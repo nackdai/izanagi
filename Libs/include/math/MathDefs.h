@@ -4,11 +4,13 @@
 #include <math.h>
 #include "../unDefs.h"
 
-// For using direct3d math.
-#define __USE_D3D_MATH__
+#ifdef __UN_DX9__
+	// For using direct3d math.
+	#define __USE_D3D_MATH__
+#endif	// #ifdef __UN_DX9__
 
 #if defined(__USE_D3D_MATH__)
-#include "d3dx9math.h"
+	#include "d3dx9math.h"
 #endif	// #if defined(__USE_D3D_MATH__)
 
 #define UN_MATH_PI			(3.14159265358979323846f)	// pi
