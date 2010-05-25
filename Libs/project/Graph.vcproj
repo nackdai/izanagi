@@ -133,7 +133,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
-			InheritedPropertySheets=".\PropertySeet\Debug_DX9.vsprops"
+			InheritedPropertySheets=".\PropertySeet\Debug_OGL.vsprops"
 			CharacterSet="2"
 			>
 			<Tool
@@ -246,7 +246,7 @@
 							>
 							<Tool
 								Name="VCCustomBuildTool"
-								CommandLine="fxc /T ps_2_0 /E main_OpVtx /Fh $(InputDir)/$(InputName)_OpVtx.h /nologo $(InputPath)&#x0D;&#x0A;fxc /T ps_2_0 /E main_OpTex /Fh $(InputDir)/$(InputName)_OpTex.h /nologo $(InputPath)&#x0D;&#x0A;fxc /T ps_2_0 /E main_OpModulate /Fh $(InputDir)/$(InputName)_OpModulate.h /nologo $(InputPath)&#x0D;&#x0A;fxc /T ps_2_0 /E main_OpModulate2x /Fh $(InputDir)/$(InputName)_OpModulate2x.h /nologo $(InputPath)&#x0D;&#x0A;fxc /T ps_2_0 /E main_OpModulate4x /Fh $(InputDir)/$(InputName)_OpModulate4x.h /nologo $(InputPath)&#x0D;&#x0A;fxc /T ps_2_0 /E main_OpAdd /Fh $(InputDir)/$(InputName)_Add.h /nologo $(InputPath)&#x0D;&#x0A;fxc /T ps_2_0 /E main_OpModulateAlpha /Fh $(InputDir)/$(InputName)_OpModulateAlpha.h /nologo $(InputPath)"
+								CommandLine="fxc /T ps_2_0 /E main_OpVtx /Fh $(InputDir)/$(InputName)_OpVtx.h /nologo $(InputPath)&#x0D;&#x0A;fxc /T ps_2_0 /E main_OpTex /Fh $(InputDir)/$(InputName)_OpTex.h /nologo $(InputPath)&#x0D;&#x0A;fxc /T ps_2_0 /E main_OpModulate /Fh $(InputDir)/$(InputName)_OpModulate.h /nologo $(InputPath)&#x0D;&#x0A;fxc /T ps_2_0 /E main_OpModulate2x /Fh $(InputDir)/$(InputName)_OpModulate2x.h /nologo $(InputPath)&#x0D;&#x0A;fxc /T ps_2_0 /E main_OpModulate4x /Fh $(InputDir)/$(InputName)_OpModulate4x.h /nologo $(InputPath)&#x0D;&#x0A;fxc /T ps_2_0 /E main_OpAdd /Fh $(InputDir)/$(InputName)_Add.h /nologo $(InputPath)&#x0D;&#x0A;fxc /T ps_2_0 /E main_OpModulateAlpha /Fh $(InputDir)/$(InputName)_OpModulateAlpha.h /nologo $(InputPath)&#x0D;&#x0A;"
 								Outputs="$(InputDir)/$(InputName)_OpVtx.h"
 							/>
 						</FileConfiguration>

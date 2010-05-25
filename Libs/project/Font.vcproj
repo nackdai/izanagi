@@ -134,7 +134,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
-			InheritedPropertySheets=".\PropertySeet\Debug_DX9.vsprops"
+			InheritedPropertySheets=".\PropertySeet\Debug_OGL.vsprops"
 			CharacterSet="2"
 			>
 			<Tool
