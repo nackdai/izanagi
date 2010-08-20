@@ -1,4 +1,5 @@
-#include "graph/dx9/VertexBuffer.h"
+#include "graph/ogl/VertexBuffer.h"
+#include "graph/ogl/OGLExtFuncProxy.h"
 
 using namespace uranus;
 
@@ -60,35 +61,57 @@ UN_BOOL CVertexBuffer::CreateBody(
 	E_GRAPH_RSC_CREATE_TYPE nCreateType)
 {
 	UN_ASSERT(m_pDevice != UN_NULL);
+	UN_ASSERT(m_nVBO == 0);
 
-	D3D_DEVICE* pD3DDev = m_pDevice->GetRawInterface();
+	UN_OGL_EXT_PROC(glGenBuffers)(1, &m_nVBO);
+	VRETURN(m_nVBO > 0);
 
-	UN_DWORD nUsage = (nCreateType == E_GRAPH_RSC_CREATE_TYPE_DYNAMIC
-						? D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY
-						: 0);
+	GLenum usage = (nCreateType == E_GRAPH_RSC_CREATE_TYPE_DYNAMIC
+					? GL_DYNAMIC_DRAW
+					: GL_STATIC_DRAW);
 
-	D3DPOOL nPool = (nCreateType == E_GRAPH_RSC_CREATE_TYPE_DYNAMIC
-						? D3DPOOL_DEFAULT
-						: D3DPOOL_MANAGED);
-
-	// 本体作成
-	HRESULT hr = pD3DDev->CreateVertexBuffer(
-					nStride * nVtxNum,
-					nUsage,
-					0,
-					nPool,
-					&m_pVB,
-					UN_NULL);
-
-	UN_BOOL ret = SUCCEEDED(hr);
-	UN_ASSERT(ret);
+	UN_OGL_EXT_PROC(glBufferData)(
+		GL_ARRAY_BUFFER,
+		nVtxNum * nStride,
+		NULL,
+		usage);
 
 	m_nStride = nStride;
 	m_nVtxNum = nVtxNum;
 	
 	m_nCreateType = nCreateType;
 
-	return ret;
+	return UN_TRUE;
+}
+
+// コンストラクタ
+CVertexBuffer::CVertexBuffer()
+{
+	m_pDevice = UN_NULL;
+	m_pAllocator = UN_NULL;
+
+	m_nVBO = 0;
+
+	m_nStride = 0;
+	m_nVtxNum = 0;
+
+	m_LockInfo.Clear();
+
+	m_nCreateType = E_GRAPH_RSC_CREATE_TYPE_STATIC;
+}
+
+// デストラクタ
+CVertexBuffer::~CVertexBuffer()
+{
+	m_pDevice->RemoveVertexBuffer(this);
+
+	FREE(m_pAllocator, m_LockInfo.data);
+
+	if (m_nVBO > 0) {
+		UN_OGL_EXT_PROC(glDeleteBuffers)(1, &m_nVBO);
+	}
+	
+	SAFE_RELEASE(m_pDevice);
 }
 
 // ロック
@@ -99,37 +122,31 @@ UN_BOOL CVertexBuffer::Lock(
 	UN_BOOL bIsReadOnly,
 	UN_BOOL bIsDiscard/*= UN_FALSE*/)
 {
+	UN_ASSERT(m_nVBO > 0);
+	UN_ASSERT(m_LockInfo.data == UN_NULL);
+
 	// NOTE
-	// 高速化のために IsDynamic のときは WRITEONLYで
-	// 作成しているので、READONLY は不可
+	// OpenGLES はバッファの読み込みはできないので
+	// OpenGL でもできないようにする
+	UN_ASSERT(!bIsReadOnly);
 
-	UN_ASSERT(m_pVB != UN_NULL);
+	// NOTE
+	// nSize == 0 のときはバッファ全体
 
-	DWORD flag = 0;
-	if (IsDynamic()) {
-		// READONLY不可
-		VRETURN(!bIsReadOnly);
-		
-		if (bIsDiscard) {
-			flag = D3DLOCK_DISCARD;
-		}
-		else {
-			flag = D3DLOCK_NOOVERWRITE;
-		}
-	}
-	else if (bIsReadOnly) {
-		flag = D3DLOCK_READONLY;
-	}
+	nOffset = (nSize > 0 ? nOffset : 0);
 
-	HRESULT hr = m_pVB->Lock(
-					nOffset,
-					nSize,
-					data,
-					flag);
+	nSize = (nSize > 0
+				? nSize
+				: m_nStride * m_nVtxNum);
 
-	UN_BOOL ret = SUCCEEDED(hr);
+	m_LockInfo.data = ALLOC_ZERO(m_pAllocator, nSize);
+	VRETURN(m_LockInfo.data != UN_NULL);
 
-	return ret;
+	*data = m_LockInfo.data;
+	m_LockInfo.offset = nOffset;
+	m_LockInfo.size = nSize;
+
+	return UN_TRUE;;
 }
 
 /**
@@ -137,31 +154,34 @@ UN_BOOL CVertexBuffer::Lock(
 */
 UN_BOOL CVertexBuffer::Unlock()
 {
-	UN_ASSERT(m_pVB != UN_NULL);
-	
-	HRESULT hr = m_pVB->Unlock();
-	UN_BOOL ret = SUCCEEDED(hr);
+	UN_ASSERT(m_nVBO > 0);
 
-	return ret;
+	if (m_LockInfo.IsLock() != UN_NULL) {
+		UN_OGL_EXT_PROC(glBindBuffer)(GL_ARRAY_BUFFER, m_nVBO);
+
+		UN_OGL_EXT_PROC(glGetBufferSubData)(
+			GL_ARRAY_BUFFER,
+			m_LockInfo.offset,
+			m_LockInfo.size,
+			m_LockInfo.data);
+
+		FREE(m_pAllocator, m_LockInfo.data);
+
+		// TODO
+		// Error Check...
+
+		UN_OGL_EXT_PROC(glBindBuffer)(GL_ARRAY_BUFFER, 0);
+	}
+
+	m_LockInfo.Clear();
+
+	return UN_TRUE;;
 }
 
 // リセット
 UN_BOOL CVertexBuffer::Reset()
 {
-	UN_BOOL ret = UN_TRUE;
-
-	// NOTE
-	// Dynamicでないときは、D3DPOOL_MANAGEDで作成されているので再作成する必要はない
-
-	if (IsDynamic()) {
-		SAFE_RELEASE(m_pVB);
-
-		// 本体作成
-		ret = CreateBody(
-				m_nStride,
-				m_nVtxNum,
-				m_nCreateType);
-	}
-
-	return ret;
+	// Nothing is done.
+	UN_ASSERT(UN_FALSE);
+	return UN_TRUE;
 }

@@ -10,10 +10,10 @@ namespace uranus {
 	*/
 	struct SVertexElement {
 		UN_WORD Stream;					// Stream index
-		UN_WORD Offset;					// Offset in the stream in bytes
 		E_GRAPH_VTX_DECL_TYPE Type;		// Data type
 		E_GRAPH_VTX_DECL_USAGE Usage;	// Semantics
 		UN_BYTE UsageIndex;				// Semantic index
+		UN_WORD Offset;					// Offset in the stream in bytes
 		UN_BYTE padding;
 	};
 
@@ -24,12 +24,6 @@ namespace uranus {
 		friend class CGraphicsDevice;
 
 	private:
-		// インスタンス作成
-		static CVertexDeclaration* CreateVertexDeclaration(
-			CGraphicsDevice* pDevice,
-			IMemoryAllocator* pAllocator,
-			const D3D_VTX_ELEMENT* pElem);
-
 		// インスタンス作成
 		static CVertexDeclaration* CreateVertexDeclaration(
 			CGraphicsDevice* pDevice,
@@ -48,15 +42,15 @@ namespace uranus {
 		// 解放
 		inline void InternalRelease();
 
-	public:
-		inline D3D_VD* GetRawInterface();
+		void Apply(CGraphicsDevice* pDevice);
 
 	protected:
 		CGraphicsDevice* m_pDevice;
 		IMemoryAllocator* m_pAllocator;
 
 		// 本体
-		D3D_VD* m_pVD;
+		SVertexElement* m_pVtxElem;
+		UN_UINT m_nElemNum;
 	};
 
 	// inline **********************************
@@ -66,14 +60,14 @@ namespace uranus {
 	{
 		m_pDevice = UN_NULL;
 		m_pAllocator = UN_NULL;
-		m_pVD = UN_NULL;
+		m_pVtxElem = UN_NULL;
+		m_nElemNum = 0;
 	}
 
 	// デストラクタ
 	CVertexDeclaration::~CVertexDeclaration()
 	{
 		SAFE_RELEASE(m_pDevice);
-		SAFE_RELEASE(m_pVD);
 	}
 
 	// 解放
@@ -83,11 +77,6 @@ namespace uranus {
 		if (m_pAllocator != UN_NULL) {
 			m_pAllocator->Free(this);
 		}
-	}
-
-	D3D_VD* CVertexDeclaration::GetRawInterface()
-	{
-		return m_pVD;
 	}
 }	// namespace uranus
 

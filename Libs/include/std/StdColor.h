@@ -21,6 +21,8 @@ namespace uranus {
 	/**
 	*/
 	class CColor : public SColor {
+		static const UN_UINT8 CLR_MAX = 255;
+
 	public:
 		enum {
 			WHITE = UN_COLOR_RGBA(0xff, 0xff, 0xff, 0xff),
@@ -59,6 +61,12 @@ namespace uranus {
 		inline UN_BOOL operator!=(const CColor& rhs) const;
 
 		inline operator UN_COLOR() const;
+
+	public:
+		UN_FLOAT GetRAsFloat() const { return (UN_FLOAT)r / CLR_MAX; }
+		UN_FLOAT GetGAsFloat() const { return (UN_FLOAT)g / CLR_MAX; }
+		UN_FLOAT GetBAsFloat() const { return (UN_FLOAT)b / CLR_MAX; }
+		UN_FLOAT GetAAsFloat() const { return (UN_FLOAT)a / CLR_MAX; }
 
 	public:
 		void SetYUV(UN_FLOAT _y, UN_FLOAT _u, UN_FLOAT _v);

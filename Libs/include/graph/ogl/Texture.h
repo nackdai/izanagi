@@ -2,13 +2,15 @@
 #define __URANUS_GRAPH_TEXTURE_H__
 
 #include "BaseTexture.h"
-#include "GraphicsDevice.h"
+//#include "GraphicsDevice.h"
 
 namespace uranus {
 	class CSurface;
+	class CGraphicsDevice;
 
 	class CTexture : public CBaseTexture {
 		friend class CGraphicsDevice;
+		friend class CSurface;
 
 	private:
 		// ファイルからテクスチャ作成
@@ -46,22 +48,12 @@ namespace uranus {
 			E_GRAPH_PIXEL_FMT fmt);
 
 	private:
-		inline CTexture();
-		inline ~CTexture();
+		CTexture();
+		~CTexture();
 
-		CTexture(const CTexture& rhs);
-		const CTexture& operator=(const CTexture& rhs);
+		NO_COPIABLE(CTexture);
 
 	private:
-		template <typename _T, typename _Func>
-		static CTexture* CreateBody_From(
-			CGraphicsDevice* pDevice,
-			IMemoryAllocator* pAllocator,
-			_T tInput,
-			UN_UINT nInputSize,
-			_Func& func,
-			E_GRAPH_PIXEL_FMT fmt);
-
 		// 本体作成（テクスチャ）
 		UN_BOOL CreateBody_Texture(
 			UN_UINT nWidth,
@@ -78,11 +70,11 @@ namespace uranus {
 			E_GRAPH_PIXEL_FMT nFmt,
 			UN_UINT nMipLevel);
 
-		// テクスチャ情報取得
-		void GetTextureInfo();
-
 		// サーフェス作成
 		UN_BOOL CreateSurface();
+
+		// 本体解放
+		void ReleaseResource();
 
 	public:
 		// ロック
@@ -105,18 +97,31 @@ namespace uranus {
 		// 解放
 		inline void InternalRelease();
 
-		// 本体解放
-		inline void ReleaseResource();
+		UN_UINT GetRawInterface() { return m_nTexture; }
 
 	public:
 		inline TEX_HANDLE GetTexHandle();
 
-	public:
-		D3D_TEXTURE* GetRawInterface() { return m_pTexture; }
-
 	private:
 		// 本体
-		D3D_TEXTURE* m_pTexture;
+		UN_UINT m_nTexture;
+
+		struct {
+			void* data;
+			UN_UINT level;
+			UN_UINT16 width;
+			UN_UINT16 height;
+
+			void Clear()
+			{
+				data = UN_NULL;
+				level = 0;
+				width = 0;
+				height = 0;
+			}
+
+			UN_BOOL IsLock() const { return (data != UN_NULL); }
+		} m_LockInfo;
 
 		// サーフェス
 		CSurface** m_pSurface;
@@ -125,31 +130,6 @@ namespace uranus {
 	};
 
 	// inline ***********************************
-
-	// コンストラクタ
-	CTexture::CTexture()
-	{
-		m_pTexture = UN_NULL;
-		m_pSurface = UN_NULL;
-
-		m_pNext = UN_NULL;
-	}
-
-	// デストラクタ
-	CTexture::~CTexture()
-	{
-		m_pDevice->RemoveTexture(this);
-		
-		SAFE_RELEASE(m_pTexture);
-
-		if (m_pSurface != NULL) {
-			for (UN_UINT i = 0; i < GetMipMapNum(); i++) {
-				SAFE_RELEASE(m_pSurface[i]);
-			}
-		}
-
-		SAFE_RELEASE(m_pDevice);
-	}
 
 	// 解放
 	void CTexture::InternalRelease()
@@ -161,21 +141,9 @@ namespace uranus {
 		}
 	}
 
-	// 本体解放
-	void CTexture::ReleaseResource()
-	{
-		if (m_pSurface != UN_NULL) {
-			for (UN_UINT32 i = 0; i < GetMipMapNum(); i++) {
-				m_pSurface[i]->ReleaseResource();
-			}
-		}
-
-		SAFE_RELEASE(m_pTexture);
-	}
-
 	TEX_HANDLE CTexture::GetTexHandle()
 	{
-		return m_pTexture;
+		return m_nTexture;
 	}
 }	// namespace uranus
 

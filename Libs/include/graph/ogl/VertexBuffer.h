@@ -23,8 +23,8 @@ namespace uranus {
 			E_GRAPH_RSC_CREATE_TYPE nCreateType);
 
 	private:
-		inline CVertexBuffer();
-		inline ~CVertexBuffer();
+		CVertexBuffer();
+		~CVertexBuffer();
 
 		CVertexBuffer(const CVertexBuffer& rhs);
 		const CVertexBuffer& operator=(const CVertexBuffer& rhs);
@@ -72,47 +72,38 @@ namespace uranus {
 		UN_BOOL IsDynamic() const { return (m_nCreateType == E_GRAPH_RSC_CREATE_TYPE_DYNAMIC); }
 
 	public:
-		D3D_VB* GetRawInterface() { return m_pVB; }
+		UN_UINT GetRawInterface() { return m_nVBO; }
 
 	private:
 		CGraphicsDevice* m_pDevice;
 		IMemoryAllocator* m_pAllocator;
 
 		// 本体
-		D3D_VB* m_pVB;
+		UN_UINT m_nVBO;
 
 		UN_UINT m_nStride;	// 頂点サイズ
 		UN_UINT m_nVtxNum;	// 頂点数
 
-		E_GRAPH_RSC_CREATE_TYPE m_nCreateType;
+		// ロック情報
+		struct {
+			void* data;
+			UN_UINT offset;
+			UN_UINT size;
 
-		CVertexBuffer* m_pNext;
+			void Clear()
+			{
+				data = UN_NULL;
+				offset = 0;
+				size = 0;
+			}
+
+			UN_BOOL IsLock() const { return (data != UN_NULL); }
+		} m_LockInfo;
+
+		E_GRAPH_RSC_CREATE_TYPE m_nCreateType;
 	};
 
 	// inline *************************************
-
-	// コンストラクタ
-	CVertexBuffer::CVertexBuffer()
-	{
-		m_pDevice = UN_NULL;
-		m_pAllocator = UN_NULL;
-
-		m_pVB = UN_NULL;
-
-		m_nStride = 0;
-		m_nVtxNum = 0;
-		
-		m_nCreateType = E_GRAPH_RSC_CREATE_TYPE_STATIC;
-	}
-
-	// デストラクタ
-	CVertexBuffer::~CVertexBuffer()
-	{
-		m_pDevice->RemoveVertexBuffer(this);
-
-		SAFE_RELEASE(m_pVB);
-		SAFE_RELEASE(m_pDevice);
-	}
 
 	// 解放
 	void CVertexBuffer::InternalRelease()
@@ -126,7 +117,8 @@ namespace uranus {
 
 	void CVertexBuffer::ReleaseResource()
 	{
-		SAFE_RELEASE(m_pVB);
+		// Nothing is done.
+		UN_ASSERT(UN_FALSE);
 	}
 
 	// 頂点サイズ取得

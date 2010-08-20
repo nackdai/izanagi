@@ -1,11 +1,19 @@
 #if !defined(__URANUS_GRAPH_PARAM_VALUE_CONVERTER_H__)
 #define __URANUS_GRAPH_PARAM_VALUE_CONVERTER_H__
 
+#if defined(__UN_DX9__)
 #include "../dx9/D3D9ParamValueConverter.h"
 
 namespace uranus {
 	typedef CD3D9ParamValueConverter CTargetParamValueConverter;
 }	// namespace uranus
+#else	// #if defined(__UN_DX9__)
+#include "../ogl/OGLParamValueConverter.h"
+
+namespace uranus {
+	typedef COGLParamValueConverter CTargetParamValueConverter;
+}	// namespace uranus
+#endif	// #if defined(__UN_DX9__)
 
 #define UN_GET_TARGET_VAL(p, v)		uranus::CTargetParamValueConverter::ConvAbstractToTarget_##p(v)
 #define UN_GET_ABST_VAL(p, v)		uranus::CTargetParamValueConverter::ConvTargetToAbstract_##p(v)

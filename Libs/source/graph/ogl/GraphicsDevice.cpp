@@ -1,21 +1,24 @@
-#include "graph/dx9/GraphicsDevice.h"
-#include "graph/dx9/BaseTexture.h"
-#include "graph/dx9/Texture.h"
-#include "graph/dx9/CubeTexture.h"
-#include "graph/dx9/Surface.h"
-#include "graph/dx9/VertexBuffer.h"
-#include "graph/dx9/IndexBuffer.h"
-#include "graph/dx9/VertexShader.h"
-#include "graph/dx9/PixelShader.h"
-#include "graph/dx9/VertexDeclaration.h"
+#include "graph/ogl/GraphicsDevice.h"
+#if 0
+#include "graph/ogl/BaseTexture.h"
+#include "graph/ogl/Texture.h"
+#include "graph/ogl/CubeTexture.h"
+#include "graph/ogl/Surface.h"
+#include "graph/ogl/VertexBuffer.h"
+#include "graph/ogl/IndexBuffer.h"
+#include "graph/ogl/VertexShader.h"
+#include "graph/ogl/PixelShader.h"
+#include "graph/ogl/VertexDeclaration.h"
+#endif
+#include "graph/ogl/Surface.h"
 #include "graph/GraphDefs.h"
 
 #include "graph/2d/2DRenderer.h"
-#include "std/MemoryAllocator.h"
+#include "std/allocator/MemoryAllocator.h"
 
 using namespace uranus;
 
-CMemoryAllocator CGraphicsDevice::s_cDeviceAllocator;
+CStandardMemoryAllocator CGraphicsDevice::s_cDeviceAllocator;
 CGraphicsDevice* CGraphicsDevice::s_pInstance = UN_NULL;
 
 /**
@@ -52,23 +55,10 @@ CGraphicsDevice* CGraphicsDevice::CreateGrapicsDevice(
 	// インスタンス作成
 	pInstance = new(pBuf) CGraphicsDevice;
 	{
-		pInstance->m_pAllocator = pAllocator;
-
-		// IDirect3D9 インターフェースの取得
-		pInstance->m_pD3D = Direct3DCreate9(D3D_SDK_VERSION);
-		result = (pInstance->m_pD3D != UN_NULL);
-		UN_ASSERT(result);
-
-		// 現在の画面モードの取得
-		if (result) {
-			HRESULT hr = pInstance->m_pD3D->GetAdapterDisplayMode(
-							D3DADAPTER_DEFAULT,
-							&pInstance->m_sDisplayMode);
-			result = SUCCEEDED(hr);
-			UN_ASSERT(result);
-		}
-
 		pInstance->AddRef();
+		pInstance->m_pAllocator = pAllocator;
+		
+		// Nothing is done...
 	}
 
 	if (!result) {
@@ -95,17 +85,14 @@ CGraphicsDevice::CGraphicsDevice()
 {
 	m_pAllocator = UN_NULL;
 
-	m_pD3D = UN_NULL;
+	m_hGLRC = UN_NULL;
+	m_hWnd = UN_NULL;
+	m_hDC = UN_NULL;
 
-	m_pDevice = UN_NULL;
-	ZeroMemory(&m_sPresentParameters, sizeof(m_sPresentParameters));
+	FILL_ZERO(m_pTexture, sizeof(m_pTexture));
+	FILL_ZERO(m_sSamplerState, sizeof(m_sSamplerState));
 
-	m_hFocusWindow = UN_NULL;
-
-	ZeroMemory(m_pTexture, sizeof(CTexture*) * TEX_STAGE_NUM);
-	ZeroMemory(m_sSamplerState, sizeof(S_SAMPLER_STATE) * TEX_STAGE_NUM);
-
-	ZeroMemory(&m_RenderState, sizeof(S_RENDER_STATE));
+	FILL_ZERO(&m_RenderState, sizeof(S_RENDER_STATE));
 
 	m_p2DRenderer = UN_NULL;
 
@@ -117,9 +104,6 @@ CGraphicsDevice::CGraphicsDevice()
 	m_Flags.is_render_2d = UN_FALSE;
 	m_Flags.is_force_set_state = UN_FALSE;
 	m_Flags.is_lost_device = UN_FALSE;
-
-	m_pResetCallBack = UN_NULL;
-	m_pLostDeviceCallBack = UN_NULL;
 }
 
 // デストラクタ
@@ -132,8 +116,11 @@ CGraphicsDevice::~CGraphicsDevice()
 
 	ClearRenderState();
 
-	SAFE_RELEASE(m_pDevice);
-	SAFE_RELEASE(m_pD3D);
+	if (m_hGLRC != UN_NULL) {
+		::wglMakeCurrent(UN_NULL, UN_NULL);
+		::wglDeleteContext(m_hGLRC);
+		m_hGLRC = UN_NULL;
+	}
 }
 
 // 解放
@@ -157,7 +144,7 @@ UN_BOOL CGraphicsDevice::Reset(const SGraphicsDeviceInitParams& sParams)
 {
 	UN_BOOL ret = UN_TRUE;
 
-	if (m_pDevice == UN_NULL) {
+	if (m_hGLRC == UN_NULL) {
 		// 本体作成
 		ret = CreateBody(sParams);
 
@@ -169,10 +156,6 @@ UN_BOOL CGraphicsDevice::Reset(const SGraphicsDeviceInitParams& sParams)
 			ret = (m_p2DRenderer != UN_NULL);
 			UN_ASSERT(ret);
 		}
-	}
-	else {
-		// リセット
-		ret = ResetInternal(sParams);
 	}
 
 	if (ret) {
@@ -218,9 +201,8 @@ UN_BOOL CGraphicsDevice::Reset(const SGraphicsDeviceInitParams& sParams)
 			UN_ASSERT(ret);
 			
 			if (ret) {
+				// TODO
 				// フレームバッファサーフェースを取ってくる・・・
-				m_pDevice->GetRenderTarget(0, &m_pRT->m_pSurface);
-				m_pDevice->GetDepthStencilSurface(&m_pDepth->m_pSurface);
 
 				// 明示的に記述をセットする
 				m_pRT->SetDesc();
@@ -239,57 +221,66 @@ UN_BOOL CGraphicsDevice::Reset(const SGraphicsDeviceInitParams& sParams)
 // 本体作成
 UN_BOOL CGraphicsDevice::CreateBody(const SGraphicsDeviceInitParams& sParams)
 {
-	UN_ASSERT(m_pD3D != UN_NULL);
+	m_hDC = ::GetDC(sParams.hWnd);
+	VRETURN(m_hDC != UN_NULL);
 
-	UN_BOOL ret = UN_TRUE;
+	::PIXELFORMATDESCRIPTOR pfd = {
+		sizeof(PIXELFORMATDESCRIPTOR),	// nSize
+		1,								// nVersion
+		PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER,	// dwFlags
+		PFD_TYPE_RGBA,					// iPixelType
+		24,								// cColorBits
+		0,								// cRedBits
+		0,								// cRedShift
+		0,								// cGreenBits
+		0,								// cGreenShift
+		0,								// cBlueBits
+		0,								// cBlueShift
+		8,								// cAlphaBits
+		0,								// cAlphaShift
+		0,								// cAccumBits
+		0,								// cAccumRedBits
+		0,								// cAccumGreenBits
+		0,								// cAccumBlueBits
+		0,								// cAccumAlphaBits
+		sParams.DepthBits,				// cDepthBits
+		sParams.StencilBits,			// cStencilBits
+		0,								// cAuxBuffers
+		PFD_MAIN_PLANE,					// iLayerType
+		0,								// bReserved
+		0,								// dwLayerMask
+		0,								// dwVisibleMask
+		0,								// dwDamageMask
+	};
 
-	m_hFocusWindow = sParams.hFocusWindow;
+	UN_INT nPixelFmt = ::ChoosePixelFormat(
+							m_hDC,
+							&pfd);
+	VRETURN(nPixelFmt != 0);
 
-	// D3DPRESENT_PARAMETERS の設定
+	UN_BOOL ret = ::SetPixelFormat(
+					m_hDC,
+					nPixelFmt,
+					&pfd);
+	VRETURN(ret);
+
+	// Create context.
+	m_hGLRC = ::wglCreateContext(m_hDC);
+	ret = (m_hGLRC != UN_NULL);
+	VRETURN(ret);
+
+	ret = ::wglMakeCurrent(m_hDC, m_hGLRC);
+	VRETURN(ret);
+
+	m_hWnd = sParams.hWnd;
+
 	{
-		ZeroMemory(&m_sPresentParameters, sizeof(m_sPresentParameters));
-
-		m_sPresentParameters.BackBufferCount = 2;
-
-		m_sPresentParameters.Windowed = sParams.Windowed;					// 画面モード(ウインドウモード)
 		m_sPresentParameters.BackBufferWidth = sParams.BackBufferWidth;		// バックバッファの幅
 		m_sPresentParameters.BackBufferHeight = sParams.BackBufferHeight;	// バックバッファの高さ
-
-		// バックバッファのフォーマット
-		m_sPresentParameters.BackBufferFormat = m_sDisplayMode.Format;
-
-		m_sPresentParameters.MultiSampleType = sParams.MultiSampleType;		// マルチ・サンプリングの種類
-
-		// スワップエフェクトの種類
-		m_sPresentParameters.SwapEffect = D3DSWAPEFFECT_DISCARD;
-
-		m_sPresentParameters.hDeviceWindow = sParams.hDeviceWindow;
-
-#if 1
-		// Zバッファの自動作成
-		m_sPresentParameters.EnableAutoDepthStencil = UN_TRUE;
-		//m_sPresentParameters.AutoDepthStencilFormat = D3DFMT_D24S8;
-		m_sPresentParameters.AutoDepthStencilFormat = sParams.DepthStencilFormat;
-#else
-		// Zバッファを自動作成しない
-		m_sPresentParameters.EnableAutoDepthStencil = UN_FALSE;
-#endif
-
-		// VSyncのタイプ
-		m_sPresentParameters.PresentationInterval = sParams.PresentationInterval;
 	}
 
-	if (FAILED(m_pD3D->CreateDevice(
-				sParams.Adapter, 
-				sParams.DeviceType,
-				sParams.hFocusWindow,
-				sParams.BehaviorFlags,
-				&m_sPresentParameters,
-				&m_pDevice)))
-	{
-		// 結局失敗した
-		ret = UN_FALSE;
-    }
+	// TODO
+	// バックバッファサイズの正当性のチェック？
 
 	return ret;
 }
@@ -310,60 +301,6 @@ void CGraphicsDevice::ResetResource(_T* pList)
 	}
 }
 
-UN_BOOL CGraphicsDevice::ResetInternal(const SGraphicsDeviceInitParams& sParams)
-{
-	// リソースを解放する
-	{
-		m_pRT->ReleaseResource();
-		m_pDepth->ReleaseResource();
-
-		m_p2DRenderer->ResetResource();
-
-		ReleaseResource(m_pResetTexture);
-		ReleaseResource(m_pResetVB);
-		ReleaseResource(m_pResetIB);
-	}
-
-	// クリアされるものを保存しておく
-	UN_UINT nBackBufferCount = m_sPresentParameters.BackBufferCount;
-	D3DFORMAT fmt = m_sPresentParameters.BackBufferFormat;
-
-	// 新しく設定されるもの
-	m_sPresentParameters.BackBufferWidth = sParams.BackBufferWidth;
-	m_sPresentParameters.BackBufferHeight = sParams.BackBufferHeight;
-
-	HRESULT hr = m_pDevice->Reset(&m_sPresentParameters);
-	UN_ASSERT(hr != D3DERR_DRIVERINTERNALERROR);
-
-	UN_BOOL ret = SUCCEEDED(hr);
-
-	if (ret) {
-		// クリアされたので設定値に変更する
-		m_sPresentParameters.BackBufferCount = nBackBufferCount;
-		m_sPresentParameters.BackBufferFormat = fmt;
-
-		// リソースをリセットする
-		{
-			m_pRT->Reset(UN_NULL, 0);
-			m_pDepth->Reset(UN_NULL, 0);
-
-			m_p2DRenderer->Reset();
-
-			ResetResource(m_pResetTexture);
-			ResetResource(m_pResetVB);
-			ResetResource(m_pResetIB);
-		}
-
-		// コールバック
-		if (m_pResetCallBack != UN_NULL) {
-			ret = (*m_pResetCallBack)();
-			UN_ASSERT(ret);
-		}
-	}
-
-	return ret;
-}
-
 /**
 * 描画開始
 */
@@ -373,32 +310,24 @@ UN_BOOL CGraphicsDevice::BeginRender(
 	UN_FLOAT fClearZ,
 	UN_DWORD nClearStencil)
 {
-	UN_ASSERT(m_pDevice != NULL);
+	UN_ASSERT(m_hGLRC != UN_NULL);
+	
+	m_Flags.is_call_begin = UN_TRUE;
 
-	UN_BOOL ret = UN_FALSE;
+	Clear(
+		nClearFlags,
+		nClearColor,
+		fClearZ,
+		nClearStencil);
 
-	if (!m_Flags.is_lost_device) {
-		// デバイスロストしてないので、通常の描画開始処理を行う
-		m_pDevice->BeginScene();
-		m_Flags.is_call_begin = UN_TRUE;
+	// フレームバッファサーフェスを現在のサーフェスとしてセット
+	SAFE_REPLACE(m_RenderState.curRT[0], m_pRT);
+	SAFE_REPLACE(m_RenderState.curDepth, m_pDepth);
 
-		Clear(
-			nClearFlags,
-			nClearColor,
-			fClearZ,
-			nClearStencil);
+	// 2D処理開始
+	m_p2DRenderer->BeginFrame();
 
-		// フレームバッファサーフェスを現在のサーフェスとしてセット
-		SAFE_REPLACE(m_RenderState.curRT[0], m_pRT);
-		SAFE_REPLACE(m_RenderState.curDepth, m_pDepth);
-
-		// 2D処理開始
-		m_p2DRenderer->BeginFrame();
-
-		ret = UN_TRUE;
-	}
-
-	return ret;
+	return UN_TRUE;
 }
 
 /**
@@ -410,7 +339,8 @@ void CGraphicsDevice::EndRender()
 	EndScene();
 
 	if (m_Flags.is_call_begin) {
-		m_pDevice->EndScene();
+		::glEnd();
+		::glFlush();
 	}
 
 	m_Flags.is_call_begin = UN_FALSE;
@@ -469,22 +399,22 @@ void CGraphicsDevice::Clear(
 	UN_FLOAT fClearZ,
 	UN_DWORD nClearStencil)
 {
-	UN_ASSERT(m_pDevice != NULL);
-
 	if (nClearFlags > 0) {
-		// DirectX のクリアフラグに変換する
-		UN_DWORD nDXClearFlag = 0;
-		nDXClearFlag |= _CONV_CLEAR_FLAG(nClearFlags, E_GRAPH_CLEAR_FLAG_COLOR,   D3DCLEAR_TARGET);
-		nDXClearFlag |= _CONV_CLEAR_FLAG(nClearFlags, E_GRAPH_CLEAR_FLAG_DEPTH,   D3DCLEAR_ZBUFFER);
-		nDXClearFlag |= _CONV_CLEAR_FLAG(nClearFlags, E_GRAPH_CLEAR_FLAG_STENCIL, D3DCLEAR_STENCIL);
+		// OpenGL のクリアフラグに変換する
+		UN_DWORD nClearFlag = 0;
+		nClearFlag |= _CONV_CLEAR_FLAG(nClearFlags, E_GRAPH_CLEAR_FLAG_COLOR,   GL_COLOR_BUFFER_BIT);
+		nClearFlag |= _CONV_CLEAR_FLAG(nClearFlags, E_GRAPH_CLEAR_FLAG_DEPTH,   GL_DEPTH_BUFFER_BIT);
+		nClearFlag |= _CONV_CLEAR_FLAG(nClearFlags, E_GRAPH_CLEAR_FLAG_STENCIL, GL_STENCIL_BUFFER_BIT);
 
-		m_pDevice->Clear(
-			0,
-			NULL,
-			nDXClearFlag,
-			nClearColor,
-			fClearZ,
-			nClearStencil);
+		CColor cClearClr(nClearColor);
+
+		::glClearColor(
+			cClearClr.GetRAsFloat(),
+			cClearClr.GetGAsFloat(),
+			cClearClr.GetBAsFloat(),
+			cClearClr.GetAAsFloat());
+
+		::glClear(nClearFlag);
 	}
 }
 
@@ -595,42 +525,11 @@ void CGraphicsDevice::EndScene(UN_UINT flag/* = 0xffffffff*/)
 */
 UN_BOOL CGraphicsDevice::Present()
 {
-	UN_BOOL ret = UN_TRUE;
+	UN_ASSERT(m_hDC != UN_NULL);
 
-	HRESULT hr = m_pDevice->Present(
-					UN_NULL,
-					UN_NULL,
-					m_hFocusWindow,
-					UN_NULL);
-
-	if (hr == D3DERR_DEVICELOST) {
-		// デバイスロストした
-		m_Flags.is_lost_device = UN_TRUE;
-
-		// デバイスロストしたときのコールバック
-		if (m_pLostDeviceCallBack != UN_NULL) {
-			(*m_pLostDeviceCallBack)();
-		}
-
-		SGraphicsDeviceInitParams sParams;
-		{
-			sParams.BackBufferWidth = m_sPresentParameters.BackBufferWidth;
-			sParams.BackBufferHeight = m_sPresentParameters.BackBufferHeight;
-		}
-
-		// 復帰をこころみる
-		ret = Reset(sParams);
-
-		if (ret) {
-			// 復帰した
-			m_Flags.is_lost_device = UN_FALSE;
-		}
-	}
-	else {
-		ret = SUCCEEDED(hr);
-	}
-
+	UN_BOOL ret = ::SwapBuffers(m_hDC);
 	UN_ASSERT(ret);
+
 	return ret;
 }
 

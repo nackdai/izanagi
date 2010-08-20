@@ -75,47 +75,38 @@ namespace uranus {
 		UN_BOOL IsDynamic() const { return (m_nCreateType == E_GRAPH_RSC_CREATE_TYPE_DYNAMIC); }
 
 	public:
-		D3D_IB* GetRawInterface() { return m_pIB; }
+		UN_UINT GetRawInterface() { return m_nIBO; }
 
 	private:
 		CGraphicsDevice* m_pDevice;
 		IMemoryAllocator* m_pAllocator;
 
 		// 本体
-		D3D_IB* m_pIB;
+		UN_UINT m_nIBO;
 
 		UN_UINT m_nIdxNum;				// インデックス数
 		E_GRAPH_INDEX_BUFFER_FMT m_Fmt;	// フォーマット
 
-		E_GRAPH_RSC_CREATE_TYPE m_nCreateType;
+		// ロック情報
+		struct {
+			void* data;
+			UN_UINT offset;
+			UN_UINT size;
 
-		CIndexBuffer* m_pNext;
+			void Clear()
+			{
+				data = UN_NULL;
+				offset = 0;
+				size = 0;
+			}
+
+			UN_BOOL IsLock() const { return (data != UN_NULL); }
+		} m_LockInfo;
+
+		E_GRAPH_RSC_CREATE_TYPE m_nCreateType;
 	};
 
 	// inline *************************************
-
-	// コンストラクタ
-	CIndexBuffer::CIndexBuffer()
-	{
-		m_pDevice = UN_NULL;
-		m_pAllocator = UN_NULL;
-
-		m_pIB = UN_NULL;
-
-		m_nIdxNum = 0;
-		m_Fmt = E_GRAPH_INDEX_BUFFER_FMT_FORCE_INT32;
-		
-		m_nCreateType = E_GRAPH_RSC_CREATE_TYPE_STATIC;
-	}
-
-	// デストラクタ
-	CIndexBuffer::~CIndexBuffer()
-	{
-		m_pDevice->RemoveIndexBuffer(this);
-
-		SAFE_RELEASE(m_pIB);
-		SAFE_RELEASE(m_pDevice);
-	}
 
 	// 解放
 	void CIndexBuffer::InternalRelease()
@@ -129,7 +120,8 @@ namespace uranus {
 
 	void CIndexBuffer::ReleaseResource()
 	{
-		SAFE_RELEASE(m_pIB);
+		// Nothing is done.
+		UN_ASSERT(UN_FALSE);
 	}
 
 	// インデックスサイズ取得
