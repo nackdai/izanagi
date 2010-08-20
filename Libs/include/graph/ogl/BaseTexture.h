@@ -78,6 +78,9 @@ namespace uranus {
 			};
 
 			E_GRAPH_PIXEL_FMT fmt;
+
+			GLenum glFmt;
+			GLenum glType;
 		} m_TexInfo;		
 
 		// ステート

@@ -23,28 +23,24 @@ namespace uranus {
 	class CVertexShader;
 	class CPixelShader;
 	class CVertexDeclaration;
+	class CSurface;
 	struct SVertexElement;
 
 	/**
 	* 初期化パラメータ
 	*/
-	struct SGraphicsDeviceInitParams {
-		HWND hFocusWindow;
-		HWND hDeviceWindow;
+	struct SGraphicsDeviceInitParamsOGL {
+		// TODO
+		HWND hWnd;
 
 		UN_UINT BackBufferWidth;
 		UN_UINT BackBufferHeight;
-		UN_BOOL Windowed;
-		D3DMULTISAMPLE_TYPE MultiSampleType;
 
-		UN_UINT Adapter;
-		D3DDEVTYPE DeviceType;
-		UN_DWORD BehaviorFlags;
-
-		D3DFORMAT DepthStencilFormat;
-
-		UN_UINT PresentationInterval;
+		UN_UINT DepthBits;
+		UN_UINT StencilBits;
 	};
+
+	typedef SGraphicsDeviceInitParamsOGL SGraphicsDeviceInitParams;
 
 	/**
 	* グラフィックスデバイス
@@ -55,7 +51,7 @@ namespace uranus {
 		friend class CIndexBuffer;
 
 	private:
-		static CMemoryAllocator s_cDeviceAllocator;
+		static CStandardMemoryAllocator s_cDeviceAllocator;
 		static CGraphicsDevice* s_pInstance;
 
 	public:
@@ -78,6 +74,7 @@ namespace uranus {
 		void InternalRelease();
 
 	public:
+#if 0
 		// ファイルからテクスチャ作成
 		CTexture* CreateTextureFromFile(
 			UN_PCSTR lpszPathName,
@@ -140,8 +137,8 @@ namespace uranus {
 		CPixelShader* CreatePixelShader(const void* pProgram);
 
 		// 頂点宣言作成
-		CVertexDeclaration* CreateVertexDeclaration(const D3D_VTX_ELEMENT* pElem);
 		CVertexDeclaration* CreateVertexDeclaration(const SVertexElement* pElem, UN_UINT nNum);
+#endif
 
 	private:
 		// リソース挿入
@@ -163,9 +160,6 @@ namespace uranus {
 	private:
 		// 本体作成
 		UN_BOOL CreateBody(const SGraphicsDeviceInitParams& sParams);
-
-		// リセット
-		UN_BOOL ResetInternal(const SGraphicsDeviceInitParams& sParams);
 
 	private:
 		template <class _T>
@@ -327,12 +321,6 @@ namespace uranus {
 		void SetRenderState(const S_RENDER_STATE& sRS);
 
 	public:
-		// ディスプレイモード取得
-		inline const D3DDISPLAYMODE& GetDisplayMode() const;
-
-		// プレゼントパラメータ取得
-		inline const D3DPRESENT_PARAMETERS& GetPresentParam() const;
-
 		// リフレッシュレート取得
 		inline UN_UINT GetRefreshRate() const;
 
@@ -382,26 +370,26 @@ namespace uranus {
 		// デバイスロスト用コールバックセット
 		inline void SetLostDeviceCallBack(GraphicsDeviceLostDeviceCallBack pCallBack);
 
-	public:
-		D3D_DEVICE* GetRawInterface() { return m_pDevice; }
-
 	private:
 		enum {
 			// レンダーターゲットのキュー数
 			RT_QUEUE_MAX = 4,
 		};
 
+		typedef CObjectManager<CSurface, RT_QUEUE_MAX> CRenderTargetManager;
+
 	private:
 		IMemoryAllocator* m_pAllocator;
 
-		D3D_INST* m_pD3D;
+		// TODO
+		HGLRC m_hGLRC;
+		HWND m_hWnd;
+		HDC m_hDC;
 
-		// 本体
-		D3D_DEVICE* m_pDevice;
-
-		D3DDISPLAYMODE m_sDisplayMode;
-		D3DPRESENT_PARAMETERS m_sPresentParameters;
-		HWND m_hFocusWindow;
+		struct {
+			UN_UINT BackBufferWidth;
+			UN_UINT BackBufferHeight;
+		} m_sPresentParameters;
 
 		// テクスチャ
 		CBaseTexture* m_pTexture[TEX_STAGE_NUM];
@@ -415,8 +403,8 @@ namespace uranus {
 		CSurface* m_pDepth;
 
 		// レンダーターゲット管理
-		CRenderTargetManager<RT_QUEUE_MAX> m_cRTMgr[MAX_MRT_NUM];
-		CRenderTargetManager<RT_QUEUE_MAX> m_cDepthMgr;
+		CRenderTargetManager m_cRTMgr[MAX_MRT_NUM];
+		CRenderTargetManager m_cDepthMgr;
 
 		// 2D描画用
 		C2DRenderer* m_p2DRenderer;
@@ -434,12 +422,6 @@ namespace uranus {
 			UN_UINT is_lost_device		: 1;	// デバイスロストしているかどうか
 			UN_UINT reserved			: 28;
 		} m_Flags;
-
-		// リセット用コールバック
-		GraphicsDeviceResetCallBack m_pResetCallBack;
-
-		// デバイスロスト用コールバック
-		GraphicsDeviceLostDeviceCallBack m_pLostDeviceCallBack;
 	};
 
 	// inline ***************************
@@ -453,27 +435,12 @@ namespace uranus {
 	}
 
 	/**
-	* ディスプレイモード取得
-	*/
-	const D3DDISPLAYMODE& CGraphicsDevice::GetDisplayMode() const
-	{
-		return m_sDisplayMode;
-	}
-
-	/**
-	* プレゼントパラメータ取得
-	*/
-	const D3DPRESENT_PARAMETERS& CGraphicsDevice::GetPresentParam() const
-	{
-		return m_sPresentParameters;
-	}
-
-	/**
 	* リフレッシュレート取得
 	*/
 	UN_UINT CGraphicsDevice::GetRefreshRate() const
 	{
-		return m_sDisplayMode.RefreshRate;
+		// TODO
+		return 60;
 	}
 
 	/**
@@ -512,7 +479,7 @@ namespace uranus {
 
 		if (m_RenderState.rcScissor != rc) {
 			m_RenderState.rcScissor = rc;
-			m_pDevice->SetScissorRect(reinterpret_cast<RECT*>(&m_RenderState.rcScissor));
+			// TODO
 		}
 	}
 
@@ -619,7 +586,7 @@ namespace uranus {
 	*/
 	void CGraphicsDevice::SetResetCallBack(GraphicsDeviceResetCallBack pCallBack)
 	{
-		m_pResetCallBack = pCallBack;
+		// Nothing is done.
 	}
 
 	/**
@@ -627,7 +594,7 @@ namespace uranus {
 	*/
 	void CGraphicsDevice::SetLostDeviceCallBack(GraphicsDeviceLostDeviceCallBack pCallBack)
 	{
-		m_pLostDeviceCallBack = pCallBack;
+		// Nothing is done.
 	}
 }	// namespace uranus
 

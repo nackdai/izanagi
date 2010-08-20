@@ -2,6 +2,7 @@
 #define __URANUS_GRAPH_SURFACE_H__
 
 #include "unStd.h"
+#include "graph/GraphDefs.h"
 #include "unD3DDefs.h"
 
 namespace uranus {
@@ -32,28 +33,34 @@ namespace uranus {
 			CTexture* pTexture,
 			UN_UINT nLevel);
 
+		// うーん・・・
+		UN_BOOL SetDesc();
+
 	private:
 		inline void ReleaseResource();
 
+		UN_UINT GetRawInterface() { return m_nFBO; }
+		UN_UINT GetDepthBuffer() { return m_nDepthBuffer; }
+		
 	public:
 		inline UN_UINT GetWidth() const;
 		inline UN_UINT GetHeight() const;
-		inline D3DFORMAT GetPixelFormat() const;
-
-	public:
-		D3D_SURFACE* GetRawInterface() { return m_pSurface; }
-
-		// うーん・・・
-		inline UN_BOOL SetDesc();
+		inline E_GRAPH_PIXEL_FMT GetPixelFormat() const;
 
 	private:
 		IMemoryAllocator* m_pAllocator;
 
 		// 本体
-		D3D_SURFACE* m_pSurface;
+		UN_UINT m_nFBO;
+
+		UN_UINT m_nDepthBuffer;
 
 		// 記述
-		D3DSURFACE_DESC m_Desc;
+		struct {
+			UN_UINT16 Width;
+			UN_UINT16 Height;
+			E_GRAPH_PIXEL_FMT Format;
+		} m_Desc;
 	};
 
 	// inline ********************************
@@ -68,25 +75,14 @@ namespace uranus {
 		return m_Desc.Height;
 	}
 
-	D3DFORMAT CSurface::GetPixelFormat() const
+	E_GRAPH_PIXEL_FMT CSurface::GetPixelFormat() const
 	{
 		return m_Desc.Format;
 	}
 
 	void CSurface::ReleaseResource()
 	{
-		SAFE_RELEASE(m_pSurface);
-	}
-
-	// うーん・・・
-	UN_BOOL CSurface::SetDesc()
-	{
-		UN_BOOL ret = UN_FALSE;
-		if (m_pSurface != UN_NULL) {
-			HRESULT hr = m_pSurface->GetDesc(&m_Desc);
-			ret = SUCCEEDED(hr);
-		}
-		return ret;
+		// Nothing is done.
 	}
 }	// namespace uranus
 

@@ -1,6 +1,7 @@
-#include "graph/dx9/Surface.h"
-#include "graph/dx9/Texture.h"
-#include "std/MemoryAllocator.h"
+#include "graph/ogl/Surface.h"
+#include "graph/ogl/Texture.h"
+#include "std/allocator/MemoryAllocator.h"
+#include "graph/ogl/OGLExtFuncProxy.h"
 
 using namespace uranus;
 
@@ -42,7 +43,8 @@ CSurface::CSurface()
 {
 	m_pAllocator = UN_NULL;
 
-	m_pSurface = UN_NULL;
+	m_nFBO = 0;
+	m_nDepthBuffer = 0;
 
 	FILL_ZERO(&m_Desc, sizeof(m_Desc));
 }
@@ -50,7 +52,13 @@ CSurface::CSurface()
 // デストラクタ
 CSurface::~CSurface()
 {
-	SAFE_RELEASE(m_pSurface);
+	if (m_nFBO > 0) {
+		UN_OGL_EXT_PROC(glDeleteFramebuffers)(1, &m_nFBO);
+	}
+
+	if (m_nDepthBuffer > 0) {
+		UN_OGL_EXT_PROC(glDeleteRenderbuffers)(1, &m_nDepthBuffer);
+	}
 }
 
 // 解放
@@ -70,27 +78,30 @@ UN_BOOL CSurface::Reset(
 {
 	UN_BOOL ret = UN_TRUE;
 
-	SAFE_RELEASE(m_pSurface);
-
-	if (pTexture != UN_NULL) {
-		UN_ASSERT(nLevel < pTexture->GetMipMapNum());
-
-		D3D_TEXTURE* pD3DTex = pTexture->GetRawInterface();
-
-		// TODO
-		// 最上位レベルのみ
-		HRESULT hr = pD3DTex->GetSurfaceLevel(nLevel, &m_pSurface);
-
-		UN_BOOL ret = SUCCEEDED(hr);
-		UN_ASSERT(ret);
+	if (m_nFBO == 0) {
+		UN_OGL_EXT_PROC(glGenFramebuffers)(1, &m_nFBO);
+		VRETURN(m_nFBO > 0);
 	}
 
-	if (ret && (m_pSurface != UN_NULL)) {
+	if (ret && (m_nFBO > 0)) {
+		UN_ASSERT(pTexture != UN_NULL);
+
 		// 記述取得
-		HRESULT hr = m_pSurface->GetDesc(&m_Desc);
-		ret = SUCCEEDED(hr);
-		UN_ASSERT(ret);
+		m_Desc.Width = pTexture->GetWidth();
+		m_Desc.Height = pTexture->GetHeight();
+		m_Desc.Format = pTexture->GetPixelFormat();
+
+		UN_OGL_EXT_PROC(glGenRenderbuffers)(1, &m_nDepthBuffer);
+		UN_ASSERT(m_nDepthBuffer > 0);
 	}
 
 	return ret;
+}
+
+// うーん・・・
+UN_BOOL CSurface::SetDesc()
+{
+	// Nothing is done.
+	UN_ASSERT(UN_FALSE);
+	return UN_FALSE;
 }

@@ -1,5 +1,6 @@
-#include "graph/dx9/IndexBuffer.h"
-#include "graph/dx9/D3D9ParamValueConverter.h"
+#include "graph/ogl/IndexBuffer.h"
+#include "graph/ogl/OGLExtFuncProxy.h"
+#include "graph/ogl/OGLParamValueConverter.h"
 
 using namespace uranus;
 
@@ -54,6 +55,32 @@ __EXIT__:
 	return pInstance;
 }
 
+// コンストラクタ
+CIndexBuffer::CIndexBuffer()
+{
+	m_pDevice = UN_NULL;
+	m_pAllocator = UN_NULL;
+
+	m_nIBO = 0;
+
+	m_nIdxNum = 0;
+	m_Fmt = E_GRAPH_INDEX_BUFFER_FMT_FORCE_INT32;
+	
+	m_nCreateType = E_GRAPH_RSC_CREATE_TYPE_STATIC;
+}
+
+// デストラクタ
+CIndexBuffer::~CIndexBuffer()
+{
+	m_pDevice->RemoveIndexBuffer(this);
+
+	if (m_nIBO > 0) {
+		UN_OGL_EXT_PROC(glDeleteBuffers)(1, &m_nIBO);
+	}
+
+	SAFE_RELEASE(m_pDevice);
+}
+
 // 本体作成
 UN_BOOL CIndexBuffer::CreateBody(
 	UN_UINT nIdxNum,
@@ -61,37 +88,29 @@ UN_BOOL CIndexBuffer::CreateBody(
 	E_GRAPH_RSC_CREATE_TYPE nCreateType)
 {
 	UN_ASSERT(m_pDevice != UN_NULL);
+	UN_ASSERT(m_nIBO == 0);
 
-	D3D_DEVICE* pD3DDev = m_pDevice->GetRawInterface();
-
-	D3DFORMAT fmt = UN_GET_TARGET_IDX_BUF_FMT(nFmt);
-	UN_UINT nStride = (fmt == D3DFMT_INDEX16 ? sizeof(UN_UINT16) : sizeof(UN_UINT32));
-
-	UN_DWORD nUsage = (nCreateType == E_GRAPH_RSC_CREATE_TYPE_DYNAMIC
-						? D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY
-						: 0);
-
-	D3DPOOL nPool = (nCreateType == E_GRAPH_RSC_CREATE_TYPE_DYNAMIC
-						? D3DPOOL_DEFAULT
-						: D3DPOOL_MANAGED);
-
-	HRESULT hr = pD3DDev->CreateIndexBuffer(
-					nIdxNum * nStride,
-					nUsage,
-					fmt,
-					nPool,
-					&m_pIB,
-					UN_NULL);
-
-	UN_BOOL ret = SUCCEEDED(hr);
-	UN_ASSERT(ret);
+	UN_OGL_EXT_PROC(glGenBuffers)(1, &m_nIBO);
+	VRETURN(m_nIBO > 0);
 
 	m_nIdxNum = nIdxNum;
 	m_Fmt = nFmt;
+
+	UN_UINT nStride = GetStride();
+
+	GLenum usage = (nCreateType == E_GRAPH_RSC_CREATE_TYPE_DYNAMIC
+					? GL_DYNAMIC_DRAW
+					: GL_STATIC_DRAW);
+
+	UN_OGL_EXT_PROC(glBufferData)(
+		GL_ARRAY_BUFFER,
+		nIdxNum * nStride,
+		NULL,
+		usage);
 	
 	m_nCreateType = nCreateType;
 
-	return ret;
+	return UN_TRUE;
 }
 
 // ロック
@@ -102,37 +121,33 @@ UN_BOOL CIndexBuffer::Lock(
 	UN_BOOL bIsReadOnly,
 	UN_BOOL bIsDiscard/*= UN_FALSE*/)
 {
+	UN_ASSERT(m_nIBO > 0);
+	UN_ASSERT(m_LockInfo.data == UN_NULL);
+
 	// NOTE
-	// 高速化のために IsDynamic のときは WRITEONLYで
-	// 作成しているので、READONLY は不可
+	// OpenGLES はバッファの読み込みはできないので
+	// OpenGL でもできないようにする
+	UN_ASSERT(!bIsReadOnly);
 
-	UN_ASSERT(m_pIB != UN_NULL);
+	// NOTE
+	// nSize == 0 のときはバッファ全体
 
-	DWORD flag = 0;
-	if (IsDynamic()) {
-		// READONLY不可
-		VRETURN(!bIsReadOnly);
-		
-		if (bIsDiscard) {
-			flag = D3DLOCK_DISCARD;
-		}
-		else {
-			flag = D3DLOCK_NOOVERWRITE;
-		}
-	}
-	else if (bIsReadOnly) {
-		flag = D3DLOCK_READONLY;
-	}
+	nOffset = (nSize > 0 ? nOffset : 0);
 
-	HRESULT hr = m_pIB->Lock(
-					nOffset,
-					nSize,
-					data,
-					flag);
+	UN_UINT nStride = GetStride();
 
-	UN_BOOL ret = SUCCEEDED(hr);
+	nSize = (nSize > 0
+				? nSize
+				: nStride * m_nIdxNum);
 
-	return ret;
+	m_LockInfo.data = ALLOC_ZERO(m_pAllocator, nSize);
+	VRETURN(m_LockInfo.data != UN_NULL);
+
+	*data = m_LockInfo.data;
+	m_LockInfo.offset = nOffset;
+	m_LockInfo.size = nSize;
+
+	return UN_TRUE;;
 }
 
 /**
@@ -140,33 +155,34 @@ UN_BOOL CIndexBuffer::Lock(
 */
 UN_BOOL CIndexBuffer::Unlock()
 {
-	UN_ASSERT(m_pIB != UN_NULL);
-	
-	HRESULT hr = m_pIB->Unlock();
-	UN_BOOL ret = SUCCEEDED(hr);
+	UN_ASSERT(m_nIBO > 0);
 
-	return ret;
+	if (m_LockInfo.IsLock() != UN_NULL) {
+		UN_OGL_EXT_PROC(glBindBuffer)(GL_ARRAY_BUFFER, m_nIBO);
+
+		UN_OGL_EXT_PROC(glGetBufferSubData)(
+			GL_ARRAY_BUFFER,
+			m_LockInfo.offset,
+			m_LockInfo.size,
+			m_LockInfo.data);
+
+		FREE(m_pAllocator, m_LockInfo.data);
+
+		// TODO
+		// Error Check;
+
+		UN_OGL_EXT_PROC(glBindBuffer)(GL_ARRAY_BUFFER, 0);
+	}
+
+	m_LockInfo.Clear();
+
+	return UN_TRUE;;
 }
 
 // リセット
 UN_BOOL CIndexBuffer::Reset()
 {
-	UN_BOOL ret = UN_TRUE;
-
-	// NOTE
-	// Dynamicでないときは、D3DPOOL_MANAGEDで作成されているので再作成する必要はない
-
-	if (IsDynamic()) {
-		D3D_DEVICE* pD3DDev = m_pDevice->GetRawInterface();
-
-		SAFE_RELEASE(m_pIB);
-
-		// 本体作成
-		ret = CreateBody(
-				m_nIdxNum,
-				m_Fmt,
-				m_nCreateType);
-	}
-
-	return ret;
+	// Nothing is done.
+	UN_ASSERT(UN_FALSE);
+	return UN_TRUE;
 }

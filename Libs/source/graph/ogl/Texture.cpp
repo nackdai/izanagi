@@ -1,88 +1,11 @@
-#include "graph/dx9/Texture.h"
-#include "graph/dx9/Surface.h"
-#include "std/MemoryAllocator.h"
-#include "graph/dx9/D3D9ParamValueConverter.h"
+#include "graph/ogl/Texture.h"
+#include "graph/ogl/Surface.h"
+#include "graph/ogl/OGLParamValueConverter.h"
+#include "graph/ogl/GraphicsDevice.h"
+#include "std/allocator/MemoryAllocator.h"
+#include "graph/ogl/OGLExtFuncProxy.h"
 
 using namespace uranus;
-
-namespace {
-	struct SFuncCreateTextureFromFile {
-		UN_BOOL operator()(
-			D3D_TEXTURE** pTex,
-			CGraphicsDevice* pDevice,
-			UN_PCSTR lpszPathName,
-			UN_UINT nDummy,
-			E_GRAPH_PIXEL_FMT nFmt)
-		{
-			D3D_DEVICE* pD3DDev = pDevice->GetRawInterface();
-
-			D3DFORMAT fmt = (nFmt >= E_GRAPH_PIXEL_FMT_NUM
-								? D3DFMT_FROM_FILE
-								: UN_GET_TARGET_PIXEL_FMT(nFmt));
-
-			HRESULT hr;
-			hr = D3DXCreateTextureFromFileEx(
-					pD3DDev,
-					lpszPathName,
-					D3DX_DEFAULT,		// width
-					D3DX_DEFAULT,		// height
-					D3DFMT_FROM_FILE,	// mip levels
-					0,					// usage
-					fmt,				// format
-					D3DPOOL_MANAGED,	// pool
-					D3DX_FILTER_LINEAR,	// filter
-					D3DX_FILTER_LINEAR,	// mip filter
-					0,					// color key
-					NULL,
-					NULL,
-					pTex);
-
-			UN_BOOL ret = SUCCEEDED(hr);
-			UN_ASSERT(ret);
-
-			return ret;
-		}
-	};
-
-	struct SFuncCreateTextureFromMemory {
-		UN_BOOL operator()(
-			D3D_TEXTURE** pTex,
-			CGraphicsDevice* pDevice,
-			const void* pData,
-			UN_UINT nDataSize,
-			E_GRAPH_PIXEL_FMT nFmt)
-		{
-			D3D_DEVICE* pD3DDev = pDevice->GetRawInterface();
-
-			D3DFORMAT fmt = (nFmt >= E_GRAPH_PIXEL_FMT_NUM
-								? D3DFMT_FROM_FILE
-								: UN_GET_TARGET_PIXEL_FMT(nFmt));
-
-			HRESULT hr;
-			hr = D3DXCreateTextureFromFileInMemoryEx (
-					pD3DDev,
-					pData,
-					nDataSize,
-					D3DX_DEFAULT,		// width
-					D3DX_DEFAULT,		// height
-					D3DFMT_FROM_FILE,	// mip levels
-					0,					// usage
-					fmt,				// format
-					D3DPOOL_MANAGED,	// pool
-					D3DX_FILTER_LINEAR,	// filter
-					D3DX_FILTER_LINEAR,	// mip filter
-					0,					// color key
-					NULL,
-					NULL,
-					pTex);
-
-			UN_BOOL ret = SUCCEEDED(hr);
-			UN_ASSERT(ret);
-
-			return ret;
-		}
-	};
-}	// namespace
 
 // ファイルからテクスチャ作成
 CTexture* CTexture::CreateTextureFromFile(
@@ -91,14 +14,9 @@ CTexture* CTexture::CreateTextureFromFile(
 	UN_PCSTR lpszPathName,
 	E_GRAPH_PIXEL_FMT fmt)
 {
-	CTexture* ret = CreateBody_From(
-						pDevice,
-						pAllocator,
-						lpszPathName,
-						0,
-						SFuncCreateTextureFromFile(),
-						fmt);
-	return ret;
+	// Nothing is done.
+	UN_ASSERT(UN_FALSE);
+	return UN_NULL;
 }
 
 // データからテクスチャ作成
@@ -109,76 +27,9 @@ CTexture* CTexture::CreateTextureFromMemory(
 	UN_UINT nDataSize,
 	E_GRAPH_PIXEL_FMT fmt)
 {
-	CTexture* ret = CreateBody_From(
-						pDevice, pAllocator,
-						pData, nDataSize,
-						SFuncCreateTextureFromMemory(),
-						fmt);
-	return ret;
-}
-
-// 本体作成
-// 入力から作成
-template <typename _T, typename _Func>
-CTexture* CTexture::CreateBody_From(
-	CGraphicsDevice* pDevice,
-	IMemoryAllocator* pAllocator,
-	_T tInput,
-	UN_UINT nInputSize,
-	_Func& func,
-	E_GRAPH_PIXEL_FMT fmt)
-{
-	UN_ASSERT(pDevice != UN_NULL);
-
-	UN_BOOL result = UN_TRUE;
-	UN_UINT8* pBuf = UN_NULL;
-	CTexture* pInstance = UN_NULL;
-
-	// メモリ確保
-	pBuf = (UN_UINT8*)ALLOC_ZERO(pAllocator, sizeof(CTexture));
-	if (!(result = (pBuf != UN_NULL))) {
-		UN_ASSERT(UN_FALSE);
-		goto __EXIT__;
-	}
-
-	// インスタンス作成
-	pInstance = new (pBuf)CTexture;
-	{
-		pInstance->m_pAllocator = pAllocator;
-		SAFE_REPLACE(pInstance->m_pDevice, pDevice);
-
-		pInstance->AddRef();
-	}
-	
-	// 本体作成
-	{
-		// 本体作成
-		result = func(
-					&pInstance->m_pTexture,
-					pDevice,
-					tInput,
-					nInputSize,
-					fmt);
-		UN_ASSERT(result);
-
-		pInstance->GetTextureInfo();
-	}
-
-	if (!result) {
-		goto __EXIT__;
-	}
-
-__EXIT__:
-	if (!result) {
-		if (pInstance != UN_NULL) {
-			SAFE_RELEASE(pInstance);
-		}
-		else if (pBuf != UN_NULL) {
-			pAllocator->Free(pBuf);
-		}
-	}
-
-	return pInstance;
+	// Nothing is done.
+	UN_ASSERT(UN_FALSE);
+	return UN_NULL;
 }
 
 // テクスチャ作成
@@ -337,6 +188,48 @@ __EXIT__:
 	return pInstance;
 }
 
+// コンストラクタ
+CTexture::CTexture()
+{
+	m_nTexture = 0;
+
+	m_LockInfo.Clear();
+
+	m_pSurface = UN_NULL;
+
+	m_pNext = UN_NULL;
+}
+
+// デストラクタ
+CTexture::~CTexture()
+{
+	m_pDevice->RemoveTexture(this);
+
+	FREE(m_pAllocator, m_LockInfo.data);
+	
+	if (m_nTexture > 0) {
+		glDeleteTextures(1, &m_nTexture);
+		m_nTexture = 0;
+	}
+
+	if (m_pSurface != NULL) {
+		for (UN_UINT i = 0; i < GetMipMapNum(); i++) {
+			SAFE_RELEASE(m_pSurface[i]);
+		}
+	}
+
+	SAFE_RELEASE(m_pDevice);
+}
+
+namespace {
+	inline UN_BOOL _IsCompressedFormat(E_GRAPH_PIXEL_FMT fmt)
+	{
+		return ((fmt == E_GRAPH_PIXEL_FMT_DXT1)
+				|| (fmt == E_GRAPH_PIXEL_FMT_DXT3)
+				|| (fmt == E_GRAPH_PIXEL_FMT_DXT5));
+	}
+}	// namespace
+
 // 本体作成（テクスチャ）
 UN_BOOL CTexture::CreateBody_Texture(
 	UN_UINT nWidth,
@@ -348,40 +241,37 @@ UN_BOOL CTexture::CreateBody_Texture(
 {
 	UN_ASSERT(m_pDevice != UN_NULL);
 
-	D3D_DEVICE* pD3DDev = m_pDevice->GetRawInterface();
+	glGenTextures(1, &m_nTexture);
+	VRETURN(m_nTexture > 0);
+
+	glBindTexture(GL_TEXTURE_2D, m_nTexture);
 	
-	UN_DWORD nUsage = 0;
-	if (!bIsOnSysMem) {
-		nUsage = (nCreateType & E_GRAPH_RSC_CREATE_TYPE_STATIC
-					? 0
-					: D3DUSAGE_DYNAMIC);
-	}
+	UN_UINT nPixelFmt = UN_GET_TARGET_PIXEL_FMT(nFmt);
+	GLenum fmt = UN_OGL_GET_PIXEL_FMT(nPixelFmt);
+	GLenum type = UN_OGL_GET_PIXEL_TYPE(nPixelFmt);
 
-	D3DPOOL nPool = D3DPOOL_SYSTEMMEM;
-	if (!bIsOnSysMem) {
-		nPool = (nCreateType & E_GRAPH_RSC_CREATE_TYPE_DYNAMIC
-					? D3DPOOL_DEFAULT
-					: D3DPOOL_MANAGED);
-	}
-
-	D3DFORMAT fmt = UN_GET_TARGET_PIXEL_FMT(nFmt);
-
+	// TODO
 	// 本体作成
-	HRESULT hr;
-	hr = pD3DDev->CreateTexture(
-			nWidth,			// width
-			nHeight,		// height
-			nMipLevel,		// mip levels
-			nUsage,			// usage
-			fmt,			// format
-			nPool,			// pool
-			&m_pTexture,
-			NULL);
+	if (_IsCompressedFormat(nFmt)) {
+	}
+	else {
+	}
 
-	VRETURN(SUCCEEDED(hr));
+	glBindTexture(GL_TEXTURE_2D, 0);
 
-	// テクスチャ情報取得
-	GetTextureInfo();
+	// テクスチャ情報設定
+	{
+		m_TexInfo.width = nWidth;
+		m_TexInfo.height = nHeight;
+		
+		m_TexInfo.level = nMipLevel;
+		m_TexInfo.fmt = nFmt;
+
+		m_TexInfo.is_rendertarget = UN_FALSE;
+		m_TexInfo.is_dynamic = UN_TRUE;
+		m_TexInfo.is_on_sysmem = UN_FALSE;
+		m_TexInfo.is_on_vram = UN_TRUE;
+	}
 
 	return UN_TRUE;
 }
@@ -393,54 +283,20 @@ UN_BOOL CTexture::CreateBody_RenderTarget(
 	E_GRAPH_PIXEL_FMT nFmt,
 	UN_UINT nMipLevel)
 {
-	UN_ASSERT(m_pDevice != UN_NULL);
+	UN_ASSERT(!_IsCompressedFormat(nFmt));
 
-	D3D_DEVICE* pD3DDev = m_pDevice->GetRawInterface();
+	// テクスチャ作成
+	UN_BOOL ret = CreateBody_Texture(
+					nWidth,
+					nHeight,
+					nMipLevel,
+					nFmt,
+					E_GRAPH_RSC_CREATE_TYPE_STATIC,	// TODO
+					UN_FALSE);
 
-	D3DFORMAT fmt = UN_GET_TARGET_PIXEL_FMT(nFmt);
+	m_TexInfo.is_rendertarget = UN_TRUE;
 
-	// NOTE
-	// poolはD3DPOOL_DEFAULTしか許されていない
-
-	// 本体作成
-	HRESULT hr;
-	hr = pD3DDev->CreateTexture(
-			nWidth,					// width
-			nHeight,				// height
-			nMipLevel,				// mip levels
-			D3DUSAGE_RENDERTARGET,	// usage
-			fmt,					// format
-			D3DPOOL_DEFAULT,		// pool
-			&m_pTexture,
-			NULL);
-
-	VRETURN(SUCCEEDED(hr));
-
-	// テクスチャ情報取得
-	GetTextureInfo();
-
-	return UN_TRUE;
-}
-
-// テクスチャ情報取得
-void CTexture::GetTextureInfo()
-{
-	UN_ASSERT(m_pTexture != UN_NULL);
-
-	D3DSURFACE_DESC sDesc;
-
-	m_pTexture->GetLevelDesc(0, &sDesc);
-
-	m_TexInfo.width = sDesc.Width;
-	m_TexInfo.height = sDesc.Height;
-	
-	m_TexInfo.level = static_cast<UN_UINT8>(m_pTexture->GetLevelCount());
-	m_TexInfo.fmt = UN_GET_ABST_PIXEL_FMT(sDesc.Format);
-
-	m_TexInfo.is_rendertarget = (sDesc.Usage == D3DUSAGE_RENDERTARGET);
-	m_TexInfo.is_dynamic = ((sDesc.Usage & D3DUSAGE_DYNAMIC) > 0);
-	m_TexInfo.is_on_sysmem = (sDesc.Pool == D3DPOOL_SYSTEMMEM);
-	m_TexInfo.is_on_vram = (sDesc.Pool == D3DPOOL_DEFAULT);
+	return ret;
 }
 
 // サーフェス作成
@@ -448,6 +304,8 @@ UN_BOOL CTexture::CreateSurface()
 {
 	// サーフェス作成
 	if (m_pSurface != UN_NULL) {
+		UN_ASSERT(m_TexInfo.level == 1);
+
 		for (UN_UINT i = 0; i < m_TexInfo.level; i++) {
 			m_pSurface[i] = CSurface::CreateSurface(m_pAllocator);
 			UN_BOOL result = (m_pSurface != UN_NULL);
@@ -455,6 +313,30 @@ UN_BOOL CTexture::CreateSurface()
 			if (result) {
 				result = m_pSurface[i]->Reset(this, i);
 				VRETURN(result);
+
+				UN_OGL_EXT_PROC(glBindFramebuffer)(
+					GL_FRAMEBUFFER_EXT,
+					m_pSurface[i]->GetRawInterface());
+
+				// FBO とテクスチャをバインド
+				UN_OGL_EXT_PROC(glFramebufferTexture2D)(
+					GL_FRAMEBUFFER_EXT,
+					GL_COLOR_ATTACHMENT0_EXT,
+					GL_TEXTURE_2D,
+					m_nTexture,
+					0);
+
+				// FBO と深度バッファをバインド
+				UN_OGL_EXT_PROC(glFramebufferTexture2D)(
+					GL_FRAMEBUFFER_EXT,
+					GL_DEPTH_ATTACHMENT_EXT,
+					GL_TEXTURE_2D,
+					m_pSurface[i]->GetDepthBuffer(),
+					0);
+
+				UN_OGL_EXT_PROC(glBindFramebuffer)(
+					GL_FRAMEBUFFER_EXT,
+					0);
 			}
 			else {
 				UN_ASSERT(UN_FALSE);
@@ -466,6 +348,60 @@ UN_BOOL CTexture::CreateSurface()
 	return UN_TRUE;
 }
 
+// 本体解放
+void CTexture::ReleaseResource()
+{
+	// Nothing is done.
+	UN_ASSERT(UN_FALSE);
+}
+
+namespace {
+	inline UN_UINT _ComputePitch(
+		UN_UINT nWidth,
+		E_GRAPH_PIXEL_FMT fmt)
+	{
+		UN_UINT nBPP = 0;
+
+		switch (fmt) {
+		case E_GRAPH_PIXEL_FMT_RGBA8:
+		case E_GRAPH_PIXEL_FMT_BGRA8:
+		case E_GRAPH_PIXEL_FMT_RGB10A2:
+		case E_GRAPH_PIXEL_FMT_R32F:
+			nBPP = 4;
+			break;
+		case E_GRAPH_PIXEL_FMT_RGBA4:
+			nBPP = 2;
+			break;
+		case E_GRAPH_PIXEL_FMT_A8:
+			nBPP = 1;
+			break;
+		case E_GRAPH_PIXEL_FMT_RGBA16F:
+			nBPP = 8;
+			break;
+		case E_GRAPH_PIXEL_FMT_RGBA32F:
+			nBPP = 16;
+			break;
+		default:
+			UN_ASSERT(UN_FALSE);
+			break;
+		}
+
+		UN_UINT ret = nBPP * nWidth;
+
+		return ret;
+	}
+
+	inline UN_UINT _ComputeTexSize(
+		UN_UINT nWidth,
+		UN_UINT nHeight,
+		E_GRAPH_PIXEL_FMT fmt)
+	{
+		UN_UINT nPitch = _ComputePitch(nWidth, fmt);
+		UN_UINT ret = nPitch * nHeight;
+		return ret;
+	}
+}	// namespace
+
 /**
 * ロック
 */
@@ -475,21 +411,16 @@ UN_UINT CTexture::Lock(
 	UN_BOOL bIsReadOnly,
 	UN_BOOL bIsDiscard/*= UN_FALSE*/)
 {
+	UN_ASSERT(m_nTexture > 0);
+	UN_ASSERT(!m_LockInfo.IsLock());
+
 	// NOTE
-	// 動的テクスチャにおいて
-	// ミップマップの場合、最上位レベルでのみ LOCK_DISCARD を使える
-	// 最上位レベルをロックするだけですべてのレベルが破棄される
+	// OpenGLES はバッファの読み込みはできないので
+	// OpenGL でもできないようにする
+	UN_ASSERT(!bIsReadOnly);
 
-	UN_ASSERT(m_pTexture != UN_NULL);
-
-#if 0
-	if (!IsDynamic() && !IsOnSysMem()) {
-		// 動的テクスチャ以外ではロック不可
-		// ただし、システムメモリ上にあるときはＯＫ
-		UN_ASSERT(UN_FALSE);
-		return 0;
-	}
-#endif
+	// NOTE
+	// OpenGL の仕様として Discard という概念がない（はず）ので無視する
 
 	if (nLevel >= m_TexInfo.level) {
 		// レベル指定オーバー
@@ -497,36 +428,22 @@ UN_UINT CTexture::Lock(
 		return 0;
 	}
 
-	DWORD flag = 0;
-	if (IsDynamic()) {
-		// READONLY不可
-		VRETURN(!bIsReadOnly);
+	m_LockInfo.level = nLevel;
+	m_LockInfo.width = GetWidth(nLevel);
+	m_LockInfo.height = GetHeight(nLevel);
 
-		if (bIsDiscard) {
-			flag = D3DLOCK_DISCARD;
-		}
-		else {
-			flag = D3DLOCK_NOOVERWRITE;
-		}
-	}
-	else if (bIsReadOnly) {
-		flag = D3DLOCK_READONLY;
-	}
+	UN_UINT nSize = _ComputeTexSize(
+						m_LockInfo.width,
+						m_LockInfo.height,
+						m_TexInfo.fmt);
 
-	D3DLOCKED_RECT rect;
-	HRESULT hr = m_pTexture->LockRect(
-					nLevel,
-					&rect,
-					NULL,
-					flag);
-	UN_ASSERT(SUCCEEDED(hr));
+	m_LockInfo.data = ALLOC_ZERO(m_pAllocator, nSize);
+	UN_ASSERT(m_LockInfo.data != UN_NULL);
 
-	UINT ret = 0;
-
-	if (SUCCEEDED(hr)) {
-		*data = rect.pBits;
-		ret = rect.Pitch;
-	}
+	*data = m_LockInfo.data;
+	UN_UINT ret = _ComputePitch(
+					m_LockInfo.width, 
+					m_TexInfo.fmt); 
 
 	return ret;
 }
@@ -536,13 +453,29 @@ UN_UINT CTexture::Lock(
 */
 UN_BOOL CTexture::Unlock(UN_UINT nLevel)
 {
-	UN_ASSERT(m_pTexture != UN_NULL);
+	UN_ASSERT(m_nTexture > 0);
+	UN_ASSERT(m_LockInfo.IsLock());
 
-	HRESULT hr = m_pTexture->UnlockRect(nLevel);
-	UN_BOOL ret = SUCCEEDED(hr);
-	UN_ASSERT(ret);
+	glBindTexture(GL_TEXTURE_2D, m_nTexture);
 
-	return ret;
+	glTexSubImage2D(
+		GL_TEXTURE_2D,
+		m_LockInfo.level,
+		0,
+		0,
+		m_LockInfo.width,
+		m_LockInfo.height,
+		m_TexInfo.glFmt,
+		m_TexInfo.glType,
+		m_LockInfo.data);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	FREE(m_pAllocator, m_LockInfo.data);
+	
+	m_LockInfo.Clear();
+	
+	return UN_TRUE;
 }
 
 // サーフェス取得
@@ -557,40 +490,7 @@ CSurface* CTexture::GetSurface(UN_UINT idx)
 // リセット
 UN_BOOL CTexture::Reset()
 {
-	UN_BOOL ret = UN_TRUE;
-
-	if (IsRenderTarget()) {
-		// RenderTargetは強制的にリセット
-
-		SAFE_RELEASE(m_pTexture);
-
-		ret = CreateBody_RenderTarget(
-				GetWidth(),
-				GetHeight(),
-				GetPixelFormat(),
-				GetMipMapNum());
-		UN_ASSERT(ret);
-
-		if (ret) {
-			// サーフェスもリセット
-			for (UN_UINT32 i = 0; i < GetMipMapNum(); i++) {
-				ret = m_pSurface[i]->Reset(this, i);
-				UN_ASSERT(ret);
-			}
-		}
-	}
-	else if (IsOnVram()) {
-		SAFE_RELEASE(m_pTexture);
-
-		ret = CreateBody_Texture(
-				GetWidth(),
-				GetHeight(),
-				GetMipMapNum(),
-				GetPixelFormat(),
-				E_GRAPH_RSC_CREATE_TYPE_DYNAMIC,
-				IsOnSysMem());
-		UN_ASSERT(ret);
-	}
-
-	return ret;
+	// Nothing is done.
+	UN_ASSERT(UN_FALSE);
+	return UN_FALSE;
 }
