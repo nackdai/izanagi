@@ -34,7 +34,7 @@ CVertexDeclaration* CVertexDeclaration::CreateVertexDeclaration(
 	return pInstance;
 }
 
-void CVertexDeclaration::Apply(CGraphicsDevice* pDevice)
+void CVertexDeclaration::Apply(CVertexShader* pVS)
 {
 	for (UN_UINT i = 0; i < m_nElemNum; i++) {
 		const SVertexElement& sElem = m_pVtxElem[i];

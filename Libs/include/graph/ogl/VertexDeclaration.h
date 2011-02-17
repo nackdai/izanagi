@@ -6,6 +6,8 @@
 #include "GraphicsDevice.h"
 
 namespace uranus {
+	class CVertexShader;
+
 	/**
 	*/
 	struct SVertexElement {
@@ -42,7 +44,7 @@ namespace uranus {
 		// ‰ð•ú
 		inline void InternalRelease();
 
-		void Apply(CGraphicsDevice* pDevice);
+		void Apply(CVertexShader* pVS);
 
 	protected:
 		CGraphicsDevice* m_pDevice;
