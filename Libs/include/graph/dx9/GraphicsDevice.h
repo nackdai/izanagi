@@ -1,4 +1,4 @@
-#if !defined(__URANUS_GRPAH_GRAPHICS_DEVICE_H__)
+ï»¿#if !defined(__URANUS_GRPAH_GRAPHICS_DEVICE_H__)
 #define __URANUS_GRPAH_GRAPHICS_DEVICE_H__
 
 #include "unDefs.h"
@@ -22,7 +22,7 @@ namespace uranus {
 	struct SVertexElement;
 
 	/**
-	* ‰Šú‰»ƒpƒ‰ƒ[ƒ^
+	* åˆæœŸåŒ–ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
 	*/
 	struct SGraphicsDeviceInitParams {
 		HWND hFocusWindow;
@@ -43,7 +43,7 @@ namespace uranus {
 	};
 
 	/**
-	* ƒOƒ‰ƒtƒBƒbƒNƒXƒfƒoƒCƒX
+	* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ã‚¹ãƒ‡ãƒã‚¤ã‚¹
 	*/
 	class CGraphicsDevice : public CObject {
 		friend class CTexture;
@@ -55,12 +55,12 @@ namespace uranus {
 		static CGraphicsDevice* s_pInstance;
 
 	public:
-		// ƒCƒ“ƒXƒ^ƒ“ƒXì¬
+		// ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ä½œæˆ
 		static CGraphicsDevice* CreateGrapicsDevice(
 			UN_UINT nBufSize,
 			void* pDeviceBuffer);
 
-		// ƒOƒ‰ƒtƒBƒbƒNƒXƒfƒoƒCƒX—pƒƒ‚ƒŠƒAƒƒP[ƒ^ƒ_ƒ“ƒv
+		// ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ã‚¹ãƒ‡ãƒã‚¤ã‚¹ç”¨ãƒ¡ãƒ¢ãƒªã‚¢ãƒ­ã‚±ãƒ¼ã‚¿ãƒ€ãƒ³ãƒ—
 		static inline void Dump();
 
 	private:
@@ -71,22 +71,22 @@ namespace uranus {
 		const CGraphicsDevice& operator=(const CGraphicsDevice& rhs);
 
 	private:
-		// ‰ğ•ú
+		// è§£æ”¾
 		void InternalRelease();
 
 	public:
-		// ƒtƒ@ƒCƒ‹‚©‚çƒeƒNƒXƒ`ƒƒì¬
+		// ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¯ã‚¹ãƒãƒ£ä½œæˆ
 		CTexture* CreateTextureFromFile(
 			UN_PCSTR lpszPathName,
 			E_GRAPH_PIXEL_FMT fmt = E_GRAPH_PIXEL_FMT_NUM);
 
-		// ƒƒ‚ƒŠ‚©‚çƒeƒNƒXƒ`ƒƒì¬
+		// ãƒ¡ãƒ¢ãƒªã‹ã‚‰ãƒ†ã‚¯ã‚¹ãƒãƒ£ä½œæˆ
 		CTexture* CreateTextureFromMemory(
 			void* pData,
 			UN_UINT nDataSize,
 			E_GRAPH_PIXEL_FMT fmt);
 
-		// ƒeƒNƒXƒ`ƒƒì¬
+		// ãƒ†ã‚¯ã‚¹ãƒãƒ£ä½œæˆ
 		CTexture* CreateTexture(
 			UN_UINT nWidth,
 			UN_UINT nHeight,
@@ -94,12 +94,12 @@ namespace uranus {
 			E_GRAPH_PIXEL_FMT fmt,
 			E_GRAPH_RSC_CREATE_TYPE nCreateType);
 
-		// ƒtƒ@ƒCƒ‹‚©‚çƒLƒ…[ƒuƒeƒNƒXƒ`ƒƒì¬
+		// ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ã‚­ãƒ¥ãƒ¼ãƒ–ãƒ†ã‚¯ã‚¹ãƒãƒ£ä½œæˆ
 		CCubeTexture* CreateCubeTextureFromFile(
 			UN_PCSTR lpszPathName,
 			E_GRAPH_PIXEL_FMT fmt = E_GRAPH_PIXEL_FMT_NUM);
 
-		// ƒLƒ…[ƒuƒeƒNƒXƒ`ƒƒì¬
+		// ã‚­ãƒ¥ãƒ¼ãƒ–ãƒ†ã‚¯ã‚¹ãƒãƒ£ä½œæˆ
 		CCubeTexture* CreateCubeTexture(
 			UN_UINT nWidth,
 			UN_UINT nHeight,
@@ -107,45 +107,45 @@ namespace uranus {
 			E_GRAPH_PIXEL_FMT fmt,
 			UN_BOOL bIsDynamic);
 
-		// ƒŒƒ“ƒ_[ƒ^[ƒQƒbƒgì¬
+		// ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆä½œæˆ
 		CTexture* CreateRenderTarget(
 			UN_UINT nWidth, UN_UINT nHeight,
 			E_GRAPH_PIXEL_FMT fmt);
 		
-		// ƒVƒXƒeƒ€ƒƒ‚ƒŠã‚ÉƒeƒNƒXƒ`ƒƒì¬
+		// ã‚·ã‚¹ãƒ†ãƒ ãƒ¡ãƒ¢ãƒªä¸Šã«ãƒ†ã‚¯ã‚¹ãƒãƒ£ä½œæˆ
 		CTexture* CreateTextureOnSysMem(
 			UN_UINT nWidth, UN_UINT nHeight,
 			E_GRAPH_PIXEL_FMT fmt,
 			UN_UINT nMipLevel);
 
-		// ’¸“_ƒoƒbƒtƒ@ì¬
+		// é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ä½œæˆ
 		CVertexBuffer* CreateVertexBuffer(
 			UN_UINT nStride,
 			UN_UINT nVtxNum,
 			E_GRAPH_RSC_CREATE_TYPE nCreateType);
 
-		// ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@ì¬
+		// ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ä½œæˆ
 		CIndexBuffer* CreateIndexBuffer(
 			UN_UINT nIdxNum,
 			E_GRAPH_INDEX_BUFFER_FMT fmt,
 			E_GRAPH_RSC_CREATE_TYPE nCreateType);
 
-		// ’¸“_ƒVƒF[ƒ_ì¬
+		// é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€ä½œæˆ
 		CVertexShader* CreateVertexShader(const void* pProgram);
 
-		// ƒsƒNƒZƒ‹ƒVƒF[ƒ_ì¬
+		// ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€ä½œæˆ
 		CPixelShader* CreatePixelShader(const void* pProgram);
 
-		// ’¸“_éŒ¾ì¬
+		// é ‚ç‚¹å®£è¨€ä½œæˆ
 		CVertexDeclaration* CreateVertexDeclaration(const D3D_VTX_ELEMENT* pElem);
 		CVertexDeclaration* CreateVertexDeclaration(const SVertexElement* pElem, UN_UINT nNum);
 
 	private:
-		// ƒŠƒ\[ƒX‘}“ü
+		// ãƒªã‚½ãƒ¼ã‚¹æŒ¿å…¥
 		template <class _T>
 		_T* InsertResource(_T* p, _T* pListTop);
 
-		// ƒŠƒ\[ƒXíœ
+		// ãƒªã‚½ãƒ¼ã‚¹å‰Šé™¤
 		template <class _T>
 		_T* RemoveResource(_T* p, _T* pListTop);
 
@@ -154,14 +154,14 @@ namespace uranus {
 		void RemoveIndexBuffer(CIndexBuffer* p);
 
 	public:
-		// ƒŠƒZƒbƒg
+		// ãƒªã‚»ãƒƒãƒˆ
 		UN_BOOL Reset(const SGraphicsDeviceInitParams& sParams);
 
 	private:
-		// –{‘Ìì¬
+		// æœ¬ä½“ä½œæˆ
 		UN_BOOL CreateBody(const SGraphicsDeviceInitParams& sParams);
 
-		// ƒŠƒZƒbƒg
+		// ãƒªã‚»ãƒƒãƒˆ
 		UN_BOOL ResetInternal(const SGraphicsDeviceInitParams& sParams);
 
 	private:
@@ -172,24 +172,24 @@ namespace uranus {
 		inline void ResetResource(_T* pList);
 
 	public:
-		// •`‰æŠJn
+		// æç”»é–‹å§‹
 		UN_BOOL BeginRender(
 			UN_DWORD nClearFlags,
 			UN_COLOR nClearColor,
 			UN_FLOAT fClearZ,
 			UN_DWORD nClearStencil);
 
-		// •`‰æI—¹
+		// æç”»çµ‚äº†
 		void EndRender();
 
-		// ƒNƒŠƒA
+		// ã‚¯ãƒªã‚¢
 		void Clear(
 			UN_DWORD nClearFlags,
 			UN_COLOR nClearColor,
 			UN_FLOAT fClearZ,
 			UN_DWORD nClearStencil);
 
-		// ƒV[ƒ“•`‰æŠJn
+		// ã‚·ãƒ¼ãƒ³æç”»é–‹å§‹
 		UN_BOOL BeginScene(
 			UN_DWORD nClearFlags,
 			UN_COLOR nClearColor = 0,
@@ -211,22 +211,22 @@ namespace uranus {
 			UN_FLOAT fClearZ = 1.0f,
 			UN_DWORD nClearStencil = 0);
 
-		// ƒV[ƒ“•`‰æI—¹
+		// ã‚·ãƒ¼ãƒ³æç”»çµ‚äº†
 		void EndScene(UN_UINT flag = 0xffffffff);
 
-		// “¯Šú
+		// åŒæœŸ
 		UN_BOOL Present();
 
-		// 2D•`‰æŠJn
+		// 2Dæç”»é–‹å§‹
 		UN_BOOL Begin2D();
 
-		// 2D•`‰æI—¹
+		// 2Dæç”»çµ‚äº†
 		UN_BOOL End2D();
 
-		// 2D•`‰æƒoƒbƒtƒ@ƒtƒ‰ƒbƒVƒ…
+		// 2Dæç”»ãƒãƒƒãƒ•ã‚¡ãƒ•ãƒ©ãƒƒã‚·ãƒ¥
 		UN_BOOL Flush2D();
 
-		// 2DƒXƒvƒ‰ƒCƒg•`‰æ
+		// 2Dã‚¹ãƒ—ãƒ©ã‚¤ãƒˆæç”»
 		UN_BOOL Draw2DSprite(
 			const CFloatRect& rcSrc,
 			const CIntRect& rcDst,
@@ -236,18 +236,18 @@ namespace uranus {
 			const CIntRect& rcDst,
 			const UN_COLOR color = UN_COLOR_RGBA(255, 255, 255, 255));
 
-		// 2D‹éŒ`•`‰æ
+		// 2DçŸ©å½¢æç”»
 		UN_BOOL Draw2DRect(
 			const CIntRect& rcDst,
 			const UN_COLOR color);
 
-		// 2Dƒ‰ƒCƒ“•`‰æ
+		// 2Dãƒ©ã‚¤ãƒ³æç”»
 		UN_BOOL Draw2DLine(
 			const CIntPoint& ptStart,
 			const CIntPoint& ptGoal,
 			const UN_COLOR color);
 
-		// 2D•`‰æƒ‚[ƒh
+		// 2Dæç”»ãƒ¢ãƒ¼ãƒ‰
 		void Set2DRenderOp(E_GRAPH_2D_RENDER_OP nOp);
 		E_GRAPH_2D_RENDER_OP Get2DRenderOp() const;
 
@@ -255,36 +255,36 @@ namespace uranus {
 		void ClearRenderState();
 
 	public:
-		// ƒeƒNƒXƒ`ƒƒƒZƒbƒg
+		// ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚»ãƒƒãƒˆ
 		UN_BOOL SetTexture(UN_UINT nStage, CBaseTexture* pTex);
 
-		// ƒeƒNƒXƒ`ƒƒæ“¾
+		// ãƒ†ã‚¯ã‚¹ãƒãƒ£å–å¾—
 		CBaseTexture* GetTexture(UN_UINT nStage);
 
 	private:
-		// ƒŒƒ“ƒ_[ƒ^[ƒQƒbƒgƒZƒbƒg
+		// ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚»ãƒƒãƒˆ
 		UN_BOOL PushRenderTarget(CSurface** pSurface, UN_UINT num);
 		void SetRenderTarget(CSurface** pSurface, UN_UINT num);
 
-		// [“xEƒXƒeƒ“ƒVƒ‹ƒZƒbƒg
+		// æ·±åº¦ãƒ»ã‚¹ãƒ†ãƒ³ã‚·ãƒ«ã‚»ãƒƒãƒˆ
 		UN_BOOL PushDepthStencil(CSurface* pSurface);
 		void SetDepthStencil(CSurface* pSurface);
 
 	public:
-		// ’¸“_ƒoƒbƒtƒ@ƒZƒbƒg
+		// é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ã‚»ãƒƒãƒˆ
 		UN_BOOL SetVertexBuffer(
 			UN_UINT nStreamIdx,
 			UN_UINT nOffsetByte,
 			UN_UINT nStride,
 			CVertexBuffer* pVB);
 
-		// FVFƒZƒbƒg
+		// FVFã‚»ãƒƒãƒˆ
 		UN_BOOL SetFVF(UN_DWORD dwFVF);
 
-		// ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@ƒZƒbƒg
+		// ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ã‚»ãƒƒãƒˆ
 		UN_BOOL SetIndexBuffer(CIndexBuffer* pIB);
 
-		// ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@•`‰æ
+		// ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡æç”»
 		UN_BOOL DrawIndexedPrimitive(
 			E_GRAPH_PRIM_TYPE prim_type,
 			UN_UINT nBaseIdx,
@@ -293,70 +293,70 @@ namespace uranus {
 			UN_UINT nStartIdx,
 			UN_UINT nPrimCnt);
 
-		// ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@‚È‚µ•`‰æ
+		// ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ãªã—æç”»
 		UN_BOOL DrawPrimitive(
 			E_GRAPH_PRIM_TYPE prim_type,
 			UN_UINT nStartIdx,
 			UN_UINT nPrimCnt);
 
 	public:
-		// ’¸“_ƒVƒF[ƒ_ƒZƒbƒg
+		// é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€ã‚»ãƒƒãƒˆ
 		UN_BOOL SetVertexShader(CVertexShader* pVS);
 
-		// ƒsƒNƒZƒ‹ƒVƒF[ƒ_ƒZƒbƒg
+		// ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€ã‚»ãƒƒãƒˆ
 		UN_BOOL SetPixelShader(CPixelShader* pPS);
 
-		// ’¸“_éŒ¾ƒZƒbƒg
+		// é ‚ç‚¹å®£è¨€ã‚»ãƒƒãƒˆ
 		UN_BOOL SetVertexDeclaration(CVertexDeclaration* pVD);
 
 	public:
-		// ƒrƒ…[ƒ|[ƒgƒZƒbƒg
+		// ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆã‚»ãƒƒãƒˆ
 		UN_BOOL SetViewport(const SViewport& vp);
 
-		// ƒfƒtƒHƒ‹ƒg‚ÌƒŒƒ“ƒ_[ƒXƒe[ƒg‚ğİ’è
+		// ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¹ãƒ†ãƒ¼ãƒˆã‚’è¨­å®š
 		void SetDefaultRenderState();
 
-		// ƒŒƒ“ƒ_[ƒXƒe[ƒg•Û‘¶
+		// ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¹ãƒ†ãƒ¼ãƒˆä¿å­˜
 		UN_BOOL SaveRenderState();
 
-		// ƒŒƒ“ƒ_[ƒXƒe[ƒg•œ‹A
+		// ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¹ãƒ†ãƒ¼ãƒˆå¾©å¸°
 		UN_BOOL LoadRenderState();
 		void SetRenderState(const S_RENDER_STATE& sRS);
 
 	public:
-		// ƒfƒBƒXƒvƒŒƒCƒ‚[ƒhæ“¾
+		// ãƒ‡ã‚£ã‚¹ãƒ—ãƒ¬ã‚¤ãƒ¢ãƒ¼ãƒ‰å–å¾—
 		inline const D3DDISPLAYMODE& GetDisplayMode() const;
 
-		// ƒvƒŒƒ[ƒ“ƒgƒpƒ‰ƒ[ƒ^æ“¾
+		// ãƒ—ãƒ¬ã‚¼ãƒ³ãƒˆãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å–å¾—
 		inline const D3DPRESENT_PARAMETERS& GetPresentParam() const;
 
-		// ƒŠƒtƒŒƒbƒVƒ…ƒŒ[ƒgæ“¾
+		// ãƒªãƒ•ãƒ¬ãƒƒã‚·ãƒ¥ãƒ¬ãƒ¼ãƒˆå–å¾—
 		inline UN_UINT GetRefreshRate() const;
 
-		// ƒTƒ“ƒvƒ‰ƒXƒe[ƒgæ“¾
+		// ã‚µãƒ³ãƒ—ãƒ©ã‚¹ãƒ†ãƒ¼ãƒˆå–å¾—
 		inline const S_SAMPLER_STATE& GetSamplerState(UN_UINT nStage) const;
 
-		// ƒŒƒ“ƒ_[ƒXƒe[ƒgæ“¾
+		// ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¹ãƒ†ãƒ¼ãƒˆå–å¾—
 		inline const S_RENDER_STATE& GetRenderState() const;
 
-		// ƒrƒ…[ƒ|[ƒgæ“¾
+		// ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆå–å¾—
 		inline const SViewport& GetViewport() const;
 
-		// ƒVƒU[‹éŒ`
+		// ã‚·ã‚¶ãƒ¼çŸ©å½¢
 		inline void SetScissorTestRect(const SIntRect& rc);
 
-		// ƒŒƒ“ƒ_[ƒXƒe[ƒgİ’è
+		// ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¹ãƒ†ãƒ¼ãƒˆè¨­å®š
 		inline void SetRenderState(E_GRAPH_RENDER_STATE nState, UN_DWORD val);
 
 	private:
-		// ƒeƒNƒXƒ`ƒƒƒXƒe[ƒWƒXƒe[ƒgİ’è
+		// ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚¹ãƒ†ãƒ¼ã‚¸ã‚¹ãƒ†ãƒ¼ãƒˆè¨­å®š
 		template <typename _TS, typename _T>
 		inline void SetTextureStageState(
 			UN_DWORD stage,
 			_TS nTSType,
 			_T& old_val, _T new_val);
 
-		// ƒTƒ“ƒvƒ‰ƒXƒe[ƒgİ’è
+		// ã‚µãƒ³ãƒ—ãƒ©ã‚¹ãƒ†ãƒ¼ãƒˆè¨­å®š
 		template <typename _SS, typename _T>
 		inline void SetSamplerStateAddr(
 			UN_DWORD stage,
@@ -369,14 +369,14 @@ namespace uranus {
 			_T& old_val, _T new_val);
 
 	public:
-		// ƒŒƒ“ƒ_[ƒ^[ƒQƒbƒgæ“¾
+		// ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆå–å¾—
 		inline CSurface* GetRenderTarget(UN_UINT idx);
 		inline CSurface* GetDepthSrencil();
 
-		// ƒŠƒZƒbƒg—pƒR[ƒ‹ƒoƒbƒNƒZƒbƒg
+		// ãƒªã‚»ãƒƒãƒˆç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚»ãƒƒãƒˆ
 		inline void SetResetCallBack(GraphicsDeviceResetCallBack pCallBack);
 
-		// ƒfƒoƒCƒXƒƒXƒg—pƒR[ƒ‹ƒoƒbƒNƒZƒbƒg
+		// ãƒ‡ãƒã‚¤ã‚¹ãƒ­ã‚¹ãƒˆç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚»ãƒƒãƒˆ
 		inline void SetLostDeviceCallBack(GraphicsDeviceLostDeviceCallBack pCallBack);
 
 	public:
@@ -384,7 +384,7 @@ namespace uranus {
 
 	private:
 		enum {
-			// ƒŒƒ“ƒ_[ƒ^[ƒQƒbƒg‚ÌƒLƒ…[”
+			// ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®ã‚­ãƒ¥ãƒ¼æ•°
 			RT_QUEUE_MAX = 4,
 		};
 
@@ -393,56 +393,56 @@ namespace uranus {
 
 		D3D_INST* m_pD3D;
 
-		// –{‘Ì
+		// æœ¬ä½“
 		D3D_DEVICE* m_pDevice;
 
 		D3DDISPLAYMODE m_sDisplayMode;
 		D3DPRESENT_PARAMETERS m_sPresentParameters;
 		HWND m_hFocusWindow;
 
-		// ƒeƒNƒXƒ`ƒƒ
+		// ãƒ†ã‚¯ã‚¹ãƒãƒ£
 		CBaseTexture* m_pTexture[TEX_STAGE_NUM];
 		S_SAMPLER_STATE m_sSamplerState[TEX_STAGE_NUM];
 
-		// ƒŒƒ“ƒ_[ƒXƒe[ƒg
+		// ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¹ãƒ†ãƒ¼ãƒˆ
 		CRenderState m_RenderState;
 
-		// ƒtƒŒ[ƒ€ƒoƒbƒtƒ@
+		// ãƒ•ãƒ¬ãƒ¼ãƒ ãƒãƒƒãƒ•ã‚¡
 		CSurface* m_pRT;
 		CSurface* m_pDepth;
 
-		// ƒŒƒ“ƒ_[ƒ^[ƒQƒbƒgŠÇ—
+		// ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆç®¡ç†
 		CRenderTargetManager<RT_QUEUE_MAX> m_cRTMgr[MAX_MRT_NUM];
 		CRenderTargetManager<RT_QUEUE_MAX> m_cDepthMgr;
 
-		// 2D•`‰æ—p
+		// 2Dæç”»ç”¨
 		C2DRenderer* m_p2DRenderer;
 
-		// ƒŠƒZƒbƒg‘Îô—p
+		// ãƒªã‚»ãƒƒãƒˆå¯¾ç­–ç”¨
 		CTexture* m_pResetTexture;
 		CVertexBuffer* m_pResetVB;
 		CIndexBuffer* m_pResetIB;
 
-		// ƒtƒ‰ƒO
+		// ãƒ•ãƒ©ã‚°
 		struct {
-			UN_UINT is_call_begin		: 1;	// BeginScene‚ğŒÄ‚ñ‚¾‚©‚Ç‚¤‚©
-			UN_UINT is_render_2d		: 1;	// 2D•`‰æ’†‚©
-			UN_UINT is_force_set_state	: 1;	// ‹­§“I‚ÉƒXƒe[ƒg‚ğİ’è‚·‚é‚©‚Ç‚¤‚©
-			UN_UINT is_lost_device		: 1;	// ƒfƒoƒCƒXƒƒXƒg‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©
+			UN_UINT is_call_begin		: 1;	// BeginSceneã‚’å‘¼ã‚“ã ã‹ã©ã†ã‹
+			UN_UINT is_render_2d		: 1;	// 2Dæç”»ä¸­ã‹
+			UN_UINT is_force_set_state	: 1;	// å¼·åˆ¶çš„ã«ã‚¹ãƒ†ãƒ¼ãƒˆã‚’è¨­å®šã™ã‚‹ã‹ã©ã†ã‹
+			UN_UINT is_lost_device		: 1;	// ãƒ‡ãƒã‚¤ã‚¹ãƒ­ã‚¹ãƒˆã—ã¦ã„ã‚‹ã‹ã©ã†ã‹
 			UN_UINT reserved			: 28;
 		} m_Flags;
 
-		// ƒŠƒZƒbƒg—pƒR[ƒ‹ƒoƒbƒN
+		// ãƒªã‚»ãƒƒãƒˆç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
 		GraphicsDeviceResetCallBack m_pResetCallBack;
 
-		// ƒfƒoƒCƒXƒƒXƒg—pƒR[ƒ‹ƒoƒbƒN
+		// ãƒ‡ãƒã‚¤ã‚¹ãƒ­ã‚¹ãƒˆç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
 		GraphicsDeviceLostDeviceCallBack m_pLostDeviceCallBack;
 	};
 
 	// inline ***************************
 
 	/**
-	* ƒOƒ‰ƒtƒBƒbƒNƒXƒfƒoƒCƒX—pƒƒ‚ƒŠƒAƒƒP[ƒ^ƒ_ƒ“ƒv
+	* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ã‚¹ãƒ‡ãƒã‚¤ã‚¹ç”¨ãƒ¡ãƒ¢ãƒªã‚¢ãƒ­ã‚±ãƒ¼ã‚¿ãƒ€ãƒ³ãƒ—
 	*/
 	void CGraphicsDevice::Dump()
 	{
@@ -450,7 +450,7 @@ namespace uranus {
 	}
 
 	/**
-	* ƒfƒBƒXƒvƒŒƒCƒ‚[ƒhæ“¾
+	* ãƒ‡ã‚£ã‚¹ãƒ—ãƒ¬ã‚¤ãƒ¢ãƒ¼ãƒ‰å–å¾—
 	*/
 	const D3DDISPLAYMODE& CGraphicsDevice::GetDisplayMode() const
 	{
@@ -458,7 +458,7 @@ namespace uranus {
 	}
 
 	/**
-	* ƒvƒŒƒ[ƒ“ƒgƒpƒ‰ƒ[ƒ^æ“¾
+	* ãƒ—ãƒ¬ã‚¼ãƒ³ãƒˆãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å–å¾—
 	*/
 	const D3DPRESENT_PARAMETERS& CGraphicsDevice::GetPresentParam() const
 	{
@@ -466,7 +466,7 @@ namespace uranus {
 	}
 
 	/**
-	* ƒŠƒtƒŒƒbƒVƒ…ƒŒ[ƒgæ“¾
+	* ãƒªãƒ•ãƒ¬ãƒƒã‚·ãƒ¥ãƒ¬ãƒ¼ãƒˆå–å¾—
 	*/
 	UN_UINT CGraphicsDevice::GetRefreshRate() const
 	{
@@ -474,7 +474,7 @@ namespace uranus {
 	}
 
 	/**
-	* ƒTƒ“ƒvƒ‰ƒXƒe[ƒgæ“¾
+	* ã‚µãƒ³ãƒ—ãƒ©ã‚¹ãƒ†ãƒ¼ãƒˆå–å¾—
 	*/
 	const S_SAMPLER_STATE& CGraphicsDevice::GetSamplerState(UN_UINT nStage) const
 	{
@@ -483,8 +483,8 @@ namespace uranus {
 	}
 
 	/**
-	* ƒŒƒ“ƒ_[ƒXƒe[ƒgæ“¾
-	* ”ñ„§
+	* ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¹ãƒ†ãƒ¼ãƒˆå–å¾—
+	* éæ¨å¥¨
 	*/
 	const S_RENDER_STATE& CGraphicsDevice::GetRenderState() const
 	{
@@ -492,7 +492,7 @@ namespace uranus {
 	}
 
 	/**
-	* ƒrƒ…[ƒ|[ƒgæ“¾
+	* ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆå–å¾—
 	*/
 	const SViewport& CGraphicsDevice::GetViewport() const
 	{
@@ -500,11 +500,11 @@ namespace uranus {
 	}
 
 	/**
-	* ƒVƒU[‹éŒ`
+	* ã‚·ã‚¶ãƒ¼çŸ©å½¢
 	*/
 	void CGraphicsDevice::SetScissorTestRect(const SIntRect& rc)
 	{
-		// ”O‚Ì‚½‚ß‚±‚ê‚­‚ç‚¢‚Íƒ`ƒFƒbƒN‚·‚é‚©
+		// å¿µã®ãŸã‚ã“ã‚Œãã‚‰ã„ã¯ãƒã‚§ãƒƒã‚¯ã™ã‚‹ã‹
 		UN_C_ASSERT(sizeof(RECT) == sizeof(CIntRect));
 
 		if (m_RenderState.rcScissor != rc) {
@@ -513,7 +513,7 @@ namespace uranus {
 		}
 	}
 
-	// ƒeƒNƒXƒ`ƒƒƒXƒe[ƒWƒXƒe[ƒgİ’è
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚¹ãƒ†ãƒ¼ã‚¸ã‚¹ãƒ†ãƒ¼ãƒˆè¨­å®š
 	template <typename _TS, typename _T>
 	void CGraphicsDevice::SetTextureStageState(
 		UN_DWORD stage,
@@ -532,7 +532,7 @@ namespace uranus {
 		}
 	}
 
-	// ƒTƒ“ƒvƒ‰ƒXƒe[ƒgİ’è
+	// ã‚µãƒ³ãƒ—ãƒ©ã‚¹ãƒ†ãƒ¼ãƒˆè¨­å®š
 	template <typename _SS, typename _T>
 	void CGraphicsDevice::SetSamplerStateAddr(
 		UN_DWORD stage,
@@ -559,7 +559,7 @@ namespace uranus {
 		}
 	}
 
-	// ƒTƒ“ƒvƒ‰ƒXƒe[ƒgİ’è
+	// ã‚µãƒ³ãƒ—ãƒ©ã‚¹ãƒ†ãƒ¼ãƒˆè¨­å®š
 	template <typename _SS, typename _T>
 	void CGraphicsDevice::SetSamplerStateFilter(
 		UN_DWORD stage,
@@ -587,7 +587,7 @@ namespace uranus {
 	}
 
 	/**
-	* ƒŒƒ“ƒ_[ƒXƒe[ƒgİ’è
+	* ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¹ãƒ†ãƒ¼ãƒˆè¨­å®š
 	*/
 	void CGraphicsDevice::SetRenderState(E_GRAPH_RENDER_STATE nState, UN_DWORD val)
 	{
@@ -595,7 +595,7 @@ namespace uranus {
 	}
 
 	/**
-	* ƒŒƒ“ƒ_[ƒ^[ƒQƒbƒgæ“¾
+	* ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆå–å¾—
 	*/
 	CSurface* CGraphicsDevice::GetRenderTarget(UN_UINT idx)
 	{
@@ -604,7 +604,7 @@ namespace uranus {
 	}
 
 	/**
-	* [“xEƒXƒeƒ“ƒVƒ‹æ“¾
+	* æ·±åº¦ãƒ»ã‚¹ãƒ†ãƒ³ã‚·ãƒ«å–å¾—
 	*/
 	CSurface* CGraphicsDevice::GetDepthSrencil()
 	{
@@ -612,7 +612,7 @@ namespace uranus {
 	}
 
 	/**
-	* ƒŠƒZƒbƒg—pƒR[ƒ‹ƒoƒbƒNƒZƒbƒg
+	* ãƒªã‚»ãƒƒãƒˆç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚»ãƒƒãƒˆ
 	*/
 	void CGraphicsDevice::SetResetCallBack(GraphicsDeviceResetCallBack pCallBack)
 	{
@@ -620,7 +620,7 @@ namespace uranus {
 	}
 
 	/**
-	* ƒfƒoƒCƒXƒƒXƒg—pƒR[ƒ‹ƒoƒbƒNƒZƒbƒg
+	* ãƒ‡ãƒã‚¤ã‚¹ãƒ­ã‚¹ãƒˆç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚»ãƒƒãƒˆ
 	*/
 	void CGraphicsDevice::SetLostDeviceCallBack(GraphicsDeviceLostDeviceCallBack pCallBack)
 	{
