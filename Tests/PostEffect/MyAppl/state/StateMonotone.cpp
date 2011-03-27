@@ -1,0 +1,106 @@
+﻿#include <stdafx.h>
+#include "StateMonotone.h"
+#include "StateManager.h"
+#include "SceneRenderer.h"
+#include "EnvBox.h"
+#include "MySystem.h"
+#include "PostEffectSample.h"
+
+IZ_BOOL CStateMonotone::Create()
+{
+	return IZ_TRUE;
+}
+
+IZ_BOOL CStateMonotone::Render()
+{
+	Render3D();
+	Render2D();
+
+	return IZ_TRUE;
+}
+
+void CStateMonotone::Render2D()
+{
+	static const D3DCOLOR color = D3DCOLOR_RGBA(255, 255, 255, 255);
+
+	/*
+	if (CMySystem::GetInstance().GetGraphicsDevice()->Begin2D()) {
+		CMySystem::GetInstance().GetDebugFont()->Begin();
+
+		CMySystem::GetInstance().GetDebugFont()->DBPrint(
+			0, 0,
+			color,
+			"Monotone\n");
+		CMySystem::GetInstance().GetDebugFont()->DBPrint(
+			color,
+			"Back : Return Menu\n");
+		CMySystem::GetInstance().GetDebugFont()->DBPrint(
+			color,
+			"Space : On/Off\n");
+
+		CMySystem::GetInstance().GetDebugFont()->End();
+		CMySystem::GetInstance().GetGraphicsDevice()->End2D();
+	}
+	*/
+}
+
+void CStateMonotone::Render3D()
+{
+	static const D3DCOLOR color = D3DCOLOR_ARGB(255, 0, 128, 255);
+
+	izanagi::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
+
+	CPostEffectSample::GetInstance().BeginScene();
+
+	// クリアシーン
+	pDevice->Clear(
+		D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER | D3DCLEAR_STENCIL,
+		color, 1.0f, 0);
+
+	CEnvBox::GetInstance().Render(pDevice);
+	CSceneRenderer::GetInstance().Render(pDevice);
+
+	pDevice->SetRenderState(
+		izanagi::E_GRAPH_RS_CULLMODE,
+		izanagi::E_GRAPH_CULL_NONE);
+
+	CPostEffectSample::GetInstance().Apply();
+}
+
+IZ_BOOL CStateMonotone::Update()
+{
+	if (m_bBack) {
+		CStateManager::GetInstance().ChangePrevState();
+		return IZ_TRUE;
+	}
+
+	return IZ_TRUE;
+}
+
+IZ_BOOL CStateMonotone::Destroy()
+{
+	return IZ_TRUE;
+}
+
+IZ_BOOL CStateMonotone::Enter()
+{
+	m_bBack = IZ_FALSE;
+
+	IZ_BOOL ret = CPostEffectSample::GetInstance().Read("data/Monotone.pes");
+
+	return ret;
+}
+
+IZ_BOOL CStateMonotone::Leave()
+{
+	return IZ_TRUE;
+}
+
+IZ_BOOL CStateMonotone::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	if (nChar == VK_BACK) {
+		m_bBack = IZ_TRUE;
+	}
+
+	return IZ_TRUE;
+}

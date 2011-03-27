@@ -1,0 +1,30 @@
+﻿#if !defined(__APP_ERROR_H__)
+#define __APP_ERROR_H__
+
+#include "ToolKitStdDefs.h"
+
+class CErrorLog : public izanagi::izanagi_tk::ILog {
+public:
+	CErrorLog(IZ_PCSTR format, IZ_PCSTR file_name, IZ_UINT line, ...)
+	{
+		static char buf[256];
+
+		va_list vlist;
+		
+		va_start(vlist, format);
+		vsnprintf_s(buf, sizeof(buf), sizeof(buf), format, vlist);
+		va_end(vlist);
+
+		m_ErrStr.Format(_T("%s (%s)[%d]"), buf, file_name, line);
+	}
+
+	~CErrorLog() {}
+
+public:
+	IZ_PCSTR GetString() const { return m_ErrStr; }
+
+private:
+	CString m_ErrStr;
+};
+
+#endif	// #if !defined(__APP_ERROR_H__)

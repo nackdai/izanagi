@@ -1,0 +1,5 @@
+-c   "%DXSDK_DIR%Utilities\Bin\x86\fxc"
+-co  "/nologo"
+-src "../PostEffectShader/fx/PostEffectBloomStarEx.fx"
+-I	 "../PostEffectShader/include"
+-asm
