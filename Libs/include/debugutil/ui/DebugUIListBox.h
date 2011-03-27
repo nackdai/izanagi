@@ -1,0 +1,4 @@
+﻿#if !defined(__IZANAGI_DEBUGUTIL_DEBUG_UI_LIST_BOX_H__)
+#define __IZANAGI_DEBUGUTIL_DEBUG_UI_LIST_BOX_H__
+
+#endif	// #if !defined(__IZANAGI_DEBUGUTIL_DEBUG_UI_LIST_BOX_H__)

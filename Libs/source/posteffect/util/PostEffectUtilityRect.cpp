@@ -1,0 +1,53 @@
+﻿#include "posteffect/util/PostEffectUtilityRect.h"
+
+using namespace izanagi;
+
+/**
+* テクスチャ座標を計算する
+*/
+void CPostEffectRectUtil::GetTextureCoord(
+	SFloatRect* pTexCoord,
+	const CTexture* pSrcTex,
+	const SIntRect* pSrcRect,
+	const CTexture* pDstTex,
+	const SIntRect* pDstRect)
+{
+	IZ_ASSERT(pTexCoord != IZ_NULL);
+
+	// NOTE
+	// 矩形描画時に0.5ピクセルずらしているので、
+	// テクスチャ座標をずらす必要はない
+
+	pTexCoord->left = 0.0f;
+	pTexCoord->top = 0.0f;
+	pTexCoord->right = 1.0f;
+	pTexCoord->bottom = 1.0f;
+
+	if ((pSrcRect != IZ_NULL) && (pSrcTex != IZ_NULL)) {
+		// 入力に基づいて補正
+		IZ_INT nWidth = pSrcTex->GetWidth();
+		IZ_INT nHeight = pSrcTex->GetHeight();
+
+		IZ_FLOAT fU = 1.0f / nWidth;
+		IZ_FLOAT fV = 1.0f / nHeight;
+
+		pTexCoord->left += pSrcRect->left * fU;
+		pTexCoord->top += pSrcRect->top * fV;
+		pTexCoord->right -= (nWidth - pSrcRect->right) * fU;
+		pTexCoord->bottom -= (nHeight - pSrcRect->bottom) * fV;
+	}
+
+	if ((pDstRect != IZ_NULL) && (pDstTex != IZ_NULL)) {
+		// 出力に基づいて補正
+		IZ_INT nWidth = pDstTex->GetWidth();
+		IZ_INT nHeight = pDstTex->GetHeight();
+
+		IZ_FLOAT fU = 1.0f / nWidth;
+		IZ_FLOAT fV = 1.0f / nHeight;
+
+		pTexCoord->left -= pDstRect->left * fU;
+		pTexCoord->top -= pDstRect->top * fV;
+		pTexCoord->right += (nWidth - pDstRect->right) * fU;
+		pTexCoord->bottom += (nHeight - pDstRect->bottom) * fV;
+	}
+}
