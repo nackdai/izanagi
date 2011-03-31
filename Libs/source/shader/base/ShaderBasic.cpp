@@ -329,6 +329,14 @@ IZ_BOOL CShaderBasic::CommitChages()
 	return IZ_TRUE;
 }
 
+/**
+* Return number of techniques.
+*/
+IZ_UINT CShaderBasic::GetTechNum() const
+{
+	return m_TechTbl.GetTechNum();
+}
+
 template <typename _SHD>
 IZ_BOOL CShaderBasic::SetParamValue(
 	IZ_UINT idx,

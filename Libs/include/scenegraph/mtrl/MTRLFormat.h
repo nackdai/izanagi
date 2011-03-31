@@ -107,6 +107,7 @@ namespace izanagi {
 
 	private:
 		CShader* shader;
+		IZ_UINT tech_idx;
 
 		friend class CMaterial;
 	};

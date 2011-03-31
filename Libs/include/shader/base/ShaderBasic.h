@@ -78,6 +78,8 @@ namespace izanagi {
 
 		virtual IZ_BOOL CommitChages();
 
+		virtual IZ_UINT GetTechNum() const;
+
 	public:
 		IZ_SHADER_HANDLE GetParameterByName(IZ_PCSTR pszName);
 		IZ_SHADER_HANDLE GetParameterBySemantic(IZ_PCSTR pszSemantic);

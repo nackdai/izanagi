@@ -62,9 +62,7 @@ namespace izanagi {
 	void CSceneParam::InternalRelease()
 	{
 		delete this;
-		if (m_pAllocator != IZ_NULL) {
-			FREE(m_pAllocator, this);
-		}
+		FREE(m_pAllocator, this);
 	}
 
 	/**

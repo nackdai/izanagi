@@ -20,7 +20,6 @@ namespace izanagi {
 		static CMaterial* CreateMaterial(
 			IZ_PCSTR pszName,
 			IZ_UINT nTexNum,
-			IZ_BOOL nShaderNum,
 			IZ_UINT nParamNum,
 			IZ_UINT nParamBytes,
 			IMemoryAllocator* pAllocator);
@@ -28,7 +27,6 @@ namespace izanagi {
 	private:
 		static CMaterial* CreateMaterial(
 			IZ_UINT nTexNum,
-			IZ_BOOL nShaderNum,
 			IZ_UINT nParamNum,
 			IZ_UINT nParamBytes,
 			IMemoryAllocator* pAllocator);
@@ -72,18 +70,26 @@ namespace izanagi {
 			IZ_UINT nBytes,
 			const void* pValue);
 
+		IZ_BOOL IsValid() const;
+
 	public:
 		IZ_UINT GetTexNum() const { return m_Header.numTex; }
+#if 0
 		IZ_UINT GetShaderNum() const { return m_Header.numShader; }
+#endif
 		IZ_UINT GetParamNum() const { return m_Header.numParam; }
 
 		const S_MTRL_TEXTURE* GetTexInfoByIdx(IZ_UINT idx) const;
 		const S_MTRL_TEXTURE* GetTexInfoByName(IZ_PCSTR pszName) const;
 		const S_MTRL_TEXTURE* GetTexInfoByKey(const CKey& key) const;
 
+#if 0
 		const S_MTRL_SHADER* GetShaderInfoByIdx(IZ_UINT idx) const;
 		const S_MTRL_SHADER* GetShaderInfoByName(IZ_PCSTR pszName) const;
 		const S_MTRL_SHADER* GetShaderInfoByKey(const CKey& key) const;
+#else
+		const S_MTRL_SHADER* GetShaderInfo() const { return m_pShaderInfo; }
+#endif
 
 		const S_MTRL_PARAM* GetParamInfoByIdx(IZ_UINT idx) const;
 		const S_MTRL_PARAM* GetParamInfoByName(IZ_PCSTR pszName) const;
@@ -93,9 +99,19 @@ namespace izanagi {
 		CBaseTexture* GetTextureByName(IZ_PCSTR pszName);
 		CBaseTexture* GetTextureByKey(const CKey& key);
 
+#if 0
 		CShader* GetShaderByIdx(IZ_UINT idx);
 		CShader* GetShaderByName(IZ_PCSTR pszName);
 		CShader* GetShaderByKey(const CKey& key);
+#else
+		CShader* GetShader()
+		{
+			return (m_pShaderInfo != IZ_NULL ? m_pShaderInfo->shader : IZ_NULL);
+		}
+#endif
+
+		IZ_BOOL SetShaderTechnique(IZ_UINT idx);
+		IZ_INT GetShaderTechnique() const;
 
 		const void* GetParamByIdx(IZ_UINT idx) const;
 		const void* GetParamByName(IZ_PCSTR pszName) const;

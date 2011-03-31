@@ -18,10 +18,13 @@ CMaterial* CMaterial::CreateMaterial(
 	// TODO
 	// Check magic number and version...
 
+	// NOTE
+	// Material must have "a" shader.
+	VRETURN_NULL(sHeader.numShader == 1);
+
 	// Create instance.
 	CMaterial* pInstance = CreateMaterial(
 							sHeader.numTex,
-							sHeader.numShader,
 							sHeader.numParam,
 							sHeader.paramBytes,
 							pAllocator);
@@ -51,7 +54,6 @@ __EXIT__:
 CMaterial* CMaterial::CreateMaterial(
 	IZ_PCSTR pszName,
 	IZ_UINT nTexNum,
-	IZ_BOOL nShaderNum,
 	IZ_UINT nParamNum,
 	IZ_UINT nParamBytes,
 	IMemoryAllocator* pAllocator)
@@ -59,7 +61,6 @@ CMaterial* CMaterial::CreateMaterial(
 	// Create instance.
 	CMaterial* pInstance = CreateMaterial(
 							nTexNum,
-							nShaderNum,
 							nParamNum,
 							nParamBytes,
 							pAllocator);
@@ -69,7 +70,10 @@ CMaterial* CMaterial::CreateMaterial(
 	pInstance->m_Header.keyMaterial = pInstance->m_Header.name.GetKeyValue();
 
 	pInstance->m_Header.numTex = nTexNum;
-	pInstance->m_Header.numShader = nShaderNum;
+
+	// NOTE
+	// Material must have "a" shader.
+	pInstance->m_Header.numShader = 1;
 
 	pInstance->m_Header.numParam = nParamNum;
 	pInstance->m_Header.paramBytes = nParamBytes;
@@ -81,11 +85,12 @@ CMaterial* CMaterial::CreateMaterial(
 
 CMaterial* CMaterial::CreateMaterial(
 	IZ_UINT nTexNum,
-	IZ_BOOL nShaderNum,
 	IZ_UINT nParamNum,
 	IZ_UINT nParamBytes,
 	IMemoryAllocator* pAllocator)
 {
+	const IZ_UINT nShaderNum = 1;
+
 	// Compute size of allocating memory.
 	size_t nSize = sizeof(CMaterial);
 	size_t nTexInfoSize = sizeof(S_MTRL_TEXTURE) * nTexNum;
@@ -307,6 +312,7 @@ IZ_BOOL CMaterial::AddShader(CShader* pShader)
 {
 	IZ_BOOL ret = IZ_TRUE;
 
+#if 0
 	IZ_PCSTR pszShaderName = pShader->GetName();
 
 	// Check whether there is not specified shader.
@@ -327,6 +333,18 @@ IZ_BOOL CMaterial::AddShader(CShader* pShader)
 			SAFE_REPLACE(pInfo->shader, pShader);
 		}
 	}
+#else
+	IZ_ASSERT(m_pShaderInfo != IZ_NULL);
+
+	// there is not specified shader.
+	VRETURN(!m_IsFromMtrlFile);
+
+	// Update shader's info.
+	m_pShaderInfo->name.SetString(pShader->GetName());
+	m_pShaderInfo->key = pShader->GetKey();
+
+	SAFE_REPLACE(m_pShaderInfo->shader, pShader);
+#endif
 
 	return ret;
 }
@@ -453,6 +471,26 @@ IZ_BOOL CMaterial::SetParameter(
 	return IZ_TRUE;
 }
 
+/**
+* Return whether materal has testures, shaders that are specified.
+*/
+IZ_BOOL CMaterial::IsValid() const
+{
+	for (IZ_UINT i = 0; i < m_Header.numTex; i++) {
+		if (m_pTexInfo[i].tex == IZ_NULL) {
+			return IZ_FALSE;
+		}
+	}
+
+	for (IZ_UINT i = 0; i < m_Header.numShader; i++) {
+		if (m_pShaderInfo[i].shader == IZ_NULL) {
+			return IZ_FALSE;
+		}
+	}
+
+	return IZ_TRUE;
+}
+
 namespace {
 	template <typename _T>
 	const _T* _GetInfoByKey(
@@ -490,6 +528,7 @@ const S_MTRL_TEXTURE* CMaterial::GetTexInfoByKey(const CKey& key) const
 	return ret;
 }
 
+#if 0
 const S_MTRL_SHADER* CMaterial::GetShaderInfoByIdx(IZ_UINT idx) const
 {
 	VRETURN_NULL(idx < m_Header.numShader);
@@ -507,6 +546,7 @@ const S_MTRL_SHADER* CMaterial::GetShaderInfoByKey(const CKey& key) const
 	const S_MTRL_SHADER* ret = _GetInfoByKey(m_pShaderInfo, m_Header.numTex, key);
 	return ret;
 }
+#endif
 
 const S_MTRL_PARAM* CMaterial::GetParamInfoByIdx(IZ_UINT idx) const
 {
@@ -553,6 +593,7 @@ CBaseTexture* CMaterial::GetTextureByKey(const CKey& key)
 	return IZ_NULL;
 }
 
+#if 0
 CShader* CMaterial::GetShaderByIdx(IZ_UINT idx)
 {
 	S_MTRL_SHADER* pInfo = const_cast<S_MTRL_SHADER*>(GetShaderInfoByIdx(idx));
@@ -578,6 +619,35 @@ CShader* CMaterial::GetShaderByKey(const CKey& key)
 		return pInfo->shader;
 	}
 	return IZ_NULL;
+}
+#endif
+
+/**
+* Set technique index of shader.
+*/
+IZ_BOOL CMaterial::SetShaderTechnique(IZ_UINT idx)
+{
+	IZ_ASSERT(m_pShaderInfo != IZ_NULL);
+
+	// Material must have a shader.
+	VRETURN(m_pShaderInfo->shader != IZ_NULL);
+	VRETURN(m_pShaderInfo->shader->GetTechNum() > idx);
+
+	m_pShaderInfo->tech_idx = idx;
+
+	return IZ_TRUE;
+}
+
+/**
+* Return technique index of shader.
+*/
+IZ_INT CMaterial::GetShaderTechnique() const
+{
+	IZ_ASSERT(m_pShaderInfo != IZ_NULL);
+
+	VRETURN_VAL(m_pShaderInfo->shader != IZ_NULL, -1);
+
+	return m_pShaderInfo->tech_idx;
 }
 
 const void* CMaterial::GetParamByIdx(IZ_UINT idx) const

@@ -21,63 +21,29 @@ CScene* CScene::CreateScene(IMemoryAllocator* pAllocator)
 CScene::CScene()
 {
 	m_pAllocator = IZ_NULL;
+
 	m_pSceneParam = IZ_NULL;
+
+	m_pCurShader = IZ_NULL;
+	m_nCurShaderPassNum = 0;
+	m_nCurShaderPass = -1;
 }
 
 CScene::~CScene()
 {
 	SAFE_RELEASE(m_pSceneParam);
+	SAFE_RELEASE(m_pCurShader);
 }
 
-template <typename _T>
-void CScene::Set(
-	CStdHash<CKey, CHashElem<_T>, HASH_SIZE>& cHash, 
-	const CKey& cKey, 
-	_T* pData)
+IZ_BOOL CScene::End()
 {
-	// TODO
-	CHashElem<_T>* pHashElem = CHashElem<_T>::CreateHashElem(m_pAllocator, cKey, pData);
-	IZ_ASSERT(pHashElem != IZ_NULL);
+	IZ_ASSERT(m_pCurShader != IZ_NULL);
 
-	//pHashElem->m_HashItem.Init(cKey, p);
+	VRETURN(m_pCurShader->End());
 
-	//cHash.Add(pHashElem->GetHashItem());
-}
+	SAFE_RELEASE(m_pCurShader);
+	m_nCurShaderPassNum = 0;
+	m_nCurShaderPass = -1;
 
-template <typename _T>
-_T* CScene::Get(
-	CStdHash<CKey, CHashElem<_T>, HASH_SIZE>& cHash, 
-	const CKey& cKey)
-{
-	CHashElem<_T>* pHashElem = cHash.FindData(cKey);
-
-	_T* ret = (pHashElem != IZ_NULL
-				? pHashElem->GetData()
-				: IZ_NULL);
-
-	return ret;
-}
-
-template <typename _T>
-IZ_BOOL CScene::Remove(
-	CStdHash<CKey, CHashElem<_T>, HASH_SIZE>& cHash, 
-	const CKey& cKey)
-{
-	CHashElem<_T>* pHashElem = cHash.FindData(cKey);
-
-	IZ_BOOL ret = (pHashElem != IZ_NULL);
-	if (ret) {
-		CHashElem<_T>::DeleteHashElem(
-			m_pAllocator,
-			pHashElem);
-	}
-
-	return ret;
-}
-
-template <typename _T>
-IZ_UINT CScene::GetNum(const CStdHash<CKey, CHashElem<_T>, HASH_SIZE>& cHash) const
-{
-	IZ_UINT ret = cHash.GetDataNum();
-	return ret;
+	return IZ_TRUE;
 }

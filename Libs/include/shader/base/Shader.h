@@ -75,6 +75,8 @@ namespace izanagi {
 				IZ_SHADER_HANDLE handle, 
 				SShaderParamDesc& sDesc) const);
 
+		PURE_VIRTUAL(IZ_UINT GetTechNum() const);
+
 	public:
 		IZ_BOOL HasParameterByName(IZ_PCSTR pszName)
 		{

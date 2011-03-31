@@ -5,6 +5,7 @@
 #include "izGraph.h"
 #include "scenegraph/SceneDefs.h"
 #include "scenegraph/msh/MshRenderHandler.h"
+#include "scenegraph/scene/Scene.h"
 
 namespace izanagi {
 	/**
@@ -12,6 +13,7 @@ namespace izanagi {
 	template <IZ_UINT _ZLEVEL, typename _T_MDL, typename _T_MESH>
 	class CGeometrySorter : public CObject {
 	protected:
+		// List ordered by Z.
 		class CZList {
 		public:
 			CZList() {}
@@ -32,6 +34,7 @@ namespace izanagi {
 					return ret;
 				}
 
+				// Sort by Z value.
 				while (p != IZ_NULL) {
 					const _T_MESH* pMesh = p->GetData();
 
@@ -124,18 +127,21 @@ namespace izanagi {
 			return RegisterInternal(z, level, pMdl, type);
 		}
 
+		/**
+		*/
 		IZ_BOOL Render(
 			CGraphicsDevice* pDevice,
+			CScene* pScene,
 			IMshRenderHandler* pRenderHandler)
 		{
 			// Opaque
 			for (IZ_UINT i = 0; i < _ZLEVEL; i++) {
-				VRETURN(Render(pDevice, pRenderHandler, m_Opaque[i], ERenderOrder_Forward));
+				VRETURN(Render(pDevice, pScene, pRenderHandler, m_Opaque[i], ERenderOrder_Forward));
 			}
 
 			// Tranlucent
 			for (IZ_UINT i = 0; i < _ZLEVEL; i++) {
-				VRETURN(Render(pDevice, pRenderHandler, m_Translucent[i], ERenderOrder_Reverse));
+				VRETURN(Render(pDevice, pScene, pRenderHandler, m_Translucent[i], ERenderOrder_Reverse));
 			}
 
 			return IZ_TRUE;
@@ -191,24 +197,46 @@ namespace izanagi {
 
 		IZ_BOOL Render(
 			CGraphicsDevice* pDevice,
+			CScene* pScene,
 			IMshRenderHandler* pRenderHandler,
 			CZList& cList,
 			ERenderOrder nOrder)
 		{
+			// Get top or tail of ZList.
 			CStdList<_T_MESH>::Item* pItem = (nOrder == ERenderOrder_Forward
 												? cList.GetList().GetTop()
 												: cList.GetList().GetTail());
 
-			while (pItem != IZ_NULL) {
+			for (; pItem != IZ_NULL;) {
 				_T_MESH* pMesh = pItem->GetData();
 				IZ_ASSERT(pMesh != IZ_NULL);
 
-				// TODO
-				pMesh->Render(pDevice, pRenderHandler);
+				IZ_UINT nPassNum = pScene->Begin(pMesh);
 
-				pItem = (nOrder == ERenderOrder_Forward
-							? pItem->GetNext()
-							: pItem->GetPrev());
+				// Keep loop top.
+				CStdList<_T_MESH>::Item* pItemBegin = pItem;
+
+				for (IZ_UINT nPass = 0; nPass < nPassNum; nPass++) {
+					while (pItem != IZ_NULL) {
+						pMesh = pItem->GetData();
+
+						if (pScene->Iter(nPass, pMesh)) {
+							pItem = (nOrder == ERenderOrder_Forward
+										? pItem->GetNext()
+										: pItem->GetPrev());
+						}
+						else {
+							if (!result && (nPass == nPassNum - 1)) {
+								// Change shader.
+								VRETURN(pScene->End());
+								break;
+							}
+
+							// Return to loop top.
+							pItem = pItemBegin;
+						}
+					}
+				}
 			}
 
 			return IZ_TRUE;
