@@ -16,59 +16,6 @@ namespace izanagi {
 	public:
 		static CScene* CreateScene(IMemoryAllocator* pAllocator);
 
-		enum {
-			HASH_SIZE = 5,
-		};
-
-	private:
-		template <class _T>
-		class CHashElem : public CPlacementNew {
-		public:
-			static CHashElem* CreateHashElem(
-				IMemoryAllocator* pAllocator,
-				const CKey& cKey,
-				_T* p)
-			{
-				void* pBuf = ALLOC_ZERO(pAllocator, sizeof(CHashElem));
-				VRETURN_NULL(pBuf);
-				CHashElem* pInstance = new(pBuf) CHashElem;
-				SAFE_REPLACE(pInstance->m_pData, p);
-				//pInstance->m_HashItem.Init(cKey, pInstance);
-				return pInstance;
-			}
-
-			static void DeleteHashElem(
-				IMemoryAllocator* pAllocator,
-				CHashElem* p)
-			{
-				delete p;
-				FREE(pAllocator, p);
-			}
-
-		public:
-			CHashElem()
-			{
-				m_pData = IZ_NULL;
-			}
-			~CHashElem()
-			{
-				SAFE_RELEASE(m_pData);
-			}
-
-		public:
-			CStdHash<CKey, CHashElem<class _T>, HASH_SIZE>::Item* GetHashItem() { return &m_HashItem; }
-			_T* GetData() { return m_pData; }
-
-		public:
-			_T* m_pData;
-
-			CStdHash<CKey, CHashElem<class _T>, HASH_SIZE>::Item m_HashItem;
-		};
-
-		typedef CStdHash<CKey, CHashElem<CMaterial>, HASH_SIZE>		CMtrlHash;
-		typedef CStdHash<CKey, CHashElem<CBaseTexture>, HASH_SIZE>	CTexHash;
-		typedef CStdHash<CKey, CHashElem<CShader>, HASH_SIZE>		CShaderHash;
-
 	private:
 		CScene();
 		~CScene();
@@ -78,10 +25,10 @@ namespace izanagi {
 		IZ_DEFINE_INTERNAL_RELEASE();
 
 	public:
+		/**
+		*/
 		template <typename _T_MESH>
-		void Render(
-			CGraphicsDevice* pDevice,
-			_T_MESH* pMesh)
+		IZ_UINT Begin(_T_MESH* pMesh)
 		{
 			CMaterial* pMtrl = pMesh->GetMaterial();
 
@@ -93,44 +40,64 @@ namespace izanagi {
 
 			IZ_ASSERT(pMtrl != IZ_NULL);
 
-			// TODO
+			CShader* pShader = pMtrl->GetShader();
+			VRETURN(pShader != IZ_NULL);
+
+			if ((m_pCurShader == IZ_NULL)
+				|| (m_pCurShader->GetKey() != pShader->GetKey()))
+			{
+				SAFE_REPLACE(m_pCurShader, pShader);
+
+				IZ_INT nTechIdx = pMtrl->GetShaderTechnique();
+				IZ_ASSERT(nTechIdx >= 0);
+
+				m_nCurShaderPassNum = pShader->Begin(nTechIdx);
+			}
+
+			return m_nCurShaderPassNum;
 		}
 
-	public:
-		void SetMaterial(const CKey& cKey, CMaterial* pMtrl) { Set(m_MtrlHash, cKey, pMtrl); }
-		CMaterial* GetMaterial(const CKey& cKey) { return Get(m_MtrlHash, cKey); }
-		IZ_BOOL RemoveMaterial(const CKey& cKey) { return Remove(m_MtrlHash, cKey); }
-		IZ_UINT GetMaterialNum() const { return GetNum(m_MtrlHash); }
+		/**
+		*/
+		template <typename _T_MESH>
+		IZ_BOOL Iter(IZ_UINT nPass, _T_MESH* pMesh)
+		{
+			IZ_ASSERT(m_nCurShaderPassNum > 0);
+			IZ_ASSERT(m_nCurShaderPassNum > nPass);
 
-		void SetTexture(const CKey& cKey, CBaseTexture* pTex) { Set(m_TexHash, cKey, pTex); }
-		CBaseTexture* GetTexture(const CKey& cKey) { return Get(m_TexHash, cKey); }
-		IZ_BOOL RemoveTexture(const CKey& cKey) { return Remove(m_TexHash, cKey); }
-		IZ_UINT GetTextureNum() const { return GetNum(m_TexHash); }
+			CMaterial* pMtrl = pMesh->GetMaterial();
+			IZ_ASSERT(pMtrl != IZ_NULL);
+			IZ_ASSERT(m_pCurShader != IZ_NULL);
+			
+			if (m_pCurShader->GetKey() != pMtrl->GetShader()->GetKey()) {
+				// Specify differing shader.
+				return IZ_FALSE;
+			}
 
-		void SetShader(const CKey& cKey, CShader* pShader) { Set(m_ShaderHash, cKey, pShader); }
-		CShader* GetShader(const CKey& cKey) { return Get(m_ShaderHash, cKey); }
-		IZ_BOOL RemoveShader(const CKey& cKey) { return Remove(m_ShaderHash, cKey); }
-		IZ_UINT GetShaderNum() const { return GetNum(m_ShaderHash); }
+			if (m_nCurShaderPass != nPass) {
+				// Change pass.
+				VRETURN(m_pCurShader->BeginPass(nPass));
+				m_nCurShaderPass = nPass;
+			}
 
-	private:
-		template <typename _T>
-		void Set(
-			CStdHash<CKey, CHashElem<_T>, HASH_SIZE>& cHash, 
-			const CKey& cKey, 
-			_T* pData);
+			// Set parameters to shader.
+			SetShaderParam(
+				m_pCurShader, 
+				pMtrl, 
+				m_pSceneParam);
 
-		template <typename _T>
-		_T* Get(
-			CStdHash<CKey, CHashElem<_T>, HASH_SIZE>& cHash, 
-			const CKey& cKey);
+			// TODO
+			// Set textures.
 
-		template <typename _T>
-		IZ_BOOL Remove(
-			CStdHash<CKey, CHashElem<_T>, HASH_SIZE>& cHash, 
-			const CKey& cKey);
+			VRETURN(m_pCurShader->CommitChages());
 
-		template <typename _T>
-		IZ_UINT GetNum(const CStdHash<CKey, CHashElem<_T>, HASH_SIZE>& cHash) const;
+			// TODO
+			// Render mesh.
+
+			return IZ_TRUE;
+		}
+
+		IZ_BOOL End();
 
 	public:
 		void SetSceneParam(CSceneParam* pParam) { SAFE_REPLACE(m_pSceneParam, pParam); }
@@ -141,9 +108,9 @@ namespace izanagi {
 
 		CSceneParam* m_pSceneParam;
 
-		CMtrlHash m_MtrlHash;
-		CTexHash m_TexHash;
-		CShaderHash m_ShaderHash;
+		CShader* m_pCurShader;
+		IZ_UINT m_nCurShaderPassNum;
+		IZ_INT m_nCurShaderPass;
 	};
 }	// namespace izanagi
 
