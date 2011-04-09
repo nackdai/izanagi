@@ -45,31 +45,31 @@ IZ_BOOL CShaderBasic::Init(
 			// End of data.
 			break;
 		}
-		else if (sChunkHeader.magicChunk ==  SHD_STRING_CHUNK_MAGIC_NUMBER) {
+		else if (sChunkHeader.magicChunk ==  SHD_CHUNK_MAGIC_NUMBER_STRING) {
 			// String
 			pBuffer = m_StringBuffer.Init(m_Header.sizeStringBuffer, pBuffer);
 		}
-		else if (sChunkHeader.magicChunk ==  SHD_PARAM_CHUNK_MAGIC_NUMBER) {
+		else if (sChunkHeader.magicChunk ==  SHD_CHUNK_MAGIC_NUMBER_PARAM) {
 			// Parameters.
 			pBuffer = m_ParamTbl.Init(pBuffer);
 		}
-		else if (sChunkHeader.magicChunk ==  SHD_TEX_CHUNK_MAGIC_NUMBER) {
+		else if (sChunkHeader.magicChunk ==  SHD_CHUNK_MAGIC_NUMBER_TEX) {
 			// Textures.
 			pBuffer = m_TexTbl.Init(pBuffer);
 		}
-		else if (sChunkHeader.magicChunk ==  SHD_SMPL_CHUNK_MAGIC_NUMBER) {
+		else if (sChunkHeader.magicChunk ==  SHD_CHUNK_MAGIC_NUMBER_SMPL) {
 			// Samplers
 			pBuffer = m_SmplTbl.Init(pBuffer);
 		}
-		else if (sChunkHeader.magicChunk ==  SHD_PASS_CHUNK_MAGIC_NUMBER) {
+		else if (sChunkHeader.magicChunk ==  SHD_CHUNK_MAGIC_NUMBER_PASS) {
 			// Passes
 			pBuffer = m_PassTbl.Init(pBuffer);
 		}
-		else if (sChunkHeader.magicChunk ==  SHD_TECH_CHUNK_MAGIC_NUMBER) {
+		else if (sChunkHeader.magicChunk ==  SHD_CHUNK_MAGIC_NUMBER_TECH) {
 			// Techniques.
 			pBuffer = m_TechTbl.Init(pBuffer);
 		}
-		else if (sChunkHeader.magicChunk ==  SHD_PROG_CHUNK_MAGIC_NUMBER) {
+		else if (sChunkHeader.magicChunk ==  SHD_CHUNK_MAGIC_NUMBER_PROG) {
 			// Allocate buffer for CShaderPass.
 			m_pPass = reinterpret_cast<CShaderPass*>(pBuffer);
 			pBuffer += sizeof(CShaderPass) * m_Header.numPass;
@@ -79,9 +79,16 @@ IZ_BOOL CShaderBasic::Init(
 			// This is terminator, so end of data.
 			break;
 		}
+		else if (sChunkHeader.magicChunk == SHD_CHUNK_MAGIC_NUMBER_ATTR) {
+			// Attributes.
+			pBuffer = m_AttrTbl.Init(pBuffer);
+		}
 	}
 
 	VRETURN(CStdUtil::GetPtrDistance(m_pBuffer, pBuffer) == nBufSize);
+
+	// Initialize item of hash and list for CShaderManager,
+	InitItem(m_Header.nameKey, this);
 
 	return IZ_TRUE;
 }
@@ -276,7 +283,7 @@ IZ_BOOL CShaderBasic::EndPass()
 	return IZ_TRUE;
 }
 
-IZ_BOOL CShaderBasic::CommitChages()
+IZ_BOOL CShaderBasic::CommitChanges()
 {
 	IZ_ASSERT(m_nCurPass >= 0);
 
@@ -335,6 +342,106 @@ IZ_BOOL CShaderBasic::CommitChages()
 IZ_UINT CShaderBasic::GetTechNum() const
 {
 	return m_TechTbl.GetTechNum();
+}
+
+/**
+* Return number of attributes.
+*/
+IZ_UINT CShaderBasic::GetAttrNum() const
+{
+	return m_Header.numAttr;
+}
+
+/**
+* Return specified attribute's name.
+*/
+IZ_PCSTR CShaderBasic::GetAttrName(IZ_UINT idx) const
+{
+	IZ_ASSERT(idx < m_Header.numAttr);
+
+	const S_SHD_ATTRIBUTE* pAttr = m_AttrTbl.GetAttrByIdx(idx);
+
+	IZ_PCSTR pszName = m_StringBuffer.GetString(pAttr->posName);
+	return pszName;
+}
+
+/**
+* Compare specified attribute's value.
+*/
+IZ_BOOL CShaderBasic::CmpAttr(const CShaderAttr& attr) const
+{
+	E_SHADER_PARAMETER_TYPE type = attr.GetType();
+	IZ_PCSTR name = attr.GetName();
+
+	switch (type) {
+	case E_SHADER_PARAMETER_TYPE_INT:
+		return CmpAttrValue(name, attr.GetValueAsUInt());
+	case E_SHADER_PARAMETER_TYPE_FLOAT:
+		return CmpAttrValue(name, attr.GetValueAsFloat());
+	case E_SHADER_PARAMETER_TYPE_BOOL:
+		return CmpAttrValue(name, attr.GetValueAsBool());
+	}
+
+	IZ_ASSERT(IZ_FALSE);
+	return IZ_FALSE;
+}
+
+/**
+* Compare specified attribute's value.
+*/
+IZ_BOOL CShaderBasic::CmpAttrValue(IZ_PCSTR attrName, IZ_UINT val) const
+{
+	IZ_BOOL ret = CmpAttrValue(
+					attrName, 
+					E_SHADER_PARAMETER_TYPE_INT,
+					val);
+	return ret;
+}
+
+/**
+* Compare specified attribute's value.
+*/
+IZ_BOOL CShaderBasic::CmpAttrValue(IZ_PCSTR attrName, IZ_FLOAT val) const
+{
+	IZ_BOOL ret = CmpAttrValue(
+					attrName, 
+					E_SHADER_PARAMETER_TYPE_FLOAT,
+					val);
+	return ret;
+}
+
+/**
+* Compare specified attribute's value.
+*/
+IZ_BOOL CShaderBasic::CmpAttrValue(IZ_PCSTR attrName, IZ_BOOL val) const
+{
+	IZ_BOOL ret = CmpAttrValue(
+					attrName, 
+					E_SHADER_PARAMETER_TYPE_BOOL,
+					val);
+	return ret;
+}
+
+template <typename _T>
+IZ_BOOL CShaderBasic::CmpAttrValue(
+	IZ_PCSTR attrName, 
+	E_SHADER_PARAMETER_TYPE type,
+	_T val) const
+{
+	IZ_UINT nKey = CKey::GenerateValue(attrName);
+	IZ_ASSERT(nKey > 0);
+
+	// Ummm...
+	const S_SHD_ATTRIBUTE* pAttr = const_cast<CShaderAttrTable&>(m_AttrTbl).GetAttrByKey(nKey);
+
+	if (pAttr == IZ_NULL) {
+		return IZ_FALSE;
+	}
+
+	VRETURN(pAttr->type == type);
+
+	_T nAttrVal = *(_T*)(pAttr->param);
+	return (nAttrVal == val);
 }
 
 template <typename _SHD>

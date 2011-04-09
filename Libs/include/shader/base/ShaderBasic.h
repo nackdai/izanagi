@@ -11,6 +11,8 @@
 #include "table/ShaderPassTable.h"
 #include "table/ShaderTechTable.h"
 #include "table/ShaderTextureTable.h"
+#include "table/ShaderTextureTable.h"
+#include "ShaderAttrTable.h"
 #include "ShaderPass.h"
 #include "ShaderDefs.h"
 
@@ -76,9 +78,23 @@ namespace izanagi {
 		virtual IZ_BOOL BeginPass(IZ_UINT nPassIdx);
 		virtual IZ_BOOL EndPass();
 
-		virtual IZ_BOOL CommitChages();
+		virtual IZ_BOOL CommitChanges();
 
 		virtual IZ_UINT GetTechNum() const;
+
+		virtual IZ_UINT GetAttrNum() const;
+		virtual IZ_PCSTR GetAttrName(IZ_UINT idx) const;
+		virtual IZ_BOOL CmpAttr(const CShaderAttr& attr) const;
+		virtual IZ_BOOL CmpAttrValue(IZ_PCSTR attrName, IZ_UINT val) const;
+		virtual IZ_BOOL CmpAttrValue(IZ_PCSTR attrName, IZ_FLOAT val) const;
+		virtual IZ_BOOL CmpAttrValue(IZ_PCSTR attrName, IZ_BOOL val) const;
+
+	private:
+		template <typename _T>
+		IZ_BOOL CmpAttrValue(
+			IZ_PCSTR attrName, 
+			E_SHADER_PARAMETER_TYPE type,
+			_T val) const;
 
 	public:
 		IZ_SHADER_HANDLE GetParameterByName(IZ_PCSTR pszName);
@@ -121,6 +137,7 @@ namespace izanagi {
 		CShaderSamplerTable   m_SmplTbl;		// samplers of shader.
 		CShaderPassTable      m_PassTbl;		// passed of shader.
 		CShaderTechTable      m_TechTbl;		// techniques of shader.
+		CShaderAttrTable      m_AttrTbl;
 
 		CShaderPass* m_pPass;
 
