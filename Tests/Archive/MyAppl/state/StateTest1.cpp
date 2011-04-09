@@ -1,7 +1,7 @@
 ﻿#include <stdafx.h>
 #include "StateTest1.h"
 #include "MySystem.h"
-#include "izArchive.h"
+#include "izResource.h"
 #include "izSceneGraph.h"
 #include "izFont.h"
 
