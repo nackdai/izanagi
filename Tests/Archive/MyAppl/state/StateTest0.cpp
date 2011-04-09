@@ -1,7 +1,7 @@
 ﻿#include <stdafx.h>
 #include "StateTest0.h"
 #include "MySystem.h"
-#include "izArchive.h"
+#include "izResource.h"
 
 #include "../../data/test_0.h"
 
