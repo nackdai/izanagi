@@ -52,6 +52,11 @@ namespace izanagi {
 				m_OrderItem.Leave();
 			}
 
+			IZ_BOOL HasList() const
+			{
+				return m_HashItem.HasList();
+			}
+
 		protected:
 			typename CStdList<Item>::Item* GetHashItem() { return &m_HashItem; }
 			typename CStdList<Item>::Item* GetOrderItem() { return &m_OrderItem; }
