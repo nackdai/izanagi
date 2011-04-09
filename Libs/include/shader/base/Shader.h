@@ -7,6 +7,10 @@
 #include "ShaderDefs.h"
 
 namespace izanagi {
+	enum {
+		SHD_HASH_MAX = 5,
+	};
+
 	/**
 	*/
 	struct SShaderParamDesc {
@@ -38,7 +42,54 @@ namespace izanagi {
 
 	/**
 	*/
+	class CShaderAttr {
+	public:
+		~CShaderAttr() {}
+
+	private:
+		CShaderAttr() {}
+
+		NO_COPIABLE(CShaderAttr);
+
+	public:
+		CShaderAttr(IZ_PCSTR pszName, IZ_FLOAT fVal) { Set(pszName, fVal); }
+		CShaderAttr(IZ_PCSTR pszName, IZ_UINT nVal) { Set(pszName, nVal); }
+		CShaderAttr(IZ_PCSTR pszName, IZ_BOOL bVal) { Set(pszName, bVal); }
+
+		void Set(IZ_PCSTR pszName, IZ_FLOAT fVal) { Set(pszName, E_SHADER_PARAMETER_TYPE_FLOAT, fVal); }
+		void Set(IZ_PCSTR pszName, IZ_UINT nVal) { Set(pszName, E_SHADER_PARAMETER_TYPE_INT, nVal); }
+		void Set(IZ_PCSTR pszName, IZ_BOOL bVal) { Set(pszName, E_SHADER_PARAMETER_TYPE_BOOL, bVal); }
+
+		IZ_PCSTR GetName() const { return m_Name; }
+		E_SHADER_PARAMETER_TYPE GetType() const { return m_Type; }
+
+		IZ_UINT GetValueAsUInt() const { return *(IZ_UINT*)(m_Value); }
+		IZ_FLOAT GetValueAsFloat() const { return *(IZ_FLOAT*)(m_Value); }
+		IZ_BOOL GetValueAsBool() const { return *(IZ_BOOL*)(m_Value); }
+
+	private:
+		template <typename _T>
+		void Set(
+			IZ_PCSTR pszName, 
+			E_SHADER_PARAMETER_TYPE nType,
+			_T val)
+		{
+			m_Name = pszName;
+			m_Type = nType;
+			memcpy(m_Value, &val, sizeof(_T));
+		}
+
+	private:
+		IZ_PCSTR m_Name;
+		E_SHADER_PARAMETER_TYPE m_Type;
+		IZ_UINT8 m_Value[4];
+	};
+
+	/**
+	*/
 	class CShader : public CObject {
+		friend class CShaderManager;
+
 	protected:
 		CShader()
 		{
@@ -65,7 +116,7 @@ namespace izanagi {
 		PURE_VIRTUAL(IZ_BOOL BeginPass(IZ_UINT nPassIdx));
 		PURE_VIRTUAL(IZ_BOOL EndPass());
 
-		PURE_VIRTUAL(IZ_BOOL CommitChages());
+		PURE_VIRTUAL(IZ_BOOL CommitChanges());
 
 		PURE_VIRTUAL(IZ_SHADER_HANDLE GetParameterByName(IZ_PCSTR pszName));
 		PURE_VIRTUAL(IZ_SHADER_HANDLE GetParameterBySemantic(IZ_PCSTR pszSemantic));
@@ -76,6 +127,13 @@ namespace izanagi {
 				SShaderParamDesc& sDesc) const);
 
 		PURE_VIRTUAL(IZ_UINT GetTechNum() const);
+
+		PURE_VIRTUAL(IZ_UINT GetAttrNum() const);
+		PURE_VIRTUAL(IZ_PCSTR GetAttrName(IZ_UINT idx) const);
+		PURE_VIRTUAL(IZ_BOOL CmpAttr(const CShaderAttr& attr) const);
+		PURE_VIRTUAL(IZ_BOOL CmpAttrValue(IZ_PCSTR attrName, IZ_UINT val) const);
+		PURE_VIRTUAL(IZ_BOOL CmpAttrValue(IZ_PCSTR attrName, IZ_FLOAT val) const);
+		PURE_VIRTUAL(IZ_BOOL CmpAttrValue(IZ_PCSTR attrName, IZ_BOOL val) const);
 
 	public:
 		IZ_BOOL HasParameterByName(IZ_PCSTR pszName)
@@ -90,9 +148,29 @@ namespace izanagi {
 			return (handle > 0);
 		}
 
+		void RemoveFromShaderManager()
+		{
+			if (m_HashItem.HasList()) {
+				this->Release();
+				m_HashItem.Leave();
+			}
+		}
+
+	protected:
+		void InitItem(IZ_UINT key, CShader* pShader)
+		{
+			m_HashItem.Init(key, pShader);
+		}
+
+	private:
+		CStdHash<IZ_UINT, CShader, SHD_HASH_MAX>::Item* GetHashItem() { return &m_HashItem; }
+
 	protected:
 		IMemoryAllocator* m_pAllocator;
 		CGraphicsDevice* m_pDevice;
+
+	private:
+		CStdHash<IZ_UINT, CShader, SHD_HASH_MAX>::Item m_HashItem;
 	};
 }	// namespace izanagi
 

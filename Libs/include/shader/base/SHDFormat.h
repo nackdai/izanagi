@@ -20,15 +20,20 @@ namespace izanagi {
 		// Magic number of SHD file.
 		SHD_MAGIC_NUMBER = 0x004b5053,	// " SHD"
 
-		SHD_STRING_CHUNK_MAGIC_NUMBER  = 0x00000001,	// " STR"
-		SHD_PARAM_CHUNK_MAGIC_NUMBER   = 0x00000002,	// " PRM"
-		SHD_TEX_CHUNK_MAGIC_NUMBER     = 0x00000003,	// " TEX"
-		SHD_SMPL_CHUNK_MAGIC_NUMBER    = 0x00000004,	// "SMPL"
-		SHD_PASS_CHUNK_MAGIC_NUMBER    = 0x00000005,	// "PASS"
-		SHD_TECH_CHUNK_MAGIC_NUMBER    = 0x00000006,	// "TECH"
-		SHD_PROG_CHUNK_MAGIC_NUMBER    = 0x00000007,	// "PROG"
+		SHD_CHUNK_MAGIC_NUMBER_STRING = 0x00000001,	// " STR"
+		SHD_CHUNK_MAGIC_NUMBER_PARAM  = 0x00000002,	// " PRM"
+		SHD_CHUNK_MAGIC_NUMBER_TEX    = 0x00000003,	// " TEX"
+		SHD_CHUNK_MAGIC_NUMBER_SMPL   = 0x00000004,	// "SMPL"
+		SHD_CHUNK_MAGIC_NUMBER_PASS   = 0x00000005,	// "PASS"
+		SHD_CHUNK_MAGIC_NUMBER_TECH   = 0x00000006,	// "TECH"
+		SHD_CHUNK_MAGIC_NUMBER_PROG   = 0x00000007,	// "PROG"
+		SHD_CHUNK_MAGIC_NUMBER_ATTR   = 0x00000008,	// "ATTR"
 
 		SHD_PROGRAM_CHUNK_TERMINATER   = 0x7fffffff,
+	};
+
+	enum {
+		SHD_ATTR_HASH_MAX = 5,
 	};
 
 	//////////////////////////////////////////////////////////
@@ -65,6 +70,8 @@ namespace izanagi {
 	// +----------------+
 	// | 文字列バッファ |
 	// +----------------+
+	// |    属性値      |
+	// +----------------+
 
 	//////////////////////////////////////////////////////////
 
@@ -86,7 +93,7 @@ namespace izanagi {
 		IZ_UINT16 numPass;
 		IZ_UINT16 numParam;
 		IZ_UINT16 numSmpl;
-		IZ_UINT16 reserved;
+		IZ_UINT16 numAttr;
 
 		// プログラムの最大サイズ
 		IZ_UINT maxProgamSize;
@@ -122,6 +129,11 @@ namespace izanagi {
 
 	struct S_SHD_TECH_HEADER {
 		IZ_UINT16 numTechnique;		// テクニック数
+		IZ_UINT16 padding;
+	};
+
+	struct S_SHD_ATTR_HEADER {
+		IZ_UINT16 numAttrs;
 		IZ_UINT16 padding;
 	};
 
@@ -316,6 +328,24 @@ namespace izanagi {
 
 		IZ_UINT16 posPass;		// パス位置
 		IZ_UINT16 numPass;		// パス数
+	};
+
+	//////////////////////////////////////////////////////////
+
+	struct S_SHD_ATTRIBUTE {
+		IZ_UINT posName;
+		IZ_UINT keyName;
+
+		E_SHADER_PARAMETER_TYPE type;	// float or int or bool
+		IZ_UINT8 param[4];
+
+	private:
+		friend class CShaderAttrTable;
+
+		CStdHash<IZ_UINT, S_SHD_ATTRIBUTE, SHD_ATTR_HASH_MAX>::Item hashItem;
+
+		void InitHash() { hashItem.Init(keyName, this); }
+		CStdHash<IZ_UINT, S_SHD_ATTRIBUTE, SHD_ATTR_HASH_MAX>::Item* GetHashItem() { return &hashItem; }
 	};
 }	// namespace izanagi
 

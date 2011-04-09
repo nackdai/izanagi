@@ -4,9 +4,7 @@
 #include "SHDFormat.h"
 
 namespace izanagi {
-	/**
-	* シェーダ定数テーブル
-	*/
+	// シェーダ定数テーブル
 	class CShaderParameterTable {
 		friend class CShaderBasic;
 
