@@ -12,7 +12,7 @@
 #include "table/ShaderTechTable.h"
 #include "table/ShaderTextureTable.h"
 #include "table/ShaderTextureTable.h"
-#include "ShaderAttrTable.h"
+#include "table/ShaderAttrTable.h"
 #include "ShaderPass.h"
 #include "ShaderDefs.h"
 

@@ -274,7 +274,7 @@
 					Name="table"
 					>
 					<File
-						RelativePath="..\include\shader\base\ShaderAttrTable.h"
+						RelativePath="..\include\shader\base\table\ShaderAttrTable.h"
 						>
 					</File>
 					<File
