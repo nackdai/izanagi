@@ -9,7 +9,7 @@ namespace izanagi {
 		friend class CShaderBasic;
 
 	private:
-		CShaderAttrTable();
+		inline CShaderAttrTable();
 		~CShaderAttrTable() {}
 
 		NO_COPIABLE(CShaderAttrTable);

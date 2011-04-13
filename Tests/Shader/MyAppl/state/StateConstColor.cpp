@@ -48,7 +48,7 @@ void CStateConstColor::Render3D()
 			m_pShader->SetParamValue(m_hW2C, &mtxW2C, sizeof(mtxW2C));
 		}
 
-		m_pShader->CommitChages();
+		m_pShader->CommitChanges();
 
 		m_pMesh->Draw();
 

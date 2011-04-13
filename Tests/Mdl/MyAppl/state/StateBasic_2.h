@@ -44,8 +44,6 @@ protected:
 	izanagi::CMesh* m_pMsh;
 	izanagi::CSkeleton* m_pSkl;
 
-	izanagi::CGeometrySorter<2, izanagi::CModel, izanagi::CMeshSetInstance>* m_pGeomSorter;
-
 	izanagi::CAnimation* m_pAnm;
 	izanagi::CStdTimeline m_Timeline;
 
