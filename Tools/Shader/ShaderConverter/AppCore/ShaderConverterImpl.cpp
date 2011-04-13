@@ -169,7 +169,7 @@ BOOL CShaderConverter::Export(const SShaderConfig& sConfig)
 	ExportStringBuffer();
 
 	// Export program chunk's header.
-	_ExportChunkHeader(m_Out, izanagi::SHD_PROG_CHUNK_MAGIC_NUMBER);
+	_ExportChunkHeader(m_Out, izanagi::SHD_CHUNK_MAGIC_NUMBER_PROG);
 
 	// プログラム開始位置
 	m_ShdHeader.posProgram = m_Out.GetCurPos();
@@ -254,7 +254,7 @@ namespace {
 */
 BOOL CShaderConverter::ExportTechnique()
 {
-	VRETURN(_ExportChunkHeader(m_Out, izanagi::SHD_TECH_CHUNK_MAGIC_NUMBER));
+	VRETURN(_ExportChunkHeader(m_Out, izanagi::SHD_CHUNK_MAGIC_NUMBER_TECH));
 
 	izanagi::S_SHD_TECH_HEADER sTechHeader;
 	FILL_ZERO(&sTechHeader, sizeof(sTechHeader));
@@ -310,7 +310,7 @@ BOOL CShaderConverter::ExportTechnique()
 
 BOOL CShaderConverter::ExportTexture()
 {
-	VRETURN(_ExportChunkHeader(m_Out, izanagi::SHD_TEX_CHUNK_MAGIC_NUMBER));
+	VRETURN(_ExportChunkHeader(m_Out, izanagi::SHD_CHUNK_MAGIC_NUMBER_TEX));
 
 	izanagi::S_SHD_TEXTRUE_HEADER sTexHeader;
 	FILL_ZERO(&sTexHeader, sizeof(sTexHeader));
@@ -363,7 +363,7 @@ BOOL CShaderConverter::ExportTexture()
 
 BOOL CShaderConverter::ExportSampler()
 {
-	VRETURN(_ExportChunkHeader(m_Out, izanagi::SHD_SMPL_CHUNK_MAGIC_NUMBER));
+	VRETURN(_ExportChunkHeader(m_Out, izanagi::SHD_CHUNK_MAGIC_NUMBER_SMPL));
 
 	izanagi::S_SHD_SAMPLER_HEADER sSmplHeader;
 	FILL_ZERO(&sSmplHeader, sizeof(sSmplHeader));
@@ -430,7 +430,7 @@ BOOL CShaderConverter::ExportSampler()
 */
 BOOL CShaderConverter::ExportParameter()
 {
-	_ExportChunkHeader(m_Out, izanagi::SHD_PARAM_CHUNK_MAGIC_NUMBER);
+	_ExportChunkHeader(m_Out, izanagi::SHD_CHUNK_MAGIC_NUMBER_PARAM);
 
 	izanagi::S_SHD_PARAM_HEADER sParamHeader;
 	FILL_ZERO(&sParamHeader, sizeof(sParamHeader));
@@ -683,7 +683,7 @@ namespace {
 // パス解析
 BOOL CShaderConverter::ExportPass()
 {
-	_ExportChunkHeader(m_Out, izanagi::SHD_PASS_CHUNK_MAGIC_NUMBER);
+	_ExportChunkHeader(m_Out, izanagi::SHD_CHUNK_MAGIC_NUMBER_PASS);
 
 	izanagi::S_SHD_PASS_HEADER sPassHeader;
 	FILL_ZERO(&sPassHeader, sizeof(sPassHeader));
@@ -879,7 +879,7 @@ BOOL CShaderConverter::ExportProgram()
 
 BOOL CShaderConverter::ExportStringBuffer()
 {
-	_ExportChunkHeader(m_Out, izanagi::SHD_STRING_CHUNK_MAGIC_NUMBER);
+	_ExportChunkHeader(m_Out, izanagi::SHD_CHUNK_MAGIC_NUMBER_STRING);
 
 	m_ShdHeader.sizeStringBuffer = CStringChunk::GetInstance().GetBufferSize();
 

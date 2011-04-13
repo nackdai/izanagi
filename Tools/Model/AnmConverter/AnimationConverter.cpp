@@ -7,7 +7,7 @@
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-#if 0
+#if 1
 	IImporter* pImporter = IImporter::CreateImporter<CColladaImporter>();
 	//pImporter->Open("cube.dae");
 	//pImporter->Open("sphere.dae");

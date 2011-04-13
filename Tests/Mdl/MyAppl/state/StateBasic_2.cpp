@@ -98,8 +98,6 @@ CStateBasicEx2::CStateBasicEx2()
 	m_pMdl = IZ_NULL;
 	m_pMsh = IZ_NULL;
 	m_pSkl = IZ_NULL;
-
-	m_pGeomSorter = IZ_NULL;
 }
 
 CStateBasicEx2::~CStateBasicEx2()
@@ -168,9 +166,8 @@ void CStateBasicEx2::Render3D()
 	pDevice->SetTexture(0, m_pTex);
 
 	m_pShader->BeginPass(0);
-	//m_pShader->CommitChanges();
-	//m_pMdl->Render();
-	m_pGeomSorter->Render(pDevice, s_pMdlRenderHandler);
+	m_pShader->CommitChanges();
+	m_pMdl->Render();
 	m_pShader->EndPass();
 
 	// 描画終了
@@ -230,17 +227,6 @@ IZ_BOOL CStateBasicEx2::Update()
 	m_pMdl->ApplyAnimation(time, m_pAnm);
 
 	m_pMdl->Update();
-
-	{
-		m_pGeomSorter->BeginRegister();
-
-		m_pGeomSorter->Register(
-			0.0f,
-			m_pMdl, 
-			izanagi::E_SCENE_REGISTER_TYPE_NORMAL);
-
-		m_pGeomSorter->EndRegister();
-	}
 
 	return IZ_TRUE;
 }
@@ -372,10 +358,6 @@ IZ_BOOL CStateBasicEx2::Enter()
 #endif
 	IZ_ASSERT(m_pMdl != IZ_NULL);
 
-	// Geometry sorter.
-	m_pGeomSorter = izanagi::CGeometrySorter<2, izanagi::CModel, izanagi::CMeshSetInstance>::CreateGeometrySorter(pAllocator);
-	IZ_ASSERT(m_pGeomSorter != IZ_NULL);
-
 	// XYZ軸
 	m_pAxis = izanagi::CDebugMeshAxis::CreateDebugMeshAxisDefault(
 				pAllocator,
@@ -418,8 +400,6 @@ IZ_BOOL CStateBasicEx2::Leave()
 	SAFE_RELEASE(m_pAxis);
 	SAFE_RELEASE(m_pTex);
 	SAFE_RELEASE(m_pAnm);
-
-	SAFE_RELEASE(m_pGeomSorter);
 
 	SAFE_RELEASE(s_pMdlRenderHandler);
 
