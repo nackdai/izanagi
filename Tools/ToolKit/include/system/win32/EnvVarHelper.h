@@ -25,9 +25,9 @@ namespace izanagi_tk {
 
 		// 環境変数の展開
 		static IZ_BOOL ExpandEnvStrings(
-			IZ_PCSTR lpszStr,
 			izChar pDst[],
-			size_t nDstLen)
+			size_t nDstLen,
+			IZ_PCSTR lpszStr)
 		{
 			IZ_BOOL ret = IZ_FALSE;
 

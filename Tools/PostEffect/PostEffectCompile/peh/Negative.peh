@@ -1,5 +1,5 @@
 -c   "%DXSDK_DIR%Utilities\Bin\x86\fxc"
 -co  "/nologo"
--src "../PostEffectShader/fx/PostEffectNegative.fx"
--I	 "../PostEffectShader/include"
+-src "../../PostEffectShader/fx/PostEffectNegative.fx"
+-I	 "../../PostEffectShader/include"
 -asm

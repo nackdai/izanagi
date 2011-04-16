@@ -100,10 +100,10 @@ int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 			}
 
 			// 中間ファイル出力ディレクトリの指定がある
-			if (!cOption.obj_dir.IsEmpty()) {
-				if (!_IsExist(cOption.obj_dir)) {
+			if (!cOption.objDir.IsEmpty()) {
+				if (!_IsExist(cOption.objDir)) {
 					// 存在しないので作成する
-					CreateDirectory(cOption.obj_dir, NULL);
+					CreateDirectory(cOption.objDir, NULL);
 				}
 			}
 
@@ -119,7 +119,7 @@ int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 				goto __EXIT__;
 			}
 
-			if (!CPostEffectConverter::GetInstance().Begin(cOption.preproc_file)) {
+			if (!CPostEffectConverter::GetInstance().Begin(cOption.preprocFile)) {
 				nRetCode = 1;
 				goto __EXIT__;
 			}
@@ -127,16 +127,16 @@ int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 			// シェーダコンパイル
 			if (!CPostEffectConverter::GetInstance().CompileShader(
 					cOption.isCompileAsm,
-					cOption.compile,
-					cOption.preproc_file,
-					cOption.obj_dir))
+					cOption.compiler,
+					cOption.preprocFile,
+					cOption.objDir))
 			{
 				nRetCode = 1;
 				goto __EXIT__;
 			}
 
 #if 1
-			if (!CPostEffectConverter::GetInstance().Export(cOption.out_file)) {
+			if (!CPostEffectConverter::GetInstance().Export(cOption.outFile)) {
 				nRetCode = 1;
 				goto __EXIT__;
 			}

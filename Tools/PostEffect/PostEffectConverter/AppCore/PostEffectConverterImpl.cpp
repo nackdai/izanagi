@@ -732,9 +732,9 @@ BOOL CPostEffectConverter::ExportPass()
 	}
 
 	// Compute size of buffer for indices for parameters which a pass uses.
-	m_PesHeader.sizePassBuffForParamIdx = izanagi::CPostEffect::ComputeSizePassBuffForParamIdx(
-											nConstNum,
-											nSamplerNum);
+	m_PesHeader.sizePassBuffForParamIdx = (IZ_UINT)izanagi::CPostEffect::ComputeSizePassBuffForParamIdx(
+													nConstNum,
+													nSamplerNum);
 
 	return TRUE;
 }

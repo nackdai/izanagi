@@ -290,6 +290,18 @@
 						>
 					</File>
 				</Filter>
+				<Filter
+					Name="mtrl"
+					>
+					<File
+						RelativePath=".\importer\collada\ColladaMaterial.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\importer\collada\ColladaMaterial.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="x_file"

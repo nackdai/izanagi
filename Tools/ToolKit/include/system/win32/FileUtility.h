@@ -28,7 +28,7 @@ namespace izanagi_tk {
 
 			return (hFind != INVALID_HANDLE_VALUE);
 #else
-			return PathFileExists(pszName);
+			return ::PathFileExists(pszName);
 #endif
 		}
 
@@ -40,7 +40,7 @@ namespace izanagi_tk {
 			HANDLE hFind;
 			WIN32_FIND_DATA fd;
 
-			hFind = FindFirstFile(pszName, &fd);
+			hFind = ::FindFirstFile(pszName, &fd);
 
 			if(hFind != INVALID_HANDLE_VALUE) {
 				if (fd.dwFileAttributes & FILE_ATTRIBUTE_READONLY) {
@@ -60,11 +60,13 @@ namespace izanagi_tk {
 			IZ_PCSTR path_0,
 			IZ_PCSTR path_1)
 		{
+			IZ_ASSERT((pDst != path_0) && (pDst != path_1));
+
 			FILL_ZERO(pDst, nSize);
 
 			IZ_BOOL ret = (::PathCombine(pDst, path_0, path_1) != IZ_NULL);
-
 			IZ_ASSERT(ret);
+
 			return ret;
 		}
 
@@ -94,6 +96,26 @@ namespace izanagi_tk {
 		}
 
 		/**
+		* Get path without file name.
+		*/
+		static IZ_BOOL GetPathWithoutFileName(
+			izChar* pDst,
+			size_t nSize,
+			IZ_PCSTR pszPath)
+		{
+			IZ_ASSERT(pDst != pszPath);
+
+			IZ_BOOL ret = (::sprintf_s(pDst, nSize, "%s\0", pszPath) >= 0);
+			IZ_ASSERT(ret);
+
+			if (ret) {
+				::PathRemoveFileSpec(pDst);
+			}
+
+			return ret;
+		}
+
+		/**
 		* Get file name from path without extension.
 		*/
 		static IZ_BOOL GetFileNameFromPathWithoutExt(
@@ -101,6 +123,8 @@ namespace izanagi_tk {
 			size_t nSize,
 			IZ_PCSTR pszPath)
 		{
+			IZ_ASSERT(pDst != pszPath);
+
 			IZ_PCSTR tmp = GetFileNameFromPath(pszPath);
 
 			VRETURN(IsEnableCopyToBuf(pDst, nSize, tmp));
@@ -119,6 +143,8 @@ namespace izanagi_tk {
 			size_t nSize,
 			IZ_PCSTR pszPath)
 		{
+			IZ_ASSERT(pDst != pszPath);
+
 			VRETURN(IsEnableCopyToBuf(pDst, nSize, pszPath));
 			VRETURN(CopyToBuf(pszPath, pDst, nSize));
 
@@ -132,15 +158,17 @@ namespace izanagi_tk {
 		* Get extension.
 		*/
 		static IZ_PCSTR GetExtension(
-			izChar* pTmp,
+			izChar* pDst,
 			size_t nSize,
 			IZ_PCSTR pszPath)
 		{
-			VRETURN_NULL(IsEnableCopyToBuf(pTmp, nSize, pszPath));
-			VRETURN_NULL(CopyToBuf(pszPath, pTmp, nSize));
+			IZ_ASSERT(pDst != pszPath);
+
+			VRETURN_NULL(IsEnableCopyToBuf(pDst, nSize, pszPath));
+			VRETURN_NULL(CopyToBuf(pszPath, pDst, nSize));
 
 			// Get extension.
-			izChar* ret = ::PathFindExtension(pTmp);
+			izChar* ret = ::PathFindExtension(pDst);
 			if ((ret != NULL)
 				&& (ret[0] == '.'))
 			{
@@ -159,7 +187,7 @@ namespace izanagi_tk {
 		{
 			FILL_ZERO(pDst, nSize);
 
-			IZ_BOOL ret = (GetModuleFileName(
+			IZ_BOOL ret = (::GetModuleFileName(
 							IZ_NULL,
 							pDst,
 							static_cast<DWORD>(nSize)) != 0);
@@ -194,6 +222,14 @@ namespace izanagi_tk {
 			return ::DeleteFile(pszStr);
 		}
 
+		/**
+		* Return whether path is relative path.
+		*/
+		static IZ_BOOL IsRelativePath(IZ_PCSTR pszPath)
+		{
+			return ::PathIsRelative(pszPath);
+		}
+
 	private:
 		static IZ_BOOL IsEnableCopyToBuf(
 			IZ_PCSTR pszStr0,
@@ -202,8 +238,11 @@ namespace izanagi_tk {
 		{
 			// Compare buffer size and size of input string.
 			size_t nStrSize = strlen(pszStr1);
+			IZ_BOOL b0 = (nSize >= nStrSize);
 
-			return (nSize >= nStrSize);
+			IZ_BOOL b1 = (pszStr0 != pszStr1);
+
+			return (b0 && b1);
 		}
 
 		static IZ_BOOL CopyToBuf(IZ_PCSTR pszSrc, izChar* pDst, size_t nSize)
@@ -211,7 +250,7 @@ namespace izanagi_tk {
 			IZ_BOOL ret = IZ_FALSE;
 
 			if (IsEnableCopyToBuf(pDst, nSize, pszSrc)) {
-				ret = (sprintf_s(pDst, nSize, "%s\0", pszSrc) >= 0);
+				ret = (::sprintf_s(pDst, nSize, "%s\0", pszSrc) >= 0);
 			}
 
 			return ret;

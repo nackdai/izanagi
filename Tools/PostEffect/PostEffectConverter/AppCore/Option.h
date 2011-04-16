@@ -7,14 +7,14 @@
 * オプション構造体
 */
 struct SOption {
-	CString compile;		// コンパイルコマンド
-	CString compile_opt;	// コンパイルオプション
+	CString compiler;		// コンパイルコマンド
+	CString compileOpt;	// コンパイルオプション
 
-	CString obj_dir;		// 中間ファイルディレクトリ
+	CString objDir;		// 中間ファイルディレクトリ
 
 	CString shader;			// コンパイルするシェーダ
-	CString preproc_file;	// プリプロセス済みファイル
-	CString out_file;		// 出力ファイル
+	CString preprocFile;	// プリプロセス済みファイル
+	CString outFile;		// 出力ファイル
 
 	std::vector<CString> defines;	// -Dオプションで指定されたもの
 	std::vector<CString> includes;	// -Iオプションで指定されたもの
@@ -26,7 +26,10 @@ struct SOption {
 	};
 
 	// オプション記述ファイル
-	CString option_file;
+	CString optionFile;
+
+	// ベースディレクトリ
+	std::string baseDir;
 };
 
 /**
@@ -46,7 +49,7 @@ public:
 
 protected:
 	// 解析処理
-	void AnalysisInternal();
+	BOOL AnalysisInternal();
 
 	// コピー
 	void Copy(const COption& rhs);
