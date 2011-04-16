@@ -53,7 +53,7 @@ int Preproc(COption& cOption)
 
 	// 出力ファイル
 	{
-		LPCSTR tmp = cOption.out_file;
+		LPCSTR tmp = cOption.outFile;
 		tvArgs.push_back(const_cast<char*>(tmp));
 	}
 
@@ -85,7 +85,7 @@ BOOL ExecWithPreprocMode(
 		"%s -E %s -o %s",
 		lpszExe,
 		cOption.shader,
-		cOption.preproc_file);
+		cOption.preprocFile);
 
 	// インクルードパス
 	{

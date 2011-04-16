@@ -36,9 +36,9 @@ namespace {
 		INT num;
 		const float* p = cgGetFloatAnnotationValues(ann, &num);
 		if (num == 2) {
-			// 必ず２なければいけない
-			sAnn.Dimensions[0] = p[0];
-			sAnn.Dimensions[1] = p[1];
+			// 必ず２つなければいけない
+			sAnn.Dimensions[0] = static_cast<IZ_UINT16>(p[0]);
+			sAnn.Dimensions[1] = static_cast<IZ_UINT16>(p[1]);
 		}
 		return (num == 2);
 	}
@@ -49,7 +49,7 @@ namespace {
 		INT num;
 		const float* p = cgGetFloatAnnotationValues(ann, &num);
 		if (num == 2) {
-			// 必ず２なければいけない
+			// 必ず２つなければいけない
 			sAnn.ViewportRatio[0] = p[0];
 			sAnn.ViewportRatio[1] = p[1];
 		}
