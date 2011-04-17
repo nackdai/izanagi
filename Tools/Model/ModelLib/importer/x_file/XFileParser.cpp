@@ -113,7 +113,7 @@ IZ_BOOL CXFileParser::Parse(IZ_PCSTR pszFile)
 	{
 		// NOTE
 		// '0' = 48 = 0x30
-		m_nFloatSize += (sHeader.float_type[0] - 0x30) * 1000
+		m_nFloatSize = (sHeader.float_type[0] - 0x30) * 1000
 						+ (sHeader.float_type[1] - 0x30) * 100
 						+ (sHeader.float_type[2] - 0x30) * 10
 						+ (sHeader.float_type[3] - 0x30);
@@ -958,7 +958,9 @@ namespace {
 			izChar ch = *_GetChar(cIn);
 			while ((cIn.GetCurPos() < cIn.GetSize()) && ::isspace(ch)) {
 				_NextOneChar(cIn);
-				ch = *_GetChar(cIn);
+				if (cIn.GetCurPos() < cIn.GetSize()) {
+					ch = *_GetChar(cIn);
+				}
 			}
 
 			if (cIn.GetCurPos() >= cIn.GetSize()) {
