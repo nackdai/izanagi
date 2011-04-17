@@ -139,6 +139,9 @@ int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 			// オプションが不正かどうか
 			_VGOTO(cOption.IsValid(), __EXIT__);
 
+			// 相対パスを絶対パスにするためのベースとなるディレクトリを設定
+			CShaderConfigManager::GetInstance().SetBaseDir(cOption.in_file);
+
 			// 中間ファイル出力ディレクトリの指定がある
 			if (!cOption.obj_dir.IsEmpty()) {
 				if (!izanagi::izanagi_tk::CFileUtility::IsExist(cOption.obj_dir)) {
@@ -156,6 +159,7 @@ int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 			// 自分自身をプリプロセス処理モードで呼び出す
 			_VGOTO(cOption.PreprocInputFile(), __EXIT__);
 
+			// 設定XMLファイルを解析
 			xercesc::XMLPlatformUtils::Initialize();
 			xercesc::SAX2XMLReader* parser = xercesc::XMLReaderFactory::createXMLReader();
 			parser->setContentHandler(&CShaderConfigManager::GetInstance());
@@ -185,7 +189,7 @@ int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 				_VGOTO(
 					CShaderConverter::GetInstance().CompileShader(
 						sConfig.isCompileAsm,
-						sConfig.compile,
+						sConfig.compiler,
 						sConfig.preproc_file,
 						cOption.obj_dir),
 					__EXIT__);

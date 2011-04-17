@@ -138,9 +138,9 @@ BOOL COption::EndAnalysis()
 	if (!in_file.IsEmpty()) {
 		VRETURN(
 			izanagi::izanagi_tk::CEnvVarHelper::ExpandEnvStrings(
-				in_file,
 				s_BUF,
-				sizeof(s_BUF)));
+				sizeof(s_BUF),
+				in_file));
 	}
 
 #if 0
@@ -213,9 +213,9 @@ BOOL COption::EndAnalysis()
 		
 		VRETURN(
 			izanagi::izanagi_tk::CEnvVarHelper::ExpandEnvStrings(
-				str,
 				s_BUF,
-				sizeof(s_BUF)));
+				sizeof(s_BUF),
+				str));
 		
 		it++;
 	}

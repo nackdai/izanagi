@@ -2,10 +2,10 @@
 
 <shd
 	compiler="%DXSDK_DIR%Utilities\Bin\x86\fxc"
-	src="../ShaderSource/fx/ConstantColorShader.fx"
+	src="../../ShaderSource/fx/ConstantColorShader.fx"
 	option="/nologo"
 	is_asm="true">
 
-	<include path="../ShaderSource/include"/>
+	<include path="../../ShaderSource/include"/>
 
 </shd>
