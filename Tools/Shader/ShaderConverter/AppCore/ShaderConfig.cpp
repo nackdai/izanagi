@@ -1,7 +1,6 @@
 ﻿#include <stdafx.h>
 #include "ShaderConfig.h"
 #include "izToolKit.h"
-#include "ToolKitXmlDefs.h"
 
 CShaderConfigManager CShaderConfigManager::s_cInstance;
 
@@ -31,6 +30,7 @@ void CShaderConfigManager::startElement(
 	CString name(XN(qname));
 
 	if (IsAttr(name, attr_type::SHD)) {
+		// shd
 		BeginAnalysisShaderElement();
 
 		AnalysisAttr(
@@ -38,11 +38,13 @@ void CShaderConfigManager::startElement(
 			&CShaderConfigManager::AnalysisAttrSHD);
 	}
 	else if (IsAttr(name, attr_type::INCLUDE)) {
+		// include
 		AnalysisAttr(
 			attrs,
 			&CShaderConfigManager::AnalysisAttrINCLUDE);
 	}
 	else if (IsAttr(name, attr_type::DEFINE)) {
+		// define
 		AnalysisAttr(
 			attrs,
 			&CShaderConfigManager::AnalysisAttrDEFINE);
@@ -81,32 +83,32 @@ namespace {
 		if (!sConfig.shader.IsEmpty()) {
 			VRETURN(
 				izanagi::izanagi_tk::CEnvVarHelper::ExpandEnvStrings(
-					sConfig.shader,
 					s_BUF,
-					sizeof(s_BUF)));
+					sizeof(s_BUF),
+					sConfig.shader));
 
 			sConfig.shader.Format(_T("%s"), s_BUF);
 			sConfig.shader.Replace('\\', '/');
 		}
 
-		if (sConfig.compile.IsEmpty()) {
-			sConfig.compile.Format(_T("%%DXSDK_DIR%%Utilities/Bin/x86/fxc"));
+		if (sConfig.compiler.IsEmpty()) {
+			sConfig.compiler.Format(_T("%%DXSDK_DIR%%Utilities/Bin/x86/fxc"));
 		}
 
-		if (!sConfig.compile.IsEmpty()) {
+		if (!sConfig.compiler.IsEmpty()) {
 			VRETURN(
 				izanagi::izanagi_tk::CEnvVarHelper::ExpandEnvStrings(
-					sConfig.compile,
 					s_BUF,
-					sizeof(s_BUF)));
+					sizeof(s_BUF),
+					sConfig.compiler));
 
-			sConfig.compile.Format(_T("%s"), s_BUF);
-			sConfig.compile.Replace('\\', '/');
+			sConfig.compiler.Format(_T("%s"), s_BUF);
+			sConfig.compiler.Replace('\\', '/');
 
 			// コンパイルオプションとの結合
 			CString tmp;
-			tmp.Format(_T("\"\"%s\"\" %s"), sConfig.compile, sConfig.compile_opt);
-			sConfig.compile = tmp;
+			tmp.Format(_T("\"\"%s\"\" %s"), sConfig.compiler, sConfig.compile_opt);
+			sConfig.compiler = tmp;
 		}
 
 		if (sConfig.name.IsEmpty()) {
@@ -126,9 +128,9 @@ namespace {
 
 			VRETURN(
 				izanagi::izanagi_tk::CEnvVarHelper::ExpandEnvStrings(
-					str,
 					s_BUF,
-					sizeof(s_BUF)));
+					sizeof(s_BUF),
+					str));
 			
 			str.Format(_T("%s"), s_BUF);
 			str.Replace('\\', '/');
@@ -178,28 +180,76 @@ namespace {
 void CShaderConfigManager::AnalysisAttrSHD(const CString& strAttrName, const CString& strVal)
 {
 	if (IsAttr(strAttrName, attr_type::COMPILER)) {
-		m_pCurConfig->compile = strVal;
+		// compiler
+		m_pCurConfig->compiler = strVal;
 	}
 	else if (IsAttr(strAttrName, attr_type::SRC)) {
+		// src
+#if 0
 		m_pCurConfig->shader = strVal;
+#else
+		if (m_BaseDir.empty()) {
+			m_pCurConfig->shader = strVal;
+		}
+		else {
+			m_pCurConfig->shader.Format(_T("%s\\%s"), m_BaseDir.c_str(), strVal);
+		}
+#endif
 	}
 	else if (IsAttr(strAttrName, attr_type::OPTION)) {
+		// option
 		m_pCurConfig->compile_opt = strVal;
 	}
 	else if (IsAttr(strAttrName, attr_type::IS_ASM)) {
+		// is_asm
 		m_pCurConfig->isCompileAsm = _CheckBoolValue(strVal);
 	}
 	else if (IsAttr(strAttrName, attr_type::NAME)) {
+		// name
 		m_pCurConfig->name = strVal;
 	}
 }
 
 void CShaderConfigManager::AnalysisAttrINCLUDE(const CString& strAttrName, const CString& strVal)
 {
+#if 0
 	m_pCurConfig->includes.push_back(strVal);
+#else
+	m_pCurConfig->includes.push_back(CString());
+
+	CString& str = m_pCurConfig->includes.back();
+	if (m_BaseDir.empty()) {
+		str = strVal;
+	}
+	else {
+		str.Format(_T("%s\\%s"), m_BaseDir.c_str(), strVal);
+	}
+#endif
 }
 
 void CShaderConfigManager::AnalysisAttrDEFINE(const CString& strAttrName, const CString& strVal)
 {
 	m_pCurConfig->defines.push_back(strVal);
+}
+
+// 相対パスを絶対パスにするためのベースとなるディレクトリを設定
+IZ_BOOL CShaderConfigManager::SetBaseDir(IZ_PCSTR pszDir)
+{
+	static izChar BUF[MAX_PATH];
+
+	if (m_BaseDir.empty()) {
+		CString str(pszDir);
+		str.Replace("/", "\\");
+
+		VRETURN(
+			izanagi::izanagi_tk::CFileUtility::GetPathWithoutFileName(
+				BUF,
+				sizeof(BUF),
+				str));
+
+		//m_BaseDir.clear();
+		m_BaseDir.append(BUF);
+	}
+
+	return IZ_TRUE;
 }

@@ -10,7 +10,7 @@
 /////////////////////////////////////////////
 
 struct SShaderConfig {
-	CString compile;		// コンパイルコマンド
+	CString compiler;		// コンパイルコマンド
 	CString compile_opt;	// コンパイルオプション
 
 	CString shader;			// コンパイルするシェーダ
@@ -66,6 +66,10 @@ public:
 		const XMLCh* const localname,
 		const XMLCh* const qname);
 
+public:
+	// 相対パスを絶対パスにするためのベースとなるディレクトリを設定
+	IZ_BOOL SetBaseDir(IZ_PCSTR pszDir);
+
 private:
 	void BeginAnalysisShaderElement();
 	void EndtAnalysisShaderElement();
@@ -80,6 +84,8 @@ private:
 	void AnalysisAttrDEFINE(const CString& strAttrName, const CString& strVal);
 
 private:
+	std::string m_BaseDir;
+
 	std::vector<SShaderConfig> m_tvConfigs;
 	SShaderConfig* m_pCurConfig;
 };
