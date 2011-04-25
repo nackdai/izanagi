@@ -7,7 +7,7 @@
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-#if 1
+#if 0
 	IImporter* pImporter = IImporter::CreateImporter<CColladaImporter>();
 	//pImporter->Open("cube.dae");
 	//pImporter->Open("sphere.dae");
@@ -18,8 +18,8 @@ int _tmain(int argc, _TCHAR* argv[])
 	IImporter* pImporter = IImporter::CreateImporter<CXFileImporter>();
 
 	//static IZ_PCSTR pszXFile = "Dwarf.x";
-	//static IZ_PCSTR pszXFile = "00_Mesh1P.x";
-	static IZ_PCSTR pszXFile = "tiny.x";
+	static IZ_PCSTR pszXFile = "00_Mesh1P.x";
+	//static IZ_PCSTR pszXFile = "tiny.x";
 
 	std::string strXFile(pszXFile);
 
