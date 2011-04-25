@@ -177,7 +177,7 @@
 				>
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="$(ProjectDir)/../ShaderConverter/ShaderConverterD.exe -src &quot;$(InputPath)&quot; -obj &quot;$(ProjectDir)/shader_obj&quot; -o &quot;data&quot;&#x0D;&#x0A;"
+					CommandLine="$(SolutionDir)\tools\$(ConfigurationName)\ShaderConverter.exe -src &quot;$(InputPath)&quot; -obj &quot;$(ProjectDir)/shader_obj&quot; -o &quot;data&quot;"
 					Outputs="$(ProjectDir)data/$(InputName).shd"
 				/>
 			</FileConfiguration>
@@ -186,7 +186,8 @@
 				>
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="$(ProjectDir)/../ShaderConverter/ShaderConverter.exe -src &quot;$(InputPath)&quot; -obj &quot;$(ProjectDir)/shader_obj&quot;&#x0D;&#x0A;"
+					CommandLine="$(SolutionDir)\tools\$(ConfigurationName)\ShaderConverter.exe -src &quot;$(InputPath)&quot; -obj &quot;$(ProjectDir)/shader_obj&quot; -o &quot;data&quot;"
+					Outputs="$(ProjectDir)data/$(InputName).shd"
 				/>
 			</FileConfiguration>
 		</File>

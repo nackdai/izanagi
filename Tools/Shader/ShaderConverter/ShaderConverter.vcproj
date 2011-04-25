@@ -64,7 +64,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="$(SolutionDir)/External/xerces/Build/Win32/VC8/$(ConfigurationName)/xerces-c_3D.lib $(SolutionDir)/External/Cg/lib/cg.lib $(SolutionDir)/External/Cg/lib/cgD3D9.lib $(SolutionDir)/External/Preproc/$(ConfigurationName)/Preproc.lib"
-				OutputFile="$(ProjectName)D.exe"
+				OutputFile="$(SolutionDir)\tools\$(ConfigurationName)\$(ProjectName).exe"
 				LinkIncremental="2"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
@@ -142,7 +142,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(ProjectName).exe"
+				OutputFile="$(SolutionDir)\tools\$(ConfigurationName)\$(ProjectName).exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="1"

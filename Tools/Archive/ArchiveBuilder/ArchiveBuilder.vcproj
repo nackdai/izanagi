@@ -55,6 +55,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				OutputFile="$(SolutionDir)\tools\$(ConfigurationName)\$(ProjectName).exe"
 				LinkIncremental="2"
 				SubSystem="1"
 				TargetMachine="1"
@@ -130,7 +131,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="../../ToolKit/ToolKit.lib"
-				OutputFile="$(ProjectName).exe"
+				OutputFile="$(SolutionDir)\tools\$(ConfigurationName)\$(ProjectName).exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="1"
