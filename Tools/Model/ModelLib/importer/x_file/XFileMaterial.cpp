@@ -85,6 +85,13 @@ IZ_BOOL CXFileMaterial::GetMaterial(
 
 	sMtrl.numParam = 4;
 
+	for (IZ_UINT i = 0; i < sMtrl.numParam; i++) {
+		izanagi::S_MTRL_PARAM sParam;
+		GetMaterialParam(nMtrlIdx, i, sParam);
+
+		sMtrl.paramBytes += sParam.bytes;
+	}
+
 	return IZ_TRUE;
 }
 
@@ -102,6 +109,7 @@ void CXFileMaterial::GetMaterialTexture(
 	const SXFileTexture& sXfileTex = sXfileMtrl.textures[nTexIdx];
 
 	sTex.name.SetString(sXfileTex.name.c_str());
+	sTex.key = sTex.name.GetKeyValue();
 
 	// NOTE
 	// XFile's texture is only albedo or normal map.

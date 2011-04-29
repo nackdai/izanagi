@@ -25,7 +25,7 @@ float3 ApplyL2C(float3 v) { return mul(v, (float3x3)g_mL2C); }
 
 float3 ComputeDirFromEye(float4 v)
 {
-	return normalize(v - g_vEye).xyz;
+	return normalize(v.xyz - g_vEye.xyz);
 }
 
 #endif	// #if !defined(__IZANAGI_SHADER_CAMERA_DEFS_FXH__)

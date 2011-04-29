@@ -418,7 +418,7 @@ BOOL CShaderConverter::ExportSampler()
 		param = ::cgGetNextParameter(param);
 	}
 
-	m_ShdHeader.numSmpl = sSmplHeader.numSampler;
+	//m_ShdHeader.numSmpl = sSmplHeader.numSampler;
 
 	VRETURN(_EndExportChunk(sSmplHeader, cSeekHelper));
 
@@ -508,7 +508,7 @@ BOOL CShaderConverter::ExportParameter()
 			sParamHeader.sizeValueBuffer);
 	}
 
-	m_ShdHeader.numParam = sParamHeader.numParameter;
+	//m_ShdHeader.numParam = sParamHeader.numParameter;
 
 	VRETURN(_EndExportChunk(sParamHeader, cSeekHelper));
 
@@ -749,6 +749,12 @@ BOOL CShaderConverter::ExportPass()
 	}
 
 	m_ShdHeader.numPass = sPassHeader.numPass;
+
+	// NOTE
+	// 全体でのシェーダ定数、サンプラの総数を知りたい
+
+	m_ShdHeader.numParam = nConstNum;
+	m_ShdHeader.numSmpl = nSamplerNum;
 
 	VRETURN(ExportUsedParamAndSamplerIdxByPass());
 

@@ -563,7 +563,7 @@ IZ_BOOL CShaderBasic::SetParamValue(
 	VRETURN(_IZ_IS_SHADER_HANDLE_PARAM(hParam));
 
 	IZ_UINT nIdx = _IZ_SHADER_HANDLE_GET_IDX(hParam);
-	VRETURN(nIdx < m_Header.numParam);
+	//VRETURN(nIdx < m_Header.numParam);
 
 	VRETURN(m_ParamTbl.SetParam(nIdx, pValue, nBytes));
 
