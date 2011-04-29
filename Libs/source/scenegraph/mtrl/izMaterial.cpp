@@ -7,56 +7,82 @@ using namespace izanagi;
 
 /**
 */
-CMaterial* CMaterial::CreateMaterial(
+IZ_BOOL CMaterial::CreateMaterial(
+	IMemoryAllocator* pAllocator,
 	IInputStream* pIn,
-	IMemoryAllocator* pAllocator)
+	CStdList<CMaterial>& cMtrlList)
 {
 	// Read mtrl's header.
-	S_MTRL_MATERIAL sHeader;
-	VRETURN_NULL(IZ_INPUT_READ(pIn, &sHeader, 0, sizeof(sHeader)));
+	S_MTRL_HEADER sHeader;
+	VRETURN(IZ_INPUT_READ(pIn, &sHeader, 0, sizeof(sHeader)));
 
 	// TODO
 	// Check magic number and version...
 
-	// NOTE
-	// Material must have "a" shader.
-	VRETURN_NULL(sHeader.numShader == 1);
+	// Skip jump table.
+	VRETURN(pIn->Seek(sizeof(IZ_UINT) * sHeader.numMtrl, E_IO_STREAM_SEEK_POS_CUR));
 
-	// Create instance.
-	CMaterial* pInstance = CreateMaterial(
-							sHeader.numTex,
-							sHeader.numParam,
-							sHeader.paramBytes,
+	IZ_BOOL result = IZ_TRUE;
+
+	for (IZ_UINT i = 0; i < sHeader.numMtrl; i++) {
+		S_MTRL_MATERIAL sMtrlInfo;
+		result = IZ_INPUT_READ(pIn, &sMtrlInfo, 0, sizeof(sMtrlInfo));
+		VGOTO(result, __EXIT__);
+
+		// NOTE
+		// Material must have "a" shader.
+		VGOTO(result = (sMtrlInfo.numShader == 1), __EXIT__);
+
+		// Create instance.
+		CMaterial* pMtrl = CreateMaterial(
+							sMtrlInfo.numTex,
+							sMtrlInfo.numParam,
+							sMtrlInfo.paramBytes,
 							pAllocator);
-	VRETURN_NULL(pInstance != IZ_NULL);
-	
-	memcpy(
-		&pInstance->m_Header,
-		&sHeader,
-		sizeof(sHeader));
+		VGOTO(result = (pMtrl != IZ_NULL), __EXIT__);
+		
+		memcpy(
+			&pMtrl->m_Header,
+			&sMtrlInfo,
+			sizeof(sMtrlInfo));
 
-	// Read datas.
-	IZ_BOOL result = pInstance->Read(pIn);
-	VGOTO(result, __EXIT__);
+		// Read datas.
+		result = pMtrl->Read(pIn);
+		if (!result) {
+			SAFE_RELEASE(pMtrl);
+			VGOTO(result, __EXIT__);
+		}
 
-	pInstance->AttachParamBuf();
+		pMtrl->AttachParamBuf();
+
+		// Add to list.
+		cMtrlList.AddTail(pMtrl->GetListItem());
+	}
 
 __EXIT__:
 	if (!result) {
-		SAFE_RELEASE(pInstance);
+		// Release materials...
+		CStdList<CMaterial>::Item* pItem = cMtrlList.GetTop();
+		while (pItem != IZ_NULL) {
+			CMaterial* pMtrl = pItem->GetData();
+			SAFE_RELEASE(pMtrl);
+			pItem = pItem->GetNext();
+		}
+
+		return IZ_FALSE;
 	}
 
-	return pInstance;
+	return IZ_TRUE;
 }
 
 /**
 */
 CMaterial* CMaterial::CreateMaterial(
+	IMemoryAllocator* pAllocator,
 	IZ_PCSTR pszName,
 	IZ_UINT nTexNum,
 	IZ_UINT nParamNum,
-	IZ_UINT nParamBytes,
-	IMemoryAllocator* pAllocator)
+	IZ_UINT nParamBytes)
 {
 	// Create instance.
 	CMaterial* pInstance = CreateMaterial(
@@ -109,7 +135,8 @@ CMaterial* CMaterial::CreateMaterial(
 
 	IZ_UINT8* pTop = pBuf;
 
-	CMaterial* pInstance = reinterpret_cast<CMaterial*>(pBuf);
+	//CMaterial* pInstance = reinterpret_cast<CMaterial*>(pBuf);
+	CMaterial* pInstance = new(pBuf) CMaterial;
 	{
 		pBuf += sizeof(CMaterial);
 
@@ -156,6 +183,8 @@ CMaterial::CMaterial()
 
 	m_pParamInfo = IZ_NULL;
 	m_pParamBuf = IZ_NULL;
+
+	m_ListItem.Init(this);
 }
 
 CMaterial::~CMaterial()

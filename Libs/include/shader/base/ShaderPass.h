@@ -229,17 +229,16 @@ namespace izanagi {
 		IZ_UINT nSmplIdx,
 		IZ_PCSTR name)
 	{
-		IZ_BOOL bIsVS = m_pDesc->IsVSConst(idx);
-		IZ_BOOL bIsPS = m_pDesc->IsPSConst(idx);
+		IZ_BOOL bIsPS = m_pDesc->IsPSSampler(nSmplIdx);
 
-		IZ_ASSERT(bIsVS || bIsPS);
+		IZ_ASSERT(bIsPS);
 
 		IZ_BOOL ret = InitInfo<SSamplerInfo>(
 						m_Samplers, 
 						idx, 
 						nSmplIdx, 
 						name,
-						bIsVS);
+						IZ_FALSE);
 		
 		if (ret) {
 			m_Samplers.list[idx].resource_id = (IZ_UINT16)CShaderUtil::GetSamplerResourceIndexByHandle(

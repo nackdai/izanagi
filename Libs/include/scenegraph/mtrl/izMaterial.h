@@ -13,16 +13,17 @@ namespace izanagi {
 	*/
 	class CMaterial : public CObject {
 	public:
-		static CMaterial* CreateMaterial(
+		static IZ_BOOL CreateMaterial(
+			IMemoryAllocator* pAllocator,
 			IInputStream* pIn,
-			IMemoryAllocator* pAllocator);
+			CStdList<CMaterial>& cMtrlList);
 
 		static CMaterial* CreateMaterial(
+			IMemoryAllocator* pAllocator,
 			IZ_PCSTR pszName,
 			IZ_UINT nTexNum,
 			IZ_UINT nParamNum,
-			IZ_UINT nParamBytes,
-			IMemoryAllocator* pAllocator);
+			IZ_UINT nParamBytes);
 
 	private:
 		static CMaterial* CreateMaterial(
@@ -36,6 +37,8 @@ namespace izanagi {
 		~CMaterial();
 
 		NO_COPIABLE(CMaterial);
+
+		IZ_DEFINE_INTERNAL_RELEASE();
 
 	public:
 		IZ_BOOL Prepare(CGraphicsDevice* pDevice);
@@ -117,6 +120,8 @@ namespace izanagi {
 		const void* GetParamByName(IZ_PCSTR pszName) const;
 		const void* GetParamByKey(const CKey& key) const;
 
+		CStdList<CMaterial>::Item* GetListItem() { return &m_ListItem; }
+
 	private:
 		IZ_BOOL Read(IInputStream* pIn);
 
@@ -136,6 +141,8 @@ namespace izanagi {
 
 		S_MTRL_PARAM* m_pParamInfo;
 		IZ_UINT8* m_pParamBuf;
+
+		CStdList<CMaterial>::Item m_ListItem;
 	};
 }	// namespace izanagi
 

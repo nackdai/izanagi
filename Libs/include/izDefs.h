@@ -131,7 +131,7 @@ typedef const wchar_t*	IZ_PCWSTR;
 // いろいろ便利系
 
 #ifndef UNUSED_ALWAYS
-#define UNUSED_ALWAYS(v)	(v)
+	#define UNUSED_ALWAYS(v)	(v)
 #endif	// #ifndef UNUSED
 
 inline void _OutputDebugString(izPcstr pszFormat, ...)
@@ -149,7 +149,7 @@ inline void _OutputDebugString(izPcstr pszFormat, ...)
 }
 
 #ifndef IZ_PRINTF
-#define IZ_PRINTF	_OutputDebugString
+	#define IZ_PRINTF	_OutputDebugString
 #endif	// #ifndef IZ_PRINTF
 
 #ifndef IZ_ASSERT
