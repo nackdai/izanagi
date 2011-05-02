@@ -226,7 +226,8 @@ namespace izanagi {
 										: pItem->GetPrev());
 						}
 						else {
-							if (!result && (nPass == nPassNum - 1)) {
+							//if (!result && (nPass == nPassNum - 1)) {
+							if (nPass == nPassNum - 1) {
 								// Change shader.
 								VRETURN(pScene->End());
 								break;

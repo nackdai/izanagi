@@ -19,7 +19,8 @@ int _tmain(int argc, _TCHAR* argv[])
 	IImporter* pImporter = IImporter::CreateImporter<CXFileImporter>();
 
 	//static IZ_PCSTR pszXFile = "Dwarf.x";
-	static IZ_PCSTR pszXFile = "tiny.x";
+	//static IZ_PCSTR pszXFile = "tiny.x";
+	static IZ_PCSTR pszXFile = "00_Mesh1P.x";
 
 	std::string strXFile(pszXFile);
 
@@ -64,8 +65,14 @@ int _tmain(int argc, _TCHAR* argv[])
 #endif
 
 	CMtrlExporter::GetInstance().Export(
-		"test.mtrl",
-		pImporter);
+		"00_0.mtrl",
+		pImporter,
+		0);
+
+	CMtrlExporter::GetInstance().Export(
+		"00_1.mtrl",
+		pImporter,
+		1);
 
 	return 0;
 }
