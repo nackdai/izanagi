@@ -80,14 +80,8 @@ namespace izanagi {
 				m_nCurShaderPass = nPass;
 			}
 
-			// Set parameters to shader.
-			SetShaderParam(
-				m_pCurShader, 
-				pMtrl, 
-				m_pSceneParam);
-
-			// TODO
-			// Set textures.
+			// Prepare material.
+			VRETURN(pMtrl->Prepare());
 
 			VRETURN(m_pCurShader->CommitChages());
 

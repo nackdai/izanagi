@@ -15,8 +15,7 @@ namespace izanagi {
 	public:
 		static IZ_BOOL CreateMaterial(
 			IMemoryAllocator* pAllocator,
-			IInputStream* pIn,
-			CStdList<CMaterial>& cMtrlList);
+			IInputStream* pIn);
 
 		static CMaterial* CreateMaterial(
 			IMemoryAllocator* pAllocator,

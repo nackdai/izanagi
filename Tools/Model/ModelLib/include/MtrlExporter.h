@@ -19,7 +19,8 @@ private:
 public:
 	IZ_BOOL Export(
 		IZ_PCSTR lpszOutFile,
-		IImporter* pImporter);
+		IImporter* pImporter,
+		IZ_UINT nMtrlIdx);
 
 private:
 	IZ_BOOL ExportMaterial(

@@ -97,8 +97,8 @@ namespace izanagi {
 			_T val) const;
 
 	public:
-		IZ_SHADER_HANDLE GetParameterByName(IZ_PCSTR pszName);
-		IZ_SHADER_HANDLE GetParameterBySemantic(IZ_PCSTR pszSemantic);
+		virtual IZ_SHADER_HANDLE GetParameterByName(IZ_PCSTR pszName);
+		virtual IZ_SHADER_HANDLE GetParameterBySemantic(IZ_PCSTR pszSemantic);
 
 		IZ_BOOL GetParameterDesc(
 			IZ_SHADER_HANDLE handle, 

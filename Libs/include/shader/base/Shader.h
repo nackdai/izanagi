@@ -126,6 +126,22 @@ namespace izanagi {
 				IZ_SHADER_HANDLE handle, 
 				SShaderParamDesc& sDesc) const);
 
+		PURE_VIRTUAL(
+			IZ_BOOL SetParamValue(
+				IZ_SHADER_HANDLE hParam,
+				const void* pValue,
+				IZ_UINT nBytes));
+
+		PURE_VIRTUAL(
+			IZ_BOOL SetTexture(
+				IZ_SHADER_HANDLE hTex,
+				CBaseTexture* pTex));
+
+		PURE_VIRTUAL(
+			IZ_BOOL SetTextureToSampler(
+				IZ_SHADER_HANDLE hSmpl,
+				CBaseTexture* pTex));
+
 		PURE_VIRTUAL(IZ_UINT GetTechNum() const);
 
 		PURE_VIRTUAL(IZ_UINT GetAttrNum() const);

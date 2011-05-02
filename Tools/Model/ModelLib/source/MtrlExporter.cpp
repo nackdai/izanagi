@@ -14,13 +14,15 @@ CMtrlExporter::~CMtrlExporter()
 
 IZ_BOOL CMtrlExporter::Export(
 	IZ_PCSTR lpszOutFile,
-	IImporter* pImporter)
+	IImporter* pImporter,
+	IZ_UINT nMtrlIdx)
 {
 	IZ_BOOL ret = IZ_TRUE;
 
 	VRETURN(pImporter->BeginMaterial());
 
 	IZ_UINT nMtrlNum = pImporter->GetMaterialNum();
+	IZ_ASSERT(nMtrlIdx < nMtrlNum);
 
 	// Open file.
 	VRETURN(m_Out.Open(lpszOutFile));
@@ -37,6 +39,7 @@ IZ_BOOL CMtrlExporter::Export(
 
 	// Blank for file's header and jump table.
 	izanagi::izanagi_tk::CIoStreamSeekHelper cSeekHelper(&m_Out);
+#if 0
 	VRETURN(cSeekHelper.Skip(sizeof(sHeader) + sizeof(IZ_UINT) * nMtrlNum));
 
 	// Jump table
@@ -48,12 +51,18 @@ IZ_BOOL CMtrlExporter::Export(
 
 		VRETURN(ExportMaterial(i, pImporter));
 	}
+#else
+	VRETURN(cSeekHelper.Skip(sizeof(sHeader)));
+	VRETURN(ExportMaterial(nMtrlIdx, pImporter));
+#endif
 
 	VRETURN(pImporter->EndMaterial());
 
 	// Export files's header and jump table.
 	{
+#if 0
 		sHeader.numMtrl = nMtrlNum;
+#endif
 
 		sHeader.sizeFile = m_Out.GetCurPos();
 
@@ -63,9 +72,13 @@ IZ_BOOL CMtrlExporter::Export(
 		// Export files' header.
 		IZ_OUTPUT_WRITE_VRETURN(&m_Out, &sHeader, 0, sizeof(sHeader));
 
+#if 0
 		// Export jump table.
 		IZ_OUTPUT_WRITE_VRETURN(&m_Out, &tvJumpTbl[0], 0, sizeof(IZ_UINT) * nMtrlNum);
+#endif
 	}
+
+	m_Out.Finalize();
 
 	return IZ_TRUE;
 }

@@ -23,6 +23,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Math", "Math\Math.vcproj", 
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Shader", "Shader\Shader.vcproj", "{7177D4AC-108B-4566-B333-363B910F5BDF}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Mtrl", "Mtrl\Mtrl.vcproj", "{95CF5521-BA29-43BD-B598-211B919283B9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug_DX9|Win32 = Debug_DX9|Win32
@@ -119,6 +121,14 @@ Global
 		{7177D4AC-108B-4566-B333-363B910F5BDF}.Release_DX9|Win32.Build.0 = Release_DX9|Win32
 		{7177D4AC-108B-4566-B333-363B910F5BDF}.Release|Win32.ActiveCfg = Release_DX9|Win32
 		{7177D4AC-108B-4566-B333-363B910F5BDF}.Release|Win32.Build.0 = Release_DX9|Win32
+		{95CF5521-BA29-43BD-B598-211B919283B9}.Debug_DX9|Win32.ActiveCfg = Debug_DX9|Win32
+		{95CF5521-BA29-43BD-B598-211B919283B9}.Debug_DX9|Win32.Build.0 = Debug_DX9|Win32
+		{95CF5521-BA29-43BD-B598-211B919283B9}.Debug|Win32.ActiveCfg = Debug_DX9|Win32
+		{95CF5521-BA29-43BD-B598-211B919283B9}.Debug|Win32.Build.0 = Debug_DX9|Win32
+		{95CF5521-BA29-43BD-B598-211B919283B9}.Release_DX9|Win32.ActiveCfg = Release_DX9|Win32
+		{95CF5521-BA29-43BD-B598-211B919283B9}.Release_DX9|Win32.Build.0 = Release_DX9|Win32
+		{95CF5521-BA29-43BD-B598-211B919283B9}.Release|Win32.ActiveCfg = Release_DX9|Win32
+		{95CF5521-BA29-43BD-B598-211B919283B9}.Release|Win32.Build.0 = Release_DX9|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

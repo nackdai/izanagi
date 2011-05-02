@@ -57,7 +57,9 @@ namespace izanagi {
 		IZ_UINT sizeFile;
 		IZ_UINT sizeHeader;
 
+#if 0
 		IZ_UINT numMtrl;
+#endif
 	};
 
 	/**
@@ -125,6 +127,7 @@ namespace izanagi {
 
 	private:
 		void* param;
+		IZ_SHADER_HANDLE handle;
 
 		friend class CMaterial;
 	};

@@ -9,8 +9,7 @@ using namespace izanagi;
 */
 IZ_BOOL CMaterial::CreateMaterial(
 	IMemoryAllocator* pAllocator,
-	IInputStream* pIn,
-	CStdList<CMaterial>& cMtrlList)
+	IInputStream* pIn)
 {
 	// Read mtrl's header.
 	S_MTRL_HEADER sHeader;
@@ -19,12 +18,19 @@ IZ_BOOL CMaterial::CreateMaterial(
 	// TODO
 	// Check magic number and version...
 
+#if 0
 	// Skip jump table.
 	VRETURN(pIn->Seek(sizeof(IZ_UINT) * sHeader.numMtrl, E_IO_STREAM_SEEK_POS_CUR));
+#endif
 
 	IZ_BOOL result = IZ_TRUE;
 
+#if 0
 	for (IZ_UINT i = 0; i < sHeader.numMtrl; i++) {
+#else
+	CMaterial* pMtrl = IZ_NULL;
+	{
+#endif
 		S_MTRL_MATERIAL sMtrlInfo;
 		result = IZ_INPUT_READ(pIn, &sMtrlInfo, 0, sizeof(sMtrlInfo));
 		VGOTO(result, __EXIT__);
@@ -34,11 +40,19 @@ IZ_BOOL CMaterial::CreateMaterial(
 		VGOTO(result = (sMtrlInfo.numShader == 1), __EXIT__);
 
 		// Create instance.
+#if 0
 		CMaterial* pMtrl = CreateMaterial(
 							sMtrlInfo.numTex,
 							sMtrlInfo.numParam,
 							sMtrlInfo.paramBytes,
 							pAllocator);
+#else
+		pMtrl = CreateMaterial(
+					sMtrlInfo.numTex,
+					sMtrlInfo.numParam,
+					sMtrlInfo.paramBytes,
+					pAllocator);
+#endif
 		VGOTO(result = (pMtrl != IZ_NULL), __EXIT__);
 		
 		memcpy(
@@ -55,19 +69,26 @@ IZ_BOOL CMaterial::CreateMaterial(
 
 		pMtrl->AttachParamBuf();
 
+#if 0
 		// Add to list.
 		cMtrlList.AddTail(pMtrl->GetListItem());
+#else
+#endif
 	}
 
 __EXIT__:
 	if (!result) {
 		// Release materials...
+#if 0
 		CStdList<CMaterial>::Item* pItem = cMtrlList.GetTop();
 		while (pItem != IZ_NULL) {
 			CMaterial* pMtrl = pItem->GetData();
 			SAFE_RELEASE(pMtrl);
 			pItem = pItem->GetNext();
 		}
+#else
+		SAFE_RELEASE(pMtrl);
+#endif
 
 		return IZ_FALSE;
 	}
@@ -234,6 +255,11 @@ IZ_BOOL CMaterial::Prepare(CGraphicsDevice* pDevice)
 {
 	IZ_ASSERT(pDevice != IZ_NULL);
 
+	// TODO
+	IZ_ASSERT((m_Header.numShader == 1) && (m_pShaderInfo != IZ_NULL));
+	IZ_ASSERT(m_pShaderInfo->shader != IZ_NULL);
+	izanagi::CShader* pShader = m_pShaderInfo->shader;
+
 	// Textures.
 	for (IZ_UINT i = 0; i < m_Header.numTex; i++) {
 		if (m_pTexInfo[i].tex != IZ_NULL) {
@@ -241,7 +267,22 @@ IZ_BOOL CMaterial::Prepare(CGraphicsDevice* pDevice)
 		}
 	}
 
-	// TODO
+	// Parameters.
+	for (IZ_UINT i = 0; i < m_Header.numParam; i++) {
+		S_MTRL_PARAM& sParamInfo = m_pParamInfo[i];
+		
+		if (sParamInfo.handle == 0) {
+			sParamInfo.handle = pShader->GetParameterByName(sParamInfo.name.GetString());
+		}
+
+		if (sParamInfo.handle > 0) {
+			pShader->SetParamValue(
+				sParamInfo.handle,
+				sParamInfo.param,
+				sParamInfo.bytes);
+		}
+	}
+
 	return IZ_TRUE;
 }
 
