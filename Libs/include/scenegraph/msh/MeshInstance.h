@@ -4,8 +4,6 @@
 #include "izStd.h"
 #include "MSHFormat.h"
 
-class CMeshGroupInstance;
-
 namespace izanagi {
 	class IMemoryAllocator;
 	class CGraphicsDevice;
@@ -15,18 +13,27 @@ namespace izanagi {
 	class CSkeletonInstance;
 	class IMshRenderHandler;
 	class CMaterial;
+	class CMeshGroupInstance;
 
 	////////////////////////////////////////////
+
 	/**
-	*/
+	 * メッシュセットインスタンス
+	 *
+	 * メッシュセットとは、マテリアルごとのプリミティブセットの集まり
+	 */
 	class CMeshSetInstance : public CPlacementNew {
 		friend class CMeshGroupInstance;
+		friend class CGeometrySorter;
+		friend class CScene;
 
 	private:
+		// インスタンス作成
 		static CMeshSetInstance* CreateMeshSetInstance(
 			IZ_UINT8** pBuf,
 			CMeshSet* pMeshSet);
 
+		// インスタンス作成に必要なバイト数を計算
 		static inline size_t ComputeBytes(CMeshSet* pMeshSet);
 
 	private:
@@ -36,18 +43,23 @@ namespace izanagi {
 		NO_COPIABLE(CMeshSetInstance);
 
 	private:
+		// 初期化
 		IZ_UINT8* Init(
 			IZ_UINT8* pBuf,
 			CMeshSet* pMeshSet);
 
-	public:
+		// 描画
 		IZ_BOOL Render(
 			CGraphicsDevice* pDevice,
 			IMshRenderHandler* pRenderHandler);
 
+		// 描画に利用するスケルトンを設定
 		void SetSkeleton(CSkeletonInstance* pSkl);
 
+		// 描画に利用するマテリアルを設定
 		void SetMaterial(CMaterial* pMtrl);
+
+		// 設定されているマテリアルを取得
 		CMaterial* GetMaterial();
 
 		const S_MSH_MTRL& GetMaterialInfo();
@@ -77,10 +89,15 @@ namespace izanagi {
 	};
 
 	////////////////////////////////////////////
+
 	/**
-	*/
+	 * メッシュデータインスタンス
+	 */
 	class CMeshInstance : public CObject {
 	public:
+		/**
+		 * インスタンス作成
+		 */
 		static CMeshInstance* CreateMeshInstance(
 			IMemoryAllocator* pAllocator,
 			CMesh* pMesh);
@@ -94,15 +111,33 @@ namespace izanagi {
 		IZ_DEFINE_INTERNAL_RELEASE();
 
 	public:
+		/**
+		 * 描画
+		 */
 		IZ_BOOL Render(
+			IZ_UINT level,
 			CSkeletonInstance* pSkl,
 			IMshRenderHandler* pRenderHandler);
 
-		void ApplySkeleton(CSkeletonInstance* pSkl);
+		/**
+		 * スケルトンデータの適用
+		 */
+		void ApplySkeleton(
+			IZ_UINT level,
+			CSkeletonInstance* pSkl);
 
-		IZ_UINT GetMeshSetNum() const;
+		/**
+		 * 描画に利用するマテリアルを設定
+		 */
+		void SetMaterial(
+			IZ_UINT level,
+			CMaterial* pMtrl);
 
-		CMeshSetInstance* GetMeshSet(IZ_UINT idx);
+		IZ_UINT GetMeshGroupNum() const { return m_nGroupNum; }
+
+		IZ_UINT GetMeshSetNum(IZ_UINT level) const;
+
+		CMeshSetInstance* GetMeshSet(IZ_UINT level, IZ_UINT idx);
 
 	private:
 		IMemoryAllocator* m_pAllocator;

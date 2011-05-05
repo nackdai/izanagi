@@ -70,6 +70,11 @@ namespace izanagi {
 		IZ_PCSTR GetName() const { return m_Header.name.GetString(); }
 		IZ_UINT GetKey() const { return m_Header.nameKey; }
 
+		/**
+		 * シェーダの名前を設定
+		 */
+		IZ_BOOL SetName(IZ_PCSTR name);
+
 		virtual IZ_UINT Begin(
 			IZ_UINT nTechIdx,
 			IZ_BOOL bIsSaveState);

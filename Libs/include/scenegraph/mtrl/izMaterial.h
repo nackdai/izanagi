@@ -13,7 +13,7 @@ namespace izanagi {
 	*/
 	class CMaterial : public CObject {
 	public:
-		static IZ_BOOL CreateMaterial(
+		static CMaterial* CreateMaterial(
 			IMemoryAllocator* pAllocator,
 			IInputStream* pIn);
 
@@ -40,6 +40,9 @@ namespace izanagi {
 		IZ_DEFINE_INTERNAL_RELEASE();
 
 	public:
+		/**
+		 * 描画準備
+		 */
 		IZ_BOOL Prepare(CGraphicsDevice* pDevice);
 
 		IZ_BOOL AddTexture(

@@ -34,6 +34,7 @@ namespace izanagi {
 
 	enum {
 		SHD_ATTR_HASH_MAX = 5,
+		SHD_NAME_LEN_MAX = 127,
 	};
 
 	//////////////////////////////////////////////////////////
@@ -84,7 +85,7 @@ namespace izanagi {
 		IZ_UINT sizeHeader;	// ヘッダ長
 
 		// Shader name.
-		CStdString<izChar, 127> name;
+		CStdString<izChar, SHD_NAME_LEN_MAX> name;
 		IZ_UINT nameKey;
 
 		// 文字列バッファサイズ

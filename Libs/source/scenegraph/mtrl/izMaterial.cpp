@@ -7,13 +7,13 @@ using namespace izanagi;
 
 /**
 */
-IZ_BOOL CMaterial::CreateMaterial(
+CMaterial* CMaterial::CreateMaterial(
 	IMemoryAllocator* pAllocator,
 	IInputStream* pIn)
 {
 	// Read mtrl's header.
 	S_MTRL_HEADER sHeader;
-	VRETURN(IZ_INPUT_READ(pIn, &sHeader, 0, sizeof(sHeader)));
+	VRETURN_NULL(IZ_INPUT_READ(pIn, &sHeader, 0, sizeof(sHeader)));
 
 	// TODO
 	// Check magic number and version...
@@ -89,11 +89,9 @@ __EXIT__:
 #else
 		SAFE_RELEASE(pMtrl);
 #endif
-
-		return IZ_FALSE;
 	}
 
-	return IZ_TRUE;
+	return pMtrl;
 }
 
 /**
@@ -249,8 +247,7 @@ void CMaterial::AttachParamBuf()
 	}
 }
 
-/**
-*/
+// 描画準備
 IZ_BOOL CMaterial::Prepare(CGraphicsDevice* pDevice)
 {
 	IZ_ASSERT(pDevice != IZ_NULL);
@@ -317,8 +314,6 @@ namespace {
 	}
 }	// namespace
 
-/**
-*/
 IZ_BOOL CMaterial::AddTexture(
 	IZ_PCSTR pszName,
 	const S_MTRL_TEXTURE_TYPE& type,

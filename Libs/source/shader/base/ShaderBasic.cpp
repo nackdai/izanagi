@@ -202,6 +202,17 @@ __EXIT__:
 	return pBuffer;
 }
 
+// シェーダの名前を設定
+IZ_BOOL CShaderBasic::SetName(IZ_PCSTR name)
+{
+	VRETURN(strlen(name) < SHD_NAME_LEN_MAX);
+
+	m_Header.name.SetString(name);
+	m_Header.nameKey = m_Header.name.GetKeyValue();
+
+	return IZ_TRUE;
+}
+
 IZ_UINT CShaderBasic::Begin(
 	IZ_UINT nTechIdx,
 	IZ_BOOL bIsSaveState)

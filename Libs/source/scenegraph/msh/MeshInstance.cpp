@@ -12,164 +12,193 @@ using namespace izanagi;
 
 ///////////////////////////////////////////////////
 
-class CMeshGroupInstance : public CPlacementNew {
-public:
-	static CMeshGroupInstance* CreateMeshGroupInstances(
+namespace izanagi {
+	// メッシュグループインスタンス
+	// メッシュグループとは、LODのレベルごとのメッシュセットの集まり
+	class CMeshGroupInstance : public CPlacementNew {
+	public:
+		// インスタンス作成
+		static CMeshGroupInstance* CreateMeshGroupInstances(
+			IZ_UINT8** pBuf,
+			CMeshGroup* pGroup);
+
+		// インスタンス作成に必要なバイト数を計算
+		// CMesh の持つメッシュグループ全てについて計算する
+		static inline size_t ComputeBytes(CMesh* pMesh);
+
+	public:
+		inline CMeshGroupInstance();
+		inline ~CMeshGroupInstance();
+
+		NO_COPIABLE(CMeshGroupInstance);
+
+	private:
+		// 初期化
+		IZ_UINT8* Init(
+			IZ_UINT8* pBuf,
+			CMeshGroup* pGroup);
+
+	public:
+		IZ_UINT GetMeshSetNum() { return m_nSetNum; }
+
+		// メッシュセットインスタンスを取得
+		inline CMeshSetInstance* GetMeshSet(IZ_UINT idx);
+
+		// 描画
+		inline IZ_BOOL Render(
+			CGraphicsDevice* pDevice,
+			IMshRenderHandler* pRenderHandler);
+
+		// スケルトンをセットする
+		inline void SetSkeleton(CSkeletonInstance* pSkl);
+
+		IZ_UINT GetMeshSetNum() const { return m_nSetNum; }
+
+		// 描画に利用するマテリアルを設定
+		void SetMaterial(CMaterial* pMtrl);
+
+	private:
+		CMeshGroup* m_pBody;
+
+		IZ_UINT m_nSetNum;
+		CMeshSetInstance** m_pMeshSet;
+	};
+
+	// インスタンス作成
+	CMeshGroupInstance* CMeshGroupInstance::CreateMeshGroupInstances(
 		IZ_UINT8** pBuf,
-		CMeshGroup* pGroup);
+		CMeshGroup* pGroup)
+	{
+		IZ_ASSERT(pBuf != IZ_NULL);
+		IZ_ASSERT(pGroup != IZ_NULL);
 
-	static inline size_t ComputeBytes(CMesh* pMesh);
+		IZ_UINT8*& buf = *pBuf;
 
-public:
-	inline CMeshGroupInstance();
-	inline ~CMeshGroupInstance();
+		CMeshGroupInstance* pInstance = new(buf) CMeshGroupInstance;
+		buf += sizeof(CMeshGroupInstance);
+		
+		buf = pInstance->Init(buf, pGroup);
+		IZ_BOOL result = (buf != IZ_NULL);
 
-	NO_COPIABLE(CMeshGroupInstance);
-
-private:
-	IZ_UINT8* Init(
-		IZ_UINT8* pBuf,
-		CMeshGroup* pGroup);
-
-public:
-	IZ_UINT GetMeshSetNum() { return m_nSetNum; }
-
-	inline CMeshSetInstance* GetMeshSet(IZ_UINT idx);
-
-	inline IZ_BOOL Render(
-		CGraphicsDevice* pDevice,
-		IMshRenderHandler* pRenderHandler);
-
-	inline void SetSkeleton(CSkeletonInstance* pSkl);
-
-	IZ_UINT GetMeshSetNum() const { return m_nSetNum; }
-
-private:
-	CMeshGroup* m_pBody;
-
-	IZ_UINT m_nSetNum;
-	CMeshSetInstance** m_pMeshSet;
-};
-
-CMeshGroupInstance* CMeshGroupInstance::CreateMeshGroupInstances(
-	IZ_UINT8** pBuf,
-	CMeshGroup* pGroup)
-{
-	IZ_ASSERT(pBuf != IZ_NULL);
-	IZ_ASSERT(pGroup != IZ_NULL);
-
-	IZ_UINT8*& buf = *pBuf;
-
-	CMeshGroupInstance* pInstance = new(buf) CMeshGroupInstance;
-	buf += sizeof(CMeshGroupInstance);
-	
-	buf = pInstance->Init(buf, pGroup);
-	IZ_BOOL result = (buf != IZ_NULL);
-
-	if (!result) {
-		SAFE_DELETE(pInstance);
+		if (!result) {
+			SAFE_DELETE(pInstance);
+		}
+		return pInstance;
 	}
-	return pInstance;
-}
 
-size_t CMeshGroupInstance::ComputeBytes(CMesh* pMesh)
-{
-	IZ_ASSERT(pMesh != IZ_NULL);
+	// インスタンス作成に必要なバイト数を計算
+	// CMesh の持つメッシュグループ全てについて計算する
+	size_t CMeshGroupInstance::ComputeBytes(CMesh* pMesh)
+	{
+		IZ_ASSERT(pMesh != IZ_NULL);
 
-	size_t ret = 0;
+		size_t ret = 0;
 
-	IZ_UINT nGroupNum = pMesh->GetMeshGroupNum();
+		// メッシュグループ数
+		IZ_UINT nGroupNum = pMesh->GetMeshGroupNum();
 
-	for (IZ_UINT i = 0; i < nGroupNum; i++) {
-		ret += sizeof(CMeshGroupInstance*);
-		ret += sizeof(CMeshGroupInstance);
+		for (IZ_UINT i = 0; i < nGroupNum; i++) {
+			ret += sizeof(CMeshGroupInstance*);
+			ret += sizeof(CMeshGroupInstance);
 
-		CMeshGroup* pGroup = pMesh->GetMeshGroup(i);
+			CMeshGroup* pGroup = pMesh->GetMeshGroup(i);
 
-		IZ_UINT nMeshSetNum = pGroup->GetMeshSetNum();
+			// メッシュグループの持つメッシュセット数
+			IZ_UINT nMeshSetNum = pGroup->GetMeshSetNum();
 
-		for (IZ_UINT n = 0; n < nMeshSetNum; n++) {
-			ret += sizeof(CMeshSetInstance*);
-			ret += CMeshSetInstance::ComputeBytes(pGroup->GetMeshSet(n));
+			for (IZ_UINT n = 0; n < nMeshSetNum; n++) {
+				ret += sizeof(CMeshSetInstance*);
+				ret += CMeshSetInstance::ComputeBytes(pGroup->GetMeshSet(n));
+			}
+		}
+
+		return ret;
+	}
+
+	// コンストラクタ
+	CMeshGroupInstance::CMeshGroupInstance()
+	{
+		m_pBody = IZ_NULL;
+
+		m_nSetNum = 0;
+		m_pMeshSet = IZ_NULL;
+	}
+
+	// デストラクタ
+	CMeshGroupInstance::~CMeshGroupInstance()
+	{
+		SAFE_RELEASE(m_pBody);
+
+		for (IZ_UINT i = 0; i < m_nSetNum; i++) {
+			delete m_pMeshSet[i];
 		}
 	}
 
-	return ret;
-}
+	// 初期化
+	IZ_UINT8* CMeshGroupInstance::Init(
+		IZ_UINT8* pBuf,
+		CMeshGroup* pGroup)
+	{
+		IZ_ASSERT(pBuf != IZ_NULL);
+		IZ_ASSERT(pGroup != IZ_NULL);
 
-CMeshGroupInstance::CMeshGroupInstance()
-{
-	m_pBody = IZ_NULL;
+		// メッシュグループ本体
+		SAFE_REPLACE(m_pBody, pGroup);
 
-	m_nSetNum = 0;
-	m_pMeshSet = IZ_NULL;
-}
+		m_nSetNum = m_pBody->GetMeshSetNum();
+		if (m_nSetNum == 0) {
+			// メッシュセットが存在しないので、ここまで
+			return pBuf;
+		}
 
-CMeshGroupInstance::~CMeshGroupInstance()
-{
-	SAFE_RELEASE(m_pBody);
+		m_pMeshSet = reinterpret_cast<CMeshSetInstance**>(pBuf);
+		pBuf += sizeof(CMeshSetInstance*) * m_nSetNum;
 
-	for (IZ_UINT i = 0; i < m_nSetNum; i++) {
-		delete m_pMeshSet[i];
-	}
-}
-
-IZ_UINT8* CMeshGroupInstance::Init(
-	IZ_UINT8* pBuf,
-	CMeshGroup* pGroup)
-{
-	IZ_ASSERT(pBuf != IZ_NULL);
-	IZ_ASSERT(pGroup != IZ_NULL);
-
-	SAFE_REPLACE(m_pBody, pGroup);
-
-	m_nSetNum = m_pBody->GetMeshSetNum();
-	if (m_nSetNum == 0) {
+		for (IZ_UINT i = 0; i < m_nSetNum; i++) {
+			// メッシュセットインスタンス作成
+			m_pMeshSet[i] = CMeshSetInstance::CreateMeshSetInstance(
+								&pBuf,
+								pGroup->GetMeshSet(i));
+			if (m_pMeshSet[i] == IZ_NULL) {
+				pBuf = IZ_NULL;
+				break;
+			}
+		}
+		
 		return pBuf;
 	}
 
-	m_pMeshSet = reinterpret_cast<CMeshSetInstance**>(pBuf);
-	pBuf += sizeof(CMeshSetInstance*) * m_nSetNum;
+	// メッシュセットインスタンスを取得
+	CMeshSetInstance* CMeshGroupInstance::GetMeshSet(IZ_UINT idx)
+	{
+		IZ_ASSERT(idx < m_nSetNum);
+		return m_pMeshSet[idx];
+	}
 
-	for (IZ_UINT i = 0; i < m_nSetNum; i++) {
-		m_pMeshSet[i] = CMeshSetInstance::CreateMeshSetInstance(
-							&pBuf,
-							pGroup->GetMeshSet(i));
-		if (m_pMeshSet[i] == IZ_NULL) {
-			pBuf = IZ_NULL;
-			break;
+	// 描画
+	IZ_BOOL CMeshGroupInstance::Render(
+		CGraphicsDevice* pDevice,
+		IMshRenderHandler* pRenderHandler)
+	{
+		for (IZ_UINT i = 0; i < m_nSetNum; ++i) {
+			VRETURN(m_pMeshSet[i]->Render(pDevice, pRenderHandler));
+		}
+
+		return IZ_TRUE;
+	}
+
+	// スケルトンをセットする
+	void CMeshGroupInstance::SetSkeleton(CSkeletonInstance* pSkl)
+	{
+		for (IZ_UINT i = 0; i < m_nSetNum; ++i) {
+			m_pMeshSet[i]->SetSkeleton(pSkl);
 		}
 	}
-	
-	return pBuf;
-}
-
-CMeshSetInstance* CMeshGroupInstance::GetMeshSet(IZ_UINT idx)
-{
-	IZ_ASSERT(idx < m_nSetNum);
-	return m_pMeshSet[idx];
-}
-
-IZ_BOOL CMeshGroupInstance::Render(
-	CGraphicsDevice* pDevice,
-	IMshRenderHandler* pRenderHandler)
-{
-	for (IZ_UINT i = 0; i < m_nSetNum; ++i) {
-		VRETURN(m_pMeshSet[i]->Render(pDevice, pRenderHandler));
-	}
-
-	return IZ_TRUE;
-}
-
-void CMeshGroupInstance::SetSkeleton(CSkeletonInstance* pSkl)
-{
-	for (IZ_UINT i = 0; i < m_nSetNum; ++i) {
-		m_pMeshSet[i]->SetSkeleton(pSkl);
-	}
-}
+}	// namespace izanagi
 
 ///////////////////////////////////////////////////
 
+// インスタンス作成
 CMeshSetInstance* CMeshSetInstance::CreateMeshSetInstance(
 	IZ_UINT8** pBuf,
 	CMeshSet* pMeshSet)
@@ -191,6 +220,7 @@ CMeshSetInstance* CMeshSetInstance::CreateMeshSetInstance(
 	return pInstance;
 }
 
+// インスタンス作成に必要なバイト数を計算
 size_t CMeshSetInstance::ComputeBytes(CMeshSet* pMeshSet)
 {
 	IZ_ASSERT(pMeshSet != IZ_NULL);
@@ -202,6 +232,7 @@ size_t CMeshSetInstance::ComputeBytes(CMeshSet* pMeshSet)
 	return ret;
 }
 
+// コンストラクタ
 CMeshSetInstance::CMeshSetInstance()
 {
 	m_pBody = IZ_NULL;
@@ -218,6 +249,7 @@ CMeshSetInstance::CMeshSetInstance()
 	m_ListItem.Init(this);
 }
 
+// デストラクタ
 CMeshSetInstance::~CMeshSetInstance()
 {
 	SAFE_RELEASE(m_pBody);
@@ -230,6 +262,7 @@ CMeshSetInstance::~CMeshSetInstance()
 	SAFE_RELEASE(m_pMtrl);
 }
 
+// 初期化
 IZ_UINT8* CMeshSetInstance::Init(
 	IZ_UINT8* pBuf,
 	CMeshSet* pMeshSet)
@@ -241,6 +274,7 @@ IZ_UINT8* CMeshSetInstance::Init(
 
 	m_nPrimNum = pMeshSet->GetPrimSetNum();
 	if (m_nPrimNum == 0) {
+		// プリミティブセットを持たないので、ここまで
 		return pBuf;
 	}
 
@@ -254,12 +288,14 @@ IZ_UINT8* CMeshSetInstance::Init(
 	return pBuf;
 }
 
+// 描画
 IZ_BOOL CMeshSetInstance::Render(
 	CGraphicsDevice* pDevice,
 	IMshRenderHandler* pRenderHandler)
 {
 	IZ_ASSERT(m_pBody != IZ_NULL);
 
+	// 描画に使用する頂点宣言
 	CVertexDeclaration* pVD = m_pBody->GetVD();
 	IZ_ASSERT(pVD != IZ_NULL);
 
@@ -284,16 +320,19 @@ IZ_BOOL CMeshSetInstance::Render(
 	return IZ_TRUE;
 }
 
+// 描画に利用するスケルトンを設定
 void CMeshSetInstance::SetSkeleton(CSkeletonInstance* pSkl)
 {
 	SAFE_REPLACE(m_pSkl, pSkl);
 }
 
+// 描画に利用するマテリアルを設定
 void CMeshSetInstance::SetMaterial(CMaterial* pMtrl)
 {
 	SAFE_REPLACE(m_pMtrl, pMtrl);
 }
 
+// 設定されているマテリアルを取得
 CMaterial* CMeshSetInstance::GetMaterial()
 {
 	return m_pMtrl;
@@ -307,6 +346,7 @@ const S_MSH_MTRL& CMeshSetInstance::GetMaterialInfo()
 
 ///////////////////////////////////////////////////
 
+// インスタンス作成
 CMeshInstance* CMeshInstance::CreateMeshInstance(
 	IMemoryAllocator* pAllocator,
 	CMesh* pMesh)
@@ -362,6 +402,7 @@ CMeshInstance* CMeshInstance::CreateMeshInstance(
 	return pInstance;
 }
 
+// コンストラクタ
 CMeshInstance::CMeshInstance()
 {
 	m_pAllocator = IZ_NULL;
@@ -371,6 +412,7 @@ CMeshInstance::CMeshInstance()
 	m_pGroups = IZ_NULL;
 }
 
+// デストラクタ
 CMeshInstance::~CMeshInstance()
 {
 	SAFE_RELEASE(m_pBody);
@@ -380,46 +422,62 @@ CMeshInstance::~CMeshInstance()
 	}
 }
 
+// 描画
 IZ_BOOL CMeshInstance::Render(
+	IZ_UINT level,
 	CSkeletonInstance* pSkl,
 	IMshRenderHandler* pRenderHandler)
 {
 	IZ_ASSERT(m_pBody != IZ_NULL);
 	IZ_ASSERT(m_pGroups != IZ_NULL);
+	IZ_ASSERT(level < m_nGroupNum);
 
 	CGraphicsDevice* pDevice = m_pBody->GetGraphicsDevice();
 	IZ_ASSERT(pDevice != IZ_NULL);
 
-	// TODO
-	m_pGroups[0]->SetSkeleton(pSkl);
+	// スケルトン設定
+	m_pGroups[level]->SetSkeleton(pSkl);
 
-	IZ_BOOL ret = m_pGroups[0]->Render(pDevice, pRenderHandler);
+	// 描画
+	IZ_BOOL ret = m_pGroups[level]->Render(pDevice, pRenderHandler);
 
 	return ret;
 }
 
-void CMeshInstance::ApplySkeleton(CSkeletonInstance* pSkl)
+// スケルトンデータの適用
+void CMeshInstance::ApplySkeleton(
+	IZ_UINT level,
+	CSkeletonInstance* pSkl)
 {
 	IZ_ASSERT(m_pGroups != IZ_NULL);
+	IZ_ASSERT(level < m_nGroupNum);
 
-	// TODO
-	m_pGroups[0]->SetSkeleton(pSkl);
+	m_pGroups[level]->SetSkeleton(pSkl);
 }
 
-IZ_UINT CMeshInstance::GetMeshSetNum() const
+// 描画に利用するマテリアルを設定
+void CMeshInstance::SetMaterial(
+	IZ_UINT level,
+	CMaterial* pMtrl)
+{
+	// TODO
+	IZ_C_ASSERT(false);
+}
+
+IZ_UINT CMeshInstance::GetMeshSetNum(IZ_UINT level) const
 {
 	IZ_ASSERT(m_pGroups != IZ_NULL);
+	IZ_ASSERT(level < m_nGroupNum);
 
-	// TODO
-	IZ_UINT ret = m_pGroups[0]->GetMeshSetNum();
+	IZ_UINT ret = m_pGroups[level]->GetMeshSetNum();
 	return ret;
 }
 
-CMeshSetInstance* CMeshInstance::GetMeshSet(IZ_UINT idx)
+CMeshSetInstance* CMeshInstance::GetMeshSet(IZ_UINT level, IZ_UINT idx)
 {
 	IZ_ASSERT(m_pGroups != IZ_NULL);
-	IZ_ASSERT(idx < GetMeshSetNum());
+	IZ_ASSERT(idx < GetMeshSetNum(level));
 
-	CMeshSetInstance* ret = m_pGroups[0]->GetMeshSet(idx);
+	CMeshSetInstance* ret = m_pGroups[level]->GetMeshSet(idx);
 	return ret;
 }

@@ -9,14 +9,20 @@ namespace izanagi {
 	class CMaterial;
 	class CBaseTexture;
 	class CShader;
+	class CMeshSetInstance;
 
 	/**
-	*/
+	 */
 	class CScene : public CObject {
+		friend class CGeometrySorter;
+
 	public:
+		/**
+		 * インスタンス作成
+		 */
 		static CScene* CreateScene(IMemoryAllocator* pAllocator);
 
-	private:
+	protected:
 		CScene();
 		~CScene();
 
@@ -24,74 +30,18 @@ namespace izanagi {
 
 		IZ_DEFINE_INTERNAL_RELEASE();
 
-	public:
-		/**
-		*/
-		template <typename _T_MESH>
-		IZ_UINT Begin(_T_MESH* pMesh)
-		{
-			CMaterial* pMtrl = pMesh->GetMaterial();
+	protected:
+		// 描画開始
+		IZ_UINT BeginRender(CMeshSetInstance* pMesh);
 
-			if (pMtrl == IZ_NULL) {
-				const S_MSH_MTRL& sMtrlInfo = pMesh->GetMaterialInfo();
-				pMtrl = GetMaterial(sMtrlInfo.nameKey);
-				pMesh->SetMaterial(pMtrl);
-			}
+		// 描画途中
+		IZ_BOOL IterRender(
+			CGraphicsDevice* pDevice,
+			IZ_UINT nPass,
+			CMeshSetInstance* pMesh);
 
-			IZ_ASSERT(pMtrl != IZ_NULL);
-
-			CShader* pShader = pMtrl->GetShader();
-			VRETURN(pShader != IZ_NULL);
-
-			if ((m_pCurShader == IZ_NULL)
-				|| (m_pCurShader->GetKey() != pShader->GetKey()))
-			{
-				SAFE_REPLACE(m_pCurShader, pShader);
-
-				IZ_INT nTechIdx = pMtrl->GetShaderTechnique();
-				IZ_ASSERT(nTechIdx >= 0);
-
-				m_nCurShaderPassNum = pShader->Begin(nTechIdx);
-			}
-
-			return m_nCurShaderPassNum;
-		}
-
-		/**
-		*/
-		template <typename _T_MESH>
-		IZ_BOOL Iter(IZ_UINT nPass, _T_MESH* pMesh)
-		{
-			IZ_ASSERT(m_nCurShaderPassNum > 0);
-			IZ_ASSERT(m_nCurShaderPassNum > nPass);
-
-			CMaterial* pMtrl = pMesh->GetMaterial();
-			IZ_ASSERT(pMtrl != IZ_NULL);
-			IZ_ASSERT(m_pCurShader != IZ_NULL);
-			
-			if (m_pCurShader->GetKey() != pMtrl->GetShader()->GetKey()) {
-				// Specify differing shader.
-				return IZ_FALSE;
-			}
-
-			if (m_nCurShaderPass != nPass) {
-				// Change pass.
-				VRETURN(m_pCurShader->BeginPass(nPass));
-				m_nCurShaderPass = nPass;
-			}
-
-			// Prepare material.
-			VRETURN(pMtrl->Prepare());
-
-			VRETURN(m_pCurShader->CommitChages());
-
-			// TODO
-			// Render mesh.
-
-			return IZ_TRUE;
-		}
-
-		IZ_BOOL End();
+		// 描画終了
+		IZ_BOOL EndRender();
 
 	public:
 		void SetSceneParam(CSceneParam* pParam) { SAFE_REPLACE(m_pSceneParam, pParam); }
