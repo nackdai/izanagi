@@ -283,6 +283,10 @@
 				Name="scene"
 				>
 				<File
+					RelativePath="..\source\scenegraph\scene\GeometrySorter.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\source\scenegraph\scene\Scene.cpp"
 					>
 				</File>

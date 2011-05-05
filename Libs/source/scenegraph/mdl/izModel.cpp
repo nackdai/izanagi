@@ -131,6 +131,7 @@ CModel* CModel::CreateModel(
 	return pInstance;
 }
 
+// コンストラクタ
 CModel::CModel()
 {
 	m_pAllocator = IZ_NULL;
@@ -139,8 +140,11 @@ CModel::CModel()
 	m_pSkeleton = IZ_NULL;
 
 	m_pRenderHandler = IZ_NULL;
+
+	m_nCurLODLevel = 0;
 }
 
+// デストラクタ
 CModel::~CModel()
 {
 	SAFE_RELEASE(m_pMesh);
@@ -148,28 +152,34 @@ CModel::~CModel()
 	SAFE_RELEASE(m_pRenderHandler);
 }
 
+// 描画
 IZ_BOOL CModel::Render()
 {
 	IZ_ASSERT(m_pMesh != IZ_NULL);
+	IZ_ASSERT(m_nCurLODLevel < GetMaxLODLevel());
 
 	IZ_BOOL ret = m_pMesh->Render(
+					m_nCurLODLevel,
 					m_pSkeleton,
 					m_pRenderHandler);
 
 	return ret;
 }
 
+// 適用されたモーションに基づき更新
 void CModel::Update()
 {
 	if (m_pSkeleton != IZ_NULL) {
 		m_pSkeleton->BuildMatrix();
 
 		if (m_pMesh != IZ_NULL) {
-			m_pMesh->ApplySkeleton(m_pSkeleton);
+			IZ_ASSERT(m_nCurLODLevel < GetMaxLODLevel());
+			m_pMesh->ApplySkeleton(m_nCurLODLevel, m_pSkeleton);
 		}
 	}
 }
 
+// スケルトン全体にモーション適用
 void CModel::ApplyAnimation(
 	IZ_FLOAT fTime,
 	CAnimation* pAnm)
@@ -179,6 +189,7 @@ void CModel::ApplyAnimation(
 	}
 }
 
+// 指定した関節のみにモーション適用
 void CModel::ApplyAnimationByIdx(
 	IZ_UINT nJointIdx,
 	IZ_FLOAT fTime,
@@ -189,6 +200,7 @@ void CModel::ApplyAnimationByIdx(
 	}
 }
 
+// 指定した関節のみにモーション適用
 void CModel::ApplyAnimationByName(
 	IZ_PCSTR pszJointName,
 	IZ_FLOAT fTime,
@@ -199,6 +211,7 @@ void CModel::ApplyAnimationByName(
 	}
 }
 
+// 指定した関節のみにモーション適用
 void CModel::ApplyAnimationByKey(
 	IZ_UINT nJointKey,
 	IZ_FLOAT fTime,
@@ -207,4 +220,22 @@ void CModel::ApplyAnimationByKey(
 	if (m_pSkeleton != IZ_NULL) {
 		m_pSkeleton->ApplyAnimationByKey(nJointKey, fTime, pAnm);
 	}
+}
+
+// 利用可能なLODレベルの最大を取得
+IZ_UINT CModel::GetMaxLODLevel() const
+{
+	IZ_ASSERT(m_pMesh != IZ_NULL);
+
+	IZ_UINT ret = m_pMesh->GetMeshGroupNum();
+	return ret;
+}
+
+// LODレベルを設定する
+IZ_BOOL CModel::SetLODLevel(IZ_UINT level)
+{
+	VRETURN(level < GetMaxLODLevel());
+
+	m_nCurLODLevel = level;
+	return IZ_TRUE;
 }

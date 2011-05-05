@@ -282,10 +282,14 @@ IZ_BOOL CStateBasic::Enter()
 
 	// Material
 	{
-		VRETURN(input.Open("data/00.mtrl"));
+		VRETURN(input.Open("data/00_0.mtrl"));
+		m_pMtrl[0] = izanagi::CMaterial::CreateMaterial(pAllocator, &input);
+		IZ_ASSERT(m_pMtrl[0] != IZ_NULL);
+		input.Finalize();
 
-		IZ_BOOL result = izanagi::CMaterial::CreateMaterial(pAllocator, &input, m_MtrlList);
-		IZ_ASSERT(result);
+		VRETURN(input.Open("data/00_1.mtrl"));
+		m_pMtrl[1] = izanagi::CMaterial::CreateMaterial(pAllocator, &input);
+		IZ_ASSERT(m_pMtrl[1] != IZ_NULL);
 		input.Finalize();
 	}
 
@@ -367,27 +371,21 @@ IZ_BOOL CStateBasic::Enter()
 
 		m_pTex[1] = pDevice->CreateTextureFromFile("data/Face_C.dds", izanagi::E_GRAPH_PIXEL_FMT_RGBA8);
 		IZ_ASSERT(m_pTex[1] != IZ_NULL);
-
-		izanagi::CStdList<izanagi::CMaterial>::Item* pItem = m_MtrlList.GetTop();
-		while (pItem != IZ_NULL) {
-			izanagi::CMaterial* pMtrl = pItem->GetData();
-
-			if (pMtrl->GetTexInfoByName("1P_C.dds")) {
-				pMtrl->SetTexture("1P_C.dds", m_pTex[0]);
-			}
-			else if (pMtrl->GetTexInfoByName("Face_C.dds")) {
-				pMtrl->SetTexture("Face_C.dds", m_pTex[1]);
-			}
-
-			pMtrl->SetShader(m_pShader);
-
-			pItem = pItem->GetNext();
-		}
 	}
 
 	input.Finalize();
 
-	m_GeomSorter = izanagi::CGeometrySorter<4, izanagi::CModel, izanagi::CMeshSetInstance>::CreateGeometrySorter(pAllocator);
+	{
+		m_pShader->SetName("DefaultShader");
+
+		m_pMtrl[0]->SetTexture("Face_C.dds", m_pTex[1]);
+		m_pMtrl[0]->SetShader(m_pShader);
+
+		m_pMtrl[1]->SetTexture("1P_C.dds", m_pTex[0]);
+		m_pMtrl[1]->SetShader(m_pShader);
+	}
+
+	m_GeomSorter = izanagi::CGeometrySorter::CreateGeometrySorter(pAllocator, 4);
 	IZ_ASSERT(m_GeomSorter != IZ_NULL);
 
 	m_Scene = izanagi::CScene::CreateScene(pAllocator);

@@ -11,6 +11,11 @@ namespace izanagi {
 	class CSkeletonInstance;
 	class IMshRenderHandler;
 
+	/**
+	 * プリミティブデータ
+	 *
+	 * メッシュデータの最小単位
+	 */
 	class CPrimitiveSet : public CObject {
 		friend class CMesh;
 		friend class CMeshGroup;
@@ -25,6 +30,9 @@ namespace izanagi {
 		void InternalRelease() { delete this; }
 
 	public:
+		/**
+		 * 描画
+		 */
 		IZ_BOOL Render(
 			CGraphicsDevice* pDevice,
 			CSkeletonInstance* pSkeleton,

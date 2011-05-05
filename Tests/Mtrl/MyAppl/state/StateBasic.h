@@ -55,9 +55,9 @@ protected:
 	izanagi::CModel* m_pMdl;
 	izanagi::CMesh* m_pMsh;
 	izanagi::CSkeleton* m_pSkl;
-	izanagi::CStdList<izanagi::CMaterial> m_MtrlList;
+	izanagi::CMaterial* m_pMtrl[2];
 
-	izanagi::CGeometrySorter<4, izanagi::CModel, izanagi::CMeshSetInstance>* m_GeomSorter;
+	izanagi::CGeometrySorter* m_GeomSorter;
 	izanagi::CScene* m_Scene;
 };
 

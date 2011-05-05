@@ -12,7 +12,7 @@ namespace izanagi {
 	class IInputStream;
 
 	/**
-	*/
+	 */
 	class CModel : public CObject {
 	public:
 		// Create instance.
@@ -43,40 +43,68 @@ namespace izanagi {
 		IZ_DEFINE_INTERNAL_RELEASE();
 
 	public:
+		/**
+		 * 描画
+		 */
 		IZ_BOOL Render();
 
+		/**
+		 * 適用されたモーションに基づき更新
+		 */
 		void Update();
 
+		/**
+		 * スケルトン全体にモーション適用
+		 */
 		void ApplyAnimation(
 			IZ_FLOAT fTime,
 			CAnimation* pAnm);
 
+		/**
+		 * 指定した関節のみにモーション適用
+		 */
 		void ApplyAnimationByIdx(
 			IZ_UINT nJointIdx,
 			IZ_FLOAT fTime,
 			CAnimation* pAnm);
 
+		/**
+		 * 指定した関節のみにモーション適用
+		 */
 		void ApplyAnimationByName(
 			IZ_PCSTR pszJointName,
 			IZ_FLOAT fTime,
 			CAnimation* pAnm);
 
+		/**
+		 * 指定した関節のみにモーション適用
+		 */
 		void ApplyAnimationByKey(
 			IZ_UINT nJointKey,
 			IZ_FLOAT fTime,
 			CAnimation* pAnm);
 
+		/**
+		 * 利用可能なLODレベルの最大を取得
+		 */
+		IZ_UINT GetMaxLODLevel() const;
+
+		/**
+		 * LODレベルを設定する
+		 */
+		IZ_BOOL SetLODLevel(IZ_UINT level);
+
 	public:
 		IZ_UINT GetMeshSetNum()
 		{
 			IZ_ASSERT(m_pMesh != IZ_NULL);
-			return m_pMesh->GetMeshSetNum();
+			return m_pMesh->GetMeshSetNum(m_nCurLODLevel);
 		}
 
 		CMeshSetInstance* GetMeshSet(IZ_UINT idx)
 		{
 			IZ_ASSERT(m_pMesh != IZ_NULL);
-			return m_pMesh->GetMeshSet(idx);
+			return m_pMesh->GetMeshSet(m_nCurLODLevel, idx);
 		}
 
 		CMeshInstance* GetMesh() { return m_pMesh; }
@@ -91,6 +119,8 @@ namespace izanagi {
 		CSkeletonInstance* m_pSkeleton;
 
 		IMshRenderHandler* m_pRenderHandler;
+
+		IZ_UINT m_nCurLODLevel;
 	};
 }	// namespace izanagi
 
