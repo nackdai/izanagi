@@ -104,6 +104,13 @@ IZ_BOOL CXFileImporter::GetVertex(
 	return ret;
 }
 
+void CXFileImporter::GetMaterialForMesh(
+	IZ_UINT nIdx,
+	izanagi::S_MSH_MTRL& sMtrl)
+{
+	CXFileGeometry::GetInstance().GetMaterial(nIdx, sMtrl);
+}
+
 //////////////////////////////////
 // For joint chunk.
 

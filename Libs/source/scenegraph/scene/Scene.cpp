@@ -30,6 +30,8 @@ CScene::CScene()
 	m_pCurShader = IZ_NULL;
 	m_nCurShaderPassNum = 0;
 	m_nCurShaderPass = -1;
+
+	m_pCurMtrl = IZ_NULL;
 }
 
 // デストラクタ
@@ -37,6 +39,7 @@ CScene::~CScene()
 {
 	SAFE_RELEASE(m_pSceneParam);
 	SAFE_RELEASE(m_pCurShader);
+	SAFE_RELEASE(m_pCurMtrl);
 }
 
 // 描画開始
@@ -76,7 +79,8 @@ IZ_UINT CScene::BeginRender(CMeshSetInstance* pMesh)
 IZ_BOOL CScene::IterRender(
 	CGraphicsDevice* pDevice,
 	IZ_UINT nPass, 
-	CMeshSetInstance* pMesh)
+	CMeshSetInstance* pMesh,
+	IMshRenderHandler* pRenderHandler)
 {
 	IZ_ASSERT(m_nCurShaderPassNum > 0);
 	IZ_ASSERT(m_nCurShaderPassNum > nPass);
@@ -96,13 +100,27 @@ IZ_BOOL CScene::IterRender(
 		m_nCurShaderPass = nPass;
 	}
 
-	// Prepare material.
-	VRETURN(pMtrl->Prepare(pDevice));
+	IZ_BOOL bIsPreparedMtrl = IZ_FALSE;
 
-	VRETURN(m_pCurShader->CommitChanges());
+	if (m_pCurMtrl != pMtrl) {
+		// Prepare material.
+		bIsPreparedMtrl = pMtrl->Prepare(pDevice);
+		VRETURN(bIsPreparedMtrl);
 
-	// TODO
+		SAFE_REPLACE(m_pCurMtrl, pMtrl);
+	}
+
+	if (bIsPreparedMtrl) {
+		// マテリアルに応じた変更が発生したので
+		// シェーダのCommitChangeを行う
+		VRETURN(m_pCurShader->CommitChanges());
+	}
+
 	// Render mesh.
+	VRETURN(
+		pMesh->Render(
+			pDevice,
+			pRenderHandler));
 
 	return IZ_TRUE;
 }

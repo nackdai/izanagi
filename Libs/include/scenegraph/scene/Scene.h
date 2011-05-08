@@ -10,6 +10,7 @@ namespace izanagi {
 	class CBaseTexture;
 	class CShader;
 	class CMeshSetInstance;
+	class IMshRenderHandler;
 
 	/**
 	 */
@@ -38,7 +39,8 @@ namespace izanagi {
 		IZ_BOOL IterRender(
 			CGraphicsDevice* pDevice,
 			IZ_UINT nPass,
-			CMeshSetInstance* pMesh);
+			CMeshSetInstance* pMesh,
+			IMshRenderHandler* pRenderHandler);
 
 		// 描画終了
 		IZ_BOOL EndRender();
@@ -55,6 +57,8 @@ namespace izanagi {
 		CShader* m_pCurShader;
 		IZ_UINT m_nCurShaderPassNum;
 		IZ_INT m_nCurShaderPass;
+
+		CMaterial* m_pCurMtrl;
 	};
 }	// namespace izanagi
 

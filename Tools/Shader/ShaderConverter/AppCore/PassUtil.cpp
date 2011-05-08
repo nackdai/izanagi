@@ -311,6 +311,16 @@ BOOL CPassUtil::SetStateValue(
 	izanagi::S_SHD_PASS_STATE& sState,
 	CGpass pass)
 {
+	// デフォルト値
+	sState.AlphaBlendEnable = IZ_TRUE;
+	sState.AlphaBlendMethod = izanagi::E_GRAPH_ALPHA_BLEND_NORMAL;
+	sState.AlphaTestEnable = IZ_FALSE;
+	sState.AlphaTestFunc = izanagi::E_GRAPH_CMP_FUNC_LESS;
+	sState.AlphaTestRef = 128;
+	sState.ZEnable = IZ_TRUE;
+	sState.ZFunc = izanagi::E_GRAPH_CMP_FUNC_LESS;
+	sState.ZWriteEnable = IZ_TRUE;
+
 	{
 		CGstateassignment sa = ::cgGetFirstStateAssignment(pass);
 

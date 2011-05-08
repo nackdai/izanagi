@@ -45,6 +45,10 @@ public:
 		izanagi::SVector& vec,
 		izanagi::E_MSH_VTX_FMT_TYPE type);
 
+	void GetMaterialForMesh(
+		IZ_UINT nIdx,
+		izanagi::S_MSH_MTRL& sMtrl);
+
 	//////////////////////////////////
 	// For joint chunk.
 

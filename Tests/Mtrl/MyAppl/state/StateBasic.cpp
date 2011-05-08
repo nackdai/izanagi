@@ -39,18 +39,21 @@ private:
 	izanagi::CShaderBasic* m_pShader;
 
 	IZ_UINT m_nCnt;
-	//izanagi::SVector m_Vec[12];
-	izanagi::SMatrix m_Vec[4];
+	izanagi::SMatrix m_Mtx[4];
+
+	izanagi::IZ_SHADER_HANDLE m_Handle;
 };
 
 void CTestMdlRenderHandler::BeginRenderMesh()
 {
 	m_nCnt = 0;
 
-	izanagi::SetUnitMatrix(m_Vec[0]);
-	izanagi::SetUnitMatrix(m_Vec[1]);
-	izanagi::SetUnitMatrix(m_Vec[2]);
-	izanagi::SetUnitMatrix(m_Vec[3]);
+	izanagi::SetUnitMatrix(m_Mtx[0]);
+	izanagi::SetUnitMatrix(m_Mtx[1]);
+	izanagi::SetUnitMatrix(m_Mtx[2]);
+	izanagi::SetUnitMatrix(m_Mtx[3]);
+
+	m_Handle = 0;
 }
 
 void CTestMdlRenderHandler::EndRenderMesh()
@@ -61,27 +64,21 @@ void CTestMdlRenderHandler::SetJointMatrix(
 	IZ_UINT nIdx,
 	const izanagi::SMatrix& mtx)
 {
-#if 0
-	izanagi::CopyVector(
-		m_Vec[m_nCnt + 0],
-		mtx.v[0]);
-	izanagi::CopyVector(
-		m_Vec[m_nCnt + 1],
-		mtx.v[1]);
-	izanagi::CopyVector(
-		m_Vec[m_nCnt + 2],
-		mtx.v[2]);
-
-	m_nCnt += 3;
-#else
-	izanagi::CopyMatrix(m_Vec[m_nCnt], mtx);
+	izanagi::CopyMatrix(m_Mtx[m_nCnt], mtx);
 	m_nCnt++;
-#endif
 }
 
 void CTestMdlRenderHandler::CommitChanges()
 {
-	// TODO
+	if (m_Handle == 0) {
+		m_Handle = m_pShader->GetParameterByName("vJointMatrix");
+		IZ_ASSERT(m_Handle > 0);
+	}
+
+	m_pShader->SetParamValue(
+		m_Handle,
+		m_Mtx,
+		sizeof(izanagi::SMatrix) * m_nCnt);
 
 	m_pShader->CommitChanges();
 }
@@ -123,12 +120,13 @@ namespace {
 		IZ_UINT nBytes)
 	{
 		izanagi::IZ_SHADER_HANDLE handle = pShader->GetParameterByName(pszName);
-		IZ_ASSERT(handle != NULL);
 
-		pShader->SetParamValue(
-			handle,
-			value,
-			nBytes);
+		if (handle > 0) {
+			pShader->SetParamValue(
+				handle,
+				value,
+				nBytes);
+		}
 
 		return IZ_TRUE;
 	}
@@ -334,6 +332,30 @@ IZ_BOOL CStateBasic::Enter()
 			"g_vLitAmbientColor",
 			&sAmbient.color,
 			sizeof(sAmbient.color));
+
+		// マテリアル
+		izanagi::SMaterialParam sMtrl;
+		{
+			sMtrl.vDiffuse.Set(1.0f, 1.0f, 1.0f, 1.0f);
+			sMtrl.vAmbient.Set(1.0f, 1.0f, 1.0f, 1.0f);
+			sMtrl.vSpecular.Set(1.0f, 1.0f, 1.0f, 20.0f);
+		}
+
+		_SetShaderParameter(
+			m_pShader,
+			"g_vMtrlDiffuse",
+			&sMtrl.vDiffuse,
+			sizeof(sMtrl.vDiffuse));
+		_SetShaderParameter(
+			m_pShader,
+			"g_vMtrlAmbient",
+			&sMtrl.vAmbient,
+			sizeof(sMtrl.vAmbient));
+		_SetShaderParameter(
+			m_pShader,
+			"g_vMtrlSpecular",
+			&sMtrl.vSpecular,
+			sizeof(sMtrl.vSpecular));
 	}
 
 #if 1
@@ -378,11 +400,16 @@ IZ_BOOL CStateBasic::Enter()
 	{
 		m_pShader->SetName("DefaultShader");
 
+		m_pMtrl[0]->SetName("Material_0");
 		m_pMtrl[0]->SetTexture("Face_C.dds", m_pTex[1]);
 		m_pMtrl[0]->SetShader(m_pShader);
 
+		m_pMtrl[1]->SetName("Material_1");
 		m_pMtrl[1]->SetTexture("1P_C.dds", m_pTex[0]);
 		m_pMtrl[1]->SetShader(m_pShader);
+
+		m_pMdl->GetMesh()->SetMaterial(0, m_pMtrl[0]);
+		m_pMdl->GetMesh()->SetMaterial(0, m_pMtrl[1]);
 	}
 
 	m_GeomSorter = izanagi::CGeometrySorter::CreateGeometrySorter(pAllocator, 4);
@@ -403,6 +430,8 @@ IZ_BOOL CStateBasic::Leave()
 	SAFE_RELEASE(m_pAxis);
 	SAFE_RELEASE(m_pTex[0]);
 	SAFE_RELEASE(m_pTex[1]);
+	SAFE_RELEASE(m_pMtrl[0]);
+	SAFE_RELEASE(m_pMtrl[1]);
 
 	SAFE_RELEASE(s_pMdlRenderHandler);
 

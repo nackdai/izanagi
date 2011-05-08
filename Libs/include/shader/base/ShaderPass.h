@@ -15,14 +15,16 @@ namespace izanagi {
 		// パラメータホルダ
 		struct SParamInfo {
 			IZ_UINT idx;						// パラメータインデックス（そのパスの中で何番目のパラメータか）
-			SHADER_PARAM_HANDLE handle;			// パラメータハンドル
+			SHADER_PARAM_HANDLE handleVS;		// パラメータハンドル（頂点シェーダ）
+			SHADER_PARAM_HANDLE handlePS;		// パラメータハンドル（ピクセルシェーダ）
 		};
 
 		// サンプラホルダ
 		struct SSamplerInfo {
-			IZ_UINT16 idx;				// パラメータインデックス（そのパスの中で何番目のサンプラか）
-			IZ_UINT16 resource_id;		// リソースID (0〜7のいずれか)
-			SHADER_PARAM_HANDLE handle;	// パラメータハンドル
+			IZ_UINT16 idx;					// パラメータインデックス（そのパスの中で何番目のサンプラか）
+			IZ_UINT16 resource_id;			// リソースID (0〜7のいずれか)
+			SHADER_PARAM_HANDLE handleVS;	// パラメータハンドル
+			SHADER_PARAM_HANDLE handlePS;	// パラメータハンドル
 		};
 
 		template <typename _T>
@@ -61,12 +63,19 @@ namespace izanagi {
 		{
 			IZ_ASSERT(idx < sParams.num);
 
-			sParams.list[idx].idx = nIdxInParam;
-			sParams.list[idx].handle = (bIsVS
-										? m_pVS->GetHandleByName(name)
-										: m_pPS->GetHandleByName(name));
+			IZ_BOOL ret = IZ_FALSE;
 
-			return (sParams.list[idx].handle != IZ_NULL);
+			sParams.list[idx].idx = nIdxInParam;
+			if (bIsVS) {
+				sParams.list[idx].handleVS = m_pVS->GetHandleByName(name);
+				ret = (sParams.list[idx].handleVS != IZ_NULL);
+			}
+			else {
+				sParams.list[idx].handlePS = m_pPS->GetHandleByName(name);
+				ret = (sParams.list[idx].handlePS != IZ_NULL);
+			}
+
+			return ret;
 		}
 
 		template <typename _T>
@@ -208,12 +217,24 @@ namespace izanagi {
 
 		IZ_ASSERT(bIsVS || bIsPS);
 
-		IZ_BOOL result = InitInfo<SParamInfo>(
-							m_Params, 
-							idx, 
-							nParamIdx, 
-							name,
-							bIsVS);
+		IZ_BOOL result = IZ_FALSE;
+		
+		if (bIsVS) {
+			result = InitInfo<SParamInfo>(
+						m_Params, 
+						idx, 
+						nParamIdx, 
+						name,
+						IZ_TRUE);
+		}
+		if (bIsPS) {
+			result = InitInfo<SParamInfo>(
+						m_Params, 
+						idx, 
+						nParamIdx, 
+						name,
+						IZ_FALSE);
+		}
 
 #if 0
 		if (result) {
@@ -243,7 +264,7 @@ namespace izanagi {
 		if (ret) {
 			m_Samplers.list[idx].resource_id = (IZ_UINT16)CShaderUtil::GetSamplerResourceIndexByHandle(
 															m_pPS,
-															m_Samplers.list[idx].handle);
+															m_Samplers.list[idx].handlePS);
 
 			// NOTE
 			// サンプラレジスタ 0 - 7 の８個まで

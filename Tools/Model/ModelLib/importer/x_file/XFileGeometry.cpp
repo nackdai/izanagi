@@ -402,6 +402,18 @@ IZ_UINT CXFileGeometry::GetSkinIdx(
 	return ret;
 }
 
+void CXFileGeometry::GetMaterial(
+	IZ_UINT nIdx,
+	izanagi::S_MSH_MTRL& sMtrl)
+{
+	IZ_ASSERT(nIdx < (IZ_UINT)m_MtrlList.size());
+
+	const SXFileMaterial* pXFileMtrl = m_MtrlList[nIdx];
+
+	sMtrl.name.SetString(pXFileMtrl->name.c_str());
+	sMtrl.nameKey = sMtrl.name.GetKeyValue();
+}
+
 const SXFileMesh* CXFileGeometry::GetMesh(IZ_UINT nFaceIdx)
 {
 	std::vector<SFace>& tvFaceList = m_FaceList[nFaceIdx];

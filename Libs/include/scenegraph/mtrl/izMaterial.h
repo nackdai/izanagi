@@ -75,9 +75,27 @@ namespace izanagi {
 			IZ_UINT nBytes,
 			const void* pValue);
 
+		/**
+		 * Return whether materal has textures, shaders that are specified.
+		 */
 		IZ_BOOL IsValid() const;
 
+		/**
+		 * マテリアル名変更
+		 */
+		void SetName(IZ_PCSTR pszName);
+
 	public:
+		/**
+		 * マテリアル名取得
+		 */
+		IZ_PCSTR GetName() const { return m_Header.name.GetString(); }
+
+		/**
+		 * マテリアルキー取得
+		 */
+		IZ_UINT GetKey() const { return m_Header.keyMaterial; }
+
 		IZ_UINT GetTexNum() const { return m_Header.numTex; }
 #if 0
 		IZ_UINT GetShaderNum() const { return m_Header.numShader; }

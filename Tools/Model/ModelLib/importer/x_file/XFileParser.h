@@ -101,6 +101,8 @@ private:
 	std::vector<SXFileNode*> m_NodeList;
 	std::vector<SXFileBone> m_BoneList;
 	std::vector<SXFileAnmSet*> m_AnmList;
+
+	IZ_UINT m_nReadMtrlNum;
 };
 
 #endif	// #if !defined(__MODEL_LIB_XFILE_PARSER_H__)

@@ -308,6 +308,10 @@ IZ_BOOL CShaderBasic::CommitChanges()
 		m_pDevice->SetRenderState(E_GRAPH_RS_ALPHATESTENABLE,  pDesc->state.AlphaTestEnable);
 		m_pDevice->SetRenderState(E_GRAPH_RS_ALPHAREF,         pDesc->state.AlphaTestRef);
 		m_pDevice->SetRenderState(E_GRAPH_RS_ALPHAFUNC,        pDesc->state.AlphaTestFunc);
+
+		m_pDevice->SetRenderState(E_GRAPH_RS_ZENABLE,          pDesc->state.ZEnable);
+		m_pDevice->SetRenderState(E_GRAPH_RS_ZWRITEENABLE,     pDesc->state.ZWriteEnable);
+		m_pDevice->SetRenderState(E_GRAPH_RS_ZFUNC,            pDesc->state.ZFunc);
 	}
 
 	// Set VertexShader.
@@ -320,7 +324,7 @@ IZ_BOOL CShaderBasic::CommitChanges()
 		// Set parameters.
 		for (IZ_UINT i = 0; i < pDesc->numConst; i++) {
 			if (pDesc->IsVSConst(i)) {
-				VRETURN(SetParamValue(i, cPass, pVS));
+				VRETURN(SetParamValue(i, cPass, pVS, IZ_TRUE));
 			}
 		}
 
@@ -336,7 +340,7 @@ IZ_BOOL CShaderBasic::CommitChanges()
 		// Set parameters.
 		for (IZ_UINT i = 0; i < pDesc->numConst; i++) {
 			if (pDesc->IsPSConst(i)) {
-				VRETURN(SetParamValue(i, cPass, pPS));
+				VRETURN(SetParamValue(i, cPass, pPS, IZ_FALSE));
 			}
 		}
 
@@ -455,24 +459,48 @@ IZ_BOOL CShaderBasic::CmpAttrValue(
 	return (nAttrVal == val);
 }
 
-template <typename _SHD>
 IZ_BOOL CShaderBasic::SetParamValue(
 	IZ_UINT idx,
 	CShaderPass& cPass,
-	_SHD* pShd)
+	CShaderConstTable* pShd,
+	IZ_BOOL bIsVS)
 {
 	const CShaderPass::SParamInfo* pParamInfo = cPass.GetParamInfo(idx);
 
-	IZ_UINT nBytes = 0;
+	// TODO
+	S_SHD_PARAMETER* pParamDesc = const_cast<S_SHD_PARAMETER*>(m_ParamTbl.GetDesc(idx));
 
-	const void* pParam = m_ParamTbl.GetParam(pParamInfo->idx, &nBytes);
-	IZ_ASSERT(pParam != IZ_NULL);
+	// For Debug.
+#if 0
+	IZ_PCSTR name = m_StringBuffer.GetString(pParamDesc->posName);
 
-	VRETURN(
-		pShd->SetValue(
-			pParamInfo->handle,
-			pParam,
-			nBytes));
+	SHADER_PARAM_HANDLE handle = pShd->GetHandleByName(name);
+	IZ_ASSERT(handle == (bIsVS ? pParamInfo->handleVS : pParamInfo->handlePS));
+#endif
+
+	// パラメータに変化があったときだけ
+	IZ_BOOL bIsDirty = (bIsVS ? pParamDesc->isDirtyVS : pParamDesc->isDirtyPS);
+
+	
+	if (bIsDirty) {
+		IZ_UINT nBytes = 0;
+
+		const void* pParam = m_ParamTbl.GetParam(pParamInfo->idx, &nBytes);
+		IZ_ASSERT(pParam != IZ_NULL);
+
+		VRETURN(
+			pShd->SetValue(
+				bIsVS ? pParamInfo->handleVS : pParamInfo->handlePS,
+				pParam,
+				nBytes));
+
+		if (bIsVS) {
+			pParamDesc->isDirtyVS = IZ_FALSE;
+		}
+		else {
+			pParamDesc->isDirtyPS = IZ_FALSE;
+		}
+	}
 
 	return IZ_TRUE;
 }

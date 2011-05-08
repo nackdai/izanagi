@@ -66,6 +66,10 @@ public:
 		IZ_UINT nFaceIdx,
 		IZ_UINT nVtxIdx);
 
+	void GetMaterial(
+		IZ_UINT nIdx,
+		izanagi::S_MSH_MTRL& sMtrl);
+
 private:
 	const SXFileMesh* GetMesh(IZ_UINT nFaceIdx);
 

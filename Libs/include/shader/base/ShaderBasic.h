@@ -125,11 +125,11 @@ namespace izanagi {
 		CGraphicsDevice* GetDevice();
 
 	private:
-		template <typename _SHD>
 		IZ_BOOL SetParamValue(
 			IZ_UINT idx,
 			CShaderPass& cPass,
-			_SHD* pShd);
+			CShaderConstTable* pShd,
+			IZ_BOOL bIsVS);
 
 	protected:
 		IZ_UINT8* m_pBuffer;

@@ -192,7 +192,8 @@ namespace izanagi {
 			IZ_UINT32 Public		: 1;	// ユーザに公開するパラメータか
 			IZ_UINT32 DoNotStrip	: 1;	// エフェクト内では使用しないけど削除しない
 			IZ_UINT32 hasAnn		: 1;	// アノテーションを持つか
-			IZ_UINT32 isDirty		: 1;
+			IZ_UINT32 isDirtyVS		: 1;
+			IZ_UINT32 isDirtyPS		: 1;
 		};
 
 		IZ_UINT16 AnnotationIdx;	// アノテーションインデックス

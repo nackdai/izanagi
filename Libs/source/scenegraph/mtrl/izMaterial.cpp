@@ -536,9 +536,7 @@ IZ_BOOL CMaterial::SetParameter(
 	return IZ_TRUE;
 }
 
-/**
-* Return whether materal has testures, shaders that are specified.
-*/
+// Return whether materal has textures, shaders that are specified.
 IZ_BOOL CMaterial::IsValid() const
 {
 	for (IZ_UINT i = 0; i < m_Header.numTex; i++) {
@@ -554,6 +552,13 @@ IZ_BOOL CMaterial::IsValid() const
 	}
 
 	return IZ_TRUE;
+}
+
+// マテリアル名変更
+void CMaterial::SetName(IZ_PCSTR pszName)
+{
+	m_Header.name.SetString(pszName);
+	m_Header.keyMaterial = m_Header.name.GetKeyValue();
 }
 
 namespace {
