@@ -16,6 +16,8 @@ CXFileParser::CXFileParser()
 	m_nMaxAnimTime = 0;
 
 	m_pRootNode = IZ_NULL;
+
+	m_nReadMtrlNum = 0;
 }
 
 CXFileParser::~CXFileParser()
@@ -226,6 +228,8 @@ IZ_BOOL CXFileParser::Parse(IZ_PCSTR pszFile)
 		fclose(fp);
 	}
 #endif
+
+	m_nReadMtrlNum = 0;
 
 	ParseFile();
 
@@ -601,6 +605,15 @@ IZ_BOOL CXFileParser::ParseSkinWeights(SXFileMesh* pMesh)
 	return IZ_TRUE;
 }
 
+namespace {
+	inline IZ_PCSTR _GetTmpMtrlName(IZ_UINT idx)
+	{
+		static izChar buf[256];
+		sprintf_s(buf, sizeof(buf), "Material_%d\0", idx);
+		return buf;
+	}
+}	// namespace
+
 IZ_BOOL CXFileParser::ParseMeshMaterialList(SXFileMesh* pMesh)
 {
 	IZ_ASSERT(pMesh != IZ_NULL);
@@ -629,6 +642,15 @@ IZ_BOOL CXFileParser::ParseMeshMaterialList(SXFileMesh* pMesh)
 			pMesh->mtrls.push_back(SXFileMaterial());
 			SXFileMaterial& mtrl = pMesh->mtrls.back();
 			VRETURN(ParseMaterial(&mtrl));
+
+			// TODO
+			// マテリアル名が"{"だったときは
+			// あまりにも何なので、それっぽい名前を付ける
+			if (mtrl.name.compare("{") == 0) {
+				mtrl.name = _GetTmpMtrlName(m_nReadMtrlNum);
+			}
+
+			m_nReadMtrlNum++;
 		}
 		else {
 			IZ_ASSERT(IZ_FALSE);

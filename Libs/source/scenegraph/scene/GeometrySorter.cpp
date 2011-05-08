@@ -55,11 +55,14 @@ CGeometrySorter* CGeometrySorter::CreateGeometrySorter(
 
 	size_t nInstanceSize = sizeof(CGeometrySorter);
 	size_t size = nInstanceSize;
-	size += sizeof(CZList*) * 2;
-	size += (sizeof(CZList) * nZLevel) * 2;
+	size += sizeof(CZList*) * nZLevel * 2;
+	size += sizeof(CZList) * nZLevel * 2;
 	
-	IZ_UINT8* buf = reinterpret_cast<IZ_UINT8*>(ALLOC_ZERO(pAllocator, sizeof(size)));
+	IZ_UINT8* buf = reinterpret_cast<IZ_UINT8*>(ALLOC_ZERO(pAllocator, size));
 	VRETURN_NULL(buf != IZ_NULL);
+
+	// 先頭位置を覚えておく
+	IZ_UINT8* top = buf;
 
 	CGeometrySorter* pInstance = new(buf) CGeometrySorter;
 	{
@@ -71,10 +74,10 @@ CGeometrySorter* CGeometrySorter::CreateGeometrySorter(
 		pInstance->m_nZLevvel = nZLevel;
 
 		pInstance->m_Opaque = reinterpret_cast<CZList**>(buf);
-		buf += sizeof(CZList*);
+		buf += sizeof(CZList*) * nZLevel;
 
 		pInstance->m_Translucent = reinterpret_cast<CZList**>(buf);
-		buf += sizeof(CZList*);
+		buf += sizeof(CZList*) * nZLevel;
 
 		for (IZ_UINT i = 0; i < nZLevel; i++) {
 			pInstance->m_Opaque[i] = new(buf) CZList;
@@ -84,6 +87,8 @@ CGeometrySorter* CGeometrySorter::CreateGeometrySorter(
 			buf += sizeof(CZList);
 		}
 	}
+
+	IZ_ASSERT(CStdUtil::GetPtrDistance(buf, top) == size);
 	
 	return pInstance;
 }
@@ -209,7 +214,12 @@ IZ_BOOL CGeometrySorter::RenderInternal(
 			while (pItem != IZ_NULL) {
 				pMesh = pItem->GetData();
 
-				if (pScene->IterRender(pDevice, nPass, pMesh)) {
+				if (pScene->IterRender(
+						pDevice, 
+						nPass, 
+						pMesh,
+						pRenderHandler))
+				{
 					pItem = (nOrder == ERenderOrder_Forward
 								? pItem->GetNext()
 								: pItem->GetPrev());

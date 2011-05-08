@@ -782,6 +782,7 @@ BOOL CShaderConverter::ExportUsedParamAndSamplerIdxByPass()
 }
 
 namespace {
+	// 指定されたパス内で利用されているパラメータのインデックスを出力
 	inline IZ_BOOL _ExportUsedParamIdxByPass(
 		izanagi::IOutputStream* pOut,
 		const std::vector<CGparameter>& tvParamList,
@@ -792,31 +793,36 @@ namespace {
 		for (IZ_UINT nIdx = 0; it != tvParamList.end(); it++, nIdx++) {
 			CGparameter param = *it;
 
+			// For Debug
+			//const char* name = ::cgGetParameterName(param);
+
 			if (::cgIsParameterUsed(param, pass)) {
 				CGprogram progVS = CPassUtil::GetVSProgram(pass);
 				CGprogram progPS = CPassUtil::GetPSProgram(pass);
 
+				// シェーダ内で利用されているかどうか
 				IZ_BOOL bIsUsedInVS = ::cgIsParameterUsed(param, progVS);
-				IZ_BOOL bIsUsedInPS= ::cgIsParameterUsed(param, progPS);
+				IZ_BOOL bIsUsedInPS = ::cgIsParameterUsed(param, progPS);
+
+				izanagi::S_SHD_PARAM_IDX sParamIdx;
+				{
+					sParamIdx.isVS = IZ_FALSE;
+					sParamIdx.isPS = IZ_FALSE;
+				}
 
 				if (bIsUsedInVS) {
-					izanagi::S_SHD_PARAM_IDX sParamIdx;
-					{
-						sParamIdx.isVS = IZ_TRUE;
-						sParamIdx.isPS = IZ_FALSE;
-						sParamIdx.idx = nIdx;
-					}
-
-					IZ_OUTPUT_WRITE_VRETURN(pOut, &sParamIdx, 0, sizeof(sParamIdx));
+					// 頂点シェーダで利用されている
+					sParamIdx.isVS = IZ_TRUE;
+					sParamIdx.idx = nIdx;
 				}
-				else if (bIsUsedInPS) {
-					izanagi::S_SHD_PARAM_IDX sParamIdx;
-					{
-						sParamIdx.isVS = IZ_FALSE;
-						sParamIdx.isPS = IZ_TRUE;
-						sParamIdx.idx = nIdx;
-					}
+				if (bIsUsedInPS) {
+					// ピクセルシェーダで利用されている
+					sParamIdx.isPS = IZ_TRUE;
+					sParamIdx.idx = nIdx;
+				}
 
+				if (bIsUsedInVS || bIsUsedInPS) {
+					// シェーダ内で利用されているので出力
 					IZ_OUTPUT_WRITE_VRETURN(pOut, &sParamIdx, 0, sizeof(sParamIdx));
 				}
 			}
@@ -828,12 +834,14 @@ namespace {
 
 BOOL CShaderConverter::ExportUsedParamAndSamplerIdxByPass(CGpass pass)
 {
+	// 指定されたパス内で利用されているパラメータのインデックスを出力
 	VRETURN(
 		_ExportUsedParamIdxByPass(
 			&m_Out,
 			m_ParamList,
 			pass));
 
+	// / 指定されたパス内で利用されているサンプラのインデックスを出力
 	VRETURN(
 		_ExportUsedParamIdxByPass(
 			&m_Out,

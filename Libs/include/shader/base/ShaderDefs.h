@@ -143,9 +143,6 @@ namespace izanagi {
 	};
 
 	typedef IZ_UINT	IZ_SHADER_HANDLE;
-	enum {
-		IZ_SHADER_HANDLE_INVALID = 0x7fffffff,
-	};
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_SHADER_SHADER_DEFS_H__)

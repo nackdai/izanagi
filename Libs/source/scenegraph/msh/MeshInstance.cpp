@@ -54,9 +54,6 @@ namespace izanagi {
 
 		IZ_UINT GetMeshSetNum() const { return m_nSetNum; }
 
-		// 描画に利用するマテリアルを設定
-		void SetMaterial(CMaterial* pMtrl);
-
 	private:
 		CMeshGroup* m_pBody;
 
@@ -262,6 +259,25 @@ CMeshSetInstance::~CMeshSetInstance()
 	SAFE_RELEASE(m_pMtrl);
 }
 
+// マテリアル情報取得
+const S_MSH_MTRL& CMeshSetInstance::GetMaterialInfo()
+{
+	IZ_ASSERT(m_pBody != IZ_NULL);
+	return m_pBody->GetMtrlInfo();
+}
+
+// 描画に利用するマテリアルを設定
+void CMeshSetInstance::SetMaterial(CMaterial* pMtrl)
+{
+	SAFE_REPLACE(m_pMtrl, pMtrl);
+}
+
+// 設定されているマテリアルを取得
+CMaterial* CMeshSetInstance::GetMaterial()
+{
+	return m_pMtrl;
+}
+
 // 初期化
 IZ_UINT8* CMeshSetInstance::Init(
 	IZ_UINT8* pBuf,
@@ -324,24 +340,6 @@ IZ_BOOL CMeshSetInstance::Render(
 void CMeshSetInstance::SetSkeleton(CSkeletonInstance* pSkl)
 {
 	SAFE_REPLACE(m_pSkl, pSkl);
-}
-
-// 描画に利用するマテリアルを設定
-void CMeshSetInstance::SetMaterial(CMaterial* pMtrl)
-{
-	SAFE_REPLACE(m_pMtrl, pMtrl);
-}
-
-// 設定されているマテリアルを取得
-CMaterial* CMeshSetInstance::GetMaterial()
-{
-	return m_pMtrl;
-}
-
-const S_MSH_MTRL& CMeshSetInstance::GetMaterialInfo()
-{
-	IZ_ASSERT(m_pBody != IZ_NULL);
-	return m_pBody->GetMtrlInfo();
 }
 
 ///////////////////////////////////////////////////
@@ -456,12 +454,30 @@ void CMeshInstance::ApplySkeleton(
 }
 
 // 描画に利用するマテリアルを設定
-void CMeshInstance::SetMaterial(
+IZ_BOOL CMeshInstance::SetMaterial(
 	IZ_UINT level,
 	CMaterial* pMtrl)
 {
-	// TODO
-	IZ_C_ASSERT(false);
+	IZ_ASSERT(level < m_nGroupNum);
+	IZ_ASSERT(m_pGroups != IZ_NULL);
+
+	IZ_BOOL ret = IZ_FALSE;
+
+	IZ_UINT nMtrlKey = pMtrl->GetKey();
+
+	IZ_UINT nMeshSetNum = m_pGroups[level]->GetMeshSetNum();
+
+	for (IZ_UINT i = 0; i < nMeshSetNum; i++) {
+		CMeshSetInstance* pMshSet = m_pGroups[level]->GetMeshSet(i);
+		if (pMshSet->GetMaterialInfo().nameKey == nMtrlKey) {
+			pMshSet->SetMaterial(pMtrl);
+
+			// １個でも登録できたので
+			ret = IZ_TRUE;
+		}
+	}
+
+	return ret;
 }
 
 IZ_UINT CMeshInstance::GetMeshSetNum(IZ_UINT level) const

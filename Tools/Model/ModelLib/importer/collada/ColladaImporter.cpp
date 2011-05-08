@@ -205,6 +205,17 @@ IZ_BOOL CColladaImporter::GetVertex(
 	return ret;
 }
 
+void CColladaImporter::GetMaterialForMesh(
+	IZ_UINT nIdx,
+	izanagi::S_MSH_MTRL& sMtrl)
+{
+	// TODO
+	IZ_ASSERT(IZ_FALSE);
+
+	sMtrl.name.SetString("dummy");
+	sMtrl.nameKey = sMtrl.name.GetKeyValue();
+}
+
 //////////////////////////////////
 // For joint chunk.
 

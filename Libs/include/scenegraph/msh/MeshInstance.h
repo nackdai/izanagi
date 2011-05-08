@@ -23,6 +23,7 @@ namespace izanagi {
 	 * メッシュセットとは、マテリアルごとのプリミティブセットの集まり
 	 */
 	class CMeshSetInstance : public CPlacementNew {
+		friend class CMeshInstance;
 		friend class CMeshGroupInstance;
 		friend class CGeometrySorter;
 		friend class CScene;
@@ -42,6 +43,22 @@ namespace izanagi {
 
 		NO_COPIABLE(CMeshSetInstance);
 
+	public:
+		/**
+		 * マテリアル情報取得
+		 */
+		const S_MSH_MTRL& GetMaterialInfo();
+
+		/**
+		 * 描画に利用するマテリアルを設定
+		 */
+		void SetMaterial(CMaterial* pMtrl);
+
+		/**
+		 * 設定されているマテリアルを取得
+		 */
+		CMaterial* GetMaterial();
+
 	private:
 		// 初期化
 		IZ_UINT8* Init(
@@ -55,14 +72,6 @@ namespace izanagi {
 
 		// 描画に利用するスケルトンを設定
 		void SetSkeleton(CSkeletonInstance* pSkl);
-
-		// 描画に利用するマテリアルを設定
-		void SetMaterial(CMaterial* pMtrl);
-
-		// 設定されているマテリアルを取得
-		CMaterial* GetMaterial();
-
-		const S_MSH_MTRL& GetMaterialInfo();
 
 		CStdList<CMeshSetInstance>::Item* GetListItem() { return &m_ListItem; }
 
@@ -129,7 +138,7 @@ namespace izanagi {
 		/**
 		 * 描画に利用するマテリアルを設定
 		 */
-		void SetMaterial(
+		IZ_BOOL SetMaterial(
 			IZ_UINT level,
 			CMaterial* pMtrl);
 
