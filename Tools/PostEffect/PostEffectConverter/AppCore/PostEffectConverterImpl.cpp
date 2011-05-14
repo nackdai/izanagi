@@ -49,18 +49,24 @@ BOOL CPostEffectConverter::Begin(LPCSTR lpszShaderFile)
 					lpszShaderFile,
 					NULL);
 
-	// TODO
-	// エラー出力表示
-	const char* pErrorStr = cgGetLastListing(m_pCgContext);
-	if (pErrorStr != NULL) {
-		printf("%s\n", pErrorStr);
+	CGerror error = ::cgGetError();
 
-		// NOTE
-		// 何故かcgCreateEffectFromFileでコンパイルが失敗してもNULLが返ってこないことがある・・・。
-		// なので、エラー文字列を調べて "error" があったら失敗とみなす・・・。
-		CString str(pErrorStr);
-		if (str.Find(_T(" error ")) >= 0) {
-			return FALSE;
+	if (error != CG_NO_ERROR) {
+		// TODO
+		// エラー出力表示
+		const char* pErrorStr = cgGetLastListing(m_pCgContext);
+		if (pErrorStr != NULL) {
+			printf("%s\n", pErrorStr);
+
+#if 0
+			// NOTE
+			// 何故かcgCreateEffectFromFileでコンパイルが失敗してもNULLが返ってこないことがある・・・。
+			// なので、エラー文字列を調べて "error" があったら失敗とみなす・・・。
+			CString str(pErrorStr);
+			if (str.Find(_T(" error ")) >= 0) {
+				return FALSE;
+			}
+#endif
 		}
 	}
 
