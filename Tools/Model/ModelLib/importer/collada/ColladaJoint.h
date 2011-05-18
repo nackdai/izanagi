@@ -12,7 +12,7 @@
 #include "GeometryCommon.h"
 
 class CColladaJoint {
-	static CColladaJoint s_cInstance;
+	static CColladaJoint* s_pInstance;
 
 	enum E_JOINT_ACCESS_TYPE {
 		E_JOINT_ACCESS_TYPE_NAME = 0,
@@ -25,7 +25,8 @@ class CColladaJoint {
 	struct SFuncIsSameNameNode;
 
 public:
-	static CColladaJoint& GetInstance() { return s_cInstance; }
+	static CColladaJoint& GetInstance();
+	static void DeleteInstance();
 
 private:
 	CColladaJoint();

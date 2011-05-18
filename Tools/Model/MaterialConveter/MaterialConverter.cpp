@@ -7,14 +7,13 @@
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-#if 0
+#if 1
 	IImporter* pImporter = IImporter::CreateImporter<CColladaImporter>();
 	//pImporter->Open("cube.dae");
 	//pImporter->Open("sphere.dae");
 	//pImporter->Open("duck.dae");
 	//pImporter->Open("dice.dae");
 	pImporter->Open("Seymour.dae");
-	pImporter->ReadBaseModel("Seymour.dae");
 #else
 	IImporter* pImporter = IImporter::CreateImporter<CXFileImporter>();
 

@@ -3,8 +3,6 @@
 #include "izMath.h"
 #include "izToolKit.h"
 
-CColladaJoint CColladaJoint::s_cInstance;
-
 ////////////////////////////////////////////
 
 struct CColladaJoint::SFuncIsSameNameNode {
@@ -33,6 +31,21 @@ struct CColladaJoint::SFuncIsSameNameNode {
 };
 
 ////////////////////////////////////////////
+
+CColladaJoint* CColladaJoint::s_pInstance = IZ_NULL;
+
+CColladaJoint& CColladaJoint::GetInstance()
+{
+	if (s_pInstance == IZ_NULL) {
+		s_pInstance = new CColladaJoint();
+	}
+	return *s_pInstance;
+}
+
+void CColladaJoint::DeleteInstance()
+{
+	SAFE_DELETE(s_pInstance);
+}
 
 CColladaJoint::CColladaJoint()
 {

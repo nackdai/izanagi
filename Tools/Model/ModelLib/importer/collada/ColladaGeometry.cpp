@@ -39,7 +39,20 @@ bool CColladaGeometry::SVtxFmt::operator==(izanagi::E_MSH_VTX_FMT_TYPE _type)
 
 //////////////////////////////////////////////////
 
-CColladaGeometry CColladaGeometry::s_cIntance;
+CColladaGeometry* CColladaGeometry::s_pInstance = IZ_NULL;
+
+CColladaGeometry& CColladaGeometry::GetInstance()
+{
+	if (s_pInstance == IZ_NULL) {
+		s_pInstance = new CColladaGeometry();
+	}
+	return *s_pInstance;
+}
+
+void CColladaGeometry::DeleteInstance()
+{
+	SAFE_DELETE(s_pInstance);
+}
 
 void CColladaGeometry::Clear()
 {

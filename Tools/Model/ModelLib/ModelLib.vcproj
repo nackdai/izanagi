@@ -293,6 +293,14 @@
 				<Filter
 					Name="mtrl"
 					>
+					<File
+						RelativePath=".\importer\collada\ColladaMaterial.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\importer\collada\ColladaMaterial.h"
+						>
+					</File>
 				</Filter>
 			</Filter>
 			<Filter

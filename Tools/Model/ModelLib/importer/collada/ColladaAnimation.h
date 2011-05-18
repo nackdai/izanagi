@@ -12,7 +12,7 @@
 #include "izToolKit.h"
 
 class CColladaAnimation {
-	static CColladaAnimation s_cInstance;
+	static CColladaAnimation* s_pInstance;
 
 private:
 	enum E_INPUT_SEMANTIC {
@@ -116,7 +116,8 @@ private:
 	};
 
 public:
-	static CColladaAnimation& GetInstance() { return s_cInstance; }
+	static CColladaAnimation& GetInstance();
+	static void DeleteInstance();
 
 private:
 	CColladaAnimation();

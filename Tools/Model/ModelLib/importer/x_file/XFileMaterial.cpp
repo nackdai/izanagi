@@ -1,6 +1,19 @@
 ﻿#include "XFileMaterial.h"
 
-CXFileMaterial CXFileMaterial::s_cInstance;
+CXFileMaterial* CXFileMaterial::s_pInstance = IZ_NULL;
+
+CXFileMaterial& CXFileMaterial::GetInstance()
+{
+	if (s_pInstance == IZ_NULL) {
+		s_pInstance = new CXFileMaterial();
+	}
+	return *s_pInstance;
+}
+
+void CXFileMaterial::DeleteInstance()
+{
+	SAFE_DELETE(s_pInstance);
+}
 
 CXFileMaterial::CXFileMaterial()
 {

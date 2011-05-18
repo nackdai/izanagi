@@ -6,7 +6,7 @@
 #include "XFileParser.h"
 
 class CXFileAnimation {
-	static CXFileAnimation s_cInstance;
+	static CXFileAnimation* s_pInstance;
 
 private:
 	struct SAnmKey {
@@ -28,7 +28,8 @@ private:
 	};
 
 public:
-	static CXFileAnimation& GetInstance() { return s_cInstance; }
+	static CXFileAnimation& GetInstance();
+	static void DeleteInstance();
 
 private:
 	CXFileAnimation() {}

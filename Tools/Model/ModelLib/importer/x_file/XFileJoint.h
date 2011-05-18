@@ -8,7 +8,7 @@
 struct SJointTransform;
 
 class CXFileJoint {
-	static CXFileJoint s_cInstance;
+	static CXFileJoint* s_pInstance;
 
 private:
 	struct SJoint {
@@ -33,7 +33,8 @@ private:
 	};
 
 public:
-	static CXFileJoint& GetInstance() { return s_cInstance; }
+	static CXFileJoint& GetInstance();
+	static void DeleteInstance();
 
 private:
 	CXFileJoint();
