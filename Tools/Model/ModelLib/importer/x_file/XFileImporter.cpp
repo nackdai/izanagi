@@ -25,6 +25,11 @@ IZ_BOOL CXFileImporter::Open(IZ_PCSTR pszName)
 
 IZ_BOOL CXFileImporter::Close()
 {
+	CXFileAnimation::DeleteInstance();
+	CXFileGeometry::DeleteInstance();
+	CXFileJoint::DeleteInstance();
+	CXFileMaterial::DeleteInstance();
+
 	return IZ_TRUE;
 }
 

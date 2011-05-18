@@ -1,7 +1,20 @@
 ﻿#include <algorithm>
 #include "XFileAnimation.h"
 
-CXFileAnimation CXFileAnimation::s_cInstance;
+CXFileAnimation* CXFileAnimation::s_pInstance = IZ_NULL;
+
+CXFileAnimation& CXFileAnimation::GetInstance()
+{
+	if (s_pInstance == NULL) {
+		s_pInstance = new CXFileAnimation();
+	}
+	return *s_pInstance;
+}
+
+void CXFileAnimation::DeleteInstance()
+{
+	SAFE_DELETE(s_pInstance);
+}
 
 namespace {
 	inline IZ_INT _GetNodeIdxByName(

@@ -3,7 +3,20 @@
 
 #include <algorithm>
 
-CXFileJoint CXFileJoint::s_cInstance;
+CXFileJoint* CXFileJoint::s_pInstance = IZ_NULL;
+
+CXFileJoint& CXFileJoint::GetInstance()
+{
+	if (s_pInstance == IZ_NULL) {
+		s_pInstance = new CXFileJoint();
+	}
+	return *s_pInstance;
+}
+
+void CXFileJoint::DeleteInstance()
+{
+	SAFE_DELETE(s_pInstance);
+}
 
 CXFileJoint::CXFileJoint()
 {

@@ -2,6 +2,7 @@
 #include "ColladaGeometry.h"
 #include "ColladaJoint.h"
 #include "ColladaAnimation.h"
+#include "ColladaMaterial.h"
 #include "izToolKit.h"
 
 CColladaImporter::CColladaImporter()
@@ -41,6 +42,11 @@ IZ_BOOL CColladaImporter::Close()
 
 	SAFE_DELETE(m_pBaseDAEForANm);
 	m_pBaseRootForAnm = IZ_NULL;
+
+	CColladaAnimation::DeleteInstance();
+	CColladaGeometry::DeleteInstance();
+	CColladaJoint::DeleteInstance();
+	CColladaMaterial::DeleteInstance();
 
 	return IZ_TRUE;
 }
@@ -403,28 +409,38 @@ IZ_BOOL CColladaImporter::GetAnmKey(
 
 IZ_BOOL CColladaImporter::BeginMaterial()
 {
-	// TODO
+	CColladaMaterial::GetInstance().ReadImages(m_pRoot);
+	CColladaMaterial::GetInstance().ReadMaterials(m_pRoot);
+
 	return IZ_TRUE;
 }
 
 IZ_BOOL CColladaImporter::EndMaterial()
 {
-	// TODO
+	// Nothing is done.
 	return IZ_TRUE;
 }
 
 IZ_UINT CColladaImporter::GetMaterialNum()
 {
-	// TODO
-	return 0;
+	IZ_UINT ret = CColladaMaterial::GetInstance().GetMaterialNum();
+	
+	if (ret == 0) {
+		IZ_BOOL result = BeginMaterial();
+		VRETURN_VAL(result, 0);
+
+		ret = CColladaMaterial::GetInstance().GetMaterialNum();
+	}
+
+	return ret;
 }
 
 IZ_BOOL CColladaImporter::GetMaterial(
 	IZ_UINT nMtrlIdx,
 	izanagi::S_MTRL_MATERIAL& sMtrl)
 {
-	// TODO
-	return IZ_TRUE;
+	IZ_BOOL ret = CColladaMaterial::GetInstance().GetMaterial(nMtrlIdx, sMtrl);
+	return ret;
 }
 
 void CColladaImporter::GetMaterialTexture(
@@ -432,7 +448,10 @@ void CColladaImporter::GetMaterialTexture(
 	IZ_UINT nTexIdx,
 	izanagi::S_MTRL_TEXTURE& sTex)
 {
-	// TODO
+	CColladaMaterial::GetInstance().GetMaterialTexture(
+		nMtrlIdx,
+		nTexIdx,
+		sTex);
 }
 
 void CColladaImporter::GetMaterialShader(
@@ -440,7 +459,10 @@ void CColladaImporter::GetMaterialShader(
 	IZ_UINT nShaderIdx,
 	izanagi::S_MTRL_SHADER& sShader)
 {
-	// TODO
+	CColladaMaterial::GetInstance().GetMaterialShader(
+		nMtrlIdx,
+		nShaderIdx,
+		sShader);
 }
 
 void CColladaImporter::GetMaterialParam(
@@ -448,7 +470,10 @@ void CColladaImporter::GetMaterialParam(
 	IZ_UINT nParamIdx,
 	izanagi::S_MTRL_PARAM& sParam)
 {
-	// TODO
+	CColladaMaterial::GetInstance().GetMaterialParam(
+		nMtrlIdx,
+		nParamIdx,
+		sParam);
 }
 
 void CColladaImporter::GetMaterialParamValue(
@@ -456,5 +481,8 @@ void CColladaImporter::GetMaterialParamValue(
 	IZ_UINT nParamIdx,
 	std::vector<IZ_FLOAT>& tvValue)
 {
-	// TODO
+	CColladaMaterial::GetInstance().GetMaterialParamValue(
+		nMtrlIdx,
+		nParamIdx,
+		tvValue);
 }

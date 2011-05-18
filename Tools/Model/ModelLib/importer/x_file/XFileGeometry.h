@@ -8,7 +8,7 @@
 class CXFileParser;
 
 class CXFileGeometry {
-	static CXFileGeometry s_cInstance;
+	static CXFileGeometry* s_pInstance;
 
 private:
 	struct SFace {
@@ -29,7 +29,8 @@ private:
 	};
 
 public:
-	static CXFileGeometry& GetInstance() { return s_cInstance; }
+	static CXFileGeometry& GetInstance();
+	static void DeleteInstance();
 
 private:
 	CXFileGeometry() {}

@@ -10,7 +10,7 @@
 #include <vector>
 
 class CColladaGeometry {
-	static CColladaGeometry s_cIntance;
+	static CColladaGeometry* s_pInstance;
 
 private:
 	enum E_PRIM_TYPE {
@@ -44,7 +44,8 @@ private:
 	};
 
 public:
-	static CColladaGeometry& GetInstance() { return s_cIntance; }
+	static CColladaGeometry& GetInstance();
+	static void DeleteInstance();
 
 private:
 	CColladaGeometry() {}

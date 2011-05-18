@@ -19,7 +19,20 @@ bool CXFileGeometry::SVtx::operator ==(const CXFileGeometry::SVtx &rhs)
 
 ////////////////////////////////////////////
 
-CXFileGeometry CXFileGeometry::s_cInstance;
+CXFileGeometry* CXFileGeometry::s_pInstance = IZ_NULL;
+
+CXFileGeometry& CXFileGeometry::GetInstance()
+{
+	if (s_pInstance == IZ_NULL) {
+		s_pInstance = new CXFileGeometry();
+	}
+	return *s_pInstance;
+}
+
+void CXFileGeometry::DeleteInstance()
+{
+	SAFE_DELETE(s_pInstance);
+}
 
 void CXFileGeometry::Clear()
 {

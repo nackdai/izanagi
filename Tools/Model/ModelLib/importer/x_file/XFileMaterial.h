@@ -6,10 +6,11 @@
 #include "XFileParser.h"
 
 class CXFileMaterial {
-	static CXFileMaterial s_cInstance;
+	static CXFileMaterial* s_pInstance;
 
 public:
-	static CXFileMaterial& GetInstance() { return s_cInstance; }
+	static CXFileMaterial& GetInstance();
+	static void DeleteInstance();
 
 private:
 	CXFileMaterial();

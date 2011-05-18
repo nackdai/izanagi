@@ -2,7 +2,20 @@
 #include <algorithm>
 #include "ColladaAnimation.h"
 
-CColladaAnimation CColladaAnimation::s_cInstance;
+CColladaAnimation* CColladaAnimation::s_pInstance = IZ_NULL;
+
+CColladaAnimation& CColladaAnimation::GetInstance()
+{
+	if (s_pInstance == IZ_NULL) {
+		s_pInstance = new CColladaAnimation();
+	}
+	return *s_pInstance;
+}
+
+void CColladaAnimation::DeleteInstance()
+{
+	SAFE_DELETE(s_pInstance);
+}
 
 CColladaAnimation::CColladaAnimation()
 {
