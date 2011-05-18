@@ -245,10 +245,6 @@
 				Name="util"
 				>
 				<File
-					RelativePath="..\source\posteffect\util\PostEffectUtilityParam.cpp"
-					>
-				</File>
-				<File
 					RelativePath="..\source\posteffect\util\PostEffectUtilityRect.cpp"
 					>
 				</File>
@@ -366,10 +362,6 @@
 			<Filter
 				Name="util"
 				>
-				<File
-					RelativePath="..\include\posteffect\util\PostEffectParameterTypes.h"
-					>
-				</File>
 				<File
 					RelativePath="..\include\posteffect\util\PostEffectShaderUtil.h"
 					>

@@ -228,14 +228,6 @@
 					RelativePath="..\source\shader\base\ShaderBasic.cpp"
 					>
 				</File>
-				<Filter
-					Name="util"
-					>
-					<File
-						RelativePath="..\source\shader\base\util\ShaderParamUtil.cpp"
-						>
-					</File>
-				</Filter>
 			</Filter>
 		</Filter>
 		<Filter
@@ -305,10 +297,6 @@
 				<Filter
 					Name="util"
 					>
-					<File
-						RelativePath="..\include\shader\base\util\ShaderParameterTypes.h"
-						>
-					</File>
 					<File
 						RelativePath="..\include\shader\base\util\ShaderParamUtil.h"
 						>
