@@ -9,11 +9,11 @@ using namespace izanagi;
 // Add mesh to list.
 IZ_BOOL CGeometrySorter::CZList::Add(
 	IZ_FLOAT fAddZ,
-	CMeshSetInstance* pAddMesh)
+	IMeshSet* pAddMesh)
 {
 	IZ_BOOL ret = IZ_FALSE;
 
-	CStdList<CMeshSetInstance>::Item* p = m_List.GetTop();
+	CStdList<IMeshSet>::Item* p = m_List.GetTop();
 	if (p == IZ_NULL) {
 		// List is empty.
 		ret = m_List.AddTop(pAddMesh->GetListItem());
@@ -22,7 +22,7 @@ IZ_BOOL CGeometrySorter::CZList::Add(
 
 	// Sort by Z value.
 	while (p != IZ_NULL) {
-		const CMeshSetInstance* pMesh = p->GetData();
+		const IMeshSet* pMesh = p->GetData();
 
 		IZ_FLOAT fZ = pMesh->GetZ();
 
@@ -110,7 +110,7 @@ CGeometrySorter::~CGeometrySorter()
 // モデル登録
 IZ_BOOL CGeometrySorter::Register(
 	IZ_FLOAT z,
-	CModel* pMdl,
+	IModel* pMdl,
 	E_SCENE_REGISTER_TYPE type)
 {
 	IZ_UINT level = static_cast<IZ_UINT>(z * m_nZLevvel);
@@ -152,7 +152,7 @@ IZ_BOOL CGeometrySorter::Render(
 IZ_BOOL CGeometrySorter::RegisterInternal(
 	IZ_FLOAT z,
 	IZ_UINT level,
-	CModel* pMdl,
+	IModel* pMdl,
 	E_SCENE_REGISTER_TYPE type)
 {
 	IZ_ASSERT(level < m_nZLevvel);
@@ -162,7 +162,7 @@ IZ_BOOL CGeometrySorter::RegisterInternal(
 	IZ_UINT nMshSetNum = pMdl->GetMeshSetNum();
 
 	for (IZ_UINT i = 0; i < nMshSetNum; i++) {
-		CMeshSetInstance* pMesh = pMdl->GetMeshSet(i);
+		IMeshSet* pMesh = pMdl->GetMeshSet(i);
 
 		// TODO
 		pMesh->SetZ(z);
@@ -197,18 +197,18 @@ IZ_BOOL CGeometrySorter::RenderInternal(
 	ERenderOrder nOrder)
 {
 	// Get top or tail of ZList.
-	CStdList<CMeshSetInstance>::Item* pItem = (nOrder == ERenderOrder_Forward
-												? cList.GetList().GetTop()
-												: cList.GetList().GetTail());
+	CStdList<IMeshSet>::Item* pItem = (nOrder == ERenderOrder_Forward
+										? cList.GetList().GetTop()
+										: cList.GetList().GetTail());
 
 	for (; pItem != IZ_NULL;) {
-		CMeshSetInstance* pMesh = pItem->GetData();
+		IMeshSet* pMesh = pItem->GetData();
 		IZ_ASSERT(pMesh != IZ_NULL);
 
 		IZ_UINT nPassNum = pScene->BeginRender(pMesh);
 
 		// Keep loop top.
-		CStdList<CMeshSetInstance>::Item* pItemBegin = pItem;
+		CStdList<IMeshSet>::Item* pItemBegin = pItem;
 
 		for (IZ_UINT nPass = 0; nPass < nPassNum; nPass++) {
 			while (pItem != IZ_NULL) {

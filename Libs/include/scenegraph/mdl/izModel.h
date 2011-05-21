@@ -12,8 +12,31 @@ namespace izanagi {
 	class IInputStream;
 
 	/**
+	 * モデルオブジェクトのインターフェース
 	 */
-	class CModel : public CObject {
+	class IModel : public CObject {
+	protected:
+		IModel() {}
+		virtual ~IModel() {}
+
+		NO_COPIABLE(IModel);
+
+	public:
+		/**
+		 * 所属するメッシュセット数を返す
+		 */
+		virtual IZ_UINT GetMeshSetNum() = 0;
+
+		/**
+		 * 指定されたメッシュセットを返す
+		 */
+		virtual IMeshSet* GetMeshSet(IZ_UINT idx) = 0;
+	};
+
+	/**
+	 * メッシュ + スケルトンで構成されるシンプルなモデルオブジェクト
+	 */
+	class CModel : public IModel {
 	public:
 		// Create instance.
 		static CModel* CreateModel(
@@ -101,7 +124,7 @@ namespace izanagi {
 			return m_pMesh->GetMeshSetNum(m_nCurLODLevel);
 		}
 
-		CMeshSetInstance* GetMeshSet(IZ_UINT idx)
+		IMeshSet* GetMeshSet(IZ_UINT idx)
 		{
 			IZ_ASSERT(m_pMesh != IZ_NULL);
 			return m_pMesh->GetMeshSet(m_nCurLODLevel, idx);
