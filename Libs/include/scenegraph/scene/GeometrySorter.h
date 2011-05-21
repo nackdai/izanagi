@@ -10,6 +10,7 @@
 namespace izanagi {
 	class IMeshSet;
 	class IModel;
+	class CCamera;
 
 	/**
 	 * ジオメトリソートを行うクラス

@@ -138,7 +138,7 @@ void CStateBasicEx2::Render3D()
 		SetUnitMatrix(mL2W);
 		m_pShader->SetL2W(mL2W);
 
-		m_pShader->SetW2C(CMyCamera::GetInstance().GetRawInterface().mtxW2C);
+		m_pShader->SetW2C(CMyCamera::GetInstance().GetRawInterface().GetParam().mtxW2C);
 	}
 #elif 1
 	{
@@ -147,15 +147,15 @@ void CStateBasicEx2::Render3D()
 		//izanagi::SetScaleMatrix(mL2W, 0.2f, 0.2f, 0.2f);
 		m_pShader->SetL2W(mL2W);
 
-		m_pShader->SetW2C(CMyCamera::GetInstance().GetRawInterface().mtxW2C);
-		m_pShader->SetCameraPos(CMyCamera::GetInstance().GetRawInterface().pos);
+		m_pShader->SetW2C(CMyCamera::GetInstance().GetRawInterface().GetParam().mtxW2C);
+		m_pShader->SetCameraPos(CMyCamera::GetInstance().GetRawInterface().GetParam().pos);
 	}
 #else
 		izanagi::SMatrix mL2W;
 		izanagi::SetUnitMatrix(mL2W);
 		m_pShader->SetL2W(mL2W);
 
-		m_pShader->SetW2C(CMyCamera::GetInstance().GetRawInterface().mtxW2C);
+		m_pShader->SetW2C(CMyCamera::GetInstance().GetRawInterface().GetParam().mtxW2C);
 #endif
 
 	m_pShader->BeginPass(1);

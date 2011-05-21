@@ -86,8 +86,8 @@ void CSceneRenderer::Render(izanagi::CGraphicsDevice* pDevice)
 	SetUnitMatrix(mL2W);
 	m_pPhongShader->SetL2W(mL2W);
 
-	m_pPhongShader->SetW2C(CMyCamera::GetInstance().GetRawInterface().mtxW2C);
-	m_pPhongShader->SetCameraPos(CMyCamera::GetInstance().GetRawInterface().pos);
+	m_pPhongShader->SetW2C(CMyCamera::GetInstance().GetRawInterface().GetParam().mtxW2C);
+	m_pPhongShader->SetCameraPos(CMyCamera::GetInstance().GetRawInterface().GetParam().pos);
 
 	m_pPhongShader->Begin(0);
 	IZ_UINT nPassCnt = m_pPhongShader->GetPassCount();
