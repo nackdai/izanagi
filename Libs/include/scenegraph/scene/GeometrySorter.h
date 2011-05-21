@@ -8,8 +8,8 @@
 #include "scenegraph/scene/Scene.h"
 
 namespace izanagi {
-	class CMeshSetInstance;
-	class CModel;
+	class IMeshSet;
+	class IModel;
 
 	/**
 	 * ジオメトリソートを行うクラス
@@ -26,14 +26,14 @@ namespace izanagi {
 			// Add mesh to list.
 			IZ_BOOL Add(
 				IZ_FLOAT fAddZ,
-				CMeshSetInstance* pAddMesh);
+				IMeshSet* pAddMesh);
 
 			void Clear() { m_List.Clear(); }
 
-			CStdList<CMeshSetInstance>& GetList() { return m_List; }
+			CStdList<IMeshSet>& GetList() { return m_List; }
 
 		private:
-			CStdList<CMeshSetInstance> m_List;
+			CStdList<IMeshSet> m_List;
 		};
 
 		enum ERenderOrder {
@@ -81,7 +81,7 @@ namespace izanagi {
 		 */
 		IZ_BOOL Register(
 			IZ_FLOAT z,
-			CModel* pMdl,
+			IModel* pMdl,
 			E_SCENE_REGISTER_TYPE type);
 
 		/**
@@ -97,7 +97,7 @@ namespace izanagi {
 		IZ_BOOL RegisterInternal(
 			IZ_FLOAT z,
 			IZ_UINT level,
-			CModel* pMdl,
+			IModel* pMdl,
 			E_SCENE_REGISTER_TYPE type);
 
 		// 描画内部処理

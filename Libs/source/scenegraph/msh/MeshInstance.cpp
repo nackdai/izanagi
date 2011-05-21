@@ -195,6 +195,32 @@ namespace izanagi {
 
 ///////////////////////////////////////////////////
 
+IMeshSet::IMeshSet()
+{
+	m_pMtrl = IZ_NULL;
+	m_ListItem.Init(this);
+	m_fZ = 0.0f;
+}
+
+IMeshSet::~IMeshSet()
+{
+	SAFE_RELEASE(m_pMtrl);
+}
+
+// 描画に利用するマテリアルを設定
+void IMeshSet::SetMaterial(CMaterial* pMtrl)
+{
+	SAFE_REPLACE(m_pMtrl, pMtrl);
+}
+
+// 設定されているマテリアルを取得
+CMaterial* IMeshSet::GetMaterial()
+{
+	return m_pMtrl;
+}
+
+///////////////////////////////////////////////////
+
 // インスタンス作成
 CMeshSetInstance* CMeshSetInstance::CreateMeshSetInstance(
 	IZ_UINT8** pBuf,
@@ -238,12 +264,6 @@ CMeshSetInstance::CMeshSetInstance()
 	m_pPrims = IZ_NULL;
 
 	m_pSkl = IZ_NULL;
-
-	m_pMtrl = IZ_NULL;
-
-	m_fZ = 0.0f;
-
-	m_ListItem.Init(this);
 }
 
 // デストラクタ
@@ -256,7 +276,6 @@ CMeshSetInstance::~CMeshSetInstance()
 	}
 
 	SAFE_RELEASE(m_pSkl);
-	SAFE_RELEASE(m_pMtrl);
 }
 
 // マテリアル情報取得
@@ -264,18 +283,6 @@ const S_MSH_MTRL& CMeshSetInstance::GetMaterialInfo()
 {
 	IZ_ASSERT(m_pBody != IZ_NULL);
 	return m_pBody->GetMtrlInfo();
-}
-
-// 描画に利用するマテリアルを設定
-void CMeshSetInstance::SetMaterial(CMaterial* pMtrl)
-{
-	SAFE_REPLACE(m_pMtrl, pMtrl);
-}
-
-// 設定されているマテリアルを取得
-CMaterial* CMeshSetInstance::GetMaterial()
-{
-	return m_pMtrl;
 }
 
 // 初期化

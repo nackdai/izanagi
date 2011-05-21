@@ -19,6 +19,7 @@ namespace izanagi {
 	class CMeshSet : public CObject {
 		friend class CMesh;
 		friend class CMeshGroup;
+		friend class CMeshSetInstance;
 
 	private:
 		CMeshSet();
@@ -28,7 +29,7 @@ namespace izanagi {
 
 		void InternalRelease() { delete this; }
 
-	public:
+	private:
 		/**
 		 * 描画
 		 */
@@ -37,16 +38,13 @@ namespace izanagi {
 			CSkeletonInstance* pSkeleton,
 			IMshRenderHandler* pRenderHandler);
 
-	private:
 		IZ_UINT8* Read(
 			IZ_UINT8* pBuf,
 			CGraphicsDevice* pDevice,
 			IInputStream* pIn);
 
-	public:
 		CPrimitiveSet* GetPrimSet(IZ_UINT idx);
 
-	public:
 		inline void GetCenter(SVector& vPos);
 
 		/**

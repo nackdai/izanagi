@@ -18,15 +18,81 @@ namespace izanagi {
 	////////////////////////////////////////////
 
 	/**
+	 * メッシュセットインターフェース
+	 *
+	 * ジオメトリソーティングの最小単位
+	 * メッシュセットとは、マテリアルごとのプリミティブセットの集まり
+	 */
+	class IMeshSet : public CPlacementNew {
+		friend class CGeometrySorter;
+		friend class CScene;
+
+	protected:
+		IMeshSet();
+		virtual ~IMeshSet();
+
+		NO_COPIABLE(IMeshSet);
+
+	protected:
+		/**
+		 * マテリアル情報取得
+		 */
+		virtual const S_MSH_MTRL& GetMaterialInfo() = 0;
+
+		/**
+		 * 描画に利用するマテリアルを設定
+		 */
+		void SetMaterial(CMaterial* pMtrl);
+
+		/**
+		 * 設定されているマテリアルを取得
+		 */
+		CMaterial* GetMaterial();
+
+		/**
+		 * 描画
+		 */
+		virtual IZ_BOOL Render(
+			CGraphicsDevice* pDevice,
+			IMshRenderHandler* pRenderHandler) = 0;
+
+		/**
+		 * 描画に利用するスケルトンを設定
+		 */
+		virtual void SetSkeleton(CSkeletonInstance* pSkl)
+		{
+			// Nothing is done.
+		}
+
+		// TODO
+		IZ_BOOL IsTranslucent() const { return IZ_FALSE; }
+
+	private:
+		// GeometrySorter用
+		CStdList<IMeshSet>::Item* GetListItem() { return &m_ListItem; }
+
+		// TODO
+		void SetZ(IZ_FLOAT z) { m_fZ = z; }
+		IZ_FLOAT GetZ() const { return m_fZ; }
+
+	protected:
+		CMaterial* m_pMtrl;
+
+		CStdList<IMeshSet>::Item m_ListItem;
+
+		IZ_FLOAT m_fZ;
+	};
+
+	////////////////////////////////////////////
+
+	/**
 	 * メッシュセットインスタンス
 	 *
 	 * メッシュセットとは、マテリアルごとのプリミティブセットの集まり
 	 */
-	class CMeshSetInstance : public CPlacementNew {
+	class CMeshSetInstance : public IMeshSet {
 		friend class CMeshInstance;
 		friend class CMeshGroupInstance;
-		friend class CGeometrySorter;
-		friend class CScene;
 
 	private:
 		// インスタンス作成
@@ -39,31 +105,16 @@ namespace izanagi {
 
 	private:
 		inline CMeshSetInstance();
-		inline ~CMeshSetInstance();
-
-		NO_COPIABLE(CMeshSetInstance);
-
-	public:
-		/**
-		 * マテリアル情報取得
-		 */
-		const S_MSH_MTRL& GetMaterialInfo();
-
-		/**
-		 * 描画に利用するマテリアルを設定
-		 */
-		void SetMaterial(CMaterial* pMtrl);
-
-		/**
-		 * 設定されているマテリアルを取得
-		 */
-		CMaterial* GetMaterial();
+		inline ~CMeshSetInstance();		
 
 	private:
 		// 初期化
 		IZ_UINT8* Init(
 			IZ_UINT8* pBuf,
 			CMeshSet* pMeshSet);
+
+		// マテリアル情報取得
+		const S_MSH_MTRL& GetMaterialInfo();
 
 		// 描画
 		IZ_BOOL Render(
@@ -73,15 +124,6 @@ namespace izanagi {
 		// 描画に利用するスケルトンを設定
 		void SetSkeleton(CSkeletonInstance* pSkl);
 
-		CStdList<CMeshSetInstance>::Item* GetListItem() { return &m_ListItem; }
-
-		// TODO
-		IZ_BOOL IsTranslucent() const { return IZ_FALSE; }
-
-		// TODO
-		void SetZ(IZ_FLOAT z) { m_fZ = z; }
-		IZ_FLOAT GetZ() const { return m_fZ; }
-
 	private:
 		CMeshSet* m_pBody;
 
@@ -89,12 +131,6 @@ namespace izanagi {
 		CPrimitiveSet** m_pPrims;
 
 		CSkeletonInstance* m_pSkl;
-
-		CMaterial* m_pMtrl;
-
-		IZ_FLOAT m_fZ;
-
-		CStdList<CMeshSetInstance>::Item m_ListItem;
 	};
 
 	////////////////////////////////////////////

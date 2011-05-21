@@ -9,7 +9,7 @@ namespace izanagi {
 	class CMaterial;
 	class CBaseTexture;
 	class CShader;
-	class CMeshSetInstance;
+	class IMeshSet;
 	class IMshRenderHandler;
 
 	/**
@@ -33,13 +33,13 @@ namespace izanagi {
 
 	protected:
 		// 描画開始
-		IZ_UINT BeginRender(CMeshSetInstance* pMesh);
+		IZ_UINT BeginRender(IMeshSet* pMesh);
 
 		// 描画途中
 		IZ_BOOL IterRender(
 			CGraphicsDevice* pDevice,
 			IZ_UINT nPass,
-			CMeshSetInstance* pMesh,
+			IMeshSet* pMesh,
 			IMshRenderHandler* pRenderHandler);
 
 		// 描画終了

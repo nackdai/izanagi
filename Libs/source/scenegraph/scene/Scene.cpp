@@ -43,7 +43,7 @@ CScene::~CScene()
 }
 
 // 描画開始
-IZ_UINT CScene::BeginRender(CMeshSetInstance* pMesh)
+IZ_UINT CScene::BeginRender(IMeshSet* pMesh)
 {
 	CMaterial* pMtrl = pMesh->GetMaterial();
 
@@ -79,7 +79,7 @@ IZ_UINT CScene::BeginRender(CMeshSetInstance* pMesh)
 IZ_BOOL CScene::IterRender(
 	CGraphicsDevice* pDevice,
 	IZ_UINT nPass, 
-	CMeshSetInstance* pMesh,
+	IMeshSet* pMesh,
 	IMshRenderHandler* pRenderHandler)
 {
 	IZ_ASSERT(m_nCurShaderPassNum > 0);
