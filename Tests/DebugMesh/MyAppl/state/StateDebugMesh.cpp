@@ -100,7 +100,7 @@ IZ_BOOL CStateDebugMesh::Render3D()
 		SetUnitMatrix(mL2W);
 		m_pShader->SetL2W(mL2W);
 
-		m_pShader->SetW2C(CMyCamera::GetInstance().GetRawInterface().mtxW2C);
+		m_pShader->SetW2C(CMyCamera::GetInstance().GetRawInterface().GetParam().mtxW2C);
 	}
 
 	// グリッド描画
@@ -238,8 +238,8 @@ IZ_BOOL CStateDebugMesh::Enter()
 					pAllocator,
 					pDevice,
 					IZ_COLOR_RGBA(0xff, 0, 0, 0x80),
-					cCamera.aspect,
-					cCamera.fov,
+					cCamera.GetParam().aspect,
+					cCamera.GetParam().fov,
 					1.0f, 100.0f);
 					//cCamera.cameraNear,
 					//cCamera.cameraFar);

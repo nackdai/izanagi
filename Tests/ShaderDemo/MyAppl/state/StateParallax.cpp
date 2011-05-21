@@ -55,8 +55,8 @@ IZ_BOOL CStateParallax::Render3D()
 		SetUnitMatrix(mL2W);
 		m_pShader->SetL2W(mL2W);
 
-		m_pShader->SetW2C(CMyCamera::GetInstance().GetRawInterface().mtxW2C);
-		m_pShader->SetCameraPos(CMyCamera::GetInstance().GetRawInterface().pos);
+		m_pShader->SetW2C(CMyCamera::GetInstance().GetRawInterface().GetParam().mtxW2C);
+		m_pShader->SetCameraPos(CMyCamera::GetInstance().GetRawInterface().GetParam().pos);
 	}
 
 	// グリッド描画

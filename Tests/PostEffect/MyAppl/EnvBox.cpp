@@ -167,11 +167,11 @@ void CEnvBox::Render(izanagi::CGraphicsDevice* pDevice)
 #if 1
 	CopyVectorXYZ(
 		mL2W.v[3],
-		CMyCamera::GetInstance().GetRawInterface().pos);
+		CMyCamera::GetInstance().GetRawInterface().GetParam().pos);
 #endif
 	m_pShader->SetL2W(mL2W);
 
-	m_pShader->SetW2C(CMyCamera::GetInstance().GetRawInterface().mtxW2C);
+	m_pShader->SetW2C(CMyCamera::GetInstance().GetRawInterface().GetParam().mtxW2C);
 
 	m_pShader->Begin(0);
 	IZ_UINT nPassCnt = m_pShader->GetPassCount();

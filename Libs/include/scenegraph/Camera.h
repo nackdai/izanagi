@@ -27,11 +27,13 @@ namespace izanagi {
 		SMatrix mtxW2C;	// World - Clip
 	};
 
-	class CCamera : public SCameraParam {
-		friend class CStereoCamera;
-
+	class CCamera {
 	public:
-		CCamera() {}
+		CCamera()
+		{
+			m_IsDirtyW2V = IZ_FALSE;
+			m_IsDirtyV2C = IZ_FALSE;
+		}
 		~CCamera() {}
 
 		NO_COPIABLE(CCamera);
@@ -56,12 +58,62 @@ namespace izanagi {
 		void RenderCamera(CGraphicsDevice* pDevice);
 #endif
 
+		const SCameraParam& GetParam() const { return m_Param; }
+
+		void SetPos(const SVector& vecPos)
+		{
+			CopyVector(m_Param.pos, vecPos);
+			m_IsDirtyW2V = IZ_TRUE;
+		}
+
+		void SetAt(const SVector& vecAt)
+		{
+			CopyVector(m_Param.ref, vecAt);
+			m_IsDirtyW2V = IZ_TRUE;
+		}
+
+		void SetUp(const SVector& vecUp)
+		{
+			CopyVector(m_Param.up, vecUp);
+			m_IsDirtyW2V = IZ_TRUE;
+		}
+
+		void SetNear(IZ_FLOAT fNear)
+		{
+			m_Param.cameraNear = fNear;
+			m_IsDirtyV2C = IZ_TRUE;
+		}
+
+		void SetFar(IZ_FLOAT fFar)
+		{
+			m_Param.cameraFar = fFar;
+			m_IsDirtyV2C = IZ_TRUE;
+		}
+
+		void SetFOV(IZ_FLOAT fFOV)
+		{
+			m_Param.fov = fFOV;
+			m_IsDirtyV2C = IZ_TRUE;
+		}
+
+		void SetAspect(IZ_FLOAT fAspect)
+		{
+			m_Param.aspect = fAspect;
+			m_IsDirtyV2C = IZ_TRUE;
+		}
+
 	protected:
 		// World - View
 		void ComputeW2V();
 
 		// View - Clip
 		void ComputeV2C();
+
+	protected:
+		SCameraParam m_Param;
+
+		IZ_BOOL m_IsDirtyW2V;
+		IZ_BOOL m_IsDirtyV2C;
 	};
 
 }	// namespace izanagi

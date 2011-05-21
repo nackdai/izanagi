@@ -147,7 +147,7 @@ void CChildView::OnSize(UINT nType, int cx, int cy)
 		// NOTE
 		// Reset内部でビューポートをリセットしているので、ここではやらない
 
-		CMyCamera::GetInstance().GetRawInterface().aspect = (IZ_FLOAT)sParams.BackBufferHeight / sParams.BackBufferWidth;
+		CMyCamera::GetInstance().GetRawInterface().GetParam().aspect = (IZ_FLOAT)sParams.BackBufferHeight / sParams.BackBufferWidth;
 		CMyCamera::GetInstance().UpdateCamera();
 	}
 #endif

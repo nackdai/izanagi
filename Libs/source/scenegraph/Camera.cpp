@@ -18,15 +18,18 @@ void CCamera::Init(
 	IZ_FLOAT fFov,
 	IZ_FLOAT fAspect)
 {
-	cameraNear = fNear;
-	cameraFar = fFar;
-	fov = fFov;
+	m_Param.cameraNear = fNear;
+	m_Param.cameraFar = fFar;
+	m_Param.fov = fFov;
 
-	aspect = fAspect;
+	m_Param.aspect = fAspect;
 
-	CopyVector(pos, vecPos);
-	CopyVector(ref, vecRef);
-	CopyVector(up, vecUp);
+	CopyVector(m_Param.pos, vecPos);
+	CopyVector(m_Param.ref, vecRef);
+	CopyVector(m_Param.up, vecUp);
+
+	m_IsDirtyW2V = IZ_TRUE;
+	m_IsDirtyV2C = IZ_TRUE;
 }
 
 void CCamera::Init(const SCameraParam& sParam)
@@ -44,10 +47,19 @@ void CCamera::Init(const SCameraParam& sParam)
 // カメラ更新
 void CCamera::UpdateCamera()
 {
-	ComputeW2V();
-	ComputeV2C();
+	if (m_IsDirtyW2V) {
+		ComputeW2V();
+	}
+	if (m_IsDirtyV2C) {
+		ComputeV2C();
+	}
 
-	MulMatrix(mtxW2C, mtxW2V, mtxV2C);
+	if (m_IsDirtyW2V || m_IsDirtyV2C) {
+		MulMatrix(m_Param.mtxW2C, m_Param.mtxW2V, m_Param.mtxV2C);
+
+		m_IsDirtyW2V = IZ_FALSE;
+		m_IsDirtyV2C = IZ_FALSE;
+	}
 }
 
 #if 0
@@ -72,7 +84,7 @@ void CCamera::RenderCamera(CGraphicsDevice* pDevice)
 // World - View
 void CCamera::ComputeW2V()
 {
-	SetUnitMatrix(mtxW2V);
+	SetUnitMatrix(m_Param.mtxW2V);
 
 	SVector vecX;
 	SVector vecY;
@@ -81,62 +93,62 @@ void CCamera::ComputeW2V()
 	// Z
 	// 視点から注視点へのベクトル
 #ifdef VIEW_LH
-	SubVectorXYZ(vecZ, ref, pos);	// 左手
+	SubVectorXYZ(vecZ, m_Param.ref, m_Param.pos);	// 左手
 #else	// #ifdef VIEW_LH
-	SubVectorXYZ(vecZ, pos, ref);	// 右手
+	SubVectorXYZ(vecZ, m_Param.pos, m_Param.ref);	// 右手
 #endif	// #ifdef VIEW_LH
 
 	NormalizeVector(vecZ, vecZ);
 
 	// X
-	CrossVector(vecX, up, vecZ);
+	CrossVector(vecX, m_Param.up, vecZ);
 	NormalizeVector(vecX, vecX);
 
 	// Y
 	CrossVector(vecY, vecZ, vecX);
 
-	CopyVector(mtxW2V.v[0], vecX);
-	CopyVector(mtxW2V.v[1], vecY);
-	CopyVector(mtxW2V.v[2], vecZ);
+	CopyVector(m_Param.mtxW2V.v[0], vecX);
+	CopyVector(m_Param.mtxW2V.v[1], vecY);
+	CopyVector(m_Param.mtxW2V.v[2], vecZ);
 
-	TransposeMatrix(mtxW2V, mtxW2V);
+	TransposeMatrix(m_Param.mtxW2V, m_Param.mtxW2V);
 
-	mtxW2V.m[3][0] = -1.0f * DotVector(vecX, pos);
-	mtxW2V.m[3][1] = -1.0f * DotVector(vecY, pos);
-	mtxW2V.m[3][2] = -1.0f * DotVector(vecZ, pos);
-	mtxW2V.m[3][3] = 1.0f;
+	m_Param.mtxW2V.m[3][0] = -1.0f * DotVector(vecX, m_Param.pos);
+	m_Param.mtxW2V.m[3][1] = -1.0f * DotVector(vecY, m_Param.pos);
+	m_Param.mtxW2V.m[3][2] = -1.0f * DotVector(vecZ, m_Param.pos);
+	m_Param.mtxW2V.m[3][3] = 1.0f;
 }
 
 // View - Clip
 void CCamera::ComputeV2C()
 {
-	SetUnitMatrix(mtxV2C);
+	SetUnitMatrix(m_Param.mtxV2C);
 
 #if 0
 	// Use Horizontal FOV
-	const IZ_FLOAT fH = 1 / tanf(fov * 0.5f);
-	const IZ_FLOAT fW = fH / aspect;
+	const IZ_FLOAT fH = 1 / tanf(m_Param.fov * 0.5f);
+	const IZ_FLOAT fW = fH / m_Param.aspect;
 #else
 	// Use Vertical FOV
-	const IZ_FLOAT fW = 1 / tanf(fov * 0.5f);
-	const IZ_FLOAT fH = fW * aspect;
+	const IZ_FLOAT fW = 1 / tanf(m_Param.fov * 0.5f);
+	const IZ_FLOAT fH = fW * m_Param.aspect;
 #endif
-	const IZ_FLOAT fQ = -cameraFar / (cameraFar - cameraNear);
+	const IZ_FLOAT fQ = -m_Param.cameraFar / (m_Param.cameraFar - m_Param.cameraNear);
 
-	mtxV2C.m[0][0] = fW;
-	mtxV2C.m[1][1] = fH;
+	m_Param.mtxV2C.m[0][0] = fW;
+	m_Param.mtxV2C.m[1][1] = fH;
 
 #ifdef VIEW_LH
 	// 左手
-	mtxV2C.m[2][2] = -fQ;
-	mtxV2C.m[3][2] = fQ * cameraNear;
-	mtxV2C.m[2][3] = 1.0f;
+	m_Param.mtxV2C.m[2][2] = -fQ;
+	m_Param.mtxV2C.m[3][2] = fQ * m_Param.cameraNear;
+	m_Param.mtxV2C.m[2][3] = 1.0f;
 #else	// #ifdef VIEW_LH
 	// 右手
-	mtxV2C.m[2][2] = fQ;
-	mtxV2C.m[3][2] = fQ * cameraNear;
-	mtxV2C.m[2][3] = -1.0f;
+	m_Param.mtxV2C.m[2][2] = fQ;
+	m_Param.mtxV2C.m[3][2] = fQ * m_Param.cameraNear;
+	m_Param.mtxV2C.m[2][3] = -1.0f;
 #endif	// #ifdef VIEW_LH
 
-	mtxV2C.m[3][3] = 0.0f;
+	m_Param.mtxV2C.m[3][3] = 0.0f;
 }
