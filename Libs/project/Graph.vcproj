@@ -346,18 +346,6 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\source\graph\dx9\FxShader.cpp"
-					>
-					<FileConfiguration
-						Name="Debug_OGL|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
 					RelativePath="..\source\graph\dx9\GraphicsDevice.cpp"
 					>
 					<FileConfiguration
@@ -966,10 +954,6 @@
 				</File>
 				<File
 					RelativePath="..\include\graph\dx9\D3D9ParamValueConverter.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\graph\dx9\FxShader.h"
 					>
 				</File>
 				<File
