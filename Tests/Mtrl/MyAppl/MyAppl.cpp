@@ -88,7 +88,7 @@ IZ_BOOL CMyAppl::Update()
 {
 	IZ_BOOL ret = CStateManager::GetInstance().Update();
 
-	CMyCamera::GetInstance().UpdateCamera();
+	CMyCamera::GetInstance().Update();
 
 	return ret;
 }
@@ -104,7 +104,7 @@ IZ_BOOL CMyAppl::Render()
 		izanagi::E_GRAPH_CLEAR_FLAG_ALL,
 		color, 1.0f, 0);
 
-	//CMyCamera::GetInstance().UpdateCamera();
+	//CMyCamera::GetInstance().Update();
 
 	IZ_BOOL ret = CStateManager::GetInstance().Render();
 

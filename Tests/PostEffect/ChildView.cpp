@@ -92,7 +92,7 @@ void CChildView::OnMouseMove(UINT nFlags, CPoint point)
 		fLongitude *= 0.005f;
 
 		CMyCamera::GetInstance().Rotate(fLatitude, fLongitude);
-		CMyCamera::GetInstance().UpdateCamera();
+		CMyCamera::GetInstance().Update();
 	}
 	else if (GetAsyncKeyState(VK_RBUTTON) & 0xff00) {
 		float fOffsetX = (float)(m_ptPrevPoint.x - point.x);
@@ -102,7 +102,7 @@ void CChildView::OnMouseMove(UINT nFlags, CPoint point)
 		fOffsetY *= 0.005f;
 
 		CMyCamera::GetInstance().Move(fOffsetX, fOffsetY);
-		CMyCamera::GetInstance().UpdateCamera();
+		CMyCamera::GetInstance().Update();
 	}
 
 	m_ptPrevPoint = point;
@@ -113,7 +113,7 @@ void CChildView::OnMouseMove(UINT nFlags, CPoint point)
 BOOL CChildView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 {
 	CMyCamera::GetInstance().Dolly(zDelta * 0.05f);
-	CMyCamera::GetInstance().UpdateCamera();
+	CMyCamera::GetInstance().Update();
 
 	return CWnd::OnMouseWheel(nFlags, zDelta, pt);
 }
@@ -148,7 +148,7 @@ void CChildView::OnSize(UINT nType, int cx, int cy)
 		// Reset内部でビューポートをリセットしているので、ここではやらない
 
 		CMyCamera::GetInstance().GetRawInterface().GetParam().aspect = (IZ_FLOAT)sParams.BackBufferHeight / sParams.BackBufferWidth;
-		CMyCamera::GetInstance().UpdateCamera();
+		CMyCamera::GetInstance().Update();
 	}
 #endif
 }

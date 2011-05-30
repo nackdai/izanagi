@@ -26,7 +26,7 @@ public:
 		IZ_FLOAT fFov,
 		IZ_FLOAT fAspect);
 
-	inline void UpdateCamera();
+	inline void Update();
 #if 0
 	inline void RenderCamera(izanagi::CGraphicsDevice* pDevice);
 #endif
@@ -49,15 +49,15 @@ public:
 
 // inline ********************************
 
-void CMyCamera::UpdateCamera()
+void CMyCamera::Update()
 {
-	m_cCamera.UpdateCamera();
+	m_cCamera.Update();
 }
 
 #if 0
 void CMyCamera::RenderCamera(izanagi::CGraphicsDevice* pDevice)
 {
-	m_cCamera.UpdateCamera();
+	m_cCamera.Update();
 }
 #endif
 
