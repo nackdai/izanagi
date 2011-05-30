@@ -121,26 +121,17 @@ namespace izanagi {
 				}
 			}
 
-			IZ_BOOL operator>(Item* pItem)
+			IZ_BOOL operator>(Item& rhs)
 			{
 				IZ_ASSERT(m_pData != IZ_NULL);
-				IZ_ASSERT(Item != IZ_NULL);
-				IZ_ASSERT(Item->m_pData != IZ_NULL);
+				IZ_ASSERT(rhs.m_pData != IZ_NULL);
 
-				return *m_pData > *(pItem->m_pData);
-			}
-			IZ_BOOL operator==(Item* pItem)
-			{
-				IZ_ASSERT(m_pData != IZ_NULL);
-				IZ_ASSERT(Item != IZ_NULL);
-				IZ_ASSERT(Item->m_pData != IZ_NULL);
-
-				return *m_pData == *(pItem->m_pData);
+				return *m_pData > *(rhs.m_pData);
 			}
 
 		private:
 			_T* m_pData;
-			CStdList<_T>* m_pList;	// 所属先リスト
+			CStdSet<_T>* m_pList;	// 所属先リスト
 			Item* m_pPrev;
 			Item* m_pNext;
 		};
@@ -187,12 +178,25 @@ namespace izanagi {
 			IZ_UINT nNum = GetItemNum();
 			VRETURN_VAL(idx < nNum, IZ_NULL);
 
-			CStdList<_T>::Item* ret = GetTop();
-			for (IZ_UINT i = 0; i < nNum; ++i) {
-				if (i == idx) {
-					break;
+			CStdSet<_T>::Item* ret = IZ_NULL;
+
+			if (idx >= nNum / 2) {
+				ret = GetTop();
+				for (IZ_UINT i = 0; ret != IZ_NULL; ++i) {
+					if (i == idx) {
+						break;
+					}
+					ret = ret->GetNext();
 				}
-				ret = ret->GetNext();
+			}
+			else {
+				ret = GetTail();
+				for (IZ_UINT i = nNum - 1; ret != IZ_NULL; --i) {
+					if (i == idx) {
+						break;
+					}
+					ret = ret->GetPrev();
+				}
 			}
 
 			return ret;
@@ -215,7 +219,7 @@ namespace izanagi {
 					// Add to top.
 					return pItem->JoinBefore(pTop);
 				}
-				else if (*pItem > *pTail) {
+				else {
 					// Add to tail.
 					return pItem->JoinBefore(pTail);
 				}
@@ -224,22 +228,19 @@ namespace izanagi {
 
 				// Search insert position by binary search.
 				while (nTopIdx <= nTailIdx) {
-					IZ_UINT nMidxIdx = (nTopIdx + nTailIdx) >> 1;
+					IZ_UINT nMidIdx = (nTopIdx + nTailIdx) >> 1;
 					pMid = GetAt(nMidIdx);
 
-					if (*pMid < *pItem) {
-						nTopIdx = nMidxIdx + 1;
-					}
-					else if (*pItem > *pMid) {
-						nTailIdx = nMidIdx - 1;
+					if (*pItem > (*pMid)) {
+						nTopIdx = nMidIdx + 1;
 					}
 					else {
-						return IZ_FALSE;
+						nTailIdx = nMidIdx - 1;
 					}
 				}
 
 				// Insert item.
-				for (Item* p = pMid;; p != IZ_NULL; p = p->GetNext();) {
+				for (Item* p = pMid; p != IZ_NULL; p = p->GetNext()) {
 					if (*pItem > *p) {
 						return pItem->JoinAfter(p);
 					}

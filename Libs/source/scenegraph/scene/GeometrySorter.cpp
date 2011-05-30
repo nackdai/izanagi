@@ -13,6 +13,7 @@ IZ_BOOL CGeometrySorter::CZList::Add(
 {
 	IZ_BOOL ret = IZ_FALSE;
 
+#if 0
 	CStdList<IMeshSet>::Item* p = m_List.GetTop();
 	if (p == IZ_NULL) {
 		// List is empty.
@@ -38,6 +39,9 @@ IZ_BOOL CGeometrySorter::CZList::Add(
 		// Z value is larger than all items.
 		ret = m_List.AddTail(pAddMesh->GetListItem());
 	}
+#else
+	ret = m_List.Add(pAddMesh->GetListItem());
+#endif
 
 	IZ_ASSERT(ret);
 	return ret;
@@ -109,11 +113,35 @@ CGeometrySorter::~CGeometrySorter()
 
 // モデル登録
 IZ_BOOL CGeometrySorter::Register(
+	const CCamera& camera,
 	IZ_FLOAT z,
 	IModel* pMdl,
 	E_SCENE_REGISTER_TYPE type)
 {
-	IZ_UINT level = static_cast<IZ_UINT>(z * m_nZLevvel);
+	// カメラは更新されている必要がある
+	VRETURN(camera.IsUpdated());
+
+	const SCameraParam& cameraParam = camera.GetParam();
+#if 1
+	IZ_FLOAT w = cameraParam.mtxW2C.m[2][3] * z + cameraParam.mtxW2C.m[3][3];
+	IZ_FLOAT normalizedZ = cameraParam.mtxW2C.m[2][2] * z + cameraParam.mtxW2C.m[3][2];
+#else
+	SVector v;
+	v.Set(0.0f, 0.0f, z);
+	ApplyMatrix(v, v, cameraParam.mtxW2C);
+
+	IZ_FLOAT w = v.w;
+	IZ_FLOAT normalizedZ = v.z;
+#endif
+	normalizedZ /= w;
+
+	// NOTE
+	// DirectX ->  0 <= z/w <= 1
+	// OpenGL  -> -1 <= z/w <= 1
+	// そのため、どちらでも 0 - 1 の範囲に正規化する必要がある
+	normalizedZ = (normalizedZ + 1.0f) * 0.5f;
+
+	IZ_UINT level = static_cast<IZ_UINT>(normalizedZ * m_nZLevvel);
 	return RegisterInternal(z, level, pMdl, type);
 }
 
@@ -197,9 +225,15 @@ IZ_BOOL CGeometrySorter::RenderInternal(
 	ERenderOrder nOrder)
 {
 	// Get top or tail of ZList.
+#if 0
 	CStdList<IMeshSet>::Item* pItem = (nOrder == ERenderOrder_Forward
 										? cList.GetList().GetTop()
 										: cList.GetList().GetTail());
+#else
+	CStdSet<IMeshSet>::Item* pItem = (nOrder == ERenderOrder_Forward
+										? cList.GetList().GetTop()
+										: cList.GetList().GetTail());
+#endif
 
 	for (; pItem != IZ_NULL;) {
 		IMeshSet* pMesh = pItem->GetData();
@@ -208,7 +242,8 @@ IZ_BOOL CGeometrySorter::RenderInternal(
 		IZ_UINT nPassNum = pScene->BeginRender(pMesh);
 
 		// Keep loop top.
-		CStdList<IMeshSet>::Item* pItemBegin = pItem;
+		//CStdList<IMeshSet>::Item* pItemBegin = pItem;
+		CStdSet<IMeshSet>::Item* pItemBegin = pItem;
 
 		for (IZ_UINT nPass = 0; nPass < nPassNum; nPass++) {
 			while (pItem != IZ_NULL) {

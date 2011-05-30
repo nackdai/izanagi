@@ -69,7 +69,17 @@ namespace izanagi {
 
 	private:
 		// GeometrySorter用
+#if 0
 		CStdList<IMeshSet>::Item* GetListItem() { return &m_ListItem; }
+#else
+		CStdSet<IMeshSet>::Item* GetListItem() { return &m_ListItem; }
+	public:
+		IZ_BOOL operator>(IMeshSet& rhs)
+		{
+			return m_fZ > rhs.m_fZ;
+		}
+	private:
+#endif
 
 		// TODO
 		void SetZ(IZ_FLOAT z) { m_fZ = z; }
@@ -78,7 +88,11 @@ namespace izanagi {
 	protected:
 		CMaterial* m_pMtrl;
 
+#if 0
 		CStdList<IMeshSet>::Item m_ListItem;
+#else
+		CStdSet<IMeshSet>::Item m_ListItem;
+#endif
 
 		IZ_FLOAT m_fZ;
 	};
