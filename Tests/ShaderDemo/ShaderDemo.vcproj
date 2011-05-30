@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="d3d9.lib d3dx9d.lib dxguid.lib dinput8.lib dxerr9.lib winmm.lib Graph.lib Io.lib Math.lib Std.lib DebugUtil.lib SceneGraph.lib"
+				AdditionalDependencies="d3d9.lib d3dx9d.lib dxguid.lib dinput8.lib dxerr.lib winmm.lib Graph.lib Io.lib Math.lib Std.lib DebugUtil.lib SceneGraph.lib"
 				AdditionalLibraryDirectories=""
 				SubSystem="2"
 				TargetMachine="1"

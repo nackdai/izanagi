@@ -51,12 +51,9 @@ namespace izanagi {
 		void Init(const SCameraParam& sParam);
 
 		// カメラ更新
-		void UpdateCamera();
+		void Update();
 
-#if 0
-		// カメラセット
-		void RenderCamera(CGraphicsDevice* pDevice);
-#endif
+		IZ_BOOL IsUpdated() const { return (!m_IsDirtyW2V && !m_IsDirtyV2C); }
 
 		const SCameraParam& GetParam() const { return m_Param; }
 

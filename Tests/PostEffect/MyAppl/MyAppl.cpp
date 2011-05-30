@@ -177,7 +177,7 @@ IZ_BOOL CMyAppl::Render()
 			izanagi::E_GRAPH_CLEAR_FLAG_ALL,
 			color, 1.0f, 0))
 	{
-		CMyCamera::GetInstance().UpdateCamera();
+		CMyCamera::GetInstance().Update();
 
 		CStateManager::GetInstance().Render();
 

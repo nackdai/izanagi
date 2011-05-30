@@ -45,7 +45,7 @@ void CCamera::Init(const SCameraParam& sParam)
 }
 
 // カメラ更新
-void CCamera::UpdateCamera()
+void CCamera::Update()
 {
 	if (m_IsDirtyW2V) {
 		ComputeW2V();
@@ -61,25 +61,6 @@ void CCamera::UpdateCamera()
 		m_IsDirtyV2C = IZ_FALSE;
 	}
 }
-
-#if 0
-void CCamera::RenderCamera(CGraphicsDevice* pDevice)
-{
-	// うーん・・・
-	IZ_C_ASSERT(sizeof(SMatrix) == sizeof(D3DMATRIX));
-
-	D3D_DEVICE* pDev = pDevice->GetRawInterface();
-
-	// DirectX限定
-	pDev->SetTransform(
-		D3DTS_VIEW,
-		(D3DMATRIX*)&mtxW2V.m);
-
-	pDev->SetTransform(
-		D3DTS_PROJECTION,
-		(D3DMATRIX*)&mtxV2C.m);
-}
-#endif
 
 // World - View
 void CCamera::ComputeW2V()

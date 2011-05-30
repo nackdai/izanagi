@@ -177,8 +177,8 @@ void CStateBasic::Render3D()
 		izanagi::SMatrix mtxL2W;
 		izanagi::SetUnitMatrix(mtxL2W);
 
-		const izanagi::SMatrix& mtxW2C = CMyCamera::GetInstance().GetRawInterface().GetParam().GetParam().mtxW2C;
-		const izanagi::SVector& vecEye = CMyCamera::GetInstance().GetRawInterface().GetParam().GetParam().pos;
+		const izanagi::SMatrix& mtxW2C = CMyCamera::GetInstance().GetRawInterface().GetParam().mtxW2C;
+		const izanagi::SVector& vecEye = CMyCamera::GetInstance().GetRawInterface().GetParam().pos;
 
 		_SetShaderParameter(m_pShader, "g_mL2W", &mtxL2W, sizeof(mtxL2W));
 		_SetShaderParameter(m_pShader, "g_mW2C", &mtxW2C, sizeof(mtxW2C));
@@ -188,6 +188,7 @@ void CStateBasic::Render3D()
 	m_GeomSorter->BeginRegister();
 	{
 		m_GeomSorter->Register(
+			CMyCamera::GetInstance().GetRawInterface(),
 			0.0f,
 			m_pMdl,
 			izanagi::E_SCENE_REGISTER_TYPE_NORMAL);
