@@ -31,10 +31,17 @@ namespace izanagi {
 
 			void Clear() { m_List.Clear(); }
 
+#if 0
 			CStdList<IMeshSet>& GetList() { return m_List; }
 
 		private:
 			CStdList<IMeshSet> m_List;
+#else
+			CStdSet<IMeshSet>& GetList() { return m_List; }
+
+		private:
+			CStdSet<IMeshSet> m_List;
+#endif
 		};
 
 		enum ERenderOrder {
@@ -81,6 +88,7 @@ namespace izanagi {
 		 * モデル登録
 		 */
 		IZ_BOOL Register(
+			const CCamera& camera,
 			IZ_FLOAT z,
 			IModel* pMdl,
 			E_SCENE_REGISTER_TYPE type);
