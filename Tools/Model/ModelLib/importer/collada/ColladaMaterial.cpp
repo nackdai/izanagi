@@ -242,10 +242,14 @@ IZ_BOOL CColladaMaterial::ReadEffect(SMaterial& sMtrl, domEffect* effect)
 					std::vector<IZ_FLOAT> values;
 
 					if (strcmp(value->getElementName(), "texture") == 0) {
+						// 参照名を取得
 						std::string texName;
 						VRETURN(_GetTextureName(texName, prof, value));
+
 						if (!texName.empty()) {
-							sEffect.texName.push_back(texName);
+							// ファイル名を取得
+							std::string& imgName = m_Images[texName.c_str()];
+							sEffect.texName.push_back(imgName);
 						}
 					}
 					else {

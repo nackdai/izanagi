@@ -140,7 +140,7 @@ void CColladaImporter::BeginMesh(IZ_UINT nIdx)
 {
 	domMesh* pMesh = GetMesh();
 
-	CColladaGeometry::GetInstance().Begin(pMesh, nIdx);
+	CColladaGeometry::GetInstance().Begin(m_pDAE, pMesh, nIdx);
 }
 
 void CColladaImporter::EndMesh()
@@ -215,11 +215,7 @@ void CColladaImporter::GetMaterialForMesh(
 	IZ_UINT nIdx,
 	izanagi::S_MSH_MTRL& sMtrl)
 {
-	// TODO
-	IZ_ASSERT(IZ_FALSE);
-
-	sMtrl.name.SetString("dummy");
-	sMtrl.nameKey = sMtrl.name.GetKeyValue();
+	CColladaGeometry::GetInstance().GetMaterialForMesh(nIdx, sMtrl);
 }
 
 //////////////////////////////////

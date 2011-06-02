@@ -55,34 +55,47 @@ public:
 	void Clear();
 
 	void Begin(
+		DAE* pDAE,
 		domMesh* pMesh,
 		IZ_UINT nMeshIdx);
 
 	void End();
 
+	// Return mesh count.
 	IZ_UINT GetMeshNum(DAE* pDAE);
 
+	// Get informaitons of skin.
 	void GetSkinList(
 		DAE* pDAE,
 		std::vector<SSkin>& tvSkinList);
 
+	// Returns count of triangles in specified mesh.
 	IZ_UINT GetTriangles(
 		domMesh* pMesh,
 		std::vector<STri>& tvTriList);
 
+	// Returns index of skin that influeces specified vertex.
 	IZ_UINT GetSkinIdx(
 		domMesh* pMesh,
 		IZ_UINT nVtxIdx);
 
+	// Returns size per vertex.
 	IZ_UINT GetVtxSize();
 
+	// Returns vertex format.
 	IZ_UINT GetVtxFmt();
 
+	// Get vertex paremter by specifed type.
 	IZ_BOOL GetVertex(
 		domMesh* pMesh,
 		IZ_UINT nIdx,
 		izanagi::SVector& vec,
 		izanagi::E_MSH_VTX_FMT_TYPE type);
+
+	// メッシュにバインドされるマテリアル情報を取得
+	IZ_BOOL GetMaterialForMesh(
+		IZ_UINT nIdx,
+		izanagi::S_MSH_MTRL& sMtrl);
 
 private:
 	template <typename _T>
@@ -108,15 +121,24 @@ private:
 		domMesh* pMesh,
 		_T pPrim);
 
+	// Return index of skin that influeces specified vertex in specified primitive.
 	template <typename _T>
 	IZ_UINT GetSkinIdx(
 		_T pPrim,
 		IZ_UINT nVtxIdx);
 
+	// メッシュのプリミティブタイプを取得
 	E_PRIM_TYPE GetPrimType(
 		domMesh* pMesh,
 		IZ_UINT nIdx,
 		IZ_UINT* pMeshSubsetPos);
+
+	// メッシュにバインドされるマテリアルを読み込み
+	template <typename _T>
+	void ReadMeshMtrl(
+		DAE* pDAE,
+		IZ_UINT nIdx,
+		_T pPrim);
 
 private:
 	E_PRIM_TYPE m_PrimType;
@@ -126,6 +148,8 @@ private:
 
 	std::vector<SVtx> m_VtxList;
 	std::set<SVtxFmt> m_VtxFmtList;
+
+	std::map<IZ_UINT, std::string> m_Mtrl;
 };
 
 #endif	// #if !defined(__MODEL_LIB_COLLADA_GEOMETRY_H__)

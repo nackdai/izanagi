@@ -207,7 +207,7 @@ namespace izanagi {
 
 #if 0
 	// ベクトルにクオータニオンを適用する
-	extern void ApplyQuat(SVector& dst, const SVector& src, const SQuat& q);
+	void ApplyQuat(SVector& dst, const SVector& src, const SQuat& q);
 #endif
 
 	// 球面線形補間
@@ -229,21 +229,21 @@ namespace izanagi {
 	}
 
 	// 角度と軸からクオータニオンを設定する
-	extern void SetQuatFromRadAxis(SQuat& quat, IZ_FLOAT rad, IZ_FLOAT fAxisX, IZ_FLOAT fAxisY, IZ_FLOAT fAxisZ);
-	extern void SetQuatFromRadAxis(SQuat& quat, IZ_FLOAT rad, const SVector& vAxis);
+	void SetQuatFromRadAxis(SQuat& quat, IZ_FLOAT rad, IZ_FLOAT fAxisX, IZ_FLOAT fAxisY, IZ_FLOAT fAxisZ);
+	void SetQuatFromRadAxis(SQuat& quat, IZ_FLOAT rad, const SVector& vAxis);
 
 	// クオータニオンから行列を計算する
-	extern void MatrixFromQuat(SMatrix& mtx, const SQuat& quat);
+	void MatrixFromQuat(SMatrix& mtx, const SQuat& quat);
 
 	// 行列からクオータニオンを計算する
-	extern void QuatFromMatrix(SQuat& quat, const SMatrix& mtx);
+	void QuatFromMatrix(SQuat& quat, const SMatrix& mtx);
 
 	// オイラー角からクオータニオンを計算する
-	extern void QuatFromEuler(SQuat& quat, IZ_FLOAT fYaw, IZ_FLOAT fPitch, IZ_FLOAT fRoll);
+	void QuatFromEuler(SQuat& quat, IZ_FLOAT fYaw, IZ_FLOAT fPitch, IZ_FLOAT fRoll);
 
 	// 二つのベクトルv0,v1が与えられたときに
 	// q  * v0 == v1 となるクオータニオンqを計算する
-	extern void RotateionArc(SQuat& quat, const SVector& from, const SVector& to);
+	void RotateionArc(SQuat& quat, const SVector& from, const SVector& to);
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI__MATH_QUATERNION_H__)

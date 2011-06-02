@@ -114,7 +114,7 @@ CGeometrySorter::~CGeometrySorter()
 // モデル登録
 IZ_BOOL CGeometrySorter::Register(
 	const CCamera& camera,
-	IZ_FLOAT z,
+	const SVector& pos,
 	IModel* pMdl,
 	E_SCENE_REGISTER_TYPE type)
 {
@@ -122,18 +122,25 @@ IZ_BOOL CGeometrySorter::Register(
 	VRETURN(camera.IsUpdated());
 
 	const SCameraParam& cameraParam = camera.GetParam();
-#if 1
+#if 0
 	IZ_FLOAT w = cameraParam.mtxW2C.m[2][3] * z + cameraParam.mtxW2C.m[3][3];
 	IZ_FLOAT normalizedZ = cameraParam.mtxW2C.m[2][2] * z + cameraParam.mtxW2C.m[3][2];
 #else
 	SVector v;
-	v.Set(0.0f, 0.0f, z);
-	ApplyMatrix(v, v, cameraParam.mtxW2C);
+	ApplyMatrix(v, pos, cameraParam.mtxW2C);
 
 	IZ_FLOAT w = v.w;
 	IZ_FLOAT normalizedZ = v.z;
 #endif
+
+#if 0
 	normalizedZ /= w;
+#else
+	// ZLevelが偏らないようにW値を利用してみる
+	IZ_FLOAT n = camera.GetParam().cameraNear;
+	IZ_FLOAT f = camera.GetParam().cameraFar;
+	normalizedZ = (w - n) / (f - n);
+#endif
 
 	// NOTE
 	// DirectX ->  0 <= z/w <= 1
@@ -142,7 +149,7 @@ IZ_BOOL CGeometrySorter::Register(
 	normalizedZ = (normalizedZ + 1.0f) * 0.5f;
 
 	IZ_UINT level = static_cast<IZ_UINT>(normalizedZ * m_nZLevvel);
-	return RegisterInternal(z, level, pMdl, type);
+	return RegisterInternal(normalizedZ, level, pMdl, type);
 }
 
 // 描画

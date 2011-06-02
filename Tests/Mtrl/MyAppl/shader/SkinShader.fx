@@ -1,7 +1,7 @@
 // Phong Shader
 
 #define USE_TEX		(1)
-#define USE_INTERNAL_PARAM	(0)
+#define USE_INTERNAL_PARAM	(1)
 
 struct SVSInput {
 	float4 vPos		: POSITION;
@@ -146,7 +146,7 @@ float4 mainPS(SPSInput In) : COLOR
 #endif
 
 #if USE_TEX
-#if 0
+#if 1
 	// For duck, tiny
 	vOut *= tex2D(sTex, float2(In.vUV.x, 1.0f - In.vUV.y));
 #else

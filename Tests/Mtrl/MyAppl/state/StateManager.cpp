@@ -1,6 +1,7 @@
 ﻿#include <stdafx.h>
 #include "StateManager.h"
-#include "StateBasic.h"
+#include "StateBasicGirl.h"
+#include "StateBasicBoy.h"
 
 CStateManager CStateManager::s_cInstance;
 
@@ -15,7 +16,8 @@ CStateManager::CStateManager()
 	
 	// タスクテーブル
 	{
-		_STATE(BASIC, CStateBasic)
+		//_STATE(BASIC, CStateBasicGirl)
+		_STATE(BASIC, CStateBasicBoy)
 	}
 	
 	m_nNextState = STATE_NUM;
