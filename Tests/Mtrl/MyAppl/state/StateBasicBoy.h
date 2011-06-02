@@ -1,5 +1,5 @@
-﻿#if !defined(__STATE_BASIC_H__)
-#define __STATE_BASIC_H__
+﻿#if !defined(__STATE_BASIC_BOY_H__)
+#define __STATE_BASIC_BOY_H__
 
 #include "izDefs.h"
 #include "izStd.h"
@@ -8,26 +8,10 @@
 #include "izDebugUtil.h"
 #include "izShader.h"
 
-//////////////////////////////////////////////////////
-
-class CShaderTest : public izanagi::CShaderBasic {
-	friend class izanagi::CShader;
-
-protected:
-	CShaderTest() {}
-	~CShaderTest() {}
-
+class CStateBasicBoy : public izanagi::CGameState {
 public:
-	izanagi::IZ_SHADER_HANDLE GetParameterByName(IZ_PCSTR pszName);
-	izanagi::IZ_SHADER_HANDLE GetParameterBySemantic(IZ_PCSTR pszSemantic);
-};
-
-//////////////////////////////////////////////////////
-
-class CStateBasic : public izanagi::CGameState {
-public:
-	CStateBasic();
-	~CStateBasic();
+	CStateBasicBoy();
+	~CStateBasicBoy();
 
 public:
 	IZ_BOOL Create();
@@ -50,15 +34,15 @@ protected:
 
 	izanagi::CDebugMeshAxis* m_pAxis;
 
-	izanagi::CTexture* m_pTex[2];
+	izanagi::CTexture* m_pTex;
 
 	izanagi::CModel* m_pMdl;
 	izanagi::CMesh* m_pMsh;
 	izanagi::CSkeleton* m_pSkl;
-	izanagi::CMaterial* m_pMtrl[2];
+	izanagi::CMaterial* m_pMtrl[4];
 
 	izanagi::CGeometrySorter* m_GeomSorter;
 	izanagi::CScene* m_Scene;
 };
 
-#endif	// #if !defined(__STATE_BASIC_H__)
+#endif	// #if !defined(__STATE_BASIC_BOY_H__)

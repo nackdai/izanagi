@@ -89,7 +89,7 @@ namespace izanagi {
 		 */
 		IZ_BOOL Register(
 			const CCamera& camera,
-			IZ_FLOAT z,
+			const SVector& pos,
 			IModel* pMdl,
 			E_SCENE_REGISTER_TYPE type);
 

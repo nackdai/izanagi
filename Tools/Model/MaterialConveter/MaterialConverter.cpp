@@ -63,15 +63,18 @@ int _tmain(int argc, _TCHAR* argv[])
 #endif
 #endif
 
-	CMtrlExporter::GetInstance().Export(
-		"00_0.mtrl",
-		pImporter,
-		0);
+	char tmp[128];
 
-	CMtrlExporter::GetInstance().Export(
-		"00_1.mtrl",
-		pImporter,
-		1);
+	IZ_UINT nMtrlNum = pImporter->GetMaterialNum();
+
+	for (IZ_UINT i = 0; i < nMtrlNum; i++) {
+		sprintf_s(tmp, sizeof(tmp), "Seymour_%d.mtrl\0", i);
+	
+		CMtrlExporter::GetInstance().Export(
+			tmp,
+			pImporter,
+			i);
+	}
 
 	return 0;
 }

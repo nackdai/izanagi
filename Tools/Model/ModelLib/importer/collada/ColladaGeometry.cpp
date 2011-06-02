@@ -61,6 +61,7 @@ void CColladaGeometry::Clear()
 }
 
 void CColladaGeometry::Begin(
+	DAE* pDAE,
 	domMesh* pMesh,
 	IZ_UINT nMeshIdx)
 {
@@ -77,12 +78,14 @@ void CColladaGeometry::Begin(
 		{
 			domTrianglesRef triangles = pMesh->getTriangles_array().get(m_nMeshSubsetPos);
 			ReadVtxFmt(pMesh, triangles);
+			ReadMeshMtrl(pDAE, nMeshIdx, triangles);
 		}
 		break;
 	case E_PRIM_TYPE_POLYLIST:
 		{
 			domPolylistRef polylist = pMesh->getPolylist_array().get(m_nMeshSubsetPos);
 			ReadVtxFmt(pMesh, polylist);
+			ReadMeshMtrl(pDAE, nMeshIdx, polylist);
 		}
 		break;
 	case E_PRIM_TYPE_POLYGONS:
@@ -144,6 +147,10 @@ IZ_UINT CColladaGeometry::GetMeshNum(DAE* pDAE)
 namespace {
 	domSkinRef _GetSkin(DAE* pDAE)
 	{
+		// NOTE
+		// 複数のモデルが混在するシーンは対応しない
+		// DOMツリーをたどれなくはないが、相当面倒くさいので・・・
+
 		domVisual_scene* pScene = IZ_NULL;
 		pDAE->getDatabase()->getElement(
 			(daeElement**)&pScene,
@@ -510,6 +517,22 @@ IZ_BOOL CColladaGeometry::GetVertex(
 	return IZ_TRUE;
 }
 
+// メッシュにバインドされるマテリアル情報を取得
+IZ_BOOL CColladaGeometry::GetMaterialForMesh(
+	IZ_UINT nIdx,
+	izanagi::S_MSH_MTRL& sMtrl)
+{
+	IZ_BOOL ret = IZ_FALSE;
+
+	if (m_Mtrl.find(nIdx) != m_Mtrl.end()) {
+		const std::string& mtrlName = m_Mtrl.find(nIdx)->second;
+		sMtrl.name.SetString(mtrlName.c_str());
+		sMtrl.nameKey = sMtrl.name.GetKeyValue();
+	}
+
+	return ret;
+}
+
 namespace {
 	template <typename _T>
 	inline IZ_UINT _GetTriNumFromPrim(
@@ -727,7 +750,7 @@ void CColladaGeometry::ReadVtxFmt(
 		izanagi::E_MSH_VTX_FMT_TYPE type;
 	} tblInput[] = {
 		"POSITION",     izanagi::E_MSH_VTX_FMT_TYPE_POS,
-		"NORMAL",      izanagi::E_MSH_VTX_FMT_TYPE_NORMAL,
+		"NORMAL",       izanagi::E_MSH_VTX_FMT_TYPE_NORMAL,
 		"COLOR",        izanagi::E_MSH_VTX_FMT_TYPE_COLOR,
 		"TEXCOORD",     izanagi::E_MSH_VTX_FMT_TYPE_UV,
 		"TANGENT",      izanagi::E_MSH_VTX_FMT_TYPE_TANGENT,
@@ -783,7 +806,7 @@ IZ_UINT CColladaGeometry::GetSkinIdx(
 	return ret;
 }
 
-
+// メッシュのプリミティブタイプを取得
 CColladaGeometry::E_PRIM_TYPE CColladaGeometry::GetPrimType(
 	domMesh* pMesh,
 	IZ_UINT nIdx,
@@ -800,6 +823,10 @@ CColladaGeometry::E_PRIM_TYPE CColladaGeometry::GetPrimType(
 
 	IZ_UINT nPos = nIdx;
 
+	// NOTE
+	// 力技だがどのプリミティブの範囲に入るかを探索して
+	// ヒットしたプリミティブのタイプを返す
+
 	for (IZ_UINT i = 0; i < E_PRIM_TYPE_NUM; i++) {
 		if (nPos < tblMeshSubsetCnt[i]) {
 			if (pMeshSubsetPos != IZ_NULL) {
@@ -814,4 +841,60 @@ CColladaGeometry::E_PRIM_TYPE CColladaGeometry::GetPrimType(
 
 	IZ_ASSERT(IZ_FALSE);
 	return E_PRIM_TYPE_TRIANGLES;
+}
+
+// メッシュにバインドされるマテリアルを読み込み
+template <typename _T>
+void CColladaGeometry::ReadMeshMtrl(
+	DAE* pDAE,
+	IZ_UINT nIdx,
+	_T pPrim)
+{
+	domVisual_scene* pScene = IZ_NULL;
+	pDAE->getDatabase()->getElement(
+		(daeElement**)&pScene,
+		0,
+		IZ_NULL,
+		"visual_scene");
+
+	size_t nNodeCnt = pScene->getNode_array().getCount();
+
+	std::map<std::string, std::string> mapBindMtrl;
+
+	// Search all nodes.
+	for (size_t i = 0; i < nNodeCnt; i++) {
+		domNodeRef pNode = pScene->getNode_array().get(i);
+
+		// If a node has controller, it is skin node.
+		if (pNode->getInstance_controller_array().getCount() > 0) {
+			// I think that skin must have "a" controller.
+			IZ_ASSERT(pNode->getInstance_controller_array().getCount() == 1);
+
+			// Get controller.
+			domInstance_controller* pInstanceController = pNode->getInstance_controller_array().get(0);
+			
+			// Get <bind_material>
+			domBind_materialRef bindMaterial = pInstanceController->getBind_material();
+			if (bindMaterial) {
+				// Get <technique_common>
+				domBind_material::domTechnique_common *techCommon = bindMaterial->getTechnique_common();
+				if (techCommon) {
+					// Get <instance_material>
+					domInstance_material_Array &instMtrlArray = techCommon->getInstance_material_array();
+					for(size_t n = 0; n < instMtrlArray.getCount(); n++) {
+						domInstance_materialRef mtrl = instMtrlArray[n];
+
+						mapBindMtrl[mtrl->getSymbol()] = mtrl->getTarget().id();
+					}
+				}
+			}
+		}
+	}
+
+	const std::string& bindMtrlName = pPrim->getMaterial();
+	
+	if (mapBindMtrl.find(bindMtrlName) != mapBindMtrl.end()) {
+		const std::string& mtrlName = mapBindMtrl.find(bindMtrlName)->second;
+		m_Mtrl.insert(std::pair<IZ_UINT, std::string>(nIdx, mtrlName));
+	}
 }

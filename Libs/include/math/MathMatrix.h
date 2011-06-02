@@ -30,7 +30,7 @@ namespace izanagi {
 
 #if 0
 	// 単位マトリクスを参照する
-	extern const SMatrix& GetUnitMatrix();
+	const SMatrix& GetUnitMatrix();
 #else
 	// 単位マトリクスを参照する
 	inline const SMatrix& GetUnitMatrix()
@@ -181,13 +181,13 @@ namespace izanagi {
 	}
 
 	// X軸を回転軸にして回転するマトリクスを取得
-	extern void GetRotMatrixX(SMatrix& dst, IZ_FLOAT fTheta);
+	void GetRotMatrixX(SMatrix& dst, IZ_FLOAT fTheta);
 
 	// Y軸を回転軸にして回転するマトリクスを取得
-	extern void GetRotMatrixY(SMatrix& dst, IZ_FLOAT fTheta);
+	void GetRotMatrixY(SMatrix& dst, IZ_FLOAT fTheta);
 
 	// Z軸を回転軸にして回転するマトリクスを取得
-	extern void GetRotMatrixZ(SMatrix& dst, IZ_FLOAT fTheta);
+	void GetRotMatrixZ(SMatrix& dst, IZ_FLOAT fTheta);
 
 	// X軸に対する回転を行なう
 	inline void RotMatrixX(SMatrix& dst, const SMatrix& src, IZ_FLOAT fTheta)
@@ -214,7 +214,7 @@ namespace izanagi {
 	}
 
 	// オフセットを指定したマトリクスを取得
-	extern void GetTransMatrix(SMatrix& dst, const SVector& tv);
+	void GetTransMatrix(SMatrix& dst, const SVector& tv);
 
 	// 平行移動する
 	inline void TransMatrix(SMatrix& dst, const SMatrix& src, const SVector& tv)
@@ -292,11 +292,11 @@ namespace izanagi {
 	}
 
 	// 一般マトリクスの逆マトリクスを求める
-	extern void InverseMatrix(SMatrix& dst, const SMatrix& src);
+	void InverseMatrix(SMatrix& dst, const SMatrix& src);
 
 	// ベクトルから回転マトリクスを求める
-	extern void GetRotMatrixFromVector(SMatrix& mtx, const SVector& vec);
-	extern void GetRotMatrixFromVector(SMatrix& mtx, const SVector& vec, const SVector& up);
+	void GetRotMatrixFromVector(SMatrix& mtx, const SVector& vec);
+	void GetRotMatrixFromVector(SMatrix& mtx, const SVector& vec, const SVector& up);
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI__MATH_MATRIX_H__)

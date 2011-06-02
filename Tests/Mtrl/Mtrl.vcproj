@@ -297,11 +297,23 @@
 				Name="state"
 				>
 				<File
-					RelativePath=".\MyAppl\state\StateBasic.cpp"
+					RelativePath=".\MyAppl\state\Common.h"
 					>
 				</File>
 				<File
-					RelativePath=".\MyAppl\state\StateBasic.h"
+					RelativePath=".\MyAppl\state\StateBasicBoy.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\MyAppl\state\StateBasicBoy.h"
+					>
+				</File>
+				<File
+					RelativePath=".\MyAppl\state\StateBasicGirl.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\MyAppl\state\StateBasicGirl.h"
 					>
 				</File>
 				<File

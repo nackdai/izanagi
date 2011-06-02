@@ -1,116 +1,10 @@
 ﻿#include <stdafx.h>
-#include "StateBasic.h"
+#include "StateBasicBoy.h"
 #include "MySystem.h"
 #include "MyCamera.h"
-
-///////////////////////////////////////////////
-
-class CTestMdlRenderHandler : public izanagi::IMshRenderHandler {
-	friend class izanagi::IMshRenderHandler;
-
-private:
-	CTestMdlRenderHandler()
-	{
-		m_pShader = IZ_NULL;
-	}
-
-	~CTestMdlRenderHandler()
-	{
-		SAFE_RELEASE(m_pShader);
-	}
-
-public:
-	void BeginRenderMesh();
-	void EndRenderMesh();
-
-	void SetJointMatrix(
-		IZ_UINT nIdx,
-		const izanagi::SMatrix& mtx);
-
-	void CommitChanges();
-
-public:
-	void SetShader(izanagi::CShaderBasic* pShader)
-	{
-		SAFE_REPLACE(m_pShader, pShader);
-	}
-
-private:
-	izanagi::CShaderBasic* m_pShader;
-
-	IZ_UINT m_nCnt;
-	izanagi::SMatrix m_Mtx[4];
-
-	izanagi::IZ_SHADER_HANDLE m_Handle;
-};
-
-void CTestMdlRenderHandler::BeginRenderMesh()
-{
-	m_nCnt = 0;
-
-	izanagi::SetUnitMatrix(m_Mtx[0]);
-	izanagi::SetUnitMatrix(m_Mtx[1]);
-	izanagi::SetUnitMatrix(m_Mtx[2]);
-	izanagi::SetUnitMatrix(m_Mtx[3]);
-
-	m_Handle = 0;
-}
-
-void CTestMdlRenderHandler::EndRenderMesh()
-{
-}
-
-void CTestMdlRenderHandler::SetJointMatrix(
-	IZ_UINT nIdx,
-	const izanagi::SMatrix& mtx)
-{
-	izanagi::CopyMatrix(m_Mtx[m_nCnt], mtx);
-	m_nCnt++;
-}
-
-void CTestMdlRenderHandler::CommitChanges()
-{
-	if (m_Handle == 0) {
-		m_Handle = m_pShader->GetParameterByName("vJointMatrix");
-		IZ_ASSERT(m_Handle > 0);
-	}
-
-	m_pShader->SetParamValue(
-		m_Handle,
-		m_Mtx,
-		sizeof(izanagi::SMatrix) * m_nCnt);
-
-	m_pShader->CommitChanges();
-}
+#include "Common.h"
 
 static CTestMdlRenderHandler* s_pMdlRenderHandler = IZ_NULL;
-
-//////////////////////////////////////////////////////
-
-#define STR_CMP(str0, str1)	(memcmp(str0, str1, strlen(str1)) == 0)
-
-izanagi::IZ_SHADER_HANDLE CShaderTest::GetParameterByName(IZ_PCSTR pszName)
-{
-	if (STR_CMP(pszName, "diffuse")) {
-		return GetParameterByName("g_vMtrlDiffuse");
-	}
-	else if (STR_CMP(pszName, "specular")) {
-		return GetParameterByName("g_vMtrlSpecular");
-	}
-	else if (STR_CMP(pszName, "emission")) {
-		return GetParameterByName("g_vMtrlAmbient");
-	}
-
-	return 0;
-}
-
-izanagi::IZ_SHADER_HANDLE CShaderTest::GetParameterBySemantic(IZ_PCSTR pszSemantic)
-{
-	// Nothing is done.
-	return 0;
-}
-
-//////////////////////////////////////////////////////
 
 namespace {
 	inline IZ_BOOL _SetShaderParameter(
@@ -132,7 +26,7 @@ namespace {
 	}
 }	// namespace
 
-CStateBasic::CStateBasic()
+CStateBasicBoy::CStateBasicBoy()
 {
 	m_pShader = IZ_NULL;
 
@@ -140,22 +34,21 @@ CStateBasic::CStateBasic()
 	m_pMsh = IZ_NULL;
 	m_pSkl = IZ_NULL;
 
-	m_pTex[0] = IZ_NULL;
-	m_pTex[1] = IZ_NULL;
+	m_pTex = IZ_NULL;
 }
 
-CStateBasic::~CStateBasic()
+CStateBasicBoy::~CStateBasicBoy()
 {
 }
 
-IZ_BOOL CStateBasic::Create()
+IZ_BOOL CStateBasicBoy::Create()
 {
 	return IZ_TRUE;
 }
 
 #define _Print CMySystem::GetInstance().GetDebugFont()->DBPrint
 
-IZ_BOOL CStateBasic::Render()
+IZ_BOOL CStateBasicBoy::Render()
 {
 	Render3D();
 	Render2D();
@@ -163,7 +56,7 @@ IZ_BOOL CStateBasic::Render()
 	return IZ_TRUE;
 }
 
-void CStateBasic::Render3D()
+void CStateBasicBoy::Render3D()
 {
 	izanagi::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
 
@@ -187,9 +80,12 @@ void CStateBasic::Render3D()
 
 	m_GeomSorter->BeginRegister();
 	{
+		izanagi::SVector pos;
+		pos.Set(0.0f, 0.0f, 0.0f);
+
 		m_GeomSorter->Register(
 			CMyCamera::GetInstance().GetRawInterface(),
-			0.0f,
+			pos,
 			m_pMdl,
 			izanagi::E_SCENE_REGISTER_TYPE_NORMAL);
 	}
@@ -201,7 +97,7 @@ void CStateBasic::Render3D()
 		s_pMdlRenderHandler);
 }
 
-void CStateBasic::Render2D()
+void CStateBasicBoy::Render2D()
 {
 	if (CMySystem::GetInstance().GetGraphicsDevice()->Begin2D()) {
 		CMySystem::GetInstance().GetDebugFont()->Begin();
@@ -240,19 +136,19 @@ void CStateBasic::Render2D()
 
 static IZ_FLOAT fElapsed = 0.0f;
 
-IZ_BOOL CStateBasic::Update()
+IZ_BOOL CStateBasicBoy::Update()
 {
 	m_pMdl->Update();
 
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateBasic::Destroy()
+IZ_BOOL CStateBasicBoy::Destroy()
 {
 	return Leave();
 }
 
-IZ_BOOL CStateBasic::Enter()
+IZ_BOOL CStateBasicBoy::Enter()
 {
 	izanagi::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
 	izanagi::IMemoryAllocator* pAllocator = CMySystem::GetInstance().GetMemoryAllocator();
@@ -260,7 +156,7 @@ IZ_BOOL CStateBasic::Enter()
 
 	// Mesh
 	{
-		VRETURN(input.Open("data/00.msh"));
+		VRETURN(input.Open("data/Seymour.msh"));
 
 		m_pMsh = izanagi::CMesh::CreateMesh(
 					pAllocator,
@@ -272,23 +168,22 @@ IZ_BOOL CStateBasic::Enter()
 
 	// Skeleton
 	{
-		VRETURN(input.Open("data/00.skl"));
+		VRETURN(input.Open("data/Seymour.skl"));
 
 		m_pSkl = izanagi::CSkeleton::CreateSkeleton(pAllocator, &input);
 		IZ_ASSERT(m_pSkl != IZ_NULL);
 		input.Finalize();
 	}
 
-	// Material
-	{
-		VRETURN(input.Open("data/00_0.mtrl"));
-		m_pMtrl[0] = izanagi::CMaterial::CreateMaterial(pAllocator, &input);
-		IZ_ASSERT(m_pMtrl[0] != IZ_NULL);
-		input.Finalize();
+	static char tmp[128];
 
-		VRETURN(input.Open("data/00_1.mtrl"));
-		m_pMtrl[1] = izanagi::CMaterial::CreateMaterial(pAllocator, &input);
-		IZ_ASSERT(m_pMtrl[1] != IZ_NULL);
+	// Material
+	for (IZ_UINT i = 0; i < 4; i++) {
+		sprintf_s(tmp, sizeof(tmp), "data/Seymour_%d.mtrl\0", i);
+
+		VRETURN(input.Open(tmp));
+		m_pMtrl[i] = izanagi::CMaterial::CreateMaterial(pAllocator, &input);
+		IZ_ASSERT(m_pMtrl[i] != IZ_NULL);
 		input.Finalize();
 	}
 
@@ -296,7 +191,7 @@ IZ_BOOL CStateBasic::Enter()
 	{
 		VRETURN(input.Open("data/SkinShader.shd"));
 
-		m_pShader = izanagi::CShaderBasic::CreateShader<izanagi::CShaderBasic>(
+		m_pShader = izanagi::CShaderBasic::CreateShader<CShaderTest>(
 						pAllocator,
 						pDevice,
 						&input);
@@ -389,11 +284,8 @@ IZ_BOOL CStateBasic::Enter()
 	IZ_ASSERT(m_pAxis != IZ_NULL);
 
 	{
-		m_pTex[0] = pDevice->CreateTextureFromFile("data/1P_C.dds", izanagi::E_GRAPH_PIXEL_FMT_RGBA8);
-		IZ_ASSERT(m_pTex[0] != IZ_NULL);
-
-		m_pTex[1] = pDevice->CreateTextureFromFile("data/Face_C.dds", izanagi::E_GRAPH_PIXEL_FMT_RGBA8);
-		IZ_ASSERT(m_pTex[1] != IZ_NULL);
+		m_pTex = pDevice->CreateTextureFromFile("data/boy_10.dds", izanagi::E_GRAPH_PIXEL_FMT_RGBA8);
+		IZ_ASSERT(m_pTex != IZ_NULL);
 	}
 
 	input.Finalize();
@@ -401,16 +293,13 @@ IZ_BOOL CStateBasic::Enter()
 	{
 		m_pShader->SetName("DefaultShader");
 
-		m_pMtrl[0]->SetName("Material_0");
-		m_pMtrl[0]->SetTexture("Face_C.dds", m_pTex[1]);
-		m_pMtrl[0]->SetShader(m_pShader);
+		for (IZ_UINT i = 0; i < 4; i++) {
+			IZ_PCSTR name = m_pMtrl[i]->GetName();
+			m_pMtrl[i]->SetTexture("boy_10.tga", m_pTex);
+			m_pMtrl[i]->SetShader(m_pShader);
 
-		m_pMtrl[1]->SetName("Material_1");
-		m_pMtrl[1]->SetTexture("1P_C.dds", m_pTex[0]);
-		m_pMtrl[1]->SetShader(m_pShader);
-
-		m_pMdl->GetMesh()->SetMaterial(0, m_pMtrl[0]);
-		m_pMdl->GetMesh()->SetMaterial(0, m_pMtrl[1]);
+			m_pMdl->GetMesh()->SetMaterial(0, m_pMtrl[i]);
+		}
 	}
 
 	m_GeomSorter = izanagi::CGeometrySorter::CreateGeometrySorter(pAllocator, 4);
@@ -422,17 +311,18 @@ IZ_BOOL CStateBasic::Enter()
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateBasic::Leave()
+IZ_BOOL CStateBasicBoy::Leave()
 {
 	SAFE_RELEASE(m_pShader);
 	SAFE_RELEASE(m_pMdl);
 	SAFE_RELEASE(m_pMsh);
 	SAFE_RELEASE(m_pSkl);
 	SAFE_RELEASE(m_pAxis);
-	SAFE_RELEASE(m_pTex[0]);
-	SAFE_RELEASE(m_pTex[1]);
-	SAFE_RELEASE(m_pMtrl[0]);
-	SAFE_RELEASE(m_pMtrl[1]);
+	SAFE_RELEASE(m_pTex);
+
+	for (IZ_UINT i = 0; i < 4; i++) {
+		SAFE_RELEASE(m_pMtrl[i]);
+	}
 
 	SAFE_RELEASE(s_pMdlRenderHandler);
 
@@ -442,17 +332,17 @@ IZ_BOOL CStateBasic::Leave()
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateBasic::OnKeyDown(IZ_UINT nChar, IZ_UINT nRepCnt, IZ_UINT nFlags)
+IZ_BOOL CStateBasicBoy::OnKeyDown(IZ_UINT nChar, IZ_UINT nRepCnt, IZ_UINT nFlags)
 {
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateBasic::OnMouseMove(IZ_UINT nFlags, IZ_INT x, IZ_INT y)
+IZ_BOOL CStateBasicBoy::OnMouseMove(IZ_UINT nFlags, IZ_INT x, IZ_INT y)
 {
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateBasic::OnMouseWheel(IZ_UINT nFlags, IZ_SHORT zDelta, IZ_INT x, IZ_INT y)
+IZ_BOOL CStateBasicBoy::OnMouseWheel(IZ_UINT nFlags, IZ_SHORT zDelta, IZ_INT x, IZ_INT y)
 {
 	return IZ_TRUE;
 }
