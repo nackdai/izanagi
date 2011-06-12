@@ -55,7 +55,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="d3d9.lib d3dx9d.lib dxerr9.lib"
+				AdditionalDependencies="d3d9.lib d3dx9d.lib"
 				OutputFile="$(SolutionDir)\tools\$(ConfigurationName)\$(ProjectName).exe"
 				LinkIncremental="2"
 				SubSystem="1"
