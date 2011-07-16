@@ -225,10 +225,10 @@ void CDebugMeshTorus::ComputeVtx(
 
 	// 位置
 	if (IsPos(flag)) {
-		pVtx->pos.v[0] = vPos.x;
-		pVtx->pos.v[1] = vPos.y;
-		pVtx->pos.v[2] = vPos.z;
-		pVtx->pos.v[3] = 1.0f;
+		pVtx->pos.x = vPos.x;
+		pVtx->pos.y = vPos.y;
+		pVtx->pos.z = vPos.z;
+		pVtx->pos.w = 1.0f;
 	}
 
 	// 法線
@@ -239,12 +239,12 @@ void CDebugMeshTorus::ComputeVtx(
 			vPos.y - vCenter.y,
 			vPos.z - vCenter.z);
 
-		NormalizeVector(vNml, vNml);
+		SVector::Normalize(vNml, vNml);
 
-		pVtx->nml.v[0] = vNml.x;
-		pVtx->nml.v[1] = vNml.y;
-		pVtx->nml.v[2] = vNml.z;
-		pVtx->nml.v[3] = 0.0f;
+		pVtx->nml.x = vNml.x;
+		pVtx->nml.y = vNml.y;
+		pVtx->nml.z = vNml.z;
+		pVtx->nml.w = 0.0f;
 	}
 
 	// 頂点カラー

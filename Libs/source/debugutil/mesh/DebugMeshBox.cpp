@@ -166,18 +166,18 @@ IZ_BOOL CDebugMeshBox::SetData(
 			if (IsPos(flag)) {
 				IZ_UINT idx = PRIM[i][n];
 
-				pVtx->pos.v[0] = fWidth * POS[idx][0];
-				pVtx->pos.v[1] = fHeight * POS[idx][1];
-				pVtx->pos.v[2] = fDepth * POS[idx][2];
-				pVtx->pos.v[3] = 1.0f;
+				pVtx->pos.x = fWidth * POS[idx][0];
+				pVtx->pos.y = fHeight * POS[idx][1];
+				pVtx->pos.z = fDepth * POS[idx][2];
+				pVtx->pos.w = 1.0f;
 			}
 
 			// 法線
 			if (IsNormal(flag)) {
-				pVtx->nml.v[0] = NML[i][0];
-				pVtx->nml.v[1] = NML[i][1];
-				pVtx->nml.v[2] = NML[i][2];
-				pVtx->nml.v[3] = 0.0f;
+				pVtx->nml.x = NML[i][0];
+				pVtx->nml.y = NML[i][1];
+				pVtx->nml.z = NML[i][2];
+				pVtx->nml.w = 0.0f;
 			}
 
 			// カラー

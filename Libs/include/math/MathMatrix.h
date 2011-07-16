@@ -154,7 +154,7 @@ namespace izanagi {
 	{
 #if defined(__USE_D3D_MATH__)
 		SVector v;
-		CopyVector(v, vec);
+		SVector::Copy(v, vec);
 		v.w = 0.0f;
 
 		D3DXVec4Transform(
@@ -253,9 +253,9 @@ namespace izanagi {
 	// Ｘ→Ｙ→Ｚ軸の順で回転を行う
 	inline void RotMatrixXYZ(SMatrix& dst, const SMatrix& src, const SVector& angle)
 	{
-		RotMatrixX(dst, src, angle.v[0]);
-		RotMatrixY(dst, dst, angle.v[1]);
-		RotMatrixZ(dst, dst, angle.v[2]);
+		RotMatrixX(dst, src, angle.x);
+		RotMatrixY(dst, dst, angle.y);
+		RotMatrixZ(dst, dst, angle.z);
 	}
 
 	// スケーリングマトリクスを得る
@@ -288,12 +288,12 @@ namespace izanagi {
 	inline void ScaleMatrix(SMatrix& dst, const SMatrix& src, const SVector& scale)
 	{
 		SVector s;
-		SetVector(s, scale.v[0], scale.v[1], scale.v[2], 1.0f);
+		s.Set(scale.x, scale.y, scale.z, 1.0f);
 
-		MulVector(dst.v[0], src.v[0], s);
-		MulVector(dst.v[1], src.v[1], s);
-		MulVector(dst.v[2], src.v[2], s);
-		MulVector(dst.v[3], src.v[3], s);
+		SVector::Mul(dst.v[0], src.v[0], s);
+		SVector::Mul(dst.v[1], src.v[1], s);
+		SVector::Mul(dst.v[2], src.v[2], s);
+		SVector::Mul(dst.v[3], src.v[3], s);
 	}
 
 	inline void ScaleMatrix(

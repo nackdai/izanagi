@@ -181,16 +181,16 @@ IZ_BOOL CDebugMeshAxis::SetVtx(
 
 	// Position
 	{
-		SMeshVtx[0].pos.v[0] = start.v[0];
-		SMeshVtx[0].pos.v[1] = start.v[1];
-		SMeshVtx[0].pos.v[2] = start.v[2];
-		SMeshVtx[0].pos.v[3] = 1.0f;
+		SMeshVtx[0].pos.x = start.x;
+		SMeshVtx[0].pos.y = start.y;
+		SMeshVtx[0].pos.z = start.z;
+		SMeshVtx[0].pos.w = 1.0f;
 	}
 	{
-		SMeshVtx[1].pos.v[0] = start.v[0] + end.v[0];
-		SMeshVtx[1].pos.v[1] = start.v[1] + end.v[1];
-		SMeshVtx[1].pos.v[2] = start.v[2] + end.v[2];
-		SMeshVtx[1].pos.v[3] = 1.0f;
+		SMeshVtx[1].pos.x = start.x + end.x;
+		SMeshVtx[1].pos.y = start.y + end.y;
+		SMeshVtx[1].pos.z = start.z + end.z;
+		SMeshVtx[1].pos.w = 1.0f;
 	}
 
 	// Color

@@ -87,7 +87,7 @@ IZ_BOOL CStateParallax::Render3D()
 		izanagi::SParallelLightParam sParallel;
 		{
 			sParallel.vDir.Set(-1.0f, -1.0f, -1.0f, 0.0f);
-			izanagi::NormalizeVector(sParallel.vDir, sParallel.vDir);
+			izanagi::SVector::Normalize(sParallel.vDir, sParallel.vDir);
 
 			// ローカル座標に変換する
 			izanagi::ApplyMatrixXYZ(sParallel.vDir, sParallel.vDir, mtxW2L);
@@ -96,7 +96,7 @@ IZ_BOOL CStateParallax::Render3D()
 		}
 
 		izanagi::SAmbientLightParam sAmbient;
-		izanagi::SetZeroVector(sAmbient.color);
+		izanagi::SVector::SetZero(sAmbient.color);
 
 		// マテリアル
 		izanagi::SMaterialParam sMtrl;

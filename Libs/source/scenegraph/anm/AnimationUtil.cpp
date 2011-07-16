@@ -191,7 +191,7 @@ IZ_FLOAT CAnimationUtil::ComputeHermite(
 		};
 
 		ApplyMatrix(vecS, vecS, mtxBezier);
-		ret = DotVector(vecS, vecC);
+		ret = SVector::Dot(vecS, vecC);
 	}
 
 	return ret;
