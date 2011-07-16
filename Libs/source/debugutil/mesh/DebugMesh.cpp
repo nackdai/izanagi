@@ -391,10 +391,10 @@ void CDebugMesh::ComputeTangent(
 	const SMeshVtx& vtx2)
 {
 	SVector vP;
-	SubVector(vP, vtx1.pos, vtx0->pos);
+	SVector::Sub(vP, vtx1.pos, vtx0->pos);
 
 	SVector vQ;
-	SubVector(vQ, vtx2.pos, vtx0->pos);
+	SVector::Sub(vQ, vtx2.pos, vtx0->pos);
 
 	IZ_FLOAT a = vtx2.uv[1] - vtx0->uv[1];
 	IZ_FLOAT b = vtx1.uv[1] - vtx0->uv[1];
@@ -410,18 +410,18 @@ void CDebugMesh::ComputeTangent(
 		vB.x = fInvDeterminant * (-c * vP.x + d * vQ.x);
 		vB.y = fInvDeterminant * (-c * vP.y + d * vQ.y);
 		vB.z = fInvDeterminant * (-c * vP.z + d * vQ.z);
-		NormalizeVector(vB, vB);
+		SVector::Normalize(vB, vB);
 	}
 
 	// Tangent
 	SVector vT;
 	{
 		// X(T) = Y(B) x Z(N)
-		CrossVector(vT, vB, vtx0->nml);
+		SVector::Cross(vT, vB, vtx0->nml);
 	}
 
 	// Y(B) = Z(N) x X(T)
-	CrossVector(vB, vtx0->nml, vT);
+	SVector::Cross(vB, vtx0->nml, vT);
 
 	// TODO
 	// DirectXの座標系（左手）に変換する
@@ -465,8 +465,8 @@ void CDebugMesh::ComputeTangent(
 		NormalizeVector(vtx0->binml, vtx0->binml);
 	}
 #else
-	CopyVector(vtx0->tangent, vT);
-	CopyVector(vtx0->binml, vB);
+	SVector::Copy(vtx0->tangent, vT);
+	SVector::Copy(vtx0->binml, vB);
 #endif
 }
 
@@ -581,9 +581,9 @@ IZ_UINT8* CDebugMesh::SetVtxPos(IZ_UINT flag, const SMeshVtx& sVtx, IZ_UINT8* pV
 {
 	if (IsPos(flag)) {
 		IZ_FLOAT* pos = (IZ_FLOAT*)pVtx;
-		pos[0] = sVtx.pos.v[0];
-		pos[1] = sVtx.pos.v[1];
-		pos[2] = sVtx.pos.v[2];
+		pos[0] = sVtx.pos.x;
+		pos[1] = sVtx.pos.y;
+		pos[2] = sVtx.pos.z;
 		pos[3] = 1.0f;
 
 		pVtx += GetPosSize(flag);
@@ -596,9 +596,9 @@ IZ_UINT8* CDebugMesh::SetVtxNormal(IZ_UINT flag, const SMeshVtx& sVtx, IZ_UINT8*
 {
 	if (IsNormal(flag)) {
 		IZ_FLOAT* nml = (IZ_FLOAT*)pVtx;
-		nml[0] = sVtx.nml.v[0];
-		nml[1] = sVtx.nml.v[1];
-		nml[2] = sVtx.nml.v[2];
+		nml[0] = sVtx.nml.x;
+		nml[1] = sVtx.nml.y;
+		nml[2] = sVtx.nml.z;
 
 		pVtx += GetNormalSize(flag);
 	}
@@ -633,10 +633,10 @@ IZ_UINT8* CDebugMesh::SetVtxTangent(IZ_UINT flag, const SMeshVtx& sVtx, IZ_UINT8
 {
 	if (IsTangent(flag)) {
 		IZ_FLOAT* tangent = (IZ_FLOAT*)pVtx;
-		tangent[0] = sVtx.tangent.v[0];
-		tangent[1] = sVtx.tangent.v[1];
-		tangent[2] = sVtx.tangent.v[2];
-		tangent[3] = sVtx.tangent.v[3];
+		tangent[0] = sVtx.tangent.x;
+		tangent[1] = sVtx.tangent.y;
+		tangent[2] = sVtx.tangent.z;
+		tangent[3] = sVtx.tangent.w;
 
 		pVtx += GetTangentSize(flag);
 	}

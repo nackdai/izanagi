@@ -214,13 +214,13 @@ namespace izanagi {
 	{
 		// 念のため
 		SVector v0, v1;
-		NormalizeVector(v0, from);
-		NormalizeVector(v1, to);
+		SVector::Normalize(v0, from);
+		SVector::Normalize(v1, to);
 
 		SVector c;
-		CrossVector(c, v0, v1);
+		SVector::Cross(c, v0, v1);
 
-		IZ_FLOAT d = DotVector(v0, v1);
+		IZ_FLOAT d = SVector::Dot(v0, v1);
 		IZ_FLOAT s = sqrtf(2.0f * (1.0f + d));
 
 		quat.x = c.x / s;
