@@ -243,7 +243,7 @@ namespace izanagi {
 		static IZ_UINT GetColorSize(IZ_UINT flag)   { return (IsColor(flag)   ? sizeof(IZ_COLOR)     : 0); }
 		static IZ_UINT GetNormalSize(IZ_UINT flag)  { return (IsNormal(flag)  ? sizeof(IZ_FLOAT) * 3 : 0); }
 		static IZ_UINT GetUVSize(IZ_UINT flag)      { return (IsUV(flag)      ? sizeof(IZ_FLOAT) * 2 : 0); }
-		static IZ_UINT GetTangentSize(IZ_UINT flag) { return (IsTangent(flag) ? sizeof(IZ_FLOAT) * 3 : 0); }
+		static IZ_UINT GetTangentSize(IZ_UINT flag) { return (IsTangent(flag) ? sizeof(IZ_FLOAT) * 4 : 0); }
 
 		// For Debug.
 		static IZ_UINT GetAxisFlag(IZ_UINT flag)

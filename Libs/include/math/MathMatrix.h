@@ -189,6 +189,11 @@ namespace izanagi {
 	// Z軸を回転軸にして回転するマトリクスを取得
 	void GetRotMatrixZ(SMatrix& dst, IZ_FLOAT fTheta);
 
+	// 任意軸を回転軸にして回転するマトリクスを取得
+	void GetRotMatrix(
+		SMatrix& dst, IZ_FLOAT fTheta,
+		IZ_FLOAT x, IZ_FLOAT y, IZ_FLOAT z);
+
 	// X軸に対する回転を行なう
 	inline void RotMatrixX(SMatrix& dst, const SMatrix& src, IZ_FLOAT fTheta)
 	{
@@ -210,6 +215,17 @@ namespace izanagi {
 	{
 		SMatrix m;
 		GetRotMatrixZ(m, fTheta);
+		MulMatrix(dst, src, m);
+	}
+
+	// 任意軸に対する回転を行なう
+	inline void RotMatrix(
+		SMatrix& dst, const SMatrix& src,
+		IZ_FLOAT fTheta,
+		IZ_FLOAT x, IZ_FLOAT y, IZ_FLOAT z)
+	{
+		SMatrix m;
+		GetRotMatrix(m, fTheta, x, y, z);
 		MulMatrix(dst, src, m);
 	}
 
@@ -290,6 +306,9 @@ namespace izanagi {
 
 		ScaleMatrix(dst, src, scale);
 	}
+
+	// 行列式を計算する
+	IZ_FLOAT DeterminantMatrix(const SMatrix& mtx);
 
 	// 一般マトリクスの逆マトリクスを求める
 	void InverseMatrix(SMatrix& dst, const SMatrix& src);

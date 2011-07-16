@@ -13,23 +13,23 @@ namespace {
 	// 位置
 	const IZ_FLOAT POS[][3] = {
 		{-0.5f,  0.5f,  0.5f},
-		{-0.5f,  0.5f, -0.5f},
-		{ 0.5f,  0.5f,  0.5f},
-		{ 0.5f,  0.5f, -0.5f},
-
 		{-0.5f, -0.5f,  0.5f},
-		{-0.5f, -0.5f, -0.5f},
 		{ 0.5f, -0.5f,  0.5f},
+		{ 0.5f,  0.5f,  0.5f},
+
+		{ 0.5f,  0.5f, -0.5f},
 		{ 0.5f, -0.5f, -0.5f},
+		{-0.5f, -0.5f, -0.5f},
+		{-0.5f,  0.5f, -0.5f},
 	};
 
 	// 法線
 	const IZ_FLOAT NML[][3] = {
-		{ 0.0f,  1.0f,  0.0f},
 		{ 0.0f,  0.0f,  1.0f},
 		{ 1.0f,  0.0f,  0.0f},
 		{ 0.0f,  0.0f, -1.0f},
 		{-1.0f,  0.0f,  0.0f},
+		{ 0.0f,  1.0f,  0.0f},
 		{ 0.0f, -1.0f,  0.0f},
 	};
 
@@ -37,8 +37,8 @@ namespace {
 	const IZ_FLOAT UV[][2] = {
 		{0.0f, 0.0f},
 		{0.0f, 1.0f},
-		{1.0f, 0.0f},
 		{1.0f, 1.0f},
+		{1.0f, 0.0f},
 	};
 
 	enum {
@@ -50,11 +50,11 @@ namespace {
 	// 面
 	const IZ_UINT16 PRIM[PRIM_NUM][IDX_NUM_PER_FACE] = {
 		{0, 1, 2, 3},
-		{2, 6, 0, 4},
-		{3, 7, 2, 6},
-		{1, 5, 3, 7},
-		{0, 4, 1, 5},
-		{5, 4, 7, 6},
+		{3, 2, 5, 4},
+		{4, 5, 6, 7},
+		{7, 6, 1, 0},
+		{7, 0, 3, 4},
+		{1, 6, 5, 2},
 	};
 }	// namespace
 
@@ -217,8 +217,8 @@ IZ_BOOL CDebugMeshBox::SetIdx()
 			++pFace;
 		}
 		{
-			pFace->idx[0] = nCurIdx + 2;
-			pFace->idx[1] = nCurIdx + 1;
+			pFace->idx[0] = nCurIdx + 0;
+			pFace->idx[1] = nCurIdx + 2;
 			pFace->idx[2] = nCurIdx + 3;
 
 			BindFaceToVtx(pFace);

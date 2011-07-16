@@ -54,20 +54,22 @@ sampler sTex : register(s0);
 SVSOutput mainVS(SVSInput In)
 {
 	SVSOutput Out = (SVSOutput)0;
+
+	// 視点への方向ベクトル（ローカル座標）
+	float3 vV = normalize(g_vEye - In.vPos);
 	
 	Out.vPos = mul(In.vPos, g_mL2W);
-	
-	// 視点への方向ベクトル
-	float3 vV = normalize(g_vEye - Out.vPos);
-	
 	Out.vPos = mul(Out.vPos, g_mW2C);
 	
-	Out.vNormal = mul(In.vNormal, (float3x3)g_mL2W);
-	Out.vNormal = normalize(Out.vNormal);
+	Out.vNormal = normalize(In.vNormal);
 
 	// Ambient
 	Out.vColor = g_vMtrlAmbient * g_vLitAmbientColor;
-	
+
+	// NOTE
+	// ローカル座標での計算なので
+	// ライトの方向ベクトルはCPU側でローカル座標に変換されていること
+
 	Out.vHalf = normalize(-g_vLitParallelDir + vV);
 	
 	Out.vColor.a = 1.0f;

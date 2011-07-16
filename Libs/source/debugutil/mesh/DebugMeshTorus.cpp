@@ -159,7 +159,7 @@ IZ_BOOL CDebugMeshTorus::SetVtx(
 	IZ_FLOAT fRingRadius = fOuterRadius - fInnerRadius;		// リングの半径
 	IZ_FLOAT fCenterRadius = fInnerRadius + fRingRadius;	// リング中心までの径
 
-	IZ_FLOAT fLatitudeStep = IZ_MATH_PI2 / nSides;		// 緯度ステップ
+	IZ_FLOAT fLatitudeStep = IZ_MATH_PI2 / nSides;	// 緯度ステップ
 	IZ_FLOAT fLongitudeStep = IZ_MATH_PI2 / nRings;	// 経度ステップ
 
 	for (IZ_UINT ring = 0; ring <= nRings; ++ring) {
@@ -204,9 +204,9 @@ void CDebugMeshTorus::ComputeVtx(
 	// 中心位置
 	SVector vCenter;
 	vCenter.Set(
-		fCenterRadius * fCosLong,
+		fCenterRadius * fSinLong,
 		0.0f,
-		fCenterRadius * fSinLong);
+		fCenterRadius * fCosLong);
 
 	// 位置
 	SVector vPos;
@@ -219,9 +219,9 @@ void CDebugMeshTorus::ComputeVtx(
 		vPos.y,
 		vPos.z);
 	vPos.Set(
-		vPos.x * fCosLong,
+		vPos.x * fSinLong,
 		vPos.y,
-		vPos.x * fSinLong);
+		vPos.x * fCosLong);
 
 	// 位置
 	if (IsPos(flag)) {

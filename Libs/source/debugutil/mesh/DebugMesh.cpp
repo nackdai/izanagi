@@ -226,15 +226,9 @@ IZ_BOOL CDebugMesh::CopyDataToBuffer(IZ_UINT flag)
 	VGOTO(ret = LockIB((void**)&pIdxData), __EXIT__);
 	{
 		for (IZ_UINT i = 0; i < m_nPrimCnt; ++i) {
-#if 0
 			*pIdxData++ = m_pFace[i].idx[0];
 			*pIdxData++ = m_pFace[i].idx[1];
 			*pIdxData++ = m_pFace[i].idx[2];
-#else
-			*pIdxData++ = m_pFace[i].idx[0];
-			*pIdxData++ = m_pFace[i].idx[2];
-			*pIdxData++ = m_pFace[i].idx[1];
-#endif
 
 			// 面ごとの計算
 			ComputeFace(&m_pFace[i], flag);
@@ -380,15 +374,9 @@ void CDebugMesh::ComputeFace(
 	IZ_UINT flag)
 {
 	if (IsTangent(flag)) {
-#if 0
 		SMeshVtx* vtx0 = GetVtx(pFace->idx[0]);
 		SMeshVtx* vtx1 = GetVtx(pFace->idx[1]);
 		SMeshVtx* vtx2 = GetVtx(pFace->idx[2]);
-#else
-		SMeshVtx* vtx0 = GetVtx(pFace->idx[0]);
-		SMeshVtx* vtx1 = GetVtx(pFace->idx[2]);
-		SMeshVtx* vtx2 = GetVtx(pFace->idx[1]);
-#endif
 
 		// Tangent
 		ComputeTangent(vtx0, *vtx1, *vtx2);
@@ -408,21 +396,20 @@ void CDebugMesh::ComputeTangent(
 	SVector vQ;
 	SubVector(vQ, vtx2.pos, vtx0->pos);
 
-	IZ_FLOAT fCoeff[4] = {
-		vtx2.uv[1] - vtx0->uv[1],
-		-(vtx1.uv[1] - vtx0->uv[1]),
-		-(vtx2.uv[0] - vtx0->uv[0]),
-		vtx1.uv[0] - vtx0->uv[0],
-	};
+	IZ_FLOAT a = vtx2.uv[1] - vtx0->uv[1];
+	IZ_FLOAT b = vtx1.uv[1] - vtx0->uv[1];
+	IZ_FLOAT c = vtx2.uv[0] - vtx0->uv[0];
+	IZ_FLOAT d = vtx1.uv[0] - vtx0->uv[0];
 
-	IZ_FLOAT fInvDeterminant = 1.0f / (fCoeff[3] * fCoeff[0] - fCoeff[2] * fCoeff[1]);
+	// 行列式の逆数
+	IZ_FLOAT fInvDeterminant = 1.0f / (a * d - b * c);
 
 	// BiNormal
 	SVector vB;
 	{
-		ScaleVector(vP, vP, fInvDeterminant * fCoeff[2]);
-		ScaleVector(vQ, vQ, fInvDeterminant * fCoeff[3]);
-		AddVector(vB, vP, vQ);
+		vB.x = fInvDeterminant * (-c * vP.x + d * vQ.x);
+		vB.y = fInvDeterminant * (-c * vP.y + d * vQ.y);
+		vB.z = fInvDeterminant * (-c * vP.z + d * vQ.z);
 		NormalizeVector(vB, vB);
 	}
 
@@ -436,6 +423,33 @@ void CDebugMesh::ComputeTangent(
 	// Y(B) = Z(N) x X(T)
 	CrossVector(vB, vtx0->nml, vT);
 
+	// TODO
+	// DirectXの座標系（左手）に変換する
+	{
+		SMatrix m;
+		GetRotMatrix(
+			m,
+			IZ_MATH_PI,
+			vtx0->nml.x, vtx0->nml.y, vtx0->nml.z);
+
+		ApplyMatrix(vT, vT, m);
+	}
+
+#if 1
+	SMatrix mtx;
+	mtx.v[0].Set(vT.x, vB.x, vtx0->nml.x, 0.0f);
+	mtx.v[1].Set(vT.y, vB.y, vtx0->nml.y, 0.0f);
+	mtx.v[2].Set(vT.z, vB.z, vtx0->nml.z, 0.0f);
+	mtx.v[3].Set(0.0f, 0.0f,        0.0f, 1.0f);
+
+	IZ_FLOAT determinant = DeterminantMatrix(mtx);
+
+	vT.w = determinant;
+
+	//ScaleVector(vB, vB, determinant);
+#endif
+
+#if 0
 	IZ_FLOAT fLen = LengthVector(vtx0->tangent);
 	if (fLen == 0.0f) {
 		CopyVector(vtx0->tangent, vT);
@@ -450,6 +464,10 @@ void CDebugMesh::ComputeTangent(
 		ScaleVector(vtx0->binml, vtx0->binml, 0.5f);
 		NormalizeVector(vtx0->binml, vtx0->binml);
 	}
+#else
+	CopyVector(vtx0->tangent, vT);
+	CopyVector(vtx0->binml, vB);
+#endif
 }
 
 void CDebugMesh::SetOverlapVtx(
@@ -467,7 +485,7 @@ void CDebugMesh::ApplyOverlap(
 	SMeshVtx* pVtx,
 	IZ_UINT flag)
 {
-#if 1
+#if 0
 	if (pVtx->HasOverlapIdx()) {
 		IZ_UINT idx = pVtx->GetOverlapIdx();
 		SMeshVtx* pOverlap = GetVtx(idx);
@@ -550,7 +568,7 @@ IZ_UINT CDebugMesh::SetVtxElementTangent(IZ_UINT flag, SVertexElement* pElem, IZ
 {
 	if (IsTangent(flag)) {
 		pElem[nPos].Offset = *pOffset;
-		pElem[nPos].Type = E_GRAPH_VTX_DECL_TYPE_FLOAT3;
+		pElem[nPos].Type = E_GRAPH_VTX_DECL_TYPE_FLOAT4;
 		pElem[nPos].Usage = E_GRAPH_VTX_DECL_USAGE_TANGENT;
 		*pOffset += GetTangentSize(flag);
 		return nPos + 1;
@@ -618,7 +636,7 @@ IZ_UINT8* CDebugMesh::SetVtxTangent(IZ_UINT flag, const SMeshVtx& sVtx, IZ_UINT8
 		tangent[0] = sVtx.tangent.v[0];
 		tangent[1] = sVtx.tangent.v[1];
 		tangent[2] = sVtx.tangent.v[2];
-		//tangent[3] = sVtx.tangent.v[3];
+		tangent[3] = sVtx.tangent.v[3];
 
 		pVtx += GetTangentSize(flag);
 	}

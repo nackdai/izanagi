@@ -16,7 +16,7 @@ CDebugMeshCylinder* CDebugMeshCylinder::CreateDebugMeshCylinder(
 	flag |= E_DEBUG_MESH_VTX_FORM_POS;
 
 	nSlices = IZ_MAX(3, nSlices);
-	nStacks = IZ_MAX(2, nStacks);
+	nStacks = IZ_MAX(2, nStacks + 1);
 
 	void* pBuf = ALLOC_ZERO(pAllocator, sizeof(CDebugMeshCylinder));
 	VRETURN_VAL(pBuf != IZ_NULL, IZ_NULL);
@@ -247,17 +247,17 @@ void CDebugMeshCylinder::ComputeVtx(
 
 	// 位置
 	if (IsPos(flag)) {
-		pVtx->pos.v[0] = fRadius * fCosLong;
+		pVtx->pos.v[0] = fRadius * fSinLong;
 		pVtx->pos.v[1] = fY;
-		pVtx->pos.v[2] = fRadius * fSinLong;
+		pVtx->pos.v[2] = fRadius * fCosLong;
 		pVtx->pos.v[3] = 1.0f;
 	}
 
 	// 法線
 	if (IsNormal(flag)) {
-		pVtx->nml.v[0] = fCosLong;
+		pVtx->nml.v[0] = fSinLong;
 		pVtx->nml.v[1] = 0.0f;
-		pVtx->nml.v[2] = fSinLong;
+		pVtx->nml.v[2] = fCosLong;
 		pVtx->nml.v[3] = 0.0f;
 	}
 
@@ -291,7 +291,7 @@ IZ_BOOL CDebugMeshCylinder::SetIdx(
 	for (IZ_UINT slice = 0; slice < nSlices; ++slice) {
 		pFace->idx[0] = slice;	// 一番上の点
 		pFace->idx[1] = slice + nSlices;
-		pFace->idx[2] = slice + 1 + nSlices;
+		pFace->idx[2] = slice + nSlices + 1;
 
 		if (slice + 1 >= nSlices) {
 			SetOverlapVtx(
@@ -313,6 +313,9 @@ IZ_BOOL CDebugMeshCylinder::SetIdx(
 	//
 	//  1-5-2 / 2-5-6
 	//  2-6-3 / 3-6-7
+
+	// NOTE
+	// + nSlices は頂上(or下)の点の分
 
 	for (IZ_UINT stack = 0; stack < nStacks - 1; ++stack) {
 		for (IZ_UINT slice = 0; slice < nSlices; ++slice) {
