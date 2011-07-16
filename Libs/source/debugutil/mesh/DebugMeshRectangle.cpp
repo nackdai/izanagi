@@ -107,7 +107,7 @@ IZ_BOOL CDebugMeshRectangle::SetVtx(
 	IZ_FLOAT fDivX = 1.0f / nDivideX;
 	IZ_FLOAT fDivY = 1.0f / nDivideY;
 
-	IZ_FLOAT fWidthPerVtx = -fWidth * fDivX;
+	IZ_FLOAT fWidthPerVtx = fWidth * fDivX;
 	IZ_FLOAT fHeightPerVtx = fHeight * fDivY;
 
 	IZ_FLOAT fTexUPerVtx = 1.0f * fDivX;
@@ -116,7 +116,7 @@ IZ_BOOL CDebugMeshRectangle::SetVtx(
 	IZ_FLOAT fZ = -0.5f * fHeight;
 
 	for (IZ_UINT y = 0; y <= nDivideY; ++y) {
-		IZ_FLOAT fX = 0.5f * fWidth;
+		IZ_FLOAT fX = -0.5f * fWidth;
 		
 		for (IZ_UINT x = 0; x <= nDivideX; ++x) {
 			// 位置

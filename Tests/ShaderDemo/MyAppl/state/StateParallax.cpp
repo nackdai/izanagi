@@ -51,12 +51,63 @@ IZ_BOOL CStateParallax::Render3D()
 
 	// シェーダパラメータセット
 	{
-		izanagi::SMatrix mL2W;
-		SetUnitMatrix(mL2W);
-		m_pShader->SetL2W(mL2W);
+		// Local -> World
+		izanagi::SMatrix mtxL2W;
+		izanagi::SetUnitMatrix(mtxL2W);
+		m_pShader->SetL2W(mtxL2W);
+
+		// ローカル座標変換行列
+		izanagi::SMatrix mtxW2L;
+		izanagi::InverseMatrix(mtxW2L, mtxL2W);
 
 		m_pShader->SetW2C(CMyCamera::GetInstance().GetRawInterface().GetParam().mtxW2C);
-		m_pShader->SetCameraPos(CMyCamera::GetInstance().GetRawInterface().GetParam().pos);
+
+		// View -> Local
+		izanagi::SMatrix mtxV2L;
+		izanagi::MulMatrix(
+			mtxV2L, 
+			mtxL2W, 
+			CMyCamera::GetInstance().GetRawInterface().GetParam().mtxW2V);
+		izanagi::InverseMatrix(mtxV2L, mtxV2L);
+
+		// ビュー座標系における視点は常に原点
+		izanagi::SVector vEyePos;
+		vEyePos.Set(0.0f, 0.0f, 0.0f);
+
+		// 視点の位置をローカル座標に変換する
+		izanagi::SVector vLocalEye;
+		izanagi::ApplyMatrix(
+			vLocalEye,
+			vEyePos,
+			mtxV2L);
+
+		m_pShader->SetCameraPos(vLocalEye);
+
+		// ライト
+		izanagi::SParallelLightParam sParallel;
+		{
+			sParallel.vDir.Set(-1.0f, -1.0f, -1.0f, 0.0f);
+			izanagi::NormalizeVector(sParallel.vDir, sParallel.vDir);
+
+			// ローカル座標に変換する
+			izanagi::ApplyMatrixXYZ(sParallel.vDir, sParallel.vDir, mtxW2L);
+
+			sParallel.color.Set(1.0f, 1.0f, 1.0f, 1.0f);
+		}
+
+		izanagi::SAmbientLightParam sAmbient;
+		izanagi::SetZeroVector(sAmbient.color);
+
+		// マテリアル
+		izanagi::SMaterialParam sMtrl;
+		{
+			sMtrl.vDiffuse.Set(1.0f, 1.0f, 1.0f, 1.0f);
+			sMtrl.vAmbient.Set(1.0f, 1.0f, 1.0f, 1.0f);
+			sMtrl.vSpecular.Set(1.0f, 1.0f, 1.0f, 20.0f);
+		}
+
+		m_pShader->SetLight(sParallel, sAmbient);
+		m_pShader->SetMaterial(sMtrl);
 	}
 
 	// グリッド描画
@@ -107,32 +158,6 @@ IZ_BOOL CStateParallax::Enter()
 					"./data/ParallaxShader.bin");
 					//"./data/PhongeShader.bin");
 	IZ_ASSERT(m_pShader != IZ_NULL);
-
-	// テストなので、ここで各種パラメータ設定
-	if (m_pShader != IZ_NULL) {
-		// ライト
-		izanagi::SParallelLightParam sParallel;
-		{
-			sParallel.vDir.Set(-1.0f, -1.0f, -1.0f, 0.0f);
-			NormalizeVector(sParallel.vDir, sParallel.vDir);
-
-			sParallel.color.Set(1.0f, 1.0f, 1.0f, 1.0f);
-		}
-
-		izanagi::SAmbientLightParam sAmbient;
-		izanagi::SetZeroVector(sAmbient.color);
-
-		// マテリアル
-		izanagi::SMaterialParam sMtrl;
-		{
-			sMtrl.vDiffuse.Set(1.0f, 1.0f, 1.0f, 1.0f);
-			sMtrl.vAmbient.Set(1.0f, 1.0f, 1.0f, 1.0f);
-			sMtrl.vSpecular.Set(1.0f, 1.0f, 1.0f, 20.0f);
-		}
-
-		m_pShader->SetLight(sParallel, sAmbient);
-		m_pShader->SetMaterial(sMtrl);
-	}
 
 	// グリッド
 	m_pGrid = izanagi::CDebugMeshGrid::CreateDebugMeshGrid(

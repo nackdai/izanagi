@@ -57,23 +57,26 @@ sampler sNormalMap : register(s1);
 SVSOutput mainVS(SVSInput In)
 {
 	SVSOutput Out = (SVSOutput)0;
-	
-	Out.vPos = mul(In.vPos, g_mL2W);
 
 	// 視点への方向ベクトル
-	float3 vV = normalize(g_vEye - Out.vPos);
-
+	float3 vV = normalize(g_vEye - In.vPos);
+	
+	Out.vPos = mul(In.vPos, g_mL2W);
 	Out.vPos = mul(Out.vPos, g_mW2C);
 	
 	// Ambient
 	Out.vColor = g_vMtrlAmbient * g_vLitAmbientColor;
+
+	// NOTE
+	// ローカル座標での計算なので
+	// ライトの方向ベクトルはCPU側でローカル座標に変換されていること
 
 	float3 vL = -g_vLitParallelDir.xyz;
 
 	// Tangent-space
 	float3 vN = In.vNormal;
 	float3 vT = In.vTangent.xyz;
-	float3 vB = cross(vN, vT);
+	float3 vB = In.vTangent.w * cross(vN, vT);
 
 	// Tangent-spaceに変換
 	{

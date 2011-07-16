@@ -228,9 +228,9 @@ void CDebugMeshSphere::ComputeVtx(
 	IZ_FLOAT fCosLong = CMath::CosF(fLongitude);
 
 	SVector vNml;
-	vNml.x = fSinLat * fCosLong;
+	vNml.x = fSinLat * fSinLong;
 	vNml.y = fCosLat;
-	vNml.z = fSinLat * fSinLong;
+	vNml.z = fSinLat * fCosLong;
 	vNml.w = 1.0f;
 
 	// 位置
@@ -279,7 +279,7 @@ IZ_BOOL CDebugMeshSphere::SetIdx(
 	for (IZ_UINT slice = 0; slice < nSlices; ++slice) {
 		pFace->idx[0] = slice;	// 一番上の点
 		pFace->idx[1] = slice + nSlices;
-		pFace->idx[2] = slice + 1 + nSlices;
+		pFace->idx[2] = slice + nSlices + 1;
 
 		if (slice + 1 >= nSlices) {
 			SetOverlapVtx(
@@ -301,6 +301,12 @@ IZ_BOOL CDebugMeshSphere::SetIdx(
 	//
 	//  1-5-2 / 2-5-6
 	//  2-6-3 / 3-6-7
+
+	// NOTE
+	// 上下の二つ分をStackからマイナスする
+
+	// NOTE
+	// + nSlices は頂上(or下)の点の分
 
 	for (IZ_UINT stack = 0; stack < nStacks - 2; ++stack) {
 		for (IZ_UINT slice = 0; slice < nSlices; ++slice) {

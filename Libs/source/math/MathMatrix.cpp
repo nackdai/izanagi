@@ -70,6 +70,46 @@ namespace izanagi {
 #endif	// #if defined(__USE_D3D_MATH__)
 	}
 
+	// 任意軸を回転軸にして回転するマトリクスを取得
+	void GetRotMatrix(
+		SMatrix& dst, IZ_FLOAT fTheta,
+		IZ_FLOAT x, IZ_FLOAT y, IZ_FLOAT z)
+	{
+#if defined(__USE_D3D_MATH__)
+		D3DXVECTOR3 v(x, y, z);
+
+		D3DXMatrixRotationAxis(
+			reinterpret_cast<D3DXMATRIX*>(&dst),
+			&v,
+			fTheta);
+#else
+		IZ_FLAOT c = ::cosf(fTheta);
+		IZ_FLOAT 1_c = 1.0f - c;
+
+		IZ_FLOAT s = ::sinf(fTheta);
+
+		dst._00 = c + x * x * 1_c;
+		dst._01 = x * y * 1_c + z * s;
+		dst._02 = x * z * 1_c - y * s;
+		dst._03 = 0.0f;
+
+		dst._10 = x * y * 1_c - z * s;
+		dst._11 = c + y * y * 1_c;
+		dst._12 = y * z * 1_c + x * s;
+		dst._13 = 0.0f;
+
+		dst._20 = x * z * 1_c + y * s;
+		dst._21 = y * z * 1_c - x * s;
+		dst._22 = c + z * z * 1_c;
+		dst._23 = 0.0f;
+
+		dst._30 = 0.0f;
+		dst._31 = 0.0f;
+		dst._32 = 0.0f;
+		dst._33 = 1.0f;
+#endif
+	}
+
 	// オフセットを指定したマトリクスを取得
 	void GetTransMatrix(SMatrix& dst, const SVector& tv)
 	{
@@ -85,6 +125,19 @@ namespace izanagi {
 		dst.m[2][0] = 0.0f;    dst.m[2][1] = 0.0f;    dst.m[2][2] = 1.0f;    dst.m[2][3] = 0.0f;
 		dst.m[3][0] = tv.v[0]; dst.m[3][1] = tv.v[1]; dst.m[3][2] = tv.v[2]; dst.m[3][3] = 1.0f;
 #endif	// #if defined(__USE_D3D_MATH__)
+	}
+
+	// 行列式を計算する
+	IZ_FLOAT DeterminantMatrix(const SMatrix& mtx)
+	{
+#if defined(__USE_D3D_MATH__)
+		IZ_FLOAT ret = D3DXMatrixDeterminant(reinterpret_cast<const D3DXMATRIX*>(&mtx));
+		return ret;
+#else
+		// TODO
+		IZ_ASSERT(IZ_FALSE);
+		return 0.0f;
+#endif
 	}
 
 	// 逆マトリクスを Gauss/Jordan 法で求める
