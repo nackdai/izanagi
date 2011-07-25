@@ -1,8 +1,8 @@
 ﻿#if !defined(__IZANAGI_SHADER_SHADER_DEFS_H__)
 #define __IZANAGI_SHADER_SHADER_DEFS_H__
 
-#define IZ_SHADER_PARAM_TYPE(flag, row, column, is_float, is_int)\
-	((((flag) & 0x0f) << 10) | (((row) & 0x0f) << 6) | (((column) & 0x0f) << 2) | (((is_float) & 0x01) << 1) | ((is_int) & 0x01))
+#define IZ_SHADER_PARAM_TYPE(flag, row, column, is_int, is_float)\
+	((((flag) & 0x0f) << 10) | (((row) & 0x0f) << 6) | (((column) & 0x0f) << 2) | (((is_int) & 0x01) << 1) | ((is_float) & 0x01))
 
 #define IZ_GET_FLAG_SHADER_PARAM_TYPE(type)\
 	(((type) >> 10) & 0x0f)
@@ -13,10 +13,10 @@
 #define IZ_GET_COLUMN_SHADER_PARAM_TYPE(type)\
 	(((type) >> 2) & 0x0f)
 
-#define IZ_IS_FLOAT_SHADER_PARAM_TYPE(type)\
+#define IZ_IS_INT_SHADER_PARAM_TYPE(type)\
 	(((type) >> 1) & 0x01)
 
-#define IZ_IS_INT_SHADER_PARAM_TYPE(type)\
+#define IZ_IS_FLOAT_SHADER_PARAM_TYPE(type)\
 	((type) & 0x01)
 
 
@@ -164,7 +164,7 @@ namespace izanagi {
 		E_SHADER_PARAMETER_TYPE_SAMPLERRECT	= IZ_SHADER_PARAM_TYPE(E_SHADER_PARAMETER_TYPE_SAMPLER_FLAG, 0, 0, 0, 0),
 		E_SHADER_PARAMETER_TYPE_SAMPLERCUBE	= IZ_SHADER_PARAM_TYPE(E_SHADER_PARAMETER_TYPE_SAMPLER_FLAG, 0, 0, 0, 0),
 
-		E_POSTEFFECT_PARAMETER_TYPE_FORCE_INT32 = 0x7fffffff,
+		E_SHADER_PARAMETER_TYPE_FORCE_INT32 = 0x7fffffff,
 	};
 
 	typedef IZ_UINT	IZ_SHADER_HANDLE;
