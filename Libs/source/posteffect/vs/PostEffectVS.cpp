@@ -19,8 +19,8 @@ CPostEffectVS::CPostEffectVS()
 
 	FILL_ZERO(m_hCommonHandle, sizeof(m_hCommonHandle));
 
-	SVector::SetZero(m_vecPosOffset);
-	SVector::SetZero(m_vecTexParam);
+	SetZeroVector(m_vecPosOffset);
+	SetZeroVector(m_vecTexParam);
 }
 
 // デストラクタ

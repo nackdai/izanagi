@@ -54,7 +54,7 @@ namespace izanagi {
 		IZ_ASSERT(num <= _VECTOR_NUM);
 
 		for (IZ_UINT i = 0; i < num; ++i) {
-			SVector::Copy(m_vOffset[i], pVector[i]);
+			CopyVector(m_vOffset[i], pVector[i]);
 		}
 	}
 

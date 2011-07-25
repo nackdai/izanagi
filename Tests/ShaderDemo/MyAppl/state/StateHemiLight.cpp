@@ -109,14 +109,14 @@ IZ_BOOL CStateHemiLight::Enter()
 		izanagi::SHemisphereLightParam sParam;
 		{
 			sParam.vAxis.Set(1.0f, 1.0f, 1.0f, 0.0f);
-			izanagi::SVector::Normalize(sParam.vAxis, sParam.vAxis);
+			NormalizeVector(sParam.vAxis, sParam.vAxis);
 
 			sParam.upColor.Set(1.0f, 0.0f, 0.0f);
 			sParam.downColor.Set(0.0f, 0.0f, 1.0f);
 		}
 
 		izanagi::SAmbientLightParam sAmbient;
-		izanagi::SVector::SetZero(sAmbient.color);
+		izanagi::SetZeroVector(sAmbient.color);
 
 		// マテリアル
 		izanagi::SMaterialParam sMtrl;
