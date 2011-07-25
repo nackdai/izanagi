@@ -165,7 +165,7 @@ void CEnvBox::Render(izanagi::CGraphicsDevice* pDevice)
 	SetUnitMatrix(mL2W);
 	ScaleMatrix(mL2W, mL2W, izanagi::CVector(100.0f, 100.0f, 100.0f, 100.0f));
 #if 1
-	izanagi::SVector::CopyXYZ(
+	CopyVectorXYZ(
 		mL2W.v[3],
 		CMyCamera::GetInstance().GetRawInterface().GetParam().pos);
 #endif

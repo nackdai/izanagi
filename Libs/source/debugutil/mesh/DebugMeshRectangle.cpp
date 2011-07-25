@@ -121,18 +121,18 @@ IZ_BOOL CDebugMeshRectangle::SetVtx(
 		for (IZ_UINT x = 0; x <= nDivideX; ++x) {
 			// 位置
 			if (IsPos(flag)) {
-				pVtx->pos.x = fX;
-				pVtx->pos.y = 0.0f;
-				pVtx->pos.z = fZ;
-				pVtx->pos.w = 1.0f;
+				pVtx->pos.v[0] = fX;
+				pVtx->pos.v[1] = 0.0f;
+				pVtx->pos.v[2] = fZ;
+				pVtx->pos.v[3] = 1.0f;
 			}
 
 			// 法線
 			if (IsNormal(flag)) {
-				pVtx->nml.x = 0.0f;
-				pVtx->nml.y = 1.0f;
-				pVtx->nml.z = 0.0f;
-				pVtx->nml.w = 0.0f;
+				pVtx->nml.v[0] = 0.0f;
+				pVtx->nml.v[1] = 1.0f;
+				pVtx->nml.v[2] = 0.0f;
+				pVtx->nml.v[3] = 0.0f;
 			}
 
 			// 頂点カラー

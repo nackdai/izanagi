@@ -282,13 +282,13 @@ IZ_BOOL CStateBasicEx2::Enter()
 		izanagi::SParallelLightParam sParallel;
 		{
 			sParallel.vDir.Set(-1.0f, -1.0f, -1.0f, 0.0f);
-			SVector::Normalize(sParallel.vDir, sParallel.vDir);
+			NormalizeVector(sParallel.vDir, sParallel.vDir);
 
 			sParallel.color.Set(1.0f, 1.0f, 1.0f, 1.0f);
 		}
 
 		izanagi::SAmbientLightParam sAmbient;
-		izanagi::SVector::SetZero(sAmbient.color);
+		izanagi::SetZeroVector(sAmbient.color);
 		//sAmbient.color.Set(1.0f, 1.0f, 1.0f, 1.0f);
 
 		// マテリアル
@@ -313,13 +313,13 @@ IZ_BOOL CStateBasicEx2::Enter()
 		izanagi::SParallelLightParam sParallel;
 		{
 			sParallel.vDir.Set(-1.0f, -1.0f, -1.0f, 0.0f);
-			izanagi::SVector::Normalize(sParallel.vDir, sParallel.vDir);
+			NormalizeVector(sParallel.vDir, sParallel.vDir);
 
 			sParallel.color.Set(1.0f, 1.0f, 1.0f, 1.0f);
 		}
 
 		izanagi::SAmbientLightParam sAmbient;
-		izanagi::SVector::SetZero(sAmbient.color);
+		izanagi::SetZeroVector(sAmbient.color);
 		//sAmbient.color.Set(1.0f, 1.0f, 1.0f, 1.0f);
 
 		// マテリアル

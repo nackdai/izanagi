@@ -112,13 +112,13 @@ IZ_BOOL CStateRimLight::Enter()
 		{
 			//sParallel.vDir.Set(-1.0f, -1.0f, -1.0f, 0.0f);
 			sParallel.vDir.Set(0.0f, 0.0f, -1.0f, 0.0f);
-			izanagi::SVector::Normalize(sParallel.vDir, sParallel.vDir);
+			NormalizeVector(sParallel.vDir, sParallel.vDir);
 
 			sParallel.color.Set(0.5f, 0.5f, 0.5f, 1.0f);
 		}
 
 		izanagi::SAmbientLightParam sAmbient;
-		izanagi::SVector::SetZero(sAmbient.color);
+		izanagi::SetZeroVector(sAmbient.color);
 
 		// マテリアル
 		izanagi::SMaterialParam sMtrl;

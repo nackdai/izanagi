@@ -143,13 +143,13 @@ IZ_BOOL CStatePhong::Enter()
 		izanagi::SParallelLightParam sParallel;
 		{
 			sParallel.vDir.Set(-1.0f, -1.0f, -1.0f, 0.0f);
-			izanagi::SVector::Normalize(sParallel.vDir, sParallel.vDir);
+			NormalizeVector(sParallel.vDir, sParallel.vDir);
 
 			sParallel.color.Set(1.0f, 1.0f, 1.0f, 1.0f);
 		}
 
 		izanagi::SAmbientLightParam sAmbient;
-		izanagi::SVector::SetZero(sAmbient.color);
+		izanagi::SetZeroVector(sAmbient.color);
 
 		// マテリアル
 		izanagi::SMaterialParam sMtrl;

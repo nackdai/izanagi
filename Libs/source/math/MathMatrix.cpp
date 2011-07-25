@@ -203,7 +203,7 @@ namespace izanagi {
 		SVector& vY = mtx.v[1];
 		SVector& vZ = mtx.v[2];
 
-		SVector::Normalize(vZ, vec);
+		NormalizeVector(vZ, vec);
 
 		SVector vUp;
 		if (CMath::IsNearyEqualZero(vZ.x) && CMath::IsNearyEqualZero(vZ.z)) {
@@ -217,13 +217,13 @@ namespace izanagi {
 			}
 		}
 		else {
-			SVector::Copy(vUp, up);
+			CopyVector(vUp, up);
 		}
 
-		SVector::Cross(vX, vUp, vZ);
-		SVector::Normalize(vX, vX);
+		CrossVector(vX, vUp, vZ);
+		NormalizeVector(vX, vX);
 
-		SVector::Cross(vY, vZ, vX);
+		CrossVector(vY, vZ, vX);
 
 		vX.w = vY.w = vZ.w = 0.0f;
 	}
