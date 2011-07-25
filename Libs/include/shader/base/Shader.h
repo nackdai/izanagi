@@ -36,7 +36,7 @@ namespace izanagi {
 			padding_2 = 0;
 
 			clazz = E_SHADER_PARAMETER_CLASS_UNKNOWN;
-			type = E_POSTEFFECT_PARAMETER_TYPE_FORCE_INT32;
+			type = E_SHADER_PARAMETER_TYPE_FORCE_INT32;
 		}
 	};
 
