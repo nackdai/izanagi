@@ -112,7 +112,7 @@ struct SVtxAdditional {
 		}
 
 		izanagi::SVector v;
-		izanagi::SetZeroVector(v);
+		izanagi::SVector::SetZero(v);
 
 		for (size_t i = 0; i < nml.size(); i++) {
 			v.x += nml[i].x;
@@ -134,7 +134,7 @@ struct SVtxAdditional {
 		// NOTE
 		// Need to call "FixNormal" before call this function...
 		IZ_ASSERT(nml.size() == 1);
-		izanagi::CopyVector(v, nml[0]);
+		izanagi::SVector::Copy(v, nml[0]);
 	}
 
 	void FixTangent()
@@ -144,7 +144,7 @@ struct SVtxAdditional {
 		}
 
 		izanagi::SVector v;
-		izanagi::SetZeroVector(v);
+		izanagi::SVector::SetZero(v);
 
 		for (size_t i = 0; i < tangent.size(); i++) {
 			v.x += tangent[i].x;
@@ -163,7 +163,7 @@ struct SVtxAdditional {
 		// NOTE
 		// Need to call "FixTangent" before call this function...
 		IZ_ASSERT(tangent.size() == 1);
-		izanagi::CopyVector(v, tangent[0]);
+		izanagi::SVector::Copy(v, tangent[0]);
 	}
 };
 

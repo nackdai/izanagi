@@ -424,13 +424,13 @@ IZ_BOOL CGeometryChunk::ComputeVtxNormal(
 		IZ_UINT nIdx_2 = (i + 2) % 3;
 
 		izanagi::SVector vP;
-		izanagi::SubVectorXYZ(vP, vecPos[nIdx_1], vecPos[nIdx_0]);
+		izanagi::SVector::SubXYZ(vP, vecPos[nIdx_1], vecPos[nIdx_0]);
 
 		izanagi::SVector vQ;
-		izanagi::SubVectorXYZ(vQ, vecPos[nIdx_2], vecPos[nIdx_0]);
+		izanagi::SVector::SubXYZ(vQ, vecPos[nIdx_2], vecPos[nIdx_0]);
 
 		izanagi::SVector nml;
-		izanagi::CrossVector(nml, vP, vQ);
+		izanagi::SVector::Cross(nml, vP, vQ);
 
 		SVtxAdditional& sVtx = m_VtxList[nVtxIdx];
 		sVtx.nml.push_back(nml);
@@ -499,10 +499,10 @@ IZ_BOOL CGeometryChunk::ComputeVtxTangent(
 		IZ_UINT nIdx_2 = (i + 2) % 3;
 
 		izanagi::SVector vP;
-		izanagi::SubVectorXYZ(vP, vecPos[nIdx_1], vecPos[nIdx_0]);
+		izanagi::SVector::SubXYZ(vP, vecPos[nIdx_1], vecPos[nIdx_0]);
 
 		izanagi::SVector vQ;
-		izanagi::SubVectorXYZ(vQ, vecPos[nIdx_2], vecPos[nIdx_0]);
+		izanagi::SVector::SubXYZ(vQ, vecPos[nIdx_2], vecPos[nIdx_0]);
 
 		fCoeff[0] = vecUV[nIdx_2].v[1] - vecUV[nIdx_0].v[1];
 		fCoeff[1] = -(vecUV[nIdx_1].v[1] - vecUV[nIdx_0].v[1]);
@@ -514,17 +514,17 @@ IZ_BOOL CGeometryChunk::ComputeVtxTangent(
 		// BiNormal
 		izanagi::SVector vB;
 		{
-			izanagi::ScaleVector(vP, vP, fInvDeterminant * fCoeff[2]);
-			izanagi::ScaleVector(vQ, vQ, fInvDeterminant * fCoeff[3]);
-			izanagi::AddVector(vB, vP, vQ);
-			izanagi::NormalizeVector(vB, vB);
+			izanagi::SVector::Scale(vP, vP, fInvDeterminant * fCoeff[2]);
+			izanagi::SVector::Scale(vQ, vQ, fInvDeterminant * fCoeff[3]);
+			izanagi::SVector::Add(vB, vP, vQ);
+			izanagi::SVector::Normalize(vB, vB);
 		}
 
 		// Tangent
 		izanagi::SVector vT;
 		{
 			// X(T) = Y(B) x Z(N)
-			izanagi::CrossVector(vT, vB, vecNml[nIdx_0]);
+			izanagi::SVector::Cross(vT, vB, vecNml[nIdx_0]);
 		}
 
 		SVtxAdditional& sVtx = m_VtxList[nVtxIdx];

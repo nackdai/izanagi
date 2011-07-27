@@ -59,19 +59,19 @@ namespace izanagi {
 
 		void SetPos(const SVector& vecPos)
 		{
-			CopyVector(m_Param.pos, vecPos);
+			SVector::Copy(m_Param.pos, vecPos);
 			m_IsDirtyW2V = IZ_TRUE;
 		}
 
 		void SetAt(const SVector& vecAt)
 		{
-			CopyVector(m_Param.ref, vecAt);
+			SVector::Copy(m_Param.ref, vecAt);
 			m_IsDirtyW2V = IZ_TRUE;
 		}
 
 		void SetUp(const SVector& vecUp)
 		{
-			CopyVector(m_Param.up, vecUp);
+			SVector::Copy(m_Param.up, vecUp);
 			m_IsDirtyW2V = IZ_TRUE;
 		}
 

@@ -144,7 +144,7 @@ namespace izanagi {
 			}
 		}
 
-		CopyVector(dst, v);
+		SVector::Copy(dst, v);
 #endif	// #if defined(__USE_D3D_MATH__)
 	}
 
@@ -154,7 +154,7 @@ namespace izanagi {
 	{
 #if defined(__USE_D3D_MATH__)
 		SVector v;
-		CopyVector(v, vec);
+		SVector::Copy(v, vec);
 		v.w = 0.0f;
 
 		D3DXVec4Transform(
@@ -268,11 +268,11 @@ namespace izanagi {
 			fScaleY,
 			fScaleZ);
 #else	// #if defined(__USE_D3D_MATH__)
-		SetVector(dst.v[0], fScaleX, 0.0f, 0.0f, 0.0f);
-		SetVector(dst.v[1], 0.0f, fScaleY, 0.0f, 0.0f);
-		SetVector(dst.v[2], 0.0f, 0.0f, fScaleZ, 0.0f);
+		SVector::Set(dst.v[0], fScaleX, 0.0f, 0.0f, 0.0f);
+		SVector::Set(dst.v[1], 0.0f, fScaleY, 0.0f, 0.0f);
+		SVector::Set(dst.v[2], 0.0f, 0.0f, fScaleZ, 0.0f);
 
-		SetVector(dst.v[3], 0.0f, 0.0f, 0.0f, 1.0f);
+		SVector::Set(dst.v[3], 0.0f, 0.0f, 0.0f, 1.0f);
 #endif	// #if defined(__USE_D3D_MATH__)
 	}
 
@@ -288,12 +288,12 @@ namespace izanagi {
 	inline void ScaleMatrix(SMatrix& dst, const SMatrix& src, const SVector& scale)
 	{
 		SVector s;
-		SetVector(s, scale.v[0], scale.v[1], scale.v[2], 1.0f);
+		SVector::Set(s, scale.v[0], scale.v[1], scale.v[2], 1.0f);
 
-		MulVector(dst.v[0], src.v[0], s);
-		MulVector(dst.v[1], src.v[1], s);
-		MulVector(dst.v[2], src.v[2], s);
-		MulVector(dst.v[3], src.v[3], s);
+		SVector::Mul(dst.v[0], src.v[0], s);
+		SVector::Mul(dst.v[1], src.v[1], s);
+		SVector::Mul(dst.v[2], src.v[2], s);
+		SVector::Mul(dst.v[3], src.v[3], s);
 	}
 
 	inline void ScaleMatrix(

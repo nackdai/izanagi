@@ -391,10 +391,10 @@ void CDebugMesh::ComputeTangent(
 	const SMeshVtx& vtx2)
 {
 	SVector vP;
-	SubVector(vP, vtx1.pos, vtx0->pos);
+	SVector::Sub(vP, vtx1.pos, vtx0->pos);
 
 	SVector vQ;
-	SubVector(vQ, vtx2.pos, vtx0->pos);
+	SVector::Sub(vQ, vtx2.pos, vtx0->pos);
 
 	IZ_FLOAT a = vtx2.uv[1] - vtx0->uv[1];
 	IZ_FLOAT b = vtx1.uv[1] - vtx0->uv[1];
@@ -410,18 +410,18 @@ void CDebugMesh::ComputeTangent(
 		vB.x = fInvDeterminant * (-c * vP.x + d * vQ.x);
 		vB.y = fInvDeterminant * (-c * vP.y + d * vQ.y);
 		vB.z = fInvDeterminant * (-c * vP.z + d * vQ.z);
-		NormalizeVector(vB, vB);
+		SVector::Normalize(vB, vB);
 	}
 
 	// Tangent
 	SVector vT;
 	{
 		// X(T) = Y(B) x Z(N)
-		CrossVector(vT, vB, vtx0->nml);
+		SVector::Cross(vT, vB, vtx0->nml);
 	}
 
 	// Y(B) = Z(N) x X(T)
-	CrossVector(vB, vtx0->nml, vT);
+	SVector::Cross(vB, vtx0->nml, vT);
 
 	// TODO
 	// DirectXの座標系（左手）に変換する
@@ -446,27 +446,27 @@ void CDebugMesh::ComputeTangent(
 
 	vT.w = determinant;
 
-	//ScaleVector(vB, vB, determinant);
+	//SVector::Scale(vB, vB, determinant);
 #endif
 
 #if 0
 	IZ_FLOAT fLen = LengthVector(vtx0->tangent);
 	if (fLen == 0.0f) {
-		CopyVector(vtx0->tangent, vT);
-		CopyVector(vtx0->binml, vB);
+		SVector::Copy(vtx0->tangent, vT);
+		SVector::Copy(vtx0->binml, vB);
 	}
 	else {
-		AddVector(vtx0->tangent, vtx0->tangent, vT);
-		ScaleVector(vtx0->tangent, vtx0->tangent, 0.5f);
-		NormalizeVector(vtx0->tangent, vtx0->tangent);
+		SVector::Add(vtx0->tangent, vtx0->tangent, vT);
+		SVector::Scale(vtx0->tangent, vtx0->tangent, 0.5f);
+		SVector::Normalize(vtx0->tangent, vtx0->tangent);
 
-		AddVector(vtx0->binml, vtx0->binml, vB);
-		ScaleVector(vtx0->binml, vtx0->binml, 0.5f);
-		NormalizeVector(vtx0->binml, vtx0->binml);
+		SVector::Add(vtx0->binml, vtx0->binml, vB);
+		SVector::Scale(vtx0->binml, vtx0->binml, 0.5f);
+		SVector::Normalize(vtx0->binml, vtx0->binml);
 	}
 #else
-	CopyVector(vtx0->tangent, vT);
-	CopyVector(vtx0->binml, vB);
+	SVector::Copy(vtx0->tangent, vT);
+	SVector::Copy(vtx0->binml, vB);
 #endif
 }
 
@@ -492,18 +492,18 @@ void CDebugMesh::ApplyOverlap(
 
 		if (IsTangent(flag)) {
 			// Tangent
-			AddVector(pVtx->tangent, pVtx->tangent, pOverlap->tangent);
-			ScaleVector(pVtx->tangent, pVtx->tangent, 0.5f);
-			NormalizeVector(pVtx->tangent, pVtx->tangent);
+			SVector::Add(pVtx->tangent, pVtx->tangent, pOverlap->tangent);
+			SVector::Scale(pVtx->tangent, pVtx->tangent, 0.5f);
+			SVector::Normalize(pVtx->tangent, pVtx->tangent);
 
-			CopyVector(pOverlap->tangent, pVtx->tangent);
+			SVector::Copy(pOverlap->tangent, pVtx->tangent);
 
 			// BiNormal
-			AddVector(pVtx->binml, pVtx->binml, pOverlap->binml);
-			ScaleVector(pVtx->binml, pVtx->binml, 0.5f);
-			NormalizeVector(pVtx->binml, pVtx->binml);
+			SVector::Add(pVtx->binml, pVtx->binml, pOverlap->binml);
+			SVector::Scale(pVtx->binml, pVtx->binml, 0.5f);
+			SVector::Normalize(pVtx->binml, pVtx->binml);
 
-			CopyVector(pOverlap->binml, pVtx->binml);
+			SVector::Copy(pOverlap->binml, pVtx->binml);
 		}
 	}
 #endif

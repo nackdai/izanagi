@@ -505,7 +505,7 @@ IZ_BOOL CColladaGeometry::GetVertex(
 	// Get pareters's source.
 	domSourceRef pSrc = _GetSource(pMesh, sVtxFmt.src_id);
 
-	izanagi::SetDefaultZeroVector(vec);
+	izanagi::SVector::SetDefaultZero(vec);
 
 	// Get vertex paramter.
 	E_VTX_ACCESS_TYPE nVtxType = _GetVtxData(

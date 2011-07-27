@@ -49,97 +49,97 @@ namespace izanagi {
 		const CVector operator*(IZ_FLOAT f) const
 		{
 			CVector ret(*this);
-			ScaleVector(ret, ret, f);
+			SVector::Scale(ret, ret, f);
 			return ret;
 		}
 
 		const CVector& operator*=(IZ_FLOAT f)
 		{
-			ScaleVector(*this, *this, f);
+			SVector::Scale(*this, *this, f);
 			return *this;
 		}
 
 		const CVector operator/(IZ_FLOAT f) const
 		{
 			CVector ret(*this);
-			ScaleVector(ret, ret, 1.0f / f);
+			SVector::Scale(ret, ret, 1.0f / f);
 			return ret;
 		}
 
 		const CVector& operator/=(IZ_FLOAT f)
 		{
-			ScaleVector(*this, *this, 1.0f / f);
+			SVector::Scale(*this, *this, 1.0f / f);
 			return *this;
 		}
 
 		const CVector operator+(const SVector& rhs) const
 		{
 			CVector ret(*this);
-			AddVector(ret, ret, rhs);
+			SVector::Add(ret, ret, rhs);
 			return ret;
 		}
 
 		const CVector operator+(const CVector& rhs) const
 		{
 			CVector ret(*this);
-			AddVector(ret, ret, rhs);
+			SVector::Add(ret, ret, rhs);
 			return ret;
 		}
 
 		const CVector& operator+=(const SVector& rhs)
 		{
-			AddVector(*this, *this, rhs);
+			SVector::Add(*this, *this, rhs);
 			return *this;
 		}
 
 		const CVector& operator+=(const CVector& rhs)
 		{
-			AddVector(*this, *this, rhs);
+			SVector::Add(*this, *this, rhs);
 			return *this;
 		}
 
 		const CVector operator-(const SVector& rhs) const
 		{
 			CVector ret(*this);
-			SubVector(ret, ret, rhs);
+			SVector::Sub(ret, ret, rhs);
 			return ret;
 		}
 
 		const CVector operator-(const CVector& rhs) const
 		{
 			CVector ret(*this);
-			SubVector(ret, ret, rhs);
+			SVector::Sub(ret, ret, rhs);
 			return ret;
 		}
 
 		const CVector& operator-=(const SVector& rhs)
 		{
-			SubVector(*this, *this, rhs);
+			SVector::Sub(*this, *this, rhs);
 			return *this;
 		}
 
 		const CVector& operator-=(const CVector& rhs)
 		{
-			SubVector(*this, *this, rhs);
+			SVector::Sub(*this, *this, rhs);
 			return *this;
 		}
 
 		IZ_FLOAT dot(const SVector& rhs) const
 		{
-			IZ_FLOAT ret = DotVector(*this, rhs);
+			IZ_FLOAT ret = SVector::Dot(*this, rhs);
 			return ret;
 		}
 
 		IZ_FLOAT dot(const CVector& rhs) const
 		{
-			IZ_FLOAT ret = DotVector(*this, rhs);
+			IZ_FLOAT ret = SVector::Dot(*this, rhs);
 			return ret;
 		}
 
 	public:
 		friend void operator*(IZ_FLOAT f, CVector& rhs)
 		{
-			ScaleVector(rhs, rhs, f);
+			SVector::Scale(rhs, rhs, f);
 		}
 	};
 }	// namespace izanagi

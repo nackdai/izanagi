@@ -267,11 +267,11 @@ IZ_BOOL CXFileGeometry::GetVertex(
 
 	if (type == izanagi::E_MSH_VTX_FMT_TYPE_POS) {
 		IZ_UINT idx = sVtx.input[0];
-		izanagi::CopyVector(vec, pMesh->positions[idx]);
+		izanagi::SVector::Copy(vec, pMesh->positions[idx]);
 	}
 	else if (type == izanagi::E_MSH_VTX_FMT_TYPE_NORMAL) {
 		IZ_UINT idx = sVtx.input[1];
-		izanagi::CopyVector(vec, pMesh->normals[idx]);
+		izanagi::SVector::Copy(vec, pMesh->normals[idx]);
 	}
 	else if (type == izanagi::E_MSH_VTX_FMT_TYPE_COLOR) {
 		IZ_UINT idx = sVtx.input[0];

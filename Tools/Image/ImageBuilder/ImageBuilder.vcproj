@@ -55,7 +55,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="../ImageLib/ImageLibD.lib $(SolutionDir)/External/xerces/Build/Win32/VC8/$(ConfigurationName)/xerces-c_3D.lib d3d9.lib d3dx9d.lib dxerr9.lib"
+				AdditionalDependencies="../ImageLib/ImageLibD.lib $(SolutionDir)/External/xerces/Build/Win32/VC8/$(ConfigurationName)/xerces-c_3D.lib d3d9.lib d3dx9d.lib dxerr.lib"
 				OutputFile="$(SolutionDir)\tools\$(ConfigurationName)\$(ProjectName).exe"
 				LinkIncremental="2"
 				IgnoreDefaultLibraryNames=""
@@ -132,7 +132,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="../ImageLib/ImageLib.lib $(SolutionDir)/xerces/Build/Win32/VC8/$(ConfigurationName)/xerces-c_3.lib d3d9.lib d3dx9.lib dxerr9.lib"
+				AdditionalDependencies="../ImageLib/ImageLib.lib $(SolutionDir)/xerces/Build/Win32/VC8/$(ConfigurationName)/xerces-c_3.lib d3d9.lib d3dx9.lib dxerr.lib"
 				OutputFile="$(SolutionDir)\tools\$(ConfigurationName)\$(ProjectName).exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
