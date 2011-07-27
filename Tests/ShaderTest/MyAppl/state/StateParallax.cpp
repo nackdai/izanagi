@@ -88,7 +88,7 @@ IZ_BOOL CStateParallax::Render3D()
 	// シェーダパラメータセット
 	{
 		izanagi::SMatrix mL2W;
-		SetUnitMatrix(mL2W);
+		izanagi::SMatrix::SetUnit(mL2W);
 		m_pShader->SetL2W(mL2W);
 
 		m_pShader->SetW2C(CMyCamera::GetInstance().GetRawInterface().GetParam().mtxW2C);

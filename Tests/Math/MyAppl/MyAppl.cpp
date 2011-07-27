@@ -85,7 +85,7 @@ namespace {
 		};
 
 		izanagi::SMatrix mtx;
-		izanagi::SetUnitMatrix(mtx);
+		izanagi::SMatrix::SetUnit(mtx);
 
 		for (size_t i = 0; i < COUNTOF(tbl); i++) {
 			izanagi::SQuat quat;
@@ -107,7 +107,7 @@ namespace {
 				}
 			}
 
-			izanagi::MulMatrix(mtx, mtx, tmp);
+			izanagi::SMatrix::Mul(mtx, mtx, tmp);
 		}
 
 		IZ_PRINTF("============\n");

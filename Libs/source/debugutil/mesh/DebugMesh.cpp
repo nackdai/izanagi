@@ -427,12 +427,12 @@ void CDebugMesh::ComputeTangent(
 	// DirectXの座標系（左手）に変換する
 	{
 		SMatrix m;
-		GetRotMatrix(
+		SMatrix::GetRot(
 			m,
 			IZ_MATH_PI,
 			vtx0->nml.x, vtx0->nml.y, vtx0->nml.z);
 
-		ApplyMatrix(vT, vT, m);
+		SMatrix::Apply(vT, vT, m);
 	}
 
 #if 1
@@ -442,7 +442,7 @@ void CDebugMesh::ComputeTangent(
 	mtx.v[2].Set(vT.z, vB.z, vtx0->nml.z, 0.0f);
 	mtx.v[3].Set(0.0f, 0.0f,        0.0f, 1.0f);
 
-	IZ_FLOAT determinant = DeterminantMatrix(mtx);
+	IZ_FLOAT determinant = SMatrix::Determinant(mtx);
 
 	vT.w = determinant;
 

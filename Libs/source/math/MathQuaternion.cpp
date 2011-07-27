@@ -112,7 +112,7 @@ namespace izanagi {
 		m2.m[2][0] =  y; m2.m[2][1] = -x; m2.m[2][2] =  w; m2.m[2][3] = 0.0f;
 		m2.m[3][0] = -z; m2.m[3][1] =  w; m2.m[3][2] =  x; m2.m[3][3] = 0.0f;
 
-		MulMatrix(mtx, m1, m2);
+		SMatrix::Mul(mtx, m1, m2);
 		mtx.m[3][3] = 1.0f;
 #endif
 #endif	// #if defined(__USE_D3D_MATH__)

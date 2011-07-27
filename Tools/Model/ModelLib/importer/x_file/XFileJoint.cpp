@@ -92,13 +92,13 @@ IZ_BOOL CXFileJoint::Init(CXFileParser* pParser)
 									sJoint.name);
 
 		if (pBone != IZ_NULL) {
-			izanagi::CopyMatrix(
+			izanagi::SMatrix::Copy(
 				sJoint.mtxInv,
 				pBone->mtx);
 			sJoint.isMtxInvFromSkin = IZ_TRUE;
 		}
 		else {
-			izanagi::CopyMatrix(
+			izanagi::SMatrix::Copy(
 				sJoint.mtxInv,
 				pNode->mtxTransform);
 			sJoint.isMtxInvFromSkin = IZ_FALSE;
@@ -113,7 +113,7 @@ IZ_BOOL CXFileJoint::Init(CXFileParser* pParser)
 			if (sJoint.parent >= 0) {
 				const SJoint& sParent = m_JointList[sJoint.parent];
 
-				izanagi::MulMatrix(
+				izanagi::SMatrix::Mul(
 					sJoint.mtxInv,
 					sJoint.mtxInv,
 					sParent.mtxInv);
@@ -126,7 +126,7 @@ IZ_BOOL CXFileJoint::Init(CXFileParser* pParser)
 		SJoint& sJoint = m_JointList[i];
 
 		if (!sJoint.isMtxInvFromSkin) {
-			izanagi::InverseMatrix(sJoint.mtxInv, sJoint.mtxInv);
+			izanagi::SMatrix::Inverse(sJoint.mtxInv, sJoint.mtxInv);
 		}
 	}
 
@@ -165,7 +165,7 @@ void CXFileJoint::GetJointInvMtx(
 
 	const SJoint& sJoint = m_JointList[nIdx];
 
-	izanagi::CopyMatrix(
+	izanagi::SMatrix::Copy(
 		mtx,
 		sJoint.mtxInv);
 }

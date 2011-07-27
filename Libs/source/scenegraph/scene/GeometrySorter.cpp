@@ -127,7 +127,7 @@ IZ_BOOL CGeometrySorter::Register(
 	IZ_FLOAT normalizedZ = cameraParam.mtxW2C.m[2][2] * z + cameraParam.mtxW2C.m[3][2];
 #else
 	SVector v;
-	ApplyMatrix(v, pos, cameraParam.mtxW2C);
+	SMatrix::Apply(v, pos, cameraParam.mtxW2C);
 
 	IZ_FLOAT w = v.w;
 	IZ_FLOAT normalizedZ = v.z;

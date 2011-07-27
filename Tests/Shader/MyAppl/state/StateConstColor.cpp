@@ -41,7 +41,7 @@ void CStateConstColor::Render3D()
 		IZ_ASSERT(m_pShader->BeginPass(i));
 		{
 			izanagi::SMatrix mtxL2W;
-			izanagi::SetUnitMatrix(mtxL2W);
+			izanagi::SMatrix::SetUnit(mtxL2W);
 			m_pShader->SetParamValue(m_hL2W, &mtxL2W, sizeof(mtxL2W));
 
 			const izanagi::SMatrix& mtxW2C = CMyCamera::GetInstance().GetRawInterface().GetParam().mtxW2C;

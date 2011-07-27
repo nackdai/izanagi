@@ -69,7 +69,7 @@ void CStateBasicGirl::Render3D()
 	// シェーダパラメータセット
 	{
 		izanagi::SMatrix mtxL2W;
-		izanagi::SetUnitMatrix(mtxL2W);
+		izanagi::SMatrix::SetUnit(mtxL2W);
 
 		const izanagi::SMatrix& mtxW2C = CMyCamera::GetInstance().GetRawInterface().GetParam().mtxW2C;
 		const izanagi::SVector& vecEye = CMyCamera::GetInstance().GetRawInterface().GetParam().pos;

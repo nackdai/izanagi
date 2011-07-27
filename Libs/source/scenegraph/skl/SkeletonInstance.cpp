@@ -132,7 +132,7 @@ namespace {
 		SMatrix mtx;
 		MatrixFromQuat(mtx, quat);
 
-		MulMatrix(dst, src, mtx);
+		SMatrix::Mul(dst, src, mtx);
 	}
 #else
 	void _RotateAxis(
@@ -146,7 +146,7 @@ namespace {
 		SMatrix mtx;
 		MatrixFromQuat(mtx, quat);
 
-		MulMatrix(dst, src, mtx);
+		SMatrix::Mul(dst, src, mtx);
 	}
 #endif
 }	// namespace
@@ -164,10 +164,10 @@ void CSkeletonInstance::BuildLocalMatrix(IZ_UINT nIdx)
 	const S_SKL_JOINT_POSE& pose = m_pJointPose[nIdx];
 	SMatrix& mtxJoint = m_pGlobalPose[nIdx];
 
-	SetUnitMatrix(mtxJoint);
+	SMatrix::SetUnit(mtxJoint);
 
 	if (flag.IsOn(E_SKL_JOINT_PARAM_SCALE)) {
-		ScaleMatrix(
+		SMatrix::Scale(
 			mtxJoint,
 			mtxJoint, 
 			pose.scale[0],
@@ -186,7 +186,7 @@ void CSkeletonInstance::BuildLocalMatrix(IZ_UINT nIdx)
 	}
 
 	if (flag.IsOn(E_SKL_JOINT_PARAM_TRANSLATE)) {
-		TransMatrix(
+		SMatrix::Trans(
 			mtxJoint,
 			mtxJoint, 
 			pose.trans[0],
@@ -202,7 +202,7 @@ void CSkeletonInstance::ApplyInvBindMatrix(IZ_UINT nIdx)
 
 	SMatrix& mtxJoint = m_pGlobalPose[nIdx];
 
-	MulMatrix(
+	SMatrix::Mul(
 		mtxJoint,
 		pJoint->mtxInvBind,
 		mtxJoint);
@@ -215,7 +215,7 @@ void CSkeletonInstance::ApplyParentMatrix(
 	SMatrix& mtxJoint = m_pGlobalPose[nIdx];
 	const SMatrix& mtxParent = m_pGlobalPose[nParentIdx];
 
-	MulMatrix(
+	SMatrix::Mul(
 		mtxJoint,
 		mtxJoint,
 		mtxParent);

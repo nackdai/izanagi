@@ -131,7 +131,7 @@ IZ_BOOL CJointChunk::ExportJoint(
 			tvTransform);
 
 		izanagi::SMatrix mtxRot;
-		izanagi::SetUnitMatrix(mtxRot);
+		izanagi::SMatrix::SetUnit(mtxRot);
 
 		sJoint.validParam = 0;
 
@@ -180,7 +180,7 @@ IZ_BOOL CJointChunk::ExportJoint(
 				izanagi::SMatrix mtx;
 				izanagi::MatrixFromQuat(mtx, quat);
 
-				izanagi::MulMatrix(mtxRot, mtxRot, mtx);
+				izanagi::SMatrix::Mul(mtxRot, mtxRot, mtx);
 
 				bHasQuatFromAxisRot = IZ_TRUE;
 			}

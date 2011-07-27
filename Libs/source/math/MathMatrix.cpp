@@ -17,7 +17,7 @@ namespace izanagi {
 #endif
 
 	// X軸を回転軸にして回転するマトリクスを取得
-	void GetRotMatrixX(SMatrix& dst, IZ_FLOAT fTheta)
+	void SMatrix::GetRotByX(SMatrix& dst, IZ_FLOAT fTheta)
 	{
 #if defined(__USE_D3D_MATH__)
 		D3DXMatrixRotationX(
@@ -35,7 +35,7 @@ namespace izanagi {
 	}
 
 	// Y軸を回転軸にして回転するマトリクスを取得
-	void GetRotMatrixY(SMatrix& dst, IZ_FLOAT fTheta)
+	void SMatrix::GetRotByY(SMatrix& dst, IZ_FLOAT fTheta)
 	{
 #if defined(__USE_D3D_MATH__)
 		D3DXMatrixRotationY(
@@ -53,7 +53,7 @@ namespace izanagi {
 	}
 
 	// Z軸を回転軸にして回転するマトリクスを取得
-	void GetRotMatrixZ(SMatrix& dst, IZ_FLOAT fTheta)
+	void SMatrix::GetRotByZ(SMatrix& dst, IZ_FLOAT fTheta)
 	{
 #if defined(__USE_D3D_MATH__)
 		D3DXMatrixRotationZ(
@@ -71,7 +71,7 @@ namespace izanagi {
 	}
 
 	// 任意軸を回転軸にして回転するマトリクスを取得
-	void GetRotMatrix(
+	void SMatrix::GetRot(
 		SMatrix& dst, IZ_FLOAT fTheta,
 		IZ_FLOAT x, IZ_FLOAT y, IZ_FLOAT z)
 	{
@@ -83,24 +83,24 @@ namespace izanagi {
 			&v,
 			fTheta);
 #else
-		IZ_FLAOT c = ::cosf(fTheta);
-		IZ_FLOAT 1_c = 1.0f - c;
+		IZ_FLOAT c = ::cosf(fTheta);
+		IZ_FLOAT one_c = 1.0f - c;
 
 		IZ_FLOAT s = ::sinf(fTheta);
 
-		dst._00 = c + x * x * 1_c;
-		dst._01 = x * y * 1_c + z * s;
-		dst._02 = x * z * 1_c - y * s;
+		dst._00 = c + x * x * one_c;
+		dst._01 = x * y * one_c + z * s;
+		dst._02 = x * z * one_c - y * s;
 		dst._03 = 0.0f;
 
-		dst._10 = x * y * 1_c - z * s;
-		dst._11 = c + y * y * 1_c;
-		dst._12 = y * z * 1_c + x * s;
+		dst._10 = x * y * one_c - z * s;
+		dst._11 = c + y * y * one_c;
+		dst._12 = y * z * one_c + x * s;
 		dst._13 = 0.0f;
 
-		dst._20 = x * z * 1_c + y * s;
-		dst._21 = y * z * 1_c - x * s;
-		dst._22 = c + z * z * 1_c;
+		dst._20 = x * z * one_c + y * s;
+		dst._21 = y * z * one_c - x * s;
+		dst._22 = c + z * z * one_c;
 		dst._23 = 0.0f;
 
 		dst._30 = 0.0f;
@@ -111,7 +111,7 @@ namespace izanagi {
 	}
 
 	// オフセットを指定したマトリクスを取得
-	void GetTransMatrix(SMatrix& dst, const SVector& tv)
+	void SMatrix::GetTrans(SMatrix& dst, const SVector& tv)
 	{
 #if defined(__USE_D3D_MATH__)
 		D3DXMatrixTranslation(
@@ -128,7 +128,7 @@ namespace izanagi {
 	}
 
 	// 行列式を計算する
-	IZ_FLOAT DeterminantMatrix(const SMatrix& mtx)
+	IZ_FLOAT SMatrix::Determinant(const SMatrix& mtx)
 	{
 #if defined(__USE_D3D_MATH__)
 		IZ_FLOAT ret = D3DXMatrixDeterminant(reinterpret_cast<const D3DXMATRIX*>(&mtx));
@@ -141,7 +141,7 @@ namespace izanagi {
 	}
 
 	// 逆マトリクスを Gauss/Jordan 法で求める
-	void InverseMatrix(SMatrix& dst, const SMatrix& src)
+	void SMatrix::Inverse(SMatrix& dst, const SMatrix& src)
 	{
 #if defined(__USE_D3D_MATH__)
 		D3DXMatrixInverse(
@@ -152,7 +152,7 @@ namespace izanagi {
 		// Gauss/Jordan法で求める
 		SMatrix mtx;
 		CopyMatrix(mtx, src);
-		SetUnitMatrix(dst);
+		SMatrix::SetUnit(dst);
 
 		for (int i = 0; i < 4; ++i) {
 			// ピボット選択
@@ -161,8 +161,8 @@ namespace izanagi {
 			for (int j = i + 1; j < 4; ++j) {
 				if (f < CMath::Absf(mtx.m[j][i])) {
 					f = CMath::Absf(mtx.m[j][i]);
-					SwapVector(mtx.v[i], mtx.v[j]);
-					SwapVector(dst.v[i], dst.v[j]);
+					SVector::Swap(mtx.v[i], mtx.v[j]);
+					SVector::Swap(dst.v[i], dst.v[j]);
 				}
 			}
 
@@ -189,7 +189,7 @@ namespace izanagi {
 	}
 
 	// ベクトルから回転マトリクスを求める
-	void GetRotMatrixFromVector(SMatrix& mtx, const SVector& vec)
+	void SMatrix::GetRotMatrixFromVector(SMatrix& mtx, const SVector& vec)
 	{
 		SVector up;
 		up.Set(0.0f, 1.0f, 0.0f, 0.0f);
@@ -197,7 +197,7 @@ namespace izanagi {
 		GetRotMatrixFromVector(mtx, vec, up);
 	}
 
-	void GetRotMatrixFromVector(SMatrix& mtx, const SVector& vec, const SVector& up)
+	void SMatrix::GetRotMatrixFromVector(SMatrix& mtx, const SVector& vec, const SVector& up)
 	{
 		SVector& vX = mtx.v[0];
 		SVector& vY = mtx.v[1];
