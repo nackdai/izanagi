@@ -236,7 +236,7 @@ void CDebugMeshSphere::ComputeVtx(
 	// 位置
 	if (IsPos(flag)) {
 		SVector vPos;
-		ScaleVector(vPos, vNml, fRadius);
+		SVector::Scale(vPos, vNml, fRadius);
 
 		pVtx->pos.v[0] = vPos.x;
 		pVtx->pos.v[1] = vPos.y;

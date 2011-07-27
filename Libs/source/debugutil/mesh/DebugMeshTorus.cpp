@@ -239,7 +239,7 @@ void CDebugMeshTorus::ComputeVtx(
 			vPos.y - vCenter.y,
 			vPos.z - vCenter.z);
 
-		NormalizeVector(vNml, vNml);
+		SVector::Normalize(vNml, vNml);
 
 		pVtx->nml.v[0] = vNml.x;
 		pVtx->nml.v[1] = vNml.y;

@@ -22,7 +22,7 @@ namespace izanagi {
 #else	// #if defined(__USE_D3D_MATH__)
 		// 念のため
 		SVector v;
-		NormalizeVector(v, vAxis);
+		SVector::Normalize(v, vAxis);
 
 		IZ_FLOAT c = cosf(rad * 0.5f);
 		IZ_FLOAT s = sinf(rad * 0.5f);
@@ -50,12 +50,12 @@ namespace izanagi {
 		SVector cross;
 		OuterProduct(cross, v, dst);
 
-		ScaleVector(dst, dst, ww - vv);
-		ScaleVector(v, v, 2.0f * vd);
-		ScaleVector(cross, cross, 2.0f * q.w);
+		SVector::Scale(dst, dst, ww - vv);
+		SVector::Scale(v, v, 2.0f * vd);
+		SVector::Scale(cross, cross, 2.0f * q.w);
 
-		AddVector(dst, dst, v);
-		AddVector(dst, dst, cross);
+		SVector::Add(dst, dst, v);
+		SVector::Add(dst, dst, cross);
 	}
 #endif
 
@@ -214,13 +214,13 @@ namespace izanagi {
 	{
 		// 念のため
 		SVector v0, v1;
-		NormalizeVector(v0, from);
-		NormalizeVector(v1, to);
+		SVector::Normalize(v0, from);
+		SVector::Normalize(v1, to);
 
 		SVector c;
-		CrossVector(c, v0, v1);
+		SVector::Cross(c, v0, v1);
 
-		IZ_FLOAT d = DotVector(v0, v1);
+		IZ_FLOAT d = SVector::Dot(v0, v1);
 		IZ_FLOAT s = sqrtf(2.0f * (1.0f + d));
 
 		quat.x = c.x / s;

@@ -24,9 +24,9 @@ void CCamera::Init(
 
 	m_Param.aspect = fAspect;
 
-	CopyVector(m_Param.pos, vecPos);
-	CopyVector(m_Param.ref, vecRef);
-	CopyVector(m_Param.up, vecUp);
+	SVector::Copy(m_Param.pos, vecPos);
+	SVector::Copy(m_Param.ref, vecRef);
+	SVector::Copy(m_Param.up, vecUp);
 
 	m_IsDirtyW2V = IZ_TRUE;
 	m_IsDirtyV2C = IZ_TRUE;
@@ -74,29 +74,29 @@ void CCamera::ComputeW2V()
 	// Z
 	// 視点から注視点へのベクトル
 #ifdef VIEW_LH
-	SubVectorXYZ(vecZ, m_Param.ref, m_Param.pos);	// 左手
+	SVector::SubXYZ(vecZ, m_Param.ref, m_Param.pos);	// 左手
 #else	// #ifdef VIEW_LH
-	SubVectorXYZ(vecZ, m_Param.pos, m_Param.ref);	// 右手
+	SVector::SubXYZ(vecZ, m_Param.pos, m_Param.ref);	// 右手
 #endif	// #ifdef VIEW_LH
 
-	NormalizeVector(vecZ, vecZ);
+	SVector::Normalize(vecZ, vecZ);
 
 	// X
-	CrossVector(vecX, m_Param.up, vecZ);
-	NormalizeVector(vecX, vecX);
+	SVector::Cross(vecX, m_Param.up, vecZ);
+	SVector::Normalize(vecX, vecX);
 
 	// Y
-	CrossVector(vecY, vecZ, vecX);
+	SVector::Cross(vecY, vecZ, vecX);
 
-	CopyVector(m_Param.mtxW2V.v[0], vecX);
-	CopyVector(m_Param.mtxW2V.v[1], vecY);
-	CopyVector(m_Param.mtxW2V.v[2], vecZ);
+	SVector::Copy(m_Param.mtxW2V.v[0], vecX);
+	SVector::Copy(m_Param.mtxW2V.v[1], vecY);
+	SVector::Copy(m_Param.mtxW2V.v[2], vecZ);
 
 	TransposeMatrix(m_Param.mtxW2V, m_Param.mtxW2V);
 
-	m_Param.mtxW2V.m[3][0] = -1.0f * DotVector(vecX, m_Param.pos);
-	m_Param.mtxW2V.m[3][1] = -1.0f * DotVector(vecY, m_Param.pos);
-	m_Param.mtxW2V.m[3][2] = -1.0f * DotVector(vecZ, m_Param.pos);
+	m_Param.mtxW2V.m[3][0] = -1.0f * SVector::Dot(vecX, m_Param.pos);
+	m_Param.mtxW2V.m[3][1] = -1.0f * SVector::Dot(vecY, m_Param.pos);
+	m_Param.mtxW2V.m[3][2] = -1.0f * SVector::Dot(vecZ, m_Param.pos);
 	m_Param.mtxW2V.m[3][3] = 1.0f;
 }
 

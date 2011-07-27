@@ -8,7 +8,7 @@ namespace {
 		izanagi::SVector vec;
 		vec.Set(x, y, z);
 
-		IZ_FLOAT len = izanagi::LengthVector(vec);
+		IZ_FLOAT len = izanagi::SVector::Length(vec);
 #if 0
 		IZ_BOOL bHasScale = !izanagi::CMath::IsNearyEqual(len, 1.0f);
 #else

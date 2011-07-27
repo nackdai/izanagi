@@ -78,7 +78,7 @@ void CSceneGraphUtil::Point2Ray(
 	DivVector(vRay, vRay, vRay.w);
 	vRay.w = 0.0f;
 
-	NormalizeVector(vRay, vRay);
+	SVector::Normalize(vRay, vRay);
 
 	SMatrix mV2W;
 	InverseMatrix(mV2W, sCamera.mtxW2V);
@@ -96,16 +96,16 @@ void CSceneGraphUtil::Point2Ray(
 	IZ_FLOAT y = -2.0f * (nY - nCy) * fTan / nH;
 
 	SVector vX, vY;
-	ScaleVector(vX, sCamera.mtxW2V.v[0], x);
-	ScaleVector(vY, sCamera.mtxW2V.v[1], y);
+	SVector::Scale(vX, sCamera.mtxW2V.v[0], x);
+	SVector::Scale(vY, sCamera.mtxW2V.v[1], y);
 
 	SVector vZ;
-	CopyVector(vZ, sCamera.mtxW2V.v[2]);
+	SVector::Copy(vZ, sCamera.mtxW2V.v[2]);
 	vZ.z *= -1.0f;
 
-	AddVector(vRay, vX, vY);
-	AddVector(vRay, vRay, vZ);
+	SVector::Add(vRay, vX, vY);
+	SVector::Add(vRay, vRay, vZ);
 
-	NormalizeVector(vRay, vRay);
+	SVector::Normalize(vRay, vRay);
 #endif
 }

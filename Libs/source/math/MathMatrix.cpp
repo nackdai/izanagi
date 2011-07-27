@@ -168,8 +168,8 @@ namespace izanagi {
 
 			// 対象となる行の対角値を 1 にする
 			f = 1.0f / mtx.m[i][i];
-			ScaleVector(mtx.v[i], mtx.v[i], f);
-			ScaleVector(dst.v[i], dst.v[i], f);
+			SVector::Scale(mtx.v[i], mtx.v[i], f);
+			SVector::Scale(dst.v[i], dst.v[i], f);
 
 			// 対象とならない列の値を 0 にする
 			for (int j = 0; j < 4; ++j) {
@@ -177,11 +177,11 @@ namespace izanagi {
 					IZ_FLOAT fTemp = mtx.m[j][i];
 
 					SVector v1, v2;
-					ScaleVector(v1, mtx.v[i], fTemp);
-					ScaleVector(v2, dst.v[i], fTemp);
+					SVector::Scale(v1, mtx.v[i], fTemp);
+					SVector::Scale(v2, dst.v[i], fTemp);
 
-					SubVector(mtx.v[j], mtx.v[j], v1);
-					SubVector(dst.v[j], dst.v[j], v2);
+					SVector::Sub(mtx.v[j], mtx.v[j], v1);
+					SVector::Sub(dst.v[j], dst.v[j], v2);
 				}
 			}
 		}
@@ -203,7 +203,7 @@ namespace izanagi {
 		SVector& vY = mtx.v[1];
 		SVector& vZ = mtx.v[2];
 
-		NormalizeVector(vZ, vec);
+		SVector::Normalize(vZ, vec);
 
 		SVector vUp;
 		if (CMath::IsNearyEqualZero(vZ.x) && CMath::IsNearyEqualZero(vZ.z)) {
@@ -217,13 +217,13 @@ namespace izanagi {
 			}
 		}
 		else {
-			CopyVector(vUp, up);
+			SVector::Copy(vUp, up);
 		}
 
-		CrossVector(vX, vUp, vZ);
-		NormalizeVector(vX, vX);
+		SVector::Cross(vX, vUp, vZ);
+		SVector::Normalize(vX, vX);
 
-		CrossVector(vY, vZ, vX);
+		SVector::Cross(vY, vZ, vX);
 
 		vX.w = vY.w = vZ.w = 0.0f;
 	}

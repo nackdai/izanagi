@@ -93,14 +93,14 @@ IZ_BOOL CPostEffectFunctorRenderStar::Apply(
 
 		// そろぞれのサンプリングで適当に色をつける
 		for (IZ_INT i = 0; i < SAMPLE_NUM; ++i) {
-			LerpVector(
+			SVector::Lerp(
 				vColor[nPass][i],
 				vChromaticAberrationTable[i],
 				vColWhite,
 				fRatio);
 			
 			// 全体的な色の変化を調整する
-			LerpVector(
+			SVector::Lerp(
 				vColor[nPass][i],
 				vColWhite,
 				vColor[nPass][i],
@@ -190,7 +190,7 @@ IZ_BOOL CPostEffectFunctorRenderStar::Apply(
 				IZ_FLOAT fLum = powf(sStarData.fAttenuation, fAttnPowScale * nSample);
 	            
 				// 色を変化させるための重み
-				ScaleVector(
+				SVector::Scale(
 					vWeights[nSample],
 					vColor[sStarData.nPasses - 1 - nPass][nSample],
 					fLum * (nPass + 1.0f) * 0.5f);
@@ -206,7 +206,7 @@ IZ_BOOL CPostEffectFunctorRenderStar::Apply(
 					vOffsets[nSample].v[pos] = 0.0f;
 					vOffsets[nSample].v[pos + 1] = 0.0f;
 
-					SetZeroVector(vWeights[nSample]);
+					SVector::SetZero(vWeights[nSample]);
 				}
 			}	// end of for
 
@@ -283,7 +283,7 @@ IZ_BOOL CPostEffectFunctorRenderStar::Apply(
 
 			// 次への準備
 			{
-				ScaleVector(
+				SVector::Scale(
 					vStepUV,
 					vStepUV,
 					(IZ_FLOAT)SAMPLE_NUM);
