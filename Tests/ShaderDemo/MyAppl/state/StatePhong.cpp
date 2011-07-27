@@ -53,22 +53,22 @@ IZ_BOOL CStatePhong::Render3D()
 	{
 		// Local -> World
 		izanagi::SMatrix mtxL2W;
-		izanagi::SetUnitMatrix(mtxL2W);
+		izanagi::SMatrix::SetUnit(mtxL2W);
 		m_pShader->SetL2W(mtxL2W);
 
 		// ローカル座標変換行列
 		izanagi::SMatrix mtxW2L;
-		izanagi::InverseMatrix(mtxW2L, mtxL2W);
+		izanagi::SMatrix::Inverse(mtxW2L, mtxL2W);
 
 		m_pShader->SetW2C(CMyCamera::GetInstance().GetRawInterface().GetParam().mtxW2C);
 
 		// View -> Local
 		izanagi::SMatrix mtxV2L;
-		izanagi::MulMatrix(
+		izanagi::SMatrix::Mul(
 			mtxV2L, 
 			mtxL2W, 
 			CMyCamera::GetInstance().GetRawInterface().GetParam().mtxW2V);
-		izanagi::InverseMatrix(mtxV2L, mtxV2L);
+		izanagi::SMatrix::Inverse(mtxV2L, mtxV2L);
 
 		// ビュー座標系における視点は常に原点
 		izanagi::SVector vEyePos;
@@ -76,7 +76,7 @@ IZ_BOOL CStatePhong::Render3D()
 
 		// 視点の位置をローカル座標に変換する
 		izanagi::SVector vLocalEye;
-		izanagi::ApplyMatrix(
+		izanagi::SMatrix::Apply(
 			vLocalEye,
 			vEyePos,
 			mtxV2L);
@@ -90,7 +90,7 @@ IZ_BOOL CStatePhong::Render3D()
 			izanagi::SVector::Normalize(sParallel.vDir, sParallel.vDir);
 
 			// ローカル座標に変換する
-			izanagi::ApplyMatrixXYZ(sParallel.vDir, sParallel.vDir, mtxW2L);
+			izanagi::SMatrix::ApplyXYZ(sParallel.vDir, sParallel.vDir, mtxW2L);
 
 			sParallel.color.Set(1.0f, 1.0f, 1.0f, 1.0f);
 		}

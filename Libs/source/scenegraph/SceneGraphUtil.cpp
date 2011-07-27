@@ -12,7 +12,7 @@ void CSceneGraphUtil::ComputeC2S(
 	IZ_FLOAT fMinZ,
 	IZ_FLOAT fMaxZ)
 {
-	SetUnitMatrix(mtxC2S);
+	SMatrix::SetUnit(mtxC2S);
 
 	mtxC2S.m[0][0] = fScreenWidth / 2.0f;
 	mtxC2S.m[1][1] = -fScreenHeight / 2.0f;
@@ -74,7 +74,7 @@ void CSceneGraphUtil::Point2Ray(
 	SMatrix mC2V;
 	InverseMatrix(mC2V, sCamera.mtxV2C);
 
-	ApplyMatrix(vRay, vClip, mC2V);
+	SMatrix::Apply(vRay, vClip, mC2V);
 	DivVector(vRay, vRay, vRay.w);
 	vRay.w = 0.0f;
 
@@ -82,7 +82,7 @@ void CSceneGraphUtil::Point2Ray(
 
 	SMatrix mV2W;
 	InverseMatrix(mV2W, sCamera.mtxW2V);
-	ApplyMatrix(vRay, vRay, mV2W);
+	SMatrix::Apply(vRay, vRay, mV2W);
 #else
 	IZ_INT nW = vp.width;
 	IZ_INT nH = vp.height;

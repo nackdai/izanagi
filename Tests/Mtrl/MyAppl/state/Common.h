@@ -86,10 +86,10 @@ void CTestMdlRenderHandler::BeginRenderMesh()
 {
 	m_nCnt = 0;
 
-	izanagi::SetUnitMatrix(m_Mtx[0]);
-	izanagi::SetUnitMatrix(m_Mtx[1]);
-	izanagi::SetUnitMatrix(m_Mtx[2]);
-	izanagi::SetUnitMatrix(m_Mtx[3]);
+	izanagi::SMatrix::SetUnit(m_Mtx[0]);
+	izanagi::SMatrix::SetUnit(m_Mtx[1]);
+	izanagi::SMatrix::SetUnit(m_Mtx[2]);
+	izanagi::SMatrix::SetUnit(m_Mtx[3]);
 
 	m_Handle = 0;
 }
@@ -102,7 +102,7 @@ void CTestMdlRenderHandler::SetJointMatrix(
 	IZ_UINT nIdx,
 	const izanagi::SMatrix& mtx)
 {
-	izanagi::CopyMatrix(m_Mtx[m_nCnt], mtx);
+	izanagi::SMatrix::Copy(m_Mtx[m_nCnt], mtx);
 	m_nCnt++;
 }
 

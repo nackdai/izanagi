@@ -162,8 +162,8 @@ void CEnvBox::Render(izanagi::CGraphicsDevice* pDevice)
 	}
 
 	izanagi::SMatrix mL2W;
-	SetUnitMatrix(mL2W);
-	ScaleMatrix(mL2W, mL2W, izanagi::CVector(100.0f, 100.0f, 100.0f, 100.0f));
+	izanagi::SMatrix::SetUnit(mL2W);
+	izanagi::SMatrix::Scale(mL2W, mL2W, izanagi::CVector(100.0f, 100.0f, 100.0f, 100.0f));
 #if 1
 	izanagi::SVector::CopyXYZ(
 		mL2W.v[3],

@@ -190,7 +190,7 @@ IZ_FLOAT CAnimationUtil::ComputeHermite(
 			pKeys[nNext]->params[KEY_PARAM_IN_TANGENT],
 		};
 
-		ApplyMatrix(vecS, vecS, mtxBezier);
+		SMatrix::Apply(vecS, vecS, mtxBezier);
 		ret = SVector::Dot(vecS, vecC);
 	}
 

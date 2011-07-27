@@ -125,7 +125,7 @@ IZ_BOOL CColladaJoint::ReadJoint(domVisual_scene* pScene)
 					}
 				}
 
-				IZ_ASSERT(izanagi::IsUnitMatrix(mtxBindShape));
+				IZ_ASSERT(izanagi::SMatrix::IsUnit(mtxBindShape));
 
 				// Find the <joints> and <vertex_weights> elements inside <skin>
 				domSkin::domJoints* pJointsElement = pSkin->getJoints();
@@ -326,7 +326,7 @@ void CColladaJoint::GetJointInvMtx(
 
 	// TODO
 	// COLLADA-viewer のソースを見ていると必要らしいが・・・
-	izanagi::TransposeMatrix(mtx, mtx);
+	izanagi::SMatrix::Transpose(mtx, mtx);
 }
 
 #if 0
@@ -467,7 +467,7 @@ namespace {
 
 		// TODO
 		// COLLADA-viewer のソースを見ていると必要らしいが・・・
-		izanagi::TransposeMatrix(mtx, mtx);
+		izanagi::SMatrix::Transpose(mtx, mtx);
 
 		for (IZ_UINT i = 0; i < 16; i++) {
 			sTransform.param.push_back(mtx.a[i]);

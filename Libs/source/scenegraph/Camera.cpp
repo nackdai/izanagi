@@ -55,7 +55,7 @@ void CCamera::Update()
 	}
 
 	if (m_IsDirtyW2V || m_IsDirtyV2C) {
-		MulMatrix(m_Param.mtxW2C, m_Param.mtxW2V, m_Param.mtxV2C);
+		SMatrix::Mul(m_Param.mtxW2C, m_Param.mtxW2V, m_Param.mtxV2C);
 
 		m_IsDirtyW2V = IZ_FALSE;
 		m_IsDirtyV2C = IZ_FALSE;
@@ -65,7 +65,7 @@ void CCamera::Update()
 // World - View
 void CCamera::ComputeW2V()
 {
-	SetUnitMatrix(m_Param.mtxW2V);
+	SMatrix::SetUnit(m_Param.mtxW2V);
 
 	SVector vecX;
 	SVector vecY;
@@ -92,7 +92,7 @@ void CCamera::ComputeW2V()
 	SVector::Copy(m_Param.mtxW2V.v[1], vecY);
 	SVector::Copy(m_Param.mtxW2V.v[2], vecZ);
 
-	TransposeMatrix(m_Param.mtxW2V, m_Param.mtxW2V);
+	SMatrix::Transpose(m_Param.mtxW2V, m_Param.mtxW2V);
 
 	m_Param.mtxW2V.m[3][0] = -1.0f * SVector::Dot(vecX, m_Param.pos);
 	m_Param.mtxW2V.m[3][1] = -1.0f * SVector::Dot(vecY, m_Param.pos);
@@ -103,7 +103,7 @@ void CCamera::ComputeW2V()
 // View - Clip
 void CCamera::ComputeV2C()
 {
-	SetUnitMatrix(m_Param.mtxV2C);
+	SMatrix::SetUnit(m_Param.mtxV2C);
 
 #if 0
 	// Use Horizontal FOV

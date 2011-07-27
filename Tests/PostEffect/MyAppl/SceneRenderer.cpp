@@ -83,7 +83,7 @@ void CSceneRenderer::Render(izanagi::CGraphicsDevice* pDevice)
 #endif
 
 	izanagi::SMatrix mL2W;
-	SetUnitMatrix(mL2W);
+	izanagi::SMatrix::SetUnit(mL2W);
 	m_pPhongShader->SetL2W(mL2W);
 
 	m_pPhongShader->SetW2C(CMyCamera::GetInstance().GetRawInterface().GetParam().mtxW2C);

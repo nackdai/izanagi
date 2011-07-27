@@ -180,10 +180,10 @@ void CMyCamera::Move(float fOffsetX, float fOffsetY)
 	vDir.y = 0.0f;
 
 	izanagi::SMatrix mRot;
-	izanagi::SetUnitMatrix(mRot);
-	izanagi::GetRotMatrixFromVector(mRot, vDir);
+	izanagi::SMatrix::SetUnit(mRot);
+	izanagi::SMatrix::GetRotMatrixFromVector(mRot, vDir);
 
-	izanagi::ApplyMatrix(vOffset, vOffset, mRot);
+	izanagi::SMatrix::Apply(vOffset, vOffset, mRot);
 
 	izanagi::SVector pos = m_cCamera.GetParam().pos;
 	izanagi::SVector ref = m_cCamera.GetParam().ref;

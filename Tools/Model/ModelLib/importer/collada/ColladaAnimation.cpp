@@ -650,7 +650,7 @@ namespace {
 		izanagi::SMatrix mtx;
 		izanagi::MatrixFromQuat(mtx, quat);
 
-		izanagi::MulMatrix(dst, src, mtx);
+		izanagi::SMatrix::Mul(dst, src, mtx);
 	}
 }	// namespace
 
@@ -806,7 +806,7 @@ IZ_BOOL CColladaAnimation::CreateSlerp(IZ_UINT nNodeIdx)
 					sAnmInput.params.push_back(quat.w);
 				}
 
-				izanagi::SetUnitMatrix(mtx);
+				izanagi::SMatrix::SetUnit(mtx);
 				_RotateAxis(
 					mtx, mtx,
 					x, y, z, angle);

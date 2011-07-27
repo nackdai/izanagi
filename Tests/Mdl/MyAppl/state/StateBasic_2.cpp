@@ -47,10 +47,10 @@ void CTestMdlRenderHandler::BeginRenderMesh()
 {
 	m_nCnt = 0;
 
-	izanagi::SetUnitMatrix(m_Vec[0]);
-	izanagi::SetUnitMatrix(m_Vec[1]);
-	izanagi::SetUnitMatrix(m_Vec[2]);
-	izanagi::SetUnitMatrix(m_Vec[3]);
+	izanagi::SMatrix::SetUnit(m_Vec[0]);
+	izanagi::SMatrix::SetUnit(m_Vec[1]);
+	izanagi::SMatrix::SetUnit(m_Vec[2]);
+	izanagi::SMatrix::SetUnit(m_Vec[3]);
 }
 
 void CTestMdlRenderHandler::EndRenderMesh()
@@ -74,7 +74,7 @@ void CTestMdlRenderHandler::SetJointMatrix(
 
 	m_nCnt += 3;
 #else
-	izanagi::CopyMatrix(m_Vec[m_nCnt], mtx);
+	izanagi::SMatrix::Copy(m_Vec[m_nCnt], mtx);
 	m_nCnt++;
 #endif
 }
@@ -135,7 +135,7 @@ void CStateBasicEx2::Render3D()
 #if 0
 	{
 		izanagi::SMatrix mL2W;
-		SetUnitMatrix(mL2W);
+		SMatrix::SetUnit(mL2W);
 		m_pShader->SetL2W(mL2W);
 
 		m_pShader->SetW2C(CMyCamera::GetInstance().GetRawInterface().GetParam().mtxW2C);
@@ -143,7 +143,7 @@ void CStateBasicEx2::Render3D()
 #elif 1
 	{
 		izanagi::SMatrix mL2W;
-		izanagi::SetUnitMatrix(mL2W);
+		izanagi::SMatrix::SetUnit(mL2W);
 		//izanagi::SetScaleMatrix(mL2W, 0.2f, 0.2f, 0.2f);
 		m_pShader->SetL2W(mL2W);
 
@@ -152,7 +152,7 @@ void CStateBasicEx2::Render3D()
 	}
 #else
 		izanagi::SMatrix mL2W;
-		izanagi::SetUnitMatrix(mL2W);
+		izanagi::SMatrix::SetUnit(mL2W);
 		m_pShader->SetL2W(mL2W);
 
 		m_pShader->SetW2C(CMyCamera::GetInstance().GetRawInterface().GetParam().mtxW2C);

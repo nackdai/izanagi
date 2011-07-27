@@ -192,7 +192,7 @@ IZ_BOOL CPrimitiveSet::DebugRender(
 					const SMatrix& mtx = *tblJointMtx[idx];
 
 					SVector vec;
-					ApplyMatrix(vec, sVtx.pos, mtx);
+					SMatrix::Apply(vec, sVtx.pos, mtx);
 
 					vPosTmp.x += vec.x * weight;
 					vPosTmp.y += vec.y * weight;
