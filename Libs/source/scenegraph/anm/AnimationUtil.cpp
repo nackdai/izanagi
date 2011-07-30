@@ -243,7 +243,7 @@ void CAnimationUtil::ComputeSlerp(
 			pKeys[nNext]->params[3]);
 
 		// Slerp
-		SlerpQuat(
+		SQuat::Slerp(
 			vRef,
 			quat1, quat2,
 			fNormTime);

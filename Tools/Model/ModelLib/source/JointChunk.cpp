@@ -175,10 +175,10 @@ IZ_BOOL CJointChunk::ExportJoint(
 				IZ_FLOAT angle = sTransform.param[3];
 
 				izanagi::SQuat quat;
-				izanagi::SetQuatFromRadAxis(quat, angle, x, y, z);
+				izanagi::SQuat::SetQuatFromRadAxis(quat, angle, x, y, z);
 
 				izanagi::SMatrix mtx;
-				izanagi::MatrixFromQuat(mtx, quat);
+				izanagi::SQuat::MatrixFromQuat(mtx, quat);
 
 				izanagi::SMatrix::Mul(mtxRot, mtxRot, mtx);
 
@@ -200,9 +200,9 @@ IZ_BOOL CJointChunk::ExportJoint(
 
 		if (bHasQuatFromAxisRot) {
 			izanagi::SQuat quat;
-			izanagi::QuatFromMatrix(quat, mtxRot);
+			izanagi::SQuat::QuatFromMatrix(quat, mtxRot);
 
-			izanagi::CopyQuat(sJoint.pose.quat, quat);
+			izanagi::SQuat::Copy(sJoint.pose.quat, quat);
 
 			sJoint.validParam |= izanagi::E_SKL_JOINT_PARAM_QUARTANION;
 		}

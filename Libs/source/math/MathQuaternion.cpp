@@ -4,7 +4,7 @@
 
 namespace izanagi {
 	// 角度と軸からクオータニオンを設定する
-	void SetQuatFromRadAxis(SQuat& quat, IZ_FLOAT rad, IZ_FLOAT fAxisX, IZ_FLOAT fAxisY, IZ_FLOAT fAxisZ)
+	void SQuat::SetQuatFromRadAxis(SQuat& quat, IZ_FLOAT rad, IZ_FLOAT fAxisX, IZ_FLOAT fAxisY, IZ_FLOAT fAxisZ)
 	{
 		SVector vAxis;
 		vAxis.Set(fAxisX, fAxisY, fAxisZ, 0.0f);
@@ -12,7 +12,7 @@ namespace izanagi {
 		SetQuatFromRadAxis(quat, rad, vAxis);
 	}
 
-	void SetQuatFromRadAxis(SQuat& quat, IZ_FLOAT rad, const SVector& vAxis)
+	void SQuat::SetQuatFromRadAxis(SQuat& quat, IZ_FLOAT rad, const SVector& vAxis)
 	{
 #if defined(__USE_D3D_MATH__)
 		D3DXQuaternionRotationAxis(
@@ -36,7 +36,7 @@ namespace izanagi {
 
 #if 0
 	// ベクトルにクオータニオンを適用する
-	void ApplyQuat(SVector& dst, const SVector& src, const SQuat& q)
+	void SQuat::ApplyQuat(SVector& dst, const SVector& src, const SQuat& q)
 	{
 		dst.Set(src.x, src.y, src.z, 0.0f);
 
@@ -60,7 +60,7 @@ namespace izanagi {
 #endif
 
 	// クオータニオンから行列を計算する
-	void MatrixFromQuat(SMatrix& mtx, const SQuat& quat)
+	void SQuat::MatrixFromQuat(SMatrix& mtx, const SQuat& quat)
 	{
 #if defined(__USE_D3D_MATH__)
 		D3DXMatrixRotationQuaternion(
@@ -119,7 +119,7 @@ namespace izanagi {
 	}
 
 	// 行列からクオータニオンを計算する
-	void QuatFromMatrix(SQuat& quat, const SMatrix& mtx)
+	void SQuat::QuatFromMatrix(SQuat& quat, const SMatrix& mtx)
 	{
 #if defined(__USE_D3D_MATH__)
 		D3DXQuaternionRotationMatrix(
@@ -179,7 +179,7 @@ namespace izanagi {
 	}
 
 	// オイラー角からクオータニオンを計算する
-	void QuatFromEuler(SQuat& quat, IZ_FLOAT fYaw, IZ_FLOAT fPitch, IZ_FLOAT fRoll)
+	void SQuat::QuatFromEuler(SQuat& quat, IZ_FLOAT fYaw, IZ_FLOAT fPitch, IZ_FLOAT fRoll)
 	{
 #if defined(__USE_D3D_MATH__)
 		D3DXQuaternionRotationYawPitchRoll(
@@ -210,7 +210,7 @@ namespace izanagi {
 
 	// 二つのベクトルv0,v1が与えられたときに
 	// q  * v0 == v1 となるクオータニオンqを計算する
-	void RotateionArc(SQuat& quat, const SVector& from, const SVector& to)
+	void SQuat::RotateionArc(SQuat& quat, const SVector& from, const SVector& to)
 	{
 		// 念のため
 		SVector v0, v1;
