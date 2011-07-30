@@ -141,10 +141,10 @@ namespace {
 		IZ_FLOAT x, IZ_FLOAT y, IZ_FLOAT z, IZ_FLOAT w)
 	{
 		SQuat quat;
-		SetQuat(quat, x, y, z, w);
+		SQuat::Set(quat, x, y, z, w);
 
 		SMatrix mtx;
-		MatrixFromQuat(mtx, quat);
+		SQuat::MatrixFromQuat(mtx, quat);
 
 		SMatrix::Mul(dst, src, mtx);
 	}

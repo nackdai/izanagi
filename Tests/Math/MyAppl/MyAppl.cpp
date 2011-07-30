@@ -65,13 +65,13 @@ namespace {
 	void test0()
 	{
 		izanagi::SQuat quat;
-		izanagi::SetQuatFromRadAxis(quat, IZ_DEG2RAD(45.0f), 0.0f, 0.0f, 1.0f);
+		izanagi::SQuat::SetQuatFromRadAxis(quat, IZ_DEG2RAD(45.0f), 0.0f, 0.0f, 1.0f);
 
 		izanagi::SMatrix mtx;
-		izanagi::MatrixFromQuat(mtx, quat);
+		izanagi::SQuat::MatrixFromQuat(mtx, quat);
 
 		izanagi::SQuat quat1;
-		izanagi::QuatFromMatrix(quat1, mtx);
+		izanagi::SQuat::QuatFromMatrix(quat1, mtx);
 	}
 
 	void test1()
@@ -89,12 +89,12 @@ namespace {
 
 		for (size_t i = 0; i < COUNTOF(tbl); i++) {
 			izanagi::SQuat quat;
-			izanagi::SetQuatFromRadAxis(
+			izanagi::SQuat::SetQuatFromRadAxis(
 				quat,
 				IZ_DEG2RAD(tbl[i].w), tbl[i].x, tbl[i].y, tbl[i].z);
 
 			izanagi::SMatrix tmp;
-			izanagi::MatrixFromQuat(tmp, quat);
+			izanagi::SQuat::MatrixFromQuat(tmp, quat);
 
 			IZ_PRINTF("-----------\n");
 			for (IZ_UINT n = 0; n < 16; n++) {
@@ -122,7 +122,7 @@ namespace {
 		}
 
 		izanagi::SQuat quatEnd;
-		izanagi::QuatFromMatrix(quatEnd, mtx);
+		izanagi::SQuat::QuatFromMatrix(quatEnd, mtx);
 
 		IZ_PRINTF("quat: %f, %f, %f, %f\n", quatEnd.x, quatEnd.y, quatEnd.z, quatEnd.w); 
 	}

@@ -259,7 +259,7 @@ IZ_BOOL CXFileAnimation::SetAnmChannels(
 			SAnmKey sKey;
 			{
 				sKey.time = sAnmKey.time;
-				izanagi::CopyQuat(sKey.param, sAnmKey.data.pose.quat);
+				izanagi::SQuat::Copy(sKey.param, sAnmKey.data.pose.quat);
 			}
 			sChannel.keys.push_back(sKey);
 		}

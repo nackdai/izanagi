@@ -42,7 +42,7 @@ IZ_BOOL CXFileMathUtil::BreakDownMatrix(
 	sPose.trans[1] = mtx.v[3].y;
 	sPose.trans[2] = mtx.v[3].z;
 
-	izanagi::QuatFromMatrix(
+	izanagi::SQuat::QuatFromMatrix(
 		sPose.quat,
 		mtx);
 

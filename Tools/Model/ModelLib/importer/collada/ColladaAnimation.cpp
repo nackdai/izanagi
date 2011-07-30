@@ -645,10 +645,10 @@ namespace {
 		IZ_FLOAT x, IZ_FLOAT y, IZ_FLOAT z, IZ_FLOAT angle)
 	{
 		izanagi::SQuat quat;
-		izanagi::SetQuatFromRadAxis(quat, angle, x, y, z);
+		izanagi::SQuat::SetQuatFromRadAxis(quat, angle, x, y, z);
 
 		izanagi::SMatrix mtx;
-		izanagi::MatrixFromQuat(mtx, quat);
+		izanagi::SQuat::MatrixFromQuat(mtx, quat);
 
 		izanagi::SMatrix::Mul(dst, src, mtx);
 	}
@@ -798,8 +798,8 @@ IZ_BOOL CColladaAnimation::CreateSlerp(IZ_UINT nNodeIdx)
 			else {
 				if (i > 0) {
 					izanagi::SQuat quat;
-					izanagi::QuatFromMatrix(quat, mtx);
-					NormalizeQuat(quat, quat);
+					izanagi::SQuat::QuatFromMatrix(quat, mtx);
+					izanagi::SQuat::Normalize(quat, quat);
 					sAnmInput.params.push_back(quat.x);
 					sAnmInput.params.push_back(quat.y);
 					sAnmInput.params.push_back(quat.z);
@@ -817,8 +817,8 @@ IZ_BOOL CColladaAnimation::CreateSlerp(IZ_UINT nNodeIdx)
 
 		{
 			izanagi::SQuat quat;
-			izanagi::QuatFromMatrix(quat, mtx);
-			NormalizeQuat(quat, quat);
+			izanagi::SQuat::QuatFromMatrix(quat, mtx);
+			izanagi::SQuat::Normalize(quat, quat);
 			sAnmInput.params.push_back(quat.x);
 			sAnmInput.params.push_back(quat.y);
 			sAnmInput.params.push_back(quat.z);
