@@ -91,6 +91,28 @@ namespace izanagi {
 #endif	// #if defined(__USE_D3D_MATH__)
 		}
 
+		// マトリクスを加算する
+		// dst = src1 + src2
+		static void Add(SMatrix& dst, const SMatrix& src1, const SMatrix& src2)
+		{
+			for (IZ_UINT i = 0; i < 4; i++) {
+				for (IZ_UINT n = 0; n < 4; n++) {
+					dst.m[i][n] = src1.m[i][n] + src2.m[i][n];
+				}
+			}
+		}
+
+		// マトリクスを減算する
+		// dst = src1 - src2
+		static void Sub(SMatrix& dst, const SMatrix& src1, const SMatrix& src2)
+		{
+			for (IZ_UINT i = 0; i < 4; i++) {
+				for (IZ_UINT n = 0; n < 4; n++) {
+					dst.m[i][n] = src1.m[i][n] - src2.m[i][n];
+				}
+			}
+		}
+
 		// マトリクスを乗算する
 		// dst = src1 x src2
 		static void Mul(SMatrix& dst, const SMatrix& src1, const SMatrix& src2)

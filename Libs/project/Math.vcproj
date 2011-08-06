@@ -218,6 +218,18 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath="..\include\math\MathCMatrix.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\math\MathCQuaternion.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\math\MathCVector.h"
+				>
+			</File>
+			<File
 				RelativePath="..\include\math\MathDefs.h"
 				>
 			</File>
@@ -247,10 +259,6 @@
 			</File>
 			<File
 				RelativePath="..\include\math\MathVector.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\math\MathVectorEx.h"
 				>
 			</File>
 			<Filter

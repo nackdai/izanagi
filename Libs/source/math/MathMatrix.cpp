@@ -84,23 +84,23 @@ namespace izanagi {
 			fTheta);
 #else
 		IZ_FLOAT c = ::cosf(fTheta);
-		IZ_FLOAT one_c = 1.0f - c;
+		IZ_FLOAT _1_c = 1.0f - c;
 
 		IZ_FLOAT s = ::sinf(fTheta);
 
-		dst._00 = c + x * x * one_c;
-		dst._01 = x * y * one_c + z * s;
-		dst._02 = x * z * one_c - y * s;
+		dst._00 = c + x * x * _1_c;
+		dst._01 = x * y * _1_c + z * s;
+		dst._02 = x * z * _1_c - y * s;
 		dst._03 = 0.0f;
 
-		dst._10 = x * y * one_c - z * s;
-		dst._11 = c + y * y * one_c;
-		dst._12 = y * z * one_c + x * s;
+		dst._10 = x * y * _1_c - z * s;
+		dst._11 = c + y * y * _1_c;
+		dst._12 = y * z * _1_c + x * s;
 		dst._13 = 0.0f;
 
-		dst._20 = x * z * one_c + y * s;
-		dst._21 = y * z * one_c - x * s;
-		dst._22 = c + z * z * one_c;
+		dst._20 = x * z * _1_c + y * s;
+		dst._21 = y * z * _1_c - x * s;
+		dst._22 = c + z * z * _1_c;
 		dst._23 = 0.0f;
 
 		dst._30 = 0.0f;
