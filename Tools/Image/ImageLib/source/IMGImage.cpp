@@ -1,6 +1,6 @@
-﻿#include "../include/IMGImage.h"
-#include "../include/ImageLibUtility.h"
-#include "../include/PixelFormatConverter.h"
+﻿#include "IMGImage.h"
+#include "ImageLibUtility.h"
+#include "PixelFormatConverter.h"
 #include "ToolKitIoDefs.h"
 
 using namespace izanagi;

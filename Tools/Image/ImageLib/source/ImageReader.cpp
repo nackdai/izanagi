@@ -1,5 +1,5 @@
-﻿#include "../include/ImageReader.h"
-#include "../include/IMGBody.h"
+﻿#include "ImageReader.h"
+#include "IMGBody.h"
 
 using namespace izanagi;
 using namespace izanagi_tk;

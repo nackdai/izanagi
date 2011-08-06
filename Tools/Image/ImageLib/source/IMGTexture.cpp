@@ -1,5 +1,5 @@
-﻿#include "../include/IMGTexture.h"
-#include "../include/MipMapCreator.h"
+﻿#include "IMGTexture.h"
+#include "MipMapCreator.h"
 #include "ToolKitIoDefs.h"
 
 using namespace izanagi;

@@ -1,5 +1,5 @@
-﻿#include "../include/MipMapCreator.h"
-#include "../include/ImageLibUtility.h"
+﻿#include "MipMapCreator.h"
+#include "ImageLibUtility.h"
 
 using namespace izanagi;
 using namespace izanagi_tk;

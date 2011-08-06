@@ -1,7 +1,7 @@
-﻿#include "../include/IMGBody.h"
+﻿#include "IMGBody.h"
 #include "izIo.h"
 #include "ToolKitIoDefs.h"
-#include "../include/ImageLibUtility.h"
+#include "ImageLibUtility.h"
 
 using namespace izanagi;
 using namespace izanagi_tk;
