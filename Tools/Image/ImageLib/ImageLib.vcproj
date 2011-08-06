@@ -39,8 +39,9 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=""
+				AdditionalIncludeDirectories="include;&quot;$(SolutionDir)/External\squish&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
+				RuntimeLibrary="1"
 				UsePrecompiledHeader="0"
 			/>
 			<Tool
@@ -54,6 +55,8 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				AdditionalDependencies="$(SolutionDir)\External\squish\lib\squishd.lib"
+				AdditionalLibraryDirectories=""
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -76,6 +79,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
+			InheritedPropertySheets="..\..\PeopertySeet\Release.vsprops"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
@@ -96,7 +100,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="../../../Libs/include;../../ToolKit/include"
+				AdditionalIncludeDirectories="include;&quot;$(SolutionDir)/External\squish&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
@@ -115,6 +119,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				AdditionalDependencies="$(SolutionDir)\External\squish\lib\squish.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -141,6 +146,10 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
+			<File
+				RelativePath=".\source\DXTFormatConverter.cpp"
+				>
+			</File>
 			<File
 				RelativePath=".\source\ImageReader.cpp"
 				>

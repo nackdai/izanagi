@@ -1,6 +1,8 @@
-﻿#include "../include/PixelFormatConverter.h"
-#include "../include/ImageLibUtility.h"
+﻿#include "PixelFormatConverter.h"
+#include "ImageLibUtility.h"
+#include "DXTFormatConverter.h"
 #include "izMath.h"
+#include "squish.h"
 
 using namespace izanagi;
 using namespace izanagi_tk;
@@ -60,18 +62,32 @@ namespace {
 	// DXT1
 	IZ_UINT _ComputeByteSize_DXT1(IZ_UINT nWidth, IZ_UINT nHeight)
 	{
+#if 0
 		// NOTE
 		// 4 x 4 [pixel] -> 64 [bit]
 		IZ_UINT ret = (nWidth >> 2) * (nHeight >> 2) * 8;
+#else
+		IZ_UINT ret = squish::GetStorageRequirements(
+						nWidth, nHeight, 
+						squish::kDxt1);
+#endif
 		return ret;
 	}
 
 	// DXT3/DXT5
 	IZ_UINT _ComputeByteSize_DXT5(IZ_UINT nWidth, IZ_UINT nHeight)
 	{
+#if 0
 		// NOTE
 		// 4 x 4 [pixel] -> 128 [bit]
 		IZ_UINT ret = (nWidth >> 2) * (nHeight >> 2) * 16;
+#else
+		// NOTE
+		// サイズは DXT3 or DXT5 どちらでも同じ
+		IZ_UINT ret = squish::GetStorageRequirements(
+						nWidth, nHeight, 
+						squish::kDxt3);
+#endif
 		return ret;
 	}
 
@@ -225,10 +241,10 @@ namespace {
 
 			IZ_FLOAT fA = a * DIV_RGBA8_MAX;
 
-			*(src++) = fA;
-			*(src++) = fA;
-			*(src++) = fA;
-			*(src++) = fA;
+			*(src++) = static_cast<IZ_BYTE>(fA);
+			*(src++) = static_cast<IZ_BYTE>(fA);
+			*(src++) = static_cast<IZ_BYTE>(fA);
+			*(src++) = static_cast<IZ_BYTE>(fA);
 		}
 	}
 
@@ -251,6 +267,8 @@ namespace {
 	// RGBA16F -> RGBA32F
 	void ConvertFunc(RGBA16F, RGBA32F)(void* pSrc, void* pDst, IZ_UINT nWidth)
 	{
+		// TODO
+		IZ_ASSERT(IZ_FALSE);
 	}
 }	// namespace
 
@@ -267,10 +285,10 @@ namespace {
 			IZ_FLOAT b = *(src++);
 			IZ_FLOAT a = *(src++);
 
-			*(dst++) = IZ_MIN(r * RGBA8_MAX, RGBA8_MAX);
-			*(dst++) = IZ_MIN(g * RGBA8_MAX, RGBA8_MAX);
-			*(dst++) = IZ_MIN(b * RGBA8_MAX, RGBA8_MAX);
-			*(dst++) = IZ_MIN(a * RGBA8_MAX, RGBA8_MAX);
+			*(dst++) = static_cast<IZ_BYTE>(IZ_MIN(r * RGBA8_MAX, RGBA8_MAX));
+			*(dst++) = static_cast<IZ_BYTE>(IZ_MIN(g * RGBA8_MAX, RGBA8_MAX));
+			*(dst++) = static_cast<IZ_BYTE>(IZ_MIN(b * RGBA8_MAX, RGBA8_MAX));
+			*(dst++) = static_cast<IZ_BYTE>(IZ_MIN(a * RGBA8_MAX, RGBA8_MAX));
 		}
 	}
 
@@ -320,10 +338,10 @@ namespace {
 			IZ_FLOAT a = *(src++);
 			a = CMath::Clamp(a, 0.0f, 1.0f);
 
-			dst->r = IZ_MIN(r * RGB10A2_RGB_MAX, RGB10A2_RGB_MAX);
-			dst->g = IZ_MIN(g * RGB10A2_RGB_MAX, RGB10A2_RGB_MAX);
-			dst->b = IZ_MIN(b * RGB10A2_RGB_MAX, RGB10A2_RGB_MAX);
-			dst->a = IZ_MIN(a * RGB10A2_A_MAX, RGB10A2_A_MAX);
+			dst->r = static_cast<IZ_UINT32>(IZ_MIN(r * RGB10A2_RGB_MAX, RGB10A2_RGB_MAX));
+			dst->g = static_cast<IZ_UINT32>(IZ_MIN(g * RGB10A2_RGB_MAX, RGB10A2_RGB_MAX));
+			dst->b = static_cast<IZ_UINT32>(IZ_MIN(b * RGB10A2_RGB_MAX, RGB10A2_RGB_MAX));
+			dst->a = static_cast<IZ_UINT32>(IZ_MIN(a * RGB10A2_A_MAX, RGB10A2_A_MAX));
 			dst++;
 		}
 	}
@@ -340,7 +358,7 @@ namespace {
 			IZ_FLOAT b = *(src++);
 			IZ_FLOAT a = *(src++);
 
-			*(dst++) = IZ_MIN(a * RGBA8_MAX, RGBA8_MAX);
+			*(dst++) = static_cast<IZ_BYTE>(IZ_MIN(a * RGBA8_MAX, RGBA8_MAX));
 		}
 	}
 
@@ -363,6 +381,8 @@ namespace {
 	// RGBA32F -> RGBA16F
 	void ConvertFunc(RGBA32F, RGBA16F)(void* pSrc, void* pDst, IZ_UINT nWidth)
 	{
+		// TODO
+		IZ_ASSERT(IZ_FALSE);
 	}
 }	// namespace
 
@@ -423,8 +443,40 @@ IZ_BOOL CPixelFormatConverter::Convert(
 	}
 
 	if (CImageUtil::IsDXT(nDstFmt)) {
-		// TODO
-		// DXTは特殊処理・・・
+		// まず RGBA8 に変換する
+		std::vector<IZ_UINT8> tmp(ComputeByteSize(nWidth, nHeight, E_GRAPH_PIXEL_FMT_RGBA8));
+
+		VRETURN(
+			Convert(
+				pSrc,
+				nWidth, nHeight,
+				nSrcFmt,
+				&tmp[0],
+				E_GRAPH_PIXEL_FMT_RGBA8));
+
+		// DXTに変換する
+		CDXTFormatConverter::Compress(
+			nWidth, nHeight,
+			pSrc, pDst,
+			nDstFmt);
+	}
+	else if (CImageUtil::IsDXT(nSrcFmt)) {
+		// DXT -> RGBA8に変換される
+		std::vector<IZ_UINT8> tmp(ComputeByteSize(nWidth, nHeight, E_GRAPH_PIXEL_FMT_RGBA8));
+
+		CDXTFormatConverter::Decompress(
+			nWidth, nHeight,
+			pSrc, &tmp[0],
+			nSrcFmt);
+
+		// 最終フォーマットに変換する
+		VRETURN(
+			Convert(
+				&tmp[0],
+				nWidth, nHeight,
+				E_GRAPH_PIXEL_FMT_RGBA8,
+				pDst,
+				nDstFmt));
 	}
 	else {
 		// RGBA32F変換用１ラインバッファ
@@ -440,6 +492,8 @@ IZ_BOOL CPixelFormatConverter::Convert(
 		// 変換関数
 		ConvertPixelFormat pIterFunc = InterFmtConvTbl[nSrcFmt];
 		ConvertPixelFormat pDstFunc = DstFmtConvTbl[nDstFmt];
+
+		VRETURN((pIterFunc != IZ_NULL) && (pDstFunc != IZ_NULL));
 
 		for (IZ_UINT y = 0; y < nHeight; y++) {
 			IZ_BYTE* src = pSrc + nSrcPitch * y;

@@ -42,6 +42,7 @@
 				Optimization="0"
 				AdditionalIncludeDirectories="./AppCore;../ImageLib;&quot;$(SolutionDir)/External/xerces/src&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				RuntimeLibrary="1"
 				UsePrecompiledHeader="2"
 			/>
 			<Tool
@@ -92,6 +93,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
+			InheritedPropertySheets="..\..\PeopertySeet\Release.vsprops"
 			UseOfMFC="1"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
@@ -132,7 +134,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="../ImageLib/ImageLib.lib $(SolutionDir)/xerces/Build/Win32/VC8/$(ConfigurationName)/xerces-c_3.lib d3d9.lib d3dx9.lib dxerr.lib"
+				AdditionalDependencies="../ImageLib/ImageLib.lib $(SolutionDir)/External/xerces/Build/Win32/VC8/$(ConfigurationName)/xerces-c_3.lib d3d9.lib d3dx9.lib dxerr.lib"
 				OutputFile="$(SolutionDir)\tools\$(ConfigurationName)\$(ProjectName).exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
