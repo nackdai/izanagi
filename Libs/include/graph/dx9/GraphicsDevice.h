@@ -278,9 +278,6 @@ namespace izanagi {
 			IZ_UINT nStride,
 			CVertexBuffer* pVB);
 
-		// FVFセット
-		IZ_BOOL SetFVF(IZ_DWORD dwFVF);
-
 		// インデックスバッファセット
 		IZ_BOOL SetIndexBuffer(CIndexBuffer* pIB);
 

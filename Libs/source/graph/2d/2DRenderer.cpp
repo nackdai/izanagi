@@ -205,12 +205,6 @@ IZ_BOOL C2DRenderer::EndDraw(CGraphicsDevice* pDevice)
 	// といってもフラッシュするだけ・・・
 	IZ_BOOL ret = Flush(pDevice);
 
-	// FVFを強制クリア
-	pDevice->SetFVF(0);
-
-	// FVF描画により頂点宣言が無効になっているので
-	pDevice->SetVertexDeclaration(IZ_NULL);
-
 	return ret;
 }
 

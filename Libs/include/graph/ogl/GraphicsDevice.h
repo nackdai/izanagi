@@ -507,6 +507,10 @@ namespace izanagi {
 	*/
 	void CGraphicsDevice::SetScissorTestRect(const SIntRect& rc)
 	{
+		if (m_Flags.is_render_2d) {
+			Flush2D();
+		}
+
 		// 念のためこれくらいはチェックするか
 		IZ_C_ASSERT(sizeof(RECT) == sizeof(CIntRect));
 
@@ -594,6 +598,10 @@ namespace izanagi {
 	*/
 	void CGraphicsDevice::SetRenderState(E_GRAPH_RENDER_STATE nState, IZ_DWORD val)
 	{
+		if (m_Flags.is_render_2d) {
+			Flush2D();
+		}
+
 		m_RenderState.SetRenderState(this, nState, val);
 	}
 

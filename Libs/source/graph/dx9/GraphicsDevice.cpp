@@ -432,7 +432,6 @@ void CGraphicsDevice::ClearRenderState()
 	SetIndexBuffer(IZ_NULL);
 
 	SAFE_RELEASE(m_RenderState.curVD);
-	SetFVF(0);
 #endif
 
 	for (IZ_UINT i = 0; i < MAX_MRT_NUM; ++i) {
@@ -1007,21 +1006,6 @@ IZ_BOOL CGraphicsDevice::SetVertexBuffer(
 }
 
 /**
-* FVFセット
-*/
-IZ_BOOL CGraphicsDevice::SetFVF(IZ_DWORD dwFVF)
-{
-	if (m_RenderState.curFVF != dwFVF) {
-		HRESULT hr = m_pDevice->SetFVF(dwFVF);
-		VRETURN(SUCCEEDED(hr));
-
-		m_RenderState.curFVF = dwFVF;
-	}
-
-	return IZ_TRUE;
-}
-
-/**
 * インデックスバッファセット
 */
 IZ_BOOL CGraphicsDevice::SetIndexBuffer(CIndexBuffer* pIB)
@@ -1155,10 +1139,6 @@ IZ_BOOL CGraphicsDevice::SetVertexDeclaration(CVertexDeclaration* pVD)
 	if (pVD != IZ_NULL) {
 		HRESULT hr = m_pDevice->SetVertexDeclaration(pVD->GetRawInterface());
 		VRETURN(SUCCEEDED(hr));
-
-		// TODO
-		// FVFを強制クリア
-		SetFVF(0);
 	}
 
 	// 現在設定されているものとして保持
@@ -1172,6 +1152,12 @@ IZ_BOOL CGraphicsDevice::SetVertexDeclaration(CVertexDeclaration* pVD)
 */
 IZ_BOOL CGraphicsDevice::SetViewport(const SViewport& vp)
 {
+	if (m_Flags.is_render_2d) {
+		// TODO
+		// 2D描画中は不可
+		return IZ_TRUE;
+	}
+
 	IZ_BOOL ret = IZ_TRUE;
 	HRESULT hr = S_OK;
 
