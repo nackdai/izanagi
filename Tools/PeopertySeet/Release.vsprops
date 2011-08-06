@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="shift_jis"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="Release"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		Optimization="2"
+		AdditionalIncludeDirectories="&quot;$(SolutionDir)/../Libs/include&quot;;&quot;$(SolutionDir)/ToolKit/include&quot;"
+	/>
+	<Tool
+		Name="VCLibrarianTool"
+		OutputFile="$(ProjectName).lib"
+		AdditionalLibraryDirectories=""
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		AdditionalDependencies="$(SolutionDir)/ToolKit/ToolKit.lib"
+		OutputFile="$(ProjectName).exe"
+		AdditionalLibraryDirectories="&quot;$(SolutionDir)/ToolKit&quot;;&quot;$(SolutionDir)/../Libs/project/lib/$(ConfigurationName)_DX9&quot;"
+	/>
+</VisualStudioPropertySheet>
