@@ -7,6 +7,8 @@
 #include "math/MathQuaternion.h"
 #include "math/MathRand.h"
 
-#include "math/MathVectorEx.h"
+#include "math/MathCVector.h"
+#include "math/MathCMatrix.h"
+#include "math/MathCQuaternion.h"
 
 #endif	// #if !defined(__IZANAGI_MATH_H__)
