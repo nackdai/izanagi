@@ -245,6 +245,10 @@ void CImageBuilder::SetCommonAttrs(
 			else if (IsAttr(strAttrName, attr_type::MIPMAP)) {
 				// mipmap
 				pImageInfo->info.level = atoi(val);
+				if (pImageInfo->info.level == 0) {
+					// ０はダメ
+					pImageInfo->info.level = 1;
+				}
 			}
 			else if (IsAttr(strAttrName, attr_type::ADDR_U)) {
 				// addrU
@@ -374,6 +378,7 @@ BOOL CImageBuilder::BuildIMG(LPCSTR lpszExport)
 		const SImageInfo& sImageInfo = m_ImageInfoList[i];
 
 		// ジャンプテーブル
+		// 出力先の現在位置がイメージデータの位置（ジャンプ先）になる
 		tJumpTable.push_back(cOut.GetSize());
 
 		// テクスチャ読み込み

@@ -270,8 +270,8 @@ namespace izanagi_tk {
 		m_TexInfo.w = ComputeExponentBy2(static_cast<IZ_FLOAT>(nWidth));
 		m_TexInfo.h = ComputeExponentBy2(static_cast<IZ_FLOAT>(nHeight));
 #else
-		m_TexInfo.w = CMath::ComputeNextPow2(nWidth);
-		m_TexInfo.h = CMath::ComputeNextPow2(nHeight);
+		m_TexInfo.w = CMath::ComputeNextLog2(nWidth);
+		m_TexInfo.h = CMath::ComputeNextLog2(nHeight);
 #endif
 
 		m_TexInfo.size = CPixelFormatConverter::GetInstance()->ComputeByteSize(

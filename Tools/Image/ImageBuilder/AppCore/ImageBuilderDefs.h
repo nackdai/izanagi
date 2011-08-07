@@ -13,6 +13,8 @@ struct SImageInfo {
 	SImageInfo()
 	{
 		memset(&info, 0, sizeof(info));
+		info.level = 1;
+
 		tex_idx = -1;
 	}
 };

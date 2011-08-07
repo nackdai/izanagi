@@ -349,6 +349,8 @@ IZ_BOOL CIMGTexture::Write(IOutputStream* pOut)
 {
 	IZ_ASSERT(pOut != IZ_NULL);
 
+	m_TexInfo.size = GetExportSize();
+
 	// テクスチャヘッダ
 	IZ_BOOL ret = IZ_OUTPUT_WRITE(
 					pOut,
