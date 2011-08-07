@@ -10,8 +10,8 @@ using namespace izanagi_tk;
 namespace {
 	// くっ・・・・
 	D3DFORMAT PixelFormatTbl[] = {
-		D3DFMT_A8R8G8B8,
 		D3DFMT_A8B8G8R8,
+		D3DFMT_A8R8G8B8,
 		D3DFMT_A4R4G4B4,
 		D3DFMT_A2R10G10B10,
 		D3DFMT_A8,
@@ -88,7 +88,7 @@ CTextureLite* CTextureLite::CreateTextureFromFile(
 		// 不明なピクセルフォーマットは強制的にRGBA8にする
 		D3DFORMAT fmt = (_IsValidPixelFmt(sImageInfo.Format)
 							? D3DFMT_FROM_FILE
-							: D3DFMT_A8R8G8B8);
+							: D3DFMT_A8B8G8R8);
 
 		// テクスチャ読み込み
 		// NOTE
