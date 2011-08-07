@@ -67,6 +67,25 @@ __EXIT__:
 }
 
 namespace {
+	IZ_UINT _ComputeSize(
+		IZ_UINT pitch,
+		IZ_UINT height,
+		E_GRAPH_PIXEL_FMT fmt)
+	{
+		IZ_UINT ret = pitch * height;
+
+		if (fmt == E_GRAPH_PIXEL_FMT_DXT1) {
+			ret = (pitch * height) >> 2;
+		}
+		else if (fmt == E_GRAPH_PIXEL_FMT_DXT3
+					|| fmt == E_GRAPH_PIXEL_FMT_DXT5)
+		{
+			ret = (pitch * height) >> 1;
+		}
+
+		return ret;
+	}
+
 	// テクスチャ作成
 	CBaseTexture* _CreateTexture(
 		CGraphicsDevice* pDevice,
@@ -104,8 +123,7 @@ namespace {
 			result = (nPitch > 0);
 			VGOTO(result, __EXIT__);
 
-			// TODO
-			IZ_UINT nSize = nPitch * nHeight;
+			IZ_UINT nSize = _ComputeSize(nPitch, nHeight, nFmt);
 
 			memcpy(data, *pBuf, nSize); 
 
@@ -164,8 +182,7 @@ __EXIT__:
 				result = (nPitch > 0);
 				VGOTO(result, __EXIT__);
 
-				// TODO
-				IZ_UINT nSize = nPitch * nH;
+				IZ_UINT nSize = _ComputeSize(nPitch, nHeight, nFmt);
 
 				memcpy(data, *pBuf, nSize); 
 
