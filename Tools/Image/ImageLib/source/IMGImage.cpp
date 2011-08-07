@@ -66,15 +66,10 @@ IZ_BOOL CIMGImage::ConvertPixelFormat(E_GRAPH_PIXEL_FMT nFmt)
 	IZ_UINT nDstSize = CPixelFormatConverter::GetInstance()->ComputeByteSize(
 						m_nWidth,
 						m_nHeight,
-						m_Fmt);
+						nFmt);
 
 	// 出力バッファ
-	std::vector<IZ_BYTE> tDstBuffer;
-
-	// 出力バッファ確保
-	if (tDstBuffer.size() < nDstSize) {
-		tDstBuffer.resize(nDstSize);
-	}
+	std::vector<IZ_BYTE> tDstBuffer(nDstSize);
 
 	// 変換
 	IZ_BOOL ret = CPixelFormatConverter::GetInstance()->Convert(
