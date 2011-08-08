@@ -8,7 +8,7 @@
 #include <xercesc/sax2/SAX2XMLReader.hpp>
 #include <xercesc/sax2/XMLReaderFactory.hpp>
 
-#include "ToolKitGraphDefs.h"
+#include "izToolKit.h"
 #include "ImageBuilderImpl.h"
 #include "AppError.h"
 #include "Option.h"
@@ -44,6 +44,8 @@ namespace {
 		printf("%s\n", pszStr);
 	}
 }	// namespace
+
+static IZ_CHAR BUF[MAX_PATH];
 
 #ifdef VGOTO
 #undef VGOTO
@@ -84,6 +86,25 @@ int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 		VGOTO(cOption.IsValid());
 
 		try {
+			// 入力XMLのパス部分のみを取得
+			izanagi::izanagi_tk::CFileUtility::GetPathWithoutFileName(
+				BUF,
+				COUNTOF(BUF),
+				cOption.in);
+
+#if 0
+			// 絶対パスに変更
+			{
+				CString tmp;
+				tmp.Format(_T("%s"), BUF);
+				BOOL result = (_fullpath(BUF, tmp, COUNTOF(BUF)) != NULL);
+				VGOTO(result);
+			}
+#endif
+
+			// XMLに記述されているイメージデータがXMLからの相対パスになるようにする
+			CImageBuilder::GetInstance().SetBasePath(BUF);
+
 			xercesc::XMLPlatformUtils::Initialize();
 
 			xercesc::SAX2XMLReader* parser = xercesc::XMLReaderFactory::createXMLReader();

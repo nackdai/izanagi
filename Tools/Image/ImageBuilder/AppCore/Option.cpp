@@ -20,6 +20,7 @@ BOOL COption::Analysis(int argc, TCHAR* argv[])
 			if (result = (cmd == _T("-i"))) {
 				// -i
 				in.Format(_T("%s"), argv[++i]);
+				in.Replace("/", "\\");
 			}
 			else if (result = (cmd == _T("-o"))) {
 				// -o
