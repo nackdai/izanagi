@@ -51,8 +51,11 @@ public:
 	// IMGデータ作成
 	BOOL BuildIMG(LPCSTR lpszExport);
 
+	void SetBasePath(const char* path);
+
 private:
 	std::vector<SImageInfo> m_ImageInfoList;
+	std::string m_BasePath;
 };
 
 #endif	// #if !defined(__IMAGE_BUILDER_IMPL_H__)

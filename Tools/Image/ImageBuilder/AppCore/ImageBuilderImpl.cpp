@@ -1,10 +1,11 @@
 ﻿#include <stdafx.h>
 #include "ImageBuilderImpl.h"
 #include "ImageReaderImpl.h"
-#include "ToolKitXmlDefs.h"
-#include "ToolKitIoDefs.h"
 #include "izImageLib.h"
 #include "AppError.h"
+
+#define IZ_TOOLKIT_ENABLE_XERCES
+#include "izToolKit.h"
 
 CImageBuilder CImageBuilder::s_cInstance;
 
@@ -232,7 +233,19 @@ void CImageBuilder::SetCommonAttrs(
 
 		if (IsAttr(strAttrName, attr_type::PATH)) {
 			// path
+#if 0
 			pImageInfo->path = val;
+#else
+			if (m_BasePath.empty()) {
+				pImageInfo->path = val;
+			}
+			else {
+				pImageInfo->path.Format(
+					"%s\\%s",
+					m_BasePath.c_str(),
+					val);
+			}
+#endif
 		}
 		else {
 			// 小文字にする
@@ -452,4 +465,12 @@ __EXIT__:
 	cOut.Finalize();
 
 	return ret;
+}
+
+void CImageBuilder::SetBasePath(const char* path)
+{
+	izanagi::izanagi_tk::CStringUtil::Format(
+		m_BasePath,
+		"%s\0",
+		path);
 }
