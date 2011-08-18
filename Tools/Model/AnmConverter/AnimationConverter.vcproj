@@ -39,7 +39,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\External\collada-dom\dom\include&quot;;&quot;$(SolutionDir)\External\collada-dom\dom\include\1.4&quot;;&quot;$(SolutionDir)\External\collada-dom\dom\external-libs\boost&quot;;../AppCore;../ModelLib/include"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\External\collada-dom\dom\include&quot;;&quot;$(SolutionDir)\External\collada-dom\dom\include\1.4&quot;;&quot;$(SolutionDir)\External\collada-dom\dom\external-libs\boost&quot;;./AppCore;../ModelLib/include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ALL_NO_LIB;PCRE_STATIC;DOM_INCLUDE_LIBXML"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -117,7 +117,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\External\collada-dom\dom\include&quot;;&quot;$(SolutionDir)\External\collada-dom\dom\include\1.4&quot;;&quot;$(SolutionDir)\External\collada-dom\dom\external-libs\boost&quot;;../AppCore;../ModelLib/include"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\External\collada-dom\dom\include&quot;;&quot;$(SolutionDir)\External\collada-dom\dom\include\1.4&quot;;&quot;$(SolutionDir)\External\collada-dom\dom\external-libs\boost&quot;;./AppCore;../ModelLib/include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -209,10 +209,18 @@
 			<Filter
 				Name="include"
 				>
+				<File
+					RelativePath=".\AppCore\Option.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="source"
 				>
+				<File
+					RelativePath=".\AppCore\Option.cpp"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<File

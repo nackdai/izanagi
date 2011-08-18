@@ -4,79 +4,97 @@
 #include "stdafx.h"
 #include "izModelLib.h"
 #include "izToolKit.h"
+#include "Option.h"
+
+#define INVALID_RET_VAL		(1)
+
+namespace {
+	void _DispUsage()
+	{
+		printf(
+			"ModelConverter Version 0.01 b\n"
+			"\n"
+			"モデルコンバータ\n"
+			"\n"
+			"Usage : ModelConverter [options]\n"
+			"\n"
+			"[Options]\n"
+			" -i [in]   : 入力ファイル\n"
+			" -o [out]  : 出力ファイル\n"
+			"             指定がない場合は入力ファイル名から自動生成\n"
+			" -e [type] : 出力ファイルタイプ\n"
+			"             指定がない場合は msh と skl の２つを出力\n"
+			"   mdl : mdlファイル出力（msh, skl を１つにパックしたもの）\n"
+			"   msh : mshファイル出力（メッシュデータ）\n"
+			"   skl : sklファイル出力（スケルトンデータ）\n"
+			" -f [type] : 入力ファイルがどのようなファイルなのかを指定\n"
+			"             指定がない場合は入力ファイルの拡張子から自動判定\n"
+			"   dae : Colladaファイル入力\n"
+			"   x   : XFileファイル入力\n"
+			"   fbx : FBXファイル入力\n"
+		);
+	}
+}
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-#if 1
-	IImporter* pImporter = IImporter::CreateImporter<CColladaImporter>();
-	//pImporter->Open("cube.dae");
-	//pImporter->Open("sphere.dae");
-	//pImporter->Open("duck.dae");
-	//pImporter->Open("dice.dae");
-	pImporter->Open("Seymour.dae");
-#else
-	IImporter* pImporter = IImporter::CreateImporter<CXFileImporter>();
+	COption option;
 
-	//static IZ_PCSTR pszXFile = "Dwarf.x";
-	static IZ_PCSTR pszXFile = "00_Mesh1P.x";
-	//static IZ_PCSTR pszXFile = "tiny.x";
-
-	std::string strXFile(pszXFile);
-
-	IZ_BOOL bNeedRemoveFile = IZ_FALSE;
-
-#if 0
-	if (CXFileImporter::IsTxtFormat(pszXFile)) {
-		// Get temporary file name.
-		std::string strTmp;
-		izanagi::izanagi_tk::CFileUtility::CreateTmpFileName(strTmp);
-		strTmp += ".tmp";
-
-		// ウインドウハンドル取得
-		HWND hWnd = ::GetConsoleWindow();
-
-		// Create GraphicsDevice.
-		izanagi::izanagi_tk::CGraphicsDeviceLite* pDevice = izanagi::izanagi_tk::CGraphicsDeviceLite::CreateGraphicsDeviceLight(hWnd);
-
-		// Convert text format to binary format.
-		Dix::convertXFileFormat(
-			pDevice->GetRawInterface(),
-			_T(strXFile.c_str()),
-			_T(strTmp.c_str()),
-			D3DXF_FILEFORMAT_BINARY);
-
-		// Rename.
-		strXFile = strTmp;
-		bNeedRemoveFile = IZ_TRUE;
-
-		SAFE_RELEASE(pDevice);
+	// オプション解析
+	if (!option.Analysis(argc, argv)) {
+		_DispUsage();
+		return INVALID_RET_VAL;
 	}
-#endif
 
-	pImporter->Open(strXFile.c_str());
-
-	if (bNeedRemoveFile) {
-		// Remove file.
-		izanagi::izanagi_tk::CFileUtility::RemoveFile(strXFile.c_str());
+	// オプションチェック
+	if (!option.IsValid()) {
+		_DispUsage();
+		return INVALID_RET_VAL;
 	}
-#endif
 
-#if 0
-	// Model
-	CMdlExporter::GetInstance().Export(
-		"test.mdl",
-		pImporter);
-#else
-	// Mesh
-	CMshExporter::GetInstance().Export(
-		"test.msh",
-		pImporter);
-	// Skeleton
-	CSklExporter::GetInstance().Export(
-		"test.skl",
-		pImporter);
-#endif
+	IImporter* importer = IZ_NULL;
+	
+	if (option.fileType == FileTypeCollada) {
+		// COLLADA
+		importer = IImporter::CreateImporter<CColladaImporter>();
+	}
+	else if (option.fileType == FileTypeXFile) {
+		// XFile
+		importer = IImporter::CreateImporter<CXFileImporter>();
+	}
+	else if (option.fileType == FileTypeFBX) {
+		// FBX
+	}
+	
+	// 入力ファイルを開く
+	VRETURN_VAL(
+		importer->Open(option.in.c_str()),
+		INVALID_RET_VAL);
+
+	// 出力
+	if (option.exportType == ExportTypeMdl) {
+		// Model
+		VRETURN_VAL(
+			CMdlExporter::GetInstance().Export(
+				option.out.c_str(),
+				importer),
+			INVALID_RET_VAL);
+	}
+	else {
+		// Mesh
+		VRETURN_VAL(
+			CMshExporter::GetInstance().Export(
+				option.outMsh.c_str(),
+				importer),
+			INVALID_RET_VAL);
+
+		// Skeleton
+		VRETURN_VAL(
+			CSklExporter::GetInstance().Export(
+				option.outSkl.c_str(),
+				importer),
+			INVALID_RET_VAL);
+	}
 
 	return 0;
 }
-
