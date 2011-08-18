@@ -130,6 +130,14 @@ typedef const wchar_t*	IZ_PCWSTR;
 /////////////////////////////////////////////////////////////
 // いろいろ便利系
 
+#ifndef DEBUG_BREAK
+	#ifdef WINDOWS
+		#define DEBUG_BREAK		::DebugBreak
+	#else
+		// TODO
+	#endif
+#endif	// #ifndef DEBUG_BREAK
+
 #ifndef UNUSED_ALWAYS
 	#define UNUSED_ALWAYS(v)	(v)
 #endif	// #ifndef UNUSED
@@ -149,7 +157,11 @@ inline void _OutputDebugString(izPcstr pszFormat, ...)
 }
 
 #ifndef IZ_PRINTF
-	#define IZ_PRINTF	_OutputDebugString
+	#ifdef WINDOWS
+		#define IZ_PRINTF	_OutputDebugString
+	#else
+		#define IZ_PRINTF	printf
+	#endif
 #endif	// #ifndef IZ_PRINTF
 
 #ifndef IZ_ASSERT
@@ -157,7 +169,7 @@ inline void _OutputDebugString(izPcstr pszFormat, ...)
 		#define IZ_ASSERT(b)\
 			if (!(b)) {\
 				IZ_PRINTF("assert : %s(%d)\n", __FILE__, __LINE__);\
-				::DebugBreak();\
+				DEBUG_BREAK();\
 			}
 	#else	// #ifdef __IZ_DEBUG__
 		#define IZ_ASSERT(b)
@@ -171,6 +183,18 @@ inline void _OutputDebugString(izPcstr pszFormat, ...)
 		#define IZ_ASSERT_NULL(p)
 	#endif	// #ifdef __IZ_DEBUG__
 #endif	// #ifndef IZ_ASSERT_NULL
+
+#ifndef IZ_VERIFY
+	#ifdef __IZ_DEBUG__
+		#define IZ_VERIFY(b)\
+			if (!(b)) {\
+				IZ_PRINTF("assert : %s(%d)\n", __FILE__, __LINE__);\
+				DEBUG_BREAK();\
+			}
+	#else	// #ifdef __IZ_DEBUG__
+		#define IZ_VERIFY(b)	(b)
+	#endif	// #ifdef __IZ_DEBUG__
+#endif	// #ifndef IZ_VERIFY
 
 #ifndef IZ_EXPECT
 	#ifdef __IZ_DEBUG__
