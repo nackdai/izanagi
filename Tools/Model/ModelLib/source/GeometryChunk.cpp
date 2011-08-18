@@ -866,7 +866,9 @@ IZ_BOOL CGeometryChunk::ExportMesh(
 		sMeshInfo.center[2] = (vMin.z + vMax.z) * 0.5f;
 
 		// Get material information.
-		pImporter->GetMaterialForMesh(i, sMeshInfo.mtrl);
+		pImporter->GetMaterialForMesh(
+			static_cast<IZ_UINT>(i),
+			sMeshInfo.mtrl);
 
 		// Return to position of expoting S_MSH_MESH_SET.
 		VRETURN(cSeekHelper.ReturnWithAnchor());
