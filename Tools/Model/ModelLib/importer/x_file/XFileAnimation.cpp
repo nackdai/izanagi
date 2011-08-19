@@ -50,7 +50,13 @@ IZ_BOOL CXFileAnimation::Begin(
 			sNode.nameJoint = pAnm->name;
 
 			IZ_INT idx = _GetNodeIdxByName(tvNodeList, sNode.nameJoint);
+#if 0
 			VRETURN(idx >= 0);
+#else
+			if (idx < 0) {
+				continue;
+			}
+#endif
 
 			sNode.idxJoint = idx;
 
