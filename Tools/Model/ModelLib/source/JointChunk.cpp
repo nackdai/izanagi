@@ -134,6 +134,7 @@ IZ_BOOL CJointChunk::ExportJoint(
 		izanagi::SMatrix::SetUnit(mtxRot);
 
 		sJoint.validParam = 0;
+		sJoint.validAnmParam = 0;
 
 		sJoint.pose.trans[0] = 0.0f;
 		sJoint.pose.trans[1] = 0.0f;
