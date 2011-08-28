@@ -7,7 +7,7 @@
 namespace izanagi {
 	class IInputStream;
 	class CSkeleton;
-	class CAnimation;
+	class IAnimation;
 	struct S_ANM_NODE;
 
 	class CSkeletonInstance : public CObject {
@@ -38,31 +38,42 @@ namespace izanagi {
 
 		void ApplyAnimation(
 			IZ_FLOAT fTime,
-			CAnimation* pAnm);
+			IAnimation* pAnm);
 
 		void ApplyAnimationByIdx(
 			IZ_UINT nJointIdx,
 			IZ_FLOAT fTime,
-			CAnimation* pAnm);
+			IAnimation* pAnm);
 
 		void ApplyAnimationByName(
 			IZ_PCSTR pszJointName,
 			IZ_FLOAT fTime,
-			CAnimation* pAnm);
+			IAnimation* pAnm);
 
 		void ApplyAnimationByKey(
 			IZ_UINT nJointKey,
 			IZ_FLOAT fTime,
-			CAnimation* pAnm);
+			IAnimation* pAnm);
+
+		// 姿勢情報更新開始
+		IZ_BOOL BeginUpdatePose(IZ_UINT idx);
+
+		// 姿勢情報更新終了
+		void EndUpdatePose(
+			IZ_UINT idx,
+			IZ_UINT8 updateFlag);
+
+		// 姿勢情報更新
+		void UpdatePose(
+			IZ_UINT idx,
+			IZ_UINT transformType,
+			IZ_UINT paramType,
+			const SVector& param);
 
 	private:
 		IZ_UINT8* SetJointData(IZ_UINT8* pBuf);
 
 		void BuildLocalMatrix(IZ_UINT nIdx);
-
-		void ApplyAnimation(
-			IZ_FLOAT fTime,
-			const S_ANM_NODE* pAnmNode);
 
 		inline void ApplyParentMatrix(
 			IZ_UINT nIdx,
@@ -73,12 +84,20 @@ namespace izanagi {
 	private:
 		IMemoryAllocator* m_pAllocator;
 
+		// 骨情報本体
 		CSkeleton* m_pBody;
 
+		// 関節数
 		IZ_UINT m_nJointNum;
 
+		// 姿勢情報
 		S_SKL_JOINT_POSE* m_pJointPose;
+
+		// 最終的な行列
 		SMatrix* m_pGlobalPose;
+
+		// 姿勢情報を更新中かどうか
+		IZ_BOOL m_IsUpdatingPose;
 	};
 }	// namespace iznagi
 

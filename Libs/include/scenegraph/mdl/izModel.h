@@ -81,7 +81,7 @@ namespace izanagi {
 		 */
 		void ApplyAnimation(
 			IZ_FLOAT fTime,
-			CAnimation* pAnm);
+			IAnimation* pAnm);
 
 		/**
 		 * 指定した関節のみにモーション適用
@@ -89,7 +89,7 @@ namespace izanagi {
 		void ApplyAnimationByIdx(
 			IZ_UINT nJointIdx,
 			IZ_FLOAT fTime,
-			CAnimation* pAnm);
+			IAnimation* pAnm);
 
 		/**
 		 * 指定した関節のみにモーション適用
@@ -97,7 +97,7 @@ namespace izanagi {
 		void ApplyAnimationByName(
 			IZ_PCSTR pszJointName,
 			IZ_FLOAT fTime,
-			CAnimation* pAnm);
+			IAnimation* pAnm);
 
 		/**
 		 * 指定した関節のみにモーション適用
@@ -105,7 +105,7 @@ namespace izanagi {
 		void ApplyAnimationByKey(
 			IZ_UINT nJointKey,
 			IZ_FLOAT fTime,
-			CAnimation* pAnm);
+			IAnimation* pAnm);
 
 		/**
 		 * 利用可能なLODレベルの最大を取得

@@ -357,6 +357,10 @@
 				Name="anm"
 				>
 				<File
+					RelativePath="..\include\scenegraph\anm\AnimationInterface.h"
+					>
+				</File>
+				<File
 					RelativePath="..\include\scenegraph\anm\AnimationUtil.h"
 					>
 				</File>
