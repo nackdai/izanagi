@@ -182,7 +182,7 @@ void CModel::Update(const SMatrix* mtxL2W/*= IZ_NULL*/)
 // スケルトン全体にモーション適用
 void CModel::ApplyAnimation(
 	IZ_FLOAT fTime,
-	CAnimation* pAnm)
+	IAnimation* pAnm)
 {
 	if (m_pSkeleton != IZ_NULL) {
 		m_pSkeleton->ApplyAnimation(fTime, pAnm);
@@ -193,7 +193,7 @@ void CModel::ApplyAnimation(
 void CModel::ApplyAnimationByIdx(
 	IZ_UINT nJointIdx,
 	IZ_FLOAT fTime,
-	CAnimation* pAnm)
+	IAnimation* pAnm)
 {
 	if (m_pSkeleton != IZ_NULL) {
 		m_pSkeleton->ApplyAnimationByIdx(nJointIdx, fTime, pAnm);
@@ -204,7 +204,7 @@ void CModel::ApplyAnimationByIdx(
 void CModel::ApplyAnimationByName(
 	IZ_PCSTR pszJointName,
 	IZ_FLOAT fTime,
-	CAnimation* pAnm)
+	IAnimation* pAnm)
 {
 	if (m_pSkeleton != IZ_NULL) {
 		m_pSkeleton->ApplyAnimationByName(pszJointName, fTime, pAnm);
@@ -215,7 +215,7 @@ void CModel::ApplyAnimationByName(
 void CModel::ApplyAnimationByKey(
 	IZ_UINT nJointKey,
 	IZ_FLOAT fTime,
-	CAnimation* pAnm)
+	IAnimation* pAnm)
 {
 	if (m_pSkeleton != IZ_NULL) {
 		m_pSkeleton->ApplyAnimationByKey(nJointKey, fTime, pAnm);

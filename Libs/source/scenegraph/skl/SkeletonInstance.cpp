@@ -2,8 +2,7 @@
 #include "scenegraph/skl/izSkeleton.h"
 #include "izIo.h"
 
-#include "scenegraph/anm/izAnimation.h"
-#include "scenegraph/anm/AnimationUtil.h"
+#include "scenegraph/anm/AnimationInterface.h"
 
 using namespace izanagi;
 
@@ -62,6 +61,8 @@ CSkeletonInstance::CSkeletonInstance()
 
 	m_pJointPose = IZ_NULL;
 	m_pGlobalPose = IZ_NULL;
+
+	m_IsUpdatingPose = IZ_FALSE;
 }
 
 CSkeletonInstance::~CSkeletonInstance()
@@ -243,152 +244,131 @@ void CSkeletonInstance::ApplyParentMatrix(
 
 void CSkeletonInstance::ApplyAnimation(
 	IZ_FLOAT fTime,
-	CAnimation* pAnm)
+	IAnimation* pAnm)
 {
-#if 1
-	for (IZ_UINT i = 0; i < m_nJointNum; ++i) {
-		ApplyAnimationByIdx(
-			i,
-			fTime,
-			pAnm);
-	}
-#else
-	ApplyAnimationByIdx(
-		13,
-		fTime,
-		pAnm);
-#endif
+	IZ_ASSERT(pAnm != IZ_NULL);
+	pAnm->ApplyAnimation(this, fTime);
 }
 
 void CSkeletonInstance::ApplyAnimationByIdx(
 	IZ_UINT nJointIdx,
 	IZ_FLOAT fTime,
-	CAnimation* pAnm)
+	IAnimation* pAnm)
 {
-	const S_ANM_NODE* pAnmNode = pAnm->GetAnmNodeByJointIdx(nJointIdx);
-	if (pAnmNode != IZ_NULL) {
-		ApplyAnimation(fTime, pAnmNode);
-	}
+	IZ_ASSERT(pAnm != IZ_NULL);
+	pAnm->ApplyAnimationByIdx(this, nJointIdx, fTime);
 }
 
 void CSkeletonInstance::ApplyAnimationByName(
 	IZ_PCSTR pszJointName,
 	IZ_FLOAT fTime,
-	CAnimation* pAnm)
+	IAnimation* pAnm)
 {
-	IZ_UINT nKey = CKey::GenerateValue(pszJointName);
-
-	ApplyAnimationByKey(
-		nKey,
-		fTime,
-		pAnm);
+	IZ_ASSERT(pAnm != IZ_NULL);
+	pAnm->ApplyAnimationByName(this, pszJointName, fTime);
 }
 
 void CSkeletonInstance::ApplyAnimationByKey(
 	IZ_UINT nJointKey,
 	IZ_FLOAT fTime,
-	CAnimation* pAnm)
+	IAnimation* pAnm)
 {
-	const S_ANM_NODE* pAnmNode = pAnm->GetAnmNodeByKey(nJointKey);
-	if (pAnmNode != IZ_NULL) {
-		ApplyAnimation(fTime, pAnmNode);
-	}
+	IZ_ASSERT(pAnm != IZ_NULL);
+	pAnm->ApplyAnimationByKey(this, nJointKey, fTime);
 }
 
-void CSkeletonInstance::ApplyAnimation(
-	IZ_FLOAT fTime,
-	const S_ANM_NODE* pAnmNode)
+// 姿勢情報更新開始
+IZ_BOOL CSkeletonInstance::BeginUpdatePose(IZ_UINT idx)
 {
-	IZ_ASSERT(pAnmNode != IZ_NULL);
+	VRETURN(!m_IsUpdatingPose);
+	VRETURN(idx < m_nJointNum);
 
-	const S_ANM_NODE& sAnmNode = *pAnmNode;
-	const IZ_UINT nJointIdx = sAnmNode.targetIdx;
+	m_IsUpdatingPose = IZ_TRUE;
+	return IZ_TRUE;
+}
 
-	IZ_ASSERT(nJointIdx < m_nJointNum);
+// 姿勢情報更新終了
+void CSkeletonInstance::EndUpdatePose(
+	IZ_UINT idx,
+	IZ_UINT8 updateFlag)
+{
+	IZ_ASSERT(idx < m_nJointNum);
+	IZ_ASSERT(m_IsUpdatingPose);
 
-	// 対象となる関節を探す
-	S_SKL_JOINT* pJoint = m_pBody->GetJoint(nJointIdx);
-	S_SKL_JOINT_POSE& sPose = m_pJointPose[nJointIdx];
+	S_SKL_JOINT* pJoint = m_pBody->GetJoint(idx);
+	pJoint->validAnmParam = updateFlag;
 
-	// 本当に対象となる関節かチェック
-	IZ_ASSERT(pJoint->nameKey == sAnmNode.targetKey);
+	m_IsUpdatingPose = IZ_FALSE;
+}
 
-	// どのパラメータについて計算したかフラグ
-	pJoint->validAnmParam = 0;
+namespace {
+	inline void _UpdatePose(
+		IZ_UINT paramType,
+		IZ_FLOAT* dst,
+		const SVector& src)
+	{
+		IZ_UINT paramNum = 0;
+		IZ_UINT paramPos = 0;
 
-	for (IZ_UINT nChannelIdx = 0; nChannelIdx < sAnmNode.numChannels; ++nChannelIdx) {
-		const S_ANM_CHANNEL& sChannel = sAnmNode.channels[nChannelIdx];
-
-		IZ_UINT nParamType = (sChannel.type & E_ANM_TRANSFORM_TYPE_PARAM_MASK);
-		IZ_UINT nTransformType = (sChannel.type & E_ANM_TRANSFORM_TYPE_TRANSFORM_MASK);
-
-		IZ_FLOAT* param = IZ_NULL;
-		switch (nTransformType) {
-		case E_ANM_TRANSFORM_TYPE_TRANSLATE:
-			param = sPose.trans;
-			pJoint->validAnmParam |= E_SKL_JOINT_PARAM_TRANSLATE;
+		switch (paramType) {
+		case E_ANM_TRANSFORM_TYPE_X:	// Xのみ
+			paramNum = 1;
+			paramPos = 0;
 			break;
-		case E_ANM_TRANSFORM_TYPE_QUATERNION:
-			pJoint->validAnmParam |= E_SKL_JOINT_PARAM_QUARTANION;
+		case E_ANM_TRANSFORM_TYPE_Y:	// Yのみ
+			paramNum = 1;
+			paramPos = 1;
 			break;
-		case E_ANM_TRANSFORM_TYPE_SCALE:
-			param = sPose.scale;
-			pJoint->validAnmParam |= E_SKL_JOINT_PARAM_SCALE;
+		case E_ANM_TRANSFORM_TYPE_Z:	// Zのみ
+			paramNum = 1;
+			paramPos = 2;
+			break;
+		case E_ANM_TRANSFORM_TYPE_W:	// Wのみ
+			paramNum = 1;
+			paramPos = 3;
+			break;
+		case E_ANM_TRANSFORM_TYPE_XYZ:	// XWZのみ
+			SVector::CopyXYZ(
+				*(reinterpret_cast<SVector*>(dst)),
+				src);
+			break;
+		case E_ANM_TRANSFORM_TYPE_XYZW:	// XYZWすべて
+			SVector::Copy(
+				*(reinterpret_cast<SVector*>(dst)),
+				src);
 			break;
 		default:
 			IZ_ASSERT(IZ_FALSE);
 			break;
 		}
 
-		const E_ANM_INTERP_TYPE nInterp = static_cast<E_ANM_INTERP_TYPE>(sChannel.interp);
-		const IZ_UINT nKeyNum = sChannel.numKeys;
-		S_ANM_KEY** const pKey = sChannel.keys;
-
-		if (CAnimationUtil::IsScalarInterp(sChannel.interp)) {
-			switch (nParamType) {
-			case E_ANM_TRANSFORM_TYPE_X:	// Xのみ
-				param[0] = CAnimationUtil::ComputeInterp(nInterp, fTime, nKeyNum, 0, pKey);
-				break;
-			case E_ANM_TRANSFORM_TYPE_Y:	// Yのみ
-				param[1] = CAnimationUtil::ComputeInterp(nInterp, fTime, nKeyNum, 0, pKey);
-				break;
-			case E_ANM_TRANSFORM_TYPE_Z:	// Zのみ
-				param[2] = CAnimationUtil::ComputeInterp(nInterp, fTime, nKeyNum, 0, pKey);
-				break;
-			case E_ANM_TRANSFORM_TYPE_W:	// Wのみ
-				param[3] = CAnimationUtil::ComputeInterp(nInterp, fTime, nKeyNum, 0, pKey);
-				break;
-			case E_ANM_TRANSFORM_TYPE_XYZ:	// XWZのみ
-				param[0] = CAnimationUtil::ComputeInterp(nInterp, fTime, nKeyNum, 0, pKey);
-				param[1] = CAnimationUtil::ComputeInterp(nInterp, fTime, nKeyNum, 1, pKey);
-				param[2] = CAnimationUtil::ComputeInterp(nInterp, fTime, nKeyNum, 2, pKey);
-				break;
-			case E_ANM_TRANSFORM_TYPE_XYZW:	// XYZWすべて
-				param[0] = CAnimationUtil::ComputeInterp(nInterp, fTime, nKeyNum, 0, pKey);
-				param[1] = CAnimationUtil::ComputeInterp(nInterp, fTime, nKeyNum, 1, pKey);
-				param[2] = CAnimationUtil::ComputeInterp(nInterp, fTime, nKeyNum, 2, pKey);
-				param[3] = CAnimationUtil::ComputeInterp(nInterp, fTime, nKeyNum, 3, pKey);
-				break;
-			default:
-				IZ_ASSERT(IZ_FALSE);
-				break;
-			}
+		if (paramNum == 1) {
+			dst[paramPos] = src.v[paramPos];
 		}
-		else {
-			// NOTE
-			// 現状slerpを行う場合
+	}
+}	// namespace
 
-			// TODO
-			IZ_ASSERT(nParamType == E_ANM_TRANSFORM_TYPE_XYZW);
-			IZ_ASSERT(nTransformType == E_ANM_TRANSFORM_TYPE_QUATERNION);
+// 姿勢情報更新
+void CSkeletonInstance::UpdatePose(
+	IZ_UINT idx,
+	IZ_UINT transformType,
+	IZ_UINT paramType,
+	const SVector& param)
+{
+	S_SKL_JOINT_POSE& sPose = m_pJointPose[idx];
 
-			CAnimationUtil::ComputeInterp(
-				sPose.quat,
-				nInterp,
-				fTime,
-				nKeyNum,
-				0,
-				pKey);
-		}
+	switch (transformType) {
+	case E_ANM_TRANSFORM_TYPE_TRANSLATE:
+		_UpdatePose(paramType, sPose.trans, param);
+		break;
+	case E_ANM_TRANSFORM_TYPE_QUATERNION:
+		_UpdatePose(paramType, sPose.quat.v, param);
+		break;
+	case E_ANM_TRANSFORM_TYPE_SCALE:
+		_UpdatePose(paramType, sPose.scale, param);
+		break;
+	default:
+		IZ_ASSERT(IZ_FALSE);
+		break;
 	}
 }

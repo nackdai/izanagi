@@ -1,15 +1,16 @@
 ﻿#if !defined(__IZANAGI_SCENEGRAPH_IZ_ANIMATION_H__)
 #define __IZANAGI_SCENEGRAPH_IZ_ANIMATION_H__
 
-#include "izStd.h"
 #include "ANMFormat.h"
+#include "AnimationInterface.h"
 
 namespace izanagi {
 	class IInputStream;
+	class CSkeletonInstance;
 
 	/**
 	*/
-	class CAnimation : public CObject {
+	class CAnimation : public IAnimation {
 		static const IZ_UINT HASH_SIZE = 16;
 
 		struct SAnmNodeInstance;
@@ -37,7 +38,7 @@ namespace izanagi {
 
 	private:
 		CAnimation();
-		~CAnimation() {}
+		virtual ~CAnimation() {}
 
 		NO_COPIABLE(CAnimation);
 
@@ -47,6 +48,32 @@ namespace izanagi {
 		IZ_UINT8* Init(
 			IInputStream* pIn,
 			IZ_UINT8* pBuf);
+
+		void ApplyAnimation(
+			CSkeletonInstance* skl,
+			IZ_FLOAT time,
+			const S_ANM_NODE* anmNode);
+
+	public:
+		// アニメーション適用
+		void ApplyAnimation(
+			CSkeletonInstance* skl,
+			IZ_FLOAT time);
+
+		void ApplyAnimationByIdx(
+			CSkeletonInstance* skl,
+			IZ_UINT nJointIdx,
+			IZ_FLOAT fTime);
+
+		void ApplyAnimationByName(
+			CSkeletonInstance* skl,
+			IZ_PCSTR pszJointName,
+			IZ_FLOAT fTime);
+
+		void ApplyAnimationByKey(
+			CSkeletonInstance* skl,
+			IZ_UINT nJointKey,
+			IZ_FLOAT fTime);
 
 	public:
 		const S_ANM_NODE* GetAnmNodeByIdx(IZ_UINT idx);

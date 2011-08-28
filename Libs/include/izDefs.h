@@ -268,7 +268,7 @@ inline void _OutputDebugString(izPcstr pszFormat, ...)
 	#define VRETURN_VAL(b, r)\
 		if (!(b)) {\
 			IZ_ASSERT(IZ_FALSE);\
-			return (r);\
+			return r;\
 		}
 #endif	// #ifndef VRETURN_VAL
 

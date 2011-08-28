@@ -1,4 +1,6 @@
 ﻿#include "scenegraph/anm/izAnimation.h"
+#include "scenegraph/skl/SkeletonInstance.h"
+#include "scenegraph/anm/AnimationUtil.h"
 #include "izIo.h"
 
 using namespace izanagi;
@@ -113,6 +115,152 @@ IZ_UINT8* CAnimation::Init(
 	}
 
 	return pBuf;
+}
+
+void CAnimation::ApplyAnimation(
+	CSkeletonInstance* skl,
+	IZ_FLOAT time,
+	const S_ANM_NODE* anmNode)
+{
+	const S_ANM_NODE& sAnmNode = *anmNode;
+	const IZ_UINT nJointIdx = sAnmNode.targetIdx;
+
+	SVector param;
+	IZ_UINT updateFlag = 0;
+
+	// 姿勢情報更新開始
+	VRETURN_VAL(skl->BeginUpdatePose(nJointIdx),);
+
+	for (IZ_UINT nChannelIdx = 0; nChannelIdx < sAnmNode.numChannels; ++nChannelIdx) {
+		const S_ANM_CHANNEL& sChannel = sAnmNode.channels[nChannelIdx];
+
+		IZ_UINT nParamType = (sChannel.type & E_ANM_TRANSFORM_TYPE_PARAM_MASK);
+		IZ_UINT nTransformType = (sChannel.type & E_ANM_TRANSFORM_TYPE_TRANSFORM_MASK);
+
+		switch (nTransformType) {
+		case E_ANM_TRANSFORM_TYPE_TRANSLATE:
+			updateFlag |= E_SKL_JOINT_PARAM_TRANSLATE;
+			break;
+		case E_ANM_TRANSFORM_TYPE_QUATERNION:
+			updateFlag |= E_SKL_JOINT_PARAM_QUARTANION;
+			break;
+		case E_ANM_TRANSFORM_TYPE_SCALE:
+			updateFlag |= E_SKL_JOINT_PARAM_SCALE;
+			break;
+		default:
+			IZ_ASSERT(IZ_FALSE);
+			break;
+		}
+
+		const E_ANM_INTERP_TYPE nInterp = static_cast<E_ANM_INTERP_TYPE>(sChannel.interp);
+		const IZ_UINT nKeyNum = sChannel.numKeys;
+		S_ANM_KEY** const pKey = sChannel.keys;
+
+		if (CAnimationUtil::IsScalarInterp(sChannel.interp)) {
+			switch (nParamType) {
+			case E_ANM_TRANSFORM_TYPE_X:	// Xのみ
+				param.v[0] = CAnimationUtil::ComputeInterp(nInterp, time, nKeyNum, 0, pKey);
+				break;
+			case E_ANM_TRANSFORM_TYPE_Y:	// Yのみ
+				param.v[1] = CAnimationUtil::ComputeInterp(nInterp, time, nKeyNum, 0, pKey);
+				break;
+			case E_ANM_TRANSFORM_TYPE_Z:	// Zのみ
+				param.v[2] = CAnimationUtil::ComputeInterp(nInterp, time, nKeyNum, 0, pKey);
+				break;
+			case E_ANM_TRANSFORM_TYPE_W:	// Wのみ
+				param.v[3] = CAnimationUtil::ComputeInterp(nInterp, time, nKeyNum, 0, pKey);
+				break;
+			case E_ANM_TRANSFORM_TYPE_XYZ:	// XWZのみ
+				param.v[0] = CAnimationUtil::ComputeInterp(nInterp, time, nKeyNum, 0, pKey);
+				param.v[1] = CAnimationUtil::ComputeInterp(nInterp, time, nKeyNum, 1, pKey);
+				param.v[2] = CAnimationUtil::ComputeInterp(nInterp, time, nKeyNum, 2, pKey);
+				break;
+			case E_ANM_TRANSFORM_TYPE_XYZW:	// XYZWすべて
+				param.v[0] = CAnimationUtil::ComputeInterp(nInterp, time, nKeyNum, 0, pKey);
+				param.v[1] = CAnimationUtil::ComputeInterp(nInterp, time, nKeyNum, 1, pKey);
+				param.v[2] = CAnimationUtil::ComputeInterp(nInterp, time, nKeyNum, 2, pKey);
+				param.v[3] = CAnimationUtil::ComputeInterp(nInterp, time, nKeyNum, 3, pKey);
+				break;
+			default:
+				IZ_ASSERT(IZ_FALSE);
+				break;
+			}
+		}
+		else {
+			// NOTE
+			// 現状slerpを行う場合
+
+			// TODO
+			IZ_ASSERT(nParamType == E_ANM_TRANSFORM_TYPE_XYZW);
+			IZ_ASSERT(nTransformType == E_ANM_TRANSFORM_TYPE_QUATERNION);
+
+			CAnimationUtil::ComputeInterp(
+				param,
+				nInterp,
+				time,
+				nKeyNum,
+				0,
+				pKey);
+		}
+
+		// 姿勢情報更新
+		skl->UpdatePose(
+			nJointIdx,
+			nTransformType,
+			nParamType,
+			param);
+	}
+
+	// 姿勢情報更新終了
+	skl->EndUpdatePose(
+		nJointIdx,
+		updateFlag);
+}
+
+// アニメーション適用
+void CAnimation::ApplyAnimation(
+	CSkeletonInstance* skl,
+	IZ_FLOAT time)
+{
+	IZ_ASSERT(skl != IZ_NULL);
+
+	IZ_UINT jointNum = skl->GetJointNum();
+
+	for (IZ_UINT i = 0; i < jointNum; ++i) {
+		ApplyAnimationByIdx(skl, i, time);
+	}
+}
+
+void CAnimation::ApplyAnimationByIdx(
+	CSkeletonInstance* skl,
+	IZ_UINT nJointIdx,
+	IZ_FLOAT fTime)
+{
+	const S_ANM_NODE* pAnmNode = GetAnmNodeByJointIdx(nJointIdx);
+	if (pAnmNode != IZ_NULL) {
+		ApplyAnimation(skl, fTime, pAnmNode);
+	}
+}
+
+void CAnimation::ApplyAnimationByName(
+	CSkeletonInstance* skl,
+	IZ_PCSTR pszJointName,
+	IZ_FLOAT fTime)
+{
+	IZ_UINT nKey = CKey::GenerateValue(pszJointName);
+
+	ApplyAnimationByKey(skl, nKey, fTime);
+}
+
+void CAnimation::ApplyAnimationByKey(
+	CSkeletonInstance* skl,
+	IZ_UINT nJointKey,
+	IZ_FLOAT fTime)
+{
+	const S_ANM_NODE* pAnmNode = GetAnmNodeByKey(nJointKey);
+	if (pAnmNode != IZ_NULL) {
+		ApplyAnimation(skl, fTime, pAnmNode);
+	}
 }
 
 const S_ANM_NODE* CAnimation::GetAnmNodeByIdx(IZ_UINT idx)
