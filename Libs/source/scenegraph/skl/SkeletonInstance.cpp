@@ -69,7 +69,7 @@ CSkeletonInstance::~CSkeletonInstance()
 	SAFE_RELEASE(m_pBody);
 }
 
-void CSkeletonInstance::BuildMatrix()
+void CSkeletonInstance::BuildMatrix(const SMatrix* mtxL2W)
 {
 	for (IZ_UINT i = 0; i < m_nJointNum; ++i) {
 		BuildLocalMatrix(i);
@@ -82,6 +82,15 @@ void CSkeletonInstance::BuildMatrix()
 		if (nParentIdx >= 0) {
 			IZ_ASSERT((IZ_UINT)nParentIdx < i);
 			ApplyParentMatrix(i, nParentIdx);
+		}
+		else if (mtxL2W != IZ_NULL) {
+			// ルートに対しては、L2Wマトリクスを計算する
+			SMatrix& mtxJoint = m_pGlobalPose[0];
+
+			SMatrix::Mul(
+				mtxJoint,
+				mtxJoint,
+				*mtxL2W);
 		}
 	}
 

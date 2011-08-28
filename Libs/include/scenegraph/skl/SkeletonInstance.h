@@ -30,7 +30,7 @@ namespace izanagi {
 		IZ_DEFINE_INTERNAL_RELEASE();
 
 	public:
-		void BuildMatrix();
+		void BuildMatrix(const SMatrix* mtxL2W);
 
 		const SMatrix* GetJointMtx(IZ_INT idx) const;
 
