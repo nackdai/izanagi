@@ -167,10 +167,10 @@ IZ_BOOL CModel::Render()
 }
 
 // 適用されたモーションに基づき更新
-void CModel::Update()
+void CModel::Update(const SMatrix* mtxL2W/*= IZ_NULL*/)
 {
 	if (m_pSkeleton != IZ_NULL) {
-		m_pSkeleton->BuildMatrix();
+		m_pSkeleton->BuildMatrix(mtxL2W);
 
 		if (m_pMesh != IZ_NULL) {
 			IZ_ASSERT(m_nCurLODLevel < GetMaxLODLevel());
