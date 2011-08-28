@@ -80,3 +80,12 @@ const S_SKL_JOINT* CSkeleton::GetJoint(IZ_INT idx) const
 	IZ_ASSERT((IZ_UINT)idx < m_nJointNum);
 	return &m_pJoint[idx];
 }
+
+S_SKL_JOINT* CSkeleton::GetJoint(IZ_INT idx)
+{
+	if (idx < 0) {
+		return IZ_NULL;
+	}
+	IZ_ASSERT((IZ_UINT)idx < m_nJointNum);
+	return &m_pJoint[idx];
+}
