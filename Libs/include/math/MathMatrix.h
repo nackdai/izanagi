@@ -337,6 +337,14 @@ namespace izanagi {
 		// ベクトルから回転マトリクスを求める
 		static void GetRotMatrixFromVector(SMatrix& mtx, const SVector& vec);
 		static void GetRotMatrixFromVector(SMatrix& mtx, const SVector& vec, const SVector& up);
+
+		// マトリクスの中身をダンプする
+		static void Dump(const SMatrix& mtx)
+		{
+			for (IZ_UINT i = 0; i < 4; i++) {
+				IZ_PRINTF("%f, %f, %f, %f\n", mtx.m[i][0], mtx.m[i][1], mtx.m[i][2], mtx.m[i][3]);
+			}
+		}
 	};
 }	// namespace izanagi
 
