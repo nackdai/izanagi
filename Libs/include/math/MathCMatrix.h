@@ -241,6 +241,11 @@ namespace izanagi {
 				*this, *this,
 				scaleX, scaleY, scaleZ);
 		}
+
+		void Dump()
+		{
+			SMatrix::Dump(*this);
+		}
 	};
 }	// namespace izanagi
 
