@@ -8,6 +8,8 @@ namespace izanagi {
 	class IInputStream;
 
 	class CSkeleton : public CObject {
+		friend class CSkeletonInstance;
+
 	public:
 		static CSkeleton* CreateSkeleton(
 			IMemoryAllocator* pAllocator,
@@ -34,6 +36,8 @@ namespace izanagi {
 		IZ_UINT8* ReadJoint(
 			IZ_UINT8* pBuf,
 			IInputStream* pIn);
+
+		S_SKL_JOINT* GetJoint(IZ_INT idx);
 
 	private:
 		IMemoryAllocator* m_pAllocator;

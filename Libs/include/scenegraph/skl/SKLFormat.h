@@ -10,9 +10,9 @@
 
 namespace izanagi {
 	enum E_SKL_JOINT_PARAM {
-		E_SKL_JOINT_PARAM_TRANSLATE = 1 << 0,
+		E_SKL_JOINT_PARAM_TRANSLATE  = 1 << 0,
 		E_SKL_JOINT_PARAM_QUARTANION = 1 << 1,
-		E_SKL_JOINT_PARAM_SCALE = 1 << 2,
+		E_SKL_JOINT_PARAM_SCALE      = 1 << 2,
 	};
 
 	enum {
@@ -83,7 +83,8 @@ namespace izanagi {
 		SMatrix mtxInvBind;
 
 		IZ_UINT8 validParam;
-		IZ_UINT8 reserved[3];
+		IZ_UINT8 validAnmParam;
+		IZ_UINT8 reserved[2];
 
 		S_SKL_JOINT_POSE pose;
 	};

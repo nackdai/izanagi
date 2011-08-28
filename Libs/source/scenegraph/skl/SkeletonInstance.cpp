@@ -154,12 +154,23 @@ namespace {
 void CSkeletonInstance::BuildLocalMatrix(IZ_UINT nIdx)
 {
 	IZ_ASSERT(m_pBody != IZ_NULL);
-	const S_SKL_JOINT* pJoint = m_pBody->GetJoint(nIdx);
+	S_SKL_JOINT* pJoint = m_pBody->GetJoint(nIdx);
 
 	// NOTE
 	// izanagiは右掛け
 
-	CBit32Flag flag(pJoint->validParam);
+	// 計算するパラメータを判定するフラグ
+	CBit32Flag flag;
+	if (pJoint->validAnmParam > 0) {
+		// アニメーションが適用されている場合
+		flag.Set(pJoint->validAnmParam);
+
+		// 念のため次に向けてリセットしておく
+		pJoint->validAnmParam = 0;
+	}
+	else {
+		flag.Set(pJoint->validParam);
+	}
 
 	const S_SKL_JOINT_POSE& pose = m_pJointPose[nIdx];
 	SMatrix& mtxJoint = m_pGlobalPose[nIdx];
@@ -286,10 +297,15 @@ void CSkeletonInstance::ApplyAnimation(
 
 	IZ_ASSERT(nJointIdx < m_nJointNum);
 
-	const S_SKL_JOINT* pJoint = m_pBody->GetJoint(nJointIdx);
+	// 対象となる関節を探す
+	S_SKL_JOINT* pJoint = m_pBody->GetJoint(nJointIdx);
 	S_SKL_JOINT_POSE& sPose = m_pJointPose[nJointIdx];
 
+	// 本当に対象となる関節かチェック
 	IZ_ASSERT(pJoint->nameKey == sAnmNode.targetKey);
+
+	// どのパラメータについて計算したかフラグ
+	pJoint->validAnmParam = 0;
 
 	for (IZ_UINT nChannelIdx = 0; nChannelIdx < sAnmNode.numChannels; ++nChannelIdx) {
 		const S_ANM_CHANNEL& sChannel = sAnmNode.channels[nChannelIdx];
@@ -301,12 +317,14 @@ void CSkeletonInstance::ApplyAnimation(
 		switch (nTransformType) {
 		case E_ANM_TRANSFORM_TYPE_TRANSLATE:
 			param = sPose.trans;
+			pJoint->validAnmParam |= E_SKL_JOINT_PARAM_TRANSLATE;
 			break;
 		case E_ANM_TRANSFORM_TYPE_QUATERNION:
-			// Nothing is done.
+			pJoint->validAnmParam |= E_SKL_JOINT_PARAM_QUARTANION;
 			break;
 		case E_ANM_TRANSFORM_TYPE_SCALE:
 			param = sPose.scale;
+			pJoint->validAnmParam |= E_SKL_JOINT_PARAM_SCALE;
 			break;
 		default:
 			IZ_ASSERT(IZ_FALSE);
@@ -319,24 +337,24 @@ void CSkeletonInstance::ApplyAnimation(
 
 		if (CAnimationUtil::IsScalarInterp(sChannel.interp)) {
 			switch (nParamType) {
-			case E_ANM_TRANSFORM_TYPE_X:
+			case E_ANM_TRANSFORM_TYPE_X:	// Xのみ
 				param[0] = CAnimationUtil::ComputeInterp(nInterp, fTime, nKeyNum, 0, pKey);
 				break;
-			case E_ANM_TRANSFORM_TYPE_Y:
+			case E_ANM_TRANSFORM_TYPE_Y:	// Yのみ
 				param[1] = CAnimationUtil::ComputeInterp(nInterp, fTime, nKeyNum, 0, pKey);
 				break;
-			case E_ANM_TRANSFORM_TYPE_Z:
+			case E_ANM_TRANSFORM_TYPE_Z:	// Zのみ
 				param[2] = CAnimationUtil::ComputeInterp(nInterp, fTime, nKeyNum, 0, pKey);
 				break;
-			case E_ANM_TRANSFORM_TYPE_W:
+			case E_ANM_TRANSFORM_TYPE_W:	// Wのみ
 				param[3] = CAnimationUtil::ComputeInterp(nInterp, fTime, nKeyNum, 0, pKey);
 				break;
-			case E_ANM_TRANSFORM_TYPE_XYZ:
+			case E_ANM_TRANSFORM_TYPE_XYZ:	// XWZのみ
 				param[0] = CAnimationUtil::ComputeInterp(nInterp, fTime, nKeyNum, 0, pKey);
 				param[1] = CAnimationUtil::ComputeInterp(nInterp, fTime, nKeyNum, 1, pKey);
 				param[2] = CAnimationUtil::ComputeInterp(nInterp, fTime, nKeyNum, 2, pKey);
 				break;
-			case E_ANM_TRANSFORM_TYPE_XYZW:
+			case E_ANM_TRANSFORM_TYPE_XYZW:	// XYZWすべて
 				param[0] = CAnimationUtil::ComputeInterp(nInterp, fTime, nKeyNum, 0, pKey);
 				param[1] = CAnimationUtil::ComputeInterp(nInterp, fTime, nKeyNum, 1, pKey);
 				param[2] = CAnimationUtil::ComputeInterp(nInterp, fTime, nKeyNum, 2, pKey);
@@ -348,6 +366,9 @@ void CSkeletonInstance::ApplyAnimation(
 			}
 		}
 		else {
+			// NOTE
+			// 現状slerpを行う場合
+
 			// TODO
 			IZ_ASSERT(nParamType == E_ANM_TRANSFORM_TYPE_XYZW);
 			IZ_ASSERT(nTransformType == E_ANM_TRANSFORM_TYPE_QUATERNION);
