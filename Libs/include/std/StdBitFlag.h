@@ -27,22 +27,22 @@ namespace {
 		IZ_BOOL IsOn(_T mask) const { return (m_Body & mask); }
 		IZ_BOOL IsOff(_T mask) const { return !IsOn(mask); }
 
-		IZ_BOOL IsOnEx(IZ_UINT bit) const
+		IZ_BOOL IsOnByBitShift(IZ_UINT bit) const
 		{
 			IZ_ASSERT(bit < COUNT_BIT(_T));
 			return IsOn(1 << bit);
 		}
-		IZ_BOOL IsOffEx(IZ_UINT bit) const { return !IsOnEx(bit); }
+		IZ_BOOL IsOffByBitShift(IZ_UINT bit) const { return !IsOnByBitShift(bit); }
 
 		void OnFlag(_T mask) const { m_Body |= mask; }
 		void OffFlag(_T mask) const { m_Body &= ~mask; }
 
-		void OnFlagEx(IZ_UINT bit) const
+		void OnFlagByBitShift(IZ_UINT bit) const
 		{
 			IZ_ASSERT(bit < COUNT_BIT(_T));
 			m_Body |= (1 << bit);
 		}
-		void OffFlagEx(IZ_UINT bit) const
+		void OffFlagByBitShift(IZ_UINT bit) const
 		{
 			IZ_ASSERT(bit < COUNT_BIT(_T));
 			m_Body &= ~(1 << bit);
