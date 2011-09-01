@@ -80,7 +80,8 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
-			CharacterSet="1"
+			InheritedPropertySheets="..\..\PeopertySeet\Release.vsprops"
+			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -100,13 +101,14 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\Extarnal\collada-dom\dom\include&quot;;&quot;$(SolutionDir)\Extarnal\collada-dom\dom\include\1.4&quot;;&quot;$(SolutionDir)\Extarnal\collada-dom\dom\external-libs\boost&quot;;&quot;$(SolutionDir)\Extarnal\NvTriStrip\include&quot;;&quot;$(SolutionDir)\Extarnal\zlib&quot;;./include"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\External\collada-dom\dom\include&quot;;&quot;$(SolutionDir)\External\collada-dom\dom\include\1.4&quot;;&quot;$(SolutionDir)\External\collada-dom\dom\external-libs\boost&quot;;&quot;$(SolutionDir)\External\NvTriStrip\include&quot;;&quot;$(SolutionDir)\External\zlib&quot;;./include"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;BOOST_ALL_NO_LIB;PCRE_STATIC;DOM_INCLUDE_LIBXML;__IZANAGI_NO_USE_D3D__"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="3"
+				DisableSpecificWarnings="4819"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
