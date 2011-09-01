@@ -135,7 +135,7 @@ IZ_BOOL COption::AnalysisInternal()
 IZ_BOOL COption::IsValid()
 {
 	VRETURN(!in.empty());
-	VRETURN(!out.empty());
+	VRETURN(!out.empty() || !outMsh.empty() || !outSkl.empty());
 	VRETURN(fileType != FileTypeUnknown);
 
 	return IZ_TRUE;
