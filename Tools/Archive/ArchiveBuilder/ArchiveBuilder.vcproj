@@ -90,6 +90,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
+			InheritedPropertySheets="..\..\PeopertySeet\Release.vsprops"
 			UseOfMFC="1"
 			CharacterSet="2"
 			WholeProgramOptimization="1"

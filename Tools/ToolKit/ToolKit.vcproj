@@ -76,6 +76,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
+			InheritedPropertySheets="..\PeopertySeet\Release.vsprops"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>

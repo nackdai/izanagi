@@ -101,7 +101,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\..\PeopertySeet\Debug.vsprops"
+			InheritedPropertySheets="..\..\PeopertySeet\Release.vsprops"
 			UseOfMFC="1"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
@@ -124,7 +124,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="./AppCore;&quot;$(SolutionDir)/External/Cg/include&quot;;&quot;$(SolutionDir)/External/xerces/src&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;IZ_TOOLKIT_ENABLE_XERCES"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="2"
 				WarningLevel="3"
@@ -142,6 +142,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="$(SolutionDir)/External/xerces/Build/Win32/VC8/$(ConfigurationName)/xerces-c_3.lib $(SolutionDir)/External/Cg/lib/cg.lib $(SolutionDir)/External/Cg/lib/cgD3D9.lib $(SolutionDir)/External/Preproc/$(ConfigurationName)/Preproc.lib"
 				OutputFile="$(SolutionDir)\tools\$(ConfigurationName)\$(ProjectName).exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
