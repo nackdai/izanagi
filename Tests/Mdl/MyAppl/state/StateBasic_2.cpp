@@ -218,8 +218,8 @@ IZ_BOOL CStateBasicEx2::Update()
 	IZ_FLOAT fElapsed = CMySystem::GetInstance().GetTimer(0).GetTime();
 	fElapsed /= 1000.0f;
 
-	m_Timeline.Advance(fElapsed);
-	//m_Timeline.Advance(80);
+	//m_Timeline.Advance(fElapsed);
+	m_Timeline.Advance(80);
 	IZ_FLOAT time = m_Timeline.GetTime();
 
 	//IZ_PRINTF("time [%f]\n", time);
@@ -244,7 +244,8 @@ IZ_BOOL CStateBasicEx2::Enter()
 
 	// Mesh
 	{
-		IZ_ASSERT(input.Open("data/Seymour.msh"));
+		//IZ_ASSERT(input.Open("data/Seymour.msh"));
+		IZ_ASSERT(input.Open("data/00.msh"));
 
 		m_pMsh = izanagi::CMesh::CreateMesh(
 					pAllocator,
@@ -256,7 +257,8 @@ IZ_BOOL CStateBasicEx2::Enter()
 
 	// Skeleton
 	{
-		IZ_ASSERT(input.Open("data/Seymour.skl"));
+		//IZ_ASSERT(input.Open("data/Seymour.skl"));
+		IZ_ASSERT(input.Open("data/00.skl"));
 
 		m_pSkl = izanagi::CSkeleton::CreateSkeleton(
 					pAllocator,
@@ -369,12 +371,14 @@ IZ_BOOL CStateBasicEx2::Enter()
 	//m_pTex = pDevice->CreateTextureFromFile("data/earth.bmp",
 	//m_pTex = pDevice->CreateTextureFromFile("data/dice.tga",
 	//m_pTex = pDevice->CreateTextureFromFile("data/Tiny_skin.dds",
+	//m_pTex = pDevice->CreateTextureFromFile("data/1P_C.dds",
 				izanagi::E_GRAPH_PIXEL_FMT_RGBA8);
 	IZ_ASSERT(m_pTex != IZ_NULL);
 
 
-	VRETURN(input.Open("data/Seymour.anm"));
+	//VRETURN(input.Open("data/Seymour.anm"));
 	//VRETURN(input.Open("data/tiny.anm"));
+	VRETURN(input.Open("data/00_Run.anm"));
 	m_pAnm = izanagi::CAnimation::CreateAnimation(
 				pAllocator,
 				&input);
