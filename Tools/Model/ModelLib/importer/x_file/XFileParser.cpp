@@ -1174,7 +1174,7 @@ std::string CXFileParser::GetTokenEx()
 		_NextOneChar(m_MemInStream);
 	}
 
-	IZ_ASSERT(IsSemiColon());
+	VRETURN(IsSemiColon());
 
 	return ret;
 }
@@ -1256,7 +1256,7 @@ IZ_FLOAT CXFileParser::ReadFloat()
 
 		ret = static_cast<IZ_FLOAT>(::atof(str.c_str()));
 
-		IZ_ASSERT(IsSeparator());
+		VRETURN(IsSeparator());
 	}
 
 	return ret;
@@ -1290,7 +1290,7 @@ IZ_INT CXFileParser::ReadInt()
 
 		ret =::atoi(str.c_str());
 
-		IZ_ASSERT(IsSeparator());
+		VRETURN(IsSeparator());
 	}
 
 	return ret;
@@ -1302,7 +1302,7 @@ void CXFileParser::ReadVector(izanagi::SVector& vec)
 	vec.y = ReadFloat();
 	vec.z = ReadFloat();
 	vec.w = ReadFloat();
-	IZ_ASSERT(IsSeparator());
+	VRETURN_VAL(IsSeparator(),);
 }
 
 void CXFileParser::ReadVectorXYZ(izanagi::SVector& vec)
@@ -1310,7 +1310,7 @@ void CXFileParser::ReadVectorXYZ(izanagi::SVector& vec)
 	vec.x = ReadFloat();
 	vec.y = ReadFloat();
 	vec.z = ReadFloat();
-	IZ_ASSERT(IsSeparator());
+	VRETURN_VAL(IsSeparator(),);
 }
 
 void CXFileParser::ReadVectorXY(izanagi::SVector& vec)
@@ -1322,7 +1322,7 @@ void CXFileParser::ReadFloat2(IZ_FLOAT& f0, IZ_FLOAT& f1)
 {
 	f0 = ReadFloat();
 	f1 = ReadFloat();
-	IZ_ASSERT(IsSeparator());
+	VRETURN_VAL(IsSeparator(),);
 }
 
 void CXFileParser::ReadRGBA(izanagi::SVector& vec)
