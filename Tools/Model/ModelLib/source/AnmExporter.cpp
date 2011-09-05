@@ -120,11 +120,14 @@ IZ_BOOL CAnmExporter::Export(
 				fMaxTime = (sKey.keyTime > fMaxTime ? sKey.keyTime : fMaxTime);
 
 				sKey.numParams = static_cast<IZ_UINT8>(tvValue.size());
+				sKey.params = IZ_NULL;
 
 				IZ_OUTPUT_WRITE_VRETURN(&m_Out, &sKey, 0, sizeof(sKey));
 
+#if 0
 				IZ_INT nOffset = sizeof(IZ_FLOAT);
 				VRETURN(m_Out.Seek(-nOffset, izanagi::E_IO_STREAM_SEEK_POS_CUR));
+#endif
 
 				IZ_OUTPUT_WRITE_VRETURN(&m_Out, &tvValue[0], 0, sizeof(IZ_FLOAT) * tvValue.size());
 			}
