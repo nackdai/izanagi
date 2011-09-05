@@ -25,7 +25,7 @@ namespace izanagi {
 	 */
 	class IMeshSet : public CPlacementNew {
 		friend class CGeometrySorter;
-		friend class CScene;
+		friend class CSceneRenderer;
 
 	protected:
 		IMeshSet();

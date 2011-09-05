@@ -227,6 +227,14 @@
 				Name="anm"
 				>
 				<File
+					RelativePath="..\source\scenegraph\anm\AnimationInterface.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\source\scenegraph\anm\AnimationInterp.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\source\scenegraph\anm\AnimationUtil.cpp"
 					>
 				</File>
@@ -278,6 +286,10 @@
 					RelativePath="..\source\scenegraph\skl\SkeletonInstance.cpp"
 					>
 				</File>
+				<File
+					RelativePath="..\source\scenegraph\skl\SkeletonUtil.cpp"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="scene"
@@ -287,7 +299,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\source\scenegraph\scene\Scene.cpp"
+					RelativePath="..\source\scenegraph\scene\SceneRenerer.cpp"
 					>
 				</File>
 			</Filter>
@@ -361,6 +373,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\include\scenegraph\anm\AnimationInterp.h"
+					>
+				</File>
+				<File
 					RelativePath="..\include\scenegraph\anm\AnimationUtil.h"
 					>
 				</File>
@@ -417,6 +433,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\include\scenegraph\skl\SkeletonUtil.h"
+					>
+				</File>
+				<File
 					RelativePath="..\include\scenegraph\skl\SKLFormat.h"
 					>
 				</File>
@@ -429,7 +449,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\include\scenegraph\scene\Scene.h"
+					RelativePath="..\include\scenegraph\scene\SceneRenderer.h"
 					>
 				</File>
 			</Filter>

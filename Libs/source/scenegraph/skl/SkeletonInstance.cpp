@@ -1,5 +1,6 @@
 ﻿#include "scenegraph/skl/SkeletonInstance.h"
 #include "scenegraph/skl/izSkeleton.h"
+#include "scenegraph/skl/SkeletonUtil.h"
 #include "izIo.h"
 
 #include "scenegraph/anm/AnimationInterface.h"
@@ -170,16 +171,12 @@ void CSkeletonInstance::BuildLocalMatrix(IZ_UINT nIdx)
 	// izanagiは右掛け
 
 	// 計算するパラメータを判定するフラグ
-	CBit32Flag flag;
-	if (pJoint->validAnmParam > 0) {
-		// アニメーションが適用されている場合
-		flag.Set(pJoint->validAnmParam);
+	CBit32Flag flag(
+		pJoint->validParam | pJoint->validAnmParam);
 
+	if (pJoint->validAnmParam > 0) {
 		// 念のため次に向けてリセットしておく
 		pJoint->validAnmParam = 0;
-	}
-	else {
-		flag.Set(pJoint->validParam);
 	}
 
 	const S_SKL_JOINT_POSE& pose = m_pJointPose[nIdx];
@@ -301,53 +298,6 @@ void CSkeletonInstance::EndUpdatePose(
 	m_IsUpdatingPose = IZ_FALSE;
 }
 
-namespace {
-	inline void _UpdatePose(
-		IZ_UINT paramType,
-		IZ_FLOAT* dst,
-		const SVector& src)
-	{
-		IZ_UINT paramNum = 0;
-		IZ_UINT paramPos = 0;
-
-		switch (paramType) {
-		case E_ANM_TRANSFORM_TYPE_X:	// Xのみ
-			paramNum = 1;
-			paramPos = 0;
-			break;
-		case E_ANM_TRANSFORM_TYPE_Y:	// Yのみ
-			paramNum = 1;
-			paramPos = 1;
-			break;
-		case E_ANM_TRANSFORM_TYPE_Z:	// Zのみ
-			paramNum = 1;
-			paramPos = 2;
-			break;
-		case E_ANM_TRANSFORM_TYPE_W:	// Wのみ
-			paramNum = 1;
-			paramPos = 3;
-			break;
-		case E_ANM_TRANSFORM_TYPE_XYZ:	// XWZのみ
-			SVector::CopyXYZ(
-				*(reinterpret_cast<SVector*>(dst)),
-				src);
-			break;
-		case E_ANM_TRANSFORM_TYPE_XYZW:	// XYZWすべて
-			SVector::Copy(
-				*(reinterpret_cast<SVector*>(dst)),
-				src);
-			break;
-		default:
-			IZ_ASSERT(IZ_FALSE);
-			break;
-		}
-
-		if (paramNum == 1) {
-			dst[paramPos] = src.v[paramPos];
-		}
-	}
-}	// namespace
-
 // 姿勢情報更新
 void CSkeletonInstance::UpdatePose(
 	IZ_UINT idx,
@@ -355,20 +305,31 @@ void CSkeletonInstance::UpdatePose(
 	IZ_UINT paramType,
 	const SVector& param)
 {
+	IZ_ASSERT(m_IsUpdatingPose);
+
 	S_SKL_JOINT_POSE& sPose = m_pJointPose[idx];
 
-	switch (transformType) {
-	case E_ANM_TRANSFORM_TYPE_TRANSLATE:
-		_UpdatePose(paramType, sPose.trans, param);
-		break;
-	case E_ANM_TRANSFORM_TYPE_QUATERNION:
-		_UpdatePose(paramType, sPose.quat.v, param);
-		break;
-	case E_ANM_TRANSFORM_TYPE_SCALE:
-		_UpdatePose(paramType, sPose.scale, param);
-		break;
-	default:
-		IZ_ASSERT(IZ_FALSE);
-		break;
+	CSkeletonUtil::UpdatePose(
+		sPose,
+		transformType,
+		paramType,
+		param);
+}
+
+// ジョイントキーからジョイントインデックスを逆引きする
+IZ_INT CSkeletonInstance::GetJointIdxByKey(IZ_UINT key)
+{
+	IZ_ASSERT(m_pBody != IZ_NULL);
+
+	IZ_UINT jointNum = m_pBody->GetJointNum();
+
+	for (IZ_UINT i = 0; i < jointNum; i++) {
+		const S_SKL_JOINT* joint = m_pBody->GetJoint(i);
+		if (joint->nameKey == key) {
+			return i;
+		}
 	}
+
+	IZ_ASSERT(IZ_FALSE);
+	return -1;
 }

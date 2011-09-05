@@ -5,7 +5,7 @@
 #include "izGraph.h"
 #include "scenegraph/SceneDefs.h"
 #include "scenegraph/msh/MshRenderHandler.h"
-#include "scenegraph/scene/Scene.h"
+#include "scenegraph/scene/SceneRenderer.h"
 
 namespace izanagi {
 	class IMeshSet;
@@ -98,7 +98,7 @@ namespace izanagi {
 		 */
 		IZ_BOOL Render(
 			CGraphicsDevice* pDevice,
-			CScene* pScene,
+			CSceneRenderer* pScene,
 			IMshRenderHandler* pRenderHandler);
 		
 	protected:
@@ -112,7 +112,7 @@ namespace izanagi {
 		// 描画内部処理
 		IZ_BOOL RenderInternal(
 			CGraphicsDevice* pDevice,
-			CScene* pScene,
+			CSceneRenderer* pScene,
 			IMshRenderHandler* pRenderHandler,
 			CZList& cList,
 			ERenderOrder nOrder);

@@ -49,10 +49,10 @@ namespace izanagi {
 			IInputStream* pIn,
 			IZ_UINT8* pBuf);
 
-		void ApplyAnimation(
-			CSkeletonInstance* skl,
+		IZ_UINT ApplyAnimation(
 			IZ_FLOAT time,
-			const S_ANM_NODE* anmNode);
+			const S_ANM_NODE* anmNode,
+			CPoseUpdater& poseUpdater);
 
 	public:
 		// アニメーション適用
@@ -75,6 +75,12 @@ namespace izanagi {
 			IZ_UINT nJointKey,
 			IZ_FLOAT fTime);
 
+	protected:
+		IZ_UINT GetPoseByIdx(
+			S_SKL_JOINT_POSE& pose,
+			IZ_UINT idx,
+			IZ_FLOAT time);
+
 	public:
 		const S_ANM_NODE* GetAnmNodeByIdx(IZ_UINT idx);
 		const S_ANM_NODE* GetAnmNodeByName(IZ_PCSTR name);
@@ -86,7 +92,7 @@ namespace izanagi {
 		IZ_FLOAT GetAnimationTime() const { return m_sHeader.time; }
 
 		E_ANM_KEY_TYPE GetKeyType() const { return m_sHeader.keyType; }
-
+		
 	private:
 		IMemoryAllocator* m_pAllocator;
 
