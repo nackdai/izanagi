@@ -1,4 +1,4 @@
-﻿#include "scenegraph/scene/Scene.h"
+﻿#include "scenegraph/scene/SceneRenderer.h"
 #include "scenegraph/msh/MeshInstance.h"
 #include "scenegraph/mtrl/izMaterial.h"
 #include "izGraph.h"
@@ -6,12 +6,12 @@
 using namespace izanagi;
 
 // インスタンス作成
-CScene* CScene::CreateScene(IMemoryAllocator* pAllocator)
+CSceneRenderer* CSceneRenderer::CreateSceneRenderer(IMemoryAllocator* pAllocator)
 {
-	void* pBuf = ALLOC_ZERO(pAllocator, sizeof(CScene));
+	void* pBuf = ALLOC_ZERO(pAllocator, sizeof(CSceneRenderer));
 	VRETURN_NULL(pBuf != IZ_NULL);
 
-	CScene* pInstance = new(pBuf) CScene;
+	CSceneRenderer* pInstance = new(pBuf) CSceneRenderer;
 	{
 		pInstance->AddRef();
 		pInstance->m_pAllocator = pAllocator;
@@ -21,7 +21,7 @@ CScene* CScene::CreateScene(IMemoryAllocator* pAllocator)
 }
 
 // コンストラクタ
-CScene::CScene()
+CSceneRenderer::CSceneRenderer()
 {
 	m_pAllocator = IZ_NULL;
 
@@ -35,7 +35,7 @@ CScene::CScene()
 }
 
 // デストラクタ
-CScene::~CScene()
+CSceneRenderer::~CSceneRenderer()
 {
 	SAFE_RELEASE(m_pSceneParam);
 	SAFE_RELEASE(m_pCurShader);
@@ -43,7 +43,7 @@ CScene::~CScene()
 }
 
 // 描画開始
-IZ_UINT CScene::BeginRender(IMeshSet* pMesh)
+IZ_UINT CSceneRenderer::BeginRender(IMeshSet* pMesh)
 {
 	CMaterial* pMtrl = pMesh->GetMaterial();
 
@@ -76,7 +76,7 @@ IZ_UINT CScene::BeginRender(IMeshSet* pMesh)
 }
 
 // 描画途中
-IZ_BOOL CScene::IterRender(
+IZ_BOOL CSceneRenderer::IterRender(
 	CGraphicsDevice* pDevice,
 	IZ_UINT nPass, 
 	IMeshSet* pMesh,
@@ -125,7 +125,7 @@ IZ_BOOL CScene::IterRender(
 	return IZ_TRUE;
 }
 
-IZ_BOOL CScene::EndRender()
+IZ_BOOL CSceneRenderer::EndRender()
 {
 	IZ_ASSERT(m_pCurShader != IZ_NULL);
 

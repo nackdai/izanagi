@@ -1,5 +1,5 @@
-﻿#if !defined(__IZANAGI_SCENEGRAPH_SCENE_H__)
-#define __IZANAGI_SCENEGRAPH_SCENE_H__
+﻿#if !defined(__IZANAGI_SCENEGRAPH_SCENE_RENDERER_H__)
+#define __IZANAGI_SCENEGRAPH_SCENE_RENDERER_H__
 
 #include "izStd.h"
 #include "scenegraph/SceneParam.h"
@@ -14,20 +14,20 @@ namespace izanagi {
 
 	/**
 	 */
-	class CScene : public CObject {
+	class CSceneRenderer : public CObject {
 		friend class CGeometrySorter;
 
 	public:
 		/**
 		 * インスタンス作成
 		 */
-		static CScene* CreateScene(IMemoryAllocator* pAllocator);
+		static CSceneRenderer* CreateSceneRenderer(IMemoryAllocator* pAllocator);
 
 	protected:
-		CScene();
-		~CScene();
+		CSceneRenderer();
+		~CSceneRenderer();
 
-		NO_COPIABLE(CScene);
+		NO_COPIABLE(CSceneRenderer);
 
 		IZ_DEFINE_INTERNAL_RELEASE();
 
@@ -62,4 +62,4 @@ namespace izanagi {
 	};
 }	// namespace izanagi
 
-#endif	// #if !defined(__IZANAGI_SCENEGRAPH_SCENE_H__)
+#endif	// #if !defined(__IZANAGI_SCENEGRAPH_SCENE_RENDERER_H__)

@@ -1,6 +1,7 @@
 ﻿#include "scenegraph/anm/izAnimation.h"
 #include "scenegraph/skl/SkeletonInstance.h"
 #include "scenegraph/anm/AnimationUtil.h"
+#include "scenegraph/skl/SkeletonUtil.h"
 #include "izIo.h"
 
 using namespace izanagi;
@@ -61,13 +62,17 @@ IZ_UINT8* CAnimation::Init(
 	IInputStream* pIn,
 	IZ_UINT8* pBuf)
 {
+	// データサイズ
 	size_t nDataSize = m_sHeader.sizeFile - m_sHeader.sizeHeader;
 
+	// ノード情報読み込み
 	IZ_BOOL result = IZ_INPUT_READ(pIn, pBuf, 0, sizeof(S_ANM_NODE) * m_sHeader.numNodes); 
 	VRETURN_NULL(result);
 
+	// 読み込んだノード情報分減らす
 	nDataSize -= sizeof(S_ANM_NODE) * m_sHeader.numNodes;
 
+	// ノードを探索しやすくするためにハッシュに登録
 	for (IZ_UINT i = 0; i < m_sHeader.numNodes; ++i) {
 		m_pNodes[i].node = reinterpret_cast<S_ANM_NODE*>(pBuf);
 		pBuf += sizeof(S_ANM_NODE);
@@ -76,11 +81,14 @@ IZ_UINT8* CAnimation::Init(
 		m_NodeHash.Add(m_pNodes[i].GetHashItem());
 	}
 
+	// チャンネル情報読み込み
 	result = IZ_INPUT_READ(pIn, pBuf, 0, sizeof(S_ANM_CHANNEL) * m_sHeader.numChannels);
 	VRETURN_NULL(result);
 
+	// 読み込んだチャンネル情報分減らす
 	nDataSize -= sizeof(S_ANM_CHANNEL) * m_sHeader.numChannels;
 
+	// ノード情報とチャンネル情報を関連付ける
 	for (IZ_UINT nKeyIdx = 0; nKeyIdx < m_sHeader.numNodes; ++nKeyIdx) {
 		S_ANM_NODE& sNode = *m_pNodes[nKeyIdx].node;
 
@@ -88,6 +96,7 @@ IZ_UINT8* CAnimation::Init(
 		pBuf += sizeof(S_ANM_CHANNEL) * sNode.numChannels;
 	}
 
+	// チャンネル情報にキー情報用のバッファを割り当てる
 	for (IZ_UINT nKeyIdx = 0; nKeyIdx < m_sHeader.numNodes; ++nKeyIdx) {
 		S_ANM_NODE& sNode = *m_pNodes[nKeyIdx].node;
 
@@ -97,9 +106,11 @@ IZ_UINT8* CAnimation::Init(
 		}
 	}
 
+	// 残りのデータ（キー情報）読み込み
 	result = IZ_INPUT_READ(pIn, pBuf, 0, nDataSize);
 	VRETURN_NULL(result);
 
+	// チャンネル情報にキー情報を関連付ける
 	for (IZ_UINT nKeyIdx = 0; nKeyIdx < m_sHeader.numNodes; ++nKeyIdx) {
 		S_ANM_NODE& sNode = *m_pNodes[nKeyIdx].node;
 
@@ -109,7 +120,13 @@ IZ_UINT8* CAnimation::Init(
 			for (IZ_UINT nKeyIdx = 0; nKeyIdx < sChannel.numKeys; ++nKeyIdx) {
 				sChannel.keys[nKeyIdx] = reinterpret_cast<S_ANM_KEY*>(pBuf);
 				pBuf += sizeof(S_ANM_KEY);
+#if 0
 				pBuf += sizeof(IZ_FLOAT) * (sChannel.keys[nKeyIdx]->numParams - 1);
+#else
+				// パラメータへのポインタへ実データを割り当てる
+				sChannel.keys[nKeyIdx]->params = reinterpret_cast<IZ_FLOAT*>(pBuf);
+				pBuf += sizeof(IZ_FLOAT) * (sChannel.keys[nKeyIdx]->numParams);
+#endif
 			}
 		}
 	}
@@ -117,10 +134,10 @@ IZ_UINT8* CAnimation::Init(
 	return pBuf;
 }
 
-void CAnimation::ApplyAnimation(
-	CSkeletonInstance* skl,
+IZ_UINT CAnimation::ApplyAnimation(
 	IZ_FLOAT time,
-	const S_ANM_NODE* anmNode)
+	const S_ANM_NODE* anmNode,
+	CPoseUpdater& poseUpdater)
 {
 	const S_ANM_NODE& sAnmNode = *anmNode;
 	const IZ_UINT nJointIdx = sAnmNode.targetIdx;
@@ -129,7 +146,7 @@ void CAnimation::ApplyAnimation(
 	IZ_UINT updateFlag = 0;
 
 	// 姿勢情報更新開始
-	VRETURN_VAL(skl->BeginUpdatePose(nJointIdx),);
+	VRETURN_VAL(poseUpdater.BeginUpdate(nJointIdx), 0);
 
 	for (IZ_UINT nChannelIdx = 0; nChannelIdx < sAnmNode.numChannels; ++nChannelIdx) {
 		const S_ANM_CHANNEL& sChannel = sAnmNode.channels[nChannelIdx];
@@ -204,7 +221,7 @@ void CAnimation::ApplyAnimation(
 		}
 
 		// 姿勢情報更新
-		skl->UpdatePose(
+		poseUpdater.Update(
 			nJointIdx,
 			nTransformType,
 			nParamType,
@@ -212,9 +229,11 @@ void CAnimation::ApplyAnimation(
 	}
 
 	// 姿勢情報更新終了
-	skl->EndUpdatePose(
+	poseUpdater.EndUpdate(
 		nJointIdx,
 		updateFlag);
+
+	return updateFlag;
 }
 
 // アニメーション適用
@@ -238,7 +257,10 @@ void CAnimation::ApplyAnimationByIdx(
 {
 	const S_ANM_NODE* pAnmNode = GetAnmNodeByJointIdx(nJointIdx);
 	if (pAnmNode != IZ_NULL) {
-		ApplyAnimation(skl, fTime, pAnmNode);
+		ApplyAnimation(
+			fTime,
+			pAnmNode,
+			CSklPoseUpdater(skl));
 	}
 }
 
@@ -259,8 +281,29 @@ void CAnimation::ApplyAnimationByKey(
 {
 	const S_ANM_NODE* pAnmNode = GetAnmNodeByKey(nJointKey);
 	if (pAnmNode != IZ_NULL) {
-		ApplyAnimation(skl, fTime, pAnmNode);
+		ApplyAnimation(
+			fTime,
+			pAnmNode,
+			CSklPoseUpdater(skl));
 	}
+}
+
+IZ_UINT CAnimation::GetPoseByIdx(
+	S_SKL_JOINT_POSE& pose,
+	IZ_UINT idx,
+	IZ_FLOAT time)
+{
+	IZ_UINT updateFlag = 0;
+
+	const S_ANM_NODE* pAnmNode = GetAnmNodeByJointIdx(idx);
+	if (pAnmNode != IZ_NULL) {
+		updateFlag = ApplyAnimation(
+						time,
+						pAnmNode,
+						CPoseUpdater(&pose));
+	}
+
+	return updateFlag;
 }
 
 const S_ANM_NODE* CAnimation::GetAnmNodeByIdx(IZ_UINT idx)

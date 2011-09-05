@@ -16,6 +16,8 @@ CStdTimeline::CStdTimeline()
 	m_Flags.is_pause = IZ_TRUE;
 	m_Flags.is_forward = IZ_TRUE;
 
+	m_TimeOverHandler = IZ_NULL;
+
 	m_ListItem.Init(this);
 }
 
@@ -90,6 +92,10 @@ void CStdTimeline::Advance(IZ_FLOAT fDelta)
 	}
 
 	if (bIsOver) {
+		if (m_TimeOverHandler != IZ_NULL) {
+			m_TimeOverHandler->Handle(*this);
+		}
+
 		if (IsLoop()) {
 			if (IsReverse()) {
 				// 向きを変える

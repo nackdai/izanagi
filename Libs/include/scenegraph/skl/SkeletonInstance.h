@@ -70,6 +70,9 @@ namespace izanagi {
 			IZ_UINT paramType,
 			const SVector& param);
 
+		// ジョイントキーからジョイントインデックスを逆引きする
+		IZ_INT GetJointIdxByKey(IZ_UINT key);
+
 	private:
 		IZ_UINT8* SetJointData(IZ_UINT8* pBuf);
 

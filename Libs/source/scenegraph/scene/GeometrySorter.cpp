@@ -155,7 +155,7 @@ IZ_BOOL CGeometrySorter::Register(
 // 描画
 IZ_BOOL CGeometrySorter::Render(
 	CGraphicsDevice* pDevice,
-	CScene* pScene,
+	CSceneRenderer* pScene,
 	IMshRenderHandler* pRenderHandler)
 {
 	// Opaque
@@ -226,7 +226,7 @@ IZ_BOOL CGeometrySorter::RegisterInternal(
 // 描画内部処理
 IZ_BOOL CGeometrySorter::RenderInternal(
 	CGraphicsDevice* pDevice,
-	CScene* pScene,
+	CSceneRenderer* pScene,
 	IMshRenderHandler* pRenderHandler,
 	CZList& cList,
 	ERenderOrder nOrder)

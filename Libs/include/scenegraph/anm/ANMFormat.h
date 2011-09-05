@@ -117,7 +117,11 @@ namespace izanagi {
 		IZ_UINT8 stride;
 		IZ_UINT8 reserved[2];
 
+#if 0
 		IZ_FLOAT params[1];
+#else
+		IZ_FLOAT* params;
+#endif
 	};
 
 	/**

@@ -10,6 +10,18 @@ namespace izanagi {
 	*/
 	class CStdTimeline {
 	public:
+		/** タイムラインが設定時間を超えたときのハンドラ
+		 */
+		class CTimeOverHandler {
+		public:
+			CTimeOverHandler() {}
+			virtual ~CTimeOverHandler() {}
+
+		public:
+			virtual void Handle(const CStdTimeline& timeline) = 0;
+		};
+
+	public:
 		CStdTimeline();
 		CStdTimeline(
 			IZ_FLOAT fDuration,
@@ -43,6 +55,9 @@ namespace izanagi {
 
 		// 逆回し
 		void Rewind() { m_Flags.is_forward = !m_Flags.is_forward; }
+
+		// タイムラインが設定時間を超えたときのハンドラをセット
+		void SetTimeOverHandler(CTimeOverHandler* handler) { m_TimeOverHandler = handler; }
 
 	public:
 		// 現在時間取得
@@ -90,6 +105,8 @@ namespace izanagi {
 			IZ_UINT is_pause	: 1;	// ポーズ中かどうか
 			IZ_UINT is_forward	: 1;	// 順方向進行かどうか
 		} m_Flags;
+
+		CTimeOverHandler* m_TimeOverHandler;
 
 		CStdList<CStdTimeline>::Item m_ListItem;
 	};
