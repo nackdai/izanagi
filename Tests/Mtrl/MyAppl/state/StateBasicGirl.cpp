@@ -313,7 +313,7 @@ IZ_BOOL CStateBasicGirl::Enter()
 	m_GeomSorter = izanagi::CGeometrySorter::CreateGeometrySorter(pAllocator, 4);
 	IZ_ASSERT(m_GeomSorter != IZ_NULL);
 
-	m_Scene = izanagi::CScene::CreateScene(pAllocator);
+	m_Scene = izanagi::CSceneRenderer::CreateSceneRenderer(pAllocator);
 	IZ_ASSERT(m_Scene != IZ_NULL);
 
 	return IZ_TRUE;

@@ -1,0 +1,25 @@
+﻿#if !defined(__STATE_MANAGER_H__)
+#define __STATE_MANAGER_H__
+
+#include "izDefs.h"
+#include "izStd.h"
+
+enum STATE {
+	STATE_ANM_LIST,
+
+	STATE_NUM,
+};
+
+class CStateManager : public izanagi::CGameStateManagerBase<STATE, STATE_NUM> {
+private:
+	static CStateManager s_cInstance;
+
+public:
+	static CStateManager& GetInstance() { return s_cInstance; }
+
+private:
+	CStateManager();
+	~CStateManager() {}
+};
+
+#endif	// #if !defined(__STATE_MANAGER_H__)
