@@ -42,7 +42,7 @@ protected:
 	izanagi::CMaterial* m_pMtrl[4];
 
 	izanagi::CGeometrySorter* m_GeomSorter;
-	izanagi::CScene* m_Scene;
+	izanagi::CSceneRenderer* m_Scene;
 };
 
 #endif	// #if !defined(__STATE_BASIC_BOY_H__)

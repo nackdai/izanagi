@@ -25,6 +25,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Shader", "Shader\Shader.vcp
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Mtrl", "Mtrl\Mtrl.vcproj", "{95CF5521-BA29-43BD-B598-211B919283B9}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Animation", "Animation\Animation.vcproj", "{6DF1628D-FB9D-4D14-84B5-B0D139E71D56}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug_DX9|Win32 = Debug_DX9|Win32
@@ -129,6 +131,14 @@ Global
 		{95CF5521-BA29-43BD-B598-211B919283B9}.Release_DX9|Win32.Build.0 = Release_DX9|Win32
 		{95CF5521-BA29-43BD-B598-211B919283B9}.Release|Win32.ActiveCfg = Release_DX9|Win32
 		{95CF5521-BA29-43BD-B598-211B919283B9}.Release|Win32.Build.0 = Release_DX9|Win32
+		{6DF1628D-FB9D-4D14-84B5-B0D139E71D56}.Debug_DX9|Win32.ActiveCfg = Debug_DX9|Win32
+		{6DF1628D-FB9D-4D14-84B5-B0D139E71D56}.Debug_DX9|Win32.Build.0 = Debug_DX9|Win32
+		{6DF1628D-FB9D-4D14-84B5-B0D139E71D56}.Debug|Win32.ActiveCfg = Debug_DX9|Win32
+		{6DF1628D-FB9D-4D14-84B5-B0D139E71D56}.Debug|Win32.Build.0 = Debug_DX9|Win32
+		{6DF1628D-FB9D-4D14-84B5-B0D139E71D56}.Release_DX9|Win32.ActiveCfg = Release_DX9|Win32
+		{6DF1628D-FB9D-4D14-84B5-B0D139E71D56}.Release_DX9|Win32.Build.0 = Release_DX9|Win32
+		{6DF1628D-FB9D-4D14-84B5-B0D139E71D56}.Release|Win32.ActiveCfg = Release_DX9|Win32
+		{6DF1628D-FB9D-4D14-84B5-B0D139E71D56}.Release|Win32.Build.0 = Release_DX9|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

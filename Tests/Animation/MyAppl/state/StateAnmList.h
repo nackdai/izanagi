@@ -1,5 +1,5 @@
-﻿#if !defined(__STATE_BASIC_GIRL_H__)
-#define __STATE_BASIC_GIRL_H__
+﻿#if !defined(__STATE_ANM_LIST_H__)
+#define __STATE_ANM_LIST_H__
 
 #include "izDefs.h"
 #include "izStd.h"
@@ -8,10 +8,10 @@
 #include "izDebugUtil.h"
 #include "izShader.h"
 
-class CStateBasicGirl : public izanagi::CGameState {
+class CStateAnmList : public izanagi::CGameState {
 public:
-	CStateBasicGirl();
-	~CStateBasicGirl();
+	CStateAnmList();
+	~CStateAnmList();
 
 public:
 	IZ_BOOL Create();
@@ -29,20 +29,13 @@ protected:
 	void Render2D();
 	void Render3D();
 
+	IZ_BOOL ReadAnm();
+
 protected:
-	izanagi::CShaderBasic* m_pShader;
+	izanagi::CAnimation* m_pAnm;
+	izanagi::CStdTimeline m_Timeline;
 
-	izanagi::CDebugMeshAxis* m_pAxis;
-
-	izanagi::CTexture* m_pTex[2];
-
-	izanagi::CModel* m_pMdl;
-	izanagi::CMesh* m_pMsh;
-	izanagi::CSkeleton* m_pSkl;
-	izanagi::CMaterial* m_pMtrl[2];
-
-	izanagi::CGeometrySorter* m_GeomSorter;
-	izanagi::CSceneRenderer* m_Scene;
+	IZ_INT m_nCurAnmIdx;
 };
 
-#endif	// #if !defined(__STATE_BASIC_GIRL_H__)
+#endif	// #if !defined(__STATE_ANM_LIST_H__)
