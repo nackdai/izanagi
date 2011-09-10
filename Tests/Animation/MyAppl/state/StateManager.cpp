@@ -1,5 +1,6 @@
 ﻿#include <stdafx.h>
 #include "StateManager.h"
+#include "StateMenu.h"
 #include "StateAnmList.h"
 #include "StateAnmInterp.h"
 
@@ -16,8 +17,9 @@ CStateManager::CStateManager()
 	
 	// タスクテーブル
 	{
-		//_STATE(ANM_LIST, CStateAnmList)
-		_STATE(ANM_LIST, CStateAnmInterp)
+		_STATE(MENU, CStateMenu)
+		_STATE(ANM_LIST, CStateAnmList)
+		_STATE(ANM_INTERP, CStateAnmInterp)
 	}
 	
 	m_nNextState = STATE_NUM;

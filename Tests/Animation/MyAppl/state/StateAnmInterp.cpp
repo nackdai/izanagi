@@ -2,6 +2,7 @@
 #include "MyAppl.h"
 #include "MySystem.h"
 #include "StateAnmInterp.h"
+#include "StateManager.h"
 
 void CStateAnmInterp::CTimeOverHandler::Handle(const izanagi::CStdTimeline& timeline)
 {
@@ -35,6 +36,8 @@ CStateAnmInterp::CStateAnmInterp()
 	m_AnmInterp = IZ_NULL;
 
 	m_TargetAnmIdx = 1;
+
+	m_IsBack = IZ_FALSE;
 }
 
 CStateAnmInterp::~CStateAnmInterp()
@@ -103,6 +106,12 @@ void CStateAnmInterp::Render2D()
 
 IZ_BOOL CStateAnmInterp::Update()
 {
+	if (m_IsBack) {
+		CStateManager::GetInstance().ChangePrevState();
+		m_IsBack = IZ_FALSE;
+		return IZ_TRUE;
+	}
+
 	IZ_FLOAT time = m_Timeline.GetTime();
 
 	CCharacter* charater = CMyAppl::GetInstance().GetCharacter();
@@ -208,6 +217,9 @@ IZ_BOOL CStateAnmInterp::OnKeyDown(IZ_UINT nChar, IZ_UINT nRepCnt, IZ_UINT nFlag
 			0.0f);
 		m_Timeline.Reset();
 		m_Timeline.Start();
+	}
+	else if (nChar == VK_BACK) {
+		m_IsBack = IZ_TRUE;
 	}
 
 	return IZ_TRUE;
