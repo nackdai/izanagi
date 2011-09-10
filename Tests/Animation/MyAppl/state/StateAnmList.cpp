@@ -2,6 +2,7 @@
 #include "MyAppl.h"
 #include "MySystem.h"
 #include "StateAnmList.h"
+#include "StateManager.h"
 
 static const char* anmTbl[] = {
 	"data/anm/00R_121.anm",
@@ -81,6 +82,8 @@ static const char* anmTbl[] = {
 CStateAnmList::CStateAnmList()
 {
 	m_pAnm = IZ_NULL;
+
+	m_IsBack = IZ_FALSE;
 }
 
 CStateAnmList::~CStateAnmList()
@@ -154,6 +157,12 @@ void CStateAnmList::Render2D()
 
 IZ_BOOL CStateAnmList::Update()
 {
+	if (m_IsBack) {
+		CStateManager::GetInstance().ChangePrevState();
+		m_IsBack = IZ_FALSE;
+		return IZ_TRUE;
+	}
+
 	IZ_FLOAT fElapsed = CMySystem::GetInstance().GetTimer(0).GetTime();
 	fElapsed /= 1000.0f;
 
@@ -200,6 +209,9 @@ IZ_BOOL CStateAnmList::OnKeyDown(IZ_UINT nChar, IZ_UINT nRepCnt, IZ_UINT nFlags)
 	else if (nChar == VK_DOWN) {
 		m_nCurAnmIdx++;
 		needUpdateAnm = IZ_TRUE;
+	}
+	else if (nChar == VK_BACK) {
+		m_IsBack = IZ_TRUE;
 	}
 
 	if (needUpdateAnm) {

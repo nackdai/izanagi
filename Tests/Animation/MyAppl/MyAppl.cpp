@@ -57,13 +57,13 @@ IZ_BOOL CMyAppl::Init(
 
 	// カメラ初期化
 	{
-		izanagi::CVector vecPos(0.0f, 0.0f, 200.0f, 1.0f);
-		izanagi::CVector vecRef(0.0f, 0.0f, 0.0f, 1.0f);
+		izanagi::CVector vecPos(0.0f, 0.5f, 2.0f, 1.0f);
+		izanagi::CVector vecRef(0.0f, 0.5f, 0.0f, 1.0f);
 		izanagi::CVector vecUp(0.0f, 1.0f, 0.0f, 1.0f);
 
 		CMyCamera::GetInstance().Init(
 			vecPos, vecRef, vecUp,
-			1.0f, 1000.0f,
+			0.1f, 100.0f,
 			izanagi::CMath::Deg2Rad(90.0f),
 			(IZ_FLOAT)SCREEN_WIDTH / SCREEN_HEIGHT);
 	}

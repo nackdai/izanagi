@@ -36,6 +36,8 @@ protected:
 	izanagi::CStdTimeline m_Timeline;
 
 	IZ_INT m_nCurAnmIdx;
+
+	IZ_BOOL m_IsBack;
 };
 
 #endif	// #if !defined(__STATE_ANM_LIST_H__)

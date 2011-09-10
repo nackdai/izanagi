@@ -33,6 +33,7 @@ void CStateMenu::Render2D()
 
 	static const char* MENU_NAME[] = {
 		"AnimationList",
+		"AnimationInterp",
 	};
 
 	if (CMySystem::GetInstance().GetGraphicsDevice()->Begin2D()) {
@@ -73,15 +74,11 @@ IZ_BOOL CStateMenu::Update()
 	if (m_bDecide) {
 		IZ_UINT pos = m_nPos + 1;
 
-#if 0
 		switch (pos) {
-		case STATE_MONOTONE:		CHANGE_STATE(MONOTONE);		break;
-		case STATE_BLOOMSTAR:		CHANGE_STATE(BLOOMSTAR);	break;
-		case STATE_BLOOMSTAR_EX:	CHANGE_STATE(BLOOMSTAR_EX);	break;
-		case STATE_HDR:				CHANGE_STATE(HDR);			break;
+		case STATE_ANM_LIST:		CHANGE_STATE(ANM_LIST);		break;
+		case STATE_ANM_INTERP:		CHANGE_STATE(ANM_INTERP);	break;
 		default:					IZ_ASSERT(IZ_FALSE);		break;
 		}
-#endif
 	}
 
 	return IZ_TRUE;
@@ -120,7 +117,7 @@ IZ_BOOL CStateMenu::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	}
 
 	if (m_nPos < 0) {
-		m_nPos = CStateManager::GetInstance().GetStateNum() - 2;
+		m_nPos += CStateManager::GetInstance().GetStateNum() - 1;
 	}
 	else if (m_nPos >= CStateManager::GetInstance().GetStateNum() - 1) {
 		m_nPos = 0;

@@ -5,7 +5,9 @@
 #include "izStd.h"
 
 enum STATE {
+	STATE_MENU = 0,
 	STATE_ANM_LIST,
+	STATE_ANM_INTERP,
 
 	STATE_NUM,
 };
@@ -21,5 +23,12 @@ private:
 	CStateManager();
 	~CStateManager() {}
 };
+
+// いちいち面倒だろうから
+#define CHANGE_STATE(task) \
+	CStateManager::GetInstance().ChangeState(STATE_##task)
+
+#define GET_STATE(task) \
+	CStateManager::GetInstance().GetState(STATE_##task)
 
 #endif	// #if !defined(__STATE_MANAGER_H__)

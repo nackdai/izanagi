@@ -53,6 +53,8 @@ protected:
 
 	izanagi::IAnimation* m_CurAnm;
 	IZ_UINT m_TargetAnmIdx;
+
+	IZ_BOOL m_IsBack;
 };
 
 #endif	// #if !defined(__STATE_ANM_LIST_H__)
