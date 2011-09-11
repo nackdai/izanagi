@@ -41,9 +41,15 @@ CGeometryChunk CGeometryChunk::s_cInstance;
 // +------------------------+
 
 IZ_BOOL CGeometryChunk::Export(
+	IZ_UINT maxJointMtxNum,
 	izanagi::IOutputStream* pOut,
 	IImporter* pImporter)
 {
+	m_MaxJointMtxNum = izanagi::CMath::Clamp<IZ_UINT>(
+						maxJointMtxNum,
+						izanagi::MSH_BELONGED_JOINT_MIN,
+						izanagi::MSH_BELONGED_JOINT_MAX);
+
 	izanagi::S_MSH_HEADER sHeader;
 	{
 		FILL_ZERO(&sHeader, sizeof(sHeader));
@@ -297,25 +303,84 @@ void CGeometryChunk::BindJointToTri(
 	}
 }
 
+namespace {
+	struct FuncFindIncludedJointIdx {
+		static std::vector< std::vector<const SPrimSet*> > candidateList;
+
+		const SPrimSet& master;
+		const IZ_UINT maxJointMtxNum;
+
+		FuncFindIncludedJointIdx(const SPrimSet& prim, IZ_UINT num)
+			: master(prim),
+			  maxJointMtxNum(num)
+		{}
+
+		~FuncFindIncludedJointIdx() {}
+
+		void operator()(const SPrimSet& rhs)
+		{
+			if (&master == &rhs) {
+				// 同じものは無視する
+				return;
+			}
+
+			// 所属関節群がどれだけ一致するか調べる
+
+			IZ_UINT nMatchCnt = 0;
+
+			std::set<IZ_UINT>::const_iterator it = master.joint.begin();
+			for (; it != master.joint.end(); it++) {
+				IZ_UINT jointIdx = *it;	
+
+				std::set<IZ_UINT>::const_iterator itRhs = rhs.joint.begin();
+				for (; itRhs != rhs.joint.end(); itRhs++) {
+					IZ_UINT rhsJointIdx = *itRhs;
+
+					if (jointIdx == rhsJointIdx) {
+						nMatchCnt++;
+					}
+				}
+			}
+
+			if (nMatchCnt > 0) {
+				IZ_UINT added = rhs.joint.size() - nMatchCnt;
+
+				if (added + master.joint.size() <= maxJointMtxNum) {
+					candidateList[nMatchCnt - 1].push_back(&rhs);
+				}
+			}
+		}
+	};
+
+	std::vector< std::vector<const SPrimSet*> > FuncFindIncludedJointIdx::candidateList;
+}	// namespace
+
 void CGeometryChunk::ClassifyTriByJoint(SMesh& sMesh)
 {
 	for (IZ_UINT nTriPos = sMesh.startTri; nTriPos < sMesh.endTri; nTriPos++) {
 		STri& sTri = m_TriList[nTriPos];
 
+		// 所属する関節群からキー値を計算する
 		IZ_UINT nKey = sTri.ComputeKey();
 
+		// 自分の所属する可能性のあるプリミティブセットを探す
 		std::vector<SPrimSet>::iterator itSubset = std::find(
 														sMesh.subset.begin(),
 														sMesh.subset.end(),
 														nKey);
 		if (itSubset == sMesh.subset.end()) {
+			// 見つからなかった
+			// 見つからなかったということは初出の関節群なので新規にプリミティブセットを作る
 			sMesh.subset.push_back(SPrimSet());
 			SPrimSet& sPrimSet = sMesh.subset.back();
 			{
+				// 関節群から計算されたキー値
 				sPrimSet.key = nKey;
 
+				// 三角形を登録
 				sPrimSet.tri.push_back(nTriPos);
 
+				// 所属関節インデックスを登録
 				std::set<IZ_UINT>::const_iterator it = sTri.joint.begin();
 				for (; it != sTri.joint.end(); it++) {
 					sPrimSet.joint.insert(*it);
@@ -323,12 +388,13 @@ void CGeometryChunk::ClassifyTriByJoint(SMesh& sMesh)
 			}
 		}
 		else {
+			// 見つかったので三角形を登録
 			SPrimSet& sPrimSet = *itSubset;
 			sPrimSet.tri.push_back(nTriPos);
 		}
 	}
 
-#if 1
+#if 0
 	// Merge triangles by joint idx.
 	if (sMesh.subset.size() > 1) {
 		std::vector<SPrimSet>::iterator it = sMesh.subset.begin();
@@ -337,6 +403,11 @@ void CGeometryChunk::ClassifyTriByJoint(SMesh& sMesh)
 			SPrimSet& sPrimSet = *it;
 
 			IZ_BOOL bIsAdvanceIter = IZ_TRUE;
+
+			// NOTE
+			// SPrimSet::tri : SPrimSetを構成する三角形情報へのインデックス
+			// SPrimSetを構成する三角形 -> 同じ関節群（スキン計算を行うための関節）に所属する三角形
+			// そのため、関節情報についてはどれでも共通なので、sPrimSet.tri[0] を持ってくればいい
 
 			IZ_UINT nTriIdx = sPrimSet.tri[0];
 			const STri& sTri = m_TriList[nTriIdx];
@@ -369,6 +440,87 @@ void CGeometryChunk::ClassifyTriByJoint(SMesh& sMesh)
 			}
 
 			if (bIsAdvanceIter) {
+				it++;
+			}
+		}
+	}
+#else
+	// Merge triangles by joint idx.
+	if (sMesh.subset.size() > 1) {
+		FuncFindIncludedJointIdx::candidateList.resize(m_MaxJointMtxNum);
+
+		std::vector<SPrimSet>::iterator it = sMesh.subset.begin();
+
+		for (; it != sMesh.subset.end(); ) {
+			SPrimSet& sPrimSet = *it;
+			IZ_UINT masterKey = sPrimSet.key;
+
+			IZ_BOOL erased = IZ_FALSE;
+
+			if (sPrimSet.joint.size() < m_MaxJointMtxNum) {
+				// マージ候補を探す
+				std::for_each(
+					sMesh.subset.begin(),
+					sMesh.subset.end(),
+					FuncFindIncludedJointIdx(sPrimSet, m_MaxJointMtxNum));
+
+				std::vector<IZ_UINT> releaseList;
+
+				for (IZ_INT i = m_MaxJointMtxNum - 1; i >= 0; i--) {
+					std::vector<const SPrimSet*>::iterator candidate = FuncFindIncludedJointIdx::candidateList[i].begin();
+
+					for (; candidate != FuncFindIncludedJointIdx::candidateList[i].end(); candidate++) {
+						const SPrimSet& prim = *(*candidate);
+
+						// マージする
+						SPrimSet& sSubsetMatch = const_cast<SPrimSet&>(prim);
+
+						if (sPrimSet.joint.size() + sSubsetMatch.joint.size() >= m_MaxJointMtxNum) {
+							// もう入らない可能性が高いので終了
+							break;
+						}
+
+						// Merge to found MeshGroup.
+						sPrimSet.tri.insert(
+							sPrimSet.tri.end(),
+							sSubsetMatch.tri.begin(),
+							sSubsetMatch.tri.end());
+
+						// Register joint indices.
+						std::set<IZ_UINT>::const_iterator itJoint = sSubsetMatch.joint.begin();
+						for (; itJoint != sSubsetMatch.joint.end(); itJoint++) {
+							sPrimSet.joint.insert(*itJoint);
+						}
+
+						// 削除候補を登録
+						releaseList.push_back(prim.key);
+					}
+
+					FuncFindIncludedJointIdx::candidateList[i].clear();
+				}
+
+				// マージしたので消す
+				for (size_t n = 0; n < releaseList.size(); n++) {
+					IZ_UINT key = releaseList[n];
+
+					std::vector<SPrimSet>::iterator itFind = std::find(
+																sMesh.subset.begin(),
+																sMesh.subset.end(),
+																key);
+					sMesh.subset.erase(itFind);
+					erased = IZ_TRUE;
+				}
+			}
+
+			if (erased) {
+				it = std::find(
+						sMesh.subset.begin(),
+						sMesh.subset.end(),
+						masterKey);
+				IZ_ASSERT(it != sMesh.subset.end());
+				it++;
+			}
+			else {
 				it++;
 			}
 		}

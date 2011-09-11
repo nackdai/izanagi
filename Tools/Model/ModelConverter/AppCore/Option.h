@@ -30,6 +30,8 @@ struct SOption {
 
 	IZ_UINT exportType;	// 出力タイプ
 	FileType fileType;	// ファイルタイプ
+
+	IZ_UINT maxJointMtxNum;
 };
 
 class COption : public SOption {

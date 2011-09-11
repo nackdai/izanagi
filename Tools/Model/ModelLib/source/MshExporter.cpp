@@ -24,6 +24,7 @@ CMshExporter::~CMshExporter()
 }
 
 IZ_BOOL CMshExporter::Export(
+	IZ_UINT maxJointMtxNum,
 	IZ_PCSTR lpszOutFile,
 	IImporter* pImporter)
 {
@@ -32,6 +33,7 @@ IZ_BOOL CMshExporter::Export(
 	VRETURN(m_Out.Open(lpszOutFile));
 
 	ret = CGeometryChunk::GetInstance().Export(
+			maxJointMtxNum,
 			&m_Out,
 			pImporter);
 

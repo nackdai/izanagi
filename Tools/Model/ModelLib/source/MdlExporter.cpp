@@ -26,6 +26,7 @@ CMdlExporter::~CMdlExporter()
 }
 
 IZ_BOOL CMdlExporter::Export(
+	IZ_UINT maxJointMtxNum,
 	IZ_PCSTR lpszOutFile,
 	IImporter* pImporter)
 {
@@ -96,6 +97,7 @@ IZ_BOOL CMdlExporter::Export(
 		VGOTO(ret, __EXIT__);
 
 		ret = CGeometryChunk::GetInstance().Export(
+				maxJointMtxNum,
 				&m_Out,
 				pImporter);
 	}
