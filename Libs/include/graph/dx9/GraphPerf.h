@@ -16,11 +16,8 @@ namespace izanagi {
 	public:
 		static inline IZ_INT BeginEvent(
 			IZ_COLOR color,
-#if 1
-			IZ_PCSTR pszName);
-#else
-			IZ_PCWSTR pszName);
-#endif
+			IZ_PCSTR pszFormat,
+			...);
 
 		static inline IZ_INT EndEvent();
 	};
@@ -32,32 +29,32 @@ namespace izanagi {
 	*/
 	IZ_INT CGraphPerf::BeginEvent(
 		IZ_COLOR color,
-#if 1
-		IZ_PCSTR pszName)
-#else
-		IZ_PCWSTR pszName)
-#endif
+		IZ_PCSTR pszFormat,
+		...)
 	{
 #ifdef __IZ_DEBUG__
-#if 1
-		static const IZ_UINT BUF_SIZE = 32;
+		static const IZ_UINT BUF_SIZE = 256;
 		static wchar_t buf[BUF_SIZE];
 
-		size_t len = strlen(pszName);
+		va_list	argp;
+		izChar tmp[256];
+		va_start(argp, pszFormat);
+		IZ_VSPRINTF(tmp, sizeof(tmp), pszFormat, argp);
+		va_end(argp);
+
+		size_t len = strlen(pszFormat);
 		IZ_ASSERT(len <= BUF_SIZE);
 
-		mbstowcs_s(&len, buf, pszName, BUF_SIZE);
+		mbstowcs_s(&len, buf, tmp, BUF_SIZE);
 		IZ_ASSERT(len >= 0);
 
 		IZ_INT ret = D3DPERF_BeginEvent(color, buf);
-#else
-		IZ_INT ret = D3DPERF_BeginEvent(color, pszName);
-#endif
 		//IZ_ASSERT(ret >= 0);
+
 		return ret;
 #else	// #ifdef __IZ_DEBUG__
 		UNUSED_ALWAYS(color);
-		UNUSED_ALWAYS(pszName);
+		UNUSED_ALWAYS(pszFormat);
 		return 0;
 #endif	// #ifdef __IZ_DEBUG__
 	}

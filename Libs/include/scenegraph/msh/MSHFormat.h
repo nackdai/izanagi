@@ -35,6 +35,9 @@ namespace izanagi {
 	enum {
 		// TODO
 		MSH_NAME_LEN = 31,
+
+		MSH_BELONGED_JOINT_MAX = 16,
+		MSH_BELONGED_JOINT_MIN = 4,
 	};
 
 	// フォーマット
@@ -136,7 +139,7 @@ namespace izanagi {
 		IZ_UINT numIdx;						// インデックス数
 		E_GRAPH_INDEX_BUFFER_FMT fmtIdx;	// インデックスフォーマット
 
-		IZ_INT16 joints[4];
+		IZ_INT16 joints[MSH_BELONGED_JOINT_MAX];
 	};
 }	// namespace izanagi
 

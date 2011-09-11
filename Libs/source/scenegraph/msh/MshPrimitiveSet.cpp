@@ -161,7 +161,7 @@ IZ_BOOL CPrimitiveSet::DebugRender(
 		IZ_NULL, IZ_NULL, IZ_NULL, IZ_NULL,
 	};
 
-	for (IZ_UINT i = 0; i < 4; ++i) {
+	for (IZ_UINT i = 0; i < MSH_BELONGED_JOINT_MAX; ++i) {
 		IZ_INT idx = m_Info.joints[i];
 		if (idx >= 0) {
 			tblJointMtx[i] = pSkeleton->GetJointMtx(idx);
