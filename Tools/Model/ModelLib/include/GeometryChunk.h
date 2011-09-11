@@ -20,6 +20,7 @@ protected:
 
 public:
 	IZ_BOOL Export(
+		IZ_UINT maxJointMtxNum,
 		izanagi::IOutputStream* pOut,
 		IImporter* pImporter);
 
@@ -97,6 +98,9 @@ protected:
 	IZ_UINT m_nExportedVBNum;
 	IZ_UINT m_nExportedSetNum;
 	IZ_UINT m_nExportedSubsetNum;
+
+	// 最大ボーンマトリクス数
+	IZ_UINT m_MaxJointMtxNum;
 };
 
 #endif	// #if !defined(__MODEL_LIB_GEOMETRY_CHUNK_H__)

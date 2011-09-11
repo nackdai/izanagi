@@ -18,6 +18,7 @@ private:
 
 public:
 	IZ_BOOL Export(
+		IZ_UINT maxJointMtxNum,
 		IZ_PCSTR lpszOutFile,
 		IImporter* pImporter);
 

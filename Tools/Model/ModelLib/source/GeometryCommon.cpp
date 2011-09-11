@@ -127,6 +127,7 @@ IZ_BOOL SSkin::EraseJoint(IZ_UINT idx)
 
 std::vector<STri>* SPrimSet::ptrTriList = IZ_NULL;
 
+#if 0
 bool SPrimSet::operator==(const SPrimSet& rhs)
 {
 	std::vector<STri>& tvTriList = *GetTriList();
@@ -159,3 +160,9 @@ bool SPrimSet::operator==(const SPrimSet& rhs)
 
 	return ret;
 }
+#else
+bool SPrimSet::operator==(const SPrimSet& rhs)
+{
+	return (this == &rhs);
+}
+#endif

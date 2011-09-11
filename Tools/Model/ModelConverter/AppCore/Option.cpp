@@ -5,6 +5,8 @@ COption::COption()
 {
 	exportType = ExportTypeMsh | ExportTypeSkl;
 	fileType = FileTypeUnknown;
+
+	maxJointMtxNum = 0;
 }
 
 COption::~COption()
@@ -51,6 +53,9 @@ IZ_BOOL COption::Analysis(int argc, char* argv[])
 				else if (result = (subOpt == "fbx")) {
 					fileType = FileTypeFBX;
 				}
+			}
+			else if (result = (opt == "-mtx")) {
+				maxJointMtxNum = ::atoi(argv[++i]);
 			}
 		}
 

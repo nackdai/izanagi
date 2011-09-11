@@ -20,18 +20,24 @@ namespace {
 			"\n"
 			"[Options]\n"
 			" -i [in]   : 入力ファイル\n"
+			"\n"
 			" -o [out]  : 出力ファイル\n"
 			"             指定がない場合は入力ファイル名から自動生成\n"
+			"\n"
 			" -e [type] : 出力ファイルタイプ\n"
 			"             指定がない場合は msh と skl の２つを出力\n"
 			"   mdl : mdlファイル出力（msh, skl を１つにパックしたもの）\n"
 			"   msh : mshファイル出力（メッシュデータ）\n"
 			"   skl : sklファイル出力（スケルトンデータ）\n"
+			"\n"
 			" -f [type] : 入力ファイルがどのようなファイルなのかを指定\n"
 			"             指定がない場合は入力ファイルの拡張子から自動判定\n"
 			"   dae : Colladaファイル入力\n"
 			"   x   : XFileファイル入力\n"
 			"   fbx : FBXファイル入力\n"
+			"\n"
+			" -mtx [num] : 指定した数の関節数までメッシュをまとめる\n"
+			"              4 から 16 まで指定可能\n"
 		);
 	}
 }
@@ -76,6 +82,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		// Model
 		VRETURN_VAL(
 			CMdlExporter::GetInstance().Export(
+				option.maxJointMtxNum,
 				option.out.c_str(),
 				importer),
 			INVALID_RET_VAL);
@@ -84,6 +91,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		// Mesh
 		VRETURN_VAL(
 			CMshExporter::GetInstance().Export(
+				option.maxJointMtxNum,
 				option.outMsh.c_str(),
 				importer),
 			INVALID_RET_VAL);
