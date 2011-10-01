@@ -34,6 +34,7 @@ void CStateMenu::Render2D()
 	static const char* MENU_NAME[] = {
 		"AnimationList",
 		"AnimationInterp",
+		"AnimationBlend",
 	};
 
 	if (CMySystem::GetInstance().GetGraphicsDevice()->Begin2D()) {
@@ -77,6 +78,7 @@ IZ_BOOL CStateMenu::Update()
 		switch (pos) {
 		case STATE_ANM_LIST:		CHANGE_STATE(ANM_LIST);		break;
 		case STATE_ANM_INTERP:		CHANGE_STATE(ANM_INTERP);	break;
+		case STATE_ANM_BLEND:		CHANGE_STATE(ANM_BLEND);	break;
 		default:					IZ_ASSERT(IZ_FALSE);		break;
 		}
 	}

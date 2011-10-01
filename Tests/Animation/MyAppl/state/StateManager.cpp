@@ -3,6 +3,7 @@
 #include "StateMenu.h"
 #include "StateAnmList.h"
 #include "StateAnmInterp.h"
+#include "StateAnmBlend.h"
 
 CStateManager CStateManager::s_cInstance;
 
@@ -20,6 +21,7 @@ CStateManager::CStateManager()
 		_STATE(MENU, CStateMenu)
 		_STATE(ANM_LIST, CStateAnmList)
 		_STATE(ANM_INTERP, CStateAnmInterp)
+		_STATE(ANM_BLEND, CStateAnmBlend)
 	}
 	
 	m_nNextState = STATE_NUM;
