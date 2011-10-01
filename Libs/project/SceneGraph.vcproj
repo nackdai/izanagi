@@ -227,6 +227,10 @@
 				Name="anm"
 				>
 				<File
+					RelativePath="..\source\scenegraph\anm\AnimationBinder.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\source\scenegraph\anm\AnimationInterface.cpp"
 					>
 				</File>
@@ -242,6 +246,14 @@
 					RelativePath="..\source\scenegraph\anm\izAnimation.cpp"
 					>
 				</File>
+				<Filter
+					Name="blend"
+					>
+					<File
+						RelativePath="..\source\scenegraph\anm\AnimationLinearBlender.cpp"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="mtrl"
@@ -369,6 +381,10 @@
 				Name="anm"
 				>
 				<File
+					RelativePath="..\include\scenegraph\anm\AnimationBinder.h"
+					>
+				</File>
+				<File
 					RelativePath="..\include\scenegraph\anm\AnimationInterface.h"
 					>
 				</File>
@@ -388,6 +404,18 @@
 					RelativePath="..\include\scenegraph\anm\izAnimation.h"
 					>
 				</File>
+				<Filter
+					Name="blend"
+					>
+					<File
+						RelativePath="..\include\scenegraph\anm\AnimationBlender.h"
+						>
+					</File>
+					<File
+						RelativePath="..\include\scenegraph\anm\AnimationLinearBlender.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="msh"

@@ -45,16 +45,6 @@ namespace izanagi {
 			IZ_FLOAT fTime,
 			IAnimation* pAnm);
 
-		void ApplyAnimationByName(
-			IZ_PCSTR pszJointName,
-			IZ_FLOAT fTime,
-			IAnimation* pAnm);
-
-		void ApplyAnimationByKey(
-			IZ_UINT nJointKey,
-			IZ_FLOAT fTime,
-			IAnimation* pAnm);
-
 		// 姿勢情報更新開始
 		IZ_BOOL BeginUpdatePose(IZ_UINT idx);
 

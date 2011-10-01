@@ -5,15 +5,21 @@
 
 namespace izanagi {
 	class CSkeletonInstance;
+	class CPoseUpdater;
 
 	/**
 	 */
 	class CAnimationInterp : public IAnimation {
 	public:
 		// インスタンス作成
-		static CAnimationInterp* CreateAnimationInterp(
-			IMemoryAllocator* allocator,
-			IZ_FLOAT interpTime);
+		static CAnimationInterp* CreateAnimationInterp(IMemoryAllocator* allocator);
+
+		enum E_INTERP_TYPE {
+			E_INTERP_TYPE_FROZEN = 0,
+			E_INTERP_TYPE_SMOOTH,
+
+			E_INTERP_TYPE_NUM,
+		};
 
 	protected:
 		CAnimationInterp();
@@ -25,6 +31,8 @@ namespace izanagi {
 
 	public:
 		IZ_BOOL SetAnimation(
+			IZ_FLOAT interpTime,
+			E_INTERP_TYPE type,
 			IAnimation* startAnm,
 			IZ_FLOAT targetStart,
 			IAnimation* goalAnm,
@@ -36,24 +44,19 @@ namespace izanagi {
 
 		void ApplyAnimationByIdx(
 			CSkeletonInstance* skl,
-			IZ_UINT nJointIdx,
-			IZ_FLOAT fTime);
-
-		void ApplyAnimationByName(
-			CSkeletonInstance* skl,
-			IZ_PCSTR pszJointName,
-			IZ_FLOAT fTime);
-
-		void ApplyAnimationByKey(
-			CSkeletonInstance* skl,
-			IZ_UINT nJointKey,
-			IZ_FLOAT fTime);
+			IZ_UINT jointIdx,
+			IZ_FLOAT time);
 
 	public:
 		IZ_FLOAT GetAnimationTime() const { return m_InterpTime; }
 
 	protected:
 		IZ_UINT ApplyAnimation(
+			IZ_FLOAT time,
+			IZ_UINT nJointIdx,
+			CPoseUpdater& poseUpdater);
+
+		IZ_UINT ApplyAnimationBySmooth(
 			IZ_FLOAT time,
 			IZ_UINT nJointIdx,
 			CPoseUpdater& poseUpdater);
@@ -103,6 +106,9 @@ namespace izanagi {
 
 		// 補間にかける時間
 		IZ_FLOAT m_InterpTime;
+
+		// 補間方法
+		E_INTERP_TYPE m_Type;
 
 		S_ANM_KEY* mKeys[2];
 

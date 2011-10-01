@@ -256,24 +256,6 @@ void CSkeletonInstance::ApplyAnimationByIdx(
 	pAnm->ApplyAnimationByIdx(this, nJointIdx, fTime);
 }
 
-void CSkeletonInstance::ApplyAnimationByName(
-	IZ_PCSTR pszJointName,
-	IZ_FLOAT fTime,
-	IAnimation* pAnm)
-{
-	IZ_ASSERT(pAnm != IZ_NULL);
-	pAnm->ApplyAnimationByName(this, pszJointName, fTime);
-}
-
-void CSkeletonInstance::ApplyAnimationByKey(
-	IZ_UINT nJointKey,
-	IZ_FLOAT fTime,
-	IAnimation* pAnm)
-{
-	IZ_ASSERT(pAnm != IZ_NULL);
-	pAnm->ApplyAnimationByKey(this, nJointKey, fTime);
-}
-
 // 姿勢情報更新開始
 IZ_BOOL CSkeletonInstance::BeginUpdatePose(IZ_UINT idx)
 {

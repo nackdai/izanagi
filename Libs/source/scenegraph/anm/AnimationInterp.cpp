@@ -6,9 +6,7 @@
 using namespace izanagi;
 
 // インスタンス作成
-CAnimationInterp* CAnimationInterp::CreateAnimationInterp(
-	IMemoryAllocator* allocator,
-	IZ_FLOAT interpTime)
+CAnimationInterp* CAnimationInterp::CreateAnimationInterp(IMemoryAllocator* allocator)
 {
 	IZ_ASSERT(allocator != IZ_NULL);
 
@@ -25,10 +23,10 @@ CAnimationInterp* CAnimationInterp::CreateAnimationInterp(
 		instance->AddRef();
 
 		instance->m_pAllocator = allocator;
-		instance->m_InterpTime = interpTime;
+		instance->m_InterpTime = 0.0f;
 
 		instance->mStartKey.keyTime = 0;
-		instance->mGoalKey.keyTime = interpTime;
+		instance->mGoalKey.keyTime = 0;
 	}
 
 	return instance;
@@ -37,7 +35,9 @@ CAnimationInterp* CAnimationInterp::CreateAnimationInterp(
 CAnimationInterp::CAnimationInterp()
 {
 	m_pAllocator = IZ_NULL;
+
 	m_InterpTime = 0.0f;
+	m_Type = E_INTERP_TYPE_FROZEN;
 
 	memset(&mStartKey, 0, sizeof(mStartKey));
 	mStartKey.numParams = 4;
@@ -52,6 +52,8 @@ CAnimationInterp::CAnimationInterp()
 }
 
 IZ_BOOL CAnimationInterp::SetAnimation(
+	IZ_FLOAT interpTime,
+	E_INTERP_TYPE type,
 	IAnimation* startAnm,
 	IZ_FLOAT targetStart,
 	IAnimation* goalAnm,
@@ -59,12 +61,20 @@ IZ_BOOL CAnimationInterp::SetAnimation(
 {
 	IZ_ASSERT(startAnm != IZ_NULL);
 	IZ_ASSERT(goalAnm != IZ_NULL);
+	IZ_ASSERT(interpTime > 0.0f);
+	IZ_ASSERT(type < E_INTERP_TYPE_NUM);
 
 	VRETURN(targetStart <= startAnm->GetAnimationTime());
 	VRETURN(targetGoal <= goalAnm->GetAnimationTime());
 
 	m_InterpAnm[0].Set(startAnm, targetStart);
 	m_InterpAnm[1].Set(goalAnm, targetGoal);
+
+	m_InterpTime = interpTime;
+	m_Type = type;
+
+	mStartKey.keyTime = 0;
+	mGoalKey.keyTime = interpTime;
 
 	return IZ_TRUE;
 }
@@ -105,11 +115,15 @@ IZ_UINT CAnimationInterp::ApplyAnimation(
 		IZ_UINT updateFlagStart = 0;
 		IZ_UINT updateFlagGoal = 0;
 
+		IZ_FLOAT addTime = (m_Type == E_INTERP_TYPE_FROZEN
+							? 0.0f
+							: time);
+
 		// 開始モーション
 		updateFlagStart = m_InterpAnm[0].anm->GetPoseByIdx(
 							poseStart,
 							nJointIdx, 
-							m_InterpAnm[0].targetTime);
+							m_InterpAnm[0].targetTime + addTime);
 
 		CBit32Flag bitFlagStart(updateFlagStart);
 
@@ -117,7 +131,7 @@ IZ_UINT CAnimationInterp::ApplyAnimation(
 		updateFlagGoal = m_InterpAnm[1].anm->GetPoseByIdx(
 							poseGoal,
 							nJointIdx, 
-							m_InterpAnm[1].targetTime);
+							m_InterpAnm[1].targetTime + addTime);
 
 		CBit32Flag bitFlagGoal(updateFlagGoal);
 
@@ -239,36 +253,16 @@ void CAnimationInterp::ApplyAnimation(
 
 void CAnimationInterp::ApplyAnimationByIdx(
 	CSkeletonInstance* skl,
-	IZ_UINT nJointIdx,
-	IZ_FLOAT fTime)
-{
-	ApplyAnimation(
-		fTime,
-		nJointIdx,
-		CSklPoseUpdater(skl));
-}
-
-void CAnimationInterp::ApplyAnimationByName(
-	CSkeletonInstance* skl,
-	IZ_PCSTR pszJointName,
-	IZ_FLOAT fTime)
-{
-	IZ_UINT nKey = CKey::GenerateValue(pszJointName);
-
-	ApplyAnimationByKey(skl, nKey, fTime);
-}
-
-void CAnimationInterp::ApplyAnimationByKey(
-	CSkeletonInstance* skl,
-	IZ_UINT nJointKey,
-	IZ_FLOAT fTime)
+	IZ_UINT jointIdx,
+	IZ_FLOAT time)
 {
 	IZ_ASSERT(skl != IZ_NULL);
+	IZ_ASSERT(jointIdx < skl->GetJointNum());
 
-	IZ_INT jointIdx = skl->GetJointIdxByKey(nJointKey);
-	VRETURN_VAL(jointIdx >= 0,);
-
-	ApplyAnimationByIdx(skl, jointIdx, fTime);
+	ApplyAnimation(
+		time,
+		jointIdx,
+		CSklPoseUpdater(skl));
 }
 
 IZ_UINT CAnimationInterp::GetPoseByIdx(

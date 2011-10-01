@@ -6,8 +6,7 @@
 namespace izanagi {
 	class CSkeletonUtil {
 		friend class CSkeletonInstance;
-		friend class IAnimation;
-		friend class CAnimation;
+		friend class CPoseUpdater;
 
 	private:
 		CSkeletonUtil();

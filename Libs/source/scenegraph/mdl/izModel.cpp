@@ -200,28 +200,6 @@ void CModel::ApplyAnimationByIdx(
 	}
 }
 
-// 指定した関節のみにモーション適用
-void CModel::ApplyAnimationByName(
-	IZ_PCSTR pszJointName,
-	IZ_FLOAT fTime,
-	IAnimation* pAnm)
-{
-	if (m_pSkeleton != IZ_NULL) {
-		m_pSkeleton->ApplyAnimationByName(pszJointName, fTime, pAnm);
-	}
-}
-
-// 指定した関節のみにモーション適用
-void CModel::ApplyAnimationByKey(
-	IZ_UINT nJointKey,
-	IZ_FLOAT fTime,
-	IAnimation* pAnm)
-{
-	if (m_pSkeleton != IZ_NULL) {
-		m_pSkeleton->ApplyAnimationByKey(nJointKey, fTime, pAnm);
-	}
-}
-
 // 利用可能なLODレベルの最大を取得
 IZ_UINT CModel::GetMaxLODLevel() const
 {
