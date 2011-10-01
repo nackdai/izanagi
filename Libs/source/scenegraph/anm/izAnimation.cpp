@@ -252,37 +252,16 @@ void CAnimation::ApplyAnimation(
 
 void CAnimation::ApplyAnimationByIdx(
 	CSkeletonInstance* skl,
-	IZ_UINT nJointIdx,
-	IZ_FLOAT fTime)
+	IZ_UINT jointIdx,
+	IZ_FLOAT time)
 {
-	const S_ANM_NODE* pAnmNode = GetAnmNodeByJointIdx(nJointIdx);
+	IZ_ASSERT(skl != IZ_NULL);
+	IZ_ASSERT(jointIdx < skl->GetJointNum());
+
+	const S_ANM_NODE* pAnmNode = GetAnmNodeByJointIdx(jointIdx);
 	if (pAnmNode != IZ_NULL) {
 		ApplyAnimation(
-			fTime,
-			pAnmNode,
-			CSklPoseUpdater(skl));
-	}
-}
-
-void CAnimation::ApplyAnimationByName(
-	CSkeletonInstance* skl,
-	IZ_PCSTR pszJointName,
-	IZ_FLOAT fTime)
-{
-	IZ_UINT nKey = CKey::GenerateValue(pszJointName);
-
-	ApplyAnimationByKey(skl, nKey, fTime);
-}
-
-void CAnimation::ApplyAnimationByKey(
-	CSkeletonInstance* skl,
-	IZ_UINT nJointKey,
-	IZ_FLOAT fTime)
-{
-	const S_ANM_NODE* pAnmNode = GetAnmNodeByKey(nJointKey);
-	if (pAnmNode != IZ_NULL) {
-		ApplyAnimation(
-			fTime,
+			time,
 			pAnmNode,
 			CSklPoseUpdater(skl));
 	}

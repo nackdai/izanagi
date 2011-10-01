@@ -7,6 +7,7 @@
 namespace izanagi {
 	class IInputStream;
 	class CSkeletonInstance;
+	class CPoseUpdater;
 
 	/**
 	*/
@@ -62,18 +63,8 @@ namespace izanagi {
 
 		void ApplyAnimationByIdx(
 			CSkeletonInstance* skl,
-			IZ_UINT nJointIdx,
-			IZ_FLOAT fTime);
-
-		void ApplyAnimationByName(
-			CSkeletonInstance* skl,
-			IZ_PCSTR pszJointName,
-			IZ_FLOAT fTime);
-
-		void ApplyAnimationByKey(
-			CSkeletonInstance* skl,
-			IZ_UINT nJointKey,
-			IZ_FLOAT fTime);
+			IZ_UINT jointIdx,
+			IZ_FLOAT time);
 
 	protected:
 		IZ_UINT GetPoseByIdx(

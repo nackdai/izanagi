@@ -92,22 +92,6 @@ namespace izanagi {
 			IAnimation* pAnm);
 
 		/**
-		 * 指定した関節のみにモーション適用
-		 */
-		void ApplyAnimationByName(
-			IZ_PCSTR pszJointName,
-			IZ_FLOAT fTime,
-			IAnimation* pAnm);
-
-		/**
-		 * 指定した関節のみにモーション適用
-		 */
-		void ApplyAnimationByKey(
-			IZ_UINT nJointKey,
-			IZ_FLOAT fTime,
-			IAnimation* pAnm);
-
-		/**
 		 * 利用可能なLODレベルの最大を取得
 		 */
 		IZ_UINT GetMaxLODLevel() const;
