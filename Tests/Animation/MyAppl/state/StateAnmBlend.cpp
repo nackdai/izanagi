@@ -1,57 +1,31 @@
 ﻿#include <stdafx.h>
 #include "MyAppl.h"
 #include "MySystem.h"
-#include "StateAnmInterp.h"
+#include "StateAnmBlend.h"
 #include "StateManager.h"
 
-void CStateAnmInterp::CTimeOverHandler::Handle(const izanagi::CStdTimeline& timeline)
-{
-	IZ_ASSERT(m_State != IZ_NULL);
-
-	if ((void*)m_State->m_CurAnm != (void*)m_State->m_AnmInterp) {
-		return;
-	}
-
-	if (m_State->m_TargetAnmIdx == 1) {
-		m_State->m_CurAnm = m_State->m_pAnm[0];
-		m_State->m_TargetAnmIdx = 1;
-	}
-	else {
-		m_State->m_CurAnm = m_State->m_pAnm[1];
-		m_State->m_TargetAnmIdx = 0;
-	}
-	
-	m_State->m_Timeline.Init(
-		m_State->m_CurAnm->GetAnimationTime(),
-		0.0f);
-	m_State->m_Timeline.Reset();
-	m_State->m_Timeline.Start();
-}
-
-CStateAnmInterp::CStateAnmInterp()
+CStateAnmBlend::CStateAnmBlend()
 {
 	m_pAnm[0] = IZ_NULL;
 	m_pAnm[1] = IZ_NULL;
 
-	m_AnmInterp = IZ_NULL;
-
-	m_TargetAnmIdx = 1;
+	m_AnmBlender = IZ_NULL;
 
 	m_IsBack = IZ_FALSE;
 }
 
-CStateAnmInterp::~CStateAnmInterp()
+CStateAnmBlend::~CStateAnmBlend()
 {
 }
 
-IZ_BOOL CStateAnmInterp::Create()
+IZ_BOOL CStateAnmBlend::Create()
 {
 	return IZ_TRUE;
 }
 
 #define _Print CMySystem::GetInstance().GetDebugFont()->DBPrint
 
-IZ_BOOL CStateAnmInterp::Render()
+IZ_BOOL CStateAnmBlend::Render()
 {
 	Render3D();
 	Render2D();
@@ -59,7 +33,7 @@ IZ_BOOL CStateAnmInterp::Render()
 	return IZ_TRUE;
 }
 
-void CStateAnmInterp::Render3D()
+void CStateAnmBlend::Render3D()
 {
 	izanagi::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
 
@@ -71,7 +45,7 @@ void CStateAnmInterp::Render3D()
 		pDevice);
 }
 
-void CStateAnmInterp::Render2D()
+void CStateAnmBlend::Render2D()
 {
 	if (CMySystem::GetInstance().GetGraphicsDevice()->Begin2D()) {
 		CMySystem::GetInstance().GetDebugFont()->Begin();
@@ -98,13 +72,26 @@ void CStateAnmInterp::Render2D()
 		}
 #endif
 
+		{
+			IZ_FLOAT anmTime = m_AnmBlender->GetAnimationTime();
+			IZ_FLOAT time = m_Timeline.GetTime();
+
+			IZ_FLOAT anm0 = m_pAnm[0]->GetAnimationTime();
+			IZ_FLOAT anm1 = m_pAnm[1]->GetAnimationTime();
+
+			CMySystem::GetInstance().GetDebugFont()->DBPrint(
+				"%.2f / %.2f (%.2f, %.2f\n",
+				time, anmTime,
+				anm0,anm1);
+		}
+
 		CMySystem::GetInstance().GetDebugFont()->End();
 
 		CMySystem::GetInstance().GetGraphicsDevice()->End2D();
 	}
 }
 
-IZ_BOOL CStateAnmInterp::Update()
+IZ_BOOL CStateAnmBlend::Update()
 {
 	if (m_IsBack) {
 		CStateManager::GetInstance().ChangePrevState();
@@ -115,7 +102,7 @@ IZ_BOOL CStateAnmInterp::Update()
 	IZ_FLOAT time = m_Timeline.GetTime();
 
 	CCharacter* charater = CMyAppl::GetInstance().GetCharacter();
-	charater->Update(time, m_CurAnm);
+	charater->Update(time, m_AnmBlender);
 
 	IZ_FLOAT fElapsed = CMySystem::GetInstance().GetTimer(0).GetTime();
 	fElapsed /= 1000.0f;
@@ -128,12 +115,12 @@ IZ_BOOL CStateAnmInterp::Update()
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateAnmInterp::Destroy()
+IZ_BOOL CStateAnmBlend::Destroy()
 {
 	return Leave();
 }
 
-IZ_BOOL CStateAnmInterp::Enter()
+IZ_BOOL CStateAnmBlend::Enter()
 {
 	izanagi::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
 	izanagi::IMemoryAllocator* pAllocator = CMySystem::GetInstance().GetMemoryAllocator();
@@ -157,85 +144,41 @@ IZ_BOOL CStateAnmInterp::Enter()
 		input.Finalize();
 	}
 
-	m_CurAnm = m_pAnm[0];
+	m_AnmBlender = izanagi::IAnimationBlender::CreateAnmBlender<izanagi::CAnmLinearBlender>(
+						pAllocator);
+	IZ_ASSERT(m_AnmBlender != IZ_NULL);
 
-	m_AnmInterp = izanagi::CAnimationInterp::CreateAnimationInterp(pAllocator);
-	IZ_ASSERT(m_AnmInterp != IZ_NULL);
+	m_AnmBlender->SetAnimation(
+		0.5f,
+		m_pAnm[0],
+		m_pAnm[1]);
 
 	m_Timeline.Init(
-		m_pAnm[0]->GetAnimationTime(),
+		m_AnmBlender->GetAnimationTime(),
 		0.0f);
 	m_Timeline.SetIsLoop(IZ_TRUE);
 	m_Timeline.SetIsReverse(IZ_FALSE);
 	m_Timeline.Start();
 	m_Timeline.Reset();
 
-	m_TimeOverHandler.Set(this);
-	m_Timeline.SetTimeOverHandler(&m_TimeOverHandler);
-
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateAnmInterp::Leave()
+IZ_BOOL CStateAnmBlend::Leave()
 {
 	SAFE_RELEASE(m_pAnm[0]);
 	SAFE_RELEASE(m_pAnm[1]);
 
-	SAFE_RELEASE(m_AnmInterp);
+	SAFE_RELEASE(m_AnmBlender);
 
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateAnmInterp::OnKeyDown(IZ_UINT nChar, IZ_UINT nRepCnt, IZ_UINT nFlags)
+IZ_BOOL CStateAnmBlend::OnKeyDown(IZ_UINT nChar, IZ_UINT nRepCnt, IZ_UINT nFlags)
 {
-	static const izanagi::CAnimationInterp::E_INTERP_TYPE type = izanagi::CAnimationInterp::E_INTERP_TYPE_FROZEN;
-	static const IZ_FLOAT interpTime = 1000.0f;
-
-	if (nChar == VK_RETURN) {
-		if (m_TargetAnmIdx == 1) {
-			IZ_FLOAT time = m_Timeline.GetTime();
-
-			m_AnmInterp->SetAnimation(
-				interpTime,
-				type,
-				m_pAnm[0], time,
-				m_pAnm[1], 0.0f);
-
-			m_TargetAnmIdx = 0;
-		}
-		else {
-			IZ_FLOAT time = m_Timeline.GetTime();
-
-			m_AnmInterp->SetAnimation(
-				interpTime,
-				type,
-				m_pAnm[1], time,
-				m_pAnm[0], 0.0f);
-
-			m_TargetAnmIdx = 1;
-		}
-
-		m_CurAnm = m_AnmInterp;
-
-		m_Timeline.Init(
-			m_AnmInterp->GetAnimationTime(),
-			0.0f);
-		m_Timeline.Reset();
-		m_Timeline.Start();
-	}
-	else if (nChar == VK_BACK) {
+	if (nChar == VK_BACK) {
 		m_IsBack = IZ_TRUE;
 	}
 
-	return IZ_TRUE;
-}
-
-IZ_BOOL CStateAnmInterp::OnMouseMove(IZ_UINT nFlags, IZ_INT x, IZ_INT y)
-{
-	return IZ_TRUE;
-}
-
-IZ_BOOL CStateAnmInterp::OnMouseWheel(IZ_UINT nFlags, IZ_SHORT zDelta, IZ_INT x, IZ_INT y)
-{
 	return IZ_TRUE;
 }
