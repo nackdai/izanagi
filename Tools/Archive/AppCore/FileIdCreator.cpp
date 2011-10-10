@@ -32,7 +32,7 @@ void CFileIdCreator::Register(
 				const izanagi::izanagi_tk::CString& strPrev = *prevItem;
 
 				izanagi::izanagi_tk::CString tmp(str);
-				str.format("%s/%s", strPrev, tmp);
+				str.format("%s/%s", strPrev.c_str(), tmp.c_str());
 			}
 
 			prevItem = it;

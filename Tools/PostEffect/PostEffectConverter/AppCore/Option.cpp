@@ -263,14 +263,14 @@ BOOL COption::AnalysisInternal()
 
 		// コンパイルオプションとの結合
 		izanagi::izanagi_tk::CString tmp;
-		tmp.format("\"\"%s\"\" %s", compiler, compileOpt);
+		tmp.format("\"\"%s\"\" %s", compiler.c_str(), compileOpt.c_str());
 		compiler = tmp;
 	}
 
 	// 出力ファイル
 	if (outFile.empty() && !shader.empty()) {
 		// 出力ファイルが空
-		IZ_BOOL result = (::sprintf_s(s_BUF, sizeof(s_BUF), "%s\0", shader) >= 0);
+		IZ_BOOL result = (::sprintf_s(s_BUF, sizeof(s_BUF), "%s\0", shader.c_str()) >= 0);
 		VRETURN(result);
 
 		// ファイル名取得
@@ -288,7 +288,7 @@ BOOL COption::AnalysisInternal()
 		// プリプロセス済みファイル
 		{
 			// 出力ファイルが空
-			IZ_BOOL result = (::sprintf_s(s_BUF, sizeof(s_BUF), "%s\0", shader) >= 0);
+			IZ_BOOL result = (::sprintf_s(s_BUF, sizeof(s_BUF), "%s\0", shader.c_str()) >= 0);
 			VRETURN(result);
 
 			// ファイル名取得
@@ -299,14 +299,14 @@ BOOL COption::AnalysisInternal()
 			VRETURN(result);
 
 			if (objDir.empty()) {
-				preprocFile.format("%s.fx_", file_name);
+				preprocFile.format("%s.fx_", file_name.c_str());
 			}
 			else {
 				// 中間ディレクトリに出力する
 				izanagi::izanagi_tk::CFileUtility::CombinePath(
 					s_BUF,
 					sizeof(s_BUF),
-					objDir,
+					objDir.c_str(),
 					file_name.c_str());
 
 				preprocFile.format("%s.fx_", s_BUF);
@@ -323,7 +323,8 @@ BOOL COption::AnalysisInternal()
 			izanagi::izanagi_tk::CFileUtility::CombinePath(
 				s_BUF,
 				sizeof(s_BUF),
-				baseDir.c_str(), shader);
+				baseDir.c_str(),
+				shader);
 			shader.format("%s", s_BUF);
 		}
 	}
@@ -337,7 +338,7 @@ BOOL COption::AnalysisInternal()
 			if (izanagi::izanagi_tk::CEnvVarHelper::ExpandEnvStrings(
 					s_BUF,
 					sizeof(s_BUF),
-					str))
+					str.c_str()))
 			{
 				str.format("%s", s_BUF);
 				str.replace('\\', '/');
@@ -349,7 +350,8 @@ BOOL COption::AnalysisInternal()
 					izanagi::izanagi_tk::CFileUtility::CombinePath(
 						s_BUF,
 						sizeof(s_BUF),
-						baseDir.c_str(), str);
+						baseDir.c_str(),
+						str);
 
 					str.format("%s", s_BUF);
 				}

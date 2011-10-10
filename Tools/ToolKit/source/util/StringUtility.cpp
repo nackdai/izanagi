@@ -17,7 +17,7 @@ IZ_BOOL CString::CmpStr(const char* str0, const char* str1)
 
 void CString::format(const char* format, ...)
 {
-	std::vector<izChar> tmp(128);
+	std::vector<izChar> tmp(1000);
         
 	va_list args;
 	va_start(args, format);

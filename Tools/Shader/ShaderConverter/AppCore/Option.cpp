@@ -188,7 +188,7 @@ BOOL COption::EndAnalysis()
 				file_name));
 
 		if (obj_dir.empty()) {
-			preproc_file.format("%s.%s_", s_BUF, ext);
+			preproc_file.format("%s.%s_", s_BUF, ext.c_str());
 		}
 		else {
 			izanagi::izanagi_tk::CString tmp(s_BUF);
@@ -201,7 +201,7 @@ BOOL COption::EndAnalysis()
 					obj_dir,
 					tmp));
 
-			preproc_file.format("%s.%s_", s_BUF, ext);
+			preproc_file.format("%s.%s_", s_BUF, ext.c_str());
 		}
 	}
 
