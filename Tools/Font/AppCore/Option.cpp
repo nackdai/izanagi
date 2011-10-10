@@ -1,5 +1,4 @@
-﻿#include <stdafx.h>
-#include <shlwapi.h>
+﻿#include <shlwapi.h>
 #include <direct.h>
 #include "Option.h"
 
@@ -20,7 +19,7 @@ COption::COption()
 
 	charEncode = izanagi::E_FONT_CHAR_ENCODE_SJIS;
 
-	fontFace.Format("%s", _T("ＭＳ 明朝"));
+	fontFace.format("%s", "ＭＳ 明朝");
 
 	isFixedPitch = FALSE;
 	isBold = FALSE;
@@ -34,53 +33,53 @@ BOOL COption::Analysis(int argc, TCHAR* argv[])
 {
 	for (int i = 1; i < argc; i++) {
 		BOOL result = FALSE;
-		CString cmd(argv[i]);
+		izanagi::izanagi_tk::CString cmd(argv[i]);
 
 		if (i < argc - 1) {
-			if (result = (cmd == _T("-i"))) {
+			if (result = (cmd == "-i")) {
 				// -i
-				list_file.Format(_T("%s"), argv[++i]);
+				list_file.format("%s", argv[++i]);
 			}
-			else if (result = (cmd == _T("-o"))) {
+			else if (result = (cmd == "-o")) {
 				// -o
-				out_file.Format(_T("%s"), argv[++i]);
+				out_file.format("%s", argv[++i]);
 			}
-			else if (result = (cmd == _T("-fs"))) {
+			else if (result = (cmd == "-fs")) {
 				// -fs
 				fontSize = atoi(argv[++i]);
 			}
-			else if (result = (cmd == _T("-w"))) {
+			else if (result = (cmd == "-w")) {
 				// -w
 				texWidth = atoi(argv[++i]);
 			}
-			else if (result = (cmd == _T("-h"))) {
+			else if (result = (cmd == "-h")) {
 				// -h
 				texHeight = atoi(argv[++i]);
 			}
-			else if (result = (cmd == _T("-code"))) {
+			else if (result = (cmd == "-code")) {
 				// -c
-				CString tmp(argv[++i]);
+				izanagi::izanagi_tk::CString tmp(argv[++i]);
 
-				if (tmp.CompareNoCase(_T("SJIS")) == 0) {
+				if (tmp.compare_no_case("SJIS") == 0) {
 					charEncode = izanagi::E_FONT_CHAR_ENCODE_SJIS;
 				}
-				else if ((tmp.CompareNoCase(_T("UTF16")) == 0)
-						|| (tmp.CompareNoCase(_T("UNICODE")) == 0))
+				else if ((tmp.compare_no_case("UTF16") == 0)
+						|| (tmp.compare_no_case("UNICODE") == 0))
 				{
 					charEncode = izanagi::E_FONT_CHAR_ENCODE_UTF16;
 				}
-				else if (tmp.CompareNoCase(_T("UTF8")) == 0) {
+				else if (tmp.compare_no_case("UTF8") == 0) {
 					charEncode = izanagi::E_FONT_CHAR_ENCODE_UTF8;
 				}
 				else {
 					result = FALSE;
 				}
 			}
-			else if (result = (cmd == _T("-ft"))) {
+			else if (result = (cmd == "-ft")) {
 				// -ft
-				fontFace.Format(_T("%s"), argv[++i]);
+				fontFace.format("%s", argv[++i]);
 			}
-			else if (result = (cmd == _T("-aa"))) {
+			else if (result = (cmd == "-aa")) {
 				// -aa
 				// アンチエイリアス
 				INT num = atoi(argv[++i]);
@@ -106,15 +105,15 @@ BOOL COption::Analysis(int argc, TCHAR* argv[])
 
 		if (!result) {
 			// 引数無しオプション
-			if (result = (cmd == _T("-fixed_pitch"))) {
+			if (result = (cmd == "-fixed_pitch")) {
 				// -fixed_pitch
 				isFixedPitch = TRUE;
 			}
-			else if (result = (cmd == _T("-bold"))) {
+			else if (result = (cmd == "-bold")) {
 				// -bold
 				isBold = TRUE;
 			}
-			else if (result = (cmd == _T("-italic"))) {
+			else if (result = (cmd == "-italic")) {
 				// -italic
 				isItalic = TRUE;
 			}
@@ -123,14 +122,14 @@ BOOL COption::Analysis(int argc, TCHAR* argv[])
 		if (!result) {
 			// TODO
 			printf("無効なオプションです[%s]\n\n", cmd);
-			//ASSERT(FALSE);
+			//IZ_ASSERT(FALSE);
 			return FALSE;
 		}
 	}
 
 	// 後処理
 	if (!AfterAnalysis()) {
-		ASSERT(FALSE);
+		IZ_ASSERT(FALSE);
 		return FALSE;
 	}
 
@@ -144,10 +143,10 @@ BOOL COption::AfterAnalysis()
 
 	BOOL ret = FALSE;
 
-	if (!out_file.IsEmpty()) {
+	if (!out_file.empty()) {
 		ret = TRUE;
 	}
-	else if (out_file.IsEmpty() && !list_file.IsEmpty()) {
+	else if (out_file.empty() && !list_file.empty()) {
 		// 出力ファイルが設定されていない
 		// 入力ファイルを基に出力ファイル名を決める
 		memcpy(s_BUF, list_file, min(sizeof(s_BUF), strlen(list_file)));
@@ -158,7 +157,7 @@ BOOL COption::AfterAnalysis()
 		// 拡張子削除
 		PathRemoveExtension(file_name);
 
-		out_file.Format(_T("%s.fnt"), file_name);
+		out_file.format("%s.fnt", file_name);
 		memset(s_BUF, 0, sizeof(s_BUF));
 
 		ret = TRUE;
@@ -172,7 +171,7 @@ BOOL COption::AfterAnalysis()
 */
 BOOL COption::IsValid()
 {
-	if (list_file.IsEmpty()) {
+	if (list_file.empty()) {
 		printf("リストファイルが指定されていません\n");
 		return FALSE;
 	}
@@ -224,7 +223,7 @@ BOOL COption::AnalysisListFile()
 
 	// ディレクトリを移動
 	if (_chdir(BASE_PATH) != 0) {
-		ASSERT(FALSE);
+		IZ_ASSERT(FALSE);
 		return FALSE;
 	}
 
@@ -237,17 +236,17 @@ BOOL COption::AnalysisListFile()
 		// パスの前後の空白を取り除く
 		PathRemoveBlanks(BUF);
 
-		CString str;
-		str.Format(_T("%s"), BUF);
+		izanagi::izanagi_tk::CString str;
+		str.format("%s", BUF);
 
-		if (!str.IsEmpty()) {
+		if (!str.empty()) {
 			// フルパス取得
 			BOOL result = (_fullpath(BUF, str, BUF_SIZE) != NULL);
-			ASSERT(result);
+			IZ_ASSERT(result);
 
 			if (result) {
 				// 登録
-				str.Format(_T("%s"), BUF);
+				str.format("%s", BUF);
 				in_file_list.push_back(str);
 			}
 		}
@@ -257,7 +256,7 @@ BOOL COption::AnalysisListFile()
 
 	// 元のディレクトリに移動
 	if (_chdir(CUR_DIR) != 0) {
-		ASSERT(FALSE);
+		IZ_ASSERT(FALSE);
 	}
 
 	BOOL ret = (in_file_list.size() > 0);

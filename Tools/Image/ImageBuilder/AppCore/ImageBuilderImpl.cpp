@@ -1,10 +1,7 @@
-﻿#include <stdafx.h>
-#include "ImageBuilderImpl.h"
+﻿#include "ImageBuilderImpl.h"
 #include "ImageReaderImpl.h"
 #include "izImageLib.h"
 #include "AppError.h"
-
-#define IZ_TOOLKIT_ENABLE_XERCES
 #include "izToolKit.h"
 
 CImageBuilder CImageBuilder::s_cInstance;
@@ -45,7 +42,7 @@ void CImageBuilder::startElement(
 	const XMLCh* const qname, 
 	const xercesc::Attributes& attrs)
 {
-	CString name(XN(qname));
+	izanagi::izanagi_tk::CString name(XN(qname));
 
 	if (IsAttr(name, attr_type::CUBE)) {
 		// TODO
@@ -86,14 +83,14 @@ namespace {
 		CMP_TYPE_NUM,
 	};
 
-	inline void _ConvString(CString& str, CMP_TYPE typeCmp)
+	inline void _ConvString(izanagi::izanagi_tk::CString& str, CMP_TYPE typeCmp)
 	{
 		switch (typeCmp) {
 		case CMP_TYPE_LOWER:
-			str.MakeLower();
+			str.make_lower();
 			break;
 		case CMP_TYPE_UPPER:
-			str.MakeUpper();
+			str.make_upper();
 			break;
 		case CMP_TYPE_NORMAL:
 			break;
@@ -109,13 +106,13 @@ namespace {
 	{
 		_T ret = (_T)0;
 
-		CString str(lpszStr);
+		izanagi::izanagi_tk::CString str(lpszStr);
 		_ConvString(str, typeCmp);
 
 		size_t nStrLen = strlen(lpszStr);
 
 		for (UINT i = 0; i < nTableNum; i++) {
-			CString tmp(lpszTable[i]);
+			izanagi::izanagi_tk::CString tmp(lpszTable[i]);
 			_ConvString(tmp, typeCmp);
 
 			if (str == tmp) {
@@ -227,9 +224,9 @@ void CImageBuilder::SetCommonAttrs(
 	UINT nAttrNum = (UINT)attrs.getLength();
 
 	for (UINT i = 0; i < nAttrNum; i++) {
-		CString strAttrName(XN(attrs.getQName(i)));
+		izanagi::izanagi_tk::CString strAttrName(XN(attrs.getQName(i)));
 
-		CString val(XN(attrs.getValue(i)));
+		izanagi::izanagi_tk::CString val(XN(attrs.getValue(i)));
 
 		if (IsAttr(strAttrName, attr_type::PATH)) {
 			// path
@@ -240,7 +237,7 @@ void CImageBuilder::SetCommonAttrs(
 				pImageInfo->path = val;
 			}
 			else {
-				pImageInfo->path.Format(
+				pImageInfo->path.format(
 					"%s\\%s",
 					m_BasePath.c_str(),
 					val);
@@ -249,7 +246,7 @@ void CImageBuilder::SetCommonAttrs(
 		}
 		else {
 			// 小文字にする
-			val = val.MakeLower();
+			val = val.make_lower();
 
 			if (IsAttr(strAttrName, attr_type::FMT)) {
 				// fmt
@@ -307,8 +304,8 @@ namespace {
 		const SImageInfo& sImageInfo,
 		izanagi::izanagi_tk::CIMGTexture* pTex)
 	{
-		ASSERT(pOut != NULL);
-		ASSERT(pHeader != NULL);
+		IZ_ASSERT(pOut != NULL);
+		IZ_ASSERT(pHeader != NULL);
 
 		BOOL result = TRUE;
 
@@ -469,8 +466,5 @@ __EXIT__:
 
 void CImageBuilder::SetBasePath(const char* path)
 {
-	izanagi::izanagi_tk::CStringUtil::Format(
-		m_BasePath,
-		"%s\0",
-		path);
+	m_BasePath.format("%s", path);
 }

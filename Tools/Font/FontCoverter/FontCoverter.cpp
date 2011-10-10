@@ -1,8 +1,11 @@
 ﻿// FontCoverter.cpp : コンソール アプリケーションのエントリ ポイントを定義します。
 //
 
-#include "stdafx.h"
-#include "FontCoverter.h"
+#ifndef _WIN32_WINNT		// Windows XP 以降のバージョンに固有の機能の使用を許可します。                   
+#define _WIN32_WINNT 0x0501	// これを Windows の他のバージョン向けに適切な値に変更してください。
+#endif						
+
+#include <windows.h>
 
 #include "CharList.h"
 #include "Option.h"
@@ -12,11 +15,6 @@
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
-
-
-// 唯一のアプリケーション オブジェクトです。
-
-CWinApp theApp;
 
 using namespace std;
 
@@ -60,92 +58,82 @@ namespace {
 
 #define _VGOTO(b, label)	if (!b) { nRetCode = 1; VGOTO(IZ_FALSE, label); }
 
-int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
+int main(int argc, char* argv[])
 {
 	int nRetCode = 0;
 
-	// MFC を初期化して、エラーの場合は結果を印刷します。
-	if (!AfxWinInit(::GetModuleHandle(NULL), NULL, ::GetCommandLine(), 0))
+	COption cOption;
+	izanagi::izanagi_tk::CGraphicsDeviceLite* pDevice = IZ_NULL;
+	izanagi::CFileOutputStream cOut;
+
+	// オプション解析
+	_VGOTO(cOption.Analysis(argc, argv), __EXIT__);
+
+	// オプション正当性チェック
+	_VGOTO(cOption.IsValid(), __EXIT__);
+
+	// リストファイルを解析
+	_VGOTO(cOption.AnalysisListFile(), __EXIT__);
+
+	// ウインドウハンドル取得
+	HWND hWnd = ::GetConsoleWindow();
+	_VGOTO(hWnd != NULL, __EXIT__);
+
+	// GraphicsDevice作成
+	pDevice = izanagi::izanagi_tk::CGraphicsDeviceLite::CreateGraphicsDeviceLight(hWnd);
+	_VGOTO(pDevice != IZ_NULL, __EXIT__);
+
 	{
-		// TODO: 必要に応じてエラー コードを変更してください。
-		_tprintf(_T("致命的なエラー: MFC の初期化ができませんでした。\n"));
-		nRetCode = 1;
-	}
-	else
-	{
-		COption cOption;
-		izanagi::izanagi_tk::CGraphicsDeviceLite* pDevice = IZ_NULL;
-		izanagi::CFileOutputStream cOut;
+		std::vector<izanagi::izanagi_tk::CString>::iterator it = cOption.in_file_list.begin();
+		while (it != cOption.in_file_list.end()) {
+			izanagi::CFileInputStream cIn;
+			_VGOTO(cIn.Open(*it), __EXIT__);
 
-		// オプション解析
-		_VGOTO(cOption.Analysis(argc, argv), __EXIT__);
+			// 文字列登録
+			CCharList::GetInstance().Register(
+				cOption.charEncode,
+				&cIn);
 
-		// オプション正当性チェック
-		_VGOTO(cOption.IsValid(), __EXIT__);
-
-		// リストファイルを解析
-		_VGOTO(cOption.AnalysisListFile(), __EXIT__);
-
-		// ウインドウハンドル取得
-		HWND hWnd = ::GetConsoleWindow();
-		_VGOTO(hWnd != NULL, __EXIT__);
-
-		// GraphicsDevice作成
-		pDevice = izanagi::izanagi_tk::CGraphicsDeviceLite::CreateGraphicsDeviceLight(hWnd);
-		_VGOTO(pDevice != IZ_NULL, __EXIT__);
-
-		{
-			std::vector<CString>::iterator it = cOption.in_file_list.begin();
-			while (it != cOption.in_file_list.end()) {
-				izanagi::CFileInputStream cIn;
-				_VGOTO(cIn.Open(*it), __EXIT__);
-
-				// 文字列登録
-				CCharList::GetInstance().Register(
-					cOption.charEncode,
-					&cIn);
-
-				cIn.Close();
-				it++;
-			}
+			cIn.Close();
+			it++;
 		}
+	}
 
-		// デバイスコンテキスト取得
-		HDC hDC = ::GetDC(hWnd);
-		_VGOTO(hDC != NULL, __EXIT__);
+	// デバイスコンテキスト取得
+	HDC hDC = ::GetDC(hWnd);
+	_VGOTO(hDC != NULL, __EXIT__);
 
-		// 準備
-		_VGOTO(
-			CFontConverter::GetInstance().Init(hDC, cOption),
-			__EXIT__);
+	// 準備
+	_VGOTO(
+		CFontConverter::GetInstance().Init(hDC, cOption),
+		__EXIT__);
 
-		// フォントイメージデータ作成
-		_VGOTO(
-			CFontConverter::GetInstance().CreateFontImage(hDC, cOption),
-			__EXIT__);
+	// フォントイメージデータ作成
+	_VGOTO(
+		CFontConverter::GetInstance().CreateFontImage(hDC, cOption),
+		__EXIT__);
 
-		// 出力
+	// 出力
 #if 0
-		_VGOTO(
-			CFontConverter::GetInstance().ExportAsDDS(),
-			__EXIT__);
+	_VGOTO(
+		CFontConverter::GetInstance().ExportAsDDS(),
+		__EXIT__);
 #else
-		_VGOTO(
-			cOut.Open(cOption.out_file),
-			__EXIT__);
+	_VGOTO(
+		cOut.Open(cOption.out_file),
+		__EXIT__);
 
-		_VGOTO(
-			CFontConverter::GetInstance().Export(&cOut, cOption),
-			__EXIT__);
+	_VGOTO(
+		CFontConverter::GetInstance().Export(&cOut, cOption),
+		__EXIT__);
 
-		cOut.Finalize();
+	cOut.Finalize();
 #endif
 
 __EXIT__:
-		// 開放
-		CFontConverter::GetInstance().Release();
-		SAFE_RELEASE(pDevice);
-	}
+	// 開放
+	CFontConverter::GetInstance().Release();
+	SAFE_RELEASE(pDevice);
 
 	return nRetCode;
 }

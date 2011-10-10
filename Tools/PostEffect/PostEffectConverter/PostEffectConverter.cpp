@@ -1,9 +1,6 @@
 ﻿// PostEffectConverter.cpp : コンソール アプリケーションのエントリ ポイントを定義します。
 //
 
-#include "stdafx.h"
-#include "PostEffectConverter.h"
-
 #include <vector>
 #include "shlwapi.h"
 #include "Option.h"
@@ -13,11 +10,6 @@
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
-
-
-// 唯一のアプリケーション オブジェクトです。
-
-//CWinApp theApp;
 
 using namespace std;
 
@@ -59,7 +51,7 @@ namespace {
 	}
 
 	// 存在するかどうか
-	inline BOOL _IsExist(LPCSTR lpszName)
+	inline BOOL _IsExist(const char* lpszName)
 	{
 		HANDLE hFind;
 		WIN32_FIND_DATA fd;
@@ -71,81 +63,71 @@ namespace {
 	}
 }
 
-int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
+int main(int argc, char* argv[])
 {
 	int nRetCode = 0;
 
 	COption cOption;
 
-	// MFC を初期化して、エラーの場合は結果を印刷します。
-	if (!AfxWinInit(::GetModuleHandle(NULL), NULL, ::GetCommandLine(), 0))
-	{
-		// TODO: 必要に応じてエラー コードを変更してください。
-		_tprintf(_T("致命的なエラー: MFC の初期化ができませんでした。\n"));
-		nRetCode = 1;
-	}
-	else
-	{
-		try {
-			if (!cOption.Analysis(argc, argv)) {
-				// オプション解析に失敗
-				nRetCode = 1;
-				goto __EXIT__;
-			}
+	try {
+		if (!cOption.Analysis(argc, argv)) {
+			// オプション解析に失敗
+			nRetCode = 1;
+			goto __EXIT__;
+		}
 
-			if (!cOption.IsValid()) {
-				// オプションが不正
-				nRetCode = 1;
-				goto __EXIT__;
-			}
+		if (!cOption.IsValid()) {
+			// オプションが不正
+			nRetCode = 1;
+			goto __EXIT__;
+		}
 
-			// 中間ファイル出力ディレクトリの指定がある
-			if (!cOption.objDir.IsEmpty()) {
-				if (!_IsExist(cOption.objDir)) {
-					// 存在しないので作成する
-					CreateDirectory(cOption.objDir, NULL);
-				}
+		// 中間ファイル出力ディレクトリの指定がある
+		if (!cOption.objDir.empty()) {
+			if (!_IsExist(cOption.objDir)) {
+				// 存在しないので作成する
+				CreateDirectory(cOption.objDir, NULL);
 			}
+		}
 
-			if (cOption.IsPreproc()) {
-				// プリプロセス処理のみを行う
-				nRetCode = Preproc(cOption);
-				goto __EXIT__;
-			}
+		if (cOption.IsPreproc()) {
+			// プリプロセス処理のみを行う
+			nRetCode = Preproc(cOption);
+			goto __EXIT__;
+		}
 
-			// 自分自身をプリプロセス処理モードで呼び出す
-			if (!ExecWithPreprocMode(argv[0], cOption)) {
-				nRetCode = 1;
-				goto __EXIT__;
-			}
+		// 自分自身をプリプロセス処理モードで呼び出す
+		if (!ExecWithPreprocMode(argv[0], cOption)) {
+			nRetCode = 1;
+			goto __EXIT__;
+		}
 
-			if (!CPostEffectConverter::GetInstance().Begin(cOption.preprocFile)) {
-				nRetCode = 1;
-				goto __EXIT__;
-			}
+		if (!CPostEffectConverter::GetInstance().Begin(cOption.preprocFile)) {
+			nRetCode = 1;
+			goto __EXIT__;
+		}
 
-			// シェーダコンパイル
-			if (!CPostEffectConverter::GetInstance().CompileShader(
-					cOption.isCompileAsm,
-					cOption.compiler,
-					cOption.preprocFile,
-					cOption.objDir))
-			{
-				nRetCode = 1;
-				goto __EXIT__;
-			}
+		// シェーダコンパイル
+		if (!CPostEffectConverter::GetInstance().CompileShader(
+				cOption.isCompileAsm,
+				cOption.compiler,
+				cOption.preprocFile,
+				cOption.objDir))
+		{
+			nRetCode = 1;
+			goto __EXIT__;
+		}
 
 #if 1
-			if (!CPostEffectConverter::GetInstance().Export(cOption.outFile)) {
-				nRetCode = 1;
-				goto __EXIT__;
-			}
-#endif
-		}
-		catch (...) {
-			printf("予期しないエラーが発生しました\n");
+		if (!CPostEffectConverter::GetInstance().Export(cOption.outFile)) {
 			nRetCode = 1;
+			goto __EXIT__;
 		}
+#endif
+	}
+	catch (...) {
+		printf("予期しないエラーが発生しました\n");
+		nRetCode = 1;
 	}
 __EXIT__:
 	return nRetCode;

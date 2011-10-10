@@ -1,5 +1,5 @@
-﻿#include <stdafx.h>
-#include "PostEffectConverterUtil.h"
+﻿#include "PostEffectConverterUtil.h"
+#include "izToolKit.h"
 
 /**
 * 頂点プログラムのタイプを決める
@@ -50,7 +50,7 @@ izanagi::E_POSTEFFECT_VTX_SHADER CPostEffectConvUtil::GetVtxShaderType(LPCSTR lp
 		}
 	}
 
-	ASSERT(ret < izanagi::E_POSTEFFECT_VTX_SHADER_NUM);
+	IZ_ASSERT(ret < izanagi::E_POSTEFFECT_VTX_SHADER_NUM);
 
 	return ret;
 }
@@ -73,7 +73,7 @@ namespace {
 */
 izanagi::E_POSTEFFECT_PARAMETER_CLASS CPostEffectConvUtil::CgParamClassToIzanagiPostEffectParamClass(CGparameterclass nClass)
 {
-	ASSERT(nClass < COUNTOF(ClassTable));
+	IZ_ASSERT(nClass < COUNTOF(ClassTable));
 	
 	izanagi::E_POSTEFFECT_PARAMETER_CLASS ret = ClassTable[nClass];
 
@@ -187,7 +187,7 @@ namespace {
 izanagi::E_POSTEFFECT_PARAMETER_TYPE CPostEffectConvUtil::CgParamTypeToIzanagiPostEffectParamType(CGtype type)
 {
 	INT idx = type - CG_TYPE_START_ENUM - 1;
-	ASSERT(idx >= 0);
+	IZ_ASSERT(idx >= 0);
 
 	izanagi::E_POSTEFFECT_PARAMETER_TYPE ret = TypeTable[idx];
 

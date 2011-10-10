@@ -1,4 +1,7 @@
-﻿#include <stdafx.h>
+﻿#ifndef _WIN32_WINNT		// Windows XP 以降のバージョンに固有の機能の使用を許可します。                   
+#define _WIN32_WINNT 0x0501	// これを Windows の他のバージョン向けに適切な値に変更してください。
+#endif						
+
 #include "FontConverterImpl.h"
 #include "CharList.h"
 
@@ -50,8 +53,8 @@ BOOL CFontConverter::ExportAsDDS()
 	for (UINT cnt = 0; it != m_TexList.end(); it++, cnt++) {
 		izanagi::izanagi_tk::CTextureLite* p = *it;
 
-		CString strOut;
-		strOut.Format(_T("%d.dds"), cnt);
+		izanagi::izanagi_tk::CString strOut;
+		strOut.format("%d.dds", cnt);
 
 		ret = ExportAs(
 				p,
@@ -59,7 +62,7 @@ BOOL CFontConverter::ExportAsDDS()
 				D3DXIFF_DDS);
 
 		if (!ret) {
-			ASSERT(ret);
+			IZ_ASSERT(ret);
 			break;
 		}
 	}
@@ -84,7 +87,7 @@ BOOL CFontConverter::ExportAs(
 					NULL);
 
 	ret = SUCCEEDED(hr);
-	ASSERT(ret);
+	IZ_ASSERT(ret);
 
 	return ret;
 }
@@ -401,7 +404,7 @@ BOOL CFontConverter::CreateFontImage(
 													sOption.texHeight,
 													D3D_TEX_FMT);
 		if (pTex == IZ_NULL) {
-			ASSERT(FALSE);
+			IZ_ASSERT(FALSE);
 			ret = FALSE;
 			break;
 		}
@@ -495,7 +498,7 @@ BOOL CFontConverter::CreateFontImage(
 				nDstLeft = (nDstLeft >> 1) + (nDstLeft & 0x01);
 #endif
 
-				ASSERT(nDstLeft + sGlyphMetrics.gmBlackBoxX <= nFontW);
+				IZ_ASSERT(nDstLeft + sGlyphMetrics.gmBlackBoxX <= nFontW);
 			}
 
 			// テクスチャ内に収まるかチェック
@@ -570,7 +573,7 @@ BOOL CFontConverter::CreateFontImage(
 __EXIT__:
 	if (bIsLocked) {
 		// LockされているならUnlockする
-		ASSERT(pCurTex != NULL);
+		IZ_ASSERT(pCurTex != NULL);
 		pCurTex->Unlock(0);
 	}
 
@@ -600,7 +603,7 @@ namespace {
 		FILE* pTmp = NULL;
 		fopen_s(&pTmp, pszFile, "rb");
 		if (pTmp == NULL) {
-			ASSERT(FALSE);
+			IZ_ASSERT(FALSE);
 			return 0;
 		}
 
@@ -663,8 +666,8 @@ BOOL CFontConverter::Export(
 		// イメージ出力
 		UINT num = static_cast<UINT>(m_FontImgList.size());
 		for (UINT i = 0; i < num; i++) {
-			CString strTmp;
-			strTmp.Format("%d.dds", i);
+			izanagi::izanagi_tk::CString strTmp;
+			strTmp.format("%d.dds", i);
 
 			m_FontImgList[i].sizeData = _GetFileSize(strTmp);
 		}
@@ -724,7 +727,7 @@ UINT CFontConverter::ExportFontImageData(izanagi::IOutputStream* pOut)
 		result = (pBits != IZ_NULL);
 		
 		if (!result) {
-			ASSERT(FALSE);
+			IZ_ASSERT(FALSE);
 			break;
 		}
 

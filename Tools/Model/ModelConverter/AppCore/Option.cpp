@@ -91,23 +91,14 @@ IZ_BOOL COption::AnalysisInternal()
 
 		// 出力タイプに応じて拡張子を付加する
 		if (exportType == ExportTypeMdl) {
-			izanagi::izanagi_tk::CStringUtil::Format(
-				out,
-				"%s.mdl",
-				BUF);
+			out.format("%s.mdl", BUF);
 		}
 		else {
 			if (exportType & ExportTypeMsh) {
-				izanagi::izanagi_tk::CStringUtil::Format(
-					outMsh,
-					"%s.msh",
-					BUF);
+				outMsh.format("%s.msh", BUF);
 			}
 			if (exportType & ExportTypeSkl) {
-				izanagi::izanagi_tk::CStringUtil::Format(
-					outSkl,
-					"%s.skl",
-					BUF);
+				outSkl.format("%s.skl", BUF);
 			}
 		}
 	}

@@ -1,9 +1,11 @@
 ﻿#if !defined(__OPTION_H__)
 #define __OPTION_H__
 
+#include "izToolKit.h"
+
 struct SOption {
-	CString in;
-	CString out;
+	izanagi::izanagi_tk::CString in;
+	izanagi::izanagi_tk::CString out;
 };
 
 class COption : public SOption {

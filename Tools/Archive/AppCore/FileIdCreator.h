@@ -3,13 +3,14 @@
 
 #include <map>
 #include <vector>
+#include "izToolKit.h"
 
 #define _ENABLE_EXPORT_ENUM
 
 class CFileIdCreator {
 	struct SIdInfo {
 		UINT id;
-		CString str;
+		izanagi::izanagi_tk::CString str;
 
 		SIdInfo* parent;
 		std::vector<SIdInfo*> child;
@@ -33,7 +34,7 @@ private:
 public:
 	void SetRoot(LPCSTR lpszRoot)
 	{ 
-		m_strRoot.Format(_T("%s"), lpszRoot);
+		m_strRoot.format("%s", lpszRoot);
 	}
 
 	void Register(
@@ -49,7 +50,7 @@ private:
 		UINT nIndent);
 
 private:
-	CString m_strRoot;
+	izanagi::izanagi_tk::CString m_strRoot;
 	std::map<UINT, SIdInfo> m_InfoList;
 
 	BOOL m_bIsEnum;

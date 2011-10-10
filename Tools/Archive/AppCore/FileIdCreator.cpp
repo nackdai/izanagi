@@ -1,5 +1,4 @@
-﻿#include <stdafx.h>
-#include "FileIdCreator.h"
+﻿#include "FileIdCreator.h"
 #include "Utility.h"
 #include "izStd.h"
 #include "izToolKit.h"
@@ -10,9 +9,9 @@ void CFileIdCreator::Register(
 	UINT nId,
 	LPCSTR lpszPath)
 {
-	ASSERT(m_strRoot.GetLength() > 0);
+	IZ_ASSERT(m_strRoot.length() > 0);
 
-	std::vector<CString> tPathList;
+	std::vector<izanagi::izanagi_tk::CString> tPathList;
 
 	// パスを '/' or '\' で分解する
 	CUtility::BreakPath(
@@ -20,20 +19,20 @@ void CFileIdCreator::Register(
 		m_strRoot,
 		tPathList);
 
-	std::vector<CString>::iterator it = tPathList.begin();
+	std::vector<izanagi::izanagi_tk::CString>::iterator it = tPathList.begin();
 
 	// パスとして構築しなおす
 	{
-		std::vector<CString>::iterator prevItem = tPathList.end();
+		std::vector<izanagi::izanagi_tk::CString>::iterator prevItem = tPathList.end();
 
 		for (; it != tPathList.end(); it++) {
-			CString& str = *it;
+			izanagi::izanagi_tk::CString& str = *it;
 
 			if (prevItem != tPathList.end()) {
-				const CString& strPrev = *prevItem;
+				const izanagi::izanagi_tk::CString& strPrev = *prevItem;
 
-				CString tmp(str);
-				str.Format(_T("%s/%s"), strPrev, tmp);
+				izanagi::izanagi_tk::CString tmp(str);
+				str.format("%s/%s", strPrev, tmp);
 			}
 
 			prevItem = it;
@@ -45,7 +44,7 @@ void CFileIdCreator::Register(
 
 	// 登録済みか探す
 	for (; it != tPathList.end(); it++) {
-		const CString& str = *it;
+		const izanagi::izanagi_tk::CString& str = *it;
 
 		UINT nKey = izanagi::CKey::GenerateValue(str);
 
@@ -61,7 +60,7 @@ void CFileIdCreator::Register(
 			// 登録
 			std::pair<std::map<UINT, SIdInfo>::iterator, bool> result = m_InfoList.insert(
 																			std::pair<UINT, SIdInfo>(nKey, sIdInfo));
-			ASSERT(result.second);
+			IZ_ASSERT(result.second);
 			item = result.first;
 
 			if (prevItem != m_InfoList.end()) {
@@ -98,7 +97,7 @@ BOOL CFileIdCreator::Export(LPCSTR lpszExport)
 	UINT nRootKey = izanagi::CKey::GenerateValue(m_strRoot);
 
 	std::map<UINT, SIdInfo>::const_iterator it = m_InfoList.find(nRootKey);
-	ASSERT(it != m_InfoList.end());
+	IZ_ASSERT(it != m_InfoList.end());
 
 	const SIdInfo& sRootInfo = it->second;
 
@@ -106,7 +105,7 @@ BOOL CFileIdCreator::Export(LPCSTR lpszExport)
 				fpOut,
 				sRootInfo,
 				0);
-	ASSERT(ret);
+	IZ_ASSERT(ret);
 
 	fclose(fpOut);
 
@@ -149,7 +148,7 @@ BOOL CFileIdCreator::Export(
 #endif	// #ifdef _ENABLE_EXPORT_ENUM
 
 		// Get file extension
-		CString strExt(
+		izanagi::izanagi_tk::CString strExt(
 			izanagi::izanagi_tk::CFileUtility::GetExtension(
 				s_Buf,
 				sizeof(s_Buf),
@@ -164,7 +163,7 @@ BOOL CFileIdCreator::Export(
 
 		 IZ_PCSTR pszPathWithoutExt = s_Buf;
 
-		if (strExt.GetLength() > 0) {
+		if (strExt.length() > 0) {
 			_PrintWithIndent(
 				fpOut,
 #ifdef _ENABLE_EXPORT_ENUM

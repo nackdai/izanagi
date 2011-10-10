@@ -25,7 +25,7 @@
 
 #include <stdio.h>
 #include <tchar.h>
-#define _ATL_CSTRING_EXPLICIT_CONSTRUCTORS	// 一部の CString コンストラクタは明示的です。
+#define _ATL_CSTRING_EXPLICIT_CONSTRUCTORS	// 一部の izanagi::izanagi_tk::CString コンストラクタは明示的です。
 
 #ifndef VC_EXTRALEAN
 #define VC_EXTRALEAN		// Windows ヘッダーから使用されていない部分を除外します。

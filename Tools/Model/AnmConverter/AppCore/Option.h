@@ -3,6 +3,7 @@
 
 #include <string>
 #include "izDefs.h"
+#include "izToolKit.h"
 
 // ファイルタイプ
 enum FileType {
@@ -15,8 +16,8 @@ enum FileType {
 };
 
 struct SOption {
-	std::string in;		// 入力ファイル
-	std::string out;	// 出力ファイル
+	izanagi::izanagi_tk::CString in;		// 入力ファイル
+	izanagi::izanagi_tk::CString out;	// 出力ファイル
 
 	std::string base;	// ベースモデルファイル
 

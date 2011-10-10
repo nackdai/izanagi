@@ -1,5 +1,5 @@
-﻿#include <stdafx.h>
-#include "ShaderConverterUtil.h"
+﻿#include "ShaderConverterUtil.h"
+#include "izToolKit.h"
 
 namespace {
 	izanagi::E_SHADER_PARAMETER_CLASS ClassTable[] = {
@@ -19,7 +19,7 @@ namespace {
 */
 izanagi::E_SHADER_PARAMETER_CLASS CShaderConvUtil::CgParamClassToIzanagiShaderParamClass(CGparameterclass nClass)
 {
-	ASSERT(nClass < COUNTOF(ClassTable));
+	IZ_ASSERT(nClass < COUNTOF(ClassTable));
 	
 	izanagi::E_SHADER_PARAMETER_CLASS ret = ClassTable[nClass];
 
@@ -133,7 +133,7 @@ namespace {
 izanagi::E_SHADER_PARAMETER_TYPE CShaderConvUtil::CgParamTypeToIzanagiShaderParamType(CGtype type)
 {
 	INT idx = type - CG_TYPE_START_ENUM - 1;
-	ASSERT(idx >= 0);
+	IZ_ASSERT(idx >= 0);
 
 	izanagi::E_SHADER_PARAMETER_TYPE ret = TypeTable[idx];
 

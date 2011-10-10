@@ -1,6 +1,5 @@
-﻿#include <stdafx.h>
-#include "ImageReaderImpl.h"
-#include "ToolKitGraphDefs.h"
+﻿#include "ImageReaderImpl.h"
+#include "izToolKit.h"
 #include "izImageLib.h"
 
 using namespace izanagi;

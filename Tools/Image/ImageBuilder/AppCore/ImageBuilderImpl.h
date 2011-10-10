@@ -5,6 +5,7 @@
 #include <xercesc/sax2/Attributes.hpp>
 #include <xercesc/sax2/DefaultHandler.hpp>
 #include "ImageBuilderDefs.h"
+#include "izToolKit.h"
 
 // イメージビルダー
 class CImageBuilder : public xercesc::DefaultHandler {
@@ -55,7 +56,7 @@ public:
 
 private:
 	std::vector<SImageInfo> m_ImageInfoList;
-	std::string m_BasePath;
+	izanagi::izanagi_tk::CString m_BasePath;
 };
 
 #endif	// #if !defined(__IMAGE_BUILDER_IMPL_H__)

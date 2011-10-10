@@ -1,5 +1,4 @@
-﻿#include <stdafx.h>
-#include <shlwapi.h>
+﻿#include <shlwapi.h>
 #include "Option.h"
 
 namespace {
@@ -14,17 +13,17 @@ BOOL COption::Analysis(int argc, TCHAR* argv[])
 {
 	for (int i = 1; i < argc; i++) {
 		BOOL result = FALSE;
-		CString cmd(argv[i]);
+		izanagi::izanagi_tk::CString cmd(argv[i]);
 
 		if (i < argc - 1) {
-			if (result = (cmd == _T("-i"))) {
+			if (result = (cmd == "-i")) {
 				// -i
-				in.Format(_T("%s"), argv[++i]);
-				in.Replace("/", "\\");
+				in.format("%s", argv[++i]);
+				in.replace('/', '\\');
 			}
-			else if (result = (cmd == _T("-o"))) {
+			else if (result = (cmd == "-o")) {
 				// -o
-				out.Format(_T("%s"), argv[++i]);
+				out.format("%s", argv[++i]);
 			}
 		}
 
@@ -35,14 +34,14 @@ BOOL COption::Analysis(int argc, TCHAR* argv[])
 		if (!result) {
 			// TODO
 			printf("無効なオプションです[%s]\n\n", cmd);
-			//ASSERT(FALSE);
+			//IZ_ASSERT(FALSE);
 			return FALSE;
 		}
 	}
 
 	// 後処理
 	if (!AfterAnalysis()) {
-		ASSERT(FALSE);
+		IZ_ASSERT(FALSE);
 		return FALSE;
 	}
 
@@ -51,7 +50,7 @@ BOOL COption::Analysis(int argc, TCHAR* argv[])
 
 BOOL COption::IsValid() const
 {
-	return (!out.IsEmpty() && !in.IsEmpty());
+	return (!out.empty() && !in.empty());
 }
 
 // 解析の後処理
@@ -61,7 +60,7 @@ BOOL COption::AfterAnalysis()
 
 	BOOL ret = TRUE;
 
-	if (out.IsEmpty() && !in.IsEmpty()) {
+	if (out.empty() && !in.empty()) {
 		// 出力ファイルが設定されていない
 		// 入力ファイルを基に出力ファイル名を決める
 		memcpy(s_BUF, in, min(sizeof(s_BUF), strlen(in)));
@@ -72,7 +71,7 @@ BOOL COption::AfterAnalysis()
 		// 拡張子削除
 		PathRemoveExtension(file_name);
 
-		out.Format(_T("%s.img"), file_name);
+		out.format("%s.img", file_name);
 		memset(s_BUF, 0, sizeof(s_BUF));
 
 		ret = TRUE;

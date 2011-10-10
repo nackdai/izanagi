@@ -1,6 +1,6 @@
-﻿#include "stdafx.h"
-#include "Preproc.h"
+﻿#include "Preproc.h"
 #include "Option.h"
+#include "izToolKit.h"
 
 // プリプロセッサエントリポイント
 extern "C"
@@ -19,7 +19,7 @@ int Preproc(COption& cOption)
 
 	// インクルードパス
 	{
-		std::vector<CString>::iterator it = cOption.includes.begin();
+		std::vector<izanagi::izanagi_tk::CString>::iterator it = cOption.includes.begin();
 		while (it != cOption.includes.end()) {
 			LPCSTR str = *it;
 			tvArgs.push_back("-I");
@@ -30,7 +30,7 @@ int Preproc(COption& cOption)
 
 	// プリプロセス定義
 	{
-		std::vector<CString>::iterator it = cOption.defines.begin();
+		std::vector<izanagi::izanagi_tk::CString>::iterator it = cOption.defines.begin();
 		while (it != cOption.defines.end()) {
 			LPCSTR str = *it;
 			tvArgs.push_back("-D");
@@ -65,7 +65,7 @@ int Preproc(COption& cOption)
 	int ret = preproc_main((int)tvArgs.size(), &tvArgs[0]);
 
 	if (ret > 0) {
-		CString tmp;
+		izanagi::izanagi_tk::CString tmp;
 		for (int i = 0; i < (int)tvArgs.size(); i++) {
 			tmp += tvArgs[0];
 			tmp += " ";
@@ -85,8 +85,8 @@ BOOL ExecWithPreprocMode(
 	COption& cOption)
 {
 	// コマンド作成
-	CString strCmd;
-	strCmd.Format(
+	izanagi::izanagi_tk::CString strCmd;
+	strCmd.format(
 		"%s -E %s -out_tmp %s",
 		lpszExe,
 		cOption.in_file,
@@ -98,7 +98,7 @@ BOOL ExecWithPreprocMode(
 
 	// インクルードパス
 	{
-		std::vector<CString>::iterator it = cOption.includes.begin();
+		std::vector<izanagi::izanagi_tk::CString>::iterator it = cOption.includes.begin();
 		while (it != cOption.includes.end()) {
 			strCmd += " -I ";
 			strCmd += *it;
@@ -108,7 +108,7 @@ BOOL ExecWithPreprocMode(
 
 	// プリプロセス定義
 	{
-		std::vector<CString>::iterator it = cOption.defines.begin();
+		std::vector<izanagi::izanagi_tk::CString>::iterator it = cOption.defines.begin();
 		while (it != cOption.defines.end()) {
 			strCmd += " -D ";
 			strCmd += *it;
@@ -119,11 +119,11 @@ BOOL ExecWithPreprocMode(
 	// 実行すっぞ
 	FILE* fp = _popen(strCmd, "w");
 	if (fp == NULL) {
-		ASSERT(FALSE);
+		IZ_ASSERT(IZ_FALSE);
 
 		// TODO
 
-		return FALSE;
+		return IZ_FALSE;
 	}
 
 	// ０で正常終了

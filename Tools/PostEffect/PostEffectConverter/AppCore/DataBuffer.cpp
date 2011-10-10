@@ -1,5 +1,4 @@
-﻿#include <stdafx.h>
-#include "DataBuffer.h"
+﻿#include "DataBuffer.h"
 
 CDataBuffer CDataBuffer::s_cInstance;
 

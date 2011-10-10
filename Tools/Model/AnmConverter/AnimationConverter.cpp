@@ -1,7 +1,6 @@
 ﻿// AnimationConverter.cpp : コンソール アプリケーションのエントリ ポイントを定義します。
 //
 
-#include "stdafx.h"
 #include "izModelLib.h"
 #include "izToolKit.h"
 #include "Option.h"
@@ -36,7 +35,7 @@ namespace {
 	}
 }
 
-int _tmain(int argc, _TCHAR* argv[])
+int main(int argc, char* argv[])
 {
 	COption option;
 

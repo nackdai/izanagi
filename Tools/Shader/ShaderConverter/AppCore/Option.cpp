@@ -1,5 +1,4 @@
-﻿#include <stdafx.h>
-#include "shlwapi.h"
+﻿#include "shlwapi.h"
 #include "Option.h"
 #include "Preproc.h"
 #include "izToolKit.h"
@@ -25,52 +24,52 @@ BOOL COption::Analysis(int argc, char* argv[])
 {
 	for (int i = 1; i < argc; i++) {
 		BOOL result = FALSE;
-		CString cmd(argv[i]);
+		izanagi::izanagi_tk::CString cmd(argv[i]);
 
 		if (i < argc - 1) {
-			if (result = (cmd == _T("-I"))) {
+			if (result = (cmd == "-I")) {
 				// -I
-				CString tmp;
-				tmp.Format(_T("%s"), argv[i + 1]);
+				izanagi::izanagi_tk::CString tmp;
+				tmp.format("%s", argv[i + 1]);
 
 				includes.push_back(tmp);
 
 				i++;
 			}
-			else if (result = (cmd == _T("-D"))) {
+			else if (result = (cmd == "-D")) {
 				// -D
-				CString tmp;
-				tmp.Format(_T("%s"), argv[i + 1]);
+				izanagi::izanagi_tk::CString tmp;
+				tmp.format("%s", argv[i + 1]);
 
 				defines.push_back(tmp);
 
 				i++;
 			}
-			else if (result = (cmd == _T("-obj"))) {
+			else if (result = (cmd == "-obj")) {
 				// -obj
-				obj_dir.Format(_T("%s"), argv[i + 1]);
+				obj_dir.format("%s", argv[i + 1]);
 				i++;
 			}
-			else if (result = (cmd == _T("-src"))) {
+			else if (result = (cmd == "-src")) {
 				// -src
-				in_file.Format(_T("%s"), argv[i + 1]);
+				in_file.format("%s", argv[i + 1]);
 				i++;
 			}
-			else if (result = (cmd == _T("-out_tmp"))) {
+			else if (result = (cmd == "-out_tmp")) {
 				// -out_tmp
-				out_file.Format(_T("%s"), argv[i + 1]);
+				out_file.format("%s", argv[i + 1]);
 				i++;
 			}
-			else if (result = (cmd == _T("-E"))) {
+			else if (result = (cmd == "-E")) {
 				// -E
-				in_file.Format(_T("%s"), argv[i + 1]);
+				in_file.format("%s", argv[i + 1]);
 				i++;
 
 				isPreproc = TRUE;
 			}
-			else if (result = (cmd == _T("-o"))) {
+			else if (result = (cmd == "-o")) {
 				// -o
-				export_dir.Format(_T("%s"), argv[i + 1]);
+				export_dir.format("%s", argv[i + 1]);
 				i++;
 			}
 		}
@@ -85,7 +84,7 @@ BOOL COption::Analysis(int argc, char* argv[])
 		if (!result) {
 			// TODO
 			printf("無効なオプションです[%s]\n\n", cmd);
-			ASSERT(FALSE);
+			IZ_ASSERT(IZ_FALSE);
 			return FALSE;
 		}
 	}
@@ -101,7 +100,7 @@ BOOL COption::Analysis(int argc, char* argv[])
 */
 BOOL COption::IsValid()
 {
-	if (in_file.IsEmpty()) {
+	if (in_file.empty()) {
 		// シェーダファイルが空
 		// TODO
 
@@ -115,7 +114,7 @@ BOOL COption::IsValid()
 	}
 
 	if (IsPreproc()) {
-		if (out_file.IsEmpty()) {
+		if (out_file.empty()) {
 			// 出力ファイルが空
 			// TODO
 
@@ -135,7 +134,7 @@ BOOL COption::IsValid()
 BOOL COption::EndAnalysis()
 {
 	// 環境変数の展開
-	if (!in_file.IsEmpty()) {
+	if (!in_file.empty()) {
 		VRETURN(
 			izanagi::izanagi_tk::CEnvVarHelper::ExpandEnvStrings(
 				s_BUF,
@@ -145,7 +144,7 @@ BOOL COption::EndAnalysis()
 
 #if 0
 	// 出力ファイル
-	if (out_file.IsEmpty() && !in_file.IsEmpty()) {
+	if (out_file.empty() && !in_file.empty()) {
 		FILL_ZERO(s_BUF, sizeof(s_BUF));
 
 		// 出力ファイルが空
@@ -157,25 +156,25 @@ BOOL COption::EndAnalysis()
 		// 拡張子削除
 		PathRemoveExtension(file_name);
 
-		out_file.Format(_T("%s.shd"), file_name);
+		out_file.format(_T("%s.shd"), file_name);
 	}
 #endif
 
 	// プリプロセス済みファイル
-	if (IsPreproc() && !out_file.IsEmpty()) {
+	if (IsPreproc() && !out_file.empty()) {
 		preproc_file = out_file;
 	}
-	else if (!in_file.IsEmpty()) {
+	else if (!in_file.empty()) {
 		FILL_ZERO(s_BUF, sizeof(s_BUF));
 
 		// 出力ファイルが空
 		memcpy(s_BUF, in_file, min(sizeof(s_BUF), strlen(in_file)));
 
 		// ファイル名取得
-		CString file_name(
+		izanagi::izanagi_tk::CString file_name(
 			izanagi::izanagi_tk::CFileUtility::GetFileNameFromPath(s_BUF));
 
-		CString ext(
+		izanagi::izanagi_tk::CString ext(
 			izanagi::izanagi_tk::CFileUtility::GetExtension(
 				s_BUF,
 				sizeof(s_BUF),
@@ -188,11 +187,11 @@ BOOL COption::EndAnalysis()
 				sizeof(s_BUF),
 				file_name));
 
-		if (obj_dir.IsEmpty()) {
-			preproc_file.Format(_T("%s.%s_"), s_BUF, ext);
+		if (obj_dir.empty()) {
+			preproc_file.format("%s.%s_", s_BUF, ext);
 		}
 		else {
-			CString tmp(s_BUF);
+			izanagi::izanagi_tk::CString tmp(s_BUF);
 
 			// 中間ディレクトリに出力する
 			VRETURN(
@@ -202,14 +201,14 @@ BOOL COption::EndAnalysis()
 					obj_dir,
 					tmp));
 
-			preproc_file.Format(_T("%s.%s_"), s_BUF, ext);
+			preproc_file.format("%s.%s_", s_BUF, ext);
 		}
 	}
 
 	// includeパスの環境変数の展開
-	std::vector<CString>::iterator it = includes.begin();
+	std::vector<izanagi::izanagi_tk::CString>::iterator it = includes.begin();
 	while (it != includes.end()) {
-		CString& str = *it;
+		izanagi::izanagi_tk::CString& str = *it;
 		
 		VRETURN(
 			izanagi::izanagi_tk::CEnvVarHelper::ExpandEnvStrings(
@@ -243,7 +242,7 @@ BOOL COption::PreprocInputFile()
 
 	if (!ret) {
 		// 失敗・・・
-		ASSERT(FALSE);
+		IZ_ASSERT(IZ_FALSE);
 
 		// TODO
 
@@ -251,7 +250,7 @@ BOOL COption::PreprocInputFile()
 	}
 
 	this->in_file = this->preproc_file;
-	this->preproc_file.Empty();
+	this->preproc_file.clear();
 
 	isPreproc = FALSE;
 

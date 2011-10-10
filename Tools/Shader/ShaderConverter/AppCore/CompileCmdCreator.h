@@ -2,6 +2,7 @@
 #define __SHADER_CONVERTER_COMPILE_CMD_CREATEOR_H__
 
 #include "Cg/cg.h"
+#include "izToolKit.h"
 
 /**
 * シェーダコンパイルタイプ
@@ -33,8 +34,8 @@ private:
 public:
 	// コマンド作成
 	void CreateCompileCommand(
-		CString& cmd,
-		CString& out,
+		izanagi::izanagi_tk::CString& cmd,
+		izanagi::izanagi_tk::CString& out,
 		COMPILE_TYPE type,
 		LPCSTR lpszCompileCommand,
 		LPCSTR lpszShaderFile,

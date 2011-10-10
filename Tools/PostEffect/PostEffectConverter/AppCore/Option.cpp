@@ -1,5 +1,4 @@
-﻿#include <stdafx.h>
-#include "shlwapi.h"
+﻿#include "shlwapi.h"
 #include "Option.h"
 #include "Preproc.h"
 #include "izToolKit.h"
@@ -25,23 +24,23 @@ BOOL COption::Analysis(int argc, char* argv[])
 {
 	for (int i = 1; i < argc; i++) {
 		BOOL result = FALSE;
-		CString cmd(argv[i]);
+		izanagi::izanagi_tk::CString cmd(argv[i]);
 
 		if (i < argc - 1) {
 			if (result = (cmd == "-c")) {
 				// -c
-				compiler.Format(_T("%s"), argv[i + 1]);
+				compiler.format("%s", argv[i + 1]);
 				i++;
 			}
 			else if (result = (cmd == "-co")) {
 				// -co
-				compileOpt.Format(_T("%s"), argv[i + 1]);
+				compileOpt.format("%s", argv[i + 1]);
 				i++;
 			}
 			else if (result = (cmd == "-I")) {
 				// -I
-				CString tmp;
-				tmp.Format(_T("%s"), argv[i + 1]);
+				izanagi::izanagi_tk::CString tmp;
+				tmp.format("%s", argv[i + 1]);
 
 				includes.push_back(tmp);
 
@@ -49,8 +48,8 @@ BOOL COption::Analysis(int argc, char* argv[])
 			}
 			else if (result = (cmd == "-D")) {
 				// -D
-				CString tmp;
-				tmp.Format(_T("%s"), argv[i + 1]);
+				izanagi::izanagi_tk::CString tmp;
+				tmp.format("%s", argv[i + 1]);
 
 				defines.push_back(tmp);
 
@@ -58,29 +57,29 @@ BOOL COption::Analysis(int argc, char* argv[])
 			}
 			else if (result = (cmd == "-obj")) {
 				// -obj
-				objDir.Format(_T("%s"), argv[i + 1]);
+				objDir.format("%s", argv[i + 1]);
 				i++;
 			}
 			else if (result = (cmd == "-src")) {
 				// -src
-				shader.Format(_T("%s"), argv[i + 1]);
+				shader.format("%s", argv[i + 1]);
 				i++;
 			}
 			else if (result = (cmd == "-o")) {
 				// -o
-				outFile.Format(_T("%s"), argv[i + 1]);
+				outFile.format("%s", argv[i + 1]);
 				i++;
 			}
 			else if (result = (cmd == "-E")) {
 				// -E
-				shader.Format(_T("%s"), argv[i + 1]);
+				shader.format("%s", argv[i + 1]);
 				i++;
 
 				isPreproc = TRUE;
 			}
 			else if (result = (cmd == "-l")) {
 				// -l
-				optionFile.Format(_T("%s"), argv[i + 1]);
+				optionFile.format("%s", argv[i + 1]);
 				i++;
 			}
 		}
@@ -96,19 +95,19 @@ BOOL COption::Analysis(int argc, char* argv[])
 		if (!result) {
 			// TODO
 			printf("無効なオプションです[%s]\n\n", cmd);
-			//ASSERT(FALSE);
+			//IZ_ASSERT(FALSE);
 			return FALSE;
 		}
 	}
 
-	if (optionFile.IsEmpty()) {
+	if (optionFile.empty()) {
 		// 設定ファイルが指定されていない
 		if (!AnalysisInternal()) {
 			return FALSE;
 		}
 	}
 	else {
-		std::vector<CString> tvArgsList;
+		std::vector<izanagi::izanagi_tk::CString> tvArgsList;
 
 		// 設定ファイル解析
 		if (AnalysisOptionFile(tvArgsList)) {
@@ -119,7 +118,7 @@ BOOL COption::Analysis(int argc, char* argv[])
 					// 最初にはダミーを入れる
 					args_tmp.push_back("");
 
-					std::vector<CString>::iterator it = tvArgsList.begin();
+					std::vector<izanagi::izanagi_tk::CString>::iterator it = tvArgsList.begin();
 					while (it != tvArgsList.end()) {
 						const char* p = *it;
 						args_tmp.push_back(const_cast<char*>(p));
@@ -129,7 +128,7 @@ BOOL COption::Analysis(int argc, char* argv[])
 
 				// 再度解析
 				if (!Analysis((int)args_tmp.size(), &args_tmp[0])) {
-					ASSERT(FALSE);
+					IZ_ASSERT(FALSE);
 
 					// TODO
 
@@ -138,7 +137,7 @@ BOOL COption::Analysis(int argc, char* argv[])
 			}
 			else {
 				// 設定ファイルが空て・・・
-				ASSERT(FALSE);
+				IZ_ASSERT(FALSE);
 
 				// TODO
 
@@ -155,7 +154,7 @@ BOOL COption::Analysis(int argc, char* argv[])
 */
 BOOL COption::IsValid()
 {
-	if (shader.IsEmpty()) {
+	if (shader.empty()) {
 		// シェーダファイルが空
 		// TODO
 
@@ -170,7 +169,7 @@ BOOL COption::IsValid()
 
 	if (!IsPreproc()) {
 		// プリプロセスモードのときは調べない
-		if (compiler.IsEmpty()) {
+		if (compiler.empty()) {
 			// コンパイルコマンドが空
 			// TODO
 
@@ -178,7 +177,7 @@ BOOL COption::IsValid()
 		}
 	}
 
-	if (outFile.IsEmpty()) {
+	if (outFile.empty()) {
 		// 出力ファイルが空
 		// TODO
 
@@ -202,10 +201,10 @@ BOOL COption::IsValid()
 
 namespace {
 	inline void _DeleteString(
-		std::vector<CString>& tvList,
+		std::vector<izanagi::izanagi_tk::CString>& tvList,
 		LPCSTR lpszStr)
 	{
-		std::vector<CString>::iterator it = tvList.begin();
+		std::vector<izanagi::izanagi_tk::CString>::iterator it = tvList.begin();
 		while (it != tvList.end()) {
 			if (*it == lpszStr) {
 				it = tvList.erase(it);
@@ -218,10 +217,10 @@ namespace {
 	}
 
 	inline void _PushString(
-		std::vector<CString>& tvList,
+		std::vector<izanagi::izanagi_tk::CString>& tvList,
 		LPCSTR lpszStr)
 	{
-		CString str(_T(lpszStr));
+		izanagi::izanagi_tk::CString str(lpszStr);
 		tvList.push_back(str);
 	}
 }	// namespace
@@ -234,42 +233,42 @@ BOOL COption::AnalysisInternal()
 	memset(s_BUF, 0, sizeof(s_BUF));
 
 	// 環境変数の展開
-	if (!shader.IsEmpty()) {
+	if (!shader.empty()) {
 		if (izanagi::izanagi_tk::CEnvVarHelper::ExpandEnvStrings(
 				s_BUF,
 				sizeof(s_BUF),
 				shader))
 		{
-			shader.Format(_T("%s"), s_BUF);
-			shader.Replace('\\', '/');
+			shader.format("%s", s_BUF);
+			shader.replace('\\', '/');
 			memset(s_BUF, 0, sizeof(s_BUF));
 		}
 	}
 
-	if (compiler.IsEmpty()) {
+	if (compiler.empty()) {
 		// コンパイラの指定がないので、デフォルトを指定
-		compiler.Format(_T("%%DXSDK_DIR%%Utilities/Bin/x86/fxc"));
+		compiler.format("%%DXSDK_DIR%%Utilities/Bin/x86/fxc");
 	}
 
-	if (!compiler.IsEmpty()) {
+	if (!compiler.empty()) {
 		if (izanagi::izanagi_tk::CEnvVarHelper::ExpandEnvStrings(
 				s_BUF,
 				sizeof(s_BUF),
 				compiler))
 		{
-			compiler.Format(_T("%s"), s_BUF);
-			compiler.Replace('\\', '/');
+			compiler.format("%s", s_BUF);
+			compiler.replace('\\', '/');
 			memset(s_BUF, 0, sizeof(s_BUF));
 		}
 
 		// コンパイルオプションとの結合
-		CString tmp;
-		tmp.Format(_T("\"\"%s\"\" %s"), compiler, compileOpt);
+		izanagi::izanagi_tk::CString tmp;
+		tmp.format("\"\"%s\"\" %s", compiler, compileOpt);
 		compiler = tmp;
 	}
 
 	// 出力ファイル
-	if (outFile.IsEmpty() && !shader.IsEmpty()) {
+	if (outFile.empty() && !shader.empty()) {
 		// 出力ファイルが空
 		IZ_BOOL result = (::sprintf_s(s_BUF, sizeof(s_BUF), "%s\0", shader) >= 0);
 		VRETURN(result);
@@ -281,11 +280,11 @@ BOOL COption::AnalysisInternal()
 		result = izanagi::izanagi_tk::CFileUtility::RemoveExtension(s_BUF, sizeof(s_BUF), file_name.c_str());
 		VRETURN(result);
 
-		outFile.Format(_T("%s.pes"), file_name);
+		outFile.format("%s.pes", file_name);
 		memset(s_BUF, 0, sizeof(s_BUF));
 	}
 
-	if (!shader.IsEmpty()) {
+	if (!shader.empty()) {
 		// プリプロセス済みファイル
 		{
 			// 出力ファイルが空
@@ -299,8 +298,8 @@ BOOL COption::AnalysisInternal()
 			result = izanagi::izanagi_tk::CFileUtility::RemoveExtension(s_BUF, sizeof(s_BUF), file_name.c_str());
 			VRETURN(result);
 
-			if (objDir.IsEmpty()) {
-				preprocFile.Format(_T("%s.fx_"), file_name);
+			if (objDir.empty()) {
+				preprocFile.format("%s.fx_", file_name);
 			}
 			else {
 				// 中間ディレクトリに出力する
@@ -310,7 +309,7 @@ BOOL COption::AnalysisInternal()
 					objDir,
 					file_name.c_str());
 
-				preprocFile.Format(_T("%s.fx_"), s_BUF);
+				preprocFile.format("%s.fx_", s_BUF);
 			}
 
 			memset(s_BUF, 0, sizeof(s_BUF));
@@ -325,14 +324,14 @@ BOOL COption::AnalysisInternal()
 				s_BUF,
 				sizeof(s_BUF),
 				baseDir.c_str(), shader);
-			shader.Format(_T("%s"), s_BUF);
+			shader.format("%s", s_BUF);
 		}
 	}
 
 	{
-		std::vector<CString>::iterator it = includes.begin();
+		std::vector<izanagi::izanagi_tk::CString>::iterator it = includes.begin();
 		while (it != includes.end()) {
-			CString& str = *it;
+			izanagi::izanagi_tk::CString& str = *it;
 
 			// includeパスの環境変数の展開
 			if (izanagi::izanagi_tk::CEnvVarHelper::ExpandEnvStrings(
@@ -340,8 +339,8 @@ BOOL COption::AnalysisInternal()
 					sizeof(s_BUF),
 					str))
 			{
-				str.Format(_T("%s"), s_BUF);
-				str.Replace('\\', '/');
+				str.format("%s", s_BUF);
+				str.replace('\\', '/');
 
 				if (!baseDir.empty()
 					&& izanagi::izanagi_tk::CFileUtility::IsRelativePath(str))
@@ -352,7 +351,7 @@ BOOL COption::AnalysisInternal()
 						sizeof(s_BUF),
 						baseDir.c_str(), str);
 
-					str.Format(_T("%s"), s_BUF);
+					str.format("%s", s_BUF);
 				}
 
 				memset(s_BUF, 0, sizeof(s_BUF));
@@ -399,30 +398,30 @@ void COption::Copy(const COption& rhs)
 */
 void COption::Clear()
 {
-	compiler.Empty();
-	objDir.Empty();
-	shader.Empty();
-	preprocFile.Empty();
-	outFile.Empty();
+	compiler.clear();
+	objDir.clear();
+	shader.clear();
+	preprocFile.clear();
+	outFile.clear();
 
 	defines.clear();
 	includes.clear();
 
 	isPreproc = FALSE;
 
-	optionFile.Empty();
+	optionFile.clear();
 }
 
 namespace {
 	// テンポラリファイル名を作成する
-	inline void _CreateTmpFileName(CString& strFile)
+	inline void _CreateTmpFileName(izanagi::izanagi_tk::CString& strFile)
 	{
 		// システム時間取得
 		SYSTEMTIME time;
 		::GetLocalTime(&time);
 
-		strFile.Format(
-			_T("__tmp_%d_%d_%d_%d_%d_%d__"),
+		strFile.format(
+			"__tmp_%d_%d_%d_%d_%d_%d__",
 			time.wYear,
 			time.wMonth,
 			time.wDay,
@@ -449,7 +448,7 @@ namespace {
 	// 文字列を分解
 	void _BreakString(
 		LPCSTR str,
-		std::vector<CString>& tvRet)
+		std::vector<izanagi::izanagi_tk::CString>& tvRet)
 	{
 		UINT len = (UINT)strlen(str);
 		UINT pos = 0;
@@ -463,8 +462,8 @@ namespace {
 			{
 				s_BUF[pos] = '\0';
 
-				CString str;
-				str.Format(_T("%s"), s_BUF);
+				izanagi::izanagi_tk::CString str;
+				str.format("%s", s_BUF);
 
 				tvRet.push_back(str);
 
@@ -489,14 +488,14 @@ namespace {
 /**
 * オプションファイル解析
 */
-BOOL COption::AnalysisOptionFile(std::vector<CString>& tvArgs)
+BOOL COption::AnalysisOptionFile(std::vector<izanagi::izanagi_tk::CString>& tvArgs)
 {
 	BOOL ret = TRUE;
 
 	FILE* fp = NULL;
 
 	// テンポラリファイル名を作成する
-	CString strTmp;
+	izanagi::izanagi_tk::CString strTmp;
 	_CreateTmpFileName(strTmp);
 		
 	// プリプロセスする
@@ -518,7 +517,7 @@ BOOL COption::AnalysisOptionFile(std::vector<CString>& tvArgs)
 
 		if (!ret) {
 			// 失敗・・・
-			ASSERT(FALSE);
+			IZ_ASSERT(FALSE);
 
 			// TODO
 
@@ -532,7 +531,7 @@ BOOL COption::AnalysisOptionFile(std::vector<CString>& tvArgs)
 	// ファイル開く
 	fopen_s(&fp, strTmp, "rt");
 	if (fp == NULL) {
-		ASSERT(FALSE);
+		IZ_ASSERT(FALSE);
 
 		// TODO
 
@@ -543,13 +542,13 @@ BOOL COption::AnalysisOptionFile(std::vector<CString>& tvArgs)
 
 	// リストファイルを解析
 	while (fgets(s_BUF, sizeof(s_BUF), fp) != NULL) {
-		CString str;
-		str.Format(_T("%s"), s_BUF);
+		izanagi::izanagi_tk::CString str;
+		str.format("%s", s_BUF);
 
 		if (strlen(str) > 0) {
 			if (_IsOptionString(str)) {
 				// オプションを表している文字列
-				std::vector<CString> tvTmp;
+				std::vector<izanagi::izanagi_tk::CString> tvTmp;
 
 				_BreakString(str, tvTmp);
 
@@ -571,8 +570,8 @@ __EXIT__:
 	// テンポラリファイルを削除
 	DeleteFile(strTmp);
 
-	if (!optionFile.IsEmpty()) {
-		optionFile.Replace("/", "\\");
+	if (!optionFile.empty()) {
+		optionFile.replace('/', '\\');
 		ret = izanagi::izanagi_tk::CFileUtility::GetPathWithoutFileName(s_BUF, sizeof(s_BUF), optionFile);
 		VRETURN(ret);
 
@@ -588,40 +587,40 @@ __EXIT__:
 /**
 * オプションを引数リストに戻す
 */
-void COption::ConvetOptionToArgs(std::vector<CString>& tvArgs)
+void COption::ConvetOptionToArgs(std::vector<izanagi::izanagi_tk::CString>& tvArgs)
 {
 	// コンパイルコマンド
-	if (!compiler.IsEmpty()) {
-		tvArgs.push_back(CString("-c"));
+	if (!compiler.empty()) {
+		tvArgs.push_back(izanagi::izanagi_tk::CString("-c"));
 		tvArgs.push_back(compiler);
 	}
 
 	// コンパイルオプション
-	if (!compileOpt.IsEmpty()) {
-		tvArgs.push_back(CString("-co"));
+	if (!compileOpt.empty()) {
+		tvArgs.push_back(izanagi::izanagi_tk::CString("-co"));
 		tvArgs.push_back(compileOpt);
 	}
 
 	// 中間ファイルディレクトリ
-	if (!objDir.IsEmpty()) {
-		tvArgs.push_back(CString("-obj"));
+	if (!objDir.empty()) {
+		tvArgs.push_back(izanagi::izanagi_tk::CString("-obj"));
 		tvArgs.push_back(objDir);
 	}
 
 	// コンパイルするシェーダ
-	if (!shader.IsEmpty()) {
-		tvArgs.push_back(CString("-src"));
+	if (!shader.empty()) {
+		tvArgs.push_back(izanagi::izanagi_tk::CString("-src"));
 		tvArgs.push_back(shader);
 	}
 
 	// 出力ファイル
-	if (!outFile.IsEmpty()) {
-		tvArgs.push_back(CString("-o"));
+	if (!outFile.empty()) {
+		tvArgs.push_back(izanagi::izanagi_tk::CString("-o"));
 		tvArgs.push_back(outFile);
 	}
 
 	// アセンブラ表示のためのコンパイルをするかどうか
 	if (isCompileAsm) {
-		tvArgs.push_back(CString("-asm"));
+		tvArgs.push_back(izanagi::izanagi_tk::CString("-asm"));
 	}
 }

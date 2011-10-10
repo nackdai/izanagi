@@ -1,5 +1,4 @@
-﻿#include <stdafx.h>
-#include <shlwapi.h>
+﻿#include <shlwapi.h>
 #include "Option.h"
 
 namespace {
@@ -16,24 +15,24 @@ BOOL COption::Analysis(int argc, char* argv[])
 {
 	for (int i = 1; i < argc; i++) {
 		BOOL result = FALSE;
-		CString cmd(argv[i]);
+		izanagi::izanagi_tk::CString cmd(argv[i]);
 
 		if (i < argc - 1) {
-			if (result = (cmd == _T("-i"))) {
+			if (result = (cmd == "-i")) {
 				// -i
-				in_dir.Format(_T("%s"), argv[++i]);
+				in_dir.format("%s", argv[++i]);
 			}
-			else if (result = (cmd == _T("-o"))) {
+			else if (result = (cmd == "-o")) {
 				// -o
-				output.Format(_T("%s"), argv[++i]);
+				output.format("%s", argv[++i]);
 			}
-			else if (result = (cmd == _T("-h"))) {
+			else if (result = (cmd == "-h")) {
 				// -h
-				file_id.Format(_T("%s"), argv[++i]);
+				file_id.format("%s", argv[++i]);
 			}
-			else if (result = (cmd == _T("-obj"))) {
+			else if (result = (cmd == "-obj")) {
 				// -obj
-				obj_dir.Format(_T("%s"), argv[++i]);
+				obj_dir.format("%s", argv[++i]);
 			}
 		}
 
@@ -44,14 +43,14 @@ BOOL COption::Analysis(int argc, char* argv[])
 		if (!result) {
 			// TODO
 			printf("無効なオプションです[%s]\n\n", cmd);
-			//ASSERT(FALSE);
+			//IZ_ASSERT(FALSE);
 			return FALSE;
 		}
 	}
 
 	// 後処理
 	if (!AfterAnalysis()) {
-		ASSERT(FALSE);
+		IZ_ASSERT(FALSE);
 		return FALSE;
 	}
 
@@ -68,15 +67,15 @@ BOOL COption::AfterAnalysis()
 	memset(s_BUF, 0, sizeof(s_BUF));
 
 	// ラベル
-	if (in_dir.IsEmpty()) {
+	if (in_dir.empty()) {
 		// 適当に決める
 
 		// システム時間取得
 		SYSTEMTIME time;
 		GetLocalTime(&time);
 
-		label.Format(
-			_T("__tmp_%d_%d_%d_%d_%d_%d__"),
+		label.format(
+			"__tmp_%d_%d_%d_%d_%d_%d__",
 			time.wYear,
 			time.wMonth,
 			time.wDay,
@@ -93,7 +92,7 @@ BOOL COption::AfterAnalysis()
 		// バッファを超えないようにする
 		pos = (pos >= cnt - 1 ? pos - cnt - 1 : 0);
 
-		sprintf_s(s_BUF, _T("%s"), p + pos);
+		sprintf_s(s_BUF, "%s", p + pos);
 
 		// PathFindFileNameが動くように
 		// パス末尾のデリミタを取り除く
@@ -105,12 +104,12 @@ BOOL COption::AfterAnalysis()
 
 		p = PathFindFileName(s_BUF);
 
-		label.Format(_T("%s"), p);
+		label.format("%s", p);
 	}
 
 	// 出力ファイル
-	if (output.IsEmpty()) {
-		sprintf_s(s_BUF, _T("%s"), label);
+	if (output.empty()) {
+		sprintf_s(s_BUF, "%s", label);
 
 		// ファイル名取得
 		LPSTR file_name = PathFindFileName(s_BUF);
@@ -118,28 +117,28 @@ BOOL COption::AfterAnalysis()
 		// 拡張子削除
 		PathRemoveExtension(file_name);
 
-		output.Format(_T("%s.arc"), file_name);
+		output.format("%s.arc", file_name);
 		memset(s_BUF, 0, sizeof(s_BUF));
 	}
 
 
 	// 入力ディレクトリ
-	if (in_dir.IsEmpty()) {
+	if (in_dir.empty()) {
 		// 入力ディレクトリが指定されていないので
 		// カレントディレクトリにする
-		in_dir.Format(_T("./"));
+		in_dir.format("./");
 	}
 
 	// 中間ディレクトリ
-	if (obj_dir.IsEmpty()) {
+	if (obj_dir.empty()) {
 		// 適当に決める
 
 		// システム時間取得
 		SYSTEMTIME time;
 		GetLocalTime(&time);
 
-		obj_dir.Format(
-			_T("__tmp_%d_%d_%d_%d_%d_%d__"),
+		obj_dir.format(
+			"__tmp_%d_%d_%d_%d_%d_%d__",
 			time.wYear,
 			time.wMonth,
 			time.wDay,

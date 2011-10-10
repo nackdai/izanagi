@@ -103,7 +103,7 @@ public:
 			ret = sizeof(float);
 		}
 		else {
-			ASSERT(FALSE);
+			IZ_ASSERT(IZ_FALSE);
 		}
 
 		return ret;

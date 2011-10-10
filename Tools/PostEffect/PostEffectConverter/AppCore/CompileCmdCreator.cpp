@@ -1,7 +1,7 @@
-﻿#include <stdafx.h>
-#include <vector>
+﻿#include <vector>
 #include "shlwapi.h"
 #include "CompileCmdCreator.h"
+#include "izToolKit.h"
 
 CCompileCmdCreator CCompileCmdCreator::s_cInstance;
 
@@ -30,8 +30,8 @@ static const char* COMPILED_ASM_VS_EXT = ".vsh";
 * コマンド作成
 */
 void CCompileCmdCreator::CreateCompileCommand(
-	CString& cmd,
-	CString& out,
+	izanagi::izanagi_tk::CString& cmd,
+	izanagi::izanagi_tk::CString& out,
 	COMPILE_TYPE type,
 	LPCSTR lpszCompileCommand,
 	LPCSTR lpszShaderFile,
@@ -48,23 +48,25 @@ void CCompileCmdCreator::CreateCompileCommand(
 	}
 
 	// プロファイル設定
-	CString strProfile(IsVS() ? "vs_2_a" : "ps_2_a");
+	izanagi::izanagi_tk::CString strProfile(IsVS() ? "vs_2_a" : "ps_2_a");
 	if (profile != CG_PROFILE_GENERIC) {
-		strProfile.Format(_T("%s"), cgGetProfileString(profile));
+		strProfile.format("%s", cgGetProfileString(profile));
 	}
 
 	// アセンブラ出力するかどうか
 	BOOL bIsAsm = (type == COMPILE_TYPE_SHADER_ASM);
 
-	cmd.Format(
-		bIsAsm ? _T("%s /Fh %s%s /E %s /T %s %s") : _T("%s /Fo %s%s /E %s /T %s %s"),
+	cmd.format(
+		bIsAsm
+			? "%s /Fh %s%s /E %s /T %s %s"
+			: "%s /Fo %s%s /E %s /T %s %s",
 		lpszCompileCommand,
 		out, lpszExt,
 		lpszEntryPoint,
 		strProfile,
 		lpszShaderFile);
 
-	if (!out.IsEmpty()) {
+	if (!out.empty()) {
 		// 出力ファイルに拡張子をつける
 		out += lpszExt;
 	}

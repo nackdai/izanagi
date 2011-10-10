@@ -74,10 +74,7 @@ IZ_BOOL COption::AnalysisInternal()
 							in.c_str());
 		VRETURN(result);
 
-		izanagi::izanagi_tk::CStringUtil::Format(
-			out,
-			"%s.anm",
-			BUF);
+		out.format("%s.anm", BUF);
 	}
 
 	if (fileType == FileTypeUnknown) {
