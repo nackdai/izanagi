@@ -1,8 +1,6 @@
 ﻿// ShaderConverter.cpp : コンソール アプリケーションのエントリ ポイントを定義します。
 //
 
-#include "ShaderConverter.h"
-
 #include <xercesc/util/PlatformUtils.hpp>
 #include <xercesc/sax2/SAX2XMLReader.hpp>
 #include <xercesc/sax2/XMLReaderFactory.hpp>
@@ -111,6 +109,8 @@ namespace {
 		return IZ_TRUE;
 	}
 }	// namespace
+
+#pragma optimize("", off) 
 
 int main(int argc, char* argv[])
 {

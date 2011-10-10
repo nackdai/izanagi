@@ -61,9 +61,10 @@ void CCompileCmdCreator::CreateCompileCommand(
 			? "%s /Fh %s%s /E %s /T %s %s"
 			: "%s /Fo %s%s /E %s /T %s %s",
 		lpszCompileCommand,
-		out, lpszExt,
+		out.c_str(),
+		lpszExt,
 		lpszEntryPoint,
-		strProfile,
+		strProfile.c_str(),
 		lpszShaderFile);
 
 	if (!out.empty()) {

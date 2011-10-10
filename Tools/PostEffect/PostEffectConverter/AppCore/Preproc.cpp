@@ -83,8 +83,8 @@ BOOL ExecWithPreprocMode(
 	strCmd.format(
 		"%s -E %s -o %s",
 		lpszExe,
-		cOption.shader,
-		cOption.preprocFile);
+		cOption.shader.c_str(),
+		cOption.preprocFile.c_str());
 
 	// インクルードパス
 	{

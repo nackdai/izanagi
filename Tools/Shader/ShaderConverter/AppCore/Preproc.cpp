@@ -89,8 +89,8 @@ BOOL ExecWithPreprocMode(
 	strCmd.format(
 		"%s -E %s -out_tmp %s",
 		lpszExe,
-		cOption.in_file,
-		cOption.preproc_file);
+		cOption.in_file.c_str(),
+		cOption.preproc_file.c_str());
 
 	if (cOption.isPreprocShader) {
 		strCmd += " -PreprocShd";

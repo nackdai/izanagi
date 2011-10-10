@@ -106,7 +106,7 @@ namespace {
 
 			// コンパイルオプションとの結合
 			izanagi::izanagi_tk::CString tmp;
-			tmp.format("\"\"%s\"\" %s", sConfig.compiler, sConfig.compile_opt);
+			tmp.format("\"\"%s\"\" %s", sConfig.compiler.c_str(), sConfig.compile_opt.c_str());
 			sConfig.compiler = tmp;
 		}
 
@@ -145,7 +145,7 @@ void CShaderConfigManager::EndtAnalysisShaderElement()
 {
 	IZ_ASSERT(m_pCurConfig != NULL);
 
-	IZ_ASSERT(_AnalysisConfig(*m_pCurConfig));
+	IZ_VERIFY(_AnalysisConfig(*m_pCurConfig));
 	m_pCurConfig = IZ_NULL;
 }
 
@@ -191,7 +191,7 @@ void CShaderConfigManager::AnalysisAttrSHD(const izanagi::izanagi_tk::CString& s
 			m_pCurConfig->shader = strVal;
 		}
 		else {
-			m_pCurConfig->shader.format("%s\\%s", m_BaseDir.c_str(), strVal);
+			m_pCurConfig->shader.format("%s\\%s", m_BaseDir.c_str(), strVal.c_str());
 		}
 #endif
 	}
@@ -221,7 +221,7 @@ void CShaderConfigManager::AnalysisAttrINCLUDE(const izanagi::izanagi_tk::CStrin
 		str = strVal;
 	}
 	else {
-		str.format("%s\\%s", m_BaseDir.c_str(), strVal);
+		str.format("%s\\%s", m_BaseDir.c_str(), strVal.c_str());
 	}
 #endif
 }
