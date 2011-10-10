@@ -2,6 +2,7 @@
 #define __UTILITY_H__
 
 #include <vector>
+#include "izToolKit.h"
 
 class CUtility {
 private:
@@ -13,7 +14,7 @@ public:
 	static void BreakPath(
 		LPCSTR lpszPath,
 		LPCSTR lpszRoot,
-		std::vector<CString>& tPathList);
+		std::vector<izanagi::izanagi_tk::CString>& tPathList);
 };
 
 #endif	// #if !defined(__UTILITY_H__)

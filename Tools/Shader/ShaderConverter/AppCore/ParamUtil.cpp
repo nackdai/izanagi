@@ -1,8 +1,8 @@
-﻿#include <stdafx.h>
-#include "ParamUtil.h"
+﻿#include "ParamUtil.h"
 #include "ShaderConverterUtil.h"
 #include "DataBuffer.h"
 #include "ShaderConverterUtil.h"
+#include "izToolKit.h"
 
 namespace {
 #if 0
@@ -97,7 +97,7 @@ namespace {
 
 		BOOL ret = TRUE;
 
-		CString str(cgGetAnnotationName(ann));
+		izanagi::izanagi_tk::CString str(cgGetAnnotationName(ann));
 
 		for (UINT i = 0; i < COUNTOF(AnnTable); i++) {
 			if (str == AnnTable[i].Name) {
@@ -132,7 +132,7 @@ namespace {
 		CGannotation ann = ::cgGetFirstParameterAnnotation(param);
 
 		while (ann != NULL) {
-			CString str(::cgGetAnnotationName(ann));
+			izanagi::izanagi_tk::CString str(::cgGetAnnotationName(ann));
 
 			if (str == "DoNotStrip") {
 				int num = 0;

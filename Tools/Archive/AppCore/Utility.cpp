@@ -1,11 +1,10 @@
-﻿#include <stdafx.h>
-#include "Utility.h"
+﻿#include "Utility.h"
 
 // パスを '/' or '\' で分解する
 void CUtility::BreakPath(
 	LPCSTR lpszPath,
 	LPCSTR lpszRoot,
-	std::vector<CString>& tPathList)
+	std::vector<izanagi::izanagi_tk::CString>& tPathList)
 {
 	static CHAR buf[1024];
 
@@ -20,8 +19,8 @@ void CUtility::BreakPath(
 			buf[nBufPos] = '\0';
 			nBufPos = 0;
 
-			CString str(buf);
-			if (str.GetLength() > 0) {
+			izanagi::izanagi_tk::CString str(buf);
+			if (str.length() > 0) {
 				if (!bEnableAdd && (str == lpszRoot)) {
 					bEnableAdd = TRUE;
 				}
@@ -37,6 +36,6 @@ void CUtility::BreakPath(
 
 	if (bEnableAdd && (nBufPos > 0)) {
 		buf[nBufPos] = '\0';
-		tPathList.push_back(CString(buf));
+		tPathList.push_back(izanagi::izanagi_tk::CString(buf));
 	}
 }

@@ -1,5 +1,4 @@
-﻿#include <stdafx.h>
-#include <vector>
+﻿#include <vector>
 #include "ArchiveBuilderImpl.h"
 #include "FileTree.h"
 #include "FileIdCreator.h"
@@ -29,15 +28,15 @@ namespace {
 	}
 
 	inline void _CombinePath(
-		CString& strRet,
-		const std::vector<CString>& tPathList)
+		izanagi::izanagi_tk::CString& strRet,
+		const std::vector<izanagi::izanagi_tk::CString>& tPathList)
 	{
-		strRet.Empty();
+		strRet.clear();
 
-		std::vector<CString>::const_iterator it = tPathList.begin();
+		std::vector<izanagi::izanagi_tk::CString>::const_iterator it = tPathList.begin();
 
 		for (UINT cnt = 0; it != tPathList.end(); it++, cnt++) {
-			const CString& str = *it;
+			const izanagi::izanagi_tk::CString& str = *it;
 
 			if (cnt == 0) {
 				strRet = str;
@@ -72,8 +71,8 @@ BOOL CStringExporter::Export(
 	LPCSTR lpszPath,
 	LPCSTR lpszRoot)
 {
-	CString strPath;
-	std::vector<CString> tPathList;
+	izanagi::izanagi_tk::CString strPath;
+	std::vector<izanagi::izanagi_tk::CString> tPathList;
 
 	// パスを '/' or '\' で分解する
 	CUtility::BreakPath(
@@ -85,7 +84,7 @@ BOOL CStringExporter::Export(
 		strPath,
 		tPathList);
 
-	size_t len = strPath.GetLength();
+	size_t len = strPath.length();
 
 	IZ_OUTPUT_WRITE_VRETURN(m_pOut, strPath, 0, len);
 
@@ -104,7 +103,7 @@ namespace {
 		FILE* fp = NULL;
 
 		fopen_s(&fp, lpszFile, "rb");
-		ASSERT(fp != NULL);
+		IZ_ASSERT(fp != NULL);
 
 		fseek(fp, 0, SEEK_END);
 		UINT ret = ftell(fp);

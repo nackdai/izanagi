@@ -1,8 +1,10 @@
 ﻿#if !defined(__FILE_DEFS_H__)
 #define __FILE_DEFS_H__
 
+#include "izToolKit.h"
+
 struct SFile {
-	CString path;	// パス
+	izanagi::izanagi_tk::CString path;	// パス
 
 	struct {
 		UINT isCompress	: 1;	// 圧縮

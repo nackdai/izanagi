@@ -67,10 +67,7 @@ IZ_BOOL COption::AnalysisInternal()
 							in.c_str());
 		VRETURN(result);
 
-		izanagi::izanagi_tk::CStringUtil::Format(
-			out,
-			"%s.mtrl",
-			BUF);
+		out.format("%s.mtrl", BUF);
 	}
 
 	if (fileType == FileTypeUnknown) {
@@ -111,10 +108,7 @@ IZ_BOOL COption::RemoveExtFromExportFileName()
 						out.c_str());
 	VRETURN(result);
 
-	izanagi::izanagi_tk::CStringUtil::Format(
-		out,
-		"%s",
-		BUF);
+	out.format("%s", BUF);
 
 	return IZ_TRUE;
 }

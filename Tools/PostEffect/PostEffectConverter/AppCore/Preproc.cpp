@@ -1,5 +1,4 @@
-﻿#include "stdafx.h"
-#include "Preproc.h"
+﻿#include "Preproc.h"
 #include "Option.h"
 
 // プリプロセッサエントリポイント
@@ -19,22 +18,22 @@ int Preproc(COption& cOption)
 
 	// インクルードパス
 	{
-		std::vector<CString>::iterator it = cOption.includes.begin();
+		std::vector<izanagi::izanagi_tk::CString>::iterator it = cOption.includes.begin();
 		while (it != cOption.includes.end()) {
-			LPCSTR str = *it;
+			izanagi::izanagi_tk::CString& str = *it;
 			tvArgs.push_back("-I");
-			tvArgs.push_back(const_cast<char*>(str));
+			tvArgs.push_back(const_cast<char*>(str.c_str()));
 			it++;
 		}
 	}
 
 	// プリプロセス定義
 	{
-		std::vector<CString>::iterator it = cOption.defines.begin();
+		std::vector<izanagi::izanagi_tk::CString>::iterator it = cOption.defines.begin();
 		while (it != cOption.defines.end()) {
-			LPCSTR str = *it;
+			izanagi::izanagi_tk::CString& str = *it;
 			tvArgs.push_back("-D");
-			tvArgs.push_back(const_cast<char*>(str));
+			tvArgs.push_back(const_cast<char*>(str.c_str()));
 			it++;
 		}
 	}
@@ -47,20 +46,20 @@ int Preproc(COption& cOption)
 
 	// 入力ファイル
 	{
-		LPCSTR tmp = cOption.shader;
-		tvArgs.push_back(const_cast<char*>(tmp));
+		izanagi::izanagi_tk::CString& tmp = cOption.shader;
+		tvArgs.push_back(const_cast<char*>(tmp.c_str()));
 	}
 
 	// 出力ファイル
 	{
-		LPCSTR tmp = cOption.outFile;
-		tvArgs.push_back(const_cast<char*>(tmp));
+		izanagi::izanagi_tk::CString& tmp = cOption.outFile;
+		tvArgs.push_back(const_cast<char*>(tmp.c_str()));
 	}
 
 	int ret = preproc_main((int)tvArgs.size(), &tvArgs[0]);
 
 	if (ret > 0) {
-		CString tmp;
+		izanagi::izanagi_tk::CString tmp;
 		for (int i = 0; i < (int)tvArgs.size(); i++) {
 			tmp += tvArgs[0];
 			tmp += " ";
@@ -80,8 +79,8 @@ BOOL ExecWithPreprocMode(
 	COption& cOption)
 {
 	// コマンド作成
-	CString strCmd;
-	strCmd.Format(
+	izanagi::izanagi_tk::CString strCmd;
+	strCmd.format(
 		"%s -E %s -o %s",
 		lpszExe,
 		cOption.shader,
@@ -89,7 +88,7 @@ BOOL ExecWithPreprocMode(
 
 	// インクルードパス
 	{
-		std::vector<CString>::iterator it = cOption.includes.begin();
+		std::vector<izanagi::izanagi_tk::CString>::iterator it = cOption.includes.begin();
 		while (it != cOption.includes.end()) {
 			strCmd += " -I ";
 			strCmd += *it;
@@ -99,7 +98,7 @@ BOOL ExecWithPreprocMode(
 
 	// プリプロセス定義
 	{
-		std::vector<CString>::iterator it = cOption.defines.begin();
+		std::vector<izanagi::izanagi_tk::CString>::iterator it = cOption.defines.begin();
 		while (it != cOption.defines.end()) {
 			strCmd += " -D ";
 			strCmd += *it;
@@ -108,9 +107,9 @@ BOOL ExecWithPreprocMode(
 	}
 
 	// 実行すっぞ
-	FILE* fp = _popen(strCmd, "w");
+	FILE* fp = _popen(strCmd.c_str(), "w");
 	if (fp == NULL) {
-		ASSERT(FALSE);
+		IZ_ASSERT(FALSE);
 
 		// TODO
 

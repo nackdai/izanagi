@@ -2,8 +2,8 @@
 #define __IZANAGI_TOOL_KIT_SYSTEM_ENV_VAR_HELPER_H__
 
 #include <windows.h>
+#include <vector>
 #include "izDefs.h"
-#include "../../util/StringBuffer.h"
 
 namespace izanagi {
 namespace izanagi_tk {
@@ -16,9 +16,11 @@ namespace izanagi_tk {
 		// 環境変数が有効かどうか
 		static IZ_BOOL IsValidEnvVar(IZ_PCSTR lpszName)
 		{
-			CStringBuffer::ClearBuf();
+			// TODO
+			// このくらいの長さがあれば十分？
+			std::vector<char> tmp(1024);
 
-			IZ_CHAR* pBuf = CStringBuffer::GetBuf();
+			char* pBuf = &tmp[0];
 			DWORD size = ::GetEnvironmentVariable(lpszName, pBuf, sizeof(lpszName));
 			return (size > 0);
 		}

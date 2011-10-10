@@ -1,8 +1,8 @@
-﻿#include <stdafx.h>
-#include "TextureUtil.h"
+﻿#include "TextureUtil.h"
+#include "izToolKit.h"
 
 namespace {
-	// Format
+	// format
 	BOOL _SetValueFormat(izanagi::S_PES_TEXTURE_ANN& sAnn, CGannotation ann)
 	{
 		static struct {
@@ -21,7 +21,7 @@ namespace {
 		VRETURN(fmt != NULL);
 
 		for (IZ_UINT i = 0; i < COUNTOF(tbl); i++) {
-			if (izanagi::izanagi_tk::CStringUtil::CmpStr(fmt, tbl[i].strFmt)) {
+			if (izanagi::izanagi_tk::CString::CmpStr(fmt, tbl[i].strFmt)) {
 				sAnn.fmt = tbl[i].fmt;
 				break;
 			}
@@ -94,7 +94,7 @@ namespace {
 		VRETURN(fmt != NULL);
 
 		for (IZ_UINT i = 0; i < COUNTOF(tbl); i++) {
-			if (izanagi::izanagi_tk::CStringUtil::CmpStr(fmt, tbl[i].strFmt)) {
+			if (izanagi::izanagi_tk::CString::CmpStr(fmt, tbl[i].strFmt)) {
 				sAnn.typeRsc = tbl[i].type;
 				break;
 			}
@@ -112,7 +112,7 @@ namespace {
 			const char* Name;
 			BOOL (*Func)(izanagi::S_PES_TEXTURE_ANN&, CGannotation);
 		} AnnTable[] = {
-			{"Format", _SetValueFormat},					// ピクセルフォーマット
+			{"format", _SetValueFormat},					// ピクセルフォーマット
 			{"Dimensions", _SetValueDimensions},			// サイズ
 			{"ViewportRatio", _SetValueViewportRatio},		// 比率
 			{"IsRenderTarget", _SetValueIsRenderTarget},	// レンダーターゲットか
@@ -122,7 +122,7 @@ namespace {
 
 		BOOL ret = TRUE;
 
-		CString str(cgGetAnnotationName(ann));
+		izanagi::izanagi_tk::CString str(cgGetAnnotationName(ann));
 
 		for (UINT i = 0; i < COUNTOF(AnnTable); i++) {
 			if (str == AnnTable[i].Name) {

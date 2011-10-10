@@ -1,7 +1,10 @@
 ﻿// ImageBuilder.cpp : コンソール アプリケーションのエントリ ポイントを定義します。
 //
 
-#include "stdafx.h"
+#ifndef _WIN32_WINNT		// Windows XP 以降のバージョンに固有の機能の使用を許可します。                   
+#define _WIN32_WINNT 0x0501	// これを Windows の他のバージョン向けに適切な値に変更してください。
+#endif						
+
 #include "ImageBuilder.h"
 
 #include <xercesc/util/PlatformUtils.hpp>
@@ -16,11 +19,6 @@
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
-
-
-// 唯一のアプリケーション オブジェクトです。
-
-CWinApp theApp;
 
 using namespace std;
 
@@ -51,83 +49,73 @@ static IZ_CHAR BUF[MAX_PATH];
 #undef VGOTO
 #endif
 
-#define VGOTO(b)	if (!(b)) { ASSERT(FALSE); nRetCode = 1; goto __EXIT__; }
+#define VGOTO(b)	if (!(b)) { IZ_ASSERT(FALSE); nRetCode = 1; goto __EXIT__; }
 
-int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
+int main(int argc, char* argv[])
 {
 	int nRetCode = 0;
 
-	// MFC を初期化して、エラーの場合は結果を印刷します。
-	if (!AfxWinInit(::GetModuleHandle(NULL), NULL, ::GetCommandLine(), 0))
-	{
-		// TODO: 必要に応じてエラー コードを変更してください。
-		_tprintf(_T("致命的なエラー: MFC の初期化ができませんでした。\n"));
-		nRetCode = 1;
-	}
-	else
-	{
-		// エラーストリング表示用関数セット
-		izanagi::izanagi_tk::CException::SetPrintLogFunc(_PrintString);
+	// エラーストリング表示用関数セット
+	izanagi::izanagi_tk::CException::SetPrintLogFunc(_PrintString);
 
-		COption cOption;
+	COption cOption;
 
-		// ウインドウハンドル取得
-		HWND hWnd = ::GetConsoleWindow();
-		VGOTO(hWnd != NULL);
+	// ウインドウハンドル取得
+	HWND hWnd = ::GetConsoleWindow();
+	VGOTO(hWnd != NULL);
 
-		// グラフィックスデバイス作成
-		izanagi::izanagi_tk::CGraphicsDeviceLite* pDevice = IZ_NULL;
-		pDevice = izanagi::izanagi_tk::CGraphicsDeviceLite::CreateGraphicsDeviceLight(hWnd);
-		VGOTO(pDevice != NULL);
+	// グラフィックスデバイス作成
+	izanagi::izanagi_tk::CGraphicsDeviceLite* pDevice = IZ_NULL;
+	pDevice = izanagi::izanagi_tk::CGraphicsDeviceLite::CreateGraphicsDeviceLight(hWnd);
+	VGOTO(pDevice != NULL);
 
-		// オプション解析
-		BOOL result = cOption.Analysis(argc, argv);
-		VGOTO(result);
-		VGOTO(cOption.IsValid());
+	// オプション解析
+	BOOL result = cOption.Analysis(argc, argv);
+	VGOTO(result);
+	VGOTO(cOption.IsValid());
 
-		try {
-			// 入力XMLのパス部分のみを取得
-			izanagi::izanagi_tk::CFileUtility::GetPathWithoutFileName(
-				BUF,
-				COUNTOF(BUF),
-				cOption.in);
+	try {
+		// 入力XMLのパス部分のみを取得
+		izanagi::izanagi_tk::CFileUtility::GetPathWithoutFileName(
+			BUF,
+			COUNTOF(BUF),
+			cOption.in);
 
 #if 0
-			// 絶対パスに変更
-			{
-				CString tmp;
-				tmp.Format(_T("%s"), BUF);
-				BOOL result = (_fullpath(BUF, tmp, COUNTOF(BUF)) != NULL);
-				VGOTO(result);
-			}
-#endif
-
-			// XMLに記述されているイメージデータがXMLからの相対パスになるようにする
-			CImageBuilder::GetInstance().SetBasePath(BUF);
-
-			xercesc::XMLPlatformUtils::Initialize();
-
-			xercesc::SAX2XMLReader* parser = xercesc::XMLReaderFactory::createXMLReader();
-			
-			parser->setContentHandler(&CImageBuilder::GetInstance());
-
-			parser->parse(cOption.in);
-
-			result = CImageBuilder::GetInstance().BuildIMG(cOption.out);
+		// 絶対パスに変更
+		{
+			izanagi::izanagi_tk::CString tmp;
+			tmp.Format("%s", BUF);
+			BOOL result = (_fullpath(BUF, tmp, COUNTOF(BUF)) != NULL);
 			VGOTO(result);
 		}
-		catch (izanagi::izanagi_tk::CException* e) {
-			e->PrintLog();
-			VGOTO(FALSE);
-		}
-		catch (...) {
-			printf("Failed\n");
-			VGOTO(FALSE);
-		}
+#endif
+
+		// XMLに記述されているイメージデータがXMLからの相対パスになるようにする
+		CImageBuilder::GetInstance().SetBasePath(BUF);
+
+		xercesc::XMLPlatformUtils::Initialize();
+
+		xercesc::SAX2XMLReader* parser = xercesc::XMLReaderFactory::createXMLReader();
+		
+		parser->setContentHandler(&CImageBuilder::GetInstance());
+
+		parser->parse(cOption.in);
+
+		result = CImageBuilder::GetInstance().BuildIMG(cOption.out);
+		VGOTO(result);
+	}
+	catch (izanagi::izanagi_tk::CException* e) {
+		e->PrintLog();
+		VGOTO(FALSE);
+	}
+	catch (...) {
+		printf("Failed\n");
+		VGOTO(FALSE);
+	}
 
 __EXIT__:
-		SAFE_RELEASE(pDevice);
-	}
+	SAFE_RELEASE(pDevice);
 
 	return nRetCode;
 }

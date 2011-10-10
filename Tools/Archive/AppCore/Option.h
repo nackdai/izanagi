@@ -1,13 +1,15 @@
 ﻿#if !defined(__OPTION_H__)
 #define __OPTION_H__
 
-struct SOption {
-	CString in_dir;		// 入力ディレクトリ
+#include "izToolKit.h"
 
-	CString label;
-	CString output;		// 出力
-	CString file_id;	// ファイルID
-	CString obj_dir;	// 中間データ出力ディレクトリ
+struct SOption {
+	izanagi::izanagi_tk::CString in_dir;		// 入力ディレクトリ
+
+	izanagi::izanagi_tk::CString label;
+	izanagi::izanagi_tk::CString output;		// 出力
+	izanagi::izanagi_tk::CString file_id;	// ファイルID
+	izanagi::izanagi_tk::CString obj_dir;	// 中間データ出力ディレクトリ
 };
 
 class COption : public SOption {

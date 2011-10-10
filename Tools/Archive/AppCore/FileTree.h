@@ -36,7 +36,7 @@ private:
 	std::map<izanagi::CKey, SFile> m_FileInfoMap;
 	std::vector<SFile> m_FileList;
 
-	std::vector<CString> m_TmpDirList;
+	std::vector<izanagi::izanagi_tk::CString> m_TmpDirList;
 };
 
 #endif	// #if !defined(__FILE_TREE_H__)

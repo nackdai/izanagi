@@ -1,6 +1,8 @@
 ﻿#if !defined(__SHADER_CONVERTER_PREPROC_H__)
 #define __SHADER_CONVERTER_PREPROC_H__
 
+#include "izToolKit.h"
+
 class COption;
 
 /**
@@ -11,7 +13,7 @@ extern int Preproc(COption& cOption);
 /**
 * 自分自身をプリプロセス処理モードで呼び出す
 */
-extern BOOL ExecWithPreprocMode(
+extern IZ_BOOL ExecWithPreprocMode(
 	const char* lpszExe,
 	COption& cOption);
 

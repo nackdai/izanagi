@@ -55,7 +55,7 @@ protected:
 	BOOL DoNotRemoveParam(CGparameter param);
 
 	void ConvertFunctorArgsStrToIndex(
-		const std::vector<CString>& tvFunctorArgSList,
+		const std::vector<izanagi::izanagi_tk::CString>& tvFunctorArgSList,
 		izanagi::S_PES_PASS_ANN& sParamAnn);
 
 	BOOL ExportUsedParamAndSamplerIdxByPass();
@@ -92,10 +92,10 @@ private:
 
 	izanagi::CFileOutputStream m_Out;
 
-	std::vector<CString> m_CompiledPSList;
+	std::vector<izanagi::izanagi_tk::CString> m_CompiledPSList;
 
 	struct SVSInfo {
-		CString file;
+		izanagi::izanagi_tk::CString file;
 		izanagi::E_POSTEFFECT_VTX_SHADER type;
 	};
 

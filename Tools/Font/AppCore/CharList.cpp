@@ -63,7 +63,7 @@ void CCharList::Register(
 	// ファイルの中身を全て読み込む
 	{
 		// 読み込みサイズ確定
-		IZ_UINT nSize = pIn->GetSize();
+		IZ_UINT nSize = (IZ_UINT)pIn->GetSize();
 		IZ_ASSERT(nSize > 0);
 
 		// バッファ確保

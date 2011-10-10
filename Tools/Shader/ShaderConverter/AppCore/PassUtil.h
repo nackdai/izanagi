@@ -4,6 +4,7 @@
 #include <vector>
 #include <Cg/cg.h>
 #include "izShader.h"
+#include "izToolKit.h"
 
 class CPassUtil {
 public:
@@ -31,7 +32,7 @@ public:
 
 	static void GetFunctorArgsString(
 		CGpass pass,
-		std::vector<CString>& tvRet);
+		std::vector<izanagi::izanagi_tk::CString>& tvRet);
 
 	static IZ_PCSTR GetFunctorName(CGpass pass);
 };

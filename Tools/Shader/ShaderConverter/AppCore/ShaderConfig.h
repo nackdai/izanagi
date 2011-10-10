@@ -10,22 +10,22 @@
 /////////////////////////////////////////////
 
 struct SShaderConfig {
-	CString compiler;		// コンパイルコマンド
-	CString compile_opt;	// コンパイルオプション
+	izanagi::izanagi_tk::CString compiler;		// コンパイルコマンド
+	izanagi::izanagi_tk::CString compile_opt;	// コンパイルオプション
 
-	CString shader;			// コンパイルするシェーダ
-	CString out;
+	izanagi::izanagi_tk::CString shader;			// コンパイルするシェーダ
+	izanagi::izanagi_tk::CString out;
 
-	std::vector<CString> defines;	// -Dオプションで指定されたもの
-	std::vector<CString> includes;	// -Iオプションで指定されたもの
+	std::vector<izanagi::izanagi_tk::CString> defines;	// -Dオプションで指定されたもの
+	std::vector<izanagi::izanagi_tk::CString> includes;	// -Iオプションで指定されたもの
 
 	struct {
 		UINT isCompileAsm	: 1;	// アセンブラ表示のためのコンパイルをするかどうか
 	};
 
-	CString preproc_file;	// プリプロセス済みファイル
+	izanagi::izanagi_tk::CString preproc_file;	// プリプロセス済みファイル
 
-	CString name;
+	izanagi::izanagi_tk::CString name;
 };
 
 /////////////////////////////////////////////
@@ -74,14 +74,14 @@ private:
 	void BeginAnalysisShaderElement();
 	void EndtAnalysisShaderElement();
 
-	typedef void (CShaderConfigManager::*AnalysisAttrFunc)(const CString&, const CString&);
+	typedef void (CShaderConfigManager::*AnalysisAttrFunc)(const izanagi::izanagi_tk::CString&, const izanagi::izanagi_tk::CString&);
 	inline void AnalysisAttr(
 		const xercesc::Attributes& attrs,
 		AnalysisAttrFunc func);
 
-	void AnalysisAttrSHD(const CString& strAttrName, const CString& strVal);
-	void AnalysisAttrINCLUDE(const CString& strAttrName, const CString& strVal);
-	void AnalysisAttrDEFINE(const CString& strAttrName, const CString& strVal);
+	void AnalysisAttrSHD(const izanagi::izanagi_tk::CString& strAttrName, const izanagi::izanagi_tk::CString& strVal);
+	void AnalysisAttrINCLUDE(const izanagi::izanagi_tk::CString& strAttrName, const izanagi::izanagi_tk::CString& strVal);
+	void AnalysisAttrDEFINE(const izanagi::izanagi_tk::CString& strAttrName, const izanagi::izanagi_tk::CString& strVal);
 
 private:
 	std::string m_BaseDir;

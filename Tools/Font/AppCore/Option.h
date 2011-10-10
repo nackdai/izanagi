@@ -8,13 +8,13 @@
 
 struct SOption : public CFontConverter::SOption {
 	// 入力リストファイル
-	CString list_file;
+	izanagi::izanagi_tk::CString list_file;
 
 	// 入力リストファイルを解析した入力ファイルのリスト
-	std::vector<CString> in_file_list;
+	std::vector<izanagi::izanagi_tk::CString> in_file_list;
 
 	// 出力ファイル
-	CString out_file;
+	izanagi::izanagi_tk::CString out_file;
 };
 
 class COption : public SOption {

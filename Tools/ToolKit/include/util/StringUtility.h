@@ -1,59 +1,46 @@
 ﻿#if !defined(__IZANAGI_TOOL_KIT_UTIL_STRING_UTILITY_H__)
 #define __IZANAGI_TOOL_KIT_UTIL_STRING_UTILITY_H__
 
+#include <string>
+#include <vector>
 #include "izDefs.h"
 
 namespace izanagi {
 namespace izanagi_tk {
 	/**
-	*/
-	class CStringUtil {
-	private:
-		CStringUtil();
-		~CStringUtil();
+	 */
+	class CString : public std::string {
+	public:
+		CString() {}
+		~CString() {}
+
+		CString(const char* str) : std::string(str) {}
 
 	public:
-		static IZ_BOOL CmpStr(IZ_PCSTR str0, IZ_PCSTR str1)
-		{
-			size_t len0 = strlen(str0);
-			size_t len1 = strlen(str1);
+		static IZ_BOOL CmpStr(const char* str0, const char* str1);
 
-			if (len0 != len1) {
-				return IZ_FALSE;
-			}
+		void format(const char* format, ...);
 
-			return (memcmp(str0, str1, len0) == 0);
-		}
+		void replace(char chOld, char chNew);
 
-		static void Format(
-			std::string& dst,
-			IZ_PCSTR format, ...)
-		{
-			static std::vector<izChar> tmp(1000);
-        
-			va_list args;
-			va_start(args, format);
+		const CString& make_lower();
+		const CString& make_upper();
 
-			va_list src = args;
-	        
-			while (IZ_TRUE) {
-				args = src;
-	            
-				if(IZ_VSPRINTF(&tmp[0], tmp.size(), format, args) == -1) {
-					tmp.resize(tmp.size() * 2);
-				}
-				else{
-					break;
-				}
-			}
+		void clear();
 
-			va_end(args);
+		int reverse_find(char ch);
 
-			tmp.push_back('\0');
-			dst = &tmp[0];
-		}
+		int compare_no_case(const char* str);
+
+		operator const char*();
+		operator const char*() const;
+
+		operator const void*() const;
+
+		const CString& operator=(const char* rhs);
+
+		bool operator==(char rhs);
 	};
-
 }	// namespace izanagi_tk
 }	// namespace izanagi
 

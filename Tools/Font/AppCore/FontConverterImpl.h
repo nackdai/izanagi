@@ -3,8 +3,7 @@
 
 #include <vector>
 #include <set>
-#include "ToolKitGraphDefs.h"
-#include "ToolKitIoDefs.h"
+#include "izToolKit.h"
 #include "izFont.h"
 
 #define _TEX_FMT_A8_
@@ -25,7 +24,7 @@ public:
 		// アンチエイリアス
 		IZ_UINT typeAA;
 
-		CString fontFace;
+		izanagi::izanagi_tk::CString fontFace;
 
 		izanagi::E_FONT_CHAR_ENCODE charEncode;
 

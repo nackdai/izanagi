@@ -3,11 +3,12 @@
 
 #include <vector>
 #include "izSceneGraph.h"
+#include "izToolKit.h"
 
 struct SImageInfo {
 	izanagi::S_IMG_TEX_HEADER info;
 
-	CString path;
+	izanagi::izanagi_tk::CString path;
 	INT tex_idx;
 
 	SImageInfo()

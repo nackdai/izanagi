@@ -2,22 +2,23 @@
 #define __SHADER_CONVERTER_OPTION_H__
 
 #include <vector>
+#include "izToolKit.h"
 
 /**
 * オプション構造体
 */
 struct SOption {
-	CString in_file;
+	izanagi::izanagi_tk::CString in_file;
 
-	std::vector<CString> includes;
-	std::vector<CString> defines;
+	std::vector<izanagi::izanagi_tk::CString> includes;
+	std::vector<izanagi::izanagi_tk::CString> defines;
 
-	CString preproc_file;	// プリプロセス済みファイル
+	izanagi::izanagi_tk::CString preproc_file;	// プリプロセス済みファイル
 
-	CString out_file;		// 出力ファイル
+	izanagi::izanagi_tk::CString out_file;		// 出力ファイル
 
-	CString obj_dir;		// 中間ファイルディレクトリ
-	CString export_dir;
+	izanagi::izanagi_tk::CString obj_dir;		// 中間ファイルディレクトリ
+	izanagi::izanagi_tk::CString export_dir;
 
 	struct {
 		UINT isPreproc			: 1;	// プリプロセス処理のみを行うかどうか

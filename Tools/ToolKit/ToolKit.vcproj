@@ -41,6 +41,7 @@
 				Optimization="0"
 				AdditionalIncludeDirectories=""
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
+				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
 			/>
 			<Tool
@@ -54,6 +55,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				AdditionalDependencies="shlwapi.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -99,7 +101,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="../../Libs/include;include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
-				RuntimeLibrary="0"
+				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="true"
@@ -116,6 +118,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				AdditionalDependencies="shlwapi.lib"
 				OutputFile="$(ProjectName).lib"
 			/>
 			<Tool
@@ -249,10 +252,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\include\util\StringBuffer.h"
-					>
-				</File>
-				<File
 					RelativePath=".\include\util\StringUtility.h"
 					>
 				</File>
@@ -265,7 +264,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\source\util\StringBuffer.cpp"
+					RelativePath=".\source\util\StringUtility.cpp"
 					>
 				</File>
 			</Filter>

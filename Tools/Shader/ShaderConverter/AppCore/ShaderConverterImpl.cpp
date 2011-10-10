@@ -1,5 +1,4 @@
-﻿#include <stdafx.h>
-#include <algorithm>
+﻿#include <algorithm>
 #include "ShaderConverterImpl.h"
 #include "ShaderConfig.h"
 
@@ -63,7 +62,7 @@ BOOL CShaderConverter::Begin(LPCSTR lpszShaderFile)
 			// NOTE
 			// 何故かcgCreateEffectFromFileでコンパイルが失敗してもNULLが返ってこないことがある・・・。
 			// なので、エラー文字列を調べて "error" があったら失敗とみなす・・・。
-			CString str(pErrorStr);
+			izanagi::izanagi_tk::CString str(pErrorStr);
 			if (str.Find(_T(" error ")) >= 0) {
 				return FALSE;
 			}
@@ -143,7 +142,7 @@ namespace {
 */
 BOOL CShaderConverter::Export(const SShaderConfig& sConfig)
 {
-	ASSERT(m_pCgEffect != NULL);
+	IZ_ASSERT(m_pCgEffect != NULL);
 
 	VRETURN(m_Out.Open(sConfig.out));
 
@@ -301,7 +300,7 @@ BOOL CShaderConverter::ExportTechnique()
 	}
 	else {
 		// テクニックは必ず一つはないといけない
-		ASSERT(FALSE);
+		IZ_ASSERT(FALSE);
 
 		// TODO
 
@@ -564,7 +563,7 @@ BOOL CShaderConverter::DoNotRemoveParam(CGparameter param)
 {
 	BOOL bIsUsedInEffect = ::cgIsParameterUsed(param, m_pCgEffect);
 
-	CString strParamName(::cgGetParameterName(param));
+	izanagi::izanagi_tk::CString strParamName(::cgGetParameterName(param));
 
 	{
 		// 頂点シェーダでしか利用されていない
@@ -625,7 +624,7 @@ namespace {
 		const std::vector<CGparameter>& tvParamList,
 		CGpass pass)
 	{
-		CString strName(pszParamName);
+		izanagi::izanagi_tk::CString strName(pszParamName);
 
 		std::vector<CGparameter>::const_iterator it = tvParamList.begin();
 		for (IZ_INT i = 0; it != tvParamList.end(); it++, i++) {
@@ -858,7 +857,7 @@ BOOL CShaderConverter::ExportUsedParamAndSamplerIdxByPass(CGpass pass)
 
 namespace {
 	BOOL _ExportFile(
-		const CString& strIn,
+		const izanagi::izanagi_tk::CString& strIn,
 		izanagi::IOutputStream* pOut)
 	{
 		static const IZ_UINT BUF_SIZE = 1024;
@@ -886,8 +885,8 @@ BOOL CShaderConverter::ExportProgram()
 	VRETURN(m_CompiledPSList.size() == m_CompiledVSList.size());
 
 	for (size_t i = 0; i < m_CompiledVSList.size(); i++) {
-		const CString strVS = m_CompiledVSList[i];
-		const CString strPS = m_CompiledPSList[i];
+		const izanagi::izanagi_tk::CString strVS = m_CompiledVSList[i];
+		const izanagi::izanagi_tk::CString strPS = m_CompiledPSList[i];
 
 		VRETURN(_ExportFile(strVS, &m_Out));
 		VRETURN(_ExportFile(strPS, &m_Out));
@@ -920,7 +919,7 @@ BOOL CShaderConverter::ExportStringBuffer()
 namespace {
 	// コンパイラ実行
 	BOOL _CompileShaderInternal(
-		CString& out,
+		izanagi::izanagi_tk::CString& out,
 		COMPILE_TYPE type,
 		LPCSTR lpszCompileCommand,
 		LPCSTR lpszShaderFile,
@@ -928,7 +927,7 @@ namespace {
 		CGprofile profile)
 	{
 		// コマンド作成
-		CString cmd;
+		izanagi::izanagi_tk::CString cmd;
 		CCompileCmdCreator::GetInstance().CreateCompileCommand(
 			cmd, out,
 			type,
@@ -939,11 +938,11 @@ namespace {
 
 		int result = 0;
 
-		if (!cmd.IsEmpty()) {
+		if (!cmd.empty()) {
 			// TODO
 			FILE* fp = _popen(cmd, "w");
 			if (fp == NULL) {
-				ASSERT(FALSE);
+				IZ_ASSERT(FALSE);
 
 				// TODO
 
@@ -951,7 +950,7 @@ namespace {
 			}
 
 			result = _pclose(fp);
-			ASSERT(result == 0);
+			IZ_ASSERT(result == 0);
 		}
 
 		return (result == 0);
@@ -959,14 +958,14 @@ namespace {
 
 	// コンパイラ実行
 	BOOL _CompileShader(
-		CString& out,
+		izanagi::izanagi_tk::CString& out,
 		BOOL bIsAsm,
 		LPCSTR lpszCompileCommand,
 		LPCSTR lpszShaderFile,
 		LPCSTR lpszEntryPoint,
 		CGprofile profile)
 	{
-		CString tmp = out;
+		izanagi::izanagi_tk::CString tmp = out;
 
 		BOOL ret = FALSE;
 
@@ -995,15 +994,15 @@ namespace {
 
 	// 出力ファイル名を作成
 	inline void _MakeOutFile(
-		CString& strOut,
+		izanagi::izanagi_tk::CString& strOut,
 		UINT nID,
 		LPCSTR lpszShaderFile,
 		LPCSTR lpszObjDir)
 	{
 		static CHAR BUF[1024];
 
-		CString tmp0;
-		tmp0.Format(_T("%s"), lpszShaderFile);
+		izanagi::izanagi_tk::CString tmp0;
+		tmp0.format("%s", lpszShaderFile);
 
 		// ファイル名取得
 		LPSTR file_name = PathFindFileName(tmp0);
@@ -1011,8 +1010,8 @@ namespace {
 		// 拡張子削除
 		PathRemoveExtension(file_name);
 
-		CString tmp1;
-		tmp1.Format(_T("%s_%d"), file_name, nID);
+		izanagi::izanagi_tk::CString tmp1;
+		tmp1.format("%s_%d", file_name, nID);
 
 		if (strlen(lpszObjDir) > 0) {
 			// 中間ディレクトリに出力する
@@ -1021,10 +1020,10 @@ namespace {
 				lpszObjDir,
 				tmp1);
 
-			strOut.Format(_T("%s"), BUF);
+			strOut.format("%s", BUF);
 		}
 		else {
-			strOut.Format(_T("%s"), tmp1);
+			strOut.format("%s", tmp1);
 		}
 	}
 }	// namespace
@@ -1075,7 +1074,7 @@ BOOL CShaderConverter::CompileProgram(
 
 		while (pass != NULL) {
 			// 出力ファイル名を作成
-			CString strOut;
+			izanagi::izanagi_tk::CString strOut;
 			_MakeOutFile(
 				strOut,
 				nPassCnt,
@@ -1102,7 +1101,7 @@ BOOL CShaderConverter::CompileProgram(
 					pszEntryPoint,
 					profile))
 			{
-				ASSERT(FALSE);
+				IZ_ASSERT(FALSE);
 
 				// TODO
 

@@ -3,6 +3,7 @@
 
 #include <string>
 #include "izDefs.h"
+#include "izToolKit.h"
 
 // 出力タイプ
 enum ExportType {
@@ -22,11 +23,11 @@ enum FileType {
 };
 
 struct SOption {
-	std::string in;		// 入力ファイル
-	std::string out;	// 出力ファイル
+	izanagi::izanagi_tk::CString in;		// 入力ファイル
+	izanagi::izanagi_tk::CString out;	// 出力ファイル
 
-	std::string outMsh;
-	std::string outSkl;
+	izanagi::izanagi_tk::CString outMsh;
+	izanagi::izanagi_tk::CString outSkl;
 
 	IZ_UINT exportType;	// 出力タイプ
 	FileType fileType;	// ファイルタイプ
