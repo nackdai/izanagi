@@ -8,4 +8,6 @@
 #include "system/SysMutex.h"
 #include "system/SysEvent.h"
 
+#include "system/SysWindow.h"
+
 #endif	// #if !defined(__IZANAGI_SYSTEM_H__)
