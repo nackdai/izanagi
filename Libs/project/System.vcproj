@@ -243,6 +243,10 @@
 				RelativePath="..\source\system\SysTimer.cpp"
 				>
 			</File>
+			<File
+				RelativePath="..\source\system\SysWindow.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="include"
@@ -271,6 +275,10 @@
 			</File>
 			<File
 				RelativePath="..\include\system\SysTimer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\system\SysWindow.h"
 				>
 			</File>
 		</Filter>
