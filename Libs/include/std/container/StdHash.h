@@ -229,7 +229,7 @@ namespace izanagi {
 	protected:
 		CStdList<Item>* GetHashListInternal(const _KEY& tKey)
 		{
-			IZ_UINT idx = tKey % _NUM;
+			IZ_UINT64 idx = tKey % _NUM;
 			return &m_HashList[idx];
 		}
 
