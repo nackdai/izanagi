@@ -194,9 +194,8 @@ WindowHandle CSysWindow::Create(
 	HINSTANCE hInst = (HINSTANCE)param.platformParam;
 	IZ_ASSERT(hInst != IZ_NULL);
 
+	WNDCLASSEX wcex;
 	{
-		WNDCLASSEX wcex;
-
 		wcex.cbSize         = sizeof(WNDCLASSEX);
 		wcex.style          = CS_HREDRAW | CS_VREDRAW;
 		wcex.lpfnWndProc    = WndProc;
@@ -208,7 +207,7 @@ WindowHandle CSysWindow::Create(
 		//wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW + 1);	// システムカラー（白色）
 		wcex.hbrBackground  = (HBRUSH)::GetStockObject(BLACK_BRUSH);
 		wcex.lpszMenuName   = NULL;
-		wcex.lpszClassName  = registerName;
+		wcex.lpszClassName  = (param.title != IZ_NULL ? param.title : registerName);
 		wcex.hIconSm        = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_APPLICATION));
 
 		VRETURN_NULL(RegisterClassEx(&wcex));
@@ -258,7 +257,7 @@ WindowHandle CSysWindow::Create(
 	// ウインドウ作成
 	HWND hWnd = ::CreateWindowExA(
 					exStyle,
-					registerName,
+					wcex.lpszClassName,
 					param.title,
 					style,
 					rect.left, rect.top,
