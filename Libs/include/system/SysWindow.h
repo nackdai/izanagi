@@ -5,6 +5,8 @@
 #include "izStd.h"
 
 namespace izanagi {
+	class CMsgHandlerManager;
+
 	/**
 	 */
 	typedef void*	WindowHandle;
@@ -12,6 +14,8 @@ namespace izanagi {
 	/**
 	 */
 	class CMessageHandler {
+		friend class CMsgHandlerManager;
+
 	protected:
 		CMessageHandler() {}
 		virtual ~CMessageHandler() {}
@@ -19,15 +23,28 @@ namespace izanagi {
 		NO_COPIABLE(CMessageHandler);
 
 	public:
-		virtual void OnKeyDonw(IZ_UINT nChar, IZ_UINT repCnt) {}
+		virtual void OnKeyDown(IZ_UINT nChar) {}
+
+		virtual void OnKeyUp(IZ_UINT nChar) {}
+
+		virtual void OnMouseLBtnDown() {}
+
+		virtual void OnMouseLBtnUp() {}
+
+		virtual void OnMouseRBtnDown() {}
+
+		virtual void OnMouseRBtnUp() {}
 
 		virtual void OnMouseMove(const CIntPoint& point) {}
 
-		virtual void OnMouseWheel(IZ_INT delta, const CIntPoint& point) {}
+		virtual void OnMouseWheel(IZ_INT delta) {}
 
 		virtual void OnPaint() {}
 
 		virtual void OnIdle() {}
+
+	private:
+		CStdHash<IZ_UINT64, CMessageHandler, 4>::Item mHashItem;
 	};
 
 	/**
@@ -63,7 +80,7 @@ namespace izanagi {
 
 		/** ループ実行.
 		 */
-		static void RunLoop();
+		static void RunLoop(const WindowHandle& handle);
 
 		static void* GetNativeWindowHandle(const WindowHandle& handle);
 

@@ -1,12 +1,41 @@
 ﻿#include <windows.h>
-#include <stdlib.h>
-#include <string.h>
-#include <tchar.h>
+#include <zmouse.h>
 #include "system/SysWindow.h"
 
 using namespace izanagi;
 
-static CMessageHandler* sHandler = IZ_NULL;
+//////////////////////////////////////////
+
+namespace izanagi {
+
+class CMsgHandlerManager : public CStdHash<IZ_UINT64, CMessageHandler, 4> {
+public:
+	CMsgHandlerManager() {}
+	~CMsgHandlerManager() {}
+
+public:
+	IZ_BOOL Register(
+		CMessageHandler* handler,
+		HWND hWnd);
+};
+
+IZ_BOOL CMsgHandlerManager::Register(
+	CMessageHandler* handler,
+	HWND hWnd)
+{
+	IZ_ASSERT(handler != IZ_NULL);
+	IZ_ASSERT(hWnd != IZ_NULL);
+
+	IZ_UINT64 id = (IZ_UINT64)hWnd;
+	handler->mHashItem.Init(id, handler);
+	
+	IZ_BOOL ret = Add(&handler->mHashItem);
+	return ret;
+}
+
+static CMsgHandlerManager sMsgHandlerMgr;
+
+}
 
 //////////////////////////////////////////
 
@@ -74,6 +103,8 @@ void CWindow::Destroy(CWindow* window)
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+	CMessageHandler* msgHandler = sMsgHandlerMgr.FindData((IZ_UINT64)hWnd);
+
 	switch (uMsg) {
 	case WM_DESTROY:
 	case WM_CLOSE:
@@ -81,11 +112,71 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		return 0;
 
 	case WM_PAINT:
-	case WM_ERASEBKGND:
-		if (sHandler) {
-			sHandler->OnPaint();
+		if (msgHandler) {
+			msgHandler->OnPaint();
+			return 0;
 		}
-		return 0;
+		break;
+
+	case WM_ERASEBKGND:
+		if (msgHandler) {
+			msgHandler->OnPaint();
+			return 0;
+		}
+		break;
+
+	case WM_KEYDOWN:
+		if (msgHandler) {
+			msgHandler->OnKeyDown((IZ_UINT)wParam);
+			return 0;
+		}
+		break;
+
+	case WM_LBUTTONDOWN:
+		if (msgHandler) {
+			msgHandler->OnMouseLBtnDown();
+			return 0;
+		}
+		break;
+
+	case WM_LBUTTONUP:
+		if (msgHandler) {
+			msgHandler->OnMouseLBtnUp();
+			return 0;
+		}
+		break;
+
+	case WM_RBUTTONDOWN:
+		if (msgHandler) {
+			msgHandler->OnMouseRBtnDown();
+			return 0;
+		}
+		break;
+
+	case WM_RBUTTONUP:
+		if (msgHandler) {
+			msgHandler->OnMouseRBtnUp();
+			return 0;
+		}
+		break;
+
+	case WM_MOUSEMOVE:
+		if (msgHandler) {
+			CIntPoint point(
+				LOWORD(lParam),
+				HIWORD(lParam));
+			msgHandler->OnMouseMove(point);
+			return 0;
+		}
+		break;
+
+	case WM_MOUSEWHEEL:
+		if (msgHandler) {
+			IZ_INT zDelta = HIWORD(wParam);
+			msgHandler->OnMouseWheel(zDelta);
+			return 0;
+		}
+		break;
 	}
 
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);
@@ -137,7 +228,7 @@ WindowHandle CSysWindow::Create(
 
 		// TODO
 		// 最大化、最小化ボタンは無し
-		style &= ~WS_MINIMIZEBOX;
+		//style &= ~WS_MINIMIZEBOX;
 		style &= ~WS_MAXIMIZEBOX;
 
 		// TODO
@@ -180,6 +271,9 @@ WindowHandle CSysWindow::Create(
 
 	// ウインドウ表示
 	::ShowWindow(hWnd, SW_SHOWNORMAL);
+	::SetFocus(hWnd);
+	::SetForegroundWindow(hWnd);
+
 	::UpdateWindow(hWnd);
 
 	HDC hDC = ::GetDC(hWnd);
@@ -192,7 +286,9 @@ WindowHandle CSysWindow::Create(
 						hDC);
 
 	// メッセージハンドラを保持
-	sHandler = param.handler;
+	if (param.handler) {
+		sMsgHandlerMgr.Register(param.handler, hWnd);
+	}
 
 	return window;
 }
@@ -241,11 +337,18 @@ static IZ_BOOL ProcMsg()
 }
 
 // ループ実行.
-void CSysWindow::RunLoop()
+void CSysWindow::RunLoop(const WindowHandle& handle)
 {
+	IZ_ASSERT(handle != IZ_NULL);
+	
+	CWindow* window = (CWindow*)handle;
+	HWND hWnd = window->GetHWND();
+
+	CMessageHandler* msgHandler = sMsgHandlerMgr.FindData((IZ_UINT64)hWnd);
+
 	while (ProcMsg()) {
-		if (sHandler) {
-			sHandler->OnIdle();
+		if (msgHandler) {
+			msgHandler->OnIdle();
 		}
 	}
 }
