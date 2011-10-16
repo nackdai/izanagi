@@ -128,53 +128,50 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	case WM_KEYDOWN:
 		if (msgHandler) {
 			msgHandler->OnKeyDown((IZ_UINT)wParam);
-			return 0;
 		}
 		break;
 
 	case WM_LBUTTONDOWN:
 		if (msgHandler) {
+			::SetCapture(hWnd);
 			msgHandler->OnMouseLBtnDown();
-			return 0;
 		}
 		break;
 
 	case WM_LBUTTONUP:
 		if (msgHandler) {
+			::ReleaseCapture();
 			msgHandler->OnMouseLBtnUp();
-			return 0;
 		}
 		break;
 
 	case WM_RBUTTONDOWN:
 		if (msgHandler) {
+			::SetCapture(hWnd);
 			msgHandler->OnMouseRBtnDown();
-			return 0;
 		}
 		break;
 
 	case WM_RBUTTONUP:
 		if (msgHandler) {
+			::ReleaseCapture();
 			msgHandler->OnMouseRBtnUp();
-			return 0;
 		}
 		break;
 
 	case WM_MOUSEMOVE:
 		if (msgHandler) {
 			CIntPoint point(
-				LOWORD(lParam),
-				HIWORD(lParam));
+				static_cast<short>(LOWORD(lParam)),
+				static_cast<short>(HIWORD(lParam)));
 			msgHandler->OnMouseMove(point);
-			return 0;
 		}
 		break;
 
 	case WM_MOUSEWHEEL:
 		if (msgHandler) {
-			IZ_INT zDelta = HIWORD(wParam);
+			IZ_INT zDelta = static_cast<short>(HIWORD(wParam));
 			msgHandler->OnMouseWheel(zDelta);
-			return 0;
 		}
 		break;
 	}
