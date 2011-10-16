@@ -54,7 +54,7 @@ namespace izanagi {
 		IZ_BOOL AllRead();
 
 	private:
-		class CTexHolder {
+		class CTexHolder : public izanagi::CPlacementNew {
 		public:
 			CTexHolder() {
 				m_pTex = IZ_NULL;

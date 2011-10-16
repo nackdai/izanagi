@@ -1,5 +1,4 @@
-﻿#include <stdafx.h>
-#include "StateBloomStar.h"
+﻿#include "StateBloomStar.h"
 #include "StateManager.h"
 #include "SceneRenderer.h"
 #include "EnvBox.h"

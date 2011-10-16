@@ -1,4 +1,3 @@
-#include <stdafx.h>
 #include "Character.h"
 #include "Common.h"
 

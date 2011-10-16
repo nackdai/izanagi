@@ -1,5 +1,4 @@
-﻿#include <stdafx.h>
-#include "MySystem.h"
+﻿#include "MySystem.h"
 #include "StateManager.h"
 #include "StateBasic.h"
 #include "StatePhong.h"

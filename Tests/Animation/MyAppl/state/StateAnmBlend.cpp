@@ -1,5 +1,4 @@
-﻿#include <stdafx.h>
-#include "MyAppl.h"
+﻿#include "MyAppl.h"
 #include "MySystem.h"
 #include "StateAnmBlend.h"
 #include "StateManager.h"

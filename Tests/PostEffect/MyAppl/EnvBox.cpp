@@ -1,5 +1,4 @@
-﻿#include <stdafx.h>
-#include "izStd.h"
+﻿#include "izStd.h"
 #include "EnvBox.h"
 
 #include "MyCamera.h"

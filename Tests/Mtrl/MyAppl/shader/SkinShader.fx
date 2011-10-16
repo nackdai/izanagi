@@ -72,7 +72,7 @@ sampler sTex = sampler_state
 /////////////////////////////////////////////////////////////
 // 頂点シェーダ
 
-float4x4 vJointMatrix[4];
+float4x4 vJointMatrix[16];
 
 SVSOutput mainVS(SVSInput In)
 {
@@ -146,7 +146,7 @@ float4 mainPS(SPSInput In) : COLOR
 #endif
 
 #if USE_TEX
-#if 1
+#if 0
 	// For duck, tiny
 	vOut *= tex2D(sTex, float2(In.vUV.x, 1.0f - In.vUV.y));
 #else

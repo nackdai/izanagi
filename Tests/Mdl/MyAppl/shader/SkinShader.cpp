@@ -1,5 +1,4 @@
-﻿#include <stdafx.h>
-#include "SkinShader.h"
+﻿#include "SkinShader.h"
 
 // シェーダごとの初期化
 BOOL CSkinShader::InitInternal(izanagi::CGraphicsDevice* pDevice)

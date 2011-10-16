@@ -1,5 +1,4 @@
-﻿#include <stdafx.h>
-#include "StateBasicGirl.h"
+﻿#include "StateBasicGirl.h"
 #include "MySystem.h"
 #include "MyCamera.h"
 #include "Common.h"

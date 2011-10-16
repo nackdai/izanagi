@@ -1,5 +1,4 @@
-﻿#include <stdafx.h>
-#if 0
+﻿#if 0
 #include "StateBasic.h"
 #include "MySystem.h"
 #include "MyCamera.h"

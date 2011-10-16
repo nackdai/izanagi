@@ -1,5 +1,4 @@
-﻿#include <stdafx.h>
-#include "MySystem.h"
+﻿#include "MySystem.h"
 
 /////////////////////////////////////////////////
 void* CMyMemoryAllocator::Alloc(size_t size)

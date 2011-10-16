@@ -1,5 +1,4 @@
-﻿#include <stdafx.h>
-#include "StateTest1.h"
+﻿#include "StateTest1.h"
 #include "MySystem.h"
 #include "izResource.h"
 #include "izSceneGraph.h"

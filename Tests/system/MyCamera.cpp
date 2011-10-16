@@ -1,5 +1,4 @@
-﻿#include <stdafx.h>
-#include "MyCamera.h"
+﻿#include "MyCamera.h"
 
 CMyCamera CMyCamera::s_cInstance;
 

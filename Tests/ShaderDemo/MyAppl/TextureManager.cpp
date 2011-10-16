@@ -1,5 +1,4 @@
-﻿#include <stdafx.h>
-#include "TextureManager.h"
+﻿#include "TextureManager.h"
 
 using namespace izanagi;
 
@@ -56,11 +55,11 @@ IZ_INT CTextureManager::Read(IZ_PCSTR pszFile)
 	result = (pTex != IZ_NULL);
 	VGOTO(result, __EXIT__);
 
-	CTexHolder* pHolder = (CTexHolder*)ALLOC_ZERO(m_pAllocator, sizeof(CTexHolder));
-	result = (pHolder != IZ_NULL);
+	void* buf = (CTexHolder*)ALLOC_ZERO(m_pAllocator, sizeof(CTexHolder));
+	result = (buf != IZ_NULL);
 	VGOTO(result, __EXIT__);
 
-	pHolder = new(pHolder) CTexHolder;
+	CTexHolder* pHolder = new(buf) CTexHolder;
 
 	pHolder->SetTexture(pTex);
 
