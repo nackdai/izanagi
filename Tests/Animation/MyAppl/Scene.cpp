@@ -1,4 +1,3 @@
-#include <stdafx.h>
 #include "Scene.h"
 #include "Character.h"
 #include "MySystem.h"

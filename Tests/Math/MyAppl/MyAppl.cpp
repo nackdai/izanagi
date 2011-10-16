@@ -1,7 +1,5 @@
-﻿#include <stdafx.h>
-#include "MyAppl.h"
+﻿#include "MyAppl.h"
 #include "MySystem.h"
-#include "MyCamera.h"
 
 CMyAppl CMyAppl::s_cInstance;
 

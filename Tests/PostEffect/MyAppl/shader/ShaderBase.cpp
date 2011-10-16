@@ -1,5 +1,4 @@
-﻿#include <stdafx.h>
-#include <vector>
+﻿#include <vector>
 #include "ShaderBase.h"
 
 // コンストラクタ
@@ -120,7 +119,7 @@ IZ_BOOL CShaderBase::GetParameterBySemantic(
 	D3DXHANDLE* pHandles,
 	LPCSTR* pSemantics)
 {
-	ASSERT(m_pEffect != NULL);
+	IZ_ASSERT(m_pEffect != NULL);
 
 	IZ_BOOL ret = IZ_TRUE;
 

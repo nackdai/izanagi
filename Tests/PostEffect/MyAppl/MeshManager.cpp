@@ -1,5 +1,4 @@
-﻿#include <stdafx.h>
-#include "MeshManager.h"
+﻿#include "MeshManager.h"
 
 #include "izDefs.h"
 
@@ -54,7 +53,7 @@ BOOL CMeshManager::CreateSphere(
 					NULL);
 	
 	BOOL ret = SUCCEEDED(hr);
-	ASSERT(ret);
+	IZ_ASSERT(ret);
 
 	return ret;
 }
@@ -67,7 +66,7 @@ BOOL CMeshManager::CreateTeapot(LPDIRECT3DDEVICE9 pDevice)
 					NULL);
 	
 	BOOL ret = SUCCEEDED(hr);
-	ASSERT(ret);
+	IZ_ASSERT(ret);
 
 	return ret;
 }
@@ -83,7 +82,7 @@ BOOL CMeshManager::CreateBox(
 					NULL);
 
 	BOOL ret = SUCCEEDED(hr);
-	ASSERT(ret);
+	IZ_ASSERT(ret);
 
 	return ret;
 }
@@ -99,8 +98,8 @@ void CMeshManager::Render(
 	UINT type,
 	D3DCOLOR color/*= 0xffffffff*/)
 {
-	ASSERT(type < MESH_NUM);
-	ASSERT(m_pMesh[type] != NULL);
+	IZ_ASSERT(type < MESH_NUM);
+	IZ_ASSERT(m_pMesh[type] != NULL);
 
 	D3DMATERIAL9 sMaterial;
 	ZeroMemory(&sMaterial, sizeof(D3DMATERIAL9));
@@ -115,7 +114,7 @@ void CMeshManager::Render(
 
 	LPDIRECT3DDEVICE9 pDevice = NULL;
 	m_pMesh[type]->GetDevice(&pDevice);
-	ASSERT(pDevice != NULL);
+	IZ_ASSERT(pDevice != NULL);
 
 	pDevice->SetMaterial(&sMaterial);
 	SAFE_RELEASE(pDevice);

@@ -1,5 +1,4 @@
-﻿#include <stdafx.h>
-#include "StateManager.h"
+﻿#include "StateManager.h"
 #include "StateDebugMesh.h"
 
 CStateManager CStateManager::s_cInstance;

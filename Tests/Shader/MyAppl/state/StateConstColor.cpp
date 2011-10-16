@@ -1,5 +1,4 @@
-﻿#include <stdafx.h>
-#include "StateConstColor.h"
+﻿#include "StateConstColor.h"
 #include "StateManager.h"
 #include "MySystem.h"
 #include "MyCamera.h"

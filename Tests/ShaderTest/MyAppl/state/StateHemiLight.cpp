@@ -1,5 +1,4 @@
-﻿#include <stdafx.h>
-#include "StateHemiLight.h"
+﻿#include "StateHemiLight.h"
 #include "MySystem.h"
 #include "MyCamera.h"
 
