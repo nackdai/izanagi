@@ -4,7 +4,7 @@
 // NOTE
 // izanagiのインクルードパスを通すこと
 
-#include "system/win32/FileUtility.h"
-#include "system/win32/EnvVarHelper.h"
+#include "system/FileUtility.h"
+#include "system/EnvVarHelper.h"
 
 #endif	// #if !defined(__IZANAGI_TOOL_KIT_TOOL_KIT_SYSTEM_DEFS_H__)

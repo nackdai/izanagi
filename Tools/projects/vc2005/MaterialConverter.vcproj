@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="AnimationConverter"
-	ProjectGUID="{B1BDB1F2-A9E6-44D7-8555-9C69CDEAF272}"
-	RootNamespace="AnimationConverter"
+	Name="MaterialConverter"
+	ProjectGUID="{41CE8028-5DB0-45E6-A52E-226121F066AA}"
+	RootNamespace="MaterialConverter"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -18,7 +18,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\..\PeopertySeet\Debug.vsprops"
+			InheritedPropertySheets=".\Debug.vsprops"
 			CharacterSet="2"
 			>
 			<Tool
@@ -39,7 +39,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\External\collada-dom\dom\include&quot;;&quot;$(SolutionDir)\External\collada-dom\dom\include\1.4&quot;;&quot;$(SolutionDir)\External\collada-dom\dom\external-libs\boost&quot;;./AppCore;../ModelLib/include"
+				AdditionalIncludeDirectories="&quot;$(EXTERNAL_DIR)\collada-dom\dom\include&quot;;&quot;$(EXTERNAL_DIR)\collada-dom\dom\include\1.4&quot;;&quot;$(EXTERNAL_DIR)\collada-dom\dom\external-libs\boost&quot;;&quot;$(SolutionDir)../../Model\MaterialConveter\AppCore&quot;;&quot;$(SolutionDir)../../Model/ModelLib/include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ALL_NO_LIB;PCRE_STATIC;DOM_INCLUDE_LIBXML"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -58,10 +58,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libcollada14dom21-sd.lib libxml2_a.lib zlib.lib wsock32.lib pcre-d.lib pcrecpp-d.lib minizip-d.lib libboost_filesystem-d.lib libboost_system-d.lib d3d9.lib d3dx9d.lib Math.lib shlwapi.lib"
-				OutputFile="$(SolutionDir)\tools\$(ConfigurationName)\$(ProjectName).exe"
+				AdditionalDependencies="ModelLib/$(ConfigurationName)/ModelLib.lib d3d9.lib d3dx9d.lib Math.lib shlwapi.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)\External\collada-dom\dom\build\vc8-1.4-d&quot;;&quot;$(SolutionDir)\External\collada-dom\dom\external-libs\libxml2\win32\lib&quot;;&quot;$(SolutionDir)\External\collada-dom\dom\external-libs\pcre\lib\vc8&quot;;&quot;$(SolutionDir)\External\collada-dom\dom\external-libs\minizip\win32\lib&quot;;&quot;$(SolutionDir)\External\collada-dom\dom\external-libs\boost\lib\vc8&quot;;&quot;$(SolutionDir)\External\NvTriStrip\lib\$(ConfigurationName)&quot;;../ModelLib;&quot;..\..\..\Libs\project\lib\$(ConfigurationName)_DX9&quot;"
+				AdditionalLibraryDirectories="&quot;ModelLib/$(CongurationName)&quot;"
 				IgnoreDefaultLibraryNames="msvcrt"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -94,10 +93,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\..\PeopertySeet\Release.vsprops"
+			InheritedPropertySheets=".\Release.vsprops"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
@@ -118,7 +115,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\External\collada-dom\dom\include&quot;;&quot;$(SolutionDir)\External\collada-dom\dom\include\1.4&quot;;&quot;$(SolutionDir)\External\collada-dom\dom\external-libs\boost&quot;;./AppCore;../ModelLib/include"
+				AdditionalIncludeDirectories="&quot;$(EXTERNAL_DIR)\collada-dom\dom\include&quot;;&quot;$(EXTERNAL_DIR)\collada-dom\dom\include\1.4&quot;;&quot;$(EXTERNAL_DIR)\collada-dom\dom\external-libs\boost&quot;;&quot;$(SolutionDir)../../Model\MaterialConveter\AppCore&quot;;&quot;$(SolutionDir)../../Model/ModelLib/include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;BOOST_ALL_NO_LIB;PCRE_STATIC;DOM_INCLUDE_LIBXML"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -138,10 +135,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libcollada14dom21-s.lib libxml2_a.lib zlib.lib wsock32.lib pcre-d.lib pcrecpp.lib minizip.lib libboost_filesystem.lib libboost_system.lib NvTriStrip.lib d3d9.lib d3dx9.lib Math.lib shlwapi.lib"
-				OutputFile="$(SolutionDir)\tools\$(ConfigurationName)\$(ProjectName).exe"
+				AdditionalDependencies="ModelLib/$(ConfigurationName)/ModelLib.lib d3d9.lib d3dx9.lib Math.lib shlwapi.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)\External\collada-dom\dom\build\vc8-1.4&quot;;&quot;$(SolutionDir)\External\collada-dom\dom\external-libs\libxml2\win32\lib&quot;;&quot;$(SolutionDir)\External\collada-dom\dom\external-libs\pcre\lib\vc8&quot;;&quot;$(SolutionDir)\External\collada-dom\dom\external-libs\minizip\win32\lib&quot;;&quot;$(SolutionDir)\External\collada-dom\dom\external-libs\boost\lib\vc8&quot;;&quot;$(SolutionDir)\External\NvTriStrip\lib\$(ConfigurationName)&quot;;../ModelLib;&quot;..\..\..\Libs\project\lib\$(ConfigurationName)_DX9&quot;"
+				AdditionalLibraryDirectories="&quot;ModelLib/$(CongurationName)&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -183,7 +179,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\AnimationConverter.cpp"
+				RelativePath="..\..\Model\MaterialConveter\MaterialConverter.cpp"
 				>
 			</File>
 		</Filter>
@@ -200,7 +196,7 @@
 				Name="include"
 				>
 				<File
-					RelativePath=".\AppCore\Option.h"
+					RelativePath="..\..\Model\MaterialConveter\AppCore\Option.h"
 					>
 				</File>
 			</Filter>
@@ -208,7 +204,7 @@
 				Name="source"
 				>
 				<File
-					RelativePath=".\AppCore\Option.cpp"
+					RelativePath="..\..\Model\MaterialConveter\AppCore\Option.cpp"
 					>
 				</File>
 			</Filter>

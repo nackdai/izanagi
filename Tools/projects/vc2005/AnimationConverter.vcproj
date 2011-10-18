@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="ShaderCompile"
-	ProjectGUID="{72385CA4-C72A-4F85-BC0E-079F3290005E}"
-	RootNamespace="ShaderCompile"
+	Name="AnimationConverter"
+	ProjectGUID="{B1BDB1F2-A9E6-44D7-8555-9C69CDEAF272}"
+	RootNamespace="AnimationConverter"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -17,10 +17,9 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			CharacterSet="1"
+			InheritedPropertySheets=".\Debug.vsprops"
+			CharacterSet="2"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -40,14 +39,13 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				AdditionalIncludeDirectories="&quot;$(EXTERNAL_DIR)\collada-dom\dom\include&quot;;&quot;$(EXTERNAL_DIR)\collada-dom\dom\include\1.4&quot;;&quot;$(EXTERNAL_DIR)\collada-dom\dom\external-libs\boost&quot;;&quot;$(SolutionDir)../../Model/AnmConverter/AppCore&quot;;&quot;$(SolutionDir)../../Model/ModelLib/include&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ALL_NO_LIB;PCRE_STATIC;DOM_INCLUDE_LIBXML"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
-				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
-				DebugInformationFormat="4"
+				DisableSpecificWarnings="4819"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -60,7 +58,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="ModelLib/$(ConfigurationName)/ModelLib.lib d3d9.lib d3dx9d.lib Math.lib shlwapi.lib"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="&quot;ModelLib/$(CongurationName)&quot;"
+				IgnoreDefaultLibraryNames="msvcrt"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -92,10 +93,9 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			CharacterSet="1"
+			InheritedPropertySheets=".\Release.vsprops"
+			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -115,12 +115,14 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				AdditionalIncludeDirectories="&quot;$(EXTERNAL_DIR)\collada-dom\dom\include&quot;;&quot;$(EXTERNAL_DIR)\collada-dom\dom\include\1.4&quot;;&quot;$(EXTERNAL_DIR)\collada-dom\dom\external-libs\boost&quot;;&quot;$(SolutionDir)../../Model/AnmConverter/AppCore&quot;;&quot;$(SolutionDir)../../Model/ModelLib/include&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;BOOST_ALL_NO_LIB;PCRE_STATIC;DOM_INCLUDE_LIBXML"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="3"
+				DisableSpecificWarnings="4819"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -133,7 +135,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="ModelLib/$(ConfigurationName)/ModelLib.lib d3d9.lib d3dx9.lib Math.lib shlwapi.lib"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="&quot;ModelLib/$(CongurationName)&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -169,27 +173,45 @@
 	<References>
 	</References>
 	<Files>
-		<File
-			RelativePath=".\xml\ConstantColorShader.xml"
+		<Filter
+			Name="source"
+			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
+			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
-			<FileConfiguration
-				Name="Debug|Win32"
+			<File
+				RelativePath="..\..\Model\AnmConverter\AnimationConverter.cpp"
 				>
-				<Tool
-					Name="VCCustomBuildTool"
-					CommandLine="$(SolutionDir)\tools\$(ConfigurationName)\ShaderConverter.exe -src &quot;$(InputPath)&quot; -obj &quot;$(ProjectDir)/shader_obj&quot; -o &quot;data&quot;"
-					Outputs="$(ProjectDir)data/$(InputName).shd"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
+			</File>
+		</Filter>
+		<Filter
+			Name="include"
+			Filter="h;hpp;hxx;hm;inl;inc;xsd"
+			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
+			>
+		</Filter>
+		<Filter
+			Name="AppCore"
+			>
+			<Filter
+				Name="include"
 				>
-				<Tool
-					Name="VCCustomBuildTool"
-					CommandLine="$(SolutionDir)\tools\$(ConfigurationName)\ShaderConverter.exe -src &quot;$(InputPath)&quot; -obj &quot;$(ProjectDir)/shader_obj&quot; -o &quot;data&quot;"
-					Outputs="$(ProjectDir)data/$(InputName).shd"
-				/>
-			</FileConfiguration>
+				<File
+					RelativePath="..\..\Model\AnmConverter\AppCore\Option.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="source"
+				>
+				<File
+					RelativePath="..\..\Model\AnmConverter\AppCore\Option.cpp"
+					>
+				</File>
+			</Filter>
+		</Filter>
+		<File
+			RelativePath=".\ReadMe.txt"
+			>
 		</File>
 	</Files>
 	<Globals>

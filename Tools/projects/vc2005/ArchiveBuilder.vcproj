@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="ImageBuilder"
-	ProjectGUID="{08586CAB-4A9D-488B-96DC-0B7FADB366A1}"
-	RootNamespace="ImageBuilder"
+	Name="ArchiveBuilder"
+	ProjectGUID="{59BFC55F-FBEB-41B2-89EA-82E92E82DEE6}"
+	RootNamespace="ArchiveBuilder"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -18,7 +18,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\..\PeopertySeet\Debug.vsprops"
+			InheritedPropertySheets=".\Debug.vsprops"
 			UseOfMFC="0"
 			CharacterSet="2"
 			>
@@ -40,8 +40,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="./AppCore;../ImageLib;&quot;$(SolutionDir)/External/xerces/src&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;IZ_TOOLKIT_ENABLE_XERCES"
+				AdditionalIncludeDirectories="../../Archive/AppCore"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
 			/>
@@ -56,10 +56,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="../ImageLib/ImageLibD.lib $(SolutionDir)/External/xerces/Build/Win32/VC8/$(ConfigurationName)/xerces-c_3D.lib d3d9.lib d3dx9d.lib dxerr.lib"
-				OutputFile="$(SolutionDir)\tools\$(ConfigurationName)\$(ProjectName).exe"
 				LinkIncremental="2"
-				IgnoreDefaultLibraryNames=""
+				AdditionalLibraryDirectories=""
 				SubSystem="1"
 				TargetMachine="1"
 			/>
@@ -90,10 +88,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\..\PeopertySeet\Release.vsprops"
+			InheritedPropertySheets=".\Release.vsprops"
 			UseOfMFC="0"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
@@ -115,8 +111,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="./AppCore;../ImageLib;&quot;$(SolutionDir)/External/xerces/src&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;IZ_TOOLKIT_ENABLE_XERCES"
+				AdditionalIncludeDirectories="../../Archive/AppCore"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -134,8 +130,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="../ImageLib/ImageLib.lib $(SolutionDir)/External/xerces/Build/Win32/VC8/$(ConfigurationName)/xerces-c_3.lib d3d9.lib d3dx9.lib dxerr.lib"
-				OutputFile="$(SolutionDir)\tools\$(ConfigurationName)\$(ProjectName).exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -178,7 +172,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\ImageBuilder.cpp"
+				RelativePath="..\..\Archive\ArchiveBuilder\ArchiveBuilder.cpp"
 				>
 			</File>
 		</Filter>
@@ -193,23 +187,31 @@
 				Name="include"
 				>
 				<File
-					RelativePath=".\AppCore\AppError.h"
+					RelativePath="..\..\Archive\AppCore\AppError.h"
 					>
 				</File>
 				<File
-					RelativePath=".\AppCore\ImageBuilderDefs.h"
+					RelativePath="..\..\Archive\AppCore\ArchiveBuilderImpl.h"
 					>
 				</File>
 				<File
-					RelativePath=".\AppCore\ImageBuilderImpl.h"
+					RelativePath="..\..\Archive\AppCore\FileDefs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\AppCore\ImageReaderImpl.h"
+					RelativePath="..\..\Archive\AppCore\FileIdCreator.h"
 					>
 				</File>
 				<File
-					RelativePath=".\AppCore\Option.h"
+					RelativePath="..\..\Archive\AppCore\FileTree.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Archive\AppCore\Option.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Archive\AppCore\Utility.h"
 					>
 				</File>
 			</Filter>
@@ -217,15 +219,23 @@
 				Name="source"
 				>
 				<File
-					RelativePath=".\AppCore\ImageBuilderImpl.cpp"
+					RelativePath="..\..\Archive\AppCore\ArchiveBuilderImpl.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AppCore\ImageReaderImpl.cpp"
+					RelativePath="..\..\Archive\AppCore\FileIdCreator.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AppCore\Option.cpp"
+					RelativePath="..\..\Archive\AppCore\FileTree.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Archive\AppCore\Option.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Archive\AppCore\Utility.cpp"
 					>
 				</File>
 			</Filter>

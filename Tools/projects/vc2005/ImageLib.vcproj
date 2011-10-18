@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="ShaderSource"
-	ProjectGUID="{2C70FF41-A6EB-48AD-9184-DB92A8B254FC}"
-	RootNamespace="ShaderSource"
+	Name="ImageLib"
+	ProjectGUID="{14A6B823-609D-4DC4-828E-533ABA219678}"
+	RootNamespace="ImageLib"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -17,10 +17,9 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
-			CharacterSet="1"
+			InheritedPropertySheets=".\Debug.vsprops"
+			CharacterSet="2"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -40,14 +39,10 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)../../Image/ImageLib/include&quot;;&quot;$(SolutionDir)../../External\squish&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
-				MinimalRebuild="true"
-				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
-				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
-				DebugInformationFormat="4"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -60,6 +55,8 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				AdditionalDependencies="squishd.lib"
+				AdditionalLibraryDirectories="$(EXTERNAL_DIR)/squish/lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -79,10 +76,9 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
-			CharacterSet="1"
+			InheritedPropertySheets=".\Release.vsprops"
+			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -102,6 +98,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)../../Image/ImageLib/include&quot;;&quot;$(SolutionDir)../../External\squish&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -120,6 +117,8 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				AdditionalDependencies="squish.lib"
+				AdditionalLibraryDirectories="$(EXTERNAL_DIR)/squish/lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -142,49 +141,81 @@
 	</References>
 	<Files>
 		<Filter
-			Name="fx"
+			Name="source"
+			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
+			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\fx\ConstantColorShader.fx"
+				RelativePath="..\..\Image\ImageLib\source\DXTFormatConverter.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\fx\PhongShader.fx"
+				RelativePath="..\..\Image\ImageLib\source\ImageReader.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Image\ImageLib\source\IMGBody.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Image\ImageLib\source\IMGImage.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Image\ImageLib\source\IMGTexture.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Image\ImageLib\source\MipMapCreator.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Image\ImageLib\source\PixelFormatConverter.cpp"
 				>
 			</File>
 		</Filter>
 		<Filter
 			Name="include"
+			Filter="h;hpp;hxx;hm;inl;inc;xsd"
+			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\include\CameraDefs.fxh"
+				RelativePath="..\..\Image\ImageLib\include\DXTFormatConverter.h"
 				>
 			</File>
 			<File
-				RelativePath=".\include\LightDefs.fxh"
+				RelativePath="..\..\Image\ImageLib\include\ImageLibUtility.h"
 				>
 			</File>
 			<File
-				RelativePath=".\include\LightUtil.fxh"
+				RelativePath="..\..\Image\ImageLib\include\ImageReader.h"
 				>
 			</File>
 			<File
-				RelativePath=".\include\MaterialDefs.fxh"
+				RelativePath="..\..\Image\ImageLib\include\IMGBody.h"
 				>
 			</File>
 			<File
-				RelativePath=".\include\Shader.fxh"
+				RelativePath="..\..\Image\ImageLib\include\IMGImage.h"
 				>
 			</File>
 			<File
-				RelativePath=".\include\ShaderDefs.fxh"
+				RelativePath="..\..\Image\ImageLib\include\IMGTexture.h"
 				>
 			</File>
 			<File
-				RelativePath=".\include\ShaderIO.fxh"
+				RelativePath="..\..\Image\ImageLib\include\MipMapCreator.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Image\ImageLib\include\PixelFormatConverter.h"
 				>
 			</File>
 		</Filter>
+		<File
+			RelativePath="..\..\Image\ImageLib\izImageLib.h"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

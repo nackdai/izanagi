@@ -18,7 +18,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			ConfigurationType="4"
-			InheritedPropertySheets="..\PeopertySeet\Debug.vsprops"
+			InheritedPropertySheets=".\Debug.vsprops"
 			CharacterSet="2"
 			>
 			<Tool
@@ -75,10 +75,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
-			InheritedPropertySheets="..\PeopertySeet\Release.vsprops"
+			InheritedPropertySheets=".\Release.vsprops"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
@@ -99,7 +97,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="../../Libs/include;include"
+				AdditionalIncludeDirectories=""
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -119,7 +117,6 @@
 			<Tool
 				Name="VCLibrarianTool"
 				AdditionalDependencies="shlwapi.lib"
-				OutputFile="$(ProjectName).lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -145,18 +142,18 @@
 			Name="graph"
 			>
 			<File
-				RelativePath=".\include\ToolKitGraphDefs.h"
+				RelativePath="..\..\ToolKit\include\ToolKitGraphDefs.h"
 				>
 			</File>
 			<Filter
 				Name="include"
 				>
 				<File
-					RelativePath=".\include\graph\GraphicsDeviceLite.h"
+					RelativePath="..\..\ToolKit\include\graph\GraphicsDeviceLite.h"
 					>
 				</File>
 				<File
-					RelativePath=".\include\graph\TextureLite.h"
+					RelativePath="..\..\ToolKit\include\graph\TextureLite.h"
 					>
 				</File>
 			</Filter>
@@ -164,11 +161,11 @@
 				Name="source"
 				>
 				<File
-					RelativePath=".\source\graph\GraphicsDeviceLite.cpp"
+					RelativePath="..\..\ToolKit\source\graph\GraphicsDeviceLite.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\source\graph\TextureLite.cpp"
+					RelativePath="..\..\ToolKit\source\graph\TextureLite.cpp"
 					>
 				</File>
 			</Filter>
@@ -177,14 +174,14 @@
 			Name="io"
 			>
 			<File
-				RelativePath=".\include\ToolKitIoDefs.h"
+				RelativePath="..\..\ToolKit\include\ToolKitIoDefs.h"
 				>
 			</File>
 			<Filter
 				Name="include"
 				>
 				<File
-					RelativePath=".\include\io\IoUtil.h"
+					RelativePath="..\..\ToolKit\include\io\IoUtil.h"
 					>
 				</File>
 			</Filter>
@@ -193,18 +190,18 @@
 			Name="std"
 			>
 			<File
-				RelativePath=".\include\ToolKitStdDefs.h"
+				RelativePath="..\..\ToolKit\include\ToolKitStdDefs.h"
 				>
 			</File>
 			<Filter
 				Name="include"
 				>
 				<File
-					RelativePath=".\include\std\ErrorUtil.h"
+					RelativePath="..\..\ToolKit\include\std\ErrorUtil.h"
 					>
 				</File>
 				<File
-					RelativePath=".\include\std\SimpleMemoryAllocator.h"
+					RelativePath="..\..\ToolKit\include\std\SimpleMemoryAllocator.h"
 					>
 				</File>
 			</Filter>
@@ -212,11 +209,11 @@
 				Name="source"
 				>
 				<File
-					RelativePath=".\source\std\ErrorUtil.cpp"
+					RelativePath="..\..\ToolKit\source\std\ErrorUtil.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\source\std\SimpleMemoryAllocator.cpp"
+					RelativePath="..\..\ToolKit\source\std\SimpleMemoryAllocator.cpp"
 					>
 				</File>
 			</Filter>
@@ -225,14 +222,14 @@
 			Name="xml"
 			>
 			<File
-				RelativePath=".\include\ToolKitXmlDefs.h"
+				RelativePath="..\..\ToolKit\include\ToolKitXmlDefs.h"
 				>
 			</File>
 			<Filter
 				Name="include"
 				>
 				<File
-					RelativePath=".\include\xml\XercesHelper.h"
+					RelativePath="..\..\ToolKit\include\xml\XercesHelper.h"
 					>
 				</File>
 			</Filter>
@@ -241,18 +238,18 @@
 			Name="util"
 			>
 			<File
-				RelativePath=".\include\ToolKitUtilDefs.h"
+				RelativePath="..\..\ToolKit\include\ToolKitUtilDefs.h"
 				>
 			</File>
 			<Filter
 				Name="include"
 				>
 				<File
-					RelativePath=".\include\util\PreprocHelper.h"
+					RelativePath="..\..\ToolKit\include\util\PreprocHelper.h"
 					>
 				</File>
 				<File
-					RelativePath=".\include\util\StringUtility.h"
+					RelativePath="..\..\ToolKit\include\util\StringUtility.h"
 					>
 				</File>
 			</Filter>
@@ -260,11 +257,11 @@
 				Name="source"
 				>
 				<File
-					RelativePath=".\source\util\PreprocHelper.cpp"
+					RelativePath="..\..\ToolKit\source\util\PreprocHelper.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\source\util\StringUtility.cpp"
+					RelativePath="..\..\ToolKit\source\util\StringUtility.cpp"
 					>
 				</File>
 			</Filter>
@@ -273,24 +270,24 @@
 			Name="system"
 			>
 			<File
-				RelativePath=".\include\ToolKitSystemDefs.h"
+				RelativePath="..\..\ToolKit\include\ToolKitSystemDefs.h"
 				>
 			</File>
 			<Filter
 				Name="include"
 				>
 				<File
-					RelativePath=".\include\system\win32\EnvVarHelper.h"
+					RelativePath="..\..\ToolKit\include\system\EnvVarHelper.h"
 					>
 				</File>
 				<File
-					RelativePath=".\include\system\win32\FileUtility.h"
+					RelativePath="..\..\ToolKit\include\system\FileUtility.h"
 					>
 				</File>
 			</Filter>
 		</Filter>
 		<File
-			RelativePath=".\include\izToolKit.h"
+			RelativePath="..\..\ToolKit\include\izToolKit.h"
 			>
 		</File>
 	</Files>
