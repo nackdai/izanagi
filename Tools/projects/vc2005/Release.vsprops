@@ -20,7 +20,7 @@
 		Name="VCLinkerTool"
 		AdditionalDependencies="ToolKit.lib"
 		OutputFile="$(SolutionDir)../../tools/$(ConfigurationName)/$(ProjectName).exe"
-		AdditionalLibraryDirectories="&quot;ToolKit/$(ConfigurationName)&quot;;&quot;$(SolutionDir)../../../Libs/project/lib/$(ConfigurationName)_DX9&quot;"
+		AdditionalLibraryDirectories="&quot;ToolKit/$(ConfigurationName)&quot;;&quot;$(SolutionDir)../../../Libs/project/vc2005/lib/$(ConfigurationName)_DX9&quot;"
 	/>
 	<UserMacro
 		Name="EXTERNAL_DIR"
