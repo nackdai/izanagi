@@ -5,8 +5,6 @@
 #define _WIN32_WINNT 0x0501	// これを Windows の他のバージョン向けに適切な値に変更してください。
 #endif						
 
-#include "ImageBuilder.h"
-
 #include <xercesc/util/PlatformUtils.hpp>
 #include <xercesc/sax2/SAX2XMLReader.hpp>
 #include <xercesc/sax2/XMLReaderFactory.hpp>

@@ -145,70 +145,70 @@
 			Name="include"
 			>
 			<File
-				RelativePath=".\include\PostEffectColorFilter.fxh"
+				RelativePath="..\..\PostEffect\PostEffectShader\include\PostEffectColorFilter.fxh"
 				>
 			</File>
 			<File
-				RelativePath=".\include\PostEffectColorSpace.fxh"
+				RelativePath="..\..\PostEffect\PostEffectShader\include\PostEffectColorSpace.fxh"
 				>
 			</File>
 			<File
-				RelativePath=".\include\PostEffectCommonUtility.fxh"
+				RelativePath="..\..\PostEffect\PostEffectShader\include\PostEffectCommonUtility.fxh"
 				>
 			</File>
 			<File
-				RelativePath=".\include\PostEffectSamplingParam.fxh"
+				RelativePath="..\..\PostEffect\PostEffectShader\include\PostEffectSamplingParam.fxh"
 				>
 			</File>
 			<File
-				RelativePath=".\include\PostEffectShader.fxh"
+				RelativePath="..\..\PostEffect\PostEffectShader\include\PostEffectShader.fxh"
 				>
 			</File>
 			<File
-				RelativePath=".\include\PostEffectShaderDefs.fxh"
+				RelativePath="..\..\PostEffect\PostEffectShader\include\PostEffectShaderDefs.fxh"
 				>
 			</File>
 			<File
-				RelativePath=".\include\PostEffectShaderIO.fxh"
+				RelativePath="..\..\PostEffect\PostEffectShader\include\PostEffectShaderIO.fxh"
 				>
 			</File>
 			<File
-				RelativePath=".\include\PostEffectVS.fxh"
+				RelativePath="..\..\PostEffect\PostEffectShader\include\PostEffectVS.fxh"
 				>
 			</File>
 			<Filter
 				Name="ColorSpace"
 				>
 				<File
-					RelativePath=".\include\ColorSpace\ColorSpaceCMY.fxh"
+					RelativePath="..\..\PostEffect\PostEffectShader\include\ColorSpace\ColorSpaceCMY.fxh"
 					>
 				</File>
 				<File
-					RelativePath=".\include\ColorSpace\ColorSpaceCMYK.fxh"
+					RelativePath="..\..\PostEffect\PostEffectShader\include\ColorSpace\ColorSpaceCMYK.fxh"
 					>
 				</File>
 				<File
-					RelativePath=".\include\ColorSpace\ColorSpaceHLS.fxh"
+					RelativePath="..\..\PostEffect\PostEffectShader\include\ColorSpace\ColorSpaceHLS.fxh"
 					>
 				</File>
 				<File
-					RelativePath=".\include\ColorSpace\ColorSpaceHSV.fxh"
+					RelativePath="..\..\PostEffect\PostEffectShader\include\ColorSpace\ColorSpaceHSV.fxh"
 					>
 				</File>
 				<File
-					RelativePath=".\include\ColorSpace\ColorSpaceUtil.fxh"
+					RelativePath="..\..\PostEffect\PostEffectShader\include\ColorSpace\ColorSpaceUtil.fxh"
 					>
 				</File>
 				<File
-					RelativePath=".\include\ColorSpace\ColorSpaceYCbCr.fxh"
+					RelativePath="..\..\PostEffect\PostEffectShader\include\ColorSpace\ColorSpaceYCbCr.fxh"
 					>
 				</File>
 				<File
-					RelativePath=".\include\ColorSpace\ColorSpaceYIQ.fxh"
+					RelativePath="..\..\PostEffect\PostEffectShader\include\ColorSpace\ColorSpaceYIQ.fxh"
 					>
 				</File>
 				<File
-					RelativePath=".\include\ColorSpace\ColorSpaceYUV.fxh"
+					RelativePath="..\..\PostEffect\PostEffectShader\include\ColorSpace\ColorSpaceYUV.fxh"
 					>
 				</File>
 			</Filter>
@@ -216,23 +216,23 @@
 				Name="ColorFilter"
 				>
 				<File
-					RelativePath=".\include\ColorFilter\ColorFilterGammaControl.fxh"
+					RelativePath="..\..\PostEffect\PostEffectShader\include\ColorFilter\ColorFilterGammaControl.fxh"
 					>
 				</File>
 				<File
-					RelativePath=".\include\ColorFilter\ColorFilterMonotone.fxh"
+					RelativePath="..\..\PostEffect\PostEffectShader\include\ColorFilter\ColorFilterMonotone.fxh"
 					>
 				</File>
 				<File
-					RelativePath=".\include\ColorFilter\ColorFilterNegative.fxh"
+					RelativePath="..\..\PostEffect\PostEffectShader\include\ColorFilter\ColorFilterNegative.fxh"
 					>
 				</File>
 				<File
-					RelativePath=".\include\ColorFilter\ColorFilterSepia.fxh"
+					RelativePath="..\..\PostEffect\PostEffectShader\include\ColorFilter\ColorFilterSepia.fxh"
 					>
 				</File>
 				<File
-					RelativePath=".\include\ColorFilter\ColorFilterUserDefs.fxh"
+					RelativePath="..\..\PostEffect\PostEffectShader\include\ColorFilter\ColorFilterUserDefs.fxh"
 					>
 				</File>
 			</Filter>
@@ -240,15 +240,15 @@
 				Name="VS"
 				>
 				<File
-					RelativePath=".\include\VS\VSCommon.fxh"
+					RelativePath="..\..\PostEffect\PostEffectShader\include\VS\VSCommon.fxh"
 					>
 				</File>
 				<File
-					RelativePath=".\include\VS\VSDefault.fxh"
+					RelativePath="..\..\PostEffect\PostEffectShader\include\VS\VSDefault.fxh"
 					>
 				</File>
 				<File
-					RelativePath=".\include\VS\VSSampling.fxh"
+					RelativePath="..\..\PostEffect\PostEffectShader\include\VS\VSSampling.fxh"
 					>
 				</File>
 			</Filter>
@@ -256,31 +256,31 @@
 				Name="ShaderDefs"
 				>
 				<File
-					RelativePath=".\include\ShaderDefs\ShaderDefsFunctor.fxh"
+					RelativePath="..\..\PostEffect\PostEffectShader\include\ShaderDefs\ShaderDefsFunctor.fxh"
 					>
 				</File>
 				<File
-					RelativePath=".\include\ShaderDefs\ShaderDefsInternal.fxh"
+					RelativePath="..\..\PostEffect\PostEffectShader\include\ShaderDefs\ShaderDefsInternal.fxh"
 					>
 				</File>
 				<File
-					RelativePath=".\include\ShaderDefs\ShaderDefsParam.fxh"
+					RelativePath="..\..\PostEffect\PostEffectShader\include\ShaderDefs\ShaderDefsParam.fxh"
 					>
 				</File>
 				<File
-					RelativePath=".\include\ShaderDefs\ShaderDefsPass.fxh"
+					RelativePath="..\..\PostEffect\PostEffectShader\include\ShaderDefs\ShaderDefsPass.fxh"
 					>
 				</File>
 				<File
-					RelativePath=".\include\ShaderDefs\ShaderDefsSampler.fxh"
+					RelativePath="..\..\PostEffect\PostEffectShader\include\ShaderDefs\ShaderDefsSampler.fxh"
 					>
 				</File>
 				<File
-					RelativePath=".\include\ShaderDefs\ShaderDefsScript.fxh"
+					RelativePath="..\..\PostEffect\PostEffectShader\include\ShaderDefs\ShaderDefsScript.fxh"
 					>
 				</File>
 				<File
-					RelativePath=".\include\ShaderDefs\ShaderDefsTex.fxh"
+					RelativePath="..\..\PostEffect\PostEffectShader\include\ShaderDefs\ShaderDefsTex.fxh"
 					>
 				</File>
 			</Filter>
@@ -288,11 +288,11 @@
 				Name="HDR"
 				>
 				<File
-					RelativePath=".\include\HDR\MeasureLuminance.fxh"
+					RelativePath="..\..\PostEffect\PostEffectShader\include\HDR\MeasureLuminance.fxh"
 					>
 				</File>
 				<File
-					RelativePath=".\include\HDR\Tonemap.fxh"
+					RelativePath="..\..\PostEffect\PostEffectShader\include\HDR\Tonemap.fxh"
 					>
 				</File>
 			</Filter>
@@ -300,15 +300,15 @@
 				Name="CommonUtility"
 				>
 				<File
-					RelativePath=".\include\CommonUtility\Blur.fxh"
+					RelativePath="..\..\PostEffect\PostEffectShader\include\CommonUtility\Blur.fxh"
 					>
 				</File>
 				<File
-					RelativePath=".\include\CommonUtility\FilterSampling.fxh"
+					RelativePath="..\..\PostEffect\PostEffectShader\include\CommonUtility\FilterSampling.fxh"
 					>
 				</File>
 				<File
-					RelativePath=".\include\CommonUtility\PostEffectShaderUtility.fxh"
+					RelativePath="..\..\PostEffect\PostEffectShader\include\CommonUtility\PostEffectShaderUtility.fxh"
 					>
 				</File>
 			</Filter>
@@ -317,39 +317,39 @@
 			Name="fx"
 			>
 			<File
-				RelativePath=".\fx\PostEffectBloomStar.fx"
+				RelativePath="..\..\PostEffect\PostEffectShader\fx\PostEffectBloomStar.fx"
 				>
 			</File>
 			<File
-				RelativePath=".\fx\PostEffectBloomStarEx.fx"
+				RelativePath="..\..\PostEffect\PostEffectShader\fx\PostEffectBloomStarEx.fx"
 				>
 			</File>
 			<File
-				RelativePath=".\fx\PostEffectDOF.fx"
+				RelativePath="..\..\PostEffect\PostEffectShader\fx\PostEffectDOF.fx"
 				>
 			</File>
 			<File
-				RelativePath=".\fx\PostEffectDOF2.fx"
+				RelativePath="..\..\PostEffect\PostEffectShader\fx\PostEffectDOF2.fx"
 				>
 			</File>
 			<File
-				RelativePath=".\fx\PostEffectHDR.fx"
+				RelativePath="..\..\PostEffect\PostEffectShader\fx\PostEffectHDR.fx"
 				>
 			</File>
 			<File
-				RelativePath=".\fx\PostEffectHDR2.fx"
+				RelativePath="..\..\PostEffect\PostEffectShader\fx\PostEffectHDR2.fx"
 				>
 			</File>
 			<File
-				RelativePath=".\fx\PostEffectMonotone.fx"
+				RelativePath="..\..\PostEffect\PostEffectShader\fx\PostEffectMonotone.fx"
 				>
 			</File>
 			<File
-				RelativePath=".\fx\PostEffectNegative.fx"
+				RelativePath="..\..\PostEffect\PostEffectShader\fx\PostEffectNegative.fx"
 				>
 			</File>
 			<File
-				RelativePath=".\fx\PostEffectSepia.fx"
+				RelativePath="..\..\PostEffect\PostEffectShader\fx\PostEffectSepia.fx"
 				>
 			</File>
 		</Filter>

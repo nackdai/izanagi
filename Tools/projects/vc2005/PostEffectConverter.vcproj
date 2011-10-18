@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="ShaderConverter"
-	ProjectGUID="{527F2B12-FA4F-42D1-B81F-D4EC25208797}"
-	RootNamespace="ShaderConverter"
+	Name="PostEffectConverter"
+	ProjectGUID="{ECA80E2D-1BB5-4C71-9676-5E2EA803A20E}"
+	RootNamespace="PostEffectConverter"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -17,10 +17,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\..\PeopertySeet\Debug.vsprops"
+			InheritedPropertySheets=".\Debug.vsprops"
 			UseOfMFC="0"
 			CharacterSet="2"
 			>
@@ -42,15 +40,10 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="./AppCore;&quot;$(SolutionDir)/External/Cg/include&quot;;&quot;$(SolutionDir)/External/xerces/src&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;IZ_TOOLKIT_ENABLE_XERCES"
-				MinimalRebuild="true"
-				BasicRuntimeChecks="3"
+				AdditionalIncludeDirectories="&quot;$(EXTERNAL_DIR)/Cg/include&quot;;&quot;$(SolutionDir)../../PostEffect/PostEffectConverter/AppCore&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
-				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
-				DebugInformationFormat="4"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -63,11 +56,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="$(SolutionDir)/External/xerces/Build/Win32/VC8/$(ConfigurationName)/xerces-c_3D.lib $(SolutionDir)/External/Cg/lib/cg.lib $(SolutionDir)/External/Cg/lib/cgD3D9.lib $(SolutionDir)/External/Preproc/$(ConfigurationName)/Preproc.lib"
-				OutputFile="$(SolutionDir)\tools\$(ConfigurationName)\$(ProjectName).exe"
+				AdditionalDependencies="$(EXTERNAL_DIR)/Cg/lib/cg.lib $(EXTERNAL_DIR)/Cg/lib/cgD3D9.lib $(EXTERNAL_DIR)/Preproc/$(ConfigurationName)/Preproc.lib"
 				LinkIncremental="2"
-				IgnoreDefaultLibraryNames=""
-				GenerateDebugInformation="true"
+				AdditionalLibraryDirectories=""
 				SubSystem="1"
 				TargetMachine="1"
 			/>
@@ -98,10 +89,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\..\PeopertySeet\Release.vsprops"
+			InheritedPropertySheets=".\Release.vsprops"
 			UseOfMFC="0"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
@@ -123,8 +112,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="./AppCore;&quot;$(SolutionDir)/External/Cg/include&quot;;&quot;$(SolutionDir)/External/xerces/src&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;IZ_TOOLKIT_ENABLE_XERCES"
+				AdditionalIncludeDirectories="&quot;$(EXTERNAL_DIR)/Cg/include&quot;;&quot;$(SolutionDir)../../PostEffect/PostEffectConverter/AppCore&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -142,8 +131,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="$(SolutionDir)/External/xerces/Build/Win32/VC8/$(ConfigurationName)/xerces-c_3.lib $(SolutionDir)/External/Cg/lib/cg.lib $(SolutionDir)/External/Cg/lib/cgD3D9.lib $(SolutionDir)/External/Preproc/$(ConfigurationName)/Preproc.lib"
-				OutputFile="$(SolutionDir)\tools\$(ConfigurationName)\$(ProjectName).exe"
+				AdditionalDependencies="$(EXTERNAL_DIR)/Cg/lib/cg.lib $(EXTERNAL_DIR)/Cg/lib/cgD3D9.lib $(EXTERNAL_DIR)/Preproc/$(ConfigurationName)/Preproc.lib"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -186,7 +174,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\ShaderConverter.cpp"
+				RelativePath="..\..\PostEffect\PostEffectConverter\PostEffectConverter.cpp"
 				>
 			</File>
 		</Filter>
@@ -201,54 +189,50 @@
 				Name="include"
 				>
 				<File
-					RelativePath=".\AppCore\CompileCmdCreator.h"
+					RelativePath="..\..\PostEffect\PostEffectConverter\AppCore\CompileCmdCreator.h"
 					>
 				</File>
 				<File
-					RelativePath=".\AppCore\DataBuffer.h"
+					RelativePath="..\..\PostEffect\PostEffectConverter\AppCore\DataBuffer.h"
 					>
 				</File>
 				<File
-					RelativePath=".\AppCore\Option.h"
+					RelativePath="..\..\PostEffect\PostEffectConverter\AppCore\Option.h"
 					>
 				</File>
 				<File
-					RelativePath=".\AppCore\Preproc.h"
+					RelativePath="..\..\PostEffect\PostEffectConverter\AppCore\PostEffectConverterImpl.h"
 					>
 				</File>
 				<File
-					RelativePath=".\AppCore\ShaderConfig.h"
+					RelativePath="..\..\PostEffect\PostEffectConverter\AppCore\Preproc.h"
 					>
 				</File>
 				<File
-					RelativePath=".\AppCore\ShaderConverterImpl.h"
-					>
-				</File>
-				<File
-					RelativePath=".\AppCore\StringChunk.h"
+					RelativePath="..\..\PostEffect\PostEffectConverter\AppCore\StringChunk.h"
 					>
 				</File>
 				<Filter
 					Name="util"
 					>
 					<File
-						RelativePath=".\AppCore\ParamUtil.h"
+						RelativePath="..\..\PostEffect\PostEffectConverter\AppCore\ParamUtil.h"
 						>
 					</File>
 					<File
-						RelativePath=".\AppCore\PassUtil.h"
+						RelativePath="..\..\PostEffect\PostEffectConverter\AppCore\PassUtil.h"
 						>
 					</File>
 					<File
-						RelativePath=".\AppCore\SamplerUtil.h"
+						RelativePath="..\..\PostEffect\PostEffectConverter\AppCore\PostEffectConverterUtil.h"
 						>
 					</File>
 					<File
-						RelativePath=".\AppCore\ShaderConverterUtil.h"
+						RelativePath="..\..\PostEffect\PostEffectConverter\AppCore\SamplerUtil.h"
 						>
 					</File>
 					<File
-						RelativePath=".\AppCore\TextureUtil.h"
+						RelativePath="..\..\PostEffect\PostEffectConverter\AppCore\TextureUtil.h"
 						>
 					</File>
 				</Filter>
@@ -257,54 +241,50 @@
 				Name="source"
 				>
 				<File
-					RelativePath=".\AppCore\CompileCmdCreator.cpp"
+					RelativePath="..\..\PostEffect\PostEffectConverter\AppCore\CompileCmdCreator.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AppCore\DataBuffer.cpp"
+					RelativePath="..\..\PostEffect\PostEffectConverter\AppCore\DataBuffer.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AppCore\Option.cpp"
+					RelativePath="..\..\PostEffect\PostEffectConverter\AppCore\Option.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AppCore\Preproc.cpp"
+					RelativePath="..\..\PostEffect\PostEffectConverter\AppCore\PostEffectConverterImpl.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AppCore\ShaderConfig.cpp"
+					RelativePath="..\..\PostEffect\PostEffectConverter\AppCore\PostEffectConverterUtil.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AppCore\ShaderConverterImpl.cpp"
+					RelativePath="..\..\PostEffect\PostEffectConverter\AppCore\Preproc.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AppCore\StringChunk.cpp"
+					RelativePath="..\..\PostEffect\PostEffectConverter\AppCore\StringChunk.cpp"
 					>
 				</File>
 				<Filter
 					Name="util"
 					>
 					<File
-						RelativePath=".\AppCore\ParamUtil.cpp"
+						RelativePath="..\..\PostEffect\PostEffectConverter\AppCore\ParamUtil.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\AppCore\PassUtil.cpp"
+						RelativePath="..\..\PostEffect\PostEffectConverter\AppCore\PassUtil.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\AppCore\SamplerUtil.cpp"
+						RelativePath="..\..\PostEffect\PostEffectConverter\AppCore\SamplerUtil.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\AppCore\ShaderConverterUtil.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\AppCore\TextureUtil.cpp"
+						RelativePath="..\..\PostEffect\PostEffectConverter\AppCore\TextureUtil.cpp"
 						>
 					</File>
 				</Filter>

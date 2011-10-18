@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="FontCoverter"
-	ProjectGUID="{A2629A24-E521-44F6-B827-2F9E4075B51B}"
-	RootNamespace="FontCoverter"
+	Name="ShaderCompile"
+	ProjectGUID="{72385CA4-C72A-4F85-BC0E-079F3290005E}"
+	RootNamespace="ShaderCompile"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -17,10 +17,10 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\..\PeopertySeet\Debug.vsprops"
-			UseOfMFC="0"
-			CharacterSet="2"
+			CharacterSet="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -40,10 +40,14 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../AppCore"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				MinimalRebuild="true"
+				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="true"
+				DebugInformationFormat="4"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -56,9 +60,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="d3d9.lib d3dx9d.lib"
-				OutputFile="$(SolutionDir)\tools\$(ConfigurationName)\$(ProjectName).exe"
 				LinkIncremental="2"
+				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
 			/>
@@ -92,9 +95,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\..\PeopertySeet\Release.vsprops"
-			UseOfMFC="0"
-			CharacterSet="2"
+			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -114,7 +115,6 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="../../../Libs/include;../AppCore"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -133,8 +133,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="d3d9.lib d3dx9.lib dxerr.lib"
-				OutputFile="$(SolutionDir)\tools\$(ConfigurationName)\$(ProjectName).exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -171,95 +169,27 @@
 	<References>
 	</References>
 	<Files>
-		<Filter
-			Name="source"
-			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
-			>
-			<File
-				RelativePath=".\FontCoverter.cpp"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="include"
-			>
-		</Filter>
-		<Filter
-			Name="AppCore"
-			>
-			<Filter
-				Name="include"
-				>
-				<File
-					RelativePath="..\AppCore\CharList.h"
-					>
-				</File>
-				<File
-					RelativePath="..\AppCore\FontConverterDefs.h"
-					>
-				</File>
-				<File
-					RelativePath="..\AppCore\FontConverterImpl.h"
-					>
-				</File>
-				<File
-					RelativePath="..\AppCore\Option.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="source"
-				>
-				<File
-					RelativePath="..\AppCore\CharList.cpp"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="0"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="0"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\AppCore\FontConverterImpl.cpp"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="0"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="0"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\AppCore\Option.cpp"
-					>
-				</File>
-			</Filter>
-		</Filter>
 		<File
-			RelativePath=".\ReadMe.txt"
+			RelativePath="..\..\Shader\ShaderCompile\xml\ConstantColorShader.xml"
 			>
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCustomBuildTool"
+					CommandLine="$(InputDir)\..\..\..\tools\$(ConfigurationName)\ShaderConverter.exe -src &quot;$(InputPath)&quot; -obj &quot;$(InputDir)/../obj&quot; -o &quot;$(InputDir)/../data&quot;"
+					Outputs="$(InputDir)\..\data\$(InputName).shd"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				>
+				<Tool
+					Name="VCCustomBuildTool"
+					CommandLine="$(InputDir)\..\..\..\tools\$(ConfigurationName)\ShaderConverter.exe -src &quot;$(InputPath)&quot; -obj &quot;$(InputDir)/../obj&quot; -o &quot;$(InputDir)/../data&quot;"
+					Outputs="$(InputDir)\..\data\$(InputName).shd"
+				/>
+			</FileConfiguration>
 		</File>
 	</Files>
 	<Globals>

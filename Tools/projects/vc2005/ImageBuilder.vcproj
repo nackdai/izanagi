@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="ModelConverter"
-	ProjectGUID="{8AD239E5-7BAE-4361-8C6E-6E96E8B4EBD5}"
-	RootNamespace="ModelConverter"
+	Name="ImageBuilder"
+	ProjectGUID="{08586CAB-4A9D-488B-96DC-0B7FADB366A1}"
+	RootNamespace="ImageBuilder"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -18,7 +18,8 @@
 		<Configuration
 			Name="Debug|Win32"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\..\PeopertySeet\Debug.vsprops"
+			InheritedPropertySheets=".\Debug.vsprops"
+			UseOfMFC="0"
 			CharacterSet="2"
 			>
 			<Tool
@@ -39,13 +40,10 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\External\collada-dom\dom\include&quot;;&quot;$(SolutionDir)\External\collada-dom\dom\include\1.4&quot;;&quot;$(SolutionDir)\External\collada-dom\dom\external-libs\boost&quot;;../ModelLib/include;./AppCore"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ALL_NO_LIB;PCRE_STATIC;DOM_INCLUDE_LIBXML"
-				MinimalRebuild="true"
-				BasicRuntimeChecks="3"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)../../Image/ImageBuilder/AppCore&quot;;&quot;$(SolutionDir)../../Image/ImageLib&quot;;&quot;$(EXTERNAL_DIR)/xerces/src&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;IZ_TOOLKIT_ENABLE_XERCES"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
-				DisableSpecificWarnings="4819"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -58,12 +56,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libcollada14dom21-sd.lib libxml2_a.lib zlib.lib wsock32.lib pcre-d.lib pcrecpp-d.lib minizip-d.lib libboost_filesystem-d.lib libboost_system-d.lib NvTriStrip.lib d3d9.lib d3dx9d.lib Math.lib shlwapi.lib"
-				OutputFile="$(SolutionDir)\tools\$(ConfigurationName)\$(ProjectName).exe"
+				AdditionalDependencies="$(SolutionDir)ImageLib/$(ConfigurationName)/ImageLib.lib $(EXTERNAL_DIR)/xerces/Build/Win32/VC8/$(ConfigurationName)/xerces-c_3D.lib d3d9.lib d3dx9d.lib dxerr.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)\External\collada-dom\dom\build\vc8-1.4-d&quot;;&quot;$(SolutionDir)\External\collada-dom\dom\external-libs\libxml2\win32\lib&quot;;&quot;$(SolutionDir)\External\collada-dom\dom\external-libs\pcre\lib\vc8&quot;;&quot;$(SolutionDir)\External\collada-dom\dom\external-libs\minizip\win32\lib&quot;;&quot;$(SolutionDir)\External\collada-dom\dom\external-libs\boost\lib\vc8&quot;;&quot;$(SolutionDir)\External\NvTriStrip\lib\$(ConfigurationName)&quot;;../ModelLib;&quot;..\..\..\Libs\project\lib\$(ConfigurationName)_DX9&quot;"
-				IgnoreDefaultLibraryNames="msvcrt"
-				GenerateDebugInformation="true"
+				IgnoreDefaultLibraryNames=""
 				SubSystem="1"
 				TargetMachine="1"
 			/>
@@ -94,10 +89,9 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\..\PeopertySeet\Release.vsprops"
+			InheritedPropertySheets=".\Release.vsprops"
+			UseOfMFC="0"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
@@ -118,14 +112,13 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\External\collada-dom\dom\include&quot;;&quot;$(SolutionDir)\External\collada-dom\dom\include\1.4&quot;;&quot;$(SolutionDir)\External\collada-dom\dom\external-libs\boost&quot;;../ModelLib/include;./AppCore"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;BOOST_ALL_NO_LIB;PCRE_STATIC;DOM_INCLUDE_LIBXML"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)../../Image/ImageBuilder/AppCore&quot;;&quot;$(SolutionDir)../../Image/ImageLib&quot;;&quot;$(EXTERNAL_DIR)/xerces/src&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;IZ_TOOLKIT_ENABLE_XERCES"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="3"
-				DisableSpecificWarnings="4819"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -138,10 +131,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libcollada14dom21-s.lib libxml2_a.lib zlib.lib wsock32.lib pcre-d.lib pcrecpp.lib minizip.lib libboost_filesystem.lib libboost_system.lib NvTriStrip.lib d3d9.lib d3dx9.lib Math.lib shlwapi.lib"
-				OutputFile="$(SolutionDir)\tools\$(ConfigurationName)\$(ProjectName).exe"
+				AdditionalDependencies="$(SolutionDir)ImageLib/$(ConfigurationName)/ImageLib.lib $(EXTERNAL_DIR)/xerces/Build/Win32/VC8/$(ConfigurationName)/xerces-c_3.lib d3d9.lib d3dx9.lib dxerr.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)\External\collada-dom\dom\build\vc8-1.4&quot;;&quot;$(SolutionDir)\External\collada-dom\dom\external-libs\libxml2\win32\lib&quot;;&quot;$(SolutionDir)\External\collada-dom\dom\external-libs\pcre\lib\vc8&quot;;&quot;$(SolutionDir)\External\collada-dom\dom\external-libs\minizip\win32\lib&quot;;&quot;$(SolutionDir)\External\collada-dom\dom\external-libs\boost\lib\vc8&quot;;&quot;$(SolutionDir)\External\NvTriStrip\lib\$(ConfigurationName)&quot;;../ModelLib;&quot;..\..\..\Libs\project\lib\$(ConfigurationName)_DX9&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -183,14 +174,12 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\ModelConverter.cpp"
+				RelativePath="..\..\Image\ImageBuilder\ImageBuilder.cpp"
 				>
 			</File>
 		</Filter>
 		<Filter
 			Name="include"
-			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 		</Filter>
 		<Filter
@@ -200,7 +189,23 @@
 				Name="include"
 				>
 				<File
-					RelativePath=".\AppCore\Option.h"
+					RelativePath="..\..\Image\ImageBuilder\AppCore\AppError.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Image\ImageBuilder\AppCore\ImageBuilderDefs.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Image\ImageBuilder\AppCore\ImageBuilderImpl.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Image\ImageBuilder\AppCore\ImageReaderImpl.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Image\ImageBuilder\AppCore\Option.h"
 					>
 				</File>
 			</Filter>
@@ -208,7 +213,15 @@
 				Name="source"
 				>
 				<File
-					RelativePath=".\AppCore\Option.cpp"
+					RelativePath="..\..\Image\ImageBuilder\AppCore\ImageBuilderImpl.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Image\ImageBuilder\AppCore\ImageReaderImpl.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Image\ImageBuilder\AppCore\Option.cpp"
 					>
 				</File>
 			</Filter>

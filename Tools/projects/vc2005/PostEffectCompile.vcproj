@@ -170,15 +170,15 @@
 	</References>
 	<Files>
 		<File
-			RelativePath=".\peh\BloomStar.peh"
+			RelativePath="..\..\PostEffect\PostEffectCompile\peh\BloomStar.peh"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="$(SolutionDir)\tools\$(ConfigurationName)\PostEffectConverter.exe -l &quot;$(InputPath)&quot; -obj &quot;$(ProjectDir)posteffect_obj&quot; -o &quot;$(ProjectDir)data/$(InputName).pes&quot;"
-					Outputs="$(ProjectDir)data/$(InputName).pes"
+					CommandLine="$(InputDir)../../../tools/$(ConfigurationName)/PostEffectConverter.exe -l $(InputPath) -obj $(InputDir)/../obj -asm -o $(InputDir)/../data/$(InputName).pes"
+					Outputs="$(InputDir)/../data/$(InputName).pes"
 				/>
 			</FileConfiguration>
 			<FileConfiguration
@@ -186,21 +186,21 @@
 				>
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="$(SolutionDir)\tools\$(ConfigurationName)\PostEffectConverter.exe -l &quot;$(InputPath)&quot; -obj &quot;$(ProjectDir)posteffect_obj&quot; -o &quot;$(ProjectDir)data/$(InputName).pes&quot;"
-					Outputs="$(ProjectDir)data/$(InputName).pes"
+					CommandLine="$(InputDir)../../../tools/$(ConfigurationName)/PostEffectConverter.exe -l $(InputPath) -obj $(InputDir)/../obj -asm -o $(InputDir)/../data/$(InputName).pes"
+					Outputs="$(InputDir)/../data/$(InputName).pes"
 				/>
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath=".\peh\BloomStarEx.peh"
+			RelativePath="..\..\PostEffect\PostEffectCompile\peh\BloomStarEx.peh"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="$(SolutionDir)\tools\$(ConfigurationName)\PostEffectConverter.exe -l &quot;$(InputPath)&quot; -obj &quot;$(ProjectDir)posteffect_obj&quot; -o &quot;$(ProjectDir)data/$(InputName).pes&quot;"
-					Outputs="$(ProjectDir)data/$(InputName).pes"
+					CommandLine="$(InputDir)../../../tools/$(ConfigurationName)/PostEffectConverter.exe -l $(InputPath) -obj $(InputDir)/../obj -asm -o $(InputDir)/../data/$(InputName).pes"
+					Outputs="$(InputDir)/../data/$(InputName).pes"
 				/>
 			</FileConfiguration>
 			<FileConfiguration
@@ -208,21 +208,21 @@
 				>
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="$(SolutionDir)\tools\$(ConfigurationName)\PostEffectConverter.exe -l &quot;$(InputPath)&quot; -obj &quot;$(ProjectDir)posteffect_obj&quot; -o &quot;$(ProjectDir)data/$(InputName).pes&quot;"
-					Outputs="$(ProjectDir)data/$(InputName).pes"
+					CommandLine="$(InputDir)../../../tools/$(ConfigurationName)/PostEffectConverter.exe -l $(InputPath) -obj $(InputDir)/../obj -asm -o $(InputDir)/../data/$(InputName).pes"
+					Outputs="$(InputDir)/../data/$(InputName).pes"
 				/>
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath=".\peh\HDR.peh"
+			RelativePath="..\..\PostEffect\PostEffectCompile\peh\HDR.peh"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="$(SolutionDir)\tools\$(ConfigurationName)\PostEffectConverter.exe -l &quot;$(InputPath)&quot; -obj &quot;$(ProjectDir)posteffect_obj&quot; -o &quot;$(ProjectDir)data/$(InputName).pes&quot;"
-					Outputs="$(ProjectDir)data/$(InputName).pes"
+					CommandLine="$(InputDir)../../../tools/$(ConfigurationName)/PostEffectConverter.exe -l $(InputPath) -obj $(InputDir)/../obj -asm -o $(InputDir)/../data/$(InputName).pes"
+					Outputs="$(InputDir)/../data/$(InputName).pes"
 				/>
 			</FileConfiguration>
 			<FileConfiguration
@@ -230,21 +230,21 @@
 				>
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="$(SolutionDir)\tools\$(ConfigurationName)\PostEffectConverter.exe -l &quot;$(InputPath)&quot; -obj &quot;$(ProjectDir)posteffect_obj&quot; -o &quot;$(ProjectDir)data/$(InputName).pes&quot;"
-					Outputs="$(ProjectDir)data/$(InputName).pes"
+					CommandLine="$(InputDir)../../../tools/$(ConfigurationName)/PostEffectConverter.exe -l $(InputPath) -obj $(InputDir)/../obj -asm -o $(InputDir)/../data/$(InputName).pes"
+					Outputs="$(InputDir)/../data/$(InputName).pes"
 				/>
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath=".\peh\HDR2.peh"
+			RelativePath="..\..\PostEffect\PostEffectCompile\peh\HDR2.peh"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="$(SolutionDir)\tools\$(ConfigurationName)\PostEffectConverter.exe -l &quot;$(InputPath)&quot; -obj &quot;$(ProjectDir)posteffect_obj&quot; -o &quot;$(ProjectDir)data/$(InputName).pes&quot;"
-					Outputs="$(ProjectDir)data/$(InputName).pes"
+					CommandLine="$(InputDir)../../../tools/$(ConfigurationName)/PostEffectConverter.exe -l $(InputPath) -obj $(InputDir)/../obj -asm -o $(InputDir)/../data/$(InputName).pes"
+					Outputs="$(InputDir)/../data/$(InputName).pes"
 				/>
 			</FileConfiguration>
 			<FileConfiguration
@@ -252,21 +252,21 @@
 				>
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="$(SolutionDir)\tools\$(ConfigurationName)\PostEffectConverter.exe -l &quot;$(InputPath)&quot; -obj &quot;$(ProjectDir)posteffect_obj&quot; -o &quot;$(ProjectDir)data/$(InputName).pes&quot;"
-					Outputs="$(ProjectDir)data/$(InputName).pes"
+					CommandLine="$(InputDir)../../../tools/$(ConfigurationName)/PostEffectConverter.exe -l $(InputPath) -obj $(InputDir)/../obj -asm -o $(InputDir)/../data/$(InputName).pes"
+					Outputs="$(InputDir)/../data/$(InputName).pes"
 				/>
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath=".\peh\Monotone.peh"
+			RelativePath="..\..\PostEffect\PostEffectCompile\peh\Monotone.peh"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="$(SolutionDir)\tools\$(ConfigurationName)\PostEffectConverter.exe -l &quot;$(InputPath)&quot; -obj &quot;$(ProjectDir)posteffect_obj&quot; -o &quot;$(ProjectDir)data/$(InputName).pes&quot;"
-					Outputs="$(ProjectDir)data/$(InputName).pes"
+					CommandLine="$(InputDir)../../../tools/$(ConfigurationName)/PostEffectConverter.exe -l $(InputPath) -obj $(InputDir)/../obj -asm -o $(InputDir)/../data/$(InputName).pes"
+					Outputs="$(InputDir)/../data/$(InputName).pes"
 				/>
 			</FileConfiguration>
 			<FileConfiguration
@@ -274,21 +274,21 @@
 				>
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="$(SolutionDir)\tools\$(ConfigurationName)\PostEffectConverter.exe -l &quot;$(InputPath)&quot; -obj &quot;$(ProjectDir)posteffect_obj&quot; -o &quot;$(ProjectDir)data/$(InputName).pes&quot;"
-					Outputs="$(ProjectDir)data/$(InputName).pes"
+					CommandLine="$(InputDir)../../../tools/$(ConfigurationName)/PostEffectConverter.exe -l $(InputPath) -obj $(InputDir)/../obj -asm -o $(InputDir)/../data/$(InputName).pes"
+					Outputs="$(InputDir)/../data/$(InputName).pes"
 				/>
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath=".\peh\Negative.peh"
+			RelativePath="..\..\PostEffect\PostEffectCompile\peh\Negative.peh"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="$(SolutionDir)\tools\$(ConfigurationName)\PostEffectConverter.exe -l &quot;$(InputPath)&quot; -obj &quot;$(ProjectDir)posteffect_obj&quot; -o &quot;$(ProjectDir)data/$(InputName).pes&quot;"
-					Outputs="$(ProjectDir)data/$(InputName).pes"
+					CommandLine="$(InputDir)../../../tools/$(ConfigurationName)/PostEffectConverter.exe -l $(InputPath) -obj $(InputDir)/../obj -asm -o $(InputDir)/../data/$(InputName).pes"
+					Outputs="$(InputDir)/../data/$(InputName).pes"
 				/>
 			</FileConfiguration>
 			<FileConfiguration
@@ -296,21 +296,21 @@
 				>
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="$(SolutionDir)\tools\$(ConfigurationName)\PostEffectConverter.exe -l &quot;$(InputPath)&quot; -obj &quot;$(ProjectDir)posteffect_obj&quot; -o &quot;$(ProjectDir)data/$(InputName).pes&quot;"
-					Outputs="$(ProjectDir)data/$(InputName).pes"
+					CommandLine="$(InputDir)../../../tools/$(ConfigurationName)/PostEffectConverter.exe -l $(InputPath) -obj $(InputDir)/../obj -asm -o $(InputDir)/../data/$(InputName).pes"
+					Outputs="$(InputDir)/../data/$(InputName).pes"
 				/>
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath=".\peh\Sepia.peh"
+			RelativePath="..\..\PostEffect\PostEffectCompile\peh\Sepia.peh"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="$(SolutionDir)\tools\$(ConfigurationName)\PostEffectConverter.exe -l &quot;$(InputPath)&quot; -obj &quot;$(ProjectDir)posteffect_obj&quot; -o &quot;$(ProjectDir)data/$(InputName).pes&quot;"
-					Outputs="$(ProjectDir)data/$(InputName).pes"
+					CommandLine="$(InputDir)../../../tools/$(ConfigurationName)/PostEffectConverter.exe -l $(InputPath) -obj $(InputDir)/../obj -asm -o $(InputDir)/../data/$(InputName).pes"
+					Outputs="$(InputDir)/../data/$(InputName).pes"
 				/>
 			</FileConfiguration>
 			<FileConfiguration
@@ -318,8 +318,8 @@
 				>
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="$(SolutionDir)\tools\$(ConfigurationName)\PostEffectConverter.exe -l &quot;$(InputPath)&quot; -obj &quot;$(ProjectDir)posteffect_obj&quot; -o &quot;$(ProjectDir)data/$(InputName).pes&quot;"
-					Outputs="$(ProjectDir)data/$(InputName).pes"
+					CommandLine="$(InputDir)../../../tools/$(ConfigurationName)/PostEffectConverter.exe -l $(InputPath) -obj $(InputDir)/../obj -asm -o $(InputDir)/../data/$(InputName).pes"
+					Outputs="$(InputDir)/../data/$(InputName).pes"
 				/>
 			</FileConfiguration>
 		</File>
