@@ -68,7 +68,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="IF NOT EXIST lib\$(IntDir) mkdir lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; lib\$(IntDir)&#x0D;&#x0A;"
+				CommandLine="IF NOT EXIST ..\lib\$(IntDir) mkdir ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; ..\lib\$(IntDir)&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -124,7 +124,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="IF NOT EXIST lib\$(IntDir) mkdir lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; lib\$(IntDir)&#x0D;&#x0A;"
+				CommandLine="IF NOT EXIST ..\lib\$(IntDir) mkdir ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; ..\lib\$(IntDir)&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -183,7 +183,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="IF NOT EXIST lib\$(IntDir) mkdir lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; lib\$(IntDir)&#x0D;&#x0A;"
+				CommandLine="IF NOT EXIST ..\lib\$(IntDir) mkdir ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; ..\lib\$(IntDir)&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
@@ -196,22 +196,22 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\source\scenegraph\Camera.cpp"
+				RelativePath="..\..\source\scenegraph\Camera.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\source\scenegraph\SceneGraphUtil.cpp"
+				RelativePath="..\..\source\scenegraph\SceneGraphUtil.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\source\scenegraph\SceneParam.cpp"
+				RelativePath="..\..\source\scenegraph\SceneParam.cpp"
 				>
 			</File>
 			<Filter
 				Name="img"
 				>
 				<File
-					RelativePath="..\source\scenegraph\img\izImage.cpp"
+					RelativePath="..\..\source\scenegraph\img\izImage.cpp"
 					>
 				</File>
 			</Filter>
@@ -219,7 +219,7 @@
 				Name="mdl"
 				>
 				<File
-					RelativePath="..\source\scenegraph\mdl\izModel.cpp"
+					RelativePath="..\..\source\scenegraph\mdl\izModel.cpp"
 					>
 				</File>
 			</Filter>
@@ -227,30 +227,30 @@
 				Name="anm"
 				>
 				<File
-					RelativePath="..\source\scenegraph\anm\AnimationBinder.cpp"
+					RelativePath="..\..\source\scenegraph\anm\AnimationBinder.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\source\scenegraph\anm\AnimationInterface.cpp"
+					RelativePath="..\..\source\scenegraph\anm\AnimationInterface.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\source\scenegraph\anm\AnimationInterp.cpp"
+					RelativePath="..\..\source\scenegraph\anm\AnimationInterp.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\source\scenegraph\anm\AnimationUtil.cpp"
+					RelativePath="..\..\source\scenegraph\anm\AnimationUtil.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\source\scenegraph\anm\izAnimation.cpp"
+					RelativePath="..\..\source\scenegraph\anm\izAnimation.cpp"
 					>
 				</File>
 				<Filter
 					Name="blend"
 					>
 					<File
-						RelativePath="..\source\scenegraph\anm\AnimationLinearBlender.cpp"
+						RelativePath="..\..\source\scenegraph\anm\AnimationLinearBlender.cpp"
 						>
 					</File>
 				</Filter>
@@ -259,7 +259,7 @@
 				Name="mtrl"
 				>
 				<File
-					RelativePath="..\source\scenegraph\mtrl\izMaterial.cpp"
+					RelativePath="..\..\source\scenegraph\mtrl\izMaterial.cpp"
 					>
 				</File>
 			</Filter>
@@ -267,23 +267,23 @@
 				Name="msh"
 				>
 				<File
-					RelativePath="..\source\scenegraph\msh\izMesh.cpp"
+					RelativePath="..\..\source\scenegraph\msh\izMesh.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\source\scenegraph\msh\MeshInstance.cpp"
+					RelativePath="..\..\source\scenegraph\msh\MeshInstance.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\source\scenegraph\msh\MshMeshGroup.cpp"
+					RelativePath="..\..\source\scenegraph\msh\MshMeshGroup.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\source\scenegraph\msh\MshMeshSet.cpp"
+					RelativePath="..\..\source\scenegraph\msh\MshMeshSet.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\source\scenegraph\msh\MshPrimitiveSet.cpp"
+					RelativePath="..\..\source\scenegraph\msh\MshPrimitiveSet.cpp"
 					>
 				</File>
 			</Filter>
@@ -291,15 +291,15 @@
 				Name="skl"
 				>
 				<File
-					RelativePath="..\source\scenegraph\skl\izSkeleton.cpp"
+					RelativePath="..\..\source\scenegraph\skl\izSkeleton.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\source\scenegraph\skl\SkeletonInstance.cpp"
+					RelativePath="..\..\source\scenegraph\skl\SkeletonInstance.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\source\scenegraph\skl\SkeletonUtil.cpp"
+					RelativePath="..\..\source\scenegraph\skl\SkeletonUtil.cpp"
 					>
 				</File>
 			</Filter>
@@ -307,11 +307,11 @@
 				Name="scene"
 				>
 				<File
-					RelativePath="..\source\scenegraph\scene\GeometrySorter.cpp"
+					RelativePath="..\..\source\scenegraph\scene\GeometrySorter.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\source\scenegraph\scene\SceneRenerer.cpp"
+					RelativePath="..\..\source\scenegraph\scene\SceneRenerer.cpp"
 					>
 				</File>
 			</Filter>
@@ -322,34 +322,34 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\include\scenegraph\Camera.h"
+				RelativePath="..\..\include\scenegraph\Camera.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\scenegraph\LightParam.h"
+				RelativePath="..\..\include\scenegraph\LightParam.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\scenegraph\SceneDefs.h"
+				RelativePath="..\..\include\scenegraph\SceneDefs.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\scenegraph\SceneGraphUtil.h"
+				RelativePath="..\..\include\scenegraph\SceneGraphUtil.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\scenegraph\SceneParam.h"
+				RelativePath="..\..\include\scenegraph\SceneParam.h"
 				>
 			</File>
 			<Filter
 				Name="img"
 				>
 				<File
-					RelativePath="..\include\scenegraph\img\IMGFormat.h"
+					RelativePath="..\..\include\scenegraph\img\IMGFormat.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\scenegraph\img\izImage.h"
+					RelativePath="..\..\include\scenegraph\img\izImage.h"
 					>
 				</File>
 			</Filter>
@@ -357,11 +357,11 @@
 				Name="mdl"
 				>
 				<File
-					RelativePath="..\include\scenegraph\mdl\izModel.h"
+					RelativePath="..\..\include\scenegraph\mdl\izModel.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\scenegraph\mdl\MDLFormat.h"
+					RelativePath="..\..\include\scenegraph\mdl\MDLFormat.h"
 					>
 				</File>
 			</Filter>
@@ -369,11 +369,11 @@
 				Name="mtrl"
 				>
 				<File
-					RelativePath="..\include\scenegraph\mtrl\izMaterial.h"
+					RelativePath="..\..\include\scenegraph\mtrl\izMaterial.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\scenegraph\mtrl\MTRLFormat.h"
+					RelativePath="..\..\include\scenegraph\mtrl\MTRLFormat.h"
 					>
 				</File>
 			</Filter>
@@ -381,38 +381,38 @@
 				Name="anm"
 				>
 				<File
-					RelativePath="..\include\scenegraph\anm\AnimationBinder.h"
+					RelativePath="..\..\include\scenegraph\anm\AnimationBinder.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\scenegraph\anm\AnimationInterface.h"
+					RelativePath="..\..\include\scenegraph\anm\AnimationInterface.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\scenegraph\anm\AnimationInterp.h"
+					RelativePath="..\..\include\scenegraph\anm\AnimationInterp.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\scenegraph\anm\AnimationUtil.h"
+					RelativePath="..\..\include\scenegraph\anm\AnimationUtil.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\scenegraph\anm\ANMFormat.h"
+					RelativePath="..\..\include\scenegraph\anm\ANMFormat.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\scenegraph\anm\izAnimation.h"
+					RelativePath="..\..\include\scenegraph\anm\izAnimation.h"
 					>
 				</File>
 				<Filter
 					Name="blend"
 					>
 					<File
-						RelativePath="..\include\scenegraph\anm\AnimationBlender.h"
+						RelativePath="..\..\include\scenegraph\anm\AnimationBlender.h"
 						>
 					</File>
 					<File
-						RelativePath="..\include\scenegraph\anm\AnimationLinearBlender.h"
+						RelativePath="..\..\include\scenegraph\anm\AnimationLinearBlender.h"
 						>
 					</File>
 				</Filter>
@@ -421,31 +421,31 @@
 				Name="msh"
 				>
 				<File
-					RelativePath="..\include\scenegraph\msh\izMesh.h"
+					RelativePath="..\..\include\scenegraph\msh\izMesh.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\scenegraph\msh\MeshInstance.h"
+					RelativePath="..\..\include\scenegraph\msh\MeshInstance.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\scenegraph\msh\MSHFormat.h"
+					RelativePath="..\..\include\scenegraph\msh\MSHFormat.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\scenegraph\msh\MshMeshGroup.h"
+					RelativePath="..\..\include\scenegraph\msh\MshMeshGroup.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\scenegraph\msh\MshMeshSet.h"
+					RelativePath="..\..\include\scenegraph\msh\MshMeshSet.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\scenegraph\msh\MshPrimitiveSet.h"
+					RelativePath="..\..\include\scenegraph\msh\MshPrimitiveSet.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\scenegraph\msh\MshRenderHandler.h"
+					RelativePath="..\..\include\scenegraph\msh\MshRenderHandler.h"
 					>
 				</File>
 			</Filter>
@@ -453,19 +453,19 @@
 				Name="skl"
 				>
 				<File
-					RelativePath="..\include\scenegraph\skl\izSkeleton.h"
+					RelativePath="..\..\include\scenegraph\skl\izSkeleton.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\scenegraph\skl\SkeletonInstance.h"
+					RelativePath="..\..\include\scenegraph\skl\SkeletonInstance.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\scenegraph\skl\SkeletonUtil.h"
+					RelativePath="..\..\include\scenegraph\skl\SkeletonUtil.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\scenegraph\skl\SKLFormat.h"
+					RelativePath="..\..\include\scenegraph\skl\SKLFormat.h"
 					>
 				</File>
 			</Filter>
@@ -473,11 +473,11 @@
 				Name="scene"
 				>
 				<File
-					RelativePath="..\include\scenegraph\scene\GeometrySorter.h"
+					RelativePath="..\..\include\scenegraph\scene\GeometrySorter.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\scenegraph\scene\SceneRenderer.h"
+					RelativePath="..\..\include\scenegraph\scene\SceneRenderer.h"
 					>
 				</File>
 			</Filter>

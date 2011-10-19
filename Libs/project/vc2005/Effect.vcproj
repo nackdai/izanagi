@@ -196,19 +196,19 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\source\effect\EffectEmitter.cpp"
+				RelativePath="..\..\source\effect\EffectEmitter.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\source\effect\EffectParticleManager.cpp"
+				RelativePath="..\..\source\effect\EffectParticleManager.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\source\effect\EffectResource.cpp"
+				RelativePath="..\..\source\effect\EffectResource.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\source\effect\EffectTexAnmManager.cpp"
+				RelativePath="..\..\source\effect\EffectTexAnmManager.cpp"
 				>
 			</File>
 		</Filter>
@@ -218,66 +218,66 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\include\effect\EffectDefs.h"
+				RelativePath="..\..\include\effect\EffectDefs.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\effect\EffectEmitter.h"
+				RelativePath="..\..\include\effect\EffectEmitter.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\effect\EffectObject.h"
+				RelativePath="..\..\include\effect\EffectObject.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\effect\EffectParticle.h"
+				RelativePath="..\..\include\effect\EffectParticle.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\effect\EffectParticleAttribute.h"
+				RelativePath="..\..\include\effect\EffectParticleAttribute.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\effect\EffectParticleManager.h"
+				RelativePath="..\..\include\effect\EffectParticleManager.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\effect\EffectResource.h"
+				RelativePath="..\..\include\effect\EffectResource.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\effect\EffectShape.h"
+				RelativePath="..\..\include\effect\EffectShape.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\effect\EffectTexAnmManager.h"
+				RelativePath="..\..\include\effect\EffectTexAnmManager.h"
 				>
 			</File>
 			<Filter
 				Name="shape"
 				>
 				<File
-					RelativePath="..\include\effect\EffectShapeBox.h"
+					RelativePath="..\..\include\effect\EffectShapeBox.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\effect\EffectShapeLine.h"
+					RelativePath="..\..\include\effect\EffectShapeLine.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\effect\EffectShapePlane.h"
+					RelativePath="..\..\include\effect\EffectShapePlane.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\effect\EffectShapePoint.h"
+					RelativePath="..\..\include\effect\EffectShapePoint.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\effect\EffectShapeRect.h"
+					RelativePath="..\..\include\effect\EffectShapeRect.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\effect\EffectShapeSphere.h"
+					RelativePath="..\..\include\effect\EffectShapeSphere.h"
 					>
 				</File>
 			</Filter>
@@ -285,7 +285,7 @@
 				Name="particle"
 				>
 				<File
-					RelativePath="..\include\effect\EffectParticleBillboard.h"
+					RelativePath="..\..\include\effect\EffectParticleBillboard.h"
 					>
 				</File>
 			</Filter>

@@ -79,13 +79,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lower", "Lower", "{F9BBC662
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 	ProjectSection(SolutionItems) = preProject
-		..\include\izD3DDefs.h = ..\include\izD3DDefs.h
-		..\include\izDefs.h = ..\include\izDefs.h
-		..\include\izGraph.h = ..\include\izGraph.h
-		..\include\izIo.h = ..\include\izIo.h
-		..\include\izMath.h = ..\include\izMath.h
-		..\include\izStd.h = ..\include\izStd.h
-		..\include\izSystem.h = ..\include\izSystem.h
+		..\..\include\izD3DDefs.h = ..\..\include\izD3DDefs.h
+		..\..\include\izDefs.h = ..\..\include\izDefs.h
+		..\..\include\izGraph.h = ..\..\include\izGraph.h
+		..\..\include\izIo.h = ..\..\include\izIo.h
+		..\..\include\izMath.h = ..\..\include\izMath.h
+		..\..\include\izStd.h = ..\..\include\izStd.h
+		..\..\include\izSystem.h = ..\..\include\izSystem.h
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Upper", "Upper", "{8B121785-95CB-4DD2-9995-3EF692F5F99E}"
@@ -94,7 +94,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Upper", "Upper", "{8B121785
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 	ProjectSection(SolutionItems) = preProject
-		..\include\izSceneGraph.h = ..\include\izSceneGraph.h
+		..\..\include\izSceneGraph.h = ..\..\include\izSceneGraph.h
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Upper", "Upper", "{1D02B04C-72A9-4F8D-ADCC-67BF57ED0FE2}"
@@ -121,12 +121,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Middle", "Middle", "{6EF652
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 	ProjectSection(SolutionItems) = preProject
-		..\include\izCompress.h = ..\include\izCompress.h
-		..\include\izDebugUtil.h = ..\include\izDebugUtil.h
-		..\include\izFont.h = ..\include\izFont.h
-		..\include\izPostEffect.h = ..\include\izPostEffect.h
-		..\include\izResource.h = ..\include\izResource.h
-		..\include\izShader.h = ..\include\izShader.h
+		..\..\include\izCompress.h = ..\..\include\izCompress.h
+		..\..\include\izDebugUtil.h = ..\..\include\izDebugUtil.h
+		..\..\include\izFont.h = ..\..\include\izFont.h
+		..\..\include\izPostEffect.h = ..\..\include\izPostEffect.h
+		..\..\include\izResource.h = ..\..\include\izResource.h
+		..\..\include\izShader.h = ..\..\include\izShader.h
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Terra", "Terra.vcproj", "{96045295-93C8-4453-A9E5-A3358FAD3DB7}"

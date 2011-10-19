@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="PostEffect"
-	ProjectGUID="{E282A954-0783-43AE-B6F0-E81EEE6789E7}"
-	RootNamespace="PostEffect"
+	Name="DebugUtil"
+	ProjectGUID="{3C6615A2-A960-4BA3-B0A5-D17F797CB141}"
+	RootNamespace="DebugUtil"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -69,7 +69,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="IF NOT EXIST lib\$(IntDir) mkdir lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; lib\$(IntDir)&#x0D;&#x0A;"
+				CommandLine="IF NOT EXIST ..\lib\$(IntDir) mkdir ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; ..\lib\$(IntDir)"
 			/>
 		</Configuration>
 		<Configuration
@@ -126,7 +126,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="IF NOT EXIST lib\$(IntDir) mkdir lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; lib\$(IntDir)&#x0D;&#x0A;"
+				CommandLine="IF NOT EXIST ..\lib\$(IntDir) mkdir ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; ..\lib\$(IntDir)"
 			/>
 		</Configuration>
 		<Configuration
@@ -185,7 +185,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="IF NOT EXIST lib\$(IntDir) mkdir lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; lib\$(IntDir)&#x0D;&#x0A;"
+				CommandLine="IF NOT EXIST ..\lib\$(IntDir) mkdir ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; ..\lib\$(IntDir)"
 			/>
 		</Configuration>
 	</Configurations>
@@ -198,66 +198,70 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\source\posteffect\PostEffect.cpp"
+				RelativePath="..\..\source\debugutil\DebugFont.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\source\posteffect\PostEffectShader.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\source\posteffect\PostEffectSystem.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\source\posteffect\PostEffectTextureCreator.cpp"
+				RelativePath="..\..\source\debugutil\font.dat"
 				>
 			</File>
 			<Filter
-				Name="functor"
+				Name="mesh"
 				>
 				<File
-					RelativePath="..\source\posteffect\functor\PostEffectFunctor.cpp"
+					RelativePath="..\..\source\debugutil\mesh\DebugMesh.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\source\posteffect\functor\PostEffectFunctorDefault.cpp"
+					RelativePath="..\..\source\debugutil\mesh\DebugMeshAxis.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\source\posteffect\functor\PostEffectFunctorDOF.cpp"
+					RelativePath="..\..\source\debugutil\mesh\DebugMeshBox.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\source\posteffect\functor\PostEffectFunctorMGF.cpp"
+					RelativePath="..\..\source\debugutil\mesh\DebugMeshCylinder.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\source\posteffect\functor\PostEffectFunctorRenderStar.cpp"
+					RelativePath="..\..\source\debugutil\mesh\DebugMeshFrustum.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\source\posteffect\functor\PostEffectFunctorSwitchTex.cpp"
+					RelativePath="..\..\source\debugutil\mesh\DebugMeshGrid.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\source\debugutil\mesh\DebugMeshRectangle.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\source\debugutil\mesh\DebugMeshSphere.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\source\debugutil\mesh\DebugMeshTorus.cpp"
 					>
 				</File>
 			</Filter>
 			<Filter
-				Name="util"
+				Name="ui"
 				>
 				<File
-					RelativePath="..\source\posteffect\util\PostEffectUtilityRect.cpp"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="vs"
-				>
-				<File
-					RelativePath="..\source\posteffect\vs\PostEffectVS.cpp"
+					RelativePath="..\..\source\debugutil\ui\DebugUIButton.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\source\posteffect\vs\PostEffectVSManager.cpp"
+					RelativePath="..\..\source\debugutil\ui\DebugUIDialog.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\source\debugutil\ui\DebugUIFontLayout.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\source\debugutil\ui\DebugUIManager.cpp"
 					>
 				</File>
 			</Filter>
@@ -268,126 +272,98 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\include\posteffect\PESFormat.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\posteffect\PostEffect.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\posteffect\PosteffectDefs.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\posteffect\PostEffectShader.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\posteffect\PostEffectShaderPass.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\posteffect\PostEffectSystem.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\posteffect\PostEffectTextureCreator.h"
+				RelativePath="..\..\include\debugutil\DebugFont.h"
 				>
 			</File>
 			<Filter
-				Name="functor"
+				Name="mesh"
 				>
 				<File
-					RelativePath="..\include\posteffect\functor\PostEffectFunctor.h"
+					RelativePath="..\..\include\debugutil\mesh\DebugMesh.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\posteffect\functor\PostEffectFunctorCreator.h"
+					RelativePath="..\..\include\debugutil\mesh\DebugMeshAxis.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\posteffect\functor\PostEffectFunctorDefault.h"
+					RelativePath="..\..\include\debugutil\mesh\DebugMeshBox.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\posteffect\functor\PostEffectFunctorDOF.h"
+					RelativePath="..\..\include\debugutil\mesh\DebugMeshCylinder.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\posteffect\functor\PostEffectFunctorMGF.h"
+					RelativePath="..\..\include\debugutil\mesh\DebugMeshFrustum.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\posteffect\functor\PostEffectFunctorOnce.h"
+					RelativePath="..\..\include\debugutil\mesh\DebugMeshGrid.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\posteffect\functor\PostEffectFunctorRenderStar.h"
+					RelativePath="..\..\include\debugutil\mesh\DebugMeshRectangle.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\posteffect\functor\PostEffectFunctorSwitchTex.h"
+					RelativePath="..\..\include\debugutil\mesh\DebugMeshSphere.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\debugutil\mesh\DebugMeshTorus.h"
 					>
 				</File>
 			</Filter>
 			<Filter
-				Name="table"
+				Name="ui"
 				>
 				<File
-					RelativePath="..\include\posteffect\table\PostEffectShaderConstTable.h"
+					RelativePath="..\..\include\debugutil\ui\DebugUIButton.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\posteffect\table\PostEffectShaderPassTable.h"
+					RelativePath="..\..\include\debugutil\ui\DebugUICheckBox.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\posteffect\table\PostEffectShaderSamplerTable.h"
+					RelativePath="..\..\include\debugutil\ui\DebugUIComboBox.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\posteffect\table\PostEffectShaderStringTable.h"
+					RelativePath="..\..\include\debugutil\ui\DebugUIDialog.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\posteffect\table\PostEffectShaderTechTable.h"
+					RelativePath="..\..\include\debugutil\ui\DebugUIFontLayout.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\posteffect\table\PostEffectShaderTextureTable.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="util"
-				>
-				<File
-					RelativePath="..\include\posteffect\util\PostEffectShaderUtil.h"
+					RelativePath="..\..\include\debugutil\ui\DebugUIFontRenderer.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\posteffect\util\PostEffectUtilityParam.h"
+					RelativePath="..\..\include\debugutil\ui\DebugUIListBox.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\posteffect\util\PostEffectUtilityRect.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="vs"
-				>
-				<File
-					RelativePath="..\include\posteffect\vs\PostEffectVS.h"
+					RelativePath="..\..\include\debugutil\ui\DebugUIManager.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\posteffect\vs\PostEffectVSManager.h"
+					RelativePath="..\..\include\debugutil\ui\DebugUIRadioButton.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\posteffect\vs\PostEffectVSSampling.h"
+					RelativePath="..\..\include\debugutil\ui\DebugUISliderControl.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\debugutil\ui\DebugUIStaticText.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\debugutil\ui\DebugUIWidget.h"
 					>
 				</File>
 			</Filter>

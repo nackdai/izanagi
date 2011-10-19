@@ -69,7 +69,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="IF NOT EXIST lib\$(IntDir) mkdir lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; lib\$(IntDir)&#x0D;&#x0A;"
+				CommandLine="IF NOT EXIST ..\lib\$(IntDir) mkdir ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; ..\lib\$(IntDir)"
 			/>
 		</Configuration>
 		<Configuration
@@ -125,7 +125,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="IF NOT EXIST lib\$(IntDir) mkdir lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; lib\$(IntDir)&#x0D;&#x0A;"
+				CommandLine="IF NOT EXIST ..\lib\$(IntDir) mkdir ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; ..\lib\$(IntDir)"
 			/>
 		</Configuration>
 		<Configuration
@@ -184,7 +184,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="IF NOT EXIST lib\$(IntDir) mkdir lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; lib\$(IntDir)&#x0D;&#x0A;"
+				CommandLine="IF NOT EXIST ..\lib\$(IntDir) mkdir ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; ..\lib\$(IntDir)"
 			/>
 		</Configuration>
 	</Configurations>
@@ -220,7 +220,7 @@
 				Name="internal"
 				>
 				<File
-					RelativePath="..\source\graph\internal\GraphicsDeviceResourceFuncs.cpp"
+					RelativePath="..\..\source\graph\internal\GraphicsDeviceResourceFuncs.cpp"
 					>
 				</File>
 			</Filter>
@@ -228,18 +228,18 @@
 				Name="2d"
 				>
 				<File
-					RelativePath="..\source\graph\2d\2DRenderer.cpp"
+					RelativePath="..\..\source\graph\2d\2DRenderer.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\source\graph\2d\2DShader.cpp"
+					RelativePath="..\..\source\graph\2d\2DShader.cpp"
 					>
 				</File>
 				<Filter
 					Name="shader"
 					>
 					<File
-						RelativePath="..\source\graph\2d\shader\2DPS.hlsl"
+						RelativePath="..\..\source\graph\2d\shader\2DPS.hlsl"
 						>
 						<FileConfiguration
 							Name="Debug_DX9|Win32"
@@ -270,11 +270,11 @@
 						</FileConfiguration>
 					</File>
 					<File
-						RelativePath="..\source\graph\2d\shader\2DShader.hlsl"
+						RelativePath="..\..\source\graph\2d\shader\2DShader.hlsl"
 						>
 					</File>
 					<File
-						RelativePath="..\source\graph\2d\shader\2DVS.hlsl"
+						RelativePath="..\..\source\graph\2d\shader\2DVS.hlsl"
 						>
 						<FileConfiguration
 							Name="Debug_DX9|Win32"
@@ -310,7 +310,7 @@
 				Name="dx9"
 				>
 				<File
-					RelativePath="..\source\graph\dx9\BaseTexture.cpp"
+					RelativePath="..\..\source\graph\dx9\BaseTexture.cpp"
 					>
 					<FileConfiguration
 						Name="Debug_OGL|Win32"
@@ -322,7 +322,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\source\graph\dx9\CubeTexture.cpp"
+					RelativePath="..\..\source\graph\dx9\CubeTexture.cpp"
 					>
 					<FileConfiguration
 						Name="Debug_OGL|Win32"
@@ -334,7 +334,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\source\graph\dx9\D3D9ParamValueConverter.cpp"
+					RelativePath="..\..\source\graph\dx9\D3D9ParamValueConverter.cpp"
 					>
 					<FileConfiguration
 						Name="Debug_OGL|Win32"
@@ -346,7 +346,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\source\graph\dx9\GraphicsDevice.cpp"
+					RelativePath="..\..\source\graph\dx9\GraphicsDevice.cpp"
 					>
 					<FileConfiguration
 						Name="Debug_OGL|Win32"
@@ -358,7 +358,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\source\graph\dx9\IndexBuffer.cpp"
+					RelativePath="..\..\source\graph\dx9\IndexBuffer.cpp"
 					>
 					<FileConfiguration
 						Name="Debug_OGL|Win32"
@@ -370,7 +370,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\source\graph\dx9\PixelShader.cpp"
+					RelativePath="..\..\source\graph\dx9\PixelShader.cpp"
 					>
 					<FileConfiguration
 						Name="Debug_OGL|Win32"
@@ -382,7 +382,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\source\graph\dx9\RenderState.cpp"
+					RelativePath="..\..\source\graph\dx9\RenderState.cpp"
 					>
 					<FileConfiguration
 						Name="Debug_OGL|Win32"
@@ -394,7 +394,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\source\graph\dx9\ShaderConstTable.cpp"
+					RelativePath="..\..\source\graph\dx9\ShaderConstTable.cpp"
 					>
 					<FileConfiguration
 						Name="Debug_OGL|Win32"
@@ -406,7 +406,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\source\graph\dx9\Surface.cpp"
+					RelativePath="..\..\source\graph\dx9\Surface.cpp"
 					>
 					<FileConfiguration
 						Name="Debug_OGL|Win32"
@@ -418,7 +418,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\source\graph\dx9\Texture.cpp"
+					RelativePath="..\..\source\graph\dx9\Texture.cpp"
 					>
 					<FileConfiguration
 						Name="Debug_OGL|Win32"
@@ -430,7 +430,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\source\graph\dx9\VertexBuffer.cpp"
+					RelativePath="..\..\source\graph\dx9\VertexBuffer.cpp"
 					>
 					<FileConfiguration
 						Name="Debug_OGL|Win32"
@@ -442,7 +442,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\source\graph\dx9\VertexDeclaration.cpp"
+					RelativePath="..\..\source\graph\dx9\VertexDeclaration.cpp"
 					>
 					<FileConfiguration
 						Name="Debug_OGL|Win32"
@@ -454,7 +454,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\source\graph\dx9\VertexShader.cpp"
+					RelativePath="..\..\source\graph\dx9\VertexShader.cpp"
 					>
 					<FileConfiguration
 						Name="Debug_OGL|Win32"
@@ -470,7 +470,7 @@
 				Name="ogl"
 				>
 				<File
-					RelativePath="..\source\graph\ogl\BaseTexture.cpp"
+					RelativePath="..\..\source\graph\ogl\BaseTexture.cpp"
 					>
 					<FileConfiguration
 						Name="Debug_DX9|Win32"
@@ -503,7 +503,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\source\graph\ogl\CubeTexture.cpp"
+					RelativePath="..\..\source\graph\ogl\CubeTexture.cpp"
 					>
 					<FileConfiguration
 						Name="Debug_DX9|Win32"
@@ -536,7 +536,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\source\graph\ogl\FxShader.cpp"
+					RelativePath="..\..\source\graph\ogl\FxShader.cpp"
 					>
 					<FileConfiguration
 						Name="Debug_DX9|Win32"
@@ -569,7 +569,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\source\graph\ogl\GraphicsDevice.cpp"
+					RelativePath="..\..\source\graph\ogl\GraphicsDevice.cpp"
 					>
 					<FileConfiguration
 						Name="Debug_DX9|Win32"
@@ -602,7 +602,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\source\graph\ogl\IndexBuffer.cpp"
+					RelativePath="..\..\source\graph\ogl\IndexBuffer.cpp"
 					>
 					<FileConfiguration
 						Name="Debug_DX9|Win32"
@@ -635,7 +635,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\source\graph\ogl\OGLParamValueConverter.cpp"
+					RelativePath="..\..\source\graph\ogl\OGLParamValueConverter.cpp"
 					>
 					<FileConfiguration
 						Name="Debug_DX9|Win32"
@@ -655,40 +655,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\source\graph\ogl\PixelShader.cpp"
-					>
-					<FileConfiguration
-						Name="Debug_DX9|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)\$(InputName)1.obj"
-							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release_DX9|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)\$(InputName)1.obj"
-							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug_OGL|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)\$(InputName)1.obj"
-							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\source\graph\ogl\RenderState.cpp"
+					RelativePath="..\..\source\graph\ogl\PixelShader.cpp"
 					>
 					<FileConfiguration
 						Name="Debug_DX9|Win32"
@@ -721,7 +688,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\source\graph\ogl\ShaderConstTable.cpp"
+					RelativePath="..\..\source\graph\ogl\RenderState.cpp"
 					>
 					<FileConfiguration
 						Name="Debug_DX9|Win32"
@@ -754,7 +721,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\source\graph\ogl\Surface.cpp"
+					RelativePath="..\..\source\graph\ogl\ShaderConstTable.cpp"
 					>
 					<FileConfiguration
 						Name="Debug_DX9|Win32"
@@ -787,7 +754,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\source\graph\ogl\Texture.cpp"
+					RelativePath="..\..\source\graph\ogl\Surface.cpp"
 					>
 					<FileConfiguration
 						Name="Debug_DX9|Win32"
@@ -820,7 +787,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\source\graph\ogl\VertexBuffer.cpp"
+					RelativePath="..\..\source\graph\ogl\Texture.cpp"
 					>
 					<FileConfiguration
 						Name="Debug_DX9|Win32"
@@ -853,7 +820,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\source\graph\ogl\VertexDeclaration.cpp"
+					RelativePath="..\..\source\graph\ogl\VertexBuffer.cpp"
 					>
 					<FileConfiguration
 						Name="Debug_DX9|Win32"
@@ -886,7 +853,40 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\source\graph\ogl\VertexShader.cpp"
+					RelativePath="..\..\source\graph\ogl\VertexDeclaration.cpp"
+					>
+					<FileConfiguration
+						Name="Debug_DX9|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release_DX9|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug_OGL|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\source\graph\ogl\VertexShader.cpp"
 					>
 					<FileConfiguration
 						Name="Debug_DX9|Win32"
@@ -926,78 +926,78 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\include\graph\GraphDefs.h"
+				RelativePath="..\..\include\graph\GraphDefs.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\graph\GraphicsDeviceProxy.h"
+				RelativePath="..\..\include\graph\GraphicsDeviceProxy.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\graph\GraphicsDeviceUtil.h"
+				RelativePath="..\..\include\graph\GraphicsDeviceUtil.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\graph\GraphUtil.h"
+				RelativePath="..\..\include\graph\GraphUtil.h"
 				>
 			</File>
 			<Filter
 				Name="dx9"
 				>
 				<File
-					RelativePath="..\include\graph\dx9\BaseTexture.h"
+					RelativePath="..\..\include\graph\dx9\BaseTexture.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\graph\dx9\CubeTexture.h"
+					RelativePath="..\..\include\graph\dx9\CubeTexture.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\graph\dx9\D3D9ParamValueConverter.h"
+					RelativePath="..\..\include\graph\dx9\D3D9ParamValueConverter.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\graph\dx9\GraphicsDevice.h"
+					RelativePath="..\..\include\graph\dx9\GraphicsDevice.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\graph\dx9\GraphPerf.h"
+					RelativePath="..\..\include\graph\dx9\GraphPerf.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\graph\dx9\IndexBuffer.h"
+					RelativePath="..\..\include\graph\dx9\IndexBuffer.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\graph\dx9\PixelShader.h"
+					RelativePath="..\..\include\graph\dx9\PixelShader.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\graph\dx9\RenderState.h"
+					RelativePath="..\..\include\graph\dx9\RenderState.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\graph\dx9\ShaderConstTable.h"
+					RelativePath="..\..\include\graph\dx9\ShaderConstTable.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\graph\dx9\Surface.h"
+					RelativePath="..\..\include\graph\dx9\Surface.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\graph\dx9\Texture.h"
+					RelativePath="..\..\include\graph\dx9\Texture.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\graph\dx9\VertexBuffer.h"
+					RelativePath="..\..\include\graph\dx9\VertexBuffer.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\graph\dx9\VertexDeclaration.h"
+					RelativePath="..\..\include\graph\dx9\VertexDeclaration.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\graph\dx9\VertexShader.h"
+					RelativePath="..\..\include\graph\dx9\VertexShader.h"
 					>
 				</File>
 			</Filter>
@@ -1005,11 +1005,11 @@
 				Name="2d"
 				>
 				<File
-					RelativePath="..\include\graph\2d\2DRenderer.h"
+					RelativePath="..\..\include\graph\2d\2DRenderer.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\graph\2d\2DShader.h"
+					RelativePath="..\..\include\graph\2d\2DShader.h"
 					>
 				</File>
 			</Filter>
@@ -1017,11 +1017,11 @@
 				Name="internal"
 				>
 				<File
-					RelativePath="..\include\graph\internal\ParamValueConverter.h"
+					RelativePath="..\..\include\graph\internal\ParamValueConverter.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\graph\internal\RenderTargetManager.h"
+					RelativePath="..\..\include\graph\internal\RenderTargetManager.h"
 					>
 				</File>
 			</Filter>
@@ -1029,63 +1029,63 @@
 				Name="ogl"
 				>
 				<File
-					RelativePath="..\include\graph\ogl\BaseTexture.h"
+					RelativePath="..\..\include\graph\ogl\BaseTexture.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\graph\ogl\CubeTexture.h"
+					RelativePath="..\..\include\graph\ogl\CubeTexture.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\graph\ogl\FxShader.h"
+					RelativePath="..\..\include\graph\ogl\FxShader.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\graph\ogl\GraphicsDevice.h"
+					RelativePath="..\..\include\graph\ogl\GraphicsDevice.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\graph\ogl\GraphPerf.h"
+					RelativePath="..\..\include\graph\ogl\GraphPerf.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\graph\ogl\IndexBuffer.h"
+					RelativePath="..\..\include\graph\ogl\IndexBuffer.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\graph\ogl\OGLParamValueConverter.h"
+					RelativePath="..\..\include\graph\ogl\OGLParamValueConverter.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\graph\ogl\PixelShader.h"
+					RelativePath="..\..\include\graph\ogl\PixelShader.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\graph\ogl\RenderState.h"
+					RelativePath="..\..\include\graph\ogl\RenderState.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\graph\ogl\ShaderConstTable.h"
+					RelativePath="..\..\include\graph\ogl\ShaderConstTable.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\graph\ogl\Surface.h"
+					RelativePath="..\..\include\graph\ogl\Surface.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\graph\ogl\Texture.h"
+					RelativePath="..\..\include\graph\ogl\Texture.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\graph\ogl\VertexBuffer.h"
+					RelativePath="..\..\include\graph\ogl\VertexBuffer.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\graph\ogl\VertexDeclaration.h"
+					RelativePath="..\..\include\graph\ogl\VertexDeclaration.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\graph\ogl\VertexShader.h"
+					RelativePath="..\..\include\graph\ogl\VertexShader.h"
 					>
 				</File>
 			</Filter>

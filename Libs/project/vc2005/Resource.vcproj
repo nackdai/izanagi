@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="Font"
-	ProjectGUID="{53711729-EFD1-49C0-8592-45A4B0F569E8}"
-	RootNamespace="Font"
+	Name="Resource"
+	ProjectGUID="{D7E4AF58-F717-41E1-A8FA-A492616B1E16}"
+	RootNamespace="Resource"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -39,7 +39,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=""
+				AdditionalIncludeDirectories="../../zlib"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				UsePrecompiledHeader="0"
 			/>
@@ -69,7 +69,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="IF NOT EXIST lib\$(IntDir) mkdir lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; lib\$(IntDir)&#x0D;&#x0A;"
+				CommandLine="IF NOT EXIST ..\lib\$(IntDir) mkdir ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; ..\lib\$(IntDir)&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -96,7 +96,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=""
+				AdditionalIncludeDirectories="../../zlib"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				UsePrecompiledHeader="0"
 			/>
@@ -126,7 +126,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="IF NOT EXIST lib\$(IntDir) mkdir lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; lib\$(IntDir)&#x0D;&#x0A;"
+				CommandLine="IF NOT EXIST ..\lib\$(IntDir) mkdir ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; ..\lib\$(IntDir)&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -155,7 +155,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=""
+				AdditionalIncludeDirectories="../../zlib"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				UsePrecompiledHeader="0"
 			/>
@@ -185,7 +185,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="IF NOT EXIST lib\$(IntDir) mkdir lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; lib\$(IntDir)&#x0D;&#x0A;"
+				CommandLine="IF NOT EXIST ..\lib\$(IntDir) mkdir ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; ..\lib\$(IntDir)&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
@@ -198,13 +198,33 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\source\font\FontRenderer.cpp"
+				RelativePath="..\..\source\resource\Resource.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\source\font\FontRendererBmp.cpp"
+				RelativePath="..\..\source\resource\ResourceManager.cpp"
 				>
 			</File>
+			<Filter
+				Name="archive"
+				>
+				<File
+					RelativePath="..\..\source\resource\archive\ArchiveDummy.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\source\resource\archive\ArchiveImpl.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\source\resource\archive\ArchiveProxy.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\source\resource\archive\ArchiveZip.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="include"
@@ -212,21 +232,41 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\include\font\FNTFormat.h"
+				RelativePath="..\..\include\resource\Resource.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\font\FontDefs.h"
+				RelativePath="..\..\include\resource\ResourceManager.h"
 				>
 			</File>
-			<File
-				RelativePath="..\include\font\FontRenderer.h"
+			<Filter
+				Name="archive"
 				>
-			</File>
-			<File
-				RelativePath="..\include\font\FontRendererBmp.h"
-				>
-			</File>
+				<File
+					RelativePath="..\..\include\resource\archive\ARCFormat.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\resource\archive\Archive.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\resource\archive\ArchiveDummy.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\resource\archive\ArchiveImpl.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\resource\archive\ArchiveProxy.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\resource\archive\ArchiveZip.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 	</Files>
 	<Globals>

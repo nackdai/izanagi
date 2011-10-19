@@ -2,8 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="Io"
-	ProjectGUID="{A79948C7-CDE7-4C8B-88EC-DDED6A0D373F}"
+	Name="ShaderFx"
+	ProjectGUID="{770DAB1B-5831-49F6-A732-2218D926237E}"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -40,6 +40,7 @@
 				Optimization="0"
 				AdditionalIncludeDirectories=""
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
+				ExceptionHandling="1"
 				UsePrecompiledHeader="0"
 			/>
 			<Tool
@@ -155,6 +156,7 @@
 				Optimization="0"
 				AdditionalIncludeDirectories=""
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
+				ExceptionHandling="1"
 				UsePrecompiledHeader="0"
 			/>
 			<Tool
@@ -196,15 +198,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\source\io\Keyboard.cpp"
+				RelativePath="..\..\source\shaderfx\ShaderFx.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\source\io\Mouse.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\source\io\Pad.cpp"
+				RelativePath="..\..\source\shaderfx\ShaderFxCommon.cpp"
 				>
 			</File>
 		</Filter>
@@ -213,66 +211,18 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
-			<Filter
-				Name="stream"
+			<File
+				RelativePath="..\..\include\shaderfx\SFXFormat.h"
 				>
-				<File
-					RelativePath="..\include\io\stream\BufferInputStream.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\io\stream\FileInputStream.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\io\stream\FileOutputStream.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\io\stream\HeapInputStream.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\io\stream\InputStream.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\io\stream\IODefs.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\io\stream\MemoryInputStream.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\io\stream\MemoryOutputStream.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\io\stream\OutputStream.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="device"
+			</File>
+			<File
+				RelativePath="..\..\include\shaderfx\ShaderFx.h"
 				>
-				<File
-					RelativePath="..\include\io\device\InputDeviceDefs.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\io\device\Keyboard.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\io\device\Mouse.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\io\device\Pad.h"
-					>
-				</File>
-			</Filter>
+			</File>
+			<File
+				RelativePath="..\..\include\shaderfx\ShaderFxCommon.h"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

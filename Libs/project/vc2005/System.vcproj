@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="Compress"
-	ProjectGUID="{85C16506-8CF4-493C-875D-9808099398A6}"
-	RootNamespace="Compress"
+	Name="System"
+	ProjectGUID="{21E3DD95-6024-4E35-BA9E-170B93FB4324}"
+	RootNamespace="System"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -39,9 +39,17 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=""
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;IZ_ENABLE_COMPRESS_ENCODER"
+				AdditionalIncludeDirectories="include"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;D3D_DEBUG_INFO;__MYLIB_DEBUG__"
+				MinimalRebuild="true"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="1"
 				UsePrecompiledHeader="0"
+				ObjectFile="$(IntDir)\$(ProjectName)\"
+				ProgramDataBaseFileName="$(IntDir)\$(ProjectName)\$(ProjectName).pdb"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="true"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -69,7 +77,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="IF NOT EXIST lib\$(IntDir) mkdir lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; lib\$(IntDir)&#x0D;&#x0A;"
+				CommandLine="IF NOT EXIST ..\lib\$(IntDir) mkdir ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; ..\lib\$(IntDir)&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -96,9 +104,15 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=""
+				AdditionalIncludeDirectories="include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
+				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
+				ObjectFile="$(IntDir)\$(ProjectName)\"
+				ProgramDataBaseFileName="$(IntDir)\$(ProjectName)\$(ProjectName).pdb"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="true"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -126,7 +140,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="IF NOT EXIST lib\$(IntDir) mkdir lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; lib\$(IntDir)&#x0D;&#x0A;"
+				CommandLine="IF NOT EXIST ..\lib\$(IntDir) mkdir ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; ..\lib\$(IntDir)&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -155,9 +169,17 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=""
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;UN_ENABLE_COMPRESS_ENCODER"
+				AdditionalIncludeDirectories="include"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;D3D_DEBUG_INFO;__MYLIB_DEBUG__"
+				MinimalRebuild="true"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="1"
 				UsePrecompiledHeader="0"
+				ObjectFile="$(IntDir)\$(ProjectName)\"
+				ProgramDataBaseFileName="$(IntDir)\$(ProjectName)\$(ProjectName).pdb"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="true"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -185,7 +207,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="IF NOT EXIST lib\$(IntDir) mkdir lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; lib\$(IntDir)&#x0D;&#x0A;"
+				CommandLine="IF NOT EXIST ..\lib\$(IntDir) mkdir ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; ..\lib\$(IntDir)&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
@@ -198,27 +220,31 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\source\compress\CompressDecoder.cpp"
+				RelativePath="..\..\source\system\SysCpu.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\source\compress\CompressEncoder.cpp"
+				RelativePath="..\..\source\system\SysDisplay.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\source\compress\CompressRangeCoderDecoder.cpp"
+				RelativePath="..\..\source\system\SysEvent.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\source\compress\CompressRangeCoderEncoder.cpp"
+				RelativePath="..\..\source\system\SysMutex.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\source\compress\CompressSlideDictionaryDecoder.cpp"
+				RelativePath="..\..\source\system\SysThread.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\source\compress\CompressSlideDictionaryEncoder.cpp"
+				RelativePath="..\..\source\system\SysTimer.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\source\system\SysWindow.cpp"
 				>
 			</File>
 		</Filter>
@@ -228,39 +254,31 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\include\compress\CMPFormat.h"
+				RelativePath="..\..\include\system\SysCpu.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\compress\CompressIoStreamUtil.h"
+				RelativePath="..\..\include\system\SysDisplay.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\compress\Compressor.h"
+				RelativePath="..\..\include\system\SysEvent.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\compress\CompressRangeCoderBase.h"
+				RelativePath="..\..\include\system\SysMutex.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\compress\CompressRangeCoderDecoder.h"
+				RelativePath="..\..\include\system\SysThread.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\compress\CompressRangeCoderEncoder.h"
+				RelativePath="..\..\include\system\SysTimer.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\compress\CompressSlideDictionaryBase.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\compress\CompressSlideDictionaryDecoder.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\compress\CompressSlideDictionaryEncoder.h"
+				RelativePath="..\..\include\system\SysWindow.h"
 				>
 			</File>
 		</Filter>
