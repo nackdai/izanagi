@@ -2,9 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="DebugUtil"
-	ProjectGUID="{3C6615A2-A960-4BA3-B0A5-D17F797CB141}"
-	RootNamespace="DebugUtil"
+	Name="Std"
+	ProjectGUID="{486C5186-0A31-4E9E-91EC-F9F6EC07EDF2}"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -69,7 +68,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="IF NOT EXIST lib\$(IntDir) mkdir lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; lib\$(IntDir)&#x0D;&#x0A;"
+				CommandLine="IF NOT EXIST ..\lib\$(IntDir) mkdir ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; ..\lib\$(IntDir)&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -77,7 +76,6 @@
 			ConfigurationType="4"
 			InheritedPropertySheets=".\PropertySeet\Release_DX9.vsprops"
 			CharacterSet="2"
-			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -126,7 +124,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="IF NOT EXIST lib\$(IntDir) mkdir lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; lib\$(IntDir)&#x0D;&#x0A;"
+				CommandLine="IF NOT EXIST ..\lib\$(IntDir) mkdir ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; ..\lib\$(IntDir)&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -185,7 +183,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="IF NOT EXIST lib\$(IntDir) mkdir lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; lib\$(IntDir)&#x0D;&#x0A;"
+				CommandLine="IF NOT EXIST ..\lib\$(IntDir) mkdir ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; ..\lib\$(IntDir)&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
@@ -194,74 +192,54 @@
 	<Files>
 		<Filter
 			Name="source"
-			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
+			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\source\debugutil\DebugFont.cpp"
+				RelativePath="..\..\source\std\StdColor.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\source\debugutil\font.dat"
+				RelativePath="..\..\source\std\StdGameState.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\source\std\StdKey.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\source\std\StdLog.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\source\std\StdUtf.cpp"
 				>
 			</File>
 			<Filter
-				Name="mesh"
+				Name="allocator"
 				>
 				<File
-					RelativePath="..\source\debugutil\mesh\DebugMesh.cpp"
+					RelativePath="..\..\source\std\allocator\ChunkedMemoryAllocator.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\source\debugutil\mesh\DebugMeshAxis.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\source\debugutil\mesh\DebugMeshBox.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\source\debugutil\mesh\DebugMeshCylinder.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\source\debugutil\mesh\DebugMeshFrustum.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\source\debugutil\mesh\DebugMeshGrid.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\source\debugutil\mesh\DebugMeshRectangle.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\source\debugutil\mesh\DebugMeshSphere.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\source\debugutil\mesh\DebugMeshTorus.cpp"
+					RelativePath="..\..\source\std\allocator\StandardMemoryAllocator.cpp"
 					>
 				</File>
 			</Filter>
 			<Filter
-				Name="ui"
+				Name="animation"
 				>
 				<File
-					RelativePath="..\source\debugutil\ui\DebugUIButton.cpp"
+					RelativePath="..\..\source\std\animation\StdAnimation.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\source\debugutil\ui\DebugUIDialog.cpp"
+					RelativePath="..\..\source\std\animation\StdTimeline.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\source\debugutil\ui\DebugUIFontLayout.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\source\debugutil\ui\DebugUIManager.cpp"
+					RelativePath="..\..\source\std\animation\Tweener.cpp"
 					>
 				</File>
 			</Filter>
@@ -272,98 +250,126 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\include\debugutil\DebugFont.h"
+				RelativePath="..\..\include\std\2DPoint.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\std\2DRect.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\std\StdAutoPtr.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\std\StdBit.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\std\StdBitFlag.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\std\StdColor.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\std\StdGameState.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\std\StdKey.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\std\StdLog.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\std\StdObject.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\std\StdPair.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\std\StdPlacementNew.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\std\StdQueue.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\std\StdStack.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\std\StdString.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\std\StdUtf.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\std\StdUtil.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\std\StdValue.h"
 				>
 			</File>
 			<Filter
-				Name="mesh"
+				Name="allocator"
 				>
 				<File
-					RelativePath="..\include\debugutil\mesh\DebugMesh.h"
+					RelativePath="..\..\include\std\allocator\ChunkedMemoryAllocator.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\debugutil\mesh\DebugMeshAxis.h"
+					RelativePath="..\..\include\std\allocator\MemoryAllocator.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\debugutil\mesh\DebugMeshBox.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\debugutil\mesh\DebugMeshCylinder.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\debugutil\mesh\DebugMeshFrustum.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\debugutil\mesh\DebugMeshGrid.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\debugutil\mesh\DebugMeshRectangle.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\debugutil\mesh\DebugMeshSphere.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\debugutil\mesh\DebugMeshTorus.h"
+					RelativePath="..\..\include\std\allocator\StandardMemoryAllocator.h"
 					>
 				</File>
 			</Filter>
 			<Filter
-				Name="ui"
+				Name="container"
 				>
 				<File
-					RelativePath="..\include\debugutil\ui\DebugUIButton.h"
+					RelativePath="..\..\include\std\container\StdHash.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\debugutil\ui\DebugUICheckBox.h"
+					RelativePath="..\..\include\std\container\StdList.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\debugutil\ui\DebugUIComboBox.h"
+					RelativePath="..\..\include\std\container\StdRecycleArray.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\debugutil\ui\DebugUIDialog.h"
+					RelativePath="..\..\include\std\container\StdSet.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="animation"
+				>
+				<File
+					RelativePath="..\..\include\std\animation\StdAnimation.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\debugutil\ui\DebugUIFontLayout.h"
+					RelativePath="..\..\include\std\animation\StdTimeline.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\debugutil\ui\DebugUIFontRenderer.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\debugutil\ui\DebugUIListBox.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\debugutil\ui\DebugUIManager.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\debugutil\ui\DebugUIRadioButton.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\debugutil\ui\DebugUISliderControl.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\debugutil\ui\DebugUIStaticText.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\debugutil\ui\DebugUIWidget.h"
+					RelativePath="..\..\include\std\animation\Tweener.h"
 					>
 				</File>
 			</Filter>

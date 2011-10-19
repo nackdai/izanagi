@@ -2,8 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="Shader"
-	ProjectGUID="{4C9C66D7-03BB-4EB1-AB64-8C5E6AF7A2B3}"
+	Name="Math"
+	ProjectGUID="{49270663-CD1F-4426-9D28-E7B46930471D}"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -38,17 +38,9 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;D3D_DEBUG_INFO;__UN_DEBUG__"
-				MinimalRebuild="true"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="1"
+				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				UsePrecompiledHeader="0"
-				ObjectFile="$(IntDir)\$(ProjectName)\"
-				ProgramDataBaseFileName="$(IntDir)\$(ProjectName)\$(ProjectName).pdb"
-				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
-				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -76,7 +68,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="IF NOT EXIST lib\$(IntDir) mkdir lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; lib\$(IntDir)&#x0D;&#x0A;"
+				CommandLine="IF NOT EXIST ..\lib\$(IntDir) mkdir ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; ..\lib\$(IntDir)&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -102,15 +94,9 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="../include"
+				AdditionalIncludeDirectories=""
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
-				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
-				ObjectFile="$(IntDir)\$(ProjectName)\"
-				ProgramDataBaseFileName="$(IntDir)\$(ProjectName)\$(ProjectName).pdb"
-				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
-				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -138,7 +124,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="IF NOT EXIST lib\$(IntDir) mkdir lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; lib\$(IntDir)&#x0D;&#x0A;"
+				CommandLine="IF NOT EXIST ..\lib\$(IntDir) mkdir ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; ..\lib\$(IntDir)&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -167,17 +153,9 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;D3D_DEBUG_INFO;__UN_DEBUG__"
-				MinimalRebuild="true"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="1"
+				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				UsePrecompiledHeader="0"
-				ObjectFile="$(IntDir)\$(ProjectName)\"
-				ProgramDataBaseFileName="$(IntDir)\$(ProjectName)\$(ProjectName).pdb"
-				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
-				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -205,7 +183,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="IF NOT EXIST lib\$(IntDir) mkdir lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; lib\$(IntDir)&#x0D;&#x0A;"
+				CommandLine="IF NOT EXIST ..\lib\$(IntDir) mkdir ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; ..\lib\$(IntDir)&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
@@ -218,14 +196,18 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\source\shader\ShaderManager.cpp"
+				RelativePath="..\..\source\math\MathMatrix.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\source\math\MathQuaternion.cpp"
 				>
 			</File>
 			<Filter
-				Name="base"
+				Name="SFMT"
 				>
 				<File
-					RelativePath="..\source\shader\base\ShaderBasic.cpp"
+					RelativePath="..\..\source\math\SFMT\SFMT.cpp"
 					>
 				</File>
 			</Filter>
@@ -236,78 +218,114 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\include\shader\ShaderManager.h"
+				RelativePath="..\..\include\math\MathCMatrix.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\math\MathCQuaternion.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\math\MathCVector.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\math\MathDefs.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\math\MathFixed.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\math\MathHalfFloat.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\math\MathMatrix.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\math\MathQuaternion.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\math\MathRand.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\math\MathUtil.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\math\MathVector.h"
 				>
 			</File>
 			<Filter
-				Name="base"
+				Name="SFMT"
 				>
 				<File
-					RelativePath="..\include\shader\base\Shader.h"
+					RelativePath="..\..\include\math\SFMT\SFMT-alti.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\shader\base\ShaderBasic.h"
+					RelativePath="..\..\include\math\SFMT\SFMT-params.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\shader\base\ShaderDefs.h"
+					RelativePath="..\..\include\math\SFMT\SFMT-params11213.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\shader\base\ShaderPass.h"
+					RelativePath="..\..\include\math\SFMT\SFMT-params1279.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\shader\base\SHDFormat.h"
+					RelativePath="..\..\include\math\SFMT\SFMT-params132049.h"
 					>
 				</File>
-				<Filter
-					Name="table"
+				<File
+					RelativePath="..\..\include\math\SFMT\SFMT-params19937.h"
 					>
-					<File
-						RelativePath="..\include\shader\base\table\ShaderAttrTable.h"
-						>
-					</File>
-					<File
-						RelativePath="..\include\shader\base\table\ShaderParameterTable.h"
-						>
-					</File>
-					<File
-						RelativePath="..\include\shader\base\table\ShaderPassTable.h"
-						>
-					</File>
-					<File
-						RelativePath="..\include\shader\base\table\ShaderSamplerTable.h"
-						>
-					</File>
-					<File
-						RelativePath="..\include\shader\base\table\ShaderStringBuffer.h"
-						>
-					</File>
-					<File
-						RelativePath="..\include\shader\base\table\ShaderTechTable.h"
-						>
-					</File>
-					<File
-						RelativePath="..\include\shader\base\table\ShaderTextureTable.h"
-						>
-					</File>
-				</Filter>
-				<Filter
-					Name="util"
+				</File>
+				<File
+					RelativePath="..\..\include\math\SFMT\SFMT-params216091.h"
 					>
-					<File
-						RelativePath="..\include\shader\base\util\ShaderParamUtil.h"
-						>
-					</File>
-					<File
-						RelativePath="..\include\shader\base\util\ShaderUtil.h"
-						>
-					</File>
-				</Filter>
+				</File>
+				<File
+					RelativePath="..\..\include\math\SFMT\SFMT-params2281.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\math\SFMT\SFMT-params4253.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\math\SFMT\SFMT-params44497.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\math\SFMT\SFMT-params607.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\math\SFMT\SFMT-params86243.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\math\SFMT\SFMT-sse2.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\math\SFMT\SFMT.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
+		<File
+			RelativePath="..\..\include\math\SFMT\LICENSE.txt"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

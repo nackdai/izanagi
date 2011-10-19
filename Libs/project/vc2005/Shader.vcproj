@@ -2,9 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="System"
-	ProjectGUID="{21E3DD95-6024-4E35-BA9E-170B93FB4324}"
-	RootNamespace="System"
+	Name="Shader"
+	ProjectGUID="{4C9C66D7-03BB-4EB1-AB64-8C5E6AF7A2B3}"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -39,8 +38,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;D3D_DEBUG_INFO;__MYLIB_DEBUG__"
+				AdditionalIncludeDirectories="../include"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;D3D_DEBUG_INFO;__UN_DEBUG__"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
@@ -77,7 +76,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="IF NOT EXIST lib\$(IntDir) mkdir lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; lib\$(IntDir)&#x0D;&#x0A;"
+				CommandLine="IF NOT EXIST ..\lib\$(IntDir) mkdir ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; ..\lib\$(IntDir)&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -85,7 +84,6 @@
 			ConfigurationType="4"
 			InheritedPropertySheets=".\PropertySeet\Release_DX9.vsprops"
 			CharacterSet="2"
-			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -104,7 +102,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="include"
+				AdditionalIncludeDirectories="../include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
@@ -140,7 +138,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="IF NOT EXIST lib\$(IntDir) mkdir lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; lib\$(IntDir)&#x0D;&#x0A;"
+				CommandLine="IF NOT EXIST ..\lib\$(IntDir) mkdir ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; ..\lib\$(IntDir)&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -169,8 +167,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;D3D_DEBUG_INFO;__MYLIB_DEBUG__"
+				AdditionalIncludeDirectories="../include"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;D3D_DEBUG_INFO;__UN_DEBUG__"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
@@ -207,7 +205,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="IF NOT EXIST lib\$(IntDir) mkdir lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; lib\$(IntDir)&#x0D;&#x0A;"
+				CommandLine="IF NOT EXIST ..\lib\$(IntDir) mkdir ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; ..\lib\$(IntDir)&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
@@ -216,37 +214,21 @@
 	<Files>
 		<Filter
 			Name="source"
-			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
+			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\source\system\SysCpu.cpp"
+				RelativePath="..\..\source\shader\ShaderManager.cpp"
 				>
 			</File>
-			<File
-				RelativePath="..\source\system\SysDisplay.cpp"
+			<Filter
+				Name="base"
 				>
-			</File>
-			<File
-				RelativePath="..\source\system\SysEvent.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\source\system\SysMutex.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\source\system\SysThread.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\source\system\SysTimer.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\source\system\SysWindow.cpp"
-				>
-			</File>
+				<File
+					RelativePath="..\..\source\shader\base\ShaderBasic.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="include"
@@ -254,33 +236,77 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\include\system\SysCpu.h"
+				RelativePath="..\..\include\shader\ShaderManager.h"
 				>
 			</File>
-			<File
-				RelativePath="..\include\system\SysDisplay.h"
+			<Filter
+				Name="base"
 				>
-			</File>
-			<File
-				RelativePath="..\include\system\SysEvent.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\system\SysMutex.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\system\SysThread.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\system\SysTimer.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\system\SysWindow.h"
-				>
-			</File>
+				<File
+					RelativePath="..\..\include\shader\base\Shader.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\shader\base\ShaderBasic.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\shader\base\ShaderDefs.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\shader\base\ShaderPass.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\shader\base\SHDFormat.h"
+					>
+				</File>
+				<Filter
+					Name="table"
+					>
+					<File
+						RelativePath="..\..\include\shader\base\table\ShaderAttrTable.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\include\shader\base\table\ShaderParameterTable.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\include\shader\base\table\ShaderPassTable.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\include\shader\base\table\ShaderSamplerTable.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\include\shader\base\table\ShaderStringBuffer.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\include\shader\base\table\ShaderTechTable.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\include\shader\base\table\ShaderTextureTable.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="util"
+					>
+					<File
+						RelativePath="..\..\include\shader\base\util\ShaderParamUtil.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\include\shader\base\util\ShaderUtil.h"
+						>
+					</File>
+				</Filter>
+			</Filter>
 		</Filter>
 	</Files>
 	<Globals>

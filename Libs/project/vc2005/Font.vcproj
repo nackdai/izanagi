@@ -2,8 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="Math"
-	ProjectGUID="{49270663-CD1F-4426-9D28-E7B46930471D}"
+	Name="Font"
+	ProjectGUID="{53711729-EFD1-49C0-8592-45A4B0F569E8}"
+	RootNamespace="Font"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -68,7 +69,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="IF NOT EXIST lib\$(IntDir) mkdir lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; lib\$(IntDir)&#x0D;&#x0A;"
+				CommandLine="IF NOT EXIST ..\lib\$(IntDir) mkdir ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; ..\lib\$(IntDir)&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -76,6 +77,7 @@
 			ConfigurationType="4"
 			InheritedPropertySheets=".\PropertySeet\Release_DX9.vsprops"
 			CharacterSet="2"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -124,7 +126,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="IF NOT EXIST lib\$(IntDir) mkdir lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; lib\$(IntDir)&#x0D;&#x0A;"
+				CommandLine="IF NOT EXIST ..\lib\$(IntDir) mkdir ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; ..\lib\$(IntDir)&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -183,7 +185,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="IF NOT EXIST lib\$(IntDir) mkdir lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; lib\$(IntDir)&#x0D;&#x0A;"
+				CommandLine="IF NOT EXIST ..\lib\$(IntDir) mkdir ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; ..\lib\$(IntDir)&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
@@ -192,25 +194,17 @@
 	<Files>
 		<Filter
 			Name="source"
-			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
+			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\source\math\MathMatrix.cpp"
+				RelativePath="..\..\source\font\FontRenderer.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\source\math\MathQuaternion.cpp"
+				RelativePath="..\..\source\font\FontRendererBmp.cpp"
 				>
 			</File>
-			<Filter
-				Name="SFMT"
-				>
-				<File
-					RelativePath="..\source\math\SFMT\SFMT.cpp"
-					>
-				</File>
-			</Filter>
 		</Filter>
 		<Filter
 			Name="include"
@@ -218,114 +212,22 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\include\math\MathCMatrix.h"
+				RelativePath="..\..\include\font\FNTFormat.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\math\MathCQuaternion.h"
+				RelativePath="..\..\include\font\FontDefs.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\math\MathCVector.h"
+				RelativePath="..\..\include\font\FontRenderer.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\math\MathDefs.h"
+				RelativePath="..\..\include\font\FontRendererBmp.h"
 				>
 			</File>
-			<File
-				RelativePath="..\include\math\MathFixed.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\math\MathHalfFloat.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\math\MathMatrix.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\math\MathQuaternion.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\math\MathRand.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\math\MathUtil.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\math\MathVector.h"
-				>
-			</File>
-			<Filter
-				Name="SFMT"
-				>
-				<File
-					RelativePath="..\include\math\SFMT\SFMT-alti.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\math\SFMT\SFMT-params.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\math\SFMT\SFMT-params11213.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\math\SFMT\SFMT-params1279.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\math\SFMT\SFMT-params132049.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\math\SFMT\SFMT-params19937.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\math\SFMT\SFMT-params216091.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\math\SFMT\SFMT-params2281.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\math\SFMT\SFMT-params4253.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\math\SFMT\SFMT-params44497.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\math\SFMT\SFMT-params607.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\math\SFMT\SFMT-params86243.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\math\SFMT\SFMT-sse2.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\math\SFMT\SFMT.h"
-					>
-				</File>
-			</Filter>
 		</Filter>
-		<File
-			RelativePath="..\include\math\SFMT\LICENSE.txt"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>
