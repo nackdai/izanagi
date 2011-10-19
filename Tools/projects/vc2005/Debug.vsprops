@@ -26,7 +26,7 @@
 		AdditionalDependencies="ToolKit.lib"
 		OutputFile="$(SolutionDir)../../tools/$(ConfigurationName)/$(ProjectName).exe"
 		LinkIncremental="2"
-		AdditionalLibraryDirectories="&quot;ToolKit/$(ConfigurationName)&quot;;&quot;$(SolutionDir)../../../Libs/project/vc2005/lib/$(ConfigurationName)_DX9&quot;"
+		AdditionalLibraryDirectories="&quot;ToolKit/$(ConfigurationName)&quot;;&quot;$(SolutionDir)../../../Libs/project/lib/$(ConfigurationName)_DX9&quot;"
 		GenerateDebugInformation="true"
 	/>
 	<UserMacro
