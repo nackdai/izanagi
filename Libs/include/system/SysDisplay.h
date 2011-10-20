@@ -16,7 +16,7 @@ namespace izanagi {
 
 	public:
 		// Initialize.
-		static void Init(HDC hdc);
+		static void Init(void* nativeWndHandle);
 
 		// Get display's pixel size.
 		static IZ_UINT GetPixelWidth();

@@ -244,6 +244,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\source\system\SysUtil.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\source\system\SysWindow.cpp"
 				>
 			</File>
@@ -275,6 +279,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\system\SysTimer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\system\SysUtil.h"
 				>
 			</File>
 			<File

@@ -6,9 +6,9 @@ using namespace izanagi;
 
 static HDC g_HDC = IZ_NULL;
 
-void CSysDisplay::Init(HDC hdc)
+void CSysDisplay::Init(void* nativeWndHandle)
 {
-	g_HDC = hdc;
+	g_HDC = (HDC)nativeWndHandle;
 }
 
 /**
