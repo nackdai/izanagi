@@ -45,6 +45,8 @@ public:
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
+	izanagi::CSysUtil::SetCurrentDirectoryFromExe();
+
 	sAllocator.Init(sizeof(sBuf), sBuf);
 
 	CWndProc wndProc;
