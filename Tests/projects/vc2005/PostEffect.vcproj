@@ -18,7 +18,7 @@
 		<Configuration
 			Name="Debug_DX9|Win32"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\PropertySeet\Debug_DX9.vsprops"
+			InheritedPropertySheets=".\Debug_DX9.vsprops"
 			UseOfMFC="0"
 			CharacterSet="2"
 			>
@@ -43,7 +43,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\MyAppl"
+				AdditionalIncludeDirectories="..\..\PostEffect\MyAppl"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG"
 				UsePrecompiledHeader="0"
 			/>
@@ -94,10 +94,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release_DX9|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\PropertySeet\Release_DX9.vsprops"
+			InheritedPropertySheets=".\Release_DX9.vsprops"
 			UseOfMFC="0"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
@@ -122,7 +120,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".\MyAppl"
+				AdditionalIncludeDirectories="..\..\PostEffect\MyAppl"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG"
 				MinimalRebuild="false"
 				UsePrecompiledHeader="0"
@@ -182,94 +180,94 @@
 			Name="MyAppl"
 			>
 			<File
-				RelativePath=".\MyAppl\EnvBox.cpp"
+				RelativePath="..\..\PostEffect\MyAppl\EnvBox.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\MyAppl\EnvBox.h"
+				RelativePath="..\..\PostEffect\MyAppl\EnvBox.h"
 				>
 			</File>
 			<File
-				RelativePath=".\MyAppl\MeshManager.cpp"
+				RelativePath="..\..\PostEffect\MyAppl\MeshManager.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\MyAppl\MeshManager.h"
+				RelativePath="..\..\PostEffect\MyAppl\MeshManager.h"
 				>
 			</File>
 			<File
-				RelativePath=".\MyAppl\MyAppl.cpp"
+				RelativePath="..\..\PostEffect\MyAppl\MyAppl.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\MyAppl\MyAppl.h"
+				RelativePath="..\..\PostEffect\MyAppl\MyAppl.h"
 				>
 			</File>
 			<File
-				RelativePath=".\MyAppl\PostEffectSample.cpp"
+				RelativePath="..\..\PostEffect\MyAppl\PostEffectSample.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\MyAppl\PostEffectSample.h"
+				RelativePath="..\..\PostEffect\MyAppl\PostEffectSample.h"
 				>
 			</File>
 			<File
-				RelativePath=".\MyAppl\SceneRenderer.cpp"
+				RelativePath="..\..\PostEffect\MyAppl\SceneRenderer.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\MyAppl\SceneRenderer.h"
+				RelativePath="..\..\PostEffect\MyAppl\SceneRenderer.h"
 				>
 			</File>
 			<Filter
 				Name="state"
 				>
 				<File
-					RelativePath=".\MyAppl\state\StateBloomStar.cpp"
+					RelativePath="..\..\PostEffect\MyAppl\state\StateBloomStar.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\MyAppl\state\StateBloomStar.h"
+					RelativePath="..\..\PostEffect\MyAppl\state\StateBloomStar.h"
 					>
 				</File>
 				<File
-					RelativePath=".\MyAppl\state\StateBloomStarEx.cpp"
+					RelativePath="..\..\PostEffect\MyAppl\state\StateBloomStarEx.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\MyAppl\state\StateBloomStarEx.h"
+					RelativePath="..\..\PostEffect\MyAppl\state\StateBloomStarEx.h"
 					>
 				</File>
 				<File
-					RelativePath=".\MyAppl\state\StateHDR.cpp"
+					RelativePath="..\..\PostEffect\MyAppl\state\StateHDR.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\MyAppl\state\StateHDR.h"
+					RelativePath="..\..\PostEffect\MyAppl\state\StateHDR.h"
 					>
 				</File>
 				<File
-					RelativePath=".\MyAppl\state\StateManager.cpp"
+					RelativePath="..\..\PostEffect\MyAppl\state\StateManager.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\MyAppl\state\StateManager.h"
+					RelativePath="..\..\PostEffect\MyAppl\state\StateManager.h"
 					>
 				</File>
 				<File
-					RelativePath=".\MyAppl\state\StateMenu.cpp"
+					RelativePath="..\..\PostEffect\MyAppl\state\StateMenu.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\MyAppl\state\StateMenu.h"
+					RelativePath="..\..\PostEffect\MyAppl\state\StateMenu.h"
 					>
 				</File>
 				<File
-					RelativePath=".\MyAppl\state\StateMonotone.cpp"
+					RelativePath="..\..\PostEffect\MyAppl\state\StateMonotone.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\MyAppl\state\StateMonotone.h"
+					RelativePath="..\..\PostEffect\MyAppl\state\StateMonotone.h"
 					>
 				</File>
 			</Filter>
@@ -277,23 +275,23 @@
 				Name="shader"
 				>
 				<File
-					RelativePath=".\MyAppl\shader\EnvBoxShader.h"
+					RelativePath="..\..\PostEffect\MyAppl\shader\EnvBoxShader.h"
 					>
 				</File>
 				<File
-					RelativePath=".\MyAppl\shader\PhongShader.cpp"
+					RelativePath="..\..\PostEffect\MyAppl\shader\PhongShader.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\MyAppl\shader\PhongShader.h"
+					RelativePath="..\..\PostEffect\MyAppl\shader\PhongShader.h"
 					>
 				</File>
 				<File
-					RelativePath=".\MyAppl\shader\ShaderBase.cpp"
+					RelativePath="..\..\PostEffect\MyAppl\shader\ShaderBase.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\MyAppl\shader\ShaderBase.h"
+					RelativePath="..\..\PostEffect\MyAppl\shader\ShaderBase.h"
 					>
 				</File>
 			</Filter>
@@ -302,7 +300,7 @@
 			Name="fx"
 			>
 			<File
-				RelativePath=".\MyAppl\fx\EnvBoxShader.fx"
+				RelativePath="..\..\PostEffect\MyAppl\fx\EnvBoxShader.fx"
 				>
 				<FileConfiguration
 					Name="Debug_DX9|Win32"
@@ -324,7 +322,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\MyAppl\fx\PhongShader.fx"
+				RelativePath="..\..\PostEffect\MyAppl\fx\PhongShader.fx"
 				>
 				<FileConfiguration
 					Name="Debug_DX9|Win32"
@@ -350,28 +348,28 @@
 			Name="system"
 			>
 			<File
-				RelativePath="..\system\MyCamera.cpp"
+				RelativePath="..\..\system\MyCamera.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\system\MyCamera.h"
+				RelativePath="..\..\system\MyCamera.h"
 				>
 			</File>
 			<File
-				RelativePath="..\system\MySystem.cpp"
+				RelativePath="..\..\system\MySystem.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\system\MySystem.h"
+				RelativePath="..\..\system\MySystem.h"
 				>
 			</File>
 		</Filter>
 		<File
-			RelativePath=".\main.cpp"
+			RelativePath="..\..\PostEffect\main.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\ReadMe.txt"
+			RelativePath="..\..\PostEffect\ReadMe.txt"
 			>
 		</File>
 	</Files>

@@ -1,5 +1,4 @@
-﻿#include <stdafx.h>
-#include "RimLightShader.h"
+﻿#include "RimLightShader.h"
 
 // シェーダごとの初期化
 BOOL CRimLightShader::InitInternal(izanagi::CGraphicsDevice* pDevice)

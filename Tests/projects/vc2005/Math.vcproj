@@ -18,7 +18,7 @@
 		<Configuration
 			Name="Debug_DX9|Win32"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\PropertySeet\Debug_DX9.vsprops"
+			InheritedPropertySheets=".\Debug_DX9.vsprops"
 			UseOfMFC="0"
 			CharacterSet="2"
 			>
@@ -42,7 +42,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\MyAppl"
+				AdditionalIncludeDirectories="..\..\Math\MyAppl"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG"
 				TreatWChar_tAsBuiltInType="true"
 				UsePrecompiledHeader="0"
@@ -93,10 +93,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release_DX9|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\PropertySeet\Release_DX9.vsprops"
+			InheritedPropertySheets=".\Release_DX9.vsprops"
 			UseOfMFC="0"
 			CharacterSet="2"
 			>
@@ -119,7 +117,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".\MyAppl"
+				AdditionalIncludeDirectories="..\..\Math\MyAppl"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG"
 				MinimalRebuild="false"
 				TreatWChar_tAsBuiltInType="true"
@@ -180,11 +178,11 @@
 			Name="system"
 			>
 			<File
-				RelativePath="..\system\MySystem.cpp"
+				RelativePath="..\..\system\MySystem.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\system\MySystem.h"
+				RelativePath="..\..\system\MySystem.h"
 				>
 			</File>
 		</Filter>
@@ -192,20 +190,20 @@
 			Name="MyAppl"
 			>
 			<File
-				RelativePath=".\myappl\MyAppl.cpp"
+				RelativePath="..\..\Math\myappl\MyAppl.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\myappl\MyAppl.h"
+				RelativePath="..\..\Math\myappl\MyAppl.h"
 				>
 			</File>
 		</Filter>
 		<File
-			RelativePath=".\main.cpp"
+			RelativePath="..\..\Math\main.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\ReadMe.txt"
+			RelativePath="..\..\Math\ReadMe.txt"
 			>
 		</File>
 	</Files>

@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="Animation"
-	ProjectGUID="{6DF1628D-FB9D-4D14-84B5-B0D139E71D56}"
-	RootNamespace="Animation"
+	Name="ShaderTest"
+	ProjectGUID="{22BB70C1-BB33-4945-BEA8-E6BE0BE94C06}"
+	RootNamespace="ShaderTest"
 	Keyword="MFCProj"
 	>
 	<Platforms>
@@ -17,8 +17,10 @@
 	<Configurations>
 		<Configuration
 			Name="Debug_DX9|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\PropertySeet\Debug_DX9.vsprops"
+			InheritedPropertySheets=".\Debug_DX9.vsprops"
 			UseOfMFC="0"
 			CharacterSet="2"
 			>
@@ -38,13 +40,13 @@
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="_DEBUG"
 				MkTypLibCompatible="false"
+				ValidateParameters="false"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\MyAppl"
+				AdditionalIncludeDirectories="..\..\ShaderTest\MyAppl"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG"
-				TreatWChar_tAsBuiltInType="true"
 				UsePrecompiledHeader="0"
 			/>
 			<Tool
@@ -61,7 +63,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SceneGraph.lib Shader.lib"
+				AdditionalDependencies="SceneGraph.lib"
 				AdditionalLibraryDirectories=""
 				SubSystem="2"
 				TargetMachine="1"
@@ -93,12 +95,11 @@
 		</Configuration>
 		<Configuration
 			Name="Release_DX9|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\PropertySeet\Release_DX9.vsprops"
+			InheritedPropertySheets=".\Release_DX9.vsprops"
 			UseOfMFC="0"
 			CharacterSet="2"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -116,13 +117,13 @@
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="NDEBUG"
 				MkTypLibCompatible="false"
+				ValidateParameters="false"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".\MyAppl"
+				AdditionalIncludeDirectories="..\..\ShaderTest\MyAppl"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG"
 				MinimalRebuild="false"
-				TreatWChar_tAsBuiltInType="true"
 				UsePrecompiledHeader="0"
 			/>
 			<Tool
@@ -139,7 +140,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SceneGraph.lib Shader.lib"
+				AdditionalDependencies="SceneGraph.lib"
 				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -180,19 +181,19 @@
 			Name="system"
 			>
 			<File
-				RelativePath="..\system\MyCamera.cpp"
+				RelativePath="..\..\system\MyCamera.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\system\MyCamera.h"
+				RelativePath="..\..\system\MyCamera.h"
 				>
 			</File>
 			<File
-				RelativePath="..\system\MySystem.cpp"
+				RelativePath="..\..\system\MySystem.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\system\MySystem.h"
+				RelativePath="..\..\system\MySystem.h"
 				>
 			</File>
 		</Filter>
@@ -200,74 +201,78 @@
 			Name="MyAppl"
 			>
 			<File
-				RelativePath=".\MyAppl\Character.cpp"
+				RelativePath="..\..\ShaderTest\MyAppl\MyAppl.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\MyAppl\Character.h"
-				>
-			</File>
-			<File
-				RelativePath=".\MyAppl\Common.h"
-				>
-			</File>
-			<File
-				RelativePath=".\myappl\MyAppl.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\myappl\MyAppl.h"
-				>
-			</File>
-			<File
-				RelativePath=".\MyAppl\Scene.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\MyAppl\Scene.h"
+				RelativePath="..\..\ShaderTest\MyAppl\MyAppl.h"
 				>
 			</File>
 			<Filter
 				Name="state"
 				>
 				<File
-					RelativePath=".\MyAppl\state\StateAnmBlend.cpp"
+					RelativePath="..\..\ShaderTest\MyAppl\state\StateBasic.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\MyAppl\state\StateAnmBlend.h"
+					RelativePath="..\..\ShaderTest\MyAppl\state\StateBasic.h"
 					>
 				</File>
 				<File
-					RelativePath=".\MyAppl\state\StateAnmInterp.cpp"
+					RelativePath="..\..\ShaderTest\MyAppl\state\StateHemiLight.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\MyAppl\state\StateAnmInterp.h"
+					RelativePath="..\..\ShaderTest\MyAppl\state\StateHemiLight.h"
 					>
 				</File>
 				<File
-					RelativePath=".\MyAppl\state\StateAnmList.cpp"
+					RelativePath="..\..\ShaderTest\MyAppl\state\StateManager.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\MyAppl\state\StateAnmList.h"
+					RelativePath="..\..\ShaderTest\MyAppl\state\StateManager.h"
 					>
 				</File>
 				<File
-					RelativePath=".\myappl\state\StateManager.cpp"
+					RelativePath="..\..\ShaderTest\MyAppl\state\StateMenu.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\myappl\state\StateManager.h"
+					RelativePath="..\..\ShaderTest\MyAppl\state\StateMenu.h"
 					>
 				</File>
 				<File
-					RelativePath=".\MyAppl\state\StateMenu.cpp"
+					RelativePath="..\..\ShaderTest\MyAppl\state\StateNormalMap.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\MyAppl\state\StateMenu.h"
+					RelativePath="..\..\ShaderTest\MyAppl\state\StateNormalMap.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\ShaderTest\MyAppl\state\StateParallax.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\ShaderTest\MyAppl\state\StateParallax.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\ShaderTest\MyAppl\state\StatePhong.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\ShaderTest\MyAppl\state\StatePhong.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\ShaderTest\MyAppl\state\StateRimLight.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\ShaderTest\MyAppl\state\StateRimLight.h"
 					>
 				</File>
 			</Filter>
@@ -275,7 +280,7 @@
 				Name="fx"
 				>
 				<File
-					RelativePath=".\MyAppl\fx\BasicShader.fx"
+					RelativePath="..\..\ShaderTest\MyAppl\fx\BasicShader.fx"
 					>
 					<FileConfiguration
 						Name="Debug_DX9|Win32"
@@ -297,7 +302,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\MyAppl\fx\PhongShader.fx"
+					RelativePath="..\..\ShaderTest\MyAppl\fx\HemiLightShader.fx"
 					>
 					<FileConfiguration
 						Name="Debug_DX9|Win32"
@@ -319,14 +324,80 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\MyAppl\fx\SkinShader.fx"
+					RelativePath="..\..\ShaderTest\MyAppl\fx\NormalMapShader.fx"
 					>
 					<FileConfiguration
 						Name="Debug_DX9|Win32"
 						>
 						<Tool
 							Name="VCCustomBuildTool"
-							CommandLine="fxc /T fx_2_0 /Fo $(InputDir)../../data/$(InputName).bin /nologo /Od /Zi $(InputPath)&#x0D;&#x0A;"
+							CommandLine="fxc /T fx_2_0 /Fo $(InputDir)../../data/$(InputName).bin /nologo $(InputPath)&#x0D;&#x0A;"
+							Outputs="$(InputDir)../../data/$(InputName).bin"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release_DX9|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							CommandLine="fxc /T fx_2_0 /Fo $(InputDir)../../data/$(InputName).bin /nologo $(InputPath)&#x0D;&#x0A;"
+							Outputs="$(InputDir)../../data/$(InputName).bin"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\ShaderTest\MyAppl\fx\ParallaxShader.fx"
+					>
+					<FileConfiguration
+						Name="Debug_DX9|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							CommandLine="fxc /T fx_2_0 /Fo $(InputDir)../../data/$(InputName).bin /nologo $(InputPath)&#x0D;&#x0A;"
+							Outputs="$(InputDir)../../data/$(InputName).bin"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release_DX9|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							CommandLine="fxc /T fx_2_0 /Fo $(InputDir)../../data/$(InputName).bin /nologo $(InputPath)&#x0D;&#x0A;"
+							Outputs="$(InputDir)../../data/$(InputName).bin"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\ShaderTest\MyAppl\fx\PhongShader.fx"
+					>
+					<FileConfiguration
+						Name="Debug_DX9|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							CommandLine="fxc /T fx_2_0 /Fo $(InputDir)../../data/$(InputName).bin /nologo $(InputPath)&#x0D;&#x0A;"
+							Outputs="$(InputDir)../../data/$(InputName).bin"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release_DX9|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							CommandLine="fxc /T fx_2_0 /Fo $(InputDir)../../data/$(InputName).bin /nologo $(InputPath)&#x0D;&#x0A;"
+							Outputs="$(InputDir)../../data/$(InputName).bin"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\ShaderTest\MyAppl\fx\RimLightShader.fx"
+					>
+					<FileConfiguration
+						Name="Debug_DX9|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							CommandLine="fxc /T fx_2_0 /Fo $(InputDir)../../data/$(InputName).bin /nologo $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(InputDir)../../data/$(InputName).bin"
 						/>
 					</FileConfiguration>
@@ -345,41 +416,80 @@
 				Name="shader"
 				>
 				<File
-					RelativePath=".\MyAppl\shader\SkinShader.fx"
+					RelativePath="..\..\ShaderTest\MyAppl\shader\BasicShader.h"
 					>
 				</File>
 				<File
-					RelativePath=".\MyAppl\shader\SkinShader.xml"
+					RelativePath="..\..\ShaderTest\MyAppl\shader\HemiLightShader.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\ShaderTest\MyAppl\shader\HemiLightShader.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\ShaderTest\MyAppl\shader\NormalMapShader.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\ShaderTest\MyAppl\shader\ParallaxShader.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\ShaderTest\MyAppl\shader\PhongShader.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\ShaderTest\MyAppl\shader\PhongShader.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\ShaderTest\MyAppl\shader\RimLightShader.cpp"
 					>
 					<FileConfiguration
 						Name="Debug_DX9|Win32"
 						>
 						<Tool
-							Name="VCCustomBuildTool"
-							CommandLine="$(SolutionDir)\..\Tools\tools\Debug\ShaderConverter.exe -src &quot;$(InputPath)&quot; -obj &quot;$(ProjectDir)/shader_obj&quot; -o &quot;data&quot;&#x0D;&#x0A;"
-							Outputs="$(ProjectDir)data/$(InputName).shd"
+							Name="VCCLCompilerTool"
+							UsePrecompiledHeader="0"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release_DX9|Win32"
 						>
 						<Tool
-							Name="VCCustomBuildTool"
-							CommandLine="$(SolutionDir)\..\Tools\tools\Release\ShaderConverter.exe -src &quot;$(InputPath)&quot; -obj &quot;$(ProjectDir)/shader_obj&quot; -o &quot;data&quot;&#x0D;&#x0A;"
+							Name="VCCLCompilerTool"
+							UsePrecompiledHeader="0"
 						/>
 					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\ShaderTest\MyAppl\shader\RimLightShader.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\ShaderTest\MyAppl\shader\ShaderBase.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\ShaderTest\MyAppl\shader\ShaderBase.h"
+					>
 				</File>
 			</Filter>
 		</Filter>
 		<File
-			RelativePath=".\main.cpp"
+			RelativePath="..\..\ShaderTest\main.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\ReadMe.txt"
+			RelativePath="..\..\ShaderTest\ReadMe.txt"
 			>
 		</File>
 	</Files>
 	<Globals>
+		<Global
+			Name="RESOURCE_FILE"
+			Value="ShaderTest.rc"
+		/>
 	</Globals>
 </VisualStudioProject>

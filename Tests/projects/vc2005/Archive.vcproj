@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="Basic"
-	ProjectGUID="{09D20905-C5F2-4869-9C44-65E612B6449A}"
-	RootNamespace="Basic"
+	Name="Archive"
+	ProjectGUID="{9C265176-0E27-4DC6-9CB6-4DC0F4398658}"
+	RootNamespace="Archive"
 	Keyword="MFCProj"
 	>
 	<Platforms>
@@ -18,7 +18,7 @@
 		<Configuration
 			Name="Debug_DX9|Win32"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\PropertySeet\Debug_DX9.vsprops"
+			InheritedPropertySheets=".\Debug_DX9.vsprops"
 			UseOfMFC="0"
 			CharacterSet="2"
 			>
@@ -42,7 +42,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\MyAppl"
+				AdditionalIncludeDirectories="..\..\Archive\MyAppl"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG"
 				TreatWChar_tAsBuiltInType="true"
 				UsePrecompiledHeader="0"
@@ -61,6 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="Archive.lib SceneGraph.lib Font.lib"
 				AdditionalLibraryDirectories=""
 				SubSystem="2"
 				TargetMachine="1"
@@ -92,10 +93,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release_DX9|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\PropertySeet\Release_DX9.vsprops"
+			InheritedPropertySheets=".\Release_DX9.vsprops"
 			UseOfMFC="0"
 			CharacterSet="2"
 			>
@@ -118,7 +117,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".\MyAppl"
+				AdditionalIncludeDirectories="..\..\Archive\MyAppl"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG"
 				MinimalRebuild="false"
 				TreatWChar_tAsBuiltInType="true"
@@ -138,6 +137,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="Archive.lib"
 				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -178,11 +178,11 @@
 			Name="system"
 			>
 			<File
-				RelativePath="..\system\MySystem.cpp"
+				RelativePath="..\..\system\MySystem.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\system\MySystem.h"
+				RelativePath="..\..\system\MySystem.h"
 				>
 			</File>
 		</Filter>
@@ -190,40 +190,56 @@
 			Name="MyAppl"
 			>
 			<File
-				RelativePath=".\MyAppl\MyAppl.cpp"
+				RelativePath="..\..\Archive\MyAppl\MyAppl.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\MyAppl\MyAppl.h"
+				RelativePath="..\..\Archive\MyAppl\MyAppl.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Archive\data\test_0.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Archive\data\test_1.h"
 				>
 			</File>
 			<Filter
 				Name="state"
 				>
 				<File
-					RelativePath=".\MyAppl\state\StateBasic.cpp"
+					RelativePath="..\..\Archive\MyAppl\state\StateManager.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\MyAppl\state\StateBasic.h"
+					RelativePath="..\..\Archive\MyAppl\state\StateManager.h"
 					>
 				</File>
 				<File
-					RelativePath=".\MyAppl\state\StateManager.cpp"
+					RelativePath="..\..\Archive\MyAppl\state\StateTest0.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\MyAppl\state\StateManager.h"
+					RelativePath="..\..\Archive\MyAppl\state\StateTest0.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Archive\MyAppl\state\StateTest1.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Archive\MyAppl\state\StateTest1.h"
 					>
 				</File>
 			</Filter>
 		</Filter>
 		<File
-			RelativePath=".\main.cpp"
+			RelativePath="..\..\Archive\main.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\ReadMe.txt"
+			RelativePath="..\..\Archive\ReadMe.txt"
 			>
 		</File>
 	</Files>

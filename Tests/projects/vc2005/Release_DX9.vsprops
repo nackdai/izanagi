@@ -3,12 +3,12 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="Release_DX9"
-	OutputDirectory="$(ConfigurationName)"
-	IntermediateDirectory="$(ConfigurationName)"
+	OutputDirectory="$(ProjectName)\$(ConfigurationName)"
+	IntermediateDirectory="$(ProjectName)\$(ConfigurationName)"
 	>
 	<Tool
 		Name="VCCLCompilerTool"
-		AdditionalIncludeDirectories="..\..\Libs\include;..\system"
+		AdditionalIncludeDirectories="..\..\..\Libs\include;..\..\system"
 		WarningLevel="3"
 		Detect64BitPortabilityProblems="true"
 		DebugInformationFormat="3"
@@ -16,9 +16,9 @@
 	<Tool
 		Name="VCLinkerTool"
 		AdditionalDependencies="d3d9.lib d3dx9.lib dxguid.lib dinput8.lib dxerr.lib winmm.lib Std.lib Graph.lib Io.lib Math.lib DebugUtil.lib System.lib"
-		OutputFile="$(ProjectName).exe"
+		OutputFile="$(ProjectDir)..\..\$(ProjectName)\$(ProjectName).exe"
 		LinkIncremental="1"
-		AdditionalLibraryDirectories="..\..\Libs\project\lib\$(ConfigurationName)"
+		AdditionalLibraryDirectories="&quot;..\..\..\Libs\project\lib\$(ConfigurationName)&quot;"
 		GenerateDebugInformation="true"
 	/>
 </VisualStudioPropertySheet>
