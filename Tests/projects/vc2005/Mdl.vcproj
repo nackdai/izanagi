@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="Mtrl"
-	ProjectGUID="{95CF5521-BA29-43BD-B598-211B919283B9}"
-	RootNamespace="Mtrl"
+	Name="Mdl"
+	ProjectGUID="{9B47E88B-5EAA-4857-8EB1-E6DA6E515826}"
+	RootNamespace="Mdl"
 	Keyword="MFCProj"
 	>
 	<Platforms>
@@ -18,7 +18,7 @@
 		<Configuration
 			Name="Debug_DX9|Win32"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\PropertySeet\Debug_DX9.vsprops"
+			InheritedPropertySheets=".\Debug_DX9.vsprops"
 			UseOfMFC="0"
 			CharacterSet="2"
 			>
@@ -42,7 +42,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\MyAppl"
+				AdditionalIncludeDirectories="..\..\Mdl\MyAppl"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG"
 				TreatWChar_tAsBuiltInType="true"
 				UsePrecompiledHeader="0"
@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SceneGraph.lib Shader.lib"
+				AdditionalDependencies="SceneGraph.lib"
 				AdditionalLibraryDirectories=""
 				SubSystem="2"
 				TargetMachine="1"
@@ -93,10 +93,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release_DX9|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\PropertySeet\Release_DX9.vsprops"
+			InheritedPropertySheets=".\Release_DX9.vsprops"
 			UseOfMFC="0"
 			CharacterSet="2"
 			>
@@ -119,7 +117,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".\MyAppl"
+				AdditionalIncludeDirectories="..\..\Mdl\MyAppl"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG"
 				MinimalRebuild="false"
 				TreatWChar_tAsBuiltInType="true"
@@ -139,7 +137,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SceneGraph.lib Shader.lib"
+				AdditionalDependencies="SceneGraph.lib"
 				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -180,19 +178,19 @@
 			Name="system"
 			>
 			<File
-				RelativePath="..\system\MyCamera.cpp"
+				RelativePath="..\..\system\MyCamera.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\system\MyCamera.h"
+				RelativePath="..\..\system\MyCamera.h"
 				>
 			</File>
 			<File
-				RelativePath="..\system\MySystem.cpp"
+				RelativePath="..\..\system\MySystem.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\system\MySystem.h"
+				RelativePath="..\..\system\MySystem.h"
 				>
 			</File>
 		</Filter>
@@ -200,42 +198,46 @@
 			Name="MyAppl"
 			>
 			<File
-				RelativePath=".\myappl\MyAppl.cpp"
+				RelativePath="..\..\Mdl\myappl\MyAppl.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\myappl\MyAppl.h"
+				RelativePath="..\..\Mdl\myappl\MyAppl.h"
 				>
 			</File>
 			<Filter
 				Name="state"
 				>
 				<File
-					RelativePath=".\MyAppl\state\Common.h"
+					RelativePath="..\..\Mdl\myappl\state\StateBasic.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\MyAppl\state\StateBasicBoy.cpp"
+					RelativePath="..\..\Mdl\myappl\state\StateBasic.h"
 					>
 				</File>
 				<File
-					RelativePath=".\MyAppl\state\StateBasicBoy.h"
+					RelativePath="..\..\Mdl\MyAppl\state\StateBasic_2.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\MyAppl\state\StateBasicGirl.cpp"
+					RelativePath="..\..\Mdl\MyAppl\state\StateBasic_2.h"
 					>
 				</File>
 				<File
-					RelativePath=".\MyAppl\state\StateBasicGirl.h"
+					RelativePath="..\..\Mdl\MyAppl\state\StateBasicEx.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\myappl\state\StateManager.cpp"
+					RelativePath="..\..\Mdl\MyAppl\state\StateBasicEx.h"
 					>
 				</File>
 				<File
-					RelativePath=".\myappl\state\StateManager.h"
+					RelativePath="..\..\Mdl\myappl\state\StateManager.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Mdl\myappl\state\StateManager.h"
 					>
 				</File>
 			</Filter>
@@ -243,7 +245,7 @@
 				Name="fx"
 				>
 				<File
-					RelativePath=".\MyAppl\fx\BasicShader.fx"
+					RelativePath="..\..\Mdl\MyAppl\fx\BasicShader.fx"
 					>
 					<FileConfiguration
 						Name="Debug_DX9|Win32"
@@ -265,7 +267,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\MyAppl\fx\PhongShader.fx"
+					RelativePath="..\..\Mdl\MyAppl\fx\PhongShader.fx"
 					>
 					<FileConfiguration
 						Name="Debug_DX9|Win32"
@@ -287,7 +289,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\MyAppl\fx\SkinShader.fx"
+					RelativePath="..\..\Mdl\MyAppl\fx\SkinShader.fx"
 					>
 					<FileConfiguration
 						Name="Debug_DX9|Win32"
@@ -313,41 +315,41 @@
 				Name="shader"
 				>
 				<File
-					RelativePath=".\MyAppl\shader\SkinShader.fx"
+					RelativePath="..\..\Mdl\MyAppl\shader\BasicShader.h"
 					>
 				</File>
 				<File
-					RelativePath=".\MyAppl\shader\SkinShader.xml"
+					RelativePath="..\..\Mdl\MyAppl\shader\PhongShader.cpp"
 					>
-					<FileConfiguration
-						Name="Debug_DX9|Win32"
-						>
-						<Tool
-							Name="VCCustomBuildTool"
-							CommandLine="$(SolutionDir)\..\Tools\tools\Debug\ShaderConverter.exe -src &quot;$(InputPath)&quot; -obj &quot;$(ProjectDir)/shader_obj&quot; -o &quot;data&quot;"
-							AdditionalDependencies="$(ProjectDir)data/SkinShader.fx"
-							Outputs="$(ProjectDir)data/$(InputName).shd"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release_DX9|Win32"
-						>
-						<Tool
-							Name="VCCustomBuildTool"
-							CommandLine="$(SolutionDir)\..\Tools\tools\Debug\ShaderConverter.exe -src &quot;$(InputPath)&quot; -obj &quot;$(ProjectDir)/shader_obj&quot; -o &quot;data&quot;"
-							AdditionalDependencies="$(ProjectDir)data/SkinShader.fx"
-							Outputs="$(ProjectDir)data/$(InputName).shd"
-						/>
-					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\Mdl\MyAppl\shader\PhongShader.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Mdl\MyAppl\shader\ShaderBase.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Mdl\MyAppl\shader\ShaderBase.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Mdl\MyAppl\shader\SkinShader.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Mdl\MyAppl\shader\SkinShader.h"
+					>
 				</File>
 			</Filter>
 		</Filter>
 		<File
-			RelativePath=".\main.cpp"
+			RelativePath="..\..\Mdl\main.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\ReadMe.txt"
+			RelativePath="..\..\Mdl\ReadMe.txt"
 			>
 		</File>
 	</Files>

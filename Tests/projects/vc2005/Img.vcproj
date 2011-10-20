@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="Font"
-	ProjectGUID="{01C879BB-4E7C-4A6E-9ABD-F72FE87FE04F}"
-	RootNamespace="Font"
+	Name="Img"
+	ProjectGUID="{8FF8C63D-EFA7-4DF1-AEDE-53E5B61C0C78}"
+	RootNamespace="Img"
 	Keyword="MFCProj"
 	>
 	<Platforms>
@@ -18,7 +18,7 @@
 		<Configuration
 			Name="Debug_DX9|Win32"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\PropertySeet\Debug_DX9.vsprops"
+			InheritedPropertySheets=".\Debug_DX9.vsprops"
 			UseOfMFC="0"
 			CharacterSet="2"
 			>
@@ -38,13 +38,13 @@
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="_DEBUG"
 				MkTypLibCompatible="false"
-				ValidateParameters="false"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\MyAppl"
+				AdditionalIncludeDirectories="..\..\Img\MyAppl"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG"
+				TreatWChar_tAsBuiltInType="true"
 				UsePrecompiledHeader="0"
 			/>
 			<Tool
@@ -61,9 +61,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Font.lib"
+				AdditionalDependencies="SceneGraph.lib"
 				AdditionalLibraryDirectories=""
-				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
 			/>
@@ -94,13 +93,10 @@
 		</Configuration>
 		<Configuration
 			Name="Release_DX9|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\PropertySeet\Release_DX9.vsprops"
+			InheritedPropertySheets=".\Release_DX9.vsprops"
 			UseOfMFC="0"
 			CharacterSet="2"
-			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -118,13 +114,13 @@
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="NDEBUG"
 				MkTypLibCompatible="false"
-				ValidateParameters="false"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".\MyAppl"
+				AdditionalIncludeDirectories="..\..\Img\MyAppl"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG"
 				MinimalRebuild="false"
+				TreatWChar_tAsBuiltInType="true"
 				UsePrecompiledHeader="0"
 			/>
 			<Tool
@@ -141,7 +137,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Font.lib"
+				AdditionalDependencies="SceneGraph.lib"
 				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -179,62 +175,58 @@
 	</References>
 	<Files>
 		<Filter
-			Name="MyAppl"
+			Name="system"
 			>
 			<File
-				RelativePath=".\MyAppl\MyAppl.cpp"
+				RelativePath="..\..\system\MySystem.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\MyAppl\MyAppl.h"
+				RelativePath="..\..\system\MySystem.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="MyAppl"
+			>
+			<File
+				RelativePath="..\..\Img\MyAppl\MyAppl.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Img\MyAppl\MyAppl.h"
 				>
 			</File>
 			<Filter
 				Name="state"
 				>
 				<File
-					RelativePath=".\MyAppl\state\StateFont.cpp"
+					RelativePath="..\..\Img\MyAppl\state\StateBasic.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\MyAppl\state\StateFont.h"
+					RelativePath="..\..\Img\MyAppl\state\StateBasic.h"
 					>
 				</File>
 				<File
-					RelativePath=".\MyAppl\state\StateManager.cpp"
+					RelativePath="..\..\Img\MyAppl\state\StateManager.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\MyAppl\state\StateManager.h"
+					RelativePath="..\..\Img\MyAppl\state\StateManager.h"
 					>
 				</File>
 			</Filter>
 		</Filter>
-		<Filter
-			Name="system"
-			>
-			<File
-				RelativePath="..\system\MySystem.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\system\MySystem.h"
-				>
-			</File>
-		</Filter>
 		<File
-			RelativePath=".\main.cpp"
+			RelativePath="..\..\Img\main.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\ReadMe.txt"
+			RelativePath="..\..\Img\ReadMe.txt"
 			>
 		</File>
 	</Files>
 	<Globals>
-		<Global
-			Name="RESOURCE_FILE"
-			Value="Font.rc"
-		/>
 	</Globals>
 </VisualStudioProject>

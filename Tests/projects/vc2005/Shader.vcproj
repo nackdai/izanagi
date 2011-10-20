@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="Archive"
-	ProjectGUID="{9C265176-0E27-4DC6-9CB6-4DC0F4398658}"
-	RootNamespace="Archive"
+	Name="Shader"
+	ProjectGUID="{7177D4AC-108B-4566-B333-363B910F5BDF}"
+	RootNamespace="Shader"
 	Keyword="MFCProj"
 	>
 	<Platforms>
@@ -18,7 +18,7 @@
 		<Configuration
 			Name="Debug_DX9|Win32"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\PropertySeet\Debug_DX9.vsprops"
+			InheritedPropertySheets=".\Debug_DX9.vsprops"
 			UseOfMFC="0"
 			CharacterSet="2"
 			>
@@ -38,13 +38,13 @@
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="_DEBUG"
 				MkTypLibCompatible="false"
+				ValidateParameters="false"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\MyAppl"
+				AdditionalIncludeDirectories="..\..\Shader\MyAppl"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG"
-				TreatWChar_tAsBuiltInType="true"
 				UsePrecompiledHeader="0"
 			/>
 			<Tool
@@ -61,8 +61,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Archive.lib SceneGraph.lib Font.lib"
+				AdditionalDependencies="SceneGraph.lib Shader.lib"
 				AdditionalLibraryDirectories=""
+				IgnoreDefaultLibraryNames=""
 				SubSystem="2"
 				TargetMachine="1"
 			/>
@@ -94,9 +95,10 @@
 		<Configuration
 			Name="Release_DX9|Win32"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\PropertySeet\Release_DX9.vsprops"
+			InheritedPropertySheets=".\Release_DX9.vsprops"
 			UseOfMFC="0"
 			CharacterSet="2"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -114,13 +116,13 @@
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="NDEBUG"
 				MkTypLibCompatible="false"
+				ValidateParameters="false"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".\MyAppl"
+				AdditionalIncludeDirectories="..\..\Shader\MyAppl"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG"
 				MinimalRebuild="false"
-				TreatWChar_tAsBuiltInType="true"
 				UsePrecompiledHeader="0"
 			/>
 			<Tool
@@ -137,9 +139,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Archive.lib"
+				AdditionalDependencies="SceneGraph.lib Shader.lib"
 				AdditionalLibraryDirectories=""
-				GenerateDebugInformation="true"
+				IgnoreDefaultLibraryNames=""
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -175,71 +177,63 @@
 	</References>
 	<Files>
 		<Filter
-			Name="system"
-			>
-			<File
-				RelativePath="..\system\MySystem.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\system\MySystem.h"
-				>
-			</File>
-		</Filter>
-		<Filter
 			Name="MyAppl"
 			>
 			<File
-				RelativePath=".\MyAppl\MyAppl.cpp"
+				RelativePath="..\..\Shader\MyAppl\MyAppl.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\MyAppl\MyAppl.h"
-				>
-			</File>
-			<File
-				RelativePath=".\data\test_0.h"
-				>
-			</File>
-			<File
-				RelativePath=".\data\test_1.h"
+				RelativePath="..\..\Shader\MyAppl\MyAppl.h"
 				>
 			</File>
 			<Filter
 				Name="state"
 				>
 				<File
-					RelativePath=".\MyAppl\state\StateManager.cpp"
+					RelativePath="..\..\Shader\MyAppl\state\StateConstColor.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\MyAppl\state\StateManager.h"
+					RelativePath="..\..\Shader\MyAppl\state\StateConstColor.h"
 					>
 				</File>
 				<File
-					RelativePath=".\MyAppl\state\StateTest0.cpp"
+					RelativePath="..\..\Shader\MyAppl\state\StateManager.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\MyAppl\state\StateTest0.h"
-					>
-				</File>
-				<File
-					RelativePath=".\MyAppl\state\StateTest1.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\MyAppl\state\StateTest1.h"
+					RelativePath="..\..\Shader\MyAppl\state\StateManager.h"
 					>
 				</File>
 			</Filter>
 		</Filter>
+		<Filter
+			Name="system"
+			>
+			<File
+				RelativePath="..\..\system\MyCamera.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\system\MyCamera.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\system\MySystem.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\system\MySystem.h"
+				>
+			</File>
+		</Filter>
 		<File
-			RelativePath=".\main.cpp"
+			RelativePath="..\..\Shader\main.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\ReadMe.txt"
+			RelativePath="..\..\Shader\ReadMe.txt"
 			>
 		</File>
 	</Files>
