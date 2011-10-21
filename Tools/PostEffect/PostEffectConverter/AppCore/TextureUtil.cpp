@@ -112,7 +112,7 @@ namespace {
 			const char* Name;
 			BOOL (*Func)(izanagi::S_PES_TEXTURE_ANN&, CGannotation);
 		} AnnTable[] = {
-			{"format", _SetValueFormat},					// ピクセルフォーマット
+			{"Format", _SetValueFormat},					// ピクセルフォーマット
 			{"Dimensions", _SetValueDimensions},			// サイズ
 			{"ViewportRatio", _SetValueViewportRatio},		// 比率
 			{"IsRenderTarget", _SetValueIsRenderTarget},	// レンダーターゲットか

@@ -1023,7 +1023,7 @@ namespace {
 			strOut.format("%s", BUF);
 		}
 		else {
-			strOut.format("%s", tmp1);
+			strOut.format("%s", tmp1.c_str());
 		}
 	}
 }	// namespace
