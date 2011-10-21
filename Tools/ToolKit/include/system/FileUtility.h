@@ -64,10 +64,15 @@ namespace izanagi_tk {
 
 			FILL_ZERO(pDst, nSize);
 
+#if 0
 			IZ_BOOL ret = (::PathCombine(pDst, path_0, path_1) != IZ_NULL);
 			IZ_ASSERT(ret);
 
 			return ret;
+#else
+			sprintf_s(pDst, nSize, "%s/%s", path_0, path_1);
+			return IZ_TRUE;
+#endif
 		}
 
 		/**

@@ -280,7 +280,7 @@ BOOL COption::AnalysisInternal()
 		result = izanagi::izanagi_tk::CFileUtility::RemoveExtension(s_BUF, sizeof(s_BUF), file_name.c_str());
 		VRETURN(result);
 
-		outFile.format("%s.pes", file_name);
+		outFile.format("%s.pes", s_BUF);
 		memset(s_BUF, 0, sizeof(s_BUF));
 	}
 
@@ -299,7 +299,7 @@ BOOL COption::AnalysisInternal()
 			VRETURN(result);
 
 			if (objDir.empty()) {
-				preprocFile.format("%s.fx_", file_name.c_str());
+				preprocFile.format("%s.fx_", s_BUF);
 			}
 			else {
 				// 中間ディレクトリに出力する
