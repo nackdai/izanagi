@@ -56,7 +56,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				AdditionalDependencies="squishd.lib"
-				AdditionalLibraryDirectories="$(EXTERNAL_DIR)/squish/lib"
+				AdditionalLibraryDirectories="&quot;$(EXTERNAL_DIR)/squish/lib/vs8&quot;"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -118,7 +118,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				AdditionalDependencies="squish.lib"
-				AdditionalLibraryDirectories="$(EXTERNAL_DIR)/squish/lib"
+				AdditionalLibraryDirectories="&quot;$(EXTERNAL_DIR)/squish/lib/vs8&quot;"
 			/>
 			<Tool
 				Name="VCALinkTool"
