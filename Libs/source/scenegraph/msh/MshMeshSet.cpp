@@ -177,6 +177,7 @@ IZ_UINT8* CMeshSet::Read(
 {
 	IZ_INPUT_READ_ASSERT(pIn, &m_Info, 0, sizeof(m_Info));
 
+	// MeshSetの頂点宣言を作成
 	m_VD = _CreateVertexDeclaration(pDevice, m_Info);
 	VRETURN(m_VD != IZ_NULL);
 
@@ -191,7 +192,9 @@ IZ_UINT8* CMeshSet::Read(
 
 		m_pPrimSet[i]->AddRef();
 
-		VRETURN_NULL(m_pPrimSet[i]->Read(pDevice, pIn));
+		// PrimSetのデータを読み込み
+		pBuf = m_pPrimSet[i]->Read(pDevice, pIn, pBuf);
+		VRETURN_NULL(pBuf != IZ_NULL);
 
 		// TODO
 	}

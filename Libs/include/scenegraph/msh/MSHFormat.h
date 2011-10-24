@@ -36,7 +36,6 @@ namespace izanagi {
 		// TODO
 		MSH_NAME_LEN = 31,
 
-		MSH_BELONGED_JOINT_MAX = 16,
 		MSH_BELONGED_JOINT_MIN = 4,
 	};
 
@@ -91,6 +90,8 @@ namespace izanagi {
 		IZ_UINT16 numMeshGroup;
 		IZ_UINT16 numMeshSet;
 		IZ_UINT16 numMeshSubset;
+
+		IZ_UINT numAllJointIndices;
 	};
 
 	/////////////////////////////////////////////////////////
@@ -134,12 +135,12 @@ namespace izanagi {
 		IZ_UINT16 idxVB;
 		IZ_UINT16 minIdx;
 		IZ_UINT16 maxIdx;
-		IZ_UINT16 padding;
+		IZ_UINT16 numJoints;
 
 		IZ_UINT numIdx;						// インデックス数
 		E_GRAPH_INDEX_BUFFER_FMT fmtIdx;	// インデックスフォーマット
 
-		IZ_INT16 joints[MSH_BELONGED_JOINT_MAX];
+		IZ_INT16* joints;
 	};
 }	// namespace izanagi
 

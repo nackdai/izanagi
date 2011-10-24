@@ -39,9 +39,10 @@ namespace izanagi {
 			IMshRenderHandler* pRenderHandler);
 
 	private:
-		IZ_BOOL Read(
+		IZ_UINT8* Read(
 			CGraphicsDevice* pDevice,
-			IInputStream* pIn);
+			IInputStream* pIn,
+			IZ_UINT8* buf);
 
 		IZ_BOOL DebugRender(
 			CGraphicsDevice* pDevice,
