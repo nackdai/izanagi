@@ -45,56 +45,51 @@ IZ_BOOL CGeometryChunk::Export(
 	izanagi::IOutputStream* pOut,
 	IImporter* pImporter)
 {
-	m_MaxJointMtxNum = izanagi::CMath::Clamp<IZ_UINT>(
+	m_MaxJointMtxNum = max(
 						maxJointMtxNum,
-						izanagi::MSH_BELONGED_JOINT_MIN,
-						izanagi::MSH_BELONGED_JOINT_MAX);
+						izanagi::MSH_BELONGED_JOINT_MIN);
+	m_MaxJointMtxNum = ((m_MaxJointMtxNum & 0x01) == 1
+						? m_MaxJointMtxNum + 1
+						: m_MaxJointMtxNum);
 
-	izanagi::S_MSH_HEADER sHeader;
+	
 	{
-		FILL_ZERO(&sHeader, sizeof(sHeader));
+		FILL_ZERO(&m_Header, sizeof(m_Header));
 
 		// TODO
 		// version, magic number...
 
-		sHeader.sizeHeader = sizeof(sHeader);
+		m_Header.sizeHeader = sizeof(m_Header);
 	}
 
 	// Blank for S_MSH_HEADER.
 	izanagi::izanagi_tk::CIoStreamSeekHelper cSeekHelper(pOut);
-	VRETURN(cSeekHelper.Skip(sizeof(sHeader)));
-
-	m_nExportedVBNum = 0;
-	m_nExportedSetNum = 0;
-	m_nExportedSubsetNum = 0;
+	VRETURN(cSeekHelper.Skip(sizeof(m_Header)));
 
 	// TODO
 	// Export mesh groups.
 	VRETURN(ExportGroup(pOut, pImporter));
 
-	sHeader.sizeFile = pOut->GetCurPos();
+	m_Header.sizeFile = pOut->GetCurPos();
 
-	sHeader.minVtx[0] = m_vMin.x;
-	sHeader.minVtx[1] = m_vMin.y;
-	sHeader.minVtx[2] = m_vMin.z;
+	m_Header.minVtx[0] = m_vMin.x;
+	m_Header.minVtx[1] = m_vMin.y;
+	m_Header.minVtx[2] = m_vMin.z;
 
-	sHeader.maxVtx[0] = m_vMin.x;
-	sHeader.maxVtx[1] = m_vMin.y;
-	sHeader.maxVtx[2] = m_vMin.z;
+	m_Header.maxVtx[0] = m_vMin.x;
+	m_Header.maxVtx[1] = m_vMin.y;
+	m_Header.maxVtx[2] = m_vMin.z;
 
 	// TODO
-	sHeader.numMeshGroup = 1;
-	sHeader.numVB = m_nExportedVBNum;
-	sHeader.numMeshSet = m_nExportedSetNum;
-	sHeader.numMeshSubset = m_nExportedSubsetNum;
+	m_Header.numMeshGroup = 1;
 
 	// Export S_MSH_HEADER.
 	{
 		// Rmenber end of geometry chunk.
 		VRETURN(cSeekHelper.ReturnWithAnchor());
 
-		IZ_OUTPUT_WRITE_VRETURN(pOut, &sHeader, 0, sizeof(sHeader));
-		cSeekHelper.Step(sizeof(sHeader));
+		IZ_OUTPUT_WRITE_VRETURN(pOut, &m_Header, 0, sizeof(m_Header));
+		cSeekHelper.Step(sizeof(m_Header));
 
 		// Return end of geometry chunk.
 		VRETURN(cSeekHelper.ReturnToAnchor());
@@ -179,8 +174,8 @@ IZ_BOOL CGeometryChunk::ExportGroup(
 			pOut,
 			pImporter));
 
-	m_nExportedVBNum += sGroupInfo.numVB;
-	m_nExportedSetNum += sGroupInfo.numMeshSet;
+	m_Header.numVB += sGroupInfo.numVB;
+	m_Header.numMeshSet += sGroupInfo.numMeshSet;
 
 	// Export S_MSH_MESH_GROUP.
 	{
@@ -343,7 +338,7 @@ namespace {
 			}
 
 			if (nMatchCnt > 0) {
-				IZ_UINT added = rhs.joint.size() - nMatchCnt;
+				IZ_UINT added = (IZ_UINT)rhs.joint.size() - nMatchCnt;
 
 				if (added + master.joint.size() <= maxJointMtxNum) {
 					candidateList[nMatchCnt - 1].push_back(&rhs);
@@ -984,7 +979,7 @@ IZ_BOOL CGeometryChunk::ExportMesh(
 		izanagi::izanagi_tk::CIoStreamSeekHelper cSeekHelper(pOut);
 		VRETURN(cSeekHelper.Skip(sizeof(sMeshInfo)));
 
-		m_nExportedSubsetNum += sMeshInfo.numSubset;
+		m_Header.numMeshSubset += sMeshInfo.numSubset;
 
 		pImporter->BeginMesh((IZ_UINT)i);
 
@@ -1073,7 +1068,6 @@ IZ_BOOL CGeometryChunk::ExportPrimSet(
 	izanagi::S_MSH_PRIM_SET sSubsetInfo;
 	{
 		FILL_ZERO(&sSubsetInfo, sizeof(sSubsetInfo));
-		memset(sSubsetInfo.joints, -1, sizeof(sSubsetInfo.joints));
 
 		sSubsetInfo.idxVB = sPrimSet.idxVB;
 		sSubsetInfo.minIdx = sPrimSet.minIdx;
@@ -1084,15 +1078,24 @@ IZ_BOOL CGeometryChunk::ExportPrimSet(
 		// TODO
 		sSubsetInfo.fmtIdx = izanagi::E_GRAPH_INDEX_BUFFER_FMT_INDEX32;
 
-		std::set<IZ_UINT>::const_iterator it = sPrimSet.joint.begin();
-		for (IZ_UINT n = 0; it != sPrimSet.joint.end(); it++, n++) {
-			sSubsetInfo.joints[n] = *it;
-		}
+		sSubsetInfo.numJoints = (IZ_UINT16)sPrimSet.joint.size();
 	}
+
+	// のべ所属関節インデックス数
+	m_Header.numAllJointIndices += sSubsetInfo.numJoints;
 
 	// Blank S_MSH_PRIM_SET. 
 	izanagi::izanagi_tk::CIoStreamSeekHelper cSeekHelper(pOut);
 	VRETURN(cSeekHelper.Skip(sizeof(sSubsetInfo)));
+
+	// 所属関節へのインデックス
+	{
+		std::set<IZ_UINT>::const_iterator it = sPrimSet.joint.begin();
+		for (; it != sPrimSet.joint.end(); it++) {
+			IZ_UINT16 idx = *it;
+			IZ_OUTPUT_WRITE_VRETURN(pOut, &idx, 0, sizeof(idx));
+		}
+	}
 
 	// Export indices.
 	sSubsetInfo.numIdx = ExportIndices(

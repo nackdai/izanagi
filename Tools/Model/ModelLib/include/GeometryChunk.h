@@ -95,9 +95,7 @@ protected:
 	izanagi::SVector m_vMin;
 	izanagi::SVector m_vMax;
 
-	IZ_UINT m_nExportedVBNum;
-	IZ_UINT m_nExportedSetNum;
-	IZ_UINT m_nExportedSubsetNum;
+	izanagi::S_MSH_HEADER m_Header;
 
 	// 最大ボーンマトリクス数
 	IZ_UINT m_MaxJointMtxNum;
