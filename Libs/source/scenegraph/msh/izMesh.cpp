@@ -29,6 +29,7 @@ CMesh* CMesh::CreateMesh(
 	nSize += sizeof(CMeshSet) * sHeader.numMeshSet;
 	nSize += sizeof(CPrimitiveSet*) * sHeader.numMeshSubset;
 	nSize += sizeof(CPrimitiveSet) * sHeader.numMeshSubset;
+	nSize += sizeof(IZ_UINT16) * sHeader.numAllJointIndices;
 
 	IZ_UINT8* pBuf = reinterpret_cast<IZ_UINT8*>(ALLOC_ZERO(pAllocator, nSize));
 	VRETURN_NULL(pBuf != IZ_NULL);

@@ -60,14 +60,27 @@ __EXIT__:
 	}
 }	// namespace
 
-IZ_BOOL CPrimitiveSet::Read(
+IZ_UINT8* CPrimitiveSet::Read(
 	CGraphicsDevice* pDevice,
-	IInputStream* pIn)
+	IInputStream* pIn,
+	IZ_UINT8* buf)
 {
 	IZ_INPUT_READ_ASSERT(pIn, &m_Info, 0, sizeof(m_Info));
 
+	// 所属関節へのインデックス
+	if (m_Info.numJoints > 0) {
+		// バッファ確保
+		m_Info.joints = reinterpret_cast<IZ_INT16*>(buf);
+		size_t size = sizeof(IZ_UINT16) * m_Info.numJoints;
+
+		// 読み込み
+		IZ_INPUT_READ_ASSERT(pIn, m_Info.joints, 0, size);
+
+		buf += size;
+	}
+
 	m_IB = _CreateIndexBuffer(pDevice, m_Info, pIn);
-	VRETURN(m_IB != IZ_NULL);
+	VRETURN_NULL(m_IB != IZ_NULL);
 
 	// Compute count of primitive.
 	switch (m_Info.typePrim) {
@@ -86,7 +99,7 @@ IZ_BOOL CPrimitiveSet::Read(
 		break;
 	}
 
-	return IZ_TRUE;
+	return buf;
 }
 
 IZ_BOOL CPrimitiveSet::Render(
@@ -96,7 +109,7 @@ IZ_BOOL CPrimitiveSet::Render(
 {
 	if (pRenderHandler != IZ_NULL) {
 		if (pSkeleton != IZ_NULL) {
-			for (IZ_UINT i = 0; i < COUNTOF(m_Info.joints); ++i) {
+			for (IZ_UINT i = 0; i < m_Info.numJoints; ++i) {
 				if (m_Info.joints[i] >= 0) {
 					IZ_UINT16 idx = m_Info.joints[i];
 					const SMatrix* pMtx = pSkeleton->GetJointMtx(idx);
@@ -161,7 +174,7 @@ IZ_BOOL CPrimitiveSet::DebugRender(
 		IZ_NULL, IZ_NULL, IZ_NULL, IZ_NULL,
 	};
 
-	for (IZ_UINT i = 0; i < MSH_BELONGED_JOINT_MAX; ++i) {
+	for (IZ_UINT i = 0; i < m_Info.numJoints; ++i) {
 		IZ_INT idx = m_Info.joints[i];
 		if (idx >= 0) {
 			tblJointMtx[i] = pSkeleton->GetJointMtx(idx);
