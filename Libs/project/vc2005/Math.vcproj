@@ -323,6 +323,10 @@
 			</Filter>
 		</Filter>
 		<File
+			RelativePath="..\..\include\izMath.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\include\math\SFMT\LICENSE.txt"
 			>
 		</File>

@@ -123,8 +123,11 @@ typedef const wchar_t*	IZ_PCWSTR;
 #else	// #ifdef _UNICODE
 	typedef char			izChar;
 	typedef const char*		izPcstr;
-	#define IZ_VSPRINTF		vsprintf_s
-	#define IZ_SPRINTF		sprintf_s
+	#ifdef WIN32
+		#define IZ_VSPRINTF		vsprintf_s
+		#define IZ_SPRINTF		sprintf_s
+		#define IZ_FPRINTF		fprintf_s
+	#endif
 #endif	// #ifdef _UNICODE
 
 /////////////////////////////////////////////////////////////

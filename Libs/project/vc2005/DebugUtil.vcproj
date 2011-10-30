@@ -69,7 +69,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="IF NOT EXIST ..\lib\$(IntDir) mkdir ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; ..\lib\$(IntDir)"
+				CommandLine="IF NOT EXIST ..\lib\$(IntDir) mkdir ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; ..\lib\$(IntDir)&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -126,7 +126,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="IF NOT EXIST ..\lib\$(IntDir) mkdir ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; ..\lib\$(IntDir)"
+				CommandLine="IF NOT EXIST ..\lib\$(IntDir) mkdir ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; ..\lib\$(IntDir)&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -185,7 +185,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="IF NOT EXIST ..\lib\$(IntDir) mkdir ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; ..\lib\$(IntDir)"
+				CommandLine="IF NOT EXIST ..\lib\$(IntDir) mkdir ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetPath)&quot; ..\lib\$(IntDir)&#x0D;&#x0A;xcopy /R /Y &quot;$(TargetDir)$(ProjectName).pdb&quot; ..\lib\$(IntDir)&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
@@ -368,6 +368,10 @@
 				</File>
 			</Filter>
 		</Filter>
+		<File
+			RelativePath="..\..\include\izDebugUtil.h"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

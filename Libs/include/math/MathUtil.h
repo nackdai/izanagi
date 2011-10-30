@@ -11,12 +11,15 @@ namespace izanagi {
 		/**
 		* 与えられた整数値をアラインメントする
 		*/
-		static inline IZ_INT Align(IZ_INT nValue, IZ_INT nAlign)
+		static inline IZ_INT Align(IZ_UINT nValue, IZ_UINT nAlign)
 		{
 #if 0
 			return nAlign * ((nValue + nAlign - 1) / nAlign);
 #else
-			return (nAlign == 0 ? nValue : (nValue + nAlign - 1) & ~nAlign);
+			// アライン基底は２の倍数であること
+			IZ_ASSERT((nAlign & 0x01) == 0);
+			IZ_UINT mask = nAlign - 1;
+			return (nAlign == 0 ? nValue : (nValue + mask) & ~mask);
 #endif
 		}
 

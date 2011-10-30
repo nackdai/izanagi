@@ -24,6 +24,12 @@ namespace izanagi {
 		// 計測時間取得
 		IZ_FLOAT GetTime() { return m_fTime; }
 
+		// 現在の時間取得
+		IZ_INT64 GetCurTime();
+
+		// 差分から計算
+		IZ_FLOAT ComputeTime(IZ_INT64 begin, IZ_INT64 end);
+
 	protected:
 		IZ_INT64 m_Frequency;
 		IZ_INT64 m_Begin;

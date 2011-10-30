@@ -8,12 +8,7 @@ namespace izanagi {
 	* ログ
 	*/
 	class CLog {
-	private:
-		static CLog s_cInstance;
-
 	public:
-		static CLog& GetInstance() { return s_cInstance; }
-
 		enum LOG_TYPE {
 			LOG_TYPE_DEBUG   = 1,
 			LOG_TYPE_ERROR   = 1 << 1,
@@ -23,37 +18,34 @@ namespace izanagi {
 		};
 
 	private:
-		CLog() { m_EnableLogType = 0xffffffff; }
-		~CLog() {}
+		CLog();
+		~CLog();
 
 		NO_COPIABLE(CLog);
 
 	public:
-		void SetEnableFlag(IZ_UINT flag) { m_EnableLogType = flag; }
-		IZ_BOOL IsLoggable(LOG_TYPE type) { return (m_EnableLogType & type); }
+		static void SetEnableFlag(IZ_UINT flag);
+		static IZ_BOOL IsLoggable(LOG_TYPE type);
 
-		void LogDebug(IZ_PCSTR format, ...);
-		void LogError(IZ_PCSTR format, ...);
-		void LogInfo(IZ_PCSTR format, ...);
-		void LogVerbose(IZ_PCSTR format, ...);
-		void LogWarn(IZ_PCSTR format, ...);
+		static void LogDebug(IZ_PCSTR format, ...);
+		static void LogError(IZ_PCSTR format, ...);
+		static void LogInfo(IZ_PCSTR format, ...);
+		static void LogVerbose(IZ_PCSTR format, ...);
+		static void LogWarn(IZ_PCSTR format, ...);
 
-		void LogDebug(IZ_PCSTR tag, IZ_PCSTR format, ...);
-		void LogError(IZ_PCSTR tag, IZ_PCSTR format, ...);
-		void LogInfo(IZ_PCSTR tag, IZ_PCSTR format, ...);
-		void LogVerbose(IZ_PCSTR tag, IZ_PCSTR format, ...);
-		void LogWarn(IZ_PCSTR tag, IZ_PCSTR format, ...);
-
-	private:
-		IZ_UINT m_EnableLogType;
+		static void LogDebug(IZ_PCSTR tag, IZ_PCSTR format, ...);
+		static void LogError(IZ_PCSTR tag, IZ_PCSTR format, ...);
+		static void LogInfo(IZ_PCSTR tag, IZ_PCSTR format, ...);
+		static void LogVerbose(IZ_PCSTR tag, IZ_PCSTR format, ...);
+		static void LogWarn(IZ_PCSTR tag, IZ_PCSTR format, ...);
 	};
 }	// namespace izanagi
 
-#define IZ_LOGD(t, f, ...)		izanagi::CLog::GetInstance().LogDebug(t, f, __VA_ARGS__)
-#define IZ_LOGE(t, f, ...)		izanagi::CLog::GetInstance().LogError(t, f, __VA_ARGS__)
-#define IZ_LOGI(t, f, ...)		izanagi::CLog::GetInstance().LogInfo(t, f, __VA_ARGS__)
-#define IZ_LOGV(t, f, ...)		izanagi::CLog::GetInstance().LogVerbose(t, f, __VA_ARGS__)
-#define IZ_LOGW(t, f, ...)		izanagi::CLog::GetInstance().LogWarn(t, f, __VA_ARGS__)
+#define IZ_LOGD(t, f, ...)		izanagi::CLog::LogDebug(t, f, __VA_ARGS__)
+#define IZ_LOGE(t, f, ...)		izanagi::CLog::LogError(t, f, __VA_ARGS__)
+#define IZ_LOGI(t, f, ...)		izanagi::CLog::LogInfo(t, f, __VA_ARGS__)
+#define IZ_LOGV(t, f, ...)		izanagi::CLog::LogVerbose(t, f, __VA_ARGS__)
+#define IZ_LOGW(t, f, ...)		izanagi::CLog::LogWarn(t, f, __VA_ARGS__)
 
 #define IZ_LOG_ASSERT(b, t, f, ...)			if (!b) { IZ_LOGE(t, f, __VA_ARGS__); IZ_ASSERT(IZ_FALSE); }
 #define IZ_LOG_VRETURN(b, t, f, ...)		if (!b) { IZ_LOGE(t, f, __VA_ARGS__); VRETURN(IZ_FALSE); }

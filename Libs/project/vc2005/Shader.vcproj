@@ -308,6 +308,10 @@
 				</Filter>
 			</Filter>
 		</Filter>
+		<File
+			RelativePath="..\..\include\izShader.h"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

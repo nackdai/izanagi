@@ -45,3 +45,23 @@ IZ_FLOAT CTimer::End()
 	m_fTime = (cur.QuadPart - m_Begin) * 1000.0f / m_Frequency;
 	return m_fTime;
 }
+
+// 現在の時間取得
+IZ_INT64 CTimer::GetCurTime()
+{
+	LARGE_INTEGER time;
+	FILL_ZERO(&time, sizeof(time));
+
+	IZ_BOOL result = QueryPerformanceCounter(&time);
+	IZ_ASSERT(result);
+
+	IZ_INT64 ret = time.QuadPart;
+	return ret;
+}
+
+// 差分から計算
+IZ_FLOAT CTimer::ComputeTime(IZ_INT64 begin, IZ_INT64 end)
+{
+	IZ_FLOAT ret = (end - begin) * 1000.0f / m_Frequency;
+	return ret;
+}
