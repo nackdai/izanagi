@@ -19,6 +19,7 @@
 #include "std/StdBit.h"
 #include "std/StdUtf.h"
 #include "std/StdBitFlag.h"
+#include "std/StdProfiler.h"
 
 #include "std/container/StdList.h"
 #include "std/container/StdHash.h"
