@@ -1,12 +1,15 @@
 ﻿#if !defined(__IZANAGI_SYSTEM_SYS_MUTEX_H__)
 #define __IZANAGI_SYSTEM_SYS_MUTEX_H__
 
-#include "SysThread.h"
+#include "izDefs.h"
+#include "SysThreadDefs.h"
 
 namespace izanagi {
 	/**
-	*/
+	 */
 	class CMutex {
+		friend class CConditionVar;
+
 	public:
 		CMutex();
 		~CMutex();
@@ -14,48 +17,26 @@ namespace izanagi {
 		NO_COPIABLE(CMutex);
 
 	public:
-		IZ_BOOL Init();
-		void Release();
+		/** 初期化.
+		 */
+		IZ_BOOL Open();
 
+		/** 終了.
+		 */
+		void Close();
+
+		/** 同期開始.
+		 */
 		void Lock();
+
+		/** 同期終了.
+		 */
 		void Unlock();
 
 	protected:
-#ifdef WINDOWS
-		HANDLE m_Mutex;
-#else
-		pthread_mutex_t m_mutex;
-#endif
+		MutexHandle m_Handle;
 
-		CThread::ThreadId m_ThreadId;
-	};
-
-	////////////////////////////////////////////////////
-
-	/**
-	*/
-	class CAutoMutex {
-	public:
-		CAutoMutex(CMutex* mutex)
-		{
-			m_Mutex = mutex;
-			IZ_ASSERT(m_Mutex != IZ_NULL);
-			m_Mutex->Lock();
-		}
-
-		~CAutoMutex()
-		{
-			IZ_ASSERT(m_Mutex != IZ_NULL);
-			m_Mutex->Unlock();
-		}
-
-		NO_COPIABLE(CAutoMutex);
-
-	protected:
-		CAutoMutex() {}
-
-	protected:
-		CMutex* m_Mutex;
+		ThreadId m_OwnerThreadId;
 	};
 }	// namespace izanagi
 

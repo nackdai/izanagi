@@ -3,6 +3,12 @@
 
 #include "izDefs.h"
 
+#define IZ_DECL_PLACEMENT_NEW() \
+	inline void* operator new(size_t size) { IZ_ASSERT(IZ_FALSE); return IZ_NULL; } \
+	inline void* operator new(size_t size, void* buf) { return buf; } \
+	inline void operator delete(void* data) {} \
+	inline void operator delete(void* data, void* buf) {}
+
 namespace izanagi {
 	class CPlacementNew {
 	protected:
@@ -12,35 +18,8 @@ namespace izanagi {
 		NO_COPIABLE(CPlacementNew);
 
 	public:
-		inline void* operator new(size_t size);
-		inline void* operator new(size_t size, void* buf);
-
-		inline void operator delete(void* data);
-		inline void operator delete(void* data, void* buf);
+		IZ_DECL_PLACEMENT_NEW();
 	};
-
-	// new
-	void* CPlacementNew::operator new(size_t size)
-	{
-		IZ_ASSERT(IZ_FALSE);
-		return IZ_NULL;
-	}
-
-	void* CPlacementNew::operator new(size_t size, void* buf)
-	{
-		return buf;
-	}
-
-	// delete
-	void CPlacementNew::operator delete(void* data)
-	{
-		// 何もしない
-	}
-
-	void CPlacementNew::operator delete(void* data, void* buf)
-	{
-		// 何もしない
-	}
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_STD_PLACEMENT_NEW_H__)
