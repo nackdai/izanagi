@@ -383,6 +383,10 @@
 			</Filter>
 		</Filter>
 		<File
+			RelativePath="..\..\include\izDefs.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\include\izStd.h"
 			>
 		</File>

@@ -2,11 +2,14 @@
 #define __IZANAGI_SYSTEM_SYS_EVENT_H__
 
 #include "izDefs.h"
+#include "SysThreadDefs.h"
 
 namespace izanagi {
 	/**
-	*/
+	 */
 	class CEvent {
+		friend class CThread;
+
 	public:
 		CEvent();
 		~CEvent();
@@ -14,20 +17,39 @@ namespace izanagi {
 		NO_COPIABLE(CEvent);
 
 	public:
-		IZ_BOOL Init();
-		void Release();
+		/** 初期化.
+		 */
+		IZ_BOOL Open();
 
+		/** 終了.
+		 */
+		void Close();
+
+		/** シグナル状態にする.
+		 *
+		 * スレッドの動作を開始する。
+		 */
 		void Set();
+
+		/** シグナル状態になるのを待つ.
+		 *
+		 * スレッドの動作が開始されるのを待つ。
+		 */
 		IZ_BOOL Wait();
+
+		/** 非シグナル状態にする.
+		 *
+		 * スレッドの動作を一時停止させる。
+		 */
 		void Reset();
 
-	protected:
-#ifdef WINDOWS
-		HANDLE m_Event;
-#else
-		pthread_cond_t m_Cond;
-		pthread_mutex_t m_Lock;
-#endif
+	private:
+		EventHandle& GetHandle() { return m_Handle; }
+
+	private:
+		EventHandle m_Handle;
+
+		ThreadId m_OwnerThreadId;
 	};
 }	// namespace izanagi
 
