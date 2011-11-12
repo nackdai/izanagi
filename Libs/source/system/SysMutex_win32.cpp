@@ -7,9 +7,8 @@ using namespace izanagi;
 
 CMutex::CMutex()
 {
-#ifndef __IZ_MUTEX_IMPL_CRITICAL_SECTION__
-	m_Handle = IZ_NULL;
-#endif
+	m_Flags.isInitialized = IZ_FALSE;
+	m_Flags.isLocked = IZ_FALSE;
 }
 
 
@@ -22,78 +21,55 @@ CMutex::~CMutex()
 */
 IZ_BOOL CMutex::Open()
 {
-#ifdef __IZ_MUTEX_IMPL_CRITICAL_SECTION__
 	::InitializeCriticalSection(&m_Handle);
+	m_Flags.isInitialized = IZ_TRUE;
 	return IZ_TRUE;
-#else
-	m_Handle = ::CreateMutex(
-				IZ_NULL,
-				IZ_FALSE,
-				IZ_NULL);
-	IZ_ASSERT(m_Handle != IZ_NULL);
-
-	return (m_Handle != IZ_NULL);
-#endif
 }
 
 /**
 */
 void CMutex::Close()
 {
-#ifdef __IZ_MUTEX_IMPL_CRITICAL_SECTION__
+	IZ_ASSERT(!m_Flags.isLocked);
+
 	::DeleteCriticalSection(&m_Handle);
-#else
-	if (m_Handle != IZ_NULL) {
-		::WaitForSingleObject(m_Handle, INFINITE);
-		::CloseHandle(m_Handle);
-		m_Handle = IZ_NULL;
-	}
-#endif
+	m_Flags.isInitialized = IZ_FALSE;
 }
 
 /**
 */
 void CMutex::Lock()
 {
+	IZ_ASSERT(m_Flags.isInitialized);
+	IZ_ASSERT(!m_Flags.isLocked);
+
 	ThreadId id = CThread::GetCurrentThreadId();
 	if (CThread::IsEqualThreadId(m_OwnerThreadId, id)) {
 		// This mutex is already locked by this thread.
 		return;
 	}
 
-#ifdef __IZ_MUTEX_IMPL_CRITICAL_SECTION__
 	::EnterCriticalSection(&m_Handle);
+
+	m_Flags.isLocked = IZ_TRUE;
 	m_OwnerThreadId = CThread::GetCurrentThreadId();
-#else
-	IZ_ASSERT(m_Handle != IZ_NULL);
-
-	if (m_Handle) {
-		::WaitForSingleObject(m_Handle, INFINITE);
-
-		m_OwnerThreadId = CThread::GetCurrentThreadId();
-	}
-#endif
 }
 
 void CMutex::Unlock()
 {
+	IZ_ASSERT(m_Flags.isInitialized);
+	IZ_ASSERT(m_Flags.isLocked);
+
 	ThreadId id = CThread::GetCurrentThreadId();
 	if (!CThread::IsEqualThreadId(m_OwnerThreadId, id)) {
 		// This thread already released this mutex.
 		return;
 	}
 
+	m_Flags.isLocked = IZ_FALSE;
 	m_OwnerThreadId = 0;
 
-#ifdef __IZ_MUTEX_IMPL_CRITICAL_SECTION__
 	::LeaveCriticalSection(&m_Handle);
-#else
-	IZ_ASSERT(m_Handle != IZ_NULL);
-
-	if (m_Handle) {
-		::ReleaseMutex(m_Handle);
-	}
-#endif
 }
 
 #endif

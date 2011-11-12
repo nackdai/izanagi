@@ -29,8 +29,6 @@ namespace izanagi {
 	/**
 	 */
 	class CThread : public IRunnable {
-		friend class CThreadOp;
-
 	public:
 		/** Get current thread id.
 		 */
@@ -78,14 +76,6 @@ namespace izanagi {
 		 */
 		void Join();
 
-		/** スレッドの一時停止.
-		 */
-		void Suspend();
-
-		/** スレッドの再開.
-		 */
-		void Resume();
-
 		/** 現在実行中のスレッドを一時的に休止させ、ほかのスレッドが実行できるようにする.
 		 *
 		 * 同じプロセッサ上で動いているスレッド間でのみ可能
@@ -117,14 +107,6 @@ namespace izanagi {
 		 */
 		void SetName(ThreadName name);
 
-		/** 実行中かどうか取得.
-		 */
-		IZ_BOOL IsRunning();
-
-	private:
-		// 実行中かどうか設定
-		inline void SetIsRunning(IZ_BOOL running);
-
 	protected:
 		ThreadHandle m_Handle;
 
@@ -134,11 +116,6 @@ namespace izanagi {
 		IZ_UINT m_Cpu;
 		
 		IRunnable* m_Runnable;
-
-		struct {
-			IZ_UINT isRunning	: 1;
-			IZ_UINT isSuspended	: 1;
-		} m_Flags;
 
 		CMutex m_Mutex;
 	};
