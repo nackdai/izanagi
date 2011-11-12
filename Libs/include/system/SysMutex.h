@@ -37,6 +37,11 @@ namespace izanagi {
 		MutexHandle m_Handle;
 
 		ThreadId m_OwnerThreadId;
+
+		struct {
+			IZ_UINT isInitialized	: 1;
+			IZ_UINT isLocked		: 1;
+		} m_Flags;
 	};
 }	// namespace izanagi
 

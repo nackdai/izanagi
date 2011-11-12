@@ -4,17 +4,6 @@
 
 #ifdef WIN32
 
-namespace izanagi {
-	// スレッド操作
-	class CThreadOp {
-	public:
-		static void SetIsRunning(CThread* thread, IZ_BOOL running)
-		{
-			thread->SetIsRunning(running);
-		}
-	};
-}	// namespace izanagi
-
 using namespace izanagi;
 
 // Get current thread id.
@@ -44,8 +33,6 @@ static UINT __stdcall procThreadFunc(LPVOID param)
 	CThread* thread = (CThread*)param;
 
 	thread->Run();
-
-	CThreadOp::SetIsRunning(thread, IZ_FALSE);
 
 	return 0;
 }
@@ -105,9 +92,6 @@ void CThread::Init(
 	m_Cpu = cpu;
 	m_Runnable = runnable;
 
-	m_Flags.isRunning = IZ_FALSE;
-	m_Flags.isSuspended = IZ_TRUE;
-
 	if (name) {
 		m_Name.SetString(name->GetString());
 	}
@@ -139,8 +123,6 @@ IZ_BOOL CThread::Start()
 			return IZ_FALSE;
 		}
 
-		m_Flags.isRunning = IZ_TRUE;
-
 		// 実行開始
 		::ResumeThread(m_Handle);
 	}
@@ -160,40 +142,6 @@ void CThread::Join()
 
 	// Mutex解放
 	m_Mutex.Close();
-}
-
-// スレッドの一時停止.
-void CThread::Suspend()
-{
-	if (m_Handle
-		&& IsRunning()
-		&& !m_Flags.isSuspended)
-	{		
-		if (::SuspendThread(m_Handle) >= 0) {
-			SetIsRunning(IZ_FALSE);
-			m_Flags.isSuspended = IZ_TRUE;
-		}
-		else {
-			IZ_ASSERT(IZ_FALSE);
-		}
-	}
-}
-
-// スレッドの再開.
-void CThread::Resume()
-{
-	if (m_Handle
-		&& !IsRunning()
-		&& m_Flags.isSuspended)
-	{
-		if (::ResumeThread(m_Handle) >= 0) {
-			SetIsRunning(IZ_TRUE);
-			m_Flags.isSuspended = IZ_FALSE;
-		}
-		else {
-			IZ_ASSERT(IZ_FALSE);
-		}
-	}
 }
 
 // 現在実行中のスレッドを一時的に休止させ、ほかのスレッドが実行できるようにする.
@@ -234,24 +182,6 @@ const char* CThread::GetNameString() const
 void CThread::SetName(ThreadName name)
 {
 	m_Name.SetString(name.GetString());
-}
-
-// 実行中かどうか取得.
-IZ_BOOL CThread::IsRunning()
-{
-	IZ_BOOL ret;
-	{
-		CScopeGuard<CMutex> guard(m_Mutex);
-		ret = m_Flags.isRunning;
-	}
-	return ret;
-}
-
-// 実行中かどうか設定
-void CThread::SetIsRunning(IZ_BOOL running)
-{
-	CScopeGuard<CMutex> guard(m_Mutex);
-	m_Flags.isRunning = running;
 }
 
 #endif
