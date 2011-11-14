@@ -243,11 +243,19 @@
 				Name="thread"
 				>
 				<File
+					RelativePath="..\..\source\system\SysCond_win32.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\source\system\SysEvent_win32.cpp"
 					>
 				</File>
 				<File
 					RelativePath="..\..\source\system\SysMutex_win32.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\source\system\SysSemaphore_win32.cpp"
 					>
 				</File>
 				<File
@@ -285,11 +293,19 @@
 				Name="thread"
 				>
 				<File
+					RelativePath="..\..\include\system\SysCond.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\include\system\SysEvent.h"
 					>
 				</File>
 				<File
 					RelativePath="..\..\include\system\SysMutex.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\system\SysSemaphore.h"
 					>
 				</File>
 				<File
