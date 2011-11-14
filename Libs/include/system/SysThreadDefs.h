@@ -6,16 +6,10 @@
 
 	typedef UINT	ThreadId;
 
-	#define __IZ_MUTEX_IMPL_CRITICAL_SECTION__
-
 	#define ThreadHandle	HANDLE
-	#ifdef __IZ_MUTEX_IMPL_CRITICAL_SECTION__
-		#define MutexHandle		CRITICAL_SECTION
-	#else
-		#define MutexHandle		HANDLE
-	#endif
+	#define MutexHandle		HANDLE
 	#define EventHandle		HANDLE
-	#define CondHandle		HANDLE
+	#define SemaHandle		HANDLE
 #else
 	#include <pthread.h>
 

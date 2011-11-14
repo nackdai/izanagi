@@ -1,11 +1,12 @@
-﻿#include "system/SysEvent.h"
+﻿#if defined(WIN32) || defined(WIN64)
+
+#include "system/SysEvent.h"
 #include "system/SysThread.h"
 
 using namespace izanagi;
 
 CEvent::CEvent()
 {
-	m_OwnerThreadId = 0;
 	m_Handle = IZ_NULL;
 }
 
@@ -52,19 +53,8 @@ void CEvent::Close()
 // シグナル状態にする.
 void CEvent::Set()
 {
-	ThreadId id = CThread::GetCurrentThreadId();
-	if (CThread::IsEqualThreadId(m_OwnerThreadId, id)) {
-		// This mutex is already locked by this thread.
-		return;
-	}
-
 	IZ_ASSERT(m_Handle != IZ_NULL);
-
-	if (m_Handle) {
-		::SetEvent(m_Handle);
-
-		m_OwnerThreadId = CThread::GetCurrentThreadId();
-	}
+	::SetEvent(m_Handle);
 }
 
 // シグナル状態になるのを待つ.
@@ -72,7 +62,7 @@ IZ_BOOL CEvent::Wait()
 {
 	IZ_ASSERT(m_Handle != IZ_NULL);
 
-	IZ_DWORD result = ::WaitForSingleObject(m_Handle,INFINITE);
+	IZ_DWORD result = ::WaitForSingleObject(m_Handle, INFINITE);
 	IZ_ASSERT(result == WAIT_OBJECT_0);
 
 	return (result == WAIT_OBJECT_0);
@@ -81,17 +71,8 @@ IZ_BOOL CEvent::Wait()
 // 非シグナル状態にする.
 void CEvent::Reset()
 {
-	ThreadId id = CThread::GetCurrentThreadId();
-	if (!CThread::IsEqualThreadId(m_OwnerThreadId, id)) {
-		// This thread already released this mutex.
-		return;
-	}
-
-	m_OwnerThreadId = 0;
-
 	IZ_ASSERT(m_Handle != IZ_NULL);
-
-	if (m_Handle) {
-		::ResetEvent(m_Handle);
-	}
+	::ResetEvent(m_Handle);
 }
+
+#endif	// #if defined(WIN32) || defined(WIN64)

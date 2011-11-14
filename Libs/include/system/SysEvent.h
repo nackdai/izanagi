@@ -8,8 +8,6 @@ namespace izanagi {
 	/**
 	 */
 	class CEvent {
-		friend class CThread;
-
 	public:
 		CEvent();
 		~CEvent();
@@ -44,12 +42,7 @@ namespace izanagi {
 		void Reset();
 
 	private:
-		EventHandle& GetHandle() { return m_Handle; }
-
-	private:
 		EventHandle m_Handle;
-
-		ThreadId m_OwnerThreadId;
 	};
 }	// namespace izanagi
 

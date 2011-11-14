@@ -1,8 +1,8 @@
-﻿#include <process.h>
+﻿#if defined(WIN32) || defined(WIN64)
+
+#include <process.h>
 #include "system/SysThread.h"
 #include "system/SysThreadUtil.h"
-
-#ifdef WIN32
 
 using namespace izanagi;
 
@@ -184,4 +184,4 @@ void CThread::SetName(ThreadName name)
 	m_Name.SetString(name.GetString());
 }
 
-#endif
+#endif	// #if defined(WIN32) || defined(WIN64)
