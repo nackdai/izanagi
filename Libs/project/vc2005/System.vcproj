@@ -251,6 +251,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\source\system\SysMonitor_win32.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\source\system\SysMutex_win32.cpp"
 					>
 				</File>
@@ -298,6 +302,10 @@
 				</File>
 				<File
 					RelativePath="..\..\include\system\SysEvent.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\system\SysMonitor.h"
 					>
 				</File>
 				<File
