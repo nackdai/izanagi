@@ -2,15 +2,12 @@
 #define __IZANAGI_STD_QUEUE_H__
 
 #include "izDefs.h"
+#include "std/container/StdList.h"
 
-namespace {
-	/**
-	* キュー（LIFO）
-	*/
-	template<
-		class _T,
-		IZ_UINT _NUM
-	>
+namespace izanagi {
+	/** 上限があるキュー.
+	 */
+	template<class _T, IZ_UINT _NUM>
 	class CQueue {
 	public:
 		CQueue()
@@ -21,24 +18,25 @@ namespace {
 		}
 		~CQueue() {}
 		
-	private:
-		CQueue(const CQueue& rhs);
-		const CQueue& operator =(const CQueue& rhs);
+		NO_COPIABLE(CQueue);
 		
 	public:
-		// キューが一杯か
+		/** キューが一杯か.
+		 */
 		IZ_BOOL IsFull() const
 		{
 			return (m_Param.num == _NUM);
 		}
 
-		// キューが空か
+		/** キューが空か.
+		 */
 		IZ_BOOL IsEmpty() const
 		{
 			return (m_Param.num == 0);
 		}
 		
-		// アイテムをキューから取得
+		/** アイテムをキューから取得.
+		 */
 		_T& GetRear()
 		{
 			IZ_ASSERT(m_Param.idxRear < _NUM);
@@ -50,7 +48,8 @@ namespace {
 			return m_Items[m_Param.idxFront];
 		}
 		
-		// キューをプッシュする
+		/** キューをプッシュする.
+		 */
 		IZ_BOOL Push()
 		{
 			if (!IsFull()) {
@@ -62,7 +61,8 @@ namespace {
 			return IZ_FALSE;
 		}
 		
-		// キューをポップする
+		/** キューをポップする.
+		 */
 		IZ_BOOL Pop()
 		{
 			if (!IsEmpty()) {
@@ -74,13 +74,15 @@ namespace {
 			return IZ_FALSE;
 		}
 
-		// 最大登録可能アイテム数取得
+		/** 最大登録可能アイテム数取得.
+		 */
 		IZ_UINT GetMaxNum() const
 		{
 			return _NUM;
 		}
 
-		// 登録アイテム数取得
+		/** 登録アイテム数取得.
+		 */
 		IZ_UINT GetNum() const
 		{
 			return m_Param.num;
@@ -102,6 +104,24 @@ namespace {
 			IZ_INT idxRear;
 			IZ_INT num;
 		} m_Param;
+	};
+
+	/** ヒープから取得するキュー.
+	 */
+	template <class _T>
+	class CHeapQueue {
+	public:
+		CHeapQueue()
+		{
+		}
+		~CHeapQueue()
+		{
+		}
+
+		NO_COPIABLE(CHeapQueue);
+
+	private:
+		CStdList<_T> m_List;
 	};
 }	// namespace izanagi
 

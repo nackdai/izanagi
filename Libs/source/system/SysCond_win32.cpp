@@ -24,6 +24,9 @@ public:
 	// 初期化
 	IZ_BOOL Init();
 
+	// 終了
+	void Destroy();
+
 	// 待機
 	void Wait(CMutex& externalMiutex);
 
@@ -61,6 +64,21 @@ IZ_BOOL CCondVar::CCondImpl::Init()
 	VRETURN(m_WaitersReleaseDoneEvent != IZ_NULL);
 
 	return IZ_TRUE;
+}
+
+// 終了
+void CCondVar::CCondImpl::Destroy()
+{
+	// 何もしていないこと
+	IZ_ASSERT(m_Waiters == 0);
+	IZ_ASSERT(!m_DoBroadcast);
+
+	::DeleteCriticalSection(&m_WaitersCountLock);
+
+	if (m_WaitersReleaseDoneEvent) {
+		::CloseHandle(m_WaitersReleaseDoneEvent);
+		m_WaitersReleaseDoneEvent = IZ_NULL;
+	}
 }
 
 // 待機
@@ -171,13 +189,15 @@ CCondVar::~CCondVar()
 IZ_BOOL CCondVar::Init()
 {
 	m_Impl = new(m_Buf) CCondImpl;
-	return IZ_TRUE;
+	IZ_BOOL ret = m_Impl->Init();
+	return ret;
 }
 
 // 終了.
 void CCondVar::Destroy()
 {
 	if (m_Impl) {
+		m_Impl->Destroy();
 		delete m_Impl;
 		m_Impl = IZ_NULL;
 	}

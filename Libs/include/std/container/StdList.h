@@ -8,7 +8,10 @@ namespace izanagi {
 	/**
 	*/
 	template <typename _T>
-	class CStdList : public CPlacementNew {
+	class CStdList {
+	public:
+		IZ_DECL_PLACEMENT_NEW();
+
 	public:
 		class Item {
 			friend class CStdList<_T>;
