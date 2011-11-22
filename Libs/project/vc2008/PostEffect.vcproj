@@ -393,6 +393,10 @@
 				</File>
 			</Filter>
 		</Filter>
+		<File
+			RelativePath="..\..\include\izPostEffect.h"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

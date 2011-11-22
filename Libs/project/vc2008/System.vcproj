@@ -229,18 +229,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\source\system\SysEvent.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\source\system\SysMutex.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\source\system\SysThread.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\source\system\SysTimer.cpp"
 				>
 			</File>
@@ -252,6 +240,34 @@
 				RelativePath="..\..\source\system\SysWindow.cpp"
 				>
 			</File>
+			<Filter
+				Name="thread"
+				>
+				<File
+					RelativePath="..\..\source\system\SysCond_win32.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\source\system\SysEvent_win32.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\source\system\SysMonitor_win32.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\source\system\SysMutex_win32.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\source\system\SysSemaphore_win32.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\source\system\SysThread_win32.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="include"
@@ -267,18 +283,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\system\SysEvent.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\system\SysMutex.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\system\SysThread.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\include\system\SysTimer.h"
 				>
 			</File>
@@ -290,7 +294,47 @@
 				RelativePath="..\..\include\system\SysWindow.h"
 				>
 			</File>
+			<Filter
+				Name="thread"
+				>
+				<File
+					RelativePath="..\..\include\system\SysCond.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\system\SysEvent.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\system\SysMonitor.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\system\SysMutex.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\system\SysSemaphore.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\system\SysThread.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\system\SysThreadDefs.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\system\SysThreadUtil.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
+		<File
+			RelativePath="..\..\include\izSystem.h"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

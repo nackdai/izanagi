@@ -269,6 +269,10 @@
 				</File>
 			</Filter>
 		</Filter>
+		<File
+			RelativePath="..\..\include\izResource.h"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

@@ -275,6 +275,10 @@
 				</File>
 			</Filter>
 		</Filter>
+		<File
+			RelativePath="..\..\include\izIo.h"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

@@ -483,6 +483,10 @@
 				</File>
 			</Filter>
 		</Filter>
+		<File
+			RelativePath="..\..\include\izSceneGraph.h"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
