@@ -213,6 +213,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\source\std\StdProfiler.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\source\std\StdUtf.cpp"
 				>
 			</File>
@@ -299,6 +303,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\std\StdProfiler.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\std\StdQueue.h"
 				>
 			</File>
@@ -375,6 +383,14 @@
 				</File>
 			</Filter>
 		</Filter>
+		<File
+			RelativePath="..\..\include\izDefs.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\include\izStd.h"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

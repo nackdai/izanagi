@@ -369,6 +369,10 @@
 				</File>
 			</Filter>
 		</Filter>
+		<File
+			RelativePath="..\..\include\izDebugUtil.h"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

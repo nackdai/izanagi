@@ -1096,6 +1096,14 @@
 				</File>
 			</Filter>
 		</Filter>
+		<File
+			RelativePath="..\..\include\izD3DDefs.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\include\izGraph.h"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
