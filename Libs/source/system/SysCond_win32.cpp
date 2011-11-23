@@ -13,6 +13,9 @@
 using namespace izanagi;
 
 ///////////////////////////////////////////
+
+#if 0
+
 class CCondVar::CCondImpl {
 public:
 	CCondImpl() {}
@@ -162,7 +165,7 @@ void CCondVar::CCondImpl::Broadcast()
 		::LeaveCriticalSection(&m_WaitersCountLock);
 
 		// 全てのスレッドが起こされるのをここで待つ
-		::WaitForSingleObject (m_WaitersReleaseDoneEvent, INFINITE);
+		::WaitForSingleObject(m_WaitersReleaseDoneEvent, INFINITE);
 
 		// Broadcast終了
 		m_DoBroadcast = IZ_FALSE;
@@ -172,6 +175,213 @@ void CCondVar::CCondImpl::Broadcast()
 		::LeaveCriticalSection(&m_WaitersCountLock);
 	}
 }
+
+#else
+
+class CCondVar::CCondImpl {
+public:
+	CCondImpl() {}
+	~CCondImpl() {}
+
+	IZ_DECL_PLACEMENT_NEW();
+
+public:
+	// 初期化
+	IZ_BOOL Init();
+
+	// 終了
+	void Destroy();
+
+	// 待機
+	void Wait(CMutex& externalMiutex);
+
+	// スレッドを起こす
+	void Signal();
+
+	// 全スレッドを起こす
+	void Broadcast();
+
+	// スレッドを起こす
+	void SignalInternal(IZ_BOOL isAll);
+
+private:
+	CSemaphore m_SemaWaiterCountLock;
+	CSemaphore m_SemaWait;
+
+	CRITICAL_SECTION m_UnblockWaiterCountLock;
+
+	IZ_UINT m_Waiters;
+	IZ_UINT m_UnblockWaiters;
+};
+
+// 初期化
+IZ_BOOL CCondVar::CCondImpl::Init()
+{
+	VRETURN(m_SemaWaiterCountLock.Init(1));
+	VRETURN(m_SemaWait.Init(0));
+
+	::InitializeCriticalSection(&m_UnblockWaiterCountLock);
+
+	m_Waiters = 0;
+	m_UnblockWaiters = 0;
+
+	return IZ_TRUE;
+}
+
+// 終了
+void CCondVar::CCondImpl::Destroy()
+{
+	// 何も残っていないこと
+	IZ_ASSERT(m_Waiters = 0);
+	IZ_ASSERT(m_UnblockWaiters = 0);
+
+	m_SemaWaiterCountLock.Close();
+	m_SemaWait.Close();
+
+	::DeleteCriticalSection(&m_UnblockWaiterCountLock);
+}
+
+// 待機
+void CCondVar::CCondImpl::Wait(CMutex& externalMiutex)
+{
+	// シグナル状態への移行待ちの数
+	IZ_UINT waitForSignalCnt = 0;
+
+	// 待機状態の数を増やす
+	{
+		// NOTE
+		// m_SemaWaiterCountLockの初期数は１
+		m_SemaWaiterCountLock.Wait();
+		++m_Waiters;
+		m_SemaWaiterCountLock.Release();
+	}
+
+	externalMiutex.Unlock();
+
+	// 待機
+	// m_SemaWaitの初期数は０なので必ずここで待つ
+	m_SemaWait.Wait();
+
+	::EnterCriticalSection(&m_UnblockWaiterCountLock);
+
+	// シグナル状態への移行待ちの数を保持
+	waitForSignalCnt = m_UnblockWaiters;
+
+	if (m_UnblockWaiters != 0) {
+		// 完全に起こされる状態に移行するので数を減らす
+		--m_UnblockWaiters;
+	}
+
+	::LeaveCriticalSection(&m_UnblockWaiterCountLock);
+
+	if (waitForSignalCnt == 1) {
+		// 全部を起こしたので待っているのを開く
+		m_SemaWaiterCountLock.Release(1);
+	}
+
+	externalMiutex.Lock();
+}
+
+// スレッドを起こす
+void CCondVar::CCondImpl::Signal()
+{
+	SignalInternal(IZ_FALSE);
+}
+
+// 全スレッドを起こす
+void CCondVar::CCondImpl::Broadcast()
+{
+	SignalInternal(IZ_TRUE);
+}
+
+// スレッドを起こす
+void CCondVar::CCondImpl::SignalInternal(IZ_BOOL isAll)
+{
+	// 起こす必要のあるものの数
+	IZ_UINT unlockCnt = 0;
+
+	::EnterCriticalSection(&m_UnblockWaiterCountLock);
+
+	if (m_UnblockWaiters != 0) {
+		// 起こそうとしているところで、また起こそうとしている
+
+		if (m_Waiters == 0) {
+			// 待ち状態のものはいないので何もすることはない
+			::LeaveCriticalSection(&m_UnblockWaiterCountLock);
+			return;
+		}
+
+		if (isAll) {
+			// 全部起こす
+
+			// 起こす必要のあるものを保持
+			unlockCnt = m_Waiters;
+
+			// 起こそうとしているものを増やす
+			m_UnblockWaiters += m_Waiters;
+
+			// 待ちの数は０になる
+			m_Waiters = 0;
+		}
+		else {
+			// １つだけ起こす
+
+			// 起こす必要のあるものは１つだけ
+			unlockCnt = 1;
+
+			// 起こそうとしているものは１つ増える
+			++m_UnblockWaiters;
+
+			// 待ちの数は１つ減る
+			--m_Waiters;
+		}
+	}
+	else if (m_Waiters > 0) {
+		// 待っているものがある
+		// && 起こそうとしているものがない
+
+		// 何度も呼び出されないように防ぐ
+		m_SemaWaiterCountLock.Wait();
+
+		if (isAll) {
+			// 全部起こす
+
+			// 起こす必要のあるものを保持
+			unlockCnt = m_Waiters;
+
+			// 待っているものはこれから起こそうとしているものとなる
+			m_UnblockWaiters = m_Waiters;
+
+			// 待っているものは無くなる
+			m_Waiters = 0;
+		}
+		else {
+			// １つだけ起こす
+
+			// 起こす必要のあるものは１つだけ
+			unlockCnt = 1;
+
+			// これから起こそうとしているものは１つだけ
+			m_UnblockWaiters = 1;
+
+			// 待ちの数は１つ減る
+			--m_Waiters;
+		}
+	}
+	else {
+		// 何もすることはない
+		::LeaveCriticalSection(&m_UnblockWaiterCountLock);
+		return;
+	}
+
+	::LeaveCriticalSection(&m_UnblockWaiterCountLock);
+
+	// 待っているものを起こす
+	m_SemaWait.Release(unlockCnt);
+}
+
+#endif
+
 ///////////////////////////////////////////
 
 CCondVar::CCondVar()
@@ -190,6 +400,9 @@ IZ_BOOL CCondVar::Init()
 {
 	m_Impl = new(m_Buf) CCondImpl;
 	IZ_BOOL ret = m_Impl->Init();
+	if (!ret) {
+		Destroy();
+	}
 	return ret;
 }
 

@@ -34,8 +34,6 @@ IZ_BOOL CSemaphore::Init(IZ_UINT16 initialCount)
 // 終了.
 void CSemaphore::Close()
 {
-	IZ_ASSERT(m_Handle);
-
 	if (m_Handle) {
 		::CloseHandle(m_Handle);
 		m_Handle = IZ_NULL;
