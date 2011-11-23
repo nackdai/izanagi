@@ -98,7 +98,12 @@ void CMonitor::CMonitorImpl::BeginSyncronized()
 // syncronized終了.
 IZ_BOOL CMonitor::CMonitorImpl::EndSyncronized()
 {
-	// TODO
+	// 同じスレッド内での呼び出しかどうか確認
+	VRETURN(CheckLockByCallingThread());
+
+	--m_LockCount;
+	::LeaveCriticalSection(&m_Syncronized);
+
 	return IZ_TRUE;
 }
 
