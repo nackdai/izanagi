@@ -35,11 +35,13 @@ namespace izanagi {
 		 */
 		IZ_BOOL Wait();
 
+#if 0
 		/** 非シグナル状態にする.
 		 *
 		 * スレッドの動作を一時停止させる。
 		 */
 		void Reset();
+#endif
 
 	private:
 		EventHandle m_Handle;

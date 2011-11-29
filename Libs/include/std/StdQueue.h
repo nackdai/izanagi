@@ -105,24 +105,6 @@ namespace izanagi {
 			IZ_INT num;
 		} m_Param;
 	};
-
-	/** ヒープから取得するキュー.
-	 */
-	template <class _T>
-	class CHeapQueue {
-	public:
-		CHeapQueue()
-		{
-		}
-		~CHeapQueue()
-		{
-		}
-
-		NO_COPIABLE(CHeapQueue);
-
-	private:
-		CStdList<_T> m_List;
-	};
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_STD_QUEUE_H__)

@@ -2,9 +2,12 @@
 #define __IZANAGI_SYSTEM_SYS_MONITOR_H__
 
 #include "izDefs.h"
-#include "SysThreadDefs.h"
+#include "SysMutex.h"
+#include "SysCond.h"
 
 namespace izanagi {
+	class IMemoryAllocator;
+
 	/**
 	 */
 	class CMonitor {
@@ -18,12 +21,20 @@ namespace izanagi {
 
 	private:
 		// syncronized開始.
-		void BeginSyncronized();
+		void Lock();
 
 		// syncronized終了.
-		IZ_BOOL EndSyncronized();
+		void Unlock();
 
 	public:
+		/** 初期化.
+		 */
+		IZ_BOOL Init();
+
+		/** 終了.
+		 */
+		void Destroy();
+
 		/** 待機.
 		 */
 		void Wait();
@@ -37,10 +48,8 @@ namespace izanagi {
 		void NotifyAll();
 
 	private:
-		class CMonitorImpl;
-
-		CMonitorImpl* m_Impl;
-		IZ_UINT8 m_Buf[1];	// TODO
+		CMutex m_LockMutex;
+		CCondVar m_WaitCond;
 	};
 }	// namespace izanagi
 
