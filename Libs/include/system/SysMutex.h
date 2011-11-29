@@ -33,6 +33,13 @@ namespace izanagi {
 		 */
 		void Unlock();
 
+		/** 呼び出しスレッドID取得.
+		 */
+		const ThreadId& GetOwnerThreadId() const
+		{
+			return m_OwnerThreadId;
+		}
+
 	protected:
 		MutexHandle m_Handle;
 

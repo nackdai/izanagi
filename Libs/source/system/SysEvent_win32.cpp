@@ -30,7 +30,7 @@ IZ_BOOL CEvent::Open()
 	m_Handle = ::CreateEvent(
 				IZ_NULL,	// Security
 				IZ_TRUE,	// ManualReset
-				IZ_FALSE,	// InitialState
+				IZ_FALSE,	// InitialState -> TRUEだとシグナル状態、FALSEだと非シグナル状態
 				IZ_NULL);	// EventName
 
 	IZ_ASSERT(m_Handle != IZ_NULL);
@@ -68,11 +68,16 @@ IZ_BOOL CEvent::Wait()
 	return (result == WAIT_OBJECT_0);
 }
 
+// NOTE
+// 自動リセットでWait終了時に自動で非シグナル状態になるので
+// 明示的に非シグナル状態にする必要がない
+#if 0
 // 非シグナル状態にする.
 void CEvent::Reset()
 {
 	IZ_ASSERT(m_Handle != IZ_NULL);
 	::ResetEvent(m_Handle);
 }
+#endif
 
 #endif	// #if defined(WIN32) || defined(WIN64)
