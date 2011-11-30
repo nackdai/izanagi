@@ -152,3 +152,12 @@ CTextureLite* CGraphicsDeviceLite::CreateTexture(
 	
 	return ret;
 }
+
+// テクスチャ保存
+IZ_BOOL CGraphicsDeviceLite::SaveTexture(
+	IZ_PCSTR path,
+	CTextureLite* texture)
+{
+	IZ_BOOL ret = CTextureLite::SaveTexture(path, texture);
+	return ret;
+}

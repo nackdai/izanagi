@@ -58,6 +58,11 @@ namespace izanagi_tk {
 			IZ_UINT nHeight,
 			D3DFORMAT fmt);
 
+		// テクスチャ保存
+		IZ_BOOL SaveTexture(
+			IZ_PCSTR path,
+			CTextureLite* texture);
+
 	public:
 		LPDIRECT3DDEVICE9 GetRawInterface() { return m_pDevice; }
 

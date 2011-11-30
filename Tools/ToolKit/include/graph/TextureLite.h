@@ -29,6 +29,11 @@ namespace izanagi_tk {
 			IZ_UINT nHeight,
 			D3DFORMAT fmt);
 
+		// テクスチャ保存
+		static IZ_BOOL SaveTexture(
+			IZ_PCSTR path,
+			CTextureLite* texture);
+
 	private:
 		inline CTextureLite();
 		inline ~CTextureLite();
@@ -60,6 +65,12 @@ namespace izanagi_tk {
 
 		// MIPMAP数取得
 		inline IZ_UINT GetMipMapNum() const;
+
+		// オリジナルフォーマット取得
+		D3DFORMAT GetOriginalFormat() const
+		{
+			return m_Desc.Format;
+		}
 
 	public:
 		D3D_TEXTURE* GetRawInterface() { return m_pTexture; }
