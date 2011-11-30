@@ -194,6 +194,24 @@ __EXIT__:
 	return pInstance;
 }
 
+// テクスチャ保存
+IZ_BOOL CTextureLite::SaveTexture(
+	IZ_PCSTR path,
+	CTextureLite* texture)
+{
+	IZ_ASSERT(path != IZ_NULL);
+	IZ_ASSERT(texture != IZ_NULL);
+
+	HRESULT hr = D3DXSaveTextureToFile(
+					path,
+					D3DXIFF_PNG,	// PNGのみ
+					texture->m_pTexture,
+					NULL);
+	
+	IZ_BOOL ret = SUCCEEDED(hr);
+	return ret;
+}
+
 /**
 * ロック
 */
