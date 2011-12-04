@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="NormalMapCreator"
+	Name="NormalMapMaker"
 	ProjectGUID="{D5C1A914-FF21-41D7-A601-D2DC6DC0BB2A}"
-	RootNamespace="NormalMapCreator"
+	RootNamespace="NormalMapMaker"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -174,11 +174,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\..\Image\NormalMapCreator\NormalMapCreator.cpp"
+				RelativePath="..\..\Image\NormalMapMaker\NormalMapMaker.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\Image\NormalMapCreator\Option.cpp"
+				RelativePath="..\..\Image\NormalMapMaker\Option.cpp"
 				>
 			</File>
 		</Filter>
@@ -186,12 +186,12 @@
 			Name="include"
 			>
 			<File
-				RelativePath="..\..\Image\NormalMapCreator\Option.h"
+				RelativePath="..\..\Image\NormalMapMaker\Option.h"
 				>
 			</File>
 		</Filter>
 		<File
-			RelativePath=".\ReadMe.txt"
+			RelativePath="..\..\Image\NormalMapMaker\ReadMe.txt"
 			>
 		</File>
 	</Files>

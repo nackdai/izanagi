@@ -27,8 +27,6 @@ namespace {
 			" -i [xml] : 基になる高さマップのファイル名\n"
 			" -o [out] : 出力ファイル名\n"
 			"            指定が無い場案は入力ファイルをもとに自動で設定される\n"
-			" -s [scale] : 高さのスケール値\n"
-			"              デフォルトでは1.0で扱われる\n"
 			"\n"
 			"Attention : 必ずPNGとして出力される\n"
 		);
@@ -75,7 +73,7 @@ int main(int argc, char* argv[])
 	texNml = device->CreateTexture(
 				texHeight->GetWidth(0),
 				texHeight->GetHeight(0),
-				D3DFMT_A8R8G8B8);
+				D3DFMT_A8B8G8R8);
 	VGOTO(texNml != NULL);
 
 	// データ読み込み
@@ -103,38 +101,33 @@ int main(int argc, char* argv[])
 	IZ_FLOAT div = 1.0f / 255.0f;
 
 	for (IZ_UINT y = 0; y < height; y++) {
+		IZ_UINT8* s = src + srcPitch * y;
 		izanagi::SColor* d = reinterpret_cast<izanagi::SColor*>(dst + dstPitch * y);
 
 		IZ_UINT pos = 0;
 
 		for (IZ_UINT x = 0; x < width; x++) {
 			// 右ピクセルの高さ
-			IZ_UINT pos = y * srcPitch + ((x + 1) % width) * srcBPP;
-			IZ_FLOAT rightHeight = src[pos] * div * option.scale;
+			IZ_UINT pos = ((x + 1) % width) * srcBPP;
+			IZ_FLOAT rightHeight = s[pos] * div;
 
 			// 下ピクセルの高さ
 			pos = ((y + 1) % height) * srcPitch + x * srcBPP;
-			IZ_FLOAT bottomHeight = src[pos] * div * option.scale;
+			IZ_FLOAT bottomHeight = s[pos] * div;
 
 			// 高さ
-			IZ_FLOAT h = src[y * srcPitch + x * srcBPP] * div * option.scale;
+			IZ_FLOAT h = s[x * srcBPP] * div;
 
 			izanagi::SVector nml;
 
 			izanagi::CVector right(lengthPerPixel, 0.0f, rightHeight - h);
-
 			izanagi::CVector bottom(0.0f, lengthPerPixel, bottomHeight - h);
 
 			// 外積を計算
-			izanagi::SVector::Cross(nml, bottom, right);
+			izanagi::SVector::Cross(nml, right, bottom);
 
 			// 正規化
 			izanagi::SVector::Normalize(nml, nml);
-
-			// -1.0 - 1.0 のレンジを 0.0 - 1.0 のレンジに変換
-			nml.x = nml.x * 0.5f + 0.5f;
-			nml.y = nml.y * 0.5f + 0.5f;
-			nml.z = nml.z * 0.5f + 0.5f;
 
 			// 法線マップに描きこみ
 			d->r = static_cast<IZ_UINT8>(nml.x * 255.0f);
