@@ -1207,6 +1207,9 @@ void CGraphicsDevice::SetDefaultRenderState()
 	SetRenderState(E_GRAPH_RS_BLENDMETHOD, E_GRAPH_ALPHA_BLEND_NORMAL);
 
 	SetRenderState(E_GRAPH_RS_FILLMODE, E_GRAPH_FILL_MODE_SOLID);
+
+	// NOTE
+	// izanagiでは右手座標系なので、カリングの標準はClockWiseにする
 	SetRenderState(E_GRAPH_RS_CULLMODE, E_GRAPH_CULL_CW);
 
 	// うーん・・・
