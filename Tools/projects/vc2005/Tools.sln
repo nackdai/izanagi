@@ -79,7 +79,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shader", "Shader", "{B466FD
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Util", "Util", "{A18A0FC4-8551-4472-8575-A78D1E05C57B}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NormalMapCreator", "NormalMapCreator.vcproj", "{D5C1A914-FF21-41D7-A601-D2DC6DC0BB2A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NormalMapMaker", "NormalMapMaker.vcproj", "{D5C1A914-FF21-41D7-A601-D2DC6DC0BB2A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
