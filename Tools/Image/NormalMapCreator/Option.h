@@ -6,9 +6,18 @@
 struct SOption {
 	izanagi::izanagi_tk::CString in;
 	izanagi::izanagi_tk::CString out;
+
+	IZ_FLOAT scale;
 };
 
 class COption : public SOption {
+public:
+	COption()
+	{
+		scale = 1.0f;
+	}
+	~COption() {}
+
 public:
 	IZ_BOOL Analysis(int argc, TCHAR* argv[]);
 
