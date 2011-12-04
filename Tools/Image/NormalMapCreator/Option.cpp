@@ -25,6 +25,13 @@ IZ_BOOL COption::Analysis(int argc, TCHAR* argv[])
 				// -o
 				out.format("%s", argv[++i]);
 			}
+			else if (result = (cmd == "-s")) {
+				// -s
+				scale = (IZ_FLOAT)::atof(argv[++i]);
+
+				// 負の場合はゼロにする
+				scale = (scale < 0.0f ? 0.0f : scale);
+			}
 		}
 
 		if (!result) {
