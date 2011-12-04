@@ -423,6 +423,7 @@ void CDebugMesh::ComputeTangent(
 	// Y(B) = Z(N) x X(T)
 	SVector::Cross(vB, vtx0->nml, vT);
 
+#if 0
 	// TODO
 	// DirectXの座標系（左手）に変換する
 	{
@@ -434,6 +435,7 @@ void CDebugMesh::ComputeTangent(
 
 		SMatrix::Apply(vT, vT, m);
 	}
+#endif
 
 #if 1
 	SMatrix mtx;
