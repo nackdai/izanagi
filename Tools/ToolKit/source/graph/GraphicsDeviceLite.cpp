@@ -153,11 +153,27 @@ CTextureLite* CGraphicsDeviceLite::CreateTexture(
 	return ret;
 }
 
+// テクスチャ作成
+CTextureLite* CGraphicsDeviceLite::CreateTexture(
+	IZ_UINT nWidth,
+	IZ_UINT nHeight,
+	izanagi::E_GRAPH_PIXEL_FMT fmt)
+{
+	CTextureLite* ret = CTextureLite::CreateTexture(
+							this,
+							GetAllocator(),
+							nWidth, nHeight,
+							fmt);
+	
+	return ret;
+}
+
 // テクスチャ保存
 IZ_BOOL CGraphicsDeviceLite::SaveTexture(
 	IZ_PCSTR path,
-	CTextureLite* texture)
+	CTextureLite* texture,
+	TextureExportType type)
 {
-	IZ_BOOL ret = CTextureLite::SaveTexture(path, texture);
+	IZ_BOOL ret = CTextureLite::SaveTexture(path, texture, type);
 	return ret;
 }

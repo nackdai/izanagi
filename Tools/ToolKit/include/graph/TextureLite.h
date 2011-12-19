@@ -4,6 +4,7 @@
 #include "izDefs.h"
 #include "izStd.h"
 #include "izGraph.h"
+#include "graph/ToolkitGraphDefs.h"
 
 namespace izanagi {
 namespace izanagi_tk {
@@ -29,10 +30,19 @@ namespace izanagi_tk {
 			IZ_UINT nHeight,
 			D3DFORMAT fmt);
 
+		// テクスチャ作成
+		static CTextureLite* CreateTexture(
+			CGraphicsDeviceLite* pDevice,
+			IMemoryAllocator* pAllocator,
+			IZ_UINT nWidth,
+			IZ_UINT nHeight,
+			izanagi::E_GRAPH_PIXEL_FMT fmt);
+
 		// テクスチャ保存
 		static IZ_BOOL SaveTexture(
 			IZ_PCSTR path,
-			CTextureLite* texture);
+			CTextureLite* texture,
+			TextureExportType type);
 
 	private:
 		inline CTextureLite();

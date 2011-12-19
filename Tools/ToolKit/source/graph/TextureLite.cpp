@@ -24,9 +24,9 @@ namespace {
 		D3DFMT_X8B8G8R8,
 		D3DFMT_D24S8,
 	};
-	IZ_C_ASSERT(COUNTOF(PixelFormatTbl) == E_GRAPH_PIXEL_FMT_NUM);
+	IZ_C_ASSERT(COUNTOF(PixelFormatTbl) == izanagi::E_GRAPH_PIXEL_FMT_NUM);
 
-	inline E_GRAPH_PIXEL_FMT _GetPixelFmt(D3DFORMAT fmt)
+	inline izanagi::E_GRAPH_PIXEL_FMT _GetPixelFmt(D3DFORMAT fmt)
 	{
 		IZ_INT ret = 0;
 		for (IZ_UINT i = 0; i < COUNTOF(PixelFormatTbl); i++) {
@@ -36,10 +36,21 @@ namespace {
 			}
 		}
 		IZ_ASSERT(ret >= 0);
-		return static_cast<E_GRAPH_PIXEL_FMT>(ret);
+		return static_cast<izanagi::E_GRAPH_PIXEL_FMT>(ret);
 	}
 
-	inline IZ_BOOL _IsValidPixelFmt(D3DFORMAT fmt)
+	inline D3DFORMAT _GetDXPixelFmt(izanagi::E_GRAPH_PIXEL_FMT fmt)
+	{
+		IZ_ASSERT(fmt < COUNTOF(PixelFormatTbl));
+
+		if (fmt < COUNTOF(PixelFormatTbl)) {
+			return PixelFormatTbl[fmt];
+		}
+
+		return D3DFMT_UNKNOWN;
+	}
+
+	inline IZ_BOOL _IsValidDXPixelFmt(D3DFORMAT fmt)
 	{
 		for (IZ_UINT i = 0; i < COUNTOF(PixelFormatTbl); i++) {
 			if (PixelFormatTbl[i] == fmt) {
@@ -86,7 +97,7 @@ CTextureLite* CTextureLite::CreateTextureFromFile(
 
 		// NOTE
 		// 不明なピクセルフォーマットは強制的にRGBA8にする
-		D3DFORMAT fmt = (_IsValidPixelFmt(sImageInfo.Format)
+		D3DFORMAT fmt = (_IsValidDXPixelFmt(sImageInfo.Format)
 							? D3DFMT_FROM_FILE
 							: D3DFMT_A8B8G8R8);
 
@@ -160,7 +171,7 @@ CTextureLite* CTextureLite::CreateTexture(
 
 		// NOTE
 		// 不明なピクセルフォーマットは強制的にRGBA8にする
-		fmt = (_IsValidPixelFmt(fmt)
+		fmt = (_IsValidDXPixelFmt(fmt)
 				? fmt
 				: D3DFMT_A8R8G8B8);
 
@@ -194,17 +205,52 @@ __EXIT__:
 	return pInstance;
 }
 
+// テクスチャ作成
+CTextureLite* CTextureLite::CreateTexture(
+	CGraphicsDeviceLite* pDevice,
+	IMemoryAllocator* pAllocator,
+	IZ_UINT nWidth,
+	IZ_UINT nHeight,
+	izanagi::E_GRAPH_PIXEL_FMT fmt)
+{
+	D3DFORMAT dxFmt = _GetDXPixelFmt(fmt);
+	VRETURN(dxFmt != D3DFMT_UNKNOWN);
+
+	CTextureLite* ret = CreateTexture(
+							pDevice,
+							pAllocator,
+							nWidth,
+							nHeight,
+							dxFmt);
+	return ret;
+}
+
+
 // テクスチャ保存
 IZ_BOOL CTextureLite::SaveTexture(
 	IZ_PCSTR path,
-	CTextureLite* texture)
+	CTextureLite* texture,
+	TextureExportType type)
 {
 	IZ_ASSERT(path != IZ_NULL);
 	IZ_ASSERT(texture != IZ_NULL);
 
+	D3DXIMAGE_FILEFORMAT format = D3DXIFF_PNG;
+	switch (type) {
+	case TextureExportTypePNG:
+		format = D3DXIFF_PNG;
+		break;
+	case TextureExportTypeHDR:
+		format = D3DXIFF_HDR;
+		break;
+	default:
+		format = D3DXIFF_PNG;
+		break;
+	}
+
 	HRESULT hr = D3DXSaveTextureToFile(
 					path,
-					D3DXIFF_PNG,	// PNGのみ
+					format,
 					texture->m_pTexture,
 					NULL);
 	
