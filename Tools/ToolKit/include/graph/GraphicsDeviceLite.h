@@ -9,15 +9,16 @@
 
 #include "izDefs.h"
 #include "izStd.h"
-#include "../std/SimpleMemoryAllocator.h"
+#include "izGraph.h"
+#include "std/SimpleMemoryAllocator.h"
+#include "graph/ToolkitGraphDefs.h"
 
 namespace izanagi {
 namespace izanagi_tk {
 	class CTextureLite;
 
-	/**
-	* 簡易グラフィックスデバイス
-	*/
+	/** 簡易グラフィックスデバイス.
+	 */
 	class CGraphicsDeviceLite : public CObject {
 	private:
 		static CGraphicsDeviceLite* s_pInstance;
@@ -58,10 +59,17 @@ namespace izanagi_tk {
 			IZ_UINT nHeight,
 			D3DFORMAT fmt);
 
+		// テクスチャ作成
+		CTextureLite* CreateTexture(
+			IZ_UINT nWidth,
+			IZ_UINT nHeight,
+			izanagi::E_GRAPH_PIXEL_FMT fmt);
+
 		// テクスチャ保存
 		IZ_BOOL SaveTexture(
 			IZ_PCSTR path,
-			CTextureLite* texture);
+			CTextureLite* texture,
+			TextureExportType type);
 
 	public:
 		LPDIRECT3DDEVICE9 GetRawInterface() { return m_pDevice; }
