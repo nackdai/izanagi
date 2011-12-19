@@ -142,7 +142,7 @@
 			Name="graph"
 			>
 			<File
-				RelativePath="..\..\ToolKit\include\ToolKitGraphDefs.h"
+				RelativePath="..\..\ToolKit\include\ToolKitGraph.h"
 				>
 			</File>
 			<Filter
@@ -154,6 +154,10 @@
 				</File>
 				<File
 					RelativePath="..\..\ToolKit\include\graph\TextureLite.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\ToolKit\include\graph\ToolkitGraphDefs.h"
 					>
 				</File>
 			</Filter>
@@ -174,7 +178,7 @@
 			Name="io"
 			>
 			<File
-				RelativePath="..\..\ToolKit\include\ToolKitIoDefs.h"
+				RelativePath="..\..\ToolKit\include\ToolKitIo.h"
 				>
 			</File>
 			<Filter
@@ -190,7 +194,7 @@
 			Name="std"
 			>
 			<File
-				RelativePath="..\..\ToolKit\include\ToolKitStdDefs.h"
+				RelativePath="..\..\ToolKit\include\ToolKitStd.h"
 				>
 			</File>
 			<Filter
@@ -222,7 +226,7 @@
 			Name="xml"
 			>
 			<File
-				RelativePath="..\..\ToolKit\include\ToolKitXmlDefs.h"
+				RelativePath="..\..\ToolKit\include\ToolKitXml.h"
 				>
 			</File>
 			<Filter
@@ -238,7 +242,7 @@
 			Name="util"
 			>
 			<File
-				RelativePath="..\..\ToolKit\include\ToolKitUtilDefs.h"
+				RelativePath="..\..\ToolKit\include\ToolKitUtil.h"
 				>
 			</File>
 			<Filter
@@ -270,7 +274,7 @@
 			Name="system"
 			>
 			<File
-				RelativePath="..\..\ToolKit\include\ToolKitSystemDefs.h"
+				RelativePath="..\..\ToolKit\include\ToolKitSystem.h"
 				>
 			</File>
 			<Filter

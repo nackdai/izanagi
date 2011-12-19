@@ -10,6 +10,7 @@
 		Name="VCCLCompilerTool"
 		Optimization="2"
 		AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../../Libs/include&quot;;&quot;$(SolutionDir)/../../ToolKit/include&quot;"
+		DisableSpecificWarnings="4819"
 	/>
 	<Tool
 		Name="VCLibrarianTool"
