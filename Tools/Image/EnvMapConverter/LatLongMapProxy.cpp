@@ -76,7 +76,7 @@ void CLatLongMapProxy::getUVFromRef(
 }
 
 // XYから反射ベクトルを取得.
-IZ_BOOL CLatLongMapProxy::getRef(
+void CLatLongMapProxy::getRef(
 	IZ_UINT x, IZ_UINT y,
 	izanagi::SVector& ref)
 {
@@ -101,8 +101,6 @@ IZ_BOOL CLatLongMapProxy::getRef(
 	ref.z = izanagi::CMath::Clamp(ref.z, -1.0f, 1.0f);
 
 	izanagi::SVector::Normalize(ref, ref);
-
-	return IZ_TRUE;
 }
 
 // UVから色を取得.

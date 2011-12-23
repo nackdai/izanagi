@@ -21,14 +21,14 @@ void Convert(
 
 	for (IZ_UINT y = 0; y < outHeight; y++) {
 		for (IZ_UINT x = 0; x < outWidth; x++) {
-			out->getRef(x, y, vecRef);
-
-			IZ_FLOAT u, v;
-			in->getUVFromRef(vecRef, u ,v);
-
 			IZ_BOOL isValid = out->isValid(x, y);
 
 			if (isValid) {
+				out->getRef(x, y, vecRef);
+
+				IZ_FLOAT u, v;
+				in->getUVFromRef(vecRef, u ,v);
+
 				in->getColor(u, v, color);
 				out->putColor(x, y, color);
 			}

@@ -2,6 +2,7 @@
 
 #include "MirrorMapProxy.h"
 #include "LatLongMapProxy.h"
+#include "AngularMapProxy.h"
 
 IZ_FLOAT CTexProxy::NormalizeColor(IZ_UINT8 c)
 {
@@ -24,6 +25,8 @@ CTexProxy* CTexProxy::CreateTexProxy(
 		ret = new CLatLongMapProxy(tex, type);
 		break;
 	case EnvMapTypeAngular:
+		ret = new CAngularMapProxy(tex, type);
+		break;
 	case EnvMapTypeCube:
 	default:
 		IZ_ASSERT(IZ_FALSE);
