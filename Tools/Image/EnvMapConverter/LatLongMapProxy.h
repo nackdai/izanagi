@@ -21,7 +21,7 @@ public:
 
 	/** XYから反射ベクトルを取得.
 	 */
-	virtual IZ_BOOL getRef(
+	virtual void getRef(
 		IZ_UINT x, IZ_UINT y,
 		izanagi::SVector& ref);
 

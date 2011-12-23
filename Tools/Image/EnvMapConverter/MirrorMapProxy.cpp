@@ -55,7 +55,7 @@ void CMirrorMapProxy::getUVFromRef(
 }
 
 // XYから反射ベクトルを取得.
-IZ_BOOL CMirrorMapProxy::getRef(
+void CMirrorMapProxy::getRef(
 	IZ_UINT x, IZ_UINT y,
 	izanagi::SVector& ref)
 {
@@ -63,34 +63,28 @@ IZ_BOOL CMirrorMapProxy::getRef(
 	IZ_FLOAT u = 2.0f * x * m_DivW - 1.0f;
 	IZ_FLOAT v = 2.0f * y * m_DivH - 1.0f;
 
-	IZ_BOOL isValid = (::sqrtf(u * u + v * v) <= 1.0f);
-
-	if (isValid) {
-		izanagi::SVector nml;
-		{
-			nml.x = u;
-			nml.y = v;
-			nml.z = ::sqrtf(1.0f- u * u - v * v);
-		}
-
-		// NOTE
-		// R = 2 * (N・I) * N - I
-		// I = (0, 0, 1)
-		// N・I = N.z
-		//
-		// R.x = 2 * N.z * N.x - 0
-		// R.y = 2 * N.z * N.y - 0
-		// R.z = 2 * N.z * N.z - 1
-
-		ref.x = 2.0f * nml.z * nml.x;
-		ref.y = 2.0f * nml.z * nml.y;
-		ref.z = 2.0f * nml.z * nml.z - 1.0f;
-
-		// 念のため
-		izanagi::SVector::Normalize(ref, ref);
+	izanagi::SVector nml;
+	{
+		nml.x = u;
+		nml.y = v;
+		nml.z = ::sqrtf(1.0f- u * u - v * v);
 	}
 
-	return isValid;
+	// NOTE
+	// R = 2 * (N・I) * N - I
+	// I = (0, 0, 1)
+	// N・I = N.z
+	//
+	// R.x = 2 * N.z * N.x - 0
+	// R.y = 2 * N.z * N.y - 0
+	// R.z = 2 * N.z * N.z - 1
+
+	ref.x = 2.0f * nml.z * nml.x;
+	ref.y = 2.0f * nml.z * nml.y;
+	ref.z = 2.0f * nml.z * nml.z - 1.0f;
+
+	// 念のため
+	izanagi::SVector::Normalize(ref, ref);
 }
 
 // UVから色を取得.

@@ -209,6 +209,10 @@
 				Name="include"
 				>
 				<File
+					RelativePath="..\..\Image\EnvMapConverter\AngularMapProxy.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\Image\EnvMapConverter\LatLongMapProxy.h"
 					>
 				</File>
@@ -224,6 +228,10 @@
 			<Filter
 				Name="source"
 				>
+				<File
+					RelativePath="..\..\Image\EnvMapConverter\AngularMapProxy.cpp"
+					>
+				</File>
 				<File
 					RelativePath="..\..\Image\EnvMapConverter\LatLongMapProxy.cpp"
 					>
