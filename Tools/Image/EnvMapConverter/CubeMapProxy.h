@@ -1,16 +1,17 @@
-#if !defined(__MIRROR_MAP_PROXY_H__)
-#define __MIRROR_MAP_PROXY_H__
+#if !defined(__CUBE_MAP_PROXY_H__)
+#define __CUBE_MAP_PROXY_H__
 
+#include <vector>
 #include "TexProxy.h"
 
-/** ミラーマッププロキシ
+/** キューブマッププロキシ
  */
-class CMirrorMapProxy : public CTexProxy {
+class CCubeMapProxy : public CTexProxy {
 public:
-	CMirrorMapProxy(
-		izanagi::izanagi_tk::CTextureLite* tex,
+	CCubeMapProxy(
+		std::vector<izanagi::izanagi_tk::CTextureLite*>& tex,
 		EnvMapType type);
-	virtual ~CMirrorMapProxy();
+	virtual ~CCubeMapProxy();
 
 public:
 	/** 反射ベクトルからUVを取得.
@@ -43,13 +44,21 @@ public:
 	virtual IZ_BOOL isValid(IZ_UINT x, IZ_UINT y) const;
 
 protected:
-	izanagi::izanagi_tk::CTextureLite* m_Tex;
+	// 参照する面の変更
+	inline void ChangeFace(izanagi::E_GRAPH_CUBE_TEX_FACE face);
+
+protected:
+	std::vector<izanagi::izanagi_tk::CTextureLite*> m_Tex;
 
 	IZ_UINT m_Pitch;
 	IZ_UINT8* m_Data;
 
 	IZ_FLOAT m_DivW;
 	IZ_FLOAT m_DivH;
+
+	izanagi::E_GRAPH_CUBE_TEX_FACE m_CurFace;
+	izanagi::E_GRAPH_CUBE_TEX_FACE m_PrevFace;
+	IZ_BOOL m_IsChangedFace;
 };
 
-#endif	// #if !defined(__MIRROR_MAP_PROXY_H__)
+#endif	// #if !defined(__CUBE_MAP_PROXY_H__)

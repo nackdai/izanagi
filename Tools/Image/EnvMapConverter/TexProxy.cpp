@@ -3,6 +3,7 @@
 #include "MirrorMapProxy.h"
 #include "LatLongMapProxy.h"
 #include "AngularMapProxy.h"
+#include "CubeMapProxy.h"
 
 IZ_FLOAT CTexProxy::NormalizeColor(IZ_UINT8 c)
 {
@@ -12,22 +13,26 @@ IZ_FLOAT CTexProxy::NormalizeColor(IZ_UINT8 c)
 
 // テクスチャプロキシ作成
 CTexProxy* CTexProxy::CreateTexProxy(
-	izanagi::izanagi_tk::CTextureLite* tex,
+	std::vector<izanagi::izanagi_tk::CTextureLite*>& tex,
 	EnvMapType type)
 {
+	IZ_ASSERT(tex.size() > 0);
+
 	CTexProxy* ret = IZ_NULL;
 
 	switch (type) {
 	case EnvMapTypeMirror:
-		ret = new CMirrorMapProxy(tex, type);
+		ret = new CMirrorMapProxy(tex[0], type);
 		break;
 	case EnvMapTypeLatLong:
-		ret = new CLatLongMapProxy(tex, type);
+		ret = new CLatLongMapProxy(tex[0], type);
 		break;
 	case EnvMapTypeAngular:
-		ret = new CAngularMapProxy(tex, type);
+		ret = new CAngularMapProxy(tex[0], type);
 		break;
 	case EnvMapTypeCube:
+		ret = new CCubeMapProxy(tex, type);
+		break;
 	default:
 		IZ_ASSERT(IZ_FALSE);
 		break;
@@ -45,11 +50,12 @@ void CTexProxy::DeleteTexProxy(CTexProxy*& tex)
 	}
 }
 
-CTexProxy::CTexProxy(
-	izanagi::izanagi_tk::CTextureLite* tex,
-	EnvMapType type)
+CTexProxy::CTexProxy(EnvMapType type)
 {
 	m_Type = type;
+
+	m_IsFloat = IZ_FALSE;
+	m_Bpp = 1;
 }
 
 CTexProxy::~CTexProxy()

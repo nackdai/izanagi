@@ -1,6 +1,7 @@
 ﻿#if !defined(__OPTION_H__)
 #define __OPTION_H__
 
+#include <vector>
 #include "izToolKit.h"
 #include "EnvMapConverterDefs.h"
 

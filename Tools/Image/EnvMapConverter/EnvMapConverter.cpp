@@ -5,6 +5,7 @@
 #define _WIN32_WINNT 0x0501	// これを Windows の他のバージョン向けに適切な値に変更してください。
 #endif						
 
+#include <vector>
 #include "izToolKit.h"
 #include "izMath.h"
 #include "Option.h"
@@ -45,6 +46,7 @@ namespace {
 		);
 	}
 
+	// 出力テクスチャサイズを計算
 	IZ_BOOL _ComputeSize(
 		EnvMapType type,
 		IZ_UINT inWidth, IZ_UINT inHeight,
@@ -77,6 +79,57 @@ namespace {
 
 		return isValid;
 	}
+
+	// キューブマップ用プレフィックス
+	static const char* PreName[] = {
+		"XP", "XN",
+		"YP", "YX",
+		"ZP", "ZN"
+	};
+	C_ASSERT(COUNTOF(PreName) == izanagi::E_GRAPH_CUBE_TEX_FACE_NUM);
+
+	// テクスチャ名一覧を取得
+	void _GetTexNameList(
+		const izanagi::izanagi_tk::CString texName,
+		EnvMapType type,
+		std::vector<izanagi::izanagi_tk::CString>& texList)
+	{
+		if (type == EnvMapTypeCube) {
+			texList.resize(izanagi::E_GRAPH_CUBE_TEX_FACE_NUM);
+
+			// 頭に面ごとのプレフィックスを付ける
+
+			// ファイル名のみ取得
+			IZ_PCSTR name = izanagi::izanagi_tk::CFileUtility::GetFileNameFromPath(texName.c_str());
+
+			// ディレクトリパス部分のみ取得
+			char dir[1024];
+			izanagi::izanagi_tk::CFileUtility::GetPathWithoutFileName(dir, sizeof(dir), texName.c_str());
+
+			for (IZ_UINT i = 0; i < izanagi::E_GRAPH_CUBE_TEX_FACE_NUM; i++) {
+				if (::strlen(dir) > 0) {
+					texList[i].format("%s\\%s_%s", dir, PreName[i], name);
+				}
+				else {
+					texList[i].format("%s_%s", PreName[i], name);
+				}
+			}
+		}
+		else {
+			texList.push_back(texName);
+		}
+	}
+
+	// テクスチャを解放
+	void _ReleaseTexture(
+		std::vector<izanagi::izanagi_tk::CTextureLite*>& texList)
+	{
+		for (size_t i = 0; i < texList.size(); i++) {
+			izanagi::izanagi_tk::CTextureLite* tex = texList[i];
+			SAFE_RELEASE(tex);
+		}
+		texList.clear();
+	}
 }	// namespace
 
 #ifdef VGOTO
@@ -92,8 +145,12 @@ int main(int argc, char* argv[])
 	COption option;
 
 	izanagi::izanagi_tk::CGraphicsDeviceLite* device = IZ_NULL;
-	izanagi::izanagi_tk::CTextureLite* texInEnv = IZ_NULL;
-	izanagi::izanagi_tk::CTextureLite* texOutEnv = IZ_NULL;
+
+	std::vector<izanagi::izanagi_tk::CTextureLite*> texInEnv;
+	std::vector<izanagi::izanagi_tk::CTextureLite*> texOutEnv;
+
+	std::vector<izanagi::izanagi_tk::CString> inTexList;
+	std::vector<izanagi::izanagi_tk::CString> outTexList;
 
 	// ウインドウハンドル取得
 	HWND hWnd = ::GetConsoleWindow();
@@ -108,27 +165,45 @@ int main(int argc, char* argv[])
 	VGOTO(result);
 	VGOTO(option.IsValid());
 
+	_GetTexNameList(
+		option.in,
+		option.typeInEnvMap,
+		inTexList);
+
 	// 環境マップ読み込み
-	texInEnv = device->CreateTextureFromFile(option.in);
-	VGOTO(texInEnv != NULL);
+	for (size_t i = 0; i < inTexList.size(); i++) {
+		izanagi::izanagi_tk::CTextureLite* tex = device->CreateTextureFromFile(inTexList[i]);
+		VGOTO(tex != NULL);
+
+		texInEnv.push_back(tex);
+	}
 
 	// 出力先のサイズを計算
 	IZ_UINT outWidth, outHeight;
 	IZ_BOOL isValid = _ComputeSize(
 						option.typeOutEnvMap,
-						texInEnv->GetWidth(),
-						texInEnv->GetHeight(),
+						texInEnv[0]->GetWidth(),
+						texInEnv[0]->GetHeight(),
 						outWidth,
 						outHeight);
 	VGOTO(isValid);
 
+	_GetTexNameList(
+		option.out,
+		option.typeOutEnvMap,
+		outTexList);
+
 	// 出力先作成
 	// 強制的にRGBA32Fにする
-	texOutEnv = device->CreateTexture(
-					outWidth,
-					outHeight,
-					izanagi::E_GRAPH_PIXEL_FMT_RGBA32F);
-	VGOTO(texOutEnv != NULL);
+	for (size_t i = 0; i < outTexList.size(); i++) {
+		izanagi::izanagi_tk::CTextureLite* tex = device->CreateTexture(
+													outWidth,
+													outHeight,
+													izanagi::E_GRAPH_PIXEL_FMT_RGBA32F);
+		VGOTO(tex != NULL);
+
+		texOutEnv.push_back(tex);
+	}
 
 	// 変換
 	Convert(
@@ -136,15 +211,17 @@ int main(int argc, char* argv[])
 		texOutEnv, option.typeOutEnvMap);
 
 	// 出力先保存
-	result = device->SaveTexture(
-				option.out,
-				texOutEnv,
-				option.typeExport);
-	VGOTO(result);
+	for (size_t i = 0; i < outTexList.size(); i++) {
+		result = device->SaveTexture(
+					outTexList[i],
+					texOutEnv[i],
+					option.typeExport);
+		VGOTO(result);
+	}
 
 __EXIT__:
-	SAFE_RELEASE(texInEnv);
-	SAFE_RELEASE(texOutEnv);
+	_ReleaseTexture(texInEnv);
+	_ReleaseTexture(texOutEnv);
 	SAFE_RELEASE(device);
 
 	return nRetCode;
