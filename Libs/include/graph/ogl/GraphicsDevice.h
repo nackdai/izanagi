@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_GRPAH_GRAPHICS_DEVICE_H__)
+#if !defined(__IZANAGI_GRPAH_GRAPHICS_DEVICE_H__)
 #define __IZANAGI_GRPAH_GRAPHICS_DEVICE_H__
 
 //////////////////////////////////////////

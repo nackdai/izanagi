@@ -1,4 +1,4 @@
-﻿#include "debugutil/ui/DebugUIButton.h"
+#include "debugutil/ui/DebugUIButton.h"
 #include "debugutil/ui/DebugUIManager.h"
 #include "izGraph.h"
 

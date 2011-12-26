@@ -1,4 +1,4 @@
-﻿#include "debugutil/mesh/DebugMeshSphere.h"
+#include "debugutil/mesh/DebugMeshSphere.h"
 
 using namespace izanagi;
 

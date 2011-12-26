@@ -1,4 +1,4 @@
-﻿#include "posteffect/functor/PostEffectFunctorSwitchTex.h"
+#include "posteffect/functor/PostEffectFunctorSwitchTex.h"
 #include "posteffect/PostEffectShader.h"
 #include "posteffect/PostEffectTextureCreator.h"
 

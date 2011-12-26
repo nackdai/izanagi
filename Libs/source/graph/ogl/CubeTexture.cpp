@@ -1,4 +1,4 @@
-﻿#include "graph/dx9/CubeTexture.h"
+#include "graph/dx9/CubeTexture.h"
 #include "graph/dx9/GraphicsDevice.h"
 #include "std/MemoryAllocator.h"
 #include "graph/internal/ParamValueConverter.h"

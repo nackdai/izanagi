@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_IO_INPUT_STREAN_H__)
+#if !defined(__IZANAGI_IO_INPUT_STREAN_H__)
 #define __IZANAGI_IO_INPUT_STREAN_H__
 
 #include "izDefs.h"

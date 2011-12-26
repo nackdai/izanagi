@@ -1,4 +1,4 @@
-﻿#define _WIN32_WINNT 0x0500
+#define _WIN32_WINNT 0x0500
 #include "system/SysThreadDefs.h"
 
 #include "system/SysMonitor.h"

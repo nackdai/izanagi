@@ -1,4 +1,4 @@
-﻿#include "graph/dx9/Surface.h"
+#include "graph/dx9/Surface.h"
 #include "graph/dx9/Texture.h"
 #include "std/allocator/MemoryAllocator.h"
 

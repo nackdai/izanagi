@@ -1,4 +1,4 @@
-﻿#include "effect/EffectTexAnmManager.h"
+#include "effect/EffectTexAnmManager.h"
 #include "izGraph.h"
 #include "izIo.h"
 

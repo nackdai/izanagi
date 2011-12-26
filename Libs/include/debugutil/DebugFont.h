@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_DEBUG_UTIL_FONT_H__)
+#if !defined(__IZANAGI_DEBUG_UTIL_FONT_H__)
 #define __IZANAGI_DEBUG_UTIL_FONT_H__
 
 #include "izDefs.h"

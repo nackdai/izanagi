@@ -1,4 +1,4 @@
-﻿#if !defined(__POSTEFFECT_TEXTURE_TABLE_H__)
+#if !defined(__POSTEFFECT_TEXTURE_TABLE_H__)
 #define __POSTEFFECT_TEXTURE_TABLE_H__
 
 #include "posteffect/PESFormat.h"

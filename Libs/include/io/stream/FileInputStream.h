@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_IO_FILE_INPUT_STREAM_H__)
+#if !defined(__IZANAGI_IO_FILE_INPUT_STREAM_H__)
 #define __IZANAGI_IO_FILE_INPUT_STREAM_H__
 
 #include "InputStream.h"

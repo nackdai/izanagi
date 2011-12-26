@@ -1,4 +1,4 @@
-﻿#include "shader/ShaderManager.h"
+#include "shader/ShaderManager.h"
 
 using namespace izanagi;
 

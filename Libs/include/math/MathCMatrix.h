@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_MATH_CMATRIX_H__)
+#if !defined(__IZANAGI_MATH_CMATRIX_H__)
 #define __IZANAGI_MATH_CMATRIX_H__
 
 #include "MathMatrix.h"

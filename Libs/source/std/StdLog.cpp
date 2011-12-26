@@ -1,4 +1,4 @@
-﻿#include "std/StdLog.h"
+#include "std/StdLog.h"
 
 using namespace izanagi;
 

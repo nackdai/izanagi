@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_EFFECT_EFFECT_OBJECT_H__)
+#if !defined(__IZANAGI_EFFECT_EFFECT_OBJECT_H__)
 #define __IZANAGI_EFFECT_EFFECT_OBJECT_H__
 
 namespace izanagi {

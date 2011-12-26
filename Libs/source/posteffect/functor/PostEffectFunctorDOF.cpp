@@ -1,4 +1,4 @@
-﻿#if 0
+#if 0
 #include "posteffect/internal/PostEffectFunctorDOF.h"
 #include "posteffect/PostEffect.h"
 #include "posteffect/PostEffectFunctor.h"

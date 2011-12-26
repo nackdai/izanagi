@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_MATH_MATH_FIXED_H__)
+#if !defined(__IZANAGI_MATH_MATH_FIXED_H__)
 #define __IZANAGI_MATH_MATH_FIXED_H__
 
 #include "izDefs.h"

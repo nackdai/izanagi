@@ -1,4 +1,4 @@
-﻿#include "debugutil/mesh/DebugMeshFrustum.h"
+#include "debugutil/mesh/DebugMeshFrustum.h"
 
 using namespace izanagi;
 

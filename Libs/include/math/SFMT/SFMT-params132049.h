@@ -1,4 +1,4 @@
-﻿#ifndef SFMT_PARAMS132049_H
+#ifndef SFMT_PARAMS132049_H
 #define SFMT_PARAMS132049_H
 
 #define POS1	110

@@ -1,4 +1,4 @@
-﻿#include "graph/dx9/Texture.h"
+#include "graph/dx9/Texture.h"
 #include "graph/dx9/Surface.h"
 #include "std/MemoryAllocator.h"
 #include "graph/dx9/D3D9ParamValueConverter.h"

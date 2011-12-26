@@ -1,4 +1,4 @@
-﻿#include "graph/dx9/PixelShader.h"
+#include "graph/dx9/PixelShader.h"
 
 using namespace izanagi;
 

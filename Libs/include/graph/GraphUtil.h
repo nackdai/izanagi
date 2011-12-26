@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_GRAPH_GRAPH_UTIL_H__)
+#if !defined(__IZANAGI_GRAPH_GRAPH_UTIL_H__)
 #define __IZANAGI_GRAPH_GRAPH_UTIL_H__
 
 #include "izStd.h"

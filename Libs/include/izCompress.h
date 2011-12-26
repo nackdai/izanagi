@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_COMREPSS_H__)
+#if !defined(__IZANAGI_COMREPSS_H__)
 #define __IZANAGI_COMREPSS_H__
 
 #include "compress/Compressor.h"

@@ -1,4 +1,4 @@
-﻿#include "scenegraph/anm/AnimationInterp.h"
+#include "scenegraph/anm/AnimationInterp.h"
 #include "scenegraph/skl/SkeletonInstance.h"
 #include "scenegraph/anm/AnimationUtil.h"
 #include "izIo.h"

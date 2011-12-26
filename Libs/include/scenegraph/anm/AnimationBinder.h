@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_SCENEGRAPH_ANIMATION_BINDER_H__)
+#if !defined(__IZANAGI_SCENEGRAPH_ANIMATION_BINDER_H__)
 #define __IZANAGI_SCENEGRAPH_ANIMATION_BINDER_H__
 
 #include "AnimationInterface.h"

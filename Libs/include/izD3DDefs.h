@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_D3D_DEFS_H__)
+#if !defined(__IZANAGI_D3D_DEFS_H__)
 #define __IZANAGI_D3D_DEFS_H__
 
 #include <d3d9.h>

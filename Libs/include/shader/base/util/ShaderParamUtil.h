@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_SHADER_SHADER_PARAM_UTIL_H__)
+#if !defined(__IZANAGI_SHADER_SHADER_PARAM_UTIL_H__)
 #define __IZANAGI_SHADER_SHADER_PARAM_UTIL_H__
 
 #include "izStd.h"

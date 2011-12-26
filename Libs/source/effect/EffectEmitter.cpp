@@ -1,4 +1,4 @@
-﻿#include "effect/EffectEmitter.h"
+#include "effect/EffectEmitter.h"
 
 using namespace izanagi;
 

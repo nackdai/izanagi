@@ -1,4 +1,4 @@
-﻿#include "debugutil/ui/DebugUIManager.h"
+#include "debugutil/ui/DebugUIManager.h"
 #include "debugutil/ui/DebugUIDialog.h"
 
 using namespace izanagi;

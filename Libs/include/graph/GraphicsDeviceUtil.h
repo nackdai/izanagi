@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_GRAPH_RENDER_STATE_SETTER_H__)
+#if !defined(__IZANAGI_GRAPH_RENDER_STATE_SETTER_H__)
 #define __IZANAGI_GRAPH_RENDER_STATE_SETTER_H__
 
 #include "GraphicsDeviceProxy.h"

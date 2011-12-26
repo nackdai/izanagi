@@ -1,4 +1,4 @@
-﻿/*****************
+/*****************
 
  This port was based in a inital code from Jesus Gollonet, him port Penners easing equations to C/C++:
 

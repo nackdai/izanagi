@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_STD_LIST_H__)
+#if !defined(__IZANAGI_STD_LIST_H__)
 #define __IZANAGI_STD_LIST_H__
 
 #include "izDefs.h"

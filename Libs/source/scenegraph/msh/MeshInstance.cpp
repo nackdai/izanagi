@@ -1,4 +1,4 @@
-﻿#include "scenegraph/msh/MeshInstance.h"
+#include "scenegraph/msh/MeshInstance.h"
 #include "scenegraph/msh/izMesh.h"
 #include "scenegraph/msh/MshMeshSet.h"
 

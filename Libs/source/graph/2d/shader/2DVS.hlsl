@@ -1,28 +1,28 @@
-// 2D—p’¸“_ƒVƒF[ƒ_
+// 2Dç”¨é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€
 
 #include "2DShader.hlsl"
 
-// ƒXƒNƒŠ[ƒ“ƒTƒCƒY‚Ì‹t”
+// ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã‚µã‚¤ã‚ºã®é€†æ•°
 float4 g_vInvScreen = (float4)1.0f;
 
 SVSOutput main(SVSInput sIn)
 {
 	SVSOutput sOut;
 
-	// ’¸“_ˆÊ’u
+	// é ‚ç‚¹ä½ç½®
 	sOut.vPos = sIn.vPos;
 	sOut.vPos.xy *= g_vInvScreen.xy;
 
 	// [0.0f, 0.0f] - [1.0f, 1.0f] -> [-1.0f, -1.0f] - [1.0f, 1.0f]
 	sOut.vPos.xy = sOut.vPos.xy * 2.0f - 1.0f;
 
-	// ‚³‚ç‚ÉYÀ•W‚Í”½“]‚³‚¹‚é
+	// ã•ã‚‰ã«Yåº§æ¨™ã¯åè»¢ã•ã›ã‚‹
 	sOut.vPos.y *= -1.0f;
 
-	// ’¸“_ƒJƒ‰[
+	// é ‚ç‚¹ã‚«ãƒ©ãƒ¼
 	sOut.vColor = sIn.vColor;
 
-	// UVÀ•W
+	// UVåº§æ¨™
 	sOut.vUV = sIn.vUV;
 
 	return sOut;

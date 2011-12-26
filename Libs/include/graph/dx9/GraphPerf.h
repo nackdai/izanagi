@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_GRAPH_PERF_H__)
+#if !defined(__IZANAGI_GRAPH_PERF_H__)
 #define __IZANAGI_GRAPH_PERF_H__
 
 #include "izDefs.h"

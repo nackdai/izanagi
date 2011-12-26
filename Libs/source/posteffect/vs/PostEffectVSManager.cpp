@@ -1,4 +1,4 @@
-﻿#include "posteffect/vs/PostEffectVSManager.h"
+#include "posteffect/vs/PostEffectVSManager.h"
 #include "posteffect/PESFormat.h"
 #include "posteffect/vs/PostEffectVS.h"
 #include "posteffect/vs/PostEffectVSSampling.h"

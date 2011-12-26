@@ -1,4 +1,4 @@
-﻿#include "graph/dx9/VertexShader.h"
+#include "graph/dx9/VertexShader.h"
 
 using namespace izanagi;
 

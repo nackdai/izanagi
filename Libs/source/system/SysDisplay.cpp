@@ -1,4 +1,4 @@
-﻿#include "system/SysDisplay.h"
+#include "system/SysDisplay.h"
 
 #pragma comment(lib, "Gdi32.lib")
 

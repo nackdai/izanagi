@@ -1,4 +1,4 @@
-﻿#include <windows.h>
+#include <windows.h>
 #include <mmsystem.h>
 #include "system/SysTimer.h"
 

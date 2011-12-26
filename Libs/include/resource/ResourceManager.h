@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_RESOURCE_RESOURCE_MANAGER_H__)
+#if !defined(__IZANAGI_RESOURCE_RESOURCE_MANAGER_H__)
 #define __IZANAGI_RESOURCE_RESOURCE_MANAGER_H__
 
 #include "std/StdObject.h"

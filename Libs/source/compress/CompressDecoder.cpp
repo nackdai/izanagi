@@ -1,4 +1,4 @@
-﻿#include "compress/Compressor.h"
+#include "compress/Compressor.h"
 #include "compress/CMPFormat.h"
 #include "std/allocator/MemoryAllocator.h"
 #include "math/MathUtil.h"

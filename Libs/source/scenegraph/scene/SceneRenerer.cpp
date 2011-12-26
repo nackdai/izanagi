@@ -1,4 +1,4 @@
-﻿#include "scenegraph/scene/SceneRenderer.h"
+#include "scenegraph/scene/SceneRenderer.h"
 #include "scenegraph/msh/MeshInstance.h"
 #include "scenegraph/mtrl/izMaterial.h"
 #include "izGraph.h"

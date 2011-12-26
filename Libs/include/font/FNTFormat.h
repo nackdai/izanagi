@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_FONT_FNT_ENCODE_H__)
+#if !defined(__IZANAGI_FONT_FNT_ENCODE_H__)
 #define __IZANAGI_FONT_FNT_ENCODE_H__
 
 #include "izDefs.h"

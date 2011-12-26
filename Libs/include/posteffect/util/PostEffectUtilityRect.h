@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_POSTEFFECT_RECT_UTILITY_H__)
+#if !defined(__IZANAGI_POSTEFFECT_RECT_UTILITY_H__)
 #define __IZANAGI_POSTEFFECT_RECT_UTILITY_H__
 
 #include "izStd.h"

@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_DEBUGUTIL_DEBUG_UI_BUTTON_H__)
+#if !defined(__IZANAGI_DEBUGUTIL_DEBUG_UI_BUTTON_H__)
 #define __IZANAGI_DEBUGUTIL_DEBUG_UI_BUTTON_H__
 
 #include "DebugUIWidget.h"

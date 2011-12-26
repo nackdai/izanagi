@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_GRAPH_RENDER_STATE_H__)
+#if !defined(__IZANAGI_GRAPH_RENDER_STATE_H__)
 #define __IZANAGI_GRAPH_RENDER_STATE_H__
 
 #include "graph/GraphDefs.h"

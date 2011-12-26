@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_IO_IO_DEFS_H__)
+#if !defined(__IZANAGI_IO_IO_DEFS_H__)
 #define __IZANAGI_IO_IO_DEFS_H__
 
 namespace izanagi {

@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_COMPRESS_IO_STREAM_UTIL_H__)
+#if !defined(__IZANAGI_COMPRESS_IO_STREAM_UTIL_H__)
 #define __IZANAGI_COMPRESS_IO_STREAM_UTIL_H__
 
 #include "izStd.h"

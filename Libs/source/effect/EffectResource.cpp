@@ -1,4 +1,4 @@
-﻿#include "effect/EffectResource.h"
+#include "effect/EffectResource.h"
 
 using namespace izanagi;
 

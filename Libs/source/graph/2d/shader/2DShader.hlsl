@@ -1,4 +1,4 @@
-// 2D—pƒVƒF[ƒ_‹¤’Ê
+// 2Dç”¨ã‚·ã‚§ãƒ¼ãƒ€å…±é€š
 
 struct SVSInput {
 	float4 vPos		: POSITION;

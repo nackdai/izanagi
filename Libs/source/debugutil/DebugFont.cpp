@@ -1,4 +1,4 @@
-﻿#include "debugutil/DebugFont.h"
+#include "debugutil/DebugFont.h"
 #include "izGraph.h"
 
 using namespace izanagi;

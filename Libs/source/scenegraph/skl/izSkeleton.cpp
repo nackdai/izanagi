@@ -1,4 +1,4 @@
-﻿#include "scenegraph/skl/izSkeleton.h"
+#include "scenegraph/skl/izSkeleton.h"
 #include "izIo.h"
 
 using namespace izanagi;

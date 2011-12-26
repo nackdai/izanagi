@@ -1,4 +1,4 @@
-﻿#include "debugutil/mesh/DebugMeshRectangle.h"
+#include "debugutil/mesh/DebugMeshRectangle.h"
 
 using namespace izanagi;
 

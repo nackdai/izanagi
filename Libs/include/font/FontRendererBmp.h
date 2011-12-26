@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_FONT_FONT_RENDERER_BMP_H__)
+#if !defined(__IZANAGI_FONT_FONT_RENDERER_BMP_H__)
 #define __IZANAGI_FONT_FONT_RENDERER_BMP_H__
 
 #include "izDefs.h"

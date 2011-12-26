@@ -1,4 +1,4 @@
-﻿#include "posteffect/util/PostEffectUtilityRect.h"
+#include "posteffect/util/PostEffectUtilityRect.h"
 
 using namespace izanagi;
 

@@ -1,4 +1,4 @@
-﻿#include "posteffect/PostEffectTextureCreator.h"
+#include "posteffect/PostEffectTextureCreator.h"
 
 using namespace izanagi;
 

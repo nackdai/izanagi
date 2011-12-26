@@ -1,4 +1,4 @@
-﻿#include "std/StdProfiler.h"
+#include "std/StdProfiler.h"
 #include "std/allocator/MemoryAllocator.h"
 #include "std/StdStack.h"
 

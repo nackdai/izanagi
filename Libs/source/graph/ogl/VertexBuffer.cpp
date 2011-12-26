@@ -1,4 +1,4 @@
-﻿#include "graph/dx9/VertexBuffer.h"
+#include "graph/dx9/VertexBuffer.h"
 
 using namespace izanagi;
 

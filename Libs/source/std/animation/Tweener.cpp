@@ -1,4 +1,4 @@
-﻿#include "std/animation/Tweener.h"
+#include "std/animation/Tweener.h"
 #include "math/MathDefs.h"
 
 using namespace izanagi;

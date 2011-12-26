@@ -1,4 +1,4 @@
-﻿#include "graph/dx9/RenderState.h"
+#include "graph/dx9/RenderState.h"
 #include "graph/dx9/GraphicsDevice.h"
 
 using namespace izanagi;

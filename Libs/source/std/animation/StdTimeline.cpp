@@ -1,4 +1,4 @@
-﻿#include "std/animation/StdTimeline.h"
+#include "std/animation/StdTimeline.h"
 
 using namespace izanagi;
 

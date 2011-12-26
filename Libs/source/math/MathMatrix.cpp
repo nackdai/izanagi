@@ -1,4 +1,4 @@
-﻿#include "math/MathMatrix.h"
+#include "math/MathMatrix.h"
 
 namespace izanagi {
 #if 0

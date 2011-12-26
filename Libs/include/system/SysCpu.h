@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_SYSTEM_SYS_CPU_H__)
+#if !defined(__IZANAGI_SYSTEM_SYS_CPU_H__)
 #define __IZANAGI_SYSTEM_SYS_CPU_H__
 
 #include "izDefs.h"

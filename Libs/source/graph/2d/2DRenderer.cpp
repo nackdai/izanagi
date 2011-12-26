@@ -1,4 +1,4 @@
-﻿#include "graph/2d/2DRenderer.h"
+#include "graph/2d/2DRenderer.h"
 #include "graph/2d/2DShader.h"
 #include "std/allocator/MemoryAllocator.h"
 #include "izGraph.h"

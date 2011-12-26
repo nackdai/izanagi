@@ -1,4 +1,4 @@
-﻿#include "scenegraph/Camera.h"
+#include "scenegraph/Camera.h"
 #include "izGraph.h"
 
 using namespace izanagi;

@@ -1,4 +1,4 @@
-﻿#include "std/StdKey.h"
+#include "std/StdKey.h"
 
 using namespace izanagi;
 

@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_POSTEFFECT_VS_SAMPLING_H__)
+#if !defined(__IZANAGI_POSTEFFECT_VS_SAMPLING_H__)
 #define __IZANAGI_POSTEFFECT_VS_SAMPLING_H__
 
 #include "PostEffectVS.h"

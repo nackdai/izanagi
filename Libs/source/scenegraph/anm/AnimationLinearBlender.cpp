@@ -1,4 +1,4 @@
-﻿#include "scenegraph/anm/AnimationLinearBlender.h"
+#include "scenegraph/anm/AnimationLinearBlender.h"
 #include "scenegraph/anm/AnimationInterface.h"
 #include "scenegraph/anm/AnimationUtil.h"
 #include "scenegraph/skl/SkeletonInstance.h"

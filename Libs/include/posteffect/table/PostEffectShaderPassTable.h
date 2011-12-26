@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_POSTEFFECT_PASS_TABLE_H__)
+#if !defined(__IZANAGI_POSTEFFECT_PASS_TABLE_H__)
 #define __IZANAGI_POSTEFFECT_PASS_TABLE_H__
 
 #include "izGraph.h"

@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_EFFECT_EFFECT_TEX_ANM_MANAGER_H__)
+#if !defined(__IZANAGI_EFFECT_EFFECT_TEX_ANM_MANAGER_H__)
 #define __IZANAGI_EFFECT_EFFECT_TEX_ANM_MANAGER_H__
 
 #include "izStd.h"

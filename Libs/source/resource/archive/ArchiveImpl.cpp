@@ -1,4 +1,4 @@
-﻿#include "resource/archive/ArchiveImpl.h"
+#include "resource/archive/ArchiveImpl.h"
 
 using namespace izanagi;
 

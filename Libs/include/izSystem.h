@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_SYSTEM_H__)
+#if !defined(__IZANAGI_SYSTEM_H__)
 #define __IZANAGI_SYSTEM_H__
 
 #include "system/SysTimer.h"

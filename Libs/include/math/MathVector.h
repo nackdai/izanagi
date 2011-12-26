@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI__MATH_VECTOR_H__)
+#if !defined(__IZANAGI__MATH_VECTOR_H__)
 #define __IZANAGI__MATH_VECTOR_H__
 
 #include <math.h>

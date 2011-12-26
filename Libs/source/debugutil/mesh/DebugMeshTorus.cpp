@@ -1,4 +1,4 @@
-﻿#include "debugutil/mesh/DebugMeshTorus.h"
+#include "debugutil/mesh/DebugMeshTorus.h"
 
 using namespace izanagi;
 

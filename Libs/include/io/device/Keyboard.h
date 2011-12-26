@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_IO_KEYBOARD_H__)
+#if !defined(__IZANAGI_IO_KEYBOARD_H__)
 #define __IZANAGI_IO_KEYBOARD_H__
 
 #include "izStd.h"

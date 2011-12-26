@@ -1,4 +1,4 @@
-﻿#include "io/device/Keyboard.h"
+#include "io/device/Keyboard.h"
 
 using namespace izanagi;
 

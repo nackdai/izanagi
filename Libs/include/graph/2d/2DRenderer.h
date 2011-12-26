@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_GRAPH_INTERNAL_2D_RENDERER_H__)
+#if !defined(__IZANAGI_GRAPH_INTERNAL_2D_RENDERER_H__)
 #define __IZANAGI_GRAPH_INTERNAL_2D_RENDERER_H__
 
 #include "izD3DDefs.h"
