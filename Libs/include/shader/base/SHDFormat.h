@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_SHADER_SHD_FORMAT_H__)
+#if !defined(__IZANAGI_SHADER_SHD_FORMAT_H__)
 #define __IZANAGI_SHADER_SHD_FORMAT_H__
 
 #include "izGraph.h"

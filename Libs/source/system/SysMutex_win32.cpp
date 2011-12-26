@@ -1,4 +1,4 @@
-﻿#if defined(WIN32) || defined(WIN64)
+#if defined(WIN32) || defined(WIN64)
 
 #include "system/SysMutex.h"
 #include "system/SysThread.h"

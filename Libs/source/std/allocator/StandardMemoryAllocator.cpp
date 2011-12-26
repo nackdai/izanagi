@@ -1,4 +1,4 @@
-﻿#include "std/allocator/StandardMemoryAllocator.h"
+#include "std/allocator/StandardMemoryAllocator.h"
 #include "std/StdUtil.h"
 
 using namespace izanagi;

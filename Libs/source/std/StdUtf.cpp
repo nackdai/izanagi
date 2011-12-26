@@ -1,4 +1,4 @@
-﻿#include "std/StdUtf.h"
+#include "std/StdUtf.h"
 #include "std/StdBit.h"
 
 using namespace izanagi;

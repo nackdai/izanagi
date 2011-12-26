@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_IO_MOUSE_H__)
+#if !defined(__IZANAGI_IO_MOUSE_H__)
 #define __IZANAGI_IO_MOUSE_H__
 
 #include "izStd.h"

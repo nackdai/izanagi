@@ -1,4 +1,4 @@
-﻿#include "resource/Resource.h"
+#include "resource/Resource.h"
 
 using namespace izanagi;
 

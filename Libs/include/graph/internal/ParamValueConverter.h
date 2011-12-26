@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_GRAPH_PARAM_VALUE_CONVERTER_H__)
+#if !defined(__IZANAGI_GRAPH_PARAM_VALUE_CONVERTER_H__)
 #define __IZANAGI_GRAPH_PARAM_VALUE_CONVERTER_H__
 
 #include "../dx9/D3D9ParamValueConverter.h"

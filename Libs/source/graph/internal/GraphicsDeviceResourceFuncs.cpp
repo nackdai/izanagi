@@ -1,4 +1,4 @@
-﻿#include "izGraph.h"
+#include "izGraph.h"
 
 using namespace izanagi;
 

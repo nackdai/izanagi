@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_POSTEFFECT_SHADER_H__)
+#if !defined(__IZANAGI_POSTEFFECT_SHADER_H__)
 #define __IZANAGI_POSTEFFECT_SHADER_H__
 
 #include "izStd.h"

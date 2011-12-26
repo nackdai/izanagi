@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_STD_STD_BIT_FLAG_H__)
+#if !defined(__IZANAGI_STD_STD_BIT_FLAG_H__)
 #define __IZANAGI_STD_STD_BIT_FLAG_H__
 
 #include "izDefs.h"

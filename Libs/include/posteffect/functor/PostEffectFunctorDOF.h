@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_POSTEFFECT_FUNCTOR_DOF_H__)
+#if !defined(__IZANAGI_POSTEFFECT_FUNCTOR_DOF_H__)
 #define __IZANAGI_POSTEFFECT_FUNCTOR_DOF_H__
 
 #if 0

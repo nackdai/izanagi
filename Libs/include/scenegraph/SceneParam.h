@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_SCENEGRAPH_SCENE_PARAM_H__)
+#if !defined(__IZANAGI_SCENEGRAPH_SCENE_PARAM_H__)
 #define __IZANAGI_SCENEGRAPH_SCENE_PARAM_H__
 
 #include "izStd.h"

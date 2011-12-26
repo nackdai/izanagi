@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_SCENEGRAPH_IZ_MESH_H__)
+#if !defined(__IZANAGI_SCENEGRAPH_IZ_MESH_H__)
 #define __IZANAGI_SCENEGRAPH_IZ_MESH_H__
 
 #include "MSHFormat.h"

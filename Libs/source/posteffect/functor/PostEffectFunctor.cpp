@@ -1,4 +1,4 @@
-﻿#if 0
+#if 0
 #include "posteffect/PostEffectFunctor.h"
 
 using namespace izanagi;

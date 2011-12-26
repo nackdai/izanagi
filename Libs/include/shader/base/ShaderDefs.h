@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_SHADER_SHADER_DEFS_H__)
+#if !defined(__IZANAGI_SHADER_SHADER_DEFS_H__)
 #define __IZANAGI_SHADER_SHADER_DEFS_H__
 
 #define IZ_SHADER_PARAM_TYPE(flag, row, column, is_int, is_float)\

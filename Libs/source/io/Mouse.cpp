@@ -1,4 +1,4 @@
-﻿#include "io/device/Mouse.h"
+#include "io/device/Mouse.h"
 
 using namespace izanagi;
 

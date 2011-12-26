@@ -1,4 +1,4 @@
-﻿#include "graph/dx9/ShaderConstTable.h"
+#include "graph/dx9/ShaderConstTable.h"
 
 using namespace izanagi;
 

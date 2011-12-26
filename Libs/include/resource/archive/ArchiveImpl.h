@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_ARCHIVE_ARCHIVE_IMPL_H__)
+#if !defined(__IZANAGI_ARCHIVE_ARCHIVE_IMPL_H__)
 #define __IZANAGI_ARCHIVE_ARCHIVE_IMPL_H__
 
 #include "izStd.h"

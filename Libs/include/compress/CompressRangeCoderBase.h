@@ -1,4 +1,4 @@
-﻿#if !defined(__URANU_COMPRESS_RANGE_CODER_DEFS_H__)
+#if !defined(__URANU_COMPRESS_RANGE_CODER_DEFS_H__)
 #define __URANU_COMPRESS_RANGE_CODER_DEFS_H__
 
 #include "izDefs.h"

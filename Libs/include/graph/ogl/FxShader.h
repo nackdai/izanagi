@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_GRAPH_FX_SHADER_H__)
+#if !defined(__IZANAGI_GRAPH_FX_SHADER_H__)
 #define __IZANAGI_GRAPH_FX_SHADER_H__
 
 #include "izDefs.h"

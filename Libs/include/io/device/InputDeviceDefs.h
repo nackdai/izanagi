@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_IO_INPUT_DEVICE_DEFS_H__)
+#if !defined(__IZANAGI_IO_INPUT_DEVICE_DEFS_H__)
 #define __IZANAGI_IO_INPUT_DEVICE_DEFS_H__
 
 #include "izDefs.h"

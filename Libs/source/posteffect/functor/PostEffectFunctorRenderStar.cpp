@@ -1,4 +1,4 @@
-﻿#include "posteffect/functor/PostEffectFunctorRenderStar.h"
+#include "posteffect/functor/PostEffectFunctorRenderStar.h"
 #include "posteffect/PostEffectShader.h"
 #include "posteffect/PostEffectTextureCreator.h"
 

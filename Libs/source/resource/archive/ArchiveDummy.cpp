@@ -1,4 +1,4 @@
-﻿#include "resource/archive/ArchiveDummy.h"
+#include "resource/archive/ArchiveDummy.h"
 
 using namespace izanagi;
 

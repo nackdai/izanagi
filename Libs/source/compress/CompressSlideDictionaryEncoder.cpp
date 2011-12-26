@@ -1,4 +1,4 @@
-﻿#include "compress/CompressSlideDictionaryEncoder.h"
+#include "compress/CompressSlideDictionaryEncoder.h"
 #include "compress/CompressIoStreamUtil.h"
 
 using namespace izanagi;

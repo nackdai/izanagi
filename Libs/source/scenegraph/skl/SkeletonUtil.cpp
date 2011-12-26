@@ -1,4 +1,4 @@
-﻿#include "scenegraph/skl/SkeletonUtil.h"
+#include "scenegraph/skl/SkeletonUtil.h"
 #include "scenegraph/anm/ANMFormat.h"
 
 using namespace izanagi;

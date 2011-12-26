@@ -1,4 +1,4 @@
-﻿#include "scenegraph/skl/SkeletonInstance.h"
+#include "scenegraph/skl/SkeletonInstance.h"
 #include "scenegraph/skl/izSkeleton.h"
 #include "scenegraph/skl/SkeletonUtil.h"
 #include "izIo.h"

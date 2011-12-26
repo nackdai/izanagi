@@ -1,4 +1,4 @@
-﻿#include "math/MathQuaternion.h"
+#include "math/MathQuaternion.h"
 #include "math/MathVector.h"
 #include "math/MathMatrix.h"
 

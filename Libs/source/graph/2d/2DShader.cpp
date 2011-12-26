@@ -1,4 +1,4 @@
-﻿#include "graph/2d/2DShader.h"
+#include "graph/2d/2DShader.h"
 #include "izGraph.h"
 
 #include "./shader/2DVS.h"

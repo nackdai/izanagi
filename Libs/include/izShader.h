@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_SHADER_H__)
+#if !defined(__IZANAGI_SHADER_H__)
 #define __IZANAGI_SHADER_H__
 
 #include "shader/base/SHDFormat.h"

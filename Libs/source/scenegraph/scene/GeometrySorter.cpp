@@ -1,4 +1,4 @@
-﻿#include "scenegraph/scene/GeometrySorter.h"
+#include "scenegraph/scene/GeometrySorter.h"
 #include "scenegraph/msh/MeshInstance.h"
 #include "scenegraph/mdl/izModel.h"
 

@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_POSTEFFECT_TEXTURE_CREATOR_H__)
+#if !defined(__IZANAGI_POSTEFFECT_TEXTURE_CREATOR_H__)
 #define __IZANAGI_POSTEFFECT_TEXTURE_CREATOR_H__
 
 #include "izGraph.h"

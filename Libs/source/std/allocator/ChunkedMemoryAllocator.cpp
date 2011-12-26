@@ -1,4 +1,4 @@
-﻿#include "std/allocator/ChunkedMemoryAllocator.h"
+#include "std/allocator/ChunkedMemoryAllocator.h"
 #include "std/StdUtil.h"
 #include "math/MathUtil.h"
 

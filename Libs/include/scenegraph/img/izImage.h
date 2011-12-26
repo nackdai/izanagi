@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_SCENEGRAPH_IZ_IMAGE_H__)
+#if !defined(__IZANAGI_SCENEGRAPH_IZ_IMAGE_H__)
 #define __IZANAGI_SCENEGRAPH_IZ_IMAGE_H__
 
 #include "izStd.h"

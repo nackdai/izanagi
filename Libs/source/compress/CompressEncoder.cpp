@@ -1,4 +1,4 @@
-﻿#ifdef IZ_ENABLE_COMPRESS_ENCODER
+#ifdef IZ_ENABLE_COMPRESS_ENCODER
 
 #include "compress/Compressor.h"
 #include "compress/CMPFormat.h"

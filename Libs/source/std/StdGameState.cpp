@@ -1,4 +1,4 @@
-﻿#include "std/StdGameState.h"
+#include "std/StdGameState.h"
 
 using namespace izanagi;
 

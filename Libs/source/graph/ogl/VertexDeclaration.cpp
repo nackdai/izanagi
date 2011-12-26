@@ -1,4 +1,4 @@
-﻿#include "graph/dx9/VertexDeclaration.h"
+#include "graph/dx9/VertexDeclaration.h"
 
 using namespace izanagi;
 

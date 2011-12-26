@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_EFFECT_EFFECT_PARTICLE_H__)
+#if !defined(__IZANAGI_EFFECT_EFFECT_PARTICLE_H__)
 #define __IZANAGI_EFFECT_EFFECT_PARTICLE_H__
 
 #include "izStd.h"

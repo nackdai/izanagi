@@ -1,4 +1,4 @@
-﻿#include "debugutil/mesh/DebugMeshGrid.h"
+#include "debugutil/mesh/DebugMeshGrid.h"
 
 using namespace izanagi;
 

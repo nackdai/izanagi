@@ -1,4 +1,4 @@
-﻿#include "effect/EffectParticleManager.h"
+#include "effect/EffectParticleManager.h"
 #include "izGraph.h"
 
 using namespace izanagi;

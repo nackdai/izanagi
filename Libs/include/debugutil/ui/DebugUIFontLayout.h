@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_DEBUG_UTIL_DEBUG_UI_FONT_LAYOUT_H__)
+#if !defined(__IZANAGI_DEBUG_UTIL_DEBUG_UI_FONT_LAYOUT_H__)
 #define __IZANAGI_DEBUG_UTIL_DEBUG_UI_FONT_LAYOUT_H__
 
 #include "DebugUIFontRenderer.h"

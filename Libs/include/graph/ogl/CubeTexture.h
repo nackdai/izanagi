@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_GRAPH_CUBE_TEXTURE_H__)
+#if !defined(__IZANAGI_GRAPH_CUBE_TEXTURE_H__)
 #define __IZANAGI_GRAPH_CUBE_TEXTURE_H__
 
 #include "BaseTexture.h"

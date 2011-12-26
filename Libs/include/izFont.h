@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_FONT_H__)
+#if !defined(__IZANAGI_FONT_H__)
 #define __IZANAGI_FONT_H__
 
 #include "font/FontDefs.h"

@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_SCENEGRAPH_CAMERA_BASE_H__)
+#if !defined(__IZANAGI_SCENEGRAPH_CAMERA_BASE_H__)
 #define __IZANAGI_SCENEGRAPH_CAMERA_BASE_H__
 
 #include "izDefs.h"

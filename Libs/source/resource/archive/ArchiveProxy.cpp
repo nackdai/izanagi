@@ -1,4 +1,4 @@
-﻿#include "resource/archive/ArchiveProxy.h"
+#include "resource/archive/ArchiveProxy.h"
 
 using namespace izanagi;
 

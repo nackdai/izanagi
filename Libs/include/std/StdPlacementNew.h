@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_STD_PLACEMENT_NEW_H__)
+#if !defined(__IZANAGI_STD_PLACEMENT_NEW_H__)
 #define __IZANAGI_STD_PLACEMENT_NEW_H__
 
 #include "izDefs.h"

@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_EFFECT_PARTICLE_ATTRIBUTE_H__)
+#if !defined(__IZANAGI_EFFECT_PARTICLE_ATTRIBUTE_H__)
 #define __IZANAGI_EFFECT_PARTICLE_ATTRIBUTE_H__
 
 namespace izanagi {

@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_DEBUG_UTIL_H__)
+#if !defined(__IZANAGI_DEBUG_UTIL_H__)
 #define __IZANAGI_DEBUG_UTIL_H__
 
 #include "debugutil/DebugFont.h"

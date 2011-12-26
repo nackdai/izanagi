@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_SHADER_SHADER_SAMPLER_TABLE_H__)
+#if !defined(__IZANAGI_SHADER_SHADER_SAMPLER_TABLE_H__)
 #define __IZANAGI_SHADER_SHADER_SAMPLER_TABLE_H__
 
 #include "SHDFormat.h"

@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_GRAPH_VERTEX_DECLARATION_H__)
+#if !defined(__IZANAGI_GRAPH_VERTEX_DECLARATION_H__)
 #define __IZANAGI_GRAPH_VERTEX_DECLARATION_H__
 
 #include "izStd.h"

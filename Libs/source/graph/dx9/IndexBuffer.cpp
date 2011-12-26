@@ -1,4 +1,4 @@
-﻿#include "graph/dx9/IndexBuffer.h"
+#include "graph/dx9/IndexBuffer.h"
 #include "graph/dx9/D3D9ParamValueConverter.h"
 
 using namespace izanagi;

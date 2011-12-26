@@ -1,4 +1,4 @@
-﻿#include "scenegraph/SceneGraphUtil.h"
+#include "scenegraph/SceneGraphUtil.h"
 
 using namespace izanagi;
 

@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_STD_STD_PROFILER_H__)
+#if !defined(__IZANAGI_STD_STD_PROFILER_H__)
 #define __IZANAGI_STD_STD_PROFILER_H__
 
 #include "izDefs.h"

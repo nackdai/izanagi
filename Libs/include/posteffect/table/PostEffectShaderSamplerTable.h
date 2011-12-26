@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_POSTEFFECT_SMAPLER_TABLE_H__)
+#if !defined(__IZANAGI_POSTEFFECT_SMAPLER_TABLE_H__)
 #define __IZANAGI_POSTEFFECT_SMAPLER_TABLE_H__
 
 #include "../PESFormat.h"

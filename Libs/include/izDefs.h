@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_DEFS_H__)
+#if !defined(__IZANAGI_DEFS_H__)
 #define __IZANAGI_DEFS_H__
 
 #include <windows.h>

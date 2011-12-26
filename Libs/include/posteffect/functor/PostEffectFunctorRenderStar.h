@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_POSTEFFECT_FUNCTOR_RENDER_STAR_H__)
+#if !defined(__IZANAGI_POSTEFFECT_FUNCTOR_RENDER_STAR_H__)
 #define __IZANAGI_POSTEFFECT_FUNCTOR_RENDER_STAR_H__
 
 #include "PostEffectFunctor.h"

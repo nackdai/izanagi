@@ -1,4 +1,4 @@
-﻿#include "shader/base/ShaderBasic.h"
+#include "shader/base/ShaderBasic.h"
 #include "izIo.h"
 
 using namespace izanagi;

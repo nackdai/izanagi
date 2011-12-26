@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_POSTEFFECT_FUNCTOR_DEFAULT_H__)
+#if !defined(__IZANAGI_POSTEFFECT_FUNCTOR_DEFAULT_H__)
 #define __IZANAGI_POSTEFFECT_FUNCTOR_DEFAULT_H__
 
 #include "PostEffectFunctor.h"

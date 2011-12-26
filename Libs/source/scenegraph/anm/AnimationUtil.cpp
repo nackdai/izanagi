@@ -1,4 +1,4 @@
-﻿#include "scenegraph/anm/AnimationUtil.h"
+#include "scenegraph/anm/AnimationUtil.h"
 #include "scenegraph/skl/SkeletonInstance.h"
 #include "scenegraph/skl/SkeletonUtil.h"
 

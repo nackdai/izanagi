@@ -1,4 +1,4 @@
-﻿#include "debugutil/mesh/DebugMeshAxis.h"
+#include "debugutil/mesh/DebugMeshAxis.h"
 #include "math/MathVector.h"
 
 using namespace izanagi;

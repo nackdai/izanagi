@@ -1,4 +1,4 @@
-﻿#include "std/animation/StdAnimation.h"
+#include "std/animation/StdAnimation.h"
 #include "std/animation/Tweener.h"
 
 using namespace izanagi;

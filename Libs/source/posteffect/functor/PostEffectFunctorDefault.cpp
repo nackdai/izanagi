@@ -1,4 +1,4 @@
-﻿#include "posteffect/functor/PostEffectFunctorDefault.h"
+#include "posteffect/functor/PostEffectFunctorDefault.h"
 #include "posteffect/PostEffectShader.h"
 
 using namespace izanagi;

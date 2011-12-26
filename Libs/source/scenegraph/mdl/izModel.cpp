@@ -1,4 +1,4 @@
-﻿#include "scenegraph/mdl/izModel.h"
+#include "scenegraph/mdl/izModel.h"
 #include "scenegraph/mdl/MDLFormat.h"
 #include "izIo.h"
 

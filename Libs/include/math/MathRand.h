@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI__MATH_RAND_H__)
+#if !defined(__IZANAGI__MATH_RAND_H__)
 #define __IZANAGI__MATH_RAND_H__
 
 #include "izDefs.h"

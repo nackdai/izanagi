@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_COMPRESS_RANGE_CODER_DECODER_H__)
+#if !defined(__IZANAGI_COMPRESS_RANGE_CODER_DECODER_H__)
 #define __IZANAGI_COMPRESS_RANGE_CODER_DECODER_H__
 
 #include "CompressRangeCoderBase.h"

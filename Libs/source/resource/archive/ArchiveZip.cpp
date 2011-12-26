@@ -1,4 +1,4 @@
-﻿#include "resource/archive/ArchiveZip.h"
+#include "resource/archive/ArchiveZip.h"
 //#include "../../zlib/zlib.h"
 
 using namespace izanagi;

@@ -1,4 +1,4 @@
-﻿#include "scenegraph/SceneParam.h"
+#include "scenegraph/SceneParam.h"
 
 using namespace izanagi;
 

@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_DEBUG_UTIL_MESH_CYLINDER_H__)
+#if !defined(__IZANAGI_DEBUG_UTIL_MESH_CYLINDER_H__)
 #define __IZANAGI_DEBUG_UTIL_MESH_CYLINDER_H__
 
 #include "DebugMesh.h"

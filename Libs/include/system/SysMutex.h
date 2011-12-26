@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_SYSTEM_SYS_MUTEX_H__)
+#if !defined(__IZANAGI_SYSTEM_SYS_MUTEX_H__)
 #define __IZANAGI_SYSTEM_SYS_MUTEX_H__
 
 #include "izDefs.h"

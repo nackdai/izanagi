@@ -1,4 +1,4 @@
-﻿#ifndef SFMT_PARAMS4253_H
+#ifndef SFMT_PARAMS4253_H
 #define SFMT_PARAMS4253_H
 
 #define POS1	17

@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_SCENE_GRAPH_H__)
+#if !defined(__IZANAGI_SCENE_GRAPH_H__)
 #define __IZANAGI_SCENE_GRAPH_H__
 
 #include "scenegraph/Camera.h"

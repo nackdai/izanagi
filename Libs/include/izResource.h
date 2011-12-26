@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_RESOURCE_H__)
+#if !defined(__IZANAGI_RESOURCE_H__)
 #define __IZANAGI_RESOURCE_H__
 
 #include "resource/Resource.h"

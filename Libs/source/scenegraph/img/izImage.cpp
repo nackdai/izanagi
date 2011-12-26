@@ -1,4 +1,4 @@
-﻿#include "scenegraph/img/izImage.h"
+#include "scenegraph/img/izImage.h"
 #include "izIo.h"
 
 using namespace izanagi;

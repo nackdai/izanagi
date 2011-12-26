@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_GRAPH_2D_SHADER_H__)
+#if !defined(__IZANAGI_GRAPH_2D_SHADER_H__)
 #define __IZANAGI_GRAPH_2D_SHADER_H__
 
 #include "std/StdObject.h"

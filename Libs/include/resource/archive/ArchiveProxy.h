@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_ARCHIVE_ARCHIVE_PROXY_H__)
+#if !defined(__IZANAGI_ARCHIVE_ARCHIVE_PROXY_H__)
 #define __IZANAGI_ARCHIVE_ARCHIVE_PROXY_H__
 
 #include "izDefs.h"

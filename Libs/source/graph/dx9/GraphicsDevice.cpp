@@ -1,4 +1,4 @@
-﻿#include "graph/dx9/GraphicsDevice.h"
+#include "graph/dx9/GraphicsDevice.h"
 #include "graph/dx9/BaseTexture.h"
 #include "graph/dx9/Texture.h"
 #include "graph/dx9/CubeTexture.h"

@@ -1,4 +1,4 @@
-﻿#include "posteffect/PostEffectSystem.h"
+#include "posteffect/PostEffectSystem.h"
 
 #include "posteffect/PostEffect.h"
 #include "posteffect/functor/PostEffectFunctor.h"

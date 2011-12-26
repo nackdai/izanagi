@@ -1,4 +1,4 @@
-﻿#include "scenegraph/msh/MshPrimitiveSet.h"
+#include "scenegraph/msh/MshPrimitiveSet.h"
 #include "scenegraph/msh/MshRenderHandler.h"
 #include "izGraph.h"
 #include "izIo.h"

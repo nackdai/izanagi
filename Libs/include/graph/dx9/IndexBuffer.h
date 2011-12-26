@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_GRAPH_INDEX_BUFFER_H__)
+#if !defined(__IZANAGI_GRAPH_INDEX_BUFFER_H__)
 #define __IZANAGI_GRAPH_INDEX_BUFFER_H__
 
 #include "graph/GraphDefs.h"

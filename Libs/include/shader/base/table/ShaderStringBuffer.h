@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_SHADER_SHADER_STRING_BUFFER_H__)
+#if !defined(__IZANAGI_SHADER_SHADER_STRING_BUFFER_H__)
 #define __IZANAGI_SHADER_SHADER_STRING_BUFFER_H__
 
 #include "izDefs.h"

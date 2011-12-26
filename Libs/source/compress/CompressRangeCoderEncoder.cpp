@@ -1,4 +1,4 @@
-﻿#include "compress/CompressRangeCoderEncoder.h"
+#include "compress/CompressRangeCoderEncoder.h"
 #include "compress/CompressIoStreamUtil.h"
 
 using namespace izanagi;

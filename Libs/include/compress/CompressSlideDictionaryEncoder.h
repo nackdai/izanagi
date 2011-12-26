@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_COMPRESS_SLIDE_DICTIONARY_ENCODER_H__)
+#if !defined(__IZANAGI_COMPRESS_SLIDE_DICTIONARY_ENCODER_H__)
 #define __IZANAGI_COMPRESS_SLIDE_DICTIONARY_ENCODER_H__
 
 #include "CompressSlideDictionaryBase.h"

@@ -1,4 +1,4 @@
-﻿#include "debugutil/mesh/DebugMesh.h"
+#include "debugutil/mesh/DebugMesh.h"
 #include "debugutil/mesh/DebugMeshAxis.h"
 #include "math/MathVector.h"
 
