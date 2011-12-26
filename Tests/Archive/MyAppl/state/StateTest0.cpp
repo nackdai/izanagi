@@ -1,4 +1,4 @@
-﻿#include "StateTest0.h"
+#include "StateTest0.h"
 #include "MySystem.h"
 #include "izResource.h"
 

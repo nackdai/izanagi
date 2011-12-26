@@ -1,4 +1,4 @@
-﻿#include "StateManager.h"
+#include "StateManager.h"
 #include "StateFont.h"
 
 CStateManager CStateManager::s_cInstance;

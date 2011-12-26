@@ -1,4 +1,4 @@
-﻿#include "StateHDR.h"
+#include "StateHDR.h"
 #include "StateManager.h"
 #include "SceneRenderer.h"
 #include "EnvBox.h"

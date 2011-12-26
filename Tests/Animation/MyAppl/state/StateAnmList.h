@@ -1,4 +1,4 @@
-﻿#if !defined(__STATE_ANM_LIST_H__)
+#if !defined(__STATE_ANM_LIST_H__)
 #define __STATE_ANM_LIST_H__
 
 #include "izDefs.h"

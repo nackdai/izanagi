@@ -1,4 +1,4 @@
-﻿#include "StateBasic.h"
+#include "StateBasic.h"
 #include "MySystem.h"
 #include "MyCamera.h"
 #include "DebugInfoRenderer.h"

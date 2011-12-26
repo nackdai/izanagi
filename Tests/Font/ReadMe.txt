@@ -1,54 +1,54 @@
 ================================================================================
-MICROSOFT FOUNDATION CLASS ���C�u����: Font �v���W�F�N�g�̊T�v
+MICROSOFT FOUNDATION CLASS ライブラリ: Font プロジェクトの概要
 ===============================================================================
 
-�A�v���P�[�V���� �E�B�U�[�h���쐬���� Font �ɂ� Microsoft 
-Foundation Class �̊�{�I�Ȏg������������Ă��܂��B�A�v���P�[�V�����쐬�̂ЂȌ^
-�Ƃ��Ă��g�����������B
+アプリケーション ウィザードが作成した Font には Microsoft 
+Foundation Class の基本的な使い方が示されています。アプリケーション作成のひな型
+としてお使いください。
 
-���̃t�@�C���ɂ� Font �A�v���P�[�V�������\�����Ă���e�t�@�C
-���̊T�v�������܂܂�܂��B
+このファイルには Font アプリケーションを構成している各ファイ
+ルの概要説明が含まれます。
 
 Font.vcproj
-   ����̓A�v���P�[�V���� �E�B�U�[�h�Ő������ꂽ VC++ �v���W�F�N�g�̃��C�� �v
-   ���W�F�N�g �t�@�C���ł��B�t�@�C�����������ꂽ Visual C++ �̃o�[�W�������
-   �܂܂�Ă��܂��B�܂��A�A�v���P�[�V���� �E�B�U�[�h�őI�������v���b�g�t�H�[
-   ���A�\������уv���W�F�N�g�@�\�Ɋւ�������܂܂�Ă��܂��B
+   これはアプリケーション ウィザードで生成された VC++ プロジェクトのメイン プ
+   ロジェクト ファイルです。ファイルが生成された Visual C++ のバージョン情報が
+   含まれています。また、アプリケーション ウィザードで選択したプラットフォー
+   ム、構成およびプロジェクト機能に関する情報も含まれています。
 
 Font.h
-   ����̓A�v���P�[�V�����̃��C�� �w�b�_�[ �t�@�C���ł��B���̃t�@�C���ɂ́A
-   Resource.h ���܂ށA���̑��̃v���W�F�N�g�ŗL�̃w�b�_�[���܂܂�Ă��āA
-   CFontApp �A�v���P�[�V���� �N���X��錾���܂��B
+   これはアプリケーションのメイン ヘッダー ファイルです。このファイルには、
+   Resource.h を含む、その他のプロジェクト固有のヘッダーが含まれていて、
+   CFontApp アプリケーション クラスを宣言します。
 
 Font.cpp
-   ����́A�A�v���P�[�V���� �N���X CFontApp ���܂ރ��C�� �A�v���P�[
-   �V���� �\�[�X �t�@�C���ł��B
+   これは、アプリケーション クラス CFontApp を含むメイン アプリケー
+   ション ソース ファイルです。
 
 Font.rc
-   ����́A�v���O�������g�p���� Microsoft Windows �̃��\�[�X�̈ꗗ�t�@�C����
-   ���B���̃t�@�C���ɂ� RES �T�u�f�B���N�g���ɕۑ�����Ă���A�C�R���A�r�b�g�}
-   �b�v�A�J�[�\�����܂܂�Ă��܂��B���̃t�@�C���́AMicrosoft Visual C++ �Œ���
-   �ҏW���邱�Ƃ��ł��܂��B�v���W�F�N�g ���\�[�X�� 1041 �ɂ���܂��B
+   これは、プログラムが使用する Microsoft Windows のリソースの一覧ファイルで
+   す。このファイルには RES サブディレクトリに保存されているアイコン、ビットマ
+   ップ、カーソルが含まれています。このファイルは、Microsoft Visual C++ で直接
+   編集することができます。プロジェクト リソースは 1041 にあります。
 
 res\Font.ico
-   ����́A�A�v���P�[�V�����̃A�C�R���Ƃ��Ďg�p�����A�C�R���t�@�C���ł��B����
-   �A�C�R���̓��C�� ���\�[�X �t�@�C�� Font.rc �Ɋ܂܂�Ă���
-   ���B
+   これは、アプリケーションのアイコンとして使用されるアイコンファイルです。この
+   アイコンはメイン リソース ファイル Font.rc に含まれていま
+   す。
 
 res\Font.rc2
-   ���̃t�@�C���� Microsoft Visual C++ ���g�p���Ȃ��ŕҏW���ꂽ���\�[�X���܂��
-   ���܂��B���\�[�X �G�f�B�^�ŕҏW�ł��Ȃ����\�[�X�͂��ׂĂ��̃t�@�C���ɓ����
-   ���������B
+   このファイルは Microsoft Visual C++ を使用しないで編集されたリソースを含んで
+   います。リソース エディタで編集できないリソースはすべてこのファイルに入れて
+   ください。
 
 /////////////////////////////////////////////////////////////////////////////
 
-���C�� �t���[�� �E�B���h�E:
-    �v���W�F�N�g�͕W���� MFC �C���^�[�t�F�C�X���܂݂܂��B
+メイン フレーム ウィンドウ:
+    プロジェクトは標準の MFC インターフェイスを含みます。
 
 MainFrm.h, MainFrm.cpp
-   �����̃t�@�C���́A�t���[�� �N���X CMainFrame ���܂݂܂��B
-   �t���[�� �N���X�� CFrameWnd ����h�����A���ׂĂ� SDI �t���[���@�\�𐧌䂵��
-   ���B
+   これらのファイルは、フレーム クラス CMainFrame を含みます。
+   フレーム クラスは CFrameWnd から派生し、すべての SDI フレーム機能を制御しま
+   す。
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -56,43 +56,43 @@ MainFrm.h, MainFrm.cpp
 
 /////////////////////////////////////////////////////////////////////////////
 
-���̑��̋@�\:
+その他の機能:
 
-ActiveX �R���g���[��
-   �A�v���P�[�V������ ActiveX �R���g���[���̎g�p�Ɋւ���T�|�[�g���܂݂܂��B
+ActiveX コントロール
+   アプリケーションは ActiveX コントロールの使用に関するサポートを含みます。
 
 /////////////////////////////////////////////////////////////////////////////
 
-���̑��̕W���t�@�C��:
+その他の標準ファイル:
 
 StdAfx.h, StdAfx.cpp
-   �����̃t�@�C���́A���ɃR���p�C�����ꂽ�w�b�_�[ �t�@�C�� (PCH) 
-   Font.pch ����ɃR���p�C�����ꂽ�^�̃t�@�C�� StdAfx.obj ��
-   �r���h���邽�߂Ɏg�p����܂��B
+   これらのファイルは、既にコンパイルされたヘッダー ファイル (PCH) 
+   Font.pch や既にコンパイルされた型のファイル StdAfx.obj を
+   ビルドするために使用されます。
 
 Resource.h
-   ����͐V�K���\�[�X ID ���`����W���w�b�_�[ �t�@�C���ł��BMicrosoft 
-   Visual C++ �͂��̃t�@�C���̓ǂݎ��ƍX�V���s���܂��B
+   これは新規リソース ID を定義する標準ヘッダー ファイルです。Microsoft 
+   Visual C++ はこのファイルの読み取りと更新を行います。
 
 Font.manifest
-   �A�v���P�[�V���� �}�j�t�F�X�g �t�@�C���� Windows XP �ŁASide-by-Side �A�Z��
-   �u���̓���̃o�[�W�����Ɋւ���A�v���P�[�V�����̈ˑ��֌W��������邽�߂Ɏg�p
-   ����܂��B���[�_�[�͂��̏����g�p���āA�A�Z���u�� �L���b�V������K�؂ȃA�Z
-   ���u�����A�܂��̓A�v���P�[�V��������v���C�x�[�g �A�Z���u����ǂݍ��݂܂��B
-   �A�v���P�[�V���� �}�j�t�F�X�g�͍ĔЕz�p�ɁA���s�\�A�v���P�[�V�����Ɠ����t
-   �H���_�ɃC���X�g�[�������O�� .manifest �t�@�C���Ƃ��Ċ܂܂�Ă��邩�A�܂�
-   �̓��\�[�X�̃t�H�[�����̎��s�\�t�@�C���Ɋ܂܂�Ă��܂��B
+   アプリケーション マニフェスト ファイルは Windows XP で、Side-by-Side アセン
+   ブリの特定のバージョンに関するアプリケーションの依存関係を説明するために使用
+   されます。ローダーはこの情報を使用して、アセンブリ キャッシュから適切なアセ
+   ンブリを、またはアプリケーションからプライベート アセンブリを読み込みます。
+   アプリケーション マニフェストは再頒布用に、実行可能アプリケーションと同じフ
+   ォルダにインストールされる外部 .manifest ファイルとして含まれているか、また
+   はリソースのフォーム内の実行可能ファイルに含まれています。
 /////////////////////////////////////////////////////////////////////////////
 
-���̑��̒���:
+その他の注意:
 
-�A�v���P�[�V���� �E�B�U�[�h�� "TODO:" �Ŏn�܂�R�����g���g�p���āA�ǉ�������J
-�X�^�}�C�Y����K�v������\�[�X �R�[�h�̕����������܂��B
+アプリケーション ウィザードは "TODO:" で始まるコメントを使用して、追加したりカ
+スタマイズする必要があるソース コードの部分を示します。
 
-�A�v���P�[�V���������L DLL ���� MFC ���g�p����ꍇ�́AMFC DLL ���ĔЕz����K�v
-������܂��B�܂��A�A�v���P�[�V�������I�y���[�e�B���O �V�X�e���̃��P�[���ȊO�̌�
-����g�p���Ă���ꍇ���A�Ή����郍�[�J���C�Y���ꂽ���\�[�X MFC80XXX.DLL ���Ĕ�
-�z����K�v������܂��B�����̃g�s�b�N�̏ڍׂɂ��ẮAMSDN �h�L�������g�� 
-Visual C++ �A�v���P�[�V�����̍ĔЕz�Ɋւ���Z�N�V�������Q�Ƃ��Ă��������B
+アプリケーションが共有 DLL 内で MFC を使用する場合は、MFC DLL を再頒布する必要
+があります。また、アプリケーションがオペレーティング システムのロケール以外の言
+語を使用している場合も、対応するローカライズされたリソース MFC80XXX.DLL を再頒
+布する必要があります。これらのトピックの詳細については、MSDN ドキュメントの 
+Visual C++ アプリケーションの再頒布に関するセクションを参照してください。
 
 /////////////////////////////////////////////////////////////////////////////

@@ -1,4 +1,4 @@
-﻿#if !defined(__STATE_HEMI_LIGHT_H__)
+#if !defined(__STATE_HEMI_LIGHT_H__)
 #define __STATE_HEMI_LIGHT_H__
 
 #include "izDefs.h"

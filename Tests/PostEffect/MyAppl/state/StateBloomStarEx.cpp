@@ -1,4 +1,4 @@
-﻿#include "StateBloomStarEx.h"
+#include "StateBloomStarEx.h"
 #include "StateManager.h"
 #include "SceneRenderer.h"
 #include "EnvBox.h"

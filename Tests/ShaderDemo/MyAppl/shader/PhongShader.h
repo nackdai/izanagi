@@ -1,4 +1,4 @@
-﻿#if !defined(__PHONG_SHADER_H__)
+#if !defined(__PHONG_SHADER_H__)
 #define __PHONG_SHADER_H__
 
 #include "izSceneGraph.h"

@@ -1,4 +1,4 @@
-﻿#if !defined(__STATE_BASIC_BOY_H__)
+#if !defined(__STATE_BASIC_BOY_H__)
 #define __STATE_BASIC_BOY_H__
 
 #include "izDefs.h"

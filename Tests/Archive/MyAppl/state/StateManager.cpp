@@ -1,4 +1,4 @@
-﻿#include "StateManager.h"
+#include "StateManager.h"
 #include "StateTest0.h"
 #include "StateTest1.h"
 

@@ -1,4 +1,4 @@
-﻿#if !defined(__POSTEFFECT_SAMPLE_H__)
+#if !defined(__POSTEFFECT_SAMPLE_H__)
 #define __POSTEFFECT_SAMPLE_H__
 
 #include "izPostEffect.h"

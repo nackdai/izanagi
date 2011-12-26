@@ -1,4 +1,4 @@
-﻿#if !defined(__STATE_DEBUG_BASIC_H__)
+#if !defined(__STATE_DEBUG_BASIC_H__)
 #define __STATE_DEBUG_BASIC_H__
 
 #include "izDefs.h"

@@ -1,4 +1,4 @@
-﻿#include "MyAppl.h"
+#include "MyAppl.h"
 #include "MySystem.h"
 
 CMyAppl CMyAppl::s_cInstance;

@@ -79,7 +79,7 @@ private:
 	izanagi::CShader* m_pShader;
 
 	IZ_UINT m_nCnt;
-	izanagi::SMatrix m_Mtx[izanagi::MSH_BELONGED_JOINT_MAX];
+	izanagi::SMatrix m_Mtx[48];
 
 	izanagi::IZ_SHADER_HANDLE m_Handle;
 };

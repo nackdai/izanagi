@@ -1,4 +1,4 @@
-﻿#if !defined(__MESH_MANAGER_H__)
+#if !defined(__MESH_MANAGER_H__)
 #define __MESH_MANAGER_H__
 
 #include <d3dx9.h>

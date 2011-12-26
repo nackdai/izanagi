@@ -1,4 +1,4 @@
-﻿#include "DebugInfoRenderer.h"
+#include "DebugInfoRenderer.h"
 #include "MySystem.h"
 
 void CDebugInfoRenderer::Render(IZ_PCSTR pszStr)

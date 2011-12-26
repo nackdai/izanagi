@@ -10,7 +10,7 @@ struct SPSInput {
 samplerCUBE s0 : register(s0);
 
 ///////////////////////////////////////////////////
-// í∏ì_ÉVÉFÅ[É_
+// È†ÇÁÇπ„Ç∑„Çß„Éº„ÉÄ
 
 float4x4 g_mL2W;
 float4x4 g_mW2C;
@@ -23,14 +23,14 @@ SPSInput mainVS(in SVSInput sIn)
 	sOut.vPos = mul(sOut.vPos, g_mW2C);
 
 	// NOTE
-	// -1.0f - 1.0f ÇÃÉ{ÉbÉNÉXÇ≈Ç†ÇÈÇ±Ç∆ÅIÅI
+	// -1.0f - 1.0f „ÅÆ„Éú„ÉÉ„ÇØ„Çπ„Åß„ÅÇ„Çã„Åì„Å®ÔºÅÔºÅ
 	sOut.vTex = sIn.vPos.xyz;
 
 	return sOut;
 }
 
 ///////////////////////////////////////////////////
-// ÉsÉNÉZÉãÉVÉFÅ[É_
+// „Éî„ÇØ„Çª„É´„Ç∑„Çß„Éº„ÉÄ
 
 float4 mainPS(in SPSInput sIn) : COLOR0
 {
@@ -40,7 +40,7 @@ float4 mainPS(in SPSInput sIn) : COLOR0
 }
 
 ///////////////////////////////////////////////////
-// ÉeÉNÉjÉbÉN
+// „ÉÜ„ÇØ„Éã„ÉÉ„ÇØ
 
 technique EnvBoxShader
 {

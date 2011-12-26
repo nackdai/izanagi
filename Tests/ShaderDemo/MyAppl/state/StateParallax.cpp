@@ -1,4 +1,4 @@
-﻿#include "StateParallax.h"
+#include "StateParallax.h"
 #include "MySystem.h"
 #include "MyCamera.h"
 #include "MyAppl.h"

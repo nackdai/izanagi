@@ -1,6 +1,7 @@
 // Phong Shader
 
 #define USE_TEX		(1)
+#define USE_INTERNAL_PARAM	(1)
 
 struct SVSInput {
 	float4 vPos		: POSITION;
@@ -14,8 +15,8 @@ struct SVSInput {
 
 struct SPSInput {
 	float4 vPos		: POSITION;
-	float3 vNormal	: TEXCOORD0;	// ñ@ê¸
-	float3 vHalf	: TEXCOORD1;	// ÉnÅ[ÉtÉxÉNÉgÉã
+	float3 vNormal	: TEXCOORD0;	// Ê≥ïÁ∑ö
+	float3 vHalf	: TEXCOORD1;	// „Éè„Éº„Éï„Éô„ÇØ„Éà„É´
 #if USE_TEX
 	float2 vUV		: TEXCOORD2;
 #endif
@@ -27,13 +28,13 @@ struct SPSInput {
 struct SVSInput_NoTex {
 	float4 vPos		: POSITION;
 	float2 vUV		: TEXCOORD0;
-	float4 vColor	: COLOR;
+	//float4 vColor	: COLOR;
 };
 
 struct SPSInput_NoTex {
 	float4 vPos		: POSITION;
 	float2 vUV		: TEXCOORD0;
-	float4 vColor	: COLOR;
+	//float4 vColor	: COLOR;
 };
 
 #define SVSOutput_NoTex	SPSInput_NoTex
@@ -44,22 +45,34 @@ float4x4 g_mL2W;
 float4x4 g_mW2C;
 float4 g_vEye;
 
-// É}ÉeÉäÉAÉã
+// „Éû„ÉÜ„É™„Ç¢„É´
+#if USE_INTERNAL_PARAM
 float4 g_vMtrlDiffuse;
 float4 g_vMtrlAmbient;
 float4 g_vMtrlSpecular;
+#else
+float4 diffuse;
+float4 specular;
+float specularExp;
+float4 emission;
+#endif
 
-// ÉâÉCÉg
+// „É©„Ç§„Éà
 float4 g_vLitParallelDir;
 float4 g_vLitParallelColor;
 float4 g_vLitAmbientColor;
 
-sampler sTex : register(s0);
+texture tex;
+
+sampler sTex = sampler_state
+{
+	Texture = tex;
+};
 
 /////////////////////////////////////////////////////////////
-// í∏ì_ÉVÉFÅ[É_
+// È†ÇÁÇπ„Ç∑„Çß„Éº„ÉÄ
 
-float4x4 vJointMatrix[4];
+float4x4 vJointMatrix[48];
 
 SVSOutput mainVS(SVSInput In)
 {
@@ -73,15 +86,15 @@ SVSOutput mainVS(SVSInput In)
 		float4x4 mtx = vJointMatrix[idx];
 
 		Out.vPos += mul(In.vPos, mtx) * weight;
-		Out.vNormal += mul(In.vNormal, mtx) * weight;
+		Out.vNormal += mul(In.vNormal, (float3x3)mtx) * weight;
 	}
 #else
 	Out.vPos = mul(In.vPos, g_mL2W);
 	Out.vNormal = In.vNormal;
 #endif
 	
-	// éãì_Ç÷ÇÃï˚å¸ÉxÉNÉgÉã
-	float3 vV = normalize(g_vEye - Out.vPos);
+	// Ë¶ñÁÇπ„Å∏„ÅÆÊñπÂêë„Éô„ÇØ„Éà„É´
+	float3 vV = normalize(g_vEye.xyz - Out.vPos.xyz);
 	
 	Out.vPos = mul(Out.vPos, g_mW2C);
 	
@@ -89,15 +102,23 @@ SVSOutput mainVS(SVSInput In)
 	Out.vNormal = normalize(Out.vNormal);
 
 	// Ambient
+#if USE_INTERNAL_PARAM
 	Out.vColor = g_vMtrlAmbient * g_vLitAmbientColor;
+#else
+	Out.vColor = emission * g_vLitAmbientColor;
+#endif
 	
-	Out.vHalf = normalize(-g_vLitParallelDir + vV);
+	Out.vHalf = normalize(-g_vLitParallelDir.xyz + vV.xyz);
 	
 	Out.vColor.a = 1.0f;
 
 #if USE_TEX
+#if 0
 	Out.vUV.x = In.vUV.x;
 	Out.vUV.y = 1.0f - In.vUV.y;
+#else
+	Out.vUV = In.vUV;
+#endif
 #endif
 	
 	return Out;
@@ -105,19 +126,24 @@ SVSOutput mainVS(SVSInput In)
 
 float4 mainPS(SPSInput In) : COLOR
 {
-	// í∏ì_ÉVÉFÅ[É_Ç≈AmbientÇ…Ç¬Ç¢ÇƒÇÕåvéZçœÇ›
+	// È†ÇÁÇπ„Ç∑„Çß„Éº„ÉÄ„ÅßAmbient„Å´„Å§„ÅÑ„Å¶„ÅØË®àÁÆóÊ∏à„Åø
 	float4 vOut = In.vColor;
 	
-	// Ç¢ÇÈÇÃÇ©ÅEÅEÅE
+	// „ÅÑ„Çã„ÅÆ„Åã„Éª„Éª„Éª
 	float3 vN = normalize(In.vNormal);
 	float3 vH = normalize(In.vHalf);
 	float3 vL = -g_vLitParallelDir.xyz;
 	
-	// Diffuse = Md * áî(C * max(NÅEL, 0))
+#if USE_INTERNAL_PARAM
+	// Diffuse = Md * ‚àë(C * max(N„ÉªL, 0))
 	vOut.rgb += g_vMtrlDiffuse.rgb * g_vLitParallelColor.rgb * max(0.0f, dot(vN, vL));
 	
-	// Specular = Ms * áî(C * pow(max(NÅEH, 0), m))
+	// Specular = Ms * ‚àë(C * pow(max(N„ÉªH, 0), m))
 	vOut.rgb += g_vMtrlSpecular.rgb * g_vLitParallelColor.rgb * pow(max(0.0f, dot(vN, vH)), max(g_vMtrlSpecular.w, 0.00001f));
+#else
+	vOut.rgb += diffuse.rgb * g_vLitParallelColor.rgb * max(0.0f, dot(vN, vL));
+	vOut.rgb += specular.rgb * g_vLitParallelColor.rgb * pow(max(0.0f, dot(vN, vH)), max(specularExp, 0.00001f));
+#endif
 
 #if USE_TEX
 #if 0
@@ -140,7 +166,7 @@ SVSOutput_NoTex mainVS_Std(SVSInput_NoTex sIn)
 	sOut.vPos = mul(sIn.vPos, g_mL2W);
 	sOut.vPos = mul(sOut.vPos, g_mW2C);
 
-	sOut.vColor = sIn.vColor;
+	//sOut.vColor = sIn.vColor;
 	sOut.vUV = sIn.vUV;
 
 	return sOut;
@@ -148,7 +174,8 @@ SVSOutput_NoTex mainVS_Std(SVSInput_NoTex sIn)
 
 float4 mainPS_Std(SPSInput_NoTex sIn)	: COLOR
 {
-	float4 vOut = sIn.vColor * tex2D(sTex, sIn.vUV);
+	//float4 vOut = sIn.vColor * tex2D(sTex, sIn.vUV);
+	float4 vOut = tex2D(sTex, sIn.vUV);
 
 	return saturate(vOut);
 }
@@ -160,14 +187,15 @@ SVSOutput_NoTex mainVS_NoTex(SVSInput_NoTex sIn)
 	sOut.vPos = mul(sIn.vPos, g_mL2W);
 	sOut.vPos = mul(sOut.vPos, g_mW2C);
 
-	sOut.vColor = sIn.vColor;
+	//sOut.vColor = sIn.vColor;
 
 	return sOut;
 }
 
 float4 mainPS_NoTex(SPSInput_NoTex sIn)	: COLOR
 {
-	float4 vOut = sIn.vColor;
+	//float4 vOut = sIn.vColor;
+	float4 vOut = 0.0f;
 
 	return saturate(vOut);
 }
@@ -176,19 +204,23 @@ float4 mainPS_NoTex(SPSInput_NoTex sIn)	: COLOR
 
 technique PhongShader
 {
+#if 1
 	pass P0
 	{
 		VertexShader = compile vs_2_0 mainVS();
 		PixelShader = compile ps_2_0 mainPS();
 	}
+#endif
 
-#if 1
+#if 0
 	pass p1
 	{
 		VertexShader = compile vs_2_0 mainVS_NoTex();
 		PixelShader = compile ps_2_0 mainPS_NoTex();
 	}
+#endif
 
+#if 0
 	pass p2
 	{
 		VertexShader = compile vs_2_0 mainVS_Std();

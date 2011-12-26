@@ -1,4 +1,4 @@
-﻿#include "StateMenu.h"
+#include "StateMenu.h"
 #include "StateManager.h"
 #include "MySystem.h"
 

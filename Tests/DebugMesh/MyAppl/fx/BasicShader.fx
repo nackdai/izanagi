@@ -33,7 +33,7 @@ struct SPSInput_NoTex {
 #define SVSOutput_NoTex	SPSInput_NoTex
 
 ////////////////////////////////////////////////
-// ’¸“_ƒVƒF[ƒ_
+// é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€
 
 SVSOutput mainVS(SVSInput sIn)
 {
@@ -61,7 +61,7 @@ SVSOutput_NoTex mainVS_NoTex(SVSInput_NoTex sIn)
 }
 
 ////////////////////////////////////////////////
-// ƒsƒNƒZƒ‹ƒVƒF[ƒ_
+// ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€
 
 float4 mainPS(SPSInput sIn)	: COLOR
 {
@@ -82,7 +82,7 @@ float4 mainPS_NoTex(SPSInput_NoTex sIn)	: COLOR
 ////////////////////////////////////////////////
 
 // NOTE
-// ƒeƒNƒjƒbƒN‚ÌØ‚è‘Ö‚¦‚Í–Ê“|‚È‚Ì‚ÅAƒpƒX‚ÌØ‚è‘Ö‚¦‚Å‘Î‰EEE
+// ãƒ†ã‚¯ãƒ‹ãƒƒã‚¯ã®åˆ‡ã‚Šæ›¿ãˆã¯é¢å€’ãªã®ã§ã€ãƒ‘ã‚¹ã®åˆ‡ã‚Šæ›¿ãˆã§å¯¾å¿œãƒ»ãƒ»ãƒ»
 
 technique t0
 {

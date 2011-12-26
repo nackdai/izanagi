@@ -1,4 +1,4 @@
-﻿#include "MyAppl.h"
+#include "MyAppl.h"
 #include "MySystem.h"
 #include "StateAnmList.h"
 #include "StateManager.h"

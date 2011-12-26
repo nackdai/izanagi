@@ -1,4 +1,4 @@
-﻿#include "StateManager.h"
+#include "StateManager.h"
 #include "StateBasicGirl.h"
 #include "StateBasicBoy.h"
 
