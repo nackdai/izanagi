@@ -1,4 +1,4 @@
-﻿#include "SceneRenderer.h"
+#include "SceneRenderer.h"
 
 #include "MyCamera.h"
 

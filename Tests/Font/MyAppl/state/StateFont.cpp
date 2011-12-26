@@ -1,4 +1,4 @@
-﻿#include "StateFont.h"
+#include "StateFont.h"
 #include "MySystem.h"
 
 CStateFont::CStateFont()

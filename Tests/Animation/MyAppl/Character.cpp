@@ -122,7 +122,7 @@ IZ_BOOL CCharacter::Init()
 				IZ_NULL);
 	IZ_ASSERT(m_pMdl != IZ_NULL);
 
-	// テクスチャ
+	// 繝�繧ｯ繧ｹ繝√Ε
 	{
 		m_pTex[0] = m_Device->CreateTextureFromFile("data/1P_C.dds", izanagi::E_GRAPH_PIXEL_FMT_RGBA8);
 		IZ_ASSERT(m_pTex[0] != IZ_NULL);

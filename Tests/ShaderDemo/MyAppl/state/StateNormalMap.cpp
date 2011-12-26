@@ -1,4 +1,4 @@
-﻿#include "StateNormalMap.h"
+#include "StateNormalMap.h"
 #include "MySystem.h"
 #include "MyCamera.h"
 #include "MyAppl.h"

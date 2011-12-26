@@ -1,4 +1,4 @@
-﻿#if 0
+#if 0
 #include "StateBasicEx.h"
 #include "MySystem.h"
 #include "MyCamera.h"

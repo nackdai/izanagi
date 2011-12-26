@@ -1,4 +1,4 @@
-﻿#if !defined(__STATE_MONOTONE_H__)
+#if !defined(__STATE_MONOTONE_H__)
 #define __STATE_MONOTONE_H__
 
 #include "izDefs.h"

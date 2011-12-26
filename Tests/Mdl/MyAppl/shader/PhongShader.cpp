@@ -1,4 +1,4 @@
-﻿#include "PhongShader.h"
+#include "PhongShader.h"
 
 // シェーダごとの初期化
 BOOL CPhongShader::InitInternal(izanagi::CGraphicsDevice* pDevice)

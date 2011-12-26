@@ -1,4 +1,4 @@
-﻿#if !defined(__ENV_BOX_H__)
+#if !defined(__ENV_BOX_H__)
 #define __ENV_BOX_H__
 
 #include "izGraph.h"

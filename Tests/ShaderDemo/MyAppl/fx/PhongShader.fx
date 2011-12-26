@@ -8,8 +8,8 @@ struct SVSInput {
 
 struct SPSInput {
 	float4 vPos		: POSITION;
-	float3 vNormal	: TEXCOORD0;	// –@ü
-	float3 vHalf	: TEXCOORD1;	// ƒn[ƒtƒxƒNƒgƒ‹
+	float3 vNormal	: TEXCOORD0;	// æ³•ç·š
+	float3 vHalf	: TEXCOORD1;	// ãƒãƒ¼ãƒ•ãƒ™ã‚¯ãƒˆãƒ«
 	float2 vUV		: TEXCOORD2;
 	float4 vColor	: COLOR;		// Ambient
 };
@@ -36,12 +36,12 @@ float4x4 g_mL2W;
 float4x4 g_mW2C;
 float4 g_vEye;
 
-// ƒ}ƒeƒŠƒAƒ‹
+// ãƒãƒ†ãƒªã‚¢ãƒ«
 float4 g_vMtrlDiffuse;
 float4 g_vMtrlAmbient;
 float4 g_vMtrlSpecular;
 
-// ƒ‰ƒCƒg
+// ãƒ©ã‚¤ãƒˆ
 float4 g_vLitParallelDir;
 float4 g_vLitParallelColor;
 float4 g_vLitAmbientColor;
@@ -49,13 +49,13 @@ float4 g_vLitAmbientColor;
 sampler sTex : register(s0);
 
 /////////////////////////////////////////////////////////////
-// ’¸“_ƒVƒF[ƒ_
+// é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€
 
 SVSOutput mainVS(SVSInput In)
 {
 	SVSOutput Out = (SVSOutput)0;
 
-	// ‹“_‚Ö‚Ì•ûŒüƒxƒNƒgƒ‹iƒ[ƒJƒ‹À•Wj
+	// è¦–ç‚¹ã¸ã®æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«ï¼ˆãƒ­ãƒ¼ã‚«ãƒ«åº§æ¨™ï¼‰
 	float3 vV = normalize(g_vEye - In.vPos);
 	
 	Out.vPos = mul(In.vPos, g_mL2W);
@@ -67,8 +67,8 @@ SVSOutput mainVS(SVSInput In)
 	Out.vColor = g_vMtrlAmbient * g_vLitAmbientColor;
 
 	// NOTE
-	// ƒ[ƒJƒ‹À•W‚Å‚ÌŒvZ‚È‚Ì‚Å
-	// ƒ‰ƒCƒg‚Ì•ûŒüƒxƒNƒgƒ‹‚ÍCPU‘¤‚Åƒ[ƒJƒ‹À•W‚É•ÏŠ·‚³‚ê‚Ä‚¢‚é‚±‚Æ
+	// ãƒ­ãƒ¼ã‚«ãƒ«åº§æ¨™ã§ã®è¨ˆç®—ãªã®ã§
+	// ãƒ©ã‚¤ãƒˆã®æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«ã¯CPUå´ã§ãƒ­ãƒ¼ã‚«ãƒ«åº§æ¨™ã«å¤‰æ›ã•ã‚Œã¦ã„ã‚‹ã“ã¨
 
 	Out.vHalf = normalize(-g_vLitParallelDir + vV);
 	
@@ -81,18 +81,18 @@ SVSOutput mainVS(SVSInput In)
 
 float4 mainPS(SPSInput In) : COLOR
 {
-	// ’¸“_ƒVƒF[ƒ_‚ÅAmbient‚É‚Â‚¢‚Ä‚ÍŒvZÏ‚İ
+	// é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€ã§Ambientã«ã¤ã„ã¦ã¯è¨ˆç®—æ¸ˆã¿
 	float4 vOut = In.vColor;
 	
-	// ‚¢‚é‚Ì‚©EEE
+	// ã„ã‚‹ã®ã‹ãƒ»ãƒ»ãƒ»
 	float3 vN = normalize(In.vNormal);
 	float3 vH = normalize(In.vHalf);
 	float3 vL = -g_vLitParallelDir.xyz;
 	
-	// Diffuse = Md * ‡”(C * max(NEL, 0))
+	// Diffuse = Md * âˆ‘(C * max(Nãƒ»L, 0))
 	vOut.rgb += g_vMtrlDiffuse.rgb * g_vLitParallelColor.rgb * max(0.0f, dot(vN, vL));
 	
-	// Specular = Ms * ‡”(C * pow(max(NEH, 0), m))
+	// Specular = Ms * âˆ‘(C * pow(max(Nãƒ»H, 0), m))
 	vOut.rgb += g_vMtrlSpecular.rgb * g_vLitParallelColor.rgb * pow(max(0.0f, dot(vN, vH)), max(g_vMtrlSpecular.w, 0.00001f));
 
 	vOut *= tex2D(sTex, In.vUV);

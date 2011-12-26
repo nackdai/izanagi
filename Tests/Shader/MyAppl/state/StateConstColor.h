@@ -1,4 +1,4 @@
-﻿#if !defined(__STATE_CONST_COLOR_H__)
+#if !defined(__STATE_CONST_COLOR_H__)
 #define __STATE_CONST_COLOR_H__
 
 #include "izDefs.h"

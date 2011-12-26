@@ -1,4 +1,4 @@
-﻿#include <stdafx.h>
+#include <stdafx.h>
 #include "StateMenu.h"
 #include "StateManager.h"
 #include "MySystem.h"

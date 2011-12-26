@@ -1,4 +1,4 @@
-﻿#include "StateDebugMesh.h"
+#include "StateDebugMesh.h"
 #include "MySystem.h"
 #include "MyCamera.h"
 

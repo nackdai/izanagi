@@ -69,7 +69,7 @@ IZ_BOOL CScene::Init(
 	s_pMdlRenderHandler->SetShader(m_pShader);
 
 	{
-		// ƒ‰ƒCƒg
+		// ãƒ©ã‚¤ãƒˆ
 		izanagi::SParallelLightParam sParallel;
 		{
 			sParallel.vDir.Set(-1.0f, -1.0f, -1.0f, 0.0f);
@@ -98,7 +98,7 @@ IZ_BOOL CScene::Init(
 			&sAmbient.color,
 			sizeof(sAmbient.color));
 
-		// ƒ}ƒeƒŠƒAƒ‹
+		// ãƒãƒ†ãƒªã‚¢ãƒ«
 		izanagi::SMaterialParam sMtrl;
 		{
 			sMtrl.vDiffuse.Set(1.0f, 1.0f, 1.0f, 1.0f);
@@ -123,7 +123,7 @@ IZ_BOOL CScene::Init(
 			sizeof(sMtrl.vSpecular));
 	}
 
-	// XYZ²
+	// XYZè»¸
 	m_pAxis = izanagi::CDebugMeshAxis::CreateDebugMeshAxisDefault(
 				allocator,
 				device);
@@ -153,10 +153,10 @@ void CScene::Render(
 	CCharacter* character,
 	izanagi::CGraphicsDevice* device)
 {
-	// •`‰æŠJn
+	// æç”»é–‹å§‹
 	IZ_UINT nPassCnt = m_pShader->Begin(0, IZ_FALSE);
 
-	// ƒVƒF[ƒ_ƒpƒ‰ƒ[ƒ^ƒZƒbƒg
+	// ã‚·ã‚§ãƒ¼ãƒ€ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚»ãƒƒãƒˆ
 	{
 		izanagi::SMatrix mtxL2W;
 		izanagi::SMatrix::SetUnit(mtxL2W);

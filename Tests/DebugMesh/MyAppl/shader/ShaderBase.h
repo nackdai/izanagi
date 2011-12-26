@@ -1,4 +1,4 @@
-﻿#if !defined(__SHADER_BASE_H__)
+#if !defined(__SHADER_BASE_H__)
 #define __SHADER_BASE_H__
 
 #include "izStd.h"

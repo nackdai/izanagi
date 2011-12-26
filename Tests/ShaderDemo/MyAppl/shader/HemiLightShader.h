@@ -1,4 +1,4 @@
-﻿#if !defined(__HEMI_LIGHT_SHADER_H__)
+#if !defined(__HEMI_LIGHT_SHADER_H__)
 #define __HEMI_LIGHT_SHADER_H__
 
 #include "izSceneGraph.h"

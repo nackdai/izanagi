@@ -1,4 +1,4 @@
-﻿#if !defined(__TEXTURE_MANAGER_H__)
+#if !defined(__TEXTURE_MANAGER_H__)
 #define __TEXTURE_MANAGER_H__
 
 #include "izStd.h"

@@ -1,4 +1,4 @@
-﻿#if !defined(__NORMAL_MAP_SHADER_H__)
+#if !defined(__NORMAL_MAP_SHADER_H__)
 #define __NORMAL_MAP_SHADER_H__
 
 #include "izSceneGraph.h"

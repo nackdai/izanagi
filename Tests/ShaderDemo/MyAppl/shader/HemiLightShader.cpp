@@ -1,4 +1,4 @@
-﻿#include "HemiLightShader.h"
+#include "HemiLightShader.h"
 
 // シェーダごとの初期化
 BOOL CHemiLightShader::InitInternal(izanagi::CGraphicsDevice* pDevice)

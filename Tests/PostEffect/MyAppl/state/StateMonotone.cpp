@@ -1,4 +1,4 @@
-﻿#include "StateMonotone.h"
+#include "StateMonotone.h"
 #include "StateManager.h"
 #include "SceneRenderer.h"
 #include "EnvBox.h"

@@ -8,7 +8,7 @@ struct SVSInput {
 
 struct SPSInput {
 	float4 vPos		: POSITION;
-	float3 vNormal	: TEXCOORD0;	// –@ü
+	float3 vNormal	: TEXCOORD0;	// æ³•ç·š
 	float2 vUV		: TEXCOORD2;
 };
 
@@ -34,10 +34,10 @@ float4x4 g_mL2W;
 float4x4 g_mW2C;
 float4 g_vEye;
 
-// ƒ}ƒeƒŠƒAƒ‹
+// ãƒãƒ†ãƒªã‚¢ãƒ«
 float4 g_vMtrlDiffuse;
 
-// ƒ‰ƒCƒg
+// ãƒ©ã‚¤ãƒˆ
 float4 g_vAxis;
 float4 g_vUpColor;
 float4 g_vDownColor;
@@ -45,7 +45,7 @@ float4 g_vDownColor;
 sampler sTex : register(s0);
 
 /////////////////////////////////////////////////////////////
-// ’¸“_ƒVƒF[ƒ_
+// é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€
 
 SVSOutput mainVS(SVSInput In)
 {
@@ -68,7 +68,7 @@ float4 mainPS(SPSInput In) : COLOR
 
 	float fCos = In.vNormal * g_vAxis;
 	
-	// ”¼‹…ƒ‰ƒCƒgF = 0.5 * (1 + cosƒÆ) * “V‹…F
+	// åŠçƒãƒ©ã‚¤ãƒˆè‰² = 0.5 * (1 + cosÎ¸) * å¤©çƒè‰²
 	vOut *= ((1 + fCos) * g_vUpColor + (1 - fCos) * g_vDownColor) * 0.5f;
 	vOut.a = 1.0f;
 

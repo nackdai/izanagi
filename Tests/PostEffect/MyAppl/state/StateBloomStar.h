@@ -1,4 +1,4 @@
-﻿#if !defined(__STATE_BLOOMSTAR_H__)
+#if !defined(__STATE_BLOOMSTAR_H__)
 #define __STATE_BLOOMSTAR_H__
 
 #include "izDefs.h"

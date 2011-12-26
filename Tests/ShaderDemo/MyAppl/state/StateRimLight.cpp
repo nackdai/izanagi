@@ -1,4 +1,4 @@
-﻿#include "StateRimLight.h"
+#include "StateRimLight.h"
 #include "MySystem.h"
 #include "MyCamera.h"
 #include "MyAppl.h"

@@ -1,4 +1,4 @@
-﻿#include "StatePhong.h"
+#include "StatePhong.h"
 #include "MySystem.h"
 #include "MyCamera.h"
 

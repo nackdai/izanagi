@@ -1,4 +1,4 @@
-﻿#include "PostEffectSample.h"
+#include "PostEffectSample.h"
 #include "MyCamera.h"
 
 CPostEffectSample CPostEffectSample::s_cInstance;

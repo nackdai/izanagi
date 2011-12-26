@@ -1,4 +1,4 @@
-﻿#if !defined(__STATE_FONT_H__)
+#if !defined(__STATE_FONT_H__)
 #define __STATE_FONT_H__
 
 #include "izDefs.h"

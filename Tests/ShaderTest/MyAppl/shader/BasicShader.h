@@ -1,4 +1,4 @@
-﻿#if !defined(__BASIC_SHADER_H__)
+#if !defined(__BASIC_SHADER_H__)
 #define __BASIC_SHADER_H__
 
 #include "ShaderBase.h"

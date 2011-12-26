@@ -1,4 +1,4 @@
-﻿#if !defined(__SCENE_RENDERER_H__)
+#if !defined(__SCENE_RENDERER_H__)
 #define __SCENE_RENDERER_H__
 
 #include "MeshManager.h"

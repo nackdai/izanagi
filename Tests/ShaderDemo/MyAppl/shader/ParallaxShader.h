@@ -1,4 +1,4 @@
-﻿#if !defined(__PARALLAX_SHADER_H__)
+#if !defined(__PARALLAX_SHADER_H__)
 #define __PARALLAX_SHADER_H__
 
 #include "izSceneGraph.h"
