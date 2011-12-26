@@ -83,7 +83,7 @@ namespace {
 	// キューブマップ用プレフィックス
 	static const char* PreName[] = {
 		"XP", "XN",
-		"YP", "YX",
+		"YP", "YN",
 		"ZP", "ZN"
 	};
 	C_ASSERT(COUNTOF(PreName) == izanagi::E_GRAPH_CUBE_TEX_FACE_NUM);
