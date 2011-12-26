@@ -61,8 +61,8 @@ void CCubeMapProxy::getUVFromRef(
 	else if (maxVal == y) {
 		// Y面
 		face = (ref.y > 0.0f
-				? izanagi::E_GRAPH_CUBE_TEX_FACE_Y_N
-				: izanagi::E_GRAPH_CUBE_TEX_FACE_Y_P);
+				? izanagi::E_GRAPH_CUBE_TEX_FACE_Y_P
+				: izanagi::E_GRAPH_CUBE_TEX_FACE_Y_N);
 	}
 	else {
 		// Z面
@@ -75,8 +75,8 @@ void CCubeMapProxy::getUVFromRef(
 	switch (face) {
 	case izanagi::E_GRAPH_CUBE_TEX_FACE_X_P:	// +X
 		{
-			u = -ref.z / ref.x;
-			v = ref.y / ref.x;
+			u = ref.z / ref.x;
+			v = -ref.y / ref.x;
 		}
 		break;
 	case izanagi::E_GRAPH_CUBE_TEX_FACE_X_N:	// -X
@@ -88,25 +88,25 @@ void CCubeMapProxy::getUVFromRef(
 	case izanagi::E_GRAPH_CUBE_TEX_FACE_Y_P:	// +Y
 		{
 			u = -ref.x / ref.y;
-			v = -ref.z / ref.y;
+			v = ref.z / ref.y;
 		}
 		break;
 	case izanagi::E_GRAPH_CUBE_TEX_FACE_Y_N:	// -Y
 		{
-			u = ref.x / ref.y;
-			v = ref.z / ref.y;
+			u = -ref.x / ref.y;
+			v = -ref.z / ref.y;
 		}
 		break;
 	case izanagi::E_GRAPH_CUBE_TEX_FACE_Z_P:	// +Z
 		{
-			u = ref.x / ref.z;
-			v = ref.y / ref.z;
+			u = -ref.x / ref.z;
+			v = -ref.y / ref.z;
 		}
 		break;
 	case izanagi::E_GRAPH_CUBE_TEX_FACE_Z_N:	// -Z
 		{
 			u = ref.x / ref.z;
-			v = -ref.y / ref.z;
+			v = ref.y / ref.z;
 		}
 		break;
 	}
@@ -136,7 +136,7 @@ void CCubeMapProxy::getRef(
 		{
 			ref.x = 1.0f;
 			ref.y = v;
-			ref.z = -u;
+			ref.z = u;
 		}
 		break;
 	case izanagi::E_GRAPH_CUBE_TEX_FACE_X_N:	// -X
@@ -148,21 +148,21 @@ void CCubeMapProxy::getRef(
 		break;
 	case izanagi::E_GRAPH_CUBE_TEX_FACE_Y_P:	// +Y
 		{
-			ref.x = u;
-			ref.y = -1.0f;
+			ref.x = -u;
+			ref.y = 1.0f;
 			ref.z = v;
 		}
 		break;
 	case izanagi::E_GRAPH_CUBE_TEX_FACE_Y_N:	// -Y
 		{
 			ref.x = u;
-			ref.y = 1.0f;
-			ref.z = -v;
+			ref.y = -1.0f;
+			ref.z = v;
 		}
 		break;
 	case izanagi::E_GRAPH_CUBE_TEX_FACE_Z_P:	// +Z
 		{
-			ref.x = u;
+			ref.x = -u;
 			ref.y = v;
 			ref.z = 1.0f;
 		}
