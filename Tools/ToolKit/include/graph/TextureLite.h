@@ -7,7 +7,7 @@
 #include "graph/ToolkitGraphDefs.h"
 
 namespace izanagi {
-namespace izanagi_tk {
+namespace tool {
 	class CGraphicsDeviceLite;
 
 	/**
@@ -152,7 +152,7 @@ namespace izanagi_tk {
 	{
 		return m_nMipLevels;
 	}
-}	// namespace izanagi_tk
+}	// namespace tool
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_TOOL_KIT_GRAPH_TEXTURE_LIGHT_H__)

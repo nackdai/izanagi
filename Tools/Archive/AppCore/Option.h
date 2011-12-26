@@ -4,12 +4,12 @@
 #include "izToolKit.h"
 
 struct SOption {
-	izanagi::izanagi_tk::CString in_dir;		// 入力ディレクトリ
+	izanagi::tool::CString in_dir;		// 入力ディレクトリ
 
-	izanagi::izanagi_tk::CString label;
-	izanagi::izanagi_tk::CString output;		// 出力
-	izanagi::izanagi_tk::CString file_id;	// ファイルID
-	izanagi::izanagi_tk::CString obj_dir;	// 中間データ出力ディレクトリ
+	izanagi::tool::CString label;
+	izanagi::tool::CString output;		// 出力
+	izanagi::tool::CString file_id;	// ファイルID
+	izanagi::tool::CString obj_dir;	// 中間データ出力ディレクトリ
 };
 
 class COption : public SOption {

@@ -21,7 +21,7 @@ BOOL CFileTree::ReadFromXML(LPCSTR lpszIn)
 // 指定ディレクトリの情報を登録する
 BOOL CFileTree::RegisterFileTree(LPCSTR lpszPath)
 {
-	izanagi::izanagi_tk::CString strDir(PathFindFileName(lpszPath));
+	izanagi::tool::CString strDir(PathFindFileName(lpszPath));
 	
 	// 末尾の'/'を消す
 	{
@@ -54,10 +54,10 @@ BOOL CFileTree::RegisterFileTree(LPCSTR lpszPath)
 	m_TmpDirList.push_back(strDir);
 
 	while (m_TmpDirList.size() > 0) {
-		std::vector<izanagi::izanagi_tk::CString>::iterator it = m_TmpDirList.begin();
+		std::vector<izanagi::tool::CString>::iterator it = m_TmpDirList.begin();
 		IZ_ASSERT(it != m_TmpDirList.end());
 
-		const izanagi::izanagi_tk::CString& strDir = *it;
+		const izanagi::tool::CString& strDir = *it;
 		RegisterFileTreeInternal(strDir);
 
 		m_TmpDirList.erase(it);
@@ -73,14 +73,14 @@ void CFileTree::RegisterFileTreeInternal(LPCSTR lpszDir)
 	WIN32_FIND_DATA dataFile;
 	HANDLE hIter = NULL;
 	{
-		izanagi::izanagi_tk::CString strSearchPath(lpszDir);
+		izanagi::tool::CString strSearchPath(lpszDir);
 		strSearchPath += "/*.*";
 
 		hIter = FindFirstFile(strSearchPath, &dataFile);
 	}
 
 	while (hIter != INVALID_HANDLE_VALUE) {
-		izanagi::izanagi_tk::CString strName(dataFile.cFileName);
+		izanagi::tool::CString strName(dataFile.cFileName);
 
 		if (strName == '.' || strName == "..") {
 			// '.' or '..' は除く
@@ -97,7 +97,7 @@ void CFileTree::RegisterFileTreeInternal(LPCSTR lpszDir)
 		}
 		else {
 			// ディレクトリ
-			izanagi::izanagi_tk::CString strDir;
+			izanagi::tool::CString strDir;
 			strDir.format("%s/%s", lpszDir, dataFile.cFileName);
 
 			m_TmpDirList.push_back(strDir);

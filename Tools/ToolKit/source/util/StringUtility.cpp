@@ -1,7 +1,7 @@
 ﻿#include "util/StringUtility.h"
 
 using namespace izanagi;
-using namespace izanagi_tk;
+using namespace tool;
 
 IZ_BOOL CString::CmpStr(const char* str0, const char* str1)
 {

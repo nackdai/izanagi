@@ -13,7 +13,7 @@
 // α = r * π となる
 
 CAngularMapProxy::CAngularMapProxy(
-	izanagi::izanagi_tk::CTextureLite* tex,
+	izanagi::tool::CTextureLite* tex,
 	EnvMapType type)
 : CMirrorMapProxy(tex, type)
 {

@@ -5,7 +5,7 @@
 #include "squish.h"
 
 using namespace izanagi;
-using namespace izanagi_tk;
+using namespace tool;
 
 CPixelFormatConverter CPixelFormatConverter::s_cInstance;
 

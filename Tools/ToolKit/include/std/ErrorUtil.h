@@ -5,7 +5,7 @@
 #include "izDefs.h"
 
 namespace izanagi {
-namespace izanagi_tk {
+namespace tool {
 	class CException;
 
 	/**
@@ -94,13 +94,13 @@ namespace izanagi_tk {
 	private:
 		ILog* m_Log;
 	};
-}	// namespace izanagi_tk
+}	// namespace tool
 }	// namespace izanagi
 
 #define THROW_EXCEPTION(b, log_type, format, ...)\
 	do {\
 		if (!(b)) {\
-			throw izanagi::izanagi_tk::CException(new log_type(format, __FILE__, __LINE__, __VA_ARGS__));\
+			throw izanagi::tool::CException(new log_type(format, __FILE__, __LINE__, __VA_ARGS__));\
 		}\
 	} while(IZ_FALSE)
 

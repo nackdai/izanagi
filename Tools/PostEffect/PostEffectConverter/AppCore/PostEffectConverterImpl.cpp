@@ -61,7 +61,7 @@ BOOL CPostEffectConverter::Begin(LPCSTR lpszShaderFile)
 			// NOTE
 			// 何故かcgCreateEffectFromFileでコンパイルが失敗してもNULLが返ってこないことがある・・・。
 			// なので、エラー文字列を調べて "error" があったら失敗とみなす・・・。
-			izanagi::izanagi_tk::CString str(pErrorStr);
+			izanagi::tool::CString str(pErrorStr);
 			if (str.Find(_T(" error ")) >= 0) {
 				return FALSE;
 			}
@@ -192,7 +192,7 @@ void CPostEffectConverter::SetPesId()
 	CGparameter param = ::cgGetFirstEffectParameter(m_pCgEffect);
 
 	while (param != NULL) {
-		izanagi::izanagi_tk::CString str(::cgGetParameterName(param));
+		izanagi::tool::CString str(::cgGetParameterName(param));
 
 		if (str == "__pes_ID__") {
 			IZ_PCSTR p = ::cgGetStringParameterValue(param);
@@ -298,7 +298,7 @@ namespace {
 
 		if (strlen(semantic) > 0) {
 			for (IZ_UINT i = 0; i < izanagi::E_POSTEFFECT_TEXTURE_TYPE_NUM; i++) {
-				if (izanagi::izanagi_tk::CString::CmpStr(semantic, TexSemanticTbl[i])) {
+				if (izanagi::tool::CString::CmpStr(semantic, TexSemanticTbl[i])) {
 					return static_cast<izanagi::E_POSTEFFECT_TEXTURE_TYPE>(i);
 				}
 			}
@@ -402,7 +402,7 @@ namespace {
 	{
 		IZ_PCSTR name = ::cgGetParameterName(param);
 
-		izanagi::izanagi_tk::CString str(name);
+		izanagi::tool::CString str(name);
 
 		if (str == "__pes_ID__") {
 			return TRUE;
@@ -526,7 +526,7 @@ BOOL CPostEffectConverter::DoNotRemoveParam(CGparameter param)
 {
 	BOOL bIsUsedInEffect = ::cgIsParameterUsed(param, m_pCgEffect);
 
-	izanagi::izanagi_tk::CString strParamName(::cgGetParameterName(param));
+	izanagi::tool::CString strParamName(::cgGetParameterName(param));
 
 	{
 		// 頂点シェーダでしか利用されていない
@@ -586,7 +586,7 @@ namespace {
 		const std::vector<CGparameter>& tvParamList,
 		CGpass pass)
 	{
-		izanagi::izanagi_tk::CString strName(pszParamName);
+		izanagi::tool::CString strName(pszParamName);
 
 		std::vector<CGparameter>::const_iterator it = tvParamList.begin();
 		for (IZ_INT i = 0; it != tvParamList.end(); it++, i++) {
@@ -655,7 +655,7 @@ BOOL CPostEffectConverter::ExportPass()
 	IZ_UINT nConstNum = 0;
 	IZ_UINT nSamplerNum = 0;
 
-	izanagi::izanagi_tk::CString strPrevPassFunctoName;
+	izanagi::tool::CString strPrevPassFunctoName;
 
 	CGtechnique tech = ::cgGetFirstTechnique(m_pCgEffect);
 
@@ -706,7 +706,7 @@ BOOL CPostEffectConverter::ExportPass()
 			}
 
 			// Stringで設定されているファンクタ引数
-			std::vector<izanagi::izanagi_tk::CString> tvFunctorArgSList;
+			std::vector<izanagi::tool::CString> tvFunctorArgSList;
 			CPassUtil::GetFunctorArgsString(
 				pass,
 				tvFunctorArgSList);
@@ -745,7 +745,7 @@ BOOL CPostEffectConverter::ExportPass()
 }
 
 void CPostEffectConverter::ConvertFunctorArgsStrToIndex(
-	const std::vector<izanagi::izanagi_tk::CString>& tvFunctorArgSList,
+	const std::vector<izanagi::tool::CString>& tvFunctorArgSList,
 	izanagi::S_PES_PASS_ANN& sParamAnn)
 {
 	std::vector<CGparameter> tvAllParamList;
@@ -768,7 +768,7 @@ void CPostEffectConverter::ConvertFunctorArgsStrToIndex(
 
 	for (size_t nParamPos = 0; nParamPos < tvAllParamList.size(); nParamPos++) {
 		CGparameter param = tvAllParamList[nParamPos];
-		izanagi::izanagi_tk::CString strParam(::cgGetParameterName(param));
+		izanagi::tool::CString strParam(::cgGetParameterName(param));
 
 		IZ_BOOL bIsFind = (std::find(
 							tvFunctorArgSList.begin(),
@@ -863,7 +863,7 @@ BOOL CPostEffectConverter::ExportUsedParamAndSamplerIdxByPass(CGpass pass)
 
 namespace {
 	BOOL _ExportFile(
-		const izanagi::izanagi_tk::CString& strIn,
+		const izanagi::tool::CString& strIn,
 		izanagi::IOutputStream* pOut)
 	{
 		static const IZ_UINT BUF_SIZE = 1024;
@@ -888,10 +888,10 @@ namespace {
 
 BOOL CPostEffectConverter::ExportPSProgram()
 {
-	std::vector<izanagi::izanagi_tk::CString>::const_iterator it = m_CompiledPSList.begin();
+	std::vector<izanagi::tool::CString>::const_iterator it = m_CompiledPSList.begin();
 
 	for (; it != m_CompiledPSList.end(); it++) {
-		const izanagi::izanagi_tk::CString strPS = *it;
+		const izanagi::tool::CString strPS = *it;
 
 		VRETURN(_ExportFile(strPS, &m_Out));
 	}
@@ -959,7 +959,7 @@ BOOL CPostEffectConverter::ExportStringBuffer()
 namespace {
 	// コンパイラ実行
 	BOOL _CompileShaderInternal(
-		izanagi::izanagi_tk::CString& out,
+		izanagi::tool::CString& out,
 		COMPILE_TYPE type,
 		LPCSTR lpszCompileCommand,
 		LPCSTR lpszShaderFile,
@@ -967,7 +967,7 @@ namespace {
 		CGprofile profile)
 	{
 		// コマンド作成
-		izanagi::izanagi_tk::CString cmd;
+		izanagi::tool::CString cmd;
 		CCompileCmdCreator::GetInstance().CreateCompileCommand(
 			cmd, out,
 			type,
@@ -998,14 +998,14 @@ namespace {
 
 	// コンパイラ実行
 	BOOL _CompileShader(
-		izanagi::izanagi_tk::CString& out,
+		izanagi::tool::CString& out,
 		BOOL bIsAsm,
 		LPCSTR lpszCompileCommand,
 		LPCSTR lpszShaderFile,
 		LPCSTR lpszEntryPoint,
 		CGprofile profile)
 	{
-		izanagi::izanagi_tk::CString tmp = out;
+		izanagi::tool::CString tmp = out;
 
 		BOOL ret = FALSE;
 
@@ -1034,14 +1034,14 @@ namespace {
 
 	// 出力ファイル名を作成
 	inline void _MakeOutFile(
-		izanagi::izanagi_tk::CString& strOut,
+		izanagi::tool::CString& strOut,
 		UINT nID,
 		LPCSTR lpszShaderFile,
 		LPCSTR lpszObjDir)
 	{
 		static CHAR BUF[1024];
 
-		izanagi::izanagi_tk::CString tmp0;
+		izanagi::tool::CString tmp0;
 		tmp0.format("%s", lpszShaderFile);
 
 		// ファイル名取得
@@ -1050,7 +1050,7 @@ namespace {
 		// 拡張子削除
 		PathRemoveExtension(file_name);
 
-		izanagi::izanagi_tk::CString tmp1;
+		izanagi::tool::CString tmp1;
 		tmp1.format("%s_%d", file_name, nID);
 
 		if (strlen(lpszObjDir) > 0) {
@@ -1114,7 +1114,7 @@ BOOL CPostEffectConverter::CompilePixelProgram(
 
 		while (pass != NULL) {
 			// 出力ファイル名を作成
-			izanagi::izanagi_tk::CString strOut;
+			izanagi::tool::CString strOut;
 			_MakeOutFile(
 				strOut,
 				nPassCnt,

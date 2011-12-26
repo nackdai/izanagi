@@ -83,8 +83,8 @@ private:
 
 	izanagi::CFileOutputStream m_Out;
 
-	std::vector<izanagi::izanagi_tk::CString> m_CompiledVSList;
-	std::vector<izanagi::izanagi_tk::CString> m_CompiledPSList;
+	std::vector<izanagi::tool::CString> m_CompiledVSList;
+	std::vector<izanagi::tool::CString> m_CompiledPSList;
 };
 
 #endif	// #if !defined(__SHADER_CONVERTER_POSTEFFECT_CONVERTER_IMPL_H_)

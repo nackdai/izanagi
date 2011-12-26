@@ -1,10 +1,10 @@
 ﻿#include "IMGImage.h"
 #include "ImageLibUtility.h"
 #include "PixelFormatConverter.h"
-#include "ToolKitIoDefs.h"
+#include "izToolKit.h"
 
 using namespace izanagi;
-using namespace izanagi_tk;
+using namespace tool;
 
 // コンストラクタ
 CIMGImage::CIMGImage()

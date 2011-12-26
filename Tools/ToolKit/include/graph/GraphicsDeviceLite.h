@@ -14,7 +14,7 @@
 #include "graph/ToolkitGraphDefs.h"
 
 namespace izanagi {
-namespace izanagi_tk {
+namespace tool {
 	class CTextureLite;
 
 	/** 簡易グラフィックスデバイス.
@@ -80,7 +80,7 @@ namespace izanagi_tk {
 
 		D3DPRESENT_PARAMETERS m_sPresentParameters;
 	};
-}	// namespace izanagi_tk
+}	// namespace tool
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_TOOL_KIT_GRAPH_GRAPHICS_DEVICE_LIGHT_H__)

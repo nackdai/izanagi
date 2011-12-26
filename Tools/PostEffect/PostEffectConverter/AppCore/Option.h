@@ -8,17 +8,17 @@
 * オプション構造体
 */
 struct SOption {
-	izanagi::izanagi_tk::CString compiler;		// コンパイルコマンド
-	izanagi::izanagi_tk::CString compileOpt;	// コンパイルオプション
+	izanagi::tool::CString compiler;		// コンパイルコマンド
+	izanagi::tool::CString compileOpt;	// コンパイルオプション
 
-	izanagi::izanagi_tk::CString objDir;		// 中間ファイルディレクトリ
+	izanagi::tool::CString objDir;		// 中間ファイルディレクトリ
 
-	izanagi::izanagi_tk::CString shader;			// コンパイルするシェーダ
-	izanagi::izanagi_tk::CString preprocFile;	// プリプロセス済みファイル
-	izanagi::izanagi_tk::CString outFile;		// 出力ファイル
+	izanagi::tool::CString shader;			// コンパイルするシェーダ
+	izanagi::tool::CString preprocFile;	// プリプロセス済みファイル
+	izanagi::tool::CString outFile;		// 出力ファイル
 
-	std::vector<izanagi::izanagi_tk::CString> defines;	// -Dオプションで指定されたもの
-	std::vector<izanagi::izanagi_tk::CString> includes;	// -Iオプションで指定されたもの
+	std::vector<izanagi::tool::CString> defines;	// -Dオプションで指定されたもの
+	std::vector<izanagi::tool::CString> includes;	// -Iオプションで指定されたもの
 
 	struct {
 		UINT isPreproc		: 1;	// プリプロセス処理のみを行うかどうか
@@ -27,7 +27,7 @@ struct SOption {
 	};
 
 	// オプション記述ファイル
-	izanagi::izanagi_tk::CString optionFile;
+	izanagi::tool::CString optionFile;
 
 	// ベースディレクトリ
 	std::string baseDir;
@@ -59,10 +59,10 @@ protected:
 	void Clear();
 
 	// オプションファイル解析
-	BOOL AnalysisOptionFile(std::vector<izanagi::izanagi_tk::CString>& tvArgs);
+	BOOL AnalysisOptionFile(std::vector<izanagi::tool::CString>& tvArgs);
 
 	// オプションを引数リストに戻す
-	void ConvetOptionToArgs(std::vector<izanagi::izanagi_tk::CString>& tvArgs);
+	void ConvetOptionToArgs(std::vector<izanagi::tool::CString>& tvArgs);
 
 public:
 	// プリプロセス処理のみを行うかどうか

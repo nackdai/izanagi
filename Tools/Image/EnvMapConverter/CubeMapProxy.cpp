@@ -1,7 +1,7 @@
 #include "CubeMapProxy.h"
 
 CCubeMapProxy::CCubeMapProxy(
-	std::vector<izanagi::izanagi_tk::CTextureLite*>& tex,
+	std::vector<izanagi::tool::CTextureLite*>& tex,
 	EnvMapType type)
 : CTexProxy(type)
 {

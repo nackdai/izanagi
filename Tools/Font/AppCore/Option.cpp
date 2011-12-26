@@ -33,7 +33,7 @@ BOOL COption::Analysis(int argc, TCHAR* argv[])
 {
 	for (int i = 1; i < argc; i++) {
 		BOOL result = FALSE;
-		izanagi::izanagi_tk::CString cmd(argv[i]);
+		izanagi::tool::CString cmd(argv[i]);
 
 		if (i < argc - 1) {
 			if (result = (cmd == "-i")) {
@@ -58,7 +58,7 @@ BOOL COption::Analysis(int argc, TCHAR* argv[])
 			}
 			else if (result = (cmd == "-code")) {
 				// -c
-				izanagi::izanagi_tk::CString tmp(argv[++i]);
+				izanagi::tool::CString tmp(argv[++i]);
 
 				if (tmp.compare_no_case("SJIS") == 0) {
 					charEncode = izanagi::E_FONT_CHAR_ENCODE_SJIS;
@@ -236,7 +236,7 @@ BOOL COption::AnalysisListFile()
 		// パスの前後の空白を取り除く
 		PathRemoveBlanks(BUF);
 
-		izanagi::izanagi_tk::CString str;
+		izanagi::tool::CString str;
 		str.format("%s", BUF);
 
 		if (!str.empty()) {

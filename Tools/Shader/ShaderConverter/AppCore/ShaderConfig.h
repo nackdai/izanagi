@@ -10,22 +10,22 @@
 /////////////////////////////////////////////
 
 struct SShaderConfig {
-	izanagi::izanagi_tk::CString compiler;		// コンパイルコマンド
-	izanagi::izanagi_tk::CString compile_opt;	// コンパイルオプション
+	izanagi::tool::CString compiler;		// コンパイルコマンド
+	izanagi::tool::CString compile_opt;	// コンパイルオプション
 
-	izanagi::izanagi_tk::CString shader;			// コンパイルするシェーダ
-	izanagi::izanagi_tk::CString out;
+	izanagi::tool::CString shader;			// コンパイルするシェーダ
+	izanagi::tool::CString out;
 
-	std::vector<izanagi::izanagi_tk::CString> defines;	// -Dオプションで指定されたもの
-	std::vector<izanagi::izanagi_tk::CString> includes;	// -Iオプションで指定されたもの
+	std::vector<izanagi::tool::CString> defines;	// -Dオプションで指定されたもの
+	std::vector<izanagi::tool::CString> includes;	// -Iオプションで指定されたもの
 
 	struct {
 		UINT isCompileAsm	: 1;	// アセンブラ表示のためのコンパイルをするかどうか
 	};
 
-	izanagi::izanagi_tk::CString preproc_file;	// プリプロセス済みファイル
+	izanagi::tool::CString preproc_file;	// プリプロセス済みファイル
 
-	izanagi::izanagi_tk::CString name;
+	izanagi::tool::CString name;
 };
 
 /////////////////////////////////////////////
@@ -74,14 +74,14 @@ private:
 	void BeginAnalysisShaderElement();
 	void EndtAnalysisShaderElement();
 
-	typedef void (CShaderConfigManager::*AnalysisAttrFunc)(const izanagi::izanagi_tk::CString&, const izanagi::izanagi_tk::CString&);
+	typedef void (CShaderConfigManager::*AnalysisAttrFunc)(const izanagi::tool::CString&, const izanagi::tool::CString&);
 	inline void AnalysisAttr(
 		const xercesc::Attributes& attrs,
 		AnalysisAttrFunc func);
 
-	void AnalysisAttrSHD(const izanagi::izanagi_tk::CString& strAttrName, const izanagi::izanagi_tk::CString& strVal);
-	void AnalysisAttrINCLUDE(const izanagi::izanagi_tk::CString& strAttrName, const izanagi::izanagi_tk::CString& strVal);
-	void AnalysisAttrDEFINE(const izanagi::izanagi_tk::CString& strAttrName, const izanagi::izanagi_tk::CString& strVal);
+	void AnalysisAttrSHD(const izanagi::tool::CString& strAttrName, const izanagi::tool::CString& strVal);
+	void AnalysisAttrINCLUDE(const izanagi::tool::CString& strAttrName, const izanagi::tool::CString& strVal);
+	void AnalysisAttrDEFINE(const izanagi::tool::CString& strAttrName, const izanagi::tool::CString& strVal);
 
 private:
 	std::string m_BaseDir;

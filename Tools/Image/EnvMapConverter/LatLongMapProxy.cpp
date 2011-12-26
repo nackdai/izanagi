@@ -22,7 +22,7 @@
 //      θ
 
 CLatLongMapProxy::CLatLongMapProxy(
-	izanagi::izanagi_tk::CTextureLite* tex,
+	izanagi::tool::CTextureLite* tex,
 	EnvMapType type)
 : CTexProxy(type)
 {

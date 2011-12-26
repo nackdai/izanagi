@@ -30,8 +30,8 @@ static const char* COMPILED_ASM_VS_EXT = ".vsh";
 * コマンド作成
 */
 void CCompileCmdCreator::CreateCompileCommand(
-	izanagi::izanagi_tk::CString& cmd,
-	izanagi::izanagi_tk::CString& out,
+	izanagi::tool::CString& cmd,
+	izanagi::tool::CString& out,
 	COMPILE_TYPE type,
 	LPCSTR lpszCompileCommand,
 	LPCSTR lpszShaderFile,
@@ -48,7 +48,7 @@ void CCompileCmdCreator::CreateCompileCommand(
 	}
 
 	// プロファイル設定
-	izanagi::izanagi_tk::CString strProfile(IsVS() ? "vs_2_a" : "ps_2_a");
+	izanagi::tool::CString strProfile(IsVS() ? "vs_2_a" : "ps_2_a");
 	if (profile != CG_PROFILE_GENERIC) {
 		strProfile.format("%s", cgGetProfileString(profile));
 	}

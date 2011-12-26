@@ -42,7 +42,7 @@ IZ_BOOL CMdlExporter::Export(
 	}
 
 	// Blank for file's header.
-	izanagi::izanagi_tk::CIoStreamSeekHelper cSeekHelper(&m_Out);
+	izanagi::tool::CIoStreamSeekHelper cSeekHelper(&m_Out);
 	VGOTO(ret = cSeekHelper.Skip(sizeof(sHeader)), __EXIT__);
 
 #if 0

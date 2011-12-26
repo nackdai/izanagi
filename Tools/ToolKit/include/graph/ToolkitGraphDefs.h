@@ -2,7 +2,7 @@
 #define __IZANAGI_TOOL_KIT_GRAPH_DEFS_H__
 
 namespace izanagi {
-namespace izanagi_tk {
+namespace tool {
 	/** テクスチャ出力タイプ
 	 */
 	enum TextureExportType {
@@ -11,7 +11,7 @@ namespace izanagi_tk {
 
 		TextureExportTypeNum,
 	};
-}	// namespace izanagi_tk
+}	// namespace tool
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_TOOL_KIT_GRAPH_DEFS_H__)

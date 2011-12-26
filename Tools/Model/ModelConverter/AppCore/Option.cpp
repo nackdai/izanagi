@@ -83,7 +83,7 @@ IZ_BOOL COption::AnalysisInternal()
 		// 出力ファイルが空なので、入力ファイルから作成する
 
 		// 拡張子を除いた入力ファイル名を取得
-		IZ_BOOL result = izanagi::izanagi_tk::CFileUtility::RemoveExtension(
+		IZ_BOOL result = izanagi::tool::CFileUtility::RemoveExtension(
 							BUF,
 							sizeof(BUF),
 							in.c_str());
@@ -107,7 +107,7 @@ IZ_BOOL COption::AnalysisInternal()
 		// 入力ファイルの拡張子から判定する
 
 		// 拡張子を取得
-		IZ_PCSTR ext = izanagi::izanagi_tk::CFileUtility::GetExtension(
+		IZ_PCSTR ext = izanagi::tool::CFileUtility::GetExtension(
 						BUF,
 						sizeof(BUF),
 						in.c_str());

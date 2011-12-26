@@ -19,7 +19,7 @@ int Preproc(COption& cOption)
 
 	// インクルードパス
 	{
-		std::vector<izanagi::izanagi_tk::CString>::iterator it = cOption.includes.begin();
+		std::vector<izanagi::tool::CString>::iterator it = cOption.includes.begin();
 		while (it != cOption.includes.end()) {
 			LPCSTR str = *it;
 			tvArgs.push_back("-I");
@@ -30,7 +30,7 @@ int Preproc(COption& cOption)
 
 	// プリプロセス定義
 	{
-		std::vector<izanagi::izanagi_tk::CString>::iterator it = cOption.defines.begin();
+		std::vector<izanagi::tool::CString>::iterator it = cOption.defines.begin();
 		while (it != cOption.defines.end()) {
 			LPCSTR str = *it;
 			tvArgs.push_back("-D");
@@ -65,7 +65,7 @@ int Preproc(COption& cOption)
 	int ret = preproc_main((int)tvArgs.size(), &tvArgs[0]);
 
 	if (ret > 0) {
-		izanagi::izanagi_tk::CString tmp;
+		izanagi::tool::CString tmp;
 		for (int i = 0; i < (int)tvArgs.size(); i++) {
 			tmp += tvArgs[0];
 			tmp += " ";
@@ -85,7 +85,7 @@ BOOL ExecWithPreprocMode(
 	COption& cOption)
 {
 	// コマンド作成
-	izanagi::izanagi_tk::CString strCmd;
+	izanagi::tool::CString strCmd;
 	strCmd.format(
 		"%s -E %s -out_tmp %s",
 		lpszExe,
@@ -98,7 +98,7 @@ BOOL ExecWithPreprocMode(
 
 	// インクルードパス
 	{
-		std::vector<izanagi::izanagi_tk::CString>::iterator it = cOption.includes.begin();
+		std::vector<izanagi::tool::CString>::iterator it = cOption.includes.begin();
 		while (it != cOption.includes.end()) {
 			strCmd += " -I ";
 			strCmd += *it;
@@ -108,7 +108,7 @@ BOOL ExecWithPreprocMode(
 
 	// プリプロセス定義
 	{
-		std::vector<izanagi::izanagi_tk::CString>::iterator it = cOption.defines.begin();
+		std::vector<izanagi::tool::CString>::iterator it = cOption.defines.begin();
 		while (it != cOption.defines.end()) {
 			strCmd += " -D ";
 			strCmd += *it;

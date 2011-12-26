@@ -2,7 +2,7 @@
 #include "ImageLibUtility.h"
 
 using namespace izanagi;
-using namespace izanagi_tk;
+using namespace tool;
 
 CMipMapCreator CMipMapCreator::s_cInstance;
 

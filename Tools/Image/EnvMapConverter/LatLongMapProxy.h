@@ -8,7 +8,7 @@
 class CLatLongMapProxy : public CTexProxy {
 public:
 	CLatLongMapProxy(
-		izanagi::izanagi_tk::CTextureLite* tex,
+		izanagi::tool::CTextureLite* tex,
 		EnvMapType type);
 	virtual ~CLatLongMapProxy();
 
@@ -43,7 +43,7 @@ public:
 	virtual IZ_BOOL isValid(IZ_UINT x, IZ_UINT y) const;
 
 protected:
-	izanagi::izanagi_tk::CTextureLite* m_Tex;
+	izanagi::tool::CTextureLite* m_Tex;
 
 	IZ_UINT m_Pitch;
 	IZ_UINT8* m_Data;

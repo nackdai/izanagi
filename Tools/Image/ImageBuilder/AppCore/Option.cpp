@@ -13,7 +13,7 @@ BOOL COption::Analysis(int argc, TCHAR* argv[])
 {
 	for (int i = 1; i < argc; i++) {
 		BOOL result = FALSE;
-		izanagi::izanagi_tk::CString cmd(argv[i]);
+		izanagi::tool::CString cmd(argv[i]);
 
 		if (i < argc - 1) {
 			if (result = (cmd == "-i")) {

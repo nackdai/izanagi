@@ -16,8 +16,8 @@ enum FileType {
 };
 
 struct SOption {
-	izanagi::izanagi_tk::CString in;		// 入力ファイル
-	izanagi::izanagi_tk::CString out;	// 出力ファイル
+	izanagi::tool::CString in;		// 入力ファイル
+	izanagi::tool::CString out;	// 出力ファイル
 
 	FileType fileType;	// ファイルタイプ
 };

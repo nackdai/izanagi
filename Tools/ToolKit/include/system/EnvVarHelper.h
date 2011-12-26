@@ -6,7 +6,7 @@
 #include "izDefs.h"
 
 namespace izanagi {
-namespace izanagi_tk {
+namespace tool {
 	class CEnvVarHelper {
 	private:
 		CEnvVarHelper();
@@ -43,7 +43,7 @@ namespace izanagi_tk {
 			return ret;
 		}
 	};
-}	// namespace izanagi_tk
+}	// namespace tool
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_TOOL_KIT_SYSTEM_ENV_VAR_HELPER_H__)

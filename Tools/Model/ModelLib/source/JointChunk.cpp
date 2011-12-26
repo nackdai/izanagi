@@ -46,7 +46,7 @@ IZ_BOOL CJointChunk::Export(
 	}
 
 	// Blank for S_SKL_HEADER.
-	izanagi::izanagi_tk::CIoStreamSeekHelper cSeekHelper(pOut);
+	izanagi::tool::CIoStreamSeekHelper cSeekHelper(pOut);
 	VRETURN(cSeekHelper.Skip(sizeof(sHeader)));
 
 	std::vector<izanagi::S_SKL_JOINT> tvJoint;

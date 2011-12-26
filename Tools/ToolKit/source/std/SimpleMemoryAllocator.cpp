@@ -1,7 +1,7 @@
 ﻿#include "std/SimpleMemoryAllocator.h"
 
 using namespace izanagi;
-using namespace izanagi_tk;
+using namespace tool;
 
 void* CSimpleMemoryAllocator::Alloc(
 	size_t size, 

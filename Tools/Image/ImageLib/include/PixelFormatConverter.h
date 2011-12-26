@@ -8,7 +8,7 @@
 #include "izGraph.h"
 
 namespace izanagi {
-namespace izanagi_tk {
+namespace tool {
 	/**
 	*/
 	class CPixelFormatConverter {
@@ -45,7 +45,7 @@ namespace izanagi_tk {
 		// 一度確保した最大サイズを保持し続ける
 		std::vector<IZ_BYTE> m_LineBuffer;
 	};
-}	// namespace izanagi_tk
+}	// namespace tool
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_IMAGE_LIB_PIXEL_FORMAT_CONVERTER_H__)

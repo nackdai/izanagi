@@ -2,9 +2,9 @@
 #include "TexProxy.h"
 
 void Convert(
-	std::vector<izanagi::izanagi_tk::CTextureLite*>& inTex,
+	std::vector<izanagi::tool::CTextureLite*>& inTex,
 	EnvMapType inType,
-	std::vector<izanagi::izanagi_tk::CTextureLite*>& outTex,
+	std::vector<izanagi::tool::CTextureLite*>& outTex,
 	EnvMapType outType)
 {
 	CTexProxy* in = CTexProxy::CreateTexProxy(inTex, inType);

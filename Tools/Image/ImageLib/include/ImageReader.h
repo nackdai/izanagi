@@ -6,7 +6,7 @@
 #include "IMGTexture.h"
 
 namespace izanagi {
-namespace izanagi_tk {
+namespace tool {
 	/**
 	*/
 	class CImageReader {
@@ -70,7 +70,7 @@ namespace izanagi_tk {
 		m_pReadFunc = pFunc;
 	}
 
-}	// namespace izanagi_tk
+}	// namespace tool
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_IMAGE_LIB_IMAGE_READER_H__)

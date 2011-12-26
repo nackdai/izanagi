@@ -4,7 +4,7 @@
 extern "C"
 int preproc_main(int argc, char* argv[]);
 
-using namespace izanagi::izanagi_tk;
+using namespace izanagi::tool;
 
 IZ_INT CPreprocHelper::CallPreproc(int argc, char* argv[])
 {

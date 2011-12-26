@@ -4,7 +4,7 @@
 #include "izToolKit.h"
 
 struct SFile {
-	izanagi::izanagi_tk::CString path;	// パス
+	izanagi::tool::CString path;	// パス
 
 	struct {
 		UINT isCompress	: 1;	// 圧縮

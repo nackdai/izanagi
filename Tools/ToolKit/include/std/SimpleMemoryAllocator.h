@@ -5,7 +5,7 @@
 #include "izStd.h"
 
 namespace izanagi {
-namespace izanagi_tk {
+namespace tool {
 	/**
 	* Tool用シンプルメモリアロケータ
 	*/
@@ -81,7 +81,7 @@ namespace izanagi_tk {
 	private:
 		CStdList<SHeapHeader> m_AllocList;
 	};
-}	// namespace izanagi_tk
+}	// namespace tool
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_TOOL_KIT_STD_SIMPLE_MEMORY_ALLOCATOR_H__)

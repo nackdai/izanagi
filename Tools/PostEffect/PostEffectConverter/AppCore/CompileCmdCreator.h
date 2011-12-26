@@ -34,8 +34,8 @@ private:
 public:
 	// コマンド作成
 	void CreateCompileCommand(
-		izanagi::izanagi_tk::CString& cmd,
-		izanagi::izanagi_tk::CString& out,
+		izanagi::tool::CString& cmd,
+		izanagi::tool::CString& out,
 		COMPILE_TYPE type,
 		LPCSTR lpszCompileCommand,
 		LPCSTR lpszShaderFile,
