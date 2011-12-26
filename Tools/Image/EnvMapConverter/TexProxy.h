@@ -26,16 +26,14 @@ protected:
 public:
 	// テクスチャプロキシ作成
 	static CTexProxy* CreateTexProxy(
-		izanagi::izanagi_tk::CTextureLite* tex,
+		std::vector<izanagi::izanagi_tk::CTextureLite*>& tex,
 		EnvMapType type);
 
 	// テクスチャプロキシ破棄
 	static void DeleteTexProxy(CTexProxy*& tex);
 
 public:
-	CTexProxy(
-		izanagi::izanagi_tk::CTextureLite* tex,
-		EnvMapType type);
+	CTexProxy(EnvMapType type);
 	virtual ~CTexProxy();
 
 public:
@@ -49,7 +47,8 @@ public:
 	 */
 	virtual void getRef(
 		IZ_UINT x, IZ_UINT y,
-		izanagi::SVector& ref) = 0;
+		izanagi::SVector& ref,
+		izanagi::E_GRAPH_CUBE_TEX_FACE face = izanagi::E_GRAPH_CUBE_TEX_FACE_NUM) = 0;
 
 	/** UVから色を取得.
 	 */
@@ -69,6 +68,9 @@ public:
 
 protected:
 	EnvMapType m_Type;
+
+	IZ_BOOL m_IsFloat;
+	IZ_UINT m_Bpp;
 };
 
 #endif	// #if !defined(__TEX_PROXY_H__)

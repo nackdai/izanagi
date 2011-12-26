@@ -24,7 +24,7 @@
 CLatLongMapProxy::CLatLongMapProxy(
 	izanagi::izanagi_tk::CTextureLite* tex,
 	EnvMapType type)
-: CTexProxy(tex, type)
+: CTexProxy(type)
 {
 	m_Tex = tex;
 
@@ -36,6 +36,9 @@ CLatLongMapProxy::CLatLongMapProxy(
 
 	m_DivW = 1.0f / (width - 1);
 	m_DivH = 1.0f / (height - 1);
+
+	m_IsFloat = izanagi::CGraphUtil::IsFloatPixelFormat(m_Tex->GetPixelFormat());
+	m_Bpp = izanagi::CGraphUtil::GetBPP(m_Tex->GetPixelFormat());
 }
 
 CLatLongMapProxy::~CLatLongMapProxy()
@@ -78,7 +81,8 @@ void CLatLongMapProxy::getUVFromRef(
 // XYから反射ベクトルを取得.
 void CLatLongMapProxy::getRef(
 	IZ_UINT x, IZ_UINT y,
-	izanagi::SVector& ref)
+	izanagi::SVector& ref,
+	izanagi::E_GRAPH_CUBE_TEX_FACE face/*= izanagi::E_GRAPH_CUBE_TEX_FACE_NUM*/)
 {
 	// [-1:1]
 	IZ_FLOAT u = 2.0f * (x * m_DivW) - 1.0f;
@@ -116,12 +120,9 @@ void CLatLongMapProxy::getColor(
 		m_Pitch = m_Tex->Lock(0, (void**)&m_Data);
 	}
 
-	IZ_BOOL isFloat = izanagi::CGraphUtil::IsFloatPixelFormat(m_Tex->GetPixelFormat());
-	IZ_UINT bpp = izanagi::CGraphUtil::GetBPP(m_Tex->GetPixelFormat());
+	IZ_UINT8* data = m_Data + m_Pitch * y + x * m_Bpp;
 
-	IZ_UINT8* data = m_Data + m_Pitch * y + x * bpp;
-
-	if (isFloat) {
+	if (m_IsFloat) {
 		IZ_FLOAT* d = reinterpret_cast<IZ_FLOAT*>(data);
 
 		color.r = d[0];
@@ -147,12 +148,9 @@ void CLatLongMapProxy::putColor(
 		m_Pitch = m_Tex->Lock(0, (void**)&m_Data);
 	}
 
-	IZ_BOOL isFloat = izanagi::CGraphUtil::IsFloatPixelFormat(m_Tex->GetPixelFormat());
-	IZ_UINT bpp = izanagi::CGraphUtil::GetBPP(m_Tex->GetPixelFormat());
+	IZ_UINT8* data = m_Data + m_Pitch * y + x * m_Bpp;
 
-	IZ_UINT8* data = m_Data + m_Pitch * y + x * bpp;
-
-	if (isFloat) {
+	if (m_IsFloat) {
 		IZ_FLOAT* d = reinterpret_cast<IZ_FLOAT*>(data);
 
 		d[0] = color.r;

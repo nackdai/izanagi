@@ -213,6 +213,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\Image\EnvMapConverter\CubeMapProxy.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\Image\EnvMapConverter\LatLongMapProxy.h"
 					>
 				</File>
@@ -230,6 +234,10 @@
 				>
 				<File
 					RelativePath="..\..\Image\EnvMapConverter\AngularMapProxy.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Image\EnvMapConverter\CubeMapProxy.cpp"
 					>
 				</File>
 				<File
