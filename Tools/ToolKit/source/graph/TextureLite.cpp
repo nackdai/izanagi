@@ -1,4 +1,4 @@
-﻿#include "graph/TextureLite.h"
+#include "graph/TextureLite.h"
 #include "graph/GraphicsDeviceLite.h"
 
 // 力技だが・・・

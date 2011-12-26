@@ -1,4 +1,4 @@
-﻿// AnimationConverter.cpp : コンソール アプリケーションのエントリ ポイントを定義します。
+// AnimationConverter.cpp : コンソール アプリケーションのエントリ ポイントを定義します。
 //
 
 #include "izModelLib.h"

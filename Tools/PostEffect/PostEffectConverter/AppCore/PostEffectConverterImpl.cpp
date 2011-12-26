@@ -1,4 +1,4 @@
-﻿#include <algorithm>
+#include <algorithm>
 #include "PostEffectConverterImpl.h"
 
 #include "StringChunk.h"

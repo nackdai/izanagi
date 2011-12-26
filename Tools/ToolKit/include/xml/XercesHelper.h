@@ -1,4 +1,4 @@
-﻿#if !defined(__XERCES_HELPER_H__)
+#if !defined(__XERCES_HELPER_H__)
 #define __XERCES_HELPER_H__
 
 #include <string>

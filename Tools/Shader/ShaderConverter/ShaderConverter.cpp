@@ -1,4 +1,4 @@
-﻿// ShaderConverter.cpp : コンソール アプリケーションのエントリ ポイントを定義します。
+// ShaderConverter.cpp : コンソール アプリケーションのエントリ ポイントを定義します。
 //
 
 #include <xercesc/util/PlatformUtils.hpp>

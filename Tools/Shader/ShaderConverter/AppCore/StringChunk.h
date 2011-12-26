@@ -1,4 +1,4 @@
-﻿#if !defined(__SHADER_CONVERTER_STRING_CHUNK_H__)
+#if !defined(__SHADER_CONVERTER_STRING_CHUNK_H__)
 #define __SHADER_CONVERTER_STRING_CHUNK_H__
 
 #include <vector>

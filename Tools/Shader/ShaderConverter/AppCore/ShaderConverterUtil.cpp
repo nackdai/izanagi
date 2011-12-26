@@ -1,4 +1,4 @@
-﻿#include "ShaderConverterUtil.h"
+#include "ShaderConverterUtil.h"
 #include "izToolKit.h"
 
 namespace {

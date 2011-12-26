@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_TOOL_KIT_STD_ERROR_UTIL_H__)
+#if !defined(__IZANAGI_TOOL_KIT_STD_ERROR_UTIL_H__)
 #define __IZANAGI_TOOL_KIT_STD_ERROR_UTIL_H__
 
 #include <list>

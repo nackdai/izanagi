@@ -1,4 +1,4 @@
-﻿#if !defined(__FILE_TREE_H__)
+#if !defined(__FILE_TREE_H__)
 #define __FILE_TREE_H__
 
 #include <vector>

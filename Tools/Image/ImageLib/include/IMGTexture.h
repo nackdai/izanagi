@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_IMAGE_LIB_IMG_TEXTURE_H__)
+#if !defined(__IZANAGI_IMAGE_LIB_IMG_TEXTURE_H__)
 #define __IZANAGI_IMAGE_LIB_IMG_TEXTURE_H__
 
 #include <vector>

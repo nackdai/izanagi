@@ -1,4 +1,4 @@
-﻿#include "XFileJoint.h"
+#include "XFileJoint.h"
 #include "GeometryCommon.h"
 
 #include <algorithm>

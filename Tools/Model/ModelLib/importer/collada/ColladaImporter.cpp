@@ -1,4 +1,4 @@
-﻿#include "ColladaImporter.h"
+#include "ColladaImporter.h"
 #include "ColladaGeometry.h"
 #include "ColladaJoint.h"
 #include "ColladaAnimation.h"

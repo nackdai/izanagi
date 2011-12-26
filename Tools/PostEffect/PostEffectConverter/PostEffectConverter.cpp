@@ -1,4 +1,4 @@
-﻿// PostEffectConverter.cpp : コンソール アプリケーションのエントリ ポイントを定義します。
+// PostEffectConverter.cpp : コンソール アプリケーションのエントリ ポイントを定義します。
 //
 
 #include <vector>

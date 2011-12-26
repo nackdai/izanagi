@@ -1,4 +1,4 @@
-﻿#if !defined(__FONT_CONVERTER_DEFS_H__)
+#if !defined(__FONT_CONVERTER_DEFS_H__)
 #define __FONT_CONVERTER_DEFS_H__
 
 enum {

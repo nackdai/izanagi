@@ -1,4 +1,4 @@
-﻿#include "BitInputStream.h"
+#include "BitInputStream.h"
 
 using namespace izanagi;
 

@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_TOOL_KIT_GRAPH_TEXTURE_LIGHT_H__)
+#if !defined(__IZANAGI_TOOL_KIT_GRAPH_TEXTURE_LIGHT_H__)
 #define __IZANAGI_TOOL_KIT_GRAPH_TEXTURE_LIGHT_H__
 
 #include "izDefs.h"

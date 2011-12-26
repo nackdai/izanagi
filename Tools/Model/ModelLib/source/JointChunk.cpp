@@ -1,4 +1,4 @@
-﻿#include "JointChunk.h"
+#include "JointChunk.h"
 #include "izToolKit.h"
 
 // ジョイントチャンク

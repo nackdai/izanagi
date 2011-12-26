@@ -1,4 +1,4 @@
-﻿// ArchiveBuilder.cpp : コンソール アプリケーションのエントリ ポイントを定義します。
+// ArchiveBuilder.cpp : コンソール アプリケーションのエントリ ポイントを定義します。
 //
 
 #include "FileTree.h"

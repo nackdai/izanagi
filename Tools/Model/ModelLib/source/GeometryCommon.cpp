@@ -1,4 +1,4 @@
-﻿#include "GeometryCommon.h"
+#include "GeometryCommon.h"
 #include "izStd.h"
 
 ///////////////////////////////////////

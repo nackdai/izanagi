@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_IMAGE_LIB_IMAGE_LIB_COMMON_H__)
+#if !defined(__IZANAGI_IMAGE_LIB_IMAGE_LIB_COMMON_H__)
 #define __IZANAGI_IMAGE_LIB_IMAGE_LIB_COMMON_H__
 
 #include "izDefs.h"

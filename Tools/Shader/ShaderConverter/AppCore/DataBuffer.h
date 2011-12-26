@@ -1,4 +1,4 @@
-﻿#if !defined(__SHADER_CONVERTER_DATA_BUFFER_H__)
+#if !defined(__SHADER_CONVERTER_DATA_BUFFER_H__)
 #define __SHADER_CONVERTER_DATA_BUFFER_H__
 
 #include <vector>

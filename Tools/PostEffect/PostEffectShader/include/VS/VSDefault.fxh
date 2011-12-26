@@ -3,15 +3,15 @@
 
 #include "VSCommon.fxh"
 
-// ƒfƒtƒHƒ‹ƒg’¸“_ƒVƒF[ƒ_
+// ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆé ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€
 S_PE_VS_OUT VSDefault(S_PE_VS_IN sIn)
 {
 	S_PE_VS_OUT sOut;
 
-	// ’¸“_ˆÊ’uŒvZ
+	// é ‚ç‚¹ä½ç½®è¨ˆç®—
 	sOut.vPos = _ComputeVSPosition(sIn.vPos);
 
-	// ƒeƒNƒXƒ`ƒƒÀ•W
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£åº§æ¨™
 	//	out = in * scale + offset
 	sOut.vUV.xy = sIn.vUV.xy * g_vTexParam.xy + g_vTexParam.zw;
 

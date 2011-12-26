@@ -3,11 +3,11 @@
 
 #include "ShaderDefs/ShaderDefsInternal.fxh"
 
-// ƒTƒ“ƒvƒŠƒ“ƒOƒpƒ‰ƒ[ƒ^
+// ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
 
 ///////////////////////////////////////////////////
-// 1/4 x 1/4 k¬ƒTƒ“ƒvƒŠƒ“ƒOƒIƒtƒZƒbƒg
-// ƒŠƒjƒAƒtƒBƒ‹ƒ^
+// 1/4 x 1/4 ç¸®å°ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ã‚ªãƒ•ã‚»ãƒƒãƒˆ
+// ãƒªãƒ‹ã‚¢ãƒ•ã‚£ãƒ«ã‚¿
 
 // NOTE
 // +---+---+---+---+  +---+---+---+---+
@@ -32,8 +32,8 @@ PRIVATE(const float4 g_vDownScale4x4SampleOffset_Linear[] : TEX_OFFSET) = {
 };
 
 ///////////////////////////////////////////////////
-// 1/4 x 1/4 k¬ƒTƒ“ƒvƒŠƒ“ƒOƒIƒtƒZƒbƒg
-// ƒ|ƒCƒ“ƒgƒtƒBƒ‹ƒ^
+// 1/4 x 1/4 ç¸®å°ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ã‚ªãƒ•ã‚»ãƒƒãƒˆ
+// ãƒã‚¤ãƒ³ãƒˆãƒ•ã‚£ãƒ«ã‚¿
 
 // NOTE
 // +---+---+---+---+  +---+---+---+---+
@@ -82,8 +82,8 @@ PRIVATE(float4 g_vDownScale4x4SampleOffset_Point[] : TEX_OFFSET) = {
 };
 
 ///////////////////////////////////////////////////
-// 1/2 x 1/2 k¬ƒTƒ“ƒvƒŠƒ“ƒOƒIƒtƒZƒbƒg
-// ƒŠƒjƒAƒtƒBƒ‹ƒ^
+// 1/2 x 1/2 ç¸®å°ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ã‚ªãƒ•ã‚»ãƒƒãƒˆ
+// ãƒªãƒ‹ã‚¢ãƒ•ã‚£ãƒ«ã‚¿
 
 // NOTE
 // +---+---+
@@ -97,8 +97,8 @@ PRIVATE(float4 g_vDownScale2x2SampleOffset_Linear : TEX_OFFSET) = {
 };
 
 ///////////////////////////////////////////////////
-// 1/2 x 1/2 k¬ƒTƒ“ƒvƒŠƒ“ƒOƒIƒtƒZƒbƒg
-// ƒ|ƒCƒ“ƒgƒtƒBƒ‹ƒ^
+// 1/2 x 1/2 ç¸®å°ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ã‚ªãƒ•ã‚»ãƒƒãƒˆ
+// ãƒã‚¤ãƒ³ãƒˆãƒ•ã‚£ãƒ«ã‚¿
 
 // NOTE
 // +---+---+  +---+---+
@@ -119,8 +119,8 @@ PRIVATE(float4 g_vDownScale2x2SampleOffset_Point[] : TEX_OFFSET) = {
 };
 
 ///////////////////////////////////////////////////
-// 1/3 x 1/3 k¬ƒTƒ“ƒvƒŠƒ“ƒOƒIƒtƒZƒbƒg
-// ƒŠƒjƒAƒtƒBƒ‹ƒ^
+// 1/3 x 1/3 ç¸®å°ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ã‚ªãƒ•ã‚»ãƒƒãƒˆ
+// ãƒªãƒ‹ã‚¢ãƒ•ã‚£ãƒ«ã‚¿
 
 // NOTE
 // +---+---+---+     +-------+--
@@ -163,8 +163,8 @@ PRIVATE(float4 g_vDownScale3x3SampleOffset_Linear[] : TEX_OFFSET) = {
 };
 
 ///////////////////////////////////////////////////
-// 1/3 x 1/3 k¬ƒTƒ“ƒvƒŠƒ“ƒOƒIƒtƒZƒbƒg
-// ƒ|ƒCƒ“ƒgƒtƒBƒ‹ƒ^
+// 1/3 x 1/3 ç¸®å°ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ã‚ªãƒ•ã‚»ãƒƒãƒˆ
+// ãƒã‚¤ãƒ³ãƒˆãƒ•ã‚£ãƒ«ã‚¿
 
 // NOTE
 // +---+---+---+  +---+---+---+
@@ -199,7 +199,7 @@ PRIVATE(float4 g_vDownScale3x3SampleOffset_Point[] : TEX_OFFSET) = {
 };
 
 ///////////////////////////////////////////////////
-// 5 x 5 ƒKƒEƒXƒuƒ‰[ƒTƒ“ƒvƒŠƒ“ƒOƒIƒtƒZƒbƒg
+// 5 x 5 ã‚¬ã‚¦ã‚¹ãƒ–ãƒ©ãƒ¼ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ã‚ªãƒ•ã‚»ãƒƒãƒˆ
 
 // NOTE
 //         +---+
@@ -214,7 +214,7 @@ PRIVATE(float4 g_vDownScale3x3SampleOffset_Point[] : TEX_OFFSET) = {
 //         | x |
 //         +---+
 //
-// ‰~ó‚ÉƒTƒ“ƒvƒŠƒ“ƒO‚·‚é
+// å††çŠ¶ã«ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ã™ã‚‹
 
 // NOTE
 //         +---+
@@ -261,33 +261,33 @@ PRIVATE(float4 g_vGaussBlur5x5SampleOffset[] : TEX_OFFSET) = {
 };
 
 ///////////////////////////////////////////////////
-// 5 x 5 ƒKƒEƒXƒuƒ‰[ƒEƒGƒCƒg
+// 5 x 5 ã‚¬ã‚¦ã‚¹ãƒ–ãƒ©ãƒ¼ã‚¦ã‚¨ã‚¤ãƒˆ
 
 // NOTE
-// ƒKƒEƒXŠÖ”
-// f(x) = c * exp(-(x * x) / (2 * ƒĞ * ƒĞ))
-// (c : ‹KŠi‰»’è” / ƒĞ * ƒĞ : •ªU)
+// ã‚¬ã‚¦ã‚¹é–¢æ•°
+// f(x) = c * exp(-(x * x) / (2 * Ïƒ * Ïƒ))
+// (c : è¦æ ¼åŒ–å®šæ•° / Ïƒ * Ïƒ : åˆ†æ•£)
 //
-//       b
-//       ›
-//     ›››
-// ]››œ››¨x
-//     ›››
-//       ›
-//       «y
-// ‰~ó‚ÉƒTƒ“ƒvƒŠƒ“ƒO‚·‚é
+//       ï½œ
+//       â—‹
+//     â—‹â—‹â—‹
+// â€â—‹â—‹â—â—‹â—‹â†’x
+//     â—‹â—‹â—‹
+//       â—‹
+//       â†“y
+// å††çŠ¶ã«ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ã™ã‚‹
 
 // NOTE
-// «C++ƒ\[ƒXƒR[ƒh
+// â†“C++ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰
 //MY_FLOAT _GaussianDistribution(
 //	MY_FLOAT x, MY_FLOAT y, 
-//	MY_FLOAT rho)	// •ªU
+//	MY_FLOAT rho)	// åˆ†æ•£
 //{
 //
-//	// ‰~ó‚É‚È‚é‚æ‚¤‚ÈƒEƒGƒCƒg’l‚É‚È‚é‚æ‚¤(?)‚É 1 / 2ƒÎ ‚ÌŒW”
+//	// å††çŠ¶ã«ãªã‚‹ã‚ˆã†ãªã‚¦ã‚¨ã‚¤ãƒˆå€¤ã«ãªã‚‹ã‚ˆã†(?)ã« 1 / 2Ï€ ã®ä¿‚æ•°
 //	MY_FLOAT g = 1.0f / sqrtf(MATH_PI2 * rho * rho);
 //
-//	// x * x + y * y = r * r -> ‰~‚Ì®H
+//	// x * x + y * y = r * r -> å††ã®å¼ï¼Ÿ
 //	g *= expf(-(x * x + y * y) / (2 * rho * rho));
 //
 //	return g;
@@ -295,8 +295,8 @@ PRIVATE(float4 g_vGaussBlur5x5SampleOffset[] : TEX_OFFSET) = {
 //
 //void CPostEffectSamplingUtil::GetGaussBlur5x5Weight(
 //	MY_FLOAT pWeight[],
-//	MY_FLOAT fMultiplier,	// ƒEƒGƒCƒg‚Ö‚Ìæ”
-//	MY_FLOAT fDeviation)	// ƒEƒGƒCƒgŒvZ‚Ég—p‚·‚é•Î·
+//	MY_FLOAT fMultiplier,	// ã‚¦ã‚¨ã‚¤ãƒˆã¸ã®ä¹—æ•°
+//	MY_FLOAT fDeviation)	// ã‚¦ã‚¨ã‚¤ãƒˆè¨ˆç®—æ™‚ã«ä½¿ç”¨ã™ã‚‹åå·®
 //{
 //	MY_FLOAT fTotalWeight = 0.0f;
 //	MY_UINT nIdx = 0;
@@ -307,7 +307,7 @@ PRIVATE(float4 g_vGaussBlur5x5SampleOffset[] : TEX_OFFSET) = {
 //				continue;
 //			}
 //
-//			// ƒEƒGƒCƒg
+//			// ã‚¦ã‚¨ã‚¤ãƒˆ
 //			MY_FLOAT fGauss = _GaussianDistribution(
 //								(MY_FLOAT)x,
 //								(MY_FLOAT)y,
@@ -347,15 +347,15 @@ static const float g_vGaussBlur5x5Weight[] = {
 };
 
 ///////////////////////////////////////////////////
-// ƒuƒ‹[ƒ€ƒuƒ‰[ƒTƒ“ƒvƒŠƒ“ƒOƒIƒtƒZƒbƒg
-// ƒ|ƒCƒ“ƒgƒtƒBƒ‹ƒ^
+// ãƒ–ãƒ«ãƒ¼ãƒ ãƒ–ãƒ©ãƒ¼ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ã‚ªãƒ•ã‚»ãƒƒãƒˆ
+// ãƒã‚¤ãƒ³ãƒˆãƒ•ã‚£ãƒ«ã‚¿
 
 // NOTE
 // +---+---+---+---+---+---+---+---+---+---+---+---+---+
 // | x | x | x | x | x | x | @ | x | x | x | x | x | x |
 // +---+---+---+---+---+---+---+---+---+---+---+---+---+
 
-// c
+// ç¸¦
 PRIVATE(float4 g_vBloomBlurSampleOffsetV_Point[] : TEX_OFFSET) = {
 	{
 		0.0f,  0.0f,
@@ -387,7 +387,7 @@ PRIVATE(float4 g_vBloomBlurSampleOffsetV_Point[] : TEX_OFFSET) = {
 	},
 };
 
-// ‰¡
+// æ¨ª
 PRIVATE(float4 g_vBloomBlurSampleOffsetH_Point[] : TEX_OFFSET) = {
 	{
 		 0.0f, 0.0f,
@@ -420,8 +420,8 @@ PRIVATE(float4 g_vBloomBlurSampleOffsetH_Point[] : TEX_OFFSET) = {
 };
 
 ///////////////////////////////////////////////////
-// ƒuƒ‹[ƒ€ƒuƒ‰[ƒTƒ“ƒvƒŠƒ“ƒOƒEƒGƒCƒg
-// ƒ|ƒCƒ“ƒgƒtƒBƒ‹ƒ^
+// ãƒ–ãƒ«ãƒ¼ãƒ ãƒ–ãƒ©ãƒ¼ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ã‚¦ã‚¨ã‚¤ãƒˆ
+// ãƒã‚¤ãƒ³ãƒˆãƒ•ã‚£ãƒ«ã‚¿
 
 // NOTE
 // +---+---+---+---+---+---+---+---+---+---+---+---+---+
@@ -429,7 +429,7 @@ PRIVATE(float4 g_vBloomBlurSampleOffsetH_Point[] : TEX_OFFSET) = {
 // +---+---+---+---+---+---+---+---+---+---+---+---+---+
 
 // NOTE
-// «C++ƒ\[ƒXƒR[ƒh
+// â†“C++ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰
 //void _Get1DirectionGaussBlurWeight_Point(
 //	MY_FLOAT pWeight[],
 //	MY_FLOAT fMultiplier,
@@ -441,13 +441,13 @@ PRIVATE(float4 g_vBloomBlurSampleOffsetH_Point[] : TEX_OFFSET) = {
 //		pWeight[i] = fMultiplier;
 //
 //		// NOTE
-//		// ŒvZŒ‹‰Ê‚Í‚Ç‚¿‚ç‚ª‚O‚Å‚ ‚Á‚Ä‚à“¯‚¶‚É‚È‚é
+//		// è¨ˆç®—çµæœã¯ã©ã¡ã‚‰ãŒï¼ã§ã‚ã£ã¦ã‚‚åŒã˜ã«ãªã‚‹
 //		pWeight[i] *= _GaussianDistribution(
 //						(MY_FLOAT)i, 0.0f,
 //						fDeviation);
 //	}
 //
-//	// ã‚Ì•”•ª‚Å‚Í”¼•ª‚È‚Ì‚ÅA‹t‘¤”¼•ª‚ÉƒRƒs[‚·‚é
+//	// ä¸Šã®éƒ¨åˆ†ã§ã¯åŠåˆ†ãªã®ã§ã€é€†å´åŠåˆ†ã«ã‚³ãƒ”ãƒ¼ã™ã‚‹
 //	for (MY_UINT i = 7; i < 13; i++) {
 //		pWeight[i] = pWeight[i - 6];
 //	}
@@ -470,15 +470,15 @@ static const float g_vBloomBlurWeight_Point[] = {
 };
 
 ///////////////////////////////////////////////////
-// ƒuƒ‹[ƒ€ƒuƒ‰[ƒTƒ“ƒvƒŠƒ“ƒOƒIƒtƒZƒbƒg
-// ƒŠƒjƒAƒtƒBƒ‹ƒ^
+// ãƒ–ãƒ«ãƒ¼ãƒ ãƒ–ãƒ©ãƒ¼ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ã‚ªãƒ•ã‚»ãƒƒãƒˆ
+// ãƒªãƒ‹ã‚¢ãƒ•ã‚£ãƒ«ã‚¿
 
 // NOTE
 // +---+---+---+---+---+---+---+---+---+---+---+---+---+
 // | x | x | x | x | x | x | @ | x | x | x | x | x | x |
 // +---+---+---+---+---+---+---+---+---+---+---+---+---+
 // |<----->|<----->|<----->|   |<----->|<----->|<----->|
-// ã‚Ì‚æ‚¤‚É‚QƒeƒNƒZƒ‹‚¸‚Â‚Ü‚Æ‚ß‚é
+// ä¸Šã®ã‚ˆã†ã«ï¼’ãƒ†ã‚¯ã‚»ãƒ«ãšã¤ã¾ã¨ã‚ã‚‹
 
 // NOTE
 // +-------+-------+ 
@@ -486,19 +486,19 @@ static const float g_vBloomBlurWeight_Point[] = {
 // |   2   |@  1   |
 // |       |       |
 // +-------+-------+ 
-// ‚P‚Æ‚Q‚ÌŠÔ‚ğƒEƒGƒCƒg’l‚ÅüŒ`•âŠÔ‚µ‚½‚à‚Ì‚ªƒIƒtƒZƒbƒg‚É‚È‚é
-// ‚P‚©‚ç‚ÌƒIƒtƒZƒbƒg‚É‚È‚é
+// ï¼‘ã¨ï¼’ã®é–“ã‚’ã‚¦ã‚¨ã‚¤ãƒˆå€¤ã§ç·šå½¢è£œé–“ã—ãŸã‚‚ã®ãŒã‚ªãƒ•ã‚»ãƒƒãƒˆã«ãªã‚‹
+// ï¼‘ã‹ã‚‰ã®ã‚ªãƒ•ã‚»ãƒƒãƒˆã«ãªã‚‹
 //   Offset = Weight2 / (Weight1 + Weight2)
 
 // NOTE
-// «C++ƒ\[ƒXƒR[ƒh
+// â†“C++ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰
 //void _Get1DirectionGaussBlurSampleOffset_Linear(
 //	S_FLOAT_VECTOR4 pOffset[],
 //	const MY_FLOAT pWeight[],
 //	MY_INT nTexSize,
 //	MY_BOOL bIsVertical)
 //{
-//	// ƒEƒGƒCƒg’l‚ğŒ³‚ÉƒIƒtƒZƒbƒg‚ğŒvZ‚·‚é
+//	// ã‚¦ã‚¨ã‚¤ãƒˆå€¤ã‚’å…ƒã«ã‚ªãƒ•ã‚»ãƒƒãƒˆã‚’è¨ˆç®—ã™ã‚‹
 //	MY_FLOAT fOffsetArray[7];
 //	{
 //		fOffsetArray[0] = 0.0f;
@@ -510,7 +510,7 @@ static const float g_vBloomBlurWeight_Point[] = {
 //		}
 //	}
 //
-//	// ÅI“I‚ÈƒIƒtƒZƒbƒg‚ğŒvZ
+//	// æœ€çµ‚çš„ãªã‚ªãƒ•ã‚»ãƒƒãƒˆã‚’è¨ˆç®—
 //	pOffset[0].x = 0.0f;
 //	pOffset[0].y = 0.0f;
 //
@@ -549,7 +549,7 @@ static const float g_vBloomBlurWeight_Point[] = {
 //	}
 //}
 
-// c
+// ç¸¦
 PRIVATE(float4 g_vBloomBlurSampleOffsetV_Linear[] : TEX_OFFSET) = {
 	{
 		0.00000000f,  0.00000000f, 
@@ -569,7 +569,7 @@ PRIVATE(float4 g_vBloomBlurSampleOffsetV_Linear[] : TEX_OFFSET) = {
 	},
 };
 
-// ‰¡
+// æ¨ª
 PRIVATE(float4 g_vBloomBlurSampleOffsetH_Linear[] : TEX_OFFSET) = {
 	{
 		 0.00000000f, 0.00000000f,
@@ -590,24 +590,24 @@ PRIVATE(float4 g_vBloomBlurSampleOffsetH_Linear[] : TEX_OFFSET) = {
 };
 
 ///////////////////////////////////////////////////
-// ƒuƒ‹[ƒ€ƒuƒ‰[ƒTƒ“ƒvƒŠƒ“ƒOƒEƒGƒCƒg
-// ƒŠƒjƒAƒtƒBƒ‹ƒ^
+// ãƒ–ãƒ«ãƒ¼ãƒ ãƒ–ãƒ©ãƒ¼ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ã‚¦ã‚¨ã‚¤ãƒˆ
+// ãƒªãƒ‹ã‚¢ãƒ•ã‚£ãƒ«ã‚¿
 
 // NOTE
 // +---+---+---+---+---+---+---+---+---+---+---+---+---+
 // | x | x | x | x | x | x | @ | x | x | x | x | x | x |
 // +---+---+---+---+---+---+---+---+---+---+---+---+---+
 // |<----->|<----->|<----->|   |<----->|<----->|<----->|
-// ã‚Ì‚æ‚¤‚É‚QƒeƒNƒZƒ‹‚¸‚Â‚Ü‚Æ‚ß‚é
+// ä¸Šã®ã‚ˆã†ã«ï¼’ãƒ†ã‚¯ã‚»ãƒ«ãšã¤ã¾ã¨ã‚ã‚‹
 
 // NOTE
-// «C++ƒ\[ƒXƒR[ƒh
+// â†“C++ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰
 //void _Get1DirectionGaussBlurWeight_Linear(
 //	MY_FLOAT pWeight[],
 //	MY_FLOAT fMultiplier,
 //	MY_FLOAT fDeviation)
 //{
-//	// ‚Ü‚¸‚Íƒ|ƒCƒ“ƒgƒtƒBƒ‹ƒ^‚Ìê‡‚ÌƒEƒGƒCƒg‚ğŒvZ‚·‚é
+//	// ã¾ãšã¯ãƒã‚¤ãƒ³ãƒˆãƒ•ã‚£ãƒ«ã‚¿ã®å ´åˆã®ã‚¦ã‚¨ã‚¤ãƒˆã‚’è¨ˆç®—ã™ã‚‹
 //	MY_FLOAT fWeightArray[13];
 //	_Get1DirectionGaussBlurWeight_Point(
 //		fWeightArray,
@@ -632,8 +632,8 @@ static const float g_vBloomBlurWeight_Linear[] = {
 };
 
 ///////////////////////////////////////////////////
-// ‚X“_ƒTƒ“ƒvƒŠƒ“ƒO
-// ƒŠƒjƒAƒtƒBƒ‹ƒ^
+// ï¼™ç‚¹ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°
+// ãƒªãƒ‹ã‚¢ãƒ•ã‚£ãƒ«ã‚¿
 
 // NOTE
 // +---+---+---+   +---+---+---+
@@ -656,8 +656,8 @@ PRIVATE(float4 g_v9PointSampleOffset_Linear[] : TEX_OFFSET) = {
 };
 
 ///////////////////////////////////////////////////
-// ‚X“_ƒTƒ“ƒvƒŠƒ“ƒO
-// ƒ|ƒCƒ“ƒgƒtƒBƒ‹ƒ^
+// ï¼™ç‚¹ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°
+// ãƒã‚¤ãƒ³ãƒˆãƒ•ã‚£ãƒ«ã‚¿
 
 // NOTE
 // +---+---+---+  +---+---+---+

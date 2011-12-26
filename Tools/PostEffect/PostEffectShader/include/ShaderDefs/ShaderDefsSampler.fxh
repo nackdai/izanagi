@@ -2,12 +2,12 @@
 #define __IZANAGI_POSTEFFECT_SHADER_DEFS_SAMPLER_FXH__
 
 ////////////////////////////////////////////////////////
-// ƒpƒX
+// ãƒ‘ã‚¹
 
 //****************************************
-// ƒXƒe[ƒg
+// ã‚¹ãƒ†ãƒ¼ãƒˆ
 
-#define BindTex(tex)			Texture = <tex>		// ‘Î‰‚·‚éƒeƒNƒXƒ`ƒƒ
+#define BindTex(tex)			Texture = <tex>		// å¯¾å¿œã™ã‚‹ãƒ†ã‚¯ã‚¹ãƒãƒ£
 #define SetAddressU(addr)		AddressU = addr		// AddressU
 #define SetAddressV(addr)		AddressV = addr		// AddressV
 #define SetMinFilter(filter)	MinFilter = filter	// MinFilter
@@ -18,7 +18,7 @@
 #define SMPL_ADDRESS_MIRROR		MIRROR	// 1
 #define SMPL_ADDRESS_CLAMP		CLAMP	// 2
 
-// MinFilterEMagFilter
+// MinFilterãƒ»MagFilter
 #define SMPL_FILTER_NONE		NONE	// 0
 #define SMPL_FILTER_POINT		POINT	// 1
 #define SMPL_FILTER_LINEAR		LINEAR	// 2

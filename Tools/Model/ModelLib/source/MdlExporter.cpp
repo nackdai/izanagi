@@ -1,4 +1,4 @@
-﻿#include "MdlExporter.h"
+#include "MdlExporter.h"
 #include "GeometryChunk.h"
 #include "JointChunk.h"
 #include "izToolKit.h"

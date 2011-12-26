@@ -1,4 +1,4 @@
-﻿#if !defined(__ENV_MAP_CONVERTER_IMPL_H__)
+#if !defined(__ENV_MAP_CONVERTER_IMPL_H__)
 #define __ENV_MAP_CONVERTER_IMPL_H__
 
 #include <vector>

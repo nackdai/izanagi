@@ -1,4 +1,4 @@
-﻿#include "IMGImage.h"
+#include "IMGImage.h"
 #include "ImageLibUtility.h"
 #include "PixelFormatConverter.h"
 #include "izToolKit.h"

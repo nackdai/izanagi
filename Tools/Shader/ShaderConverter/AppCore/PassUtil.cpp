@@ -1,4 +1,4 @@
-﻿#include "PassUtil.h"
+#include "PassUtil.h"
 #include "StringChunk.h"
 #include "ShaderConverterUtil.h"
 #include "izToolKit.h"

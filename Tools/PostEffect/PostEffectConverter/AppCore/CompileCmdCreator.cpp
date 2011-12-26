@@ -1,4 +1,4 @@
-﻿#include <vector>
+#include <vector>
 #include "shlwapi.h"
 #include "CompileCmdCreator.h"
 #include "izToolKit.h"

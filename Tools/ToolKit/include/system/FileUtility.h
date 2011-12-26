@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_TOOL_KIT_SYSTEM_FILE_UTILITY_H__)
+#if !defined(__IZANAGI_TOOL_KIT_SYSTEM_FILE_UTILITY_H__)
 #define __IZANAGI_TOOL_KIT_SYSTEM_FILE_UTILITY_H__
 
 #include <windows.h>

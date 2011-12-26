@@ -1,4 +1,4 @@
-﻿#include <shlwapi.h>
+#include <shlwapi.h>
 #include <direct.h>
 #include "Option.h"
 

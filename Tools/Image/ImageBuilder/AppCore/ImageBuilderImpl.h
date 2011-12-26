@@ -1,4 +1,4 @@
-﻿#if !defined(__IMAGE_BUILDER_IMPL_H__)
+#if !defined(__IMAGE_BUILDER_IMPL_H__)
 #define __IMAGE_BUILDER_IMPL_H__
 
 #include <vector>

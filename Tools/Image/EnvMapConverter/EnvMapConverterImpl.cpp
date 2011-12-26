@@ -1,4 +1,4 @@
-﻿#include "EnvMapConverterImpl.h"
+#include "EnvMapConverterImpl.h"
 #include "TexProxy.h"
 
 void Convert(

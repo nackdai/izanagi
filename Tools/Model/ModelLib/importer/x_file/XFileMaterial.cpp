@@ -1,4 +1,4 @@
-﻿#include "XFileMaterial.h"
+#include "XFileMaterial.h"
 
 CXFileMaterial* CXFileMaterial::s_pInstance = IZ_NULL;
 

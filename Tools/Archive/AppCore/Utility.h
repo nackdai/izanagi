@@ -1,4 +1,4 @@
-﻿#if !defined(__UTILITY_H__)
+#if !defined(__UTILITY_H__)
 #define __UTILITY_H__
 
 #include <vector>

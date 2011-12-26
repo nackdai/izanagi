@@ -5,30 +5,30 @@
 #include "../CommonUtility/FilterSampling.fxh"
 
 /////////////////////////////////////////////
-// Reinherd ‹P“x‘ª’è
+// Reinherd è¼åº¦æ¸¬å®š
 
 // NOTE
-// Reinherd ‚Ì•½‹Ï‹P“xŒvZ
-// Lavg =  exp(1/N * ƒ°log(ƒÂ + L(x, y)))
+// Reinherd ã®å¹³å‡è¼åº¦è¨ˆç®—
+// Lavg =  exp(1/N * Î£log(Î´ + L(x, y)))
 
 // NOTE
 // W x H -> 64 x 64 -> 16 x 16 -> 4 x 4 -> 1 x 1
-// EInitial   : W x H -> 64 x 64
-// EIterative : 64 x 64 -> 16 x 16
+// ãƒ»Initial   : W x H -> 64 x 64
+// ãƒ»Iterative : 64 x 64 -> 16 x 16
 //               16 x 16 -> 4 x 4
-// EFinal     : 4 x 4 -> 1 x 1
+// ãƒ»Final     : 4 x 4 -> 1 x 1
 
 //---------------------------
-// Å‰
+// æœ€åˆ
 
-// ƒ|ƒCƒ“ƒgƒtƒBƒ‹ƒ^
+// ãƒã‚¤ãƒ³ãƒˆãƒ•ã‚£ãƒ«ã‚¿
 float4 ReinherdMeasureLuminanceInitial_Point(
 	in sampler smplIn,
 	S_PE_PS_IN_SAMPLING_9 sIn)
 {
 	// NOTE
-	// ‚±‚±‚Å‚ÍˆÈ‰º‚ÌŒvZ‚ğs‚¤
-	// 1/N * ƒ°log(ƒÂ + L(x, y))
+	// ã“ã“ã§ã¯ä»¥ä¸‹ã®è¨ˆç®—ã‚’è¡Œã†
+	// 1/N * Î£log(Î´ + L(x, y))
 
 	float4 vSample = 0.0f;
 	float fLogLumSum = 0.0f;
@@ -49,14 +49,14 @@ float4 ReinherdMeasureLuminanceInitial_Point(
 	return float4(fLogLumSum, fLogLumSum, fLogLumSum, 1.0f);
 }
 
-// ƒŠƒjƒAƒtƒBƒ‹ƒ^
+// ãƒªãƒ‹ã‚¢ãƒ•ã‚£ãƒ«ã‚¿
 float4 ReinherdMeasureLuminanceInitial_Linear(
 	in sampler smplIn,
 	S_PE_PS_IN_SAMPLING_4 sIn)
 {
 	// NOTE
-	// ‚±‚±‚Å‚ÍˆÈ‰º‚ÌŒvZ‚ğs‚¤
-	// 1/N * ƒ°log(ƒÂ + L(x, y))
+	// ã“ã“ã§ã¯ä»¥ä¸‹ã®è¨ˆç®—ã‚’è¡Œã†
+	// 1/N * Î£log(Î´ + L(x, y))
 
 	// NOTE
 	// +---+---+---+
@@ -84,38 +84,38 @@ float4 ReinherdMeasureLuminanceInitial_Linear(
 }
 
 //---------------------------
-// “r’†
+// é€”ä¸­
 
-// ƒ|ƒCƒ“ƒgƒtƒBƒ‹ƒ^
+// ãƒã‚¤ãƒ³ãƒˆãƒ•ã‚£ãƒ«ã‚¿
 float4 ReinherdMeasureLuminanceIterative_Point(
 	in sampler smplIn,
 	S_PE_PS_IN_SAMPLING_16 sIn)
 {
-	// 1/4 x 1/4 k¬‚ğ‚·‚é‚¾‚¯
+	// 1/4 x 1/4 ç¸®å°ã‚’ã™ã‚‹ã ã‘
 	return DownScale4x4_Point(smplIn, sIn);
 }
 
-// ƒŠƒjƒAƒtƒBƒ‹ƒ^
+// ãƒªãƒ‹ã‚¢ãƒ•ã‚£ãƒ«ã‚¿
 float4 ReinherdMeasureLuminanceIterative_Linear(
 	in sampler smplIn,
 	S_PE_PS_IN_SAMPLING_4 sIn)
 {
-	// 1/4 x 1/4 k¬‚ğ‚·‚é‚¾‚¯
+	// 1/4 x 1/4 ç¸®å°ã‚’ã™ã‚‹ã ã‘
 	return DownScale4x4_Linear(smplIn, sIn);
 }
 
 //---------------------------
-// ÅŒã
+// æœ€å¾Œ
 
-// ƒ|ƒCƒ“ƒgƒtƒBƒ‹ƒ^
+// ãƒã‚¤ãƒ³ãƒˆãƒ•ã‚£ãƒ«ã‚¿
 float4 ReinherdMeasureLuminanceFinal_Point(
 	in sampler smplIn,
 	S_PE_PS_IN_SAMPLING_16 sIn)
 {
 	// NOTE
-	// 1/4 x 1/4 k¬‚µ‚Â‚ÂˆÈ‰º‚ÌŒvZ‚ğs‚¤
+	// 1/4 x 1/4 ç¸®å°ã—ã¤ã¤ä»¥ä¸‹ã®è¨ˆç®—ã‚’è¡Œã†
 	// Lavg = exp(sample)
-	// sample = 1/N * ƒ°log(ƒÂ + L(x, y))
+	// sample = 1/N * Î£log(Î´ + L(x, y))
 
 	float fRet = 0.0f;
 
@@ -129,15 +129,15 @@ float4 ReinherdMeasureLuminanceFinal_Point(
 	return float4(fRet, fRet, fRet, 1.0f);
 }
 
-// ƒŠƒjƒAƒtƒBƒ‹ƒ^
+// ãƒªãƒ‹ã‚¢ãƒ•ã‚£ãƒ«ã‚¿
 float4 ReinherdMeasureLuminanceFinal_Linear(
 	in sampler smplIn,
 	S_PE_PS_IN_SAMPLING_4 sIn)
 {
 	// NOTE
-	// 1/4 x 1/4 k¬‚µ‚Â‚ÂˆÈ‰º‚ÌŒvZ‚ğs‚¤
+	// 1/4 x 1/4 ç¸®å°ã—ã¤ã¤ä»¥ä¸‹ã®è¨ˆç®—ã‚’è¡Œã†
 	// Lavg = exp(sample)
-	// sample = 1/N * ƒ°log(ƒÂ + L(x, y))
+	// sample = 1/N * Î£log(Î´ + L(x, y))
 
 	// NOTE
 	// +-------+-------+

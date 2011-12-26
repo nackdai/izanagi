@@ -4,7 +4,7 @@
 #include "../ColorSpace/ColorSpaceYCbCr.fxh"
 
 //////////////////////////////////
-// ÉÇÉmÉgÅ[Éì
+// „É¢„Éé„Éà„Éº„É≥
 
 float4 ColorFilterMonotone(float4 vIn)
 {
@@ -12,7 +12,7 @@ float4 ColorFilterMonotone(float4 vIn)
 	return float4(fY, fY, fY, vIn.a);
 }
 
-// ê¸å`ï‚ä‘Ç†ÇË
+// Á∑öÂΩ¢Ë£úÈñì„ÅÇ„Çä
 float4 ColorFilterMonotone(float4 vIn, float fWeight)
 {
 	float fY = RGBToY(vIn.rgb);

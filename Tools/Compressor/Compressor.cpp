@@ -1,4 +1,4 @@
-﻿// Compressor.cpp : コンソール アプリケーションのエントリ ポイントを定義します。
+// Compressor.cpp : コンソール アプリケーションのエントリ ポイントを定義します。
 //
 
 #include "stdafx.h"

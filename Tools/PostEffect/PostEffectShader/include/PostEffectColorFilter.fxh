@@ -2,22 +2,22 @@
 #define __IZANAGI_POSTEFFECT_COLOR_FILTER_FXH__
 
 /********************************************
-	ƒJƒ‰[ƒtƒBƒ‹ƒ^‚¢‚ë‚¢‚ë
+	ã‚«ãƒ©ãƒ¼ãƒ•ã‚£ãƒ«ã‚¿ã„ã‚ã„ã‚
 ********************************************/
 
-// ƒKƒ“ƒ}•â³
+// ã‚¬ãƒ³ãƒè£œæ­£
 #include "ColorFilter/ColorFilterGammaControl.fxh"
 
-// ƒ‚ƒmƒg[ƒ“
+// ãƒ¢ãƒãƒˆãƒ¼ãƒ³
 #include "ColorFilter/ColorFilterMonotone.fxh"
 
-// ƒlƒKƒeƒBƒu
+// ãƒã‚¬ãƒ†ã‚£ãƒ–
 #include "ColorFilter/ColorFilterNegative.fxh"
 
-// ƒZƒsƒA
+// ã‚»ãƒ”ã‚¢
 #include "ColorFilter/ColorFilterSepia.fxh"
 
-// ƒ†[ƒU”CˆÓ
+// ãƒ¦ãƒ¼ã‚¶ä»»æ„
 #include "ColorFilter/ColorFilterUserDefs.fxh"
 
 #endif	// #if !defined(__IZANAGI_POSTEFFECT_COLOR_FILTER_FXH__)

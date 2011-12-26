@@ -1,4 +1,4 @@
-// ƒ|ƒXƒgƒGƒtƒFƒNƒg@ƒlƒKƒeƒBƒu
+// ãƒã‚¹ãƒˆã‚¨ãƒ•ã‚§ã‚¯ãƒˆã€€ãƒã‚¬ãƒ†ã‚£ãƒ–
 
 #include "PostEffectShader.fxh"
 
@@ -6,13 +6,13 @@ PES_ID("POSTEFFECT_Negative");
 
 ////////////////////////////////////////////////////
 
-// ƒV[ƒ“ƒeƒNƒXƒ`ƒƒ
+// ã‚·ãƒ¼ãƒ³ãƒ†ã‚¯ã‚¹ãƒãƒ£
 texture texScene : INPUT_SCENE
 <
 	SetTexFormat(PIXEL_FORMAT_RGBA8);
 >;
 
-// ƒTƒ“ƒvƒ‰
+// ã‚µãƒ³ãƒ—ãƒ©
 sampler smplScene = sampler_state
 {
 	BindTex(texScene);
@@ -28,7 +28,7 @@ float4 mainPS_0(S_PE_PS_IN sIn) : COLOR
 	return ColorFilterNegative(vColor);
 }
 
-// üŒ`•âŠÔ‚ ‚è
+// ç·šå½¢è£œé–“ã‚ã‚Š
 float4 mainPS_1(S_PE_PS_IN sIn) : COLOR
 {
 	float4 vColor = tex2D(smplScene, sIn.vUV);
@@ -36,7 +36,7 @@ float4 mainPS_1(S_PE_PS_IN sIn) : COLOR
 }
 
 ////////////////////////////////////////////////////
-// ƒeƒNƒjƒbƒN
+// ãƒ†ã‚¯ãƒ‹ãƒƒã‚¯
 
 technique t0
 {

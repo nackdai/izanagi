@@ -2,18 +2,18 @@
 #define __IZANAGI_POSTEFFECT_SHADER_DEFS_TEX_FXH__
 
 ////////////////////////////////////////////////////////
-// ƒeƒNƒXƒ`ƒƒ
+// ãƒ†ã‚¯ã‚¹ãƒãƒ£
 
 //****************************************
-// ƒAƒmƒe[ƒVƒ‡ƒ“
+// ã‚¢ãƒãƒ†ãƒ¼ã‚·ãƒ§ãƒ³
 
-#define SetTexSize(w, h)		float2 Dimensions = {w, h}		// ƒeƒNƒXƒ`ƒƒƒTƒCƒY
-#define SetTexRatio(w, h)		float2 ViewportRatio = {w, h}	// ƒXƒNƒŠ[ƒ“ƒTƒCƒY”ä—¦
-#define SetTexFormat(fmt)		string Format = fmt				// ƒsƒNƒZƒ‹ƒtƒH[ƒ}ƒbƒg
-#define SetIsRenderTarget(b)	bool IsRenderTarget = b			// ƒŒƒ“ƒ_[ƒ^[ƒQƒbƒg‚©‚Ç‚¤‚©
-#define SetIsDynamic(b)			bool IsDynamic = b				// “®“I‚©‚Ç‚¤‚©
+#define SetTexSize(w, h)		float2 Dimensions = {w, h}		// ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚µã‚¤ã‚º
+#define SetTexRatio(w, h)		float2 ViewportRatio = {w, h}	// ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã‚µã‚¤ã‚ºæ¯”ç‡
+#define SetTexFormat(fmt)		string Format = fmt				// ãƒ”ã‚¯ã‚»ãƒ«ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ
+#define SetIsRenderTarget(b)	bool IsRenderTarget = b			// ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‹ã©ã†ã‹
+#define SetIsDynamic(b)			bool IsDynamic = b				// å‹•çš„ã‹ã©ã†ã‹
 
-// ƒsƒNƒZƒ‹ƒtƒH[ƒ}ƒbƒgİ’è’l
+// ãƒ”ã‚¯ã‚»ãƒ«ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆè¨­å®šå€¤
 #define PIXEL_FORMAT_RGBA8		"A8R8G8B8"
 #define PIXEL_FORMAT_RGBA16F	"A16B16G16R16F"
 #define PIXEL_FORMAT_RGBA32F	"A32B32G32R32F"

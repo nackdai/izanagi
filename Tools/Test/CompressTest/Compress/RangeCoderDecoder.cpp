@@ -1,4 +1,4 @@
-﻿#include "RangeCoderDecoder.h"
+#include "RangeCoderDecoder.h"
 #include "IoStreamUtil.h"
 
 using namespace izanagi;

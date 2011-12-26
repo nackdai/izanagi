@@ -70,7 +70,7 @@ IZ_BOOL CColladaMaterial::ReadMaterials(domCOLLADA* pRoot)
 }
 
 namespace {
-	// •¶š—ñ‚ğ•ª‰ğ‚µAfloat’l‚Æ‚µ‚ÄŠi”[‚·‚é
+	// æ–‡å­—åˆ—ã‚’åˆ†è§£ã—ã€floatå€¤ã¨ã—ã¦æ ¼ç´ã™ã‚‹
 	void _GetValue(
 		daeElement* element,
 		std::vector<IZ_FLOAT>& values)
@@ -139,7 +139,7 @@ namespace {
 			}
 		}
 
-		// sampler‚©‚çŠÖŒW‚·‚ésurface‚ğ’T‚µAtexture–¼‚ğˆø‚¢‚Ä‚­‚é
+		// samplerã‹ã‚‰é–¢ä¿‚ã™ã‚‹surfaceã‚’æ¢ã—ã€textureåã‚’å¼•ã„ã¦ãã‚‹
 
 		std::map<std::string, daeElement*>::iterator itSampler = samplers.begin();
 		for (; itSampler != samplers.end(); itSampler++) {
@@ -150,11 +150,11 @@ namespace {
 				if (strcmp(smplParam->getElementName(), "source") == 0) {
 					std::string surfaceName = smplParam->getCharData();
 
-					// sampler‚Éİ’è‚³‚ê‚Ä‚¢‚ésurface‚ğ’T‚·
+					// samplerã«è¨­å®šã•ã‚Œã¦ã„ã‚‹surfaceã‚’æ¢ã™
 					daeElement* surface = surfaces[surfaceName.c_str()];
 					VRETURN(surface != IZ_NULL);
 
-					// surfaceƒuƒƒbƒN“à‚©‚çƒeƒNƒXƒ`ƒƒ–¼‚ğ’T‚·
+					// surfaceãƒ–ãƒ­ãƒƒã‚¯å†…ã‹ã‚‰ãƒ†ã‚¯ã‚¹ãƒãƒ£åã‚’æ¢ã™
 					for (size_t n = 0; n < surface->getChildren().getCount(); n++) {
 						daeElement* surfParam = surface->getChildren()[0];
 						
@@ -173,11 +173,11 @@ namespace {
 
 IZ_BOOL CColladaMaterial::ReadEffect(SMaterial& sMtrl, domEffect* effect)
 {
-	// “o˜^Ï‚İ‚©’²‚×‚é
+	// ç™»éŒ²æ¸ˆã¿ã‹èª¿ã¹ã‚‹
 	std::map<std::string, SEffect>::iterator it = m_Effects.find(effect->getId());
 
 	if (it != m_Effects.end()) {
-		// “o˜^Ï‚İ
+		// ç™»éŒ²æ¸ˆã¿
 
 		// TODO
 
@@ -191,7 +191,7 @@ IZ_BOOL CColladaMaterial::ReadEffect(SMaterial& sMtrl, domEffect* effect)
 		sEffect.name = effect->getId();
 	}
 
-	// ‚P‚Â‚µ‚©‚ä‚é‚³‚È‚¢
+	// ï¼‘ã¤ã—ã‹ã‚†ã‚‹ã•ãªã„
 	size_t numProfiles = effect->getChildren().getCount();
 	VRETURN(numProfiles == 1);
 
@@ -205,8 +205,8 @@ IZ_BOOL CColladaMaterial::ReadEffect(SMaterial& sMtrl, domEffect* effect)
 		VRETURN(technique != IZ_NULL);
 
 		// NOTE
-		// ã‚©‚ç ƒRƒ“ƒXƒ^ƒ“ƒgƒJƒ‰[Aƒ‰ƒ“ƒo[ƒgAƒtƒHƒ“AƒuƒŠƒ“ƒVƒF[ƒ_‚Ìƒpƒ‰ƒ[ƒ^‚ğ’²‚×‚Ä‚¢‚­
-		// ‚Ç‚ê‚©‚É“–‚½‚é‚Í‚¸H
+		// ä¸Šã‹ã‚‰ ã‚³ãƒ³ã‚¹ã‚¿ãƒ³ãƒˆã‚«ãƒ©ãƒ¼ã€ãƒ©ãƒ³ãƒãƒ¼ãƒˆã€ãƒ•ã‚©ãƒ³ã€ãƒ–ãƒªãƒ³ã‚·ã‚§ãƒ¼ãƒ€ã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’èª¿ã¹ã¦ã„ã
+		// ã©ã‚Œã‹ã«å½“ãŸã‚‹ã¯ãšï¼Ÿ
 
 		domProfile_COMMON::domTechnique::domConstant* constant = technique->getConstant();
 		ReadEffectParams(sEffect, profCommon, constant);
@@ -223,7 +223,7 @@ IZ_BOOL CColladaMaterial::ReadEffect(SMaterial& sMtrl, domEffect* effect)
 	else
 #endif
 	{
-		// ƒ†[ƒU[”CˆÓ‚Ìİ’è‚Ìê‡
+		// ãƒ¦ãƒ¼ã‚¶ãƒ¼ä»»æ„ã®è¨­å®šã®å ´åˆ
 
 		daeElement* prof = effect->getChildren()[0];
 
@@ -242,12 +242,12 @@ IZ_BOOL CColladaMaterial::ReadEffect(SMaterial& sMtrl, domEffect* effect)
 					std::vector<IZ_FLOAT> values;
 
 					if (strcmp(value->getElementName(), "texture") == 0) {
-						// QÆ–¼‚ğæ“¾
+						// å‚ç…§åã‚’å–å¾—
 						std::string texName;
 						VRETURN(_GetTextureName(texName, prof, value));
 
 						if (!texName.empty()) {
-							// ƒtƒ@ƒCƒ‹–¼‚ğæ“¾
+							// ãƒ•ã‚¡ã‚¤ãƒ«åã‚’å–å¾—
 							std::string& imgName = m_Images[texName.c_str()];
 							sEffect.texName.push_back(imgName);
 						}
@@ -261,7 +261,7 @@ IZ_BOOL CColladaMaterial::ReadEffect(SMaterial& sMtrl, domEffect* effect)
 							_GetValue(value, values);
 						}
 						else {
-							// ‰½‚©‚ ‚éH
+							// ä½•ã‹ã‚ã‚‹ï¼Ÿ
 							VRETURN(IZ_FALSE);
 						}
 
@@ -460,7 +460,7 @@ IZ_BOOL CColladaMaterial::GetMaterial(
 	sMtrl.numTex = (IZ_UINT16)effect.texName.size();
 
 	// NOTE
-	// ‚P‚Â‚µ‚©‚È‚¢i‚Í‚¸j
+	// ï¼‘ã¤ã—ã‹ãªã„ï¼ˆã¯ãšï¼‰
 	sMtrl.numShader = 1;
 
 	sMtrl.numParam = (IZ_UINT16)effect.params.size();
@@ -517,8 +517,8 @@ void CColladaMaterial::GetMaterialShader(
 	const SEffect& effect = m_Effects[mtrl.effectName.c_str()];
 
 	// TODO
-	// ƒVƒF[ƒ_–¼‚Í‚Ç‚¤‚â‚Á‚Ä‚Á‚Ä‚­‚éH
-	// ‚Æ‚¢‚¤‚æ‚è‚à‚Ç‚±‚É‚ ‚éH
+	// ã‚·ã‚§ãƒ¼ãƒ€åã¯ã©ã†ã‚„ã£ã¦æŒã£ã¦ãã‚‹ï¼Ÿ
+	// ã¨ã„ã†ã‚ˆã‚Šã‚‚ã©ã“ã«ã‚ã‚‹ï¼Ÿ
 
 	sShader.name.SetString("DefaultShader");
 	sShader.key = sShader.name.GetKeyValue();

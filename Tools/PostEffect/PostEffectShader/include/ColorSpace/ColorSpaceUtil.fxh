@@ -9,25 +9,25 @@ float RGBToY(float3 vRGB)
 	return dot(vRGB, RGB2Y);
 }
 
-// Å‘åƒ`ƒƒƒ“ƒlƒ‹‚ğæ“¾
+// æœ€å¤§ãƒãƒ£ãƒ³ãƒãƒ«ã‚’å–å¾—
 float _GetMaxChannel(float3 vCol)
 {
 	return max(max(vCol.r, vCol.g), vCol.b);
 }
 
-// Å¬ƒ`ƒƒƒ“ƒlƒ‹‚ğæ“¾
+// æœ€å°ãƒãƒ£ãƒ³ãƒãƒ«ã‚’å–å¾—
 float _GetMinChannel(float3 vCol)
 {
 	return min(min(vCol.r, vCol.g), vCol.b);
 }
 
-// F‘Š(Hue)‚ğŒvZ
+// è‰²ç›¸(Hue)ã‚’è¨ˆç®—
 float _ComputeHue(float3 vRGB, float fMax, float fDelta)
 {
 	float fH;
 
 	// NOTE
-	// 0 - 360 -> 0 - 1 ‚É‚È‚é‚æ‚¤‚É•ÏŠ·‚·‚é
+	// 0 - 360 -> 0 - 1 ã«ãªã‚‹ã‚ˆã†ã«å¤‰æ›ã™ã‚‹
 
 	if (vRGB.r == fMax) {
 		// MAX = R
@@ -42,7 +42,7 @@ float _ComputeHue(float3 vRGB, float fMax, float fDelta)
 		fH = ((vRGB.r - vRGB.g) / fDelta) / 6.0f + 2.0f / 3.0f;
 	}
 
-	// 0.0f - 1.0f ‚Éû‚Ü‚é‚æ‚¤‚É‚·‚é
+	// 0.0f - 1.0f ã«åã¾ã‚‹ã‚ˆã†ã«ã™ã‚‹
 	fH = (fH < 0.0f ? fH + 1.0f : fH);
 	fH = (fH > 1.0f ? fH - 1.0f : fH);
 

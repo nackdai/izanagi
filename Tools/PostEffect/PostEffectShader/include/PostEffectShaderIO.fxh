@@ -2,7 +2,7 @@
 #define __IZANAGI_POSTEFFECT_SHADER_IO_FXH__
 
 /********************************************
-   ƒVƒF[ƒ_“üo—Í
+   ã‚·ã‚§ãƒ¼ãƒ€å…¥å‡ºåŠ›
 ********************************************/
 
 #define NUM_SAMPLING_4	(2)
@@ -15,10 +15,10 @@
 #define NUM_SAMPLING_13	(6)
 
 //////////////////////////////////////
-// ƒTƒ“ƒvƒŠƒ“ƒO“_‚ª‚PŒÂ‚Ìê‡
+// ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ç‚¹ãŒï¼‘å€‹ã®å ´åˆ
 
-// ƒsƒNƒZƒ‹ƒVƒF[ƒ_“ü—Í
-// ƒfƒtƒHƒ‹ƒg
+// ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€å…¥åŠ›
+// ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ
 struct S_PE_PS_IN{
 	float4 vPos	: POSITION;
 	float2 vUV	: TEXCOORD0;
@@ -27,40 +27,40 @@ struct S_PE_PS_IN{
 #define S_PE_PS_IN_SAMPLING_1 S_PE_PS_IN
 
 //////////////////////////////////////
-// ƒTƒ“ƒvƒŠƒ“ƒO“_‚ª‚SŒÂ‚Ìê‡
+// ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ç‚¹ãŒï¼”å€‹ã®å ´åˆ
 
-// ƒsƒNƒZƒ‹ƒVƒF[ƒ_“ü—Í
-// 4ƒ|ƒCƒ“ƒgƒTƒ“ƒvƒŠƒ“ƒO
+// ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€å…¥åŠ›
+// 4ãƒã‚¤ãƒ³ãƒˆã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°
 struct S_PE_PS_IN_SAMPLING_4{
 	float4 vPos					: POSITION;
 	float4 vUV[NUM_SAMPLING_4]	: TEXCOORD0;
 };
 
 //////////////////////////////////////
-// ƒTƒ“ƒvƒŠƒ“ƒO“_‚ª‚WŒÂ‚Ìê‡
+// ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ç‚¹ãŒï¼˜å€‹ã®å ´åˆ
 
-// ƒsƒNƒZƒ‹ƒVƒF[ƒ_“ü—Í
-// 8ƒ|ƒCƒ“ƒgƒTƒ“ƒvƒŠƒ“ƒO
+// ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€å…¥åŠ›
+// 8ãƒã‚¤ãƒ³ãƒˆã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°
 struct S_PE_PS_IN_SAMPLING_8{
 	float4 vPos					: POSITION;
 	float4 vUV[NUM_SAMPLING_8]	: TEXCOORD0;
 };
 
 //////////////////////////////////////
-// ƒTƒ“ƒvƒŠƒ“ƒO“_‚ª‚P‚UŒÂ‚Ìê‡
+// ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ç‚¹ãŒï¼‘ï¼–å€‹ã®å ´åˆ
 
-// ƒsƒNƒZƒ‹ƒVƒF[ƒ_“ü—Í
-// 16ƒ|ƒCƒ“ƒgƒTƒ“ƒvƒŠƒ“ƒO
+// ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€å…¥åŠ›
+// 16ãƒã‚¤ãƒ³ãƒˆã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°
 struct S_PE_PS_IN_SAMPLING_16{
 	float4 vPos					: POSITION;
 	float4 vUV[NUM_SAMPLING_16]	: TEXCOORD0;
 };
 
 //////////////////////////////////////
-// ƒTƒ“ƒvƒŠƒ“ƒO“_‚ª‚TŒÂ‚Ìê‡
+// ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ç‚¹ãŒï¼•å€‹ã®å ´åˆ
 
-// ƒsƒNƒZƒ‹ƒVƒF[ƒ_“ü—Í
-// 5ƒ|ƒCƒ“ƒgƒTƒ“ƒvƒŠƒ“ƒO
+// ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€å…¥åŠ›
+// 5ãƒã‚¤ãƒ³ãƒˆã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°
 struct S_PE_PS_IN_SAMPLING_5{
 	float4 vPos					: POSITION;
 	float2 vUV_0				: TEXCOORD0;
@@ -68,10 +68,10 @@ struct S_PE_PS_IN_SAMPLING_5{
 };
 
 //////////////////////////////////////
-// ƒTƒ“ƒvƒŠƒ“ƒO“_‚ª‚VŒÂ‚Ìê‡
+// ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ç‚¹ãŒï¼—å€‹ã®å ´åˆ
 
-// ƒsƒNƒZƒ‹ƒVƒF[ƒ_“ü—Í
-// 7ƒ|ƒCƒ“ƒgƒTƒ“ƒvƒŠƒ“ƒO
+// ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€å…¥åŠ›
+// 7ãƒã‚¤ãƒ³ãƒˆã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°
 struct S_PE_PS_IN_SAMPLING_7{
 	float4 vPos					: POSITION;
 	float2 vUV_0				: TEXCOORD0;
@@ -79,10 +79,10 @@ struct S_PE_PS_IN_SAMPLING_7{
 };
 
 //////////////////////////////////////
-// ƒTƒ“ƒvƒŠƒ“ƒO“_‚ª‚XŒÂ‚Ìê‡
+// ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ç‚¹ãŒï¼™å€‹ã®å ´åˆ
 
-// ƒsƒNƒZƒ‹ƒVƒF[ƒ_“ü—Í
-// 9ƒ|ƒCƒ“ƒgƒTƒ“ƒvƒŠƒ“ƒO
+// ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€å…¥åŠ›
+// 9ãƒã‚¤ãƒ³ãƒˆã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°
 struct S_PE_PS_IN_SAMPLING_9{
 	float4 vPos					: POSITION;
 	float2 vUV_0				: TEXCOORD0;
@@ -90,10 +90,10 @@ struct S_PE_PS_IN_SAMPLING_9{
 };
 
 //////////////////////////////////////
-// ƒTƒ“ƒvƒŠƒ“ƒO“_‚ª‚P‚RŒÂ‚Ìê‡
+// ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ç‚¹ãŒï¼‘ï¼“å€‹ã®å ´åˆ
 
-// ƒsƒNƒZƒ‹ƒVƒF[ƒ_“ü—Í
-// 13ƒ|ƒCƒ“ƒgƒTƒ“ƒvƒŠƒ“ƒO
+// ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€å…¥åŠ›
+// 13ãƒã‚¤ãƒ³ãƒˆã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°
 struct S_PE_PS_IN_SAMPLING_13{
 	float4 vPos					: POSITION;
 	float2 vUV_0				: TEXCOORD0;
@@ -117,7 +117,7 @@ struct S_PE_PS_IN_SAMPLING_13{
 
 #define NUM_SAMPLING_DOWNSCALE_4x4_LINEAR	NUM_SAMPLING_4
 #define NUM_SAMPLING_DOWNSCALE_4x4_POINT	NUM_SAMPLING_16
-#define NUM_SAMPLING_DOWNSCALE_2x2_LINEAR	// Žg—p‚·‚éˆÓ–¡‚ª‚È‚¢EEE
+#define NUM_SAMPLING_DOWNSCALE_2x2_LINEAR	// ä½¿ç”¨ã™ã‚‹æ„å‘³ãŒãªã„ãƒ»ãƒ»ãƒ»
 #define NUM_SAMPLING_DOWNSCALE_2x2_POINT	NUM_SAMPLING_4
 #define NUM_SAMPLING_DOWNSCALE_3x3_LINEAR	NUM_SAMPLING_4
 #define NUM_SAMPLING_DOWNSCALE_3x3_POINT	NUM_SAMPLING_9

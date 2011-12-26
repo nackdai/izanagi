@@ -1,4 +1,4 @@
-﻿#include "Preproc.h"
+#include "Preproc.h"
 #include "Option.h"
 #include "izToolKit.h"
 

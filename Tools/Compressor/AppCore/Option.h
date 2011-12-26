@@ -1,4 +1,4 @@
-﻿#if !defined(__OPTION_H__)
+#if !defined(__OPTION_H__)
 #define __OPTION_H__
 
 #include "izDefs.h"

@@ -1,4 +1,4 @@
-﻿#if !defined(__MODEL_LIB_XFILE_PARSER_H__)
+#if !defined(__MODEL_LIB_XFILE_PARSER_H__)
 #define __MODEL_LIB_XFILE_PARSER_H__
 
 #include "izIo.h"

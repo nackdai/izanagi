@@ -1,4 +1,4 @@
-﻿#include "IMGTexture.h"
+#include "IMGTexture.h"
 #include "MipMapCreator.h"
 #include "izToolKit.h"
 

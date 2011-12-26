@@ -1,4 +1,4 @@
-// ポストエフェクト　モノトーン
+// 繝昴せ繝医お繝輔ぉ繧ｯ繝医繝｢繝弱ヨ繝ｼ繝ｳ
 
 #include "PostEffectShader.fxh"
 
@@ -6,13 +6,13 @@ PES_ID("POSTEFFECT_Monotone");
 
 ////////////////////////////////////////////////////
 
-// シーンテクスチャ
+// 繧ｷ繝ｼ繝ｳ繝�繧ｯ繧ｹ繝√Ε
 texture texScene : INPUT_SCENE
 <
 	SetTexFormat(PIXEL_FORMAT_RGBA8);
 >;
 
-// サンプラ
+// 繧ｵ繝ｳ繝励Λ
 sampler smplScene = sampler_state
 {
 	BindTex(texScene);
@@ -33,7 +33,7 @@ float4 mainPS_0(S_PE_PS_IN sIn) : COLOR
 	return ColorFilterMonotone(vColor);
 }
 
-// 線形補間あり
+// 邱壼ｽ｢陬憺俣縺ゅｊ
 float4 mainPS_1(S_PE_PS_IN sIn) : COLOR
 {
 	float4 vColor = tex2D(smplScene, sIn.vUV);
@@ -41,7 +41,7 @@ float4 mainPS_1(S_PE_PS_IN sIn) : COLOR
 }
 
 ////////////////////////////////////////////////////
-// テクニック
+// 繝�繧ｯ繝九ャ繧ｯ
 
 technique t0
 {

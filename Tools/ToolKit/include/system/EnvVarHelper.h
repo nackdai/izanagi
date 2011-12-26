@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_TOOL_KIT_SYSTEM_ENV_VAR_HELPER_H__)
+#if !defined(__IZANAGI_TOOL_KIT_SYSTEM_ENV_VAR_HELPER_H__)
 #define __IZANAGI_TOOL_KIT_SYSTEM_ENV_VAR_HELPER_H__
 
 #include <windows.h>

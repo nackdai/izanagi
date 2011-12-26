@@ -1,4 +1,4 @@
-﻿// ImageBuilder.cpp : コンソール アプリケーションのエントリ ポイントを定義します。
+// ImageBuilder.cpp : コンソール アプリケーションのエントリ ポイントを定義します。
 //
 
 #ifndef _WIN32_WINNT		// Windows XP 以降のバージョンに固有の機能の使用を許可します。                   

@@ -1,4 +1,4 @@
-﻿#if !defined(__ENV_MAP_CONVERTER_DEFS_H__)
+#if !defined(__ENV_MAP_CONVERTER_DEFS_H__)
 #define __ENV_MAP_CONVERTER_DEFS_H__
 
 #include "izToolKit.h"

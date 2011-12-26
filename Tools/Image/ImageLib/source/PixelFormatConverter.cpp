@@ -1,4 +1,4 @@
-﻿#include "PixelFormatConverter.h"
+#include "PixelFormatConverter.h"
 #include "ImageLibUtility.h"
 #include "DXTFormatConverter.h"
 #include "izMath.h"

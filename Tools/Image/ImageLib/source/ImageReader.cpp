@@ -1,4 +1,4 @@
-﻿#include "ImageReader.h"
+#include "ImageReader.h"
 #include "IMGBody.h"
 
 using namespace izanagi;

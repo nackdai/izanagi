@@ -1,4 +1,4 @@
-﻿#include "StringChunk.h"
+#include "StringChunk.h"
 
 CStringChunk CStringChunk::s_cInstance;
 

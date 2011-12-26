@@ -1,4 +1,4 @@
-﻿#if !defined(__SHADER_CONVERTER_OPTION_H__)
+#if !defined(__SHADER_CONVERTER_OPTION_H__)
 #define __SHADER_CONVERTER_OPTION_H__
 
 #include <vector>

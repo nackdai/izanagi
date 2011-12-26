@@ -1,4 +1,4 @@
-﻿#if !defined(__RANGE_CODER_DEFS_H__)
+#if !defined(__RANGE_CODER_DEFS_H__)
 #define __RANGE_CODER_DEFS_H__
 
 #include "izDefs.h"

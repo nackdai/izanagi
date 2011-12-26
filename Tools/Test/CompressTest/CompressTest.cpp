@@ -1,4 +1,4 @@
-﻿// CompressTest.cpp : コンソール アプリケーションのエントリ ポイントを定義します。
+// CompressTest.cpp : コンソール アプリケーションのエントリ ポイントを定義します。
 //
 
 #include "stdafx.h"

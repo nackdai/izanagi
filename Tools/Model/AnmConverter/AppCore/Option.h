@@ -5,7 +5,7 @@
 #include "izDefs.h"
 #include "izToolKit.h"
 
-// ƒtƒ@ƒCƒ‹ƒ^ƒCƒv
+// ãƒ•ã‚¡ã‚¤ãƒ«ã‚¿ã‚¤ãƒ—
 enum FileType {
 	FileTypeUnknown = 0,
 	FileTypeCollada,
@@ -16,12 +16,12 @@ enum FileType {
 };
 
 struct SOption {
-	izanagi::tool::CString in;		// “ü—Íƒtƒ@ƒCƒ‹
-	izanagi::tool::CString out;	// o—Íƒtƒ@ƒCƒ‹
+	izanagi::tool::CString in;		// å…¥åŠ›ãƒ•ã‚¡ã‚¤ãƒ«
+	izanagi::tool::CString out;	// å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
 
-	std::string base;	// ƒx[ƒXƒ‚ƒfƒ‹ƒtƒ@ƒCƒ‹
+	std::string base;	// ãƒ™ãƒ¼ã‚¹ãƒ¢ãƒ‡ãƒ«ãƒ•ã‚¡ã‚¤ãƒ«
 
-	FileType fileType;	// ƒtƒ@ƒCƒ‹ƒ^ƒCƒv
+	FileType fileType;	// ãƒ•ã‚¡ã‚¤ãƒ«ã‚¿ã‚¤ãƒ—
 
 	IZ_UINT idx;
 };
@@ -32,7 +32,7 @@ public:
 	~COption();
 
 public:
-	// ‰ğÍ
+	// è§£æ
 	IZ_BOOL Analysis(int argc, char* argv[]);
 
 	IZ_BOOL IsValid();

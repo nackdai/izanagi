@@ -1,4 +1,4 @@
-﻿#include "XFileHelper.h"
+#include "XFileHelper.h"
 
 #define	_CHECK_SCALE	(0)
 

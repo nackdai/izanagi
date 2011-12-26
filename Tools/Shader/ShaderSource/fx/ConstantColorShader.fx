@@ -15,7 +15,7 @@ struct SPSInput {
 #define SVSOutput		SPSInput
 
 ////////////////////////////////////////////////
-// í∏ì_ÉVÉFÅ[É_
+// È†ÇÁÇπ„Ç∑„Çß„Éº„ÉÄ
 
 SVSOutput mainVS(SVSInput sIn)
 {
@@ -30,7 +30,7 @@ SVSOutput mainVS(SVSInput sIn)
 }
 
 ////////////////////////////////////////////////
-// ÉsÉNÉZÉãÉVÉFÅ[É_
+// „Éî„ÇØ„Çª„É´„Ç∑„Çß„Éº„ÉÄ
 
 float4 mainPS(SPSInput sIn)	: COLOR
 {

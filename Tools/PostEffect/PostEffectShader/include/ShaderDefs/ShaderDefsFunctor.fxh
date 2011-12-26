@@ -2,12 +2,12 @@
 #define __IZANAGI_POSTEFFECT_SHADER_DEFS_FUNCTOR_ID_FXH__
 
 ////////////////////////////////////////////////////////
-// ƒtƒ@ƒ“ƒNƒ^İ’è
+// ãƒ•ã‚¡ãƒ³ã‚¯ã‚¿è¨­å®š
 
-// ƒtƒ@ƒ“ƒNƒ^–¼ƒZƒbƒg
+// ãƒ•ã‚¡ãƒ³ã‚¯ã‚¿åã‚»ãƒƒãƒˆ
 #define SetFunctorName(name)	string FunctorName = name
 
-// ƒtƒ@ƒ“ƒNƒ^ˆø”ƒZƒbƒg
+// ãƒ•ã‚¡ãƒ³ã‚¯ã‚¿å¼•æ•°ã‚»ãƒƒãƒˆ
 #define SetFunctorArgsF_1(v0)				float FunctorArgsF = v0
 #define SetFunctorArgsF_2(v0, v1)			float2 FunctorArgsF = {v0, v1};
 #define SetFunctorArgsF_3(v0, v1, v2)		float3 FunctorArgsF = {v0, v1, v2};
@@ -19,15 +19,15 @@
 
 #if 0
 /********************************************
-   Šeƒtƒ@ƒ“ƒNƒ^IDƒZƒbƒgi—vƒtƒ@ƒ“ƒNƒ^ˆø”j
+   å„ãƒ•ã‚¡ãƒ³ã‚¯ã‚¿IDã‚»ãƒƒãƒˆï¼ˆè¦ãƒ•ã‚¡ãƒ³ã‚¯ã‚¿å¼•æ•°ï¼‰
 *********************************************/
 
-// ŒJ‚è•Ô‚µk¬
+// ç¹°ã‚Šè¿”ã—ç¸®å°
 #define SetFunctorLoopDownScale(cnt)\
 	SetFunctorName("PostEffectFunctorLoopDownScale");\
 	SetFunctorArgsF_1(cnt)
 
-// ƒeƒNƒXƒ`ƒƒØ‚è‘Ö‚¦
+// ãƒ†ã‚¯ã‚¹ãƒãƒ£åˆ‡ã‚Šæ›¿ãˆ
 #define SetFunctorSwitchTex(tex0, tex1)\
 	SetFunctorName("PostEffectFunctorSwitchTex");\
 	SetFunctorArgsS_2(tex0, tex1)
@@ -35,9 +35,9 @@
 
 #if 0
 ////////////////////////////////////////////////////////
-// •¡”ƒpƒXƒtƒ@ƒ“ƒNƒ^
+// è¤‡æ•°ãƒ‘ã‚¹ãƒ•ã‚¡ãƒ³ã‚¯ã‚¿
 
-// •¡”ƒpƒXƒtƒ@ƒ“ƒNƒ^’è‹`ŠJn
+// è¤‡æ•°ãƒ‘ã‚¹ãƒ•ã‚¡ãƒ³ã‚¯ã‚¿å®šç¾©é–‹å§‹
 #define MULTI_PASS_FUNCTOR(name, functor_name)\
 	technique name\
 	<\
@@ -45,7 +45,7 @@
 		SetFunctorName(functor_name);\
 	>
 
-// •¡”ƒpƒXƒtƒ@ƒ“ƒNƒ^–„‚ß‚İ
+// è¤‡æ•°ãƒ‘ã‚¹ãƒ•ã‚¡ãƒ³ã‚¯ã‚¿åŸ‹ã‚è¾¼ã¿
 #define EmbedMultiPassFunctor(name)\
 	pass name\
 	<\
@@ -55,20 +55,20 @@
 
 #if 0
 ////////////////////////////////////////////////////////
-// ƒpƒXŠO•”‹Lq
+// ãƒ‘ã‚¹å¤–éƒ¨è¨˜è¿°
 
-// ƒJƒeƒSƒŠ“I‚É‚±‚±‚ª‚¢‚¢‚Ì‚©‚Ç‚¤‚©‚Í•ª‚©‚ç‚ñ‚ªEEE
+// ã‚«ãƒ†ã‚´ãƒªçš„ã«ã“ã“ãŒã„ã„ã®ã‹ã©ã†ã‹ã¯åˆ†ã‹ã‚‰ã‚“ãŒãƒ»ãƒ»ãƒ»
 
-// ƒpƒX‚Ì‹Lq‚ğƒeƒNƒjƒbƒN‚ÌŠO•”‚É‹Lq‚·‚é‚±‚Æ‚ÅƒR[ƒh‚ğ“Ç‚İ‚â‚·‚­‚·‚é‚Ì‚Ég‚¤
+// ãƒ‘ã‚¹ã®è¨˜è¿°ã‚’ãƒ†ã‚¯ãƒ‹ãƒƒã‚¯ã®å¤–éƒ¨ã«è¨˜è¿°ã™ã‚‹ã“ã¨ã§ã‚³ãƒ¼ãƒ‰ã‚’èª­ã¿ã‚„ã™ãã™ã‚‹ã®ã«ä½¿ã†
 
-// •¡”ƒpƒXƒpƒbƒN’è‹`ŠJn
+// è¤‡æ•°ãƒ‘ã‚¹ãƒ‘ãƒƒã‚¯å®šç¾©é–‹å§‹
 #define DEFINE_PASSES(name)\
 	technique name\
 	<\
 		bool IsDefinePasses = true;\
 	>
 
-// •¡”ƒpƒXƒpƒbƒN–„‚ß‚İ
+// è¤‡æ•°ãƒ‘ã‚¹ãƒ‘ãƒƒã‚¯åŸ‹ã‚è¾¼ã¿
 #define EmbedDefinePasses(name)\
 	pass name\
 	<\

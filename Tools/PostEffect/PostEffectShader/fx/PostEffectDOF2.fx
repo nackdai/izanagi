@@ -1,7 +1,7 @@
-// ƒ|ƒXƒgƒGƒtƒFƒNƒg@”íÊŠE[“x
+// ãƒã‚¹ãƒˆã‚¨ãƒ•ã‚§ã‚¯ãƒˆã€€è¢«å†™ç•Œæ·±åº¦
 
-// ATI‚ÌƒTƒ“ƒvƒ‹‚ğƒx[ƒX‚É‚µ‚½‚à‚Ì
-// –¢Š®¬EEE
+// ATIã®ã‚µãƒ³ãƒ—ãƒ«ã‚’ãƒ™ãƒ¼ã‚¹ã«ã—ãŸã‚‚ã®
+// æœªå®Œæˆãƒ»ãƒ»ãƒ»
 
 #include "PostEffectShader.fxh"
 
@@ -9,13 +9,13 @@ PES_ID("POSTEFFECT_DOF");
 
 ////////////////////////////////////////////////////
  
-// ƒV[ƒ“ƒeƒNƒXƒ`ƒƒ
+// ã‚·ãƒ¼ãƒ³ãƒ†ã‚¯ã‚¹ãƒãƒ£
 texture texScene : INPUT_SCENE
 <
 	SetTexFormat(PIXEL_FORMAT_RGBA8);
 >;
 
-// 1/4 x 1/4 k¬ƒoƒbƒtƒ@
+// 1/4 x 1/4 ç¸®å°ãƒãƒƒãƒ•ã‚¡
 texture texDownScale4x4
 <
 	SetTexFormat(PIXEL_FORMAT_RGBA8);
@@ -23,7 +23,7 @@ texture texDownScale4x4
 	SetTexRatio(0.25f, 0.25f);	// 1/4
 >;
 
-// ƒuƒ‰[ƒeƒNƒXƒ`ƒƒ
+// ãƒ–ãƒ©ãƒ¼ãƒ†ã‚¯ã‚¹ãƒãƒ£
 texture texBlur
 <
 	SetTexFormat(PIXEL_FORMAT_RGBA8);
@@ -31,15 +31,15 @@ texture texBlur
 	SetTexRatio(0.25f, 0.25f);	// 1/4
 >;
 
-// ŠO•”“ü—Í------------------------------
+// å¤–éƒ¨å…¥åŠ›------------------------------
 
-// Z’lƒeƒNƒXƒ`ƒƒ
+// Zå€¤ãƒ†ã‚¯ã‚¹ãƒãƒ£
 texture texZ : INPUT
 <
 	SetTexFormat(PIXEL_FORMAT_RGBA8);
 >;
 
-// ƒEƒGƒCƒgƒeƒNƒXƒ`ƒƒ
+// ã‚¦ã‚¨ã‚¤ãƒˆãƒ†ã‚¯ã‚¹ãƒãƒ£
 texture texWeight : INPUT
 <
 	SetTexFormat(PIXEL_FORMAT_A8);
@@ -48,7 +48,7 @@ texture texWeight : INPUT
 
 ////////////////////////////////////////////////////
 
-// ƒV[ƒ“
+// ã‚·ãƒ¼ãƒ³
 sampler smplScene = sampler_state
 {
 	BindTex(texScene);
@@ -62,25 +62,25 @@ sampler smplScene = sampler_state
 #endif
 };
 
-// ƒEƒGƒCƒg
+// ã‚¦ã‚¨ã‚¤ãƒˆ
 sampler smplWeight = sampler_state
 {
 	BindTex(texWeight);
 };
 
-// Z’l
+// Zå€¤
 sampler smplZ = sampler_state
 {
 	BindTex(texZ);
 };
 
-// 1/4 x 1/4 k¬
+// 1/4 x 1/4 ç¸®å°
 sampler smplDownScale4x4 = sampler_state
 {
 	BindTex(texDownScale4x4);
 };
 
-// ƒuƒ‰[
+// ãƒ–ãƒ©ãƒ¼
 sampler smplBlur = sampler_state
 {
 	BindTex(texBlur);
@@ -88,43 +88,43 @@ sampler smplBlur = sampler_state
 
 ////////////////////////////////////////////////////
 
-// ‹“_‚©‚ç’‹“_‚Ü‚Å‚Ì‹——£
+// è¦–ç‚¹ã‹ã‚‰æ³¨è¦–ç‚¹ã¾ã§ã®è·é›¢
 float fEyeToAtLength : CAMERA_PARAM_EYE_TO_AT_LENGTH
 <
 	SetDoNotStrip(true);
 >;
 
-// ƒJƒƒ‰i‚è
+// ã‚«ãƒ¡ãƒ©çµã‚Š
 float fAperture : CAMERA_PARAM_APERTURE
 <
 	SetDoNotStrip(true);
 >;
 
-// ƒJƒƒ‰‰æŠp
+// ã‚«ãƒ¡ãƒ©ç”»è§’
 float fFov : CAMERA_PARAM_FOV
 <
 	SetDoNotStrip(true);
 >;
 
 
-// ƒJƒƒ‰Near
+// ã‚«ãƒ¡ãƒ©Near
 float fNear : CAMERA_PARAM_NEAR
 <
 	SetDoNotStrip(true);
 >;
 
 
-// ƒJƒƒ‰Far
+// ã‚«ãƒ¡ãƒ©Far
 float fFar : CAMERA_PARAM_FAR
 <
 	SetDoNotStrip(true);
 >;
 
 ////////////////////////////////////////////////////
-// ƒ}[ƒW
+// ãƒãƒ¼ã‚¸
 
 // NOTE
-// ƒJƒ‰[ƒoƒbƒtƒ@‚ÍA¬•ª‚Ì‚İ‚Ö‚Ì•`‚«‚İİ’è‚É‚µ‚Ä‚¨‚­‚±‚Æ
+// ã‚«ãƒ©ãƒ¼ãƒãƒƒãƒ•ã‚¡ã¯Aæˆåˆ†ã®ã¿ã¸ã®æãè¾¼ã¿è¨­å®šã«ã—ã¦ãŠãã“ã¨
 
 float4 mainMerge(S_PE_PS_IN sIn) : COLOR
 {
@@ -134,7 +134,7 @@ float4 mainMerge(S_PE_PS_IN sIn) : COLOR
 }
 
 ////////////////////////////////////////////////////
-// 1/4 x 1/4 k¬
+// 1/4 x 1/4 ç¸®å°
 
 #ifdef __DOF_POINT__
 float4 mainDownScale4x4(S_PE_PS_IN_DOWNSCALE_4x4_POINT sIn) : COLOR
@@ -151,7 +151,7 @@ float4 mainDownScale4x4(S_PE_PS_IN_DOWNSCALE_4x4_LINEAR sIn) : COLOR
 #endif	// #ifdef __ENABLE_LINEAR_SAMPLE__
 
 ////////////////////////////////////////////////////
-// 5 x 5ƒKƒEƒXƒuƒ‰[
+// 5 x 5ã‚¬ã‚¦ã‚¹ãƒ–ãƒ©ãƒ¼
 
 float4 mainBlur(S_PE_PS_IN_SAMPLING_13 sIn) : COLOR
 {
@@ -160,7 +160,7 @@ float4 mainBlur(S_PE_PS_IN_SAMPLING_13 sIn) : COLOR
 }
 
 ////////////////////////////////////////////////////
-// ÅI•`‰æ
+// æœ€çµ‚æç”»
 
 #define NUM_POISSON_TAPS	8
 static const float2 vPoisson[NUM_POISSON_TAPS] = 
@@ -184,13 +184,13 @@ float fCutOff = 10.0f;
 
 float4 mainFinal(S_PE_PS_IN sIn) : COLOR
 {
-	// ’†S
+	// ä¸­å¿ƒ
 	float4 vOut = tex2D(smplScene, sIn.vUV);
 	float fCenterWeight = vOut.a;
 
 	vOut = 0.0f;
 
-	// ƒ{ƒPƒTƒCƒY
+	// ãƒœã‚±ã‚µã‚¤ã‚º
 	float fDiscRadiusHigh = min(fCutOff, 1.0f / (1.0f - fCenterWeight + 0.00001f));
 	float fDiscRadiusLow = fDiscRadiusHigh * fRadiusScale;
 
@@ -226,10 +226,10 @@ float4 mainFinalDebug(S_PE_PS_IN sIn) : COLOR
 
 ////////////////////////////////////////////////////
 
-// ‹¤’Êˆ—
+// å…±é€šå‡¦ç†
 DEFINE_PASSES(CommonPasses)
 {
-	// ‡¬
+	// åˆæˆ
 	pass passMerge
 	<
 		BeginScene(texScene);
@@ -240,7 +240,7 @@ DEFINE_PASSES(CommonPasses)
 		SetPixelShader(ps_2_a, mainMerge);
 	}
 
-	// 1/4 x 1/4 k¬
+	// 1/4 x 1/4 ç¸®å°
 	pass passDownScale4x4
 	<
 		BeginScene(texDownScale4x4);
@@ -259,7 +259,7 @@ DEFINE_PASSES(CommonPasses)
 		SetPixelShader(ps_2_a, mainDownScale4x4);
 	}
 
-	// ƒuƒ‰[
+	// ãƒ–ãƒ©ãƒ¼
 	pass passBlur
 	<
 		BeginScene(texBlur);
@@ -277,7 +277,7 @@ technique t0
 {	
 	EmbedDefinePasses(CommonPasses)
 
-	// ÅI•`‰æ
+	// æœ€çµ‚æç”»
 	pass passFinal
 	{
 		SetVertexShader(vs_2_a, VSSampling_1);
@@ -285,10 +285,10 @@ technique t0
 	}
 }
 
-// ƒfƒoƒbƒO—p
+// ãƒ‡ãƒãƒƒã‚°ç”¨
 technique t1
 {
-	// ‡¬
+	// åˆæˆ
 	pass passMerge
 	<
 		BeginScene(texScene);
@@ -299,7 +299,7 @@ technique t1
 		SetPixelShader(ps_2_a, mainMerge);
 	}
 
-	// ÅI•`‰æ
+	// æœ€çµ‚æç”»
 	pass passFinalDebug
 	{
 		SetVertexShader(vs_2_a, VSSampling_1);

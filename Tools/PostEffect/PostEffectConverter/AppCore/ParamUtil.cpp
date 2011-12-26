@@ -1,4 +1,4 @@
-﻿#include "ParamUtil.h"
+#include "ParamUtil.h"
 #include "PostEffectConverterUtil.h"
 #include "DataBuffer.h"
 #include "izToolKit.h"

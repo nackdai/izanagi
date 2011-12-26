@@ -1,4 +1,4 @@
-// ƒ|ƒXƒgƒGƒtƒFƒNƒg@”íŽÊŠE[“x
+// ãƒã‚¹ãƒˆã‚¨ãƒ•ã‚§ã‚¯ãƒˆã€€è¢«å†™ç•Œæ·±åº¦
 
 #include "PostEffectShader.fxh"
 
@@ -6,13 +6,13 @@ PES_ID("POSTEFFECT_DOF");
 
 ////////////////////////////////////////////////////
 
-// ƒV[ƒ“ƒeƒNƒXƒ`ƒƒ
+// ã‚·ãƒ¼ãƒ³ãƒ†ã‚¯ã‚¹ãƒãƒ£
 texture texScene : INPUT_SCENE
 <
 	SetTexFormat(PIXEL_FORMAT_RGBA8);
 >;
 
-// 1/4 x 1/4 k¬ƒoƒbƒtƒ@
+// 1/4 x 1/4 ç¸®å°ãƒãƒƒãƒ•ã‚¡
 texture texDownScale4x4
 <
 	SetTexFormat(PIXEL_FORMAT_RGBA8);
@@ -20,7 +20,7 @@ texture texDownScale4x4
 	SetTexRatio(0.25f, 0.25f);	// 1/4
 >;
 
-// ƒuƒ‰[ƒeƒNƒXƒ`ƒƒ
+// ãƒ–ãƒ©ãƒ¼ãƒ†ã‚¯ã‚¹ãƒãƒ£
 texture texBlur
 <
 	SetTexFormat(PIXEL_FORMAT_RGBA8);
@@ -28,15 +28,15 @@ texture texBlur
 	SetTexRatio(0.25f, 0.25f);	// 1/4
 >;
 
-// ŠO•”“ü—Í------------------------------
+// å¤–éƒ¨å…¥åŠ›------------------------------
 
-// Z’lƒeƒNƒXƒ`ƒƒ
+// Zå€¤ãƒ†ã‚¯ã‚¹ãƒãƒ£
 texture texZ : INPUT
 <
 	SetTexFormat(PIXEL_FORMAT_RGBA8);
 >;
 
-// ƒEƒGƒCƒgƒeƒNƒXƒ`ƒƒ
+// ã‚¦ã‚¨ã‚¤ãƒˆãƒ†ã‚¯ã‚¹ãƒãƒ£
 texture texWeight : INPUT
 <
 	SetTexFormat(PIXEL_FORMAT_A8);
@@ -45,7 +45,7 @@ texture texWeight : INPUT
 
 ////////////////////////////////////////////////////
 
-// ƒV[ƒ“
+// ã‚·ãƒ¼ãƒ³
 sampler smplScene = sampler_state
 {
 	BindTex(texScene);
@@ -59,19 +59,19 @@ sampler smplScene = sampler_state
 #endif
 };
 
-// ƒEƒGƒCƒg
+// ã‚¦ã‚¨ã‚¤ãƒˆ
 sampler smplWeight = sampler_state
 {
 	BindTex(texWeight);
 };
 
-// Z’l
+// Zå€¤
 sampler smplZ = sampler_state
 {
 	BindTex(texZ);
 };
 
-// 1/4 x 1/4 k¬
+// 1/4 x 1/4 ç¸®å°
 sampler smplDownScale4x4 = sampler_state
 {
 	BindTex(texDownScale4x4);
@@ -85,7 +85,7 @@ sampler smplDownScale4x4 = sampler_state
 #endif
 };
 
-// ƒuƒ‰[
+// ãƒ–ãƒ©ãƒ¼
 sampler smplBlur = sampler_state
 {
 	BindTex(texBlur);
@@ -93,31 +93,31 @@ sampler smplBlur = sampler_state
 
 ////////////////////////////////////////////////////
 
-// Ž‹“_‚©‚ç’Ž‹“_‚Ü‚Å‚Ì‹——£
+// è¦–ç‚¹ã‹ã‚‰æ³¨è¦–ç‚¹ã¾ã§ã®è·é›¢
 float fEyeToAtLength : CAMERA_PARAM_EYE_TO_AT_LENGTH
 <
 	SetDoNotStrip(true);
 >;
 
-// ƒJƒƒ‰i‚è
+// ã‚«ãƒ¡ãƒ©çµžã‚Š
 float fAperture : CAMERA_PARAM_APERTURE
 <
 	SetDoNotStrip(true);
 >;
 
-// ƒJƒƒ‰‰æŠp
+// ã‚«ãƒ¡ãƒ©ç”»è§’
 float fFov : CAMERA_PARAM_FOV
 <
 	SetDoNotStrip(true);
 >;
 
-// ƒJƒƒ‰Near
+// ã‚«ãƒ¡ãƒ©Near
 float fNear : CAMERA_PARAM_NEAR
 <
 	SetDoNotStrip(true);
 >;
 
-// ƒJƒƒ‰Far
+// ã‚«ãƒ¡ãƒ©Far
 float fFar : CAMERA_PARAM_FAR
 <
 	SetDoNotStrip(true);
@@ -131,10 +131,10 @@ float _ComputeWeight(float fScale, float fWeight)
 }
 
 ////////////////////////////////////////////////////
-// ƒ}[ƒW
+// ãƒžãƒ¼ã‚¸
 
 // NOTE
-// ƒJƒ‰[ƒoƒbƒtƒ@‚ÍA¬•ª‚Ì‚Ý‚Ö‚Ì•`‚«ž‚ÝÝ’è‚É‚µ‚Ä‚¨‚­‚±‚Æ
+// ã‚«ãƒ©ãƒ¼ãƒãƒƒãƒ•ã‚¡ã¯Aæˆåˆ†ã®ã¿ã¸ã®æãè¾¼ã¿è¨­å®šã«ã—ã¦ãŠãã“ã¨
 
 float4 mainMerge(S_PE_PS_IN sIn) : COLOR
 {
@@ -144,7 +144,7 @@ float4 mainMerge(S_PE_PS_IN sIn) : COLOR
 }
 
 ////////////////////////////////////////////////////
-// 1/4 x 1/4 k¬
+// 1/4 x 1/4 ç¸®å°
 
 #ifdef __DOF_POINT__
 float4 mainDownScale4x4(S_PE_PS_IN_DOWNSCALE_4x4_POINT sIn) : COLOR
@@ -169,7 +169,7 @@ float4 mainDownScale4x4(S_PE_PS_IN_DOWNSCALE_4x4_LINEAR sIn) : COLOR
 							GetSamplePointFromDownScale4x4(i * 2 + 1, sIn));
 
 		// NOTE
-		// ‚O‚É‚È‚é‚Ì‚ð‰ñ”ð‚·‚é‚½‚ß­‚µ¬‚³‚­‚·‚éEEE
+		// ï¼ã«ãªã‚‹ã®ã‚’å›žé¿ã™ã‚‹ãŸã‚å°‘ã—å°ã•ãã™ã‚‹ãƒ»ãƒ»ãƒ»
 		float fW_0 = _ComputeWeight(0.49609f, vColor_0.a);
 		float fW_1 = _ComputeWeight(0.49609f, vColor_1.a);
 
@@ -184,14 +184,14 @@ float4 mainDownScale4x4(S_PE_PS_IN_DOWNSCALE_4x4_LINEAR sIn) : COLOR
 }
 
 ////////////////////////////////////////////////////
-// ƒuƒ‰[
+// ãƒ–ãƒ©ãƒ¼
 
 // NOTE
-// 4pixelˆÈãƒ{ƒP‚Ä‚¢‚éê‡‚Ì‘Î‰ž
-// 1/4x1/4k¬‚Å‚Í4pixel‚Ü‚Å‚µ‚©ƒ{ƒP‚È‚¢
+// 4pixelä»¥ä¸Šãƒœã‚±ã¦ã„ã‚‹å ´åˆã®å¯¾å¿œ
+// 1/4x1/4ç¸®å°ã§ã¯4pixelã¾ã§ã—ã‹ãƒœã‚±ãªã„
 
 #ifdef __DOF_POINT__
-// ƒ|ƒCƒ“ƒgƒtƒBƒ‹ƒ^
+// ãƒã‚¤ãƒ³ãƒˆãƒ•ã‚£ãƒ«ã‚¿
 float4 mainBlur(S_PE_PS_IN_9POINTSAMPLE_POINT sIn) : COLOR
 {
 	// NOTE
@@ -230,7 +230,7 @@ float4 mainBlur(S_PE_PS_IN_9POINTSAMPLE_POINT sIn) : COLOR
 	vOut += vColor * fW;
 	fWeight += fW;
 
-	// 4 ’†S
+	// 4 ä¸­å¿ƒ
 	vColor = tex2D(smplDownScale4x4, GetSamplePointFrom9PointSample(4, sIn));
 	fW = saturate(2.0f * vColor.a);
 	vOut += vColor * fW;
@@ -264,7 +264,7 @@ float4 mainBlur(S_PE_PS_IN_9POINTSAMPLE_POINT sIn) : COLOR
 	return vOut;
 }
 #else	// #ifdef __DOF_POINT__
-// ƒŠƒjƒAƒtƒBƒ‹ƒ^
+// ãƒªãƒ‹ã‚¢ãƒ•ã‚£ãƒ«ã‚¿
 float4 mainBlur(S_PE_PS_IN_9POINTSAMPLE_LINEAR sIn) : COLOR
 {
 	// NOTE
@@ -276,7 +276,7 @@ float4 mainBlur(S_PE_PS_IN_9POINTSAMPLE_LINEAR sIn) : COLOR
 	// |   1   |   |
 	// +---+---+---+
 
-	// ’†S
+	// ä¸­å¿ƒ
 	float4 vOut = tex2D(smplDownScale4x4, GetCenterUVFrom9PointSample(sIn));
 
 	float fWeight = saturate(2.0f * vOut.a + 0.00001f);
@@ -307,7 +307,7 @@ float4 mainBlur(S_PE_PS_IN_9POINTSAMPLE_LINEAR sIn) : COLOR
 #endif	// #ifdef __DOF_POINT__
 
 ////////////////////////////////////////////////////
-// ÅI•`‰æ
+// æœ€çµ‚æç”»
 
 float4 mainFinal(S_PE_PS_IN sIn) : COLOR
 {
@@ -350,10 +350,10 @@ float4 mainFinalDebug(S_PE_PS_IN sIn) : COLOR
 
 ////////////////////////////////////////////////////
 
-// ‹¤’Êˆ—
+// å…±é€šå‡¦ç†
 DEFINE_PASSES(CommonPasses)
 {
-	// ‡¬
+	// åˆæˆ
 	pass passMerge
 	<
 		BeginScene(texScene);
@@ -364,7 +364,7 @@ DEFINE_PASSES(CommonPasses)
 		SetPixelShader(ps_2_a, mainMerge);
 	}
 
-	// 1/4 x 1/4 k¬
+	// 1/4 x 1/4 ç¸®å°
 	pass passDownScale4x4
 	<
 		BeginScene(texDownScale4x4);
@@ -383,7 +383,7 @@ DEFINE_PASSES(CommonPasses)
 		SetPixelShader(ps_2_a, mainDownScale4x4);
 	}
 
-	// ƒuƒ‰[
+	// ãƒ–ãƒ©ãƒ¼
 	pass passBlur
 	<
 		BeginScene(texBlur);
@@ -409,7 +409,7 @@ technique t0
 {	
 	EmbedDefinePasses(CommonPasses)
 
-	// ÅI•`‰æ
+	// æœ€çµ‚æç”»
 	pass passFinalDebug
 	{
 		SetVertexShader(vs_2_a, VSSampling_1);
@@ -417,10 +417,10 @@ technique t0
 	}
 }
 
-// ƒfƒoƒbƒO—p
+// ãƒ‡ãƒãƒƒã‚°ç”¨
 technique t1
 {
-	// ‡¬
+	// åˆæˆ
 	pass passMerge
 	<
 		BeginScene(texScene);
@@ -431,7 +431,7 @@ technique t1
 		SetPixelShader(ps_2_a, mainMerge);
 	}
 
-	// ÅI•`‰æ
+	// æœ€çµ‚æç”»
 	pass passFinalDebug
 	{
 		SetVertexShader(vs_2_a, VSSampling_1);
