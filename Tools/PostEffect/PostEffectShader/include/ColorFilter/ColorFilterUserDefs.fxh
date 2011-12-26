@@ -2,7 +2,7 @@
 #define __IZANAGI_POSTEFFECT_COLOR_FILETER_USER_DEFS_FXH__
 
 //////////////////////////////////
-// 任意のカラーフィルタ
+// 莉ｻ諢上�ｮ繧ｫ繝ｩ繝ｼ繝輔ぅ繝ｫ繧ｿ
 
 float4 ColorFilterUserDefs(float4 vIn, float3x3 mFilter)
 {
@@ -18,14 +18,14 @@ float4 ColorFilterUserDefs(float4 vIn, float3 vFilterR, float3 vFilterG, float3 
 			vIn.a);
 }
 
-// 線形補間あり
+// 邱壼ｽ｢陬憺俣縺ゅｊ
 float4 ColorFilterUserDefs(float4 vIn, float3x3 mFilter, float fWeight)
 {
 	float3 tmp = lerp(vIn.rgb, mul(vIn.rgb, mFilter), fWeight);
 	return float4(tmp, vIn.a);
 }
 
-// 線形補間あり
+// 邱壼ｽ｢陬憺俣縺ゅｊ
 float4 ColorFilterUserDefs(float4 vIn, float3 vFilterR, float3 vFilterG, float3 vFilterB, float fWeight)
 {
 	float3 tmp = float3(
@@ -51,13 +51,13 @@ float4 ColorFilterUserDefs(float4 vIn, float4 vFilterR, float4 vFilterG, float4 
 			dot(vIn, vFilterA));
 }
 
-// 線形補間あり
+// 邱壼ｽ｢陬憺俣縺ゅｊ
 float4 ColorFilterUserDefs(float4 vIn, float4x4 mFilter, float fWeight)
 {
 	return lerp(vIn, mul(vIn, mFilter), fWeight);
 }
 
-// 線形補間あり
+// 邱壼ｽ｢陬憺俣縺ゅｊ
 float4 ColorFilterUserDefs(float4 vIn, float4 vFilterR, float4 vFilterG, float4 vFilterB, float4 vFilterA, float fWeight)
 {
 	float4 tmp =  float4(

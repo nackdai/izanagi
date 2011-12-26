@@ -2,14 +2,14 @@
 #define __IZANAGI_POSTEFFECT_FILTER_SAMPLING_FXH__
 
 /***********************************************
-   ƒtƒBƒ‹ƒ^ƒTƒ“ƒvƒŠƒ“ƒO
+   ãƒ•ã‚£ãƒ«ã‚¿ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°
 ***********************************************/
 
 #include "../PostEffectShaderIO.fxh"
 
 //////////////////////////////////////////////////////////
 
-// 16ƒ{ƒbƒNƒXƒtƒBƒ‹ƒ^ƒTƒ“ƒvƒŠƒ“ƒO
+// 16ãƒœãƒƒã‚¯ã‚¹ãƒ•ã‚£ãƒ«ã‚¿ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°
 float4 Box16FilterSampling(
 	in sampler smplIn,
 	S_PE_PS_IN_SAMPLING_4 sIn)
@@ -38,7 +38,7 @@ float4 Box16FilterSampling(
 	return vRet;
 }
 
-// 16ƒ|ƒCƒ“ƒgƒtƒBƒ‹ƒ^ƒTƒ“ƒvƒŠƒ“ƒO
+// 16ãƒã‚¤ãƒ³ãƒˆãƒ•ã‚£ãƒ«ã‚¿ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°
 float4 Point16FilterSampling(
 	in sampler smplIn,
 	S_PE_PS_IN_SAMPLING_16 sIn)
@@ -67,7 +67,7 @@ float4 Point16FilterSampling(
 	return vRet;
 }
 
-// 4ƒ{ƒbƒNƒXƒtƒBƒ‹ƒ^ƒTƒ“ƒvƒŠƒ“ƒO
+// 4ãƒœãƒƒã‚¯ã‚¹ãƒ•ã‚£ãƒ«ã‚¿ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°
 float4 Box4FilterSampling(
 	in sampler smplIn,
 	S_PE_PS_IN sIn)
@@ -82,7 +82,7 @@ float4 Box4FilterSampling(
 	return tex2D(smplIn, sIn.vUV);
 }
 
-// 4ƒ|ƒCƒ“ƒgƒtƒBƒ‹ƒ^ƒTƒ“ƒvƒŠƒ“ƒO
+// 4ãƒã‚¤ãƒ³ãƒˆãƒ•ã‚£ãƒ«ã‚¿ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°
 float4 Point4FilterSampling(
 	in sampler smplIn,
 	S_PE_PS_IN_SAMPLING_4 sIn)
@@ -107,7 +107,7 @@ float4 Point4FilterSampling(
 	return vRet;
 }
 
-// 9ƒR[ƒ“ƒtƒBƒ‹ƒ^ƒTƒ“ƒvƒŠƒ“ƒO
+// 9ã‚³ãƒ¼ãƒ³ãƒ•ã‚£ãƒ«ã‚¿ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°
 float4 Cone9FilterSampling(
 	in sampler smplIn,
 	S_PE_PS_IN_SAMPLING_4 sIn)
@@ -120,9 +120,9 @@ float4 Cone9FilterSampling(
 	// +---@---@---+      +---+---+---+
 	// |   |   |   |      | 1 | 2 | 1 |
 	// +---+---+---+      +---+---+---+
-	// ƒTƒ“ƒvƒŠƒ“ƒOˆÊ’u   ŠeƒsƒNƒZƒ‹‚Ìd‚İ
+	// ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ä½ç½®   å„ãƒ”ã‚¯ã‚»ãƒ«ã®é‡ã¿
 	//
-	// ’†S‚Ìd‚İ‚ª‚‚­ü•Ó‚ª’á‚­‚È‚Á‚Ä‚¢‚é‚±‚Æ‚©‚ç9ƒR[ƒ“ƒtƒBƒ‹ƒ^ƒTƒ“ƒvƒŠƒ“ƒO‚ÆŒ¾‚í‚ê‚é
+	// ä¸­å¿ƒã®é‡ã¿ãŒé«˜ãå‘¨è¾ºãŒä½ããªã£ã¦ã„ã‚‹ã“ã¨ã‹ã‚‰9ã‚³ãƒ¼ãƒ³ãƒ•ã‚£ãƒ«ã‚¿ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ã¨è¨€ã‚ã‚Œã‚‹
 
 	float4 vRet = 0.0f;
 
@@ -138,8 +138,8 @@ float4 Cone9FilterSampling(
 	return vRet;
 }
 
-// 9ƒ{ƒbƒNƒXƒtƒBƒ‹ƒ^ƒTƒ“ƒvƒŠƒ“ƒO
-// ƒ{ƒbƒNƒX‚ÆŒ¾‚¦‚é‚Ì‚©‚ÈEEE
+// 9ãƒœãƒƒã‚¯ã‚¹ãƒ•ã‚£ãƒ«ã‚¿ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°
+// ãƒœãƒƒã‚¯ã‚¹ã¨è¨€ãˆã‚‹ã®ã‹ãªãƒ»ãƒ»ãƒ»
 float4 Box9FilterSampling(
 	in sampler smplIn,
 	S_PE_PS_IN_SAMPLING_4 sIn)
@@ -183,7 +183,7 @@ float4 Box9FilterSampling(
 	return vRet;
 }
 
-// 9ƒ|ƒCƒ“ƒgƒtƒBƒ‹ƒ^ƒTƒ“ƒvƒŠƒ“ƒO
+// 9ãƒã‚¤ãƒ³ãƒˆãƒ•ã‚£ãƒ«ã‚¿ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°
 float4 Point9FilterSampling(
 	in sampler smplIn,
 	S_PE_PS_IN_SAMPLING_9 sIn)
@@ -214,11 +214,11 @@ float4 Point9FilterSampling(
 
 //////////////////////////////////////////////////////////
 
-#define DownScale4x4_Linear		Box16FilterSampling		// 1/4 x 1/4 k¬iƒŠƒjƒAƒtƒBƒ‹ƒ^j
-#define DownScale4x4_Point		Point16FilterSampling	// 1/4 x 1/4 k¬iƒ|ƒCƒ“ƒgƒtƒBƒ‹ƒ^j
-#define DownScale2x2_Linear		Box4FilterSampling		// 1/2 x 1/2 k¬iƒŠƒjƒAƒtƒBƒ‹ƒ^j
-#define DownScale2x2_Point		Point4FilterSampling	// 1/2 x 1/2 k¬iƒ|ƒCƒ“ƒgƒtƒBƒ‹ƒ^j
-#define DownScale3x3_Linear		Box9FilterSampling		// 1/3 x 1/3 k¬iƒŠƒjƒAƒtƒBƒ‹ƒ^j
-#define DownScale3x3_Point		Point9FilterSampling	// 1/3 x 1/3 k¬iƒ|ƒCƒ“ƒgƒtƒBƒ‹ƒ^j
+#define DownScale4x4_Linear		Box16FilterSampling		// 1/4 x 1/4 ç¸®å°ï¼ˆãƒªãƒ‹ã‚¢ãƒ•ã‚£ãƒ«ã‚¿ï¼‰
+#define DownScale4x4_Point		Point16FilterSampling	// 1/4 x 1/4 ç¸®å°ï¼ˆãƒã‚¤ãƒ³ãƒˆãƒ•ã‚£ãƒ«ã‚¿ï¼‰
+#define DownScale2x2_Linear		Box4FilterSampling		// 1/2 x 1/2 ç¸®å°ï¼ˆãƒªãƒ‹ã‚¢ãƒ•ã‚£ãƒ«ã‚¿ï¼‰
+#define DownScale2x2_Point		Point4FilterSampling	// 1/2 x 1/2 ç¸®å°ï¼ˆãƒã‚¤ãƒ³ãƒˆãƒ•ã‚£ãƒ«ã‚¿ï¼‰
+#define DownScale3x3_Linear		Box9FilterSampling		// 1/3 x 1/3 ç¸®å°ï¼ˆãƒªãƒ‹ã‚¢ãƒ•ã‚£ãƒ«ã‚¿ï¼‰
+#define DownScale3x3_Point		Point9FilterSampling	// 1/3 x 1/3 ç¸®å°ï¼ˆãƒã‚¤ãƒ³ãƒˆãƒ•ã‚£ãƒ«ã‚¿ï¼‰
 
 #endif	// #if !defined(__IZANAGI_POSTEFFECT_FILTER_SAMPLING_FXH__)

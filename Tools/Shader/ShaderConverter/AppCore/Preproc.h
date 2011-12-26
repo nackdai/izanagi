@@ -1,4 +1,4 @@
-﻿#if !defined(__SHADER_CONVERTER_PREPROC_H__)
+#if !defined(__SHADER_CONVERTER_PREPROC_H__)
 #define __SHADER_CONVERTER_PREPROC_H__
 
 #include "izToolKit.h"

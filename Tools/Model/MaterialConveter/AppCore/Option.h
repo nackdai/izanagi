@@ -5,7 +5,7 @@
 #include "izDefs.h"
 #include "izToolKit.h"
 
-// ƒtƒ@ƒCƒ‹ƒ^ƒCƒv
+// ãƒ•ã‚¡ã‚¤ãƒ«ã‚¿ã‚¤ãƒ—
 enum FileType {
 	FileTypeUnknown = 0,
 	FileTypeCollada,
@@ -16,10 +16,10 @@ enum FileType {
 };
 
 struct SOption {
-	izanagi::tool::CString in;		// “ü—Íƒtƒ@ƒCƒ‹
-	izanagi::tool::CString out;	// o—Íƒtƒ@ƒCƒ‹
+	izanagi::tool::CString in;		// å…¥åŠ›ãƒ•ã‚¡ã‚¤ãƒ«
+	izanagi::tool::CString out;	// å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
 
-	FileType fileType;	// ƒtƒ@ƒCƒ‹ƒ^ƒCƒv
+	FileType fileType;	// ãƒ•ã‚¡ã‚¤ãƒ«ã‚¿ã‚¤ãƒ—
 };
 
 class COption : public SOption {
@@ -28,10 +28,10 @@ public:
 	~COption();
 
 public:
-	// ‰ğÍ
+	// è§£æ
 	IZ_BOOL Analysis(int argc, char* argv[]);
 
-	// o—Íƒtƒ@ƒCƒ‹–¼‚©‚çŠg’£q‚ğæ‚èœ‚­
+	// å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«åã‹ã‚‰æ‹¡å¼µå­ã‚’å–ã‚Šé™¤ã
 	IZ_BOOL RemoveExtFromExportFileName();
 
 	IZ_BOOL IsValid();

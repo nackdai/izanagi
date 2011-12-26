@@ -1,4 +1,4 @@
-﻿#include "graph/GraphicsDeviceLite.h"
+#include "graph/GraphicsDeviceLite.h"
 #include "graph/TextureLite.h"
 
 using namespace izanagi;

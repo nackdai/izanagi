@@ -1,4 +1,4 @@
-﻿#include "GeometryChunk.h"
+#include "GeometryChunk.h"
 
 #include "NvTriStrip.h"
 #include "izToolKit.h"

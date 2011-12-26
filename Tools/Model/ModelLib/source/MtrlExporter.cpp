@@ -1,4 +1,4 @@
-﻿#include "MtrlExporter.h"
+#include "MtrlExporter.h"
 #include "izToolkit.h"
 
 CMtrlExporter CMtrlExporter::s_cInstance;

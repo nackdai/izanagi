@@ -1,4 +1,4 @@
-﻿#include "util/StringUtility.h"
+#include "util/StringUtility.h"
 
 using namespace izanagi;
 using namespace tool;

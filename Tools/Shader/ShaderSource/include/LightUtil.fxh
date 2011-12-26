@@ -6,17 +6,17 @@
 #include "MaterialDefs.fxh"
 
 /**
-* HalfƒxƒNƒgƒ‹ŒvZ
+* Halfãƒ™ã‚¯ãƒˆãƒ«è¨ˆç®—
 */
 float3 ComputeHalfVectorEx(int idxParallelLight, float4 vPos_L2W)
 {
-	// ‹“_‚©‚ç‚Ì•ûŒü
+	// è¦–ç‚¹ã‹ã‚‰ã®æ–¹å‘
 	float3 vV = ComputeDirFromEye(vPos_L2W);
 	return normalize(GetParallelLightDir(idxParallelLight) + vV);
 }
 
 /**
-* HalfƒxƒNƒgƒ‹ŒvZ
+* Halfãƒ™ã‚¯ãƒˆãƒ«è¨ˆç®—
 */
 float3 ComputeHalfVector(int idxParallelLight, float4 vPos)
 {
@@ -24,7 +24,7 @@ float3 ComputeHalfVector(int idxParallelLight, float4 vPos)
 }
 
 /**
-* ŠÂ‹«ŒõŒvZ
+* ç’°å¢ƒå…‰è¨ˆç®—
 */
 float4 ComputeAmbientLight()
 {
@@ -32,7 +32,7 @@ float4 ComputeAmbientLight()
 }
 
 /**
-* Phongƒ‰ƒCƒgŒvZ
+* Phongãƒ©ã‚¤ãƒˆè¨ˆç®—
 */
 float3 ComputePhongLight(
 	int idxParallelLight,
@@ -42,10 +42,10 @@ float3 ComputePhongLight(
 	float4 sParallelLightClr = GetParallelLightColor(idxParallelLight);
 	float3 sParallelLightDir = GetParallelLightDir(idxParallelLight);
 	
-	// Diffuse = Md * ‡”(C * max(NEL, 0))
+	// Diffuse = Md * âˆ‘(C * max(Nãƒ»L, 0))
 	float3 ret = GetMtrlDiffuse().rgb * sParallelLightClr.rgb * max(0.0f, dot(vNormal, sParallelLightDir));
 
-	// Specular = Ms * ‡”(C * pow(max(NEH, 0), m))
+	// Specular = Ms * âˆ‘(C * pow(max(Nãƒ»H, 0), m))
 	ret += GetMtrlSpecular().rgb * sParallelLightClr.rgb * pow(max(0.0f, dot(vNormal, vHalf)), GetMtrlSpecular().w);
 
 	return ret;

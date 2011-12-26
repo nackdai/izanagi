@@ -2,12 +2,12 @@
 #define __IZANAGI_POSTEFFECT_SHADER_DEFS_PARAM_FXH__
 
 ////////////////////////////////////////////////////////
-// ƒpƒ‰ƒ[ƒ^
+// ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
 
 //****************************************
-// ƒAƒmƒe[ƒVƒ‡ƒ“
+// ã‚¢ãƒãƒ†ãƒ¼ã‚·ãƒ§ãƒ³
 
-// UIƒRƒ“ƒgƒ[ƒ‹İ’è—p
+// UIã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«è¨­å®šç”¨
 #define SetUIWidget(widget)			string UIWidget = widget
 #define SetUIName(name)				string UIName = name
 #define SetUIHelp(help)				string UIHelp = help
@@ -28,20 +28,20 @@
 #define SetUIStep4(v0, v1, v2, v3)	float4 UIStep = {v0, v1, v2, v3}
 
 #if 0
-// UIƒRƒ“ƒgƒ[ƒ‹(UIWidget)İ’è’l
-#define UI_WIDGET_SLIDER		"Slider"		// ƒXƒ‰ƒCƒ_[
-#define UI_WIDGET_SPINNER		"Spinner"		// ƒXƒsƒi[
-#define UI_WIDGET_COLOR			"Color"			// ƒJƒ‰[ƒsƒbƒJ[
-#define UI_WIDGET_GRAYSCALE		"GrayScale"		// ‘S‚Ä‚Ì¬•ª‚ğ“¯‚¶’l‚É‚·‚é•K—v‚ª‚ ‚é
-#define UI_WIDGET_NUMERIC		"Numeric"		// ”’lw’è
-#define UI_WIDGET_STRING		"String"		// •¶š—ñw’è
-#define UI_WIDGET_TEXTURE		"Texture"		// ƒeƒNƒXƒ`ƒƒw’è
-#define UI_WIDGET_DIRECTION		"Direction"		// ƒ‰ƒCƒg‚Ì•ûŒü‚Æ‚©iƒ|ƒXƒgƒGƒtƒFƒNƒg‚Å‚Í•s—v‚©‚ÈEEEj
-#define UI_WIDGET_OBJECT		"Object"		// ƒAƒmƒe[ƒVƒ‡ƒ“‚ÉˆË‘¶
-#define UI_WIDGET_NONE			"None"			// ‚±‚ÌƒAƒmƒe[ƒVƒ‡ƒ“‚ğ•\¦‚µ‚È‚¢
+// UIã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«(UIWidget)è¨­å®šå€¤
+#define UI_WIDGET_SLIDER		"Slider"		// ã‚¹ãƒ©ã‚¤ãƒ€ãƒ¼
+#define UI_WIDGET_SPINNER		"Spinner"		// ã‚¹ãƒ”ãƒŠãƒ¼
+#define UI_WIDGET_COLOR			"Color"			// ã‚«ãƒ©ãƒ¼ãƒ”ãƒƒã‚«ãƒ¼
+#define UI_WIDGET_GRAYSCALE		"GrayScale"		// å…¨ã¦ã®æˆåˆ†ã‚’åŒã˜å€¤ã«ã™ã‚‹å¿…è¦ãŒã‚ã‚‹
+#define UI_WIDGET_NUMERIC		"Numeric"		// æ•°å€¤æŒ‡å®š
+#define UI_WIDGET_STRING		"String"		// æ–‡å­—åˆ—æŒ‡å®š
+#define UI_WIDGET_TEXTURE		"Texture"		// ãƒ†ã‚¯ã‚¹ãƒãƒ£æŒ‡å®š
+#define UI_WIDGET_DIRECTION		"Direction"		// ãƒ©ã‚¤ãƒˆã®æ–¹å‘ã¨ã‹ï¼ˆãƒã‚¹ãƒˆã‚¨ãƒ•ã‚§ã‚¯ãƒˆã§ã¯ä¸è¦ã‹ãªãƒ»ãƒ»ãƒ»ï¼‰
+#define UI_WIDGET_OBJECT		"Object"		// ã‚¢ãƒãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ã«ä¾å­˜
+#define UI_WIDGET_NONE			"None"			// ã“ã®ã‚¢ãƒãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ã‚’è¡¨ç¤ºã—ãªã„
 #endif
 
-// ƒGƒtƒFƒNƒg“à‚Å‚Íg—p‚µ‚È‚¢ê‡‚Å‚àAíœ‚µ‚È‚¢
+// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆå†…ã§ã¯ä½¿ç”¨ã—ãªã„å ´åˆã§ã‚‚ã€å‰Šé™¤ã—ãªã„
 #define SetDoNotStrip(b)	bool DoNotStrip = b
 
 #endif	// #if !defined(__IZANAGI_POSTEFFECT_SHADER_DEFS_PARAM_FXH__)

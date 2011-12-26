@@ -1,4 +1,4 @@
-﻿#include "FileIdCreator.h"
+#include "FileIdCreator.h"
 #include "Utility.h"
 #include "izStd.h"
 #include "izToolKit.h"

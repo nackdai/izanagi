@@ -1,4 +1,4 @@
-﻿#include "AnmExporter.h"
+#include "AnmExporter.h"
 #include "izToolKit.h"
 
 #include "../importer/collada/ColladaImporter.h"

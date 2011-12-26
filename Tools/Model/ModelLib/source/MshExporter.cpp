@@ -1,4 +1,4 @@
-﻿#include "MshExporter.h"
+#include "MshExporter.h"
 #include "GeometryChunk.h"
 
 // フォーマット

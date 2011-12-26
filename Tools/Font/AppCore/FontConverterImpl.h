@@ -1,4 +1,4 @@
-﻿#if !defined(__FONT_CONVERTER_IMPL_H__)
+#if !defined(__FONT_CONVERTER_IMPL_H__)
 #define __FONT_CONVERTER_IMPL_H__
 
 #include <vector>

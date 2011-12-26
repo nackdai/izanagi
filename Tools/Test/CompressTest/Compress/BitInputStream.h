@@ -1,4 +1,4 @@
-﻿#if !defined(__BIT_IMPUT_STREAM_H__)
+#if !defined(__BIT_IMPUT_STREAM_H__)
 #define __BIT_IMPUT_STREAM_H__
 
 #include "ToolkitIoDefs.h"

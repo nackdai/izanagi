@@ -1,4 +1,4 @@
-﻿#if !defined(__MODEL_LIB_MDL_EXPORTER_H__)
+#if !defined(__MODEL_LIB_MDL_EXPORTER_H__)
 #define __MODEL_LIB_MDL_EXPORTER_H__
 
 #include "izIo.h"

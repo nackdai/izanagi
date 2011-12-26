@@ -5,14 +5,14 @@
 #include "izDefs.h"
 #include "izToolKit.h"
 
-// o—Íƒ^ƒCƒv
+// å‡ºåŠ›ã‚¿ã‚¤ãƒ—
 enum ExportType {
-	ExportTypeMdl = 1 << 0,	// MDL‚Æ‚µ‚Äo—Í
-	ExportTypeMsh = 1 << 1,	// MSH‚ğo—Í
-	ExportTypeSkl = 1 << 2,	// SKL‚ğo—Í
+	ExportTypeMdl = 1 << 0,	// MDLã¨ã—ã¦å‡ºåŠ›
+	ExportTypeMsh = 1 << 1,	// MSHã‚’å‡ºåŠ›
+	ExportTypeSkl = 1 << 2,	// SKLã‚’å‡ºåŠ›
 };
 
-// ƒtƒ@ƒCƒ‹ƒ^ƒCƒv
+// ãƒ•ã‚¡ã‚¤ãƒ«ã‚¿ã‚¤ãƒ—
 enum FileType {
 	FileTypeUnknown = 0,
 	FileTypeCollada,
@@ -23,14 +23,14 @@ enum FileType {
 };
 
 struct SOption {
-	izanagi::tool::CString in;		// “ü—Íƒtƒ@ƒCƒ‹
-	izanagi::tool::CString out;	// o—Íƒtƒ@ƒCƒ‹
+	izanagi::tool::CString in;		// å…¥åŠ›ãƒ•ã‚¡ã‚¤ãƒ«
+	izanagi::tool::CString out;	// å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
 
 	izanagi::tool::CString outMsh;
 	izanagi::tool::CString outSkl;
 
-	IZ_UINT exportType;	// o—Íƒ^ƒCƒv
-	FileType fileType;	// ƒtƒ@ƒCƒ‹ƒ^ƒCƒv
+	IZ_UINT exportType;	// å‡ºåŠ›ã‚¿ã‚¤ãƒ—
+	FileType fileType;	// ãƒ•ã‚¡ã‚¤ãƒ«ã‚¿ã‚¤ãƒ—
 
 	IZ_UINT maxJointMtxNum;
 };
@@ -41,7 +41,7 @@ public:
 	~COption();
 
 public:
-	// ‰ğÍ
+	// è§£æ
 	IZ_BOOL Analysis(int argc, char* argv[]);
 
 	IZ_BOOL IsValid();

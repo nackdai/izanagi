@@ -1,4 +1,4 @@
-﻿#include "Utility.h"
+#include "Utility.h"
 
 // パスを '/' or '\' で分解する
 void CUtility::BreakPath(

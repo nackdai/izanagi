@@ -1,4 +1,4 @@
-﻿#include "TextureUtil.h"
+#include "TextureUtil.h"
 #include "izToolKit.h"
 
 #if 0

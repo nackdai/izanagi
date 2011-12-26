@@ -1,4 +1,4 @@
-﻿#if !defined(__POSTEFFECT_CONVERTER_PARAM_UTIL_H__)
+#if !defined(__POSTEFFECT_CONVERTER_PARAM_UTIL_H__)
 #define __POSTEFFECT_CONVERTER_PARAM_UTIL_H__
 
 #include <Cg/cg.h>

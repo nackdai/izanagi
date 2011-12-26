@@ -1,4 +1,4 @@
-﻿#include "XFileParser.h"
+#include "XFileParser.h"
 #include "izToolKit.h"
 
 #include "zlib.h"

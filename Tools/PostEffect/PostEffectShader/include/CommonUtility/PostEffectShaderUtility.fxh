@@ -2,14 +2,14 @@
 #define __IZANAGI_POSTEFFECT_SHADER_UTILITY_FXH__
 
 //////////////////////////////////////////////////
-// [“x’l•ÏŠ·
+// æ·±åº¦å€¤å¤‰æ›
 
-// Z’l
+// Zå€¤
 float ConvertZ(float4 vIn)
 {
 #if defined(__Z_RGB__)
 	// NOTE
-	// RGB 24bit¸“x
+	// RGB 24bitç²¾åº¦
 #if 0
 	return dot(vIn.rgb, float3(16711680.0f / 16777215.0f, 65280.0f / 16777215.0f, 255.0f / 16777215.0f));
 #else
@@ -17,27 +17,27 @@ float ConvertZ(float4 vIn)
 #endif
 #elif defined(__Z_GBA__)
 	// NOTE
-	// GBA 24bit¸“x
+	// GBA 24bitç²¾åº¦
 	return dot(vIn.gba, float3(256.0f/ (256.0f * 256.0f * 256.0f), 255.0f / (256.0f * 256.0f), 255.0f / 256.0f));
 #else
 	// NOTE
-	// 8bit¸“x RGB‚»‚ê‚¼‚ê‚É“¯‚¶’l‚ª“ü‚Á‚Ä‚¢‚é
+	// 8bitç²¾åº¦ RGBãã‚Œãã‚Œã«åŒã˜å€¤ãŒå…¥ã£ã¦ã„ã‚‹
 	return vIn.r;
 #endif
 }
 
-// Z’l
+// Zå€¤
 float ConvertZ(in sampler smplIn, float2 vUV)
 {
 	return ConvertZ(tex2D(smplIn, vUV));
 }
 
-// W’l
+// Wå€¤
 float ConvertW(float4 vIn)
 {
 #if defined(__W_RGB__)
 	// NOTE
-	// RGB 24bit¸“x
+	// RGB 24bitç²¾åº¦
 #if 0
 	return dot(vIn.rgb, float3(16711680.0f / 16777215.0f, 65280.0f / 16777215.0f, 255.0f / 16777215.0f));
 #else
@@ -45,29 +45,29 @@ float ConvertW(float4 vIn)
 #endif
 #else
 	// NOTE
-	// 8bit¸“x RGB‚»‚ê‚¼‚ê‚É“¯‚¶’l‚ª“ü‚Á‚Ä‚¢‚é
+	// 8bitç²¾åº¦ RGBãã‚Œãã‚Œã«åŒã˜å€¤ãŒå…¥ã£ã¦ã„ã‚‹
 	return vIn.r;
 #endif
 }
 
-// W’l
+// Wå€¤
 float ConvertW(in sampler smplIn, float2 vUV)
 {
 	return ConvertW(tex2D(smplIn, vUV));
 }
 
 //////////////////////////////////////////////////
-// ƒsƒNƒZƒ‹ƒVƒF[ƒ_“ü—Í\‘¢‘Ìƒwƒ‹ƒp
+// ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€å…¥åŠ›æ§‹é€ ä½“ãƒ˜ãƒ«ãƒ‘
 
-// ’†S“_æ“¾
-// ‚R‚˜‚Rk¬iƒ|ƒCƒ“ƒgƒtƒBƒ‹ƒ^j
+// ä¸­å¿ƒç‚¹å–å¾—
+// ï¼“ï½˜ï¼“ç¸®å°ï¼ˆãƒã‚¤ãƒ³ãƒˆãƒ•ã‚£ãƒ«ã‚¿ï¼‰
 float2 GetCenterUVFromDownScale3x3(S_PE_PS_IN_DOWNSCALE_3x3_POINT sIn)
 {
 	return sIn.vUV[2].xy;
 }
 
-// ’†S“_æ“¾
-// ‚Xƒ|ƒCƒ“ƒgƒTƒ“ƒvƒŠƒ“ƒOiƒŠƒjƒAƒtƒBƒ‹ƒ^j
+// ä¸­å¿ƒç‚¹å–å¾—
+// ï¼™ãƒã‚¤ãƒ³ãƒˆã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ï¼ˆãƒªãƒ‹ã‚¢ãƒ•ã‚£ãƒ«ã‚¿ï¼‰
 float2 GetCenterUVFrom9PointSample(S_PE_PS_IN_9POINTSAMPLE_LINEAR sIn)
 {
 	// NOTE
@@ -82,8 +82,8 @@ float2 GetCenterUVFrom9PointSample(S_PE_PS_IN_9POINTSAMPLE_LINEAR sIn)
 	return sIn.vUV_0;
 }
 
-// ’†S“_æ“¾
-// ‚Xƒ|ƒCƒ“ƒgƒTƒ“ƒvƒŠƒ“ƒOiƒ|ƒCƒ“ƒgƒtƒBƒ‹ƒ^j
+// ä¸­å¿ƒç‚¹å–å¾—
+// ï¼™ãƒã‚¤ãƒ³ãƒˆã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ï¼ˆãƒã‚¤ãƒ³ãƒˆãƒ•ã‚£ãƒ«ã‚¿ï¼‰
 float2 GetCenterUVFrom9PointSample(S_PE_PS_IN_9POINTSAMPLE_POINT sIn)
 {
 	// NOTE
@@ -98,8 +98,8 @@ float2 GetCenterUVFrom9PointSample(S_PE_PS_IN_9POINTSAMPLE_POINT sIn)
 	return GetCenterUVFromDownScale3x3(sIn);
 }
 
-// ƒTƒ“ƒvƒŠƒ“ƒO“_æ“¾
-// ‚S‚˜‚Sk¬iƒŠƒjƒAƒtƒBƒ‹ƒ^j
+// ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ç‚¹å–å¾—
+// ï¼”ï½˜ï¼”ç¸®å°ï¼ˆãƒªãƒ‹ã‚¢ãƒ•ã‚£ãƒ«ã‚¿ï¼‰
 float2 GetSamplePointFromDownScale4x4(int idx, S_PE_PS_IN_DOWNSCALE_4x4_LINEAR sIn)
 {
 	// NOTE
@@ -121,8 +121,8 @@ float2 GetSamplePointFromDownScale4x4(int idx, S_PE_PS_IN_DOWNSCALE_4x4_LINEAR s
 	}
 }
 
-// ƒTƒ“ƒvƒŠƒ“ƒO“_æ“¾
-// ‚S‚˜‚Sk¬iƒ|ƒCƒ“ƒgƒtƒBƒ‹ƒ^j
+// ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ç‚¹å–å¾—
+// ï¼”ï½˜ï¼”ç¸®å°ï¼ˆãƒã‚¤ãƒ³ãƒˆãƒ•ã‚£ãƒ«ã‚¿ï¼‰
 float2 GetSamplePointFromDownScale4x4(int idx, S_PE_PS_IN_DOWNSCALE_4x4_POINT sIn)
 {
 	// NOTE
@@ -144,15 +144,15 @@ float2 GetSamplePointFromDownScale4x4(int idx, S_PE_PS_IN_DOWNSCALE_4x4_POINT sI
 	}
 }
 
-// ƒTƒ“ƒvƒŠƒ“ƒO“_æ“¾
-// ‚Q‚˜‚Qk¬iƒŠƒjƒAƒtƒBƒ‹ƒ^j
+// ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ç‚¹å–å¾—
+// ï¼’ï½˜ï¼’ç¸®å°ï¼ˆãƒªãƒ‹ã‚¢ãƒ•ã‚£ãƒ«ã‚¿ï¼‰
 float2 GetSamplePointFromDownScale2x2(int idx, S_PE_PS_IN_DOWNSCALE_2x2_LINEAR sIn)
 {
 	return sIn.vUV;
 }
 
-// ƒTƒ“ƒvƒŠƒ“ƒO“_æ“¾
-// ‚Q‚˜‚Qk¬iƒ|ƒCƒ“ƒgƒtƒBƒ‹ƒ^j
+// ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ç‚¹å–å¾—
+// ï¼’ï½˜ï¼’ç¸®å°ï¼ˆãƒã‚¤ãƒ³ãƒˆãƒ•ã‚£ãƒ«ã‚¿ï¼‰
 float2 GetSamplePointFromDownScale2x2(int idx, S_PE_PS_IN_DOWNSCALE_2x2_POINT sIn)
 {
 	// NOTE
@@ -170,8 +170,8 @@ float2 GetSamplePointFromDownScale2x2(int idx, S_PE_PS_IN_DOWNSCALE_2x2_POINT sI
 	}
 }
 
-// ƒTƒ“ƒvƒŠƒ“ƒO“_æ“¾
-// ‚R‚˜‚Rk¬iƒŠƒjƒAƒtƒBƒ‹ƒ^j
+// ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ç‚¹å–å¾—
+// ï¼“ï½˜ï¼“ç¸®å°ï¼ˆãƒªãƒ‹ã‚¢ãƒ•ã‚£ãƒ«ã‚¿ï¼‰
 float2 GetSamplePointFromDownScale3x3(int idx, S_PE_PS_IN_DOWNSCALE_3x3_LINEAR sIn)
 {
 	// NOTE
@@ -191,8 +191,8 @@ float2 GetSamplePointFromDownScale3x3(int idx, S_PE_PS_IN_DOWNSCALE_3x3_LINEAR s
 	}
 }
 
-// ƒTƒ“ƒvƒŠƒ“ƒO“_æ“¾
-// ‚R‚˜‚Rk¬iƒ|ƒCƒ“ƒgƒtƒBƒ‹ƒ^j
+// ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ç‚¹å–å¾—
+// ï¼“ï½˜ï¼“ç¸®å°ï¼ˆãƒã‚¤ãƒ³ãƒˆãƒ•ã‚£ãƒ«ã‚¿ï¼‰
 float2 GetSamplePointFromDownScale3x3(int idx, S_PE_PS_IN_DOWNSCALE_3x3_POINT sIn)
 {
 	// NOTE
@@ -215,8 +215,8 @@ float2 GetSamplePointFromDownScale3x3(int idx, S_PE_PS_IN_DOWNSCALE_3x3_POINT sI
 	}
 }
 
-// ƒTƒ“ƒvƒŠƒ“ƒO“_æ“¾
-// ‚Xƒ|ƒCƒ“ƒgƒTƒ“ƒvƒŠƒ“ƒOiƒŠƒjƒAƒtƒBƒ‹ƒ^j
+// ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ç‚¹å–å¾—
+// ï¼™ãƒã‚¤ãƒ³ãƒˆã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ï¼ˆãƒªãƒ‹ã‚¢ãƒ•ã‚£ãƒ«ã‚¿ï¼‰
 float2 GetSamplePointFrom9PointSample(int idx, S_PE_PS_IN_9POINTSAMPLE_LINEAR sIn)
 {
 	// NOTE
@@ -239,8 +239,8 @@ float2 GetSamplePointFrom9PointSample(int idx, S_PE_PS_IN_9POINTSAMPLE_LINEAR sI
 	}
 }
 
-// ƒTƒ“ƒvƒŠƒ“ƒO“_æ“¾
-// ‚Xƒ|ƒCƒ“ƒgƒTƒ“ƒvƒŠƒ“ƒOiƒ|ƒCƒ“ƒgƒtƒBƒ‹ƒ^j
+// ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ç‚¹å–å¾—
+// ï¼™ãƒã‚¤ãƒ³ãƒˆã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ï¼ˆãƒã‚¤ãƒ³ãƒˆãƒ•ã‚£ãƒ«ã‚¿ï¼‰
 float2 GetSamplePointFrom9PointSample(int idx, S_PE_PS_IN_9POINTSAMPLE_POINT sIn)
 {
 	// NOTE

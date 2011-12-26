@@ -5,43 +5,43 @@
 #include "ShaderDefsFunctor.fxh"
 
 ////////////////////////////////////////////////////////
-// ƒpƒX
+// ãƒ‘ã‚¹
 
 //****************************************
-// ƒAƒmƒe[ƒVƒ‡ƒ“
+// ã‚¢ãƒãƒ†ãƒ¼ã‚·ãƒ§ãƒ³
 
 #if 0
-// ƒpƒX‚ÌŠÖ˜A•t‚¯İ’è
-// Eƒtƒ@ƒ“ƒNƒ^‚É•¡”‚ÌƒpƒX‚ğ‚½‚¹‚½‚¢‚Æ‚«‚Ég—p‚·‚éB
-// EÅ‘å‚Å‚S‚Ü‚Åİ’è‚Å‚«‚éB
-// E©•ª©g‚ğİ’èA“ñd“o˜^‚Ís‚¤‚±‚Æ‚ª‚Å‚«‚È‚¢B
+// ãƒ‘ã‚¹ã®é–¢é€£ä»˜ã‘è¨­å®š
+// ãƒ»ãƒ•ã‚¡ãƒ³ã‚¯ã‚¿ã«è¤‡æ•°ã®ãƒ‘ã‚¹ã‚’æŒãŸã›ãŸã„ã¨ãã«ä½¿ç”¨ã™ã‚‹ã€‚
+// ãƒ»æœ€å¤§ã§ï¼”ã¾ã§è¨­å®šã§ãã‚‹ã€‚
+// ãƒ»è‡ªåˆ†è‡ªèº«ã‚’è¨­å®šã€äºŒé‡ç™»éŒ²ã¯è¡Œã†ã“ã¨ãŒã§ããªã„ã€‚
 #define SetConnectPass_1(pass0)							string ConnectPass = #pass0
 #define SetConnectPass_2(pass0, pass1)					string ConnectPass = #pass0","#pass1
 #define SetConnectPass_3(pass0, pass1, pass2)			string ConnectPass = #pass0","#pass1","#pass2
 #define SetConnectPass_4(pass0, pass1, pass2, pass3)	string ConnectPass = #pass0","#pass1","#pass2","#pass3
 #endif
 
-// o—Íæ‚ÌƒVƒUƒŠƒ“ƒOİ’è
-// E‚±‚±‚É0ˆÈŠO‚Ì’l‚ªİ’è‚³‚ê‚½ê‡‚ÍAƒVƒUƒŠƒ“ƒO‚ğs‚¤‚à‚Ì‚Æ‚·‚éB
-// EƒŒƒ“ƒ_[ƒ^[ƒQƒbƒg‚ÌƒTƒCƒY‚Éinflate‚·‚éŒ`‚Åİ’è‚·‚éB
-// EƒŒƒ“ƒ_[ƒ^[ƒQƒbƒg‚ªw’è‚³‚ê‚È‚¢ê‡‚ÍA‚±‚±‚Åİ’è‚³‚ê‚½’l‚Íg—p‚³‚ê‚È‚¢B
-// ExAy ‚Í[-32768 - 32767]‚Ì®”‚ğƒZƒbƒg‚·‚é‚±‚ÆB‚»‚êˆÈŠO‚ğƒZƒbƒg‚µ‚½‚Æ‚«‚Ì“®ì‚Í•Ûá‚³‚ê‚È‚¢B
+// å‡ºåŠ›å…ˆã®ã‚·ã‚¶ãƒªãƒ³ã‚°è¨­å®š
+// ãƒ»ã“ã“ã«0ä»¥å¤–ã®å€¤ãŒè¨­å®šã•ã‚ŒãŸå ´åˆã¯ã€ã‚·ã‚¶ãƒªãƒ³ã‚°ã‚’è¡Œã†ã‚‚ã®ã¨ã™ã‚‹ã€‚
+// ãƒ»ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®ã‚µã‚¤ã‚ºã«inflateã™ã‚‹å½¢ã§è¨­å®šã™ã‚‹ã€‚
+// ãƒ»ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãŒæŒ‡å®šã•ã‚Œãªã„å ´åˆã¯ã€ã“ã“ã§è¨­å®šã•ã‚ŒãŸå€¤ã¯ä½¿ç”¨ã•ã‚Œãªã„ã€‚
+// ãƒ»xã€y ã¯[-32768 - 32767]ã®æ•´æ•°ã‚’ã‚»ãƒƒãƒˆã™ã‚‹ã“ã¨ã€‚ãã‚Œä»¥å¤–ã‚’ã‚»ãƒƒãƒˆã—ãŸã¨ãã®å‹•ä½œã¯ä¿éšœã•ã‚Œãªã„ã€‚
 #define SetScissorRectInflate(x, y)		int2 ScissorRectInflate = {x, y}
 
-// ƒ\[ƒXƒeƒNƒXƒ`ƒƒ‹éŒ`İ’è
-// Eƒ\[ƒXƒeƒNƒXƒ`ƒƒ‚ÍACPostEffectFunctorXXXX::GetMainSrcTexture ‚Åæ“¾‚Å‚«‚éƒeƒNƒXƒ`ƒƒ‚Ì‚±‚Æ‚Å‚ ‚éB
-// Eƒ\[ƒXƒeƒNƒXƒ`ƒƒ‹éŒ`‚ÌƒTƒCƒY‚Éinflate‚·‚éŒ`‚Åİ’è‚·‚éB
-// ExAy ‚Í[-32768 - 32767]‚Ì®”‚ğƒZƒbƒg‚·‚é‚±‚ÆB‚»‚êˆÈŠO‚ğƒZƒbƒg‚µ‚½‚Æ‚«‚Ì“®ì‚Í•Ûá‚³‚ê‚È‚¢B
+// ã‚½ãƒ¼ã‚¹ãƒ†ã‚¯ã‚¹ãƒãƒ£çŸ©å½¢è¨­å®š
+// ãƒ»ã‚½ãƒ¼ã‚¹ãƒ†ã‚¯ã‚¹ãƒãƒ£ã¯ã€CPostEffectFunctorXXXX::GetMainSrcTexture ã§å–å¾—ã§ãã‚‹ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®ã“ã¨ã§ã‚ã‚‹ã€‚
+// ãƒ»ã‚½ãƒ¼ã‚¹ãƒ†ã‚¯ã‚¹ãƒãƒ£çŸ©å½¢ã®ã‚µã‚¤ã‚ºã«inflateã™ã‚‹å½¢ã§è¨­å®šã™ã‚‹ã€‚
+// ãƒ»xã€y ã¯[-32768 - 32767]ã®æ•´æ•°ã‚’ã‚»ãƒƒãƒˆã™ã‚‹ã“ã¨ã€‚ãã‚Œä»¥å¤–ã‚’ã‚»ãƒƒãƒˆã—ãŸã¨ãã®å‹•ä½œã¯ä¿éšœã•ã‚Œãªã„ã€‚
 #define SetSrcTexRectInflate(x, y)		int2 SrcTexRectInflate = {x, y}
 
-// ƒeƒNƒXƒ`ƒƒƒIƒtƒZƒbƒg
+// ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚ªãƒ•ã‚»ãƒƒãƒˆ
 #define SetTextureOffset(offset)		string TextureOffset = #offset
 
 //****************************************
-// ƒXƒe[ƒg
+// ã‚¹ãƒ†ãƒ¼ãƒˆ
 
 // NOTE
-// ƒsƒNƒZƒ‹ƒpƒCƒvƒ‰ƒCƒ“ƒŒƒ“ƒ_[ƒXƒe[ƒg‚Ì‚İ
+// ãƒ”ã‚¯ã‚»ãƒ«ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¹ãƒ†ãƒ¼ãƒˆã®ã¿
 
 #define SetAlphaBlendEnable(b)		AlphaBlendEnable = b
 //#define SetAlphaFunc(func)			AlphaFunc = func
@@ -62,28 +62,28 @@
 
 #define SetAlphaBlend(op, src, dst)	SetBlendOp(op); SetBlendFunc(src, dst)
 
-// ”äŠrˆ—
+// æ¯”è¼ƒå‡¦ç†
 #if defined(__HLSL__)
-#define CMP_NEVER				NEVER			// í‚ÉƒeƒXƒg‚Í¸”s. 
-#define CMP_LESS				LESS			// NEW < OLD ‚È‚ç¬Œ÷. 
-#define CMP_EQUAL				EQUAL			// NEW == OLD ‚È‚ç¬Œ÷. 
-#define CMP_LESSEQUAL			LESSEQUAL		// NEW <= OLD ‚È‚ç¬Œ÷. 
-#define CMP_GREATER				GREATER			// NEW > OLD ‚È‚ç¬Œ÷. 
-#define CMP_NOTEQUAL			NOTEQUAL		// NEW != OLD ‚È‚ç¬Œ÷. 
-#define CMP_GREATEREQUAL		GREATEREQUAL	// NEW >= OLD ‚È‚ç¬Œ÷. 
-#define CMP_ALWAYS				ALWAYS			// í‚ÉƒeƒXƒg‚Í¬Œ÷. 
+#define CMP_NEVER				NEVER			// å¸¸ã«ãƒ†ã‚¹ãƒˆã¯å¤±æ•—. 
+#define CMP_LESS				LESS			// NEW < OLD ãªã‚‰æˆåŠŸ. 
+#define CMP_EQUAL				EQUAL			// NEW == OLD ãªã‚‰æˆåŠŸ. 
+#define CMP_LESSEQUAL			LESSEQUAL		// NEW <= OLD ãªã‚‰æˆåŠŸ. 
+#define CMP_GREATER				GREATER			// NEW > OLD ãªã‚‰æˆåŠŸ. 
+#define CMP_NOTEQUAL			NOTEQUAL		// NEW != OLD ãªã‚‰æˆåŠŸ. 
+#define CMP_GREATEREQUAL		GREATEREQUAL	// NEW >= OLD ãªã‚‰æˆåŠŸ. 
+#define CMP_ALWAYS				ALWAYS			// å¸¸ã«ãƒ†ã‚¹ãƒˆã¯æˆåŠŸ. 
 #else	// #if defined(__HLSL__)
-#define CMP_NEVER				Never			// í‚ÉƒeƒXƒg‚Í¸”s. 
-#define CMP_LESS				Less			// NEW < OLD ‚È‚ç¬Œ÷. 
-#define CMP_EQUAL				Equal			// NEW == OLD ‚È‚ç¬Œ÷. 
-#define CMP_LESSEQUAL			LEqual			// NEW <= OLD ‚È‚ç¬Œ÷. 
-#define CMP_GREATER				Greater			// NEW > OLD ‚È‚ç¬Œ÷. 
-#define CMP_NOTEQUAL			NotEqual		// NEW != OLD ‚È‚ç¬Œ÷. 
-#define CMP_GREATEREQUAL		GEqual			// NEW >= OLD ‚È‚ç¬Œ÷. 
-#define CMP_ALWAYS				Always			// í‚ÉƒeƒXƒg‚Í¬Œ÷. 
+#define CMP_NEVER				Never			// å¸¸ã«ãƒ†ã‚¹ãƒˆã¯å¤±æ•—. 
+#define CMP_LESS				Less			// NEW < OLD ãªã‚‰æˆåŠŸ. 
+#define CMP_EQUAL				Equal			// NEW == OLD ãªã‚‰æˆåŠŸ. 
+#define CMP_LESSEQUAL			LEqual			// NEW <= OLD ãªã‚‰æˆåŠŸ. 
+#define CMP_GREATER				Greater			// NEW > OLD ãªã‚‰æˆåŠŸ. 
+#define CMP_NOTEQUAL			NotEqual		// NEW != OLD ãªã‚‰æˆåŠŸ. 
+#define CMP_GREATEREQUAL		GEqual			// NEW >= OLD ãªã‚‰æˆåŠŸ. 
+#define CMP_ALWAYS				Always			// å¸¸ã«ãƒ†ã‚¹ãƒˆã¯æˆåŠŸ. 
 #endif	// #if defined(__HLSL__)
 
-// ƒuƒŒƒ“ƒfƒBƒ“ƒOˆ—
+// ãƒ–ãƒ¬ãƒ³ãƒ‡ã‚£ãƒ³ã‚°å‡¦ç†
 #if defined(__HLSL__)
 #define BLENDOP_ADD				ADD
 #define BLENDOP_SUBTRACT		SUBTRACT
@@ -98,7 +98,7 @@
 #define BLENDOP_MAX				Max
 #endif	// #if defined(__HLSL__)
 
-// ƒuƒŒƒ“ƒfƒBƒ“ƒOƒ‚[ƒh
+// ãƒ–ãƒ¬ãƒ³ãƒ‡ã‚£ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰
 #if defined(__HLSL__)
 #define BLEND_ZERO				ZERO			// (0, 0, 0, 0)
 #define BLEND_ONE				ONE				// (1, 1, 1, 1)
@@ -125,14 +125,14 @@
 #define BLEND_SRCALPHASAT		SrcAlphaSaturate	// (f, f, f, 1)	(f = min(As, 1 - Ad)
 #endif	// #if defined(__HLSL__)
 
-// ƒAƒ‹ƒtƒ@ƒuƒŒƒ“ƒhİ’è
-#define SetAlphaBlend_Normal()		SetAlphaBlend(BLENDOP_ADD, BLEND_SRCALPHA, BLEND_INVSRCALPHA)	// ’Êí
-#define SetAlphaBlend_CsAs_Cd()		SetAlphaBlend(BLENDOP_ADD, BLEND_SRCALPHA, BLEND_ONE)			// ‰ÁZ(ƒAƒ‹ƒtƒ@‚ ‚è)
-#define SetAlphaBlend_Cs_Cd()		SetAlphaBlend(BLENDOP_ADD, BLEND_ONE, BLEND_ONE)				// ‰ÁZ(ƒAƒ‹ƒtƒ@‚È‚µ)
-#define SetAlphaBlend_NCsAs_Cd()	SetAlphaBlend(BLENDOP_REVSUBTRACT, BLEND_SRCALPHA, BLEND_ONE)	// Œ¸Z(ƒAƒ‹ƒtƒ@‚ ‚è)
-#define SetAlphaBlend_NCs_Cd()		SetAlphaBlend(BLENDOP_REVSUBTRACT, BLEND_ONE, BLEND_ONE)		// Œ¸Z(ƒAƒ‹ƒtƒ@‚È‚µ)
+// ã‚¢ãƒ«ãƒ•ã‚¡ãƒ–ãƒ¬ãƒ³ãƒ‰è¨­å®š
+#define SetAlphaBlend_Normal()		SetAlphaBlend(BLENDOP_ADD, BLEND_SRCALPHA, BLEND_INVSRCALPHA)	// é€šå¸¸
+#define SetAlphaBlend_CsAs_Cd()		SetAlphaBlend(BLENDOP_ADD, BLEND_SRCALPHA, BLEND_ONE)			// åŠ ç®—(ã‚¢ãƒ«ãƒ•ã‚¡ã‚ã‚Š)
+#define SetAlphaBlend_Cs_Cd()		SetAlphaBlend(BLENDOP_ADD, BLEND_ONE, BLEND_ONE)				// åŠ ç®—(ã‚¢ãƒ«ãƒ•ã‚¡ãªã—)
+#define SetAlphaBlend_NCsAs_Cd()	SetAlphaBlend(BLENDOP_REVSUBTRACT, BLEND_SRCALPHA, BLEND_ONE)	// æ¸›ç®—(ã‚¢ãƒ«ãƒ•ã‚¡ã‚ã‚Š)
+#define SetAlphaBlend_NCs_Cd()		SetAlphaBlend(BLENDOP_REVSUBTRACT, BLEND_ONE, BLEND_ONE)		// æ¸›ç®—(ã‚¢ãƒ«ãƒ•ã‚¡ãªã—)
 
-// ’¸“_ƒVƒF[ƒ_İ’è
+// é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€è¨­å®š
 #define SetVertexShader(profile, EntryVS)	VertexShader = compile profile EntryVS()
 
 #if 0
@@ -166,7 +166,7 @@
 #define SetVS9PointSample_Point(profile)		SetVertexShaderSampling_9(profile)
 #endif
 
-// ƒsƒNƒZƒ‹ƒVƒF[ƒ_İ’è
+// ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€è¨­å®š
 #define SetPixelShader(profile, EntryPS)	PixelShader = compile profile EntryPS()
 
 #endif	// #if !defined(__IZANAGI_POSTEFFECT_SHADER_DEFS_PASS_FXH__)

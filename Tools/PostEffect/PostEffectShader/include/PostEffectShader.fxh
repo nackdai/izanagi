@@ -1,25 +1,25 @@
 #if !defined(__IZANAGI_POSTEFFECT_SHADER_FXH__)
 #define __IZANAGI_POSTEFFECT_SHADER_FXH__
 
-// ƒVƒF[ƒ_‹Lq—p’è‹`FX
+// ã‚·ã‚§ãƒ¼ãƒ€è¨˜è¿°ç”¨å®šç¾©è‰²ã€…
 #include "PostEffectShaderDefs.fxh"
 
-// ƒVƒF[ƒ_“üo—Í
+// ã‚·ã‚§ãƒ¼ãƒ€å…¥å‡ºåŠ›
 #include "PostEffectShaderIO.fxh"
 
-// ’¸“_ƒVƒF[ƒ_
+// é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€
 #include "PostEffectVS.fxh"
 
-// F‹óŠÔ
+// è‰²ç©ºé–“
 #include "PostEffectColorSpace.fxh"
 
-// ƒJƒ‰[ƒtƒBƒ‹ƒ^
+// ã‚«ãƒ©ãƒ¼ãƒ•ã‚£ãƒ«ã‚¿
 #include "PostEffectColorFilter.fxh"
 
-// ‹¤’Êƒ†[ƒeƒBƒŠƒeƒB[
+// å…±é€šãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£ãƒ¼
 #include "PostEffectCommonUtility.fxh"
 
-// ƒTƒ“ƒvƒŠƒ“ƒOƒpƒ‰ƒ[ƒ^
+// ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
 //#include "PostEffectSamplingParam.fxh"
 
 #endif	// #if !defined(__IZANAGI_POSTEFFECT_SHADER_FXH__)

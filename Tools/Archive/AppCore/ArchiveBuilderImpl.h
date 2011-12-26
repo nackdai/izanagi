@@ -1,4 +1,4 @@
-﻿#if !defined(__ARCHIVE_BUILDER_IMPL_H__)
+#if !defined(__ARCHIVE_BUILDER_IMPL_H__)
 #define __ARCHIVE_BUILDER_IMPL_H__
 
 #include "FileDefs.h"

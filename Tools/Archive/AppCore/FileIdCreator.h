@@ -1,4 +1,4 @@
-﻿#if !defined(__FILE_ID_CREATOR_H__)
+#if !defined(__FILE_ID_CREATOR_H__)
 #define __FILE_ID_CREATOR_H__
 
 #include <map>

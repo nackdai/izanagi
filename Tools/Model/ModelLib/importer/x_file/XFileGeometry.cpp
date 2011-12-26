@@ -1,4 +1,4 @@
-﻿#include "XFileGeometry.h"
+#include "XFileGeometry.h"
 #include "XFileParser.h"
 
 #include <algorithm>

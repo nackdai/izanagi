@@ -2,28 +2,28 @@
 #define __IZANAGI_POSTEFFECT_SHADER_DEFS_SCRIPT_FXH__
 
 /////////////////////////////////////
-// ƒeƒNƒjƒbƒNEƒpƒX‹¤’Ê
+// ãƒ†ã‚¯ãƒ‹ãƒƒã‚¯ãƒ»ãƒ‘ã‚¹å…±é€š
 
-#define SetRenderTarget(tex)		string RenderColorTarget=#tex	// ƒŒƒ“ƒ_[ƒ^[ƒQƒbƒgw’è
-#define SetDefaultRenderTarget()	string RenderColorTarget=""		// ƒŒƒ“ƒ_[ƒ^[ƒQƒbƒg‚ğŒ³‚É–ß‚·
-#define SetClearColor(col)			int ClearColor=col			// ƒNƒŠƒAƒJƒ‰[w’è
+#define SetRenderTarget(tex)		string RenderColorTarget=#tex	// ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆæŒ‡å®š
+#define SetDefaultRenderTarget()	string RenderColorTarget=""		// ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚’å…ƒã«æˆ»ã™
+#define SetClearColor(col)			int ClearColor=col			// ã‚¯ãƒªã‚¢ã‚«ãƒ©ãƒ¼æŒ‡å®š
 
 /*************
-   ŠÈˆÕİ’è
+   ç°¡æ˜“è¨­å®š
 *************/
 
-// ƒV[ƒ“ŠJn
+// ã‚·ãƒ¼ãƒ³é–‹å§‹
 #define BeginScene(tex)	SetRenderTarget(tex)
 
-// ƒV[ƒ“ŠJniƒNƒŠƒAƒJƒ‰[—L‚èj
+// ã‚·ãƒ¼ãƒ³é–‹å§‹ï¼ˆã‚¯ãƒªã‚¢ã‚«ãƒ©ãƒ¼æœ‰ã‚Šï¼‰
 #define BeginSceneWithClearColor(tex, col)\
 	SetRenderTarget(tex);\
 	SetClearColor(col)
 
-// ƒV[ƒ“ŠJniƒŒƒ“ƒ_[ƒ^[ƒQƒbƒg‚ğŒ³‚É–ß‚·j
+// ã‚·ãƒ¼ãƒ³é–‹å§‹ï¼ˆãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚’å…ƒã«æˆ»ã™ï¼‰
 #define BeginSceneByDefault()	SetDefaultRenderTarget()
 
-// ƒV[ƒ“ŠJniƒŒƒ“ƒ_[ƒ^[ƒQƒbƒg‚ğŒ³‚É–ß‚·AƒNƒŠƒAƒJƒ‰[—L‚èj
+// ã‚·ãƒ¼ãƒ³é–‹å§‹ï¼ˆãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚’å…ƒã«æˆ»ã™ã€ã‚¯ãƒªã‚¢ã‚«ãƒ©ãƒ¼æœ‰ã‚Šï¼‰
 #define BeginSceneByDefaultWithClearColor(col)\
 	SetDefaultRenderTarget();\
 	SetClearColor(col)

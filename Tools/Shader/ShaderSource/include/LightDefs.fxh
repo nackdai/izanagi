@@ -6,7 +6,7 @@
 ////////////////////////////////////////////////////////////
 
 /**
-* •½sŒõŒ¹
+* å¹³è¡Œå…‰æº
 */
 struct SParallelLightParam {
 	SVector vDir;
@@ -14,14 +14,14 @@ struct SParallelLightParam {
 };
 
 /**
-* ŠÂ‹«Œõ
+* ç’°å¢ƒå…‰
 */
 struct SAmbientLightParam {
 	SVector color;
 };
 
 /**
-* “_ŒõŒ¹
+* ç‚¹å…‰æº
 */
 struct SPointLightParam {
 	SVector vPos;
@@ -30,7 +30,7 @@ struct SPointLightParam {
 };
 
 /**
-* ƒXƒ|ƒbƒgƒ‰ƒCƒg
+* ã‚¹ãƒãƒƒãƒˆãƒ©ã‚¤ãƒˆ
 */
 struct SSpotLightParam {
 	SVector vPos;
@@ -40,7 +40,7 @@ struct SSpotLightParam {
 };
 
 /**
-* ”¼‹…ƒ‰ƒCƒg
+* åŠçƒãƒ©ã‚¤ãƒˆ
 */
 struct SHemisphereLightParam {
 	SVector vAxis;
@@ -50,7 +50,7 @@ struct SHemisphereLightParam {
 
 ////////////////////////////////////////////////////////////
 
-// •½sŒõŒ¹
+// å¹³è¡Œå…‰æº
 #ifdef IZ_SHADER_PARALLEL_LIGHT_NUM && IZ_SHADER_PARALLEL_LIGHT_NUM > 0
 	float3 g_ParallelLightDir[IZ_SHADER_PARALLEL_LIGHT_NUM];
 	float4 g_ParallelLightClr[IZ_SHADER_PARALLEL_LIGHT_NUM];
@@ -62,7 +62,7 @@ struct SHemisphereLightParam {
 	#define GetParallelLightColor(idx)	((float4)0)
 #endif
 
-// ŠÂ‹«Œõ
+// ç’°å¢ƒå…‰
 #ifdef IZ_SHADER_ENABLE_AMBIENT_LIGHT
 	float4 g_AmbientLightColor;
 	#define GetAmbientLightColor()	g_AmbientLightColor
@@ -72,7 +72,7 @@ struct SHemisphereLightParam {
 
 #define GetAmbientColor()	GetAmbientLight().color
 
-// “_ŒõŒ¹
+// ç‚¹å…‰æº
 #ifdef IZ_SHADER_POINT_LIGHT_NUM && IZ_SHADER_POINT_LIGHT_NUM > 0
 	float4 g_PointLightPos[IZ_SHADER_POINT_LIGHT_NUM];
 	float4 g_PointLightClr[IZ_SHADER_POINT_LIGHT_NUM];
@@ -87,7 +87,7 @@ struct SHemisphereLightParam {
 	#define GetPointLightAttn(idx)	((float4)0)
 #endif
 
-// ƒXƒ|ƒbƒgƒ‰ƒCƒg
+// ã‚¹ãƒãƒƒãƒˆãƒ©ã‚¤ãƒˆ
 #ifdef IZ_SHADER_SPOT_LIGHT_NUM && IZ_SHADER_SPOT_LIGHT_NUM > 0
 	float4 g_SpotLightPos[IZ_SHADER_SPOT_LIGHT_NUM];
 	float3 g_SpotLightDir[IZ_SHADER_SPOT_LIGHT_NUM];
@@ -105,7 +105,7 @@ struct SHemisphereLightParam {
 	#define GetSporLightParam(idx)	((float4)0)
 #endif
 
-// ”¼‹…ƒ‰ƒCƒg
+// åŠçƒãƒ©ã‚¤ãƒˆ
 #ifdef IZ_SHADER_HEMISPHERE_LIGHT_NUM && IZ_SHADER_HEMISPHERE_LIGHT_NUM > 0
 	float3 g_HemisphereLightAxis[IZ_SHADER_HEMISPHERE_LIGHT_NUM];
 	float4 g_HemisphereLightUpClr[IZ_SHADER_HEMISPHERE_LIGHT_NUM];

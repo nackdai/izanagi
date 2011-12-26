@@ -4,7 +4,7 @@
 ///////////////////////////////////////////////
 // For Sampler
 
-#define BindTex(tex)			Texture = <tex>		// 対応するテクスチャ
+#define BindTex(tex)			Texture = <tex>		// 蟇ｾ蠢懊☆繧九ユ繧ｯ繧ｹ繝√Ε
 #define SetAddressU(addr)		AddressU = addr		// AddressU
 #define SetAddressV(addr)		AddressV = addr		// AddressV
 #define SetMinFilter(filter)	MinFilter = filter	// MinFilter
@@ -15,7 +15,7 @@
 #define SMPL_ADDRESS_MIRROR		MIRROR	// 1
 #define SMPL_ADDRESS_CLAMP		CLAMP	// 2
 
-// MinFilter・MagFilter
+// MinFilter繝ｻMagFilter
 #define SMPL_FILTER_NONE		NONE	// 0
 #define SMPL_FILTER_POINT		POINT	// 1
 #define SMPL_FILTER_LINEAR		LINEAR	// 2

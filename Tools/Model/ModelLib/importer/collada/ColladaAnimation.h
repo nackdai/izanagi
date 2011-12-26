@@ -1,4 +1,4 @@
-﻿#if !defined(__MODEL_LIB_COLLADA_ANIMATION_H__)
+#if !defined(__MODEL_LIB_COLLADA_ANIMATION_H__)
 #define __MODEL_LIB_COLLADA_ANIMATION_H__
 
 #include <vector>

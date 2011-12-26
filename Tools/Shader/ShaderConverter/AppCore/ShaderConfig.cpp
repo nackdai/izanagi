@@ -1,4 +1,4 @@
-﻿#include "ShaderConfig.h"
+#include "ShaderConfig.h"
 #include "izToolKit.h"
 
 CShaderConfigManager CShaderConfigManager::s_cInstance;

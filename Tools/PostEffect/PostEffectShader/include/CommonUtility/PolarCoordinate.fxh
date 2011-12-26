@@ -1,12 +1,12 @@
 #if !defined(__KSG2_POSTEFFECT_POLAR_COORDINATE_FXH__)
 #define __KSG2_POSTEFFECT_POLAR_COORDINATE_FXH__
 
-// ’¼ŒğÀ•W <=> ‹ÉÀ•W
+// ç›´äº¤åº§æ¨™ <=> æ¥µåº§æ¨™
 
 #define _PI	3.141592f
 
 /////////////////////////////////////////////
-// ’¼ŒğÀ•W => ‹ÉÀ•W
+// ç›´äº¤åº§æ¨™ => æ¥µåº§æ¨™
 float2 CartesianToPolar(float2 vIn)
 {
 	float2 vOut = vIn * 2.0f - 1.0f;
@@ -27,7 +27,7 @@ float2 CartesianToPolar(float2 vIn)
 }
 
 /////////////////////////////////////////////
-// ‹ÉÀ•W => ’¼ŒğÀ•W
+// æ¥µåº§æ¨™ => ç›´äº¤åº§æ¨™
 float2 PolarToCartesian(float2 vIn)
 {
 	float2 vOut = vIn * 2.0f - 1.0f;

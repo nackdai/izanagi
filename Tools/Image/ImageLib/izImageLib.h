@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_IMAGE_LIB_IMAGE_LIB_H__)
+#if !defined(__IZANAGI_IMAGE_LIB_IMAGE_LIB_H__)
 #define __IZANAGI_IMAGE_LIB_IMAGE_LIB_H__
 
 #include "include/ImageLibUtility.h"

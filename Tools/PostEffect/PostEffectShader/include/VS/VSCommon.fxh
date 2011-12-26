@@ -4,22 +4,22 @@
 #include "../PostEffectShaderIO.fxh"
 
 /********************************************
-   ’¸“_ƒVƒF[ƒ_‹¤’Êˆ—
+   é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€å…±é€šå‡¦ç†
 ********************************************/
 
-// ’¸“_ƒVƒF[ƒ_“ü—Í
+// é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€å…¥åŠ›
 struct S_PE_VS_IN {
 	float4 vPos	: POSITION;
 	float2 vUV	: TEXCOORD0;
 };
 
 ///////////////////////////////////////////
-// ’¸“_ˆÊ’uŒvŽZ
+// é ‚ç‚¹ä½ç½®è¨ˆç®—
 
-// ’¸“_ˆÊ’uƒIƒtƒZƒbƒg
+// é ‚ç‚¹ä½ç½®ã‚ªãƒ•ã‚»ãƒƒãƒˆ
 float4 g_vPosOffset = (float4)0.0f;
 
-// ’¸“_ˆÊ’uŒvŽZ
+// é ‚ç‚¹ä½ç½®è¨ˆç®—
 float4 _ComputeVSPosition(in float4 vPos)
 {
 	float4 vRet = vPos;
@@ -27,14 +27,14 @@ float4 _ComputeVSPosition(in float4 vPos)
 	// [0.0f, 0.0f] - [1.0f, 1.0f] -> [-1.0f, -1.0f] - [1.0f, 1.0f]
 	vRet.xy = (vRet.xy + g_vPosOffset.xy) * 2.0f - 1.0f;
 
-	// ‚³‚ç‚ÉYÀ•W‚Í”½“]‚³‚¹‚é
+	// ã•ã‚‰ã«Yåº§æ¨™ã¯åè»¢ã•ã›ã‚‹
 	vRet.y *= -1.0f;
 
 	return vRet;
 }
 
 ///////////////////////////////////////////
-// ƒeƒNƒXƒ`ƒƒÀ•WŒvŽZ
+// ãƒ†ã‚¯ã‚¹ãƒãƒ£åº§æ¨™è¨ˆç®—
 
 // xy : scale
 // zw : offset
@@ -42,11 +42,11 @@ float4 g_vTexParam = {
 	1.0f, 1.0f, 0.0f, 0.0f
 };
 
-// ƒXƒNƒŠ[ƒ“ƒTƒCƒY
+// ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã‚µã‚¤ã‚º
 float2 g_vQuadScreenSize : VIEWPORTPIXELSIZE;
 
 ///////////////////////////////////////////
-// ’¸“_ƒVƒF[ƒ_o—Í
+// é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€å‡ºåŠ›
 
 #define S_PE_VS_OUT				S_PE_PS_IN
 #define S_PE_VS_OUT_SAMPLING_4	S_PE_PS_IN_SAMPLING_4

@@ -1,4 +1,4 @@
-﻿#if !defined(__MODEL_LIB_IMPORTER_H__)
+#if !defined(__MODEL_LIB_IMPORTER_H__)
 #define __MODEL_LIB_IMPORTER_H__
 
 #include "GeometryCommon.h"

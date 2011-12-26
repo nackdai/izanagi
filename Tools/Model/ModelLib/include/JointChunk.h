@@ -1,4 +1,4 @@
-﻿#if !defined(__MODEL_LIB_JOINT_CHUNK_H__)
+#if !defined(__MODEL_LIB_JOINT_CHUNK_H__)
 #define __MODEL_LIB_JOINT_CHUNK_H__
 
 #include "izIo.h"

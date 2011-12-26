@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_MODEL_LIB_MODE_LIB_H__)
+#if !defined(__IZANAGI_MODEL_LIB_MODE_LIB_H__)
 #define __IZANAGI_MODEL_LIB_MODE_LIB_H__
 
 #include "Importer.h"

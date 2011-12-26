@@ -1,4 +1,4 @@
-﻿#if !defined(__CHAR_LIST_H__)
+#if !defined(__CHAR_LIST_H__)
 #define __CHAR_LIST_H__
 
 #include <set>

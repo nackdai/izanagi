@@ -1,4 +1,4 @@
-﻿#include "DXTFormatConverter.h"
+#include "DXTFormatConverter.h"
 #include "squish.h"
 
 using namespace izanagi;

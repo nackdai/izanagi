@@ -1,4 +1,4 @@
-﻿#include <algorithm>
+#include <algorithm>
 #include "XFileAnimation.h"
 
 CXFileAnimation* CXFileAnimation::s_pInstance = IZ_NULL;

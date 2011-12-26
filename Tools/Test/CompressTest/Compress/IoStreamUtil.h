@@ -1,4 +1,4 @@
-﻿#if !defined(__IO_STREAM_UTIL_H__)
+#if !defined(__IO_STREAM_UTIL_H__)
 #define __IO_STREAM_UTIL_H__
 
 #include "izStd.h"

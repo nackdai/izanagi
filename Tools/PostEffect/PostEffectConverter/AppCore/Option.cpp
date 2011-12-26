@@ -1,4 +1,4 @@
-﻿#include "shlwapi.h"
+#include "shlwapi.h"
 #include "Option.h"
 #include "Preproc.h"
 #include "izToolKit.h"

@@ -2,25 +2,25 @@
 #define __IZANAGI_POSTEFFECT_SHADER_DEFS_FXH__
 
 /********************************************
-   ƒVƒF[ƒ_‹Lq—p’è‹`‚¢‚ë‚¢‚ë
+   ã‚·ã‚§ãƒ¼ãƒ€è¨˜è¿°ç”¨å®šç¾©ã„ã‚ã„ã‚
 ********************************************/
 
-// ƒVƒF[ƒ_ID‚ðƒZƒbƒg
+// ã‚·ã‚§ãƒ¼ãƒ€IDã‚’ã‚»ãƒƒãƒˆ
 #define PES_ID(str)	string __pes_ID__ = str
 
-// ƒpƒ‰ƒ[ƒ^
+// ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
 #include "ShaderDefs/ShaderDefsParam.fxh"
 
-// ƒpƒX
+// ãƒ‘ã‚¹
 #include "ShaderDefs/ShaderDefsPass.fxh"
 
-// ƒTƒ“ƒvƒ‰
+// ã‚µãƒ³ãƒ—ãƒ©
 #include "ShaderDefs/ShaderDefsSampler.fxh"
 
-// ƒeƒNƒXƒ`ƒƒ
+// ãƒ†ã‚¯ã‚¹ãƒãƒ£
 #include "ShaderDefs/ShaderDefsTex.fxh"
 
-// ƒXƒNƒŠƒvƒg
+// ã‚¹ã‚¯ãƒªãƒ—ãƒˆ
 #include "ShaderDefs/ShaderDefsScript.fxh"
 
 #endif	// #if !defined(__IZANAGI_POSTEFFECT_SHADER_DEFS_FXH__)

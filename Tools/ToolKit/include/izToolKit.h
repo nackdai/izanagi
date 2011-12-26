@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_TOOL_KIT_TOOL_KIT_H__)
+#if !defined(__IZANAGI_TOOL_KIT_TOOL_KIT_H__)
 #define __IZANAGI_TOOL_KIT_TOOL_KIT_H__
 
 #include "ToolKitGraph.h"

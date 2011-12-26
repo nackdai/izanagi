@@ -1,4 +1,4 @@
-﻿#include "SlideDictionaryEncoder.h"
+#include "SlideDictionaryEncoder.h"
 #include "IoStreamUtil.h"
 
 using namespace izanagi;

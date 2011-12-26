@@ -1,4 +1,4 @@
-﻿#if !defined(__SLIDE_DICTIONARY_BASE_H__)
+#if !defined(__SLIDE_DICTIONARY_BASE_H__)
 #define __SLIDE_DICTIONARY_BASE_H__
 
 #include "izStd.h"

@@ -1,4 +1,4 @@
-﻿#include "std/ErrorUtil.h"
+#include "std/ErrorUtil.h"
 
 namespace izanagi {
 namespace tool {

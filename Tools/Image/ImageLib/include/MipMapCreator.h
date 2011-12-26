@@ -1,4 +1,4 @@
-﻿#if !defined(__IZANAGI_IMAGE_LIB_MIP_MAP_CREATOR_H__)
+#if !defined(__IZANAGI_IMAGE_LIB_MIP_MAP_CREATOR_H__)
 #define __IZANAGI_IMAGE_LIB_MIP_MAP_CREATOR_H__
 
 #include "izDefs.h"

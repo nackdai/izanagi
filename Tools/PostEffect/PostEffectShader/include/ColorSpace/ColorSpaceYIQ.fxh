@@ -7,18 +7,18 @@
 // YIQ
 
 // NOTE
-// YIQ��NTSC(National Television System Committee)�����̃J���[�e���r�����Ŏg����J���[���f���ł���B
-// Y�M����0�`4MHz�ш�AI�M����1.5MHz�ш�AQ�M����0.6MHz�ш�ł���B
-// Y�̓J���[�f���𔒍��f���ɂ��邱�ƂɎg�p�ł���B(�����e���r�ƌ݊���������B)
+// YIQはNTSC(National Television System Committee)方式のカラーテレビ放送で使われるカラーモデルである。
+// Y信号は0～4MHz帯域、I信号は1.5MHz帯域、Q信号は0.6MHz帯域である。
+// Yはカラー映像を白黒映像にすることに使用できる。(白黒テレビと互換性がある。)
 //
-// Y : �P�x
-// I : ���F���܂ށA�I�����W����V�A���ɂ����Ă̐F��
-// Q : I�ȊO�̐F��
+// Y : 輝度
+// I : 肌色を含む、オレンジからシアンにかけての色調
+// Q : I以外の色調
 
 // NOTE
-// �J���[�e���r�ł́A�F���M����ό`���AI�AQ�M�Ƃ����`�ŐF����`�����Ă���B
-// I�AQ�M���́A�F���M����33�x��]���č���Ă���B
-// I�M���̓I�����W����V�A���n�̐M���AQ�M���͗΂���}�[���^�n�̐M���ƂȂ�B
+// カラーテレビでは、色差信号を変形し、I、Q信という形で色情報を伝送している。
+// I、Q信号は、色差信号を33度回転して作られている。
+// I信号はオレンジからシアン系の信号、Q信号は緑からマゼンタ系の信号となる。
 
 // NOTE
 // I = (R - Y) / 1.14 * cos(33) - (B - Y) / 2.03 * sin(33)

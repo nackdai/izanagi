@@ -1,4 +1,4 @@
-﻿#include "ColladaGeometry.h"
+#include "ColladaGeometry.h"
 #include "izToolKit.h"
 
 //////////////////////////////////////////////////

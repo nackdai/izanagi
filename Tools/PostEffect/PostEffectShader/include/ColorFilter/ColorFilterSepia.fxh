@@ -4,14 +4,14 @@
 #include "../ColorSpace/ColorSpaceYCbCr.fxh"
 
 //////////////////////////////////
-// ƒZƒsƒA
+// ã‚»ãƒ”ã‚¢
 
 float3 _ColorFilterSepia(float3 vIn, float fCb, float fCr)
 {
 	float3 vYCbCr;
 	vYCbCr.r = RGBToY(vIn.rgb);
 
-	// ”CˆÓ‚ÌCbACr‚ðƒZƒbƒg
+	// ä»»æ„ã®Cbã€Crã‚’ã‚»ãƒƒãƒˆ
 	vYCbCr.g = fCb;
 	vYCbCr.b = fCr;
 
@@ -29,14 +29,14 @@ float4 ColorFilterSepia(float4 vIn, float2 vCbCr)
 	return ColorFilterSepia(vIn, vCbCr.r, vCbCr.g);
 }
 
-// üŒ`•âŠÔ‚ ‚è
+// ç·šå½¢è£œé–“ã‚ã‚Š
 float4 ColorFilterSepia(float4 vIn, float fCb, float fCr, float fWeight)
 {
 	float3 tmp = lerp(vIn.rgb, _ColorFilterSepia(vIn.rgb, fCb, fCr), fWeight);
 	return float4(tmp, vIn.a);
 }
 
-// üŒ`•âŠÔ‚ ‚è
+// ç·šå½¢è£œé–“ã‚ã‚Š
 float4 ColorFilterSepia(float4 vIn, float2 vCbCr, float fWeight)
 {
 	return ColorFilterSepia(vIn, vCbCr.r, vCbCr.g, fWeight);

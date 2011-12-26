@@ -1,4 +1,4 @@
-﻿#if !defined(__RANGE_CODER_DECODER_H__)
+#if !defined(__RANGE_CODER_DECODER_H__)
 #define __RANGE_CODER_DECODER_H__
 
 #include "RangeCoderBase.h"

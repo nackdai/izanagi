@@ -1,4 +1,4 @@
-﻿#if !defined(__POSTEFFECT_CONVERTER_OPTION_H__)
+#if !defined(__POSTEFFECT_CONVERTER_OPTION_H__)
 #define __POSTEFFECT_CONVERTER_OPTION_H__
 
 #include <vector>

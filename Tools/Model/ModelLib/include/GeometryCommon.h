@@ -1,4 +1,4 @@
-﻿#if !defined(__MODEL_LIB_COMMON_DEFS_H__)
+#if !defined(__MODEL_LIB_COMMON_DEFS_H__)
 #define __MODEL_LIB_COMMON_DEFS_H__
 
 #include "izDefs.h"

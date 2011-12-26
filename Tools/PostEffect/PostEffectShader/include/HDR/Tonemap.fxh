@@ -13,11 +13,11 @@ float4 _ComputeTonemapInternal(
 	// x' = (1 - exp(2 * x)) ^ 1.5
 	float fY = pow(1.0f - exp(-yy * 2.0f), 1.5f);
 
-	// Y‚ğ‚Ç‚Ì’ö“x•Ï‰»‚³‚¹‚½‚Ì‚©
+	// Yã‚’ã©ã®ç¨‹åº¦å¤‰åŒ–ã•ã›ãŸã®ã‹
 	float fScale = fY / vYUV.x;
 
 	vYUV.x = fY;
-	vYUV.yz *= fScale;	// Y‚Ì•Ï‰»—¦‚É‚ ‚í‚¹‚é
+	vYUV.yz *= fScale;	// Yã®å¤‰åŒ–ç‡ã«ã‚ã‚ã›ã‚‹
 
 	// YUV -> RGB
 	float3 vRet = YUVToRGB(vYUV);
@@ -27,7 +27,7 @@ float4 _ComputeTonemapInternal(
 
 ///////////////////////////////////////////////////////////
 
-// ƒg[ƒ“ƒ}ƒbƒvŒvZ
+// ãƒˆãƒ¼ãƒ³ãƒãƒƒãƒ—è¨ˆç®—
 float4 ComputeTonemap(
 	float4 vIn,
 	float fMiddleGrey,
@@ -42,11 +42,11 @@ float4 ComputeTonemap(
 	// x' = (1 - exp(2 * x)) ^ 1.5
 	float fY = pow(1.0f - exp(-yy * 2.0f), 1.5f);
 
-	// Y‚ğ‚Ç‚Ì’ö“x•Ï‰»‚³‚¹‚½‚Ì‚©
+	// Yã‚’ã©ã®ç¨‹åº¦å¤‰åŒ–ã•ã›ãŸã®ã‹
 	float fScale = fY / vYUV.x;
 
 	vYUV.x = fY;
-	vYUV.yz *= fScale;	// Y‚Ì•Ï‰»—¦‚É‚ ‚í‚¹‚é
+	vYUV.yz *= fScale;	// Yã®å¤‰åŒ–ç‡ã«ã‚ã‚ã›ã‚‹
 
 	float4 vRet = vIn;
 
@@ -60,7 +60,7 @@ float4 ComputeTonemap(
 #endif
 }
 
-// ‹P“x’Šo
+// è¼åº¦æŠ½å‡º
 float4 ExtractLum(
 	float4 vIn,
 	float fMiddleGrey,
@@ -78,11 +78,11 @@ float4 ExtractLum(
 	// x' = (1 - exp(2 * x)) ^ 1.5
 	float fY = pow(1.0f - exp(-yy * 2.0f), 1.5f);
 
-	// Y‚ğ‚Ç‚Ì’ö“x•Ï‰»‚³‚¹‚½‚Ì‚©
+	// Yã‚’ã©ã®ç¨‹åº¦å¤‰åŒ–ã•ã›ãŸã®ã‹
 	float fScale = fY / vYUV.x;
 
 	vYUV.x = fY;
-	vYUV.yz *= fScale;	// Y‚Ì•Ï‰»—¦‚É‚ ‚í‚¹‚é
+	vYUV.yz *= fScale;	// Yã®å¤‰åŒ–ç‡ã«ã‚ã‚ã›ã‚‹
 
 	// YUV -> RGB
 	float3 vRet = YUVToRGB(vYUV);
@@ -95,28 +95,28 @@ float4 ExtractLum(
 #endif
 }
 
-// –¾EˆÃ‡‰ŒvZ
+// æ˜ãƒ»æš—é †å¿œè¨ˆç®—
 float4 ComputeAdaptation(
 	float fAdaptedLum,
 	float fCurrentLum,
 	float fAdaptedRate)
 {
 	// TODO
-	// –¾EˆÃ‡‰‘Î‰
+	// æ˜ãƒ»æš—é †å¿œå¯¾å¿œ
 	//float fRatio = min(exp(0.5 * fCurrentLum) - 0.9f, 1.0f);
 	//float fRatio = min(pow(fCurrentLum, 3.0f) + 0.2f, 1.0f);
 
 	// NOTE
-	// Hermite•âŠÔ‚ğ‚à‚Æ‚ÉŒvZ
+	// Hermiteè£œé–“ã‚’ã‚‚ã¨ã«è¨ˆç®—
 	// f(x) = (-2 * x^3 + 3 * x^2) * x
 	float fRatio = (-2.0f * pow(fCurrentLum, 3.0f) + 3.0f * pow(fCurrentLum, 2.0f)) * fCurrentLum;
 
-	// 0.1f - 1.0f ‚ÉŠÛ‚ß‚é
+	// 0.1f - 1.0f ã«ä¸¸ã‚ã‚‹
 	fRatio = clamp(fRatio, 0.1f, 1.0f);
     
 	// NOTE
-	// AdaptedLum‚ÆCurrentLum‚ÌŠÔ‚Ì·‚ğ–ˆƒtƒŒ[ƒ€w’è‚³‚ê‚½“‚¸‚Â‹ß‚Ã‚¯‚é‚æ‚¤‚É“K‰‚³‚¹‚Ä‚¢‚éB
-	// ‚¿‚È‚İ‚ÉAlŠÔ‚Ì–Ú‚Ì“K‰ƒ‚ƒfƒ‹‚Æ‚ÍˆêØŠÖŒW‚È‚¢B
+	// AdaptedLumã¨CurrentLumã®é–“ã®å·®ã‚’æ¯ãƒ•ãƒ¬ãƒ¼ãƒ æŒ‡å®šã•ã‚ŒãŸï¼…ãšã¤è¿‘ã¥ã‘ã‚‹ã‚ˆã†ã«é©å¿œã•ã›ã¦ã„ã‚‹ã€‚
+	// ã¡ãªã¿ã«ã€äººé–“ã®ç›®ã®é©å¿œãƒ¢ãƒ‡ãƒ«ã¨ã¯ä¸€åˆ‡é–¢ä¿‚ãªã„ã€‚
     float fNewAdaptation = fAdaptedLum + (fCurrentLum - fAdaptedLum) * fAdaptedRate * fRatio;
     return float4(fNewAdaptation, fNewAdaptation, fNewAdaptation, 1.0f);
 }

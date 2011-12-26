@@ -1,4 +1,4 @@
-﻿#if !defined(__IMAGE_READER_IMPL_H__)
+#if !defined(__IMAGE_READER_IMPL_H__)
 #define __IMAGE_READER_IMPL_H__
 
 #include "izGraph.h"

@@ -1,4 +1,4 @@
-﻿#include "std/SimpleMemoryAllocator.h"
+#include "std/SimpleMemoryAllocator.h"
 
 using namespace izanagi;
 using namespace tool;

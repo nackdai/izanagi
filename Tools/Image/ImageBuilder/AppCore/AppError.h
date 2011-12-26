@@ -1,4 +1,4 @@
-﻿#if !defined(__APP_ERROR_H__)
+#if !defined(__APP_ERROR_H__)
 #define __APP_ERROR_H__
 
 #include "izToolKit.h"

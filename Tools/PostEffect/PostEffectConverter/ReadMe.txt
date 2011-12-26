@@ -1,48 +1,48 @@
 ========================================================================
-    �R���\�[�� �A�v���P�[�V���� : PostEffectConverter �v���W�F�N�g�̊T�v
+    コンソール アプリケーション : PostEffectConverter プロジェクトの概要
 ========================================================================
 
-���� PostEffectConverter �A�v���P�[�V�����́AAppWizard �ɂ���č쐬����܂����B  
+この PostEffectConverter アプリケーションは、AppWizard によって作成されました。  
 
-���̃t�@�C���ɂ́APostEffectConverter �A�v���P�[�V�������\������e�t�@�C����
-���e�̊T�����L�q����Ă��܂��B
+このファイルには、PostEffectConverter アプリケーションを構成する各ファイルの
+内容の概略が記述されています。
 
 
 PostEffectConverter.vcproj
-    ����́A�A�v���P�[�V���� �E�B�U�[�h�Ő�������� VC++ �v���W�F�N�g�̃��C����
-    �v���W�F�N�g �t�@�C���ł��B 
-    �t�@�C���𐶐����� Visual C++ �̃o�[�W�������ƁA�A�v���P�[�V���� 
-    �E�B�U�[�h�őI�������v���b�g�t�H�[���A�\���A����уv���W�F�N�g�̋@�\�Ɋւ���
-    ��񂪋L�q����Ă��܂��B
+    これは、アプリケーション ウィザードで生成される VC++ プロジェクトのメインの
+    プロジェクト ファイルです。 
+    ファイルを生成した Visual C++ のバージョン情報と、アプリケーション 
+    ウィザードで選択したプラットフォーム、構成、およびプロジェクトの機能に関する
+    情報が記述されています。
 
 PostEffectConverter.cpp
-    ����́A���C���̃A�v���P�[�V���� �\�[�X �t�@�C���ł��B
+    これは、メインのアプリケーション ソース ファイルです。
 
 /////////////////////////////////////////////////////////////////////////////
-AppWizard �ɂ���āA���̃��\�[�X���쐬����܂����B
+AppWizard によって、次のリソースが作成されました。
 
 PostEffectConverter.rc
-    ����́A�v���O�����Ŏg�p���� Microsoft Windows �̑S���\�[�X�̈ꗗ�ł��B
-    RES �T�u�f�B���N�g���ɕۑ������A�C�R���A�r�b�g�}�b�v�A�J�[�\���Ȃǂ�
-    �܂܂�܂��B���̃t�@�C���́AMicrosoft Visual C++ �Œ��ڕҏW�ł��܂��B
+    これは、プログラムで使用する Microsoft Windows の全リソースの一覧です。
+    RES サブディレクトリに保存されるアイコン、ビットマップ、カーソルなどが
+    含まれます。このファイルは、Microsoft Visual C++ で直接編集できます。
 
 Resource.h
-    ����́A�V�������\�[�X ID ���`����W���̃w�b�_�[ �t�@�C���ł��B
-    ���̃t�@�C���̓ǂݍ��݂���эX�V�́AMicrosoft Visual C++ �ōs���܂��B
+    これは、新しいリソース ID を定義する標準のヘッダー ファイルです。
+    このファイルの読み込みおよび更新は、Microsoft Visual C++ で行います。
 
 /////////////////////////////////////////////////////////////////////////////
-���̑��̕W���t�@�C�� :
+その他の標準ファイル :
 
 StdAfx.h, StdAfx.cpp
-    �����̃t�@�C���́A�R���p�C���ς݃w�b�_�[ (PCH) �t�@�C�� 
-    PostEffectConverter.pch �ƃv���R���p�C���ς݌^�t�@�C�� StdAfx.obj ��
-    �r���h���邽�߂Ɏg�p���܂��B
+    これらのファイルは、コンパイル済みヘッダー (PCH) ファイル 
+    PostEffectConverter.pch とプリコンパイル済み型ファイル StdAfx.obj を
+    ビルドするために使用します。
 
 /////////////////////////////////////////////////////////////////////////////
-���̑��̃��� :
+その他のメモ :
 
-AppWizard �ł� "TODO:" �R�����g���g�p���āA���[�U�[���ǉ��܂��̓J�X�^�}�C�Y����
-�\�[�X�����������܂��B
+AppWizard では "TODO:" コメントを使用して、ユーザーが追加またはカスタマイズする
+ソース部分を示します。
 
 /////////////////////////////////////////////////////////////////////////////
 

@@ -7,9 +7,9 @@
 // HLS
 
 #if 0
-// H : F‘Š(Hue)
-// L : ‹P“x(Luminance)
-// S : Ê“x(Saturation)
+// H : è‰²ç›¸(Hue)
+// L : è¼åº¦(Luminance)
+// S : å½©åº¦(Saturation)
 
 // NOTE
 // MAX = max(max(r, g), b)
@@ -17,7 +17,7 @@
 // L = (MAX + MIN) / 2
 // S = (MAX - MIN) / (MAX + MIN)     (if L <= 0.5)
 //     (MAX - MIN) / (2 - MAX - MIN) (if L > 0.5)
-// H = HSVF‹óŠÔ‚Æ“¯‚¶
+// H = HSVè‰²ç©ºé–“ã¨åŒã˜
 
 // NOTE
 // MAX = L x (1 + S)     (if L <= 0.5)
@@ -35,11 +35,11 @@
 //          MIN                                (if 240 <= h < 360)
 //
 //   h = H
-//      G -> R‚Æ“¯—l
+//      G -> Rã¨åŒæ§˜
 //
 //   h = H - 120
 //   h = (h < 0 ? h + 360 : h)
-//      B -> R‚Æ“¯—l
+//      B -> Rã¨åŒæ§˜
 
 // RGB -> HLS
 float3 RGBToHLS(float3 vRGB)
@@ -59,7 +59,7 @@ float3 RGBToHLS(float3 vRGB)
 					? fDelta / (fMax + fMin)
 					: fDelta / (2.0f - fMax - fMin));
 
-		// H(HSV‚ÌH‚Æ“¯‚¶)
+		// H(HSVã®Hã¨åŒã˜)
 		vHLS.x = _ComputeHue(vRGB, fMax, fDelta);
 	}
 
@@ -115,9 +115,9 @@ float3 HLSToRGB(float3 vHLS)
 }
 #else
 // NOTE
-// H : F‘Š(Hue)
-// L : ‹P“x(Luminance)
-// S : Ê“x(Saturation)
+// H : è‰²ç›¸(Hue)
+// L : è¼åº¦(Luminance)
+// S : å½©åº¦(Saturation)
 
 // NOTE
 // U = R - Y

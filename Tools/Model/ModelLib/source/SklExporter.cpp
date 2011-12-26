@@ -1,4 +1,4 @@
-﻿#include "SklExporter.h"
+#include "SklExporter.h"
 #include "JointChunk.h"
 
 // フォーマット

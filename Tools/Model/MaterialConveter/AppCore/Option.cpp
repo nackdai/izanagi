@@ -10,7 +10,7 @@ COption::~COption()
 {
 }
 
-// ‰ğÍ
+// è§£æ
 IZ_BOOL COption::Analysis(int argc, char* argv[])
 {
 	IZ_BOOL result = IZ_TRUE;
@@ -42,7 +42,7 @@ IZ_BOOL COption::Analysis(int argc, char* argv[])
 
 		if (!result) {
 			// TODO
-			printf("–³Œø‚ÈƒIƒvƒVƒ‡ƒ“‚Å‚·[%s]\n\n", opt.c_str());
+			printf("ç„¡åŠ¹ãªã‚ªãƒ—ã‚·ãƒ§ãƒ³ã§ã™[%s]\n\n", opt.c_str());
 			//ASSERT(FALSE);
 			return IZ_FALSE;
 		}
@@ -58,9 +58,9 @@ static char BUF[MAX_PATH];
 IZ_BOOL COption::AnalysisInternal()
 {
 	if (out.empty()) {
-		// o—Íƒtƒ@ƒCƒ‹‚ª‹ó‚È‚Ì‚ÅA“ü—Íƒtƒ@ƒCƒ‹‚©‚çì¬‚·‚é
+		// å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ãŒç©ºãªã®ã§ã€å…¥åŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ä½œæˆã™ã‚‹
 
-		// Šg’£q‚ğœ‚¢‚½“ü—Íƒtƒ@ƒCƒ‹–¼‚ğæ“¾
+		// æ‹¡å¼µå­ã‚’é™¤ã„ãŸå…¥åŠ›ãƒ•ã‚¡ã‚¤ãƒ«åã‚’å–å¾—
 		IZ_BOOL result = izanagi::tool::CFileUtility::RemoveExtension(
 							BUF,
 							sizeof(BUF),
@@ -71,9 +71,9 @@ IZ_BOOL COption::AnalysisInternal()
 	}
 
 	if (fileType == FileTypeUnknown) {
-		// “ü—Íƒtƒ@ƒCƒ‹‚ÌŠg’£q‚©‚ç”»’è‚·‚é
+		// å…¥åŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã®æ‹¡å¼µå­ã‹ã‚‰åˆ¤å®šã™ã‚‹
 
-		// Šg’£q‚ğæ“¾
+		// æ‹¡å¼µå­ã‚’å–å¾—
 		IZ_PCSTR ext = izanagi::tool::CFileUtility::GetExtension(
 						BUF,
 						sizeof(BUF),
@@ -95,13 +95,13 @@ IZ_BOOL COption::AnalysisInternal()
 	return IZ_TRUE;
 }
 
-// o—Íƒtƒ@ƒCƒ‹–¼‚©‚çŠg’£q‚ğæ‚èœ‚­
+// å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«åã‹ã‚‰æ‹¡å¼µå­ã‚’å–ã‚Šé™¤ã
 IZ_BOOL COption::RemoveExtFromExportFileName()
 {
 	IZ_ASSERT(!out.empty());
 
 
-	// Šg’£q‚ğœ‚¢‚½“ü—Íƒtƒ@ƒCƒ‹–¼‚ğæ“¾
+	// æ‹¡å¼µå­ã‚’é™¤ã„ãŸå…¥åŠ›ãƒ•ã‚¡ã‚¤ãƒ«åã‚’å–å¾—
 	IZ_BOOL result = izanagi::tool::CFileUtility::RemoveExtension(
 						BUF,
 						sizeof(BUF),

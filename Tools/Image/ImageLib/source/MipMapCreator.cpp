@@ -1,4 +1,4 @@
-﻿#include "MipMapCreator.h"
+#include "MipMapCreator.h"
 #include "ImageLibUtility.h"
 
 using namespace izanagi;

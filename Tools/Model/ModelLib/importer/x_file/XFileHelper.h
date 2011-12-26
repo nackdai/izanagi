@@ -1,4 +1,4 @@
-﻿#if !defined(__MODEL_LIB_XFILE_HELPER_H__)
+#if !defined(__MODEL_LIB_XFILE_HELPER_H__)
 #define __MODEL_LIB_XFILE_HELPER_H__
 
 #include "izMath.h"

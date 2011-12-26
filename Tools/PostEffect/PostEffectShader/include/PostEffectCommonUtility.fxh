@@ -2,23 +2,23 @@
 #define __IZANAGI_POSTEFFECT_COMMON_UTILITY_FXH__
 
 /********************************************
-	‹¤’Êƒ†[ƒeƒŠƒeƒB[
+	å…±é€šãƒ¦ãƒ¼ãƒ†ãƒªãƒ†ã‚£ãƒ¼
 ********************************************/
 
-// ƒtƒBƒ‹ƒ^ƒTƒ“ƒvƒŠƒ“ƒO
+// ãƒ•ã‚£ãƒ«ã‚¿ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°
 #include "CommonUtility/FilterSampling.fxh"
 
-// ƒuƒ‰[
+// ãƒ–ãƒ©ãƒ¼
 #include "CommonUtility/Blur.fxh"
 
-// ƒVƒF[ƒ_ƒ†[ƒeƒŠƒeƒB[
+// ã‚·ã‚§ãƒ¼ãƒ€ãƒ¦ãƒ¼ãƒ†ãƒªãƒ†ã‚£ãƒ¼
 #include "CommonUtility/PostEffectShaderUtility.fxh"
 
 // HDR
-#include "HDR/MeasureLuminance.fxh"		// ‹P“x‘ª’è
-#include "HDR/Tonemap.fxh"				// ƒg[ƒ“ƒ}ƒbƒv
+#include "HDR/MeasureLuminance.fxh"		// è¼åº¦æ¸¬å®š
+#include "HDR/Tonemap.fxh"				// ãƒˆãƒ¼ãƒ³ãƒãƒƒãƒ—
 
-// ‹ÉÀ•W
+// æ¥µåº§æ¨™
 //#include "CommonUtility/PolarCoordinate.fxh"
 
 #endif	//#if !defined(__IZANAGI_POSTEFFECT_COMMON_UTILITY_FXH__)

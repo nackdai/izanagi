@@ -1,4 +1,4 @@
-﻿#include "util/PreprocHelper.h"
+#include "util/PreprocHelper.h"
 
 // Entrypoint for preprocessor.
 extern "C"

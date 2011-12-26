@@ -1,4 +1,4 @@
-﻿#include "ParamUtil.h"
+#include "ParamUtil.h"
 #include "ShaderConverterUtil.h"
 #include "DataBuffer.h"
 #include "ShaderConverterUtil.h"

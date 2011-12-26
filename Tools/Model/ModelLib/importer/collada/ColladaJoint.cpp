@@ -1,4 +1,4 @@
-﻿#include "ColladaJoint.h"
+#include "ColladaJoint.h"
 
 #include "izMath.h"
 #include "izToolKit.h"

@@ -1,4 +1,4 @@
-﻿#include <vector>
+#include <vector>
 #include "ArchiveBuilderImpl.h"
 #include "FileTree.h"
 #include "FileIdCreator.h"

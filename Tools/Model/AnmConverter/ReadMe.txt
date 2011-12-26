@@ -1,36 +1,36 @@
 ========================================================================
-    ƒRƒ“ƒ\[ƒ‹ ƒAƒvƒŠƒP[ƒVƒ‡ƒ“ : ModelConverter ƒvƒƒWƒFƒNƒg‚ÌŠT—v
+    ã‚³ãƒ³ã‚½ãƒ¼ãƒ« ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ : ModelConverter ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆã®æ¦‚è¦
 ========================================================================
 
-‚±‚Ì ModelConverter ƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚ÍAAppWizard ‚É‚æ‚Á‚Äì¬‚³‚ê‚Ü‚µ‚½B  
+ã“ã® ModelConverter ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã¯ã€AppWizard ã«ã‚ˆã£ã¦ä½œæˆã•ã‚Œã¾ã—ãŸã€‚  
 
-‚±‚Ìƒtƒ@ƒCƒ‹‚É‚ÍAModelConverter ƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚ð\¬‚·‚éŠeƒtƒ@ƒCƒ‹‚Ì
-“à—e‚ÌŠT—ª‚ª‹Lq‚³‚ê‚Ä‚¢‚Ü‚·B
+ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã«ã¯ã€ModelConverter ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã‚’æ§‹æˆã™ã‚‹å„ãƒ•ã‚¡ã‚¤ãƒ«ã®
+å†…å®¹ã®æ¦‚ç•¥ãŒè¨˜è¿°ã•ã‚Œã¦ã„ã¾ã™ã€‚
 
 
 ModelConverter.vcproj
-    ‚±‚ê‚ÍAƒAƒvƒŠƒP[ƒVƒ‡ƒ“ ƒEƒBƒU[ƒh‚Å¶¬‚³‚ê‚é VC++ ƒvƒƒWƒFƒNƒg‚ÌƒƒCƒ“‚Ì
-    ƒvƒƒWƒFƒNƒg ƒtƒ@ƒCƒ‹‚Å‚·B 
-    ƒtƒ@ƒCƒ‹‚ð¶¬‚µ‚½ Visual C++ ‚Ìƒo[ƒWƒ‡ƒ“î•ñ‚ÆAƒAƒvƒŠƒP[ƒVƒ‡ƒ“ 
-    ƒEƒBƒU[ƒh‚Å‘I‘ð‚µ‚½ƒvƒ‰ƒbƒgƒtƒH[ƒ€A\¬A‚¨‚æ‚ÑƒvƒƒWƒFƒNƒg‚Ì‹@”\‚ÉŠÖ‚·‚é
-    î•ñ‚ª‹Lq‚³‚ê‚Ä‚¢‚Ü‚·B
+    ã“ã‚Œã¯ã€ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ ã‚¦ã‚£ã‚¶ãƒ¼ãƒ‰ã§ç”Ÿæˆã•ã‚Œã‚‹ VC++ ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆã®ãƒ¡ã‚¤ãƒ³ã®
+    ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆ ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚ 
+    ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ç”Ÿæˆã—ãŸ Visual C++ ã®ãƒãƒ¼ã‚¸ãƒ§ãƒ³æƒ…å ±ã¨ã€ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ 
+    ã‚¦ã‚£ã‚¶ãƒ¼ãƒ‰ã§é¸æŠžã—ãŸãƒ—ãƒ©ãƒƒãƒˆãƒ•ã‚©ãƒ¼ãƒ ã€æ§‹æˆã€ãŠã‚ˆã³ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆã®æ©Ÿèƒ½ã«é–¢ã™ã‚‹
+    æƒ…å ±ãŒè¨˜è¿°ã•ã‚Œã¦ã„ã¾ã™ã€‚
 
 ModelConverter.cpp
-    ‚±‚ê‚ÍAƒƒCƒ“‚ÌƒAƒvƒŠƒP[ƒVƒ‡ƒ“ ƒ\[ƒX ƒtƒ@ƒCƒ‹‚Å‚·B
+    ã“ã‚Œã¯ã€ãƒ¡ã‚¤ãƒ³ã®ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ ã‚½ãƒ¼ã‚¹ ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
 
 /////////////////////////////////////////////////////////////////////////////
-‚»‚Ì‘¼‚Ì•W€ƒtƒ@ƒCƒ‹ :
+ãã®ä»–ã®æ¨™æº–ãƒ•ã‚¡ã‚¤ãƒ« :
 
 StdAfx.h, StdAfx.cpp
-    ‚±‚ê‚ç‚Ìƒtƒ@ƒCƒ‹‚ÍAƒRƒ“ƒpƒCƒ‹Ï‚Ýƒwƒbƒ_[ (PCH) ƒtƒ@ƒCƒ‹ 
-    ModelConverter.pch ‚ÆƒvƒŠƒRƒ“ƒpƒCƒ‹Ï‚ÝŒ^ƒtƒ@ƒCƒ‹ StdAfx.obj ‚ð
-    ƒrƒ‹ƒh‚·‚é‚½‚ß‚ÉŽg—p‚µ‚Ü‚·B
+    ã“ã‚Œã‚‰ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯ã€ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«æ¸ˆã¿ãƒ˜ãƒƒãƒ€ãƒ¼ (PCH) ãƒ•ã‚¡ã‚¤ãƒ« 
+    ModelConverter.pch ã¨ãƒ—ãƒªã‚³ãƒ³ãƒ‘ã‚¤ãƒ«æ¸ˆã¿åž‹ãƒ•ã‚¡ã‚¤ãƒ« StdAfx.obj ã‚’
+    ãƒ“ãƒ«ãƒ‰ã™ã‚‹ãŸã‚ã«ä½¿ç”¨ã—ã¾ã™ã€‚
 
 /////////////////////////////////////////////////////////////////////////////
-‚»‚Ì‘¼‚Ìƒƒ‚ :
+ãã®ä»–ã®ãƒ¡ãƒ¢ :
 
-AppWizard ‚Å‚Í "TODO:" ƒRƒƒ“ƒg‚ðŽg—p‚µ‚ÄAƒ†[ƒU[‚ª’Ç‰Á‚Ü‚½‚ÍƒJƒXƒ^ƒ}ƒCƒY‚·‚é
-ƒ\[ƒX•”•ª‚ðŽ¦‚µ‚Ü‚·B
+AppWizard ã§ã¯ "TODO:" ã‚³ãƒ¡ãƒ³ãƒˆã‚’ä½¿ç”¨ã—ã¦ã€ãƒ¦ãƒ¼ã‚¶ãƒ¼ãŒè¿½åŠ ã¾ãŸã¯ã‚«ã‚¹ã‚¿ãƒžã‚¤ã‚ºã™ã‚‹
+ã‚½ãƒ¼ã‚¹éƒ¨åˆ†ã‚’ç¤ºã—ã¾ã™ã€‚
 
 /////////////////////////////////////////////////////////////////////////////
 

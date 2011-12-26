@@ -3,21 +3,21 @@
 
 #include "VSCommon.fxh"
 
-// ƒTƒ“ƒvƒŠƒ“ƒOƒIƒtƒZƒbƒg
+// ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ã‚ªãƒ•ã‚»ãƒƒãƒˆ
 float4 g_vUVOffsetSampling[16];
 
 //////////////////////////////////////////////
-// ’¸“_ƒVƒF[ƒ_
-// 1ƒ|ƒCƒ“ƒgƒTƒ“ƒvƒŠƒ“ƒOiƒfƒtƒHƒ‹ƒgj
+// é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€
+// 1ãƒã‚¤ãƒ³ãƒˆã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ï¼ˆãƒ‡ãƒ•ã‚©ãƒ«ãƒˆï¼‰
 
 S_PE_VS_OUT VSSampling_1(S_PE_VS_IN sIn)
 {
 	S_PE_VS_OUT sOut;
 
-	// ’¸“_ˆÊ’uŒvŽZ
+	// é ‚ç‚¹ä½ç½®è¨ˆç®—
 	sOut.vPos = _ComputeVSPosition(sIn.vPos);
 
-	// ƒeƒNƒXƒ`ƒƒÀ•W
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£åº§æ¨™
 	// out = in * scale + offset
 	sOut.vUV.xy = sIn.vUV.xy * g_vTexParam.xy + g_vTexParam.zw;
 
@@ -25,10 +25,10 @@ S_PE_VS_OUT VSSampling_1(S_PE_VS_IN sIn)
 }
 
 //////////////////////////////////////////////
-// ’¸“_ƒVƒF[ƒ_
-// ‹ô”ƒ|ƒCƒ“ƒgƒTƒ“ƒvƒŠƒ“ƒO
+// é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€
+// å¶æ•°ãƒã‚¤ãƒ³ãƒˆã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°
 
-// ‹ô”ƒ|ƒCƒ“ƒgƒTƒ“ƒvƒŠƒ“ƒO@ƒeƒNƒXƒ`ƒƒÀ•WŒvŽZ
+// å¶æ•°ãƒã‚¤ãƒ³ãƒˆã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ã€€ãƒ†ã‚¯ã‚¹ãƒãƒ£åº§æ¨™è¨ˆç®—
 // NOTE : out = in * scale + offset
 #define _COMPUTE_VS_EVEN_SAMPLING_TEXCOORD(NUM)\
 	for (int i = 0; i < NUM; i++) {\
@@ -36,53 +36,53 @@ S_PE_VS_OUT VSSampling_1(S_PE_VS_IN sIn)
 		sOut.vUV[i].xyzw = sOut.vUV[i].xyzw * g_vTexParam.xyxy + g_vTexParam.zwzw;\
 	}
 
-// 4ƒ|ƒCƒ“ƒgƒTƒ“ƒvƒŠƒ“ƒO
+// 4ãƒã‚¤ãƒ³ãƒˆã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°
 S_PE_VS_OUT_SAMPLING_4 VSSampling_4(S_PE_VS_IN sIn)
 {
 	S_PE_VS_OUT_SAMPLING_4 sOut;
 
-	// ’¸“_ˆÊ’uŒvŽZ
+	// é ‚ç‚¹ä½ç½®è¨ˆç®—
 	sOut.vPos = _ComputeVSPosition(sIn.vPos);
 
-	// ƒeƒNƒXƒ`ƒƒÀ•W
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£åº§æ¨™
 	_COMPUTE_VS_EVEN_SAMPLING_TEXCOORD(NUM_SAMPLING_4);
 
 	return sOut;
 }
 
-// 8ƒ|ƒCƒ“ƒgƒTƒ“ƒvƒŠƒ“ƒO
+// 8ãƒã‚¤ãƒ³ãƒˆã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°
 S_PE_VS_OUT_SAMPLING_8 VSSampling_8(S_PE_VS_IN sIn)
 {
 	S_PE_VS_OUT_SAMPLING_8 sOut;
 
-	// ’¸“_ˆÊ’uŒvŽZ
+	// é ‚ç‚¹ä½ç½®è¨ˆç®—
 	sOut.vPos = _ComputeVSPosition(sIn.vPos);
 
-	// ƒeƒNƒXƒ`ƒƒÀ•W
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£åº§æ¨™
 	_COMPUTE_VS_EVEN_SAMPLING_TEXCOORD(NUM_SAMPLING_8);
 
 	return sOut;
 }
 
-// 16ƒ|ƒCƒ“ƒgƒTƒ“ƒvƒŠƒ“ƒO
+// 16ãƒã‚¤ãƒ³ãƒˆã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°
 S_PE_VS_OUT_SAMPLING_16 VSSampling_16(S_PE_VS_IN sIn)
 {
 	S_PE_VS_OUT_SAMPLING_16 sOut;
 
-	// ’¸“_ˆÊ’uŒvŽZ
+	// é ‚ç‚¹ä½ç½®è¨ˆç®—
 	sOut.vPos = _ComputeVSPosition(sIn.vPos);
 
-	// ƒeƒNƒXƒ`ƒƒÀ•W
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£åº§æ¨™
 	_COMPUTE_VS_EVEN_SAMPLING_TEXCOORD(NUM_SAMPLING_16);
 
 	return sOut;
 }
 
 //////////////////////////////////////////////
-// ’¸“_ƒVƒF[ƒ_
-// Šï”ƒ|ƒCƒ“ƒgƒTƒ“ƒvƒŠƒ“ƒO
+// é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€
+// å¥‡æ•°ãƒã‚¤ãƒ³ãƒˆã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°
 
-// Šï”ƒ|ƒCƒ“ƒgƒTƒ“ƒvƒŠƒ“ƒO@ƒeƒNƒXƒ`ƒƒÀ•WŒvŽZ
+// å¥‡æ•°ãƒã‚¤ãƒ³ãƒˆã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ã€€ãƒ†ã‚¯ã‚¹ãƒãƒ£åº§æ¨™è¨ˆç®—
 // NOTE : out = in * scale + offset
 #define _COMPUTE_VS_ODD_SAMPLING_TEXCOORD(NUM)\
 	{\
@@ -94,57 +94,57 @@ S_PE_VS_OUT_SAMPLING_16 VSSampling_16(S_PE_VS_IN sIn)
 		sOut.vUV_0.xy = sOut.vUV_0.xy * g_vTexParam.xy + g_vTexParam.zw;\
 	}
 
-// 5ƒ|ƒCƒ“ƒgƒTƒ“ƒvƒŠƒ“ƒO
+// 5ãƒã‚¤ãƒ³ãƒˆã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°
 S_PE_VS_OUT_SAMPLING_5 VSSampling_5(S_PE_VS_IN sIn)
 {
 	S_PE_VS_OUT_SAMPLING_5 sOut;
 
-	// ’¸“_ˆÊ’uŒvŽZ
+	// é ‚ç‚¹ä½ç½®è¨ˆç®—
 	sOut.vPos = _ComputeVSPosition(sIn.vPos);
 
-	// ƒeƒNƒXƒ`ƒƒÀ•W
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£åº§æ¨™
 	_COMPUTE_VS_ODD_SAMPLING_TEXCOORD(NUM_SAMPLING_5);
 
 	return sOut;
 }
 
-// 7ƒ|ƒCƒ“ƒgƒTƒ“ƒvƒŠƒ“ƒO
+// 7ãƒã‚¤ãƒ³ãƒˆã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°
 S_PE_VS_OUT_SAMPLING_7 VSSampling_7(S_PE_VS_IN sIn)
 {
 	S_PE_VS_OUT_SAMPLING_7 sOut;
 
-	// ’¸“_ˆÊ’uŒvŽZ
+	// é ‚ç‚¹ä½ç½®è¨ˆç®—
 	sOut.vPos = _ComputeVSPosition(sIn.vPos);
 
-	// ƒeƒNƒXƒ`ƒƒÀ•W
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£åº§æ¨™
 	_COMPUTE_VS_ODD_SAMPLING_TEXCOORD(NUM_SAMPLING_7);
 
 	return sOut;
 }
 
-// 9ƒ|ƒCƒ“ƒgƒTƒ“ƒvƒŠƒ“ƒO
+// 9ãƒã‚¤ãƒ³ãƒˆã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°
 S_PE_VS_OUT_SAMPLING_9 VSSampling_9(S_PE_VS_IN sIn)
 {
 	S_PE_VS_OUT_SAMPLING_9 sOut;
 
-	// ’¸“_ˆÊ’uŒvŽZ
+	// é ‚ç‚¹ä½ç½®è¨ˆç®—
 	sOut.vPos = _ComputeVSPosition(sIn.vPos);
 
-	// ƒeƒNƒXƒ`ƒƒÀ•W
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£åº§æ¨™
 	_COMPUTE_VS_ODD_SAMPLING_TEXCOORD(NUM_SAMPLING_9);
 
 	return sOut;
 }
 
-// 13ƒ|ƒCƒ“ƒgƒTƒ“ƒvƒŠƒ“ƒO
+// 13ãƒã‚¤ãƒ³ãƒˆã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°
 S_PE_VS_OUT_SAMPLING_13 VSSampling_13(S_PE_VS_IN sIn)
 {
 	S_PE_VS_OUT_SAMPLING_13 sOut;
 
-	// ’¸“_ˆÊ’uŒvŽZ
+	// é ‚ç‚¹ä½ç½®è¨ˆç®—
 	sOut.vPos = _ComputeVSPosition(sIn.vPos);
 
-	// ƒeƒNƒXƒ`ƒƒÀ•W
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£åº§æ¨™
 	_COMPUTE_VS_ODD_SAMPLING_TEXCOORD(NUM_SAMPLING_13);
 
 	return sOut;

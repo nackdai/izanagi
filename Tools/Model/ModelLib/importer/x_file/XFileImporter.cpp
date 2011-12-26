@@ -1,4 +1,4 @@
-﻿#include "XFileImporter.h"
+#include "XFileImporter.h"
 #include "XFileGeometry.h"
 #include "XFileJoint.h"
 #include "XFileAnimation.h"

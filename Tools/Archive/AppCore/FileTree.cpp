@@ -1,4 +1,4 @@
-﻿#include <shlwapi.h>
+#include <shlwapi.h>
 #include "FileTree.h"
 
 #define DELIMITER_0	'/'

@@ -1,4 +1,4 @@
-﻿#include "ImageReaderImpl.h"
+#include "ImageReaderImpl.h"
 #include "izToolKit.h"
 #include "izImageLib.h"
 

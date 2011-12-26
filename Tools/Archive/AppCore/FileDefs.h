@@ -1,4 +1,4 @@
-﻿#if !defined(__FILE_DEFS_H__)
+#if !defined(__FILE_DEFS_H__)
 #define __FILE_DEFS_H__
 
 #include "izToolKit.h"

@@ -2,21 +2,21 @@
 #define __IZANAGI_POSTEFFECT_BLUR_FXH__
 
 /***********************************************
-   ƒKƒEƒXƒuƒ‰[
+   ã‚¬ã‚¦ã‚¹ãƒ–ãƒ©ãƒ¼
 ***********************************************/
 
 #include "../PostEffectShaderIO.fxh"
 #include "../PostEffectSamplingParam.fxh"
 #include "../ShaderDefs/ShaderDefsInternal.fxh"
 
-// ƒuƒ‰[ŒvZi‹ô”ƒTƒ“ƒvƒŠƒ“ƒOj
+// ãƒ–ãƒ©ãƒ¼è¨ˆç®—ï¼ˆå¶æ•°ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ï¼‰
 #define _COMPUTE_EVEN_SAMPLING_BLUR_COLOR(vRet, smplIn, vUV, vWeight, NUM)\
 	for (int i = 0; i < NUM; i++) {\
 		vRet += vWeight[i * 2] * tex2D(smplIn, vUV[i].xy);\
 		vRet += vWeight[i * 2 + 1] * tex2D(smplIn, vUV[i].zw);\
 	}
 
-// ƒuƒ‰[ŒvZiŠï”ƒTƒ“ƒvƒŠƒ“ƒOj
+// ãƒ–ãƒ©ãƒ¼è¨ˆç®—ï¼ˆå¥‡æ•°ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ï¼‰
 #define _COMPUTE_ODD_SAMPLING_BLUR_COLOR(vRet, smplIn, vUV, vUV_0, vWeight, NUM)\
 	{\
 		for (int i = 0; i < NUM; i++) {\
@@ -27,9 +27,9 @@
 	}
 
 ////////////////////////////////////////////////////////////
-// ƒKƒEƒXƒuƒ‰[5x5
+// ã‚¬ã‚¦ã‚¹ãƒ–ãƒ©ãƒ¼5x5
 
-// ’†S‚É‹ß‚¢‚P‚RŒÂ‚ÌƒeƒNƒZƒ‹‚ğƒTƒ“ƒvƒŠƒ“ƒO‚·‚é
+// ä¸­å¿ƒã«è¿‘ã„ï¼‘ï¼“å€‹ã®ãƒ†ã‚¯ã‚»ãƒ«ã‚’ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ã™ã‚‹
 
 float4 GaussBlur5x5(
 	in sampler smplIn,
@@ -48,7 +48,7 @@ float4 GaussBlur5x5(
 	//         | x |
 	//         +---+
 
-	// ƒEƒGƒCƒg’l‚É‚æ‚Á‚ÄAd‚İ‚Ì‡Œv‚ª‚P‚É‚È‚é‚æ‚¤‚É‚È‚Á‚Ä‚¢‚é
+	// ã‚¦ã‚¨ã‚¤ãƒˆå€¤ã«ã‚ˆã£ã¦ã€é‡ã¿ã®åˆè¨ˆãŒï¼‘ã«ãªã‚‹ã‚ˆã†ã«ãªã£ã¦ã„ã‚‹
 
 	float4 vRet = (float4)0.0f;
 
@@ -63,9 +63,9 @@ float4 GaussBlur5x5(
 }
 
 ////////////////////////////////////////////////////////////
-// ‚P•ûŒüƒKƒEƒXƒuƒ‰[
+// ï¼‘æ–¹å‘ã‚¬ã‚¦ã‚¹ãƒ–ãƒ©ãƒ¼
 
-// ƒŠƒjƒAƒtƒBƒ‹ƒ^
+// ãƒªãƒ‹ã‚¢ãƒ•ã‚£ãƒ«ã‚¿
 float4 GaussBlur1Direction_Linear(
 	in sampler smplIn,
 	S_PE_PS_IN_SAMPLING_7 sIn)
@@ -75,7 +75,7 @@ float4 GaussBlur1Direction_Linear(
 	// | x | x | x | x | x | x | @ | x | x | x | x | x | x |
 	// +---+---+---+---+---+---+---+---+---+---+---+---+---+
 	// |<----->|<----->|<----->|   |<----->|<----->|<----->|
-	// ã‚Ì‚æ‚¤‚É‚QƒeƒNƒZƒ‹‚¸‚Â‚Ü‚Æ‚ß‚é
+	// ä¸Šã®ã‚ˆã†ã«ï¼’ãƒ†ã‚¯ã‚»ãƒ«ãšã¤ã¾ã¨ã‚ã‚‹
 
 	float4 vRet = (float4)0.0f;
 
@@ -89,7 +89,7 @@ float4 GaussBlur1Direction_Linear(
 	return vRet;
 }
 
-// ƒ|ƒCƒ“ƒgƒtƒBƒ‹ƒ^
+// ãƒã‚¤ãƒ³ãƒˆãƒ•ã‚£ãƒ«ã‚¿
 float4 GaussBlur1Direction_Point(
 	in sampler smplIn,
 	S_PE_PS_IN_SAMPLING_13 sIn)
@@ -111,17 +111,17 @@ float4 GaussBlur1Direction_Point(
 	return vRet;
 }
 
-// ƒuƒ‹[ƒ€ì¬—pƒuƒ‰[
+// ãƒ–ãƒ«ãƒ¼ãƒ ä½œæˆç”¨ãƒ–ãƒ©ãƒ¼
 #define BloomBlur_Linear	GaussBlur1Direction_Linear
 #define BloomBlur_Point		GaussBlur1Direction_Point
 
 ////////////////////////////////////////////////////////////
-// ƒXƒ^[ƒuƒ‰[
+// ã‚¹ã‚¿ãƒ¼ãƒ–ãƒ©ãƒ¼
 
-// ƒXƒ^[ƒuƒ‰[ƒEƒGƒCƒg’l
+// ã‚¹ã‚¿ãƒ¼ãƒ–ãƒ©ãƒ¼ã‚¦ã‚¨ã‚¤ãƒˆå€¤
 PRIVATE(float4 g_vStarWeight[8] : BLUR_WEIGHT);
 
-// ƒXƒ^[ƒ}[ƒWƒEƒGƒCƒg’l
+// ã‚¹ã‚¿ãƒ¼ãƒãƒ¼ã‚¸ã‚¦ã‚¨ã‚¤ãƒˆå€¤
 PRIVATE(float g_fStarMergeWeight);
 
 float4 StarBlur(

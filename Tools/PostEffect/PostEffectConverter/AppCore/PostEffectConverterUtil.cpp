@@ -1,4 +1,4 @@
-﻿#include "PostEffectConverterUtil.h"
+#include "PostEffectConverterUtil.h"
 #include "izToolKit.h"
 
 /**

@@ -1,4 +1,4 @@
-﻿// ModelConverter.cpp : コンソール アプリケーションのエントリ ポイントを定義します。
+// ModelConverter.cpp : コンソール アプリケーションのエントリ ポイントを定義します。
 //
 
 #include "izModelLib.h"

@@ -4,14 +4,14 @@
 #include "../ColorSpace/ColorSpaceCMY.fxh"
 
 //////////////////////////////////
-// ÉlÉKÉeÉBÉu
+// „Éç„Ç¨„ÉÜ„Ç£„Éñ
 
 float4 ColorFilterNegative(float4 vIn)
 {
 	return float4(RGBToCMY(vIn.rgb), vIn.a);
 }
 
-// ê¸å`ï‚ä‘Ç†ÇË
+// Á∑öÂΩ¢Ë£úÈñì„ÅÇ„Çä
 float4 ColorFilterNegative(float4 vIn, float fWeight)
 {
 	float3 tmp = lerp(vIn.rgb, RGBToCMY(vIn.rgb), fWeight);

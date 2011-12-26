@@ -2,13 +2,13 @@
 #define __IZANAGI_POSTEFFECT_VS_FXH__
 
 /********************************************
-   ’¸“_ƒVƒF[ƒ_
+   é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€
 ********************************************/
 
-// ƒfƒtƒHƒ‹ƒg’¸“_ƒVƒF[ƒ_
+// ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆé ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€
 #include "VS/VSDefault.fxh"
 
-// ƒTƒ“ƒvƒŠƒ“ƒO’¸“_ƒVƒF[ƒ_
+// ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€
 #include "VS/VSSampling.fxh"
 
 #endif	// #if !defined(__IZANAGI_POSTEFFECT_VS_FXH__)

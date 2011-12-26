@@ -9,13 +9,13 @@ struct SVSInput {
 
 struct SVSOutput {
 	float4 vPos		: POSITION;
-	float3 vNormal	: TEXCOORD0;	// –@ü
-	float3 vHalf	: TEXCOORD1;	// ƒn[ƒtƒxƒNƒgƒ‹
+	float3 vNormal	: TEXCOORD0;	// æ³•ç·š
+	float3 vHalf	: TEXCOORD1;	// ãƒãƒ¼ãƒ•ãƒ™ã‚¯ãƒˆãƒ«
 	float4 vColor	: COLOR;		// Ambient
 };
 
 /////////////////////////////////////////////////////////////
-// ’¸“_ƒVƒF[ƒ_
+// é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€
 
 SVSOutput mainVS(SVSInput In)
 {
@@ -23,7 +23,7 @@ SVSOutput mainVS(SVSInput In)
 	
 	Out.vPos = ApplyL2W(In.vPos);
 	
-	// HalfƒxƒNƒgƒ‹ŒvZ
+	// Halfãƒ™ã‚¯ãƒˆãƒ«è¨ˆç®—
 	Out.vHalf = ComputeHalfVectorEx(0, Out.vPos);
 	
 	Out.vPos = ApplyW2C(Out.vPos);
@@ -40,14 +40,14 @@ SVSOutput mainVS(SVSInput In)
 }
 
 /////////////////////////////////////////////////////////////
-// ƒsƒNƒZƒ‹ƒVƒF[ƒ_
+// ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€
 
 float4 mainPS(SVSOutput In) : COLOR
 {
-	// ’¸“_ƒVƒF[ƒ_‚ÅAmbient‚É‚Â‚¢‚Ä‚ÍŒvZÏ‚İ
+	// é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€ã§Ambientã«ã¤ã„ã¦ã¯è¨ˆç®—æ¸ˆã¿
 	float4 vOut = In.vColor;
 	
-	// ‚¢‚é‚Ì‚©EEE
+	// ã„ã‚‹ã®ã‹ãƒ»ãƒ»ãƒ»
 	float3 vN = normalize(In.vNormal);
 	float3 vH = normalize(In.vHalf);
 		

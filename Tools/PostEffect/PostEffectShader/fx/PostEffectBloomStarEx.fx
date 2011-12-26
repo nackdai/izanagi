@@ -1,22 +1,22 @@
-// ƒ|ƒXƒgƒGƒtƒFƒNƒg@BloomStarEx
+// ãƒã‚¹ãƒˆã‚¨ãƒ•ã‚§ã‚¯ãƒˆã€€BloomStarEx
 
 #include "PostEffectShader.fxh"
 
 PES_ID("POSTEFFECT_BloomStarEx");
 
 ////////////////////////////////////////////////////
-// ƒeƒNƒXƒ`ƒƒ
+// ãƒ†ã‚¯ã‚¹ãƒãƒ£
 
 #define BASE_TEX_FMT	PIXEL_FORMAT_RGBA16F
 //#define BASE_TEX_FMT	PIXEL_FORMAT_RGBA8
 
-// ƒV[ƒ“ƒeƒNƒXƒ`ƒƒ
+// ã‚·ãƒ¼ãƒ³ãƒ†ã‚¯ã‚¹ãƒãƒ£
 texture texScene : INPUT_SCENE
 <
 	SetTexFormat(BASE_TEX_FMT);
 >;
 
-// 1/4 x 1/4 k¬ƒoƒbƒtƒ@
+// 1/4 x 1/4 ç¸®å°ãƒãƒƒãƒ•ã‚¡
 texture texDownScale4x4
 <
 	SetTexFormat(BASE_TEX_FMT);
@@ -24,7 +24,7 @@ texture texDownScale4x4
 	SetTexRatio(0.25f, 0.25f);	// 1/4
 >;
 
-// ‹P“x’Šoƒoƒbƒtƒ@
+// è¼åº¦æŠ½å‡ºãƒãƒƒãƒ•ã‚¡
 texture texBright
 <
 	SetTexFormat(BASE_TEX_FMT);
@@ -33,7 +33,7 @@ texture texBright
 	SetTexSize(2, 2);
 >;
 
-// ƒXƒ^[Œ³
+// ã‚¹ã‚¿ãƒ¼å…ƒ
 texture texStarSource
 <
 	SetTexFormat(PIXEL_FORMAT_RGBA8);
@@ -42,7 +42,7 @@ texture texStarSource
 	SetTexSize(2, 2);
 >;
 
-// ƒuƒ‹[ƒ€Œ³
+// ãƒ–ãƒ«ãƒ¼ãƒ å…ƒ
 texture texBloomSource
 <
 	SetTexFormat(PIXEL_FORMAT_RGBA8);
@@ -51,7 +51,7 @@ texture texBloomSource
 	SetTexSize(2, 2);
 >;
 
-// ƒuƒ‹[ƒ€“r’†
+// ãƒ–ãƒ«ãƒ¼ãƒ é€”ä¸­
 texture texBloomIterate
 <
 	SetTexFormat(PIXEL_FORMAT_RGBA8);
@@ -60,7 +60,7 @@ texture texBloomIterate
 	SetTexSize(2, 2);
 >;
 
-// ƒuƒ‹[ƒ€
+// ãƒ–ãƒ«ãƒ¼ãƒ 
 texture texBloom
 <
 	SetTexFormat(PIXEL_FORMAT_RGBA8);
@@ -68,7 +68,7 @@ texture texBloom
 	SetTexRatio(0.125f, 0.125f);	// 1/8
 >;
 
-// ƒXƒ^[
+// ã‚¹ã‚¿ãƒ¼
 texture texStar
 <
 	SetTexFormat(PIXEL_FORMAT_RGBA8);
@@ -78,7 +78,7 @@ texture texStar
 >;
 
 ////////////////////////////////////////////////////
-// ƒTƒ“ƒvƒ‰
+// ã‚µãƒ³ãƒ—ãƒ©
 
 #ifdef __ENABLE_LINEAR_SAMPLE__
 #define SAMPLER_FILTER()\
@@ -90,65 +90,65 @@ texture texStar
 	SetMagFilter(SMPL_FILTER_POINT)
 #endif	// #ifdef __ENABLE_LINEAR_SAMPLE__
 
-// ƒV[ƒ“ƒeƒNƒXƒ`ƒƒ
+// ã‚·ãƒ¼ãƒ³ãƒ†ã‚¯ã‚¹ãƒãƒ£
 sampler smplScene = sampler_state
 {
 	BindTex(texScene);
 	SAMPLER_FILTER();
 };
 
-// 1/4 x 1/4 k¬ƒoƒbƒtƒ@
+// 1/4 x 1/4 ç¸®å°ãƒãƒƒãƒ•ã‚¡
 sampler smplDownScale4x4 = sampler_state
 {
 	BindTex(texDownScale4x4);
 	SAMPLER_FILTER();
 };
 
-// ‹P“x’Šoƒoƒbƒtƒ@
+// è¼åº¦æŠ½å‡ºãƒãƒƒãƒ•ã‚¡
 sampler smplBright = sampler_state
 {
 	BindTex(texBright);
 	SAMPLER_FILTER();
 };
 
-// ƒXƒ^[Œ³
+// ã‚¹ã‚¿ãƒ¼å…ƒ
 sampler smplStarSource = sampler_state
 {
 	BindTex(texStarSource);
 };
 
-// ƒuƒ‹[ƒ€Œ³
+// ãƒ–ãƒ«ãƒ¼ãƒ å…ƒ
 sampler smplBloomSource = sampler_state
 {
 	BindTex(texBloomSource);
 };
 
-// ƒuƒ‹[ƒ€“r’†
+// ãƒ–ãƒ«ãƒ¼ãƒ é€”ä¸­
 sampler smplBloomIterate = sampler_state
 {
 	BindTex(texBloomIterate);
 };
 
-// ƒuƒ‹[ƒ€ÅŒã
+// ãƒ–ãƒ«ãƒ¼ãƒ æœ€å¾Œ
 sampler smplBloomFinal = sampler_state
 {
 	BindTex(texBloomSource);
 };
 
-// ƒuƒ‹[ƒ€
+// ãƒ–ãƒ«ãƒ¼ãƒ 
 sampler smplBloom = sampler_state
 {
 	BindTex(texBloom);
 };
 
-// ƒXƒ^[
+// ã‚¹ã‚¿ãƒ¼
 sampler smplStar = sampler_state
 {
 	BindTex(texStar);
 };
 
 ////////////////////////////////////////////////////
-// 1/4 x 1/4 k¬ƒoƒbƒtƒ@ì¬
+// 1/4 x 1/4 ç¸®å°ãƒãƒƒãƒ•ã‚¡ä½œæˆ
 
 #ifdef __ENABLE_LINEAR_SAMPLE__
 float4 mainDownScale4x4(S_PE_PS_IN_DOWNSCALE_4x4_LINEAR sIn) : COLOR
@@ -165,25 +165,25 @@ float4 mainDownScale4x4(S_PE_PS_IN_DOWNSCALE_4x4_POINT sIn) : COLOR
 #endif	// #ifdef __ENABLE_LINEAR_SAMPLE__
 
 ////////////////////////////////////////////////////
-// ‹P“x’Šo
+// è¼åº¦æŠ½å‡º
 
 float fBrightThreshold = 0.5f;
 float fBrightScale = 1.0f;
 
-// ’´ŠÈˆÕ
+// è¶…ç°¡æ˜“
 float4 mainBrighPass(S_PE_PS_IN sIn) : COLOR
 {
 	float4 vRet = tex2D(smplDownScale4x4, sIn.vUV);
 
-	// 0–¢–‚É‚È‚ç‚È‚¢‚æ‚¤‚É‚·‚é
+	// 0æœªæº€ã«ãªã‚‰ãªã„ã‚ˆã†ã«ã™ã‚‹
 	vRet.rgb = max(vRet.rgb - fBrightThreshold, 0.0f) * fBrightScale;
 
 	return vRet;
 }
 
 ////////////////////////////////////////////////////
-// k¬ƒoƒbƒtƒ@‚ÖƒRƒs[‚µ‚½‚±‚Æ‚É‚æ‚éƒGƒCƒŠƒAƒVƒ“ƒO‚ğ–h‚®‚½‚ß‚É
-// ƒKƒEƒXŒ^‚Ì‚Ú‚©‚µ‚ğ“ü‚ê‚é
+// ç¸®å°ãƒãƒƒãƒ•ã‚¡ã¸ã‚³ãƒ”ãƒ¼ã—ãŸã“ã¨ã«ã‚ˆã‚‹ã‚¨ã‚¤ãƒªã‚¢ã‚·ãƒ³ã‚°ã‚’é˜²ããŸã‚ã«
+// ã‚¬ã‚¦ã‚¹å‹ã®ã¼ã‹ã—ã‚’å…¥ã‚Œã‚‹
 
 float4 mainGaussBlur(S_PE_PS_IN_GAUSSBLUR_5x5 sIn) : COLOR
 {
@@ -200,21 +200,21 @@ float4 mainDownScale2x2(S_PE_PS_IN sIn) : COLOR
 	return vRet;
 }
 
-// ƒuƒ‹[ƒ€Å‰
+// ãƒ–ãƒ«ãƒ¼ãƒ æœ€åˆ
 float4 mainRenderBloomInit(S_PE_PS_IN_GAUSSBLUR_5x5 sIn) : COLOR
 {
 	float4 vRet = GaussBlur5x5(smplBloomSource, sIn);
 	return vRet;
 }
 
-// ƒuƒ‹[ƒ€“r’†
+// ãƒ–ãƒ«ãƒ¼ãƒ é€”ä¸­
 float4 mainRenderBloomIterate(S_PE_PS_IN_BLOOMBLUR_LINEAR sIn) : COLOR
 {
 	float4 vRet = BloomBlur_Linear(smplBloomIterate, sIn);
 	return vRet;
 }
 
-// ƒuƒ‹[ƒ€ÅŒã
+// ãƒ–ãƒ«ãƒ¼ãƒ æœ€å¾Œ
 float4 mainRenderBloomFinal(S_PE_PS_IN_BLOOMBLUR_LINEAR sIn) : COLOR
 {
 	float4 vRet = BloomBlur_Linear(smplBloomFinal, sIn);
@@ -222,7 +222,7 @@ float4 mainRenderBloomFinal(S_PE_PS_IN_BLOOMBLUR_LINEAR sIn) : COLOR
 }
 
 ////////////////////////////////////////////////////
-// ƒXƒ^[ì¬
+// ã‚¹ã‚¿ãƒ¼ä½œæˆ
 
 float4 mainRenderStar(S_PE_PS_IN_STARBLUR sIn) : COLOR
 {
@@ -231,7 +231,7 @@ float4 mainRenderStar(S_PE_PS_IN_STARBLUR sIn) : COLOR
 }
 
 ////////////////////////////////////////////////////
-// ÅI•`‰æ
+// æœ€çµ‚æç”»
 
 float fBloomWeight = 0.5f;
 float fStarWeight = 0.8f;
@@ -273,14 +273,14 @@ float4 mainFinalWithoutStar(S_PE_PS_IN sIn) : COLOR
 }
 
 ////////////////////////////////////////////////////
-// ƒeƒNƒjƒbƒN
+// ãƒ†ã‚¯ãƒ‹ãƒƒã‚¯
 
-// ƒNƒŠƒAƒJƒ‰[
+// ã‚¯ãƒªã‚¢ã‚«ãƒ©ãƒ¼
 #define CLEAR_COLOR		(0)
 
 technique t0
 {
-	// 1/4 x 1/4 k¬ƒoƒbƒtƒ@ì¬
+	// 1/4 x 1/4 ç¸®å°ãƒãƒƒãƒ•ã‚¡ä½œæˆ
 	pass passDownScale4x4
 	<
 		BeginScene(texDownScale4x4);
@@ -299,7 +299,7 @@ technique t0
 		SetPixelShader(ps_2_a, mainDownScale4x4);
 	}
 
-	// ‹P“x’Šo
+	// è¼åº¦æŠ½å‡º
 	pass passBright
 	<
 		BeginSceneWithClearColor(texBright, CLEAR_COLOR);
@@ -310,7 +310,7 @@ technique t0
 		SetPixelShader(ps_2_a, mainBrighPass);
 	}
 
-	// ƒKƒEƒXƒuƒ‰[
+	// ã‚¬ã‚¦ã‚¹ãƒ–ãƒ©ãƒ¼
 	pass passGaussBlur
 	<
 		BeginSceneWithClearColor(texStarSource, CLEAR_COLOR);
@@ -326,7 +326,7 @@ technique t0
 	////////////////////////////////////////////////////
 	// MGF(Multi Gaussian Filter)
 
-	// 1/2 x 1/2 k¬ƒoƒbƒtƒ@ì¬
+	// 1/2 x 1/2 ç¸®å°ãƒãƒƒãƒ•ã‚¡ä½œæˆ
 	pass passDownScale2x2
 	<
 		SetFunctorName("PostEffectFunctorMGF");
@@ -341,7 +341,7 @@ technique t0
 		SetPixelShader(ps_2_a, mainDownScale2x2);
 	}
 
-	// Å‰
+	// æœ€åˆ
 	pass passRenderBloomInit
 	<
 		SetFunctorName("PostEffectFunctorMGF");
@@ -357,13 +357,13 @@ technique t0
 		SetPixelShader(ps_2_a, mainRenderBloomInit);
 	}
 
-	// “r’†
+	// é€”ä¸­
 	pass passRenderBloomIterate
 	<
 		SetFunctorName("PostEffectFunctorMGF");
 
 		BeginSceneWithClearColor(texBloomSource, CLEAR_COLOR);
-		SetTextureOffset(g_vBloomBlurSampleOffsetH_Linear);	// ‰¡‚Ú‚©‚µ
+		SetTextureOffset(g_vBloomBlurSampleOffsetH_Linear);	// æ¨ªã¼ã‹ã—
 
 		SetSrcTexRectInflate(-1, -1);
 		SetScissorRectInflate(-1, -1);
@@ -373,13 +373,13 @@ technique t0
 		SetPixelShader(ps_2_a, mainRenderBloomIterate);
 	}
 
-	// ÅŒã
+	// æœ€å¾Œ
 	pass passRenderBloomFinal
 	<
 		SetFunctorName("PostEffectFunctorMGF");
 
 		BeginScene(texBloom);
-		SetTextureOffset(g_vBloomBlurSampleOffsetV_Linear);	// c‚Ú‚©‚µ
+		SetTextureOffset(g_vBloomBlurSampleOffsetV_Linear);	// ç¸¦ã¼ã‹ã—
 
 		SetSrcTexRectInflate(-1, -1);
 	>
@@ -390,23 +390,23 @@ technique t0
 
 	////////////////////////////////////////////////////
 
-	// ƒXƒ^[ì¬
+	// ã‚¹ã‚¿ãƒ¼ä½œæˆ
 	pass passRenderStar
 	<
 		BeginSceneWithClearColor(texStar, CLEAR_COLOR);
 
-		// ƒXƒ^[ì¬ƒtƒ@ƒ“ƒNƒ^
+		// ã‚¹ã‚¿ãƒ¼ä½œæˆãƒ•ã‚¡ãƒ³ã‚¯ã‚¿
 		SetFunctorName("PostEffectFunctorRenderStar");
 	>
 	{
-		// ƒXƒ^[ì¬ƒtƒ@ƒ“ƒNƒ^“à‚Å‹­§“I‚É‰ÁZƒuƒŒƒ“ƒh‚ªİ’è‚³‚ê‚Ä‚¢‚éB
-		// ‚»‚Ì‚½‚ßA‚±‚±‚ÅƒAƒ‹ƒtƒ@ƒuƒŒƒ“ƒh‚Ìİ’è‚µ‚Ä‚à–³‹‚³‚ê‚éB
+		// ã‚¹ã‚¿ãƒ¼ä½œæˆãƒ•ã‚¡ãƒ³ã‚¯ã‚¿å†…ã§å¼·åˆ¶çš„ã«åŠ ç®—ãƒ–ãƒ¬ãƒ³ãƒ‰ãŒè¨­å®šã•ã‚Œã¦ã„ã‚‹ã€‚
+		// ãã®ãŸã‚ã€ã“ã“ã§ã‚¢ãƒ«ãƒ•ã‚¡ãƒ–ãƒ¬ãƒ³ãƒ‰ã®è¨­å®šã—ã¦ã‚‚ç„¡è¦–ã•ã‚Œã‚‹ã€‚
 
 		SetVertexShader(vs_2_a, VSSampling_8);
 		SetPixelShader(ps_2_a, mainRenderStar);
 	}
 
-	// ÅI•`‰æ
+	// æœ€çµ‚æç”»
 	pass passFinal
 	{
 		SetVertexShader(vs_2_a, VSSampling_1);

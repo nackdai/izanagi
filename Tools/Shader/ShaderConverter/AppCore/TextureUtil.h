@@ -1,4 +1,4 @@
-﻿#if !defined(__SHADER_CONVERTER_TEXTURE_UTIL_H__)
+#if !defined(__SHADER_CONVERTER_TEXTURE_UTIL_H__)
 #define __SHADER_CONVERTER_TEXTURE_UTIL_H__
 
 #include <Cg/cgD3D9.h>
