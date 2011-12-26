@@ -96,7 +96,7 @@ namespace {
 
 		BOOL ret = TRUE;
 
-		izanagi::izanagi_tk::CString str(cgGetAnnotationName(ann));
+		izanagi::tool::CString str(cgGetAnnotationName(ann));
 
 		for (UINT i = 0; i < COUNTOF(AnnTable); i++) {
 			if (str == AnnTable[i].Name) {
@@ -131,7 +131,7 @@ namespace {
 		CGannotation ann = ::cgGetFirstParameterAnnotation(param);
 
 		while (ann != NULL) {
-			izanagi::izanagi_tk::CString str(::cgGetAnnotationName(ann));
+			izanagi::tool::CString str(::cgGetAnnotationName(ann));
 
 			if (str == "DoNotStrip") {
 				int num = 0;

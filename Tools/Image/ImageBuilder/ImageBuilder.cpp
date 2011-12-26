@@ -54,7 +54,7 @@ int main(int argc, char* argv[])
 	int nRetCode = 0;
 
 	// エラーストリング表示用関数セット
-	izanagi::izanagi_tk::CException::SetPrintLogFunc(_PrintString);
+	izanagi::tool::CException::SetPrintLogFunc(_PrintString);
 
 	COption cOption;
 
@@ -63,8 +63,8 @@ int main(int argc, char* argv[])
 	VGOTO(hWnd != NULL);
 
 	// グラフィックスデバイス作成
-	izanagi::izanagi_tk::CGraphicsDeviceLite* pDevice = IZ_NULL;
-	pDevice = izanagi::izanagi_tk::CGraphicsDeviceLite::CreateGraphicsDeviceLight(hWnd);
+	izanagi::tool::CGraphicsDeviceLite* pDevice = IZ_NULL;
+	pDevice = izanagi::tool::CGraphicsDeviceLite::CreateGraphicsDeviceLight(hWnd);
 	VGOTO(pDevice != NULL);
 
 	// オプション解析
@@ -74,7 +74,7 @@ int main(int argc, char* argv[])
 
 	try {
 		// 入力XMLのパス部分のみを取得
-		izanagi::izanagi_tk::CFileUtility::GetPathWithoutFileName(
+		izanagi::tool::CFileUtility::GetPathWithoutFileName(
 			BUF,
 			COUNTOF(BUF),
 			cOption.in);
@@ -82,7 +82,7 @@ int main(int argc, char* argv[])
 #if 0
 		// 絶対パスに変更
 		{
-			izanagi::izanagi_tk::CString tmp;
+			izanagi::tool::CString tmp;
 			tmp.Format("%s", BUF);
 			BOOL result = (_fullpath(BUF, tmp, COUNTOF(BUF)) != NULL);
 			VGOTO(result);
@@ -103,7 +103,7 @@ int main(int argc, char* argv[])
 		result = CImageBuilder::GetInstance().BuildIMG(cOption.out);
 		VGOTO(result);
 	}
-	catch (izanagi::izanagi_tk::CException* e) {
+	catch (izanagi::tool::CException* e) {
 		e->PrintLog();
 		VGOTO(FALSE);
 	}

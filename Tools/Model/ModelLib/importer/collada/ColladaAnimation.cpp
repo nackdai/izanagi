@@ -265,7 +265,7 @@ IZ_BOOL CColladaAnimation::ReadJoint(domNodeRef pNode)
 			domElement* pContent = pNode->getContents().get(n);
 
 			daeString strType = pContent->getTypeName();
-			if (izanagi::izanagi_tk::CString::CmpStr(strType, "node")) {
+			if (izanagi::tool::CString::CmpStr(strType, "node")) {
 				// terminate...
 				continue;
 			}
@@ -316,7 +316,7 @@ CColladaAnimation::E_TRANSFROM_TYPE CColladaAnimation::GetTransformType(IZ_PCSTR
 	IZ_C_ASSERT(COUNTOF(tblType) == E_TRANSFROM_TYPE_NUM);
 
 	for (IZ_UINT i = 0; i < E_TRANSFROM_TYPE_NUM; i++) {
-		if (izanagi::izanagi_tk::CString::CmpStr(tblType[i], pszType)) {
+		if (izanagi::tool::CString::CmpStr(tblType[i], pszType)) {
 			return (E_TRANSFROM_TYPE)i;
 		}
 	}
@@ -432,20 +432,20 @@ IZ_BOOL CColladaAnimation::GetAnmTarget(
 
 	if (strlen(strMember) > 0) {
 		if (sAnmChannel.type & izanagi::E_ANM_TRANSFORM_TYPE_QUATERNION) {
-			if (izanagi::izanagi_tk::CString::CmpStr(strMember, "AXIS")) {
+			if (izanagi::tool::CString::CmpStr(strMember, "AXIS")) {
 				sAnmChannel.type = izanagi::E_ANM_TRANSFORM_TYPE_QUATERNION_XYZ;
 			}
-			else if (izanagi::izanagi_tk::CString::CmpStr(strMember, "ANGLE")) {
+			else if (izanagi::tool::CString::CmpStr(strMember, "ANGLE")) {
 				sAnmChannel.type = izanagi::E_ANM_TRANSFORM_TYPE_QUATERNION_W;
 			}
 		}
-		else if (izanagi::izanagi_tk::CString::CmpStr(strMember, "X")) {
+		else if (izanagi::tool::CString::CmpStr(strMember, "X")) {
 			sAnmChannel.type |= izanagi::E_ANM_TRANSFORM_TYPE_X;
 		}
-		else if (izanagi::izanagi_tk::CString::CmpStr(strMember, "Y")) {
+		else if (izanagi::tool::CString::CmpStr(strMember, "Y")) {
 			sAnmChannel.type |= izanagi::E_ANM_TRANSFORM_TYPE_Y;
 		}
-		else if (izanagi::izanagi_tk::CString::CmpStr(strMember, "Z")) {
+		else if (izanagi::tool::CString::CmpStr(strMember, "Z")) {
 			sAnmChannel.type |= izanagi::E_ANM_TRANSFORM_TYPE_Z;
 		}
 	}
@@ -473,7 +473,7 @@ CColladaAnimation::E_INPUT_SEMANTIC CColladaAnimation::ConvSemanticFromString(da
 	IZ_C_ASSERT(COUNTOF(tblSemantic) == E_INPUT_SEMANTIC_NUM);
 
 	for (IZ_UINT i = 0; i < E_INPUT_SEMANTIC_NUM; i++) {
-		if (izanagi::izanagi_tk::CString::CmpStr(tblSemantic[i], str)) {
+		if (izanagi::tool::CString::CmpStr(tblSemantic[i], str)) {
 			return static_cast<E_INPUT_SEMANTIC>(i);
 		}
 	}
@@ -539,7 +539,7 @@ IZ_BOOL CColladaAnimation::GetAnmInputParams(
 
 		domParamRef pParam = pSrc->getTechnique_common()->getAccessor()->getParam_array().get(0);
 		daeString name = pParam->getName();
-		VRETURN(izanagi::izanagi_tk::CString::CmpStr(name, "TIME"));
+		VRETURN(izanagi::tool::CString::CmpStr(name, "TIME"));
 
 		domUint num = pSrc->getFloat_array()->getCount();
 
@@ -586,7 +586,7 @@ IZ_BOOL CColladaAnimation::GetInterpType(
 	for (domUint i = 0; i < num; i++) {
 		daeString name = pSrc->getName_array()->getValue().get((size_t)i);
 
-		if (izanagi::izanagi_tk::CString::CmpStr(name, "BEZIER")) {
+		if (izanagi::tool::CString::CmpStr(name, "BEZIER")) {
 			// NOTE
 			// I think collada bezier parameters are for hermite not bezier...
 			nInterp = izanagi::E_ANM_INTERP_TYPE_HERMITE;

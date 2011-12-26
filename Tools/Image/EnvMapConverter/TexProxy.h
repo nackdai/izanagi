@@ -26,7 +26,7 @@ protected:
 public:
 	// テクスチャプロキシ作成
 	static CTexProxy* CreateTexProxy(
-		std::vector<izanagi::izanagi_tk::CTextureLite*>& tex,
+		std::vector<izanagi::tool::CTextureLite*>& tex,
 		EnvMapType type);
 
 	// テクスチャプロキシ破棄

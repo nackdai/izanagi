@@ -4,7 +4,7 @@
 void CUtility::BreakPath(
 	LPCSTR lpszPath,
 	LPCSTR lpszRoot,
-	std::vector<izanagi::izanagi_tk::CString>& tPathList)
+	std::vector<izanagi::tool::CString>& tPathList)
 {
 	static CHAR buf[1024];
 
@@ -19,7 +19,7 @@ void CUtility::BreakPath(
 			buf[nBufPos] = '\0';
 			nBufPos = 0;
 
-			izanagi::izanagi_tk::CString str(buf);
+			izanagi::tool::CString str(buf);
 			if (str.length() > 0) {
 				if (!bEnableAdd && (str == lpszRoot)) {
 					bEnableAdd = TRUE;
@@ -36,6 +36,6 @@ void CUtility::BreakPath(
 
 	if (bEnableAdd && (nBufPos > 0)) {
 		buf[nBufPos] = '\0';
-		tPathList.push_back(izanagi::izanagi_tk::CString(buf));
+		tPathList.push_back(izanagi::tool::CString(buf));
 	}
 }

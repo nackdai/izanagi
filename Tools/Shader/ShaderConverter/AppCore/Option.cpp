@@ -24,12 +24,12 @@ BOOL COption::Analysis(int argc, char* argv[])
 {
 	for (int i = 1; i < argc; i++) {
 		BOOL result = FALSE;
-		izanagi::izanagi_tk::CString cmd(argv[i]);
+		izanagi::tool::CString cmd(argv[i]);
 
 		if (i < argc - 1) {
 			if (result = (cmd == "-I")) {
 				// -I
-				izanagi::izanagi_tk::CString tmp;
+				izanagi::tool::CString tmp;
 				tmp.format("%s", argv[i + 1]);
 
 				includes.push_back(tmp);
@@ -38,7 +38,7 @@ BOOL COption::Analysis(int argc, char* argv[])
 			}
 			else if (result = (cmd == "-D")) {
 				// -D
-				izanagi::izanagi_tk::CString tmp;
+				izanagi::tool::CString tmp;
 				tmp.format("%s", argv[i + 1]);
 
 				defines.push_back(tmp);
@@ -106,7 +106,7 @@ BOOL COption::IsValid()
 
 		return FALSE;
 	}
-	else if (!izanagi::izanagi_tk::CFileUtility::IsExist(in_file)) {
+	else if (!izanagi::tool::CFileUtility::IsExist(in_file)) {
 		// ファイルの存在を確認
 		// TODO
 
@@ -120,7 +120,7 @@ BOOL COption::IsValid()
 
 			return FALSE;
 		}
-		else if (izanagi::izanagi_tk::CFileUtility::IsReadOnly(out_file)) {
+		else if (izanagi::tool::CFileUtility::IsReadOnly(out_file)) {
 			// 出力ファイルが上書き不可
 			// TODO
 
@@ -136,7 +136,7 @@ BOOL COption::EndAnalysis()
 	// 環境変数の展開
 	if (!in_file.empty()) {
 		VRETURN(
-			izanagi::izanagi_tk::CEnvVarHelper::ExpandEnvStrings(
+			izanagi::tool::CEnvVarHelper::ExpandEnvStrings(
 				s_BUF,
 				sizeof(s_BUF),
 				in_file));
@@ -171,18 +171,18 @@ BOOL COption::EndAnalysis()
 		memcpy(s_BUF, in_file, min(sizeof(s_BUF), strlen(in_file)));
 
 		// ファイル名取得
-		izanagi::izanagi_tk::CString file_name(
-			izanagi::izanagi_tk::CFileUtility::GetFileNameFromPath(s_BUF));
+		izanagi::tool::CString file_name(
+			izanagi::tool::CFileUtility::GetFileNameFromPath(s_BUF));
 
-		izanagi::izanagi_tk::CString ext(
-			izanagi::izanagi_tk::CFileUtility::GetExtension(
+		izanagi::tool::CString ext(
+			izanagi::tool::CFileUtility::GetExtension(
 				s_BUF,
 				sizeof(s_BUF),
 				file_name));
 
 		// 拡張子削除
 		VRETURN(
-			izanagi::izanagi_tk::CFileUtility::RemoveExtension(
+			izanagi::tool::CFileUtility::RemoveExtension(
 				s_BUF,
 				sizeof(s_BUF),
 				file_name));
@@ -191,11 +191,11 @@ BOOL COption::EndAnalysis()
 			preproc_file.format("%s.%s_", s_BUF, ext.c_str());
 		}
 		else {
-			izanagi::izanagi_tk::CString tmp(s_BUF);
+			izanagi::tool::CString tmp(s_BUF);
 
 			// 中間ディレクトリに出力する
 			VRETURN(
-				izanagi::izanagi_tk::CFileUtility::CombinePath(
+				izanagi::tool::CFileUtility::CombinePath(
 					s_BUF, 
 					sizeof(s_BUF),
 					obj_dir,
@@ -206,12 +206,12 @@ BOOL COption::EndAnalysis()
 	}
 
 	// includeパスの環境変数の展開
-	std::vector<izanagi::izanagi_tk::CString>::iterator it = includes.begin();
+	std::vector<izanagi::tool::CString>::iterator it = includes.begin();
 	while (it != includes.end()) {
-		izanagi::izanagi_tk::CString& str = *it;
+		izanagi::tool::CString& str = *it;
 		
 		VRETURN(
-			izanagi::izanagi_tk::CEnvVarHelper::ExpandEnvStrings(
+			izanagi::tool::CEnvVarHelper::ExpandEnvStrings(
 				s_BUF,
 				sizeof(s_BUF),
 				str));
@@ -233,7 +233,7 @@ BOOL COption::PreprocInputFile()
 
 	// exe名
 	VRETURN(
-		izanagi::izanagi_tk::CFileUtility::GetExeModuleName(
+		izanagi::tool::CFileUtility::GetExeModuleName(
 			s_BUF,
 			sizeof(s_BUF)));
 

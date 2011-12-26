@@ -6,7 +6,7 @@
 #include "izDefs.h"
 
 namespace izanagi {
-namespace izanagi_tk {
+namespace tool {
 	/**
 	 */
 	class CString : public std::string {
@@ -41,7 +41,7 @@ namespace izanagi_tk {
 
 		bool operator==(char rhs);
 	};
-}	// namespace izanagi_tk
+}	// namespace tool
 }	// namespace izanagi
 
 

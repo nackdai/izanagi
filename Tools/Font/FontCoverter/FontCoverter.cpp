@@ -10,7 +10,7 @@
 #include "CharList.h"
 #include "Option.h"
 #include "FontConverterImpl.h"
-#include "ToolKitGraphDefs.h"
+#include "izToolKit.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -63,7 +63,7 @@ int main(int argc, char* argv[])
 	int nRetCode = 0;
 
 	COption cOption;
-	izanagi::izanagi_tk::CGraphicsDeviceLite* pDevice = IZ_NULL;
+	izanagi::tool::CGraphicsDeviceLite* pDevice = IZ_NULL;
 	izanagi::CFileOutputStream cOut;
 
 	// オプション解析
@@ -80,11 +80,11 @@ int main(int argc, char* argv[])
 	_VGOTO(hWnd != NULL, __EXIT__);
 
 	// GraphicsDevice作成
-	pDevice = izanagi::izanagi_tk::CGraphicsDeviceLite::CreateGraphicsDeviceLight(hWnd);
+	pDevice = izanagi::tool::CGraphicsDeviceLite::CreateGraphicsDeviceLight(hWnd);
 	_VGOTO(pDevice != IZ_NULL, __EXIT__);
 
 	{
-		std::vector<izanagi::izanagi_tk::CString>::iterator it = cOption.in_file_list.begin();
+		std::vector<izanagi::tool::CString>::iterator it = cOption.in_file_list.begin();
 		while (it != cOption.in_file_list.end()) {
 			izanagi::CFileInputStream cIn;
 			_VGOTO(cIn.Open(*it), __EXIT__);

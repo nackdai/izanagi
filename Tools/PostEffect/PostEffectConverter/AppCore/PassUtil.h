@@ -28,7 +28,7 @@ public:
 
 	static void GetFunctorArgsString(
 		CGpass pass,
-		std::vector<izanagi::izanagi_tk::CString>& tvRet);
+		std::vector<izanagi::tool::CString>& tvRet);
 
 	static IZ_PCSTR GetFunctorName(CGpass pass);
 };

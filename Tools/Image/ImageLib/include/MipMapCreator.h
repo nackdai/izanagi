@@ -6,7 +6,7 @@
 #include "izGraph.h"
 
 namespace izanagi {
-namespace izanagi_tk {
+namespace tool {
 	/**
 	*/
 	class CMipMapCreator {
@@ -37,7 +37,7 @@ namespace izanagi_tk {
 			IZ_UINT nHeight, 
 			E_GRAPH_PIXEL_FMT nFmt);
 	};
-}	// namespace izanagi_tk
+}	// namespace tool
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_IMAGE_LIB_MIP_MAP_CREATOR_H__)

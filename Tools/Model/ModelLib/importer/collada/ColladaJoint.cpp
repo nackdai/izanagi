@@ -12,7 +12,7 @@ struct CColladaJoint::SFuncIsSameNameNode {
 								? node->getName()
 								: node->getSid());
 
-		IZ_BOOL ret = izanagi::izanagi_tk::CString::CmpStr(name, strName);
+		IZ_BOOL ret = izanagi::tool::CString::CmpStr(name, strName);
 
 		// Avoid bool cast warning.
 		return (ret == IZ_TRUE);
@@ -136,11 +136,11 @@ IZ_BOOL CColladaJoint::ReadJoint(domVisual_scene* pScene)
 				for (size_t nInputPos = 0; nInputPos < nInputNum; nInputPos++) {
 					xsNMTOKEN strSemantic = pJointsElement->getInput_array().get(nInputPos)->getSemantic();
 
-					if (izanagi::izanagi_tk::CString::CmpStr(strSemantic, "JOINT")) {
+					if (izanagi::tool::CString::CmpStr(strSemantic, "JOINT")) {
 						// Found the JOINT input semantic
 						m_pJointNameSrc = (domSource*)((daeElement*)pJointsElement->getInput_array()[nInputPos]->getSource().getElement());
 					}
-					else if (izanagi::izanagi_tk::CString::CmpStr(strSemantic, "INV_BIND_MATRIX")) {
+					else if (izanagi::tool::CString::CmpStr(strSemantic, "INV_BIND_MATRIX")) {
 						// Found the INV_BIND_MATRIX semantic
 						m_pInvBindMtxSrc = (domSource*)((daeElement*)pJointsElement->getInput_array()[nInputPos]->getSource().getElement());
 					}
@@ -236,7 +236,7 @@ namespace {
 	struct SFuncIsSameNameJoint {
 		bool operator()(const izanagi::S_SKL_JOINT& sJoint)
 		{
-			IZ_BOOL ret = izanagi::izanagi_tk::CString::CmpStr(
+			IZ_BOOL ret = izanagi::tool::CString::CmpStr(
 							sJoint.name.GetString(),
 							name);
 
@@ -388,7 +388,7 @@ E_MDL_JOINT_TRANSFORM CColladaJoint::GetTransformType(IZ_PCSTR pszName)
 	IZ_C_ASSERT(COUNTOF(tblType) == E_MDL_JOINT_TRANSFORM_NUM);
 
 	for (IZ_UINT i = 0; i < E_MDL_JOINT_TRANSFORM_NUM; i++) {
-		if (izanagi::izanagi_tk::CString::CmpStr(tblType[i].str, pszName)) {
+		if (izanagi::tool::CString::CmpStr(tblType[i].str, pszName)) {
 			return tblType[i].type;
 		}
 	}
@@ -513,7 +513,7 @@ void CColladaJoint::GetJointTransform(
 		domElement* pContent = pNode->getContents().get(n);
 
 		daeString strType = pContent->getTypeName();
-		if (izanagi::izanagi_tk::CString::CmpStr(strType, "node")) {
+		if (izanagi::tool::CString::CmpStr(strType, "node")) {
 			// terminate...
 			continue;
 		}

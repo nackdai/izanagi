@@ -14,7 +14,7 @@ public:
 	static void BreakPath(
 		LPCSTR lpszPath,
 		LPCSTR lpszRoot,
-		std::vector<izanagi::izanagi_tk::CString>& tPathList);
+		std::vector<izanagi::tool::CString>& tPathList);
 };
 
 #endif	// #if !defined(__UTILITY_H__)

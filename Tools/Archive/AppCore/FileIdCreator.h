@@ -10,7 +10,7 @@
 class CFileIdCreator {
 	struct SIdInfo {
 		UINT id;
-		izanagi::izanagi_tk::CString str;
+		izanagi::tool::CString str;
 
 		SIdInfo* parent;
 		std::vector<SIdInfo*> child;
@@ -50,7 +50,7 @@ private:
 		UINT nIndent);
 
 private:
-	izanagi::izanagi_tk::CString m_strRoot;
+	izanagi::tool::CString m_strRoot;
 	std::map<UINT, SIdInfo> m_InfoList;
 
 	BOOL m_bIsEnum;

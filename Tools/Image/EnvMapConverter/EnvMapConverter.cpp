@@ -90,9 +90,9 @@ namespace {
 
 	// テクスチャ名一覧を取得
 	void _GetTexNameList(
-		const izanagi::izanagi_tk::CString texName,
+		const izanagi::tool::CString texName,
 		EnvMapType type,
-		std::vector<izanagi::izanagi_tk::CString>& texList)
+		std::vector<izanagi::tool::CString>& texList)
 	{
 		if (type == EnvMapTypeCube) {
 			texList.resize(izanagi::E_GRAPH_CUBE_TEX_FACE_NUM);
@@ -100,11 +100,11 @@ namespace {
 			// 頭に面ごとのプレフィックスを付ける
 
 			// ファイル名のみ取得
-			IZ_PCSTR name = izanagi::izanagi_tk::CFileUtility::GetFileNameFromPath(texName.c_str());
+			IZ_PCSTR name = izanagi::tool::CFileUtility::GetFileNameFromPath(texName.c_str());
 
 			// ディレクトリパス部分のみ取得
 			char dir[1024];
-			izanagi::izanagi_tk::CFileUtility::GetPathWithoutFileName(dir, sizeof(dir), texName.c_str());
+			izanagi::tool::CFileUtility::GetPathWithoutFileName(dir, sizeof(dir), texName.c_str());
 
 			for (IZ_UINT i = 0; i < izanagi::E_GRAPH_CUBE_TEX_FACE_NUM; i++) {
 				if (::strlen(dir) > 0) {
@@ -122,10 +122,10 @@ namespace {
 
 	// テクスチャを解放
 	void _ReleaseTexture(
-		std::vector<izanagi::izanagi_tk::CTextureLite*>& texList)
+		std::vector<izanagi::tool::CTextureLite*>& texList)
 	{
 		for (size_t i = 0; i < texList.size(); i++) {
-			izanagi::izanagi_tk::CTextureLite* tex = texList[i];
+			izanagi::tool::CTextureLite* tex = texList[i];
 			SAFE_RELEASE(tex);
 		}
 		texList.clear();
@@ -144,20 +144,20 @@ int main(int argc, char* argv[])
 
 	COption option;
 
-	izanagi::izanagi_tk::CGraphicsDeviceLite* device = IZ_NULL;
+	izanagi::tool::CGraphicsDeviceLite* device = IZ_NULL;
 
-	std::vector<izanagi::izanagi_tk::CTextureLite*> texInEnv;
-	std::vector<izanagi::izanagi_tk::CTextureLite*> texOutEnv;
+	std::vector<izanagi::tool::CTextureLite*> texInEnv;
+	std::vector<izanagi::tool::CTextureLite*> texOutEnv;
 
-	std::vector<izanagi::izanagi_tk::CString> inTexList;
-	std::vector<izanagi::izanagi_tk::CString> outTexList;
+	std::vector<izanagi::tool::CString> inTexList;
+	std::vector<izanagi::tool::CString> outTexList;
 
 	// ウインドウハンドル取得
 	HWND hWnd = ::GetConsoleWindow();
 	VGOTO(hWnd != NULL);
 
 	// グラフィックスデバイス作成
-	device = izanagi::izanagi_tk::CGraphicsDeviceLite::CreateGraphicsDeviceLight(hWnd);
+	device = izanagi::tool::CGraphicsDeviceLite::CreateGraphicsDeviceLight(hWnd);
 	VGOTO(device != NULL);
 
 	// オプション解析
@@ -172,7 +172,7 @@ int main(int argc, char* argv[])
 
 	// 環境マップ読み込み
 	for (size_t i = 0; i < inTexList.size(); i++) {
-		izanagi::izanagi_tk::CTextureLite* tex = device->CreateTextureFromFile(inTexList[i]);
+		izanagi::tool::CTextureLite* tex = device->CreateTextureFromFile(inTexList[i]);
 		VGOTO(tex != NULL);
 
 		texInEnv.push_back(tex);
@@ -196,7 +196,7 @@ int main(int argc, char* argv[])
 	// 出力先作成
 	// 強制的にRGBA32Fにする
 	for (size_t i = 0; i < outTexList.size(); i++) {
-		izanagi::izanagi_tk::CTextureLite* tex = device->CreateTexture(
+		izanagi::tool::CTextureLite* tex = device->CreateTexture(
 													outWidth,
 													outHeight,
 													izanagi::E_GRAPH_PIXEL_FMT_RGBA32F);

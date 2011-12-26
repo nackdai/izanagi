@@ -13,7 +13,7 @@ IZ_FLOAT CTexProxy::NormalizeColor(IZ_UINT8 c)
 
 // テクスチャプロキシ作成
 CTexProxy* CTexProxy::CreateTexProxy(
-	std::vector<izanagi::izanagi_tk::CTextureLite*>& tex,
+	std::vector<izanagi::tool::CTextureLite*>& tex,
 	EnvMapType type)
 {
 	IZ_ASSERT(tex.size() > 0);

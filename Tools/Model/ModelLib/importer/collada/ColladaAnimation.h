@@ -111,7 +111,7 @@ private:
 
 		bool operator==(const std::string& rhs) const
 		{
-			return (izanagi::izanagi_tk::CString::CmpStr(nameJoint, rhs.c_str()) == IZ_TRUE);
+			return (izanagi::tool::CString::CmpStr(nameJoint, rhs.c_str()) == IZ_TRUE);
 		}
 	};
 

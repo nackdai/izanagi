@@ -8,7 +8,7 @@
 class CAngularMapProxy : public CMirrorMapProxy {
 public:
 	CAngularMapProxy(
-		izanagi::izanagi_tk::CTextureLite* tex,
+		izanagi::tool::CTextureLite* tex,
 		EnvMapType type);
 	virtual ~CAngularMapProxy();
 

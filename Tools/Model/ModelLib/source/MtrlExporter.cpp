@@ -38,7 +38,7 @@ IZ_BOOL CMtrlExporter::Export(
 	}
 
 	// Blank for file's header and jump table.
-	izanagi::izanagi_tk::CIoStreamSeekHelper cSeekHelper(&m_Out);
+	izanagi::tool::CIoStreamSeekHelper cSeekHelper(&m_Out);
 #if 0
 	VRETURN(cSeekHelper.Skip(sizeof(sHeader) + sizeof(IZ_UINT) * nMtrlNum));
 

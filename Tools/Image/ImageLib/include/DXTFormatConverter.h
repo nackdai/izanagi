@@ -6,7 +6,7 @@
 #include "izGraph.h"
 
 namespace izanagi {
-namespace izanagi_tk {
+namespace tool {
 	class CDXTFormatConverter {
 	private:
 		CDXTFormatConverter();
@@ -29,7 +29,7 @@ namespace izanagi_tk {
 			void* dst,
 			E_GRAPH_PIXEL_FMT fmt);
 	};
-}	// namespace izanagi_tk
+}	// namespace tool
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_IMAGE_LIB_DXT_FORMAT_CONVERTER_H__)

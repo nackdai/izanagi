@@ -9,7 +9,7 @@
 #include "IMGImage.h"
 
 namespace izanagi {
-namespace izanagi_tk {
+namespace tool {
 	/**
 	*/
 	class CIMGBody {
@@ -84,7 +84,7 @@ namespace izanagi_tk {
 
 		return ret;
 	}
-}	// namespace izanagi_tk
+}	// namespace tool
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_IMAGE_LIB_IMG_BODY_H__)

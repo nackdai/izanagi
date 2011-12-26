@@ -21,7 +21,7 @@ namespace {
 		VRETURN(fmt != NULL);
 
 		for (IZ_UINT i = 0; i < COUNTOF(tbl); i++) {
-			if (izanagi::izanagi_tk::CString::CmpStr(fmt, tbl[i].strFmt)) {
+			if (izanagi::tool::CString::CmpStr(fmt, tbl[i].strFmt)) {
 				sAnn.fmt = tbl[i].fmt;
 				break;
 			}
@@ -94,7 +94,7 @@ namespace {
 		VRETURN(fmt != NULL);
 
 		for (IZ_UINT i = 0; i < COUNTOF(tbl); i++) {
-			if (izanagi::izanagi_tk::CString::CmpStr(fmt, tbl[i].strFmt)) {
+			if (izanagi::tool::CString::CmpStr(fmt, tbl[i].strFmt)) {
 				sAnn.typeRsc = tbl[i].type;
 				break;
 			}
@@ -122,7 +122,7 @@ namespace {
 
 		BOOL ret = TRUE;
 
-		izanagi::izanagi_tk::CString str(cgGetAnnotationName(ann));
+		izanagi::tool::CString str(cgGetAnnotationName(ann));
 
 		for (UINT i = 0; i < COUNTOF(AnnTable); i++) {
 			if (str == AnnTable[i].Name) {

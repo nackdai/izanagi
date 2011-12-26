@@ -52,7 +52,7 @@ int main(int argc, TCHAR* argv[])
 	int nRetCode = 0;
 
 	// エラーストリング表示用関数セット
-	izanagi::izanagi_tk::CException::SetPrintLogFunc(_PrintString);
+	izanagi::tool::CException::SetPrintLogFunc(_PrintString);
 
 	// オプション解析
 	COption cOption;
@@ -71,7 +71,7 @@ int main(int argc, TCHAR* argv[])
 		// ファイルID出力
 		CFileIdCreator::GetInstance().Export(cOption.file_id);
 	}
-	catch (izanagi::izanagi_tk::CException* e) {
+	catch (izanagi::tool::CException* e) {
 		e->PrintLog();
 		VGOTO(FALSE);
 	}

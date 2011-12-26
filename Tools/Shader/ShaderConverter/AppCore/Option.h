@@ -8,17 +8,17 @@
 * オプション構造体
 */
 struct SOption {
-	izanagi::izanagi_tk::CString in_file;
+	izanagi::tool::CString in_file;
 
-	std::vector<izanagi::izanagi_tk::CString> includes;
-	std::vector<izanagi::izanagi_tk::CString> defines;
+	std::vector<izanagi::tool::CString> includes;
+	std::vector<izanagi::tool::CString> defines;
 
-	izanagi::izanagi_tk::CString preproc_file;	// プリプロセス済みファイル
+	izanagi::tool::CString preproc_file;	// プリプロセス済みファイル
 
-	izanagi::izanagi_tk::CString out_file;		// 出力ファイル
+	izanagi::tool::CString out_file;		// 出力ファイル
 
-	izanagi::izanagi_tk::CString obj_dir;		// 中間ファイルディレクトリ
-	izanagi::izanagi_tk::CString export_dir;
+	izanagi::tool::CString obj_dir;		// 中間ファイルディレクトリ
+	izanagi::tool::CString export_dir;
 
 	struct {
 		UINT isPreproc			: 1;	// プリプロセス処理のみを行うかどうか

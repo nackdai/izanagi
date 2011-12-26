@@ -8,7 +8,7 @@ namespace {
 	inline EnvMapType _GetEnvMapType(const char* arg)
 	{
 		EnvMapType ret = EnvMapTypeNum;
-		izanagi::izanagi_tk::CString opt(arg);
+		izanagi::tool::CString opt(arg);
 
 		if (opt == "m") {
 			// mirror
@@ -33,7 +33,7 @@ namespace {
 
 COption::COption()
 {
-	typeExport = izanagi::izanagi_tk::TextureExportTypePNG;
+	typeExport = izanagi::tool::TextureExportTypePNG;
 	typeInEnvMap = EnvMapTypeNum;
 	typeOutEnvMap = EnvMapTypeNum;
 }
@@ -43,7 +43,7 @@ IZ_BOOL COption::Analysis(int argc, TCHAR* argv[])
 {
 	for (int i = 1; i < argc; i++) {
 		BOOL result = FALSE;
-		izanagi::izanagi_tk::CString cmd(argv[i]);
+		izanagi::tool::CString cmd(argv[i]);
 
 		if (i < argc - 1) {
 			if (result = (cmd == "-i")) {
@@ -65,16 +65,16 @@ IZ_BOOL COption::Analysis(int argc, TCHAR* argv[])
 			}
 			else if (result = (cmd == "-f")) {
 				// -f
-				izanagi::izanagi_tk::CString opt(argv[++i]);
+				izanagi::tool::CString opt(argv[++i]);
 
 				// 小文字変換
 				opt.make_lower();
 
 				if (opt == "png") {
-					typeExport = izanagi::izanagi_tk::TextureExportTypePNG;
+					typeExport = izanagi::tool::TextureExportTypePNG;
 				}
 				else if (opt == "hdr") {
-					typeExport = izanagi::izanagi_tk::TextureExportTypeHDR;
+					typeExport = izanagi::tool::TextureExportTypeHDR;
 				}
 			}
 		}
@@ -130,13 +130,13 @@ IZ_BOOL COption::AfterAnalysis()
 
 		// 出力ファーマットに応じて
 		switch (typeExport) {
-		case izanagi::izanagi_tk::TextureExportTypePNG:
+		case izanagi::tool::TextureExportTypePNG:
 			{
 				out.format("%s.png", file_name);
 				ret = IZ_TRUE;
 			}
 			break;
-		case izanagi::izanagi_tk::TextureExportTypeHDR:
+		case izanagi::tool::TextureExportTypeHDR:
 			{
 				out.format("%s.hdr", file_name);
 				ret = IZ_TRUE;

@@ -4,7 +4,7 @@
 #include "io/stream/OutputStream.h"
 
 namespace izanagi {
-namespace izanagi_tk {
+namespace tool {
 	class CIoStreamSeekHelper {
 	protected:
 		CIoStreamSeekHelper();
@@ -63,7 +63,7 @@ namespace izanagi_tk {
 		IZ_UINT m_nPos;
 		IZ_UINT m_nAnchorPos;
 	};
-}	// namespace izanagi_tk
+}	// namespace tool
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_TOOL_KIT_IO_IO_UTIL_H__)

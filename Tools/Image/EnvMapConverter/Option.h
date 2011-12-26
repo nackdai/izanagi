@@ -6,10 +6,10 @@
 #include "EnvMapConverterDefs.h"
 
 struct SOption {
-	izanagi::izanagi_tk::CString in;
-	izanagi::izanagi_tk::CString out;
+	izanagi::tool::CString in;
+	izanagi::tool::CString out;
 
-	izanagi::izanagi_tk::TextureExportType typeExport;
+	izanagi::tool::TextureExportType typeExport;
 	EnvMapType typeInEnvMap;
 	EnvMapType typeOutEnvMap;
 };

@@ -24,7 +24,7 @@ public:
 		// アンチエイリアス
 		IZ_UINT typeAA;
 
-		izanagi::izanagi_tk::CString fontFace;
+		izanagi::tool::CString fontFace;
 
 		izanagi::E_FONT_CHAR_ENCODE charEncode;
 
@@ -71,7 +71,7 @@ public:
 protected:
 	// ファイルフォーマットを指定してイメージ出力
 	BOOL ExportAs(
-		izanagi::izanagi_tk::CTextureLite* pTex,
+		izanagi::tool::CTextureLite* pTex,
 		LPCSTR pszName,
 		D3DXIMAGE_FILEFORMAT nFileFmt);
 
@@ -91,7 +91,7 @@ private:
 	static const IZ_INT MARGIN = 0;
 		
 private:
-	std::vector<izanagi::izanagi_tk::CTextureLite*> m_TexList;
+	std::vector<izanagi::tool::CTextureLite*> m_TexList;
 
 	HFONT m_hFont;
 	HFONT m_hOldFont;

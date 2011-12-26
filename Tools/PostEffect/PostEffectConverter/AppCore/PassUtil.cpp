@@ -114,7 +114,7 @@ namespace {
 
 		BOOL ret = TRUE;
 
-		izanagi::izanagi_tk::CString str(::cgGetAnnotationName(ann));
+		izanagi::tool::CString str(::cgGetAnnotationName(ann));
 
 		for (IZ_UINT i = 0; i < COUNTOF(AnnTable); i++) {
 			if (str == AnnTable[i].Name) {
@@ -220,7 +220,7 @@ namespace {
 		BOOL ret = TRUE;
 
 		CGstate state = ::cgGetStateAssignmentState(sa);
-		izanagi::izanagi_tk::CString str(::cgGetStateName(state));
+		izanagi::tool::CString str(::cgGetStateName(state));
 
 		for (IZ_UINT i = 0; i < COUNTOF(StateTable); i++) {
 			if (str == StateTable[i].Name) {
@@ -238,7 +238,7 @@ namespace {
 		CGstateassignment sa)
 	{
 		CGstate state = ::cgGetStateAssignmentState(sa);
-		izanagi::izanagi_tk::CString strName(::cgGetStateName(state));
+		izanagi::tool::CString strName(::cgGetStateName(state));
 
 		if (strName == pszStateName) {
 			INT num;
@@ -342,7 +342,7 @@ namespace {
 
 		while (sa != NULL) {
 			CGstate state = ::cgGetStateAssignmentState(sa);
-			izanagi::izanagi_tk::CString strName(::cgGetStateName(state));
+			izanagi::tool::CString strName(::cgGetStateName(state));
 
 			if (strName == pszStateName) {
 				return ::cgGetProgramStateAssignmentValue(sa);
@@ -382,7 +382,7 @@ namespace {
 		CGannotation ann = ::cgGetFirstPassAnnotation(pass);
 
 		while (ann != NULL) {
-			izanagi::izanagi_tk::CString str(::cgGetAnnotationName(ann));
+			izanagi::tool::CString str(::cgGetAnnotationName(ann));
 
 			if (str == pszAnn) {
 				return ::cgGetStringAnnotationValue(ann);
@@ -407,7 +407,7 @@ IZ_PCSTR CPassUtil::GetRenderTargetName(CGpass pass)
 
 void CPassUtil::GetFunctorArgsString(
 	CGpass pass,
-	std::vector<izanagi::izanagi_tk::CString>& tvRet)
+	std::vector<izanagi::tool::CString>& tvRet)
 {
 	IZ_PCSTR pszValue = _GetStringAnnotationValue("FunctorArgsS", pass);
 	if (pszValue == NULL) {
@@ -427,7 +427,7 @@ void CPassUtil::GetFunctorArgsString(
 		if ((ch == ',') || (ch == '\0')) {
 			BUF[nPos] = '\0';
 
-			izanagi::izanagi_tk::CString str(BUF);
+			izanagi::tool::CString str(BUF);
 			tvRet.push_back(str);
 
 			nPos = 0;

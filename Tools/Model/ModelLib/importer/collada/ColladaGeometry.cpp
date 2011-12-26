@@ -19,7 +19,7 @@ bool CColladaGeometry::SVtx::operator ==(const CColladaGeometry::SVtx &rhs)
 
 bool CColladaGeometry::SVtxFmt::operator==(IZ_PCSTR pszSemantic)
 {
-	IZ_BOOL ret = izanagi::izanagi_tk::CString::CmpStr(
+	IZ_BOOL ret = izanagi::tool::CString::CmpStr(
 					semantic,
 					pszSemantic);
 
@@ -203,7 +203,7 @@ void CColladaGeometry::GetSkinList(
 	// Get source for weight.
 	for (size_t i = 0; i < pWeightsElement->getInput_array().getCount(); i++) {
 		xsNMTOKEN strSemantic = pWeightsElement->getInput_array().get(i)->getSemantic();
-		if (izanagi::izanagi_tk::CString::CmpStr(strSemantic, "WEIGHT")) {
+		if (izanagi::tool::CString::CmpStr(strSemantic, "WEIGHT")) {
 			pWeightsSrc = (domSource*)((daeElement*)pWeightsElement->getInput_array()[i]->getSource().getElement());
 			break;
 		}
@@ -385,7 +385,7 @@ namespace {
 		for (size_t i = 0; i < num; i++) {
 			domSourceRef pSrc = pMesh->getSource_array().get(i);
 
-			if (izanagi::izanagi_tk::CString::CmpStr(pSrc->getID(), strSrcId)) {
+			if (izanagi::tool::CString::CmpStr(pSrc->getID(), strSrcId)) {
 				return pSrc;
 			}
 		}
@@ -438,7 +438,7 @@ namespace {
 		{
 			xsNMTOKEN type = pSrc->getTechnique_common()->getAccessor()->getParam_array().get(0)->getType();
 			for (IZ_UINT i = 0; i < E_VTX_ACCESS_TYPE_NUM; i++) {
-				if (izanagi::izanagi_tk::CString::CmpStr(TypeTbl[i], type)) {
+				if (izanagi::tool::CString::CmpStr(TypeTbl[i], type)) {
 					ret = static_cast<E_VTX_ACCESS_TYPE>(i);
 					break;
 				}
@@ -715,7 +715,7 @@ void CColladaGeometry::ReadVtxFmt(
 		domInputLocalOffsetRef refInput = pPrim->getInput_array().get(i);
 
 		daeString strSemantic = refInput->getSemantic();
-		if (izanagi::izanagi_tk::CString::CmpStr(strSemantic, "VERTEX")) {
+		if (izanagi::tool::CString::CmpStr(strSemantic, "VERTEX")) {
 			// <vertices> 経由
 			domVerticesRef refVtx = pMesh->getVertices();
 			size_t nVtxInputNum = refVtx->getInput_array().getCount();
@@ -789,11 +789,11 @@ IZ_UINT CColladaGeometry::GetSkinIdx(
 		domInputLocalOffsetRef pInput = pPrim->getInput_array().get(i);
 
 		daeString strSemantic = pInput->getSemantic();
-		if (izanagi::izanagi_tk::CString::CmpStr(strSemantic, "VERTEX")) {
+		if (izanagi::tool::CString::CmpStr(strSemantic, "VERTEX")) {
 			nVtxOffset = (IZ_UINT)pInput->getOffset();
 			break;
 		}
-		else if (izanagi::izanagi_tk::CString::CmpStr(strSemantic, "POSITION")) {
+		else if (izanagi::tool::CString::CmpStr(strSemantic, "POSITION")) {
 			nVtxOffset = (IZ_UINT)pInput->getOffset();
 			break;
 		}

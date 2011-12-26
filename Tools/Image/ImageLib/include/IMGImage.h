@@ -9,7 +9,7 @@ namespace izanagi {
 	class IInputStream;
 	class IOutputStream;
 
-namespace izanagi_tk {
+namespace tool {
 	/**
 	* データは RGBA8 or RGBA32F のどちらかで持つ
 	*/
@@ -156,7 +156,7 @@ namespace izanagi_tk {
 		IZ_UINT ret = static_cast<IZ_UINT>(m_DataBuffer.size());
 		return ret;
 	}
-}	// namespace izanagi_tk
+}	// namespace tool
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_IMAGE_LIB_IMG_IMAGE_H__)

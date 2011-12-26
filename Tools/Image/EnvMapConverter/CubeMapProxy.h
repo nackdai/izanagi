@@ -9,7 +9,7 @@
 class CCubeMapProxy : public CTexProxy {
 public:
 	CCubeMapProxy(
-		std::vector<izanagi::izanagi_tk::CTextureLite*>& tex,
+		std::vector<izanagi::tool::CTextureLite*>& tex,
 		EnvMapType type);
 	virtual ~CCubeMapProxy();
 
@@ -48,7 +48,7 @@ protected:
 	inline void ChangeFace(izanagi::E_GRAPH_CUBE_TEX_FACE face);
 
 protected:
-	std::vector<izanagi::izanagi_tk::CTextureLite*> m_Tex;
+	std::vector<izanagi::tool::CTextureLite*> m_Tex;
 
 	IZ_UINT m_Pitch;
 	IZ_UINT8* m_Data;

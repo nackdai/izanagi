@@ -2,7 +2,7 @@
 #include "IMGBody.h"
 
 using namespace izanagi;
-using namespace izanagi_tk;
+using namespace tool;
 
 CImageReader CImageReader::s_cInstance;
 

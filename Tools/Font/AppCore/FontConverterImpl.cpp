@@ -27,10 +27,10 @@ CFontConverter::~CFontConverter()
 void CFontConverter::Release()
 {
 	{
-		std::vector<izanagi::izanagi_tk::CTextureLite*>::iterator it = m_TexList.begin();
+		std::vector<izanagi::tool::CTextureLite*>::iterator it = m_TexList.begin();
 
 		for (; it != m_TexList.end(); it++) {
-			izanagi::izanagi_tk::CTextureLite* p = *it;
+			izanagi::tool::CTextureLite* p = *it;
 			SAFE_RELEASE(p);
 		}
 
@@ -48,12 +48,12 @@ BOOL CFontConverter::ExportAsDDS()
 {
 	BOOL ret = TRUE;
 
-	std::vector<izanagi::izanagi_tk::CTextureLite*>::iterator it = m_TexList.begin();
+	std::vector<izanagi::tool::CTextureLite*>::iterator it = m_TexList.begin();
 
 	for (UINT cnt = 0; it != m_TexList.end(); it++, cnt++) {
-		izanagi::izanagi_tk::CTextureLite* p = *it;
+		izanagi::tool::CTextureLite* p = *it;
 
-		izanagi::izanagi_tk::CString strOut;
+		izanagi::tool::CString strOut;
 		strOut.format("%d.dds", cnt);
 
 		ret = ExportAs(
@@ -72,7 +72,7 @@ BOOL CFontConverter::ExportAsDDS()
 
 // ファイルフォーマットを指定してイメージ出力
 BOOL CFontConverter::ExportAs(
-	izanagi::izanagi_tk::CTextureLite* pTex,
+	izanagi::tool::CTextureLite* pTex,
 	LPCSTR pszName,
 	D3DXIMAGE_FILEFORMAT nFileFmt)
 {
@@ -389,17 +389,17 @@ BOOL CFontConverter::CreateFontImage(
 			break;
 	}
 
-	izanagi::izanagi_tk::CGraphicsDeviceLite* pDevice = izanagi::izanagi_tk::CGraphicsDeviceLite::GetInstance();
+	izanagi::tool::CGraphicsDeviceLite* pDevice = izanagi::tool::CGraphicsDeviceLite::GetInstance();
 
 	// 現在のテクスチャ
-	izanagi::izanagi_tk::CTextureLite* pCurTex = NULL;
+	izanagi::tool::CTextureLite* pCurTex = NULL;
 
 	// マップ情報リスト確保
 	m_FontMapList.resize(tsCharList.size());
 
 	for (UINT nTexNum = 0; ; nTexNum++) {
 		// テクスチャ作成
-		izanagi::izanagi_tk::CTextureLite* pTex = pDevice->CreateTexture(
+		izanagi::tool::CTextureLite* pTex = pDevice->CreateTexture(
 													sOption.texWidth,
 													sOption.texHeight,
 													D3D_TEX_FMT);
@@ -666,7 +666,7 @@ BOOL CFontConverter::Export(
 		// イメージ出力
 		UINT num = static_cast<UINT>(m_FontImgList.size());
 		for (UINT i = 0; i < num; i++) {
-			izanagi::izanagi_tk::CString strTmp;
+			izanagi::tool::CString strTmp;
 			strTmp.format("%d.dds", i);
 
 			m_FontImgList[i].sizeData = _GetFileSize(strTmp);
@@ -713,7 +713,7 @@ UINT CFontConverter::ExportFontImageData(izanagi::IOutputStream* pOut)
 
 	for (UINT i = 0; i < num; i++) {
 		const izanagi::S_FNT_IMAGE& sFntImage = m_FontImgList[i];
-		izanagi::izanagi_tk::CTextureLite* pTex = m_TexList[i];
+		izanagi::tool::CTextureLite* pTex = m_TexList[i];
 
 		// 情報部出力
 		pOut->Write(

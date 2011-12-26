@@ -94,7 +94,7 @@ namespace {
 		BOOL ret = TRUE;
 
 		CGstate state = ::cgGetSamplerStateAssignmentState(sa);
-		izanagi::izanagi_tk::CString str(::cgGetStateName(state));
+		izanagi::tool::CString str(::cgGetStateName(state));
 
 		for (IZ_UINT i = 0; i < COUNTOF(StateTable); i++) {
 			if (str == StateTable[i].Name) {
@@ -131,7 +131,7 @@ BOOL CSamplerUtil::BindTexture(
 	
 	while (sa != NULL) {
 		CGstate state = cgGetSamplerStateAssignmentState(sa);
-		izanagi::izanagi_tk::CString str(::cgGetStateName(state));
+		izanagi::tool::CString str(::cgGetStateName(state));
 
 		if (str == "Texture") {
 			CGparameter tex = ::cgGetTextureStateAssignmentValue(sa);

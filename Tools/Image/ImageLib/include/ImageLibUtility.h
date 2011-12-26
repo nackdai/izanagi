@@ -6,7 +6,7 @@
 #include "izSceneGraph.h"
 
 namespace izanagi {
-namespace izanagi_tk {
+namespace tool {
 
 	template <typename _T>
 	union S_PIXEL_VAL {
@@ -118,7 +118,7 @@ namespace izanagi_tk {
 			pHeader->sizeMax = 0;
 		}
 	};
-}	// namespace izanagi_tk
+}	// namespace tool
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_IMAGE_LIB_IMAGE_LIB_COMMON_H__)

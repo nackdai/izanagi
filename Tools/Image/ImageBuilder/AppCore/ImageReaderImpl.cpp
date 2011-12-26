@@ -3,7 +3,7 @@
 #include "izImageLib.h"
 
 using namespace izanagi;
-using namespace izanagi_tk;
+using namespace tool;
 
 namespace {
 	IZ_BOOL _SetDataAsPlane(

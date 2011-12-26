@@ -5,7 +5,7 @@
 #include <vector>
 #include "FontConverterDefs.h"
 #include "izFont.h"
-#include "ToolKitIoDefs.h"
+#include "izToolKit.h"
 
 class IInputStream {
 public:

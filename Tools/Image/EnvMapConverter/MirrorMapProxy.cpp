@@ -1,7 +1,7 @@
 #include "MirrorMapProxy.h"
 
 CMirrorMapProxy::CMirrorMapProxy(
-	izanagi::izanagi_tk::CTextureLite* tex,
+	izanagi::tool::CTextureLite* tex,
 	EnvMapType type)
 : CTexProxy(type)
 {

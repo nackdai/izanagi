@@ -49,7 +49,7 @@ IZ_BOOL CAnmExporter::Export(
 	}
 
 	// Blank for file's header.
-	izanagi::izanagi_tk::CIoStreamSeekHelper cSeekHelper(&m_Out);
+	izanagi::tool::CIoStreamSeekHelper cSeekHelper(&m_Out);
 	VRETURN(cSeekHelper.Skip(sizeof(sHeader)));
 
 	VRETURN(pImporter->BeginAnm(nSetIdx));

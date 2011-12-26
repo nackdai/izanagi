@@ -62,7 +62,7 @@ BOOL CShaderConverter::Begin(LPCSTR lpszShaderFile)
 			// NOTE
 			// 何故かcgCreateEffectFromFileでコンパイルが失敗してもNULLが返ってこないことがある・・・。
 			// なので、エラー文字列を調べて "error" があったら失敗とみなす・・・。
-			izanagi::izanagi_tk::CString str(pErrorStr);
+			izanagi::tool::CString str(pErrorStr);
 			if (str.Find(_T(" error ")) >= 0) {
 				return FALSE;
 			}
@@ -213,7 +213,7 @@ namespace {
 	template <typename _T>
 	inline IZ_BOOL _BeginExportChunk(
 		const _T& sHeader,
-		izanagi::izanagi_tk::CIoStreamSeekHelper& cSeekHelper)
+		izanagi::tool::CIoStreamSeekHelper& cSeekHelper)
 	{
 		return cSeekHelper.Skip(sizeof(_T));
 	}
@@ -221,7 +221,7 @@ namespace {
 	template <typename _T>
 	inline IZ_BOOL _EndExportChunk(
 		const _T& sHeader,
-		izanagi::izanagi_tk::CIoStreamSeekHelper& cSeekHelper)
+		izanagi::tool::CIoStreamSeekHelper& cSeekHelper)
 	{
 		izanagi::IOutputStream* pOut = cSeekHelper.GetOutputStream();
 		IZ_ASSERT(pOut != IZ_NULL);
@@ -264,7 +264,7 @@ BOOL CShaderConverter::ExportTechnique()
 	FILL_ZERO(&sTechHeader, sizeof(sTechHeader));
 
 	// Blank for technique's header.
-	izanagi::izanagi_tk::CIoStreamSeekHelper cSeekHelper(&m_Out);
+	izanagi::tool::CIoStreamSeekHelper cSeekHelper(&m_Out);
 	VRETURN(_BeginExportChunk(sTechHeader, cSeekHelper));
 
 	UINT nPassPos = 0;
@@ -320,7 +320,7 @@ BOOL CShaderConverter::ExportTexture()
 	FILL_ZERO(&sTexHeader, sizeof(sTexHeader));
 
 	// Blank for texture's header.
-	izanagi::izanagi_tk::CIoStreamSeekHelper cSeekHelper(&m_Out);
+	izanagi::tool::CIoStreamSeekHelper cSeekHelper(&m_Out);
 	VRETURN(_BeginExportChunk(sTexHeader, cSeekHelper));
 
 	m_TexList.clear();
@@ -373,7 +373,7 @@ BOOL CShaderConverter::ExportSampler()
 	FILL_ZERO(&sSmplHeader, sizeof(sSmplHeader));
 
 	// Blank for texture's header.
-	izanagi::izanagi_tk::CIoStreamSeekHelper cSeekHelper(&m_Out);
+	izanagi::tool::CIoStreamSeekHelper cSeekHelper(&m_Out);
 	VRETURN(_BeginExportChunk(sSmplHeader, cSeekHelper));
 
 	CGparameter param = ::cgGetFirstEffectParameter(m_pCgEffect);
@@ -440,7 +440,7 @@ BOOL CShaderConverter::ExportParameter()
 	FILL_ZERO(&sParamHeader, sizeof(sParamHeader));
 
 	// Blank for parameter's header.
-	izanagi::izanagi_tk::CIoStreamSeekHelper cSeekHelper(&m_Out);
+	izanagi::tool::CIoStreamSeekHelper cSeekHelper(&m_Out);
 	VRETURN(_BeginExportChunk(sParamHeader, cSeekHelper));
 
 	IZ_UINT nAnnIdx = 0;
@@ -563,7 +563,7 @@ BOOL CShaderConverter::DoNotRemoveParam(CGparameter param)
 {
 	BOOL bIsUsedInEffect = ::cgIsParameterUsed(param, m_pCgEffect);
 
-	izanagi::izanagi_tk::CString strParamName(::cgGetParameterName(param));
+	izanagi::tool::CString strParamName(::cgGetParameterName(param));
 
 	{
 		// 頂点シェーダでしか利用されていない
@@ -624,7 +624,7 @@ namespace {
 		const std::vector<CGparameter>& tvParamList,
 		CGpass pass)
 	{
-		izanagi::izanagi_tk::CString strName(pszParamName);
+		izanagi::tool::CString strName(pszParamName);
 
 		std::vector<CGparameter>::const_iterator it = tvParamList.begin();
 		for (IZ_INT i = 0; it != tvParamList.end(); it++, i++) {
@@ -693,7 +693,7 @@ BOOL CShaderConverter::ExportPass()
 	FILL_ZERO(&sPassHeader, sizeof(sPassHeader));
 
 	// Blank for pass's header.
-	izanagi::izanagi_tk::CIoStreamSeekHelper cSeekHelper(&m_Out);
+	izanagi::tool::CIoStreamSeekHelper cSeekHelper(&m_Out);
 	VRETURN(_BeginExportChunk(sPassHeader, cSeekHelper));
 
 	IZ_UINT nTechIdx = 0;
@@ -857,7 +857,7 @@ BOOL CShaderConverter::ExportUsedParamAndSamplerIdxByPass(CGpass pass)
 
 namespace {
 	BOOL _ExportFile(
-		const izanagi::izanagi_tk::CString& strIn,
+		const izanagi::tool::CString& strIn,
 		izanagi::IOutputStream* pOut)
 	{
 		static const IZ_UINT BUF_SIZE = 1024;
@@ -885,8 +885,8 @@ BOOL CShaderConverter::ExportProgram()
 	VRETURN(m_CompiledPSList.size() == m_CompiledVSList.size());
 
 	for (size_t i = 0; i < m_CompiledVSList.size(); i++) {
-		const izanagi::izanagi_tk::CString strVS = m_CompiledVSList[i];
-		const izanagi::izanagi_tk::CString strPS = m_CompiledPSList[i];
+		const izanagi::tool::CString strVS = m_CompiledVSList[i];
+		const izanagi::tool::CString strPS = m_CompiledPSList[i];
 
 		VRETURN(_ExportFile(strVS, &m_Out));
 		VRETURN(_ExportFile(strPS, &m_Out));
@@ -919,7 +919,7 @@ BOOL CShaderConverter::ExportStringBuffer()
 namespace {
 	// コンパイラ実行
 	BOOL _CompileShaderInternal(
-		izanagi::izanagi_tk::CString& out,
+		izanagi::tool::CString& out,
 		COMPILE_TYPE type,
 		LPCSTR lpszCompileCommand,
 		LPCSTR lpszShaderFile,
@@ -927,7 +927,7 @@ namespace {
 		CGprofile profile)
 	{
 		// コマンド作成
-		izanagi::izanagi_tk::CString cmd;
+		izanagi::tool::CString cmd;
 		CCompileCmdCreator::GetInstance().CreateCompileCommand(
 			cmd, out,
 			type,
@@ -958,14 +958,14 @@ namespace {
 
 	// コンパイラ実行
 	BOOL _CompileShader(
-		izanagi::izanagi_tk::CString& out,
+		izanagi::tool::CString& out,
 		BOOL bIsAsm,
 		LPCSTR lpszCompileCommand,
 		LPCSTR lpszShaderFile,
 		LPCSTR lpszEntryPoint,
 		CGprofile profile)
 	{
-		izanagi::izanagi_tk::CString tmp = out;
+		izanagi::tool::CString tmp = out;
 
 		BOOL ret = FALSE;
 
@@ -994,14 +994,14 @@ namespace {
 
 	// 出力ファイル名を作成
 	inline void _MakeOutFile(
-		izanagi::izanagi_tk::CString& strOut,
+		izanagi::tool::CString& strOut,
 		UINT nID,
 		LPCSTR lpszShaderFile,
 		LPCSTR lpszObjDir)
 	{
 		static CHAR BUF[1024];
 
-		izanagi::izanagi_tk::CString tmp0;
+		izanagi::tool::CString tmp0;
 		tmp0.format("%s", lpszShaderFile);
 
 		// ファイル名取得
@@ -1010,7 +1010,7 @@ namespace {
 		// 拡張子削除
 		PathRemoveExtension(file_name);
 
-		izanagi::izanagi_tk::CString tmp1;
+		izanagi::tool::CString tmp1;
 		tmp1.format("%s_%d", file_name, nID);
 
 		if (strlen(lpszObjDir) > 0) {
@@ -1074,7 +1074,7 @@ BOOL CShaderConverter::CompileProgram(
 
 		while (pass != NULL) {
 			// 出力ファイル名を作成
-			izanagi::izanagi_tk::CString strOut;
+			izanagi::tool::CString strOut;
 			_MakeOutFile(
 				strOut,
 				nPassCnt,

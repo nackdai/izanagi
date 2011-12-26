@@ -1,9 +1,9 @@
 ﻿#if !defined(__APP_ERROR_H__)
 #define __APP_ERROR_H__
 
-#include "ToolKitStdDefs.h"
+#include "izToolKit.h"
 
-class CErrorLog : public izanagi::izanagi_tk::ILog {
+class CErrorLog : public izanagi::tool::ILog {
 public:
 	CErrorLog(IZ_PCSTR format, IZ_PCSTR file_name, IZ_UINT line, ...)
 	{
@@ -24,7 +24,7 @@ public:
 	IZ_PCSTR GetString() const { return m_ErrStr; }
 
 private:
-	izanagi::izanagi_tk::CString m_ErrStr;
+	izanagi::tool::CString m_ErrStr;
 };
 
 #endif	// #if !defined(__APP_ERROR_H__)

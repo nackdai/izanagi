@@ -4,9 +4,9 @@
 #include "izGraph.h"
 
 namespace izanagi {
-namespace izanagi_tk {
+namespace tool {
 	class CIMGTexture;
-}	// namespace izanagi_tk
+}	// namespace tool
 }	// namespace izanagi
 
 class CImageReaderImpl {
@@ -16,7 +16,7 @@ private:
 
 public:
 	// 読み込み
-	static izanagi::izanagi_tk::CIMGTexture* Read(
+	static izanagi::tool::CIMGTexture* Read(
 		LPCSTR lpszPath,
 		izanagi::E_GRAPH_TEX_TYPE nType);
 };

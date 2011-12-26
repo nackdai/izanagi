@@ -1,10 +1,10 @@
 ﻿#include "IMGBody.h"
 #include "izIo.h"
-#include "ToolKitIoDefs.h"
+#include "izToolKit.h"
 #include "ImageLibUtility.h"
 
 using namespace izanagi;
-using namespace izanagi_tk;
+using namespace tool;
 
 // コンストラクタ
 CIMGBody::CIMGBody()

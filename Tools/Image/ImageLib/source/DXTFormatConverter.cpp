@@ -2,7 +2,7 @@
 #include "squish.h"
 
 using namespace izanagi;
-using namespace izanagi_tk;
+using namespace tool;
 
 namespace {
 	IZ_INT _GetSquishFmt(E_GRAPH_PIXEL_FMT fmt)

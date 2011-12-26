@@ -56,7 +56,7 @@ public:
 
 private:
 	std::vector<SImageInfo> m_ImageInfoList;
-	izanagi::izanagi_tk::CString m_BasePath;
+	izanagi::tool::CString m_BasePath;
 };
 
 #endif	// #if !defined(__IMAGE_BUILDER_IMPL_H__)

@@ -47,16 +47,16 @@ int main(int argc, char* argv[])
 
 	COption option;
 
-	izanagi::izanagi_tk::CGraphicsDeviceLite* device = IZ_NULL;
-	izanagi::izanagi_tk::CTextureLite* texHeight = IZ_NULL;
-	izanagi::izanagi_tk::CTextureLite* texNml = IZ_NULL;
+	izanagi::tool::CGraphicsDeviceLite* device = IZ_NULL;
+	izanagi::tool::CTextureLite* texHeight = IZ_NULL;
+	izanagi::tool::CTextureLite* texNml = IZ_NULL;
 
 	// ウインドウハンドル取得
 	HWND hWnd = ::GetConsoleWindow();
 	VGOTO(hWnd != NULL);
 
 	// グラフィックスデバイス作成
-	device = izanagi::izanagi_tk::CGraphicsDeviceLite::CreateGraphicsDeviceLight(hWnd);
+	device = izanagi::tool::CGraphicsDeviceLite::CreateGraphicsDeviceLight(hWnd);
 	VGOTO(device != NULL);
 
 	// オプション解析
@@ -195,7 +195,7 @@ int main(int argc, char* argv[])
 	device->SaveTexture(
 		option.out,
 		texNml,
-		izanagi::izanagi_tk::TextureExportTypePNG);
+		izanagi::tool::TextureExportTypePNG);
 
 __EXIT__:
 	SAFE_RELEASE(texHeight);

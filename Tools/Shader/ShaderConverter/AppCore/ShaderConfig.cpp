@@ -26,7 +26,7 @@ void CShaderConfigManager::startElement(
 	const XMLCh* const qname, 
 	const xercesc::Attributes& attrs)
 {
-	izanagi::izanagi_tk::CString name(XN(qname));
+	izanagi::tool::CString name(XN(qname));
 
 	if (IsAttr(name, attr_type::SHD)) {
 		// shd
@@ -55,7 +55,7 @@ void CShaderConfigManager::endElement(
 	const XMLCh* const localname,
 	const XMLCh* const qname)
 {
-	izanagi::izanagi_tk::CString name(XN(qname));
+	izanagi::tool::CString name(XN(qname));
 
 	if (IsAttr(name, attr_type::SHD)) {
 		EndtAnalysisShaderElement();
@@ -81,7 +81,7 @@ namespace {
 		// 環境変数の展開
 		if (!sConfig.shader.empty()) {
 			VRETURN(
-				izanagi::izanagi_tk::CEnvVarHelper::ExpandEnvStrings(
+				izanagi::tool::CEnvVarHelper::ExpandEnvStrings(
 					s_BUF,
 					sizeof(s_BUF),
 					sConfig.shader));
@@ -96,7 +96,7 @@ namespace {
 
 		if (!sConfig.compiler.empty()) {
 			VRETURN(
-				izanagi::izanagi_tk::CEnvVarHelper::ExpandEnvStrings(
+				izanagi::tool::CEnvVarHelper::ExpandEnvStrings(
 					s_BUF,
 					sizeof(s_BUF),
 					sConfig.compiler));
@@ -105,14 +105,14 @@ namespace {
 			sConfig.compiler.replace('\\', '/');
 
 			// コンパイルオプションとの結合
-			izanagi::izanagi_tk::CString tmp;
+			izanagi::tool::CString tmp;
 			tmp.format("\"\"%s\"\" %s", sConfig.compiler.c_str(), sConfig.compile_opt.c_str());
 			sConfig.compiler = tmp;
 		}
 
 		if (sConfig.name.empty()) {
 			VRETURN(
-				izanagi::izanagi_tk::CFileUtility::GetFileNameFromPathWithoutExt(
+				izanagi::tool::CFileUtility::GetFileNameFromPathWithoutExt(
 					s_BUF,
 					sizeof(s_BUF),
 					sConfig.shader));
@@ -121,12 +121,12 @@ namespace {
 		}
 
 		// includeパスの環境変数の展開
-		std::vector<izanagi::izanagi_tk::CString>::iterator it = sConfig.includes.begin();
+		std::vector<izanagi::tool::CString>::iterator it = sConfig.includes.begin();
 		while (it != sConfig.includes.end()) {
-			izanagi::izanagi_tk::CString& str = *it;
+			izanagi::tool::CString& str = *it;
 
 			VRETURN(
-				izanagi::izanagi_tk::CEnvVarHelper::ExpandEnvStrings(
+				izanagi::tool::CEnvVarHelper::ExpandEnvStrings(
 					s_BUF,
 					sizeof(s_BUF),
 					str));
@@ -158,16 +158,16 @@ void CShaderConfigManager::AnalysisAttr(
 	UINT nAttrNum = (UINT)attrs.getLength();
 
 	for (UINT i = 0; i < nAttrNum; i++) {
-		izanagi::izanagi_tk::CString strAttrName(XN(attrs.getQName(i)));
+		izanagi::tool::CString strAttrName(XN(attrs.getQName(i)));
 
-		izanagi::izanagi_tk::CString val(XN(attrs.getValue(i)));
+		izanagi::tool::CString val(XN(attrs.getValue(i)));
 
 		(this->*func)(strAttrName, val);
 	}
 }
 
 namespace {
-	inline BOOL _CheckBoolValue(izanagi::izanagi_tk::CString str)
+	inline BOOL _CheckBoolValue(izanagi::tool::CString str)
 	{
 		str.make_lower();
 
@@ -176,7 +176,7 @@ namespace {
 	}
 }	// namespace
 
-void CShaderConfigManager::AnalysisAttrSHD(const izanagi::izanagi_tk::CString& strAttrName, const izanagi::izanagi_tk::CString& strVal)
+void CShaderConfigManager::AnalysisAttrSHD(const izanagi::tool::CString& strAttrName, const izanagi::tool::CString& strVal)
 {
 	if (IsAttr(strAttrName, attr_type::COMPILER)) {
 		// compiler
@@ -209,14 +209,14 @@ void CShaderConfigManager::AnalysisAttrSHD(const izanagi::izanagi_tk::CString& s
 	}
 }
 
-void CShaderConfigManager::AnalysisAttrINCLUDE(const izanagi::izanagi_tk::CString& strAttrName, const izanagi::izanagi_tk::CString& strVal)
+void CShaderConfigManager::AnalysisAttrINCLUDE(const izanagi::tool::CString& strAttrName, const izanagi::tool::CString& strVal)
 {
 #if 0
 	m_pCurConfig->includes.push_back(strVal);
 #else
-	m_pCurConfig->includes.push_back(izanagi::izanagi_tk::CString());
+	m_pCurConfig->includes.push_back(izanagi::tool::CString());
 
-	izanagi::izanagi_tk::CString& str = m_pCurConfig->includes.back();
+	izanagi::tool::CString& str = m_pCurConfig->includes.back();
 	if (m_BaseDir.empty()) {
 		str = strVal;
 	}
@@ -226,7 +226,7 @@ void CShaderConfigManager::AnalysisAttrINCLUDE(const izanagi::izanagi_tk::CStrin
 #endif
 }
 
-void CShaderConfigManager::AnalysisAttrDEFINE(const izanagi::izanagi_tk::CString& strAttrName, const izanagi::izanagi_tk::CString& strVal)
+void CShaderConfigManager::AnalysisAttrDEFINE(const izanagi::tool::CString& strAttrName, const izanagi::tool::CString& strVal)
 {
 	m_pCurConfig->defines.push_back(strVal);
 }
@@ -237,11 +237,11 @@ IZ_BOOL CShaderConfigManager::SetBaseDir(IZ_PCSTR pszDir)
 	static izChar BUF[MAX_PATH];
 
 	if (m_BaseDir.empty()) {
-		izanagi::izanagi_tk::CString str(pszDir);
+		izanagi::tool::CString str(pszDir);
 		str.replace('/', '\\');
 
 		VRETURN(
-			izanagi::izanagi_tk::CFileUtility::GetPathWithoutFileName(
+			izanagi::tool::CFileUtility::GetPathWithoutFileName(
 				BUF,
 				sizeof(BUF),
 				str));

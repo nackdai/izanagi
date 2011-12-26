@@ -23,11 +23,11 @@ enum FileType {
 };
 
 struct SOption {
-	izanagi::izanagi_tk::CString in;		// 入力ファイル
-	izanagi::izanagi_tk::CString out;	// 出力ファイル
+	izanagi::tool::CString in;		// 入力ファイル
+	izanagi::tool::CString out;	// 出力ファイル
 
-	izanagi::izanagi_tk::CString outMsh;
-	izanagi::izanagi_tk::CString outSkl;
+	izanagi::tool::CString outMsh;
+	izanagi::tool::CString outSkl;
 
 	IZ_UINT exportType;	// 出力タイプ
 	FileType fileType;	// ファイルタイプ

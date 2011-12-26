@@ -5,7 +5,7 @@
 #include "izDefs.h"
 
 namespace izanagi {
-namespace izanagi_tk {
+namespace tool {
 
 	class CPreprocHelper {
 	private:
@@ -73,7 +73,7 @@ namespace izanagi_tk {
 			return ret;
 		}
 	};
-}	// izanagi_tk
+}	// tool
 }	// izanagi
 
 #endif	// #if !defined(__IZANAGI_TOOL_KIT_UTIL_PREPROC_HELPER_H__)

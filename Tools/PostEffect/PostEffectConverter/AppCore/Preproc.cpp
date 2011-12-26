@@ -18,9 +18,9 @@ int Preproc(COption& cOption)
 
 	// インクルードパス
 	{
-		std::vector<izanagi::izanagi_tk::CString>::iterator it = cOption.includes.begin();
+		std::vector<izanagi::tool::CString>::iterator it = cOption.includes.begin();
 		while (it != cOption.includes.end()) {
-			izanagi::izanagi_tk::CString& str = *it;
+			izanagi::tool::CString& str = *it;
 			tvArgs.push_back("-I");
 			tvArgs.push_back(const_cast<char*>(str.c_str()));
 			it++;
@@ -29,9 +29,9 @@ int Preproc(COption& cOption)
 
 	// プリプロセス定義
 	{
-		std::vector<izanagi::izanagi_tk::CString>::iterator it = cOption.defines.begin();
+		std::vector<izanagi::tool::CString>::iterator it = cOption.defines.begin();
 		while (it != cOption.defines.end()) {
-			izanagi::izanagi_tk::CString& str = *it;
+			izanagi::tool::CString& str = *it;
 			tvArgs.push_back("-D");
 			tvArgs.push_back(const_cast<char*>(str.c_str()));
 			it++;
@@ -46,20 +46,20 @@ int Preproc(COption& cOption)
 
 	// 入力ファイル
 	{
-		izanagi::izanagi_tk::CString& tmp = cOption.shader;
+		izanagi::tool::CString& tmp = cOption.shader;
 		tvArgs.push_back(const_cast<char*>(tmp.c_str()));
 	}
 
 	// 出力ファイル
 	{
-		izanagi::izanagi_tk::CString& tmp = cOption.outFile;
+		izanagi::tool::CString& tmp = cOption.outFile;
 		tvArgs.push_back(const_cast<char*>(tmp.c_str()));
 	}
 
 	int ret = preproc_main((int)tvArgs.size(), &tvArgs[0]);
 
 	if (ret > 0) {
-		izanagi::izanagi_tk::CString tmp;
+		izanagi::tool::CString tmp;
 		for (int i = 0; i < (int)tvArgs.size(); i++) {
 			tmp += tvArgs[0];
 			tmp += " ";
@@ -79,7 +79,7 @@ BOOL ExecWithPreprocMode(
 	COption& cOption)
 {
 	// コマンド作成
-	izanagi::izanagi_tk::CString strCmd;
+	izanagi::tool::CString strCmd;
 	strCmd.format(
 		"%s -E %s -o %s",
 		lpszExe,
@@ -88,7 +88,7 @@ BOOL ExecWithPreprocMode(
 
 	// インクルードパス
 	{
-		std::vector<izanagi::izanagi_tk::CString>::iterator it = cOption.includes.begin();
+		std::vector<izanagi::tool::CString>::iterator it = cOption.includes.begin();
 		while (it != cOption.includes.end()) {
 			strCmd += " -I ";
 			strCmd += *it;
@@ -98,7 +98,7 @@ BOOL ExecWithPreprocMode(
 
 	// プリプロセス定義
 	{
-		std::vector<izanagi::izanagi_tk::CString>::iterator it = cOption.defines.begin();
+		std::vector<izanagi::tool::CString>::iterator it = cOption.defines.begin();
 		while (it != cOption.defines.end()) {
 			strCmd += " -D ";
 			strCmd += *it;

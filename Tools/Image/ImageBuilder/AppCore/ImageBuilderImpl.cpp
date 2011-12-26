@@ -42,7 +42,7 @@ void CImageBuilder::startElement(
 	const XMLCh* const qname, 
 	const xercesc::Attributes& attrs)
 {
-	izanagi::izanagi_tk::CString name(XN(qname));
+	izanagi::tool::CString name(XN(qname));
 
 	if (IsAttr(name, attr_type::CUBE)) {
 		// TODO
@@ -83,7 +83,7 @@ namespace {
 		CMP_TYPE_NUM,
 	};
 
-	inline void _ConvString(izanagi::izanagi_tk::CString& str, CMP_TYPE typeCmp)
+	inline void _ConvString(izanagi::tool::CString& str, CMP_TYPE typeCmp)
 	{
 		switch (typeCmp) {
 		case CMP_TYPE_LOWER:
@@ -106,13 +106,13 @@ namespace {
 	{
 		_T ret = (_T)0;
 
-		izanagi::izanagi_tk::CString str(lpszStr);
+		izanagi::tool::CString str(lpszStr);
 		_ConvString(str, typeCmp);
 
 		size_t nStrLen = strlen(lpszStr);
 
 		for (UINT i = 0; i < nTableNum; i++) {
-			izanagi::izanagi_tk::CString tmp(lpszTable[i]);
+			izanagi::tool::CString tmp(lpszTable[i]);
 			_ConvString(tmp, typeCmp);
 
 			if (str == tmp) {
@@ -224,9 +224,9 @@ void CImageBuilder::SetCommonAttrs(
 	UINT nAttrNum = (UINT)attrs.getLength();
 
 	for (UINT i = 0; i < nAttrNum; i++) {
-		izanagi::izanagi_tk::CString strAttrName(XN(attrs.getQName(i)));
+		izanagi::tool::CString strAttrName(XN(attrs.getQName(i)));
 
-		izanagi::izanagi_tk::CString val(XN(attrs.getValue(i)));
+		izanagi::tool::CString val(XN(attrs.getValue(i)));
 
 		if (IsAttr(strAttrName, attr_type::PATH)) {
 			// path
@@ -302,7 +302,7 @@ namespace {
 		izanagi::IOutputStream* pOut,
 		izanagi::S_IMG_HEADER* pHeader,
 		const SImageInfo& sImageInfo,
-		izanagi::izanagi_tk::CIMGTexture* pTex)
+		izanagi::tool::CIMGTexture* pTex)
 	{
 		IZ_ASSERT(pOut != NULL);
 		IZ_ASSERT(pHeader != NULL);
@@ -360,7 +360,7 @@ BOOL CImageBuilder::BuildIMG(LPCSTR lpszExport)
 		lpszExport);
 
 	// DirectXテクスチャ読み込み処理をセット
-	izanagi::izanagi_tk::CImageReader::GetInstance().SetReadFunc(
+	izanagi::tool::CImageReader::GetInstance().SetReadFunc(
 		CImageReaderImpl::Read);
 
 	BOOL ret = FALSE;
@@ -370,7 +370,7 @@ BOOL CImageBuilder::BuildIMG(LPCSTR lpszExport)
 
 	// ヘッダ
 	izanagi::S_IMG_HEADER sHeader;
-	izanagi::izanagi_tk::CImageUtil::SetImageHeader(
+	izanagi::tool::CImageUtil::SetImageHeader(
 		&sHeader,
 		nTexNum);
 
@@ -392,8 +392,8 @@ BOOL CImageBuilder::BuildIMG(LPCSTR lpszExport)
 		tJumpTable.push_back(cOut.GetSize());
 
 		// テクスチャ読み込み
-		izanagi::izanagi_tk::CIMGBody* pImgBody = NULL;
-		pImgBody = izanagi::izanagi_tk::CImageReader::GetInstance().Read(
+		izanagi::tool::CIMGBody* pImgBody = NULL;
+		pImgBody = izanagi::tool::CImageReader::GetInstance().Read(
 					sImageInfo.path,
 					static_cast<izanagi::E_GRAPH_TEX_TYPE>(sImageInfo.info.type));
 
@@ -407,7 +407,7 @@ BOOL CImageBuilder::BuildIMG(LPCSTR lpszExport)
 			// テクスチャ位置指定
 
 			INT nTexIdx = IZ_MAX(nNum - 1, sImageInfo.tex_idx);
-			izanagi::izanagi_tk::CIMGTexture* pTex = pImgBody->GetTexture(nTexIdx);
+			izanagi::tool::CIMGTexture* pTex = pImgBody->GetTexture(nTexIdx);
 
 			if (pTex != IZ_NULL) {
 				// テクスチャ出力
@@ -423,7 +423,7 @@ BOOL CImageBuilder::BuildIMG(LPCSTR lpszExport)
 			// 全テクスチャ
 
 			for (UINT n = 0; n < nNum; n++) {
-				izanagi::izanagi_tk::CIMGTexture* pTex = pImgBody->GetTexture(n);
+				izanagi::tool::CIMGTexture* pTex = pImgBody->GetTexture(n);
 
 				if (pTex != IZ_NULL) {
 					// テクスチャ出力
@@ -438,7 +438,7 @@ BOOL CImageBuilder::BuildIMG(LPCSTR lpszExport)
 		}
 
 		// 削除
-		izanagi::izanagi_tk::CImageReader::GetInstance().Delete(pImgBody);
+		izanagi::tool::CImageReader::GetInstance().Delete(pImgBody);
 	}
 
 	// ファイルサイズ取得

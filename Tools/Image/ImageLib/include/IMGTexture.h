@@ -14,7 +14,7 @@ namespace izanagi {
 	class IInputStream;
 	class IOutputStream;
 
-namespace izanagi_tk {
+namespace tool {
 	/**
 	*/
 	class CIMGTexture {
@@ -279,7 +279,7 @@ namespace izanagi_tk {
 							nHeight,
 							nFmt);
 	}
-}	// namespace izanagi_tk
+}	// namespace tool
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_IMAGE_LIB_IMG_TEXTURE_H__)

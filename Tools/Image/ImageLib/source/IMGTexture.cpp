@@ -1,9 +1,9 @@
 ﻿#include "IMGTexture.h"
 #include "MipMapCreator.h"
-#include "ToolKitIoDefs.h"
+#include "izToolKit.h"
 
 using namespace izanagi;
-using namespace izanagi_tk;
+using namespace tool;
 
 // コンストラクタ
 CIMGTexture::CIMGTexture(E_GRAPH_TEX_TYPE nType/*= E_GRAPH_TEX_TYPE_PLANE*/)

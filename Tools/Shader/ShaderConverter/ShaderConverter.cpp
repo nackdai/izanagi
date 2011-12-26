@@ -34,12 +34,12 @@ namespace {
 		memcpy(s_BUF, sConfig.shader, min(sizeof(s_BUF), strlen(sConfig.shader)));
 
 		// ファイル名取得
-		izanagi::izanagi_tk::CString file_name(
-			izanagi::izanagi_tk::CFileUtility::GetFileNameFromPath(s_BUF));
+		izanagi::tool::CString file_name(
+			izanagi::tool::CFileUtility::GetFileNameFromPath(s_BUF));
 
 		// 拡張子削除
 		VRETURN(
-			izanagi::izanagi_tk::CFileUtility::RemoveExtension(
+			izanagi::tool::CFileUtility::RemoveExtension(
 				s_BUF,
 				sizeof(s_BUF),
 				file_name));
@@ -48,11 +48,11 @@ namespace {
 			sConfig.preproc_file.format("%s.fx_", s_BUF);
 		}
 		else {
-			izanagi::izanagi_tk::CString tmp(s_BUF);
+			izanagi::tool::CString tmp(s_BUF);
 
 			// 中間ディレクトリに出力する
 			VRETURN(
-				izanagi::izanagi_tk::CFileUtility::CombinePath(
+				izanagi::tool::CFileUtility::CombinePath(
 					s_BUF, 
 					sizeof(s_BUF),
 					cOption.obj_dir,
@@ -89,12 +89,12 @@ namespace {
 		memcpy(s_BUF, sConfig.preproc_file, min(sizeof(s_BUF), strlen(sConfig.preproc_file)));
 
 		// ファイル名取得
-		izanagi::izanagi_tk::CString file_name(
-			izanagi::izanagi_tk::CFileUtility::GetFileNameFromPath(s_BUF));
+		izanagi::tool::CString file_name(
+			izanagi::tool::CFileUtility::GetFileNameFromPath(s_BUF));
 
 		// 拡張子削除
 		VRETURN(
-			izanagi::izanagi_tk::CFileUtility::RemoveExtension(
+			izanagi::tool::CFileUtility::RemoveExtension(
 				s_BUF,
 				sizeof(s_BUF),
 				file_name));
@@ -129,9 +129,9 @@ int main(int argc, char* argv[])
 
 		// 中間ファイル出力ディレクトリの指定がある
 		if (!cOption.obj_dir.empty()) {
-			if (!izanagi::izanagi_tk::CFileUtility::IsExist(cOption.obj_dir)) {
+			if (!izanagi::tool::CFileUtility::IsExist(cOption.obj_dir)) {
 				// 存在しないので作成する
-				izanagi::izanagi_tk::CFileUtility::CreateDir(cOption.obj_dir);
+				izanagi::tool::CFileUtility::CreateDir(cOption.obj_dir);
 			}
 		}
 

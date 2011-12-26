@@ -2,7 +2,7 @@
 #include "graph/TextureLite.h"
 
 using namespace izanagi;
-using namespace izanagi_tk;
+using namespace tool;
 
 CGraphicsDeviceLite* CGraphicsDeviceLite::s_pInstance = IZ_NULL;
 CSimpleMemoryAllocator CGraphicsDeviceLite::s_cAllocator;

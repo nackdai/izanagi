@@ -28,15 +28,15 @@ namespace {
 	}
 
 	inline void _CombinePath(
-		izanagi::izanagi_tk::CString& strRet,
-		const std::vector<izanagi::izanagi_tk::CString>& tPathList)
+		izanagi::tool::CString& strRet,
+		const std::vector<izanagi::tool::CString>& tPathList)
 	{
 		strRet.clear();
 
-		std::vector<izanagi::izanagi_tk::CString>::const_iterator it = tPathList.begin();
+		std::vector<izanagi::tool::CString>::const_iterator it = tPathList.begin();
 
 		for (UINT cnt = 0; it != tPathList.end(); it++, cnt++) {
-			const izanagi::izanagi_tk::CString& str = *it;
+			const izanagi::tool::CString& str = *it;
 
 			if (cnt == 0) {
 				strRet = str;
@@ -71,8 +71,8 @@ BOOL CStringExporter::Export(
 	LPCSTR lpszPath,
 	LPCSTR lpszRoot)
 {
-	izanagi::izanagi_tk::CString strPath;
-	std::vector<izanagi::izanagi_tk::CString> tPathList;
+	izanagi::tool::CString strPath;
+	std::vector<izanagi::tool::CString> tPathList;
 
 	// パスを '/' or '\' で分解する
 	CUtility::BreakPath(
@@ -163,7 +163,7 @@ namespace {
 // 出力
 BOOL CArchiveBuilderImpl::Export(const SOption& sOption)
 {
-	LPCSTR lpszRoot = izanagi::izanagi_tk::CFileUtility::GetFileNameFromPath(sOption.in_dir);
+	LPCSTR lpszRoot = izanagi::tool::CFileUtility::GetFileNameFromPath(sOption.in_dir);
 	LPCSTR lpszOut = sOption.output;		// 出力
 
 	size_t nFileNum = CFileTree::GetInstance().GetFileList().size();

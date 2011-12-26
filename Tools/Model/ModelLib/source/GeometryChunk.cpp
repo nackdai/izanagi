@@ -63,7 +63,7 @@ IZ_BOOL CGeometryChunk::Export(
 	}
 
 	// Blank for S_MSH_HEADER.
-	izanagi::izanagi_tk::CIoStreamSeekHelper cSeekHelper(pOut);
+	izanagi::tool::CIoStreamSeekHelper cSeekHelper(pOut);
 	VRETURN(cSeekHelper.Skip(sizeof(m_Header)));
 
 	// TODO
@@ -122,7 +122,7 @@ IZ_BOOL CGeometryChunk::ExportGroup(
 	IZ_UINT nChunkStartPos = pOut->GetCurPos();
 
 	// Blank for S_MSH_MESH_GROUP.
-	izanagi::izanagi_tk::CIoStreamSeekHelper cSeekHelper(pOut);
+	izanagi::tool::CIoStreamSeekHelper cSeekHelper(pOut);
 	VRETURN(cSeekHelper.Skip(sizeof(sGroupInfo)));
 
 	m_MeshList.resize(sGroupInfo.numMeshSet);
@@ -690,7 +690,7 @@ IZ_UINT CGeometryChunk::ExportVertices(
 	izanagi::IOutputStream* pOut,
 	IImporter* pImporter)
 {
-	izanagi::izanagi_tk::CIoStreamSeekHelper cSeekHelper(pOut);
+	izanagi::tool::CIoStreamSeekHelper cSeekHelper(pOut);
 
 	IZ_UINT nVBCnt = 0;
 	IZ_UINT nPrevFmt = 0;
@@ -976,7 +976,7 @@ IZ_BOOL CGeometryChunk::ExportMesh(
 		}
 
 		// Blank S_MSH_MESH_SET. 
-		izanagi::izanagi_tk::CIoStreamSeekHelper cSeekHelper(pOut);
+		izanagi::tool::CIoStreamSeekHelper cSeekHelper(pOut);
 		VRETURN(cSeekHelper.Skip(sizeof(sMeshInfo)));
 
 		m_Header.numMeshSubset += sMeshInfo.numSubset;
@@ -1085,7 +1085,7 @@ IZ_BOOL CGeometryChunk::ExportPrimSet(
 	m_Header.numAllJointIndices += sSubsetInfo.numJoints;
 
 	// Blank S_MSH_PRIM_SET. 
-	izanagi::izanagi_tk::CIoStreamSeekHelper cSeekHelper(pOut);
+	izanagi::tool::CIoStreamSeekHelper cSeekHelper(pOut);
 	VRETURN(cSeekHelper.Skip(sizeof(sSubsetInfo)));
 
 	// 所属関節へのインデックス

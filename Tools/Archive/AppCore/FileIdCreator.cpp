@@ -11,7 +11,7 @@ void CFileIdCreator::Register(
 {
 	IZ_ASSERT(m_strRoot.length() > 0);
 
-	std::vector<izanagi::izanagi_tk::CString> tPathList;
+	std::vector<izanagi::tool::CString> tPathList;
 
 	// パスを '/' or '\' で分解する
 	CUtility::BreakPath(
@@ -19,19 +19,19 @@ void CFileIdCreator::Register(
 		m_strRoot,
 		tPathList);
 
-	std::vector<izanagi::izanagi_tk::CString>::iterator it = tPathList.begin();
+	std::vector<izanagi::tool::CString>::iterator it = tPathList.begin();
 
 	// パスとして構築しなおす
 	{
-		std::vector<izanagi::izanagi_tk::CString>::iterator prevItem = tPathList.end();
+		std::vector<izanagi::tool::CString>::iterator prevItem = tPathList.end();
 
 		for (; it != tPathList.end(); it++) {
-			izanagi::izanagi_tk::CString& str = *it;
+			izanagi::tool::CString& str = *it;
 
 			if (prevItem != tPathList.end()) {
-				const izanagi::izanagi_tk::CString& strPrev = *prevItem;
+				const izanagi::tool::CString& strPrev = *prevItem;
 
-				izanagi::izanagi_tk::CString tmp(str);
+				izanagi::tool::CString tmp(str);
 				str.format("%s/%s", strPrev.c_str(), tmp.c_str());
 			}
 
@@ -44,7 +44,7 @@ void CFileIdCreator::Register(
 
 	// 登録済みか探す
 	for (; it != tPathList.end(); it++) {
-		const izanagi::izanagi_tk::CString& str = *it;
+		const izanagi::tool::CString& str = *it;
 
 		UINT nKey = izanagi::CKey::GenerateValue(str);
 
@@ -148,15 +148,15 @@ BOOL CFileIdCreator::Export(
 #endif	// #ifdef _ENABLE_EXPORT_ENUM
 
 		// Get file extension
-		izanagi::izanagi_tk::CString strExt(
-			izanagi::izanagi_tk::CFileUtility::GetExtension(
+		izanagi::tool::CString strExt(
+			izanagi::tool::CFileUtility::GetExtension(
 				s_Buf,
 				sizeof(s_Buf),
 				sInfo.str));
 
 		// Get file name from path without extension.
 		VRETURN(
-			izanagi::izanagi_tk::CFileUtility::GetFileNameFromPathWithoutExt(
+			izanagi::tool::CFileUtility::GetFileNameFromPathWithoutExt(
 				s_Buf,
 				sizeof(s_Buf),
 				sInfo.str));
@@ -196,7 +196,7 @@ BOOL CFileIdCreator::Export(
 			fpOut, 
 			nIndent, 
 			"class %s {\n", 
-			izanagi::izanagi_tk::CFileUtility::GetFileNameFromPath(sInfo.str));
+			izanagi::tool::CFileUtility::GetFileNameFromPath(sInfo.str));
 		_PrintWithIndent(fpOut, nIndent, "public:\n");
 
 		std::vector<SIdInfo*>::const_iterator it = sInfo.child.begin();

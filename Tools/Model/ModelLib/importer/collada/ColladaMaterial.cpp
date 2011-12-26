@@ -29,7 +29,7 @@ void CColladaMaterial::ReadImages(domCOLLADA* pRoot)
 
 			std::string tmp(img->getInit_from()->getValue().str());
 
-			IZ_PCSTR name = izanagi::izanagi_tk::CFileUtility::GetFileNameFromPath(tmp.c_str());
+			IZ_PCSTR name = izanagi::tool::CFileUtility::GetFileNameFromPath(tmp.c_str());
 
 			m_Images[img->getId()] = name;
 		}
@@ -372,7 +372,7 @@ void CColladaMaterial::ReadEffectParams(SEffect& sEffect, domProfile_COMMON* pro
 
 	IZ_PCSTR texName = _ReadTexture(prof, param->getDiffuse());
 	if (texName != IZ_NULL) {
-		std::string name = izanagi::izanagi_tk::CFileUtility::GetFileNameFromPath(texName);
+		std::string name = izanagi::tool::CFileUtility::GetFileNameFromPath(texName);
 		sEffect.texName.push_back(name);
 	}
 
@@ -411,7 +411,7 @@ void CColladaMaterial::ReadEffectParams(SEffect& sEffect, domProfile_COMMON* pro
 
 	IZ_PCSTR texName = _ReadTexture(prof, param->getDiffuse());
 	if (texName != IZ_NULL) {
-		std::string name = izanagi::izanagi_tk::CFileUtility::GetFileNameFromPath(texName);
+		std::string name = izanagi::tool::CFileUtility::GetFileNameFromPath(texName);
 		sEffect.texName.push_back(name);
 	}
 

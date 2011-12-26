@@ -8,7 +8,7 @@
 struct SImageInfo {
 	izanagi::S_IMG_TEX_HEADER info;
 
-	izanagi::izanagi_tk::CString path;
+	izanagi::tool::CString path;
 	INT tex_idx;
 
 	SImageInfo()

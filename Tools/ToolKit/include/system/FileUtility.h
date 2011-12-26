@@ -7,7 +7,7 @@
 #include "izDefs.h"
 
 namespace izanagi {
-namespace izanagi_tk {
+namespace tool {
 	class CFileUtility {
 	private:
 		CFileUtility();
@@ -267,7 +267,7 @@ namespace izanagi_tk {
 			return buf;
 		}
 	};
-}	// izanagi_tk
+}	// tool
 }	// izanagi
 
 #endif	// #if !defined(__IZANAGI_TOOL_KIT_SYSTEM_FILE_UTILITY_H__)
