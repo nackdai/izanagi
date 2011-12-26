@@ -1,4 +1,4 @@
-﻿#include "SampleAppl.h"
+#include "SampleAppl.h"
 #include "SampleSystem.h"
 #include "SampleCamera.h"
 

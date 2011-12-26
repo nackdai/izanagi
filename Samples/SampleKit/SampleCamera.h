@@ -1,4 +1,4 @@
-﻿#if !defined(__IZ_CAMERA_H__)
+#if !defined(__IZ_CAMERA_H__)
 #define __IZ_CAMERA_H__
 
 #include "izSceneGraph.h"

@@ -1,4 +1,4 @@
-﻿#if !defined(__IZ_SAMPLE_SAMPLE_APPL_H__)
+#if !defined(__IZ_SAMPLE_SAMPLE_APPL_H__)
 #define __IZ_SAMPLE_SAMPLE_APPL_H__
 
 #include "izDefs.h"

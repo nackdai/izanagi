@@ -1,4 +1,4 @@
-﻿#if !defined(__IZ_SYSTEM_H__)
+#if !defined(__IZ_SYSTEM_H__)
 #define __IZ_SYSTEM_H__
 
 #include "izStd.h"
