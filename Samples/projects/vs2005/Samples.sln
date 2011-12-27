@@ -3,6 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SampleKit", "SampleKit.vcproj", "{DD5D28B8-93F1-4F26-8AD1-DD224CCB9A4F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Render2D", "Render2D.vcproj", "{38B3F36A-4139-4D1B-8F95-ABC4427F0AE6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DD5D28B8-93F1-4F26-8AD1-DD224CCB9A4F} = {DD5D28B8-93F1-4F26-8AD1-DD224CCB9A4F}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{A9E5AE3D-D713-440A-B763-1F16A92BB9CC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug_DX9|Win32 = Debug_DX9|Win32
@@ -13,8 +20,15 @@ Global
 		{DD5D28B8-93F1-4F26-8AD1-DD224CCB9A4F}.Debug_DX9|Win32.Build.0 = Debug_DX9|Win32
 		{DD5D28B8-93F1-4F26-8AD1-DD224CCB9A4F}.Release_DX9|Win32.ActiveCfg = Release_DX9|Win32
 		{DD5D28B8-93F1-4F26-8AD1-DD224CCB9A4F}.Release_DX9|Win32.Build.0 = Release_DX9|Win32
+		{38B3F36A-4139-4D1B-8F95-ABC4427F0AE6}.Debug_DX9|Win32.ActiveCfg = Debug_DX9|Win32
+		{38B3F36A-4139-4D1B-8F95-ABC4427F0AE6}.Debug_DX9|Win32.Build.0 = Debug_DX9|Win32
+		{38B3F36A-4139-4D1B-8F95-ABC4427F0AE6}.Release_DX9|Win32.ActiveCfg = Release_DX9|Win32
+		{38B3F36A-4139-4D1B-8F95-ABC4427F0AE6}.Release_DX9|Win32.Build.0 = Release_DX9|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{38B3F36A-4139-4D1B-8F95-ABC4427F0AE6} = {A9E5AE3D-D713-440A-B763-1F16A92BB9CC}
 	EndGlobalSection
 EndGlobal
