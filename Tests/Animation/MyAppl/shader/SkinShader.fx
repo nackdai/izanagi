@@ -72,7 +72,7 @@ sampler sTex = sampler_state
 /////////////////////////////////////////////////////////////
 // 頂点シェーダ
 
-float4x4 vJointMatrix[32];
+float4x4 vJointMatrix[48];
 
 SVSOutput mainVS(SVSInput In)
 {

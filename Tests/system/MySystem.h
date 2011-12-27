@@ -7,22 +7,6 @@
 #include "izDebugUtil.h"
 #include "izSystem.h"
 
-/////////////////////////////////////////////////
-// 仮で・・・
-class CMyMemoryAllocator : public izanagi::IMemoryAllocator {
-public:
-	CMyMemoryAllocator() {}
-	~CMyMemoryAllocator() {}
-
-public:
-	void* Alloc(size_t size);
-	void* AllocZero(size_t size);
-	IZ_BOOL Free(void* data);
-
-	void Dump();
-};
-
-/////////////////////////////////////////////////
 // システム
 class CMySystem {
 protected:
