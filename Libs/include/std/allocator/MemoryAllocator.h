@@ -80,7 +80,7 @@ namespace izanagi {
 		IZ_UINT64 m_nAllocCnt;
 #endif	// #ifdef __IZ_DEBUG__
 
-		struct SHeadHeaderWithDebugInfo {
+		struct SHeapHeaderWithDebugInfo {
 #ifdef __IZ_DEBUG__
 			IZ_UINT idx;
 			IZ_UINT line;
