@@ -5,7 +5,7 @@
 
 namespace izanagi {
 namespace sample {
-	/** ƒTƒ“ƒvƒ‹ƒJƒƒ‰.
+	/** ã‚µãƒ³ãƒ—ãƒ«ã‚«ãƒ¡ãƒ©.
 	 */
 	class CSampleCamera {
 	public:

@@ -7,7 +7,7 @@ namespace izanagi {
 namespace sample {
 	class CSampleApp;
 
-	/** サンプルウインドウメッセージハンドラ.
+	/** 繧ｵ繝ｳ繝励Ν繧ｦ繧､繝ｳ繝峨え繝｡繝�繧ｻ繝ｼ繧ｸ繝上Φ繝峨Λ.
 	 */
 	class CSampleWndProc : public izanagi::CMessageHandler {
 		friend class CSampleApp;

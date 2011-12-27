@@ -6,13 +6,13 @@ IZ_BOOL SampleMainLoop(izanagi::sample::SSampleParam& params)
 {
 	IZ_BOOL ret = IZ_TRUE;
 
-	// ŽÀsƒtƒ@ƒCƒ‹‚©‚çŒ»Ý‚ÌƒpƒX‚ðŽæ“¾
+	// å®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ç¾åœ¨ã®ãƒ‘ã‚¹ã‚’å–å¾—
 	izanagi::CSysUtil::SetCurrentDirectoryFromExe();
 
 	izanagi::sample::CSampleWndProc wndProc;
 	void* nativeWndHandle = IZ_NULL;
 
-	// ƒEƒCƒ“ƒhƒEì¬—pƒpƒ‰ƒ[ƒ^
+	// ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦ä½œæˆç”¨ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
 	izanagi::WindowParams wndParam = {
 		params.width,
 		params.height,
@@ -22,7 +22,7 @@ IZ_BOOL SampleMainLoop(izanagi::sample::SSampleParam& params)
 		&wndProc,
 	};
 
-	// ƒAƒvƒŠ‰Šú‰»—pƒpƒ‰ƒ[ƒ^
+	// ã‚¢ãƒ—ãƒªåˆæœŸåŒ–ç”¨ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
 	izanagi::sample::SSampleAppParams appParam = {
 		params.allocator,
 		params.gfxDevBufSize,
@@ -30,25 +30,25 @@ IZ_BOOL SampleMainLoop(izanagi::sample::SSampleParam& params)
 		params.width,
 		params.height,
 		&wndProc,
-		IZ_NULL,	// Œã‚ÅÝ’è‚·‚é
-		IZ_NULL,	// Œã‚ÅÝ’è‚·‚é
+		IZ_NULL,	// å¾Œã§è¨­å®šã™ã‚‹
+		IZ_NULL,	// å¾Œã§è¨­å®šã™ã‚‹
 		params.platformParam,
 	};
 
-	// ƒEƒCƒ“ƒhƒEì¬
+	// ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦ä½œæˆ
 	izanagi::WindowHandle wndHandle = izanagi::CSysWindow::Create(
 										params.allocator,
 										wndParam);
 	VGOTO(ret = (wndHandle != IZ_NULL), __EXIT__);
 
-	// ƒvƒ‰ƒbƒgƒtƒH[ƒ€‚²‚Æ‚ÌƒEƒCƒ“ƒhƒEƒnƒ“ƒhƒ‹‚ðŽæ“¾
+	// ãƒ—ãƒ©ãƒƒãƒˆãƒ•ã‚©ãƒ¼ãƒ ã”ã¨ã®ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦ãƒãƒ³ãƒ‰ãƒ«ã‚’å–å¾—
 	nativeWndHandle = izanagi::CSysWindow::GetNativeWindowHandle(wndHandle);
 	VGOTO(ret = (nativeWndHandle != IZ_NULL), __EXIT__);
 
 	appParam.deviceWindow = nativeWndHandle;
 	appParam.focusWindow = nativeWndHandle;
 
-	// ƒAƒvƒŠ‰Šú‰»
+	// ã‚¢ãƒ—ãƒªåˆæœŸåŒ–
 	ret = params.app->Init(appParam);
 	VGOTO(ret, __EXIT__);
 

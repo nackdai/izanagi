@@ -6,19 +6,19 @@ public:
 	virtual ~CRender2DApp();
 
 protected:
-	// ‰Šú‰».
+	// åˆæœŸåŒ–.
 	virtual IZ_BOOL InitInternal(
 		izanagi::IMemoryAllocator* allocator,
 		izanagi::CGraphicsDevice* device,
 		izanagi::sample::CSampleCamera& camera);
 
-	// ‰ğ•ú.
+	// è§£æ”¾.
 	virtual void ReleaseInternal();
 
-	// XV.
+	// æ›´æ–°.
 	virtual void UpdateInternal(izanagi::CCamera& camera);
 
-	// •`‰æ.
+	// æç”».
 	virtual void RenderInternal(izanagi::CGraphicsDevice* device);
 
 private:
@@ -34,7 +34,7 @@ CRender2DApp::~CRender2DApp()
 {
 }
 
-// ‰Šú‰».
+// åˆæœŸåŒ–.
 IZ_BOOL CRender2DApp::InitInternal(
 	izanagi::IMemoryAllocator* allocator,
 	izanagi::CGraphicsDevice* device,
@@ -51,19 +51,19 @@ IZ_BOOL CRender2DApp::InitInternal(
 	return (m_Img != IZ_NULL);
 }
 
-// ‰ğ•ú.
+// è§£æ”¾.
 void CRender2DApp::ReleaseInternal()
 {
 	SAFE_RELEASE(m_Img);
 }
 
-// XV.
+// æ›´æ–°.
 void CRender2DApp::UpdateInternal(izanagi::CCamera& camera)
 {
 	// Nothing is done...
 }
 
-// •`‰æ.
+// æç”».
 void CRender2DApp::RenderInternal(izanagi::CGraphicsDevice* device)
 {
 	static const IZ_COLOR bgColor = IZ_COLOR_RGBA(0, 128, 255, 255);
@@ -73,22 +73,22 @@ void CRender2DApp::RenderInternal(izanagi::CGraphicsDevice* device)
 		bgColor, 1.0f, 0);
 	{
 		if (device->Begin2D()) {
-			// ƒXƒvƒ‰ƒCƒg
+			// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆ
 			device->SetTexture(0, m_Img->GetTexture(0));
 			device->Set2DRenderOp(izanagi::E_GRAPH_2D_RENDER_OP_MODULATE);
 			device->Draw2DSprite(
 				izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),
 				izanagi::CIntRect(300, 100, 556, 228));
 
-			// “h‚è‚Â‚Ô‚µ‹éŒ`
+			// å¡—ã‚Šã¤ã¶ã—çŸ©å½¢
 			device->Draw2DRect(
 				izanagi::CIntRect(100, 100, 200, 200),
 				IZ_COLOR_RGBA(0, 0xff, 0, 0xff));
 
-			// ƒ‰ƒCƒ“
+			// ãƒ©ã‚¤ãƒ³
 			device->Draw2DLine(
-				izanagi::CIntPoint(100, 100),	// n“_
-				izanagi::CIntPoint(200, 200),	// I“_
+				izanagi::CIntPoint(100, 100),	// å§‹ç‚¹
+				izanagi::CIntPoint(200, 200),	// çµ‚ç‚¹
 				IZ_COLOR_RGBA(0xff, 0, 0, 0xff));
 
 			device->End2D();
