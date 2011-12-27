@@ -1,8 +1,9 @@
-#include "MyCamera.h"
+#include "SampleCamera.h"
 
-CMyCamera CMyCamera::s_cInstance;
+using namespace izanagi;
+using namespace sample;
 
-void CMyCamera::Init(
+void CSampleCamera::Init(
 	const izanagi::CVector& vPos,
 	const izanagi::CVector& vRef,
 	const izanagi::CVector& vUp,
@@ -30,7 +31,12 @@ void CMyCamera::Init(
 	m_fRoll = 0.0f;
 }
 
-void CMyCamera::Dolly(float fDistScale)
+void CSampleCamera::Update()
+{
+	m_cCamera.Update();
+}
+
+void CSampleCamera::Dolly(float fDistScale)
 {
 	// 視点と注視点の距離
 	float fLength = izanagi::SVector::Length2(m_cCamera.GetParam().pos, m_cCamera.GetParam().ref);
@@ -60,7 +66,7 @@ void CMyCamera::Dolly(float fDistScale)
 }
 
 #if 1
-void CMyCamera::Rotate(float fLatitude, float fLongitude)
+void CSampleCamera::Rotate(float fLatitude, float fLongitude)
 {
 	// 注視点から視点への方向
 	izanagi::CVector vDir;
@@ -107,7 +113,7 @@ void CMyCamera::Rotate(float fLatitude, float fLongitude)
 #endif
 }
 #else
-void CMyCamera::Rotate(float fLatitude, float fLongitude)
+void CSampleCamera::Rotate(float fLatitude, float fLongitude)
 {
 	// 注視点から視点への方向
 	izanagi::CVector vDir;
@@ -166,7 +172,7 @@ void CMyCamera::Rotate(float fLatitude, float fLongitude)
 }
 #endif
 
-void CMyCamera::Move(float fOffsetX, float fOffsetY)
+void CSampleCamera::Move(float fOffsetX, float fOffsetY)
 {
 	// 移動ベクトル
 	izanagi::SVector vOffset;
