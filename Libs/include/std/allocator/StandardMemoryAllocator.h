@@ -6,10 +6,11 @@
 #include "MemoryAllocator.h"
 
 namespace izanagi {
-	/**
-	* デフォルトメモリアロケータ
-	*/
-	class CStandardMemoryAllocator : public CDebugMemoryAllocator {
+	/** 標準メモリアロケータ.
+	 */
+	class CStandardMemoryAllocator
+		: public IZ_MEMORY_ALLOCATOR_BASE
+	{
 	protected:
 		struct SHeapHeader;
 
@@ -43,7 +44,7 @@ namespace izanagi {
 		IZ_UINT GetFreedSize();
 
 		// ダンプ
-		void Dump();
+		IZ_BOOL Dump();
 
 	protected:
 		// メモリ確保
