@@ -280,6 +280,7 @@ WindowHandle CSysWindow::Create(
 						hInst,
 						hWnd,
 						hDC);
+	IZ_ASSERT(window != IZ_NULL);
 
 	// メッセージハンドラを保持
 	if (param.handler) {

@@ -147,16 +147,12 @@ typedef const wchar_t*	IZ_PCWSTR;
 
 inline void _OutputDebugString(izPcstr pszFormat, ...)
 {
-#ifdef __IZ_DEBUG__
     va_list	argp;
     izChar pszBuf[256];
     va_start(argp, pszFormat);
     IZ_VSPRINTF(pszBuf, sizeof(pszBuf), pszFormat, argp);
     va_end(argp);
 	::OutputDebugString(pszBuf);
-#else	// #ifdef __IZ_DEBUG__
-	UNUSED_ALWAYS(pszFormat);
-#endif	// #ifdef __IZ_DEBUG__
 }
 
 #ifndef IZ_PRINTF

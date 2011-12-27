@@ -48,7 +48,8 @@ CStandardMemoryAllocator::CStandardMemoryAllocator()
 
 CStandardMemoryAllocator::CStandardMemoryAllocator(IZ_UINT nBufSize, void* pBuf)
 {
-	IZ_ASSERT(Init(nBufSize, pBuf));
+	IZ_BOOL result = Init(nBufSize, pBuf);
+	IZ_ASSERT(result);
 }
 
 CStandardMemoryAllocator::~CStandardMemoryAllocator()
