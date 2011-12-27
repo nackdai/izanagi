@@ -18,8 +18,8 @@ namespace sample {
 		IZ_PCSTR title;
 		void* platformParam;
 
-		IZ_UINT gfxDevBufSize;					///< �O���t�B�b�N�X�f�o�C�X�ɐݒ肷��T�C�Y
-		void* gfxDevBuf;						///< �O���t�B�b�N�X�f�o�C�X�ɐݒ肷��o�b�t�@
+		IZ_UINT gfxDevBufSize;					///< グラフィックスデバイスに設定するサイズ
+		void* gfxDevBuf;						///< グラフィックスデバイスに設定するバッファ
 	};
 }
 }
