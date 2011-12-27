@@ -1,5 +1,5 @@
 #include "SampleMain.h"
-#include "SampleWindow.h"
+#include "SampleWindowProc.h"
 #include "SampleApp.h"
 
 IZ_BOOL SampleMainLoop(izanagi::sample::SSampleParam& params)
@@ -25,13 +25,13 @@ IZ_BOOL SampleMainLoop(izanagi::sample::SSampleParam& params)
 	// アプリ初期化用パラメータ
 	izanagi::sample::SSampleAppParams appParam = {
 		params.allocator,
-		0,			// TODO
-		IZ_NULL,	// TODO
+		params.gfxDevBufSize,
+		params.gfxDevBuf,
 		params.width,
 		params.height,
 		&wndProc,
-		nativeWndHandle,
-		nativeWndHandle,
+		IZ_NULL,	// 後で設定する
+		IZ_NULL,	// 後で設定する
 		params.platformParam,
 	};
 
@@ -45,6 +45,9 @@ IZ_BOOL SampleMainLoop(izanagi::sample::SSampleParam& params)
 	nativeWndHandle = izanagi::CSysWindow::GetNativeWindowHandle(wndHandle);
 	VGOTO(ret = (nativeWndHandle != IZ_NULL), __EXIT__);
 
+	appParam.deviceWindow = nativeWndHandle;
+	appParam.focusWindow = nativeWndHandle;
+
 	// アプリ初期化
 	ret = params.app->Init(appParam);
 	VGOTO(ret, __EXIT__);
@@ -55,6 +58,8 @@ __EXIT__:
 	params.app->Release();
 
 	izanagi::CSysWindow::Destroy(wndHandle);
+
+	params.allocator->Dump();
 
 	return ret;
 }

@@ -1,4 +1,4 @@
-#include "SampleWindow.h"
+#include "SampleWindowProc.h"
 #include "SampleApp.h"
 
 using namespace izanagi;

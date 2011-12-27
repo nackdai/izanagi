@@ -1,4 +1,5 @@
 #include "SampleApp.h"
+#include "SampleWindowProc.h"
 
 using namespace izanagi;
 using namespace sample;
@@ -155,9 +156,6 @@ void CSampleApp::Release()
 
 	SAFE_RELEASE(m_Device);
 
-	// アロケータのダンプ
-	m_Allocator->Dump();
-
 	izanagi::CGraphicsDevice::Dump();
 }
 
@@ -174,6 +172,32 @@ void CSampleApp::Render()
 {
 	IZ_ASSERT(m_Device != IZ_NULL);
     RenderInternal(m_Device);
+
+	IZ_ASSERT(m_DebugFont != IZ_NULL);
+
+	// 時間表示
+	if (m_Device->Begin2D()) {
+		m_DebugFont->Begin();
+
+		{
+			IZ_FLOAT time = GetTimer(0).GetTime();
+			IZ_FLOAT fps = 1000.0f / time;
+
+			m_DebugFont->DBPrint(
+				"%.2f[ms] %.2f[fps]\n",
+				time, fps);
+		}
+		{
+			IZ_FLOAT time = GetTimer(1).GetTime();
+			IZ_FLOAT fps = 1000.0f / time;
+
+			m_DebugFont->DBPrint(
+				"%.2f[ms] %.2f[fps]\n",
+				time, fps);
+		}
+
+		m_Device->End2D();
+	}
 }
 
 // V同期.
