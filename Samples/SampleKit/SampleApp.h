@@ -8,11 +8,11 @@
 #include <izDebugUtil.h>
 #include <izIo.h>
 
-#include "SampleWindow.h"
 #include "SampleCamera.h"
 
 namespace izanagi {
 namespace sample {
+	class CSampleWndProc;
 
 	enum {
 		SAMPLE_TIMER_NUM = 2,
@@ -81,7 +81,7 @@ namespace sample {
 		virtual IZ_BOOL InitInternal(
 			izanagi::IMemoryAllocator* allocator,
 			izanagi::CGraphicsDevice* device,
-			CSampleCamera& camera) = 0;
+			izanagi::sample::CSampleCamera& camera) = 0;
 
 		/** 解放.
 		 */
