@@ -1,31 +1,5 @@
 #include "MySystem.h"
 
-/////////////////////////////////////////////////
-void* CMyMemoryAllocator::Alloc(size_t size)
-{
-	return malloc(size);
-}
-
-void* CMyMemoryAllocator::AllocZero(size_t size)
-{
-	return malloc(size);
-}
-
-IZ_BOOL CMyMemoryAllocator::Free(void* data)
-{
-	IZ_BOOL ret = (data != IZ_NULL);
-	if (ret) {
-		free(data);
-	}
-	return ret;
-}
-
-void CMyMemoryAllocator::Dump()
-{
-	// 何もしない・・・
-}
-
-/////////////////////////////////////////////////
 CMySystem CMySystem::s_cInstance;
 
 // コンストラクタ
