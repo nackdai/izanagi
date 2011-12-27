@@ -4,7 +4,9 @@
 
 using namespace izanagi;
 
-struct CChunkedMemoryAllocator::SHeapHeader : public CDebugMemoryAllocator::SHeapHeaderWithDebugInfo {
+struct CChunkedMemoryAllocator::SHeapHeader
+	: public IZ_DEBUG_HEAP_HEADER_BASE
+{
 	void* buf;
 	IZ_UINT size;
 
@@ -243,27 +245,31 @@ IZ_UINT CChunkedMemoryAllocator::GetFreedSize()
 /**
 * Dump heap information.
 */
-void CChunkedMemoryAllocator::Dump()
+IZ_BOOL CChunkedMemoryAllocator::Dump()
 {
-#ifdef __IZ_DEBUG__
+	IZ_PRINTF("Dump Memory---\n");
+
 	SHeapHeader* p = m_AllocList.GetTop();
 	while (p != IZ_NULL) {
 		// 情報表示
+		p->Dump();
+
 		IZ_PRINTF(
-			"Dump Memory idx[%d] buf[0x%x] size[%d] file[%s] line[%d]\n",
-			p->idx,
+			" buf[0x%x] size[%d]\n",
 			p->buf,
-			p->size,
-			p->file,
-			p->line);
+			p->size);
 
 		p = p->next;
 	}
 
+	IZ_PRINTF("--------------\n");
+
 	IZ_ASSERT(m_FreeList.HasItem());
 	IZ_ASSERT(m_FreeList.GetTop()->next == IZ_NULL);
 	IZ_ASSERT(m_FreeList.GetTop()->size + sizeof(SHeapHeader) == m_nBufSize);
-#endif	// #ifdef __IZ_DEBUG__
+
+	IZ_BOOL ret = m_FreeList.HasItem();
+	return ret;
 }
 
 namespace {

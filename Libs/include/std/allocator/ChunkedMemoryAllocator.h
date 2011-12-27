@@ -8,7 +8,9 @@
 namespace izanagi {
 	/**
 	*/
-	class CChunkedMemoryAllocator : public CDebugMemoryAllocator {
+	class CChunkedMemoryAllocator
+		: public IZ_MEMORY_ALLOCATOR_BASE
+	{
 	protected:
 		struct SHeapHeader;
 
@@ -38,7 +40,7 @@ namespace izanagi {
 		IZ_UINT GetFreedSize();
 
 		// ダンプ
-		void Dump();
+		IZ_BOOL Dump();
 
 	protected:
 		// メモリ確保

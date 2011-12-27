@@ -3,7 +3,9 @@
 
 using namespace izanagi;
 
-struct CStandardMemoryAllocator::SHeapHeader : public CDebugMemoryAllocator::SHeapHeaderWithDebugInfo {
+struct CStandardMemoryAllocator::SHeapHeader
+	: public IZ_DEBUG_HEAP_HEADER_BASE
+{
 	IZ_UINT8* buf;
 	IZ_UINT size;
 	SHeapHeader* prev;
@@ -31,13 +33,9 @@ struct CStandardMemoryAllocator::SHeapHeader : public CDebugMemoryAllocator::SHe
 
 	IZ_UINT GetAllSize() const
 	{
-#if 0
-		return size + sizeof(SHeapHeader);
-#else
 		IZ_ASSERT(buf > reinterpret_cast<IZ_UINT8*>(const_cast<SHeapHeader*>(this)));
 		IZ_UINT sub = (IZ_UINT)(buf - reinterpret_cast<IZ_UINT8*>(const_cast<SHeapHeader*>(this)));
 		return size + sub;
-#endif
 	}
 };
 
@@ -261,27 +259,31 @@ IZ_UINT CStandardMemoryAllocator::GetFreedSize()
 /**
 * Dump heap information.
 */
-void CStandardMemoryAllocator::Dump()
+IZ_BOOL CStandardMemoryAllocator::Dump()
 {
-#ifdef __IZ_DEBUG__
+	IZ_PRINTF("Dump Memory---\n");
+
 	SHeapHeader* p = m_AllocList.GetTop();
 	while (p != IZ_NULL) {
 		// 情報表示
+		p->Dump();
+
 		IZ_PRINTF(
-			"Dump Memory idx[%d] buf[0x%x] size[%d] file[%s] line[%d]\n",
-			p->idx,
+			" buf[0x%x] size[%d]\n",
 			p->buf,
-			p->size,
-			p->file,
-			p->line);
+			p->size);
 
 		p = p->next;
 	}
 
+	IZ_PRINTF("--------------\n");
+
 	IZ_ASSERT(m_FreeList.HasItem());
 	IZ_ASSERT(m_FreeList.GetTop()->next == IZ_NULL);
 	IZ_ASSERT(m_FreeList.GetTop()->size + sizeof(SHeapHeader) == m_nBufSize);
-#endif	// #ifdef __IZ_DEBUG__
+
+	IZ_BOOL ret = m_FreeList.HasItem();
+	return ret;
 }
 
 // メモリ確保
