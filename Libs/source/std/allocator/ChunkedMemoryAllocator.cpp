@@ -4,7 +4,7 @@
 
 using namespace izanagi;
 
-struct CChunkedMemoryAllocator::SHeapHeader : public CDebugMemoryAllocator::SHeadHeaderWithDebugInfo {
+struct CChunkedMemoryAllocator::SHeapHeader : public CDebugMemoryAllocator::SHeapHeaderWithDebugInfo {
 	void* buf;
 	IZ_UINT size;
 

@@ -3,7 +3,7 @@
 
 using namespace izanagi;
 
-struct CStandardMemoryAllocator::SHeapHeader : public CDebugMemoryAllocator::SHeadHeaderWithDebugInfo {
+struct CStandardMemoryAllocator::SHeapHeader : public CDebugMemoryAllocator::SHeapHeaderWithDebugInfo {
 	IZ_UINT8* buf;
 	IZ_UINT size;
 	SHeapHeader* prev;
