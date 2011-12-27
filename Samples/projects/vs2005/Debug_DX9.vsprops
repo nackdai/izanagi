@@ -8,7 +8,7 @@
 	>
 	<Tool
 		Name="VCCLCompilerTool"
-		AdditionalIncludeDirectories="..\..\..\Libs\include;..\..\system"
+		AdditionalIncludeDirectories="..\..\..\Libs\include;..\..\SampleKit"
 		PreprocessorDefinitions="__IZ_DEBUG__"
 		MinimalRebuild="true"
 		BasicRuntimeChecks="3"
@@ -21,7 +21,7 @@
 	/>
 	<Tool
 		Name="VCLinkerTool"
-		AdditionalDependencies="d3d9.lib d3dx9d.lib dxguid.lib dinput8.lib dxerr.lib winmm.lib Std.lib Graph.lib Io.lib Math.lib DebugUtil.lib System.lib"
+		AdditionalDependencies="d3d9.lib d3dx9d.lib dxguid.lib dinput8.lib dxerr.lib winmm.lib SampleKit\$(ConfigurationName)\SampleKit.lib"
 		OutputFile="$(ProjectDir)..\..\$(ProjectName)\$(ProjectName)D.exe"
 		LinkIncremental="2"
 		AdditionalLibraryDirectories="&quot;..\..\..\Libs\project\lib\$(ConfigurationName)&quot;"
