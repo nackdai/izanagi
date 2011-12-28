@@ -51,17 +51,12 @@ namespace izanagi {
 		friend class CIndexBuffer;
 
 	private:
-		static CStandardMemoryAllocator s_cDeviceAllocator;
 		static CGraphicsDevice* s_pInstance;
 
 	public:
 		// インスタンス作成
 		static CGraphicsDevice* CreateGrapicsDevice(
-			IZ_UINT nBufSize,
-			void* pDeviceBuffer);
-
-		// グラフィックスデバイス用メモリアロケータダンプ
-		static inline void Dump();
+			IMemoryAllocator* allocator);
 
 	private:
 		CGraphicsDevice();
@@ -438,14 +433,6 @@ namespace izanagi {
 	};
 
 	// inline ***************************
-
-	/**
-	* グラフィックスデバイス用メモリアロケータダンプ
-	*/
-	void CGraphicsDevice::Dump()
-	{
-		s_cDeviceAllocator.Dump();
-	}
 
 	/**
 	* ディスプレイモード取得

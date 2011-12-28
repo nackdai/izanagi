@@ -13,35 +13,27 @@
 
 using namespace izanagi;
 
-CStandardMemoryAllocator CGraphicsDevice::s_cDeviceAllocator;
 CGraphicsDevice* CGraphicsDevice::s_pInstance = IZ_NULL;
 
 /**
 * インスタンス作成
 */
 CGraphicsDevice* CGraphicsDevice::CreateGrapicsDevice(
-	IZ_UINT nBufSize,
-	void* pDeviceBuffer)
+	IMemoryAllocator* allocator)
 {
 	if (s_pInstance != IZ_NULL) {
 		// 作成済みなので何もしない
 		return s_pInstance;
 	}
 
-	// アロケータ初期化
-	if (!s_cDeviceAllocator.Init(nBufSize, (IZ_UINT8*)pDeviceBuffer)) {
-		IZ_ASSERT(IZ_FALSE);
-		return IZ_NULL;
-	}
-
-	IMemoryAllocator* pAllocator = &s_cDeviceAllocator;
+	IZ_ASSERT(allocator != IZ_NULL);
 
 	IZ_BOOL result = IZ_TRUE;
 	IZ_UINT8* pBuf = IZ_NULL;
 	CGraphicsDevice* pInstance = IZ_NULL;
 
 	// メモリ確保
-	pBuf = (IZ_UINT8*)ALLOC_ZERO(pAllocator, sizeof(CGraphicsDevice));
+	pBuf = (IZ_UINT8*)ALLOC_ZERO(allocator, sizeof(CGraphicsDevice));
 	if (!(result = (pBuf != IZ_NULL))) {
 		IZ_ASSERT(IZ_FALSE);
 		goto __EXIT__;
@@ -50,7 +42,7 @@ CGraphicsDevice* CGraphicsDevice::CreateGrapicsDevice(
 	// インスタンス作成
 	pInstance = new(pBuf) CGraphicsDevice;
 	{
-		pInstance->m_pAllocator = pAllocator;
+		pInstance->m_pAllocator = allocator;
 
 		// IDirect3D9 インターフェースの取得
 		pInstance->m_pD3D = Direct3DCreate9(D3D_SDK_VERSION);
@@ -81,7 +73,7 @@ __EXIT__:
 			SAFE_RELEASE(pInstance);
 		}
 		else if (pBuf != IZ_NULL) {
-			pAllocator->Free(pBuf);
+			allocator->Free(pBuf);
 		}
 	}
 
