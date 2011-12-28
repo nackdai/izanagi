@@ -283,8 +283,8 @@ IZ_BOOL CStandardMemoryAllocator::Dump()
 	IZ_ASSERT(m_FreeList.GetTop()->next == IZ_NULL);
 	IZ_ASSERT(m_FreeList.GetTop()->size + sizeof(SHeapHeader) == m_nBufSize);
 
-	IZ_BOOL ret = m_FreeList.HasItem();
-	return ret;
+	IZ_BOOL hasItem = m_AllocList.HasItem();
+	return !hasItem;
 }
 
 // メモリ確保
