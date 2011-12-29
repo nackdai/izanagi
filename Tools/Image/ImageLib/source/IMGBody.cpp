@@ -81,7 +81,12 @@ IZ_BOOL CIMGBody::Read(LPCSTR lpszPath)
 
 	// マジックナンバーチェック
 	ret = IS_IMG_FORMAT(sHeader.magic);
-	VGOTO(ret, __EXIT__);
+
+	// IMGフォーマット以外でも通ることがあるので・・・
+	//VGOTO(ret, __EXIT__);
+	if (!ret) {
+		goto __EXIT__;
+	}
 
 	// ジャンプテーブル分は飛ばす
 	ret = pIn->Seek(sHeader.sizeJumpTbl, E_IO_STREAM_SEEK_POS_CUR);

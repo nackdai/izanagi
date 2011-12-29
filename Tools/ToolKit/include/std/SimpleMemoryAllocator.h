@@ -72,7 +72,7 @@ namespace tool {
 		IZ_UINT GetAllocatedSize();
 		IZ_UINT GetFreedSize();
 
-		void Dump();
+		IZ_BOOL Dump();
 
 	private:
 		SHeapHeader* AddHeader(IZ_BYTE* ptr, size_t size, const IZ_CHAR* file, IZ_UINT line);
