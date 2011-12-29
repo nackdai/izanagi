@@ -137,7 +137,7 @@ IZ_UINT CSimpleMemoryAllocator::GetFreedSize()
 	return 0;
 }
 
-void CSimpleMemoryAllocator::Dump()
+IZ_BOOL CSimpleMemoryAllocator::Dump()
 {
 	CStdList<SHeapHeader>::Item* pItem = m_AllocList.GetTop();
 	while (pItem != IZ_NULL) {
@@ -153,6 +153,9 @@ void CSimpleMemoryAllocator::Dump()
 
 		pItem = pItem->GetNext();
 	}
+
+	IZ_BOOL hasItem = m_AllocList.HasItem();
+	return !hasItem;
 }
 
 CSimpleMemoryAllocator::SHeapHeader* CSimpleMemoryAllocator::AddHeader(

@@ -240,7 +240,7 @@ void CImageBuilder::SetCommonAttrs(
 				pImageInfo->path.format(
 					"%s\\%s",
 					m_BasePath.c_str(),
-					val);
+					val.c_str());
 			}
 #endif
 		}
