@@ -41,10 +41,11 @@ IZ_BOOL CMySystem::Init(
 	m_cAllocator.Init(nBufSize, pBuf);
 #endif
 
+	m_GraphcAllocator.Init(DEVICE_BUF_SIZE, DEVICE_BUF);
+
 	// グラフィックスデバイス作成
 	m_pDevice = izanagi::CGraphicsDevice::CreateGrapicsDevice(
-					DEVICE_BUF_SIZE,
-					DEVICE_BUF);
+					&m_GraphcAllocator);
 	if (!(result = (m_pDevice != IZ_NULL))) {
 		IZ_ASSERT(IZ_FALSE);
 		goto __EXIT__;
@@ -113,5 +114,5 @@ void CMySystem::Release()
 	// アロケータのダンプ
 	m_cAllocator.Dump();
 
-	izanagi::CGraphicsDevice::Dump();
+	m_GraphcAllocator.Dump();
 }

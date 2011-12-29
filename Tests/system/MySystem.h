@@ -53,8 +53,9 @@ protected:
 
 protected:
 	izanagi::CGraphicsDevice* m_pDevice;
-	//CMyMemoryAllocator m_cAllocator;
+	
 	izanagi::CStandardMemoryAllocator m_cAllocator;
+	izanagi::CStandardMemoryAllocator m_GraphcAllocator;
 
 	izanagi::CDebugFont* m_pDebugFont;
 
