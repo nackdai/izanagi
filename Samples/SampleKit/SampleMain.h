@@ -12,14 +12,12 @@ namespace sample {
 	struct SSampleParam {
 		izanagi::sample::CSampleApp* app;
 		izanagi::IMemoryAllocator* allocator;
+		izanagi::IMemoryAllocator* allocatorForGraph;
 		IZ_UINT width;
 		IZ_UINT height;
 		IZ_BOOL isWindowed;
 		IZ_PCSTR title;
 		void* platformParam;
-
-		IZ_UINT gfxDevBufSize;					///< グラフィックスデバイスに設定するサイズ
-		void* gfxDevBuf;						///< グラフィックスデバイスに設定するバッファ
 	};
 }
 }

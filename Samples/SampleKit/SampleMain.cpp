@@ -25,8 +25,7 @@ IZ_BOOL SampleMainLoop(izanagi::sample::SSampleParam& params)
 	// アプリ初期化用パラメータ
 	izanagi::sample::SSampleAppParams appParam = {
 		params.allocator,
-		params.gfxDevBufSize,
-		params.gfxDevBuf,
+		params.allocatorForGraph,
 		params.width,
 		params.height,
 		&wndProc,

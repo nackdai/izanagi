@@ -16,7 +16,8 @@ CSampleApp::CSampleApp()
 
 CSampleApp::~CSampleApp()
 {
-	Release();
+	// 解放されているかチェック
+	IZ_ASSERT(m_Device == IZ_NULL);
 }
 
 // 初期化
@@ -29,13 +30,10 @@ IZ_BOOL CSampleApp::Init(const SSampleAppParams& params)
 
 	// グラフィックスデバイス作成
 	{
-		IZ_ASSERT(
-			params.gfxDevBufSize > 0
-			&& params.gfxDevBuf != IZ_NULL);
+		IZ_ASSERT(params.allocatorForGraph != IZ_NULL);
 
 		m_Device = izanagi::CGraphicsDevice::CreateGrapicsDevice(
-						params.gfxDevBufSize,
-						params.gfxDevBuf);
+						params.allocatorForGraph);
 		VGOTO(ret = (m_Device != IZ_NULL), __EXIT__);
 	}
 
@@ -149,6 +147,11 @@ __EXIT__:
 void CSampleApp::Release()
 {
 	ReleaseInternal();
+
+	izanagi::IMemoryAllocator* allocator = IZ_NULL;
+	if (m_Device) {
+		allocator = m_Device->GetDeviceAllocator();
+	}
     
 	SAFE_RELEASE(m_DebugFont);
 	SAFE_RELEASE(m_Pad);
@@ -156,7 +159,9 @@ void CSampleApp::Release()
 
 	SAFE_RELEASE(m_Device);
 
-	izanagi::CGraphicsDevice::Dump();
+	if (allocator) {
+		allocator->Dump();
+	}
 }
 
 // 更新.
