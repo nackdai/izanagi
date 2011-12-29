@@ -21,10 +21,9 @@ namespace sample {
 	/** サンプルアプリケーション初期化パラメータ
 	 */
 	struct SSampleAppParams {
-		izanagi::IMemoryAllocator* allocator;	///< メモリアロケータ
+		izanagi::IMemoryAllocator* allocator;			///< メモリアロケータ
 
-		IZ_UINT gfxDevBufSize;					///< グラフィックスデバイスに設定するサイズ
-		void* gfxDevBuf;						///< グラフィックスデバイスに設定するバッファ
+		izanagi::IMemoryAllocator* allocatorForGraph;	///< グラフィックスデバイス用メモリアロケータ
 
 		IZ_UINT screenWidth;					///< スクリーン幅
 		IZ_UINT screenHeight;					///< スクリーン高さ
