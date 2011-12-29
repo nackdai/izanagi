@@ -75,12 +75,12 @@ namespace {
 		IZ_UINT ret = pitch * height;
 
 		if (fmt == E_GRAPH_PIXEL_FMT_DXT1) {
-			ret = (pitch * height) >> 2;
+			ret = (pitch * height) >> 3;
 		}
 		else if (fmt == E_GRAPH_PIXEL_FMT_DXT3
 					|| fmt == E_GRAPH_PIXEL_FMT_DXT5)
 		{
-			ret = (pitch * height) >> 1;
+			ret = (pitch * height) >> 2;
 		}
 
 		return ret;

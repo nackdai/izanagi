@@ -298,7 +298,19 @@ IZ_BOOL CShaderBasic::CommitChanges()
 {
 	IZ_ASSERT(m_nCurPass >= 0);
 
-	CShaderPass& cPass = m_pPass[m_nCurPass];
+	// テクニックとパスの指定からパス全体のインデックスを計算する
+	IZ_UINT passIdx = 0;
+
+	for (IZ_UINT i = 0; i < m_nCurTech; i++) {
+		const S_SHD_TECHNIQUE* techDesc = m_TechTbl.GetDesc(i);
+		IZ_ASSERT(techDesc != IZ_NULL);
+
+		passIdx += techDesc->numPass;
+	}
+
+	IZ_ASSERT(passIdx + m_nCurPass < m_PassTbl.GetPassNum());
+
+	CShaderPass& cPass = m_pPass[passIdx + m_nCurPass];
 	const S_SHD_PASS* pDesc = cPass.GetDesc();
 
 	// Set RenderStates.
