@@ -176,6 +176,7 @@ namespace izanagi {
 
 		// うーん・・・
 		typename CStdList<Item>::Item* GetOrderTop() { return m_OrderList.GetTop(); }
+		typename CStdList<Item>::Item* GetOrderTail() { return m_OrderList.GetTail(); }
 
 		typename CStdList<Item>::Item* GetHashTop(const _KEY& tKey)
 		{

@@ -278,7 +278,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\std\StdFixedGameStateManager.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\std\StdGameState.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\std\StdGameStateManager.h"
 				>
 			</File>
 			<File
