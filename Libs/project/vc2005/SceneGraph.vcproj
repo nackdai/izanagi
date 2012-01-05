@@ -207,6 +207,10 @@
 				RelativePath="..\..\source\scenegraph\SceneParam.cpp"
 				>
 			</File>
+			<File
+				RelativePath="..\..\source\scenegraph\SceneState.cpp"
+				>
+			</File>
 			<Filter
 				Name="img"
 				>
@@ -326,6 +330,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\scenegraph\FixedSceneStateManager.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\scenegraph\LightParam.h"
 				>
 			</File>
@@ -339,6 +347,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\scenegraph\SceneParam.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\scenegraph\SceneState.h"
 				>
 			</File>
 			<Filter

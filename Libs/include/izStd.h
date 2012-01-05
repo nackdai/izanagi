@@ -2,7 +2,6 @@
 #define __IZANAGI_STD_H__
 
 #include "izDefs.h"
-#include "std/StdGameState.h"
 #include "std/StdPlacementNew.h"
 #include "std/StdObject.h"
 #include "std/2DPoint.h"

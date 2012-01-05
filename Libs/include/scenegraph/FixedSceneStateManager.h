@@ -1,36 +1,38 @@
-#if !defined(__IZANAGI_STD_FIXED_GAME_STATE_MANAGER_H__)
-#define __IZANAGI_STD_FIXED_GAME_STATE_MANAGER_H__
+#if !defined(__IZANAGI_SCENE_GRAPH_FIXED_SCENE_STATE_MANAGER_H__)
+#define __IZANAGI_SCENE_GRAPH_FIXED_SCENE_STATE_MANAGER_H__
 
 #include "izDefs.h"
-#include "StdGameState.h"
+#include "izGraph.h"
+#include "SceneState.h"
 
 namespace izanagi {
+
 	/** 固定ステート管理.
 	 */
 	template <
 		typename STATE,
 		IZ_UINT STATE_NUM
 	>
-	class CFixedGameStateManagerBase {
+	class CFixedSceneStateManager {
 	private:
 		enum {
 			StateNumInternal = STATE_NUM,
 		};
 
 	public:
-		CFixedGameStateManagerBase()
+		CFixedSceneStateManager()
 		{
 			FILL_ZERO(m_pStateTable, sizeof(m_pStateTable));
 		}
 
-		~CFixedGameStateManagerBase() {}
+		~CFixedSceneStateManager() {}
 
-		NO_COPIABLE(CFixedGameStateManagerBase);
+		NO_COPIABLE(CFixedSceneStateManager);
 
 	public:
 		/** 登録
 		 */
-		IZ_BOOL Register(IZ_UINT idx, CGameStateBase* state)
+		IZ_BOOL Register(IZ_UINT idx, CSceneStateBase* state)
 		{
 			VRETURN(
 				idx < StateNumInternal
@@ -58,21 +60,23 @@ namespace izanagi {
 
 		/** 描画.
 		 */
-		IZ_BOOL Render()
+		IZ_BOOL Render(CGraphicsDevice* device)
 		{
 			if (GetCurrentState() == STATE_NUM) {
 				return IZ_TRUE;
 			}
 
 			// 描画
-			IZ_BOOL bRet = GetState(GetCurrentState())->Render();
+			IZ_BOOL bRet = GetState(GetCurrentState())->Render(device);
 			
 			return bRet;
 		}
 
 		/** 更新.
 		 */
-		IZ_BOOL Update()
+		IZ_BOOL Update(
+			IMemoryAllocator* allocator,
+			void* val = IZ_NULL)
 		{		
 			if (m_nNextState != STATE_NUM) {
 				// 次のタスクへ移行
@@ -86,7 +90,7 @@ namespace izanagi {
 					
 				// 次のタスクの初期化
 				m_nPrevState = GetCurrentState();
-				if (! GetState(m_nNextState)->Enter()) {
+				if (! GetState(m_nNextState)->Enter(allocator, val)) {
 					// まだ入れないって意味にする
 					return IZ_TRUE;
 				}
@@ -152,7 +156,7 @@ namespace izanagi {
 
 		/** 前のステートに変更.
 		 */
-		void ChangePrevState();
+		void ChangePrevState()
 		{
 			if (m_nPrevState != STATE_NUM) {
 				ChangeState(m_nPrevState);
@@ -161,7 +165,7 @@ namespace izanagi {
 
 		/** ステート取得.
 		 */
-		CGameStateBase* GetState(STATE task)
+		CSceneStateBase* GetState(STATE task)
 		{
 			IZ_ASSERT((task >= (STATE)0) && (task < STATE_NUM));
 			return m_pStateTable[task];
@@ -176,9 +180,9 @@ namespace izanagi {
 
 		/** 現在のステートかどうか.
 		 */ 
-		IZ_BOOL IsCurrentState(CGameStateBase* task)
+		IZ_BOOL IsCurrentState(CSceneStateBase* task)
 		{
-			CGameStateBase* current_task = GetState(m_nCurrentState);
+			CSceneStateBase* current_task = GetState(m_nCurrentState);
 			return (current_task == task);
 		}
 
@@ -207,7 +211,7 @@ namespace izanagi {
 		void SetCurrentState(STATE task) { m_nCurrentState = task; }
 
 	protected:
-		CGameStateBase* m_pStateTable[STATE_NUM];
+		CSceneStateBase* m_pStateTable[STATE_NUM];
 	
 		STATE m_nCurrentState;	// 現在のタスク
 		STATE m_nNextState;		// 次に遷移するタスク
@@ -215,4 +219,4 @@ namespace izanagi {
 	};
 }
 
-#endif	// #if !defined(__IZANAGI_STD_FIXED_GAME_STATE_MANAGER_H__)
+#endif	// #if !defined(__IZANAGI_SCENE_GRAPH_FIXED_SCENE_STATE_MANAGER_H__)

@@ -1,19 +1,22 @@
-#if !defined(__IZANAGI_STD_GAME_STATE_H__)
-#define __IZANAGI_STD_GAME_STATE_H__
+#if !defined(__IZANAGI_SCENE_GRAPH_SCENE_STATE_H__)
+#define __IZANAGI_SCENE_GRAPH_SCENE_STATE_H__
 
 #include "izDefs.h"
+#include "izStd.h"
 
 namespace izanagi {
+	class CGraphicsDevice;
+
 	/** ステートベース.
 	 */
-	class CGameStateBase {
+	class CSceneStateBase {
 	public:
-		CGameStateBase() {}
+		CSceneStateBase() {}
 		
 		// 呼ばれないので、継承しても実装しないこと！！
-		virtual ~CGameStateBase() {}
+		virtual ~CSceneStateBase() {}
 		
-		NO_COPIABLE(CGameStateBase);
+		NO_COPIABLE(CSceneStateBase);
 		
 	public:
 		/** 初期化.
@@ -22,7 +25,7 @@ namespace izanagi {
 
 		/** 描画.
 		 */
-		virtual IZ_BOOL Render();
+		virtual IZ_BOOL Render(CGraphicsDevice* device);
 
 		/** 更新.
 		 */
@@ -34,7 +37,9 @@ namespace izanagi {
 
 		/** ステートに入る（開始）.
 		 */
-		virtual IZ_BOOL Enter();
+		virtual IZ_BOOL Enter(
+			IMemoryAllocator* allocator,
+			void* val = IZ_NULL);
 
 		/** ステートから抜ける（終了）.
 		 */
@@ -56,4 +61,4 @@ namespace izanagi {
 	};
 }
 
-#endif	// #if !defined(__IZANAGI_STD_GAME_STATE_H__)
+#endif	// #if !defined(__IZANAGI_SCENE_GRAPH_SCENE_STATE_H__)
