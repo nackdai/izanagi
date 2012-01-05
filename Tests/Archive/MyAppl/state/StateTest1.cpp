@@ -14,12 +14,12 @@ CStateTest1::~CStateTest1()
 {
 }
 
-IZ_BOOL CStateTest1::Create()
+IZ_BOOL CStateTest1::Init()
 {
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateTest1::Render()
+IZ_BOOL CStateTest1::Render(izanagi::CGraphicsDevice* device)
 {
 	if (CMySystem::GetInstance().GetGraphicsDevice()->Begin2D()) {
 		// Image
@@ -72,7 +72,7 @@ namespace {
 	};
 }	// namespace
 
-IZ_BOOL CStateTest1::Enter()
+IZ_BOOL CStateTest1::Enter(izanagi::IMemoryAllocator* allocator, void* val)
 {
 	VRETURN(m_Input.Open("data/test_1.arc"));
 

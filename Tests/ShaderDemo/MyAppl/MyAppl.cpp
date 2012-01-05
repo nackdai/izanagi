@@ -53,7 +53,7 @@ IZ_BOOL CMyAppl::Init(
 	//CMySystem::GetInstance().GetGraphicsDevice()->SetResetCallBack(_ResetResource);
 
 	// ステート初期化
-	ret = CStateManager::GetInstance().Create();
+	ret = CStateManager::GetInstance().Init();
 	VRETURN(ret);
 
 	// カメラ初期化
@@ -130,7 +130,7 @@ IZ_BOOL CMyAppl::Update()
 	}
 
 	if (!CStateManager::GetInstance().OnKeyDown(0, 0, 0)) {
-		ret = CStateManager::GetInstance().Update();
+		ret = CStateManager::GetInstance().Update(CMySystem::GetInstance().GetMemoryAllocator());
 	}
 
 	CMyCamera::GetInstance().Update();
@@ -151,7 +151,7 @@ IZ_BOOL CMyAppl::Render()
 
 	CMyCamera::GetInstance().Update();
 
-	IZ_BOOL ret = CStateManager::GetInstance().Render();
+	IZ_BOOL ret = CStateManager::GetInstance().Render(pDevice);
 
 	pDevice->EndRender();
 

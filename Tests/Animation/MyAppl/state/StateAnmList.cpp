@@ -89,14 +89,14 @@ CStateAnmList::~CStateAnmList()
 {
 }
 
-IZ_BOOL CStateAnmList::Create()
+IZ_BOOL CStateAnmList::Init()
 {
 	return IZ_TRUE;
 }
 
 #define _Print CMySystem::GetInstance().GetDebugFont()->DBPrint
 
-IZ_BOOL CStateAnmList::Render()
+IZ_BOOL CStateAnmList::Render(izanagi::CGraphicsDevice* device)
 {
 	Render3D();
 	Render2D();
@@ -182,7 +182,7 @@ IZ_BOOL CStateAnmList::Destroy()
 	return Leave();
 }
 
-IZ_BOOL CStateAnmList::Enter()
+IZ_BOOL CStateAnmList::Enter(izanagi::IMemoryAllocator* allocator, void* val)
 {
 	m_nCurAnmIdx = 0;
 	ReadAnm();

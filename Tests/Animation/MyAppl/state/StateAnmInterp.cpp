@@ -43,14 +43,14 @@ CStateAnmInterp::~CStateAnmInterp()
 {
 }
 
-IZ_BOOL CStateAnmInterp::Create()
+IZ_BOOL CStateAnmInterp::Init()
 {
 	return IZ_TRUE;
 }
 
 #define _Print CMySystem::GetInstance().GetDebugFont()->DBPrint
 
-IZ_BOOL CStateAnmInterp::Render()
+IZ_BOOL CStateAnmInterp::Render(izanagi::CGraphicsDevice* device)
 {
 	Render3D();
 	Render2D();
@@ -132,7 +132,7 @@ IZ_BOOL CStateAnmInterp::Destroy()
 	return Leave();
 }
 
-IZ_BOOL CStateAnmInterp::Enter()
+IZ_BOOL CStateAnmInterp::Enter(izanagi::IMemoryAllocator* allocator, void* val)
 {
 	izanagi::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
 	izanagi::IMemoryAllocator* pAllocator = CMySystem::GetInstance().GetMemoryAllocator();

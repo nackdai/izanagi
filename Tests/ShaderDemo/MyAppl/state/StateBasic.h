@@ -6,18 +6,19 @@
 #include "izGraph.h"
 #include "izDebugUtil.h"
 #include "shader/BasicShader.h"
+#include "izSceneGraph.h"
 
-class CStateBasic : public izanagi::CGameState {
+class CStateBasic : public izanagi::CSceneStateBase {
 public:
 	CStateBasic();
 	~CStateBasic();
 
 public:
-	IZ_BOOL Create();
-	IZ_BOOL Render();
+	IZ_BOOL Init();
+	IZ_BOOL Render(izanagi::CGraphicsDevice* device);
 	IZ_BOOL Update();
 	IZ_BOOL Destroy();
-	IZ_BOOL Enter();
+	IZ_BOOL Enter(izanagi::IMemoryAllocator* allocator, void* val);
 	IZ_BOOL Leave();
 
 	IZ_BOOL OnKeyDown(IZ_UINT nChar, IZ_UINT nRepCnt, IZ_UINT nFlags);

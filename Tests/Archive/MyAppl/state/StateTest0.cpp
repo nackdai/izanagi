@@ -12,12 +12,12 @@ CStateTest0::~CStateTest0()
 {
 }
 
-IZ_BOOL CStateTest0::Create()
+IZ_BOOL CStateTest0::Init()
 {
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateTest0::Render()
+IZ_BOOL CStateTest0::Render(izanagi::CGraphicsDevice* device)
 {
 	if (CMySystem::GetInstance().GetGraphicsDevice()->Begin2D()) {
 		CMySystem::GetInstance().GetDebugFont()->Begin();
@@ -104,7 +104,7 @@ namespace {
 	}
 }	// namespace
 
-IZ_BOOL CStateTest0::Enter()
+IZ_BOOL CStateTest0::Enter(izanagi::IMemoryAllocator* allocator, void* val)
 {
 	
 	izanagi::CFileInputStream input;

@@ -5,12 +5,12 @@
 #include "MySystem.h"
 #include "PostEffectSample.h"
 
-IZ_BOOL CStateMonotone::Create()
+IZ_BOOL CStateMonotone::Init()
 {
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateMonotone::Render()
+IZ_BOOL CStateMonotone::Render(izanagi::CGraphicsDevice* device)
 {
 	Render3D();
 	Render2D();
@@ -81,7 +81,7 @@ IZ_BOOL CStateMonotone::Destroy()
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateMonotone::Enter()
+IZ_BOOL CStateMonotone::Enter(izanagi::IMemoryAllocator* allocator, void* val)
 {
 	m_bBack = IZ_FALSE;
 

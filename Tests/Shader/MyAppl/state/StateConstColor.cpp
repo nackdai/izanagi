@@ -3,7 +3,7 @@
 #include "MySystem.h"
 #include "MyCamera.h"
 
-IZ_BOOL CStateConstColor::Create()
+IZ_BOOL CStateConstColor::Init()
 {
 	m_pMesh = IZ_NULL;
 	m_pShader = IZ_NULL;
@@ -11,7 +11,7 @@ IZ_BOOL CStateConstColor::Create()
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateConstColor::Render()
+IZ_BOOL CStateConstColor::Render(izanagi::CGraphicsDevice* device)
 {
 	Render3D();
 	Render2D();
@@ -67,7 +67,7 @@ IZ_BOOL CStateConstColor::Destroy()
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateConstColor::Enter()
+IZ_BOOL CStateConstColor::Enter(izanagi::IMemoryAllocator* allocator, void* val)
 {
 	IZ_BOOL ret = IZ_TRUE;
 

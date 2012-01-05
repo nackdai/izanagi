@@ -16,12 +16,12 @@ CStateHemiLight::~CStateHemiLight()
 {
 }
 
-IZ_BOOL CStateHemiLight::Create()
+IZ_BOOL CStateHemiLight::Init()
 {
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateHemiLight::Render()
+IZ_BOOL CStateHemiLight::Render(izanagi::CGraphicsDevice* device)
 {
 	Render3D();
 	Render2D();
@@ -122,7 +122,7 @@ IZ_BOOL CStateHemiLight::Destroy()
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateHemiLight::Enter()
+IZ_BOOL CStateHemiLight::Enter(izanagi::IMemoryAllocator* allocator, void* val)
 {
 	izanagi::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
 	izanagi::IMemoryAllocator* pAllocator = CMySystem::GetInstance().GetMemoryAllocator();

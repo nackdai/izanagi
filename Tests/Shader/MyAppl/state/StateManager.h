@@ -3,13 +3,14 @@
 
 #include "izDefs.h"
 #include "izStd.h"
+#include "izSceneGraph.h"
 
 enum STATE {
 	STATE_CONST_COLOR = 0,
 	STATE_NUM,
 };
 
-class CStateManager : public izanagi::CGameStateManagerBase<STATE, STATE_NUM> {
+class CStateManager : public izanagi::CFixedSceneStateManager<STATE, STATE_NUM> {
 private:
 	static CStateManager m_cInstance;
 
