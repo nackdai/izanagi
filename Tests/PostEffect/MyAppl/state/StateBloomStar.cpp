@@ -5,12 +5,12 @@
 #include "MySystem.h"
 #include "PostEffectSample.h"
 
-IZ_BOOL CStateBloomStar::Create()
+IZ_BOOL CStateBloomStar::Init()
 {
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateBloomStar::Render()
+IZ_BOOL CStateBloomStar::Render(izanagi::CGraphicsDevice* device)
 {
 	Render3D();
 	Render2D();
@@ -81,7 +81,7 @@ IZ_BOOL CStateBloomStar::Destroy()
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateBloomStar::Enter()
+IZ_BOOL CStateBloomStar::Enter(izanagi::IMemoryAllocator* allocator, void* val)
 {
 	m_bBack = IZ_FALSE;
 

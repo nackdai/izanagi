@@ -11,12 +11,12 @@ CStateFont::~CStateFont()
 {
 }
 
-IZ_BOOL CStateFont::Create()
+IZ_BOOL CStateFont::Init()
 {
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateFont::Render()
+IZ_BOOL CStateFont::Render(izanagi::CGraphicsDevice* device)
 {
 	if (CMySystem::GetInstance().GetGraphicsDevice()->Begin2D()) {
 		CMySystem::GetInstance().GetDebugFont()->Begin();
@@ -82,7 +82,7 @@ IZ_BOOL CStateFont::Destroy()
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateFont::Enter()
+IZ_BOOL CStateFont::Enter(izanagi::IMemoryAllocator* allocator, void* val)
 {
 	izanagi::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
 	izanagi::IMemoryAllocator* pAllocator = CMySystem::GetInstance().GetMemoryAllocator();

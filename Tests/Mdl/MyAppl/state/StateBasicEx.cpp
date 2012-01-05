@@ -104,14 +104,14 @@ CStateBasicEx::~CStateBasicEx()
 {
 }
 
-IZ_BOOL CStateBasicEx::Create()
+IZ_BOOL CStateBasicEx::Init()
 {
 	return IZ_TRUE;
 }
 
 #define _Print CMySystem::GetInstance().GetDebugFont()->DBPrint
 
-IZ_BOOL CStateBasicEx::Render()
+IZ_BOOL CStateBasicEx::Render(izanagi::CGraphicsDevice* device)
 {
 	Render3D();
 	Render2D();
@@ -235,7 +235,7 @@ IZ_BOOL CStateBasicEx::Destroy()
 	return Leave();
 }
 
-IZ_BOOL CStateBasicEx::Enter()
+IZ_BOOL CStateBasicEx::Enter(izanagi::IMemoryAllocator* allocator, void* val)
 {
 	izanagi::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
 	izanagi::IMemoryAllocator* pAllocator = CMySystem::GetInstance().GetMemoryAllocator();

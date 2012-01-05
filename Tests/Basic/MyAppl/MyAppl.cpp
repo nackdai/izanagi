@@ -91,7 +91,7 @@ IZ_BOOL CMyAppl::Init(
 #endif
 
 	// ステート初期化
-	ret = CStateManager::GetInstance().Create();
+	ret = CStateManager::GetInstance().Init();
 	VRETURN(ret);
 
 #if 0
@@ -124,7 +124,7 @@ IZ_BOOL CMyAppl::Update()
 		CMySystem::GetInstance().GetPad()->Update();
 	}
 
-	IZ_BOOL ret = CStateManager::GetInstance().Update();
+	IZ_BOOL ret = CStateManager::GetInstance().Update(CMySystem::GetInstance().GetMemoryAllocator());
 	return ret;
 }
 
@@ -148,7 +148,7 @@ IZ_BOOL CMyAppl::Render()
 		0);
 #endif
 
-	IZ_BOOL ret = CStateManager::GetInstance().Render();
+	IZ_BOOL ret = CStateManager::GetInstance().Render(pDevice);
 
 #if 0
 	pDevice->EndScene(E_END_SCENE_FLAG_RT_0);

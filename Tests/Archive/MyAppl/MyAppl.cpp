@@ -91,7 +91,7 @@ IZ_BOOL CMyAppl::Init(
 #endif
 
 	// ステート初期化
-	ret = CStateManager::GetInstance().Create();
+	ret = CStateManager::GetInstance().Init();
 	VRETURN(ret);
 
 	CStateManager::GetInstance().ChangeState(STATE_TEST1);
@@ -117,7 +117,7 @@ IZ_BOOL CMyAppl::Update()
 		CMySystem::GetInstance().GetPad()->Update();
 	}
 
-	IZ_BOOL ret = CStateManager::GetInstance().Update();
+	IZ_BOOL ret = CStateManager::GetInstance().Update(CMySystem::GetInstance().GetMemoryAllocator());
 	return ret;
 }
 
@@ -132,7 +132,7 @@ IZ_BOOL CMyAppl::Render()
 		izanagi::E_GRAPH_CLEAR_FLAG_ALL,
 		color, 1.0f, 0);
 
-	IZ_BOOL ret = CStateManager::GetInstance().Render();
+	IZ_BOOL ret = CStateManager::GetInstance().Render(pDevice);
 
 	pDevice->EndRender();
 

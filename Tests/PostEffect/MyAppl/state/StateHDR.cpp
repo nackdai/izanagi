@@ -5,12 +5,12 @@
 #include "MySystem.h"
 #include "PostEffectSample.h"
 
-IZ_BOOL CStateHDR::Create()
+IZ_BOOL CStateHDR::Init()
 {
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateHDR::Render()
+IZ_BOOL CStateHDR::Render(izanagi::CGraphicsDevice* device)
 {
 	Render3D();
 	Render2D();
@@ -81,7 +81,7 @@ IZ_BOOL CStateHDR::Destroy()
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateHDR::Enter()
+IZ_BOOL CStateHDR::Enter(izanagi::IMemoryAllocator* allocator, void* val)
 {
 	m_bBack = IZ_FALSE;
 

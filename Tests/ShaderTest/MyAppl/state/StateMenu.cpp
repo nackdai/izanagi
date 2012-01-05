@@ -11,12 +11,12 @@ CStateMenu::~CStateMenu()
 {
 }
 
-IZ_BOOL CStateMenu::Create()
+IZ_BOOL CStateMenu::Init()
 {
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateMenu::Render()
+IZ_BOOL CStateMenu::Render(izanagi::CGraphicsDevice* device)
 {
 	Render2D();
 
@@ -98,7 +98,7 @@ IZ_BOOL CStateMenu::Destroy()
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateMenu::Enter()
+IZ_BOOL CStateMenu::Enter(izanagi::IMemoryAllocator* allocator, void* val)
 {
 	m_bDecide = IZ_FALSE;
 

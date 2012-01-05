@@ -18,12 +18,12 @@ CStatePhong::~CStatePhong()
 {
 }
 
-IZ_BOOL CStatePhong::Create()
+IZ_BOOL CStatePhong::Init()
 {
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStatePhong::Render()
+IZ_BOOL CStatePhong::Render(izanagi::CGraphicsDevice* device)
 {
 	Render3D();
 	Render2D();
@@ -143,7 +143,7 @@ IZ_BOOL CStatePhong::Destroy()
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStatePhong::Enter()
+IZ_BOOL CStatePhong::Enter(izanagi::IMemoryAllocator* allocator, void* val)
 {
 	izanagi::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
 	izanagi::IMemoryAllocator* pAllocator = CMySystem::GetInstance().GetMemoryAllocator();

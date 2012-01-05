@@ -10,7 +10,7 @@ CStateBasic::~CStateBasic()
 {
 }
 
-IZ_BOOL CStateBasic::Create()
+IZ_BOOL CStateBasic::Init()
 {
 	return IZ_TRUE;
 }
@@ -38,7 +38,7 @@ namespace {
 	}
 }	// namespace
 
-IZ_BOOL CStateBasic::Render()
+IZ_BOOL CStateBasic::Render(izanagi::CGraphicsDevice* device)
 {
 	if (CMySystem::GetInstance().GetGraphicsDevice()->Begin2D()) {
 		CMySystem::GetInstance().GetDebugFont()->Begin();
@@ -116,7 +116,7 @@ IZ_BOOL CStateBasic::Destroy()
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateBasic::Enter()
+IZ_BOOL CStateBasic::Enter(izanagi::IMemoryAllocator* allocator, void* val)
 {
 #if 1
 	m_pTex = CMySystem::GetInstance().GetGraphicsDevice()->CreateTextureFromFile(

@@ -85,7 +85,7 @@ IZ_BOOL CMyAppl::Init(
 	VRETURN(ret);
 
 	// ステート初期化
-	ret = CStateManager::GetInstance().Create();
+	ret = CStateManager::GetInstance().Init();
 	VRETURN(ret);
 
 	izanagi::IMemoryAllocator* pAllocator = CMySystem::GetInstance().GetMemoryAllocator();
@@ -108,7 +108,7 @@ void CMyAppl::Release()
 // 更新
 IZ_BOOL CMyAppl::Update()
 {
-	IZ_BOOL ret = CStateManager::GetInstance().Update();
+	IZ_BOOL ret = CStateManager::GetInstance().Update(CMySystem::GetInstance().GetMemoryAllocator());
 	return ret;
 }
 
@@ -127,7 +127,7 @@ IZ_BOOL CMyAppl::Render()
 	{
 		CMyCamera::GetInstance().Update();
 
-		CStateManager::GetInstance().Render();
+		CStateManager::GetInstance().Render(pDevice);
 
 		if (CMySystem::GetInstance().GetGraphicsDevice()->Begin2D()) {
 			CMySystem::GetInstance().GetDebugFont()->Begin();

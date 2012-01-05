@@ -6,17 +6,17 @@
 #include "izGraph.h"
 #include "izSceneGraph.h"
 
-class CStateTest0 : public izanagi::CGameState {
+class CStateTest0 : public izanagi::CSceneStateBase {
 public:
 	CStateTest0();
 	~CStateTest0();
 
 public:
-	IZ_BOOL Create();
-	IZ_BOOL Render();
+	IZ_BOOL Init();
+	IZ_BOOL Render(izanagi::CGraphicsDevice* device);
 	IZ_BOOL Update();
 	IZ_BOOL Destroy();
-	IZ_BOOL Enter();
+	IZ_BOOL Enter(izanagi::IMemoryAllocator* allocator, void* val);
 	IZ_BOOL Leave();
 
 	IZ_BOOL OnKeyDown(IZ_UINT nChar, IZ_UINT nRepCnt, IZ_UINT nFlags) { return IZ_TRUE; }

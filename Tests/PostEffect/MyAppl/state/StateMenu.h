@@ -3,18 +3,19 @@
 
 #include "izDefs.h"
 #include "izStd.h"
+#include "izSceneGraph.h"
 
-class CStateMenu : public izanagi::CGameState {
+class CStateMenu : public izanagi::CSceneStateBase {
 public:
 	CStateMenu();
 	~CStateMenu();
 
 public:
-	IZ_BOOL Create();
-	IZ_BOOL Render();
+	IZ_BOOL Init();
+	IZ_BOOL Render(izanagi::CGraphicsDevice* device);
 	IZ_BOOL Update();
 	IZ_BOOL Destroy();
-	IZ_BOOL Enter();
+	IZ_BOOL Enter(izanagi::IMemoryAllocator* allocator, void* val);
 	IZ_BOOL Leave();
 
 	IZ_BOOL OnKeyDown(IZ_UINT nChar, IZ_UINT nRepCnt, IZ_UINT nFlags);

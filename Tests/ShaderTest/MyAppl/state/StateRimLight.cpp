@@ -17,12 +17,12 @@ CStateRimLight::~CStateRimLight()
 {
 }
 
-IZ_BOOL CStateRimLight::Create()
+IZ_BOOL CStateRimLight::Init()
 {
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateRimLight::Render()
+IZ_BOOL CStateRimLight::Render(izanagi::CGraphicsDevice* device)
 {
 	Render3D();
 	Render2D();
@@ -124,7 +124,7 @@ IZ_BOOL CStateRimLight::Destroy()
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateRimLight::Enter()
+IZ_BOOL CStateRimLight::Enter(izanagi::IMemoryAllocator* allocator, void* val)
 {
 	izanagi::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
 	izanagi::IMemoryAllocator* pAllocator = CMySystem::GetInstance().GetMemoryAllocator();

@@ -18,12 +18,12 @@ CStateNormalMap::~CStateNormalMap()
 {
 }
 
-IZ_BOOL CStateNormalMap::Create()
+IZ_BOOL CStateNormalMap::Init()
 {
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateNormalMap::Render()
+IZ_BOOL CStateNormalMap::Render(izanagi::CGraphicsDevice* device)
 {
 	Render3D();
 	Render2D();
@@ -145,7 +145,7 @@ IZ_BOOL CStateNormalMap::Destroy()
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateNormalMap::Enter()
+IZ_BOOL CStateNormalMap::Enter(izanagi::IMemoryAllocator* allocator, void* val)
 {
 	izanagi::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
 	izanagi::IMemoryAllocator* pAllocator = CMySystem::GetInstance().GetMemoryAllocator();

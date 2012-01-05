@@ -3,6 +3,7 @@
 
 #include "izDefs.h"
 #include "izStd.h"
+#include "izSceneGraph.h"
 
 enum STATE {
 	STATE_MENU = 0,
@@ -13,7 +14,7 @@ enum STATE {
 	STATE_NUM,
 };
 
-class CStateManager : public izanagi::CGameStateManagerBase<STATE, STATE_NUM> {
+class CStateManager : public izanagi::CFixedSceneStateManager<STATE, STATE_NUM> {
 private:
 	static CStateManager s_cInstance;
 

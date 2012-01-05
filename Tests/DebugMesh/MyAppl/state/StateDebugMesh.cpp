@@ -27,12 +27,12 @@ CStateDebugMesh::~CStateDebugMesh()
 {
 }
 
-IZ_BOOL CStateDebugMesh::Create()
+IZ_BOOL CStateDebugMesh::Init()
 {
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateDebugMesh::Render()
+IZ_BOOL CStateDebugMesh::Render(izanagi::CGraphicsDevice* device)
 {
 	Render3D();
 	Render2D();
@@ -144,7 +144,7 @@ IZ_BOOL CStateDebugMesh::Destroy()
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateDebugMesh::Enter()
+IZ_BOOL CStateDebugMesh::Enter(izanagi::IMemoryAllocator* allocator, void* val)
 {
 	izanagi::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
 	izanagi::IMemoryAllocator* pAllocator = CMySystem::GetInstance().GetMemoryAllocator();
