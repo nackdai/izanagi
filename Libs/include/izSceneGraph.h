@@ -5,6 +5,9 @@
 #include "scenegraph/SceneGraphUtil.h"
 #include "scenegraph/SceneParam.h"
 
+#include "scenegraph/SceneState.h"
+#include "scenegraph/FixedSceneStateManager.h"
+
 // image
 #include "scenegraph/img/IMGFormat.h"
 #include "scenegraph/img/izImage.h"

@@ -200,10 +200,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\source\std\StdGameState.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\source\std\StdKey.cpp"
 				>
 			</File>
@@ -275,18 +271,6 @@
 			</File>
 			<File
 				RelativePath="..\..\include\std\StdColor.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\std\StdFixedGameStateManager.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\std\StdGameState.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\std\StdGameStateManager.h"
 				>
 			</File>
 			<File
