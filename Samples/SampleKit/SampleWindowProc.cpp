@@ -23,7 +23,7 @@ void CSampleWndProc::Init(CSampleApp* app)
 
 void CSampleWndProc::OnKeyDown(IZ_UINT nChar)
 {
-	//CStateManager::GetInstance().OnKeyDown(nChar, 0, 0);
+	m_App->OnKeyDown(nChar);
 }
 
 void CSampleWndProc::OnMouseLBtnDown()

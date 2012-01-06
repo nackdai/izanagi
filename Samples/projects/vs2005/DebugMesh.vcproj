@@ -17,8 +17,6 @@
 	<Configurations>
 		<Configuration
 			Name="Debug_DX9|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			InheritedPropertySheets=".\Debug_DX9.vsprops"
 			CharacterSet="2"
@@ -94,8 +92,6 @@
 		</Configuration>
 		<Configuration
 			Name="Release_DX9|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			InheritedPropertySheets=".\Release_DX9.vsprops"
 			CharacterSet="2"
@@ -208,7 +204,7 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src &quot;$(InputPath)&quot; -obj &quot;$(ProjectDir)..\..\$(ProjectName)\shader_obj&quot; -o &quot;$(ProjectDir)..\..\$(ProjectName)\data&quot;"
+						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src &quot;$(InputPath)&quot; -obj &quot;$(ProjectDir)..\..\$(ProjectName)\shader_obj&quot; -o &quot;$(ProjectDir)..\..\$(ProjectName)\data&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="$(InputDir)$(InputName).fx"
 						Outputs="$(InputDir)..\data\$(InputName).shd"
 					/>
@@ -218,7 +214,7 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src &quot;$(InputPath)&quot; -obj &quot;$(ProjectDir)..\..\$(ProjectName)\shader_obj&quot; -o &quot;$(ProjectDir)..\..\$(ProjectName)\data&quot;"
+						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src &quot;$(InputPath)&quot; -obj &quot;$(ProjectDir)..\..\$(ProjectName)\shader_obj&quot; -o &quot;$(ProjectDir)..\..\$(ProjectName)\data&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="$(InputDir)$(InputName).fx"
 						Outputs="$(InputDir)..\data\$(InputName).shd"
 					/>

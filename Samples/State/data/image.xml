@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<textures>
+  <plane
+	  path="./a.png"
+	  fmt="rgba8"/>
+  <plane
+	  path="./b.png"
+	  fmt="dxt5"/>
+  <plane
+	  path="./c.png"
+	  fmt="dxt1"/>
+</textures>
+
