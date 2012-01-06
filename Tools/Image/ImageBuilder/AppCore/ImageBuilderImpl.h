@@ -57,6 +57,9 @@ public:
 private:
 	std::vector<SImageInfo> m_ImageInfoList;
 	izanagi::tool::CString m_BasePath;
+
+	// ルートが正しく設定されているかどうか
+	IZ_BOOL m_IsStartRoot;
 };
 
 #endif	// #if !defined(__IMAGE_BUILDER_IMPL_H__)

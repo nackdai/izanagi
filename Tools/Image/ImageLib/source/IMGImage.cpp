@@ -71,6 +71,13 @@ IZ_BOOL CIMGImage::ConvertPixelFormat(E_GRAPH_PIXEL_FMT nFmt)
 	// 出力バッファ
 	std::vector<IZ_BYTE> tDstBuffer(nDstSize);
 
+	// TODO
+	// 変換フォーマット
+	E_GRAPH_PIXEL_FMT convFmt = nFmt;
+	if (convFmt == E_GRAPH_PIXEL_FMT_RGBA8) {
+		convFmt = E_GRAPH_PIXEL_FMT_BGRA8;
+	}
+
 	// 変換
 	IZ_BOOL ret = CPixelFormatConverter::GetInstance()->Convert(
 					&m_DataBuffer[0],
@@ -78,7 +85,7 @@ IZ_BOOL CIMGImage::ConvertPixelFormat(E_GRAPH_PIXEL_FMT nFmt)
 					m_nHeight,
 					m_Fmt,
 					&tDstBuffer[0],
-					nFmt);
+					convFmt);
 
 	IZ_ASSERT(ret);
 
