@@ -95,7 +95,7 @@ IZ_BOOL CStateBloomStarEx::Leave()
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateBloomStarEx::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+IZ_BOOL CStateBloomStarEx::OnKeyDown(UINT nChar)
 {
 	if (nChar == VK_BACK) {
 		m_bBack = IZ_TRUE;

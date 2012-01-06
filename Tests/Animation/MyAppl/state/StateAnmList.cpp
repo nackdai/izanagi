@@ -197,7 +197,7 @@ IZ_BOOL CStateAnmList::Leave()
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateAnmList::OnKeyDown(IZ_UINT nChar, IZ_UINT nRepCnt, IZ_UINT nFlags)
+IZ_BOOL CStateAnmList::OnKeyDown(IZ_UINT nChar)
 {
 	IZ_BOOL needUpdateAnm = IZ_FALSE;
 
@@ -220,12 +220,12 @@ IZ_BOOL CStateAnmList::OnKeyDown(IZ_UINT nChar, IZ_UINT nRepCnt, IZ_UINT nFlags)
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateAnmList::OnMouseMove(IZ_UINT nFlags, IZ_INT x, IZ_INT y)
+IZ_BOOL CStateAnmList::OnMouseMove(IZ_INT x, IZ_INT y)
 {
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateAnmList::OnMouseWheel(IZ_UINT nFlags, IZ_SHORT zDelta, IZ_INT x, IZ_INT y)
+IZ_BOOL CStateAnmList::OnMouseWheel(IZ_SHORT zDelta)
 {
 	return IZ_TRUE;
 }

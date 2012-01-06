@@ -158,17 +158,17 @@ IZ_BOOL CStateHemiLight::Leave()
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateHemiLight::OnKeyDown(IZ_UINT nChar, IZ_UINT nRepCnt, IZ_UINT nFlags)
+IZ_BOOL CStateHemiLight::OnKeyDown(IZ_UINT nChar)
 {
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateHemiLight::OnMouseMove(IZ_UINT nFlags, IZ_INT x, IZ_INT y)
+IZ_BOOL CStateHemiLight::OnMouseMove(IZ_INT x, IZ_INT y)
 {
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateHemiLight::OnMouseWheel(IZ_UINT nFlags, IZ_SHORT zDelta, IZ_INT x, IZ_INT y)
+IZ_BOOL CStateHemiLight::OnMouseWheel(IZ_SHORT zDelta)
 {
 	return IZ_TRUE;
 }

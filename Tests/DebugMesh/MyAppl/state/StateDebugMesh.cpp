@@ -277,7 +277,7 @@ IZ_BOOL CStateDebugMesh::Leave()
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateDebugMesh::OnKeyDown(IZ_UINT nChar, IZ_UINT nRepCnt, IZ_UINT nFlags)
+IZ_BOOL CStateDebugMesh::OnKeyDown(IZ_UINT nChar)
 {
 	switch (nChar) {
 	case VK_UP:
@@ -296,12 +296,12 @@ IZ_BOOL CStateDebugMesh::OnKeyDown(IZ_UINT nChar, IZ_UINT nRepCnt, IZ_UINT nFlag
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateDebugMesh::OnMouseMove(IZ_UINT nFlags, IZ_INT x, IZ_INT y)
+IZ_BOOL CStateDebugMesh::OnMouseMove(IZ_INT x, IZ_INT y)
 {
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateDebugMesh::OnMouseWheel(IZ_UINT nFlags, IZ_SHORT zDelta, IZ_INT x, IZ_INT y)
+IZ_BOOL CStateDebugMesh::OnMouseWheel(IZ_SHORT zDelta)
 {
 	return IZ_TRUE;
 }

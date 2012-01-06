@@ -19,9 +19,9 @@ public:
 	IZ_BOOL Enter(izanagi::IMemoryAllocator* allocator, void* val);
 	IZ_BOOL Leave();
 
-	IZ_BOOL OnKeyDown(IZ_UINT nChar, IZ_UINT nRepCnt, IZ_UINT nFlags);
-	IZ_BOOL OnMouseMove(IZ_UINT nFlags, IZ_INT x, IZ_INT y);
-	IZ_BOOL OnMouseWheel(IZ_UINT nFlags, IZ_SHORT zDelta, IZ_INT x, IZ_INT y); 
+	IZ_BOOL OnKeyDown(IZ_UINT nChar);
+	IZ_BOOL OnMouseMove(IZ_INT x, IZ_INT y);
+	IZ_BOOL OnMouseWheel(IZ_SHORT zDelta); 
 
 protected:
 	izanagi::CTexture* m_pTex;

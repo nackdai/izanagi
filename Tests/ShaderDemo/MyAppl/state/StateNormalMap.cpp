@@ -208,17 +208,17 @@ IZ_BOOL CStateNormalMap::Leave()
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateNormalMap::OnKeyDown(IZ_UINT nChar, IZ_UINT nRepCnt, IZ_UINT nFlags)
+IZ_BOOL CStateNormalMap::OnKeyDown(IZ_UINT nChar)
 {
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateNormalMap::OnMouseMove(IZ_UINT nFlags, IZ_INT x, IZ_INT y)
+IZ_BOOL CStateNormalMap::OnMouseMove(IZ_INT x, IZ_INT y)
 {
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateNormalMap::OnMouseWheel(IZ_UINT nFlags, IZ_SHORT zDelta, IZ_INT x, IZ_INT y)
+IZ_BOOL CStateNormalMap::OnMouseWheel(IZ_SHORT zDelta)
 {
 	return IZ_TRUE;
 }

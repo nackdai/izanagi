@@ -24,7 +24,7 @@ public:
 public:
 	void OnKeyDown(IZ_UINT nChar)
 	{
-		CStateManager::GetInstance().OnKeyDown(nChar, 0, 0);
+		CStateManager::GetInstance().OnKeyDown(nChar);
 	}
 
 	void OnMouseLBtnDown()

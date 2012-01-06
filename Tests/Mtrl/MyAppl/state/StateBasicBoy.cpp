@@ -331,17 +331,17 @@ IZ_BOOL CStateBasicBoy::Leave()
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateBasicBoy::OnKeyDown(IZ_UINT nChar, IZ_UINT nRepCnt, IZ_UINT nFlags)
+IZ_BOOL CStateBasicBoy::OnKeyDown(IZ_UINT nChar)
 {
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateBasicBoy::OnMouseMove(IZ_UINT nFlags, IZ_INT x, IZ_INT y)
+IZ_BOOL CStateBasicBoy::OnMouseMove(IZ_INT x, IZ_INT y)
 {
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateBasicBoy::OnMouseWheel(IZ_UINT nFlags, IZ_SHORT zDelta, IZ_INT x, IZ_INT y)
+IZ_BOOL CStateBasicBoy::OnMouseWheel(IZ_SHORT zDelta)
 {
 	return IZ_TRUE;
 }

@@ -185,7 +185,7 @@ IZ_BOOL CStateAnmInterp::Leave()
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateAnmInterp::OnKeyDown(IZ_UINT nChar, IZ_UINT nRepCnt, IZ_UINT nFlags)
+IZ_BOOL CStateAnmInterp::OnKeyDown(IZ_UINT nChar)
 {
 	static const izanagi::CAnimationInterp::E_INTERP_TYPE type = izanagi::CAnimationInterp::E_INTERP_TYPE_FROZEN;
 	static const IZ_FLOAT interpTime = 1000.0f;
@@ -229,12 +229,12 @@ IZ_BOOL CStateAnmInterp::OnKeyDown(IZ_UINT nChar, IZ_UINT nRepCnt, IZ_UINT nFlag
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateAnmInterp::OnMouseMove(IZ_UINT nFlags, IZ_INT x, IZ_INT y)
+IZ_BOOL CStateAnmInterp::OnMouseMove(IZ_INT x, IZ_INT y)
 {
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateAnmInterp::OnMouseWheel(IZ_UINT nFlags, IZ_SHORT zDelta, IZ_INT x, IZ_INT y)
+IZ_BOOL CStateAnmInterp::OnMouseWheel(IZ_SHORT zDelta)
 {
 	return IZ_TRUE;
 }

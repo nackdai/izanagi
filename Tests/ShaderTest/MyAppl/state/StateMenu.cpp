@@ -74,7 +74,7 @@ void CStateMenu::Render2D()
 
 IZ_BOOL CStateMenu::Update()
 {
-	OnKeyDown(0, 0, 0);
+	OnKeyDown(0);
 
 	if (m_bDecide) {
 		IZ_UINT pos = m_nPos + 1;
@@ -112,7 +112,7 @@ IZ_BOOL CStateMenu::Leave()
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateMenu::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+IZ_BOOL CStateMenu::OnKeyDown(UINT nChar)
 {
 	izanagi::CKeyboard* pKeyboard = CMySystem::GetInstance().GetKeyboard();
 	if (pKeyboard->IsPushOneShotKey(izanagi::E_KEYBOARD_BUTTON_UP)) {

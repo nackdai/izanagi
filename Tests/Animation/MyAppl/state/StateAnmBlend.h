@@ -21,7 +21,7 @@ public:
 	IZ_BOOL Enter(izanagi::IMemoryAllocator* allocator, void* val);
 	IZ_BOOL Leave();
 
-	IZ_BOOL OnKeyDown(IZ_UINT nChar, IZ_UINT nRepCnt, IZ_UINT nFlags);
+	IZ_BOOL OnKeyDown(IZ_UINT nChar);
 
 protected:
 	void Render2D();

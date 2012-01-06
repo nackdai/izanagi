@@ -129,7 +129,7 @@ IZ_BOOL CMyAppl::Update()
 		m_IsOnShader = !m_IsOnShader;
 	}
 
-	if (!CStateManager::GetInstance().OnKeyDown(0, 0, 0)) {
+	if (!CStateManager::GetInstance().OnKeyDown(0)) {
 		ret = CStateManager::GetInstance().Update(CMySystem::GetInstance().GetMemoryAllocator());
 	}
 

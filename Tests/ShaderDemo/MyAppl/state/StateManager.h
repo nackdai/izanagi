@@ -27,7 +27,7 @@ public:
 	static CStateManager& GetInstance() { return s_cInstance; }
 
 public:
-	IZ_BOOL OnKeyDown(IZ_UINT nChar, IZ_UINT nRepCnt, IZ_UINT nFlags);
+	IZ_BOOL OnKeyDown(IZ_UINT nChar);
 
 private:
 	CStateManager();

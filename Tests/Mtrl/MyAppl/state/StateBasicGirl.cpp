@@ -338,17 +338,17 @@ IZ_BOOL CStateBasicGirl::Leave()
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateBasicGirl::OnKeyDown(IZ_UINT nChar, IZ_UINT nRepCnt, IZ_UINT nFlags)
+IZ_BOOL CStateBasicGirl::OnKeyDown(IZ_UINT nChar)
 {
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateBasicGirl::OnMouseMove(IZ_UINT nFlags, IZ_INT x, IZ_INT y)
+IZ_BOOL CStateBasicGirl::OnMouseMove(IZ_INT x, IZ_INT y)
 {
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateBasicGirl::OnMouseWheel(IZ_UINT nFlags, IZ_SHORT zDelta, IZ_INT x, IZ_INT y)
+IZ_BOOL CStateBasicGirl::OnMouseWheel(IZ_SHORT zDelta)
 {
 	return IZ_TRUE;
 }

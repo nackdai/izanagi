@@ -106,7 +106,7 @@ IZ_BOOL CStateMenu::Leave()
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateMenu::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+IZ_BOOL CStateMenu::OnKeyDown(UINT nChar)
 {
 	if (nChar == VK_UP) {
 		m_nPos--;

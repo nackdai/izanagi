@@ -25,16 +25,16 @@ public:
 	static CStateManager& GetInstance() { return s_cInstance; }
 
 public:
-	inline IZ_BOOL OnKeyDown(IZ_UINT nChar, IZ_UINT nRepCnt, IZ_UINT nFlags);
+	inline IZ_BOOL OnKeyDown(IZ_UINT nChar);
 
 private:
 	CStateManager();
 	~CStateManager() {}
 };
 
-IZ_BOOL CStateManager::OnKeyDown(IZ_UINT nChar, IZ_UINT nRepCnt, IZ_UINT nFlags)
+IZ_BOOL CStateManager::OnKeyDown(IZ_UINT nChar)
 {
-	return GetState(GetCurrentState())->OnKeyDown(nChar, nRepCnt, nFlags);
+	return GetState(GetCurrentState())->OnKeyDown(nChar);
 }
 
 // いちいち面倒だろうから
