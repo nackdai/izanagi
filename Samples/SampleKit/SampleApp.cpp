@@ -56,7 +56,8 @@ IZ_BOOL CSampleApp::Init(const SSampleAppParams& params)
 
 		gfxDevParams.DepthStencilFormat = D3DFMT_D24S8;
 
-		gfxDevParams.PresentationInterval = D3DPRESENT_INTERVAL_DEFAULT;
+		//gfxDevParams.PresentationInterval = D3DPRESENT_INTERVAL_DEFAULT;
+		gfxDevParams.PresentationInterval = D3DPRESENT_INTERVAL_ONE;
 	}
 
 	// デバイスリセット

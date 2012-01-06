@@ -74,6 +74,10 @@ namespace sample {
 		 */
 		CSampleCamera& GetCamera();
 
+		/** キーボード押下
+		 */
+		virtual IZ_BOOL OnKeyDown(IZ_UINT nChar) { return IZ_TRUE; }
+
 	protected:
 		/** 初期化.
 		 */

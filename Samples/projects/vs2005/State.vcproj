@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="Shader"
-	ProjectGUID="{AC3BDA4F-7620-448B-A2AB-E8A8140D1F17}"
-	RootNamespace="Shader"
+	Name="State"
+	ProjectGUID="{B391D3DE-3F3D-4544-AFCE-817EED7837F0}"
+	RootNamespace="State"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -17,7 +17,6 @@
 	<Configurations>
 		<Configuration
 			Name="Debug_DX9|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			ConfigurationType="1"
 			InheritedPropertySheets=".\Debug_DX9.vsprops"
 			CharacterSet="2"
@@ -60,6 +59,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="Shader.lib"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -132,6 +132,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="Shader.lib"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -171,22 +172,66 @@
 		<Filter
 			Name="include"
 			>
-			<File
-				RelativePath="..\..\Shader\ShaderApp.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="source"
 			>
 			<File
-				RelativePath="..\..\Shader\main.cpp"
+				RelativePath="..\..\State\main.cpp"
 				>
 			</File>
-			<File
-				RelativePath="..\..\Shader\ShaderApp.cpp"
+		</Filter>
+		<Filter
+			Name="state"
+			>
+			<Filter
+				Name="include"
 				>
-			</File>
+				<File
+					RelativePath="..\..\State\StateA.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\State\StateB.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\State\StateBase.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\State\StateC.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\State\StateManager.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="source"
+				>
+				<File
+					RelativePath="..\..\State\StateA.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\State\StateB.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\State\StateBase.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\State\StateC.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\State\StateManager.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 	</Files>
 	<Globals>
