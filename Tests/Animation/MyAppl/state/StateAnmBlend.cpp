@@ -173,7 +173,7 @@ IZ_BOOL CStateAnmBlend::Leave()
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateAnmBlend::OnKeyDown(IZ_UINT nChar, IZ_UINT nRepCnt, IZ_UINT nFlags)
+IZ_BOOL CStateAnmBlend::OnKeyDown(IZ_UINT nChar)
 {
 	if (nChar == VK_BACK) {
 		m_IsBack = IZ_TRUE;

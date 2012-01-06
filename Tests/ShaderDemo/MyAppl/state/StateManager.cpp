@@ -33,7 +33,7 @@ CStateManager::CStateManager()
 	m_nCurrentState = STATE_NUM;
 }
 
-IZ_BOOL CStateManager::OnKeyDown(IZ_UINT nChar, IZ_UINT nRepCnt, IZ_UINT nFlags)
+IZ_BOOL CStateManager::OnKeyDown(IZ_UINT nChar)
 {
 	IZ_BOOL ret = IZ_FALSE;
 

@@ -19,9 +19,9 @@ public:
 	IZ_BOOL Enter(izanagi::IMemoryAllocator* allocator, void* val);
 	IZ_BOOL Leave();
 
-	IZ_BOOL OnKeyDown(IZ_UINT nChar, IZ_UINT nRepCnt, IZ_UINT nFlags) { return IZ_TRUE; }
-	IZ_BOOL OnMouseMove(IZ_UINT nFlags, IZ_INT x, IZ_INT y) { return IZ_TRUE; }
-	IZ_BOOL OnMouseWheel(IZ_UINT nFlags, IZ_SHORT zDelta, IZ_INT x, IZ_INT y) { return IZ_TRUE; }
+	IZ_BOOL OnKeyDown(IZ_UINT nChar) { return IZ_TRUE; }
+	IZ_BOOL OnMouseMove(IZ_INT x, IZ_INT y) { return IZ_TRUE; }
+	IZ_BOOL OnMouseWheel(IZ_SHORT zDelta) { return IZ_TRUE; }
 };
 
 #endif	// #if !defined(__STATE_STATE_0_H__)

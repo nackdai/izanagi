@@ -409,7 +409,7 @@ IZ_BOOL CStateBasicEx2::Leave()
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateBasicEx2::OnKeyDown(IZ_UINT nChar, IZ_UINT nRepCnt, IZ_UINT nFlags)
+IZ_BOOL CStateBasicEx2::OnKeyDown(IZ_UINT nChar)
 {
 	if (nChar == 'P') {
 		m_Timeline.Pause();
@@ -423,12 +423,12 @@ IZ_BOOL CStateBasicEx2::OnKeyDown(IZ_UINT nChar, IZ_UINT nRepCnt, IZ_UINT nFlags
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateBasicEx2::OnMouseMove(IZ_UINT nFlags, IZ_INT x, IZ_INT y)
+IZ_BOOL CStateBasicEx2::OnMouseMove(IZ_INT x, IZ_INT y)
 {
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateBasicEx2::OnMouseWheel(IZ_UINT nFlags, IZ_SHORT zDelta, IZ_INT x, IZ_INT y)
+IZ_BOOL CStateBasicEx2::OnMouseWheel(IZ_SHORT zDelta)
 {
 	return IZ_TRUE;
 }

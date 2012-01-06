@@ -210,17 +210,17 @@ IZ_BOOL CStateRimLight::Leave()
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateRimLight::OnKeyDown(IZ_UINT nChar, IZ_UINT nRepCnt, IZ_UINT nFlags)
+IZ_BOOL CStateRimLight::OnKeyDown(IZ_UINT nChar)
 {
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateRimLight::OnMouseMove(IZ_UINT nFlags, IZ_INT x, IZ_INT y)
+IZ_BOOL CStateRimLight::OnMouseMove(IZ_INT x, IZ_INT y)
 {
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateRimLight::OnMouseWheel(IZ_UINT nFlags, IZ_SHORT zDelta, IZ_INT x, IZ_INT y)
+IZ_BOOL CStateRimLight::OnMouseWheel(IZ_SHORT zDelta)
 {
 	return IZ_TRUE;
 }
