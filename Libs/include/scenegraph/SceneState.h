@@ -49,15 +49,15 @@ namespace izanagi {
 
 		/** キー押下
 		 */
-		virtual IZ_BOOL OnKeyDown(IZ_UINT nChar, IZ_UINT nRepCnt, IZ_UINT nFlags);
+		virtual IZ_BOOL OnKeyDown(IZ_UINT nChar);
 
 		/** マウス移動.
 		 */
-		virtual IZ_BOOL OnMouseMove(IZ_UINT nFlags, IZ_INT x, IZ_INT y);
+		virtual IZ_BOOL OnMouseMove(IZ_INT x, IZ_INT y);
 
 		/** マウスホイール操作.
 		 */ 
-		virtual IZ_BOOL OnMouseWheel(IZ_UINT nFlags, IZ_SHORT zDelta, IZ_INT x, IZ_INT y);
+		virtual IZ_BOOL OnMouseWheel(IZ_SHORT delta);
 	};
 }
 

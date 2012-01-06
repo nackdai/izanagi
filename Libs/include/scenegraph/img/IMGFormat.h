@@ -45,6 +45,8 @@ namespace izanagi {
 		IZ_UINT sizeFile;			// ファイル長
 		IZ_UINT sizeHeader;			// ヘッダ長
 
+		E_PLATFORM platform;
+
 		// テクスチャ数
 		IZ_UINT numTextures;
 

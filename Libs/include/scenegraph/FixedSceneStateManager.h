@@ -23,6 +23,10 @@ namespace izanagi {
 		CFixedSceneStateManager()
 		{
 			FILL_ZERO(m_pStateTable, sizeof(m_pStateTable));
+
+			m_nNextState = (STATE)STATE_NUM;
+			m_nPrevState = (STATE)STATE_NUM;
+			m_nCurrentState = (STATE)STATE_NUM;
 		}
 
 		~CFixedSceneStateManager() {}
@@ -39,6 +43,8 @@ namespace izanagi {
 				&& m_pStateTable[idx] == IZ_NULL);
 
 			m_pStateTable[idx] = state;
+
+			return IZ_TRUE;
 		}
 
 		/** 初期化.
@@ -125,23 +131,23 @@ namespace izanagi {
 
 		/** キー押下.
 		 */
-		IZ_BOOL OnKeyDown(IZ_UINT nChar, IZ_UINT nRepCnt, IZ_UINT nFlags)
+		IZ_BOOL OnKeyDown(IZ_UINT nChar)
 		{
-			return GetState(GetCurrentState())->OnKeyDown(nChar, nRepCnt, nFlags);
+			return GetState(GetCurrentState())->OnKeyDown(nChar);
 		}
 
 		/** マウス移動.
 		 */
-		IZ_BOOL OnMouseMove(IZ_UINT nFlags, IZ_INT x, IZ_INT y)
+		IZ_BOOL OnMouseMove(IZ_INT x, IZ_INT y)
 		{
-			return GetState(GetCurrentState())->OnMouseMove(nFlags, x, y);
+			return GetState(GetCurrentState())->OnMouseMove(x, y);
 		}
 
 		/** マウスホイール操作.
 		 */
-		IZ_BOOL OnMouseWheel(IZ_UINT nFlags, IZ_SHORT zDelta, IZ_INT x, IZ_INT y)
+		IZ_BOOL OnMouseWheel(IZ_SHORT delta)
 		{
-			return GetState(GetCurrentState())->OnMouseWheel(nFlags, zDelta, x, y);
+			return GetState(GetCurrentState())->OnMouseWheel(delta);
 		}
 
 	public:

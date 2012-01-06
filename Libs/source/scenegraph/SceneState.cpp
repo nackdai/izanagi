@@ -35,17 +35,17 @@ IZ_BOOL CSceneStateBase::Leave()
 	return IZ_TRUE;
 }
 
-IZ_BOOL CSceneStateBase::OnKeyDown(IZ_UINT nChar, IZ_UINT nRepCnt, IZ_UINT nFlags)
+IZ_BOOL CSceneStateBase::OnKeyDown(IZ_UINT nChar)
 {
 	return IZ_TRUE;
 }
 
-IZ_BOOL CSceneStateBase::OnMouseMove(IZ_UINT nFlags, IZ_INT x, IZ_INT y)
+IZ_BOOL CSceneStateBase::OnMouseMove(IZ_INT x, IZ_INT y)
 {
 	return IZ_TRUE;
 }
 
-IZ_BOOL CSceneStateBase::OnMouseWheel(IZ_UINT nFlags, IZ_SHORT zDelta, IZ_INT x, IZ_INT y)
+IZ_BOOL CSceneStateBase::OnMouseWheel(IZ_SHORT delta)
 {
 	return IZ_TRUE;
 }

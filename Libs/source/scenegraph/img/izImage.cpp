@@ -75,7 +75,7 @@ namespace {
 		IZ_UINT ret = pitch * height;
 
 		if (fmt == E_GRAPH_PIXEL_FMT_DXT1) {
-			ret = (pitch * height) >> 3;
+			ret = (pitch * height) >> 2;
 		}
 		else if (fmt == E_GRAPH_PIXEL_FMT_DXT3
 					|| fmt == E_GRAPH_PIXEL_FMT_DXT5)
@@ -93,7 +93,7 @@ namespace {
 		IZ_UINT nHeight,
 		IZ_UINT nMipLevel,
 		E_GRAPH_PIXEL_FMT nFmt,
-		IZ_BYTE** pBuf)
+		IZ_BYTE* pBuf)
 	{
 		// NOTE
 		// データセットするためにロックをしたいので、
@@ -125,7 +125,7 @@ namespace {
 
 			IZ_UINT nSize = _ComputeSize(nPitch, nHeight, nFmt);
 
-			memcpy(data, *pBuf, nSize); 
+			memcpy(data, pBuf, nSize); 
 
 			pTex->Unlock(nLevel);
 
@@ -149,7 +149,7 @@ __EXIT__:
 		IZ_UINT nHeight,
 		IZ_UINT nMipLevel,
 		E_GRAPH_PIXEL_FMT nFmt,
-		IZ_BYTE** pBuf)
+		IZ_BYTE* pBuf)
 	{
 		// テクスチャ作成
 		CCubeTexture* pTex = IZ_NULL;
@@ -184,7 +184,7 @@ __EXIT__:
 
 				IZ_UINT nSize = _ComputeSize(nPitch, nHeight, nFmt);
 
-				memcpy(data, *pBuf, nSize); 
+				memcpy(data, pBuf, nSize); 
 
 				pTex->Unlock(face, nLevel);
 
@@ -206,7 +206,7 @@ __EXIT__:
 	inline CBaseTexture* _CreateTexture(
 		CGraphicsDevice* pDevice,
 		const S_IMG_TEX_HEADER& sTexHeader,
-		IZ_BYTE** pBuf)
+		IZ_BYTE* pBuf)
 	{
 		IZ_ASSERT(pDevice != IZ_NULL);
 
@@ -220,7 +220,7 @@ __EXIT__:
 		E_GRAPH_TEX_TYPE nType = static_cast<E_GRAPH_TEX_TYPE>(sTexHeader.type);
 
 		// テクスチャ作成関数テーブル
-		typedef CBaseTexture* (*CreateTexFunc)(CGraphicsDevice*, IZ_UINT, IZ_UINT, IZ_UINT, E_GRAPH_PIXEL_FMT, IZ_BYTE**);
+		typedef CBaseTexture* (*CreateTexFunc)(CGraphicsDevice*, IZ_UINT, IZ_UINT, IZ_UINT, E_GRAPH_PIXEL_FMT, IZ_BYTE*);
 		static CreateTexFunc FuncTbl[] = {
 			_CreateTexture,
 			_CreateCubeTexture,
@@ -282,7 +282,7 @@ IZ_BOOL CImage::ReadTexture(
 		m_pTexture[i] = _CreateTexture(
 							pDevice,
 							sTexHeader,
-							&pBuf);
+							pBuf);
 		ret = (m_pTexture[i] != IZ_NULL);
 		VGOTO(ret, __EXIT__);
 
