@@ -8,6 +8,7 @@ CImageBuilder CImageBuilder::s_cInstance;
 
 void CImageBuilder::startDocument()
 {
+	m_IsStartRoot = IZ_FALSE;
 }
 
 void CImageBuilder::endDeocument()
@@ -15,6 +16,8 @@ void CImageBuilder::endDeocument()
 }
 
 namespace attr_type {
+	static const char* ROOT = "textures";
+
 	static const char* PLANE  = "plane";
 	static const char* CUBE   = "cube";
 	static const char* VOLUME = "volume";
@@ -44,15 +47,23 @@ void CImageBuilder::startElement(
 {
 	izanagi::tool::CString name(XN(qname));
 
-	if (IsAttr(name, attr_type::CUBE)) {
-		// TODO
+	if (IsAttr(name, attr_type::ROOT)) {
+		m_IsStartRoot = IZ_TRUE;
 	}
-	else if (IsAttr(name, attr_type::VOLUME)) {
+	else {
 		// TODO
-	}
-	else if (IsAttr(name, attr_type::PLANE)) {
-		// file
-		SetPlaneAttrs(attrs);
+		IZ_ASSERT(m_IsStartRoot);
+
+		if (IsAttr(name, attr_type::CUBE)) {
+			// TODO
+		}
+		else if (IsAttr(name, attr_type::VOLUME)) {
+			// TODO
+		}
+		else if (IsAttr(name, attr_type::PLANE)) {
+			// file
+			SetPlaneAttrs(attrs);
+		}
 	}
 }
 
@@ -374,6 +385,10 @@ BOOL CImageBuilder::BuildIMG(LPCSTR lpszExport)
 		&sHeader,
 		nTexNum);
 
+	// TODO
+	// プラットフォーム
+	sHeader.platform = izanagi::E_PLATFORM_DX9;
+
 	// ジャンプテーブル
 	std::vector<UINT> tJumpTable;
 	tJumpTable.reserve(nTexNum);
@@ -406,7 +421,7 @@ BOOL CImageBuilder::BuildIMG(LPCSTR lpszExport)
 		if (sImageInfo.tex_idx >= 0) {
 			// テクスチャ位置指定
 
-			INT nTexIdx = IZ_MAX(nNum - 1, sImageInfo.tex_idx);
+			INT nTexIdx = IZ_MAX(nNum - 1, (UINT)sImageInfo.tex_idx);
 			izanagi::tool::CIMGTexture* pTex = pImgBody->GetTexture(nTexIdx);
 
 			if (pTex != IZ_NULL) {
