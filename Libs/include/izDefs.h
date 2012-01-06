@@ -356,4 +356,14 @@ IZ_C_ASSERT(sizeof(IZ_UINT64) == 8)
 
 IZ_C_ASSERT(sizeof(size_t) == sizeof(IZ_UINT))
 
+/////////////////////////////////////////////////////////////
+
+namespace izanagi {
+	enum E_PLATFORM {
+		E_PLATFORM_DX9 = 0,
+
+		E_PLATFORM_NUM,
+	};
+}
+
 #endif	// #if !defined(__IZANAGI_DEFS_H__)
