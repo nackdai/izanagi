@@ -5,6 +5,8 @@
 #include "izMath.h"
 #include "EnvMapConverterDefs.h"
 
+#define ENABLE_BILINEAR
+
 struct SFloatColor {
 	IZ_FLOAT r;
 	IZ_FLOAT g;
@@ -22,6 +24,65 @@ struct SFloatColor {
 class CTexProxy {
 protected:
 	static IZ_FLOAT NormalizeColor(IZ_UINT8 c);
+
+	static void getColor(
+		IZ_BOOL isFloat,
+		IZ_UINT x, IZ_UINT y,
+		IZ_UINT pitch, IZ_UINT bpp,
+		const IZ_UINT8* src,
+		SFloatColor& dst)
+	{
+		const IZ_UINT8* data = src + pitch * y + x * bpp;
+
+		if (isFloat) {
+			const IZ_FLOAT* d = reinterpret_cast<const IZ_FLOAT*>(data);
+
+			dst.r = d[0];
+			dst.r = d[1];
+			dst.r = d[2];
+			dst.r = d[3];
+		}
+		else {
+			dst.r = NormalizeColor(data[0]);
+			dst.g = NormalizeColor(data[1]);
+			dst.b = NormalizeColor(data[2]);
+			dst.a = NormalizeColor(data[3]);
+		}
+	}
+
+	static void putColor(
+		IZ_BOOL isFloat,
+		IZ_UINT x, IZ_UINT y,
+		IZ_UINT pitch, IZ_UINT bpp,
+		const SFloatColor& src,
+		IZ_UINT8* dst)
+	{
+		IZ_UINT8* data = dst + pitch * y + x * bpp;
+
+		if (isFloat) {
+			IZ_FLOAT* d = reinterpret_cast<IZ_FLOAT*>(data);
+
+			d[0] = src.r;
+			d[1] = src.g;
+			d[2] = src.b;
+			d[3] = src.a;
+		}
+		else {
+			data[0] = src.getAsUint8_R();
+			data[1] = src.getAsUint8_G();
+			data[2] = src.getAsUint8_B();
+			data[3] = src.getAsUint8_A();
+		}
+	}
+
+	// バイリニアフィルタ計算
+	static void getBiLinearColor(
+		IZ_BOOL isFloat,
+		IZ_UINT width, IZ_UINT height,
+		IZ_UINT pitch, IZ_UINT bpp,
+		const IZ_UINT8* data,
+		IZ_FLOAT u, IZ_FLOAT v,
+		SFloatColor& color);
 
 public:
 	// テクスチャプロキシ作成

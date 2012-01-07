@@ -104,6 +104,7 @@ void CMirrorMapProxy::getColor(
 		m_Pitch = m_Tex->Lock(0, (void**)&m_Data);
 	}
 
+#if 0
 	IZ_UINT8* data = m_Data + m_Pitch * y + x * m_Bpp;
 
 	if (m_IsFloat) {
@@ -120,6 +121,24 @@ void CMirrorMapProxy::getColor(
 		color.b = NormalizeColor(data[2]);
 		color.a = NormalizeColor(data[3]);
 	}
+#else
+#ifdef ENABLE_BILINEAR
+	CTexProxy::getBiLinearColor(
+		m_IsFloat,
+		m_Tex->GetWidth(), m_Tex->GetHeight(),
+		m_Pitch, m_Bpp,
+		m_Data,
+		u, v,
+		color);
+#else
+	CTexProxy::getColor(
+		m_IsFloat,
+		x, y,
+		m_Pitch, m_Bpp,
+		m_Data,
+		color);
+#endif
+#endif
 }
 
 // 指定位置に描きこみ.
@@ -132,6 +151,7 @@ void CMirrorMapProxy::putColor(
 		m_Pitch = m_Tex->Lock(0, (void**)&m_Data);
 	}
 
+#if 0
 	IZ_UINT8* data = m_Data + m_Pitch * y + x * m_Bpp;
 
 	if (m_IsFloat) {
@@ -148,6 +168,14 @@ void CMirrorMapProxy::putColor(
 		data[2] = color.getAsUint8_B();
 		data[3] = color.getAsUint8_A();
 	}
+#else
+	CTexProxy::putColor(
+		m_IsFloat,
+		x, y,
+		m_Pitch, m_Bpp,
+		color,
+		m_Data);
+#endif
 }
 
 // XYが正しい位置かどうか.
