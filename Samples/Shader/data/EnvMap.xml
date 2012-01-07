@@ -4,8 +4,5 @@
   <plane
 	  path="./mirror.png"
 	  fmt="dxt5"/>
-  <plane
-    path="./angular.png"
-    fmt="dxt5"/>
 </textures>
 

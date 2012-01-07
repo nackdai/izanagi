@@ -1,16 +1,16 @@
-#if !defined(__STATE_MIRROR_MAP_H__)
-#define __STATE_MIRROR_MAP_H__
+#if !defined(__STATE_PHONG_SHADER_H__)
+#define __STATE_PHONG_SHADER_H__
 
 #include "izSceneGraph.h"
 #include "izDebugUtil.h"
 #include "StateBase.h"
 
-class CStateMirrorMap : public CStateBase {
+class CStatePhongShader : public CStateBase {
 public:
-	CStateMirrorMap(
+	CStatePhongShader(
 		izanagi::sample::CSampleApp* app,
 		izanagi::SCameraParam& camera);
-	virtual ~CStateMirrorMap();
+	virtual ~CStatePhongShader();
 
 public:
 	// 初期化.
@@ -39,9 +39,11 @@ public:
 	virtual IZ_BOOL OnKeyDown(IZ_UINT nChar);
 
 protected:
-	izanagi::CImage* m_Img;
 	izanagi::CShaderBasic* m_Shader;
 	izanagi::CDebugMeshSphere* m_Sphere;
+
+	izanagi::SMatrix m_L2W;
+	izanagi::SParallelLightParam m_ParallelLight;
 };
 
-#endif	// #if !defined(__STATE_MIRROR_MAP_H__)
+#endif	// #if !defined(__STATE_PHONG_SHADER_H__)

@@ -74,6 +74,10 @@ namespace sample {
 		 */
 		CSampleCamera& GetCamera();
 
+		/** デバッグフォント取得
+		 */
+		izanagi::CDebugFont* GetDebugFont() { return m_DebugFont; }
+
 		/** キーボード押下
 		 */
 		virtual IZ_BOOL OnKeyDown(IZ_UINT nChar) { return IZ_TRUE; }
