@@ -60,6 +60,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="Shader.lib"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -132,6 +133,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="Shader.lib"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -171,10 +173,6 @@
 		<Filter
 			Name="include"
 			>
-			<File
-				RelativePath="..\..\Shader\ShaderApp.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="source"
@@ -183,9 +181,91 @@
 				RelativePath="..\..\Shader\main.cpp"
 				>
 			</File>
+		</Filter>
+		<Filter
+			Name="shader"
+			>
 			<File
-				RelativePath="..\..\Shader\ShaderApp.cpp"
+				RelativePath="..\..\Shader\shader\MirrorMapShader.fx"
 				>
+			</File>
+			<File
+				RelativePath="..\..\Shader\shader\MirrorMapShader.xml"
+				>
+				<FileConfiguration
+					Name="Debug_DX9|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src &quot;$(InputPath)&quot; -obj &quot;$(ProjectDir)..\..\$(ProjectName)\shader_obj&quot; -o &quot;$(ProjectDir)..\..\$(ProjectName)\data&quot;"
+						AdditionalDependencies="$(InputDir)$(InputName).fx"
+						Outputs="$(InputDir)..\data\$(InputName).shd"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release_DX9|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src &quot;$(InputPath)&quot; -obj &quot;$(ProjectDir)..\..\$(ProjectName)\shader_obj&quot; -o &quot;$(ProjectDir)..\..\$(ProjectName)\data&quot;"
+						AdditionalDependencies="$(InputDir)$(InputName).fx"
+						Outputs="$(InputDir)..\data\$(InputName).shd"
+					/>
+				</FileConfiguration>
+			</File>
+		</Filter>
+		<Filter
+			Name="state"
+			>
+			<Filter
+				Name="include"
+				>
+				<File
+					RelativePath="..\..\Shader\StateManager.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Shader\StateMirrorMap.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="source"
+				>
+				<File
+					RelativePath="..\..\Shader\StateManager.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Shader\StateMirrorMap.cpp"
+					>
+				</File>
+			</Filter>
+		</Filter>
+		<Filter
+			Name="asset"
+			>
+			<File
+				RelativePath="..\..\shader\data\EnvMap.xml"
+				>
+				<FileConfiguration
+					Name="Debug_DX9|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ImageBuilder.exe -i &quot;$(InputPath)&quot; -o &quot;$(InputDir)..\data\$(InputName).img&quot;"
+						Outputs="$(InputDir)..\data\$(InputName).img"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release_DX9|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ImageBuilder.exe -i &quot;$(InputPath)&quot; -o &quot;$(InputDir)..\data\$(InputName).img&quot;"
+						Outputs="$(InputDir)..\data\$(InputName).img"
+					/>
+				</FileConfiguration>
 			</File>
 		</Filter>
 	</Files>

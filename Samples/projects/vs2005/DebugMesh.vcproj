@@ -221,6 +221,32 @@
 				</FileConfiguration>
 			</File>
 		</Filter>
+		<Filter
+			Name="asset"
+			>
+			<File
+				RelativePath="..\..\DebugMesh\data\earth.xml"
+				>
+				<FileConfiguration
+					Name="Debug_DX9|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ImageBuilder.exe -i &quot;$(InputPath)&quot; -o &quot;$(InputDir)..\data\$(InputName).img&quot;"
+						Outputs="$(InputDir)..\data\$(InputName).img"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release_DX9|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ImageBuilder.exe -i &quot;$(InputPath)&quot; -o &quot;$(InputDir)..\data\$(InputName).img&quot;"
+						Outputs="$(InputDir)..\data\$(InputName).img"
+					/>
+				</FileConfiguration>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

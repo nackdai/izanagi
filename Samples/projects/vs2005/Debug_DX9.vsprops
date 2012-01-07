@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="Debug_DX9"
-	OutputDirectory="$(ProjectName)\$(ConfigurationName)"
+	OutputDirectory="$(SolutionDir)..\..\$(ProjectName)"
 	IntermediateDirectory="$(ProjectName)\$(ConfigurationName)"
 	>
 	<Tool
