@@ -89,14 +89,19 @@ void CDebugFont::InternalRelease()
 */
 void CDebugFont::Begin()
 {
+	Begin(0, 0);
+}
+
+void CDebugFont::Begin(IZ_INT left, IZ_INT top)
+{
 	IZ_ASSERT(m_pDevice != IZ_NULL);
 	IZ_ASSERT(m_pFontTex != IZ_NULL);
 
 	m_pDevice->SetTexture(0, m_pFontTex);
 	m_bIsBegin = IZ_TRUE;
 
-	m_nLeft = 0;
-	m_nTop = 0;
+	m_nLeft = left;
+	m_nTop = top;
 	m_nColor = 0xffffffff;
 
 	m_nLeftBase = 0;

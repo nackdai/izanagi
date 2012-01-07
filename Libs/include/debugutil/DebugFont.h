@@ -38,6 +38,8 @@ namespace izanagi {
 
 	public:
 		void Begin();
+		void Begin(IZ_INT left, IZ_INT top);
+
 		void End();
 
 		void DBPrint(
