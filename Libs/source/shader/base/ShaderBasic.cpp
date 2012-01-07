@@ -301,7 +301,7 @@ IZ_BOOL CShaderBasic::CommitChanges()
 	// テクニックとパスの指定からパス全体のインデックスを計算する
 	IZ_UINT passIdx = 0;
 
-	for (IZ_UINT i = 0; i < m_nCurTech; i++) {
+	for (IZ_INT16 i = 0; i < m_nCurTech; i++) {
 		const S_SHD_TECHNIQUE* techDesc = m_TechTbl.GetDesc(i);
 		IZ_ASSERT(techDesc != IZ_NULL);
 
@@ -495,22 +495,27 @@ IZ_BOOL CShaderBasic::SetParamValue(
 
 	
 	if (bIsDirty) {
-		IZ_UINT nBytes = 0;
+		SHADER_PARAM_HANDLE handle = (bIsVS ? pParamInfo->handleVS : pParamInfo->handlePS);
 
-		const void* pParam = m_ParamTbl.GetParam(pParamInfo->idx, &nBytes);
-		IZ_ASSERT(pParam != IZ_NULL);
+		if (handle > 0) {
+			// 有効なハンドル
+			IZ_UINT nBytes = 0;
 
-		VRETURN(
-			pShd->SetValue(
-				bIsVS ? pParamInfo->handleVS : pParamInfo->handlePS,
-				pParam,
-				nBytes));
+			const void* pParam = m_ParamTbl.GetParam(pParamInfo->idx, &nBytes);
+			IZ_ASSERT(pParam != IZ_NULL);
 
-		if (bIsVS) {
-			pParamDesc->isDirtyVS = IZ_FALSE;
-		}
-		else {
-			pParamDesc->isDirtyPS = IZ_FALSE;
+			VRETURN(
+				pShd->SetValue(
+					handle,
+					pParam,
+					nBytes));
+
+			if (bIsVS) {
+				pParamDesc->isDirtyVS = IZ_FALSE;
+			}
+			else {
+				pParamDesc->isDirtyPS = IZ_FALSE;
+			}
 		}
 	}
 
