@@ -59,7 +59,10 @@ namespace izanagi {
 		// ベクトルをコピー
 		static void Copy(SVector& dst, const SVector& src)
 		{
-			memcpy(&dst, &src, sizeof(SVector));
+			dst.x = src.x;
+			dst.y = src.y;
+			dst.z = src.z;
+			dst.w = src.w;
 		}
 
 		// ベクトルをコピー(XYZ成分のみ)
