@@ -202,6 +202,8 @@ void CSampleApp::Render()
 				time, fps);
 		}
 
+		m_DebugFont->End();
+
 		m_Device->End2D();
 	}
 }

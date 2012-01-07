@@ -1,9 +1,12 @@
 #include "StateMirrorMap.h"
 #include "izGraph.h"
 #include "izIo.h"
+#include "StateManager.h"
 
-CStateMirrorMap::CStateMirrorMap(izanagi::SCameraParam& camera)
-: m_Camera(camera)
+CStateMirrorMap::CStateMirrorMap(
+	izanagi::sample::CSampleApp* app,
+	izanagi::SCameraParam& camera)
+: CStateBase(app, camera)
 {
 	m_Img = IZ_NULL;
 	m_Shader = IZ_NULL;
@@ -61,19 +64,19 @@ IZ_BOOL CStateMirrorMap::Render(izanagi::CGraphicsDevice* device)
 				m_Shader,
 				"g_mL2W",
 				(void*)&mtxL2W,
-				sizeof(izanagi::SMatrix));
+				sizeof(mtxL2W));
 
 			_SetShaderParam(
 				m_Shader,
 				"g_mW2C",
 				(void*)&m_Camera.mtxW2C,
-				sizeof(izanagi::SMatrix));
+				sizeof(m_Camera.mtxW2C));
 
 			_SetShaderParam(
 				m_Shader,
 				"g_mW2V",
 				(void*)&m_Camera.mtxW2V,
-				sizeof(izanagi::SMatrix));
+				sizeof(m_Camera.mtxW2V));
 
 			m_Shader->CommitChanges();
 
@@ -81,6 +84,8 @@ IZ_BOOL CStateMirrorMap::Render(izanagi::CGraphicsDevice* device)
 		}
 	}
 	m_Shader->End();
+
+	RenderName(device, "MirrorMap");
 
 	return IZ_TRUE;
 }
@@ -160,5 +165,12 @@ IZ_BOOL CStateMirrorMap::Leave()
 // キー押下
 IZ_BOOL CStateMirrorMap::OnKeyDown(IZ_UINT nChar)
 {
+	if (nChar == VK_UP) {
+		CStateManager::GetInstance().ChangeState(State_MirrorMap + 1);
+	}
+	else if (nChar == VK_DOWN) {
+		CStateManager::GetInstance().ChangeState(State_MirrorMap - 1);
+	}
+
 	return IZ_TRUE;
 }

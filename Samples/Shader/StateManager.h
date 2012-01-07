@@ -3,8 +3,15 @@
 
 #include "izSceneGraph.h"
 
+namespace izanagi {
+	namespace sample {
+		class CSampleApp;
+	}
+}
+
 enum State {
 	State_MirrorMap = 0,
+	State_PhongShader,
 
 	StateNum,
 };
@@ -21,7 +28,22 @@ public:
 	virtual ~CStateManager() {}
 
 public:
-	void Create(izanagi::SCameraParam& camera);
+	void Create(
+		izanagi::sample::CSampleApp* app,
+		izanagi::SCameraParam& camera);
+
+	// ステート変更.
+	void ChangeState(IZ_INT task)
+	{
+		if (task < 0) {
+			task = StateNum - 1;
+		}
+		else if (task >= StateNum) {
+			task = 0;
+		}
+		
+		izanagi::CFixedSceneStateManager<State, StateNum>::ChangeState(static_cast<State>(task));
+	}
 };
 
 #endif	// #if !defined(__STATE_MANAGER_H__)

@@ -206,13 +206,13 @@ void CDebugMeshApp::RenderInternal(izanagi::CGraphicsDevice* device)
 					m_Shader,
 					"g_mL2W",
 					(void*)&mtxL2W,
-					sizeof(izanagi::SMatrix));
+					sizeof(mtxL2W));
 
 				_SetShaderParam(
 					m_Shader,
 					"g_mW2C",
 					(void*)&camera.GetRawInterface().GetParam().mtxW2C,
-					sizeof(izanagi::SMatrix));
+					sizeof(camera.GetRawInterface().GetParam().mtxW2C));
 
 				// シェーダ設定
 				m_Shader->CommitChanges();
