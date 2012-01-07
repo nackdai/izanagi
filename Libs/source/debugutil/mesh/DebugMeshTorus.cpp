@@ -156,8 +156,8 @@ IZ_BOOL CDebugMeshTorus::SetVtx(
 
 	SMeshVtx* pVtx = GetVtx();
 
-	IZ_FLOAT fRingRadius = fOuterRadius - fInnerRadius;		// リングの半径
-	IZ_FLOAT fCenterRadius = fInnerRadius + fRingRadius;	// リング中心までの径
+	IZ_FLOAT fRingRadius = (fOuterRadius - fInnerRadius) * 0.5f;	// リングの半径
+	IZ_FLOAT fCenterRadius = fInnerRadius + fRingRadius;			// リング中心までの径
 
 	IZ_FLOAT fLatitudeStep = IZ_MATH_PI2 / nSides;	// 緯度ステップ
 	IZ_FLOAT fLongitudeStep = IZ_MATH_PI2 / nRings;	// 経度ステップ
