@@ -88,14 +88,14 @@ CGraphicsDevice::CGraphicsDevice()
 	m_pD3D = IZ_NULL;
 
 	m_pDevice = IZ_NULL;
-	ZeroMemory(&m_sPresentParameters, sizeof(m_sPresentParameters));
+	FILL_ZERO(&m_sPresentParameters, sizeof(m_sPresentParameters));
 
 	m_hFocusWindow = IZ_NULL;
 
-	ZeroMemory(m_pTexture, sizeof(CTexture*) * TEX_STAGE_NUM);
-	ZeroMemory(m_sSamplerState, sizeof(S_SAMPLER_STATE) * TEX_STAGE_NUM);
+	FILL_ZERO(m_pTexture, sizeof(m_pTexture));
+	FILL_ZERO(m_sSamplerState, sizeof(m_sSamplerState));
 
-	ZeroMemory(&m_RenderState, sizeof(S_RENDER_STATE));
+	FILL_ZERO(&m_RenderState, sizeof(m_RenderState));
 
 	m_p2DRenderer = IZ_NULL;
 
@@ -237,7 +237,7 @@ IZ_BOOL CGraphicsDevice::CreateBody(const SGraphicsDeviceInitParams& sParams)
 
 	// D3DPRESENT_PARAMETERS の設定
 	{
-		ZeroMemory(&m_sPresentParameters, sizeof(m_sPresentParameters));
+		FILL_ZERO(&m_sPresentParameters, sizeof(m_sPresentParameters));
 
 		m_sPresentParameters.BackBufferCount = 2;
 

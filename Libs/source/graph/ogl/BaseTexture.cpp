@@ -9,7 +9,7 @@ CBaseTexture::CBaseTexture()
 	m_pDevice = IZ_NULL;
 	m_pAllocator = IZ_NULL;
 
-	ZeroMemory(&m_TexInfo, sizeof(m_TexInfo));
+	FILL_ZERO(&m_TexInfo, sizeof(m_TexInfo));
 }
 
 // デストラクタ
