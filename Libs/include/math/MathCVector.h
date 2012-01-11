@@ -72,46 +72,33 @@ namespace izanagi {
 
 		CVector operator -() const
 		{
-			CVector ret;
-			ret.Set(-x, -y, -z, -w);
-			return ret;
+			return CVector(-x, -y, -z, -w);
 		}
 
 		CVector operator +(const SVector& rhs) const
 		{
-			CVector ret;
-			SVector::Add(ret, *this, rhs);
-			return ret;
+			return CVector(x + rhs.x, y + rhs.y, z + rhs.z, w + rhs.w);
 		}
 
 		CVector operator -(const SVector& rhs) const
 		{
-			CVector ret;
-			SVector::Sub(ret, *this, rhs);
-			return ret;
+			return CVector(x - rhs.x, y - rhs.y, z - rhs.z, w - rhs.w);
 		}
 
 		CVector operator *(IZ_FLOAT rhs) const
 		{
-			CVector ret;
-			SVector::Scale(ret, *this, rhs);
-			return ret;
+			return CVector(x * rhs, y * rhs, z * rhs, w * rhs);
 		}
 
 		CVector operator /(IZ_FLOAT rhs) const
 		{
 			rhs = 1.0f / rhs;
-
-			CVector ret;
-			SVector::Scale(ret, *this, rhs);
-			return ret;
+			return CVector(x * rhs, y * rhs, z * rhs, w * rhs);
 		}
 
 		friend CVector operator *(IZ_FLOAT f, const SVector& v)
 		{
-			CVector ret;
-			SVector::Scale(ret, v, f);
-			return ret;
+			return CVector(f * v.x, f * v.y, f * v.z, f * v.w);
 		}
 
 	public:
