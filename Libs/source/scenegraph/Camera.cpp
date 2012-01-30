@@ -94,6 +94,7 @@ void CCamera::ComputeW2V()
 
 	// Y
 	SVector::CrossLH(vecY, vecZ, vecX);
+	vecY.w = 0.0f;
 
 	SVector::Copy(m_Param.mtxW2V.v[0], vecX);
 	SVector::Copy(m_Param.mtxW2V.v[1], vecY);
