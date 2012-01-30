@@ -46,18 +46,39 @@ void CSampleWndProc::OnMouseRBtnUp()
 	m_Flags.onRBtn = IZ_FALSE;
 }
 
+namespace {
+	inline IZ_FLOAT _NormalizeHorizontal(
+		CSampleApp* app,
+		IZ_UINT x)
+	{
+		IZ_UINT width = app->GetScreenWidth();
+		IZ_FLOAT ret = (2.0f * x - width) / (IZ_FLOAT)width;
+		return ret;
+	}
+
+	inline IZ_FLOAT _NormalizeVertical(
+		CSampleApp* app,
+		IZ_UINT y)
+	{
+		IZ_UINT height = app->GetScreenHeight();
+		IZ_FLOAT ret = (height - 2.0f * y) / (IZ_FLOAT)height;
+		return ret;
+	}
+}
+
 void CSampleWndProc::OnMouseMove(const izanagi::CIntPoint& point)
 {
 	IZ_ASSERT(m_App != IZ_NULL);
 
 	if (m_Flags.onLBtn) {
-		float fLatitude = (float)(m_PrevPoint.y - point.y);
-		fLatitude *= 0.005f;
-
-		float fLongitude = (float)(m_PrevPoint.x - point.x);
-		fLongitude *= 0.005f;
-
-		m_App->GetCamera().Rotate(fLatitude, fLongitude);
+		m_App->GetCamera().Rotate(
+			izanagi::CFloatPoint(
+				_NormalizeHorizontal(m_App, m_PrevPoint.x),
+				_NormalizeVertical(m_App, m_PrevPoint.y)),
+			izanagi::CFloatPoint(
+				_NormalizeHorizontal(m_App, point.x),
+				_NormalizeVertical(m_App, point.y))
+		);
 	}
 	else if (m_Flags.onRBtn) {
 		float fOffsetX = (float)(m_PrevPoint.x - point.x);

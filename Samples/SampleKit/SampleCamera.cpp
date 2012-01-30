@@ -11,42 +11,29 @@ void CSampleCamera::Init(
 	IZ_FLOAT fFov,
 	IZ_FLOAT fAspect)
 {
-	m_cCamera.Init(
-		vPos, vRef, vUp,
+	m_Camera.Init(
+		vPos,
 		fNear, fFar,
 		fFov,
 		fAspect);
-
-	// 注視点から視点への方向
-	izanagi::CVector vDir;
-	izanagi::SVector::Sub(
-		vDir,
-		m_cCamera.GetParam().pos,
-		m_cCamera.GetParam().ref);
-
-	izanagi::SVector::Normalize(vDir, vDir);
-
-	m_fPitch = -asinf(vDir.y);
-	m_fYaw = (vDir.x == 0.0f ? IZ_MATH_PI : IZ_MATH_PI + atan2f(vDir.z, vDir.x));
-	m_fRoll = 0.0f;
 }
 
 void CSampleCamera::Update()
 {
-	m_cCamera.Update();
+	m_Camera.Update();
 }
 
 void CSampleCamera::Dolly(float fDistScale)
 {
 	// 視点と注視点の距離
-	float fLength = izanagi::SVector::Length2(m_cCamera.GetParam().pos, m_cCamera.GetParam().ref);
+	float fLength = izanagi::SVector::Length2(m_Camera.GetParam().pos, m_Camera.GetParam().ref);
 
 	// 視点から注視点への方向
 	izanagi::CVector vDir;
 	izanagi::SVector::Sub(
 		vDir,
-		m_cCamera.GetParam().ref,
-		m_cCamera.GetParam().pos);
+		m_Camera.GetParam().ref,
+		m_Camera.GetParam().pos);
 	izanagi::SVector::Div(vDir, vDir, fLength);
 
 	// スケーリング
@@ -54,123 +41,79 @@ void CSampleCamera::Dolly(float fDistScale)
 	fDistScale = fDistScale * fLength * 0.01f;
 	izanagi::SVector::Scale(vDir, vDir, fDistScale);
 
-	izanagi::SVector pos = m_cCamera.GetParam().pos;
+	izanagi::SVector pos;
 
 	// 新しい視点
 	izanagi::SVector::Add(
 		pos,
-		m_cCamera.GetParam().pos,
+		m_Camera.GetPos(),
 		vDir);
 
-	m_cCamera.SetPos(pos);
+	m_Camera.SetPos(pos);
 }
 
-#if 1
-void CSampleCamera::Rotate(float fLatitude, float fLongitude)
+namespace {
+	IZ_FLOAT _ProjectionToSphere(
+		IZ_FLOAT radius,
+		IZ_FLOAT x,
+		IZ_FLOAT y)
+	{
+		IZ_FLOAT z = 0.0f;
+		IZ_FLOAT dist = ::sqrtf(x * x + y * y);
+
+		// r * 1/√2 の点で双曲線と接する内側と外側
+
+		if (dist < radius * 0.70710678118654752440f) {
+			// 内側
+
+			// NOTE
+			// r * r = x * x + y * y + z * z
+			// <=> z * z = r * r - (x * x + y * y)
+			z = ::sqrtf(radius * radius - dist * dist);
+		}
+		else {
+			// 外側
+			IZ_FLOAT t = radius * radius * 0.5f;
+			z = t / dist;
+		}
+
+		return z;
+	}
+}
+
+void CSampleCamera::Rotate(
+	const izanagi::CFloatPoint& pt1,
+	const izanagi::CFloatPoint& pt2)
 {
-	// 注視点から視点への方向
-	izanagi::CVector vDir;
-	izanagi::SVector::Sub(
-		vDir,
-		m_cCamera.GetParam().pos,
-		m_cCamera.GetParam().ref);
+	static const IZ_FLOAT radius = 0.8f;
 
-	// 半径
-	float fRadius = izanagi::SVector::Length(vDir);
+	// スクリーン上の２点からトラックボール上の点を計算する
 
-	m_fPitch += fLatitude;
-	m_fYaw -= fLongitude;
+	izanagi::CVector v1(
+		pt1.x, pt1.y,
+		_ProjectionToSphere(radius, pt1.x, pt1.y));
+	izanagi::SVector::Normalize(v1, v1);
 
-	// ロール回転はしない
-	float fRoll = 0.0f;
+	izanagi::CVector v2(
+		pt2.x, pt2.y,
+		_ProjectionToSphere(radius, pt2.x, pt2.y));
+	izanagi::SVector::Normalize(v2, v2);
 
-	float cosY = cosf(m_fYaw);
-	float sinY = sinf(m_fYaw);
-	float cosP = cosf(m_fPitch);
-	float sinP = sinf(m_fPitch);
-	float cosR = cosf(m_fRoll);
-	float sinR = sinf(m_fRoll);
+	// 回転軸
+	izanagi::SVector axis;
+	izanagi::SVector::Cross(axis, v1, v2);
+	izanagi::SVector::Normalize(axis, axis);
 
-	izanagi::SVector vFwd;
-	vFwd.x = cosP * sinY;
-	vFwd.y = sinP;
-	vFwd.z = cosP * cosY;
-	vFwd.w = 0.0f;
+	// 回転の角度
+	// NOTE
+	// V1・V2 = |V1||V2|cosθ = cosθ (|V1| = |V2| = 1)
+	// θ = acos(cosθ)
+	// => θ = acos(cosθ) = acos(V1・V2)
+	IZ_FLOAT theta = ::acos(izanagi::SVector::Dot(v1, v2));
 
-	izanagi::SVector::Normalize(vFwd, vFwd);
-	izanagi::SVector::ScaleXYZ(vFwd, vFwd, -fRadius);
-
-	izanagi::SVector pos = m_cCamera.GetParam().pos; 
-
-	izanagi::SVector::AddXYZ(pos, m_cCamera.GetParam().ref, vFwd);
-
-	m_cCamera.SetPos(pos);
-
-#if 0
-	m_cCamera.up.x = -cosY * sinR - sinY * sinP * cosR;
-	m_cCamera.up.y = cosP * cosR;
-	m_cCamera.up.z = sinY * sinR - sinP * cosR * cosY;
-#endif
+	// 回転
+	m_Camera.Rotate(axis, theta);
 }
-#else
-void CSampleCamera::Rotate(float fLatitude, float fLongitude)
-{
-	// 注視点から視点への方向
-	izanagi::CVector vDir;
-	izanagi::SVector::Sub(
-		vDir,
-		m_cCamera.pos,
-		m_cCamera.ref);
-
-	// 半径
-	float fRadius = SVector::Length(vDir);
-
-	izanagi::SVector::Normalize(vDir, vDir);
-
-	// 緯度
-	float fTheta = MATH_PID2 - asinf(vDir.v[1]);	// PI / 2 - arcsin(y)
-
-	// 経度
-	float fPhi = 0.0f;
-
-	if (izanagi::IsNearyEqualZero(fTheta) || izanagi::IsNearyEqual(fTheta, MATH_PI)) {
-		// sin(fTheta) = 0.0f になるので
-		fPhi = 0.0f;
-	}
-	else {
-		fPhi = atan2f(vDir.v[2], vDir.v[0]);	// arctan(z/x)
-	}
-
-	fTheta += fLatitude;
-	fPhi += fLongitude;
-
-#if 0
-	fTheta = izanagi::Clamp<float>(fTheta, 0.0f, MATH_PI);
-#else
-	// ジンバルロック対策
-	fTheta = izanagi::Clamp<float>(fTheta, 0.0f + MATH_PI / 180.0f, MATH_PI - MATH_PI / 180.0f);
-#endif
-	
-	if (fPhi < -MATH_PI2) {
-		fPhi += MATH_PI2;
-	}
-	else if (fPhi > MATH_PI2) {
-		fPhi -= MATH_PI2;
-	}
-
-	// ベタに・・・
-	float x = fRadius * sinf(fTheta) * cosf(fPhi);
-	float y = fRadius * cosf(fTheta);
-	float z = fRadius * sinf(fTheta) * sinf(fPhi);
-
-	// で、x、y、z は注視点からのオフセットなので・・・
-	x += m_cCamera.ref.v[0];
-	y += m_cCamera.ref.v[1];
-	z += m_cCamera.ref.v[2];
-
-	m_cCamera.pos.Set(x, y, z, 1.0f);
-}
-#endif
 
 void CSampleCamera::Move(float fOffsetX, float fOffsetY)
 {
@@ -180,7 +123,7 @@ void CSampleCamera::Move(float fOffsetX, float fOffsetY)
 
 	// カメラの回転を考慮する
 	izanagi::SVector vDir;
-	izanagi::SVector::Sub(vDir, m_cCamera.GetParam().ref, m_cCamera.GetParam().pos);
+	izanagi::SVector::Sub(vDir, m_Camera.GetParam().ref, m_Camera.GetParam().pos);
 	izanagi::SVector::Normalize(vDir, vDir);
 	vDir.y = 0.0f;
 
@@ -190,12 +133,8 @@ void CSampleCamera::Move(float fOffsetX, float fOffsetY)
 
 	izanagi::SMatrix::Apply(vOffset, vOffset, mRot);
 
-	izanagi::SVector pos = m_cCamera.GetParam().pos;
-	izanagi::SVector ref = m_cCamera.GetParam().ref;
+	izanagi::SVector pos = m_Camera.GetParam().pos;
+	izanagi::SVector::Add(pos, m_Camera.GetParam().pos, vOffset);
 
-	izanagi::SVector::Add(ref, m_cCamera.GetParam().ref, vOffset);
-	izanagi::SVector::Add(pos, m_cCamera.GetParam().pos, vOffset);
-
-	m_cCamera.SetPos(pos);
-	m_cCamera.SetAt(ref);
+	m_Camera.SetPos(pos);
 }

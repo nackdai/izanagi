@@ -27,18 +27,16 @@ namespace sample {
 
 	public:
 		void Dolly(IZ_FLOAT fDistScale);
-		void Rotate(IZ_FLOAT fLatitude, IZ_FLOAT fLongitude);
+		void Rotate(
+			const izanagi::CFloatPoint& pt1,
+			const izanagi::CFloatPoint& pt2);
 		void Move(IZ_FLOAT fOffsetX, IZ_FLOAT fOffsetY);
 
 	protected:
-		izanagi::CCamera m_cCamera;
-
-		IZ_FLOAT m_fYaw;
-		IZ_FLOAT m_fPitch;
-		IZ_FLOAT m_fRoll;
+		izanagi::CVectorCamera m_Camera;
 
 	public:
-		izanagi::CCamera& GetRawInterface() { return m_cCamera; }
+		izanagi::CVectorCamera& GetRawInterface() { return m_Camera; }
 	};
 }
 }

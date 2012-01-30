@@ -12,6 +12,9 @@ CSampleApp::CSampleApp()
 	m_DebugFont = IZ_NULL;
 	m_Pad = IZ_NULL;
 	m_Keyboard = IZ_NULL;
+
+	m_ScreenWidth = 1;
+	m_ScreenHeight = 1;
 }
 
 CSampleApp::~CSampleApp()
@@ -24,6 +27,9 @@ CSampleApp::~CSampleApp()
 IZ_BOOL CSampleApp::Init(const SSampleAppParams& params)
 {
 	IZ_BOOL ret = IZ_TRUE;
+
+	m_ScreenWidth = params.screenWidth;
+	m_ScreenHeight= params.screenHeight;
 
 	m_Allocator = params.allocator;
 	VGOTO(ret = (m_Allocator != IZ_NULL), __EXIT__);
@@ -213,6 +219,20 @@ void CSampleApp::Present()
 {
 	IZ_ASSERT(m_Device != IZ_NULL);
 	m_Device->Present();
+}
+
+// スクリーン幅取得
+IZ_UINT CSampleApp::GetScreenWidth() const
+{
+	IZ_ASSERT(m_Device != IZ_NULL);
+	return m_ScreenWidth;
+}
+
+// スクリーン高さ取得
+IZ_UINT CSampleApp::GetScreenHeight() const
+{
+	IZ_ASSERT(m_Device != IZ_NULL);
+	return m_ScreenHeight;
 }
 
 // タイマ取得.
