@@ -211,6 +211,10 @@
 				RelativePath="..\..\source\scenegraph\SceneState.cpp"
 				>
 			</File>
+			<File
+				RelativePath="..\..\source\scenegraph\VectorCamera.cpp"
+				>
+			</File>
 			<Filter
 				Name="img"
 				>
@@ -351,6 +355,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\scenegraph\SceneState.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\scenegraph\VectorCamera.h"
 				>
 			</File>
 			<Filter

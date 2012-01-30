@@ -1,10 +1,14 @@
 #if !defined(__IZANAGI_SCENE_GRAPH_H__)
 #define __IZANAGI_SCENE_GRAPH_H__
 
-#include "scenegraph/Camera.h"
 #include "scenegraph/SceneGraphUtil.h"
 #include "scenegraph/SceneParam.h"
 
+// camera
+#include "scenegraph/Camera.h"
+#include "scenegraph/VectorCamera.h"
+
+// state
 #include "scenegraph/SceneState.h"
 #include "scenegraph/FixedSceneStateManager.h"
 

@@ -34,7 +34,7 @@ namespace izanagi {
 			m_IsDirtyW2V = IZ_FALSE;
 			m_IsDirtyV2C = IZ_FALSE;
 		}
-		~CCamera() {}
+		virtual ~CCamera() {}
 
 		NO_COPIABLE(CCamera);
 
@@ -51,7 +51,7 @@ namespace izanagi {
 		void Init(const SCameraParam& sParam);
 
 		// カメラ更新
-		void Update();
+		virtual void Update();
 
 		IZ_BOOL IsUpdated() const { return (!m_IsDirtyW2V && !m_IsDirtyV2C); }
 
