@@ -66,6 +66,14 @@ namespace sample {
 		 */
 		void Present();
 
+		/** スクリーン幅取得
+		 */
+		IZ_UINT GetScreenWidth() const;
+
+		/** スクリーン高さ取得
+		 */
+		IZ_UINT GetScreenHeight() const;
+
 		/** タイマ取得.
 		 */
 		izanagi::CTimer& GetTimer(IZ_UINT idx);
@@ -110,6 +118,9 @@ namespace sample {
 
 		izanagi::CPad* m_Pad;
 		izanagi::CKeyboard* m_Keyboard;
+
+		IZ_UINT m_ScreenWidth;
+		IZ_UINT m_ScreenHeight;
 
 		izanagi::CTimer m_Timer[SAMPLE_TIMER_NUM];
 
