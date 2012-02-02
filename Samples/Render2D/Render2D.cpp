@@ -41,7 +41,7 @@ IZ_BOOL CRender2DApp::InitInternal(
 	izanagi::sample::CSampleCamera& camera)
 {
 	izanagi::CFileInputStream in;
-	VRETURN(in.Open("data/Image.img"));
+	VRETURN(in.Open("data/earth.img"));
 
 	m_Img = izanagi::CImage::CreateImage(
 				allocator,
