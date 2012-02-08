@@ -16,6 +16,10 @@ void CSampleCamera::Init(
 		fNear, fFar,
 		fFov,
 		fAspect);
+
+	m_Camera.Rotate(
+		izanagi::CVector(0.0f, 1.0f, 0.0f),
+		IZ_MATH_PI1_2);
 }
 
 void CSampleCamera::Update()
@@ -88,6 +92,7 @@ void CSampleCamera::Rotate(
 	static const IZ_FLOAT radius = 0.8f;
 
 	// スクリーン上の２点からトラックボール上の点を計算する
+	// GLUTと同じ方法
 
 	izanagi::CVector v1(
 		pt1.x, pt1.y,
@@ -100,9 +105,12 @@ void CSampleCamera::Rotate(
 	izanagi::SVector::Normalize(v2, v2);
 
 	// 回転軸
-	izanagi::SVector axis;
+	izanagi::SVector axis; 
 	izanagi::SVector::Cross(axis, v1, v2);
 	izanagi::SVector::Normalize(axis, axis);
+
+	// カメラの回転状態に合わせて軸も回転
+	izanagi::SMatrix::Apply(axis, axis, m_Camera.GetTransform());
 
 	// 回転の角度
 	// NOTE
