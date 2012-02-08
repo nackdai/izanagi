@@ -247,7 +247,7 @@ namespace izanagi {
 		}
 
 		// ベクトルの外積を計算する
-		static void CrossLH(SVector& dst, const SVector& src1, const SVector& src2)
+		static void Cross(SVector& dst, const SVector& src1, const SVector& src2)
 		{
 #if defined(__USE_D3D_MATH__)
 			D3DXVec3Cross(
@@ -259,21 +259,6 @@ namespace izanagi {
 			dst.y = src1.z * src2.x - src1.x * src2.z;
 			dst.z = src1.x * src2.y - src1.y * src2.x;
 			dst.w = src1.w;
-#endif	// #if defined(__USE_D3D_MATH__)
-		}
-		// ベクトルの外積を計算する
-		static void Cross(SVector& dst, const SVector& src1, const SVector& src2)
-		{
-#if defined(__USE_D3D_MATH__)
-			D3DXVec3Cross(
-				reinterpret_cast<D3DXVECTOR3*>(&dst),
-				reinterpret_cast<const D3DXVECTOR3*>(&src2),
-				reinterpret_cast<const D3DXVECTOR3*>(&src1));
-#else	// #if defined(__USE_D3D_MATH__)
-			dst.x = src2.y * src1.z - src2.z * src1.y;
-			dst.y = src2.z * src1.x - src2.x * src1.z;
-			dst.z = src2.x * src1.y - src2.y * src1.x;
-			dst.w = src2.w;
 #endif	// #if defined(__USE_D3D_MATH__)
 		}
 

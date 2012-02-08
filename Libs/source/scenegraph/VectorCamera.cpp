@@ -32,6 +32,8 @@ void CVectorCamera::Init(
 	m_Y.Set(0.0f, 1.0f, 0.0f, 0.0f);
 	m_Z.Set(0.0f, 0.0f, 1.0f, 0.0f);
 	m_Pos.Set(pos.x, pos.y, pos.z);
+
+	izanagi::SMatrix::SetUnit(m_Transform);
 }
 
 // カメラ更新
@@ -54,6 +56,13 @@ void CVectorCamera::Update()
 		// 一応、注視点を更新
 		// 右手系なので、マイナスする
 		izanagi::SVector::SubXYZ(m_Param.ref, m_Pos, m_Z);
+
+		{
+			SVector::Copy(m_Transform.v[0], m_X);
+			SVector::Copy(m_Transform.v[1], m_Y);
+			SVector::Copy(m_Transform.v[2], m_Z);
+			SVector::Copy(m_Transform.v[3], m_Pos);
+		}
 	}
 	if (m_IsDirtyV2C) {
 		ComputeV2C();

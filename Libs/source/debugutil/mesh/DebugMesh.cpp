@@ -390,54 +390,60 @@ void CDebugMesh::ComputeTangent(
 	const SMeshVtx& vtx1,
 	const SMeshVtx& vtx2)
 {
+	// NOTE
+	// DirectXのuv座標系で考えると
+	//
+	// +---> u(x)
+	// |
+	// v(y)
+	//
+	// 手前がzとなるので、これは左手座標となる
+
 	SVector vP;
 	SVector::Sub(vP, vtx1.pos, vtx0->pos);
 
 	SVector vQ;
 	SVector::Sub(vQ, vtx2.pos, vtx0->pos);
+	
+	IZ_FLOAT s1 = vtx1.uv[0] - vtx0->uv[0];
+	IZ_FLOAT t1 = vtx1.uv[1] - vtx0->uv[1];
 
-	IZ_FLOAT a = vtx2.uv[1] - vtx0->uv[1];
-	IZ_FLOAT b = vtx1.uv[1] - vtx0->uv[1];
-	IZ_FLOAT c = vtx2.uv[0] - vtx0->uv[0];
-	IZ_FLOAT d = vtx1.uv[0] - vtx0->uv[0];
+	IZ_FLOAT s2 = vtx2.uv[0] - vtx0->uv[0];
+	IZ_FLOAT t2 = vtx2.uv[1] - vtx0->uv[1];
 
 	// 行列式の逆数
-	IZ_FLOAT fInvDeterminant = 1.0f / (a * d - b * c);
+	IZ_FLOAT fInvDeterminant = 1.0f / (s1 * t2 - s2 * t1);
 
 	// BiNormal
 	SVector vB;
 	{
-		vB.x = fInvDeterminant * (-c * vP.x + d * vQ.x);
-		vB.y = fInvDeterminant * (-c * vP.y + d * vQ.y);
-		vB.z = fInvDeterminant * (-c * vP.z + d * vQ.z);
+		vB.x = fInvDeterminant * (-s2 * vP.x + s1 * vQ.x);
+		vB.y = fInvDeterminant * (-s2 * vP.y + s1 * vQ.y);
+		vB.z = fInvDeterminant * (-s2 * vP.z + s1 * vQ.z);
 		SVector::Normalize(vB, vB);
 	}
 
 	// Tangent
 	SVector vT;
 	{
-		// X(T) = Y(B) x Z(N)
-		SVector::Cross(vT, vB, vtx0->nml);
-	}
-
-	// Y(B) = Z(N) x X(T)
-	SVector::Cross(vB, vtx0->nml, vT);
-
 #if 0
-	// TODO
-	// DirectXの座標系（左手）に変換する
-	{
-		SMatrix m;
-		SMatrix::GetRot(
-			m,
-			IZ_MATH_PI,
-			vtx0->nml.x, vtx0->nml.y, vtx0->nml.z);
+		vT.x = fInvDeterminant * (t2 * vP.x - t1 * vQ.x);
+		vT.y = fInvDeterminant * (t2 * vP.y - t1 * vQ.y);
+		vT.z = fInvDeterminant * (t2 * vP.z - t1 * vQ.z);
+		SVector::Normalize(vT, vT);
+#else
+		// NOTE
+		// ここでは、Tangent空間を左手座標にしたい
+		// 左手座標にするために、あえて反対に計算する
 
-		SMatrix::Apply(vT, vT, m);
-	}
+		// X = Y x Z
+		izanagi::SVector::Cross(vT, vtx0->nml, vB);
+
+		// Y = Z x X
+		izanagi::SVector::Cross(vB, vT, vtx0->nml);
 #endif
+	}
 
-#if 1
 	SMatrix mtx;
 	mtx.v[0].Set(vT.x, vB.x, vtx0->nml.x, 0.0f);
 	mtx.v[1].Set(vT.y, vB.y, vtx0->nml.y, 0.0f);
@@ -449,27 +455,9 @@ void CDebugMesh::ComputeTangent(
 	vT.w = determinant;
 
 	//SVector::Scale(vB, vB, determinant);
-#endif
 
-#if 0
-	IZ_FLOAT fLen = LengthVector(vtx0->tangent);
-	if (fLen == 0.0f) {
-		SVector::Copy(vtx0->tangent, vT);
-		SVector::Copy(vtx0->binml, vB);
-	}
-	else {
-		SVector::Add(vtx0->tangent, vtx0->tangent, vT);
-		SVector::Scale(vtx0->tangent, vtx0->tangent, 0.5f);
-		SVector::Normalize(vtx0->tangent, vtx0->tangent);
-
-		SVector::Add(vtx0->binml, vtx0->binml, vB);
-		SVector::Scale(vtx0->binml, vtx0->binml, 0.5f);
-		SVector::Normalize(vtx0->binml, vtx0->binml);
-	}
-#else
 	SVector::Copy(vtx0->tangent, vT);
 	SVector::Copy(vtx0->binml, vB);
-#endif
 }
 
 void CDebugMesh::SetOverlapVtx(

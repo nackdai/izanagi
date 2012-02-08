@@ -81,19 +81,18 @@ void CCamera::ComputeW2V()
 
 	SVector::Normalize(vecZ, vecZ);
 
+	// NOTE
+	// 右手座標
+
 	// TODO
 	// OpenGL
 
-	// NOTE
-	// DirectXの座標系（左手）で右手座標系のカメラの計算をするため
-	// ここでは外積の計算には左手系での外積を計算する必要がある？
-
-	// X
-	SVector::CrossLH(vecX, m_Param.up, vecZ);
+	// X = Y x Z
+	SVector::Cross(vecX, m_Param.up, vecZ);
 	SVector::Normalize(vecX, vecX);
 
-	// Y
-	SVector::CrossLH(vecY, vecZ, vecX);
+	// Y = Z x X
+	SVector::Cross(vecY, vecZ, vecX);
 	vecY.w = 0.0f;
 
 	SVector::Copy(m_Param.mtxW2V.v[0], vecX);

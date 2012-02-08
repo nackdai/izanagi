@@ -71,6 +71,10 @@ namespace izanagi {
 		 */
 		const SVector& GetPos() const { return m_Pos; }
 
+		/**
+		 */
+		const SMatrix& GetTransform() const { return m_Transform; }
+
 	private:
 		// 使わせない
 
@@ -102,6 +106,9 @@ namespace izanagi {
 		// NOTE
 		// m_Param.pos の参照とすることで m_Param.pos と同期するようにする
 		SVector& m_Pos;
+
+		// カメラの変換マトリクス
+		SMatrix m_Transform;
 	};
 
 }	// namespace izanagi
