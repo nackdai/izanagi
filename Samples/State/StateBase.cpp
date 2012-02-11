@@ -43,7 +43,7 @@ IZ_BOOL CStateBase::Enter(
 	void* val)
 {
 	izanagi::CFileInputStream in;
-	VRETURN(in.Open("data/image.img"));
+	VRETURN(in.Open("data/StateImage.img"));
 
 	izanagi::CGraphicsDevice* device = reinterpret_cast<izanagi::CGraphicsDevice*>(val);
 

@@ -225,15 +225,15 @@
 			Name="asset"
 			>
 			<File
-				RelativePath="..\..\DebugMesh\data\earth.xml"
+				RelativePath="..\..\data\earth.xml"
 				>
 				<FileConfiguration
 					Name="Debug_DX9|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ImageBuilder.exe -i &quot;$(InputPath)&quot; -o &quot;$(InputDir)..\data\$(InputName).img&quot;"
-						Outputs="$(InputDir)..\data\$(InputName).img"
+						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ImageBuilder.exe -i &quot;$(InputPath)&quot; -o &quot;$(TargetDir)\data\$(InputName).img&quot;&#x0D;&#x0A;"
+						Outputs="$(TargetDir)\data\$(InputName).img"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -241,8 +241,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ImageBuilder.exe -i &quot;$(InputPath)&quot; -o &quot;$(InputDir)..\data\$(InputName).img&quot;"
-						Outputs="$(InputDir)..\data\$(InputName).img"
+						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ImageBuilder.exe -i &quot;$(InputPath)&quot; -o &quot;$(TargetDir)\data\$(InputName).img&quot;&#x0D;&#x0A;"
+						Outputs="$(TargetDir)\data\$(InputName).img"
 					/>
 				</FileConfiguration>
 			</File>

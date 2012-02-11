@@ -290,15 +290,15 @@
 			Name="asset"
 			>
 			<File
-				RelativePath="..\..\shader\data\EnvMap.xml"
+				RelativePath="..\..\data\EnvMap.xml"
 				>
 				<FileConfiguration
 					Name="Debug_DX9|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ImageBuilder.exe -i &quot;$(InputPath)&quot; -o &quot;$(InputDir)..\data\$(InputName).img&quot;&#x0D;&#x0A;"
-						Outputs="$(InputDir)..\data\$(InputName).img"
+						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ImageBuilder.exe -i &quot;$(InputPath)&quot; -o &quot;$(TargetDir)\data\$(InputName).img&quot;"
+						Outputs="$(TargetDir)\data\$(InputName).img"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -306,8 +306,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ImageBuilder.exe -i &quot;$(InputPath)&quot; -o &quot;$(InputDir)..\data\$(InputName).img&quot;&#x0D;&#x0A;"
-						Outputs="$(InputDir)..\data\$(InputName).img"
+						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ImageBuilder.exe -i &quot;$(InputPath)&quot; -o &quot;$(TargetDir)\data\$(InputName).img&quot;"
+						Outputs="$(TargetDir)\data\$(InputName).img"
 					/>
 				</FileConfiguration>
 			</File>

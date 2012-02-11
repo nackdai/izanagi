@@ -126,7 +126,7 @@ IZ_BOOL CModelApp::InitInternal(
 	// Texture
 	{
 		izanagi::CFileInputStream in;
-		VRETURN(in.Open("data/texture.img"));
+		VRETURN(in.Open("data/ModelImage.img"));
 
 		m_Img = izanagi::CImage::CreateImage(
 					allocator,

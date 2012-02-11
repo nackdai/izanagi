@@ -205,7 +205,7 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src &quot;$(InputPath)&quot; -obj &quot;$(ProjectDir)..\..\$(ProjectName)\shader_obj&quot; -o &quot;$(ProjectDir)..\..\$(ProjectName)\data&quot;"
+						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src &quot;$(InputPath)&quot; -obj &quot;$(ProjectDir)..\..\$(ProjectName)\shader_obj&quot; -o &quot;$(ProjectDir)..\..\$(ProjectName)\data&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="$(InputDir)$(InputName).fx"
 						Outputs="$(InputDir)..\data\$(InputName).shd"
 					/>
@@ -215,7 +215,7 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src &quot;$(InputPath)&quot; -obj &quot;$(ProjectDir)..\..\$(ProjectName)\shader_obj&quot; -o &quot;$(ProjectDir)..\..\$(ProjectName)\data&quot;"
+						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src &quot;$(InputPath)&quot; -obj &quot;$(ProjectDir)..\..\$(ProjectName)\shader_obj&quot; -o &quot;$(ProjectDir)..\..\$(ProjectName)\data&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="$(InputDir)$(InputName).fx"
 						Outputs="$(InputDir)..\data\$(InputName).shd"
 					/>
@@ -226,16 +226,15 @@
 			Name="asset"
 			>
 			<File
-				RelativePath="..\..\Model\data\Seymour.dae"
+				RelativePath="..\..\data\ModelImage.xml"
 				>
 				<FileConfiguration
 					Name="Debug_DX9|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ModelConverter.exe -i &quot;$(InputPath)&quot; -mtx 48"
-						AdditionalDependencies="$(InputDir)$(InputName).dae"
-						Outputs="$(InputDir)..\data\$(InputName).msh"
+						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ImageBuilder.exe -i &quot;$(InputPath)&quot; -o &quot;$(TargetDir)\data\$(InputName).img&quot;"
+						Outputs="$(TargetDir)\data\$(InputName).img"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -243,22 +242,22 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ModelConverter.exe -i &quot;$(InputPath)&quot; -mtx 48"
-						AdditionalDependencies="$(InputDir)$(InputName).dae"
-						Outputs="$(InputDir)..\data\$(InputName).msh"
+						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ImageBuilder.exe -i &quot;$(InputPath)&quot; -o &quot;$(TargetDir)\data\$(InputName).img&quot;"
+						Outputs="$(TargetDir)\data\$(InputName).img"
 					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\Model\data\texture.xml"
+				RelativePath="..\..\data\Seymour.dae"
 				>
 				<FileConfiguration
 					Name="Debug_DX9|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ImageBuilder.exe -i &quot;$(InputPath)&quot; -o &quot;$(InputDir)..\data\$(InputName).img&quot;"
-						Outputs="$(InputDir)..\data\$(InputName).img"
+						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ModelConverter.exe -i &quot;$(InputPath)&quot; -mtx 48&#x0D;&#x0A;move $(InputDir)\$(InputName).msh $(TargetDir)\data&#x0D;&#x0A;move $(InputDir)\$(InputName).skl $(TargetDir)\data"
+						AdditionalDependencies="$(InputPath)"
+						Outputs="$(TargetDir)\data\$(InputName).msh"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -266,22 +265,23 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ImageBuilder.exe -i &quot;$(InputPath)&quot; -o &quot;$(InputDir)..\data\$(InputName).img&quot;"
-						Outputs="$(InputDir)..\data\$(InputName).img"
+						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ModelConverter.exe -i &quot;$(InputPath)&quot; -mtx 48&#x0D;&#x0A;move $(InputDir)\$(InputName).msh $(TargetDir)\data&#x0D;&#x0A;move $(InputDir)\$(InputName).skl $(TargetDir)\data"
+						AdditionalDependencies="$(InputPath)"
+						Outputs="$(TargetDir)\data\$(InputName).msh"
 					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\Model\data\tiny.x"
+				RelativePath="..\..\data\tiny.x"
 				>
 				<FileConfiguration
 					Name="Debug_DX9|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ModelConverter.exe -i &quot;$(InputPath)&quot; -mtx 48"
-						AdditionalDependencies="$(InputDir)$(InputName).x"
-						Outputs="$(InputDir)..\data\$(InputName).msh"
+						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ModelConverter.exe -i &quot;$(InputPath)&quot; -mtx 48&#x0D;&#x0A;move $(InputDir)\$(InputName).msh $(TargetDir)\data&#x0D;&#x0A;move $(InputDir)\$(InputName).skl $(TargetDir)\data&#x0D;&#x0A;"
+						AdditionalDependencies="$(InputPath)"
+						Outputs="$(TargetDir)\data\$(InputName).msh"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -289,9 +289,9 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ModelConverter.exe -i &quot;$(InputPath)&quot; -mtx 48"
-						AdditionalDependencies="$(InputDir)$(InputName).x"
-						Outputs="$(InputDir)..\data\$(InputName).msh"
+						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ModelConverter.exe -i &quot;$(InputPath)&quot; -mtx 48&#x0D;&#x0A;move $(InputDir)\$(InputName).msh $(TargetDir)\data&#x0D;&#x0A;move $(InputDir)\$(InputName).skl $(TargetDir)\data&#x0D;&#x0A;"
+						AdditionalDependencies="$(InputPath)"
+						Outputs="$(TargetDir)\data\$(InputName).msh"
 					/>
 				</FileConfiguration>
 			</File>
