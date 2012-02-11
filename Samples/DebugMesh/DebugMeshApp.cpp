@@ -186,144 +186,136 @@ namespace {
 // 描画.
 void CDebugMeshApp::RenderInternal(izanagi::CGraphicsDevice* device)
 {
-	static const IZ_COLOR bgColor = IZ_COLOR_RGBA(0, 128, 255, 255);
-
 	izanagi::sample::CSampleCamera& camera = GetCamera();
 
 	izanagi::SMatrix mtxL2W;
 	izanagi::SMatrix::SetUnit(mtxL2W);
 
-	device->BeginRender(
-		izanagi::E_GRAPH_CLEAR_FLAG_ALL,
-		bgColor, 1.0f, 0);
+	// テクスチャなし
+	m_Shader->Begin(1, IZ_FALSE);
 	{
-		// テクスチャなし
-		m_Shader->Begin(1, IZ_FALSE);
-		{
-			if (m_Shader->BeginPass(0)) {
-				// パラメータ設定
+		if (m_Shader->BeginPass(0)) {
+			// パラメータ設定
+			_SetShaderParam(
+				m_Shader,
+				"g_mL2W",
+				(void*)&mtxL2W,
+				sizeof(mtxL2W));
+
+			_SetShaderParam(
+				m_Shader,
+				"g_mW2C",
+				(void*)&camera.GetRawInterface().GetParam().mtxW2C,
+				sizeof(camera.GetRawInterface().GetParam().mtxW2C));
+
+			// シェーダ設定
+			m_Shader->CommitChanges();
+
+			m_Grid->Draw();
+			m_Axis->Draw();
+
+			m_Shader->EndPass();
+		}
+	}
+	m_Shader->End();
+
+	device->SetTexture(0, m_Img->GetTexture(0));
+
+	// テクスチャあり
+	m_Shader->Begin(0, IZ_FALSE);
+	{
+		if (m_Shader->BeginPass(0)) {
+			// パラメータ設定
+			_SetShaderParam(
+				m_Shader,
+				"g_mW2C",
+				(void*)&camera.GetRawInterface().GetParam().mtxW2C,
+				sizeof(izanagi::SMatrix));
+
+			// Sphere
+			{
 				_SetShaderParam(
 					m_Shader,
 					"g_mL2W",
 					(void*)&mtxL2W,
-					sizeof(mtxL2W));
-
-				_SetShaderParam(
-					m_Shader,
-					"g_mW2C",
-					(void*)&camera.GetRawInterface().GetParam().mtxW2C,
-					sizeof(camera.GetRawInterface().GetParam().mtxW2C));
-
-				// シェーダ設定
-				m_Shader->CommitChanges();
-
-				m_Grid->Draw();
-				m_Axis->Draw();
-
-				m_Shader->EndPass();
-			}
-		}
-		m_Shader->End();
-
-		device->SetTexture(0, m_Img->GetTexture(0));
-
-		// テクスチャあり
-		m_Shader->Begin(0, IZ_FALSE);
-		{
-			if (m_Shader->BeginPass(0)) {
-				// パラメータ設定
-				_SetShaderParam(
-					m_Shader,
-					"g_mW2C",
-					(void*)&camera.GetRawInterface().GetParam().mtxW2C,
 					sizeof(izanagi::SMatrix));
 
-				// Sphere
-				{
-					_SetShaderParam(
-						m_Shader,
-						"g_mL2W",
-						(void*)&mtxL2W,
-						sizeof(izanagi::SMatrix));
+				m_Shader->CommitChanges();
 
-					m_Shader->CommitChanges();
-
-					m_Mesh[MESH_TYPE_SPHERE]->Draw();
-				}
-
-				// Cube
-				{
-					izanagi::SMatrix::GetTrans(
-						mtxL2W,
-						izanagi::CVector(-15.0f, 0.0f, -15.0f));
-
-					_SetShaderParam(
-						m_Shader,
-						"g_mL2W",
-						(void*)&mtxL2W,
-						sizeof(izanagi::SMatrix));
-
-					m_Shader->CommitChanges();
-
-					m_Mesh[MESH_TYPE_CUBE]->Draw();
-				}
-
-				// Cylinder
-				{
-					izanagi::SMatrix::GetTrans(
-						mtxL2W,
-						izanagi::CVector(15.0f, 0.0f, -15.0f));
-
-					_SetShaderParam(
-						m_Shader,
-						"g_mL2W",
-						(void*)&mtxL2W,
-						sizeof(izanagi::SMatrix));
-
-					m_Shader->CommitChanges();
-
-					m_Mesh[MESH_TYPE_CYLINDER]->Draw();
-				}
-
-
-				// Torus
-				{
-					izanagi::SMatrix::GetTrans(
-						mtxL2W,
-						izanagi::CVector(15.0f, 0.0f, 15.0f));
-
-					_SetShaderParam(
-						m_Shader,
-						"g_mL2W",
-						(void*)&mtxL2W,
-						sizeof(izanagi::SMatrix));
-
-					m_Shader->CommitChanges();
-
-					m_Mesh[MESH_TYPE_TORUS]->Draw();
-				}
-
-				// Plane
-				{
-					izanagi::SMatrix::GetTrans(
-						mtxL2W,
-						izanagi::CVector(-15.0f, 0.0f, 15.0f));
-
-					_SetShaderParam(
-						m_Shader,
-						"g_mL2W",
-						(void*)&mtxL2W,
-						sizeof(izanagi::SMatrix));
-
-					m_Shader->CommitChanges();
-
-					m_Mesh[MESH_TYPE_PLANE]->Draw();
-				}
-
-				m_Shader->EndPass();
+				m_Mesh[MESH_TYPE_SPHERE]->Draw();
 			}
+
+			// Cube
+			{
+				izanagi::SMatrix::GetTrans(
+					mtxL2W,
+					izanagi::CVector(-15.0f, 0.0f, -15.0f));
+
+				_SetShaderParam(
+					m_Shader,
+					"g_mL2W",
+					(void*)&mtxL2W,
+					sizeof(izanagi::SMatrix));
+
+				m_Shader->CommitChanges();
+
+				m_Mesh[MESH_TYPE_CUBE]->Draw();
+			}
+
+			// Cylinder
+			{
+				izanagi::SMatrix::GetTrans(
+					mtxL2W,
+					izanagi::CVector(15.0f, 0.0f, -15.0f));
+
+				_SetShaderParam(
+					m_Shader,
+					"g_mL2W",
+					(void*)&mtxL2W,
+					sizeof(izanagi::SMatrix));
+
+				m_Shader->CommitChanges();
+
+				m_Mesh[MESH_TYPE_CYLINDER]->Draw();
+			}
+
+
+			// Torus
+			{
+				izanagi::SMatrix::GetTrans(
+					mtxL2W,
+					izanagi::CVector(15.0f, 0.0f, 15.0f));
+
+				_SetShaderParam(
+					m_Shader,
+					"g_mL2W",
+					(void*)&mtxL2W,
+					sizeof(izanagi::SMatrix));
+
+				m_Shader->CommitChanges();
+
+				m_Mesh[MESH_TYPE_TORUS]->Draw();
+			}
+
+			// Plane
+			{
+				izanagi::SMatrix::GetTrans(
+					mtxL2W,
+					izanagi::CVector(-15.0f, 0.0f, 15.0f));
+
+				_SetShaderParam(
+					m_Shader,
+					"g_mL2W",
+					(void*)&mtxL2W,
+					sizeof(izanagi::SMatrix));
+
+				m_Shader->CommitChanges();
+
+				m_Mesh[MESH_TYPE_PLANE]->Draw();
+			}
+
+			m_Shader->EndPass();
 		}
-		m_Shader->End();
 	}
-	device->EndRender();
+	m_Shader->End();
 }

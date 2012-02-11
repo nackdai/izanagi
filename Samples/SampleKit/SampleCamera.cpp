@@ -16,10 +16,6 @@ void CSampleCamera::Init(
 		fNear, fFar,
 		fFov,
 		fAspect);
-
-	m_Camera.Rotate(
-		izanagi::CVector(0.0f, 1.0f, 0.0f),
-		IZ_MATH_PI1_2);
 }
 
 void CSampleCamera::Update()

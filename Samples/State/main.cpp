@@ -75,15 +75,7 @@ void CSStateApp::UpdateInternal(izanagi::CCamera& camera)
 // 描画.
 void CSStateApp::RenderInternal(izanagi::CGraphicsDevice* device)
 {
-	static const IZ_COLOR bgColor = IZ_COLOR_RGBA(0, 128, 255, 255);
-
-	device->BeginRender(
-		izanagi::E_GRAPH_CLEAR_FLAG_ALL,
-		bgColor, 1.0f, 0);
-	{
-		CStateManager::GetInstance().Render(device);
-	}
-	device->EndRender();
+	CStateManager::GetInstance().Render(device);
 }
 
 static const IZ_UINT BUF_SIZE = 1 * 1024 * 1024;
