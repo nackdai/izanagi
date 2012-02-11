@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=""
+				AdditionalIncludeDirectories="$(EXTERNAL_DIR)/xerces/src"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -112,7 +112,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=""
+				AdditionalIncludeDirectories="$(EXTERNAL_DIR)/xerces/src"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;IZ_TOOLKIT_ENABLE_XERCES"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
