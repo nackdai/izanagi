@@ -183,35 +183,44 @@ void CSampleApp::Update()
 void CSampleApp::Render()
 {
 	IZ_ASSERT(m_Device != IZ_NULL);
-    RenderInternal(m_Device);
 
-	IZ_ASSERT(m_DebugFont != IZ_NULL);
+	IZ_COLOR bgColor = GetBgColor();
 
-	// 時間表示
-	if (m_Device->Begin2D()) {
-		m_DebugFont->Begin();
+	m_Device->BeginRender(
+		izanagi::E_GRAPH_CLEAR_FLAG_ALL,
+		bgColor, 1.0f, 0);
+	{
+		RenderInternal(m_Device);
 
-		{
-			IZ_FLOAT time = GetTimer(0).GetTime();
-			IZ_FLOAT fps = 1000.0f / time;
+		IZ_ASSERT(m_DebugFont != IZ_NULL);
 
-			m_DebugFont->DBPrint(
-				"%.2f[ms] %.2f[fps]\n",
-				time, fps);
+		// 時間表示
+		if (m_Device->Begin2D()) {
+			m_DebugFont->Begin();
+
+			{
+				IZ_FLOAT time = GetTimer(0).GetTime();
+				IZ_FLOAT fps = 1000.0f / time;
+
+				m_DebugFont->DBPrint(
+					"%.2f[ms] %.2f[fps]\n",
+					time, fps);
+			}
+			{
+				IZ_FLOAT time = GetTimer(1).GetTime();
+				IZ_FLOAT fps = 1000.0f / time;
+
+				m_DebugFont->DBPrint(
+					"%.2f[ms] %.2f[fps]\n",
+					time, fps);
+			}
+
+			m_DebugFont->End();
+
+			m_Device->End2D();
 		}
-		{
-			IZ_FLOAT time = GetTimer(1).GetTime();
-			IZ_FLOAT fps = 1000.0f / time;
-
-			m_DebugFont->DBPrint(
-				"%.2f[ms] %.2f[fps]\n",
-				time, fps);
-		}
-
-		m_DebugFont->End();
-
-		m_Device->End2D();
 	}
+	m_Device->EndRender();
 }
 
 // V同期.
@@ -246,4 +255,11 @@ izanagi::CTimer& CSampleApp::GetTimer(IZ_UINT idx)
 CSampleCamera& CSampleApp::GetCamera()
 {
 	return m_Camera;
+}
+
+// 背景色取得.
+IZ_COLOR CSampleApp::GetBgColor() const
+{
+	static const IZ_COLOR bgColor = IZ_COLOR_RGBA(0, 128, 255, 255);
+	return bgColor;
 }

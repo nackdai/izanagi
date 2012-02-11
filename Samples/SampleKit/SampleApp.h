@@ -91,6 +91,10 @@ namespace sample {
 		virtual IZ_BOOL OnKeyDown(IZ_UINT nChar) { return IZ_TRUE; }
 
 	protected:
+		/** 背景色取得.
+		 */
+		virtual IZ_COLOR GetBgColor() const;
+
 		/** 初期化.
 		 */
 		virtual IZ_BOOL InitInternal(

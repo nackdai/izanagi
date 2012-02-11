@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<textures>
+  <plane
+	  path="./boy_10.dds"
+	  fmt="dxt1"/>
+  <plane
+	  path="./Tiny_skin.dds"
+	  fmt="dxt1"/>
+</textures>

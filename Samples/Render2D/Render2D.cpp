@@ -68,33 +68,27 @@ void CRender2DApp::RenderInternal(izanagi::CGraphicsDevice* device)
 {
 	static const IZ_COLOR bgColor = IZ_COLOR_RGBA(0, 128, 255, 255);
 
-	device->BeginRender(
-		izanagi::E_GRAPH_CLEAR_FLAG_ALL,
-		bgColor, 1.0f, 0);
-	{
-		if (device->Begin2D()) {
-			// スプライト
-			device->SetTexture(0, m_Img->GetTexture(0));
-			device->Set2DRenderOp(izanagi::E_GRAPH_2D_RENDER_OP_MODULATE);
-			device->Draw2DSprite(
-				izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),
-				izanagi::CIntRect(300, 100, 556, 228));
+	if (device->Begin2D()) {
+		// スプライト
+		device->SetTexture(0, m_Img->GetTexture(0));
+		device->Set2DRenderOp(izanagi::E_GRAPH_2D_RENDER_OP_MODULATE);
+		device->Draw2DSprite(
+			izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),
+			izanagi::CIntRect(300, 100, 556, 228));
 
-			// 塗りつぶし矩形
-			device->Draw2DRect(
-				izanagi::CIntRect(100, 100, 200, 200),
-				IZ_COLOR_RGBA(0, 0xff, 0, 0xff));
+		// 塗りつぶし矩形
+		device->Draw2DRect(
+			izanagi::CIntRect(100, 100, 200, 200),
+			IZ_COLOR_RGBA(0, 0xff, 0, 0xff));
 
-			// ライン
-			device->Draw2DLine(
-				izanagi::CIntPoint(100, 100),	// 始点
-				izanagi::CIntPoint(200, 200),	// 終点
-				IZ_COLOR_RGBA(0xff, 0, 0, 0xff));
+		// ライン
+		device->Draw2DLine(
+			izanagi::CIntPoint(100, 100),	// 始点
+			izanagi::CIntPoint(200, 200),	// 終点
+			IZ_COLOR_RGBA(0xff, 0, 0, 0xff));
 
-			device->End2D();
-		}
+		device->End2D();
 	}
-	device->EndRender();
 }
 
 static const IZ_UINT BUF_SIZE = 1 * 1024 * 1024;
