@@ -234,12 +234,8 @@ CMeshSetInstance* CMeshSetInstance::CreateMeshSetInstance(
 	CMeshSetInstance* pInstance = new(buf) CMeshSetInstance;
 	buf += sizeof(CMeshSetInstance);
 
-	buf = pInstance->Init(buf, pMeshSet);
-	IZ_BOOL result = (buf != IZ_NULL);
+	SAFE_REPLACE(pInstance->m_pBody, pMeshSet);
 
-	if (!result) {
-		SAFE_DELETE(pInstance);
-	}
 	return pInstance;
 }
 
@@ -250,8 +246,6 @@ size_t CMeshSetInstance::ComputeBytes(CMeshSet* pMeshSet)
 
 	size_t ret = sizeof(CMeshSetInstance);
 
-	ret += sizeof(CPrimitiveSet*) * pMeshSet->GetPrimSetNum();
-
 	return ret;
 }
 
@@ -259,10 +253,6 @@ size_t CMeshSetInstance::ComputeBytes(CMeshSet* pMeshSet)
 CMeshSetInstance::CMeshSetInstance()
 {
 	m_pBody = IZ_NULL;
-
-	m_nPrimNum = 0;
-	m_pPrims = IZ_NULL;
-
 	m_pSkl = IZ_NULL;
 }
 
@@ -270,11 +260,6 @@ CMeshSetInstance::CMeshSetInstance()
 CMeshSetInstance::~CMeshSetInstance()
 {
 	SAFE_RELEASE(m_pBody);
-
-	for (IZ_UINT i = 0; i < m_nPrimNum; i++) {
-		SAFE_RELEASE(m_pPrims[i]);
-	}
-
 	SAFE_RELEASE(m_pSkl);
 }
 
@@ -285,32 +270,6 @@ const S_MSH_MTRL& CMeshSetInstance::GetMaterialInfo()
 	return m_pBody->GetMtrlInfo();
 }
 
-// 初期化
-IZ_UINT8* CMeshSetInstance::Init(
-	IZ_UINT8* pBuf,
-	CMeshSet* pMeshSet)
-{
-	IZ_ASSERT(pBuf != IZ_NULL);
-	IZ_ASSERT(pMeshSet != IZ_NULL);
-
-	SAFE_REPLACE(m_pBody, pMeshSet);
-
-	m_nPrimNum = pMeshSet->GetPrimSetNum();
-	if (m_nPrimNum == 0) {
-		// プリミティブセットを持たないので、ここまで
-		return pBuf;
-	}
-
-	m_pPrims = reinterpret_cast<CPrimitiveSet**>(pBuf);
-	pBuf += sizeof(CPrimitiveSet*) * m_nPrimNum;
-
-	for (IZ_UINT i = 0; i < m_nPrimNum; i++) {
-		SAFE_REPLACE(m_pPrims[i], pMeshSet->GetPrimSet(i));
-	}
-
-	return pBuf;
-}
-
 // 描画
 IZ_BOOL CMeshSetInstance::Render(
 	CGraphicsDevice* pDevice,
@@ -318,28 +277,10 @@ IZ_BOOL CMeshSetInstance::Render(
 {
 	IZ_ASSERT(m_pBody != IZ_NULL);
 
-	// 描画に使用する頂点宣言
-	CVertexDeclaration* pVD = m_pBody->GetVD();
-	IZ_ASSERT(pVD != IZ_NULL);
-
-	VRETURN(pDevice->SetVertexDeclaration(pVD));
-
-	for (IZ_UINT i = 0; i < m_nPrimNum; ++i) {
-		if (pRenderHandler != IZ_NULL) {
-			pRenderHandler->BeginRenderMesh();
-		}
-
-		VRETURN(
-			m_pPrims[i]->Render(
-				pDevice,
-				m_pSkl,
-				pRenderHandler));
-
-		if (pRenderHandler != IZ_NULL) {
-			pRenderHandler->EndRenderMesh();
-		}
-	}
-
+	IZ_BOOL ret = m_pBody->Render(
+					pDevice,
+					m_pSkl,
+					pRenderHandler);
 	return IZ_TRUE;
 }
 
@@ -377,13 +318,16 @@ CMeshInstance* CMeshInstance::CreateMeshInstance(
 
 		SAFE_REPLACE(pInstance->m_pBody, pMesh);
 
+		// メッシュグループ数（LOD数）
 		IZ_UINT nGroupNum = pMesh->GetMeshGroupNum();
 
+		// メッシュグループバッファ
 		pInstance->m_pGroups = reinterpret_cast<CMeshGroupInstance**>(pBuf);
 		pBuf += sizeof(CMeshGroupInstance*) * nGroupNum;
 
 		pInstance->m_nGroupNum = nGroupNum;
 
+		// メッシュグループの本データからインスタンスを作成
 		for (IZ_UINT i = 0; i < nGroupNum; i++) {
 			CMeshGroup* pGroup = pMesh->GetMeshGroup(i);
 
@@ -474,6 +418,7 @@ IZ_BOOL CMeshInstance::SetMaterial(
 
 	IZ_UINT nMeshSetNum = m_pGroups[level]->GetMeshSetNum();
 
+	// メッシュセットにマテリアルを設定する
 	for (IZ_UINT i = 0; i < nMeshSetNum; i++) {
 		CMeshSetInstance* pMshSet = m_pGroups[level]->GetMeshSet(i);
 		if (pMshSet->GetMaterialInfo().nameKey == nMtrlKey) {
