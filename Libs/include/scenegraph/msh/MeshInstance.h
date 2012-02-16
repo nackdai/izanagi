@@ -122,11 +122,6 @@ namespace izanagi {
 		inline ~CMeshSetInstance();		
 
 	private:
-		// 初期化
-		IZ_UINT8* Init(
-			IZ_UINT8* pBuf,
-			CMeshSet* pMeshSet);
-
 		// マテリアル情報取得
 		const S_MSH_MTRL& GetMaterialInfo();
 
@@ -140,10 +135,6 @@ namespace izanagi {
 
 	private:
 		CMeshSet* m_pBody;
-
-		IZ_UINT m_nPrimNum;
-		CPrimitiveSet** m_pPrims;
-
 		CSkeletonInstance* m_pSkl;
 	};
 
