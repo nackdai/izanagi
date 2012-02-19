@@ -11,8 +11,7 @@ namespace izanagi {
 	class CSkeletonInstance;
 	class IMshRenderHandler;
 
-	/**
-	 * メッシュセット
+	/** メッシュセット.
 	 *
 	 * マテリアルごとのプリミティブセットの集まり
 	 */
@@ -30,8 +29,7 @@ namespace izanagi {
 		void InternalRelease() { delete this; }
 
 	private:
-		/**
-		 * 描画
+		/** 描画.
 		 */
 		IZ_BOOL Render(
 			CGraphicsDevice* pDevice,
@@ -47,18 +45,15 @@ namespace izanagi {
 
 		inline void GetCenter(SVector& vPos);
 
-		/**
-		 * マテリアル情報の取得
+		/** マテリアル情報の取得.
 		 */
 		const S_MSH_MTRL& GetMtrlInfo() const { return m_Info.mtrl; }
 
-		/**
-		 * プリミティブセット総数を取得
+		/** プリミティブセット総数を取得.
 		 */
 		IZ_UINT GetPrimSetNum() const { return m_Info.numSubset; }
 
-		/**
-		 * 描画に利用する頂点宣言を取得
+		/** 描画に利用する頂点宣言を取得.
 		 */
 		CVertexDeclaration* GetVD() { return m_VD; }
 

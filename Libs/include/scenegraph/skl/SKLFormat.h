@@ -77,16 +77,16 @@ namespace izanagi {
 		IZ_UINT nameKey;
 
 		// If parent is -1, joint has no parent.
-		IZ_INT16 parent;
-		IZ_UINT16 idx;
+		IZ_INT16 parent;		///< 親ジョイントのインデックス.
+		IZ_UINT16 idx;			///< 自分自身のインデックス
 
 		SMatrix mtxInvBind;
 
-		IZ_UINT8 validParam;
-		IZ_UINT8 validAnmParam;
+		IZ_UINT8 validParam;	///< 有効なパラメータフラグ。ポーズパラメータの全てが有効とは限らない.
+		IZ_UINT8 validAnmParam;	///< アニメ計算時の有効なパラメータフラグ。ポーズパラメータの全てが有効とは限らない.
 		IZ_UINT8 reserved[2];
 
-		S_SKL_JOINT_POSE pose;
+		S_SKL_JOINT_POSE pose;	///< ポーズパラメータ
 	};
 }	// namespace izanagi
 

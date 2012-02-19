@@ -7,7 +7,7 @@
 namespace izanagi {
 	class IInputStream;
 	class CGraphicsDevice;
-	class CShader;
+	class IShader;
 
 	/**
 	*/
@@ -40,36 +40,60 @@ namespace izanagi {
 		IZ_DEFINE_INTERNAL_RELEASE();
 
 	public:
-		/**
-		 * 描画準備
+		/** 描画準備.
 		 */
 		IZ_BOOL Prepare(CGraphicsDevice* pDevice);
 
+		/** マテリアルにテクスチャを追加.
+		 *
+		 * マテリアルに関連付けられていないテクスチャを追加
+		 */
 		IZ_BOOL AddTexture(
 			IZ_PCSTR pszName,
 			const S_MTRL_TEXTURE_TYPE& type,
 			CBaseTexture* pTex);
 
+		/** マテリアルに関連付けられているテクスチャをセット.
+		 */
 		IZ_BOOL SetTexture(
 			IZ_PCSTR pszName, 
 			CBaseTexture* pTex);
+
+		/** マテリアルに関連付けられているテクスチャをセット.
+		 */
 		IZ_BOOL SetTexture(
 			IZ_UINT nKey,
 			CBaseTexture* pTex);
 
-		IZ_BOOL AddShader(CShader* pShader);
-		IZ_BOOL SetShader(CShader* pShader);
+		/** マテリアルにシェーダを追加.
+		 *
+		 * マテリアルに関連付けられていないテクスチャを追加
+		 */
+		IZ_BOOL AddShader(IShader* pShader);
 
+		/** マテリアルに関連付けられているテクスチャをセット.
+		 */
+		IZ_BOOL SetShader(IShader* pShader);
+
+		/** マテリアルにパラメータを追加.
+		 *
+		 * マテリアルに関連付けられていないパラメータを追加.
+		 */
 		IZ_BOOL AddParameter(
 			IZ_PCSTR pszName,
 			E_MTRL_PARAM_TYPE type,
 			IZ_UINT nNum,
 			const void* pValue);
 
+		/** マテリアルに関連付けられているパラメータをセット.
+		 */
 		IZ_BOOL SetParameter(
 			IZ_PCSTR pszName,
 			IZ_UINT nBytes,
 			const void* pValue);
+
+		/** マテリアルに関連付けられているパラメータをセット.
+		 */
 		IZ_BOOL SetParameter(
 			IZ_UINT nKey,
 			IZ_UINT nBytes,
@@ -80,19 +104,16 @@ namespace izanagi {
 		 */
 		IZ_BOOL IsValid() const;
 
-		/**
-		 * マテリアル名変更
+		/** マテリアル名を強制変更.
 		 */
 		void SetName(IZ_PCSTR pszName);
 
 	public:
-		/**
-		 * マテリアル名取得
+		/** マテリアル名取得.
 		 */
 		IZ_PCSTR GetName() const { return m_Header.name.GetString(); }
 
-		/**
-		 * マテリアルキー取得
+		/** マテリアルキー取得.
 		 */
 		IZ_UINT GetKey() const { return m_Header.keyMaterial; }
 
@@ -123,11 +144,11 @@ namespace izanagi {
 		CBaseTexture* GetTextureByKey(const CKey& key);
 
 #if 0
-		CShader* GetShaderByIdx(IZ_UINT idx);
-		CShader* GetShaderByName(IZ_PCSTR pszName);
-		CShader* GetShaderByKey(const CKey& key);
+		IShader* GetShaderByIdx(IZ_UINT idx);
+		IShader* GetShaderByName(IZ_PCSTR pszName);
+		IShader* GetShaderByKey(const CKey& key);
 #else
-		CShader* GetShader()
+		IShader* GetShader()
 		{
 			return (m_pShaderInfo != IZ_NULL ? m_pShaderInfo->shader : IZ_NULL);
 		}

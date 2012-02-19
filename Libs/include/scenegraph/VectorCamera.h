@@ -99,7 +99,7 @@ namespace izanagi {
 		
 		// NOTE
 		// m_Param.up の参照とすることで m_Param.up と同期するようにする
-		SVector m_Y;
+		SVector& m_Y;
 
 		SVector m_Z;
 

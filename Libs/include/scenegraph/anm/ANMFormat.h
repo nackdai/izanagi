@@ -8,8 +8,8 @@
 // ANM = ANiMation
 
 namespace izanagi {
-	/**
-	*/
+	/** アニメーションの補間計算.
+	 */
 	enum E_ANM_INTERP_TYPE {
 		E_ANM_INTERP_TYPE_LINEAR = 0,
 		E_ANM_INTERP_TYPE_BEZIER,
@@ -21,8 +21,8 @@ namespace izanagi {
 	};
 	IZ_C_ASSERT(E_ANM_INTERP_TYPE_NUM < IZ_UINT8_MAX);
 
-	/**
-	*/
+	/** アニメーションを行うパラメータ.
+	 */
 	enum E_ANM_TRANSFORM_TYPE {
 		E_ANM_TRANSFORM_TYPE_X  = 1 << 0,
 		E_ANM_TRANSFORM_TYPE_Y  = 1 << 1,
@@ -62,9 +62,11 @@ namespace izanagi {
 		E_ANM_TRANSFORM_TYPE_SCALE_Z   = E_ANM_TRANSFORM_TYPE_SCALE | E_ANM_TRANSFORM_TYPE_Z,
 	};
 
+	/** アニメーションキーフレーム.
+	 */
 	enum E_ANM_KEY_TYPE {
-		E_ANM_KEY_TYPE_TIME = 0,
-		E_ANM_KEY_TYPE_FRAME,
+		E_ANM_KEY_TYPE_TIME = 0,	///< 時間ベース.
+		E_ANM_KEY_TYPE_FRAME,		///< フレームベース.
 
 		E_ANM_KEY_TYPE_FORCE_INT32 = 0x7fffffff,
 	};
@@ -102,19 +104,21 @@ namespace izanagi {
 		IZ_UINT numChannels;
 		IZ_UINT numKeys;
 
-		E_ANM_KEY_TYPE keyType;
+		E_ANM_KEY_TYPE keyType;	///< アニメーションキーフレーム.
 		IZ_UINT reserved;
 
 		IZ_FLOAT time;
 	};
 
-	/**
-	*/
+	/** キーフレーム情報.
+	 *
+	 * キーフレームあたりのジョイントのパラメータに適用するパラメータ.
+	 */
 	struct S_ANM_KEY {
-		IZ_FLOAT keyTime;
+		IZ_FLOAT keyTime;		///< キー時間.
 		
-		IZ_UINT8 numParams;
-		IZ_UINT8 stride;
+		IZ_UINT8 numParams;		///< アニメーションパラメータ数。位置、回転、スケールによって異なる.
+		IZ_UINT8 stride;		///< １パラメータあたりのバイトサイズ.
 		IZ_UINT8 reserved[2];
 
 #if 0
@@ -124,26 +128,30 @@ namespace izanagi {
 #endif
 	};
 
-	/**
-	*/
+	/** アニメーションチャンネル
+	 *
+	 * ジョイントのパラメータ（ex. 位置、回転など）ごとのアニメーション情報
+	 */
 	struct S_ANM_CHANNEL {
-		IZ_UINT8 interp;
+		IZ_UINT8 interp;	///< 補間計算のタイプ.
 		IZ_UINT8 stride;
-		IZ_UINT16 numKeys;
+		IZ_UINT16 numKeys;	///< キーフレーム情報数.
 
-		IZ_UINT type;
+		IZ_UINT type;		///< アニメーションを行うパラメータのタイプ.
 
 		S_ANM_KEY** keys;
 	};
 
-	/**
-	*/
+	/** アニメーションノード.
+	 *
+	 * 適用ジョイントの情報
+	 */
 	struct S_ANM_NODE {
-		CStdString<izChar, ANM_NAME_LEN> target;
-		IZ_UINT targetKey;
+		CStdString<izChar, ANM_NAME_LEN> target;	///< 適用対象のジョイント名.
+		IZ_UINT targetKey;							///< 適用対象のジョイントのキー値.
 
-		IZ_UINT16 targetIdx;
-		IZ_UINT16 numChannels;
+		IZ_UINT16 targetIdx;	///< 適用対象のジョイントのインデックス.
+		IZ_UINT16 numChannels;	///< チャンネル数.
 
 		S_ANM_CHANNEL* channels;
 	};

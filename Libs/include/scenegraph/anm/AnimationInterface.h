@@ -18,11 +18,15 @@ namespace izanagi {
 		NO_COPIABLE(IAnimation);
 
 	public:
+		/** 指定されたスケルトンにアニメーションを適用する.
+		 */
 		PURE_VIRTUAL(
 			void ApplyAnimation(
 				CSkeletonInstance* skl,
 				IZ_FLOAT time));
 
+		/** 指定されたスケルトンの指定されたジョイントにアニメーションを適用する.
+		 */
 		PURE_VIRTUAL(
 			void ApplyAnimationByIdx(
 				CSkeletonInstance* skl,
@@ -31,6 +35,8 @@ namespace izanagi {
 
 		PURE_VIRTUAL(IZ_FLOAT GetAnimationTime() const);
 
+		/** 指定されたジョイントのポーズ情報を取得.
+		 */
 		PURE_VIRTUAL(
 			IZ_UINT GetPoseByIdx(
 				S_SKL_JOINT_POSE& pose,

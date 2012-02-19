@@ -21,7 +21,7 @@ namespace izanagi {
 
 	/**
 	*/
-	class CShaderBasic : public CShader {
+	class CShaderBasic : public IShader {
 	public:
 		/**
 		* Creates an instance of CShaderBasic.

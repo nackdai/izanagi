@@ -8,7 +8,7 @@ namespace izanagi {
 	class CGraphicsDevice;
 	class CMaterial;
 	class CBaseTexture;
-	class CShader;
+	class IShader;
 	class IMeshSet;
 	class IMshRenderHandler;
 
@@ -54,7 +54,7 @@ namespace izanagi {
 
 		CSceneParam* m_pSceneParam;
 
-		CShader* m_pCurShader;
+		IShader* m_pCurShader;
 		IZ_UINT m_nCurShaderPassNum;
 		IZ_INT m_nCurShaderPass;
 

@@ -11,8 +11,7 @@ namespace izanagi {
 	class IMshRenderHandler;
 	class CSkeletonInstance;
 
-	/**
-	 * メッシュグループ
+	/** メッシュグループ.
 	 *
 	 * LODのレベルごとのメッシュセットの集まり
 	 */
@@ -28,18 +27,15 @@ namespace izanagi {
 		void InternalRelease() { delete this; }
 
 	public:
-		/**
-		 * メッシュセットの総数を取得
+		/** メッシュセットの総数を取得.
 		 */
 		IZ_UINT GetMeshSetNum() { return m_Info.numMeshSet; }
 
-		/**
-		 * メッシュセットを取得
+		/** メッシュセットを取得.
 		 */
 		CMeshSet* GetMeshSet(IZ_UINT idx);
 
-		/**
-		 * メッシュグループ全体を描画
+		/** メッシュグループ全体を描画.
 		 */
 		IZ_BOOL Render(
 			CGraphicsDevice* pDevice,
