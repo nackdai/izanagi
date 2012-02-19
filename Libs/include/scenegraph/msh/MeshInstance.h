@@ -17,8 +17,7 @@ namespace izanagi {
 
 	////////////////////////////////////////////
 
-	/**
-	 * メッシュセットインターフェース
+	/** メッシュセットインターフェース.
 	 *
 	 * ジオメトリソーティングの最小単位
 	 * メッシュセットとは、マテリアルごとのプリミティブセットの集まり
@@ -34,30 +33,25 @@ namespace izanagi {
 		NO_COPIABLE(IMeshSet);
 
 	protected:
-		/**
-		 * マテリアル情報取得
+		/** マテリアル情報取得.
 		 */
 		virtual const S_MSH_MTRL& GetMaterialInfo() = 0;
 
-		/**
-		 * 描画に利用するマテリアルを設定
+		/** 描画に利用するマテリアルを設定.
 		 */
 		void SetMaterial(CMaterial* pMtrl);
 
-		/**
-		 * 設定されているマテリアルを取得
+		/** 設定されているマテリアルを取得.
 		 */
 		CMaterial* GetMaterial();
 
-		/**
-		 * 描画
+		/** 描画.
 		 */
 		virtual IZ_BOOL Render(
 			CGraphicsDevice* pDevice,
 			IMshRenderHandler* pRenderHandler) = 0;
 
-		/**
-		 * 描画に利用するスケルトンを設定
+		/** 描画に利用するスケルトンを設定.
 		 */
 		virtual void SetSkeleton(CSkeletonInstance* pSkl)
 		{
@@ -97,10 +91,7 @@ namespace izanagi {
 		IZ_FLOAT m_fZ;
 	};
 
-	////////////////////////////////////////////
-
-	/**
-	 * メッシュセットインスタンス
+	/** メッシュセットインスタンス.
 	 *
 	 * メッシュセットとは、マテリアルごとのプリミティブセットの集まり
 	 */
@@ -140,8 +131,7 @@ namespace izanagi {
 
 	////////////////////////////////////////////
 
-	/**
-	 * メッシュデータインスタンス
+	/** メッシュデータインスタンス.
 	 */
 	class CMeshInstance : public CObject {
 	public:
@@ -161,23 +151,20 @@ namespace izanagi {
 		IZ_DEFINE_INTERNAL_RELEASE();
 
 	public:
-		/**
-		 * 描画
+		/** 描画.
 		 */
 		IZ_BOOL Render(
 			IZ_UINT level,
 			CSkeletonInstance* pSkl,
 			IMshRenderHandler* pRenderHandler);
 
-		/**
-		 * スケルトンデータの適用
+		/** スケルトンデータの適用.
 		 */
 		void ApplySkeleton(
 			IZ_UINT level,
 			CSkeletonInstance* pSkl);
 
-		/**
-		 * 描画に利用するマテリアルを設定
+		/** 描画に利用するマテリアルを設定.
 		 */
 		IZ_BOOL SetMaterial(
 			IZ_UINT level,

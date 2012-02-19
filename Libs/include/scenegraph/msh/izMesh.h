@@ -11,8 +11,7 @@ namespace izanagi {
 	class CSkeletonInstance;
 	class IMshRenderHandler;
 
-	/**
-	 * メッシュデータ
+	/** メッシュデータ.
 	 */
 	class CMesh : public CObject {
 		friend class CModel;
@@ -32,23 +31,20 @@ namespace izanagi {
 		IZ_DEFINE_INTERNAL_RELEASE();
 
 	public:
-		/**
-		 * メッシュを描画
+		/** メッシュを描画.
 		 */
 		IZ_BOOL Render(
 			CSkeletonInstance* pSkl,
 			IMshRenderHandler* pRenderHandler);
 
 	public:
-		/**
-		 * メッシュグループ（= メッシュセットの集まり）を取得
+		/** メッシュグループ（= メッシュセットの集まり）を取得.
 		 */
 		CMeshGroup* GetMeshGroup(IZ_UINT idx);
 
 		const S_MSH_HEADER& GetHeader() const { return m_Header; }
 
-		/**
-		 * メッシュグループ総数を取得
+		/** メッシュグループ総数を取得.
 		 */
 		IZ_UINT GetMeshGroupNum() const { return m_Header.numMeshGroup; }
 

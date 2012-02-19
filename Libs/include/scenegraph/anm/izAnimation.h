@@ -56,17 +56,22 @@ namespace izanagi {
 			CPoseUpdater& poseUpdater);
 
 	public:
-		// アニメーション適用
+		/** 指定されたスケルトンにアニメーションを適用する.
+		 */
 		void ApplyAnimation(
 			CSkeletonInstance* skl,
 			IZ_FLOAT time);
 
+		/** 指定されたスケルトンの指定されたジョイントにアニメーションを適用する.
+		 */
 		void ApplyAnimationByIdx(
 			CSkeletonInstance* skl,
 			IZ_UINT jointIdx,
 			IZ_FLOAT time);
 
 	protected:
+		/** 指定されたジョイントのポーズ情報を取得.
+		 */
 		IZ_UINT GetPoseByIdx(
 			S_SKL_JOINT_POSE& pose,
 			IZ_UINT idx,

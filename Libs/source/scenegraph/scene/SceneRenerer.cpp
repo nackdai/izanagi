@@ -58,7 +58,7 @@ IZ_UINT CSceneRenderer::BeginRender(IMeshSet* pMesh)
 
 	IZ_ASSERT(pMtrl != IZ_NULL);
 
-	CShader* pShader = pMtrl->GetShader();
+	IShader* pShader = pMtrl->GetShader();
 	VRETURN(pShader != IZ_NULL);
 
 	if ((m_pCurShader == IZ_NULL)

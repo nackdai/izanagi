@@ -31,7 +31,7 @@ CShaderManager::~CShaderManager()
 	ClearAll();
 }
 
-IZ_BOOL CShaderManager::Add(CShader* pShader)
+IZ_BOOL CShaderManager::Add(IShader* pShader)
 {
 	IZ_ASSERT(pShader != IZ_NULL);
 
@@ -52,7 +52,7 @@ void CShaderManager::ClearAll()
 		CShaderHashItem* pHashItem = pOrderItem->GetData();
 		IZ_ASSERT(pHashItem != IZ_NULL);
 
-		CShader* pShader = pHashItem->GetData();
+		IShader* pShader = pHashItem->GetData();
 		SAFE_RELEASE(pShader);
 
 		pOrderItem = pOrderItem->GetNext();
@@ -74,7 +74,7 @@ IZ_UINT CShaderManager::GetShaderNumByKey(IZ_UINT key)
 	CStdList<CShaderHashItem>::Item* pItem = m_ShaderHash.GetHashTop(key);
 
 	while (pItem != IZ_NULL) {
-		CShader* pShader = pItem->GetData()->GetData();
+		IShader* pShader = pItem->GetData()->GetData();
 		IZ_ASSERT(pShader != IZ_NULL);
 
 		if (pShader->GetKey() == key) {
@@ -87,32 +87,32 @@ IZ_UINT CShaderManager::GetShaderNumByKey(IZ_UINT key)
 	return ret;
 }
 
-CShader* CShaderManager::GetShaderByName(IZ_PCSTR name)
+IShader* CShaderManager::GetShaderByName(IZ_PCSTR name)
 {
-	CShader* ret = GetShaderByKey(CKey::GenerateValue(name));
+	IShader* ret = GetShaderByKey(CKey::GenerateValue(name));
 	return ret;
 }
 
-CShader* CShaderManager::GetShaderByKey(IZ_UINT key)
+IShader* CShaderManager::GetShaderByKey(IZ_UINT key)
 {
 	// Return shader which is found firstly.
-	CShader* ret = m_ShaderHash.FindData(key);
+	IShader* ret = m_ShaderHash.FindData(key);
 	return ret;
 }
 
-CShader* CShaderManager::GetShaderByAttr(
+IShader* CShaderManager::GetShaderByAttr(
 	IZ_PCSTR name,
 	const CShaderAttr pAttrs[],
 	IZ_UINT nAttrNum)
 {
-	CShader* ret = GetShaderByAttr(
+	IShader* ret = GetShaderByAttr(
 					CKey::GenerateValue(name),
 					pAttrs,
 					nAttrNum);
 	return ret;
 }
 
-CShader* CShaderManager::GetShaderByAttr(
+IShader* CShaderManager::GetShaderByAttr(
 	IZ_UINT key,
 	const CShaderAttr pAttrs[],
 	IZ_UINT nAttrNum)
@@ -120,7 +120,7 @@ CShader* CShaderManager::GetShaderByAttr(
 	CStdList<CShaderHashItem>::Item* pItem = m_ShaderHash.GetHashTop(key);
 
 	while (pItem != IZ_NULL) {
-		CShader* pShader = pItem->GetData()->GetData();
+		IShader* pShader = pItem->GetData()->GetData();
 		IZ_ASSERT(pShader != IZ_NULL);
 
 		if (pShader->GetKey() == key) {

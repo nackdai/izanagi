@@ -255,7 +255,7 @@ IZ_BOOL CMaterial::Prepare(CGraphicsDevice* pDevice)
 	// TODO
 	IZ_ASSERT((m_Header.numShader == 1) && (m_pShaderInfo != IZ_NULL));
 	IZ_ASSERT(m_pShaderInfo->shader != IZ_NULL);
-	izanagi::CShader* pShader = m_pShaderInfo->shader;
+	izanagi::IShader* pShader = m_pShaderInfo->shader;
 
 	// Textures.
 	for (IZ_UINT i = 0; i < m_Header.numTex; i++) {
@@ -373,7 +373,7 @@ IZ_BOOL CMaterial::SetTexture(
 
 /**
 */
-IZ_BOOL CMaterial::AddShader(CShader* pShader)
+IZ_BOOL CMaterial::AddShader(IShader* pShader)
 {
 	IZ_BOOL ret = IZ_TRUE;
 
@@ -416,7 +416,7 @@ IZ_BOOL CMaterial::AddShader(CShader* pShader)
 
 /**
 */
-IZ_BOOL CMaterial::SetShader(CShader* pShader)
+IZ_BOOL CMaterial::SetShader(IShader* pShader)
 {
 	IZ_ASSERT(pShader != IZ_NULL);
 
@@ -664,7 +664,7 @@ CBaseTexture* CMaterial::GetTextureByKey(const CKey& key)
 }
 
 #if 0
-CShader* CMaterial::GetShaderByIdx(IZ_UINT idx)
+IShader* CMaterial::GetShaderByIdx(IZ_UINT idx)
 {
 	S_MTRL_SHADER* pInfo = const_cast<S_MTRL_SHADER*>(GetShaderInfoByIdx(idx));
 	if (pInfo != IZ_NULL) {
@@ -673,7 +673,7 @@ CShader* CMaterial::GetShaderByIdx(IZ_UINT idx)
 	return IZ_NULL;
 }
 
-CShader* CMaterial::GetShaderByName(IZ_PCSTR pszName)
+IShader* CMaterial::GetShaderByName(IZ_PCSTR pszName)
 {
 	S_MTRL_SHADER* pInfo = const_cast<S_MTRL_SHADER*>(GetShaderInfoByName(pszName));
 	if (pInfo != IZ_NULL) {
@@ -682,7 +682,7 @@ CShader* CMaterial::GetShaderByName(IZ_PCSTR pszName)
 	return IZ_NULL;
 }
 
-CShader* CMaterial::GetShaderByKey(const CKey& key)
+IShader* CMaterial::GetShaderByKey(const CKey& key)
 {
 	S_MTRL_SHADER* pInfo = const_cast<S_MTRL_SHADER*>(GetShaderInfoByKey(key));
 	if (pInfo != IZ_NULL) {

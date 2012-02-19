@@ -87,61 +87,93 @@ namespace izanagi {
 
 	/**
 	*/
-	class CShader : public CObject {
+	class IShader : public CObject {
 		friend class CShaderManager;
 
 	protected:
-		CShader()
+		IShader()
 		{
 			m_pAllocator = IZ_NULL;
 			m_pDevice = IZ_NULL;
 		}
 
-		virtual ~CShader() { SAFE_RELEASE(m_pDevice); }
+		virtual ~IShader() { SAFE_RELEASE(m_pDevice); }
 
-		NO_COPIABLE(CShader);
+		NO_COPIABLE(IShader);
 
 		IZ_DEFINE_INTERNAL_RELEASE();
 
 	public:
+		/** シェーダ名取得.
+		 */
 		PURE_VIRTUAL(IZ_PCSTR GetName() const);
+
+		/** シェーダキー取得.
+		 */
 		PURE_VIRTUAL(IZ_UINT GetKey() const);
 
+		/** テクニック開始.
+		 */
 		PURE_VIRTUAL(
 			IZ_UINT Begin(
 				IZ_UINT nTechIdx,
 				IZ_BOOL bIsSaveState));
+
+		/** テクニック終了.
+		 */
 		PURE_VIRTUAL(IZ_BOOL End());
 
+		/** パス開始.
+		 */
 		PURE_VIRTUAL(IZ_BOOL BeginPass(IZ_UINT nPassIdx));
+
+		/** パス終了.
+		 */
 		PURE_VIRTUAL(IZ_BOOL EndPass());
 
+		/** 変更内容の確定.
+		 */
 		PURE_VIRTUAL(IZ_BOOL CommitChanges());
 
+		/** シェーダパラメータハンドルを名前から取得.
+		 */
 		PURE_VIRTUAL(IZ_SHADER_HANDLE GetParameterByName(IZ_PCSTR pszName));
+
+		/** シェーダパラメータハンドルをセマンティックから取得.
+		 */
 		PURE_VIRTUAL(IZ_SHADER_HANDLE GetParameterBySemantic(IZ_PCSTR pszSemantic));
 
+		/** シェーダパラメータの詳細を取得.
+		 */
 		PURE_VIRTUAL(
 			IZ_BOOL GetParameterDesc(
 				IZ_SHADER_HANDLE handle, 
 				SShaderParamDesc& sDesc) const);
 
+		/** シェーダパラメータ値を設定.
+		 */
 		PURE_VIRTUAL(
 			IZ_BOOL SetParamValue(
 				IZ_SHADER_HANDLE hParam,
 				const void* pValue,
 				IZ_UINT nBytes));
 
+		/** シェーダで利用するテクスチャを設定.
+		 */
 		PURE_VIRTUAL(
 			IZ_BOOL SetTexture(
 				IZ_SHADER_HANDLE hTex,
 				CBaseTexture* pTex));
 
+		/** シェーダで利用するテクスチャをサンプラに設定.
+		 */
 		PURE_VIRTUAL(
 			IZ_BOOL SetTextureToSampler(
 				IZ_SHADER_HANDLE hSmpl,
 				CBaseTexture* pTex));
 
+		/** テクニック数取得.
+		 */
 		PURE_VIRTUAL(IZ_UINT GetTechNum() const);
 
 		PURE_VIRTUAL(IZ_UINT GetAttrNum() const);
@@ -152,12 +184,16 @@ namespace izanagi {
 		PURE_VIRTUAL(IZ_BOOL CmpAttrValue(IZ_PCSTR attrName, IZ_BOOL val) const);
 
 	public:
+		/** シェーダパラメータを持っているかどうか.
+		 */
 		IZ_BOOL HasParameterByName(IZ_PCSTR pszName)
 		{
 			IZ_SHADER_HANDLE handle = GetParameterByName(pszName);
 			return (handle > 0);
 		}
 
+		/** シェーダパラメータを持っているかどうか.
+		 */
 		IZ_BOOL HasParameterBySemantic(IZ_PCSTR pszSemantic)
 		{
 			IZ_SHADER_HANDLE handle = GetParameterBySemantic(pszSemantic);
@@ -173,20 +209,20 @@ namespace izanagi {
 		}
 
 	protected:
-		void InitItem(IZ_UINT key, CShader* pShader)
+		void InitItem(IZ_UINT key, IShader* pShader)
 		{
 			m_HashItem.Init(key, pShader);
 		}
 
 	private:
-		CStdHash<IZ_UINT, CShader, SHD_HASH_MAX>::Item* GetHashItem() { return &m_HashItem; }
+		CStdHash<IZ_UINT, IShader, SHD_HASH_MAX>::Item* GetHashItem() { return &m_HashItem; }
 
 	protected:
 		IMemoryAllocator* m_pAllocator;
 		CGraphicsDevice* m_pDevice;
 
 	private:
-		CStdHash<IZ_UINT, CShader, SHD_HASH_MAX>::Item m_HashItem;
+		CStdHash<IZ_UINT, IShader, SHD_HASH_MAX>::Item m_HashItem;
 	};
 }	// namespace izanagi
 
