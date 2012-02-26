@@ -170,7 +170,7 @@ namespace {
 	inline void _SetShaderParam(
 		izanagi::CShaderBasic* shader,
 		const char* name,
-		void* value,
+		const void* value,
 		IZ_UINT bytes)
 	{
 		izanagi::IZ_SHADER_HANDLE handle = shader->GetParameterByName(name);
