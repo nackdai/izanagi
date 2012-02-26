@@ -31,15 +31,15 @@ public:
 	virtual void CommitChanges();
 
 public:
-	void SetShader(izanagi::CShader* pShader)
+	void SetShader(izanagi::IShader* pShader)
 	{
 		SAFE_REPLACE(m_pShader, pShader);
 	}
 
-	izanagi::CShader* GetShader() { return m_pShader; }
+	izanagi::IShader* GetShader() { return m_pShader; }
 
 private:
-	izanagi::CShader* m_pShader;
+	izanagi::IShader* m_pShader;
 
 	IZ_UINT m_nCnt;
 	izanagi::SMatrix m_Mtx[48];
@@ -232,7 +232,7 @@ namespace {
 	inline void _SetShaderParam(
 		izanagi::CShaderBasic* shader,
 		const char* name,
-		void* value,
+		const void* value,
 		IZ_UINT bytes)
 	{
 		izanagi::IZ_SHADER_HANDLE handle = shader->GetParameterByName(name);

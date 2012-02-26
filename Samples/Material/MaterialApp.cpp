@@ -1,4 +1,4 @@
-#include "AnimationApp.h"
+#include "MaterialApp.h"
 
 /////////////////////////////////////////////////
 
@@ -90,36 +90,45 @@ static CSampleMdlRenderHandler* s_MdlRenderHandler = IZ_NULL;
 
 /////////////////////////////////////////////////
 
-#if 1
-	#define MSH_FILE_NAME	"data/Seymour.msh"
-	#define SKL_FILE_NAME	"data/Seymour.skl"
-	#define ANM_FILE_NAME	"data/Seymour.anm"
-	#define IMG_IDX		(0)
-	#define CAMERA_Z	(30.0f)
-#else
-	#define MSH_FILE_NAME	"data/tiny.msh"
-	#define SKL_FILE_NAME	"data/tiny.skl"
-	#define ANM_FILE_NAME	"data/tiny.anm"
-	#define IMG_IDX		(1)
-	#define CAMERA_Z	(300.0f)
-#endif
+#define MSH_FILE_NAME	"data/Seymour.msh"
+#define SKL_FILE_NAME	"data/Seymour.skl"
+#define IMG_IDX		(0)
+#define CAMERA_Z	(30.0f)
 
-CAnimationApp::CAnimationApp()
+CMaterialApp::CMaterialApp()
 {
 	m_Img = IZ_NULL;
 	m_Mdl = IZ_NULL;
 	m_Msh = IZ_NULL;
 	m_Skl = IZ_NULL;
 	m_Shd = IZ_NULL;
-	m_Anm = IZ_NULL;
+
+	memset(m_Mtrl, 0, sizeof(m_Mtrl));
 }
 
-CAnimationApp::~CAnimationApp()
+CMaterialApp::~CMaterialApp()
 {
 }
 
+namespace {
+	inline void _SetShaderParam(
+		izanagi::CShaderBasic* shader,
+		const char* name,
+		const void* value,
+		IZ_UINT bytes)
+	{
+		izanagi::IZ_SHADER_HANDLE handle = shader->GetParameterByName(name);
+		IZ_ASSERT(handle != 0);
+
+		shader->SetParamValue(
+			handle,
+			value,
+			bytes);
+	}
+}
+
 // 初期化.
-IZ_BOOL CAnimationApp::InitInternal(
+IZ_BOOL CMaterialApp::InitInternal(
 	izanagi::IMemoryAllocator* allocator,
 	izanagi::CGraphicsDevice* device,
 	izanagi::sample::CSampleCamera& camera)
@@ -164,18 +173,6 @@ IZ_BOOL CAnimationApp::InitInternal(
 		VGOTO(result = (m_Skl != IZ_NULL), __EXIT__);
 	}
 
-	// Animation
-	{
-		izanagi::CFileInputStream in;
-		VRETURN(in.Open(ANM_FILE_NAME));
-
-		m_Anm = izanagi::CAnimation::CreateAnimation(
-					allocator,
-					&in);
-
-		VGOTO(result = (m_Anm != IZ_NULL), __EXIT__);
-	}
-
 	// Shader
 	{
 		izanagi::CFileInputStream in;
@@ -194,6 +191,33 @@ IZ_BOOL CAnimationApp::InitInternal(
 		VGOTO(result = (s_MdlRenderHandler != IZ_NULL), __EXIT__);
 	}
 
+	// ライトパラメータ
+	{
+		// Ambient Light Color
+		izanagi::SAmbientLightParam ambient;
+		ambient.color.Set(0.0f, 0.0f, 0.0f);
+
+		// Parallel Light Color
+		m_ParallelLight.color.Set(1.0f, 1.0f, 1.0f);
+
+		// Parallel Light Direction
+		m_ParallelLight.vDir.Set(-1.0f, -1.0f, -1.0f);
+		izanagi::SVector::Normalize(m_ParallelLight.vDir, m_ParallelLight.vDir);
+
+		// マテリアル
+		izanagi::SMaterialParam mtrl;
+		{
+			mtrl.vDiffuse.Set(1.0f, 1.0f, 1.0f, 1.0f);
+			mtrl.vAmbient.Set(1.0f, 1.0f, 1.0f, 1.0f);
+			mtrl.vSpecular.Set(1.0f, 1.0f, 1.0f, 20.0f);
+		}
+
+		_SetShaderParam(m_Shd, "g_vMtrlDiffuse", &mtrl.vDiffuse, sizeof(mtrl.vDiffuse));
+
+		_SetShaderParam(m_Shd, "g_vLitParallelColor", &m_ParallelLight.color, sizeof(m_ParallelLight.color));
+		_SetShaderParam(m_Shd, "g_vLitAmbientColor", &ambient.color, sizeof(ambient.color));
+	}
+
 	// Model
 	{
 		m_Mdl = izanagi::CModel::CreateModel(
@@ -205,16 +229,44 @@ IZ_BOOL CAnimationApp::InitInternal(
 		VGOTO(result = (m_Mdl != IZ_NULL), __EXIT__);
 	}
 
-	// Timeline
+	// Material
 	{
-		m_Timeline.Init(
-			m_Anm->GetAnimationTime(),
-			0.0f);
-		m_Timeline.SetIsLoop(IZ_TRUE);
-		m_Timeline.SetIsReverse(IZ_FALSE);
-		m_Timeline.Start();
-		m_Timeline.Reset();
+		izanagi::CFileInputStream in;
+		IZ_CHAR tmp[32];
+
+		for (IZ_UINT i = 0; i < 4; i++) {
+			IZ_SPRINTF(tmp, sizeof(tmp), "data/Seymour_%d.mtrl\0", i);
+
+			VRETURN(in.Open(tmp));
+
+			m_Mtrl[i] = izanagi::CMaterial::CreateMaterial(allocator, &in);
+			VGOTO((result = m_Mtrl[i] != IZ_NULL), __EXIT__);
+
+			in.Finalize();
+		}
+
+		// 基本的には事前にマテリアル名とシェーダ名を一致させておくべきだが
+		// シェーダ名を強制的に変更することもできる
+		// シェーダ名を見てマテリアルをバインディングする
+		m_Shd->SetName("DefaultShader");
+
+		for (IZ_UINT i = 0; i < 4; i++) {
+			// マテリアルに対応するテクスチャとシェーダを設定
+			m_Mtrl[i]->SetTexture("boy_10.tga", m_Img->GetTexture(IMG_IDX));
+			m_Mtrl[i]->SetShader(m_Shd);
+
+			// メッシュにマテリアルを設定
+			m_Mdl->GetMesh()->SetMaterial(0, m_Mtrl[i]);
+		}
 	}
+
+	// レンダーグラフ
+	m_RenderGraph = izanagi::CRenderGraph::CreateRenderGraph(allocator, 5);
+	VGOTO(result = (m_RenderGraph != IZ_NULL), __EXIT__);
+
+	// レンダラ
+	m_Renderer = izanagi::CSceneRenderer::CreateSceneRenderer(allocator);
+	VGOTO(result = (m_Renderer != IZ_NULL), __EXIT__);
 
 	// カメラ
 	camera.Init(
@@ -236,81 +288,83 @@ __EXIT__:
 }
 
 // 解放.
-void CAnimationApp::ReleaseInternal()
+void CMaterialApp::ReleaseInternal()
 {
 	SAFE_RELEASE(m_Img);
 	SAFE_RELEASE(m_Mdl);
 	SAFE_RELEASE(m_Msh);
 	SAFE_RELEASE(m_Skl);
 	SAFE_RELEASE(m_Shd);
-	SAFE_RELEASE(m_Anm);
+
+	for (IZ_UINT i = 0; i < COUNTOF(m_Mtrl); i++) {
+		SAFE_RELEASE(m_Mtrl[i]);
+	}
+
+	SAFE_RELEASE(m_RenderGraph);
+	SAFE_RELEASE(m_Renderer);
 
 	SAFE_RELEASE(s_MdlRenderHandler);
 }
 
 // 更新.
-void CAnimationApp::UpdateInternal(izanagi::CCamera& camera)
+void CMaterialApp::UpdateInternal(izanagi::CCamera& camera)
 {
 	camera.Update();
-
-	// 時間更新
-	IZ_FLOAT fElapsed = GetTimer(0).GetTime();
-	fElapsed /= 1000.0f;
-
-	m_Timeline.Advance(fElapsed);
-	IZ_FLOAT time = m_Timeline.GetTime();
-
-	// アニメーション適用
-	m_Mdl->ApplyAnimation(time, m_Anm);
-
 	m_Mdl->Update();
-}
 
-namespace {
-	inline void _SetShaderParam(
-		izanagi::CShaderBasic* shader,
-		const char* name,
-		const void* value,
-		IZ_UINT bytes)
+	// レンダーグラフに登録
+	m_RenderGraph->BeginRegister();
 	{
-		izanagi::IZ_SHADER_HANDLE handle = shader->GetParameterByName(name);
-		IZ_ASSERT(handle != 0);
-
-		shader->SetParamValue(
-			handle,
-			value,
-			bytes);
+		// 位置は原点なので
+		m_RenderGraph->Register(
+			camera,
+			izanagi::CVector(),
+			m_Mdl);
 	}
+	m_RenderGraph->EndRegister();
 }
 
 // 描画.
-void CAnimationApp::RenderInternal(izanagi::CGraphicsDevice* device)
+void CMaterialApp::RenderInternal(izanagi::CGraphicsDevice* device)
 {
 	izanagi::sample::CSampleCamera& camera = GetCamera();
 
-	IZ_UINT passCnt = m_Shd->Begin(0, IZ_FALSE);
+	// シェーダパラメータセット
 	{
-		IZ_ASSERT(passCnt >= 1);
-		if (m_Shd->BeginPass(0)) {
-			// シェーダ定数セット
-			{
-				_SetShaderParam(
-					m_Shd,
-					"g_mW2C",
-					(void*)&camera.GetRawInterface().GetParam().mtxW2C,
-					sizeof(camera.GetRawInterface().GetParam().mtxW2C));
-			}
+		izanagi::SMatrix mtxL2W;
+		izanagi::SMatrix::SetUnit(mtxL2W);
 
-			// テクスチャセット
-			device->SetTexture(0, m_Img->GetTexture(IMG_IDX));
+		const izanagi::SMatrix& mtxW2C = camera.GetRawInterface().GetParam().mtxW2C;
+		const izanagi::SVector& vecEye = camera.GetRawInterface().GetParam().pos;
 
-			m_Shd->CommitChanges();
+		_SetShaderParam(m_Shd, "g_mW2C", &mtxW2C, sizeof(mtxW2C));
+		_SetShaderParam(m_Shd, "g_vEye", &vecEye, sizeof(vecEye));
 
-			// モデル描画
-			m_Mdl->Render();
+		{
+			// ライトの方向をローカル座標に変換する
 
-			m_Shd->EndPass();
+			// ライトの方向はワールド座標なので World -> Localマトリクスを計算する
+			izanagi::SMatrix mtxW2L;
+			izanagi::SMatrix::Inverse(mtxW2L, mtxL2W);
+
+			// World -> Local
+			izanagi::SVector parallelLightLocalDir;
+			izanagi::SMatrix::ApplyXYZ(
+				parallelLightLocalDir,
+				m_ParallelLight.vDir,
+				mtxL2W);
+
+			_SetShaderParam(
+				m_Shd,
+				"g_vLitParallelDir",
+				(void*)&parallelLightLocalDir,
+				sizeof(parallelLightLocalDir));
 		}
 	}
-	m_Shd->End();
+
+	// 描画
+	m_RenderGraph->Render(
+		device,
+		m_Renderer,
+		s_MdlRenderHandler);
 }
