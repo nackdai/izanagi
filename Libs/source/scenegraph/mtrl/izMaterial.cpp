@@ -5,8 +5,7 @@
 
 using namespace izanagi;
 
-/**
-*/
+// ファイルからインスタンス作成.
 CMaterial* CMaterial::CreateMaterial(
 	IMemoryAllocator* pAllocator,
 	IInputStream* pIn)
@@ -18,19 +17,10 @@ CMaterial* CMaterial::CreateMaterial(
 	// TODO
 	// Check magic number and version...
 
-#if 0
-	// Skip jump table.
-	VRETURN(pIn->Seek(sizeof(IZ_UINT) * sHeader.numMtrl, E_IO_STREAM_SEEK_POS_CUR));
-#endif
-
 	IZ_BOOL result = IZ_TRUE;
 
-#if 0
-	for (IZ_UINT i = 0; i < sHeader.numMtrl; i++) {
-#else
 	CMaterial* pMtrl = IZ_NULL;
 	{
-#endif
 		S_MTRL_MATERIAL sMtrlInfo;
 		result = IZ_INPUT_READ(pIn, &sMtrlInfo, 0, sizeof(sMtrlInfo));
 		VGOTO(result, __EXIT__);
@@ -40,19 +30,11 @@ CMaterial* CMaterial::CreateMaterial(
 		VGOTO(result = (sMtrlInfo.numShader == 1), __EXIT__);
 
 		// Create instance.
-#if 0
-		CMaterial* pMtrl = CreateMaterial(
-							sMtrlInfo.numTex,
-							sMtrlInfo.numParam,
-							sMtrlInfo.paramBytes,
-							pAllocator);
-#else
 		pMtrl = CreateMaterial(
 					sMtrlInfo.numTex,
 					sMtrlInfo.numParam,
 					sMtrlInfo.paramBytes,
 					pAllocator);
-#endif
 		VGOTO(result = (pMtrl != IZ_NULL), __EXIT__);
 		
 		memcpy(
@@ -68,34 +50,18 @@ CMaterial* CMaterial::CreateMaterial(
 		}
 
 		pMtrl->AttachParamBuf();
-
-#if 0
-		// Add to list.
-		cMtrlList.AddTail(pMtrl->GetListItem());
-#else
-#endif
 	}
 
 __EXIT__:
 	if (!result) {
 		// Release materials...
-#if 0
-		CStdList<CMaterial>::Item* pItem = cMtrlList.GetTop();
-		while (pItem != IZ_NULL) {
-			CMaterial* pMtrl = pItem->GetData();
-			SAFE_RELEASE(pMtrl);
-			pItem = pItem->GetNext();
-		}
-#else
 		SAFE_RELEASE(pMtrl);
-#endif
 	}
 
 	return pMtrl;
 }
 
-/**
-*/
+// 空のインスタンス作成.
 CMaterial* CMaterial::CreateMaterial(
 	IMemoryAllocator* pAllocator,
 	IZ_PCSTR pszName,
@@ -128,6 +94,7 @@ CMaterial* CMaterial::CreateMaterial(
 	return pInstance;
 }
 
+// インスタンス作成共通処理.
 CMaterial* CMaterial::CreateMaterial(
 	IZ_UINT nTexNum,
 	IZ_UINT nParamNum,
@@ -203,7 +170,7 @@ CMaterial::CMaterial()
 	m_pParamInfo = IZ_NULL;
 	m_pParamBuf = IZ_NULL;
 
-	m_ListItem.Init(this);
+	m_Alpha = IZ_UINT8_MAX;
 }
 
 CMaterial::~CMaterial()
@@ -228,6 +195,7 @@ IZ_BOOL CMaterial::Read(IInputStream* pIn)
 	return IZ_TRUE;
 }
 
+// S_MTRL_PARAMにバッファをセットする
 void CMaterial::AttachParamBuf()
 {
 	IZ_UINT nPos = 0;
@@ -280,6 +248,9 @@ IZ_BOOL CMaterial::Prepare(CGraphicsDevice* pDevice)
 		}
 	}
 
+	// TODO
+	// Alpha
+
 	return IZ_TRUE;
 }
 
@@ -314,6 +285,7 @@ namespace {
 	}
 }	// namespace
 
+// マテリアルにテクスチャを追加.
 IZ_BOOL CMaterial::AddTexture(
 	IZ_PCSTR pszName,
 	const S_MTRL_TEXTURE_TYPE& type,
@@ -344,8 +316,7 @@ IZ_BOOL CMaterial::AddTexture(
 	return ret;
 }
 
-/**
-*/
+// マテリアルに関連付けられているテクスチャをセット.
 IZ_BOOL CMaterial::SetTexture(
 	IZ_PCSTR pszName, 
 	CBaseTexture* pTex)
@@ -353,8 +324,7 @@ IZ_BOOL CMaterial::SetTexture(
 	return SetTexture(CKey(pszName), pTex);
 }
 
-/**
-*/
+// マテリアルに関連付けられているテクスチャをセット.
 IZ_BOOL CMaterial::SetTexture(
 	IZ_UINT nKey,
 	CBaseTexture* pTex)
@@ -371,8 +341,7 @@ IZ_BOOL CMaterial::SetTexture(
 	return IZ_TRUE;
 }
 
-/**
-*/
+// マテリアルにシェーダを追加.
 IZ_BOOL CMaterial::AddShader(IShader* pShader)
 {
 	IZ_BOOL ret = IZ_TRUE;
@@ -414,8 +383,7 @@ IZ_BOOL CMaterial::AddShader(IShader* pShader)
 	return ret;
 }
 
-/**
-*/
+// マテリアルに関連付けられているシェーダをセット.
 IZ_BOOL CMaterial::SetShader(IShader* pShader)
 {
 	IZ_ASSERT(pShader != IZ_NULL);
@@ -435,6 +403,7 @@ IZ_BOOL CMaterial::SetShader(IShader* pShader)
 }
 
 namespace {
+	// 指定された型に応じたバイトサイズを取得
 	inline size_t _GetSize(E_MTRL_PARAM_TYPE type)
 	{
 		switch (type) {
@@ -456,8 +425,7 @@ namespace {
 
 }	// namespace
 
-/**
-*/
+// マテリアルにパラメータを追加.
 IZ_BOOL CMaterial::AddParameter(
 	IZ_PCSTR pszName,
 	E_MTRL_PARAM_TYPE type,
@@ -503,8 +471,7 @@ IZ_BOOL CMaterial::AddParameter(
 	return ret;
 }
 
-/**
-*/
+// マテリアルに関連付けられているパラメータをセット.
 IZ_BOOL CMaterial::SetParameter(
 	IZ_PCSTR pszName,
 	IZ_UINT nBytes,
@@ -513,8 +480,7 @@ IZ_BOOL CMaterial::SetParameter(
 	return SetParameter(CKey(pszName), nBytes, pValue);
 }
 
-/**
-*/
+// マテリアルに関連付けられているパラメータをセット.
 IZ_BOOL CMaterial::SetParameter(
 	IZ_UINT nKey,
 	IZ_UINT nBytes,
@@ -692,9 +658,7 @@ IShader* CMaterial::GetShaderByKey(const CKey& key)
 }
 #endif
 
-/**
-* Set technique index of shader.
-*/
+// Set technique index of shader.
 IZ_BOOL CMaterial::SetShaderTechnique(IZ_UINT idx)
 {
 	IZ_ASSERT(m_pShaderInfo != IZ_NULL);
@@ -708,9 +672,7 @@ IZ_BOOL CMaterial::SetShaderTechnique(IZ_UINT idx)
 	return IZ_TRUE;
 }
 
-/**
-* Return technique index of shader.
-*/
+// Return technique index of shader.
 IZ_INT CMaterial::GetShaderTechnique() const
 {
 	IZ_ASSERT(m_pShaderInfo != IZ_NULL);

@@ -30,8 +30,9 @@
 #include "scenegraph/mdl/izModel.h"
 #include "scenegraph/mdl/MDLFormat.h"
 
-// scene
-#include "scenegraph/scene/GeometrySorter.h"
+// rendergraph
+#include "scenegraph/rendergraph/RenderGraph.h"
+#include "scenegraph/rendergraph/SceneRenderer.h"
 
 // animation
 #include "scenegraph/anm/ANMFormat.h"

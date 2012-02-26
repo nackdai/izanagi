@@ -283,6 +283,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\source\scenegraph\msh\MeshSetInstance.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\source\scenegraph\msh\MshMeshGroup.cpp"
 					>
 				</File>
@@ -312,14 +316,14 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="scene"
+				Name="rendergraph"
 				>
 				<File
-					RelativePath="..\..\source\scenegraph\scene\GeometrySorter.cpp"
+					RelativePath="..\..\source\scenegraph\rendergraph\RenderGraph.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\source\scenegraph\scene\SceneRenerer.cpp"
+					RelativePath="..\..\source\scenegraph\rendergraph\SceneRenerer.cpp"
 					>
 				</File>
 			</Filter>
@@ -449,6 +453,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\include\scenegraph\msh\MeshSetInstance.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\scenegraph\msh\MeshSetInterface.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\include\scenegraph\msh\MSHFormat.h"
 					>
 				</File>
@@ -490,14 +502,22 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="scene"
+				Name="rendergraph"
 				>
 				<File
-					RelativePath="..\..\include\scenegraph\scene\GeometrySorter.h"
+					RelativePath="..\..\include\scenegraph\rendergraph\RenderElement.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\include\scenegraph\scene\SceneRenderer.h"
+					RelativePath="..\..\include\scenegraph\rendergraph\RenderGraph.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\scenegraph\rendergraph\SceneRenderer.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\scenegraph\rendergraph\SceneRendererInterface.h"
 					>
 				</File>
 			</Filter>

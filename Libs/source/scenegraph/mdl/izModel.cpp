@@ -217,3 +217,30 @@ IZ_BOOL CModel::SetLODLevel(IZ_UINT level)
 	m_nCurLODLevel = level;
 	return IZ_TRUE;
 }
+
+IZ_UINT CModel::GetMeshSetNum()
+{
+	IZ_ASSERT(m_pMesh != IZ_NULL);
+	return m_pMesh->GetMeshSetNum(m_nCurLODLevel);
+}
+
+IMeshSet* CModel::GetMeshSet(IZ_UINT idx)
+{
+	IZ_ASSERT(m_pMesh != IZ_NULL);
+	return m_pMesh->GetMeshSet(m_nCurLODLevel, idx);
+}
+
+CMeshInstance* CModel::GetMesh()
+{
+	return m_pMesh;
+}
+
+CSkeletonInstance* CModel::GetSkeleton()
+{
+	return m_pSkeleton;
+}
+
+void CModel::SetRenderHandler(IMshRenderHandler* pRenderHandler)
+{
+	SAFE_REPLACE(m_pRenderHandler, pRenderHandler);
+}

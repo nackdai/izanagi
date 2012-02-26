@@ -10,6 +10,7 @@
 
 namespace izanagi {
 	class IInputStream;
+	class IMeshSet;
 
 	/**
 	 * モデルオブジェクトのインターフェース
@@ -33,8 +34,7 @@ namespace izanagi {
 		virtual IMeshSet* GetMeshSet(IZ_UINT idx) = 0;
 	};
 
-	/**
-	 * メッシュ + スケルトンで構成されるシンプルなモデルオブジェクト
+	/** メッシュ + スケルトンで構成されるシンプルなモデルオブジェクト.
 	 */
 	class CModel : public IModel {
 	public:
@@ -66,58 +66,45 @@ namespace izanagi {
 		IZ_DEFINE_INTERNAL_RELEASE();
 
 	public:
-		/**
-		 * 描画
+		/** 描画.
 		 */
 		IZ_BOOL Render();
 
-		/**
-		 * 適用されたモーションに基づき更新
+		/** 適用されたモーションに基づき更新.
 		 */
 		void Update(const SMatrix* mtxL2W = IZ_NULL);
 
-		/**
-		 * スケルトン全体にモーション適用
+		/** スケルトン全体にモーション適用.
 		 */
 		void ApplyAnimation(
 			IZ_FLOAT fTime,
 			IAnimation* pAnm);
 
-		/**
-		 * 指定した関節のみにモーション適用
+		/** 指定した関節のみにモーション適用.
 		 */
 		void ApplyAnimationByIdx(
 			IZ_UINT nJointIdx,
 			IZ_FLOAT fTime,
 			IAnimation* pAnm);
 
-		/**
-		 * 利用可能なLODレベルの最大を取得
+		/** 利用可能なLODレベルの最大を取得.
 		 */
 		IZ_UINT GetMaxLODLevel() const;
 
-		/**
-		 * LODレベルを設定する
+		/** LODレベルを設定する.
 		 */
 		IZ_BOOL SetLODLevel(IZ_UINT level);
 
 	public:
-		IZ_UINT GetMeshSetNum()
-		{
-			IZ_ASSERT(m_pMesh != IZ_NULL);
-			return m_pMesh->GetMeshSetNum(m_nCurLODLevel);
-		}
+		IZ_UINT GetMeshSetNum();
 
-		IMeshSet* GetMeshSet(IZ_UINT idx)
-		{
-			IZ_ASSERT(m_pMesh != IZ_NULL);
-			return m_pMesh->GetMeshSet(m_nCurLODLevel, idx);
-		}
+		IMeshSet* GetMeshSet(IZ_UINT idx);
 
-		CMeshInstance* GetMesh() { return m_pMesh; }
-		CSkeletonInstance* GetSkeleton() { return m_pSkeleton; }
+		CMeshInstance* GetMesh();
 
-		void SetRenderHandler(IMshRenderHandler* pRenderHandler) { SAFE_REPLACE(m_pRenderHandler, pRenderHandler); }
+		CSkeletonInstance* GetSkeleton();
+
+		void SetRenderHandler(IMshRenderHandler* pRenderHandler);
 
 	protected:
 		IMemoryAllocator* m_pAllocator;

@@ -1,7 +1,8 @@
-#include "scenegraph/scene/SceneRenderer.h"
+#include "scenegraph/rendergraph/SceneRenderer.h"
 #include "scenegraph/msh/MeshInstance.h"
 #include "scenegraph/mtrl/izMaterial.h"
 #include "izGraph.h"
+#include "izShader.h"
 
 using namespace izanagi;
 
@@ -43,84 +44,73 @@ CSceneRenderer::~CSceneRenderer()
 }
 
 // 描画開始
-IZ_UINT CSceneRenderer::BeginRender(IMeshSet* pMesh)
+IZ_UINT CSceneRenderer::BeginRender(
+	IShader* shader,
+	IZ_UINT techIdx)
 {
-	CMaterial* pMtrl = pMesh->GetMaterial();
-
-	// TODO
-#if 0
-	if (pMtrl == IZ_NULL) {
-		const S_MSH_MTRL& sMtrlInfo = pMesh->GetMaterialInfo();
-		pMtrl = GetMaterial(sMtrlInfo.nameKey);
-		pMesh->SetMaterial(pMtrl);
-	}
-#endif
-
-	IZ_ASSERT(pMtrl != IZ_NULL);
-
-	IShader* pShader = pMtrl->GetShader();
-	VRETURN(pShader != IZ_NULL);
+	IZ_ASSERT(shader != IZ_NULL);
+	IZ_ASSERT(techIdx < shader->GetTechNum());
 
 	if ((m_pCurShader == IZ_NULL)
-		|| (m_pCurShader->GetKey() != pShader->GetKey()))
+		|| (m_pCurShader->GetKey() != shader->GetKey()))
 	{
-		SAFE_REPLACE(m_pCurShader, pShader);
+		// 異なるシェーダを使用する場合
+		SAFE_REPLACE(m_pCurShader, shader);
 
-		IZ_INT nTechIdx = pMtrl->GetShaderTechnique();
-		IZ_ASSERT(nTechIdx >= 0);
-
-		m_nCurShaderPassNum = pShader->Begin(nTechIdx, IZ_FALSE);
+		m_nCurShaderPassNum = shader->Begin(techIdx, IZ_FALSE);
 	}
 
+	// これから使用するシェーダのパス数を返す
 	return m_nCurShaderPassNum;
 }
 
 // 描画途中
 IZ_BOOL CSceneRenderer::IterRender(
-	CGraphicsDevice* pDevice,
-	IZ_UINT nPass, 
-	IMeshSet* pMesh,
-	IMshRenderHandler* pRenderHandler)
+	CGraphicsDevice* device,
+	IZ_UINT passIdx, 
+	IRenderElement* element,
+	IMshRenderHandler* renderHandler)
 {
 	IZ_ASSERT(m_nCurShaderPassNum > 0);
-	IZ_ASSERT(m_nCurShaderPassNum > nPass);
+	IZ_ASSERT(m_nCurShaderPassNum > passIdx);
 
-	CMaterial* pMtrl = pMesh->GetMaterial();
-	IZ_ASSERT(pMtrl != IZ_NULL);
+	CMaterial* mtrl = element->GetMaterial();
+	IZ_ASSERT(mtrl != IZ_NULL);
 	IZ_ASSERT(m_pCurShader != IZ_NULL);
 	
-	if (m_pCurShader->GetKey() != pMtrl->GetShader()->GetKey()) {
-		// Specify differing shader.
+	if (m_pCurShader->GetKey() != mtrl->GetShader()->GetKey()) {
+		// 現在設定されているシェーダと異なるシェーダを利用しようとしている
 		return IZ_FALSE;
 	}
 
-	if (m_nCurShaderPass != nPass) {
+	if (m_nCurShaderPass != passIdx) {
 		// Change pass.
-		VRETURN(m_pCurShader->BeginPass(nPass));
-		m_nCurShaderPass = nPass;
+		VRETURN(m_pCurShader->BeginPass(passIdx));
+		m_nCurShaderPass = passIdx;
 	}
 
-	IZ_BOOL bIsPreparedMtrl = IZ_FALSE;
+	// マテリアルの準備をしたかどうか
+	IZ_BOOL isPreparedMtrl = IZ_FALSE;
 
-	if (m_pCurMtrl != pMtrl) {
-		// Prepare material.
-		bIsPreparedMtrl = pMtrl->Prepare(pDevice);
-		VRETURN(bIsPreparedMtrl);
+	if (m_pCurMtrl != mtrl) {
+		// マテリアルの応じた設定
+		isPreparedMtrl = mtrl->Prepare(device);
+		VRETURN(isPreparedMtrl);
 
-		SAFE_REPLACE(m_pCurMtrl, pMtrl);
+		SAFE_REPLACE(m_pCurMtrl, mtrl);
 	}
 
-	if (bIsPreparedMtrl) {
+	if (isPreparedMtrl) {
 		// マテリアルに応じた変更が発生したので
 		// シェーダのCommitChangeを行う
 		VRETURN(m_pCurShader->CommitChanges());
 	}
 
-	// Render mesh.
+	// 要素の描画
 	VRETURN(
-		pMesh->Render(
-			pDevice,
-			pRenderHandler));
+		element->Render(
+			device,
+			renderHandler));
 
 	return IZ_TRUE;
 }
