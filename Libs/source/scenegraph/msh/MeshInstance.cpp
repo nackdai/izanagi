@@ -1,12 +1,14 @@
 #include "scenegraph/msh/MeshInstance.h"
 #include "scenegraph/msh/izMesh.h"
 #include "scenegraph/msh/MshMeshSet.h"
-
 #include "scenegraph/msh/MshRenderHandler.h"
 #include "scenegraph/msh/MshMeshGroup.h"
 #include "scenegraph/msh/MshPrimitiveSet.h"
+#include "scenegraph/msh/MeshSetInstance.h"
+
 #include "scenegraph/skl/SkeletonInstance.h"
 #include "scenegraph/mtrl/izMaterial.h"
+
 
 using namespace izanagi;
 
@@ -192,105 +194,6 @@ namespace izanagi {
 		}
 	}
 }	// namespace izanagi
-
-///////////////////////////////////////////////////
-
-IMeshSet::IMeshSet()
-{
-	m_pMtrl = IZ_NULL;
-	m_ListItem.Init(this);
-	m_fZ = 0.0f;
-}
-
-IMeshSet::~IMeshSet()
-{
-	SAFE_RELEASE(m_pMtrl);
-}
-
-// 描画に利用するマテリアルを設定
-void IMeshSet::SetMaterial(CMaterial* pMtrl)
-{
-	SAFE_REPLACE(m_pMtrl, pMtrl);
-}
-
-// 設定されているマテリアルを取得
-CMaterial* IMeshSet::GetMaterial()
-{
-	return m_pMtrl;
-}
-
-///////////////////////////////////////////////////
-
-// インスタンス作成
-CMeshSetInstance* CMeshSetInstance::CreateMeshSetInstance(
-	IZ_UINT8** pBuf,
-	CMeshSet* pMeshSet)
-{
-	IZ_ASSERT(pBuf != IZ_NULL);
-	IZ_ASSERT(pMeshSet != IZ_NULL);
-
-	IZ_UINT8*& buf = *pBuf;
-
-	CMeshSetInstance* pInstance = new(buf) CMeshSetInstance;
-	buf += sizeof(CMeshSetInstance);
-
-	SAFE_REPLACE(pInstance->m_pBody, pMeshSet);
-
-	return pInstance;
-}
-
-// インスタンス作成に必要なバイト数を計算
-size_t CMeshSetInstance::ComputeBytes(CMeshSet* pMeshSet)
-{
-	IZ_ASSERT(pMeshSet != IZ_NULL);
-
-	size_t ret = sizeof(CMeshSetInstance);
-
-	return ret;
-}
-
-// コンストラクタ
-CMeshSetInstance::CMeshSetInstance()
-{
-	m_pBody = IZ_NULL;
-	m_pSkl = IZ_NULL;
-}
-
-// デストラクタ
-CMeshSetInstance::~CMeshSetInstance()
-{
-	SAFE_RELEASE(m_pBody);
-	SAFE_RELEASE(m_pSkl);
-}
-
-// マテリアル情報取得
-const S_MSH_MTRL& CMeshSetInstance::GetMaterialInfo()
-{
-	IZ_ASSERT(m_pBody != IZ_NULL);
-	return m_pBody->GetMtrlInfo();
-}
-
-// 描画
-IZ_BOOL CMeshSetInstance::Render(
-	CGraphicsDevice* pDevice,
-	IMshRenderHandler* pRenderHandler)
-{
-	IZ_ASSERT(m_pBody != IZ_NULL);
-
-	IZ_BOOL ret = m_pBody->Render(
-					pDevice,
-					m_pSkl,
-					pRenderHandler);
-	return IZ_TRUE;
-}
-
-// 描画に利用するスケルトンを設定
-void CMeshSetInstance::SetSkeleton(CSkeletonInstance* pSkl)
-{
-	SAFE_REPLACE(m_pSkl, pSkl);
-}
-
-///////////////////////////////////////////////////
 
 // インスタンス作成
 CMeshInstance* CMeshInstance::CreateMeshInstance(

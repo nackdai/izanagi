@@ -13,10 +13,14 @@ namespace izanagi {
 	*/
 	class CMaterial : public CObject {
 	public:
+		/** ファイルからインスタンス作成.
+		 */
 		static CMaterial* CreateMaterial(
 			IMemoryAllocator* pAllocator,
 			IInputStream* pIn);
 
+		/** 空のインスタンス作成.
+		 */
 		static CMaterial* CreateMaterial(
 			IMemoryAllocator* pAllocator,
 			IZ_PCSTR pszName,
@@ -25,6 +29,7 @@ namespace izanagi {
 			IZ_UINT nParamBytes);
 
 	private:
+		// インスタンス作成共通処理.
 		static CMaterial* CreateMaterial(
 			IZ_UINT nTexNum,
 			IZ_UINT nParamNum,
@@ -71,7 +76,7 @@ namespace izanagi {
 		 */
 		IZ_BOOL AddShader(IShader* pShader);
 
-		/** マテリアルに関連付けられているテクスチャをセット.
+		/** マテリアルに関連付けられているシェーダをセット.
 		 */
 		IZ_BOOL SetShader(IShader* pShader);
 
@@ -154,24 +159,38 @@ namespace izanagi {
 		}
 #endif
 
+		/** Set technique index of shader.
+		 */
 		IZ_BOOL SetShaderTechnique(IZ_UINT idx);
+
+		/** Return technique index of shader.
+		 */
 		IZ_INT GetShaderTechnique() const;
 
 		const void* GetParamByIdx(IZ_UINT idx) const;
 		const void* GetParamByName(IZ_PCSTR pszName) const;
 		const void* GetParamByKey(const CKey& key) const;
 
-		CStdList<CMaterial>::Item* GetListItem() { return &m_ListItem; }
+		/** 半透明値をセット.
+		 */
+		void SetAlpha(IZ_UINT8 alpha) { m_Alpha = alpha; }
+
+		/** 半透明値を取得.
+		 */
+		IZ_UINT8 GetAlpha() const { return m_Alpha; }
 
 	private:
 		IZ_BOOL Read(IInputStream* pIn);
 
+		// S_MTRL_PARAMにバッファをセットする
 		void AttachParamBuf();
 
 	private:
 		IMemoryAllocator* m_pAllocator;
 
+		// mtrlファイルから作成されたかどうか
 		IZ_BOOL m_IsFromMtrlFile;
+
 		IZ_UINT m_nAttachBufPos;
 
 		S_MTRL_MATERIAL m_Header;
@@ -183,7 +202,8 @@ namespace izanagi {
 		S_MTRL_PARAM* m_pParamInfo;
 		IZ_UINT8* m_pParamBuf;
 
-		CStdList<CMaterial>::Item m_ListItem;
+		// 透明度
+		IZ_UINT8 m_Alpha;
 	};
 }	// namespace izanagi
 
