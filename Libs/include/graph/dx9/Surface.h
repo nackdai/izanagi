@@ -14,6 +14,14 @@ namespace izanagi {
 		friend class CGraphicsDevice;
 
 	private:
+		// サーフェース作成.
+		static CSurface* CreateDepthStencilSurface(
+			IMemoryAllocator* allocator,
+			CGraphicsDevice* device,
+			IZ_UINT width, 
+			IZ_UINT height,
+			E_GRAPH_PIXEL_FMT fmt);
+
 		// サーフェス作成
 		static CSurface* CreateSurface(IMemoryAllocator* pAllocator);
 

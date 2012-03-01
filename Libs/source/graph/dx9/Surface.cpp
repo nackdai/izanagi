@@ -4,6 +4,47 @@
 
 using namespace izanagi;
 
+// サーフェース作成.
+CSurface* CSurface::CreateDepthStencilSurface(
+	IMemoryAllocator* allocator,
+	CGraphicsDevice* device,
+	IZ_UINT width, 
+	IZ_UINT height,
+	E_GRAPH_PIXEL_FMT fmt)
+{
+	VRETURN_NULL(fmt == E_GRAPH_PIXEL_FMT_D24S8);
+
+	IZ_BOOL result = IZ_FALSE;
+
+	void* buf = ALLOC_ZERO(allocator, sizeof(CSurface));
+	VRETURN_NULL(buf != IZ_NULL);
+
+	CSurface* instance = new(buf) CSurface();
+	{
+		instance->m_pAllocator = allocator;
+		instance->AddRef();
+
+		D3D_DEVICE* d3dDevice = device->GetRawInterface();
+
+		HRESULT hr = d3dDevice->CreateDepthStencilSurface(
+						width, height,
+						CD3D9ParamValueConverter::ConvAbstractToTarget_PixelFormat(fmt),
+						D3DMULTISAMPLE_NONE, 0,
+						TRUE,
+						&instance->m_pSurface,
+						NULL);
+		result = SUCCEEDED(hr);
+		if (result) {
+			instance->SetDesc();
+		}
+	}
+
+	if (!result) {
+		SAFE_RELEASE(instance);
+	}
+	return instance;
+}
+
 CSurface* CSurface::CreateSurface(IMemoryAllocator* pAllocator)
 {
 	IZ_BOOL result = IZ_TRUE;

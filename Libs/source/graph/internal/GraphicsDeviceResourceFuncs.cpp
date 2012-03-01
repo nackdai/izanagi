@@ -117,6 +117,21 @@ CTexture* CGraphicsDevice::CreateRenderTarget(
 	return pRT;
 }
 
+// 深度・ステンシルサーフェス作成
+CSurface* CGraphicsDevice::CreateDepthStencilSurface(
+	IZ_UINT width, 
+	IZ_UINT height,
+	E_GRAPH_PIXEL_FMT fmt)
+{
+	CSurface* ret = CSurface::CreateDepthStencilSurface(
+						m_pAllocator,
+						this,
+						width, height,
+						fmt);
+
+	return ret;
+}
+
 /**
 * システムメモリ上にテクスチャ作成
 */
