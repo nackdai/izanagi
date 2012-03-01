@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="ImageBuilder"
-	ProjectGUID="{08586CAB-4A9D-488B-96DC-0B7FADB366A1}"
-	RootNamespace="ImageBuilder"
+	Name="ImageLibDll"
+	ProjectGUID="{9DEAF8CA-4E10-4D35-85CE-4EBEDB4DD9F5}"
+	RootNamespace="ImageLibDll"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -17,9 +17,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			ConfigurationType="1"
+			ConfigurationType="2"
 			InheritedPropertySheets=".\Debug.vsprops"
-			UseOfMFC="0"
 			CharacterSet="2"
 			>
 			<Tool
@@ -40,8 +39,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)../../Image/ImageBuilder/AppCore&quot;;&quot;$(SolutionDir)../../Image/ImageLib&quot;;&quot;$(EXTERNAL_DIR)/xerces/src&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;IZ_TOOLKIT_ENABLE_XERCES"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)../../Image/ImageLib&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
 			/>
@@ -56,11 +55,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="$(SolutionDir)ImageLib/$(ConfigurationName)/ImageLib.lib $(EXTERNAL_DIR)/xerces/Build/Win32/VC8/$(ConfigurationName)/xerces-c_3D.lib"
-				LinkIncremental="2"
-				IgnoreDefaultLibraryNames=""
-				SubSystem="1"
-				TargetMachine="1"
+				AdditionalDependencies="$(SolutionDir)ImageLib/$(ConfigurationName)/ImageLib.lib"
+				OutputFile="$(SolutionDir)../../tools/$(ConfigurationName)/$(ProjectName).dll"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)../../Image/ImageLig/$(ConfigurationName)&quot;"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -89,9 +86,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			ConfigurationType="1"
+			ConfigurationType="2"
 			InheritedPropertySheets=".\Release.vsprops"
-			UseOfMFC="0"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
@@ -112,8 +108,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)../../Image/ImageBuilder/AppCore&quot;;&quot;$(SolutionDir)../../Image/ImageLib&quot;;&quot;$(EXTERNAL_DIR)/xerces/src&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;IZ_TOOLKIT_ENABLE_XERCES"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)../../Image/ImageLib&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -131,13 +127,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="$(SolutionDir)ImageLib/$(ConfigurationName)/ImageLib.lib $(EXTERNAL_DIR)/xerces/Build/Win32/VC8/$(ConfigurationName)/xerces-c_3.lib"
-				LinkIncremental="1"
-				GenerateDebugInformation="true"
-				SubSystem="1"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				TargetMachine="1"
+				AdditionalDependencies="ToolKit.lib"
+				OutputFile="$(SolutionDir)../../tools/$(ConfigurationName)/$(ProjectName).dll"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -168,66 +159,16 @@
 	<References>
 	</References>
 	<Files>
-		<Filter
-			Name="source"
-			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
-			>
-			<File
-				RelativePath="..\..\Image\ImageBuilder\ImageBuilder.cpp"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="include"
-			>
-		</Filter>
-		<Filter
-			Name="AppCore"
-			>
-			<Filter
-				Name="include"
-				>
-				<File
-					RelativePath="..\..\Image\ImageBuilder\AppCore\AppError.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Image\ImageBuilder\AppCore\ImageBuilderDefs.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Image\ImageBuilder\AppCore\ImageBuilderImpl.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Image\ImageBuilder\AppCore\ImageReaderImpl.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Image\ImageBuilder\AppCore\Option.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="source"
-				>
-				<File
-					RelativePath="..\..\Image\ImageBuilder\AppCore\ImageBuilderImpl.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Image\ImageBuilder\AppCore\ImageReaderImpl.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Image\ImageBuilder\AppCore\Option.cpp"
-					>
-				</File>
-			</Filter>
-		</Filter>
 		<File
-			RelativePath=".\ReadMe.txt"
+			RelativePath="..\..\Image\ImageLibDll\ImageLibImpl.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Image\ImageLibDll\ImageReaderImpl.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Image\ImageLibDll\ImageReaderImpl.h"
 			>
 		</File>
 	</Files>

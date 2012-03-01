@@ -55,7 +55,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="squishd.lib"
+				AdditionalDependencies="squishd.lib d3d9.lib d3dx9d.lib dxerr.lib"
 				AdditionalLibraryDirectories="&quot;$(EXTERNAL_DIR)/squish/lib/vs8&quot;"
 			/>
 			<Tool
@@ -117,7 +117,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="squish.lib"
+				AdditionalDependencies="squish.lib d3d9.lib d3dx9.lib dxerr.lib"
 				AdditionalLibraryDirectories="&quot;$(EXTERNAL_DIR)/squish/lib/vs8&quot;"
 			/>
 			<Tool
