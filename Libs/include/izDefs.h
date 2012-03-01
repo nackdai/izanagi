@@ -15,6 +15,18 @@
 	#endif
 #endif	// #ifndef WINDOWS
 
+#ifdef WINDOWS
+	#ifdef _WINDLL
+		#define IZ_API	__declspec(dllexport)
+	#else
+		#define IZ_API	__declspec(dllimport)
+	#endif
+#endif	// #ifdef WINDOWS
+
+#ifndef IZ_API
+	#define IZ_API
+#endif
+
 /////////////////////////////////////////////////////////////
 // 基本
 
