@@ -205,6 +205,7 @@ BOOL COption::AnalysisListFile()
 	fopen_s(&pFile, list_file, "rt");
 	if (pFile == NULL) {
 		printf("リストファイルが存在しません [%s]\n", list_file);
+		return FALSE;
 	}
 
 	// リストファイルのフルパスを求める
