@@ -42,10 +42,15 @@ public:
 private:
 	// 属性セット
 	void SetPlaneAttrs(const xercesc::Attributes& attrs);
+	void SetCubeAttrs(const xercesc::Attributes& attrs);
 
 	// 共通属性セット
 	void SetCommonAttrs(
 		SImageInfo* pImageInfo,
+		const xercesc::Attributes& attrs);
+
+	void SetElementAttr(
+		SImageInfo* imageInfo,
 		const xercesc::Attributes& attrs);
 
 public:
@@ -60,6 +65,14 @@ private:
 
 	// ルートが正しく設定されているかどうか
 	IZ_BOOL m_IsStartRoot;
+
+	enum State {
+		StateNormal = 0,
+		StateCube,
+		StateVolume,
+	};
+
+	State m_State;
 };
 
 #endif	// #if !defined(__IMAGE_BUILDER_IMPL_H__)
