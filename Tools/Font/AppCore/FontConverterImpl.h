@@ -88,7 +88,7 @@ private:
 	static const izanagi::E_GRAPH_PIXEL_FMT IZ_TEX_FMT = izanagi::E_GRAPH_PIXEL_FMT_BGRA8
 	static const UINT TEX_BPP = 4;
 #endif
-	static const IZ_INT MARGIN = 0;
+	static const IZ_INT MARGIN = 1;
 		
 private:
 	std::vector<izanagi::tool::CTextureLite*> m_TexList;

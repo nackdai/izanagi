@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="FontCoverter"
+	Name="FontConverter"
 	ProjectGUID="{A2629A24-E521-44F6-B827-2F9E4075B51B}"
-	RootNamespace="FontCoverter"
+	RootNamespace="FontConverter"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -173,7 +173,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\..\Font\FontCoverter\FontCoverter.cpp"
+				RelativePath="..\..\Font\FontConverter\FontConverter.cpp"
 				>
 			</File>
 		</Filter>
