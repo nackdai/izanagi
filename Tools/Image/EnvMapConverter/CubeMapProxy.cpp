@@ -61,8 +61,8 @@ void CCubeMapProxy::getUVFromRef(
 	else if (maxVal == y) {
 		// Y面
 		face = (ref.y > 0.0f
-				? izanagi::E_GRAPH_CUBE_TEX_FACE_Y_P
-				: izanagi::E_GRAPH_CUBE_TEX_FACE_Y_N);
+				? izanagi::E_GRAPH_CUBE_TEX_FACE_Y_N
+				: izanagi::E_GRAPH_CUBE_TEX_FACE_Y_P);
 	}
 	else {
 		// Z面
@@ -146,14 +146,14 @@ void CCubeMapProxy::getRef(
 			ref.z = u;
 		}
 		break;
-	case izanagi::E_GRAPH_CUBE_TEX_FACE_Y_P:	// +Y
+	case izanagi::E_GRAPH_CUBE_TEX_FACE_Y_N:	// +Y
 		{
 			ref.x = u;
 			ref.y = 1.0f;
 			ref.z = v;
 		}
 		break;
-	case izanagi::E_GRAPH_CUBE_TEX_FACE_Y_N:	// -Y
+	case izanagi::E_GRAPH_CUBE_TEX_FACE_Y_P:	// -Y
 		{
 			ref.x = u;
 			ref.y = -1.0f;
