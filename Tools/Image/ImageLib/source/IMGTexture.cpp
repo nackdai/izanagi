@@ -5,10 +5,32 @@
 using namespace izanagi;
 using namespace tool;
 
+// 空のテクスチャを作成する
+CIMGTexture* CIMGTexture::CreateEmptyTexture(E_GRAPH_TEX_TYPE type)
+{
+	CIMGTexture* ret = new CIMGTexture(type);
+	if (ret
+		&& type == E_GRAPH_TEX_TYPE_CUBE)
+	{
+		ret->m_Images.resize(izanagi::E_GRAPH_CUBE_TEX_FACE_NUM);
+	}
+	return ret;
+}
+
+// テクスチャを削除する
+void CIMGTexture::Delete(CIMGTexture* tex)
+{
+	if (tex) {
+		tex->Clear();
+		delete tex;
+	}
+}
+
 // コンストラクタ
 CIMGTexture::CIMGTexture(E_GRAPH_TEX_TYPE nType/*= E_GRAPH_TEX_TYPE_PLANE*/)
 {
 	memset(&m_TexInfo, 0, sizeof(m_TexInfo));
+	m_TexInfo.level = 1;
 	m_TexInfo.type = nType;
 }
 
@@ -66,13 +88,18 @@ IZ_BOOL CIMGTexture::InitAsPlane(
 	for (IZ_UINT i = 0; i < nMipLevel; i++) {
 		CIMGImage* pImage = new CIMGImage();
 
+		IZ_UINT nW = IZ_MAX(1, nWidth >> i);
+		IZ_UINT nH = IZ_MAX(1, nHeight >> i);
+
 		ret = pImage->Init(
-				nWidth, nHeight, 
+				nW, nH,
 				nFmt,
 				bIsAllocBuffer);
 		if (!ret) {
 			IZ_ASSERT(IZ_FALSE);
-			break;
+			// TODO
+			// 後始末
+			return IZ_FALSE;
 		}
 
 		m_Images[0].push_back(pImage);
@@ -105,9 +132,57 @@ IZ_BOOL CIMGTexture::InitAsCube(
 	E_GRAPH_PIXEL_FMT nFmt,
 	IZ_BOOL bIsAllocBuffer/*= IZ_TRUE*/)
 {
-	// TODO
-	IZ_ASSERT(IZ_FALSE);
-	return IZ_FALSE;
+	IZ_BOOL ret = IZ_FALSE;
+
+	// 一応
+	Clear();
+	m_Images.resize(izanagi::E_GRAPH_CUBE_TEX_FACE_NUM);
+
+	// 作成可能レベル
+	nMipLevel = _ComputeMipLevel(
+					nWidth, nHeight,
+					nFmt,
+					nMipLevel);
+
+	for (IZ_UINT i = 0; i < izanagi::E_GRAPH_CUBE_TEX_FACE_NUM; i++) {
+		m_Images[i].reserve(nMipLevel);
+
+		for (IZ_UINT n = 0; n < nMipLevel; n++) {
+			CIMGImage* pImage = new CIMGImage();
+
+			IZ_UINT nW = IZ_MAX(1, nWidth >> n);
+			IZ_UINT nH = IZ_MAX(1, nHeight >> n);
+
+			ret = pImage->Init(
+					nW, nH,
+					nFmt,
+					bIsAllocBuffer);
+			if (!ret) {
+				IZ_ASSERT(IZ_FALSE);
+				// TODO
+				// 後始末
+				return IZ_FALSE;
+			}
+
+			m_Images[i].push_back(pImage);
+		}
+	}
+
+	if (ret) {
+		// テクスチャ情報をセット
+		SetTexInfo(
+			E_GRAPH_TEX_TYPE_CUBE,
+			nWidth,
+			nHeight,
+			nFmt,
+			nMipLevel,
+			0);
+	}
+	else {
+		Clear();
+	}
+
+	return ret;
 }
 
 /**
@@ -208,6 +283,14 @@ IZ_BOOL CIMGTexture::CreateMipMap(IZ_UINT nMipLevel/*= 1000*/)
 
 	for (IZ_UINT i = 0; i < nNum; i++) {
 		std::vector<CIMGImage*>& tImageList = m_Images[i];
+
+		// TODO
+		// 先頭以外は消す
+		std::vector<CIMGImage*>::iterator it = tImageList.begin();
+		IZ_ASSERT(it != tImageList.end());
+		for (; it != tImageList.end(); it++) {
+			tImageList.erase(it);
+		}
 
 		// 念のため
 		IZ_ASSERT(tImageList[0]->GetFmt() == nFmt);

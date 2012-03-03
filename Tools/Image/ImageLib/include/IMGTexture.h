@@ -21,6 +21,15 @@ namespace tool {
 		friend class CIMGBody;
 
 	public:
+		/** 空のテクスチャを作成する
+		 */
+		static CIMGTexture* CreateEmptyTexture(E_GRAPH_TEX_TYPE type);
+
+		/** テクスチャを削除する
+		 */
+		static void Delete(CIMGTexture* tex);
+
+	private:
 		CIMGTexture(E_GRAPH_TEX_TYPE nType = E_GRAPH_TEX_TYPE_PLANE);
 		~CIMGTexture();
 
@@ -48,6 +57,7 @@ namespace tool {
 			E_GRAPH_PIXEL_FMT nFmt,
 			IZ_BOOL bIsAllocBuffer = IZ_TRUE);
 
+	public:
 		// クリア
 		void Clear();
 
@@ -83,6 +93,12 @@ namespace tool {
 
 		// テクスチャ情報を取得
 		inline const S_IMG_TEX_HEADER& GetTexInfo() const;
+
+		// イメージ幅を取得
+		IZ_UINT GetWidth() const { return (1 << m_TexInfo.w); }
+
+		// イメージ高さを取得
+		IZ_UINT GetHeight() const { return (1 << m_TexInfo.h); }
 
 	public:
 		// テクスチャアドレッシングをセット

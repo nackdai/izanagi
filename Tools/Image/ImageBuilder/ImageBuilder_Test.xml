@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <textures>
-  <plane
-	  path="./test.bmp"
-	  fmt="dxt1"/>
+  <cube fmt="rgba8">
+    <element path="cube.bmp" face="xp"/>
+    <element path="cube.bmp" face="xn"/>
+    <element path="cube.bmp" face="yp"/>
+    <element path="cube.bmp" face="xn"/>
+    <element path="cube.bmp" face="zp"/>
+    <element path="cube.bmp" face="zn"/>
+  </cube>
+  <plane path="./test.bmp" fmt="dxt1"/>
 </textures>
-

@@ -59,7 +59,7 @@ CIMGTexture* CImageReaderImpl::Read(
 	VRETURN_NULL(pTex);
 
 	// テクスチャインスタンス作成
-	CIMGTexture* ret = new CIMGTexture();
+	CIMGTexture* ret = CIMGTexture::CreateEmptyTexture(izanagi::E_GRAPH_TEX_TYPE_PLANE);
 	IZ_ASSERT(ret != IZ_NULL);
 
 	// データセット関数テーブル
@@ -86,7 +86,7 @@ CIMGTexture* CImageReaderImpl::Read(
 						&ret);
 	if (!result) {
 		IZ_ASSERT(result);
-		delete ret;
+		CIMGTexture::Delete(ret);
 		ret = IZ_NULL;
 	}
 

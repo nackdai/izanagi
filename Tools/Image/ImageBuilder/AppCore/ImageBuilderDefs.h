@@ -5,18 +5,27 @@
 #include "izSceneGraph.h"
 #include "izToolKit.h"
 
+struct SImageElement {
+	izanagi::tool::CString path;
+	IZ_INT texIdx;
+	izanagi::E_GRAPH_CUBE_TEX_FACE face;
+
+	SImageElement()
+	{
+		texIdx = -1;
+		face = izanagi::E_GRAPH_CUBE_TEX_FACE_NUM;
+	}
+};
+
 struct SImageInfo {
 	izanagi::S_IMG_TEX_HEADER info;
 
-	izanagi::tool::CString path;
-	INT tex_idx;
+	std::vector<SImageElement> elements;
 
 	SImageInfo()
 	{
 		memset(&info, 0, sizeof(info));
 		info.level = 1;
-
-		tex_idx = -1;
 	}
 };
 

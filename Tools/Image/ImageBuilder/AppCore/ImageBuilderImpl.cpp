@@ -8,6 +8,7 @@ CImageBuilder CImageBuilder::s_cInstance;
 
 void CImageBuilder::startDocument()
 {
+	m_State = StateNormal;
 	m_IsStartRoot = IZ_FALSE;
 }
 
@@ -18,9 +19,11 @@ void CImageBuilder::endDeocument()
 namespace attr_type {
 	static const char* ROOT = "textures";
 
-	static const char* PLANE  = "plane";
-	static const char* CUBE   = "cube";
-	static const char* VOLUME = "volume";
+	static const char* PLANE   = "plane";
+	static const char* CUBE    = "cube";
+	static const char* VOLUME  = "volume";
+
+	static const char* ELEMENT = "element";
 
 	static const char* PATH       = "path";
 	static const char* FMT        = "fmt";
@@ -32,12 +35,12 @@ namespace attr_type {
 	static const char* MIP_FILTER = "filterMip";
 	static const char* ANISO_NUM  = "numAniso";
 
+	static const char* FACE       = "face";
+
 	static const char* TEX_TYPE   = "type";
 
 	static const char* TEX_IDX    = "texIdx";
 }	// namespace attr_type
-
-#define IsAttr(str, type)	(memcmp((str), (type), strlen(type)) == 0)
 
 void CImageBuilder::startElement(
 	const XMLCh* const uri, 
@@ -47,22 +50,33 @@ void CImageBuilder::startElement(
 {
 	izanagi::tool::CString name(XN(qname));
 
-	if (IsAttr(name, attr_type::ROOT)) {
+	if (name == attr_type::ROOT) {
 		m_IsStartRoot = IZ_TRUE;
+		m_State = StateNormal;
 	}
 	else {
 		// TODO
 		IZ_ASSERT(m_IsStartRoot);
 
-		if (IsAttr(name, attr_type::CUBE)) {
+		if (name == attr_type::CUBE) {
+			m_State = StateCube;
+			SetCubeAttrs(attrs);
+		}
+		else if (name == attr_type::VOLUME) {
 			// TODO
 		}
-		else if (IsAttr(name, attr_type::VOLUME)) {
-			// TODO
-		}
-		else if (IsAttr(name, attr_type::PLANE)) {
-			// file
+		else if (name == attr_type::PLANE) {
 			SetPlaneAttrs(attrs);
+		}
+		else if (name == attr_type::ELEMENT) {
+			// NOTE
+			// CubeMapのような複数のテクスチャを明示的に指定するときの要素
+			if (m_State == StateCube) {
+				if (m_ImageInfoList.rbegin() != m_ImageInfoList.rend()) {
+					SImageInfo& imageInfo = *m_ImageInfoList.rbegin();
+					SetElementAttr(&imageInfo, attrs);
+				}
+			}
 		}
 	}
 }
@@ -72,12 +86,35 @@ void CImageBuilder::endElement(
 	const XMLCh* const localname,
 	const XMLCh* const qname)
 {
+	izanagi::tool::CString name(XN(qname));
+
+	if (name == attr_type::CUBE
+		|| name == attr_type::VOLUME)
+	{
+		m_State = StateNormal;
+	}
 }
 
 // 属性セット
 void CImageBuilder::SetPlaneAttrs(const xercesc::Attributes& attrs)
 {
 	SImageInfo sImageInfo;
+	sImageInfo.info.type = izanagi::E_GRAPH_TEX_TYPE_PLANE;
+
+	SetCommonAttrs(&sImageInfo, attrs);
+	SetElementAttr(&sImageInfo, attrs);
+
+	// TODO
+	// IsValid
+
+	m_ImageInfoList.push_back(sImageInfo);
+}
+
+// 属性セット
+void CImageBuilder::SetCubeAttrs(const xercesc::Attributes& attrs)
+{
+	SImageInfo sImageInfo;
+	sImageInfo.info.type = izanagi::E_GRAPH_TEX_TYPE_CUBE;
 
 	SetCommonAttrs(&sImageInfo, attrs);
 
@@ -239,72 +276,114 @@ void CImageBuilder::SetCommonAttrs(
 
 		izanagi::tool::CString val(XN(attrs.getValue(i)));
 
-		if (IsAttr(strAttrName, attr_type::PATH)) {
+		// 小文字にする
+		val = val.make_lower();
+
+		if (strAttrName == attr_type::FMT) {
+			// fmt
+			pImageInfo->info.fmt = _ConvTextToPixelFormat(val);
+		}
+		else if (strAttrName == attr_type::MIPMAP) {
+			// mipmap
+			pImageInfo->info.level = atoi(val);
+			if (pImageInfo->info.level == 0) {
+				// ０はダメ
+				pImageInfo->info.level = 1;
+			}
+		}
+		else if (strAttrName == attr_type::ADDR_U) {
+			// addrU
+			pImageInfo->info.addressU = _ConvTextToTexAddr(val);
+		}
+		else if (strAttrName == attr_type::ADDR_V) {
+			// addrV
+			pImageInfo->info.addressV = _ConvTextToTexAddr(val);
+		}
+		else if (strAttrName == attr_type::MIN_FILTER) {
+			// filterMin
+			pImageInfo->info.minFilter = _ConvTextToTexFilter(val);
+		}
+		else if (strAttrName == attr_type::MAG_FILTER) {
+			// filterMag
+			pImageInfo->info.magFilter = _ConvTextToTexFilter(val);
+		}
+		else if (strAttrName == attr_type::MIP_FILTER) {
+			// filterMip
+			pImageInfo->info.mipFilter = _ConvTextToTexFilter(val);
+		}
+		else if (strAttrName == attr_type::ANISO_NUM) {
+			// numAniso
+			pImageInfo->info.anisoNum = atoi(val);
+		}
+		else if (strAttrName == attr_type::TEX_TYPE) {
+			// type
+			pImageInfo->info.type = _ConvTextToTexType(val);
+		}
+	}
+}
+
+namespace {
+	// 文字列 -> CubeFace
+	inline izanagi::E_GRAPH_CUBE_TEX_FACE _ConvTextToCubeFace(LPCSTR lpszStr)
+	{
+		static const char* str[] = {
+			"xp", "xn",
+			"yp", "yn",
+			"zp", "zn",
+		};
+		C_ASSERT(COUNTOF(str) == izanagi::E_GRAPH_CUBE_TEX_FACE_NUM);
+
+		izanagi::E_GRAPH_CUBE_TEX_FACE ret = _ConvString<izanagi::E_GRAPH_CUBE_TEX_FACE>(
+												lpszStr,
+												str,
+												COUNTOF(str),
+												CMP_TYPE_LOWER);
+		return ret;
+	}
+}	// namespace
+
+void CImageBuilder::SetElementAttr(
+	SImageInfo* imageInfo,
+	const xercesc::Attributes& attrs)
+{
+	UINT nAttrNum = (UINT)attrs.getLength();
+
+	SImageElement imgElement;
+
+	for (UINT i = 0; i < nAttrNum; i++) {
+		izanagi::tool::CString strAttrName(XN(attrs.getQName(i)));
+
+		izanagi::tool::CString val(XN(attrs.getValue(i)));
+
+
+		if (strAttrName == attr_type::PATH) {
 			// path
-#if 0
-			pImageInfo->path = val;
-#else
 			if (m_BasePath.empty()) {
-				pImageInfo->path = val;
+				imgElement.path = val;
 			}
 			else {
-				pImageInfo->path.format(
+				imgElement.path.format(
 					"%s\\%s",
 					m_BasePath.c_str(),
 					val.c_str());
 			}
-#endif
 		}
 		else {
 			// 小文字にする
-			val = val.make_lower();
+			val.make_lower();
 
-			if (IsAttr(strAttrName, attr_type::FMT)) {
-				// fmt
-				pImageInfo->info.fmt = _ConvTextToPixelFormat(val);
-			}
-			else if (IsAttr(strAttrName, attr_type::MIPMAP)) {
-				// mipmap
-				pImageInfo->info.level = atoi(val);
-				if (pImageInfo->info.level == 0) {
-					// ０はダメ
-					pImageInfo->info.level = 1;
-				}
-			}
-			else if (IsAttr(strAttrName, attr_type::ADDR_U)) {
-				// addrU
-				pImageInfo->info.addressU = _ConvTextToTexAddr(val);
-			}
-			else if (IsAttr(strAttrName, attr_type::ADDR_V)) {
-				// addrV
-				pImageInfo->info.addressV = _ConvTextToTexAddr(val);
-			}
-			else if (IsAttr(strAttrName, attr_type::MIN_FILTER)) {
-				// filterMin
-				pImageInfo->info.minFilter = _ConvTextToTexFilter(val);
-			}
-			else if (IsAttr(strAttrName, attr_type::MAG_FILTER)) {
-				// filterMag
-				pImageInfo->info.magFilter = _ConvTextToTexFilter(val);
-			}
-			else if (IsAttr(strAttrName, attr_type::MIP_FILTER)) {
-				// filterMip
-				pImageInfo->info.mipFilter = _ConvTextToTexFilter(val);
-			}
-			else if (IsAttr(strAttrName, attr_type::ANISO_NUM)) {
-				// numAniso
-				pImageInfo->info.anisoNum = atoi(val);
-			}
-			else if (IsAttr(strAttrName, attr_type::ANISO_NUM)) {
+			if (strAttrName == attr_type::TEX_IDX) {
 				// texIdx
-				pImageInfo->tex_idx = atoi(val);
+				imgElement.texIdx = atoi(val);
 			}
-			else if (IsAttr(strAttrName, attr_type::TEX_TYPE)) {
-				// type
-				pImageInfo->info.type = _ConvTextToTexType(val);
+			else if (strAttrName == attr_type::FACE) {
+				// face
+				imgElement.face = _ConvTextToCubeFace(val);
 			}
 		}
 	}
+
+	imageInfo->elements.push_back(imgElement);
 }
 
 namespace {
@@ -358,6 +437,154 @@ namespace {
 
 		return result;
 	}
+
+	// テクスチャ出力
+	IZ_BOOL _ExportTex(
+		izanagi::CFileOutputStream* out,
+		izanagi::S_IMG_HEADER* header,
+		const SImageInfo& imageInfo)
+	{
+		VRETURN(imageInfo.elements.size() > 0);
+
+		IZ_BOOL ret = IZ_TRUE;
+
+		const SImageElement& elem = imageInfo.elements[0];
+
+		// テクスチャ読み込み
+		izanagi::tool::CIMGBody* imgBody = NULL;
+		imgBody = izanagi::tool::CImageReader::GetInstance().Read(
+					elem.path,
+					izanagi::E_GRAPH_TEX_TYPE_PLANE);
+		VRETURN(imgBody != IZ_NULL);
+
+		UINT nNum = imgBody->GetTexNum();
+		
+		if (elem.texIdx >= 0) {
+			INT nTexIdx = IZ_MAX(nNum - 1, (UINT)elem.texIdx);
+			izanagi::tool::CIMGTexture* tex = imgBody->GetTexture(nTexIdx);
+
+			if (tex != IZ_NULL) {
+				// テクスチャ出力
+				ret = _ExportTex(
+						out,
+						header,
+						imageInfo,
+						tex);
+				IZ_ASSERT(ret);
+			}
+		}
+		else {
+			// 全テクスチャ
+
+			for (UINT n = 0; n < nNum; n++) {
+				izanagi::tool::CIMGTexture* tex = imgBody->GetTexture(n);
+
+				if (tex != IZ_NULL) {
+					// テクスチャ出力
+					ret = _ExportTex(
+							out,
+							header,
+							imageInfo,
+							tex);
+					IZ_ASSERT(ret);
+					break;
+				}
+			}
+		}
+
+		// 削除
+		izanagi::tool::CImageReader::GetInstance().Delete(imgBody);
+		return ret;
+	}
+
+	// キューブテクスチャ出力
+	IZ_BOOL _ExportCubeTex(
+		izanagi::CFileOutputStream* out,
+		izanagi::S_IMG_HEADER* header,
+		const SImageInfo& imageInfo)
+	{
+		VRETURN(imageInfo.elements.size() == izanagi::E_GRAPH_CUBE_TEX_FACE_NUM);
+
+		IZ_BOOL ret = IZ_TRUE;
+
+		// 出力用テクスチャ作成
+		izanagi::tool::CIMGTexture* exportTex = izanagi::tool::CIMGTexture::CreateEmptyTexture(izanagi::E_GRAPH_TEX_TYPE_CUBE);
+		VRETURN(exportTex != IZ_NULL);
+
+		// 基準となる幅・高さ
+		// キューブテクスチャは全ての面が同じ幅と高さにならないといけない
+		// そのチェックに利用する
+		IZ_UINT baseWidth = 0;
+		IZ_UINT baseHeight = 0;
+
+		for (IZ_UINT i = 0; i < izanagi::E_GRAPH_CUBE_TEX_FACE_NUM; i++) {
+			const SImageElement& elem = imageInfo.elements[i];
+
+			// テクスチャ読み込み
+			izanagi::tool::CIMGBody* imgBody = NULL;
+			imgBody = izanagi::tool::CImageReader::GetInstance().Read(
+						elem.path,
+						izanagi::E_GRAPH_TEX_TYPE_PLANE);
+			VRETURN(imgBody != IZ_NULL);
+
+			IZ_UINT nNum = imgBody->GetTexNum();
+			
+			IZ_UINT texIdx = (elem.texIdx < 0 ? 0 : elem.texIdx);
+			texIdx = IZ_MAX(nNum - 1, texIdx);
+
+			// 読み込んだテクスチャを取得
+			// Planeテクスチャでないといけない
+			izanagi::tool::CIMGTexture* tex = imgBody->GetTexture(texIdx);
+
+			// 幅チェック
+			if (baseWidth == 0) {
+				// 基準値取得
+				baseWidth = tex->GetWidth();
+			}
+			else {
+				ret = (baseWidth == tex->GetWidth());
+				VGOTO(ret, __EXIT__);
+			}
+
+			// 高さチェック
+			if (baseHeight == 0) {
+				// 基準値取得
+				baseHeight = tex->GetHeight();
+			}
+			else {
+				ret = (baseHeight == tex->GetHeight());
+				VGOTO(ret, __EXIT__);
+			}
+
+			if (tex->GetTexInfo().type == izanagi::E_GRAPH_TEX_TYPE_PLANE) {
+				// 読み込んだイメージデータを出力用テクスチャにセット
+				// Mimmapは後で作るので、トップの１枚だけをセットする
+				exportTex->GetImage(i).push_back(tex->GetImage(0)[0]);
+
+				// 所有者をexportTexにする
+				tex->GetImage(0).erase(tex->GetImage(0).begin());
+			}
+
+			// 削除
+			izanagi::tool::CImageReader::GetInstance().Delete(imgBody);
+		}
+
+		// テクスチャ出力
+		if (ret) {
+			ret = _ExportTex(
+							out,
+							header,
+							imageInfo,
+							exportTex);
+			IZ_ASSERT(ret);
+		}
+
+__EXIT__:
+		// 削除
+		izanagi::tool::CIMGTexture::Delete(exportTex);
+
+		return ret;
+	}
 }	// namespace
 
 // IMGデータ作成
@@ -406,54 +633,16 @@ BOOL CImageBuilder::BuildIMG(LPCSTR lpszExport)
 		// 出力先の現在位置がイメージデータの位置（ジャンプ先）になる
 		tJumpTable.push_back(cOut.GetSize());
 
-		// テクスチャ読み込み
-		izanagi::tool::CIMGBody* pImgBody = NULL;
-		pImgBody = izanagi::tool::CImageReader::GetInstance().Read(
-					sImageInfo.path,
-					static_cast<izanagi::E_GRAPH_TEX_TYPE>(sImageInfo.info.type));
-
-		if (pImgBody == IZ_NULL) {
-			continue;
+		if (sImageInfo.info.type == izanagi::E_GRAPH_TEX_TYPE_CUBE) {
+			ret = _ExportCubeTex(&cOut, &sHeader, sImageInfo);
+			VGOTO(ret, __EXIT__);
 		}
-
-		UINT nNum = pImgBody->GetTexNum();
-		
-		if (sImageInfo.tex_idx >= 0) {
-			// テクスチャ位置指定
-
-			INT nTexIdx = IZ_MAX(nNum - 1, (UINT)sImageInfo.tex_idx);
-			izanagi::tool::CIMGTexture* pTex = pImgBody->GetTexture(nTexIdx);
-
-			if (pTex != IZ_NULL) {
-				// テクスチャ出力
-				ret = _ExportTex(
-						&cOut,
-						&sHeader,
-						sImageInfo,
-						pTex);
-				VGOTO(ret, __EXIT__);
-			}
+		else if (sImageInfo.info.type == izanagi::E_GRAPH_TEX_TYPE_VOLUME) {
 		}
 		else {
-			// 全テクスチャ
-
-			for (UINT n = 0; n < nNum; n++) {
-				izanagi::tool::CIMGTexture* pTex = pImgBody->GetTexture(n);
-
-				if (pTex != IZ_NULL) {
-					// テクスチャ出力
-					ret = _ExportTex(
-							&cOut,
-							&sHeader,
-							sImageInfo,
-							pTex);
-					VGOTO(ret, __EXIT__);
-				}
-			}
+			ret = _ExportTex(&cOut, &sHeader, sImageInfo);
+			VGOTO(ret, __EXIT__);
 		}
-
-		// 削除
-		izanagi::tool::CImageReader::GetInstance().Delete(pImgBody);
 	}
 
 	// ファイルサイズ取得
