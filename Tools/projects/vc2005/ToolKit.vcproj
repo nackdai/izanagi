@@ -281,11 +281,23 @@
 				Name="include"
 				>
 				<File
+					RelativePath="..\..\ToolKit\include\system\CharCodeUtility.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\ToolKit\include\system\EnvVarHelper.h"
 					>
 				</File>
 				<File
 					RelativePath="..\..\ToolKit\include\system\FileUtility.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="source"
+				>
+				<File
+					RelativePath="..\..\ToolKit\source\system\CharCodeUtility.cpp"
 					>
 				</File>
 			</Filter>

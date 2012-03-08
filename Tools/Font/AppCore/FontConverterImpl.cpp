@@ -5,6 +5,8 @@
 #include "FontConverterImpl.h"
 #include "CharList.h"
 
+//#define REMOVE_TMP_DDS
+
 CFontConverter CFontConverter::s_cInstance;
 
 // コンストラクタ
@@ -204,6 +206,33 @@ namespace {
 					lpmat2);
 		}
 		else {
+			if (nCharFmt == izanagi::E_FONT_CHAR_ENCODE_UTF8
+				&& !izanagi::tool::CCharCodeUtility::IsAscii(uChar))
+			{
+				// NOTE
+				// GetGlyphOutlineAはSJISしか受け付けないので
+				// UTF8 -> SJIS変換が必要
+				union {
+					IZ_UINT code;
+					IZ_BYTE ch[4];
+				} tmp;
+
+				tmp.code = uChar;
+
+				IZ_UINT size = izanagi::tool::CCharCodeUtility::ConvUtf8ToSjis((const char*)tmp.ch, NULL);
+
+				std::vector<BYTE> buf(size + 1);
+				izanagi::tool::CCharCodeUtility::ConvUtf8ToSjis((const char*)tmp.ch, &buf[0]);
+
+				uChar = 0;
+				IZ_UINT count = IZ_MIN(COUNTOF(tmp.ch), (IZ_UINT)buf.size());
+				for (IZ_UINT i = 0; i < count; i++) {
+					if (buf[i] > 0) {
+						uChar = (uChar << (8 * i)) | buf[i];
+					}
+				}
+			}
+
 			// SJIS or UTF8
 			ret = ::GetGlyphOutlineA(
 					hdc,
@@ -694,6 +723,18 @@ BOOL CFontConverter::Export(
 		sizeof(sHeader));
 
 __EXIT__:
+#ifdef REMOVE_TMP_DDS
+	// いらないから削除
+	{
+		// イメージ出力
+		UINT num = static_cast<UINT>(m_FontImgList.size());
+		for (UINT i = 0; i < num; i++) {
+			izanagi::tool::CString strTmp;
+			strTmp.format("%d.dds", i);
+			izanagi::tool::CFileUtility::RemoveFile(strTmp);
+		}
+	}
+#endif	// #ifdef REMOVE_TMP_DDS
 
 	return ret;
 }

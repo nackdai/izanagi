@@ -95,25 +95,18 @@ void CCharList::Register(
 }
 
 namespace {
-	// Returns whether the character code is ASCII.
-	inline IZ_BOOL _IsAscii(IZ_UINT ch)
-	{
-		return (((0x21 <= ch) && (ch <= 0x7e))
-				|| ((0xa1 <= ch) && (ch <= 0xdf)));
-	}
-
-	// Returns whether the character code is SJIS.
-	inline IZ_BOOL _IsSjis(IZ_UINT ch)
-	{
-		return (((0x81 <= ch) && (ch <= 0x9f))
-				|| ((0xe0 <= ch) && (ch <= 0xef)));
-	}
-
 	// Returns whether the character code is surrogate.
 	inline IZ_BOOL _IsSurrogate(IZ_UINT ch)
 	{
 		IZ_BOOL ret = (((0xD800 <= ch) && (ch <= 0xDBFF))			// 上位サロゲート
 						|| ((0xDC00 <= ch) && (ch <= 0xDFFF)));		// 下位サロゲート
+		return ret;
+	}
+
+	// 改行コード
+	inline IZ_BOOL _IsLineFeedCode(IZ_UINT ch)
+	{
+		IZ_BOOL ret = ((ch == 0x0d) || (ch == 0x0a));
 		return ret;
 	}
 }
@@ -127,10 +120,10 @@ void CCharList::RegisterSJIS(IInputStream* pIn)
 			break;
 		}
 
-		if (_IsAscii(ch)) {
+		if (izanagi::tool::CCharCodeUtility::IsAsciiExt(ch)) {
 			m_CharList.insert(ch);
 		}
-		else if (_IsSjis(ch)) {
+		else if (izanagi::tool::CCharCodeUtility::IsSjis(ch)) {
 			IZ_INT ch_1 = pIn->Get();
 			IZ_UINT val = ((ch << 8) | (ch_1 & 0xff));
 			m_CharList.insert(val);
@@ -147,7 +140,7 @@ void CCharList::RegisterUTF16(IInputStream* pIn)
 			break;
 		}
 
-		if (_IsAscii(ch)) {
+		if (izanagi::tool::CCharCodeUtility::IsAscii(ch)) {
 			m_CharList.insert(ch);
 		}
 		else {
@@ -168,22 +161,67 @@ void CCharList::RegisterUTF16(IInputStream* pIn)
 	}
 }
 
+namespace {
+	inline void _Swap(IZ_UINT num, IZ_BYTE ch[4])
+	{
+		switch (num) {
+		case 2:
+			{
+				IZ_BYTE tmp = ch[0];
+				ch[0] = ch[1];
+				ch[1] = tmp;
+			}
+			break;
+		case 3:
+			{
+				IZ_BYTE tmp = ch[0];
+				ch[0] = ch[2];
+				ch[2] = tmp;
+			}
+			break;
+		case 4:
+			{
+				IZ_BYTE tmp = ch[0];
+				ch[0] = ch[3];
+				ch[3] = tmp;
+
+				tmp = ch[1];
+				ch[1] = ch[2];
+				ch[2] = tmp;
+			}
+			break;
+		default:
+			IZ_ASSERT(IZ_FALSE);
+			break;
+		}
+	}
+}
+
 // Registers characters as UTF8.
 void CCharList::RegisterUTF8(IInputStream* pIn)
 {
 	union {
 		IZ_UINT code;
 		IZ_BYTE ch[4];
-	} sChar;
+	} sChar = { 0 };
+
+	IZ_INT ch = -1;
 
 	for (;;) {
-		IZ_INT ch = pIn->Get();
+		if (ch < 0) {
+			ch = pIn->Get();
+		}
 		if (ch == EOF) {
 			break;
 		}
 
-		if (_IsAscii(ch)) {
+		if (_IsLineFeedCode(ch)) {
+			ch = -1;
+			continue;
+		}
+		else if (izanagi::tool::CCharCodeUtility::IsAscii(ch)) {
 			m_CharList.insert(ch);
+			ch = -1;
 		}
 		else {
 			IZ_UINT nPos = 0;
@@ -192,25 +230,25 @@ void CCharList::RegisterUTF8(IInputStream* pIn)
 			for (;;) {
 				ch = pIn->Get();
 
-				if ((ch & 0xe0) == 0xc0) {
-					sChar.ch[nPos++] = ch;
+				if (ch < 0) {
 					break;
 				}
-				else if ((ch & 0xf0) == 0xe0) {
-					sChar.ch[nPos++] = ch;
+				else if (_IsLineFeedCode(ch)) {
+					ch = -1;
 					break;
 				}
-				else if ((ch & 0xf8) == 0xf0) {
-					sChar.ch[nPos++] = ch;
+				else if ((ch & 0xc0) == 0xc0) {
 					break;
 				}
 				else {
-					// Not surpported yet...
-					IZ_ASSERT(IZ_FALSE);
+					sChar.ch[nPos++] = ch;
 				}
 			}
 
+			//_Swap(nPos, sChar.ch);
 			m_CharList.insert(sChar.code);
+
+			sChar.code = 0;
 		}
 	}
 }
@@ -241,7 +279,7 @@ IZ_UINT CCharList::GetCharBytes(IZ_UINT code)
 // Returns character code bytes as SJIS
 IZ_UINT CCharList::GetCharBytesAsSJIS(IZ_UINT code)
 {
-	if (_IsAscii(code)) {
+	if (izanagi::tool::CCharCodeUtility::IsAscii(code)) {
 		// ASCII
 		return 1;
 	}
@@ -262,7 +300,7 @@ IZ_UINT CCharList::GetCharBytesAsUTF16(IZ_UINT code)
 // Returns character code bytes as UTF8
 IZ_UINT CCharList::GetCharBytesAsUTF8(IZ_UINT code)
 {
-	if (_IsAscii(code)) {
+	if (izanagi::tool::CCharCodeUtility::IsAscii(code)) {
 		return 1;
 	}
 	else {
