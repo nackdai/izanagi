@@ -56,7 +56,7 @@ BOOL COption::Analysis(int argc, TCHAR* argv[])
 				// -h
 				texHeight = atoi(argv[++i]);
 			}
-			else if (result = (cmd == "-code")) {
+			else if (result = (cmd == "-c")) {
 				// -c
 				izanagi::tool::CString tmp(argv[++i]);
 

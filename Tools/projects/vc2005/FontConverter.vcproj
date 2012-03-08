@@ -254,7 +254,7 @@
 			</Filter>
 		</Filter>
 		<File
-			RelativePath=".\ReadMe.txt"
+			RelativePath="..\..\Font\FontConverter\ReadMe.txt"
 			>
 		</File>
 	</Files>
