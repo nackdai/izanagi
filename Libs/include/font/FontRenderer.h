@@ -52,12 +52,12 @@ namespace izanagi {
 
 	public:
 		// 登録
-		virtual IZ_BOOL Register(void* pStr) = 0;
+		virtual IZ_BOOL Register(const void* pStr) = 0;
 
 		// 描画
 		// 登録されていない場合は、描画しない
 		virtual void Render(
-			void* pStr,
+			const void* pStr,
 			IZ_INT nX, IZ_INT nY,
 			IZ_COLOR nColor = IZ_COLOR_RGBA(255, 255, 255, 255)) = 0;
 

@@ -49,7 +49,7 @@ float4 main_OpAdd(SPSInput sIn) : COLOR
 float4 main_OpModulateAlpha(SPSInput sIn) : COLOR
 {
 	// Dst = Vtx x Tex.a
-#if 0
+#if 1
 	float4 vColor = sIn.vColor * float4(1.0f, 1.0f, 1.0f, tex2D(sTex, sIn.vUV).a);
 #else
 	float4 vColor = sIn.vColor;

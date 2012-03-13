@@ -103,13 +103,6 @@ namespace {
 
 	IZ_BYTE* _GetUTF8Code(IZ_BYTE* src, IZ_UINT* pRet)
 	{
-		union {
-			IZ_UINT code;
-			IZ_BYTE ch[4];
-		} sChar;
-
-		IZ_UINT nPos = 0;
-
 		IZ_BYTE ch = *src;
 
 		if (ch <= 0x7f) {
@@ -118,24 +111,24 @@ namespace {
 
 		++src;
 
-		sChar.ch[nPos++] = ch;
+		IZ_UINT count = 1;
+		IZ_UINT code = ch;
 
-		for (;;) {
-			ch = *(src++);
+		for (;; src++) {
+			ch = *src;
+			count++;
 
-			if ((ch & 0xc0) == 0x80) {
-				sChar.ch[nPos++] = ch;
-			}
-			else if ((ch & 0xe0) == 0xc0) {
-				sChar.ch[nPos++] = ch;
+			if (ch <= 0x7f) {
 				break;
 			}
-			else if ((ch & 0xf0) == 0xe0) {
-				sChar.ch[nPos++] = ch;
-				break;
+			else if ((ch & 0xc0) == 0x80) {
+				IZ_ASSERT(count <= 4);
+				code = ((code << 8) | ch);
 			}
-			else if ((ch & 0xf8) == 0xf0) {
-				sChar.ch[nPos++] = ch;
+			else if (((ch & 0xe0) == 0xc0)
+					|| ((ch & 0xf0) == 0xe0)
+					|| ((ch & 0xf8) == 0xf0))
+			{
 				break;
 			}
 			else {
@@ -144,7 +137,7 @@ namespace {
 			}
 		}
 
-		*pRet = sChar.code;
+		*pRet = code;
 
 		return src;
 	}
@@ -320,15 +313,18 @@ void* CStdUtf::GetOneCharCodeAsUTF8(void* src, IZ_UINT* ret)
 	IZ_ASSERT(src != IZ_NULL);
 	IZ_BYTE* pSrc = reinterpret_cast<IZ_BYTE*>(src);
 
-	IZ_BYTE ch = *(pSrc++);
+	IZ_BYTE ch = *pSrc;
 
 	if (ch == 0) {
 		goto __EXIT__;
 	}
 
-	if (IsAscii(ch)) {
-		// ASCII
+	if (IsAscii(ch)
+		|| IsSpace(ch))
+	{
+		// ASCII or Blank
 		*ret = ch;
+		pSrc++;
 	}
 	else {
 		pSrc = _GetUTF8Code(pSrc, ret);
@@ -393,8 +389,10 @@ void* CStdUtf::GetOneCharCodeAsSJIS(void* src, IZ_UINT* ret)
 		goto __EXIT__;
 	}
 
-	if (IsAscii(ch)) {
-		// ASCII
+	if (IsAscii(ch)
+		|| IsSpace(ch))
+	{
+		// ASCII or Blank
 		*ret = ch;
 	}
 	else {
