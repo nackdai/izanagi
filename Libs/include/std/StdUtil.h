@@ -112,6 +112,40 @@ namespace izanagi {
 
 			return r ^ 0xFFFFFFFFUL;
 		}
+
+		static void Swap(IZ_UINT num, IZ_BYTE ch[4])
+		{
+			switch (num) {
+			case 2:
+				{
+					IZ_BYTE tmp = ch[0];
+					ch[0] = ch[1];
+					ch[1] = tmp;
+				}
+				break;
+			case 3:
+				{
+					IZ_BYTE tmp = ch[0];
+					ch[0] = ch[2];
+					ch[2] = tmp;
+				}
+				break;
+			case 4:
+				{
+					IZ_BYTE tmp = ch[0];
+					ch[0] = ch[3];
+					ch[3] = tmp;
+
+					tmp = ch[1];
+					ch[1] = ch[2];
+					ch[2] = tmp;
+				}
+				break;
+			default:
+				IZ_ASSERT(IZ_FALSE);
+				break;
+			}
+		}
 	};
 }	// namespace izanagi
 

@@ -285,7 +285,7 @@ namespace {
 * 登録
 * 存在しない文字があったときにFALSEを返す
 */
-IZ_BOOL CFontRendererBmp::Register(void* pStr)
+IZ_BOOL CFontRendererBmp::Register(const void* pStr)
 {
 	if (!BeginRegister()) {
 		// 登録開始処理失敗
@@ -297,14 +297,21 @@ IZ_BOOL CFontRendererBmp::Register(void* pStr)
 	const E_FONT_CHAR_ENCODE encode = m_sHeader.charEncode;
 	IZ_UINT nCode = 0;
 
+	void* str = const_cast<void*>(pStr);
+
 	for (;;) {
-		pStr = _GetOneCharCode(
-				pStr,
+		str = _GetOneCharCode(
+				str,
 				&nCode,
 				encode);
 
 		if (nCode == 0) {
 			break;
+		}
+		else if (CStdUtf::IsSpace(nCode)
+				|| CStdUtf::IsLineFeed(nCode))
+		{
+			continue;
 		}
 
 		ret = (RegisterInternal(nCode) != IZ_NULL);
@@ -326,7 +333,7 @@ IZ_BOOL CFontRendererBmp::Register(void* pStr)
 * 登録されていない場合は、描画しない
 */
 void CFontRendererBmp::Render(
-	void* pStr,
+	const void* pStr,
 	IZ_INT nX, IZ_INT nY,
 	IZ_COLOR nColor/*= IZ_COLOR_RGB(255, 255, 255, 255)*/)
 {
@@ -358,21 +365,25 @@ void CFontRendererBmp::Render(
 	const E_FONT_CHAR_ENCODE encode = m_sHeader.charEncode;
 	IZ_UINT nCode = 0;
 
+	void* str = const_cast<void*>(pStr);
+
 	for (;;) {
-		pStr = _GetOneCharCode(
-				pStr,
+		str = _GetOneCharCode(
+				str,
 				&nCode,
 				encode);
 
 		if (nCode == 0) {
 			break;
 		}
-		else if (CStdUtf::IsAscii(nCode)) {
-			if ((nCode == 0x0d) || (nCode == 0x0a)) {
-				// CR or LF
-				bIsLineFeed = IZ_TRUE;
-				continue;
-			}
+		else if (CStdUtf::IsSpace(nCode)) {
+			sDstPoint.x += m_sHeader.fontHeight;
+			continue;
+		}
+		else if (CStdUtf::IsLineFeed(nCode)) {
+			// CR or LF
+			bIsLineFeed = IZ_TRUE;
+			continue;
 		}
 
 		if (bIsLineFeed) {
@@ -520,23 +531,37 @@ const S_FNT_MAP* CFontRendererBmp::GetFontMap(IZ_UINT code)
 	S_FNT_MAP* ret = IZ_NULL;
 
 	// 二分探索する
-	S_FNT_MAP* pTop = &m_pMapList[0];
-	S_FNT_MAP* pTail = &m_pMapList[m_sHeader.numFont - 1];
+	IZ_INT idxTop = m_pMapList[0].idx;
+	IZ_INT idxTail = m_pMapList[m_sHeader.numFont - 1].idx;
 
-	while (pTop <= pTail) {
-		S_FNT_MAP* pMid = m_pMapList + ((pTail->idx + pTop->idx) >> 1);
+	while (idxTop <= idxTail) {
+		IZ_UINT idxMid = ((idxTop + idxTail) >> 1);
+		S_FNT_MAP* pMid = &m_pMapList[idxMid];
 
 		if (pMid->code < code) {
-			pTop = pMid + 1;
+			idxTop = idxMid + 1;
+			VRETURN_NULL(idxTop < m_sHeader.numFont);
 		}
 		else if (pMid->code > code) {
-			pTail = pMid - 1;
+			idxTail = idxMid - 1;
+			VRETURN_NULL(idxTail >= 0);
 		}
 		else {
 			// あった
 			ret = pMid;
 			break;
 		}
+	}
+
+	if (ret == IZ_NULL) {
+		// 線形探索してみる
+		for (IZ_UINT i = 0; i < m_sHeader.numFont; i++) {
+			if (m_pMapList[i].code == code) {
+				ret = &m_pMapList[i];
+				break;
+			}
+		}
+		IZ_ASSERT(ret != IZ_NULL);
 	}
 
 	return ret;

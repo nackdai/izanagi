@@ -39,6 +39,16 @@ namespace izanagi {
 					|| ((0x0a == ch) || (0x0d == ch)));
 #endif
 		}
+
+		static inline IZ_BOOL IsLineFeed(IZ_UINT ch)
+		{
+			return ((0x0a == ch) || (0x0d == ch));
+		}
+
+		static inline IZ_BOOL IsSpace(IZ_UINT ch)
+		{
+			return (0x20 == ch);
+		}
 	};
 }	// namespace izanagi
 
