@@ -80,6 +80,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="md $(ProjectDir)..\..\$(InputName)\$(ConfigurationName)&#x0D;&#x0A;copy $(ProjectDir)$(InputName)\$(ConfigurationName)\$(InputName).lib $(ProjectDir)..\..\$(InputName)\$(ConfigurationName)\$(InputName).lib"
 			/>
 		</Configuration>
 		<Configuration
@@ -146,6 +147,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="cp $(ProjectDir)\$(InputName)\$(ConfigurationName)\$(InputName).lib ..\..\$(InputName)\$(ConfigurationName)\"
 			/>
 		</Configuration>
 	</Configurations>
