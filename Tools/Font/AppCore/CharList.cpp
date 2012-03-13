@@ -156,43 +156,6 @@ void CCharList::RegisterUTF16(IInputStream* pIn)
 			}
 
 			m_CharList.insert(val);
-			
-		}
-	}
-}
-
-namespace {
-	inline void _Swap(IZ_UINT num, IZ_BYTE ch[4])
-	{
-		switch (num) {
-		case 2:
-			{
-				IZ_BYTE tmp = ch[0];
-				ch[0] = ch[1];
-				ch[1] = tmp;
-			}
-			break;
-		case 3:
-			{
-				IZ_BYTE tmp = ch[0];
-				ch[0] = ch[2];
-				ch[2] = tmp;
-			}
-			break;
-		case 4:
-			{
-				IZ_BYTE tmp = ch[0];
-				ch[0] = ch[3];
-				ch[3] = tmp;
-
-				tmp = ch[1];
-				ch[1] = ch[2];
-				ch[2] = tmp;
-			}
-			break;
-		default:
-			IZ_ASSERT(IZ_FALSE);
-			break;
 		}
 	}
 }
@@ -200,11 +163,6 @@ namespace {
 // Registers characters as UTF8.
 void CCharList::RegisterUTF8(IInputStream* pIn)
 {
-	union {
-		IZ_UINT code;
-		IZ_BYTE ch[4];
-	} sChar = { 0 };
-
 	IZ_INT ch = -1;
 
 	for (;;) {
@@ -224,11 +182,12 @@ void CCharList::RegisterUTF8(IInputStream* pIn)
 			ch = -1;
 		}
 		else {
-			IZ_UINT nPos = 0;
-			sChar.ch[nPos++] = ch;
+			IZ_UINT count = 1;
+			IZ_UINT code = ch;
 
 			for (;;) {
 				ch = pIn->Get();
+				count++;
 
 				if (ch < 0) {
 					break;
@@ -241,14 +200,12 @@ void CCharList::RegisterUTF8(IInputStream* pIn)
 					break;
 				}
 				else {
-					sChar.ch[nPos++] = ch;
+					VRETURN_VAL(count <= 4,);
+					code = (code << 8) | (ch & 0xff);
 				}
 			}
 
-			//_Swap(nPos, sChar.ch);
-			m_CharList.insert(sChar.code);
-
-			sChar.code = 0;
+			m_CharList.insert(code);
 		}
 	}
 }

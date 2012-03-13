@@ -182,6 +182,37 @@ BOOL CFontConverter::Init(
 }
 
 namespace {
+	inline void _Swap(IZ_BYTE ch[4], IZ_UINT num)
+	{
+		switch (num) {
+		case 2:
+			{
+				IZ_BYTE tmp = ch[0];
+				ch[0] = ch[1];
+				ch[1] = tmp;
+			}
+			break;
+		case 3:
+			{
+				IZ_BYTE tmp = ch[0];
+				ch[0] = ch[2];
+				ch[2] = tmp;
+			}
+			break;
+		case 4:
+			{
+				IZ_BYTE tmp = ch[0];
+				ch[0] = ch[3];
+				ch[3] = ch[0];
+
+				tmp = ch[1];
+				ch[1] = ch[2];
+				ch[2] = tmp;
+			}
+			break;
+		}
+	}
+
 	inline DWORD _GetGlyphOutline(
 		izanagi::E_FONT_CHAR_ENCODE nCharFmt,
 		HDC hdc, 
@@ -218,6 +249,15 @@ namespace {
 				} tmp;
 
 				tmp.code = uChar;
+
+				IZ_UINT zeroPos = 0;
+				for (; zeroPos < COUNTOF(tmp.ch); zeroPos++) {
+					if (tmp.ch[zeroPos] == 0) {
+						break;
+					}
+				}
+
+				_Swap(tmp.ch, zeroPos);
 
 				IZ_UINT size = izanagi::tool::CCharCodeUtility::ConvUtf8ToSjis((const char*)tmp.ch, NULL);
 
