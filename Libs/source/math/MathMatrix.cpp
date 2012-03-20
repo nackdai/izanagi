@@ -113,18 +113,22 @@ namespace izanagi {
 	// オフセットを指定したマトリクスを取得
 	void SMatrix::GetTrans(SMatrix& dst, const SVector& tv)
 	{
+		GetTrans(dst, tv.x, tv.y, tv.z);
+	}
+
+	void SMatrix::GetTrans(SMatrix& dst, IZ_FLOAT x, IZ_FLOAT y, IZ_FLOAT z)
+	{
 #if defined(__USE_D3D_MATH__)
 		D3DXMatrixTranslation(
 			reinterpret_cast<D3DXMATRIX*>(&dst),
-			tv.x,
-			tv.y,
-			tv.z);
+			x, y, z);
 #else	// #if defined(__USE_D3D_MATH__)
-		dst.m[0][0] = 1.0f;    dst.m[0][1] = 0.0f;    dst.m[0][2] = 0.0f;    dst.m[0][3] = 0.0f;
-		dst.m[1][0] = 0.0f;    dst.m[1][1] = 1.0f;    dst.m[1][2] = 0.0f;    dst.m[1][3] = 0.0f;
-		dst.m[2][0] = 0.0f;    dst.m[2][1] = 0.0f;    dst.m[2][2] = 1.0f;    dst.m[2][3] = 0.0f;
-		dst.m[3][0] = tv.v[0]; dst.m[3][1] = tv.v[1]; dst.m[3][2] = tv.v[2]; dst.m[3][3] = 1.0f;
+		dst.m[0][0] = 1.0f; dst.m[0][1] = 0.0f; dst.m[0][2] = 0.0f; dst.m[0][3] = 0.0f;
+		dst.m[1][0] = 0.0f; dst.m[1][1] = 1.0f; dst.m[1][2] = 0.0f; dst.m[1][3] = 0.0f;
+		dst.m[2][0] = 0.0f; dst.m[2][1] = 0.0f; dst.m[2][2] = 1.0f; dst.m[2][3] = 0.0f;
+		dst.m[3][0] = x;    dst.m[3][1] = y;    dst.m[3][2] = z;    dst.m[3][3] = 1.0f;
 #endif	// #if defined(__USE_D3D_MATH__)
+
 	}
 
 	// 行列式を計算する

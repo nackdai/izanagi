@@ -220,12 +220,14 @@ IZ_UINT CCubeTexture::Lock(
 {
 	IZ_ASSERT(m_pTexture != IZ_NULL);
 
+#if 0
 	if (!IsDynamic() && !IsOnSysMem()) {
 		// 動的テクスチャ以外ではロック不可
 		// ただし、システムメモリ上にあるときはＯＫ
 		IZ_ASSERT(IZ_FALSE);
 		return 0;
 	}
+#endif
 
 	if (nLevel >= m_TexInfo.level) {
 		// レベル指定オーバー
