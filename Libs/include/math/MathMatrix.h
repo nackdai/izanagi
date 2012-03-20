@@ -252,6 +252,7 @@ namespace izanagi {
 
 		// オフセットを指定したマトリクスを取得
 		static void GetTrans(SMatrix& dst, const SVector& tv);
+		static void GetTrans(SMatrix& dst, IZ_FLOAT x, IZ_FLOAT y, IZ_FLOAT z);
 
 		// 平行移動する
 		static void Trans(SMatrix& dst, const SMatrix& src, const SVector& tv)

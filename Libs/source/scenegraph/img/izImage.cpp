@@ -129,7 +129,7 @@ namespace {
 
 			pTex->Unlock(nLevel);
 
-			*pBuf += nSize;
+			pBuf += nSize;
 
 			nWidth >>= 1;
 			nHeight >>= 1;
@@ -188,7 +188,7 @@ __EXIT__:
 
 				pTex->Unlock(face, nLevel);
 
-				*pBuf += nSize;
+				pBuf += nSize;
 
 				nW >>= 1;
 				nH >>= 1;
