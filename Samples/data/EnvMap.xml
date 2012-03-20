@@ -4,5 +4,13 @@
   <plane
 	  path="./mirror.png"
 	  fmt="dxt5"/>
+  <cube>
+    <element path="./XP_uffizi_probe.png" face="xp"/>
+    <element path="./XN_uffizi_probe.png" face="xn"/>
+    <element path="./YP_uffizi_probe.png" face="yp"/>
+    <element path="./YN_uffizi_probe.png" face="xn"/>
+    <element path="./ZP_uffizi_probe.png" face="zp"/>
+    <element path="./ZN_uffizi_probe.png" face="zn"/>
+  </cube>
 </textures>
 
