@@ -558,8 +558,9 @@ namespace {
 
 			if (tex->GetTexInfo().type == izanagi::E_GRAPH_TEX_TYPE_PLANE) {
 				// 読み込んだイメージデータを出力用テクスチャにセット
-				// Mimmapは後で作るので、トップの１枚だけをセットする
-				exportTex->GetImage(i).push_back(tex->GetImage(0)[0]);
+				exportTex->AddImageAsCubeFace(
+					(izanagi::E_GRAPH_CUBE_TEX_FACE)i,
+					tex->GetImage(0));
 
 				// 所有者をexportTexにする
 				tex->GetImage(0).erase(tex->GetImage(0).begin());
@@ -572,10 +573,10 @@ namespace {
 		// テクスチャ出力
 		if (ret) {
 			ret = _ExportTex(
-							out,
-							header,
-							imageInfo,
-							exportTex);
+					out,
+					header,
+					imageInfo,
+					exportTex);
 			IZ_ASSERT(ret);
 		}
 

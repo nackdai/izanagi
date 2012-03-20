@@ -361,9 +361,83 @@ IZ_BOOL CIMGTexture::DeleteLawestMipMap()
 	return IZ_TRUE;
 }
 
-/**
-* 読み込み
-*/
+// 出力
+IZ_BOOL CIMGTexture::Write(IOutputStream* pOut)
+{
+	IZ_ASSERT(pOut != IZ_NULL);
+
+	m_TexInfo.size = GetExportSize();
+
+	// テクスチャヘッダ
+	IZ_BOOL ret = IZ_OUTPUT_WRITE(
+					pOut,
+					&m_TexInfo,
+					0,
+					sizeof(m_TexInfo));
+	VGOTO(ret, __EXIT__);
+
+	// イメージデータ
+	IZ_UINT nImageNum = GetImageNum();
+	IZ_UINT nLevelMax = GetTexInfo().level;
+
+	for (IZ_UINT i = 0; i < nImageNum; i++) {
+		std::vector<CIMGImage*>& tImageList = m_Images[i];
+
+		for (IZ_UINT nLevel = 0; nLevel < nLevelMax; nLevel++) {
+			CIMGImage* pImage = tImageList[nLevel];
+
+			ret = pImage->Write(pOut);
+			VGOTO(ret, __EXIT__);
+		}
+	}
+
+__EXIT__:
+	return ret;
+}
+
+// Cubeテクスチャの面として追加する.
+IZ_BOOL CIMGTexture::AddImageAsCubeFace(
+	izanagi::E_GRAPH_CUBE_TEX_FACE face,
+	std::vector<CIMGImage*>& images)
+{
+	VRETURN(m_Images.size() == izanagi::E_GRAPH_CUBE_TEX_FACE_NUM);
+	VRETURN(images.size() > 0);
+	
+	if (m_Images[0].size() > 0) {
+		// キューブマップの全ての面は同じ幅・高さである必要がある
+
+		const CIMGImage* img = images[0];
+
+		IZ_UINT width = GetWidth();
+		IZ_UINT height = GetHeight();
+		IZ_ASSERT(width > 0 && height > 0);
+
+		VRETURN(img->GetWidth() == width && img->GetHeight() == height);
+	}
+
+	// 一番上のレベルのみ登録
+	m_Images[face].push_back(images[0]);
+
+	// テクスチャ情報を設定
+	// XP面を基準とする
+	if (face == izanagi::E_GRAPH_CUBE_TEX_FACE_X_P
+		&& m_Images[izanagi::E_GRAPH_CUBE_TEX_FACE_X_P].size() > 0)
+	{
+		const CIMGImage* img = m_Images[izanagi::E_GRAPH_CUBE_TEX_FACE_X_P][0];
+
+		SetTexInfo(
+			izanagi::E_GRAPH_TEX_TYPE_CUBE,
+			img->GetWidth(),
+			img->GetHeight(),
+			img->GetFmt(),
+			1,
+			0);
+	}
+
+	return IZ_TRUE;
+}
+
+// 読み込み
 IZ_BOOL CIMGTexture::Read(IInputStream* pIn)
 {
 	IZ_ASSERT(pIn != IZ_NULL);
@@ -422,41 +496,5 @@ __EXIT__:
 	if (!ret) {
 		Clear();
 	}
-	return ret;
-}
-
-/**
-* 出力
-*/
-IZ_BOOL CIMGTexture::Write(IOutputStream* pOut)
-{
-	IZ_ASSERT(pOut != IZ_NULL);
-
-	m_TexInfo.size = GetExportSize();
-
-	// テクスチャヘッダ
-	IZ_BOOL ret = IZ_OUTPUT_WRITE(
-					pOut,
-					&m_TexInfo,
-					0,
-					sizeof(m_TexInfo));
-	VGOTO(ret, __EXIT__);
-
-	// イメージデータ
-	IZ_UINT nImageNum = GetImageNum();
-	IZ_UINT nLevelMax = GetTexInfo().level;
-
-	for (IZ_UINT i = 0; i < nImageNum; i++) {
-		std::vector<CIMGImage*>& tImageList = m_Images[i];
-
-		for (IZ_UINT nLevel = 0; nLevel < nLevelMax; nLevel++) {
-			CIMGImage* pImage = tImageList[nLevel];
-
-			ret = pImage->Write(pOut);
-			VGOTO(ret, __EXIT__);
-		}
-	}
-
-__EXIT__:
 	return ret;
 }
