@@ -29,7 +29,8 @@ public:
 		CGtype type = GetCgType(param);
 		return ((type == CG_SAMPLER1D)
 				|| (type == CG_SAMPLER2D)
-				|| (type == CG_SAMPLER3D));
+				|| (type == CG_SAMPLER3D)
+				|| (type == CG_SAMPLERCUBE));
 	}
 
 	static BOOL IsParameter(CGparameter param)
