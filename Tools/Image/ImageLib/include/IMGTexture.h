@@ -70,13 +70,20 @@ namespace tool {
 		// 最下位MIPMAP削除
 		IZ_BOOL DeleteLawestMipMap();
 
-	private:
-		// 読み込み
-		IZ_BOOL Read(IInputStream* pIn);
-
-	public:
-		// 出力
+		/** 出力.
+		 */
 		IZ_BOOL Write(IOutputStream* pOut);
+
+		/** Cubeテクスチャの面として追加する.
+		 */
+		IZ_BOOL AddImageAsCubeFace(
+			izanagi::E_GRAPH_CUBE_TEX_FACE face,
+			std::vector<CIMGImage*>& images);
+
+	private:
+		/** 読み込み.
+		 */
+		IZ_BOOL Read(IInputStream* pIn);
 
 	public:
 		// イメージ数取得
