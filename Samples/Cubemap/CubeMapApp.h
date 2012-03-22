@@ -28,7 +28,8 @@ protected:
 	virtual void RenderInternal(izanagi::CGraphicsDevice* device);
 
 private:
-	izanagi::CDebugMesh* m_Cube;
+	izanagi::sample::CSampleEnvBox* m_Cube;
+
 	izanagi::CImage* m_Img;
 	izanagi::CShaderBasic* m_Shader;
 

@@ -26,12 +26,9 @@ IZ_BOOL CCubeMapApp::InitInternal(
 
 	// Cube
 	{
-		m_Cube = izanagi::CDebugMeshBox::CreateDebugMeshBox(
+		m_Cube = izanagi::sample::CSampleEnvBox::CreateSampleEnvBox(
 			allocator,
-			device,
-			flag,
-			IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0xff),
-			1.0f, 1.0f, 1.0f);
+			device);
 		VGOTO(result = (m_Cube != IZ_NULL), __EXIT__);
 	}
 
@@ -143,11 +140,7 @@ void CCubeMapApp::RenderInternal(izanagi::CGraphicsDevice* device)
 
 			m_Shader->CommitChanges();
 
-			device->SetRenderState(
-				izanagi::E_GRAPH_RS_CULLMODE,
-				izanagi::E_GRAPH_CULL_CCW);
-
-			m_Cube->Draw();
+			m_Cube->Render(device);
 
 			m_Shader->EndPass();
 		}
