@@ -80,7 +80,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="md $(ProjectDir)..\..\$(InputName)\$(ConfigurationName)&#x0D;&#x0A;copy $(ProjectDir)$(InputName)\$(ConfigurationName)\$(InputName).lib $(ProjectDir)..\..\$(InputName)\$(ConfigurationName)\$(InputName).lib"
+				CommandLine="md $(ProjectDir)..\..\$(InputName)\$(ConfigurationName)&#x0D;&#x0A;copy $(ProjectDir)$(InputName)\$(ConfigurationName)\$(InputName).lib $(ProjectDir)..\..\$(InputName)\$(ConfigurationName)\$(InputName).lib&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -170,6 +170,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\SampleKit\SampleEnvBox.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\SampleKit\SampleMain.h"
 				>
 			</File>
@@ -187,6 +191,10 @@
 			</File>
 			<File
 				RelativePath="..\..\SampleKit\SampleCamera.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\SampleKit\SampleEnvBox.cpp"
 				>
 			</File>
 			<File
