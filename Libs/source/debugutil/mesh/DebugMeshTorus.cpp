@@ -203,25 +203,41 @@ void CDebugMeshTorus::ComputeVtx(
 
 	// 中心位置
 	SVector vCenter;
+#ifdef IZ_COORD_LEFT_HAND
+	vCenter.Set(
+		fCenterRadius * fCosLong,
+		0.0f,
+		fCenterRadius * fSinLong);
+#else
 	vCenter.Set(
 		fCenterRadius * fSinLong,
 		0.0f,
 		fCenterRadius * fCosLong);
+#endif
 
 	// 位置
 	SVector vPos;
-	vPos.Set(
-		fRingRadius * fCosLat,
-		fRingRadius * fSinLat,
-		0.0f);
-	vPos.Set(
-		vPos.x + fCenterRadius,
-		vPos.y,
-		vPos.z);
-	vPos.Set(
-		vPos.x * fSinLong,
-		vPos.y,
-		vPos.x * fCosLong);
+	{
+		vPos.Set(
+			fRingRadius * fCosLat,
+			fRingRadius * fSinLat,
+			0.0f);
+		vPos.Set(
+			vPos.x + fCenterRadius,
+			vPos.y,
+			vPos.z);
+#ifdef IZ_COORD_LEFT_HAND
+		vPos.Set(
+			vPos.x * fCosLong,
+			vPos.y,
+			vPos.x * fSinLong);
+#else
+		vPos.Set(
+			vPos.x * fSinLong,
+			vPos.y,
+			vPos.x * fCosLong);
+#endif
+	}
 
 	// 位置
 	if (IsPos(flag)) {

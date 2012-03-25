@@ -226,9 +226,15 @@ IZ_BOOL CDebugMesh::CopyDataToBuffer(IZ_UINT flag)
 	VGOTO(ret = LockIB((void**)&pIdxData), __EXIT__);
 	{
 		for (IZ_UINT i = 0; i < m_nPrimCnt; ++i) {
+#ifdef IZ_COORD_LEFT_HAND
+			*pIdxData++ = m_pFace[i].idx[0];
+			*pIdxData++ = m_pFace[i].idx[2];
+			*pIdxData++ = m_pFace[i].idx[1];
+#else
 			*pIdxData++ = m_pFace[i].idx[0];
 			*pIdxData++ = m_pFace[i].idx[1];
 			*pIdxData++ = m_pFace[i].idx[2];
+#endif
 
 			// 面ごとの計算
 			ComputeFace(&m_pFace[i], flag);
@@ -374,9 +380,15 @@ void CDebugMesh::ComputeFace(
 	IZ_UINT flag)
 {
 	if (IsTangent(flag)) {
+#ifdef IZ_COORD_LEFT_HAND
+		SMeshVtx* vtx0 = GetVtx(pFace->idx[0]);
+		SMeshVtx* vtx1 = GetVtx(pFace->idx[2]);
+		SMeshVtx* vtx2 = GetVtx(pFace->idx[1]);
+#else
 		SMeshVtx* vtx0 = GetVtx(pFace->idx[0]);
 		SMeshVtx* vtx1 = GetVtx(pFace->idx[1]);
 		SMeshVtx* vtx2 = GetVtx(pFace->idx[2]);
+#endif
 
 		// Tangent
 		ComputeTangent(vtx0, *vtx1, *vtx2);
@@ -432,6 +444,13 @@ void CDebugMesh::ComputeTangent(
 		vT.z = fInvDeterminant * (t2 * vP.z - t1 * vQ.z);
 		SVector::Normalize(vT, vT);
 #else
+#ifdef IZ_COORD_LEFT_HAND
+		// X = Y x Z
+		izanagi::SVector::Cross(vT, vB, vtx0->nml);
+
+		// Y = Z x X
+		izanagi::SVector::Cross(vB, vtx0->nml, vT);
+#else
 		// NOTE
 		// ここでは、Tangent空間を左手座標にしたい
 		// 左手座標にするために、あえて反対に計算する
@@ -441,6 +460,7 @@ void CDebugMesh::ComputeTangent(
 
 		// Y = Z x X
 		izanagi::SVector::Cross(vB, vT, vtx0->nml);
+#endif
 #endif
 	}
 

@@ -89,7 +89,13 @@ namespace izanagi {
 		E_GRAPH_CULL_CCW,
 
 		E_GRAPH_CULL_NUM,
-		E_GRAPH_CULL_FORCE_INT32,
+
+		// NOTE
+		// izanagiでは左手座標系なので
+		// カリングの標準はCounterClockWiseにする
+		E_GRAPH_CULL_DEFAULT = E_GRAPH_CULL_CCW,
+
+		E_GRAPH_CULL_FORCE_INT32 = 0x7fffffff,
 	};
 
 	/**

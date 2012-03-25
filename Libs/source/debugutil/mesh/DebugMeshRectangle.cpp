@@ -108,12 +108,17 @@ IZ_BOOL CDebugMeshRectangle::SetVtx(
 	IZ_FLOAT fDivY = 1.0f / nDivideY;
 
 	IZ_FLOAT fWidthPerVtx = fWidth * fDivX;
-	IZ_FLOAT fHeightPerVtx = fHeight * fDivY;
 
 	IZ_FLOAT fTexUPerVtx = 1.0f * fDivX;
 	IZ_FLOAT fTexVPerVtx = 1.0f * fDivY;
 
+#ifdef IZ_COORD_LEFT_HAND
+	IZ_FLOAT fZ = 0.5f * fHeight;
+	IZ_FLOAT fHeightPerVtx = -fHeight * fDivY;
+#else
 	IZ_FLOAT fZ = -0.5f * fHeight;
+	IZ_FLOAT fHeightPerVtx = fHeight * fDivY;
+#endif
 
 	for (IZ_UINT y = 0; y <= nDivideY; ++y) {
 		IZ_FLOAT fX = -0.5f * fWidth;

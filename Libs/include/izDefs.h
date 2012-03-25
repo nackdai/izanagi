@@ -378,4 +378,6 @@ namespace izanagi {
 	};
 }
 
+#define IZ_COORD_LEFT_HAND
+
 #endif	// #if !defined(__IZANAGI_DEFS_H__)

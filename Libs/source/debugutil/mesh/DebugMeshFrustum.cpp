@@ -74,30 +74,30 @@ IZ_BOOL CDebugMeshFrustum::SetVtx(
 	IZ_FLOAT fH = fHeight * 0.5f;
 
 	const IZ_FLOAT FrustumPos[][3][3] = {
-#if 0
+#ifdef IZ_COORD_LEFT_HAND
 		{
 			// Left
 			{0.0f, 0.0f, 0.0f},
-			{fW, -fH, fFar},
 			{fW,  fH, fFar},
+			{fW, -fH, fFar},
 		},
 		{
 			// Top
 			{0.0f, 0.0f, 0.0f},
-			{ fW, fH, fFar},
 			{-fW, fH, fFar},
+			{ fW, fH, fFar},
 		},
 		{
 			// Right
 			{0.0f, 0.0f, 0.0f},
-			{-fW,  fH, fFar},
 			{-fW, -fH, fFar},
+			{-fW,  fH, fFar},
 		},
 		{
 			// Bottom
 			{0.0f, 0.0f, 0.0f},
-			{-fW, -fH, fFar},
 			{ fW, -fH, fFar},
+			{-fW, -fH, fFar},
 		},
 		{
 			// Far_0
@@ -163,6 +163,7 @@ IZ_BOOL CDebugMeshFrustum::SetVtx(
 				FrustumPos[i][n][0],
 				FrustumPos[i][n][1],
 				FrustumPos[i][n][2]);
+
 			sVtx.clr = nColor;
 
 			pData = SetVtxData(

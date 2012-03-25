@@ -643,7 +643,7 @@ IZ_BOOL CGraphicsDevice::Begin2D()
 		SetRenderState(E_GRAPH_RS_ALPHABLENDENABLE, IZ_TRUE);
 		SetRenderState(E_GRAPH_RS_BLENDMETHOD, E_GRAPH_ALPHA_BLEND_NORMAL);
 		SetRenderState(E_GRAPH_RS_FILLMODE, E_GRAPH_FILL_MODE_SOLID);
-		SetRenderState(E_GRAPH_RS_CULLMODE, E_GRAPH_CULL_CW);
+		SetRenderState(E_GRAPH_RS_CULLMODE, E_GRAPH_CULL_DEFAULT);
 
 		SetVertexShader(IZ_NULL);
 		SetPixelShader(IZ_NULL);
@@ -1200,9 +1200,7 @@ void CGraphicsDevice::SetDefaultRenderState()
 
 	SetRenderState(E_GRAPH_RS_FILLMODE, E_GRAPH_FILL_MODE_SOLID);
 
-	// NOTE
-	// izanagiでは右手座標系なので、カリングの標準はClockWiseにする
-	SetRenderState(E_GRAPH_RS_CULLMODE, E_GRAPH_CULL_CW);
+	SetRenderState(E_GRAPH_RS_CULLMODE, E_GRAPH_CULL_DEFAULT);
 
 	// うーん・・・
 	for (IZ_UINT i = 0; i < TEX_STAGE_NUM; ++i) {
