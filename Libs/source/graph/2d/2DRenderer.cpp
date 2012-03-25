@@ -746,11 +746,19 @@ void C2DRenderer::SetVtx(
 		v[0].x = fLeft;
 		v[0].y = fTop;
 
+#ifdef IZ_COORD_LEFT_HAND
+		v[1].x = fRight;
+		v[1].y = fTop;
+
+		v[2].x = fLeft;
+		v[2].y = fBottom;
+#else
 		v[1].x = fLeft;
 		v[1].y = fBottom;
 
 		v[2].x = fRight;
 		v[2].y = fTop;
+#endif
 
 		v[3].x = fRight;
 		v[3].y = fBottom;
@@ -762,11 +770,19 @@ void C2DRenderer::SetVtx(
 	v[0].u = rcSrc.left;
 	v[0].v = rcSrc.top;
 
+#ifdef IZ_COORD_LEFT_HAND
+	v[1].u = rcSrc.right;
+	v[1].v = rcSrc.top;
+
+	v[2].u = rcSrc.left;
+	v[2].v = rcSrc.bottom;
+#else
 	v[1].u = rcSrc.left;
 	v[1].v = rcSrc.bottom;
 
 	v[2].u = rcSrc.right;
 	v[2].v = rcSrc.top;
+#endif
 
 	v[3].u = rcSrc.right;
 	v[3].v = rcSrc.bottom;

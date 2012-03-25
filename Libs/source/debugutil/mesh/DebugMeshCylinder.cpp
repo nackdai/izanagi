@@ -247,18 +247,32 @@ void CDebugMeshCylinder::ComputeVtx(
 
 	// 位置
 	if (IsPos(flag)) {
+#ifdef IZ_COORD_LEFT_HAND
+		pVtx->pos.v[0] = fRadius * fCosLong;
+		pVtx->pos.v[1] = fY;
+		pVtx->pos.v[2] = fRadius * fSinLong;
+		pVtx->pos.v[3] = 1.0f;
+#else
 		pVtx->pos.v[0] = fRadius * fSinLong;
 		pVtx->pos.v[1] = fY;
 		pVtx->pos.v[2] = fRadius * fCosLong;
 		pVtx->pos.v[3] = 1.0f;
+#endif
 	}
 
 	// 法線
 	if (IsNormal(flag)) {
+#ifdef IZ_COORD_LEFT_HAND
+		pVtx->nml.v[0] = fCosLong;
+		pVtx->nml.v[1] = 0.0f;
+		pVtx->nml.v[2] = fSinLong;
+		pVtx->nml.v[3] = 0.0f;
+#else
 		pVtx->nml.v[0] = fSinLong;
 		pVtx->nml.v[1] = 0.0f;
 		pVtx->nml.v[2] = fCosLong;
 		pVtx->nml.v[3] = 0.0f;
+#endif
 	}
 
 	// 頂点カラー

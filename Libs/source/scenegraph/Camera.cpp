@@ -7,8 +7,6 @@ using namespace izanagi;
 // DirectX の座標系は左手系
 // OpenGL の座標系は右手系
 
-//#define VIEW_LH
-
 // 初期化
 void CCamera::Init(
 	const SVector& vecPos,
@@ -73,7 +71,7 @@ void CCamera::ComputeW2V()
 
 	// Z
 	// 視点から注視点へのベクトル
-#ifdef VIEW_LH
+#ifdef IZ_COORD_LEFT_HAND
 	SVector::SubXYZ(vecZ, m_Param.ref, m_Param.pos);	// 左手
 #else	// #ifdef VIEW_LH
 	SVector::SubXYZ(vecZ, m_Param.pos, m_Param.ref);	// 右手
@@ -126,7 +124,7 @@ void CCamera::ComputeV2C()
 	m_Param.mtxV2C.m[0][0] = fW;
 	m_Param.mtxV2C.m[1][1] = fH;
 
-#ifdef VIEW_LH
+#ifdef IZ_COORD_LEFT_HAND
 	// 左手
 	m_Param.mtxV2C.m[2][2] = -fQ;
 	m_Param.mtxV2C.m[3][2] = fQ * m_Param.cameraNear;

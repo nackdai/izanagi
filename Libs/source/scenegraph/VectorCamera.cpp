@@ -15,6 +15,7 @@ CVectorCamera::~CVectorCamera()
 // 初期化
 void CVectorCamera::Init(
 	const SVector& pos,
+	const SVector& at,
 	IZ_FLOAT fNear, IZ_FLOAT fFar,
 	IZ_FLOAT fov,
 	IZ_FLOAT aspect)
@@ -28,9 +29,18 @@ void CVectorCamera::Init(
 	m_IsDirtyW2V = IZ_TRUE;
 	m_IsDirtyV2C = IZ_TRUE;
 
-	m_X.Set(1.0f, 0.0f, 0.0f, 0.0f);
 	m_Y.Set(0.0f, 1.0f, 0.0f, 0.0f);
-	m_Z.Set(0.0f, 0.0f, 1.0f, 0.0f);
+
+	m_Z.Set(0.0f, 0.0f, at.z - pos.z, 0.0f);
+	if (m_Z.z < 0.0f) {
+		m_Z.z = -1.0f;
+	}
+	else {
+		m_Z.z = 1.0f;
+	}
+
+	SVector::Cross(m_X, m_Y, m_Z);
+
 	m_Pos.Set(pos.x, pos.y, pos.z);
 
 	izanagi::SMatrix::SetUnit(m_Transform);
@@ -54,8 +64,13 @@ void CVectorCamera::Update()
 		m_Param.mtxW2V.m[3][3] = 1.0f;
 
 		// 一応、注視点を更新
+#ifdef IZ_COORD_LEFT_HAND
+		// 右手系なので、マイナスする
+		izanagi::SVector::SubXYZ(m_Param.ref, m_Z, m_Pos);
+#else
 		// 右手系なので、マイナスする
 		izanagi::SVector::SubXYZ(m_Param.ref, m_Pos, m_Z);
+#endif
 
 		{
 			SVector::Copy(m_Transform.v[0], m_X);

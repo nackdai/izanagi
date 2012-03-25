@@ -228,9 +228,15 @@ void CDebugMeshSphere::ComputeVtx(
 	IZ_FLOAT fCosLong = CMath::CosF(fLongitude);
 
 	SVector vNml;
+#ifdef IZ_COORD_LEFT_HAND
+	vNml.x = fSinLat * fCosLong;
+	vNml.y = fCosLat;
+	vNml.z = fSinLat * fSinLong;
+#else
 	vNml.x = fSinLat * fSinLong;
 	vNml.y = fCosLat;
 	vNml.z = fSinLat * fCosLong;
+#endif
 	vNml.w = 1.0f;
 
 	// 位置

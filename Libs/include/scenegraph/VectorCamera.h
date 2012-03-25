@@ -20,6 +20,7 @@ namespace izanagi {
 		 */
 		void Init(
 			const SVector& pos,
+			const SVector& at,
 			IZ_FLOAT fNear, IZ_FLOAT fFar,
 			IZ_FLOAT fov,
 			IZ_FLOAT aspect);
