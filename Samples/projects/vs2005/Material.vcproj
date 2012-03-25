@@ -194,18 +194,34 @@
 			Name="shader"
 			>
 			<File
-				RelativePath="..\..\Model\shader\SkinShader.fx"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Model\shader\SkinShader.xml"
+				RelativePath="..\..\Material\shader\SkinShader.fx"
 				>
 				<FileConfiguration
 					Name="Debug_DX9|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src &quot;$(InputPath)&quot; -obj &quot;$(ProjectDir)..\..\$(ProjectName)\shader_obj&quot; -o &quot;$(ProjectDir)..\..\$(ProjectName)\data&quot;&#x0D;&#x0A;"
+						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src &quot;$(InputPath)&quot; -obj &quot;$(ProjectDir)..\..\$(ProjectName)\shader_obj&quot; -o &quot;$(ProjectDir)..\..\$(ProjectName)\data&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release_DX9|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src &quot;$(InputPath)&quot; -obj &quot;$(ProjectDir)..\..\$(ProjectName)\shader_obj&quot; -o &quot;$(ProjectDir)..\..\$(ProjectName)\data&quot;"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\Material\shader\SkinShader.xml"
+				>
+				<FileConfiguration
+					Name="Debug_DX9|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src &quot;$(InputPath)&quot; -obj &quot;$(ProjectDir)..\..\$(ProjectName)\shader_obj&quot; -o &quot;$(ProjectDir)..\..\$(ProjectName)\data&quot;"
 						AdditionalDependencies="$(InputDir)$(InputName).fx"
 						Outputs="$(InputDir)..\data\$(InputName).shd"
 					/>
@@ -215,7 +231,7 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src &quot;$(InputPath)&quot; -obj &quot;$(ProjectDir)..\..\$(ProjectName)\shader_obj&quot; -o &quot;$(ProjectDir)..\..\$(ProjectName)\data&quot;&#x0D;&#x0A;"
+						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src &quot;$(InputPath)&quot; -obj &quot;$(ProjectDir)..\..\$(ProjectName)\shader_obj&quot; -o &quot;$(ProjectDir)..\..\$(ProjectName)\data&quot;"
 						AdditionalDependencies="$(InputDir)$(InputName).fx"
 						Outputs="$(InputDir)..\data\$(InputName).shd"
 					/>

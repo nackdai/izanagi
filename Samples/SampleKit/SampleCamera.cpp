@@ -13,6 +13,7 @@ void CSampleCamera::Init(
 {
 	m_Camera.Init(
 		vPos,
+		vRef,
 		fNear, fFar,
 		fFov,
 		fAspect);

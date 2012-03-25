@@ -1,4 +1,4 @@
-// Phong Shader
+// Skin Shader
 
 struct SVSInput {
 	float4 vPos		: POSITION;

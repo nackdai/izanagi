@@ -43,15 +43,15 @@ SVSOutput mainVS(SVSInput In)
 	// ビュー座標系の法線を計算
 	vNormal = mul(vNormal, (float3x3)g_mW2V);
 
-	// ビュー座標系で考えるので、視点へのベクトルは常に(0, 0, 1)
-	float3 eye = float3(0.0f, 0.0f, 1.0f);
+	// ビュー座標系で考えるので、視点へのベクトルは常に(0, 0, -1) (左手座標）
+	float3 eye = float3(0.0f, 0.0f, -1.0f);
 
 	// 反射ベクトルを計算
 	float3 vRef = 2.0f * dot(vNormal, eye) * vNormal - eye;
 
 	// 法線は視線ベクトルと反射ベクトルを加算したものと一致する
 	// -> 結局法線ままとなる
-	vNormal = vRef + float3(0.0f, 0.0f, 1.0f);
+	vNormal = vRef + eye;
 	
 	Out.vNormal = normalize(vNormal);
 #else
