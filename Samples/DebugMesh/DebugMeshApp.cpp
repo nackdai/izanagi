@@ -41,7 +41,9 @@ IZ_BOOL CDebugMeshApp::InitInternal(
 
 	IZ_UINT flag = izanagi::E_DEBUG_MESH_VTX_FORM_POS
 					| izanagi::E_DEBUG_MESH_VTX_FORM_COLOR
-					| izanagi::E_DEBUG_MESH_VTX_FORM_UV;
+					| izanagi::E_DEBUG_MESH_VTX_FORM_UV
+					| izanagi::E_DEBUG_MESH_VTX_FORM_NORMAL
+					| izanagi::E_DEBUG_MESH_VTX_FORM_TANGENT;
 
 	// Sphere
 	{
@@ -186,6 +188,8 @@ namespace {
 // 描画.
 void CDebugMeshApp::RenderInternal(izanagi::CGraphicsDevice* device)
 {
+	static const IZ_BOOL isDrawTangentSpaceAxis = IZ_TRUE;
+
 	izanagi::sample::CSampleCamera& camera = GetCamera();
 
 	izanagi::SMatrix mtxL2W;
@@ -242,7 +246,7 @@ void CDebugMeshApp::RenderInternal(izanagi::CGraphicsDevice* device)
 
 				m_Shader->CommitChanges();
 
-				m_Mesh[MESH_TYPE_SPHERE]->Draw();
+				m_Mesh[MESH_TYPE_SPHERE]->Draw(isDrawTangentSpaceAxis);
 			}
 
 			// Cube
@@ -259,7 +263,7 @@ void CDebugMeshApp::RenderInternal(izanagi::CGraphicsDevice* device)
 
 				m_Shader->CommitChanges();
 
-				m_Mesh[MESH_TYPE_CUBE]->Draw();
+				m_Mesh[MESH_TYPE_CUBE]->Draw(isDrawTangentSpaceAxis);
 			}
 
 			// Cylinder
@@ -276,7 +280,7 @@ void CDebugMeshApp::RenderInternal(izanagi::CGraphicsDevice* device)
 
 				m_Shader->CommitChanges();
 
-				m_Mesh[MESH_TYPE_CYLINDER]->Draw();
+				m_Mesh[MESH_TYPE_CYLINDER]->Draw(isDrawTangentSpaceAxis);
 			}
 
 
@@ -294,7 +298,7 @@ void CDebugMeshApp::RenderInternal(izanagi::CGraphicsDevice* device)
 
 				m_Shader->CommitChanges();
 
-				m_Mesh[MESH_TYPE_TORUS]->Draw();
+				m_Mesh[MESH_TYPE_TORUS]->Draw(isDrawTangentSpaceAxis);
 			}
 
 			// Plane
@@ -311,7 +315,7 @@ void CDebugMeshApp::RenderInternal(izanagi::CGraphicsDevice* device)
 
 				m_Shader->CommitChanges();
 
-				m_Mesh[MESH_TYPE_PLANE]->Draw();
+				m_Mesh[MESH_TYPE_PLANE]->Draw(isDrawTangentSpaceAxis);
 			}
 
 			m_Shader->EndPass();
