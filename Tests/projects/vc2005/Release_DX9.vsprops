@@ -16,7 +16,7 @@
 	/>
 	<Tool
 		Name="VCLinkerTool"
-		AdditionalDependencies="d3d9.lib d3dx9.lib dxguid.lib dinput8.lib dxerr.lib winmm.lib Std.lib Graph.lib Io.lib Math.lib DebugUtil.lib System.lib SceneGraph.lib"
+		AdditionalDependencies="d3d9.lib d3dx9.lib dxguid.lib dinput8.lib dxerr.lib winmm.lib Std.lib Graph.lib Io.lib Math.lib DebugUtil.lib System.lib SceneGraph.lib $(SolutionDir)..\..\..\Samples\SampleKit\$(ConfigurationName)\SampleKit.lib"
 		OutputFile="$(ProjectDir)..\..\$(ProjectName)\$(ProjectName).exe"
 		LinkIncremental="1"
 		AdditionalLibraryDirectories="&quot;..\..\..\Libs\project\lib\$(ConfigurationName)&quot;"
