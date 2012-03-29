@@ -27,13 +27,13 @@ namespace izanagi {
 
 		virtual void OnKeyUp(IZ_UINT nChar) {}
 
-		virtual void OnMouseLBtnDown() {}
+		virtual void OnMouseLBtnDown(const CIntPoint& point) {}
 
-		virtual void OnMouseLBtnUp() {}
+		virtual void OnMouseLBtnUp(const CIntPoint& point) {}
 
-		virtual void OnMouseRBtnDown() {}
+		virtual void OnMouseRBtnDown(const CIntPoint& point) {}
 
-		virtual void OnMouseRBtnUp() {}
+		virtual void OnMouseRBtnUp(const CIntPoint& point) {}
 
 		virtual void OnMouseMove(const CIntPoint& point) {}
 
