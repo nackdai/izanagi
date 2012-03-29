@@ -22,10 +22,10 @@ namespace sample {
 	public:
 		virtual void OnKeyDown(IZ_UINT nChar);
 
-		virtual void OnMouseLBtnDown();
-		virtual void OnMouseLBtnUp();
-		virtual void OnMouseRBtnDown();
-		virtual void OnMouseRBtnUp();
+		virtual void OnMouseLBtnDown(const izanagi::CIntPoint& point);
+		virtual void OnMouseLBtnUp(const izanagi::CIntPoint& point);
+		virtual void OnMouseRBtnDown(const izanagi::CIntPoint& point);
+		virtual void OnMouseRBtnUp(const izanagi::CIntPoint& point);
 		virtual void OnMouseMove(const izanagi::CIntPoint& point);
 		virtual void OnMouseWheel(IZ_INT delta);
 

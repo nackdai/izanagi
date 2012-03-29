@@ -90,6 +90,10 @@ namespace sample {
 		 */
 		virtual IZ_BOOL OnKeyDown(IZ_UINT nChar) { return IZ_TRUE; }
 
+		/** マウス左ボタン押下
+		 */
+		virtual IZ_BOOL OnMouseLBtnDown(const CIntPoint& point) { return IZ_TRUE; }
+
 	protected:
 		/** 背景色取得.
 		 */

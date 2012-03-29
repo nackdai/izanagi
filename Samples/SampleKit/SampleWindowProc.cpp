@@ -26,22 +26,26 @@ void CSampleWndProc::OnKeyDown(IZ_UINT nChar)
 	m_App->OnKeyDown(nChar);
 }
 
-void CSampleWndProc::OnMouseLBtnDown()
+void CSampleWndProc::OnMouseLBtnDown(const izanagi::CIntPoint& point)
 {
 	m_Flags.onLBtn = IZ_TRUE;
+	m_PrevPoint = point;
+
+	m_App->OnMouseLBtnDown(point);
 }
 
-void CSampleWndProc::OnMouseLBtnUp()
+void CSampleWndProc::OnMouseLBtnUp(const izanagi::CIntPoint& point)
 {
 	m_Flags.onLBtn = IZ_FALSE;
 }
 
-void CSampleWndProc::OnMouseRBtnDown()
+void CSampleWndProc::OnMouseRBtnDown(const izanagi::CIntPoint& point)
 {
 	m_Flags.onRBtn = IZ_TRUE;
+	m_PrevPoint = point;
 }
 
-void CSampleWndProc::OnMouseRBtnUp()
+void CSampleWndProc::OnMouseRBtnUp(const izanagi::CIntPoint& point)
 {
 	m_Flags.onRBtn = IZ_FALSE;
 }
