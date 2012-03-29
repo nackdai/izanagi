@@ -134,28 +134,40 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	case WM_LBUTTONDOWN:
 		if (msgHandler) {
 			::SetCapture(hWnd);
-			msgHandler->OnMouseLBtnDown();
+			CIntPoint point(
+				static_cast<short>(LOWORD(lParam)),
+				static_cast<short>(HIWORD(lParam)));
+			msgHandler->OnMouseLBtnDown(point);
 		}
 		break;
 
 	case WM_LBUTTONUP:
 		if (msgHandler) {
 			::ReleaseCapture();
-			msgHandler->OnMouseLBtnUp();
+			CIntPoint point(
+				static_cast<short>(LOWORD(lParam)),
+				static_cast<short>(HIWORD(lParam)));
+			msgHandler->OnMouseLBtnUp(point);
 		}
 		break;
 
 	case WM_RBUTTONDOWN:
 		if (msgHandler) {
 			::SetCapture(hWnd);
-			msgHandler->OnMouseRBtnDown();
+			CIntPoint point(
+				static_cast<short>(LOWORD(lParam)),
+				static_cast<short>(HIWORD(lParam)));
+			msgHandler->OnMouseRBtnDown(point);
 		}
 		break;
 
 	case WM_RBUTTONUP:
 		if (msgHandler) {
 			::ReleaseCapture();
-			msgHandler->OnMouseRBtnUp();
+			CIntPoint point(
+				static_cast<short>(LOWORD(lParam)),
+				static_cast<short>(HIWORD(lParam)));
+			msgHandler->OnMouseRBtnUp(point);
 		}
 		break;
 

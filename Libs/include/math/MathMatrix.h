@@ -213,6 +213,11 @@ namespace izanagi {
 		// 任意軸を回転軸にして回転するマトリクスを取得
 		static void GetRot(
 			SMatrix& dst, IZ_FLOAT fTheta,
+			const SVector& axis);
+
+		// 任意軸を回転軸にして回転するマトリクスを取得
+		static void GetRot(
+			SMatrix& dst, IZ_FLOAT fTheta,
 			IZ_FLOAT x, IZ_FLOAT y, IZ_FLOAT z);
 
 		// X軸に対する回転を行なう

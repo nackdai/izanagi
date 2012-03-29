@@ -73,6 +73,14 @@ namespace izanagi {
 	// 任意軸を回転軸にして回転するマトリクスを取得
 	void SMatrix::GetRot(
 		SMatrix& dst, IZ_FLOAT fTheta,
+		const SVector& axis)
+	{
+		GetRot(dst, fTheta, axis.x, axis.y, axis.z);
+	}
+
+	// 任意軸を回転軸にして回転するマトリクスを取得
+	void SMatrix::GetRot(
+		SMatrix& dst, IZ_FLOAT fTheta,
 		IZ_FLOAT x, IZ_FLOAT y, IZ_FLOAT z)
 	{
 #if defined(__USE_D3D_MATH__)
