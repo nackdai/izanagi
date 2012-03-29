@@ -8,7 +8,7 @@
 	>
 	<Tool
 		Name="VCCLCompilerTool"
-		AdditionalIncludeDirectories="..\..\..\Libs\include;..\..\system"
+		AdditionalIncludeDirectories="..\..\..\Libs\include;..\..\system;..\..\..\Samples\SampleKit"
 		PreprocessorDefinitions="__IZ_DEBUG__"
 		MinimalRebuild="true"
 		BasicRuntimeChecks="3"
