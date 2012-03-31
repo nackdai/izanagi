@@ -210,7 +210,7 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\FontConverter.exe -i &quot;$(InputPath)&quot; -o &quot;$(TargetDir)data/$(InputName).fnt&quot; -aa 4 -c utf8"
+						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\FontConverter.exe -i &quot;$(InputPath)&quot; -o &quot;$(TargetDir)data/$(InputName).fnt&quot; -aa 4 -c sjis"
 						AdditionalDependencies="$(InputDir)$(InputName).txt"
 						Outputs="$(TargetDir)data/$(InputName).fnt"
 					/>
@@ -228,7 +228,7 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\FontConverter.exe -i &quot;$(InputPath)&quot; -o &quot;$(TargetDir)data/$(InputName).fnt&quot; -aa 4 -c utf8"
+						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\FontConverter.exe -i &quot;$(InputPath)&quot; -o &quot;$(TargetDir)data/$(InputName).fnt&quot; -aa 4 -c utf8&#x0D;&#x0A;"
 						AdditionalDependencies="$(InputDir)$(InputName).txt"
 						Outputs="$(TargetDir)data/$(InputName).fnt"
 					/>
@@ -238,7 +238,7 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\FontConverter.exe -i &quot;$(InputPath)&quot; -o &quot;$(TargetDir)data/$(InputName).fnt&quot; -aa 4 -c utf8"
+						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\FontConverter.exe -i &quot;$(InputPath)&quot; -o &quot;$(TargetDir)data/$(InputName).fnt&quot; -aa 4 -c utf8&#x0D;&#x0A;"
 						AdditionalDependencies="$(InputDir)$(InputName).txt"
 						Outputs="$(TargetDir)data/$(InputName).fnt"
 					/>
