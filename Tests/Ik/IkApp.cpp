@@ -40,6 +40,7 @@ izanagi::SVector s_Target;
 IZ_UINT s_RecursiveNum = 1;
 
 IZ_FLOAT angle = 90.0f;
+IZ_BOOL enableLimitAngle = IZ_FALSE;
 
 void UpdateJointMatrix();
 
@@ -100,6 +101,23 @@ void UpdateJointMatrix()
 				joints[i].mtx,
 				mtxParent);
 		}
+	}
+}
+
+/** 制限角度のチェック
+ */
+void CheckLimitAngle(Joint* joint)
+{
+	if (enableLimitAngle) {
+		izanagi::SVector angle;
+		izanagi::SQuat::GetEuler(angle, joint->quat);
+
+		angle.z = izanagi::CMath::Clamp(
+			angle.z,
+			IZ_DEG2RAD(-90.0f),
+			IZ_DEG2RAD(90.0f));
+
+		izanagi::SQuat::QuatFromEuler(joint->quat, angle);
 	}
 }
 
@@ -167,6 +185,8 @@ void ApplyIK(
 
 				// 関節の回転を更新
 				izanagi::SQuat::Mul(joint->quat, joint->quat, quat);
+
+				CheckLimitAngle(joint);
 			}
 		}
 
@@ -267,6 +287,10 @@ void CIkApp::RenderInternal(izanagi::CGraphicsDevice* device)
 			s_RecursiveNum,
 			(IZ_UINT)s_Target.x, (IZ_UINT)s_Target.y,
 			angle);
+		GetDebugFont()->DBPrint(
+			0, 340,
+			"LimitAngle[%s]",
+			enableLimitAngle ? "ON" : "OFF");
 		GetDebugFont()->End();
 
 		device->End2D();
@@ -308,5 +332,9 @@ IZ_BOOL CIkApp::OnKeyDown(IZ_UINT nChar)
 		s_Target.x = 640.0f - x;
 		s_Target.y = y;
 	}
+	else if (nChar = 'B') {
+		enableLimitAngle = !enableLimitAngle;
+	}
+
 	return IZ_TRUE;
 }

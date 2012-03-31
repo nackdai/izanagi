@@ -11,23 +11,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 {
 	CIkApp app;
 
-	izanagi::CStandardMemoryAllocator allocator(BUF_SIZE, BUF);
-	izanagi::CStandardMemoryAllocator allocatorForGraph(GFX_BUF_SIZE, GFX_BUF);
-
-	izanagi::sample::SSampleParam sampleParam = {
-		&app,
-		&allocator,
-		&allocatorForGraph,
-		SCREEN_WIDTH,
-		SCREEN_HEIGHT,
-		IZ_TRUE,
-		"IK",
+	int ret = SampleMain(
 		hInstance,
-	};
-
-	IZ_BOOL result = SampleMainLoop(sampleParam);
-
-	int ret = (result ? 0 : 1);
+		&app,
+		"IK",
+		SCREEN_WIDTH, SCREEN_HEIGHT,
+		BUF, BUF_SIZE,
+		GFX_BUF, GFX_BUF_SIZE);
 
 	return ret;
 }
