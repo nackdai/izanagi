@@ -242,9 +242,8 @@ namespace izanagi {
 	// オイラー角からクオータニオンを計算する
 	void SQuat::QuatFromEuler(SQuat& quat, const SVector& angle)
 	{
-		SMatrix mtx;
-		SMatrix::GetRotByXYZ(mtx, angle);
-
-		QuatFromMatrix(quat, mtx);
+		QuatFromEuler(
+			quat,
+			angle.x, angle.y, angle.z);
 	}
 }	// namespace izanagi
