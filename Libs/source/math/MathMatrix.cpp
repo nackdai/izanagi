@@ -70,6 +70,14 @@ namespace izanagi {
 #endif	// #if defined(__USE_D3D_MATH__)
 	}
 
+	// XYZ軸を回転軸にしてX->Y->Zの順番で回転するマトリクスを取得
+	void SMatrix::GetRotByXYZ(SMatrix& dst, const SVector& angle)
+	{
+		GetRotByX(dst, angle.x);
+		RotByY(dst, dst, angle.y);
+		RotByZ(dst, dst, angle.z);
+	}
+
 	// 任意軸を回転軸にして回転するマトリクスを取得
 	void SMatrix::GetRot(
 		SMatrix& dst, IZ_FLOAT fTheta,
@@ -238,5 +246,68 @@ namespace izanagi {
 		SVector::Cross(vY, vZ, vX);
 
 		vX.w = vY.w = vZ.w = 0.0f;
+	}
+
+	// マトリクスからオイラー角を取得する
+	void SMatrix::GetEulerFromMatrix(SVector& angle, const SMatrix& mtx)
+	{
+		// NOTE
+		// X軸、Y軸、Z軸回転の行列を掛け合わせると以下のようになる
+		//
+		// m[0][0] = CyCz;          m[0][1] = CySz;          m[0][2] = -Sy;  m[0][3] = 0.0f;
+		// m[1][0] = SxSyCz - CxSz; m[1][1] = SxSySz + CxCz  m[1][2] = SxCy; m[1][3] = 0.0f;
+		// m[2][0] = CxSyCz + SxSz; m[2][1] = CxSySz - SxCz; m[2][2] = CxCy; m[2][3] = 0.0f;
+		// m[3][0] = 0.0f;          m[3][1] = 0.0f;          m[3][2] = 0.0f; m[3][3] = 1.0f;
+		//
+		// Cx = X軸回転行列での cosθ
+		// Sx = X軸回転行列での sinθ
+		//  以下、Cy, Sy Cz, Sz も同様
+
+		IZ_FLOAT Sy = -mtx._02;
+		IZ_FLOAT Cy = ::sqrtf(1.0f - Sy * Sy);
+		angle.y = ::atan2f(Sy, Cy);
+
+		if (Cy != 0.0f) {
+			IZ_FLOAT Sx = mtx._12 / Cy;
+			IZ_FLOAT Cx = mtx._22 / Cy;
+			angle.x = ::atan2f(Sx, Cx);
+
+			IZ_FLOAT Sz = mtx._01 / Cy;
+			IZ_FLOAT Cz = mtx._00 / Cy;
+			angle.x = ::atan2f(Sz, Cz);
+		}
+		else {
+			// NOTE
+			// Yの回転角度が 90度 or 270度
+
+			// NOTE
+			// Sy = 1.0f として、行列を整理すると
+			//
+			// m[0][0] = 0.0f;        m[0][1] = 0.0f;        m[0][2] = -Sy;  m[0][3] = 0.0f;
+			// m[1][0] = SxCz - CxSz; m[1][1] = SxSz + CxCz  m[1][2] = 0.0f; m[1][3] = 0.0f;
+			// m[2][0] = CxCz + SxSz; m[2][1] = CxSz - SxCz; m[2][2] = 0.0f; m[2][3] = 0.0f;
+			// m[3][0] = 0.0f;        m[3][1] = 0.0f;        m[3][2] = 0.0f; m[3][3] = 1.0f;
+			//
+			// m[0][0] = 0.0f;       m[0][1] = 0.0f;        m[0][2] = -1.0f; m[0][3] = 0.0f;
+			// m[1][0] = sin(α-β); m[1][1] =  cos(α-β); m[1][2] =  0.0f; m[1][3] = 0.0f;
+			// m[2][0] = cos(α-β); m[2][1] = -sin(α-β); m[2][2] =  0.0f; m[2][3] = 0.0f;
+			// m[3][0] = 0.0f;       m[3][1] = 0.0f;        m[3][2] =  0.0f; m[3][3] = 1.0f;
+			//
+			// α = X軸回転時の角度
+			// β = Z軸回転時の角度
+			//
+			// 自由度がα-βのみに依存した行列となる
+			// つまり、ジンバルロックの状態となる
+
+			// そこで、Z軸の回転については回転無し（θ = 0) という制約を付けることで計算を解く
+
+			IZ_FLOAT Sz = 0.0f;
+			IZ_FLOAT Cz = 1.0f;
+			angle.z = ::atan2f(Sz, Cz);
+
+			IZ_FLOAT Cx = mtx._11;
+			IZ_FLOAT Sx = mtx._10;
+			angle.x = ::atan2f(Sx, Cx);
+		}
 	}
 }	// namespace izanagi

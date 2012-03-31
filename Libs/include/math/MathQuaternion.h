@@ -244,6 +244,12 @@ namespace izanagi {
 		// 二つのベクトルv0,v1が与えられたときに
 		// q  * v0 == v1 となるクオータニオンqを計算する
 		static void RotateionArc(SQuat& quat, const SVector& from, const SVector& to);
+
+		// クオータニオンからオイラー角を計算する
+		static void GetEuler(SVector& angle, const SQuat& quat);
+
+		// オイラー角からクオータニオンを計算する
+		static void QuatFromEuler(SQuat& quat, const SVector& angle);
 	};
 }	// namespace izanagi
 
