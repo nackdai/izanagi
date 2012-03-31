@@ -229,4 +229,22 @@ namespace izanagi {
 
 		quat.w = s * 0.5f;
 	}
+
+	// クオータニオンからオイラー角を計算する
+	void SQuat::GetEuler(SVector& angle, const SQuat& quat)
+	{
+		izanagi::SMatrix mtx;
+		MatrixFromQuat(mtx, quat);
+
+		SMatrix::GetEulerFromMatrix(angle, mtx);
+	}
+
+	// オイラー角からクオータニオンを計算する
+	void SQuat::QuatFromEuler(SQuat& quat, const SVector& angle)
+	{
+		SMatrix mtx;
+		SMatrix::GetRotByXYZ(mtx, angle);
+
+		QuatFromMatrix(quat, mtx);
+	}
 }	// namespace izanagi

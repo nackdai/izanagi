@@ -210,6 +210,9 @@ namespace izanagi {
 		// Z軸を回転軸にして回転するマトリクスを取得
 		static void GetRotByZ(SMatrix& dst, IZ_FLOAT fTheta);
 
+		// XYZ軸を回転軸にしてX->Y->Zの順番で回転するマトリクスを取得
+		static void GetRotByXYZ(SMatrix& dst, const SVector& angle);
+
 		// 任意軸を回転軸にして回転するマトリクスを取得
 		static void GetRot(
 			SMatrix& dst, IZ_FLOAT fTheta,
@@ -242,6 +245,15 @@ namespace izanagi {
 			SMatrix m;
 			GetRotByZ(m, fTheta);
 			Mul(dst, src, m);
+		}
+
+		// X->Y->Z軸の順の回転を行なう
+		static void RotByXYZ(SMatrix& dst, const SMatrix& src, const SVector& angle)
+		{
+			SMatrix m;
+			RotByX(m, src, angle.x);
+			RotByY(m, m, angle.y);
+			RotByZ(dst, m, angle.z);
 		}
 
 		// 任意軸に対する回転を行なう
@@ -343,6 +355,9 @@ namespace izanagi {
 		// ベクトルから回転マトリクスを求める
 		static void GetRotMatrixFromVector(SMatrix& mtx, const SVector& vec);
 		static void GetRotMatrixFromVector(SMatrix& mtx, const SVector& vec, const SVector& up);
+
+		// マトリクスからオイラー角を取得する
+		static void GetEulerFromMatrix(SVector& angle, const SMatrix& mtx);
 
 		// マトリクスの中身をダンプする
 		static void Dump(const SMatrix& mtx)
