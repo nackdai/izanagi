@@ -2,6 +2,23 @@
 #include "SampleWindowProc.h"
 #include "SampleApp.h"
 
+namespace izanagi {
+namespace sample {
+	/**
+	 */
+	struct SSampleParam {
+		izanagi::sample::CSampleApp* app;
+		izanagi::IMemoryAllocator* allocator;
+		izanagi::IMemoryAllocator* allocatorForGraph;
+		IZ_UINT width;
+		IZ_UINT height;
+		IZ_BOOL isWindowed;
+		IZ_PCSTR title;
+		void* platformParam;
+	};
+}
+}
+
 IZ_BOOL SampleMainLoop(izanagi::sample::SSampleParam& params)
 {
 	IZ_BOOL ret = IZ_TRUE;
@@ -59,6 +76,35 @@ __EXIT__:
 	izanagi::CSysWindow::Destroy(wndHandle);
 
 	params.allocator->Dump();
+
+	return ret;
+}
+
+IZ_INT SampleMain(
+	void* systemData,
+	izanagi::sample::CSampleApp* app,
+	const char* title,
+	IZ_UINT screenWidth, IZ_UINT screenHeight,
+	void* allocatorBuf, IZ_UINT bufSize,
+	void* graphBuf, IZ_UINT graphBufSize)
+{
+	izanagi::CStandardMemoryAllocator allocator(bufSize, allocatorBuf);
+	izanagi::CStandardMemoryAllocator allocatorForGraph(graphBufSize, graphBuf);
+
+	izanagi::sample::SSampleParam sampleParam = {
+		app,
+		&allocator,
+		&allocatorForGraph,
+		screenWidth,
+		screenHeight,
+		IZ_TRUE,
+		title,
+		systemData,
+	};
+
+	IZ_BOOL result = SampleMainLoop(sampleParam);
+
+	int ret = (result ? 0 : 1);
 
 	return ret;
 }
