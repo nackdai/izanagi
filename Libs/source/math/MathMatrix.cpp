@@ -274,7 +274,7 @@ namespace izanagi {
 
 			IZ_FLOAT Sz = mtx._01 / Cy;
 			IZ_FLOAT Cz = mtx._00 / Cy;
-			angle.x = ::atan2f(Sz, Cz);
+			angle.z = ::atan2f(Sz, Cz);
 		}
 		else {
 			// NOTE
