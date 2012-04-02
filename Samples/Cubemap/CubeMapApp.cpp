@@ -63,7 +63,7 @@ IZ_BOOL CCubeMapApp::InitInternal(
 		izanagi::CVector(0.0f, 1.0f,  0.0f, 1.0f),
 		1.0f,
 		500.0f,
-		izanagi::CMath::Deg2Rad(90.0f),
+		izanagi::CMath::Deg2Rad(60.0f),
 		(IZ_FLOAT)SCREEN_WIDTH / SCREEN_HEIGHT);
 	camera.Update();
 
