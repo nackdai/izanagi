@@ -1,5 +1,5 @@
-#if !defined(__IZANAGI_IMG_LIB_DLL_H__)
-#define __IZANAGI_IMG_LIB_DLL_H__
+#if !defined(__IZANAGI_IMG_LIB_DLL_IMAGE_GRAPHICS_DEVICE_H__)
+#define __IZANAGI_IMG_LIB_DLL_IMAGE_GRAPHICS_DEVICE_H__
 
 #include "izStd.h"
 #include "izToolKit.h"
@@ -7,14 +7,14 @@
 
 namespace izanagi {
 
+// グラフィックスデバイス初期化
 tool::CGraphicsDeviceLite* InitGraphicsDevice(void* hWnd);
-void ReleaseGraphicsDevice();
-tool::CGraphicsDeviceLite* GetGraphicsDevice();
 
-// 読み込み
-tool::CIMGTexture* Read(
-	const char* path,
-	izanagi::E_GRAPH_TEX_TYPE type);
+// グラフィックスデバイス解放
+void ReleaseGraphicsDevice();
+
+// グラフィックスデバイス取得
+tool::CGraphicsDeviceLite* GetGraphicsDevice();
 
 }	// namespace izanagi
 

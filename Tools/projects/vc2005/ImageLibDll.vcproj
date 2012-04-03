@@ -39,7 +39,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)../../Image/ImageLib&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)../../Image/ImageLib&quot;;&quot;$(SolutionDir)../../Image/ImageBuilder/AppCore&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -82,6 +82,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="md $(ProjectDir)..\..\Image\$(ProjectName)\$(ConfigurationName)&#x0D;&#x0A;copy $(ProjectDir)..\..\tools\$(ConfigurationName)\$(ProjectName).lib $(ProjectDir)..\..\Image\$(ProjectName)\$(ConfigurationName)\$(ProjectName).lib"
 			/>
 		</Configuration>
 		<Configuration
@@ -108,7 +109,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)../../Image/ImageLib&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)../../Image/ImageLib&quot;;&quot;$(SolutionDir)../../Image/ImageBuilder/AppCore&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -153,22 +154,39 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="md $(ProjectDir)..\..\Image\$(ProjectName)\$(ConfigurationName)&#x0D;&#x0A;copy $(ProjectDir)..\..\tools\$(ConfigurationName)\$(ProjectName).lib $(ProjectDir)..\..\Image\$(ProjectName)\$(ConfigurationName)\$(ProjectName).lib"
 			/>
 		</Configuration>
 	</Configurations>
 	<References>
 	</References>
 	<Files>
+		<Filter
+			Name="external"
+			>
+			<File
+				RelativePath="..\..\Image\ImageBuilder\AppCore\ImageReaderImpl.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Image\ImageBuilder\AppCore\ImageReaderImpl.h"
+				>
+			</File>
+		</Filter>
+		<File
+			RelativePath="..\..\Image\ImageLibDll\ImageGraphicsDevice.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Image\ImageLibDll\ImageGraphicsDevice.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Image\ImageLibDll\ImageLibDll.h"
+			>
+		</File>
 		<File
 			RelativePath="..\..\Image\ImageLibDll\ImageLibImpl.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Image\ImageLibDll\ImageReaderImpl.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Image\ImageLibDll\ImageReaderImpl.h"
 			>
 		</File>
 	</Files>
