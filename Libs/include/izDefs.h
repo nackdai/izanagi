@@ -295,6 +295,10 @@ inline void _OutputDebugString(izPcstr pszFormat, ...)
 	#define VRETURN_ZERO(b)	VRETURN_VAL(b, 0)
 #endif	// #ifndef VRETURN_ZERO
 
+#ifndef VRETURN_NONE
+	#define VRETURN_NONE(b)	VRETURN_VAL(b,)
+#endif
+
 #ifndef VGOTO
 	#define VGOTO(b, label)\
 		if (!(b)) {\
