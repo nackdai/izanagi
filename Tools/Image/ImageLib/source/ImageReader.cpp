@@ -9,16 +9,16 @@ CImageReader CImageReader::s_cInstance;
 /**
 * 読み込み
 */
-CIMGBody* CImageReader::Read(
+CIMGMaster* CImageReader::Read(
 	LPCSTR lpszPath,
 	E_GRAPH_TEX_TYPE nType/*= E_GRAPH_TEX_TYPE_PLANE*/)
 {
 	// とりあえず作る
-	CIMGBody* pIMGBody = new CIMGBody();
-	IZ_ASSERT(pIMGBody != IZ_NULL);
+	CIMGMaster* master = new CIMGMaster();
+	IZ_ASSERT(master != IZ_NULL);
 
 	// 読み込み
-	IZ_BOOL result = pIMGBody->Read(lpszPath);
+	IZ_BOOL result = master->Read(lpszPath);
 
 	if (!result) {
 		// もうひとつの可能性にかける
@@ -29,15 +29,15 @@ CIMGBody* CImageReader::Read(
 			IZ_ASSERT(result);
 
 			if (result) {
-				pIMGBody->Add(pTex);
+				master->Add(pTex);
 			}
 		}
 	}
 
 	if (!result) {
-		SAFE_DELETE(pIMGBody);
+		SAFE_DELETE(master);
 		IZ_ASSERT(IZ_FALSE);
 	}
 
-	return pIMGBody;
+	return master;
 }

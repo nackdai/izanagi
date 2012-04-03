@@ -33,13 +33,13 @@ namespace tool {
 
 	public:
 		// 読み込み
-		CIMGBody* Read(
+		CIMGMaster* Read(
 			LPCSTR lpszPath,
 			E_GRAPH_TEX_TYPE nType = E_GRAPH_TEX_TYPE_PLANE);
 
 	public:
 		// 削除
-		inline void Delete(CIMGBody*& p);
+		inline void Delete(CIMGMaster*& p);
 
 		// コールバックセット
 		inline void SetReadFunc(ReadFunc pFunc);
@@ -53,7 +53,7 @@ namespace tool {
 	/**
 	* 削除
 	*/
-	void CImageReader::Delete(CIMGBody*& p)
+	void CImageReader::Delete(CIMGMaster*& p)
 	{
 		if (p != IZ_NULL) {
 			p->RemoveAll();

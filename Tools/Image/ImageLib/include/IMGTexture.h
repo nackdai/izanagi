@@ -18,7 +18,7 @@ namespace tool {
 	/**
 	*/
 	class CIMGTexture {
-		friend class CIMGBody;
+		friend class CIMGMaster;
 
 	public:
 		/** 空のテクスチャを作成する
