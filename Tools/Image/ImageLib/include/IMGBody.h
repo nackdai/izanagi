@@ -12,12 +12,12 @@ namespace izanagi {
 namespace tool {
 	/**
 	*/
-	class CIMGBody {
+	class CIMGMaster {
 	public:
-		CIMGBody();
-		~CIMGBody();
+		CIMGMaster();
+		~CIMGMaster();
 
-		NO_COPIABLE(CIMGBody);
+		NO_COPIABLE(CIMGMaster);
 
 	public:
 		// テクスチャ追加
@@ -53,7 +53,7 @@ namespace tool {
 	/**
 	* テクスチャ数取得
 	*/
-	IZ_UINT CIMGBody::GetTexNum() const
+	IZ_UINT CIMGMaster::GetTexNum() const
 	{
 		IZ_UINT ret = static_cast<IZ_UINT>(m_Textures.size());
 		return ret;
@@ -62,7 +62,7 @@ namespace tool {
 	/**
 	* テクスチャ取得
 	*/
-	CIMGTexture* CIMGBody::GetTexture(IZ_UINT nIdx)
+	CIMGTexture* CIMGMaster::GetTexture(IZ_UINT nIdx)
 	{
 		IZ_ASSERT(nIdx < GetTexNum());
 		CIMGTexture* ret = m_Textures[nIdx];
@@ -72,7 +72,7 @@ namespace tool {
 	/**
 	* テクスチャ取得
 	*/
-	CIMGTexture* CIMGBody::GetTexture(const CKey& cKey)
+	CIMGTexture* CIMGMaster::GetTexture(const CKey& cKey)
 	{
 		CIMGTexture* ret = IZ_NULL;
 

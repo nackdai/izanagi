@@ -7,12 +7,12 @@ using namespace izanagi;
 using namespace tool;
 
 // コンストラクタ
-CIMGBody::CIMGBody()
+CIMGMaster::CIMGMaster()
 {
 }
 
 // デストラクタ
-CIMGBody::~CIMGBody()
+CIMGMaster::~CIMGMaster()
 {
 	RemoveAll();
 }
@@ -20,7 +20,7 @@ CIMGBody::~CIMGBody()
 /**
 * テクスチャ追加
 */
-IZ_BOOL CIMGBody::Add(CIMGTexture* pTex)
+IZ_BOOL CIMGMaster::Add(CIMGTexture* pTex)
 {
 	m_Textures.push_back(pTex);
 	return IZ_TRUE;
@@ -29,7 +29,7 @@ IZ_BOOL CIMGBody::Add(CIMGTexture* pTex)
 /**
 * テクスチャ削除
 */
-IZ_BOOL CIMGBody::Remove(IZ_UINT nIdx)
+IZ_BOOL CIMGMaster::Remove(IZ_UINT nIdx)
 {
 	IZ_ASSERT(nIdx < m_Textures.size());
 
@@ -48,7 +48,7 @@ IZ_BOOL CIMGBody::Remove(IZ_UINT nIdx)
 /**
 * テクスチャ全削除
 */
-void CIMGBody::RemoveAll()
+void CIMGMaster::RemoveAll()
 {
 	IZ_UINT nNum = (IZ_UINT)m_Textures.size();
 
@@ -63,7 +63,7 @@ void CIMGBody::RemoveAll()
 /**
 * 読み込み
 */
-IZ_BOOL CIMGBody::Read(LPCSTR lpszPath)
+IZ_BOOL CIMGMaster::Read(LPCSTR lpszPath)
 {
 	CFileInputStream cInputStream;
 	if (!cInputStream.Open(lpszPath)) {
@@ -113,7 +113,7 @@ __EXIT__:
 /**
 * 出力
 */
-IZ_BOOL CIMGBody::Write(LPCSTR lpszPath)
+IZ_BOOL CIMGMaster::Write(LPCSTR lpszPath)
 {
 	CFileOutputStream cOutputStream;
 	if (!cOutputStream.Open(lpszPath)) {

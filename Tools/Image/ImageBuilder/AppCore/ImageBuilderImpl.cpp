@@ -451,17 +451,17 @@ namespace {
 		const SImageElement& elem = imageInfo.elements[0];
 
 		// テクスチャ読み込み
-		izanagi::tool::CIMGBody* imgBody = NULL;
-		imgBody = izanagi::tool::CImageReader::GetInstance().Read(
+		izanagi::tool::CIMGMaster* imgMaster = NULL;
+		imgMaster = izanagi::tool::CImageReader::GetInstance().Read(
 					elem.path,
 					izanagi::E_GRAPH_TEX_TYPE_PLANE);
-		VRETURN(imgBody != IZ_NULL);
+		VRETURN(imgMaster != IZ_NULL);
 
-		UINT nNum = imgBody->GetTexNum();
+		UINT nNum = imgMaster->GetTexNum();
 		
 		if (elem.texIdx >= 0) {
 			INT nTexIdx = IZ_MAX(nNum - 1, (UINT)elem.texIdx);
-			izanagi::tool::CIMGTexture* tex = imgBody->GetTexture(nTexIdx);
+			izanagi::tool::CIMGTexture* tex = imgMaster->GetTexture(nTexIdx);
 
 			if (tex != IZ_NULL) {
 				// テクスチャ出力
@@ -477,7 +477,7 @@ namespace {
 			// 全テクスチャ
 
 			for (UINT n = 0; n < nNum; n++) {
-				izanagi::tool::CIMGTexture* tex = imgBody->GetTexture(n);
+				izanagi::tool::CIMGTexture* tex = imgMaster->GetTexture(n);
 
 				if (tex != IZ_NULL) {
 					// テクスチャ出力
@@ -493,7 +493,7 @@ namespace {
 		}
 
 		// 削除
-		izanagi::tool::CImageReader::GetInstance().Delete(imgBody);
+		izanagi::tool::CImageReader::GetInstance().Delete(imgMaster);
 		return ret;
 	}
 
@@ -521,20 +521,20 @@ namespace {
 			const SImageElement& elem = imageInfo.elements[i];
 
 			// テクスチャ読み込み
-			izanagi::tool::CIMGBody* imgBody = NULL;
-			imgBody = izanagi::tool::CImageReader::GetInstance().Read(
+			izanagi::tool::CIMGMaster* imgMaster = NULL;
+			imgMaster = izanagi::tool::CImageReader::GetInstance().Read(
 						elem.path,
 						izanagi::E_GRAPH_TEX_TYPE_PLANE);
-			VRETURN(imgBody != IZ_NULL);
+			VRETURN(imgMaster != IZ_NULL);
 
-			IZ_UINT nNum = imgBody->GetTexNum();
+			IZ_UINT nNum = imgMaster->GetTexNum();
 			
 			IZ_UINT texIdx = (elem.texIdx < 0 ? 0 : elem.texIdx);
 			texIdx = IZ_MAX(nNum - 1, texIdx);
 
 			// 読み込んだテクスチャを取得
 			// Planeテクスチャでないといけない
-			izanagi::tool::CIMGTexture* tex = imgBody->GetTexture(texIdx);
+			izanagi::tool::CIMGTexture* tex = imgMaster->GetTexture(texIdx);
 
 			// 幅チェック
 			if (baseWidth == 0) {
@@ -567,7 +567,7 @@ namespace {
 			}
 
 			// 削除
-			izanagi::tool::CImageReader::GetInstance().Delete(imgBody);
+			izanagi::tool::CImageReader::GetInstance().Delete(imgMaster);
 		}
 
 		// テクスチャ出力
