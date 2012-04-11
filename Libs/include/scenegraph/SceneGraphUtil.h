@@ -17,7 +17,7 @@ namespace izanagi {
 
 	public:
 		// Clip - Screen 座標変換マトリクス計算
-		void ComputeC2S(
+		static void ComputeC2S(
 			SMatrix& mtxC2S,
 			IZ_FLOAT fScreenWidth,
 			IZ_FLOAT fScreenHeight,
@@ -27,12 +27,12 @@ namespace izanagi {
 			IZ_FLOAT fMaxZ);
 
 		// スクリーン距離計算
-		IZ_FLOAT ComputeScreenDistance(
+		static IZ_FLOAT ComputeScreenDistance(
 			IZ_FLOAT fScreenWidth,
 			IZ_FLOAT fFov);
 
 		// クリップ座標取得
-		void Point2Clip(
+		static void Screen2Clip(
 			SVector& vClip,
 			const SCameraParam& sCamera,
 			const SViewport& vp,
@@ -40,7 +40,7 @@ namespace izanagi {
 			IZ_INT nY);
 
 		// 光線を取得
-		void Point2Ray(
+		static void Point2Ray(
 			SVector& vRay,
 			const SCameraParam& sCamera,
 			const SViewport& vp,
