@@ -110,15 +110,10 @@ void CCamera::ComputeV2C()
 {
 	SMatrix::SetUnit(m_Param.mtxV2C);
 
-#if 0
-	// Use Horizontal FOV
+	// Use Vertical FOV
 	const IZ_FLOAT fH = 1 / tanf(m_Param.fov * 0.5f);
 	const IZ_FLOAT fW = fH / m_Param.aspect;
-#else
-	// Use Vertical FOV
-	const IZ_FLOAT fW = 1 / tanf(m_Param.fov * 0.5f);
-	const IZ_FLOAT fH = fW * m_Param.aspect;
-#endif
+
 	const IZ_FLOAT fQ = -m_Param.cameraFar / (m_Param.cameraFar - m_Param.cameraNear);
 
 	m_Param.mtxV2C.m[0][0] = fW;
