@@ -21,7 +21,9 @@ protected:
 	virtual void ReleaseInternal();
 
 	// 更新.
-	virtual void UpdateInternal(izanagi::CCamera& camera);
+	virtual void UpdateInternal(
+		izanagi::CCamera& camera,
+		izanagi::CGraphicsDevice* device);
 
 	// 描画.
 	virtual void RenderInternal(izanagi::CGraphicsDevice* device);
@@ -67,7 +69,9 @@ void CSStateApp::ReleaseInternal()
 }
 
 // 更新.
-void CSStateApp::UpdateInternal(izanagi::CCamera& camera)
+void CSStateApp::UpdateInternal(
+	izanagi::CCamera& camera,
+	izanagi::CGraphicsDevice* device)
 {
 	CStateManager::GetInstance().Update(m_Allocator, m_Device);
 }

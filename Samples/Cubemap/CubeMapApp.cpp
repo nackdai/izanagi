@@ -84,7 +84,9 @@ void CCubeMapApp::ReleaseInternal()
 }
 
 // 更新.
-void CCubeMapApp::UpdateInternal(izanagi::CCamera& camera)
+void CCubeMapApp::UpdateInternal(
+	izanagi::CCamera& camera,
+	izanagi::CGraphicsDevice* device)
 {
 	camera.Update();
 

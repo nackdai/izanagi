@@ -129,7 +129,9 @@ void CProjectedTextureShadowApp::ReleaseInternal()
 }
 
 // 更新.
-void CProjectedTextureShadowApp::UpdateInternal(izanagi::CCamera& camera)
+void CProjectedTextureShadowApp::UpdateInternal(
+	izanagi::CCamera& camera,
+	izanagi::CGraphicsDevice* device)
 {
 	camera.Update();
 }

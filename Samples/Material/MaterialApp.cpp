@@ -307,7 +307,9 @@ void CMaterialApp::ReleaseInternal()
 }
 
 // 更新.
-void CMaterialApp::UpdateInternal(izanagi::CCamera& camera)
+void CMaterialApp::UpdateInternal(
+	izanagi::CCamera& camera,
+	izanagi::CGraphicsDevice* device)
 {
 	camera.Update();
 	m_Mdl->Update();

@@ -174,7 +174,9 @@ void CSampleApp::Release()
 // 更新.
 void CSampleApp::Update()
 {
-	UpdateInternal(m_Camera.GetRawInterface());
+	UpdateInternal(
+		m_Camera.GetRawInterface(),
+		m_Device);
 
 	m_Camera.Update();
 }

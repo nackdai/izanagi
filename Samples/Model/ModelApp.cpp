@@ -222,7 +222,9 @@ void CModelApp::ReleaseInternal()
 }
 
 // 更新.
-void CModelApp::UpdateInternal(izanagi::CCamera& camera)
+void CModelApp::UpdateInternal(
+	izanagi::CCamera& camera,
+	izanagi::CGraphicsDevice* device)
 {
 	camera.Update();
 	m_Mdl->Update();
