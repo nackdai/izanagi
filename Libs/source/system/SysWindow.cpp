@@ -131,6 +131,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		}
 		break;
 
+	case WM_KEYUP:
+		if (msgHandler) {
+			msgHandler->OnKeyUp((IZ_UINT)wParam);
+		}
+		break;
+
 	case WM_LBUTTONDOWN:
 		if (msgHandler) {
 			::SetCapture(hWnd);
