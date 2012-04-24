@@ -11,4 +11,8 @@
 #include "math/MathCMatrix.h"
 #include "math/MathCQuaternion.h"
 
+#include "math/MathRay.h"
+#include "math/MathPlane.h"
+#include "math/MathRectangle.h"
+
 #endif	// #if !defined(__IZANAGI_MATH_H__)
