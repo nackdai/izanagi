@@ -21,6 +21,7 @@ namespace sample {
 
 	public:
 		virtual void OnKeyDown(IZ_UINT nChar);
+		virtual void OnKeyUp(IZ_UINT nChar);
 
 		virtual void OnMouseLBtnDown(const izanagi::CIntPoint& point);
 		virtual void OnMouseLBtnUp(const izanagi::CIntPoint& point);

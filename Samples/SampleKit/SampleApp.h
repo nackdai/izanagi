@@ -90,6 +90,10 @@ namespace sample {
 		 */
 		virtual IZ_BOOL OnKeyDown(IZ_UINT nChar) { return IZ_TRUE; }
 
+		/** キーボードアップ
+		 */
+		virtual void OnKeyUp(IZ_UINT nChar) {}
+
 		/** マウス左ボタン押下
 		 */
 		virtual IZ_BOOL OnMouseLBtnDown(const CIntPoint& point) { return IZ_TRUE; }
@@ -112,7 +116,9 @@ namespace sample {
 
 		/** 更新.
 		 */
-		virtual void UpdateInternal(izanagi::CCamera& camera) = 0;
+		virtual void UpdateInternal(
+			izanagi::CCamera& camera,
+			izanagi::CGraphicsDevice* device) = 0;
 
 		/** 描画.
 		 */

@@ -163,7 +163,9 @@ void CDebugMeshApp::ReleaseInternal()
 }
 
 // 更新.
-void CDebugMeshApp::UpdateInternal(izanagi::CCamera& camera)
+void CDebugMeshApp::UpdateInternal(
+	izanagi::CCamera& camera,
+	izanagi::CGraphicsDevice* device)
 {
 	camera.Update();
 }

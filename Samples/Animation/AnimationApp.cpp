@@ -249,7 +249,9 @@ void CAnimationApp::ReleaseInternal()
 }
 
 // 更新.
-void CAnimationApp::UpdateInternal(izanagi::CCamera& camera)
+void CAnimationApp::UpdateInternal(
+	izanagi::CCamera& camera,
+	izanagi::CGraphicsDevice* device)
 {
 	camera.Update();
 

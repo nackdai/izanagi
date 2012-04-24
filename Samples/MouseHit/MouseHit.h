@@ -1,17 +1,15 @@
-#if !defined(__PROJECTED_TEXTURE_SHADOW_APP_H__)
-#define __PROJECTED_TEXTURE_SHADOW_APP_H__
+#if !defined(__TEST_MOUSE_HIT_H__)
+#define __TEST_MOUSE_HIT_H__
 
 #include "izSampleKit.h"
-
-class CShadow;
 
 static const IZ_UINT SCREEN_WIDTH = 1280;
 static const IZ_UINT SCREEN_HEIGHT = 720;
 
-class CProjectedTextureShadowApp : public izanagi::sample::CSampleApp {
+class CMouseHit : public izanagi::sample::CSampleApp {
 public:
-	CProjectedTextureShadowApp();
-	virtual ~CProjectedTextureShadowApp();
+	CMouseHit();
+	virtual ~CMouseHit();
 
 protected:
 	// 初期化.
@@ -31,19 +29,22 @@ protected:
 	// 描画.
 	virtual void RenderInternal(izanagi::CGraphicsDevice* device);
 
-	void RenderForShadow(izanagi::CGraphicsDevice* device);
+	virtual IZ_BOOL OnKeyDown(IZ_UINT nChar);
+	virtual void OnKeyUp(IZ_UINT nChar);
+	virtual IZ_BOOL OnMouseLBtnDown(const izanagi::CIntPoint& point);
 
 private:
-	izanagi::CDebugMesh* m_Torus;
-	izanagi::CDebugMesh* m_Plane;
-
-	izanagi::CDebugMeshAxis* m_Axis;
-
-	izanagi::CImage* m_Img;
+	struct {
+		izanagi::CRectangle rc;
+		izanagi::CDebugMeshRectangle* mesh;
+		izanagi::SMatrix mtx;
+	} m_Rectangles[4];
 
 	izanagi::CShaderBasic* m_Shader;
 
-	CShadow* m_Shadow;
+	IZ_BOOL m_IsPressKey;
+	izanagi::CIntPoint m_MousePoint;
+	IZ_INT m_CrossRectIdx;
 };
 
-#endif	// #if !defined(__PROJECTED_TEXTURE_SHADOW_APP_H__)
+#endif	// #if !defined(__TEST_MOUSE_HIT_H__)

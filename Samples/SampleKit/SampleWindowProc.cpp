@@ -26,6 +26,11 @@ void CSampleWndProc::OnKeyDown(IZ_UINT nChar)
 	m_App->OnKeyDown(nChar);
 }
 
+void CSampleWndProc::OnKeyUp(IZ_UINT nChar)
+{
+	m_App->OnKeyUp(nChar);
+}
+
 void CSampleWndProc::OnMouseLBtnDown(const izanagi::CIntPoint& point)
 {
 	m_Flags.onLBtn = IZ_TRUE;
