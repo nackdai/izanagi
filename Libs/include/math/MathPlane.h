@@ -20,6 +20,8 @@ namespace izanagi {
 			};
 		};
 		IZ_FLOAT d;
+
+		SVector pt;
 	};
 
 	/**
@@ -31,9 +33,16 @@ namespace izanagi {
 		/** 平面上でレイと交差する点を取得
 		 */
 		static IZ_BOOL GetCrossPoint(
-			CPlane& plane,
+			const CPlane& plane,
 			const SRay& ray,
-			SVector& refPtr); 
+			SVector& refPtr);
+
+		/** レイと交差する点を裏表の両面について取得.
+		 */
+		static IZ_BOOL GetBilateralCrossPoint(
+			const CPlane& plane,
+			const SRay& ray,
+			SVector& refPtr);
 
 	public:
 		CPlane();
@@ -41,6 +50,9 @@ namespace izanagi {
 		CPlane(const SPlane& rhs);
 
 		~CPlane() {}
+
+	private:
+		CPlane(IZ_FLOAT _a, IZ_FLOAT _b, IZ_FLOAT _c, IZ_FLOAT _d);
 
 	public:
 		/** 平面をコピー.
@@ -63,19 +75,33 @@ namespace izanagi {
 		 */
 		void Transform(const SMatrix& mtx);
 
-		/** 平面をあらわすベクトルを取得
+		/** 平面をあらわすベクトルを取得.
 		 */
 		void GetPlaneVector(SVector& plane);
 
-		/** レイと交差する点を取得
+		/** レイと交差する点を取得.
 		 */
 		IZ_BOOL GetCrossPoint(
 			const SRay& ray,
-			SVector& refPtr);
+			SVector& refPtr) const;
 
-		/** レイと交差するかどうか
+		/** レイと交差するかどうか.
 		 */
-		IZ_BOOL IsCross(const SRay& ray);
+		IZ_BOOL IsCross(const SRay& ray) const;
+
+		/** レイと交差する点を裏表の両面について取得.
+		 */
+		IZ_BOOL GetBilateralCrossPoint(
+			const SRay& ray,
+			SVector& refPtr) const;
+
+		/** 裏表の両面についてレイと交差するかどうか.
+		 */
+		IZ_BOOL IsBilateralCross(const SRay& ray) const;
+
+		/** 面の正側（法線の向き側）に点があるかどうか.
+		 */
+		IZ_BOOL IsPositive(const SVector& ptr) const;
 	};
 }	// namespace izanagi
 

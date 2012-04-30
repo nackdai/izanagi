@@ -6,6 +6,8 @@
 
 namespace izanagi {
 	struct SRay;
+	struct SPlane;
+	class CPlane;
 
 	struct SRectangle {
 		SVector pt;
@@ -63,7 +65,7 @@ namespace izanagi {
 
 		/** 矩形上に存在する点かどうか.
 		 */
-		IZ_BOOL IsOnRectangle(const SVector& ptr);
+		IZ_BOOL IsOnRectangle(const SVector& ptr) const;
 
 		/** 4x4行列による変換.
 		 */
@@ -73,11 +75,34 @@ namespace izanagi {
 		 */
 		IZ_BOOL GetCrossPoint(
 			const SRay& ray,
-			SVector& refPtr);
+			SVector& refPtr) const;
 
 		/** レイと交差するかどうか
 		 */
 		IZ_BOOL IsCross(const SRay& ray);
+
+		/** レイと交差する点を裏表の両面について取得.
+		 */
+		IZ_BOOL GetBilateralCrossPoint(
+			const SRay& ray,
+			SVector& refPtr) const;
+
+		/** 裏表の両面についてレイと交差するかどうか.
+		 */
+		IZ_BOOL IsBilateralCross(const SRay& ray) const;
+
+		/** 平面を取得.
+		 */
+		void GetPlane(SPlane& plane) const;
+
+	private:
+		typedef IZ_BOOL (*GetCrossPointFunc)(const CPlane& plane, const SRay& ray, SVector& refPtr);
+
+		// レイと交差する点を取得
+		IZ_BOOL GetCrossPoint(
+			GetCrossPointFunc func,
+			const SRay& ray,
+			SVector& refPtr) const;
 	};
 }	// namespace izanagi
 

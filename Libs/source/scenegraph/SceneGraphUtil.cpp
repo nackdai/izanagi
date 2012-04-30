@@ -1,6 +1,6 @@
 #include "scenegraph/SceneGraphUtil.h"
 
-using namespace izanagi;
+namespace izanagi {
 
 // Clip - Screen 座標変換マトリクス計算
 void CSceneGraphUtil::ComputeC2S(
@@ -192,3 +192,220 @@ void CSceneGraphUtil::Point2Ray(
 	SVector::Sub(ray, rayFar, camera.pos);
 #endif
 }
+
+namespace {
+	inline IZ_BOOL _IsCross(
+		const CPlane& sissorPlane,
+		const STriangle& tri,
+		IZ_UINT pos0, IZ_UINT pos1)
+	{
+		SVector dir;
+		SVector::SubXYZ(
+			dir,
+			tri.pt[pos1],
+			tri.pt[pos0]);
+
+		CRay ray(tri.pt[pos0], dir);
+
+		IZ_BOOL isCross = sissorPlane.IsBilateralCross(ray);
+		return isCross;
+	}
+}
+
+// シザリングで作成される三角形の数を計算する.
+IZ_UINT CSceneGraphUtil::ComputeTriNumBySissoring(
+	const CPlane& sissorPlane,
+	const CTriangle triangle[],
+	IZ_UINT triNum)
+{
+	IZ_UINT pointNum = 0;
+
+	// 交差する点と面の法線側にある点の数を数える
+	for (IZ_UINT i = 0; i < triNum; i++)
+	{
+		if (_IsCross(sissorPlane, triangle[i],	0, 1))
+		{
+			pointNum++;
+		}
+		if (_IsCross(sissorPlane, triangle[i],	1, 2))
+		{
+			pointNum++;
+		}
+		if (_IsCross(sissorPlane, triangle[i],	2, 0))
+		{
+			pointNum++;
+		}
+
+		if (sissorPlane.IsPositive(triangle[i].pt[0]))
+		{
+			pointNum++;
+		}
+		if (sissorPlane.IsPositive(triangle[i].pt[1]))
+		{
+			pointNum++;
+		}
+		if (sissorPlane.IsPositive(triangle[i].pt[2]))
+		{
+			pointNum++;
+		}
+	}
+
+	// 三角形を構成するのに十分な点の数がない
+	if (pointNum < 3)
+	{
+		return 0;
+	}
+
+	// 作成する三角形の数を計算
+	IZ_UINT newTriNum = pointNum - 2;
+	return newTriNum;
+}
+
+namespace {
+	inline IZ_BOOL _GetCrossPoint(
+		SVector& ret,
+		const CPlane& sissorPlane,
+		const STriangle& tri,
+		IZ_UINT pos0, IZ_UINT pos1)
+	{
+		SVector dir;
+		SVector::SubXYZ(
+			dir,
+			tri.pt[pos1],
+			tri.pt[pos0]);
+
+		CRay ray(tri.pt[pos0], dir);
+
+		IZ_BOOL isCross = sissorPlane.GetBilateralCrossPoint(ray, ret);
+		return isCross;
+	}
+
+	IZ_UINT _Sissoring(
+		const CPlane& sissorPlane,
+		const STriangle& triangle,
+		CTriangle* newTri)
+	{
+		// 基準点を探す
+		IZ_INT basePos = -1;
+		for (IZ_UINT i = 0; i < 3; i++)
+		{
+			if (sissorPlane.IsPositive(triangle.pt[i]))
+			{
+				basePos = i;
+				break;
+			}
+		}
+
+		if (basePos < 0)
+		{
+			return 0;
+		}
+
+		// 調べていく頂点の位置
+		static const IZ_UINT vtxIdxTbl[][4] =
+		{
+			{0, 1, 2, 0},
+			{1, 2, 0, 1},
+			{2, 0, 1, 2},
+		};
+
+		// 最大で４頂点まで
+		SVector tmp[4];
+
+		IZ_UINT vtxNum = 0;
+
+		// 基準点
+		tmp[vtxNum++].Set(
+			triangle.pt[basePos].x,
+			triangle.pt[basePos].y,
+			triangle.pt[basePos].z);
+
+		for (IZ_UINT i = 0; i < 3; i++)
+		{
+			IZ_UINT idx0 = vtxIdxTbl[basePos][i];
+			IZ_UINT idx1 = vtxIdxTbl[basePos][i + 1];
+
+			// 交点
+			if (_GetCrossPoint(
+				tmp[vtxNum],
+				sissorPlane,
+				triangle,
+				idx0, idx1))
+			{
+				vtxNum++;
+				IZ_ASSERT(vtxNum <= COUNTOF(tmp));
+			}
+
+			// 面の法線側にある点
+			if (i > 0)
+			{
+				if (sissorPlane.IsPositive(triangle.pt[idx0]))
+				{
+					IZ_ASSERT(vtxNum + 1 <= COUNTOF(tmp));
+
+					tmp[vtxNum++].Set(
+						triangle.pt[idx0].x,
+						triangle.pt[idx0].y,
+						triangle.pt[idx0].z);
+				}
+			}
+		}
+
+		if (vtxNum < 3)
+		{
+			// 三角形を構成できないので
+			return 0;
+		}
+
+		// 最大でも三角形からは４頂点のはず
+		IZ_ASSERT(vtxNum <= 4);
+
+		// 三角形を構成
+		IZ_UINT triNum = vtxNum - 2;
+
+		// 三角形を構成する頂点のインデックス
+		static const IZ_UINT triVtxTbl[][3] =
+		{
+			{0, 1, 2},
+			{0, 2, 3},
+		};
+
+		for (IZ_UINT i = 0; i < triNum; i++)
+		{
+			for (IZ_UINT n = 0; n < 3; n++)
+			{
+				IZ_UINT idx = triVtxTbl[i][n];
+
+				newTri[i].pt[n].Set(
+					tmp[idx].x,
+					tmp[idx].y,
+					tmp[idx].z);
+			}
+		}
+			
+		return triNum;
+	}
+}
+
+// シザリング
+void CSceneGraphUtil::Sissoring(
+	const CPlane& sissorPlane,
+	const CTriangle triangle[],
+	IZ_UINT triNum,
+	CTriangle newTriangle[],
+	IZ_UINT newTriNum)
+{
+	IZ_UINT triPos = 0;
+
+	for (IZ_UINT i = 0; i < triNum; i++)
+	{
+		triPos += _Sissoring(
+			sissorPlane,
+			triangle[i],
+			&newTriangle[triPos]);
+
+		IZ_ASSERT(triPos <= newTriNum);
+	}
+}
+
+}	// namespace izanagi
