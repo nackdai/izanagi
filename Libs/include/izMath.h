@@ -14,5 +14,6 @@
 #include "math/MathRay.h"
 #include "math/MathPlane.h"
 #include "math/MathRectangle.h"
+#include "math/MathTriangle.h"
 
 #endif	// #if !defined(__IZANAGI_MATH_H__)

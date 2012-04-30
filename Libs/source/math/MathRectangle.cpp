@@ -10,7 +10,7 @@ namespace izanagi {
 
 		pt.Set(0.0f, 0.0f, 0.0f);
 		v[0].dir.Set(0.0f, 0.0f, 0.0f, 0.0f);
-		v[0].dir.Set(0.0f, 0.0f, 0.0f, 0.0f);
+		v[1].dir.Set(0.0f, 0.0f, 0.0f, 0.0f);
 	}
 
 	CRectangle::CRectangle(
@@ -101,7 +101,7 @@ namespace izanagi {
 	}
 
 	// 矩形上に存在する点かどうか.
-	IZ_BOOL CRectangle::IsOnRectangle(const SVector& ptr)
+	IZ_BOOL CRectangle::IsOnRectangle(const SVector& ptr) const
 	{
 		SVector p;
 		SVector::Sub(p, ptr, pt);
@@ -140,20 +140,12 @@ namespace izanagi {
 	// レイと交差する点を取得
 	IZ_BOOL CRectangle::GetCrossPoint(
 		const SRay& ray,
-		SVector& refPtr)
+		SVector& refPtr) const
 	{
-		CVector ptr;
-
-		IZ_BOOL isCross = CPlane::GetCrossPoint(
-			CPlane(nml, pt),
-			ray, ptr);
-
-		if (isCross) {
-			isCross = IsOnRectangle(ptr);
-			if (isCross) {
-				SVector::Copy(refPtr, ptr);
-			}
-		}
+		IZ_BOOL isCross = GetCrossPoint(
+			CPlane::GetCrossPoint,
+			ray,
+			refPtr);
 
 		return isCross;
 	}
@@ -164,6 +156,63 @@ namespace izanagi {
 		CVector ptr;
 
 		IZ_BOOL isCross = GetCrossPoint(ray, ptr);
+
+		return isCross;
+	}
+
+	// レイと交差する点を裏表の両面について取得.
+	IZ_BOOL CRectangle::GetBilateralCrossPoint(
+		const SRay& ray,
+		SVector& refPtr) const
+	{
+		IZ_BOOL isCross = GetCrossPoint(
+			CPlane::GetBilateralCrossPoint,
+			ray,
+			refPtr);
+
+		return isCross;
+	}
+
+	// 裏表の両面についてレイと交差するかどうか.
+	IZ_BOOL CRectangle::IsBilateralCross(const SRay& ray) const
+	{
+		CVector ptr;
+
+		IZ_BOOL isCross = GetBilateralCrossPoint(ray, ptr);
+
+		return isCross;
+	}
+
+	// 平面を取得.
+	void CRectangle::GetPlane(SPlane& plane) const
+	{
+		plane.pt.Set(
+			pt.x,
+			pt.y,
+			pt.z);
+
+		plane.nml.Set(a, b, c, 0.0f);
+		plane.d = d;
+	}
+
+	// レイと交差する点を取得
+	IZ_BOOL CRectangle::GetCrossPoint(
+		CRectangle::GetCrossPointFunc func,
+		const SRay& ray,
+		SVector& refPtr) const
+	{
+		CVector ptr;
+
+		IZ_BOOL isCross = (*func)(
+			CPlane(nml, pt),
+			ray, ptr);
+
+		if (isCross) {
+			isCross = IsOnRectangle(ptr);
+			if (isCross) {
+				SVector::Copy(refPtr, ptr);
+			}
+		}
 
 		return isCross;
 	}

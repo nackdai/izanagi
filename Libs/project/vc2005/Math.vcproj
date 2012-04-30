@@ -210,6 +210,10 @@
 					RelativePath="..\..\source\math\MathRectangle.cpp"
 					>
 				</File>
+				<File
+					RelativePath="..\..\source\math\MathTriangle.cpp"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="basic"
@@ -250,6 +254,10 @@
 				</File>
 				<File
 					RelativePath="..\..\include\math\MathRectangle.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\math\MathTriangle.h"
 					>
 				</File>
 			</Filter>
