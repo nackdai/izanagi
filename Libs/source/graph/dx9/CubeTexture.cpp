@@ -74,7 +74,7 @@ CCubeTexture* CCubeTexture::CreateInternal(
 	// インスタンス作成
 	pInstance = new (pBuf)CCubeTexture;
 	{
-		pInstance->m_pAllocator = pAllocator;
+		pInstance->m_Allocator = pAllocator;
 		SAFE_REPLACE(pInstance->m_pDevice, pDevice);
 
 		pInstance->AddRef();
@@ -110,8 +110,8 @@ void CCubeTexture::InternalRelease()
 {
 	delete this;
 
-	if (m_pAllocator != IZ_NULL) {
-		m_pAllocator->Free(this);
+	if (m_Allocator != IZ_NULL) {
+		m_Allocator->Free(this);
 	}
 }
 

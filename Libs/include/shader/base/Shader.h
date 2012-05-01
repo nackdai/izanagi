@@ -93,7 +93,7 @@ namespace izanagi {
 	protected:
 		IShader()
 		{
-			m_pAllocator = IZ_NULL;
+			m_Allocator = IZ_NULL;
 			m_pDevice = IZ_NULL;
 		}
 
@@ -218,7 +218,7 @@ namespace izanagi {
 		CStdHash<IZ_UINT, IShader, SHD_HASH_MAX>::Item* GetHashItem() { return &m_HashItem; }
 
 	protected:
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 		CGraphicsDevice* m_pDevice;
 
 	private:

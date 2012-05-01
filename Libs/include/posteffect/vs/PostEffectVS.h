@@ -85,7 +85,7 @@ namespace izanagi {
 		};
 
 	protected:
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 		CGraphicsDevice* m_pDevice;
 
 		E_POSTEFFECT_VTX_SHADER m_Type;
@@ -121,7 +121,7 @@ namespace izanagi {
 		pInstance = new(pBuf) _T;
 		{
 			pInstance->AddRef();
-			pInstance->m_pAllocator = pAllocator;
+			pInstance->m_Allocator = pAllocator;
 
 			// シェーダ作成
 			result = pInstance->CreateShader(pDevice, pProgram);

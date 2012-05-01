@@ -51,7 +51,7 @@ namespace izanagi {
 		CGraphicsDevice* GetGraphicsDevice() { return m_pDevice; }
 
 	private:
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 		CGraphicsDevice* m_pDevice;
 
 		S_MSH_HEADER m_Header;

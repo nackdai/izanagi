@@ -41,7 +41,7 @@ namespace izanagi {
 			IZ_UINT nAttrNum);
 
 	private:
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 
 		CStdHash<IZ_UINT, IShader, SHD_HASH_MAX> m_ShaderHash;
 

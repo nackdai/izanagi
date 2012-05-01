@@ -132,7 +132,7 @@ CFxShader* CFxShader::CreateFxShader(
 	// インスタンス作成
 	pInstance = new(pBuf) CFxShader;
 	{
-		pInstance->m_pAllocator = pAllocator;
+		pInstance->m_Allocator = pAllocator;
 		pInstance->AddRef();
 
 		SAFE_REPLACE(
@@ -179,8 +179,8 @@ CFxShader::~CFxShader()
 void CFxShader::InternalRelease()
 {
 	delete this;
-	if (m_pAllocator != IZ_NULL) {
-		FREE(m_pAllocator, this);
+	if (m_Allocator != IZ_NULL) {
+		FREE(m_Allocator, this);
 	}
 }
 

@@ -41,7 +41,7 @@ namespace izanagi {
 		inline IZ_UINT GetSpotLightNum() const;
 
 	protected:
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 
 		SParallelLightParam* m_pParallel;	// 平行光源
 		SPointLightParam* m_pPoint;			// 点光源
@@ -62,7 +62,7 @@ namespace izanagi {
 	void CSceneParam::InternalRelease()
 	{
 		delete this;
-		FREE(m_pAllocator, this);
+		FREE(m_Allocator, this);
 	}
 
 	/**

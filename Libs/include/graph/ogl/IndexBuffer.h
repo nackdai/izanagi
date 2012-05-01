@@ -79,7 +79,7 @@ namespace izanagi {
 
 	private:
 		CGraphicsDevice* m_pDevice;
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 
 		// 本体
 		D3D_IB* m_pIB;
@@ -98,7 +98,7 @@ namespace izanagi {
 	CIndexBuffer::CIndexBuffer()
 	{
 		m_pDevice = IZ_NULL;
-		m_pAllocator = IZ_NULL;
+		m_Allocator = IZ_NULL;
 
 		m_pIB = IZ_NULL;
 
@@ -122,8 +122,8 @@ namespace izanagi {
 	{
 		delete this;
 
-		if (m_pAllocator != IZ_NULL) {
-			m_pAllocator->Free(this);
+		if (m_Allocator != IZ_NULL) {
+			m_Allocator->Free(this);
 		}
 	}
 

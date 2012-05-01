@@ -122,7 +122,7 @@ namespace izanagi {
 		typedef CFntHash::Item			CFntHashItem;
 		typedef CStdList<CFntHashItem>	CFntOrderList;
 
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 		CGraphicsDevice* m_pDevice;
 
 		// ヘッダ

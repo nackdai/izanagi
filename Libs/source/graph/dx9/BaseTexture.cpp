@@ -7,7 +7,7 @@ using namespace izanagi;
 CBaseTexture::CBaseTexture()
 {
 	m_pDevice = IZ_NULL;
-	m_pAllocator = IZ_NULL;
+	m_Allocator = IZ_NULL;
 
 	FILL_ZERO(&m_TexInfo, sizeof(m_TexInfo));
 }

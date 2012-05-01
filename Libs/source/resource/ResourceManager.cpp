@@ -24,7 +24,7 @@ CResourceManager* CResourceManager::CreateResourceManager(
 	CResourceManager* pInstance = new(pBuf) CResourceManager;
 	{
 		pInstance->AddRef();
-		pInstance->m_pAllocator = pAllocator;
+		pInstance->m_Allocator = pAllocator;
 	}
 	pBuf += sizeof(CResourceManager);
 
@@ -48,7 +48,7 @@ CResource* CResourceManager::Add(
 	CResource* pRsc = GetFreeResource();
 	if (pRsc == IZ_NULL) {
 		// Create a new resource.
-		pRsc = CreateResource(m_pAllocator);
+		pRsc = CreateResource(m_Allocator);
 	}
 
 	VRETURN_NULL(pRsc != IZ_NULL);
@@ -228,9 +228,9 @@ void CResourceManager::AddFreeResrouce(CResource* pRsc)
 // Create an empty CReource instance.
 CResource* CResourceManager::CreateResource()
 {
-	IZ_ASSERT(m_pAllocator != IZ_NULL);
+	IZ_ASSERT(m_Allocator != IZ_NULL);
 
-	CResource* ret = CreateResource(m_pAllocator);
+	CResource* ret = CreateResource(m_Allocator);
 
 	ret->SetAllocator(IZ_NULL);
 

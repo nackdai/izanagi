@@ -144,7 +144,7 @@ CTexture* CTexture::CreateBody_From(
 	// インスタンス作成
 	pInstance = new (pBuf)CTexture;
 	{
-		pInstance->m_pAllocator = pAllocator;
+		pInstance->m_Allocator = pAllocator;
 		SAFE_REPLACE(pInstance->m_pDevice, pDevice);
 
 		pInstance->AddRef();
@@ -230,7 +230,7 @@ CTexture* CTexture::CreateTexture(
 	// インスタンス作成
 	pInstance = new (pBuf)CTexture;
 	{
-		pInstance->m_pAllocator = pAllocator;
+		pInstance->m_Allocator = pAllocator;
 		SAFE_REPLACE(pInstance->m_pDevice, pDevice);
 
 		if (bIsCreateSurface) {
@@ -301,7 +301,7 @@ CTexture* CTexture::CreateRenderTarget(
 	// インスタンス作成
 	pInstance = new (pBuf)CTexture;
 	{
-		pInstance->m_pAllocator = pAllocator;
+		pInstance->m_Allocator = pAllocator;
 		SAFE_REPLACE(pInstance->m_pDevice, pDevice);
 
 		pInstance->m_pSurface = reinterpret_cast<CSurface**>(pBuf + sizeof(CTexture));
@@ -459,7 +459,7 @@ IZ_BOOL CTexture::CreateSurface()
 	// サーフェス作成
 	if (m_pSurface != IZ_NULL) {
 		for (IZ_UINT i = 0; i < m_TexInfo.level; ++i) {
-			m_pSurface[i] = CSurface::CreateSurface(m_pAllocator);
+			m_pSurface[i] = CSurface::CreateSurface(m_Allocator);
 			IZ_BOOL result = (m_pSurface != IZ_NULL);
 
 			if (result) {

@@ -17,14 +17,14 @@ namespace izanagi {
 			_T* ret = new(pBuf) _T;
 			{
 				ret->AddRef();
-				ret->m_pAllocator = pAllocator;
+				ret->m_Allocator = pAllocator;
 			}
 
 			return ret;
 		}
 
 	protected:
-		IMshRenderHandler() { m_pAllocator = IZ_NULL; }
+		IMshRenderHandler() { m_Allocator = IZ_NULL; }
 		virtual ~IMshRenderHandler() {}
 
 		NO_COPIABLE(IMshRenderHandler);
@@ -43,7 +43,7 @@ namespace izanagi {
 		PURE_VIRTUAL(void CommitChanges());
 
 	protected:
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 	};
 }	// namespace izanagi
 

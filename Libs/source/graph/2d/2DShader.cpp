@@ -48,7 +48,7 @@ C2DShader* C2DShader::Create2DShader(
 	pInstance = new (pBuf) C2DShader();
 	{
 		pInstance->AddRef();
-		pInstance->m_pAllocator = pAllocator;
+		pInstance->m_Allocator = pAllocator;
 		
 		// シェーダ作成
 		result = pInstance->CreateShader(pDevice);

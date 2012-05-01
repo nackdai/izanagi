@@ -23,7 +23,7 @@ CSkeleton* CSkeleton::CreateSkeleton(
 	{
 		pBuf += sizeof(CSkeleton);
 
-		pInstance->m_pAllocator = pAllocator;
+		pInstance->m_Allocator = pAllocator;
 		pInstance->AddRef();
 
 		pInstance->m_nJointNum = sHeader.numJoint;
@@ -49,7 +49,7 @@ IZ_UINT CSkeleton::ComputeBufferSize(
 
 CSkeleton::CSkeleton()
 {
-	m_pAllocator = IZ_NULL;
+	m_Allocator = IZ_NULL;
 
 	m_nJointNum = 0;
 	m_pJoint = IZ_NULL;
@@ -57,7 +57,7 @@ CSkeleton::CSkeleton()
 
 CSkeleton::~CSkeleton()
 {
-	FREE(m_pAllocator, this);
+	FREE(m_Allocator, this);
 }
 
 IZ_UINT8* CSkeleton::ReadJoint(

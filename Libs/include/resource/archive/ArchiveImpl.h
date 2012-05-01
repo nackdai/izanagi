@@ -30,7 +30,7 @@ namespace izanagi {
 		void InternalRelease()
 		{
 			delete this;
-			FREE(m_pAllocator, this);
+			FREE(m_Allocator, this);
 		}
 
 	protected:
@@ -83,7 +83,7 @@ namespace izanagi {
 		typedef CStdHash<CKey, S_ARC_FILE_HEADER, HASH_SIZE>	CArcHash;
 		typedef CArcHash::Item	CArcHashItem;
 
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 
 		IInputStream* m_pInput;
 

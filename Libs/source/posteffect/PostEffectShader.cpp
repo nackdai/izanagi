@@ -79,7 +79,7 @@ CPostEffectShader* CPostEffectShader::CreatePostEffectShader(
 
 		pInstance->AddRef();
 
-		pInstance->m_pAllocator = pAllocator;
+		pInstance->m_Allocator = pAllocator;
 		SAFE_REPLACE(pInstance->m_pDevice, pDevice);
 	}
 
@@ -105,7 +105,7 @@ __EXIT__:
 // コンストラクタ
 CPostEffectShader::CPostEffectShader()
 {
-	m_pAllocator = IZ_NULL;
+	m_Allocator = IZ_NULL;
 	m_pDevice = IZ_NULL;
 
 	m_pPass = IZ_NULL;
@@ -736,12 +736,12 @@ IZ_BOOL CPostEffectShader::Init(
 
 	// 頂点プログラム作成 & 割り当て
 	{
-		void* pProgramBuf = ALLOC_ZERO(m_pAllocator, m_sHeader.maxProgamSize);
+		void* pProgramBuf = ALLOC_ZERO(m_Allocator, m_sHeader.maxProgamSize);
 		VRETURN(pProgramBuf);
 
 		ret = pVSMgr->CreateVS(
 				m_sHeader.numVtxProgram,
-				m_pAllocator,
+				m_Allocator,
 				m_pDevice,
 				reinterpret_cast<IZ_UINT8*>(pProgramBuf),
 				in);
@@ -759,7 +759,7 @@ IZ_BOOL CPostEffectShader::Init(
 		}
 
 __EXIT__:
-		FREE(m_pAllocator, pProgramBuf);
+		FREE(m_Allocator, pProgramBuf);
 	}
 
 	return IZ_TRUE;
@@ -770,11 +770,11 @@ IZ_UINT8* CPostEffectShader::CreatePass(
 	IZ_UINT8* pBuffer,
 	IInputStream* in)
 {
-	IZ_ASSERT(m_pAllocator != IZ_NULL);
+	IZ_ASSERT(m_Allocator != IZ_NULL);
 	IZ_ASSERT(m_pDevice != IZ_NULL);
 
 	// プログラム読み込み用バッファ
-	void* pProgramBuf = ALLOC(m_pAllocator, m_sHeader.maxProgamSize);
+	void* pProgramBuf = ALLOC(m_Allocator, m_sHeader.maxProgamSize);
 	IZ_ASSERT(pProgramBuf != IZ_NULL);
 
 	m_pPass = reinterpret_cast<CPostEffectPass*>(pBuffer);
@@ -830,7 +830,7 @@ IZ_UINT8* CPostEffectShader::CreatePass(
 	}
 
 __EXIT__:
-	FREE(m_pAllocator, pProgramBuf);
+	FREE(m_Allocator, pProgramBuf);
 
 	return pBuffer;
 }

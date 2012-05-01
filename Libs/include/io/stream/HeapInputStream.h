@@ -23,7 +23,7 @@ namespace izanagi {
 		inline void Finalize();
 
 	protected:
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 	};
 
 	// inline ********************************
@@ -31,7 +31,7 @@ namespace izanagi {
 	// コンストラクタ
 	CHeapInputStream::CHeapInputStream()
 	{
-		m_pAllocator = IZ_NULL;
+		m_Allocator = IZ_NULL;
 	}
 
 	// デストラクタ
@@ -45,15 +45,15 @@ namespace izanagi {
 	*/
 	IZ_BOOL CHeapInputStream::Init(IMemoryAllocator* pAllocator, IZ_UINT size)
 	{
-		if ((m_pAllocator != IZ_NULL) && (m_pBuffer != IZ_NULL)) {
-			FREE(m_pAllocator, const_cast<IZ_UINT8*>(m_pBuffer));
+		if ((m_Allocator != IZ_NULL) && (m_pBuffer != IZ_NULL)) {
+			FREE(m_Allocator, const_cast<IZ_UINT8*>(m_pBuffer));
 			m_pBuffer = IZ_NULL;
 		}
 
-		m_pAllocator = pAllocator;
+		m_Allocator = pAllocator;
 
 		// メモリ確保
-		m_pBuffer = static_cast<IZ_UINT8*>(ALLOC_ZERO(m_pAllocator, size));
+		m_pBuffer = static_cast<IZ_UINT8*>(ALLOC_ZERO(m_Allocator, size));
 		VRETURN(m_pBuffer != IZ_NULL);
 
 		m_nSize = size;
@@ -67,8 +67,8 @@ namespace izanagi {
 	*/
 	void CHeapInputStream::Finalize()
 	{
-		if ((m_pAllocator != IZ_NULL) && (m_pBuffer != IZ_NULL)) {
-			FREE(m_pAllocator, const_cast<IZ_UINT8*>(m_pBuffer));
+		if ((m_Allocator != IZ_NULL) && (m_pBuffer != IZ_NULL)) {
+			FREE(m_Allocator, const_cast<IZ_UINT8*>(m_pBuffer));
 		}
 	}
 }	// namespace izanagi

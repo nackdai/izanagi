@@ -30,7 +30,7 @@ namespace izanagi {
 		void InternalRelease()
 		{
 			delete this;
-			FREE(m_pAllocator, this);
+			FREE(m_Allocator, this);
 		}
 
 	public:
@@ -81,7 +81,7 @@ namespace izanagi {
 
 		typedef CStdHash<CKey, ZipDirFileHeader, HASH_SIZE>		CZipHash;
 
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 
 		IInputStream* m_pInput;
 

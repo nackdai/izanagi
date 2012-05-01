@@ -133,7 +133,7 @@ namespace izanagi {
 		typedef CFunctorHash::Item CFunctorHashItem;
 	
 	private:
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 		CGraphicsDevice* m_pDevice;
 
 		CPostEffectShader* m_pShader;

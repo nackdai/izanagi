@@ -23,7 +23,7 @@ CMouse* CMouse::CreateMouse(IMemoryAllocator* pAllocator)
 	pInstance = new(pBuf) CMouse;
 	{
 		pInstance->AddRef();
-		pInstance->m_pAllocator = pAllocator;
+		pInstance->m_Allocator = pAllocator;
 	}
 
 __EXIT__:
@@ -41,7 +41,7 @@ __EXIT__:
 // コンストラクタ
 CMouse::CMouse()
 {
-	m_pAllocator = IZ_NULL;
+	m_Allocator = IZ_NULL;
 	m_pMouseDevice = IZ_NULL;
 	m_hWnd = IZ_NULL;
 
@@ -67,8 +67,8 @@ void CMouse::InternalRelease()
 {
 	delete this;
 
-	if (m_pAllocator != IZ_NULL) {
-		m_pAllocator->Free(this);
+	if (m_Allocator != IZ_NULL) {
+		m_Allocator->Free(this);
 	}
 }
 

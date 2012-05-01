@@ -100,7 +100,7 @@ namespace izanagi {
 		D3D_EFFECT* GetRawInterface() { return m_pBody; }
 
 	protected:
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 		CGraphicsDevice* m_pDevice;
 
 		D3D_EFFECT* m_pBody;

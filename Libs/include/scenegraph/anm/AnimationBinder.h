@@ -92,7 +92,7 @@ namespace izanagi {
 		};
 
 	private:
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 
 		IZ_UINT m_JointNum;
 		SJointInfo* m_Joints;

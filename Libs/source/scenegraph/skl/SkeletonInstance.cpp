@@ -25,7 +25,7 @@ CSkeletonInstance* CSkeletonInstance::CreateSkeletonInstance(
 		pBuf += sizeof(CSkeletonInstance);
 
 		pInstance->AddRef();
-		pInstance->m_pAllocator = pAllocator;
+		pInstance->m_Allocator = pAllocator;
 
 		SAFE_REPLACE(pInstance->m_pBody, pSkl);
 
@@ -54,7 +54,7 @@ IZ_UINT CSkeletonInstance::ComputeBufferSize(const CSkeleton* pSkl)
 
 CSkeletonInstance::CSkeletonInstance()
 {
-	m_pAllocator = IZ_NULL;
+	m_Allocator = IZ_NULL;
 
 	m_pBody = IZ_NULL;
 

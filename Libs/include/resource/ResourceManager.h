@@ -32,7 +32,7 @@ namespace izanagi {
 			IZ_UINT nInitialCreateRscNum);
 
 	protected:
-		CResourceManager() { m_pAllocator = IZ_NULL; }
+		CResourceManager() { m_Allocator = IZ_NULL; }
 		~CResourceManager() { DeleteAll(); }
 
 		NO_COPIABLE(CResourceManager);
@@ -93,7 +93,7 @@ namespace izanagi {
 		IZ_DEFINE_INTERNAL_RELEASE();
 
 	protected:
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 
 		CRscHash m_RscHash;
 		CFreeRscList m_FreeRscList;

@@ -47,7 +47,7 @@ namespace izanagi {
 		inline IZ_BOOL SetDesc();
 
 	private:
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 
 		// 本体
 		D3D_SURFACE* m_pSurface;

@@ -24,7 +24,7 @@ CPixelShader* CPixelShader::CreatePixelShader(
 	pInstance = new(pBuf) CPixelShader;
 	{
 		pInstance->AddRef();
-		pInstance->m_pAllocator = pAllocator;
+		pInstance->m_Allocator = pAllocator;
 	}
 
 	//IZ_C_ASSERT(sizeof(DWORD) == sizeof(IZ_DWORD));

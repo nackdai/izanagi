@@ -69,7 +69,7 @@ namespace izanagi {
 		CStdList<CDebugUIWidget>::Item* GetListItem() { return &m_ListItem; }
 
 	protected:
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 
 		// リストアイテム
 		CStdList<CDebugUIWidget>::Item m_ListItem;
@@ -94,7 +94,7 @@ namespace izanagi {
 	// コンストラクタ
 	CDebugUIWidget::CDebugUIWidget()
 	{
-		m_pAllocator = IZ_NULL;
+		m_Allocator = IZ_NULL;
 
 		m_ListItem.Init(this);
 
@@ -113,8 +113,8 @@ namespace izanagi {
 	void CDebugUIWidget::ReleaseIntenral()
 	{
 		delete this;
-		if (m_pAllocator != IZ_NULL) {
-			m_pAllocator->Free(this);
+		if (m_Allocator != IZ_NULL) {
+			m_Allocator->Free(this);
 		}
 	}
 

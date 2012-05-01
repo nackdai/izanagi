@@ -23,7 +23,7 @@ CKeyboard* CKeyboard::CreateKeyboard(IMemoryAllocator* pAllocator)
 	pInstance = new(pBuf) CKeyboard;
 	{
 		pInstance->AddRef();
-		pInstance->m_pAllocator = pAllocator;
+		pInstance->m_Allocator = pAllocator;
 	}
 
 __EXIT__:
@@ -41,7 +41,7 @@ __EXIT__:
 // コンストラクタ
 CKeyboard::CKeyboard()
 {
-	m_pAllocator = IZ_NULL;
+	m_Allocator = IZ_NULL;
 	m_pKeyDevice = IZ_NULL;
 	m_hWnd = IZ_NULL;
 
@@ -68,8 +68,8 @@ void CKeyboard::InternalRelease()
 {
 	delete this;
 
-	if (m_pAllocator != IZ_NULL) {
-		m_pAllocator->Free(this);
+	if (m_Allocator != IZ_NULL) {
+		m_Allocator->Free(this);
 	}
 }
 

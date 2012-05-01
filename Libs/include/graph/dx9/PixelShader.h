@@ -32,7 +32,7 @@ namespace izanagi {
 		inline D3D_PS* GetRawInterface();
 
 	protected:
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 
 		// 本体
 		D3D_PS* m_pPS;
@@ -43,7 +43,7 @@ namespace izanagi {
 	// コンストラクタ
 	CPixelShader::CPixelShader()
 	{
-		m_pAllocator = IZ_NULL;
+		m_Allocator = IZ_NULL;
 		m_pPS = IZ_NULL;
 	}
 
@@ -57,8 +57,8 @@ namespace izanagi {
 	void CPixelShader::InternalRelease()
 	{
 		delete this;
-		if (m_pAllocator != IZ_NULL) {
-			m_pAllocator->Free(this);
+		if (m_Allocator != IZ_NULL) {
+			m_Allocator->Free(this);
 		}
 	}
 

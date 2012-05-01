@@ -48,7 +48,7 @@ namespace izanagi {
 		};
 
 	protected:
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 
 		D_INPUT_DEVICE* m_pKeyDevice;
 		HWND m_hWnd;

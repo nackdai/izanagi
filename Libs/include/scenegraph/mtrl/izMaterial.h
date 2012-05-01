@@ -186,7 +186,7 @@ namespace izanagi {
 		void AttachParamBuf();
 
 	private:
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 
 		// mtrlファイルから作成されたかどうか
 		IZ_BOOL m_IsFromMtrlFile;

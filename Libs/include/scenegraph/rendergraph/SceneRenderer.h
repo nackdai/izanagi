@@ -59,7 +59,7 @@ namespace izanagi {
 		CSceneParam* GetSceneParam() { return m_pSceneParam; }
 
 	private:
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 
 		CSceneParam* m_pSceneParam;
 

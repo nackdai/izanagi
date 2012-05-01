@@ -19,7 +19,7 @@ CModel* CModel::CreateModel(
 	CModel* pInstance = new(pBuf) CModel;
 	{
 		pInstance->AddRef();
-		pInstance->m_pAllocator = pAllocator;
+		pInstance->m_Allocator = pAllocator;
 
 		SAFE_REPLACE(pInstance->m_pMesh, pMesh);
 		SAFE_REPLACE(pInstance->m_pSkeleton, pSkl);
@@ -134,7 +134,7 @@ CModel* CModel::CreateModel(
 // コンストラクタ
 CModel::CModel()
 {
-	m_pAllocator = IZ_NULL;
+	m_Allocator = IZ_NULL;
 
 	m_pMesh = IZ_NULL;
 	m_pSkeleton = IZ_NULL;

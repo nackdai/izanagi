@@ -42,7 +42,7 @@ CImage* CImage::CreateImage(
 
 		pInstance->AddRef();
 
-		pInstance->m_pAllocator = pAllocator;
+		pInstance->m_Allocator = pAllocator;
 		pInstance->m_pTexture = (CBaseTexture**)pBuf;
 
 		memcpy(&pInstance->m_Header, &sHeader, sizeof(sHeader));
@@ -251,12 +251,12 @@ IZ_BOOL CImage::ReadTexture(
 	CGraphicsDevice* pDevice,
 	IInputStream* pInputStream)
 {
-	IZ_ASSERT(m_pAllocator != IZ_NULL);
+	IZ_ASSERT(m_Allocator != IZ_NULL);
 	IZ_ASSERT(pDevice != IZ_NULL);
 	IZ_ASSERT(pInputStream != IZ_NULL);
 
 	// 読み込みバッファメモリ確保
-	IZ_BYTE* pBuf = (IZ_BYTE*)ALLOC_ZERO(m_pAllocator, m_Header.sizeMax);
+	IZ_BYTE* pBuf = (IZ_BYTE*)ALLOC_ZERO(m_Allocator, m_Header.sizeMax);
 	VRETURN(pBuf != IZ_NULL);
 
 	// バッファ先頭位置を保持
@@ -297,6 +297,6 @@ IZ_BOOL CImage::ReadTexture(
 	}
 
 __EXIT__:
-	FREE(m_pAllocator, pBufTop);
+	FREE(m_Allocator, pBufTop);
 	return ret;
 }

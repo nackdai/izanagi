@@ -28,7 +28,7 @@ CAnimationBinder* CAnimationBinder::CreateAnimationBinder(
 
 		instance->AddRef();
 
-		instance->m_pAllocator = allocator;
+		instance->m_Allocator = allocator;
 		instance->m_JointNum = jointNum;
 		instance->m_Joints = reinterpret_cast<SJointInfo*>(buf);
 
@@ -53,7 +53,7 @@ CAnimationBinder* CAnimationBinder::CreateAnimationBinder(
 
 CAnimationBinder::CAnimationBinder()
 {
-	m_pAllocator = IZ_NULL;
+	m_Allocator = IZ_NULL;
 
 	m_JointNum = 0;
 	m_Joints = IZ_NULL;

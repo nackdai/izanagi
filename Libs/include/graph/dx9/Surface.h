@@ -55,7 +55,7 @@ namespace izanagi {
 		D3D_SURFACE* GetRawInterface() { return m_pSurface; }
 
 	private:
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 
 		// 本体
 		D3D_SURFACE* m_pSurface;

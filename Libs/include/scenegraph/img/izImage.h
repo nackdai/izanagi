@@ -44,7 +44,7 @@ namespace izanagi {
 		inline CBaseTexture* GetTexture(IZ_UINT nIdx);
 
 	protected:
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 
 		S_IMG_HEADER m_Header;
 		CBaseTexture** m_pTexture;
@@ -55,7 +55,7 @@ namespace izanagi {
 	// コンストラクタ
 	CImage::CImage()
 	{
-		m_pAllocator = IZ_NULL;
+		m_Allocator = IZ_NULL;
 		m_pTexture = IZ_NULL;
 	}
 
@@ -71,8 +71,8 @@ namespace izanagi {
 	void CImage::InternalRelease()
 	{
 		delete this;
-		if (m_pAllocator != IZ_NULL) {
-			FREE(m_pAllocator, this);
+		if (m_Allocator != IZ_NULL) {
+			FREE(m_Allocator, this);
 		}
 	}
 

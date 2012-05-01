@@ -379,7 +379,7 @@ namespace izanagi {
 
 	public:
 		D3D_DEVICE* GetRawInterface() { return m_pDevice; }
-		IMemoryAllocator* GetDeviceAllocator() { return m_pAllocator; }
+		IMemoryAllocator* GetDeviceAllocator() { return m_Allocator; }
 
 	private:
 		enum {
@@ -388,7 +388,7 @@ namespace izanagi {
 		};
 
 	private:
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 
 		D3D_INST* m_pD3D;
 

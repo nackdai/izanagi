@@ -25,7 +25,7 @@ CArchiveProxy* CArchiveProxy::CreateArchiveProxy(
 	CArchiveProxy* pInstance = new(pBuf) CArchiveProxy;
 	{
 		pInstance->AddRef();
-		pInstance->m_pAllocator = pAllocator;
+		pInstance->m_Allocator = pAllocator;
 
 		SAFE_REPLACE(pInstance->m_pArchive, pArchive);
 	}
@@ -38,7 +38,7 @@ CArchiveProxy* CArchiveProxy::CreateArchiveProxy(
 
 CArchiveProxy::CArchiveProxy()
 {
-	m_pAllocator = IZ_NULL;
+	m_Allocator = IZ_NULL;
 	m_pArchive = IZ_NULL;
 }
 
@@ -134,7 +134,7 @@ void* CArchiveProxy::CreateResource(
 
 	// Create resource.
 	CObject* pObj = pListener->CreateRsc(
-						(pAllocator == IZ_NULL ? m_pAllocator : pAllocator),
+						(pAllocator == IZ_NULL ? m_Allocator : pAllocator),
 						pDevice,
 						m_pArchive->GetInputStream());
 	VRETURN_NULL(pObj != IZ_NULL);

@@ -4,7 +4,7 @@ using namespace izanagi;
 
 CResource::CResource()
 {
-	m_pAllocator = IZ_NULL;
+	m_Allocator = IZ_NULL;
 
 	m_pData = IZ_NULL;
 	m_pRscMgr = IZ_NULL;

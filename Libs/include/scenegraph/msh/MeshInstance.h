@@ -60,7 +60,7 @@ namespace izanagi {
 		CMeshSetInstance* GetMeshSet(IZ_UINT level, IZ_UINT idx);
 
 	private:
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 
 		CMesh* m_pBody;
 

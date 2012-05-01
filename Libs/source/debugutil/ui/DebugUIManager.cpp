@@ -25,7 +25,7 @@ CDebugUIManager* CDebugUIManager::CreateDebugUIManager(IMemoryAllocator* pAlloca
 	s_pInstance = new(pBuf) CDebugUIManager;
 	{
 		s_pInstance->AddRef();
-		s_pInstance->m_pAllocator = pAllocator;
+		s_pInstance->m_Allocator = pAllocator;
 	}
 
 __EXIT__:

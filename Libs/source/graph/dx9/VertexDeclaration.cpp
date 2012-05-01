@@ -24,7 +24,7 @@ CVertexDeclaration* CVertexDeclaration::CreateVertexDeclaration(
 	pInstance = new(pBuf) CVertexDeclaration;
 	{
 		pInstance->AddRef();
-		pInstance->m_pAllocator = pAllocator;
+		pInstance->m_Allocator = pAllocator;
 	}
 
 	// 頂点宣言本体作成

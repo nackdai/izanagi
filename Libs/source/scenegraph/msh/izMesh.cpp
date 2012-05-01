@@ -41,7 +41,7 @@ CMesh* CMesh::CreateMesh(
 		pBuf += sizeof(CMesh);
 
 		pInstance->AddRef();
-		pInstance->m_pAllocator = pAllocator;
+		pInstance->m_Allocator = pAllocator;
 
 		memcpy(&pInstance->m_Header, &sHeader, sizeof(sHeader));
 
@@ -73,7 +73,7 @@ __EXIT__:
 
 CMesh::CMesh()
 {
-	m_pAllocator = IZ_NULL;
+	m_Allocator = IZ_NULL;
 	m_pDevice = IZ_NULL;
 
 	FILL_ZERO(&m_Header, sizeof(m_Header));

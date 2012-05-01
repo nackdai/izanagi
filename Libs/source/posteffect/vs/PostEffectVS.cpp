@@ -10,7 +10,7 @@ using namespace izanagi;
 // コンストラクタ
 CPostEffectVS::CPostEffectVS()
 {
-	m_pAllocator = IZ_NULL;
+	m_Allocator = IZ_NULL;
 	m_pDevice = IZ_NULL;
 
 	m_pShader = IZ_NULL;
@@ -37,8 +37,8 @@ void CPostEffectVS::InternalRelease()
 {
 	delete this;
 
-	if (m_pAllocator != IZ_NULL) {
-		m_pAllocator->Free(this);
+	if (m_Allocator != IZ_NULL) {
+		m_Allocator->Free(this);
 	}
 }
 

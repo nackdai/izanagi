@@ -42,7 +42,7 @@ CGraphicsDevice* CGraphicsDevice::CreateGrapicsDevice(
 	// インスタンス作成
 	pInstance = new(pBuf) CGraphicsDevice;
 	{
-		pInstance->m_pAllocator = allocator;
+		pInstance->m_Allocator = allocator;
 
 		// IDirect3D9 インターフェースの取得
 		pInstance->m_pD3D = Direct3DCreate9(D3D_SDK_VERSION);
@@ -83,7 +83,7 @@ __EXIT__:
 // コンストラクタ
 CGraphicsDevice::CGraphicsDevice()
 {
-	m_pAllocator = IZ_NULL;
+	m_Allocator = IZ_NULL;
 
 	m_pD3D = IZ_NULL;
 
@@ -131,8 +131,8 @@ void CGraphicsDevice::InternalRelease()
 {	
 	delete this;
 
-	if (m_pAllocator != IZ_NULL) {
-		m_pAllocator->Free(this);
+	if (m_Allocator != IZ_NULL) {
+		m_Allocator->Free(this);
 	}
 
 	if (s_pInstance == this) {
@@ -155,7 +155,7 @@ IZ_BOOL CGraphicsDevice::Reset(const SGraphicsDeviceInitParams& sParams)
 			// 2D描画初期化
 			m_p2DRenderer = C2DRenderer::Create2DRenderer(
 								this,
-								m_pAllocator);
+								m_Allocator);
 			ret = (m_p2DRenderer != IZ_NULL);
 			IZ_ASSERT(ret);
 		}
@@ -194,14 +194,14 @@ IZ_BOOL CGraphicsDevice::Reset(const SGraphicsDeviceInitParams& sParams)
 				m_pRT->Reset(IZ_NULL, 0);
 			}
 			else {
-				m_pRT = CSurface::CreateSurface(m_pAllocator);
+				m_pRT = CSurface::CreateSurface(m_Allocator);
 			}
 
 			if (m_pDepth != IZ_NULL) {
 				m_pDepth->Reset(IZ_NULL, 0);
 			}
 			else {
-				m_pDepth = CSurface::CreateSurface(m_pAllocator);
+				m_pDepth = CSurface::CreateSurface(m_Allocator);
 			}
 
 			ret = ((m_pRT != IZ_NULL) && (m_pDepth != IZ_NULL));

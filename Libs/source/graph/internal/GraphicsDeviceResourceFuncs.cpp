@@ -11,7 +11,7 @@ CTexture* CGraphicsDevice::CreateTextureFromFile(
 {
 	CTexture* pTexture = CTexture::CreateTextureFromFile(
 							this,
-							m_pAllocator,
+							m_Allocator,
 							lpszPathName,
 							fmt);
 	return pTexture;
@@ -27,7 +27,7 @@ CTexture* CGraphicsDevice::CreateTextureFromMemory(
 {
 	CTexture* pTexture = CTexture::CreateTextureFromMemory(
 							this,
-							m_pAllocator,
+							m_Allocator,
 							pData,
 							nDataSize,
 							fmt);
@@ -46,7 +46,7 @@ CTexture* CGraphicsDevice::CreateTexture(
 {
 	CTexture* pTexture = CTexture::CreateTexture(
 							this,
-							m_pAllocator,
+							m_Allocator,
 							nWidth, nHeight,
 							nMipLevel,
 							fmt,
@@ -69,7 +69,7 @@ CCubeTexture* CGraphicsDevice::CreateCubeTextureFromFile(
 {
 	CCubeTexture* pTexture = CCubeTexture::CreateCubeTextureFromFile(
 								this,
-								m_pAllocator,
+								m_Allocator,
 								lpszPathName,
 								fmt);
 	return pTexture;
@@ -87,7 +87,7 @@ CCubeTexture* CGraphicsDevice::CreateCubeTexture(
 {
 	CCubeTexture* pTexture = CCubeTexture::CreateCubeTexture(
 								this,
-								m_pAllocator,
+								m_Allocator,
 								nWidth,
 								nHeight,
 								nMipLevel,
@@ -104,7 +104,7 @@ CTexture* CGraphicsDevice::CreateRenderTarget(
 {
 	CTexture* pRT = CTexture::CreateRenderTarget(
 						this,
-						m_pAllocator,
+						m_Allocator,
 						nWidth,
 						nHeight,
 						fmt);
@@ -124,7 +124,7 @@ CSurface* CGraphicsDevice::CreateDepthStencilSurface(
 	E_GRAPH_PIXEL_FMT fmt)
 {
 	CSurface* ret = CSurface::CreateDepthStencilSurface(
-						m_pAllocator,
+						m_Allocator,
 						this,
 						width, height,
 						fmt);
@@ -142,7 +142,7 @@ CTexture* CGraphicsDevice::CreateTextureOnSysMem(
 {
 	CTexture* pTexture = CTexture::CreateTexture(
 							this,
-							m_pAllocator,
+							m_Allocator,
 							nWidth,
 							nHeight,
 							nMipLevel,
@@ -162,7 +162,7 @@ CVertexBuffer* CGraphicsDevice::CreateVertexBuffer(
 {
 	CVertexBuffer* pVB = CVertexBuffer::CreateVertexBuffer(
 							this,
-							m_pAllocator,
+							m_Allocator,
 							nStride,
 							nVtxNum,
 							nCreateType);
@@ -187,7 +187,7 @@ CIndexBuffer* CGraphicsDevice::CreateIndexBuffer(
 {
 	CIndexBuffer* pIB = CIndexBuffer::CreateIndexBuffer(
 							this,
-							m_pAllocator,
+							m_Allocator,
 							nIdxNum,
 							fmt,
 							nCreateType);
@@ -209,7 +209,7 @@ CVertexShader* CGraphicsDevice::CreateVertexShader(const void* pProgram)
 {
 	CVertexShader* ret = CVertexShader::CreateVertexShader(
 							this,
-							m_pAllocator,
+							m_Allocator,
 							pProgram);
 	return ret;
 }
@@ -221,7 +221,7 @@ CPixelShader* CGraphicsDevice::CreatePixelShader(const void* pProgram)
 {
 	CPixelShader* ret = CPixelShader::CreatePixelShader(
 							this,
-							m_pAllocator,
+							m_Allocator,
 							pProgram);
 	return ret;
 }
@@ -233,7 +233,7 @@ CVertexDeclaration* CGraphicsDevice::CreateVertexDeclaration(const D3D_VTX_ELEME
 {
 	CVertexDeclaration* ret = CVertexDeclaration::CreateVertexDeclaration(
 								this,
-								m_pAllocator,
+								m_Allocator,
 								pElem);
 	return ret;
 }
@@ -242,7 +242,7 @@ CVertexDeclaration* CGraphicsDevice::CreateVertexDeclaration(const SVertexElemen
 {
 	CVertexDeclaration* ret = CVertexDeclaration::CreateVertexDeclaration(
 								this,
-								m_pAllocator,
+								m_Allocator,
 								pElem,
 								nNum);
 	return ret;

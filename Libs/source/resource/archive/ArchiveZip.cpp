@@ -89,7 +89,7 @@ IArchive* CArchiveZip::CreateArchiveZip(
 	pInstance = new (pBuf) CArchiveZip;
 	{
 		pInstance->AddRef();
-		pInstance->m_pAllocator = pAllocator;
+		pInstance->m_Allocator = pAllocator;
 
 		pBuf += sizeof(CArchiveZip);
 
@@ -118,7 +118,7 @@ __EXIT__:
 // Constructor
 CArchiveZip::CArchiveZip()
 {
-	m_pAllocator = IZ_NULL;
+	m_Allocator = IZ_NULL;
 
 	m_pInput = IZ_NULL;
 
