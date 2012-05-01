@@ -75,7 +75,7 @@ namespace izanagi {
 		inline void ApplyInvBindMatrix(IZ_UINT nIdx);
 
 	private:
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 
 		// 骨情報本体
 		CSkeleton* m_pBody;

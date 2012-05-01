@@ -15,7 +15,7 @@ CSceneRenderer* CSceneRenderer::CreateSceneRenderer(IMemoryAllocator* pAllocator
 	CSceneRenderer* pInstance = new(pBuf) CSceneRenderer;
 	{
 		pInstance->AddRef();
-		pInstance->m_pAllocator = pAllocator;
+		pInstance->m_Allocator = pAllocator;
 	}
 
 	return pInstance;
@@ -24,7 +24,7 @@ CSceneRenderer* CSceneRenderer::CreateSceneRenderer(IMemoryAllocator* pAllocator
 // コンストラクタ
 CSceneRenderer::CSceneRenderer()
 {
-	m_pAllocator = IZ_NULL;
+	m_Allocator = IZ_NULL;
 
 	m_pSceneParam = IZ_NULL;
 

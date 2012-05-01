@@ -64,7 +64,7 @@ namespace izanagi {
 		typedef CTexHash::Item	CTexHashItem;
 
 	private:
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 		CGraphicsDevice* m_pDevice;
 
 		// テクスチャリスト

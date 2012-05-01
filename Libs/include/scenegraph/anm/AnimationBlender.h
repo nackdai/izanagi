@@ -19,7 +19,7 @@ namespace izanagi {
 			_T* instance = new(buf) _T;
 			{
 				instance->AddRef();
-				instance->m_pAllocator = allocator;
+				instance->m_Allocator = allocator;
 
 				result = instance->Init();
 			}
@@ -47,7 +47,7 @@ namespace izanagi {
 		PURE_VIRTUAL(IZ_FLOAT GetMaxAnimationTime() const);
 
 	protected:
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 	};
 }	// namespace izanagi
 

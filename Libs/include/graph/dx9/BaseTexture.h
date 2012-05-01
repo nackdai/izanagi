@@ -62,7 +62,7 @@ namespace izanagi {
 
 	protected:
 		CGraphicsDevice* m_pDevice;
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 
 		// テクスチャ情報
 		struct {

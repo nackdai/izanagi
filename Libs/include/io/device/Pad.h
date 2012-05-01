@@ -70,7 +70,7 @@ namespace izanagi {
 		inline const PadState& GetPrevState() const;
 
 	protected:
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 
 		D_INPUT_DEVICE* m_pPadDevice;
 		HWND m_hWnd;

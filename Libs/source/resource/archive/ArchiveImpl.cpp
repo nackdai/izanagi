@@ -74,7 +74,7 @@ CArchive* CArchive::CreateArchive(
 
 		pInstance->AddRef();
 
-		pInstance->m_pAllocator = pAllocator;
+		pInstance->m_Allocator = pAllocator;
 		pInstance->m_pInput = pInput;
 
 		// ヘッダ

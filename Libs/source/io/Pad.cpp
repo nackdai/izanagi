@@ -23,7 +23,7 @@ CPad* CPad::CreatePad(IMemoryAllocator* pAllocator)
 	pInstance = new(pBuf) CPad;
 	{
 		pInstance->AddRef();
-		pInstance->m_pAllocator = pAllocator;
+		pInstance->m_Allocator = pAllocator;
 	}
 
 __EXIT__:
@@ -127,7 +127,7 @@ BOOL CALLBACK CPad::EnumPadAxisCallback(LPCDIDEVICEOBJECTINSTANCE lpddoi, LPVOID
 // コンストラクタ
 CPad::CPad()
 {
-	m_pAllocator = IZ_NULL;
+	m_Allocator = IZ_NULL;
 	m_pPadDevice = IZ_NULL;
 	m_hWnd = IZ_NULL;
 
@@ -154,8 +154,8 @@ void CPad::InternalRelease()
 {
 	delete this;
 
-	if (m_pAllocator != IZ_NULL) {
-		m_pAllocator->Free(this);
+	if (m_Allocator != IZ_NULL) {
+		m_Allocator->Free(this);
 	}
 }
 

@@ -82,7 +82,7 @@ namespace izanagi {
 		void Clear();
 		
 	private:
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 
 		IZ_UINT m_nZLevvel;
 

@@ -83,7 +83,7 @@ namespace izanagi {
 		inline CDebugUIFontLayout* GetFontLayout();
 
 	protected:
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 
 		// キャプチャウィジェット
 		CDebugUIWidget* m_pCapture;
@@ -100,7 +100,7 @@ namespace izanagi {
 	// コンストラクタ
 	CDebugUIManager::CDebugUIManager()
 	{
-		m_pAllocator = IZ_NULL;
+		m_Allocator = IZ_NULL;
 		m_pCapture = IZ_NULL;
 	}
 
@@ -115,8 +115,8 @@ namespace izanagi {
 	void CDebugUIManager::InternalRelease()
 	{
 		delete this;
-		if (m_pAllocator != IZ_NULL) {
-			m_pAllocator->Free(this);
+		if (m_Allocator != IZ_NULL) {
+			m_Allocator->Free(this);
 		}
 	}
 

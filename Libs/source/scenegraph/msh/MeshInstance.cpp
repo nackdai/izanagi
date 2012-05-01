@@ -217,7 +217,7 @@ CMeshInstance* CMeshInstance::CreateMeshInstance(
 	pBuf += sizeof(CMeshInstance);
 	{
 		pInstance->AddRef();
-		pInstance->m_pAllocator = pAllocator;
+		pInstance->m_Allocator = pAllocator;
 
 		SAFE_REPLACE(pInstance->m_pBody, pMesh);
 
@@ -257,7 +257,7 @@ CMeshInstance* CMeshInstance::CreateMeshInstance(
 // コンストラクタ
 CMeshInstance::CMeshInstance()
 {
-	m_pAllocator = IZ_NULL;
+	m_Allocator = IZ_NULL;
 	m_pBody = IZ_NULL;
 
 	m_nGroupNum = 0;

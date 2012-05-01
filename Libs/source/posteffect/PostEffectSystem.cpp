@@ -69,7 +69,7 @@ CPostEffectSystem* CPostEffectSystem::CreatePostEffectSystem(
 	// インスタンス作成
 	pInstance = new(pBuf) CPostEffectSystem;
 	{
-		pInstance->m_pAllocator = pAllocator;
+		pInstance->m_Allocator = pAllocator;
 		SAFE_REPLACE(pInstance->m_pDevice, pDevice);
 
 		// 初期化
@@ -93,7 +93,7 @@ __EXIT__:
 // コンストラクタ
 CPostEffectSystem::CPostEffectSystem()
 {
-	m_pAllocator = IZ_NULL;
+	m_Allocator = IZ_NULL;
 	m_pDevice = IZ_NULL;
 	m_pTexCreator = IZ_NULL;
 }
@@ -112,7 +112,7 @@ CPostEffect* CPostEffectSystem::CreatePostEffect(IInputStream* in)
 {
 	// ポストエフェクト作成
 	CPostEffect* pPostEffect = CPostEffect::CreatePostEffect(
-								m_pAllocator,
+								m_Allocator,
 								m_pDevice,
 								m_pTexCreator,
 								&m_cVSMgr,
@@ -159,7 +159,7 @@ void CPostEffectSystem::InternalRelease()
 {
 	delete this;
 
-	FREE(m_pAllocator, this);
+	FREE(m_Allocator, this);
 
 	if (s_pInstance == this) {
 		s_pInstance = IZ_NULL;

@@ -48,7 +48,7 @@ CPostEffectTextureCreator* CPostEffectTextureCreator::CreatePostEffectTextureCre
 		pBuf += sizeof(CPostEffectTextureCreator);
 
 		pInstance->AddRef();
-		pInstance->m_pAllocator = pAllocator;
+		pInstance->m_Allocator = pAllocator;
 
 		SAFE_REPLACE(pInstance->m_pDevice, pDevice);
 
@@ -62,7 +62,7 @@ CPostEffectTextureCreator* CPostEffectTextureCreator::CreatePostEffectTextureCre
 // コンストラクタ
 CPostEffectTextureCreator::CPostEffectTextureCreator()
 {
-	m_pAllocator = IZ_NULL;
+	m_Allocator = IZ_NULL;
 	m_pDevice = IZ_NULL;
 
 	m_pTexList = IZ_NULL;
@@ -84,7 +84,7 @@ CPostEffectTextureCreator::~CPostEffectTextureCreator()
 		}
 	}
 
-	FREE(m_pAllocator, m_pTexList);
+	FREE(m_Allocator, m_pTexList);
 }
 
 // テクスチャ作成開始

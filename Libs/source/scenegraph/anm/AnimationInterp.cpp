@@ -22,7 +22,7 @@ CAnimationInterp* CAnimationInterp::CreateAnimationInterp(IMemoryAllocator* allo
 	{
 		instance->AddRef();
 
-		instance->m_pAllocator = allocator;
+		instance->m_Allocator = allocator;
 		instance->m_InterpTime = 0.0f;
 
 		instance->mStartKey.keyTime = 0;
@@ -34,7 +34,7 @@ CAnimationInterp* CAnimationInterp::CreateAnimationInterp(IMemoryAllocator* allo
 
 CAnimationInterp::CAnimationInterp()
 {
-	m_pAllocator = IZ_NULL;
+	m_Allocator = IZ_NULL;
 
 	m_InterpTime = 0.0f;
 	m_Type = E_INTERP_TYPE_FROZEN;

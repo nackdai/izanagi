@@ -156,8 +156,8 @@ namespace izanagi {
 	{
 		delete this;
 
-		if (m_pAllocator != IZ_NULL) {
-			m_pAllocator->Free(this);
+		if (m_Allocator != IZ_NULL) {
+			m_Allocator->Free(this);
 		}
 	}
 

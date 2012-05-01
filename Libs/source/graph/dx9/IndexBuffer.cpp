@@ -27,7 +27,7 @@ CIndexBuffer* CIndexBuffer::CreateIndexBuffer(
 	// インスタンス作成
 	pInstance = new (pBuf)CIndexBuffer;
 	{
-		pInstance->m_pAllocator = pAllocator;
+		pInstance->m_Allocator = pAllocator;
 		pInstance->AddRef();
 		SAFE_REPLACE(pInstance->m_pDevice, pDevice);
 	}

@@ -89,7 +89,7 @@ namespace izanagi {
 		IZ_DWORD GetFontColor() { return m_nColor; }
 
 	protected:
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 		CGraphicsDevice* m_pDevice;
 
 		CTexture* m_pFontTex;

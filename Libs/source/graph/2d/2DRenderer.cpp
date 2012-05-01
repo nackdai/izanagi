@@ -32,7 +32,7 @@ C2DRenderer* C2DRenderer::Create2DRenderer(
 	}
 
 	{
-		pInstance->m_pAllocator = pAllocator;
+		pInstance->m_Allocator = pAllocator;
 		pInstance->AddRef();
 
 		// 初期化
@@ -59,7 +59,7 @@ __EXIT__:
 // コンストラクタ
 C2DRenderer::C2DRenderer()
 {
-	m_pAllocator = IZ_NULL;
+	m_Allocator = IZ_NULL;
 
 	m_pVB = IZ_NULL;
 	m_pIB = IZ_NULL;
@@ -87,8 +87,8 @@ void C2DRenderer::InternalRelease()
 {
 	delete this;
 
-	if (m_pAllocator != IZ_NULL) {
-		m_pAllocator->Free(this);
+	if (m_Allocator != IZ_NULL) {
+		m_Allocator->Free(this);
 	}
 }
 
@@ -162,7 +162,7 @@ IZ_BOOL C2DRenderer::Init(CGraphicsDevice* pDevice)
 		IZ_UINT nRefCnt = pDevice->GetRefCnt();
 
 		m_pShader = C2DShader::Create2DShader(
-						m_pAllocator,
+						m_Allocator,
 						pDevice);
 		VRETURN(m_pShader != IZ_NULL);
 

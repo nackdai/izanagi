@@ -55,7 +55,7 @@ namespace izanagi {
 		};
 
 	private:
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 
 		CVertexShader* m_pVS;
 		CPixelShader* m_pPS[E_GRAPH_2D_RENDER_OP_NUM];
@@ -71,8 +71,8 @@ namespace izanagi {
 	void C2DShader::InternalRelease()
 	{
 		delete this;
-		if (m_pAllocator != IZ_NULL) {
-			m_pAllocator->Free(this);
+		if (m_Allocator != IZ_NULL) {
+			m_Allocator->Free(this);
 		}
 	}
 

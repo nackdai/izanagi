@@ -40,7 +40,7 @@ namespace izanagi {
 		S_SKL_JOINT* GetJoint(IZ_INT idx);
 
 	private:
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 
 		IZ_UINT m_nJointNum;
 		S_SKL_JOINT* m_pJoint;

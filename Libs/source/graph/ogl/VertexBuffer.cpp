@@ -27,7 +27,7 @@ CVertexBuffer* CVertexBuffer::CreateVertexBuffer(
 	pInstance = new (pBuf)CVertexBuffer;
 	{
 		SAFE_REPLACE(pInstance->m_pDevice, pDevice);
-		pInstance->m_pAllocator = pAllocator;
+		pInstance->m_Allocator = pAllocator;
 		pInstance->AddRef();
 	}
 

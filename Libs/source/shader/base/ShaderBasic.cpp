@@ -7,7 +7,7 @@ IZ_BOOL CShaderBasic::Init(
 	CGraphicsDevice* pDevice,
 	IInputStream* pIn)
 {
-	IZ_ASSERT(m_pAllocator != IZ_NULL);
+	IZ_ASSERT(m_Allocator != IZ_NULL);
 
 	// Read file's header.
 	IZ_INPUT_READ_VRETURN(pIn, (IZ_UINT8*)&m_Header, 0, sizeof(m_Header));
@@ -26,7 +26,7 @@ IZ_BOOL CShaderBasic::Init(
 					m_Header.numSmpl);
 
 	// Allocate buffer.
-	IZ_UINT8* pBuffer = reinterpret_cast<IZ_UINT8*>(ALLOC_ZERO(m_pAllocator, nBufSize));
+	IZ_UINT8* pBuffer = reinterpret_cast<IZ_UINT8*>(ALLOC_ZERO(m_Allocator, nBufSize));
 	VRETURN(pBuffer != IZ_NULL);
 
 	// Keep top of allocated buffer.
@@ -95,7 +95,7 @@ IZ_BOOL CShaderBasic::Init(
 
 CShaderBasic::CShaderBasic()
 {
-	m_pAllocator = IZ_NULL;
+	m_Allocator = IZ_NULL;
 	m_pDevice = IZ_NULL;
 
 	m_pBuffer = IZ_NULL;
@@ -117,7 +117,7 @@ CShaderBasic::~CShaderBasic()
 	}
 
 	SAFE_RELEASE(m_pDevice);
-	FREE(m_pAllocator, m_pBuffer);
+	FREE(m_Allocator, m_pBuffer);
 }
 
 IZ_UINT8* CShaderBasic::CreatePass(
@@ -125,12 +125,12 @@ IZ_UINT8* CShaderBasic::CreatePass(
 	IInputStream* pIn,
 	IZ_UINT8* pBuffer)
 {
-	IZ_ASSERT(m_pAllocator != IZ_NULL);
+	IZ_ASSERT(m_Allocator != IZ_NULL);
 	IZ_ASSERT(m_pDevice != IZ_NULL);
 	IZ_ASSERT(m_pPass != IZ_NULL);
 
 	// プログラム読み込み用バッファ
-	void* pProgramBuf = ALLOC(m_pAllocator, m_Header.maxProgamSize);
+	void* pProgramBuf = ALLOC(m_Allocator, m_Header.maxProgamSize);
 	VRETURN_NULL(pProgramBuf != IZ_NULL);
 
 	for (IZ_UINT i = 0; i < m_Header.numPass; ++i) {
@@ -198,7 +198,7 @@ IZ_UINT8* CShaderBasic::CreatePass(
 	}
 
 __EXIT__:
-	FREE(m_pAllocator, pProgramBuf);
+	FREE(m_Allocator, pProgramBuf);
 	return pBuffer;
 }
 

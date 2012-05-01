@@ -128,7 +128,7 @@ CMaterial* CMaterial::CreateMaterial(
 
 		pInstance->AddRef();
 
-		pInstance->m_pAllocator = pAllocator;
+		pInstance->m_Allocator = pAllocator;
 		pInstance->m_IsFromMtrlFile = IZ_TRUE;
 
 		pInstance->m_pTexInfo = reinterpret_cast<S_MTRL_TEXTURE*>(pBuf);
@@ -156,7 +156,7 @@ CMaterial* CMaterial::CreateMaterial(
 
 CMaterial::CMaterial()
 {
-	m_pAllocator = IZ_NULL;
+	m_Allocator = IZ_NULL;
 
 	m_IsFromMtrlFile = IZ_FALSE;
 	m_nAttachBufPos = 0;

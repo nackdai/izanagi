@@ -17,7 +17,7 @@ namespace izanagi {
 	public:
 		CRecycleArray()
 		{
-			m_pAllocator = IZ_NULL;
+			m_Allocator = IZ_NULL;
 		
 			m_Elements = IZ_NULL;
 
@@ -43,7 +43,7 @@ namespace izanagi {
 			m_Elements = reinterpret_cast<SElement>(ALLOC_ZERO(pAllocator, sizeof(SElemet) * nNum));
 			VRETURN(m_Elements != IZ_NULL);
 
-			m_pAllocator = pAllocator;
+			m_Allocator = pAllocator;
 			m_nElementNum = nNum;
 
 			return IZ_TRUE;
@@ -62,8 +62,8 @@ namespace izanagi {
 
 		void Clear()
 		{
-			if (m_pAllocator != IZ_NULL) {
-				FREE(m_pAllocator, m_Elements);
+			if (m_Allocator != IZ_NULL) {
+				FREE(m_Allocator, m_Elements);
 			}
 			m_Elements = IZ_NULL;
 		}
@@ -187,7 +187,7 @@ namespace izanagi {
 		}
 
 	protected:
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 		
 		SElement* m_Elements;
 

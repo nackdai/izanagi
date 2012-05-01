@@ -107,7 +107,7 @@ namespace izanagi {
 		void SetRenderHandler(IMshRenderHandler* pRenderHandler);
 
 	protected:
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 
 		CMeshInstance* m_pMesh;
 		CSkeletonInstance* m_pSkeleton;

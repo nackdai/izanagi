@@ -33,7 +33,7 @@ CDebugMesh::GetElemSizeFunc CDebugMesh::GetElemSizeFuncTbl[] = {
 */
 CDebugMesh::CDebugMesh()
 {
-	m_pAllocator = IZ_NULL;
+	m_Allocator = IZ_NULL;
 	m_pDevice = IZ_NULL;
 	
 	m_pVB = IZ_NULL;
@@ -176,10 +176,10 @@ IZ_BOOL CDebugMesh::CreateDataBuffer(
 {
 	IZ_ASSERT(m_nPrimCnt > 0);
 
-	m_pVtx = (SMeshVtx*)ALLOC_ZERO(m_pAllocator, sizeof(SMeshVtx) * nVtxNum);
+	m_pVtx = (SMeshVtx*)ALLOC_ZERO(m_Allocator, sizeof(SMeshVtx) * nVtxNum);
 	VRETURN_NULL(m_pVtx);
 
-	m_pFace = (SMeshFace*)ALLOC_ZERO(m_pAllocator, sizeof(SMeshFace) * m_nPrimCnt);
+	m_pFace = (SMeshFace*)ALLOC_ZERO(m_Allocator, sizeof(SMeshFace) * m_nPrimCnt);
 	VRETURN_NULL(m_pFace);
 
 	return IZ_TRUE;
@@ -197,7 +197,7 @@ IZ_BOOL CDebugMesh::CreateDebugAxis(
 	nAxisFlag |= (IsTangent(flag) ? E_DEBUG_MESH_AXIS_X | E_DEBUG_MESH_AXIS_Y : 0);
 
 	m_pDebugAxis = CDebugMeshAxis::CreateDebugMeshAxis(
-					m_pAllocator,
+					m_Allocator,
 					m_pDevice,
 					nAxisFlag,
 					nVtxNum);
@@ -209,8 +209,8 @@ IZ_BOOL CDebugMesh::CreateDebugAxis(
 // データバッファクリア
 void CDebugMesh::ClearDataBuffer()
 {
-	FREE(m_pAllocator, m_pVtx);
-	FREE(m_pAllocator, m_pFace);
+	FREE(m_Allocator, m_pVtx);
+	FREE(m_Allocator, m_pFace);
 }
 
 // データをVB、IBにコピーする

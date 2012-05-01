@@ -32,8 +32,8 @@ namespace izanagi {
 		// Return whether this has data.
 		IZ_BOOL IsValid() const { return (m_pData != IZ_NULL); }
 
-		void SetAllocator(IMemoryAllocator* pAllocator) { m_pAllocator = pAllocator; }
-		IMemoryAllocator* GetAllocator() { return m_pAllocator; }
+		void SetAllocator(IMemoryAllocator* pAllocator) { m_Allocator = pAllocator; }
+		IMemoryAllocator* GetAllocator() { return m_Allocator; }
 
 		CResourceManager::CRscHashItem* GetHashItem() { return &m_HashItem; }
 		CResourceManager::CFreeRscListItem* GetFreeListItem() { return &m_FreeListItem; }
@@ -58,7 +58,7 @@ namespace izanagi {
 			STR_SIZE = 7,
 		};
 
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 
 		CRscType m_Type;
 		CObject* m_pData;

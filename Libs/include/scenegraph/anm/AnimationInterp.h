@@ -99,7 +99,7 @@ namespace izanagi {
 		};
 
 	private:
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 
 		// 補間するアニメーション
 		SInterpAnm m_InterpAnm[2];

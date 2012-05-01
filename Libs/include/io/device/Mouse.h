@@ -50,7 +50,7 @@ namespace izanagi {
 		inline HWND GetHWND();
 
 	protected:
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 
 		D_INPUT_DEVICE* m_pMouseDevice;
 		HWND m_hWnd;

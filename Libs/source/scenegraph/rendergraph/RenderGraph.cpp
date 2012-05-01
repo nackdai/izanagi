@@ -30,7 +30,7 @@ CRenderGraph* CRenderGraph::CreateRenderGraph(
 		buf += instanceSize;
 
 		pInstance->AddRef();
-		pInstance->m_pAllocator = pAllocator;
+		pInstance->m_Allocator = pAllocator;
 
 		pInstance->m_nZLevvel = nZLevel;
 
@@ -53,7 +53,7 @@ CRenderGraph* CRenderGraph::CreateRenderGraph(
 
 CRenderGraph::CRenderGraph()
 {
-	m_pAllocator = IZ_NULL;
+	m_Allocator = IZ_NULL;
 
 	m_nZLevvel = 0;
 	m_Opaque = IZ_NULL;

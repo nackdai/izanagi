@@ -71,7 +71,7 @@ CFontRenderer* CFontRendererBmp::CreateFontRendererBmp(
 		pBuf += sizeof(CFontRendererBmp);
 
 		pInstance->AddRef();
-		pInstance->m_pAllocator = pAllocator;
+		pInstance->m_Allocator = pAllocator;
 		SAFE_REPLACE(pInstance->m_pDevice, pDevice);
 
 		pInstance->m_nMaxRegisterNum = nMaxRegisterNum;
@@ -153,7 +153,7 @@ __EXIT__:
 // コンストラクタ
 CFontRendererBmp::CFontRendererBmp()
 {
-	m_pAllocator = IZ_NULL;
+	m_Allocator = IZ_NULL;
 	m_pDevice = IZ_NULL;
 
 	// ヘッダ
@@ -198,8 +198,8 @@ void CFontRendererBmp::InternalRelease()
 {
 	delete this;
 
-	if (m_pAllocator != IZ_NULL) {
-		m_pAllocator->Free(this);
+	if (m_Allocator != IZ_NULL) {
+		m_Allocator->Free(this);
 	}
 }
 

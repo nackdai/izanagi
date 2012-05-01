@@ -33,7 +33,7 @@ CDebugFont* CDebugFont::CreateDebugFont(
 	{
 		pInstance->AddRef();
 
-		pInstance->m_pAllocator = pAllocator;
+		pInstance->m_Allocator = pAllocator;
 		SAFE_REPLACE(pInstance->m_pDevice, pDevice);
 
 		// テクスチャ作成
@@ -53,7 +53,7 @@ __EXIT__:
 // コンストラクタ
 CDebugFont::CDebugFont()
 {
-	m_pAllocator = IZ_NULL;
+	m_Allocator = IZ_NULL;
 	m_pDevice = IZ_NULL;
 
 	m_pFontTex = IZ_NULL;
@@ -79,8 +79,8 @@ void CDebugFont::InternalRelease()
 {
 	delete this;
 
-	if (m_pAllocator != IZ_NULL) {
-		m_pAllocator->Free(this);
+	if (m_Allocator != IZ_NULL) {
+		m_Allocator->Free(this);
 	}
 }
 

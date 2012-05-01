@@ -88,7 +88,7 @@ namespace izanagi {
 #define IZ_DEFINE_INTERNAL_RELEASE()\
 	void InternalRelease() {\
 		delete this;\
-		FREE(m_pAllocator, this);\
+		FREE(m_Allocator, this);\
 	}
 
 #endif	// #if !defined(__IZANAGI_STD_OBEJCT_H__)

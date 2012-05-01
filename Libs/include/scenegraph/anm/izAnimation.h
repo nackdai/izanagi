@@ -90,7 +90,7 @@ namespace izanagi {
 		E_ANM_KEY_TYPE GetKeyType() const { return m_sHeader.keyType; }
 		
 	private:
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 
 		S_ANM_HEADER m_sHeader;
 

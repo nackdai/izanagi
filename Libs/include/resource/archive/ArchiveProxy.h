@@ -103,7 +103,7 @@ namespace izanagi {
 		};
 
 	protected:
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 
 		CResourceManagerProxy m_RscMgr;
 

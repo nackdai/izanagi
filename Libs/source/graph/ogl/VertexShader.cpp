@@ -24,7 +24,7 @@ CVertexShader* CVertexShader::CreateVertexShader(
 	pInstance = new(pBuf) CVertexShader;
 	{
 		pInstance->AddRef();
-		pInstance->m_pAllocator = pAllocator;
+		pInstance->m_Allocator = pAllocator;
 	}
 
 	//IZ_C_ASSERT(sizeof(DWORD) == sizeof(IZ_DWORD));

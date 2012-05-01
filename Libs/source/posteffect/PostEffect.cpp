@@ -36,7 +36,7 @@ CPostEffect* CPostEffect::CreatePostEffect(
 		pBuffer += sizeof(CPostEffect);
 
 		pInstance->AddRef();
-		pInstance->m_pAllocator = pAllocator;
+		pInstance->m_Allocator = pAllocator;
 
 		SAFE_REPLACE(pInstance->m_pDevice, pDevice);
 
@@ -89,7 +89,7 @@ size_t CPostEffect::ComputeFunctorSize(CPostEffectShader* pShader)
 // コンストラクタ
 CPostEffect::CPostEffect()
 {
-	m_pAllocator = IZ_NULL;
+	m_Allocator = IZ_NULL;
 	m_pDevice = IZ_NULL;
 
 	m_pShader = IZ_NULL;

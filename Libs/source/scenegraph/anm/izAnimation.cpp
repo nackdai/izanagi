@@ -30,7 +30,7 @@ CAnimation* CAnimation::CreateAnimation(
 		pBuf += sizeof(CAnimation);
 
 		pInstance->AddRef();
-		pInstance->m_pAllocator = pAllocator;
+		pInstance->m_Allocator = pAllocator;
 
 		memcpy(&pInstance->m_sHeader, &sHeader, sizeof(sHeader));
 
@@ -52,7 +52,7 @@ __EXIT__:
 
 CAnimation::CAnimation()
 {
-	m_pAllocator = IZ_NULL;
+	m_Allocator = IZ_NULL;
 	m_pNodes = IZ_NULL;
 
 	FILL_ZERO(&m_sHeader, sizeof(m_sHeader));

@@ -182,7 +182,7 @@ namespace izanagi {
 		};
 
 	protected:
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 
 		CVertexBuffer* m_pVB;		// 頂点バッファ
 		CIndexBuffer* m_pIB;		// インデックスバッファ

@@ -15,7 +15,7 @@ CShaderManager* CShaderManager::CreateShaderManager(IMemoryAllocator* pAllocator
 	CShaderManager* pInstance = new(pBuf) CShaderManager;
 	{
 		pInstance->AddRef();
-		pInstance->m_pAllocator = pAllocator;
+		pInstance->m_Allocator = pAllocator;
 	}
 
 	return pInstance;
@@ -23,7 +23,7 @@ CShaderManager* CShaderManager::CreateShaderManager(IMemoryAllocator* pAllocator
 
 CShaderManager::CShaderManager()
 {
-	m_pAllocator = IZ_NULL;
+	m_Allocator = IZ_NULL;
 }
 
 CShaderManager::~CShaderManager()

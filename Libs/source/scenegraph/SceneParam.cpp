@@ -37,7 +37,7 @@ CSceneParam* CSceneParam::CreateSceneParam(
 
 		pInstance->AddRef();
 
-		pInstance->m_pAllocator = pAllocator;
+		pInstance->m_Allocator = pAllocator;
 
 		SET_BUF(pInstance->m_pParallel, pBuf, SParallelLightParam, nParallelLightNum);
 		SET_BUF(pInstance->m_pPoint, pBuf, SPointLightParam, nPointLightNum);
@@ -67,7 +67,7 @@ __EXIT__:
 // コンストラクタ
 CSceneParam::CSceneParam()
 {
-	m_pAllocator = IZ_NULL;
+	m_Allocator = IZ_NULL;
 
 	m_pParallel = IZ_NULL;
 	m_pPoint = IZ_NULL;

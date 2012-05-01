@@ -74,7 +74,7 @@ namespace izanagi {
 		typedef CFunctorCreatorHash::Item CFunctorCreatorHashItem;
 
 	private:
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 		CGraphicsDevice* m_pDevice;
 
 		// テクスチャ作成用

@@ -215,7 +215,7 @@ namespace izanagi {
 			_T* ret = new(pBuf)_T;
 
 			ret->AddRef();
-			ret->m_pAllocator = pAllocator;
+			ret->m_Allocator = pAllocator;
 			SAFE_REPLACE(ret->m_pDevice, pDevice);
 
 			ret->m_nVtxFormFlag = nVtxFormFlag;
@@ -261,7 +261,7 @@ namespace izanagi {
 		}
 
 	protected:
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 		CGraphicsDevice* m_pDevice;
 
 		CVertexBuffer* m_pVB;
@@ -287,8 +287,8 @@ namespace izanagi {
 	{
 		delete this;
 
-		if (m_pAllocator != IZ_NULL) {
-			m_pAllocator->Free(this);
+		if (m_Allocator != IZ_NULL) {
+			m_Allocator->Free(this);
 		}
 	}
 

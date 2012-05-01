@@ -249,7 +249,7 @@ namespace izanagi {
 		// コンストラクタ
 		CStdHashEx()
 		{
-			m_pAllocator != NULL;
+			m_Allocator != NULL;
 
 			m_nSize = 0;
 			m_pHashList = NULL;
@@ -261,7 +261,7 @@ namespace izanagi {
 		~CStdHashEx()
 		{
 			Clear();
-			FREE(m_pAllocator, m_pHashList);
+			FREE(m_Allocator, m_pHashList);
 		}
 
 		// 初期化
@@ -270,7 +270,7 @@ namespace izanagi {
 			IZ_ASSERT(pAllocator != IZ_NULL);
 			IZ_ASSERT(nSize > 0);
 
-			if (m_pAllocator != NULL) {
+			if (m_Allocator != NULL) {
 				Clear();
 			}
 
@@ -334,7 +334,7 @@ namespace izanagi {
 		}
 
 	private:
-		IMemoryAllocator* m_pAllocator;
+		IMemoryAllocator* m_Allocator;
 
 		// ハッシュリスト
 		IZ_UINT m_nSize;

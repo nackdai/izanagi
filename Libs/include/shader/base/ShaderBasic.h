@@ -38,7 +38,7 @@ namespace izanagi {
 			_SHADER* pInstance = new(pBuf) _SHADER;
 			{
 				pInstance->AddRef();
-				pInstance->m_pAllocator = pAllocator;
+				pInstance->m_Allocator = pAllocator;
 				SAFE_REPLACE(pInstance->m_pDevice, pDevice);
 
 				if (!pInstance->Init(pDevice, pIn)) {

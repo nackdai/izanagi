@@ -20,7 +20,7 @@ CSurface* CSurface::CreateSurface(IMemoryAllocator* pAllocator)
 	// インスタンス作成
 	pInstance = new (pBuf)CSurface;
 	{
-		pInstance->m_pAllocator = pAllocator;
+		pInstance->m_Allocator = pAllocator;
 		pInstance->AddRef();
 	}
 
@@ -40,7 +40,7 @@ __EXIT__:
 // コンストラクタ
 CSurface::CSurface()
 {
-	m_pAllocator = IZ_NULL;
+	m_Allocator = IZ_NULL;
 
 	m_pSurface = IZ_NULL;
 
@@ -58,8 +58,8 @@ void CSurface::InternalRelease()
 {
 	delete this;
 
-	if (m_pAllocator != IZ_NULL) {
-		m_pAllocator->Free(this);
+	if (m_Allocator != IZ_NULL) {
+		m_Allocator->Free(this);
 	}
 }
 
