@@ -47,7 +47,7 @@ private:
 	static const IZ_USHORT sIdxList[IDX_NUM];
 
 private:
-	izanagi::IMemoryAllocator* m_pAllocator;
+	izanagi::IMemoryAllocator* m_Allocator;
 
 	izanagi::CVertexBuffer* m_VB;
 	izanagi::CIndexBuffer* m_IB;
