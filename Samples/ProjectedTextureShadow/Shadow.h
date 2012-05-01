@@ -32,7 +32,7 @@ public:
 	const izanagi::SMatrix& GetShadowTexMtx() const;
 
 private:
-	izanagi::IMemoryAllocator* m_pAllocator;
+	izanagi::IMemoryAllocator* m_Allocator;
 
 	izanagi::CTexture* m_RT;
 	izanagi::CSurface* m_DepthRT;

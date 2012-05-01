@@ -42,7 +42,7 @@ CSampleEnvBox* CSampleEnvBox::CreateSampleEnvBox(
 	CSampleEnvBox* instance = new(buf) CSampleEnvBox();
 	{
 		instance->AddRef();
-		instance->m_pAllocator = allocator;
+		instance->m_Allocator = allocator;
 
 		result = instance->Init(device);
 	}
@@ -57,7 +57,7 @@ CSampleEnvBox* CSampleEnvBox::CreateSampleEnvBox(
 // コンストラクタ
 CSampleEnvBox::CSampleEnvBox()
 {
-	m_pAllocator = IZ_NULL;
+	m_Allocator = IZ_NULL;
 
 	m_VB = IZ_NULL;
 	m_IB = IZ_NULL;

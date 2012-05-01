@@ -13,7 +13,7 @@ CShadow* CShadow::Create(
 
 	CShadow* instance = new(buf) CShadow();
 	{
-		instance->m_pAllocator = allocator;
+		instance->m_Allocator = allocator;
 		instance->AddRef();
 		
 		instance->m_RT = device->CreateRenderTarget(
@@ -42,7 +42,7 @@ CShadow* CShadow::Create(
 
 CShadow::CShadow()
 {
-	m_pAllocator = IZ_NULL;
+	m_Allocator = IZ_NULL;
 	m_RT = IZ_NULL;
 	m_DepthRT = IZ_NULL;
 }

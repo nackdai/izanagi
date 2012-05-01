@@ -233,6 +233,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ImageBuilder.exe -i &quot;$(InputPath)&quot; -o &quot;$(TargetDir)\data\$(InputName).img&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="$(InputDir)earth.bmp"
 						Outputs="$(TargetDir)\data\$(InputName).img"
 					/>
 				</FileConfiguration>
@@ -242,6 +243,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ImageBuilder.exe -i &quot;$(InputPath)&quot; -o &quot;$(TargetDir)\data\$(InputName).img&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="$(InputDir)earth.bmp"
 						Outputs="$(TargetDir)\data\$(InputName).img"
 					/>
 				</FileConfiguration>
