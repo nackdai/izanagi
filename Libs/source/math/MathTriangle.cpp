@@ -1,4 +1,7 @@
 #include "math/MathTriangle.h"
+#include "math/MathRectangle.h"
+#include "math/MathPlane.h"
+#include "math/MathCVector.h"
 
 namespace izanagi {
 	CTriangle::CTriangle()
@@ -72,5 +75,136 @@ namespace izanagi {
 		}
 
 		Set(tmp);
+	}
+
+	// 三角形上に存在する点かどうか.
+	IZ_BOOL CTriangle::IsOnTriangle(const SVector& ptr) const
+	{
+		CRectangle rc(
+			pt[0],
+			v[0].dir, v[0].length,
+			v[1].dir, v[1].length);
+
+		IZ_BOOL isOn = rc.IsOnRectangle(ptr);
+
+		if (isOn)
+		{
+			for (IZ_UINT i = 0; i < 3; i++)
+			{
+				IZ_UINT idx = (i + 1) % 3;
+				CVector e(
+					pt[idx].x - pt[i].x,
+					pt[idx].y - pt[i].y,
+					pt[idx].z - pt[i].z);
+
+				idx = (i + 1) % 3;
+				CVector f(
+					pt[idx].x - pt[i].x,
+					pt[idx].y - pt[i].y,
+					pt[idx].z - pt[i].z);
+
+				CVector g(
+					ptr.x - pt[i].x,
+					ptr.y - pt[i].y,
+					ptr.z - pt[i].z);
+
+				SVector normalOfE;
+				{
+					// ベクトルeに垂直なベクトルを計算する
+					SVector cross;
+					
+					SVector::Cross(cross, e, f);
+					SVector::Cross(normalOfE, cross, e);
+
+					// 三角形の内側にあるか計算する
+					IZ_FLOAT dot0 = SVector::Dot(f, normalOfE);
+					IZ_FLOAT dot1 = SVector::Dot(g, normalOfE);
+					if (dot0 * dot1 >= 0.0f)
+					{
+						return IZ_TRUE;
+					}
+
+					// 逆向きで計算してみる
+					SVector::Cross(normalOfE, e, cross);
+
+					// 三角形の内側にあるか計算する
+					dot0 = SVector::Dot(f, normalOfE);
+					dot1 = SVector::Dot(g, normalOfE);
+					if (dot0 * dot1 >= 0.0f)
+					{
+						return IZ_TRUE;
+					}
+				}
+			}
+		}
+
+		return IZ_FALSE;
+	}
+
+	// レイと交差する点を取得
+	IZ_BOOL CTriangle::GetCrossPoint(
+		const SRay& ray,
+		SVector& refPtr) const
+	{
+		CPlane plane(nml, pt[0]);
+
+		IZ_BOOL isCross = plane.GetCrossPoint(ray, refPtr);
+
+		if (isCross)
+		{
+			isCross = IsOnTriangle(refPtr);
+		}
+
+		return isCross;
+	}
+
+	// レイと交差するかどうか
+	IZ_BOOL CTriangle::IsCross(const SRay& ray)
+	{
+		SVector tmp;
+
+		IZ_BOOL isCross = GetCrossPoint(ray, tmp);
+		return isCross;
+	}
+
+	// レイと交差する点を裏表の両面について取得.
+	IZ_BOOL CTriangle::GetBilateralCrossPoint(
+		const SRay& ray,
+		SVector& refPtr) const
+	{
+		CPlane plane(nml, pt[0]);
+
+		IZ_BOOL isCross = plane.GetBilateralCrossPoint(ray, refPtr);
+
+		if (isCross)
+		{
+			isCross = IsOnTriangle(refPtr);
+		}
+
+		return isCross;
+	}
+
+	// 裏表の両面についてレイと交差するかどうか.
+	IZ_BOOL CTriangle::IsBilateralCross(const SRay& ray) const
+	{
+		SVector tmp;
+
+		IZ_BOOL isCross = GetBilateralCrossPoint(ray, tmp);
+		return isCross;
+	}
+
+	// 三角形の基準点からのベクトルに対する割合を取得.
+	IZ_BOOL CTriangle::GetFraction(
+		const SVector& point,
+		IZ_FLOAT f[2]) const
+	{
+		IZ_BOOL isOn = IsOnTriangle(point);
+		if (!isOn)
+		{
+			// そもそも三角形上にないので何もしない
+			return IZ_FALSE;
+		}
+
+		// それぞれに対するなす角を計算する
 	}
 }	// namespace izanagi
