@@ -71,13 +71,13 @@ namespace izanagi {
 		 */
 		void Transform(const SMatrix& mtx);
 
-		/** レイと交差する点を取得
+		/** レイと交差する点を取得.
 		 */
 		IZ_BOOL GetCrossPoint(
 			const SRay& ray,
 			SVector& refPtr) const;
 
-		/** レイと交差するかどうか
+		/** レイと交差するかどうか.
 		 */
 		IZ_BOOL IsCross(const SRay& ray);
 
