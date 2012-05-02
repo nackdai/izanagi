@@ -79,6 +79,19 @@ IZ_API IZ_UINT izGetImageWidth(void* p);
  */
 IZ_API IZ_UINT izGetImageHeight(void* p);
 
+/** RGBA8としてピクセルデータを取得.
+ *
+ * @param[in] p イメージデータ (CIMGImage)
+ * @return ピクセルデータのポインタ
+ */
+IZ_API void* izGetPixelDataAsRGBA8(void* p);
+
+/** 取得したピクセルデータを解放.
+ *
+ * @param[in] p イメージデータ (CIMGImage)
+ */
+IZ_API void izReleasePixelData(void* p);
+
 }
 
 #endif	// #if !defined(__IZANAGI_IMG_LIB_DLL_H__)

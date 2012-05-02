@@ -42,6 +42,14 @@ namespace tool {
 		// フォーマット変換
 		IZ_BOOL ConvertPixelFormat(E_GRAPH_PIXEL_FMT nFmt);
 
+		/** RGBA8としてピクセルデータを取得.
+		 */
+		IZ_BYTE* GetPixelDataAsRGBA8();
+
+		/** 内部のテンポラリバッファをクリアする.
+		 */
+		void ClearTemporaryBuffer();
+
 	private:
 		// 読み込み
 		IZ_BOOL Read(IInputStream* pIn);
@@ -81,6 +89,8 @@ namespace tool {
 		IZ_UINT m_nWidth;
 		IZ_UINT m_nHeight;
 		E_GRAPH_PIXEL_FMT m_Fmt;
+
+		std::vector<IZ_BYTE> m_TmpBuffer;
 	};
 
 	// inline **********************************

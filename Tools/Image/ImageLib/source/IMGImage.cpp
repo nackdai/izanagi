@@ -102,6 +102,40 @@ IZ_BOOL CIMGImage::ConvertPixelFormat(E_GRAPH_PIXEL_FMT nFmt)
 	return ret;
 }
 
+// RGBA8としてピクセルデータを取得.
+IZ_BYTE* CIMGImage::GetPixelDataAsRGBA8()
+{
+	ClearTemporaryBuffer();
+
+	if (m_Fmt == E_GRAPH_PIXEL_FMT_RGBA8)
+	{
+		m_TmpBuffer.resize(m_DataBuffer.size());
+		memcpy(&m_TmpBuffer[0], &m_DataBuffer[0], m_TmpBuffer.size());
+	}
+	else
+	{
+		m_TmpBuffer.resize(m_DataBuffer.size());
+
+		IZ_BOOL result = CPixelFormatConverter::GetInstance()->Convert(
+			&m_DataBuffer[0],
+			m_nWidth,
+			m_nHeight,
+			m_Fmt,
+			&m_TmpBuffer[0],
+			E_GRAPH_PIXEL_FMT_RGBA8);
+
+		VRETURN_NULL(result);
+	}
+
+	return &m_TmpBuffer[0];
+}
+
+// 内部のテンポラリバッファをクリアする.
+void CIMGImage::ClearTemporaryBuffer()
+{
+	m_TmpBuffer.clear();
+}
+
 // 読み込み
 IZ_BOOL CIMGImage::Read(IInputStream* pIn)
 {

@@ -157,6 +157,29 @@ IZ_UINT izGetImageHeight(void* p)
 	return ret;
 }
 
+/** RGBA8としてピクセルデータを取得.
+ *
+ * @param[in] p イメージデータ (CIMGImage)
+ * @return ピクセルデータのポインタ
+ */
+void* izGetPixelDataAsRGBA8(void* p)
+{
+	VRETURN_ZERO(p != IZ_NULL);
+	izanagi::tool::CIMGImage* img = reinterpret_cast<izanagi::tool::CIMGImage*>(p);
+	return img->GetPixelDataAsRGBA8();
+}
+
+/** 取得したピクセルデータを解放.
+ *
+ * @param[in] p イメージデータ (CIMGImage)
+ */
+void izReleasePixelData(void* p)
+{
+	VRETURN_VAL(p != IZ_NULL,);
+	izanagi::tool::CIMGImage* img = reinterpret_cast<izanagi::tool::CIMGImage*>(p);
+	img->ClearTemporaryBuffer();
+}
+
 static const char* format[] = {
 	"RGBA8",
 	"BGRA8",
