@@ -29,19 +29,10 @@ namespace ImageViewer
 
         private void OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            var oldNode = e.OldValue as ImageTreeViewNode;
-            var newNode = e.NewValue as ImageTreeViewNode;
-
-            if (oldNode != null)
+            if (TreeViewSelectedItemChangedCommand.Command.CanExecute(e))
             {
-                oldNode.State = NodeState.Normal;
+                TreeViewSelectedItemChangedCommand.Command.Execute(e);
             }
-            if (newNode != null)
-            {
-                newNode.State = NodeState.Selected;
-            }
-
-            ImageViewerProxy.NorifySelectedItemChanged(newNode.Model);
         }
     }
 }

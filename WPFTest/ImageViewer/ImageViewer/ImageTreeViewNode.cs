@@ -19,6 +19,7 @@ namespace ImageViewer
         Master,
         Texture,
         Image,
+        None,
     }
 
     /// <summary>
@@ -80,13 +81,27 @@ namespace ImageViewer
         {
         }
 
-        public ImageTreeViewNode(IImgObject imgObj, string name, NodeType type)
+        public ImageTreeViewNode(IImgObject imgObj, string name)
             : base()
         {
             Model = imgObj;
             Name = name;
             State = NodeState.Normal;
-            Type = type;
+
+            // Modelの種類からTypeを決める
+            Type = NodeType.None;
+            if (Model is ImgMaster)
+            {
+                Type = NodeType.Master;
+            }
+            else if (Model is ImgTexture)
+            {
+                Type = NodeType.Texture;
+            }
+            else if (Model is ImgImage)
+            {
+                Type = NodeType.Image;
+            }
 
             ReadImage();
         }

@@ -24,7 +24,7 @@ namespace ImageViewer
         {
             InitializeComponent();
 
-            ImageViewerProxy.OnSelectedItemChanged += OnSelectedItemChanged;
+            TreeViewSelectedItemChangedCommand.Command.OnSelectedItemChanged += OnSelectedItemChanged;
         }
 
         private void OnSelectedItemChanged(IImgObject selectedObj)
