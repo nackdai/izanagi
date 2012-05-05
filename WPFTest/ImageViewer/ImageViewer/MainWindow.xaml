@@ -2,15 +2,17 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:ImageViewer"
+        xmlns:osc="clr-namespace:OpenSourceControls;assembly=DockPanelSplitter"
         Title="MainWindow" Height="350" Width="525" Loaded="Window_Loaded" Closed="Winsow_Closed">
     <Window.CommandBindings>
         <CommandBinding Command="Open" Executed="OnOpen"/>
         <CommandBinding Command="Close" Executed="OnClose"/>
     </Window.CommandBindings>
     <Window.Resources>
+        <ResourceDictionary Source="/DockPanelSplitter;component/DockPanelSplitterStyle.xaml"/>
     </Window.Resources>
-    <StackPanel>
-        <Grid>
+    <DockPanel>
+        <Grid DockPanel.Dock="Top">
             <Menu VerticalAlignment="Top">
                 <MenuItem Header="ファイル(_F)">
                     <MenuItem Command="Open"/>
@@ -18,9 +20,10 @@
                 </MenuItem>
             </Menu>
         </Grid>
-        <StackPanel Orientation="Horizontal">
-            <local:ImageViewerTreeView Height="293" x:Name="ImageTreeView" Width="120" HorizontalAlignment="Left"/>
-            <local:ImageViewerImageView x:Name="ImageView" Width="382" />
-        </StackPanel>
-    </StackPanel>
+        <DockPanel>
+            <local:ImageViewerTreeView x:Name="ImageTreeView" DockPanel.Dock="Left" Width="200" HorizontalAlignment="Left"/>
+            <osc:DockPanelSplitter DockPanel.Dock="Left" Style="{StaticResource VerticalBevelGrip}"/>
+            <local:ImageViewerImageView x:Name="ImageView" />
+        </DockPanel>
+    </DockPanel>
 </Window>

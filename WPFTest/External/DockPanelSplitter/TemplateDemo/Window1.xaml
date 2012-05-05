@@ -1,0 +1,82 @@
+﻿<Window x:Class="TemplateDemo.Window1"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:osc="clr-namespace:OpenSourceControls;assembly=DockPanelSplitter"
+    Title="DockPanelSplitter with template" Height="400" Width="600">
+    <Window.Resources>
+
+        <!-- Styling the DockPanelSplitter -->
+        <Style x:Key="HorizontalBevelGrip" TargetType="{x:Type osc:DockPanelSplitter}">
+            <Setter Property="Thickness" Value="6"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type osc:DockPanelSplitter}">
+                        <Grid ToolTip="Resize" SnapsToDevicePixels="True" Background="LightGray">
+                            <!-- Grip -->
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Rectangle Width="2" Height="2" Fill="#5A000000"/>
+                                <Rectangle Width="2" Height="2" Margin="2 0 2 0" Fill="#5A000000"/>
+                                <Rectangle Width="2" Height="2" Fill="#5A000000"/>
+                                <!-- (could also use an image or a drawing) -->
+                            </StackPanel>
+                            <!-- Bevels -->
+                            <Border BorderBrush="#5AFFFFFF" BorderThickness="0,1,0,0"/>
+                            <Border BorderBrush="#5A000000" BorderThickness="0,0,0,1"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="VerticalBevelGrip" TargetType="{x:Type osc:DockPanelSplitter}">
+            <Setter Property="Thickness" Value="6"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type osc:DockPanelSplitter}">
+                        <Grid ToolTip="Resize" SnapsToDevicePixels="True" Background="LightGray">
+                            <!-- Grip -->
+                            <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                                <Rectangle Width="2" Height="2" Fill="#5A000000"/>
+                                <Rectangle Width="2" Height="2" Margin="0 2 0 2" Fill="#5A000000"/>
+                                <Rectangle Width="2" Height="2" Fill="#5A000000"/>
+                                <!-- (could also use an image or a drawing) -->
+                            </StackPanel>
+                            <!-- Bevels -->
+                            <Border BorderBrush="#5AFFFFFF" BorderThickness="1,0,0,0"/>
+                            <Border BorderBrush="#5A000000" BorderThickness="0,0,1,0"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <DockPanel>
+        <Grid Name="LeftPane1" DockPanel.Dock="Left" Width="80" MinWidth="40">
+            <Rectangle Fill="SkyBlue"/>
+        </Grid>
+        <osc:DockPanelSplitter DockPanel.Dock="Left" Style="{StaticResource VerticalBevelGrip}"/>
+
+        <Grid Name="LeftPane2" DockPanel.Dock="Left" Width="120" MinWidth="40">
+            <Rectangle Fill="LightBlue"/>
+        </Grid>
+        <osc:DockPanelSplitter DockPanel.Dock="Left" Style="{StaticResource VerticalBevelGrip}"/>
+
+        <Grid Name="RightPane" DockPanel.Dock="Right" Width="80">
+            <Rectangle Fill="Yellow"/>
+        </Grid>
+        <osc:DockPanelSplitter DockPanel.Dock="Right" Style="{StaticResource VerticalBevelGrip}"/>
+
+        <Grid Name="TopPane" DockPanel.Dock="Top" Height="80" MinHeight="20">
+            <Rectangle Fill="LightGreen"/>
+        </Grid>
+        <osc:DockPanelSplitter DockPanel.Dock="Top" Style="{StaticResource HorizontalBevelGrip}"/>
+
+        <Grid Name="BottomPane" DockPanel.Dock="Bottom" Height="70">
+            <Rectangle Fill="LightPink"/>
+        </Grid>
+        <osc:DockPanelSplitter DockPanel.Dock="Bottom" Style="{StaticResource HorizontalBevelGrip}"/>
+
+        <Grid Name="MainPane" Background="Coral" >
+            <Rectangle Fill="Coral"/>
+        </Grid>
+    </DockPanel>
+</Window>

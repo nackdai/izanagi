@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageViewerInfra", "ImageVi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageViewerInfraTest", "ImageViewerInfraTest\ImageViewerInfraTest.csproj", "{4F0195A3-FF79-4FFE-BA06-E65200EB7779}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DockPanelSplitter", "..\External\DockPanelSplitter\DockPanelSplitter\DockPanelSplitter.csproj", "{60BCD395-0A26-406A-862A-615457CBFD8F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,16 @@ Global
 		{4F0195A3-FF79-4FFE-BA06-E65200EB7779}.Release|Mixed Platforms.Build.0 = Release|x86
 		{4F0195A3-FF79-4FFE-BA06-E65200EB7779}.Release|x86.ActiveCfg = Release|x86
 		{4F0195A3-FF79-4FFE-BA06-E65200EB7779}.Release|x86.Build.0 = Release|x86
+		{60BCD395-0A26-406A-862A-615457CBFD8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60BCD395-0A26-406A-862A-615457CBFD8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60BCD395-0A26-406A-862A-615457CBFD8F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{60BCD395-0A26-406A-862A-615457CBFD8F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{60BCD395-0A26-406A-862A-615457CBFD8F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{60BCD395-0A26-406A-862A-615457CBFD8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60BCD395-0A26-406A-862A-615457CBFD8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60BCD395-0A26-406A-862A-615457CBFD8F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{60BCD395-0A26-406A-862A-615457CBFD8F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{60BCD395-0A26-406A-862A-615457CBFD8F}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
