@@ -58,12 +58,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Command\TreeViewSelectedItemChangedCommand.cs" />
     <Compile Include="EmbeddedResourceProxy.cs" />
     <Compile Include="ImageTreeViewNode.cs" />
     <Compile Include="ImageViewerImageView.xaml.cs">
       <DependentUpon>ImageViewerImageView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ImageViewerProxy.cs" />
     <Compile Include="ImageViewerTreeView.xaml.cs">
       <DependentUpon>ImageViewerTreeView.xaml</DependentUpon>
     </Compile>
