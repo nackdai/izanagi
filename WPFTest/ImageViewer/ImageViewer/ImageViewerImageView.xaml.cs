@@ -51,15 +51,10 @@ namespace ImageViewer
 //            if (ImageCanvas.Width < blueRectangle.Width)
             {
                 ImageCanvas.Width = blueRectangle.Width;
+                ImageCanvas.Height = blueRectangle.Height;
             }
 
             ImageCanvas.Children.Add(blueRectangle);
-        }
-
-        private void OnSizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            Scroller.Width = this.Width;
-            Scroller.Height = this.Height;
         }
     }
 }
