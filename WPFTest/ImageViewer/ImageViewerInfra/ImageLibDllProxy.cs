@@ -45,7 +45,7 @@ namespace ImageViewerInfra
         static extern uint izGetImageHeight(IntPtr p);
 
         [DllImport("ImageLibDll.dll", CallingConvention = CallingConvention.Cdecl)]
-        static extern IntPtr izGetPixelDataAsRGBA8(IntPtr p);
+        static extern IntPtr izGetPixelDataAsBGRA8(IntPtr p);
 
         [DllImport("ImageLibDll.dll", CallingConvention = CallingConvention.Cdecl)]
         static extern void izReleasePixelData(IntPtr p);
@@ -208,13 +208,13 @@ namespace ImageViewerInfra
         }
 
         /// <summary>
-        /// RGBA8としてピクセルデータを取得.
+        /// BGRA8としてピクセルデータを取得.
         /// </summary>
         /// <param name="p">イメージハンドル</param>
         /// <returns>ピクセルデータ</returns>
-        static public IntPtr GetPixelDataAsRGBA8(IntPtr p)
+        static public IntPtr GetPixelDataAsBGRA8(IntPtr p)
         {
-            IntPtr ret = izGetPixelDataAsRGBA8(p);
+            IntPtr ret = izGetPixelDataAsBGRA8(p);
             if (ret == IntPtr.Zero)
             {
                 throw new Exception();

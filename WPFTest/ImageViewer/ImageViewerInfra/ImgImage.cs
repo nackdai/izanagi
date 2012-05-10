@@ -84,7 +84,7 @@ namespace ImageViewerInfra
             // 異なるフォーマットのピクセルデータを取得する場合は
             // 前のデータを解放する
 
-            pixelData = ImageLibDllProxy.GetPixelDataAsRGBA8(imageBody);
+            pixelData = ImageLibDllProxy.GetPixelDataAsBGRA8(imageBody);
 
             if (pixelData != IntPtr.Zero)
             {
