@@ -44,6 +44,13 @@ namespace ImageViewerInfra
         [DllImport("ImageLibDll.dll", CallingConvention = CallingConvention.Cdecl)]
         static extern uint izGetImageHeight(IntPtr p);
 
+        [DllImport("ImageLibDll.dll", CallingConvention = CallingConvention.Cdecl)]
+        static extern IntPtr izGetPixelDataAsRGBA8(IntPtr p);
+
+        [DllImport("ImageLibDll.dll", CallingConvention = CallingConvention.Cdecl)]
+        static extern void izReleasePixelData(IntPtr p);
+
+
         /// <summary>
         /// ImageLibを利用するための初期化
         /// </summary>
@@ -198,6 +205,30 @@ namespace ImageViewerInfra
                 throw new Exception();
             }
             return ret;
+        }
+
+        /// <summary>
+        /// RGBA8としてピクセルデータを取得.
+        /// </summary>
+        /// <param name="p">イメージハンドル</param>
+        /// <returns>ピクセルデータ</returns>
+        static public IntPtr GetPixelDataAsRGBA8(IntPtr p)
+        {
+            IntPtr ret = izGetPixelDataAsRGBA8(p);
+            if (ret == IntPtr.Zero)
+            {
+                throw new Exception();
+            }
+            return ret;
+        }
+
+        /// <summary>
+        /// ピクセルデータを解放.
+        /// </summary>
+        /// <param name="p">イメージハンドル</param>
+        static public void ReleasePixelData(IntPtr p)
+        {
+            izReleasePixelData(p);
         }
     }
 }

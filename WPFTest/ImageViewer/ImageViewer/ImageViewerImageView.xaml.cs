@@ -29,32 +29,21 @@ namespace ImageViewer
 
         private void OnSelectedItemChanged(IImgObject selectedObj)
         {
-            Rectangle blueRectangle = new Rectangle();
-            blueRectangle.Height = 200;
-            blueRectangle.Width = 400;
+            var img = selectedObj as ImgImage;
 
-            Canvas.SetLeft(blueRectangle, 0);
-            Canvas.SetTop(blueRectangle, 0);
-
-            // Create a blue and a black Brush
-            SolidColorBrush blueBrush = new SolidColorBrush();
-            blueBrush.Color = Colors.Red;
-            SolidColorBrush blackBrush = new SolidColorBrush();
-            blackBrush.Color = Colors.Black;
-
-            // Set Rectangle's width and color
-            blueRectangle.StrokeThickness = 4;
-            blueRectangle.Stroke = blackBrush;
-            // Fill rectangle with blue color
-            blueRectangle.Fill = blueBrush;
-
-//            if (ImageCanvas.Width < blueRectangle.Width)
+            if (img != null)
             {
-                ImageCanvas.Width = blueRectangle.Width;
-                ImageCanvas.Height = blueRectangle.Height;
-            }
+                var imgCtrl = new Image();
+                imgCtrl.BeginInit();
+                {
+                    imgCtrl.Source = img.GetImageSource();
+                    imgCtrl.HorizontalAlignment = HorizontalAlignment.Left;
+                    imgCtrl.VerticalAlignment = VerticalAlignment.Top;
+                }
+                imgCtrl.EndInit();
 
-            ImageCanvas.Children.Add(blueRectangle);
+                Scroller.Content = imgCtrl;
+            }
         }
     }
 }

@@ -7,7 +7,11 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <ScrollViewer Name="Scroller" Background="Gray" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-            <Canvas Name="ImageCanvas" />
+            <!--
+            <Grid>
+                <Canvas Name="ImageCanvas"/>
+            </Grid>
+            -->
         </ScrollViewer>
     </Grid>
 </UserControl>
