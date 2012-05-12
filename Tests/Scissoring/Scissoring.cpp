@@ -41,9 +41,7 @@ IZ_BOOL CScissoring::InitInternal(
 
 		m_Rectangle.rc.Set(
 			izanagi::CVector(-Length * 0.5f, 0.0f, Length * 0.5f),
-			izanagi::CVector(1.0f, 0.0f, 0.0f),
 			Length,
-			izanagi::CVector(0.0f, 0.0f, -1.0f),
 			Length);
 
 		izanagi::SMatrix::GetRotByZ(
