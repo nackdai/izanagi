@@ -236,15 +236,15 @@ IZ_UINT CSceneGraphUtil::ComputeTriNumBySissoring(
 			pointNum++;
 		}
 
-		if (sissorPlane.IsPositive(triangle[i].pt[0]))
+		if (sissorPlane.IsPositive(triangle[i].pt[0], triangle[i].pt[1]))
 		{
 			pointNum++;
 		}
-		if (sissorPlane.IsPositive(triangle[i].pt[1]))
+		if (sissorPlane.IsPositive(triangle[i].pt[1], triangle[i].pt[2]))
 		{
 			pointNum++;
 		}
-		if (sissorPlane.IsPositive(triangle[i].pt[2]))
+		if (sissorPlane.IsPositive(triangle[i].pt[2], triangle[i].pt[0]))
 		{
 			pointNum++;
 		}
@@ -388,7 +388,7 @@ namespace {
 }
 
 // シザリング
-void CSceneGraphUtil::Sissoring(
+IZ_UINT CSceneGraphUtil::Sissoring(
 	const CPlane& sissorPlane,
 	const CTriangle triangle[],
 	IZ_UINT triNum,
@@ -406,6 +406,8 @@ void CSceneGraphUtil::Sissoring(
 
 		IZ_ASSERT(triPos <= newTriNum);
 	}
+
+	return triPos;
 }
 
 }	// namespace izanagi

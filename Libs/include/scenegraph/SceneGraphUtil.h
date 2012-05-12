@@ -58,7 +58,7 @@ namespace izanagi {
 
 		/** シザリング.
 		 */
-		static void Sissoring(
+		static IZ_UINT Sissoring(
 			const CPlane& sissorPlane,
 			const CTriangle triangle[],
 			IZ_UINT triNum,

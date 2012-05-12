@@ -32,12 +32,8 @@ namespace izanagi {
 		CRectangle();
 		CRectangle(
 			const SVector& point,
-			const SVector& dir1,
-			const SVector& dir2);
-		CRectangle(
-			const SVector& point,
-			const SVector& dir1, IZ_FLOAT length1,
-			const SVector& dir2, IZ_FLOAT length2);
+			IZ_FLOAT lengthX,
+			IZ_FLOAT lengthZ);
 		CRectangle(const CRectangle& rhs);
 
 		~CRectangle() {}
@@ -49,15 +45,8 @@ namespace izanagi {
 		 */
 		void Set(
 			const SVector& point,
-			const SVector& dir1,
-			const SVector& dir2);
-
-		/** 矩形を設定.
-		 */
-		void Set(
-			const SVector& point,
-			const SVector& dir1, IZ_FLOAT length1,
-			const SVector& dir2, IZ_FLOAT length2);
+			IZ_FLOAT lengthX,
+			IZ_FLOAT lengthZ);
 
 		/** 原点からの距離を取得.
 		 */
@@ -94,6 +83,22 @@ namespace izanagi {
 		/** 平面を取得.
 		 */
 		void GetPlane(SPlane& plane) const;
+
+		/** X方向のベクトルを取得.
+		 */
+		const SVector& GetX() const;
+
+		/** Z方向のベクトルを取得.
+		 */
+		const SVector& GetZ() const;
+
+		/** 幅を取得.
+		 */
+		IZ_FLOAT GetWidth() const;
+
+		/** 高さを取得.
+		 */
+		IZ_FLOAT GetHeight() const;
 
 	private:
 		typedef IZ_BOOL (*GetCrossPointFunc)(const CPlane& plane, const SRay& ray, SVector& refPtr);

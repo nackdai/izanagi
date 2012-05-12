@@ -63,6 +63,10 @@ namespace izanagi {
 		 */
 		void Set(const SVector& normal, const SVector& ptr);
 
+		/** 平面を設定.
+		 */
+		void Set(const SVector& normal, IZ_FLOAT _d);
+
 		/** 原点からの距離を取得.
 		 */
 		IZ_FLOAT GetDistance() const;
@@ -102,6 +106,10 @@ namespace izanagi {
 		/** 面の正側（法線の向き側）に点があるかどうか.
 		 */
 		IZ_BOOL IsPositive(const SVector& ptr) const;
+
+		/** 面の正側（法線の向き側）に点があるかどうか.
+		 */
+		IZ_BOOL IsPositive(const SVector& base, const SVector& ptr) const;
 	};
 }	// namespace izanagi
 

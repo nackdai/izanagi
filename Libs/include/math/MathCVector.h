@@ -7,6 +7,13 @@ namespace izanagi {
 	// うーん・・・
 	class CVector : public SVector {
 	public:
+		enum INIT_TYPE
+		{
+			INIT_ADD,
+			INIT_SUB,
+		};
+
+	public:
 		CVector()
 		{
 			x = y = z = w = 0.0f;
@@ -22,6 +29,19 @@ namespace izanagi {
 		CVector(IZ_FLOAT _x, IZ_FLOAT _y, IZ_FLOAT _z, IZ_FLOAT _w = 1.0f)
 		{
 			x = _x; y = _y; z = _z; w = _w;
+		}
+
+		CVector(const SVector& v0, const SVector& v1, INIT_TYPE type)
+		{
+			switch (type)
+			{
+			case INIT_ADD:
+				SVector::Add(*this, v0, v1);
+				break;
+			case INIT_SUB:
+				SVector::Sub(*this, v0, v1);
+				break;
+			}
 		}
 
 		operator IZ_FLOAT*()

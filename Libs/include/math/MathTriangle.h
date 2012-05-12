@@ -68,12 +68,6 @@ namespace izanagi {
 		/** 裏表の両面についてレイと交差するかどうか.
 		 */
 		IZ_BOOL IsBilateralCross(const SRay& ray) const;
-
-		/** 三角形の基準点からのベクトルに対する割合を取得.
-		 */
-		IZ_BOOL GetFraction(
-			const SVector& point,
-			IZ_FLOAT f[2]) const;
 	};
 }	// namespace izanagi
 
