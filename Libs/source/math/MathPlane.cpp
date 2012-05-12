@@ -63,6 +63,17 @@ namespace izanagi {
 		pt.Set(ptr.x, ptr.y, ptr.z);
 	}
 
+	// 平面を設定.
+	void CPlane::Set(const SVector& normal, IZ_FLOAT _d)
+	{
+		SVector::Copy(nml, normal);
+
+		nml.w = 0.0f;
+		SVector::Normalize(nml, nml);
+
+		d = _d;
+	}
+
 	// 原点からの距離を取得.
 	IZ_FLOAT CPlane::GetDistance() const
 	{
@@ -199,11 +210,17 @@ namespace izanagi {
 	// 面の正側（法線の向き側）に点があるかどうか.
 	IZ_BOOL CPlane::IsPositive(const SVector& ptr) const
 	{
+		return IsPositive(this->pt, ptr);
+	}
+
+	// 面の正側（法線の向き側）に点があるかどうか.
+	IZ_BOOL CPlane::IsPositive(const SVector& base, const SVector& ptr) const
+	{
 		// 基準点からの方向ベクトル
 		CVector dir(
-			ptr.x - pt.x,
-			ptr.y - pt.y,
-			ptr.z - pt.z,
+			ptr.x - base.x,
+			ptr.y - base.y,
+			ptr.z - base.z,
 			0.0f);
 
 		// NOTE

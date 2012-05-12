@@ -15,21 +15,12 @@ namespace izanagi {
 
 	CRectangle::CRectangle(
 		const SVector& point,
-		const SVector& dir1,
-		const SVector& dir2)
-	{
-		Set(point, dir1, dir2);
-	}
-
-	CRectangle::CRectangle(
-		const SVector& point,
-		const SVector& dir1, IZ_FLOAT length1,
-		const SVector& dir2, IZ_FLOAT length2)
+		IZ_FLOAT lengthX,
+		IZ_FLOAT lengthZ)
 	{
 		Set(
 			point,
-			dir1, length1,
-			dir2, length2);
+			lengthX, lengthZ);
 	}
 
 	CRectangle::CRectangle(const CRectangle& rhs)
@@ -57,36 +48,16 @@ namespace izanagi {
 	// 矩形を設定.
 	void CRectangle::Set(
 		const SVector& point,
-		const SVector& dir1,
-		const SVector& dir2)
-	{
-		SVector d1;
-		SVector::Normalize(d1, dir1);
-		IZ_FLOAT length1 = SVector::Length(dir1);
-
-		SVector d2;
-		SVector::Normalize(d2, dir2);
-		IZ_FLOAT length2 = SVector::Length(dir2);
-
-		Set(
-			point,
-			d1, length1,
-			d2, length2);
-	}
-
-	// 矩形を設定.
-	void CRectangle::Set(
-		const SVector& point,
-		const SVector& dir1, IZ_FLOAT length1,
-		const SVector& dir2, IZ_FLOAT length2)
+		IZ_FLOAT lengthX,
+		IZ_FLOAT lengthZ)
 	{
 		SVector::Copy(pt, point);
 
-		v[0].length = length1;
-		SVector::Normalize(v[0].dir, dir1);
+		v[0].length = lengthX;
+		v[0].dir.Set(1.0f, 0.0f, 0.0f, 0.0f);
 
-		v[1].length = length2;
-		SVector::Normalize(v[1].dir, dir2);
+		v[1].length = lengthZ;
+		v[1].dir.Set(0.0f, 0.0f, -1.0f, 0.0f);
 
 		SVector::Cross(nml, v[0].dir, v[1].dir);
 		SVector::Normalize(nml, nml);
@@ -215,5 +186,29 @@ namespace izanagi {
 		}
 
 		return isCross;
+	}
+
+	// X方向のベクトルを取得.
+	const SVector& CRectangle::GetX() const
+	{
+		return v[0].dir;
+	}
+
+	// Z方向のベクトルを取得.
+	const SVector& CRectangle::GetZ() const
+	{
+		return v[1].dir;
+	}
+
+	// 幅を取得.
+	IZ_FLOAT CRectangle::GetWidth() const
+	{
+		return v[0].length;
+	}
+
+	// 高さを取得.
+	IZ_FLOAT CRectangle::GetHeight() const
+	{
+		return v[1].length;
 	}
 }	// namespace izanagi
