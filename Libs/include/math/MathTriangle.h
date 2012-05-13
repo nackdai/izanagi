@@ -41,6 +41,11 @@ namespace izanagi {
 
 		void Set(const SVector point[3]);
 
+		void Set(
+			const SVector& point0,
+			const SVector& point1,
+			const SVector& point2);
+
 		/** 4x4s—ñ‚É‚æ‚é•ÏŠ·.
 		 */
 		void Transform(const SMatrix& mtx);

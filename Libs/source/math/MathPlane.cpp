@@ -128,7 +128,8 @@ namespace izanagi {
 
 		// LEV
 		IZ_FLOAT d = SVector::Dot(plane, ray.v);
-		if (d >= 0.0f) {
+		if (d >= 0.0f || CMath::IsNearyEqualZero(d))
+		{
 
 			// NOTE
 			//   | /       |

@@ -236,12 +236,12 @@ namespace izanagi {
 		static IZ_FLOAT Dot(const SVector& vec1, const SVector& vec2)
 		{
 #if defined(__USE_D3D_MATH__)
-			IZ_FLOAT ret = D3DXVec3Dot(
-							reinterpret_cast<const D3DXVECTOR3*>(&vec1),
-							reinterpret_cast<const D3DXVECTOR3*>(&vec2));
+			IZ_FLOAT ret = D3DXVec4Dot(
+							reinterpret_cast<const D3DXVECTOR4*>(&vec1),
+							reinterpret_cast<const D3DXVECTOR4*>(&vec2));
 			return ret;
 #else	// #if defined(__USE_D3D_MATH__)
-			IZ_FLOAT ret = vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z;
+			IZ_FLOAT ret = vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z + vec1.w * vec2.w;
 			return ret;
 #endif	// #if defined(__USE_D3D_MATH__)
 		}
