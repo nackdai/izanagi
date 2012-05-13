@@ -45,10 +45,17 @@ namespace izanagi {
 
 	void CTriangle::Set(const SVector point[3])
 	{
-		for (IZ_UINT i = 0; i < COUNTOF(pt); i++)
-		{
-			pt[i].Set(point[i].x, point[i].y, point[i].z);
-		}
+		Set(point[0], point[1], point[2]);
+	}
+
+	void CTriangle::Set(
+		const SVector& point0,
+		const SVector& point1,
+		const SVector& point2)
+	{
+		pt[0].Set(point0.x, point0.y, point0.z);
+		pt[1].Set(point1.x, point1.y, point1.z);
+		pt[2].Set(point2.x, point2.y, point2.z);
 
 		SVector::Sub(v[0].dir, pt[1], pt[0]);
 		v[0].length = SVector::Length(v[0].dir);
