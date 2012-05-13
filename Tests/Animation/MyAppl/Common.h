@@ -68,15 +68,15 @@ public:
 	inline void CommitChanges();
 
 public:
-	void SetShader(izanagi::CShader* pShader)
+	void SetShader(izanagi::IShader* pShader)
 	{
 		SAFE_REPLACE(m_pShader, pShader);
 	}
 
-	izanagi::CShader* GetShader() { return m_pShader; }
+	izanagi::IShader* GetShader() { return m_pShader; }
 
 private:
-	izanagi::CShader* m_pShader;
+	izanagi::IShader* m_pShader;
 
 	IZ_UINT m_nCnt;
 	izanagi::SMatrix m_Mtx[48];

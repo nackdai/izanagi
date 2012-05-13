@@ -129,7 +129,7 @@ IZ_BOOL CScene::Init(
 				device);
 	IZ_ASSERT(m_pAxis != IZ_NULL);
 
-	m_GeomSorter = izanagi::CGeometrySorter::CreateGeometrySorter(allocator, 4);
+	m_GeomSorter = izanagi::CRenderGraph::CreateRenderGraph(allocator, 4);
 	IZ_ASSERT(m_GeomSorter != IZ_NULL);
 
 	m_SceneRenderer = izanagi::CSceneRenderer::CreateSceneRenderer(allocator);
@@ -179,8 +179,7 @@ void CScene::Render(
 		m_GeomSorter->Register(
 			CMyCamera::GetInstance().GetRawInterface(),
 			pos,
-			character->GetMdl(),
-			izanagi::E_SCENE_REGISTER_TYPE_NORMAL);
+			character->GetMdl());
 	}
 	m_GeomSorter->EndRegister();
 

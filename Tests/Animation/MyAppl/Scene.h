@@ -31,7 +31,7 @@ private:
 
 	izanagi::CDebugMeshAxis* m_pAxis;
 
-	izanagi::CGeometrySorter* m_GeomSorter;
+	izanagi::CRenderGraph* m_GeomSorter;
 	izanagi::CSceneRenderer* m_SceneRenderer;
 };
 
