@@ -31,7 +31,7 @@ public:
 		IZ_FLOAT time,
 		izanagi::IAnimation* animation);
 
-	void SetShader(izanagi::CShader* shader);
+	void SetShader(izanagi::IShader* shader);
 
 	izanagi::CModel* GetMdl() { return m_pMdl; }
 

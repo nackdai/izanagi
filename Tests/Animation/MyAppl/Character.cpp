@@ -145,7 +145,7 @@ void CCharacter::Update(
 	m_pMdl->Update();
 }
 
-void CCharacter::SetShader(izanagi::CShader* shader)
+void CCharacter::SetShader(izanagi::IShader* shader)
 {
 	IZ_ASSERT(shader != IZ_NULL);
 
