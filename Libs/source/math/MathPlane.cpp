@@ -12,15 +12,6 @@ namespace izanagi {
 		return plane.GetCrossPoint(ray, refPtr);
 	}
 
-	// レイと交差する点を裏表の両面について取得.
-	IZ_BOOL CPlane::GetBilateralCrossPoint(
-		const CPlane& plane,
-		const SRay& ray,
-		SVector& refPtr)
-	{
-		return plane.GetBilateralCrossPoint(ray, refPtr);
-	}
-
 	CPlane::CPlane()
 	{
 		a = b = c = d = padding = 0.0f;
@@ -72,6 +63,13 @@ namespace izanagi {
 		SVector::Normalize(nml, nml);
 
 		d = _d;
+
+		// 平面の基準位置を計算する
+		// => 原点からの法線方向へのレイとの交点を計算する
+		CRay ray(
+			CVector(0.0f, 0.0f, 0.0f),
+			nml);
+		GetCrossPoint(ray, this->pt);
 	}
 
 	// 原点からの距離を取得.
@@ -128,20 +126,8 @@ namespace izanagi {
 
 		// L・V
 		IZ_FLOAT d = SVector::Dot(plane, ray.v);
-		if (d >= 0.0f || CMath::IsNearyEqualZero(d))
+		if (CMath::IsNearyEqualZero(d))
 		{
-
-			// NOTE
-			//   | /       |
-			//   |/        |
-			//---+----  ---+---
-			//            /
-			//           /
-			//  NG        OK
-			//
-			// 面の法線となす角が90度より大きければ面と交わる
-			// => 内積の値がマイナスであれば面と交わる
-
 			return IZ_FALSE;
 		}
 
@@ -159,6 +145,27 @@ namespace izanagi {
 		return IZ_TRUE;
 	}
 
+	// 線分と交差する点を取得.
+	IZ_BOOL CPlane::GetCrossPoint(
+		const SVector& from,
+		const SVector& to,
+		SVector& refPtr) const
+	{
+		if ((IsPositive(from) && !IsPositive(to))
+			|| (!IsPositive(from) && IsPositive(to)))
+		{
+			// 二つの点は面の正負のそれぞれにないといけない
+			CRay ray(
+				from,
+				CVector(to, from, CVector::INIT_SUB));
+
+			IZ_BOOL ret = GetCrossPoint(ray, refPtr);
+			return ret;
+		}
+
+		return IZ_FALSE;
+	}
+
 	// レイと交差するかどうか
 	IZ_BOOL CPlane::IsCross(const SRay& ray) const
 	{
@@ -166,63 +173,29 @@ namespace izanagi {
 
 		IZ_FLOAT d = SVector::Dot(plane, ray.v);
 
-		// NOTE
-		// 面の法線となす角が90度より大きければ面と交わる
-		// => 内積の値がマイナスであれば面と交わる
-
-		return (d < 0.0f);
-	}
-
-	// レイと交差する点を裏表の両面について取得.
-	IZ_BOOL CPlane::GetBilateralCrossPoint(
-		const SRay& ray,
-		SVector& refPtr) const
-	{
-		// 表
-		if (CPlane::GetCrossPoint(*this, ray, refPtr))
+		if (CMath::IsNearyEqualZero(d))
 		{
-			return IZ_TRUE;
+			return IZ_FALSE;
 		}
 
-		// 裏
-		CPlane planeBack(-a, -b, -c, d);
-		if (CPlane::GetCrossPoint(planeBack, ray, refPtr))
-		{
-			return IZ_TRUE;
-		}
-
-		return IZ_FALSE;
-	}
-
-	// 裏表の両面についてレイと交差するかどうか.
-	IZ_BOOL CPlane::IsBilateralCross(const SRay& ray) const
-	{
-		// 表
-		if (IsCross(ray))
-		{
-			return IZ_TRUE;
-		}
-
-		// 裏
-		CPlane planeBack(-a, -b, -c, d);
-		return planeBack.IsCross(ray);
+		return IZ_TRUE;
 	}
 
 	// 面の正側（法線の向き側）に点があるかどうか.
 	IZ_BOOL CPlane::IsPositive(const SVector& ptr) const
 	{
-		return IsPositive(this->pt, ptr);
-	}
+#if 0
+		// 原点からの距離
+		IZ_FLOAT len = SVector::Length(ptr);
 
-	// 面の正側（法線の向き側）に点があるかどうか.
-	IZ_BOOL CPlane::IsPositive(const SVector& base, const SVector& ptr) const
-	{
-		// 基準点からの方向ベクトル
-		CVector dir(
-			ptr.x - base.x,
-			ptr.y - base.y,
-			ptr.z - base.z,
-			0.0f);
+		// 平面まで届いていない
+		if (len <= ::fabs(d))
+		{
+			return IZ_FALSE;
+		}
+
+		// 原点からの方向ベクトル
+		CVector dir(ptr.x, ptr.y, ptr.z, 0.0f);
 
 		// NOTE
 		//   | /       |
@@ -237,5 +210,11 @@ namespace izanagi {
 		IZ_FLOAT dot = SVector::Dot(nml, dir);
 
 		return (dot >= 0.0f);
+#else
+		CVector n(a, b, c, d);
+		IZ_FLOAT dot = SVector::Dot(n, ptr);
+		dot = (CMath::IsNearyEqualZero(dot) ? 0.0f : dot);
+		return (dot >= 0.0f);
+#endif
 	}
 }	// namespace izanagi

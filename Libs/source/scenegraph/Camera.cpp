@@ -69,6 +69,8 @@ void CCamera::ComputeW2V()
 	SVector vecY;
 	SVector vecZ;
 
+	vecX.w = vecY.w = vecZ.w = 0.0f;
+
 	// Z
 	// 視点から注視点へのベクトル
 #ifdef IZ_COORD_LEFT_HAND

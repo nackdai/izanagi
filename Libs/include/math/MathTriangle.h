@@ -12,10 +12,6 @@ namespace izanagi {
 	};
 
 	struct STrianglePlane : public STriangle {
-		struct {
-			SVector dir;
-			IZ_FLOAT length;
-		} v[2];
 		union {
 			SVector nml;
 			struct {
@@ -63,16 +59,6 @@ namespace izanagi {
 		/** レイと交差するかどうか.
 		 */
 		IZ_BOOL IsCross(const SRay& ray);
-
-		/** レイと交差する点を裏表の両面について取得.
-		 */
-		IZ_BOOL GetBilateralCrossPoint(
-			const SRay& ray,
-			SVector& refPtr) const;
-
-		/** 裏表の両面についてレイと交差するかどうか.
-		 */
-		IZ_BOOL IsBilateralCross(const SRay& ray) const;
 	};
 }	// namespace izanagi
 

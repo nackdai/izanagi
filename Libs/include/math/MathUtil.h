@@ -85,7 +85,8 @@ namespace izanagi {
 		*/
 		static inline IZ_BOOL IsNearyEqual(IZ_FLOAT a, IZ_FLOAT b)
 		{
-			return ((a < b + IZ_MATH_EPSILON) && (a > b - IZ_MATH_EPSILON));
+			//return ((a < b + IZ_MATH_EPSILON) && (a > b - IZ_MATH_EPSILON));
+			return ((b - 1e-5f <= a) && (a <= b + 1e-5f));
 		}
 
 		/**

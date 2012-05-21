@@ -70,16 +70,6 @@ namespace izanagi {
 		 */
 		IZ_BOOL IsCross(const SRay& ray);
 
-		/** レイと交差する点を裏表の両面について取得.
-		 */
-		IZ_BOOL GetBilateralCrossPoint(
-			const SRay& ray,
-			SVector& refPtr) const;
-
-		/** 裏表の両面についてレイと交差するかどうか.
-		 */
-		IZ_BOOL IsBilateralCross(const SRay& ray) const;
-
 		/** 平面を取得.
 		 */
 		void GetPlane(SPlane& plane) const;
@@ -88,9 +78,9 @@ namespace izanagi {
 		 */
 		const SVector& GetX() const;
 
-		/** Z方向のベクトルを取得.
+		/** Y方向のベクトルを取得.
 		 */
-		const SVector& GetZ() const;
+		const SVector& GetY() const;
 
 		/** 幅を取得.
 		 */

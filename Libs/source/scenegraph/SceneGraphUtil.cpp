@@ -207,7 +207,7 @@ namespace {
 
 		CRay ray(tri.pt[pos0], dir);
 
-		IZ_BOOL isCross = sissorPlane.IsBilateralCross(ray);
+		IZ_BOOL isCross = sissorPlane.IsCross(ray);
 		return isCross;
 	}
 }
@@ -218,47 +218,86 @@ IZ_UINT CSceneGraphUtil::ComputeTriNumBySissoring(
 	const CTriangle triangle[],
 	IZ_UINT triNum)
 {
-	IZ_UINT pointNum = 0;
+	IZ_UINT newTriNum = 0;
 
 	// 交差する点と面の法線側にある点の数を数える
 	for (IZ_UINT i = 0; i < triNum; i++)
 	{
-		if (_IsCross(sissorPlane, triangle[i],	0, 1))
+		IZ_UINT pointNum = 0;
+
+		if (sissorPlane.IsPositive(triangle[i].pt[0]))
 		{
 			pointNum++;
 		}
-		if (_IsCross(sissorPlane, triangle[i],	1, 2))
+		if (sissorPlane.IsPositive(triangle[i].pt[1]))
 		{
 			pointNum++;
 		}
-		if (_IsCross(sissorPlane, triangle[i],	2, 0))
+		if (sissorPlane.IsPositive(triangle[i].pt[2]))
 		{
 			pointNum++;
 		}
 
-		if (sissorPlane.IsPositive(triangle[i].pt[0], triangle[i].pt[1]))
+		// ひとつでも面の負の側に点が存在するかどうか
+		if ((0 < pointNum) && (pointNum < 3))
 		{
-			pointNum++;
-		}
-		if (sissorPlane.IsPositive(triangle[i].pt[1], triangle[i].pt[2]))
-		{
-			pointNum++;
-		}
-		if (sissorPlane.IsPositive(triangle[i].pt[2], triangle[i].pt[0]))
-		{
-			pointNum++;
+			// 平面と交差する点の数を計算する
+			IZ_UINT crossNum = GetCrossNum(sissorPlane, triangle[i]);
+
+			if (crossNum > 0)
+			{
+				pointNum += crossNum;
+
+				// 作成する三角形の数を計算
+				newTriNum += pointNum - 2;
+			}
 		}
 	}
 
-	// 三角形を構成するのに十分な点の数がない
-	if (pointNum < 3)
-	{
-		return 0;
-	}
-
-	// 作成する三角形の数を計算
-	IZ_UINT newTriNum = pointNum - 2;
 	return newTriNum;
+}
+
+// 平面と交差する点の数を計算する.
+IZ_UINT CSceneGraphUtil::GetCrossNum(
+	const CPlane& sissorPlane,
+	const CTriangle& triangle)
+{
+#if 0
+	IZ_UINT crossNum = 0;
+
+	if (_IsCross(sissorPlane, triangle,	0, 1))
+	{
+		crossNum++;
+	}
+	if (_IsCross(sissorPlane, triangle,	1, 2))
+	{
+		crossNum++;
+	}
+	if (_IsCross(sissorPlane, triangle,	2, 0))
+	{
+		crossNum++;
+	}
+
+	return crossNum;
+#else
+	// １点でも交差すれば
+	// 平面に対しては必ず２点の交差点が存在する
+
+	if (_IsCross(sissorPlane, triangle,	0, 1))
+	{
+		return 2;
+	}
+	if (_IsCross(sissorPlane, triangle,	1, 2))
+	{
+		return 2;
+	}
+	if (_IsCross(sissorPlane, triangle,	2, 0))
+	{
+		return 2;
+	}
+
+	return 0;
+#endif
 }
 
 namespace {
@@ -268,6 +307,7 @@ namespace {
 		const STriangle& tri,
 		IZ_UINT pos0, IZ_UINT pos1)
 	{
+#if 0
 		SVector dir;
 		SVector::SubXYZ(
 			dir,
@@ -276,8 +316,15 @@ namespace {
 
 		CRay ray(tri.pt[pos0], dir);
 
-		IZ_BOOL isCross = sissorPlane.GetBilateralCrossPoint(ray, ret);
+		IZ_BOOL isCross = sissorPlane.GetCrossPoint(ray, ret);
 		return isCross;
+#else
+		IZ_BOOL isCross = sissorPlane.GetCrossPoint(
+			tri.pt[pos0],
+			tri.pt[pos1],
+			ret);
+		return isCross;
+#endif
 	}
 
 	IZ_UINT _Sissoring(
@@ -285,21 +332,33 @@ namespace {
 		const STriangle& triangle,
 		CTriangle* newTri)
 	{
+		IZ_UINT positivePointNum = 0;
+
 		// 基準点を探す
 		IZ_INT basePos = -1;
 		for (IZ_UINT i = 0; i < 3; i++)
 		{
 			if (sissorPlane.IsPositive(triangle.pt[i]))
 			{
-				basePos = i;
-				break;
+				if (basePos < 0)
+				{
+					basePos = i;
+				}
+				positivePointNum++;
 			}
 		}
 
+#if 0
+		if (basePos < 0 || positivePointNum == 3)
+		{
+			return 0;
+		}
+#else
 		if (basePos < 0)
 		{
 			return 0;
 		}
+#endif
 
 		// 調べていく頂点の位置
 		static const IZ_UINT vtxIdxTbl[][4] =
@@ -325,17 +384,6 @@ namespace {
 			IZ_UINT idx0 = vtxIdxTbl[basePos][i];
 			IZ_UINT idx1 = vtxIdxTbl[basePos][i + 1];
 
-			// 交点
-			if (_GetCrossPoint(
-				tmp[vtxNum],
-				sissorPlane,
-				triangle,
-				idx0, idx1))
-			{
-				vtxNum++;
-				IZ_ASSERT(vtxNum <= COUNTOF(tmp));
-			}
-
 			// 面の法線側にある点
 			if (i > 0)
 			{
@@ -348,6 +396,17 @@ namespace {
 						triangle.pt[idx0].y,
 						triangle.pt[idx0].z);
 				}
+			}
+
+			// 交点
+			if (_GetCrossPoint(
+				tmp[vtxNum],
+				sissorPlane,
+				triangle,
+				idx0, idx1))
+			{
+				vtxNum++;
+				IZ_ASSERT(vtxNum <= COUNTOF(tmp));
 			}
 		}
 

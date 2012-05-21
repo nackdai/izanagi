@@ -45,6 +45,9 @@ namespace izanagi {
 		return *this;
 	}
 
+	static const izanagi::CVector DirX(1.0f, 0.0f,  0.0f, 0.0f);
+	static const izanagi::CVector DirZ(0.0f, 0.0f, -1.0f, 0.0f);
+
 	// 矩形を設定.
 	void CRectangle::Set(
 		const SVector& point,
@@ -54,10 +57,10 @@ namespace izanagi {
 		SVector::Copy(pt, point);
 
 		v[0].length = lengthX;
-		v[0].dir.Set(1.0f, 0.0f, 0.0f, 0.0f);
+		v[0].dir.Set(DirX);
 
 		v[1].length = lengthZ;
-		v[1].dir.Set(0.0f, 0.0f, -1.0f, 0.0f);
+		v[1].dir.Set(DirZ);
 
 		SVector::Cross(nml, v[0].dir, v[1].dir);
 		SVector::Normalize(nml, nml);
@@ -83,13 +86,23 @@ namespace izanagi {
 		IZ_FLOAT length1 = v[0].length;
 		IZ_FLOAT length2 = v[1].length;
 
+#if 0
 		return IS_IN_BOUND(dot1 / length1, 0.0f, 1.0f) && IS_IN_BOUND(dot2 / length2, 0.0f, 1.0f);
+#else
+		// ptは矩形の中心点なので
+		// 矩形を構成する点は二つのベクトルの -0.5 - 0.5 の範囲に存在する
+		return IS_IN_BOUND(dot1 / length1, -0.5f, 0.5f)
+			&& IS_IN_BOUND(dot2 / length2, -0.5f, 0.5f);
+#endif
 	}
 
 	// 4x4行列による変換.
 	void CRectangle::Transform(const SMatrix& mtx)
 	{
-		SMatrix::Apply(pt, pt, mtx);
+		CVector p(0.0f, 0.0f, 0.0f);
+		SMatrix::Apply(p, p, mtx);
+
+		SVector::AddXYZ(pt, pt, p);
 
 		for (IZ_UINT i = 0; i < COUNTOF(v); i++)
 		{
@@ -127,29 +140,6 @@ namespace izanagi {
 		CVector ptr;
 
 		IZ_BOOL isCross = GetCrossPoint(ray, ptr);
-
-		return isCross;
-	}
-
-	// レイと交差する点を裏表の両面について取得.
-	IZ_BOOL CRectangle::GetBilateralCrossPoint(
-		const SRay& ray,
-		SVector& refPtr) const
-	{
-		IZ_BOOL isCross = GetCrossPoint(
-			CPlane::GetBilateralCrossPoint,
-			ray,
-			refPtr);
-
-		return isCross;
-	}
-
-	// 裏表の両面についてレイと交差するかどうか.
-	IZ_BOOL CRectangle::IsBilateralCross(const SRay& ray) const
-	{
-		CVector ptr;
-
-		IZ_BOOL isCross = GetBilateralCrossPoint(ray, ptr);
 
 		return isCross;
 	}
@@ -194,8 +184,8 @@ namespace izanagi {
 		return v[0].dir;
 	}
 
-	// Z方向のベクトルを取得.
-	const SVector& CRectangle::GetZ() const
+	// Y方向のベクトルを取得.
+	const SVector& CRectangle::GetY() const
 	{
 		return v[1].dir;
 	}
