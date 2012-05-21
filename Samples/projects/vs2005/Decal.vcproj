@@ -210,6 +210,10 @@
 			Name="include"
 			>
 			<File
+				RelativePath="..\..\Decal\Cube.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Decal\Decal.h"
 				>
 			</File>
@@ -225,6 +229,10 @@
 		<Filter
 			Name="source"
 			>
+			<File
+				RelativePath="..\..\Decal\Cube.cpp"
+				>
+			</File>
 			<File
 				RelativePath="..\..\Decal\Decal.cpp"
 				>
@@ -253,7 +261,7 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ImageBuilder.exe -i &quot;$(InputPath)&quot; -o &quot;$(TargetDir)\data\$(InputName).img&quot;"
+						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ImageBuilder.exe -i &quot;$(InputPath)&quot; -o &quot;$(TargetDir)\data\$(InputName).img&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="$(InputDir)earth.bmp"
 						Outputs="$(TargetDir)\data\$(InputName).img"
 					/>
@@ -263,7 +271,7 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ImageBuilder.exe -i &quot;$(InputPath)&quot; -o &quot;$(TargetDir)\data\$(InputName).img&quot;"
+						CommandLine="$(ProjectDir)..\..\..\Tools\tools\Release\ImageBuilder.exe -i &quot;$(InputPath)&quot; -o &quot;$(TargetDir)\data\$(InputName).img&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="$(InputDir)earth.bmp"
 						Outputs="$(TargetDir)\data\$(InputName).img"
 					/>

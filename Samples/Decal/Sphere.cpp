@@ -141,13 +141,15 @@ IZ_BOOL CSphere::CreateTriangles(
 		for (IZ_UINT i = 0; i < slices; i++)
 		{
 			IZ_UINT idx = i;
-			m_Triangles[triPos].pt[0].Set(vtx[idx].x, vtx[idx].y, vtx[idx].z);
+			izanagi::CVector p0(vtx[idx].x, vtx[idx].y, vtx[idx].z);
 
 			idx = i + slices + 2;
-			m_Triangles[triPos].pt[1].Set(vtx[idx].x, vtx[idx].y, vtx[idx].z);
+			izanagi::CVector p1(vtx[idx].x, vtx[idx].y, vtx[idx].z);
 
 			idx = i + slices + 1;
-			m_Triangles[triPos].pt[2].Set(vtx[idx].x, vtx[idx].y, vtx[idx].z);
+			izanagi::CVector p2(vtx[idx].x, vtx[idx].y, vtx[idx].z);
+
+			m_Triangles[triPos].Set(p0, p1, p2);
 
 			triPos++;
 		}
@@ -162,26 +164,30 @@ IZ_BOOL CSphere::CreateTriangles(
 				// 上半分
 				{
 					IZ_UINT idx = pos;
-					m_Triangles[triPos].pt[0].Set(vtx[idx].x, vtx[idx].y, vtx[idx].z);
+					izanagi::CVector p0(vtx[idx].x, vtx[idx].y, vtx[idx].z);
 
 					idx = pos + 1;
-					m_Triangles[triPos].pt[1].Set(vtx[idx].x, vtx[idx].y, vtx[idx].z);
+					izanagi::CVector p1(vtx[idx].x, vtx[idx].y, vtx[idx].z);
 
 					idx = pos + slices + 1;
-					m_Triangles[triPos].pt[2].Set(vtx[idx].x, vtx[idx].y, vtx[idx].z);
+					izanagi::CVector p2(vtx[idx].x, vtx[idx].y, vtx[idx].z);
+
+					m_Triangles[triPos].Set(p0, p1, p2);
 				}
 				triPos++;
 
 				// 下半分
 				{
 					IZ_UINT idx = pos + slices + 1;
-					m_Triangles[triPos].pt[0].Set(vtx[idx].x, vtx[idx].y, vtx[idx].z);
+					izanagi::CVector p0(vtx[idx].x, vtx[idx].y, vtx[idx].z);
 
 					idx = pos + 1;
-					m_Triangles[triPos].pt[1].Set(vtx[idx].x, vtx[idx].y, vtx[idx].z);
+					izanagi::CVector p1(vtx[idx].x, vtx[idx].y, vtx[idx].z);
 
 					idx = pos + slices + 2;
-					m_Triangles[triPos].pt[2].Set(vtx[idx].x, vtx[idx].y, vtx[idx].z);
+					izanagi::CVector p2(vtx[idx].x, vtx[idx].y, vtx[idx].z);
+
+					m_Triangles[triPos].Set(p0, p1, p2);
 				}
 				triPos++;
 			}
@@ -194,13 +200,15 @@ IZ_BOOL CSphere::CreateTriangles(
 		for (IZ_UINT i = 0; i < slices; i++)
 		{
 			IZ_UINT idx = lastIdx + i;
-			m_Triangles[triPos].pt[0].Set(vtx[idx].x, vtx[idx].y, vtx[idx].z);
+			izanagi::CVector p0(vtx[idx].x, vtx[idx].y, vtx[idx].z);
 
 			idx = lastIdx - (slices + 1) + i;
-			m_Triangles[triPos].pt[1].Set(vtx[idx].x, vtx[idx].y, vtx[idx].z);
+			izanagi::CVector p1(vtx[idx].x, vtx[idx].y, vtx[idx].z);
 
 			idx = lastIdx - (slices + 1) + i + 1;
-			m_Triangles[triPos].pt[2].Set(vtx[idx].x, vtx[idx].y, vtx[idx].z);
+			izanagi::CVector p2(vtx[idx].x, vtx[idx].y, vtx[idx].z);
+
+			m_Triangles[triPos].Set(p0, p1, p2);
 
 			triPos++;
 		}
@@ -221,9 +229,10 @@ IZ_BOOL CSphere::GetCrossPoint(
 	izanagi::SVector& refPtr,
 	izanagi::SVector* normal)
 {
+#if 0
 	for (IZ_UINT i = 0; i < m_TriNum; i++)
 	{
-		if (m_Triangles[i].GetBilateralCrossPoint(ray, refPtr))
+		if (m_Triangles[i].GetCrossPoint(ray, refPtr))
 		{
 			if (normal != IZ_NULL)
 			{
@@ -236,4 +245,41 @@ IZ_BOOL CSphere::GetCrossPoint(
 	}
 
 	return IZ_FALSE;
+#else
+	IZ_FLOAT minLen = IZ_FLOAT_MAX;
+
+	izanagi::CVector tmpPtr;
+	IZ_BOOL isCross = IZ_FALSE;
+	IZ_UINT crossTriPos = 0;
+
+	for (IZ_UINT i = 0; i < m_TriNum; i++)
+	{
+		if (m_Triangles[i].GetCrossPoint(ray, tmpPtr))
+		{
+			isCross = IZ_TRUE;
+
+			IZ_FLOAT len = izanagi::SVector::Length2(ray.p, tmpPtr);
+			if (len < minLen)
+			{
+				minLen = len;
+				crossTriPos = i;
+			}
+		}
+	}
+
+	if (isCross)
+	{
+		m_Triangles[crossTriPos].GetCrossPoint(ray, refPtr);
+
+		if (normal != IZ_NULL)
+		{
+			// 法線を取得
+			izanagi::SVector::CopyXYZ(
+				*normal,
+				m_Triangles[crossTriPos].nml);
+		}
+	}
+
+	return isCross;
+#endif
 }

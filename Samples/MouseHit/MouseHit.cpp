@@ -43,7 +43,7 @@ IZ_BOOL CMouseHit::InitInternal(
 		IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0xff),
 		IZ_COLOR_RGBA(0xff, 0x00, 0x00, 0xff),
 		IZ_COLOR_RGBA(0x00, 0xff, 0x00, 0xff),
-		IZ_COLOR_RGBA(0x00, 0x00, 0xff, 0xff),
+		IZ_COLOR_RGBA(0xff, 0x00, 0xff, 0xff),
 	};
 	IZ_C_ASSERT(COUNTOF(color) == COUNTOF(m_Rectangles));
 
@@ -58,11 +58,9 @@ IZ_BOOL CMouseHit::InitInternal(
 			Length, Length);
 
 		m_Rectangles[i].rc.Set(
-			izanagi::CVector(-Length * 0.5f, 0.0f, Length * 0.5f),
-			izanagi::CVector(1.0f, 0.0f, 0.0f),
-			Length,
-			izanagi::CVector(0.0f, 0.0f, -1.0f),
-			Length);
+			//izanagi::CVector(-Length * 0.5f, 0.0f, Length * 0.5f),
+			izanagi::CVector(0.0f, 0.0f, 0.0f),
+			Length, Length);
 
 		m_Rectangles[i].rc.Transform(m_Rectangles[i].mtx);
 	}
@@ -119,27 +117,30 @@ void CMouseHit::UpdateInternal(
 	m_CrossRectIdx = -1;
 	izanagi::SVector dir;
 
-	// 2D -> 3D
-	if (m_MousePoint.x >= 0
-		&& m_MousePoint.y >= 0)
+	//if (m_IsPressKey)
 	{
-		izanagi::CSceneGraphUtil::Point2Ray(
-			dir,
-			camera.GetParam(),
-			device->GetViewport(),
-			m_MousePoint.x,
-			m_MousePoint.y);
-
-		izanagi::CRay ray(
-			camera.GetParam().pos,
-			dir);
-
-		for (IZ_UINT i = 0; i < COUNTOF(m_Rectangles); i++)
+		// 2D -> 3D
+		if (m_MousePoint.x >= 0
+			&& m_MousePoint.y >= 0)
 		{
-			if (m_Rectangles[i].rc.IsCross(ray))
+			izanagi::CSceneGraphUtil::Point2Ray(
+				dir,
+				camera.GetParam(),
+				device->GetViewport(),
+				m_MousePoint.x,
+				m_MousePoint.y);
+
+			izanagi::CRay ray(
+				camera.GetParam().pos,
+				dir);
+
+			for (IZ_UINT i = 0; i < COUNTOF(m_Rectangles); i++)
 			{
-				m_CrossRectIdx = i;
-				break;
+				if (m_Rectangles[i].rc.IsCross(ray))
+				{
+					m_CrossRectIdx = i;
+					break;
+				}
 			}
 		}
 	}
