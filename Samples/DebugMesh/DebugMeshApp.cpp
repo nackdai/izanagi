@@ -190,7 +190,7 @@ namespace {
 // 描画.
 void CDebugMeshApp::RenderInternal(izanagi::CGraphicsDevice* device)
 {
-	static const IZ_BOOL isDrawTangentSpaceAxis = IZ_TRUE;
+	static const IZ_BOOL isDrawTangentSpaceAxis = IZ_FALSE;
 
 	izanagi::sample::CSampleCamera& camera = GetCamera();
 
