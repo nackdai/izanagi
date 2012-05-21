@@ -40,6 +40,7 @@ void CVectorCamera::Init(
 	}
 
 	SVector::Cross(m_X, m_Y, m_Z);
+	m_X.w = 0.0f;
 
 	m_Pos.Set(pos.x, pos.y, pos.z);
 

@@ -56,6 +56,12 @@ namespace izanagi {
 			const CTriangle triangle[],
 			IZ_UINT triNum);
 
+		/** 平面と交差する点の数を計算する.
+		 */
+		static IZ_UINT GetCrossNum(
+			const CPlane& sissorPlane,
+			const CTriangle& triangle);
+
 		/** シザリング.
 		 */
 		static IZ_UINT Sissoring(

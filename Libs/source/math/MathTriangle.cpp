@@ -11,9 +11,6 @@ namespace izanagi {
 		pt[0].Set(0.0f, 0.0f, 0.0f);
 		pt[1].Set(0.0f, 0.0f, 0.0f);
 		pt[2].Set(0.0f, 0.0f, 0.0f);
-
-		v[0].dir.Set(0.0f, 0.0f, 0.0f, 0.0f);
-		v[1].dir.Set(0.0f, 0.0f, 0.0f, 0.0f);
 	}
 
 	CTriangle::CTriangle(const SVector point[3])
@@ -29,15 +26,7 @@ namespace izanagi {
 	const CTriangle& CTriangle::operator=(const CTriangle& rhs)
 	{
 		memcpy(pt, rhs.pt, sizeof(pt));
-
-		v[0].length = rhs.v[0].length;
-		SVector::Copy(v[0].dir, rhs.v[0].dir);
-
-		v[1].length = rhs.v[1].length;
-		SVector::Copy(v[1].dir, rhs.v[1].dir);
-
 		SVector::Copy(nml, rhs.nml);
-
 		d = rhs.d;
 
 		return *this;
@@ -57,15 +46,10 @@ namespace izanagi {
 		pt[1].Set(point1.x, point1.y, point1.z);
 		pt[2].Set(point2.x, point2.y, point2.z);
 
-		SVector::Sub(v[0].dir, pt[1], pt[0]);
-		v[0].length = SVector::Length(v[0].dir);
-		SVector::Normalize(v[0].dir, v[0].dir);
+		izanagi::CVector dir0(pt[1], pt[0], CVector::INIT_SUB);
+		izanagi::CVector dir1(pt[2], pt[0], CVector::INIT_SUB);
 
-		SVector::Sub(v[1].dir, pt[2], pt[0]);
-		v[1].length = SVector::Length(v[1].dir);
-		SVector::Normalize(v[1].dir, v[1].dir);
-
-		SVector::Cross(nml, v[0].dir, v[1].dir);
+		SVector::Cross(nml, dir0, dir1);
 		SVector::Normalize(nml, nml);
 
 		d = -(a * pt[0].x + b * pt[0].y + c * pt[0].z);
@@ -93,18 +77,21 @@ namespace izanagi {
 			CVector e(
 				pt[idx].x - pt[i].x,
 				pt[idx].y - pt[i].y,
-				pt[idx].z - pt[i].z);
+				pt[idx].z - pt[i].z,
+				0.0f);
 
 			idx = (i + 2) % 3;
 			CVector f(
 				pt[idx].x - pt[i].x,
 				pt[idx].y - pt[i].y,
-				pt[idx].z - pt[i].z);
+				pt[idx].z - pt[i].z,
+				0.0f);
 
 			CVector g(
 				ptr.x - pt[i].x,
 				ptr.y - pt[i].y,
-				ptr.z - pt[i].z);
+				ptr.z - pt[i].z,
+				0.0f);
 
 			SVector normalOfE;
 			{
@@ -163,32 +150,6 @@ namespace izanagi {
 		SVector tmp;
 
 		IZ_BOOL isCross = GetCrossPoint(ray, tmp);
-		return isCross;
-	}
-
-	// レイと交差する点を裏表の両面について取得.
-	IZ_BOOL CTriangle::GetBilateralCrossPoint(
-		const SRay& ray,
-		SVector& refPtr) const
-	{
-		CPlane plane(nml, pt[0]);
-
-		IZ_BOOL isCross = plane.GetBilateralCrossPoint(ray, refPtr);
-
-		if (isCross)
-		{
-			isCross = IsOnTriangle(refPtr);
-		}
-
-		return isCross;
-	}
-
-	// 裏表の両面についてレイと交差するかどうか.
-	IZ_BOOL CTriangle::IsBilateralCross(const SRay& ray) const
-	{
-		SVector tmp;
-
-		IZ_BOOL isCross = GetBilateralCrossPoint(ray, tmp);
 		return isCross;
 	}
 }	// namespace izanagi
