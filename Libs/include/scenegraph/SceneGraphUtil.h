@@ -5,6 +5,8 @@
 #include "graph/GraphDefs.h"
 #include "Camera.h"
 
+#include <vector>
+
 namespace izanagi {
 	/**
 	*/
@@ -70,6 +72,14 @@ namespace izanagi {
 			IZ_UINT triNum,
 			CTriangle newTriangle[],
 			IZ_UINT newTriNum);
+
+		/** シザリング.
+		 */
+		static IZ_UINT Sissoring(
+			const CPlane& sissorPlane,
+			const CTriangle triangle[],
+			IZ_UINT triNum,
+			std::vector<CTriangle, STLMemoryAllocator<CTriangle> >& newTriangle);
 	};
 }	// namespace izanagi
 
