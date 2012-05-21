@@ -327,10 +327,61 @@ namespace {
 #endif
 	}
 
+	struct FuncSissor
+	{
+		void operator()(
+			const SVector point[],
+			const IZ_UINT idxTbl[][3],
+			IZ_UINT triNum,
+			CTriangle* newTri)
+		{
+			for (IZ_UINT i = 0; i < triNum; i++)
+			{
+				for (IZ_UINT n = 0; n < 3; n++)
+				{
+					IZ_UINT idx = idxTbl[i][n];
+
+					newTri[i].pt[n].Set(
+						point[idx].x,
+						point[idx].y,
+						point[idx].z);
+				}
+			}
+		}
+	};
+
+	struct FuncSissorSTL
+	{
+		void operator()(
+			const SVector point[],
+			const IZ_UINT idxTbl[][3],
+			IZ_UINT triNum,
+			std::vector<CTriangle, STLMemoryAllocator<CTriangle> >& triList)
+		{
+			for (IZ_UINT i = 0; i < triNum; i++)
+			{
+				triList.push_back(CTriangle());
+				CTriangle& tri = triList[triList.size() - 1];
+
+				for (IZ_UINT n = 0; n < 3; n++)
+				{
+					IZ_UINT idx = idxTbl[i][n];
+
+					tri.pt[n].Set(
+						point[idx].x,
+						point[idx].y,
+						point[idx].z);
+				}
+			}
+		}
+	};
+
+	template <typename TriListType, typename Func>
 	IZ_UINT _Sissoring(
 		const CPlane& sissorPlane,
 		const STriangle& triangle,
-		CTriangle* newTri)
+		TriListType newTri,
+		Func& func)
 	{
 		IZ_UINT positivePointNum = 0;
 
@@ -429,18 +480,11 @@ namespace {
 			{0, 2, 3},
 		};
 
-		for (IZ_UINT i = 0; i < triNum; i++)
-		{
-			for (IZ_UINT n = 0; n < 3; n++)
-			{
-				IZ_UINT idx = triVtxTbl[i][n];
-
-				newTri[i].pt[n].Set(
-					tmp[idx].x,
-					tmp[idx].y,
-					tmp[idx].z);
-			}
-		}
+		func(
+			tmp,
+			triVtxTbl,
+			triNum,
+			newTri);
 			
 		return triNum;
 	}
@@ -455,15 +499,38 @@ IZ_UINT CSceneGraphUtil::Sissoring(
 	IZ_UINT newTriNum)
 {
 	IZ_UINT triPos = 0;
+	FuncSissor func;
 
 	for (IZ_UINT i = 0; i < triNum; i++)
 	{
 		triPos += _Sissoring(
 			sissorPlane,
 			triangle[i],
-			&newTriangle[triPos]);
+			&newTriangle[triPos],
+			func);
 
 		IZ_ASSERT(triPos <= newTriNum);
+	}
+
+	return triPos;
+}
+
+IZ_UINT CSceneGraphUtil::Sissoring(
+	const CPlane& sissorPlane,
+	const CTriangle triangle[],
+	IZ_UINT triNum,
+	std::vector<CTriangle, STLMemoryAllocator<CTriangle> >& newTriangle)
+{
+	IZ_UINT triPos = 0;
+	FuncSissorSTL func;
+
+	for (IZ_UINT i = 0; i < triNum; i++)
+	{
+		triPos += _Sissoring<std::vector<CTriangle, STLMemoryAllocator<CTriangle> >&>(
+			sissorPlane,
+			triangle[i],
+			newTriangle,
+			func);
 	}
 
 	return triPos;

@@ -32,5 +32,6 @@
 #include "std/allocator/MemoryAllocator.h"
 #include "std/allocator/StandardMemoryAllocator.h"
 #include "std/allocator/ChunkedMemoryAllocator.h"
+#include "std/allocator/STLMemoryAllocator.h"
 
 #endif	// #if !defined(__IZANAGI_STD_H__)

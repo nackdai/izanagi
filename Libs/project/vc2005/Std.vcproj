@@ -226,6 +226,10 @@
 					RelativePath="..\..\source\std\allocator\StandardMemoryAllocator.cpp"
 					>
 				</File>
+				<File
+					RelativePath="..\..\source\std\allocator\STLMemoryAllocator.cpp"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="animation"
@@ -334,6 +338,10 @@
 				</File>
 				<File
 					RelativePath="..\..\include\std\allocator\StandardMemoryAllocator.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\std\allocator\STLMemoryAllocator.h"
 					>
 				</File>
 			</Filter>
