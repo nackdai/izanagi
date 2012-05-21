@@ -40,7 +40,7 @@ IZ_BOOL CScissoring::InitInternal(
 			Length, Length);
 
 		m_Rectangle.rc.Set(
-			izanagi::CVector(-Length * 0.5f, 0.0f, Length * 0.5f),
+			izanagi::CVector(0.0f, 0.0f, 0.0f),
 			Length,
 			Length);
 
