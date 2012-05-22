@@ -26,6 +26,10 @@ int main(int argc, char* argv[])
 
 	// イメージライブラリ初期化
 	IZ_BOOL result = izInitImageLib(hWnd);
+	void* master = izReadImageMaster(argv[1]);
+	void* tex = izGetTextureInMaster(master, 0);
+	void* img = izGetImageInTexture(tex, 0, 0);
+	void* data = izGetPixelDataAsRGBA8(img);
 
 __EXIT__:
 	return nRetCode;

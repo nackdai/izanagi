@@ -44,7 +44,7 @@ namespace tool {
 
 		/** RGBA8としてピクセルデータを取得.
 		 */
-		IZ_BYTE* GetPixelDataAsRGBA8();
+		IZ_BYTE* GetPixelDataAsBGRA8();
 
 		/** 内部のテンポラリバッファをクリアする.
 		 */

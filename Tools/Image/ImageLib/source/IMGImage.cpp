@@ -103,11 +103,11 @@ IZ_BOOL CIMGImage::ConvertPixelFormat(E_GRAPH_PIXEL_FMT nFmt)
 }
 
 // RGBA8としてピクセルデータを取得.
-IZ_BYTE* CIMGImage::GetPixelDataAsRGBA8()
+IZ_BYTE* CIMGImage::GetPixelDataAsBGRA8()
 {
 	ClearTemporaryBuffer();
 
-	if (m_Fmt == E_GRAPH_PIXEL_FMT_RGBA8)
+	if (m_Fmt == E_GRAPH_PIXEL_FMT_BGRA8)
 	{
 		m_TmpBuffer.resize(m_DataBuffer.size());
 		memcpy(&m_TmpBuffer[0], &m_DataBuffer[0], m_TmpBuffer.size());
@@ -122,7 +122,7 @@ IZ_BYTE* CIMGImage::GetPixelDataAsRGBA8()
 			m_nHeight,
 			m_Fmt,
 			&m_TmpBuffer[0],
-			E_GRAPH_PIXEL_FMT_RGBA8);
+			E_GRAPH_PIXEL_FMT_BGRA8);
 
 		VRETURN_NULL(result);
 	}
