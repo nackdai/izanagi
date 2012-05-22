@@ -53,6 +53,20 @@ namespace izanagi {
 		// カメラ更新
 		virtual void Update();
 
+		/** カメラ座標系でのオフセットを考慮にいれたV2Cマトリクスを取得.
+		 */
+		void GetOffsetV2C(
+			SMatrix& mtxV2C,
+			const SVector& pos,
+			IZ_FLOAT delta);
+
+		/** カメラ座標系でのオフセットを考慮にいれたV2Cマトリクスを取得.
+		 */
+		void GetOffsetV2C(
+			SMatrix& mtxV2C,
+			IZ_FLOAT viewZ,
+			IZ_FLOAT delta);
+
 		IZ_BOOL IsUpdated() const { return (!m_IsDirtyW2V && !m_IsDirtyV2C); }
 
 		const SCameraParam& GetParam() const { return m_Param; }

@@ -60,6 +60,47 @@ void CCamera::Update()
 	}
 }
 
+// カメラ座標系でのオフセットを考慮にいれたV2Cマトリクスを取得.
+void CCamera::GetOffsetV2C(
+	SMatrix& mtxV2C,
+	const SVector& pos,
+	IZ_FLOAT delta)
+{
+	// 念のため
+	Update();
+
+	// カメラ座標系の位置を計算
+	SVector viewPos;
+	SMatrix::Apply(
+		viewPos,
+		pos,
+		m_Param.mtxW2V);
+
+	GetOffsetV2C(
+		mtxV2C,
+		viewPos.z,
+		delta);
+}
+
+void CCamera::GetOffsetV2C(
+	SMatrix& mtxV2C,
+	IZ_FLOAT viewZ,
+	IZ_FLOAT delta)
+{
+	// 念のため
+	Update();
+
+	IZ_FLOAT f = m_Param.cameraFar;
+	IZ_FLOAT n = m_Param.cameraNear;
+
+	IZ_FLOAT epsilon = -2.0f * f * n * delta;
+	epsilon /= ((f + n) * viewZ * (viewZ + delta));
+
+	SMatrix::Copy(mtxV2C, m_Param.mtxV2C);
+
+	mtxV2C.m[2][2] *= (1.0f + epsilon);
+}
+
 // World - View
 void CCamera::ComputeW2V()
 {
