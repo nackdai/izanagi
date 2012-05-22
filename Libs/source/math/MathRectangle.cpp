@@ -118,6 +118,12 @@ namespace izanagi {
 		SVector::Cross(nml, v[0].dir, v[1].dir);
 		SVector::Normalize(nml, nml);
 
+		// ŒvŽZŒëŽZ‚ðŠÛ‚ß‚é
+		nml.x = izanagi::CMath::IsNearyEqualZero(nml.x) ? 0.0f : nml.x;
+		nml.y = izanagi::CMath::IsNearyEqualZero(nml.y) ? 0.0f : nml.y;
+		nml.z = izanagi::CMath::IsNearyEqualZero(nml.z) ? 0.0f : nml.z;
+		SVector::Normalize(nml, nml);
+
 		d = -(a * pt.x + b * pt.y + c * pt.z);
 	}
 
