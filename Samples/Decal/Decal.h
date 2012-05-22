@@ -41,6 +41,8 @@ public:
 
 	void Draw(izanagi::CGraphicsDevice* device);
 
+	const izanagi::SVector& GetCenter() const;
+
 private:
 	void ComputeNewTriNumByScissoring(
 		const izanagi::CTriangle tri[],

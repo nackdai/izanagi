@@ -161,6 +161,16 @@ void CDecalApp::RenderInternal(izanagi::CGraphicsDevice* device)
 	izanagi::SMatrix mtx;
 	izanagi::SMatrix::SetUnit(mtx);
 
+	izanagi::SMatrix mtxDecalW2C;
+	camera.GetRawInterface().GetOffsetV2C(
+		mtxDecalW2C,
+		m_Decal->GetCenter(),
+		1e-3f);
+	izanagi::SMatrix::Mul(
+		mtxDecalW2C,
+		camera.GetRawInterface().GetParam().mtxW2V,
+		mtxDecalW2C);
+
 	m_Shader->Begin(0, IZ_FALSE);
 	{		
 		if (m_Shader->BeginPass(0)) {
@@ -187,6 +197,12 @@ void CDecalApp::RenderInternal(izanagi::CGraphicsDevice* device)
 
 			// デカール
 			device->SetTexture(0, m_Img->GetTexture(1));
+
+			_SetShaderParam(
+				m_Shader,
+				"g_mW2C",
+				(void*)&mtxDecalW2C,
+				sizeof(mtxDecalW2C));
 
 			// シェーダ設定
 			m_Shader->CommitChanges();

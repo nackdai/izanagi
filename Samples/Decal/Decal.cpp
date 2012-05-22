@@ -71,17 +71,6 @@ void CDecal::SetRectangle(
 	izanagi::SQuat::MatrixFromQuat(rotMtx, rotQuat);
 	m_Rectangle.Transform(rotMtx);
 
-	// ŒvŽZŒëŽZ‚ðŠÛ‚ß‚é
-	m_Rectangle.nml.x = izanagi::CMath::IsNearyEqualZero(m_Rectangle.nml.x) ? 0.0f : m_Rectangle.nml.x;
-	m_Rectangle.nml.y = izanagi::CMath::IsNearyEqualZero(m_Rectangle.nml.y) ? 0.0f : m_Rectangle.nml.y;
-	m_Rectangle.nml.z = izanagi::CMath::IsNearyEqualZero(m_Rectangle.nml.z) ? 0.0f : m_Rectangle.nml.z;
-	//izanagi::SVector::Normalize(m_Rectangle.nml, m_Rectangle.nml);
-
-	izanagi::SVector::DivXYZ(
-		m_Rectangle.nml, 
-		m_Rectangle.nml, 
-		izanagi::SVector::Length(m_Rectangle.nml));
-
 	IZ_FLOAT width = m_Rectangle.GetWidth() * 0.5f;
 	IZ_FLOAT height = m_Rectangle.GetHeight() * 0.5f;
 
@@ -306,7 +295,7 @@ void CDecal::Draw(izanagi::CGraphicsDevice* device)
 	device->SetVertexDeclaration(m_VD);
 	device->SetVertexBuffer(0, 0, m_VB->GetStride(), m_VB);
 
-#if 1
+#if 0
 	device->SetRenderState(
 		izanagi::E_GRAPH_RS_ZENABLE,
 		IZ_FALSE);
@@ -323,6 +312,11 @@ void CDecal::Draw(izanagi::CGraphicsDevice* device)
 		izanagi::E_GRAPH_PRIM_TYPE_TRIANGLELIST,
 		0, m_TriNum);
 #endif
+}
+
+const izanagi::SVector& CDecal::GetCenter() const
+{
+	return m_Rectangle.pt;
 }
 
 void CDecal::ComputeNewTriNumByScissoring(
