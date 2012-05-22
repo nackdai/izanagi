@@ -7,7 +7,7 @@ namespace izanagi {
 namespace sample {
 	/** サンプルカメラ.
 	 */
-	class CSampleCamera {
+	class CSampleCamera : public izanagi::CVectorCamera {
 	public:
 		CSampleCamera() {}
 		~CSampleCamera() {}
@@ -31,12 +31,6 @@ namespace sample {
 			const izanagi::CFloatPoint& pt1,
 			const izanagi::CFloatPoint& pt2);
 		void Move(IZ_FLOAT fOffsetX, IZ_FLOAT fOffsetY);
-
-	protected:
-		izanagi::CVectorCamera m_Camera;
-
-	public:
-		izanagi::CVectorCamera& GetRawInterface() { return m_Camera; }
 	};
 }
 }

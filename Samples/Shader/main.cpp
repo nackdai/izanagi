@@ -80,7 +80,7 @@ IZ_BOOL CShaderApp::InitInternal(
 
 	CStateManager::GetInstance().Create(
 		this,
-		const_cast<izanagi::SCameraParam&>(camera.GetRawInterface().GetParam()));
+		const_cast<izanagi::SCameraParam&>(camera.GetParam()));
 
 	return CStateManager::GetInstance().Init();
 }
