@@ -21,9 +21,14 @@
             </Menu>
         </Grid>
         <DockPanel>
-            <local:ImageViewerTreeView x:Name="ImageTreeView" DockPanel.Dock="Left" Width="200" HorizontalAlignment="Left"/>
-            <osc:DockPanelSplitter DockPanel.Dock="Left" Style="{StaticResource VerticalBevelGrip}"/>
-            <local:ImageViewerImageView x:Name="ImageView" />
+            <local:ImageViewerImageView x:Name="ImageView" Width="300" DockPanel.Dock="Right"/>
+            <osc:DockPanelSplitter DockPanel.Dock="Right" Style="{StaticResource VerticalBevelGrip}"/>
+            <Grid x:Name="PropertyPane" DockPanel.Dock="Bottom" Height="100">
+                <Rectangle x:Name="DummyRect" Fill="Gray"/>
+                <local:ImgMasterPropertyControl x:Name="ImgMasterPropertyView" Visibility="Collapsed"/>
+            </Grid>
+            <osc:DockPanelSplitter DockPanel.Dock="Bottom" Style="{StaticResource VerticalBevelGrip}"/>
+            <local:ImageViewerTreeView x:Name="ImageTreeView" DockPanel.Dock="Top"/>
         </DockPanel>
     </DockPanel>
 </Window>
