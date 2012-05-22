@@ -19,6 +19,8 @@ namespace ImageViewer
         public MainWindow()
         {
             InitializeComponent();
+
+            TreeViewSelectedItemChangedCommand.Command.OnSelectedItemChanged += OnSelectedItemChanged;
         }
 
         /// <summary>
@@ -81,6 +83,23 @@ namespace ImageViewer
         private void Winsow_Closed(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void OnSelectedItemChanged(IImgObject selectedObj)
+        {
+            for (int i = 0; i< PropertyPane.Children.Count; i++)
+            {
+                PropertyPane.Children[i].Visibility = Visibility.Collapsed;
+            }
+
+            if (selectedObj is ImgMaster)
+            {
+                ImgMasterPropertyView.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                DummyRect.Visibility = Visibility.Visible;
+            }
         }
     }
 }
