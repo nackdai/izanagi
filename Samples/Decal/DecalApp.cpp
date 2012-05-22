@@ -54,8 +54,8 @@ IZ_BOOL CDecalApp::InitInternal(
 		izanagi::SVector decalPoint;
 		izanagi::SVector decalNormal;
 
-		const izanagi::SVector& pos = camera.GetRawInterface().GetPos();
-		const izanagi::SVector& ref = camera.GetRawInterface().GetParam().ref;
+		const izanagi::SVector& pos = camera.GetPos();
+		const izanagi::SVector& ref = camera.GetParam().ref;
 
 		// 適当にカメラ位置から原点へのレイを飛ばす
 		IZ_BOOL isCross = m_Sphere->GetCrossPoint(
@@ -162,13 +162,13 @@ void CDecalApp::RenderInternal(izanagi::CGraphicsDevice* device)
 	izanagi::SMatrix::SetUnit(mtx);
 
 	izanagi::SMatrix mtxDecalW2C;
-	camera.GetRawInterface().GetOffsetV2C(
+	camera.GetOffsetV2C(
 		mtxDecalW2C,
 		m_Decal->GetCenter(),
 		1e-3f);
 	izanagi::SMatrix::Mul(
 		mtxDecalW2C,
-		camera.GetRawInterface().GetParam().mtxW2V,
+		camera.GetParam().mtxW2V,
 		mtxDecalW2C);
 
 	m_Shader->Begin(0, IZ_FALSE);
@@ -183,8 +183,8 @@ void CDecalApp::RenderInternal(izanagi::CGraphicsDevice* device)
 			_SetShaderParam(
 				m_Shader,
 				"g_mW2C",
-				(void*)&camera.GetRawInterface().GetParam().mtxW2C,
-				sizeof(camera.GetRawInterface().GetParam().mtxW2C));
+				(void*)&camera.GetParam().mtxW2C,
+				sizeof(camera.GetParam().mtxW2C));
 
 			// 球
 			device->SetTexture(0, m_Img->GetTexture(0));
