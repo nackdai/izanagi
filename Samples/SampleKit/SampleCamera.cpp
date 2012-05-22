@@ -11,7 +11,7 @@ void CSampleCamera::Init(
 	IZ_FLOAT fFov,
 	IZ_FLOAT fAspect)
 {
-	m_Camera.Init(
+	izanagi::CVectorCamera::Init(
 		vPos,
 		vRef,
 		fNear, fFar,
@@ -21,20 +21,24 @@ void CSampleCamera::Init(
 
 void CSampleCamera::Update()
 {
-	m_Camera.Update();
+	izanagi::CVectorCamera::Update();
 }
 
 void CSampleCamera::Dolly(float fDistScale)
 {
+	const izanagi::SCameraParam& param = GetParam();
+
 	// 視点と注視点の距離
-	float fLength = izanagi::SVector::Length2(m_Camera.GetParam().pos, m_Camera.GetParam().ref);
+	float fLength = izanagi::SVector::Length2(
+		param.pos,
+		param.ref);
 
 	// 視点から注視点への方向
 	izanagi::CVector vDir;
 	izanagi::SVector::Sub(
 		vDir,
-		m_Camera.GetParam().ref,
-		m_Camera.GetParam().pos);
+		param.ref,
+		param.pos);
 	izanagi::SVector::Div(vDir, vDir, fLength);
 
 	// スケーリング
@@ -47,10 +51,10 @@ void CSampleCamera::Dolly(float fDistScale)
 	// 新しい視点
 	izanagi::SVector::Add(
 		pos,
-		m_Camera.GetPos(),
+		GetPos(),
 		vDir);
 
-	m_Camera.SetPos(pos);
+	SetPos(pos);
 }
 
 namespace {
@@ -88,6 +92,8 @@ void CSampleCamera::Rotate(
 {
 	static const IZ_FLOAT radius = 0.8f;
 
+	const izanagi::SCameraParam& param = GetParam();
+
 	// スクリーン上の２点からトラックボール上の点を計算する
 	// GLUTと同じ方法
 
@@ -107,7 +113,7 @@ void CSampleCamera::Rotate(
 	izanagi::SVector::Normalize(axis, axis);
 
 	// カメラの回転状態に合わせて軸も回転
-	izanagi::SMatrix::Apply(axis, axis, m_Camera.GetTransform());
+	izanagi::SMatrix::Apply(axis, axis, GetTransform());
 
 	// 回転の角度
 	// NOTE
@@ -117,18 +123,20 @@ void CSampleCamera::Rotate(
 	IZ_FLOAT theta = ::acos(izanagi::SVector::Dot(v1, v2));
 
 	// 回転
-	m_Camera.Rotate(axis, theta);
+	izanagi::CVectorCamera::Rotate(axis, theta);
 }
 
 void CSampleCamera::Move(float fOffsetX, float fOffsetY)
 {
+	const izanagi::SCameraParam& param = GetParam();
+
 	// 移動ベクトル
 	izanagi::SVector vOffset;
 	izanagi::SVector::Set(vOffset, fOffsetX, 0.0f, fOffsetY, 0.0f);
 
 	// カメラの回転を考慮する
 	izanagi::SVector vDir;
-	izanagi::SVector::Sub(vDir, m_Camera.GetParam().ref, m_Camera.GetParam().pos);
+	izanagi::SVector::Sub(vDir, param.ref, param.pos);
 	izanagi::SVector::Normalize(vDir, vDir);
 	vDir.y = 0.0f;
 
@@ -138,8 +146,8 @@ void CSampleCamera::Move(float fOffsetX, float fOffsetY)
 
 	izanagi::SMatrix::Apply(vOffset, vOffset, mRot);
 
-	izanagi::SVector pos = m_Camera.GetParam().pos;
-	izanagi::SVector::Add(pos, m_Camera.GetParam().pos, vOffset);
+	izanagi::SVector pos = param.pos;
+	izanagi::SVector::Add(pos, param.pos, vOffset);
 
-	m_Camera.SetPos(pos);
+	SetPos(pos);
 }

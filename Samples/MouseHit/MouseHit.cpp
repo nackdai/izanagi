@@ -192,8 +192,8 @@ void CMouseHit::RenderInternal(izanagi::CGraphicsDevice* device)
 			_SetShaderParam(
 				m_Shader,
 				"g_mW2C",
-				(void*)&camera.GetRawInterface().GetParam().mtxW2C,
-				sizeof(camera.GetRawInterface().GetParam().mtxW2C));
+				(void*)&camera.GetParam().mtxW2C,
+				sizeof(camera.GetParam().mtxW2C));
 
 			const izanagi::SVector& clr = (m_CrossRectIdx == i ? color[1] : color[0]);
 

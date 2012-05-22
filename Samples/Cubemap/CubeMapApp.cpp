@@ -131,7 +131,7 @@ void CCubeMapApp::RenderInternal(izanagi::CGraphicsDevice* device)
 			_SetShaderParam(
 				m_Shader,
 				"g_mW2C",
-				(void*)&camera.GetRawInterface().GetParam().mtxW2C,
+				(void*)&camera.GetParam().mtxW2C,
 				sizeof(izanagi::SMatrix));
 
 			_SetShaderParam(

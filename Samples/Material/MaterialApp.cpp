@@ -336,8 +336,8 @@ void CMaterialApp::RenderInternal(izanagi::CGraphicsDevice* device)
 		izanagi::SMatrix mtxL2W;
 		izanagi::SMatrix::SetUnit(mtxL2W);
 
-		const izanagi::SMatrix& mtxW2C = camera.GetRawInterface().GetParam().mtxW2C;
-		const izanagi::SVector& vecEye = camera.GetRawInterface().GetParam().pos;
+		const izanagi::SMatrix& mtxW2C = camera.GetParam().mtxW2C;
+		const izanagi::SVector& vecEye = camera.GetParam().pos;
 
 		_SetShaderParam(m_Shd, "g_mW2C", &mtxW2C, sizeof(mtxW2C));
 		_SetShaderParam(m_Shd, "g_vEye", &vecEye, sizeof(vecEye));

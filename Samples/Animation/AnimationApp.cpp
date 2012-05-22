@@ -299,8 +299,8 @@ void CAnimationApp::RenderInternal(izanagi::CGraphicsDevice* device)
 				_SetShaderParam(
 					m_Shd,
 					"g_mW2C",
-					(void*)&camera.GetRawInterface().GetParam().mtxW2C,
-					sizeof(camera.GetRawInterface().GetParam().mtxW2C));
+					(void*)&camera.GetParam().mtxW2C,
+					sizeof(camera.GetParam().mtxW2C));
 			}
 
 			// テクスチャセット
