@@ -12,11 +12,18 @@ namespace izanagi {
 	{
 	protected:
 		static IMemoryAllocator* s_Allocator;
+		static IZ_ULONG s_AllocatedSize;
 
 	public:
 		static void SetAllocator(IMemoryAllocator* allocator)
 		{
+			IZ_ASSERT(s_AllocatedSize == 0);
 			s_Allocator = allocator;
+		}
+
+		static IZ_BOOL IsValid()
+		{
+			return (s_Allocator != IZ_NULL);
 		}
 	};
 
@@ -66,7 +73,16 @@ namespace izanagi {
 			const void* hint = 0)
 		{
 			IZ_ASSERT(s_Allocator != IZ_NULL);
-			void* p = ALLOC(s_Allocator, num * sizeof(T));
+			
+			size_t size = num * sizeof(T);
+			void* p = ALLOC(s_Allocator, size);
+
+			IZ_ASSERT(p != IZ_NULL);
+			if (p != IZ_NULL)
+			{
+				s_AllocatedSize += size;
+			}
+
 			return (pointer)(p);
 		}
 
@@ -79,6 +95,14 @@ namespace izanagi {
 		// メモリを解放する
 		void deallocate(pointer p, size_type num)
 		{
+			if (p != IZ_NULL)
+			{
+				size_t size = num * sizeof(T);
+
+				IZ_ASSERT(s_AllocatedSize >= size);
+				s_AllocatedSize -= size;
+			}
+
 			FREE(s_Allocator, p);
 		}
 
