@@ -50,19 +50,8 @@ int main(int argc, char* argv[])
 		return INVALID_RET_VAL;
 	}
 
-	IImporter* importer = IZ_NULL;
-	
-	if (option.fileType == FileTypeCollada) {
-		// COLLADA
-		importer = IImporter::CreateImporter<CColladaImporter>();
-	}
-	else if (option.fileType == FileTypeXFile) {
-		// XFile
-		importer = IImporter::CreateImporter<CXFileImporter>();
-	}
-	else if (option.fileType == FileTypeFBX) {
-		// FBX
-	}
+	// インポーター作成
+	IImporter* importer = IImporter::CreateImporter(option.modelType);
 
 	// 入力ファイルを開く
 	VRETURN_VAL(

@@ -67,6 +67,7 @@ void CColladaGeometry::Begin(
 {
 	m_nMeshSubsetPos = 0;
 
+	// メッシュのプリミティブタイプを取得
 	m_PrimType = GetPrimType(
 					pMesh,
 					nMeshIdx,
@@ -185,11 +186,13 @@ namespace {
 	}
 }	// namespace
 
+// 指定されているメッシュに関連するスキニング情報を取得.
 // Get informaitons of skin.
 void CColladaGeometry::GetSkinList(
 	DAE* pDAE,
 	std::vector<SSkin>& tvSkinList)
 {
+	// そもそもスキンニングがあるのか
 	domSkinRef pSkin = _GetSkin(pDAE);
 	if (pSkin == IZ_NULL) {
 		// There is no skin, so nothing is done.
@@ -218,12 +221,15 @@ void CColladaGeometry::GetSkinList(
 		tvSkinList.push_back(SSkin());
 		SSkin& skin = tvSkinList.back();
 
+		// 影響を与える頂点数を取得
 		// Get count of information that joint influences vertex.
 		domUint nInfluenceNum = pSkin->getVertex_weights()->getVcount()->getValue()[(size_t)i];
 
 		for (domUint nInflCnt = 0; nInflCnt < nInfluenceNum; nInflCnt++) {
+			// 関節インデックス取得
 			IZ_UINT nJointIdx = (IZ_UINT)pSkin->getVertex_weights()->getV()->getValue()[pos + 0];
 
+			// ウエイト値を取得
 			IZ_UINT nWeightIdx = (IZ_UINT)pSkin->getVertex_weights()->getV()->getValue()[pos + 1];
 			IZ_FLOAT fWeight = (IZ_FLOAT)pWeightsSrc->getFloat_array()->getValue()[nWeightIdx];
 
@@ -237,12 +243,15 @@ void CColladaGeometry::GetSkinList(
 	}
 }
 
+// 指定されているメッシュに含まれる三角形を取得.
 // Returns count of triangles in specified mesh.
 IZ_UINT CColladaGeometry::GetTriangles(
 	domMesh* pMesh,
 	std::vector<STri>& tvTriList)
 {
 	m_TriList = &tvTriList;
+
+	// 形状に応じて三角形を取得.
 
 	switch (m_PrimType) {
 	case E_PRIM_TYPE_TRIANGLES:
@@ -534,6 +543,7 @@ IZ_BOOL CColladaGeometry::GetMaterialForMesh(
 }
 
 namespace {
+	// プリミティブから三角形数を取得
 	template <typename _T>
 	inline IZ_UINT _GetTriNumFromPrim(
 		_T pPrim,
@@ -543,12 +553,16 @@ namespace {
 		return 0;
 	}
 
+	// プリミティブから三角形数を取得
 	template <>
 	inline IZ_UINT _GetTriNumFromPrim(
 		domPolylistRef pPrim,
-		size_t nPos)
+		size_t primCnt)
 	{
-		domUint ret = pPrim->getVcount()->getValue().get(nPos);
+		// 頂点数を取得
+		domUint ret = pPrim->getVcount()->getValue().get(primCnt);
+
+		// 頂点数から三角形数を計算
 		ret -= 2;
 		return static_cast<IZ_UINT>(ret);
 	}
@@ -577,6 +591,7 @@ namespace {
 	}
 }	// namespace
 
+// 頂点データを読み込む
 template <typename _T>
 void CColladaGeometry::ReadVtx(_T pPrim)
 {
@@ -588,7 +603,7 @@ void CColladaGeometry::ReadVtx(_T pPrim)
 	size_t nOffset = 0;
 
 	for (size_t nPrimCnt = 0; nPrimCnt < nPrimNum; nPrimCnt++) {
-		// 三角形数
+		// プリミティブから三角形数を取得
 		IZ_UINT nTriNum = _GetTriNumFromPrim(pPrim, nPrimCnt);
 
 		ReadVtx(
@@ -630,6 +645,7 @@ void CColladaGeometry::ReadVtx(domTrianglesRef pTriangles)
 	}
 }
 
+// 頂点データを読み込む
 template <typename _T>
 void CColladaGeometry::ReadVtx(
 	size_t nInputNum,
@@ -682,11 +698,13 @@ void CColladaGeometry::ReadVtx(
 	}
 }
 
+// 頂点を追加 & 三角形に頂点インデックスを設定
 void CColladaGeometry::AddVtx(
 	STri& sTri,
 	IZ_UINT nPos,
 	CColladaGeometry::SVtx& sVtx)
 {
+	// 指定された頂点を探す
 	std::vector<CColladaGeometry::SVtx>::iterator it;
 	it = std::find(
 			m_VtxList.begin(), 
@@ -694,14 +712,17 @@ void CColladaGeometry::AddVtx(
 			sVtx);
 
 	if (it == m_VtxList.end()) {
+		// 見つからなかったので新規登録
 		sTri.vtx[nPos] = (IZ_UINT)m_VtxList.size();
 		m_VtxList.push_back(sVtx);
 	}
 	else {
+		// 見つかったので、インデックスをセット
 		sTri.vtx[nPos] = (IZ_UINT)std::distance(m_VtxList.begin(), it);
 	}
 }
 
+// 頂点フォーマットを読み込む
 template <typename _T>
 void CColladaGeometry::ReadVtxFmt(
 	domMesh* pMesh,

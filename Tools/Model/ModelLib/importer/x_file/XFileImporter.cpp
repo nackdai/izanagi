@@ -75,7 +75,7 @@ IZ_UINT CXFileImporter::GetTriangles(std::vector<STri>& tvTriList)
 	return ret;
 }
 
-IZ_UINT CXFileImporter::GetSkinIdx(IZ_UINT nVtxIdx)
+IZ_UINT CXFileImporter::GetSkinIdxAffectToVtx(IZ_UINT nVtxIdx)
 {
 	IZ_UINT ret = CXFileGeometry::GetInstance().GetSkinIdx(
 					&m_Parser,

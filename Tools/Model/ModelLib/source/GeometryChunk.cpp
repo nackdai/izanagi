@@ -45,6 +45,7 @@ IZ_BOOL CGeometryChunk::Export(
 	izanagi::IOutputStream* pOut,
 	IImporter* pImporter)
 {
+	// メッシュが影響を受けるマトリクスの最大数
 	m_MaxJointMtxNum = max(
 						maxJointMtxNum,
 						izanagi::MSH_BELONGED_JOINT_MIN);
@@ -108,6 +109,7 @@ void CGeometryChunk::Clear()
 	m_VtxList.clear();
 }
 
+// メッシュグループ出力
 IZ_BOOL CGeometryChunk::ExportGroup(
 	izanagi::IOutputStream* pOut,
 	IImporter* pImporter)
@@ -116,6 +118,7 @@ IZ_BOOL CGeometryChunk::ExportGroup(
 	{
 		FILL_ZERO(&sGroupInfo, sizeof(sGroupInfo));
 
+		// メッシュグループに所属するメッシュセット数
 		sGroupInfo.numMeshSet = pImporter->GetMeshNum();
 	}
 
@@ -125,22 +128,28 @@ IZ_BOOL CGeometryChunk::ExportGroup(
 	izanagi::tool::CIoStreamSeekHelper cSeekHelper(pOut);
 	VRETURN(cSeekHelper.Skip(sizeof(sGroupInfo)));
 
+	// メッシュセットリスト
 	m_MeshList.resize(sGroupInfo.numMeshSet);
 
 	IZ_UINT nVtxNum = 0;
 
+#if 0
+	// 三角形リストの保持先を覚えさせておく
 	SPrimSet::SetTriList(&m_TriList);
+#endif
 
 	for (IZ_UINT nMeshIdx = 0; nMeshIdx < sGroupInfo.numMeshSet; nMeshIdx++) {
 		SMesh& sMesh = m_MeshList[nMeshIdx];
 
 		pImporter->BeginMesh(nMeshIdx);
 
+		// メッシュセットに含まれる三角形の開始位置
 		sMesh.startTri = static_cast<IZ_UINT>(m_TriList.size());
 
 		// Get triangels.
 		nVtxNum += pImporter->GetTriangles(m_TriList);
 
+		// メッシュセットに含まれる三角形の終了位置
 		sMesh.endTri = static_cast<IZ_UINT>(m_TriList.size());
 
 		// Get skin data.
@@ -195,8 +204,12 @@ IZ_BOOL CGeometryChunk::ExportGroup(
 }
 
 namespace {
+	// 関節情報
 	struct SJointInfo {
+		// 関節インデックス
 		IZ_UINT idx;
+
+		// 指定された関節におけるスキニングウエイト最大値
 		IZ_FLOAT maxWeight;
 
 		SJointInfo()
@@ -214,6 +227,7 @@ namespace {
 			return (idx == i);
 		}
 
+		// ソート用
 		bool operator<(const SJointInfo& rhs) const
 		{
 			return (maxWeight < rhs.maxWeight);
@@ -221,6 +235,7 @@ namespace {
 	};
 }	// namespace
 
+// 指定されたメッシュについて三角形と関節を関連付ける
 void CGeometryChunk::BindJointToTri(
 	IImporter* pImporter,
 	SMesh& sMesh)
@@ -230,6 +245,7 @@ void CGeometryChunk::BindJointToTri(
 		return;
 	}
 
+	// 関節情報の一時保存用のリスト
 	std::vector<SJointInfo> tvJointInfo;
 
 	for (IZ_UINT nTriPos = sMesh.startTri; nTriPos < sMesh.endTri; nTriPos++) {
@@ -237,17 +253,25 @@ void CGeometryChunk::BindJointToTri(
 		STri& sTri = m_TriList[nTriPos];
 
 		for (IZ_UINT i = 0; i < 3; i++) {
-			IZ_UINT nSkinIdx = pImporter->GetSkinIdx(sTri.vtx[i]);
+			// 三角形が持つ頂点に関連したスキニング情報へのインデックスを取得
+			IZ_UINT nSkinIdx = pImporter->GetSkinIdxAffectToVtx(sTri.vtx[i]);
 
 			// Get skin information.
 			const SSkin& sSkin = m_SkinList[nSkinIdx];
 
 			for (size_t n = 0; n < sSkin.joint.size(); n++) {
+				// 関節インデックス取得
 				IZ_UINT idx = sSkin.joint[n];
 
+				// // 三角形に影響を与える関節インデックスが設定されているか調べる
+
 				if (std::find(sTri.joint.begin(), sTri.joint.end(), idx) == sTri.joint.end()) {
+					// 未設定
+
+					// 三角形に影響を与える関節インデックスを登録
 					sTri.joint.insert(idx);
 
+					// 関節情報を登録
 					tvJointInfo.push_back(SJointInfo());
 					SJointInfo& sJointInfo = tvJointInfo.back();
 					{
@@ -256,6 +280,9 @@ void CGeometryChunk::BindJointToTri(
 					}
 				}
 				else {
+					// 設定済み
+
+					// 三角形に影響を与える関節情報を取得
 					// triangle belongs to joint.
 					std::vector<SJointInfo>::iterator itJointInfo = std::find(
 																		tvJointInfo.begin(),
@@ -271,10 +298,16 @@ void CGeometryChunk::BindJointToTri(
 
 		IZ_ASSERT(sTri.joint.size() > 0);
 		
+		// 三角形に影響を与える関節数は最大４まで
+		// それを超えた場合は一番影響が小さいもの（ウエイトが小さいもの）を削除する
 		// If num of skin is over 4, num of skin is limited to 4 by weight.
 		if (sTri.joint.size() > 4) {
+			// 先頭の関節情報を取得
+			// ここでは既にウエイトが小さいものの順にソートされているので
+			// 一番影響が小さい関節の情報を取得
 			std::vector<SJointInfo>::iterator itJointInfo = tvJointInfo.begin();
 
+			// 三角形に影響を与える関節数が４以下になるまで削除を繰り返す
 			for (size_t n = sTri.joint.size(); n > 4; itJointInfo++, n--) {
 				const SJointInfo& sJointInfo = *itJointInfo;
 
@@ -282,10 +315,13 @@ void CGeometryChunk::BindJointToTri(
 				sTri.EraseJoint(sJointInfo.idx);
 
 				for (IZ_UINT i = 0; i < 3; i++) {
-					IZ_UINT nSkinIdx = pImporter->GetSkinIdx(sTri.vtx[i]);
+					// 指定された頂点に影響を与えるスキニング情報を取得.
+					IZ_UINT nSkinIdx = pImporter->GetSkinIdxAffectToVtx(sTri.vtx[i]);
 
+					// スキニング情報からも関節を削除
 					SSkin& sSkin = m_SkinList[nSkinIdx];
 					if (sSkin.EraseJoint(sJointInfo.idx)) {
+						// ウエイト値の合計が１になるように正規化する
 						sSkin.Normalize();
 					}
 				}
@@ -299,10 +335,16 @@ void CGeometryChunk::BindJointToTri(
 }
 
 namespace {
+	// 基準となるプリミティブセットとのマージ候補を探すための関数オブジェクト
 	struct FuncFindIncludedJointIdx {
+		// マージ候補のプリミティブセット
+		// 基準となっているプリミティブセットと一致する関節数ごとに候補を登録する
 		static std::vector< std::vector<const SPrimSet*> > candidateList;
 
+		// 基準となっているプリミティブセット
 		const SPrimSet& master;
+
+		// 最大関節数
 		const IZ_UINT maxJointMtxNum;
 
 		FuncFindIncludedJointIdx(const SPrimSet& prim, IZ_UINT num)
@@ -337,10 +379,17 @@ namespace {
 				}
 			}
 
+			// 一致する関節があった
 			if (nMatchCnt > 0) {
+				// 一致する関節を持つプリミティブセットを登録する
+				// しかし、そこで関節の最大数を超えてはまずいのでチェックする
+
+				// 一致しない関節の数が新たに増える関節数になるので
+				// 一致しない関節数を計算する
 				IZ_UINT added = (IZ_UINT)rhs.joint.size() - nMatchCnt;
 
 				if (added + master.joint.size() <= maxJointMtxNum) {
+					// 新たに登録しても最大数は超えないので登録する
 					candidateList[nMatchCnt - 1].push_back(&rhs);
 				}
 			}
@@ -350,6 +399,7 @@ namespace {
 	std::vector< std::vector<const SPrimSet*> > FuncFindIncludedJointIdx::candidateList;
 }	// namespace
 
+// 三角形に影響を与える関節に応じて三角形を分類する
 void CGeometryChunk::ClassifyTriByJoint(SMesh& sMesh)
 {
 	for (IZ_UINT nTriPos = sMesh.startTri; nTriPos < sMesh.endTri; nTriPos++) {
@@ -440,8 +490,10 @@ void CGeometryChunk::ClassifyTriByJoint(SMesh& sMesh)
 		}
 	}
 #else
+	// 影響を受ける関節が同じ三角形をまとめる
 	// Merge triangles by joint idx.
 	if (sMesh.subset.size() > 1) {
+		// 候補リストを最大関節数だけ確保
 		FuncFindIncludedJointIdx::candidateList.resize(m_MaxJointMtxNum);
 
 		std::vector<SPrimSet>::iterator it = sMesh.subset.begin();
@@ -461,6 +513,8 @@ void CGeometryChunk::ClassifyTriByJoint(SMesh& sMesh)
 
 				std::vector<IZ_UINT> releaseList;
 
+				// 一致した関節数ごとに処理を行う
+
 				for (IZ_INT i = m_MaxJointMtxNum - 1; i >= 0; i--) {
 					std::vector<const SPrimSet*>::iterator candidate = FuncFindIncludedJointIdx::candidateList[i].begin();
 
@@ -475,7 +529,8 @@ void CGeometryChunk::ClassifyTriByJoint(SMesh& sMesh)
 							break;
 						}
 
-						// Merge to found MeshGroup.
+						// ベースとなるプリミティブセットにマージ
+						// プリミティブセットを構成する三角形をベースとなるプリミティブセットに登録
 						sPrimSet.tri.insert(
 							sPrimSet.tri.end(),
 							sSubsetMatch.tri.begin(),
@@ -523,6 +578,7 @@ void CGeometryChunk::ClassifyTriByJoint(SMesh& sMesh)
 #endif
 }
 
+// メッシュ情報を取得
 void CGeometryChunk::GetMeshInfo(
 	IImporter* pImporter,
 	SMesh& sMesh)
@@ -686,6 +742,7 @@ void CGeometryChunk::ComputeVtxParemters(IImporter* pImporter)
 	// TODO
 }
 
+// 頂点データを出力
 IZ_UINT CGeometryChunk::ExportVertices(
 	izanagi::IOutputStream* pOut,
 	IImporter* pImporter)
@@ -813,6 +870,7 @@ IZ_UINT CGeometryChunk::ExportVertices(
 }
 
 namespace {
+	// 指定された関節リストにおける関節インデックスの格納位置を探す
 	inline IZ_INT _FindJointIdx(
 		const std::set<IZ_UINT>& tsJoint,
 		IZ_UINT nJointIdx)
@@ -832,12 +890,14 @@ namespace {
 	}
 }	// namespace
 
+// 頂点データを出力.
 IZ_BOOL CGeometryChunk::ExportVertices(
 	izanagi::IOutputStream* pOut,
 	IImporter* pImporter,
 	const SMesh& sMesh,
 	SPrimSet& sPrimSet)
 {
+	// 頂点データサイズのテーブル
 	static IZ_UINT tblVtxSize[] = {
 		izanagi::E_MSH_VTX_SIZE_POS,
 		izanagi::E_MSH_VTX_SIZE_NORMAL, 
@@ -855,12 +915,15 @@ IZ_BOOL CGeometryChunk::ExportVertices(
 	IZ_UINT16 nMaxIdx = 0;
 
 	for (size_t i = 0; i < sPrimSet.tri.size(); i++) {
+		// 三角形を取得
 		IZ_UINT nTriIdx = sPrimSet.tri[i];
 		STri& sTri = m_TriList[nTriIdx];
 
 		for (size_t nVtxPos = 0; nVtxPos < 3; nVtxPos++) {
+			// 頂点インデックスを取得
 			IZ_UINT nVtxIdx = sTri.vtx[nVtxPos];
 
+			// 出力済み頂点かどうか
 			std::vector<IZ_UINT>::iterator itFind = std::find(
 														m_ExportedVtx.begin(),
 														m_ExportedVtx.end(),
@@ -884,14 +947,17 @@ IZ_BOOL CGeometryChunk::ExportVertices(
 			nMaxIdx = (nIdx > nMaxIdx ? nIdx : nMaxIdx);
 
 			if (itFind != m_ExportedVtx.end()) {
+				// 出力済み頂点なのでこれ以上は何もしない
 				continue;
 			}
 
+			// 出力済み頂点リストに登録
 			m_ExportedVtx.push_back(nVtxIdx);
 
 			for (IZ_UINT nVtxFmt = 0; nVtxFmt < izanagi::E_MSH_VTX_FMT_TYPE_NUM; nVtxFmt++) {
 				izanagi::SVector vec;
 
+				// 指定された頂点における指定フォーマットのデータを取得.
 				IZ_BOOL bIsExist = pImporter->GetVertex(
 									nVtxIdx,
 									vec, 
@@ -901,10 +967,12 @@ IZ_BOOL CGeometryChunk::ExportVertices(
 				// bIsExist means whether specified format is exist.
 
 				if (bIsExist) {
+					// 指定された頂点に指定フォーマットのデータは存在する
 					IZ_ASSERT(nVtxFmt < COUNTOF(tblVtxSize));
 					IZ_ASSERT(sizeof(vec) >= tblVtxSize[nVtxFmt]);
 
 					if (nVtxFmt == izanagi::E_MSH_VTX_FMT_TYPE_COLOR) {
+						// カラーの場合は変換してから出力
 						IZ_UINT8 r = (IZ_UINT8)vec.x;
 						IZ_UINT8 g = (IZ_UINT8)vec.y;
 						IZ_UINT8 b = (IZ_UINT8)vec.z;
@@ -930,7 +998,8 @@ IZ_BOOL CGeometryChunk::ExportVertices(
 
 			// For skin.
 			if (bEnableSkin) {
-				IZ_UINT nSkinIdx = pImporter->GetSkinIdx(nVtxIdx);
+				// 指定頂点におけるスキニング情報を取得
+				IZ_UINT nSkinIdx = pImporter->GetSkinIdxAffectToVtx(nVtxIdx);
 				const SSkin& sSkin = m_SkinList[nSkinIdx];
 
 				izanagi::SVector vecJoint;
@@ -941,6 +1010,8 @@ IZ_BOOL CGeometryChunk::ExportVertices(
 				
 				for (size_t n = 0; n < sSkin.joint.size(); n++) {
 #if 1
+					// プリミティブセット内での関節位置を探す
+					// これが描画時における関節インデックスとなる
 					vecJoint.v[n] = (IZ_FLOAT)_FindJointIdx(sPrimSet.joint, sSkin.joint[n]);
 #else
 					vecJoint.v[n] = sSkin.joint[n];

@@ -154,6 +154,7 @@ IZ_UINT CColladaImporter::GetMeshNum()
 	return ret;
 }
 
+// 指定されているメッシュに関連するスキニング情報を取得.
 void CColladaImporter::GetSkinList(std::vector<SSkin>& tvSkinList)
 {
 	if (tvSkinList.empty()) {
@@ -163,6 +164,7 @@ void CColladaImporter::GetSkinList(std::vector<SSkin>& tvSkinList)
 	}
 }
 
+// 指定されているメッシュに含まれる三角形を取得.
 IZ_UINT CColladaImporter::GetTriangles(std::vector<STri>& tvTriList)
 {
 	domMesh* pMesh = GetMesh();
@@ -174,7 +176,7 @@ IZ_UINT CColladaImporter::GetTriangles(std::vector<STri>& tvTriList)
 	return nVtxNum;
 }
 
-IZ_UINT CColladaImporter::GetSkinIdx(IZ_UINT nVtxIdx)
+IZ_UINT CColladaImporter::GetSkinIdxAffectToVtx(IZ_UINT nVtxIdx)
 {
 	domMesh* pMesh = GetMesh();
 

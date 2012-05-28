@@ -4,25 +4,14 @@
 #include <string>
 #include "izDefs.h"
 #include "izToolKit.h"
-
-// ファイルタイプ
-enum FileType {
-	FileTypeUnknown = 0,
-	FileTypeCollada,
-	FileTypeXFile,
-	FileTypeFBX,
-
-	FileTypeNum,
-};
+#include "izModelLib.h"
 
 struct SOption {
-	izanagi::tool::CString in;		// 入力ファイル
+	izanagi::tool::CString in;	// 入力ファイル
 	izanagi::tool::CString out;	// 出力ファイル
-
-	FileType fileType;	// ファイルタイプ
 };
 
-class COption : public SOption {
+class COption : public CToolOption<SOption> {
 public:
 	COption();
 	~COption();

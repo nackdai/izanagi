@@ -25,33 +25,57 @@ enum E_MDL_JOINT_TRANSFORM {
 
 ///////////////////////////////////////
 
+/** 三角形情報
+ */
 struct STri {
-	IZ_UINT vtx[3];
-	std::set<IZ_UINT> joint;
+	IZ_UINT vtx[3];				///< 三角形を構成する頂点インデックス
+	std::set<IZ_UINT> joint;	///< 三角形を構成する頂点に影響を与える（スキニングする）関節インデックス
 
+	/** 三角形に影響を与える関節インデックスから一意に決まるキーを計算する.
+	 */
 	IZ_UINT ComputeKey() const;
+
+	/** 三角形に影響を与える関節数を取得.
+	 */ 
 	IZ_UINT GetJointNum() const;
+
+	/** 指定された関節を削除.
+	 */
 	void EraseJoint(IZ_UINT idx);
 };
 
 ///////////////////////////////////////
 
+/** スキニング情報.
+ * １頂点ごとに存在する
+ */
 struct SSkin {
-	std::vector<IZ_UINT> joint;
-	std::vector<IZ_FLOAT> weight;
+	std::vector<IZ_UINT> joint;		///< 影響を与える関節のインデックス
+	std::vector<IZ_FLOAT> weight;	///< ウエイト値
 
+	/** 関節を登録.
+	 */
 	void Add(IZ_UINT nJointIdx, IZ_FLOAT fWeight);
+
+	/** ウエイト値の合計が１になるように正規化する.
+	 */
 	void Normalize();
+
+	/** 指定された関節を削除する.
+	 */
 	IZ_BOOL EraseJoint(IZ_UINT idx);
 };
 
 ///////////////////////////////////////
 
+/** プリミティブセット.
+ * 所属関節ごとにまとめられた三角形群
+ */
 struct SPrimSet {
-	IZ_UINT key;
-	std::vector<IZ_UINT> tri;
+	IZ_UINT key;				///< 三角形に影響を与える関節インデックスから一意に決まるキー
+	std::vector<IZ_UINT> tri;	///< 関節から影響を受ける三角形群
 
-	std::set<IZ_UINT> joint;
+	std::set<IZ_UINT> joint;	///< 三角形に影響を与える関節インデックス
 
 	IZ_UINT idxVB;
 	IZ_UINT16 minIdx;
@@ -65,6 +89,7 @@ struct SPrimSet {
 
 	bool operator==(const SPrimSet& rhs);
 
+#if 0
 private:
 	static std::vector<STri>* ptrTriList;
 
@@ -75,18 +100,21 @@ public:
 		IZ_ASSERT(ptrTriList != IZ_NULL);
 		return ptrTriList;
 	}
+#endif
 };
 
 ///////////////////////////////////////
 
+/** メッシュ情報.
+ */
 struct SMesh {
-	IZ_UINT startTri;
-	IZ_UINT endTri;
+	IZ_UINT startTri;	///< メッシュを構成する三角形の開始インデックス
+	IZ_UINT endTri;		///< メッシュを構成する三角形の終了インデックス
 
 	std::vector<SPrimSet> subset;
 
-	IZ_UINT fmt;
-	IZ_UINT sizeVtx;
+	IZ_UINT fmt;		///< メッシュにおける頂点フォーマット
+	IZ_UINT sizeVtx;	///< メッシュにおける１頂点あたりのサイズ
 };
 
 ///////////////////////////////////////

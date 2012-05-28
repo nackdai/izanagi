@@ -4,22 +4,13 @@
 #include <string>
 #include "izDefs.h"
 #include "izToolKit.h"
+#include "izModelLib.h"
 
 // 出力タイプ
 enum ExportType {
 	ExportTypeMdl = 1 << 0,	// MDLとして出力
 	ExportTypeMsh = 1 << 1,	// MSHを出力
 	ExportTypeSkl = 1 << 2,	// SKLを出力
-};
-
-// ファイルタイプ
-enum FileType {
-	FileTypeUnknown = 0,
-	FileTypeCollada,
-	FileTypeXFile,
-	FileTypeFBX,
-
-	FileTypeNum,
 };
 
 struct SOption {
@@ -30,12 +21,11 @@ struct SOption {
 	izanagi::tool::CString outSkl;
 
 	IZ_UINT exportType;	// 出力タイプ
-	FileType fileType;	// ファイルタイプ
 
 	IZ_UINT maxJointMtxNum;
 };
 
-class COption : public SOption {
+class COption : public CToolOption<SOption> {
 public:
 	COption();
 	~COption();
