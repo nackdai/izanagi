@@ -8,7 +8,6 @@
 #include "AnmExporter.h"
 #include "MtrlExporter.h"
 
-#include "../importer/collada/ColladaImporter.h"
-#include "../importer/x_file/XFileImporter.h"
+#include "ToolOption.h"
 
 #endif	// #if !defined(__IZANAGI_MODEL_LIB_MODE_LIB_H__)

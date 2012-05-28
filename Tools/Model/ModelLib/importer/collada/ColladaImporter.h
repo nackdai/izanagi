@@ -24,22 +24,32 @@ public:
 
 	void ExportGeometryCompleted();
 
-	void BeginMesh(IZ_UINT nIdx);
-
-	void EndMesh();
-	
 	IZ_UINT GetMeshNum();
 
+	// メッシュに関する処理を開始.
+	void BeginMesh(IZ_UINT nIdx);
+
+	// メッシュに関する処理を終了.
+	void EndMesh();
+
+	// BeginMeshで指定されたメッシュに含まれスキニング情報を取得.
 	void GetSkinList(std::vector<SSkin>& tvSkinList);
 
+	// BeginMeshで指定されたメッシュに含まれる三角形を取得.
 	IZ_UINT GetTriangles(std::vector<STri>& tvTriList);
 
-	IZ_UINT GetSkinIdx(IZ_UINT nVtxIdx);
+	// 指定された頂点に影響を与えるスキニング情報へのインデックスを取得.
+	IZ_UINT GetSkinIdxAffectToVtx(IZ_UINT nVtxIdx);
 
+	// １頂点あたりのサイズを取得.
+	// ただし、スキニングに関するサイズは含まない
 	IZ_UINT GetVtxSize();
 
+	// 頂点フォーマットを取得.
+	// ただし、スキニングに関するフォーマットは含まない
 	IZ_UINT GetVtxFmt();
 
+	// 指定された頂点における指定フォーマットのデータを取得.
 	IZ_BOOL GetVertex(
 		IZ_UINT nIdx,
 		izanagi::SVector& vec,
@@ -52,24 +62,32 @@ public:
 	//////////////////////////////////
 	// For joint chunk.
 
+	// 関節データの出力完了を通知.
 	void ExportJointCompleted();
 
+	// 関節に関する処理を開始.
 	IZ_BOOL BeginJoint();
 
+	// 関節に関する処理を終了.
 	void EndJoint();
 
+	// 関節数を取得.
 	IZ_UINT GetJointNum();
 
+	// 指定された関節の名前を取得.
 	IZ_PCSTR GetJointName(IZ_UINT nIdx);
 
+	// 親関節へのインデックスを取得.	
 	IZ_INT GetJointParent(
 		IZ_UINT nIdx,
 		const std::vector<izanagi::S_SKL_JOINT>& tvJoint);
 
+	// 指定された関節の逆マトリクスを取得.	
 	void GetJointInvMtx(
 		IZ_UINT nIdx,
 		izanagi::SMatrix& mtx);
 		
+	// 関節の姿勢を取得.
 	void GetJointTransform(
 		IZ_UINT nIdx,
 		const std::vector<izanagi::S_SKL_JOINT>& tvJoint,

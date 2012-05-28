@@ -155,6 +155,10 @@
 				RelativePath="..\..\Model\ModelLib\include\izModelLib.h"
 				>
 			</File>
+			<File
+				RelativePath="..\..\Model\ModelLib\include\ToolOption.h"
+				>
+			</File>
 			<Filter
 				Name="anm"
 				>
@@ -203,6 +207,10 @@
 		<Filter
 			Name="source"
 			>
+			<File
+				RelativePath="..\..\Model\ModelLib\source\Importer.cpp"
+				>
+			</File>
 			<Filter
 				Name="mdl"
 				>
@@ -382,6 +390,30 @@
 						>
 					</File>
 				</Filter>
+			</Filter>
+			<Filter
+				Name="pmd"
+				>
+				<File
+					RelativePath="..\..\Model\ModelLib\importer\pmd\PMDFormat.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Model\ModelLib\importer\pmd\PMDImporter.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Model\ModelLib\importer\pmd\PMDImporter.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Model\ModelLib\importer\pmd\PMDLoader.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Model\ModelLib\importer\pmd\PMDLoader.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 	</Files>

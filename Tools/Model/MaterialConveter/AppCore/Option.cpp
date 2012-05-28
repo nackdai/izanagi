@@ -3,7 +3,6 @@
 
 COption::COption()
 {
-	fileType = FileTypeUnknown;
 }
 
 COption::~COption()
@@ -28,15 +27,7 @@ IZ_BOOL COption::Analysis(int argc, char* argv[])
 			else if (result = (opt == "-f")) {
 				std::string subOpt(argv[++i]);
 
-				if (result = (subOpt == "dae")) {
-					fileType = FileTypeCollada;
-				}
-				else if (result = (subOpt == "x")) {
-					fileType = FileTypeXFile;
-				}
-				else if (result = (subOpt == "fbx")) {
-					fileType = FileTypeFBX;
-				}
+				result = AnalysisModelType(subOpt);
 			}
 		}
 
@@ -70,7 +61,7 @@ IZ_BOOL COption::AnalysisInternal()
 		out.format("%s.mtrl", BUF);
 	}
 
-	if (fileType == FileTypeUnknown) {
+	if (!IsValidModelType()) {
 		// 入力ファイルの拡張子から判定する
 
 		// 拡張子を取得
@@ -82,14 +73,7 @@ IZ_BOOL COption::AnalysisInternal()
 
 		std::string strExt(ext);
 
-		if (strExt == "dae") {
-			fileType = FileTypeCollada;
-		}
-		else if (strExt == "x") {
-			fileType = FileTypeXFile;
-		}
-		else if (strExt == "fbx") {
-		}
+		AnalysisModelType(strExt);
 	}
 
 	return IZ_TRUE;
@@ -117,7 +101,7 @@ IZ_BOOL COption::IsValid()
 {
 	VRETURN(!in.empty());
 	VRETURN(!out.empty());
-	VRETURN(fileType != FileTypeUnknown);
+	VRETURN(IsValidModelType());
 
 	return IZ_TRUE;
 }

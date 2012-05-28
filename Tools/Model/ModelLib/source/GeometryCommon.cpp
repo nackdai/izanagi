@@ -3,6 +3,7 @@
 
 ///////////////////////////////////////
 
+// 三角形に影響を与える関節インデックスから一意に決まるキーを計算する.
 IZ_UINT STri::ComputeKey() const
 {
 	static IZ_UINT nJointTbl[4];
@@ -26,6 +27,7 @@ IZ_UINT STri::ComputeKey() const
 	return ret;
 }
 
+// 三角形に影響を与える関節数を取得.
 IZ_UINT STri::GetJointNum() const
 {
 	size_t ret = 0;
@@ -37,6 +39,7 @@ IZ_UINT STri::GetJointNum() const
 	return (IZ_UINT)ret;
 }
 
+// 指定された関節を削除.
 void STri::EraseJoint(IZ_UINT idx)
 {
 	std::set<IZ_UINT>::iterator it = joint.begin();
@@ -63,6 +66,7 @@ namespace {
 	}
 }	// namespace
 
+// 関節を登録.
 void SSkin::Add(IZ_UINT nJointIdx, IZ_FLOAT fWeight)
 {
 	if (weight.size() < 4) {
@@ -92,6 +96,7 @@ void SSkin::Add(IZ_UINT nJointIdx, IZ_FLOAT fWeight)
 	}
 }
 
+// ウエイト値の合計が１になるように正規化する.
 void SSkin::Normalize()
 {
 	IZ_FLOAT fWeightSum = 0.0f;
@@ -104,6 +109,7 @@ void SSkin::Normalize()
 	}
 }
 
+// 指定された関節を削除する.
 IZ_BOOL SSkin::EraseJoint(IZ_UINT idx)
 {
 	for (size_t i = 0; i < joint.size(); i++) {
@@ -125,9 +131,9 @@ IZ_BOOL SSkin::EraseJoint(IZ_UINT idx)
 
 ////////////////////////////////////////////
 
+#if 0
 std::vector<STri>* SPrimSet::ptrTriList = IZ_NULL;
 
-#if 0
 bool SPrimSet::operator==(const SPrimSet& rhs)
 {
 	std::vector<STri>& tvTriList = *GetTriList();

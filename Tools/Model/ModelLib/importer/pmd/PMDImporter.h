@@ -1,21 +1,20 @@
-#if !defined(__MODEL_LIB_XFILE_IMPORTER_H__)
-#define __MODEL_LIB_XFILE_IMPORTER_H__
+#if !defined(__MODEL_LIB_PMD_IMPORTER_H__)
+#define __MODEL_LIB_PMD_IMPORTER_H__
 
 #include "Importer.h"
-#include "XFileParser.h"
+#include "PMDLoader.h"
+#include <vector>
 
-class CXFileImporter : public IImporter {
+class CPmdImporter : public IImporter {
 	friend class IImporter;
 
 protected:
-	CXFileImporter();
-	~CXFileImporter() { Close(); }
+	CPmdImporter();
+	~CPmdImporter() { Close(); }
 
-	NO_COPIABLE(CXFileImporter);
+	NO_COPIABLE(CPmdImporter);
 
 public:
-	static IZ_BOOL IsTxtFormat(IZ_PCSTR pszName);
-
 	IZ_BOOL Open(IZ_PCSTR pszName);
 	IZ_BOOL Close();
 
@@ -127,8 +126,6 @@ public:
 	//////////////////////////////////
 	// For material.
 
-	void SetNameForInvalidMaterial(IZ_PCSTR pszName);
-
 	IZ_BOOL BeginMaterial();
 
 	IZ_BOOL EndMaterial();
@@ -159,11 +156,14 @@ public:
 		IZ_UINT nParamIdx,
 		std::vector<IZ_FLOAT>& tvValue);
 
-protected:
-	CXFileParser m_Parser;
-	IZ_UINT m_nMeshIdx;
+private:
+	CPmdLoader m_Loader;
 
-	CXFileParser* m_BaseMdlParser;
+	IZ_INT m_CurMeshIdx;
+
+	// マテリアルにバインドされている面のインデックスのリスト
+	// マテリアル[0]から順に対応する面の先頭のインデックスが保持される
+	std::vector<IZ_UINT> m_FaceIdxInMtrlList;
 };
 
-#endif	// #if !defined(__MODEL_LIB_XFILE_IMPORTER_H__)
+#endif	// #if !defined(__MODEL_LIB_PMD_IMPORTER_H__)
