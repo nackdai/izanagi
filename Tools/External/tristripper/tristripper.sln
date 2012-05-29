@@ -1,0 +1,36 @@
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libtristripper", "lib\libtristripper.vcproj", "{DFC8E3D2-BAD2-4266-9135-D8289B383E4D}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test", "test\test.vcproj", "{B6433982-3CB0-449C-8798-028E9139837A}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+	ProjectSection(ProjectDependencies) = postProject
+		{DFC8E3D2-BAD2-4266-9135-D8289B383E4D} = {DFC8E3D2-BAD2-4266-9135-D8289B383E4D}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DFC8E3D2-BAD2-4266-9135-D8289B383E4D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{DFC8E3D2-BAD2-4266-9135-D8289B383E4D}.Debug|Win32.Build.0 = Debug|Win32
+		{DFC8E3D2-BAD2-4266-9135-D8289B383E4D}.Release|Win32.ActiveCfg = Release|Win32
+		{DFC8E3D2-BAD2-4266-9135-D8289B383E4D}.Release|Win32.Build.0 = Release|Win32
+		{B6433982-3CB0-449C-8798-028E9139837A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B6433982-3CB0-449C-8798-028E9139837A}.Debug|Win32.Build.0 = Debug|Win32
+		{B6433982-3CB0-449C-8798-028E9139837A}.Release|Win32.ActiveCfg = Release|Win32
+		{B6433982-3CB0-449C-8798-028E9139837A}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
