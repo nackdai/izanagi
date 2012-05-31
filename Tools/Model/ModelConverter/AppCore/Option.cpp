@@ -4,8 +4,8 @@
 COption::COption()
 {
 	exportType = ExportTypeMsh | ExportTypeSkl;
-
 	maxJointMtxNum = 0;
+	isExportTriList = IZ_FALSE;
 }
 
 COption::~COption()
@@ -15,9 +15,8 @@ COption::~COption()
 // 解析
 IZ_BOOL COption::Analysis(int argc, char* argv[])
 {
-	IZ_BOOL result = IZ_TRUE;
-
 	for (IZ_INT i = 1; i < argc; i++) {
+		IZ_BOOL result = IZ_FALSE;
 		std::string opt(argv[i]);
 
 		if (i < argc - 1) {
@@ -47,6 +46,14 @@ IZ_BOOL COption::Analysis(int argc, char* argv[])
 			}
 			else if (result = (opt == "-mtx")) {
 				maxJointMtxNum = ::atoi(argv[++i]);
+			}
+		}
+
+		if (!result)
+		{
+			if (result = (opt == "-list"))
+			{
+				isExportTriList = IZ_TRUE;
 			}
 		}
 

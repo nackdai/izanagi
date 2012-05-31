@@ -75,7 +75,21 @@ void CPmdImporter::GetSkinList(std::vector<SSkin>& tvSkinList)
 		const SPmdVertex& vtx = m_Loader.GetVertex(i);
 
 		SSkin skin;
-		// TODO
+
+		IZ_FLOAT weight[2] = 
+		{
+			IZ_MIN(1.0f, vtx.boneWeight * 0.01f),
+			IZ_MIN(1.0f, (100 - vtx.boneWeight) * 0.01f),
+		};
+
+		skin.weight.push_back(weight[0]);
+		skin.joint.push_back(vtx.boneIdx[0]);
+
+		if (weight[1] > 0.0f)
+		{
+			skin.weight.push_back(weight[1]);
+			skin.joint.push_back(vtx.boneIdx[1]);
+		}
 
 		tvSkinList.push_back(skin);
 	}
@@ -129,8 +143,8 @@ IZ_UINT CPmdImporter::GetVtxSize()
 IZ_UINT CPmdImporter::GetVtxFmt()
 {
 	IZ_UINT ret = 1 << izanagi::E_MSH_VTX_FMT_TYPE_POS;
-	ret = 1 << izanagi::E_MSH_VTX_FMT_TYPE_NORMAL;
-	ret = 1 << izanagi::E_MSH_VTX_FMT_TYPE_UV;
+	ret |= 1 << izanagi::E_MSH_VTX_FMT_TYPE_NORMAL;
+	ret |= 1 << izanagi::E_MSH_VTX_FMT_TYPE_UV;
 	return ret;
 }
 
@@ -158,17 +172,6 @@ IZ_BOOL CPmdImporter::GetVertex(
 	case izanagi::E_MSH_VTX_FMT_TYPE_UV:
 		vec.Set(vtx.uv[0], vtx.uv[1], 0.0f, 0.0f);
 		break;
-#if 0
-	case izanagi::E_MSH_VTX_FMT_TYPE_BLENDINDICES:
-		vec.Set(vtx.boneIdx[0], vtx.boneIdx[1], 0.0f, 0.0f);
-		break;
-	case izanagi::E_MSH_VTX_FMT_TYPE_BLENDWEIGHT:
-		{
-			IZ_FLOAT weight = IZ_MIN(vtx.boneWeight * 0.1f, 1.0f);
-			vec.Set(weight, 1.0f - weight, 0.0f, 0.0f);
-		}
-		break;
-#endif
 	default:
 		ret = IZ_FALSE;
 		break;
@@ -258,6 +261,8 @@ void CPmdImporter::GetJointTransform(
 	transform.param.push_back(pose.trans[0]);
 	transform.param.push_back(pose.trans[1]);
 	transform.param.push_back(pose.trans[2]);
+
+	tvTransform.push_back(transform);
 }
 
 //////////////////////////////////

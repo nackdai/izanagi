@@ -41,3 +41,9 @@ IZ_BOOL CMshExporter::Export(
 
 	return ret;
 }
+
+// トライアングルリストで出力するかどうかを設定.
+void CMshExporter::SetIsExportTriList(IZ_BOOL flag)
+{
+	CGeometryChunk::GetInstance().SetIsExportTriList(flag);
+}

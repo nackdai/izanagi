@@ -22,6 +22,10 @@ public:
 		IZ_PCSTR lpszOutFile,
 		IImporter* pImporter);
 
+	/** トライアングルリストで出力するかどうかを設定.
+	 */
+	void SetIsExportTriList(IZ_BOOL flag);
+
 private:
 	izanagi::CFileOutputStream m_Out;
 };
