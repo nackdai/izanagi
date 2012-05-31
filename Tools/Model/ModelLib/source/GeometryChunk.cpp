@@ -1144,7 +1144,9 @@ IZ_BOOL CGeometryChunk::ExportPrimSet(
 		sSubsetInfo.minIdx = sPrimSet.minIdx;
 		sSubsetInfo.maxIdx = sPrimSet.maxIdx;
 
-		sSubsetInfo.typePrim = izanagi::E_GRAPH_PRIM_TYPE_TRIANGLESTRIP;
+		sSubsetInfo.typePrim = (m_ExportTriList
+			? izanagi::E_GRAPH_PRIM_TYPE_TRIANGLELIST
+			: izanagi::E_GRAPH_PRIM_TYPE_TRIANGLESTRIP);
 
 		// TODO
 		sSubsetInfo.fmtIdx = izanagi::E_GRAPH_INDEX_BUFFER_FMT_INDEX32;
@@ -1191,6 +1193,9 @@ IZ_UINT CGeometryChunk::ExportIndices(
 	IImporter* pImporter,
 	const SPrimSet& sPrimSet)
 {
+	IZ_BOOL result = IZ_FALSE;
+	IZ_UINT nIdxNum = 0;
+
 	std::vector<IZ_UINT> tvIndices;
 	tvIndices.reserve(sPrimSet.tri.size() * 3);
 
@@ -1204,27 +1209,41 @@ IZ_UINT CGeometryChunk::ExportIndices(
 		tvIndices.push_back(sTri.vtx[2]);
 	}
 
-	PrimitiveGroup* pPrimGroup = IZ_NULL;
-	IZ_USHORT nPrimGroupNum = 0;
+	if (m_ExportTriList)
+	{
+		// TriangleList
 
-	// Crteate triangle strip.
-	VRETURN_VAL(
-		GenerateStrips(
-			&tvIndices[0],
-			(IZ_UINT)tvIndices.size(),
-			&pPrimGroup,
-			&nPrimGroupNum), 0);
+		nIdxNum = static_cast<IZ_UINT>(tvIndices.size());
 
-	VRETURN_VAL(nPrimGroupNum == 1, 0);
-	VRETURN_VAL(pPrimGroup != IZ_NULL, 0);
+		result = pOut->Write(&tvIndices[0], 0, sizeof(IZ_UINT) * tvIndices.size());
+		IZ_ASSERT(result);
+	}
+	else
+	{
+		// TriangleStrip
 
-	IZ_UINT nIdxNum = pPrimGroup->numIndices;
+		PrimitiveGroup* pPrimGroup = IZ_NULL;
+		IZ_USHORT nPrimGroupNum = 0;
 
-	// Export indices.
-	IZ_BOOL result = pOut->Write(pPrimGroup->indices, 0, sizeof(UINT32) * pPrimGroup->numIndices);
-	IZ_ASSERT(result);
+		// Crteate triangle strip.
+		VRETURN_VAL(
+			GenerateStrips(
+				&tvIndices[0],
+				(IZ_UINT)tvIndices.size(),
+				&pPrimGroup,
+				&nPrimGroupNum), 0);
 
-	SAFE_DELETE_ARRAY(pPrimGroup);
+		VRETURN_VAL(nPrimGroupNum == 1, 0);
+		VRETURN_VAL(pPrimGroup != IZ_NULL, 0);
+
+		nIdxNum = pPrimGroup->numIndices;
+
+		// Export indices.
+		result = pOut->Write(pPrimGroup->indices, 0, sizeof(UINT32) * pPrimGroup->numIndices);
+		IZ_ASSERT(result);
+
+		SAFE_DELETE_ARRAY(pPrimGroup);
+	}
 
 	return (result ? nIdxNum : 0);
 }

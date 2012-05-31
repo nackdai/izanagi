@@ -14,7 +14,7 @@ enum ExportType {
 };
 
 struct SOption {
-	izanagi::tool::CString in;		// 入力ファイル
+	izanagi::tool::CString in;	// 入力ファイル
 	izanagi::tool::CString out;	// 出力ファイル
 
 	izanagi::tool::CString outMsh;
@@ -23,6 +23,9 @@ struct SOption {
 	IZ_UINT exportType;	// 出力タイプ
 
 	IZ_UINT maxJointMtxNum;
+
+	// トライアングルリストで出力するかどうか
+	IZ_BOOL isExportTriList;
 };
 
 class COption : public CToolOption<SOption> {

@@ -15,7 +15,10 @@ public:
 	static CGeometryChunk& GetInstance() { return s_cInstance; }
 
 protected:
-	CGeometryChunk() {}
+	CGeometryChunk()
+	{
+		m_ExportTriList = IZ_FALSE;
+	}
 	~CGeometryChunk() {}
 
 public:
@@ -28,6 +31,10 @@ public:
 
 	const izanagi::SVector& GetMin() { return m_vMin; }
 	const izanagi::SVector& GetMax() { return m_vMax; }
+
+	/** トライアングルリストで出力するかどうかを設定.
+	 */
+	void SetIsExportTriList(IZ_BOOL flag) { m_ExportTriList = flag; }
 
 protected:
 	IZ_BOOL ExportGroup(
@@ -99,6 +106,9 @@ protected:
 
 	// 最大ボーンマトリクス数
 	IZ_UINT m_MaxJointMtxNum;
+
+	// トライアングルリストで出力するかどうか
+	IZ_BOOL m_ExportTriList;
 };
 
 #endif	// #if !defined(__MODEL_LIB_GEOMETRY_CHUNK_H__)

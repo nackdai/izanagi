@@ -65,6 +65,9 @@ int main(int argc, char* argv[])
 		importer->Open(option.in.c_str()),
 		INVALID_RET_VAL);
 
+	// トライアングルリストで出力するかどうかを設定.
+	CMshExporter::GetInstance().SetIsExportTriList(option.isExportTriList);
+
 	// 出力
 	if (option.exportType == ExportTypeMdl) {
 		// Model
