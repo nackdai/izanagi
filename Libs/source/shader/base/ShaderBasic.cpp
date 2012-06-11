@@ -626,6 +626,23 @@ IZ_BOOL CShaderBasic::SetParamValue(
 	return IZ_TRUE;
 }
 
+IZ_BOOL CShaderBasic::SetParamValue(
+	IZ_PCSTR name,
+	const void* value,
+	IZ_UINT bytes)
+{
+	IZ_BOOL ret = IZ_FALSE;
+	IZ_SHADER_HANDLE handle = GetParameterByName(name);
+	
+	if (handle > 0)
+	{
+		ret = SetParamValue(handle, value, bytes);
+	}
+
+	return ret;
+}
+
+// シェーダで利用するテクスチャを設定.
 IZ_BOOL CShaderBasic::SetTexture(
 	IZ_SHADER_HANDLE hTex,
 	CBaseTexture* pTex)
@@ -640,6 +657,23 @@ IZ_BOOL CShaderBasic::SetTexture(
 	return IZ_TRUE;
 }
 
+// シェーダで利用するテクスチャを設定.
+IZ_BOOL CShaderBasic::SetTexture(
+	IZ_PCSTR name,
+	CBaseTexture* tex)
+{
+	IZ_BOOL ret = IZ_FALSE;
+	IZ_SHADER_HANDLE handle = GetParameterByName(name);
+
+	if (handle > 0)
+	{
+		ret = SetTexture(handle, tex);
+	}
+
+	return ret;
+}
+
+// シェーダで利用するテクスチャをサンプラに設定.
 IZ_BOOL CShaderBasic::SetTextureToSampler(
 	IZ_SHADER_HANDLE hSmpl,
 	CBaseTexture* pTex)
@@ -661,4 +695,20 @@ IZ_BOOL CShaderBasic::SetTextureToSampler(
 			pTex));
 
 	return IZ_TRUE;
+}
+
+// シェーダで利用するテクスチャをサンプラに設定.
+IZ_BOOL CShaderBasic::SetTextureToSampler(
+	IZ_PCSTR name,
+	CBaseTexture* tex)
+{
+	IZ_BOOL ret = IZ_FALSE;
+	IZ_SHADER_HANDLE handle = GetParameterByName(name);
+
+	if (handle > 0)
+	{
+		ret = SetTextureToSampler(handle, tex);
+	}
+
+	return ret;
 }
