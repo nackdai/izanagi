@@ -3,6 +3,7 @@
 #include "scenegraph/anm/AnimationUtil.h"
 #include "scenegraph/skl/SkeletonInstance.h"
 #include "scenegraph/skl/SKLFormat.h"
+#include "scenegraph/anm/PoseUpdater.h"
 
 using namespace izanagi;
 

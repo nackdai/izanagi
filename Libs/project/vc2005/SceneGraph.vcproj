@@ -254,6 +254,10 @@
 					RelativePath="..\..\source\scenegraph\anm\izAnimation.cpp"
 					>
 				</File>
+				<File
+					RelativePath="..\..\source\scenegraph\anm\PoseUpdater.cpp"
+					>
+				</File>
 				<Filter
 					Name="blend"
 					>
@@ -426,6 +430,10 @@
 				</File>
 				<File
 					RelativePath="..\..\include\scenegraph\anm\izAnimation.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\scenegraph\anm\PoseUpdater.h"
 					>
 				</File>
 				<Filter

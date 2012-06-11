@@ -2,6 +2,7 @@
 #include "scenegraph/skl/SkeletonInstance.h"
 #include "scenegraph/anm/AnimationUtil.h"
 #include "scenegraph/skl/SkeletonUtil.h"
+#include "scenegraph/anm/PoseUpdater.h"
 #include "izIo.h"
 
 using namespace izanagi;
