@@ -114,13 +114,30 @@ namespace izanagi {
 			const void* pValue,
 			IZ_UINT nBytes);
 
+		IZ_BOOL SetParamValue(
+			IZ_PCSTR name,
+			const void* value,
+			IZ_UINT bytes);
+
+		// シェーダで利用するテクスチャを設定.
 		IZ_BOOL SetTexture(
 			IZ_SHADER_HANDLE hTex,
 			CBaseTexture* pTex);
 
+		// シェーダで利用するテクスチャを設定.
+		IZ_BOOL SetTexture(
+			IZ_PCSTR name,
+			CBaseTexture* tex);
+
+		// シェーダで利用するテクスチャをサンプラに設定.
 		IZ_BOOL SetTextureToSampler(
 			IZ_SHADER_HANDLE hSmpl,
 			CBaseTexture* pTex);
+
+		// シェーダで利用するテクスチャをサンプラに設定.
+		IZ_BOOL SetTextureToSampler(
+			IZ_PCSTR name,
+			CBaseTexture* tex);
 
 		CGraphicsDevice* GetDevice();
 

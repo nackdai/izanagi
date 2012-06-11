@@ -158,6 +158,14 @@ namespace izanagi {
 				const void* pValue,
 				IZ_UINT nBytes));
 
+		/** シェーダパラメータ値を設定.
+		 */
+		PURE_VIRTUAL(
+			IZ_BOOL SetParamValue(
+				IZ_PCSTR name,
+				const void* value,
+				IZ_UINT bytes));
+
 		/** シェーダで利用するテクスチャを設定.
 		 */
 		PURE_VIRTUAL(
@@ -165,12 +173,26 @@ namespace izanagi {
 				IZ_SHADER_HANDLE hTex,
 				CBaseTexture* pTex));
 
+		/** シェーダで利用するテクスチャを設定.
+		 */
+		PURE_VIRTUAL(
+			IZ_BOOL SetTexture(
+				IZ_PCSTR name,
+				CBaseTexture* tex));
+
 		/** シェーダで利用するテクスチャをサンプラに設定.
 		 */
 		PURE_VIRTUAL(
 			IZ_BOOL SetTextureToSampler(
 				IZ_SHADER_HANDLE hSmpl,
 				CBaseTexture* pTex));
+
+		/** シェーダで利用するテクスチャをサンプラに設定.
+		 */
+		PURE_VIRTUAL(
+			IZ_BOOL SetTextureToSampler(
+				IZ_PCSTR name,
+				CBaseTexture* tex));
 
 		/** テクニック数取得.
 		 */
