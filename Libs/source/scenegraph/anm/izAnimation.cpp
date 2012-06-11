@@ -32,7 +32,7 @@ CAnimation* CAnimation::CreateAnimation(
 		pInstance->AddRef();
 		pInstance->m_Allocator = pAllocator;
 
-		memcpy(&pInstance->m_sHeader, &sHeader, sizeof(sHeader));
+		memcpy(&pInstance->m_Header, &sHeader, sizeof(sHeader));
 
 		pInstance->m_pNodes = reinterpret_cast<SAnmNodeInstance*>(pBuf);
 		pBuf += sizeof(SAnmNodeInstance) * sHeader.numNodes;
@@ -55,7 +55,7 @@ CAnimation::CAnimation()
 	m_Allocator = IZ_NULL;
 	m_pNodes = IZ_NULL;
 
-	FILL_ZERO(&m_sHeader, sizeof(m_sHeader));
+	FILL_ZERO(&m_Header, sizeof(m_Header));
 }
 
 IZ_UINT8* CAnimation::Init(
@@ -63,17 +63,17 @@ IZ_UINT8* CAnimation::Init(
 	IZ_UINT8* pBuf)
 {
 	// データサイズ
-	size_t nDataSize = m_sHeader.sizeFile - m_sHeader.sizeHeader;
+	size_t nDataSize = m_Header.sizeFile - m_Header.sizeHeader;
 
 	// ノード情報読み込み
-	IZ_BOOL result = IZ_INPUT_READ(pIn, pBuf, 0, sizeof(S_ANM_NODE) * m_sHeader.numNodes); 
+	IZ_BOOL result = IZ_INPUT_READ(pIn, pBuf, 0, sizeof(S_ANM_NODE) * m_Header.numNodes); 
 	VRETURN_NULL(result);
 
 	// 読み込んだノード情報分減らす
-	nDataSize -= sizeof(S_ANM_NODE) * m_sHeader.numNodes;
+	nDataSize -= sizeof(S_ANM_NODE) * m_Header.numNodes;
 
 	// ノードを探索しやすくするためにハッシュに登録
-	for (IZ_UINT i = 0; i < m_sHeader.numNodes; ++i) {
+	for (IZ_UINT i = 0; i < m_Header.numNodes; ++i) {
 		m_pNodes[i].node = reinterpret_cast<S_ANM_NODE*>(pBuf);
 		pBuf += sizeof(S_ANM_NODE);
 
@@ -82,14 +82,14 @@ IZ_UINT8* CAnimation::Init(
 	}
 
 	// チャンネル情報読み込み
-	result = IZ_INPUT_READ(pIn, pBuf, 0, sizeof(S_ANM_CHANNEL) * m_sHeader.numChannels);
+	result = IZ_INPUT_READ(pIn, pBuf, 0, sizeof(S_ANM_CHANNEL) * m_Header.numChannels);
 	VRETURN_NULL(result);
 
 	// 読み込んだチャンネル情報分減らす
-	nDataSize -= sizeof(S_ANM_CHANNEL) * m_sHeader.numChannels;
+	nDataSize -= sizeof(S_ANM_CHANNEL) * m_Header.numChannels;
 
 	// ノード情報とチャンネル情報を関連付ける
-	for (IZ_UINT nKeyIdx = 0; nKeyIdx < m_sHeader.numNodes; ++nKeyIdx) {
+	for (IZ_UINT nKeyIdx = 0; nKeyIdx < m_Header.numNodes; ++nKeyIdx) {
 		S_ANM_NODE& sNode = *m_pNodes[nKeyIdx].node;
 
 		sNode.channels = reinterpret_cast<S_ANM_CHANNEL*>(pBuf);
@@ -97,7 +97,7 @@ IZ_UINT8* CAnimation::Init(
 	}
 
 	// チャンネル情報にキー情報用のバッファを割り当てる
-	for (IZ_UINT nKeyIdx = 0; nKeyIdx < m_sHeader.numNodes; ++nKeyIdx) {
+	for (IZ_UINT nKeyIdx = 0; nKeyIdx < m_Header.numNodes; ++nKeyIdx) {
 		S_ANM_NODE& sNode = *m_pNodes[nKeyIdx].node;
 
 		for (IZ_UINT nChannelIdx = 0; nChannelIdx < sNode.numChannels; ++nChannelIdx) {
@@ -111,7 +111,7 @@ IZ_UINT8* CAnimation::Init(
 	VRETURN_NULL(result);
 
 	// チャンネル情報にキー情報を関連付ける
-	for (IZ_UINT nKeyIdx = 0; nKeyIdx < m_sHeader.numNodes; ++nKeyIdx) {
+	for (IZ_UINT nKeyIdx = 0; nKeyIdx < m_Header.numNodes; ++nKeyIdx) {
 		S_ANM_NODE& sNode = *m_pNodes[nKeyIdx].node;
 
 		for (IZ_UINT nChannelIdx = 0; nChannelIdx < sNode.numChannels; ++nChannelIdx) {
@@ -287,7 +287,7 @@ IZ_UINT CAnimation::GetPoseByIdx(
 
 const S_ANM_NODE* CAnimation::GetAnmNodeByIdx(IZ_UINT idx)
 {
-	IZ_ASSERT(idx < m_sHeader.numNodes);
+	IZ_ASSERT(idx < m_Header.numNodes);
 	return m_pNodes[idx].node;
 }
 
@@ -311,7 +311,7 @@ const S_ANM_NODE* CAnimation::GetAnmNodeByKey(IZ_UINT key)
 
 const S_ANM_NODE* CAnimation::GetAnmNodeByJointIdx(IZ_UINT nJointIdx)
 {
-	for (IZ_UINT i = 0; i < m_sHeader.numNodes; ++i) {
+	for (IZ_UINT i = 0; i < m_Header.numNodes; ++i) {
 		const SAnmNodeInstance& sNode = m_pNodes[i];
 		if (sNode.node->targetIdx == nJointIdx) {
 			return sNode.node;
