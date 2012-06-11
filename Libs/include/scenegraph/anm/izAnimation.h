@@ -84,15 +84,15 @@ namespace izanagi {
 		const S_ANM_NODE* GetAnmNodeByJointIdx(IZ_UINT nJointIdx);
 
 	public:
-		IZ_UINT GetNodelNum() const { return m_sHeader.numNodes; }
-		IZ_FLOAT GetAnimationTime() const { return m_sHeader.time; }
+		IZ_UINT GetNodelNum() const { return m_Header.numNodes; }
+		IZ_FLOAT GetAnimationTime() const { return m_Header.time; }
 
-		E_ANM_KEY_TYPE GetKeyType() const { return m_sHeader.keyType; }
+		E_ANM_KEY_TYPE GetKeyType() const { return m_Header.keyType; }
 		
 	private:
 		IMemoryAllocator* m_Allocator;
 
-		S_ANM_HEADER m_sHeader;
+		S_ANM_HEADER m_Header;
 
 		SAnmNodeInstance* m_pNodes;
 
