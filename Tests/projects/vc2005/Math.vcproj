@@ -175,26 +175,22 @@
 	</References>
 	<Files>
 		<Filter
-			Name="system"
+			Name="test"
 			>
 			<File
-				RelativePath="..\..\system\MySystem.cpp"
+				RelativePath="..\..\Math\NumericalAnalysisTest.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\system\MySystem.h"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="MyAppl"
-			>
-			<File
-				RelativePath="..\..\Math\myappl\MyAppl.cpp"
+				RelativePath="..\..\Math\NumericalAnalysisTest.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\Math\myappl\MyAppl.h"
+				RelativePath="..\..\Math\test0.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Math\test0.h"
 				>
 			</File>
 		</Filter>
