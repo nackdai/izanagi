@@ -235,6 +235,14 @@
 					</File>
 				</Filter>
 			</Filter>
+			<Filter
+				Name="analysis"
+				>
+				<File
+					RelativePath="..\..\source\math\MathNumericalAnlysis.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="include"
@@ -368,6 +376,14 @@
 						>
 					</File>
 				</Filter>
+			</Filter>
+			<Filter
+				Name="analysis"
+				>
+				<File
+					RelativePath="..\..\include\math\MathNumericalAnlysis.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<File

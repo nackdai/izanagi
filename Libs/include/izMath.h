@@ -16,4 +16,6 @@
 #include "math/MathRectangle.h"
 #include "math/MathTriangle.h"
 
+#include "math/MathNumericalAnlysis.h"
+
 #endif	// #if !defined(__IZANAGI_MATH_H__)
