@@ -48,6 +48,9 @@ public:
 	// 関節のマトリクスを取得.
 	const izanagi::SMatrix& GetMatrix(IZ_UINT idx);
 
+	// ボーン名からインデックスを取得.
+	IZ_INT GetIdxFromBoneName(const char* name) const;
+
 private:
 	// 頂点チャンクロード
 	IZ_BOOL LoadVtxChunk(izanagi::IInputStream* stream);
@@ -61,28 +64,31 @@ private:
 	// ボーンチャンクロード
 	IZ_BOOL LoadBoneChunk(izanagi::IInputStream* stream);
 
+	// IKチャンクロード
+	IZ_BOOL LoadIkChunk(izanagi::IInputStream* stream);
+
 public:
 	// 頂点数取得
-	IZ_UINT GetVtxNum()
+	IZ_UINT GetVtxNum() const
 	{
 		return m_VtxChunkHeader.vtxNum;
 	}
 
 	// 面数取得
-	IZ_UINT GetFaceNum()
+	IZ_UINT GetFaceNum() const
 	{
 		IZ_UINT ret = m_FaceChunkHeader.vtxNum;
 		return ret / 3;
 	}
 
 	// マテリアル数取得
-	IZ_UINT GetMtrlNum()
+	IZ_UINT GetMtrlNum() const
 	{
 		return m_MtrlChunkHeader.mtrlNum;
 	}
 
 	// ボーン数取得
-	IZ_UINT GetBoneNum()
+	IZ_UINT GetBoneNum() const
 	{
 		return m_BoneChunkHeader.boneNum;
 	}
@@ -110,6 +116,10 @@ private:
 	// 関節の姿勢
 	std::vector<izanagi::S_SKL_JOINT_POSE> m_PoseList;
 	std::vector<izanagi::SMatrix> m_MtxList;
+
+	// IK
+	SPmdIkChunkHeader m_IkChunkHeader;
+	std::vector<SPmdIk> m_IkList;
 };
 
 #endif	// #if !defined(__MODEL_LIB_PMD_LOADER_H__)

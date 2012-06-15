@@ -3,6 +3,7 @@
 
 #include "Importer.h"
 #include "PMDLoader.h"
+#include "VMDLoader.h"
 #include <vector>
 
 class CPmdImporter : public IImporter {
@@ -95,27 +96,41 @@ public:
 	//////////////////////////////////
 	// For animation.
 
+	// モーションの対象となるモデルデータを指定.
 	IZ_BOOL ReadBaseModel(IZ_PCSTR pszName);
 
+	// ファイルに含まれるモーションの数を取得.
 	IZ_UINT GetAnmSetNum();
 
+	// モーションに関する処理を開始.
 	IZ_BOOL BeginAnm(IZ_UINT nSetIdx);
 
+	// モーションに関する処理を終了.
 	IZ_BOOL EndAnm();
 
+	// モーションノード（適用ジョイント）の数を取得.
 	IZ_UINT GetAnmNodeNum();
 
+	// アニメーションチャンネルの数を取得.
+	// アニメーションチャンネルとは
+	// ジョイントのパラメータ（ex. 位置、回転など）ごとのアニメーション情報のこと
 	IZ_UINT GetAnmChannelNum(IZ_UINT nNodeIdx);
 
+	// モーションノード（適用ジョイント）の情報を取得.
 	IZ_BOOL GetAnmNode(
 		IZ_UINT nNodeIdx,
 		izanagi::S_ANM_NODE& sNode);
 
+	// アニメーションチャンネルの情報を取得.
+	// アニメーションチャンネルとは
+	// ジョイントのパラメータ（ex. 位置、回転など）ごとのアニメーション情報のこと
 	IZ_BOOL GetAnmChannel(
 		IZ_UINT nNodeIdx,
 		IZ_UINT nChannelIdx,
 		izanagi::S_ANM_CHANNEL& sChannel);
-	
+
+	// キーフレーム情報を取得.
+	// キーフレームあたりのジョイントのパラメータに適用するパラメータを取得.
 	IZ_BOOL GetAnmKey(
 		IZ_UINT nNodeIdx,
 		IZ_UINT nChannelIdx,
@@ -157,7 +172,8 @@ public:
 		std::vector<IZ_FLOAT>& tvValue);
 
 private:
-	CPmdLoader m_Loader;
+	CPmdLoader m_PmdLoader;
+	CVmdLoader m_VmdLoader;
 
 	IZ_INT m_CurMeshIdx;
 

@@ -1,23 +1,8 @@
 #if !defined(__MODEL_LIB_PMD_FORMAT_H__)
 #define __MODEL_LIB_PMD_FORMAT_H__
 
-#ifdef BYTE
-	#undef BYTE
-#endif
-
-#define BYTE	unsigned char
-
-#ifdef WORD
-	#undef WORD
-#endif
-
-#define WORD	unsigned short
-
-#ifdef DWORD
-	#undef DWORD
-#endif
-
-#define DWORD	unsigned int
+#include <vector>
+#include "PMDDefs.h"
 
 // PMDフォーマット
 // +---------------------+
@@ -36,6 +21,15 @@
 // +---------------------+
 // | マテリアルデータ    |
 // | x マテリアル数      |
+// +---------------------+
+// |ボーンチャンクヘッダ |
+// +---------------------+
+// | ボーンデータ        |
+// | x ボーン数          |
+// +---------------------+
+// |  IKチャンクヘッダ   |
+// +---------------------+
+// | IKデータ x データ数 |
 // +---------------------+
 
 // NOTE
@@ -164,6 +158,34 @@ struct SPmdBone
 
 	// ボーンのヘッドの位置
 	float boneHeadPos[3];
+};
+
+// IKチャンクヘッダ
+struct SPmdIkChunkHeader
+{
+	WORD ikNum;
+};
+
+// IKデータ
+struct SPmdIk
+{
+	struct {
+		// IKボーン番号
+		WORD idx;
+
+		// IKターゲットボーン番号
+		// IKボーンが最初に接続するボーン
+		WORD targetBoneIdx;	
+
+		// IKチェーンの長さ(子の数)
+		BYTE chainNum;
+
+		WORD iterations;	// 再帰演算回数
+		float weight;		// IKの影響度
+	} param;
+
+	// IK影響下のボーン番号
+	std::vector<WORD> childBoneIdx;
 };
 
 #pragma pack(pop)
