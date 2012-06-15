@@ -136,6 +136,8 @@ IZ_UINT CAnimationInterp::ApplyAnimation(
 
 		CBit32Flag bitFlagGoal(updateFlagGoal);
 
+		const S_ANM_KEY** keys = (const S_ANM_KEY**)mKeys;
+
 		S_SKL_JOINT_POSE finalPose;
 
 		if (bitFlagStart.IsOn(E_SKL_JOINT_PARAM_SCALE) || bitFlagGoal.IsOn(E_SKL_JOINT_PARAM_SCALE)) {
@@ -145,7 +147,12 @@ IZ_UINT CAnimationInterp::ApplyAnimation(
 
 				// TODO
 				// 線形補間
-				finalPose.scale[i] = CAnimationUtil::ComputeInterp(E_ANM_INTERP_TYPE_LINEAR, time, 2, i, mKeys);
+				finalPose.scale[i] = CAnimationUtil::ComputeInterp(
+					E_ANM_INTERP_TYPE_LINEAR,
+					time,
+					2,
+					i,
+					keys);
 			}
 
 			updateFlag |= E_SKL_JOINT_PARAM_SCALE;
@@ -157,7 +164,12 @@ IZ_UINT CAnimationInterp::ApplyAnimation(
 
 				// TODO
 				// 線形補間
-				finalPose.trans[i] = CAnimationUtil::ComputeInterp(E_ANM_INTERP_TYPE_LINEAR, time, 2, i, mKeys);
+				finalPose.trans[i] = CAnimationUtil::ComputeInterp(
+					E_ANM_INTERP_TYPE_LINEAR,
+					time,
+					2,
+					i,
+					keys);
 			}
 
 			updateFlag |= E_SKL_JOINT_PARAM_TRANSLATE;
@@ -175,7 +187,7 @@ IZ_UINT CAnimationInterp::ApplyAnimation(
 				time,
 				2,
 				0,
-				mKeys);
+				keys);
 
 			updateFlag |= E_SKL_JOINT_PARAM_QUARTANION;
 		}

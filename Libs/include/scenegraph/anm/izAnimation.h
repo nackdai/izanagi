@@ -32,10 +32,19 @@ namespace izanagi {
 		};
 
 	public:
-		// Create instance.
+		/** Create instance.
+		 */
 		static CAnimation* CreateAnimation(
 			IMemoryAllocator* pAllocator,
 			IInputStream* pIn);
+
+		/** スカラー値の補間処理を設定.
+		 */
+		static void SetUserFuncInterpScalar(FuncInterpScalar func);
+
+		/** ベクターの補間処理を設定.
+		 */
+		static void SetUserFuncInterpVector(FuncInterpVector func);
 
 	private:
 		CAnimation();

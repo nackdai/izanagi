@@ -4,11 +4,34 @@
 
 using namespace izanagi;
 
+FuncInterpScalar CAnimationUtil::s_UserFuncInterpScalar = IZ_NULL;
+FuncInterpVector CAnimationUtil::s_UserFuncInterpVector = IZ_NULL;
+
+// スカラー値の補間処理を設定.
+void CAnimationUtil::SetUserFuncInterpScalar(FuncInterpScalar func)
+{
+	s_UserFuncInterpScalar = func;
+}
+
+// ベクターの補間処理を設定.
+void CAnimationUtil::SetUserFuncInterpVector(FuncInterpVector func)
+{
+	s_UserFuncInterpVector = func;
+}
+
 IZ_BOOL CAnimationUtil::IsScalarInterp(IZ_UINT type)
 {
+	type = (type & E_ANM_INTERP_TYPE_MASK);
+
 	IZ_BOOL ret = (type == E_ANM_INTERP_TYPE_LINEAR)
 					|| (type == E_ANM_INTERP_TYPE_BEZIER)
 					|| (type == E_ANM_INTERP_TYPE_HERMITE);
+	return ret;
+}
+
+IZ_BOOL CAnimationUtil::IsUserCustomInterp(IZ_UINT type)
+{
+	IZ_BOOL ret = ((type & E_ANM_INTERP_TYPE_USER_CUSTOM) > 0);
 	return ret;
 }
 
@@ -17,23 +40,37 @@ IZ_FLOAT CAnimationUtil::ComputeInterp(
 	IZ_FLOAT fTime,
 	IZ_UINT nKeyNum,
 	IZ_UINT nPos,
-	S_ANM_KEY** const pKeys)
+	const S_ANM_KEY** pKeys)
 {
-	typedef IZ_FLOAT (*funcInterp)(IZ_FLOAT, IZ_UINT, IZ_UINT, S_ANM_KEY** const);
+	if (IsUserCustomInterp(nInterp))
+	{
+		// ユーザー指定の補間処理
+		VRETURN_VAL(s_UserFuncInterpScalar != IZ_NULL, 0.0f);
 
-	static funcInterp tblFuncInterp[] = {
-		&CAnimationUtil::ComputeLinear,
-		&CAnimationUtil::ComputeBezier,
-		&CAnimationUtil::ComputeHermite,
-		IZ_NULL,
-	};
-	IZ_C_ASSERT(COUNTOF(tblFuncInterp) == E_ANM_INTERP_TYPE_NUM);
+		IZ_FLOAT ret = (*s_UserFuncInterpScalar)(
+			fTime,
+			nKeyNum,
+			nPos,
+			pKeys);
 
-	IZ_ASSERT(nInterp < E_ANM_INTERP_TYPE_NUM);
-	IZ_ASSERT(tblFuncInterp[nInterp] != IZ_NULL);
+		return ret;
+	}
+	else
+	{
+		static FuncInterpScalar tblFuncInterp[] = {
+			&CAnimationUtil::ComputeLinear,
+			&CAnimationUtil::ComputeBezier,
+			&CAnimationUtil::ComputeHermite,
+			IZ_NULL,
+		};
+		IZ_C_ASSERT(COUNTOF(tblFuncInterp) == E_ANM_INTERP_TYPE_NUM);
 
-	IZ_FLOAT ret = (*tblFuncInterp[nInterp])(fTime, nKeyNum, nPos, pKeys);
-	return ret;
+		IZ_ASSERT(nInterp < E_ANM_INTERP_TYPE_NUM);
+		IZ_ASSERT(tblFuncInterp[nInterp] != IZ_NULL);
+
+		IZ_FLOAT ret = (*tblFuncInterp[nInterp])(fTime, nKeyNum, nPos, pKeys);
+		return ret;
+	}
 }
 
 void CAnimationUtil::ComputeInterp(
@@ -42,22 +79,35 @@ void CAnimationUtil::ComputeInterp(
 	IZ_FLOAT fTime,
 	IZ_UINT nKeyNum,
 	IZ_UINT nPos,
-	S_ANM_KEY** const pKeys)
+	const S_ANM_KEY** pKeys)
 {
-	typedef void (*funcInterp)(SVector&, IZ_FLOAT, IZ_UINT, IZ_UINT, S_ANM_KEY** const);
+	if (IsUserCustomInterp(nInterp))
+	{
+		// ユーザー指定の補間処理
+		VRETURN_VAL(s_UserFuncInterpVector != IZ_NULL,);
 
-	static funcInterp tblFuncInterp[] = {
-		IZ_NULL,
-		IZ_NULL,
-		IZ_NULL,
-		&CAnimationUtil::ComputeSlerp,
-	};
-	IZ_C_ASSERT(COUNTOF(tblFuncInterp) == E_ANM_INTERP_TYPE_NUM);
+		(*s_UserFuncInterpVector)(
+			vRef,
+			fTime,
+			nKeyNum,
+			nPos,
+			pKeys);
+	}
+	else
+	{
+		static FuncInterpVector tblFuncInterp[] = {
+			IZ_NULL,
+			IZ_NULL,
+			IZ_NULL,
+			&CAnimationUtil::ComputeSlerp,
+		};
+		IZ_C_ASSERT(COUNTOF(tblFuncInterp) == E_ANM_INTERP_TYPE_NUM);
 
-	IZ_ASSERT(nInterp < E_ANM_INTERP_TYPE_NUM);
-	IZ_ASSERT(tblFuncInterp[nInterp] != IZ_NULL);
+		IZ_ASSERT(nInterp < E_ANM_INTERP_TYPE_NUM);
+		IZ_ASSERT(tblFuncInterp[nInterp] != IZ_NULL);
 
-	(*tblFuncInterp[nInterp])(vRef, fTime, nKeyNum, nPos, pKeys);
+		(*tblFuncInterp[nInterp])(vRef, fTime, nKeyNum, nPos, pKeys);
+	}
 }
 
 IZ_FLOAT CAnimationUtil::ComputeNomralizedTime(
@@ -65,7 +115,7 @@ IZ_FLOAT CAnimationUtil::ComputeNomralizedTime(
 	IZ_INT& nPrev,
 	IZ_INT& nNext,
 	IZ_UINT nKeyNum,
-	S_ANM_KEY** const pKeys)
+	const S_ANM_KEY** pKeys)
 {
 	nPrev = 0;
 	nNext = -1;
@@ -104,7 +154,7 @@ IZ_FLOAT CAnimationUtil::ComputeLinear(
 	IZ_FLOAT fTime,
 	IZ_UINT nKeyNum,
 	IZ_UINT nPos,
-	S_ANM_KEY** const pKeys)
+	const S_ANM_KEY** pKeys)
 {
 	IZ_INT nPrev = 0;
 	IZ_INT nNext = -1;
@@ -130,7 +180,7 @@ IZ_FLOAT CAnimationUtil::ComputeBezier(
 	IZ_FLOAT fTime,
 	IZ_UINT nKeyNum,
 	IZ_UINT nPos,
-	S_ANM_KEY** const pKeys)
+	const S_ANM_KEY** pKeys)
 {
 	// TODO
 	IZ_ASSERT(IZ_FALSE);
@@ -141,7 +191,7 @@ IZ_FLOAT CAnimationUtil::ComputeHermite(
 	IZ_FLOAT fTime,
 	IZ_UINT nKeyNum,
 	IZ_UINT nPos,
-	S_ANM_KEY** const pKeys)
+	const S_ANM_KEY** pKeys)
 {
 	IZ_ASSERT(pKeys != IZ_NULL);
 
@@ -209,7 +259,7 @@ void CAnimationUtil::ComputeSlerp(
 	IZ_FLOAT fTime,
 	IZ_UINT nKeyNum,
 	IZ_UINT nPos,
-	S_ANM_KEY** const pKeys)
+	const S_ANM_KEY** pKeys)
 {
 	IZ_ASSERT(pKeys != IZ_NULL);
 

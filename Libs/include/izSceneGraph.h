@@ -38,6 +38,7 @@
 #include "scenegraph/anm/ANMFormat.h"
 #include "scenegraph/anm/AnimationInterface.h"
 #include "scenegraph/anm/izAnimation.h"
+#include "scenegraph/anm/AnimationUtil.h"
 #include "scenegraph/anm/AnimationInterp.h"
 #include "scenegraph/anm/AnimationBinder.h"
 #include "scenegraph/anm/AnimationBlender.h"
