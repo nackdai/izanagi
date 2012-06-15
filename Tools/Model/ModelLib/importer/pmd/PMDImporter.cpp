@@ -8,13 +8,32 @@ CPmdImporter::CPmdImporter()
 
 IZ_BOOL CPmdImporter::Open(IZ_PCSTR pszName)
 {
-	IZ_BOOL ret = m_Loader.Load(pszName);
+	izanagi::CFileInputStream stream;
+	VRETURN(stream.Open(pszName));
+
+	// Check magic number
+	SPmdHeader header;
+	IZ_INPUT_READ_VRETURN(&stream, &header, 0, sizeof(header));
+
+	stream.Close();
+
+	IZ_BOOL ret = IZ_FALSE;
+
+	if (header.magic[0] == 'P' && header.magic[1] == 'm'&& header.magic[2] == 'd')
+	{
+		ret = m_PmdLoader.Load(pszName);
+	}
+	else
+	{
+		ret = m_VmdLoader.Load(pszName);
+	}
+
 	return ret;
 }
 
 IZ_BOOL CPmdImporter::Close()
 {
-	m_Loader.Clear();
+	m_PmdLoader.Clear();
 	return IZ_TRUE;
 }
 
@@ -23,7 +42,7 @@ IZ_BOOL CPmdImporter::Close()
 
 void CPmdImporter::ExportGeometryCompleted()
 {
-	m_Loader.ClearGeometryData();
+	m_PmdLoader.ClearGeometryData();
 }
 
 void CPmdImporter::BeginMesh(IZ_UINT nIdx)
@@ -45,9 +64,9 @@ IZ_UINT CPmdImporter::GetMeshNum()
 	{
 		IZ_UINT vtxPos = 0;
 
-		for (IZ_UINT i = 0; i < m_Loader.GetMtrlNum(); i++)
+		for (IZ_UINT i = 0; i < m_PmdLoader.GetMtrlNum(); i++)
 		{
-			const SPmdMaterial& mtrl = m_Loader.GetMtrl(i);
+			const SPmdMaterial& mtrl = m_PmdLoader.GetMtrl(i);
 
 			// NOTE
 			// １面あたり３頂点なので
@@ -60,7 +79,7 @@ IZ_UINT CPmdImporter::GetMeshNum()
 
 	// メッシュとマテリアルが１対１に結びつくので
 	// メッシュ数 = マテリアル数 となる
-	IZ_UINT ret = m_Loader.GetMtrlNum();
+	IZ_UINT ret = m_PmdLoader.GetMtrlNum();
 	IZ_ASSERT(ret == m_FaceIdxInMtrlList.size());
 
 	return ret;
@@ -68,11 +87,11 @@ IZ_UINT CPmdImporter::GetMeshNum()
 
 void CPmdImporter::GetSkinList(std::vector<SSkin>& tvSkinList)
 {
-	IZ_UINT vtxNum = m_Loader.GetVtxNum();
+	IZ_UINT vtxNum = m_PmdLoader.GetVtxNum();
 
 	for (IZ_UINT i = 0; i < vtxNum; i++)
 	{
-		const SPmdVertex& vtx = m_Loader.GetVertex(i);
+		const SPmdVertex& vtx = m_PmdLoader.GetVertex(i);
 
 		SSkin skin;
 
@@ -105,13 +124,13 @@ IZ_UINT CPmdImporter::GetTriangles(std::vector<STri>& tvTriList)
 	// NOTE
 	// １面あたり３頂点なので
 	// 頂点位置を３で割れば、それは面の数になる
-	const SPmdMaterial& mtrl = m_Loader.GetMtrl(m_CurMeshIdx);
+	const SPmdMaterial& mtrl = m_PmdLoader.GetMtrl(m_CurMeshIdx);
 	const IZ_UINT faceNum = mtrl.faceVtxNum / 3;
 
 	for (IZ_UINT i = 0; i < faceNum; i++)
 	{
 		IZ_UINT idx = facePos + i;
-		const SPmdFace& face = m_Loader.GetFace(idx);
+		const SPmdFace& face = m_PmdLoader.GetFace(idx);
 
 		STri tri;
 		{
@@ -128,7 +147,7 @@ IZ_UINT CPmdImporter::GetTriangles(std::vector<STri>& tvTriList)
 
 IZ_UINT CPmdImporter::GetSkinIdxAffectToVtx(IZ_UINT nVtxIdx)
 {
-	IZ_ASSERT(nVtxIdx < m_Loader.GetVtxNum());
+	IZ_ASSERT(nVtxIdx < m_PmdLoader.GetVtxNum());
 	return nVtxIdx;
 }
 
@@ -157,7 +176,7 @@ IZ_BOOL CPmdImporter::GetVertex(
 	// スキンニングについては別であつかうので
 	// ここでは考慮しない
 
-	const SPmdVertex& vtx = m_Loader.GetVertex(nIdx);
+	const SPmdVertex& vtx = m_PmdLoader.GetVertex(nIdx);
 
 	IZ_BOOL ret = IZ_TRUE;
 
@@ -205,7 +224,7 @@ void CPmdImporter::ExportJointCompleted()
 IZ_BOOL CPmdImporter::BeginJoint()
 {
 	// 関節の姿勢を計算
-	m_Loader.ComputeJointPose();
+	m_PmdLoader.ComputeJointPose();
 
 	return IZ_TRUE;
 }
@@ -217,7 +236,7 @@ void CPmdImporter::EndJoint()
 
 IZ_UINT CPmdImporter::GetJointNum()
 {
-	IZ_UINT ret = m_Loader.GetBoneNum();
+	IZ_UINT ret = m_PmdLoader.GetBoneNum();
 	return ret;
 }
 
@@ -233,7 +252,7 @@ IZ_INT CPmdImporter::GetJointParent(
 	IZ_UINT nIdx,
 	const std::vector<izanagi::S_SKL_JOINT>& tvJoint)
 {
-	const SPmdBone& bone = m_Loader.GetBone(nIdx);
+	const SPmdBone& bone = m_PmdLoader.GetBone(nIdx);
 	IZ_INT ret = (bone.parentIdx == 0xFFFF ? -1 : bone.parentIdx);
 	return ret;
 }
@@ -242,7 +261,7 @@ void CPmdImporter::GetJointInvMtx(
 	IZ_UINT nIdx,
 	izanagi::SMatrix& mtx)
 {
-	const izanagi::SMatrix& mtxJoint = m_Loader.GetMatrix(nIdx);
+	const izanagi::SMatrix& mtxJoint = m_PmdLoader.GetMatrix(nIdx);
 	izanagi::SMatrix::Inverse(mtx, mtxJoint);
 }
 
@@ -251,7 +270,7 @@ void CPmdImporter::GetJointTransform(
 	const std::vector<izanagi::S_SKL_JOINT>& tvJoint,
 	std::vector<SJointTransform>& tvTransform)
 {
-	const izanagi::S_SKL_JOINT_POSE& pose = m_Loader.GetPose(nIdx);
+	const izanagi::S_SKL_JOINT_POSE& pose = m_PmdLoader.GetPose(nIdx);
 
 	// NOTE
 	// translateのみを考えればいい
@@ -270,17 +289,21 @@ void CPmdImporter::GetJointTransform(
 
 IZ_BOOL CPmdImporter::ReadBaseModel(IZ_PCSTR pszName)
 {
-	return IZ_TRUE;
+	IZ_BOOL ret = m_PmdLoader.Load(pszName);
+	return ret;
 }
 
 IZ_UINT CPmdImporter::GetAnmSetNum()
 {
-	return 0;
+	// 常に１
+	return 1;
 }
 
 IZ_BOOL CPmdImporter::BeginAnm(IZ_UINT nSetIdx)
 {
-	return IZ_TRUE;
+	// NOTE
+	// 含まれるモーション数は常に１なので無視する
+	return m_VmdLoader.MakeFrameOrder(m_PmdLoader);
 }
 
 IZ_BOOL CPmdImporter::EndAnm()
@@ -290,18 +313,44 @@ IZ_BOOL CPmdImporter::EndAnm()
 
 IZ_UINT CPmdImporter::GetAnmNodeNum()
 {
-	return 0;
+	IZ_UINT ret = m_PmdLoader.GetBoneNum();
+	return ret;
 }
 
 IZ_UINT CPmdImporter::GetAnmChannelNum(IZ_UINT nNodeIdx)
 {
-	return 0;
+	IZ_ASSERT(nNodeIdx < m_PmdLoader.GetBoneNum());
+
+	IZ_UINT ret = 0;
+
+	if (m_VmdLoader.IsValidTrans(nNodeIdx))
+	{
+		ret += 1;
+	}
+	if (m_VmdLoader.IsValidRotate(nNodeIdx))
+	{
+		ret += 1;
+	}
+
+	return ret;
 }
 
 IZ_BOOL CPmdImporter::GetAnmNode(
 	IZ_UINT nNodeIdx,
 	izanagi::S_ANM_NODE& sNode)
 {
+	const SPmdBone& bone = m_PmdLoader.GetBone(nNodeIdx);
+
+	sNode.numChannels = GetAnmChannelNum(nNodeIdx);
+	sNode.targetIdx = nNodeIdx;
+
+	// TODO
+	izanagi::tool::CString str;
+	str.format("node_%d", nNodeIdx);
+
+	sNode.target.SetString(str.c_str());
+	sNode.targetKey = sNode.target.GetKeyValue();
+
 	return IZ_TRUE;
 }
 
@@ -310,7 +359,60 @@ IZ_BOOL CPmdImporter::GetAnmChannel(
 	IZ_UINT nChannelIdx,
 	izanagi::S_ANM_CHANNEL& sChannel)
 {
+	// TODO
+	// 面倒なのでチャンネルは常にtransとquatの２つ
+	VRETURN(nChannelIdx < 2);
+
+	// NOTE
+	// There is only bezier interpolation in VMD.
+
+	// NOTE
+	// VMD has four points always for bezier.
+	// -> A point has two params, (x,y).
+
+	IZ_BOOL isValidTrans = m_VmdLoader.IsValidTrans(nNodeIdx);
+	IZ_BOOL isValidRotate = m_VmdLoader.IsValidRotate(nNodeIdx);
+
+	if (isValidTrans && nChannelIdx == 0)
+	{
+		// trans parameter is 1 per XYZ.
+		sChannel.stride = 4 * 2 * 3 + 3;
+
+		sChannel.type = izanagi::E_ANM_TRANSFORM_TYPE_TRANSLATE_XYZ;
+		sChannel.interp = izanagi::E_ANM_INTERP_TYPE_BEZIER | izanagi::E_ANM_INTERP_TYPE_USER_CUSTOM;
+	}
+	else
+	{
+		// quat parameters are 4.
+		sChannel.stride = 4 * 2 + 4;
+
+		sChannel.type = izanagi::E_ANM_TRANSFORM_TYPE_QUATERNION_XYZW;
+		sChannel.interp = izanagi::E_ANM_INTERP_TYPE_SLERP | izanagi::E_ANM_INTERP_TYPE_USER_CUSTOM;
+	}
+
+	sChannel.numKeys = static_cast<IZ_UINT16>(m_VmdLoader.GetFrameInfo(nNodeIdx).size());
+
 	return IZ_TRUE;
+}
+
+namespace
+{
+	inline void _SetValue(
+		const char params[],
+		IZ_UINT idx,
+		IZ_FLOAT attn,
+		std::vector<IZ_FLOAT>& value)
+	{
+		value.push_back(0.0f);
+		value.push_back(params[idx * 4 + 0] * attn);
+		value.push_back(params[idx * 4 + 1] * attn);
+		value.push_back(1.0f);
+
+		value.push_back(0.0f);
+		value.push_back(params[idx * 4 + 2] * attn);
+		value.push_back(params[idx * 4 + 3] * attn);
+		value.push_back(1.0f);
+	}
 }
 
 IZ_BOOL CPmdImporter::GetAnmKey(
@@ -320,6 +422,70 @@ IZ_BOOL CPmdImporter::GetAnmKey(
 	izanagi::S_ANM_KEY& sKey,
 	std::vector<IZ_FLOAT>& tvValue)
 {
+	// TODO
+	// 面倒なのでチャンネルは常にtransとquatの２つ
+	VRETURN(nChannelIdx < 2);
+
+	const SVmdFrame* frame = m_VmdLoader.GetFrameInfo(nNodeIdx, nKeyIdx);
+	VRETURN(frame != IZ_NULL);
+
+	sKey.stride = (nChannelIdx == 0 ? 3 : 1);
+	sKey.keyTime = static_cast<IZ_FLOAT>(frame->frameNo);
+
+	// NOTE
+	// VMD has four points always for bezier.
+	// -> A point has two params, (x,y).
+	sKey.numParams = sKey.stride * 4 * 2;
+
+	static const IZ_FLOAT div = 1.0f / 127.0f;
+
+	IZ_BOOL isValidTrans = m_VmdLoader.IsValidTrans(nNodeIdx);
+	IZ_BOOL isValidRotate = m_VmdLoader.IsValidRotate(nNodeIdx);
+
+	if (isValidTrans && nChannelIdx == 0)
+	{
+		// trans
+
+		sKey.numParams += 3;
+
+		// X
+		tvValue.push_back(frame->trans[0]);
+		_SetValue(
+			frame->interpParam,
+			0, div,
+			tvValue);
+
+		// Y
+		tvValue.push_back(frame->trans[1]);
+		_SetValue(
+			frame->interpParam,
+			1, div,
+			tvValue);
+
+		// Z
+		tvValue.push_back(frame->trans[2]);
+		_SetValue(
+			frame->interpParam,
+			2, div,
+			tvValue);
+	}
+	else
+	{
+		// quat
+
+		sKey.numParams += 4;
+		
+		tvValue.push_back(frame->quat[0]);
+		tvValue.push_back(frame->quat[1]);
+		tvValue.push_back(frame->quat[2]);
+		tvValue.push_back(frame->quat[3]);
+
+		_SetValue(
+			frame->interpParam,
+			3, div,
+			tvValue);
+	}
+
 	return IZ_TRUE;
 }
 

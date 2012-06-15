@@ -22,6 +22,9 @@ IZ_BOOL CPmdLoader::Load(IZ_PCSTR path)
 	// ボーンチャンク
 	VRETURN(LoadBoneChunk(&stream));
 
+	// IKチャンク
+	VRETURN(LoadIkChunk(&stream));
+
 	return IZ_TRUE;
 }
 
@@ -147,6 +150,28 @@ const izanagi::SMatrix& CPmdLoader::GetMatrix(IZ_UINT idx)
 	return m_MtxList[idx];
 }
 
+// ボーン名からインデックスを取得.
+IZ_INT CPmdLoader::GetIdxFromBoneName(const char* name) const
+{
+	for (IZ_UINT i = 0; i < m_BoneList.size(); i++)
+	{
+		const SPmdBone& bone = m_BoneList[i];
+
+		size_t nameLen_0 = ::strlen(bone.boneName);
+		size_t nameLen_1 = ::strlen(name);
+
+		if (nameLen_0 == nameLen_1
+			&& (memcmp(bone.boneName, name, nameLen_0) == 0))
+		{
+			return i;
+		}
+	}
+
+	// TODO
+	//IZ_ASSERT(IZ_FALSE);
+	return -1;
+}
+
 // 頂点チャンクロード
 IZ_BOOL CPmdLoader::LoadVtxChunk(izanagi::IInputStream* stream)
 {
@@ -232,6 +257,38 @@ IZ_BOOL CPmdLoader::LoadBoneChunk(izanagi::IInputStream* stream)
 	{
 		SPmdBone& bone = m_BoneList[i];
 		IZ_INPUT_READ_VRETURN(stream, &bone, 0, sizeof(bone));
+	}
+
+	return IZ_TRUE;
+}
+
+// IKチャンクロード
+IZ_BOOL CPmdLoader::LoadIkChunk(izanagi::IInputStream* stream)
+{
+	// IKチャンクヘッダ
+	IZ_INPUT_READ_VRETURN(
+		stream,
+		&m_IkChunkHeader,
+		0,
+		sizeof(m_IkChunkHeader));
+
+	// IK情報
+	m_IkList.resize(m_IkChunkHeader.ikNum);
+	for (IZ_UINT i = 0; i < m_IkChunkHeader.ikNum; i++)
+	{
+		SPmdIk& ik = m_IkList[i];
+
+		IZ_INPUT_READ_VRETURN(stream, &ik.param, 0, sizeof(ik.param));
+
+		if (ik.param.chainNum > 0)
+		{
+			ik.childBoneIdx.resize(ik.param.chainNum);
+			IZ_INPUT_READ_VRETURN(
+				stream,
+				&ik.childBoneIdx[0],
+				0,
+				sizeof(WORD) * ik.param.chainNum);
+		}
 	}
 
 	return IZ_TRUE;

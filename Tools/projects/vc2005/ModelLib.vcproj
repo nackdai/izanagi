@@ -395,6 +395,10 @@
 				Name="pmd"
 				>
 				<File
+					RelativePath="..\..\Model\ModelLib\importer\pmd\PMDDefs.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\Model\ModelLib\importer\pmd\PMDFormat.h"
 					>
 				</File>
@@ -412,6 +416,18 @@
 				</File>
 				<File
 					RelativePath="..\..\Model\ModelLib\importer\pmd\PMDLoader.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Model\ModelLib\importer\pmd\VMDFormat.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Model\ModelLib\importer\pmd\VMDLoader.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Model\ModelLib\importer\pmd\VMDLoader.h"
 					>
 				</File>
 			</Filter>

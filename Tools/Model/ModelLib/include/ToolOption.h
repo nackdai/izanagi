@@ -31,7 +31,7 @@ public:
 		else if (ret = (ext == "fbx")) {
 			modelType = ModelTypeFBX;
 		}
-		else if (ret = (ext == "pmd")) {
+		else if (ret = ((ext == "pmd") || (ext == "vmd"))) {
 			modelType = ModelTypePMD;
 		}
 
