@@ -51,6 +51,18 @@ __EXIT__:
 	return pInstance;
 }
 
+// スカラー値の補間処理を設定.
+void CAnimation::SetUserFuncInterpScalar(FuncInterpScalar func)
+{
+	CAnimationUtil::SetUserFuncInterpScalar(func);
+}
+
+// ベクターの補間処理を設定.
+void CAnimation::SetUserFuncInterpVector(FuncInterpVector func)
+{
+	CAnimationUtil::SetUserFuncInterpVector(func);
+}
+
 CAnimation::CAnimation()
 {
 	m_Allocator = IZ_NULL;
@@ -172,7 +184,7 @@ IZ_UINT CAnimation::ApplyAnimation(
 
 		const E_ANM_INTERP_TYPE nInterp = static_cast<E_ANM_INTERP_TYPE>(sChannel.interp);
 		const IZ_UINT nKeyNum = sChannel.numKeys;
-		S_ANM_KEY** const pKey = sChannel.keys;
+		const S_ANM_KEY** pKey = (const S_ANM_KEY**)sChannel.keys;
 
 		if (CAnimationUtil::IsScalarInterp(sChannel.interp)) {
 			switch (nParamType) {

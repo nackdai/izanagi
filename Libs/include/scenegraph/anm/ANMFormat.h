@@ -17,6 +17,10 @@ namespace izanagi {
 		E_ANM_INTERP_TYPE_SLERP,
 
 		E_ANM_INTERP_TYPE_NUM,
+
+		E_ANM_INTERP_TYPE_MASK = 0x7f,
+		E_ANM_INTERP_TYPE_USER_CUSTOM = 1 << 7,
+		
 		E_ANM_INTERP_TYPE_FORCE_INT32 = 0x7fffffff,
 	};
 	IZ_C_ASSERT(E_ANM_INTERP_TYPE_NUM < IZ_UINT8_MAX);
@@ -155,6 +159,15 @@ namespace izanagi {
 
 		S_ANM_CHANNEL* channels;
 	};
+
+	/** スカラー値の補間処理.
+	 */
+	typedef IZ_FLOAT (*FuncInterpScalar)(IZ_FLOAT time, IZ_UINT keyNum, IZ_UINT paramPos, const S_ANM_KEY** keys);
+
+	/** ベクターの補間処理.
+	 */
+	typedef void (*FuncInterpVector)(SVector& ret, IZ_FLOAT time, IZ_UINT keyNum, IZ_UINT paramPos, const S_ANM_KEY** keys);
+
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_SCENEGRAPH_ANM_FORMAT_H__)
