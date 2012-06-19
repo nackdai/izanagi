@@ -452,7 +452,7 @@ CFontRendererBmp::SRegInfo* CFontRendererBmp::RegisterInternal(IZ_UINT code)
 	if (m_nRegNum == m_nMaxRegisterNum) {
 		// NOTE
 		// 古いものほどリストの先頭にくる
-		CFntHashItem* pListItem = m_FontHash.GetOrderTopData();
+		CFntHashItem* pListItem = m_FontHash.GetOrderTopHashItem();
 		IZ_ASSERT(pListItem != IZ_NULL);
 
 		// リストから外す
