@@ -89,7 +89,7 @@ void CResourceManager::RemoveAll()
 {
 	CRscHashItem* pItem = IZ_NULL;
 
-	while((pItem = m_RscHash.GetOrderTopData()) != IZ_NULL) {
+	while((pItem = m_RscHash.GetOrderTopHashItem()) != IZ_NULL) {
 		RemoveResource(pItem, IZ_FALSE);
 	}
 
@@ -116,7 +116,7 @@ void CResourceManager::DeleteAll()
 {
 	CRscHashItem* pItem = IZ_NULL;
 
-	while((pItem = m_RscHash.GetOrderTopData()) != IZ_NULL) {
+	while((pItem = m_RscHash.GetOrderTopHashItem()) != IZ_NULL) {
 		RemoveResource(pItem, IZ_TRUE);
 	}
 

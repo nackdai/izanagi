@@ -13,21 +13,17 @@ namespace izanagi {
 
 	/**
 	 */
-	template <typename T>
-	class TNotifyPropertyChanged : public T
+	template <typename T = NullClass>
+	class INotifyPropertyChanged : public T
 	{
 	public:
-		TNotifyPropertyChanged() {}
-		virtual ~TNotifyPropertyChanged() {}
+		INotifyPropertyChanged() {}
+		virtual ~INotifyPropertyChanged() {}
 
 		/**
 		 */
 		virtual CStdEvent<void, const DependencyProperty&>& PropertyChanged() = 0;
 	};
-
-	/**
-	 */
-	class INotifyPropertyChanged : TNotifyPropertyChanged<NullClass> {};
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_STD_NOTIFY_PROPERTY_CHANGED_H__)

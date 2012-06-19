@@ -11,7 +11,7 @@ namespace izanagi {
 	/**
 	 */
 	template <typename T = NullClass>
-	class DependencyObject : TNotifyPropertyChanged<T>
+	class DependencyObject : INotifyPropertyChanged<T>
 	{
 		static const IZ_UINT HASH_NUM = 8;
 
@@ -26,8 +26,15 @@ namespace izanagi {
 		};
 
 	public:
-		DependencyObject() {}
-		virtual ~DependencyObject() {}
+		DependencyObject()
+		{
+			m_IsCalledClearAll = IZ_FALSE;
+		}
+
+		virtual ~DependencyObject()
+		{
+			IZ_ASSERT(m_IsCalledClearAll);
+		}
 
 		/**
 		 */
@@ -104,6 +111,21 @@ namespace izanagi {
 		virtual void OnPropertyChanged(const DependencyPropertyChangedEventArgs& e) = 0;
 
 	protected:
+		void ClearAll()
+		{
+			typename CStdList<typename CStdHash<IZ_UINT, Element, HASH_NUM>::Item>::Item* item = m_Dictionary.GetOrderTop();
+			while (item != IZ_NULL)
+			{
+				typename CStdList<typename CStdHash<IZ_UINT, Element, HASH_NUM>::Item>::Item* next = item->GetNext();
+				Element* element = item->GetData()->GetData();
+				delete element;
+				FreeForDependencyObject(element);
+				item = next;
+			}
+
+			m_IsCalledClearAll = IZ_TRUE;
+		}
+
 		/**
 		 */
 		virtual void* AllocForDependencyObject(size_t size) = 0;
@@ -185,6 +207,8 @@ namespace izanagi {
 	private:
 		typename CStdHash<IZ_UINT, Element, HASH_NUM> m_Dictionary;
 		CStdEvent<void, const DependencyProperty&> m_Event;
+
+		IZ_BOOL m_IsCalledClearAll;
 	};
 }	// namespace izanagi
 

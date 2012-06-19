@@ -158,17 +158,17 @@ namespace izanagi {
 			return ret;
 		}
 
-		Item* GetOrderTopData()
+		Item* GetOrderTopHashItem()
 		{
 			CStdList<Item>::Item* pOrderListItem = m_OrderList.GetTop();
 			return (pOrderListItem != IZ_NULL ? pOrderListItem->GetData() : IZ_NULL);
 		}
-		Item* GetOrderTailData()
+		Item* GetOrderTailHashItem()
 		{
 			CStdList<Item>::Item* pOrderListItem = m_OrderList.GetTail();
 			return (pOrderListItem != IZ_NULL ? pOrderListItem->GetData() : IZ_NULL);
 		}
-		Item* GetOrderAtData(IZ_UINT idx)
+		Item* GetOrderAtHashItem(IZ_UINT idx)
 		{
 			CStdList<Item>::Item* pOrderListItem = m_OrderList.GetAt(idx);
 			return (pOrderListItem != IZ_NULL ? pOrderListItem->GetData() : IZ_NULL);
