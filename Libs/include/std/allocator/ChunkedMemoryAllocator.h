@@ -3,6 +3,7 @@
 
 #include "izDefs.h"
 #include "std/container/StdList.h"
+#include "std/container/StdSimpleList.h"
 #include "MemoryAllocator.h"
 
 namespace izanagi {

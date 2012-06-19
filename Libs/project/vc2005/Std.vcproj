@@ -223,6 +223,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\source\std\allocator\SimpleMemoryAllocator.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\source\std\allocator\StandardMemoryAllocator.cpp"
 					>
 				</File>
@@ -275,6 +279,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\std\StdColor.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\std\StdEvent.h"
 				>
 			</File>
 			<File
@@ -337,6 +345,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\include\std\allocator\SimpleMemoryAllocator.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\include\std\allocator\StandardMemoryAllocator.h"
 					>
 				</File>
@@ -362,6 +374,10 @@
 				</File>
 				<File
 					RelativePath="..\..\include\std\container\StdSet.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\std\container\StdSimpleList.h"
 					>
 				</File>
 			</Filter>

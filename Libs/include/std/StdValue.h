@@ -10,6 +10,10 @@ namespace izanagi {
 	class CValue {
 	public:
 		enum TYPE {
+			TYPE_INT8,
+			TYPE_UINT8,
+			TYPE_INT16,
+			TYPE_UINT16,
 			TYPE_INT32,
 			TYPE_UINT32,
 			TYPE_FLOAT,
@@ -23,6 +27,10 @@ namespace izanagi {
 		inline CValue();
 		~CValue() {}
 
+		CValue(IZ_INT8 n) { SetValue(n); }
+		CValue(IZ_UINT8 n) { SetValue(n); }
+		CValue(IZ_INT16 n) { SetValue(n); }
+		CValue(IZ_UINT16 n) { SetValue(n); }
 		CValue(IZ_INT32 n) { SetValue(n); }
 		CValue(IZ_UINT32 n) { SetValue(n); }
 		CValue(IZ_FLOAT f) { SetValue(f); }
@@ -42,6 +50,27 @@ namespace izanagi {
 			return *(reinterpret_cast<_T*>(m_ValPtr));
 		}
 
+		template <>
+		IZ_INT8 GetValue() const { return m_nValInt32; }
+
+		template <>
+		IZ_UINT8 GetValue() const { return m_nValUInt32; }
+
+		template <>
+		IZ_INT16 GetValue() const { return m_nValInt32; }
+
+		template <>
+		IZ_UINT16 GetValue() const { return m_nValUInt32; }
+
+		template <>
+		IZ_INT32 GetValue() const { return m_nValInt32; }
+
+		template <>
+		IZ_UINT32 GetValue() const { return m_nValUInt32; }
+
+		template <>
+		IZ_FLOAT GetValue() const { return m_fValFloat; }
+
 		// 値取得
 		inline IZ_INT32 GetValueAsInt32() const;
 		inline IZ_UINT32 GetValueAsUInt32() const;
@@ -49,6 +78,10 @@ namespace izanagi {
 		inline void* GetValueAsPtr() const;
 		
 		// 値セット
+		inline void SetValue(IZ_INT8 v);
+		inline void SetValue(IZ_UINT8 v);
+		inline void SetValue(IZ_INT16 v);
+		inline void SetValue(IZ_UINT16 v);
 		inline void SetValue(IZ_INT32 v);
 		inline void SetValue(IZ_UINT32 v);
 		inline void SetValue(IZ_FLOAT v);
@@ -106,6 +139,30 @@ namespace izanagi {
 	}
 
 	// 値セット
+	void CValue::SetValue(IZ_INT8 v)
+	{
+		m_Type = TYPE_INT8;
+		m_nValInt32 = v;
+	}
+
+	void CValue::SetValue(IZ_UINT8 v)
+	{
+		m_Type = TYPE_UINT8;
+		m_nValUInt32 = v;
+	}
+
+	void CValue::SetValue(IZ_INT16 v)
+	{
+		m_Type = TYPE_INT16;
+		m_nValInt32 = v;
+	}
+
+	void CValue::SetValue(IZ_UINT16 v)
+	{
+		m_Type = TYPE_UINT16;
+		m_nValUInt32 = v;
+	}
+
 	void CValue::SetValue(IZ_INT32 v)
 	{
 		m_Type = TYPE_INT32;

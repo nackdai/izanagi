@@ -245,26 +245,6 @@
 					>
 				</File>
 			</Filter>
-			<Filter
-				Name="ui"
-				>
-				<File
-					RelativePath="..\..\source\debugutil\ui\DebugUIButton.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\source\debugutil\ui\DebugUIDialog.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\source\debugutil\ui\DebugUIFontLayout.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\source\debugutil\ui\DebugUIManager.cpp"
-					>
-				</File>
-			</Filter>
 		</Filter>
 		<Filter
 			Name="include"
@@ -312,58 +292,6 @@
 				</File>
 				<File
 					RelativePath="..\..\include\debugutil\mesh\DebugMeshTorus.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="ui"
-				>
-				<File
-					RelativePath="..\..\include\debugutil\ui\DebugUIButton.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\include\debugutil\ui\DebugUICheckBox.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\include\debugutil\ui\DebugUIComboBox.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\include\debugutil\ui\DebugUIDialog.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\include\debugutil\ui\DebugUIFontLayout.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\include\debugutil\ui\DebugUIFontRenderer.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\include\debugutil\ui\DebugUIListBox.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\include\debugutil\ui\DebugUIManager.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\include\debugutil\ui\DebugUIRadioButton.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\include\debugutil\ui\DebugUISliderControl.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\include\debugutil\ui\DebugUIStaticText.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\include\debugutil\ui\DebugUIWidget.h"
 					>
 				</File>
 			</Filter>

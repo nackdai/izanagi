@@ -2,7 +2,7 @@
 #define __IZANAGI_STD_STANDARD_MEMORY_ALLOCATOR_H__
 
 #include "izDefs.h"
-#include "std/container/StdList.h"
+#include "std/container/StdSimpleList.h"
 #include "MemoryAllocator.h"
 
 namespace izanagi {

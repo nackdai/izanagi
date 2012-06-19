@@ -3,10 +3,11 @@
 
 #include "izDefs.h"
 #include "std/StdPlacementNew.h"
+#include "std/allocator/MemoryAllocator.h"
 
 namespace izanagi {
 	/**
-	*/
+	 */
 	template <typename _T>
 	class CStdList {
 	public:
@@ -232,150 +233,132 @@ namespace izanagi {
 		Item m_Tail;
 	};
 
-	/////////////////////////////////////////////////////
-
-	template <typename _T>
-	class CStdSimpleList {
+	/**
+	 */
+	template <typename T>
+	class CStdListEx : public CStdList<T>
+	{
 	public:
-
-		CStdSimpleList()
+		class Item : CStdList::Item
 		{
-			m_Top = m_Tail = IZ_NULL;
+			friend class CStdListEx<T>;
+
+			IZ_DECL_PLACEMENT_NEW();
+
+		protected:
+			void Leave()
+			{
+				CStdList::Item::Leave();
+			}
+		};
+
+	public:
+		CStdListEx() : CStdList()
+		{
+			m_Allocator = IZ_NULL;
 		}
 
-		IZ_BOOL HasItem() { return (m_Top != IZ_NULL); }
+		NO_COPIABLE(CStdListEx);
 
-		_T* GetTop() { return m_Top; }
-		_T* GetTail() { return m_Tail; }
-
-		void AddTop(_T* p)
+	public:
+		void Init(IMemoryAllocator* allocator)
 		{
-			if (m_Top != IZ_NULL) {
-				p->next = m_Top;
-				p->prev = IZ_NULL;
-
-				m_Top->prev = p;
-
-				m_Top = p;
-			}
-			else {
-				m_Top = p;
-				m_Tail = p;
-			}
+			CStdList::Init();
+			m_Allocator = allocator;
 		}
 
-		void AddTail(_T* p)
+		IZ_BOOL AddTop(T* data)
 		{
-			if (m_Tail != IZ_NULL) {
-				p->next = IZ_NULL;
-				p->prev = m_Tail;
-
-				m_Tail->next = p;
-
-				m_Tail = p;
-			}
-			else {
-				m_Top = p;
-				m_Tail = p;
-			}
-		}
-
-		void Clear()
-		{
-			_T* p = GetTop();
-			_T* next = IZ_NULL;
-
-			while (p != IZ_NULL) {
-				next = p->next;
-
-				p->prev = IZ_NULL;
-				p->next = IZ_NULL;
-
-				p = next;
-			}
-
-			m_Top = IZ_NULL;
-			m_Tail = IZ_NULL;
-		}
-
-		void Remove(_T* p)
-		{
-			IZ_BOOL bIsRemoved = IZ_FALSE;
-
-			if (m_Top == p) {
-				if (p->next != IZ_NULL) {
-					p->next->prev = IZ_NULL;
-				}
-				m_Top = p->next;
-				bIsRemoved = IZ_TRUE;
-			}
+			IZ_ASSERT(m_Allocator != IZ_NULL);
 			
-			if (m_Tail == p) {
-				if (p->prev != IZ_NULL) {
-					p->prev->next = IZ_NULL;
-				}
-				m_Tail = p->prev;
-				bIsRemoved = IZ_TRUE;
-			}
+			void* buf = ALLOC_ZERO(m_Allocator, sizeof(Item));
+			VRETURN(buf != IZ_NULL);
 
-			if (!bIsRemoved) {
-				if (p->prev != IZ_NULL) {
-					p->prev->next = p->next;
-				}
-				if (p->next != IZ_NULL) {
-					p->next->prev = p->prev;
-				}
+			Item* item = new(buf) Item;
+			item->Init(data);
 
-				bIsRemoved = IZ_TRUE;
-			}
-
-			if (bIsRemoved) {
-				p->next = IZ_NULL;
-				p->prev = IZ_NULL;
-			}
+			return AddTop(item);
 		}
 
-		// p0 の前に p1 を挿入
-		void JoinBefore(_T* p0, _T* p1)
+		IZ_BOOL AddTail(T* data)
 		{
-			_T* prev = p0->prev;
+			IZ_ASSERT(m_Allocator != IZ_NULL);
+			
+			void* buf = ALLOC_ZERO(m_Allocator, sizeof(Item));
+			VRETURN(buf != IZ_NULL);
 
-			if (p0->prev != IZ_NULL) {
-				p0->prev->next = p1;
-			}
-			p0->prev = p1;
+			Item* item = new(buf) Item;
+			item->Init(data);
 
-			p1->prev = prev;
-			p1->next = p0;
-
-			if (p0 == m_Top) {
-				m_Top = p1;
-			}
+			return AddTail(item);
 		}
 
-		// p0 の後に p1 を挿入
-		void JoinAfter(_T* p0, _T* p1)
+		IZ_INT Find(T* data)
 		{
-			_T* next = p0->next;
+			IZ_UINT idx = 0;
 
-			if (p0->next != IZ_NULL) {
-				p0->next->prev = p1;
+			CStdList::Item* item = GetTop();
+			while (item != IZ_NULL)
+			{
+				T* d = item->GetData();
+				if (d == data)
+				{
+					return idx;
+				}
+
+				item = item->GetNext();
+				idx++;
 			}
-			p0->next = p1;
 
-			p1->prev = p0;
-			p1->next = next;
-
-			if (p0 == m_Tail) {
-				m_Tail = p1;
-			}
+			return -1;
 		}
 
-		NO_COPIABLE(CStdSimpleList);
+		IZ_BOOL Remove(Item* item)
+		{
+			if (this == item->GetList())
+			{
+				item->Leave();
+				delete item;
+				return IZ_TRUE;
+			}
+			return IZ_FALSE;
+		}
+
+		IZ_BOOL Remove(T* data)
+		{
+			IZ_ASSERT(data != IZ_NULL);
+
+			CStdList::Item* item = GetTop();
+			while (item != IZ_NULL)
+			{
+				T* d = item->GetData();
+				if (d == data)
+				{
+					item->Leave();
+					delete item;
+					return IZ_TRUE;
+				}
+
+				item = item->GetNext();
+			}
+
+			IZ_ASSERT(IZ_FALSE);
+			return IZ_FALSE;
+		}
 
 	private:
-		_T* m_Top;
-		_T* m_Tail;
+		IZ_BOOL AddTop(Item* pItem)
+		{
+			return CStdList::AddTop(pItem);
+		}
+
+		IZ_BOOL AddTail(Item* pItem)
+		{
+			return CStdList::AddTail(pItem);
+		}
+
+	private:
+		IMemoryAllocator* m_Allocator;
 	};
 }	// namespace izanagi
 

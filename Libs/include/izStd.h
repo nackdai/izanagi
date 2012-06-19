@@ -20,6 +20,8 @@
 #include "std/StdBitFlag.h"
 #include "std/StdProfiler.h"
 
+#include "std/StdEvent.h"
+
 #include "std/container/StdList.h"
 #include "std/container/StdHash.h"
 #include "std/container/StdSet.h"
@@ -32,6 +34,7 @@
 #include "std/allocator/MemoryAllocator.h"
 #include "std/allocator/StandardMemoryAllocator.h"
 #include "std/allocator/ChunkedMemoryAllocator.h"
+#include "std/allocator/SimpleMemoryAllocator.h"
 #include "std/allocator/STLMemoryAllocator.h"
 
 #endif	// #if !defined(__IZANAGI_STD_H__)
