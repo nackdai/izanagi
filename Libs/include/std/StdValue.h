@@ -86,6 +86,16 @@ namespace izanagi {
 		inline void SetValue(IZ_UINT32 v);
 		inline void SetValue(IZ_FLOAT v);
 		inline void SetValue(void* v);
+
+		IZ_BOOL operator==(const CValue& rhs)
+		{
+			return (m_nValInt32 == rhs.m_nValInt32);
+		}
+
+		IZ_BOOL operator!=(const CValue& rhs)
+		{
+			return !(*this == rhs);
+		}
 		
 	protected:
 		TYPE m_Type;
@@ -115,6 +125,7 @@ namespace izanagi {
 	{
 		m_Type = rhs.m_Type;
 		m_nValInt32 = rhs.m_nValInt32;
+		return *this;
 	}
 
 	// 値取得

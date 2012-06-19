@@ -251,6 +251,14 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="dependency_property"
+				>
+				<File
+					RelativePath="..\..\source\std\dependency_property\DependencyPropertyChangedEventArgs.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="include"
@@ -394,6 +402,30 @@
 				</File>
 				<File
 					RelativePath="..\..\include\std\animation\Tweener.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="dependency_property"
+				>
+				<File
+					RelativePath="..\..\include\std\dependency_property\DependencyObject.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\std\dependency_property\DependencyProperty.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\std\dependency_property\DependencyPropertyChangedEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\std\dependency_property\NotifyPropertyChanged.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\std\dependency_property\PropertyMetaData.h"
 					>
 				</File>
 			</Filter>

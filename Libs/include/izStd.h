@@ -37,4 +37,9 @@
 #include "std/allocator/SimpleMemoryAllocator.h"
 #include "std/allocator/STLMemoryAllocator.h"
 
+#include "std/dependency_property/DependencyObject.h"
+#include "std/dependency_property/DependencyProperty.h"
+#include "std/dependency_property/DependencyPropertyChangedEventArgs.h"
+#include "std/dependency_property/NotifyPropertyChanged.h"
+
 #endif	// #if !defined(__IZANAGI_STD_H__)
