@@ -6,7 +6,7 @@
 #include "std/StdString.h"
 
 namespace izanagi {
-	/** 依存性プロパティ
+	/** 萓晏ｭ俶ｧ繝励Ο繝代ユ繧｣
 	 */
 	class DependencyProperty
 	{
