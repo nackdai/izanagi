@@ -28,6 +28,87 @@ public:
 	}
 };
 
+class DPTest : izanagi::DependencyObject<>
+{
+public:
+	static izanagi::DependencyProperty sProp;
+
+public:
+	DPTest::DPTest()
+	{
+		SetTestVal(0);
+	}
+	DPTest::~DPTest()
+	{
+		ClearAll();
+	}
+
+	void SetTestVal(IZ_UINT val)
+	{
+		SetValue(sProp, val);
+	}
+
+	IZ_UINT GetTestVal()
+	{
+		izanagi::CValue value;
+		GetValue(sProp, value);
+		return value.GetValue<IZ_UINT>();
+	}
+
+	virtual void OnPropertyChanged(const izanagi::DependencyPropertyChangedEventArgs& e)
+	{
+		IZ_PRINTF(
+			"value [%d] -> [%d]\n",
+			e.GetOldValue().GetValueAsUInt32(),
+			e.GetNewValue().GetValueAsUInt32());
+	}
+
+protected:
+	virtual void* AllocForDependencyObject(size_t size)
+	{
+		return malloc(size);
+	}
+
+	virtual void FreeForDependencyObject(void* p)
+	{
+		free(p);
+	}
+
+private:
+	IZ_UINT m_TestVal;
+};
+
+class BindingTest
+{
+public:
+	BindingTest() {}
+	~BindingTest() {}
+
+	IZ_UINT m_Val;
+};
+
+class Binding : public izanagi::Binding
+{
+public:
+	Binding() {}
+	virtual ~Binding() {}
+
+	void SetSource(BindingTest* source)
+	{
+		m_Source = source;
+	}
+
+	virtual void GetValue(izanagi::CValue& ret)
+	{
+		ret.SetValue(m_Source->m_Val);
+	}
+
+private:
+	BindingTest* m_Source;
+};
+
+izanagi::DependencyProperty DPTest::sProp("TestVal");
+
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	izanagi::CSimpleMemoryAllocator allocator;
@@ -45,6 +126,28 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	event2 += izanagi::EventHandler(&allocator, OnEventEx);
 	event2 += izanagi::EventHandler(&allocator, &test, &Test::OnEventEx);
 	event2(1);
+
+	DPTest dpTest;
+	dpTest.SetTestVal(100);
+	IZ_UINT val = dpTest.GetTestVal();
+	IZ_PRINTF("%d\n", val);
+
+	Binding* binding = izanagi::Binding::CreateBinding<Binding>(&allocator, "m_Val");
+
+	BindingTest bindTest;
+	binding->SetSource(&bindTest);
+	
+	izanagi::BindingOperations::SetBindings(
+		&allocator,
+		//*(izanagi::DependencyObjectBase*)&dpTest,
+		dpTest,
+		DPTest::sProp,
+		binding);
+
+	bindTest.m_Val = 200;
+	izanagi::BindingOperations::GetBindingExpression(DPTest::sProp)->UpdateTarget();
+	val = dpTest.GetTestVal();
+	IZ_PRINTF("%d\n", val);
 
 	return 0;
 }
