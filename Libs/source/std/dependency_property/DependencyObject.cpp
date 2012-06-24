@@ -2,6 +2,12 @@
 
 namespace izanagi
 {
+	DependencyObjectBase::DependencyObjectBase()
+	{
+		m_Flags.isCalledClearAll = IZ_FALSE;
+		m_Flags.isValueChanged = IZ_FALSE;
+	}
+
 	void DependencyObjectBase::ClearAll()
 	{
 		CStdList<CStdHash<IZ_UINT, Element, HASH_NUM>::Item>::Item* item = m_Dictionary.GetOrderTop();
@@ -14,7 +20,7 @@ namespace izanagi
 			item = next;
 		}
 
-		m_IsCalledClearAll = IZ_TRUE;
+		m_Flags.isCalledClearAll = IZ_TRUE;
 	}	
 
 	CStdHash<IZ_UINT, DependencyObjectBase::Element, DependencyObjectBase::HASH_NUM>::Item* DependencyObjectBase::Find(const DependencyProperty& prop)
@@ -30,7 +36,7 @@ namespace izanagi
 		// プロパティに該当するハッシュアイテムを探す
 		CStdHash<IZ_UINT, Element, HASH_NUM>::Item* item = Find(prop);
 
-		IZ_BOOL isValueChanged = IZ_FALSE;
+		m_Flags.isValueChanged = IZ_FALSE;
 
 		CValue oldVal;
 		
@@ -40,8 +46,8 @@ namespace izanagi
 
 			oldVal = item->GetData()->value;
 
-			isValueChanged = (item->GetData()->value != value);
-			if (isValueChanged)
+			m_Flags.isValueChanged = (item->GetData()->value != value);
+			if (m_Flags.isValueChanged)
 			{
 				item->GetData()->value = value;
 			}
@@ -50,7 +56,7 @@ namespace izanagi
 		{
 			// 初登録
 
-			//isValueChanged = IZ_TRUE;
+			//m_Flags.isValueChanged = IZ_TRUE;
 
 			// 登録用の要素を作成
 			void* p = AllocForDependencyObject(sizeof(Element));
@@ -67,7 +73,7 @@ namespace izanagi
 			m_Dictionary.Add(&element->hashItem);
 		}
 
-		if (isValueChanged)
+		if (m_Flags.isValueChanged)
 		{
 			// 値が変更された
 

@@ -42,17 +42,9 @@ namespace izanagi {
 		IZ_DECL_PLACEMENT_NEW();
 
 	public:
-		/** ターゲットへの値の更新.
+		/** 値の更新.
 		 */
-		void UpdateTarget()
-		{
-			IZ_ASSERT(m_Binding != IZ_NULL);
-
-			CValue value;
-			m_Binding->GetValue(value);
-
-			m_Target.SetValue(m_Property, value);
-		}
+		void Update();
 
 	private:
 		BindingOperations::Dictionary::Item* GetItem()
@@ -68,6 +60,9 @@ namespace izanagi {
 		Binding* m_Binding;
 
 		BindingOperations::Dictionary::Item m_Item;
+
+		// For E_BINDING_MODE_ONE_TIME.
+		IZ_BOOL m_IsBinded;
 	};
 }	// namespace izanagi
 
