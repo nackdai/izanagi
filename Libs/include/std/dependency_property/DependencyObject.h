@@ -8,7 +8,7 @@
 #include "std/container/StdHash.h"
 
 namespace izanagi {
-	/**
+	/** 依存性プロパティを持つオブジェクトのベースクラス
 	 */
 	class DependencyObjectBase
 	{
@@ -133,7 +133,7 @@ namespace izanagi {
 		IZ_BOOL m_IsCalledClearAll;
 	};
 
-	/**
+	/** 依存性プロパティを持つオブジェクト
 	 */
 	template <typename T = NullClass>
 	class DependencyObject : public DependencyObjectBase, public INotifyPropertyChanged<T>

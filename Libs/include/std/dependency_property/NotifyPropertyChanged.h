@@ -11,7 +11,7 @@ namespace izanagi {
 	 */
 	class NullClass {};
 
-	/**
+	/** プロパティの変更を通知するためのインターフェース
 	 */
 	template <typename T = NullClass>
 	class INotifyPropertyChanged : public T

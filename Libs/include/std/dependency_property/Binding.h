@@ -23,7 +23,7 @@ namespace izanagi {
 		E_BINDING_MODE_FORCE_INT32 = 0x7fffffff,
 	};
 
-	/**
+	/** データバインディング情報
 	 */
 	class Binding : public CObject
 	{
