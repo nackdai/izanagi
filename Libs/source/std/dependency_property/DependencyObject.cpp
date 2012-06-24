@@ -27,7 +27,7 @@ namespace izanagi
 
 	void DependencyObjectBase::SetValueInternal(const DependencyProperty& prop, const CValue& value)
 	{
-		// ƒvƒƒpƒeƒB‚ÉŠY“–‚·‚éƒnƒbƒVƒ…ƒAƒCƒeƒ€‚ğ’T‚·
+		// ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã«è©²å½“ã™ã‚‹ãƒãƒƒã‚·ãƒ¥ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ¢ã™
 		CStdHash<IZ_UINT, Element, HASH_NUM>::Item* item = Find(prop);
 
 		IZ_BOOL isValueChanged = IZ_FALSE;
@@ -36,7 +36,7 @@ namespace izanagi
 		
 		if (item != IZ_NULL)
 		{
-			// “o˜^Ï‚İ
+			// ç™»éŒ²æ¸ˆã¿
 
 			oldVal = item->GetData()->value;
 
@@ -48,11 +48,11 @@ namespace izanagi
 		}
 		else
 		{
-			// ‰“o˜^
+			// åˆç™»éŒ²
 
 			//isValueChanged = IZ_TRUE;
 
-			// “o˜^—p‚Ì—v‘f‚ğì¬
+			// ç™»éŒ²ç”¨ã®è¦ç´ ã‚’ä½œæˆ
 			void* p = AllocForDependencyObject(sizeof(Element));
 			IZ_ASSERT(p != IZ_NULL);
 
@@ -63,13 +63,13 @@ namespace izanagi
 				element->hashItem.Init(element->name.GetKeyValue(), element);
 			}
 
-			// “o˜^
+			// ç™»éŒ²
 			m_Dictionary.Add(&element->hashItem);
 		}
 
 		if (isValueChanged)
 		{
-			// ’l‚ª•ÏX‚³‚ê‚½
+			// å€¤ãŒå¤‰æ›´ã•ã‚ŒãŸ
 
 			DependencyPropertyChangedEventArgs e(
 				oldVal,

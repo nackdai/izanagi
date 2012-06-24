@@ -7,7 +7,7 @@
 namespace izanagi {
 	class DependencyProperty;
 
-	/**
+	/** 依存性プロパティ変更イベントに渡される引数クラス
 	 */
 	class DependencyPropertyChangedEventArgs
 	{

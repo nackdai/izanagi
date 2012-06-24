@@ -9,7 +9,7 @@
 namespace izanagi {
 	class BindingExpression;
 
-	/**
+	/** ãƒ‡ãƒ¼ã‚¿ãƒã‚¤ãƒ³ãƒ‡ã‚£ãƒ³ã‚°å®Ÿè¡Œ
 	 */
 	class BindingOperations
 	{
@@ -21,7 +21,7 @@ namespace izanagi {
 		NO_COPIABLE(BindingOperations);
 
 	public:
-		/** ƒf[ƒ^ƒoƒCƒ“ƒfƒBƒ“ƒO‚ğİ’è.
+		/** ãƒ‡ãƒ¼ã‚¿ãƒã‚¤ãƒ³ãƒ‡ã‚£ãƒ³ã‚°ã‚’è¨­å®š.
 		 */
 		static void SetBindings(
 			IMemoryAllocator* allocator,
@@ -29,11 +29,11 @@ namespace izanagi {
 			DependencyProperty& property,
 			Binding* binding);
 
-		/** w’è‚³‚ê‚½ƒvƒƒpƒeƒB‚É‘Î‚·‚éƒf[ƒ^ƒoƒCƒ“ƒfƒBƒ“ƒO‚ğæ“¾.
+		/** æŒ‡å®šã•ã‚ŒãŸãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã«å¯¾ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ãƒã‚¤ãƒ³ãƒ‡ã‚£ãƒ³ã‚°ã‚’å–å¾—.
 		 */
 		static BindingExpression* GetBindingExpression(const DependencyProperty& property);
 
-		/** w’è‚³‚ê‚½ƒvƒƒpƒeƒB‚É‘Î‚·‚éƒf[ƒ^ƒoƒCƒ“ƒfƒBƒ“ƒO‚ğíœ.
+		/** æŒ‡å®šã•ã‚ŒãŸãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã«å¯¾ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ãƒã‚¤ãƒ³ãƒ‡ã‚£ãƒ³ã‚°ã‚’å‰Šé™¤.
 		 */
 		static IZ_BOOL RemoveBindingExpression(const DependencyProperty& property);
 

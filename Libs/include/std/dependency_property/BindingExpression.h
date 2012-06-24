@@ -9,21 +9,21 @@
 #include "BindingOperations.h"
 
 namespace izanagi {
-	/**
+	/** ãƒ‡ãƒ¼ã‚¿ãƒã‚¤ãƒ³ãƒ‡ã‚£ãƒ³ã‚°ã®é–¢ä¿‚çŠ¶æ…‹
 	 */
 	class BindingExpression
 	{
 		friend class BindingOperations;
 
 	private:
-		// BindingExpression‚ğì¬.
+		// BindingExpressionã‚’ä½œæˆ.
 		static BindingExpression* Create(
 			IMemoryAllocator* allocator,
 			DependencyObjectBase& target,
 			DependencyProperty& property,
 			Binding* binding);
 
-		// ì¬‚µ‚½BindingExpression‚ğ‰ğ•ú.
+		// ä½œæˆã—ãŸBindingExpressionã‚’è§£æ”¾.
 		static void Free(BindingExpression* exp);
 
 	private:
@@ -42,7 +42,7 @@ namespace izanagi {
 		IZ_DECL_PLACEMENT_NEW();
 
 	public:
-		/** ƒ^[ƒQƒbƒg‚Ö‚Ì’l‚ÌXV.
+		/** ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã¸ã®å€¤ã®æ›´æ–°.
 		 */
 		void UpdateTarget()
 		{

@@ -1,11 +1,11 @@
-#include "std/dependency_property/BindingOperations.h"
+ï»¿#include "std/dependency_property/BindingOperations.h"
 #include "std/dependency_property/BindingExpression.h"
 
 namespace izanagi
 {
 	BindingOperations::Dictionary BindingOperations::s_Dictionary;
 
-	// ƒf[ƒ^ƒoƒCƒ“ƒfƒBƒ“ƒO‚ğİ’è.
+	// ãƒ‡ãƒ¼ã‚¿ãƒã‚¤ãƒ³ãƒ‡ã‚£ãƒ³ã‚°ã‚’è¨­å®š.
 	void BindingOperations::SetBindings(
 		IMemoryAllocator* allocator,
 		DependencyObjectBase& target,
@@ -24,14 +24,14 @@ namespace izanagi
 		}
 	}
 
-	// w’è‚³‚ê‚½ƒvƒƒpƒeƒB‚É‘Î‚·‚éƒf[ƒ^ƒoƒCƒ“ƒfƒBƒ“ƒO‚ğæ“¾.
+	// æŒ‡å®šã•ã‚ŒãŸãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã«å¯¾ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ãƒã‚¤ãƒ³ãƒ‡ã‚£ãƒ³ã‚°ã‚’å–å¾—.
 	BindingExpression* BindingOperations::GetBindingExpression(const DependencyProperty& property)
 	{
 		BindingExpression* exp = s_Dictionary.FindData(property.GetKey());
 		return exp;
 	}
 
-	// w’è‚³‚ê‚½ƒvƒƒpƒeƒB‚É‘Î‚·‚éƒf[ƒ^ƒoƒCƒ“ƒfƒBƒ“ƒO‚ğíœ.
+	// æŒ‡å®šã•ã‚ŒãŸãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã«å¯¾ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ãƒã‚¤ãƒ³ãƒ‡ã‚£ãƒ³ã‚°ã‚’å‰Šé™¤.
 	IZ_BOOL BindingOperations::RemoveBindingExpression(const DependencyProperty& property)
 	{
 		Dictionary::Item* item = s_Dictionary.Find(property.GetKey());

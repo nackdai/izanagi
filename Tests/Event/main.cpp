@@ -139,8 +139,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	
 	izanagi::BindingOperations::SetBindings(
 		&allocator,
-		//*(izanagi::DependencyObjectBase*)&dpTest,
-		dpTest,
+		*(izanagi::DependencyObjectBase*)&dpTest,
 		DPTest::sProp,
 		binding);
 

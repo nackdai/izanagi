@@ -2,7 +2,7 @@
 
 namespace izanagi
 {
-	// BindingExpression‚ğì¬.
+	// BindingExpressionã‚’ä½œæˆ.
 	BindingExpression* BindingExpression::Create(
 		IMemoryAllocator* allocator,
 		DependencyObjectBase& target,
@@ -16,7 +16,7 @@ namespace izanagi
 		return ret;
 	}
 
-	// ì¬‚µ‚½BindingExpression‚ğ‰ğ•ú.
+	// ä½œæˆã—ãŸBindingExpressionã‚’è§£æ”¾.
 	void BindingExpression::Free(BindingExpression* exp)
 	{
 		IZ_ASSERT(exp != IZ_NULL);
