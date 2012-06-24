@@ -103,6 +103,11 @@ public:
 		ret.SetValue(m_Source->m_Val);
 	}
 
+	virtual void SetValue(const izanagi::CValue& value)
+	{
+		m_Source->m_Val = value.GetValueAsInt32();
+	}
+
 private:
 	BindingTest* m_Source;
 };
@@ -144,7 +149,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		binding);
 
 	bindTest.m_Val = 200;
-	izanagi::BindingOperations::GetBindingExpression(DPTest::sProp)->UpdateTarget();
+	izanagi::BindingOperations::GetBindingExpression(DPTest::sProp)->Update();
 	val = dpTest.GetTestVal();
 	IZ_PRINTF("%d\n", val);
 

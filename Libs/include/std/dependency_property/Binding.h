@@ -92,6 +92,10 @@ namespace izanagi {
 		 */
 		virtual void GetValue(CValue& ret) = 0;
 
+		/**
+		 */
+		virtual void SetValue(const CValue& value) = 0;
+
 	private:
 		void SetPropertyName(IZ_PCSTR name)
 		{

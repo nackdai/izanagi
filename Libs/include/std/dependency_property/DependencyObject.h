@@ -12,6 +12,8 @@ namespace izanagi {
 	 */
 	class DependencyObjectBase
 	{
+		friend class BindingExpression;
+
 		static const IZ_UINT HASH_NUM = 8;
 
 		class Element
@@ -25,14 +27,11 @@ namespace izanagi {
 		};
 
 	public:
-		DependencyObjectBase()
-		{
-			m_IsCalledClearAll = IZ_FALSE;
-		}
+		DependencyObjectBase();
 
 		virtual ~DependencyObjectBase()
 		{
-			IZ_ASSERT(m_IsCalledClearAll);
+			IZ_ASSERT(m_Flags.isCalledClearAll);
 		}
 
 		/**
@@ -127,10 +126,18 @@ namespace izanagi {
 
 		IZ_BOOL GetValueInternal(const DependencyProperty& prop, CValue& ret);
 
+		IZ_BOOL IsValueChagned() const { return m_Flags.isValueChanged; }
+
+		void ClearValueChagned() { m_Flags.isValueChanged = IZ_FALSE; }
+
 	private:
 		CStdHash<IZ_UINT, Element, HASH_NUM> m_Dictionary;
 
-		IZ_BOOL m_IsCalledClearAll;
+		struct
+		{
+			IZ_UINT32 isCalledClearAll	: 1;
+			IZ_UINT32 isValueChanged	: 1;
+		} m_Flags;
 	};
 
 	/** 依存性プロパティを持つオブジェクト
