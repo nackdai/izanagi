@@ -31,6 +31,7 @@ namespace izanagi {
 		DependencyProperty(IZ_PCSTR name)
 			: m_Name(name)
 		{
+			m_Key = m_Name.GetKeyValue();
 		}
 
 		~DependencyProperty() {}
@@ -42,8 +43,16 @@ namespace izanagi {
 			return m_Name;
 		}
 
+		/**
+		 */
+		IZ_UINT GetKey() const
+		{
+			return m_Key;
+		}
+
 	private:
 		CStdString<IZ_CHAR, PropertyNameMax> m_Name;
+		IZ_UINT m_Key;
 	};
 }	// namespace izanagi
 

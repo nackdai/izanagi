@@ -255,6 +255,22 @@
 				Name="dependency_property"
 				>
 				<File
+					RelativePath="..\..\source\std\dependency_property\Binding.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\source\std\dependency_property\BindingExpression.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\source\std\dependency_property\BindingOperations.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\source\std\dependency_property\DependencyObject.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\source\std\dependency_property\DependencyPropertyChangedEventArgs.cpp"
 					>
 				</File>
@@ -408,6 +424,18 @@
 			<Filter
 				Name="dependency_property"
 				>
+				<File
+					RelativePath="..\..\include\std\dependency_property\Binding.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\std\dependency_property\BindingExpression.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\std\dependency_property\BindingOperations.h"
+					>
+				</File>
 				<File
 					RelativePath="..\..\include\std\dependency_property\DependencyObject.h"
 					>

@@ -10,8 +10,7 @@
 namespace izanagi {
 	/**
 	 */
-	template <typename T = NullClass>
-	class DependencyObject : INotifyPropertyChanged<T>
+	class DependencyObjectBase
 	{
 		static const IZ_UINT HASH_NUM = 8;
 
@@ -20,20 +19,27 @@ namespace izanagi {
 		public:
 			DependencyProperty::PropertyName name;
 			CValue value;
-			typename CStdHash<IZ_UINT, Element, HASH_NUM>::Item hashItem;
+			CStdHash<IZ_UINT, Element, HASH_NUM>::Item hashItem;
 
 			IZ_DECL_PLACEMENT_NEW();
 		};
 
 	public:
-		DependencyObject()
+		DependencyObjectBase()
 		{
 			m_IsCalledClearAll = IZ_FALSE;
 		}
 
-		virtual ~DependencyObject()
+		virtual ~DependencyObjectBase()
 		{
 			IZ_ASSERT(m_IsCalledClearAll);
+		}
+
+		/**
+		 */
+		void SetValue(const DependencyProperty& prop, const CValue& value)
+		{
+			SetValueInternal(prop, value);
 		}
 
 		/**
@@ -101,30 +107,10 @@ namespace izanagi {
 
 		/**
 		 */
-		virtual CStdEvent<void, const DependencyProperty&>& PropertyChanged()
-		{
-			return m_Event;
-		}
-
-		/**
-		 */
 		virtual void OnPropertyChanged(const DependencyPropertyChangedEventArgs& e) = 0;
 
 	protected:
-		void ClearAll()
-		{
-			typename CStdList<typename CStdHash<IZ_UINT, Element, HASH_NUM>::Item>::Item* item = m_Dictionary.GetOrderTop();
-			while (item != IZ_NULL)
-			{
-				typename CStdList<typename CStdHash<IZ_UINT, Element, HASH_NUM>::Item>::Item* next = item->GetNext();
-				Element* element = item->GetData()->GetData();
-				delete element;
-				FreeForDependencyObject(element);
-				item = next;
-			}
-
-			m_IsCalledClearAll = IZ_TRUE;
-		}
+		void ClearAll();
 
 		/**
 		 */
@@ -135,80 +121,36 @@ namespace izanagi {
 		virtual void FreeForDependencyObject(void* p) = 0;
 
 	private:
-		typename CStdHash<IZ_UINT, Element, HASH_NUM>::Item* Find(const DependencyProperty& prop)
+		CStdHash<IZ_UINT, Element, HASH_NUM>::Item* Find(const DependencyProperty& prop);
+
+		void SetValueInternal(const DependencyProperty& prop, const CValue& value);
+
+		IZ_BOOL GetValueInternal(const DependencyProperty& prop, CValue& ret);
+
+	private:
+		CStdHash<IZ_UINT, Element, HASH_NUM> m_Dictionary;
+
+		IZ_BOOL m_IsCalledClearAll;
+	};
+
+	/**
+	 */
+	template <typename T = NullClass>
+	class DependencyObject : public DependencyObjectBase, public INotifyPropertyChanged<T>
+	{
+	public:
+		DependencyObject() {}
+		virtual ~DependencyObject() {}
+
+		/**
+		 */
+		virtual CStdEvent<void, const DependencyProperty&>& PropertyChanged()
 		{
-			DependencyProperty::PropertyName name(prop.GetName());
-			typename CStdHash<IZ_UINT, Element, HASH_NUM>::Item* item = m_Dictionary.Find(name.GetKeyValue());
-			return item;
-		}
-
-		void SetValueInternal(const DependencyProperty& prop, const CValue& value)
-		{
-			typename CStdHash<IZ_UINT, Element, HASH_NUM>::Item* item = Find(prop);
-
-			IZ_BOOL isValueChanged = IZ_FALSE;
-			
-			if (item != IZ_NULL)
-			{
-				isValueChanged = (item->GetData()->value != value);
-				if (isValueChanged)
-				{
-					item->GetData()->value = value;
-				}
-			}
-			else
-			{
-				//isValueChanged = IZ_TRUE;
-
-				void* p = AllocForDependencyObject(sizeof(Element));
-				IZ_ASSERT(p != IZ_NULL);
-
-				Element* element = new(p) Element;
-				{
-					element->name.SetString(prop.GetName().GetString());
-					element->value = value;
-					element->hashItem.Init(element->name.GetKeyValue(), element);
-				}
-
-				m_Dictionary.Add(&element->hashItem);
-			}
-
-			if (isValueChanged)
-			{
-				DependencyPropertyChangedEventArgs e(
-					item->GetData()->value,
-					value,
-					prop);
-
-				OnPropertyChanged(e);
-			}
-		}
-
-		IZ_BOOL GetValueInternal(const DependencyProperty& prop, CValue& ret)
-		{
-			typename CStdHash<IZ_UINT, Element, HASH_NUM>::Item* item = Find(prop);
-
-			if (item != IZ_NULL)
-			{
-				ret = item->GetData()->value;
-				return IZ_TRUE;
-			}
-#if 0
-			else if (prop.GetMetaData().IsValidDefaultValue())
-			{
-				ret = prop.GetMetaData().GetDefaultValue();
-				return IZ_TRUE;
-			}
-#endif
-
-			return IZ_FALSE;
+			return m_Event;
 		}
 
 	private:
-		typename CStdHash<IZ_UINT, Element, HASH_NUM> m_Dictionary;
 		CStdEvent<void, const DependencyProperty&> m_Event;
-
-		IZ_BOOL m_IsCalledClearAll;
 	};
 }	// namespace izanagi
 

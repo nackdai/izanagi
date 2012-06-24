@@ -41,5 +41,8 @@
 #include "std/dependency_property/DependencyProperty.h"
 #include "std/dependency_property/DependencyPropertyChangedEventArgs.h"
 #include "std/dependency_property/NotifyPropertyChanged.h"
+#include "std/dependency_property/Binding.h"
+#include "std/dependency_property/BindingOperations.h"
+#include "std/dependency_property/BindingExpression.h"
 
 #endif	// #if !defined(__IZANAGI_STD_H__)

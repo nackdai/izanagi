@@ -51,22 +51,22 @@ namespace izanagi {
 		}
 
 		template <>
-		IZ_INT8 GetValue() const { return m_nValInt32; }
+		IZ_INT8 GetValue() const { return static_cast<IZ_INT8>(m_nValInt64); }
 
 		template <>
-		IZ_UINT8 GetValue() const { return m_nValUInt32; }
+		IZ_UINT8 GetValue() const { return static_cast<IZ_UINT8>(m_nValUInt64); }
 
 		template <>
-		IZ_INT16 GetValue() const { return m_nValInt32; }
+		IZ_INT16 GetValue() const { return static_cast<IZ_INT16>(m_nValInt64); }
 
 		template <>
-		IZ_UINT16 GetValue() const { return m_nValUInt32; }
+		IZ_UINT16 GetValue() const { return static_cast<IZ_UINT16>(m_nValUInt64); }
 
 		template <>
-		IZ_INT32 GetValue() const { return m_nValInt32; }
+		IZ_INT32 GetValue() const { return static_cast<IZ_INT32>(m_nValInt64); }
 
 		template <>
-		IZ_UINT32 GetValue() const { return m_nValUInt32; }
+		IZ_UINT32 GetValue() const { return static_cast<IZ_UINT32>(m_nValUInt64); }
 
 		template <>
 		IZ_FLOAT GetValue() const { return m_fValFloat; }
@@ -89,7 +89,7 @@ namespace izanagi {
 
 		IZ_BOOL operator==(const CValue& rhs)
 		{
-			return (m_nValInt32 == rhs.m_nValInt32);
+			return (m_nValInt64 == rhs.m_nValInt64);
 		}
 
 		IZ_BOOL operator!=(const CValue& rhs)
@@ -100,8 +100,8 @@ namespace izanagi {
 	protected:
 		TYPE m_Type;
 		union {
-			IZ_INT32  m_nValInt32;
-			IZ_UINT32 m_nValUInt32;
+			IZ_INT64  m_nValInt64;
+			IZ_UINT64 m_nValUInt64;
 			IZ_FLOAT  m_fValFloat;
 			void*     m_pValPtr;
 		};
@@ -111,7 +111,7 @@ namespace izanagi {
 	CValue::CValue()
 	{
 		m_Type = TYPE_UINT32;
-		m_nValInt32 = 0;
+		m_nValInt64 = 0;
 	}
 
 	// コピーコンストラクタ
@@ -124,19 +124,19 @@ namespace izanagi {
 	const CValue& CValue::operator=(const CValue& rhs)
 	{
 		m_Type = rhs.m_Type;
-		m_nValInt32 = rhs.m_nValInt32;
+		m_nValInt64 = rhs.m_nValInt64;
 		return *this;
 	}
 
 	// 値取得
 	IZ_INT32 CValue::GetValueAsInt32() const
 	{
-		return m_nValInt32;
+		return GetValue<IZ_INT32>();
 	}
 
 	IZ_UINT32 CValue::GetValueAsUInt32() const
 	{
-		return m_nValUInt32;
+		return GetValue<IZ_UINT32>();
 	}
 
 	IZ_FLOAT CValue::GetValueAsFloat() const
@@ -153,37 +153,37 @@ namespace izanagi {
 	void CValue::SetValue(IZ_INT8 v)
 	{
 		m_Type = TYPE_INT8;
-		m_nValInt32 = v;
+		m_nValInt64 = v;
 	}
 
 	void CValue::SetValue(IZ_UINT8 v)
 	{
 		m_Type = TYPE_UINT8;
-		m_nValUInt32 = v;
+		m_nValUInt64 = v;
 	}
 
 	void CValue::SetValue(IZ_INT16 v)
 	{
 		m_Type = TYPE_INT16;
-		m_nValInt32 = v;
+		m_nValInt64 = v;
 	}
 
 	void CValue::SetValue(IZ_UINT16 v)
 	{
 		m_Type = TYPE_UINT16;
-		m_nValUInt32 = v;
+		m_nValUInt64 = v;
 	}
 
 	void CValue::SetValue(IZ_INT32 v)
 	{
 		m_Type = TYPE_INT32;
-		m_nValInt32 = v;
+		m_nValInt64 = v;
 	}
 
 	void CValue::SetValue(IZ_UINT32 v)
 	{
 		m_Type = TYPE_UINT32;
-		m_nValUInt32 = v;
+		m_nValUInt64 = v;
 	}
 
 	void CValue::SetValue(IZ_FLOAT v)
