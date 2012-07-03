@@ -27,10 +27,6 @@
 #include "std/container/StdSet.h"
 #include "std/container/StdRecycleArray.h"
 
-#include "std/animation/StdTimeline.h"
-#include "std/animation/StdAnimation.h"
-#include "std/animation/Tweener.h"
-
 #include "std/allocator/MemoryAllocator.h"
 #include "std/allocator/StandardMemoryAllocator.h"
 #include "std/allocator/ChunkedMemoryAllocator.h"
