@@ -416,10 +416,6 @@
 					RelativePath="..\..\include\std\animation\StdTimeline.h"
 					>
 				</File>
-				<File
-					RelativePath="..\..\include\std\animation\Tweener.h"
-					>
-				</File>
 			</Filter>
 			<Filter
 				Name="dependency_property"

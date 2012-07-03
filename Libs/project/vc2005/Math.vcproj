@@ -226,6 +226,10 @@
 					RelativePath="..\..\source\math\MathQuaternion.cpp"
 					>
 				</File>
+				<File
+					RelativePath="..\..\source\math\MathVector.cpp"
+					>
+				</File>
 				<Filter
 					Name="SFMT"
 					>
@@ -240,6 +244,18 @@
 				>
 				<File
 					RelativePath="..\..\source\math\MathNumericalAnlysis.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="curve"
+				>
+				<File
+					RelativePath="..\..\source\math\MathFunctionCurve.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\source\math\Tweener.cpp"
 					>
 				</File>
 			</Filter>
@@ -382,6 +398,18 @@
 				>
 				<File
 					RelativePath="..\..\include\math\MathNumericalAnlysis.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="curve"
+				>
+				<File
+					RelativePath="..\..\include\math\MathFunctionCurve.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\include\math\Tweener.h"
 					>
 				</File>
 			</Filter>

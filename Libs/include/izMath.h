@@ -18,4 +18,6 @@
 
 #include "math/MathNumericalAnlysis.h"
 
+#include "math/Tweener.h"
+
 #endif	// #if !defined(__IZANAGI_MATH_H__)
