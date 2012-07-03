@@ -236,22 +236,6 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="animation"
-				>
-				<File
-					RelativePath="..\..\source\std\animation\StdAnimation.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\source\std\animation\StdTimeline.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\source\std\animation\Tweener.cpp"
-					>
-				</File>
-			</Filter>
-			<Filter
 				Name="dependency_property"
 				>
 				<File
@@ -402,18 +386,6 @@
 				</File>
 				<File
 					RelativePath="..\..\include\std\container\StdSimpleList.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="animation"
-				>
-				<File
-					RelativePath="..\..\include\std\animation\StdAnimation.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\include\std\animation\StdTimeline.h"
 					>
 				</File>
 			</Filter>
