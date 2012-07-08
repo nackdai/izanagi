@@ -1,0 +1,380 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug_DX9|Win32">
+      <Configuration>Debug_DX9</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug_OGL|Win32">
+      <Configuration>Debug_OGL</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release_DX9|Win32">
+      <Configuration>Release_DX9</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{B3B78D13-7032-4460-AC62-8AA68C03C96C}</ProjectGuid>
+    <RootNamespace>Graph</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="PropertySeet\Debug_DX9.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="PropertySeet\Release_DX9.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="PropertySeet\Debug_DX9.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+    </ClCompile>
+    <PostBuildEvent />
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+    </ClCompile>
+    <PostBuildEvent />
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+    </ClCompile>
+    <PostBuildEvent>
+      <Command>IF NOT EXIST ..\lib\$(IntDir) mkdir ..\lib\$(IntDir)
+xcopy /R /Y "$(TargetPath)" ..\lib\$(IntDir)
+xcopy /R /Y "$(TargetDir)$(ProjectName).pdb" ..\lib\$(IntDir)
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Reference Include="System">
+      <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+    </Reference>
+    <Reference Include="System.Data">
+      <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+    </Reference>
+    <Reference Include="System.Xml">
+      <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\source\graph\internal\GraphicsDeviceResourceFuncs.cpp" />
+    <ClCompile Include="..\..\source\graph\2d\2DRenderer.cpp" />
+    <ClCompile Include="..\..\source\graph\2d\2DShader.cpp" />
+    <ClCompile Include="..\..\source\graph\dx9\BaseTexture.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\dx9\CubeTexture.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\dx9\D3D9ParamValueConverter.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\dx9\GraphicsDevice.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\dx9\IndexBuffer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\dx9\PixelShader.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\dx9\RenderState.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\dx9\ShaderConstTable.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\dx9\Surface.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\dx9\Texture.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\dx9\VertexBuffer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\dx9\VertexDeclaration.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\dx9\VertexShader.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\ogl\BaseTexture.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</ExcludedFromBuild>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">true</ExcludedFromBuild>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\ogl\CubeTexture.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</ExcludedFromBuild>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">true</ExcludedFromBuild>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\ogl\FxShader.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</ExcludedFromBuild>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">true</ExcludedFromBuild>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\ogl\GraphicsDevice.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</ExcludedFromBuild>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">true</ExcludedFromBuild>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\ogl\IndexBuffer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</ExcludedFromBuild>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">true</ExcludedFromBuild>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\ogl\OGLParamValueConverter.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\ogl\PixelShader.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</ExcludedFromBuild>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">true</ExcludedFromBuild>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\ogl\RenderState.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</ExcludedFromBuild>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">true</ExcludedFromBuild>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\ogl\ShaderConstTable.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</ExcludedFromBuild>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">true</ExcludedFromBuild>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\ogl\Surface.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</ExcludedFromBuild>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">true</ExcludedFromBuild>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\ogl\Texture.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</ExcludedFromBuild>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">true</ExcludedFromBuild>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\ogl\VertexBuffer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</ExcludedFromBuild>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">true</ExcludedFromBuild>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\ogl\VertexDeclaration.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</ExcludedFromBuild>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">true</ExcludedFromBuild>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\ogl\VertexShader.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</ExcludedFromBuild>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">true</ExcludedFromBuild>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\source\graph\2d\shader\2DPS.hlsl">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">fxc /T ps_2_0 /E main_OpVtx /Fh %(RootDir)%(Directory)/%(Filename)_OpVtx.h /nologo %(FullPath)
+fxc /T ps_2_0 /E main_OpTex /Fh %(RootDir)%(Directory)/%(Filename)_OpTex.h /nologo %(FullPath)
+fxc /T ps_2_0 /E main_OpModulate /Fh %(RootDir)%(Directory)/%(Filename)_OpModulate.h /nologo %(FullPath)
+fxc /T ps_2_0 /E main_OpModulate2x /Fh %(RootDir)%(Directory)/%(Filename)_OpModulate2x.h /nologo %(FullPath)
+fxc /T ps_2_0 /E main_OpModulate4x /Fh %(RootDir)%(Directory)/%(Filename)_OpModulate4x.h /nologo %(FullPath)
+fxc /T ps_2_0 /E main_OpAdd /Fh %(RootDir)%(Directory)/%(Filename)_Add.h /nologo %(FullPath)
+fxc /T ps_2_0 /E main_OpModulateAlpha /Fh %(RootDir)%(Directory)/%(Filename)_OpModulateAlpha.h /nologo %(FullPath)
+fxc /T ps_2_0 /E main_OpNoTexAlpha /Fh %(RootDir)%(Directory)/%(Filename)_OpNoTexAlpha.h /nologo %(FullPath)
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(RootDir)%(Directory)/%(Filename)_OpVtx.h;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">fxc /T ps_2_0 /E main_OpVtx /Fh %(RootDir)%(Directory)/%(Filename)_OpVtx.h /nologo %(FullPath)
+fxc /T ps_2_0 /E main_OpTex /Fh %(RootDir)%(Directory)/%(Filename)_OpTex.h /nologo %(FullPath)
+fxc /T ps_2_0 /E main_OpModulate /Fh %(RootDir)%(Directory)/%(Filename)_OpModulate.h /nologo %(FullPath)
+fxc /T ps_2_0 /E main_OpModulate2x /Fh %(RootDir)%(Directory)/%(Filename)_OpModulate2x.h /nologo %(FullPath)
+fxc /T ps_2_0 /E main_OpModulate4x /Fh %(RootDir)%(Directory)/%(Filename)_OpModulate4x.h /nologo %(FullPath)
+fxc /T ps_2_0 /E main_OpAdd /Fh %(RootDir)%(Directory)/%(Filename)_Add.h /nologo %(FullPath)
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">%(RootDir)%(Directory)/%(Filename)_OpVtx.h;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">fxc /T ps_2_0 /E main_OpVtx /Fh %(RootDir)%(Directory)/%(Filename)_OpVtx.h /nologo %(FullPath)
+fxc /T ps_2_0 /E main_OpTex /Fh %(RootDir)%(Directory)/%(Filename)_OpTex.h /nologo %(FullPath)
+fxc /T ps_2_0 /E main_OpModulate /Fh %(RootDir)%(Directory)/%(Filename)_OpModulate.h /nologo %(FullPath)
+fxc /T ps_2_0 /E main_OpModulate2x /Fh %(RootDir)%(Directory)/%(Filename)_OpModulate2x.h /nologo %(FullPath)
+fxc /T ps_2_0 /E main_OpModulate4x /Fh %(RootDir)%(Directory)/%(Filename)_OpModulate4x.h /nologo %(FullPath)
+fxc /T ps_2_0 /E main_OpAdd /Fh %(RootDir)%(Directory)/%(Filename)_Add.h /nologo %(FullPath)
+fxc /T ps_2_0 /E main_OpModulateAlpha /Fh %(RootDir)%(Directory)/%(Filename)_OpModulateAlpha.h /nologo %(FullPath)
+fxc /T ps_2_0 /E main_OpNoTexAlpha /Fh %(RootDir)%(Directory)/%(Filename)_OpNoTexAlpha.h /nologo %(FullPath)
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">%(RootDir)%(Directory)/%(Filename)_OpVtx.h;%(Outputs)</Outputs>
+    </CustomBuild>
+    <None Include="..\..\source\graph\2d\shader\2DShader.hlsl" />
+    <CustomBuild Include="..\..\source\graph\2d\shader\2DVS.hlsl">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">fxc /T vs_2_0 /Fh %(RootDir)%(Directory)/%(Filename).h /nologo %(FullPath)
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(RootDir)%(Directory)/%(Filename).h;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">fxc /T vs_2_0 /Fh %(RootDir)%(Directory)/%(Filename).h /nologo %(FullPath)
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">%(RootDir)%(Directory)/%(Filename).h;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">fxc /T vs_2_0 /Fh %(RootDir)%(Directory)/%(Filename).h /nologo %(FullPath)
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">%(RootDir)%(Directory)/%(Filename).h;%(Outputs)</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\graph\GraphDefs.h" />
+    <ClInclude Include="..\..\include\graph\GraphicsDeviceProxy.h" />
+    <ClInclude Include="..\..\include\graph\GraphicsDeviceUtil.h" />
+    <ClInclude Include="..\..\include\graph\GraphUtil.h" />
+    <ClInclude Include="..\..\include\graph\dx9\BaseTexture.h" />
+    <ClInclude Include="..\..\include\graph\dx9\CubeTexture.h" />
+    <ClInclude Include="..\..\include\graph\dx9\D3D9ParamValueConverter.h" />
+    <ClInclude Include="..\..\include\graph\dx9\GraphicsDevice.h" />
+    <ClInclude Include="..\..\include\graph\dx9\GraphPerf.h" />
+    <ClInclude Include="..\..\include\graph\dx9\IndexBuffer.h" />
+    <ClInclude Include="..\..\include\graph\dx9\PixelShader.h" />
+    <ClInclude Include="..\..\include\graph\dx9\RenderState.h" />
+    <ClInclude Include="..\..\include\graph\dx9\ShaderConstTable.h" />
+    <ClInclude Include="..\..\include\graph\dx9\Surface.h" />
+    <ClInclude Include="..\..\include\graph\dx9\Texture.h" />
+    <ClInclude Include="..\..\include\graph\dx9\VertexBuffer.h" />
+    <ClInclude Include="..\..\include\graph\dx9\VertexDeclaration.h" />
+    <ClInclude Include="..\..\include\graph\dx9\VertexShader.h" />
+    <ClInclude Include="..\..\include\graph\2d\2DRenderer.h" />
+    <ClInclude Include="..\..\include\graph\2d\2DShader.h" />
+    <ClInclude Include="..\..\include\graph\internal\ParamValueConverter.h" />
+    <ClInclude Include="..\..\include\graph\internal\RenderTargetManager.h" />
+    <ClInclude Include="..\..\include\graph\ogl\BaseTexture.h" />
+    <ClInclude Include="..\..\include\graph\ogl\CubeTexture.h" />
+    <ClInclude Include="..\..\include\graph\ogl\FxShader.h" />
+    <ClInclude Include="..\..\include\graph\ogl\GraphicsDevice.h" />
+    <ClInclude Include="..\..\include\graph\ogl\GraphPerf.h" />
+    <ClInclude Include="..\..\include\graph\ogl\IndexBuffer.h" />
+    <ClInclude Include="..\..\include\graph\ogl\OGLParamValueConverter.h" />
+    <ClInclude Include="..\..\include\graph\ogl\PixelShader.h" />
+    <ClInclude Include="..\..\include\graph\ogl\RenderState.h" />
+    <ClInclude Include="..\..\include\graph\ogl\ShaderConstTable.h" />
+    <ClInclude Include="..\..\include\graph\ogl\Surface.h" />
+    <ClInclude Include="..\..\include\graph\ogl\Texture.h" />
+    <ClInclude Include="..\..\include\graph\ogl\VertexBuffer.h" />
+    <ClInclude Include="..\..\include\graph\ogl\VertexDeclaration.h" />
+    <ClInclude Include="..\..\include\graph\ogl\VertexShader.h" />
+    <ClInclude Include="..\..\include\izD3DDefs.h" />
+    <ClInclude Include="..\..\include\izGraph.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

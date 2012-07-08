@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug_DX9|Win32">
+      <Configuration>Debug_DX9</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug_OGL|Win32">
+      <Configuration>Debug_OGL</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release_DX9|Win32">
+      <Configuration>Release_DX9</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{486C5186-0A31-4E9E-91EC-F9F6EC07EDF2}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="PropertySeet\Debug_DX9.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="PropertySeet\Release_DX9.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="PropertySeet\Debug_DX9.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+    </ClCompile>
+    <PostBuildEvent />
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+    </ClCompile>
+    <PostBuildEvent />
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+    </ClCompile>
+    <PostBuildEvent>
+      <Command>IF NOT EXIST ..\lib\$(IntDir) mkdir ..\lib\$(IntDir)
+xcopy /R /Y "$(TargetPath)" ..\lib\$(IntDir)
+xcopy /R /Y "$(TargetDir)$(ProjectName).pdb" ..\lib\$(IntDir)
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\source\std\StdColor.cpp" />
+    <ClCompile Include="..\..\source\std\StdKey.cpp" />
+    <ClCompile Include="..\..\source\std\StdLog.cpp" />
+    <ClCompile Include="..\..\source\std\StdProfiler.cpp" />
+    <ClCompile Include="..\..\source\std\StdUtf.cpp" />
+    <ClCompile Include="..\..\source\std\allocator\ChunkedMemoryAllocator.cpp" />
+    <ClCompile Include="..\..\source\std\allocator\SimpleMemoryAllocator.cpp" />
+    <ClCompile Include="..\..\source\std\allocator\StandardMemoryAllocator.cpp" />
+    <ClCompile Include="..\..\source\std\allocator\STLMemoryAllocator.cpp" />
+    <ClCompile Include="..\..\source\std\dependency_property\Binding.cpp" />
+    <ClCompile Include="..\..\source\std\dependency_property\BindingExpression.cpp" />
+    <ClCompile Include="..\..\source\std\dependency_property\BindingOperations.cpp" />
+    <ClCompile Include="..\..\source\std\dependency_property\DependencyObject.cpp" />
+    <ClCompile Include="..\..\source\std\dependency_property\DependencyPropertyChangedEventArgs.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\std\2DPoint.h" />
+    <ClInclude Include="..\..\include\std\2DRect.h" />
+    <ClInclude Include="..\..\include\std\StdAutoPtr.h" />
+    <ClInclude Include="..\..\include\std\StdBit.h" />
+    <ClInclude Include="..\..\include\std\StdBitFlag.h" />
+    <ClInclude Include="..\..\include\std\StdColor.h" />
+    <ClInclude Include="..\..\include\std\StdEvent.h" />
+    <ClInclude Include="..\..\include\std\StdKey.h" />
+    <ClInclude Include="..\..\include\std\StdLog.h" />
+    <ClInclude Include="..\..\include\std\StdObject.h" />
+    <ClInclude Include="..\..\include\std\StdPair.h" />
+    <ClInclude Include="..\..\include\std\StdPlacementNew.h" />
+    <ClInclude Include="..\..\include\std\StdProfiler.h" />
+    <ClInclude Include="..\..\include\std\StdQueue.h" />
+    <ClInclude Include="..\..\include\std\StdStack.h" />
+    <ClInclude Include="..\..\include\std\StdString.h" />
+    <ClInclude Include="..\..\include\std\StdUtf.h" />
+    <ClInclude Include="..\..\include\std\StdUtil.h" />
+    <ClInclude Include="..\..\include\std\StdValue.h" />
+    <ClInclude Include="..\..\include\std\allocator\ChunkedMemoryAllocator.h" />
+    <ClInclude Include="..\..\include\std\allocator\MemoryAllocator.h" />
+    <ClInclude Include="..\..\include\std\allocator\SimpleMemoryAllocator.h" />
+    <ClInclude Include="..\..\include\std\allocator\StandardMemoryAllocator.h" />
+    <ClInclude Include="..\..\include\std\allocator\STLMemoryAllocator.h" />
+    <ClInclude Include="..\..\include\std\container\StdHash.h" />
+    <ClInclude Include="..\..\include\std\container\StdList.h" />
+    <ClInclude Include="..\..\include\std\container\StdRecycleArray.h" />
+    <ClInclude Include="..\..\include\std\container\StdSet.h" />
+    <ClInclude Include="..\..\include\std\container\StdSimpleList.h" />
+    <ClInclude Include="..\..\include\std\dependency_property\Binding.h" />
+    <ClInclude Include="..\..\include\std\dependency_property\BindingExpression.h" />
+    <ClInclude Include="..\..\include\std\dependency_property\BindingOperations.h" />
+    <ClInclude Include="..\..\include\std\dependency_property\DependencyObject.h" />
+    <ClInclude Include="..\..\include\std\dependency_property\DependencyProperty.h" />
+    <ClInclude Include="..\..\include\std\dependency_property\DependencyPropertyChangedEventArgs.h" />
+    <ClInclude Include="..\..\include\std\dependency_property\NotifyPropertyChanged.h" />
+    <ClInclude Include="..\..\include\std\dependency_property\PropertyMetaData.h" />
+    <ClInclude Include="..\..\include\izDefs.h" />
+    <ClInclude Include="..\..\include\izStd.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
