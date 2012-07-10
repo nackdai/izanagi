@@ -1,0 +1,191 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="source\allocator">
+      <UniqueIdentifier>{1f05be49-9191-4937-8fdf-1b3cfcd6b9cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\dependency_property">
+      <UniqueIdentifier>{e7daed04-d43c-4b56-9926-094c5b28cf32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="include\allocator">
+      <UniqueIdentifier>{d214c9c9-914e-4f6a-bef8-048d1ad93ad3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\container">
+      <UniqueIdentifier>{46608c66-7b09-4936-8231-da371ab75d30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\dependency_property">
+      <UniqueIdentifier>{0125b681-bccb-4a49-8a97-ce7987b6c51b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\source\std\StdColor.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\std\StdKey.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\std\StdLog.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\std\StdProfiler.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\std\StdUtf.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\std\allocator\ChunkedMemoryAllocator.cpp">
+      <Filter>source\allocator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\std\allocator\SimpleMemoryAllocator.cpp">
+      <Filter>source\allocator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\std\allocator\StandardMemoryAllocator.cpp">
+      <Filter>source\allocator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\std\allocator\STLMemoryAllocator.cpp">
+      <Filter>source\allocator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\std\dependency_property\Binding.cpp">
+      <Filter>source\dependency_property</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\std\dependency_property\BindingExpression.cpp">
+      <Filter>source\dependency_property</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\std\dependency_property\BindingOperations.cpp">
+      <Filter>source\dependency_property</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\std\dependency_property\DependencyObject.cpp">
+      <Filter>source\dependency_property</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\std\dependency_property\DependencyPropertyChangedEventArgs.cpp">
+      <Filter>source\dependency_property</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\std\2DPoint.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\2DRect.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\StdAutoPtr.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\StdBit.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\StdBitFlag.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\StdColor.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\StdEvent.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\StdKey.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\StdLog.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\StdObject.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\StdPair.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\StdPlacementNew.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\StdProfiler.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\StdQueue.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\StdStack.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\StdString.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\StdUtf.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\StdUtil.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\StdValue.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\allocator\ChunkedMemoryAllocator.h">
+      <Filter>include\allocator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\allocator\MemoryAllocator.h">
+      <Filter>include\allocator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\allocator\SimpleMemoryAllocator.h">
+      <Filter>include\allocator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\allocator\StandardMemoryAllocator.h">
+      <Filter>include\allocator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\allocator\STLMemoryAllocator.h">
+      <Filter>include\allocator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\container\StdHash.h">
+      <Filter>include\container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\container\StdList.h">
+      <Filter>include\container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\container\StdRecycleArray.h">
+      <Filter>include\container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\container\StdSet.h">
+      <Filter>include\container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\container\StdSimpleList.h">
+      <Filter>include\container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\dependency_property\Binding.h">
+      <Filter>include\dependency_property</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\dependency_property\BindingExpression.h">
+      <Filter>include\dependency_property</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\dependency_property\BindingOperations.h">
+      <Filter>include\dependency_property</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\dependency_property\DependencyObject.h">
+      <Filter>include\dependency_property</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\dependency_property\DependencyProperty.h">
+      <Filter>include\dependency_property</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\dependency_property\DependencyPropertyChangedEventArgs.h">
+      <Filter>include\dependency_property</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\dependency_property\NotifyPropertyChanged.h">
+      <Filter>include\dependency_property</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\dependency_property\PropertyMetaData.h">
+      <Filter>include\dependency_property</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\izDefs.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\izStd.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

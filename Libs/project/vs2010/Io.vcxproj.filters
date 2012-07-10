@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="include\stream">
+      <UniqueIdentifier>{9295fba6-2820-4a26-9a44-b4bcc0055b6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\device">
+      <UniqueIdentifier>{23644149-012a-4f84-9648-cd5a1c65ec22}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\source\io\Keyboard.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\io\Mouse.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\io\Pad.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\io\stream\BufferInputStream.h">
+      <Filter>include\stream</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\io\stream\FileInputStream.h">
+      <Filter>include\stream</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\io\stream\FileOutputStream.h">
+      <Filter>include\stream</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\io\stream\HeapInputStream.h">
+      <Filter>include\stream</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\io\stream\InputStream.h">
+      <Filter>include\stream</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\io\stream\IODefs.h">
+      <Filter>include\stream</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\io\stream\MemoryInputStream.h">
+      <Filter>include\stream</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\io\stream\MemoryOutputStream.h">
+      <Filter>include\stream</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\io\stream\OutputStream.h">
+      <Filter>include\stream</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\io\device\InputDeviceDefs.h">
+      <Filter>include\device</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\io\device\Keyboard.h">
+      <Filter>include\device</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\io\device\Mouse.h">
+      <Filter>include\device</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\io\device\Pad.h">
+      <Filter>include\device</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\izIo.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
