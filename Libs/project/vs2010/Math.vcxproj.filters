@@ -1,0 +1,179 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="source\shape">
+      <UniqueIdentifier>{b52a3ed3-db58-489a-adf3-9b798d49a88d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\basic">
+      <UniqueIdentifier>{904f887b-7f2e-417a-b196-e484fe76ff49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\basic\SFMT">
+      <UniqueIdentifier>{8d0964ac-17c4-4fe5-be56-4ac2f04600f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\analysis">
+      <UniqueIdentifier>{35f9312a-22e4-489b-a18c-a6e340db98a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\curve">
+      <UniqueIdentifier>{6af76def-1520-4459-b930-cc8239dae04a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="include\shape">
+      <UniqueIdentifier>{0ff92a3a-34a8-4828-96bb-f8c31ef1b97b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\basic">
+      <UniqueIdentifier>{a061fde9-3de0-48a9-b92c-5ec8873e0bbd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\basic\SFMT">
+      <UniqueIdentifier>{63655950-deb4-4091-ba11-cd2f7d9337dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\analysis">
+      <UniqueIdentifier>{01d45372-b2b9-492d-a1a7-78cf76158471}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\curve">
+      <UniqueIdentifier>{3272ca61-731b-4700-85a8-071470ce8b34}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\source\math\MathPlane.cpp">
+      <Filter>source\shape</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\math\MathRay.cpp">
+      <Filter>source\shape</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\math\MathRectangle.cpp">
+      <Filter>source\shape</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\math\MathTriangle.cpp">
+      <Filter>source\shape</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\math\MathMatrix.cpp">
+      <Filter>source\basic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\math\MathQuaternion.cpp">
+      <Filter>source\basic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\math\SFMT\SFMT.cpp">
+      <Filter>source\basic\SFMT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\math\MathNumericalAnlysis.cpp">
+      <Filter>source\analysis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\math\MathFunctionCurve.cpp">
+      <Filter>source\curve</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\math\Tweener.cpp">
+      <Filter>source\curve</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\math\MathPlane.h">
+      <Filter>include\shape</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\MathRay.h">
+      <Filter>include\shape</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\MathRectangle.h">
+      <Filter>include\shape</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\MathTriangle.h">
+      <Filter>include\shape</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\MathCMatrix.h">
+      <Filter>include\basic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\MathCQuaternion.h">
+      <Filter>include\basic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\MathCVector.h">
+      <Filter>include\basic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\MathDefs.h">
+      <Filter>include\basic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\MathFixed.h">
+      <Filter>include\basic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\MathHalfFloat.h">
+      <Filter>include\basic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\MathMatrix.h">
+      <Filter>include\basic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\MathQuaternion.h">
+      <Filter>include\basic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\MathRand.h">
+      <Filter>include\basic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\MathUtil.h">
+      <Filter>include\basic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\MathVector.h">
+      <Filter>include\basic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\SFMT\SFMT-alti.h">
+      <Filter>include\basic\SFMT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\SFMT\SFMT-params.h">
+      <Filter>include\basic\SFMT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\SFMT\SFMT-params11213.h">
+      <Filter>include\basic\SFMT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\SFMT\SFMT-params1279.h">
+      <Filter>include\basic\SFMT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\SFMT\SFMT-params132049.h">
+      <Filter>include\basic\SFMT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\SFMT\SFMT-params19937.h">
+      <Filter>include\basic\SFMT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\SFMT\SFMT-params216091.h">
+      <Filter>include\basic\SFMT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\SFMT\SFMT-params2281.h">
+      <Filter>include\basic\SFMT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\SFMT\SFMT-params4253.h">
+      <Filter>include\basic\SFMT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\SFMT\SFMT-params44497.h">
+      <Filter>include\basic\SFMT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\SFMT\SFMT-params607.h">
+      <Filter>include\basic\SFMT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\SFMT\SFMT-params86243.h">
+      <Filter>include\basic\SFMT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\SFMT\SFMT-sse2.h">
+      <Filter>include\basic\SFMT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\SFMT\SFMT.h">
+      <Filter>include\basic\SFMT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\MathNumericalAnlysis.h">
+      <Filter>include\analysis</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\MathFunctionCurve.h">
+      <Filter>include\curve</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\Tweener.h">
+      <Filter>include\curve</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\izMath.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\include\math\SFMT\LICENSE.txt" />
+  </ItemGroup>
+</Project>
