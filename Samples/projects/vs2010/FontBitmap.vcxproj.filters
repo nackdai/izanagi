@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{f3963730-e722-45a1-a17a-26d0aec98db6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{be4a6d3b-0a0b-41b8-bc92-5306d841406c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="asset">
+      <UniqueIdentifier>{037f04e6-a9aa-4211-b7ad-caa7b25bfd44}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\FontBitmap\FontSJIS.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FontBitmap\FontUTF8.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\FontBitmap\FontBitmap.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\data\FontSample_Sjis.txt">
+      <Filter>asset</Filter>
+    </None>
+    <None Include="..\..\data\FontSample_Utf8.txt">
+      <Filter>asset</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\data\FontSample_Sjis.list">
+      <Filter>asset</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\data\FontSample_Utf8.list">
+      <Filter>asset</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>
