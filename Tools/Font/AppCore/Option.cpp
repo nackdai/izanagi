@@ -152,15 +152,16 @@ BOOL COption::AfterAnalysis()
 		memcpy(s_BUF, list_file, min(sizeof(s_BUF), strlen(list_file)));
 
 		// ファイル名取得
-		LPSTR file_name = PathFindFileName(s_BUF);
+        ret = izanagi::tool::CFileUtility::RemoveExtension(
+            s_BUF,
+            sizeof(s_BUF),
+            list_file.c_str());
 
-		// 拡張子削除
-		PathRemoveExtension(file_name);
-
-		out_file.format("%s.fnt", file_name);
-		memset(s_BUF, 0, sizeof(s_BUF));
-
-		ret = TRUE;
+        if (ret)
+        {
+		    out_file.format("%s.fnt", s_BUF);
+		    memset(s_BUF, 0, sizeof(s_BUF));
+        }
 	}
 
 	return ret;

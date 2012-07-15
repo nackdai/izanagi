@@ -67,16 +67,28 @@ int main(int argc, char* argv[])
 	izanagi::CFileOutputStream cOut;
 
 	// オプション解析
-	_VGOTO(cOption.Analysis(argc, argv), __EXIT__);
+	if (!cOption.Analysis(argc, argv))
+    {
+        _DispUsage();
+        _VGOTO(IZ_FALSE, __EXIT__);
+    }
 
 	// オプション正当性チェック
-	_VGOTO(cOption.IsValid(), __EXIT__);
-
+    if (!cOption.IsValid())
+    {
+        _DispUsage();
+        _VGOTO(IZ_FALSE, __EXIT__);
+    }
+	
 	// リストファイルを解析
 	_VGOTO(cOption.AnalysisListFile(), __EXIT__);
 
 	// ウインドウハンドル取得
 	HWND hWnd = ::GetConsoleWindow();
+    if (hWnd == NULL)
+    {
+        hWnd = FindWindow(0, 0);
+    }
 	_VGOTO(hWnd != NULL, __EXIT__);
 
 	// GraphicsDevice作成
