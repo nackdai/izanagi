@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{ea6ad53e-a9fd-48bf-962b-2b538ce3f957}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TexProxy">
+      <UniqueIdentifier>{6169884f-befd-4e62-834a-ecae5c8b8e55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TexProxy\include">
+      <UniqueIdentifier>{218992ea-1f13-4e14-88a1-507a2652d303}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TexProxy\source">
+      <UniqueIdentifier>{416195c5-0c1a-4b21-ab8c-5320dcb951d8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Image\EnvMapConverter\EnvMapConverter.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Image\EnvMapConverter\EnvMapConverterImpl.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Image\EnvMapConverter\Option.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Image\EnvMapConverter\AngularMapProxy.cpp">
+      <Filter>TexProxy\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Image\EnvMapConverter\CubeMapProxy.cpp">
+      <Filter>TexProxy\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Image\EnvMapConverter\LatLongMapProxy.cpp">
+      <Filter>TexProxy\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Image\EnvMapConverter\MirrorMapProxy.cpp">
+      <Filter>TexProxy\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Image\EnvMapConverter\TexProxy.cpp">
+      <Filter>TexProxy\source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Image\EnvMapConverter\EnvMapConverterDefs.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Image\EnvMapConverter\EnvMapConverterImpl.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Image\EnvMapConverter\Option.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Image\EnvMapConverter\AngularMapProxy.h">
+      <Filter>TexProxy\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Image\EnvMapConverter\CubeMapProxy.h">
+      <Filter>TexProxy\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Image\EnvMapConverter\LatLongMapProxy.h">
+      <Filter>TexProxy\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Image\EnvMapConverter\MirrorMapProxy.h">
+      <Filter>TexProxy\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Image\EnvMapConverter\TexProxy.h">
+      <Filter>TexProxy\include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Image\NormalMapMaker\ReadMe.txt" />
+  </ItemGroup>
+</Project>

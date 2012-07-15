@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="graph">
+      <UniqueIdentifier>{234abf58-2d97-4647-9ec2-f0d0b9e68ee3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="graph\include">
+      <UniqueIdentifier>{d832b84a-2b52-462a-a5e4-53ab379b5448}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="graph\source">
+      <UniqueIdentifier>{0ba7a75b-6ad9-4068-94e2-97aeca05bc66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="io">
+      <UniqueIdentifier>{cddeee6e-2574-456a-9da3-7bc10cbcab90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="io\include">
+      <UniqueIdentifier>{11b181f6-5ed8-4d31-98e5-d2fc876664f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="std">
+      <UniqueIdentifier>{82d7890e-89a6-430b-be6e-28d8f2fc7891}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="std\include">
+      <UniqueIdentifier>{d702c628-c501-48f7-949c-a1a0cd98d4c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="std\source">
+      <UniqueIdentifier>{341c16ab-7b35-4202-a29d-0283707b4d0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="xml">
+      <UniqueIdentifier>{59cdcb9f-6eba-447c-b6e6-c7fa784c8254}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="xml\include">
+      <UniqueIdentifier>{02423434-4b58-40e6-a0c0-3d81c083a643}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="util">
+      <UniqueIdentifier>{385ec636-8440-4e5e-931c-2e4b8f6d77de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="util\include">
+      <UniqueIdentifier>{a4716ff4-d419-4955-9d46-2d57b892461a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="util\source">
+      <UniqueIdentifier>{1fe1791c-31f3-4547-bb50-61f97339dc77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="system">
+      <UniqueIdentifier>{c238d954-1eb0-4ed7-ac8a-4c1b1752f6cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="system\include">
+      <UniqueIdentifier>{5c1759f1-ae5f-482a-99a6-a7fe26882785}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="system\source">
+      <UniqueIdentifier>{6a6ff835-7016-4f88-b8b5-1bc56d4f1b58}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\ToolKit\include\ToolKitGraph.h">
+      <Filter>graph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ToolKit\include\graph\GraphicsDeviceLite.h">
+      <Filter>graph\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ToolKit\include\graph\TextureLite.h">
+      <Filter>graph\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ToolKit\include\graph\ToolkitGraphDefs.h">
+      <Filter>graph\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ToolKit\include\ToolKitIo.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ToolKit\include\io\IoUtil.h">
+      <Filter>io\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ToolKit\include\ToolKitStd.h">
+      <Filter>std</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ToolKit\include\std\ErrorUtil.h">
+      <Filter>std\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ToolKit\include\std\SimpleMemoryAllocator.h">
+      <Filter>std\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ToolKit\include\ToolKitXml.h">
+      <Filter>xml</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ToolKit\include\xml\XercesHelper.h">
+      <Filter>xml\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ToolKit\include\ToolKitUtil.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ToolKit\include\util\PreprocHelper.h">
+      <Filter>util\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ToolKit\include\util\StringUtility.h">
+      <Filter>util\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ToolKit\include\ToolKitSystem.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ToolKit\include\system\CharCodeUtility.h">
+      <Filter>system\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ToolKit\include\system\EnvVarHelper.h">
+      <Filter>system\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ToolKit\include\system\FileUtility.h">
+      <Filter>system\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ToolKit\include\izToolKit.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\ToolKit\source\graph\GraphicsDeviceLite.cpp">
+      <Filter>graph\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ToolKit\source\graph\TextureLite.cpp">
+      <Filter>graph\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ToolKit\source\std\ErrorUtil.cpp">
+      <Filter>std\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ToolKit\source\std\SimpleMemoryAllocator.cpp">
+      <Filter>std\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ToolKit\source\util\PreprocHelper.cpp">
+      <Filter>util\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ToolKit\source\util\StringUtility.cpp">
+      <Filter>util\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ToolKit\source\system\CharCodeUtility.cpp">
+      <Filter>system\source</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

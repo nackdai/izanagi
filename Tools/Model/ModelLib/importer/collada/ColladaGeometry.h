@@ -40,7 +40,9 @@ private:
 		inline bool operator==(IZ_PCSTR pszSemantic);
 		inline bool operator<(const SVtxFmt& rhs) const;
 
+#if 0
 		inline bool operator==(izanagi::E_MSH_VTX_FMT_TYPE _type);
+#endif
 	};
 
 public:

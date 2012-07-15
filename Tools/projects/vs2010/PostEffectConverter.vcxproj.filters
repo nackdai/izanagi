@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{23a2e2fe-e0ef-4271-8511-407ffaf22d0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AppCore">
+      <UniqueIdentifier>{e85062e5-8421-4d8c-a44f-ee6cd2a3bf08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AppCore\include">
+      <UniqueIdentifier>{c44451c5-431d-4af0-9372-07ead041f7ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AppCore\include\util">
+      <UniqueIdentifier>{cba9a72b-08e6-4a50-8acb-80f248aade08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AppCore\source">
+      <UniqueIdentifier>{851d76e0-af17-418a-a853-f079812c8d1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AppCore\source\util">
+      <UniqueIdentifier>{690782e1-5fef-456d-b364-f467981550eb}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\PostEffect\PostEffectConverter\PostEffectConverter.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\PostEffectConverter\AppCore\CompileCmdCreator.cpp">
+      <Filter>AppCore\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\PostEffectConverter\AppCore\DataBuffer.cpp">
+      <Filter>AppCore\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\PostEffectConverter\AppCore\Option.cpp">
+      <Filter>AppCore\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\PostEffectConverter\AppCore\PostEffectConverterImpl.cpp">
+      <Filter>AppCore\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\PostEffectConverter\AppCore\PostEffectConverterUtil.cpp">
+      <Filter>AppCore\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\PostEffectConverter\AppCore\Preproc.cpp">
+      <Filter>AppCore\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\PostEffectConverter\AppCore\StringChunk.cpp">
+      <Filter>AppCore\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\PostEffectConverter\AppCore\ParamUtil.cpp">
+      <Filter>AppCore\source\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\PostEffectConverter\AppCore\PassUtil.cpp">
+      <Filter>AppCore\source\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\PostEffectConverter\AppCore\SamplerUtil.cpp">
+      <Filter>AppCore\source\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\PostEffectConverter\AppCore\TextureUtil.cpp">
+      <Filter>AppCore\source\util</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\PostEffect\PostEffectConverter\AppCore\CompileCmdCreator.h">
+      <Filter>AppCore\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\PostEffectConverter\AppCore\DataBuffer.h">
+      <Filter>AppCore\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\PostEffectConverter\AppCore\Option.h">
+      <Filter>AppCore\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\PostEffectConverter\AppCore\PostEffectConverterImpl.h">
+      <Filter>AppCore\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\PostEffectConverter\AppCore\Preproc.h">
+      <Filter>AppCore\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\PostEffectConverter\AppCore\StringChunk.h">
+      <Filter>AppCore\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\PostEffectConverter\AppCore\ParamUtil.h">
+      <Filter>AppCore\include\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\PostEffectConverter\AppCore\PassUtil.h">
+      <Filter>AppCore\include\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\PostEffectConverter\AppCore\PostEffectConverterUtil.h">
+      <Filter>AppCore\include\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\PostEffectConverter\AppCore\SamplerUtil.h">
+      <Filter>AppCore\include\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\PostEffectConverter\AppCore\TextureUtil.h">
+      <Filter>AppCore\include\util</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+</Project>

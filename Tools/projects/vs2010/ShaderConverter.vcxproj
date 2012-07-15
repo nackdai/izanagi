@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{527F2B12-FA4F-42D1-B81F-D4EC25208797}</ProjectGuid>
+    <RootNamespace>ShaderConverter</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Release.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Debug.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(SolutionDir)../../Shader/ShaderConverter/AppCore;$(EXTERNAL_DIR)/Cg/include;$(EXTERNAL_DIR)/xerces/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;IZ_TOOLKIT_ENABLE_XERCES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>$(XERCES_LIB_DIR)xerces-c_3D.lib;$(EXTERNAL_DIR)/Cg/lib/cg.lib;$(EXTERNAL_DIR)/Cg/lib/cgD3D9.lib;$(EXTERNAL_DIR)/Preproc/$(Configuration)/Preproc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)../../Shader/ShaderConverter/AppCore;$(EXTERNAL_DIR)/Cg/include;$(EXTERNAL_DIR)/xerces/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;IZ_TOOLKIT_ENABLE_XERCES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>$(XERCES_LIB_DIR)xerces-c_3.lib;$(EXTERNAL_DIR)/Cg/lib/cg.lib;$(EXTERNAL_DIR)/Cg/lib/cgD3D9.lib;$(EXTERNAL_DIR)/Preproc/$(Configuration)/Preproc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Shader\ShaderConverter\ShaderConverter.cpp" />
+    <ClCompile Include="..\..\Shader\ShaderConverter\AppCore\CompileCmdCreator.cpp" />
+    <ClCompile Include="..\..\Shader\ShaderConverter\AppCore\DataBuffer.cpp" />
+    <ClCompile Include="..\..\Shader\ShaderConverter\AppCore\Option.cpp" />
+    <ClCompile Include="..\..\Shader\ShaderConverter\AppCore\Preproc.cpp" />
+    <ClCompile Include="..\..\Shader\ShaderConverter\AppCore\ShaderConfig.cpp" />
+    <ClCompile Include="..\..\Shader\ShaderConverter\AppCore\ShaderConverterImpl.cpp" />
+    <ClCompile Include="..\..\Shader\ShaderConverter\AppCore\StringChunk.cpp" />
+    <ClCompile Include="..\..\Shader\ShaderConverter\AppCore\ParamUtil.cpp" />
+    <ClCompile Include="..\..\Shader\ShaderConverter\AppCore\PassUtil.cpp" />
+    <ClCompile Include="..\..\Shader\ShaderConverter\AppCore\SamplerUtil.cpp" />
+    <ClCompile Include="..\..\Shader\ShaderConverter\AppCore\ShaderConverterUtil.cpp" />
+    <ClCompile Include="..\..\Shader\ShaderConverter\AppCore\TextureUtil.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Shader\ShaderConverter\AppCore\CompileCmdCreator.h" />
+    <ClInclude Include="..\..\Shader\ShaderConverter\AppCore\DataBuffer.h" />
+    <ClInclude Include="..\..\Shader\ShaderConverter\AppCore\Option.h" />
+    <ClInclude Include="..\..\Shader\ShaderConverter\AppCore\Preproc.h" />
+    <ClInclude Include="..\..\Shader\ShaderConverter\AppCore\ShaderConfig.h" />
+    <ClInclude Include="..\..\Shader\ShaderConverter\AppCore\ShaderConverterImpl.h" />
+    <ClInclude Include="..\..\Shader\ShaderConverter\AppCore\StringChunk.h" />
+    <ClInclude Include="..\..\Shader\ShaderConverter\AppCore\ParamUtil.h" />
+    <ClInclude Include="..\..\Shader\ShaderConverter\AppCore\PassUtil.h" />
+    <ClInclude Include="..\..\Shader\ShaderConverter\AppCore\SamplerUtil.h" />
+    <ClInclude Include="..\..\Shader\ShaderConverter\AppCore\ShaderConverterUtil.h" />
+    <ClInclude Include="..\..\Shader\ShaderConverter\AppCore\TextureUtil.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="ToolKit.vcxproj">
+      <Project>{e39712e8-aa2f-4764-975b-40b54164b95e}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

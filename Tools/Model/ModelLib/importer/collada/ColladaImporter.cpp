@@ -1,3 +1,4 @@
+#include <dom/domConstants.h>
 #include "ColladaImporter.h"
 #include "ColladaGeometry.h"
 #include "ColladaJoint.h"
@@ -26,7 +27,7 @@ IZ_BOOL CColladaImporter::Open(IZ_PCSTR pszName)
 	VRETURN(result == DAE_OK);
 #else
 	m_pDAE = new DAE();
-	m_pRoot = m_pDAE->open(pszName);
+    m_pRoot = m_pDAE->open141(pszName);
 	VRETURN(m_pRoot != IZ_NULL);
 #endif
 
@@ -108,7 +109,7 @@ domGeometry* CColladaImporter::GetGeometry()
 
 				domElement* pSrcElement = pSkin->getSource().getElement();
 				IZ_ASSERT(pSrcElement != IZ_NULL);
-				IZ_ASSERT(pSrcElement->getElementType() == COLLADA_TYPE::GEOMETRY);
+                IZ_ASSERT(pSrcElement->getElementName() == ColladaDOM141::COLLADA_TYPE_GEOMETRY);
 
 				return (domGeometry*)pSrcElement;
 			}
@@ -304,7 +305,7 @@ void CColladaImporter::GetJointTransform(
 IZ_BOOL CColladaImporter::ReadBaseModel(IZ_PCSTR pszName)
 {
 	m_pBaseDAEForANm = new DAE();
-	m_pBaseRootForAnm = m_pBaseDAEForANm->open(pszName);
+	m_pBaseRootForAnm = m_pBaseDAEForANm->open141(pszName);
 	VRETURN(m_pBaseRootForAnm != IZ_NULL);
 	return IZ_TRUE;
 }

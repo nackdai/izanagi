@@ -5,7 +5,7 @@ using namespace izanagi;
 using namespace tool;
 
 CGraphicsDeviceLite* CGraphicsDeviceLite::s_pInstance = IZ_NULL;
-CSimpleMemoryAllocator CGraphicsDeviceLite::s_cAllocator;
+izanagi::tool::CSimpleMemoryAllocator CGraphicsDeviceLite::s_cAllocator;
 
 /**
 * インスタンス作成

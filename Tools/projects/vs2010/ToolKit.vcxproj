@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{E39712E8-AA2F-4764-975B-40B54164B95E}</ProjectGuid>
+    <RootNamespace>ToolKit</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Release.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Debug.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+    </ClCompile>
+    <Lib>
+      <AdditionalDependencies>shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Lib>
+      <AdditionalDependencies>shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\ToolKit\include\ToolKitGraph.h" />
+    <ClInclude Include="..\..\ToolKit\include\graph\GraphicsDeviceLite.h" />
+    <ClInclude Include="..\..\ToolKit\include\graph\TextureLite.h" />
+    <ClInclude Include="..\..\ToolKit\include\graph\ToolkitGraphDefs.h" />
+    <ClInclude Include="..\..\ToolKit\include\ToolKitIo.h" />
+    <ClInclude Include="..\..\ToolKit\include\io\IoUtil.h" />
+    <ClInclude Include="..\..\ToolKit\include\ToolKitStd.h" />
+    <ClInclude Include="..\..\ToolKit\include\std\ErrorUtil.h" />
+    <ClInclude Include="..\..\ToolKit\include\std\SimpleMemoryAllocator.h" />
+    <ClInclude Include="..\..\ToolKit\include\ToolKitXml.h" />
+    <ClInclude Include="..\..\ToolKit\include\xml\XercesHelper.h" />
+    <ClInclude Include="..\..\ToolKit\include\ToolKitUtil.h" />
+    <ClInclude Include="..\..\ToolKit\include\util\PreprocHelper.h" />
+    <ClInclude Include="..\..\ToolKit\include\util\StringUtility.h" />
+    <ClInclude Include="..\..\ToolKit\include\ToolKitSystem.h" />
+    <ClInclude Include="..\..\ToolKit\include\system\CharCodeUtility.h" />
+    <ClInclude Include="..\..\ToolKit\include\system\EnvVarHelper.h" />
+    <ClInclude Include="..\..\ToolKit\include\system\FileUtility.h" />
+    <ClInclude Include="..\..\ToolKit\include\izToolKit.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\ToolKit\source\graph\GraphicsDeviceLite.cpp" />
+    <ClCompile Include="..\..\ToolKit\source\graph\TextureLite.cpp" />
+    <ClCompile Include="..\..\ToolKit\source\std\ErrorUtil.cpp" />
+    <ClCompile Include="..\..\ToolKit\source\std\SimpleMemoryAllocator.cpp" />
+    <ClCompile Include="..\..\ToolKit\source\util\PreprocHelper.cpp" />
+    <ClCompile Include="..\..\ToolKit\source\util\StringUtility.cpp" />
+    <ClCompile Include="..\..\ToolKit\source\system\CharCodeUtility.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

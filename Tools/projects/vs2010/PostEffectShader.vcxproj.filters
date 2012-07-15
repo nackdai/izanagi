@@ -1,0 +1,166 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{9f956383-4980-4440-96af-65c556f09cbd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\ColorSpace">
+      <UniqueIdentifier>{c7bc8b71-4c28-46fa-a5a2-87257b34720c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\ColorFilter">
+      <UniqueIdentifier>{edfb8f90-2a45-46ea-b7f6-8217c89a5cd5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\VS">
+      <UniqueIdentifier>{4ef39a1d-3689-4607-8474-53d8b0f82969}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\ShaderDefs">
+      <UniqueIdentifier>{22cbdb66-68f7-4a5e-8dcf-a9b2fd276343}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\HDR">
+      <UniqueIdentifier>{e824f3e4-cf3e-4b13-bf16-e9d9aa0f94cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\CommonUtility">
+      <UniqueIdentifier>{d165bcc2-28ea-40b6-9891-6b7e3e60dff4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fx">
+      <UniqueIdentifier>{9ad01d06-75c3-4dd5-8667-536e45949f6d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\PostEffect\PostEffectShader\include\PostEffectColorFilter.fxh">
+      <Filter>include</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\include\PostEffectColorSpace.fxh">
+      <Filter>include</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\include\PostEffectCommonUtility.fxh">
+      <Filter>include</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\include\PostEffectSamplingParam.fxh">
+      <Filter>include</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\include\PostEffectShader.fxh">
+      <Filter>include</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\include\PostEffectShaderDefs.fxh">
+      <Filter>include</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\include\PostEffectShaderIO.fxh">
+      <Filter>include</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\include\PostEffectVS.fxh">
+      <Filter>include</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\include\ColorSpace\ColorSpaceCMY.fxh">
+      <Filter>include\ColorSpace</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\include\ColorSpace\ColorSpaceCMYK.fxh">
+      <Filter>include\ColorSpace</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\include\ColorSpace\ColorSpaceHLS.fxh">
+      <Filter>include\ColorSpace</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\include\ColorSpace\ColorSpaceHSV.fxh">
+      <Filter>include\ColorSpace</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\include\ColorSpace\ColorSpaceUtil.fxh">
+      <Filter>include\ColorSpace</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\include\ColorSpace\ColorSpaceYCbCr.fxh">
+      <Filter>include\ColorSpace</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\include\ColorSpace\ColorSpaceYIQ.fxh">
+      <Filter>include\ColorSpace</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\include\ColorSpace\ColorSpaceYUV.fxh">
+      <Filter>include\ColorSpace</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\include\ColorFilter\ColorFilterGammaControl.fxh">
+      <Filter>include\ColorFilter</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\include\ColorFilter\ColorFilterMonotone.fxh">
+      <Filter>include\ColorFilter</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\include\ColorFilter\ColorFilterNegative.fxh">
+      <Filter>include\ColorFilter</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\include\ColorFilter\ColorFilterSepia.fxh">
+      <Filter>include\ColorFilter</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\include\ColorFilter\ColorFilterUserDefs.fxh">
+      <Filter>include\ColorFilter</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\include\VS\VSCommon.fxh">
+      <Filter>include\VS</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\include\VS\VSDefault.fxh">
+      <Filter>include\VS</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\include\VS\VSSampling.fxh">
+      <Filter>include\VS</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\include\ShaderDefs\ShaderDefsFunctor.fxh">
+      <Filter>include\ShaderDefs</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\include\ShaderDefs\ShaderDefsInternal.fxh">
+      <Filter>include\ShaderDefs</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\include\ShaderDefs\ShaderDefsParam.fxh">
+      <Filter>include\ShaderDefs</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\include\ShaderDefs\ShaderDefsPass.fxh">
+      <Filter>include\ShaderDefs</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\include\ShaderDefs\ShaderDefsSampler.fxh">
+      <Filter>include\ShaderDefs</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\include\ShaderDefs\ShaderDefsScript.fxh">
+      <Filter>include\ShaderDefs</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\include\ShaderDefs\ShaderDefsTex.fxh">
+      <Filter>include\ShaderDefs</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\include\HDR\MeasureLuminance.fxh">
+      <Filter>include\HDR</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\include\HDR\Tonemap.fxh">
+      <Filter>include\HDR</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\include\CommonUtility\Blur.fxh">
+      <Filter>include\CommonUtility</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\include\CommonUtility\FilterSampling.fxh">
+      <Filter>include\CommonUtility</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\include\CommonUtility\PostEffectShaderUtility.fxh">
+      <Filter>include\CommonUtility</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\fx\PostEffectBloomStar.fx">
+      <Filter>fx</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\fx\PostEffectBloomStarEx.fx">
+      <Filter>fx</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\fx\PostEffectDOF.fx">
+      <Filter>fx</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\fx\PostEffectDOF2.fx">
+      <Filter>fx</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\fx\PostEffectHDR.fx">
+      <Filter>fx</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\fx\PostEffectHDR2.fx">
+      <Filter>fx</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\fx\PostEffectMonotone.fx">
+      <Filter>fx</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\fx\PostEffectNegative.fx">
+      <Filter>fx</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\fx\PostEffectSepia.fx">
+      <Filter>fx</Filter>
+    </None>
+  </ItemGroup>
+</Project>

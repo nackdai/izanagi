@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{3889DA58-19AD-4AEB-9E4F-5C50BC86D48B}</ProjectGuid>
+    <RootNamespace>PostEffectShader</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="..\..\PostEffect\PostEffectShader\include\PostEffectColorFilter.fxh" />
+    <None Include="..\..\PostEffect\PostEffectShader\include\PostEffectColorSpace.fxh" />
+    <None Include="..\..\PostEffect\PostEffectShader\include\PostEffectCommonUtility.fxh" />
+    <None Include="..\..\PostEffect\PostEffectShader\include\PostEffectSamplingParam.fxh" />
+    <None Include="..\..\PostEffect\PostEffectShader\include\PostEffectShader.fxh" />
+    <None Include="..\..\PostEffect\PostEffectShader\include\PostEffectShaderDefs.fxh" />
+    <None Include="..\..\PostEffect\PostEffectShader\include\PostEffectShaderIO.fxh" />
+    <None Include="..\..\PostEffect\PostEffectShader\include\PostEffectVS.fxh" />
+    <None Include="..\..\PostEffect\PostEffectShader\include\ColorSpace\ColorSpaceCMY.fxh" />
+    <None Include="..\..\PostEffect\PostEffectShader\include\ColorSpace\ColorSpaceCMYK.fxh" />
+    <None Include="..\..\PostEffect\PostEffectShader\include\ColorSpace\ColorSpaceHLS.fxh" />
+    <None Include="..\..\PostEffect\PostEffectShader\include\ColorSpace\ColorSpaceHSV.fxh" />
+    <None Include="..\..\PostEffect\PostEffectShader\include\ColorSpace\ColorSpaceUtil.fxh" />
+    <None Include="..\..\PostEffect\PostEffectShader\include\ColorSpace\ColorSpaceYCbCr.fxh" />
+    <None Include="..\..\PostEffect\PostEffectShader\include\ColorSpace\ColorSpaceYIQ.fxh" />
+    <None Include="..\..\PostEffect\PostEffectShader\include\ColorSpace\ColorSpaceYUV.fxh" />
+    <None Include="..\..\PostEffect\PostEffectShader\include\ColorFilter\ColorFilterGammaControl.fxh" />
+    <None Include="..\..\PostEffect\PostEffectShader\include\ColorFilter\ColorFilterMonotone.fxh" />
+    <None Include="..\..\PostEffect\PostEffectShader\include\ColorFilter\ColorFilterNegative.fxh" />
+    <None Include="..\..\PostEffect\PostEffectShader\include\ColorFilter\ColorFilterSepia.fxh" />
+    <None Include="..\..\PostEffect\PostEffectShader\include\ColorFilter\ColorFilterUserDefs.fxh" />
+    <None Include="..\..\PostEffect\PostEffectShader\include\VS\VSCommon.fxh" />
+    <None Include="..\..\PostEffect\PostEffectShader\include\VS\VSDefault.fxh" />
+    <None Include="..\..\PostEffect\PostEffectShader\include\VS\VSSampling.fxh" />
+    <None Include="..\..\PostEffect\PostEffectShader\include\ShaderDefs\ShaderDefsFunctor.fxh" />
+    <None Include="..\..\PostEffect\PostEffectShader\include\ShaderDefs\ShaderDefsInternal.fxh" />
+    <None Include="..\..\PostEffect\PostEffectShader\include\ShaderDefs\ShaderDefsParam.fxh" />
+    <None Include="..\..\PostEffect\PostEffectShader\include\ShaderDefs\ShaderDefsPass.fxh" />
+    <None Include="..\..\PostEffect\PostEffectShader\include\ShaderDefs\ShaderDefsSampler.fxh" />
+    <None Include="..\..\PostEffect\PostEffectShader\include\ShaderDefs\ShaderDefsScript.fxh" />
+    <None Include="..\..\PostEffect\PostEffectShader\include\ShaderDefs\ShaderDefsTex.fxh" />
+    <None Include="..\..\PostEffect\PostEffectShader\include\HDR\MeasureLuminance.fxh" />
+    <None Include="..\..\PostEffect\PostEffectShader\include\HDR\Tonemap.fxh" />
+    <None Include="..\..\PostEffect\PostEffectShader\include\CommonUtility\Blur.fxh" />
+    <None Include="..\..\PostEffect\PostEffectShader\include\CommonUtility\FilterSampling.fxh" />
+    <None Include="..\..\PostEffect\PostEffectShader\include\CommonUtility\PostEffectShaderUtility.fxh" />
+    <None Include="..\..\PostEffect\PostEffectShader\fx\PostEffectBloomStar.fx" />
+    <None Include="..\..\PostEffect\PostEffectShader\fx\PostEffectBloomStarEx.fx" />
+    <None Include="..\..\PostEffect\PostEffectShader\fx\PostEffectDOF.fx" />
+    <None Include="..\..\PostEffect\PostEffectShader\fx\PostEffectDOF2.fx" />
+    <None Include="..\..\PostEffect\PostEffectShader\fx\PostEffectHDR.fx" />
+    <None Include="..\..\PostEffect\PostEffectShader\fx\PostEffectHDR2.fx" />
+    <None Include="..\..\PostEffect\PostEffectShader\fx\PostEffectMonotone.fx" />
+    <None Include="..\..\PostEffect\PostEffectShader\fx\PostEffectNegative.fx" />
+    <None Include="..\..\PostEffect\PostEffectShader\fx\PostEffectSepia.fx" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
