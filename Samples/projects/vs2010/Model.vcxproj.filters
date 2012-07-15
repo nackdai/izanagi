@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{d7346891-b831-42de-83e3-7250a9ff91ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{5b2d1865-4979-4810-9d12-9e73e7561c7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shader">
+      <UniqueIdentifier>{2890445c-96e7-44ba-ab15-211aee21117d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="asset">
+      <UniqueIdentifier>{7d1299f5-14ce-4a99-81f8-64cc929af09f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Model\ModelApp.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Model\main.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Model\ModelApp.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Model\shader\SkinShader.fx">
+      <Filter>shader</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\Model\shader\SkinShader.xml">
+      <Filter>shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\data\ModelImage.xml">
+      <Filter>asset</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\data\Seymour.dae">
+      <Filter>asset</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\data\tiny.x">
+      <Filter>asset</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{107ab20d-0658-4d4d-807d-1ca33b37488b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{868105fa-ab46-46d1-a3a9-9202f8c8d466}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shader">
+      <UniqueIdentifier>{74893a50-5562-4f78-9974-8a8e2eea914c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="asset">
+      <UniqueIdentifier>{ee2f5114-0741-4a0d-8707-33dda5dd79ec}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Animation\AnimationApp.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Animation\CustomInterp.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Animation\AnimationApp.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Animation\CustomInterp.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Animation\main.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\Animation\shader\SkinShader.fx">
+      <Filter>shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\Animation\shader\SkinShader.xml">
+      <Filter>shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\data\miku.pmd">
+      <Filter>asset</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\data\miku_step.vmd">
+      <Filter>asset</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\data\ModelImage.xml">
+      <Filter>asset</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\data\Seymour.dae">
+      <Filter>asset</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\data\tiny.x">
+      <Filter>asset</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>
