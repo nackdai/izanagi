@@ -60,6 +60,10 @@ int main(int argc, char* argv[])
 
 	// ウインドウハンドル取得
 	HWND hWnd = ::GetConsoleWindow();
+    if (hWnd == NULL)
+    {
+        hWnd = ::FindWindow(0, 0);
+    }
 	VGOTO(hWnd != NULL);
 
 	// グラフィックスデバイス作成
