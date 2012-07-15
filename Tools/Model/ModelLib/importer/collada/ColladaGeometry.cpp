@@ -32,10 +32,12 @@ bool CColladaGeometry::SVtxFmt::operator<(const SVtxFmt& rhs) const
 	return (type < rhs.type);
 }
 
+#if 0
 bool CColladaGeometry::SVtxFmt::operator==(izanagi::E_MSH_VTX_FMT_TYPE _type)
 {
 	return (type == _type);
 }
+#endif
 
 //////////////////////////////////////////////////
 
@@ -484,7 +486,7 @@ IZ_BOOL CColladaGeometry::GetVertex(
 	izanagi::SVector& vec,
 	izanagi::E_MSH_VTX_FMT_TYPE type)
 {
-#if 0
+#if 1
 	std::set<SVtxFmt>::const_iterator itVtxFmt = m_VtxFmtList.begin();
 	for (; itVtxFmt != m_VtxFmtList.end(); itVtxFmt++) {
 		const SVtxFmt& sVtxFmt = *itVtxFmt;

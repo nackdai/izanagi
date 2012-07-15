@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{d94016b3-56bc-4c12-98cc-0a94c3d18042}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AppCore">
+      <UniqueIdentifier>{3a0478f5-c845-4979-af49-d227e638cdc1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AppCore\include">
+      <UniqueIdentifier>{fb73e80f-fbc6-40e6-9643-5aa1c0159fc6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AppCore\include\util">
+      <UniqueIdentifier>{cea37d7d-647d-403d-b754-1b7ad9220290}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AppCore\source">
+      <UniqueIdentifier>{b9eb164e-3eae-4353-a00a-435c582ae876}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AppCore\source\util">
+      <UniqueIdentifier>{304326c7-9372-4f77-9138-600ae43ac6dd}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Shader\ShaderConverter\ShaderConverter.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Shader\ShaderConverter\AppCore\CompileCmdCreator.cpp">
+      <Filter>AppCore\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Shader\ShaderConverter\AppCore\DataBuffer.cpp">
+      <Filter>AppCore\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Shader\ShaderConverter\AppCore\Option.cpp">
+      <Filter>AppCore\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Shader\ShaderConverter\AppCore\Preproc.cpp">
+      <Filter>AppCore\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Shader\ShaderConverter\AppCore\ShaderConfig.cpp">
+      <Filter>AppCore\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Shader\ShaderConverter\AppCore\ShaderConverterImpl.cpp">
+      <Filter>AppCore\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Shader\ShaderConverter\AppCore\StringChunk.cpp">
+      <Filter>AppCore\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Shader\ShaderConverter\AppCore\ParamUtil.cpp">
+      <Filter>AppCore\source\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Shader\ShaderConverter\AppCore\PassUtil.cpp">
+      <Filter>AppCore\source\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Shader\ShaderConverter\AppCore\SamplerUtil.cpp">
+      <Filter>AppCore\source\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Shader\ShaderConverter\AppCore\ShaderConverterUtil.cpp">
+      <Filter>AppCore\source\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Shader\ShaderConverter\AppCore\TextureUtil.cpp">
+      <Filter>AppCore\source\util</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Shader\ShaderConverter\AppCore\CompileCmdCreator.h">
+      <Filter>AppCore\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Shader\ShaderConverter\AppCore\DataBuffer.h">
+      <Filter>AppCore\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Shader\ShaderConverter\AppCore\Option.h">
+      <Filter>AppCore\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Shader\ShaderConverter\AppCore\Preproc.h">
+      <Filter>AppCore\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Shader\ShaderConverter\AppCore\ShaderConfig.h">
+      <Filter>AppCore\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Shader\ShaderConverter\AppCore\ShaderConverterImpl.h">
+      <Filter>AppCore\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Shader\ShaderConverter\AppCore\StringChunk.h">
+      <Filter>AppCore\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Shader\ShaderConverter\AppCore\ParamUtil.h">
+      <Filter>AppCore\include\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Shader\ShaderConverter\AppCore\PassUtil.h">
+      <Filter>AppCore\include\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Shader\ShaderConverter\AppCore\SamplerUtil.h">
+      <Filter>AppCore\include\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Shader\ShaderConverter\AppCore\ShaderConverterUtil.h">
+      <Filter>AppCore\include\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Shader\ShaderConverter\AppCore\TextureUtil.h">
+      <Filter>AppCore\include\util</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+</Project>

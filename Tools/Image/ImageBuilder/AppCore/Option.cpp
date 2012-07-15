@@ -58,23 +58,23 @@ BOOL COption::AfterAnalysis()
 {
 	memset(s_BUF, 0, sizeof(s_BUF));
 
-	BOOL ret = TRUE;
+    BOOL ret = !in.empty();
 
 	if (out.empty() && !in.empty()) {
 		// 出力ファイルが設定されていない
 		// 入力ファイルを基に出力ファイル名を決める
-		memcpy(s_BUF, in, min(sizeof(s_BUF), strlen(in)));
 
 		// ファイル名取得
-		LPSTR file_name = PathFindFileName(s_BUF);
+		ret = izanagi::tool::CFileUtility::RemoveExtension(
+            s_BUF,
+            sizeof(s_BUF),
+            in.c_str());
 
-		// 拡張子削除
-		PathRemoveExtension(file_name);
-
-		out.format("%s.img", file_name);
-		memset(s_BUF, 0, sizeof(s_BUF));
-
-		ret = TRUE;
+        if (ret)
+        {
+		    out.format("%s.img", s_BUF);
+		    memset(s_BUF, 0, sizeof(s_BUF));
+        }
 	}
 
 	return ret;

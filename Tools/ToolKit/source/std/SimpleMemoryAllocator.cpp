@@ -1,7 +1,7 @@
 #include "std/SimpleMemoryAllocator.h"
 
-using namespace izanagi;
-using namespace tool;
+namespace izanagi {
+namespace tool {
 
 void* CSimpleMemoryAllocator::Alloc(
 	size_t size, 
@@ -196,3 +196,6 @@ CSimpleMemoryAllocator::SHeapHeader* CSimpleMemoryAllocator::FindHeader(void* pt
 
 	return pHeader;
 }
+
+}   // namespace tool
+}   // namespace izanagi

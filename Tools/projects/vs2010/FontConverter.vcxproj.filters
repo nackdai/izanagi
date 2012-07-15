@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{dab991cd-38e1-4f3f-add3-2ea386c1ab7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AppCore">
+      <UniqueIdentifier>{6627a214-e362-4e4a-b1d3-25f9f1f185a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AppCore\include">
+      <UniqueIdentifier>{14e43800-b57c-43c5-b2cc-064c345a62e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AppCore\source">
+      <UniqueIdentifier>{baf625db-2ed6-4a14-afc3-750423877245}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Font\FontConverter\FontConverter.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Font\AppCore\CharList.cpp">
+      <Filter>AppCore\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Font\AppCore\FontConverterImpl.cpp">
+      <Filter>AppCore\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Font\AppCore\Option.cpp">
+      <Filter>AppCore\source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Font\AppCore\CharList.h">
+      <Filter>AppCore\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Font\AppCore\FontConverterDefs.h">
+      <Filter>AppCore\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Font\AppCore\FontConverterImpl.h">
+      <Filter>AppCore\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Font\AppCore\Option.h">
+      <Filter>AppCore\include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Font\FontConverter\ReadMe.txt" />
+  </ItemGroup>
+</Project>

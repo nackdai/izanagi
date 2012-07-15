@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{7c997ef2-ea14-4991-bb92-f36fb6433936}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AppCore">
+      <UniqueIdentifier>{f686faf5-deb3-4eae-83c3-c6fa093214c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AppCore\include">
+      <UniqueIdentifier>{a453449e-1df5-45b1-902a-26685d67dd62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AppCore\source">
+      <UniqueIdentifier>{45ce249a-0244-45f7-a9cd-818ccdff4eed}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Image\ImageBuilder\ImageBuilder.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Image\ImageBuilder\AppCore\ImageBuilderImpl.cpp">
+      <Filter>AppCore\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Image\ImageBuilder\AppCore\ImageReaderImpl.cpp">
+      <Filter>AppCore\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Image\ImageBuilder\AppCore\Option.cpp">
+      <Filter>AppCore\source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Image\ImageBuilder\AppCore\AppError.h">
+      <Filter>AppCore\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Image\ImageBuilder\AppCore\ImageBuilderDefs.h">
+      <Filter>AppCore\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Image\ImageBuilder\AppCore\ImageBuilderImpl.h">
+      <Filter>AppCore\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Image\ImageBuilder\AppCore\ImageReaderImpl.h">
+      <Filter>AppCore\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Image\ImageBuilder\AppCore\Option.h">
+      <Filter>AppCore\include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+</Project>

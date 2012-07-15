@@ -1,5 +1,6 @@
 #include <string.h>
 #include <algorithm>
+#include <dom/domConstants.h>
 #include "ColladaAnimation.h"
 
 CColladaAnimation* CColladaAnimation::s_pInstance = IZ_NULL;
@@ -414,6 +415,7 @@ IZ_BOOL CColladaAnimation::GetAnmTarget(
 	domElement* pElement = sidResolver.getElement();
 	VRETURN(pElement != IZ_NULL);
 
+#if 0
 	COLLADA_TYPE::TypeEnum type = pElement->getElementType();
 	switch (type) {
 	case COLLADA_TYPE::TRANSLATE:
@@ -429,6 +431,43 @@ IZ_BOOL CColladaAnimation::GetAnmTarget(
 		VRETURN(IZ_FALSE);
 		break;
 	}
+#elif 1
+    daeString type = pElement->getElementName();
+    if (type == ColladaDOM141::COLLADA_TYPE_TRANSLATE)
+    {
+        sAnmChannel.type = izanagi::E_ANM_TRANSFORM_TYPE_TRANSLATE;
+    }
+    else if (type == ColladaDOM141::COLLADA_TYPE_ROTATE)
+    {
+        sAnmChannel.type = izanagi::E_ANM_TRANSFORM_TYPE_QUATERNION;
+    }
+    else if (type == ColladaDOM141::COLLADA_TYPE_SCALE)
+    {
+        sAnmChannel.type = izanagi::E_ANM_TRANSFORM_TYPE_SCALE;
+    }
+    else
+    {
+        VRETURN(IZ_FALSE);
+    }
+#else
+    daeString type = pElement->getElementName();
+    if (type == "translate")
+    {
+        sAnmChannel.type = izanagi::E_ANM_TRANSFORM_TYPE_TRANSLATE;
+    }
+    else if (type == "rotate")
+    {
+        sAnmChannel.type = izanagi::E_ANM_TRANSFORM_TYPE_QUATERNION;
+    }
+    else if (type == "scale")
+    {
+        sAnmChannel.type = izanagi::E_ANM_TRANSFORM_TYPE_SCALE;
+    }
+    else
+    {
+        VRETURN(IZ_FALSE);
+    }
+#endif
 
 	if (strlen(strMember) > 0) {
 		if (sAnmChannel.type & izanagi::E_ANM_TRANSFORM_TYPE_QUATERNION) {
