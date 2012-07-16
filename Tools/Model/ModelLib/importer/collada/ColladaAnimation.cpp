@@ -431,8 +431,8 @@ IZ_BOOL CColladaAnimation::GetAnmTarget(
 		VRETURN(IZ_FALSE);
 		break;
 	}
-#elif 1
-    daeString type = pElement->getElementName();
+#else
+    izanagi::tool::CString type(pElement->getElementName());
     if (type == ColladaDOM141::COLLADA_TYPE_TRANSLATE)
     {
         sAnmChannel.type = izanagi::E_ANM_TRANSFORM_TYPE_TRANSLATE;
@@ -442,24 +442,6 @@ IZ_BOOL CColladaAnimation::GetAnmTarget(
         sAnmChannel.type = izanagi::E_ANM_TRANSFORM_TYPE_QUATERNION;
     }
     else if (type == ColladaDOM141::COLLADA_TYPE_SCALE)
-    {
-        sAnmChannel.type = izanagi::E_ANM_TRANSFORM_TYPE_SCALE;
-    }
-    else
-    {
-        VRETURN(IZ_FALSE);
-    }
-#else
-    daeString type = pElement->getElementName();
-    if (type == "translate")
-    {
-        sAnmChannel.type = izanagi::E_ANM_TRANSFORM_TYPE_TRANSLATE;
-    }
-    else if (type == "rotate")
-    {
-        sAnmChannel.type = izanagi::E_ANM_TRANSFORM_TYPE_QUATERNION;
-    }
-    else if (type == "scale")
     {
         sAnmChannel.type = izanagi::E_ANM_TRANSFORM_TYPE_SCALE;
     }
