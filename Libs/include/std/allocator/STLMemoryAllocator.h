@@ -130,6 +130,7 @@ namespace izanagi {
 			return s_Allocator->GetSize() / sizeof(T);
 		}
 
+#if 0
 		template <class T1, class T2>
 		static friend bool operator==(const STLMemoryAllocator<T1>&, const STLMemoryAllocator<T2>&) throw()
 		{
@@ -141,6 +142,19 @@ namespace izanagi {
 		{
 			return false;
 		}
+#else
+        template <class T2>
+        bool operator==(const STLMemoryAllocator<T2>&) throw()
+        {
+            return true;
+        }
+
+        template <class T2>
+        bool operator!=(const STLMemoryAllocator<T2>&) throw()
+        {
+            return false;
+        }
+#endif
 	};
 }	// namespace izanagi
 
