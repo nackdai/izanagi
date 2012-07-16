@@ -2,6 +2,7 @@
 #define __ANIMATION_APP_H__
 
 #include "izSampleKit.h"
+#include "izAnimation.h"
 
 static const IZ_UINT SCREEN_WIDTH = 1280;
 static const IZ_UINT SCREEN_HEIGHT = 720;
@@ -37,7 +38,7 @@ private:
 	izanagi::CShaderBasic* m_Shd;
 	izanagi::CAnimation* m_Anm;
 
-	izanagi::CStdTimeline m_Timeline;
+    izanagi::animation::CTimeline m_Timeline;
 };
 
 #endif	// #if !defined(__ANIMATION_APP_H__)
