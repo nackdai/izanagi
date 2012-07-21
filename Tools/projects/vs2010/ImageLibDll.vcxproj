@@ -43,15 +43,15 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)../../Image/ImageLib;$(SolutionDir)../../Image/ImageBuilder/AppCore;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)../../Image/ImageLib;$(ProjectDir)../../Image/ImageBuilder/AppCore;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>
       </PrecompiledHeader>
     </ClCompile>
     <Link>
       <AdditionalDependencies>ImageLib.lib</AdditionalDependencies>
-      <OutputFile>$(SolutionDir)../../tools/$(Configuration)/$(ProjectName).dll</OutputFile>
+      <OutputFile>$(OutDir)$(ProjectName).dll</OutputFile>
       <AdditionalLibraryDirectories>$(SolutionDir)../../Image/ImageLig/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
@@ -61,7 +61,7 @@ copy $(ProjectDir)..\..\tools\$(Configuration)\$(ProjectName).lib $(ProjectDir).
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)../../Image/ImageLib;$(SolutionDir)../../Image/ImageBuilder/AppCore;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)../../Image/ImageLib;$(ProjectDir)../../Image/ImageBuilder/AppCore;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>
@@ -71,7 +71,7 @@ copy $(ProjectDir)..\..\tools\$(Configuration)\$(ProjectName).lib $(ProjectDir).
     </ClCompile>
     <Link>
       <AdditionalDependencies>ImageLib.lib</AdditionalDependencies>
-      <OutputFile>$(SolutionDir)../../tools/$(Configuration)/$(ProjectName).dll</OutputFile>
+      <OutputFile>$(OutDir)$(ProjectName).dll</OutputFile>
     </Link>
     <PostBuildEvent>
       <Command>md $(ProjectDir)..\..\Image\$(ProjectName)\$(Configuration)
