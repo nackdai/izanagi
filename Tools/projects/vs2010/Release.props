@@ -24,8 +24,12 @@
       <AdditionalLibraryDirectories>$(OutDir);$(ProjectDir)../../../Libs/project/lib/$(Configuration)_DX9;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /R /Y "$(SolutionDir)..\..\External\xerces\Build\Win32\VC10\$(Configuration)\xerces-c_3_1.dll" "$(SolutionDir)..\..\tools\$(ConfigurationName)"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>xcopy /R /Y /D "$(SolutionDir)..\..\External\xerces\Build\Win32\VC10\$(Configuration)\xerces-c_3_1.dll" "$(SolutionDir)..\..\tools\$(ConfigurationName)"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <BuildMacro Include="EXTERNAL_DIR">
