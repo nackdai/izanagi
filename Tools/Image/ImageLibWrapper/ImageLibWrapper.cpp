@@ -1,4 +1,4 @@
-#include "ImageLibDll.h"
+#include "ImageLibWrapper.h"
 #include "izToolKit.h"
 #include "izImageLib.h"
 
