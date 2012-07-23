@@ -12,17 +12,17 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9DEAF8CA-4E10-4D35-85CE-4EBEDB4DD9F5}</ProjectGuid>
-    <RootNamespace>ImageLibDll</RootNamespace>
+    <RootNamespace>ImageLibWrapper</RootNamespace>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -44,7 +44,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)../../Image/ImageLib;$(ProjectDir)../../Image/ImageBuilder/AppCore;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>
       </PrecompiledHeader>
@@ -52,12 +52,18 @@
     <Link>
       <AdditionalDependencies>ImageLib.lib</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName).dll</OutputFile>
-      <AdditionalLibraryDirectories>$(SolutionDir)../../Image/ImageLig/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>md $(ProjectDir)..\..\Image\$(ProjectName)\$(Configuration)
 copy $(ProjectDir)..\..\tools\$(Configuration)\$(ProjectName).lib $(ProjectDir)..\..\Image\$(ProjectName)\$(Configuration)\$(ProjectName).lib</Command>
     </PostBuildEvent>
+    <Lib>
+      <AdditionalDependencies>ToolKit.lib;ImageLib.lib</AdditionalDependencies>
+    </Lib>
+    <Lib>
+      <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -77,16 +83,22 @@ copy $(ProjectDir)..\..\tools\$(Configuration)\$(ProjectName).lib $(ProjectDir).
       <Command>md $(ProjectDir)..\..\Image\$(ProjectName)\$(Configuration)
 copy $(ProjectDir)..\..\tools\$(Configuration)\$(ProjectName).lib $(ProjectDir)..\..\Image\$(ProjectName)\$(Configuration)\$(ProjectName).lib</Command>
     </PostBuildEvent>
+    <Lib>
+      <AdditionalDependencies>ToolKit.lib;ImageLib.lib</AdditionalDependencies>
+    </Lib>
+    <Lib>
+      <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Image\ImageBuilder\AppCore\ImageReaderImpl.cpp" />
-    <ClCompile Include="..\..\Image\ImageLibDll\ImageGraphicsDevice.cpp" />
-    <ClCompile Include="..\..\Image\ImageLibDll\ImageLibImpl.cpp" />
+    <ClCompile Include="..\..\Image\ImageLibWrapper\ImageGraphicsDevice.cpp" />
+    <ClCompile Include="..\..\Image\ImageLibWrapper\ImageLibWrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Image\ImageBuilder\AppCore\ImageReaderImpl.h" />
-    <ClInclude Include="..\..\Image\ImageLibDll\ImageGraphicsDevice.h" />
-    <ClInclude Include="..\..\Image\ImageLibDll\ImageLibDll.h" />
+    <ClInclude Include="..\..\Image\ImageLibWrapper\ImageGraphicsDevice.h" />
+    <ClInclude Include="..\..\Image\ImageLibWrapper\ImageLibWrapper.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="ImageLib.vcxproj">

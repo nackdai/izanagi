@@ -9,14 +9,14 @@
     <ClCompile Include="..\..\Image\ImageBuilder\AppCore\ImageReaderImpl.cpp">
       <Filter>external</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Image\ImageLibDll\ImageGraphicsDevice.cpp" />
-    <ClCompile Include="..\..\Image\ImageLibDll\ImageLibImpl.cpp" />
+    <ClCompile Include="..\..\Image\ImageLibWrapper\ImageGraphicsDevice.cpp" />
+    <ClCompile Include="..\..\Image\ImageLibWrapper\ImageLibWrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Image\ImageBuilder\AppCore\ImageReaderImpl.h">
       <Filter>external</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Image\ImageLibDll\ImageGraphicsDevice.h" />
-    <ClInclude Include="..\..\Image\ImageLibDll\ImageLibDll.h" />
+    <ClInclude Include="..\..\Image\ImageLibWrapper\ImageGraphicsDevice.h" />
+    <ClInclude Include="..\..\Image\ImageLibWrapper\ImageLibWrapper.h" />
   </ItemGroup>
 </Project>

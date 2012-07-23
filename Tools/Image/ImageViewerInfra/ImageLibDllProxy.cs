@@ -11,53 +11,13 @@ namespace ImageViewerInfra
     /// </summary>
     static public unsafe class ImageLibDllProxy
     {
-        [DllImport("ImageLibDll.dll", CallingConvention = CallingConvention.Cdecl)]
-        static extern bool izInitImageLib(IntPtr hWnd);
-
-        [DllImport("ImageLibDll.dll", CallingConvention = CallingConvention.Cdecl)]
-        static extern void izReleaseImageLib();
-
-        [DllImport("ImageLibDll.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        static extern IntPtr izReadImageMaster(char* path);
-
-        [DllImport("ImageLibDll.dll", CallingConvention = CallingConvention.Cdecl)]
-        static extern void izReleaseImageMaster(IntPtr p);
-
-        [DllImport("ImageLibDll.dll", CallingConvention = CallingConvention.Cdecl)]
-        static extern uint izGetTexNumInMaster(IntPtr p);
-
-        [DllImport("ImageLibDll.dll", CallingConvention = CallingConvention.Cdecl)]
-        static extern IntPtr izGetTextureInMaster(IntPtr p, uint texIdx);
-
-        [DllImport("ImageLibDll.dll", CallingConvention = CallingConvention.Cdecl)]
-        static extern uint izGetImageNumInTexture(IntPtr p);
-
-        [DllImport("ImageLibDll.dll", CallingConvention = CallingConvention.Cdecl)]
-        static extern uint izGetMipMapNumInTexture(IntPtr p);
-
-        [DllImport("ImageLibDll.dll", CallingConvention = CallingConvention.Cdecl)]
-        static extern IntPtr izGetImageInTexture(IntPtr p, uint imgIdx, uint level);
-
-        [DllImport("ImageLibDll.dll", CallingConvention = CallingConvention.Cdecl)]
-        static extern uint izGetImageWidth(IntPtr p);
-
-        [DllImport("ImageLibDll.dll", CallingConvention = CallingConvention.Cdecl)]
-        static extern uint izGetImageHeight(IntPtr p);
-
-        [DllImport("ImageLibDll.dll", CallingConvention = CallingConvention.Cdecl)]
-        static extern IntPtr izGetPixelDataAsBGRA8(IntPtr p);
-
-        [DllImport("ImageLibDll.dll", CallingConvention = CallingConvention.Cdecl)]
-        static extern void izReleasePixelData(IntPtr p);
-
-
         /// <summary>
         /// ImageLibを利用するための初期化
         /// </summary>
         /// <param name="hWnd">ウインドウハンドル</param>
         static public bool InitImageLib(IntPtr hWnd)
         {
-            bool ret = izInitImageLib(hWnd);
+            bool ret = izanagi.tool.ImageLibProxy.InitImageLib(hWnd);
             if (!ret)
             {
                 // TODO
@@ -71,7 +31,7 @@ namespace ImageViewerInfra
         /// </summary>
         static public void ReleaseImageLib()
         {
-            izReleaseImageLib();
+            izanagi.tool.ImageLibProxy.ReleaseImageLib();
         }
 
         /// <summary>
@@ -82,7 +42,7 @@ namespace ImageViewerInfra
         static public IntPtr Read(string path)
         {
             char* p = (char*)System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi(path);
-            IntPtr ret = izReadImageMaster(p);
+            IntPtr ret = izanagi.tool.ImageLibProxy.ReadImageMaster((sbyte*)p);
             if (ret == IntPtr.Zero)
             {
                 throw new Exception();
@@ -96,7 +56,7 @@ namespace ImageViewerInfra
         /// <param name="p">イメージファイルハンドル</param>
         static public void Release(IntPtr p)
         {
-            izReleaseImageMaster(p);
+            izanagi.tool.ImageLibProxy.ReleaseImageMaster(p);
         }
 
         /// <summary>
@@ -106,7 +66,7 @@ namespace ImageViewerInfra
         /// <returns>テクスチャ数</returns>
         static public uint GetTexNumInMaster(IntPtr p)
         {
-            uint ret = izGetTexNumInMaster(p);
+            uint ret = izanagi.tool.ImageLibProxy.GetTexNumInMaster(p);
             if (ret == 0)
             {
                 throw new Exception();
@@ -122,7 +82,7 @@ namespace ImageViewerInfra
         /// <returns>テクスチャハンドル</returns>
         static public IntPtr GetTextureInMaster(IntPtr p, uint texIdx)
         {
-            IntPtr ret = izGetTextureInMaster(p, texIdx);
+            IntPtr ret = izanagi.tool.ImageLibProxy.GetTextureInMaster(p, texIdx);
             if (ret == IntPtr.Zero)
             {
                 throw new Exception();
@@ -137,7 +97,7 @@ namespace ImageViewerInfra
         /// <returns>テクスチャデータ内のイメージ数</returns>
         static public uint GetImageNumInTexture(IntPtr p)
         {
-            uint ret = izGetImageNumInTexture(p);
+            uint ret = izanagi.tool.ImageLibProxy.GetImageNumInTexture(p);
             if (ret == 0)
             {
                 throw new Exception();
@@ -152,7 +112,7 @@ namespace ImageViewerInfra
         /// <returns>テクスチャデータ内のミップマップ数</returns>
         static public uint GetMipMapNumInTexture(IntPtr p)
         {
-            uint ret = izGetMipMapNumInTexture(p);
+            uint ret = izanagi.tool.ImageLibProxy.GetMipMapNumInTexture(p);
             if (ret == 0)
             {
                 throw new Exception();
@@ -169,7 +129,7 @@ namespace ImageViewerInfra
         /// <returns>イメージハンドル</returns>
         static public IntPtr GetImageInTexture(IntPtr p, uint imgIdx, uint level)
         {
-            IntPtr ret = izGetImageInTexture(p, imgIdx, level);
+            IntPtr ret = izanagi.tool.ImageLibProxy.GetImageInTexture(p, imgIdx, level);
             if (ret == IntPtr.Zero)
             {
                 throw new Exception();
@@ -184,7 +144,7 @@ namespace ImageViewerInfra
         /// <returns>イメージ幅</returns>
         static public uint GetImageWidth(IntPtr p)
         {
-            uint ret = izGetImageWidth(p);
+            uint ret = izanagi.tool.ImageLibProxy.GetImageWidth(p);
             if (ret == 0)
             {
                 throw new Exception();
@@ -199,7 +159,7 @@ namespace ImageViewerInfra
         /// <returns>イメージ高さ</returns>
         static public uint GetImageHeight(IntPtr p)
         {
-            uint ret = izGetImageHeight(p);
+            uint ret = izanagi.tool.ImageLibProxy.GetImageHeight(p);
             if (ret == 0)
             {
                 throw new Exception();
@@ -214,7 +174,7 @@ namespace ImageViewerInfra
         /// <returns>ピクセルデータ</returns>
         static public IntPtr GetPixelDataAsBGRA8(IntPtr p)
         {
-            IntPtr ret = izGetPixelDataAsBGRA8(p);
+            IntPtr ret = izanagi.tool.ImageLibProxy.GetPixelDataAsBGRA8(p);
             if (ret == IntPtr.Zero)
             {
                 throw new Exception();
@@ -228,7 +188,7 @@ namespace ImageViewerInfra
         /// <param name="p">イメージハンドル</param>
         static public void ReleasePixelData(IntPtr p)
         {
-            izReleasePixelData(p);
+            izanagi.tool.ImageLibProxy.ReleasePixelData(p);
         }
     }
 }

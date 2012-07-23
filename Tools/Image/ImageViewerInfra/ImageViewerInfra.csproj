@@ -51,6 +51,12 @@
     <Compile Include="ImgTexture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ImageLibProxy\ImageLibProxy.vcxproj">
+      <Project>{AF951827-2CBE-4819-BD49-58843C366C4B}</Project>
+      <Name>ImageLibProxy</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
