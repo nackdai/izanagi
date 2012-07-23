@@ -89,6 +89,11 @@
     <Compile Include="ImageViewerTreeView.xaml.cs">
       <DependentUpon>ImageViewerTreeView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Infra\IImgObject.cs" />
+    <Compile Include="Infra\ImageLibDllProxy.cs" />
+    <Compile Include="Infra\ImgImage.cs" />
+    <Compile Include="Infra\ImgMaster.cs" />
+    <Compile Include="Infra\ImgTexture.cs" />
     <Compile Include="PropertyView\ImgMasterPropertyControl.xaml.cs">
       <DependentUpon>ImgMasterPropertyControl.xaml</DependentUpon>
     </Compile>
@@ -158,9 +163,9 @@
       <Project>{60BCD395-0A26-406A-862A-615457CBFD8F}</Project>
       <Name>DockPanelSplitter</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ImageViewerInfra\ImageViewerInfra.csproj">
-      <Project>{4A4B91A6-35A3-45E8-8639-6B94EBCE6885}</Project>
-      <Name>ImageViewerInfra</Name>
+    <ProjectReference Include="..\ImageLibProxy\ImageLibProxy.vcxproj">
+      <Project>{AF951827-2CBE-4819-BD49-58843C366C4B}</Project>
+      <Name>ImageLibProxy</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
