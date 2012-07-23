@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lower", "Lower", "{6D503A3A-4431-4573-8624-904507B5C1B5}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\include\izDefs.h = ..\..\include\izDefs.h
+		..\..\include\izTypes.h = ..\..\include\izTypes.h
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Middle", "Middle", "{576398E3-E15D-495C-8585-59CFE962FD6C}"
 EndProject
