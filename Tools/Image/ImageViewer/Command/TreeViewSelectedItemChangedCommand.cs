@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Windows.Input;
 using System.Windows;
-using ImageViewerInfra;
 
 namespace ImageViewer
 {

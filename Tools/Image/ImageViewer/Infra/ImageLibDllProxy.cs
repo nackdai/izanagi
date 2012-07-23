@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace ImageViewerInfra
+namespace ImageViewer
 {
     /// <summary>
     /// ImageLibDll.dllのproxy
