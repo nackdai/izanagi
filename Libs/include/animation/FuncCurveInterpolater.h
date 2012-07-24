@@ -8,12 +8,12 @@
 namespace izanagi {
 namespace animation {
 	/**
-	*/
+	 */
 	enum E_ANM_FUNC_CURVE_MODE
 	{
-		E_ANM_FUNC_CURVE_MODE_BEZIER = 0,
-		E_ANM_FUNC_CURVE_MODE_HERMITE,
-		E_ANM_FUNC_CURVE_MODE_CATMULL_ROM,
+		E_ANM_FUNC_CURVE_MODE_BEZIER = 0,   ///< ƒxƒWƒF
+		E_ANM_FUNC_CURVE_MODE_HERMITE,      ///< Hermite
+		E_ANM_FUNC_CURVE_MODE_CATMULL_ROM,  ///< Catmull-Rom
 
 		E_ANM_FUNC_CURVE_MODE_NUM,
 		E_ANM_FUNC_CURVE_MODE_FORCE_INT32 = 0x7fffffff,
@@ -65,6 +65,7 @@ namespace animation {
 				start, end,
 				CVector(x0, x1, x2, x3));
 		}
+
 		void Init(
 			E_ANM_FUNC_CURVE_MODE mode,
 			IZ_FLOAT start,

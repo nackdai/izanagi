@@ -22,9 +22,9 @@ namespace animation {
 
 		static Func funcs[] =
 		{
-			&math::CMathFunctionCurve::ComputeBezier,
-			&math::CMathFunctionCurve::ComputeHermite,
-			&math::CMathFunctionCurve::ComputeCatmullRom,
+			&math::CMathInterpolater::ComputeBezier,
+			&math::CMathInterpolater::ComputeHermite,
+			&math::CMathInterpolater::ComputeCatmullRom,
 		};
 
 		IZ_C_ASSERT(COUNTOF(funcs) == E_ANM_FUNC_CURVE_MODE_NUM);
