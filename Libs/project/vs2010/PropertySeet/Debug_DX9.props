@@ -2,7 +2,7 @@
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
-    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)..\lib\$(Configuration)\</OutDir>
     <IntDir>$(Configuration)\</IntDir>
     <ExecutablePath>$(DXSDK_DIR)Utilities\bin\x64;$(ExecutablePath)</ExecutablePath>
     <IncludePath>$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
@@ -14,19 +14,18 @@
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <ObjectFileName>$(IntDir)$(ProjectName)\</ObjectFileName>
-      <ProgramDataBaseFileName>$(IntDir)$(ProjectName)\$(ProjectName).pdb</ProgramDataBaseFileName>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>$(OutDir)$(TargetName).pdb</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <DisableSpecificWarnings>4819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Lib>
-      <OutputFile>$(TargetDir)$(TargetName)\$(TargetFileName)</OutputFile>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
     </Lib>
     <PostBuildEvent>
-      <Command>IF NOT EXIST "$(SolutionDir)..\lib\$(ConfigurationName)" mkdir "$(SolutionDir)..\lib\$(ConfigurationName)"
-xcopy /R /Y "$(TargetDir)$(TargetName)\$(TargetFileName)" "$(SolutionDir)..\lib\$(ConfigurationName)"
-xcopy /R /Y "$(TargetDir)$(TargetName)\$(ProjectName).pdb" "$(SolutionDir)..\lib\$(ConfigurationName)"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
 </Project>
