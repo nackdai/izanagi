@@ -140,7 +140,6 @@ xcopy /R /Y "$(TargetDir)$(ProjectName).pdb" ..\lib\$(IntDir)
     <ClInclude Include="..\..\include\std\dependency_property\DependencyPropertyChangedEventArgs.h" />
     <ClInclude Include="..\..\include\std\dependency_property\NotifyPropertyChanged.h" />
     <ClInclude Include="..\..\include\std\dependency_property\PropertyMetaData.h" />
-    <ClInclude Include="..\..\include\izDefs.h" />
     <ClInclude Include="..\..\include\izStd.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

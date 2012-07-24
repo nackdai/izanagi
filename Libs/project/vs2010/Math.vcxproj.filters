@@ -17,9 +17,6 @@
     <Filter Include="source\analysis">
       <UniqueIdentifier>{35f9312a-22e4-489b-a18c-a6e340db98a0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source\curve">
-      <UniqueIdentifier>{6af76def-1520-4459-b930-cc8239dae04a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="include">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
@@ -36,8 +33,11 @@
     <Filter Include="include\analysis">
       <UniqueIdentifier>{01d45372-b2b9-492d-a1a7-78cf76158471}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\curve">
-      <UniqueIdentifier>{3272ca61-731b-4700-85a8-071470ce8b34}</UniqueIdentifier>
+    <Filter Include="include\interp">
+      <UniqueIdentifier>{e421e2ac-9466-40d8-a7e6-815f2e9c7b34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\interp">
+      <UniqueIdentifier>{c8e7ece5-3dd4-46f9-b9c0-5f05cfc480e2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -65,11 +65,11 @@
     <ClCompile Include="..\..\source\math\MathNumericalAnlysis.cpp">
       <Filter>source\analysis</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\math\MathFunctionCurve.cpp">
-      <Filter>source\curve</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\math\Tweener.cpp">
-      <Filter>source\curve</Filter>
+      <Filter>source\interp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\math\MathInterpolater.cpp">
+      <Filter>source\interp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -163,14 +163,14 @@
     <ClInclude Include="..\..\include\math\MathNumericalAnlysis.h">
       <Filter>include\analysis</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\math\MathFunctionCurve.h">
-      <Filter>include\curve</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\math\Tweener.h">
-      <Filter>include\curve</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\izMath.h">
       <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\Tweener.h">
+      <Filter>include\interp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\MathInterpolater.h">
+      <Filter>include\interp</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,18 +1,18 @@
-#if !defined(__IZANAGI__MATH_FUNCTION_CURVE_H__)
-#define __IZANAGI__MATH_FUNCTION_CURVE_H__
+#if !defined(__IZANAGI_MATH_INTERPOLATER_H__)
+#define __IZANAGI_MATH_INTERPOLATER_H__
 
 #include "izDefs.h"
 #include "MathCVector.h"
 
 namespace izanagi {
 namespace math {
-	/** 関数カーブ.
+	/**
 	 */
-	class CMathFunctionCurve
+	class CMathInterpolater
 	{
 	private:
-		CMathFunctionCurve();
-		~CMathFunctionCurve();
+		CMathInterpolater();
+		~CMathInterpolater();
 
 	public:
 		/** ベジェ曲線.
@@ -63,4 +63,4 @@ namespace math {
 }	// namespace math {
 }	// namespace izanagi
 
-#endif	// #if !defined(__IZANAGI__MATH_FUNCTION_CURVE_H__)
+#endif	// #if !defined(__IZANAGI_MATH_INTERPOLATER_H__)
