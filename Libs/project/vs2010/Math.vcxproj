@@ -87,6 +87,7 @@ xcopy /R /Y "$(TargetDir)$(ProjectName).pdb" ..\lib\$(IntDir)
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\source\math\MathInterpolater.cpp" />
     <ClCompile Include="..\..\source\math\MathPlane.cpp" />
     <ClCompile Include="..\..\source\math\MathRay.cpp" />
     <ClCompile Include="..\..\source\math\MathRectangle.cpp" />
@@ -95,10 +96,10 @@ xcopy /R /Y "$(TargetDir)$(ProjectName).pdb" ..\lib\$(IntDir)
     <ClCompile Include="..\..\source\math\MathQuaternion.cpp" />
     <ClCompile Include="..\..\source\math\SFMT\SFMT.cpp" />
     <ClCompile Include="..\..\source\math\MathNumericalAnlysis.cpp" />
-    <ClCompile Include="..\..\source\math\MathFunctionCurve.cpp" />
     <ClCompile Include="..\..\source\math\Tweener.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\include\math\MathInterpolater.h" />
     <ClInclude Include="..\..\include\math\MathPlane.h" />
     <ClInclude Include="..\..\include\math\MathRay.h" />
     <ClInclude Include="..\..\include\math\MathRectangle.h" />
@@ -129,7 +130,6 @@ xcopy /R /Y "$(TargetDir)$(ProjectName).pdb" ..\lib\$(IntDir)
     <ClInclude Include="..\..\include\math\SFMT\SFMT-sse2.h" />
     <ClInclude Include="..\..\include\math\SFMT\SFMT.h" />
     <ClInclude Include="..\..\include\math\MathNumericalAnlysis.h" />
-    <ClInclude Include="..\..\include\math\MathFunctionCurve.h" />
     <ClInclude Include="..\..\include\math\Tweener.h" />
     <ClInclude Include="..\..\include\izMath.h" />
   </ItemGroup>

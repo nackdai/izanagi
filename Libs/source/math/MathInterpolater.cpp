@@ -1,11 +1,11 @@
-#include "math/MathFunctionCurve.h"
+#include "math/MathInterpolater.h"
 #include "math/MathMatrix.h"
 
 namespace izanagi {
 namespace math {
 	/** ベジェ曲線.
 	 */
-	IZ_FLOAT CMathFunctionCurve::ComputeBezier(
+	IZ_FLOAT CMathInterpolater::ComputeBezier(
 		IZ_FLOAT t,
 		IZ_FLOAT x0,
 		IZ_FLOAT x1,
@@ -32,7 +32,7 @@ namespace math {
 
 	/** ベジェ曲線.
 	 */
-	IZ_FLOAT CMathFunctionCurve::ComputeBezier(
+	IZ_FLOAT CMathInterpolater::ComputeBezier(
 		IZ_FLOAT t,
 		const SVector& p)
 	{
@@ -41,7 +41,7 @@ namespace math {
 
 	/** Hermite曲線.
 	 */
-	IZ_FLOAT CMathFunctionCurve::ComputeHermite(
+	IZ_FLOAT CMathInterpolater::ComputeHermite(
 		IZ_FLOAT t,
 		IZ_FLOAT x0,
 		IZ_FLOAT x1,
@@ -53,7 +53,7 @@ namespace math {
 
 	/** Hermite曲線.
 	 */
-	IZ_FLOAT CMathFunctionCurve::ComputeHermite(
+	IZ_FLOAT CMathInterpolater::ComputeHermite(
 		IZ_FLOAT t,
 		const SVector& p)
 	{
@@ -80,7 +80,7 @@ namespace math {
 
 	/** Catmull-Rom曲線.
 	 */
-	IZ_FLOAT CMathFunctionCurve::ComputeCatmullRom(
+	IZ_FLOAT CMathInterpolater::ComputeCatmullRom(
 		IZ_FLOAT t,
 		IZ_FLOAT x0,
 		IZ_FLOAT x1,
@@ -95,7 +95,7 @@ namespace math {
 
 	/** Catmull-Rom曲線.
 	 */
-	IZ_FLOAT CMathFunctionCurve::ComputeCatmullRom(
+	IZ_FLOAT CMathInterpolater::ComputeCatmullRom(
 		IZ_FLOAT t,
 		const SVector& p)
 	{
