@@ -33,10 +33,10 @@
     <Filter Include="include\analysis">
       <UniqueIdentifier>{01d45372-b2b9-492d-a1a7-78cf76158471}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\interp">
+    <Filter Include="include\curve">
       <UniqueIdentifier>{e421e2ac-9466-40d8-a7e6-815f2e9c7b34}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source\interp">
+    <Filter Include="source\curve">
       <UniqueIdentifier>{c8e7ece5-3dd4-46f9-b9c0-5f05cfc480e2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -66,10 +66,10 @@
       <Filter>source\analysis</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\math\Tweener.cpp">
-      <Filter>source\interp</Filter>
+      <Filter>source\curve</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\math\MathInterpolater.cpp">
-      <Filter>source\interp</Filter>
+      <Filter>source\curve</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -167,10 +167,10 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\math\Tweener.h">
-      <Filter>include\interp</Filter>
+      <Filter>include\curve</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\math\MathInterpolater.h">
-      <Filter>include\interp</Filter>
+      <Filter>include\curve</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
