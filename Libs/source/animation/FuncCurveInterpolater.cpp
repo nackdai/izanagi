@@ -1,6 +1,6 @@
 #include "animation/FuncCurveInterpolater.h"
 #include "animation/Timeline.h"
-#include "math/MathFunctionCurve.h"
+#include "math/MathInterpolater.h"
 
 namespace izanagi {
 namespace animation {
