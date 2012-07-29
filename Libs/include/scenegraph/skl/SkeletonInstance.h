@@ -89,6 +89,9 @@ namespace izanagi {
 		// 最終的な行列
 		SMatrix* m_pGlobalPose;
 
+        // アニメーションパラメータの中で更新が必要なパラメータフラグ
+        IZ_UINT8* m_ValidAnmParam;
+
 		// 姿勢情報を更新中かどうか
 		IZ_BOOL m_IsUpdatingPose;
 	};

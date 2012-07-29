@@ -37,8 +37,6 @@ namespace izanagi {
 			IZ_UINT8* pBuf,
 			IInputStream* pIn);
 
-		S_SKL_JOINT* GetJoint(IZ_INT idx);
-
 	private:
 		IMemoryAllocator* m_Allocator;
 
