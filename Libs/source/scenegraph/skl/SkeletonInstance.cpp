@@ -41,15 +41,16 @@ CSkeletonInstance* CSkeletonInstance::CreateSkeletonInstance(
 
 IZ_UINT CSkeletonInstance::ComputeBufferSize(const CSkeleton* pSkl)
 {
-	IZ_UINT nSize = sizeof(CSkeletonInstance);
+	IZ_UINT size = sizeof(CSkeletonInstance);
 	{
-		IZ_UINT nJointNum = pSkl->GetJointNum();
+		IZ_UINT jointNum = pSkl->GetJointNum();
 
-		nSize += sizeof(S_SKL_JOINT_POSE) * nJointNum;
-		nSize += sizeof(SMatrix) * nJointNum;
+		size += sizeof(S_SKL_JOINT_POSE) * jointNum;
+		size += sizeof(SMatrix) * jointNum;
+        size += sizeof(IZ_UINT8) * jointNum;
 	}
 
-	return nSize; 
+	return size; 
 }
 
 CSkeletonInstance::CSkeletonInstance()
@@ -112,19 +113,30 @@ const SMatrix* CSkeletonInstance::GetJointMtx(IZ_INT idx) const
 
 IZ_UINT8* CSkeletonInstance::SetJointData(IZ_UINT8* pBuf)
 {
+    // 姿勢情報
 	m_pJointPose = reinterpret_cast<S_SKL_JOINT_POSE*>(pBuf);
 	pBuf += sizeof(S_SKL_JOINT_POSE) * m_nJointNum;
 
+    // 最終的な行列
 	m_pGlobalPose = reinterpret_cast<SMatrix*>(pBuf);
 	pBuf += sizeof(SMatrix) * m_nJointNum;
 
-	for (IZ_UINT i = 0; i < m_nJointNum; ++i) {
-		const S_SKL_JOINT* pJoint = m_pBody->GetJoint(i);
+    // アニメーションパラメータの中で更新が必要なパラメータフラグ
+    m_ValidAnmParam = reinterpret_cast<IZ_UINT8*>(pBuf);
+    pBuf += sizeof(IZ_UINT8) * m_nJointNum;
 
+    // 元データからコピー
+	for (IZ_UINT i = 0; i < m_nJointNum; ++i) {
+		const S_SKL_JOINT* joint = m_pBody->GetJoint(i);
+
+        // 姿勢情報
 		memcpy(
 			&m_pJointPose[i],
-			&pJoint->pose,
+			&joint->pose,
 			sizeof(S_SKL_JOINT_POSE));
+
+        // アニメーションパラメータの中で更新が必要なパラメータフラグ
+        m_ValidAnmParam[i] = joint->validAnmParam;
 	}
 
 	return pBuf;
@@ -165,7 +177,7 @@ namespace {
 void CSkeletonInstance::BuildLocalMatrix(IZ_UINT nIdx)
 {
 	IZ_ASSERT(m_pBody != IZ_NULL);
-	S_SKL_JOINT* pJoint = m_pBody->GetJoint(nIdx);
+	const S_SKL_JOINT* pJoint = m_pBody->GetJoint(nIdx);
 
 	// NOTE
 	// izanagiは右掛け
@@ -174,9 +186,9 @@ void CSkeletonInstance::BuildLocalMatrix(IZ_UINT nIdx)
 	CBit32Flag flag(
 		pJoint->validParam | pJoint->validAnmParam);
 
-	if (pJoint->validAnmParam > 0) {
+	if (m_ValidAnmParam[nIdx] > 0) {
 		// 念のため次に向けてリセットしておく
-		pJoint->validAnmParam = 0;
+		m_ValidAnmParam[nIdx] = 0;
 	}
 
 	const S_SKL_JOINT_POSE& pose = m_pJointPose[nIdx];
@@ -274,8 +286,8 @@ void CSkeletonInstance::EndUpdatePose(
 	IZ_ASSERT(idx < m_nJointNum);
 	IZ_ASSERT(m_IsUpdatingPose);
 
-	S_SKL_JOINT* pJoint = m_pBody->GetJoint(idx);
-	pJoint->validAnmParam = updateFlag;
+	const S_SKL_JOINT* pJoint = m_pBody->GetJoint(idx);
+	m_ValidAnmParam[idx] = updateFlag;
 
 	m_IsUpdatingPose = IZ_FALSE;
 }
