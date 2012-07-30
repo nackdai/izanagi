@@ -72,7 +72,7 @@ namespace izanagi {
 		const IZ_FLOAT& z = quat.z;
 		const IZ_FLOAT& w = quat.w;
 
-#if 0
+#if 1
 		// ベタに計算するとこうなる
 		const IZ_FLOAT xx2 = 2.0f * x * x;
 		const IZ_FLOAT yy2 = 2.0f * y * y;
@@ -179,32 +179,35 @@ namespace izanagi {
 	}
 
 	// オイラー角からクオータニオンを計算する
-	void SQuat::QuatFromEuler(SQuat& quat, IZ_FLOAT fYaw, IZ_FLOAT fPitch, IZ_FLOAT fRoll)
+	void SQuat::QuatFromEuler(SQuat& quat, IZ_FLOAT x, IZ_FLOAT y, IZ_FLOAT z)
 	{
 #if defined(__USE_D3D_MATH__)
 		D3DXQuaternionRotationYawPitchRoll(
 			reinterpret_cast<D3DXQUATERNION*>(&quat),
-			fYaw,
-			fPitch,
-			fRoll);
+			y,	// Yaw
+			x,	// Pitch
+			z);	// Roll
 #else	// #if defined(__USE_D3D_MATH__)
 		// NOTE
 		// XYZ軸で回転するクオータニオンを順に乗算する
 
-		IZ_FLOAT cosY = cosf(fYaw * 0.5f);
-		IZ_FLOAT sinY = sinf(fYaw * 0.5f);
+		// Yaw
+		IZ_FLOAT cosY = cosf(y * 0.5f);
+		IZ_FLOAT sinY = sinf(y * 0.5f);
 
-		IZ_FLOAT cosP = cosf(fPitch * 0.5f);
-		IZ_FLOAT sinP = sinf(fPitch * 0.5f);
+		// Pitch
+		IZ_FLOAT cosX = cosf(x * 0.5f);
+		IZ_FLOAT sinX = sinf(x * 0.5f);
 
-		IZ_FLOAT cosR = cosf(fRoll * 0.5f);
-		IZ_FLOAT sinR = sinf(fRoll * 0.5f);
+		// Roll
+		IZ_FLOAT cosZ = cosf(z * 0.5f);
+		IZ_FLOAT sinZ = sinf(z * 0.5f);
 
 		quat.Set(
-			cosR * sinP * cosY + sinR * cosP * sinY,
-			cosR * cosP * sinY - sinR * sinP * cosY,
-			sinR * cosP * cosY - cosR * sinP * sinY,
-			cosR * cosP * cosY + sinR * sinP * sinY);
+			cosZ * sinX * cosY + sinZ * cosX * sinY,
+			cosZ * cosX * sinY - sinZ * sinX * cosY,
+			sinZ * cosX * cosY - cosZ * sinX * sinY,
+			cosZ * cosX * cosY + sinZ * sinX * sinY);
 #endif	// #if defined(__USE_D3D_MATH__)
 	}
 
@@ -236,7 +239,9 @@ namespace izanagi {
 		izanagi::SMatrix mtx;
 		MatrixFromQuat(mtx, quat);
 
-		SMatrix::GetEulerFromMatrix(angle, mtx);
+		// TODO
+		// MatrixFromQuatの結果はZXYの回転順番であることを常に保障する？
+		SMatrix::GetEulerFromMatrix(angle, mtx, E_MATH_ROTATION_ORDER_ZXY);
 	}
 
 	// オイラー角からクオータニオンを計算する

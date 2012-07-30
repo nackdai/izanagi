@@ -94,9 +94,6 @@
     <ClInclude Include="..\..\include\math\MathCVector.h">
       <Filter>include\basic</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\math\MathDefs.h">
-      <Filter>include\basic</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\math\MathFixed.h">
       <Filter>include\basic</Filter>
     </ClInclude>
@@ -171,6 +168,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\math\MathInterpolater.h">
       <Filter>include\curve</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\MathDefs.h">
+      <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
