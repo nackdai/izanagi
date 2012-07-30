@@ -239,7 +239,7 @@ namespace izanagi {
 		static void QuatFromMatrix(SQuat& quat, const SMatrix& mtx);
 
 		// オイラー角からクオータニオンを計算する
-		static void QuatFromEuler(SQuat& quat, IZ_FLOAT fYaw, IZ_FLOAT fPitch, IZ_FLOAT fRoll);
+		static void QuatFromEuler(SQuat& quat, IZ_FLOAT x, IZ_FLOAT y, IZ_FLOAT z);
 
 		// 二つのベクトルv0,v1が与えられたときに
 		// q  * v0 == v1 となるクオータニオンqを計算する

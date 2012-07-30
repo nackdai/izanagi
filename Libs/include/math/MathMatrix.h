@@ -7,7 +7,23 @@
 #include "MathVector.h"
 
 namespace izanagi {
+	/** 回転計算の順番
+	 */
+	enum E_MATH_ROTATION_ORDER
+	{
+		E_MATH_ROTATION_ORDER_XYZ = 0,
+		E_MATH_ROTATION_ORDER_XZY,
+		E_MATH_ROTATION_ORDER_YXZ,
+		E_MATH_ROTATION_ORDER_YZX,
+		E_MATH_ROTATION_ORDER_ZXY,
+		E_MATH_ROTATION_ORDER_ZYX,
 
+		E_MATH_ROTATION_ORDER_NUM,
+		E_MATH_ROTATION_ORDER_FORCE_INT32 = 0x7fffffff,
+	};
+
+	/**
+	 */
 	struct SMatrix {
 		union {
 			IZ_FLOAT a[16];
@@ -357,7 +373,7 @@ namespace izanagi {
 		static void GetRotMatrixFromVector(SMatrix& mtx, const SVector& vec, const SVector& up);
 
 		// マトリクスからオイラー角を取得する
-		static void GetEulerFromMatrix(SVector& angle, const SMatrix& mtx);
+		static void GetEulerFromMatrix(SVector& angle, const SMatrix& mtx, E_MATH_ROTATION_ORDER order);
 
 		// マトリクスの中身をダンプする
 		static void Dump(const SMatrix& mtx)

@@ -171,7 +171,7 @@ namespace izanagi {
 #else	// #if defined(__USE_D3D_MATH__)
 		// Gauss/Jordan法で求める
 		SMatrix mtx;
-		CopyMatrix(mtx, src);
+		Copy(mtx, src);
 		SMatrix::SetUnit(dst);
 
 		for (int i = 0; i < 4; ++i) {
@@ -249,7 +249,7 @@ namespace izanagi {
 	}
 
 	// マトリクスからオイラー角を取得する
-	void SMatrix::GetEulerFromMatrix(SVector& angle, const SMatrix& mtx)
+	void _GetEulerFromMatrixXYZ(SVector& angle, const SMatrix& mtx)
 	{
 		// NOTE
 		// X軸、Y軸、Z軸回転の行列を掛け合わせると以下のようになる
@@ -265,9 +265,11 @@ namespace izanagi {
 
 		IZ_FLOAT Sy = -mtx._02;
 		IZ_FLOAT Cy = ::sqrtf(1.0f - Sy * Sy);
-		angle.y = ::atan2f(Sy, Cy);
 
 		if (Cy != 0.0f) {
+			//angle.y = ::atan2f(Sy, Cy);
+			angle.y = ::acosf(Cy);
+
 			IZ_FLOAT Sx = mtx._12 / Cy;
 			IZ_FLOAT Cx = mtx._22 / Cy;
 			angle.x = ::atan2f(Sx, Cx);
@@ -295,19 +297,93 @@ namespace izanagi {
 			//
 			// α = X軸回転時の角度
 			// β = Z軸回転時の角度
+			// ex) SxCz - CxSz = sinαcosβ - cosαsinβ = sin(α-β)
 			//
 			// 自由度がα-βのみに依存した行列となる
 			// つまり、ジンバルロックの状態となる
 
 			// そこで、Z軸の回転については回転無し（θ = 0) という制約を付けることで計算を解く
 
-			IZ_FLOAT Sz = 0.0f;
-			IZ_FLOAT Cz = 1.0f;
-			angle.z = ::atan2f(Sz, Cz);
+			if (Sy > 0.0f)
+			{
+				// Yの回転角度が -90度(=270度)
+				angle.y = IZ_DEG2RAD(-90.0f);
+			}
+			else
+			{
+				// Yの回転角度が 90度
+				angle.y = IZ_DEG2RAD(90.0f);
+			}
+
+			angle.z = 0.0f;
 
 			IZ_FLOAT Cx = mtx._11;
 			IZ_FLOAT Sx = mtx._10;
 			angle.x = ::atan2f(Sx, Cx);
 		}
+	}
+
+	void _GetEulerFromMatrixZXY(SVector& angle, const SMatrix& mtx)
+	{
+		// NOTE
+		// m[0][0] = CzCy + SzSxSy  m[0][1] = SzCx m[0][2] = -CzSy + SzSxCy m[0][3] = 0
+		// m[1][0] = -SzCy + CzSxSy m[1][1] = CzCx m[1][2] = SzSy + CzSxCy  m[1][3] = 0
+		// m[2][0] = CxSy           m[2][1] = -Sx  m[2][2] = CxCy           m[2][3] = 0
+		// m[3][0] = 0              m[3][1] = 0    m[3][2] = 0              m[3][3] = 1
+
+		IZ_FLOAT Sx = -mtx._21;
+		IZ_FLOAT Cx = ::sqrtf(1.0f - Sx * Sx);
+
+		if (Cx != 0.0f)
+		{
+			angle.x = ::acosf(Cx);
+
+			IZ_FLOAT Sy = mtx._20 / Cx;
+			IZ_FLOAT Cy = mtx._22 / Cx;
+			angle.y = ::atan2f(Sy, Cy);
+
+			IZ_FLOAT Sz = mtx._01 / Cx;
+			IZ_FLOAT Cz = mtx._11 / Cx;
+			angle.z = ::atan2f(Sz, Cz);
+		}
+		else
+		{
+			if (Cx > 0.0f)
+			{
+				// Xの回転角度が -90度(=270度)
+				angle.x = IZ_DEG2RAD(-90.0f);
+			}
+			else
+			{
+				// Xの回転角度が 90度
+				angle.x = IZ_DEG2RAD(90.0f);
+			}
+
+			angle.y = 0.0f;
+
+			IZ_FLOAT Cz = mtx._00;
+			IZ_FLOAT Sz = -mtx._10;
+			angle.z = ::atan2f(Sz, Cz);
+		}
+	}
+
+	// マトリクスからオイラー角を取得する
+	void SMatrix::GetEulerFromMatrix(SVector& angle, const SMatrix& mtx, E_MATH_ROTATION_ORDER order)
+	{
+		typedef void (*Func)(SVector&, const SMatrix&);
+		Func funcs[] =
+		{
+			_GetEulerFromMatrixXYZ,
+			IZ_NULL,	// XZY
+			IZ_NULL,	// YXZ
+			IZ_NULL,	// YZX
+			_GetEulerFromMatrixZXY,
+			IZ_NULL,	// ZYX
+		};
+		IZ_C_ASSERT(COUNTOF(funcs) == E_MATH_ROTATION_ORDER_NUM);
+
+		IZ_ASSERT(funcs[order] != IZ_NULL);
+
+		(*funcs[order])(angle, mtx);
 	}
 }	// namespace izanagi
