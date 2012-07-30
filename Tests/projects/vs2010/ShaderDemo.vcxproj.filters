@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="system">
+      <UniqueIdentifier>{963702e4-7a18-42cf-bdea-a0beb76d39c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyAppl">
+      <UniqueIdentifier>{bc9403d4-7567-48c3-bf9f-7ea29b7a43ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyAppl\state">
+      <UniqueIdentifier>{29e982f1-a43e-45d8-85d6-534567795a20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyAppl\fx">
+      <UniqueIdentifier>{06eaee6e-828e-46dc-bd6e-e630adc3b1d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyAppl\shader">
+      <UniqueIdentifier>{20b6cae6-9a16-4002-8542-63d85acd050b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\system\MyCamera.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\system\MySystem.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ShaderDemo\MyAppl\DebugInfoRenderer.cpp">
+      <Filter>MyAppl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ShaderDemo\MyAppl\MyAppl.cpp">
+      <Filter>MyAppl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ShaderDemo\MyAppl\TextureManager.cpp">
+      <Filter>MyAppl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ShaderDemo\MyAppl\state\StateBasic.cpp">
+      <Filter>MyAppl\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ShaderDemo\MyAppl\state\StateHemiLight.cpp">
+      <Filter>MyAppl\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ShaderDemo\MyAppl\state\StateManager.cpp">
+      <Filter>MyAppl\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ShaderDemo\MyAppl\state\StateNormalMap.cpp">
+      <Filter>MyAppl\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ShaderDemo\MyAppl\state\StateParallax.cpp">
+      <Filter>MyAppl\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ShaderDemo\MyAppl\state\StatePhong.cpp">
+      <Filter>MyAppl\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ShaderDemo\MyAppl\state\StateRimLight.cpp">
+      <Filter>MyAppl\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ShaderDemo\MyAppl\shader\HemiLightShader.cpp">
+      <Filter>MyAppl\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ShaderDemo\MyAppl\shader\PhongShader.cpp">
+      <Filter>MyAppl\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ShaderDemo\MyAppl\shader\RimLightShader.cpp">
+      <Filter>MyAppl\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ShaderDemo\MyAppl\shader\ShaderBase.cpp">
+      <Filter>MyAppl\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ShaderDemo\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\system\MyCamera.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\system\MySystem.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ShaderDemo\MyAppl\DebugInfoRenderer.h">
+      <Filter>MyAppl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ShaderDemo\MyAppl\MyAppl.h">
+      <Filter>MyAppl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ShaderDemo\MyAppl\TextureManager.h">
+      <Filter>MyAppl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ShaderDemo\MyAppl\state\StateBasic.h">
+      <Filter>MyAppl\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ShaderDemo\MyAppl\state\StateHemiLight.h">
+      <Filter>MyAppl\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ShaderDemo\MyAppl\state\StateManager.h">
+      <Filter>MyAppl\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ShaderDemo\MyAppl\state\StateNormalMap.h">
+      <Filter>MyAppl\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ShaderDemo\MyAppl\state\StateParallax.h">
+      <Filter>MyAppl\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ShaderDemo\MyAppl\state\StatePhong.h">
+      <Filter>MyAppl\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ShaderDemo\MyAppl\state\StateRimLight.h">
+      <Filter>MyAppl\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ShaderDemo\MyAppl\shader\BasicShader.h">
+      <Filter>MyAppl\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ShaderDemo\MyAppl\shader\HemiLightShader.h">
+      <Filter>MyAppl\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ShaderDemo\MyAppl\shader\NormalMapShader.h">
+      <Filter>MyAppl\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ShaderDemo\MyAppl\shader\ParallaxShader.h">
+      <Filter>MyAppl\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ShaderDemo\MyAppl\shader\PhongShader.h">
+      <Filter>MyAppl\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ShaderDemo\MyAppl\shader\RimLightShader.h">
+      <Filter>MyAppl\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ShaderDemo\MyAppl\shader\ShaderBase.h">
+      <Filter>MyAppl\shader</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\ShaderDemo\ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\ShaderDemo\MyAppl\fx\BasicShader.fx">
+      <Filter>MyAppl\fx</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\ShaderDemo\MyAppl\fx\HemiLightShader.fx">
+      <Filter>MyAppl\fx</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\ShaderDemo\MyAppl\fx\NormalMapShader.fx">
+      <Filter>MyAppl\fx</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\ShaderDemo\MyAppl\fx\ParallaxShader.fx">
+      <Filter>MyAppl\fx</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\ShaderDemo\MyAppl\fx\PhongShader.fx">
+      <Filter>MyAppl\fx</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\ShaderDemo\MyAppl\fx\RimLightShader.fx">
+      <Filter>MyAppl\fx</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>

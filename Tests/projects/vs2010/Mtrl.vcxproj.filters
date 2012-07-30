@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="system">
+      <UniqueIdentifier>{f8ee7b94-8e90-448d-b294-20df1577339c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyAppl">
+      <UniqueIdentifier>{66a568c4-b094-4e71-8c91-9cec720d4ffe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyAppl\state">
+      <UniqueIdentifier>{c8a912da-f038-4d7b-9a14-5ca8ad495848}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyAppl\fx">
+      <UniqueIdentifier>{1db83a1d-7b06-474c-bdd8-3ea4682d4697}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyAppl\shader">
+      <UniqueIdentifier>{909c3c31-5373-4f3d-9bb7-dd0d31e2dfd7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\system\MyCamera.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\system\MySystem.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Mtrl\myappl\MyAppl.cpp">
+      <Filter>MyAppl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Mtrl\MyAppl\state\StateBasicBoy.cpp">
+      <Filter>MyAppl\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Mtrl\MyAppl\state\StateBasicGirl.cpp">
+      <Filter>MyAppl\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Mtrl\myappl\state\StateManager.cpp">
+      <Filter>MyAppl\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Mtrl\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\system\MyCamera.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\system\MySystem.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Mtrl\myappl\MyAppl.h">
+      <Filter>MyAppl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Mtrl\MyAppl\state\Common.h">
+      <Filter>MyAppl\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Mtrl\MyAppl\state\StateBasicBoy.h">
+      <Filter>MyAppl\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Mtrl\MyAppl\state\StateBasicGirl.h">
+      <Filter>MyAppl\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Mtrl\myappl\state\StateManager.h">
+      <Filter>MyAppl\state</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Mtrl\MyAppl\shader\SkinShader.fx">
+      <Filter>MyAppl\shader</Filter>
+    </None>
+    <None Include="..\..\Mtrl\ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\Mtrl\MyAppl\fx\BasicShader.fx">
+      <Filter>MyAppl\fx</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\Mtrl\MyAppl\fx\PhongShader.fx">
+      <Filter>MyAppl\fx</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\Mtrl\MyAppl\fx\SkinShader.fx">
+      <Filter>MyAppl\fx</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\Mtrl\MyAppl\shader\SkinShader.xml">
+      <Filter>MyAppl\shader</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>
