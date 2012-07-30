@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="system">
+      <UniqueIdentifier>{34d6695f-9e6f-4b92-b33e-488f34c757a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyAppl">
+      <UniqueIdentifier>{5f98930d-5859-4477-bbe9-7f3252aaa468}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyAppl\state">
+      <UniqueIdentifier>{dd50904e-d45f-44ce-9316-62ba6150efbc}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\system\MySystem.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Img\MyAppl\MyAppl.cpp">
+      <Filter>MyAppl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Img\MyAppl\state\StateBasic.cpp">
+      <Filter>MyAppl\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Img\MyAppl\state\StateManager.cpp">
+      <Filter>MyAppl\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Img\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\system\MySystem.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Img\MyAppl\MyAppl.h">
+      <Filter>MyAppl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Img\MyAppl\state\StateBasic.h">
+      <Filter>MyAppl\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Img\MyAppl\state\StateManager.h">
+      <Filter>MyAppl\state</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Img\ReadMe.txt" />
+  </ItemGroup>
+</Project>

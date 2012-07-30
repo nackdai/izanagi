@@ -249,7 +249,9 @@ void CIkApp::ReleaseInternal()
 }
 
 // 更新.
-void CIkApp::UpdateInternal(izanagi::CCamera& camera)
+void CIkApp::UpdateInternal(
+    izanagi::CCamera& camera,
+    izanagi::CGraphicsDevice* device)
 {
 	InitJoints();
 	ApplyIK(s_RecursiveNum, s_Target);

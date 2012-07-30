@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="MyAppl">
+      <UniqueIdentifier>{bca99b9b-9a76-4383-9998-db197e6f801f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyAppl\state">
+      <UniqueIdentifier>{a0f4fc6b-a914-4314-930d-56843a4912c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="system">
+      <UniqueIdentifier>{7f918cb0-acd3-443e-b2cb-9d4a5307b7c8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Font\MyAppl\MyAppl.cpp">
+      <Filter>MyAppl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Font\MyAppl\state\StateFont.cpp">
+      <Filter>MyAppl\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Font\MyAppl\state\StateManager.cpp">
+      <Filter>MyAppl\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\system\MySystem.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Font\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Font\MyAppl\MyAppl.h">
+      <Filter>MyAppl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Font\MyAppl\state\StateFont.h">
+      <Filter>MyAppl\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Font\MyAppl\state\StateManager.h">
+      <Filter>MyAppl\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\system\MySystem.h">
+      <Filter>system</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Font\ReadMe.txt" />
+  </ItemGroup>
+</Project>
