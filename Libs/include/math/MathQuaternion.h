@@ -106,11 +106,11 @@ namespace izanagi {
 				reinterpret_cast<const D3DXQUATERNION*>(&src1),
 				reinterpret_cast<const D3DXQUATERNION*>(&src2));
 #else	// #if defined(__USE_D3D_MATH__)
-			dst.x = (src1.w * src2.x + src2.w * src1.x) + (src1.y * src2.z - src1.z * src2.y);
-			dst.y = (src1.w * src2.y + src2.w * src1.y) + (src1.z * src2.x - src1.x * src2.z);
-			dst.z = (src1.w * src2.z + src2.w * src1.z) + (src1.x * src2.y - src1.y * src2.x);
+			dst.x = src1.w * src2.x + src2.w * src1.x + src1.y * src2.z - src1.z * src2.y;
+			dst.y = src1.w * src2.y + src2.w * src1.y + src1.z * src2.x - src1.x * src2.z;
+			dst.z = src1.w * src2.z + src2.w * src1.z + src1.x * src2.y - src1.y * src2.x;
 
-			dst.w = src1.w * src2.w - (src1.x * src2.x + src1.y * src2.y + src1.z * src2.z);
+			dst.w = src1.w * src2.w - src1.x * src2.x - src1.y * src2.y - src1.z * src2.z;
 #endif	// #if defined(__USE_D3D_MATH__)
 		}
 
@@ -243,7 +243,7 @@ namespace izanagi {
 
 		// 二つのベクトルv0,v1が与えられたときに
 		// q  * v0 == v1 となるクオータニオンqを計算する
-		static void RotateionArc(SQuat& quat, const SVector& from, const SVector& to);
+		static void RotationArc(SQuat& quat, const SVector& from, const SVector& to);
 
 		// クオータニオンからオイラー角を計算する
 		static void GetEuler(SVector& angle, const SQuat& quat);
