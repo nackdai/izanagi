@@ -188,8 +188,34 @@ namespace izanagi {
 			x,	// Pitch
 			z);	// Roll
 #else	// #if defined(__USE_D3D_MATH__)
-		// NOTE
-		// XYZ軸で回転するクオータニオンを順に乗算する
+        // Q1 = (x1, y1, z1, w1) = x1i + y1j + z1k + w1
+        // Q2 = (x2, y2, z2, w2) = x2i + y2j + z2k + w2
+        //
+        // ii = jj = kk = -1
+        // ij = -ji = k
+        // jk = -kj = i
+        // ki = -ik = j
+        //
+        // Q1Q2 = (w1w2 - x1x2 - y1y2 - z1-z2)
+        //        + (w1x2 + x1w2 + y1z2 - z1y2)i
+        //        + (w1y2 - x1z2 + y1w2 + z1x2)j
+        //        + (w1z2 + x1y2 - y1x2 + z1w2)k
+
+        // Qyaw   = (0,            sin(yaw/2), 0,           cos(yaw/2))
+        // Qpitch = (sin(pitch/2), 0,          0,           cos(pitch/2))
+        // Qroll  = (0,            0,          sin(roll/2), cos(roll/2))
+        //
+        // Q = QyawQpitchQroll -> Roll Pitch Yaw の順番
+        //  (qPq^-1 = QyawQpitchQrollPq^-1 からRoll Pitch Yaw の順番でかけることになる）
+        //
+        // Cy = cos(yaw/2), Cp = cos(pitch/2), Cr = cos(roll/2)
+        // Sy = sin(yaw/2), Sp = sin(pitch/2), Sr = sin(roll/2)
+        //
+        // QpitchQroll = (CpCr) + (SpCr)i + (-SpSR)j + (CpSr)k
+        // QyawQpirchQroll = (CyCpCr + SySpSr) 
+        //                      + (CySpCr + SyCpCr)i
+        //                      + (-CySpSr + SyCpCr)j
+        //                      + (CyCpSr - SySpCr)k
 
 		// Yaw
 		IZ_FLOAT cosY = cosf(y * 0.5f);
@@ -213,7 +239,7 @@ namespace izanagi {
 
 	// 二つのベクトルv0,v1が与えられたときに
 	// q  * v0 == v1 となるクオータニオンqを計算する
-	void SQuat::RotateionArc(SQuat& quat, const SVector& from, const SVector& to)
+	void SQuat::RotationArc(SQuat& quat, const SVector& from, const SVector& to)
 	{
 		// 念のため
 		SVector v0, v1;
