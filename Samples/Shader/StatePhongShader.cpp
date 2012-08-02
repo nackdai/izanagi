@@ -87,7 +87,7 @@ IZ_BOOL CStatePhongShader::Render(izanagi::CGraphicsDevice* device)
 				izanagi::SMatrix::ApplyXYZ(
 					parallelLightLocalDir,
 					m_ParallelLight.vDir,
-					m_L2W);
+					mtxW2L);
 
 				_SetShaderParam(
 					m_Shader,
