@@ -307,11 +307,9 @@ void CMaterialApp::ReleaseInternal()
 }
 
 // 更新.
-void CMaterialApp::UpdateInternal(
-	izanagi::CCamera& camera,
-	izanagi::CGraphicsDevice* device)
+void CMaterialApp::UpdateInternal(izanagi::CGraphicsDevice* device)
 {
-	camera.Update();
+	GetCamera().Update();
 	m_Mdl->Update();
 
 	// レンダーグラフに登録
@@ -319,7 +317,7 @@ void CMaterialApp::UpdateInternal(
 	{
 		// 位置は原点なので
 		m_RenderGraph->Register(
-			camera,
+			GetCamera(),
 			izanagi::CVector(),
 			m_Mdl);
 	}

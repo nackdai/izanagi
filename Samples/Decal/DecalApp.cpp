@@ -119,11 +119,9 @@ void CDecalApp::ReleaseInternal()
 }
 
 // 更新.
-void CDecalApp::UpdateInternal(
-	izanagi::CCamera& camera,
-	izanagi::CGraphicsDevice* device)
+void CDecalApp::UpdateInternal(izanagi::CGraphicsDevice* device)
 {
-	camera.Update();
+	GetCamera().Update();
 
 	m_Decal->DoScissoring(
 		m_Sphere->GetTriangles(),

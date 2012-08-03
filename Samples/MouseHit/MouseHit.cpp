@@ -108,11 +108,9 @@ void CMouseHit::ReleaseInternal()
 }
 
 // 更新.
-void CMouseHit::UpdateInternal(
-	izanagi::CCamera& camera,
-	izanagi::CGraphicsDevice* device)
+void CMouseHit::UpdateInternal(izanagi::CGraphicsDevice* device)
 {
-	camera.Update();
+	GetCamera().Update();
 
 	m_CrossRectIdx = -1;
 	izanagi::SVector dir;
@@ -125,13 +123,13 @@ void CMouseHit::UpdateInternal(
 		{
 			izanagi::CSceneGraphUtil::Point2Ray(
 				dir,
-				camera.GetParam(),
+				GetCamera().GetParam(),
 				device->GetViewport(),
 				m_MousePoint.x,
 				m_MousePoint.y);
 
 			izanagi::CRay ray(
-				camera.GetParam().pos,
+				GetCamera().GetParam().pos,
 				dir);
 
 			for (IZ_UINT i = 0; i < COUNTOF(m_Rectangles); i++)

@@ -174,9 +174,7 @@ void CSampleApp::Release()
 // 更新.
 void CSampleApp::Update()
 {
-	UpdateInternal(
-		m_Camera,
-		m_Device);
+	UpdateInternal(m_Device);
 
 	m_Camera.Update();
 }

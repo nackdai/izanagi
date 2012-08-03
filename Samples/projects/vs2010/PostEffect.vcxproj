@@ -99,6 +99,20 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
     </CustomBuild>
+    <CustomBuild Include="..\..\PostEffect\posteffect\Negative.peh">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\..\PostEffect\posteffect\Sepia.peh">
+      <FileType>Document</FileType>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
+    </CustomBuild>
     <None Include="..\..\PostEffect\shader\CubeMapBoxShader.fx" />
     <CustomBuild Include="..\..\PostEffect\shader\CubeMapBoxShader.xml">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
@@ -122,6 +136,9 @@
     <ClCompile Include="..\..\PostEffect\StateBase.cpp" />
     <ClCompile Include="..\..\PostEffect\StateManager.cpp" />
     <ClCompile Include="..\..\PostEffect\StateMonotone.cpp" />
+    <ClCompile Include="..\..\PostEffect\StateNegative.cpp" />
+    <ClCompile Include="..\..\PostEffect\StatePostEffect.cpp" />
+    <ClCompile Include="..\..\PostEffect\StateSepia.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\PostEffect\PostEffectApp.h" />
@@ -130,6 +147,9 @@
     <ClInclude Include="..\..\PostEffect\StateBase.h" />
     <ClInclude Include="..\..\PostEffect\StateManager.h" />
     <ClInclude Include="..\..\PostEffect\StateMonotone.h" />
+    <ClInclude Include="..\..\PostEffect\StateNegative.h" />
+    <ClInclude Include="..\..\PostEffect\StatePostEffect.h" />
+    <ClInclude Include="..\..\PostEffect\StateSepia.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
