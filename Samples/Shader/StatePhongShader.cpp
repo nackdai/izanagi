@@ -75,6 +75,35 @@ IZ_BOOL CStatePhongShader::Render(izanagi::CGraphicsDevice* device)
 				(void*)&m_Camera.pos,
 				sizeof(m_Camera.pos));
 
+            // ライトパラメータ
+	        {
+		        // Ambient Light Color
+		        izanagi::SAmbientLightParam ambient;
+		        ambient.color.Set(0.0f, 0.0f, 0.0f);
+
+		        // Parallel Light Color
+		        m_ParallelLight.color.Set(1.0f, 1.0f, 1.0f);
+
+		        // Parallel Light Direction
+		        m_ParallelLight.vDir.Set(-1.0f, -1.0f, -1.0f);
+		        izanagi::SVector::Normalize(m_ParallelLight.vDir, m_ParallelLight.vDir);
+
+		        // マテリアル
+		        izanagi::SMaterialParam mtrl;
+		        {
+			        mtrl.vDiffuse.Set(1.0f, 1.0f, 1.0f, 1.0f);
+			        mtrl.vAmbient.Set(1.0f, 1.0f, 1.0f, 1.0f);
+			        mtrl.vSpecular.Set(1.0f, 1.0f, 1.0f, 20.0f);
+		        }
+
+		        _SetShaderParam(m_Shader, "g_vLitParallelColor", &m_ParallelLight.color, sizeof(m_ParallelLight.color));
+		        _SetShaderParam(m_Shader, "g_vLitAmbientColor", &ambient.color, sizeof(ambient.color));
+
+		        _SetShaderParam(m_Shader, "g_vMtrlDiffuse", &mtrl.vDiffuse, sizeof(mtrl.vDiffuse));
+		        _SetShaderParam(m_Shader, "g_vMtrlAmbient", &mtrl.vAmbient, sizeof(mtrl.vAmbient));
+		        _SetShaderParam(m_Shader, "g_vMtrlSpecular", &mtrl.vSpecular, sizeof(mtrl.vSpecular));
+	        }
+
 			{
 				// ライトの方向をローカル座標に変換する
 
@@ -127,35 +156,6 @@ IZ_BOOL CStatePhongShader::Enter(
 					device,
 					&in);
 		VGOTO(result = (m_Shader != IZ_NULL), __EXIT__);
-	}
-
-	// ライトパラメータ
-	{
-		// Ambient Light Color
-		izanagi::SAmbientLightParam ambient;
-		ambient.color.Set(0.0f, 0.0f, 0.0f);
-
-		// Parallel Light Color
-		m_ParallelLight.color.Set(1.0f, 1.0f, 1.0f);
-
-		// Parallel Light Direction
-		m_ParallelLight.vDir.Set(-1.0f, -1.0f, -1.0f);
-		izanagi::SVector::Normalize(m_ParallelLight.vDir, m_ParallelLight.vDir);
-
-		// マテリアル
-		izanagi::SMaterialParam mtrl;
-		{
-			mtrl.vDiffuse.Set(1.0f, 1.0f, 1.0f, 1.0f);
-			mtrl.vAmbient.Set(1.0f, 1.0f, 1.0f, 1.0f);
-			mtrl.vSpecular.Set(1.0f, 1.0f, 1.0f, 20.0f);
-		}
-
-		_SetShaderParam(m_Shader, "g_vLitParallelColor", &m_ParallelLight.color, sizeof(m_ParallelLight.color));
-		_SetShaderParam(m_Shader, "g_vLitAmbientColor", &ambient.color, sizeof(ambient.color));
-
-		_SetShaderParam(m_Shader, "g_vMtrlDiffuse", &mtrl.vDiffuse, sizeof(mtrl.vDiffuse));
-		_SetShaderParam(m_Shader, "g_vMtrlAmbient", &mtrl.vAmbient, sizeof(mtrl.vAmbient));
-		_SetShaderParam(m_Shader, "g_vMtrlSpecular", &mtrl.vSpecular, sizeof(mtrl.vSpecular));
 	}
 
 	// 球
