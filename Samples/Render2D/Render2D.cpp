@@ -16,9 +16,7 @@ protected:
 	virtual void ReleaseInternal();
 
 	// 更新.
-	virtual void UpdateInternal(
-		izanagi::CCamera& camera,
-		izanagi::CGraphicsDevice* device);
+	virtual void UpdateInternal(izanagi::CGraphicsDevice* device);
 
 	// 描画.
 	virtual void RenderInternal(izanagi::CGraphicsDevice* device);
@@ -60,9 +58,7 @@ void CRender2DApp::ReleaseInternal()
 }
 
 // 更新.
-void CRender2DApp::UpdateInternal(
-	izanagi::CCamera& camera,
-	izanagi::CGraphicsDevice* device)
+void CRender2DApp::UpdateInternal(izanagi::CGraphicsDevice* device)
 {
 	// Nothing is done...
 }

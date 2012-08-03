@@ -260,11 +260,9 @@ void CAnimationApp::ReleaseInternal()
 }
 
 // 更新.
-void CAnimationApp::UpdateInternal(
-	izanagi::CCamera& camera,
-	izanagi::CGraphicsDevice* device)
+void CAnimationApp::UpdateInternal(izanagi::CGraphicsDevice* device)
 {
-	camera.Update();
+	GetCamera().Update();
 
 	// 時間更新
 	IZ_FLOAT fElapsed = GetTimer(0).GetTime();

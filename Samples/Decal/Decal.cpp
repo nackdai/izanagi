@@ -61,7 +61,7 @@ void CDecal::SetRectangle(
 
 	// 矩形の法線が指定された法線に一致する回転を計算する
 	izanagi::SQuat rotQuat;
-	izanagi::SQuat::RotateionArc(
+	izanagi::SQuat::RotationArc(
 		rotQuat,
 		m_Rectangle.nml,
 		normal);

@@ -116,9 +116,7 @@ namespace sample {
 
 		/** 更新.
 		 */
-		virtual void UpdateInternal(
-			izanagi::CCamera& camera,
-			izanagi::CGraphicsDevice* device) = 0;
+		virtual void UpdateInternal(izanagi::CGraphicsDevice* device) = 0;
 
 		/** 描画.
 		 */

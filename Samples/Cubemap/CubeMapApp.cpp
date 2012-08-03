@@ -84,11 +84,9 @@ void CCubeMapApp::ReleaseInternal()
 }
 
 // 更新.
-void CCubeMapApp::UpdateInternal(
-	izanagi::CCamera& camera,
-	izanagi::CGraphicsDevice* device)
+void CCubeMapApp::UpdateInternal(izanagi::CGraphicsDevice* device)
 {
-	camera.Update();
+	GetCamera().Update();
 
 	izanagi::SMatrix::SetScale(m_L2W, 100.0f, 100.0f, 100.0f);
 
@@ -96,7 +94,7 @@ void CCubeMapApp::UpdateInternal(
 	izanagi::SMatrix::Trans(
 		m_L2W,
 		m_L2W,
-		camera.GetParam().pos);
+		GetCamera().GetParam().pos);
 }
 
 namespace {

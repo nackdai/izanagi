@@ -13,17 +13,17 @@
     <Filter Include="asset">
       <UniqueIdentifier>{454389db-4d85-48ed-8792-3ae47e7e4fbb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="state">
-      <UniqueIdentifier>{07de1f13-02b8-40c1-aa92-c4d92be07aee}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="state\include">
-      <UniqueIdentifier>{a8a2d202-b0f0-40c0-9a51-e1062550eb15}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="state\source">
-      <UniqueIdentifier>{6d6b8c38-8f10-4b49-a85c-c5b9a2a0c6a4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="posteffect">
       <UniqueIdentifier>{72028f26-e875-463c-ad4b-17b21fc9bbbc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="state">
+      <UniqueIdentifier>{9d844c34-bd8c-41aa-b53a-8efaacb806a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="state\include">
+      <UniqueIdentifier>{0a1157b9-627f-4b67-8f50-7f05d3bbf0a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="state\source">
+      <UniqueIdentifier>{acf3d670-f33b-4782-82d1-3942bbc3acdb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -38,15 +38,6 @@
     <ClCompile Include="..\..\PostEffect\main.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\PostEffect\StateBase.cpp">
-      <Filter>state\source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\PostEffect\StateManager.cpp">
-      <Filter>state\source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\PostEffect\StateMonotone.cpp">
-      <Filter>state\source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\PostEffect\SceneRenderer.cpp">
       <Filter>source</Filter>
     </ClCompile>
@@ -56,25 +47,52 @@
     <ClCompile Include="..\..\PostEffect\PostEffectApp.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\PostEffect\StateManager.cpp">
+      <Filter>state\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\StateMonotone.cpp">
+      <Filter>state\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\StateBase.cpp">
+      <Filter>state\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\StateNegative.cpp">
+      <Filter>state\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\StatePostEffect.cpp">
+      <Filter>state\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\StateSepia.cpp">
+      <Filter>state\source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\PostEffect\StateBase.h">
-      <Filter>state\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\PostEffect\StateManager.h">
-      <Filter>state\include</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\PostEffect\SceneRenderer.h">
       <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\PostEffect\StateMonotone.h">
-      <Filter>state\include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\PostEffect\PostEffectSample.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\PostEffect\PostEffectApp.h">
       <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\StateBase.h">
+      <Filter>state\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\StateManager.h">
+      <Filter>state\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\StateMonotone.h">
+      <Filter>state\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\StateNegative.h">
+      <Filter>state\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\StatePostEffect.h">
+      <Filter>state\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\StateSepia.h">
+      <Filter>state\include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -88,6 +106,12 @@
       <Filter>shader</Filter>
     </CustomBuild>
     <CustomBuild Include="..\..\PostEffect\posteffect\Monotone.peh">
+      <Filter>posteffect</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\PostEffect\posteffect\Negative.peh">
+      <Filter>posteffect</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\PostEffect\posteffect\Sepia.peh">
       <Filter>posteffect</Filter>
     </CustomBuild>
   </ItemGroup>
