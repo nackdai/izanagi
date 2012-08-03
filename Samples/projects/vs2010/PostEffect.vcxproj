@@ -55,7 +55,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>Shader.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Shader.lib;PostEffect.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
@@ -71,7 +71,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>Shader.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Shader.lib;PostEffect.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -92,6 +92,13 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(PROJECT_MAIN_DIR)data\%(Filename).img;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(PROJECT_MAIN_DIR)data\%(Filename).img;%(Outputs)</Outputs>
     </CustomBuild>
+    <CustomBuild Include="..\..\PostEffect\posteffect\Monotone.peh">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
+    </CustomBuild>
     <None Include="..\..\PostEffect\shader\CubeMapBoxShader.fx" />
     <CustomBuild Include="..\..\PostEffect\shader\CubeMapBoxShader.xml">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
@@ -109,12 +116,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\PostEffect\main.cpp" />
+    <ClCompile Include="..\..\PostEffect\PostEffectApp.cpp" />
+    <ClCompile Include="..\..\PostEffect\PostEffectSample.cpp" />
     <ClCompile Include="..\..\PostEffect\SceneRenderer.cpp" />
     <ClCompile Include="..\..\PostEffect\StateBase.cpp" />
     <ClCompile Include="..\..\PostEffect\StateManager.cpp" />
     <ClCompile Include="..\..\PostEffect\StateMonotone.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\PostEffect\PostEffectApp.h" />
+    <ClInclude Include="..\..\PostEffect\PostEffectSample.h" />
     <ClInclude Include="..\..\PostEffect\SceneRenderer.h" />
     <ClInclude Include="..\..\PostEffect\StateBase.h" />
     <ClInclude Include="..\..\PostEffect\StateManager.h" />
