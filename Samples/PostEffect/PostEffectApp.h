@@ -29,9 +29,7 @@ protected:
 	virtual void ReleaseInternal();
 
 	// çXêV.
-	virtual void UpdateInternal(
-		izanagi::CCamera& camera,
-		izanagi::CGraphicsDevice* device);
+	virtual void UpdateInternal(izanagi::CGraphicsDevice* device);
 
 	// ï`âÊ.
 	virtual void RenderInternal(izanagi::CGraphicsDevice* device);
@@ -39,6 +37,9 @@ protected:
 private:
 	izanagi::IMemoryAllocator* m_Allocator;
 	izanagi::CGraphicsDevice* m_Device;
+
+    IZ_INT m_CurIdx;
+    IZ_BOOL m_IsChangeState;
 };
 
 #endif

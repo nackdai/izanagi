@@ -1,16 +1,16 @@
-#if !defined(__STATE_MONOTONE_H__)
-#define __STATE_MONOTONE_H__
+#if !defined(__STATE_SEPIA_H__)
+#define __STATE_SEPIA_H__
 
 #include "izSceneGraph.h"
 #include "izDebugUtil.h"
 #include "StatePostEffect.h"
 
-class CStateMonotone : public CStatePostEffect {
+class CStateSepia : public CStatePostEffect {
 public:
-	CStateMonotone(
+	CStateSepia(
 		izanagi::sample::CSampleApp* app,
 		izanagi::SCameraParam& camera);
-	virtual ~CStateMonotone();
+	virtual ~CStateSepia();
 
 public:
 	// 描画.
@@ -22,4 +22,4 @@ public:
 		void* val);
 };
 
-#endif	// #if !defined(__STATE_PHONG_SHADER_H__)
+#endif	// #if !defined(__STATE_SEPIA_H__)

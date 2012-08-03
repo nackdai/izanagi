@@ -11,6 +11,8 @@ namespace izanagi {
 
 enum State {
 	State_Monotone,
+    State_Negative,
+    State_Sepia,
 
 	StateNum,
 };
@@ -31,7 +33,6 @@ public:
 		izanagi::sample::CSampleApp* app,
 		izanagi::SCameraParam& camera);
 
-	// �X�e�[�g�ύX.
 	void ChangeState(IZ_INT task)
 	{
 		if (task < 0) {
