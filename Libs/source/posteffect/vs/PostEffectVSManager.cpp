@@ -150,6 +150,17 @@ IZ_BOOL CPostEffectVSManager::SetVertexBuffer()
 	CUSTOM_FVF sFVF[VERTEX_NUM];
 
 	{
+#ifdef IZ_COORD_LEFT_HAND
+        sFVF[0].vecPos.Set(0.0f, 0.0f, 0.5f, 1.0f);
+        sFVF[1].vecPos.Set(1.0f, 0.0f, 0.5f, 1.0f);
+        sFVF[2].vecPos.Set(0.0f, 1.0f, 0.5f, 1.0f);
+        sFVF[3].vecPos.Set(1.0f, 1.0f, 0.5f, 1.0f);
+
+        sFVF[0].uv[0] = 0.0f; sFVF[0].uv[1] = 0.0f;
+        sFVF[1].uv[0] = 1.0f; sFVF[1].uv[1] = 0.0f;
+        sFVF[2].uv[0] = 0.0f; sFVF[2].uv[1] = 1.0f;
+        sFVF[3].uv[0] = 1.0f; sFVF[3].uv[1] = 1.0f;
+#else
 		sFVF[0].vecPos.Set(0.0f, 0.0f, 0.5f, 1.0f);
 		sFVF[1].vecPos.Set(0.0f, 1.0f, 0.5f, 1.0f);
 		sFVF[2].vecPos.Set(1.0f, 0.0f, 0.5f, 1.0f);
@@ -159,6 +170,7 @@ IZ_BOOL CPostEffectVSManager::SetVertexBuffer()
 		sFVF[1].uv[0] = 0.0f; sFVF[1].uv[1] = 1.0f;
 		sFVF[2].uv[0] = 1.0f; sFVF[2].uv[1] = 0.0f;
 		sFVF[3].uv[0] = 1.0f; sFVF[3].uv[1] = 1.0f;
+#endif
 	}
 
 	void* pvoid = IZ_NULL;
