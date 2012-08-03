@@ -1,6 +1,8 @@
 #include "StateManager.h"
 
 #include "StateMonotone.h"
+#include "StateNegative.h"
+#include "StateSepia.h"
 
 CStateManager CStateManager::s_Instance;
 
@@ -17,4 +19,6 @@ void CStateManager::Create(
 	izanagi::SCameraParam& camera)
 {
 	_STATE(Monotone, app, camera);
+    _STATE(Negative, app, camera);
+    _STATE(Sepia, app, camera);
 }

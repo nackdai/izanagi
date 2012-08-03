@@ -1,33 +1,33 @@
-#include "StateMonotone.h"
+#include "StateSepia.h"
 #include "StateManager.h"
 #include "SceneRenderer.h"
 #include "PostEffectSample.h"
 
-CStateMonotone::CStateMonotone(
+CStateSepia::CStateSepia(
 	izanagi::sample::CSampleApp* app,
 	izanagi::SCameraParam& camera)
 : CStatePostEffect(app, camera)
 {
 }
 
-CStateMonotone::~CStateMonotone()
+CStateSepia::~CStateSepia()
 {
 }
 
 // 描画.
-IZ_BOOL CStateMonotone::Render(izanagi::CGraphicsDevice* device)
+IZ_BOOL CStateSepia::Render(izanagi::CGraphicsDevice* device)
 {
     CStatePostEffect::Render(device);
-	RenderName(device, "Monotone");
+	RenderName(device, "Sepia");
 
 	return IZ_TRUE;
 }
 
 // 開始
-IZ_BOOL CStateMonotone::Enter(
+IZ_BOOL CStateSepia::Enter(
 	izanagi::IMemoryAllocator* allocator,
 	void* val)
 {
-    IZ_BOOL ret = CPostEffectSample::GetInstance()->Read("data/Monotone.pes");
+    IZ_BOOL ret = CPostEffectSample::GetInstance()->Read("data/Sepia.pes");
     return ret;
 }

@@ -1,4 +1,5 @@
 #include "PostEffectApp.h"
+#include "StateManager.h"
 
 CPostEffectApp::CPostEffectApp()
 {
@@ -19,7 +20,7 @@ IZ_BOOL CPostEffectApp::OnKeyDown(IZ_UINT nChar)
         return IZ_TRUE;
     }
 
-	return CStateManager::GetInstance().OnKeyDown(nChar);
+    return CStateManager::GetInstance().OnKeyDown(nChar);
 }
 
 // èâä˙âª.
@@ -52,11 +53,11 @@ IZ_BOOL CPostEffectApp::InitInternal(
             allocator,
             device));
 
-	CStateManager::GetInstance().Create(
+    CStateManager::GetInstance().Create(
 		this,
 		const_cast<izanagi::SCameraParam&>(camera.GetParam()));
 
-	return CStateManager::GetInstance().Init();
+    return CStateManager::GetInstance().Init();
 }
 
 // âï˙.
@@ -69,15 +70,13 @@ void CPostEffectApp::ReleaseInternal()
 }
 
 // çXêV.
-void CPostEffectApp::UpdateInternal(
-	izanagi::CCamera& camera,
-	izanagi::CGraphicsDevice* device)
+void CPostEffectApp::UpdateInternal(izanagi::CGraphicsDevice* device)
 {
-	CStateManager::GetInstance().Update(m_Allocator, m_Device);
+    CStateManager::GetInstance().Update(m_Allocator, device);
 }
 
 // ï`âÊ.
 void CPostEffectApp::RenderInternal(izanagi::CGraphicsDevice* device)
 {
-	CStateManager::GetInstance().Render(device);
+    CStateManager::GetInstance().Render(device);
 }

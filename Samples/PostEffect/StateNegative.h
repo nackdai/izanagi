@@ -1,16 +1,16 @@
-#if !defined(__STATE_MONOTONE_H__)
-#define __STATE_MONOTONE_H__
+#if !defined(__STATE_NEGATIVE_H__)
+#define __STATE_NEGATIVE_H__
 
 #include "izSceneGraph.h"
 #include "izDebugUtil.h"
 #include "StatePostEffect.h"
 
-class CStateMonotone : public CStatePostEffect {
+class CStateNegative : public CStatePostEffect {
 public:
-	CStateMonotone(
+	CStateNegative(
 		izanagi::sample::CSampleApp* app,
 		izanagi::SCameraParam& camera);
-	virtual ~CStateMonotone();
+	virtual ~CStateNegative();
 
 public:
 	// 描画.
@@ -22,4 +22,4 @@ public:
 		void* val);
 };
 
-#endif	// #if !defined(__STATE_PHONG_SHADER_H__)
+#endif	// #if !defined(__STATE_NEGATIVE_H__)
