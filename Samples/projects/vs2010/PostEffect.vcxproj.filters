@@ -22,6 +22,9 @@
     <Filter Include="state\source">
       <UniqueIdentifier>{6d6b8c38-8f10-4b49-a85c-c5b9a2a0c6a4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="posteffect">
+      <UniqueIdentifier>{72028f26-e875-463c-ad4b-17b21fc9bbbc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\PostEffect\shader\PhongShader.fx">
@@ -47,6 +50,12 @@
     <ClCompile Include="..\..\PostEffect\SceneRenderer.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\PostEffect\PostEffectSample.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\PostEffectApp.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\PostEffect\StateBase.h">
@@ -61,6 +70,12 @@
     <ClInclude Include="..\..\PostEffect\StateMonotone.h">
       <Filter>state\include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\PostEffect\PostEffectSample.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\PostEffectApp.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\PostEffect\shader\PhongShader.xml">
@@ -71,6 +86,9 @@
     </CustomBuild>
     <CustomBuild Include="..\..\PostEffect\shader\CubeMapBoxShader.xml">
       <Filter>shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\PostEffect\posteffect\Monotone.peh">
+      <Filter>posteffect</Filter>
     </CustomBuild>
   </ItemGroup>
 </Project>

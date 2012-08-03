@@ -1,6 +1,7 @@
 #include "StateMonotone.h"
 #include "StateManager.h"
 #include "SceneRenderer.h"
+#include "PostEffectSample.h"
 
 CStateMonotone::CStateMonotone(
 	izanagi::sample::CSampleApp* app,
@@ -30,7 +31,16 @@ IZ_BOOL CStateMonotone::Update()
 // 描画.
 IZ_BOOL CStateMonotone::Render(izanagi::CGraphicsDevice* device)
 {
-    CSceneRenderer::GetInstance()->Render(m_Camera, device);
+    CPostEffectSample::GetInstance()->BeginScene(device);
+    {
+        device->Clear(
+            izanagi::E_GRAPH_CLEAR_FLAG_COLOR, 
+            IZ_COLOR_RGBA(0, 0, 0, 0xff), 
+            1.0f, 0);
+        CSceneRenderer::GetInstance()->Render(m_Camera, device);
+    }
+    CPostEffectSample::GetInstance()->Apply(device);
+
 	RenderName(device, "Monotone");
 
 	return IZ_TRUE;
@@ -41,7 +51,8 @@ IZ_BOOL CStateMonotone::Enter(
 	izanagi::IMemoryAllocator* allocator,
 	void* val)
 {
-    return IZ_TRUE;
+    IZ_BOOL ret = CPostEffectSample::GetInstance()->Read("data/Monotone.pes");
+    return ret;
 }
 
 // 終了.
