@@ -13,12 +13,6 @@ public:
 	virtual ~CStatePhongShader();
 
 public:
-	// 初期化.
-	virtual IZ_BOOL Init();
-
-	// 更新.
-	virtual IZ_BOOL Update();
-
 	// 描画.
 	virtual IZ_BOOL Render(izanagi::CGraphicsDevice* device);
 
@@ -27,16 +21,8 @@ public:
 		izanagi::IMemoryAllocator* allocator,
 		void* val);
 
-	// 終了.
-	virtual IZ_BOOL Destroy();
-
 	// ステートから抜ける（終了）.
 	virtual IZ_BOOL Leave();
-
-	// For Windows
-
-	// キー押下
-	virtual IZ_BOOL OnKeyDown(IZ_UINT nChar);
 
 protected:
 	izanagi::CShaderBasic* m_Shader;

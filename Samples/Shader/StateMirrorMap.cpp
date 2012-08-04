@@ -18,19 +18,6 @@ CStateMirrorMap::~CStateMirrorMap()
 	Destroy();
 }
 
-// 初期化.
-IZ_BOOL CStateMirrorMap::Init()
-{
-	// Nothing is done...
-	return IZ_TRUE;
-}
-
-// 更新
-IZ_BOOL CStateMirrorMap::Update()
-{
-	return IZ_TRUE;
-}
-
 namespace {
 	inline void _SetShaderParam(
 		izanagi::CShaderBasic* shader,
@@ -146,31 +133,12 @@ __EXIT__:
 	return result;
 }
 
-// 終了.
-IZ_BOOL CStateMirrorMap::Destroy()
-{
-	return Leave();
-}
-
 // ステートから抜ける（終了）.
 IZ_BOOL CStateMirrorMap::Leave()
 {
 	SAFE_RELEASE(m_Img);
 	SAFE_RELEASE(m_Shader);
 	SAFE_RELEASE(m_Sphere);
-
-	return IZ_TRUE;
-}
-
-// キー押下
-IZ_BOOL CStateMirrorMap::OnKeyDown(IZ_UINT nChar)
-{
-	if (nChar == VK_UP) {
-		CStateManager::GetInstance().ChangeState(State_MirrorMap + 1);
-	}
-	else if (nChar == VK_DOWN) {
-		CStateManager::GetInstance().ChangeState(State_MirrorMap - 1);
-	}
 
 	return IZ_TRUE;
 }

@@ -17,6 +17,19 @@ public:
 		izanagi::SCameraParam& camera);
 	virtual ~CStateBase() {}
 
+public:
+    // 初期化.
+	virtual IZ_BOOL Init();
+
+	// 更新.
+	virtual IZ_BOOL Update();
+
+    // 終了.
+	virtual IZ_BOOL Destroy();
+
+    // キー押下
+    virtual IZ_BOOL OnKeyDown(IZ_UINT nChar);
+
 protected:
 	void RenderName(
 		izanagi::CGraphicsDevice* device,
