@@ -62,3 +62,18 @@ void CStateBase::RenderName(
 		device->End2D();
 	}
 }
+
+void CStateBase::SetShaderParam(
+	izanagi::CShaderBasic* shader,
+	const char* name,
+	const void* value,
+	IZ_UINT bytes)
+{
+	izanagi::IZ_SHADER_HANDLE handle = shader->GetParameterByName(name);
+	if (handle > 0) {
+		shader->SetParamValue(
+			handle,
+			value,
+			bytes);
+	}
+}

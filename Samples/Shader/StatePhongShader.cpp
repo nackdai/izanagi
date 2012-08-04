@@ -18,7 +18,7 @@ CStatePhongShader::~CStatePhongShader()
 }
 
 namespace {
-	inline void _SetShaderParam(
+	inline void SetShaderParam(
 		izanagi::CShaderBasic* shader,
 		const char* name,
 		const void* value,
@@ -44,19 +44,19 @@ IZ_BOOL CStatePhongShader::Render(izanagi::CGraphicsDevice* device)
 	{
 		if (m_Shader->BeginPass(0)) {
 			// パラメータ設定
-			_SetShaderParam(
+			SetShaderParam(
 				m_Shader,
 				"g_mL2W",
 				(void*)&mtxL2W,
 				sizeof(mtxL2W));
 
-			_SetShaderParam(
+			SetShaderParam(
 				m_Shader,
 				"g_mW2C",
 				(void*)&m_Camera.mtxW2C,
 				sizeof(m_Camera.mtxW2C));
 
-			_SetShaderParam(
+			SetShaderParam(
 				m_Shader,
 				"g_vEye",
 				(void*)&m_Camera.pos,
@@ -83,12 +83,12 @@ IZ_BOOL CStatePhongShader::Render(izanagi::CGraphicsDevice* device)
 			        mtrl.vSpecular.Set(1.0f, 1.0f, 1.0f, 20.0f);
 		        }
 
-		        _SetShaderParam(m_Shader, "g_vLitParallelColor", &m_ParallelLight.color, sizeof(m_ParallelLight.color));
-		        _SetShaderParam(m_Shader, "g_vLitAmbientColor", &ambient.color, sizeof(ambient.color));
+		        SetShaderParam(m_Shader, "g_vLitParallelColor", &m_ParallelLight.color, sizeof(m_ParallelLight.color));
+		        SetShaderParam(m_Shader, "g_vLitAmbientColor", &ambient.color, sizeof(ambient.color));
 
-		        _SetShaderParam(m_Shader, "g_vMtrlDiffuse", &mtrl.vDiffuse, sizeof(mtrl.vDiffuse));
-		        _SetShaderParam(m_Shader, "g_vMtrlAmbient", &mtrl.vAmbient, sizeof(mtrl.vAmbient));
-		        _SetShaderParam(m_Shader, "g_vMtrlSpecular", &mtrl.vSpecular, sizeof(mtrl.vSpecular));
+		        SetShaderParam(m_Shader, "g_vMtrlDiffuse", &mtrl.vDiffuse, sizeof(mtrl.vDiffuse));
+		        SetShaderParam(m_Shader, "g_vMtrlAmbient", &mtrl.vAmbient, sizeof(mtrl.vAmbient));
+		        SetShaderParam(m_Shader, "g_vMtrlSpecular", &mtrl.vSpecular, sizeof(mtrl.vSpecular));
 	        }
 
 			{
@@ -105,7 +105,7 @@ IZ_BOOL CStatePhongShader::Render(izanagi::CGraphicsDevice* device)
 					m_ParallelLight.vDir,
 					mtxW2L);
 
-				_SetShaderParam(
+				SetShaderParam(
 					m_Shader,
 					"g_vLitParallelDir",
 					(void*)&parallelLightLocalDir,

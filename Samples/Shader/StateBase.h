@@ -35,6 +35,12 @@ protected:
 		izanagi::CGraphicsDevice* device,
 		const char* name);
 
+    static void SetShaderParam(
+		izanagi::CShaderBasic* shader,
+		const char* name,
+		const void* value,
+		IZ_UINT bytes);
+
 protected:
 	izanagi::sample::CSampleApp* m_App;
 	izanagi::SCameraParam& m_Camera;
