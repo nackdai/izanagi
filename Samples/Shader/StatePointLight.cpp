@@ -79,7 +79,7 @@ IZ_BOOL CStatePointLight::Render(izanagi::CGraphicsDevice* device)
 	}
 	m_Shader->End();
 
-	RenderName(device, "PhongShader");
+	RenderName(device, "PointLight");
 
 	return IZ_TRUE;
 }
