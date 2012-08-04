@@ -17,19 +17,6 @@ CStatePhongShader::~CStatePhongShader()
 	Destroy();
 }
 
-// 初期化.
-IZ_BOOL CStatePhongShader::Init()
-{
-	// Nothing is done...
-	return IZ_TRUE;
-}
-
-// 更新
-IZ_BOOL CStatePhongShader::Update()
-{
-	return IZ_TRUE;
-}
-
 namespace {
 	inline void _SetShaderParam(
 		izanagi::CShaderBasic* shader,
@@ -184,30 +171,11 @@ __EXIT__:
 	return result;
 }
 
-// 終了.
-IZ_BOOL CStatePhongShader::Destroy()
-{
-	return Leave();
-}
-
 // ステートから抜ける（終了）.
 IZ_BOOL CStatePhongShader::Leave()
 {
 	SAFE_RELEASE(m_Shader);
 	SAFE_RELEASE(m_Sphere);
-
-	return IZ_TRUE;
-}
-
-// キー押下
-IZ_BOOL CStatePhongShader::OnKeyDown(IZ_UINT nChar)
-{
-	if (nChar == VK_UP) {
-		CStateManager::GetInstance().ChangeState(State_PhongShader + 1);
-	}
-	else if (nChar == VK_DOWN) {
-		CStateManager::GetInstance().ChangeState(State_PhongShader - 1);
-	}
 
 	return IZ_TRUE;
 }

@@ -1,5 +1,6 @@
 #include "StateBase.h"
 #include "izSampleKit.h"
+#include "StateManager.h"
 
 CStateBase::CStateBase(
 	izanagi::sample::CSampleApp* app,
@@ -7,6 +8,40 @@ CStateBase::CStateBase(
 : m_App(app), 
   m_Camera(camera)
 {
+}
+
+// èâä˙âª.
+IZ_BOOL CStateBase::Init()
+{
+	// Nothing is done...
+	return IZ_TRUE;
+}
+
+// çXêV
+IZ_BOOL CStateBase::Update()
+{
+	return IZ_TRUE;
+}
+
+
+// èIóπ.
+IZ_BOOL CStateBase::Destroy()
+{
+	return Leave();
+}
+
+IZ_BOOL CStateBase::OnKeyDown(IZ_UINT nChar)
+{
+    State cur = CStateManager::GetInstance().GetCurrentState();
+
+	if (nChar == VK_UP) {
+		CStateManager::GetInstance().ChangeState(cur + 1);
+	}
+	else if (nChar == VK_DOWN) {
+		CStateManager::GetInstance().ChangeState(cur - 1);
+	}
+
+	return IZ_TRUE;
 }
 
 void CStateBase::RenderName(
