@@ -18,23 +18,6 @@ CStateMirrorMap::~CStateMirrorMap()
 	Destroy();
 }
 
-namespace {
-	inline void _SetShaderParam(
-		izanagi::CShaderBasic* shader,
-		const char* name,
-		const void* value,
-		IZ_UINT bytes)
-	{
-		izanagi::IZ_SHADER_HANDLE handle = shader->GetParameterByName(name);
-		if (handle > 0) {
-			shader->SetParamValue(
-				handle,
-				value,
-				bytes);
-		}
-	}
-}
-
 // 描画.
 IZ_BOOL CStateMirrorMap::Render(izanagi::CGraphicsDevice* device)
 {
@@ -47,19 +30,19 @@ IZ_BOOL CStateMirrorMap::Render(izanagi::CGraphicsDevice* device)
 	{
 		if (m_Shader->BeginPass(0)) {
 			// パラメータ設定
-			_SetShaderParam(
+			SetShaderParam(
 				m_Shader,
 				"g_mL2W",
 				(void*)&mtxL2W,
 				sizeof(mtxL2W));
 
-			_SetShaderParam(
+			SetShaderParam(
 				m_Shader,
 				"g_mW2C",
 				(void*)&m_Camera.mtxW2C,
 				sizeof(m_Camera.mtxW2C));
 
-			_SetShaderParam(
+			SetShaderParam(
 				m_Shader,
 				"g_mW2V",
 				(void*)&m_Camera.mtxW2V,
