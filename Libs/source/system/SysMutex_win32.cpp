@@ -8,6 +8,7 @@ using namespace izanagi;
 CMutex::CMutex()
 {
 	m_Handle = IZ_NULL;
+    m_OwnerThreadId = 0;
 }
 
 
