@@ -76,8 +76,6 @@
     <ClInclude Include="..\..\include\shader\base\util\ShaderUtil.h">
       <Filter>include\base\util</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\izShader.h">
-      <Filter>include</Filter>
-    </ClInclude>
+    <ClInclude Include="..\..\include\izShader.h" />
   </ItemGroup>
 </Project>

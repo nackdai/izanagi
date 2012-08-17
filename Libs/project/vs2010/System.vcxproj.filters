@@ -91,8 +91,6 @@
     <ClInclude Include="..\..\include\system\SysThreadUtil.h">
       <Filter>include\thread</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\izSystem.h">
-      <Filter>include</Filter>
-    </ClInclude>
+    <ClInclude Include="..\..\include\izSystem.h" />
   </ItemGroup>
 </Project>

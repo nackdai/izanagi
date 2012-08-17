@@ -181,8 +181,6 @@
     <ClInclude Include="..\..\include\std\dependency_property\PropertyMetaData.h">
       <Filter>include\dependency_property</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\izStd.h">
-      <Filter>include</Filter>
-    </ClInclude>
+    <ClInclude Include="..\..\include\izStd.h" />
   </ItemGroup>
 </Project>

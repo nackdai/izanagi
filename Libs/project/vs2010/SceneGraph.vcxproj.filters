@@ -259,8 +259,6 @@
     <ClInclude Include="..\..\include\scenegraph\rendergraph\SceneRendererInterface.h">
       <Filter>include\rendergraph</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\izSceneGraph.h">
-      <Filter>include</Filter>
-    </ClInclude>
+    <ClInclude Include="..\..\include\izSceneGraph.h" />
   </ItemGroup>
 </Project>

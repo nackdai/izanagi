@@ -67,8 +67,6 @@
     <ClInclude Include="..\..\include\io\device\Pad.h">
       <Filter>include\device</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\izIo.h">
-      <Filter>include</Filter>
-    </ClInclude>
+    <ClInclude Include="..\..\include\izIo.h" />
   </ItemGroup>
 </Project>

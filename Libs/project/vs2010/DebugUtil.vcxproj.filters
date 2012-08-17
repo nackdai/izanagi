@@ -84,8 +84,6 @@
     <ClInclude Include="..\..\include\debugutil\mesh\DebugMeshTorus.h">
       <Filter>include\mesh</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\izDebugUtil.h">
-      <Filter>include</Filter>
-    </ClInclude>
+    <ClInclude Include="..\..\include\izDebugUtil.h" />
   </ItemGroup>
 </Project>

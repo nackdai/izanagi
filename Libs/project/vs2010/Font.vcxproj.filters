@@ -31,8 +31,6 @@
     <ClInclude Include="..\..\include\font\FontRendererBmp.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\izFont.h">
-      <Filter>include</Filter>
-    </ClInclude>
+    <ClInclude Include="..\..\include\izFont.h" />
   </ItemGroup>
 </Project>

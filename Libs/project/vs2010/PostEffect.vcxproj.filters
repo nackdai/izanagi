@@ -154,8 +154,6 @@
     <ClInclude Include="..\..\include\posteffect\vs\PostEffectVSSampling.h">
       <Filter>include\vs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\izPostEffect.h">
-      <Filter>include</Filter>
-    </ClInclude>
+    <ClInclude Include="..\..\include\izPostEffect.h" />
   </ItemGroup>
 </Project>
