@@ -160,9 +160,6 @@
     <ClInclude Include="..\..\include\math\MathNumericalAnlysis.h">
       <Filter>include\analysis</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\izMath.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\math\Tweener.h">
       <Filter>include\curve</Filter>
     </ClInclude>
@@ -172,6 +169,7 @@
     <ClInclude Include="..\..\include\math\MathDefs.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\izMath.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\include\math\SFMT\LICENSE.txt" />

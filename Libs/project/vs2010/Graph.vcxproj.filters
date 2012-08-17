@@ -249,9 +249,7 @@
     <ClInclude Include="..\..\include\izD3DDefs.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\izGraph.h">
-      <Filter>include</Filter>
-    </ClInclude>
+    <ClInclude Include="..\..\include\izGraph.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\source\graph\2d\shader\2DPS.hlsl">

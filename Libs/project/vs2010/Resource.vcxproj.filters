@@ -61,8 +61,6 @@
     <ClInclude Include="..\..\include\resource\archive\ArchiveZip.h">
       <Filter>include\archive</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\izResource.h">
-      <Filter>include</Filter>
-    </ClInclude>
+    <ClInclude Include="..\..\include\izResource.h" />
   </ItemGroup>
 </Project>
