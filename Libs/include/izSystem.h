@@ -6,8 +6,13 @@
 #include "system/SysCpu.h"
 #include "system/SysUtil.h"
 
+// Thread
+#include "system/SysThread.h"
 #include "system/SysMutex.h"
 #include "system/SysEvent.h"
+#include "system/SysSemaphore.h"
+#include "system/SysMonitor.h"
+#include "system/SysCond.h"
 
 #include "system/SysWindow.h"
 

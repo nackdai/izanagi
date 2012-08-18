@@ -44,7 +44,7 @@ namespace izanagi {
 		class CCondImpl;
 
 		CCondImpl* m_Impl;
-		IZ_UINT8 m_Buf[40];
+		IZ_UINT8 m_Buf[44];
 #endif
 	};
 }	// namespace izanagi

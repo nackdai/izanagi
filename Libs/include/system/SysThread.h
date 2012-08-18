@@ -19,7 +19,7 @@ namespace izanagi {
 		NO_COPIABLE(IRunnable);
 
 	public:
-		virtual void Run() = 0;
+		virtual void Run(void* userData) = 0;
 	};
 
 	/** スレッドの名前の型
@@ -28,7 +28,7 @@ namespace izanagi {
 
 	/**
 	 */
-	class CThread : public IRunnable {
+	class CThread {
 	public:
 		/** Get current thread id.
 		 */
@@ -42,20 +42,29 @@ namespace izanagi {
 
 		/** 実行中のスレッドを、指定されたミリ秒数の間、スリープ.
 		 */
-		void Sleep(IZ_UINT millisec);
+		static void Sleep(IZ_UINT millisec);
+
+        /** 現在実行中のスレッドを一時的に休止させ、ほかのスレッドが実行できるようにする.
+		 *
+		 * 同じプロセッサ上で動いているスレッド間でのみ可能
+		 *
+		 * NOTE
+		 * windowsだとwinbase.hの中で#define Yield()としているため、関数名にYieldが使えない
+		 */
+		static void YieldThread();
 
 	public:
 		CThread();
-		CThread(ThreadName name);
-		CThread(IRunnable* runnable);
-		CThread(ThreadName name, IRunnable* runnable);
+		CThread(const ThreadName& name);
+		CThread(IRunnable* runnable, void* userData);
+		CThread(const ThreadName& name, IRunnable* runnable, void* userData);
 
 		CThread(IZ_UINT cpu);
-		CThread(IZ_UINT cpu, ThreadName name);
-		CThread(IZ_UINT cpu, IRunnable* runnable);
-		CThread(IZ_UINT cpu, ThreadName name, IRunnable* runnable);
+		CThread(IZ_UINT cpu, const ThreadName& name);
+		CThread(IZ_UINT cpu, IRunnable* runnable, void* userData);
+		CThread(IZ_UINT cpu, const ThreadName& name, IRunnable* runnable, void* userData);
 
-		virtual ~CThread();
+		~CThread();
 
 		IZ_DECL_PLACEMENT_NEW();
 
@@ -64,8 +73,9 @@ namespace izanagi {
 	private:
 		void Init(
 			IZ_UINT cpu,
-			ThreadName* name,
-			IRunnable* runnable);
+			const ThreadName* name,
+			IRunnable* runnable,
+            void* userData);
 
 	public:
 		/** このスレッドの実行を開始.
@@ -76,20 +86,11 @@ namespace izanagi {
 		 */
 		void Join();
 
-		/** 現在実行中のスレッドを一時的に休止させ、ほかのスレッドが実行できるようにする.
-		 *
-		 * 同じプロセッサ上で動いているスレッド間でのみ可能
-		 *
-		 * NOTE
-		 * windowsだとwinbase.hの中で#define Yield()としているため、関数名にYieldが使えない
-		 */
-		void YieldThread();
-
 		/** 処理実行.
 		 *
 		 * @return falseを返すとスレッドから抜ける
 		 */
-		virtual void Run();
+		void Run();
 
 		/** スレッドID取得.
 		 */
@@ -115,6 +116,7 @@ namespace izanagi {
 
 		IZ_UINT m_Cpu;
 		
+        void* m_UserData;
 		IRunnable* m_Runnable;
 
 		CMutex m_Mutex;

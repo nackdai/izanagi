@@ -14,6 +14,7 @@ using namespace izanagi;
 
 CMonitor::CMonitor()
 {
+    m_IsLocked = IZ_FALSE;
 }
 
 CMonitor::~CMonitor()
@@ -50,32 +51,23 @@ void CMonitor::Destroy()
 void CMonitor::Lock()
 {
 	m_LockMutex.Lock();
+    m_IsLocked = IZ_TRUE;
 }
 
 // syncronized終了.
 void CMonitor::Unlock()
 {
 	m_LockMutex.Unlock();
+    m_IsLocked = IZ_FALSE;
 
 	// 念のため
-	NotifyAll();
-}
-
-namespace {
-	// スレッドIDチェック
-	inline IZ_BOOL CheckOwnerThreadId(const ThreadId& threadId)
-	{
-		ThreadId id = CThread::GetCurrentThreadId();
-		IZ_BOOL ret = CThread::IsEqualThreadId(threadId, id);
-		return ret;
-	}
+	//NotifyAll();
 }
 
 // 待機.
 void CMonitor::Wait()
 {
-	// スレッドIDチェック
-	IZ_ASSERT(CheckOwnerThreadId(m_LockMutex.GetOwnerThreadId()));
+    IZ_ASSERT(m_IsLocked);
 
 	m_WaitCond.Wait(m_LockMutex);
 }
@@ -83,17 +75,11 @@ void CMonitor::Wait()
 // 待機中のスレッドを１つ起こす.
 void CMonitor::Notify()
 {
-	// スレッドIDチェック
-	IZ_ASSERT(CheckOwnerThreadId(m_LockMutex.GetOwnerThreadId()));
-
 	m_WaitCond.Signal();
 }
 
 // 待機中のスレッドを全て起こす.
 void CMonitor::NotifyAll()
 {
-	// スレッドIDチェック
-	IZ_ASSERT(CheckOwnerThreadId(m_LockMutex.GetOwnerThreadId()));
-
 	m_WaitCond.Broadcast();
 }

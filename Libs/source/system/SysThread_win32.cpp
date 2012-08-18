@@ -27,6 +27,12 @@ void CThread::Sleep(IZ_UINT millisec)
 	::Sleep(millisec);
 }
 
+// 現在実行中のスレッドを一時的に休止させ、ほかのスレッドが実行できるようにする.
+void CThread::YieldThread()
+{
+	CThread::Sleep(0);
+}
+
 // スレッド実行関数
 static UINT __stdcall procThreadFunc(LPVOID param)
 {
@@ -39,42 +45,42 @@ static UINT __stdcall procThreadFunc(LPVOID param)
 
 CThread::CThread()
 {
-	Init(0, IZ_NULL, IZ_NULL);
+	Init(0, IZ_NULL, IZ_NULL, IZ_NULL);
 }
 
-CThread::CThread(ThreadName name)
+CThread::CThread(const ThreadName& name)
 {
-	Init(0, &name, IZ_NULL);
+	Init(0, &name, IZ_NULL, IZ_NULL);
 }
 
-CThread::CThread(IRunnable* runnable)
+CThread::CThread(IRunnable* runnable, void* userData)
 {
-	Init(0, IZ_NULL, runnable);
+	Init(0, IZ_NULL, runnable, userData);
 }
 
-CThread::CThread(ThreadName name, IRunnable* runnable)
+CThread::CThread(const ThreadName& name, IRunnable* runnable, void* userData)
 {
-	Init(0, &name, runnable);
+	Init(0, &name, runnable, userData);
 }
 
 CThread::CThread(IZ_UINT cpu)
 {
-	Init(cpu, IZ_NULL, IZ_NULL);
+	Init(cpu, IZ_NULL, IZ_NULL, IZ_NULL);
 }
 
-CThread::CThread(IZ_UINT cpu, ThreadName name)
+CThread::CThread(IZ_UINT cpu, const ThreadName& name)
 {
-	Init(cpu, &name, IZ_NULL);
+	Init(cpu, &name, IZ_NULL, IZ_NULL);
 }
 
-CThread::CThread(IZ_UINT cpu, IRunnable* runnable)
+CThread::CThread(IZ_UINT cpu, IRunnable* runnable, void* userData)
 {
-	Init(cpu, IZ_NULL, runnable);
+	Init(cpu, IZ_NULL, runnable, userData);
 }
 
-CThread::CThread(IZ_UINT cpu, ThreadName name, IRunnable* runnable)
+CThread::CThread(IZ_UINT cpu, const ThreadName& name, IRunnable* runnable, void* userData)
 {
-	Init(cpu, &name, runnable);
+	Init(cpu, &name, runnable, userData);
 }
 
 CThread::~CThread()
@@ -84,12 +90,15 @@ CThread::~CThread()
 
 void CThread::Init(
 	IZ_UINT cpu,
-	ThreadName* name,
-	IRunnable* runnable)
+	const ThreadName* name,
+	IRunnable* runnable,
+    void* userData)
 {
 	m_Handle = IZ_NULL;
 	m_Id = 0;
 	m_Cpu = cpu;
+
+    m_UserData = userData;
 	m_Runnable = runnable;
 
 	if (name) {
@@ -117,7 +126,7 @@ IZ_BOOL CThread::Start()
 						CREATE_SUSPENDED,	// 待機
 						&m_Id);
 
-		if (m_Handle != IZ_NULL) {
+		if (m_Handle == IZ_NULL) {
 			IZ_ASSERT(IZ_FALSE);
 			Join();
 			return IZ_FALSE;
@@ -144,19 +153,13 @@ void CThread::Join()
 	m_Mutex.Close();
 }
 
-// 現在実行中のスレッドを一時的に休止させ、ほかのスレッドが実行できるようにする.
-void CThread::YieldThread()
-{
-	CThread::Sleep(0);
-}
-
 // 処理実行.
 void CThread::Run()
 {
 	IZ_ASSERT(m_Runnable != IZ_NULL);
 
 	if (m_Runnable) {
-		m_Runnable->Run();
+		m_Runnable->Run(m_UserData);
 	}
 }
 

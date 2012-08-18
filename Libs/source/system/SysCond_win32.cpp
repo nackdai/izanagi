@@ -212,6 +212,8 @@ private:
 
 	IZ_UINT m_Waiters;
 	IZ_UINT m_UnblockWaiters;
+
+    IZ_BOOL m_IsDestroied;
 };
 
 // 初期化
@@ -225,20 +227,27 @@ IZ_BOOL CCondVar::CCondImpl::Init()
 	m_Waiters = 0;
 	m_UnblockWaiters = 0;
 
+    m_IsDestroied = IZ_FALSE;
+
 	return IZ_TRUE;
 }
 
 // 終了
 void CCondVar::CCondImpl::Destroy()
 {
-	// 何も残っていないこと
-	IZ_ASSERT(m_Waiters = 0);
-	IZ_ASSERT(m_UnblockWaiters = 0);
+    if (!m_IsDestroied)
+    {
+	    // 何も残っていないこと
+	    IZ_ASSERT(m_Waiters == 0);
+	    IZ_ASSERT(m_UnblockWaiters == 0);
 
-	m_SemaWaiterCountLock.Close();
-	m_SemaWait.Close();
+	    m_SemaWaiterCountLock.Close();
+	    m_SemaWait.Close();
 
-	::DeleteCriticalSection(&m_UnblockWaiterCountLock);
+	    ::DeleteCriticalSection(&m_UnblockWaiterCountLock);
+
+        m_IsDestroied = IZ_TRUE;
+    }
 }
 
 // 待機

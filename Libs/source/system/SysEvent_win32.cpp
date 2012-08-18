@@ -69,15 +69,15 @@ IZ_BOOL CEvent::Wait()
 }
 
 // NOTE
-// 自動リセットでWait終了時に自動で非シグナル状態になるので
+// 自動リセットではWait終了時に自動で非シグナル状態になるので
 // 明示的に非シグナル状態にする必要がない
-#if 0
+// 今回は手動リセット
+
 // 非シグナル状態にする.
 void CEvent::Reset()
 {
 	IZ_ASSERT(m_Handle != IZ_NULL);
 	::ResetEvent(m_Handle);
 }
-#endif
 
 #endif	// #if defined(WIN32) || defined(WIN64)
