@@ -17,14 +17,7 @@ namespace izanagi {
 		CMonitor();
 		~CMonitor();
 
-		NO_COPIABLE(CMonitor);
-
-	private:
-		// syncronized開始.
-		void Lock();
-
-		// syncronized終了.
-		void Unlock();
+		NO_COPIABLE(CMonitor);		
 
 	public:
 		/** 初期化.
@@ -34,6 +27,14 @@ namespace izanagi {
 		/** 終了.
 		 */
 		void Destroy();
+
+        /** syncronized開始.
+         */
+		void Lock();
+
+		/** syncronized終了.
+         */
+		void Unlock();
 
 		/** 待機.
 		 */
@@ -50,6 +51,7 @@ namespace izanagi {
 	private:
 		CMutex m_LockMutex;
 		CCondVar m_WaitCond;
+        IZ_BOOL m_IsLocked;
 	};
 }	// namespace izanagi
 
