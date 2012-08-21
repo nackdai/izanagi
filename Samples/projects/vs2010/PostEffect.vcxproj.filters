@@ -33,6 +33,15 @@
     <None Include="..\..\PostEffect\shader\CubeMapBoxShader.fx">
       <Filter>shader</Filter>
     </None>
+    <None Include="..\..\PostEffect\posteffect\PostEffectNegative.fx">
+      <Filter>posteffect</Filter>
+    </None>
+    <None Include="..\..\PostEffect\posteffect\PostEffectSepia.fx">
+      <Filter>posteffect</Filter>
+    </None>
+    <None Include="..\..\PostEffect\posteffect\PostEffectMonotone.fx">
+      <Filter>posteffect</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\PostEffect\main.cpp">
