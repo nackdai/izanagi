@@ -1,16 +1,16 @@
-#if !defined(__STATE_POINT_LIGHT_H__)
-#define __STATE_POINT_LIGHT_H__
+#if !defined(__STATE_SPOT_LIGHT_H__)
+#define __STATE_SPOT_LIGHT_H__
 
 #include "izSceneGraph.h"
 #include "izDebugUtil.h"
 #include "StateBase.h"
 
-class CStatePointLight : public CStateBase {
+class CStateSpotLight : public CStateBase {
 public:
-	CStatePointLight(
+	CStateSpotLight(
 		izanagi::sample::CSampleApp* app,
 		izanagi::SCameraParam& camera);
-	virtual ~CStatePointLight();
+	virtual ~CStateSpotLight();
 
 public:
 	// 描画.
@@ -36,7 +36,7 @@ private:
 protected:
 	izanagi::CShaderBasic* m_Shader;
 
-    izanagi::SPointLightParam m_PointLight;
+    izanagi::SSpotLightParam m_SpotLight;
 
 	izanagi::CDebugMesh* m_Light;
 
@@ -45,4 +45,4 @@ protected:
     izanagi::CDebugMesh* m_Plane;
 };
 
-#endif	// #if !defined(__STATE_POINT_LIGHT_H__)
+#endif	// #if !defined(__STATE_SPOT_LIGHT_H__)

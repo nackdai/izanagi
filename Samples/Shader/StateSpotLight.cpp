@@ -1,9 +1,9 @@
-#include "StatePointLight.h"
+#include "StateSpotLight.h"
 #include "izGraph.h"
 #include "izIo.h"
 #include "StateManager.h"
 
-CStatePointLight::CStatePointLight(
+CStateSpotLight::CStateSpotLight(
 	izanagi::sample::CSampleApp* app,
 	izanagi::SCameraParam& camera)
 : CStateBase(app, camera)
@@ -17,13 +17,13 @@ CStatePointLight::CStatePointLight(
     m_Plane = IZ_NULL;
 }
 
-CStatePointLight::~CStatePointLight()
+CStateSpotLight::~CStateSpotLight()
 {
 	Destroy();
 }
 
 // 描画.
-IZ_BOOL CStatePointLight::Render(izanagi::CGraphicsDevice* device)
+IZ_BOOL CStateSpotLight::Render(izanagi::CGraphicsDevice* device)
 {
 	izanagi::SMatrix mtxL2W;
 	izanagi::SMatrix::SetUnit(mtxL2W);
@@ -46,19 +46,24 @@ IZ_BOOL CStatePointLight::Render(izanagi::CGraphicsDevice* device)
 
             SetShaderParam(
 				m_Shader,
-                "g_PointLightPos",
-                (void*)&m_PointLight.vPos,
-                sizeof(m_PointLight.vPos));
+                "g_SpotLightPos",
+                (void*)&m_SpotLight.vPos,
+                sizeof(m_SpotLight.vPos));
             SetShaderParam(
 				m_Shader,
-                "g_PointLight",
-                (void*)&m_PointLight.attn,
-                sizeof(m_PointLight.attn));
+                "g_SpotLight",
+                (void*)&m_SpotLight.param,
+                sizeof(m_SpotLight.param));
             SetShaderParam(
 				m_Shader,
-                "g_PointLightColor",
-                (void*)&m_PointLight.color,
-                sizeof(m_PointLight.color));
+                "g_SpotLightColor",
+                (void*)&m_SpotLight.color,
+                sizeof(m_SpotLight.color));
+            SetShaderParam(
+				m_Shader,
+                "g_SpotLightDir",
+                (void*)&m_SpotLight.vDir,
+                sizeof(m_SpotLight.vDir));
 
             // 地面
             RenderScene(
@@ -105,17 +110,17 @@ IZ_BOOL CStatePointLight::Render(izanagi::CGraphicsDevice* device)
 			RenderScene(
                 device, 
                 m_Light,
-                m_PointLight.vPos);
+                m_SpotLight.vPos);
         }
 	}
 	m_Shader->End();
 
-	RenderName(device, "PointLight");
+	RenderName(device, "SpotLight");
 
 	return IZ_TRUE;
 }
 
-void CStatePointLight::RenderScene(
+void CStateSpotLight::RenderScene(
     izanagi::CGraphicsDevice* device,
     izanagi::CDebugMesh* mesh,
     const izanagi::SVector& position)
@@ -135,7 +140,7 @@ void CStatePointLight::RenderScene(
 }
 
 // 開始
-IZ_BOOL CStatePointLight::Enter(
+IZ_BOOL CStateSpotLight::Enter(
 	izanagi::IMemoryAllocator* allocator,
 	void* val)
 {
@@ -146,7 +151,7 @@ IZ_BOOL CStatePointLight::Enter(
 	// シェーダ
 	{
 		izanagi::CFileInputStream in;
-		VRETURN(in.Open("data/PointLightShader.shd"));
+		VRETURN(in.Open("data/SpotLightShader.shd"));
 
 		m_Shader = izanagi::CShaderBasic::CreateShader<izanagi::CShaderBasic>(
 					allocator,
@@ -206,9 +211,10 @@ IZ_BOOL CStatePointLight::Enter(
 
     // ポイントライト
     {
-        m_PointLight.vPos.Set(0.0f, 5.0f, 0.0f);
-        m_PointLight.color.Set(1.0f, 1.0f, 1.0f, 1.0f);
-        m_PointLight.attn.Set(0.0f, 0.0f, 0.01f, 0.0f);
+        m_SpotLight.vPos.Set(0.0f, 15.0f, 0.0f);
+        m_SpotLight.vDir.Set(0.0f, -1.0f, 0.0f);
+        m_SpotLight.color.Set(1.0f, 1.0f, 1.0f, 1.0f);
+        m_SpotLight.param.Set(0.0f, 0.0f, 0.01f, 3.0f);
     }
 
 __EXIT__:
@@ -220,7 +226,7 @@ __EXIT__:
 }
 
 // ステートから抜ける（終了）.
-IZ_BOOL CStatePointLight::Leave()
+IZ_BOOL CStateSpotLight::Leave()
 {
 	SAFE_RELEASE(m_Shader);
 

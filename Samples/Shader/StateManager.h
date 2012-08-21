@@ -13,6 +13,7 @@ enum State {
 	State_MirrorMap = 0,
 	State_PhongShader,
     State_PointLight,
+    State_SpotLight,
 
 	StateNum,
 };

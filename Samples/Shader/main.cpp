@@ -1,5 +1,6 @@
 #include "izSampleKit.h"
 #include "StateManager.h"
+#include "StateBase.h"
 
 static const IZ_UINT BUF_SIZE = 8 * 1024 * 1024;
 static IZ_UINT8 BUF[BUF_SIZE];
@@ -34,6 +35,9 @@ protected:
 
 	// ï`âÊ.
 	virtual void RenderInternal(izanagi::CGraphicsDevice* device);
+
+    // îwåiêFéÊìæ.
+	virtual IZ_COLOR GetBgColor() const;
 
 private:
 	izanagi::IMemoryAllocator* m_Allocator;
@@ -100,6 +104,21 @@ void CShaderApp::UpdateInternal(izanagi::CGraphicsDevice* device)
 void CShaderApp::RenderInternal(izanagi::CGraphicsDevice* device)
 {
 	CStateManager::GetInstance().Render(device);
+}
+
+// îwåiêFéÊìæ.
+IZ_COLOR CShaderApp::GetBgColor() const
+{
+    izanagi::CSceneStateBase* state = CStateManager::GetInstance().GetState(
+        CStateManager::GetInstance().GetCurrentState());
+
+    IZ_BOOL enableBgColor = (reinterpret_cast<CStateBase*>(state))->EnableBgColor();
+    if (enableBgColor)
+    {
+        return (reinterpret_cast<CStateBase*>(state))->GetBgColor();
+    }
+
+    return CSampleApp::GetBgColor();
 }
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)

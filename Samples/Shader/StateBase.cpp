@@ -76,4 +76,8 @@ void CStateBase::SetShaderParam(
 			value,
 			bytes);
 	}
+    else
+    {
+        IZ_PRINTF("Can not find shader parameter [%s]\n", name);
+    }
 }
