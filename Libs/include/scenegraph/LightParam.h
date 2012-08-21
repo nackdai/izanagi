@@ -36,7 +36,7 @@ namespace izanagi {
 		SVector vPos;
 		SVector vDir;
 		SVector color;
-		SVector param;	// 0 : power / 1 - 3 : attn
+		SVector param;	// 0 - 2 : attn / 3 : power
 	};
 
 	/**
