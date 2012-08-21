@@ -3,6 +3,7 @@
 #include "StateMirrorMap.h"
 #include "StatePhongShader.h"
 #include "StatePointLight.h"
+#include "StateSpotLight.h"
 
 CStateManager CStateManager::s_Instance;
 
@@ -21,4 +22,5 @@ void CStateManager::Create(
 	_STATE(MirrorMap, app, camera);
 	_STATE(PhongShader, app, camera);
     _STATE(PointLight, app, camera);
+    _STATE(SpotLight, app, camera);
 }

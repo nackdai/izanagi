@@ -1,4 +1,4 @@
-// PointLight Shader
+// SpotLight Shader
 
 struct SVSInput {
 	float4 vPos		: POSITION;
@@ -9,6 +9,7 @@ struct SPSInput {
 	float4 vPos		: POSITION;
 	float4 vColor	: COLOR;
 	float distance	: TEXCOORD0;
+	float attn		: TEXCOORD1;
 };
 
 #define SVSOutput		SPSInput
@@ -19,13 +20,16 @@ float4x4 g_mL2W;
 float4x4 g_mW2C;
 
 // 位置
-float4 g_PointLightPos;
+float4 g_SpotLightPos;
+
+// 方向
+float4 g_SpotLightDir;
 
 // 係数
-float4 g_PointLight;
+float4 g_SpotLight;
 
 // 色
-float4 g_PointLightColor;
+float4 g_SpotLightColor;
 
 /////////////////////////////////////////////////////////////
 
@@ -35,8 +39,17 @@ SVSOutput mainVS(SVSInput In)
 	
 	Out.vPos = mul(In.vPos, g_mL2W);
 
+	// ライトへの方向ベクトル
+	float3 vLightDir = g_SpotLightPos.xyz - Out.vPos.xyz;
+
 	// ライトとの距離
-	Out.distance = length(g_PointLightPos - Out.vPos);
+	Out.distance = length(vLightDir);
+
+	// 単位ベクトルにする
+	vLightDir = normalize(vLightDir);
+
+	// ライトベクトルの逆向きとスポットライトとの内積
+	Out.attn = max(dot(g_SpotLightDir.xyz, -vLightDir), 0.0f);
 
 	Out.vPos = mul(Out.vPos, g_mW2C);
 		
@@ -47,11 +60,11 @@ SVSOutput mainVS(SVSInput In)
 
 float4 mainPS(SPSInput In) : COLOR
 {
-	// ポイントライトの減衰
+	// 減衰を計算
 	float d = In.distance;
-	float attn = 1.0f / (g_PointLight.x + g_PointLight.y * d + g_PointLight.z * d * d);
+	float attn = pow(In.attn, g_SpotLight.w) / (g_SpotLight.x + g_SpotLight.y * d + g_SpotLight.z * d * d);
 
-	float4 vOut = In.vColor + attn * g_PointLightColor;
+	float4 vOut = In.vColor + attn * g_SpotLightColor;
 	vOut.a = In.vColor.a;
 	
 	return vOut;
@@ -87,7 +100,6 @@ technique PointLight
 		VertexShader = compile vs_3_0 mainVS();
 		PixelShader = compile ps_3_0 mainPS();
 	}
-
 	pass P1
 	{
 		VertexShader = compile vs_3_0 mainVS_NoLight();
