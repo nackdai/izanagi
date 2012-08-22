@@ -45,6 +45,9 @@
     <ClCompile Include="..\..\Shader\StateSpotLight.cpp">
       <Filter>state\source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Shader\StateNormalMap.cpp">
+      <Filter>state\source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Shader\shader\MirrorMapShader.fx">
@@ -57,6 +60,9 @@
       <Filter>shader</Filter>
     </None>
     <None Include="..\..\Shader\shader\SpotLightShader.fx">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\Shader\shader\NormalMapShader.fx">
       <Filter>shader</Filter>
     </None>
   </ItemGroup>
@@ -79,6 +85,9 @@
     <ClInclude Include="..\..\Shader\StateSpotLight.h">
       <Filter>state\include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Shader\StateNormalMap.h">
+      <Filter>state\include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\Shader\shader\MirrorMapShader.xml">
@@ -94,6 +103,12 @@
       <Filter>shader</Filter>
     </CustomBuild>
     <CustomBuild Include="..\..\Shader\shader\SpotLightShader.xml">
+      <Filter>shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\Shader\asset.xml">
+      <Filter>asset</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\Shader\shader\NormalMapShader.xml">
       <Filter>shader</Filter>
     </CustomBuild>
   </ItemGroup>
