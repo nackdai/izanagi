@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<textures>
+  <plane
+    path="../data/tile.bmp"
+    fmt="dxt5"/>
+  <plane
+	  path="../data/four_NM_height.dds"
+	  fmt="rgba8"/>
+</textures>

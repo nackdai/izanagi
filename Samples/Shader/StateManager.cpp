@@ -4,6 +4,7 @@
 #include "StatePhongShader.h"
 #include "StatePointLight.h"
 #include "StateSpotLight.h"
+#include "StateNormalMap.h"
 
 CStateManager CStateManager::s_Instance;
 
@@ -23,4 +24,5 @@ void CStateManager::Create(
 	_STATE(PhongShader, app, camera);
     _STATE(PointLight, app, camera);
     _STATE(SpotLight, app, camera);
+    _STATE(NormalMap, app, camera);
 }

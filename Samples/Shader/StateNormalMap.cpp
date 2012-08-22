@@ -1,28 +1,32 @@
-#include "StatePhongShader.h"
+#include "StateNormalMap.h"
 #include "izGraph.h"
 #include "izIo.h"
 #include "StateManager.h"
 
-CStatePhongShader::CStatePhongShader(
+CStateNormalMap::CStateNormalMap(
 	izanagi::sample::CSampleApp* app,
 	izanagi::SCameraParam& camera)
 : CStateBase(app, camera)
 {
 	m_Shader = IZ_NULL;
-	m_Sphere = IZ_NULL;
     m_Axis = IZ_NULL;
+	m_Plane = IZ_NULL;
+    m_Image = IZ_NULL;
 }
 
-CStatePhongShader::~CStatePhongShader()
+CStateNormalMap::~CStateNormalMap()
 {
 	Destroy();
 }
 
 // 描画.
-IZ_BOOL CStatePhongShader::Render(izanagi::CGraphicsDevice* device)
+IZ_BOOL CStateNormalMap::Render(izanagi::CGraphicsDevice* device)
 {
 	izanagi::SMatrix mtxL2W;
 	izanagi::SMatrix::SetUnit(mtxL2W);
+
+    device->SetTexture(0, m_Image->GetTexture(0));
+    device->SetTexture(1, m_Image->GetTexture(1));
 
 	m_Shader->Begin(0, IZ_FALSE);
 	{
@@ -48,6 +52,9 @@ IZ_BOOL CStatePhongShader::Render(izanagi::CGraphicsDevice* device)
         }
 
 		if (m_Shader->BeginPass(0)) {
+            //m_Shader->SetTexture("texAlbedo", m_Image->GetTexture(0));
+            //m_Shader->SetTexture("texNormal", m_Image->GetTexture(1));
+
 			// パラメータ設定
 			SetShaderParam(
 				m_Shader,
@@ -63,31 +70,12 @@ IZ_BOOL CStatePhongShader::Render(izanagi::CGraphicsDevice* device)
 
             // ライトパラメータ
 	        {
-		        // Ambient Light Color
-		        izanagi::SAmbientLightParam ambient;
-		        ambient.color.Set(0.0f, 0.0f, 0.0f);
-
-		        // Parallel Light Color
-		        m_ParallelLight.color.Set(1.0f, 1.0f, 1.0f);
-
-		        // Parallel Light Direction
-		        m_ParallelLight.vDir.Set(-1.0f, -1.0f, -1.0f);
-		        izanagi::SVector::Normalize(m_ParallelLight.vDir, m_ParallelLight.vDir);
-
-		        // マテリアル
-		        izanagi::SMaterialParam mtrl;
-		        {
-			        mtrl.vDiffuse.Set(1.0f, 1.0f, 1.0f, 1.0f);
-			        mtrl.vAmbient.Set(1.0f, 1.0f, 1.0f, 1.0f);
-			        mtrl.vSpecular.Set(1.0f, 1.0f, 1.0f, 20.0f);
-		        }
-
 		        SetShaderParam(m_Shader, "g_vLitParallelColor", &m_ParallelLight.color, sizeof(m_ParallelLight.color));
-		        SetShaderParam(m_Shader, "g_vLitAmbientColor", &ambient.color, sizeof(ambient.color));
+		        SetShaderParam(m_Shader, "g_vLitAmbientColor", &m_Ambient.color, sizeof(m_Ambient.color));
 
-		        SetShaderParam(m_Shader, "g_vMtrlDiffuse", &mtrl.vDiffuse, sizeof(mtrl.vDiffuse));
-		        SetShaderParam(m_Shader, "g_vMtrlAmbient", &mtrl.vAmbient, sizeof(mtrl.vAmbient));
-		        SetShaderParam(m_Shader, "g_vMtrlSpecular", &mtrl.vSpecular, sizeof(mtrl.vSpecular));
+		        SetShaderParam(m_Shader, "g_vMtrlDiffuse", &m_Mtrl.vDiffuse, sizeof(m_Mtrl.vDiffuse));
+		        SetShaderParam(m_Shader, "g_vMtrlAmbient", &m_Mtrl.vAmbient, sizeof(m_Mtrl.vAmbient));
+		        SetShaderParam(m_Shader, "g_vMtrlSpecular", &m_Mtrl.vSpecular, sizeof(m_Mtrl.vSpecular));
 	        }
 
 			{
@@ -130,18 +118,18 @@ IZ_BOOL CStatePhongShader::Render(izanagi::CGraphicsDevice* device)
 
 			m_Shader->CommitChanges();
 
-			m_Sphere->Draw();
+			m_Plane->Draw();
 		}
 	}
 	m_Shader->End();
 
-	RenderName(device, "PhongShader");
+	RenderName(device, "NormalMap");
 
 	return IZ_TRUE;
 }
 
 // 開始
-IZ_BOOL CStatePhongShader::Enter(
+IZ_BOOL CStateNormalMap::Enter(
 	izanagi::IMemoryAllocator* allocator,
 	void* val)
 {
@@ -152,7 +140,7 @@ IZ_BOOL CStatePhongShader::Enter(
 	// シェーダ
 	{
 		izanagi::CFileInputStream in;
-		VRETURN(in.Open("data/PhongShader.shd"));
+		VRETURN(in.Open("data/NormalMapShader.shd"));
 
 		m_Shader = izanagi::CShaderBasic::CreateShader<izanagi::CShaderBasic>(
 					allocator,
@@ -170,18 +158,50 @@ IZ_BOOL CStatePhongShader::Enter(
 	// 球
 	{
 		IZ_UINT flag = izanagi::E_DEBUG_MESH_VTX_FORM_POS
+                        | izanagi::E_DEBUG_MESH_VTX_FORM_UV
 						| izanagi::E_DEBUG_MESH_VTX_FORM_NORMAL
-						| izanagi::E_DEBUG_MESH_VTX_FORM_COLOR;
+						| izanagi::E_DEBUG_MESH_VTX_FORM_COLOR
+                        | izanagi::E_DEBUG_MESH_VTX_FORM_TANGENT;
 
-		m_Sphere = izanagi::CDebugMeshSphere::CreateDebugMeshSphere(
-						allocator,
-						device,
-						flag,
-						IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0xff),
-						5.0f,
-						20, 20);
-		VGOTO(result = (m_Sphere != IZ_NULL), __EXIT__);
+		m_Plane = izanagi::CDebugMeshRectangle::CreateDebugMeshRectangle(
+            allocator,
+            device,
+            flag,
+            IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0xff),
+            10, 10,
+            50.0f, 50.0f);
+        VGOTO(result = (m_Plane != IZ_NULL), __EXIT__);
 	}
+
+    // テクスチャ
+    {
+        izanagi::CFileInputStream in;
+		VRETURN(in.Open("data/asset.img"));
+        
+        m_Image = izanagi::CImage::CreateImage(
+            allocator,
+            device,
+            &in);
+        VGOTO(result = (m_Image != IZ_NULL), __EXIT__);
+    }
+
+    // ライトパラメータ
+	{
+		// Ambient Light Color
+		m_Ambient.color.Set(0.0f, 0.0f, 0.0f);
+
+		// Parallel Light Color
+		m_ParallelLight.color.Set(1.0f, 1.0f, 1.0f);
+
+		// Parallel Light Direction
+		m_ParallelLight.vDir.Set(0.0f, 0.0f, -1.0f);
+		izanagi::SVector::Normalize(m_ParallelLight.vDir, m_ParallelLight.vDir);
+
+		// マテリアル
+		m_Mtrl.vDiffuse.Set(1.0f, 1.0f, 1.0f, 1.0f);
+		m_Mtrl.vAmbient.Set(1.0f, 1.0f, 1.0f, 1.0f);
+		m_Mtrl.vSpecular.Set(1.0f, 1.0f, 1.0f, 20.0f);
+    }
 
 	izanagi::SMatrix::SetUnit(m_L2W);
 
@@ -194,11 +214,12 @@ __EXIT__:
 }
 
 // ステートから抜ける（終了）.
-IZ_BOOL CStatePhongShader::Leave()
+IZ_BOOL CStateNormalMap::Leave()
 {
 	SAFE_RELEASE(m_Shader);
-	SAFE_RELEASE(m_Sphere);
     SAFE_RELEASE(m_Axis);
+	SAFE_RELEASE(m_Plane);
+    SAFE_RELEASE(m_Image);
 
 	return IZ_TRUE;
 }

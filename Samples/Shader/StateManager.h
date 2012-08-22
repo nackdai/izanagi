@@ -14,6 +14,7 @@ enum State {
 	State_PhongShader,
     State_PointLight,
     State_SpotLight,
+    State_NormalMap,
 
 	StateNum,
 };

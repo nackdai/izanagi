@@ -1,16 +1,16 @@
-#if !defined(__STATE_PHONG_SHADER_H__)
-#define __STATE_PHONG_SHADER_H__
+#if !defined(__STATE_NORMAL_MAP_H__)
+#define __STATE_NORMAL_MAP_H__
 
 #include "izSceneGraph.h"
 #include "izDebugUtil.h"
 #include "StateBase.h"
 
-class CStatePhongShader : public CStateBase {
+class CStateNormalMap : public CStateBase {
 public:
-	CStatePhongShader(
+	CStateNormalMap(
 		izanagi::sample::CSampleApp* app,
 		izanagi::SCameraParam& camera);
-	virtual ~CStatePhongShader();
+	virtual ~CStateNormalMap();
 
 public:
 	// 描画.
@@ -28,10 +28,15 @@ protected:
 	izanagi::CShaderBasic* m_Shader;
 
     izanagi::CDebugMeshAxis* m_Axis;
-	izanagi::CDebugMeshSphere* m_Sphere;
+    izanagi::CDebugMeshRectangle* m_Plane;
+
+    izanagi::CImage* m_Image;
 
 	izanagi::SMatrix m_L2W;
+
 	izanagi::SParallelLightParam m_ParallelLight;
+    izanagi::SAmbientLightParam m_Ambient;
+    izanagi::SMaterialParam m_Mtrl;
 };
 
-#endif	// #if !defined(__STATE_PHONG_SHADER_H__)
+#endif	// #if !defined(__STATE_NORMAL_MAP_H__)
