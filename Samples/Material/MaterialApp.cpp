@@ -279,6 +279,9 @@ IZ_BOOL CMaterialApp::InitInternal(
 		(IZ_FLOAT)SCREEN_WIDTH / SCREEN_HEIGHT);
 	camera.Update();
 
+    // L2W
+    izanagi::SMatrix::SetUnit(m_L2W);
+
 __EXIT__:
 	if (!result) {
 		ReleaseInternal();
@@ -331,34 +334,45 @@ void CMaterialApp::RenderInternal(izanagi::CGraphicsDevice* device)
 
 	// シェーダパラメータセット
 	{
-		izanagi::SMatrix mtxL2W;
-		izanagi::SMatrix::SetUnit(mtxL2W);
-
 		const izanagi::SMatrix& mtxW2C = camera.GetParam().mtxW2C;
-		const izanagi::SVector& vecEye = camera.GetParam().pos;
-
 		_SetShaderParam(m_Shd, "g_mW2C", &mtxW2C, sizeof(mtxW2C));
-		_SetShaderParam(m_Shd, "g_vEye", &vecEye, sizeof(vecEye));
 
 		{
 			// ライトの方向をローカル座標に変換する
 
 			// ライトの方向はワールド座標なので World -> Localマトリクスを計算する
 			izanagi::SMatrix mtxW2L;
-			izanagi::SMatrix::Inverse(mtxW2L, mtxL2W);
+			izanagi::SMatrix::Inverse(mtxW2L, m_L2W);
 
 			// World -> Local
 			izanagi::SVector parallelLightLocalDir;
 			izanagi::SMatrix::ApplyXYZ(
 				parallelLightLocalDir,
 				m_ParallelLight.vDir,
-				mtxL2W);
+				m_L2W);
 
 			_SetShaderParam(
 				m_Shd,
 				"g_vLitParallelDir",
 				(void*)&parallelLightLocalDir,
 				sizeof(parallelLightLocalDir));
+
+            // L2V = L2W * W2V の逆行列を計算する
+            izanagi::SMatrix mtxV2L;
+            izanagi::SMatrix::Mul(mtxV2L, m_L2W, camera.GetParam().mtxW2V);
+            izanagi::SMatrix::Inverse(mtxV2L, mtxV2L);
+
+            // ビュー座標系における視点は常に原点
+            izanagi::CVector eyePos(0.0f, 0.0f, 0.0f, 1.0f);
+
+            // 視点のローカル座標を計算する
+            izanagi::SMatrix::Apply(eyePos, eyePos, mtxV2L);
+
+            _SetShaderParam(
+				m_Shd,
+				"g_vEye",
+				(void*)&eyePos,
+				sizeof(eyePos));
 		}
 	}
 
