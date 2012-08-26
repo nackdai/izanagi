@@ -18,11 +18,11 @@
     <Filter Include="include\allocator">
       <UniqueIdentifier>{d214c9c9-914e-4f6a-bef8-048d1ad93ad3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\container">
-      <UniqueIdentifier>{46608c66-7b09-4936-8231-da371ab75d30}</UniqueIdentifier>
-    </Filter>
     <Filter Include="include\dependency_property">
       <UniqueIdentifier>{0125b681-bccb-4a49-8a97-ce7987b6c51b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\collection">
+      <UniqueIdentifier>{46608c66-7b09-4936-8231-da371ab75d30}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -76,9 +76,6 @@
     <ClInclude Include="..\..\include\std\2DRect.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\std\StdAutoPtr.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\std\StdBit.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -100,16 +97,10 @@
     <ClInclude Include="..\..\include\std\StdObject.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\std\StdPair.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\std\StdPlacementNew.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\std\StdProfiler.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\std\StdQueue.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\std\StdStack.h">
@@ -142,21 +133,6 @@
     <ClInclude Include="..\..\include\std\allocator\STLMemoryAllocator.h">
       <Filter>include\allocator</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\std\container\StdHash.h">
-      <Filter>include\container</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\std\container\StdList.h">
-      <Filter>include\container</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\std\container\StdRecycleArray.h">
-      <Filter>include\container</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\std\container\StdSet.h">
-      <Filter>include\container</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\std\container\StdSimpleList.h">
-      <Filter>include\container</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\std\dependency_property\Binding.h">
       <Filter>include\dependency_property</Filter>
     </ClInclude>
@@ -182,5 +158,23 @@
       <Filter>include\dependency_property</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\izStd.h" />
+    <ClInclude Include="..\..\include\std\collection\StdRecycleArray.h">
+      <Filter>include\collection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\collection\StdSet.h">
+      <Filter>include\collection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\collection\StdSimpleList.h">
+      <Filter>include\collection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\collection\StdHash.h">
+      <Filter>include\collection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\collection\StdList.h">
+      <Filter>include\collection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\collection\StdQueue.h">
+      <Filter>include\collection</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

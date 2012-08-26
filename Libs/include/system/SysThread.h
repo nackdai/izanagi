@@ -64,7 +64,7 @@ namespace izanagi {
 		CThread(IZ_UINT cpu, IRunnable* runnable, void* userData);
 		CThread(IZ_UINT cpu, const ThreadName& name, IRunnable* runnable, void* userData);
 
-		~CThread();
+		virtual ~CThread();
 
 		IZ_DECL_PLACEMENT_NEW();
 
@@ -87,10 +87,8 @@ namespace izanagi {
 		void Join();
 
 		/** 処理実行.
-		 *
-		 * @return falseを返すとスレッドから抜ける
 		 */
-		void Run();
+		virtual void Run();
 
 		/** スレッドID取得.
 		 */
@@ -118,8 +116,6 @@ namespace izanagi {
 		
         void* m_UserData;
 		IRunnable* m_Runnable;
-
-		CMutex m_Mutex;
 	};
 }	// namespace izanagi
 

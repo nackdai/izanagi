@@ -15,7 +15,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{486C5186-0A31-4E9E-91EC-F9F6EC07EDF2}</ProjectGuid>
+    <ProjectGuid>{CE8F3D3B-999B-4FA7-9AD1-70078E4E3FA1}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -87,58 +87,15 @@ xcopy /R /Y "$(TargetDir)$(ProjectName).pdb" ..\lib\$(IntDir)
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\source\std\StdColor.cpp" />
-    <ClCompile Include="..\..\source\std\StdKey.cpp" />
-    <ClCompile Include="..\..\source\std\StdLog.cpp" />
-    <ClCompile Include="..\..\source\std\StdProfiler.cpp" />
-    <ClCompile Include="..\..\source\std\StdUtf.cpp" />
-    <ClCompile Include="..\..\source\std\allocator\ChunkedMemoryAllocator.cpp" />
-    <ClCompile Include="..\..\source\std\allocator\SimpleMemoryAllocator.cpp" />
-    <ClCompile Include="..\..\source\std\allocator\StandardMemoryAllocator.cpp" />
-    <ClCompile Include="..\..\source\std\allocator\STLMemoryAllocator.cpp" />
-    <ClCompile Include="..\..\source\std\dependency_property\Binding.cpp" />
-    <ClCompile Include="..\..\source\std\dependency_property\BindingExpression.cpp" />
-    <ClCompile Include="..\..\source\std\dependency_property\BindingOperations.cpp" />
-    <ClCompile Include="..\..\source\std\dependency_property\DependencyObject.cpp" />
-    <ClCompile Include="..\..\source\std\dependency_property\DependencyPropertyChangedEventArgs.cpp" />
+    <ClInclude Include="..\..\include\izThreadModel.h" />
+    <ClInclude Include="..\..\include\threadmodel\ThreadModelJob.h" />
+    <ClInclude Include="..\..\include\threadmodel\ThreadModelJobQueue.h" />
+    <ClInclude Include="..\..\include\threadmodel\ThreadModelJobWorker.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\std\2DPoint.h" />
-    <ClInclude Include="..\..\include\std\2DRect.h" />
-    <ClInclude Include="..\..\include\std\collection\StdHash.h" />
-    <ClInclude Include="..\..\include\std\collection\StdList.h" />
-    <ClInclude Include="..\..\include\std\collection\StdQueue.h" />
-    <ClInclude Include="..\..\include\std\collection\StdRecycleArray.h" />
-    <ClInclude Include="..\..\include\std\collection\StdSet.h" />
-    <ClInclude Include="..\..\include\std\collection\StdSimpleList.h" />
-    <ClInclude Include="..\..\include\std\StdBit.h" />
-    <ClInclude Include="..\..\include\std\StdBitFlag.h" />
-    <ClInclude Include="..\..\include\std\StdColor.h" />
-    <ClInclude Include="..\..\include\std\StdEvent.h" />
-    <ClInclude Include="..\..\include\std\StdKey.h" />
-    <ClInclude Include="..\..\include\std\StdLog.h" />
-    <ClInclude Include="..\..\include\std\StdObject.h" />
-    <ClInclude Include="..\..\include\std\StdPlacementNew.h" />
-    <ClInclude Include="..\..\include\std\StdProfiler.h" />
-    <ClInclude Include="..\..\include\std\StdStack.h" />
-    <ClInclude Include="..\..\include\std\StdString.h" />
-    <ClInclude Include="..\..\include\std\StdUtf.h" />
-    <ClInclude Include="..\..\include\std\StdUtil.h" />
-    <ClInclude Include="..\..\include\std\StdValue.h" />
-    <ClInclude Include="..\..\include\std\allocator\ChunkedMemoryAllocator.h" />
-    <ClInclude Include="..\..\include\std\allocator\MemoryAllocator.h" />
-    <ClInclude Include="..\..\include\std\allocator\SimpleMemoryAllocator.h" />
-    <ClInclude Include="..\..\include\std\allocator\StandardMemoryAllocator.h" />
-    <ClInclude Include="..\..\include\std\allocator\STLMemoryAllocator.h" />
-    <ClInclude Include="..\..\include\std\dependency_property\Binding.h" />
-    <ClInclude Include="..\..\include\std\dependency_property\BindingExpression.h" />
-    <ClInclude Include="..\..\include\std\dependency_property\BindingOperations.h" />
-    <ClInclude Include="..\..\include\std\dependency_property\DependencyObject.h" />
-    <ClInclude Include="..\..\include\std\dependency_property\DependencyProperty.h" />
-    <ClInclude Include="..\..\include\std\dependency_property\DependencyPropertyChangedEventArgs.h" />
-    <ClInclude Include="..\..\include\std\dependency_property\NotifyPropertyChanged.h" />
-    <ClInclude Include="..\..\include\std\dependency_property\PropertyMetaData.h" />
-    <ClInclude Include="..\..\include\izStd.h" />
+    <ClCompile Include="..\..\source\threadmodel\ThreadModelJob.cpp" />
+    <ClCompile Include="..\..\source\threadmodel\ThreadModelJobQueue.cpp" />
+    <ClCompile Include="..\..\source\threadmodel\ThreadModelJobWorker.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

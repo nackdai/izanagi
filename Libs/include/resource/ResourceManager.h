@@ -1,9 +1,7 @@
 #if !defined(__IZANAGI_RESOURCE_RESOURCE_MANAGER_H__)
 #define __IZANAGI_RESOURCE_RESOURCE_MANAGER_H__
 
-#include "std/StdObject.h"
-#include "std/StdString.h"
-#include "std/container/StdHash.h"
+#include "izStd.h"
 
 namespace izanagi {
 	class CResource;

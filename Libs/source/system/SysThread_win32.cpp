@@ -110,13 +110,6 @@ void CThread::Init(
 IZ_BOOL CThread::Start()
 {
 	if (m_Handle == IZ_NULL) {
-		// Mutex初期化
-		if (!m_Mutex.Open()) {
-			IZ_ASSERT(IZ_FALSE);
-			Join();
-			return IZ_FALSE;
-		}
-
 		// スレッドハンドル作成
 		m_Handle = (ThreadHandle)::_beginthreadex(
 						NULL,
@@ -148,9 +141,6 @@ void CThread::Join()
 
 		m_Handle = IZ_NULL;
 	}
-
-	// Mutex解放
-	m_Mutex.Close();
 }
 
 // 処理実行.
