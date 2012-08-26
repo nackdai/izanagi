@@ -5,7 +5,7 @@
 #include "NotifyPropertyChanged.h"
 #include "DependencyPropertyChangedEventArgs.h"
 #include "DependencyProperty.h"
-#include "std/container/StdHash.h"
+#include "std/collection/StdHash.h"
 
 namespace izanagi {
 	/** 依存性プロパティを持つオブジェクトのベースクラス

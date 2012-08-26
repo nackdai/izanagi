@@ -3,7 +3,7 @@
 
 #include "izDefs.h"
 #include "StdValue.h"
-#include "std/container/StdList.h"
+#include "std/collection/StdList.h"
 #include "std/allocator/MemoryAllocator.h"
 #include "std/allocator/STLMemoryAllocator.h"
 
