@@ -36,6 +36,9 @@ namespace threadmodel
                 }
                 else
                 {
+                    // キューが空になったことを通知する
+                    m_JobQueue->NotifyEmptyJobToMainThred();
+
                     // キューが空なので何もすることがなさそうだから寝る
                     m_JobQueue->ResetEvent();
                 }
