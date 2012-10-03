@@ -1,0 +1,1 @@
+call BuildSamples.bat Release

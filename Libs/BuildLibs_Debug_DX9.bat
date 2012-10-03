@@ -1,0 +1,1 @@
+call BuildLibs.bat Debug_DX9

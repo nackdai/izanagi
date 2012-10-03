@@ -1,0 +1,1 @@
+call BuildExternal.bat Debug
