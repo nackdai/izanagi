@@ -88,6 +88,13 @@ namespace threadmodel
         /** 実行待ちキューが終了するまで待つ.
          *
          * メインスレッドで呼ぶこと
+         */
+        void WaitForFinishJobQueue();
+
+        /** スレッド終了.
+         *
+         * 実行待ちキューが終了するまで待つ.
+         * メインスレッドで呼ぶこと
          *
          * @return 終了待ちキューが存在する場合はtrueを返す
          */
@@ -117,6 +124,9 @@ namespace threadmodel
         // イベントを非シグナル状態にする
         void ResetEvent();
 
+        // メインスレッドにジョブが空になったことを通知する
+        void NotifyEmptyJobToMainThred();
+
     private:
         IMemoryAllocator* m_Allocator;
 
@@ -136,7 +146,10 @@ namespace threadmodel
         // キューの状態によってスレッドを止めたり動かしたりする用
         CEvent m_Event;
 
+        CEvent m_WaitEvent;
+
         IZ_BOOL m_IsTerminated;
+        IZ_BOOL m_IsWaiting;
     };
 }   // namespace threadmodel
 }   // namespace izanagi
