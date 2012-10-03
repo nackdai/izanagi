@@ -31,7 +31,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ShaderDemo", "ShaderDemo.vc
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ShaderTest", "ShaderTest.vcxproj", "{22BB70C1-BB33-4945-BEA8-E6BE0BE94C06}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SampleKit", "..\..\..\Samples\projects\vs2005\SampleKit.vcxproj", "{DD5D28B8-93F1-4F26-8AD1-DD224CCB9A4F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SampleKit", "..\..\..\Samples\projects\vs2010\SampleKit.vcxproj", "{DD5D28B8-93F1-4F26-8AD1-DD224CCB9A4F}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Ik", "Ik.vcxproj", "{E9A14E3D-907B-4C6F-AF76-041DEF577D49}"
 EndProject

@@ -1,0 +1,1 @@
+call BuildTools.bat Release
