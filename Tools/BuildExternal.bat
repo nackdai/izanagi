@@ -1,5 +1,5 @@
 set MSBUILD="C:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"
-set TARGET=Build
+set TARGET=Rebuild
 set CONFIG=%1
 
 %MSBUILD% External\Preproc\Preproc_VC10.sln /t:%TARGET% /p:Configuration=%CONFIG% || goto error
