@@ -27,10 +27,19 @@ namespace threadmodel
     private:
         virtual void Run();
 
+        // このスレッドの実行を開始.
+        IZ_BOOL Start();
+
+        void Resume();
+
+        void Suspend();
+
         void WillJoin() { m_WillJoin = IZ_TRUE; }
 
     private:
         CJobQueue* m_JobQueue;
+        
+        CEvent m_Event;
 
         IZ_BOOL m_WillJoin;
     };

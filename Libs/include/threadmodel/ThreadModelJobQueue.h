@@ -118,14 +118,8 @@ namespace threadmodel
         // 終了ジョブキューからデキュー
         CJob* DequeueFromFinishJobQueue();
 
-        // イベント待機
-        IZ_BOOL WaitEvent();
-
-        // イベントを非シグナル状態にする
-        void ResetEvent();
-
-        // メインスレッドにジョブが空になったことを通知する
-        void NotifyEmptyJobToMainThred();
+        // ワーカースレッドが停止したことを通知
+        void NotifyWorkerThreadSuspend();
 
     private:
         IMemoryAllocator* m_Allocator;
@@ -143,10 +137,8 @@ namespace threadmodel
         // バッファ
         IZ_UINT8* m_Buf;
 
-        // キューの状態によってスレッドを止めたり動かしたりする用
-        CEvent m_Event;
-
         CEvent m_WaitEvent;
+        IZ_INT m_WorkingThreadNum;
 
         IZ_BOOL m_IsTerminated;
         IZ_BOOL m_IsWaiting;

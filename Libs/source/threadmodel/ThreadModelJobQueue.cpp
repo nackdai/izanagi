@@ -173,7 +173,6 @@ namespace threadmodel
             m_Buf = reinterpret_cast<IZ_UINT8*>(ALLOC_ZERO(allocator, bufSize));
             VRETURN(m_Buf != IZ_NULL);
 
-            m_Event.Open();
             m_WaitEvent.Open();
 
             IZ_UINT8* buf = m_Buf;
@@ -193,8 +192,7 @@ namespace threadmodel
             IZ_ASSERT(CStdUtil::GetPtrDistance(buf, m_Buf) == bufSize);
 
             m_JobWorkerNum = threadNum;
-
-            m_Event.Set();
+            m_WorkingThreadNum = 0;
 
             m_IsTerminated = IZ_FALSE;
             m_IsWaiting = IZ_FALSE;
@@ -224,8 +222,11 @@ namespace threadmodel
 
         IZ_BOOL ret = m_ExecJobQueue.Enqueue(this, job);
 
-        // ジョブが積まれたのでスレッドを動かす
-        m_Event.Set();
+        // キューに積まれたのでワーカーを動かす
+        for (IZ_UINT i = 0; i < m_JobWorkerNum; i++)
+        {
+            m_JobWorker[i]->Resume();
+        }
 
         return ret;
     }
@@ -276,45 +277,51 @@ namespace threadmodel
     // 実行待ちキューが終了するまで待つ.
     void CJobQueue::WaitForFinishJobQueue()
     {
-        IZ_BOOL hasJob = IZ_FALSE;
-
-        m_ExecJobQueue.Lock();
+        if (m_IsTerminated)
         {
-            hasJob = m_ExecJobQueue.GetQueue().HasItem();
-            if (hasJob)
-            {
-                m_IsWaiting = IZ_TRUE;
-            }
+            return;
         }
-        m_ExecJobQueue.Unlock();
 
-        if (m_IsWaiting)
+        // 一度止める
+        for (IZ_UINT i = 0; i < m_JobWorkerNum; i++)
         {
-            // 止まっているかもしれないので動かす
-            m_Event.Set();
-
-            // ジョブがあるので待つ
-            m_WaitEvent.Wait();
-            m_IsWaiting = IZ_FALSE;
+            m_JobWorker[i]->Suspend();
         }
+
+        m_IsWaiting = IZ_TRUE;
+        m_WorkingThreadNum = m_JobWorkerNum;
+
+        m_WaitEvent.Reset();
+
+        // 動かす
+        for (IZ_UINT i = 0; i < m_JobWorkerNum; i++)
+        {
+            m_JobWorker[i]->Resume();
+        }
+
+        while (m_WorkingThreadNum > 0)
+        {
+            m_WaitEvent.Set();
+        }
+
+        m_IsWaiting = IZ_FALSE;
     }
 
     // スレッド終了.
     IZ_BOOL CJobQueue::Join()
     {
-        // ジョブがなくなるのを待つ
-        while (HasJob())
+        if (m_IsTerminated)
         {
-            CThread::YieldThread();
+            return IZ_TRUE;
         }
 
         for (IZ_UINT i = 0; i < m_JobWorkerNum; i++)
         {
             m_JobWorker[i]->WillJoin();
-        }
 
-        // 止まっているかもしれないので動かす
-        m_Event.Set();
+            // 止まっているかもしれないので動かす
+            m_JobWorker[i]->Resume();
+        }
 
         for (IZ_UINT i = 0; i < m_JobWorkerNum; i++)
         {
@@ -364,34 +371,19 @@ namespace threadmodel
         return m_FinishJobQueue.Dequeue();
     }
 
-    // イベント待機
-    IZ_BOOL CJobQueue::WaitEvent()
+    // ワーカースレッドが停止したことを通知
+    void CJobQueue::NotifyWorkerThreadSuspend()
     {
-        return m_Event.Wait();
-    }
-
-    // イベントを非シグナル状態にする
-    void CJobQueue::ResetEvent()
-    {
-        m_Event.Reset();
-    }
-
-    // メインスレッドにジョブが空になったことを通知する
-    void CJobQueue::NotifyEmptyJobToMainThred()
-    {
-        IZ_BOOL isWaiting = IZ_FALSE;
-
-        m_ExecJobQueue.Lock();
+        if (m_IsWaiting)
         {
-            isWaiting = m_IsWaiting;
-        }
-        m_ExecJobQueue.Unlock();
+            IZ_INTERLOCKED_DECREMENT(&m_WorkingThreadNum);
+            IZ_ASSERT(m_WorkingThreadNum >= 0);
 
-        if (isWaiting)
-        {
-            m_WaitEvent.Set();
+            if (m_WorkingThreadNum == 0)
+            {
+                m_WaitEvent.Set();
+            }
         }
     }
-
 }   // namespace threadmodel
 }   // namespace izanagi
