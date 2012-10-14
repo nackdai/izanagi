@@ -17,7 +17,7 @@ public:
         {
             IZ_PRINTF("%d: [%d] {%d}\n", id, m_ID, i);
 
-            izanagi::CThread::Sleep(10);
+            izanagi::CThread::Sleep(5);
         }
     }
 
@@ -45,9 +45,12 @@ int TestJobQueue(izanagi::IMemoryAllocator* allocator)
     jobQueue.Enqueue(&job_2);
     jobQueue.Enqueue(&job_3);
 
-    jobQueue.Join();
+    //jobQueue.Join();
+    jobQueue.WaitForFinishJobQueue();
 
     jobQueue.Update();
+
+    jobQueue.Join();
 
 	return 0;
 }
