@@ -13,6 +13,7 @@
 #include "system/SysSemaphore.h"
 #include "system/SysMonitor.h"
 #include "system/SysCond.h"
+#include "system/SysInterlocked.h"
 
 #include "system/SysWindow.h"
 

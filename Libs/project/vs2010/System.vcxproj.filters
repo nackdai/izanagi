@@ -92,5 +92,8 @@
       <Filter>include\thread</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\izSystem.h" />
+    <ClInclude Include="..\..\include\system\SysInterlocked.h">
+      <Filter>include\thread</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
