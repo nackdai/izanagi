@@ -123,6 +123,7 @@ xcopy /R /Y "$(TargetDir)$(ProjectName).pdb" ..\lib\$(IntDir)
   <ItemGroup>
     <ClInclude Include="..\..\include\system\SysCpu.h" />
     <ClInclude Include="..\..\include\system\SysDisplay.h" />
+    <ClInclude Include="..\..\include\system\SysInterlocked.h" />
     <ClInclude Include="..\..\include\system\SysTimer.h" />
     <ClInclude Include="..\..\include\system\SysUtil.h" />
     <ClInclude Include="..\..\include\system\SysWindow.h" />
