@@ -25,6 +25,9 @@
       <Filter>include\JobQueue</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\izThreadModel.h" />
+    <ClInclude Include="..\..\include\threadmodel\ThreadSafeValue.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\threadmodel\ThreadModelJobQueue.cpp">

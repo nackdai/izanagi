@@ -91,6 +91,7 @@ xcopy /R /Y "$(TargetDir)$(ProjectName).pdb" ..\lib\$(IntDir)
     <ClInclude Include="..\..\include\threadmodel\ThreadModelJob.h" />
     <ClInclude Include="..\..\include\threadmodel\ThreadModelJobQueue.h" />
     <ClInclude Include="..\..\include\threadmodel\ThreadModelJobWorker.h" />
+    <ClInclude Include="..\..\include\threadmodel\ThreadSafeValue.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\threadmodel\ThreadModelJob.cpp" />
