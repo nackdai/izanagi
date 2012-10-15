@@ -4,6 +4,8 @@
 #include "izStd.h"
 #include "izSystem.h"
 
+#include "threadmodel/ThreadSafeValue.h"
+
 namespace izanagi
 {
 namespace threadmodel
@@ -141,7 +143,7 @@ namespace threadmodel
         IZ_INT m_WorkingThreadNum;
 
         IZ_BOOL m_IsTerminated;
-        IZ_BOOL m_IsWaiting;
+        CThreadSafeFlag m_IsWaiting;
     };
 }   // namespace threadmodel
 }   // namespace izanagi
