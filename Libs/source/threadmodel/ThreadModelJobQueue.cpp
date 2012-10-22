@@ -6,142 +6,6 @@ namespace izanagi
 {
 namespace threadmodel
 {
-///////////////////////////////////////////////////////////////
-
-    CJobQueue::CLockableQueue::CLockableQueue()
-    {
-        m_Mutex.Open();
-    }
-
-    CJobQueue::CLockableQueue::~CLockableQueue()
-    {
-        IZ_ASSERT(m_JobQueue.GetItemNum() == 0);
-        m_Mutex.Close();
-    }
-
-    // エンキュー
-    IZ_BOOL CJobQueue::CLockableQueue::Enqueue(CJobQueue* jobQueue, CJob* job)
-    {
-        IZ_BOOL ret = IZ_FALSE;
-
-        m_Mutex.Lock();
-        {
-            if (job->GetQueueItem()->GetList() != (CStdList<CJob>*)m_JobQueue)
-            {
-                ret = m_JobQueue.Enqueue(job->GetQueueItem());
-                if (ret)
-                {
-                    job->Prepare(jobQueue);
-                }
-            }
-        }
-        m_Mutex.Unlock();
-
-        return ret;
-    }
-
-    // デキュー
-    CJob* CJobQueue::CLockableQueue::Dequeue()
-    {
-        CJob* ret = IZ_NULL;
-
-        m_Mutex.Lock();
-        {
-            CStdQueue<CJob>::Item* item = m_JobQueue.Dequeue();
-            if (item != IZ_NULL)
-            {
-                ret = item->GetData();
-            }
-        }
-        m_Mutex.Unlock();
-
-        return ret;
-    }
-
-    // 削除
-    IZ_BOOL CJobQueue::CLockableQueue::Remove(CJob* job)
-    {
-        IZ_BOOL ret = IZ_FALSE;
-
-        m_Mutex.Lock();
-        {
-            ret = m_JobQueue.Remove(job->GetQueueItem());
-            job->Detach();
-        }
-        m_Mutex.Unlock();
-
-        return ret;
-    }
-
-    // クリア
-    void CJobQueue::CLockableQueue::Clear()
-    {
-        m_Mutex.Lock();
-        {
-            CStdQueue<CJob>::Item* item = m_JobQueue.Dequeue();
-
-            while (item != IZ_NULL)
-            {
-                CStdQueue<CJob>::Item* next = item->GetNext();
-
-                item->Leave();
-                item->GetData()->Detach();
-
-                item = next;
-            }
-        }
-        m_Mutex.Unlock();
-    }
-
-    // 要素が登録されているかどうか
-    IZ_BOOL CJobQueue::CLockableQueue::HasItem()
-    {
-        IZ_BOOL ret = IZ_FALSE;
-
-        m_Mutex.Lock();
-        {
-            ret = m_JobQueue.HasItem();
-        }
-        m_Mutex.Unlock();
-
-        return ret;
-    }
-
-    void CJobQueue::CLockableQueue::Lock()
-    {
-        m_Mutex.Lock();
-    }
-
-    void CJobQueue::CLockableQueue::Unlock()
-    {
-        m_Mutex.Unlock();
-    }
-
-    IZ_BOOL CJobQueue::CLockableQueue::LeaveItem(CStdQueue<CJob>::Item* item)
-    {
-        IZ_BOOL ret = IZ_FALSE;
-
-        // まずは簡単に確認
-        if (m_JobQueue.HasItem(item))
-        {
-            // キューに積まれているので外す
-            m_Mutex.Lock();
-            {
-                // もう一度確認しておく
-                if (m_JobQueue.HasItem(item))
-                {
-                    item->Leave();
-                    ret = IZ_TRUE;
-                }
-            }
-            m_Mutex.Unlock();
-        }
-
-        return ret;
-    }
-
-///////////////////////////////////////////////////////////////
-
     // バッファサイズを計算
     size_t CJobQueue::ComputeBufferSize(IZ_UINT threadNum)
     {
@@ -151,6 +15,12 @@ namespace threadmodel
         ret += threadNum * sizeof(CJobWorker);
 
         return ret;
+    }
+
+    // エンキュー時の処理
+    void CJobQueue::EnqueueAction(CJob* job, void* jobQueue)
+    {
+        job->Prepare(reinterpret_cast<CJobQueue*>(jobQueue));
     }
 
     CJobQueue::CJobQueue()
@@ -265,7 +135,10 @@ namespace threadmodel
             return IZ_FALSE;
         }
 
-        IZ_BOOL ret = m_ExecJobQueue.Enqueue(this, job);
+        IZ_BOOL ret = m_ExecJobQueue.Enqueue(
+            job->GetQueueItem(),
+            this,
+            EnqueueAction);
 
         // キューに積まれたのでワーカーを動かす
         for (IZ_UINT i = 0; i < m_JobWorkerNum; i++)
@@ -393,7 +266,7 @@ namespace threadmodel
     // 終了ジョブとしてエンキュー
     IZ_BOOL CJobQueue::EnqueueAsFinishJob(CJob* job)
     {
-        return m_FinishJobQueue.Enqueue(this, job);
+        return m_FinishJobQueue.Enqueue(job->GetQueueItem(), this, IZ_NULL);
     }
 
     // 終了ジョブキューからデキュー
@@ -420,10 +293,10 @@ namespace threadmodel
     // ジョブをキャンセル
     IZ_BOOL CJobQueue::Cancel(CJob* job)
     {
-        IZ_BOOL ret = m_ExecJobQueue.LeaveItem(job->GetQueueItem());
+        IZ_BOOL ret = m_ExecJobQueue.Remove(job->GetQueueItem());
         if (!ret)
         {
-            ret = m_FinishJobQueue.LeaveItem(job->GetQueueItem());
+            ret = m_FinishJobQueue.Remove(job->GetQueueItem());
         }
         return ret;
     }

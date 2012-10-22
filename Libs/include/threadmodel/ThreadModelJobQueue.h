@@ -5,6 +5,7 @@
 #include "izSystem.h"
 
 #include "threadmodel/ThreadSafeValue.h"
+#include "threadmodel/ThreadSafeQueue.h"
 
 namespace izanagi
 {
@@ -21,47 +22,11 @@ namespace threadmodel
         friend class CJob;
 
     private:
-        // ロック可能キュー
-        class CLockableQueue
-        {
-        public:
-            CLockableQueue();
-            ~CLockableQueue();
-
-        public:
-            // エンキュー
-            IZ_BOOL Enqueue(CJobQueue* jobQueue, CJob* job);
-
-            // デキュー
-            CJob* Dequeue();
-
-            // 削除
-            IZ_BOOL Remove(CJob* job);
-
-            // クリア
-            void Clear();
-
-            // 要素が登録されているかどうか
-            IZ_BOOL HasItem();
-
-            // 自己責任用
-
-            inline void Lock();
-            inline void Unlock();
-
-            inline IZ_BOOL LeaveItem(CStdQueue<CJob>::Item* item);
-
-            CStdQueue<CJob>& GetQueue() { return m_JobQueue; }
-
-        private:
-            CStdQueue<CJob> m_JobQueue;
-            CMutex m_Mutex;
-        };
-
-    private:
-        /** バッファサイズを計算
-         */
+        // バッファサイズを計算
         static size_t ComputeBufferSize(IZ_UINT threadNum);
+
+        // エンキュー時の処理
+        static void EnqueueAction(CJob* job, void* jobQueue);
 
     public:
         CJobQueue();
@@ -133,10 +98,10 @@ namespace threadmodel
         IMemoryAllocator* m_Allocator;
 
         // 実行待ちキュー
-        CLockableQueue m_ExecJobQueue;
+        CThreadSafeQueue<CJob> m_ExecJobQueue;
 
         // 終了待ちキュー
-        CLockableQueue m_FinishJobQueue;
+        CThreadSafeQueue<CJob> m_FinishJobQueue;
 
         // ワーカースレッドリスト
         CJobWorker** m_JobWorker;
