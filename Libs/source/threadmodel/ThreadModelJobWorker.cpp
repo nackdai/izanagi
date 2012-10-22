@@ -24,10 +24,18 @@ namespace threadmodel
 
             if (job != IZ_NULL)
             {
-                job->OnExecute();
+                if (job->WillCancel())
+                {
+                    job->NotifyCancel();
+                    job->Detach();
+                }
+                else
+                {
+                    job->OnExecute();
 
-                // 終了待ちキューに積む
-                m_JobQueue->EnqueueAsFinishJob(job);
+                    // 終了待ちキューに積む
+                    m_JobQueue->EnqueueAsFinishJob(job);
+                }
             }
             else
             {

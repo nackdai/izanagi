@@ -81,6 +81,23 @@ namespace izanagi
             m_List.Clear();
         }
 
+        /** 指定された要素を持っているかどうか
+         */ 
+        IZ_BOOL HasItem(Item* item)
+        {
+            return (item->GetList() == &m_List);
+        }
+
+        operator CStdList<_T>&()
+        {
+            return m_List;
+        }
+
+        operator CStdList<_T>*()
+        {
+            return &m_List;
+        }
+
     private:
         CStdList<_T> m_List;
     };

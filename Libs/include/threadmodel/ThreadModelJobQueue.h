@@ -18,6 +18,7 @@ namespace threadmodel
     class CJobQueue
     {
         friend class CJobWorker;
+        friend class CJob;
 
     private:
         // ロック可能キュー
@@ -45,8 +46,10 @@ namespace threadmodel
 
             // 自己責任用
 
-            void Lock();
-            void Unlock();
+            inline void Lock();
+            inline void Unlock();
+
+            inline IZ_BOOL LeaveItem(CStdQueue<CJob>::Item* item);
 
             CStdQueue<CJob>& GetQueue() { return m_JobQueue; }
 
@@ -73,13 +76,13 @@ namespace threadmodel
             IMemoryAllocator* allocator,
             IZ_UINT threadNum);
 
+        /** 開始
+         */
+        void Start();
+
         /** ジョブをキューに積む.
          */
         IZ_BOOL Enqueue(CJob* job, IZ_BOOL isSync = IZ_FALSE);
-
-        /** ジョブキャンセル.
-         */
-        IZ_BOOL Cancel(CJob* job);
 
         /** 更新処理.
          *
@@ -123,6 +126,9 @@ namespace threadmodel
         // ワーカースレッドが停止したことを通知
         void NotifyWorkerThreadSuspend();
 
+        // ジョブをキャンセル
+        IZ_BOOL Cancel(CJob* job);
+
     private:
         IMemoryAllocator* m_Allocator;
 
@@ -143,6 +149,7 @@ namespace threadmodel
         IZ_INT m_WorkingThreadNum;
 
         IZ_BOOL m_IsTerminated;
+        IZ_BOOL m_IsStarted;
         CThreadSafeFlag m_IsWaiting;
     };
 }   // namespace threadmodel
