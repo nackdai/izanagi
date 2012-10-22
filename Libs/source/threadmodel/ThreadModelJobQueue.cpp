@@ -26,10 +26,13 @@ namespace threadmodel
 
         m_Mutex.Lock();
         {
-            ret = m_JobQueue.Enqueue(job->GetQueueItem());
-            if (ret)
+            if (job->GetQueueItem()->GetList() != (CStdList<CJob>*)m_JobQueue)
             {
-                job->Registered(jobQueue);
+                ret = m_JobQueue.Enqueue(job->GetQueueItem());
+                if (ret)
+                {
+                    job->Prepare(jobQueue);
+                }
             }
         }
         m_Mutex.Unlock();
@@ -63,7 +66,7 @@ namespace threadmodel
         m_Mutex.Lock();
         {
             ret = m_JobQueue.Remove(job->GetQueueItem());
-            job->Detached();
+            job->Detach();
         }
         m_Mutex.Unlock();
 
@@ -82,7 +85,7 @@ namespace threadmodel
                 CStdQueue<CJob>::Item* next = item->GetNext();
 
                 item->Leave();
-                item->GetData()->Detached();
+                item->GetData()->Detach();
 
                 item = next;
             }
@@ -114,6 +117,29 @@ namespace threadmodel
         m_Mutex.Unlock();
     }
 
+    IZ_BOOL CJobQueue::CLockableQueue::LeaveItem(CStdQueue<CJob>::Item* item)
+    {
+        IZ_BOOL ret = IZ_FALSE;
+
+        // まずは簡単に確認
+        if (m_JobQueue.HasItem(item))
+        {
+            // キューに積まれているので外す
+            m_Mutex.Lock();
+            {
+                // もう一度確認しておく
+                if (m_JobQueue.HasItem(item))
+                {
+                    item->Leave();
+                    ret = IZ_TRUE;
+                }
+            }
+            m_Mutex.Unlock();
+        }
+
+        return ret;
+    }
+
 ///////////////////////////////////////////////////////////////
 
     // バッファサイズを計算
@@ -137,6 +163,7 @@ namespace threadmodel
         m_Buf = IZ_NULL;
 
         m_IsTerminated = IZ_FALSE;
+        m_IsStarted = IZ_FALSE;
         m_IsWaiting = IZ_FALSE;
     }
 
@@ -185,8 +212,6 @@ namespace threadmodel
             {
                 m_JobWorker[i] = new (buf) CJobWorker(this);
                 buf += sizeof(CJobWorker);
-
-                m_JobWorker[i]->Start();
             }
 
             IZ_ASSERT(CStdUtil::GetPtrDistance(buf, m_Buf) == bufSize);
@@ -195,10 +220,30 @@ namespace threadmodel
             m_WorkingThreadNum = 0;
 
             m_IsTerminated = IZ_FALSE;
+            m_IsStarted = IZ_FALSE;
             m_IsWaiting = IZ_FALSE;
         }
 
         return ret;
+    }
+
+    // 開始
+    void CJobQueue::Start()
+    {
+        if (m_IsTerminated || m_IsWaiting)
+        {
+            return;
+        }
+
+        if (!m_IsStarted)
+        {
+            m_IsStarted = IZ_TRUE;
+
+            for (IZ_UINT i = 0; i < m_JobWorkerNum; i++)
+            {
+                m_JobWorker[i]->Start();
+            }
+        }
     }
 
     // ジョブをキューに積む.
@@ -231,28 +276,6 @@ namespace threadmodel
         return ret;
     }
 
-    // ジョブキャンセル.
-    IZ_BOOL CJobQueue::Cancel(CJob* job)
-    {
-        IZ_ASSERT(job != IZ_NULL);
-
-        // 実行待ちキューから削除
-        IZ_BOOL isRemoved = m_ExecJobQueue.Remove(job);
-
-        if (!isRemoved)
-        {
-            // 終了待ちキューから削除
-            isRemoved = m_FinishJobQueue.Remove(job);
-        }
-
-        if (isRemoved)
-        {
-            job->Detached();
-        }
-
-        return isRemoved;
-    }
-
     // 更新処理.
     void CJobQueue::Update()
     {
@@ -265,8 +288,16 @@ namespace threadmodel
             {
                 CJob* job = item->GetData();
 
-                job->OnFinished();
-                job->Detached();
+                if (job->WillCancel())
+                {
+                    job->NotifyCancel();
+                }
+                else
+                {
+                    job->OnFinished();
+                }
+
+                job->Detach();
 
                 item = m_FinishJobQueue.GetQueue().Dequeue();
             }
@@ -385,5 +416,17 @@ namespace threadmodel
             }
         }
     }
+
+    // ジョブをキャンセル
+    IZ_BOOL CJobQueue::Cancel(CJob* job)
+    {
+        IZ_BOOL ret = m_ExecJobQueue.LeaveItem(job->GetQueueItem());
+        if (!ret)
+        {
+            ret = m_FinishJobQueue.LeaveItem(job->GetQueueItem());
+        }
+        return ret;
+    }
+
 }   // namespace threadmodel
 }   // namespace izanagi
