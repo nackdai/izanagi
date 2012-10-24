@@ -100,9 +100,13 @@ void Test_2(izanagi::IMemoryAllocator* allocator)
 
 int TestJobQueue(izanagi::IMemoryAllocator* allocator)
 {
-    //Test_0(allocator);
+    Test_0(allocator);
 
-    //Test_1(allocator);
+    Sleep(1000);
+
+    Test_1(allocator);
+
+    Sleep(1000);
 
     Test_2(allocator);
 

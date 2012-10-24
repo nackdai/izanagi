@@ -143,7 +143,7 @@ namespace threadmodel
 
         typename CStdQueue<T>& GetQueue() { return m_Queue; }
 
-    private:
+    protected:
         typename CStdQueue<T> m_Queue;
         CMutex m_Mutex;
     };
