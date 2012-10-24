@@ -152,6 +152,9 @@ namespace izanagi {
 			Clear();
 		}
 
+        NO_COPIABLE(CStdList);
+
+    public:
 		IZ_UINT GetItemNum() const
 		{
 			return m_nNum;
@@ -224,7 +227,24 @@ namespace izanagi {
 			}
 		}
 
-		NO_COPIABLE(CStdList);
+        typedef IZ_BOOL(*FuncMatch)(_T* data);
+
+        _T* Find(FuncMatch* funcMatch)
+        {
+            IZ_ASSERT(funcMatch != IZ_NULL);
+
+            CStdList<_T>::Item* item = GetTop();
+            while (item != IZ_NULL)
+            {
+                if ((*funcMatch)(item->GetData()))
+                {
+                    return item->GetData();
+                }
+                item = item->GetNext();
+            }
+            return IZ_NULL;
+        }
+        
 
 	private:
 		IZ_UINT32 m_nNum;

@@ -13,6 +13,12 @@
     <Filter Include="source\JobQueue">
       <UniqueIdentifier>{d61513bd-5b18-40f4-9e49-b1748200eec8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\MessageQueue">
+      <UniqueIdentifier>{9903585f-4133-4e4a-83e3-5bd516809c40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\MessageQueue">
+      <UniqueIdentifier>{a6100f70-a887-424d-a04f-7da2d17352ac}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\threadmodel\ThreadModelJob.h">
@@ -31,6 +37,12 @@
     <ClInclude Include="..\..\include\threadmodel\ThreadSafeQueue.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\threadmodel\ThreadModelMessageQueue.h">
+      <Filter>include\MessageQueue</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\threadmodel\ThreadModelMessage.h">
+      <Filter>include\MessageQueue</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\threadmodel\ThreadModelJobQueue.cpp">
@@ -41,6 +53,9 @@
     </ClCompile>
     <ClCompile Include="..\..\source\threadmodel\ThreadModelJob.cpp">
       <Filter>source\JobQueue</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\threadmodel\ThreadModelMessageQueue.cpp">
+      <Filter>source\MessageQueue</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

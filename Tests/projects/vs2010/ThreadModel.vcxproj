@@ -106,6 +106,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\ThreadModel\main.cpp" />
     <ClCompile Include="..\..\ThreadModel\TestJobQueue.cpp" />
+    <ClCompile Include="..\..\ThreadModel\TestMessageQueue.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

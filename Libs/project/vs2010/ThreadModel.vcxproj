@@ -91,6 +91,8 @@ xcopy /R /Y "$(TargetDir)$(ProjectName).pdb" ..\lib\$(IntDir)
     <ClInclude Include="..\..\include\threadmodel\ThreadModelJob.h" />
     <ClInclude Include="..\..\include\threadmodel\ThreadModelJobQueue.h" />
     <ClInclude Include="..\..\include\threadmodel\ThreadModelJobWorker.h" />
+    <ClInclude Include="..\..\include\threadmodel\ThreadModelMessage.h" />
+    <ClInclude Include="..\..\include\threadmodel\ThreadModelMessageQueue.h" />
     <ClInclude Include="..\..\include\threadmodel\ThreadSafeQueue.h" />
     <ClInclude Include="..\..\include\threadmodel\ThreadSafeValue.h" />
   </ItemGroup>
@@ -98,6 +100,7 @@ xcopy /R /Y "$(TargetDir)$(ProjectName).pdb" ..\lib\$(IntDir)
     <ClCompile Include="..\..\source\threadmodel\ThreadModelJob.cpp" />
     <ClCompile Include="..\..\source\threadmodel\ThreadModelJobQueue.cpp" />
     <ClCompile Include="..\..\source\threadmodel\ThreadModelJobWorker.cpp" />
+    <ClCompile Include="..\..\source\threadmodel\ThreadModelMessageQueue.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
