@@ -95,6 +95,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Math\HalfFloatTest.cpp" />
     <ClCompile Include="..\..\Math\NumericalAnalysisTest.cpp" />
     <ClCompile Include="..\..\Math\test0.cpp" />
     <ClCompile Include="..\..\Math\main.cpp" />
