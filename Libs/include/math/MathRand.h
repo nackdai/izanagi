@@ -1,5 +1,5 @@
-#if !defined(__IZANAGI__MATH_RAND_H__)
-#define __IZANAGI__MATH_RAND_H__
+#if !defined(__IZANAGI_MATH_RAND_H__)
+#define __IZANAGI_MATH_RAND_H__
 
 #include "izDefs.h"
 #include "SFMT/SFMT.h"
@@ -107,4 +107,4 @@ namespace izanagi {
 	}
 }	// namespace izanagi
 
-#endif	// #if !defined(__IZANAGI__MATH_RAND_H__)
+#endif	// #if !defined(__IZANAGI_MATH_RAND_H__)
