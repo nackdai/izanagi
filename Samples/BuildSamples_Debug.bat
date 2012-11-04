@@ -1,1 +1,1 @@
-call BuildSamples.bat Debug
+call BuildSamples.bat Debug_DX9
