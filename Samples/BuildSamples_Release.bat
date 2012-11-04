@@ -1,1 +1,1 @@
-call BuildSamples.bat Release
+call BuildSamples.bat Release_DX9
