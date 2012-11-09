@@ -128,12 +128,15 @@ BOOL CGraphicsDeviceLite::Init(HWND hWnd)
 /**
 * テクスチャ読み込み
 */
-CTextureLite* CGraphicsDeviceLite::CreateTextureFromFile(LPCSTR lpszPath)
+CTextureLite* CGraphicsDeviceLite::CreateTextureFromFile(
+    LPCSTR lpszPath,
+    IZ_BOOL needNonPow2/*= IZ_FALSE*/)
 {
 	CTextureLite* ret = CTextureLite::CreateTextureFromFile(
 							this,
 							GetAllocator(),
-							lpszPath);
+							lpszPath,
+                            needNonPow2);
 	
 	return ret;
 }

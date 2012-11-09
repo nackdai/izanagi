@@ -10,6 +10,7 @@
 #include "izMath.h"
 #include "Option.h"
 #include "EnvMapConverterImpl.h"
+#include "CrossMapProxy.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -30,15 +31,17 @@ namespace {
 			" -o [out]   : 出力ファイル名\n"
 			"              指定が無い場合は入力ファイルをもとに自動で設定される\n"
 			" -ie [type] : 入力環境マップのタイプ\n"
-			"              m : mirror map\n"
-			"              l : latitude-longitude map\n"
-			"              a : angular map\n"
-			"              c : cube map\n"
+			"              m  : mirror map\n"
+			"              l  : latitude-longitude map\n"
+			"              a  : angular map\n"
+			"              c  : cube map\n"
+            "              cr : cross map\n"
 			" -oe [type] : 出力環境マップのタイプ\n"
 			"              m : mirror map\n"
 			"              l : latitude-longitude map\n"
 			"              a : angular map\n"
 			"              c : cube map\n"
+            "              cr : cross map\n"
 			" -f [type]  : 出力ファイルのタイプ\n"
 			"               png : PNG\n"
 			"               hdr : HDR\n"
@@ -48,13 +51,21 @@ namespace {
 
 	// 出力テクスチャサイズを計算
 	IZ_BOOL _ComputeSize(
-		EnvMapType type,
+        EnvMapType inType,
+		EnvMapType outType,
 		IZ_UINT inWidth, IZ_UINT inHeight,
 		IZ_UINT& outWidth, IZ_UINT& outHeight)
 	{
 		IZ_BOOL isValid = IZ_TRUE;
 
-		switch (type) {
+        if (inType == EnvMapTypeCross)
+        {
+            inWidth = CCrossMapProxy::GetWidthPerFace(inWidth);
+            inHeight = CCrossMapProxy::GetHeightPerFace(inHeight);
+            IZ_ASSERT(inWidth == inHeight);
+        }
+
+		switch (outType) {
 		case EnvMapTypeMirror:
 		case EnvMapTypeAngular:
 		case EnvMapTypeCube:
@@ -75,6 +86,16 @@ namespace {
 				outHeight = inWidth;
 			}
 			break;
+        case EnvMapTypeCross:
+            {
+				IZ_UINT size = min(inWidth, inHeight);
+                outWidth = size * 3;
+				outHeight = size * 4;
+            }
+            break;
+        default:
+            IZ_ASSERT(IZ_FALSE);
+            break;
 		}
 
 		return isValid;
@@ -172,7 +193,11 @@ int main(int argc, char* argv[])
 
 	// 環境マップ読み込み
 	for (size_t i = 0; i < inTexList.size(); i++) {
-		izanagi::tool::CTextureLite* tex = device->CreateTextureFromFile(inTexList[i]);
+        // NOTE
+        // クロスの場合は２のべき乗にはならない
+		izanagi::tool::CTextureLite* tex = device->CreateTextureFromFile(
+            inTexList[i],
+            option.typeInEnvMap == EnvMapTypeCross ? IZ_TRUE : IZ_FALSE);
 		VGOTO(tex != NULL);
 
 		texInEnv.push_back(tex);
@@ -181,11 +206,12 @@ int main(int argc, char* argv[])
 	// 出力先のサイズを計算
 	IZ_UINT outWidth, outHeight;
 	IZ_BOOL isValid = _ComputeSize(
-						option.typeOutEnvMap,
-						texInEnv[0]->GetWidth(),
-						texInEnv[0]->GetHeight(),
-						outWidth,
-						outHeight);
+        option.typeInEnvMap,
+		option.typeOutEnvMap,
+		texInEnv[0]->GetWidth(),
+		texInEnv[0]->GetHeight(),
+		outWidth,
+		outHeight);
 	VGOTO(isValid);
 
 	_GetTexNameList(

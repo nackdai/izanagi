@@ -97,6 +97,8 @@ public:
 	CTexProxy(EnvMapType type);
 	virtual ~CTexProxy();
 
+    CTexProxy() {}
+
 public:
 	/** 反射ベクトルからUVを取得.
 	 */

@@ -43,6 +43,9 @@
     <ClCompile Include="..\..\Image\EnvMapConverter\TexProxy.cpp">
       <Filter>TexProxy\source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Image\EnvMapConverter\CrossMapProxy.cpp">
+      <Filter>TexProxy\source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Image\EnvMapConverter\EnvMapConverterDefs.h">
@@ -67,6 +70,9 @@
       <Filter>TexProxy\include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Image\EnvMapConverter\TexProxy.h">
+      <Filter>TexProxy\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Image\EnvMapConverter\CrossMapProxy.h">
       <Filter>TexProxy\include</Filter>
     </ClInclude>
   </ItemGroup>

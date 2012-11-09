@@ -9,6 +9,7 @@ enum EnvMapType {
 	EnvMapTypeLatLong,
 	EnvMapTypeAngular,
 	EnvMapTypeCube,
+    EnvMapTypeCross,
 
 	EnvMapTypeNum,
 };

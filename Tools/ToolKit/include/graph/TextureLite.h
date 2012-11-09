@@ -20,7 +20,8 @@ namespace tool {
 		static CTextureLite* CreateTextureFromFile(
 			CGraphicsDeviceLite* pDevice,
 			IMemoryAllocator* pAllocator,
-			IZ_PCSTR lpszPath);
+			IZ_PCSTR lpszPath,
+            IZ_BOOL needNonPow2 = IZ_FALSE);
 
 		// テクスチャ作成
 		static CTextureLite* CreateTexture(
