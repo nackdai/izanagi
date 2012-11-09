@@ -51,7 +51,9 @@ namespace tool {
 
 	public:
 		// テクスチャ読み込み
-		CTextureLite* CreateTextureFromFile(LPCSTR lpszPath);
+		CTextureLite* CreateTextureFromFile(
+            LPCSTR lpszPath,
+            IZ_BOOL needNonPow2 = IZ_FALSE);
 
 		// テクスチャ作成
 		CTextureLite* CreateTexture(

@@ -30,7 +30,7 @@ CCubeMapProxy::CCubeMapProxy(
 
 CCubeMapProxy::~CCubeMapProxy()
 {
-	if (m_Data) {
+	if (m_Data != IZ_NULL) {
 		IZ_ASSERT(m_CurFace != izanagi::E_GRAPH_CUBE_TEX_FACE_NUM);
 
 		m_Tex[m_CurFace]->Unlock(0);
@@ -130,6 +130,17 @@ void CCubeMapProxy::getRef(
 	// [-1:1]に変換
 	IZ_FLOAT u = 2.0f * x * m_DivW - 1.0f;
 	IZ_FLOAT v = 2.0f * y * m_DivH - 1.0f;
+
+    // NOTE
+    // 各面を正面から見たときにu、v方向がどの軸になるのか
+    //
+    // ex) +X面の場合 
+    //       +v
+    //    +---|---+
+    // +u |   |   |
+    // <--+---+---+-
+    //    |   |   |
+    //    +---|---+
 
 	switch (face) {
 	case izanagi::E_GRAPH_CUBE_TEX_FACE_X_P:	// +X

@@ -267,8 +267,20 @@ namespace {
 	// RGBA16F -> RGBA32F
 	void ConvertFunc(RGBA16F, RGBA32F)(void* pSrc, void* pDst, IZ_UINT nWidth)
 	{
-		// TODO
-		IZ_ASSERT(IZ_FALSE);
+		IZ_UINT16* src = reinterpret_cast<IZ_UINT16*>(pSrc);
+        IZ_FLOAT* dst = reinterpret_cast<IZ_FLOAT*>(pDst);
+
+        for (IZ_UINT x = 0; x < nWidth; x++) {
+            IZ_UINT16 r = *(src++);
+            IZ_UINT16 g = *(src++);
+            IZ_UINT16 b = *(src++);
+            IZ_UINT16 a = *(src++);
+
+            *(dst++) = izanagi::CFloat16::Float16ToFloat32(r);
+            *(dst++) = izanagi::CFloat16::Float16ToFloat32(g);
+            *(dst++) = izanagi::CFloat16::Float16ToFloat32(b);
+            *(dst++) = izanagi::CFloat16::Float16ToFloat32(a);
+        }
 	}
 }	// namespace
 
@@ -381,8 +393,20 @@ namespace {
 	// RGBA32F -> RGBA16F
 	void ConvertFunc(RGBA32F, RGBA16F)(void* pSrc, void* pDst, IZ_UINT nWidth)
 	{
-		// TODO
-		IZ_ASSERT(IZ_FALSE);
+		IZ_FLOAT* src = reinterpret_cast<IZ_FLOAT*>(pSrc);
+        IZ_UINT16* dst = reinterpret_cast<IZ_UINT16*>(pDst);
+
+        for (IZ_UINT x = 0; x < nWidth; x++) {
+			IZ_FLOAT r = *(src++);
+			IZ_FLOAT g = *(src++);
+			IZ_FLOAT b = *(src++);
+			IZ_FLOAT a = *(src++);
+
+            *(dst++) = izanagi::CFloat16::Float32ToFloat16(r);
+            *(dst++) = izanagi::CFloat16::Float32ToFloat16(g);
+            *(dst++) = izanagi::CFloat16::Float32ToFloat16(b);
+            *(dst++) = izanagi::CFloat16::Float32ToFloat16(a);
+        }
 	}
 }	// namespace
 

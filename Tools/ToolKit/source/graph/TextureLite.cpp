@@ -65,7 +65,8 @@ namespace {
 CTextureLite* CTextureLite::CreateTextureFromFile(
 	CGraphicsDeviceLite* pDevice,
 	IMemoryAllocator* pAllocator,
-	IZ_PCSTR lpszPath)
+	IZ_PCSTR lpszPath,
+    IZ_BOOL needNonPow2/*= IZ_FALSE*/)
 {
 	IZ_ASSERT(pDevice != IZ_NULL);
 	IZ_ASSERT(pAllocator != IZ_NULL);
@@ -101,14 +102,16 @@ CTextureLite* CTextureLite::CreateTextureFromFile(
 							? D3DFMT_FROM_FILE
 							: D3DFMT_A8B8G8R8);
 
+        UINT sizeType = (needNonPow2 ? D3DX_DEFAULT_NONPOW2 : D3DX_DEFAULT);
+
 		// テクスチャ読み込み
 		// NOTE
 		// Width、Heightは２のべき乗にして読み込む
 		HRESULT hr = D3DXCreateTextureFromFileEx(
 						pD3DDevice,
 						lpszPath,
-						D3DX_DEFAULT,		// Width
-						D3DX_DEFAULT,		// Height
+						sizeType,           // Width
+						sizeType,           // Height
 						D3DX_FROM_FILE,		// MipLevels,
 						0,					// Usage
 						fmt,				// Format

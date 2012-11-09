@@ -4,6 +4,7 @@
 #include "LatLongMapProxy.h"
 #include "AngularMapProxy.h"
 #include "CubeMapProxy.h"
+#include "CrossMapProxy.h"
 
 IZ_FLOAT CTexProxy::NormalizeColor(IZ_UINT8 c)
 {
@@ -116,6 +117,9 @@ CTexProxy* CTexProxy::CreateTexProxy(
 		break;
 	case EnvMapTypeCube:
 		ret = new CCubeMapProxy(tex, type);
+		break;
+    case EnvMapTypeCross:
+        ret = new CCrossMapProxy(tex[0], type);
 		break;
 	default:
 		IZ_ASSERT(IZ_FALSE);

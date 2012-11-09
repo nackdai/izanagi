@@ -26,6 +26,10 @@ namespace {
 			// cube
 			ret = EnvMapTypeCube;
 		}
+        else if (opt == "cr") {
+            // cross
+            ret = EnvMapTypeCross;
+        }
 		
 		return ret;
 	}

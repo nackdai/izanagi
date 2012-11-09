@@ -80,6 +80,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Image\EnvMapConverter\CrossMapProxy.cpp" />
     <ClCompile Include="..\..\Image\EnvMapConverter\EnvMapConverter.cpp" />
     <ClCompile Include="..\..\Image\EnvMapConverter\EnvMapConverterImpl.cpp" />
     <ClCompile Include="..\..\Image\EnvMapConverter\Option.cpp" />
@@ -90,6 +91,7 @@
     <ClCompile Include="..\..\Image\EnvMapConverter\TexProxy.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Image\EnvMapConverter\CrossMapProxy.h" />
     <ClInclude Include="..\..\Image\EnvMapConverter\EnvMapConverterDefs.h" />
     <ClInclude Include="..\..\Image\EnvMapConverter\EnvMapConverterImpl.h" />
     <ClInclude Include="..\..\Image\EnvMapConverter\Option.h" />

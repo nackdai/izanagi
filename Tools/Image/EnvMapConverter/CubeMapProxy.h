@@ -13,6 +13,9 @@ public:
 		EnvMapType type);
 	virtual ~CCubeMapProxy();
 
+protected:
+    CCubeMapProxy() {}
+
 public:
 	/** 反射ベクトルからUVを取得.
 	 */

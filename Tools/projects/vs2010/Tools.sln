@@ -46,6 +46,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NormalMapMaker", "NormalMapMaker.vcxproj", "{D5C1A914-FF21-41D7-A601-D2DC6DC0BB2A}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EnvMapConverter", "EnvMapConverter.vcxproj", "{43C3C920-F597-4C19-A31D-4C59E4C83A10}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E39712E8-AA2F-4764-975B-40B54164B95E} = {E39712E8-AA2F-4764-975B-40B54164B95E}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FontConverter", "FontConverter.vcxproj", "{A2629A24-E521-44F6-B827-2F9E4075B51B}"
 EndProject
