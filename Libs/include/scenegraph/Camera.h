@@ -5,8 +5,6 @@
 #include "izMath.h"
 
 namespace izanagi {
-	class CGraphicsDevice;
-
 	struct SCameraParam {
 		IZ_FLOAT cameraNear;
 		IZ_FLOAT cameraFar;

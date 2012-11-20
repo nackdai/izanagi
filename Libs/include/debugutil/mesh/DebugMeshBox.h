@@ -14,7 +14,7 @@ namespace izanagi {
 		// インスタンス作成
 		static CDebugMeshBox* CreateDebugMeshBox(
 			IMemoryAllocator* pAllocator,
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			IZ_UINT flag,
 			IZ_COLOR nColor,
 			IZ_FLOAT fWidth,
@@ -30,12 +30,12 @@ namespace izanagi {
 	protected:
 		// 初期化
 		IZ_BOOL Init(
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			IZ_UINT flag);
 
 		// データセット
 		IZ_BOOL SetData(
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			IZ_UINT flag,
 			IZ_COLOR nColor,
 			IZ_FLOAT fWidth,

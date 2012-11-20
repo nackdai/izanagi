@@ -4,8 +4,8 @@
 #include "MSHFormat.h"
 
 namespace izanagi {
-	class CGraphicsDevice;
-	class CVertexDeclaration;
+	class graph::CGraphicsDevice;
+	class graph::CVertexDeclaration;
 	class IInputStream;
 	class CPrimitiveSet;
 	class CSkeletonInstance;
@@ -32,13 +32,13 @@ namespace izanagi {
 		/** 描画.
 		 */
 		IZ_BOOL Render(
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			CSkeletonInstance* pSkeleton,
 			IMshRenderHandler* pRenderHandler);
 
 		IZ_UINT8* Read(
 			IZ_UINT8* pBuf,
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			IInputStream* pIn);
 
 		CPrimitiveSet* GetPrimSet(IZ_UINT idx);
@@ -55,12 +55,12 @@ namespace izanagi {
 
 		/** 描画に利用する頂点宣言を取得.
 		 */
-		CVertexDeclaration* GetVD() { return m_VD; }
+		graph::CVertexDeclaration* GetVD() { return m_VD; }
 
 	private:
 		S_MSH_MESH_SET m_Info;
 
-		CVertexDeclaration* m_VD;
+		graph::CVertexDeclaration* m_VD;
 		
 		CPrimitiveSet** m_pPrimSet;
 	};

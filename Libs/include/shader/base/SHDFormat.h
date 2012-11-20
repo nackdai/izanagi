@@ -213,11 +213,11 @@ namespace izanagi {
 #if 0
 	// テクスチャアノテーション
 	struct S_SHD_TEXTURE_ANN {
-		E_GRAPH_PIXEL_FMT fmt;		// ピクセルフォーマット
+		graph::E_GRAPH_PIXEL_FMT fmt;		// ピクセルフォーマット
 		IZ_UINT16 Dimensions[2];	// テクスチャサイズ
 		IZ_FLOAT ViewportRatio[2];	// テクスチャ比率
 
-		E_GRAPH_RSC_TYPE typeRsc;
+		graph::E_GRAPH_RSC_TYPE typeRsc;
 
 		struct {
 			IZ_UINT32 isRenderTarget	: 1;	// レンダーターゲットかどうか
@@ -240,7 +240,7 @@ namespace izanagi {
 		friend class CShaderTextureTable;
 
 		IZ_BOOL isDirty;
-		CBaseTexture* tex;
+		graph::CBaseTexture* tex;
 	};
 
 	//////////////////////////////////////////////////////////
@@ -259,7 +259,7 @@ namespace izanagi {
 
 		E_SHADER_PARAMETER_TYPE Type;
 
-		S_SAMPLER_STATE state;
+		graph::S_SAMPLER_STATE state;
 	};
 
 	//////////////////////////////////////////////////////////
@@ -267,7 +267,7 @@ namespace izanagi {
 	// パスステート
 	struct S_SHD_PASS_STATE {
 		IZ_UINT AlphaBlendMethod;	// アルファブレンド式
-		E_GRAPH_CMP_FUNC AlphaTestFunc;	// アルファテスト式
+		graph::E_GRAPH_CMP_FUNC AlphaTestFunc;	// アルファテスト式
 
 		IZ_UINT8 AlphaTestRef;			// アルファテスト閾値
 		IZ_UINT8 reserved[2];
@@ -278,7 +278,7 @@ namespace izanagi {
 			IZ_UINT8 ZEnable			: 1;
 		};
 
-		E_GRAPH_CMP_FUNC ZFunc;		// Zテスト式
+		graph::E_GRAPH_CMP_FUNC ZFunc;		// Zテスト式
 	};
 
 	struct S_SHD_PARAM_IDX {

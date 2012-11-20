@@ -216,7 +216,7 @@ void CMaterial::AttachParamBuf()
 }
 
 // 描画準備
-IZ_BOOL CMaterial::Prepare(CGraphicsDevice* pDevice)
+IZ_BOOL CMaterial::Prepare(graph::CGraphicsDevice* pDevice)
 {
 	IZ_ASSERT(pDevice != IZ_NULL);
 
@@ -289,7 +289,7 @@ namespace {
 IZ_BOOL CMaterial::AddTexture(
 	IZ_PCSTR pszName,
 	const S_MTRL_TEXTURE_TYPE& type,
-	CBaseTexture* pTex)
+	graph::CBaseTexture* pTex)
 {
 	IZ_BOOL ret = IZ_TRUE;
 
@@ -319,7 +319,7 @@ IZ_BOOL CMaterial::AddTexture(
 // マテリアルに関連付けられているテクスチャをセット.
 IZ_BOOL CMaterial::SetTexture(
 	IZ_PCSTR pszName, 
-	CBaseTexture* pTex)
+	graph::CBaseTexture* pTex)
 {
 	return SetTexture(CKey(pszName), pTex);
 }
@@ -327,7 +327,7 @@ IZ_BOOL CMaterial::SetTexture(
 // マテリアルに関連付けられているテクスチャをセット.
 IZ_BOOL CMaterial::SetTexture(
 	IZ_UINT nKey,
-	CBaseTexture* pTex)
+	graph::CBaseTexture* pTex)
 {
 	// Find specified texture's info.
 	S_MTRL_TEXTURE* pTexInfo = _Find(
@@ -602,7 +602,7 @@ const S_MTRL_PARAM* CMaterial::GetParamInfoByKey(const CKey& key) const
 	return ret;
 }
 
-CBaseTexture* CMaterial::GetTextureByIdx(IZ_UINT idx)
+graph::CBaseTexture* CMaterial::GetTextureByIdx(IZ_UINT idx)
 {
 	S_MTRL_TEXTURE* pInfo = const_cast<S_MTRL_TEXTURE*>(GetTexInfoByIdx(idx));
 	if (pInfo != IZ_NULL) {
@@ -611,7 +611,7 @@ CBaseTexture* CMaterial::GetTextureByIdx(IZ_UINT idx)
 	return IZ_NULL;
 }
 
-CBaseTexture* CMaterial::GetTextureByName(IZ_PCSTR pszName)
+graph::CBaseTexture* CMaterial::GetTextureByName(IZ_PCSTR pszName)
 {
 	S_MTRL_TEXTURE* pInfo = const_cast<S_MTRL_TEXTURE*>(GetTexInfoByName(pszName));
 	if (pInfo != IZ_NULL) {
@@ -620,7 +620,7 @@ CBaseTexture* CMaterial::GetTextureByName(IZ_PCSTR pszName)
 	return IZ_NULL;
 }
 
-CBaseTexture* CMaterial::GetTextureByKey(const CKey& key)
+graph::CBaseTexture* CMaterial::GetTextureByKey(const CKey& key)
 {
 	S_MTRL_TEXTURE* pInfo = const_cast<S_MTRL_TEXTURE*>(GetTexInfoByKey(key));
 	if (pInfo != IZ_NULL) {

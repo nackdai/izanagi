@@ -37,8 +37,8 @@ namespace izanagi {
 
 		// ステートリスト要素
 		struct SMGFStateListItem {
-			CTexture* pSrc;
-			CTexture* pDst;
+			graph::CTexture* pSrc;
+			graph::CTexture* pDst;
 
 			IZ_INT nSrcTexIdx;
 			IZ_INT nDstTexIdx;
@@ -61,7 +61,7 @@ namespace izanagi {
 
 	protected:
 		IZ_BOOL Apply(
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			CPostEffectShader* pShader);
 
 		// ファンクタ独自のテクスチャ作成
@@ -69,22 +69,22 @@ namespace izanagi {
 			CPostEffect* pPostEffect,
 			CPostEffectShader* pShader,
 			CPostEffectTextureCreator* pTexCreator,
-			CGraphicsDevice* pDevice);
+			graph::CGraphicsDevice* pDevice);
 
 	protected:
 		// 縮小
 		IZ_BOOL ApplyMGFDownScale(
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			CPostEffectShader* pShader);
 
 		// ブルーム作成
 		IZ_BOOL ApplyMGFRenderBloom(
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			CPostEffectShader* pShader);
 
 		// マージ
 		IZ_BOOL ApplyMGFMerge(
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			CPostEffectShader* pShader);
 
 	protected:

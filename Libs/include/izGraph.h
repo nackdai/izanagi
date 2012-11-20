@@ -4,20 +4,17 @@
 #include "izD3DDefs.h"
 
 #include "graph/GraphDefs.h"
-#include "graph/GraphicsDeviceUtil.h"
-
 #include "graph/GraphUtil.h"
-
-#include "graph/dx9/GraphicsDevice.h"
-#include "graph/dx9/BaseTexture.h"
-#include "graph/dx9/Texture.h"
-#include "graph/dx9/CubeTexture.h"
-#include "graph/dx9/Surface.h"
-#include "graph/dx9/VertexBuffer.h"
-#include "graph/dx9/IndexBuffer.h"
-#include "graph/dx9/VertexShader.h"
-#include "graph/dx9/PixelShader.h"
-#include "graph/dx9/VertexDeclaration.h"
+#include "graph/GraphicsDevice.h"
+#include "graph/BaseTexture.h"
+#include "graph/Texture.h"
+#include "graph/CubeTexture.h"
+#include "graph/Surface.h"
+#include "graph/VertexBuffer.h"
+#include "graph/IndexBuffer.h"
+#include "graph/VertexShader.h"
+#include "graph/PixelShader.h"
+#include "graph/VertexDeclaration.h"
 
 #include "graph/dx9/GraphPerf.h"
 

@@ -13,7 +13,7 @@ namespace izanagi {
 	public:
 		static CDebugMeshFrustum* CreateDebugMeshFrustum(
 			IMemoryAllocator* pAllocator,
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			IZ_COLOR nColor,
 			IZ_FLOAT fAspect,
 			IZ_FLOAT fFov,

@@ -25,16 +25,16 @@ CPrimitiveSet::~CPrimitiveSet()
 
 namespace {
 	// Create IndexBuffer.
-	CIndexBuffer* _CreateIndexBuffer(
-		CGraphicsDevice* pDevice,
+	graph::CIndexBuffer* _CreateIndexBuffer(
+		graph::CGraphicsDevice* pDevice,
 		const S_MSH_PRIM_SET& sMeshSubset,
 		IInputStream* pIn)
 	{
 		// Create IndexBuffer.
-		CIndexBuffer* pIB = pDevice->CreateIndexBuffer(
+		graph::CIndexBuffer* pIB = pDevice->CreateIndexBuffer(
 								sMeshSubset.numIdx,
 								sMeshSubset.fmtIdx,
-								E_GRAPH_RSC_TYPE_STATIC);
+								graph::E_GRAPH_RSC_TYPE_STATIC);
 		IZ_BOOL ret = (pIB != IZ_NULL);
 		VGOTO(ret, __EXIT__);
 
@@ -44,7 +44,7 @@ namespace {
 		VGOTO(ret, __EXIT__);
 
 		IZ_UINT nSize = sMeshSubset.numIdx;
-		nSize *= (sMeshSubset.fmtIdx == E_GRAPH_INDEX_BUFFER_FMT_INDEX32
+		nSize *= (sMeshSubset.fmtIdx == graph::E_GRAPH_INDEX_BUFFER_FMT_INDEX32
 					? sizeof(IZ_UINT32)
 					: sizeof(IZ_UINT16));
 
@@ -61,7 +61,7 @@ __EXIT__:
 }	// namespace
 
 IZ_UINT8* CPrimitiveSet::Read(
-	CGraphicsDevice* pDevice,
+	graph::CGraphicsDevice* pDevice,
 	IInputStream* pIn,
 	IZ_UINT8* buf)
 {
@@ -84,14 +84,14 @@ IZ_UINT8* CPrimitiveSet::Read(
 
 	// Compute count of primitive.
 	switch (m_Info.typePrim) {
-	case E_GRAPH_PRIM_TYPE_TRIANGLESTRIP:
+	case graph::E_GRAPH_PRIM_TYPE_TRIANGLESTRIP:
 		m_PrimNum = m_Info.numIdx - 2;
 		break;
-	case E_GRAPH_PRIM_TYPE_TRIANGLEFAN:
+	case graph::E_GRAPH_PRIM_TYPE_TRIANGLEFAN:
 		// TODO
 		IZ_ASSERT(IZ_FALSE);
 		break;
-	case E_GRAPH_PRIM_TYPE_TRIANGLELIST:
+	case graph::E_GRAPH_PRIM_TYPE_TRIANGLELIST:
 		m_PrimNum = m_Info.numIdx / 3;
 		break;
 	default:
@@ -103,7 +103,7 @@ IZ_UINT8* CPrimitiveSet::Read(
 }
 
 IZ_BOOL CPrimitiveSet::Render(
-	CGraphicsDevice* pDevice,
+	graph::CGraphicsDevice* pDevice,
 	CSkeletonInstance* pSkeleton,
 	IMshRenderHandler* pRenderHandler)
 {
@@ -156,7 +156,7 @@ IZ_BOOL CPrimitiveSet::Render(
 }
 
 IZ_BOOL CPrimitiveSet::DebugRender(
-	CGraphicsDevice* pDevice,
+	graph::CGraphicsDevice* pDevice,
 	const CSkeletonInstance* pSkeleton,
 	IMshRenderHandler* pRenderHandler)
 {

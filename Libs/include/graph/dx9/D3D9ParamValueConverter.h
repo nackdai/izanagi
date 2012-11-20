@@ -11,7 +11,10 @@
 	static FUNC_ABSTRACT_TO_TARGET(p, target, abst);\
 	static FUNC_TARGET_TO_ABSTRACT(p, abst, target)
 
-namespace izanagi {
+namespace izanagi
+{
+namespace graph
+{
 	/**
 	* IZANAGIのパラメータ -> D3D9のパラメータ
 	*/
@@ -65,6 +68,7 @@ namespace izanagi {
 		// 頂点データの使い方
 		FUNC_CONV_PARAM_VAL(VtxDeclUsage, D3DDECLUSAGE, E_GRAPH_VTX_DECL_USAGE);
 	};
+}   // namespace graph
 }	// namespace izanagi
 
 

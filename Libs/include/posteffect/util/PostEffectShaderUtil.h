@@ -17,6 +17,7 @@ namespace izanagi {
 		// パラメータをセットする
 		template <class _T>
 		static IZ_BOOL SetValue(
+            graph::CGraphicsDevice* device,
 			_T* pShader,
 			SHADER_PARAM_HANDLE handle,
 			const void* pValue,
@@ -26,13 +27,13 @@ namespace izanagi {
 	public:
 		// サンプラのリソースインデックスをハンドルから引いてくる
 		static inline IZ_UINT GetSamplerResourceIndexByHandle(
-			CPixelShader* pShader,
+			graph::CPixelShader* pShader,
 			SHADER_PARAM_HANDLE handle);
 
 		static inline IZ_BOOL BeginScene(
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			IZ_INT nColorBufferNum,
-			CSurface** pColorBuffer,
+			graph::CSurface** pColorBuffer,
 			IZ_BOOL bIsResetViewport,
 			IZ_INT nTarget,
 			IZ_DWORD nClearColor,
@@ -43,6 +44,7 @@ namespace izanagi {
 	// パラメータをセットする
 	template <class _T>
 	IZ_BOOL CPostEffectShaderUtil::SetValue(
+        graph::CGraphicsDevice* device,
 		_T* pShader,
 		SHADER_PARAM_HANDLE handle,
 		const void* pValue,
@@ -57,6 +59,7 @@ namespace izanagi {
 		if (CPostEffectParamUtil::IsBoolType(type)) {
 			// BOOL
 			pShader->SetBoolArray(
+                device,
 				handle,
 				(const IZ_BOOL*)pValue,
 				nRow * nColumn * nElements);
@@ -64,6 +67,7 @@ namespace izanagi {
 		else if (CPostEffectParamUtil::IsIntType(type)) {
 			// INT
 			pShader->SetIntArray(
+                device,
 				handle,
 				(const IZ_INT*)pValue,
 				nRow * nColumn * nElements);
@@ -71,6 +75,7 @@ namespace izanagi {
 		else if (CPostEffectParamUtil::IsMatrixType(type)) {
 			// FLOAT4x4 -> MATRIX
 			pShader->SetMatrixArray(
+                device,
 				handle,
 				(const SMatrix*)pValue,
 				nElements);
@@ -79,6 +84,7 @@ namespace izanagi {
 			if (nColumn < 4) {
 				// FLOATn x M
 				pShader->SetFloatArray(
+                    device,
 					handle,
 					(const IZ_FLOAT*)pValue,
 					nRow * nColumn * nElements);
@@ -86,6 +92,7 @@ namespace izanagi {
 			else {
 				// FLOAT4xN -> VECTOR4 x N
 				pShader->SetVectorArray(
+                    device,
 					handle,
 					(const SVector*)pValue,
 					nRow * nElements);
@@ -103,17 +110,17 @@ namespace izanagi {
 
 	// サンプラのリソースインデックスをハンドルから引いてくる
 	IZ_UINT CPostEffectShaderUtil::GetSamplerResourceIndexByHandle(
-		CPixelShader* pShader,
+		graph::CPixelShader* pShader,
 		SHADER_PARAM_HANDLE handle)
 	{
-		IZ_UINT ret = pShader->CShaderConstTable::GetRawInterface()->GetSamplerIndex(handle);
+		IZ_UINT ret = pShader->GetSamplerIndex(handle);
 		return ret;
 	}
 
 	IZ_BOOL CPostEffectShaderUtil::BeginScene(
-		CGraphicsDevice* pDevice,
+		graph::CGraphicsDevice* pDevice,
 		IZ_INT nColorBufferNum,
-		CSurface** pColorBuffer,
+		graph::CSurface** pColorBuffer,
 		IZ_BOOL bIsResetViewport,
 		IZ_INT nTarget,
 		IZ_DWORD nClearColor,

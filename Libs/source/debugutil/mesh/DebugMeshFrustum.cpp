@@ -4,7 +4,7 @@ using namespace izanagi;
 
 CDebugMeshFrustum* CDebugMeshFrustum::CreateDebugMeshFrustum(
 	IMemoryAllocator* pAllocator,
-	CGraphicsDevice* pDevice,
+	graph::CGraphicsDevice* pDevice,
 	IZ_COLOR nColor,
 	IZ_FLOAT fAspect,
 	IZ_FLOAT fFov,
@@ -53,7 +53,7 @@ IZ_BOOL CDebugMeshFrustum::Init()
 
 	VRETURN(CreateVD(VTX_FORM_FLAG));
 
-	m_PrimType = E_GRAPH_PRIM_TYPE_TRIANGLELIST;
+	m_PrimType = graph::E_GRAPH_PRIM_TYPE_TRIANGLELIST;
 	m_nPrimCnt = 4 + 2;
 
 	return IZ_TRUE;

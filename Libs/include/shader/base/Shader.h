@@ -171,28 +171,28 @@ namespace izanagi {
 		PURE_VIRTUAL(
 			IZ_BOOL SetTexture(
 				IZ_SHADER_HANDLE hTex,
-				CBaseTexture* pTex));
+				graph::CBaseTexture* pTex));
 
 		/** シェーダで利用するテクスチャを設定.
 		 */
 		PURE_VIRTUAL(
 			IZ_BOOL SetTexture(
 				IZ_PCSTR name,
-				CBaseTexture* tex));
+				graph::CBaseTexture* tex));
 
 		/** シェーダで利用するテクスチャをサンプラに設定.
 		 */
 		PURE_VIRTUAL(
 			IZ_BOOL SetTextureToSampler(
 				IZ_SHADER_HANDLE hSmpl,
-				CBaseTexture* pTex));
+				graph::CBaseTexture* pTex));
 
 		/** シェーダで利用するテクスチャをサンプラに設定.
 		 */
 		PURE_VIRTUAL(
 			IZ_BOOL SetTextureToSampler(
 				IZ_PCSTR name,
-				CBaseTexture* tex));
+				graph::CBaseTexture* tex));
 
 		/** テクニック数取得.
 		 */
@@ -241,7 +241,7 @@ namespace izanagi {
 
 	protected:
 		IMemoryAllocator* m_Allocator;
-		CGraphicsDevice* m_pDevice;
+		graph::CGraphicsDevice* m_pDevice;
 
 	private:
 		CStdHash<IZ_UINT, IShader, SHD_HASH_MAX>::Item m_HashItem;

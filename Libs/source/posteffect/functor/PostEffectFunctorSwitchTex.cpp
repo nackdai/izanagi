@@ -6,7 +6,7 @@ using namespace izanagi;
 
 // 実行メイン処理
 IZ_BOOL CPostEffectFunctorSwitchTex::ApplyCore(
-	CGraphicsDevice* pDevice,
+	graph::CGraphicsDevice* pDevice,
 	CPostEffectShader* pShader)
 {
 	IZ_ASSERT(m_nSwapTexIdx[0] >= 0);
@@ -20,8 +20,8 @@ IZ_BOOL CPostEffectFunctorSwitchTex::ApplyCore(
 			IZ_POSTEFFECT_HANDLE nTexHandle_0 = pShader->GetTexHandleByIdx(m_nSwapTexIdx[0]);
 			IZ_POSTEFFECT_HANDLE nTexHandle_1 = pShader->GetTexHandleByIdx(m_nSwapTexIdx[1]);
 
-			CTexture* pTex_0 = pShader->GetTexture(m_nSwapTexIdx[0]);
-			CTexture* pTex_1 = pShader->GetTexture(m_nSwapTexIdx[1]);
+			graph::CTexture* pTex_0 = pShader->GetTexture(m_nSwapTexIdx[0]);
+			graph::CTexture* pTex_1 = pShader->GetTexture(m_nSwapTexIdx[1]);
 
 			// Swap
 			if (m_bSwitch) {

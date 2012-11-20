@@ -36,7 +36,7 @@ namespace izanagi {
 		// ファンクタ処理
 		PURE_VIRTUAL(
 			IZ_BOOL Apply(
-				CGraphicsDevice* pDevice,
+				graph::CGraphicsDevice* pDevice,
 				CPostEffectShader* pShader));
 
 		// ファンクタ独自のテクスチャ作成
@@ -44,7 +44,7 @@ namespace izanagi {
 			CPostEffect* pPostEffect,
 			CPostEffectShader* pShader,
 			CPostEffectTextureCreator* pTexCreator,
-			CGraphicsDevice* pDevice)
+			graph::CGraphicsDevice* pDevice)
 		{
 			return IZ_TRUE;
 		}

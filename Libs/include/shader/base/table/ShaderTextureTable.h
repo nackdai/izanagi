@@ -30,12 +30,12 @@ namespace izanagi {
 		inline IZ_INT GetIdxBySemantic(IZ_PCSTR pszSemantic) const;
 
 		// テクスチャハンドルをセット
-		inline IZ_BOOL SetTexture(IZ_UINT idx, CBaseTexture* pTex);
-		inline IZ_BOOL SetTextureByName(IZ_PCSTR pszName, CBaseTexture* pTex);
-		inline IZ_BOOL SetTextureBySemantic(IZ_PCSTR pszSemantic, CBaseTexture* pTex);
+		inline IZ_BOOL SetTexture(IZ_UINT idx, graph::CBaseTexture* pTex);
+		inline IZ_BOOL SetTextureByName(IZ_PCSTR pszName, graph::CBaseTexture* pTex);
+		inline IZ_BOOL SetTextureBySemantic(IZ_PCSTR pszSemantic, graph::CBaseTexture* pTex);
 
 		// テクスチャを取得
-		inline CBaseTexture* GetTexture(IZ_UINT idx);
+		inline graph::CBaseTexture* GetTexture(IZ_UINT idx);
 
 		// テクスチャ数を取得
 		inline IZ_UINT GetTexNum() const;
@@ -43,7 +43,7 @@ namespace izanagi {
 		inline void Release();
 		inline void Clean();
 
-		inline CBaseTexture* GetTextureIfDirty(IZ_UINT idx);
+		inline graph::CBaseTexture* GetTextureIfDirty(IZ_UINT idx);
 
 	private:
 		S_SHD_TEXTRUE_HEADER m_Header;
@@ -129,7 +129,7 @@ namespace izanagi {
 	}
 
 	// テクスチャハンドルをセット
-	IZ_BOOL CShaderTextureTable::SetTexture(IZ_UINT idx, CBaseTexture* pTex)
+	IZ_BOOL CShaderTextureTable::SetTexture(IZ_UINT idx, graph::CBaseTexture* pTex)
 	{
 		IZ_ASSERT(m_pDesc != IZ_NULL);
 
@@ -141,7 +141,7 @@ namespace izanagi {
 		return ret;
 	}
 
-	IZ_BOOL CShaderTextureTable::SetTextureByName(IZ_PCSTR pszName, CBaseTexture* pTex)
+	IZ_BOOL CShaderTextureTable::SetTextureByName(IZ_PCSTR pszName, graph::CBaseTexture* pTex)
 	{
 		IZ_INT nIdx = GetIdxByName(pszName);
 
@@ -156,7 +156,7 @@ namespace izanagi {
 		return ret;
 	}
 
-	IZ_BOOL CShaderTextureTable::SetTextureBySemantic(IZ_PCSTR pszSemantic, CBaseTexture* pTex)
+	IZ_BOOL CShaderTextureTable::SetTextureBySemantic(IZ_PCSTR pszSemantic, graph::CBaseTexture* pTex)
 	{
 		IZ_INT nIdx = GetIdxBySemantic(pszSemantic);
 
@@ -172,11 +172,11 @@ namespace izanagi {
 	}
 
 	// テクスチャハンドルを取得
-	CBaseTexture* CShaderTextureTable::GetTexture(IZ_UINT idx)
+	graph::CBaseTexture* CShaderTextureTable::GetTexture(IZ_UINT idx)
 	{
 		IZ_ASSERT(m_pDesc != IZ_NULL);
 
-		CBaseTexture* ret = IZ_NULL;
+		graph::CBaseTexture* ret = IZ_NULL;
 
 		if (idx < m_Header.numTexture) {
 			ret = m_pDesc[idx].tex;
@@ -206,9 +206,9 @@ namespace izanagi {
 		}
 	}
 
-	CBaseTexture* CShaderTextureTable::GetTextureIfDirty(IZ_UINT idx)
+	graph::CBaseTexture* CShaderTextureTable::GetTextureIfDirty(IZ_UINT idx)
 	{
-		CBaseTexture* ret = IZ_NULL;
+		graph::CBaseTexture* ret = IZ_NULL;
 
 		if ((idx < m_Header.numTexture)
 			&& (m_pDesc[idx].isDirty))

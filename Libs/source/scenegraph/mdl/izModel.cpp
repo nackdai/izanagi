@@ -66,7 +66,7 @@ __EXIT__:
 
 CModel* CModel::CreateModel(
 	IMemoryAllocator* pAllocator,
-	CGraphicsDevice* pDevice,
+	graph::CGraphicsDevice* pDevice,
 	IInputStream* pIn,
 	IMshRenderHandler* pRenderHandler)
 {

@@ -14,7 +14,7 @@ namespace izanagi {
 		// インスタンス作成
 		static CDebugMeshTorus* CreateDebugMeshTorus(
 			IMemoryAllocator* pAllocator,
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			IZ_UINT flag,
 			IZ_COLOR nColor,
 			IZ_FLOAT fInnerRadius,	// 内径
@@ -31,7 +31,7 @@ namespace izanagi {
 	protected:
 		// 初期化
 		IZ_BOOL Init(
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			IZ_UINT flag,
 			IZ_UINT nSides, 
 			IZ_UINT nRings);

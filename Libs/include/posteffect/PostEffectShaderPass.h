@@ -127,10 +127,10 @@ namespace izanagi {
 		inline void Clear();
 
 		// ピクセルシェーダのセット
-		void SetPS(CPixelShader* pPS) { SAFE_REPLACE(m_pPS, pPS); }
+		void SetPS(graph::CPixelShader* pPS) { SAFE_REPLACE(m_pPS, pPS); }
 
 		// ピクセルシェーダ取得
-		CPixelShader* GetPS() { return m_pPS; }
+		graph::CPixelShader* GetPS() { return m_pPS; }
 
 		// パラメータ数取得
 		IZ_UINT GetParamNum() const { return m_Params.num; }
@@ -161,7 +161,7 @@ namespace izanagi {
 		SParams<SSamplerInfo> m_Samplers;
 
 		// ピクセルシェーダ
-		CPixelShader* m_pPS;
+		graph::CPixelShader* m_pPS;
 
 		// 頂点シェーダ
 		CPostEffectVS* m_pVS;

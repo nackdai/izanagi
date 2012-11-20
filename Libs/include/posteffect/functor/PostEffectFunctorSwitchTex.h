@@ -18,12 +18,12 @@ namespace izanagi {
 
 	protected:
 		IZ_BOOL ApplyCore(
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			CPostEffectShader* pShader);
 
 		// 処理終了後処理
 		inline IZ_BOOL EndApply(
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			CPostEffectShader* pShader);
 
 		// リセット
@@ -50,7 +50,7 @@ namespace izanagi {
 
 	// 処理終了後処理
 	IZ_BOOL CPostEffectFunctorSwitchTex::EndApply(
-		CGraphicsDevice* pDevice,
+		graph::CGraphicsDevice* pDevice,
 		CPostEffectShader* pShader)
 	{
 		IZ_UINT tmp = m_nSwapTexIdx[0];

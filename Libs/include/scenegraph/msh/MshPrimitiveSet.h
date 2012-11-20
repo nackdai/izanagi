@@ -4,9 +4,9 @@
 #include "MSHFormat.h"
 
 namespace izanagi {
-	class CGraphicsDevice;
-	class CVertexBuffer;
-	class CIndexBuffer;
+	class graph::CGraphicsDevice;
+	class graph::CVertexBuffer;
+	class graph::CIndexBuffer;
 	class IInputStream;
 	class CSkeletonInstance;
 	class IMshRenderHandler;
@@ -32,33 +32,33 @@ namespace izanagi {
 		/** 描画.
 		 */
 		IZ_BOOL Render(
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			CSkeletonInstance* pSkeleton,
 			IMshRenderHandler* pRenderHandler);
 
 	private:
 		IZ_UINT8* Read(
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			IInputStream* pIn,
 			IZ_UINT8* buf);
 
 		IZ_BOOL DebugRender(
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			const CSkeletonInstance* pSkeleton,
 			IMshRenderHandler* pRenderHandler);
 
 	private:
 		const S_MSH_PRIM_SET& GetInfo() const { return m_Info; }
 
-		void SetVB(CVertexBuffer* pVB) { SAFE_REPLACE(m_VB, pVB); }
+		void SetVB(graph::CVertexBuffer* pVB) { SAFE_REPLACE(m_VB, pVB); }
 
 	private:
 		S_MSH_PRIM_SET m_Info;
 
 		IZ_UINT m_PrimNum;
 
-		CVertexBuffer* m_VB;
-		CIndexBuffer* m_IB;
+		graph::CVertexBuffer* m_VB;
+		graph::CIndexBuffer* m_IB;
 
 		struct {
 			IZ_UINT m_IsTransform	: 1;

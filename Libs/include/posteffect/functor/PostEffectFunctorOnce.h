@@ -19,12 +19,12 @@ namespace izanagi {
 	protected:
 		// 処理開始前処理
 		inline IZ_BOOL BeginApply(
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			CPostEffectShader* pShader);
 
 		// 処理終了後処理
 		inline IZ_BOOL EndApply(
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			CPostEffectShader* pShader);
 
 		// リセット
@@ -45,7 +45,7 @@ namespace izanagi {
 
 	// 処理開始前処理
 	IZ_BOOL CPostEffectFunctorOnce::BeginApply(
-		CGraphicsDevice* pDevice,
+		graph::CGraphicsDevice* pDevice,
 		CPostEffectShader* pShader)
 	{
 		UNUSED_ALWAYS(pDevice);
@@ -58,7 +58,7 @@ namespace izanagi {
 
 	// 処理終了後処理
 	IZ_BOOL CPostEffectFunctorOnce::EndApply(
-		CGraphicsDevice* pDevice,
+		graph::CGraphicsDevice* pDevice,
 		CPostEffectShader* pShader)
 	{
 		UNUSED_ALWAYS(pDevice);

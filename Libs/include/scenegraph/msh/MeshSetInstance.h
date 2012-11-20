@@ -5,7 +5,7 @@
 #include "MeshSetInterface.h"
 
 namespace izanagi {
-	class CGraphicsDevice;
+	class graph::CGraphicsDevice;
 	class CMeshSet;
 	class CSkeletonInstance;
 	class CMaterial;
@@ -46,7 +46,7 @@ namespace izanagi {
 
 		// 描画
 		virtual IZ_BOOL Render(
-			CGraphicsDevice* device,
+			graph::CGraphicsDevice* device,
 			void* renderHandler);
 
 		// 半透明かどうかを取得.

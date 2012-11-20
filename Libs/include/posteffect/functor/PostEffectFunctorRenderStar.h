@@ -47,7 +47,7 @@ namespace izanagi {
 
 	protected:
 		IZ_BOOL Apply(
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			CPostEffectShader* pShader);
 
 		// ファンクタ独自のテクスチャ作成
@@ -55,11 +55,11 @@ namespace izanagi {
 			CPostEffect* pPostEffect,
 			CPostEffectShader* pShader,
 			CPostEffectTextureCreator* pTexCreator,
-			CGraphicsDevice* pDevice);
+			graph::CGraphicsDevice* pDevice);
 
 	protected:
 		// スター出力テクスチャ取得
-		CTexture* GetStarDstTex(CPostEffectShader* pShader);
+		graph::CTexture* GetStarDstTex(CPostEffectShader* pShader);
 
 		// 使用テクスチャ数取得
 		IZ_UINT GetUseTexNum();
@@ -71,7 +71,7 @@ namespace izanagi {
 
 	protected:
 		// ワークテクスチャ取得
-		inline CTexture* GetWorkTex();
+		inline graph::CTexture* GetWorkTex();
 		
 		// ワークテクスチャ切り替え
 		inline void ToggleWorkTex();
@@ -90,7 +90,7 @@ namespace izanagi {
 
 
 	protected:
-		CTexture* m_pWorkTex[TEX_NUM];
+		graph::CTexture* m_pWorkTex[TEX_NUM];
 
 		// ワークテクスチャインデックス
 		IZ_INT m_nWorkTexIdx;
@@ -112,7 +112,7 @@ namespace izanagi {
 	}
 
 	// ワークテクスチャ取得
-	CTexture* CPostEffectFunctorRenderStar::GetWorkTex()
+	graph::CTexture* CPostEffectFunctorRenderStar::GetWorkTex()
 	{
 		return m_pWorkTex[m_nWorkTexIdx];
 	}

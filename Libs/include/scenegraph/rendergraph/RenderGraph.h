@@ -66,14 +66,14 @@ namespace izanagi {
 		/** 描画.
 		 */
 		IZ_BOOL Render(
-			CGraphicsDevice* device,
+			graph::CGraphicsDevice* device,
 			ISceneRenderer* sceneRenderer,
 			IMshRenderHandler* renderHandler);
 
 	private:
 		// 描画内部処理
 		IZ_BOOL RenderInternal(
-			CGraphicsDevice* device,
+			graph::CGraphicsDevice* device,
 			ISceneRenderer* sceneRenderer,
 			IMshRenderHandler* renderHandler,
 			CStdSet<IRenderElement>& list,

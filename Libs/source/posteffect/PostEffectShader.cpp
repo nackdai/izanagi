@@ -47,7 +47,7 @@ IZ_BOOL CPostEffectShader::SRenderParam::IsValid()
 
 CPostEffectShader* CPostEffectShader::CreatePostEffectShader(
 	IMemoryAllocator* pAllocator,
-	CGraphicsDevice* pDevice,
+	graph::CGraphicsDevice* pDevice,
 	CPostEffectVSManager* pVSMgr,
 	IInputStream* in)
 {
@@ -140,7 +140,7 @@ IZ_BOOL CPostEffectShader::Render(
 	const S_PES_PASS* pDesc = pPass->GetDesc();
 
 	// 入力テクスチャを探す
-	CTexture* pSrcTex = IZ_NULL;
+	graph::CTexture* pSrcTex = IZ_NULL;
 	if (pPass->GetSamplerNum() > 0) {
 		const SSmplInfo* pSmplInfo = pPass->GetSamplerInfo(0);
 		const S_PES_SAMPLER* pSmplDesc = GetSamplerDesc(pSmplInfo->idx);
@@ -198,7 +198,9 @@ IZ_BOOL CPostEffectShader::Render(
 		if (!CPostEffectRectUtil::CmpRect(rcDst, rcRenderTarget)) {
 			// レンダーターゲットの矩形と出力矩形が一致しない
 			// シザリング設定
-			CRenderStateSetter::EnableScissorTest(m_pDevice, IZ_TRUE);
+            m_pDevice->SetRenderState(
+                graph::E_GRAPH_RS_SCISSORTESTENABLE,
+                IZ_TRUE);
 			m_pDevice->SetScissorTestRect(rcDst);
 
 			bIsScissor = IZ_TRUE;
@@ -219,7 +221,9 @@ IZ_BOOL CPostEffectShader::Render(
 
 	if (bIsScissor) {
 		// シザリングを解除
-		CRenderStateSetter::EnableScissorTest(m_pDevice, IZ_FALSE);
+        m_pDevice->SetRenderState(
+            graph::E_GRAPH_RS_SCISSORTESTENABLE,
+            IZ_FALSE);
 	}
 
 	return IZ_TRUE;
@@ -253,7 +257,7 @@ IZ_BOOL CPostEffectShader::BeginRender(
 	CPostEffectFunctor* pFunctor,
 	IZ_UINT nTechIdx,
 	IZ_UINT nPassIdx,
-	CTexture* pTex,
+	graph::CTexture* pTex,
 	IZ_BOOL bIsClear)
 {
 	IZ_ASSERT(pFunctor != IZ_NULL);
@@ -277,14 +281,14 @@ IZ_BOOL CPostEffectShader::BeginRender(
 				nMethod = m_StateAlphaBlend.method;
 			}
 
-			CRenderStateSetter::EnableAlphaBlend(m_pDevice, bEnable);
-			CRenderStateSetter::SetAlphaBlendMethod(m_pDevice, nMethod);
+            m_pDevice->SetRenderState(graph::E_GRAPH_RS_ALPHABLENDENABLE, bEnable);
+            m_pDevice->SetRenderState(graph::E_GRAPH_RS_BLENDMETHOD, nMethod);
 		}
 
 		// アルファテスト
 		{
 			IZ_BOOL bEnable = pDesc->state.AlphaTestEnable;
-			E_GRAPH_CMP_FUNC nFunc = pDesc->state.AlphaTestFunc;
+			graph::E_GRAPH_CMP_FUNC nFunc = pDesc->state.AlphaTestFunc;
 			IZ_UINT8 nRef = pDesc->state.AlphaTestRef;
 			if (m_StateAlphaTest.IsDirty()) {
 				// 外部設定を利用する
@@ -293,15 +297,15 @@ IZ_BOOL CPostEffectShader::BeginRender(
 				nRef = m_StateAlphaTest.ref;
 			}
 
-			CRenderStateSetter::EnableAlphaTest(m_pDevice, bEnable);
-			CRenderStateSetter::SetAlphaTestFunc(m_pDevice, nFunc);
-			CRenderStateSetter::SetAlphaTestRef(m_pDevice, nRef);
+            m_pDevice->SetRenderState(graph::E_GRAPH_RS_ALPHABLENDENABLE, bEnable);
+            m_pDevice->SetRenderState(graph::E_GRAPH_RS_ALPHAFUNC, nFunc);
+            m_pDevice->SetRenderState(graph::E_GRAPH_RS_ALPHAREF, nRef);
 		}
 	}
 
 	// レンダーターゲット切り替え
 	if (pTex != IZ_NULL) {
-		CSurface* pSurf = pTex->GetSurface(0);
+		graph::CSurface* pSurf = pTex->GetSurface(0);
 		IZ_ASSERT(pSurf != IZ_NULL);
 
 		IZ_UINT nClearFlag = 0;
@@ -312,7 +316,7 @@ IZ_BOOL CPostEffectShader::BeginRender(
 #else
 		if (pDesc->ann.isClearColor && bIsClear) {
 #endif
-			nClearFlag = E_GRAPH_CLEAR_FLAG_COLOR;
+			nClearFlag = graph::E_GRAPH_CLEAR_FLAG_COLOR;
 			nClearColor = pDesc->ann.ClearColor;
 		}
 
@@ -354,7 +358,7 @@ IZ_BOOL CPostEffectShader::BeginRender(
 	IZ_UINT nPassIdx)
 {
 	IZ_BOOL ret = IZ_TRUE;
-	CTexture* pTex = IZ_NULL;
+	graph::CTexture* pTex = IZ_NULL;
 
 	// パス取得
 	CPostEffectPass* pPass = GetPass(nTechIdx, nPassIdx);
@@ -383,7 +387,7 @@ IZ_BOOL CPostEffectShader::EndRender()
 {
 	if (m_bIsBeginScene) {
 		// BeginRender()が呼ばれている
-		m_pDevice->EndScene(E_GRAPH_END_SCENE_FLAG_RT_0);
+		m_pDevice->EndScene(graph::E_GRAPH_END_SCENE_FLAG_RT_0);
 		m_bIsBeginScene = IZ_FALSE;
 	}
 
@@ -494,7 +498,7 @@ IZ_BOOL CPostEffectShader::SetParameter(
 */
 IZ_BOOL CPostEffectShader::SetTexture(
 	IZ_POSTEFFECT_HANDLE nHandle,
-	CTexture* pTex)
+	graph::CTexture* pTex)
 {
 	IZ_ASSERT(nHandle != IZ_POSTEFFECT_HANDLE_INVALID);
 	IZ_ASSERT(pTex != IZ_NULL);
@@ -534,7 +538,7 @@ IZ_BOOL CPostEffectShader::SetTextureOffsetParameter(
 /**
 * テクスチャオフセットパラメータをセットする
 */
-IZ_BOOL CPostEffectShader::SetTextureOffsetParameter(const CTexture* pTex)
+IZ_BOOL CPostEffectShader::SetTextureOffsetParameter(const graph::CTexture* pTex)
 {
 	VRETURN(m_RenderParam.IsValid());
 
@@ -634,6 +638,7 @@ IZ_BOOL CPostEffectShader::CommitChanges()
 									: 1);
 
 			ret = CPostEffectShaderUtil::SetValue(
+                    m_pDevice,
 					pPass->GetPS(),
 					handle,
 					pValue,
@@ -656,7 +661,7 @@ IZ_BOOL CPostEffectShader::CommitChanges()
 			VRETURN(pSmplDesc);
 
 			// テクスチャ取得
-			CTexture* pTex = m_cTexTableTmp.GetTextureIfDirty(
+			graph::CTexture* pTex = m_cTexTableTmp.GetTextureIfDirty(
 								pSmplDesc->state.BindTexIdx);
 			if (pTex == IZ_NULL) {
 				pTex = m_cTexTable.GetTexture(
@@ -671,7 +676,7 @@ IZ_BOOL CPostEffectShader::CommitChanges()
 				pTex->SetFilter(
 					pSmplDesc->state.magFilter,
 					pSmplDesc->state.minFilter,
-					E_GRAPH_TEX_FILTER_NONE);
+					graph::E_GRAPH_TEX_FILTER_NONE);
 
 				// テクスチャセット
 				m_pDevice->SetTexture(
@@ -794,7 +799,7 @@ IZ_UINT8* CPostEffectShader::CreatePass(
 		IZ_INPUT_READ_ASSERT(in, pProgramBuf, 0, pDesc->sizeProgram);
 
 		// ピクセルシェーダ作成
-		CPixelShader* pPS = m_pDevice->CreatePixelShader(pProgramBuf);
+		graph::CPixelShader* pPS = m_pDevice->CreatePixelShader(pProgramBuf);
 		IZ_ASSERT(pPS != IZ_NULL);
 
 		cPass.SetPS(pPS);

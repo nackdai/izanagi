@@ -18,16 +18,16 @@ namespace izanagi {
 
 	protected:
 		IZ_BOOL Apply(
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			CPostEffectShader* pShader);
 
 		virtual IZ_BOOL ApplyCore(
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			CPostEffectShader* pShader);
 
 		// 処理開始前処理
 		virtual IZ_BOOL BeginApply(
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			CPostEffectShader* pShader)
 		{
 			return IZ_TRUE;
@@ -35,7 +35,7 @@ namespace izanagi {
 
 		// 処理終了後処理
 		virtual IZ_BOOL EndApply(
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			CPostEffectShader* pShader)
 		{
 			return IZ_TRUE;

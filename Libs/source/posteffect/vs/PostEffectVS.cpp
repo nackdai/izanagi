@@ -44,7 +44,7 @@ void CPostEffectVS::InternalRelease()
 
 // シェーダ作成
 IZ_BOOL CPostEffectVS::CreateShader(
-	CGraphicsDevice* pDevice,
+	graph::CGraphicsDevice* pDevice,
 	IZ_UINT8* pProgram)
 {
 	IZ_BOOL result = IZ_FALSE;
@@ -129,7 +129,7 @@ void CPostEffectVS::Render(
 	// NOTE
 	// 頂点数を指定する
 	m_pDevice->DrawPrimitive(
-		E_GRAPH_PRIM_TYPE_TRIANGLESTRIP, 
+		graph::E_GRAPH_PRIM_TYPE_TRIANGLESTRIP, 
 		0, 
 		CPostEffectVSManager::PRIM_NUM);
 }
@@ -152,7 +152,7 @@ void CPostEffectVS::SetCommonShaderParameter(
 {
 	// 位置オフセット
 	{
-		CSurface* pSurface = m_pDevice->GetRenderTarget(0);
+		graph::CSurface* pSurface = m_pDevice->GetRenderTarget(0);
 		IZ_ASSERT(pSurface != IZ_NULL);
 
 		IZ_FLOAT fWidth = (IZ_FLOAT)pSurface->GetWidth();
@@ -171,6 +171,7 @@ void CPostEffectVS::SetCommonShaderParameter(
 			0.0f, 0.0f);
 
 		m_pShader->SetVector(
+            m_pDevice,
 			m_hCommonHandle[COMMON_HANDLE_PosOffset],
 			m_vecPosOffset);
 	}
@@ -196,6 +197,7 @@ void CPostEffectVS::SetCommonShaderParameter(
 			fTexOffsetX, fTexOffsetY);
 
 		m_pShader->SetVector(
+            m_pDevice,
 			m_hCommonHandle[COMMON_HANDLE_TexParam],
 			m_vecTexParam);
 	}

@@ -1,14 +1,15 @@
 #if !defined(__IZANAGI_GRAPH_INTERNAL_2D_RENDERER_H__)
 #define __IZANAGI_GRAPH_INTERNAL_2D_RENDERER_H__
 
-#include "izD3DDefs.h"
-#include "std/StdObject.h"
-#include "std/2DRect.h"
+#include "izDefs.h"
+#include "izStd.h"
 #include "graph/GraphDefs.h"
-#include "2DShader.h"
+#include "graph/2d/2DShader.h"
 
-namespace izanagi {
-	class IMemoryAllocator;
+namespace izanagi
+{
+namespace graph
+{
 	class CGraphicsDevice;
 	class CVertexBuffer;
 	class CIndexBuffer;
@@ -16,21 +17,23 @@ namespace izanagi {
 
 	/**
 	*/
-	class C2DRenderer : public CObject {
+	class C2DRenderer : public CObject
+    {
 		friend class CGraphicsDevice;
 
 	protected:
 		// インスタンス作成
 		static C2DRenderer* Create2DRenderer(
-			CGraphicsDevice* pDevice,
-			IMemoryAllocator* pAllocator);
+			CGraphicsDevice* device,
+			IMemoryAllocator* allocator);
 
 	protected:
 		C2DRenderer();
 		~C2DRenderer();
 
-		C2DRenderer(const C2DRenderer& rhs);
-		const C2DRenderer& operator=(const C2DRenderer& rhs);
+		NO_COPIABLE(C2DRenderer);
+
+        IZ_DEFINE_INTERNAL_RELEASE();
 
 	protected:
 		struct CUSTOM_VERTEX {
@@ -51,13 +54,10 @@ namespace izanagi {
 		};
 
 	protected:
-		// 解放
-		void InternalRelease();
-
 		// 初期化
-		IZ_BOOL Init(CGraphicsDevice* pDevice);
+		IZ_BOOL Init(CGraphicsDevice* device);
 
-	protected:
+	public:
 		// フレーム開始時に呼ぶこと
 		void BeginFrame();
 
@@ -65,45 +65,44 @@ namespace izanagi {
 		IZ_BOOL BeginDraw();
 
 		// 描画終了
-		IZ_BOOL EndDraw(CGraphicsDevice* pDevice);
+		IZ_BOOL EndDraw(CGraphicsDevice* device);
 
 		// 描画コマンドをフラッシュ
-		IZ_BOOL Flush(CGraphicsDevice* pDevice);
+		IZ_BOOL Flush(CGraphicsDevice* device);
 
 		// スプライト描画
 		IZ_BOOL DrawSprite(
-			CGraphicsDevice* pDevice,
+			CGraphicsDevice* device,
 			const CFloatRect& rcSrc,
 			const CIntRect& rcDst,
 			const IZ_COLOR color = IZ_COLOR_RGBA(255, 255, 255, 255));
 		IZ_BOOL DrawSpriteEx(
-			CGraphicsDevice* pDevice,
+			CGraphicsDevice* device,
 			const CIntRect& rcSrc,
 			const CIntRect& rcDst,
 			const IZ_COLOR color = IZ_COLOR_RGBA(255, 255, 255, 255));
 
 		// 矩形描画
 		IZ_BOOL DrawRect(
-			CGraphicsDevice* pDevice,
+			CGraphicsDevice* device,
 			const CIntRect& rcDst,
 			const IZ_COLOR color);
 
 		// 線描画
 		IZ_BOOL DrawLine(
-			CGraphicsDevice* pDevice,
+			CGraphicsDevice* device,
 			const CIntPoint& ptStart,
 			const CIntPoint& ptGoal,
 			const IZ_COLOR color);
 
 		// 描画設定
 		IZ_BOOL SetRenderOp(
-			CGraphicsDevice* pDevice,
+			CGraphicsDevice* device,
 			E_GRAPH_2D_RENDER_OP nOp);
 
-	protected:
 		// 描画準備
 		IZ_BOOL PrepareDraw(
-			CGraphicsDevice* pDevice,
+			CGraphicsDevice* device,
 			PRIM_TYPE nPrimType);
 
 		// ロック
@@ -133,7 +132,11 @@ namespace izanagi {
 		void ToggleIsLock() { m_bIsLock = !m_bIsLock; }
 
 		// 描画設定取得
-		inline E_GRAPH_2D_RENDER_OP GetRenderOp() const;
+		E_GRAPH_2D_RENDER_OP GetRenderOp() const
+        {
+		    IZ_ASSERT(m_pShader != IZ_NULL);
+		    return m_pShader->GetRenderOp();
+	    }
 
 	protected:
 		enum {
@@ -207,15 +210,7 @@ namespace izanagi {
 		// ロックフラグ
 		IZ_BOOL m_bIsLock;
 	};
-
-	// inline ********************************
-
-	// 描画設定取得
-	E_GRAPH_2D_RENDER_OP C2DRenderer::GetRenderOp() const
-	{
-		IZ_ASSERT(m_pShader != IZ_NULL);
-		return m_pShader->GetRenderOp();
-	}
+}   // namespace graph
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_GRAPH_INTERNAL_2D_RENDERER_H__)

@@ -5,7 +5,7 @@ using namespace izanagi;
 
 // 実行
 IZ_BOOL CPostEffectFunctorDefault::Apply(
-	CGraphicsDevice* pDevice,
+	graph::CGraphicsDevice* pDevice,
 	CPostEffectShader* pShader)
 {
 	IZ_ASSERT(pShader != IZ_NULL);
@@ -32,7 +32,7 @@ IZ_BOOL CPostEffectFunctorDefault::Apply(
 
 // 実行メイン処理
 IZ_BOOL CPostEffectFunctorDefault::ApplyCore(
-	CGraphicsDevice* pDevice,
+	graph::CGraphicsDevice* pDevice,
 	CPostEffectShader* pShader)
 {
 	IZ_BOOL ret = IZ_TRUE;
@@ -68,7 +68,7 @@ IZ_BOOL CPostEffectFunctorDefault::SetTextureOffset(CPostEffectShader* pShader)
 						m_nTechIdx,
 						m_nPassIdx);
 
-	CTexture* pTex = pShader->GetTexture(nTexIdx);
+	graph::CTexture* pTex = pShader->GetTexture(nTexIdx);
 	
 	IZ_BOOL ret = pShader->SetTextureOffsetParameter(pTex);
 	return ret;

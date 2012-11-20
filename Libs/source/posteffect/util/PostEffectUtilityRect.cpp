@@ -7,9 +7,9 @@ using namespace izanagi;
 */
 void CPostEffectRectUtil::GetTextureCoord(
 	SFloatRect* pTexCoord,
-	const CTexture* pSrcTex,
+	const graph::CTexture* pSrcTex,
 	const SIntRect* pSrcRect,
-	const CTexture* pDstTex,
+	const graph::CTexture* pDstTex,
 	const SIntRect* pDstRect)
 {
 	IZ_ASSERT(pTexCoord != IZ_NULL);

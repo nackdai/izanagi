@@ -26,7 +26,7 @@ namespace izanagi {
 		// インスタンス作成
 		static CPostEffectSystem* CreatePostEffectSystem(
 			IMemoryAllocator* pAllocator,
-			CGraphicsDevice* pDevice);
+			graph::CGraphicsDevice* pDevice);
 
 		// インスタンス取得
 		static CPostEffectSystem* GetPostEffectSystem() { return s_pInstance; }
@@ -75,7 +75,7 @@ namespace izanagi {
 
 	private:
 		IMemoryAllocator* m_Allocator;
-		CGraphicsDevice* m_pDevice;
+		graph::CGraphicsDevice* m_pDevice;
 
 		// テクスチャ作成用
 		CPostEffectTextureCreator* m_pTexCreator;

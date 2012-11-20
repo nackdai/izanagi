@@ -4,19 +4,23 @@
 #include "izDefs.h"
 #include "izD3DDefs.h"
 #include "std/StdStack.h"
-#include "../dx9/Surface.h"
+#include "graph/Surface.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace graph
+{
 	// レンダーターゲット管理
 	template <IZ_UINT _STACK_NUM>
-	class CRenderTargetManager {
+	class CRenderTargetManager
+    {
 		friend class CGraphicsDevice;
 
 	private:
 		CRenderTargetManager() {}
 		~CRenderTargetManager() {}
 
-	private:
+	public:
 		// プッシュ
 		IZ_BOOL Push(CSurface* pSurf)
 		{
@@ -80,6 +84,7 @@ namespace izanagi {
 		// スタック
 		CStack<SItem, _STACK_NUM> m_Stack;
 	};
+}   // namespace graph
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_GRAPH_INTERNAL_RENDER_TARGET_MANAGER_H__)

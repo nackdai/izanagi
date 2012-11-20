@@ -6,7 +6,7 @@
 
 namespace izanagi {
 	class IInputStream;
-	class CGraphicsDevice;
+	class graph::CGraphicsDevice;
 	class IShader;
 
 	/**
@@ -47,7 +47,7 @@ namespace izanagi {
 	public:
 		/** 描画準備.
 		 */
-		IZ_BOOL Prepare(CGraphicsDevice* pDevice);
+		IZ_BOOL Prepare(graph::CGraphicsDevice* pDevice);
 
 		/** マテリアルにテクスチャを追加.
 		 *
@@ -56,19 +56,19 @@ namespace izanagi {
 		IZ_BOOL AddTexture(
 			IZ_PCSTR pszName,
 			const S_MTRL_TEXTURE_TYPE& type,
-			CBaseTexture* pTex);
+			graph::CBaseTexture* pTex);
 
 		/** マテリアルに関連付けられているテクスチャをセット.
 		 */
 		IZ_BOOL SetTexture(
 			IZ_PCSTR pszName, 
-			CBaseTexture* pTex);
+			graph::CBaseTexture* pTex);
 
 		/** マテリアルに関連付けられているテクスチャをセット.
 		 */
 		IZ_BOOL SetTexture(
 			IZ_UINT nKey,
-			CBaseTexture* pTex);
+			graph::CBaseTexture* pTex);
 
 		/** マテリアルにシェーダを追加.
 		 *
@@ -144,9 +144,9 @@ namespace izanagi {
 		const S_MTRL_PARAM* GetParamInfoByName(IZ_PCSTR pszName) const;
 		const S_MTRL_PARAM* GetParamInfoByKey(const CKey& key) const;
 
-		CBaseTexture* GetTextureByIdx(IZ_UINT idx);
-		CBaseTexture* GetTextureByName(IZ_PCSTR pszName);
-		CBaseTexture* GetTextureByKey(const CKey& key);
+		graph::CBaseTexture* GetTextureByIdx(IZ_UINT idx);
+		graph::CBaseTexture* GetTextureByName(IZ_PCSTR pszName);
+		graph::CBaseTexture* GetTextureByKey(const CKey& key);
 
 #if 0
 		IShader* GetShaderByIdx(IZ_UINT idx);

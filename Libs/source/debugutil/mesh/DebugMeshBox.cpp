@@ -82,7 +82,7 @@ namespace {
 // インスタンス作成
 CDebugMeshBox* CDebugMeshBox::CreateDebugMeshBox(
 	IMemoryAllocator* pAllocator,
-	CGraphicsDevice* pDevice,
+	graph::CGraphicsDevice* pDevice,
 	IZ_UINT flag,
 	IZ_COLOR nColor,
 	IZ_FLOAT fWidth,
@@ -102,7 +102,7 @@ CDebugMeshBox* CDebugMeshBox::CreateDebugMeshBox(
 	VGOTO(result != (pInstance != IZ_NULL), __EXIT__);
 
 	{
-		pInstance->m_PrimType = E_GRAPH_PRIM_TYPE_TRIANGLELIST;
+		pInstance->m_PrimType = graph::E_GRAPH_PRIM_TYPE_TRIANGLELIST;
 		pInstance->m_nPrimCnt = PRIM_NUM * 2;
 	}
 
@@ -136,7 +136,7 @@ __EXIT__:
 
 // 初期化
 IZ_BOOL CDebugMeshBox::Init(
-	CGraphicsDevice* pDevice,
+	graph::CGraphicsDevice* pDevice,
 	IZ_UINT flag)
 {
 	IZ_UINT nVtxNum = PRIM_NUM * VTX_NUM_PER_FACE;
@@ -150,11 +150,11 @@ IZ_BOOL CDebugMeshBox::Init(
 	VRETURN(
 		CreateIB(
 			nIdxNum, 
-			E_GRAPH_INDEX_BUFFER_FMT_INDEX32));
+			graph::E_GRAPH_INDEX_BUFFER_FMT_INDEX32));
 
 	VRETURN(CreateVD(flag));
 
-	m_PrimType = E_GRAPH_PRIM_TYPE_TRIANGLELIST;
+	m_PrimType = graph::E_GRAPH_PRIM_TYPE_TRIANGLELIST;
 	m_nPrimCnt = nIdxNum / 3;
 
 	VRETURN(
@@ -172,7 +172,7 @@ IZ_BOOL CDebugMeshBox::Init(
 
 // データセット
 IZ_BOOL CDebugMeshBox::SetData(
-	CGraphicsDevice* pDevice,
+	graph::CGraphicsDevice* pDevice,
 	IZ_UINT flag,
 	IZ_COLOR nColor,
 	IZ_FLOAT fWidth,

@@ -8,7 +8,7 @@ using namespace izanagi;
 */
 CImage* CImage::CreateImage(
 	IMemoryAllocator* pAllocator,
-	CGraphicsDevice* pDevice,
+	graph::CGraphicsDevice* pDevice,
 	IInputStream* pInputStream)
 {
 	IZ_ASSERT(pAllocator != IZ_NULL);
@@ -28,7 +28,7 @@ CImage* CImage::CreateImage(
 	VGOTO(result, __EXIT__);
 
 	// 確保サイズ
-	size_t nSize = sizeof(CImage) + sizeof(CTexture*) * sHeader.numTextures;
+	size_t nSize = sizeof(CImage) + sizeof(graph::CTexture*) * sHeader.numTextures;
 
 	// メモリ確保
 	pBuf = (IZ_BYTE*)ALLOC_ZERO(pAllocator, nSize);
@@ -43,7 +43,7 @@ CImage* CImage::CreateImage(
 		pInstance->AddRef();
 
 		pInstance->m_Allocator = pAllocator;
-		pInstance->m_pTexture = (CBaseTexture**)pBuf;
+		pInstance->m_pTexture = (graph::CBaseTexture**)pBuf;
 
 		memcpy(&pInstance->m_Header, &sHeader, sizeof(sHeader));
 	}
@@ -70,15 +70,15 @@ namespace {
 	IZ_UINT _ComputeSize(
 		IZ_UINT pitch,
 		IZ_UINT height,
-		E_GRAPH_PIXEL_FMT fmt)
+		graph::E_GRAPH_PIXEL_FMT fmt)
 	{
 		IZ_UINT ret = pitch * height;
 
-		if (fmt == E_GRAPH_PIXEL_FMT_DXT1) {
+		if (fmt == graph::E_GRAPH_PIXEL_FMT_DXT1) {
 			ret = (pitch * height) >> 2;
 		}
-		else if (fmt == E_GRAPH_PIXEL_FMT_DXT3
-					|| fmt == E_GRAPH_PIXEL_FMT_DXT5)
+		else if (fmt == graph::E_GRAPH_PIXEL_FMT_DXT3
+					|| fmt == graph::E_GRAPH_PIXEL_FMT_DXT5)
 		{
 			ret = (pitch * height) >> 2;
 		}
@@ -87,12 +87,12 @@ namespace {
 	}
 
 	// テクスチャ作成
-	CBaseTexture* _CreateTexture(
-		CGraphicsDevice* pDevice,
+	graph::CBaseTexture* _CreateTexture(
+		graph::CGraphicsDevice* pDevice,
 		IZ_UINT nWidth,
 		IZ_UINT nHeight,
 		IZ_UINT nMipLevel,
-		E_GRAPH_PIXEL_FMT nFmt,
+		graph::E_GRAPH_PIXEL_FMT nFmt,
 		IZ_BYTE* pBuf)
 	{
 		// NOTE
@@ -100,13 +100,13 @@ namespace {
 		// 動的にテクスチャを作成する
 
 		// テクスチャ作成
-		CTexture* pTex = IZ_NULL;
+		graph::CTexture* pTex = IZ_NULL;
 		pTex = pDevice->CreateTexture(
 				nWidth,
 				nHeight,
 				nMipLevel,
 				nFmt,
-				E_GRAPH_RSC_TYPE_STATIC);
+				graph::E_GRAPH_RSC_TYPE_STATIC);
 
 		VRETURN_NULL(pTex != IZ_NULL);
 
@@ -143,16 +143,16 @@ __EXIT__:
 	}
 
 	// キューブテクスチャ作成
-	CBaseTexture* _CreateCubeTexture(
-		CGraphicsDevice* pDevice,
+	graph::CBaseTexture* _CreateCubeTexture(
+		graph::CGraphicsDevice* pDevice,
 		IZ_UINT nWidth,
 		IZ_UINT nHeight,
 		IZ_UINT nMipLevel,
-		E_GRAPH_PIXEL_FMT nFmt,
+		graph::E_GRAPH_PIXEL_FMT nFmt,
 		IZ_BYTE* pBuf)
 	{
 		// テクスチャ作成
-		CCubeTexture* pTex = IZ_NULL;
+		graph::CCubeTexture* pTex = IZ_NULL;
 		pTex = pDevice->CreateCubeTexture(
 				nWidth,
 				nHeight,
@@ -164,12 +164,12 @@ __EXIT__:
 
 		IZ_BOOL result = IZ_FALSE;
 
-		for (IZ_UINT nFace = 0; nFace < E_GRAPH_CUBE_TEX_FACE_NUM; ++nFace) {
+		for (IZ_UINT nFace = 0; nFace < graph::E_GRAPH_CUBE_TEX_FACE_NUM; ++nFace) {
 			IZ_UINT nW = nWidth;
 			IZ_UINT nH = nHeight;
 
 			for (IZ_UINT nLevel = 0; nLevel < nMipLevel; ++nLevel) {
-				E_GRAPH_CUBE_TEX_FACE face = static_cast<E_GRAPH_CUBE_TEX_FACE>(nFace);
+				graph::E_GRAPH_CUBE_TEX_FACE face = static_cast<graph::E_GRAPH_CUBE_TEX_FACE>(nFace);
 
 				// データセット
 				IZ_BYTE* data = IZ_NULL;
@@ -203,8 +203,8 @@ __EXIT__:
 	}
 
 	// テクスチャ作成
-	inline CBaseTexture* _CreateTexture(
-		CGraphicsDevice* pDevice,
+	inline graph::CBaseTexture* _CreateTexture(
+		graph::CGraphicsDevice* pDevice,
 		const S_IMG_TEX_HEADER& sTexHeader,
 		IZ_BYTE* pBuf)
 	{
@@ -215,22 +215,22 @@ __EXIT__:
 
 		IZ_UINT nMipLevel = sTexHeader.level;
 
-		E_GRAPH_PIXEL_FMT nFmt = sTexHeader.fmt;
+		graph::E_GRAPH_PIXEL_FMT nFmt = sTexHeader.fmt;
 
-		E_GRAPH_TEX_TYPE nType = static_cast<E_GRAPH_TEX_TYPE>(sTexHeader.type);
+		graph::E_GRAPH_TEX_TYPE nType = static_cast<graph::E_GRAPH_TEX_TYPE>(sTexHeader.type);
 
 		// テクスチャ作成関数テーブル
-		typedef CBaseTexture* (*CreateTexFunc)(CGraphicsDevice*, IZ_UINT, IZ_UINT, IZ_UINT, E_GRAPH_PIXEL_FMT, IZ_BYTE*);
+		typedef graph::CBaseTexture* (*CreateTexFunc)(graph::CGraphicsDevice*, IZ_UINT, IZ_UINT, IZ_UINT, graph::E_GRAPH_PIXEL_FMT, IZ_BYTE*);
 		static CreateTexFunc FuncTbl[] = {
 			_CreateTexture,
 			_CreateCubeTexture,
 			IZ_NULL,
 		};
-		IZ_C_ASSERT(COUNTOF(FuncTbl) == E_GRAPH_TEX_TYPE_NUM);
+		IZ_C_ASSERT(COUNTOF(FuncTbl) == graph::E_GRAPH_TEX_TYPE_NUM);
 
 		IZ_ASSERT(FuncTbl[nType] != IZ_NULL);
 
-		CBaseTexture* pTex = IZ_NULL;
+		graph::CBaseTexture* pTex = IZ_NULL;
 
 		// テクスチャ作成
 		pTex = (*FuncTbl[nType])(
@@ -248,7 +248,7 @@ __EXIT__:
 
 // テクスチャ読み込み
 IZ_BOOL CImage::ReadTexture(
-	CGraphicsDevice* pDevice,
+	graph::CGraphicsDevice* pDevice,
 	IInputStream* pInputStream)
 {
 	IZ_ASSERT(m_Allocator != IZ_NULL);
@@ -288,12 +288,12 @@ IZ_BOOL CImage::ReadTexture(
 
 		// パラメータセット
 		m_pTexture[i]->SetAddress(
-			static_cast<E_GRAPH_TEX_ADDRESS>(sTexHeader.addressU),
-			static_cast<E_GRAPH_TEX_ADDRESS>(sTexHeader.addressV));
+			static_cast<graph::E_GRAPH_TEX_ADDRESS>(sTexHeader.addressU),
+			static_cast<graph::E_GRAPH_TEX_ADDRESS>(sTexHeader.addressV));
 		m_pTexture[i]->SetFilter(
-			static_cast<E_GRAPH_TEX_FILTER>(sTexHeader.minFilter),
-			static_cast<E_GRAPH_TEX_FILTER>(sTexHeader.magFilter),
-			static_cast<E_GRAPH_TEX_FILTER>(sTexHeader.mipFilter));
+			static_cast<graph::E_GRAPH_TEX_FILTER>(sTexHeader.minFilter),
+			static_cast<graph::E_GRAPH_TEX_FILTER>(sTexHeader.magFilter),
+			static_cast<graph::E_GRAPH_TEX_FILTER>(sTexHeader.mipFilter));
 	}
 
 __EXIT__:

@@ -61,7 +61,7 @@ namespace izanagi {
 
 		E_FONT_CHAR_ENCODE charEncode;	// 文字コード
 
-		E_GRAPH_PIXEL_FMT texFmt;		// テクスチャフォーマット
+		graph::E_GRAPH_PIXEL_FMT texFmt;		// テクスチャフォーマット
 
 		struct {
 			IZ_UINT isFixedPitch	: 1;	// 固定ピッチかどうか

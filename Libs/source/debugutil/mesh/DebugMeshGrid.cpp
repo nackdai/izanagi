@@ -5,7 +5,7 @@ using namespace izanagi;
 // インスタンス作成
 CDebugMeshGrid* CDebugMeshGrid::CreateDebugMeshGrid(
 	IMemoryAllocator* pAllocator,
-	CGraphicsDevice* pDevice,
+	graph::CGraphicsDevice* pDevice,
 	IZ_COLOR nColor,
 	IZ_UINT nGridNumX,
 	IZ_UINT nGridNumY,
@@ -50,7 +50,7 @@ __EXIT__:
 
 // 初期化
 IZ_BOOL CDebugMeshGrid::Init(
-	CGraphicsDevice* pDevice,
+	graph::CGraphicsDevice* pDevice,
 	IZ_UINT flag,
 	IZ_UINT nGridNumX,
 	IZ_UINT nGridNumY)
@@ -60,7 +60,7 @@ IZ_BOOL CDebugMeshGrid::Init(
 	VRETURN(CreateVB(flag, nVtxNum));
 	VRETURN(CreateVD(flag));
 
-	m_PrimType = E_GRAPH_PRIM_TYPE_LINELIST;
+	m_PrimType = graph::E_GRAPH_PRIM_TYPE_LINELIST;
 	m_nPrimCnt = (nGridNumX + 1) + (nGridNumY + 1);
 
 	return IZ_TRUE;

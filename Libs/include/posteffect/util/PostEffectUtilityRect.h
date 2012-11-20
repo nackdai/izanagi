@@ -20,19 +20,19 @@ namespace izanagi {
 		// テクスチャ座標を計算する
 		static void GetTextureCoord(
 			SFloatRect* pTexCoord,
-			const CTexture* pSrcTex,
+			const graph::CTexture* pSrcTex,
 			const SIntRect* pSrcRect,
-			const CTexture* pDstTex,
+			const graph::CTexture* pDstTex,
 			const SIntRect* pDstRect);
 
 	public:
 		// テクスチャ矩形を取得
 		static inline void GetTextureRect(
-			const CTexture* pTex,
+			const graph::CTexture* pTex,
 			SIntRect* pRect);
 		static inline void GetTextureRect(
-			CTexture* pTex,
-			CGraphicsDevice* pDevice,
+			graph::CTexture* pTex,
+			graph::CGraphicsDevice* pDevice,
 			SIntRect* pRect);
 
 		// 矩形を膨らませる
@@ -54,7 +54,7 @@ namespace izanagi {
 	* テクスチャ矩形を取得
 	*/
 	void CPostEffectRectUtil::GetTextureRect(
-		const CTexture* pTex,
+		const graph::CTexture* pTex,
 		SIntRect* pRect)
 	{
 		IZ_ASSERT(pTex != IZ_NULL);
@@ -70,8 +70,8 @@ namespace izanagi {
 	* テクスチャ矩形を取得
 	*/
 	void CPostEffectRectUtil::GetTextureRect(
-		CTexture* pTex,
-		CGraphicsDevice* pDevice,
+		graph::CTexture* pTex,
+		graph::CGraphicsDevice* pDevice,
 		SIntRect* pRect)
 	{
 		IZ_ASSERT(pRect != IZ_NULL);

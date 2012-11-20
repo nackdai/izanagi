@@ -4,7 +4,10 @@
 #include "izStd.h"
 #include "GraphDefs.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace graph
+{
 	/**
 	*/
 	class CGraphUtil {
@@ -75,6 +78,7 @@ namespace izanagi {
 			return ret;
 		}
 	};
+}   // namespace graph
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_GRAPH_GRAPH_UTIL_H__)

@@ -7,7 +7,7 @@
 
 namespace izanagi {
 	class IMemoryAllocator;
-	class CGraphicsDevice;
+	class graph::CGraphicsDevice;
 	class CMesh;
 	class CMeshSet;
 	class IMshRenderHandler;

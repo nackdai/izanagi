@@ -5,9 +5,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="source\internal">
-      <UniqueIdentifier>{a9a8f636-11f6-4947-a2c1-4b207d25ba89}</UniqueIdentifier>
-    </Filter>
     <Filter Include="source\2d">
       <UniqueIdentifier>{9ea5c334-3c0b-4e53-b701-6b498381102b}</UniqueIdentifier>
     </Filter>
@@ -16,9 +13,6 @@
     </Filter>
     <Filter Include="source\dx9">
       <UniqueIdentifier>{1fe1e3f9-465b-4c3b-986d-3c1d48b31d58}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\ogl">
-      <UniqueIdentifier>{1878befe-31f2-478d-b1af-d6caea98579f}</UniqueIdentifier>
     </Filter>
     <Filter Include="include">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
@@ -33,100 +27,58 @@
     <Filter Include="include\internal">
       <UniqueIdentifier>{e3e6a58a-de3d-42a3-9612-ed20adfedaee}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\ogl">
-      <UniqueIdentifier>{654fcc90-dba9-4fe7-9f2e-8190d2537146}</UniqueIdentifier>
+    <Filter Include="include\base">
+      <UniqueIdentifier>{673e5b54-011e-4a13-95fc-ec4367bede85}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\source\graph\internal\GraphicsDeviceResourceFuncs.cpp">
-      <Filter>source\internal</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\graph\2d\2DRenderer.cpp">
       <Filter>source\2d</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\graph\2d\2DShader.cpp">
       <Filter>source\2d</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\graph\dx9\BaseTexture.cpp">
+    <ClCompile Include="..\..\source\graph\dx9\IndexBuffer_DX9.cpp">
       <Filter>source\dx9</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\graph\dx9\CubeTexture.cpp">
+    <ClCompile Include="..\..\source\graph\dx9\VertexBuffer_DX9.cpp">
+      <Filter>source\dx9</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\dx9\VertexDeclaration_DX9.cpp">
+      <Filter>source\dx9</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\dx9\RenderState_DX9.cpp">
+      <Filter>source\dx9</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\dx9\GraphicsDevice_DX9.cpp">
+      <Filter>source\dx9</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\dx9\Surface_DX9.cpp">
+      <Filter>source\dx9</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\dx9\Texture_DX9.cpp">
+      <Filter>source\dx9</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\dx9\CubeTexture_DX9.cpp">
+      <Filter>source\dx9</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\dx9\VertexShader_DX9.cpp">
+      <Filter>source\dx9</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\dx9\PixelShader_DX9.cpp">
       <Filter>source\dx9</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\graph\dx9\D3D9ParamValueConverter.cpp">
       <Filter>source\dx9</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\graph\dx9\GraphicsDevice.cpp">
+    <ClCompile Include="..\..\source\graph\GraphicsDevice.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\RenderState.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\dx9\GraphicsDeviceResourceFuncs.cpp">
       <Filter>source\dx9</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\graph\dx9\IndexBuffer.cpp">
-      <Filter>source\dx9</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\graph\dx9\PixelShader.cpp">
-      <Filter>source\dx9</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\graph\dx9\RenderState.cpp">
-      <Filter>source\dx9</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\graph\dx9\ShaderConstTable.cpp">
-      <Filter>source\dx9</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\graph\dx9\Surface.cpp">
-      <Filter>source\dx9</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\graph\dx9\Texture.cpp">
-      <Filter>source\dx9</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\graph\dx9\VertexBuffer.cpp">
-      <Filter>source\dx9</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\graph\dx9\VertexDeclaration.cpp">
-      <Filter>source\dx9</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\graph\dx9\VertexShader.cpp">
-      <Filter>source\dx9</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\graph\ogl\BaseTexture.cpp">
-      <Filter>source\ogl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\graph\ogl\CubeTexture.cpp">
-      <Filter>source\ogl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\graph\ogl\FxShader.cpp">
-      <Filter>source\ogl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\graph\ogl\GraphicsDevice.cpp">
-      <Filter>source\ogl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\graph\ogl\IndexBuffer.cpp">
-      <Filter>source\ogl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\graph\ogl\OGLParamValueConverter.cpp">
-      <Filter>source\ogl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\graph\ogl\PixelShader.cpp">
-      <Filter>source\ogl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\graph\ogl\RenderState.cpp">
-      <Filter>source\ogl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\graph\ogl\ShaderConstTable.cpp">
-      <Filter>source\ogl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\graph\ogl\Surface.cpp">
-      <Filter>source\ogl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\graph\ogl\Texture.cpp">
-      <Filter>source\ogl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\graph\ogl\VertexBuffer.cpp">
-      <Filter>source\ogl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\graph\ogl\VertexDeclaration.cpp">
-      <Filter>source\ogl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\graph\ogl\VertexShader.cpp">
-      <Filter>source\ogl</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -138,56 +90,11 @@
     <ClInclude Include="..\..\include\graph\GraphDefs.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\graph\GraphicsDeviceProxy.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\graph\GraphicsDeviceUtil.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\graph\GraphUtil.h">
       <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\graph\dx9\BaseTexture.h">
-      <Filter>include\dx9</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\graph\dx9\CubeTexture.h">
-      <Filter>include\dx9</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\graph\dx9\D3D9ParamValueConverter.h">
-      <Filter>include\dx9</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\graph\dx9\GraphicsDevice.h">
-      <Filter>include\dx9</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\graph\dx9\GraphPerf.h">
-      <Filter>include\dx9</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\graph\dx9\IndexBuffer.h">
-      <Filter>include\dx9</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\graph\dx9\PixelShader.h">
-      <Filter>include\dx9</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\graph\dx9\RenderState.h">
-      <Filter>include\dx9</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\graph\dx9\ShaderConstTable.h">
-      <Filter>include\dx9</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\graph\dx9\Surface.h">
-      <Filter>include\dx9</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\graph\dx9\Texture.h">
-      <Filter>include\dx9</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\graph\dx9\VertexBuffer.h">
-      <Filter>include\dx9</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\graph\dx9\VertexDeclaration.h">
-      <Filter>include\dx9</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\graph\dx9\VertexShader.h">
-      <Filter>include\dx9</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\graph\2d\2DRenderer.h">
       <Filter>include\2d</Filter>
@@ -201,55 +108,82 @@
     <ClInclude Include="..\..\include\graph\internal\RenderTargetManager.h">
       <Filter>include\internal</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\graph\ogl\BaseTexture.h">
-      <Filter>include\ogl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\graph\ogl\CubeTexture.h">
-      <Filter>include\ogl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\graph\ogl\FxShader.h">
-      <Filter>include\ogl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\graph\ogl\GraphicsDevice.h">
-      <Filter>include\ogl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\graph\ogl\GraphPerf.h">
-      <Filter>include\ogl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\graph\ogl\IndexBuffer.h">
-      <Filter>include\ogl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\graph\ogl\OGLParamValueConverter.h">
-      <Filter>include\ogl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\graph\ogl\PixelShader.h">
-      <Filter>include\ogl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\graph\ogl\RenderState.h">
-      <Filter>include\ogl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\graph\ogl\ShaderConstTable.h">
-      <Filter>include\ogl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\graph\ogl\Surface.h">
-      <Filter>include\ogl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\graph\ogl\Texture.h">
-      <Filter>include\ogl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\graph\ogl\VertexBuffer.h">
-      <Filter>include\ogl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\graph\ogl\VertexDeclaration.h">
-      <Filter>include\ogl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\graph\ogl\VertexShader.h">
-      <Filter>include\ogl</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\izD3DDefs.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\izGraph.h" />
+    <ClInclude Include="..\..\include\graph\BaseTexture.h">
+      <Filter>include\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\CubeTexture.h">
+      <Filter>include\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\GraphicsDevice.h">
+      <Filter>include\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\IndexBuffer.h">
+      <Filter>include\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\RenderState.h">
+      <Filter>include\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\Surface.h">
+      <Filter>include\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\Texture.h">
+      <Filter>include\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\VertexBuffer.h">
+      <Filter>include\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\VertexDeclaration.h">
+      <Filter>include\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\dx9\IndexBuffer_DX9.h">
+      <Filter>include\dx9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\dx9\VertexBuffer_DX9.h">
+      <Filter>include\dx9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\dx9\VertexDeclaration_DX9.h">
+      <Filter>include\dx9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\dx9\Texture_DX9.h">
+      <Filter>include\dx9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\dx9\Surface_DX9.h">
+      <Filter>include\dx9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\dx9\CubeTexture_DX9.h">
+      <Filter>include\dx9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\ShaderBase.h">
+      <Filter>include\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\PixelShader.h">
+      <Filter>include\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\VertexShader.h">
+      <Filter>include\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\dx9\VertexShader_DX9.h">
+      <Filter>include\dx9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\dx9\ShaderProxy.h">
+      <Filter>include\dx9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\dx9\PixelShader_DX9.h">
+      <Filter>include\dx9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\dx9\D3D9ParamValueConverter.h">
+      <Filter>include\dx9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\dx9\GraphicsDevice_DX9.h">
+      <Filter>include\dx9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\dx9\2DRenderer_DX9.h">
+      <Filter>include\dx9</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\source\graph\2d\shader\2DPS.hlsl">

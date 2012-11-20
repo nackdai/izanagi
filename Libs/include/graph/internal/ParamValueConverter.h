@@ -1,14 +1,18 @@
 #if !defined(__IZANAGI_GRAPH_PARAM_VALUE_CONVERTER_H__)
 #define __IZANAGI_GRAPH_PARAM_VALUE_CONVERTER_H__
 
-#include "../dx9/D3D9ParamValueConverter.h"
+#include "graph/dx9/D3D9ParamValueConverter.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace graph
+{
 	typedef CD3D9ParamValueConverter CTargetParamValueConverter;
+}   // namespace graph
 }	// namespace izanagi
 
-#define IZ_CONV_PARAM_TO_TARGET(p)	izanagi::CTargetParamValueConverter::ConvAbstractToTarget_##p
-#define IZ_CONV_PARAM_TO_ABST(p)	izanagi::CTargetParamValueConverter::ConvTargetToAbstract_##p
+#define IZ_CONV_PARAM_TO_TARGET(p)	izanagi::graph::CTargetParamValueConverter::ConvAbstractToTarget_##p
+#define IZ_CONV_PARAM_TO_ABST(p)	izanagi::graph::CTargetParamValueConverter::ConvTargetToAbstract_##p
 
 #define IZ_GET_TARGET_VAL(p, v)		IZ_CONV_PARAM_TO_TARGET(p)(v)
 #define IZ_GET_ABST_VAL(p, v)		IZ_CONV_PARAM_TO_ABST(p)(v)

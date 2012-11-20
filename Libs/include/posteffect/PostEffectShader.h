@@ -25,7 +25,7 @@ namespace izanagi {
 
 		static CPostEffectShader* CreatePostEffectShader(
 			IMemoryAllocator* pAllocator,
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			CPostEffectVSManager* pVSMgr,
 			IInputStream* in);
 
@@ -49,7 +49,7 @@ namespace izanagi {
 			CPostEffectFunctor* pFunctor,
 			IZ_UINT nTechIdx,
 			IZ_UINT nPassIdx,
-			CTexture* pTex,
+			graph::CTexture* pTex,
 			IZ_BOOL bIsClear);
 		IZ_BOOL BeginRender(
 			CPostEffectFunctor* pFunctor,
@@ -74,7 +74,7 @@ namespace izanagi {
 		// テクスチャをセットする
 		IZ_BOOL SetTexture(
 			IZ_POSTEFFECT_HANDLE nHandle,
-			CTexture* pTex);
+			graph::CTexture* pTex);
 
 		// 直接頂点シェーダにテクスチャオフセットパラメータをセットする
 		IZ_BOOL SetTextureOffsetParameter(
@@ -82,7 +82,7 @@ namespace izanagi {
 			IZ_UINT num);
 
 		// テクスチャオフセットパラメータをセットする
-		IZ_BOOL SetTextureOffsetParameter(const CTexture* pTex);
+		IZ_BOOL SetTextureOffsetParameter(const graph::CTexture* pTex);
 
 		// コミットチェンジ
 		IZ_BOOL CommitChanges();		
@@ -186,7 +186,7 @@ namespace izanagi {
 		// アルファテストステートをセット
 		inline void SetAlphaTestState(
 			IZ_BOOL bEnable,
-			E_GRAPH_CMP_FUNC nFunc,
+			graph::E_GRAPH_CMP_FUNC nFunc,
 			IZ_UINT8 nRef);
 
 		// テクスチャインデックス取得
@@ -195,11 +195,11 @@ namespace izanagi {
 
 		// テクスチャ取得
 #if 0
-		CTexture* GetTexture(IZ_UINT idx) { return m_cTexTable.GetTexture(idx); }
+		graph::CTexture* GetTexture(IZ_UINT idx) { return m_cTexTable.GetTexture(idx); }
 #else
-		CTexture* GetTexture(IZ_UINT idx)
+		graph::CTexture* GetTexture(IZ_UINT idx)
 		{
-			CTexture* ret = m_cTexTableTmp.GetTextureIfDirty(idx);
+			graph::CTexture* ret = m_cTexTableTmp.GetTextureIfDirty(idx);
 			if (ret == IZ_NULL) {
 				ret = m_cTexTable.GetTexture(idx);
 			}
@@ -221,7 +221,7 @@ namespace izanagi {
 			{
 				isDirty = IZ_FALSE;
 				enable = IZ_FALSE;
-				method = E_GRAPH_ALPHA_BLEND_NORMAL;
+				method = graph::E_GRAPH_ALPHA_BLEND_NORMAL;
 			}
 
 			// 有効かどうか
@@ -238,7 +238,7 @@ namespace izanagi {
 				IZ_UINT ref		: 8;	// アルファテスト閾値
 			};
 
-			E_GRAPH_CMP_FUNC func;	// アルファテスト式
+			graph::E_GRAPH_CMP_FUNC func;	// アルファテスト式
 
 			// コンストラクタ
 			SStateAlphaTest()
@@ -257,7 +257,7 @@ namespace izanagi {
 			IZ_INT tech_idx;
 			IZ_INT pass_idx;
 			CPostEffectFunctor* functor;
-			CTexture* render_target;
+			graph::CTexture* render_target;
 
 			SRenderParam();
 			void Clear();
@@ -266,7 +266,7 @@ namespace izanagi {
 
 	private:
 		IMemoryAllocator* m_Allocator;
-		CGraphicsDevice* m_pDevice;
+		graph::CGraphicsDevice* m_pDevice;
 
 		// ファイルヘッダ
 		S_PES_HEADER m_sHeader;
@@ -406,7 +406,7 @@ namespace izanagi {
 	*/
 	void CPostEffectShader::SetAlphaTestState(
 		IZ_BOOL bEnable,
-		E_GRAPH_CMP_FUNC nFunc,
+		graph::E_GRAPH_CMP_FUNC nFunc,
 		IZ_UINT8 nRef)
 	{
 		m_StateAlphaTest.isDirty = IZ_TRUE;

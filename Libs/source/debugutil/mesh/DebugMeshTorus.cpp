@@ -5,7 +5,7 @@ using namespace izanagi;
 // インスタンス作成
 CDebugMeshTorus* CDebugMeshTorus::CreateDebugMeshTorus(
 	IMemoryAllocator* pAllocator,
-	CGraphicsDevice* pDevice,
+	graph::CGraphicsDevice* pDevice,
 	IZ_UINT flag,
 	IZ_COLOR nColor,
 	IZ_FLOAT fInnerRadius,	// 内径
@@ -93,7 +93,7 @@ namespace {
 
 // 初期化
 IZ_BOOL CDebugMeshTorus::Init(
-	CGraphicsDevice* pDevice,
+	graph::CGraphicsDevice* pDevice,
 	IZ_UINT flag,
 	IZ_UINT nSides, 
 	IZ_UINT nRings)
@@ -107,11 +107,11 @@ IZ_BOOL CDebugMeshTorus::Init(
 	IZ_UINT nIdxNum = _ComputeIdxNum(nSides, nRings);
 
 #if 0
-	E_GRAPH_INDEX_BUFFER_FMT fmt = (nIdxNum > IZ_UINT16_MAX 
-									? E_GRAPH_INDEX_BUFFER_FMT_INDEX32 
-									: E_GRAPH_INDEX_BUFFER_FMT_INDEX16);
+	graph::E_GRAPH_INDEX_BUFFER_FMT fmt = (nIdxNum > IZ_UINT16_MAX 
+									? graph::E_GRAPH_INDEX_BUFFER_FMT_INDEX32 
+									: graph::E_GRAPH_INDEX_BUFFER_FMT_INDEX16);
 #else
-	E_GRAPH_INDEX_BUFFER_FMT fmt = E_GRAPH_INDEX_BUFFER_FMT_INDEX32;
+	graph::E_GRAPH_INDEX_BUFFER_FMT fmt = graph::E_GRAPH_INDEX_BUFFER_FMT_INDEX32;
 #endif
 
 	VRETURN(
@@ -127,7 +127,7 @@ IZ_BOOL CDebugMeshTorus::Init(
 	VRETURN(
 		CreateVD(flag));
 
-	m_PrimType = E_GRAPH_PRIM_TYPE_TRIANGLELIST;
+	m_PrimType = graph::E_GRAPH_PRIM_TYPE_TRIANGLELIST;
 	m_nPrimCnt = nIdxNum / 3;
 
 	VRETURN(

@@ -8,7 +8,7 @@
 namespace izanagi {
 	class IInputStream;
 	class IMemoryAllocator;
-	class CGraphicsDevice;
+	class graph::CGraphicsDevice;
 	class CTexture;
 
 	/**
@@ -19,13 +19,13 @@ namespace izanagi {
 
 	private:
 #if 0
-		static const E_GRAPH_PIXEL_FMT TEX_FORMAT = E_GRAPH_PIXEL_FMT_RGBA8;
+		static const graph::E_GRAPH_PIXEL_FMT TEX_FORMAT = graph::E_GRAPH_PIXEL_FMT_RGBA8;
 		static const IZ_UINT TEX_BPP = 4;
-		static const E_GRAPH_2D_RENDER_OP RENDER_2D_OP = E_GRAPH_2D_RENDER_OP_MODULATE;
+		static const graph::E_GRAPH_2D_RENDER_OP RENDER_2D_OP = graph::E_GRAPH_2D_RENDER_OP_MODULATE;
 #else
-		static const E_GRAPH_PIXEL_FMT TEX_FORMAT = E_GRAPH_PIXEL_FMT_A8;
+		static const graph::E_GRAPH_PIXEL_FMT TEX_FORMAT = graph::E_GRAPH_PIXEL_FMT_A8;
 		static const IZ_UINT TEX_BPP = 1;
-		static const E_GRAPH_2D_RENDER_OP RENDER_2D_OP = E_GRAPH_2D_RENDER_OP_MODULATE_ALPHA;
+		static const graph::E_GRAPH_2D_RENDER_OP RENDER_2D_OP = graph::E_GRAPH_2D_RENDER_OP_MODULATE_ALPHA;
 #endif
 
 		// 登録情報
@@ -35,7 +35,7 @@ namespace izanagi {
 		// インスタンス作成
 		static CFontRenderer* CreateFontRendererBmp(
 			IMemoryAllocator* pAllocator,
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			IZ_UINT	nMaxRegisterNum,
 			IInputStream* in);
 
@@ -123,7 +123,7 @@ namespace izanagi {
 		typedef CStdList<CFntHashItem>	CFntOrderList;
 
 		IMemoryAllocator* m_Allocator;
-		CGraphicsDevice* m_pDevice;
+		graph::CGraphicsDevice* m_pDevice;
 
 		// ヘッダ
 		S_FNT_HEADER m_sHeader;
@@ -135,8 +135,8 @@ namespace izanagi {
 		S_FNT_IMAGE* m_pImageList;
 
 		// フォントテクスチャ
-		CTexture* m_pSrcTex;
-		CTexture* m_pDstTex;
+		graph::CTexture* m_pSrcTex;
+		graph::CTexture* m_pDstTex;
 
 		// イメージ情報
 		struct {

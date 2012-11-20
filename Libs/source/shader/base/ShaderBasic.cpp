@@ -4,7 +4,7 @@
 using namespace izanagi;
 
 IZ_BOOL CShaderBasic::Init(
-	CGraphicsDevice* pDevice,
+	graph::CGraphicsDevice* pDevice,
 	IInputStream* pIn)
 {
 	IZ_ASSERT(m_Allocator != IZ_NULL);
@@ -121,7 +121,7 @@ CShaderBasic::~CShaderBasic()
 }
 
 IZ_UINT8* CShaderBasic::CreatePass(
-	CGraphicsDevice* pDevice,
+	graph::CGraphicsDevice* pDevice,
 	IInputStream* pIn,
 	IZ_UINT8* pBuffer)
 {
@@ -145,7 +145,7 @@ IZ_UINT8* CShaderBasic::CreatePass(
 				IZ_INPUT_READ(pIn, pProgramBuf, 0, pDesc->sizeVS),
 				__EXIT__);
 			
-			CVertexShader* pVS = pDevice->CreateVertexShader(pProgramBuf);
+			graph::CVertexShader* pVS = pDevice->CreateVertexShader(pProgramBuf);
 			VGOTO(pVS != IZ_NULL, __EXIT__);
 
 			cPass.SetVS(pVS);
@@ -158,7 +158,7 @@ IZ_UINT8* CShaderBasic::CreatePass(
 				IZ_INPUT_READ(pIn, pProgramBuf, 0, pDesc->sizePS),
 				__EXIT__);
 
-			CPixelShader* pPS = pDevice->CreatePixelShader(pProgramBuf);
+			graph::CPixelShader* pPS = pDevice->CreatePixelShader(pProgramBuf);
 			VGOTO(pPS != IZ_NULL, __EXIT__);
 
 			cPass.SetPS(pPS);
@@ -315,20 +315,20 @@ IZ_BOOL CShaderBasic::CommitChanges()
 
 	// Set RenderStates.
 	{
-		m_pDevice->SetRenderState(E_GRAPH_RS_ALPHABLENDENABLE, pDesc->state.AlphaBlendEnable);
-		m_pDevice->SetRenderState(E_GRAPH_RS_BLENDMETHOD,      pDesc->state.AlphaBlendMethod);
-		m_pDevice->SetRenderState(E_GRAPH_RS_ALPHATESTENABLE,  pDesc->state.AlphaTestEnable);
-		m_pDevice->SetRenderState(E_GRAPH_RS_ALPHAREF,         pDesc->state.AlphaTestRef);
-		m_pDevice->SetRenderState(E_GRAPH_RS_ALPHAFUNC,        pDesc->state.AlphaTestFunc);
+		m_pDevice->SetRenderState(graph::E_GRAPH_RS_ALPHABLENDENABLE, pDesc->state.AlphaBlendEnable);
+		m_pDevice->SetRenderState(graph::E_GRAPH_RS_BLENDMETHOD,      pDesc->state.AlphaBlendMethod);
+		m_pDevice->SetRenderState(graph::E_GRAPH_RS_ALPHATESTENABLE,  pDesc->state.AlphaTestEnable);
+		m_pDevice->SetRenderState(graph::E_GRAPH_RS_ALPHAREF,         pDesc->state.AlphaTestRef);
+		m_pDevice->SetRenderState(graph::E_GRAPH_RS_ALPHAFUNC,        pDesc->state.AlphaTestFunc);
 
-		m_pDevice->SetRenderState(E_GRAPH_RS_ZENABLE,          pDesc->state.ZEnable);
-		m_pDevice->SetRenderState(E_GRAPH_RS_ZWRITEENABLE,     pDesc->state.ZWriteEnable);
-		m_pDevice->SetRenderState(E_GRAPH_RS_ZFUNC,            pDesc->state.ZFunc);
+		m_pDevice->SetRenderState(graph::E_GRAPH_RS_ZENABLE,          pDesc->state.ZEnable);
+		m_pDevice->SetRenderState(graph::E_GRAPH_RS_ZWRITEENABLE,     pDesc->state.ZWriteEnable);
+		m_pDevice->SetRenderState(graph::E_GRAPH_RS_ZFUNC,            pDesc->state.ZFunc);
 	}
 
 	// Set VertexShader.
 	{
-		CVertexShader* pVS = cPass.GetVS();
+		graph::CVertexShader* pVS = cPass.GetVS();
 		m_pDevice->SetVertexShader(pVS);
 
 		IZ_UINT nBytes = 0;
@@ -346,7 +346,7 @@ IZ_BOOL CShaderBasic::CommitChanges()
 
 	// Set PixelShader.
 	{
-		CPixelShader* pPS = cPass.GetPS();
+		graph::CPixelShader* pPS = cPass.GetPS();
 		m_pDevice->SetPixelShader(pPS);
 
 		// Set parameters.
@@ -474,7 +474,7 @@ IZ_BOOL CShaderBasic::CmpAttrValue(
 IZ_BOOL CShaderBasic::SetParamValue(
 	IZ_UINT idx,
 	CShaderPass& cPass,
-	CShaderConstTable* pShd,
+	graph::IShader* pShd,
 	IZ_BOOL bIsVS)
 {
 	const CShaderPass::SParamInfo* pParamInfo = cPass.GetParamInfo(idx);
@@ -506,6 +506,7 @@ IZ_BOOL CShaderBasic::SetParamValue(
 
 			VRETURN(
 				pShd->SetValue(
+                    m_pDevice,
 					handle,
 					pParam,
 					nBytes));
@@ -566,7 +567,7 @@ IZ_SHADER_HANDLE CShaderBasic::GetParameterBySemantic(IZ_PCSTR pszSemantic)
 	return ret;
 }
 
-CGraphicsDevice* CShaderBasic::GetDevice()
+graph::CGraphicsDevice* CShaderBasic::GetDevice()
 {
 	return m_pDevice;
 }
@@ -645,7 +646,7 @@ IZ_BOOL CShaderBasic::SetParamValue(
 // シェーダで利用するテクスチャを設定.
 IZ_BOOL CShaderBasic::SetTexture(
 	IZ_SHADER_HANDLE hTex,
-	CBaseTexture* pTex)
+	graph::CBaseTexture* pTex)
 {
 	VRETURN(_IZ_IS_SHADER_HANDLE_TEX(hTex));
 
@@ -660,7 +661,7 @@ IZ_BOOL CShaderBasic::SetTexture(
 // シェーダで利用するテクスチャを設定.
 IZ_BOOL CShaderBasic::SetTexture(
 	IZ_PCSTR name,
-	CBaseTexture* tex)
+	graph::CBaseTexture* tex)
 {
 	IZ_BOOL ret = IZ_FALSE;
 	IZ_SHADER_HANDLE handle = GetParameterByName(name);
@@ -676,7 +677,7 @@ IZ_BOOL CShaderBasic::SetTexture(
 // シェーダで利用するテクスチャをサンプラに設定.
 IZ_BOOL CShaderBasic::SetTextureToSampler(
 	IZ_SHADER_HANDLE hSmpl,
-	CBaseTexture* pTex)
+	graph::CBaseTexture* pTex)
 {
 	VRETURN(_IZ_IS_SHADER_HANDLE_SMPL(hSmpl));
 
@@ -700,7 +701,7 @@ IZ_BOOL CShaderBasic::SetTextureToSampler(
 // シェーダで利用するテクスチャをサンプラに設定.
 IZ_BOOL CShaderBasic::SetTextureToSampler(
 	IZ_PCSTR name,
-	CBaseTexture* tex)
+	graph::CBaseTexture* tex)
 {
 	IZ_BOOL ret = IZ_FALSE;
 	IZ_SHADER_HANDLE handle = GetParameterByName(name);

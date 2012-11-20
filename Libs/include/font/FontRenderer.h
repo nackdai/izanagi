@@ -3,13 +3,11 @@
 
 #include "izDefs.h"
 #include "izStd.h"
+#include "izGraph.h"
+#include "izIo.h"
 #include "FontDefs.h"
 
 namespace izanagi {
-	class IMemoryAllocator;
-	class CGraphicsDevice;
-	class IInputStream;
-
 	/**
 	* フォントレンダラ
 	*/
@@ -17,13 +15,13 @@ namespace izanagi {
 	public:
 		/**
 		*/
-		typedef IZ_UINT (*RenderFontHandler)(CGraphicsDevice* pDevice, IZ_UINT code, const SIntRect& rc, IZ_UINT x, IZ_UINT y, IZ_COLOR color);
+		typedef IZ_UINT (*RenderFontHandler)(graph::CGraphicsDevice* pDevice, IZ_UINT code, const SIntRect& rc, IZ_UINT x, IZ_UINT y, IZ_COLOR color);
 
 		/**
 		*/
 		static CFontRenderer* CreateFontRendererBmp(
 			IMemoryAllocator* pAllocator,
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			IZ_UINT	nMaxRegisterNum,
 			IInputStream* in);
 
@@ -32,7 +30,7 @@ namespace izanagi {
 		*/
 		static CFontRenderer* CreateFontRendererFT(
 			IMemoryAllocator* pAllocator,
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			IZ_UINT	nMaxRegisterNum);
 
 	protected:

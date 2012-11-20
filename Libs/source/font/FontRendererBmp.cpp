@@ -32,7 +32,7 @@ struct CFontRendererBmp::SRegInfo {
 */
 CFontRenderer* CFontRendererBmp::CreateFontRendererBmp(
 	IMemoryAllocator* pAllocator,
-	CGraphicsDevice* pDevice,
+	graph::CGraphicsDevice* pDevice,
 	IZ_UINT nMaxRegisterNum,
 	IInputStream* in)
 {
@@ -243,7 +243,7 @@ IZ_BOOL CFontRendererBmp::CreateTexture(IInputStream* in)
 					nHeight,
 					1,
 					TEX_FORMAT,
-					E_GRAPH_RSC_TYPE_STATIC_DYNAMIC);
+					graph::E_GRAPH_RSC_TYPE_STATIC_DYNAMIC);
 	ret = (m_pDstTex != NULL);
 	VGOTO(ret, __EXIT__);
 
@@ -344,7 +344,7 @@ void CFontRendererBmp::Render(
 	}
 
 	// 描画モード変更
-	E_GRAPH_2D_RENDER_OP nPrevOp = m_pDevice->Get2DRenderOp();
+	graph::E_GRAPH_2D_RENDER_OP nPrevOp = m_pDevice->Get2DRenderOp();
 	m_pDevice->Set2DRenderOp(RENDER_2D_OP);
 
 	// テクスチャセット
@@ -613,7 +613,7 @@ void CFontRendererBmp::RenderToSrcTex(
 		// 転送元
 		const IZ_UINT8* pSrc = sFntImage.images;
 		IZ_UINT nSrcPitch = sFntImage.pitch;
-		IZ_UINT nSrcBpp = (m_sHeader.texFmt == E_GRAPH_PIXEL_FMT_A8 ? 1 : 4);
+		IZ_UINT nSrcBpp = (m_sHeader.texFmt == graph::E_GRAPH_PIXEL_FMT_A8 ? 1 : 4);
 		IZ_ASSERT(nSrcBpp == 1);
 
 		// 転送先矩形
@@ -681,12 +681,14 @@ IZ_BOOL CFontRendererBmp::UpdateSurface()
 	IZ_ASSERT(m_pDevice != NULL);
 
 	// TODO
-	D3D_DEVICE* pD3DDev = m_pDevice->GetRawInterface();
+    D3D_DEVICE* pD3DDev = (D3D_DEVICE*)m_pDevice->GetPlatformInterface();
+    D3D_SURFACE* src = (D3D_SURFACE*)m_pSrcTex->GetSurface(0)->GetPlatformInterface();
+    D3D_SURFACE* dst = (D3D_SURFACE*)m_pDstTex->GetSurface(0)->GetPlatformInterface();
 
 	HRESULT hr = pD3DDev->UpdateSurface(
-					m_pSrcTex->GetSurface(0)->GetRawInterface(),
+					src,
 					NULL,
-					m_pDstTex->GetSurface(0)->GetRawInterface(),
+					dst,
 					NULL);
 
 	IZ_BOOL ret = SUCCEEDED(hr);

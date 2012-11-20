@@ -4,8 +4,8 @@
 #include "MSHFormat.h"
 
 namespace izanagi {
-	class CGraphicsDevice;
-	class CVertexBuffer;
+	class graph::CGraphicsDevice;
+	class graph::CVertexBuffer;
 	class IInputStream;
 	class CMeshSet;
 	class IMshRenderHandler;
@@ -38,24 +38,24 @@ namespace izanagi {
 		/** メッシュグループ全体を描画.
 		 */
 		IZ_BOOL Render(
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			CSkeletonInstance* pSkl,
 			IMshRenderHandler* pRenderHandler);
 
 	private:
 		IZ_UINT8* Read(
 			IZ_UINT8* pBuf,
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			IInputStream* pIn);
 
 		IZ_BOOL ReadVertices(
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			IInputStream* pIn);
 
 	private:
 		S_MSH_MESH_GROUP m_Info;
 
-		CVertexBuffer** m_pVB;
+		graph::CVertexBuffer** m_pVB;
 		CMeshSet** m_pMeshSet;
 	};
 }	// namespace izanagi

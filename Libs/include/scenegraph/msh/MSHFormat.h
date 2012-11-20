@@ -129,7 +129,7 @@ namespace izanagi {
 
 	// プリミティブセット情報
 	struct S_MSH_PRIM_SET {
-		E_GRAPH_PRIM_TYPE typePrim;
+		graph::E_GRAPH_PRIM_TYPE typePrim;
 
 		IZ_UINT16 idxVB;		///< 利用する頂点バッファのインデックス
 		IZ_UINT16 minIdx;
@@ -137,7 +137,7 @@ namespace izanagi {
 		IZ_UINT16 numJoints;	///< ジョイント数
 
 		IZ_UINT numIdx;						///< インデックス数
-		E_GRAPH_INDEX_BUFFER_FMT fmtIdx;	///< インデックスフォーマット
+		graph::E_GRAPH_INDEX_BUFFER_FMT fmtIdx;	///< インデックスフォーマット
 
 		IZ_INT16* joints;	///< ジョイントインデックスバッファ
 	};

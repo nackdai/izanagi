@@ -3,18 +3,16 @@
 
 #include "izDefs.h"
 #include "izStd.h"
+#include "izGraph.h"
 
 namespace izanagi {
-	class IMemoryAllocator;
-	class CGraphicsDevice;
-	class CTexture;
 
 	class CDebugFont : public CObject {
 	public:
 		// インスタンス作成
 		static CDebugFont* CreateDebugFont(
 			IMemoryAllocator* pAllocator,
-			CGraphicsDevice* pDevice);
+			graph::CGraphicsDevice* pDevice);
 			
 		enum {
 			FONT_SIZE = 16,			// フォントサイズ
@@ -90,9 +88,9 @@ namespace izanagi {
 
 	protected:
 		IMemoryAllocator* m_Allocator;
-		CGraphicsDevice* m_pDevice;
+		graph::CGraphicsDevice* m_pDevice;
 
-		CTexture* m_pFontTex;
+		graph::CTexture* m_pFontTex;
 
 		// 描画パラメータ
 		IZ_INT m_nLeft;			// 文字位置（左）

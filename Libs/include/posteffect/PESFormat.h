@@ -150,11 +150,11 @@ namespace izanagi {
 
 	// テクスチャアノテーション
 	struct S_PES_TEXTURE_ANN {
-		E_GRAPH_PIXEL_FMT fmt;		// ピクセルフォーマット
+		graph::E_GRAPH_PIXEL_FMT fmt;		// ピクセルフォーマット
 		IZ_UINT16 Dimensions[2];	// テクスチャサイズ
 		IZ_FLOAT ViewportRatio[2];	// テクスチャ比率
 
-		E_GRAPH_RSC_TYPE typeRsc;
+		graph::E_GRAPH_RSC_TYPE typeRsc;
 
 		struct {
 			IZ_UINT32 isRenderTarget	: 1;	// レンダーターゲットかどうか
@@ -198,16 +198,16 @@ namespace izanagi {
 	// サンプラステート
 	struct S_PES_SAMPLER_STATE {
 		IZ_UINT BindTexIdx;			// バインドするテクスチャのインデックス
-		E_GRAPH_TEX_FILTER minFilter;
-		E_GRAPH_TEX_FILTER magFilter;
-		E_GRAPH_TEX_ADDRESS addrU;
-		E_GRAPH_TEX_ADDRESS addrV;
+		graph::E_GRAPH_TEX_FILTER minFilter;
+		graph::E_GRAPH_TEX_FILTER magFilter;
+		graph::E_GRAPH_TEX_ADDRESS addrU;
+		graph::E_GRAPH_TEX_ADDRESS addrV;
 	};
 
 	// パスステート
 	struct S_PES_PASS_STATE {
 		IZ_BOOL AlphaTestEnable;		// アルファテストの可否
-		E_GRAPH_CMP_FUNC AlphaTestFunc;	// アルファテスト式
+		graph::E_GRAPH_CMP_FUNC AlphaTestFunc;	// アルファテスト式
 		IZ_UINT8 AlphaTestRef;			// アルファテスト閾値
 		IZ_UINT8 reserved[3];
 
