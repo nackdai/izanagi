@@ -67,8 +67,7 @@ namespace graph
 	// デストラクタ
 	CVertexBufferDX9::~CVertexBufferDX9()
 	{
-        // TODO
-		//m_Device->RemoveVertexBuffer(this);
+		m_Device->RemoveVertexBuffer(this);
 
 		SAFE_RELEASE(m_VB);
 		SAFE_RELEASE(m_Device);

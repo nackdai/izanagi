@@ -64,7 +64,6 @@ namespace graph
 
 	private:
 		CGraphicsDeviceDX9* m_Device;
-		IMemoryAllocator* m_Allocator;
 
 		// 本体
 		D3D_VB* m_VB;

@@ -32,6 +32,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Decal", "Decal.vcxproj", "{E04DB7F2-4913-47EF-9037-0BDC994394C8}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Render2D", "Render2D.vcxproj", "{38B3F36A-4139-4D1B-8F95-ABC4427F0AE6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DD5D28B8-93F1-4F26-8AD1-DD224CCB9A4F} = {DD5D28B8-93F1-4F26-8AD1-DD224CCB9A4F}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PostEffect", "PostEffect.vcxproj", "{B1A551DC-8998-4E69-8716-5BECE3FEDFC8}"
 EndProject

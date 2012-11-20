@@ -6,7 +6,11 @@
 #define ALLOC(a, size)		(a)->Alloc(size, __FILE__, __LINE__)
 #define ALLOC_ZERO(a, size)	(a)->AllocZero(size, __FILE__, __LINE__)
 #define REALLOC(a, p, size)	(a)->Realloc(p, size, __FILE__, __LINE__)
-#define FREE(a, mem)		if ((mem != IZ_NULL) && ((a) != IZ_NULL)) { (a)->Free(mem); }
+#if __IZ_DEBUG__
+    #define FREE(a, mem)		if (mem != IZ_NULL) { IZ_ASSERT(a != IZ_NULL); (a)->Free(mem); }
+#else
+    #define FREE(a, mem)		if ((mem != IZ_NULL) && ((a) != IZ_NULL)) { (a)->Free(mem); }
+#endif
 
 namespace izanagi {
 	/** メモリアロケータインターフェース.
