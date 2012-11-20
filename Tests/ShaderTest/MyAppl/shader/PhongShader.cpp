@@ -1,7 +1,7 @@
 #include "PhongShader.h"
 
 // シェーダごとの初期化
-BOOL CPhongShader::InitInternal(izanagi::CGraphicsDevice* pDevice)
+BOOL CPhongShader::InitInternal(izanagi::graph::CGraphicsDevice* pDevice)
 {
 	UNUSED_ALWAYS(pDevice);
 	IZ_ASSERT(m_pEffect != IZ_NULL);

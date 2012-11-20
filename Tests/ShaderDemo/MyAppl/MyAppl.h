@@ -7,7 +7,7 @@
 #define SCREEN_HEIGHT	720
 
 namespace izanagi {
-	class CTexture;
+	class graph::CTexture;
 }
 
 class CMyAppl {
@@ -37,7 +37,7 @@ public:
 	IZ_BOOL IsOnShader() { return m_IsOnShader; }
 
 protected:
-	izanagi::CTexture* m_pRT;
+	izanagi::graph::CTexture* m_pRT;
 
 	IZ_BOOL m_IsOnShader;
 };

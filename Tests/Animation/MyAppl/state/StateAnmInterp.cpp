@@ -50,7 +50,7 @@ IZ_BOOL CStateAnmInterp::Init()
 
 #define _Print CMySystem::GetInstance().GetDebugFont()->DBPrint
 
-IZ_BOOL CStateAnmInterp::Render(izanagi::CGraphicsDevice* device)
+IZ_BOOL CStateAnmInterp::Render(izanagi::graph::CGraphicsDevice* device)
 {
 	Render3D();
 	Render2D();
@@ -60,7 +60,7 @@ IZ_BOOL CStateAnmInterp::Render(izanagi::CGraphicsDevice* device)
 
 void CStateAnmInterp::Render3D()
 {
-	izanagi::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
+	izanagi::graph::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
 
 	CScene* scene = CMyAppl::GetInstance().GetScene();
 	CCharacter* character = CMyAppl::GetInstance().GetCharacter();
@@ -134,7 +134,7 @@ IZ_BOOL CStateAnmInterp::Destroy()
 
 IZ_BOOL CStateAnmInterp::Enter(izanagi::IMemoryAllocator* allocator, void* val)
 {
-	izanagi::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
+	izanagi::graph::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
 	izanagi::IMemoryAllocator* pAllocator = CMySystem::GetInstance().GetMemoryAllocator();
 	izanagi::CFileInputStream input;
 

@@ -19,13 +19,13 @@ IZ_BOOL CStateTest1::Init()
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateTest1::Render(izanagi::CGraphicsDevice* device)
+IZ_BOOL CStateTest1::Render(izanagi::graph::CGraphicsDevice* device)
 {
 	if (CMySystem::GetInstance().GetGraphicsDevice()->Begin2D()) {
 		// Image
 		izanagi::CImage* pImage = m_pArchProxy->Find<izanagi::CImage>(test_1::a::Image_img);
 		CMySystem::GetInstance().GetGraphicsDevice()->SetTexture(0, pImage->GetTexture(0));
-		CMySystem::GetInstance().GetGraphicsDevice()->Set2DRenderOp(izanagi::E_GRAPH_2D_RENDER_OP_MODULATE);
+		CMySystem::GetInstance().GetGraphicsDevice()->Set2DRenderOp(izanagi::graph::E_GRAPH_2D_RENDER_OP_MODULATE);
 		CMySystem::GetInstance().GetGraphicsDevice()->Draw2DSprite(
 			izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),
 			izanagi::CIntRect(300, 100, 556, 228));
@@ -57,7 +57,7 @@ IZ_BOOL CStateTest1::Destroy()
 namespace {
 	class CImgCreateListener : public izanagi::CCreateRscListener {
 	public:
-		izanagi::CObject* CreateRsc(izanagi::IMemoryAllocator* pAllocator, izanagi::CGraphicsDevice* pDevice, izanagi::IInputStream* pIn)
+		izanagi::CObject* CreateRsc(izanagi::IMemoryAllocator* pAllocator, izanagi::graph::CGraphicsDevice* pDevice, izanagi::IInputStream* pIn)
 		{
 			return izanagi::CImage::CreateImage(pAllocator, pDevice, pIn);
 		}
@@ -65,7 +65,7 @@ namespace {
 
 	class CFntCreateListener : public izanagi::CCreateRscListener {
 	public:
-		izanagi::CObject* CreateRsc(izanagi::IMemoryAllocator* pAllocator, izanagi::CGraphicsDevice* pDevice, izanagi::IInputStream* pIn)
+		izanagi::CObject* CreateRsc(izanagi::IMemoryAllocator* pAllocator, izanagi::graph::CGraphicsDevice* pDevice, izanagi::IInputStream* pIn)
 		{
 			return izanagi::CFontRenderer::CreateFontRendererBmp(pAllocator, pDevice, 128, pIn);
 		}
@@ -76,7 +76,7 @@ IZ_BOOL CStateTest1::Enter(izanagi::IMemoryAllocator* allocator, void* val)
 {
 	VRETURN(m_Input.Open("data/test_1.arc"));
 
-	izanagi::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
+	izanagi::graph::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
 	izanagi::IMemoryAllocator* pAllocator = CMySystem::GetInstance().GetMemoryAllocator();
 
 	izanagi::CArchive* pArchive = izanagi::CArchiveImpl::CreateArchive(

@@ -23,7 +23,7 @@ IZ_BOOL CStateRimLight::Init()
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateRimLight::Render(izanagi::CGraphicsDevice* device)
+IZ_BOOL CStateRimLight::Render(izanagi::graph::CGraphicsDevice* device)
 {
 	Render3D();
 	Render2D();
@@ -39,7 +39,7 @@ IZ_BOOL CStateRimLight::Render2D()
 
 IZ_BOOL CStateRimLight::Render3D()
 {
-	izanagi::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
+	izanagi::graph::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
 
 	// 描画開始
 	m_pShader->Begin(0);
@@ -65,7 +65,7 @@ IZ_BOOL CStateRimLight::Render3D()
 	m_pShader->EndPass();
 
 	// テクスチャセット
-	izanagi::CTexture* pTex = izanagi::CTextureManager::GetInstance().Get(DEMO_TEX_EARTH);
+	izanagi::graph::CTexture* pTex = izanagi::CTextureManager::GetInstance().Get(DEMO_TEX_EARTH);
 	pDevice->SetTexture(0, pTex);
 
 	IZ_BOOL bIsOnShader = CMyAppl::GetInstance().IsOnShader();
@@ -94,7 +94,7 @@ IZ_BOOL CStateRimLight::Destroy()
 
 IZ_BOOL CStateRimLight::Enter(izanagi::IMemoryAllocator* allocator, void* val)
 {
-	izanagi::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
+	izanagi::graph::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
 	izanagi::IMemoryAllocator* pAllocator = CMySystem::GetInstance().GetMemoryAllocator();
 
 	// シェーダ

@@ -48,7 +48,7 @@ IZ_BOOL CStateBasicGirl::Init()
 
 #define _Print CMySystem::GetInstance().GetDebugFont()->DBPrint
 
-IZ_BOOL CStateBasicGirl::Render(izanagi::CGraphicsDevice* device)
+IZ_BOOL CStateBasicGirl::Render(izanagi::graph::CGraphicsDevice* device)
 {
 	Render3D();
 	Render2D();
@@ -58,9 +58,9 @@ IZ_BOOL CStateBasicGirl::Render(izanagi::CGraphicsDevice* device)
 
 void CStateBasicGirl::Render3D()
 {
-	izanagi::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
+	izanagi::graph::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
 
-	//pDevice->SetRenderState(izanagi::E_GRAPH_RS_CULLMODE, izanagi::E_GRAPH_CULL_CCW);
+	//pDevice->SetRenderState(izanagi::graph::E_GRAPH_RS_CULLMODE, izanagi::graph::E_GRAPH_CULL_CCW);
 
 	// 描画開始
 	IZ_UINT nPassCnt = m_pShader->Begin(0, IZ_FALSE);
@@ -150,7 +150,7 @@ IZ_BOOL CStateBasicGirl::Destroy()
 
 IZ_BOOL CStateBasicGirl::Enter(izanagi::IMemoryAllocator* allocator, void* val)
 {
-	izanagi::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
+	izanagi::graph::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
 	izanagi::IMemoryAllocator* pAllocator = CMySystem::GetInstance().GetMemoryAllocator();
 	izanagi::CFileInputStream input;
 
@@ -285,10 +285,10 @@ IZ_BOOL CStateBasicGirl::Enter(izanagi::IMemoryAllocator* allocator, void* val)
 	IZ_ASSERT(m_pAxis != IZ_NULL);
 
 	{
-		m_pTex[0] = pDevice->CreateTextureFromFile("data/1P_C.dds", izanagi::E_GRAPH_PIXEL_FMT_RGBA8);
+		m_pTex[0] = pDevice->CreateTextureFromFile("data/1P_C.dds", izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA8);
 		IZ_ASSERT(m_pTex[0] != IZ_NULL);
 
-		m_pTex[1] = pDevice->CreateTextureFromFile("data/Face_C.dds", izanagi::E_GRAPH_PIXEL_FMT_RGBA8);
+		m_pTex[1] = pDevice->CreateTextureFromFile("data/Face_C.dds", izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA8);
 		IZ_ASSERT(m_pTex[1] != IZ_NULL);
 	}
 

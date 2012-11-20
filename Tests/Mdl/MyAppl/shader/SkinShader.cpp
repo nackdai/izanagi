@@ -1,7 +1,7 @@
 #include "SkinShader.h"
 
 // シェーダごとの初期化
-BOOL CSkinShader::InitInternal(izanagi::CGraphicsDevice* pDevice)
+BOOL CSkinShader::InitInternal(izanagi::graph::CGraphicsDevice* pDevice)
 {
 	UNUSED_ALWAYS(pDevice);
 	IZ_ASSERT(m_pEffect != IZ_NULL);

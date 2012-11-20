@@ -18,7 +18,7 @@ CShaderBase::~CShaderBase()
 
 // シェーダ読み込み
 IZ_BOOL CShaderBase::ReadShader(
-	izanagi::CGraphicsDevice* pDevice,
+	izanagi::graph::CGraphicsDevice* pDevice,
 	LPCSTR lpszPathName)
 {
 	FILE* fp;
@@ -66,7 +66,7 @@ IZ_BOOL CShaderBase::ReadShader(
 }
 
 // シェーダごとの初期化
-IZ_BOOL CShaderBase::InitInternal(izanagi::CGraphicsDevice* pDevice)
+IZ_BOOL CShaderBase::InitInternal(izanagi::graph::CGraphicsDevice* pDevice)
 {
 	return IZ_TRUE;
 }

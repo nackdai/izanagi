@@ -23,7 +23,7 @@ struct SVertex {
 // 初期化.
 IZ_BOOL CScissoring::InitInternal(
 	izanagi::IMemoryAllocator* allocator,
-	izanagi::CGraphicsDevice* device,
+	izanagi::graph::CGraphicsDevice* device,
 	izanagi::sample::CSampleCamera& camera)
 {
 	IZ_BOOL result = IZ_TRUE;
@@ -52,10 +52,10 @@ IZ_BOOL CScissoring::InitInternal(
 	}
 
 	{
-		static const izanagi::SVertexElement vtxElem[] =
+		static const izanagi::graph::SVertexElement vtxElem[] =
 		{
-			{0,  0, izanagi::E_GRAPH_VTX_DECL_TYPE_FLOAT4, izanagi::E_GRAPH_VTX_DECL_USAGE_POSITION, 0},	// 座標
-			{0, 16, izanagi::E_GRAPH_VTX_DECL_TYPE_COLOR, izanagi::E_GRAPH_VTX_DECL_USAGE_COLOR, 0},		// 色
+			{0,  0, izanagi::graph::E_GRAPH_VTX_DECL_TYPE_FLOAT4, izanagi::graph::E_GRAPH_VTX_DECL_USAGE_POSITION, 0},	// 座標
+			{0, 16, izanagi::graph::E_GRAPH_VTX_DECL_TYPE_COLOR, izanagi::graph::E_GRAPH_VTX_DECL_USAGE_COLOR, 0},		// 色
 		};
 
 		static const SVertex vtx[] =
@@ -72,7 +72,7 @@ IZ_BOOL CScissoring::InitInternal(
 		m_Triangles.defaultVB = device->CreateVertexBuffer(
 			sizeof(SVertex),
 			COUNTOF(vtx),
-			izanagi::E_GRAPH_RSC_TYPE_STATIC);
+			izanagi::graph::E_GRAPH_RSC_TYPE_STATIC);
 		VGOTO(m_Triangles.defaultVB != IZ_NULL, __EXIT__);
 
 		void* data = IZ_NULL;
@@ -90,7 +90,7 @@ IZ_BOOL CScissoring::InitInternal(
 			m_Triangles.vb[i] = device->CreateVertexBuffer(
 				sizeof(SVertex),
 				COUNTOF(vtx),
-				izanagi::E_GRAPH_RSC_TYPE_STATIC);
+				izanagi::graph::E_GRAPH_RSC_TYPE_STATIC);
 			VGOTO(m_Triangles.vb[i] != IZ_NULL, __EXIT__);
 		}
 
@@ -146,7 +146,7 @@ void CScissoring::ReleaseInternal()
 // 更新.
 void CScissoring::UpdateInternal(
 	izanagi::CCamera& camera,
-	izanagi::CGraphicsDevice* device)
+	izanagi::graph::CGraphicsDevice* device)
 {
 	camera.Update();
 
@@ -190,13 +190,13 @@ namespace {
 }
 
 // 描画.
-void CScissoring::RenderInternal(izanagi::CGraphicsDevice* device)
+void CScissoring::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
 	izanagi::sample::CSampleCamera& camera = GetCamera();
 
 	device->SetRenderState(
-		izanagi::E_GRAPH_RS_CULLMODE,
-		izanagi::E_GRAPH_CULL_NONE);
+		izanagi::graph::E_GRAPH_RS_CULLMODE,
+		izanagi::graph::E_GRAPH_CULL_NONE);
 
 	if (m_EnableScissoring && m_TriNum > 0 && !m_CopiedVtx)
 	{
@@ -271,7 +271,7 @@ void CScissoring::RenderInternal(izanagi::CGraphicsDevice* device)
 					{
 						device->SetVertexBuffer(0, 0, m_Triangles.vb[i]->GetStride(), m_Triangles.vb[i]);
 						device->DrawPrimitive(
-							izanagi::E_GRAPH_PRIM_TYPE_TRIANGLELIST,
+							izanagi::graph::E_GRAPH_PRIM_TYPE_TRIANGLELIST,
 							0, 1);
 					}
 				}
@@ -279,7 +279,7 @@ void CScissoring::RenderInternal(izanagi::CGraphicsDevice* device)
 				{
 					device->SetVertexBuffer(0, 0, m_Triangles.defaultVB->GetStride(), m_Triangles.defaultVB);
 					device->DrawPrimitive(
-						izanagi::E_GRAPH_PRIM_TYPE_TRIANGLELIST,
+						izanagi::graph::E_GRAPH_PRIM_TYPE_TRIANGLELIST,
 						0, 1);
 				}
 			}

@@ -42,13 +42,13 @@ namespace izanagi {
 	public:
 		IZ_BOOL Init(
 			IMemoryAllocator* pAllocator,
-			CGraphicsDevice* pDevice);
+			graph::CGraphicsDevice* pDevice);
 
 		void Clear();
 
 		IZ_INT Read(IZ_PCSTR pszFile);
 
-		CTexture* Get(IZ_UINT nIdx);
+		graph::CTexture* Get(IZ_UINT nIdx);
 
 	public:
 		IZ_BOOL AllRead();
@@ -63,21 +63,21 @@ namespace izanagi {
 			~CTexHolder() {}
 
 		public:
-			void SetTexture(CTexture* p) { m_pTex = p; }
+			void SetTexture(graph::CTexture* p) { m_pTex = p; }
 
-			CTexture* GetTexture() { return m_pTex; }
+			graph::CTexture* GetTexture() { return m_pTex; }
 			CStdList<CTexHolder>::Item* GetListItem() { return &m_ListItem; }
 
 			void Release() { SAFE_RELEASE(m_pTex); }
 
 		private:
-			CTexture* m_pTex;
+			graph::CTexture* m_pTex;
 			CStdList<CTexHolder>::Item m_ListItem;
 		};
 
 	private:
 		IMemoryAllocator* m_pAllocator;
-		CGraphicsDevice* m_pDevice;
+		graph::CGraphicsDevice* m_pDevice;
 
 		CStdList<CTexHolder> m_List;
 	};

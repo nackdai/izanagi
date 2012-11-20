@@ -231,7 +231,7 @@ CIkApp::~CIkApp()
 // 初期化.
 IZ_BOOL CIkApp::InitInternal(
 	izanagi::IMemoryAllocator* allocator,
-	izanagi::CGraphicsDevice* device,
+	izanagi::graph::CGraphicsDevice* device,
 	izanagi::sample::CSampleCamera& camera)
 {
 	InitJoints();
@@ -251,14 +251,14 @@ void CIkApp::ReleaseInternal()
 // 更新.
 void CIkApp::UpdateInternal(
     izanagi::CCamera& camera,
-    izanagi::CGraphicsDevice* device)
+    izanagi::graph::CGraphicsDevice* device)
 {
 	InitJoints();
 	ApplyIK(s_RecursiveNum, s_Target);
 }
 
 // 描画.
-void CIkApp::RenderInternal(izanagi::CGraphicsDevice* device)
+void CIkApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
 	static const IZ_COLOR bgColor = IZ_COLOR_RGBA(0, 128, 255, 255);
 

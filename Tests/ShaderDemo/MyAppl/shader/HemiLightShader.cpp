@@ -1,7 +1,7 @@
 #include "HemiLightShader.h"
 
 // シェーダごとの初期化
-BOOL CHemiLightShader::InitInternal(izanagi::CGraphicsDevice* pDevice)
+BOOL CHemiLightShader::InitInternal(izanagi::graph::CGraphicsDevice* pDevice)
 {
 	UNUSED_ALWAYS(pDevice);
 	IZ_ASSERT(m_pEffect != IZ_NULL);

@@ -7,7 +7,7 @@
 #define SCREEN_HEIGHT	480
 
 namespace izanagi {
-	class CTexture;
+	class graph::CTexture;
 }
 
 class CMyAppl {

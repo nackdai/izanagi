@@ -17,7 +17,7 @@ IZ_BOOL CStateTest0::Init()
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateTest0::Render(izanagi::CGraphicsDevice* device)
+IZ_BOOL CStateTest0::Render(izanagi::graph::CGraphicsDevice* device)
 {
 	if (CMySystem::GetInstance().GetGraphicsDevice()->Begin2D()) {
 		CMySystem::GetInstance().GetDebugFont()->Begin();

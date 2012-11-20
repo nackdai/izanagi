@@ -17,7 +17,7 @@ CTextureManager::~CTextureManager()
 
 IZ_BOOL CTextureManager::Init(
 	IMemoryAllocator* pAllocator,
-	CGraphicsDevice* pDevice)
+	graph::CGraphicsDevice* pDevice)
 {
 	m_pAllocator = pAllocator;
 	SAFE_REPLACE(m_pDevice, pDevice);
@@ -49,9 +49,9 @@ IZ_INT CTextureManager::Read(IZ_PCSTR pszFile)
 	IZ_BOOL result = IZ_TRUE;
 	IZ_INT ret = -1;
 
-	CTexture* pTex = m_pDevice->CreateTextureFromFile(
+	graph::CTexture* pTex = m_pDevice->CreateTextureFromFile(
 						pszFile,
-						izanagi::E_GRAPH_PIXEL_FMT_RGBA8);
+						izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA8);
 	result = (pTex != IZ_NULL);
 	VGOTO(result, __EXIT__);
 
@@ -80,14 +80,14 @@ __EXIT__:
 	return ret;
 }
 
-CTexture* CTextureManager::Get(IZ_UINT nIdx)
+graph::CTexture* CTextureManager::Get(IZ_UINT nIdx)
 {
 	IZ_UINT num = m_List.GetItemNum();
 	IZ_ASSERT(nIdx < num);
 
 	CStdList<CTexHolder>::Item* item = m_List.GetAt(nIdx);
 	
-	CTexture* ret = IZ_NULL;
+	graph::CTexture* ret = IZ_NULL;
 
 	if (item != IZ_NULL) {
 		CTexHolder* pHolder = item->GetData();

@@ -28,7 +28,7 @@ public:
 
 	inline void Update();
 #if 0
-	inline void RenderCamera(izanagi::CGraphicsDevice* pDevice);
+	inline void RenderCamera(izanagi::graph::CGraphicsDevice* pDevice);
 #endif
 
 public:
@@ -55,7 +55,7 @@ void CMyCamera::Update()
 }
 
 #if 0
-void CMyCamera::RenderCamera(izanagi::CGraphicsDevice* pDevice)
+void CMyCamera::RenderCamera(izanagi::graph::CGraphicsDevice* pDevice)
 {
 	m_cCamera.Update();
 }

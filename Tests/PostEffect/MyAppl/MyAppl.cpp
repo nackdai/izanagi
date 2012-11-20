@@ -116,7 +116,7 @@ IZ_BOOL CMyAppl::Init(
 		CMySystem::GetInstance().GetGraphicsDevice()->GetRawInterface());
 
 	izanagi::IMemoryAllocator* pAllocator = CMySystem::GetInstance().GetMemoryAllocator();
-	izanagi::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
+	izanagi::graph::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
 
 	// シェーダ初期化
 	CSceneRenderer::GetInstance().InitShader(
@@ -168,12 +168,12 @@ IZ_BOOL CMyAppl::Render()
 {
 	static const D3DCOLOR color = D3DCOLOR_ARGB(255, 0, 128, 255);
 
-	izanagi::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
+	izanagi::graph::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
 
 	const izanagi::SViewport& vp = pDevice->GetViewport();
 
 	if (pDevice->BeginRender(
-			izanagi::E_GRAPH_CLEAR_FLAG_ALL,
+			izanagi::graph::E_GRAPH_CLEAR_FLAG_ALL,
 			color, 1.0f, 0))
 	{
 		CMyCamera::GetInstance().Update();
@@ -211,7 +211,7 @@ IZ_BOOL CMyAppl::Render()
 				IZ_UINT y = 0;
 
 				for (IZ_UINT i = 3; i < 7; i++) {
-					izanagi::CTexture* tex = pPostEffect->GetTexture(i);
+					izanagi::graph::CTexture* tex = pPostEffect->GetTexture(i);
 
 					//if (tex != IZ_NULL) {
 					{
@@ -219,7 +219,7 @@ IZ_BOOL CMyAppl::Render()
 							0, 
 							tex);
 
-						pDevice->Set2DRenderOp(izanagi::E_GRAPH_2D_RENDER_OP_NO_TEX_ALPHA);
+						pDevice->Set2DRenderOp(izanagi::graph::E_GRAPH_2D_RENDER_OP_NO_TEX_ALPHA);
 						pDevice->Draw2DSprite(
 							izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),
 							izanagi::CIntRect(0, y, 256, y + 144));

@@ -10,7 +10,7 @@ IZ_BOOL CStateMonotone::Init()
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateMonotone::Render(izanagi::CGraphicsDevice* device)
+IZ_BOOL CStateMonotone::Render(izanagi::graph::CGraphicsDevice* device)
 {
 	Render3D();
 	Render2D();
@@ -47,7 +47,7 @@ void CStateMonotone::Render3D()
 {
 	static const D3DCOLOR color = D3DCOLOR_ARGB(255, 0, 128, 255);
 
-	izanagi::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
+	izanagi::graph::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
 
 	CPostEffectSample::GetInstance().BeginScene();
 
@@ -60,8 +60,8 @@ void CStateMonotone::Render3D()
 	CSceneRenderer::GetInstance().Render(pDevice);
 
 	pDevice->SetRenderState(
-		izanagi::E_GRAPH_RS_CULLMODE,
-		izanagi::E_GRAPH_CULL_NONE);
+		izanagi::graph::E_GRAPH_RS_CULLMODE,
+		izanagi::graph::E_GRAPH_CULL_NONE);
 
 	CPostEffectSample::GetInstance().Apply();
 }

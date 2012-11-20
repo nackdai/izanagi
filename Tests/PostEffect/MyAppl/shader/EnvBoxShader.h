@@ -18,7 +18,7 @@ protected:
 	inline void InternalRelease();
 
 	// シェーダごとの初期化
-	inline IZ_BOOL InitInternal(izanagi::CGraphicsDevice* pDevice);
+	inline IZ_BOOL InitInternal(izanagi::graph::CGraphicsDevice* pDevice);
 };
 
 // inline ********************************
@@ -33,7 +33,7 @@ void CEnvBoxShader::InternalRelease()
 }
 
 // シェーダごとの初期化
-IZ_BOOL CEnvBoxShader::InitInternal(izanagi::CGraphicsDevice* pDevice)
+IZ_BOOL CEnvBoxShader::InitInternal(izanagi::graph::CGraphicsDevice* pDevice)
 {
 	// 共通パラメータのハンドルを取得
 	GetCommonParameterHandles();

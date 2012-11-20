@@ -25,11 +25,11 @@ public:
 	// シェーダ初期化
 	IZ_BOOL InitShader(
 		izanagi::IMemoryAllocator* pAllocator,
-		izanagi::CGraphicsDevice* pDevice,
+		izanagi::graph::CGraphicsDevice* pDevice,
 		LPCSTR lpszName);
 
 	// 描画
-	void Render(izanagi::CGraphicsDevice* pDevice);
+	void Render(izanagi::graph::CGraphicsDevice* pDevice);
 
 public:
 	inline CPhongShader* GetPhongShader();

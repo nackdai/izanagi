@@ -17,7 +17,7 @@ protected:
 
 protected:
 	// シェーダごとの初期化
-	IZ_BOOL InitInternal(izanagi::CGraphicsDevice* pDevice);
+	IZ_BOOL InitInternal(izanagi::graph::CGraphicsDevice* pDevice);
 
 	inline void InternalRelease();
 

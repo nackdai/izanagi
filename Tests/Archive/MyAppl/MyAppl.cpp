@@ -126,10 +126,10 @@ IZ_BOOL CMyAppl::Render()
 {
 	static const D3DCOLOR color = D3DCOLOR_ARGB(255, 0, 128, 255);
 
-	izanagi::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
+	izanagi::graph::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
 
 	pDevice->BeginRender(
-		izanagi::E_GRAPH_CLEAR_FLAG_ALL,
+		izanagi::graph::E_GRAPH_CLEAR_FLAG_ALL,
 		color, 1.0f, 0);
 
 	IZ_BOOL ret = CStateManager::GetInstance().Render(pDevice);

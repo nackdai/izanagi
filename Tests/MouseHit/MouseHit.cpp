@@ -28,7 +28,7 @@ struct SVertex {
 // 初期化.
 IZ_BOOL CMouseHit::InitInternal(
 	izanagi::IMemoryAllocator* allocator,
-	izanagi::CGraphicsDevice* device,
+	izanagi::graph::CGraphicsDevice* device,
 	izanagi::sample::CSampleCamera& camera)
 {
 	IZ_BOOL result = IZ_TRUE;
@@ -40,10 +40,10 @@ IZ_BOOL CMouseHit::InitInternal(
 		{  10.0f, 0.0f, 20.0f, 1.0f },
 	};
 
-	static const izanagi::SVertexElement vtxElem[] =
+	static const izanagi::graph::SVertexElement vtxElem[] =
 	{
-		{0,  0, izanagi::E_GRAPH_VTX_DECL_TYPE_FLOAT4, izanagi::E_GRAPH_VTX_DECL_USAGE_POSITION, 0},	// 座標
-		{0, 16, izanagi::E_GRAPH_VTX_DECL_TYPE_COLOR, izanagi::E_GRAPH_VTX_DECL_USAGE_COLOR, 0},		// 色
+		{0,  0, izanagi::graph::E_GRAPH_VTX_DECL_TYPE_FLOAT4, izanagi::graph::E_GRAPH_VTX_DECL_USAGE_POSITION, 0},	// 座標
+		{0, 16, izanagi::graph::E_GRAPH_VTX_DECL_TYPE_COLOR, izanagi::graph::E_GRAPH_VTX_DECL_USAGE_COLOR, 0},		// 色
 	};
 
 	{
@@ -53,7 +53,7 @@ IZ_BOOL CMouseHit::InitInternal(
 		m_Triangles.vb = device->CreateVertexBuffer(
 			sizeof(SVertex),
 			3,
-			izanagi::E_GRAPH_RSC_TYPE_STATIC);
+			izanagi::graph::E_GRAPH_RSC_TYPE_STATIC);
 
 		SVertex* data = IZ_NULL;
 		m_Triangles.vb->Lock(0, 0, (void**)&data, IZ_FALSE);
@@ -111,7 +111,7 @@ void CMouseHit::ReleaseInternal()
 // 更新.
 void CMouseHit::UpdateInternal(
 	izanagi::CCamera& camera,
-	izanagi::CGraphicsDevice* device)
+	izanagi::graph::CGraphicsDevice* device)
 {
 	camera.Update();
 
@@ -155,13 +155,13 @@ namespace {
 }
 
 // 描画.
-void CMouseHit::RenderInternal(izanagi::CGraphicsDevice* device)
+void CMouseHit::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
 	izanagi::sample::CSampleCamera& camera = GetCamera();
 
 	device->SetRenderState(
-		izanagi::E_GRAPH_RS_CULLMODE,
-		izanagi::E_GRAPH_CULL_NONE);
+		izanagi::graph::E_GRAPH_RS_CULLMODE,
+		izanagi::graph::E_GRAPH_CULL_NONE);
 
 	static const izanagi::SVector color[2] = {
 		{ 1.0f, 1.0f, 1.0f, 1.0f },
@@ -200,7 +200,7 @@ void CMouseHit::RenderInternal(izanagi::CGraphicsDevice* device)
 			m_Triangles.vb->GetStride(), 
 			m_Triangles.vb);
 		device->DrawPrimitive(
-			izanagi::E_GRAPH_PRIM_TYPE_TRIANGLELIST,
+			izanagi::graph::E_GRAPH_PRIM_TYPE_TRIANGLELIST,
 			0, 1);
 
 		m_Shader->EndPass();
