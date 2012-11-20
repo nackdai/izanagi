@@ -196,12 +196,9 @@ namespace graph
 			    IZ_ASSERT(ret);
 			
 			    if (ret) {
-                    D3D_SURFACE* d3dRenderTarget = renderTarget->GetRawInterface();
-                    D3D_SURFACE* d3dDepthStencil = deptthStencil->GetRawInterface();
-
 				    // フレームバッファサーフェースを取ってくる・・・
-				    m_Device->GetRenderTarget(0, &d3dRenderTarget);
-				    m_Device->GetDepthStencilSurface(&d3dDepthStencil);
+                    m_Device->GetRenderTarget(0, &renderTarget->m_Surface);
+                    m_Device->GetDepthStencilSurface(&deptthStencil->m_Surface);
 
 				    // 明示的に記述をセットする
 				    renderTarget->SetDesc();
@@ -905,6 +902,8 @@ namespace graph
 	    for (IZ_UINT i = 0; i < num; ++i) {
 		    if (m_RenderState.curRT[i] != pSurface[i]) {
                 CSurfaceDX9* dx9Surface = reinterpret_cast<CSurfaceDX9*>(pSurface[i]);
+                IZ_ASSERT(dx9Surface->GetRawInterface() != IZ_NULL);
+
 			    m_Device->SetRenderTarget(i, dx9Surface->GetRawInterface());
 			    SAFE_REPLACE(m_RenderState.curRT[i], pSurface[i]);
 		    }

@@ -18,6 +18,9 @@ namespace graph
 	class CGraphicsDeviceDX9 : public CGraphicsDevice
     {
         friend class CGraphicsDevice;
+        friend class CTextureDX9;
+        friend class CVertexBufferDX9;
+        friend class CIndexBufferDX9;
 
 	private:
 		CGraphicsDeviceDX9();

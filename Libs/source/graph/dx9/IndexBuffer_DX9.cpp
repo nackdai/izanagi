@@ -68,8 +68,7 @@ namespace graph
 	// デストラクタ
 	CIndexBufferDX9::~CIndexBufferDX9()
 	{
-        // TODO
-		//m_Device->RemoveIndexBuffer(this);
+		m_Device->RemoveIndexBuffer(this);
 
 		SAFE_RELEASE(m_IB);
 		SAFE_RELEASE(m_Device);

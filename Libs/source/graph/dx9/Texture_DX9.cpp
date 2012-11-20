@@ -131,8 +131,7 @@ namespace graph
 	// デストラクタ
 	CTextureDX9::~CTextureDX9()
 	{
-        // TODO
-		//m_Device->RemoveTexture(this);
+		m_Device->RemoveTexture(this);
 
         if (m_Surface != NULL)
         {
