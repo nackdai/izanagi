@@ -1,10 +1,14 @@
 #if !defined(__IZANAGI_GRAPH_2D_SHADER_H__)
 #define __IZANAGI_GRAPH_2D_SHADER_H__
 
-#include "std/StdObject.h"
+#include "izDefs.h"
+#include "izStd.h"
 #include "graph/GraphDefs.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace graph
+{
 	class CVertexShader;
 	class CPixelShader;
 	class CGraphicsDevice;
@@ -16,8 +20,8 @@ namespace izanagi {
 	private:
 		// インスタンス作成
 		static C2DShader* Create2DShader(
-			IMemoryAllocator* pAllocator,
-			CGraphicsDevice* pDevice);
+			IMemoryAllocator* allocator,
+			CGraphicsDevice* device);
 
 	private:
 		C2DShader();
@@ -31,13 +35,13 @@ namespace izanagi {
 		inline void InternalRelease();
 
 		// シェーダ作成
-		IZ_BOOL CreateShader(CGraphicsDevice* pDevice);
+		IZ_BOOL CreateShader(CGraphicsDevice* device);
 
 		// シェーダセット
-		IZ_BOOL SetShader(CGraphicsDevice* pDevice);
+		IZ_BOOL SetShader(CGraphicsDevice* device);
 
 		// シェーダパラメータセット
-		IZ_BOOL SetShaderParams(CGraphicsDevice* pDevice);
+		IZ_BOOL SetShaderParams(CGraphicsDevice* device);
 
 	private:
 		// 描画設定をセット
@@ -87,7 +91,7 @@ namespace izanagi {
 	{
 		return m_nOp;
 	}
-
+}   // namespace graph
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_GRAPH_2D_SHADER_H__)

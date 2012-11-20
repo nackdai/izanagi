@@ -16,7 +16,7 @@ namespace izanagi {
 		template <class _T>
 		static _T* Create(
 			IMemoryAllocator* pAllocator,
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			IZ_UINT8* pProgram);
 
 	protected:
@@ -32,7 +32,7 @@ namespace izanagi {
 
 		// シェーダ作成
 		IZ_BOOL CreateShader(
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			IZ_UINT8* pProgram);
 
 		// シェーダ定数ハンドル取得
@@ -68,10 +68,10 @@ namespace izanagi {
 
 	protected:
 		// 頂点バッファセット
-		inline void SetVertexBuffer(CVertexBuffer* pVB);
+		inline void SetVertexBuffer(graph::CVertexBuffer* pVB);
 
 		// 頂点宣言セット
-		inline void SetVertexDeclaration(CVertexDeclaration* pVtxDecl);
+		inline void SetVertexDeclaration(graph::CVertexDeclaration* pVtxDecl);
 
 		// 頂点シェーダタイプ取得
 		inline E_POSTEFFECT_VTX_SHADER GetVSType() const;
@@ -86,13 +86,13 @@ namespace izanagi {
 
 	protected:
 		IMemoryAllocator* m_Allocator;
-		CGraphicsDevice* m_pDevice;
+		graph::CGraphicsDevice* m_pDevice;
 
 		E_POSTEFFECT_VTX_SHADER m_Type;
 
-		CVertexShader* m_pShader;
-		CVertexBuffer* m_pVB;
-		CVertexDeclaration* m_pVtxDecl;
+		graph::CVertexShader* m_pShader;
+		graph::CVertexBuffer* m_pVB;
+		graph::CVertexDeclaration* m_pVtxDecl;
 
 		// 共通シェーダ定数ハンドル
 		SHADER_PARAM_HANDLE m_hCommonHandle[COMMON_HANDLE_NUM];
@@ -107,7 +107,7 @@ namespace izanagi {
 	template <class _T>
 	_T* CPostEffectVS::Create(
 		IMemoryAllocator* pAllocator,
-		CGraphicsDevice* pDevice,
+		graph::CGraphicsDevice* pDevice,
 		IZ_UINT8* pProgram)
 	{
 		_T* pInstance = IZ_NULL;
@@ -141,13 +141,13 @@ namespace izanagi {
 	}
 
 	// 頂点バッファセット
-	void CPostEffectVS::SetVertexBuffer(CVertexBuffer* pVB)
+	void CPostEffectVS::SetVertexBuffer(graph::CVertexBuffer* pVB)
 	{
 		SAFE_REPLACE(m_pVB, pVB);
 	}
 
 	// 頂点宣言セット
-	void CPostEffectVS::SetVertexDeclaration(CVertexDeclaration* pVtxDecl)
+	void CPostEffectVS::SetVertexDeclaration(graph::CVertexDeclaration* pVtxDecl)
 	{
 		SAFE_REPLACE(m_pVtxDecl, pVtxDecl);
 	}

@@ -12,7 +12,7 @@ using namespace izanagi;
 
 CMesh* CMesh::CreateMesh(
 	IMemoryAllocator* pAllocator,
-	CGraphicsDevice* pDevice,
+	graph::CGraphicsDevice* pDevice,
 	IInputStream* pIn)
 {
 	S_MSH_HEADER sHeader;
@@ -22,7 +22,7 @@ CMesh* CMesh::CreateMesh(
 
 	// Compute buffer size.
 	IZ_UINT nSize = sizeof(CMesh);
-	nSize += sizeof(CVertexBuffer*) * sHeader.numVB;
+	nSize += sizeof(graph::CVertexBuffer*) * sHeader.numVB;
 	nSize += sizeof(CMeshGroup*) * sHeader.numMeshGroup;
 	nSize += sizeof(CMeshGroup) * sHeader.numMeshGroup;
 	nSize += sizeof(CMeshSet*) * sHeader.numMeshSet;

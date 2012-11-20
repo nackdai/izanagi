@@ -66,7 +66,7 @@ namespace izanagi {
 
 		/** 描画.
 		 */
-		IZ_BOOL Render(CGraphicsDevice* device)
+		IZ_BOOL Render(graph::CGraphicsDevice* device)
 		{
 			if (GetCurrentState() == STATE_NUM) {
 				return IZ_TRUE;

@@ -79,7 +79,7 @@ void CMeshSetInstance::SetSkeleton(CSkeletonInstance* pSkl)
 
 // 描画
 IZ_BOOL CMeshSetInstance::Render(
-	CGraphicsDevice* device,
+	graph::CGraphicsDevice* device,
 	void* renderHandler)
 {
 	IZ_ASSERT(m_pBody != IZ_NULL);

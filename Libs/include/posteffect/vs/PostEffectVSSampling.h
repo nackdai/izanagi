@@ -87,6 +87,7 @@ namespace izanagi {
 		IZ_ASSERT(m_hOffset != IZ_NULL);
 
 		m_pShader->SetVectorArray(
+            m_pDevice,
 			m_hOffset,
 			m_vOffset,
 			COUNTOF(m_vOffset));

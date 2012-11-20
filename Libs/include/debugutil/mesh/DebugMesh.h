@@ -113,7 +113,7 @@ namespace izanagi {
 		// インデックスバッファ作成
 		IZ_BOOL CreateIB(
 			IZ_UINT nIdxNum,
-			E_GRAPH_INDEX_BUFFER_FMT fmt);
+			graph::E_GRAPH_INDEX_BUFFER_FMT fmt);
 
 		// 頂点宣言作成
 		IZ_BOOL CreateVD(IZ_UINT flag);
@@ -181,7 +181,7 @@ namespace izanagi {
 		SMeshVtx* GetVtx() { return m_pVtx; }
 
 	private:
-		typedef IZ_UINT (*SetElemFunc)(IZ_UINT, SVertexElement*, IZ_UINT, IZ_WORD*);
+		typedef IZ_UINT (*SetElemFunc)(IZ_UINT, graph::SVertexElement*, IZ_UINT, IZ_WORD*);
 		static SetElemFunc SetElemFuncTbl[];
 
 		typedef IZ_UINT8* (*SetVtxFunc)(IZ_UINT, const SMeshVtx&, IZ_UINT8*);
@@ -190,11 +190,11 @@ namespace izanagi {
 		typedef IZ_UINT (*GetElemSizeFunc)(IZ_UINT);
 		static GetElemSizeFunc GetElemSizeFuncTbl[];
 
-		static IZ_UINT SetVtxElementPos(IZ_UINT flag, SVertexElement* pElem, IZ_UINT nPos, IZ_WORD* pOffset);
-		static IZ_UINT SetVtxElementNormal(IZ_UINT flag, SVertexElement* pElem, IZ_UINT nPos, IZ_WORD* pOffset);
-		static IZ_UINT SetVtxElementColor(IZ_UINT flag, SVertexElement* pElem, IZ_UINT nPos, IZ_WORD* pOffset);
-		static IZ_UINT SetVtxElementUV(IZ_UINT flag, SVertexElement* pElem, IZ_UINT nPos, IZ_WORD* pOffset);
-		static IZ_UINT SetVtxElementTangent(IZ_UINT flag, SVertexElement* pElem, IZ_UINT nPos, IZ_WORD* pOffset);
+		static IZ_UINT SetVtxElementPos(IZ_UINT flag, graph::SVertexElement* pElem, IZ_UINT nPos, IZ_WORD* pOffset);
+		static IZ_UINT SetVtxElementNormal(IZ_UINT flag, graph::SVertexElement* pElem, IZ_UINT nPos, IZ_WORD* pOffset);
+		static IZ_UINT SetVtxElementColor(IZ_UINT flag, graph::SVertexElement* pElem, IZ_UINT nPos, IZ_WORD* pOffset);
+		static IZ_UINT SetVtxElementUV(IZ_UINT flag, graph::SVertexElement* pElem, IZ_UINT nPos, IZ_WORD* pOffset);
+		static IZ_UINT SetVtxElementTangent(IZ_UINT flag, graph::SVertexElement* pElem, IZ_UINT nPos, IZ_WORD* pOffset);
 
 		static IZ_UINT8* SetVtxPos(IZ_UINT flag, const SMeshVtx& sVtx, IZ_UINT8* pVtx);
 		static IZ_UINT8* SetVtxNormal(IZ_UINT flag, const SMeshVtx& sVtx, IZ_UINT8* pVtx);
@@ -207,7 +207,7 @@ namespace izanagi {
 		static _T* CreateMesh(
 			void* pBuf,
 			IMemoryAllocator* pAllocator,
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			IZ_UINT nVtxFormFlag)
 		{
 			IZ_ASSERT(pBuf != IZ_NULL);
@@ -262,13 +262,13 @@ namespace izanagi {
 
 	protected:
 		IMemoryAllocator* m_Allocator;
-		CGraphicsDevice* m_pDevice;
+		graph::CGraphicsDevice* m_pDevice;
 
-		CVertexBuffer* m_pVB;
-		CIndexBuffer* m_pIB;
-		CVertexDeclaration* m_pVD;
+		graph::CVertexBuffer* m_pVB;
+		graph::CIndexBuffer* m_pIB;
+		graph::CVertexDeclaration* m_pVD;
 
-		E_GRAPH_PRIM_TYPE m_PrimType;
+		graph::E_GRAPH_PRIM_TYPE m_PrimType;
 		IZ_UINT m_nPrimCnt;
 
 		SMeshVtx* m_pVtx;

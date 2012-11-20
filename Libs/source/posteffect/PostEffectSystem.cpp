@@ -51,7 +51,7 @@ CPostEffectSystem* CPostEffectSystem::s_pInstance = IZ_NULL;
 */
 CPostEffectSystem* CPostEffectSystem::CreatePostEffectSystem(
 	IMemoryAllocator* pAllocator,
-	CGraphicsDevice* pDevice)
+	graph::CGraphicsDevice* pDevice)
 {
 	if (s_pInstance != IZ_NULL) {
 		return s_pInstance;
@@ -124,7 +124,7 @@ CPostEffect* CPostEffectSystem::CreatePostEffect(IInputStream* in)
 
 namespace {
 	IZ_BOOL _CheckColorSurface(
-		CSurface** pColorBuffer,
+		graph::CSurface** pColorBuffer,
 		IZ_UINT nColorBufferNum)
 	{
 		if (nColorBufferNum < 1) {
@@ -136,7 +136,7 @@ namespace {
 			return IZ_FALSE;
 		}
 
-		E_GRAPH_PIXEL_FMT fmtBase = pColorBuffer[0]->GetPixelFormat();
+		graph::E_GRAPH_PIXEL_FMT fmtBase = pColorBuffer[0]->GetPixelFormat();
 
 		for (IZ_UINT i = 1; i <  nColorBufferNum; ++i) {
 			if (pColorBuffer[i] == IZ_NULL) {
@@ -144,7 +144,7 @@ namespace {
 				return IZ_FALSE;
 			}
 
-			E_GRAPH_PIXEL_FMT fmt = pColorBuffer[i]->GetPixelFormat();
+			graph::E_GRAPH_PIXEL_FMT fmt = pColorBuffer[i]->GetPixelFormat();
 
 			// ピクセルフォーマットは一致してないといけない・・・
 			IZ_ASSERT(fmtBase == fmt);

@@ -34,7 +34,7 @@ namespace izanagi {
 		// インスタンス作成
 		static CPostEffect* CreatePostEffect(
 			IMemoryAllocator* pAllocator,
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			CPostEffectTextureCreator* pTexCreator,
 			CPostEffectVSManager* pVSMgr,
 			IInputStream* in);
@@ -57,15 +57,15 @@ namespace izanagi {
 			CPostEffectTextureCreator* pTexCreator,
 			IZ_UINT nPassIdx,
 			IZ_UINT& nCreatedTexTblPos,
-			const CTexture* tblCreatedTex[]);
-		CTexture* CreateTexture(
+			const graph::CTexture* tblCreatedTex[]);
+		graph::CTexture* CreateTexture(
 			CPostEffectTextureCreator* pTexCreator,
 			const S_PES_TEXTURE* pTexDesc);
 
 	public:
 		// ポストエフェクト実行
 		IZ_BOOL Apply(
-			CTexture* pInputSceneTex,
+			graph::CTexture* pInputSceneTex,
 			IZ_UINT nEnableTechIdx);
 
 		// リセット
@@ -86,12 +86,12 @@ namespace izanagi {
 		// テクスチャをセットする
 		IZ_BOOL SetTexture(
 			IZ_POSTEFFECT_HANDLE nHandle,
-			CTexture* pTex)
+			graph::CTexture* pTex)
 		{
 			return m_pShader->SetTexture(nHandle, pTex);
 		}
 
-		CTexture* GetTexture(IZ_UINT nIdx) { return m_pShader->GetTexture(nIdx); }
+		graph::CTexture* GetTexture(IZ_UINT nIdx) { return m_pShader->GetTexture(nIdx); }
 
 	public:
 		// パラメータ総数
@@ -113,7 +113,7 @@ namespace izanagi {
 		IZ_PCSTR GetID() const { return m_pShader->GetHeader().pesID; }
 
 		// INPUT_SCENEテクスチャ取得
-		CTexture* GetInputSceneTex() { return m_pShader->GetTextureTable().GetTextureByTextureType(E_POSTEFFECT_TEXTURE_TYPE_INPUT_SCENE); }
+		graph::CTexture* GetInputSceneTex() { return m_pShader->GetTextureTable().GetTextureByTextureType(E_POSTEFFECT_TEXTURE_TYPE_INPUT_SCENE); }
 
 	private:
 		// シェーダ取得
@@ -134,7 +134,7 @@ namespace izanagi {
 	
 	private:
 		IMemoryAllocator* m_Allocator;
-		CGraphicsDevice* m_pDevice;
+		graph::CGraphicsDevice* m_pDevice;
 
 		CPostEffectShader* m_pShader;
 

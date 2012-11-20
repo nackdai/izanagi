@@ -14,7 +14,7 @@ namespace izanagi {
 		// インスタンス作成
 		static CDebugMeshGrid* CreateDebugMeshGrid(
 			IMemoryAllocator* pAllocator,
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			IZ_COLOR nColor,
 			IZ_UINT nGridNumX,
 			IZ_UINT nGridNumY,
@@ -29,7 +29,7 @@ namespace izanagi {
 	protected:
 		// 初期化
 		IZ_BOOL Init(
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			IZ_UINT flag,
 			IZ_UINT nGridNumX,
 			IZ_UINT nGridNumY);

@@ -53,7 +53,7 @@ namespace izanagi {
 
 		static CModel* CreateModel(
 			IMemoryAllocator* pAllocator,
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			IInputStream* pIn,
 			IMshRenderHandler* pRenderHandler);
 

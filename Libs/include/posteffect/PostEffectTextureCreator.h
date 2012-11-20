@@ -13,7 +13,7 @@ namespace izanagi {
 	public:
 		static CPostEffectTextureCreator* CreatePostEffectTextureCreator(
 			IMemoryAllocator* pAllocator,
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			IZ_UINT nMaxTexNum);
 
 	private:
@@ -32,21 +32,21 @@ namespace izanagi {
 		void EndCreate() {}
 
 		// テクスチャ作成
-		CTexture* Create(
+		graph::CTexture* Create(
 			IZ_UINT16 nWidth,
 			IZ_UINT16 nHeight,
-			E_GRAPH_PIXEL_FMT fmt,
+			graph::E_GRAPH_PIXEL_FMT fmt,
 			IZ_BOOL bIsRenderTarget,
-			E_GRAPH_RSC_TYPE nCreateType,
+			graph::E_GRAPH_RSC_TYPE nCreateType,
 			E_POSTEFFECT_TEXTURE_TYPE type);
 
 		// テクスチャを探す
-		CTexture* Find(
+		graph::CTexture* Find(
 			IZ_UINT16 nWidth,
 			IZ_UINT16 nHeight,
-			E_GRAPH_PIXEL_FMT fmt,
+			graph::E_GRAPH_PIXEL_FMT fmt,
 			IZ_BOOL bIsRenderTarget,
-			E_GRAPH_RSC_TYPE nCreateType);
+			graph::E_GRAPH_RSC_TYPE nCreateType);
 
 		void ClearAll();
 
@@ -65,7 +65,7 @@ namespace izanagi {
 
 	private:
 		IMemoryAllocator* m_Allocator;
-		CGraphicsDevice* m_pDevice;
+		graph::CGraphicsDevice* m_pDevice;
 
 		// テクスチャリスト
 		STexHolder* m_pTexList;

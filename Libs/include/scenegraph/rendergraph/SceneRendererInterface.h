@@ -2,9 +2,9 @@
 #define __IZANAGI_SCENEGRAPH_SCENE_RENDERER_INTERFACE_H__
 
 #include "izStd.h"
+#include "izGraph.h"
 
 namespace izanagi {
-	class CGraphicsDevice;
 	class IRenderElement;
 	class IMshRenderHandler;
 	class IShader;
@@ -32,7 +32,7 @@ namespace izanagi {
 		 */
 		PURE_VIRTUAL(
 			IZ_BOOL IterRender(
-				CGraphicsDevice* device,
+				graph::CGraphicsDevice* device,
 				IZ_UINT passIdx,
 				IRenderElement* element,
 				IMshRenderHandler* renderHandler));

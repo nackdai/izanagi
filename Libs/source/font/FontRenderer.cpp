@@ -9,7 +9,7 @@ using namespace izanagi;
 */
 CFontRenderer* CFontRenderer::CreateFontRendererBmp(
 	IMemoryAllocator* pAllocator,
-	CGraphicsDevice* pDevice,
+	graph::CGraphicsDevice* pDevice,
 	IZ_UINT	nMaxRegisterNum,
 	IInputStream* in)
 {
@@ -25,7 +25,7 @@ CFontRenderer* CFontRenderer::CreateFontRendererBmp(
 */
 CFontRenderer* CreateFontRendererFT(
 	IMemoryAllocator* pAllocator,
-	CGraphicsDevice* pDevice,
+	graph::CGraphicsDevice* pDevice,
 	IZ_UINT	nMaxRegisterNum)
 {
 	// TODO

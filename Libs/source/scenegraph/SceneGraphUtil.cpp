@@ -37,7 +37,7 @@ IZ_FLOAT CSceneGraphUtil::ComputeScreenDistance(
 void CSceneGraphUtil::Screen2Clip(
 	SVector& vClip,
 	const SCameraParam& camera,
-	const SViewport& vp,
+	const graph::SViewport& vp,
 	IZ_INT nX, IZ_INT nY,
 	IZ_FLOAT fZ)
 {
@@ -57,7 +57,7 @@ void CSceneGraphUtil::Screen2Clip(
 void CSceneGraphUtil::Point2Ray(
 	SVector& ray,
 	const SCameraParam& camera,
-	const SViewport& vp,
+	const graph::SViewport& vp,
 	IZ_INT nX,
 	IZ_INT nY)
 {

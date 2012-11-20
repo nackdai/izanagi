@@ -37,7 +37,7 @@ CMeshSet* CMeshGroup::GetMeshSet(IZ_UINT idx)
 }
 
 IZ_BOOL CMeshGroup::Render(
-	CGraphicsDevice* pDevice,
+	graph::CGraphicsDevice* pDevice,
 	CSkeletonInstance* pSkl,
 	IMshRenderHandler* pRenderHandler)
 {
@@ -54,15 +54,15 @@ IZ_BOOL CMeshGroup::Render(
 
 IZ_UINT8* CMeshGroup::Read(
 	IZ_UINT8* pBuf,
-	CGraphicsDevice* pDevice,
+	graph::CGraphicsDevice* pDevice,
 	IInputStream* pIn)
 {
 	IZ_INPUT_READ_VRETURN(pIn, &m_Info, 0, sizeof(m_Info));
 
 	IZ_BOOL result = IZ_FALSE;
 
-	m_pVB = reinterpret_cast<CVertexBuffer**>(pBuf);
-	pBuf += sizeof(CVertexBuffer*) * m_Info.numVB;
+	m_pVB = reinterpret_cast<graph::CVertexBuffer**>(pBuf);
+	pBuf += sizeof(graph::CVertexBuffer*) * m_Info.numVB;
 
 	// Read vertices.
 	result = ReadVertices(
@@ -89,7 +89,7 @@ IZ_UINT8* CMeshGroup::Read(
 			CPrimitiveSet* pSubset = m_pMeshSet[i]->GetPrimSet(n);
 			IZ_ASSERT(pSubset != IZ_NULL);
 
-			CVertexBuffer* pVB = m_pVB[pSubset->GetInfo().idxVB];
+			graph::CVertexBuffer* pVB = m_pVB[pSubset->GetInfo().idxVB];
 			pSubset->SetVB(pVB);
 		}
 	}
@@ -99,16 +99,16 @@ IZ_UINT8* CMeshGroup::Read(
 
 namespace {
 	// Create VertexBuffer.
-	CVertexBuffer* _CreateVertexBuffer(
-		CGraphicsDevice* pDevice,
+	graph::CVertexBuffer* _CreateVertexBuffer(
+		graph::CGraphicsDevice* pDevice,
 		const S_MSH_VERTICES& sVtxInfo,
 		IInputStream* pIn)
 	{
 		// Create VertexBuffer.
-		CVertexBuffer* pVB = pDevice->CreateVertexBuffer(
+		graph::CVertexBuffer* pVB = pDevice->CreateVertexBuffer(
 								sVtxInfo.sizeVtx,
 								sVtxInfo.numVtx,
-								E_GRAPH_RSC_TYPE_STATIC);
+								graph::E_GRAPH_RSC_TYPE_STATIC);
 		IZ_BOOL ret = (pVB != IZ_NULL);
 		VGOTO(ret, __EXIT__);
 
@@ -131,7 +131,7 @@ __EXIT__:
 }	// namespace
 
 IZ_BOOL CMeshGroup::ReadVertices(
-	CGraphicsDevice* pDevice,
+	graph::CGraphicsDevice* pDevice,
 	IInputStream* pIn)
 {
 	IZ_ASSERT(m_pVB != IZ_NULL);

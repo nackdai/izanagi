@@ -6,7 +6,7 @@ using namespace izanagi;
 // インスタンス作成
 CDebugMeshAxis* CDebugMeshAxis::CreateDebugMeshAxis(
 	IMemoryAllocator* pAllocator,
-	CGraphicsDevice* pDevice,
+	graph::CGraphicsDevice* pDevice,
 	IZ_UINT flag,
 	IZ_UINT nPointNum/*= 0*/)
 {
@@ -26,7 +26,7 @@ CDebugMeshAxis* CDebugMeshAxis::CreateDebugMeshAxis(
 	VGOTO(result != (pInstance != IZ_NULL), __EXIT__);
 
 	{
-		pInstance->m_PrimType = E_GRAPH_PRIM_TYPE_LINELIST;
+		pInstance->m_PrimType = graph::E_GRAPH_PRIM_TYPE_LINELIST;
 
 		if (IsAxisX(flag)) {
 			++(pInstance->m_nPrimCnt);
@@ -61,7 +61,7 @@ __EXIT__:
 
 CDebugMeshAxis* CDebugMeshAxis::CreateDebugMeshAxisDefault(
 	IMemoryAllocator* pAllocator,
-	CGraphicsDevice* pDevice)
+	graph::CGraphicsDevice* pDevice)
 {
 	CDebugMeshAxis* pInstance = CreateDebugMeshAxis(
 									pAllocator,
@@ -99,7 +99,7 @@ CDebugMeshAxis::~CDebugMeshAxis()
 
 // 初期化
 IZ_BOOL CDebugMeshAxis::Init(
-	CGraphicsDevice* pDevice,
+	graph::CGraphicsDevice* pDevice,
 	IZ_UINT flag)
 {
 	VRETURN(

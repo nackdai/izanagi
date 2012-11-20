@@ -9,7 +9,7 @@ using namespace izanagi;
 IZ_BOOL CPostEffectVSManager::CreateVS(
 	IZ_UINT nVsProgramNum,
 	IMemoryAllocator* pAllocator,
-	CGraphicsDevice* pDevice,
+	graph::CGraphicsDevice* pDevice,
 	IZ_UINT8* pReadBuffer,
 	IInputStream* in)
 {
@@ -44,7 +44,7 @@ namespace {
 	template <class _T>
 	CPostEffectVS* _CreateVS(
 		IMemoryAllocator* pAllocator,
-		CGraphicsDevice* pDevice,
+		graph::CGraphicsDevice* pDevice,
 		IZ_UINT8* pProgram)
 	{
 		_T* p = CPostEffectVS::Create<_T>(
@@ -59,7 +59,7 @@ namespace {
 IZ_BOOL CPostEffectVSManager::CreateVS(
 	E_POSTEFFECT_VTX_SHADER type,
 	IMemoryAllocator* pAllocator,
-	CGraphicsDevice* pDevice,
+	graph::CGraphicsDevice* pDevice,
 	IZ_UINT8* pProgram)
 {
 	VRETURN(type < E_POSTEFFECT_VTX_SHADER_NUM);
@@ -69,7 +69,7 @@ IZ_BOOL CPostEffectVSManager::CreateVS(
 		return IZ_TRUE;
 	}
 
-	typedef CPostEffectVS* (*CreateFunc)(IMemoryAllocator*, CGraphicsDevice*, IZ_UINT8*);
+	typedef CPostEffectVS* (*CreateFunc)(IMemoryAllocator*, graph::CGraphicsDevice*, IZ_UINT8*);
 	static CreateFunc func[] = {
 		_CreateVS<CPostEffectVSSampling_1>,
 		_CreateVS<CPostEffectVSSampling_4>,
@@ -106,12 +106,12 @@ void CPostEffectVSManager::Release()
 }
 
 // レンダラ初期化
-IZ_BOOL CPostEffectVSManager::InitRenderer(CGraphicsDevice* pDevice)
+IZ_BOOL CPostEffectVSManager::InitRenderer(graph::CGraphicsDevice* pDevice)
 {
 	// 頂点宣言
-	static const SVertexElement VERTEX_ELEMENT[] = {
-		{0,  0, E_GRAPH_VTX_DECL_TYPE_FLOAT4, E_GRAPH_VTX_DECL_USAGE_POSITION, 0},	// 座標
-		{0, 16, E_GRAPH_VTX_DECL_TYPE_FLOAT2, E_GRAPH_VTX_DECL_USAGE_TEXCOORD, 0},	// テクスチャ座標
+	static const graph::SVertexElement VERTEX_ELEMENT[] = {
+		{0,  0, graph::E_GRAPH_VTX_DECL_TYPE_FLOAT4, graph::E_GRAPH_VTX_DECL_USAGE_POSITION, 0},	// 座標
+		{0, 16, graph::E_GRAPH_VTX_DECL_TYPE_FLOAT2, graph::E_GRAPH_VTX_DECL_USAGE_TEXCOORD, 0},	// テクスチャ座標
 	};
 
 	// 頂点バッファ作成
@@ -119,7 +119,7 @@ IZ_BOOL CPostEffectVSManager::InitRenderer(CGraphicsDevice* pDevice)
 		m_pVertexBuffer = pDevice->CreateVertexBuffer(
 							sizeof(CUSTOM_FVF),
 							VERTEX_NUM,
-							E_GRAPH_RSC_TYPE_STATIC);
+							graph::E_GRAPH_RSC_TYPE_STATIC);
 
 		IZ_ASSERT(m_pVertexBuffer != IZ_NULL);
 	}

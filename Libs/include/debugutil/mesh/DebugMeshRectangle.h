@@ -13,7 +13,7 @@ namespace izanagi {
 		// インスタンス作成
 		static CDebugMeshRectangle* CreateDebugMeshRectangle(
 			IMemoryAllocator* pAllocator,
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			IZ_UINT flag,
 			IZ_COLOR nColor,
 			IZ_UINT nDivideX,
@@ -30,7 +30,7 @@ namespace izanagi {
 	protected:
 		// 初期化
 		IZ_BOOL Init(
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			IZ_UINT flag,
 			IZ_UINT nDivideX,
 			IZ_UINT nDivideY,

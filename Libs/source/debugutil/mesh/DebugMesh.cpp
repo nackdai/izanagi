@@ -40,7 +40,7 @@ CDebugMesh::CDebugMesh()
 	m_pIB = IZ_NULL;
 	m_pVD = IZ_NULL;
 
-	m_PrimType = E_GRAPH_PRIM_TYPE_TRIANGLESTRIP;
+	m_PrimType = graph::E_GRAPH_PRIM_TYPE_TRIANGLESTRIP;
 	m_nPrimCnt = 0;
 
 	m_pVtx = IZ_NULL;
@@ -130,7 +130,7 @@ IZ_BOOL CDebugMesh::CreateVB(
 	m_pVB = m_pDevice->CreateVertexBuffer(
 				nStride,
 				nVtxNum,
-				E_GRAPH_RSC_TYPE_STATIC);
+				graph::E_GRAPH_RSC_TYPE_STATIC);
 
 	return (m_pVB != IZ_NULL);
 }
@@ -138,12 +138,12 @@ IZ_BOOL CDebugMesh::CreateVB(
 // インデックスバッファ作成
 IZ_BOOL CDebugMesh::CreateIB(
 	IZ_UINT nIdxNum,
-	E_GRAPH_INDEX_BUFFER_FMT fmt)
+	graph::E_GRAPH_INDEX_BUFFER_FMT fmt)
 {
 	m_pIB = m_pDevice->CreateIndexBuffer(
 				nIdxNum,
 				fmt,
-				E_GRAPH_RSC_TYPE_STATIC);
+				graph::E_GRAPH_RSC_TYPE_STATIC);
 
 	return (m_pIB != IZ_NULL);
 }
@@ -154,7 +154,7 @@ IZ_BOOL CDebugMesh::CreateVD(IZ_UINT flag)
 	IZ_C_ASSERT(COUNTOF(SetElemFuncTbl) == E_DEBUG_MESH_VTX_FORM_NUM);
 
 	// +1はENDの分
-	SVertexElement VtxElement[E_DEBUG_MESH_VTX_FORM_NUM + 1];
+	graph::SVertexElement VtxElement[E_DEBUG_MESH_VTX_FORM_NUM + 1];
 	FILL_ZERO(VtxElement, sizeof(VtxElement));
 
 	IZ_WORD nOffset = 0;
@@ -522,12 +522,12 @@ void CDebugMesh::ApplyOverlap(
 //////////////////////////////////////////////////////////////
 
 // 位置
-IZ_UINT CDebugMesh::SetVtxElementPos(IZ_UINT flag, SVertexElement* pElem, IZ_UINT nPos, IZ_WORD* pOffset)
+IZ_UINT CDebugMesh::SetVtxElementPos(IZ_UINT flag, graph::SVertexElement* pElem, IZ_UINT nPos, IZ_WORD* pOffset)
 {
 	if (IsPos(flag)) {
 		pElem[nPos].Offset = *pOffset;
-		pElem[nPos].Type = E_GRAPH_VTX_DECL_TYPE_FLOAT4;
-		pElem[nPos].Usage = E_GRAPH_VTX_DECL_USAGE_POSITION;
+		pElem[nPos].Type = graph::E_GRAPH_VTX_DECL_TYPE_FLOAT4;
+		pElem[nPos].Usage = graph::E_GRAPH_VTX_DECL_USAGE_POSITION;
 		*pOffset += GetPosSize(flag);
 		return nPos + 1;
 	}
@@ -535,12 +535,12 @@ IZ_UINT CDebugMesh::SetVtxElementPos(IZ_UINT flag, SVertexElement* pElem, IZ_UIN
 }
 
 // 法線
-IZ_UINT CDebugMesh::SetVtxElementNormal(IZ_UINT flag, SVertexElement* pElem, IZ_UINT nPos, IZ_WORD* pOffset)
+IZ_UINT CDebugMesh::SetVtxElementNormal(IZ_UINT flag, graph::SVertexElement* pElem, IZ_UINT nPos, IZ_WORD* pOffset)
 {
 	if (IsNormal(flag)) {
 		pElem[nPos].Offset = *pOffset;
-		pElem[nPos].Type = E_GRAPH_VTX_DECL_TYPE_FLOAT3;
-		pElem[nPos].Usage = E_GRAPH_VTX_DECL_USAGE_NORMAL;
+		pElem[nPos].Type = graph::E_GRAPH_VTX_DECL_TYPE_FLOAT3;
+		pElem[nPos].Usage = graph::E_GRAPH_VTX_DECL_USAGE_NORMAL;
 		*pOffset += GetNormalSize(flag);
 		return nPos + 1;
 	}
@@ -548,12 +548,12 @@ IZ_UINT CDebugMesh::SetVtxElementNormal(IZ_UINT flag, SVertexElement* pElem, IZ_
 }
 
 // 頂点カラー
-IZ_UINT CDebugMesh::SetVtxElementColor(IZ_UINT flag, SVertexElement* pElem, IZ_UINT nPos, IZ_WORD* pOffset)
+IZ_UINT CDebugMesh::SetVtxElementColor(IZ_UINT flag, graph::SVertexElement* pElem, IZ_UINT nPos, IZ_WORD* pOffset)
 {
 	if (IsColor(flag)) {
 		pElem[nPos].Offset = *pOffset;
-		pElem[nPos].Type = E_GRAPH_VTX_DECL_TYPE_COLOR;
-		pElem[nPos].Usage = E_GRAPH_VTX_DECL_USAGE_COLOR;
+		pElem[nPos].Type = graph::E_GRAPH_VTX_DECL_TYPE_COLOR;
+		pElem[nPos].Usage = graph::E_GRAPH_VTX_DECL_USAGE_COLOR;
 		*pOffset += GetColorSize(flag);
 		return nPos + 1;
 	}
@@ -561,12 +561,12 @@ IZ_UINT CDebugMesh::SetVtxElementColor(IZ_UINT flag, SVertexElement* pElem, IZ_U
 }
 
 // UV座標
-IZ_UINT CDebugMesh::SetVtxElementUV(IZ_UINT flag, SVertexElement* pElem, IZ_UINT nPos, IZ_WORD* pOffset)
+IZ_UINT CDebugMesh::SetVtxElementUV(IZ_UINT flag, graph::SVertexElement* pElem, IZ_UINT nPos, IZ_WORD* pOffset)
 {
 	if (IsUV(flag)) {
 		pElem[nPos].Offset = *pOffset;
-		pElem[nPos].Type = E_GRAPH_VTX_DECL_TYPE_FLOAT2;
-		pElem[nPos].Usage = E_GRAPH_VTX_DECL_USAGE_TEXCOORD;
+		pElem[nPos].Type = graph::E_GRAPH_VTX_DECL_TYPE_FLOAT2;
+		pElem[nPos].Usage = graph::E_GRAPH_VTX_DECL_USAGE_TEXCOORD;
 		*pOffset += GetUVSize(flag);
 		return nPos + 1;
 	}
@@ -574,12 +574,12 @@ IZ_UINT CDebugMesh::SetVtxElementUV(IZ_UINT flag, SVertexElement* pElem, IZ_UINT
 }
 
 // 接ベクトル
-IZ_UINT CDebugMesh::SetVtxElementTangent(IZ_UINT flag, SVertexElement* pElem, IZ_UINT nPos, IZ_WORD* pOffset)
+IZ_UINT CDebugMesh::SetVtxElementTangent(IZ_UINT flag, graph::SVertexElement* pElem, IZ_UINT nPos, IZ_WORD* pOffset)
 {
 	if (IsTangent(flag)) {
 		pElem[nPos].Offset = *pOffset;
-		pElem[nPos].Type = E_GRAPH_VTX_DECL_TYPE_FLOAT4;
-		pElem[nPos].Usage = E_GRAPH_VTX_DECL_USAGE_TANGENT;
+		pElem[nPos].Type = graph::E_GRAPH_VTX_DECL_TYPE_FLOAT4;
+		pElem[nPos].Usage = graph::E_GRAPH_VTX_DECL_USAGE_TANGENT;
 		*pOffset += GetTangentSize(flag);
 		return nPos + 1;
 	}

@@ -38,7 +38,7 @@ namespace izanagi {
 		static void Screen2Clip(
 			SVector& vClip,
 			const SCameraParam& sCamera,
-			const SViewport& vp,
+			const graph::SViewport& vp,
 			IZ_INT nX, IZ_INT nY,
 			IZ_FLOAT fZ);
 
@@ -47,7 +47,7 @@ namespace izanagi {
 		static void Point2Ray(
 			SVector& vRay,
 			const SCameraParam& sCamera,
-			const SViewport& vp,
+			const graph::SViewport& vp,
 			IZ_INT nX,
 			IZ_INT nY);
 

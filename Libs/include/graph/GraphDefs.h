@@ -5,7 +5,15 @@
 #include "izDefs.h"
 #include "izStd.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace graph
+{
+    enum {
+		TEX_STAGE_NUM = 8,
+		MAX_MRT_NUM = 2,
+	};
+
 	/**
 	* レンダーステート
 	*/
@@ -429,6 +437,7 @@ namespace izanagi {
 	* デバイスロスト用コールバック関数型
 	*/
 	typedef void (*GraphicsDeviceLostDeviceCallBack)();
+}   // namespace graph
 }	// namespace izanagi;
 
 #endif	// #if !defined(__IZANAGI_GRAPH_GRAPH_DEFS_H__)

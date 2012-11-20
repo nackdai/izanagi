@@ -5,7 +5,7 @@
 #include "scenegraph/mtrl/izMaterial.h"
 
 namespace izanagi {
-	class CGraphicsDevice;
+	class graph::CGraphicsDevice;
 
 	/**
 	 */
@@ -23,7 +23,7 @@ namespace izanagi {
 		/** •`‰æ.
 		 */
 		virtual IZ_BOOL Render(
-			CGraphicsDevice* device,
+			graph::CGraphicsDevice* device,
 			void* additional) = 0;
 
 		/** ”¼“§–¾‚©‚Ç‚¤‚©‚ðŽæ“¾.

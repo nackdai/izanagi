@@ -63,7 +63,7 @@ namespace izanagi {
 	struct S_IMG_TEX_HEADER {
 		IZ_UINT size;
 
-		E_GRAPH_PIXEL_FMT fmt;	// ピクセルフォーマット
+		graph::E_GRAPH_PIXEL_FMT fmt;	// ピクセルフォーマット
 
 		struct {
 			IZ_UINT type		: 2;	// テクスチャタイプ

@@ -48,7 +48,7 @@ namespace izanagi {
 
 		// 描画
 		inline IZ_BOOL Render(
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			IMshRenderHandler* pRenderHandler);
 
 		// スケルトンをセットする
@@ -176,7 +176,7 @@ namespace izanagi {
 
 	// 描画
 	IZ_BOOL CMeshGroupInstance::Render(
-		CGraphicsDevice* pDevice,
+		graph::CGraphicsDevice* pDevice,
 		IMshRenderHandler* pRenderHandler)
 	{
 		for (IZ_UINT i = 0; i < m_nSetNum; ++i) {
@@ -284,7 +284,7 @@ IZ_BOOL CMeshInstance::Render(
 	IZ_ASSERT(m_pGroups != IZ_NULL);
 	IZ_ASSERT(level < m_nGroupNum);
 
-	CGraphicsDevice* pDevice = m_pBody->GetGraphicsDevice();
+	graph::CGraphicsDevice* pDevice = m_pBody->GetGraphicsDevice();
 	IZ_ASSERT(pDevice != IZ_NULL);
 
 	// スケルトン設定

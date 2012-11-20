@@ -4,8 +4,8 @@
 #include "MSHFormat.h"
 
 namespace izanagi {
-	class CGraphicsDevice;
-	class CVertexBuffer;
+	class graph::CGraphicsDevice;
+	class graph::CVertexBuffer;
 	class IInputStream;
 	class CMeshGroup;
 	class CSkeletonInstance;
@@ -19,7 +19,7 @@ namespace izanagi {
 	public:
 		static CMesh* CreateMesh(
 			IMemoryAllocator* pAllocator,
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			IInputStream* pIn);
 
 	private:
@@ -48,11 +48,11 @@ namespace izanagi {
 		 */
 		IZ_UINT GetMeshGroupNum() const { return m_Header.numMeshGroup; }
 
-		CGraphicsDevice* GetGraphicsDevice() { return m_pDevice; }
+		graph::CGraphicsDevice* GetGraphicsDevice() { return m_pDevice; }
 
 	private:
 		IMemoryAllocator* m_Allocator;
-		CGraphicsDevice* m_pDevice;
+		graph::CGraphicsDevice* m_pDevice;
 
 		S_MSH_HEADER m_Header;
 

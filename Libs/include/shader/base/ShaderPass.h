@@ -134,10 +134,10 @@ namespace izanagi {
 		inline void Clear();
 
 		// ピクセルシェーダのセット
-		void SetPS(CPixelShader* pPS) { SAFE_REPLACE(m_pPS, pPS); }
+		void SetPS(graph::CPixelShader* pPS) { SAFE_REPLACE(m_pPS, pPS); }
 
 		// ピクセルシェーダ取得
-		CPixelShader* GetPS() { return m_pPS; }
+		graph::CPixelShader* GetPS() { return m_pPS; }
 
 		// パラメータ数取得
 		IZ_UINT GetParamNum() const { return m_Params.num; }
@@ -150,10 +150,10 @@ namespace izanagi {
 		const SSamplerInfo* GetSamplerInfo(IZ_UINT idx) const { return GetInfo(m_Samplers, idx); }
 
 		// 頂点シェーダのセット
-		void SetVS(CVertexShader* pVS) { SAFE_REPLACE(m_pVS, pVS); }
+		void SetVS(graph::CVertexShader* pVS) { SAFE_REPLACE(m_pVS, pVS); }
 
 		// 頂点シェーダの取得
-		CVertexShader* GetVS() { return m_pVS; }
+		graph::CVertexShader* GetVS() { return m_pVS; }
 
 		IZ_UINT GetIdx() const { return m_nIdx; }
 
@@ -169,10 +169,10 @@ namespace izanagi {
 		SParams<SSamplerInfo> m_Samplers;
 
 		// ピクセルシェーダ
-		CPixelShader* m_pPS;
+		graph::CPixelShader* m_pPS;
 
 		// 頂点シェーダ
-		CVertexShader* m_pVS;
+		graph::CVertexShader* m_pVS;
 	};
 
 	// inline ***************************************

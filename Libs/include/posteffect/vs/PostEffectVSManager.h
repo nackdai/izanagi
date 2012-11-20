@@ -26,7 +26,7 @@ namespace izanagi {
 		IZ_BOOL CreateVS(
 			IZ_UINT nVsProgramNum,
 			IMemoryAllocator* pAllocator,
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			IZ_UINT8* pReadBuffer,
 			IInputStream* in);
 
@@ -34,14 +34,14 @@ namespace izanagi {
 		IZ_BOOL CreateVS(
 			E_POSTEFFECT_VTX_SHADER type,
 			IMemoryAllocator* pAllocator,
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			IZ_UINT8* pProgram);
 
 		// 解放
 		void Release();
 
 		// レンダラ初期化
-		IZ_BOOL InitRenderer(CGraphicsDevice* pDevice);
+		IZ_BOOL InitRenderer(graph::CGraphicsDevice* pDevice);
 
 		// 頂点バッファにデータセット
 		IZ_BOOL SetVertexBuffer();
@@ -65,10 +65,10 @@ namespace izanagi {
 		CPostEffectVS* m_pVS[E_POSTEFFECT_VTX_SHADER_NUM];
 
 		// 頂点バッファ
-		CVertexBuffer* m_pVertexBuffer;
+		graph::CVertexBuffer* m_pVertexBuffer;
 
 		// 頂点宣言オブジェクト
-		CVertexDeclaration* m_pVertexDecl;
+		graph::CVertexDeclaration* m_pVertexDecl;
 	};
 
 	// inline *******************************

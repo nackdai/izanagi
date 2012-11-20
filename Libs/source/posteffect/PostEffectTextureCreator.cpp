@@ -5,7 +5,7 @@ using namespace izanagi;
 //////////////////////////////////////////////////////
 
 struct CPostEffectTextureCreator::STexHolder {
-	CTexture* tex;
+	graph::CTexture* tex;
 	IZ_BOOL lock;
 
 	E_POSTEFFECT_TEXTURE_TYPE type;
@@ -13,7 +13,7 @@ struct CPostEffectTextureCreator::STexHolder {
 	CTexHashItem item;
 
 	void Init(
-		CTexture* pTex,
+		graph::CTexture* pTex,
 		IZ_BOOL bIsLock,
 		E_POSTEFFECT_TEXTURE_TYPE nType)
 	{
@@ -34,7 +34,7 @@ struct CPostEffectTextureCreator::STexHolder {
 
 CPostEffectTextureCreator* CPostEffectTextureCreator::CreatePostEffectTextureCreator(
 	IMemoryAllocator* pAllocator,
-	CGraphicsDevice* pDevice,
+	graph::CGraphicsDevice* pDevice,
 	IZ_UINT nMaxTexNum)
 {
 	size_t nSize = sizeof(CPostEffectTextureCreator); 
@@ -100,15 +100,15 @@ void CPostEffectTextureCreator::BeginCreate()
 /**
 * テクスチャ作成
 */
-CTexture* CPostEffectTextureCreator::Create(
+graph::CTexture* CPostEffectTextureCreator::Create(
 	IZ_UINT16 nWidth,
 	IZ_UINT16 nHeight,
-	E_GRAPH_PIXEL_FMT fmt,
+	graph::E_GRAPH_PIXEL_FMT fmt,
 	IZ_BOOL bIsRenderTarget,
-	E_GRAPH_RSC_TYPE nRscType,
+	graph::E_GRAPH_RSC_TYPE nRscType,
 	E_POSTEFFECT_TEXTURE_TYPE type)
 {
-	CTexture* ret = IZ_NULL;
+	graph::CTexture* ret = IZ_NULL;
 
 	if (type != E_POSTEFFECT_TEXTURE_TYPE_PRIVATE) {
 		// まずは探す
@@ -156,18 +156,18 @@ CTexture* CPostEffectTextureCreator::Create(
 /**
 * テクスチャを探す
 */
-CTexture* CPostEffectTextureCreator::Find(
+graph::CTexture* CPostEffectTextureCreator::Find(
 	IZ_UINT16 nWidth,
 	IZ_UINT16 nHeight,
-	E_GRAPH_PIXEL_FMT fmt,
+	graph::E_GRAPH_PIXEL_FMT fmt,
 	IZ_BOOL bIsRenderTarget,
-	E_GRAPH_RSC_TYPE nRscType)
+	graph::E_GRAPH_RSC_TYPE nRscType)
 {
 	if (!m_bEnableFind) {
 		return IZ_NULL;
 	}
 
-	CTexture* ret = IZ_NULL;
+	graph::CTexture* ret = IZ_NULL;
 
 	const IZ_UINT nKey = nWidth;
 

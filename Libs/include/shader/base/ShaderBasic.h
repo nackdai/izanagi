@@ -29,7 +29,7 @@ namespace izanagi {
 		template <typename _SHADER>
 		static _SHADER* CreateShader(
 			IMemoryAllocator* pAllocator,
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			IInputStream* pIn)
 		{
 			void* pBuf = ALLOC_ZERO(pAllocator, sizeof(_SHADER));
@@ -58,11 +58,11 @@ namespace izanagi {
 
 	protected:
 		IZ_BOOL Init(
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			IInputStream* pIn);
 
 		IZ_UINT8* CreatePass(
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			IInputStream* pIn,
 			IZ_UINT8* pBuffer);
 
@@ -122,30 +122,30 @@ namespace izanagi {
 		// シェーダで利用するテクスチャを設定.
 		IZ_BOOL SetTexture(
 			IZ_SHADER_HANDLE hTex,
-			CBaseTexture* pTex);
+			graph::CBaseTexture* pTex);
 
 		// シェーダで利用するテクスチャを設定.
 		IZ_BOOL SetTexture(
 			IZ_PCSTR name,
-			CBaseTexture* tex);
+			graph::CBaseTexture* tex);
 
 		// シェーダで利用するテクスチャをサンプラに設定.
 		IZ_BOOL SetTextureToSampler(
 			IZ_SHADER_HANDLE hSmpl,
-			CBaseTexture* pTex);
+			graph::CBaseTexture* pTex);
 
 		// シェーダで利用するテクスチャをサンプラに設定.
 		IZ_BOOL SetTextureToSampler(
 			IZ_PCSTR name,
-			CBaseTexture* tex);
+			graph::CBaseTexture* tex);
 
-		CGraphicsDevice* GetDevice();
+		graph::CGraphicsDevice* GetDevice();
 
 	private:
 		IZ_BOOL SetParamValue(
 			IZ_UINT idx,
 			CShaderPass& cPass,
-			CShaderConstTable* pShd,
+			graph::IShader* pShd,
 			IZ_BOOL bIsVS);
 
 	protected:

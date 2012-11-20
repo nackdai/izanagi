@@ -11,7 +11,7 @@ static const IZ_BYTE FontImageData[] = {
 // インスタンス作成
 CDebugFont* CDebugFont::CreateDebugFont(
 	IMemoryAllocator* pAllocator,
-	CGraphicsDevice* pDevice)
+	graph::CGraphicsDevice* pDevice)
 {
 	IZ_ASSERT(pDevice != IZ_NULL);
 	IZ_ASSERT(pAllocator != IZ_NULL);
@@ -128,8 +128,8 @@ IZ_BOOL CDebugFont::CreateTexture()
 					IMAGE_WIDTH,
 					IMAGE_HEIGHT,
 					0xffffffff,
-					E_GRAPH_PIXEL_FMT_RGBA8,
-					E_GRAPH_RSC_TYPE_STATIC);
+					graph::E_GRAPH_PIXEL_FMT_RGBA8,
+					graph::E_GRAPH_RSC_TYPE_STATIC);
 	VRETURN(m_pFontTex != IZ_NULL);
 	
 	// データセット

@@ -5,7 +5,7 @@ using namespace izanagi;
 // インスタンス作成
 CDebugMeshRectangle* CDebugMeshRectangle::CreateDebugMeshRectangle(
 	IMemoryAllocator* pAllocator,
-	CGraphicsDevice* pDevice,
+	graph::CGraphicsDevice* pDevice,
 	IZ_UINT flag,
 	IZ_COLOR nColor,
 	IZ_UINT nDivideX,
@@ -67,7 +67,7 @@ __EXIT__:
 
 // 初期化
 IZ_BOOL CDebugMeshRectangle::Init(
-	CGraphicsDevice* pDevice,
+	graph::CGraphicsDevice* pDevice,
 	IZ_UINT flag,
 	IZ_UINT nDivideX,
 	IZ_UINT nDivideY,
@@ -80,10 +80,10 @@ IZ_BOOL CDebugMeshRectangle::Init(
 	IZ_UINT nIdxNum = nRectNum * 6;
 
 	VRETURN(CreateVB(flag, nVtxNum));
-	VRETURN(CreateIB(nIdxNum, E_GRAPH_INDEX_BUFFER_FMT_INDEX32));
+	VRETURN(CreateIB(nIdxNum, graph::E_GRAPH_INDEX_BUFFER_FMT_INDEX32));
 	VRETURN(CreateVD(flag));
 
-	m_PrimType = E_GRAPH_PRIM_TYPE_TRIANGLELIST;
+	m_PrimType = graph::E_GRAPH_PRIM_TYPE_TRIANGLELIST;
 	m_nPrimCnt = nRectNum * 2;
 
 	VRETURN(CreateDataBuffer(nVtxNum, nIdxNum));

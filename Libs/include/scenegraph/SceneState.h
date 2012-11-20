@@ -3,10 +3,9 @@
 
 #include "izDefs.h"
 #include "izStd.h"
+#include "izGraph.h"
 
 namespace izanagi {
-	class CGraphicsDevice;
-
 	/** ステートベース.
 	 */
 	class CSceneStateBase {
@@ -25,7 +24,7 @@ namespace izanagi {
 
 		/** 描画.
 		 */
-		virtual IZ_BOOL Render(CGraphicsDevice* device);
+		virtual IZ_BOOL Render(graph::CGraphicsDevice* device);
 
 		/** 更新.
 		 */

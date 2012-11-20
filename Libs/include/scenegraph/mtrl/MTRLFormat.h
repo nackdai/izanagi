@@ -98,7 +98,7 @@ namespace izanagi {
 
 	private:
 		// テクスチャ
-		CBaseTexture* tex;
+		graph::CBaseTexture* tex;
 
 		friend class CMaterial;
 	};

@@ -8,7 +8,7 @@ IZ_BOOL CSceneStateBase::Init()
 	return IZ_TRUE;
 }
 
-IZ_BOOL CSceneStateBase::Render(CGraphicsDevice* device)
+IZ_BOOL CSceneStateBase::Render(graph::CGraphicsDevice* device)
 {
 	return IZ_TRUE;
 }

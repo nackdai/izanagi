@@ -66,7 +66,7 @@ IZ_UINT CSceneRenderer::BeginRender(
 
 // 描画途中
 IZ_BOOL CSceneRenderer::IterRender(
-	CGraphicsDevice* device,
+	graph::CGraphicsDevice* device,
 	IZ_UINT passIdx, 
 	IRenderElement* element,
 	IMshRenderHandler* renderHandler)

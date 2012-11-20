@@ -15,7 +15,7 @@ namespace izanagi {
 		// インスタンス作成
 		static CImage* CreateImage(
 			IMemoryAllocator* pAllocator,
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			IInputStream* pInputStream);
 
 	protected:
@@ -30,7 +30,7 @@ namespace izanagi {
 
 		// テクスチャ読み込み
 		IZ_BOOL ReadTexture(
-			CGraphicsDevice* pDevice,
+			graph::CGraphicsDevice* pDevice,
 			IInputStream* pInputStream);
 
 	public:
@@ -41,13 +41,13 @@ namespace izanagi {
 		inline IZ_UINT GetTexNum() const;
 
 		// テクスチャ取得
-		inline CBaseTexture* GetTexture(IZ_UINT nIdx);
+		inline graph::CBaseTexture* GetTexture(IZ_UINT nIdx);
 
 	protected:
 		IMemoryAllocator* m_Allocator;
 
 		S_IMG_HEADER m_Header;
-		CBaseTexture** m_pTexture;
+		graph::CBaseTexture** m_pTexture;
 	};
 
 	// inline **********************************
@@ -95,7 +95,7 @@ namespace izanagi {
 	/**
 	* テクスチャ取得
 	*/
-	CBaseTexture* CImage::GetTexture(IZ_UINT nIdx)
+	graph::CBaseTexture* CImage::GetTexture(IZ_UINT nIdx)
 	{
 		IZ_ASSERT(nIdx < m_Header.numTextures);
 		IZ_ASSERT(m_pTexture != IZ_NULL);

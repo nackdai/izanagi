@@ -3,7 +3,7 @@
 using namespace izanagi;
 
 IZ_BOOL CPostEffectFunctorMGF::Apply(
-	CGraphicsDevice* pDevice,
+	graph::CGraphicsDevice* pDevice,
 	CPostEffectShader* pShader)
 {
 	IZ_BOOL ret = IZ_TRUE;
@@ -52,7 +52,7 @@ IZ_BOOL CPostEffectFunctorMGF::CreateTexture(
 	CPostEffect* pPostEffect,
 	CPostEffectShader* pShader,
 	CPostEffectTextureCreator* pTexCreator,
-	CGraphicsDevice* pDevice)
+	graph::CGraphicsDevice* pDevice)
 {
 	IZ_UINT nValidCnt = MGF_LOOP_NUM;
 
@@ -66,11 +66,11 @@ IZ_BOOL CPostEffectFunctorMGF::CreateTexture(
 
 			// 入力
 			IZ_UINT nSrcTexIdx = pShader->GetSrcTexIdx(0, nTechIdx, nPassIdx);
-			CTexture* pSrc = pShader->GetTexture(nSrcTexIdx);
+			graph::CTexture* pSrc = pShader->GetTexture(nSrcTexIdx);
 
 			// 出力
 			IZ_UINT nDstTexIdx = pShader->GetDstTexIdx(nTechIdx, nPassIdx);
-			CTexture* pDst = pShader->GetTexture(nDstTexIdx);
+			graph::CTexture* pDst = pShader->GetTexture(nDstTexIdx);
 
 			SAFE_REPLACE(m_DownScaleState[0].pSrc, pSrc);
 			SAFE_REPLACE(m_DownScaleState[0].pDst, pDst);
@@ -102,15 +102,15 @@ IZ_BOOL CPostEffectFunctorMGF::CreateTexture(
 				break;
 			}
 
-			E_GRAPH_PIXEL_FMT fmt = m_DownScaleState[i].pSrc->GetPixelFormat();
+			graph::E_GRAPH_PIXEL_FMT fmt = m_DownScaleState[i].pSrc->GetPixelFormat();
 
 			// 出力
-			CTexture* pDst = pTexCreator->Create(
+			graph::CTexture* pDst = pTexCreator->Create(
 								nW + 2,
 								nH + 2,
 								fmt,
 								IZ_TRUE, 
-								E_GRAPH_RSC_TYPE_STATIC,	// RenderTargetなので何でもいい
+								graph::E_GRAPH_RSC_TYPE_STATIC,	// RenderTargetなので何でもいい
 								E_POSTEFFECT_TEXTURE_TYPE_NONE);
 
 			SAFE_REPLACE(m_DownScaleState[i].pDst, pDst);
@@ -130,11 +130,11 @@ IZ_BOOL CPostEffectFunctorMGF::CreateTexture(
 
 				// 入力
 				IZ_UINT nSrcTexIdx = pShader->GetSrcTexIdx(0, nTechIdx, nPassIdx);
-				CTexture* pSrc = pShader->GetTexture(nSrcTexIdx);
+				graph::CTexture* pSrc = pShader->GetTexture(nSrcTexIdx);
 
 				// 出力
 				IZ_UINT nDstTexIdx = pShader->GetDstTexIdx(nTechIdx, nPassIdx);
-				CTexture* pDst = pShader->GetTexture(nDstTexIdx);
+				graph::CTexture* pDst = pShader->GetTexture(nDstTexIdx);
 
 				SAFE_REPLACE(m_BloomState[0][MGF_BLOOM_STATE_INIT].pSrc, pSrc);
 				SAFE_REPLACE(m_BloomState[0][MGF_BLOOM_STATE_INIT].pDst, pDst);
@@ -149,11 +149,11 @@ IZ_BOOL CPostEffectFunctorMGF::CreateTexture(
 
 				// 入力
 				IZ_UINT nSrcTexIdx = pShader->GetSrcTexIdx(0, nTechIdx, nPassIdx);
-				CTexture* pSrc = pShader->GetTexture(nSrcTexIdx);
+				graph::CTexture* pSrc = pShader->GetTexture(nSrcTexIdx);
 
 				// 出力
 				IZ_UINT nDstTexIdx = pShader->GetDstTexIdx(nTechIdx, nPassIdx);
-				CTexture* pDst = pShader->GetTexture(nDstTexIdx);
+				graph::CTexture* pDst = pShader->GetTexture(nDstTexIdx);
 
 				SAFE_REPLACE(m_BloomState[0][MGF_BLOOM_STATE_ITER].pSrc, pSrc);
 				SAFE_REPLACE(m_BloomState[0][MGF_BLOOM_STATE_ITER].pDst, pDst);
@@ -168,11 +168,11 @@ IZ_BOOL CPostEffectFunctorMGF::CreateTexture(
 
 				// 入力
 				IZ_UINT nSrcTexIdx = pShader->GetSrcTexIdx(0, nTechIdx, nPassIdx);
-				CTexture* pSrc = pShader->GetTexture(nSrcTexIdx);
+				graph::CTexture* pSrc = pShader->GetTexture(nSrcTexIdx);
 
 				// 出力
 				IZ_UINT nDstTexIdx = pShader->GetDstTexIdx(nTechIdx, nPassIdx);
-				CTexture* pDst = pShader->GetTexture(nDstTexIdx);
+				graph::CTexture* pDst = pShader->GetTexture(nDstTexIdx);
 
 				// 出力は新規作成する
 				pDst = pTexCreator->Create(
@@ -180,7 +180,7 @@ IZ_BOOL CPostEffectFunctorMGF::CreateTexture(
 						pDst->GetHeight(),
 						pDst->GetPixelFormat(),
 						IZ_TRUE,
-						E_GRAPH_RSC_TYPE_STATIC,
+						graph::E_GRAPH_RSC_TYPE_STATIC,
 						E_POSTEFFECT_TEXTURE_TYPE_NONE);
 				VRETURN(pDst != IZ_NULL);
 
@@ -202,16 +202,16 @@ IZ_BOOL CPostEffectFunctorMGF::CreateTexture(
 
 				IZ_UINT nW = m_BloomState[i][MGF_BLOOM_STATE_INIT].pSrc->GetWidth();
 				IZ_UINT nH = m_BloomState[i][MGF_BLOOM_STATE_INIT].pSrc->GetHeight();
-				E_GRAPH_PIXEL_FMT fmt = m_BloomState[i][MGF_BLOOM_STATE_INIT].pSrc->GetPixelFormat();
+				graph::E_GRAPH_PIXEL_FMT fmt = m_BloomState[i][MGF_BLOOM_STATE_INIT].pSrc->GetPixelFormat();
 
 				// 出力
 				// 同じサイズで作成する
-				CTexture* pDst = pTexCreator->Create(
+				graph::CTexture* pDst = pTexCreator->Create(
 									nW,
 									nH,
 									fmt,
 									IZ_TRUE,
-									E_GRAPH_RSC_TYPE_STATIC,
+									graph::E_GRAPH_RSC_TYPE_STATIC,
 									E_POSTEFFECT_TEXTURE_TYPE_NONE);
 				VRETURN(pDst != IZ_NULL);
 
@@ -249,15 +249,15 @@ IZ_BOOL CPostEffectFunctorMGF::CreateTexture(
 				// 必ず+2されているものとする・・・
 				IZ_UINT nW = m_DownScaleState[i].pDst->GetWidth() - 2;
 				IZ_UINT nH = m_DownScaleState[i].pDst->GetHeight() - 2;
-				E_GRAPH_PIXEL_FMT fmt = m_DownScaleState[i].pDst->GetPixelFormat();
+				graph::E_GRAPH_PIXEL_FMT fmt = m_DownScaleState[i].pDst->GetPixelFormat();
 
 				// 出力は新規作成
-				CTexture* pDst = pTexCreator->Create(
+				graph::CTexture* pDst = pTexCreator->Create(
 									nW,
 									nH,
 									fmt,
 									IZ_TRUE,
-									E_GRAPH_RSC_TYPE_STATIC,
+									graph::E_GRAPH_RSC_TYPE_STATIC,
 									E_POSTEFFECT_TEXTURE_TYPE_NONE);
 				VRETURN(pDst != IZ_NULL);
 
@@ -279,7 +279,7 @@ static char tmp[256];
 
 // 縮小
 IZ_BOOL CPostEffectFunctorMGF::ApplyMGFDownScale(
-	CGraphicsDevice* pDevice,
+	graph::CGraphicsDevice* pDevice,
 	CPostEffectShader* pShader)
 {
 	// 1/2 x 1/2 縮小を繰り返し行う
@@ -325,7 +325,7 @@ IZ_BOOL CPostEffectFunctorMGF::ApplyMGFDownScale(
 
 // ブルーム作成
 IZ_BOOL CPostEffectFunctorMGF::ApplyMGFRenderBloom(
-	CGraphicsDevice* pDevice,
+	graph::CGraphicsDevice* pDevice,
 	CPostEffectShader* pShader)
 {
 	IZ_BOOL ret = IZ_TRUE;
@@ -380,7 +380,7 @@ IZ_BOOL CPostEffectFunctorMGF::ApplyMGFRenderBloom(
 
 // マージ
 IZ_BOOL CPostEffectFunctorMGF::ApplyMGFMerge(
-	CGraphicsDevice* pDevice,
+	graph::CGraphicsDevice* pDevice,
 	CPostEffectShader* pShader)
 {
 	IZ_BOOL ret = IZ_TRUE;
@@ -396,15 +396,15 @@ IZ_BOOL CPostEffectFunctorMGF::ApplyMGFMerge(
 							nPassIdx);
 
 	// 出力先
-	CTexture* pFinalDst = pShader->GetTexture(nDstTexIdx);
+	graph::CTexture* pFinalDst = pShader->GetTexture(nDstTexIdx);
 
 	// レンダーターゲット切り替え
 	// 手動で行う・・・
 	
-	CSurface* pSurf = pFinalDst->GetSurface(0);
+	graph::CSurface* pSurf = pFinalDst->GetSurface(0);
 	ret = pDevice->BeginScene(
 			&pSurf, 1,
-			E_GRAPH_CLEAR_FLAG_COLOR,
+			graph::E_GRAPH_CLEAR_FLAG_COLOR,
 			0);
 	IZ_ASSERT(ret);
 
@@ -436,11 +436,17 @@ IZ_BOOL CPostEffectFunctorMGF::ApplyMGFMerge(
 			// レンダーステート設定
 			{
 				// 加算アルファブレンドする
-				CRenderStateSetter::EnableAlphaBlend(pDevice, IZ_TRUE);
-				CRenderStateSetter::SetAlphaBlendMethod(pDevice, E_GRAPH_ALPHA_BLEND_Cs_Cd);
+                pDevice->SetRenderState(
+                    graph::E_GRAPH_RS_ALPHABLENDENABLE,
+                    IZ_TRUE);
+                pDevice->SetRenderState(
+                    graph::E_GRAPH_RS_BLENDMETHOD,
+                    graph::E_GRAPH_ALPHA_BLEND_Cs_Cd);
 
 				// アルファテスト無し
-				CRenderStateSetter::EnableAlphaTest(pDevice, IZ_FALSE);
+                pDevice->SetRenderState(
+                    graph::E_GRAPH_RS_ALPHATESTENABLE,
+                    IZ_FALSE);
 			}
 
 			// TODO
@@ -448,7 +454,7 @@ IZ_BOOL CPostEffectFunctorMGF::ApplyMGFMerge(
 
 			// 描画
 			for (IZ_UINT i = 0; i < MGF_LOOP_NUM; ++i) {
-				CTexture* tex = m_BloomState[i][MGF_BLOOM_STATE_FIN].pDst;
+				graph::CTexture* tex = m_BloomState[i][MGF_BLOOM_STATE_FIN].pDst;
 
 				if (tex != IZ_NULL) {
 					pDevice->SetTexture(0, tex);
@@ -463,7 +469,7 @@ IZ_BOOL CPostEffectFunctorMGF::ApplyMGFMerge(
 		}
 
 		// 戻す
-		pDevice->EndScene(E_GRAPH_END_SCENE_FLAG_RT_0);
+		pDevice->EndScene(graph::E_GRAPH_END_SCENE_FLAG_RT_0);
 	}
 
 	return ret;

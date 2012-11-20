@@ -16,14 +16,14 @@ namespace izanagi {
 
 		struct STexHolder {
 			IZ_BOOL isDirty;
-			CTexture* tex;
+			graph::CTexture* tex;
 
 			STexHolder()
 			{
 				isDirty = IZ_FALSE;
 				tex = IZ_NULL;
 			}
-			void SetTexture(CTexture* _tex)
+			void SetTexture(graph::CTexture* _tex)
 			{
 				SAFE_REPLACE(tex, _tex);
 				isDirty = (tex != IZ_NULL);
@@ -73,15 +73,15 @@ namespace izanagi {
 		inline IZ_INT GetIdxBySemantic(IZ_PCSTR pszSemantic) const;
 
 		// テクスチャハンドルをセット
-		inline IZ_BOOL SetTexture(IZ_UINT idx, CTexture* pTex);
-		inline IZ_BOOL SetTextureByName(IZ_PCSTR pszName, CTexture* pTex);
-		inline IZ_BOOL SetTextureBySemantic(IZ_PCSTR pszSemantic, CTexture* pTex);
+		inline IZ_BOOL SetTexture(IZ_UINT idx, graph::CTexture* pTex);
+		inline IZ_BOOL SetTextureByName(IZ_PCSTR pszName, graph::CTexture* pTex);
+		inline IZ_BOOL SetTextureBySemantic(IZ_PCSTR pszSemantic, graph::CTexture* pTex);
 
 		// テクスチャの有無を確認
 		inline IZ_BOOL HasTextureBySemantic(IZ_PCSTR pszSemantic);
 
 		// テクスチャを取得
-		inline CTexture* GetTexture(IZ_UINT idx);
+		inline graph::CTexture* GetTexture(IZ_UINT idx);
 
 		// テクスチャ数を取得
 		inline IZ_UINT GetTexNum() const;
@@ -91,12 +91,12 @@ namespace izanagi {
 
 		// 指定されたテクスチャタイプの取得
 		// 複数ある場合は最初に見つかったものを返す
-		inline CTexture* GetTextureByTextureType(E_POSTEFFECT_TEXTURE_TYPE type);
+		inline graph::CTexture* GetTextureByTextureType(E_POSTEFFECT_TEXTURE_TYPE type);
 
 	private:
 		inline void Clean();
 
-		inline CTexture* GetTextureIfDirty(IZ_UINT idx);
+		inline graph::CTexture* GetTextureIfDirty(IZ_UINT idx);
 
 	private:
 		// テクスチャ数
@@ -228,7 +228,7 @@ namespace izanagi {
 	}
 
 	// テクスチャハンドルをセット
-	IZ_BOOL CPostEffectTextureTable::SetTexture(IZ_UINT idx, CTexture* pTex)
+	IZ_BOOL CPostEffectTextureTable::SetTexture(IZ_UINT idx, graph::CTexture* pTex)
 	{
 		IZ_ASSERT(m_pTexBuffer != IZ_NULL);
 
@@ -239,7 +239,7 @@ namespace izanagi {
 		return ret;
 	}
 
-	IZ_BOOL CPostEffectTextureTable::SetTextureByName(IZ_PCSTR pszName, CTexture* pTex)
+	IZ_BOOL CPostEffectTextureTable::SetTextureByName(IZ_PCSTR pszName, graph::CTexture* pTex)
 	{
 		IZ_INT nIdx = GetIdxByName(pszName);
 
@@ -254,7 +254,7 @@ namespace izanagi {
 		return ret;
 	}
 
-	IZ_BOOL CPostEffectTextureTable::SetTextureBySemantic(IZ_PCSTR pszSemantic, CTexture* pTex)
+	IZ_BOOL CPostEffectTextureTable::SetTextureBySemantic(IZ_PCSTR pszSemantic, graph::CTexture* pTex)
 	{
 		IZ_INT nIdx = GetIdxBySemantic(pszSemantic);
 
@@ -278,9 +278,9 @@ namespace izanagi {
 	}
 
 	// テクスチャハンドルを取得
-	CTexture* CPostEffectTextureTable::GetTexture(IZ_UINT idx)
+	graph::CTexture* CPostEffectTextureTable::GetTexture(IZ_UINT idx)
 	{
-		CTexture* ret = IZ_NULL;
+		graph::CTexture* ret = IZ_NULL;
 
 		if (idx < m_nTexNum) {
 			ret = m_pTexBuffer[idx].tex;
@@ -309,7 +309,7 @@ namespace izanagi {
 
 	// 指定されたテクスチャタイプの取得
 	// 複数ある場合は最初に見つかったものを返す
-	CTexture* CPostEffectTextureTable::GetTextureByTextureType(E_POSTEFFECT_TEXTURE_TYPE type)
+	graph::CTexture* CPostEffectTextureTable::GetTextureByTextureType(E_POSTEFFECT_TEXTURE_TYPE type)
 	{
 		for (IZ_UINT i = 0; i < m_nTexNum; ++i) {
 			if (m_pDesc[i].type == type) {
@@ -326,9 +326,9 @@ namespace izanagi {
 		}
 	}
 
-	CTexture* CPostEffectTextureTable::GetTextureIfDirty(IZ_UINT idx)
+	graph::CTexture* CPostEffectTextureTable::GetTextureIfDirty(IZ_UINT idx)
 	{
-		CTexture* ret = IZ_NULL;
+		graph::CTexture* ret = IZ_NULL;
 
 		if ((idx < m_nTexNum)
 			&& (m_pTexBuffer[idx].isDirty))

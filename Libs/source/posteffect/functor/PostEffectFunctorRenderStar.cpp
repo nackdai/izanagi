@@ -13,12 +13,12 @@ CPostEffectFunctorRenderStar::~CPostEffectFunctorRenderStar()
 }
 
 // スター出力テクスチャ取得
-CTexture* CPostEffectFunctorRenderStar::GetStarDstTex(CPostEffectShader* pShader)
+graph::CTexture* CPostEffectFunctorRenderStar::GetStarDstTex(CPostEffectShader* pShader)
 {
 	IZ_INT nTexIdx = pShader->GetDstTexIdx(m_nTechIdx, m_nPassIdx);
 	IZ_ASSERT(nTexIdx > 0);
 
-	CTexture* ret = pShader->GetTexture(nTexIdx);
+	graph::CTexture* ret = pShader->GetTexture(nTexIdx);
 
 	return ret;
 }
@@ -50,7 +50,7 @@ const CPostEffectFunctorRenderStar::SStarData CPostEffectFunctorRenderStar::STAR
 };
 
 IZ_BOOL CPostEffectFunctorRenderStar::Apply(
-	CGraphicsDevice* pDevice,
+	graph::CGraphicsDevice* pDevice,
 	CPostEffectShader* pShader)
 {
 	IZ_ASSERT(pShader != IZ_NULL);
@@ -120,7 +120,7 @@ IZ_BOOL CPostEffectFunctorRenderStar::Apply(
 	// Get parameter handle for texture.
 	IZ_POSTEFFECT_HANDLE hTexHandle = pShader->GetTexHandleByIdx(nTexIdx);
 
-	CTexture* pSrcTex = pShader->GetTexture(nTexIdx);
+	graph::CTexture* pSrcTex = pShader->GetTexture(nTexIdx);
 	IZ_ASSERT(pSrcTex != IZ_NULL);
 
 	// 元の画像のサイズ
@@ -147,7 +147,7 @@ IZ_BOOL CPostEffectFunctorRenderStar::Apply(
 	static char tmp[64];
 
 	for (IZ_INT nLine = 0; nLine < nStarLines; ++nLine) {
-		CTexture* pTexSource = pSrcTex;
+		graph::CTexture* pTexSource = pSrcTex;
 
 		// 各スターの線ごとの傾き
 		IZ_FLOAT fRad = fRadOffset + nLine * IZ_MATH_PI2 / nStarLines;
@@ -170,7 +170,7 @@ IZ_BOOL CPostEffectFunctorRenderStar::Apply(
 			CGraphPerf::BeginEvent(0, tmp);
 
 			// 描画先の決定
-			CTexture* pDst = IZ_NULL;
+			graph::CTexture* pDst = IZ_NULL;
 			{
 				if (sStarData.nPasses - 1 == nPass) {
 					// 最後だけは、別のバッファを使う
@@ -223,7 +223,7 @@ IZ_BOOL CPostEffectFunctorRenderStar::Apply(
 				SetAlphaBlendState(
 					pShader,
 					IZ_TRUE,
-					E_GRAPH_ALPHA_BLEND_Cs_Cd);
+					graph::E_GRAPH_ALPHA_BLEND_Cs_Cd);
 
 				result = pShader->BeginRender(
 							this,
@@ -309,7 +309,7 @@ IZ_BOOL CPostEffectFunctorRenderStar::CreateTexture(
 	CPostEffect* pPostEffect,
 	CPostEffectShader* pShader,
 	CPostEffectTextureCreator* pTexCreator,
-	CGraphicsDevice* pDevice)
+	graph::CGraphicsDevice* pDevice)
 {
 	UNUSED_ALWAYS(pPostEffect);
 	UNUSED_ALWAYS(pDevice);
@@ -321,19 +321,19 @@ IZ_BOOL CPostEffectFunctorRenderStar::CreateTexture(
 						m_nPassIdx);
 	IZ_ASSERT(nTexIdx > 0);
 
-	CTexture* pSrcTex = pShader->GetTexture(nTexIdx);
+	graph::CTexture* pSrcTex = pShader->GetTexture(nTexIdx);
 	IZ_ASSERT(pSrcTex != IZ_NULL);
 
 	IZ_UINT num = GetUseTexNum();
 
 	for (IZ_UINT i = 0; i < num; ++i) {
 		// 作成
-		CTexture* pTex = pTexCreator->Create(
+		graph::CTexture* pTex = pTexCreator->Create(
 							pSrcTex->GetWidth(),
 							pSrcTex->GetHeight(),
 							pSrcTex->GetPixelFormat(),
 							IZ_TRUE,
-							E_GRAPH_RSC_TYPE_STATIC,	// RenderTargetなので何でもいい
+							graph::E_GRAPH_RSC_TYPE_STATIC,	// RenderTargetなので何でもいい
 							E_POSTEFFECT_TEXTURE_TYPE_PRIVATE);
 
 		VRETURN(pTex != IZ_NULL);

@@ -135,7 +135,7 @@ IZ_BOOL CRenderGraph::Register(
 
 // 描画
 IZ_BOOL CRenderGraph::Render(
-	CGraphicsDevice* device,
+	graph::CGraphicsDevice* device,
 	ISceneRenderer* sceneRenderer,
 	IMshRenderHandler* renderHandler)
 {
@@ -166,7 +166,7 @@ IZ_BOOL CRenderGraph::Render(
 
 // 描画内部処理
 IZ_BOOL CRenderGraph::RenderInternal(
-	CGraphicsDevice* device,
+	graph::CGraphicsDevice* device,
 	ISceneRenderer* sceneRenderer,
 	IMshRenderHandler* renderHandler,
 	CStdSet<IRenderElement>& list,
