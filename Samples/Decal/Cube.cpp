@@ -2,7 +2,7 @@
 
 CCube* CCube::Create(
 	izanagi::IMemoryAllocator* allocator,
-	izanagi::CGraphicsDevice* device,
+	izanagi::graph::CGraphicsDevice* device,
 	IZ_FLOAT size)
 {
 	void* buf = ALLOC_ZERO(allocator, sizeof(CCube));
@@ -64,7 +64,7 @@ CCube::~CCube()
 // メッシュ作成
 IZ_BOOL CCube::CreateMesh(
 	izanagi::IMemoryAllocator* allocator,
-	izanagi::CGraphicsDevice* device,
+	izanagi::graph::CGraphicsDevice* device,
 	IZ_FLOAT size)
 {
 	static const IZ_UINT flag = izanagi::E_DEBUG_MESH_VTX_FORM_POS

@@ -88,7 +88,7 @@ int main(int argc, char* argv[])
 	IZ_UINT width = texHeight->GetWidth(0);
 	IZ_UINT height = texHeight->GetHeight(0);
 
-	IZ_UINT srcBPP = izanagi::CGraphUtil::GetBPP(
+	IZ_UINT srcBPP = izanagi::graph::CGraphUtil::GetBPP(
 						texHeight->GetPixelFormat());
 
 	// NOTE

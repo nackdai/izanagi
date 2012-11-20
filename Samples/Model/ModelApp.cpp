@@ -118,7 +118,7 @@ CModelApp::~CModelApp()
 // 初期化.
 IZ_BOOL CModelApp::InitInternal(
 	izanagi::IMemoryAllocator* allocator,
-	izanagi::CGraphicsDevice* device,
+	izanagi::graph::CGraphicsDevice* device,
 	izanagi::sample::CSampleCamera& camera)
 {
 	IZ_BOOL result = IZ_TRUE;
@@ -222,7 +222,7 @@ void CModelApp::ReleaseInternal()
 }
 
 // 更新.
-void CModelApp::UpdateInternal(izanagi::CGraphicsDevice* device)
+void CModelApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
 	GetCamera().Update();
 	m_Mdl->Update();
@@ -246,7 +246,7 @@ namespace {
 }
 
 // 描画.
-void CModelApp::RenderInternal(izanagi::CGraphicsDevice* device)
+void CModelApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
 	izanagi::sample::CSampleCamera& camera = GetCamera();
 

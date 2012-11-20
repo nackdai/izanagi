@@ -9,14 +9,14 @@ using namespace tool;
 // コンストラクタ
 CIMGImage::CIMGImage()
 {
-	Init(0, 0, E_GRAPH_PIXEL_FMT_RGBA8);
+	Init(0, 0, graph::E_GRAPH_PIXEL_FMT_RGBA8);
 }
 
 // コンストラクタ
 CIMGImage::CIMGImage(
 	IZ_UINT nWidth,
 	IZ_UINT nHeight,
-	E_GRAPH_PIXEL_FMT nFmt)
+	graph::E_GRAPH_PIXEL_FMT nFmt)
 {
 	Init(nWidth, nHeight, nFmt);
 }
@@ -33,7 +33,7 @@ CIMGImage::~CIMGImage()
 IZ_BOOL CIMGImage::Init(
 	IZ_UINT nWidth,
 	IZ_UINT nHeight,
-	E_GRAPH_PIXEL_FMT nFmt,
+	graph::E_GRAPH_PIXEL_FMT nFmt,
 	IZ_BOOL bIsAllocBuffer/*= IZ_TRUE*/)
 {
 	m_nWidth = nWidth;
@@ -60,7 +60,7 @@ IZ_BOOL CIMGImage::Init(
 /**
 * フォーマット変換
 */
-IZ_BOOL CIMGImage::ConvertPixelFormat(E_GRAPH_PIXEL_FMT nFmt)
+IZ_BOOL CIMGImage::ConvertPixelFormat(graph::E_GRAPH_PIXEL_FMT nFmt)
 {
 	// 出力サイズ
 	IZ_UINT nDstSize = CPixelFormatConverter::GetInstance()->ComputeByteSize(
@@ -73,9 +73,9 @@ IZ_BOOL CIMGImage::ConvertPixelFormat(E_GRAPH_PIXEL_FMT nFmt)
 
 	// TODO
 	// 変換フォーマット
-	E_GRAPH_PIXEL_FMT convFmt = nFmt;
-	if (convFmt == E_GRAPH_PIXEL_FMT_RGBA8) {
-		convFmt = E_GRAPH_PIXEL_FMT_BGRA8;
+	graph::E_GRAPH_PIXEL_FMT convFmt = nFmt;
+	if (convFmt == graph::E_GRAPH_PIXEL_FMT_RGBA8) {
+		convFmt = graph::E_GRAPH_PIXEL_FMT_BGRA8;
 	}
 
 	// 変換
@@ -107,7 +107,7 @@ IZ_BYTE* CIMGImage::GetPixelDataAsBGRA8()
 {
 	ClearTemporaryBuffer();
 
-	if (m_Fmt == E_GRAPH_PIXEL_FMT_BGRA8)
+	if (m_Fmt == graph::E_GRAPH_PIXEL_FMT_BGRA8)
 	{
 		m_TmpBuffer.resize(m_DataBuffer.size());
 		memcpy(&m_TmpBuffer[0], &m_DataBuffer[0], m_TmpBuffer.size());
@@ -122,7 +122,7 @@ IZ_BYTE* CIMGImage::GetPixelDataAsBGRA8()
 			m_nHeight,
 			m_Fmt,
 			&m_TmpBuffer[0],
-			E_GRAPH_PIXEL_FMT_BGRA8);
+			graph::E_GRAPH_PIXEL_FMT_BGRA8);
 
 		VRETURN_NULL(result);
 	}

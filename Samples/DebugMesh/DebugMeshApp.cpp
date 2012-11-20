@@ -19,7 +19,7 @@ CDebugMeshApp::~CDebugMeshApp()
 // 初期化.
 IZ_BOOL CDebugMeshApp::InitInternal(
 	izanagi::IMemoryAllocator* allocator,
-	izanagi::CGraphicsDevice* device,
+	izanagi::graph::CGraphicsDevice* device,
 	izanagi::sample::CSampleCamera& camera)
 {
 	IZ_BOOL result = IZ_TRUE;
@@ -163,7 +163,7 @@ void CDebugMeshApp::ReleaseInternal()
 }
 
 // 更新.
-void CDebugMeshApp::UpdateInternal(izanagi::CGraphicsDevice* device)
+void CDebugMeshApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
 	GetCamera().Update();
 }
@@ -186,7 +186,7 @@ namespace {
 }
 
 // 描画.
-void CDebugMeshApp::RenderInternal(izanagi::CGraphicsDevice* device)
+void CDebugMeshApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
 	static const IZ_BOOL isDrawTangentSpaceAxis = IZ_FALSE;
 

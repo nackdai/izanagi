@@ -16,7 +16,7 @@ CCubeMapApp::~CCubeMapApp()
 // 初期化.
 IZ_BOOL CCubeMapApp::InitInternal(
 	izanagi::IMemoryAllocator* allocator,
-	izanagi::CGraphicsDevice* device,
+	izanagi::graph::CGraphicsDevice* device,
 	izanagi::sample::CSampleCamera& camera)
 {
 	IZ_BOOL result = IZ_TRUE;
@@ -84,7 +84,7 @@ void CCubeMapApp::ReleaseInternal()
 }
 
 // 更新.
-void CCubeMapApp::UpdateInternal(izanagi::CGraphicsDevice* device)
+void CCubeMapApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
 	GetCamera().Update();
 
@@ -115,7 +115,7 @@ namespace {
 }
 
 // 描画.
-void CCubeMapApp::RenderInternal(izanagi::CGraphicsDevice* device)
+void CCubeMapApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
 	izanagi::sample::CSampleCamera& camera = GetCamera();
 

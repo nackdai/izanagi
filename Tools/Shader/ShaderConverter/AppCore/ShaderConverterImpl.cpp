@@ -340,7 +340,7 @@ BOOL CShaderConverter::ExportTexture()
 
 				sTex.ann.isRenderTarget = IZ_TRUE;
 				sTex.ann.isDynamic = IZ_FALSE;
-				sTex.ann.typeRsc = izanagi::E_GRAPH_RSC_TYPE_STATIC;
+				sTex.ann.typeRsc = izanagi::graph::E_GRAPH_RSC_TYPE_STATIC;
 
 				VRETURN(
 					CTextureUtil::SetAnnValue(
@@ -387,11 +387,11 @@ BOOL CShaderConverter::ExportSampler()
 				{
 					FILL_ZERO(&sSampler, sizeof(sSampler));
 
-					sSampler.state.minFilter = izanagi::E_GRAPH_TEX_FILTER_LINEAR;
-					sSampler.state.magFilter = izanagi::E_GRAPH_TEX_FILTER_LINEAR;
-					sSampler.state.mipFilter = izanagi::E_GRAPH_TEX_FILTER_LINEAR;
-					sSampler.state.addressU = izanagi::E_GRAPH_TEX_ADDRESS_CLAMP;
-					sSampler.state.addressV = izanagi::E_GRAPH_TEX_ADDRESS_CLAMP;
+					sSampler.state.minFilter = izanagi::graph::E_GRAPH_TEX_FILTER_LINEAR;
+					sSampler.state.magFilter = izanagi::graph::E_GRAPH_TEX_FILTER_LINEAR;
+					sSampler.state.mipFilter = izanagi::graph::E_GRAPH_TEX_FILTER_LINEAR;
+					sSampler.state.addressU = izanagi::graph::E_GRAPH_TEX_ADDRESS_CLAMP;
+					sSampler.state.addressV = izanagi::graph::E_GRAPH_TEX_ADDRESS_CLAMP;
 
 					CParamUtil::SetNameAndSemantic(sSampler, param);
 

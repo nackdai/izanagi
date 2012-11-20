@@ -37,9 +37,9 @@ public:
 		const izanagi::CTriangle tri[],
 		IZ_UINT triNum);
 
-	void CreateGraphicsObject(izanagi::CGraphicsDevice* device);
+	void CreateGraphicsObject(izanagi::graph::CGraphicsDevice* device);
 
-	void Draw(izanagi::CGraphicsDevice* device);
+	void Draw(izanagi::graph::CGraphicsDevice* device);
 
 	const izanagi::SVector& GetCenter() const;
 
@@ -103,8 +103,8 @@ private:
 
 	IZ_BOOL m_NeedCreateGraphicsObject;
 
-	izanagi::CVertexBuffer* m_VB;
-	izanagi::CVertexDeclaration* m_VD;
+	izanagi::graph::CVertexBuffer* m_VB;
+	izanagi::graph::CVertexDeclaration* m_VD;
 };
 
 

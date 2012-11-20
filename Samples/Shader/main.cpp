@@ -24,24 +24,24 @@ protected:
 	// èâä˙âª.
 	virtual IZ_BOOL InitInternal(
 		izanagi::IMemoryAllocator* allocator,
-		izanagi::CGraphicsDevice* device,
+		izanagi::graph::CGraphicsDevice* device,
 		izanagi::sample::CSampleCamera& camera);
 
 	// âï˙.
 	virtual void ReleaseInternal();
 
 	// çXêV.
-	virtual void UpdateInternal(izanagi::CGraphicsDevice* device);
+	virtual void UpdateInternal(izanagi::graph::CGraphicsDevice* device);
 
 	// ï`âÊ.
-	virtual void RenderInternal(izanagi::CGraphicsDevice* device);
+	virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device);
 
     // îwåiêFéÊìæ.
 	virtual IZ_COLOR GetBgColor() const;
 
 private:
 	izanagi::IMemoryAllocator* m_Allocator;
-	izanagi::CGraphicsDevice* m_Device;
+	izanagi::graph::CGraphicsDevice* m_Device;
 };
 
 CShaderApp::CShaderApp()
@@ -63,7 +63,7 @@ IZ_BOOL CShaderApp::OnKeyDown(IZ_UINT nChar)
 // èâä˙âª.
 IZ_BOOL CShaderApp::InitInternal(
 	izanagi::IMemoryAllocator* allocator,
-	izanagi::CGraphicsDevice* device,
+	izanagi::graph::CGraphicsDevice* device,
 	izanagi::sample::CSampleCamera& camera)
 {
 	m_Allocator = allocator;
@@ -95,13 +95,13 @@ void CShaderApp::ReleaseInternal()
 }
 
 // çXêV.
-void CShaderApp::UpdateInternal(izanagi::CGraphicsDevice* device)
+void CShaderApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
 	CStateManager::GetInstance().Update(m_Allocator, m_Device);
 }
 
 // ï`âÊ.
-void CShaderApp::RenderInternal(izanagi::CGraphicsDevice* device)
+void CShaderApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
 	CStateManager::GetInstance().Render(device);
 }

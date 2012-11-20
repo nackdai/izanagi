@@ -19,7 +19,7 @@ CStatePhongShader::~CStatePhongShader()
 }
 
 // 描画.
-IZ_BOOL CStatePhongShader::Render(izanagi::CGraphicsDevice* device)
+IZ_BOOL CStatePhongShader::Render(izanagi::graph::CGraphicsDevice* device)
 {
 	izanagi::SMatrix mtxL2W;
 	izanagi::SMatrix::SetUnit(mtxL2W);
@@ -145,7 +145,7 @@ IZ_BOOL CStatePhongShader::Enter(
 	izanagi::IMemoryAllocator* allocator,
 	void* val)
 {
-	izanagi::CGraphicsDevice* device = reinterpret_cast<izanagi::CGraphicsDevice*>(val);
+	izanagi::graph::CGraphicsDevice* device = reinterpret_cast<izanagi::graph::CGraphicsDevice*>(val);
 
 	IZ_BOOL result = IZ_TRUE;
 

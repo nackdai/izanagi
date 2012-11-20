@@ -29,16 +29,16 @@ namespace tool {
 		IZ_UINT ComputeByteSize(
 			IZ_UINT nWidth,
 			IZ_UINT nHeight,
-			E_GRAPH_PIXEL_FMT nFmt);
+			graph::E_GRAPH_PIXEL_FMT nFmt);
 
 		// コンバート
 		IZ_BOOL Convert(
 			IZ_BYTE* pSrc,
 			IZ_UINT nWidth,
 			IZ_UINT nHeight,
-			E_GRAPH_PIXEL_FMT nSrcFmt,
+			graph::E_GRAPH_PIXEL_FMT nSrcFmt,
 			IZ_BYTE* pDst,
-			E_GRAPH_PIXEL_FMT nDstFmt);
+			graph::E_GRAPH_PIXEL_FMT nDstFmt);
 
 	private:
 		// ラインバッファ

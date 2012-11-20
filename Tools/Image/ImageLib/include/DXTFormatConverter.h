@@ -20,14 +20,14 @@ namespace tool {
 			IZ_UINT height,
 			const void* src,
 			void* dst,
-			E_GRAPH_PIXEL_FMT fmt);
+			graph::E_GRAPH_PIXEL_FMT fmt);
 
 		static void Decompress(
 			IZ_UINT width,
 			IZ_UINT height,
 			const void* src,
 			void* dst,
-			E_GRAPH_PIXEL_FMT fmt);
+			graph::E_GRAPH_PIXEL_FMT fmt);
 	};
 }	// namespace tool
 }	// namespace izanagi

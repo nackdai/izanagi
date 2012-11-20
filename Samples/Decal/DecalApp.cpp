@@ -15,7 +15,7 @@ CDecalApp::~CDecalApp()
 // 初期化.
 IZ_BOOL CDecalApp::InitInternal(
 	izanagi::IMemoryAllocator* allocator,
-	izanagi::CGraphicsDevice* device,
+	izanagi::graph::CGraphicsDevice* device,
 	izanagi::sample::CSampleCamera& camera)
 {
 	IZ_BOOL result = IZ_TRUE;
@@ -119,7 +119,7 @@ void CDecalApp::ReleaseInternal()
 }
 
 // 更新.
-void CDecalApp::UpdateInternal(izanagi::CGraphicsDevice* device)
+void CDecalApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
 	GetCamera().Update();
 
@@ -146,15 +146,15 @@ namespace {
 }
 
 // 描画.
-void CDecalApp::RenderInternal(izanagi::CGraphicsDevice* device)
+void CDecalApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
 	izanagi::sample::CSampleCamera& camera = GetCamera();
 
 	m_Decal->CreateGraphicsObject(device);
 
 	device->SetRenderState(
-		izanagi::E_GRAPH_RS_CULLMODE,
-		izanagi::E_GRAPH_CULL_NONE);
+		izanagi::graph::E_GRAPH_RS_CULLMODE,
+		izanagi::graph::E_GRAPH_CULL_NONE);
 
 	izanagi::SMatrix mtx;
 	izanagi::SMatrix::SetUnit(mtx);

@@ -130,7 +130,7 @@ namespace {
 // 初期化.
 IZ_BOOL CMaterialApp::InitInternal(
 	izanagi::IMemoryAllocator* allocator,
-	izanagi::CGraphicsDevice* device,
+	izanagi::graph::CGraphicsDevice* device,
 	izanagi::sample::CSampleCamera& camera)
 {
 	IZ_BOOL result = IZ_TRUE;
@@ -310,7 +310,7 @@ void CMaterialApp::ReleaseInternal()
 }
 
 // 更新.
-void CMaterialApp::UpdateInternal(izanagi::CGraphicsDevice* device)
+void CMaterialApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
 	GetCamera().Update();
 	m_Mdl->Update();
@@ -328,7 +328,7 @@ void CMaterialApp::UpdateInternal(izanagi::CGraphicsDevice* device)
 }
 
 // 描画.
-void CMaterialApp::RenderInternal(izanagi::CGraphicsDevice* device)
+void CMaterialApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
 	izanagi::sample::CSampleCamera& camera = GetCamera();
 

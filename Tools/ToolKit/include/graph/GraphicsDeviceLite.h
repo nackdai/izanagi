@@ -65,7 +65,7 @@ namespace tool {
 		CTextureLite* CreateTexture(
 			IZ_UINT nWidth,
 			IZ_UINT nHeight,
-			izanagi::E_GRAPH_PIXEL_FMT fmt);
+			izanagi::graph::E_GRAPH_PIXEL_FMT fmt);
 
 		// テクスチャ保存
 		IZ_BOOL SaveTexture(

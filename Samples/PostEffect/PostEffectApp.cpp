@@ -26,7 +26,7 @@ IZ_BOOL CPostEffectApp::OnKeyDown(IZ_UINT nChar)
 // èâä˙âª.
 IZ_BOOL CPostEffectApp::InitInternal(
 	izanagi::IMemoryAllocator* allocator,
-	izanagi::CGraphicsDevice* device,
+	izanagi::graph::CGraphicsDevice* device,
 	izanagi::sample::CSampleCamera& camera)
 {
 	m_Allocator = allocator;
@@ -70,13 +70,13 @@ void CPostEffectApp::ReleaseInternal()
 }
 
 // çXêV.
-void CPostEffectApp::UpdateInternal(izanagi::CGraphicsDevice* device)
+void CPostEffectApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
     CStateManager::GetInstance().Update(m_Allocator, device);
 }
 
 // ï`âÊ.
-void CPostEffectApp::RenderInternal(izanagi::CGraphicsDevice* device)
+void CPostEffectApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
     CStateManager::GetInstance().Render(device);
 }

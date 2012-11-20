@@ -18,14 +18,14 @@ namespace tool {
 
 	public:
 		// Image内で保持されるフォーマット
-		static E_GRAPH_PIXEL_FMT GetFmtInImage(E_GRAPH_PIXEL_FMT nFmt);
+		static graph::E_GRAPH_PIXEL_FMT GetFmtInImage(graph::E_GRAPH_PIXEL_FMT nFmt);
 
 	private:
 		CIMGImage();
 		CIMGImage(
 			IZ_UINT nWidth,
 			IZ_UINT nHeight,
-			E_GRAPH_PIXEL_FMT nFmt);
+			graph::E_GRAPH_PIXEL_FMT nFmt);
 
 		~CIMGImage();
 
@@ -36,11 +36,11 @@ namespace tool {
 		IZ_BOOL Init(
 			IZ_UINT nWidth,
 			IZ_UINT nHeight,
-			E_GRAPH_PIXEL_FMT nFmt,
+			graph::E_GRAPH_PIXEL_FMT nFmt,
 			IZ_BOOL bIsAllocBuffer = IZ_TRUE);
 
 		// フォーマット変換
-		IZ_BOOL ConvertPixelFormat(E_GRAPH_PIXEL_FMT nFmt);
+		IZ_BOOL ConvertPixelFormat(graph::E_GRAPH_PIXEL_FMT nFmt);
 
 		/** RGBA8としてピクセルデータを取得.
 		 */
@@ -78,7 +78,7 @@ namespace tool {
 		inline IZ_UINT GetHeight() const;
 
 		// ピクセルフォーマット取得
-		inline E_GRAPH_PIXEL_FMT GetFmt() const;
+		inline graph::E_GRAPH_PIXEL_FMT GetFmt() const;
 
 		// データサイズ取得
 		inline IZ_UINT GetSize() const;
@@ -88,7 +88,7 @@ namespace tool {
 
 		IZ_UINT m_nWidth;
 		IZ_UINT m_nHeight;
-		E_GRAPH_PIXEL_FMT m_Fmt;
+		graph::E_GRAPH_PIXEL_FMT m_Fmt;
 
 		std::vector<IZ_BYTE> m_TmpBuffer;
 	};
@@ -153,7 +153,7 @@ namespace tool {
 	/**
 	* ピクセルフォーマット取得
 	*/
-	E_GRAPH_PIXEL_FMT CIMGImage::GetFmt() const
+	graph::E_GRAPH_PIXEL_FMT CIMGImage::GetFmt() const
 	{
 		return m_Fmt;
 	}

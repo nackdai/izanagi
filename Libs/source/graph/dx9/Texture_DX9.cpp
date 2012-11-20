@@ -244,7 +244,7 @@ namespace graph
 
 	    if (needCreateSurface) {
 		    mipLevel = (mipLevel == 0 ? maxMipLevel : mipLevel);
-		    size += sizeof(CSurfaceDX9) * mipLevel;
+		    size += sizeof(CSurfaceDX9*) * mipLevel;
 	    }
 	    else {
 		    mipLevel = 1;
@@ -255,20 +255,25 @@ namespace graph
 	    result = (buf != IZ_NULL);
         VGOTO(result, __EXIT__);
 
-        buf += sizeof(CTextureDX9);
+        IZ_UINT8* top = buf;
 
 	    // インスタンス作成
 	    instance = new (buf)CTextureDX9;
 	    {
+            buf += sizeof(CTextureDX9);
+
 		    instance->m_Allocator = allocator;
 		    SAFE_REPLACE(instance->m_Device, device);
 
 		    if (needCreateSurface) {
 			    instance->m_Surface = reinterpret_cast<CSurfaceDX9**>(buf);
+                buf += sizeof(CSurfaceDX9*) * mipLevel;
 		    }
 
 		    instance->AddRef();
 	    }
+
+        IZ_ASSERT(CStdUtil::GetPtrDistance(top, buf) == size);
 
 	    // 本体作成
 	    result = instance->CreateBody_Texture(
@@ -328,18 +333,23 @@ namespace graph
 		    goto __EXIT__;
 	    }
 
-        buf += sizeof(CTextureDX9);
+        IZ_UINT8* top = buf;
 
 	    // インスタンス作成
 	    instance = new (buf)CTextureDX9;
 	    {
+            buf += sizeof(CTextureDX9);
+
 		    instance->m_Allocator = allocator;
 		    SAFE_REPLACE(instance->m_Device, device);
 
 		    instance->m_Surface = reinterpret_cast<CSurfaceDX9**>(buf);
+            buf += sizeof(CSurfaceDX9*) * mipLevel;
 
 		    instance->AddRef();
 	    }
+
+        IZ_ASSERT(CStdUtil::GetPtrDistance(top, buf) == size);
 
 	    // 本体作成
 	    result = instance->CreateBody_RenderTarget(

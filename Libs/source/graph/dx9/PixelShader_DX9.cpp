@@ -65,5 +65,15 @@ namespace graph
 
 	    return instance;
     }
+
+    CPixelShaderDX9::CPixelShaderDX9()
+    {
+        m_PS = IZ_NULL;
+    }
+
+    CPixelShaderDX9::~CPixelShaderDX9()
+    {
+        SAFE_RELEASE(m_PS);
+    }
 }   // namespace graph
 }   // namespace izanagi

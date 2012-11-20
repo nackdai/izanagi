@@ -39,7 +39,7 @@ void* izReadImageMaster(const char* path)
 	// TODO
 	izanagi::tool::CIMGMaster* master = izanagi::tool::CImageReader::GetInstance().Read(
 		path,
-		izanagi::E_GRAPH_TEX_TYPE_PLANE);
+		izanagi::graph::E_GRAPH_TEX_TYPE_PLANE);
 
 	return master;
 }
@@ -229,7 +229,7 @@ const char* izGetImagePixelFormat(void* p)
 {
 	izanagi::tool::CIMGTexture* tex = reinterpret_cast<izanagi::tool::CIMGTexture*>(p);
 	if (tex != IZ_NULL) {
-		izanagi::E_GRAPH_PIXEL_FMT fmt = tex->GetTexInfo().fmt;
+		izanagi::graph::E_GRAPH_PIXEL_FMT fmt = tex->GetTexInfo().fmt;
 		VRETURN_NULL(fmt < COUNTOF(format));
 		return format[fmt];
 	}

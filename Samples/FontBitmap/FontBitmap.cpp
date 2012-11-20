@@ -13,17 +13,17 @@ protected:
 	// 初期化.
 	virtual IZ_BOOL InitInternal(
 		izanagi::IMemoryAllocator* allocator,
-		izanagi::CGraphicsDevice* device,
+		izanagi::graph::CGraphicsDevice* device,
 		izanagi::sample::CSampleCamera& camera);
 
 	// 解放.
 	virtual void ReleaseInternal();
 
 	// 更新.
-	virtual void UpdateInternal(izanagi::CGraphicsDevice* device);
+	virtual void UpdateInternal(izanagi::graph::CGraphicsDevice* device);
 
 	// 描画.
-	virtual void RenderInternal(izanagi::CGraphicsDevice* device);
+	virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device);
 
 private:
 	izanagi::CFontRenderer* m_FontUtf8;
@@ -43,7 +43,7 @@ CFontBitmapApp::~CFontBitmapApp()
 // 初期化.
 IZ_BOOL CFontBitmapApp::InitInternal(
 	izanagi::IMemoryAllocator* allocator,
-	izanagi::CGraphicsDevice* device,
+	izanagi::graph::CGraphicsDevice* device,
 	izanagi::sample::CSampleCamera& camera)
 {
 	// UTF8
@@ -86,13 +86,13 @@ void CFontBitmapApp::ReleaseInternal()
 }
 
 // 更新.
-void CFontBitmapApp::UpdateInternal(izanagi::CGraphicsDevice* device)
+void CFontBitmapApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
 	// Nothing is done...
 }
 
 // 描画.
-void CFontBitmapApp::RenderInternal(izanagi::CGraphicsDevice* device)
+void CFontBitmapApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
 	if (device->Begin2D()) {
 		// フォント描画

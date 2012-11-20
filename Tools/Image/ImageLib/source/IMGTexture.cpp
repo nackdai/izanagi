@@ -6,13 +6,13 @@ using namespace izanagi;
 using namespace tool;
 
 // 空のテクスチャを作成する
-CIMGTexture* CIMGTexture::CreateEmptyTexture(E_GRAPH_TEX_TYPE type)
+CIMGTexture* CIMGTexture::CreateEmptyTexture(graph::E_GRAPH_TEX_TYPE type)
 {
 	CIMGTexture* ret = new CIMGTexture(type);
 	if (ret
-		&& type == E_GRAPH_TEX_TYPE_CUBE)
+		&& type == graph::E_GRAPH_TEX_TYPE_CUBE)
 	{
-		ret->m_Images.resize(izanagi::E_GRAPH_CUBE_TEX_FACE_NUM);
+		ret->m_Images.resize(izanagi::graph::E_GRAPH_CUBE_TEX_FACE_NUM);
 	}
 	return ret;
 }
@@ -27,7 +27,7 @@ void CIMGTexture::Delete(CIMGTexture* tex)
 }
 
 // コンストラクタ
-CIMGTexture::CIMGTexture(E_GRAPH_TEX_TYPE nType/*= E_GRAPH_TEX_TYPE_PLANE*/)
+CIMGTexture::CIMGTexture(graph::E_GRAPH_TEX_TYPE nType/*= graph::E_GRAPH_TEX_TYPE_PLANE*/)
 {
 	memset(&m_TexInfo, 0, sizeof(m_TexInfo));
 	m_TexInfo.level = 1;
@@ -45,7 +45,7 @@ namespace {
 	inline IZ_UINT _ComputeMipLevel(
 		IZ_UINT nWidth,
 		IZ_UINT nHeight,
-		E_GRAPH_PIXEL_FMT nFmt,
+		graph::E_GRAPH_PIXEL_FMT nFmt,
 		IZ_UINT nMipLevel)
 	{
 		// 作成可能レベル
@@ -68,7 +68,7 @@ IZ_BOOL CIMGTexture::InitAsPlane(
 	IZ_UINT nWidth,
 	IZ_UINT nHeight,
 	IZ_UINT nMipLevel,
-	E_GRAPH_PIXEL_FMT nFmt,
+	graph::E_GRAPH_PIXEL_FMT nFmt,
 	IZ_BOOL bIsAllocBuffer/*= IZ_TRUE*/)
 {
 	IZ_BOOL ret = IZ_FALSE;
@@ -108,7 +108,7 @@ IZ_BOOL CIMGTexture::InitAsPlane(
 	if (ret) {
 		// テクスチャ情報をセット
 		SetTexInfo(
-			E_GRAPH_TEX_TYPE_PLANE,
+			graph::E_GRAPH_TEX_TYPE_PLANE,
 			nWidth,
 			nHeight,
 			nFmt,
@@ -129,14 +129,14 @@ IZ_BOOL CIMGTexture::InitAsCube(
 	IZ_UINT nWidth,
 	IZ_UINT nHeight,
 	IZ_UINT nMipLevel,
-	E_GRAPH_PIXEL_FMT nFmt,
+	graph::E_GRAPH_PIXEL_FMT nFmt,
 	IZ_BOOL bIsAllocBuffer/*= IZ_TRUE*/)
 {
 	IZ_BOOL ret = IZ_FALSE;
 
 	// 一応
 	Clear();
-	m_Images.resize(izanagi::E_GRAPH_CUBE_TEX_FACE_NUM);
+	m_Images.resize(izanagi::graph::E_GRAPH_CUBE_TEX_FACE_NUM);
 
 	// 作成可能レベル
 	nMipLevel = _ComputeMipLevel(
@@ -144,7 +144,7 @@ IZ_BOOL CIMGTexture::InitAsCube(
 					nFmt,
 					nMipLevel);
 
-	for (IZ_UINT i = 0; i < izanagi::E_GRAPH_CUBE_TEX_FACE_NUM; i++) {
+	for (IZ_UINT i = 0; i < izanagi::graph::E_GRAPH_CUBE_TEX_FACE_NUM; i++) {
 		m_Images[i].reserve(nMipLevel);
 
 		for (IZ_UINT n = 0; n < nMipLevel; n++) {
@@ -171,7 +171,7 @@ IZ_BOOL CIMGTexture::InitAsCube(
 	if (ret) {
 		// テクスチャ情報をセット
 		SetTexInfo(
-			E_GRAPH_TEX_TYPE_CUBE,
+			graph::E_GRAPH_TEX_TYPE_CUBE,
 			nWidth,
 			nHeight,
 			nFmt,
@@ -193,7 +193,7 @@ IZ_BOOL CIMGTexture::InitAsVolume(
 	IZ_UINT nWidth,
 	IZ_UINT nHeight,
 	IZ_UINT nMipLevel,
-	E_GRAPH_PIXEL_FMT nFmt,
+	graph::E_GRAPH_PIXEL_FMT nFmt,
 	IZ_BOOL bIsAllocBuffer/*= IZ_TRUE*/)
 {
 	// TODO
@@ -225,7 +225,7 @@ void CIMGTexture::Clear()
 /**
 * フォーマット変換
 */
-IZ_BOOL CIMGTexture::ConvertPixelFormat(E_GRAPH_PIXEL_FMT nFmt)
+IZ_BOOL CIMGTexture::ConvertPixelFormat(graph::E_GRAPH_PIXEL_FMT nFmt)
 {
 	IZ_BOOL ret = IZ_FALSE;
 
@@ -269,7 +269,7 @@ IZ_BOOL CIMGTexture::CreateMipMap(IZ_UINT nMipLevel/*= 1000*/)
 	IZ_BOOL ret = IZ_FALSE;
 
 	IZ_UINT nNum = GetImageNum();
-	E_GRAPH_PIXEL_FMT nFmt = m_TexInfo.fmt;
+	graph::E_GRAPH_PIXEL_FMT nFmt = m_TexInfo.fmt;
 	IZ_UINT nCurMipLevel = m_TexInfo.level;
 
 	IZ_UINT nWidth = 1 << m_TexInfo.w;
@@ -397,10 +397,10 @@ __EXIT__:
 
 // Cubeテクスチャの面として追加する.
 IZ_BOOL CIMGTexture::AddImageAsCubeFace(
-	izanagi::E_GRAPH_CUBE_TEX_FACE face,
+	izanagi::graph::E_GRAPH_CUBE_TEX_FACE face,
 	std::vector<CIMGImage*>& images)
 {
-	VRETURN(m_Images.size() == izanagi::E_GRAPH_CUBE_TEX_FACE_NUM);
+	VRETURN(m_Images.size() == izanagi::graph::E_GRAPH_CUBE_TEX_FACE_NUM);
 	VRETURN(images.size() > 0);
 	
 	if (m_Images[0].size() > 0) {
@@ -420,13 +420,13 @@ IZ_BOOL CIMGTexture::AddImageAsCubeFace(
 
 	// テクスチャ情報を設定
 	// XP面を基準とする
-	if (face == izanagi::E_GRAPH_CUBE_TEX_FACE_X_P
-		&& m_Images[izanagi::E_GRAPH_CUBE_TEX_FACE_X_P].size() > 0)
+	if (face == izanagi::graph::E_GRAPH_CUBE_TEX_FACE_X_P
+		&& m_Images[izanagi::graph::E_GRAPH_CUBE_TEX_FACE_X_P].size() > 0)
 	{
-		const CIMGImage* img = m_Images[izanagi::E_GRAPH_CUBE_TEX_FACE_X_P][0];
+		const CIMGImage* img = m_Images[izanagi::graph::E_GRAPH_CUBE_TEX_FACE_X_P][0];
 
 		SetTexInfo(
-			izanagi::E_GRAPH_TEX_TYPE_CUBE,
+			izanagi::graph::E_GRAPH_TEX_TYPE_CUBE,
 			img->GetWidth(),
 			img->GetHeight(),
 			img->GetFmt(),
@@ -446,26 +446,26 @@ IZ_BOOL CIMGTexture::Read(IInputStream* pIn)
 	IZ_BOOL ret = IZ_INPUT_READ(pIn, &m_TexInfo, 0, sizeof(m_TexInfo));
 	VGOTO(ret, __EXIT__);
 
-	E_GRAPH_TEX_TYPE nTexType = static_cast<E_GRAPH_TEX_TYPE>(m_TexInfo.type);
+	graph::E_GRAPH_TEX_TYPE nTexType = static_cast<graph::E_GRAPH_TEX_TYPE>(m_TexInfo.type);
 
 	IZ_UINT nWidth = 1 << m_TexInfo.w;
 	IZ_UINT nHeight = 1 << m_TexInfo.h;
 
 	// 初期化
 	switch (nTexType) {
-	case E_GRAPH_TEX_TYPE_PLANE:
+	case graph::E_GRAPH_TEX_TYPE_PLANE:
 		ret = InitAsPlane(
 				nWidth, nHeight,
 				m_TexInfo.level,
 				m_TexInfo.fmt);
 		break;
-	case E_GRAPH_TEX_TYPE_CUBE:
+	case graph::E_GRAPH_TEX_TYPE_CUBE:
 		ret = InitAsCube(
 				nWidth, nHeight,
 				m_TexInfo.level,
 				m_TexInfo.fmt);
 		break;
-	case E_GRAPH_TEX_TYPE_VOLUME:
+	case graph::E_GRAPH_TEX_TYPE_VOLUME:
 		ret = InitAsVolume(
 				m_TexInfo.depth,
 				nWidth, nHeight,

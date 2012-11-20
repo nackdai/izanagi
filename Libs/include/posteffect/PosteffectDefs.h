@@ -1,7 +1,6 @@
 #if !defined(__IZANAGI_POSTEFFECT_DEFS_H__)
 #define __IZANAGI_POSTEFFECT_DEFS_H__
 
-#include "izD3DDefs.h"
 #include "izStd.h"
 #include "graph/GraphDefs.h"
 

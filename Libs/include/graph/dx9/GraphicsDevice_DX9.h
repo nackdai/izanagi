@@ -24,7 +24,7 @@ namespace graph
 		virtual ~CGraphicsDeviceDX9();
 
     private:
-		virtual void ClearRenderState();
+        void ClearRenderState();
 
 	public:
 		// メモリからテクスチャ作成

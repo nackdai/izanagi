@@ -14,7 +14,7 @@ public:
 	 */
 	static CSampleEnvBox* CreateSampleEnvBox(
 		izanagi::IMemoryAllocator* allocator,
-		izanagi::CGraphicsDevice* device);
+		izanagi::graph::CGraphicsDevice* device);
 
 private:
 	CSampleEnvBox();
@@ -26,12 +26,12 @@ private:
 
 private:
 	// èâä˙âª
-	IZ_BOOL Init(izanagi::CGraphicsDevice* device);
+	IZ_BOOL Init(izanagi::graph::CGraphicsDevice* device);
 
 public:
 	/** ï`âÊ
 	 */
-	void Render(izanagi::CGraphicsDevice* device);
+	void Render(izanagi::graph::CGraphicsDevice* device);
 
 private:
 	enum {
@@ -49,9 +49,9 @@ private:
 private:
 	izanagi::IMemoryAllocator* m_Allocator;
 
-	izanagi::CVertexBuffer* m_VB;
-	izanagi::CIndexBuffer* m_IB;
-	izanagi::CVertexDeclaration* m_VD;
+	izanagi::graph::CVertexBuffer* m_VB;
+	izanagi::graph::CIndexBuffer* m_IB;
+	izanagi::graph::CVertexDeclaration* m_VD;
 };
 
 }

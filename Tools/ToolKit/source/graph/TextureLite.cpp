@@ -24,9 +24,9 @@ namespace {
 		D3DFMT_X8B8G8R8,
 		D3DFMT_D24S8,
 	};
-	IZ_C_ASSERT(COUNTOF(PixelFormatTbl) == izanagi::E_GRAPH_PIXEL_FMT_NUM);
+	IZ_C_ASSERT(COUNTOF(PixelFormatTbl) == izanagi::graph::E_GRAPH_PIXEL_FMT_NUM);
 
-	inline izanagi::E_GRAPH_PIXEL_FMT _GetPixelFmt(D3DFORMAT fmt)
+	inline izanagi::graph::E_GRAPH_PIXEL_FMT _GetPixelFmt(D3DFORMAT fmt)
 	{
 		IZ_INT ret = 0;
 		for (IZ_UINT i = 0; i < COUNTOF(PixelFormatTbl); i++) {
@@ -36,10 +36,10 @@ namespace {
 			}
 		}
 		IZ_ASSERT(ret >= 0);
-		return static_cast<izanagi::E_GRAPH_PIXEL_FMT>(ret);
+		return static_cast<izanagi::graph::E_GRAPH_PIXEL_FMT>(ret);
 	}
 
-	inline D3DFORMAT _GetDXPixelFmt(izanagi::E_GRAPH_PIXEL_FMT fmt)
+	inline D3DFORMAT _GetDXPixelFmt(izanagi::graph::E_GRAPH_PIXEL_FMT fmt)
 	{
 		IZ_ASSERT(fmt < COUNTOF(PixelFormatTbl));
 
@@ -214,7 +214,7 @@ CTextureLite* CTextureLite::CreateTexture(
 	IMemoryAllocator* pAllocator,
 	IZ_UINT nWidth,
 	IZ_UINT nHeight,
-	izanagi::E_GRAPH_PIXEL_FMT fmt)
+	izanagi::graph::E_GRAPH_PIXEL_FMT fmt)
 {
 	D3DFORMAT dxFmt = _GetDXPixelFmt(fmt);
 	VRETURN(dxFmt != D3DFMT_UNKNOWN);

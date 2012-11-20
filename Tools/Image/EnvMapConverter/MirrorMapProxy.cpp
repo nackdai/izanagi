@@ -16,8 +16,8 @@ CMirrorMapProxy::CMirrorMapProxy(
 	m_DivW = 1.0f / (width - 1);
 	m_DivH = 1.0f / (height - 1);
 
-	m_IsFloat = izanagi::CGraphUtil::IsFloatPixelFormat(m_Tex->GetPixelFormat());
-	m_Bpp = izanagi::CGraphUtil::GetBPP(m_Tex->GetPixelFormat());
+	m_IsFloat = izanagi::graph::CGraphUtil::IsFloatPixelFormat(m_Tex->GetPixelFormat());
+	m_Bpp = izanagi::graph::CGraphUtil::GetBPP(m_Tex->GetPixelFormat());
 }
 
 CMirrorMapProxy::~CMirrorMapProxy()
@@ -61,7 +61,7 @@ void CMirrorMapProxy::getUVFromRef(
 void CMirrorMapProxy::getRef(
 	IZ_UINT x, IZ_UINT y,
 	izanagi::SVector& ref,
-	izanagi::E_GRAPH_CUBE_TEX_FACE face/*= izanagi::E_GRAPH_CUBE_TEX_FACE_NUM*/)
+	izanagi::graph::E_GRAPH_CUBE_TEX_FACE face/*= izanagi::graph::E_GRAPH_CUBE_TEX_FACE_NUM*/)
 {
 	// [-1:1]に変換
 	IZ_FLOAT u = 2.0f * x * m_DivW - 1.0f;

@@ -8,12 +8,12 @@
 struct SImageElement {
 	izanagi::tool::CString path;
 	IZ_INT texIdx;
-	izanagi::E_GRAPH_CUBE_TEX_FACE face;
+	izanagi::graph::E_GRAPH_CUBE_TEX_FACE face;
 
 	SImageElement()
 	{
 		texIdx = -1;
-		face = izanagi::E_GRAPH_CUBE_TEX_FACE_NUM;
+		face = izanagi::graph::E_GRAPH_CUBE_TEX_FACE_NUM;
 	}
 };
 

@@ -2,7 +2,6 @@
 #define __IZANAGI_GRAPH_INTERNAL_RENDER_TARGET_MANAGER_H__
 
 #include "izDefs.h"
-#include "izD3DDefs.h"
 #include "std/StdStack.h"
 #include "graph/Surface.h"
 

@@ -22,21 +22,21 @@ protected:
 	// èâä˙âª.
 	virtual IZ_BOOL InitInternal(
 		izanagi::IMemoryAllocator* allocator,
-		izanagi::CGraphicsDevice* device,
+		izanagi::graph::CGraphicsDevice* device,
 		izanagi::sample::CSampleCamera& camera);
 
 	// âï˙.
 	virtual void ReleaseInternal();
 
 	// çXêV.
-	virtual void UpdateInternal(izanagi::CGraphicsDevice* device);
+	virtual void UpdateInternal(izanagi::graph::CGraphicsDevice* device);
 
 	// ï`âÊ.
-	virtual void RenderInternal(izanagi::CGraphicsDevice* device);
+	virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device);
 
 private:
 	izanagi::IMemoryAllocator* m_Allocator;
-	izanagi::CGraphicsDevice* m_Device;
+	izanagi::graph::CGraphicsDevice* m_Device;
 
     IZ_INT m_CurIdx;
     IZ_BOOL m_IsChangeState;

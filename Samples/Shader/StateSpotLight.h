@@ -14,7 +14,7 @@ public:
 
 public:
 	// 描画.
-	virtual IZ_BOOL Render(izanagi::CGraphicsDevice* device);
+	virtual IZ_BOOL Render(izanagi::graph::CGraphicsDevice* device);
 
 	// 開始
 	virtual IZ_BOOL Enter(
@@ -29,7 +29,7 @@ public:
 
 private:
     void RenderScene(
-        izanagi::CGraphicsDevice* device,
+        izanagi::graph::CGraphicsDevice* device,
         izanagi::CDebugMesh* mesh,
         const izanagi::SVector& position);
 

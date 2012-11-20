@@ -10,7 +10,7 @@ namespace {
 		IZ_UINT nWidth,
 		IZ_UINT nHeight,
 		IZ_UINT nLevel,
-		E_GRAPH_PIXEL_FMT nFmt,
+		graph::E_GRAPH_PIXEL_FMT nFmt,
 		CTextureLite* pSrcTex,
 		CIMGTexture** pDstTex)
 	{
@@ -48,7 +48,7 @@ namespace {
 // 読み込み
 CIMGTexture* CImageReaderImpl::Read(
 	LPCSTR lpszPath,
-	izanagi::E_GRAPH_TEX_TYPE nType)
+	izanagi::graph::E_GRAPH_TEX_TYPE nType)
 {
 	// グラフィックスデバイス取得
 	CGraphicsDeviceLite* pDevice = CGraphicsDeviceLite::GetInstance();
@@ -59,22 +59,22 @@ CIMGTexture* CImageReaderImpl::Read(
 	VRETURN_NULL(pTex);
 
 	// テクスチャインスタンス作成
-	CIMGTexture* ret = CIMGTexture::CreateEmptyTexture(izanagi::E_GRAPH_TEX_TYPE_PLANE);
+	CIMGTexture* ret = CIMGTexture::CreateEmptyTexture(izanagi::graph::E_GRAPH_TEX_TYPE_PLANE);
 	IZ_ASSERT(ret != IZ_NULL);
 
 	// データセット関数テーブル
-	typedef IZ_BOOL (*SetDataFunc)(IZ_UINT, IZ_UINT, IZ_UINT, E_GRAPH_PIXEL_FMT, CTextureLite*, CIMGTexture**);
+	typedef IZ_BOOL (*SetDataFunc)(IZ_UINT, IZ_UINT, IZ_UINT, graph::E_GRAPH_PIXEL_FMT, CTextureLite*, CIMGTexture**);
 	static SetDataFunc func[] = {
 		_SetDataAsPlane,
 		IZ_NULL,
 		IZ_NULL,
 	};
-	IZ_C_ASSERT(COUNTOF(func) == E_GRAPH_TEX_TYPE_NUM);
+	IZ_C_ASSERT(COUNTOF(func) == graph::E_GRAPH_TEX_TYPE_NUM);
 
 	IZ_UINT nWidth = pTex->GetWidth();
 	IZ_UINT nHeight = pTex->GetHeight();
 	IZ_UINT nLevel = pTex->GetMipMapNum();
-	E_GRAPH_PIXEL_FMT nFmt = pTex->GetPixelFormat();
+	graph::E_GRAPH_PIXEL_FMT nFmt = pTex->GetPixelFormat();
 
 	// データセット
 	IZ_BOOL result = (*func[nType])(

@@ -62,7 +62,7 @@ void CAngularMapProxy::getUVFromRef(
 void CAngularMapProxy::getRef(
 	IZ_UINT x, IZ_UINT y,
 	izanagi::SVector& ref,
-	izanagi::E_GRAPH_CUBE_TEX_FACE face/*= izanagi::E_GRAPH_CUBE_TEX_FACE_NUM*/)
+	izanagi::graph::E_GRAPH_CUBE_TEX_FACE face/*= izanagi::graph::E_GRAPH_CUBE_TEX_FACE_NUM*/)
 {
 	// [-1:1]に変換
 	IZ_FLOAT u = 2.0f * x * m_DivW - 1.0f;

@@ -37,8 +37,6 @@ namespace graph
 	    SAFE_RELEASE(m_Depth);
 
 	    SAFE_RELEASE(m_2DRenderer);
-
-        ClearRenderState();
     }
 
     // シーン描画開始

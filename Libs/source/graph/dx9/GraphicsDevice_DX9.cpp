@@ -18,9 +18,7 @@ namespace graph
     /**
     * インスタンス作成
     */
-    CGraphicsDevice* CGraphicsDevice::CreateGraphicsDevice(
-        const void* initialParam,
-	    IMemoryAllocator* allocator)
+    CGraphicsDevice* CGraphicsDevice::CreateGraphicsDevice(IMemoryAllocator* allocator)
     {
 	    if (s_Instance != IZ_NULL) {
 		    // 作成済みなので何もしない
@@ -97,6 +95,8 @@ namespace graph
     {
 	    SAFE_RELEASE(m_Device);
 	    SAFE_RELEASE(m_D3D);
+
+        ClearRenderState();
     }
 
     void CGraphicsDeviceDX9::ClearRenderState()
@@ -175,8 +175,8 @@ namespace graph
 		    // サーフェスのリセット
 		    //（フレームバッファのリセット）
 		    {
-                CSurfaceDX9* renderTarget = reinterpret_cast<CSurfaceDX9*>(m_RT);
-                CSurfaceDX9* deptthStencil = reinterpret_cast<CSurfaceDX9*>(m_Depth);
+                CSurfaceDX9*& renderTarget = reinterpret_cast<CSurfaceDX9*&>(m_RT);
+                CSurfaceDX9*& deptthStencil = reinterpret_cast<CSurfaceDX9*&>(m_Depth);
 
 			    if (m_RT != IZ_NULL) {
                     renderTarget->Reset(IZ_NULL, 0);
@@ -843,6 +843,72 @@ namespace graph
 
 	    // シザー矩形
 	    SetScissorTestRect(sRS.rcScissor);
+    }
+
+    IZ_BOOL CGraphicsDeviceDX9::SetTextureInternal(IZ_UINT nStage, CBaseTexture* pTex)
+    {
+        HRESULT hr = m_Device->SetTexture(
+            nStage,
+            pTex != NULL ? pTex->GetTexHandle() : NULL);
+	    VRETURN(SUCCEEDED(hr));
+
+        // 保持しておく
+	    m_Texture[nStage] = pTex;
+
+	    // うーん・・・
+	    // ステート
+	    if (pTex != NULL) {
+		    // MIN_FILTER
+		    SetSamplerStateFilter(
+			    nStage,
+			    E_GRAPH_SAMPLER_STATE_TYPE_MINFILTER,
+			    m_SamplerState[nStage].minFilter,
+			    pTex->GetState().minFilter);
+
+		    // MAG_FILTER
+		    SetSamplerStateFilter(
+			    nStage,
+			    E_GRAPH_SAMPLER_STATE_TYPE_MAGFILTER,
+			    m_SamplerState[nStage].magFilter,
+			    pTex->GetState().magFilter);
+
+		    // MIP_FILTER
+		    if (pTex->GetMipMapNum() > 1) {
+			    SetSamplerStateFilter(
+				    nStage,
+				    E_GRAPH_SAMPLER_STATE_TYPE_MIPFILTER,
+				    m_SamplerState[nStage].mipFilter,
+				    pTex->GetState().mipFilter);
+		    }
+
+		    // ADDRESS_U
+		    SetSamplerStateAddr(
+			    nStage,
+			    E_GRAPH_SAMPLER_STATE_TYPE_ADDRESSU,
+			    m_SamplerState[nStage].addressU,
+			    pTex->GetState().addressU);
+
+		    // ADDRESS_V
+		    SetSamplerStateAddr(
+			    nStage,
+			    E_GRAPH_SAMPLER_STATE_TYPE_ADDRESSV,
+			    m_SamplerState[nStage].addressV,
+			    pTex->GetState().addressV);
+	    }
+
+	    return IZ_TRUE;
+    }
+
+    void CGraphicsDeviceDX9::SetRenderTargetInternal(CSurface** pSurface, IZ_UINT num)
+    {
+        // レンダーターゲットを入れ替える
+	    for (IZ_UINT i = 0; i < num; ++i) {
+		    if (m_RenderState.curRT[i] != pSurface[i]) {
+                CSurfaceDX9* dx9Surface = reinterpret_cast<CSurfaceDX9*>(pSurface[i]);
+			    m_Device->SetRenderTarget(i, dx9Surface->GetRawInterface());
+			    SAFE_REPLACE(m_RenderState.curRT[i], pSurface[i]);
+		    }
+	    }
     }
 }   // namespace graph
 }   // namespace izanagi

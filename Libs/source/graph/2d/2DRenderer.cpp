@@ -118,23 +118,6 @@ namespace graph
 		    device->Release();
 	    }
 
-    #if 0
-	    // 頂点宣言
-	    static const D3D_VTX_ELEMENT VERTEX_ELEMENT[] = {
-		    {0,  0, D3DDECLTYPE_FLOAT4,   0, D3DDECLUSAGE_POSITION, 0},	// 座標
-		    {0, 16, D3DDECLTYPE_D3DCOLOR, 0, D3DDECLUSAGE_COLOR,    0},	// 頂点カラー
-		    {0, 20, D3DDECLTYPE_FLOAT2,   0, D3DDECLUSAGE_TEXCOORD, 0},	// テクスチャ座標
-		    D3DDECL_END(),
-	    };
-	    {
-		    m_pVD = device->CreateVertexDeclaration(VERTEX_ELEMENT);
-		    VRETURN(m_pVD != IZ_NULL);
-
-		    // かなり無茶するが・・・
-		    // m_pVDの分のデバイスの参照カウントを減らす
-		    device->Release();
-	    }
-    #else
 	    static const SVertexElement VtxElement[] = {
 		    {0,  0, E_GRAPH_VTX_DECL_TYPE_FLOAT4, E_GRAPH_VTX_DECL_USAGE_POSITION, 0},	// 座標
 		    {0, 16, E_GRAPH_VTX_DECL_TYPE_COLOR,  E_GRAPH_VTX_DECL_USAGE_COLOR,    0},	// 頂点カラー
@@ -144,31 +127,13 @@ namespace graph
 	    {
 		    m_pVD = device->CreateVertexDeclaration(VtxElement, COUNTOF(VtxElement));
 		    VRETURN(m_pVD != IZ_NULL);
-
-		    // かなり無茶するが・・・
-		    // m_pVDの分のデバイスの参照カウントを減らす
-		    device->Release();
 	    }
-    #endif
 
 	    // シェーダ
-	    {
-		    // 参照カウント数を覚えておく・・・
-		    IZ_UINT nRefCnt = device->GetRefCnt();
-
-		    m_pShader = C2DShader::Create2DShader(
-						    m_Allocator,
-						    device);
-		    VRETURN(m_pShader != IZ_NULL);
-
-		    // 増えたカウント数
-		    nRefCnt = device->GetRefCnt() - nRefCnt;
-
-		    // 増えた分だけデバイスの参照カウントを減らす
-		    for (IZ_UINT i = 0; i < nRefCnt; ++i) {
-			    device->Release();
-		    }
-	    }
+		m_pShader = C2DShader::Create2DShader(
+						m_Allocator,
+						device);
+		VRETURN(m_pShader != IZ_NULL);
 
 	    return IZ_TRUE;
     }

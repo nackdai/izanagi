@@ -27,30 +27,30 @@ private:
 public:
     IZ_BOOL Init(
         izanagi::IMemoryAllocator* allocator,
-        izanagi::CGraphicsDevice* device);
+        izanagi::graph::CGraphicsDevice* device);
 
     void Render(
         const izanagi::SCameraParam& camera,
-        izanagi::CGraphicsDevice* device);
+        izanagi::graph::CGraphicsDevice* device);
 
     void Release();
 
 private:
     IZ_BOOL InitTorus(
         izanagi::IMemoryAllocator* allocator,
-        izanagi::CGraphicsDevice* device);
+        izanagi::graph::CGraphicsDevice* device);
 
     IZ_BOOL InitEnvBox(
         izanagi::IMemoryAllocator* allocator,
-        izanagi::CGraphicsDevice* device);
+        izanagi::graph::CGraphicsDevice* device);
 
     void RenderTorus(
         const izanagi::SCameraParam& camera,
-        izanagi::CGraphicsDevice* device);
+        izanagi::graph::CGraphicsDevice* device);
 
     void RenderEnvBox(
         const izanagi::SCameraParam& camera,
-        izanagi::CGraphicsDevice* device);
+        izanagi::graph::CGraphicsDevice* device);
 
 private:
     izanagi::CDebugMesh* m_Torus;

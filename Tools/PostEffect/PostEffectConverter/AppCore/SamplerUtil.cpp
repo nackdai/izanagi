@@ -3,16 +3,16 @@
 #include "izToolKit.h"
 
 namespace {
-	izanagi::E_GRAPH_TEX_ADDRESS TexAddrTable[] = {
-		izanagi::E_GRAPH_TEX_ADDRESS_CLAMP,
-		izanagi::E_GRAPH_TEX_ADDRESS_WRAP,
-		izanagi::E_GRAPH_TEX_ADDRESS_MIRROR,
+	izanagi::graph::E_GRAPH_TEX_ADDRESS TexAddrTable[] = {
+		izanagi::graph::E_GRAPH_TEX_ADDRESS_CLAMP,
+		izanagi::graph::E_GRAPH_TEX_ADDRESS_WRAP,
+		izanagi::graph::E_GRAPH_TEX_ADDRESS_MIRROR,
 	};
 
-	izanagi::E_GRAPH_TEX_FILTER TexFilterTable[] = {
-		izanagi::E_GRAPH_TEX_FILTER_POINT,
-		izanagi::E_GRAPH_TEX_FILTER_POINT,
-		izanagi::E_GRAPH_TEX_FILTER_LINEAR,
+	izanagi::graph::E_GRAPH_TEX_FILTER TexFilterTable[] = {
+		izanagi::graph::E_GRAPH_TEX_FILTER_POINT,
+		izanagi::graph::E_GRAPH_TEX_FILTER_POINT,
+		izanagi::graph::E_GRAPH_TEX_FILTER_LINEAR,
 	};
 
 	// AddressU

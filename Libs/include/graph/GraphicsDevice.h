@@ -33,9 +33,7 @@ namespace graph
     public:
         /**
          */
-        static CGraphicsDevice* CreateGraphicsDevice(
-            const void* initialParam,
-            IMemoryAllocator* allocator);
+        static CGraphicsDevice* CreateGraphicsDevice(IMemoryAllocator* allocator);
 
 	protected:
 		CGraphicsDevice();
@@ -333,6 +331,11 @@ namespace graph
 
         PURE_VIRTUAL(IZ_UINT GetBackBufferWidth() const);
         PURE_VIRTUAL(IZ_UINT GetBackBufferHeight() const);
+
+        IMemoryAllocator* GetDeviceAllocator()
+        {
+            return m_Allocator;
+        }
 
         virtual void* GetPlatformInterface() { return IZ_NULL; }
 

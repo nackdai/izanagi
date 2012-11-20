@@ -18,7 +18,7 @@ public:
 	// 読み込み
 	static izanagi::tool::CIMGTexture* Read(
 		LPCSTR lpszPath,
-		izanagi::E_GRAPH_TEX_TYPE nType);
+		izanagi::graph::E_GRAPH_TEX_TYPE nType);
 };
 
 #endif	// #if !defined(__IMAGE_READER_IMPL_H__)

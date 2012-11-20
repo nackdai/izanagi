@@ -15,17 +15,17 @@ protected:
 	// 初期化.
 	virtual IZ_BOOL InitInternal(
 		izanagi::IMemoryAllocator* allocator,
-		izanagi::CGraphicsDevice* device,
+		izanagi::graph::CGraphicsDevice* device,
 		izanagi::sample::CSampleCamera& camera);
 
 	// 解放.
 	virtual void ReleaseInternal();
 
 	// 更新.
-	virtual void UpdateInternal(izanagi::CGraphicsDevice* device);
+	virtual void UpdateInternal(izanagi::graph::CGraphicsDevice* device);
 
 	// 描画.
-	virtual void RenderInternal(izanagi::CGraphicsDevice* device);
+	virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device);
 
 private:
 	izanagi::sample::CSampleEnvBox* m_Cube;

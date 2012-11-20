@@ -183,7 +183,7 @@ namespace {
 		if (ret) {
 			int func = (int)*p;
 
-			sState.AlphaTestFunc = static_cast<izanagi::E_GRAPH_CMP_FUNC>(func - 1);
+			sState.AlphaTestFunc = static_cast<izanagi::graph::E_GRAPH_CMP_FUNC>(func - 1);
 			sState.AlphaTestRef = (IZ_UINT8)*(p + 1);
 		}
 
@@ -277,9 +277,9 @@ BOOL CPassUtil::SetStateValue(
 		std::vector<IZ_UINT> tvTmp;
 		CGstateassignment sa = ::cgGetFirstStateAssignment(pass);
 
-		izanagi::E_GRAPH_BLEND src = izanagi::E_GRAPH_BLEND_FORCE_INT32;
-		izanagi::E_GRAPH_BLEND dst = izanagi::E_GRAPH_BLEND_FORCE_INT32;
-		izanagi::E_GRAPH_BLEND_OP op = izanagi::E_GRAPH_BLEND_OP_FORCE_INT32;
+		izanagi::graph::E_GRAPH_BLEND src = izanagi::graph::E_GRAPH_BLEND_FORCE_INT32;
+		izanagi::graph::E_GRAPH_BLEND dst = izanagi::graph::E_GRAPH_BLEND_FORCE_INT32;
+		izanagi::graph::E_GRAPH_BLEND_OP op = izanagi::graph::E_GRAPH_BLEND_OP_FORCE_INT32;
 
 		while (sa != NULL) {
 			if (_GetStateValue(tvTmp, "BlendOp", sa)) {
@@ -287,8 +287,8 @@ BOOL CPassUtil::SetStateValue(
 				VRETURN(result);
 
 				if (result) {
-					src = static_cast<izanagi::E_GRAPH_BLEND>(tvTmp[0] - 1);
-					dst = static_cast<izanagi::E_GRAPH_BLEND>(tvTmp[1] - 1);
+					src = static_cast<izanagi::graph::E_GRAPH_BLEND>(tvTmp[0] - 1);
+					dst = static_cast<izanagi::graph::E_GRAPH_BLEND>(tvTmp[1] - 1);
 				}
 
 				tvTmp.clear();
@@ -298,7 +298,7 @@ BOOL CPassUtil::SetStateValue(
 				VRETURN(result);
 
 				if (result) {
-					op = static_cast<izanagi::E_GRAPH_BLEND_OP>(tvTmp[0] - 1);
+					op = static_cast<izanagi::graph::E_GRAPH_BLEND_OP>(tvTmp[0] - 1);
 				}
 
 				tvTmp.clear();
@@ -307,9 +307,9 @@ BOOL CPassUtil::SetStateValue(
 			sa = ::cgGetNextStateAssignment(sa);
 		}
 
-		if ((src != izanagi::E_GRAPH_BLEND_FORCE_INT32)
-			&& (dst != izanagi::E_GRAPH_BLEND_FORCE_INT32)
-			&& (op != izanagi::E_GRAPH_BLEND_OP_FORCE_INT32))
+		if ((src != izanagi::graph::E_GRAPH_BLEND_FORCE_INT32)
+			&& (dst != izanagi::graph::E_GRAPH_BLEND_FORCE_INT32)
+			&& (op != izanagi::graph::E_GRAPH_BLEND_OP_FORCE_INT32))
 		{
 			sState.AlphaBlendMethod = IZ_GRAPH_ALPHA_BLEND_VAL(op, src, dst);
 		}
