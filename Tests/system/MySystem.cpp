@@ -44,7 +44,7 @@ IZ_BOOL CMySystem::Init(
 	m_GraphcAllocator.Init(DEVICE_BUF_SIZE, DEVICE_BUF);
 
 	// グラフィックスデバイス作成
-	m_pDevice = izanagi::CGraphicsDevice::CreateGrapicsDevice(
+	m_pDevice = izanagi::graph::CGraphicsDevice::CreateGrapicsDevice(
 					&m_GraphcAllocator);
 	if (!(result = (m_pDevice != IZ_NULL))) {
 		IZ_ASSERT(IZ_FALSE);

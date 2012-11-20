@@ -17,7 +17,7 @@ protected:
 
 protected:
 	// シェーダごとの初期化
-	IZ_BOOL InitInternal(izanagi::CGraphicsDevice* pDevice);
+	IZ_BOOL InitInternal(izanagi::graph::CGraphicsDevice* pDevice);
 
 public:
 	inline void SetMaterial(const izanagi::SMaterialParam& sMaterial);

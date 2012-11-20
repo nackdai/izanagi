@@ -36,7 +36,7 @@ public:
 	void Release();
 
 public:
-	izanagi::CGraphicsDevice* GetGraphicsDevice() { return m_pDevice; }
+	izanagi::graph::CGraphicsDevice* GetGraphicsDevice() { return m_pDevice; }
 	izanagi::IMemoryAllocator* GetMemoryAllocator() { return &m_cAllocator; }
 
 	izanagi::CDebugFont* GetDebugFont() { return m_pDebugFont; }
@@ -52,7 +52,7 @@ protected:
 	};
 
 protected:
-	izanagi::CGraphicsDevice* m_pDevice;
+	izanagi::graph::CGraphicsDevice* m_pDevice;
 	
 	izanagi::CStandardMemoryAllocator m_cAllocator;
 	izanagi::CStandardMemoryAllocator m_GraphcAllocator;

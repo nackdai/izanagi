@@ -1,7 +1,7 @@
 #include "RimLightShader.h"
 
 // シェーダごとの初期化
-BOOL CRimLightShader::InitInternal(izanagi::CGraphicsDevice* pDevice)
+BOOL CRimLightShader::InitInternal(izanagi::graph::CGraphicsDevice* pDevice)
 {
 	BOOL ret = CPhongShader::InitInternal(pDevice);
 

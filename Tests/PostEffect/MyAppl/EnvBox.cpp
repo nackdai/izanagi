@@ -23,7 +23,7 @@ CEnvBox::~CEnvBox()
 // 初期化
 IZ_BOOL CEnvBox::Init(
 	izanagi::IMemoryAllocator* pAllocator,
-	izanagi::CGraphicsDevice* pDevice,
+	izanagi::graph::CGraphicsDevice* pDevice,
 	LPCSTR lpszCubeTex,
 	LPCSTR lpszShader)
 {
@@ -41,8 +41,8 @@ IZ_BOOL CEnvBox::Init(
 	};
 
 	// 頂点宣言
-	static const izanagi::SVertexElement VERTEX_ELEMENT[] = {
-		{0, 0, izanagi::E_GRAPH_VTX_DECL_TYPE_FLOAT3, izanagi::E_GRAPH_VTX_DECL_USAGE_POSITION , 0},	// 座標
+	static const izanagi::graph::SVertexElement VERTEX_ELEMENT[] = {
+		{0, 0, izanagi::graph::E_GRAPH_VTX_DECL_TYPE_FLOAT3, izanagi::graph::E_GRAPH_VTX_DECL_USAGE_POSITION , 0},	// 座標
 	};
 
 	IZ_BOOL ret = IZ_TRUE;
@@ -52,7 +52,7 @@ IZ_BOOL CEnvBox::Init(
 		m_pVB = pDevice->CreateVertexBuffer(
 					sizeof(SVertex),
 					VTX_NUM,
-					izanagi::E_GRAPH_RSC_TYPE_STATIC);
+					izanagi::graph::E_GRAPH_RSC_TYPE_STATIC);
 		ret = (m_pVB != IZ_NULL);
 		IZ_ASSERT(ret);
 
@@ -68,8 +68,8 @@ IZ_BOOL CEnvBox::Init(
 	if (ret) {
 		m_pIB = pDevice->CreateIndexBuffer(
 					IDX_NUM,
-					izanagi::E_GRAPH_INDEX_BUFFER_FMT_INDEX16,
-					izanagi::E_GRAPH_RSC_TYPE_STATIC);
+					izanagi::graph::E_GRAPH_INDEX_BUFFER_FMT_INDEX16,
+					izanagi::graph::E_GRAPH_RSC_TYPE_STATIC);
 		ret = (m_pIB != IZ_NULL);
 		IZ_ASSERT(ret);
 
@@ -114,7 +114,7 @@ IZ_BOOL CEnvBox::Init(
 
 IZ_BOOL CEnvBox::InitShader(
 	izanagi::IMemoryAllocator* pAllocator,
-	izanagi::CGraphicsDevice* pDevice,
+	izanagi::graph::CGraphicsDevice* pDevice,
 	LPCSTR lpszShader)
 {
 	IZ_BOOL ret = IZ_FALSE;
@@ -147,11 +147,11 @@ void CEnvBox::Release()
 }
 
 // 描画
-void CEnvBox::Render(izanagi::CGraphicsDevice* pDevice)
+void CEnvBox::Render(izanagi::graph::CGraphicsDevice* pDevice)
 {
 	pDevice->SetRenderState(
-		izanagi::E_GRAPH_RS_CULLMODE,
-		izanagi::E_GRAPH_CULL_NONE);
+		izanagi::graph::E_GRAPH_RS_CULLMODE,
+		izanagi::graph::E_GRAPH_CULL_NONE);
 	{
 		pDevice->SetVertexBuffer(0, 0, sizeof(SVertex), m_pVB);
 		pDevice->SetIndexBuffer(m_pIB);
@@ -178,7 +178,7 @@ void CEnvBox::Render(izanagi::CGraphicsDevice* pDevice)
 	for (IZ_UINT i = 0; i < nPassCnt; i++) {
 		if (m_pShader->BeginPass(i)) {
 			pDevice->DrawIndexedPrimitive(
-				izanagi::E_GRAPH_PRIM_TYPE_TRIANGLESTRIP,
+				izanagi::graph::E_GRAPH_PRIM_TYPE_TRIANGLESTRIP,
 				0, 0,
 				VTX_NUM, 0,
 				IDX_NUM - 2);

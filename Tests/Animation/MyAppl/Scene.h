@@ -18,13 +18,13 @@ public:
 public:
 	IZ_BOOL Init(
 		izanagi::IMemoryAllocator* allocator,
-		izanagi::CGraphicsDevice* device);
+		izanagi::graph::CGraphicsDevice* device);
 
 	void Clear();
 
 	void Render(
 		CCharacter* character,
-		izanagi::CGraphicsDevice* device);
+		izanagi::graph::CGraphicsDevice* device);
 
 private:
 	izanagi::CShaderBasic* m_pShader;

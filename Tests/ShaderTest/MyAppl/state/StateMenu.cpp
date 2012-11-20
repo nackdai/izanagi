@@ -16,7 +16,7 @@ IZ_BOOL CStateMenu::Init()
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateMenu::Render(izanagi::CGraphicsDevice* device)
+IZ_BOOL CStateMenu::Render(izanagi::graph::CGraphicsDevice* device)
 {
 	Render2D();
 

@@ -28,7 +28,7 @@ CPostEffectSample::~CPostEffectSample()
 // 初期化
 IZ_BOOL CPostEffectSample::Init(
 	izanagi::IMemoryAllocator* pAllocator,
-	izanagi::CGraphicsDevice* pDevice)
+	izanagi::graph::CGraphicsDevice* pDevice)
 {
 	static const IZ_UINT nDefaultTexMgrCreateMax = 32;
 
@@ -151,7 +151,7 @@ IZ_BOOL CPostEffectSample::Apply()
 	IZ_BOOL ret = IZ_TRUE;
 
 	if (EnablePostEffect()) {
-		IZ_UINT nEndSceneTargetFlag = izanagi::E_GRAPH_END_SCENE_FLAG_RT_0;
+		IZ_UINT nEndSceneTargetFlag = izanagi::graph::E_GRAPH_END_SCENE_FLAG_RT_0;
 
 		m_pDevice->EndScene(nEndSceneTargetFlag);
 

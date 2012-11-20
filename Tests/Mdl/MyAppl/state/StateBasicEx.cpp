@@ -111,7 +111,7 @@ IZ_BOOL CStateBasicEx::Init()
 
 #define _Print CMySystem::GetInstance().GetDebugFont()->DBPrint
 
-IZ_BOOL CStateBasicEx::Render(izanagi::CGraphicsDevice* device)
+IZ_BOOL CStateBasicEx::Render(izanagi::graph::CGraphicsDevice* device)
 {
 	Render3D();
 	Render2D();
@@ -121,9 +121,9 @@ IZ_BOOL CStateBasicEx::Render(izanagi::CGraphicsDevice* device)
 
 void CStateBasicEx::Render3D()
 {
-	izanagi::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
+	izanagi::graph::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
 
-	//pDevice->SetRenderState(izanagi::E_GRAPH_RS_CULLMODE, izanagi::E_GRAPH_CULL_CCW);
+	//pDevice->SetRenderState(izanagi::graph::E_GRAPH_RS_CULLMODE, izanagi::graph::E_GRAPH_CULL_CCW);
 
 	// 描画開始
 	m_pShader->Begin(0);
@@ -237,7 +237,7 @@ IZ_BOOL CStateBasicEx::Destroy()
 
 IZ_BOOL CStateBasicEx::Enter(izanagi::IMemoryAllocator* allocator, void* val)
 {
-	izanagi::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
+	izanagi::graph::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
 	izanagi::IMemoryAllocator* pAllocator = CMySystem::GetInstance().GetMemoryAllocator();
 	izanagi::CFileInputStream input;
 
@@ -368,7 +368,7 @@ IZ_BOOL CStateBasicEx::Enter(izanagi::IMemoryAllocator* allocator, void* val)
 	//m_pTex = pDevice->CreateTextureFromFile("data/earth.bmp",
 	//m_pTex = pDevice->CreateTextureFromFile("data/dice.tga",
 	//m_pTex = pDevice->CreateTextureFromFile("data/Tiny_skin.dds",
-				izanagi::E_GRAPH_PIXEL_FMT_RGBA8);
+				izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA8);
 	IZ_ASSERT(m_pTex != IZ_NULL);
 
 

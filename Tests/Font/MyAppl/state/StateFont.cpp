@@ -16,7 +16,7 @@ IZ_BOOL CStateFont::Init()
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateFont::Render(izanagi::CGraphicsDevice* device)
+IZ_BOOL CStateFont::Render(izanagi::graph::CGraphicsDevice* device)
 {
 	if (CMySystem::GetInstance().GetGraphicsDevice()->Begin2D()) {
 		CMySystem::GetInstance().GetDebugFont()->Begin();
@@ -84,7 +84,7 @@ IZ_BOOL CStateFont::Destroy()
 
 IZ_BOOL CStateFont::Enter(izanagi::IMemoryAllocator* allocator, void* val)
 {
-	izanagi::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
+	izanagi::graph::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
 	izanagi::IMemoryAllocator* pAllocator = CMySystem::GetInstance().GetMemoryAllocator();
 
 	izanagi::CFileInputStream cIn;

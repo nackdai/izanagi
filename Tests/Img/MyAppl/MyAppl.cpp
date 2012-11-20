@@ -95,7 +95,7 @@ IZ_BOOL CMyAppl::Init(
 	VRETURN(ret);
 
 #if 0
-	CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
+	graph::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
 	m_pRT = pDevice->CreateRenderTarget(
 				640, 480,
 				D3DFMT_A8R8G8B8);
@@ -133,7 +133,7 @@ IZ_BOOL CMyAppl::Render()
 {
 	static const D3DCOLOR color = D3DCOLOR_ARGB(255, 0, 128, 255);
 
-	izanagi::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
+	izanagi::graph::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
 
 	pDevice->BeginRender(
 		D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER | D3DCLEAR_STENCIL,

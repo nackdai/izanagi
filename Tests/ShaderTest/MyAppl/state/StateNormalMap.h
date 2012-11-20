@@ -15,7 +15,7 @@ public:
 
 public:
 	IZ_BOOL Init();
-	IZ_BOOL Render(izanagi::CGraphicsDevice* device);
+	IZ_BOOL Render(izanagi::graph::CGraphicsDevice* device);
 	IZ_BOOL Update();
 	IZ_BOOL Destroy();
 	IZ_BOOL Enter(izanagi::IMemoryAllocator* allocator, void* val);
@@ -32,8 +32,8 @@ protected:
 protected:
 	CNormalMapShader* m_pShader;
 
-	izanagi::CTexture* m_pTex;
-	izanagi::CTexture* m_pNormalMap;
+	izanagi::graph::CTexture* m_pTex;
+	izanagi::graph::CTexture* m_pNormalMap;
 
 	izanagi::CDebugMeshGrid* m_pGrid;
 	izanagi::CDebugMeshAxis* m_pAxis;

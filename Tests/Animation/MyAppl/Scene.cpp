@@ -44,7 +44,7 @@ namespace {
 
 IZ_BOOL CScene::Init(
 	izanagi::IMemoryAllocator* allocator,
-	izanagi::CGraphicsDevice* device)
+	izanagi::graph::CGraphicsDevice* device)
 {
 	IZ_ASSERT(allocator != IZ_NULL);
 	IZ_ASSERT(device != IZ_NULL);
@@ -151,7 +151,7 @@ void CScene::Clear()
 
 void CScene::Render(
 	CCharacter* character,
-	izanagi::CGraphicsDevice* device)
+	izanagi::graph::CGraphicsDevice* device)
 {
 	// 描画開始
 	IZ_UINT nPassCnt = m_pShader->Begin(0, IZ_FALSE);

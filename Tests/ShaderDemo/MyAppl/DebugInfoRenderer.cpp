@@ -3,7 +3,7 @@
 
 void CDebugInfoRenderer::Render(IZ_PCSTR pszStr)
 {
-	izanagi::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
+	izanagi::graph::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
 	izanagi::CDebugFont* pFont = CMySystem::GetInstance().GetDebugFont();
 
 	if (pDevice->Begin2D()) {

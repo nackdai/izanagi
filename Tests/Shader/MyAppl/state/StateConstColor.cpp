@@ -11,7 +11,7 @@ IZ_BOOL CStateConstColor::Init()
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateConstColor::Render(izanagi::CGraphicsDevice* device)
+IZ_BOOL CStateConstColor::Render(izanagi::graph::CGraphicsDevice* device)
 {
 	Render3D();
 	Render2D();
@@ -28,7 +28,7 @@ void CStateConstColor::Render3D()
 {
 	static const D3DCOLOR color = D3DCOLOR_ARGB(255, 0, 128, 255);
 
-	izanagi::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
+	izanagi::graph::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
 
 	// クリアシーン
 	pDevice->Clear(
@@ -72,7 +72,7 @@ IZ_BOOL CStateConstColor::Enter(izanagi::IMemoryAllocator* allocator, void* val)
 	IZ_BOOL ret = IZ_TRUE;
 
 	izanagi::IMemoryAllocator* pAllocator = CMySystem::GetInstance().GetMemoryAllocator();
-	izanagi::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
+	izanagi::graph::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
 
 	// 球
 	m_pMesh = izanagi::CDebugMeshSphere::CreateDebugMeshSphere(

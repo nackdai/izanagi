@@ -21,7 +21,7 @@ public:
 	// 初期化
 	IZ_BOOL Init(
 		izanagi::IMemoryAllocator* pAllocator,
-		izanagi::CGraphicsDevice* pDevice);
+		izanagi::graph::CGraphicsDevice* pDevice);
 
 	// 開放
 	void Release();
@@ -37,7 +37,7 @@ public:
 
 public :
 	// 深度テクスチャセット
-	inline void SetDepthTexture(izanagi::CTexture* pTex);
+	inline void SetDepthTexture(izanagi::graph::CTexture* pTex);
 
 	inline IZ_BOOL EnablePostEffect();
 	inline void ToggleEnablePostEffect();
@@ -52,13 +52,13 @@ public :
 
 private:
 	izanagi::IMemoryAllocator* m_pAllocator;
-	izanagi::CGraphicsDevice* m_pDevice;
+	izanagi::graph::CGraphicsDevice* m_pDevice;
 
 	izanagi::CPostEffectSystem* m_pPostEffectSystem;
 	izanagi::CPostEffect* m_pPostEffect;
 	izanagi::CPostEffectTextureCreator* m_pPostEffectTexCreator;
 
-	izanagi::CTexture* m_pSrcTex;
+	izanagi::graph::CTexture* m_pSrcTex;
 
 	IZ_BOOL m_bEnablePostEffect;
 

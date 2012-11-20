@@ -7,7 +7,7 @@ CCharacter* CCharacter::sInstance = IZ_NULL;
 
 CCharacter* CCharacter::CreateCharacter(
 	izanagi::IMemoryAllocator* allocator,
-	izanagi::CGraphicsDevice* device)
+	izanagi::graph::CGraphicsDevice* device)
 {
 	IZ_ASSERT(allocator != IZ_NULL);
 	IZ_ASSERT(device != IZ_NULL);
@@ -124,10 +124,10 @@ IZ_BOOL CCharacter::Init()
 
 	// テクスチャ
 	{
-		m_pTex[0] = m_Device->CreateTextureFromFile("data/1P_C.dds", izanagi::E_GRAPH_PIXEL_FMT_RGBA8);
+		m_pTex[0] = m_Device->CreateTextureFromFile("data/1P_C.dds", izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA8);
 		IZ_ASSERT(m_pTex[0] != IZ_NULL);
 
-		m_pTex[1] = m_Device->CreateTextureFromFile("data/Face_C.dds", izanagi::E_GRAPH_PIXEL_FMT_RGBA8);
+		m_pTex[1] = m_Device->CreateTextureFromFile("data/Face_C.dds", izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA8);
 		IZ_ASSERT(m_pTex[1] != IZ_NULL);
 	}
 

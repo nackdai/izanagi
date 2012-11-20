@@ -21,7 +21,7 @@ IZ_BOOL CStateHemiLight::Init()
 	return IZ_TRUE;
 }
 
-IZ_BOOL CStateHemiLight::Render(izanagi::CGraphicsDevice* device)
+IZ_BOOL CStateHemiLight::Render(izanagi::graph::CGraphicsDevice* device)
 {
 	Render3D();
 	Render2D();
@@ -31,7 +31,7 @@ IZ_BOOL CStateHemiLight::Render(izanagi::CGraphicsDevice* device)
 
 IZ_BOOL CStateHemiLight::Render2D()
 {
-	izanagi::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
+	izanagi::graph::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
 	izanagi::CDebugFont* pFont = CMySystem::GetInstance().GetDebugFont();
 
 	if (pDevice->Begin2D()) {
@@ -73,7 +73,7 @@ IZ_BOOL CStateHemiLight::Render2D()
 
 IZ_BOOL CStateHemiLight::Render3D()
 {
-	izanagi::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
+	izanagi::graph::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
 
 	// 描画開始
 	m_pShader->Begin(0);
@@ -124,7 +124,7 @@ IZ_BOOL CStateHemiLight::Destroy()
 
 IZ_BOOL CStateHemiLight::Enter(izanagi::IMemoryAllocator* allocator, void* val)
 {
-	izanagi::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
+	izanagi::graph::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
 	izanagi::IMemoryAllocator* pAllocator = CMySystem::GetInstance().GetMemoryAllocator();
 
 	// シェーダ
@@ -163,7 +163,7 @@ IZ_BOOL CStateHemiLight::Enter(izanagi::IMemoryAllocator* allocator, void* val)
 	m_pTex = pDevice->CreateTextureFromFile(
 				"./data/earth.bmp",
 				//"./data/color.bmp",
-				izanagi::E_GRAPH_PIXEL_FMT_RGBA8);
+				izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA8);
 	IZ_ASSERT(m_pTex != IZ_NULL);
 
 	// グリッド

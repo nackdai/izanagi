@@ -25,18 +25,18 @@ protected:
 public:
 	IZ_BOOL Init(
 		izanagi::IMemoryAllocator* pAllocator,
-		izanagi::CGraphicsDevice* pDevice,
+		izanagi::graph::CGraphicsDevice* pDevice,
 		LPCSTR lpszCubeTex,
 		LPCSTR lpszShader);
 
 	IZ_BOOL InitShader(
 		izanagi::IMemoryAllocator* pAllocator,
-		izanagi::CGraphicsDevice* pDevice,
+		izanagi::graph::CGraphicsDevice* pDevice,
 		LPCSTR lpszShader);
 
 	void Release();
 
-	void Render(izanagi::CGraphicsDevice* pDevice);
+	void Render(izanagi::graph::CGraphicsDevice* pDevice);
 
 public:
 	CEnvBoxShader* GetEnvBoxShader() { return m_pShader; }
@@ -53,9 +53,9 @@ protected:
 	};
 
 protected:
-	izanagi::CVertexBuffer* m_pVB;
+	izanagi::graph::CVertexBuffer* m_pVB;
 	izanagi::CIndexBuffer* m_pIB;
-	izanagi::CVertexDeclaration* m_pVD;
+	izanagi::graph::CVertexDeclaration* m_pVD;
 
 	izanagi::CCubeTexture* m_pTex;
 

@@ -96,7 +96,7 @@ IZ_BOOL CStateAnmList::Init()
 
 #define _Print CMySystem::GetInstance().GetDebugFont()->DBPrint
 
-IZ_BOOL CStateAnmList::Render(izanagi::CGraphicsDevice* device)
+IZ_BOOL CStateAnmList::Render(izanagi::graph::CGraphicsDevice* device)
 {
 	Render3D();
 	Render2D();
@@ -106,7 +106,7 @@ IZ_BOOL CStateAnmList::Render(izanagi::CGraphicsDevice* device)
 
 void CStateAnmList::Render3D()
 {
-	izanagi::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
+	izanagi::graph::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
 
 	CScene* scene = CMyAppl::GetInstance().GetScene();
 	CCharacter* character = CMyAppl::GetInstance().GetCharacter();
@@ -243,7 +243,7 @@ IZ_BOOL CStateAnmList::ReadAnm()
 
 	SAFE_RELEASE(m_pAnm);
 
-	izanagi::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
+	izanagi::graph::CGraphicsDevice* pDevice = CMySystem::GetInstance().GetGraphicsDevice();
 	izanagi::IMemoryAllocator* pAllocator = CMySystem::GetInstance().GetMemoryAllocator();
 	izanagi::CFileInputStream input;
 

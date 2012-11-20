@@ -2,13 +2,10 @@
 #define __IZ_APPL_H__
 
 #include "izDefs.h"
+#include "izGraph.h"
 
 #define SCREEN_WIDTH	640
 #define SCREEN_HEIGHT	480
-
-namespace izanagi {
-	class CTexture;
-}
 
 class CMyAppl {
 private:
@@ -35,7 +32,7 @@ public:
 	IZ_BOOL Render();
 
 protected:
-	izanagi::CTexture* m_pRT;
+	izanagi::graph::CTexture* m_pRT;
 };
 
 #endif	// #if !defined(__IZ_APPL_H__)

@@ -13,7 +13,7 @@ void CSceneRenderer::Release()
 // シェーダ初期化
 IZ_BOOL CSceneRenderer::InitShader(
 	izanagi::IMemoryAllocator* pAllocator,
-	izanagi::CGraphicsDevice* pDevice,
+	izanagi::graph::CGraphicsDevice* pDevice,
 	LPCSTR lpszName)
 {
 	IZ_BOOL ret = IZ_FALSE;
@@ -63,7 +63,7 @@ IZ_BOOL CSceneRenderer::InitShader(
 }
 
 // 描画
-void CSceneRenderer::Render(izanagi::CGraphicsDevice* pDevice)
+void CSceneRenderer::Render(izanagi::graph::CGraphicsDevice* pDevice)
 {
 #if 0
 	pDevice->SetTextureMappingRenderState(0, IZ_FALSE);
@@ -77,8 +77,8 @@ void CSceneRenderer::Render(izanagi::CGraphicsDevice* pDevice)
 #else
 #if 0
 	pDevice->SetRenderState(
-		izanagi::E_GRAPH_RS_CULLMODE,
-		izanagi::E_GRAPH_CULL_CCW);
+		izanagi::graph::E_GRAPH_RS_CULLMODE,
+		izanagi::graph::E_GRAPH_CULL_CCW);
 #endif
 
 	izanagi::SMatrix mL2W;
@@ -102,7 +102,7 @@ void CSceneRenderer::Render(izanagi::CGraphicsDevice* pDevice)
 	m_pPhongShader->End();
 
 	pDevice->SetRenderState(
-		izanagi::E_GRAPH_RS_CULLMODE,
-		izanagi::E_GRAPH_CULL_CW);
+		izanagi::graph::E_GRAPH_RS_CULLMODE,
+		izanagi::graph::E_GRAPH_CULL_CW);
 #endif
 }

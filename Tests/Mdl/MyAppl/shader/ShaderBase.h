@@ -11,7 +11,7 @@ public:
 	template <class _T>
 	static _T* CreateShader(
 		izanagi::IMemoryAllocator* pAllocator,
-		izanagi::CGraphicsDevice* pDevice,
+		izanagi::graph::CGraphicsDevice* pDevice,
 		LPCSTR lpszPathName);
 
 protected:
@@ -24,11 +24,11 @@ protected:
 protected:
 	// シェーダ読み込み
 	IZ_BOOL ReadShader(
-		izanagi::CGraphicsDevice* pDevice,
+		izanagi::graph::CGraphicsDevice* pDevice,
 		LPCSTR lpszPathName);
 
 	// シェーダごとの初期化
-	virtual IZ_BOOL InitInternal(izanagi::CGraphicsDevice* pDevice);
+	virtual IZ_BOOL InitInternal(izanagi::graph::CGraphicsDevice* pDevice);
 
 	// 共通パラメータのハンドルを取得
 	BOOL GetCommonParameterHandles();
@@ -67,7 +67,7 @@ public:
 public:
 	inline void OnLostDevice();
 	inline IZ_BOOL Reset(
-		izanagi::CGraphicsDevice* pDevice,
+		izanagi::graph::CGraphicsDevice* pDevice,
 		LPCSTR lpszPathName);
 
 protected:
@@ -93,7 +93,7 @@ protected:
 template <class _T>
 _T* CShaderBase::CreateShader(
 	izanagi::IMemoryAllocator* pAllocator,
-	izanagi::CGraphicsDevice* pDevice,
+	izanagi::graph::CGraphicsDevice* pDevice,
 	LPCSTR lpszPathName)
 {
 	IZ_UINT8* pBuf = IZ_NULL;
@@ -215,7 +215,7 @@ void CShaderBase::OnLostDevice()
 }
 
 IZ_BOOL CShaderBase::Reset(
-	izanagi::CGraphicsDevice* pDevice,
+	izanagi::graph::CGraphicsDevice* pDevice,
 	LPCSTR lpszPathName)
 {
 	IZ_BOOL ret = ReadShader(pDevice, lpszPathName);

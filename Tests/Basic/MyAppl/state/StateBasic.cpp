@@ -38,7 +38,7 @@ namespace {
 	}
 }	// namespace
 
-IZ_BOOL CStateBasic::Render(izanagi::CGraphicsDevice* device)
+IZ_BOOL CStateBasic::Render(izanagi::graph::CGraphicsDevice* device)
 {
 	if (CMySystem::GetInstance().GetGraphicsDevice()->Begin2D()) {
 		CMySystem::GetInstance().GetDebugFont()->Begin();
@@ -78,7 +78,7 @@ IZ_BOOL CStateBasic::Render(izanagi::CGraphicsDevice* device)
 #if 1
 		if (m_pTex != IZ_NULL) {
 			CMySystem::GetInstance().GetGraphicsDevice()->SetTexture(0, m_pTex);
-			CMySystem::GetInstance().GetGraphicsDevice()->Set2DRenderOp(izanagi::E_GRAPH_2D_RENDER_OP_MODULATE);
+			CMySystem::GetInstance().GetGraphicsDevice()->Set2DRenderOp(izanagi::graph::E_GRAPH_2D_RENDER_OP_MODULATE);
 			CMySystem::GetInstance().GetGraphicsDevice()->Draw2DSprite(
 				izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),
 				izanagi::CIntRect(300, 100, 556, 228));
@@ -121,7 +121,7 @@ IZ_BOOL CStateBasic::Enter(izanagi::IMemoryAllocator* allocator, void* val)
 #if 1
 	m_pTex = CMySystem::GetInstance().GetGraphicsDevice()->CreateTextureFromFile(
 				"../data/test.bmp",
-				izanagi::E_GRAPH_PIXEL_FMT_RGBA8);
+				izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA8);
 #else
 	izanagi::CFileInputStream cInput;
 	cInput.Open("../data/test.bmp");
