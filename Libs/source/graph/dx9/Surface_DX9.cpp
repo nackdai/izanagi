@@ -55,7 +55,7 @@ namespace graph
 	    CSurfaceDX9* instance = IZ_NULL;
 
 	    // メモリ確保
-	    buf = (IZ_UINT8*)ALLOC_ZERO(allocator, sizeof(CSurface));
+	    buf = (IZ_UINT8*)ALLOC_ZERO(allocator, sizeof(CSurfaceDX9));
 	    if (!(result = (buf != IZ_NULL))) {
 		    IZ_ASSERT(IZ_FALSE);
 		    goto __EXIT__;

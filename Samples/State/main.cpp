@@ -14,21 +14,21 @@ protected:
 	// 初期化.
 	virtual IZ_BOOL InitInternal(
 		izanagi::IMemoryAllocator* allocator,
-		izanagi::CGraphicsDevice* device,
+		izanagi::graph::CGraphicsDevice* device,
 		izanagi::sample::CSampleCamera& camera);
 
 	// 解放.
 	virtual void ReleaseInternal();
 
 	// 更新.
-	virtual void UpdateInternal(izanagi::CGraphicsDevice* device);
+	virtual void UpdateInternal(izanagi::graph::CGraphicsDevice* device);
 
 	// 描画.
-	virtual void RenderInternal(izanagi::CGraphicsDevice* device);
+	virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device);
 
 private:
 	izanagi::IMemoryAllocator* m_Allocator;
-	izanagi::CGraphicsDevice* m_Device;
+	izanagi::graph::CGraphicsDevice* m_Device;
 };
 
 CSStateApp::CSStateApp()
@@ -50,7 +50,7 @@ IZ_BOOL CSStateApp::OnKeyDown(IZ_UINT nChar)
 // 初期化.
 IZ_BOOL CSStateApp::InitInternal(
 	izanagi::IMemoryAllocator* allocator,
-	izanagi::CGraphicsDevice* device,
+	izanagi::graph::CGraphicsDevice* device,
 	izanagi::sample::CSampleCamera& camera)
 {
 	m_Allocator = allocator;
@@ -67,13 +67,13 @@ void CSStateApp::ReleaseInternal()
 }
 
 // 更新.
-void CSStateApp::UpdateInternal(izanagi::CGraphicsDevice* device)
+void CSStateApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
 	CStateManager::GetInstance().Update(m_Allocator, m_Device);
 }
 
 // 描画.
-void CSStateApp::RenderInternal(izanagi::CGraphicsDevice* device)
+void CSStateApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
 	CStateManager::GetInstance().Render(device);
 }

@@ -129,7 +129,7 @@ CAnimationApp::~CAnimationApp()
 // 初期化.
 IZ_BOOL CAnimationApp::InitInternal(
 	izanagi::IMemoryAllocator* allocator,
-	izanagi::CGraphicsDevice* device,
+	izanagi::graph::CGraphicsDevice* device,
 	izanagi::sample::CSampleCamera& camera)
 {
 	IZ_BOOL result = IZ_TRUE;
@@ -260,7 +260,7 @@ void CAnimationApp::ReleaseInternal()
 }
 
 // 更新.
-void CAnimationApp::UpdateInternal(izanagi::CGraphicsDevice* device)
+void CAnimationApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
 	GetCamera().Update();
 
@@ -296,7 +296,7 @@ namespace {
 }
 
 // 描画.
-void CAnimationApp::RenderInternal(izanagi::CGraphicsDevice* device)
+void CAnimationApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
 	izanagi::sample::CSampleCamera& camera = GetCamera();
 

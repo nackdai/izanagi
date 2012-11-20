@@ -81,11 +81,11 @@ protected:
 private:
 #ifdef _TEX_FMT_A8_
 	static const D3DFORMAT D3D_TEX_FMT = D3DFMT_A8;
-	static const izanagi::E_GRAPH_PIXEL_FMT IZ_TEX_FMT = izanagi::E_GRAPH_PIXEL_FMT_A8;
+	static const izanagi::graph::E_GRAPH_PIXEL_FMT IZ_TEX_FMT = izanagi::graph::E_GRAPH_PIXEL_FMT_A8;
 	static const UINT TEX_BPP = 1;
 #else
 	static const D3DFORMAT D3D_TEX_FMT = D3DFMT_A8B8G8R8;
-	static const izanagi::E_GRAPH_PIXEL_FMT IZ_TEX_FMT = izanagi::E_GRAPH_PIXEL_FMT_BGRA8
+	static const izanagi::graph::E_GRAPH_PIXEL_FMT IZ_TEX_FMT = izanagi::graph::E_GRAPH_PIXEL_FMT_BGRA8
 	static const UINT TEX_BPP = 4;
 #endif
 	static const IZ_INT MARGIN = 1;

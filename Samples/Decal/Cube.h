@@ -9,7 +9,7 @@ class CCube : public izanagi::CObject {
 public:
 	static CCube* Create(
 		izanagi::IMemoryAllocator* allocator,
-		izanagi::CGraphicsDevice* device,
+		izanagi::graph::CGraphicsDevice* device,
 		IZ_FLOAT size);
 
 private:
@@ -23,7 +23,7 @@ private:
 private:
 	IZ_BOOL CreateMesh(
 		izanagi::IMemoryAllocator* allocator,
-		izanagi::CGraphicsDevice* device,
+		izanagi::graph::CGraphicsDevice* device,
 		IZ_FLOAT size);
 
 	IZ_BOOL CreateTriangles(

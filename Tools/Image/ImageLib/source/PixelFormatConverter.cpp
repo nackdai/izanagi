@@ -113,7 +113,7 @@ namespace {
 		IZ_NULL,	// D24S8
 	};
 
-	IZ_C_ASSERT(COUNTOF(ComputeByteSizeFuncTbl) == E_GRAPH_PIXEL_FMT_NUM);
+	IZ_C_ASSERT(COUNTOF(ComputeByteSizeFuncTbl) == graph::E_GRAPH_PIXEL_FMT_NUM);
 }	// namespace
 
 /**
@@ -122,7 +122,7 @@ namespace {
 IZ_UINT CPixelFormatConverter::ComputeByteSize(
 	IZ_UINT nWidth,
 	IZ_UINT nHeight,
-	E_GRAPH_PIXEL_FMT nFmt)
+	graph::E_GRAPH_PIXEL_FMT nFmt)
 {
 	ComputeByteSizeFunc func = ComputeByteSizeFuncTbl[nFmt];
 	VRETURN_VAL(func != IZ_NULL, 0);
@@ -427,7 +427,7 @@ namespace {
 		IZ_NULL,						// RGBX8
 		IZ_NULL,						// D24S8
 	};
-	IZ_C_ASSERT(COUNTOF(InterFmtConvTbl) == E_GRAPH_PIXEL_FMT_NUM);
+	IZ_C_ASSERT(COUNTOF(InterFmtConvTbl) == graph::E_GRAPH_PIXEL_FMT_NUM);
 
 	// 最終フォーマット変換テーブル
 	ConvertPixelFormat DstFmtConvTbl[] = {
@@ -445,7 +445,7 @@ namespace {
 		IZ_NULL,						// RGBX8
 		IZ_NULL,						// D24S8
 	};
-	IZ_C_ASSERT(COUNTOF(DstFmtConvTbl) == E_GRAPH_PIXEL_FMT_NUM);
+	IZ_C_ASSERT(COUNTOF(DstFmtConvTbl) == graph::E_GRAPH_PIXEL_FMT_NUM);
 }	// namespace
 
 /**
@@ -455,9 +455,9 @@ IZ_BOOL CPixelFormatConverter::Convert(
 	IZ_BYTE* pSrc,
 	IZ_UINT nWidth,
 	IZ_UINT nHeight,
-	E_GRAPH_PIXEL_FMT nSrcFmt,
+	graph::E_GRAPH_PIXEL_FMT nSrcFmt,
 	IZ_BYTE* pDst,
-	E_GRAPH_PIXEL_FMT nDstFmt)
+	graph::E_GRAPH_PIXEL_FMT nDstFmt)
 {
 	if (nSrcFmt == nDstFmt) {
 		// ある？
@@ -468,7 +468,7 @@ IZ_BOOL CPixelFormatConverter::Convert(
 
 	if (CImageUtil::IsDXT(nDstFmt)) {
 		// まず RGBA8 に変換する
-		std::vector<IZ_UINT8> tmp(ComputeByteSize(nWidth, nHeight, E_GRAPH_PIXEL_FMT_RGBA8));
+		std::vector<IZ_UINT8> tmp(ComputeByteSize(nWidth, nHeight, graph::E_GRAPH_PIXEL_FMT_RGBA8));
 
 		VRETURN(
 			Convert(
@@ -476,7 +476,7 @@ IZ_BOOL CPixelFormatConverter::Convert(
 				nWidth, nHeight,
 				nSrcFmt,
 				&tmp[0],
-				E_GRAPH_PIXEL_FMT_RGBA8));
+				graph::E_GRAPH_PIXEL_FMT_RGBA8));
 
 		// DXTに変換する
 		CDXTFormatConverter::Compress(
@@ -486,7 +486,7 @@ IZ_BOOL CPixelFormatConverter::Convert(
 	}
 	else if (CImageUtil::IsDXT(nSrcFmt)) {
 		// DXT -> RGBA8に変換される
-		std::vector<IZ_UINT8> tmp(ComputeByteSize(nWidth, nHeight, E_GRAPH_PIXEL_FMT_RGBA8));
+		std::vector<IZ_UINT8> tmp(ComputeByteSize(nWidth, nHeight, graph::E_GRAPH_PIXEL_FMT_RGBA8));
 
 		CDXTFormatConverter::Decompress(
 			nWidth, nHeight,
@@ -498,13 +498,13 @@ IZ_BOOL CPixelFormatConverter::Convert(
 			Convert(
 				&tmp[0],
 				nWidth, nHeight,
-				E_GRAPH_PIXEL_FMT_RGBA8,
+				graph::E_GRAPH_PIXEL_FMT_RGBA8,
 				pDst,
 				nDstFmt));
 	}
 	else {
 		// RGBA32F変換用１ラインバッファ
-		IZ_UINT nBufSize = nWidth * CImageUtil::GetBpp(E_GRAPH_PIXEL_FMT_RGBA32F);
+		IZ_UINT nBufSize = nWidth * CImageUtil::GetBpp(graph::E_GRAPH_PIXEL_FMT_RGBA32F);
 		if (m_LineBuffer.size() < nBufSize) {
 			m_LineBuffer.resize(nBufSize);
 		}

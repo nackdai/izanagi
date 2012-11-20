@@ -126,13 +126,13 @@ void CMipMapCreator::Convert(
 	void* pDst,
 	IZ_UINT nWidth,
 	IZ_UINT nHeight,
-	E_GRAPH_PIXEL_FMT nFmt)
+	graph::E_GRAPH_PIXEL_FMT nFmt)
 {
 	if (CImageUtil::IsDXT(nFmt)) {
 		// TODO
 		// DXTは特殊・・・
 	}
-	else if (nFmt == E_GRAPH_PIXEL_FMT_A8) {
+	else if (nFmt == graph::E_GRAPH_PIXEL_FMT_A8) {
 		// A8も特殊・・・
 		_CreateMipMap(
 			pSrc,
@@ -140,7 +140,7 @@ void CMipMapCreator::Convert(
 			nWidth, nHeight,
 			MipMapFunc<S_A8_VAL>());
 	}
-	else if (nFmt == E_GRAPH_PIXEL_FMT_R32F) {
+	else if (nFmt == graph::E_GRAPH_PIXEL_FMT_R32F) {
 		// R32Fも特殊・・・
 		_CreateMipMap(
 			pSrc,
@@ -148,10 +148,10 @@ void CMipMapCreator::Convert(
 			nWidth, nHeight,
 			MipMapFunc<S_R32F_VAL>());
 	}
-	else if (nFmt == E_GRAPH_PIXEL_FMT_RGBA16F) {
+	else if (nFmt == graph::E_GRAPH_PIXEL_FMT_RGBA16F) {
 		// RGBA16Fも特殊・・・
 	}
-	else if (nFmt == E_GRAPH_PIXEL_FMT_RGBA32F) {
+	else if (nFmt == graph::E_GRAPH_PIXEL_FMT_RGBA32F) {
 		// RGBA32Fも特殊・・・
 		_CreateMipMap(
 			pSrc,
@@ -174,7 +174,7 @@ void CMipMapCreator::Convert(
 IZ_UINT CMipMapCreator::ComputeMaxMipLevel(
 	IZ_UINT nWidth, 
 	IZ_UINT nHeight, 
-	E_GRAPH_PIXEL_FMT nFmt)
+	graph::E_GRAPH_PIXEL_FMT nFmt)
 {
 	IZ_UINT ret = 1;
 

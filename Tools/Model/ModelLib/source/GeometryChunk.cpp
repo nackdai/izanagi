@@ -1145,11 +1145,11 @@ IZ_BOOL CGeometryChunk::ExportPrimSet(
 		sSubsetInfo.maxIdx = sPrimSet.maxIdx;
 
 		sSubsetInfo.typePrim = (m_ExportTriList
-			? izanagi::E_GRAPH_PRIM_TYPE_TRIANGLELIST
-			: izanagi::E_GRAPH_PRIM_TYPE_TRIANGLESTRIP);
+			? izanagi::graph::E_GRAPH_PRIM_TYPE_TRIANGLELIST
+			: izanagi::graph::E_GRAPH_PRIM_TYPE_TRIANGLESTRIP);
 
 		// TODO
-		sSubsetInfo.fmtIdx = izanagi::E_GRAPH_INDEX_BUFFER_FMT_INDEX32;
+		sSubsetInfo.fmtIdx = izanagi::graph::E_GRAPH_INDEX_BUFFER_FMT_INDEX32;
 
 		sSubsetInfo.numJoints = (IZ_UINT16)sPrimSet.joint.size();
 	}

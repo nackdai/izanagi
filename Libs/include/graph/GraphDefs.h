@@ -1,7 +1,6 @@
 #if !defined(__IZANAGI_GRAPH_GRAPH_DEFS_H__)
 #define __IZANAGI_GRAPH_GRAPH_DEFS_H__
 
-#include "izD3DDefs.h"
 #include "izDefs.h"
 #include "izStd.h"
 

@@ -15,7 +15,7 @@ CStateNegative::~CStateNegative()
 }
 
 // 描画.
-IZ_BOOL CStateNegative::Render(izanagi::CGraphicsDevice* device)
+IZ_BOOL CStateNegative::Render(izanagi::graph::CGraphicsDevice* device)
 {
     CStatePostEffect::Render(device);
 	RenderName(device, "Negative");

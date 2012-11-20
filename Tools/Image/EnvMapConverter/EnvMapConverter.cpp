@@ -107,7 +107,7 @@ namespace {
 		"YP", "YN",
 		"ZP", "ZN"
 	};
-	C_ASSERT(COUNTOF(PreName) == izanagi::E_GRAPH_CUBE_TEX_FACE_NUM);
+	C_ASSERT(COUNTOF(PreName) == izanagi::graph::E_GRAPH_CUBE_TEX_FACE_NUM);
 
 	// テクスチャ名一覧を取得
 	void _GetTexNameList(
@@ -116,7 +116,7 @@ namespace {
 		std::vector<izanagi::tool::CString>& texList)
 	{
 		if (type == EnvMapTypeCube) {
-			texList.resize(izanagi::E_GRAPH_CUBE_TEX_FACE_NUM);
+			texList.resize(izanagi::graph::E_GRAPH_CUBE_TEX_FACE_NUM);
 
 			// 頭に面ごとのプレフィックスを付ける
 
@@ -127,7 +127,7 @@ namespace {
 			char dir[1024];
 			izanagi::tool::CFileUtility::GetPathWithoutFileName(dir, sizeof(dir), texName.c_str());
 
-			for (IZ_UINT i = 0; i < izanagi::E_GRAPH_CUBE_TEX_FACE_NUM; i++) {
+			for (IZ_UINT i = 0; i < izanagi::graph::E_GRAPH_CUBE_TEX_FACE_NUM; i++) {
 				if (::strlen(dir) > 0) {
 					texList[i].format("%s\\%s_%s", dir, PreName[i], name);
 				}
@@ -225,7 +225,7 @@ int main(int argc, char* argv[])
 		izanagi::tool::CTextureLite* tex = device->CreateTexture(
 													outWidth,
 													outHeight,
-													izanagi::E_GRAPH_PIXEL_FMT_RGBA32F);
+													izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA32F);
 		VGOTO(tex != NULL);
 
 		texOutEnv.push_back(tex);

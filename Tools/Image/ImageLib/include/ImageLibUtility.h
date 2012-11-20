@@ -66,34 +66,34 @@ namespace tool {
 		NO_COPIABLE(CImageUtil);
 
 	public:
-		static inline IZ_BOOL IsDXT(E_GRAPH_PIXEL_FMT nFmt)
+		static inline IZ_BOOL IsDXT(graph::E_GRAPH_PIXEL_FMT nFmt)
 		{
-			return ((nFmt == E_GRAPH_PIXEL_FMT_DXT1)
-					|| (nFmt == E_GRAPH_PIXEL_FMT_DXT3)
-					|| (nFmt == E_GRAPH_PIXEL_FMT_DXT5));
+			return ((nFmt == graph::E_GRAPH_PIXEL_FMT_DXT1)
+					|| (nFmt == graph::E_GRAPH_PIXEL_FMT_DXT3)
+					|| (nFmt == graph::E_GRAPH_PIXEL_FMT_DXT5));
 		}
 
-		static inline IZ_UINT GetBpp(E_GRAPH_PIXEL_FMT nFmt)
+		static inline IZ_UINT GetBpp(graph::E_GRAPH_PIXEL_FMT nFmt)
 		{
 			IZ_UINT ret = 0;
 
 			switch (nFmt) {
-			case E_GRAPH_PIXEL_FMT_RGBA8:
-			case E_GRAPH_PIXEL_FMT_BGRA8:
-			case E_GRAPH_PIXEL_FMT_RGB10A2:
-			case E_GRAPH_PIXEL_FMT_R32F:
+			case graph::E_GRAPH_PIXEL_FMT_RGBA8:
+			case graph::E_GRAPH_PIXEL_FMT_BGRA8:
+			case graph::E_GRAPH_PIXEL_FMT_RGB10A2:
+			case graph::E_GRAPH_PIXEL_FMT_R32F:
 				ret = 4;
 				break;
-			case E_GRAPH_PIXEL_FMT_RGBA4:
+			case graph::E_GRAPH_PIXEL_FMT_RGBA4:
 				ret = 2;
 				break;
-			case E_GRAPH_PIXEL_FMT_A8:
+			case graph::E_GRAPH_PIXEL_FMT_A8:
 				ret = 1;
 				break;
-			case E_GRAPH_PIXEL_FMT_RGBA16F:
+			case graph::E_GRAPH_PIXEL_FMT_RGBA16F:
 				ret = 8;
 				break;
-			case E_GRAPH_PIXEL_FMT_RGBA32F:
+			case graph::E_GRAPH_PIXEL_FMT_RGBA32F:
 				ret = 16;
 				break;
 			default:

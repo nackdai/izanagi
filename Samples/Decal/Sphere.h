@@ -9,7 +9,7 @@ class CSphere : public izanagi::CObject {
 public:
 	static CSphere* Create(
 		izanagi::IMemoryAllocator* allocator,
-		izanagi::CGraphicsDevice* device,
+		izanagi::graph::CGraphicsDevice* device,
 		IZ_FLOAT radius,
 		IZ_UINT slices,
 		IZ_UINT stacks);
@@ -25,7 +25,7 @@ private:
 private:
 	IZ_BOOL CreateMesh(
 		izanagi::IMemoryAllocator* allocator,
-		izanagi::CGraphicsDevice* device,
+		izanagi::graph::CGraphicsDevice* device,
 		IZ_FLOAT radius,
 		IZ_UINT slices,
 		IZ_UINT stacks);

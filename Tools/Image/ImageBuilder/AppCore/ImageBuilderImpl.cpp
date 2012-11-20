@@ -99,7 +99,7 @@ void CImageBuilder::endElement(
 void CImageBuilder::SetPlaneAttrs(const xercesc::Attributes& attrs)
 {
 	SImageInfo sImageInfo;
-	sImageInfo.info.type = izanagi::E_GRAPH_TEX_TYPE_PLANE;
+	sImageInfo.info.type = izanagi::graph::E_GRAPH_TEX_TYPE_PLANE;
 
 	SetCommonAttrs(&sImageInfo, attrs);
 	SetElementAttr(&sImageInfo, attrs);
@@ -114,7 +114,7 @@ void CImageBuilder::SetPlaneAttrs(const xercesc::Attributes& attrs)
 void CImageBuilder::SetCubeAttrs(const xercesc::Attributes& attrs)
 {
 	SImageInfo sImageInfo;
-	sImageInfo.info.type = izanagi::E_GRAPH_TEX_TYPE_CUBE;
+	sImageInfo.info.type = izanagi::graph::E_GRAPH_TEX_TYPE_CUBE;
 
 	SetCommonAttrs(&sImageInfo, attrs);
 
@@ -173,30 +173,30 @@ namespace {
 	}
 
 	// 文字列 -> PixelFormat
-	inline izanagi::E_GRAPH_PIXEL_FMT _ConvTextToPixelFormat(LPCSTR lpszStr)
+	inline izanagi::graph::E_GRAPH_PIXEL_FMT _ConvTextToPixelFormat(LPCSTR lpszStr)
 	{
 		static const char* str[] = {
-			"rgba8",	// E_GRAPH_PIXEL_FMT_RGBA8
-			"bgra8",	// E_GRAPH_PIXEL_FMT_BGRA8
+			"rgba8",	// graph::E_GRAPH_PIXEL_FMT_RGBA8
+			"bgra8",	// graph::E_GRAPH_PIXEL_FMT_BGRA8
 
-			"rgba4",	// E_GRAPH_PIXEL_FMT_RGBA4
-			"rgb10A2",	// E_GRAPH_PIXEL_FMT_RGB10A2
-			"a8",		// E_GRAPH_PIXEL_FMT_A8
+			"rgba4",	// graph::E_GRAPH_PIXEL_FMT_RGBA4
+			"rgb10A2",	// graph::E_GRAPH_PIXEL_FMT_RGB10A2
+			"a8",		// graph::E_GRAPH_PIXEL_FMT_A8
 			
-			"r32f",		// E_GRAPH_PIXEL_FMT_R32F
-			"rgba16f",	// E_GRAPH_PIXEL_FMT_RGBA16F
-			"rgba32f",	// E_GRAPH_PIXEL_FMT_RGBA32F
+			"r32f",		// graph::E_GRAPH_PIXEL_FMT_R32F
+			"rgba16f",	// graph::E_GRAPH_PIXEL_FMT_RGBA16F
+			"rgba32f",	// graph::E_GRAPH_PIXEL_FMT_RGBA32F
 
-			"dxt1",		// E_GRAPH_PIXEL_FMT_DXT1
-			"dxt3",		// E_GRAPH_PIXEL_FMT_DXT3
-			"dxt5",		// E_GRAPH_PIXEL_FMT_DXT5
+			"dxt1",		// graph::E_GRAPH_PIXEL_FMT_DXT1
+			"dxt3",		// graph::E_GRAPH_PIXEL_FMT_DXT3
+			"dxt5",		// graph::E_GRAPH_PIXEL_FMT_DXT5
 
-			"rgbx8",	// E_GRAPH_PIXEL_FMT_RGBX8
-			"d24s8",	// E_GRAPH_PIXEL_FMT_D24S8
+			"rgbx8",	// graph::E_GRAPH_PIXEL_FMT_RGBX8
+			"d24s8",	// graph::E_GRAPH_PIXEL_FMT_D24S8
 		};
-		C_ASSERT(COUNTOF(str) == izanagi::E_GRAPH_PIXEL_FMT_NUM);
+		C_ASSERT(COUNTOF(str) == izanagi::graph::E_GRAPH_PIXEL_FMT_NUM);
 
-		izanagi::E_GRAPH_PIXEL_FMT ret = _ConvString<izanagi::E_GRAPH_PIXEL_FMT>(
+		izanagi::graph::E_GRAPH_PIXEL_FMT ret = _ConvString<izanagi::graph::E_GRAPH_PIXEL_FMT>(
 											lpszStr,
 											str,
 											COUNTOF(str),
@@ -205,18 +205,18 @@ namespace {
 	}
 
 	// 文字列 -> TexAddress
-	inline izanagi::E_GRAPH_TEX_ADDRESS _ConvTextToTexAddr(LPCSTR lpszStr)
+	inline izanagi::graph::E_GRAPH_TEX_ADDRESS _ConvTextToTexAddr(LPCSTR lpszStr)
 	{
 		static const char* str[] = {
-			"wrap",			// E_GRAPH_TEX_ADDRESS_WRAP
-			"mirror",		// E_GRAPH_TEX_ADDRESS_MIRROR
-			"clamp",		// E_GRAPH_TEX_ADDRESS_CLAMP
-			"border",		// E_GRAPH_TEX_ADDRESS_BORDER
-			"mirroronce",	// E_GRAPH_TEX_ADDRESS_MIRRORONCE
+			"wrap",			// graph::E_GRAPH_TEX_ADDRESS_WRAP
+			"mirror",		// graph::E_GRAPH_TEX_ADDRESS_MIRROR
+			"clamp",		// graph::E_GRAPH_TEX_ADDRESS_CLAMP
+			"border",		// graph::E_GRAPH_TEX_ADDRESS_BORDER
+			"mirroronce",	// graph::E_GRAPH_TEX_ADDRESS_MIRRORONCE
 		};
-		C_ASSERT(COUNTOF(str) == izanagi::E_GRAPH_TEX_ADDRESS_NUM);
+		C_ASSERT(COUNTOF(str) == izanagi::graph::E_GRAPH_TEX_ADDRESS_NUM);
 
-		izanagi::E_GRAPH_TEX_ADDRESS ret = _ConvString<izanagi::E_GRAPH_TEX_ADDRESS>(
+		izanagi::graph::E_GRAPH_TEX_ADDRESS ret = _ConvString<izanagi::graph::E_GRAPH_TEX_ADDRESS>(
 											lpszStr,
 											str,
 											COUNTOF(str),
@@ -225,19 +225,19 @@ namespace {
 	}
 
 	// 文字列 -> TexFilter
-	inline izanagi::E_GRAPH_TEX_FILTER _ConvTextToTexFilter(LPCSTR lpszStr)
+	inline izanagi::graph::E_GRAPH_TEX_FILTER _ConvTextToTexFilter(LPCSTR lpszStr)
 	{
 		static const char* str[] = {
-			"none",			// E_GRAPH_TEX_FILTER_NONE
-			"point",		// E_GRAPH_TEX_FILTER_POINT
-			"linear",		// E_GRAPH_TEX_FILTER_LINEAR
-			"aniso",		// E_GRAPH_TEX_FILTER_ANISOTROPIC
-			"pyramidquad",	// E_GRAPH_TEX_FILTER_PYRAMIDALQUAD
-			"gaussquad",	// E_GRAPH_TEX_FILTER_GAUSSIANQUAD
+			"none",			// graph::E_GRAPH_TEX_FILTER_NONE
+			"point",		// graph::E_GRAPH_TEX_FILTER_POINT
+			"linear",		// graph::E_GRAPH_TEX_FILTER_LINEAR
+			"aniso",		// graph::E_GRAPH_TEX_FILTER_ANISOTROPIC
+			"pyramidquad",	// graph::E_GRAPH_TEX_FILTER_PYRAMIDALQUAD
+			"gaussquad",	// graph::E_GRAPH_TEX_FILTER_GAUSSIANQUAD
 		};
-		C_ASSERT(COUNTOF(str) == izanagi::E_GRAPH_TEX_FILTER_NUM);
+		C_ASSERT(COUNTOF(str) == izanagi::graph::E_GRAPH_TEX_FILTER_NUM);
 
-		izanagi::E_GRAPH_TEX_FILTER ret = _ConvString<izanagi::E_GRAPH_TEX_FILTER>(
+		izanagi::graph::E_GRAPH_TEX_FILTER ret = _ConvString<izanagi::graph::E_GRAPH_TEX_FILTER>(
 											lpszStr,
 											str,
 											COUNTOF(str),
@@ -246,16 +246,16 @@ namespace {
 	}
 
 	// 文字列 -> TexType
-	inline izanagi::E_GRAPH_TEX_TYPE _ConvTextToTexType(LPCSTR lpszStr)
+	inline izanagi::graph::E_GRAPH_TEX_TYPE _ConvTextToTexType(LPCSTR lpszStr)
 	{
 		static const char* str[] = {
 			"plane",
 			"cube",
 			"volume",
 		};
-		C_ASSERT(COUNTOF(str) == izanagi::E_GRAPH_TEX_TYPE_NUM);
+		C_ASSERT(COUNTOF(str) == izanagi::graph::E_GRAPH_TEX_TYPE_NUM);
 
-		izanagi::E_GRAPH_TEX_TYPE ret = _ConvString<izanagi::E_GRAPH_TEX_TYPE>(
+		izanagi::graph::E_GRAPH_TEX_TYPE ret = _ConvString<izanagi::graph::E_GRAPH_TEX_TYPE>(
 											lpszStr,
 											str,
 											COUNTOF(str),
@@ -324,16 +324,16 @@ void CImageBuilder::SetCommonAttrs(
 
 namespace {
 	// 文字列 -> CubeFace
-	inline izanagi::E_GRAPH_CUBE_TEX_FACE _ConvTextToCubeFace(LPCSTR lpszStr)
+	inline izanagi::graph::E_GRAPH_CUBE_TEX_FACE _ConvTextToCubeFace(LPCSTR lpszStr)
 	{
 		static const char* str[] = {
 			"xp", "xn",
 			"yp", "yn",
 			"zp", "zn",
 		};
-		C_ASSERT(COUNTOF(str) == izanagi::E_GRAPH_CUBE_TEX_FACE_NUM);
+		C_ASSERT(COUNTOF(str) == izanagi::graph::E_GRAPH_CUBE_TEX_FACE_NUM);
 
-		izanagi::E_GRAPH_CUBE_TEX_FACE ret = _ConvString<izanagi::E_GRAPH_CUBE_TEX_FACE>(
+		izanagi::graph::E_GRAPH_CUBE_TEX_FACE ret = _ConvString<izanagi::graph::E_GRAPH_CUBE_TEX_FACE>(
 												lpszStr,
 												str,
 												COUNTOF(str),
@@ -454,7 +454,7 @@ namespace {
 		izanagi::tool::CIMGMaster* imgMaster = NULL;
 		imgMaster = izanagi::tool::CImageReader::GetInstance().Read(
 					elem.path,
-					izanagi::E_GRAPH_TEX_TYPE_PLANE);
+					izanagi::graph::E_GRAPH_TEX_TYPE_PLANE);
 		VRETURN(imgMaster != IZ_NULL);
 
 		UINT nNum = imgMaster->GetTexNum();
@@ -503,12 +503,12 @@ namespace {
 		izanagi::S_IMG_HEADER* header,
 		const SImageInfo& imageInfo)
 	{
-		VRETURN(imageInfo.elements.size() == izanagi::E_GRAPH_CUBE_TEX_FACE_NUM);
+		VRETURN(imageInfo.elements.size() == izanagi::graph::E_GRAPH_CUBE_TEX_FACE_NUM);
 
 		IZ_BOOL ret = IZ_TRUE;
 
 		// 出力用テクスチャ作成
-		izanagi::tool::CIMGTexture* exportTex = izanagi::tool::CIMGTexture::CreateEmptyTexture(izanagi::E_GRAPH_TEX_TYPE_CUBE);
+		izanagi::tool::CIMGTexture* exportTex = izanagi::tool::CIMGTexture::CreateEmptyTexture(izanagi::graph::E_GRAPH_TEX_TYPE_CUBE);
 		VRETURN(exportTex != IZ_NULL);
 
 		// 基準となる幅・高さ
@@ -517,14 +517,14 @@ namespace {
 		IZ_UINT baseWidth = 0;
 		IZ_UINT baseHeight = 0;
 
-		for (IZ_UINT i = 0; i < izanagi::E_GRAPH_CUBE_TEX_FACE_NUM; i++) {
+		for (IZ_UINT i = 0; i < izanagi::graph::E_GRAPH_CUBE_TEX_FACE_NUM; i++) {
 			const SImageElement& elem = imageInfo.elements[i];
 
 			// テクスチャ読み込み
 			izanagi::tool::CIMGMaster* imgMaster = NULL;
 			imgMaster = izanagi::tool::CImageReader::GetInstance().Read(
 						elem.path,
-						izanagi::E_GRAPH_TEX_TYPE_PLANE);
+						izanagi::graph::E_GRAPH_TEX_TYPE_PLANE);
 			VRETURN(imgMaster != IZ_NULL);
 
 			IZ_UINT nNum = imgMaster->GetTexNum();
@@ -556,10 +556,10 @@ namespace {
 				VGOTO(ret, __EXIT__);
 			}
 
-			if (tex->GetTexInfo().type == izanagi::E_GRAPH_TEX_TYPE_PLANE) {
+			if (tex->GetTexInfo().type == izanagi::graph::E_GRAPH_TEX_TYPE_PLANE) {
 				// 読み込んだイメージデータを出力用テクスチャにセット
 				exportTex->AddImageAsCubeFace(
-					(izanagi::E_GRAPH_CUBE_TEX_FACE)i,
+					(izanagi::graph::E_GRAPH_CUBE_TEX_FACE)i,
 					tex->GetImage(0));
 
 				// 所有者をexportTexにする
@@ -634,11 +634,11 @@ BOOL CImageBuilder::BuildIMG(LPCSTR lpszExport)
 		// 出力先の現在位置がイメージデータの位置（ジャンプ先）になる
 		tJumpTable.push_back(cOut.GetSize());
 
-		if (sImageInfo.info.type == izanagi::E_GRAPH_TEX_TYPE_CUBE) {
+		if (sImageInfo.info.type == izanagi::graph::E_GRAPH_TEX_TYPE_CUBE) {
 			ret = _ExportCubeTex(&cOut, &sHeader, sImageInfo);
 			VGOTO(ret, __EXIT__);
 		}
-		else if (sImageInfo.info.type == izanagi::E_GRAPH_TEX_TYPE_VOLUME) {
+		else if (sImageInfo.info.type == izanagi::graph::E_GRAPH_TEX_TYPE_VOLUME) {
 		}
 		else {
 			ret = _ExportTex(&cOut, &sHeader, sImageInfo);

@@ -23,14 +23,14 @@ namespace tool {
 	public:
 		/** 空のテクスチャを作成する
 		 */
-		static CIMGTexture* CreateEmptyTexture(E_GRAPH_TEX_TYPE type);
+		static CIMGTexture* CreateEmptyTexture(graph::E_GRAPH_TEX_TYPE type);
 
 		/** テクスチャを削除する
 		 */
 		static void Delete(CIMGTexture* tex);
 
 	private:
-		CIMGTexture(E_GRAPH_TEX_TYPE nType = E_GRAPH_TEX_TYPE_PLANE);
+		CIMGTexture(graph::E_GRAPH_TEX_TYPE nType = graph::E_GRAPH_TEX_TYPE_PLANE);
 		~CIMGTexture();
 
 		NO_COPIABLE(CIMGTexture);
@@ -41,20 +41,20 @@ namespace tool {
 			IZ_UINT nWidth,
 			IZ_UINT nHeight,
 			IZ_UINT nMipLevel,
-			E_GRAPH_PIXEL_FMT nFmt,
+			graph::E_GRAPH_PIXEL_FMT nFmt,
 			IZ_BOOL bIsAllocBuffer = IZ_TRUE);
 		IZ_BOOL InitAsCube(
 			IZ_UINT nWidth,
 			IZ_UINT nHeight,
 			IZ_UINT nMipLevel,
-			E_GRAPH_PIXEL_FMT nFmt,
+			graph::E_GRAPH_PIXEL_FMT nFmt,
 			IZ_BOOL bIsAllocBuffer = IZ_TRUE);
 		IZ_BOOL InitAsVolume(
 			IZ_UINT nDepth,
 			IZ_UINT nWidth,
 			IZ_UINT nHeight,
 			IZ_UINT nMipLevel,
-			E_GRAPH_PIXEL_FMT nFmt,
+			graph::E_GRAPH_PIXEL_FMT nFmt,
 			IZ_BOOL bIsAllocBuffer = IZ_TRUE);
 
 	public:
@@ -62,7 +62,7 @@ namespace tool {
 		void Clear();
 
 		// フォーマット変換
-		IZ_BOOL ConvertPixelFormat(E_GRAPH_PIXEL_FMT nFmt);
+		IZ_BOOL ConvertPixelFormat(graph::E_GRAPH_PIXEL_FMT nFmt);
 
 		// MIPMAP作成
 		IZ_BOOL CreateMipMap(IZ_UINT nMipLevel = 1000);
@@ -77,7 +77,7 @@ namespace tool {
 		/** Cubeテクスチャの面として追加する.
 		 */
 		IZ_BOOL AddImageAsCubeFace(
-			izanagi::E_GRAPH_CUBE_TEX_FACE face,
+			izanagi::graph::E_GRAPH_CUBE_TEX_FACE face,
 			std::vector<CIMGImage*>& images);
 
 	private:
@@ -127,10 +127,10 @@ namespace tool {
 	private:
 		// テクスチャ情報をセット
 		inline void SetTexInfo(
-			E_GRAPH_TEX_TYPE type,
+			graph::E_GRAPH_TEX_TYPE type,
 			IZ_UINT nWidth,
 			IZ_UINT nHeight,
-			E_GRAPH_PIXEL_FMT nFmt,
+			graph::E_GRAPH_PIXEL_FMT nFmt,
 			IZ_UINT nLevel,
 			IZ_UINT nDepth);
 
@@ -277,10 +277,10 @@ namespace tool {
 
 	// テクスチャ情報をセット
 	void CIMGTexture::SetTexInfo(
-		E_GRAPH_TEX_TYPE type,
+		graph::E_GRAPH_TEX_TYPE type,
 		IZ_UINT nWidth,
 		IZ_UINT nHeight,
-		E_GRAPH_PIXEL_FMT nFmt,
+		graph::E_GRAPH_PIXEL_FMT nFmt,
 		IZ_UINT nLevel,
 		IZ_UINT nDepth)
 	{

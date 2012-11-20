@@ -29,13 +29,13 @@ namespace tool {
 			void* pDst,
 			IZ_UINT nWidth,
 			IZ_UINT nHeight,
-			E_GRAPH_PIXEL_FMT nFmt);
+			graph::E_GRAPH_PIXEL_FMT nFmt);
 
 		// 作成可能MIPMAPレベルを計算
 		static IZ_UINT ComputeMaxMipLevel(
 			IZ_UINT nWidth, 
 			IZ_UINT nHeight, 
-			E_GRAPH_PIXEL_FMT nFmt);
+			graph::E_GRAPH_PIXEL_FMT nFmt);
 	};
 }	// namespace tool
 }	// namespace izanagi

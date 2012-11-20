@@ -28,7 +28,7 @@ void Convert(
 					out->getRef(
 						x, y,
 						vecRef,
-						(izanagi::E_GRAPH_CUBE_TEX_FACE)i);
+						(izanagi::graph::E_GRAPH_CUBE_TEX_FACE)i);
 
 					IZ_FLOAT u, v;
 					in->getUVFromRef(vecRef, u ,v);

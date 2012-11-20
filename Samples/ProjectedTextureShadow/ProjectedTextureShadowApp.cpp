@@ -22,7 +22,7 @@ CProjectedTextureShadowApp::~CProjectedTextureShadowApp()
 // 初期化.
 IZ_BOOL CProjectedTextureShadowApp::InitInternal(
 	izanagi::IMemoryAllocator* allocator,
-	izanagi::CGraphicsDevice* device,
+	izanagi::graph::CGraphicsDevice* device,
 	izanagi::sample::CSampleCamera& camera)
 {
 	IZ_BOOL result = IZ_TRUE;
@@ -129,7 +129,7 @@ void CProjectedTextureShadowApp::ReleaseInternal()
 }
 
 // 更新.
-void CProjectedTextureShadowApp::UpdateInternal(izanagi::CGraphicsDevice* device)
+void CProjectedTextureShadowApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
 	GetCamera().Update();
 }
@@ -152,7 +152,7 @@ namespace {
 }
 
 // 描画.
-void CProjectedTextureShadowApp::RenderInternal(izanagi::CGraphicsDevice* device)
+void CProjectedTextureShadowApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
 	RenderForShadow(device);
 
@@ -267,7 +267,7 @@ void CProjectedTextureShadowApp::RenderInternal(izanagi::CGraphicsDevice* device
 	m_Shader->End();
 }
 
-void CProjectedTextureShadowApp::RenderForShadow(izanagi::CGraphicsDevice* device)
+void CProjectedTextureShadowApp::RenderForShadow(izanagi::graph::CGraphicsDevice* device)
 {
 	izanagi::SMatrix mtxL2W;
 	izanagi::SMatrix::SetUnit(mtxL2W);

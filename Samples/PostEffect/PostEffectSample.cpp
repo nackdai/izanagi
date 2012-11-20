@@ -25,7 +25,7 @@ CPostEffectSample::~CPostEffectSample()
 // 初期化
 IZ_BOOL CPostEffectSample::Init(
 	izanagi::IMemoryAllocator* allocator,
-	izanagi::CGraphicsDevice* device)
+	izanagi::graph::CGraphicsDevice* device)
 {
 	static const IZ_UINT DefaultTexMgrCreateMax = 32;
 
@@ -114,12 +114,12 @@ IZ_BOOL CPostEffectSample::Read(IZ_PCSTR filapath)
 }
 
 // シーン描画開始
-IZ_BOOL CPostEffectSample::BeginScene(izanagi::CGraphicsDevice* device)
+IZ_BOOL CPostEffectSample::BeginScene(izanagi::graph::CGraphicsDevice* device)
 {
 	IZ_BOOL ret = IZ_TRUE;
 
 	if (EnablePostEffect()) {
-		izanagi::CSurface* surfs[2];
+		izanagi::graph::CSurface* surfs[2];
 		IZ_UINT surfaceNum = 0;
 
 		surfs[surfaceNum++] = m_SrcTex->GetSurface(0);
@@ -135,12 +135,12 @@ IZ_BOOL CPostEffectSample::BeginScene(izanagi::CGraphicsDevice* device)
 }
 
 // ポストエフェクト実行
-IZ_BOOL CPostEffectSample::Apply(izanagi::CGraphicsDevice* device)
+IZ_BOOL CPostEffectSample::Apply(izanagi::graph::CGraphicsDevice* device)
 {
 	IZ_BOOL ret = IZ_TRUE;
 
 	if (EnablePostEffect()) {
-		IZ_UINT endSceneTargetFlag = izanagi::E_GRAPH_END_SCENE_FLAG_RT_0;
+		IZ_UINT endSceneTargetFlag = izanagi::graph::E_GRAPH_END_SCENE_FLAG_RT_0;
 
 		device->EndScene(endSceneTargetFlag);
 

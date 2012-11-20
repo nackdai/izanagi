@@ -11,7 +11,7 @@ CImageReader CImageReader::s_cInstance;
 */
 CIMGMaster* CImageReader::Read(
 	LPCSTR lpszPath,
-	E_GRAPH_TEX_TYPE nType/*= E_GRAPH_TEX_TYPE_PLANE*/)
+	graph::E_GRAPH_TEX_TYPE nType/*= graph::E_GRAPH_TEX_TYPE_PLANE*/)
 {
 	// とりあえず作る
 	CIMGMaster* master = new CIMGMaster();

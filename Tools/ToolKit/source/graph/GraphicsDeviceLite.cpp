@@ -160,7 +160,7 @@ CTextureLite* CGraphicsDeviceLite::CreateTexture(
 CTextureLite* CGraphicsDeviceLite::CreateTexture(
 	IZ_UINT nWidth,
 	IZ_UINT nHeight,
-	izanagi::E_GRAPH_PIXEL_FMT fmt)
+	izanagi::graph::E_GRAPH_PIXEL_FMT fmt)
 {
 	CTextureLite* ret = CTextureLite::CreateTexture(
 							this,

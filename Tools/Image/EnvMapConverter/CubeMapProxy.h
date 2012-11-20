@@ -28,7 +28,7 @@ public:
 	virtual void getRef(
 		IZ_UINT x, IZ_UINT y,
 		izanagi::SVector& ref,
-		izanagi::E_GRAPH_CUBE_TEX_FACE face = izanagi::E_GRAPH_CUBE_TEX_FACE_NUM);
+		izanagi::graph::E_GRAPH_CUBE_TEX_FACE face = izanagi::graph::E_GRAPH_CUBE_TEX_FACE_NUM);
 
 	/** UVから色を取得.
 	 */
@@ -48,7 +48,7 @@ public:
 
 protected:
 	// 参照する面の変更
-	inline void ChangeFace(izanagi::E_GRAPH_CUBE_TEX_FACE face);
+	inline void ChangeFace(izanagi::graph::E_GRAPH_CUBE_TEX_FACE face);
 
 protected:
 	std::vector<izanagi::tool::CTextureLite*> m_Tex;
@@ -59,8 +59,8 @@ protected:
 	IZ_FLOAT m_DivW;
 	IZ_FLOAT m_DivH;
 
-	izanagi::E_GRAPH_CUBE_TEX_FACE m_CurFace;
-	izanagi::E_GRAPH_CUBE_TEX_FACE m_PrevFace;
+	izanagi::graph::E_GRAPH_CUBE_TEX_FACE m_CurFace;
+	izanagi::graph::E_GRAPH_CUBE_TEX_FACE m_PrevFace;
 	IZ_BOOL m_IsChangedFace;
 };
 

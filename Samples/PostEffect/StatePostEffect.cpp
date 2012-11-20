@@ -28,12 +28,12 @@ IZ_BOOL CStatePostEffect::Update()
 }
 
 // 描画.
-IZ_BOOL CStatePostEffect::Render(izanagi::CGraphicsDevice* device)
+IZ_BOOL CStatePostEffect::Render(izanagi::graph::CGraphicsDevice* device)
 {
     CPostEffectSample::GetInstance()->BeginScene(device);
     {
         device->Clear(
-            izanagi::E_GRAPH_CLEAR_FLAG_COLOR, 
+            izanagi::graph::E_GRAPH_CLEAR_FLAG_COLOR, 
             IZ_COLOR_RGBA(0, 0, 0, 0xff), 
             1.0f, 0);
         CSceneRenderer::GetInstance()->Render(m_Camera, device);

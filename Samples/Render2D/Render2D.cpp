@@ -9,17 +9,17 @@ protected:
 	// 初期化.
 	virtual IZ_BOOL InitInternal(
 		izanagi::IMemoryAllocator* allocator,
-		izanagi::CGraphicsDevice* device,
+		izanagi::graph::CGraphicsDevice* device,
 		izanagi::sample::CSampleCamera& camera);
 
 	// 解放.
 	virtual void ReleaseInternal();
 
 	// 更新.
-	virtual void UpdateInternal(izanagi::CGraphicsDevice* device);
+	virtual void UpdateInternal(izanagi::graph::CGraphicsDevice* device);
 
 	// 描画.
-	virtual void RenderInternal(izanagi::CGraphicsDevice* device);
+	virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device);
 
 private:
 	izanagi::CImage* m_Img;
@@ -37,7 +37,7 @@ CRender2DApp::~CRender2DApp()
 // 初期化.
 IZ_BOOL CRender2DApp::InitInternal(
 	izanagi::IMemoryAllocator* allocator,
-	izanagi::CGraphicsDevice* device,
+	izanagi::graph::CGraphicsDevice* device,
 	izanagi::sample::CSampleCamera& camera)
 {
 	izanagi::CFileInputStream in;
@@ -58,20 +58,20 @@ void CRender2DApp::ReleaseInternal()
 }
 
 // 更新.
-void CRender2DApp::UpdateInternal(izanagi::CGraphicsDevice* device)
+void CRender2DApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
 	// Nothing is done...
 }
 
 // 描画.
-void CRender2DApp::RenderInternal(izanagi::CGraphicsDevice* device)
+void CRender2DApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
 	static const IZ_COLOR bgColor = IZ_COLOR_RGBA(0, 128, 255, 255);
 
 	if (device->Begin2D()) {
 		// スプライト
 		device->SetTexture(0, m_Img->GetTexture(0));
-		device->Set2DRenderOp(izanagi::E_GRAPH_2D_RENDER_OP_MODULATE);
+		device->Set2DRenderOp(izanagi::graph::E_GRAPH_2D_RENDER_OP_MODULATE);
 		device->Draw2DSprite(
 			izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),
 			izanagi::CIntRect(300, 100, 556, 228));

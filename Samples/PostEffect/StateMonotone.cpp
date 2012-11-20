@@ -15,7 +15,7 @@ CStateMonotone::~CStateMonotone()
 }
 
 // 描画.
-IZ_BOOL CStateMonotone::Render(izanagi::CGraphicsDevice* device)
+IZ_BOOL CStateMonotone::Render(izanagi::graph::CGraphicsDevice* device)
 {
     CStatePostEffect::Render(device);
 	RenderName(device, "Monotone");

@@ -8,14 +8,14 @@ namespace {
 	{
 		static struct {
 			IZ_PCSTR strFmt;
-			izanagi::E_GRAPH_PIXEL_FMT fmt;
+			izanagi::graph::E_GRAPH_PIXEL_FMT fmt;
 		} tbl[] = {
-			{"A8R8G8B8",      izanagi::E_GRAPH_PIXEL_FMT_RGBA8},
-			{"A16B16G16R16F", izanagi::E_GRAPH_PIXEL_FMT_RGBA16F},
-			{"A32B32G32R32F", izanagi::E_GRAPH_PIXEL_FMT_RGBA32F},
-			{"R32F",          izanagi::E_GRAPH_PIXEL_FMT_R32F},
-			{"A2R10G10B10",   izanagi::E_GRAPH_PIXEL_FMT_RGB10A2},
-			{"A8",            izanagi::E_GRAPH_PIXEL_FMT_A8},
+			{"A8R8G8B8",      izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA8},
+			{"A16B16G16R16F", izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA16F},
+			{"A32B32G32R32F", izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA32F},
+			{"R32F",          izanagi::graph::E_GRAPH_PIXEL_FMT_R32F},
+			{"A2R10G10B10",   izanagi::graph::E_GRAPH_PIXEL_FMT_RGB10A2},
+			{"A8",            izanagi::graph::E_GRAPH_PIXEL_FMT_A8},
 		};
 
 		IZ_PCSTR fmt = ::cgGetStringAnnotationValue(ann);
@@ -84,11 +84,11 @@ namespace {
 	{
 		static struct {
 			IZ_PCSTR strFmt;
-			izanagi::E_GRAPH_RSC_TYPE type;
+			izanagi::graph::E_GRAPH_RSC_TYPE type;
 		} tbl[] = {
-			{"STATIC", izanagi::E_GRAPH_RSC_TYPE_STATIC},
-			{"DYNAMIC", izanagi::E_GRAPH_RSC_TYPE_DYNAMIC},
-			{"STATIC_DYNAMIC", izanagi::E_GRAPH_RSC_TYPE_STATIC_DYNAMIC},
+			{"STATIC", izanagi::graph::E_GRAPH_RSC_TYPE_STATIC},
+			{"DYNAMIC", izanagi::graph::E_GRAPH_RSC_TYPE_DYNAMIC},
+			{"STATIC_DYNAMIC", izanagi::graph::E_GRAPH_RSC_TYPE_STATIC_DYNAMIC},
 		};
 
 		IZ_PCSTR fmt = ::cgGetStringAnnotationValue(ann);

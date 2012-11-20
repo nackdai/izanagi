@@ -38,13 +38,13 @@ IZ_BOOL CSampleApp::Init(const SSampleAppParams& params)
 	{
 		IZ_ASSERT(params.allocatorForGraph != IZ_NULL);
 
-		m_Device = izanagi::CGraphicsDevice::CreateGrapicsDevice(
+		m_Device = izanagi::graph::CGraphicsDevice::CreateGraphicsDevice(
 						params.allocatorForGraph);
 		VGOTO(ret = (m_Device != IZ_NULL), __EXIT__);
 	}
 
 	// グラフィックスデバイス設定
-	izanagi::SGraphicsDeviceInitParams gfxDevParams;
+	izanagi::graph::SGraphicsDeviceInitParams gfxDevParams;
 	{
 		gfxDevParams.hFocusWindow = (HWND)params.focusWindow;
 		gfxDevParams.hDeviceWindow = (HWND)params.deviceWindow;
@@ -67,7 +67,7 @@ IZ_BOOL CSampleApp::Init(const SSampleAppParams& params)
 	}
 
 	// デバイスリセット
-	ret = m_Device->Reset(gfxDevParams);
+	ret = m_Device->Reset((const void*)&gfxDevParams);
 	VGOTO(ret, __EXIT__);
 
 	// デバッグフォント初期化
@@ -187,7 +187,7 @@ void CSampleApp::Render()
 	IZ_COLOR bgColor = GetBgColor();
 
 	m_Device->BeginRender(
-		izanagi::E_GRAPH_CLEAR_FLAG_ALL,
+		izanagi::graph::E_GRAPH_CLEAR_FLAG_ALL,
 		bgColor, 1.0f, 0);
 	{
 		RenderInternal(m_Device);

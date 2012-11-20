@@ -20,7 +20,7 @@ public:
 	// 初期化
 	IZ_BOOL Init(
 		izanagi::IMemoryAllocator* allocator,
-		izanagi::CGraphicsDevice* device);
+		izanagi::graph::CGraphicsDevice* device);
 
 	// 開放
 	void Release();
@@ -29,13 +29,13 @@ public:
 	IZ_BOOL Read(IZ_PCSTR filapath);
 
 	// シーン描画開始
-	IZ_BOOL BeginScene(izanagi::CGraphicsDevice* device);
+	IZ_BOOL BeginScene(izanagi::graph::CGraphicsDevice* device);
 
 	// ポストエフェクト実行
-	IZ_BOOL Apply(izanagi::CGraphicsDevice* device);
+	IZ_BOOL Apply(izanagi::graph::CGraphicsDevice* device);
 
 	// 深度テクスチャセット
-	void SetDepthTexture(izanagi::CTexture* pTex);
+	void SetDepthTexture(izanagi::graph::CTexture* pTex);
 
     // ポストエフェクト実行可能かどうか
 	IZ_BOOL EnablePostEffect();
@@ -59,7 +59,7 @@ private:
 	izanagi::CPostEffect* m_PostEffect;
 	izanagi::CPostEffectTextureCreator* m_TexCreator;
 
-	izanagi::CTexture* m_SrcTex;
+	izanagi::graph::CTexture* m_SrcTex;
 
 	IZ_BOOL m_Enable;
 

@@ -29,13 +29,13 @@ namespace tool {
 	public:
 		/**
 		*/
-		typedef CIMGTexture* (*ReadFunc)(LPCSTR lpszPath, E_GRAPH_TEX_TYPE nType);
+		typedef CIMGTexture* (*ReadFunc)(LPCSTR lpszPath, graph::E_GRAPH_TEX_TYPE nType);
 
 	public:
 		// 読み込み
 		CIMGMaster* Read(
 			LPCSTR lpszPath,
-			E_GRAPH_TEX_TYPE nType = E_GRAPH_TEX_TYPE_PLANE);
+			graph::E_GRAPH_TEX_TYPE nType = graph::E_GRAPH_TEX_TYPE_PLANE);
 
 	public:
 		// 削除

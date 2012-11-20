@@ -5,17 +5,17 @@ using namespace izanagi;
 using namespace tool;
 
 namespace {
-	IZ_INT _GetSquishFmt(E_GRAPH_PIXEL_FMT fmt)
+	IZ_INT _GetSquishFmt(graph::E_GRAPH_PIXEL_FMT fmt)
 	{
 		IZ_INT ret = squish::kDxt1;
 		switch (fmt) {
-		case E_GRAPH_PIXEL_FMT_DXT1:
+		case graph::E_GRAPH_PIXEL_FMT_DXT1:
 			ret = squish::kDxt1;
 			break;
-		case E_GRAPH_PIXEL_FMT_DXT3:
+		case graph::E_GRAPH_PIXEL_FMT_DXT3:
 			ret = squish::kDxt3;
 			break;
-		case E_GRAPH_PIXEL_FMT_DXT5:
+		case graph::E_GRAPH_PIXEL_FMT_DXT5:
 			ret = squish::kDxt5;
 			break;
 		default:
@@ -32,7 +32,7 @@ void CDXTFormatConverter::Compress(
 	IZ_UINT height,
 	const void* src,
 	void* dst,
-	E_GRAPH_PIXEL_FMT fmt)
+	graph::E_GRAPH_PIXEL_FMT fmt)
 {
 	// NOTE
 	// 外部でRGBA8に変換されている前提
@@ -51,7 +51,7 @@ void CDXTFormatConverter::Decompress(
 	IZ_UINT height,
 	const void* src,
 	void* dst,
-	E_GRAPH_PIXEL_FMT fmt)
+	graph::E_GRAPH_PIXEL_FMT fmt)
 {
 	IZ_INT squishFmt = _GetSquishFmt(fmt);
 

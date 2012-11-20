@@ -3,20 +3,20 @@
 #include "izToolKit.h"
 
 namespace {
-	izanagi::E_GRAPH_TEX_ADDRESS TexAddrTable[] = {
-		izanagi::E_GRAPH_TEX_ADDRESS_CLAMP,
-		izanagi::E_GRAPH_TEX_ADDRESS_WRAP,
-		izanagi::E_GRAPH_TEX_ADDRESS_MIRROR,
+	izanagi::graph::E_GRAPH_TEX_ADDRESS TexAddrTable[] = {
+		izanagi::graph::E_GRAPH_TEX_ADDRESS_CLAMP,
+		izanagi::graph::E_GRAPH_TEX_ADDRESS_WRAP,
+		izanagi::graph::E_GRAPH_TEX_ADDRESS_MIRROR,
 	};
 
-	izanagi::E_GRAPH_TEX_FILTER TexFilterTable[] = {
-		izanagi::E_GRAPH_TEX_FILTER_POINT,
-		izanagi::E_GRAPH_TEX_FILTER_POINT,
-		izanagi::E_GRAPH_TEX_FILTER_LINEAR,
+	izanagi::graph::E_GRAPH_TEX_FILTER TexFilterTable[] = {
+		izanagi::graph::E_GRAPH_TEX_FILTER_POINT,
+		izanagi::graph::E_GRAPH_TEX_FILTER_POINT,
+		izanagi::graph::E_GRAPH_TEX_FILTER_LINEAR,
 	};
 
 	// AddressU
-	BOOL _SetValueAddressU(izanagi::S_SAMPLER_STATE& sState, CGstateassignment sa)
+	BOOL _SetValueAddressU(izanagi::graph::S_SAMPLER_STATE& sState, CGstateassignment sa)
 	{
 		INT num;
 		const int* p = cgGetIntStateAssignmentValues(sa, &num);
@@ -28,7 +28,7 @@ namespace {
 	}
 
 	// AddressV
-	BOOL _SetValueAddressV(izanagi::S_SAMPLER_STATE& sState, CGstateassignment sa)
+	BOOL _SetValueAddressV(izanagi::graph::S_SAMPLER_STATE& sState, CGstateassignment sa)
 	{
 		INT num;
 		const int* p = cgGetIntStateAssignmentValues(sa, &num);
@@ -40,7 +40,7 @@ namespace {
 	}
 
 	// MinFilter
-	BOOL _SetValueMinFilter(izanagi::S_SAMPLER_STATE& sState, CGstateassignment sa)
+	BOOL _SetValueMinFilter(izanagi::graph::S_SAMPLER_STATE& sState, CGstateassignment sa)
 	{
 		INT num;
 		const int* p = cgGetIntStateAssignmentValues(sa, &num);
@@ -52,7 +52,7 @@ namespace {
 	}
 
 	// MagFilter
-	BOOL _SetValueMagFilter(izanagi::S_SAMPLER_STATE& sState, CGstateassignment sa)
+	BOOL _SetValueMagFilter(izanagi::graph::S_SAMPLER_STATE& sState, CGstateassignment sa)
 	{
 		INT num;
 		const int* p = cgGetIntStateAssignmentValues(sa, &num);
@@ -64,7 +64,7 @@ namespace {
 	}
 
 	// MipFilter
-	BOOL _SetValueMipFilter(izanagi::S_SAMPLER_STATE& sState, CGstateassignment sa)
+	BOOL _SetValueMipFilter(izanagi::graph::S_SAMPLER_STATE& sState, CGstateassignment sa)
 	{
 		INT num;
 		const int* p = cgGetIntStateAssignmentValues(sa, &num);
@@ -77,12 +77,12 @@ namespace {
 
 	// 各種ステートをセット
 	BOOL _SetStateValue(
-		izanagi::S_SAMPLER_STATE& sState,
+		izanagi::graph::S_SAMPLER_STATE& sState,
 		CGstateassignment sa)
 	{
 		static struct {
 			const char* Name;
-			BOOL (*Func)(izanagi::S_SAMPLER_STATE&, CGstateassignment);
+			BOOL (*Func)(izanagi::graph::S_SAMPLER_STATE&, CGstateassignment);
 		} StateTable[] = {
 			{"AddressU", _SetValueAddressU},
 			{"AddressV", _SetValueAddressV},

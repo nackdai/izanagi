@@ -107,7 +107,7 @@ namespace sample {
 		 */
 		virtual IZ_BOOL InitInternal(
 			izanagi::IMemoryAllocator* allocator,
-			izanagi::CGraphicsDevice* device,
+			izanagi::graph::CGraphicsDevice* device,
 			izanagi::sample::CSampleCamera& camera) = 0;
 
 		/** 解放.
@@ -116,14 +116,14 @@ namespace sample {
 
 		/** 更新.
 		 */
-		virtual void UpdateInternal(izanagi::CGraphicsDevice* device) = 0;
+		virtual void UpdateInternal(izanagi::graph::CGraphicsDevice* device) = 0;
 
 		/** 描画.
 		 */
-		virtual void RenderInternal(izanagi::CGraphicsDevice* device) = 0;
+		virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device) = 0;
 
 	protected:
-		izanagi::CGraphicsDevice* m_Device;
+		izanagi::graph::CGraphicsDevice* m_Device;
 		izanagi::IMemoryAllocator* m_Allocator;
 
 		izanagi::CDebugFont* m_DebugFont;

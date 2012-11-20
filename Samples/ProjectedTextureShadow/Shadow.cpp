@@ -2,7 +2,7 @@
 
 CShadow* CShadow::Create(
 	izanagi::IMemoryAllocator* allocator,
-	izanagi::CGraphicsDevice* device,
+	izanagi::graph::CGraphicsDevice* device,
 	IZ_UINT width,
 	IZ_UINT height)
 {
@@ -24,8 +24,8 @@ CShadow* CShadow::Create(
 
 		if (result) {
 			instance->m_RT->SetAddress(
-				izanagi::E_GRAPH_TEX_ADDRESS_CLAMP,
-				izanagi::E_GRAPH_TEX_ADDRESS_CLAMP);
+				izanagi::graph::E_GRAPH_TEX_ADDRESS_CLAMP,
+				izanagi::graph::E_GRAPH_TEX_ADDRESS_CLAMP);
 
 			instance->m_DepthRT = device->CreateDepthStencilSurface(
 									width, height,
@@ -54,17 +54,17 @@ CShadow::~CShadow()
 }
 
 IZ_BOOL CShadow::BeginShadowRender(
-	izanagi::CGraphicsDevice* device,
+	izanagi::graph::CGraphicsDevice* device,
 	const izanagi::SVector& lightPos,
 	const izanagi::SVector& lightDir)
 {
-	izanagi::CSurface* srf = m_RT->GetSurface(0);
-	izanagi::CSurface* depth = m_DepthRT;
+	izanagi::graph::CSurface* srf = m_RT->GetSurface(0);
+	izanagi::graph::CSurface* depth = m_DepthRT;
 
 	IZ_BOOL ret = device->BeginScene(
 					&srf, 1,
 					depth,
-					izanagi::E_GRAPH_CLEAR_FLAG_ALL);
+					izanagi::graph::E_GRAPH_CLEAR_FLAG_ALL);
 	IZ_ASSERT(ret);
 
 	if (ret) {
@@ -83,9 +83,9 @@ IZ_BOOL CShadow::BeginShadowRender(
 	return ret;
 }
 
-void CShadow::EndShadowRender(izanagi::CGraphicsDevice* device)
+void CShadow::EndShadowRender(izanagi::graph::CGraphicsDevice* device)
 {
-	device->EndScene(izanagi::E_GRAPH_END_SCENE_FLAG_RT_0 | izanagi::E_GRAPH_END_SCENE_FLAG_DEPTH_STENCIL);
+	device->EndScene(izanagi::graph::E_GRAPH_END_SCENE_FLAG_RT_0 | izanagi::graph::E_GRAPH_END_SCENE_FLAG_DEPTH_STENCIL);
 }
 
 const izanagi::SMatrix& CShadow::GetLightViewProjMtx() const

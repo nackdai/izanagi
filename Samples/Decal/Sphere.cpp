@@ -2,7 +2,7 @@
 
 CSphere* CSphere::Create(
 	izanagi::IMemoryAllocator* allocator,
-	izanagi::CGraphicsDevice* device,
+	izanagi::graph::CGraphicsDevice* device,
 	IZ_FLOAT radius,
 	IZ_UINT slices,
 	IZ_UINT stacks)
@@ -68,7 +68,7 @@ CSphere::~CSphere()
 // メッシュ作成
 IZ_BOOL CSphere::CreateMesh(
 	izanagi::IMemoryAllocator* allocator,
-	izanagi::CGraphicsDevice* device,
+	izanagi::graph::CGraphicsDevice* device,
 	IZ_FLOAT radius,
 	IZ_UINT slices,
 	IZ_UINT stacks)

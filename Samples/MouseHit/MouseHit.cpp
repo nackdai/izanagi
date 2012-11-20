@@ -20,7 +20,7 @@ CMouseHit::~CMouseHit()
 // 初期化.
 IZ_BOOL CMouseHit::InitInternal(
 	izanagi::IMemoryAllocator* allocator,
-	izanagi::CGraphicsDevice* device,
+	izanagi::graph::CGraphicsDevice* device,
 	izanagi::sample::CSampleCamera& camera)
 {
 	IZ_BOOL result = IZ_TRUE;
@@ -108,7 +108,7 @@ void CMouseHit::ReleaseInternal()
 }
 
 // 更新.
-void CMouseHit::UpdateInternal(izanagi::CGraphicsDevice* device)
+void CMouseHit::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
 	GetCamera().Update();
 
@@ -162,13 +162,13 @@ namespace {
 }
 
 // 描画.
-void CMouseHit::RenderInternal(izanagi::CGraphicsDevice* device)
+void CMouseHit::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
 	izanagi::sample::CSampleCamera& camera = GetCamera();
 
 	device->SetRenderState(
-		izanagi::E_GRAPH_RS_CULLMODE,
-		izanagi::E_GRAPH_CULL_NONE);
+		izanagi::graph::E_GRAPH_RS_CULLMODE,
+		izanagi::graph::E_GRAPH_CULL_NONE);
 
 	static const izanagi::SVector color[2] = {
 		{ 1.0f, 1.0f, 1.0f, 1.0f },

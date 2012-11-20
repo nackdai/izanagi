@@ -40,24 +40,30 @@ typedef IDirect3DBaseTexture9* TEX_HANDLE;
 // シェーダ定数ハンドル
 typedef D3DXHANDLE	SHADER_PARAM_HANDLE;
 
-/** 初期化パラメータ
- */
-struct SGraphicsDeviceInitParams {
-	HWND hFocusWindow;
-	HWND hDeviceWindow;
+namespace izanagi
+{
+namespace graph
+{
+    /** 初期化パラメータ
+     */
+    struct SGraphicsDeviceInitParams {
+	    HWND hFocusWindow;
+	    HWND hDeviceWindow;
 
-	DWORD BackBufferWidth;
-	DWORD BackBufferHeight;
-	BOOL Windowed;
-	D3DMULTISAMPLE_TYPE MultiSampleType;
+	    DWORD BackBufferWidth;
+	    DWORD BackBufferHeight;
+	    BOOL Windowed;
+	    D3DMULTISAMPLE_TYPE MultiSampleType;
 
-	DWORD Adapter;
-	D3DDEVTYPE DeviceType;
-	DWORD BehaviorFlags;
+	    DWORD Adapter;
+	    D3DDEVTYPE DeviceType;
+	    DWORD BehaviorFlags;
 
-	D3DFORMAT DepthStencilFormat;
+	    D3DFORMAT DepthStencilFormat;
 
-	DWORD PresentationInterval;
-};
+	    DWORD PresentationInterval;
+    };
+}   // namespace graph
+}   // namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_D3D_DEFS_H__)

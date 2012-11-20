@@ -19,7 +19,7 @@ public:
 
 protected:
 	void RenderName(
-		izanagi::CGraphicsDevice* device,
+		izanagi::graph::CGraphicsDevice* device,
 		const char* name);
 
 protected:

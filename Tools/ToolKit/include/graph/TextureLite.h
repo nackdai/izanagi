@@ -37,7 +37,7 @@ namespace tool {
 			IMemoryAllocator* pAllocator,
 			IZ_UINT nWidth,
 			IZ_UINT nHeight,
-			izanagi::E_GRAPH_PIXEL_FMT fmt);
+			izanagi::graph::E_GRAPH_PIXEL_FMT fmt);
 
 		// テクスチャ保存
 		static IZ_BOOL SaveTexture(
@@ -72,7 +72,7 @@ namespace tool {
 		inline IZ_UINT GetHeight(IZ_UINT level = 0) const;
 
 		// フォーマット取得
-		inline E_GRAPH_PIXEL_FMT GetPixelFormat() const;
+		inline graph::E_GRAPH_PIXEL_FMT GetPixelFormat() const;
 
 		// MIPMAP数取得
 		inline IZ_UINT GetMipMapNum() const;
@@ -94,7 +94,7 @@ namespace tool {
 
 		D3DSURFACE_DESC m_Desc;
 		IZ_UINT m_nMipLevels;
-		E_GRAPH_PIXEL_FMT m_nFmt;
+		graph::E_GRAPH_PIXEL_FMT m_nFmt;
 	};
 
 	// inline ***********************************
@@ -107,7 +107,7 @@ namespace tool {
 
 		memset(&m_Desc, 0, sizeof(m_Desc));
 		m_nMipLevels = 0;
-		m_nFmt = E_GRAPH_PIXEL_FMT_RGBA8;
+		m_nFmt = graph::E_GRAPH_PIXEL_FMT_RGBA8;
 	}
 
 	// デストラクタ
@@ -143,7 +143,7 @@ namespace tool {
 	}
 
 	// フォーマット取得
-	E_GRAPH_PIXEL_FMT CTextureLite::GetPixelFormat() const
+	graph::E_GRAPH_PIXEL_FMT CTextureLite::GetPixelFormat() const
 	{
 		return m_nFmt;
 	}

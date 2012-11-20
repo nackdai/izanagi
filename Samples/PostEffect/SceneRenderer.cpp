@@ -37,7 +37,7 @@ namespace {
 
 IZ_BOOL CSceneRenderer::Init(
     izanagi::IMemoryAllocator* allocator,
-    izanagi::CGraphicsDevice* device)
+    izanagi::graph::CGraphicsDevice* device)
 {
     IZ_BOOL result = InitTorus(allocator, device);
     VGOTO(result, __EXIT__);
@@ -55,7 +55,7 @@ __EXIT__:
 
 IZ_BOOL CSceneRenderer::InitTorus(
     izanagi::IMemoryAllocator* allocator,
-    izanagi::CGraphicsDevice* device)
+    izanagi::graph::CGraphicsDevice* device)
 {
     IZ_BOOL result = IZ_TRUE;
 
@@ -93,7 +93,7 @@ __EXIT__:
 
 IZ_BOOL CSceneRenderer::InitEnvBox(
     izanagi::IMemoryAllocator* allocator,
-    izanagi::CGraphicsDevice* device)
+    izanagi::graph::CGraphicsDevice* device)
 {
     IZ_BOOL result = IZ_TRUE;
 
@@ -138,7 +138,7 @@ __EXIT__:
 
 void CSceneRenderer::Render(
     const izanagi::SCameraParam& camera,
-    izanagi::CGraphicsDevice* device)
+    izanagi::graph::CGraphicsDevice* device)
 {
     RenderEnvBox(camera, device);
 
@@ -176,7 +176,7 @@ void CSceneRenderer::Render(
 
 void CSceneRenderer::RenderTorus(
     const izanagi::SCameraParam& camera,
-    izanagi::CGraphicsDevice* device)
+    izanagi::graph::CGraphicsDevice* device)
 {
     izanagi::SMatrix::SetUnit(m_L2W);
 
@@ -233,7 +233,7 @@ void CSceneRenderer::RenderTorus(
 
 void CSceneRenderer::RenderEnvBox(
     const izanagi::SCameraParam& camera,
-    izanagi::CGraphicsDevice* device)
+    izanagi::graph::CGraphicsDevice* device)
 {
     izanagi::SMatrix::SetScale(m_L2W, 100.0f, 100.0f, 100.0f);
 

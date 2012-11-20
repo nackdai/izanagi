@@ -21,12 +21,12 @@ IZ_BOOL CStateBase::Init()
 }
 
 // 描画.
-IZ_BOOL CStateBase::Render(izanagi::CGraphicsDevice* device)
+IZ_BOOL CStateBase::Render(izanagi::graph::CGraphicsDevice* device)
 {
 	if (device->Begin2D()) {
 		// スプライト
 		device->SetTexture(0, m_Img->GetTexture(GetIndex()));
-		device->Set2DRenderOp(izanagi::E_GRAPH_2D_RENDER_OP_MODULATE);
+		device->Set2DRenderOp(izanagi::graph::E_GRAPH_2D_RENDER_OP_MODULATE);
 		device->Draw2DSprite(
 			izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),
 			izanagi::CIntRect(300, 100, 556, 228));
@@ -45,7 +45,7 @@ IZ_BOOL CStateBase::Enter(
 	izanagi::CFileInputStream in;
 	VRETURN(in.Open("data/StateImage.img"));
 
-	izanagi::CGraphicsDevice* device = reinterpret_cast<izanagi::CGraphicsDevice*>(val);
+	izanagi::graph::CGraphicsDevice* device = reinterpret_cast<izanagi::graph::CGraphicsDevice*>(val);
 
 	m_Img = izanagi::CImage::CreateImage(
 				allocator,

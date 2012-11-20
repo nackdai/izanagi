@@ -23,13 +23,13 @@ const IZ_USHORT CSampleEnvBox::sIdxList[CSampleEnvBox::IDX_NUM] = {
 };
 
 // 頂点宣言
-static const izanagi::SVertexElement VERTEX_ELEMENT[] = {
-	{0, 0, izanagi::E_GRAPH_VTX_DECL_TYPE_FLOAT3, izanagi::E_GRAPH_VTX_DECL_USAGE_POSITION , 0},	// 座標
+static const izanagi::graph::SVertexElement VERTEX_ELEMENT[] = {
+	{0, 0, izanagi::graph::E_GRAPH_VTX_DECL_TYPE_FLOAT3, izanagi::graph::E_GRAPH_VTX_DECL_USAGE_POSITION , 0},	// 座標
 };
 
 CSampleEnvBox* CSampleEnvBox::CreateSampleEnvBox(
 	izanagi::IMemoryAllocator* allocator,
-	izanagi::CGraphicsDevice* device)
+	izanagi::graph::CGraphicsDevice* device)
 {
 	IZ_ASSERT(allocator != IZ_NULL);
 	IZ_ASSERT(device != IZ_NULL);
@@ -73,14 +73,14 @@ CSampleEnvBox::~CSampleEnvBox()
 }
 
 // 初期化
-IZ_BOOL CSampleEnvBox::Init(izanagi::CGraphicsDevice* device)
+IZ_BOOL CSampleEnvBox::Init(izanagi::graph::CGraphicsDevice* device)
 {
 	// 頂点バッファ
 	{
 		m_VB = device->CreateVertexBuffer(
 					sizeof(SVertex),
 					VTX_NUM,
-					izanagi::E_GRAPH_RSC_TYPE_STATIC);
+					izanagi::graph::E_GRAPH_RSC_TYPE_STATIC);
 		VRETURN(m_VB != IZ_NULL);
 
 		SVertex* data;
@@ -93,8 +93,8 @@ IZ_BOOL CSampleEnvBox::Init(izanagi::CGraphicsDevice* device)
 	{ 
 		m_IB = device->CreateIndexBuffer(
 					IDX_NUM,
-					izanagi::E_GRAPH_INDEX_BUFFER_FMT_INDEX16,
-					izanagi::E_GRAPH_RSC_TYPE_STATIC);
+					izanagi::graph::E_GRAPH_INDEX_BUFFER_FMT_INDEX16,
+					izanagi::graph::E_GRAPH_RSC_TYPE_STATIC);
 		VRETURN(m_IB != IZ_NULL);
 
 		IZ_UINT16* data;
@@ -115,14 +115,14 @@ IZ_BOOL CSampleEnvBox::Init(izanagi::CGraphicsDevice* device)
 }
 
 // 描画
-void CSampleEnvBox::Render(izanagi::CGraphicsDevice* device)
+void CSampleEnvBox::Render(izanagi::graph::CGraphicsDevice* device)
 {
 	device->SetVertexBuffer(0, 0, sizeof(SVertex), m_VB);
 	device->SetIndexBuffer(m_IB);
 	device->SetVertexDeclaration(m_VD);
 
 	device->DrawIndexedPrimitive(
-		izanagi::E_GRAPH_PRIM_TYPE_TRIANGLESTRIP,
+		izanagi::graph::E_GRAPH_PRIM_TYPE_TRIANGLESTRIP,
 		0, 0,
 		VTX_NUM, 0,
 		IDX_NUM - 2);

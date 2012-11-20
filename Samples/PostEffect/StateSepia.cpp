@@ -15,7 +15,7 @@ CStateSepia::~CStateSepia()
 }
 
 // 描画.
-IZ_BOOL CStateSepia::Render(izanagi::CGraphicsDevice* device)
+IZ_BOOL CStateSepia::Render(izanagi::graph::CGraphicsDevice* device)
 {
     CStatePostEffect::Render(device);
 	RenderName(device, "Sepia");

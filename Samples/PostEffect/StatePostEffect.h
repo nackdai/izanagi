@@ -19,7 +19,7 @@ public:
 	virtual IZ_BOOL Update();
 
 	// 描画.
-	virtual IZ_BOOL Render(izanagi::CGraphicsDevice* device);
+	virtual IZ_BOOL Render(izanagi::graph::CGraphicsDevice* device);
 
 	// 終了.
 	virtual IZ_BOOL Destroy();

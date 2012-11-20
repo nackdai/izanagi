@@ -218,7 +218,7 @@ void CDecal::DoScissoring(
 #endif
 }
 
-void CDecal::CreateGraphicsObject(izanagi::CGraphicsDevice* device)
+void CDecal::CreateGraphicsObject(izanagi::graph::CGraphicsDevice* device)
 {
 	if (!m_NeedCreateGraphicsObject)
 	{
@@ -237,7 +237,7 @@ void CDecal::CreateGraphicsObject(izanagi::CGraphicsDevice* device)
 	m_VB = device->CreateVertexBuffer(
 		sizeof(SVtx),
 		vtxNum,
-		izanagi::E_GRAPH_RSC_TYPE_STATIC);
+		izanagi::graph::E_GRAPH_RSC_TYPE_STATIC);
 	IZ_ASSERT(m_VB != IZ_NULL);
 
 	struct {
@@ -272,18 +272,18 @@ void CDecal::CreateGraphicsObject(izanagi::CGraphicsDevice* device)
 	}
 	m_VB->Unlock();
 
-	static const izanagi::SVertexElement elems[] =
+	static const izanagi::graph::SVertexElement elems[] =
 	{
-		{0,  0, izanagi::E_GRAPH_VTX_DECL_TYPE_FLOAT4, izanagi::E_GRAPH_VTX_DECL_USAGE_POSITION, 0},	// 座標
-		{0, 16, izanagi::E_GRAPH_VTX_DECL_TYPE_COLOR,  izanagi::E_GRAPH_VTX_DECL_USAGE_COLOR,    0},	// 色
-		{0, 20, izanagi::E_GRAPH_VTX_DECL_TYPE_FLOAT2, izanagi::E_GRAPH_VTX_DECL_USAGE_TEXCOORD, 0},	// UV
+		{0,  0, izanagi::graph::E_GRAPH_VTX_DECL_TYPE_FLOAT4, izanagi::graph::E_GRAPH_VTX_DECL_USAGE_POSITION, 0},	// 座標
+		{0, 16, izanagi::graph::E_GRAPH_VTX_DECL_TYPE_COLOR,  izanagi::graph::E_GRAPH_VTX_DECL_USAGE_COLOR,    0},	// 色
+		{0, 20, izanagi::graph::E_GRAPH_VTX_DECL_TYPE_FLOAT2, izanagi::graph::E_GRAPH_VTX_DECL_USAGE_TEXCOORD, 0},	// UV
 	};
 
 	m_VD = device->CreateVertexDeclaration(elems, COUNTOF(elems));
 	IZ_ASSERT(m_VD != IZ_NULL);
 }
 
-void CDecal::Draw(izanagi::CGraphicsDevice* device)
+void CDecal::Draw(izanagi::graph::CGraphicsDevice* device)
 {
 	IZ_ASSERT(device != IZ_NULL);
 
@@ -297,19 +297,19 @@ void CDecal::Draw(izanagi::CGraphicsDevice* device)
 
 #if 0
 	device->SetRenderState(
-		izanagi::E_GRAPH_RS_ZENABLE,
+		izanagi::graph::E_GRAPH_RS_ZENABLE,
 		IZ_FALSE);
 
 	device->DrawPrimitive(
-		izanagi::E_GRAPH_PRIM_TYPE_TRIANGLELIST,
+		izanagi::graph::E_GRAPH_PRIM_TYPE_TRIANGLELIST,
 		0, m_TriNum);
 
 	device->SetRenderState(
-		izanagi::E_GRAPH_RS_ZENABLE,
+		izanagi::graph::E_GRAPH_RS_ZENABLE,
 		IZ_TRUE);
 #else
 	device->DrawPrimitive(
-		izanagi::E_GRAPH_PRIM_TYPE_TRIANGLELIST,
+		izanagi::graph::E_GRAPH_PRIM_TYPE_TRIANGLELIST,
 		0, m_TriNum);
 #endif
 }

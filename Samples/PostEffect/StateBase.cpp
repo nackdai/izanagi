@@ -10,7 +10,7 @@ CStateBase::CStateBase(
 }
 
 void CStateBase::RenderName(
-	izanagi::CGraphicsDevice* device,
+	izanagi::graph::CGraphicsDevice* device,
 	const char* name)
 {
 	izanagi::CDebugFont* debugFont = m_App->GetDebugFont();
