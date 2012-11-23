@@ -31,7 +31,7 @@ public:
 	virtual void getRef(
 		IZ_UINT x, IZ_UINT y,
 		izanagi::SVector& ref,
-		izanagi::E_GRAPH_CUBE_TEX_FACE face = izanagi::E_GRAPH_CUBE_TEX_FACE_NUM);
+		izanagi::graph::E_GRAPH_CUBE_TEX_FACE face = izanagi::graph::E_GRAPH_CUBE_TEX_FACE_NUM);
 
 	/** UVから色を取得.
 	 */
