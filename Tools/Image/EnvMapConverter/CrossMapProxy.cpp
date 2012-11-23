@@ -21,11 +21,11 @@ CCrossMapProxy::CCrossMapProxy(
 	m_DivW = 1.0f / (m_WidthPerFace - 1);
 	m_DivH = 1.0f / (m_HeightPerFace - 1);
 
-	m_IsFloat = izanagi::CGraphUtil::IsFloatPixelFormat(m_Tex->GetPixelFormat());
-	m_Bpp = izanagi::CGraphUtil::GetBPP(m_Tex->GetPixelFormat());
+	m_IsFloat = izanagi::graph::CGraphUtil::IsFloatPixelFormat(m_Tex->GetPixelFormat());
+	m_Bpp = izanagi::graph::CGraphUtil::GetBPP(m_Tex->GetPixelFormat());
 
-    m_CurFace = izanagi::E_GRAPH_CUBE_TEX_FACE_NUM;
-	m_PrevFace = izanagi::E_GRAPH_CUBE_TEX_FACE_NUM;
+    m_CurFace = izanagi::graph::E_GRAPH_CUBE_TEX_FACE_NUM;
+	m_PrevFace = izanagi::graph::E_GRAPH_CUBE_TEX_FACE_NUM;
 	m_IsChangedFace = IZ_FALSE;
 }
 
@@ -59,7 +59,7 @@ CCrossMapProxy::~CCrossMapProxy()
 void CCrossMapProxy::getRef(
 	IZ_UINT x, IZ_UINT y,
 	izanagi::SVector& ref,
-	izanagi::E_GRAPH_CUBE_TEX_FACE face/*= izanagi::E_GRAPH_CUBE_TEX_FACE_NUM*/)
+	izanagi::graph::E_GRAPH_CUBE_TEX_FACE face/*= izanagi::graph::E_GRAPH_CUBE_TEX_FACE_NUM*/)
 {
     // NOTE
     //     1   2   3
@@ -211,27 +211,27 @@ void CCrossMapProxy::getColor(
     //   +---+---+---+
 
     switch (m_CurFace) {
-	case izanagi::E_GRAPH_CUBE_TEX_FACE_X_P:	// +X
+	case izanagi::graph::E_GRAPH_CUBE_TEX_FACE_X_P:	// +X
 		x = _3RD_COLUMN_REAL_X(x, m_WidthPerFace);
         y = _2ND_ROW_REAL_Y(y, m_HeightPerFace);
 		break;
-	case izanagi::E_GRAPH_CUBE_TEX_FACE_X_N:	// -X
+	case izanagi::graph::E_GRAPH_CUBE_TEX_FACE_X_N:	// -X
 		x = _1ST_COLUMN_REAL_X(x, m_WidthPerFace);
         y = _2ND_ROW_REAL_Y(y, m_HeightPerFace);
 		break;
-	case izanagi::E_GRAPH_CUBE_TEX_FACE_Y_N:	// -Y
+	case izanagi::graph::E_GRAPH_CUBE_TEX_FACE_Y_N:	// -Y
 		x = _2ND_COLUMN_REAL_X(x, m_WidthPerFace);
         y = _3RD_ROW_REAL_Y(y, m_HeightPerFace);
 		break;
-	case izanagi::E_GRAPH_CUBE_TEX_FACE_Y_P:	// +Y
+	case izanagi::graph::E_GRAPH_CUBE_TEX_FACE_Y_P:	// +Y
 		x = _2ND_COLUMN_REAL_X(x, m_WidthPerFace);
         y = _1ST_ROW_REAL_Y(y, m_HeightPerFace);
 		break;
-	case izanagi::E_GRAPH_CUBE_TEX_FACE_Z_P:	// +Z
+	case izanagi::graph::E_GRAPH_CUBE_TEX_FACE_Z_P:	// +Z
 		x = _2ND_COLUMN_REAL_X(x, m_WidthPerFace);
         y = _2ND_ROW_REAL_Y(y, m_HeightPerFace);
 		break;
-	case izanagi::E_GRAPH_CUBE_TEX_FACE_Z_N:	// -Z
+	case izanagi::graph::E_GRAPH_CUBE_TEX_FACE_Z_N:	// -Z
         {
 		    x = _2ND_COLUMN_REAL_X(x, m_WidthPerFace);
             y = _4TH_ROW_REAL_Y(y, m_HeightPerFace);
