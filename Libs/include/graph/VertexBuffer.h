@@ -45,10 +45,6 @@ namespace graph
             return m_Stride * m_VtxNum;
         }
 
-    protected:
-        virtual void ReleaseResource() {}
-        virtual IZ_BOOL Reset() { return IZ_TRUE; }
-
 	protected:
 		IZ_UINT m_Stride;	// 頂点サイズ
 		IZ_UINT m_VtxNum;	// 頂点数

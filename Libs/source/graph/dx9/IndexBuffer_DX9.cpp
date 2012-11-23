@@ -74,11 +74,6 @@ namespace graph
 		SAFE_RELEASE(m_Device);
 	}
 
-    void CIndexBufferDX9::ReleaseResource()
-	{
-		SAFE_RELEASE(m_IB);
-	}
-
     // 本体作成
     IZ_BOOL CIndexBufferDX9::CreateBody(
         CGraphicsDeviceDX9* device,
@@ -174,8 +169,19 @@ namespace graph
 	    return ret;
     }
 
+    IZ_BOOL CIndexBufferDX9::IsPrepared() const
+    {
+        return (m_IB != IZ_NULL);
+    }
+
+    IZ_BOOL CIndexBufferDX9::Disable()
+	{
+		SAFE_RELEASE(m_IB);
+        return IZ_TRUE;
+	}
+
     // リセット
-    IZ_BOOL CIndexBufferDX9::Reset()
+    IZ_BOOL CIndexBufferDX9::Restore()
     {
 	    IZ_BOOL ret = IZ_TRUE;
 

@@ -793,23 +793,23 @@ namespace graph
     }
 
     // リソースリセット
-    void C2DRenderer::ResetResource()
+    void C2DRenderer::DisableResource()
     {
 	    IZ_ASSERT(m_pVB != IZ_NULL);
 	    IZ_ASSERT(m_pIB != IZ_NULL);
 
-	    m_pVB->ReleaseResource();
-	    m_pIB->ReleaseResource();
+	    m_pVB->Disable();
+	    m_pIB->Disable();
     }
 
     // リセット
-    void C2DRenderer::Reset()
+    void C2DRenderer::RestoreResource()
     {
 	    IZ_ASSERT(m_pVB != IZ_NULL);
 	    IZ_ASSERT(m_pIB != IZ_NULL);
 
-	    m_pVB->Reset();
-	    m_pIB->Reset();
+	    m_pVB->Restore();
+	    m_pIB->Restore();
     }
 }   // namespace graph
 }   // namespace izanagi

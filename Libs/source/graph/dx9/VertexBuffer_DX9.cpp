@@ -73,11 +73,6 @@ namespace graph
 		SAFE_RELEASE(m_Device);
 	}
 
-    void CVertexBufferDX9::ReleaseResource()
-	{
-		SAFE_RELEASE(m_VB);
-	}
-
     // 本体作成
     IZ_BOOL CVertexBufferDX9::CreateBody(
         CGraphicsDeviceDX9* device,
@@ -172,8 +167,19 @@ namespace graph
 	    return ret;
     }
 
+    IZ_BOOL CVertexBufferDX9::IsPrepared() const
+    {
+        return (m_VB != IZ_NULL);
+    }
+
+    IZ_BOOL CVertexBufferDX9::Disable()
+	{
+		SAFE_RELEASE(m_VB);
+        return IZ_TRUE;
+	}
+
     // リセット
-    IZ_BOOL CVertexBufferDX9::Reset()
+    IZ_BOOL CVertexBufferDX9::Restore()
     {
 	    IZ_BOOL ret = IZ_TRUE;
 

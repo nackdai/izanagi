@@ -3,6 +3,7 @@
 
 #include "izDefs.h"
 #include "izStd.h"
+#include "graph/GraphResource.h"
 #include "graph/GraphDefs.h"
 
 namespace izanagi
@@ -11,7 +12,7 @@ namespace graph
 {
 	/** ベーステクスチャ
 	 */
-	class CBaseTexture : public CObject
+	class CBaseTexture : public CGraphResource
     {
 	protected:
 		CBaseTexture()
@@ -21,10 +22,6 @@ namespace graph
         }
 
         virtual ~CBaseTexture() {};
-
-		NO_COPIABLE(CBaseTexture);
-
-        IZ_DEFINE_INTERNAL_RELEASE();
 
 	public:
 		// 幅取得
@@ -109,8 +106,6 @@ namespace graph
 		PURE_VIRTUAL(TEX_HANDLE GetTexHandle());
 
 	protected:
-		IMemoryAllocator* m_Allocator;
-
 		// テクスチャ情報
 		struct {
 			IZ_UINT16 width;

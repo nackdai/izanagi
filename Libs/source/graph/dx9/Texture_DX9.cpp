@@ -596,8 +596,26 @@ namespace graph
 	    return ret;
     }
 
+    IZ_BOOL CTextureDX9::IsPrepared() const
+    {
+        return (m_Texture != IZ_NULL);
+    }
+
+    // 本体解放
+    IZ_BOOL CTextureDX9::Disable()
+	{
+		if (m_Surface != IZ_NULL) {
+			for (IZ_UINT32 i = 0; i < GetMipMapNum(); ++i) {
+				m_Surface[i]->ReleaseResource();
+			}
+		}
+
+		SAFE_RELEASE(m_Texture);
+        return IZ_TRUE;
+	}
+
     // リセット
-    IZ_BOOL CTextureDX9::Reset()
+    IZ_BOOL CTextureDX9::Restore()
     {
 	    IZ_BOOL ret = IZ_TRUE;
 
@@ -636,18 +654,6 @@ namespace graph
 
 	    return ret;
     }
-
-    // 本体解放
-	void CTextureDX9::ReleaseResource()
-	{
-		if (m_Surface != IZ_NULL) {
-			for (IZ_UINT32 i = 0; i < GetMipMapNum(); ++i) {
-				m_Surface[i]->ReleaseResource();
-			}
-		}
-
-		SAFE_RELEASE(m_Texture);
-	}
 
     // サーフェス取得
 	CSurface* CTextureDX9::GetSurface(IZ_UINT idx)

@@ -190,6 +190,9 @@
     <ClInclude Include="..\..\include\graph\BufferBase.h">
       <Filter>include\base</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\graph\GraphResource.h">
+      <Filter>include\base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\source\graph\2d\shader\2DPS.hlsl">

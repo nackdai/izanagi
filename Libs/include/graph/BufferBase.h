@@ -3,6 +3,7 @@
 
 #include "izDefs.h"
 #include "izStd.h"
+#include "graph/GraphResource.h"
 
 namespace izanagi
 {
@@ -10,7 +11,7 @@ namespace graph
 {
 	/**
      */
-	class CBufferBase : public CObject
+	class CBufferBase : public CGraphResource
     {
 	protected:
 		CBufferBase()
@@ -20,10 +21,6 @@ namespace graph
         }
 
         virtual ~CBufferBase() {};
-
-		NO_COPIABLE(CBufferBase);
-
-	    IZ_DEFINE_INTERNAL_RELEASE();
 
 	public:
 		// ロック
@@ -52,8 +49,6 @@ namespace graph
         IZ_BOOL ReadBuffer(void** data, size_t size);
 
 	protected:
-		IMemoryAllocator* m_Allocator;
-
         IZ_UINT8* m_LockedBuffer;
 	};
 }   // namespace graph

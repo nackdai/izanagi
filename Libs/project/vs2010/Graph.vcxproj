@@ -193,6 +193,7 @@ fxc /T ps_2_0 /E main_OpNoTexAlpha /Fh %(RootDir)%(Directory)/%(Filename)_OpNoTe
     <ClInclude Include="..\..\include\graph\GraphDefs.h" />
     <ClInclude Include="..\..\include\graph\GraphicsDevice.h" />
     <ClInclude Include="..\..\include\graph\GraphicsDeviceUtil.h" />
+    <ClInclude Include="..\..\include\graph\GraphResource.h" />
     <ClInclude Include="..\..\include\graph\GraphUtil.h" />
     <ClInclude Include="..\..\include\graph\2d\2DRenderer.h" />
     <ClInclude Include="..\..\include\graph\2d\2DShader.h" />

@@ -28,8 +28,6 @@ namespace graph
 		virtual inline ~CVertexBufferDX9();
 
 	private:
-		virtual void ReleaseResource();
-
 		// 本体作成
 		IZ_BOOL CreateBody(
             CGraphicsDeviceDX9* device,
@@ -49,10 +47,14 @@ namespace graph
 		// アンロック
 		virtual IZ_BOOL Unlock();
 
-	private:
-        // リセット
-		virtual IZ_BOOL Reset();
+    public:
+        virtual IZ_BOOL IsPrepared() const;
 
+        virtual IZ_BOOL Disable();
+
+        virtual IZ_BOOL Restore();
+
+	private:
 		// 動的リソースかどうか
 		IZ_BOOL IsDynamic() const
         {
