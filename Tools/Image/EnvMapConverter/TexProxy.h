@@ -38,9 +38,9 @@ protected:
 			const IZ_FLOAT* d = reinterpret_cast<const IZ_FLOAT*>(data);
 
 			dst.r = d[0];
-			dst.r = d[1];
-			dst.r = d[2];
-			dst.r = d[3];
+			dst.g = d[1];
+			dst.b = d[2];
+			dst.a = d[3];
 		}
 		else {
 			dst.r = NormalizeColor(data[0]);
