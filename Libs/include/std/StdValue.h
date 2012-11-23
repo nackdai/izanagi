@@ -24,7 +24,11 @@ namespace izanagi {
 		};
 
 	public:
-		inline CValue();
+		CValue()
+        {
+		    m_Type = TYPE_UINT32;
+		    m_ValInt64 = 0;
+	    }
 		~CValue() {}
 
 		CValue(IZ_INT8 n) { SetValue(n); }
@@ -36,12 +40,23 @@ namespace izanagi {
 		CValue(IZ_FLOAT f) { SetValue(f); }
 		CValue(void* p) { SetValue(p); }
 
-		inline CValue(const CValue& rhs);
-		inline const CValue& operator=(const CValue& rhs);
+		CValue(const CValue& rhs)
+        {
+		    *this = rhs;
+	    }
+		const CValue& operator=(const CValue& rhs)
+        {
+            m_Type = rhs.m_Type;
+		    m_ValInt64 = rhs.m_ValInt64;
+		    return *this;
+        }
 
 	public:
 		// タイプ取得
-		inline TYPE GetType() const;
+		TYPE GetType() const
+        {
+            return m_Type;
+        }
 
 		// 値取得
 		template <typename _T>
@@ -51,45 +66,104 @@ namespace izanagi {
 		}
 
 		template <>
-		IZ_INT8 GetValue() const { return static_cast<IZ_INT8>(m_nValInt64); }
+		IZ_INT8 GetValue() const { return static_cast<IZ_INT8>(m_ValInt64); }
 
 		template <>
-		IZ_UINT8 GetValue() const { return static_cast<IZ_UINT8>(m_nValUInt64); }
+		IZ_UINT8 GetValue() const { return static_cast<IZ_UINT8>(m_ValUInt64); }
 
 		template <>
-		IZ_INT16 GetValue() const { return static_cast<IZ_INT16>(m_nValInt64); }
+		IZ_INT16 GetValue() const { return static_cast<IZ_INT16>(m_ValInt64); }
 
 		template <>
-		IZ_UINT16 GetValue() const { return static_cast<IZ_UINT16>(m_nValUInt64); }
+		IZ_UINT16 GetValue() const { return static_cast<IZ_UINT16>(m_ValUInt64); }
 
 		template <>
-		IZ_INT32 GetValue() const { return static_cast<IZ_INT32>(m_nValInt64); }
+		IZ_INT32 GetValue() const { return static_cast<IZ_INT32>(m_ValInt64); }
 
 		template <>
-		IZ_UINT32 GetValue() const { return static_cast<IZ_UINT32>(m_nValUInt64); }
+		IZ_UINT32 GetValue() const { return static_cast<IZ_UINT32>(m_ValUInt64); }
 
 		template <>
-		IZ_FLOAT GetValue() const { return m_fValFloat; }
+		IZ_FLOAT GetValue() const { return m_ValFloat; }
 
 		// 値取得
-		inline IZ_INT32 GetValueAsInt32() const;
-		inline IZ_UINT32 GetValueAsUInt32() const;
-		inline IZ_FLOAT GetValueAsFloat() const;
-		inline void* GetValueAsPtr() const;
+	    IZ_INT32 GetValueAsInt32() const
+	    {
+		    return GetValue<IZ_INT32>();
+	    }
+
+	    IZ_UINT32 GetValueAsUInt32() const
+	    {
+		    return GetValue<IZ_UINT32>();
+	    }
+
+	    IZ_FLOAT GetValueAsFloat() const
+	    {
+		    return m_ValFloat;
+	    }
+
+        IZ_BOOL GetValueAsBool() const
+        {
+            return m_ValBool;
+        }
+
+	    void* GetValueAsPtr() const
+	    {
+		    return m_ValPtr;
+	    }
 		
 		// 値セット
-		inline void SetValue(IZ_INT8 v);
-		inline void SetValue(IZ_UINT8 v);
-		inline void SetValue(IZ_INT16 v);
-		inline void SetValue(IZ_UINT16 v);
-		inline void SetValue(IZ_INT32 v);
-		inline void SetValue(IZ_UINT32 v);
-		inline void SetValue(IZ_FLOAT v);
-		inline void SetValue(void* v);
+	    void SetValue(IZ_INT8 v)
+	    {
+		    m_Type = TYPE_INT8;
+		    m_ValInt64 = v;
+	    }
+
+	    void SetValue(IZ_UINT8 v)
+	    {
+		    m_Type = TYPE_UINT8;
+		    m_ValUInt64 = v;
+	    }
+
+	    void SetValue(IZ_INT16 v)
+	    {
+		    m_Type = TYPE_INT16;
+		    m_ValInt64 = v;
+	    }
+
+	    void SetValue(IZ_UINT16 v)
+	    {
+		    m_Type = TYPE_UINT16;
+		    m_ValUInt64 = v;
+	    }
+
+	    void SetValue(IZ_INT32 v)
+	    {
+		    m_Type = TYPE_INT32;
+		    m_ValInt64 = v;
+	    }
+
+	    void SetValue(IZ_UINT32 v)
+	    {
+		    m_Type = TYPE_UINT32;
+		    m_ValUInt64 = v;
+	    }
+
+	    void SetValue(IZ_FLOAT v)
+	    {
+		    m_Type = TYPE_FLOAT;
+		    m_ValFloat = v;
+	    }
+
+	    void SetValue(void* v)
+	    {
+		    m_Type = TYPE_PTR;
+		    m_ValPtr = v;
+	    }
 
 		IZ_BOOL operator==(const CValue& rhs)
 		{
-			return (m_nValInt64 == rhs.m_nValInt64);
+			return (m_ValInt64 == rhs.m_ValInt64);
 		}
 
 		IZ_BOOL operator!=(const CValue& rhs)
@@ -100,104 +174,13 @@ namespace izanagi {
 	protected:
 		TYPE m_Type;
 		union {
-			IZ_INT64  m_nValInt64;
-			IZ_UINT64 m_nValUInt64;
-			IZ_FLOAT  m_fValFloat;
-			void*     m_pValPtr;
+			IZ_INT64  m_ValInt64;
+			IZ_UINT64 m_ValUInt64;
+			IZ_FLOAT  m_ValFloat;
+            IZ_BOOL   m_ValBool;
+			void*     m_ValPtr;
 		};
 	};
-
-	// コンストラクタ
-	CValue::CValue()
-	{
-		m_Type = TYPE_UINT32;
-		m_nValInt64 = 0;
-	}
-
-	// コピーコンストラクタ
-	CValue::CValue(const CValue& rhs)
-	{
-		*this = rhs;
-	}
-
-	// operator=
-	const CValue& CValue::operator=(const CValue& rhs)
-	{
-		m_Type = rhs.m_Type;
-		m_nValInt64 = rhs.m_nValInt64;
-		return *this;
-	}
-
-	// 値取得
-	IZ_INT32 CValue::GetValueAsInt32() const
-	{
-		return GetValue<IZ_INT32>();
-	}
-
-	IZ_UINT32 CValue::GetValueAsUInt32() const
-	{
-		return GetValue<IZ_UINT32>();
-	}
-
-	IZ_FLOAT CValue::GetValueAsFloat() const
-	{
-		return m_fValFloat;
-	}
-
-	void* CValue::GetValueAsPtr() const
-	{
-		return m_pValPtr;
-	}
-
-	// 値セット
-	void CValue::SetValue(IZ_INT8 v)
-	{
-		m_Type = TYPE_INT8;
-		m_nValInt64 = v;
-	}
-
-	void CValue::SetValue(IZ_UINT8 v)
-	{
-		m_Type = TYPE_UINT8;
-		m_nValUInt64 = v;
-	}
-
-	void CValue::SetValue(IZ_INT16 v)
-	{
-		m_Type = TYPE_INT16;
-		m_nValInt64 = v;
-	}
-
-	void CValue::SetValue(IZ_UINT16 v)
-	{
-		m_Type = TYPE_UINT16;
-		m_nValUInt64 = v;
-	}
-
-	void CValue::SetValue(IZ_INT32 v)
-	{
-		m_Type = TYPE_INT32;
-		m_nValInt64 = v;
-	}
-
-	void CValue::SetValue(IZ_UINT32 v)
-	{
-		m_Type = TYPE_UINT32;
-		m_nValUInt64 = v;
-	}
-
-	void CValue::SetValue(IZ_FLOAT v)
-	{
-		m_Type = TYPE_FLOAT;
-		m_fValFloat = v;
-	}
-
-	void CValue::SetValue(void* v)
-	{
-		m_Type = TYPE_PTR;
-		m_pValPtr = v;
-	}
-
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_STD_STD_VALUE_H__)

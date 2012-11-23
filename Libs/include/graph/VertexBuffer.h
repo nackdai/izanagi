@@ -1,8 +1,7 @@
 #if !defined(__IZANAGI_GRAPH_VERTEX_BUFFER_H__)
 #define __IZANAGI_GRAPH_VERTEX_BUFFER_H__
 
-#include "izDefs.h"
-#include "izStd.h"
+#include "graph/BufferBase.h"
 #include "graph/GraphDefs.h"
 
 namespace izanagi
@@ -11,7 +10,7 @@ namespace graph
 {
 	/** 頂点バッファ
      */
-	class CVertexBuffer : public CObject
+	class CVertexBuffer : public CBufferBase
     {
         friend class C2DRenderer;
 
@@ -26,23 +25,6 @@ namespace graph
         }
 
         virtual ~CVertexBuffer() {};
-
-		NO_COPIABLE(CVertexBuffer);
-
-	    IZ_DEFINE_INTERNAL_RELEASE();
-
-	public:
-		// ロック
-        PURE_VIRTUAL(
-		    IZ_BOOL Lock(
-			    IZ_UINT offset,
-			    IZ_UINT size,
-			    void** data,
-			    IZ_BOOL isReadOnly,
-			    IZ_BOOL isDiscard = IZ_FALSE));
-
-		// アンロック
-		PURE_VIRTUAL(IZ_BOOL Unlock());
 
 	public:
 		// 頂点サイズ取得
@@ -68,8 +50,6 @@ namespace graph
         virtual IZ_BOOL Reset() { return IZ_TRUE; }
 
 	protected:
-		IMemoryAllocator* m_Allocator;
-
 		IZ_UINT m_Stride;	// 頂点サイズ
 		IZ_UINT m_VtxNum;	// 頂点数
 

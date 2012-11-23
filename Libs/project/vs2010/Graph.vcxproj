@@ -110,6 +110,7 @@ xcopy /R /Y "$(TargetDir)$(ProjectName).pdb" ..\lib\$(IntDir)
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\source\graph\BufferBase.cpp" />
     <ClCompile Include="..\..\source\graph\dx9\CubeTexture_DX9.cpp" />
     <ClCompile Include="..\..\source\graph\dx9\D3D9ParamValueConverter.cpp" />
     <ClCompile Include="..\..\source\graph\dx9\GraphicsDeviceResourceFuncs.cpp" />
@@ -175,6 +176,7 @@ fxc /T ps_2_0 /E main_OpNoTexAlpha /Fh %(RootDir)%(Directory)/%(Filename)_OpNoTe
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\graph\BaseTexture.h" />
+    <ClInclude Include="..\..\include\graph\BufferBase.h" />
     <ClInclude Include="..\..\include\graph\CubeTexture.h" />
     <ClInclude Include="..\..\include\graph\dx9\2DRenderer_DX9.h" />
     <ClInclude Include="..\..\include\graph\dx9\CubeTexture_DX9.h" />
