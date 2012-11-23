@@ -96,13 +96,14 @@ namespace graph
 		// アンロック
 		virtual IZ_BOOL Unlock(IZ_UINT level);
 
+    public:
+        virtual IZ_BOOL IsPrepared() const;
+
+        virtual IZ_BOOL Disable();
+
+        virtual IZ_BOOL Restore();
+
 	private:
-		// 本体解放
-		void ReleaseResource();
-
-        // リセット
-		IZ_BOOL Reset();
-
         // サーフェス取得
 		virtual CSurface* GetSurface(IZ_UINT idx);
 

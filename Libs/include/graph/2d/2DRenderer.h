@@ -121,10 +121,10 @@ namespace graph
 		void SetIdx();
 
 		// リソースリセット
-		void ResetResource();
+		void DisableResource();
 
 		// リセット
-		void Reset();
+		void RestoreResource();
 
 	protected:
 		// ロックフラグ制御

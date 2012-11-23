@@ -272,19 +272,19 @@ namespace graph
 	    return ret;
     }
 
-    template <class _T>
-    void CGraphicsDeviceDX9::ReleaseResource(_T* pList)
+    template <typename _T>
+    void CGraphicsDeviceDX9::DisableResource(_T* pList)
     {
 	    for (_T* p = pList; p != IZ_NULL; p = p->m_Next) {
-		    p->ReleaseResource();
+		    p->Disable();
 	    }
     }
 
-    template <class _T>
-    void CGraphicsDeviceDX9::ResetResource(_T* pList)
+    template <typename _T>
+    void CGraphicsDeviceDX9::RestoreResource(_T* pList)
     {
 	    for (_T* p = pList; p != IZ_NULL; p = p->m_Next) {
-		    p->Reset();
+		    p->Restore();
 	    }
     }
 
@@ -298,11 +298,11 @@ namespace graph
 		    renderTarget->ReleaseResource();
 		    deptthStencil->ReleaseResource();
 
-		    m_2DRenderer->ResetResource();
+		    m_2DRenderer->DisableResource();
 
-		    ReleaseResource(m_ResetTexture);
-		    ReleaseResource(m_ResetVB);
-		    ReleaseResource(m_ResetIB);
+		    DisableResource(m_ResetTexture);
+		    DisableResource(m_ResetVB);
+		    DisableResource(m_ResetIB);
 	    }
 
 	    // クリアされるものを保存しておく
@@ -328,11 +328,11 @@ namespace graph
 			    renderTarget->Reset(IZ_NULL, 0);
                 deptthStencil->Reset(IZ_NULL, 0);
 
-			    m_2DRenderer->Reset();
+			    m_2DRenderer->RestoreResource();
 
-			    ResetResource(m_ResetTexture);
-			    ResetResource(m_ResetVB);
-			    ResetResource(m_ResetIB);
+			    RestoreResource(m_ResetTexture);
+			    RestoreResource(m_ResetVB);
+			    RestoreResource(m_ResetIB);
 		    }
 
 		    // コールバック

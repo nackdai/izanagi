@@ -55,10 +55,6 @@ namespace graph
             return m_Fmt;
         }
 
-    protected:
-        virtual void ReleaseResource() {}
-        virtual IZ_BOOL Reset() { return IZ_TRUE; }
-
 	protected:
 		IZ_UINT m_IdxNum;				// インデックス数
 		E_GRAPH_INDEX_BUFFER_FMT m_Fmt;	// フォーマット

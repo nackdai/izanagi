@@ -100,10 +100,10 @@ namespace graph
 		_T* RemoveResource(_T* p, _T* pListTop);
 
         template <class _T>
-		void ReleaseResource(_T* pList);
+		void DisableResource(_T* pList);
 
 		template <class _T>
-		void ResetResource(_T* pList);
+		void RestoreResource(_T* pList);
 
 		void RemoveTexture(CTextureDX9* p);
 		void RemoveVertexBuffer(CVertexBufferDX9* p);
