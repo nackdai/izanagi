@@ -80,6 +80,9 @@
     <ClCompile Include="..\..\source\graph\dx9\GraphicsDeviceResourceFuncs.cpp">
       <Filter>source\dx9</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\graph\BufferBase.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\source\graph\2d\shader\2DShader.hlsl">
@@ -183,6 +186,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\graph\dx9\2DRenderer_DX9.h">
       <Filter>include\dx9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\BufferBase.h">
+      <Filter>include\base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

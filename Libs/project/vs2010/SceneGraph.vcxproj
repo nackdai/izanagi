@@ -88,6 +88,7 @@ xcopy /R /Y "$(TargetDir)$(ProjectName).pdb" ..\lib\$(IntDir)
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\scenegraph\Camera.cpp" />
+    <ClCompile Include="..\..\source\scenegraph\rendergraph\SceneRenderer.cpp" />
     <ClCompile Include="..\..\source\scenegraph\SceneGraphUtil.cpp" />
     <ClCompile Include="..\..\source\scenegraph\SceneParam.cpp" />
     <ClCompile Include="..\..\source\scenegraph\SceneState.cpp" />
@@ -112,7 +113,6 @@ xcopy /R /Y "$(TargetDir)$(ProjectName).pdb" ..\lib\$(IntDir)
     <ClCompile Include="..\..\source\scenegraph\skl\SkeletonInstance.cpp" />
     <ClCompile Include="..\..\source\scenegraph\skl\SkeletonUtil.cpp" />
     <ClCompile Include="..\..\source\scenegraph\rendergraph\RenderGraph.cpp" />
-    <ClCompile Include="..\..\source\scenegraph\rendergraph\SceneRenerer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\scenegraph\Camera.h" />

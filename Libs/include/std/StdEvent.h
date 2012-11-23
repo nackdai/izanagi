@@ -46,7 +46,10 @@ namespace izanagi {
 		IMemoryAllocator* m_Allocator;
 	};
 
-	/** 
+	/** 引数が１つのデリゲート
+     *
+     * @tparam RETURN 返り値の型
+     * @tparam ARG 引数の型
 	 */
 	template <typename RETURN, typename ARG>
 	class DelgateArg1 : public Delegate
@@ -63,13 +66,15 @@ namespace izanagi {
 			return ret;
 		}
 
-		virtual Delegate Copy() = 0;
+		virtual Delegate Clone() = 0;
 
 	protected:
 		virtual CValue Execute(ARG arg1) = 0;
 	};
 
-	/** 
+	/** 返り値が無い、かつ引数が１つのデリゲート
+     *
+     * @tparam ARG 引数の型
 	 */
 	template <typename ARG>
 	class DelgateArg1<void, ARG> : public Delegate
@@ -84,13 +89,15 @@ namespace izanagi {
 			Execute(arg1);
 		}
 
-		virtual Delegate Copy() = 0;
+		virtual Delegate Clone() = 0;
 
 	protected:
 		virtual void Execute(ARG arg1) = 0;
 	};
 
-	/**
+	/** C#のActionに相当
+     *
+     * @tparam ARG 引数の型
 	 */
 	template <typename ARG>
 	class ActionDelegate : public DelgateArg1<void, ARG>
@@ -102,7 +109,12 @@ namespace izanagi {
 		virtual ~ActionDelegate() {}
 	};
 
-	/**
+	/** C#のActionに相当
+     * 内部では指定されたオブジェクトのメソッドを呼び出す
+     *
+     * @tparam O オブジェクトの型
+     * @tparam T 呼び出すメソッドが定義されたクラスの型
+     * @tparam ARG 引数の型
 	 */
 	template <typename O, typename T, typename ARG>
 	class ActionDelegateInstance : public ActionDelegate<ARG>
@@ -117,7 +129,7 @@ namespace izanagi {
 		ActionDelegateInstance(const ActionDelegateInstance& rhs) : ActionDelegate(rhs) { m_Func = rhs.m_Func; }
 		virtual ~ActionDelegateInstance() {}
 
-		virtual Delegate Copy()
+		virtual Delegate Clone()
 		{
 			return ActionDelegateInstance(*this);
 		}
@@ -135,7 +147,10 @@ namespace izanagi {
 		FUNC m_Func;
 	};
 
-	/**
+	/** C#のActionに相当
+     * 内部ではstaticな関数を呼び出す
+     *
+     * @tparam ARG 引数の型 
 	 */
 	template <typename ARG>
 	class ActionDelegateStatic : public ActionDelegate<ARG>
@@ -150,7 +165,7 @@ namespace izanagi {
 		ActionDelegateStatic(const ActionDelegateStatic& rhs) : ActionDelegate(rhs) {}
 		virtual ~ActionDelegateStatic() {}
 
-		virtual Delegate Copy()
+		virtual Delegate Clone()
 		{
 			return ActionDelegateStatic(*this);
 		}
@@ -165,7 +180,10 @@ namespace izanagi {
 		}
 	};
 
-	/**
+	/** C#のFuncに相当
+     *
+     * @tparam RETURN 返り値の型
+     * @tparam ARG 引数の型
 	 */
 	template <typename RETURN, typename ARG>
 	class FuncDelegate : public DelgateArg1<RETURN, ARG>
@@ -177,7 +195,13 @@ namespace izanagi {
 		virtual ~FuncDelegate() {}
 	};
 
-	/**
+	/** C#のFuncに相当
+     * 内部では指定されたオブジェクトのメソッドを呼び出す
+     *
+     * @tparam O オブジェクトの型
+     * @tparam T 呼び出すメソッドが定義されたクラスの型
+     * @tparam RETURN 返り値の型
+     * @tparam ARG 引数の型
 	 */
 	template <typename O, typename T, typename RETURN, typename ARG>
 	class FuncDelegateInstance : public FuncDelegate<RETURN, ARG>
@@ -192,7 +216,7 @@ namespace izanagi {
 		FuncDelegateInstance(const FuncDelegateInstance& rhs) : FuncDelegate(rhs) { m_Func = rhs.m_Func; }
 		virtual ~FuncDelegateInstance() {}
 
-		virtual Delegate Copy()
+		virtual Delegate Clone()
 		{
 			return FuncDelegateInstance(*this);
 		}
@@ -211,7 +235,11 @@ namespace izanagi {
 		FUNC m_Func;
 	};
 
-	/**
+	/** C#のActionに相当
+     * 内部ではstaticな関数を呼び出す
+     *
+     * @tparam RETURN 返り値の型
+     * @tparam ARG 引数の型 
 	 */
 	template <typename RETURN, typename ARG>
 	class FuncDelegateStatic : public FuncDelegate<RETURN, ARG>
@@ -226,7 +254,7 @@ namespace izanagi {
 		FuncDelegateStatic(const FuncDelegateStatic& rhs) : FuncDelegate(rhs) {}
 		virtual ~FuncDelegateStatic() {}
 
-		virtual Delegate Copy()
+		virtual Delegate Clone()
 		{
 			return FuncDelegateStatic(*this);
 		}
@@ -242,9 +270,20 @@ namespace izanagi {
 		}
 	};
 
-	class CEventHandlerHelper
+    /** デリゲートファクトリ
+     */
+	class CDelegateFactory
 	{
 	public:
+        /** デリゲート作成
+         *
+         * ActionDelegateInstanceを作成する
+         *
+         * @tparam O オブジェクトの型
+         * @tparam T 呼び出すメソッドが定義されたクラスの型
+         * @tparam ARG 引数の型
+         * @tparam DELEGATE 作成するデリゲートの型
+         */
 		template <typename O, typename T, typename ARG, typename DELEGATE>
 		static DELEGATE* Create(IMemoryAllocator* allocator, O* object, void (T::* func)(ARG))
 		{
@@ -254,6 +293,13 @@ namespace izanagi {
 			return ret;
 		}
 
+        /** デリゲート作成
+         *
+         * ActionDelegateStaticを作成する
+         *
+         * @tparam ARG 引数の型
+         * @tparam DELEGATE 作成するデリゲートの型
+         */
 		template <typename ARG, typename DELEGATE>
 		static DELEGATE* Create(IMemoryAllocator* allocator, void (* func)(ARG))
 		{
@@ -263,6 +309,16 @@ namespace izanagi {
 			return ret;
 		}
 
+        /** デリゲート作成
+         *
+         * FuncDelegateInstanceを作成する
+         *
+         * @tparam O オブジェクトの型
+         * @tparam T 呼び出すメソッドが定義されたクラスの型
+         * @tparam RETURN 返り値の型
+         * @tparam ARG 引数の型
+         * @tparam DELEGATE 作成するデリゲートの型
+         */
 		template <typename O, typename T, typename RETURN, typename ARG, typename DELEGATE>
 		static DELEGATE* Create(IMemoryAllocator* allocator, O* object, RETURN (T::* func)(ARG))
 		{
@@ -272,6 +328,14 @@ namespace izanagi {
 			return ret;
 		}
 
+         /** デリゲート作成
+         *
+         * FuncDelegateStaticを作成する
+         *
+         * @tparam RETURN 返り値の型
+         * @tparam ARG 引数の型
+         * @tparam DELEGATE 作成するデリゲートの型
+         */
 		template <typename RETURN, typename ARG, typename DELEGATE>
 		static DELEGATE* Create(IMemoryAllocator* allocator, RETURN (* func)(ARG))
 		{
@@ -282,37 +346,59 @@ namespace izanagi {
 		}
 	};
 
-	/**
+	/** イベントハンドラ作成
+     *
+     * ActionDelegateInstanceを作成する
+     *
+     * @tparam O オブジェクトの型
+     * @tparam T 呼び出すメソッドが定義されたクラスの型
+     * @tparam ARG 引数の型
 	 */
 	template <typename O, typename T, typename ARG>
 	ActionDelegateInstance<O, T, ARG>& EventHandler(IMemoryAllocator* allocator, O* object, void (T::*func)(ARG))
 	{
-		return *CEventHandlerHelper::Create<O, T, ARG, ActionDelegateInstance<O, T, ARG> >(allocator, object, func);
+		return *CDelegateFactory::Create<O, T, ARG, ActionDelegateInstance<O, T, ARG> >(allocator, object, func);
 	}
 
-	/**
+	/** イベントハンドラ作成
+     *
+     * ActionDelegateStaticを作成する
+     *
+     * @tparam ARG 引数の型
 	 */
 	template <typename ARG>
 	ActionDelegateStatic<ARG>& EventHandler(IMemoryAllocator* allocator, void(*func)(ARG))
 	{
-		return *CEventHandlerHelper::Create<ARG, ActionDelegateStatic<ARG> >(allocator, func);
+		return *CDelegateFactory::Create<ARG, ActionDelegateStatic<ARG> >(allocator, func);
 	}
 
-	/**
+	/** イベントハンドラ作成
+     *
+     * FuncDelegateInstanceを作成する
+     *
+     * @tparam O オブジェクトの型
+     * @tparam T 呼び出すメソッドが定義されたクラスの型
+     * @tparam RETURN 返り値の型
+     * @tparam ARG 引数の型
 	 */
 	template <typename O, typename T, typename RETURN, typename ARG>
 	FuncDelegateInstance<O, T, RETURN, ARG>& EventHandler(IMemoryAllocator* allocator, O* object, RETURN (T::*func)(ARG))
 	{
-		return *CEventHandlerHelper::Create<O, T, RETURN, ARG, FuncDelegateInstance<O, T, RETURN, ARG> >(
+		return *CDelegateFactory::Create<O, T, RETURN, ARG, FuncDelegateInstance<O, T, RETURN, ARG> >(
 			allocator, object, func);
 	}
 
-	/**
+	/** イベントハンドラ作成
+     *
+     * FuncDelegateStaticを作成する
+     *
+     * @tparam RETURN 返り値の型
+     * @tparam ARG 引数の型
 	 */
 	template <typename RETURN, typename ARG>
 	FuncDelegateStatic<RETURN, ARG>& EventHandler(IMemoryAllocator* allocator, RETURN (*func)(ARG))
 	{
-		return *CEventHandlerHelper::Create<RETURN, ARG, FuncDelegateStatic<RETURN, ARG> >(allocator, func);
+		return *CDelegateFactory::Create<RETURN, ARG, FuncDelegateStatic<RETURN, ARG> >(allocator, func);
 	}
 
 	/**
@@ -326,6 +412,8 @@ namespace izanagi {
 	public:
 		virtual ~CStdEventBase() {}
 
+        /** デリゲートを追加
+         */
 		void operator+=(DELEGATE& delegate)
 		{
 			if (!Find(delegate))
@@ -334,6 +422,8 @@ namespace izanagi {
 			}
 		}
 
+        /** 指定されたデリゲートをイベントから削除
+         */
 		void operator-=(DELEGATE& delegate)
 		{
 			if (Find(delegate))
@@ -342,12 +432,22 @@ namespace izanagi {
 			}
 		}
 
+        /** 登録されているデリゲート数を取得
+         */
 		virtual IZ_UINT GetCount() = 0;
+
+        /** 指定されたデリゲートを取得
+         */
 		virtual DELEGATE* Get(IZ_UINT idx) = 0;
 
 	protected:
+        // 指定されたデリゲートを探す
 		virtual IZ_BOOL Find(DELEGATE& delegate) = 0;
+
+        // デリゲートを追加
 		virtual IZ_BOOL Add(DELEGATE& delegate) = 0;
+
+        // 指定されたデリゲートをイベントから削除
 		virtual IZ_BOOL Remove(DELEGATE& delegate) = 0;
 	};
 
