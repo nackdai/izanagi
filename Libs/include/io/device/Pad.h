@@ -15,7 +15,9 @@ namespace izanagi {
 
 	public:
 		// インスタンス作成
-		static CPad* CreatePad(IMemoryAllocator* pAllocator);
+		static CPad* CreatePad(
+            IMemoryAllocator* pAllocator,
+            SInputDeviceInitParam* initParam);
 
 	protected:
 		enum {
@@ -44,10 +46,10 @@ namespace izanagi {
 		// 解放
 		void InternalRelease();
 
-	public:
-		// 初期化
+        // 初期化
 		IZ_BOOL Init(SInputDeviceInitParam* pInitParam);
 
+	public:
 		// 更新
 		IZ_BOOL Update();
 

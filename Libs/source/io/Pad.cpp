@@ -5,7 +5,9 @@ using namespace izanagi;
 /**
 * インスタンス作成
 */
-CPad* CPad::CreatePad(IMemoryAllocator* pAllocator)
+CPad* CPad::CreatePad(
+    IMemoryAllocator* pAllocator,
+    SInputDeviceInitParam* initParam)
 {
 	IZ_UINT8* pBuf = IZ_NULL;
 	CPad* pInstance = IZ_NULL;
@@ -24,6 +26,8 @@ CPad* CPad::CreatePad(IMemoryAllocator* pAllocator)
 	{
 		pInstance->AddRef();
 		pInstance->m_Allocator = pAllocator;
+
+        result = pInstance->Init(initParam);
 	}
 
 __EXIT__:
@@ -177,7 +181,14 @@ IZ_BOOL CPad::Init(SInputDeviceInitParam* pInitParam)
 	VRETURN(SUCCEEDED(hr));
 
 	m_pPadDevice = g_pDevTmp;
+#if 0
 	VRETURN(m_pPadDevice != IZ_NULL);
+#else
+    if (m_pPadDevice == IZ_NULL)
+    {
+        return IZ_FALSE;
+    }
+#endif
 	
 	// デバイスをパッドに設定
 	// デフォルトの設定を使用
