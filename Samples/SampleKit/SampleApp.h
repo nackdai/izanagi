@@ -98,6 +98,8 @@ namespace sample {
 		 */
 		virtual IZ_BOOL OnMouseLBtnDown(const CIntPoint& point) { return IZ_TRUE; }
 
+
+
 	protected:
 		/** 背景色取得.
 		 */
@@ -121,6 +123,11 @@ namespace sample {
 		/** 描画.
 		 */
 		virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device) = 0;
+
+        izanagi::CPad* GetPad()
+        {
+            return m_Pad;
+        }
 
 	protected:
 		izanagi::graph::CGraphicsDevice* m_Device;
