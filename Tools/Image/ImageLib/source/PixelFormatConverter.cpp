@@ -517,17 +517,29 @@ IZ_BOOL CPixelFormatConverter::Convert(
 		ConvertPixelFormat pIterFunc = InterFmtConvTbl[nSrcFmt];
 		ConvertPixelFormat pDstFunc = DstFmtConvTbl[nDstFmt];
 
-		VRETURN((pIterFunc != IZ_NULL) && (pDstFunc != IZ_NULL));
-
 		for (IZ_UINT y = 0; y < nHeight; y++) {
 			IZ_BYTE* src = pSrc + nSrcPitch * y;
 			IZ_BYTE* dst = pDst + nDstPitch * y;
 
-			// RGBA32F に変換
-			(*pIterFunc)(src, &m_LineBuffer[0], nWidth);
+            if (pIterFunc != IZ_NULL)
+            {
+			    // RGBA32F に変換
+			    (*pIterFunc)(src, &m_LineBuffer[0], nWidth);
+            }
+            else
+            {
+                memcpy(&m_LineBuffer[0], src, nSrcPitch);
+            }
 
-			// 最終フォーマットに変換
-			(*pDstFunc)(&m_LineBuffer[0], dst, nWidth);
+            if (pDstFunc != IZ_NULL)
+            {
+			    // 最終フォーマットに変換
+			    (*pDstFunc)(&m_LineBuffer[0], dst, nWidth);
+            }
+            else
+            {
+                memcpy(dst, &m_LineBuffer[0], nDstPitch);
+            }
 		}
 	}
 

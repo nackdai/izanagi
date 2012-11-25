@@ -182,7 +182,7 @@ void CCrossMapProxy::getRef(
 #define _3RD_COLUMN_REAL_X(x, w) (x + w * 2)
 
 #define _1ST_ROW_REAL_Y(y, h)    (y)
-#define _2ND_ROW_REAL_Y(y, h)    (y + h )
+#define _2ND_ROW_REAL_Y(y, h)    (y + h)
 #define _3RD_ROW_REAL_Y(y, h)    (y + h * 2)
 #define _4TH_ROW_REAL_Y(y, h)    (y + h * 3)
 
@@ -224,8 +224,14 @@ void CCrossMapProxy::getColor(
         y = _3RD_ROW_REAL_Y(y, m_HeightPerFace);
 		break;
 	case izanagi::graph::E_GRAPH_CUBE_TEX_FACE_Y_P:	// +Y
-		x = _2ND_COLUMN_REAL_X(x, m_WidthPerFace);
-        y = _1ST_ROW_REAL_Y(y, m_HeightPerFace);
+        {
+		    x = _2ND_COLUMN_REAL_X(x, m_WidthPerFace);
+            y = _1ST_ROW_REAL_Y(y, m_HeightPerFace);
+
+            // 反転
+            x = ((m_Width - 1) - m_WidthPerFace) - (x - m_WidthPerFace);
+            y = m_HeightPerFace - y;
+        }
 		break;
 	case izanagi::graph::E_GRAPH_CUBE_TEX_FACE_Z_P:	// +Z
 		x = _2ND_COLUMN_REAL_X(x, m_WidthPerFace);
@@ -237,6 +243,7 @@ void CCrossMapProxy::getColor(
             y = _4TH_ROW_REAL_Y(y, m_HeightPerFace);
 
             // 反転
+            x = ((m_Width - 1) - m_WidthPerFace) - (x - m_WidthPerFace);
             y = (m_Height - 1) - y + (m_HeightPerFace * 3);
         }
 		break;

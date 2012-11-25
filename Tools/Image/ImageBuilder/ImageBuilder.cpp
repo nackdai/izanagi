@@ -104,7 +104,7 @@ int main(int argc, char* argv[])
 
 		parser->parse(cOption.in);
 
-		result = CImageBuilder::GetInstance().BuildIMG(cOption.out);
+        result = CImageBuilder::GetInstance().BuildIMG(cOption.out.c_str());
 		VGOTO(result);
 	}
 	catch (izanagi::tool::CException* e) {
