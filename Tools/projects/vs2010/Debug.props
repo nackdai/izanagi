@@ -35,7 +35,9 @@
       </Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>xcopy /R /Y /D "$(SolutionDir)..\..\External\xerces\Build\Win32\VC10\$(Configuration)\xerces-c_3_1D.dll" "$(SolutionDir)..\..\tools\$(ConfigurationName)"</Command>
+      <Command>xcopy /R /Y /D "$(SolutionDir)..\..\External\xerces\Build\Win32\VC10\$(Configuration)\xerces-c_3_1D.dll" "$(SolutionDir)..\..\tools\$(ConfigurationName)"
+xcopy /R /Y /D "$(SolutionDir)..\..\External\Cg\dll\cg.dll" "$(SolutionDir)..\..\tools\$(ConfigurationName)"
+xcopy /R /Y /D "$(SolutionDir)..\..\External\Cg\dll\cgD3D9.dll" "$(SolutionDir)..\..\tools\$(ConfigurationName)"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
