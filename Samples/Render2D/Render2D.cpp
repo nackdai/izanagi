@@ -66,8 +66,6 @@ void CRender2DApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 // 描画.
 void CRender2DApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
-	static const IZ_COLOR bgColor = IZ_COLOR_RGBA(0, 128, 255, 255);
-
 	if (device->Begin2D()) {
 		// スプライト
 		device->SetTexture(0, m_Img->GetTexture(0));
