@@ -78,45 +78,45 @@ IZ_BOOL CSampleApp::Init(const SSampleAppParams& params)
 		VGOTO(ret = (m_DebugFont != IZ_NULL), __EXIT__);
 	}
 
-#if 0
 	// 入力初期化
 	{
 #if 0
 		HRESULT hr = CoInitialize(NULL);
 		IZ_ASSERT(SUCCEEDED(hr));
 
-		D_INPUT pInput = NULL;
+		D_INPUT input = NULL;
 		hr = CoCreateInstance(
 				CLSID_DirectInput8,
 				NULL, 
 				CLSCTX_INPROC,
 				IID_IDirectInput8,
-				(void**)&pInput);
+				(void**)&input);
 		IZ_ASSERT(SUCCEEDED(hr));
 
-		hr = pInput->Initialize(hInst, DIRECTINPUT_VERSION);
+		hr = input->Initialize(hInst, DIRECTINPUT_VERSION);
 #else
 		D_INPUT* input = NULL;
 		HRESULT hr = DirectInput8Create(
-						params.instanceHandle,
+						(HINSTANCE)params.instanceHandle,
 						DIRECTINPUT_VERSION,
 						IID_IDirectInput8,
 						(void**)&input,
 						NULL);
-		IZ_ASSERT(SUCCEEDED(hr));
 #endif
 		
 		// パッド作成
+        if (SUCCEEDED(hr))
 		{
-			m_Pad = izanagi::CPad::CreatePad(&m_Allocator);
-			VGOTO(ret, __EXIT__);
-
-			izanagi::SInputDeviceInitParam padInitParam(
+            izanagi::SInputDeviceInitParam padInitParam(
 				input,
-				params.deviceWindow);
-			m_Pad->Init(&padInitParam);
+				(HWND)params.deviceWindow);
+
+			m_Pad = izanagi::CPad::CreatePad(
+                m_Allocator,
+                &padInitParam);
 		}
 
+#if 0
 		// キーボード作成
 		{
 			m_Keyboard = izanagi::CKeyboard::CreateKeyboard(&m_Allocator);
@@ -124,10 +124,10 @@ IZ_BOOL CSampleApp::Init(const SSampleAppParams& params)
 			
 			// TODO
 		}
-
-		input->Release();
-	}
 #endif
+
+		SAFE_RELEASE(input);
+	}
 
 	// TODO
 	// リセット用コールバックセット
