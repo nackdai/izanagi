@@ -3,6 +3,8 @@
 #include "StateMonotone.h"
 #include "StateNegative.h"
 #include "StateSepia.h"
+#include "StateBloomStar.h"
+#include "StateBloomStarMGF.h"
 
 CStateManager CStateManager::s_Instance;
 
@@ -21,4 +23,6 @@ void CStateManager::Create(
 	_STATE(Monotone, app, camera);
     _STATE(Negative, app, camera);
     _STATE(Sepia, app, camera);
+    _STATE(BloomStar, app, camera);
+    _STATE(BloomStarMGF, app, camera);
 }

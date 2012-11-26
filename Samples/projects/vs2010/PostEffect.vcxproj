@@ -113,6 +113,22 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
     </CustomBuild>
+    <CustomBuild Include="..\..\PostEffect\posteffect\BloomStar.peh">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\..\PostEffect\posteffect\BloomStarMGF.peh">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
+    </CustomBuild>
+    <None Include="..\..\PostEffect\posteffect\PostEffectBloomStar.fx" />
+    <None Include="..\..\PostEffect\posteffect\PostEffectBloomStarMGF.fx" />
     <None Include="..\..\PostEffect\posteffect\PostEffectMonotone.fx" />
     <None Include="..\..\PostEffect\posteffect\PostEffectNegative.fx" />
     <None Include="..\..\PostEffect\posteffect\PostEffectSepia.fx" />
@@ -137,6 +153,8 @@
     <ClCompile Include="..\..\PostEffect\PostEffectSample.cpp" />
     <ClCompile Include="..\..\PostEffect\SceneRenderer.cpp" />
     <ClCompile Include="..\..\PostEffect\StateBase.cpp" />
+    <ClCompile Include="..\..\PostEffect\StateBloomStar.cpp" />
+    <ClCompile Include="..\..\PostEffect\StateBloomStarMGF.cpp" />
     <ClCompile Include="..\..\PostEffect\StateManager.cpp" />
     <ClCompile Include="..\..\PostEffect\StateMonotone.cpp" />
     <ClCompile Include="..\..\PostEffect\StateNegative.cpp" />
@@ -148,6 +166,8 @@
     <ClInclude Include="..\..\PostEffect\PostEffectSample.h" />
     <ClInclude Include="..\..\PostEffect\SceneRenderer.h" />
     <ClInclude Include="..\..\PostEffect\StateBase.h" />
+    <ClInclude Include="..\..\PostEffect\StateBloomStar.h" />
+    <ClInclude Include="..\..\PostEffect\StateBloomStarMGF.h" />
     <ClInclude Include="..\..\PostEffect\StateManager.h" />
     <ClInclude Include="..\..\PostEffect\StateMonotone.h" />
     <ClInclude Include="..\..\PostEffect\StateNegative.h" />

@@ -243,7 +243,7 @@ void CSceneRenderer::RenderEnvBox(
 		m_L2W,
 		camera.pos);
 
-    device->SetTexture(0, m_EnvImg->GetTexture(1));
+    device->SetTexture(0, m_EnvImg->GetTexture(2));
 
 	// テクスチャあり
 	m_EnvShader->Begin(0, IZ_FALSE);
