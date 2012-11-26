@@ -25,6 +25,12 @@
     <Filter Include="state\source">
       <UniqueIdentifier>{acf3d670-f33b-4782-82d1-3942bbc3acdb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="posteffect\config">
+      <UniqueIdentifier>{f1460e78-4104-4021-9953-d9fe946ecd24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="posteffect\shader">
+      <UniqueIdentifier>{dbda3a87-34d8-4778-9c20-b5d954e033b6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\PostEffect\shader\PhongShader.fx">
@@ -33,14 +39,20 @@
     <None Include="..\..\PostEffect\shader\CubeMapBoxShader.fx">
       <Filter>shader</Filter>
     </None>
+    <None Include="..\..\PostEffect\posteffect\PostEffectMonotone.fx">
+      <Filter>posteffect\shader</Filter>
+    </None>
     <None Include="..\..\PostEffect\posteffect\PostEffectNegative.fx">
-      <Filter>posteffect</Filter>
+      <Filter>posteffect\shader</Filter>
     </None>
     <None Include="..\..\PostEffect\posteffect\PostEffectSepia.fx">
-      <Filter>posteffect</Filter>
+      <Filter>posteffect\shader</Filter>
     </None>
-    <None Include="..\..\PostEffect\posteffect\PostEffectMonotone.fx">
-      <Filter>posteffect</Filter>
+    <None Include="..\..\PostEffect\posteffect\PostEffectBloomStar.fx">
+      <Filter>posteffect\shader</Filter>
+    </None>
+    <None Include="..\..\PostEffect\posteffect\PostEffectBloomStarMGF.fx">
+      <Filter>posteffect\shader</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -74,6 +86,12 @@
     <ClCompile Include="..\..\PostEffect\StateSepia.cpp">
       <Filter>state\source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\PostEffect\StateBloomStar.cpp">
+      <Filter>state\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\StateBloomStarMGF.cpp">
+      <Filter>state\source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\PostEffect\SceneRenderer.h">
@@ -103,6 +121,12 @@
     <ClInclude Include="..\..\PostEffect\StateSepia.h">
       <Filter>state\include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\PostEffect\StateBloomStar.h">
+      <Filter>state\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\StateBloomStarMGF.h">
+      <Filter>state\include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\PostEffect\shader\PhongShader.xml">
@@ -115,13 +139,19 @@
       <Filter>shader</Filter>
     </CustomBuild>
     <CustomBuild Include="..\..\PostEffect\posteffect\Monotone.peh">
-      <Filter>posteffect</Filter>
+      <Filter>posteffect\config</Filter>
     </CustomBuild>
     <CustomBuild Include="..\..\PostEffect\posteffect\Negative.peh">
-      <Filter>posteffect</Filter>
+      <Filter>posteffect\config</Filter>
     </CustomBuild>
     <CustomBuild Include="..\..\PostEffect\posteffect\Sepia.peh">
-      <Filter>posteffect</Filter>
+      <Filter>posteffect\config</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\PostEffect\posteffect\BloomStar.peh">
+      <Filter>posteffect\config</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\PostEffect\posteffect\BloomStarMGF.peh">
+      <Filter>posteffect\config</Filter>
     </CustomBuild>
   </ItemGroup>
 </Project>

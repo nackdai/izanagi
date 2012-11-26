@@ -13,6 +13,8 @@ enum State {
 	State_Monotone,
     State_Negative,
     State_Sepia,
+    State_BloomStar,
+    State_BloomStarMGF,
 
 	StateNum,
 };
