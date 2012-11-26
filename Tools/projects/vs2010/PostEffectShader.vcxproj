@@ -45,6 +45,7 @@
   <ItemDefinitionGroup>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="..\..\PostEffect\PostEffectShader\fx\PostEffectBloomStarMGF.fx" />
     <None Include="..\..\PostEffect\PostEffectShader\include\PostEffectColorFilter.fxh" />
     <None Include="..\..\PostEffect\PostEffectShader\include\PostEffectColorSpace.fxh" />
     <None Include="..\..\PostEffect\PostEffectShader\include\PostEffectCommonUtility.fxh" />
@@ -82,7 +83,6 @@
     <None Include="..\..\PostEffect\PostEffectShader\include\CommonUtility\FilterSampling.fxh" />
     <None Include="..\..\PostEffect\PostEffectShader\include\CommonUtility\PostEffectShaderUtility.fxh" />
     <None Include="..\..\PostEffect\PostEffectShader\fx\PostEffectBloomStar.fx" />
-    <None Include="..\..\PostEffect\PostEffectShader\fx\PostEffectBloomStarEx.fx" />
     <None Include="..\..\PostEffect\PostEffectShader\fx\PostEffectDOF.fx" />
     <None Include="..\..\PostEffect\PostEffectShader\fx\PostEffectDOF2.fx" />
     <None Include="..\..\PostEffect\PostEffectShader\fx\PostEffectHDR.fx" />
