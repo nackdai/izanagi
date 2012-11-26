@@ -138,9 +138,6 @@
     <None Include="..\..\PostEffect\PostEffectShader\fx\PostEffectBloomStar.fx">
       <Filter>fx</Filter>
     </None>
-    <None Include="..\..\PostEffect\PostEffectShader\fx\PostEffectBloomStarEx.fx">
-      <Filter>fx</Filter>
-    </None>
     <None Include="..\..\PostEffect\PostEffectShader\fx\PostEffectDOF.fx">
       <Filter>fx</Filter>
     </None>
@@ -160,6 +157,9 @@
       <Filter>fx</Filter>
     </None>
     <None Include="..\..\PostEffect\PostEffectShader\fx\PostEffectSepia.fx">
+      <Filter>fx</Filter>
+    </None>
+    <None Include="..\..\PostEffect\PostEffectShader\fx\PostEffectBloomStarMGF.fx">
       <Filter>fx</Filter>
     </None>
   </ItemGroup>
