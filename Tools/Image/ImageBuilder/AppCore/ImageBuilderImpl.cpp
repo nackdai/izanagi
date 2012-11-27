@@ -427,6 +427,19 @@ namespace {
 		IZ_UINT nSize = pTex->GetExportSize();
 		pHeader->sizeMax = IZ_MAX(nSize, pHeader->sizeMax);
 
+        // 最大ピッチサイズ
+        IZ_UINT pitch = 0;
+        if (izanagi::graph::CGraphUtil::IsCompressedPixelFormat(pTex->GetTexInfo().fmt))
+        {
+            IZ_UINT height = pTex->GetHeight();
+            pitch = nSize / height;
+        }
+        else
+        {
+            pitch = pTex->GetPitchSize();
+        }
+        pHeader->maxPitch = IZ_MAX(pitch, pHeader->maxPitch);
+
 		// 出力
 		result = pTex->Write(pOut);
 		THROW_EXCEPTION(

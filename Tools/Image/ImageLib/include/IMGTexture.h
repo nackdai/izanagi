@@ -95,6 +95,14 @@ namespace tool {
 		// 出力サイズ取得
 		inline IZ_UINT GetExportSize() const;
 
+        // ピッチサイズ取得
+        IZ_UINT GetPitchSize() const
+        {
+            IZ_UINT bpp = izanagi::graph::CGraphUtil::GetBPP(m_TexInfo.fmt);
+            IZ_UINT width = GetWidth();
+            return bpp * width;
+        }
+
 		// イメージを取得
 		inline std::vector<CIMGImage*>& GetImage(IZ_UINT nPos);
 
