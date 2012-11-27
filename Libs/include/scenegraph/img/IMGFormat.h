@@ -53,6 +53,9 @@ namespace izanagi {
 		// 最大サイズ
 		IZ_UINT sizeMax;
 
+        // 最大ピッチサイズ
+        IZ_UINT maxPitch;
+
 		// ジャンプテーブルサイズ
 		IZ_UINT sizeJumpTbl;
 	};
