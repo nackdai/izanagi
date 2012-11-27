@@ -18,16 +18,67 @@ namespace izanagi {
 			graph::CGraphicsDevice* pDevice,
 			IInputStream* pInputStream);
 
+    private:
+        // データサイズを計算
+        static IZ_UINT ComputeSize(
+		    IZ_UINT pitch,
+		    IZ_UINT height,
+		    graph::E_GRAPH_PIXEL_FMT fmt);
+
+        // データ読み込み
+        static void ReadData(
+            IZ_UINT8* dst,
+            IZ_UINT nPitch,
+		    IZ_UINT nHeight,
+		    graph::E_GRAPH_PIXEL_FMT nFmt,
+		    IZ_BYTE* pBuf,
+            IInputStream* input);
+
+        // テクスチャ作成
+	    static graph::CBaseTexture* CreatePlaneTexture(
+		    graph::CGraphicsDevice* pDevice,
+		    IZ_UINT nWidth,
+		    IZ_UINT nHeight,
+		    IZ_UINT nMipLevel,
+		    graph::E_GRAPH_PIXEL_FMT nFmt,
+		    IZ_BYTE* pBuf,
+            IInputStream* input);
+
+        // キューブテクスチャ作成
+	    static graph::CBaseTexture* CreateCubeTexture(
+		    graph::CGraphicsDevice* pDevice,
+		    IZ_UINT nWidth,
+		    IZ_UINT nHeight,
+		    IZ_UINT nMipLevel,
+		    graph::E_GRAPH_PIXEL_FMT nFmt,
+		    IZ_BYTE* pBuf,
+            IInputStream* input);
+
+        // テクスチャ作成
+	    static inline graph::CBaseTexture* CreateTexture(
+		    graph::CGraphicsDevice* pDevice,
+		    const S_IMG_TEX_HEADER& sTexHeader,
+		    IZ_BYTE* pBuf,
+            IInputStream* input);
+
 	protected:
-		inline CImage();
-		inline ~CImage();
+		CImage()
+        {
+		    m_Allocator = IZ_NULL;
+		    m_pTexture = IZ_NULL;
+	    }
+		~CImage()
+        {
+		    for (IZ_UINT i = 0; i < m_Header.numTextures; ++i) {
+			    SAFE_RELEASE(m_pTexture[i]);
+		    }
+	    }
 
 		NO_COPIABLE(CImage);
 
-	protected:
-		// 解放
-		inline void InternalRelease();
+         IZ_DEFINE_INTERNAL_RELEASE();
 
+	protected:
 		// テクスチャ読み込み
 		IZ_BOOL ReadTexture(
 			graph::CGraphicsDevice* pDevice,
@@ -35,72 +86,31 @@ namespace izanagi {
 
 	public:
 		// ヘッダ取得
-		inline const S_IMG_HEADER& GetHeader() const;
+		const S_IMG_HEADER& GetHeader() const
+        {
+		    return m_Header;
+	    }
 
 		// テクスチャ数取得
-		inline IZ_UINT GetTexNum() const;
+		IZ_UINT GetTexNum() const
+        {
+		    return m_Header.numTextures;
+	    }
 
 		// テクスチャ取得
-		inline graph::CBaseTexture* GetTexture(IZ_UINT nIdx);
+		graph::CBaseTexture* GetTexture(IZ_UINT nIdx)
+        {
+		    IZ_ASSERT(nIdx < m_Header.numTextures);
+		    IZ_ASSERT(m_pTexture != IZ_NULL);
+		    return m_pTexture[nIdx];
+	    }
 
 	protected:
 		IMemoryAllocator* m_Allocator;
 
 		S_IMG_HEADER m_Header;
 		graph::CBaseTexture** m_pTexture;
-	};
-
-	// inline **********************************
-
-	// コンストラクタ
-	CImage::CImage()
-	{
-		m_Allocator = IZ_NULL;
-		m_pTexture = IZ_NULL;
-	}
-
-	// デストラクタ
-	CImage::~CImage()
-	{
-		for (IZ_UINT i = 0; i < m_Header.numTextures; ++i) {
-			SAFE_RELEASE(m_pTexture[i]);
-		}
-	}
-
-	// 解放
-	void CImage::InternalRelease()
-	{
-		delete this;
-		if (m_Allocator != IZ_NULL) {
-			FREE(m_Allocator, this);
-		}
-	}
-
-	/**
-	* ヘッダ取得
-	*/
-	const S_IMG_HEADER& CImage::GetHeader() const
-	{
-		return m_Header;
-	}
-
-	/**
-	* テクスチャ数取得
-	*/
-	IZ_UINT CImage::GetTexNum() const
-	{
-		return m_Header.numTextures;
-	}
-
-	/**
-	* テクスチャ取得
-	*/
-	graph::CBaseTexture* CImage::GetTexture(IZ_UINT nIdx)
-	{
-		IZ_ASSERT(nIdx < m_Header.numTextures);
-		IZ_ASSERT(m_pTexture != IZ_NULL);
-		return m_pTexture[nIdx];
-	}
+	};	
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_SCENEGRAPH_IZ_IMAGE_H__)
