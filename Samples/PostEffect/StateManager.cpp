@@ -5,6 +5,8 @@
 #include "StateSepia.h"
 #include "StateBloomStar.h"
 #include "StateBloomStarMGF.h"
+#include "StateHDR.h"
+#include "StateHDR2.h"
 
 CStateManager CStateManager::s_Instance;
 
@@ -25,4 +27,6 @@ void CStateManager::Create(
     _STATE(Sepia, app, camera);
     _STATE(BloomStar, app, camera);
     _STATE(BloomStarMGF, app, camera);
+    _STATE(HDR, app, camera);
+    _STATE(HDR_2, app, camera);
 }

@@ -54,6 +54,12 @@
     <None Include="..\..\PostEffect\posteffect\PostEffectBloomStarMGF.fx">
       <Filter>posteffect\shader</Filter>
     </None>
+    <None Include="..\..\PostEffect\posteffect\PostEffectHDR2.fx">
+      <Filter>posteffect\shader</Filter>
+    </None>
+    <None Include="..\..\PostEffect\posteffect\PostEffectHDR.fx">
+      <Filter>posteffect\shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\PostEffect\main.cpp">
@@ -92,6 +98,12 @@
     <ClCompile Include="..\..\PostEffect\StateBloomStarMGF.cpp">
       <Filter>state\source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\PostEffect\StateHDR.cpp">
+      <Filter>state\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\StateHDR2.cpp">
+      <Filter>state\source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\PostEffect\SceneRenderer.h">
@@ -127,6 +139,12 @@
     <ClInclude Include="..\..\PostEffect\StateBloomStarMGF.h">
       <Filter>state\include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\PostEffect\StateHDR.h">
+      <Filter>state\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\StateHDR2.h">
+      <Filter>state\include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\PostEffect\shader\PhongShader.xml">
@@ -151,6 +169,12 @@
       <Filter>posteffect\config</Filter>
     </CustomBuild>
     <CustomBuild Include="..\..\PostEffect\posteffect\BloomStarMGF.peh">
+      <Filter>posteffect\config</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\PostEffect\posteffect\HDR.peh">
+      <Filter>posteffect\config</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\PostEffect\posteffect\HDR2.peh">
       <Filter>posteffect\config</Filter>
     </CustomBuild>
   </ItemGroup>
