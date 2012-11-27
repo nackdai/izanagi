@@ -15,6 +15,8 @@ enum State {
     State_Sepia,
     State_BloomStar,
     State_BloomStarMGF,
+    State_HDR,
+    State_HDR_2,
 
 	StateNum,
 };
