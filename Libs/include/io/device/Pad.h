@@ -5,13 +5,21 @@
 #include "InputDeviceDefs.h"
 
 namespace izanagi {
+    /**
+     */
+    struct PadState
+    {
+        IZ_FLOAT axisX;
+        IZ_FLOAT axisY;
+        IZ_BYTE  buttons[32];         /* 32 buttons                   */
+    };
+
+    /**
+     */
 	class CPad : public CObject {
-	public:
-#if 0
-		typedef DIJOYSTATE2 PadState;
-#else
-		typedef DIJOYSTATE PadState;
-#endif
+    public:
+        // TODO
+        typedef DIJOYSTATE RawPadState;
 
 	public:
 		// インスタンス作成
@@ -39,13 +47,11 @@ namespace izanagi {
 		CPad();
 		~CPad();
 
-		CPad(const CPad& rhs);
-		const CPad& operator=(const CPad& rhs);
+		NO_COPIABLE(CPad);
+
+        IZ_DEFINE_INTERNAL_RELEASE();
 
 	protected:
-		// 解放
-		void InternalRelease();
-
         // 初期化
 		IZ_BOOL Init(SInputDeviceInitParam* pInitParam);
 
@@ -55,21 +61,39 @@ namespace izanagi {
 
 	public:
 		// キーを押し続けているか
-		inline IZ_BOOL IsPushKey(E_PAD_BUTTON key);
+		IZ_BOOL IsPushKey(E_PAD_BUTTON key)
+        {
+		    IZ_BOOL ret = IZ_FALSE;
+		    if (m_bSucceedUpdate) {
+			    ret = (m_CurState.buttons[key] > 0);
+		    }
+		    return ret;
+	    }
 
 		// キーを一度だけ押したかどうか
-		inline IZ_BOOL IsPushOneShotKey(E_PAD_BUTTON key);
+		IZ_BOOL IsPushOneShotKey(E_PAD_BUTTON key)
+        {
+		    IZ_BOOL ret = IZ_FALSE;
+		    if (m_bSucceedUpdate) {
+			    ret = (m_CurState.buttons[key] > 0);
+		    }
+		    return ret;
+	    }
 
-		// アナログスティック位置取得
-		inline void GetLeftAnalogStick(IZ_FLOAT* x, IZ_FLOAT* y);
-		inline void GetRightAnalogStick(IZ_FLOAT* x, IZ_FLOAT* y);
+		const PadState& GetCurState() const
+        {
+		    return m_CurState;
+	    }
+		const PadState& GetPrevState() const
+        {
+            return m_PrevState;
+        }
 
-	public:
-		inline D_INPUT_DEVICE* GetRawInterface();
-		inline HWND GetHWND();
-
-		inline const PadState& GetCurState() const;
-		inline const PadState& GetPrevState() const;
+        // TODO
+        const RawPadState& GetRawState() const
+        {
+            return m_RawState;
+        }
 
 	protected:
 		IMemoryAllocator* m_Allocator;
@@ -80,81 +104,11 @@ namespace izanagi {
 		PadState m_CurState;
 		PadState m_PrevState;
 
+        RawPadState m_RawState;
+
 		// 更新に成功したかどうか
 		IZ_BOOL m_bSucceedUpdate;
 	};
-
-	// inlien *******************************
-
-	/**
-	* キーを押し続けているか
-	*/
-	IZ_BOOL CPad::IsPushKey(E_PAD_BUTTON key)
-	{
-		IZ_BOOL ret = IZ_FALSE;
-		if (m_bSucceedUpdate) {
-			ret = (m_CurState.rgbButtons[key] > 0);
-		}
-		return ret;
-	}
-
-	/**
-	* キーを一度だけ押したかどうか
-	*/
-	IZ_BOOL CPad::IsPushOneShotKey(E_PAD_BUTTON key)
-	{
-		IZ_BOOL ret = IZ_FALSE;
-		if (m_bSucceedUpdate) {
-			ret = ((m_CurState.rgbButtons[key] > 0) && (m_PrevState.rgbButtons[key] == 0));
-		}
-		return ret;
-	}
-
-	/**
-	* アナログスティック位置取得（左）
-	*/
-	void CPad::GetLeftAnalogStick(IZ_FLOAT* x, IZ_FLOAT* y)
-	{
-		if (x != IZ_NULL) {
-			*x = (IZ_FLOAT)m_CurState.lX / ANALOG_STCIK_MAX;
-		}
-		if (y != IZ_NULL) {
-			*y = (IZ_FLOAT)m_CurState.lX / ANALOG_STCIK_MAX;
-		}
-	}
-
-	/**
-	* アナログスティック位置取得（右）
-	*/
-	void CPad::GetRightAnalogStick(IZ_FLOAT* x, IZ_FLOAT* y)
-	{
-		if (x != IZ_NULL) {
-			*x = (IZ_FLOAT)m_CurState.lZ / ANALOG_STCIK_MAX;
-		}
-		if (y != IZ_NULL) {
-			*y = (IZ_FLOAT)m_CurState.lRz / ANALOG_STCIK_MAX;
-		}
-	}
-
-	D_INPUT_DEVICE* CPad::GetRawInterface()
-	{
-		return m_pPadDevice;
-	}
-
-	HWND CPad::GetHWND()
-	{
-		return m_hWnd;
-	}
-
-	const CPad::PadState& CPad::GetCurState() const
-	{
-		return m_CurState;
-	}
-
-	const CPad::PadState& CPad::GetPrevState() const
-	{
-		return m_PrevState;
-	}
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_IO_PAD_H__)

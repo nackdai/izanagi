@@ -9,18 +9,6 @@ namespace izanagi {
 	struct SInputDeviceInitParam {
 		D_INPUT* pInput;
 		HWND hWnd;
-
-		SInputDeviceInitParam()
-		{
-			pInput = IZ_NULL;
-			hWnd = IZ_NULL;
-		}
-
-		SInputDeviceInitParam(D_INPUT* pInput, HWND hWnd)
-		{
-			this->pInput = pInput;
-			this->hWnd = hWnd;
-		}
 	};
 
 	// パッドボタン
