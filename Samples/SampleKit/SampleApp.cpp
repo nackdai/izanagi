@@ -107,9 +107,11 @@ IZ_BOOL CSampleApp::Init(const SSampleAppParams& params)
 		// パッド作成
         if (SUCCEEDED(hr))
 		{
-            izanagi::SInputDeviceInitParam padInitParam(
+            izanagi::SInputDeviceInitParam padInitParam =
+            {
 				input,
-				(HWND)params.deviceWindow);
+				(HWND)params.deviceWindow,
+            };
 
 			m_Pad = izanagi::CPad::CreatePad(
                 m_Allocator,

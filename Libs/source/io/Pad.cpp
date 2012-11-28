@@ -153,16 +153,6 @@ CPad::~CPad()
 	m_hWnd = IZ_NULL;
 }
 
-// 解放
-void CPad::InternalRelease()
-{
-	delete this;
-
-	if (m_Allocator != IZ_NULL) {
-		m_Allocator->Free(this);
-	}
-}
-
 /**
 * 初期化
 */
@@ -238,40 +228,55 @@ IZ_BOOL CPad::Update()
 
 		if (ret) {
 			m_bSucceedUpdate = IZ_TRUE;
-			m_pPadDevice->GetDeviceState(sizeof(m_CurState), &m_CurState);
+
+            DIJOYSTATE state;
+			m_pPadDevice->GetDeviceState(sizeof(state), &state);
+
+            // TODO
+            m_pPadDevice->GetDeviceState(sizeof(m_RawState), &m_RawState);
 
 #if 1
 			// 左キーの状態を POV -> Button に移す
-			switch (m_CurState.rgdwPOV[0]) {
+			switch (state.rgdwPOV[0]) {
 			case 0:
-				m_CurState.rgbButtons[E_PAD_BUTTON_L_UP] = 128;
+				state.rgbButtons[E_PAD_BUTTON_L_UP] = 128;
 				break;
 			case 4500:
-				m_CurState.rgbButtons[E_PAD_BUTTON_L_UP] = 128;
-				m_CurState.rgbButtons[E_PAD_BUTTON_L_RIGHT] = 128;
+				state.rgbButtons[E_PAD_BUTTON_L_UP] = 128;
+				state.rgbButtons[E_PAD_BUTTON_L_RIGHT] = 128;
 				break;
 			case 9000:
-				m_CurState.rgbButtons[E_PAD_BUTTON_L_RIGHT] = 128;
+				state.rgbButtons[E_PAD_BUTTON_L_RIGHT] = 128;
 				break;
 			case 13500:
-				m_CurState.rgbButtons[E_PAD_BUTTON_L_RIGHT] = 128;
-				m_CurState.rgbButtons[E_PAD_BUTTON_L_DOWN] = 128;
+				state.rgbButtons[E_PAD_BUTTON_L_RIGHT] = 128;
+				state.rgbButtons[E_PAD_BUTTON_L_DOWN] = 128;
 				break;
 			case 18000:
-				m_CurState.rgbButtons[E_PAD_BUTTON_L_DOWN] = 128;
+				state.rgbButtons[E_PAD_BUTTON_L_DOWN] = 128;
 				break;
 			case 22500:
-				m_CurState.rgbButtons[E_PAD_BUTTON_L_DOWN] = 128;
-				m_CurState.rgbButtons[E_PAD_BUTTON_L_LEFT] = 128;
+				state.rgbButtons[E_PAD_BUTTON_L_DOWN] = 128;
+				state.rgbButtons[E_PAD_BUTTON_L_LEFT] = 128;
 				break;
 			case 27000:
-				m_CurState.rgbButtons[E_PAD_BUTTON_L_LEFT] = 128;
+				state.rgbButtons[E_PAD_BUTTON_L_LEFT] = 128;
 				break;
 			case 31500:
-				m_CurState.rgbButtons[E_PAD_BUTTON_L_LEFT] = 128;
-				m_CurState.rgbButtons[E_PAD_BUTTON_L_UP] = 128;
+				state.rgbButtons[E_PAD_BUTTON_L_LEFT] = 128;
+				state.rgbButtons[E_PAD_BUTTON_L_UP] = 128;
 				break;
 			}
+
+            {
+                m_CurState.axisX = (IZ_FLOAT)state.lX / ANALOG_STCIK_MAX;
+                m_CurState.axisY = (IZ_FLOAT)state.lY / ANALOG_STCIK_MAX;
+
+                for (IZ_UINT i = 0; i < E_PAD_BUTTON_NUM; i++)
+                {
+                    m_CurState.buttons[i] = state.rgbButtons[i];
+                }
+            }
 #endif
 		}
 		else {
