@@ -3,6 +3,8 @@
 
 namespace izanagi
 {
+namespace math
+{
 	// “ñ•ª–@.
 	IZ_FLOAT CNumericalAnalysis::ComputeBisectionMethod(
 		CNumericalAnalysis::Func& func,
@@ -95,4 +97,5 @@ namespace izanagi
 		//IZ_ASSERT(IZ_FALSE);
 		return newX;
 	}
+}   // namespace math
 }	// namespace izanagi

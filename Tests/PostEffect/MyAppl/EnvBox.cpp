@@ -160,11 +160,11 @@ void CEnvBox::Render(izanagi::graph::CGraphicsDevice* pDevice)
 		pDevice->SetTexture(0, m_pTex);
 	}
 
-	izanagi::SMatrix mL2W;
-	izanagi::SMatrix::SetUnit(mL2W);
-	izanagi::SMatrix::Scale(mL2W, mL2W, izanagi::CVector(100.0f, 100.0f, 100.0f, 100.0f));
+	izanagi::math::SMatrix mL2W;
+	izanagi::math::SMatrix::SetUnit(mL2W);
+	izanagi::math::SMatrix::Scale(mL2W, mL2W, izanagi::math::CVector(100.0f, 100.0f, 100.0f, 100.0f));
 #if 1
-	izanagi::SVector::CopyXYZ(
+	izanagi::math::SVector::CopyXYZ(
 		mL2W.v[3],
 		CMyCamera::GetInstance().GetRawInterface().GetParam().pos);
 #endif

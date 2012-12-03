@@ -201,7 +201,7 @@ IZ_UINT CColladaImporter::GetVtxFmt()
 
 IZ_BOOL CColladaImporter::GetVertex(
 	IZ_UINT nIdx,
-	izanagi::SVector& vec,
+	izanagi::math::SVector& vec,
 	izanagi::E_MSH_VTX_FMT_TYPE type)
 {
 	domMesh* pMesh = GetMesh();
@@ -280,7 +280,7 @@ IZ_INT CColladaImporter::GetJointParent(
 
 void CColladaImporter::GetJointInvMtx(
 	IZ_UINT nIdx,
-	izanagi::SMatrix& mtx)
+	izanagi::math::SMatrix& mtx)
 {
 	CColladaJoint::GetInstance().GetJointInvMtx(
 		nIdx,

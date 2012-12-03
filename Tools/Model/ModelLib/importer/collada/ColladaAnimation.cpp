@@ -661,17 +661,17 @@ namespace {
 	};
 
 	inline void _RotateAxis(
-		izanagi::SMatrix& dst,
-		const izanagi::SMatrix& src,
+		izanagi::math::SMatrix& dst,
+		const izanagi::math::SMatrix& src,
 		IZ_FLOAT x, IZ_FLOAT y, IZ_FLOAT z, IZ_FLOAT angle)
 	{
-		izanagi::SQuat quat;
-		izanagi::SQuat::SetQuatFromRadAxis(quat, angle, x, y, z);
+		izanagi::math::SQuat quat;
+		izanagi::math::SQuat::SetQuatFromRadAxis(quat, angle, x, y, z);
 
-		izanagi::SMatrix mtx;
-		izanagi::SQuat::MatrixFromQuat(mtx, quat);
+		izanagi::math::SMatrix mtx;
+		izanagi::math::SQuat::MatrixFromQuat(mtx, quat);
 
-		izanagi::SMatrix::Mul(dst, src, mtx);
+		izanagi::math::SMatrix::Mul(dst, src, mtx);
 	}
 }	// namespace
 
@@ -801,7 +801,7 @@ IZ_BOOL CColladaAnimation::CreateSlerp(IZ_UINT nNodeIdx)
 		// Compute new quartanion.
 		IZ_FLOAT fPrevTime = IZ_FLOAT_MAX;
 
-		izanagi::SMatrix mtx;
+		izanagi::math::SMatrix mtx;
 
 		for (size_t i = 0; i < tvQuatList.size(); i++) {
 			const SQuatParam& sQuatParam = tvQuatList[i];
@@ -818,16 +818,16 @@ IZ_BOOL CColladaAnimation::CreateSlerp(IZ_UINT nNodeIdx)
 			}
 			else {
 				if (i > 0) {
-					izanagi::SQuat quat;
-					izanagi::SQuat::QuatFromMatrix(quat, mtx);
-					izanagi::SQuat::Normalize(quat, quat);
+					izanagi::math::SQuat quat;
+					izanagi::math::SQuat::QuatFromMatrix(quat, mtx);
+					izanagi::math::SQuat::Normalize(quat, quat);
 					sAnmInput.params.push_back(quat.x);
 					sAnmInput.params.push_back(quat.y);
 					sAnmInput.params.push_back(quat.z);
 					sAnmInput.params.push_back(quat.w);
 				}
 
-				izanagi::SMatrix::SetUnit(mtx);
+				izanagi::math::SMatrix::SetUnit(mtx);
 				_RotateAxis(
 					mtx, mtx,
 					x, y, z, angle);
@@ -837,9 +837,9 @@ IZ_BOOL CColladaAnimation::CreateSlerp(IZ_UINT nNodeIdx)
 		}
 
 		{
-			izanagi::SQuat quat;
-			izanagi::SQuat::QuatFromMatrix(quat, mtx);
-			izanagi::SQuat::Normalize(quat, quat);
+			izanagi::math::SQuat quat;
+			izanagi::math::SQuat::QuatFromMatrix(quat, mtx);
+			izanagi::math::SQuat::Normalize(quat, quat);
 			sAnmInput.params.push_back(quat.x);
 			sAnmInput.params.push_back(quat.y);
 			sAnmInput.params.push_back(quat.z);

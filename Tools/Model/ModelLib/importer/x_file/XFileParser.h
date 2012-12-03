@@ -32,7 +32,7 @@ private:
 	IZ_BOOL ParseTemplate();
 
 	IZ_BOOL ParseFrame(SXFileNode* pParent);
-	IZ_BOOL ParseFrameTransformMatrix(izanagi::SMatrix& mtx);
+	IZ_BOOL ParseFrameTransformMatrix(izanagi::math::SMatrix& mtx);
 
 	IZ_BOOL ParseMesh(SXFileMesh* pMesh);
 	IZ_BOOL ParseMeshNormal(SXFileMesh* pMesh);
@@ -61,14 +61,14 @@ private:
 	inline IZ_FLOAT ReadFloat();
 	inline IZ_INT ReadInt();
 
-	inline void ReadVector(izanagi::SVector& vec);
-	inline void ReadVectorXYZ(izanagi::SVector& vec);
-	inline void ReadVectorXY(izanagi::SVector& vec);
+	inline void ReadVector(izanagi::math::SVector& vec);
+	inline void ReadVectorXYZ(izanagi::math::SVector& vec);
+	inline void ReadVectorXY(izanagi::math::SVector& vec);
 
 	inline void ReadFloat2(IZ_FLOAT& f0, IZ_FLOAT& f1);
 
-	inline void ReadRGBA(izanagi::SVector& vec);
-	inline void ReadRGB(izanagi::SVector& vec);
+	inline void ReadRGBA(izanagi::math::SVector& vec);
+	inline void ReadRGB(izanagi::math::SVector& vec);
 
 	inline IZ_UINT32 Read4Byte();
 	inline IZ_UINT16 Read2Byte();

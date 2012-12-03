@@ -116,6 +116,7 @@ namespace tool {
 			pHeader->sizeJumpTbl = sizeof(IZ_UINT) * pHeader->numTextures;
 
 			pHeader->sizeMax = 0;
+            pHeader->maxPitch = 0;
 		}
 	};
 }	// namespace tool

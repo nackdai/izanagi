@@ -74,8 +74,8 @@ IZ_BOOL CMdlExporter::Export(
 	{
 		sHeader.sizeFile = m_Out.GetCurPos();
 
-		const izanagi::SVector& vMin = CGeometryChunk::GetInstance().GetMin();
-		const izanagi::SVector& vMax = CGeometryChunk::GetInstance().GetMax();
+		const izanagi::math::SVector& vMin = CGeometryChunk::GetInstance().GetMin();
+		const izanagi::math::SVector& vMax = CGeometryChunk::GetInstance().GetMax();
 
 		sHeader.minVtx[0] = vMin.x;
 		sHeader.minVtx[1] = vMin.y;

@@ -92,13 +92,13 @@ IZ_BOOL CXFileJoint::Init(CXFileParser* pParser)
 									sJoint.name);
 
 		if (pBone != IZ_NULL) {
-			izanagi::SMatrix::Copy(
+			izanagi::math::SMatrix::Copy(
 				sJoint.mtxInv,
 				pBone->mtx);
 			sJoint.isMtxInvFromSkin = IZ_TRUE;
 		}
 		else {
-			izanagi::SMatrix::Copy(
+			izanagi::math::SMatrix::Copy(
 				sJoint.mtxInv,
 				pNode->mtxTransform);
 			sJoint.isMtxInvFromSkin = IZ_FALSE;
@@ -113,7 +113,7 @@ IZ_BOOL CXFileJoint::Init(CXFileParser* pParser)
 			if (sJoint.parent >= 0) {
 				const SJoint& sParent = m_JointList[sJoint.parent];
 
-				izanagi::SMatrix::Mul(
+				izanagi::math::SMatrix::Mul(
 					sJoint.mtxInv,
 					sJoint.mtxInv,
 					sParent.mtxInv);
@@ -126,7 +126,7 @@ IZ_BOOL CXFileJoint::Init(CXFileParser* pParser)
 		SJoint& sJoint = m_JointList[i];
 
 		if (!sJoint.isMtxInvFromSkin) {
-			izanagi::SMatrix::Inverse(sJoint.mtxInv, sJoint.mtxInv);
+			izanagi::math::SMatrix::Inverse(sJoint.mtxInv, sJoint.mtxInv);
 		}
 	}
 
@@ -159,13 +159,13 @@ IZ_INT CXFileJoint::GetJointParent(IZ_UINT nIdx)
 
 void CXFileJoint::GetJointInvMtx(
 	IZ_UINT nIdx,
-	izanagi::SMatrix& mtx)
+	izanagi::math::SMatrix& mtx)
 {
 	IZ_ASSERT(nIdx < GetJointNum());
 
 	const SJoint& sJoint = m_JointList[nIdx];
 
-	izanagi::SMatrix::Copy(
+	izanagi::math::SMatrix::Copy(
 		mtx,
 		sJoint.mtxInv);
 }

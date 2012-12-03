@@ -5,12 +5,12 @@
 // BoneIdx  : +-- 0 --+-- 1 --+-- 2 --+
 
 struct Joint {
-	izanagi::SVector trans;
-	izanagi::SQuat quat;
-	izanagi::SMatrix mtx;
+	izanagi::math::SVector trans;
+	izanagi::math::SQuat quat;
+	izanagi::math::SMatrix mtx;
 	Joint* parent;
 
-	izanagi::SVector pos;
+	izanagi::math::SVector pos;
 
 	void ComputeLocalMatrix();
 	void ComputePos();
@@ -18,16 +18,16 @@ struct Joint {
 
 void Joint::ComputeLocalMatrix()
 {
-	izanagi::SMatrix::SetUnit(mtx);
-	izanagi::SQuat::MatrixFromQuat(mtx, quat);
-	izanagi::SMatrix::Trans(mtx, mtx, trans);
+	izanagi::math::SMatrix::SetUnit(mtx);
+	izanagi::math::SQuat::MatrixFromQuat(mtx, quat);
+	izanagi::math::SMatrix::Trans(mtx, mtx, trans);
 }
 
 void Joint::ComputePos()
 {
 	pos.Set(0.0f, 0.0f, 0.0f);
 
-	izanagi::SMatrix::Apply(
+	izanagi::math::SMatrix::Apply(
 		pos,
 		pos,
 		mtx);
@@ -36,7 +36,7 @@ void Joint::ComputePos()
 /////////////////////////////////////////////
 
 Joint joints[5];
-izanagi::SVector s_Target;
+izanagi::math::SVector s_Target;
 IZ_UINT s_RecursiveNum = 1;
 
 IZ_FLOAT angle = 90.0f;
@@ -72,7 +72,7 @@ void InitJoints()
 
 	// 回転
 	for (IZ_UINT i = 0; i < COUNTOF(joints); i++) {
-		izanagi::SQuat::SetQuatFromRadAxis(
+		izanagi::math::SQuat::SetQuatFromRadAxis(
 			joints[i].quat,
 			0.0f,
 			0.0f, 0.0f, 1.0f);
@@ -80,7 +80,7 @@ void InitJoints()
 
 	// 行列
 	for (IZ_UINT i = 0; i < COUNTOF(joints); i++) {
-		izanagi::SMatrix::SetUnit(joints[i].mtx);
+		izanagi::math::SMatrix::SetUnit(joints[i].mtx);
 	}
 }
 
@@ -94,9 +94,9 @@ void UpdateJointMatrix()
 		Joint* parent = joints[i].parent;
 		
 		if (parent != IZ_NULL) {
-			const izanagi::SMatrix mtxParent = parent->mtx;
+			const izanagi::math::SMatrix mtxParent = parent->mtx;
 
-			izanagi::SMatrix::Mul(
+			izanagi::math::SMatrix::Mul(
 				joints[i].mtx,
 				joints[i].mtx,
 				mtxParent);
@@ -109,15 +109,15 @@ void UpdateJointMatrix()
 void CheckLimitAngle(Joint* joint)
 {
 	if (enableLimitAngle) {
-		izanagi::SVector angle;
-		izanagi::SQuat::GetEuler(angle, joint->quat);
+		izanagi::math::SVector angle;
+		izanagi::math::SQuat::GetEuler(angle, joint->quat);
 
-		angle.z = izanagi::CMath::Clamp(
+		angle.z = izanagi::math::CMath::Clamp(
 			angle.z,
 			IZ_DEG2RAD(-90.0f),
 			IZ_DEG2RAD(90.0f));
 
-		izanagi::SQuat::QuatFromEuler(joint->quat, angle);
+		izanagi::math::SQuat::QuatFromEuler(joint->quat, angle);
 	}
 }
 
@@ -128,16 +128,16 @@ void CheckLimitAngle(Joint* joint)
  */
 void ApplyIK(
 	IZ_UINT recursiveNum,
-	const izanagi::SVector& target)
+	const izanagi::math::SVector& target)
 {
 	// 先端
 	Joint* effector = &joints[COUNTOF(joints) - 1];
 
-	izanagi::SVector localEffector;
-	izanagi::SVector localTarget;
+	izanagi::math::SVector localEffector;
+	izanagi::math::SVector localTarget;
 
-	izanagi::SVector baseCoordEffector;
-	izanagi::SVector baseCoordTarget;
+	izanagi::math::SVector baseCoordEffector;
+	izanagi::math::SVector baseCoordTarget;
 
 	for (IZ_UINT i = 0; i < recursiveNum; i++) {
 		// NOTE
@@ -148,43 +148,43 @@ void ApplyIK(
 			joint->ComputePos();
 
 			// 基準関節の座標空間に変換するための逆行列
-			izanagi::SMatrix mtx;
+			izanagi::math::SMatrix mtx;
 			{
-				izanagi::SMatrix::Inverse(mtx, joint->mtx);
+				izanagi::math::SMatrix::Inverse(mtx, joint->mtx);
 			}
 
 			// 先端を基準関節の座標空間に変換
 			effector->ComputePos();
-			izanagi::SMatrix::Apply(localEffector, effector->pos, mtx);
+			izanagi::math::SMatrix::Apply(localEffector, effector->pos, mtx);
 			
 
 			// 目標位置を基準関節の座標空間に変換
-			izanagi::SMatrix::Apply(localTarget, target, mtx);
+			izanagi::math::SMatrix::Apply(localTarget, target, mtx);
 
-			izanagi::SVector::Normalize(baseCoordEffector, localEffector);
-			izanagi::SVector::Normalize(baseCoordTarget, localTarget);
+			izanagi::math::SVector::Normalize(baseCoordEffector, localEffector);
+			izanagi::math::SVector::Normalize(baseCoordTarget, localTarget);
 
 			// ベクトル1 = 先端 - 基準関節
 			// ベクトル2 = 目標位置 - 基準関節
 			// ベクトル1とベクトル2のなす角度
-			IZ_FLOAT dot = izanagi::SVector::Dot(baseCoordEffector, baseCoordTarget);
+			IZ_FLOAT dot = izanagi::math::SVector::Dot(baseCoordEffector, baseCoordTarget);
 
 			IZ_FLOAT angle = ::acosf(dot);
 
 			IZ_FLOAT deg = IZ_RAD2DEG(angle);
 
-			//if (!izanagi::CMath::IsNearyEqualZero(angle)) {
+			//if (!izanagi::math::CMath::IsNearyEqualZero(angle)) {
 			if (angle > 1.0e-5f) {
 				// 回転軸
-				izanagi::SVector axis;
-				izanagi::SVector::Cross(axis, baseCoordEffector, baseCoordTarget);
-				izanagi::SVector::Normalize(axis, axis);
+				izanagi::math::SVector axis;
+				izanagi::math::SVector::Cross(axis, baseCoordEffector, baseCoordTarget);
+				izanagi::math::SVector::Normalize(axis, axis);
 
-				izanagi::SQuat quat;
-				izanagi::SQuat::SetQuatFromRadAxis(quat, angle, axis);
+				izanagi::math::SQuat quat;
+				izanagi::math::SQuat::SetQuatFromRadAxis(quat, angle, axis);
 
 				// 関節の回転を更新
-				izanagi::SQuat::Mul(joint->quat, joint->quat, quat);
+				izanagi::math::SQuat::Mul(joint->quat, joint->quat, quat);
 
 				CheckLimitAngle(joint);
 			}
@@ -196,23 +196,23 @@ void ApplyIK(
 			UpdateJointMatrix();
 
 			// 基準関節の座標空間に変換するための逆行列
-			izanagi::SMatrix mtx;
+			izanagi::math::SMatrix mtx;
 			{
-				izanagi::SMatrix::Inverse(mtx, joints[0].mtx);
+				izanagi::math::SMatrix::Inverse(mtx, joints[0].mtx);
 			}
 
 			// 先端を基準関節の座標空間に変換
 			effector->ComputePos();
-			izanagi::SMatrix::Apply(localEffector, effector->pos, mtx);
+			izanagi::math::SMatrix::Apply(localEffector, effector->pos, mtx);
 
 			// 目標位置を基準関節の座標空間に変換
-			izanagi::SMatrix::Apply(localTarget, target, mtx);
+			izanagi::math::SMatrix::Apply(localTarget, target, mtx);
 		}
 #endif
 
 		// 最終位置と目標位置の距離が限りなくゼロになったらもうやめる
-		IZ_FLOAT length = izanagi::SVector::Length2(localEffector, localTarget);
-		if (izanagi::CMath::IsNearyEqualZero(length)) {
+		IZ_FLOAT length = izanagi::math::SVector::Length2(localEffector, localTarget);
+		if (izanagi::math::CMath::IsNearyEqualZero(length)) {
 			break;
 		}
 	}
@@ -238,7 +238,7 @@ IZ_BOOL CIkApp::InitInternal(
 	
 	UpdateJointMatrix();
 	joints[COUNTOF(joints) - 1].ComputePos();
-	izanagi::SVector::Copy(s_Target, joints[COUNTOF(joints) - 1].pos);
+	izanagi::math::SVector::Copy(s_Target, joints[COUNTOF(joints) - 1].pos);
 
 	return IZ_TRUE;
 }
@@ -262,12 +262,12 @@ void CIkApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
 	static const IZ_COLOR bgColor = IZ_COLOR_RGBA(0, 128, 255, 255);
 
-	izanagi::SVector pos[COUNTOF(joints)];
+	izanagi::math::SVector pos[COUNTOF(joints)];
 
 	if (device->Begin2D()) {
 		for (IZ_UINT i = 0; i < COUNTOF(joints); i++) {
 			joints[i].ComputePos();
-			izanagi::SVector::Copy(pos[i], joints[i].pos);
+			izanagi::math::SVector::Copy(pos[i], joints[i].pos);
 		}
 
 		for (IZ_UINT i = 0; i < COUNTOF(joints) - 1; i++) {

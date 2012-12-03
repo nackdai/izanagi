@@ -3,7 +3,10 @@
 
 #include "MathVector.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace math
+{
 	/**
 	 */
 	struct SRay {
@@ -55,6 +58,7 @@ namespace izanagi {
 		 */
 		void Normalize();
 	};
+}   // namespace math
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI__MATH_RAY_H__)

@@ -3,7 +3,10 @@
 #include "math/MathPlane.h"
 #include "math/MathCVector.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace math
+{
 	CRectangle::CRectangle()
 	{
 		a = b = c = d = padding = 0.0f;
@@ -45,8 +48,8 @@ namespace izanagi {
 		return *this;
 	}
 
-	static const izanagi::CVector DirX(1.0f, 0.0f,  0.0f, 0.0f);
-	static const izanagi::CVector DirZ(0.0f, 0.0f, -1.0f, 0.0f);
+	static const CVector DirX(1.0f, 0.0f,  0.0f, 0.0f);
+	static const CVector DirZ(0.0f, 0.0f, -1.0f, 0.0f);
 
 	// ãÈå`Çê›íË.
 	void CRectangle::Set(
@@ -119,9 +122,9 @@ namespace izanagi {
 		SVector::Normalize(nml, nml);
 
 		// åvéZåÎéZÇä€ÇﬂÇÈ
-		nml.x = izanagi::CMath::IsNearyEqualZero(nml.x) ? 0.0f : nml.x;
-		nml.y = izanagi::CMath::IsNearyEqualZero(nml.y) ? 0.0f : nml.y;
-		nml.z = izanagi::CMath::IsNearyEqualZero(nml.z) ? 0.0f : nml.z;
+		nml.x = CMath::IsNearyEqualZero(nml.x) ? 0.0f : nml.x;
+		nml.y = CMath::IsNearyEqualZero(nml.y) ? 0.0f : nml.y;
+		nml.z = CMath::IsNearyEqualZero(nml.z) ? 0.0f : nml.z;
 		SVector::Normalize(nml, nml);
 
 		d = -(a * pt.x + b * pt.y + c * pt.z);
@@ -207,4 +210,5 @@ namespace izanagi {
 	{
 		return v[1].length;
 	}
+}   // namespace math
 }	// namespace izanagi

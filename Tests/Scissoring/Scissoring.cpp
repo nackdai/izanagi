@@ -40,11 +40,11 @@ IZ_BOOL CScissoring::InitInternal(
 			Length, Length);
 
 		m_Rectangle.rc.Set(
-			izanagi::CVector(0.0f, 0.0f, 0.0f),
+			izanagi::math::CVector(0.0f, 0.0f, 0.0f),
 			Length,
 			Length);
 
-		izanagi::SMatrix::GetRotByZ(
+		izanagi::math::SMatrix::GetRotByZ(
 			m_Rectangle.mtx,
 			IZ_DEG2RAD(90.0f));
 
@@ -94,7 +94,7 @@ IZ_BOOL CScissoring::InitInternal(
 			VGOTO(m_Triangles.vb[i] != IZ_NULL, __EXIT__);
 		}
 
-		izanagi::SMatrix::SetUnit(m_Triangles.mtx);
+		izanagi::math::SMatrix::SetUnit(m_Triangles.mtx);
 
 		m_Triangles.tri.Transform(m_Triangles.mtx);
 	}
@@ -113,12 +113,12 @@ IZ_BOOL CScissoring::InitInternal(
 
 	// カメラ
 	camera.Init(
-		izanagi::CVector(-50.0f, 20.0f, -200.0, 1.0f),
-		izanagi::CVector(0.0f, 0.0f, 0.0f, 1.0f),
-		izanagi::CVector(0.0f, 1.0f, 0.0f, 1.0f),
+		izanagi::math::CVector(-50.0f, 20.0f, -200.0, 1.0f),
+		izanagi::math::CVector(0.0f, 0.0f, 0.0f, 1.0f),
+		izanagi::math::CVector(0.0f, 1.0f, 0.0f, 1.0f),
 		1.0f,
 		500.0f,
-		izanagi::CMath::Deg2Rad(60.0f),
+		izanagi::math::CMath::Deg2Rad(60.0f),
 		(IZ_FLOAT)SCREEN_WIDTH / SCREEN_HEIGHT);
 	camera.Update();
 

@@ -40,12 +40,12 @@ public:
 	IZ_BOOL Draw();
 
 	IZ_BOOL GetCrossPoint(
-		const izanagi::CRay& ray,
-		izanagi::SVector& refPtr,
-		izanagi::SVector* normal);
+		const izanagi::math::CRay& ray,
+		izanagi::math::SVector& refPtr,
+		izanagi::math::SVector* normal);
 
 	IZ_UINT GetTriNum() const { return m_TriNum; }
-	const izanagi::CTriangle* GetTriangles() const { return m_Triangles; }
+	const izanagi::math::CTriangle* GetTriangles() const { return m_Triangles; }
 
 private:
 	izanagi::IMemoryAllocator* m_Allocator;
@@ -53,7 +53,7 @@ private:
 	izanagi::CDebugMesh* m_Mesh;
 
 	IZ_UINT m_TriNum;
-	izanagi::CTriangle* m_Triangles;
+	izanagi::math::CTriangle* m_Triangles;
 };
 
 #endif	// #if !defined(__SHPERE_H__)

@@ -46,7 +46,7 @@ IZ_UINT CSkeletonInstance::ComputeBufferSize(const CSkeleton* pSkl)
 		IZ_UINT jointNum = pSkl->GetJointNum();
 
 		size += sizeof(S_SKL_JOINT_POSE) * jointNum;
-		size += sizeof(SMatrix) * jointNum;
+		size += sizeof(math::SMatrix) * jointNum;
         size += sizeof(IZ_UINT8) * jointNum;
 	}
 
@@ -72,7 +72,7 @@ CSkeletonInstance::~CSkeletonInstance()
 	SAFE_RELEASE(m_pBody);
 }
 
-void CSkeletonInstance::BuildMatrix(const SMatrix* mtxL2W)
+void CSkeletonInstance::BuildMatrix(const math::SMatrix* mtxL2W)
 {
 	for (IZ_UINT i = 0; i < m_nJointNum; ++i) {
 		BuildLocalMatrix(i);
@@ -88,9 +88,9 @@ void CSkeletonInstance::BuildMatrix(const SMatrix* mtxL2W)
 		}
 		else if (mtxL2W != IZ_NULL) {
 			// ルートに対しては、L2Wマトリクスを計算する
-			SMatrix& mtxJoint = m_pGlobalPose[0];
+			math::SMatrix& mtxJoint = m_pGlobalPose[0];
 
-			SMatrix::Mul(
+			math::SMatrix::Mul(
 				mtxJoint,
 				mtxJoint,
 				*mtxL2W);
@@ -102,7 +102,7 @@ void CSkeletonInstance::BuildMatrix(const SMatrix* mtxL2W)
 	}
 }
 
-const SMatrix* CSkeletonInstance::GetJointMtx(IZ_INT idx) const
+const math::SMatrix* CSkeletonInstance::GetJointMtx(IZ_INT idx) const
 {
 	if (idx < 0) {
 		return IZ_NULL;
@@ -118,8 +118,8 @@ IZ_UINT8* CSkeletonInstance::SetJointData(IZ_UINT8* pBuf)
 	pBuf += sizeof(S_SKL_JOINT_POSE) * m_nJointNum;
 
     // 最終的な行列
-	m_pGlobalPose = reinterpret_cast<SMatrix*>(pBuf);
-	pBuf += sizeof(SMatrix) * m_nJointNum;
+	m_pGlobalPose = reinterpret_cast<math::SMatrix*>(pBuf);
+	pBuf += sizeof(math::SMatrix) * m_nJointNum;
 
     // アニメーションパラメータの中で更新が必要なパラメータフラグ
     m_ValidAnmParam = reinterpret_cast<IZ_UINT8*>(pBuf);
@@ -145,31 +145,31 @@ IZ_UINT8* CSkeletonInstance::SetJointData(IZ_UINT8* pBuf)
 namespace {
 #if 0
 	void _RotateAxis(
-		SMatrix& dst,
-		const SMatrix& src,
+		math::SMatrix& dst,
+		const math::SMatrix& src,
 		IZ_FLOAT x, IZ_FLOAT y, IZ_FLOAT z, IZ_FLOAT angle)
 	{
-		SQuat quat;
+		math::SQuat quat;
 		SetQuatFromRadAxis(quat, angle, x, y, z);
 
-		SMatrix mtx;
+		math::SMatrix mtx;
 		MatrixFromQuat(mtx, quat);
 
-		SMatrix::Mul(dst, src, mtx);
+		math::SMatrix::Mul(dst, src, mtx);
 	}
 #else
 	void _RotateAxis(
-		SMatrix& dst,
-		const SMatrix& src,
+		math::SMatrix& dst,
+		const math::SMatrix& src,
 		IZ_FLOAT x, IZ_FLOAT y, IZ_FLOAT z, IZ_FLOAT w)
 	{
-		SQuat quat;
-		SQuat::Set(quat, x, y, z, w);
+		math::SQuat quat;
+		math::SQuat::Set(quat, x, y, z, w);
 
-		SMatrix mtx;
-		SQuat::MatrixFromQuat(mtx, quat);
+		math::SMatrix mtx;
+		math::SQuat::MatrixFromQuat(mtx, quat);
 
-		SMatrix::Mul(dst, src, mtx);
+		math::SMatrix::Mul(dst, src, mtx);
 	}
 #endif
 }	// namespace
@@ -192,12 +192,12 @@ void CSkeletonInstance::BuildLocalMatrix(IZ_UINT nIdx)
 	}
 
 	const S_SKL_JOINT_POSE& pose = m_pJointPose[nIdx];
-	SMatrix& mtxJoint = m_pGlobalPose[nIdx];
+	math::SMatrix& mtxJoint = m_pGlobalPose[nIdx];
 
-	SMatrix::SetUnit(mtxJoint);
+	math::SMatrix::SetUnit(mtxJoint);
 
 	if (flag.IsOn(E_SKL_JOINT_PARAM_SCALE)) {
-		SMatrix::Scale(
+		math::SMatrix::Scale(
 			mtxJoint,
 			mtxJoint, 
 			pose.scale[0],
@@ -216,7 +216,7 @@ void CSkeletonInstance::BuildLocalMatrix(IZ_UINT nIdx)
 	}
 
 	if (flag.IsOn(E_SKL_JOINT_PARAM_TRANSLATE)) {
-		SMatrix::Trans(
+		math::SMatrix::Trans(
 			mtxJoint,
 			mtxJoint, 
 			pose.trans[0],
@@ -230,9 +230,9 @@ void CSkeletonInstance::ApplyInvBindMatrix(IZ_UINT nIdx)
 	IZ_ASSERT(m_pBody != IZ_NULL);
 	const S_SKL_JOINT* pJoint = m_pBody->GetJoint(nIdx);
 
-	SMatrix& mtxJoint = m_pGlobalPose[nIdx];
+	math::SMatrix& mtxJoint = m_pGlobalPose[nIdx];
 
-	SMatrix::Mul(
+	math::SMatrix::Mul(
 		mtxJoint,
 		pJoint->mtxInvBind,
 		mtxJoint);
@@ -242,10 +242,10 @@ void CSkeletonInstance::ApplyParentMatrix(
 	IZ_UINT nIdx,
 	IZ_UINT nParentIdx)
 {
-	SMatrix& mtxJoint = m_pGlobalPose[nIdx];
-	const SMatrix& mtxParent = m_pGlobalPose[nParentIdx];
+	math::SMatrix& mtxJoint = m_pGlobalPose[nIdx];
+	const math::SMatrix& mtxParent = m_pGlobalPose[nParentIdx];
 
-	SMatrix::Mul(
+	math::SMatrix::Mul(
 		mtxJoint,
 		mtxJoint,
 		mtxParent);
@@ -297,7 +297,7 @@ void CSkeletonInstance::UpdatePose(
 	IZ_UINT idx,
 	IZ_UINT transformType,
 	IZ_UINT paramType,
-	const SVector& param)
+	const math::SVector& param)
 {
 	IZ_ASSERT(m_IsUpdatingPose);
 

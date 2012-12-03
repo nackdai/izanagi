@@ -93,12 +93,14 @@ xcopy /R /Y "$(TargetDir)$(ProjectName).pdb" ..\lib\$(IntDir)
     <ClCompile Include="..\..\source\math\MathRectangle.cpp" />
     <ClCompile Include="..\..\source\math\MathTriangle.cpp" />
     <ClCompile Include="..\..\source\math\MathMatrix.cpp" />
-    <ClCompile Include="..\..\source\math\MathQuaternion.cpp" />
     <ClCompile Include="..\..\source\math\SFMT\SFMT.cpp" />
     <ClCompile Include="..\..\source\math\MathNumericalAnlysis.cpp" />
     <ClCompile Include="..\..\source\math\Tweener.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\include\math\dx9\MathMatrix_DX9.h" />
+    <ClInclude Include="..\..\include\math\dx9\MathQuaternion_DX9.h" />
+    <ClInclude Include="..\..\include\math\dx9\MathVector_DX9.h" />
     <ClInclude Include="..\..\include\math\MathInterpolater.h" />
     <ClInclude Include="..\..\include\math\MathPlane.h" />
     <ClInclude Include="..\..\include\math\MathRay.h" />
@@ -108,13 +110,15 @@ xcopy /R /Y "$(TargetDir)$(ProjectName).pdb" ..\lib\$(IntDir)
     <ClInclude Include="..\..\include\math\MathCQuaternion.h" />
     <ClInclude Include="..\..\include\math\MathCVector.h" />
     <ClInclude Include="..\..\include\math\MathDefs.h" />
-    <ClInclude Include="..\..\include\math\MathFixed.h" />
     <ClInclude Include="..\..\include\math\MathHalfFloat.h" />
     <ClInclude Include="..\..\include\math\MathMatrix.h" />
     <ClInclude Include="..\..\include\math\MathQuaternion.h" />
     <ClInclude Include="..\..\include\math\MathRand.h" />
     <ClInclude Include="..\..\include\math\MathUtil.h" />
     <ClInclude Include="..\..\include\math\MathVector.h" />
+    <ClInclude Include="..\..\include\math\noplatform\MathMatrix_NoPlatform.h" />
+    <ClInclude Include="..\..\include\math\noplatform\MathQuaternion_NoPlatform.h" />
+    <ClInclude Include="..\..\include\math\noplatform\MathVector_NoPlatform.h" />
     <ClInclude Include="..\..\include\math\SFMT\SFMT-alti.h" />
     <ClInclude Include="..\..\include\math\SFMT\SFMT-params.h" />
     <ClInclude Include="..\..\include\math\SFMT\SFMT-params11213.h" />

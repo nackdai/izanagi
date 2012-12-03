@@ -23,7 +23,7 @@ protected:
 	inline void InternalRelease();
 
 public:
-	inline void SetCameraPos(const izanagi::SVector& vec);
+	inline void SetCameraPos(const izanagi::math::SVector& vec);
 
 	inline void SetLight(
 		const izanagi::SParallelLightParam& sParallel,
@@ -33,8 +33,8 @@ public:
 
 	inline void SetJointMatrix(
 		IZ_UINT num,
-		//izanagi::SVector* pVecArray);
-		izanagi::SMatrix* pVecArray);
+		//izanagi::math::SVector* pVecArray);
+		izanagi::math::SMatrix* pVecArray);
 
 protected:
 	enum {
@@ -74,7 +74,7 @@ void CSkinShader::InternalRelease()
 }
 
 // カメラ位置セット
-void CSkinShader::SetCameraPos(const izanagi::SVector& vec)
+void CSkinShader::SetCameraPos(const izanagi::math::SVector& vec)
 {
 	if (m_hHandles[HANDLE_CAMERA_POS] != IZ_NULL) {
 		m_pEffect->SetVector(
@@ -129,8 +129,8 @@ void CSkinShader::SetMaterial(const izanagi::SMaterialParam& sMaterial)
 
 void CSkinShader::SetJointMatrix(
 	IZ_UINT num,
-	//izanagi::SVector* pVecArray)
-	izanagi::SMatrix* pVecArray)
+	//izanagi::math::SVector* pVecArray)
+	izanagi::math::SMatrix* pVecArray)
 {
 	if (m_hHandles[HANDLE_JOINT_MATRIX] != IZ_NULL) {
 		HRESULT hr = m_pEffect->SetMatrixArray(

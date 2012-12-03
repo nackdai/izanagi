@@ -45,11 +45,11 @@ namespace graph
 		PURE_VIRTUAL(IZ_BOOL SetInt(CGraphicsDevice* device, SHADER_PARAM_HANDLE handle, IZ_INT n));
 		PURE_VIRTUAL(IZ_BOOL SetIntArray(CGraphicsDevice* device, SHADER_PARAM_HANDLE handle, const IZ_INT* n, IZ_UINT num));
 
-		PURE_VIRTUAL(IZ_BOOL SetMatrix(CGraphicsDevice* device, SHADER_PARAM_HANDLE handle, const SMatrix& m));
-		PURE_VIRTUAL(IZ_BOOL SetMatrixArray(CGraphicsDevice* device, SHADER_PARAM_HANDLE handle, const SMatrix* m, IZ_UINT num));
+		PURE_VIRTUAL(IZ_BOOL SetMatrix(CGraphicsDevice* device, SHADER_PARAM_HANDLE handle, const math::SMatrix& m));
+		PURE_VIRTUAL(IZ_BOOL SetMatrixArray(CGraphicsDevice* device, SHADER_PARAM_HANDLE handle, const math::SMatrix* m, IZ_UINT num));
 
-		PURE_VIRTUAL(IZ_BOOL SetVector(CGraphicsDevice* device, SHADER_PARAM_HANDLE handle, const SVector& v));
-		PURE_VIRTUAL(IZ_BOOL SetVectorArray(CGraphicsDevice* device, SHADER_PARAM_HANDLE handle, const SVector* v, IZ_UINT num));
+		PURE_VIRTUAL(IZ_BOOL SetVector(CGraphicsDevice* device, SHADER_PARAM_HANDLE handle, const math::SVector& v));
+		PURE_VIRTUAL(IZ_BOOL SetVectorArray(CGraphicsDevice* device, SHADER_PARAM_HANDLE handle, const math::SVector* v, IZ_UINT num));
 
 		PURE_VIRTUAL(IZ_BOOL SetValue(CGraphicsDevice* device, SHADER_PARAM_HANDLE handle, const void* p, IZ_UINT size));
 

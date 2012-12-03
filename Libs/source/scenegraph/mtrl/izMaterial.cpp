@@ -410,9 +410,9 @@ namespace {
 		case E_MTRL_PARAM_TYPE_FLOAT:
 			return sizeof(IZ_FLOAT);
 		case E_MTRL_PARAM_TYPE_VECTOR:
-			return sizeof(SVector);
+			return sizeof(math::SVector);
 		case E_MTRL_PARAM_TYPE_MATRIX:
-			return sizeof(SMatrix);
+			return sizeof(math::SMatrix);
 		case E_MTRL_PARAM_TYPE_UINT:
 			return sizeof(IZ_UINT);
 		case E_MTRL_PARAM_TYPE_BOOL:

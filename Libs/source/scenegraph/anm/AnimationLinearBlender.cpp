@@ -78,7 +78,7 @@ IZ_UINT CAnmLinearBlender::ApplyAnimation(
 	}
 	if (bitFlagStart.IsOn(E_SKL_JOINT_PARAM_QUARTANION) || bitFlagGoal.IsOn(E_SKL_JOINT_PARAM_QUARTANION)) {
 		// 球面線形補間
-		SQuat::Slerp(
+		math::SQuat::Slerp(
 			finalPose.quat,
 			poseStart.quat,
 			poseGoal.quat,
@@ -108,13 +108,13 @@ void CAnmLinearBlender::UpdatePose(
 	IZ_UINT updateFlag,
 	CPoseUpdater& poseUpdater)
 {
-	SVector param;
+	math::SVector param;
 
 	CBit32Flag bitFlag(updateFlag);
 
 	// 姿勢更新
 	if (bitFlag.IsOn(E_SKL_JOINT_PARAM_SCALE)) {
-		SVector::SetXYZ(
+		math::SVector::SetXYZ(
 			param,
 			pose.scale[0], pose.scale[1], pose.scale[2]);
 
@@ -125,7 +125,7 @@ void CAnmLinearBlender::UpdatePose(
 			param);
 	}
 	if (bitFlag.IsOn(E_SKL_JOINT_PARAM_TRANSLATE)) {
-		SVector::SetXYZ(
+		math::SVector::SetXYZ(
 			param,
 			pose.trans[0], pose.trans[1], pose.trans[2]);
 
@@ -157,7 +157,7 @@ IZ_BOOL CAnmLinearBlender::SetAnimation(
 	m_Anms[0].Set(startAnm);
 	m_Anms[1].Set(goalAnm);
 
-	m_StartWeight = 1.0f - CMath::Clamp(weight, 0.0f, 1.0f);
+	m_StartWeight = 1.0f - math::CMath::Clamp(weight, 0.0f, 1.0f);
 	m_GoalWeight = 1.0f - m_StartWeight;
 
 	m_MinTime = IZ_MIN(

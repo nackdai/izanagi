@@ -33,7 +33,7 @@ private:
 	izanagi::CImage* m_Img;
 	izanagi::CShaderBasic* m_Shader;
 
-	izanagi::SMatrix m_L2W;
+	izanagi::math::SMatrix m_L2W;
 };
 
 #endif	// #if !defined(__CUBE_MAP_APP_H__)

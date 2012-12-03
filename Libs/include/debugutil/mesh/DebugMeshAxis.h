@@ -4,7 +4,7 @@
 #include "DebugMesh.h"
 
 namespace izanagi {
-	struct SVector;
+	struct math::SVector;
 
 	/**
 	* 軸
@@ -47,8 +47,8 @@ namespace izanagi {
 
 		IZ_BOOL SetVtx(
 			IZ_UINT type,
-			const SVector& start,
-			const SVector& end);
+			const math::SVector& start,
+			const math::SVector& end);
 
 	private:
 		IZ_UINT8* m_pVtxDst;

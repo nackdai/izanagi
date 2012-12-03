@@ -27,7 +27,7 @@ void CPoseUpdater::Update(
 	IZ_UINT idx,
 	IZ_UINT transformType,
 	IZ_UINT paramType,
-	const SVector& param)
+	const math::SVector& param)
 {
 	UNUSED_ALWAYS(idx);
 
@@ -69,7 +69,7 @@ void CSklPoseUpdater::Update(
 	IZ_UINT idx,
 	IZ_UINT transformType,
 	IZ_UINT paramType,
-	const SVector& param)
+	const math::SVector& param)
 {
 	IZ_ASSERT(m_Skl != IZ_NULL);
 	m_Skl->UpdatePose(

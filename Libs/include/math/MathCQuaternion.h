@@ -3,7 +3,10 @@
 
 #include "MathQuaternion.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace math
+{
 	// うーん・・・
 	class CQuat : public SQuat {
 	public:
@@ -154,6 +157,7 @@ namespace izanagi {
 			SQuat::Inverse(*this, *this);
 		}
 	};
+}   // namespace math
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI__MATH_CVECTOR_H__)

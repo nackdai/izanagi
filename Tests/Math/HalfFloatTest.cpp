@@ -6,8 +6,8 @@ void SimpleTest()
     IZ_FLOAT zero = 0.0f;
     IZ_FLOAT one = 1.0f;
 
-    izanagi::CFloat16 zeroF16(zero);
-    izanagi::CFloat16 oneF16(one);
+    izanagi::math::CFloat16 zeroF16(zero);
+    izanagi::math::CFloat16 oneF16(one);
 
     IZ_FLOAT tmp_0 = zeroF16;
     IZ_FLOAT tmp_1= oneF16;
@@ -22,9 +22,9 @@ void FloatTest()
     IZ_FLOAT f1 = 5.25f;
     IZ_FLOAT f2 = 19.75f;
 
-    izanagi::CFloat16 h0(f0);
-    izanagi::CFloat16 h1(f1);
-    izanagi::CFloat16 h2(f2);
+    izanagi::math::CFloat16 h0(f0);
+    izanagi::math::CFloat16 h1(f1);
+    izanagi::math::CFloat16 h2(f2);
 
     IZ_FLOAT t0 = h0;
     IZ_FLOAT t1 = h1;
@@ -39,9 +39,9 @@ void RandomTest()
 {
     for (IZ_UINT i = 0; i < 10; i++)
     {
-        IZ_FLOAT value = izanagi::CMathRand::GetRandFloat();
+        IZ_FLOAT value = izanagi::math::CMathRand::GetRandFloat();
 
-        izanagi::CFloat16 f16(value);
+        izanagi::math::CFloat16 f16(value);
 
         IZ_FLOAT tmp = f16;
 
@@ -59,7 +59,7 @@ void RandomTest()
 void HalfFloatTest()
 {
     izanagi::CTimer timer;
-    izanagi::CMathRand::Init(timer.GetCurTime());
+    izanagi::math::CMathRand::Init(timer.GetCurTime());
 
     SimpleTest();
     FloatTest();

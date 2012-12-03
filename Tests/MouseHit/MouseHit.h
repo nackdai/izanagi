@@ -35,8 +35,8 @@ protected:
 
 private:
 	struct {
-		izanagi::CTriangle tri;
-		izanagi::SMatrix mtx;
+		izanagi::math::CTriangle tri;
+		izanagi::math::SMatrix mtx;
 		izanagi::graph::CVertexBuffer* vb;
 	} m_Triangles;
 

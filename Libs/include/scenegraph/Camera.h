@@ -15,14 +15,14 @@ namespace izanagi {
 		// aspect = width / height
 		IZ_FLOAT aspect;
 
-		SVector pos;		// 視点
-		SVector ref;		// 注視点
+		math::SVector pos;		// 視点
+		math::SVector ref;		// 注視点
 
-		SVector up;
+		math::SVector up;
 
-		SMatrix mtxW2V;	// World - View
-		SMatrix mtxV2C;	// View - Clip
-		SMatrix mtxW2C;	// World - Clip
+		math::SMatrix mtxW2V;	// World - View
+		math::SMatrix mtxV2C;	// View - Clip
+		math::SMatrix mtxW2C;	// World - Clip
 	};
 
 	class CCamera {
@@ -39,9 +39,9 @@ namespace izanagi {
 	public:
 		// 初期化
 		void Init(
-			const SVector& vecPos,
-			const SVector& vecRef,
-			const SVector& vecUp,
+			const math::SVector& vecPos,
+			const math::SVector& vecRef,
+			const math::SVector& vecUp,
 			IZ_FLOAT fNear, IZ_FLOAT fFar,
 			IZ_FLOAT fFov,
 			IZ_FLOAT fAspect);
@@ -54,14 +54,14 @@ namespace izanagi {
 		/** カメラ座標系でのオフセットを考慮にいれたV2Cマトリクスを取得.
 		 */
 		void GetOffsetV2C(
-			SMatrix& mtxV2C,
-			const SVector& pos,
+			math::SMatrix& mtxV2C,
+			const math::SVector& pos,
 			IZ_FLOAT delta);
 
 		/** カメラ座標系でのオフセットを考慮にいれたV2Cマトリクスを取得.
 		 */
 		void GetOffsetV2C(
-			SMatrix& mtxV2C,
+			math::SMatrix& mtxV2C,
 			IZ_FLOAT viewZ,
 			IZ_FLOAT delta);
 
@@ -69,21 +69,21 @@ namespace izanagi {
 
 		const SCameraParam& GetParam() const { return m_Param; }
 
-		void SetPos(const SVector& vecPos)
+		void SetPos(const math::SVector& vecPos)
 		{
-			SVector::Copy(m_Param.pos, vecPos);
+			math::SVector::Copy(m_Param.pos, vecPos);
 			m_IsDirtyW2V = IZ_TRUE;
 		}
 
-		void SetAt(const SVector& vecAt)
+		void SetAt(const math::SVector& vecAt)
 		{
-			SVector::Copy(m_Param.ref, vecAt);
+			math::SVector::Copy(m_Param.ref, vecAt);
 			m_IsDirtyW2V = IZ_TRUE;
 		}
 
-		void SetUp(const SVector& vecUp)
+		void SetUp(const math::SVector& vecUp)
 		{
-			SVector::Copy(m_Param.up, vecUp);
+			math::SVector::Copy(m_Param.up, vecUp);
 			m_IsDirtyW2V = IZ_TRUE;
 		}
 

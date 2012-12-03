@@ -39,6 +39,12 @@
     <Filter Include="source\curve">
       <UniqueIdentifier>{c8e7ece5-3dd4-46f9-b9c0-5f05cfc480e2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\basic\noplatform">
+      <UniqueIdentifier>{0e6aa40d-ad37-49e3-aa21-ffe699154666}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\basic\dx9">
+      <UniqueIdentifier>{29c97304-b920-49d7-a873-651929798b82}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\math\MathPlane.cpp">
@@ -54,9 +60,6 @@
       <Filter>source\shape</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\math\MathMatrix.cpp">
-      <Filter>source\basic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\math\MathQuaternion.cpp">
       <Filter>source\basic</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\math\SFMT\SFMT.cpp">
@@ -92,9 +95,6 @@
       <Filter>include\basic</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\math\MathCVector.h">
-      <Filter>include\basic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\math\MathFixed.h">
       <Filter>include\basic</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\math\MathHalfFloat.h">
@@ -170,6 +170,24 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\izMath.h" />
+    <ClInclude Include="..\..\include\math\dx9\MathVector_DX9.h">
+      <Filter>include\basic\dx9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\noplatform\MathVector_NoPlatform.h">
+      <Filter>include\basic\noplatform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\noplatform\MathMatrix_NoPlatform.h">
+      <Filter>include\basic\noplatform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\dx9\MathMatrix_DX9.h">
+      <Filter>include\basic\dx9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\noplatform\MathQuaternion_NoPlatform.h">
+      <Filter>include\basic\noplatform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\dx9\MathQuaternion_DX9.h">
+      <Filter>include\basic\dx9</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\include\math\SFMT\LICENSE.txt" />

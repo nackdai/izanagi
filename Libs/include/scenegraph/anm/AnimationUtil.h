@@ -26,7 +26,7 @@ namespace izanagi {
 			const S_ANM_KEY** pKeys);
 
 		static void ComputeInterp(
-			SVector& vRef,
+			math::SVector& vRef,
 			E_ANM_INTERP_TYPE nInterp,
 			IZ_FLOAT fTime,
 			IZ_UINT nKeyNum,
@@ -53,14 +53,14 @@ namespace izanagi {
 			const S_ANM_KEY** pKeys);
 
 		static void ComputeSlerp(
-			SVector& vRef,
+			math::SVector& vRef,
 			IZ_FLOAT fTime,
 			IZ_UINT nKeyNum,
 			IZ_UINT nPos,
 			const S_ANM_KEY** pKeys);
 
 		static void ComputeBezierSlerp(
-			SVector& vRef,
+			math::SVector& vRef,
 			IZ_FLOAT fTime,
 			IZ_UINT nKeyNum,
 			IZ_UINT nPos,

@@ -3,7 +3,10 @@
 
 #include "MathDefs.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace math
+{
 	/**
 	*/
 	class CMath {
@@ -116,14 +119,10 @@ namespace izanagi {
 		/**
 		* sinθ, cosθ を求める。ただし、-2π < θ < 2π
 		*/
-		static inline void GetSinCosF(IZ_FLOAT fTheta, IZ_FLOAT* pSin, IZ_FLOAT* pCos)
+		static inline void GetSinCosF(IZ_FLOAT fTheta, IZ_FLOAT& sin, IZ_FLOAT& cos)
 		{
-			if (pSin != IZ_NULL) {
-				*pSin = SinF(fTheta);
-			}
-			if (pCos != IZ_NULL) {
-				*pCos = CosF(fTheta);
-			}
+            sin = ::sinf(fTheta);
+            cos = 1.0f - (sin * sin);
 		}
 
 		/**
@@ -297,6 +296,7 @@ namespace izanagi {
 			return ((nExp == 0) && (nFraction != 0));
 		}
 	};
+}   // namespace math
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_MATH_MATH_UTIL_H__)

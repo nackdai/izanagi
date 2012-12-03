@@ -112,7 +112,7 @@ IZ_BOOL CPrimitiveSet::Render(
 			for (IZ_UINT i = 0; i < m_Info.numJoints; ++i) {
 				if (m_Info.joints[i] >= 0) {
 					IZ_UINT16 idx = m_Info.joints[i];
-					const SMatrix* pMtx = pSkeleton->GetJointMtx(idx);
+					const math::SMatrix* pMtx = pSkeleton->GetJointMtx(idx);
 
 					pRenderHandler->SetJointMatrix(
 						i,
@@ -163,14 +163,14 @@ IZ_BOOL CPrimitiveSet::DebugRender(
 	IZ_ASSERT(m_VB != IZ_NULL);
 
 	struct SVtx {
-		SVector pos;
+		math::SVector pos;
 		float nml[3];
 		float uv[2];
 		float idx[4];
 		float weight[4];
 	};
 
-	const SMatrix* tblJointMtx[4] = {
+	const math::SMatrix* tblJointMtx[4] = {
 		IZ_NULL, IZ_NULL, IZ_NULL, IZ_NULL,
 	};
 
@@ -192,7 +192,7 @@ IZ_BOOL CPrimitiveSet::DebugRender(
 		for (IZ_UINT i = 0; i < nVtxNum; ++i) {
 			SVtx& sVtx = pVtx[i];
 
-			SVector vPosTmp;
+			math::SVector vPosTmp;
 			vPosTmp.Set(0.0f, 0.0f, 0.0f, 0.0f);
 
 			float fTotalW = 0.0f;
@@ -202,10 +202,10 @@ IZ_BOOL CPrimitiveSet::DebugRender(
 				float weight = sVtx.weight[n];
 
 				if ((idx >= 0) && (tblJointMtx[idx] != IZ_NULL)) {
-					const SMatrix& mtx = *tblJointMtx[idx];
+					const math::SMatrix& mtx = *tblJointMtx[idx];
 
-					SVector vec;
-					SMatrix::Apply(vec, sVtx.pos, mtx);
+					math::SVector vec;
+					math::SMatrix::Apply(vec, sVtx.pos, mtx);
 
 					vPosTmp.x += vec.x * weight;
 					vPosTmp.y += vec.y * weight;

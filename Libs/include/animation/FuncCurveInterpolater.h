@@ -30,14 +30,14 @@ namespace animation {
 			Init(
 				E_ANM_FUNC_CURVE_MODE_BEZIER,
 				0.0f, 0.0f,
-				CVector(0.0f, 0.0f, 0.0f, 0.0f));
+				math::CVector(0.0f, 0.0f, 0.0f, 0.0f));
 		}
 
 		CFuncCurveInterpolater(
 			E_ANM_FUNC_CURVE_MODE mode,
 			IZ_FLOAT start,
 			IZ_FLOAT end,
-			const SVector& p)
+			const math::SVector& p)
 		{
 			Init(mode, start, end, p);
 		}
@@ -63,14 +63,14 @@ namespace animation {
 			Init(
 				mode,
 				start, end,
-				CVector(x0, x1, x2, x3));
+				math::CVector(x0, x1, x2, x3));
 		}
 
 		void Init(
 			E_ANM_FUNC_CURVE_MODE mode,
 			IZ_FLOAT start,
 			IZ_FLOAT end,
-			const SVector& p)
+			const math::SVector& p)
 		{
 			SetRange(start, end);
 			SetMode(mode);
@@ -91,12 +91,12 @@ namespace animation {
 			IZ_FLOAT x2,
 			IZ_FLOAT x3)
 		{
-			SetParam(CVector(x0, x1, x2, x3));
+			SetParam(math::CVector(x0, x1, x2, x3));
 		}
 
-		void SetParam(const SVector& p)
+		void SetParam(const math::SVector& p)
 		{
-			SVector::Copy(m_Param, p);
+			math::SVector::Copy(m_Param, p);
 		}
 
 		IZ_FLOAT GetStart() const { return m_Start; }
@@ -111,7 +111,7 @@ namespace animation {
 		IZ_FLOAT m_Start;
 		IZ_FLOAT m_End;
 
-		SVector m_Param;
+		math::SVector m_Param;
 	};
 
 }	// namespace animation

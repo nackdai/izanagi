@@ -26,7 +26,7 @@ namespace izanagi {
 	public:
 		// パラメータセット
 		void SetParameter(
-			const SVector* pVector,
+			const math::SVector* pVector,
 			IZ_UINT num);
 
 	protected:
@@ -38,7 +38,7 @@ namespace izanagi {
 
 	protected:
 		SHADER_PARAM_HANDLE m_hOffset;
-		SVector m_vOffset[_VECTOR_NUM];
+		math::SVector m_vOffset[_VECTOR_NUM];
 	};
 
 	// パラメータセット
@@ -48,13 +48,13 @@ namespace izanagi {
 		IZ_UINT _VECTOR_NUM
 	>
 	void CPostEffectVSSampling<_NUM, _VECTOR_NUM>::SetParameter(
-		const SVector* pVector,
+		const math::SVector* pVector,
 		IZ_UINT num)
 	{
 		IZ_ASSERT(num <= _VECTOR_NUM);
 
 		for (IZ_UINT i = 0; i < num; ++i) {
-			SVector::Copy(m_vOffset[i], pVector[i]);
+			math::SVector::Copy(m_vOffset[i], pVector[i]);
 		}
 	}
 

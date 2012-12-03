@@ -25,16 +25,16 @@ IZ_BOOL CMouseHit::InitInternal(
 {
 	IZ_BOOL result = IZ_TRUE;
 
-	izanagi::SMatrix::GetTrans(
+	izanagi::math::SMatrix::GetTrans(
 		m_Rectangles[0].mtx,
 		-10.0f, 0.0f, -10.0f);
-	izanagi::SMatrix::GetTrans(
+	izanagi::math::SMatrix::GetTrans(
 		m_Rectangles[1].mtx,
 		-10.0f, 0.0f, 10.0f);
-	izanagi::SMatrix::GetTrans(
+	izanagi::math::SMatrix::GetTrans(
 		m_Rectangles[2].mtx,
 		10.0f, 0.0f, -10.0f);
-	izanagi::SMatrix::GetTrans(
+	izanagi::math::SMatrix::GetTrans(
 		m_Rectangles[3].mtx,
 		10.0f, 0.0f, 10.0f);
 
@@ -58,8 +58,8 @@ IZ_BOOL CMouseHit::InitInternal(
 			Length, Length);
 
 		m_Rectangles[i].rc.Set(
-			//izanagi::CVector(-Length * 0.5f, 0.0f, Length * 0.5f),
-			izanagi::CVector(0.0f, 0.0f, 0.0f),
+			//izanagi::math::CVector(-Length * 0.5f, 0.0f, Length * 0.5f),
+			izanagi::math::CVector(0.0f, 0.0f, 0.0f),
 			Length, Length);
 
 		m_Rectangles[i].rc.Transform(m_Rectangles[i].mtx);
@@ -79,12 +79,12 @@ IZ_BOOL CMouseHit::InitInternal(
 
 	// カメラ
 	camera.Init(
-		izanagi::CVector(0.0f, 5.0f, -30.0, 1.0f),
-		izanagi::CVector(0.0f, 5.0f, 0.0f, 1.0f),
-		izanagi::CVector(0.0f, 1.0f, 0.0f, 1.0f),
+		izanagi::math::CVector(0.0f, 5.0f, -30.0, 1.0f),
+		izanagi::math::CVector(0.0f, 5.0f, 0.0f, 1.0f),
+		izanagi::math::CVector(0.0f, 1.0f, 0.0f, 1.0f),
 		1.0f,
 		500.0f,
-		izanagi::CMath::Deg2Rad(60.0f),
+		izanagi::math::CMath::Deg2Rad(60.0f),
 		(IZ_FLOAT)SCREEN_WIDTH / SCREEN_HEIGHT);
 	camera.Update();
 
@@ -113,7 +113,7 @@ void CMouseHit::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 	GetCamera().Update();
 
 	m_CrossRectIdx = -1;
-	izanagi::SVector dir;
+	izanagi::math::SVector dir;
 
 	//if (m_IsPressKey)
 	{
@@ -128,7 +128,7 @@ void CMouseHit::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 				m_MousePoint.x,
 				m_MousePoint.y);
 
-			izanagi::CRay ray(
+			izanagi::math::CRay ray(
 				GetCamera().GetParam().pos,
 				dir);
 
@@ -170,7 +170,7 @@ void CMouseHit::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 		izanagi::graph::E_GRAPH_RS_CULLMODE,
 		izanagi::graph::E_GRAPH_CULL_NONE);
 
-	static const izanagi::SVector color[2] = {
+	static const izanagi::math::SVector color[2] = {
 		{ 1.0f, 1.0f, 1.0f, 1.0f },
 		{ 1.0f, 1.0f, 1.0f, 0.5f },
 	};
@@ -193,7 +193,7 @@ void CMouseHit::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 				(void*)&camera.GetParam().mtxW2C,
 				sizeof(camera.GetParam().mtxW2C));
 
-			const izanagi::SVector& clr = (m_CrossRectIdx == i ? color[1] : color[0]);
+			const izanagi::math::SVector& clr = (m_CrossRectIdx == i ? color[1] : color[0]);
 
 			_SetShaderParam(
 				m_Shader,

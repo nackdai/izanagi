@@ -166,7 +166,7 @@ namespace izanagi {
 
 	/** ベクターの補間処理.
 	 */
-	typedef void (*FuncInterpVector)(SVector& ret, IZ_FLOAT time, IZ_UINT keyNum, IZ_UINT paramPos, const S_ANM_KEY** keys);
+	typedef void (*FuncInterpVector)(math::SVector& ret, IZ_FLOAT time, IZ_UINT keyNum, IZ_UINT paramPos, const S_ANM_KEY** keys);
 
 }	// namespace izanagi
 

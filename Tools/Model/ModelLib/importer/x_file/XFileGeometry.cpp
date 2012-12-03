@@ -244,7 +244,7 @@ IZ_UINT CXFileGeometry::GetVtxFmt(IZ_UINT nMeshIdx)
 IZ_BOOL CXFileGeometry::GetVertex(
 	IZ_UINT nFaceIdx,
 	IZ_UINT nVtxIdx,
-	izanagi::SVector& vec,
+	izanagi::math::SVector& vec,
 	izanagi::E_MSH_VTX_FMT_TYPE type)
 {
 	IZ_ASSERT(nFaceIdx < m_FaceList.size());
@@ -267,11 +267,11 @@ IZ_BOOL CXFileGeometry::GetVertex(
 
 	if (type == izanagi::E_MSH_VTX_FMT_TYPE_POS) {
 		IZ_UINT idx = sVtx.input[0];
-		izanagi::SVector::Copy(vec, pMesh->positions[idx]);
+		izanagi::math::SVector::Copy(vec, pMesh->positions[idx]);
 	}
 	else if (type == izanagi::E_MSH_VTX_FMT_TYPE_NORMAL) {
 		IZ_UINT idx = sVtx.input[1];
-		izanagi::SVector::Copy(vec, pMesh->normals[idx]);
+		izanagi::math::SVector::Copy(vec, pMesh->normals[idx]);
 	}
 	else if (type == izanagi::E_MSH_VTX_FMT_TYPE_COLOR) {
 		IZ_UINT idx = sVtx.input[0];

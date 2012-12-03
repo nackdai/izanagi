@@ -68,7 +68,7 @@ namespace izanagi {
 
 	struct S_SKL_JOINT_POSE {
 		IZ_FLOAT trans[3];
-		SQuat quat;
+		math::SQuat quat;
 		IZ_FLOAT scale[3];
 	};
 
@@ -80,7 +80,7 @@ namespace izanagi {
 		IZ_INT16 parent;		///< 親ジョイントのインデックス.
 		IZ_UINT16 idx;			///< 自分自身のインデックス
 
-		SMatrix mtxInvBind;
+		math::SMatrix mtxInvBind;
 
 		IZ_UINT8 validParam;	///< 有効なパラメータフラグ。ポーズパラメータの全てが有効とは限らない.
 		IZ_UINT8 validAnmParam;	///< アニメ計算時の有効なパラメータフラグ。ポーズパラメータの全てが有効とは限らない.

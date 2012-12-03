@@ -60,7 +60,7 @@ private:
 	izanagi::CImage* m_EnvImg;
 	izanagi::CShaderBasic* m_EnvShader;
 
-    izanagi::SMatrix m_L2W;
+    izanagi::math::SMatrix m_L2W;
     izanagi::SParallelLightParam m_ParallelLight;
 };
 

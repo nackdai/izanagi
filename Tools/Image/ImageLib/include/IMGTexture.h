@@ -301,8 +301,8 @@ namespace tool {
 		m_TexInfo.w = ComputeExponentBy2(static_cast<IZ_FLOAT>(nWidth));
 		m_TexInfo.h = ComputeExponentBy2(static_cast<IZ_FLOAT>(nHeight));
 #else
-		m_TexInfo.w = CMath::ComputeNextLog2(nWidth);
-		m_TexInfo.h = CMath::ComputeNextLog2(nHeight);
+		m_TexInfo.w = math::CMath::ComputeNextLog2(nWidth);
+		m_TexInfo.h = math::CMath::ComputeNextLog2(nHeight);
 #endif
 
 		m_TexInfo.size = CPixelFormatConverter::GetInstance()->ComputeByteSize(

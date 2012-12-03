@@ -22,7 +22,7 @@ protected:
 	inline void InternalRelease();
 
 public:
-	inline void SetCameraPos(const izanagi::SVector& vec);
+	inline void SetCameraPos(const izanagi::math::SVector& vec);
 
 	inline void SetLight(const izanagi::SHemisphereLightParam& sParam);
 
@@ -62,7 +62,7 @@ void CHemiLightShader::InternalRelease()
 }
 
 // カメラ位置セット
-void CHemiLightShader::SetCameraPos(const izanagi::SVector& vec)
+void CHemiLightShader::SetCameraPos(const izanagi::math::SVector& vec)
 {
 	if (m_hHandles[HANDLE_CAMERA_POS] != IZ_NULL) {
 		m_pEffect->SetVector(

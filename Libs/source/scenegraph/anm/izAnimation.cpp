@@ -155,7 +155,7 @@ IZ_UINT CAnimation::ApplyAnimation(
 	const S_ANM_NODE& sAnmNode = *anmNode;
 	const IZ_UINT nJointIdx = sAnmNode.targetIdx;
 
-	SVector param;
+	math::SVector param;
 	IZ_UINT updateFlag = 0;
 
 	// 姿勢情報更新開始

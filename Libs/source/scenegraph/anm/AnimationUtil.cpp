@@ -74,7 +74,7 @@ IZ_FLOAT CAnimationUtil::ComputeInterp(
 }
 
 void CAnimationUtil::ComputeInterp(
-	SVector& vRef,
+	math::SVector& vRef,
 	E_ANM_INTERP_TYPE nInterp,
 	IZ_FLOAT fTime,
 	IZ_UINT nKeyNum,
@@ -145,7 +145,7 @@ IZ_FLOAT CAnimationUtil::ComputeNomralizedTime(
 	IZ_ASSERT(fStartTime < fEndTime);
 
 	IZ_FLOAT fNormTime = (fTime - fStartTime) / (fEndTime - fStartTime);
-	fNormTime = CMath::Clamp(fNormTime, 0.0f, 1.0f);
+	fNormTime = math::CMath::Clamp(fNormTime, 0.0f, 1.0f);
 
 	return fNormTime;
 }
@@ -208,7 +208,7 @@ IZ_FLOAT CAnimationUtil::ComputeHermite(
 	// b : Bezier matrix
 	// P = S * b * c
 
-	static const SMatrix mtxBezier = {
+	static const math::SMatrix mtxBezier = {
 		 2.0f, -2.0f,  1.0f,  1.0f,
 		-3.0f,  3.0f, -2.0f, -1.0f,
 		 0.0f,  0.0f,  1.0f,  0.0f,
@@ -233,29 +233,29 @@ IZ_FLOAT CAnimationUtil::ComputeHermite(
 
 		IZ_FLOAT fNormTime_2 = fNormTime * fNormTime;
 
-		SVector vecS = {
+		math::SVector vecS = {
 			fNormTime_2 * fNormTime,
 			fNormTime_2,
 			fNormTime,
 			1.0f,
 		};
 
-		SVector vecC = {
+		math::SVector vecC = {
 			pKeys[nPrev]->params[KEY_PARAM_VALUE],
 			pKeys[nNext]->params[KEY_PARAM_VALUE],
 			pKeys[nPrev]->params[KEY_PARAM_OUT_TANGENT],
 			pKeys[nNext]->params[KEY_PARAM_IN_TANGENT],
 		};
 
-		SMatrix::Apply(vecS, vecS, mtxBezier);
-		ret = SVector::Dot(vecS, vecC);
+		math::SMatrix::Apply(vecS, vecS, mtxBezier);
+		ret = math::SVector::Dot(vecS, vecC);
 	}
 
 	return ret;
 }
 
 void CAnimationUtil::ComputeSlerp(
-	SVector& vRef,
+	math::SVector& vRef,
 	IZ_FLOAT fTime,
 	IZ_UINT nKeyNum,
 	IZ_UINT nPos,
@@ -285,14 +285,14 @@ void CAnimationUtil::ComputeSlerp(
 								nKeyNum,
 								pKeys);
 
-		SQuat quat1;
+		math::SQuat quat1;
 		quat1.Set(
 			pKeys[nPrev]->params[0],
 			pKeys[nPrev]->params[1],
 			pKeys[nPrev]->params[2],
 			pKeys[nPrev]->params[3]);
 
-		SQuat quat2;
+		math::SQuat quat2;
 		quat2.Set(
 			pKeys[nNext]->params[0],
 			pKeys[nNext]->params[1],
@@ -300,7 +300,7 @@ void CAnimationUtil::ComputeSlerp(
 			pKeys[nNext]->params[3]);
 
 		// Slerp
-		SQuat::Slerp(
+		math::SQuat::Slerp(
 			vRef,
 			quat1, quat2,
 			fNormTime);

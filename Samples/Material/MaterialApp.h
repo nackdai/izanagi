@@ -41,7 +41,7 @@ private:
 	izanagi::CRenderGraph* m_RenderGraph;
 	izanagi::CSceneRenderer* m_Renderer;
 
-    izanagi::SMatrix m_L2W;
+    izanagi::math::SMatrix m_L2W;
 };
 
 #endif	// #if !defined(__MODEL_APP_H__)

@@ -1,6 +1,6 @@
 #include "CustomInterp.h"
 
-struct Func : public izanagi::CNumericalAnalysis::Func
+struct Func : public izanagi::math::CNumericalAnalysis::Func
 {
 	IZ_FLOAT x0;
 	IZ_FLOAT x1;
@@ -26,7 +26,7 @@ struct Func : public izanagi::CNumericalAnalysis::Func
 	}
 };
 
-struct FuncD : public izanagi::CNumericalAnalysis::Func
+struct FuncD : public izanagi::math::CNumericalAnalysis::Func
 {
 	IZ_FLOAT x0;
 	IZ_FLOAT x1;
@@ -92,7 +92,7 @@ IZ_FLOAT CCustomInterp::InterpScalar(
 		funcd.x3 = func.x3;
 	}
 
-	IZ_FLOAT t = izanagi::CNumericalAnalysis::ComputeNewtonMethod(
+	IZ_FLOAT t = izanagi::math::CNumericalAnalysis::ComputeNewtonMethod(
 		func, funcd,
 		normTime,
 		0.0001f,
@@ -120,7 +120,7 @@ IZ_FLOAT CCustomInterp::InterpScalar(
 }
 
 void CCustomInterp::InterpVector(
-	izanagi::SVector& ret,
+	izanagi::math::SVector& ret,
 	IZ_FLOAT time,
 	IZ_UINT keyNum,
 	IZ_UINT paramPos,
@@ -175,7 +175,7 @@ void CCustomInterp::InterpVector(
 		funcd.x3 = func.x3;
 	}
 
-	IZ_FLOAT t = izanagi::CNumericalAnalysis::ComputeNewtonMethod(
+	IZ_FLOAT t = izanagi::math::CNumericalAnalysis::ComputeNewtonMethod(
 		func, funcd,
 		normTime,
 		0.0001f,
@@ -195,14 +195,14 @@ void CCustomInterp::InterpVector(
 
 	// SLERP
 	{
-		izanagi::SQuat quat1;
+		izanagi::math::SQuat quat1;
 		quat1.Set(
 			keys[prev]->params[pos + 0],
 			keys[prev]->params[pos + 1],
 			keys[prev]->params[pos + 2],
 			keys[prev]->params[pos + 3]);
 
-		izanagi::SQuat quat2;
+		izanagi::math::SQuat quat2;
 		quat2.Set(
 			keys[next]->params[pos + 0],
 			keys[next]->params[pos + 1],
@@ -210,7 +210,7 @@ void CCustomInterp::InterpVector(
 			keys[next]->params[pos + 3]);
 
 		// Slerp
-		izanagi::SQuat::Slerp(
+		izanagi::math::SQuat::Slerp(
 			ret,
 			quat1, quat2,
 			t);

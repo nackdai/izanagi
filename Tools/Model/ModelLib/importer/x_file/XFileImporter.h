@@ -52,7 +52,7 @@ public:
 	// 指定された頂点における指定フォーマットのデータを取得.
 	IZ_BOOL GetVertex(
 		IZ_UINT nIdx,
-		izanagi::SVector& vec,
+		izanagi::math::SVector& vec,
 		izanagi::E_MSH_VTX_FMT_TYPE type);
 
 	void GetMaterialForMesh(
@@ -85,7 +85,7 @@ public:
 	// 指定された関節の逆マトリクスを取得.	
 	void GetJointInvMtx(
 		IZ_UINT nIdx,
-		izanagi::SMatrix& mtx);
+		izanagi::math::SMatrix& mtx);
 		
 	// 関節の姿勢を取得.
 	void GetJointTransform(

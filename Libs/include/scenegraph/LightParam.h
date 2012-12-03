@@ -9,43 +9,43 @@ namespace izanagi {
 	* 平行光源
 	*/
 	struct SParallelLightParam {
-		SVector vDir;
-		SVector color;
+		math::SVector vDir;
+		math::SVector color;
 	};
 
 	/**
 	* 環境光
 	*/
 	struct SAmbientLightParam {
-		SVector color;
+		math::SVector color;
 	};
 
 	/**
 	* 点光源
 	*/
 	struct SPointLightParam {
-		SVector vPos;
-		SVector color;
-		SVector attn;	// 0 - 2 : attn
+		math::SVector vPos;
+		math::SVector color;
+		math::SVector attn;	// 0 - 2 : attn
 	};
 
 	/**
 	* スポットライト
 	*/
 	struct SSpotLightParam {
-		SVector vPos;
-		SVector vDir;
-		SVector color;
-		SVector param;	// 0 - 2 : attn / 3 : power
+		math::SVector vPos;
+		math::SVector vDir;
+		math::SVector color;
+		math::SVector param;	// 0 - 2 : attn / 3 : power
 	};
 
 	/**
 	* 半球ライト
 	*/
 	struct SHemisphereLightParam {
-		SVector vAxis;
-		SVector upColor;
-		SVector downColor;
+		math::SVector vAxis;
+		math::SVector upColor;
+		math::SVector downColor;
 	};
 
 	/**
@@ -53,25 +53,25 @@ namespace izanagi {
 	*/
 	struct SMaterialParam {
 		// Diffuse
-		SVector vDiffuse;
+		math::SVector vDiffuse;
 
 		// Ambient
-		SVector vAmbient;
+		math::SVector vAmbient;
 
 		// Specular
 		// NOTE
 		// w = Specular Light Power
 		// Specular Light Power が大きいほどスペキュラが強くでる
-		SVector vSpecular;
+		math::SVector vSpecular;
 
 		// Emissive
-		SVector vEmissive;
+		math::SVector vEmissive;
 
 		// Rim
 		// NOTE
 		// w = Rim Light Power
 		// Rim Light Power は０に近いほどリムライトが広がる
-		SVector vRim;
+		math::SVector vRim;
 	};
 }	// namespace izanagi
 

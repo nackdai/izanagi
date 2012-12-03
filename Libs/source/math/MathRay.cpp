@@ -1,7 +1,10 @@
 #include "math/MathRay.h"
 #include "math/MathUtil.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace math
+{
 	CRay::CRay()
 	{
 		p.Set(0.0f, 0.0f, 0.0f);
@@ -85,4 +88,5 @@ namespace izanagi {
 	{
 		SVector::Normalize(v, v);
 	}
+}   // namespace math
 }	// namespace izanagi

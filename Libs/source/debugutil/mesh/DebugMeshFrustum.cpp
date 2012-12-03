@@ -65,7 +65,7 @@ IZ_BOOL CDebugMeshFrustum::SetVtx(
 	IZ_FLOAT fFov,
 	IZ_FLOAT fNear, IZ_FLOAT fFar)
 {
-	IZ_FLOAT fTangent = CMath::TanF(fFov * 0.5f);
+	IZ_FLOAT fTangent = math::CMath::TanF(fFov * 0.5f);
 
 	IZ_FLOAT fWidth = 2.0f * fTangent * fFar;
 	IZ_FLOAT fHeight = fWidth / fAspect;

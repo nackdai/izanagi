@@ -20,16 +20,16 @@ public:
 public:
 	IZ_BOOL BeginShadowRender(
 		izanagi::graph::CGraphicsDevice* device,
-		const izanagi::SVector& lightPos,
-		const izanagi::SVector& lightDir);
+		const izanagi::math::SVector& lightPos,
+		const izanagi::math::SVector& lightDir);
 
 	void EndShadowRender(izanagi::graph::CGraphicsDevice* device);
 
 	izanagi::graph::CTexture* GetRT() { return m_RT; }
 	izanagi::graph::CSurface* GetDepthRT() { return m_DepthRT; }
 
-	const izanagi::SMatrix& GetLightViewProjMtx() const;
-	const izanagi::SMatrix& GetShadowTexMtx() const;
+	const izanagi::math::SMatrix& GetLightViewProjMtx() const;
+	const izanagi::math::SMatrix& GetShadowTexMtx() const;
 
 private:
 	izanagi::IMemoryAllocator* m_Allocator;

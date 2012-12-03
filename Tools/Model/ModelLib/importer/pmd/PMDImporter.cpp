@@ -169,7 +169,7 @@ IZ_UINT CPmdImporter::GetVtxFmt()
 
 IZ_BOOL CPmdImporter::GetVertex(
 	IZ_UINT nIdx,
-	izanagi::SVector& vec,
+	izanagi::math::SVector& vec,
 	izanagi::E_MSH_VTX_FMT_TYPE type)
 {
 	// NOTE
@@ -259,10 +259,10 @@ IZ_INT CPmdImporter::GetJointParent(
 
 void CPmdImporter::GetJointInvMtx(
 	IZ_UINT nIdx,
-	izanagi::SMatrix& mtx)
+	izanagi::math::SMatrix& mtx)
 {
-	const izanagi::SMatrix& mtxJoint = m_PmdLoader.GetMatrix(nIdx);
-	izanagi::SMatrix::Inverse(mtx, mtxJoint);
+	const izanagi::math::SMatrix& mtxJoint = m_PmdLoader.GetMatrix(nIdx);
+	izanagi::math::SMatrix::Inverse(mtx, mtxJoint);
 }
 
 void CPmdImporter::GetJointTransform(
