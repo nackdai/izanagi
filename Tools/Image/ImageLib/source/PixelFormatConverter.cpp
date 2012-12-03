@@ -276,10 +276,10 @@ namespace {
             IZ_UINT16 b = *(src++);
             IZ_UINT16 a = *(src++);
 
-            *(dst++) = izanagi::CFloat16::Float16ToFloat32(r);
-            *(dst++) = izanagi::CFloat16::Float16ToFloat32(g);
-            *(dst++) = izanagi::CFloat16::Float16ToFloat32(b);
-            *(dst++) = izanagi::CFloat16::Float16ToFloat32(a);
+            *(dst++) = izanagi::math::CFloat16::Float16ToFloat32(r);
+            *(dst++) = izanagi::math::CFloat16::Float16ToFloat32(g);
+            *(dst++) = izanagi::math::CFloat16::Float16ToFloat32(b);
+            *(dst++) = izanagi::math::CFloat16::Float16ToFloat32(a);
         }
 	}
 }	// namespace
@@ -339,16 +339,16 @@ namespace {
 		
 		for (IZ_UINT x = 0; x  < nWidth; x++) {
 			IZ_FLOAT r = *(src++);
-			r = CMath::Clamp(r, 0.0f, 1.0f);
+			r = math::CMath::Clamp(r, 0.0f, 1.0f);
 			
 			IZ_FLOAT g = *(src++);
-			g = CMath::Clamp(g, 0.0f, 1.0f);
+			g = math::CMath::Clamp(g, 0.0f, 1.0f);
 			
 			IZ_FLOAT b = *(src++);
-			b = CMath::Clamp(b, 0.0f, 1.0f);
+			b = math::CMath::Clamp(b, 0.0f, 1.0f);
 			
 			IZ_FLOAT a = *(src++);
-			a = CMath::Clamp(a, 0.0f, 1.0f);
+			a = math::CMath::Clamp(a, 0.0f, 1.0f);
 
 			dst->r = static_cast<IZ_UINT32>(IZ_MIN(r * RGB10A2_RGB_MAX, RGB10A2_RGB_MAX));
 			dst->g = static_cast<IZ_UINT32>(IZ_MIN(g * RGB10A2_RGB_MAX, RGB10A2_RGB_MAX));
@@ -402,10 +402,10 @@ namespace {
 			IZ_FLOAT b = *(src++);
 			IZ_FLOAT a = *(src++);
 
-            *(dst++) = izanagi::CFloat16::Float32ToFloat16(r);
-            *(dst++) = izanagi::CFloat16::Float32ToFloat16(g);
-            *(dst++) = izanagi::CFloat16::Float32ToFloat16(b);
-            *(dst++) = izanagi::CFloat16::Float32ToFloat16(a);
+            *(dst++) = izanagi::math::CFloat16::Float32ToFloat16(r);
+            *(dst++) = izanagi::math::CFloat16::Float32ToFloat16(g);
+            *(dst++) = izanagi::math::CFloat16::Float32ToFloat16(b);
+            *(dst++) = izanagi::math::CFloat16::Float32ToFloat16(a);
         }
 	}
 }	// namespace

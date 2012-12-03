@@ -4,7 +4,10 @@
 #include "MathVector.h"
 #include "MathMatrix.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace math
+{
 	struct SRay;
 
 	struct STriangle {
@@ -60,6 +63,7 @@ namespace izanagi {
 		 */
 		IZ_BOOL IsCross(const SRay& ray);
 	};
+}   // namespace math
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_MATH_TRIANGLE_H__)

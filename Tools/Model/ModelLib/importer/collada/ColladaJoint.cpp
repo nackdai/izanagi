@@ -116,7 +116,7 @@ IZ_BOOL CColladaJoint::ReadJoint(domVisual_scene* pScene)
 			if (pSkin != IZ_NULL) {
 				// TODO
 				// Get bind shape matrix.
-				izanagi::SMatrix mtxBindShape;
+				izanagi::math::SMatrix mtxBindShape;
 				if (pSkin->getBind_shape_matrix() != IZ_NULL) {
 					domSkin::domBind_shape_matrixRef pMtx = pSkin->getBind_shape_matrix();
 
@@ -125,7 +125,7 @@ IZ_BOOL CColladaJoint::ReadJoint(domVisual_scene* pScene)
 					}
 				}
 
-				IZ_ASSERT(izanagi::SMatrix::IsUnit(mtxBindShape));
+				IZ_ASSERT(izanagi::math::SMatrix::IsUnit(mtxBindShape));
 
 				// Find the <joints> and <vertex_weights> elements inside <skin>
 				domSkin::domJoints* pJointsElement = pSkin->getJoints();
@@ -307,7 +307,7 @@ IZ_INT CColladaJoint::GetJointTree(
 
 void CColladaJoint::GetJointInvMtx(
 	IZ_UINT nIdx,
-	izanagi::SMatrix& mtx)
+	izanagi::math::SMatrix& mtx)
 {
 	if (m_JointList.empty()) {
 		return;
@@ -326,7 +326,7 @@ void CColladaJoint::GetJointInvMtx(
 
 	// TODO
 	// COLLADA-viewer のソースを見ていると必要らしいが・・・
-	izanagi::SMatrix::Transpose(mtx, mtx);
+	izanagi::math::SMatrix::Transpose(mtx, mtx);
 }
 
 #if 0
@@ -437,7 +437,7 @@ namespace {
 									pContent,
 									sTransform);
 
-		izanagi::SVector vec;
+		izanagi::math::SVector vec;
 		for (IZ_UINT i = 0; i < 4; i++) {
 			vec.v[i] = (IZ_FLOAT)pTransform->getValue().get(i);
 		}
@@ -460,14 +460,14 @@ namespace {
 							pContent,
 							sTransform);
 
-		izanagi::SMatrix mtx;
+		izanagi::math::SMatrix mtx;
 		for (IZ_UINT i = 0; i < 16; i++) {
 			mtx.a[i] = (IZ_FLOAT)pMtx->getValue().get(i);
 		}
 
 		// TODO
 		// COLLADA-viewer のソースを見ていると必要らしいが・・・
-		izanagi::SMatrix::Transpose(mtx, mtx);
+		izanagi::math::SMatrix::Transpose(mtx, mtx);
 
 		for (IZ_UINT i = 0; i < 16; i++) {
 			sTransform.param.push_back(mtx.a[i]);

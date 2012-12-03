@@ -19,7 +19,7 @@ namespace izanagi {
 			S_SKL_JOINT_POSE& pose,
 			IZ_UINT transformType,
 			IZ_UINT paramType,
-			const SVector& param);
+			const math::SVector& param);
 	};
 }	// namespace iznagi
 

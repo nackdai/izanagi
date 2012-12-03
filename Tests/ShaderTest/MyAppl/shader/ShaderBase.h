@@ -59,8 +59,8 @@ public:
 	inline IZ_BOOL EndPass();
 
 public:
-	inline void SetL2W(const izanagi::SMatrix& mat);
-	inline void SetW2C(const izanagi::SMatrix& mat);
+	inline void SetL2W(const izanagi::math::SMatrix& mat);
+	inline void SetW2C(const izanagi::math::SMatrix& mat);
 
 public:
 	inline void OnLostDevice();
@@ -186,7 +186,7 @@ IZ_BOOL CShaderBase::EndPass()
 }
 
 // L2Wマトリクスセット
-void CShaderBase::SetL2W(const izanagi::SMatrix& mat)
+void CShaderBase::SetL2W(const izanagi::math::SMatrix& mat)
 {
 	if (m_CommonHandles[HANDLE_COMMON_MTX_L2W] != NULL) {
 		// ちとマズイがメンドイので・・・
@@ -197,7 +197,7 @@ void CShaderBase::SetL2W(const izanagi::SMatrix& mat)
 }
 
 // W2Cマトリクスセット
-void CShaderBase::SetW2C(const izanagi::SMatrix& mat)
+void CShaderBase::SetW2C(const izanagi::math::SMatrix& mat)
 {
 	if (m_CommonHandles[HANDLE_COMMON_MTX_W2C] != NULL) {
 		// ちとマズイがメンドイので・・・

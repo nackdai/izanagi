@@ -8,7 +8,7 @@ using namespace izanagi;
 static const IZ_FLOAT _Div = 1.0f / 255.0f;
 #define BYTE_TO_FLOAT(n)	n * _Div;
 
-#define SATURATE(v)	CMath::Clamp(v, 0.0f, 1.0f)
+#define SATURATE(v)	math::CMath::Clamp(v, 0.0f, 1.0f)
 
 ///////////////////////////////////////////////////////////////
 // YUV
@@ -38,9 +38,9 @@ static const IZ_FLOAT _Div = 1.0f / 255.0f;
 
 void CColor::SetYUV(IZ_FLOAT _y, IZ_FLOAT _u, IZ_FLOAT _v)
 {
-	_y = CMath::Clamp(_y, 0.0f, 1.0f);
-	_u = CMath::Clamp(_u, -0.70109f, 0.70109f);
-	_v = CMath::Clamp(_v, -0.88552f, 0.88552f);
+	_y = math::CMath::Clamp(_y, 0.0f, 1.0f);
+	_u = math::CMath::Clamp(_u, -0.70109f, 0.70109f);
+	_v = math::CMath::Clamp(_v, -0.88552f, 0.88552f);
 
 	IZ_FLOAT fR = SATURATE(_y + _u);
 	IZ_FLOAT fG = SATURATE(_y - 0.50955f * _u - 0.19516f * _v);
@@ -101,9 +101,9 @@ void CColor::GetYUV(IZ_FLOAT* _y, IZ_FLOAT* _u, IZ_FLOAT* _v)
 
 void CColor::SetYCbCr(IZ_FLOAT y, IZ_FLOAT cb, IZ_FLOAT cr)
 {
-	y = CMath::Clamp(y,  0.0f, 1.0f);
-	cb = CMath::Clamp(cb, -0.5f, 0.5f);
-	cr = CMath::Clamp(cr, -0.5f, 0.5f);
+	y = math::CMath::Clamp(y,  0.0f, 1.0f);
+	cb = math::CMath::Clamp(cb, -0.5f, 0.5f);
+	cr = math::CMath::Clamp(cr, -0.5f, 0.5f);
 
 	IZ_FLOAT fR = SATURATE(y + 1.40218f * cr);
 	IZ_FLOAT fG = SATURATE(y - 0.50955f * 1.40218f * cr - 0.19516f * 1.77104f * cb);
@@ -216,7 +216,7 @@ void CColor::GetYIQ(IZ_FLOAT* y, IZ_FLOAT* i, IZ_FLOAT* q)
 void CColor::SetHLS(IZ_FLOAT h, IZ_FLOAT l, IZ_FLOAT s)
 {
 	IZ_FLOAT fSin, fCos;
-	CMath::GetSinCosF(h, &fSin, &fCos);
+	math::CMath::GetSinCosF(h, fSin, fCos);
 
 	IZ_FLOAT u = s * fSin;
 	IZ_FLOAT _v = s * fCos;

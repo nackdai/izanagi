@@ -416,7 +416,7 @@ namespace {
 		_T pParam,
 		IZ_UINT nStride,
 		IZ_UINT nPos,
-		izanagi::SVector& sVec)
+		izanagi::math::SVector& sVec)
 	{
 		switch (nStride) {
 		case 4:
@@ -437,7 +437,7 @@ namespace {
 	E_VTX_ACCESS_TYPE _GetVtxData(
 		domSourceRef pSrc,
 		IZ_UINT nIdx,
-		izanagi::SVector& sVec)
+		izanagi::math::SVector& sVec)
 	{
 		static IZ_PCSTR TypeTbl[] = {
 			"float",
@@ -483,7 +483,7 @@ namespace {
 IZ_BOOL CColladaGeometry::GetVertex(
 	domMesh* pMesh,
 	IZ_UINT nIdx,
-	izanagi::SVector& vec,
+	izanagi::math::SVector& vec,
 	izanagi::E_MSH_VTX_FMT_TYPE type)
 {
 #if 1
@@ -516,7 +516,7 @@ IZ_BOOL CColladaGeometry::GetVertex(
 	// Get pareters's source.
 	domSourceRef pSrc = _GetSource(pMesh, sVtxFmt.src_id);
 
-	izanagi::SVector::SetDefaultZero(vec);
+	izanagi::math::SVector::SetDefaultZero(vec);
 
 	// Get vertex paramter.
 	E_VTX_ACCESS_TYPE nVtxType = _GetVtxData(

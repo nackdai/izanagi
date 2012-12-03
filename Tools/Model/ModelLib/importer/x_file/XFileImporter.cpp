@@ -98,7 +98,7 @@ IZ_UINT CXFileImporter::GetVtxFmt()
 
 IZ_BOOL CXFileImporter::GetVertex(
 	IZ_UINT nIdx,
-	izanagi::SVector& vec,
+	izanagi::math::SVector& vec,
 	izanagi::E_MSH_VTX_FMT_TYPE type)
 {
 	IZ_BOOL ret = CXFileGeometry::GetInstance().GetVertex(
@@ -157,7 +157,7 @@ IZ_INT CXFileImporter::GetJointParent(
 
 void CXFileImporter::GetJointInvMtx(
 	IZ_UINT nIdx,
-	izanagi::SMatrix& mtx)
+	izanagi::math::SMatrix& mtx)
 {
 	CXFileJoint::GetInstance().GetJointInvMtx(nIdx,	mtx);
 }

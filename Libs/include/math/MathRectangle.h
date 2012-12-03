@@ -4,7 +4,10 @@
 #include "MathVector.h"
 #include "MathMatrix.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace math
+{
 	struct SRay;
 	struct SPlane;
 	class CPlane;
@@ -99,6 +102,7 @@ namespace izanagi {
 			const SRay& ray,
 			SVector& refPtr) const;
 	};
+}   // namespace math
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_MATH_RECTANGLE_H__)

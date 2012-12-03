@@ -30,7 +30,7 @@ CMirrorMapProxy::~CMirrorMapProxy()
 
 // 反射ベクトルからUVを取得.
 void CMirrorMapProxy::getUVFromRef(
-	const izanagi::SVector& ref,
+	const izanagi::math::SVector& ref,
 	IZ_FLOAT& u, IZ_FLOAT& v)
 {
 	// NOTE
@@ -60,14 +60,14 @@ void CMirrorMapProxy::getUVFromRef(
 // XYから反射ベクトルを取得.
 void CMirrorMapProxy::getRef(
 	IZ_UINT x, IZ_UINT y,
-	izanagi::SVector& ref,
+	izanagi::math::SVector& ref,
 	izanagi::graph::E_GRAPH_CUBE_TEX_FACE face/*= izanagi::graph::E_GRAPH_CUBE_TEX_FACE_NUM*/)
 {
 	// [-1:1]に変換
 	IZ_FLOAT u = 2.0f * x * m_DivW - 1.0f;
 	IZ_FLOAT v = 2.0f * y * m_DivH - 1.0f;
 
-	izanagi::SVector nml;
+	izanagi::math::SVector nml;
 	{
 		nml.x = u;
 		nml.y = v;
@@ -88,7 +88,7 @@ void CMirrorMapProxy::getRef(
 	ref.z = 2.0f * nml.z * nml.z - 1.0f;
 
 	// 念のため
-	izanagi::SVector::Normalize(ref, ref);
+	izanagi::math::SVector::Normalize(ref, ref);
 }
 
 // UVから色を取得.

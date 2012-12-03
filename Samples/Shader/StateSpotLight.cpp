@@ -25,8 +25,8 @@ CStateSpotLight::~CStateSpotLight()
 // 描画.
 IZ_BOOL CStateSpotLight::Render(izanagi::graph::CGraphicsDevice* device)
 {
-	izanagi::SMatrix mtxL2W;
-	izanagi::SMatrix::SetUnit(mtxL2W);
+	izanagi::math::SMatrix mtxL2W;
+	izanagi::math::SMatrix::SetUnit(mtxL2W);
 
 	m_Shader->Begin(0, IZ_FALSE);
 	{
@@ -69,27 +69,27 @@ IZ_BOOL CStateSpotLight::Render(izanagi::graph::CGraphicsDevice* device)
             RenderScene(
                 device, 
                 m_Plane,
-                izanagi::CVector(0.0f, 0.0f, 0.0f));
+                izanagi::math::CVector(0.0f, 0.0f, 0.0f));
 
             // 球
             RenderScene(
                 device, 
                 m_Sphere,
-                izanagi::CVector(10.0f, 5.0f, 10.0f));
+                izanagi::math::CVector(10.0f, 5.0f, 10.0f));
             RenderScene(
                 device, 
                 m_Sphere,
-                izanagi::CVector(10.0f, 5.0f, -10.0f));
+                izanagi::math::CVector(10.0f, 5.0f, -10.0f));
 
             // キューブ
             RenderScene(
                 device, 
                 m_Cube,
-                izanagi::CVector(-10.0f, 5.0f, -10.0f));
+                izanagi::math::CVector(-10.0f, 5.0f, -10.0f));
             RenderScene(
                 device, 
                 m_Cube,
-                izanagi::CVector(-10.0f, 5.0f, 10.0f));
+                izanagi::math::CVector(-10.0f, 5.0f, 10.0f));
 		}
 
         if (m_Shader->BeginPass(1)) {
@@ -123,10 +123,10 @@ IZ_BOOL CStateSpotLight::Render(izanagi::graph::CGraphicsDevice* device)
 void CStateSpotLight::RenderScene(
     izanagi::graph::CGraphicsDevice* device,
     izanagi::CDebugMesh* mesh,
-    const izanagi::SVector& position)
+    const izanagi::math::SVector& position)
 {
-    izanagi::SMatrix mtxL2W;
-    izanagi::SMatrix::GetTrans(mtxL2W, position);
+    izanagi::math::SMatrix mtxL2W;
+    izanagi::math::SMatrix::GetTrans(mtxL2W, position);
 
     SetShaderParam(
 	    m_Shader,

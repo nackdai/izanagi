@@ -73,16 +73,16 @@ CDebugMeshAxis* CDebugMeshAxis::CreateDebugMeshAxisDefault(
 	{
 		pInstance->SetVtx(
 			izanagi::E_DEBUG_MESH_AXIS_X,
-			izanagi::CVector(0.0f, 0.0f, 0.0f),
-			izanagi::CVector(10.0f, 0.0f, 0.0f));
+			math::CVector(0.0f, 0.0f, 0.0f),
+			math::CVector(10.0f, 0.0f, 0.0f));
 		pInstance->SetVtx(
 			izanagi::E_DEBUG_MESH_AXIS_Y,
-			izanagi::CVector(0.0f, 0.0f, 0.0f),
-			izanagi::CVector(0.0f, 10.0f, 0.0f));
+			math::CVector(0.0f, 0.0f, 0.0f),
+			math::CVector(0.0f, 10.0f, 0.0f));
 		pInstance->SetVtx(
 			izanagi::E_DEBUG_MESH_AXIS_Z,
-			izanagi::CVector(0.0f, 0.0f, 0.0f),
-			izanagi::CVector(0.0f, 0.0f, 10.0f));
+			math::CVector(0.0f, 0.0f, 0.0f),
+			math::CVector(0.0f, 0.0f, 10.0f));
 	}
 	pInstance->EndRegister();
 
@@ -143,8 +143,8 @@ IZ_BOOL CDebugMeshAxis::EndRegister()
 
 IZ_BOOL CDebugMeshAxis::SetVtx(
 	IZ_UINT type,
-	const SVector& start,
-	const SVector& end)
+	const math::SVector& start,
+	const math::SVector& end)
 {
 	VRETURN(m_pVtxDst != IZ_NULL);
 

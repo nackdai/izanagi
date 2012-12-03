@@ -74,7 +74,7 @@ IZ_BOOL CChunkedMemoryAllocator::Init(IZ_UINT nBufSize, void* pBuf, IZ_UINT nChu
 	m_pBuf = reinterpret_cast<IZ_UINT8*>(pBuf);
 
 	// ChunkSize must be power of 2.
-	m_nChunkSize = CMath::ComputeNextPow2(nChunkSize);
+	m_nChunkSize = math::CMath::ComputeNextPow2(nChunkSize);
 
 	// フリーリスト初期化
 	SHeapHeader* p = GetHeapHeader(m_pBuf);

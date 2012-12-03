@@ -96,12 +96,12 @@ IZ_BOOL CProjectedTextureShadowApp::InitInternal(
 
 	// カメラ
 	camera.Init(
-		izanagi::CVector(0.0f, 0.0f, 30.0f, 1.0f),
-		izanagi::CVector(0.0f, 0.0f, 0.0f, 1.0f),
-		izanagi::CVector(0.0f, 1.0f, 0.0f, 1.0f),
+		izanagi::math::CVector(0.0f, 0.0f, 30.0f, 1.0f),
+		izanagi::math::CVector(0.0f, 0.0f, 0.0f, 1.0f),
+		izanagi::math::CVector(0.0f, 1.0f, 0.0f, 1.0f),
 		1.0f,
 		500.0f,
-		izanagi::CMath::Deg2Rad(60.0f),
+		izanagi::math::CMath::Deg2Rad(60.0f),
 		(IZ_FLOAT)SCREEN_WIDTH / SCREEN_HEIGHT);
 	camera.Update();
 
@@ -158,8 +158,8 @@ void CProjectedTextureShadowApp::RenderInternal(izanagi::graph::CGraphicsDevice*
 
 	izanagi::sample::CSampleCamera& camera = GetCamera();
 
-	izanagi::SMatrix mtxL2W;
-	izanagi::SMatrix::SetUnit(mtxL2W);
+	izanagi::math::SMatrix mtxL2W;
+	izanagi::math::SMatrix::SetUnit(mtxL2W);
 
 	// テクスチャなし
 	m_Shader->Begin(1, IZ_FALSE);
@@ -200,10 +200,10 @@ void CProjectedTextureShadowApp::RenderInternal(izanagi::graph::CGraphicsDevice*
 				m_Shader,
 				"g_mW2C",
 				(void*)&camera.GetParam().mtxW2C,
-				sizeof(izanagi::SMatrix));
+				sizeof(izanagi::math::SMatrix));
 
-			izanagi::SMatrix mtxShadowTex;
-			izanagi::SMatrix::Mul(
+			izanagi::math::SMatrix mtxShadowTex;
+			izanagi::math::SMatrix::Mul(
 				mtxShadowTex,
 				m_Shadow->GetLightViewProjMtx(),
 				m_Shadow->GetShadowTexMtx());
@@ -212,14 +212,14 @@ void CProjectedTextureShadowApp::RenderInternal(izanagi::graph::CGraphicsDevice*
 				m_Shader,
 				"g_mShadowTex",
 				(void*)&mtxShadowTex,
-				sizeof(izanagi::SMatrix));
+				sizeof(izanagi::math::SMatrix));
 
 			{
 				_SetShaderParam(
 					m_Shader,
 					"g_mL2W",
 					(void*)&mtxL2W,
-					sizeof(izanagi::SMatrix));
+					sizeof(izanagi::math::SMatrix));
 
 				m_Shader->CommitChanges();
 
@@ -242,19 +242,19 @@ void CProjectedTextureShadowApp::RenderInternal(izanagi::graph::CGraphicsDevice*
 				m_Shader,
 				"g_mW2C",
 				(void*)&camera.GetParam().mtxW2C,
-				sizeof(izanagi::SMatrix));
+				sizeof(izanagi::math::SMatrix));
 
 			// Torus
 			{
-				izanagi::SMatrix::GetTrans(
+				izanagi::math::SMatrix::GetTrans(
 					mtxL2W,
-					izanagi::CVector(0.0f, 5.0f, 0.0f));
+					izanagi::math::CVector(0.0f, 5.0f, 0.0f));
 
 				_SetShaderParam(
 					m_Shader,
 					"g_mL2W",
 					(void*)&mtxL2W,
-					sizeof(izanagi::SMatrix));
+					sizeof(izanagi::math::SMatrix));
 
 				m_Shader->CommitChanges();
 
@@ -269,13 +269,13 @@ void CProjectedTextureShadowApp::RenderInternal(izanagi::graph::CGraphicsDevice*
 
 void CProjectedTextureShadowApp::RenderForShadow(izanagi::graph::CGraphicsDevice* device)
 {
-	izanagi::SMatrix mtxL2W;
-	izanagi::SMatrix::SetUnit(mtxL2W);
+	izanagi::math::SMatrix mtxL2W;
+	izanagi::math::SMatrix::SetUnit(mtxL2W);
 
 	m_Shadow->BeginShadowRender(
 		device,
-		izanagi::CVector(10.0f, 10.0f, 10.0f),	// ライトの位置
-		izanagi::CVector(-1.0f, -1.0f, -1.0f));	// ライトの向き
+		izanagi::math::CVector(10.0f, 10.0f, 10.0f),	// ライトの位置
+		izanagi::math::CVector(-1.0f, -1.0f, -1.0f));	// ライトの向き
 
 	// 影用
 	m_Shader->Begin(2, IZ_FALSE);
@@ -286,19 +286,19 @@ void CProjectedTextureShadowApp::RenderForShadow(izanagi::graph::CGraphicsDevice
 				m_Shader,
 				"g_mW2C",
 				(void*)&m_Shadow->GetLightViewProjMtx(),
-				sizeof(izanagi::SMatrix));
+				sizeof(izanagi::math::SMatrix));
 
 			// Torus
 			{
-				izanagi::SMatrix::GetTrans(
+				izanagi::math::SMatrix::GetTrans(
 					mtxL2W,
-					izanagi::CVector(0.0f, 5.0f, 0.0f));
+					izanagi::math::CVector(0.0f, 5.0f, 0.0f));
 
 				_SetShaderParam(
 					m_Shader,
 					"g_mL2W",
 					(void*)&mtxL2W,
-					sizeof(izanagi::SMatrix));
+					sizeof(izanagi::math::SMatrix));
 
 				m_Shader->CommitChanges();
 

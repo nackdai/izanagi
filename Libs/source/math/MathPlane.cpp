@@ -2,7 +2,10 @@
 #include "math/MathRay.h"
 #include "math/MathCVector.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace math
+{
 	// •½–Êã‚ÅƒŒƒC‚ÆŒð·‚·‚é“_‚ðŽæ“¾
 	IZ_BOOL CPlane::GetCrossPoint(
 		const CPlane& plane,
@@ -217,4 +220,5 @@ namespace izanagi {
 		return (dot >= 0.0f);
 #endif
 	}
+}   // namespace math
 }	// namespace izanagi

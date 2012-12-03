@@ -358,7 +358,7 @@ IZ_BOOL CXFileParser::ParseFrame(SXFileNode* pParent)
 	return IZ_TRUE;
 }
 
-IZ_BOOL CXFileParser::ParseFrameTransformMatrix(izanagi::SMatrix& mtx)
+IZ_BOOL CXFileParser::ParseFrameTransformMatrix(izanagi::math::SMatrix& mtx)
 {
 	std::string name = GetHeader();
 	IZ_ASSERT(name == "{");
@@ -384,7 +384,7 @@ IZ_BOOL CXFileParser::ParseMesh(SXFileMesh* pMesh)
 
 	// Read positions.
 	for (IZ_UINT i = 0; i < nPosNum; i++) {
-		izanagi::SVector& pos = pMesh->positions[i];
+		izanagi::math::SVector& pos = pMesh->positions[i];
 		ReadVectorXYZ(pos);
 		pos.w = 1.0f;
 	}
@@ -460,7 +460,7 @@ IZ_BOOL CXFileParser::ParseMeshNormal(SXFileMesh* pMesh)
 
 	// Read normals.
 	for (IZ_UINT i = 0; i < nNmlNum; i++) {
-		izanagi::SVector& nml = pMesh->normals[i];
+		izanagi::math::SVector& nml = pMesh->normals[i];
 		ReadVectorXYZ(nml);
 	}
 
@@ -1296,7 +1296,7 @@ IZ_INT CXFileParser::ReadInt()
 	return ret;
 }
 
-void CXFileParser::ReadVector(izanagi::SVector& vec)
+void CXFileParser::ReadVector(izanagi::math::SVector& vec)
 {
 	vec.x = ReadFloat();
 	vec.y = ReadFloat();
@@ -1305,7 +1305,7 @@ void CXFileParser::ReadVector(izanagi::SVector& vec)
 	VRETURN_VAL(IsSeparator(),);
 }
 
-void CXFileParser::ReadVectorXYZ(izanagi::SVector& vec)
+void CXFileParser::ReadVectorXYZ(izanagi::math::SVector& vec)
 {
 	vec.x = ReadFloat();
 	vec.y = ReadFloat();
@@ -1313,7 +1313,7 @@ void CXFileParser::ReadVectorXYZ(izanagi::SVector& vec)
 	VRETURN_VAL(IsSeparator(),);
 }
 
-void CXFileParser::ReadVectorXY(izanagi::SVector& vec)
+void CXFileParser::ReadVectorXY(izanagi::math::SVector& vec)
 {
 	ReadFloat2(vec.x, vec.y);
 }
@@ -1325,12 +1325,12 @@ void CXFileParser::ReadFloat2(IZ_FLOAT& f0, IZ_FLOAT& f1)
 	VRETURN_VAL(IsSeparator(),);
 }
 
-void CXFileParser::ReadRGBA(izanagi::SVector& vec)
+void CXFileParser::ReadRGBA(izanagi::math::SVector& vec)
 {
 	ReadVector(vec);
 }
 
-void CXFileParser::ReadRGB(izanagi::SVector& vec)
+void CXFileParser::ReadRGB(izanagi::math::SVector& vec)
 {
 	ReadVectorXYZ(vec);
 }

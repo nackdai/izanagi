@@ -51,7 +51,7 @@ CLatLongMapProxy::~CLatLongMapProxy()
 
 // 反射ベクトルからUVを取得.
 void CLatLongMapProxy::getUVFromRef(
-	const izanagi::SVector& ref,
+	const izanagi::math::SVector& ref,
 	IZ_FLOAT& u, IZ_FLOAT& v)
 {
 	// y = sin(θ) -> θ=asin(y)
@@ -63,7 +63,7 @@ void CLatLongMapProxy::getUVFromRef(
 
 	// z = cos(θ)cos(φ) -> cos(φ) = z / cos(θ) -> φ = acos(z / cos(θ))
 	IZ_FLOAT cosLong = ref.z / (cosLat + 0.00001f);
-	cosLong = izanagi::CMath::Clamp(cosLong, -1.0f, 1.0f);
+	cosLong = izanagi::math::CMath::Clamp(cosLong, -1.0f, 1.0f);
 
 	IZ_FLOAT longitude = ::acosf(cosLong);
 	
@@ -81,7 +81,7 @@ void CLatLongMapProxy::getUVFromRef(
 // XYから反射ベクトルを取得.
 void CLatLongMapProxy::getRef(
 	IZ_UINT x, IZ_UINT y,
-	izanagi::SVector& ref,
+	izanagi::math::SVector& ref,
 	izanagi::graph::E_GRAPH_CUBE_TEX_FACE face/*= izanagi::graph::E_GRAPH_CUBE_TEX_FACE_NUM*/)
 {
 	// [-1:1]
@@ -100,11 +100,11 @@ void CLatLongMapProxy::getRef(
 	ref.y = sinLat;
 	ref.z = cosLat * cosLong;
 
-	ref.x = izanagi::CMath::Clamp(ref.x, -1.0f, 1.0f);
-	ref.y = izanagi::CMath::Clamp(ref.y, -1.0f, 1.0f);
-	ref.z = izanagi::CMath::Clamp(ref.z, -1.0f, 1.0f);
+	ref.x = izanagi::math::CMath::Clamp(ref.x, -1.0f, 1.0f);
+	ref.y = izanagi::math::CMath::Clamp(ref.y, -1.0f, 1.0f);
+	ref.z = izanagi::math::CMath::Clamp(ref.z, -1.0f, 1.0f);
 
-	izanagi::SVector::Normalize(ref, ref);
+	izanagi::math::SVector::Normalize(ref, ref);
 }
 
 // UVから色を取得.

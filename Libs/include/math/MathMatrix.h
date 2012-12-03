@@ -6,7 +6,10 @@
 #include "MathDefs.h"
 #include "MathVector.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace math
+{
 	/** 回転計算の順番
 	 */
 	enum E_MATH_ROTATION_ORDER
@@ -43,10 +46,6 @@ namespace izanagi {
 			memcpy(&dst, &src, sizeof(SMatrix));
 		}
 
-#if 0
-		// 単位マトリクスを参照する
-		const SMatrix& GetUnit();
-#else
 		// 単位マトリクスを参照する
 		static const SMatrix& GetUnit()
 		{
@@ -59,17 +58,9 @@ namespace izanagi {
 
 			return mtxUnit;
 		}
-#endif
 
 		// 単位マトリクスを設定する
-		static void SetUnit(SMatrix& mtx)
-		{
-#if defined(__USE_D3D_MATH__)
-			D3DXMatrixIdentity(reinterpret_cast<D3DXMATRIX*>(&mtx));
-#else	// #if defined(__USE_D3D_MATH__)
-			Copy(mtx, GetUnit());
-#endif	// #if defined(__USE_D3D_MATH__)
-		}
+		static inline void SetUnit(SMatrix& mtx);
 
 		static IZ_BOOL IsUnit(const SMatrix& mtx)
 		{
@@ -89,23 +80,7 @@ namespace izanagi {
 		}
 
 		// マトリクスを転置する
-		static void Transpose(SMatrix& dst, const SMatrix& src)
-		{
-#if defined(__USE_D3D_MATH__)
-			D3DXMatrixTranspose(
-				reinterpret_cast<D3DXMATRIX*>(&dst),
-				reinterpret_cast<const D3DXMATRIX*>(&src));
-#else	// #if defined(__USE_D3D_MATH__)
-			SMatrix m;
-			for (int i = 0; i < 4; ++i) {
-				for (int j = 0; j < 4; ++j) {
-					m.m[i][j] = src.m[j][i];
-				}
-			}
-
-			Copy(dst, m);
-#endif	// #if defined(__USE_D3D_MATH__)
-		}
+		static inline void Transpose(SMatrix& dst, const SMatrix& src);
 
 		// マトリクスを加算する
 		// dst = src1 + src2
@@ -131,27 +106,7 @@ namespace izanagi {
 
 		// マトリクスを乗算する
 		// dst = src1 x src2
-		static void Mul(SMatrix& dst, const SMatrix& src1, const SMatrix& src2)
-		{
-#if defined(__USE_D3D_MATH__)
-			D3DXMatrixMultiply(
-				reinterpret_cast<D3DXMATRIX*>(&dst),
-				reinterpret_cast<const D3DXMATRIX*>(&src1),
-				reinterpret_cast<const D3DXMATRIX*>(&src2));
-#else	// #if defined(__USE_D3D_MATH__)
-			SMatrix m;
-			for (int i = 0; i < 4; ++i) {
-				for (int j = 0; j < 4; ++j) {
-					m.m[i][j] = 0.0f;
-					for (int k = 0; k < 4; ++k) {
-						m.m[i][j] += src1.m[i][k] * src2.m[k][j];
-					}
-				}
-			}
-
-			Copy(dst, m);
-#endif	// #if defined(__USE_D3D_MATH__)
-		}
+		static inline void Mul(SMatrix& dst, const SMatrix& src1, const SMatrix& src2);
 
 		// マトリクスとスカラーを乗算する
 		static void MulScalar(SMatrix& dst, const SMatrix& src, IZ_FLOAT fScalar)
@@ -165,77 +120,39 @@ namespace izanagi {
 
 		// ベクトルとマトリクスを乗算する
 		// dst = vec x mtx
-		static void Apply(SVector& dst, const SVector& vec, const SMatrix& mtx)
-		{
-#if defined(__USE_D3D_MATH__)
-			D3DXVec4Transform(
-				reinterpret_cast<D3DXVECTOR4*>(&dst),
-				reinterpret_cast<const D3DXVECTOR4*>(&vec),
-				reinterpret_cast<const D3DXMATRIX*>(&mtx));
-#else	// #if defined(__USE_D3D_MATH__)
-			SVector v;
-			for (int i = 0; i < 4; ++i) {
-				v.v[i] = 0.0f;
-				for (int j = 0; j < 4; ++j) {
-					v.v[i] += vec.v[j] * mtx.m[j][i];
-				}
-			}
-
-			SVector::Copy(dst, v);
-#endif	// #if defined(__USE_D3D_MATH__)
-		}
+		static inline void Apply(SVector& dst, const SVector& vec, const SMatrix& mtx);
 
 		// ベクトルとマトリクスのＸＹＺ成分のみを乗算する
 		// ベクトルのＷ成分、およびマトリクスの第４行は無視される
-		static void ApplyXYZ(SVector& dst, const SVector& vec, const SMatrix& mtx)
-		{
-#if defined(__USE_D3D_MATH__)
-			SVector v;
-			SVector::Copy(v, vec);
-			v.w = 0.0f;
-
-			D3DXVec4Transform(
-				reinterpret_cast<D3DXVECTOR4*>(&dst),
-				reinterpret_cast<const D3DXVECTOR4*>(&v),
-				reinterpret_cast<const D3DXMATRIX*>(&mtx));
-
-			v.w = vec.w;
-#else	// #if defined(__USE_D3D_MATH__)
-			SVector v;
-			for (int i = 0; i < 3; ++i) {
-				v.v[i] = 0.0f;
-				for (int j = 0; j < 3; ++j) {
-					v.v[i] += vec.v[j] * mtx.m[j][i];
-				}
-			}
-
-			dst.x = v.x;
-			dst.y = v.y;
-			dst.z = v.z;
-			
-			//v.v[3] = vec.v[3];
-#endif	// #if defined(__USE_D3D_MATH__)
-		}
+		static inline void ApplyXYZ(SVector& dst, const SVector& vec, const SMatrix& mtx);
 
 		// X軸を回転軸にして回転するマトリクスを取得
-		static void GetRotByX(SMatrix& dst, IZ_FLOAT fTheta);
+		static inline void GetRotByX(SMatrix& dst, IZ_FLOAT fTheta);
 
 		// Y軸を回転軸にして回転するマトリクスを取得
-		static void GetRotByY(SMatrix& dst, IZ_FLOAT fTheta);
+		static inline void GetRotByY(SMatrix& dst, IZ_FLOAT fTheta);
 
 		// Z軸を回転軸にして回転するマトリクスを取得
-		static void GetRotByZ(SMatrix& dst, IZ_FLOAT fTheta);
+		static inline void GetRotByZ(SMatrix& dst, IZ_FLOAT fTheta);
 
 		// XYZ軸を回転軸にしてX->Y->Zの順番で回転するマトリクスを取得
-		static void GetRotByXYZ(SMatrix& dst, const SVector& angle);
+		static void GetRotByXYZ(SMatrix& dst, const SVector& angle)
+        {
+		    GetRotByX(dst, angle.x);
+		    RotByY(dst, dst, angle.y);
+		    RotByZ(dst, dst, angle.z);
+	    }
 
 		// 任意軸を回転軸にして回転するマトリクスを取得
 		static void GetRot(
 			SMatrix& dst, IZ_FLOAT fTheta,
-			const SVector& axis);
+			const SVector& axis)
+        {
+		    GetRot(dst, fTheta, axis.x, axis.y, axis.z);
+	    }
 
 		// 任意軸を回転軸にして回転するマトリクスを取得
-		static void GetRot(
+		static inline void GetRot(
 			SMatrix& dst, IZ_FLOAT fTheta,
 			IZ_FLOAT x, IZ_FLOAT y, IZ_FLOAT z);
 
@@ -284,8 +201,13 @@ namespace izanagi {
 		}
 
 		// オフセットを指定したマトリクスを取得
-		static void GetTrans(SMatrix& dst, const SVector& tv);
-		static void GetTrans(SMatrix& dst, IZ_FLOAT x, IZ_FLOAT y, IZ_FLOAT z);
+		static void GetTrans(SMatrix& dst, const SVector& tv)
+        {
+		    GetTrans(dst, tv.x, tv.y, tv.z);
+	    }
+
+        // オフセットを指定したマトリクスを取得
+		static inline void GetTrans(SMatrix& dst, IZ_FLOAT x, IZ_FLOAT y, IZ_FLOAT z);
 
 		// 平行移動する
 		static void Trans(SMatrix& dst, const SMatrix& src, const SVector& tv)
@@ -295,6 +217,7 @@ namespace izanagi {
 			Mul(dst, src, m);
 		}
 
+        // 平行移動する
 		static void Trans(
 			SMatrix& dst,
 			const SMatrix& src,
@@ -314,22 +237,7 @@ namespace izanagi {
 		}
 
 		// スケーリングマトリクスを得る
-		static void SetScale(SMatrix& dst, IZ_FLOAT fScaleX, IZ_FLOAT fScaleY, IZ_FLOAT fScaleZ)
-		{
-#if defined(__USE_D3D_MATH__)
-			D3DXMatrixScaling(
-				reinterpret_cast<D3DXMATRIX*>(&dst),
-				fScaleX,
-				fScaleY,
-				fScaleZ);
-#else	// #if defined(__USE_D3D_MATH__)
-			SVector::Set(dst.v[0], fScaleX, 0.0f, 0.0f, 0.0f);
-			SVector::Set(dst.v[1], 0.0f, fScaleY, 0.0f, 0.0f);
-			SVector::Set(dst.v[2], 0.0f, 0.0f, fScaleZ, 0.0f);
-
-			SVector::Set(dst.v[3], 0.0f, 0.0f, 0.0f, 1.0f);
-#endif	// #if defined(__USE_D3D_MATH__)
-		}
+		static inline void SetScale(SMatrix& dst, IZ_FLOAT fScaleX, IZ_FLOAT fScaleY, IZ_FLOAT fScaleZ);
 
 		// スケーリングマトリクスを得る
 		static void SetScale(SMatrix& dst, const SVector& scale)
@@ -351,6 +259,7 @@ namespace izanagi {
 			SVector::Mul(dst.v[3], src.v[3], s);
 		}
 
+        // スケーリングする
 		static void Scale(
 			SMatrix& dst, 
 			const SMatrix& src,
@@ -363,13 +272,21 @@ namespace izanagi {
 		}
 
 		// 行列式を計算する
-		static IZ_FLOAT Determinant(const SMatrix& mtx);
+		static inline IZ_FLOAT Determinant(const SMatrix& mtx);
 
 		// 一般マトリクスの逆マトリクスを求める
-		static void Inverse(SMatrix& dst, const SMatrix& src);
+		static inline void Inverse(SMatrix& dst, const SMatrix& src);
 
 		// ベクトルから回転マトリクスを求める
-		static void GetRotMatrixFromVector(SMatrix& mtx, const SVector& vec);
+		static void GetRotMatrixFromVector(SMatrix& mtx, const SVector& vec)
+        {
+		    SVector up;
+		    up.Set(0.0f, 1.0f, 0.0f, 0.0f);
+
+		    GetRotMatrixFromVector(mtx, vec, up);
+	    }
+
+        // ベクトルから回転マトリクスを求める
 		static void GetRotMatrixFromVector(SMatrix& mtx, const SVector& vec, const SVector& up);
 
 		// マトリクスからオイラー角を取得する
@@ -383,6 +300,13 @@ namespace izanagi {
 			}
 		}
 	};
+}   // namespace math
 }	// namespace izanagi
+
+#ifdef __USE_D3D_MATH__
+    #include "math/dx9/MathMatrix_DX9.h"
+#else   // #ifdef __USE_D3D_MATH__
+    #include "math/noplatform/MathMatrix_NoPlatform.h"
+#endif
 
 #endif	// #if !defined(__IZANAGI__MATH_MATRIX_H__)

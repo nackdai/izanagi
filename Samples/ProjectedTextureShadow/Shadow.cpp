@@ -55,8 +55,8 @@ CShadow::~CShadow()
 
 IZ_BOOL CShadow::BeginShadowRender(
 	izanagi::graph::CGraphicsDevice* device,
-	const izanagi::SVector& lightPos,
-	const izanagi::SVector& lightDir)
+	const izanagi::math::SVector& lightPos,
+	const izanagi::math::SVector& lightDir)
 {
 	izanagi::graph::CSurface* srf = m_RT->GetSurface(0);
 	izanagi::graph::CSurface* depth = m_DepthRT;
@@ -71,8 +71,8 @@ IZ_BOOL CShadow::BeginShadowRender(
 		IZ_FLOAT aspect = m_RT->GetHeight() / (IZ_FLOAT)m_RT->GetWidth();
 		m_Light.Init(
 			lightPos,
-			izanagi::CVector(lightPos.x + lightDir.x, lightPos.y + lightDir.y, lightPos.z + lightDir.z),
-			izanagi::CVector(0.0f, 1.0f, 0.0f),
+			izanagi::math::CVector(lightPos.x + lightDir.x, lightPos.y + lightDir.y, lightPos.z + lightDir.z),
+			izanagi::math::CVector(0.0f, 1.0f, 0.0f),
 			0.1f, 100.0f,
 			IZ_MATH_PI / 2.5f,
 			aspect);
@@ -88,14 +88,14 @@ void CShadow::EndShadowRender(izanagi::graph::CGraphicsDevice* device)
 	device->EndScene(izanagi::graph::E_GRAPH_END_SCENE_FLAG_RT_0 | izanagi::graph::E_GRAPH_END_SCENE_FLAG_DEPTH_STENCIL);
 }
 
-const izanagi::SMatrix& CShadow::GetLightViewProjMtx() const
+const izanagi::math::SMatrix& CShadow::GetLightViewProjMtx() const
 {
 	return m_Light.GetParam().mtxW2C;
 }
 
-const izanagi::SMatrix& CShadow::GetShadowTexMtx() const
+const izanagi::math::SMatrix& CShadow::GetShadowTexMtx() const
 {
-	static izanagi::SMatrix mtx = {
+	static izanagi::math::SMatrix mtx = {
 		0.5f,  0.0f, 0.0f, 0.0f,
 		0.0f, -0.5f, 0.0f, 0.0f,
 		0.0f,  0.0f, 1.0f, 0.0f,

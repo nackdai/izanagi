@@ -431,8 +431,8 @@ namespace {
         IZ_UINT pitch = 0;
         if (izanagi::graph::CGraphUtil::IsCompressedPixelFormat(pTex->GetTexInfo().fmt))
         {
-            IZ_UINT height = pTex->GetHeight();
-            pitch = nSize / height;
+            IZ_UINT width = pTex->GetWidth();
+            pitch = width * 4;
         }
         else
         {

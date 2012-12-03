@@ -5,12 +5,12 @@
 namespace {
 	inline IZ_BOOL _HasScale(IZ_FLOAT x, IZ_FLOAT y, IZ_FLOAT z)
 	{
-		izanagi::SVector vec;
+		izanagi::math::SVector vec;
 		vec.Set(x, y, z);
 
-		IZ_FLOAT len = izanagi::SVector::Length(vec);
+		IZ_FLOAT len = izanagi::math::SVector::Length(vec);
 #if 0
-		IZ_BOOL bHasScale = !izanagi::CMath::IsNearyEqual(len, 1.0f);
+		IZ_BOOL bHasScale = !izanagi::math::CMath::IsNearyEqual(len, 1.0f);
 #else
 		//IZ_PRINTF("   len[%f]\n", len);
 		static const IZ_FLOAT EPSILON = 0.000001f;
@@ -24,7 +24,7 @@ namespace {
 
 // Break down matrix to trans, quartanion.
 IZ_BOOL CXFileMathUtil::BreakDownMatrix(
-	const izanagi::SMatrix& mtx,
+	const izanagi::math::SMatrix& mtx,
 	izanagi::S_SKL_JOINT_POSE& sPose)
 {
 #if _CHECK_SCALE
@@ -42,14 +42,14 @@ IZ_BOOL CXFileMathUtil::BreakDownMatrix(
 	sPose.trans[1] = mtx.v[3].y;
 	sPose.trans[2] = mtx.v[3].z;
 
-	izanagi::SQuat::QuatFromMatrix(
+	izanagi::math::SQuat::QuatFromMatrix(
 		sPose.quat,
 		mtx);
 
 	return IZ_FALSE;
 }
 
-IZ_BOOL CXFileMathUtil::HasScale(const izanagi::SMatrix& mtx)
+IZ_BOOL CXFileMathUtil::HasScale(const izanagi::math::SMatrix& mtx)
 {
 	//IZ_PRINTF("scale:");
 	IZ_BOOL b0 = _HasScale(mtx._00, mtx._10, mtx._20);

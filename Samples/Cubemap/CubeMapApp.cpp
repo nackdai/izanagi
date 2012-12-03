@@ -6,7 +6,7 @@ CCubeMapApp::CCubeMapApp()
 	m_Img = IZ_NULL;
 	m_Shader = IZ_NULL;
 
-	izanagi::SMatrix::SetUnit(m_L2W);
+	izanagi::math::SMatrix::SetUnit(m_L2W);
 }
 
 CCubeMapApp::~CCubeMapApp()
@@ -58,12 +58,12 @@ IZ_BOOL CCubeMapApp::InitInternal(
 
 	// カメラ
 	camera.Init(
-		izanagi::CVector(0.0f, 0.0f,  0.0f, 1.0f),
-		izanagi::CVector(0.0f, 0.0f, -1.0f, 1.0f),
-		izanagi::CVector(0.0f, 1.0f,  0.0f, 1.0f),
+		izanagi::math::CVector(0.0f, 0.0f,  0.0f, 1.0f),
+		izanagi::math::CVector(0.0f, 0.0f, -1.0f, 1.0f),
+		izanagi::math::CVector(0.0f, 1.0f,  0.0f, 1.0f),
 		1.0f,
 		500.0f,
-		izanagi::CMath::Deg2Rad(60.0f),
+		izanagi::math::CMath::Deg2Rad(60.0f),
 		(IZ_FLOAT)SCREEN_WIDTH / SCREEN_HEIGHT);
 	camera.Update();
 
@@ -88,10 +88,10 @@ void CCubeMapApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
 	GetCamera().Update();
 
-	izanagi::SMatrix::SetScale(m_L2W, 100.0f, 100.0f, 100.0f);
+	izanagi::math::SMatrix::SetScale(m_L2W, 100.0f, 100.0f, 100.0f);
 
 	// カメラの位置にあわせて移動する
-	izanagi::SMatrix::Trans(
+	izanagi::math::SMatrix::Trans(
 		m_L2W,
 		m_L2W,
 		GetCamera().GetParam().pos);
@@ -130,7 +130,7 @@ void CCubeMapApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 				m_Shader,
 				"g_mW2C",
 				(void*)&camera.GetParam().mtxW2C,
-				sizeof(izanagi::SMatrix));
+				sizeof(izanagi::math::SMatrix));
 
 			_SetShaderParam(
 				m_Shader,

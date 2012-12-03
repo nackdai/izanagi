@@ -51,31 +51,31 @@ IZ_BOOL CStateParallax::Render3D()
 	// シェーダパラメータセット
 	{
 		// Local -> World
-		izanagi::SMatrix mtxL2W;
-		izanagi::SMatrix::SetUnit(mtxL2W);
+		izanagi::math::SMatrix mtxL2W;
+		izanagi::math::SMatrix::SetUnit(mtxL2W);
 		m_pShader->SetL2W(mtxL2W);
 
 		// ローカル座標変換行列
-		izanagi::SMatrix mtxW2L;
-		izanagi::SMatrix::Inverse(mtxW2L, mtxL2W);
+		izanagi::math::SMatrix mtxW2L;
+		izanagi::math::SMatrix::Inverse(mtxW2L, mtxL2W);
 
 		m_pShader->SetW2C(CMyCamera::GetInstance().GetRawInterface().GetParam().mtxW2C);
 
 		// View -> Local
-		izanagi::SMatrix mtxV2L;
-		izanagi::SMatrix::Mul(
+		izanagi::math::SMatrix mtxV2L;
+		izanagi::math::SMatrix::Mul(
 			mtxV2L, 
 			mtxL2W, 
 			CMyCamera::GetInstance().GetRawInterface().GetParam().mtxW2V);
-		izanagi::SMatrix::Inverse(mtxV2L, mtxV2L);
+		izanagi::math::SMatrix::Inverse(mtxV2L, mtxV2L);
 
 		// ビュー座標系における視点は常に原点
-		izanagi::SVector vEyePos;
+		izanagi::math::SVector vEyePos;
 		vEyePos.Set(0.0f, 0.0f, 0.0f);
 
 		// 視点の位置をローカル座標に変換する
-		izanagi::SVector vLocalEye;
-		izanagi::SMatrix::Apply(
+		izanagi::math::SVector vLocalEye;
+		izanagi::math::SMatrix::Apply(
 			vLocalEye,
 			vEyePos,
 			mtxV2L);
@@ -86,16 +86,16 @@ IZ_BOOL CStateParallax::Render3D()
 		izanagi::SParallelLightParam sParallel;
 		{
 			sParallel.vDir.Set(-1.0f, -1.0f, -1.0f, 0.0f);
-			izanagi::SVector::Normalize(sParallel.vDir, sParallel.vDir);
+			izanagi::math::SVector::Normalize(sParallel.vDir, sParallel.vDir);
 
 			// ローカル座標に変換する
-			izanagi::SMatrix::ApplyXYZ(sParallel.vDir, sParallel.vDir, mtxW2L);
+			izanagi::math::SMatrix::ApplyXYZ(sParallel.vDir, sParallel.vDir, mtxW2L);
 
 			sParallel.color.Set(1.0f, 1.0f, 1.0f, 1.0f);
 		}
 
 		izanagi::SAmbientLightParam sAmbient;
-		izanagi::SVector::SetZero(sAmbient.color);
+		izanagi::math::SVector::SetZero(sAmbient.color);
 
 		// マテリアル
 		izanagi::SMaterialParam sMtrl;

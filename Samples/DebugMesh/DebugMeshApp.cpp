@@ -130,12 +130,12 @@ IZ_BOOL CDebugMeshApp::InitInternal(
 
 	// カメラ
 	camera.Init(
-		izanagi::CVector(0.0f, 0.0f, 30.0f, 1.0f),
-		izanagi::CVector(0.0f, 0.0f, 0.0f, 1.0f),
-		izanagi::CVector(0.0f, 1.0f, 0.0f, 1.0f),
+		izanagi::math::CVector(0.0f, 0.0f, 30.0f, 1.0f),
+		izanagi::math::CVector(0.0f, 0.0f, 0.0f, 1.0f),
+		izanagi::math::CVector(0.0f, 1.0f, 0.0f, 1.0f),
 		1.0f,
 		500.0f,
-		izanagi::CMath::Deg2Rad(60.0f),
+		izanagi::math::CMath::Deg2Rad(60.0f),
 		(IZ_FLOAT)SCREEN_WIDTH / SCREEN_HEIGHT);
 	camera.Update();
 
@@ -192,8 +192,8 @@ void CDebugMeshApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
 	izanagi::sample::CSampleCamera& camera = GetCamera();
 
-	izanagi::SMatrix mtxL2W;
-	izanagi::SMatrix::SetUnit(mtxL2W);
+	izanagi::math::SMatrix mtxL2W;
+	izanagi::math::SMatrix::SetUnit(mtxL2W);
 
 	// テクスチャなし
 	m_Shader->Begin(1, IZ_FALSE);
@@ -234,7 +234,7 @@ void CDebugMeshApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 				m_Shader,
 				"g_mW2C",
 				(void*)&camera.GetParam().mtxW2C,
-				sizeof(izanagi::SMatrix));
+				sizeof(izanagi::math::SMatrix));
 
 			// Sphere
 			{
@@ -242,7 +242,7 @@ void CDebugMeshApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 					m_Shader,
 					"g_mL2W",
 					(void*)&mtxL2W,
-					sizeof(izanagi::SMatrix));
+					sizeof(izanagi::math::SMatrix));
 
 				m_Shader->CommitChanges();
 
@@ -251,15 +251,15 @@ void CDebugMeshApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
 			// Cube
 			{
-				izanagi::SMatrix::GetTrans(
+				izanagi::math::SMatrix::GetTrans(
 					mtxL2W,
-					izanagi::CVector(-15.0f, 0.0f, -15.0f));
+					izanagi::math::CVector(-15.0f, 0.0f, -15.0f));
 
 				_SetShaderParam(
 					m_Shader,
 					"g_mL2W",
 					(void*)&mtxL2W,
-					sizeof(izanagi::SMatrix));
+					sizeof(izanagi::math::SMatrix));
 
 				m_Shader->CommitChanges();
 
@@ -268,15 +268,15 @@ void CDebugMeshApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
 			// Cylinder
 			{
-				izanagi::SMatrix::GetTrans(
+				izanagi::math::SMatrix::GetTrans(
 					mtxL2W,
-					izanagi::CVector(15.0f, 0.0f, -15.0f));
+					izanagi::math::CVector(15.0f, 0.0f, -15.0f));
 
 				_SetShaderParam(
 					m_Shader,
 					"g_mL2W",
 					(void*)&mtxL2W,
-					sizeof(izanagi::SMatrix));
+					sizeof(izanagi::math::SMatrix));
 
 				m_Shader->CommitChanges();
 
@@ -286,15 +286,15 @@ void CDebugMeshApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
 			// Torus
 			{
-				izanagi::SMatrix::GetTrans(
+				izanagi::math::SMatrix::GetTrans(
 					mtxL2W,
-					izanagi::CVector(15.0f, 0.0f, 15.0f));
+					izanagi::math::CVector(15.0f, 0.0f, 15.0f));
 
 				_SetShaderParam(
 					m_Shader,
 					"g_mL2W",
 					(void*)&mtxL2W,
-					sizeof(izanagi::SMatrix));
+					sizeof(izanagi::math::SMatrix));
 
 				m_Shader->CommitChanges();
 
@@ -303,15 +303,15 @@ void CDebugMeshApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
 			// Plane
 			{
-				izanagi::SMatrix::GetTrans(
+				izanagi::math::SMatrix::GetTrans(
 					mtxL2W,
-					izanagi::CVector(-15.0f, 0.0f, 15.0f));
+					izanagi::math::CVector(-15.0f, 0.0f, 15.0f));
 
 				_SetShaderParam(
 					m_Shader,
 					"g_mL2W",
 					(void*)&mtxL2W,
-					sizeof(izanagi::SMatrix));
+					sizeof(izanagi::math::SMatrix));
 
 				m_Shader->CommitChanges();
 

@@ -22,7 +22,7 @@ protected:
 	inline void InternalRelease();
 
 public:
-	inline void SetCameraPos(const izanagi::SVector& vec);
+	inline void SetCameraPos(const izanagi::math::SVector& vec);
 
 	inline void SetLight(
 		const izanagi::SParallelLightParam& sParallel,
@@ -66,7 +66,7 @@ void CPhongShader::InternalRelease()
 }
 
 // カメラ位置セット
-void CPhongShader::SetCameraPos(const izanagi::SVector& vec)
+void CPhongShader::SetCameraPos(const izanagi::math::SVector& vec)
 {
 	if (m_hHandles[HANDLE_CAMERA_POS] != IZ_NULL) {
 		m_pEffect->SetVector(

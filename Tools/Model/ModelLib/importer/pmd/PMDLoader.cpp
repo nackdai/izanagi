@@ -90,7 +90,7 @@ void CPmdLoader::ComputeJointPose()
 		pose.scale[0] = pose.scale[1] = pose.scale[2] = 1.0f;
 
 		// 回転はこの時点では存在しない
-		izanagi::SQuat::SetIdentity(pose.quat);
+		izanagi::math::SQuat::SetIdentity(pose.quat);
 
 		if (bone.parentIdx == 0xffff)
 		{
@@ -113,10 +113,10 @@ void CPmdLoader::ComputeJointPose()
 		m_PoseList.push_back(pose);
 
 		// 行列
-		izanagi::SMatrix mtx;
-		izanagi::SMatrix::GetTrans(
+		izanagi::math::SMatrix mtx;
+		izanagi::math::SMatrix::GetTrans(
 			mtx,
-			izanagi::CVector(pose.trans[0], pose.trans[1], pose.trans[2]));
+			izanagi::math::CVector(pose.trans[0], pose.trans[1], pose.trans[2]));
 
 		m_MtxList.push_back(mtx);
 	}
@@ -128,10 +128,10 @@ void CPmdLoader::ComputeJointPose()
 
 		if (bone.parentIdx != 0xffff)
 		{
-			const izanagi::SMatrix& mtxParent = m_MtxList[bone.parentIdx];
-			izanagi::SMatrix& mtx = m_MtxList[i];
+			const izanagi::math::SMatrix& mtxParent = m_MtxList[bone.parentIdx];
+			izanagi::math::SMatrix& mtx = m_MtxList[i];
 
-			izanagi::SMatrix::Mul(mtx, mtx, mtxParent);
+			izanagi::math::SMatrix::Mul(mtx, mtx, mtxParent);
 		}
 	}
 }
@@ -144,7 +144,7 @@ const izanagi::S_SKL_JOINT_POSE& CPmdLoader::GetPose(IZ_UINT idx)
 }
 
 // 関節のマトリクスを取得.
-const izanagi::SMatrix& CPmdLoader::GetMatrix(IZ_UINT idx)
+const izanagi::math::SMatrix& CPmdLoader::GetMatrix(IZ_UINT idx)
 {
 	IZ_ASSERT(idx < m_MtxList.size());
 	return m_MtxList[idx];

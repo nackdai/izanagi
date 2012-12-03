@@ -50,7 +50,7 @@ namespace izanagi {
 
 		// パラメータセット
 		virtual void SetParameter(
-			const SVector* pVector,
+			const math::SVector* pVector,
 			IZ_UINT num);
 
 	protected:
@@ -97,8 +97,8 @@ namespace izanagi {
 		// 共通シェーダ定数ハンドル
 		SHADER_PARAM_HANDLE m_hCommonHandle[COMMON_HANDLE_NUM];
 
-		SVector m_vecPosOffset;
-		SVector m_vecTexParam;
+		math::SVector m_vecPosOffset;
+		math::SVector m_vecTexParam;
 	};
 
 	// inline ****************************

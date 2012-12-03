@@ -19,9 +19,9 @@ protected:
 
 public:
 	void Init(
-		const izanagi::CVector& vPos,
-		const izanagi::CVector& vRef,
-		const izanagi::CVector& vUp,
+		const izanagi::math::CVector& vPos,
+		const izanagi::math::CVector& vRef,
+		const izanagi::math::CVector& vUp,
 		IZ_FLOAT fNear, IZ_FLOAT fFar,
 		IZ_FLOAT fFov,
 		IZ_FLOAT fAspect);

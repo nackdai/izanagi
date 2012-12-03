@@ -3,19 +3,19 @@
 
 void test0()
 {
-	izanagi::SQuat quat;
-	izanagi::SQuat::SetQuatFromRadAxis(quat, IZ_DEG2RAD(45.0f), 0.0f, 0.0f, 1.0f);
+	izanagi::math::SQuat quat;
+	izanagi::math::SQuat::SetQuatFromRadAxis(quat, IZ_DEG2RAD(45.0f), 0.0f, 0.0f, 1.0f);
 
-	izanagi::SMatrix mtx;
-	izanagi::SQuat::MatrixFromQuat(mtx, quat);
+	izanagi::math::SMatrix mtx;
+	izanagi::math::SQuat::MatrixFromQuat(mtx, quat);
 
-	izanagi::SQuat quat1;
-	izanagi::SQuat::QuatFromMatrix(quat1, mtx);
+	izanagi::math::SQuat quat1;
+	izanagi::math::SQuat::QuatFromMatrix(quat1, mtx);
 }
 
 void test1()
 {
-	static izanagi::SVector tbl[] = {
+	static izanagi::math::SVector tbl[] = {
 		{0.0f, 0.0f, 1.0f, -34.3486f},
 		{0.0f, 1.0f, 0.0f, 0.0f},
 		{1.0f, 0.0f, 0.0f, 0.0f},
@@ -23,17 +23,17 @@ void test1()
 		{1.0f, 0.0f, 0.0f, -180.0f},
 	};
 
-	izanagi::SMatrix mtx;
-	izanagi::SMatrix::SetUnit(mtx);
+	izanagi::math::SMatrix mtx;
+	izanagi::math::SMatrix::SetUnit(mtx);
 
 	for (size_t i = 0; i < COUNTOF(tbl); i++) {
-		izanagi::SQuat quat;
-		izanagi::SQuat::SetQuatFromRadAxis(
+		izanagi::math::SQuat quat;
+		izanagi::math::SQuat::SetQuatFromRadAxis(
 			quat,
 			IZ_DEG2RAD(tbl[i].w), tbl[i].x, tbl[i].y, tbl[i].z);
 
-		izanagi::SMatrix tmp;
-		izanagi::SQuat::MatrixFromQuat(tmp, quat);
+		izanagi::math::SMatrix tmp;
+		izanagi::math::SQuat::MatrixFromQuat(tmp, quat);
 
 		IZ_PRINTF("-----------\n");
 		for (IZ_UINT n = 0; n < 16; n++) {
@@ -46,7 +46,7 @@ void test1()
 			}
 		}
 
-		izanagi::SMatrix::Mul(mtx, mtx, tmp);
+		izanagi::math::SMatrix::Mul(mtx, mtx, tmp);
 	}
 
 	IZ_PRINTF("============\n");
@@ -60,8 +60,8 @@ void test1()
 		}
 	}
 
-	izanagi::SQuat quatEnd;
-	izanagi::SQuat::QuatFromMatrix(quatEnd, mtx);
+	izanagi::math::SQuat quatEnd;
+	izanagi::math::SQuat::QuatFromMatrix(quatEnd, mtx);
 
 	IZ_PRINTF("quat: %f, %f, %f, %f\n", quatEnd.x, quatEnd.y, quatEnd.z, quatEnd.w); 
 }

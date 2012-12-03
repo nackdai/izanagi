@@ -39,11 +39,11 @@ void CStateConstColor::Render3D()
 	for (IZ_UINT i = 0; i < nPassNum; i++) {
 		IZ_ASSERT(m_pShader->BeginPass(i));
 		{
-			izanagi::SMatrix mtxL2W;
-			izanagi::SMatrix::SetUnit(mtxL2W);
+			izanagi::math::SMatrix mtxL2W;
+			izanagi::math::SMatrix::SetUnit(mtxL2W);
 			m_pShader->SetParamValue(m_hL2W, &mtxL2W, sizeof(mtxL2W));
 
-			const izanagi::SMatrix& mtxW2C = CMyCamera::GetInstance().GetRawInterface().GetParam().mtxW2C;
+			const izanagi::math::SMatrix& mtxW2C = CMyCamera::GetInstance().GetRawInterface().GetParam().mtxW2C;
 			m_pShader->SetParamValue(m_hW2C, &mtxW2C, sizeof(mtxW2C));
 		}
 

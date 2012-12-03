@@ -22,8 +22,8 @@ CStateNormalMap::~CStateNormalMap()
 // 描画.
 IZ_BOOL CStateNormalMap::Render(izanagi::graph::CGraphicsDevice* device)
 {
-	izanagi::SMatrix mtxL2W;
-	izanagi::SMatrix::SetUnit(mtxL2W);
+	izanagi::math::SMatrix mtxL2W;
+	izanagi::math::SMatrix::SetUnit(mtxL2W);
 
     device->SetTexture(0, m_Image->GetTexture(0));
     device->SetTexture(1, m_Image->GetTexture(1));
@@ -82,12 +82,12 @@ IZ_BOOL CStateNormalMap::Render(izanagi::graph::CGraphicsDevice* device)
 				// ライトの方向をローカル座標に変換する
 
 				// ライトの方向はワールド座標なので World -> Localマトリクスを計算する
-				izanagi::SMatrix mtxW2L;
-				izanagi::SMatrix::Inverse(mtxW2L, m_L2W);
+				izanagi::math::SMatrix mtxW2L;
+				izanagi::math::SMatrix::Inverse(mtxW2L, m_L2W);
 
 				// World -> Local
-				izanagi::SVector parallelLightLocalDir;
-				izanagi::SMatrix::ApplyXYZ(
+				izanagi::math::SVector parallelLightLocalDir;
+				izanagi::math::SMatrix::ApplyXYZ(
 					parallelLightLocalDir,
 					m_ParallelLight.vDir,
 					mtxW2L);
@@ -99,15 +99,15 @@ IZ_BOOL CStateNormalMap::Render(izanagi::graph::CGraphicsDevice* device)
 					sizeof(parallelLightLocalDir));
 
                 // L2V = L2W * W2V の逆行列を計算する
-                izanagi::SMatrix mtxV2L;
-                izanagi::SMatrix::Mul(mtxV2L, m_L2W, m_Camera.mtxW2V);
-                izanagi::SMatrix::Inverse(mtxV2L, mtxV2L);
+                izanagi::math::SMatrix mtxV2L;
+                izanagi::math::SMatrix::Mul(mtxV2L, m_L2W, m_Camera.mtxW2V);
+                izanagi::math::SMatrix::Inverse(mtxV2L, mtxV2L);
 
                 // ビュー座標系における視点は常に原点
-                izanagi::CVector eyePos(0.0f, 0.0f, 0.0f, 1.0f);
+                izanagi::math::CVector eyePos(0.0f, 0.0f, 0.0f, 1.0f);
 
                 // 視点のローカル座標を計算する
-                izanagi::SMatrix::Apply(eyePos, eyePos, mtxV2L);
+                izanagi::math::SMatrix::Apply(eyePos, eyePos, mtxV2L);
 
                 SetShaderParam(
 				    m_Shader,
@@ -195,7 +195,7 @@ IZ_BOOL CStateNormalMap::Enter(
 
 		// Parallel Light Direction
 		m_ParallelLight.vDir.Set(0.0f, 0.0f, -1.0f);
-		izanagi::SVector::Normalize(m_ParallelLight.vDir, m_ParallelLight.vDir);
+		izanagi::math::SVector::Normalize(m_ParallelLight.vDir, m_ParallelLight.vDir);
 
 		// マテリアル
 		m_Mtrl.vDiffuse.Set(1.0f, 1.0f, 1.0f, 1.0f);
@@ -203,7 +203,7 @@ IZ_BOOL CStateNormalMap::Enter(
 		m_Mtrl.vSpecular.Set(1.0f, 1.0f, 1.0f, 20.0f);
     }
 
-	izanagi::SMatrix::SetUnit(m_L2W);
+	izanagi::math::SMatrix::SetUnit(m_L2W);
 
 __EXIT__:
 	if (!result) {

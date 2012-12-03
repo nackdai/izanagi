@@ -110,7 +110,7 @@ int main(int argc, char* argv[])
 		for (IZ_UINT x = 0; x < width; x++) {
 #if 1
 			// 法線
-			izanagi::SVector nml;
+			izanagi::math::SVector nml;
 
 			// 高さ
 			IZ_FLOAT h = src[y * srcPitch + x * srcBPP] * div * option.scale;
@@ -125,7 +125,7 @@ int main(int argc, char* argv[])
 			IZ_FLOAT heightH = src[pos] * div * option.scale;
 
 			// 水平方向のベクトル
-			izanagi::CVector vecH(lengthPerPixel, 0.0f, heightH - h);
+			izanagi::math::CVector vecH(lengthPerPixel, 0.0f, heightH - h);
 
 			// 垂直方向の高さの参照の向き
 			IZ_BOOL isBottom = (y + 1 < height);
@@ -137,16 +137,16 @@ int main(int argc, char* argv[])
 			IZ_FLOAT heightV = src[pos] * div * option.scale;
 
 			// 垂直方向のベクトル
-			izanagi::CVector vecV(0.0f, lengthPerPixel, heightV - h);
+			izanagi::math::CVector vecV(0.0f, lengthPerPixel, heightV - h);
 
 			// 外積を計算
 			if ((isRight && isBottom)
 				|| (!isRight && !isBottom))
 			{
-				izanagi::SVector::Cross(nml, vecV, vecH);
+				izanagi::math::SVector::Cross(nml, vecV, vecH);
 			}
 			else {
-				izanagi::SVector::Cross(nml, vecH, vecV);
+				izanagi::math::SVector::Cross(nml, vecH, vecV);
 			}
 #else
 			// 右ピクセルの高さ
@@ -160,18 +160,18 @@ int main(int argc, char* argv[])
 			// 高さ
 			IZ_FLOAT h = src[y * srcPitch + x * srcBPP] * div * option.scale;
 
-			izanagi::SVector nml;
+			izanagi::math::SVector nml;
 
-			izanagi::CVector right(lengthPerPixel, 0.0f, rightHeight - h);
+			izanagi::math::CVector right(lengthPerPixel, 0.0f, rightHeight - h);
 
-			izanagi::CVector bottom(0.0f, lengthPerPixel, bottomHeight - h);
+			izanagi::math::CVector bottom(0.0f, lengthPerPixel, bottomHeight - h);
 
 			// 外積を計算
-			izanagi::SVector::Cross(nml, bottom, right);
+			izanagi::math::SVector::Cross(nml, bottom, right);
 #endif
 
 			// 正規化
-			izanagi::SVector::Normalize(nml, nml);
+			izanagi::math::SVector::Normalize(nml, nml);
 
 			// -1.0 - 1.0 のレンジを 0.0 - 1.0 のレンジに変換
 			nml.x = nml.x * 0.5f + 0.5f;

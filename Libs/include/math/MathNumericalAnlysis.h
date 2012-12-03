@@ -5,7 +5,10 @@
 #include <memory.h>
 #include "izDefs.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace math
+{
 	/** êîílâêÕ.
 	 */
 	class CNumericalAnalysis
@@ -39,6 +42,7 @@ namespace izanagi {
 			IZ_FLOAT threshold,
 			IZ_UINT loopCnt);
 	};
+}   // namespace math
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_MATH_NUMERICAL_ANALYSIS_H__)

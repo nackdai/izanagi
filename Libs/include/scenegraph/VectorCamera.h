@@ -19,8 +19,8 @@ namespace izanagi {
 		/** 初期化.
 		 */
 		void Init(
-			const SVector& pos,
-			const SVector& at,
+			const math::SVector& pos,
+			const math::SVector& at,
 			IZ_FLOAT fNear, IZ_FLOAT fFar,
 			IZ_FLOAT fov,
 			IZ_FLOAT aspect);
@@ -31,7 +31,7 @@ namespace izanagi {
 
 		/** 移動.
 		 */
-		void Translate(const SVector& trans);
+		void Translate(const math::SVector& trans);
 
 		/** X軸回転.
 		 */
@@ -48,41 +48,41 @@ namespace izanagi {
 		/** 任意軸回転.
 		 */
 		void Rotate(
-			const SVector& axis,
+			const math::SVector& axis,
 			IZ_FLOAT rad);
 
 		/** 位置指定.
 		 */
-		void SetPos(const SVector& pos);
+		void SetPos(const math::SVector& pos);
 
 	public:
 		/** カメラのX軸取得
 		 */
-		const SVector& GetX() const { return m_X; }
+		const math::SVector& GetX() const { return m_X; }
 
 		/** カメラのY軸取得
 		 */
-		const SVector& GetY() const { return m_Y; }
+		const math::SVector& GetY() const { return m_Y; }
 
 		/** カメラのZ軸取得
 		 */
-		const SVector& GetZ() const { return m_Z; }
+		const math::SVector& GetZ() const { return m_Z; }
 
 		/** カメラの位置取得
 		 */
-		const SVector& GetPos() const { return m_Pos; }
+		const math::SVector& GetPos() const { return m_Pos; }
 
 		/**
 		 */
-		const SMatrix& GetTransform() const { return m_Transform; }
+		const math::SMatrix& GetTransform() const { return m_Transform; }
 
 	private:
 		// 使わせない
 
 		void Init(
-			const SVector& vecPos,
-			const SVector& vecRef,
-			const SVector& vecUp,
+			const math::SVector& vecPos,
+			const math::SVector& vecRef,
+			const math::SVector& vecUp,
 			IZ_FLOAT fNear, IZ_FLOAT fFar,
 			IZ_FLOAT fFov,
 			IZ_FLOAT fAspect)
@@ -91,25 +91,25 @@ namespace izanagi {
 
 		void Init(const SCameraParam& sParam) {}
 
-		void SetAt(const SVector& vecAt) {}
+		void SetAt(const math::SVector& vecAt) {}
 
-		void SetUp(const SVector& vecUp) {}
+		void SetUp(const math::SVector& vecUp) {}
 
 	private:
-		SVector m_X;
+		math::SVector m_X;
 		
 		// NOTE
 		// m_Param.up の参照とすることで m_Param.up と同期するようにする
-		SVector& m_Y;
+		math::SVector& m_Y;
 
-		SVector m_Z;
+		math::SVector m_Z;
 
 		// NOTE
 		// m_Param.pos の参照とすることで m_Param.pos と同期するようにする
-		SVector& m_Pos;
+		math::SVector& m_Pos;
 
 		// カメラの変換マトリクス
-		SMatrix m_Transform;
+		math::SMatrix m_Transform;
 	};
 
 }	// namespace izanagi

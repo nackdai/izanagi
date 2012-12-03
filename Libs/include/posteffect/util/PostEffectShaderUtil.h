@@ -77,7 +77,7 @@ namespace izanagi {
 			pShader->SetMatrixArray(
                 device,
 				handle,
-				(const SMatrix*)pValue,
+				(const math::SMatrix*)pValue,
 				nElements);
 		}
 		else if (CPostEffectParamUtil::IsFloatType(type)) {
@@ -94,7 +94,7 @@ namespace izanagi {
 				pShader->SetVectorArray(
                     device,
 					handle,
-					(const SVector*)pValue,
+					(const math::SVector*)pValue,
 					nRow * nElements);
 			}
 		}

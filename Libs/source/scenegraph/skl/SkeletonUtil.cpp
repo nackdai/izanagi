@@ -7,7 +7,7 @@ namespace {
 	inline void _UpdatePose(
 		IZ_UINT paramType,
 		IZ_FLOAT* dst,
-		const SVector& src)
+		const math::SVector& src)
 	{
 		IZ_UINT paramNum = 0;
 		IZ_UINT paramPos = 0;
@@ -30,13 +30,13 @@ namespace {
 			paramPos = 3;
 			break;
 		case E_ANM_TRANSFORM_TYPE_XYZ:	// XWZのみ
-			SVector::CopyXYZ(
-				*(reinterpret_cast<SVector*>(dst)),
+			math::SVector::CopyXYZ(
+				*(reinterpret_cast<math::SVector*>(dst)),
 				src);
 			break;
 		case E_ANM_TRANSFORM_TYPE_XYZW:	// XYZWすべて
-			SVector::Copy(
-				*(reinterpret_cast<SVector*>(dst)),
+			math::SVector::Copy(
+				*(reinterpret_cast<math::SVector*>(dst)),
 				src);
 			break;
 		default:
@@ -54,7 +54,7 @@ void CSkeletonUtil::UpdatePose(
 	S_SKL_JOINT_POSE& pose,
 	IZ_UINT transformType,
 	IZ_UINT paramType,
-	const SVector& param)
+	const math::SVector& param)
 {
 	switch (transformType) {
 	case E_ANM_TRANSFORM_TYPE_TRANSLATE:

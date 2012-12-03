@@ -73,7 +73,7 @@ public:
 	PURE_VIRTUAL(
 		IZ_BOOL GetVertex(
 			IZ_UINT nIdx,
-			izanagi::SVector& vec,
+			izanagi::math::SVector& vec,
 			izanagi::E_MSH_VTX_FMT_TYPE type));
 
 	PURE_VIRTUAL(
@@ -116,7 +116,7 @@ public:
 	PURE_VIRTUAL(
 		void GetJointInvMtx(
 			IZ_UINT nIdx,
-			izanagi::SMatrix& mtx));
+			izanagi::math::SMatrix& mtx));
 		
 	/** ä÷êﬂÇÃépê®ÇéÊìæ.
 	 */

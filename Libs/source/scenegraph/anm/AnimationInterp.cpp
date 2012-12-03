@@ -214,13 +214,13 @@ void CAnimationInterp::UpdatePose(
 	IZ_UINT updateFlag,
 	CPoseUpdater& poseUpdater)
 {
-	SVector param;
+	math::SVector param;
 
 	CBit32Flag bitFlag(updateFlag);
 
 	// 姿勢更新
 	if (bitFlag.IsOn(E_SKL_JOINT_PARAM_SCALE)) {
-		SVector::SetXYZ(
+		math::SVector::SetXYZ(
 			param,
 			pose.scale[0], pose.scale[1], pose.scale[2]);
 
@@ -231,7 +231,7 @@ void CAnimationInterp::UpdatePose(
 			param);
 	}
 	if (bitFlag.IsOn(E_SKL_JOINT_PARAM_TRANSLATE)) {
-		SVector::SetXYZ(
+		math::SVector::SetXYZ(
 			param,
 			pose.trans[0], pose.trans[1], pose.trans[2]);
 

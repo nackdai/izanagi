@@ -26,7 +26,7 @@ public:
 
 	virtual void SetJointMatrix(
 		IZ_UINT nIdx,
-		const izanagi::SMatrix& mtx);
+		const izanagi::math::SMatrix& mtx);
 
 	virtual void CommitChanges();
 
@@ -42,7 +42,7 @@ private:
 	izanagi::IShader* m_pShader;
 
 	IZ_UINT m_nCnt;
-	izanagi::SMatrix m_Mtx[48];
+	izanagi::math::SMatrix m_Mtx[48];
 
 	izanagi::IZ_SHADER_HANDLE m_Handle;
 };
@@ -51,10 +51,10 @@ void CSampleMdlRenderHandler::BeginRenderMesh()
 {
 	m_nCnt = 0;
 
-	izanagi::SMatrix::SetUnit(m_Mtx[0]);
-	izanagi::SMatrix::SetUnit(m_Mtx[1]);
-	izanagi::SMatrix::SetUnit(m_Mtx[2]);
-	izanagi::SMatrix::SetUnit(m_Mtx[3]);
+	izanagi::math::SMatrix::SetUnit(m_Mtx[0]);
+	izanagi::math::SMatrix::SetUnit(m_Mtx[1]);
+	izanagi::math::SMatrix::SetUnit(m_Mtx[2]);
+	izanagi::math::SMatrix::SetUnit(m_Mtx[3]);
 
 	m_Handle = 0;
 }
@@ -65,9 +65,9 @@ void CSampleMdlRenderHandler::EndRenderMesh()
 
 void CSampleMdlRenderHandler::SetJointMatrix(
 	IZ_UINT nIdx,
-	const izanagi::SMatrix& mtx)
+	const izanagi::math::SMatrix& mtx)
 {
-	izanagi::SMatrix::Copy(m_Mtx[m_nCnt], mtx);
+	izanagi::math::SMatrix::Copy(m_Mtx[m_nCnt], mtx);
 	m_nCnt++;
 }
 
@@ -81,7 +81,7 @@ void CSampleMdlRenderHandler::CommitChanges()
 	m_pShader->SetParamValue(
 		m_Handle,
 		m_Mtx,
-		sizeof(izanagi::SMatrix) * m_nCnt);
+		sizeof(izanagi::math::SMatrix) * m_nCnt);
 
 	m_pShader->CommitChanges();
 }
@@ -202,7 +202,7 @@ IZ_BOOL CMaterialApp::InitInternal(
 
 		// Parallel Light Direction
 		m_ParallelLight.vDir.Set(-1.0f, -1.0f, -1.0f);
-		izanagi::SVector::Normalize(m_ParallelLight.vDir, m_ParallelLight.vDir);
+		izanagi::math::SVector::Normalize(m_ParallelLight.vDir, m_ParallelLight.vDir);
 
 		// マテリアル
 		izanagi::SMaterialParam mtrl;
@@ -270,17 +270,17 @@ IZ_BOOL CMaterialApp::InitInternal(
 
 	// カメラ
 	camera.Init(
-		izanagi::CVector(0.0f, 5.0f, CAMERA_Z, 1.0f),
-		izanagi::CVector(0.0f, 5.0f, 0.0f, 1.0f),
-		izanagi::CVector(0.0f, 1.0f, 0.0f, 1.0f),
+		izanagi::math::CVector(0.0f, 5.0f, CAMERA_Z, 1.0f),
+		izanagi::math::CVector(0.0f, 5.0f, 0.0f, 1.0f),
+		izanagi::math::CVector(0.0f, 1.0f, 0.0f, 1.0f),
 		1.0f,
 		500.0f,
-		izanagi::CMath::Deg2Rad(60.0f),
+		izanagi::math::CMath::Deg2Rad(60.0f),
 		(IZ_FLOAT)SCREEN_WIDTH / SCREEN_HEIGHT);
 	camera.Update();
 
     // L2W
-    izanagi::SMatrix::SetUnit(m_L2W);
+    izanagi::math::SMatrix::SetUnit(m_L2W);
 
 __EXIT__:
 	if (!result) {
@@ -321,7 +321,7 @@ void CMaterialApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 		// 位置は原点なので
 		m_RenderGraph->Register(
 			GetCamera(),
-			izanagi::CVector(),
+			izanagi::math::CVector(),
 			m_Mdl);
 	}
 	m_RenderGraph->EndRegister();
@@ -334,19 +334,19 @@ void CMaterialApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
 	// シェーダパラメータセット
 	{
-		const izanagi::SMatrix& mtxW2C = camera.GetParam().mtxW2C;
+		const izanagi::math::SMatrix& mtxW2C = camera.GetParam().mtxW2C;
 		_SetShaderParam(m_Shd, "g_mW2C", &mtxW2C, sizeof(mtxW2C));
 
 		{
 			// ライトの方向をローカル座標に変換する
 
 			// ライトの方向はワールド座標なので World -> Localマトリクスを計算する
-			izanagi::SMatrix mtxW2L;
-			izanagi::SMatrix::Inverse(mtxW2L, m_L2W);
+			izanagi::math::SMatrix mtxW2L;
+			izanagi::math::SMatrix::Inverse(mtxW2L, m_L2W);
 
 			// World -> Local
-			izanagi::SVector parallelLightLocalDir;
-			izanagi::SMatrix::ApplyXYZ(
+			izanagi::math::SVector parallelLightLocalDir;
+			izanagi::math::SMatrix::ApplyXYZ(
 				parallelLightLocalDir,
 				m_ParallelLight.vDir,
 				m_L2W);
@@ -358,15 +358,15 @@ void CMaterialApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 				sizeof(parallelLightLocalDir));
 
             // L2V = L2W * W2V の逆行列を計算する
-            izanagi::SMatrix mtxV2L;
-            izanagi::SMatrix::Mul(mtxV2L, m_L2W, camera.GetParam().mtxW2V);
-            izanagi::SMatrix::Inverse(mtxV2L, mtxV2L);
+            izanagi::math::SMatrix mtxV2L;
+            izanagi::math::SMatrix::Mul(mtxV2L, m_L2W, camera.GetParam().mtxW2V);
+            izanagi::math::SMatrix::Inverse(mtxV2L, mtxV2L);
 
             // ビュー座標系における視点は常に原点
-            izanagi::CVector eyePos(0.0f, 0.0f, 0.0f, 1.0f);
+            izanagi::math::CVector eyePos(0.0f, 0.0f, 0.0f, 1.0f);
 
             // 視点のローカル座標を計算する
-            izanagi::SMatrix::Apply(eyePos, eyePos, mtxV2L);
+            izanagi::math::SMatrix::Apply(eyePos, eyePos, mtxV2L);
 
             _SetShaderParam(
 				m_Shd,

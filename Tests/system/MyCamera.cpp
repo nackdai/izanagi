@@ -3,9 +3,9 @@
 CMyCamera CMyCamera::s_cInstance;
 
 void CMyCamera::Init(
-	const izanagi::CVector& vPos,
-	const izanagi::CVector& vRef,
-	const izanagi::CVector& vUp,
+	const izanagi::math::CVector& vPos,
+	const izanagi::math::CVector& vRef,
+	const izanagi::math::CVector& vUp,
 	IZ_FLOAT fNear, IZ_FLOAT fFar,
 	IZ_FLOAT fFov,
 	IZ_FLOAT fAspect)
@@ -17,13 +17,13 @@ void CMyCamera::Init(
 		fAspect);
 
 	// 注視点から視点への方向
-	izanagi::CVector vDir;
-	izanagi::SVector::Sub(
+	izanagi::math::CVector vDir;
+	izanagi::math::SVector::Sub(
 		vDir,
 		m_cCamera.GetParam().pos,
 		m_cCamera.GetParam().ref);
 
-	izanagi::SVector::Normalize(vDir, vDir);
+	izanagi::math::SVector::Normalize(vDir, vDir);
 
 	m_fPitch = -asinf(vDir.y);
 	m_fYaw = (vDir.x == 0.0f ? IZ_MATH_PI : IZ_MATH_PI + atan2f(vDir.z, vDir.x));
@@ -33,25 +33,25 @@ void CMyCamera::Init(
 void CMyCamera::Dolly(float fDistScale)
 {
 	// 視点と注視点の距離
-	float fLength = izanagi::SVector::Length2(m_cCamera.GetParam().pos, m_cCamera.GetParam().ref);
+	float fLength = izanagi::math::SVector::Length2(m_cCamera.GetParam().pos, m_cCamera.GetParam().ref);
 
 	// 視点から注視点への方向
-	izanagi::CVector vDir;
-	izanagi::SVector::Sub(
+	izanagi::math::CVector vDir;
+	izanagi::math::SVector::Sub(
 		vDir,
 		m_cCamera.GetParam().ref,
 		m_cCamera.GetParam().pos);
-	izanagi::SVector::Div(vDir, vDir, fLength);
+	izanagi::math::SVector::Div(vDir, vDir, fLength);
 
 	// スケーリング
 	// 注視点までの距離に応じる
 	fDistScale = fDistScale * fLength * 0.01f;
-	izanagi::SVector::Scale(vDir, vDir, fDistScale);
+	izanagi::math::SVector::Scale(vDir, vDir, fDistScale);
 
-	izanagi::SVector pos = m_cCamera.GetParam().pos;
+	izanagi::math::SVector pos = m_cCamera.GetParam().pos;
 
 	// 新しい視点
-	izanagi::SVector::Add(
+	izanagi::math::SVector::Add(
 		pos,
 		m_cCamera.GetParam().pos,
 		vDir);
@@ -63,14 +63,14 @@ void CMyCamera::Dolly(float fDistScale)
 void CMyCamera::Rotate(float fLatitude, float fLongitude)
 {
 	// 注視点から視点への方向
-	izanagi::CVector vDir;
-	izanagi::SVector::Sub(
+	izanagi::math::CVector vDir;
+	izanagi::math::SVector::Sub(
 		vDir,
 		m_cCamera.GetParam().pos,
 		m_cCamera.GetParam().ref);
 
 	// 半径
-	float fRadius = izanagi::SVector::Length(vDir);
+	float fRadius = izanagi::math::SVector::Length(vDir);
 
 	m_fPitch += fLatitude;
 	m_fYaw -= fLongitude;
@@ -85,18 +85,18 @@ void CMyCamera::Rotate(float fLatitude, float fLongitude)
 	float cosR = cosf(m_fRoll);
 	float sinR = sinf(m_fRoll);
 
-	izanagi::SVector vFwd;
+	izanagi::math::SVector vFwd;
 	vFwd.x = cosP * sinY;
 	vFwd.y = sinP;
 	vFwd.z = cosP * cosY;
 	vFwd.w = 0.0f;
 
-	izanagi::SVector::Normalize(vFwd, vFwd);
-	izanagi::SVector::ScaleXYZ(vFwd, vFwd, -fRadius);
+	izanagi::math::SVector::Normalize(vFwd, vFwd);
+	izanagi::math::SVector::ScaleXYZ(vFwd, vFwd, -fRadius);
 
-	izanagi::SVector pos = m_cCamera.GetParam().pos; 
+	izanagi::math::SVector pos = m_cCamera.GetParam().pos; 
 
-	izanagi::SVector::AddXYZ(pos, m_cCamera.GetParam().ref, vFwd);
+	izanagi::math::SVector::AddXYZ(pos, m_cCamera.GetParam().ref, vFwd);
 
 	m_cCamera.SetPos(pos);
 
@@ -110,16 +110,16 @@ void CMyCamera::Rotate(float fLatitude, float fLongitude)
 void CMyCamera::Rotate(float fLatitude, float fLongitude)
 {
 	// 注視点から視点への方向
-	izanagi::CVector vDir;
-	izanagi::SVector::Sub(
+	izanagi::math::CVector vDir;
+	izanagi::math::SVector::Sub(
 		vDir,
 		m_cCamera.pos,
 		m_cCamera.ref);
 
 	// 半径
-	float fRadius = SVector::Length(vDir);
+	float fRadius = math::SVector::Length(vDir);
 
-	izanagi::SVector::Normalize(vDir, vDir);
+	izanagi::math::SVector::Normalize(vDir, vDir);
 
 	// 緯度
 	float fTheta = MATH_PID2 - asinf(vDir.v[1]);	// PI / 2 - arcsin(y)
@@ -169,26 +169,26 @@ void CMyCamera::Rotate(float fLatitude, float fLongitude)
 void CMyCamera::Move(float fOffsetX, float fOffsetY)
 {
 	// 移動ベクトル
-	izanagi::SVector vOffset;
-	izanagi::SVector::Set(vOffset, fOffsetX, 0.0f, fOffsetY, 0.0f);
+	izanagi::math::SVector vOffset;
+	izanagi::math::SVector::Set(vOffset, fOffsetX, 0.0f, fOffsetY, 0.0f);
 
 	// カメラの回転を考慮する
-	izanagi::SVector vDir;
-	izanagi::SVector::Sub(vDir, m_cCamera.GetParam().ref, m_cCamera.GetParam().pos);
-	izanagi::SVector::Normalize(vDir, vDir);
+	izanagi::math::SVector vDir;
+	izanagi::math::SVector::Sub(vDir, m_cCamera.GetParam().ref, m_cCamera.GetParam().pos);
+	izanagi::math::SVector::Normalize(vDir, vDir);
 	vDir.y = 0.0f;
 
-	izanagi::SMatrix mRot;
-	izanagi::SMatrix::SetUnit(mRot);
-	izanagi::SMatrix::GetRotMatrixFromVector(mRot, vDir);
+	izanagi::math::SMatrix mRot;
+	izanagi::math::SMatrix::SetUnit(mRot);
+	izanagi::math::SMatrix::GetRotMatrixFromVector(mRot, vDir);
 
-	izanagi::SMatrix::Apply(vOffset, vOffset, mRot);
+	izanagi::math::SMatrix::Apply(vOffset, vOffset, mRot);
 
-	izanagi::SVector pos = m_cCamera.GetParam().pos;
-	izanagi::SVector ref = m_cCamera.GetParam().ref;
+	izanagi::math::SVector pos = m_cCamera.GetParam().pos;
+	izanagi::math::SVector ref = m_cCamera.GetParam().ref;
 
-	izanagi::SVector::Add(ref, m_cCamera.GetParam().ref, vOffset);
-	izanagi::SVector::Add(pos, m_cCamera.GetParam().pos, vOffset);
+	izanagi::math::SVector::Add(ref, m_cCamera.GetParam().ref, vOffset);
+	izanagi::math::SVector::Add(pos, m_cCamera.GetParam().pos, vOffset);
 
 	m_cCamera.SetPos(pos);
 	m_cCamera.SetAt(ref);

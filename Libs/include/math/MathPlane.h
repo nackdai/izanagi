@@ -4,7 +4,10 @@
 #include "MathVector.h"
 #include "MathMatrix.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace math
+{
 	struct SRay;
 
 	/**
@@ -97,6 +100,7 @@ namespace izanagi {
 		 */
 		IZ_BOOL IsPositive(const SVector& ptr) const;
 	};
+}   // namespace math
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_MATH_PLANE_H__)

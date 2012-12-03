@@ -3,7 +3,10 @@
 
 #include "MathVector.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace math
+{
 	// うーん・・・
 	class CVector : public SVector {
 	public:
@@ -144,6 +147,7 @@ namespace izanagi {
 			SVector::Cross(*this, *this, rhs);
 		}
 	};
+}   // namespace math
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI__MATH_CVECTOR_H__)

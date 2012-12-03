@@ -18,7 +18,7 @@ namespace animation {
 
 	IZ_FLOAT CFuncCurveInterpolater::GetValue(IZ_FLOAT t)
 	{
-		typedef IZ_FLOAT (*Func)(IZ_FLOAT, const SVector&);
+		typedef IZ_FLOAT (*Func)(IZ_FLOAT, const math::SVector&);
 
 		static Func funcs[] =
 		{

@@ -140,9 +140,9 @@ namespace graph
 	    }
 
         // 行列を設定
-	    virtual IZ_BOOL SetMatrix(CGraphicsDevice* device, SHADER_PARAM_HANDLE handle, const SMatrix& m)
+	    virtual IZ_BOOL SetMatrix(CGraphicsDevice* device, SHADER_PARAM_HANDLE handle, const math::SMatrix& m)
 	    {
-		    IZ_C_ASSERT(sizeof(D3DXMATRIX) == sizeof(SMatrix));
+		    IZ_C_ASSERT(sizeof(D3DXMATRIX) == sizeof(math::SMatrix));
 
 		    HRESULT hr = m_ConstTable->SetMatrix(
 						    GetDeviceRawInterface(device),
@@ -153,9 +153,9 @@ namespace graph
 	    }
 
         // 行列を設定
-	    virtual IZ_BOOL SetMatrixArray(CGraphicsDevice* device, SHADER_PARAM_HANDLE handle, const SMatrix* pM, IZ_UINT num)
+	    virtual IZ_BOOL SetMatrixArray(CGraphicsDevice* device, SHADER_PARAM_HANDLE handle, const math::SMatrix* pM, IZ_UINT num)
 	    {
-		    IZ_C_ASSERT(sizeof(D3DXMATRIX) == sizeof(SMatrix));
+		    IZ_C_ASSERT(sizeof(D3DXMATRIX) == sizeof(math::SMatrix));
 
 		    HRESULT hr = m_ConstTable->SetMatrixArray(
 						    GetDeviceRawInterface(device),
@@ -166,9 +166,9 @@ namespace graph
 	    }
 
         // 4D ベクトルを設定
-	    virtual IZ_BOOL SetVector(CGraphicsDevice* device, SHADER_PARAM_HANDLE handle, const SVector& v)
+	    virtual IZ_BOOL SetVector(CGraphicsDevice* device, SHADER_PARAM_HANDLE handle, const math::SVector& v)
 	    {
-		    IZ_C_ASSERT(sizeof(D3DXVECTOR4) == sizeof(SVector));
+		    IZ_C_ASSERT(sizeof(D3DXVECTOR4) == sizeof(math::SVector));
 
 		    HRESULT hr = m_ConstTable->SetVector(
 						    GetDeviceRawInterface(device),
@@ -179,9 +179,9 @@ namespace graph
 	    }
 
         // 4D ベクトルを設定
-	    virtual IZ_BOOL SetVectorArray(CGraphicsDevice* device, SHADER_PARAM_HANDLE handle, const SVector* pV, IZ_UINT num)
+	    virtual IZ_BOOL SetVectorArray(CGraphicsDevice* device, SHADER_PARAM_HANDLE handle, const math::SVector* pV, IZ_UINT num)
 	    {
-		    IZ_C_ASSERT(sizeof(D3DXVECTOR4) == sizeof(SVector));
+		    IZ_C_ASSERT(sizeof(D3DXVECTOR4) == sizeof(math::SVector));
 
 		    HRESULT hr = m_ConstTable->SetVectorArray(
 						    GetDeviceRawInterface(device),

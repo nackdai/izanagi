@@ -3,7 +3,10 @@
 #include "math/MathPlane.h"
 #include "math/MathCVector.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace math
+{
 	CTriangle::CTriangle()
 	{
 		a = b = c = d = padding = 0.0f;
@@ -46,8 +49,8 @@ namespace izanagi {
 		pt[1].Set(point1.x, point1.y, point1.z);
 		pt[2].Set(point2.x, point2.y, point2.z);
 
-		izanagi::CVector dir0(pt[1], pt[0], CVector::INIT_SUB);
-		izanagi::CVector dir1(pt[2], pt[0], CVector::INIT_SUB);
+		CVector dir0(pt[1], pt[0], CVector::INIT_SUB);
+		CVector dir1(pt[2], pt[0], CVector::INIT_SUB);
 
 		SVector::Cross(nml, dir0, dir1);
 		SVector::Normalize(nml, nml);
@@ -152,4 +155,5 @@ namespace izanagi {
 		IZ_BOOL isCross = GetCrossPoint(ray, tmp);
 		return isCross;
 	}
+}   // namespace math
 }	// namespace izanagi

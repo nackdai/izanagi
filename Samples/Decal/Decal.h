@@ -13,8 +13,8 @@ class CDecal : public izanagi::CObject
 public:
 	static CDecal* Create(
 		izanagi::IMemoryAllocator* allocator,
-		const izanagi::SVector& point,
-		const izanagi::SVector& normal,
+		const izanagi::math::SVector& point,
+		const izanagi::math::SVector& normal,
 		IZ_FLOAT rectangleLengthX,
 		IZ_FLOAT rectangleLengthZ);
 
@@ -28,28 +28,28 @@ private:
 
 public:
 	void SetRectangle(
-		const izanagi::SVector& point,
-		const izanagi::SVector& normal,
+		const izanagi::math::SVector& point,
+		const izanagi::math::SVector& normal,
 		IZ_FLOAT rectangleLengthX,
 		IZ_FLOAT rectangleLengthZ);
 
 	void DoScissoring(
-		const izanagi::CTriangle tri[],
+		const izanagi::math::CTriangle tri[],
 		IZ_UINT triNum);
 
 	void CreateGraphicsObject(izanagi::graph::CGraphicsDevice* device);
 
 	void Draw(izanagi::graph::CGraphicsDevice* device);
 
-	const izanagi::SVector& GetCenter() const;
+	const izanagi::math::SVector& GetCenter() const;
 
 private:
 	void ComputeNewTriNumByScissoring(
-		const izanagi::CTriangle tri[],
+		const izanagi::math::CTriangle tri[],
 		IZ_UINT triNum);
 
 private:
-	typedef std::vector<izanagi::CTriangle, izanagi::STLMemoryAllocator<izanagi::CTriangle> > TriangleVector;
+	typedef std::vector<izanagi::math::CTriangle, izanagi::STLMemoryAllocator<izanagi::math::CTriangle> > TriangleVector;
 
 	struct STriListProxy
 	{
@@ -77,7 +77,7 @@ private:
 
 	izanagi::IMemoryAllocator* m_Allocator;
 
-	izanagi::CRectangle m_Rectangle;
+	izanagi::math::CRectangle m_Rectangle;
 
 	enum {
 		PLANE_LEFT,
@@ -90,13 +90,13 @@ private:
 		PLANE_NUM,
 	};
 
-	izanagi::CPlane m_Planes[PLANE_NUM];
+	izanagi::math::CPlane m_Planes[PLANE_NUM];
 
 	IZ_UINT m_TriNum;
-	izanagi::CTriangle* m_Triangles;
+	izanagi::math::CTriangle* m_Triangles;
 
 	struct SVtx {
-		izanagi::SVector point;
+		izanagi::math::SVector point;
 		IZ_COLOR color;
 		IZ_FLOAT uv[2];
 	};

@@ -3,7 +3,10 @@
 
 #include "izStd.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace math
+{
 	// NOTE
     // 単精度浮動小数
     // +-----------+-----------+-----------+
@@ -220,6 +223,7 @@ namespace izanagi {
 			};
 		};
 	};
+}   // namespace math
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_MATH_MATH_HALF_FLOAT_H__)

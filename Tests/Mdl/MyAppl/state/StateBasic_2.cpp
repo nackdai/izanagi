@@ -24,7 +24,7 @@ public:
 
 	void SetJointMatrix(
 		IZ_UINT nIdx,
-		const izanagi::SMatrix& mtx);
+		const izanagi::math::SMatrix& mtx);
 
 	void CommitChanges();
 
@@ -38,18 +38,18 @@ private:
 	CSkinShader* m_pShader;
 
 	IZ_UINT m_nCnt;
-	//izanagi::SVector m_Vec[12];
-	izanagi::SMatrix m_Vec[4];
+	//izanagi::math::SVector m_Vec[12];
+	izanagi::math::SMatrix m_Vec[4];
 };
 
 void CTestMdlRenderHandler::BeginRenderMesh()
 {
 	m_nCnt = 0;
 
-	izanagi::SMatrix::SetUnit(m_Vec[0]);
-	izanagi::SMatrix::SetUnit(m_Vec[1]);
-	izanagi::SMatrix::SetUnit(m_Vec[2]);
-	izanagi::SMatrix::SetUnit(m_Vec[3]);
+	izanagi::math::SMatrix::SetUnit(m_Vec[0]);
+	izanagi::math::SMatrix::SetUnit(m_Vec[1]);
+	izanagi::math::SMatrix::SetUnit(m_Vec[2]);
+	izanagi::math::SMatrix::SetUnit(m_Vec[3]);
 }
 
 void CTestMdlRenderHandler::EndRenderMesh()
@@ -58,7 +58,7 @@ void CTestMdlRenderHandler::EndRenderMesh()
 
 void CTestMdlRenderHandler::SetJointMatrix(
 	IZ_UINT nIdx,
-	const izanagi::SMatrix& mtx)
+	const izanagi::math::SMatrix& mtx)
 {
 #if 0
 	izanagi::CopyVector(
@@ -73,7 +73,7 @@ void CTestMdlRenderHandler::SetJointMatrix(
 
 	m_nCnt += 3;
 #else
-	izanagi::SMatrix::Copy(m_Vec[m_nCnt], mtx);
+	izanagi::math::SMatrix::Copy(m_Vec[m_nCnt], mtx);
 	m_nCnt++;
 #endif
 }
@@ -133,16 +133,16 @@ void CStateBasicEx2::Render3D()
 	// シェーダパラメータセット
 #if 0
 	{
-		izanagi::SMatrix mL2W;
-		SMatrix::SetUnit(mL2W);
+		izanagi::math::SMatrix mL2W;
+		math::SMatrix::SetUnit(mL2W);
 		m_pShader->SetL2W(mL2W);
 
 		m_pShader->SetW2C(CMyCamera::GetInstance().GetRawInterface().GetParam().mtxW2C);
 	}
 #elif 1
 	{
-		izanagi::SMatrix mL2W;
-		izanagi::SMatrix::SetUnit(mL2W);
+		izanagi::math::SMatrix mL2W;
+		izanagi::math::SMatrix::SetUnit(mL2W);
 		//izanagi::SetScaleMatrix(mL2W, 0.2f, 0.2f, 0.2f);
 		m_pShader->SetL2W(mL2W);
 
@@ -150,8 +150,8 @@ void CStateBasicEx2::Render3D()
 		m_pShader->SetCameraPos(CMyCamera::GetInstance().GetRawInterface().GetParam().pos);
 	}
 #else
-		izanagi::SMatrix mL2W;
-		izanagi::SMatrix::SetUnit(mL2W);
+		izanagi::math::SMatrix mL2W;
+		izanagi::math::SMatrix::SetUnit(mL2W);
 		m_pShader->SetL2W(mL2W);
 
 		m_pShader->SetW2C(CMyCamera::GetInstance().GetRawInterface().GetParam().mtxW2C);
@@ -283,13 +283,13 @@ IZ_BOOL CStateBasicEx2::Enter(izanagi::IMemoryAllocator* allocator, void* val)
 		izanagi::SParallelLightParam sParallel;
 		{
 			sParallel.vDir.Set(-1.0f, -1.0f, -1.0f, 0.0f);
-			SVector::Normalize(sParallel.vDir, sParallel.vDir);
+			math::SVector::Normalize(sParallel.vDir, sParallel.vDir);
 
 			sParallel.color.Set(1.0f, 1.0f, 1.0f, 1.0f);
 		}
 
 		izanagi::SAmbientLightParam sAmbient;
-		izanagi::SVector::SetZero(sAmbient.color);
+		izanagi::math::SVector::SetZero(sAmbient.color);
 		//sAmbient.color.Set(1.0f, 1.0f, 1.0f, 1.0f);
 
 		// マテリアル
@@ -314,13 +314,13 @@ IZ_BOOL CStateBasicEx2::Enter(izanagi::IMemoryAllocator* allocator, void* val)
 		izanagi::SParallelLightParam sParallel;
 		{
 			sParallel.vDir.Set(-1.0f, -1.0f, -1.0f, 0.0f);
-			izanagi::SVector::Normalize(sParallel.vDir, sParallel.vDir);
+			izanagi::math::SVector::Normalize(sParallel.vDir, sParallel.vDir);
 
 			sParallel.color.Set(1.0f, 1.0f, 1.0f, 1.0f);
 		}
 
 		izanagi::SAmbientLightParam sAmbient;
-		izanagi::SVector::SetZero(sAmbient.color);
+		izanagi::math::SVector::SetZero(sAmbient.color);
 		//sAmbient.color.Set(1.0f, 1.0f, 1.0f, 1.0f);
 
 		// マテリアル

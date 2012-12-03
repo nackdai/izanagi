@@ -58,7 +58,7 @@ CCrossMapProxy::~CCrossMapProxy()
 // XYから反射ベクトルを取得.
 void CCrossMapProxy::getRef(
 	IZ_UINT x, IZ_UINT y,
-	izanagi::SVector& ref,
+	izanagi::math::SVector& ref,
 	izanagi::graph::E_GRAPH_CUBE_TEX_FACE face/*= izanagi::graph::E_GRAPH_CUBE_TEX_FACE_NUM*/)
 {
     // NOTE
@@ -174,7 +174,7 @@ void CCrossMapProxy::getRef(
         }
     }
 
-	izanagi::SVector::Normalize(ref, ref);
+	izanagi::math::SVector::Normalize(ref, ref);
 }
 
 #define _1ST_COLUMN_REAL_X(x, w) (x)

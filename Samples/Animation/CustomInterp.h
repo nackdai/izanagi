@@ -13,7 +13,7 @@ public:
 		const izanagi::S_ANM_KEY** keys);
 
 	static void InterpVector(
-		izanagi::SVector& ret,
+		izanagi::math::SVector& ret,
 		IZ_FLOAT time,
 		IZ_UINT keyNum,
 		IZ_UINT paramPos,

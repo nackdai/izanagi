@@ -106,11 +106,11 @@ IZ_BOOL CSphere::CreateTriangles(
 	m_TriNum = triNum;
 
 	// 三角形を確保
-	m_Triangles = (izanagi::CTriangle*)ALLOC_ZERO(allocator, sizeof(izanagi::CTriangle) * triNum);
+	m_Triangles = (izanagi::math::CTriangle*)ALLOC_ZERO(allocator, sizeof(izanagi::math::CTriangle) * triNum);
 	VRETURN(m_Triangles != IZ_NULL);
 
 	// 一時的な頂点格納用バッファを確保
-	izanagi::SVector* vtx = (izanagi::SVector*)ALLOC_ZERO(allocator, sizeof(izanagi::SVector)* vtxNum);
+	izanagi::math::SVector* vtx = (izanagi::math::SVector*)ALLOC_ZERO(allocator, sizeof(izanagi::math::SVector)* vtxNum);
 	VRETURN(vtx != IZ_NULL);
 
 	IZ_UINT vtxPos = 0;
@@ -141,13 +141,13 @@ IZ_BOOL CSphere::CreateTriangles(
 		for (IZ_UINT i = 0; i < slices; i++)
 		{
 			IZ_UINT idx = i;
-			izanagi::CVector p0(vtx[idx].x, vtx[idx].y, vtx[idx].z);
+			izanagi::math::CVector p0(vtx[idx].x, vtx[idx].y, vtx[idx].z);
 
 			idx = i + slices + 2;
-			izanagi::CVector p1(vtx[idx].x, vtx[idx].y, vtx[idx].z);
+			izanagi::math::CVector p1(vtx[idx].x, vtx[idx].y, vtx[idx].z);
 
 			idx = i + slices + 1;
-			izanagi::CVector p2(vtx[idx].x, vtx[idx].y, vtx[idx].z);
+			izanagi::math::CVector p2(vtx[idx].x, vtx[idx].y, vtx[idx].z);
 
 			m_Triangles[triPos].Set(p0, p1, p2);
 
@@ -164,13 +164,13 @@ IZ_BOOL CSphere::CreateTriangles(
 				// 上半分
 				{
 					IZ_UINT idx = pos;
-					izanagi::CVector p0(vtx[idx].x, vtx[idx].y, vtx[idx].z);
+					izanagi::math::CVector p0(vtx[idx].x, vtx[idx].y, vtx[idx].z);
 
 					idx = pos + 1;
-					izanagi::CVector p1(vtx[idx].x, vtx[idx].y, vtx[idx].z);
+					izanagi::math::CVector p1(vtx[idx].x, vtx[idx].y, vtx[idx].z);
 
 					idx = pos + slices + 1;
-					izanagi::CVector p2(vtx[idx].x, vtx[idx].y, vtx[idx].z);
+					izanagi::math::CVector p2(vtx[idx].x, vtx[idx].y, vtx[idx].z);
 
 					m_Triangles[triPos].Set(p0, p1, p2);
 				}
@@ -179,13 +179,13 @@ IZ_BOOL CSphere::CreateTriangles(
 				// 下半分
 				{
 					IZ_UINT idx = pos + slices + 1;
-					izanagi::CVector p0(vtx[idx].x, vtx[idx].y, vtx[idx].z);
+					izanagi::math::CVector p0(vtx[idx].x, vtx[idx].y, vtx[idx].z);
 
 					idx = pos + 1;
-					izanagi::CVector p1(vtx[idx].x, vtx[idx].y, vtx[idx].z);
+					izanagi::math::CVector p1(vtx[idx].x, vtx[idx].y, vtx[idx].z);
 
 					idx = pos + slices + 2;
-					izanagi::CVector p2(vtx[idx].x, vtx[idx].y, vtx[idx].z);
+					izanagi::math::CVector p2(vtx[idx].x, vtx[idx].y, vtx[idx].z);
 
 					m_Triangles[triPos].Set(p0, p1, p2);
 				}
@@ -200,13 +200,13 @@ IZ_BOOL CSphere::CreateTriangles(
 		for (IZ_UINT i = 0; i < slices; i++)
 		{
 			IZ_UINT idx = lastIdx + i;
-			izanagi::CVector p0(vtx[idx].x, vtx[idx].y, vtx[idx].z);
+			izanagi::math::CVector p0(vtx[idx].x, vtx[idx].y, vtx[idx].z);
 
 			idx = lastIdx - (slices + 1) + i;
-			izanagi::CVector p1(vtx[idx].x, vtx[idx].y, vtx[idx].z);
+			izanagi::math::CVector p1(vtx[idx].x, vtx[idx].y, vtx[idx].z);
 
 			idx = lastIdx - (slices + 1) + i + 1;
-			izanagi::CVector p2(vtx[idx].x, vtx[idx].y, vtx[idx].z);
+			izanagi::math::CVector p2(vtx[idx].x, vtx[idx].y, vtx[idx].z);
 
 			m_Triangles[triPos].Set(p0, p1, p2);
 
@@ -225,9 +225,9 @@ IZ_BOOL CSphere::Draw()
 }
 
 IZ_BOOL CSphere::GetCrossPoint(
-	const izanagi::CRay& ray,
-	izanagi::SVector& refPtr,
-	izanagi::SVector* normal)
+	const izanagi::math::CRay& ray,
+	izanagi::math::SVector& refPtr,
+	izanagi::math::SVector* normal)
 {
 #if 0
 	for (IZ_UINT i = 0; i < m_TriNum; i++)
@@ -237,7 +237,7 @@ IZ_BOOL CSphere::GetCrossPoint(
 			if (normal != IZ_NULL)
 			{
 				// 法線を取得
-				izanagi::SVector::CopyXYZ(*normal, m_Triangles[i].nml);
+				izanagi::math::SVector::CopyXYZ(*normal, m_Triangles[i].nml);
 			}
 
 			return IZ_TRUE;
@@ -248,7 +248,7 @@ IZ_BOOL CSphere::GetCrossPoint(
 #else
 	IZ_FLOAT minLen = IZ_FLOAT_MAX;
 
-	izanagi::CVector tmpPtr;
+	izanagi::math::CVector tmpPtr;
 	IZ_BOOL isCross = IZ_FALSE;
 	IZ_UINT crossTriPos = 0;
 
@@ -258,7 +258,7 @@ IZ_BOOL CSphere::GetCrossPoint(
 		{
 			isCross = IZ_TRUE;
 
-			IZ_FLOAT len = izanagi::SVector::Length2(ray.p, tmpPtr);
+			IZ_FLOAT len = izanagi::math::SVector::Length2(ray.p, tmpPtr);
 			if (len < minLen)
 			{
 				minLen = len;
@@ -274,7 +274,7 @@ IZ_BOOL CSphere::GetCrossPoint(
 		if (normal != IZ_NULL)
 		{
 			// 法線を取得
-			izanagi::SVector::CopyXYZ(
+			izanagi::math::SVector::CopyXYZ(
 				*normal,
 				m_Triangles[crossTriPos].nml);
 		}

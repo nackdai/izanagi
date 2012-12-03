@@ -242,8 +242,8 @@ void CDebugMeshCylinder::ComputeVtx(
 	IZ_FLOAT fY,
 	IZ_FLOAT fLongitude)	// 経度
 {
-	IZ_FLOAT fSinLong = CMath::SinF(fLongitude);
-	IZ_FLOAT fCosLong = CMath::CosF(fLongitude);
+	IZ_FLOAT fSinLong = math::CMath::SinF(fLongitude);
+	IZ_FLOAT fCosLong = math::CMath::CosF(fLongitude);
 
 	// 位置
 	if (IsPos(flag)) {

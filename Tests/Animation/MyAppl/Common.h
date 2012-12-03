@@ -63,7 +63,7 @@ public:
 
 	inline void SetJointMatrix(
 		IZ_UINT nIdx,
-		const izanagi::SMatrix& mtx);
+		const izanagi::math::SMatrix& mtx);
 
 	inline void CommitChanges();
 
@@ -79,7 +79,7 @@ private:
 	izanagi::IShader* m_pShader;
 
 	IZ_UINT m_nCnt;
-	izanagi::SMatrix m_Mtx[48];
+	izanagi::math::SMatrix m_Mtx[48];
 
 	izanagi::IZ_SHADER_HANDLE m_Handle;
 };
@@ -88,10 +88,10 @@ void CTestMdlRenderHandler::BeginRenderMesh()
 {
 	m_nCnt = 0;
 
-	izanagi::SMatrix::SetUnit(m_Mtx[0]);
-	izanagi::SMatrix::SetUnit(m_Mtx[1]);
-	izanagi::SMatrix::SetUnit(m_Mtx[2]);
-	izanagi::SMatrix::SetUnit(m_Mtx[3]);
+	izanagi::math::SMatrix::SetUnit(m_Mtx[0]);
+	izanagi::math::SMatrix::SetUnit(m_Mtx[1]);
+	izanagi::math::SMatrix::SetUnit(m_Mtx[2]);
+	izanagi::math::SMatrix::SetUnit(m_Mtx[3]);
 
 	m_Handle = 0;
 }
@@ -102,9 +102,9 @@ void CTestMdlRenderHandler::EndRenderMesh()
 
 void CTestMdlRenderHandler::SetJointMatrix(
 	IZ_UINT nIdx,
-	const izanagi::SMatrix& mtx)
+	const izanagi::math::SMatrix& mtx)
 {
-	izanagi::SMatrix::Copy(m_Mtx[m_nCnt], mtx);
+	izanagi::math::SMatrix::Copy(m_Mtx[m_nCnt], mtx);
 	m_nCnt++;
 }
 
@@ -118,7 +118,7 @@ void CTestMdlRenderHandler::CommitChanges()
 	m_pShader->SetParamValue(
 		m_Handle,
 		m_Mtx,
-		sizeof(izanagi::SMatrix) * m_nCnt);
+		sizeof(izanagi::math::SMatrix) * m_nCnt);
 
 	m_pShader->CommitChanges();
 }

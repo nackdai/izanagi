@@ -29,8 +29,8 @@ public:
 
 	void Clear();
 
-	const izanagi::SVector& GetMin() { return m_vMin; }
-	const izanagi::SVector& GetMax() { return m_vMax; }
+	const izanagi::math::SVector& GetMin() { return m_vMin; }
+	const izanagi::math::SVector& GetMax() { return m_vMax; }
 
 	/** トライアングルリストで出力するかどうかを設定.
 	 */
@@ -77,8 +77,8 @@ protected:
 
 	void GetMinMaxPos(
 		IImporter* pImporter,
-		izanagi::SVector& vMin,
-		izanagi::SVector& vMax,
+		izanagi::math::SVector& vMin,
+		izanagi::math::SVector& vMax,
 		const SPrimSet& sPrimSet);
 
 	IZ_BOOL ExportPrimSet(
@@ -99,8 +99,8 @@ protected:
 
 	std::vector<IZ_UINT> m_ExportedVtx;
 
-	izanagi::SVector m_vMin;
-	izanagi::SVector m_vMax;
+	izanagi::math::SVector m_vMin;
+	izanagi::math::SVector m_vMax;
 
 	izanagi::S_MSH_HEADER m_Header;
 

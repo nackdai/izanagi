@@ -78,7 +78,7 @@ namespace izanagi {
 
 		// 直接頂点シェーダにテクスチャオフセットパラメータをセットする
 		IZ_BOOL SetTextureOffsetParameter(
-			const SVector* pVector,
+			const math::SVector* pVector,
 			IZ_UINT num);
 
 		// テクスチャオフセットパラメータをセットする

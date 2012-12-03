@@ -67,11 +67,11 @@ void CStateBasicGirl::Render3D()
 
 	// シェーダパラメータセット
 	{
-		izanagi::SMatrix mtxL2W;
-		izanagi::SMatrix::SetUnit(mtxL2W);
+		izanagi::math::SMatrix mtxL2W;
+		izanagi::math::SMatrix::SetUnit(mtxL2W);
 
-		const izanagi::SMatrix& mtxW2C = CMyCamera::GetInstance().GetRawInterface().GetParam().mtxW2C;
-		const izanagi::SVector& vecEye = CMyCamera::GetInstance().GetRawInterface().GetParam().pos;
+		const izanagi::math::SMatrix& mtxW2C = CMyCamera::GetInstance().GetRawInterface().GetParam().mtxW2C;
+		const izanagi::math::SVector& vecEye = CMyCamera::GetInstance().GetRawInterface().GetParam().pos;
 
 		_SetShaderParameter(m_pShader, "g_mL2W", &mtxL2W, sizeof(mtxL2W));
 		_SetShaderParameter(m_pShader, "g_mW2C", &mtxW2C, sizeof(mtxW2C));
@@ -80,7 +80,7 @@ void CStateBasicGirl::Render3D()
 
 	m_GeomSorter->BeginRegister();
 	{
-		izanagi::SVector pos;
+		izanagi::math::SVector pos;
 		pos.Set(0.0f, 0.0f, 0.0f);
 
 		m_GeomSorter->Register(
@@ -205,13 +205,13 @@ IZ_BOOL CStateBasicGirl::Enter(izanagi::IMemoryAllocator* allocator, void* val)
 		izanagi::SParallelLightParam sParallel;
 		{
 			sParallel.vDir.Set(-1.0f, -1.0f, -1.0f, 0.0f);
-			izanagi::SVector::Normalize(sParallel.vDir, sParallel.vDir);
+			izanagi::math::SVector::Normalize(sParallel.vDir, sParallel.vDir);
 
 			sParallel.color.Set(1.0f, 1.0f, 1.0f, 1.0f);
 		}
 
 		izanagi::SAmbientLightParam sAmbient;
-		izanagi::SVector::SetZero(sAmbient.color);
+		izanagi::math::SVector::SetZero(sAmbient.color);
 		//sAmbient.color.Set(1.0f, 1.0f, 1.0f, 1.0f);
 		
 		_SetShaderParameter(

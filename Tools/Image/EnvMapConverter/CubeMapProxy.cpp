@@ -40,13 +40,13 @@ CCubeMapProxy::~CCubeMapProxy()
 
 // 反射ベクトルからUVを取得.
 void CCubeMapProxy::getUVFromRef(
-	const izanagi::SVector& ref,
+	const izanagi::math::SVector& ref,
 	IZ_FLOAT& u, IZ_FLOAT& v)
 {
 	// 一番大きい値から面を決める
-	IZ_FLOAT x = izanagi::CMath::Absf(ref.x);
-	IZ_FLOAT y = izanagi::CMath::Absf(ref.y);
-	IZ_FLOAT z = izanagi::CMath::Absf(ref.z);
+	IZ_FLOAT x = izanagi::math::CMath::Absf(ref.x);
+	IZ_FLOAT y = izanagi::math::CMath::Absf(ref.y);
+	IZ_FLOAT z = izanagi::math::CMath::Absf(ref.z);
 
 	IZ_FLOAT maxVal = max(x, max(y, z));
 
@@ -111,8 +111,8 @@ void CCubeMapProxy::getUVFromRef(
 		break;
 	}
 
-	u = izanagi::CMath::Clamp(u, -1.0f, 1.0f);
-	v = izanagi::CMath::Clamp(v, -1.0f, 1.0f);
+	u = izanagi::math::CMath::Clamp(u, -1.0f, 1.0f);
+	v = izanagi::math::CMath::Clamp(v, -1.0f, 1.0f);
 
 	ChangeFace(face);
 
@@ -124,7 +124,7 @@ void CCubeMapProxy::getUVFromRef(
 // XYから反射ベクトルを取得.
 void CCubeMapProxy::getRef(
 	IZ_UINT x, IZ_UINT y,
-	izanagi::SVector& ref,
+	izanagi::math::SVector& ref,
 	izanagi::graph::E_GRAPH_CUBE_TEX_FACE face/*= izanagi::graph::E_GRAPH_CUBE_TEX_FACE_NUM*/)
 {
 	// [-1:1]に変換
@@ -187,7 +187,7 @@ void CCubeMapProxy::getRef(
 		break;
 	}
 
-	izanagi::SVector::Normalize(ref, ref);
+	izanagi::math::SVector::Normalize(ref, ref);
 
 	ChangeFace(face);
 }

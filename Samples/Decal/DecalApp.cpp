@@ -22,12 +22,12 @@ IZ_BOOL CDecalApp::InitInternal(
 
 	// カメラ
 	camera.Init(
-		izanagi::CVector(0.0f, 0.0f, -30.0, 1.0f),
-		izanagi::CVector(0.0f, 0.0f, 0.0f, 1.0f),
-		izanagi::CVector(0.0f, 1.0f, 0.0f, 1.0f),
+		izanagi::math::CVector(0.0f, 0.0f, -30.0, 1.0f),
+		izanagi::math::CVector(0.0f, 0.0f, 0.0f, 1.0f),
+		izanagi::math::CVector(0.0f, 1.0f, 0.0f, 1.0f),
 		1.0f,
 		500.0f,
-		izanagi::CMath::Deg2Rad(60.0f),
+		izanagi::math::CMath::Deg2Rad(60.0f),
 		(IZ_FLOAT)SCREEN_WIDTH / SCREEN_HEIGHT);
 	camera.Update();
 
@@ -51,17 +51,17 @@ IZ_BOOL CDecalApp::InitInternal(
 	// デカール
 	{
 		// デカールを貼る位置を計算する
-		izanagi::SVector decalPoint;
-		izanagi::SVector decalNormal;
+		izanagi::math::SVector decalPoint;
+		izanagi::math::SVector decalNormal;
 
-		const izanagi::SVector& pos = camera.GetPos();
-		const izanagi::SVector& ref = camera.GetParam().ref;
+		const izanagi::math::SVector& pos = camera.GetPos();
+		const izanagi::math::SVector& ref = camera.GetParam().ref;
 
 		// 適当にカメラ位置から原点へのレイを飛ばす
 		IZ_BOOL isCross = m_Sphere->GetCrossPoint(
-			izanagi::CRay(
+			izanagi::math::CRay(
 				pos,
-				izanagi::CVector(ref, pos, izanagi::CVector::INIT_SUB)),
+				izanagi::math::CVector(ref, pos, izanagi::math::CVector::INIT_SUB)),
 			decalPoint,
 			&decalNormal);
 		IZ_ASSERT(isCross);
@@ -156,15 +156,15 @@ void CDecalApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 		izanagi::graph::E_GRAPH_RS_CULLMODE,
 		izanagi::graph::E_GRAPH_CULL_NONE);
 
-	izanagi::SMatrix mtx;
-	izanagi::SMatrix::SetUnit(mtx);
+	izanagi::math::SMatrix mtx;
+	izanagi::math::SMatrix::SetUnit(mtx);
 
-	izanagi::SMatrix mtxDecalW2C;
+	izanagi::math::SMatrix mtxDecalW2C;
 	camera.GetOffsetV2C(
 		mtxDecalW2C,
 		m_Decal->GetCenter(),
 		1e-3f);
-	izanagi::SMatrix::Mul(
+	izanagi::math::SMatrix::Mul(
 		mtxDecalW2C,
 		camera.GetParam().mtxW2V,
 		mtxDecalW2C);

@@ -84,8 +84,8 @@ IZ_BOOL CStateBasic::Render3D()
 
 	// シェーダパラメータセット
 	{
-		izanagi::SMatrix mL2W;
-		izanagi::SMatrix::SetUnit(mL2W);
+		izanagi::math::SMatrix mL2W;
+		izanagi::math::SMatrix::SetUnit(mL2W);
 		m_pShader->SetL2W(mL2W);
 
 		m_pShader->SetW2C(CMyCamera::GetInstance().GetRawInterface().GetParam().mtxW2C);

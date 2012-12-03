@@ -50,8 +50,8 @@ IZ_BOOL CStateRimLight::Render3D()
 
 	// シェーダパラメータセット
 	{
-		izanagi::SMatrix mL2W;
-		izanagi::SMatrix::SetUnit(mL2W);
+		izanagi::math::SMatrix mL2W;
+		izanagi::math::SMatrix::SetUnit(mL2W);
 		m_pShader->SetL2W(mL2W);
 
 		m_pShader->SetW2C(CMyCamera::GetInstance().GetRawInterface().GetParam().mtxW2C);
@@ -111,13 +111,13 @@ IZ_BOOL CStateRimLight::Enter(izanagi::IMemoryAllocator* allocator, void* val)
 		{
 			//sParallel.vDir.Set(-1.0f, -1.0f, -1.0f, 0.0f);
 			sParallel.vDir.Set(0.0f, 0.0f, -1.0f, 0.0f);
-			izanagi::SVector::Normalize(sParallel.vDir, sParallel.vDir);
+			izanagi::math::SVector::Normalize(sParallel.vDir, sParallel.vDir);
 
 			sParallel.color.Set(0.5f, 0.5f, 0.5f, 1.0f);
 		}
 
 		izanagi::SAmbientLightParam sAmbient;
-		izanagi::SVector::SetZero(sAmbient.color);
+		izanagi::math::SVector::SetZero(sAmbient.color);
 
 		// マテリアル
 		izanagi::SMaterialParam sMtrl;

@@ -31,7 +31,7 @@ private:
     void RenderScene(
         izanagi::graph::CGraphicsDevice* device,
         izanagi::CDebugMesh* mesh,
-        const izanagi::SVector& position);
+        const izanagi::math::SVector& position);
 
 protected:
 	izanagi::CShaderBasic* m_Shader;

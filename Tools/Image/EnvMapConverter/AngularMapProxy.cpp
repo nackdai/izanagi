@@ -25,10 +25,10 @@ CAngularMapProxy::~CAngularMapProxy()
 
 // 反射ベクトルからUVを取得.
 void CAngularMapProxy::getUVFromRef(
-	const izanagi::SVector& ref,
+	const izanagi::math::SVector& ref,
 	IZ_FLOAT& u, IZ_FLOAT& v)
 {
-	if (izanagi::CMath::IsNearyEqual(ref.z, 1.0f)) {
+	if (izanagi::math::CMath::IsNearyEqual(ref.z, 1.0f)) {
 		// zが手前に向いているときは中心
 		u = 0.0f;
 		v = 0.0f;
@@ -50,8 +50,8 @@ void CAngularMapProxy::getUVFromRef(
 		u = ref.x * r / (sin + IZ_MATH_EPSILON);
 		v = ref.y * r / (sin + IZ_MATH_EPSILON);
 
-		u = izanagi::CMath::Clamp(u, -1.0f, 1.0f);
-		v = izanagi::CMath::Clamp(v, -1.0f, 1.0f);
+		u = izanagi::math::CMath::Clamp(u, -1.0f, 1.0f);
+		v = izanagi::math::CMath::Clamp(v, -1.0f, 1.0f);
 	}
 
 	u = (u + 1.0f) * 0.5f;
@@ -61,7 +61,7 @@ void CAngularMapProxy::getUVFromRef(
 // XYから反射ベクトルを取得.
 void CAngularMapProxy::getRef(
 	IZ_UINT x, IZ_UINT y,
-	izanagi::SVector& ref,
+	izanagi::math::SVector& ref,
 	izanagi::graph::E_GRAPH_CUBE_TEX_FACE face/*= izanagi::graph::E_GRAPH_CUBE_TEX_FACE_NUM*/)
 {
 	// [-1:1]に変換
@@ -70,7 +70,7 @@ void CAngularMapProxy::getRef(
 
 	IZ_FLOAT r = ::sqrtf(u * u + v * v);
 
-	if (izanagi::CMath::IsNearyEqualZero(r)) {
+	if (izanagi::math::CMath::IsNearyEqualZero(r)) {
 		// 中心位置の場合は正面を向く
 		ref.x = 0.0f;
 		ref.y = 0.0f;

@@ -3,8 +3,8 @@
 
 CDecal* CDecal::Create(
 	izanagi::IMemoryAllocator* allocator,
-	const izanagi::SVector& point,
-	const izanagi::SVector& normal,
+	const izanagi::math::SVector& point,
+	const izanagi::math::SVector& normal,
 	IZ_FLOAT rectangleLengthX,
 	IZ_FLOAT rectangleLengthZ)
 {
@@ -49,8 +49,8 @@ CDecal::~CDecal()
 }
 
 void CDecal::SetRectangle(
-	const izanagi::SVector& point,
-	const izanagi::SVector& normal,
+	const izanagi::math::SVector& point,
+	const izanagi::math::SVector& normal,
 	IZ_FLOAT rectangleLengthX,
 	IZ_FLOAT rectangleLengthZ)
 {
@@ -60,31 +60,31 @@ void CDecal::SetRectangle(
 		rectangleLengthZ);
 
 	// 矩形の法線が指定された法線に一致する回転を計算する
-	izanagi::SQuat rotQuat;
-	izanagi::SQuat::RotationArc(
+	izanagi::math::SQuat rotQuat;
+	izanagi::math::SQuat::RotationArc(
 		rotQuat,
 		m_Rectangle.nml,
 		normal);
 
 	// 矩形の法線が指定された法線に一致するように回転
-	izanagi::SMatrix rotMtx;
-	izanagi::SQuat::MatrixFromQuat(rotMtx, rotQuat);
+	izanagi::math::SMatrix rotMtx;
+	izanagi::math::SQuat::MatrixFromQuat(rotMtx, rotQuat);
 	m_Rectangle.Transform(rotMtx);
 
 	IZ_FLOAT width = m_Rectangle.GetWidth() * 0.5f;
 	IZ_FLOAT height = m_Rectangle.GetHeight() * 0.5f;
 
-	const izanagi::SVector& t = m_Rectangle.GetX();
-	const izanagi::SVector& b = m_Rectangle.GetY();
-	const izanagi::SVector& n = m_Rectangle.nml;
+	const izanagi::math::SVector& t = m_Rectangle.GetX();
+	const izanagi::math::SVector& b = m_Rectangle.GetY();
+	const izanagi::math::SVector& n = m_Rectangle.nml;
 
-	izanagi::CVector minusT(-t.x, -t.y, -t.z, 0.0f);
-	izanagi::CVector minusB(-b.x, -b.y, -b.z, 0.0f);
-	izanagi::CVector minusN(-n.x, -n.y, -n.z, 0.0f);
+	izanagi::math::CVector minusT(-t.x, -t.y, -t.z, 0.0f);
+	izanagi::math::CVector minusB(-b.x, -b.y, -b.z, 0.0f);
+	izanagi::math::CVector minusN(-n.x, -n.y, -n.z, 0.0f);
 
-	IZ_FLOAT dotTP = izanagi::SVector::Dot(t, point);
-	IZ_FLOAT dotBP = izanagi::SVector::Dot(b, point);
-	IZ_FLOAT dotNP = izanagi::SVector::Dot(n, point);
+	IZ_FLOAT dotTP = izanagi::math::SVector::Dot(t, point);
+	IZ_FLOAT dotBP = izanagi::math::SVector::Dot(b, point);
+	IZ_FLOAT dotNP = izanagi::math::SVector::Dot(n, point);
 
 	// NOTE
 	// +-----> T
@@ -113,7 +113,7 @@ void CDecal::SetRectangle(
 }
 
 void CDecal::DoScissoring(
-	const izanagi::CTriangle tri[],
+	const izanagi::math::CTriangle tri[],
 	IZ_UINT triNum)
 {
 #ifndef ENABLE_STL
@@ -133,18 +133,18 @@ void CDecal::DoScissoring(
 
 	// 一時的なバッファ
 #ifdef ENABLE_STL
-	izanagi::CTriangle triBuf[2];
+	izanagi::math::CTriangle triBuf[2];
 
 	TriangleVector* triDst = &triListProxy.Get(tmpBufPos);
 #else
-	izanagi::CTriangle* tmp[2];
+	izanagi::math::CTriangle* tmp[2];
 	{
-		tmp[0] = (izanagi::CTriangle*)ALLOC_ZERO(m_Allocator, sizeof(izanagi::CTriangle) * m_TriNum);
-		tmp[1] = (izanagi::CTriangle*)ALLOC_ZERO(m_Allocator, sizeof(izanagi::CTriangle) * m_TriNum);
+		tmp[0] = (izanagi::math::CTriangle*)ALLOC_ZERO(m_Allocator, sizeof(izanagi::math::CTriangle) * m_TriNum);
+		tmp[1] = (izanagi::math::CTriangle*)ALLOC_ZERO(m_Allocator, sizeof(izanagi::math::CTriangle) * m_TriNum);
 	}
-	izanagi::CTriangle* triDst = tmp[tmpBufPos];
+	izanagi::math::CTriangle* triDst = tmp[tmpBufPos];
 #endif
-	const izanagi::CTriangle* triSrc = tri;
+	const izanagi::math::CTriangle* triSrc = tri;
 	IZ_UINT srcNum = triNum;
 
 	tmpBufPos = 1 - tmpBufPos;
@@ -205,9 +205,9 @@ void CDecal::DoScissoring(
 
 	if (m_TriNum > 0)
 	{
-		m_Triangles = (izanagi::CTriangle*)ALLOC_ZERO(m_Allocator, sizeof(izanagi::CTriangle) * m_TriNum);
+		m_Triangles = (izanagi::math::CTriangle*)ALLOC_ZERO(m_Allocator, sizeof(izanagi::math::CTriangle) * m_TriNum);
 
-		memcpy(m_Triangles, &triSrc[0], sizeof(izanagi::CTriangle) * m_TriNum);
+		memcpy(m_Triangles, &triSrc[0], sizeof(izanagi::math::CTriangle) * m_TriNum);
 
 		m_NeedCreateGraphicsObject = IZ_TRUE;
 	}
@@ -241,7 +241,7 @@ void CDecal::CreateGraphicsObject(izanagi::graph::CGraphicsDevice* device)
 	IZ_ASSERT(m_VB != IZ_NULL);
 
 	struct {
-		izanagi::SVector pos;
+		izanagi::math::SVector pos;
 		IZ_COLOR color;
 		IZ_FLOAT uv[2];
 	}* data = IZ_NULL;
@@ -251,7 +251,7 @@ void CDecal::CreateGraphicsObject(izanagi::graph::CGraphicsDevice* device)
 
 		for (IZ_UINT i = 0; i < m_TriNum; i++)
 		{
-			const izanagi::CTriangle& tri = m_Triangles[i];
+			const izanagi::math::CTriangle& tri = m_Triangles[i];
 
 			for (IZ_UINT n = 0; n < 3; n++)
 			{
@@ -314,13 +314,13 @@ void CDecal::Draw(izanagi::graph::CGraphicsDevice* device)
 #endif
 }
 
-const izanagi::SVector& CDecal::GetCenter() const
+const izanagi::math::SVector& CDecal::GetCenter() const
 {
 	return m_Rectangle.pt;
 }
 
 void CDecal::ComputeNewTriNumByScissoring(
-	const izanagi::CTriangle tri[],
+	const izanagi::math::CTriangle tri[],
 	IZ_UINT triNum)
 {
 #if 1
@@ -338,7 +338,7 @@ void CDecal::ComputeNewTriNumByScissoring(
 
 	for (IZ_UINT i = 0; i < triNum; i++)
 	{
-		IZ_FLOAT dot = izanagi::SVector::Dot(
+		IZ_FLOAT dot = izanagi::math::SVector::Dot(
 			m_Rectangle.nml,
 			tri[i].nml);
 

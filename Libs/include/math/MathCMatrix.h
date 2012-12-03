@@ -3,7 +3,10 @@
 
 #include "MathMatrix.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace math
+{
 	// うーん・・・
 	class CMatrix : public SMatrix {
 	public:
@@ -247,6 +250,7 @@ namespace izanagi {
 			SMatrix::Dump(*this);
 		}
 	};
+}   // namespace math
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI__MATH_CMATRIX_H__)

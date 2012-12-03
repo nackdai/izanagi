@@ -38,7 +38,7 @@ namespace izanagi {
 		PURE_VIRTUAL(
 			void SetJointMatrix(
 				IZ_UINT nIdx,
-				const SMatrix& mtx));
+				const math::SMatrix& mtx));
 
 		PURE_VIRTUAL(void CommitChanges());
 

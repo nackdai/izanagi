@@ -19,8 +19,8 @@ CPostEffectVS::CPostEffectVS()
 
 	FILL_ZERO(m_hCommonHandle, sizeof(m_hCommonHandle));
 
-	SVector::SetZero(m_vecPosOffset);
-	SVector::SetZero(m_vecTexParam);
+	math::SVector::SetZero(m_vecPosOffset);
+	math::SVector::SetZero(m_vecTexParam);
 }
 
 // デストラクタ
@@ -136,7 +136,7 @@ void CPostEffectVS::Render(
 
 // パラメータセット
 void CPostEffectVS::SetParameter(
-	const SVector* pVector,
+	const math::SVector* pVector,
 	IZ_UINT num)
 {
 	// 何もしない

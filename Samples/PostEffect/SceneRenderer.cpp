@@ -153,7 +153,7 @@ void CSceneRenderer::Render(
 
 		// Parallel Light Direction
 		m_ParallelLight.vDir.Set(-1.0f, -1.0f, -1.0f);
-		izanagi::SVector::Normalize(m_ParallelLight.vDir, m_ParallelLight.vDir);
+		izanagi::math::SVector::Normalize(m_ParallelLight.vDir, m_ParallelLight.vDir);
 
 		// マテリアル
 		izanagi::SMaterialParam mtrl;
@@ -178,7 +178,7 @@ void CSceneRenderer::RenderTorus(
     const izanagi::SCameraParam& camera,
     izanagi::graph::CGraphicsDevice* device)
 {
-    izanagi::SMatrix::SetUnit(m_L2W);
+    izanagi::math::SMatrix::SetUnit(m_L2W);
 
 	m_Shader->Begin(0, IZ_FALSE);
 	{
@@ -206,12 +206,12 @@ void CSceneRenderer::RenderTorus(
 				// ライトの方向をローカル座標に変換する
 
 				// ライトの方向はワールド座標なので World -> Localマトリクスを計算する
-				izanagi::SMatrix mtxW2L;
-				izanagi::SMatrix::Inverse(mtxW2L, m_L2W);
+				izanagi::math::SMatrix mtxW2L;
+				izanagi::math::SMatrix::Inverse(mtxW2L, m_L2W);
 
 				// World -> Local
-				izanagi::SVector parallelLightLocalDir;
-				izanagi::SMatrix::ApplyXYZ(
+				izanagi::math::SVector parallelLightLocalDir;
+				izanagi::math::SMatrix::ApplyXYZ(
 					parallelLightLocalDir,
 					m_ParallelLight.vDir,
 					mtxW2L);
@@ -235,10 +235,10 @@ void CSceneRenderer::RenderEnvBox(
     const izanagi::SCameraParam& camera,
     izanagi::graph::CGraphicsDevice* device)
 {
-    izanagi::SMatrix::SetScale(m_L2W, 100.0f, 100.0f, 100.0f);
+    izanagi::math::SMatrix::SetScale(m_L2W, 100.0f, 100.0f, 100.0f);
 
 	// カメラの位置にあわせて移動する
-	izanagi::SMatrix::Trans(
+	izanagi::math::SMatrix::Trans(
 		m_L2W,
 		m_L2W,
 		camera.pos);
@@ -254,7 +254,7 @@ void CSceneRenderer::RenderEnvBox(
 				m_EnvShader,
 				"g_mW2C",
 				(void*)&camera.mtxW2C,
-				sizeof(izanagi::SMatrix));
+				sizeof(izanagi::math::SMatrix));
 
 			_SetShaderParam(
 				m_EnvShader,
