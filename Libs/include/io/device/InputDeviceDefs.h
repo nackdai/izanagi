@@ -5,7 +5,7 @@
 #include "izD3DDefs.h"
 
 namespace izanagi {
-	// 入力デバイス初期化パラメータ
+    // 入力デバイス初期化パラメータ
 	struct SInputDeviceInitParam {
 		D_INPUT* pInput;
 		HWND hWnd;

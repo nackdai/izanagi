@@ -67,9 +67,9 @@ void CGamePadApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
         {
             if (pad != IZ_NULL)
             {
-                const izanagi::CPad::RawPadState& raw = pad->GetRawState();
-
                 font->DBPrint("raw ----\n");
+
+                const DIJOYSTATE& raw = *(reinterpret_cast<const DIJOYSTATE*>(pad->GetRawState()));
 	    
                 font->DBPrint("AxisPos [%d][%d][%d]\n", raw.lX, raw.lY, raw.lZ);
 		        font->DBPrint("AxisRot [%d][%d][%d]\n", raw.lRx, raw.lRy, raw.lRz);
