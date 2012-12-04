@@ -26,6 +26,9 @@
     <ClCompile Include="..\..\source\io\Pad.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\io\Pad_DInput.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\io\stream\BufferInputStream.h">
@@ -68,5 +71,8 @@
       <Filter>include\device</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\izIo.h" />
+    <ClInclude Include="..\..\include\io\device\Pad_DInput.h">
+      <Filter>include\device</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

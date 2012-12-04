@@ -91,8 +91,10 @@ xcopy /R /Y "$(TargetDir)$(ProjectName).pdb" ..\lib\$(IntDir)
     <ClCompile Include="..\..\source\io\Keyboard.cpp" />
     <ClCompile Include="..\..\source\io\Mouse.cpp" />
     <ClCompile Include="..\..\source\io\Pad.cpp" />
+    <ClCompile Include="..\..\source\io\Pad_DInput.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\include\io\device\Pad_DInput.h" />
     <ClInclude Include="..\..\include\io\stream\BufferInputStream.h" />
     <ClInclude Include="..\..\include\io\stream\FileInputStream.h" />
     <ClInclude Include="..\..\include\io\stream\FileOutputStream.h" />

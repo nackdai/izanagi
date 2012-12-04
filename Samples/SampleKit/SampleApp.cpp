@@ -115,7 +115,8 @@ IZ_BOOL CSampleApp::Init(const SSampleAppParams& params)
 
 			m_Pad = izanagi::CPad::CreatePad(
                 m_Allocator,
-                &padInitParam);
+                &padInitParam,
+                0.15f);
 		}
 
 #if 0
