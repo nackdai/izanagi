@@ -67,22 +67,44 @@ void CGamePadApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
         {
             if (pad != IZ_NULL)
             {
-                const izanagi::CPad::RawPadState& state = pad->GetRawState();
+                const izanagi::CPad::RawPadState& raw = pad->GetRawState();
+
+                font->DBPrint("raw ----\n");
 	    
-                font->DBPrint("AxisPos [%d][%d][%d]\n", state.lX, state.lY, state.lZ);
-		        font->DBPrint("AxisRot [%d][%d][%d]\n", state.lRx, state.lRy, state.lRz);
-		        font->DBPrint("Slider  [%d][%d]\n", state.rglSlider[0], state.rglSlider[1]);
+                font->DBPrint("AxisPos [%d][%d][%d]\n", raw.lX, raw.lY, raw.lZ);
+		        font->DBPrint("AxisRot [%d][%d][%d]\n", raw.lRx, raw.lRy, raw.lRz);
+		        font->DBPrint("Slider  [%d][%d]\n", raw.rglSlider[0], raw.rglSlider[1]);
 		        font->DBPrint(
 			        "Pov     [%d][%d][%d][%d]\n", 
-			        state.rgdwPOV[0], state.rgdwPOV[1], state.rgdwPOV[2], state.rgdwPOV[3]);
+			        raw.rgdwPOV[0], raw.rgdwPOV[1], raw.rgdwPOV[2], raw.rgdwPOV[3]);
 
 		        for (IZ_UINT i = 0; i < 32; i += 2)
                 {
 			        font->DBPrint(
 				        "Button  %d[%d] %d[%d]\n",
-				        i, state.rgbButtons[i],
-				        i + 1, state.rgbButtons[i + 1]);
+				        i, raw.rgbButtons[i],
+				        i + 1, raw.rgbButtons[i + 1]);
 		        }
+
+                font->DBPrint("\n");
+                font->DBPrint("izanagi ----\n");
+
+                const izanagi::PadState& state = pad->GetCurState();
+
+                font->DBPrint("AxisX x[%f] y[%f]\n", state.axisX[0], state.axisX[1]);
+                font->DBPrint("AxisY x[%f] y[%f]\n", state.axisY[0], state.axisY[1]);
+
+                for (IZ_UINT i = 0; i < izanagi::E_PAD_BUTTON_NUM; i++)
+                {
+                    if ((i & 1) == 0)
+                    {
+                        font->DBPrint("Button  %d[%d]", i, state.buttons[i]);
+                    }
+                    else
+                    {
+                        font->DBPrint(" %d[%d]\n", i, state.buttons[i]);
+                    }
+                }
             }
             else
             {
