@@ -9,9 +9,10 @@ namespace izanagi {
      */
     struct PadState
     {
-        IZ_FLOAT axisX;
-        IZ_FLOAT axisY;
-        IZ_BYTE  buttons[32];         /* 32 buttons                   */
+        IZ_FLOAT axisX[2];
+        IZ_FLOAT axisY[2];
+        
+        IZ_BYTE  buttons[32];
     };
 
     /**
@@ -25,7 +26,8 @@ namespace izanagi {
 		// インスタンス作成
 		static CPad* CreatePad(
             IMemoryAllocator* pAllocator,
-            SInputDeviceInitParam* initParam);
+            SInputDeviceInitParam* initParam,
+            IZ_FLOAT analogStickDeadZone);
 
 	protected:
 		enum {
@@ -108,6 +110,9 @@ namespace izanagi {
 
 		// 更新に成功したかどうか
 		IZ_BOOL m_bSucceedUpdate;
+
+        // アナログスティックのデッドゾーン
+        IZ_FLOAT m_AnalogStickDeadZone
 	};
 }	// namespace izanagi
 

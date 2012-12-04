@@ -269,8 +269,11 @@ IZ_BOOL CPad::Update()
 			}
 
             {
-                m_CurState.axisX = (IZ_FLOAT)state.lX / ANALOG_STCIK_MAX;
-                m_CurState.axisY = (IZ_FLOAT)state.lY / ANALOG_STCIK_MAX;
+                m_CurState.axisX[0] = (IZ_FLOAT)state.lX / ANALOG_STCIK_MAX;
+                m_CurState.axisX[1] = (IZ_FLOAT)state.lY / ANALOG_STCIK_MAX;
+
+                m_CurState.axisY[0] = (IZ_FLOAT)state.lRx / ANALOG_STCIK_MAX;
+                m_CurState.axisY[1] = (IZ_FLOAT)state.lRy / ANALOG_STCIK_MAX;
 
                 for (IZ_UINT i = 0; i < E_PAD_BUTTON_NUM; i++)
                 {
