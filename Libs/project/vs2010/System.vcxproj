@@ -108,6 +108,11 @@ xcopy /R /Y "$(TargetDir)$(ProjectName).pdb" ..\lib\$(IntDir)
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\source\system\Keyboard.cpp" />
+    <ClCompile Include="..\..\source\system\Mouse.cpp" />
+    <ClCompile Include="..\..\source\system\Pad.cpp" />
+    <ClCompile Include="..\..\source\system\Pad_DInput.cpp" />
+    <ClCompile Include="..\..\source\system\Pad_XInput.cpp" />
     <ClCompile Include="..\..\source\system\SysCpu.cpp" />
     <ClCompile Include="..\..\source\system\SysDisplay.cpp" />
     <ClCompile Include="..\..\source\system\SysTimer.cpp" />
@@ -121,6 +126,12 @@ xcopy /R /Y "$(TargetDir)$(ProjectName).pdb" ..\lib\$(IntDir)
     <ClCompile Include="..\..\source\system\SysThread_win32.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\include\system\InputDeviceDefs.h" />
+    <ClInclude Include="..\..\include\system\Keyboard.h" />
+    <ClInclude Include="..\..\include\system\Mouse.h" />
+    <ClInclude Include="..\..\include\system\Pad.h" />
+    <ClInclude Include="..\..\include\system\Pad_DInput.h" />
+    <ClInclude Include="..\..\include\system\Pad_XInput.h" />
     <ClInclude Include="..\..\include\system\SysCpu.h" />
     <ClInclude Include="..\..\include\system\SysDisplay.h" />
     <ClInclude Include="..\..\include\system\SysInterlocked.h" />

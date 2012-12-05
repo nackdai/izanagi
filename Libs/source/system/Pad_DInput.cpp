@@ -1,4 +1,4 @@
-#include "io/device/Pad_DInput.h"
+#include "system/Pad_DInput.h"
 
 #define ANALOG_STCIK_MAX    (65535)
 

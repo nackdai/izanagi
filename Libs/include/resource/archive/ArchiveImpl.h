@@ -2,7 +2,7 @@
 #define __IZANAGI_ARCHIVE_ARCHIVE_IMPL_H__
 
 #include "izStd.h"
-#include "io/stream/InputStream.h"
+#include "io/InputStream.h"
 #include "Archive.h"
 
 namespace izanagi {

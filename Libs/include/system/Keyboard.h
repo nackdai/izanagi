@@ -1,5 +1,5 @@
-#if !defined(__IZANAGI_IO_KEYBOARD_H__)
-#define __IZANAGI_IO_KEYBOARD_H__
+#if !defined(__IZANAGI_SYSTEM_KEYBOARD_H__)
+#define __IZANAGI_SYSTEM_KEYBOARD_H__
 
 #include "izStd.h"
 #include "InputDeviceDefs.h"
@@ -98,4 +98,4 @@ namespace izanagi {
 	}
 }	// namespace izanagi
 
-#endif	// #if !defined(__IZANAGI_IO_KEYBOARD_H__)
+#endif	// #if !defined(__IZANAGI_SYSTEM_KEYBOARD_H__)

@@ -1,5 +1,5 @@
-#if !defined(__IZANAGI_IO_INPUT_DEVICE_DEFS_H__)
-#define __IZANAGI_IO_INPUT_DEVICE_DEFS_H__
+#if !defined(__IZANAGI_SYSTEM_INPUT_DEVICE_DEFS_H__)
+#define __IZANAGI_SYSTEM_INPUT_DEVICE_DEFS_H__
 
 #include "izDefs.h"
 #include "izD3DDefs.h"
@@ -206,4 +206,4 @@ namespace izanagi {
 	};
 }	// namespace izanagi
 
-#endif	// #if !defined(__IZANAGI_IO_INPUT_DEVICE_DEFS_H__)
+#endif	// #if !defined(__IZANAGI_SYSTEM_INPUT_DEVICE_DEFS_H__)

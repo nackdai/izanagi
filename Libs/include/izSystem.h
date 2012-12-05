@@ -15,6 +15,11 @@
 #include "system/SysCond.h"
 #include "system/SysInterlocked.h"
 
+// Device
+#include "system/Keyboard.h"
+#include "system/Mouse.h"
+#include "system/Pad.h"
+
 #include "system/SysWindow.h"
 
 #endif	// #if !defined(__IZANAGI_SYSTEM_H__)
