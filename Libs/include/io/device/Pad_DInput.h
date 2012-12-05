@@ -1,7 +1,6 @@
 #if !defined(__IZANAGI_IO_PAD_DINPUT_H__)
 #define __IZANAGI_IO_PAD_DINPUT_H__
 
-#include "izStd.h"
 #include "Pad.h"
 
 namespace izanagi

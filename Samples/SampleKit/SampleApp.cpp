@@ -113,10 +113,17 @@ IZ_BOOL CSampleApp::Init(const SSampleAppParams& params)
 				(HWND)params.deviceWindow,
             };
 
+#if 0
 			m_Pad = izanagi::CPad::CreatePad(
                 m_Allocator,
                 &padInitParam,
                 0.15f);
+#else
+            m_Pad = izanagi::CPad::CreatePad(
+                m_Allocator,
+                IZ_NULL,
+                0.15f);
+#endif
 		}
 
 #if 0
