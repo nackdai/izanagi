@@ -12,6 +12,7 @@
 #endif
 
 #include <dinput.h>
+#include <XInput.h>
 
 #define D3D_INST		IDirect3D9
 #define D3D_DEVICE		IDirect3DDevice9

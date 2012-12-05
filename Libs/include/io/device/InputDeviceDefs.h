@@ -13,10 +13,10 @@ namespace izanagi {
 
 	// パッドボタン
 	enum E_PAD_BUTTON {
-        E_PAD_BUTTON_R_UP = 0,
-		E_PAD_BUTTON_R_LEFT,
-		E_PAD_BUTTON_R_DOWN,
+        E_PAD_BUTTON_R_DOWN,
 		E_PAD_BUTTON_R_RIGHT,
+		E_PAD_BUTTON_R_LEFT,
+		E_PAD_BUTTON_R_UP,
 
 		E_PAD_BUTTON_L_1,
 		E_PAD_BUTTON_R_1,

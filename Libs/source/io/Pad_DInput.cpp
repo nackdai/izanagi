@@ -141,6 +141,8 @@ namespace izanagi
 
         m_InputTmp = IZ_NULL;
 	    m_DevTmp = IZ_NULL;
+
+        m_Type = E_PAD_TYPE_DIRECT_INPUT;
     }
 
     // デストラクタ
@@ -272,15 +274,20 @@ namespace izanagi
 			    }
 
                 {
-                    m_CurState.axisX[0] = (IZ_FLOAT)state.lX / ANALOG_STCIK_MAX;
-                    m_CurState.axisX[1] = (IZ_FLOAT)state.lY / ANALOG_STCIK_MAX;
+                    m_CurState.axisLeft[0] = (IZ_FLOAT)state.lX / ANALOG_STCIK_MAX;
+                    m_CurState.axisLeft[1] = (IZ_FLOAT)state.lY / ANALOG_STCIK_MAX;
 
-                    m_CurState.axisY[0] = (IZ_FLOAT)state.lRx / ANALOG_STCIK_MAX;
-                    m_CurState.axisY[1] = (IZ_FLOAT)state.lRy / ANALOG_STCIK_MAX;
+                    m_CurState.axisRight[0] = (IZ_FLOAT)state.lRx / ANALOG_STCIK_MAX;
+                    m_CurState.axisRight[1] = (IZ_FLOAT)state.lRy / ANALOG_STCIK_MAX;
+
+                    // Right Buttons
+                    //   3
+                    // 2   1
+                    //   0
 
                     for (IZ_UINT i = 0; i < E_PAD_BUTTON_NUM; i++)
                     {
-                        m_CurState.buttons[i] = state.rgbButtons[i];
+                        m_CurState.buttons[i] = (state.rgbButtons[i] > 0 ? 1 : 0);
                     }
                 }
 		    }

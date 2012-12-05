@@ -1,5 +1,6 @@
 #include "io/device/Pad.h"
 #include "io/device/Pad_DInput.h"
+#include "io/device/Pad_XInput.h"
 
 namespace izanagi
 {
@@ -11,12 +12,22 @@ namespace izanagi
         void* initParam,
         IZ_FLOAT analogStickDeadZone)
     {
+        CPad* ret = IZ_NULL;
         analogStickDeadZone = IZ_MIN(IZ_MAX(0.0f, analogStickDeadZone), 1.0f);
 
-        CPad* ret = CPadDInput::CreatePad(
-            allocator,
-            initParam,
-            analogStickDeadZone);
+        if (initParam != IZ_NULL)
+        {
+            ret = CPadDInput::CreatePad(
+                allocator,
+                initParam,
+                analogStickDeadZone);
+        }
+        else
+        {
+            ret = CPadXInput::CreatePad(
+                allocator,
+                analogStickDeadZone);
+        }
 
         return ret;
     }

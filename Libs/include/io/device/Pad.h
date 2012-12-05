@@ -9,10 +9,19 @@ namespace izanagi {
      */
     struct PadState
     {
-        IZ_FLOAT axisX[2];
-        IZ_FLOAT axisY[2];
+        IZ_FLOAT axisLeft[2];
+        IZ_FLOAT axisRight[2];
+
+        IZ_FLOAT triggerLeft;
+        IZ_FLOAT triggerRight;
         
         IZ_BYTE  buttons[32];
+    };
+
+    enum E_PAD_TYPE
+    {
+        E_PAD_TYPE_DIRECT_INPUT,
+        E_PAD_TYPE_X_INPUT,
     };
 
     /**
@@ -67,6 +76,16 @@ namespace izanagi {
             return m_PrevState;
         }
 
+        E_PAD_TYPE GetType() const
+        {
+            return m_Type;
+        }
+
+        virtual IZ_BOOL IsEnableVibrate() const
+        {
+            return IZ_FALSE;
+        }
+
         PURE_VIRTUAL(const void* GetRawState() const);
 
 	protected:
@@ -80,6 +99,8 @@ namespace izanagi {
 
         // アナログスティックのデッドゾーン
         IZ_FLOAT m_AnalogStickDeadZone;
+
+        E_PAD_TYPE m_Type;
 	};
 }	// namespace izanagi
 
