@@ -1,5 +1,5 @@
-#if !defined(__IZANAGI_IO_PAD_H__)
-#define __IZANAGI_IO_PAD_H__
+#if !defined(__IZANAGI_SYSTEM_PAD_H__)
+#define __IZANAGI_SYSTEM_PAD_H__
 
 #include "izStd.h"
 #include "InputDeviceDefs.h"
@@ -104,4 +104,4 @@ namespace izanagi {
 	};
 }	// namespace izanagi
 
-#endif	// #if !defined(__IZANAGI_IO_PAD_H__)
+#endif	// #if !defined(__IZANAGI_SYSTEM_PAD_H__)

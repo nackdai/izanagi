@@ -88,28 +88,15 @@ xcopy /R /Y "$(TargetDir)$(ProjectName).pdb" ..\lib\$(IntDir)
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\source\io\Keyboard.cpp" />
-    <ClCompile Include="..\..\source\io\Mouse.cpp" />
-    <ClCompile Include="..\..\source\io\Pad.cpp" />
-    <ClCompile Include="..\..\source\io\Pad_DInput.cpp" />
-    <ClCompile Include="..\..\source\io\Pad_XInput.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\include\io\device\Pad_DInput.h" />
-    <ClInclude Include="..\..\include\io\device\Pad_XInput.h" />
-    <ClInclude Include="..\..\include\io\stream\BufferInputStream.h" />
-    <ClInclude Include="..\..\include\io\stream\FileInputStream.h" />
-    <ClInclude Include="..\..\include\io\stream\FileOutputStream.h" />
-    <ClInclude Include="..\..\include\io\stream\HeapInputStream.h" />
-    <ClInclude Include="..\..\include\io\stream\InputStream.h" />
-    <ClInclude Include="..\..\include\io\stream\IODefs.h" />
-    <ClInclude Include="..\..\include\io\stream\MemoryInputStream.h" />
-    <ClInclude Include="..\..\include\io\stream\MemoryOutputStream.h" />
-    <ClInclude Include="..\..\include\io\stream\OutputStream.h" />
-    <ClInclude Include="..\..\include\io\device\InputDeviceDefs.h" />
-    <ClInclude Include="..\..\include\io\device\Keyboard.h" />
-    <ClInclude Include="..\..\include\io\device\Mouse.h" />
-    <ClInclude Include="..\..\include\io\device\Pad.h" />
+    <ClInclude Include="..\..\include\io\BufferInputStream.h" />
+    <ClInclude Include="..\..\include\io\FileInputStream.h" />
+    <ClInclude Include="..\..\include\io\FileOutputStream.h" />
+    <ClInclude Include="..\..\include\io\HeapInputStream.h" />
+    <ClInclude Include="..\..\include\io\InputStream.h" />
+    <ClInclude Include="..\..\include\io\IODefs.h" />
+    <ClInclude Include="..\..\include\io\MemoryInputStream.h" />
+    <ClInclude Include="..\..\include\io\MemoryOutputStream.h" />
+    <ClInclude Include="..\..\include\io\OutputStream.h" />
     <ClInclude Include="..\..\include\izIo.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

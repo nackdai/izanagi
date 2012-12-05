@@ -1,4 +1,4 @@
-#include "io/device/Pad_XInput.h"
+#include "system/Pad_XInput.h"
 
 #pragma comment(lib, "XInput.lib")
 

@@ -1,5 +1,5 @@
-#if !defined(__IZANAGI_IO_PAD_XINPUT_H__)
-#define __IZANAGI_IO_PAD_XINPUT_H__
+#if !defined(__IZANAGI_SYSTEM_PAD_XINPUT_H__)
+#define __IZANAGI_SYSTEM_PAD_XINPUT_H__
 
 #include "Pad.h"
 #include <XInput.h>
@@ -43,4 +43,4 @@ namespace izanagi
 	};
 }	// namespace izanagi
 
-#endif	// #if !defined(__IZANAGI_IO_PAD_XINPUT_H__)
+#endif	// #if !defined(__IZANAGI_SYSTEM_PAD_XINPUT_H__)

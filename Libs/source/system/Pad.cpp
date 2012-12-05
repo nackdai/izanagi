@@ -1,6 +1,6 @@
-#include "io/device/Pad.h"
-#include "io/device/Pad_DInput.h"
-#include "io/device/Pad_XInput.h"
+#include "system/Pad.h"
+#include "system/Pad_DInput.h"
+#include "system/Pad_XInput.h"
 
 namespace izanagi
 {

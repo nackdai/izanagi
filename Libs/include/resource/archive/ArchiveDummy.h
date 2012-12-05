@@ -2,7 +2,7 @@
 #define __IZANAGI_ARCHIVE_ARCHIVE_DUMMY_H__
 
 #include "Archive.h"
-#include "io/stream/FileInputStream.h"
+#include "io/FileInputStream.h"
 
 namespace izanagi {
 	/**

@@ -4,15 +4,7 @@
 // NOTE
 // izanagiのインクルードパスを通すこと
 
-#include "io/stream/IODefs.h"
-
-#include "io/stream/InputStream.h"
-#include "io/stream/FileInputStream.h"
-#include "io/stream/MemoryInputStream.h"
-
-#include "io/stream/OutputStream.h"
-#include "io/stream/FileOutputStream.h"
-#include "io/stream/MemoryOutputStream.h"
+#include "izIo.h"
 
 #include "./io/IoUtil.h"
 
