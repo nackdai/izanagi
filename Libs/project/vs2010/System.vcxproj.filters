@@ -5,9 +5,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="source\thread">
-      <UniqueIdentifier>{cb3803d3-3beb-4880-a957-0714568330ce}</UniqueIdentifier>
-    </Filter>
     <Filter Include="include">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
@@ -18,59 +15,15 @@
     <Filter Include="include\device">
       <UniqueIdentifier>{b318c7f6-ab45-4978-b1c2-c433683590c7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source\device">
+    <Filter Include="source\win32">
+      <UniqueIdentifier>{ebd42e43-6dd1-45af-a825-8cf1a9d6822d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\win32\thread">
+      <UniqueIdentifier>{cb3803d3-3beb-4880-a957-0714568330ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\win32\device">
       <UniqueIdentifier>{7b14f92d-b41b-4349-8bf8-4864087dc02a}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\source\system\SysCpu.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\system\SysDisplay.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\system\SysTimer.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\system\SysUtil.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\system\SysWindow.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\system\SysCond_win32.cpp">
-      <Filter>source\thread</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\system\SysEvent_win32.cpp">
-      <Filter>source\thread</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\system\SysMonitor_win32.cpp">
-      <Filter>source\thread</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\system\SysMutex_win32.cpp">
-      <Filter>source\thread</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\system\SysSemaphore_win32.cpp">
-      <Filter>source\thread</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\system\SysThread_win32.cpp">
-      <Filter>source\thread</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\system\Pad.cpp">
-      <Filter>source\device</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\system\Pad_DInput.cpp">
-      <Filter>source\device</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\system\Pad_XInput.cpp">
-      <Filter>source\device</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\system\Keyboard.cpp">
-      <Filter>source\device</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\system\Mouse.cpp">
-      <Filter>source\device</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\system\SysCpu.h">
@@ -134,5 +87,55 @@
     <ClInclude Include="..\..\include\system\Keyboard.h">
       <Filter>include\device</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\source\system\win32\thread\SysMonitor_win32.cpp">
+      <Filter>source\win32\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\win32\thread\SysMutex_win32.cpp">
+      <Filter>source\win32\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\win32\thread\SysSemaphore_win32.cpp">
+      <Filter>source\win32\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\win32\thread\SysThread_win32.cpp">
+      <Filter>source\win32\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\win32\thread\SysCond_win32.cpp">
+      <Filter>source\win32\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\win32\thread\SysEvent_win32.cpp">
+      <Filter>source\win32\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\win32\SysDisplay_win32.cpp">
+      <Filter>source\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\win32\SysTimer_win32.cpp">
+      <Filter>source\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\win32\SysUtil_win32.cpp">
+      <Filter>source\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\win32\SysWindow_win32.cpp">
+      <Filter>source\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\win32\SysCpu_win32.cpp">
+      <Filter>source\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\win32\device\Mouse.cpp">
+      <Filter>source\win32\device</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\win32\device\Pad_DInput.cpp">
+      <Filter>source\win32\device</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\win32\device\Pad_XInput.cpp">
+      <Filter>source\win32\device</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\win32\device\Keyboard.cpp">
+      <Filter>source\win32\device</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\Pad.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -108,24 +108,6 @@ xcopy /R /Y "$(TargetDir)$(ProjectName).pdb" ..\lib\$(IntDir)
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\source\system\Keyboard.cpp" />
-    <ClCompile Include="..\..\source\system\Mouse.cpp" />
-    <ClCompile Include="..\..\source\system\Pad.cpp" />
-    <ClCompile Include="..\..\source\system\Pad_DInput.cpp" />
-    <ClCompile Include="..\..\source\system\Pad_XInput.cpp" />
-    <ClCompile Include="..\..\source\system\SysCpu.cpp" />
-    <ClCompile Include="..\..\source\system\SysDisplay.cpp" />
-    <ClCompile Include="..\..\source\system\SysTimer.cpp" />
-    <ClCompile Include="..\..\source\system\SysUtil.cpp" />
-    <ClCompile Include="..\..\source\system\SysWindow.cpp" />
-    <ClCompile Include="..\..\source\system\SysCond_win32.cpp" />
-    <ClCompile Include="..\..\source\system\SysEvent_win32.cpp" />
-    <ClCompile Include="..\..\source\system\SysMonitor_win32.cpp" />
-    <ClCompile Include="..\..\source\system\SysMutex_win32.cpp" />
-    <ClCompile Include="..\..\source\system\SysSemaphore_win32.cpp" />
-    <ClCompile Include="..\..\source\system\SysThread_win32.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="..\..\include\system\InputDeviceDefs.h" />
     <ClInclude Include="..\..\include\system\Keyboard.h" />
     <ClInclude Include="..\..\include\system\Mouse.h" />
@@ -147,6 +129,24 @@ xcopy /R /Y "$(TargetDir)$(ProjectName).pdb" ..\lib\$(IntDir)
     <ClInclude Include="..\..\include\system\SysThreadDefs.h" />
     <ClInclude Include="..\..\include\system\SysThreadUtil.h" />
     <ClInclude Include="..\..\include\izSystem.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\source\system\Pad.cpp" />
+    <ClCompile Include="..\..\source\system\win32\device\Keyboard.cpp" />
+    <ClCompile Include="..\..\source\system\win32\device\Mouse.cpp" />
+    <ClCompile Include="..\..\source\system\win32\device\Pad_DInput.cpp" />
+    <ClCompile Include="..\..\source\system\win32\device\Pad_XInput.cpp" />
+    <ClCompile Include="..\..\source\system\win32\SysCpu_win32.cpp" />
+    <ClCompile Include="..\..\source\system\win32\SysDisplay_win32.cpp" />
+    <ClCompile Include="..\..\source\system\win32\SysTimer_win32.cpp" />
+    <ClCompile Include="..\..\source\system\win32\SysUtil_win32.cpp" />
+    <ClCompile Include="..\..\source\system\win32\SysWindow_win32.cpp" />
+    <ClCompile Include="..\..\source\system\win32\thread\SysCond_win32.cpp" />
+    <ClCompile Include="..\..\source\system\win32\thread\SysEvent_win32.cpp" />
+    <ClCompile Include="..\..\source\system\win32\thread\SysMonitor_win32.cpp" />
+    <ClCompile Include="..\..\source\system\win32\thread\SysMutex_win32.cpp" />
+    <ClCompile Include="..\..\source\system\win32\thread\SysSemaphore_win32.cpp" />
+    <ClCompile Include="..\..\source\system\win32\thread\SysThread_win32.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
