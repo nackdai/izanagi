@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="..\..\Thread\ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Thread\main.cpp" />
+    <ClCompile Include="..\..\Thread\TestSemaphore.cpp" />
+    <ClCompile Include="..\..\Thread\TestThread.cpp" />
+    <ClCompile Include="..\..\Thread\TestMuex.cpp" />
+    <ClCompile Include="..\..\Thread\TestEvent.cpp" />
+    <ClCompile Include="..\..\Thread\TestCondVar.cpp" />
+    <ClCompile Include="..\..\Thread\TestMonitor.cpp" />
+  </ItemGroup>
+</Project>
