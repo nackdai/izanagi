@@ -80,41 +80,16 @@ IZ_BOOL CSampleApp::Init(const SSampleAppParams& params)
 
 	// 入力初期化
 	{
-#if 0
-		HRESULT hr = CoInitialize(NULL);
-		IZ_ASSERT(SUCCEEDED(hr));
-
-		D_INPUT input = NULL;
-		hr = CoCreateInstance(
-				CLSID_DirectInput8,
-				NULL, 
-				CLSCTX_INPROC,
-				IID_IDirectInput8,
-				(void**)&input);
-		IZ_ASSERT(SUCCEEDED(hr));
-
-		hr = input->Initialize(hInst, DIRECTINPUT_VERSION);
-#else
-		D_INPUT* input = NULL;
-		HRESULT hr = DirectInput8Create(
-						(HINSTANCE)params.instanceHandle,
-						DIRECTINPUT_VERSION,
-						IID_IDirectInput8,
-						(void**)&input,
-						NULL);
-#endif
-		
 		// パッド作成
-        if (SUCCEEDED(hr))
-		{
+        {
             izanagi::SInputDeviceInitParam padInitParam =
             {
-				input,
-				(HWND)params.deviceWindow,
+			    params.instanceHandle,
+			    params.deviceWindow,
             };
 
 #if 0
-			m_Pad = izanagi::CPad::CreatePad(
+		    m_Pad = izanagi::CPad::CreatePad(
                 m_Allocator,
                 &padInitParam,
                 0.15f);
@@ -124,7 +99,7 @@ IZ_BOOL CSampleApp::Init(const SSampleAppParams& params)
                 IZ_NULL,
                 0.15f);
 #endif
-		}
+        }
 
 #if 0
 		// キーボード作成
@@ -135,8 +110,6 @@ IZ_BOOL CSampleApp::Init(const SSampleAppParams& params)
 			// TODO
 		}
 #endif
-
-		SAFE_RELEASE(input);
 	}
 
 	// TODO

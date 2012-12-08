@@ -2,6 +2,10 @@
 
 #define ANALOG_STCIK_MAX    (65535)
 
+extern IZ_BOOL InitDirectInput(
+    izanagi::SInputDeviceInitParam& param,
+    D_INPUT** input);
+
 namespace izanagi
 {
     /**
@@ -9,7 +13,7 @@ namespace izanagi
     */
     CPad* CPadDInput::CreatePad(
         IMemoryAllocator* pAllocator,
-        void* initParam,
+        SInputDeviceInitParam* initParam,
         IZ_FLOAT analogStickDeadZone)
     {
 	    IZ_UINT8* pBuf = IZ_NULL;
@@ -155,18 +159,25 @@ namespace izanagi
 
 	    SAFE_RELEASE(m_pPadDevice);
 	    m_hWnd = IZ_NULL;
+
+        SAFE_RELEASE(m_InputTmp);
     }
 
     /**
     * 初期化
     */
     IZ_BOOL CPadDInput::Init(
-        void* initParam,
+        SInputDeviceInitParam* initParam,
         IZ_FLOAT analogStickDeadZone)
     {
         SInputDeviceInitParam* param = reinterpret_cast<SInputDeviceInitParam*>(initParam);
 
-	    m_InputTmp = param->pInput;
+        D_INPUT* input = IZ_NULL;
+        VRETURN(InitDirectInput(*param, &input));
+
+        HWND hWnd = (HWND)param->nativeWindowHandle;
+
+	    m_InputTmp = input;
 
 	    HRESULT hr;
 
@@ -196,7 +207,7 @@ namespace izanagi
 
 	    // 協調レベルの設定
 	    hr = m_pPadDevice->SetCooperativeLevel(
-			    param->hWnd,
+			    hWnd,
 			    DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
 	    VRETURN(SUCCEEDED(hr));
 
@@ -211,7 +222,7 @@ namespace izanagi
 	    VRETURN(SUCCEEDED(hr));
 
 	    // 一応・・・
-	    m_hWnd = param->hWnd;
+	    m_hWnd = hWnd;
 
 	    return IZ_TRUE;
     }
@@ -230,7 +241,7 @@ namespace izanagi
 		    ret = SUCCEEDED(hr);
 
 		    // 前の状態を保持
-		    memcpy(&m_PrevState, &m_CurState, sizeof(m_CurState));
+		    memcpy(&m_LastState, &m_CurState, sizeof(m_CurState));
 
 		    if (ret) {
 			    m_bSucceedUpdate = IZ_TRUE;

@@ -87,6 +87,12 @@
     <ClInclude Include="..\..\include\system\Keyboard.h">
       <Filter>include\device</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\system\Keyboard_DInput.h">
+      <Filter>include\device</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\Mouse_DInput.h">
+      <Filter>include\device</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\system\win32\thread\SysMonitor_win32.cpp">
@@ -122,20 +128,29 @@
     <ClCompile Include="..\..\source\system\win32\SysCpu_win32.cpp">
       <Filter>source\win32</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\system\win32\device\Mouse.cpp">
-      <Filter>source\win32\device</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\system\win32\device\Pad_DInput.cpp">
       <Filter>source\win32\device</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\system\win32\device\Pad_XInput.cpp">
       <Filter>source\win32\device</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\system\win32\device\Keyboard.cpp">
-      <Filter>source\win32\device</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\system\Pad.cpp">
       <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\win32\device\DeviceUtil.cpp">
+      <Filter>source\win32\device</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\win32\device\Keyboard _DInput.cpp">
+      <Filter>source\win32\device</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\Keyboard.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\Mouse.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\win32\device\Mouse_DInput.cpp">
+      <Filter>source\win32\device</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
