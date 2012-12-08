@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="system">
+      <UniqueIdentifier>{f088c5aa-2c3e-4c87-9310-23830f2be72d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyAppl">
+      <UniqueIdentifier>{2d2367f7-e423-4ae1-a2e3-b638cec2c637}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyAppl\state">
+      <UniqueIdentifier>{ca1f0da0-e6eb-426b-b2be-87e0ad897c88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyAppl\fx">
+      <UniqueIdentifier>{4b51efea-4238-4422-ad25-e20786324632}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyAppl\shader">
+      <UniqueIdentifier>{cd117270-269c-4587-84a6-97bf58febb82}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\system\MyCamera.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\system\MySystem.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\DebugMesh\MyAppl\MyAppl.cpp">
+      <Filter>MyAppl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\DebugMesh\MyAppl\state\StateDebugMesh.cpp">
+      <Filter>MyAppl\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\DebugMesh\MyAppl\state\StateManager.cpp">
+      <Filter>MyAppl\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\DebugMesh\MyAppl\shader\ShaderBase.cpp">
+      <Filter>MyAppl\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\DebugMesh\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\system\MyCamera.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\system\MySystem.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\DebugMesh\MyAppl\MyAppl.h">
+      <Filter>MyAppl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\DebugMesh\MyAppl\state\StateDebugMesh.h">
+      <Filter>MyAppl\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\DebugMesh\MyAppl\state\StateManager.h">
+      <Filter>MyAppl\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\DebugMesh\MyAppl\shader\BasicShader.h">
+      <Filter>MyAppl\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\DebugMesh\MyAppl\shader\ShaderBase.h">
+      <Filter>MyAppl\shader</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\DebugMesh\ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\DebugMesh\MyAppl\fx\BasicShader.fx">
+      <Filter>MyAppl\fx</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>
