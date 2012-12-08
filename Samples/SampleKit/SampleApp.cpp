@@ -82,7 +82,7 @@ IZ_BOOL CSampleApp::Init(const SSampleAppParams& params)
 	{
 		// パッド作成
         {
-            izanagi::SInputDeviceInitParam padInitParam =
+            izanagi::sys::SInputDeviceInitParam padInitParam =
             {
 			    params.instanceHandle,
 			    params.deviceWindow,
@@ -94,7 +94,7 @@ IZ_BOOL CSampleApp::Init(const SSampleAppParams& params)
                 &padInitParam,
                 0.15f);
 #else
-            m_Pad = izanagi::CPad::CreatePad(
+            m_Pad = izanagi::sys::CPad::CreatePad(
                 m_Allocator,
                 IZ_NULL,
                 0.15f);
@@ -228,7 +228,7 @@ IZ_UINT CSampleApp::GetScreenHeight() const
 }
 
 // タイマ取得.
-izanagi::CTimer& CSampleApp::GetTimer(IZ_UINT idx)
+izanagi::sys::CTimer& CSampleApp::GetTimer(IZ_UINT idx)
 {
 	IZ_ASSERT(idx < SAMPLE_TIMER_NUM);
 	return m_Timer[idx];

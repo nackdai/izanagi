@@ -3,10 +3,12 @@
 #define ANALOG_STCIK_MAX    (65535)
 
 extern IZ_BOOL InitDirectInput(
-    izanagi::SInputDeviceInitParam& param,
+    izanagi::sys::SInputDeviceInitParam& param,
     D_INPUT** input);
 
 namespace izanagi
+{
+namespace sys
 {
     /**
     * インスタンス作成
@@ -309,4 +311,5 @@ namespace izanagi
 
 	    return ret;
     }
+}   // namespace sys
 }   // namespce izanagi

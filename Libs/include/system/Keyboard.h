@@ -6,6 +6,8 @@
 
 namespace izanagi
 {
+namespace sys
+{
 	// キーボード
 	enum E_KEYBOARD_BUTTON {
 		E_KEYBOARD_BUTTON_ESCAPE       = DIK_ESCAPE,      
@@ -250,6 +252,7 @@ namespace izanagi
 		// 更新に成功したかどうか
 		IZ_BOOL m_bSucceedUpdate;
 	};
+}   // namespace sys
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_SYSTEM_KEYBOARD_H__)

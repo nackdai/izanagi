@@ -74,7 +74,7 @@ namespace threadmodel
         }
 
     private:
-        CMutex m_Mutex;
+        sys::CMutex m_Mutex;
         _T m_Value;
     };
 

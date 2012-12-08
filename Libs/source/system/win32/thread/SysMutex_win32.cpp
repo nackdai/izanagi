@@ -3,69 +3,72 @@
 #include "system/SysMutex.h"
 #include "system/SysThread.h"
 
-using namespace izanagi;
-
-CMutex::CMutex()
+namespace izanagi
 {
-	m_Handle = IZ_NULL;
-    m_OwnerThreadId = 0;
-}
-
-
-CMutex::~CMutex()
+namespace sys
 {
-	Close();
-}
+    CMutex::CMutex()
+    {
+	    m_Handle = IZ_NULL;
+        m_OwnerThreadId = 0;
+    }
 
-/**
-*/
-IZ_BOOL CMutex::Open()
-{
-	m_Handle = ::CreateMutex(
-				NULL,
-				FALSE,
-				NULL);
-	IZ_ASSERT(m_Handle != IZ_NULL);
 
-	return (m_Handle != IZ_NULL);
-}
+    CMutex::~CMutex()
+    {
+	    Close();
+    }
 
-/**
-*/
-void CMutex::Close()
-{
-	if (m_Handle) {
-		::CloseHandle(m_Handle);
-		m_Handle = IZ_NULL;
-	}
-}
+    /**
+    */
+    IZ_BOOL CMutex::Open()
+    {
+	    m_Handle = ::CreateMutex(
+				    NULL,
+				    FALSE,
+				    NULL);
+	    IZ_ASSERT(m_Handle != IZ_NULL);
 
-/**
-*/
-void CMutex::Lock()
-{
-	ThreadId id = CThread::GetCurrentThreadId();
-	if (CThread::IsEqualThreadId(m_OwnerThreadId, id)) {
-		// This mutex is already locked by this thread.
-		return;
-	}
+	    return (m_Handle != IZ_NULL);
+    }
 
-	::WaitForSingleObject(m_Handle, INFINITE);
+    /**
+    */
+    void CMutex::Close()
+    {
+	    if (m_Handle) {
+		    ::CloseHandle(m_Handle);
+		    m_Handle = IZ_NULL;
+	    }
+    }
 
-	m_OwnerThreadId = CThread::GetCurrentThreadId();
-}
+    /**
+    */
+    void CMutex::Lock()
+    {
+	    ThreadId id = CThread::GetCurrentThreadId();
+	    if (CThread::IsEqualThreadId(m_OwnerThreadId, id)) {
+		    // This mutex is already locked by this thread.
+		    return;
+	    }
 
-void CMutex::Unlock()
-{
-	ThreadId id = CThread::GetCurrentThreadId();
-	if (!CThread::IsEqualThreadId(m_OwnerThreadId, id)) {
-		// This thread already released this mutex.
-		return;
-	}
+	    ::WaitForSingleObject(m_Handle, INFINITE);
 
-	m_OwnerThreadId = 0;
+	    m_OwnerThreadId = CThread::GetCurrentThreadId();
+    }
 
-	::ReleaseMutex(m_Handle);
-}
+    void CMutex::Unlock()
+    {
+	    ThreadId id = CThread::GetCurrentThreadId();
+	    if (!CThread::IsEqualThreadId(m_OwnerThreadId, id)) {
+		    // This thread already released this mutex.
+		    return;
+	    }
 
+	    m_OwnerThreadId = 0;
+
+	    ::ReleaseMutex(m_Handle);
+    }
+}   // namespace sys
+}   // namespace iznagi
 #endif	// #if defined(WIN32) || defined(WIN64)

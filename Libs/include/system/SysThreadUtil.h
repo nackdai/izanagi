@@ -1,7 +1,10 @@
 #if !defined(__IZANAGI_SYSTEM_SYS_THREAD_UTIL_H__)
 #define __IZANAGI_SYSTEM_SYS_THREAD_UTIL_H__
 
-namespace izanagi {
+namespace izanagi
+{
+namespace sys
+{
 	/**
 	 */
 	template <class _T>
@@ -21,6 +24,7 @@ namespace izanagi {
 	private:
 		_T& m_Body;
 	};
+}   // namespace sys
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_SYSTEM_SYS_THREAD_UTIL_H__)

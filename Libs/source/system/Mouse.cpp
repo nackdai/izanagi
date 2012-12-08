@@ -3,6 +3,8 @@
 
 namespace izanagi
 {
+namespace sys
+{
     /**
     * インスタンス作成
     */
@@ -25,4 +27,5 @@ namespace izanagi
     CMouse::~CMouse()
     {
     }
+}   // namespace sys
 }   // namespace izanagi

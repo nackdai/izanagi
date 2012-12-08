@@ -7,6 +7,8 @@
 
 namespace izanagi
 {
+namespace sys
+{
 	/**
 	* キーボード
 	*/
@@ -35,6 +37,7 @@ namespace izanagi
 		D_INPUT_DEVICE* m_pKeyDevice;
 		HWND m_hWnd;
 	};
+}   // namespace sys
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_SYSTEM_KEYBOARD_DINPUT_H__)

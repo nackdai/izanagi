@@ -4,7 +4,10 @@
 #include "izStd.h"
 #include "InputDeviceDefs.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace sys
+{
 	/** マウス
 	 */
 	class CMouse : public CObject {
@@ -44,6 +47,7 @@ namespace izanagi {
 		// 更新に成功したかどうか
 		IZ_BOOL m_bSucceedUpdate;
 	};
+}   // namespace sys
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_SYSTEM_MOUSE_H__)

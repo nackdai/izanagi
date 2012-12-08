@@ -6,6 +6,8 @@
 
 namespace izanagi
 {
+namespace sys
+{
     // XInput
     class CPadXInput : public CPad
     {
@@ -41,6 +43,7 @@ namespace izanagi
 	protected:
         XINPUT_STATE m_RawState;
 	};
+}   // namespace sys
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_SYSTEM_PAD_XINPUT_H__)

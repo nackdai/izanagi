@@ -5,6 +5,8 @@
 
 namespace izanagi
 {
+namespace sys
+{
 	class CMouseDInput : public CMouse {
 	public:
 		// インスタンス作成
@@ -56,6 +58,7 @@ namespace izanagi
 
 		DIMOUSESTATE2 m_MouseState;
 	};
+}   // namespace sys
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_SYSTEM_MOUSE_DINPUT_H__)

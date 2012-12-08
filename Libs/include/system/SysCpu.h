@@ -3,7 +3,10 @@
 
 #include "izDefs.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace sys
+{
 	/**
 	*/
 	class CSysCpu {
@@ -17,6 +20,7 @@ namespace izanagi {
 		// Return CPU num.
 		static IZ_UINT GetCpuNum();
 	};
+}   // namespace sys
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_SYSTEM_SYS_CPU_H__)

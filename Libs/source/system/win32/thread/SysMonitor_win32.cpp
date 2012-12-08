@@ -6,80 +6,85 @@
 
 #include "izStd.h"
 
-using namespace izanagi;
-
-// NOTE
-// m_WaitCondのSignal、Broadcastの呼び出しの安全性や複数回呼び出しについては
-// CCondVarの方で保障しているので、ここでは考慮しない
-
-CMonitor::CMonitor()
+namespace izanagi
 {
-    m_IsLocked = IZ_FALSE;
-}
-
-CMonitor::~CMonitor()
+namespace sys
 {
-	Destroy();
-}
 
-// 初期化.
-IZ_BOOL CMonitor::Init()
-{
-	IZ_BOOL ret = IZ_FALSE;
+    // NOTE
+    // m_WaitCondのSignal、Broadcastの呼び出しの安全性や複数回呼び出しについては
+    // CCondVarの方で保障しているので、ここでは考慮しない
 
-	ret = m_LockMutex.Open();
-	VGOTO(ret, __EXIT__);
+    CMonitor::CMonitor()
+    {
+        m_IsLocked = IZ_FALSE;
+    }
 
-	ret = m_WaitCond.Init();
-	VGOTO(ret, __EXIT__);
+    CMonitor::~CMonitor()
+    {
+	    Destroy();
+    }
 
-__EXIT__:
-	if (!ret) {
-		Destroy();
-	}
-	return ret;
-}
+    // 初期化.
+    IZ_BOOL CMonitor::Init()
+    {
+	    IZ_BOOL ret = IZ_FALSE;
 
-// 終了.
-void CMonitor::Destroy()
-{
-	m_LockMutex.Close();
-	m_WaitCond.Destroy();
-}
+	    ret = m_LockMutex.Open();
+	    VGOTO(ret, __EXIT__);
 
-// syncronized開始.
-void CMonitor::Lock()
-{
-	m_LockMutex.Lock();
-    m_IsLocked = IZ_TRUE;
-}
+	    ret = m_WaitCond.Init();
+	    VGOTO(ret, __EXIT__);
 
-// syncronized終了.
-void CMonitor::Unlock()
-{
-	m_LockMutex.Unlock();
-    m_IsLocked = IZ_FALSE;
+    __EXIT__:
+	    if (!ret) {
+		    Destroy();
+	    }
+	    return ret;
+    }
 
-	// 念のため
-	//NotifyAll();
-}
+    // 終了.
+    void CMonitor::Destroy()
+    {
+	    m_LockMutex.Close();
+	    m_WaitCond.Destroy();
+    }
 
-// 待機.
-void CMonitor::Wait()
-{
-    IZ_ASSERT(m_IsLocked);
+    // syncronized開始.
+    void CMonitor::Lock()
+    {
+	    m_LockMutex.Lock();
+        m_IsLocked = IZ_TRUE;
+    }
 
-	m_WaitCond.Wait(m_LockMutex);
-}
+    // syncronized終了.
+    void CMonitor::Unlock()
+    {
+	    m_LockMutex.Unlock();
+        m_IsLocked = IZ_FALSE;
 
-// 待機中のスレッドを１つ起こす.
-void CMonitor::Notify()
-{
-	m_WaitCond.Signal();
-}
+	    // 念のため
+	    //NotifyAll();
+    }
 
-// 待機中のスレッドを全て起こす.
-void CMonitor::NotifyAll()
-{
-	m_WaitCond.Broadcast();
-}
+    // 待機.
+    void CMonitor::Wait()
+    {
+        IZ_ASSERT(m_IsLocked);
+
+	    m_WaitCond.Wait(m_LockMutex);
+    }
+
+    // 待機中のスレッドを１つ起こす.
+    void CMonitor::Notify()
+    {
+	    m_WaitCond.Signal();
+    }
+
+    // 待機中のスレッドを全て起こす.
+    void CMonitor::NotifyAll()
+    {
+	    m_WaitCond.Broadcast();
+    }
+}   // namespace sys
+}   // namespace izanagi

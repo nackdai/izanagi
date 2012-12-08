@@ -4,7 +4,10 @@
 #include "izDefs.h"
 #include "SysThreadDefs.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace sys
+{
 	/** セマフォ.
 	 */
 	class CSemaphore {
@@ -36,6 +39,7 @@ namespace izanagi {
 	private:
 		SemaHandle m_Handle;
 	};
+}   // namespace sys
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_SYSTEM_SYS_SEMAPHORE_H__)

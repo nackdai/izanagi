@@ -4,7 +4,10 @@
 #include "izDefs.h"
 #include "SysThreadDefs.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace sys
+{
 	class CMutex;
 
 	/** 条件変数.
@@ -47,6 +50,7 @@ namespace izanagi {
 		IZ_UINT8 m_Buf[44];
 #endif
 	};
+}   // namespace sys
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_SYSTEM_SYS_COND_H__)

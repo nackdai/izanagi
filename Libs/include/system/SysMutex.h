@@ -4,7 +4,10 @@
 #include "izDefs.h"
 #include "SysThreadDefs.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace sys
+{
 	/**
 	 */
 	class CMutex {
@@ -45,6 +48,7 @@ namespace izanagi {
 
 		ThreadId m_OwnerThreadId;
 	};
+}   // namespace sys
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_SYSTEM_SYS_MUTEX_H__)

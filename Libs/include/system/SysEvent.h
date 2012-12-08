@@ -4,7 +4,10 @@
 #include "izDefs.h"
 #include "SysThreadDefs.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace sys
+{
 	/**
 	 */
 	class CEvent {
@@ -44,6 +47,7 @@ namespace izanagi {
 	private:
 		EventHandle m_Handle;
 	};
+}   // namespace sys
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_SYSTEM_SYS_EVENT_H__)

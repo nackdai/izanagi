@@ -24,13 +24,13 @@ IZ_BOOL SampleMainLoop(izanagi::sample::SSampleParam& params)
 	IZ_BOOL ret = IZ_TRUE;
 
 	// 実行ファイルから現在のパスを取得
-	izanagi::CSysUtil::SetCurrentDirectoryFromExe();
+	izanagi::sys::CSysUtil::SetCurrentDirectoryFromExe();
 
 	izanagi::sample::CSampleWndProc wndProc;
 	void* nativeWndHandle = IZ_NULL;
 
 	// ウインドウ作成用パラメータ
-	izanagi::WindowParams wndParam = {
+	izanagi::sys::WindowParams wndParam = {
 		params.width,
 		params.height,
 		params.isWindowed,
@@ -52,13 +52,13 @@ IZ_BOOL SampleMainLoop(izanagi::sample::SSampleParam& params)
 	};
 
 	// ウインドウ作成
-	izanagi::WindowHandle wndHandle = izanagi::CSysWindow::Create(
+	izanagi::sys::WindowHandle wndHandle = izanagi::sys::CSysWindow::Create(
 										params.allocator,
 										wndParam);
 	VGOTO(ret = (wndHandle != IZ_NULL), __EXIT__);
 
 	// プラットフォームごとのウインドウハンドルを取得
-	nativeWndHandle = izanagi::CSysWindow::GetNativeWindowHandle(wndHandle);
+	nativeWndHandle = izanagi::sys::CSysWindow::GetNativeWindowHandle(wndHandle);
 	VGOTO(ret = (nativeWndHandle != IZ_NULL), __EXIT__);
 
 	appParam.deviceWindow = nativeWndHandle;
@@ -68,12 +68,12 @@ IZ_BOOL SampleMainLoop(izanagi::sample::SSampleParam& params)
 	ret = params.app->Init(appParam);
 	VGOTO(ret, __EXIT__);
 
-	izanagi::CSysWindow::RunLoop(wndHandle);
+	izanagi::sys::CSysWindow::RunLoop(wndHandle);
 
 __EXIT__:
 	params.app->Release();
 
-	izanagi::CSysWindow::Destroy(wndHandle);
+	izanagi::sys::CSysWindow::Destroy(wndHandle);
 
 	params.allocator->Dump();
 

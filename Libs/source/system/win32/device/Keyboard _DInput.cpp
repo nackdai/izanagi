@@ -1,10 +1,12 @@
 #include "system/Keyboard_DInput.h"
 
 extern IZ_BOOL InitDirectInput(
-    izanagi::SInputDeviceInitParam& param,
+    izanagi::sys::SInputDeviceInitParam& param,
     D_INPUT** input);
 
 namespace izanagi
+{
+namespace sys
 {
     /**
     * インスタンス作成
@@ -136,4 +138,5 @@ __EXIT__:
 
 	    return ret;
     }
+}   // namespace sys
 }   // namespace izanagi

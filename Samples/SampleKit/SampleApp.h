@@ -76,7 +76,7 @@ namespace sample {
 
 		/** タイマ取得.
 		 */
-		izanagi::CTimer& GetTimer(IZ_UINT idx);
+		izanagi::sys::CTimer& GetTimer(IZ_UINT idx);
 
 		/** カメラ取得.
 		 */
@@ -124,7 +124,7 @@ namespace sample {
 		 */
 		virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device) = 0;
 
-        izanagi::CPad* GetPad()
+        izanagi::sys::CPad* GetPad()
         {
             return m_Pad;
         }
@@ -135,13 +135,13 @@ namespace sample {
 
 		izanagi::CDebugFont* m_DebugFont;
 
-		izanagi::CPad* m_Pad;
-		izanagi::CKeyboard* m_Keyboard;
+		izanagi::sys::CPad* m_Pad;
+		izanagi::sys::CKeyboard* m_Keyboard;
 
 		IZ_UINT m_ScreenWidth;
 		IZ_UINT m_ScreenHeight;
 
-		izanagi::CTimer m_Timer[SAMPLE_TIMER_NUM];
+		izanagi::sys::CTimer m_Timer[SAMPLE_TIMER_NUM];
 
 		CSampleCamera m_Camera;
 	};

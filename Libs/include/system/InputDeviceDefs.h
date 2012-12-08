@@ -5,6 +5,8 @@
 
 namespace izanagi
 {
+namespace sys
+{
     // 入力デバイス初期化パラメータ
 	struct SInputDeviceInitParam
     {
@@ -177,6 +179,7 @@ namespace izanagi
         DIK_PGDN,        
     };
 #endif  // #ifndef __DINPUT_INCLUDED__
+}   // namespace sys
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_SYSTEM_INPUT_DEVICE_DEFS_H__)

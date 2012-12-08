@@ -51,14 +51,14 @@ namespace threadmodel
                 }
             }
 
-            CThread::YieldThread();
+            sys::CThread::YieldThread();
         }
     }
 
     // このスレッドの実行を開始.
     IZ_BOOL CJobWorker::Start()
     {
-        IZ_BOOL ret = CThread::Start();
+        IZ_BOOL ret = sys::CThread::Start();
         if (ret)
         {
             Resume();

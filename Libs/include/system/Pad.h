@@ -4,7 +4,10 @@
 #include "izStd.h"
 #include "InputDeviceDefs.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace sys
+{
     /**
      */
     struct PadState
@@ -148,6 +151,7 @@ namespace izanagi {
 
         E_PAD_TYPE m_Type;
 	};
+}   // namespace sys
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_SYSTEM_PAD_H__)

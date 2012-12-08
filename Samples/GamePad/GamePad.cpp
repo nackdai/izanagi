@@ -47,7 +47,7 @@ void CGamePadApp::ReleaseInternal()
 // 更新.
 void CGamePadApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
-    izanagi::CPad* pad = GetPad();
+    izanagi::sys::CPad* pad = GetPad();
 
     if (pad != IZ_NULL)
     {
@@ -59,7 +59,7 @@ namespace
 {
     void DumpDInputPad(
         izanagi::CDebugFont* font,
-        izanagi::CPad* pad)
+        izanagi::sys::CPad* pad)
     {
         font->DBPrint("DirectInput ----\n");
 
@@ -83,7 +83,7 @@ namespace
 
     void DumpXInputPad(
         izanagi::CDebugFont* font,
-        izanagi::CPad* pad)
+        izanagi::sys::CPad* pad)
     {
         font->DBPrint("XInput ----\n");
 
@@ -111,7 +111,7 @@ namespace
 // 描画.
 void CGamePadApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
-    izanagi::CPad* pad = GetPad();
+    izanagi::sys::CPad* pad = GetPad();
     izanagi::CDebugFont* font = GetDebugFont();
 
     if (device->Begin2D())
@@ -122,7 +122,7 @@ void CGamePadApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
             {
                 font->DBPrint("raw ----\n");
 
-                if (pad->GetType() == izanagi::E_PAD_TYPE_X_INPUT)
+                if (pad->GetType() == izanagi::sys::E_PAD_TYPE_X_INPUT)
                 {
                     DumpXInputPad(font, pad);
                 }
@@ -134,7 +134,7 @@ void CGamePadApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
                 font->DBPrint("\n");
                 font->DBPrint("izanagi ----\n");
 
-                const izanagi::PadState& state = pad->GetCurState();
+                const izanagi::sys::PadState& state = pad->GetCurState();
 
                 font->DBPrint("AxisX x[%f] y[%f]\n", state.axisLeft[0], state.axisLeft[1]);
                 font->DBPrint("AxisY x[%f] y[%f]\n", state.axisRight[0], state.axisRight[1]);
@@ -153,14 +153,14 @@ void CGamePadApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
                     "L2", "R2",
                     "L_UP", "L_RIGHT", "L_DOWN", "L_LEFT",
                 };
-                IZ_C_ASSERT(COUNTOF(names) == izanagi::E_PAD_BUTTON_NUM);
+                IZ_C_ASSERT(COUNTOF(names) == izanagi::sys::E_PAD_BUTTON_NUM);
 
-                for (IZ_UINT i = 0; i < izanagi::E_PAD_BUTTON_NUM;)
+                for (IZ_UINT i = 0; i < izanagi::sys::E_PAD_BUTTON_NUM;)
                 {
                     font->DBPrint("%s [%d] ", names[i], state.buttons[i]);
                     i++;
 
-                    if (i < izanagi::E_PAD_BUTTON_NUM)
+                    if (i < izanagi::sys::E_PAD_BUTTON_NUM)
                     {
                         font->DBPrint("%s [%d]\n", names[i], state.buttons[i]);
                         i++;
