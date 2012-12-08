@@ -6,6 +6,8 @@
 
 namespace izanagi
 {
+namespace sys
+{
     // DirectInput
 	class CPadDInput : public CPad
     {
@@ -55,6 +57,7 @@ namespace izanagi
 
         DIJOYSTATE m_RawState;
 	};
+}   // namespace sys
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_SYSTEM_PAD_DINPUT_H__)

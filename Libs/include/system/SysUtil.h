@@ -3,7 +3,10 @@
 
 #include "izDefs.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace sys
+{
 	/**
 	*/
 	class CSysUtil {
@@ -18,6 +21,7 @@ namespace izanagi {
 		 */
 		static IZ_BOOL SetCurrentDirectoryFromExe();
 	};
+}   // namespace sys
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_SYSTEM_SYS_UTIL_H__)

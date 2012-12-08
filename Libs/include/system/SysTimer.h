@@ -3,7 +3,10 @@
 
 #include "izDefs.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace sys
+{
 	/**
 	* Timer
 	*/
@@ -36,6 +39,7 @@ namespace izanagi {
 
 		IZ_FLOAT m_fTime;
 	};
+}   // namespace sys
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_SYSTEM_SYS_TIMER_H__)

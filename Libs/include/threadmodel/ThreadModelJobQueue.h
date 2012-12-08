@@ -110,7 +110,7 @@ namespace threadmodel
         // バッファ
         IZ_UINT8* m_Buf;
 
-        CEvent m_WaitEvent;
+        sys::CEvent m_WaitEvent;
         IZ_INT m_WorkingThreadNum;
 
         IZ_BOOL m_IsTerminated;

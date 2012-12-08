@@ -4,6 +4,8 @@
 
 namespace izanagi
 {
+namespace sys
+{
     /**
     * インスタンス作成
     */
@@ -144,4 +146,5 @@ namespace izanagi
 
         return ret;
     }
+}   // namespace sys
 }   // namespce izanagi

@@ -12,7 +12,7 @@ namespace threadmodel
 
     /** ジョブを実行するワーカースレッド
      */
-    class CJobWorker : public CThread
+    class CJobWorker : public sys::CThread
     {
         friend class CJobQueue;
 
@@ -39,7 +39,7 @@ namespace threadmodel
     private:
         CJobQueue* m_JobQueue;
         
-        CEvent m_Event;
+        sys::CEvent m_Event;
 
         IZ_BOOL m_WillJoin;
     };

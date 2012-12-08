@@ -6,7 +6,10 @@
 #include "SysMutex.h"
 #include "SysEvent.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace sys
+{
 	class CThreadOp;
 
 	/**
@@ -117,6 +120,7 @@ namespace izanagi {
         void* m_UserData;
 		IRunnable* m_Runnable;
 	};
+}   // namespace sys
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_SYSTEM_SYS_THREAD_H__)

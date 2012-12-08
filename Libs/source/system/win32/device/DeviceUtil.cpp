@@ -3,7 +3,7 @@
 #include "system/InputDeviceDefs.h"
 
 IZ_BOOL InitDirectInput(
-    izanagi::SInputDeviceInitParam& param,
+    izanagi::sys::SInputDeviceInitParam& param,
     D_INPUT** input)
 {
 #if 0

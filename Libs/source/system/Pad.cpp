@@ -4,6 +4,8 @@
 
 namespace izanagi
 {
+namespace sys
+{
     /**
     * インスタンス作成
     */
@@ -47,4 +49,5 @@ namespace izanagi
     CPad::~CPad()
     {
     }
-}   // using namespace izanagi
+}   // namespace sys
+}   // namespace izanagi

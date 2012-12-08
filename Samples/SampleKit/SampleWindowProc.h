@@ -9,7 +9,7 @@ namespace sample {
 
 	/** サンプルウインドウメッセージハンドラ.
 	 */
-	class CSampleWndProc : public izanagi::CMessageHandler {
+	class CSampleWndProc : public izanagi::sys::CMessageHandler {
 		friend class CSampleApp;
 
 	public:

@@ -3,7 +3,10 @@
 
 #include "izDefs.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace sys
+{
 	/**
 	*/
 	class CSysDisplay {
@@ -32,6 +35,7 @@ namespace izanagi {
 		// Get display's refresh rate.
 		static IZ_UINT GetRefreshRate();
 	};
+}   // namespace sys
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_SYSTEM_SYS_DISPLAY_H__)

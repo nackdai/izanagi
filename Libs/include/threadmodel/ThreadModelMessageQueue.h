@@ -40,8 +40,8 @@ namespace threadmodel
         typedef CStdList<CMessage> LIST;
 
         QUEUE m_Queue[HASH_NUM];
-        CEvent m_Event;
-        CMutex m_Mutex;
+        sys::CEvent m_Event;
+        sys::CMutex m_Mutex;
     };
 }   // namespace threadmodel
 }   // namespace izanagi

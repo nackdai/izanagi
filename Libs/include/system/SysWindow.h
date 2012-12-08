@@ -4,7 +4,10 @@
 #include "izDefs.h"
 #include "izStd.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace sys
+{
 	class CMsgHandlerManager;
 
 	/**
@@ -86,6 +89,7 @@ namespace izanagi {
 
 		static void* GetNativeDisplayHandle(const WindowHandle& handle);
 	};
+}   // namespace sys
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_SYSTEM_SYS_WINDOW_H__)

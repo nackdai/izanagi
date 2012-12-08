@@ -61,7 +61,7 @@ IZ_BOOL CFontBitmapApp::InitInternal(
 		VRETURN(m_FontUtf8 != IZ_NULL);
 	}
 
-	// UTF8
+	// SJIS
 	{
 		izanagi::CFileInputStream in;
 		VRETURN(in.Open("./data/FontSample_Sjis.fnt"));

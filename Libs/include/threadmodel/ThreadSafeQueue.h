@@ -145,7 +145,7 @@ namespace threadmodel
 
     protected:
         typename CStdQueue<T> m_Queue;
-        CMutex m_Mutex;
+        sys::CMutex m_Mutex;
     };
 }   // namespace threadmodel
 }   // namespace izanagi

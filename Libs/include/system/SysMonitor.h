@@ -5,9 +5,12 @@
 #include "SysMutex.h"
 #include "SysCond.h"
 
-namespace izanagi {
+namespace izanagi
+{
 	class IMemoryAllocator;
 
+namespace sys
+{
 	/**
 	 */
 	class CMonitor {
@@ -53,6 +56,7 @@ namespace izanagi {
 		CCondVar m_WaitCond;
         IZ_BOOL m_IsLocked;
 	};
+}   // namespace sys
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_SYSTEM_SYS_MONITOR_H__)

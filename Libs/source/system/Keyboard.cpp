@@ -3,6 +3,8 @@
 
 namespace izanagi
 {
+namespace sys
+{
     /**
     * インスタンス作成
     */
@@ -29,4 +31,5 @@ namespace izanagi
     CKeyboard::~CKeyboard()
     {
     }
+}   // namespace sys
 }   // namespace izanagi
