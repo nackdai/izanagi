@@ -1,6 +1,7 @@
 #if !defined(__IZANAGI_SYSTEM_PAD_DINPUT_H__)
 #define __IZANAGI_SYSTEM_PAD_DINPUT_H__
 
+#include "izD3DDefs.h"
 #include "Pad.h"
 
 namespace izanagi
@@ -14,7 +15,7 @@ namespace izanagi
 		// インスタンス作成
 		static CPad* CreatePad(
             IMemoryAllocator* pAllocator,
-            void* initParam,
+            SInputDeviceInitParam* initParam,
             IZ_FLOAT analogStickDeadZone);
 
 		// デバイス列挙コールバック
@@ -34,7 +35,7 @@ namespace izanagi
 	private:
         // 初期化
 		IZ_BOOL Init(
-            void* initParam,
+            SInputDeviceInitParam* initParam,
             IZ_FLOAT analogStickDeadZone);
 
 		// 更新

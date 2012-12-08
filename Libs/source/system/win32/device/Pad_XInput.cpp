@@ -86,7 +86,7 @@ namespace izanagi
         if (ret)
         {
             // 前の状態を保持
-		    memcpy(&m_PrevState, &m_CurState, sizeof(m_CurState));
+		    memcpy(&m_LastState, &m_CurState, sizeof(m_CurState));
 
             static IZ_UINT btnflags[] =
             {
