@@ -1,10 +1,10 @@
 #include "izSampleKit.h"
 #include "izSystem.h"
 
-static izanagi::CCondVar g_Cond;
+static izanagi::sys::CCondVar g_Cond;
 static IZ_BOOL g_IsLocked[3] = { IZ_FALSE, IZ_FALSE, IZ_FALSE };
 
-class CTestRunnableCond : public izanagi::IRunnable
+class CTestRunnableCond : public izanagi::sys::IRunnable
 {
 protected:
     CTestRunnableCond()
@@ -17,7 +17,7 @@ protected:
     }
 
 protected:
-    izanagi::CMutex m_Mutex;
+    izanagi::sys::CMutex m_Mutex;
 };
 
 class CTestRunnableCond_1 : public CTestRunnableCond
@@ -35,7 +35,7 @@ private:
         for (int i = 0; i < 100; i++)
         {
             IZ_PRINTF("1 [%d]\n", i);
-            izanagi::CThread::YieldThread();
+            izanagi::sys::CThread::YieldThread();
         }
         m_Mutex.Unlock();
     }
@@ -56,7 +56,7 @@ private:
         for (int i = 0; i < 100; i++)
         {
             IZ_PRINTF("2 [%d]\n", i);
-            izanagi::CThread::YieldThread();
+            izanagi::sys::CThread::YieldThread();
         }
         m_Mutex.Unlock();
     }
@@ -77,7 +77,7 @@ private:
         for (int i = 0; i < 100; i++)
         {
             IZ_PRINTF("3 [%d]\n", i);
-            izanagi::CThread::YieldThread();
+            izanagi::sys::CThread::YieldThread();
         }
         m_Mutex.Unlock();
     }
@@ -91,9 +91,9 @@ int TestCondVar()
     CTestRunnableCond_2 run_2;
     CTestRunnableCond_3 run_3;
 
-    izanagi::CThread thread_1(&run_1, IZ_NULL);
-    izanagi::CThread thread_2(&run_2, IZ_NULL);
-    izanagi::CThread thread_3(&run_3, IZ_NULL);
+    izanagi::sys::CThread thread_1(&run_1, IZ_NULL);
+    izanagi::sys::CThread thread_2(&run_2, IZ_NULL);
+    izanagi::sys::CThread thread_3(&run_3, IZ_NULL);
 
     thread_1.Start();
     thread_2.Start();
@@ -105,7 +105,7 @@ int TestCondVar()
         {
             break;
         }
-        izanagi::CThread::YieldThread();
+        izanagi::sys::CThread::YieldThread();
     }
 
     for (int i = 0; i < 100; i++)
@@ -121,7 +121,7 @@ int TestCondVar()
             g_Cond.Broadcast();
         }
 
-        izanagi::CThread::Sleep(100);
+        izanagi::sys::CThread::Sleep(100);
     }
 
     thread_1.Join();

@@ -109,10 +109,9 @@ void CMouseHit::ReleaseInternal()
 }
 
 // 更新.
-void CMouseHit::UpdateInternal(
-	izanagi::CCamera& camera,
-	izanagi::graph::CGraphicsDevice* device)
+void CMouseHit::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
+    izanagi::CCamera& camera = GetCamera();
 	camera.Update();
 
 	m_IsCross = IZ_FALSE;

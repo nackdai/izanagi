@@ -7,7 +7,7 @@
 izanagi::threadmodel::CMessageQueue queue;
 IZ_BOOL isFinish = IZ_FALSE;
 
-class CTestThread : public izanagi::CThread
+class CTestThread : public izanagi::sys::CThread
 {
 public:
     CTestThread() {}
@@ -45,7 +45,7 @@ public:
                 }
             }
 
-            izanagi::CThread::Sleep(100);
+            izanagi::sys::CThread::Sleep(100);
         }
     }
 };
@@ -127,7 +127,7 @@ void Test(IZ_BOOL isPosToZero)
 
     thread.Start();
 
-    izanagi::CThread::Sleep(1000);
+    izanagi::sys::CThread::Sleep(1000);
 
     for (IZ_UINT i = 0; i < MSG_MAX; i++)
     {
@@ -142,7 +142,7 @@ void Test(IZ_BOOL isPosToZero)
             queue.Post(i, &message[i]);
         }
 
-        izanagi::CThread::YieldThread();
+        izanagi::sys::CThread::YieldThread();
     }
 
     isFinish = IZ_TRUE;

@@ -2,9 +2,9 @@
 #include "izSystem.h"
 
 static IZ_UINT g_Value = 0;
-static izanagi::CEvent g_Event;
+static izanagi::sys::CEvent g_Event;
 
-class CTestRunnableEvent : public izanagi::IRunnable
+class CTestRunnableEvent : public izanagi::sys::IRunnable
 {
 public:
     CTestRunnableEvent()
@@ -26,7 +26,7 @@ private:
                 break;
             }
 
-            izanagi::CThread::Sleep(10);
+            izanagi::sys::CThread::Sleep(10);
         }
     }
 };
@@ -38,7 +38,7 @@ int TestEvent()
 
     CTestRunnableEvent run;
 
-    izanagi::CThread thread_1(&run, IZ_NULL);
+    izanagi::sys::CThread thread_1(&run, IZ_NULL);
 
     thread_1.Start();
 
@@ -51,7 +51,7 @@ int TestEvent()
         {
             IZ_PRINTF("Event Set\n");
             g_Event.Set();
-            izanagi::CThread::Sleep(100);
+            izanagi::sys::CThread::Sleep(100);
         }
         else if (i == 10
             || i == 30
@@ -61,10 +61,10 @@ int TestEvent()
         {
             IZ_PRINTF("Event Reset\n");
             g_Event.Reset();
-            izanagi::CThread::Sleep(100);
+            izanagi::sys::CThread::Sleep(100);
         }
 
-        izanagi::CThread::Sleep(10);
+        izanagi::sys::CThread::Sleep(10);
     }
 
     IZ_PRINTF("Event Set\n");

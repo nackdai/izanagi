@@ -41,10 +41,10 @@ public:
 
 	izanagi::CDebugFont* GetDebugFont() { return m_pDebugFont; }
 
-	izanagi::CPad* GetPad() { return m_pPad; }
-	izanagi::CKeyboard* GetKeyboard() { return m_pKeyboard; }
+	izanagi::sys::CPad* GetPad() { return m_pPad; }
+	izanagi::sys::CKeyboard* GetKeyboard() { return m_pKeyboard; }
 
-	izanagi::CTimer& GetTimer(IZ_UINT idx);
+	izanagi::sys::CTimer& GetTimer(IZ_UINT idx);
 
 protected:
 	enum {
@@ -59,16 +59,16 @@ protected:
 
 	izanagi::CDebugFont* m_pDebugFont;
 
-	izanagi::CPad* m_pPad;
-	izanagi::CKeyboard* m_pKeyboard;
+	izanagi::sys::CPad* m_pPad;
+	izanagi::sys::CKeyboard* m_pKeyboard;
 
-	izanagi::CTimer m_cTimer[TIMER_NUM];
+	izanagi::sys::CTimer m_cTimer[TIMER_NUM];
 };
 
 /**
 * タイマ取得
 */
-inline izanagi::CTimer& CMySystem::GetTimer(IZ_UINT idx)
+inline izanagi::sys::CTimer& CMySystem::GetTimer(IZ_UINT idx)
 {
 	IZ_ASSERT(idx < TIMER_NUM);
 	return m_cTimer[idx];

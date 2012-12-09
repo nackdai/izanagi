@@ -22,9 +22,7 @@ protected:
 	virtual void ReleaseInternal();
 
 	// 更新.
-	virtual void UpdateInternal(
-        izanagi::CCamera& camera,
-        izanagi::graph::CGraphicsDevice* device);
+	virtual void UpdateInternal(izanagi::graph::CGraphicsDevice* device);
 
 	// 描画.
 	virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device);

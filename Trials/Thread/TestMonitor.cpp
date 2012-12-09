@@ -1,10 +1,10 @@
 #include "izSampleKit.h"
 #include "izSystem.h"
 
-static izanagi::CMonitor g_Monitor;
+static izanagi::sys::CMonitor g_Monitor;
 static IZ_BOOL g_IsLocked[3] = { IZ_FALSE, IZ_FALSE, IZ_FALSE };
 
-class CTestRunnableMonitor_1 : public izanagi::IRunnable
+class CTestRunnableMonitor_1 : public izanagi::sys::IRunnable
 {
 public:
     CTestRunnableMonitor_1() {}
@@ -18,14 +18,14 @@ private:
         for (int i = 0; i < 100; i++)
         {
             IZ_PRINTF("1 [%d]\n", i);
-            izanagi::CThread::YieldThread();
+            izanagi::sys::CThread::YieldThread();
         }
         g_Monitor.Notify();
         g_Monitor.Unlock();
     }
 };
 
-class CTestRunnableMonitor_2 : public izanagi::IRunnable
+class CTestRunnableMonitor_2 : public izanagi::sys::IRunnable
 {
 public:
     CTestRunnableMonitor_2() {}
@@ -40,13 +40,13 @@ private:
         for (int i = 0; i < 100; i++)
         {
             IZ_PRINTF("2 [%d]\n", i);
-            izanagi::CThread::YieldThread();
+            izanagi::sys::CThread::YieldThread();
         }
         g_Monitor.Unlock();
     }
 };
 
-class CTestRunnableMonitor_3 : public izanagi::IRunnable
+class CTestRunnableMonitor_3 : public izanagi::sys::IRunnable
 {
 public:
     CTestRunnableMonitor_3() {}
@@ -61,7 +61,7 @@ private:
         for (int i = 0; i < 100; i++)
         {
             IZ_PRINTF("3 [%d]\n", i);
-            izanagi::CThread::YieldThread();
+            izanagi::sys::CThread::YieldThread();
         }
         g_Monitor.Unlock();
     }
@@ -75,9 +75,9 @@ int TestMonitor()
     CTestRunnableMonitor_2 run_2;
     CTestRunnableMonitor_3 run_3;
 
-    izanagi::CThread thread_1(&run_1, IZ_NULL);
-    izanagi::CThread thread_2(&run_2, IZ_NULL);
-    izanagi::CThread thread_3(&run_3, IZ_NULL);
+    izanagi::sys::CThread thread_1(&run_1, IZ_NULL);
+    izanagi::sys::CThread thread_2(&run_2, IZ_NULL);
+    izanagi::sys::CThread thread_3(&run_3, IZ_NULL);
 
     thread_1.Start();
     thread_2.Start();
@@ -90,7 +90,7 @@ int TestMonitor()
             g_Monitor.NotifyAll();
             break;
         }
-        izanagi::CThread::YieldThread();
+        izanagi::sys::CThread::YieldThread();
     }
 
     thread_1.Join();

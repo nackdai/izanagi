@@ -1,7 +1,7 @@
 #include "izSampleKit.h"
 #include "izSystem.h"
 
-class CTestRunnable_1 : public izanagi::IRunnable
+class CTestRunnable_1 : public izanagi::sys::IRunnable
 {
 public:
     CTestRunnable_1() {}
@@ -13,12 +13,12 @@ private:
         for (int i = 0; i < 100; i++)
         {
             IZ_PRINTF("1 [%d]\n", i);
-            izanagi::CThread::YieldThread();
+            izanagi::sys::CThread::YieldThread();
         }
     }
 };
 
-class CTestRunnable_2 : public izanagi::IRunnable
+class CTestRunnable_2 : public izanagi::sys::IRunnable
 {
 public:
     CTestRunnable_2() {}
@@ -30,12 +30,12 @@ private:
         for (int i = 0; i < 100; i++)
         {
             IZ_PRINTF("2 [%d]\n", i);
-            izanagi::CThread::YieldThread();
+            izanagi::sys::CThread::YieldThread();
         }
     }
 };
 
-class CTestRunnable_3 : public izanagi::IRunnable
+class CTestRunnable_3 : public izanagi::sys::IRunnable
 {
 public:
     CTestRunnable_3() {}
@@ -47,7 +47,7 @@ private:
         for (int i = 0; i < 100; i++)
         {
             IZ_PRINTF("3 [%d]\n", i);
-            izanagi::CThread::YieldThread();
+            izanagi::sys::CThread::YieldThread();
         }
     }
 };
@@ -58,9 +58,9 @@ int TestThread()
     CTestRunnable_2 run_2;
     CTestRunnable_3 run_3;
 
-    izanagi::CThread thread_1(&run_1, IZ_NULL);
-    izanagi::CThread thread_2(&run_2, IZ_NULL);
-    izanagi::CThread thread_3(&run_3, IZ_NULL);
+    izanagi::sys::CThread thread_1(&run_1, IZ_NULL);
+    izanagi::sys::CThread thread_2(&run_2, IZ_NULL);
+    izanagi::sys::CThread thread_3(&run_3, IZ_NULL);
 
     thread_1.Start();
     thread_2.Start();
@@ -68,7 +68,7 @@ int TestThread()
 
     for (int i = 0; i < 100; i++)
     {
-        izanagi::CThread::Sleep(10);
+        izanagi::sys::CThread::Sleep(10);
     }
 
     thread_1.Join();

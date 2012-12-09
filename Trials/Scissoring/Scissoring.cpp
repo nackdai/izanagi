@@ -144,15 +144,14 @@ void CScissoring::ReleaseInternal()
 }
 
 // 更新.
-void CScissoring::UpdateInternal(
-	izanagi::CCamera& camera,
-	izanagi::graph::CGraphicsDevice* device)
+void CScissoring::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
+    izanagi::CCamera& camera = GetCamera();
 	camera.Update();
 
 	if (m_EnableScissoring)
 	{
-		izanagi::SPlane plane;
+		izanagi::math::SPlane plane;
 		m_Rectangle.rc.GetPlane(plane);
 
 		m_TriNum = izanagi::CSceneGraphUtil::ComputeTriNumBySissoring(
