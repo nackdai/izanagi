@@ -39,7 +39,7 @@ namespace izanagi {
 		void* GetObject() { return m_Object; }
 		void* GetFunc() { return m_Func; }
 
-	private:
+	protected:
 		void* m_Object;
 		void* m_Func;
 
@@ -122,6 +122,8 @@ namespace izanagi {
 		typedef void (T::* FUNC)(ARG);
 
 		friend class CEventHandlerHelper;
+        friend class CDelegateFactory;
+
 		IZ_DECL_PLACEMENT_NEW();
 
 	public:
@@ -158,6 +160,8 @@ namespace izanagi {
 		typedef void (*FUNC)(ARG);
 		
 		friend class CEventHandlerHelper;
+        friend class CDelegateFactory;
+
 		IZ_DECL_PLACEMENT_NEW();
 
 	public:
@@ -209,6 +213,8 @@ namespace izanagi {
 		typedef RETURN (T::* FUNC)(ARG);
 
 		friend class CEventHandlerHelper;
+        friend class CDelegateFactory;
+
 		IZ_DECL_PLACEMENT_NEW();
 
 	public:
@@ -247,6 +253,8 @@ namespace izanagi {
 		typedef RETURN (*FUNC)(ARG);
 
 		friend class CEventHandlerHelper;
+        friend class CDelegateFactory;
+
 		IZ_DECL_PLACEMENT_NEW();
 
 	public:
