@@ -3,7 +3,7 @@
 
 static IZ_UINT g_Value = 0;
 
-class CTestRunnableMutex : public izanagi::IRunnable
+class CTestRunnableMutex : public izanagi::sys::IRunnable
 {
 public:
     CTestRunnableMutex()
@@ -32,21 +32,21 @@ private:
             }
             m_Mutex.Unlock();
 
-            izanagi::CThread::YieldThread();
+            izanagi::sys::CThread::YieldThread();
         }
     }
 
 private:
-    izanagi::CMutex m_Mutex;
+    izanagi::sys::CMutex m_Mutex;
 };
 
 int TestMutex()
 {
     CTestRunnableMutex run;
 
-    izanagi::CThread thread_1(&run, IZ_NULL);
-    izanagi::CThread thread_2(&run, IZ_NULL);
-    izanagi::CThread thread_3(&run, IZ_NULL);
+    izanagi::sys::CThread thread_1(&run, IZ_NULL);
+    izanagi::sys::CThread thread_2(&run, IZ_NULL);
+    izanagi::sys::CThread thread_3(&run, IZ_NULL);
 
     thread_1.Start();
     thread_2.Start();
@@ -54,7 +54,7 @@ int TestMutex()
 
     for (int i = 0; i < 100; i++)
     {
-        izanagi::CThread::Sleep(10);
+        izanagi::sys::CThread::Sleep(10);
     }
 
     thread_1.Join();

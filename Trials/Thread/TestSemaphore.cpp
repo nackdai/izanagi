@@ -3,7 +3,7 @@
 
 static IZ_UINT g_Count = 0;
 
-class CTestRunnableSema : public izanagi::IRunnable
+class CTestRunnableSema : public izanagi::sys::IRunnable
 {
 public:
     CTestRunnableSema()
@@ -25,13 +25,13 @@ private:
         for (IZ_UINT i = 0; i < 100; i++)
         {
             IZ_PRINTF("%d : (%d) [%d]\n", g_Count, id, i);
-            izanagi::CThread::YieldThread();
+            izanagi::sys::CThread::YieldThread();
         }
         m_Sema.Release();
     }
 
 private:
-    izanagi::CSemaphore m_Sema;
+    izanagi::sys::CSemaphore m_Sema;
 };
 
 
@@ -41,9 +41,9 @@ int TestSemaphore()
 
     IZ_UINT id[3] = {0, 1, 2};
 
-    izanagi::CThread thread_1(&run, (void*)&id[0]);
-    izanagi::CThread thread_2(&run, (void*)&id[1]);
-    izanagi::CThread thread_3(&run, (void*)&id[2]);
+    izanagi::sys::CThread thread_1(&run, (void*)&id[0]);
+    izanagi::sys::CThread thread_2(&run, (void*)&id[1]);
+    izanagi::sys::CThread thread_3(&run, (void*)&id[2]);
 
     thread_1.Start();
     thread_2.Start();
@@ -51,7 +51,7 @@ int TestSemaphore()
 
     for (int i = 0; i < 100; i++)
     {
-        izanagi::CThread::Sleep(10);
+        izanagi::sys::CThread::Sleep(10);
     }
 
     thread_1.Join();

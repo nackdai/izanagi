@@ -11,13 +11,13 @@ public:
 public:
     virtual void OnExecute()
     {
-        izanagi::ThreadId id = izanagi::CThread::GetCurrentThreadId();
+        izanagi::sys::ThreadId id = izanagi::sys::CThread::GetCurrentThreadId();
 
         for (IZ_UINT i = 0; i < 100; i++)
         {
             IZ_PRINTF("%d: [%d] {%d}\n", id, m_ID, i);
 
-            izanagi::CThread::Sleep(5);
+            izanagi::sys::CThread::Sleep(5);
         }
     }
 

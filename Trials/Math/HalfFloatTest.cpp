@@ -58,7 +58,7 @@ void RandomTest()
 
 void HalfFloatTest()
 {
-    izanagi::CTimer timer;
+    izanagi::sys::CTimer timer;
     izanagi::math::CMathRand::Init(timer.GetCurTime());
 
     SimpleTest();
