@@ -208,7 +208,7 @@ void CPmdImporter::GetMaterialForMesh(
 	// 適当に名前を付ける
 
 	izanagi::tool::CString str;
-	str.format("materal_%d\0", nIdx);
+	str.format("material_%d\0", nIdx);
 
 	sMtrl.name.SetString(str.c_str());
 	sMtrl.nameKey = sMtrl.name.GetKeyValue();
@@ -504,14 +504,41 @@ IZ_BOOL CPmdImporter::EndMaterial()
 
 IZ_UINT CPmdImporter::GetMaterialNum()
 {
-	return 0;
+    return m_PmdLoader.GetMtrlNum();
 }
+
+#define PMD_MTRL_PARAM_NUM  (3)
 
 IZ_BOOL CPmdImporter::GetMaterial(
 	IZ_UINT nMtrlIdx,
 	izanagi::S_MTRL_MATERIAL& sMtrl)
 {
-	return IZ_TRUE;
+	IZ_ASSERT(nMtrlIdx < GetMaterialNum());
+
+    const SPmdMaterial& pmdMtrl = m_PmdLoader.GetMtrl(nMtrlIdx);
+
+    // 名前
+    izanagi::tool::CString strName;
+    strName.format("material_%d", nMtrlIdx);
+    sMtrl.name.SetString(strName.c_str());
+
+    sMtrl.keyMaterial = sMtrl.name.GetKeyValue();
+
+    // テクスチャのトーン用のテクスチャが必ず１枚ある
+    IZ_BOOL hasTex = (::strlen(pmdMtrl.texFileName) > 0);
+    sMtrl.numTex = (hasTex ? 2 : 1);
+
+    // シェーダは必ず１つ
+    sMtrl.numShader = 1;
+
+    // パラメータ数は固定
+    // diffuse, specular, ambient
+    sMtrl.numParam = PMD_MTRL_PARAM_NUM;
+
+    // パラメータのデータサイズはそれぞれで float * 4
+    sMtrl.paramBytes = 3 * sizeof(IZ_FLOAT) * 4;
+
+    return IZ_TRUE;
 }
 
 void CPmdImporter::GetMaterialTexture(
@@ -519,6 +546,30 @@ void CPmdImporter::GetMaterialTexture(
 	IZ_UINT nTexIdx,
 	izanagi::S_MTRL_TEXTURE& sTex)
 {
+    IZ_ASSERT(nMtrlIdx < GetMaterialNum());
+
+    const SPmdMaterial& pmdMtrl = m_PmdLoader.GetMtrl(nMtrlIdx);
+
+    IZ_BOOL hasTex = (::strlen(pmdMtrl.texFileName) > 0);
+    IZ_UINT numTex = (hasTex ? 2 : 1);
+
+    IZ_ASSERT(nTexIdx < numTex);
+
+    if (nTexIdx == 0)
+    {
+        // ０番目はトーン用テクスチャ
+        izanagi::tool::CString strTex;
+        strTex.format("toon%02d.bmp", pmdMtrl.idxToon);
+        sTex.name.SetString(strTex.c_str());
+    }
+    else
+    {
+        sTex.name.SetString(pmdMtrl.texFileName);
+    }
+
+    sTex.key = sTex.name.GetKeyValue();
+
+    sTex.type.flags = 0;
 }
 
 void CPmdImporter::GetMaterialShader(
@@ -526,6 +577,12 @@ void CPmdImporter::GetMaterialShader(
 	IZ_UINT nShaderIdx,
 	izanagi::S_MTRL_SHADER& sShader)
 {
+    IZ_ASSERT(nMtrlIdx < GetMaterialNum());
+
+    const SPmdMaterial& pmdMtrl = m_PmdLoader.GetMtrl(nMtrlIdx);
+
+    sShader.name.SetString("DefaultShader");
+    sShader.key = sShader.name.GetKeyValue();
 }
 
 void CPmdImporter::GetMaterialParam(
@@ -533,11 +590,66 @@ void CPmdImporter::GetMaterialParam(
 	IZ_UINT nParamIdx,
 	izanagi::S_MTRL_PARAM& sParam)
 {
+    IZ_ASSERT(nMtrlIdx < GetMaterialNum());
+
+    const SPmdMaterial& pmdMtrl = m_PmdLoader.GetMtrl(nMtrlIdx);
+
+    // パラメータ数は固定
+    // diffuse, specular, ambient
+    IZ_ASSERT(nParamIdx < PMD_MTRL_PARAM_NUM);
+
+    switch (nParamIdx)
+    {
+    case 0:
+        sParam.name.SetString("diffuse");
+        break;
+    case 1:
+        sParam.name.SetString("specular");
+        break;
+    case 2:
+        sParam.name.SetString("ambient");
+        break;
+    }
+
+    sParam.key = sParam.name.GetKeyValue();
+
+    sParam.type = izanagi::E_MTRL_PARAM_TYPE_VECTOR;
+
+    sParam.elements = 1;
+    sParam.bytes = sizeof(IZ_FLOAT) * 4;
 }
 
 void CPmdImporter::GetMaterialParamValue(
 	IZ_UINT nMtrlIdx,
 	IZ_UINT nParamIdx,
 	std::vector<IZ_FLOAT>& tvValue)
-{
+{IZ_ASSERT(nMtrlIdx < GetMaterialNum());
+
+    const SPmdMaterial& pmdMtrl = m_PmdLoader.GetMtrl(nMtrlIdx);
+
+    // パラメータ数は固定
+    // diffuse, specular, ambient
+    IZ_ASSERT(nParamIdx < PMD_MTRL_PARAM_NUM);
+
+    switch (nParamIdx)
+    {
+    case 0:
+        tvValue.push_back(pmdMtrl.diffuse[0]);
+        tvValue.push_back(pmdMtrl.diffuse[1]);
+        tvValue.push_back(pmdMtrl.diffuse[2]);
+        tvValue.push_back(1.0f);
+        break;
+    case 1:
+        tvValue.push_back(pmdMtrl.specular[0]);
+        tvValue.push_back(pmdMtrl.specular[1]);
+        tvValue.push_back(pmdMtrl.specular[2]);
+        tvValue.push_back(pmdMtrl.specularity);
+        break;
+    case 2:
+        tvValue.push_back(pmdMtrl.ambient[0]);
+        tvValue.push_back(pmdMtrl.ambient[1]);
+        tvValue.push_back(pmdMtrl.ambient[2]);
+        tvValue.push_back(1.0f);
+        break;
+    }
 }
