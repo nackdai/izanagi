@@ -226,11 +226,23 @@ IZ_BOOL CMaterial::Prepare(graph::CGraphicsDevice* pDevice)
 	izanagi::IShader* pShader = m_pShaderInfo->shader;
 
 	// Textures.
+#if 0
 	for (IZ_UINT i = 0; i < m_Header.numTex; i++) {
 		if (m_pTexInfo[i].tex != IZ_NULL) {
 			pDevice->SetTexture(i, m_pTexInfo[i].tex);
 		}
 	}
+#else
+    IZ_UINT texIdx = 0;
+    for (IZ_UINT i = 0; i < m_Header.numTex; i++)
+    {
+        if (m_pTexInfo[i].tex != IZ_NULL)
+        {
+			pDevice->SetTexture(texIdx, m_pTexInfo[i].tex);
+            texIdx++;
+		}
+    }
+#endif
 
 	// Parameters.
 	for (IZ_UINT i = 0; i < m_Header.numParam; i++) {
@@ -334,11 +346,15 @@ IZ_BOOL CMaterial::SetTexture(
 								m_pTexInfo,
 								m_Header.numTex,
 								nKey);
-	VRETURN(pTexInfo != IZ_NULL);
 	
-	SAFE_REPLACE(pTexInfo->tex, pTex);
+    IZ_BOOL ret = (pTexInfo != IZ_NULL);
+	
+    if (ret)
+    {
+	    SAFE_REPLACE(pTexInfo->tex, pTex);
+    }
 
-	return IZ_TRUE;
+	return ret;
 }
 
 // マテリアルにシェーダを追加.
