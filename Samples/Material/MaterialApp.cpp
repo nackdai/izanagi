@@ -104,6 +104,9 @@ CMaterialApp::CMaterialApp()
 	m_Shd = IZ_NULL;
 
 	memset(m_Mtrl, 0, sizeof(m_Mtrl));
+
+    m_RenderGraph = IZ_NULL;
+    m_Renderer = IZ_NULL;
 }
 
 CMaterialApp::~CMaterialApp()
@@ -234,7 +237,7 @@ IZ_BOOL CMaterialApp::InitInternal(
 		izanagi::CFileInputStream in;
 		IZ_CHAR tmp[32];
 
-		for (IZ_UINT i = 0; i < 4; i++) {
+		for (IZ_UINT i = 0; i < COUNTOF(m_Mtrl); i++) {
 			IZ_SPRINTF(tmp, sizeof(tmp), "data/Seymour_%d.mtrl\0", i);
 
 			VRETURN(in.Open(tmp));
@@ -250,7 +253,7 @@ IZ_BOOL CMaterialApp::InitInternal(
 		// シェーダ名を見てマテリアルをバインディングする
 		m_Shd->SetName("DefaultShader");
 
-		for (IZ_UINT i = 0; i < 4; i++) {
+		for (IZ_UINT i = 0; i < COUNTOF(m_Mtrl); i++) {
 			// マテリアルに対応するテクスチャとシェーダを設定
 			m_Mtrl[i]->SetTexture("boy_10.tga", m_Img->GetTexture(IMG_IDX));
 			m_Mtrl[i]->SetShader(m_Shd);
