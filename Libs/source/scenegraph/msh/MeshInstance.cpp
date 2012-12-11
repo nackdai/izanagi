@@ -312,20 +312,48 @@ IZ_BOOL CMeshInstance::SetMaterial(
 	IZ_UINT level,
 	CMaterial* pMtrl)
 {
-	IZ_ASSERT(level < m_nGroupNum);
+    IZ_UINT nMtrlKey = pMtrl->GetKey();
+
+	IZ_BOOL ret = SetMaterial(
+        level, 
+        nMtrlKey,
+        pMtrl);
+
+    return ret;
+}
+
+IZ_BOOL CMeshInstance::SetMaterialAs(
+    IZ_UINT level,
+    IZ_PCSTR name,
+    CMaterial* pMtrl)
+{
+    CKey key(name);
+
+    IZ_BOOL ret = SetMaterial(
+        level,
+        key.GetValue(),
+        pMtrl);
+
+    return ret;
+}
+
+IZ_BOOL CMeshInstance::SetMaterial(
+    IZ_UINT level,
+    IZ_UINT key,
+    CMaterial* mtrl)
+{
+    IZ_ASSERT(level < m_nGroupNum);
 	IZ_ASSERT(m_pGroups != IZ_NULL);
 
 	IZ_BOOL ret = IZ_FALSE;
-
-	IZ_UINT nMtrlKey = pMtrl->GetKey();
 
 	IZ_UINT nMeshSetNum = m_pGroups[level]->GetMeshSetNum();
 
 	// メッシュセットにマテリアルを設定する
 	for (IZ_UINT i = 0; i < nMeshSetNum; i++) {
 		CMeshSetInstance* pMshSet = m_pGroups[level]->GetMeshSet(i);
-		if (pMshSet->GetMaterialInfo().nameKey == nMtrlKey) {
-			pMshSet->SetMaterial(pMtrl);
+		if (pMshSet->GetMaterialInfo().nameKey == key) {
+			pMshSet->SetMaterial(mtrl);
 
 			// １個でも登録できたので
 			ret = IZ_TRUE;

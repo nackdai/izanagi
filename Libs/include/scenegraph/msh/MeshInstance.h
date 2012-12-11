@@ -53,11 +53,22 @@ namespace izanagi {
 			IZ_UINT level,
 			CMaterial* pMtrl);
 
+        IZ_BOOL SetMaterialAs(
+            IZ_UINT level,
+            IZ_PCSTR name,
+            CMaterial* mtrl);
+
 		IZ_UINT GetMeshGroupNum() const { return m_nGroupNum; }
 
 		IZ_UINT GetMeshSetNum(IZ_UINT level) const;
 
 		CMeshSetInstance* GetMeshSet(IZ_UINT level, IZ_UINT idx);
+
+    private:
+        IZ_BOOL SetMaterial(
+            IZ_UINT level,
+            IZ_UINT key,
+            CMaterial* mtrl);
 
 	private:
 		IMemoryAllocator* m_Allocator;
