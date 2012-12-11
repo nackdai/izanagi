@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug_DX9|Win32">
+      <Configuration>Debug_DX9</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release_DX9|Win32">
+      <Configuration>Release_DX9</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{BB75A8D8-E50F-4E53-B715-578424CF6504}</ProjectGuid>
+    <RootNamespace>ThreadModel</RootNamespace>
+    <Keyword>MFCProj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Release_DX9.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Debug_DX9.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\Animation\MyAppl;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0411</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>Shader.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\Animation\MyAppl;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0411</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>SceneGraph.lib;Shader.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Samples\projects\vs2005\SampleKit.vcxproj">
+      <Project>{dd5d28b8-93f1-4f26-8ad1-dd224ccb9a4f}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\PMD\data\image.xml">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ImageBuilder.exe -i "%(FullPath)" -o $(ProjectDir)..\..\PMD\data\image.img</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ImageBuilder.exe -i "%(FullPath)" -o "$(ProjectDir)..\..\$(ProjectName)\data\image.img"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\PMD\data\image.img</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">"$(ProjectDir)..\..\$(ProjectName)\data\image.img"</Outputs>
+    </CustomBuild>
+    <None Include="..\..\PMD\shader\SkinShader.fx" />
+    <CustomBuild Include="..\..\PMD\shader\SkinShader.xml">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(RootDir)%(Directory)%(Filename).fx</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">%(RootDir)%(Directory)%(Filename).fx</AdditionalInputs>
+    </CustomBuild>
+    <None Include="..\..\ThreadModel\ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\PMD\main.cpp" />
+    <ClCompile Include="..\..\PMD\ModelApp.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\PMD\ModelApp.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

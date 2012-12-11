@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\PMD\ModelApp.cpp" />
+    <ClCompile Include="..\..\PMD\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\PMD\ModelApp.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\ThreadModel\ReadMe.txt" />
+    <None Include="..\..\PMD\shader\SkinShader.fx">
+      <Filter>shader</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="shader">
+      <UniqueIdentifier>{dd53a686-e226-4350-a9f8-b6c1e9ab7c27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets">
+      <UniqueIdentifier>{9d935034-b69a-4f81-b284-8b5e0fab5242}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\PMD\shader\SkinShader.xml">
+      <Filter>shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\PMD\data\image.xml">
+      <Filter>assets</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>
