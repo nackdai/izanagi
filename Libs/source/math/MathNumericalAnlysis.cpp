@@ -55,7 +55,7 @@ namespace math
 	// ニュートン法.
 	IZ_FLOAT CNumericalAnalysis::ComputeNewtonMethod(
 		Func& func,
-		Func& funcd,
+		Func& funcd,    // funcを微分した関数
 		IZ_FLOAT init,
 		IZ_FLOAT threshold,
 		IZ_UINT loopCnt)
@@ -65,6 +65,10 @@ namespace math
 
 		IZ_FLOAT x = init;
 		IZ_FLOAT newX = x;
+
+        // NOTE
+        // ニュートン法
+        // Xn+1 = Xn - f(Xn) / f'(Xn)
 
 		for (IZ_UINT i = 0; i < loopCnt; i++)
 		{
