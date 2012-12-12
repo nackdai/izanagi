@@ -20,15 +20,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Model\MaterialConveter\MaterialConverter.cpp">
+    <ClCompile Include="..\..\Model\MaterialConverter\MaterialConverter.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Model\MaterialConveter\AppCore\Option.cpp">
+    <ClCompile Include="..\..\Model\MaterialConverter\AppCore\Option.cpp">
       <Filter>AppCore\source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Model\MaterialConveter\AppCore\Option.h">
+    <ClInclude Include="..\..\Model\MaterialConverter\AppCore\Option.h">
       <Filter>AppCore\include</Filter>
     </ClInclude>
   </ItemGroup>

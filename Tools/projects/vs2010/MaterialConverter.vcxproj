@@ -45,7 +45,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(EXTERNAL_DIR)\collada-dom\dom\include;$(EXTERNAL_DIR)\collada-dom\dom\include\1.4;$(EXTERNAL_DIR)\collada-dom\dom\external-libs\boost;$(ProjectDir)../../Model\MaterialConveter\AppCore;$(ProjectDir)../../Model/ModelLib/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(EXTERNAL_DIR)\collada-dom\dom\include;$(EXTERNAL_DIR)\collada-dom\dom\include\1.4;$(EXTERNAL_DIR)\collada-dom\dom\external-libs\boost;$(ProjectDir)../../Model\MaterialConverter\AppCore;$(ProjectDir)../../Model/ModelLib/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;BOOST_ALL_NO_LIB;PCRE_STATIC;DOM_INCLUDE_LIBXML;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -65,7 +65,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(EXTERNAL_DIR)\collada-dom\dom\include;$(EXTERNAL_DIR)\collada-dom\dom\include\1.4;$(EXTERNAL_DIR)\collada-dom\dom\external-libs\boost;$(ProjectDir)../../Model\MaterialConveter\AppCore;$(ProjectDir)../../Model/ModelLib/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(EXTERNAL_DIR)\collada-dom\dom\include;$(EXTERNAL_DIR)\collada-dom\dom\include\1.4;$(EXTERNAL_DIR)\collada-dom\dom\external-libs\boost;$(ProjectDir)../../Model\MaterialConverter\AppCore;$(ProjectDir)../../Model/ModelLib/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;BOOST_ALL_NO_LIB;PCRE_STATIC;DOM_INCLUDE_LIBXML;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>
@@ -85,11 +85,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Model\MaterialConveter\MaterialConverter.cpp" />
-    <ClCompile Include="..\..\Model\MaterialConveter\AppCore\Option.cpp" />
+    <ClCompile Include="..\..\Model\MaterialConverter\MaterialConverter.cpp" />
+    <ClCompile Include="..\..\Model\MaterialConverter\AppCore\Option.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Model\MaterialConveter\AppCore\Option.h" />
+    <ClInclude Include="..\..\Model\MaterialConverter\AppCore\Option.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
