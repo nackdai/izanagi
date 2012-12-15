@@ -380,3 +380,18 @@ CMeshSetInstance* CMeshInstance::GetMeshSet(IZ_UINT level, IZ_UINT idx)
 	CMeshSetInstance* ret = m_pGroups[level]->GetMeshSet(idx);
 	return ret;
 }
+
+// メッシュセットの表示の有効・無効を設定
+void CMeshInstance::SetIsVisible(
+    IZ_BOOL visible,
+    IZ_UINT level,
+    IZ_UINT idx)
+{
+    GetMeshSet(level, idx)->SetIsVisible(visible);
+}
+
+// メッシュセットの表示の有効・無効を取得
+IZ_BOOL CMeshInstance::IsVisible(IZ_UINT level, IZ_UINT idx)
+{
+    return GetMeshSet(level, idx)->IsVisible();
+}

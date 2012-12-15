@@ -64,6 +64,17 @@ namespace izanagi {
 
 		CMeshSetInstance* GetMeshSet(IZ_UINT level, IZ_UINT idx);
 
+        /** メッシュセットの表示の有効・無効を設定
+         */
+        void SetIsVisible(
+            IZ_BOOL visible,
+            IZ_UINT level,
+            IZ_UINT idx);
+
+        /** メッシュセットの表示の有効・無効を取得
+         */
+        IZ_BOOL IsVisible(IZ_UINT level, IZ_UINT idx);
+
     private:
         IZ_BOOL SetMaterial(
             IZ_UINT level,
