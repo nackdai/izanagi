@@ -179,6 +179,14 @@ namespace izanagi {
 		 */
 		IZ_UINT8 GetAlpha() const { return m_Alpha; }
 
+        /** 描画を有効にするかどうかを設定
+         */
+        void SetEnableRender(IZ_BOOL flag) { m_EnableRender = flag; }
+
+        /** 描画が有効かどうか
+         */
+        IZ_BOOL EnableRender() const { return m_EnableRender; }
+
 	private:
 		IZ_BOOL Read(IInputStream* pIn);
 
@@ -187,6 +195,8 @@ namespace izanagi {
 
 	private:
 		IMemoryAllocator* m_Allocator;
+
+        IZ_BOOL m_EnableRender;
 
 		// mtrlファイルから作成されたかどうか
 		IZ_BOOL m_IsFromMtrlFile;

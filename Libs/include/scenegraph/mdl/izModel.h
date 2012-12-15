@@ -95,6 +95,12 @@ namespace izanagi {
 		 */
 		IZ_BOOL SetLODLevel(IZ_UINT level);
 
+        /** メッシュにマテリアルを設定する.
+         */
+        IZ_BOOL SetMaterial(
+			IZ_UINT level,
+			CMaterial* mtrl);
+
 	public:
 		IZ_UINT GetMeshSetNum();
 

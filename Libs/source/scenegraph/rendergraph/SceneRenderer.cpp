@@ -83,34 +83,39 @@ IZ_BOOL CSceneRenderer::IterRender(
 		return IZ_FALSE;
 	}
 
-	if (m_nCurShaderPass != passIdx) {
-		// Change pass.
-		VRETURN(m_pCurShader->BeginPass(passIdx));
-		m_nCurShaderPass = passIdx;
-	}
+    // マテリアルが有効 && 描画要素を表示
+    if (mtrl->EnableRender()
+        && element->IsVisible())
+    {
+	    if (m_nCurShaderPass != passIdx) {
+		    // Change pass.
+		    VRETURN(m_pCurShader->BeginPass(passIdx));
+		    m_nCurShaderPass = passIdx;
+	    }
 
-	// マテリアルの準備をしたかどうか
-	IZ_BOOL isPreparedMtrl = IZ_FALSE;
+	    // マテリアルの準備をしたかどうか
+	    IZ_BOOL isPreparedMtrl = IZ_FALSE;
 
-	if (m_pCurMtrl != mtrl) {
-		// マテリアルの応じた設定
-		isPreparedMtrl = mtrl->Prepare(device);
-		VRETURN(isPreparedMtrl);
+	    if (m_pCurMtrl != mtrl) {
+		    // マテリアルの応じた設定
+		    isPreparedMtrl = mtrl->Prepare(device);
+		    VRETURN(isPreparedMtrl);
 
-		SAFE_REPLACE(m_pCurMtrl, mtrl);
-	}
+		    SAFE_REPLACE(m_pCurMtrl, mtrl);
+	    }
 
-	if (isPreparedMtrl) {
-		// マテリアルに応じた変更が発生したので
-		// シェーダのCommitChangeを行う
-		VRETURN(m_pCurShader->CommitChanges());
-	}
+	    if (isPreparedMtrl) {
+		    // マテリアルに応じた変更が発生したので
+		    // シェーダのCommitChangeを行う
+		    VRETURN(m_pCurShader->CommitChanges());
+	    }
 
-	// 要素の描画
-	VRETURN(
-		element->Render(
-			device,
-			renderHandler));
+	    // 要素の描画
+	    VRETURN(
+		    element->Render(
+			    device,
+			    renderHandler));
+    }
 
 	return IZ_TRUE;
 }

@@ -218,6 +218,14 @@ IZ_BOOL CModel::SetLODLevel(IZ_UINT level)
 	return IZ_TRUE;
 }
 
+// メッシュにマテリアルを設定する.
+IZ_BOOL CModel::SetMaterial(
+	IZ_UINT level,
+	CMaterial* mtrl)
+{
+    return GetMesh()->SetMaterial(level, mtrl);
+}
+
 IZ_UINT CModel::GetMeshSetNum()
 {
 	IZ_ASSERT(m_pMesh != IZ_NULL);

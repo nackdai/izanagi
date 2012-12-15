@@ -14,7 +14,7 @@ namespace izanagi {
 		friend class CStdSet<IRenderElement>;
 
 	protected:
-		IRenderElement() : m_Z(0.0f) { m_Item.Init(this); }
+		IRenderElement() : m_Z(0.0f), m_IsVisible(IZ_TRUE) { m_Item.Init(this); }
 		virtual ~IRenderElement() {}
 
 		NO_COPIABLE(IRenderElement);
@@ -43,6 +43,14 @@ namespace izanagi {
 		 */
 		IZ_FLOAT GetZ() const { return m_Z; }
 
+        /**
+         */
+        void SetIsVisible(IZ_BOOL visible) { m_IsVisible = visible; }
+
+        /**
+         */
+        IZ_BOOL IsVisible() const { return m_IsVisible; }
+
 	protected:
 		CStdSet<IRenderElement>::Item* GetListItem() { return &m_Item; }
 
@@ -54,6 +62,8 @@ namespace izanagi {
 	private:
 		IZ_FLOAT m_Z;
 		CStdSet<IRenderElement>::Item m_Item;
+
+        IZ_BOOL m_IsVisible;
 	};
 }	// namespace izanagi
 

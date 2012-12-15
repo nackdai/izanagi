@@ -158,6 +158,8 @@ CMaterial::CMaterial()
 {
 	m_Allocator = IZ_NULL;
 
+    m_EnableRender = IZ_TRUE;
+
 	m_IsFromMtrlFile = IZ_FALSE;
 	m_nAttachBufPos = 0;
 
