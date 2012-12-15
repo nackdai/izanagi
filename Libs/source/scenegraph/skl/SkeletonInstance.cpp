@@ -183,13 +183,12 @@ void CSkeletonInstance::BuildLocalMatrix(IZ_UINT nIdx)
 	// izanagiは右掛け
 
 	// 計算するパラメータを判定するフラグ
-	CBit32Flag flag(
-		pJoint->validParam | pJoint->validAnmParam);
+    CBit32Flag flag(
+        pJoint->validParam
+        | m_ValidAnmParam[nIdx]);
 
-	if (m_ValidAnmParam[nIdx] > 0) {
-		// 念のため次に向けてリセットしておく
-		m_ValidAnmParam[nIdx] = 0;
-	}
+	// 念のため次に向けてリセットしておく
+	m_ValidAnmParam[nIdx] = 0;
 
 	const S_SKL_JOINT_POSE& pose = m_pJointPose[nIdx];
 	math::SMatrix& mtxJoint = m_pGlobalPose[nIdx];
