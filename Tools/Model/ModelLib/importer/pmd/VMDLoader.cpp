@@ -35,14 +35,19 @@ IZ_BOOL CVmdLoader::IsValidTrans(IZ_UINT idx)
 {
 	if (m_FrameOrder[idx].size() > 0)
 	{
-		// TODO
-		// Å‰‚¾‚¯‚Ý‚ê‚Î‚n‚jH
-		const SVmdFrame& frame = m_FrameOrder[idx].begin()->frame;
+        std::set<SFrameInfo>::iterator it = m_FrameOrder[idx].begin();
 
-		IZ_BOOL ret = (frame.trans[0] != 0.0f
-						|| frame.trans[1] != 0.0f
-						|| frame.trans[2] != 0.0f);
-		return ret;
+        for (; it != m_FrameOrder[idx].end(); it++)
+        {
+            const SVmdFrame& frame = it->frame;
+
+		    if (frame.trans[0] != 0.0f
+				|| frame.trans[1] != 0.0f
+				|| frame.trans[2] != 0.0f)
+            {
+                return IZ_TRUE;
+            }
+        }
 	}
 
 	return IZ_FALSE;
@@ -53,15 +58,21 @@ IZ_BOOL CVmdLoader::IsValidRotate(IZ_UINT idx)
 {
 	if (m_FrameOrder[idx].size() > 0)
 	{
-		// TODO
-		// Å‰‚¾‚¯‚Ý‚ê‚Î‚n‚jH
-		const SVmdFrame& frame = m_FrameOrder[idx].begin()->frame;
+		
+		std::set<SFrameInfo>::iterator it = m_FrameOrder[idx].begin();
 
-		IZ_BOOL ret = (frame.quat[0] != 0.0f
-						|| frame.quat[1] != 0.0f
-						|| frame.quat[2] != 0.0f
-						|| frame.quat[3] != 1.0f);
-		return ret;
+        for (; it != m_FrameOrder[idx].end(); it++)
+        {
+            const SVmdFrame& frame = it->frame;
+
+		    if (frame.quat[0] != 0.0f
+				|| frame.quat[1] != 0.0f
+				|| frame.quat[2] != 0.0f
+				|| frame.quat[3] != 1.0f)
+            {
+                return IZ_TRUE;
+            }
+        }
 	}
 
 	return IZ_FALSE;
