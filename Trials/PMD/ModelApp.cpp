@@ -1,4 +1,5 @@
 #include "ModelApp.h"
+#include "CustomInterp.h"
 
 /////////////////////////////////////////////////
 
@@ -102,6 +103,7 @@ CModelApp::CModelApp()
 	m_Msh = IZ_NULL;
 	m_Skl = IZ_NULL;
 	m_Shd = IZ_NULL;
+    m_Anm = IZ_NULL;
 
     FILL_ZERO(m_Mtrl, sizeof(m_Mtrl));
 
@@ -132,6 +134,32 @@ IZ_BOOL CModelApp::InitInternal(
 					&in);
 
 		VGOTO(result = (m_Img != IZ_NULL), __EXIT__);
+	}
+
+    // Animation
+	{
+		izanagi::CFileInputStream in;
+		VRETURN(in.Open("data/walk.anm"));
+
+		m_Anm = izanagi::CAnimation::CreateAnimation(
+					allocator,
+					&in);
+
+		VGOTO(result = (m_Anm != IZ_NULL), __EXIT__);
+
+		izanagi::CAnimation::SetUserFuncInterpScalar(CCustomInterp::InterpScalar);
+		izanagi::CAnimation::SetUserFuncInterpVector(CCustomInterp::InterpVector);
+	}
+
+    // Timeline
+	{
+		m_Timeline.Init(
+			m_Anm->GetAnimationTime(),
+			0.0f);
+		m_Timeline.SetIsLoop(IZ_TRUE);
+		m_Timeline.SetIsReverse(IZ_FALSE);
+		m_Timeline.Start();
+		m_Timeline.Reset();
 	}
 
 	// Mesh
@@ -216,9 +244,9 @@ IZ_BOOL CModelApp::InitInternal(
             IZ_BOOL isToon = (::strncmp(name, "toon", 4) == 0);
 
             m_Mtrl[i]->SetTexture(name, m_Img->GetTexture(isToon ? 0 : 1));
-
 			m_Mtrl[i]->SetShader(m_Shd);
-			m_Mdl->GetMesh()->SetMaterial(0, m_Mtrl[i]);
+
+			m_Mdl->SetMaterial(0, m_Mtrl[i]);
 		}
     }
 
@@ -257,6 +285,7 @@ void CModelApp::ReleaseInternal()
 	SAFE_RELEASE(m_Msh);
 	SAFE_RELEASE(m_Skl);
 	SAFE_RELEASE(m_Shd);
+    SAFE_RELEASE(m_Anm);
 
     for (IZ_UINT i = 0; i < COUNTOF(m_Mtrl); i++)
     {
@@ -273,6 +302,18 @@ void CModelApp::ReleaseInternal()
 void CModelApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
 	GetCamera().Update();
+
+    // 時間更新
+	IZ_FLOAT fElapsed = GetTimer(0).GetTime();
+	fElapsed /= 1000.0f;
+
+	//m_Timeline.Advance(fElapsed);
+	m_Timeline.Advance(0.5f);
+	IZ_FLOAT time = m_Timeline.GetTime();
+
+	// アニメーション適用
+	m_Mdl->ApplyAnimation(time, m_Anm);
+
 	m_Mdl->Update();
 
     m_RenderGraph->BeginRegister();

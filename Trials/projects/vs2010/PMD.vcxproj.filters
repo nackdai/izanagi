@@ -3,9 +3,11 @@
   <ItemGroup>
     <ClCompile Include="..\..\PMD\ModelApp.cpp" />
     <ClCompile Include="..\..\PMD\main.cpp" />
+    <ClCompile Include="..\..\PMD\CustomInterp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\PMD\ModelApp.h" />
+    <ClInclude Include="..\..\PMD\CustomInterp.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\ThreadModel\ReadMe.txt" />
