@@ -2,6 +2,7 @@
 #define __MODEL_APP_H__
 
 #include "izSampleKit.h"
+#include "izAnimation.h"
 
 static const IZ_UINT SCREEN_WIDTH = 1280;
 static const IZ_UINT SCREEN_HEIGHT = 720;
@@ -34,9 +35,12 @@ private:
 	izanagi::CSkeleton* m_Skl;
 	izanagi::CShaderBasic* m_Shd;
     izanagi::CMaterial* m_Mtrl[17];
+    izanagi::CAnimation* m_Anm;
 
     izanagi::CRenderGraph* m_RenderGraph;
 	izanagi::CSceneRenderer* m_Renderer;
+
+    izanagi::animation::CTimeline m_Timeline;
 };
 
 #endif	// #if !defined(__MODEL_APP_H__)
