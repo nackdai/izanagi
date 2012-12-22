@@ -418,18 +418,10 @@ namespace {
 	// テンポラリファイル名を作成する
 	inline void _CreateTmpFileName(izanagi::tool::CString& strFile)
 	{
-		// システム時間取得
-		SYSTEMTIME time;
-		::GetLocalTime(&time);
+        izanagi::tool::CString tmp;
+        izanagi::tool::CFileUtility::CreateTmpFileName(tmp);
 
-		strFile.format(
-			"__tmp_%d_%d_%d_%d_%d_%d__",
-			time.wYear,
-			time.wMonth,
-			time.wDay,
-			time.wHour,
-			time.wMinute,
-			time.wSecond);
+        strFile.format("__tmp_%s__", tmp.c_str());
 	}
 
 	// オプションを表している文字列かどうか
