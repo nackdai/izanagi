@@ -5,6 +5,7 @@
 #include <shlwapi.h>
 #include <stdio.h>
 #include "izDefs.h"
+#include "util/StringUtility.h"
 
 namespace izanagi {
 namespace tool {
@@ -200,23 +201,35 @@ namespace tool {
 			return ret;
 		}
 
+        static void GetExecutionDirectory(CString& dst)
+        {
+            // TODO
+            static char tmp_0[512];
+            static char tmp_1[512];
+
+            GetExeModuleName(tmp_0, sizeof(tmp_0));
+
+            GetPathWithoutFileName(tmp_1, sizeof(tmp_1), tmp_0);
+            dst = tmp_1;
+        }
+
 		/**
 		* Create temporary file name by time.
 		*/
-		static void CreateTmpFileName(std::string& refName)
+		static void CreateTmpFileName(CString& dst)
 		{
-			SYSTEMTIME stTime;
-			::GetLocalTime(&stTime);
+			SYSTEMTIME time;
+            ::GetLocalTime(&time);
 
-			static izChar tmp[8];
-
-			refName += IntegerToString(stTime.wYear, tmp, sizeof(tmp));
-			refName += IntegerToString(stTime.wMonth, tmp, sizeof(tmp));
-			refName += IntegerToString(stTime.wDay, tmp, sizeof(tmp));
-			refName += IntegerToString(stTime.wHour, tmp, sizeof(tmp));
-			refName += IntegerToString(stTime.wMinute, tmp, sizeof(tmp));
-			refName += IntegerToString(stTime.wSecond, tmp, sizeof(tmp));
-			refName += IntegerToString(stTime.wMilliseconds, tmp, sizeof(tmp));
+            dst.format(
+                "%d_%d_%d_%d_%d_%d_%d",
+                time.wYear,
+                time.wMonth,
+                time.wDay,
+                time.wHour,
+                time.wMinute,
+                time.wSecond,
+                time.wMilliseconds);
 		}
 
 		/**
