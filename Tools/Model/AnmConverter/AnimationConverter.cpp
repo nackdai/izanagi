@@ -75,7 +75,7 @@ namespace {
     }
 }
 
-//#define ENABLE_CONV_IK_FK
+#define ENABLE_CONV_IK_FK
 
 int main(int argc, char* argv[])
 {
