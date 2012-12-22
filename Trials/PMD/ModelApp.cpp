@@ -93,6 +93,8 @@ static CSampleMdlRenderHandler* s_MdlRenderHandler = IZ_NULL;
 
 #define MSH_FILE_NAME	"data/miku.msh"
 #define SKL_FILE_NAME	"data/miku.skl"
+//#define ANM_FILE_NAME   "data/walk.anm"
+#define ANM_FILE_NAME   "data/walk2.anm"
 #define IMG_IDX		(0)
 #define CAMERA_Z	(30.0f)
 
@@ -139,7 +141,7 @@ IZ_BOOL CModelApp::InitInternal(
     // Animation
 	{
 		izanagi::CFileInputStream in;
-		VRETURN(in.Open("data/walk.anm"));
+		VRETURN(in.Open(ANM_FILE_NAME));
 
 		m_Anm = izanagi::CAnimation::CreateAnimation(
 					allocator,
@@ -307,8 +309,6 @@ void CModelApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 	IZ_FLOAT fElapsed = GetTimer(0).GetTime();
 	fElapsed /= 1000.0f;
 
-	//m_Timeline.Advance(fElapsed);
-	m_Timeline.Advance(0.5f);
 	IZ_FLOAT time = m_Timeline.GetTime();
 
 	// アニメーション適用
@@ -325,6 +325,9 @@ void CModelApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 			m_Mdl);
 	}
 	m_RenderGraph->EndRegister();
+
+    //m_Timeline.Advance(fElapsed);
+    m_Timeline.Advance(0.5f);
 }
 
 namespace {
