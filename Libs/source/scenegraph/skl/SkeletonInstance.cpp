@@ -222,6 +222,9 @@ void CSkeletonInstance::BuildLocalMatrix(IZ_UINT nIdx)
 			pose.trans[1],
 			pose.trans[2]);
 	}
+
+    //IZ_PRINTF("[%d]-----\n", nIdx);
+    //math::SMatrix::Dump(mtxJoint);
 }
 
 void CSkeletonInstance::ApplyInvBindMatrix(IZ_UINT nIdx)

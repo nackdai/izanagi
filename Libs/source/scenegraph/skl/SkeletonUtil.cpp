@@ -58,7 +58,14 @@ void CSkeletonUtil::UpdatePose(
 {
 	switch (transformType) {
 	case E_ANM_TRANSFORM_TYPE_TRANSLATE:
-		_UpdatePose(paramType, pose.trans, param);
+        // TODO
+        // trans が 0 は意味がないので・・・
+        if (!math::CMath::IsNearyEqualZero(param.x)
+            || !math::CMath::IsNearyEqualZero(param.y)
+            || !math::CMath::IsNearyEqualZero(param.z))
+        {
+		    _UpdatePose(paramType, pose.trans, param);
+        }
 		break;
 	case E_ANM_TRANSFORM_TYPE_QUATERNION:
 		_UpdatePose(paramType, pose.quat.v, param);
