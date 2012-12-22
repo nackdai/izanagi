@@ -33,7 +33,49 @@ namespace {
 			"              指定がない場合は常に0となる\n"
 		);
 	}
+
+    IZ_BOOL _ConvertVmdIk2Fk(
+        const char* vmd,
+        const char* pmd,
+        izanagi::tool::CString& dst)
+    {
+        // TODO
+        // MMDIK2FKの存在チェック
+
+        izanagi::tool::CString cmd;
+        izanagi::tool::CFileUtility::GetExecutionDirectory(cmd);
+
+        cmd +="\\MMDIK2FK.exe ";
+        cmd += pmd;
+        cmd += " ";
+        cmd += vmd;
+        cmd += " ";
+
+        // 一時出力ファイル作成
+        izanagi::tool::CString tmp;
+        izanagi::tool::CFileUtility::CreateTmpFileName(tmp);
+        tmp += ".vmd";
+
+        cmd += tmp;
+
+        FILE* fp = _popen(cmd, "w");
+        IZ_ASSERT(fp != IZ_NULL);
+
+        // ０で正常終了
+        int result = _pclose(fp);
+
+        IZ_BOOL ret = (result == 0);
+
+        if (ret)
+        {
+            dst = tmp;
+        }
+
+        return ret;
+    }
 }
+
+//#define ENABLE_CONV_IK_FK
 
 int main(int argc, char* argv[])
 {
@@ -54,6 +96,19 @@ int main(int argc, char* argv[])
 	// インポーター作成
 	IImporter* importer = IImporter::CreateImporter(option.modelType);
 
+    // VMDの場合はIK -> FK 変換を行う
+#ifdef ENABLE_CONV_IK_FK
+    if (option.modelType == ModelTypePMD)
+    {
+        VRETURN_VAL(
+            _ConvertVmdIk2Fk(
+                option.in.c_str(),
+                option.base.c_str(),
+                option.in),
+            INVALID_RET_VAL);
+    }
+#endif
+
 	// 入力ファイルを開く
 	VRETURN_VAL(
 		importer->Open(option.in.c_str()),
@@ -71,6 +126,14 @@ int main(int argc, char* argv[])
 			option.idx,
 			importer),
 		INVALID_RET_VAL);
+
+    // IK -> FK 変換したファイルを削除する
+#ifdef ENABLE_CONV_IK_FK
+    if (option.modelType == ModelTypePMD)
+    {
+        izanagi::tool::CFileUtility::RemoveFile(option.in.c_str());
+    }
+#endif
 
 	return 0;
 }
