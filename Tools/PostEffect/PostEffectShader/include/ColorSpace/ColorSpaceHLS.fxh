@@ -44,74 +44,74 @@
 // RGB -> HLS
 float3 RGBToHLS(float3 vRGB)
 {
-	float3 vHLS = (float3)0.0f;
+    float3 vHLS = (float3)0.0f;
 
-	float fMax = _GetMaxChannel(vRGB);
-	float fMin = _GetMinChannel(vRGB);
-	float fDelta = fMax - fMin;
-	
-	// L
-	vHLS.y = (fMax + fMin) * 0.5f;
+    float fMax = _GetMaxChannel(vRGB);
+    float fMin = _GetMinChannel(vRGB);
+    float fDelta = fMax - fMin;
+    
+    // L
+    vHLS.y = (fMax + fMin) * 0.5f;
 
-	if (fDelta != 0.0f) {
-		// S
-		vHLS.z = (vHLS.y <= 0.5f
-					? fDelta / (fMax + fMin)
-					: fDelta / (2.0f - fMax - fMin));
+    if (fDelta != 0.0f) {
+        // S
+        vHLS.z = (vHLS.y <= 0.5f
+                    ? fDelta / (fMax + fMin)
+                    : fDelta / (2.0f - fMax - fMin));
 
-		// H(HSVのHと同じ)
-		vHLS.x = _ComputeHue(vRGB, fMax, fDelta);
-	}
+        // H(HSVのHと同じ)
+        vHLS.x = _ComputeHue(vRGB, fMax, fDelta);
+    }
 
-	return vHLS;
+    return vHLS;
 }
 
 // HLS -> RGB
 float3 HLSToRGB(float3 vHLS)
 {
-	float3 vRGB = (float3)0.0f;
+    float3 vRGB = (float3)0.0f;
 
-	float fMax = (vHLS.y <= 0.5f
-					? vHLS.y * (1.0f + vHLS.z)
-					: vHLS.y * (1.0f - vHLS.z) + vHLS.z);
-	float fMin = 2.0f * vHLS.y - fMax;
+    float fMax = (vHLS.y <= 0.5f
+                    ? vHLS.y * (1.0f + vHLS.z)
+                    : vHLS.y * (1.0f - vHLS.z) + vHLS.z);
+    float fMin = 2.0f * vHLS.y - fMax;
 
-	if (vHLS.z == 0.0f) {
-		vRGB.rgb = vHLS.yyy;
-	}
-	// TODO
+    if (vHLS.z == 0.0f) {
+        vRGB.rgb = vHLS.yyy;
+    }
+    // TODO
 #if 0
-	else {
-		float3 h = {
-			vHLS.x + 1.0f / 3.0f,
-			vHLS.x,
-			vHLS.x - 1.0f / 3.0f,
-		};
-		h.x = (h.x >= 1.0f ? h.x - 1.0f : h.x);
-		h.z = (h.z < 0.0f ? h.z + 1.0f : h.z);
+    else {
+        float3 h = {
+            vHLS.x + 1.0f / 3.0f,
+            vHLS.x,
+            vHLS.x - 1.0f / 3.0f,
+        };
+        h.x = (h.x >= 1.0f ? h.x - 1.0f : h.x);
+        h.z = (h.z < 0.0f ? h.z + 1.0f : h.z);
 
-		if (h < 1.0f / 6.0f) {
-			// 0 <= h < 60
-			vRGB = fMin + (fMax - fMin) * h * 6.0f;
-		}
-		else if (h < 1.0f / 2.0f) {
-			// 60 <= h < 180
-			vRGB = fMax;
-		}
-		else if (h < 2.0f / 3.0f) {
-			// 180 <= h < 240
-			//vRGB = fMin + (fMax - fMin) * (2.0f / 3.0f - h) * 6.0f;
-			vRGB = fMin + (fMax - fMin) * (4.0f - h * 6.0f);
-		}
-		else {
-			// 240 <= h < 360
-			vRGB = fMin;
-		}
-	}
+        if (h < 1.0f / 6.0f) {
+            // 0 <= h < 60
+            vRGB = fMin + (fMax - fMin) * h * 6.0f;
+        }
+        else if (h < 1.0f / 2.0f) {
+            // 60 <= h < 180
+            vRGB = fMax;
+        }
+        else if (h < 2.0f / 3.0f) {
+            // 180 <= h < 240
+            //vRGB = fMin + (fMax - fMin) * (2.0f / 3.0f - h) * 6.0f;
+            vRGB = fMin + (fMax - fMin) * (4.0f - h * 6.0f);
+        }
+        else {
+            // 240 <= h < 360
+            vRGB = fMin;
+        }
+    }
 #endif
 
 
-	return vRGB;
+    return vRGB;
 }
 #else
 // NOTE
@@ -133,25 +133,25 @@ float3 HLSToRGB(float3 vHLS)
 // RGB -> HLS
 float3 RGBToHLS(float3 vRGB)
 {
-	// RGB -> YUV
-	float3 vYUV = RGBToYUV(vRGB);
+    // RGB -> YUV
+    float3 vYUV = RGBToYUV(vRGB);
 
-	float fH = atan(vYUV.x / (vYUV.z + 0.00001f));		// H
-	float fS = sqrt(vYUV.x * vYUV.x + vYUV.z * vYUV.z);	// S
+    float fH = atan(vYUV.x / (vYUV.z + 0.00001f));      // H
+    float fS = sqrt(vYUV.x * vYUV.x + vYUV.z * vYUV.z); // S
 
-	return float3(fH, vYUV.x, fS);
+    return float3(fH, vYUV.x, fS);
 }
 
 // HLS -> RGB
 float3 HLSToRGB(float3 vHLS)
 {
-	float fU = vHLS.z * sin(vHLS.x);
-	float fV = vHLS.z * cos(vHLS.x);
+    float fU = vHLS.z * sin(vHLS.x);
+    float fV = vHLS.z * cos(vHLS.x);
 
-	float3 vRGB = YUVToRGB(float3(vHLS.y, fU, fV));
+    float3 vRGB = YUVToRGB(float3(vHLS.y, fU, fV));
 
-	return vRGB;
+    return vRGB;
 }
 #endif
 
-#endif	// #if !defined(__IZANAGI_POSTEFFECT_COLORSPACE_HLS_FXH__)
+#endif  // #if !defined(__IZANAGI_POSTEFFECT_COLORSPACE_HLS_FXH__)

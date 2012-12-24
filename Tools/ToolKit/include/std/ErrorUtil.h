@@ -6,102 +6,102 @@
 
 namespace izanagi {
 namespace tool {
-	class CException;
+    class CException;
 
-	/**
-	* ログ
-	*/
-	class ILog {
-		friend class CException;
+    /**
+    * ログ
+    */
+    class ILog {
+        friend class CException;
 
-	protected:
-		ILog() {}
-		virtual ~ILog() {}
+    protected:
+        ILog() {}
+        virtual ~ILog() {}
 
-		NO_COPIABLE(ILog);
+        NO_COPIABLE(ILog);
 
-	public:
-		virtual IZ_PCSTR GetString() const = 0;
-	};
+    public:
+        virtual IZ_PCSTR GetString() const = 0;
+    };
 
-	/**
-	*/
-	template <IZ_UINT STR_NUM>
-	class TStdLog : public ILog {
-	public:
-		TStdLog(IZ_PCSTR format, ...)
-		{
-			va_list	argp;
-			va_start(argp, format);
-			vsprintf_s(m_Buf, STR_NUM, format, argp);
-			va_end(argp);
-		}
+    /**
+    */
+    template <IZ_UINT STR_NUM>
+    class TStdLog : public ILog {
+    public:
+        TStdLog(IZ_PCSTR format, ...)
+        {
+            va_list argp;
+            va_start(argp, format);
+            vsprintf_s(m_Buf, STR_NUM, format, argp);
+            va_end(argp);
+        }
 
-	protected:
-		TStdLog() {}
-		~TStdLog() {}
+    protected:
+        TStdLog() {}
+        ~TStdLog() {}
 
-	public:
-		IZ_PCSTR GetString() const { return m_Buf; }
+    public:
+        IZ_PCSTR GetString() const { return m_Buf; }
 
-	protected:
-		IZ_CHAR m_Buf[STR_NUM];
-	};
+    protected:
+        IZ_CHAR m_Buf[STR_NUM];
+    };
 
-	/**
-	*/
-	typedef TStdLog<1024>	CStdLog;
+    /**
+    */
+    typedef TStdLog<1024>   CStdLog;
 
-	/**
-	* 例外
-	*/
-	class CException {
-	private:
-		static void (*s_PrintLogFunc)(IZ_PCSTR);
+    /**
+    * 例外
+    */
+    class CException {
+    private:
+        static void (*s_PrintLogFunc)(IZ_PCSTR);
 
-	public:
-		static void SetPrintLogFunc(void (*func)(IZ_PCSTR))
-		{
-			s_PrintLogFunc = func;
-		}
+    public:
+        static void SetPrintLogFunc(void (*func)(IZ_PCSTR))
+        {
+            s_PrintLogFunc = func;
+        }
 
-	public:
-		CException(ILog* pLog)
-		{
-			m_Log = pLog;
-		}
-		~CException()
-		{
-			SAFE_DELETE(m_Log);
-		}
+    public:
+        CException(ILog* pLog)
+        {
+            m_Log = pLog;
+        }
+        ~CException()
+        {
+            SAFE_DELETE(m_Log);
+        }
 
-	private:
-		CException() {}
+    private:
+        CException() {}
 
-		//NO_COPIABLE(CException);
+        //NO_COPIABLE(CException);
 
-	public:
-		void PrintLog()
-		{
-			if ((s_PrintLogFunc != IZ_NULL) && (m_Log != IZ_NULL)) {
-				IZ_PCSTR str = m_Log->GetString();
-				if (str != IZ_NULL) {
-					(*s_PrintLogFunc)(str);
-				}
-			}
-		}
+    public:
+        void PrintLog()
+        {
+            if ((s_PrintLogFunc != IZ_NULL) && (m_Log != IZ_NULL)) {
+                IZ_PCSTR str = m_Log->GetString();
+                if (str != IZ_NULL) {
+                    (*s_PrintLogFunc)(str);
+                }
+            }
+        }
 
-	private:
-		ILog* m_Log;
-	};
-}	// namespace tool
-}	// namespace izanagi
+    private:
+        ILog* m_Log;
+    };
+}   // namespace tool
+}   // namespace izanagi
 
 #define THROW_EXCEPTION(b, log_type, format, ...)\
-	do {\
-		if (!(b)) {\
-			throw izanagi::tool::CException(new log_type(format, __FILE__, __LINE__, __VA_ARGS__));\
-		}\
-	} while(IZ_FALSE)
+    do {\
+        if (!(b)) {\
+            throw izanagi::tool::CException(new log_type(format, __FILE__, __LINE__, __VA_ARGS__));\
+        }\
+    } while(IZ_FALSE)
 
-#endif	// #if !defined(__IZANAGI_TOOL_KIT_STD_ERROR_UTIL_H__)
+#endif  // #if !defined(__IZANAGI_TOOL_KIT_STD_ERROR_UTIL_H__)

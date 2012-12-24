@@ -2,7 +2,7 @@
 #define __IZANAGI_POSTEFFECT_COLOR_SPACE_FXH__
 
 /********************************************
-	色空間
+    色空間
 ********************************************/
 
 // CMY
@@ -26,4 +26,4 @@
 // YUV
 #include "ColorSpace/ColorSpaceYUV.fxh"
 
-#endif	// #if !defined(__IZANAGI_POSTEFFECT_COLOR_SPACE_FXH__)
+#endif  // #if !defined(__IZANAGI_POSTEFFECT_COLOR_SPACE_FXH__)

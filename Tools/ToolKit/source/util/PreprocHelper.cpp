@@ -8,6 +8,6 @@ using namespace izanagi::tool;
 
 IZ_INT CPreprocHelper::CallPreproc(int argc, char* argv[])
 {
-	int ret = preproc_main(argc, argv);
-	return ret;
+    int ret = preproc_main(argc, argv);
+    return ret;
 }

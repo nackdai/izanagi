@@ -37,40 +37,40 @@
 // CMY -> CMYK
 float4 CMYToCMYK(float3 vCMY)
 {
-	float4 vCMYK = (float4)1.0f;
+    float4 vCMYK = (float4)1.0f;
 
-	// K
-	vCMYK.a = min(min(vCMY.r, vCMY.g), vCMY.b);
+    // K
+    vCMYK.a = min(min(vCMY.r, vCMY.g), vCMY.b);
 
-	// CMY
-	vCMYK.rgb = min(1.0f, (vCMY.rgb - vCMYK.a) / (1.0f - vCMYK.a + 0.00001f));
+    // CMY
+    vCMYK.rgb = min(1.0f, (vCMY.rgb - vCMYK.a) / (1.0f - vCMYK.a + 0.00001f));
 
-	return vCMYK;
+    return vCMYK;
 }
 
 // CMYK -> CMY
 float3 CMYKToCMY(float4 vCMYK)
 {
-	// NOTE
-	// C = C' * (1 - K) + K
-	// M = M' * (1 - K) + K
-	// Y = Y' * (1 - K) + K
+    // NOTE
+    // C = C' * (1 - K) + K
+    // M = M' * (1 - K) + K
+    // Y = Y' * (1 - K) + K
 
-	return float3(vCMYK.rgb * (1.0f - vCMYK.a) + vCMYK.a);
+    return float3(vCMYK.rgb * (1.0f - vCMYK.a) + vCMYK.a);
 }
 
 // RGB -> CMYK
 float4 RGBToCMYK(float3 vRGB)
 {
-	// RGB -> CMY -> CMYK
-	return CMYToCMYK(RGBToCMY(vRGB));
+    // RGB -> CMY -> CMYK
+    return CMYToCMYK(RGBToCMY(vRGB));
 }
 
 // CMYK -> RGB
 float3 CMYKToRGB(float4 vCMYK)
 {
-	// CMYK -> CMY -> RGB
-	return CMYToRGB(CMYKToCMY(vCMYK));
+    // CMYK -> CMY -> RGB
+    return CMYToRGB(CMYKToCMY(vCMYK));
 }
 
-#endif	// #if !defined(__IZANAGI_POSTEFFECT_COLORSPACE_CMYK_FXH__)
+#endif  // #if !defined(__IZANAGI_POSTEFFECT_COLORSPACE_CMYK_FXH__)

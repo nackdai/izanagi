@@ -8,10 +8,10 @@
 * シェーダコンパイルタイプ
 */
 enum COMPILE_TYPE {
-	COMPILE_TYPE_SHADER = 0,	// 通常
-	COMPILE_TYPE_SHADER_ASM,	// アセンブラ出力
+    COMPILE_TYPE_SHADER = 0,    // 通常
+    COMPILE_TYPE_SHADER_ASM,    // アセンブラ出力
 
-	COMPILE_TYPE_NUM,
+    COMPILE_TYPE_NUM,
 };
 
 /**
@@ -19,38 +19,38 @@ enum COMPILE_TYPE {
 */
 class CCompileCmdCreator {
 private:
-	static CCompileCmdCreator s_cInstance;
+    static CCompileCmdCreator s_cInstance;
 
 public:
-	static CCompileCmdCreator& GetInstance() { return s_cInstance; }
+    static CCompileCmdCreator& GetInstance() { return s_cInstance; }
 
 private:
-	CCompileCmdCreator();
-	~CCompileCmdCreator();
+    CCompileCmdCreator();
+    ~CCompileCmdCreator();
 
-	CCompileCmdCreator(const CCompileCmdCreator& rhs);
-	const CCompileCmdCreator& operator=(const CCompileCmdCreator& rhs);
+    CCompileCmdCreator(const CCompileCmdCreator& rhs);
+    const CCompileCmdCreator& operator=(const CCompileCmdCreator& rhs);
 
 public:
-	// コマンド作成
-	void CreateCompileCommand(
-		izanagi::tool::CString& cmd,
-		izanagi::tool::CString& out,
-		COMPILE_TYPE type,
-		LPCSTR lpszCompileCommand,
-		LPCSTR lpszShaderFile,
-		LPCSTR lpszEntryPoint,
-		CGprofile profile);
+    // コマンド作成
+    void CreateCompileCommand(
+        izanagi::tool::CString& cmd,
+        izanagi::tool::CString& out,
+        COMPILE_TYPE type,
+        LPCSTR lpszCompileCommand,
+        LPCSTR lpszShaderFile,
+        LPCSTR lpszEntryPoint,
+        CGprofile profile);
 
 public:
-	inline void SetIsVS(BOOL flag);
+    inline void SetIsVS(BOOL flag);
 
 private:
-	inline BOOL IsVS();
+    inline BOOL IsVS();
 
 private:
-	// 頂点シェーダかどうか
-	BOOL m_bIsVS;
+    // 頂点シェーダかどうか
+    BOOL m_bIsVS;
 };
 
 // inline *******************************
@@ -60,7 +60,7 @@ private:
 */
 void CCompileCmdCreator::SetIsVS(BOOL flag)
 {
-	m_bIsVS = flag;
+    m_bIsVS = flag;
 }
 
 /**
@@ -68,7 +68,7 @@ void CCompileCmdCreator::SetIsVS(BOOL flag)
 */
 BOOL CCompileCmdCreator::IsVS()
 {
-	return m_bIsVS;
+    return m_bIsVS;
 }
 
-#endif	// #if !defined(__POSTEFFECT_CONVERTER_COMPILE_CMD_CREATEOR_H__)
+#endif  // #if !defined(__POSTEFFECT_CONVERTER_COMPILE_CMD_CREATEOR_H__)

@@ -14,92 +14,92 @@ class CCgTechniqueHolder;
 */
 class CPostEffectConverter {
 private:
-	static CPostEffectConverter s_cInstance;
+    static CPostEffectConverter s_cInstance;
 
 public:
-	static CPostEffectConverter& GetInstance() { return s_cInstance; }
+    static CPostEffectConverter& GetInstance() { return s_cInstance; }
 
 private:
-	CPostEffectConverter();
-	~CPostEffectConverter();
+    CPostEffectConverter();
+    ~CPostEffectConverter();
 
-	CPostEffectConverter(const CPostEffectConverter& rhs);
-	const CPostEffectConverter& operator=(const CPostEffectConverter& rhs);
+    CPostEffectConverter(const CPostEffectConverter& rhs);
+    const CPostEffectConverter& operator=(const CPostEffectConverter& rhs);
 
 public:
-	BOOL Begin(LPCSTR lpszShaderFile);
+    BOOL Begin(LPCSTR lpszShaderFile);
 
-	BOOL Export(LPCSTR lpszOutFile);
+    BOOL Export(LPCSTR lpszOutFile);
 
-	// シェーダコンパイル
-	BOOL CompileShader(
-		BOOL bIsAsm,
-		LPCSTR lpszCompileCommand,
-		LPCSTR lpszShaderFile,
-		LPCSTR lpszObjDir);
+    // シェーダコンパイル
+    BOOL CompileShader(
+        BOOL bIsAsm,
+        LPCSTR lpszCompileCommand,
+        LPCSTR lpszShaderFile,
+        LPCSTR lpszObjDir);
 
 protected:
-	template <typename _T>
-	BOOL ExportData(const _T& data);
+    template <typename _T>
+    BOOL ExportData(const _T& data);
 
-	void SetPesId();
+    void SetPesId();
 
-	BOOL ExportTechnique();
-	BOOL ExportTexture();
-	BOOL ExportSampler();
-	BOOL ExportParameter();
-	BOOL ExportPass();
+    BOOL ExportTechnique();
+    BOOL ExportTexture();
+    BOOL ExportSampler();
+    BOOL ExportParameter();
+    BOOL ExportPass();
 
-	BOOL ExportParamAnn(IZ_INT nAnnNum = -1);
+    BOOL ExportParamAnn(IZ_INT nAnnNum = -1);
 
-	BOOL DoNotRemoveParam(CGparameter param);
+    BOOL DoNotRemoveParam(CGparameter param);
 
-	void ConvertFunctorArgsStrToIndex(
-		const std::vector<izanagi::tool::CString>& tvFunctorArgSList,
-		izanagi::S_PES_PASS_ANN& sParamAnn);
+    void ConvertFunctorArgsStrToIndex(
+        const std::vector<izanagi::tool::CString>& tvFunctorArgSList,
+        izanagi::S_PES_PASS_ANN& sParamAnn);
 
-	BOOL ExportUsedParamAndSamplerIdxByPass();
-	BOOL ExportUsedParamAndSamplerIdxByPass(CGpass pass);
+    BOOL ExportUsedParamAndSamplerIdxByPass();
+    BOOL ExportUsedParamAndSamplerIdxByPass(CGpass pass);
 
-	BOOL ExportPSProgram();
-	BOOL ExportVSProgram();
+    BOOL ExportPSProgram();
+    BOOL ExportVSProgram();
 
-	BOOL ExportStringBuffer();
+    BOOL ExportStringBuffer();
 
-	// ピクセルプログラムをコンパイル
-	BOOL CompilePixelProgram(
-		BOOL bIsAsm,
-		LPCSTR lpszCompileCommand,
-		LPCSTR lpszShaderFile,
-		LPCSTR lpszObjDir);
+    // ピクセルプログラムをコンパイル
+    BOOL CompilePixelProgram(
+        BOOL bIsAsm,
+        LPCSTR lpszCompileCommand,
+        LPCSTR lpszShaderFile,
+        LPCSTR lpszObjDir);
 
-	// 頂点プログラムをコンパイル
-	BOOL CompileVertexProgram(
-		BOOL bIsAsm,
-		LPCSTR lpszCompileCommand,
-		LPCSTR lpszShaderFile,
-		LPCSTR lpszObjDir);
+    // 頂点プログラムをコンパイル
+    BOOL CompileVertexProgram(
+        BOOL bIsAsm,
+        LPCSTR lpszCompileCommand,
+        LPCSTR lpszShaderFile,
+        LPCSTR lpszObjDir);
 
 private:
-	CGcontext m_pCgContext;
-	CGeffect m_pCgEffect;
+    CGcontext m_pCgContext;
+    CGeffect m_pCgEffect;
 
-	izanagi::S_PES_HEADER m_PesHeader;
+    izanagi::S_PES_HEADER m_PesHeader;
 
-	std::vector<CGparameter> m_TexList;
-	std::vector<CGparameter> m_SamplerList;
-	std::vector<CGparameter> m_ParamList;
+    std::vector<CGparameter> m_TexList;
+    std::vector<CGparameter> m_SamplerList;
+    std::vector<CGparameter> m_ParamList;
 
-	izanagi::CFileOutputStream m_Out;
+    izanagi::CFileOutputStream m_Out;
 
-	std::vector<izanagi::tool::CString> m_CompiledPSList;
+    std::vector<izanagi::tool::CString> m_CompiledPSList;
 
-	struct SVSInfo {
-		izanagi::tool::CString file;
-		izanagi::E_POSTEFFECT_VTX_SHADER type;
-	};
+    struct SVSInfo {
+        izanagi::tool::CString file;
+        izanagi::E_POSTEFFECT_VTX_SHADER type;
+    };
 
-	std::vector<SVSInfo> m_CompiledVSList;
+    std::vector<SVSInfo> m_CompiledVSList;
 };
 
-#endif	// #if !defined(__POSTEFFECT_CONVERTER_POSTEFFECT_CONVERTER_IMPL_H_)
+#endif  // #if !defined(__POSTEFFECT_CONVERTER_POSTEFFECT_CONVERTER_IMPL_H_)

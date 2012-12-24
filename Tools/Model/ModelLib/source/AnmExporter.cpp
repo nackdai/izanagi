@@ -26,131 +26,131 @@ CAnmExporter::CAnmExporter()
 
 CAnmExporter::~CAnmExporter()
 {
-	m_Out.Finalize();
+    m_Out.Finalize();
 }
 
 IZ_BOOL CAnmExporter::Export(
-	IZ_PCSTR lpszOutFile,
-	IZ_UINT nSetIdx,
-	IImporter* pImporter)
+    IZ_PCSTR lpszOutFile,
+    IZ_UINT nSetIdx,
+    IImporter* pImporter)
 {
-	IZ_BOOL ret = IZ_TRUE;
+    IZ_BOOL ret = IZ_TRUE;
 
-	VRETURN(m_Out.Open(lpszOutFile));
+    VRETURN(m_Out.Open(lpszOutFile));
 
-	izanagi::S_ANM_HEADER sHeader;
-	{
-		FILL_ZERO(&sHeader, sizeof(sHeader));
+    izanagi::S_ANM_HEADER sHeader;
+    {
+        FILL_ZERO(&sHeader, sizeof(sHeader));
 
-		sHeader.sizeHeader = sizeof(sHeader);
+        sHeader.sizeHeader = sizeof(sHeader);
 
-		// TODO
-		sHeader.keyType = izanagi::E_ANM_KEY_TYPE_TIME;
-	}
+        // TODO
+        sHeader.keyType = izanagi::E_ANM_KEY_TYPE_TIME;
+    }
 
-	// Blank for file's header.
-	izanagi::tool::CIoStreamSeekHelper cSeekHelper(&m_Out);
-	VRETURN(cSeekHelper.Skip(sizeof(sHeader)));
+    // Blank for file's header.
+    izanagi::tool::CIoStreamSeekHelper cSeekHelper(&m_Out);
+    VRETURN(cSeekHelper.Skip(sizeof(sHeader)));
 
-	VRETURN(pImporter->BeginAnm(nSetIdx));
+    VRETURN(pImporter->BeginAnm(nSetIdx));
 
-	IZ_UINT nNodeNum = pImporter->GetAnmNodeNum();
+    IZ_UINT nNodeNum = pImporter->GetAnmNodeNum();
 
-	// Export nodes.
-	for (IZ_UINT i = 0; i < nNodeNum; i++) {
-		izanagi::S_ANM_NODE sNode;
-		FILL_ZERO(&sNode, sizeof(sNode));
+    // Export nodes.
+    for (IZ_UINT i = 0; i < nNodeNum; i++) {
+        izanagi::S_ANM_NODE sNode;
+        FILL_ZERO(&sNode, sizeof(sNode));
 
-		VRETURN(pImporter->GetAnmNode(i, sNode));
+        VRETURN(pImporter->GetAnmNode(i, sNode));
 
-		IZ_OUTPUT_WRITE_VRETURN(&m_Out, &sNode, 0, sizeof(sNode));
-	}
+        IZ_OUTPUT_WRITE_VRETURN(&m_Out, &sNode, 0, sizeof(sNode));
+    }
 
-	IZ_UINT nChannelNum = 0;
-	std::vector<IZ_UINT> tvKeyNum;
+    IZ_UINT nChannelNum = 0;
+    std::vector<IZ_UINT> tvKeyNum;
 
-	// Export channels,
-	for (IZ_UINT nNodeIdx = 0; nNodeIdx < nNodeNum; nNodeIdx++) {
-		IZ_UINT nChannelCnt = pImporter->GetAnmChannelNum(nNodeIdx);
+    // Export channels,
+    for (IZ_UINT nNodeIdx = 0; nNodeIdx < nNodeNum; nNodeIdx++) {
+        IZ_UINT nChannelCnt = pImporter->GetAnmChannelNum(nNodeIdx);
 
-		for (IZ_UINT nChannelIdx = 0; nChannelIdx < nChannelCnt; nChannelIdx++) {
-			izanagi::S_ANM_CHANNEL sChannel;
-			FILL_ZERO(&sChannel, sizeof(sChannel));
+        for (IZ_UINT nChannelIdx = 0; nChannelIdx < nChannelCnt; nChannelIdx++) {
+            izanagi::S_ANM_CHANNEL sChannel;
+            FILL_ZERO(&sChannel, sizeof(sChannel));
 
-			VRETURN(
-				pImporter->GetAnmChannel(
-					nNodeIdx,
-					nChannelIdx,
-					sChannel));
+            VRETURN(
+                pImporter->GetAnmChannel(
+                    nNodeIdx,
+                    nChannelIdx,
+                    sChannel));
 
-			IZ_OUTPUT_WRITE_VRETURN(&m_Out, &sChannel, 0, sizeof(sChannel));
+            IZ_OUTPUT_WRITE_VRETURN(&m_Out, &sChannel, 0, sizeof(sChannel));
 
-			tvKeyNum.push_back(sChannel.numKeys);
-		}
+            tvKeyNum.push_back(sChannel.numKeys);
+        }
 
-		nChannelNum += nChannelCnt;
-	}
+        nChannelNum += nChannelCnt;
+    }
 
-	IZ_UINT nKeyNum = 0;
-	IZ_UINT nKeyPos = 0;
+    IZ_UINT nKeyNum = 0;
+    IZ_UINT nKeyPos = 0;
 
-	IZ_FLOAT fMaxTime = 0.0f;
+    IZ_FLOAT fMaxTime = 0.0f;
 
-	// Export keys.
-	for (IZ_UINT nNodeIdx = 0; nNodeIdx < nNodeNum; nNodeIdx++) {
-		IZ_UINT nChannelCnt = pImporter->GetAnmChannelNum(nNodeIdx);
+    // Export keys.
+    for (IZ_UINT nNodeIdx = 0; nNodeIdx < nNodeNum; nNodeIdx++) {
+        IZ_UINT nChannelCnt = pImporter->GetAnmChannelNum(nNodeIdx);
 
-		for (IZ_UINT nChannelIdx = 0; nChannelIdx < nChannelCnt; nChannelIdx++) {
-			IZ_UINT nKeyCnt = tvKeyNum[nKeyPos++];
+        for (IZ_UINT nChannelIdx = 0; nChannelIdx < nChannelCnt; nChannelIdx++) {
+            IZ_UINT nKeyCnt = tvKeyNum[nKeyPos++];
 
-			for (IZ_UINT nKeyIdx = 0; nKeyIdx < nKeyCnt; nKeyIdx++) {
-				izanagi::S_ANM_KEY sKey;
-				FILL_ZERO(&sKey, sizeof(sKey));
+            for (IZ_UINT nKeyIdx = 0; nKeyIdx < nKeyCnt; nKeyIdx++) {
+                izanagi::S_ANM_KEY sKey;
+                FILL_ZERO(&sKey, sizeof(sKey));
 
-				std::vector<IZ_FLOAT> tvValue;
+                std::vector<IZ_FLOAT> tvValue;
 
-				VRETURN(
-					pImporter->GetAnmKey(
-						nNodeIdx,
-						nChannelIdx,
-						nKeyIdx,
-						sKey,
-						tvValue));
+                VRETURN(
+                    pImporter->GetAnmKey(
+                        nNodeIdx,
+                        nChannelIdx,
+                        nKeyIdx,
+                        sKey,
+                        tvValue));
 
-				fMaxTime = (sKey.keyTime > fMaxTime ? sKey.keyTime : fMaxTime);
+                fMaxTime = (sKey.keyTime > fMaxTime ? sKey.keyTime : fMaxTime);
 
-				sKey.numParams = static_cast<IZ_UINT8>(tvValue.size());
-				sKey.params = IZ_NULL;
+                sKey.numParams = static_cast<IZ_UINT8>(tvValue.size());
+                sKey.params = IZ_NULL;
 
-				IZ_OUTPUT_WRITE_VRETURN(&m_Out, &sKey, 0, sizeof(sKey));
+                IZ_OUTPUT_WRITE_VRETURN(&m_Out, &sKey, 0, sizeof(sKey));
 
 #if 0
-				IZ_INT nOffset = sizeof(IZ_FLOAT);
-				VRETURN(m_Out.Seek(-nOffset, izanagi::E_IO_STREAM_SEEK_POS_CUR));
+                IZ_INT nOffset = sizeof(IZ_FLOAT);
+                VRETURN(m_Out.Seek(-nOffset, izanagi::E_IO_STREAM_SEEK_POS_CUR));
 #endif
 
-				IZ_OUTPUT_WRITE_VRETURN(&m_Out, &tvValue[0], 0, sizeof(IZ_FLOAT) * tvValue.size());
-			}
+                IZ_OUTPUT_WRITE_VRETURN(&m_Out, &tvValue[0], 0, sizeof(IZ_FLOAT) * tvValue.size());
+            }
 
-			nKeyNum += nKeyCnt;
-		}
-	}
+            nKeyNum += nKeyCnt;
+        }
+    }
 
-	VRETURN(pImporter->EndAnm());
+    VRETURN(pImporter->EndAnm());
 
-	// Export files's header.
-	{
-		sHeader.numNodes = nNodeNum;
-		sHeader.numChannels = nChannelNum;
-		sHeader.numKeys = nKeyNum;
+    // Export files's header.
+    {
+        sHeader.numNodes = nNodeNum;
+        sHeader.numChannels = nChannelNum;
+        sHeader.numKeys = nKeyNum;
 
-		sHeader.sizeFile = m_Out.GetCurPos();
+        sHeader.sizeFile = m_Out.GetCurPos();
 
-		sHeader.time = fMaxTime;
+        sHeader.time = fMaxTime;
 
-		VRETURN(cSeekHelper.Return());
-		IZ_OUTPUT_WRITE_VRETURN(&m_Out, &sHeader, 0, sizeof(sHeader));
-	}
+        VRETURN(cSeekHelper.Return());
+        IZ_OUTPUT_WRITE_VRETURN(&m_Out, &sHeader, 0, sizeof(sHeader));
+    }
 
-	return IZ_TRUE;
+    return IZ_TRUE;
 }

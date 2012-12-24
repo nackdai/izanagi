@@ -9,43 +9,43 @@
 
 namespace izanagi {
 namespace tool {
-	/**
-	*/
-	class CPixelFormatConverter {
-	private:
-		static CPixelFormatConverter s_cInstance;
+    /**
+    */
+    class CPixelFormatConverter {
+    private:
+        static CPixelFormatConverter s_cInstance;
 
-	public:
-		static CPixelFormatConverter* GetInstance() { return &s_cInstance; }
+    public:
+        static CPixelFormatConverter* GetInstance() { return &s_cInstance; }
 
-	private:
-		CPixelFormatConverter() {}
-		~CPixelFormatConverter() {}
+    private:
+        CPixelFormatConverter() {}
+        ~CPixelFormatConverter() {}
 
-		NO_COPIABLE(CPixelFormatConverter);
+        NO_COPIABLE(CPixelFormatConverter);
 
-	public:
-		// バイトサイズ計算
-		IZ_UINT ComputeByteSize(
-			IZ_UINT nWidth,
-			IZ_UINT nHeight,
-			graph::E_GRAPH_PIXEL_FMT nFmt);
+    public:
+        // バイトサイズ計算
+        IZ_UINT ComputeByteSize(
+            IZ_UINT nWidth,
+            IZ_UINT nHeight,
+            graph::E_GRAPH_PIXEL_FMT nFmt);
 
-		// コンバート
-		IZ_BOOL Convert(
-			IZ_BYTE* pSrc,
-			IZ_UINT nWidth,
-			IZ_UINT nHeight,
-			graph::E_GRAPH_PIXEL_FMT nSrcFmt,
-			IZ_BYTE* pDst,
-			graph::E_GRAPH_PIXEL_FMT nDstFmt);
+        // コンバート
+        IZ_BOOL Convert(
+            IZ_BYTE* pSrc,
+            IZ_UINT nWidth,
+            IZ_UINT nHeight,
+            graph::E_GRAPH_PIXEL_FMT nSrcFmt,
+            IZ_BYTE* pDst,
+            graph::E_GRAPH_PIXEL_FMT nDstFmt);
 
-	private:
-		// ラインバッファ
-		// 一度確保した最大サイズを保持し続ける
-		std::vector<IZ_BYTE> m_LineBuffer;
-	};
-}	// namespace tool
-}	// namespace izanagi
+    private:
+        // ラインバッファ
+        // 一度確保した最大サイズを保持し続ける
+        std::vector<IZ_BYTE> m_LineBuffer;
+    };
+}   // namespace tool
+}   // namespace izanagi
 
-#endif	// #if !defined(__IZANAGI_IMAGE_LIB_PIXEL_FORMAT_CONVERTER_H__)
+#endif  // #if !defined(__IZANAGI_IMAGE_LIB_PIXEL_FORMAT_CONVERTER_H__)

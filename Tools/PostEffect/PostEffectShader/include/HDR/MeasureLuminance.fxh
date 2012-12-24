@@ -23,64 +23,64 @@
 
 // ポイントフィルタ
 float4 ReinherdMeasureLuminanceInitial_Point(
-	in sampler smplIn,
-	S_PE_PS_IN_SAMPLING_9 sIn)
+    in sampler smplIn,
+    S_PE_PS_IN_SAMPLING_9 sIn)
 {
-	// NOTE
-	// ここでは以下の計算を行う
-	// 1/N * Σlog(δ + L(x, y))
+    // NOTE
+    // ここでは以下の計算を行う
+    // 1/N * Σlog(δ + L(x, y))
 
-	float4 vSample = 0.0f;
-	float fLogLumSum = 0.0f;
+    float4 vSample = 0.0f;
+    float fLogLumSum = 0.0f;
 
-	for (int i = 0; i < NUM_SAMPLING_9; i++) {
-		vSample = tex2D(smplIn, sIn.vUV[i].xy);
-		fLogLumSum += log(dot(vSample.rgb, RGB2Y) + 0.00001f);
+    for (int i = 0; i < NUM_SAMPLING_9; i++) {
+        vSample = tex2D(smplIn, sIn.vUV[i].xy);
+        fLogLumSum += log(dot(vSample.rgb, RGB2Y) + 0.00001f);
 
-		vSample = tex2D(smplIn, sIn.vUV[i].zw);
-		fLogLumSum += log(dot(vSample.rgb, RGB2Y) + 0.00001f);
-	}
+        vSample = tex2D(smplIn, sIn.vUV[i].zw);
+        fLogLumSum += log(dot(vSample.rgb, RGB2Y) + 0.00001f);
+    }
 
-	vSample = tex2D(smplIn, sIn.vUV_0);
-	fLogLumSum += log(dot(vSample.rgb, RGB2Y) + 0.00001f);
+    vSample = tex2D(smplIn, sIn.vUV_0);
+    fLogLumSum += log(dot(vSample.rgb, RGB2Y) + 0.00001f);
 
-	fLogLumSum /= 9;
+    fLogLumSum /= 9;
 
-	return float4(fLogLumSum, fLogLumSum, fLogLumSum, 1.0f);
+    return float4(fLogLumSum, fLogLumSum, fLogLumSum, 1.0f);
 }
 
 // リニアフィルタ
 float4 ReinherdMeasureLuminanceInitial_Linear(
-	in sampler smplIn,
-	S_PE_PS_IN_SAMPLING_4 sIn)
+    in sampler smplIn,
+    S_PE_PS_IN_SAMPLING_4 sIn)
 {
-	// NOTE
-	// ここでは以下の計算を行う
-	// 1/N * Σlog(δ + L(x, y))
+    // NOTE
+    // ここでは以下の計算を行う
+    // 1/N * Σlog(δ + L(x, y))
 
-	// NOTE
-	// +---+---+---+
-	// |  @|   |@  |
-	// +---+---+---+
-	// |   | x |   |
-	// +---+---+---+
-	// |  @|   |@  |
-	// +---+---+---+
+    // NOTE
+    // +---+---+---+
+    // |  @|   |@  |
+    // +---+---+---+
+    // |   | x |   |
+    // +---+---+---+
+    // |  @|   |@  |
+    // +---+---+---+
 
-	float3 vSample = 0.0f;
-	float fLogLumSum = 0.0f;
+    float3 vSample = 0.0f;
+    float fLogLumSum = 0.0f;
 
-	for (int i = 0; i < NUM_SAMPLING_4; i++) {
-		vSample = tex2D(smplIn, sIn.vUV[i].xy).rgb;
-		fLogLumSum += log(dot(vSample, RGB2Y) + 0.00001f);
+    for (int i = 0; i < NUM_SAMPLING_4; i++) {
+        vSample = tex2D(smplIn, sIn.vUV[i].xy).rgb;
+        fLogLumSum += log(dot(vSample, RGB2Y) + 0.00001f);
 
-		vSample = tex2D(smplIn, sIn.vUV[i].zw).rgb;
-		fLogLumSum += log(dot(vSample, RGB2Y) + 0.00001f);
-	}
+        vSample = tex2D(smplIn, sIn.vUV[i].zw).rgb;
+        fLogLumSum += log(dot(vSample, RGB2Y) + 0.00001f);
+    }
 
-	fLogLumSum /= 4;
+    fLogLumSum /= 4;
 
-	return float4(fLogLumSum, fLogLumSum, fLogLumSum, 1.0f);
+    return float4(fLogLumSum, fLogLumSum, fLogLumSum, 1.0f);
 }
 
 //---------------------------
@@ -88,20 +88,20 @@ float4 ReinherdMeasureLuminanceInitial_Linear(
 
 // ポイントフィルタ
 float4 ReinherdMeasureLuminanceIterative_Point(
-	in sampler smplIn,
-	S_PE_PS_IN_SAMPLING_16 sIn)
+    in sampler smplIn,
+    S_PE_PS_IN_SAMPLING_16 sIn)
 {
-	// 1/4 x 1/4 縮小をするだけ
-	return DownScale4x4_Point(smplIn, sIn);
+    // 1/4 x 1/4 縮小をするだけ
+    return DownScale4x4_Point(smplIn, sIn);
 }
 
 // リニアフィルタ
 float4 ReinherdMeasureLuminanceIterative_Linear(
-	in sampler smplIn,
-	S_PE_PS_IN_SAMPLING_4 sIn)
+    in sampler smplIn,
+    S_PE_PS_IN_SAMPLING_4 sIn)
 {
-	// 1/4 x 1/4 縮小をするだけ
-	return DownScale4x4_Linear(smplIn, sIn);
+    // 1/4 x 1/4 縮小をするだけ
+    return DownScale4x4_Linear(smplIn, sIn);
 }
 
 //---------------------------
@@ -109,57 +109,57 @@ float4 ReinherdMeasureLuminanceIterative_Linear(
 
 // ポイントフィルタ
 float4 ReinherdMeasureLuminanceFinal_Point(
-	in sampler smplIn,
-	S_PE_PS_IN_SAMPLING_16 sIn)
+    in sampler smplIn,
+    S_PE_PS_IN_SAMPLING_16 sIn)
 {
-	// NOTE
-	// 1/4 x 1/4 縮小しつつ以下の計算を行う
-	// Lavg = exp(sample)
-	// sample = 1/N * Σlog(δ + L(x, y))
+    // NOTE
+    // 1/4 x 1/4 縮小しつつ以下の計算を行う
+    // Lavg = exp(sample)
+    // sample = 1/N * Σlog(δ + L(x, y))
 
-	float fRet = 0.0f;
+    float fRet = 0.0f;
 
-	for (int i = 0; i < NUM_SAMPLING_16; i++) {
-		fRet += tex2D(smplIn, sIn.vUV[i].xy).r;
-		fRet += tex2D(smplIn, sIn.vUV[i].zw).r;
-	}
+    for (int i = 0; i < NUM_SAMPLING_16; i++) {
+        fRet += tex2D(smplIn, sIn.vUV[i].xy).r;
+        fRet += tex2D(smplIn, sIn.vUV[i].zw).r;
+    }
 
-	fRet = exp(fRet / 16);
+    fRet = exp(fRet / 16);
 
-	return float4(fRet, fRet, fRet, 1.0f);
+    return float4(fRet, fRet, fRet, 1.0f);
 }
 
 // リニアフィルタ
 float4 ReinherdMeasureLuminanceFinal_Linear(
-	in sampler smplIn,
-	S_PE_PS_IN_SAMPLING_4 sIn)
+    in sampler smplIn,
+    S_PE_PS_IN_SAMPLING_4 sIn)
 {
-	// NOTE
-	// 1/4 x 1/4 縮小しつつ以下の計算を行う
-	// Lavg = exp(sample)
-	// sample = 1/N * Σlog(δ + L(x, y))
+    // NOTE
+    // 1/4 x 1/4 縮小しつつ以下の計算を行う
+    // Lavg = exp(sample)
+    // sample = 1/N * Σlog(δ + L(x, y))
 
-	// NOTE
-	// +-------+-------+
-	// |   |   |   |   |
-	// +---@---+---@---+
-	// |   |   |   |   |
-	// +---+---+---+---+
-	// |   |   |   |   |
-	// +---@-------@---+
-	// |   |   |   |   |
-	// +---+---+---+---+
+    // NOTE
+    // +-------+-------+
+    // |   |   |   |   |
+    // +---@---+---@---+
+    // |   |   |   |   |
+    // +---+---+---+---+
+    // |   |   |   |   |
+    // +---@-------@---+
+    // |   |   |   |   |
+    // +---+---+---+---+
 
-	float fRet = 0.0f;
+    float fRet = 0.0f;
 
-	for (int i = 0; i < NUM_SAMPLING_4; i++) {
-		fRet += tex2D(smplIn, sIn.vUV[i].xy).r;
-		fRet += tex2D(smplIn, sIn.vUV[i].zw).r;
-	}
+    for (int i = 0; i < NUM_SAMPLING_4; i++) {
+        fRet += tex2D(smplIn, sIn.vUV[i].xy).r;
+        fRet += tex2D(smplIn, sIn.vUV[i].zw).r;
+    }
 
-	fRet = exp(fRet / 4);
+    fRet = exp(fRet / 4);
 
-	return float4(fRet, fRet, fRet, 1.0f);
+    return float4(fRet, fRet, fRet, 1.0f);
 }
 
-#endif	// #if !defined(__IZANAGI_POSTEFFECT_MEASURE_LUMINANCE_FXH__)
+#endif  // #if !defined(__IZANAGI_POSTEFFECT_MEASURE_LUMINANCE_FXH__)

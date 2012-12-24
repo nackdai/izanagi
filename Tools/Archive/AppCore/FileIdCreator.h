@@ -8,52 +8,52 @@
 #define _ENABLE_EXPORT_ENUM
 
 class CFileIdCreator {
-	struct SIdInfo {
-		UINT id;
-		izanagi::tool::CString str;
+    struct SIdInfo {
+        UINT id;
+        izanagi::tool::CString str;
 
-		SIdInfo* parent;
-		std::vector<SIdInfo*> child;
+        SIdInfo* parent;
+        std::vector<SIdInfo*> child;
 
-		SIdInfo()
-		{
-			id = 0;
-			parent = NULL;
-		}
-	};
+        SIdInfo()
+        {
+            id = 0;
+            parent = NULL;
+        }
+    };
 
-	static CFileIdCreator s_cInstance;
-
-public:
-	static CFileIdCreator& GetInstance() { return s_cInstance; }
-
-private:
-	CFileIdCreator() {}
-	~CFileIdCreator() {}
+    static CFileIdCreator s_cInstance;
 
 public:
-	void SetRoot(LPCSTR lpszRoot)
-	{ 
-		m_strRoot.format("%s", lpszRoot);
-	}
-
-	void Register(
-		UINT nId,
-		LPCSTR lpszPath);
-
-	BOOL Export(LPCSTR lpszExport);
+    static CFileIdCreator& GetInstance() { return s_cInstance; }
 
 private:
-	BOOL Export(
-		FILE* fpOut,
-		const SIdInfo& sInfo,
-		UINT nIndent);
+    CFileIdCreator() {}
+    ~CFileIdCreator() {}
+
+public:
+    void SetRoot(LPCSTR lpszRoot)
+    { 
+        m_strRoot.format("%s", lpszRoot);
+    }
+
+    void Register(
+        UINT nId,
+        LPCSTR lpszPath);
+
+    BOOL Export(LPCSTR lpszExport);
 
 private:
-	izanagi::tool::CString m_strRoot;
-	std::map<UINT, SIdInfo> m_InfoList;
+    BOOL Export(
+        FILE* fpOut,
+        const SIdInfo& sInfo,
+        UINT nIndent);
 
-	BOOL m_bIsEnum;
+private:
+    izanagi::tool::CString m_strRoot;
+    std::map<UINT, SIdInfo> m_InfoList;
+
+    BOOL m_bIsEnum;
 };
 
-#endif	// #if !defined(__FILE_ID_CREATOR_H__)
+#endif  // #if !defined(__FILE_ID_CREATOR_H__)

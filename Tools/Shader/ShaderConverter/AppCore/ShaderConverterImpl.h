@@ -15,76 +15,76 @@ struct SShaderConfig;
 */
 class CShaderConverter {
 private:
-	static CShaderConverter s_cInstance;
+    static CShaderConverter s_cInstance;
 
 public:
-	static CShaderConverter& GetInstance() { return s_cInstance; }
+    static CShaderConverter& GetInstance() { return s_cInstance; }
 
 private:
-	CShaderConverter();
-	~CShaderConverter();
+    CShaderConverter();
+    ~CShaderConverter();
 
-	CShaderConverter(const CShaderConverter& rhs);
-	const CShaderConverter& operator=(const CShaderConverter& rhs);
+    CShaderConverter(const CShaderConverter& rhs);
+    const CShaderConverter& operator=(const CShaderConverter& rhs);
 
 public:
-	BOOL Begin(LPCSTR lpszShaderFile);
+    BOOL Begin(LPCSTR lpszShaderFile);
 
-	BOOL Export(const SShaderConfig& sConfig);
+    BOOL Export(const SShaderConfig& sConfig);
 
-	// シェーダコンパイル
-	BOOL CompileShader(
-		BOOL bIsAsm,
-		LPCSTR lpszCompileCommand,
-		LPCSTR lpszShaderFile,
-		LPCSTR lpszObjDir);
+    // シェーダコンパイル
+    BOOL CompileShader(
+        BOOL bIsAsm,
+        LPCSTR lpszCompileCommand,
+        LPCSTR lpszShaderFile,
+        LPCSTR lpszObjDir);
 
 protected:
-	template <typename _T>
-	BOOL ExportData(const _T& data);
+    template <typename _T>
+    BOOL ExportData(const _T& data);
 
-	BOOL ExportTechnique();
-	BOOL ExportTexture();
-	BOOL ExportSampler();
-	BOOL ExportParameter();
-	BOOL ExportPass();
+    BOOL ExportTechnique();
+    BOOL ExportTexture();
+    BOOL ExportSampler();
+    BOOL ExportParameter();
+    BOOL ExportPass();
 
-	BOOL ExportParamAnn(
-		izanagi::S_SHD_PARAM_HEADER& sParamHeader,
-		IZ_INT nAnnNum = -1);
+    BOOL ExportParamAnn(
+        izanagi::S_SHD_PARAM_HEADER& sParamHeader,
+        IZ_INT nAnnNum = -1);
 
 #if 0
-	BOOL DoNotRemoveParam(CGparameter param);
+    BOOL DoNotRemoveParam(CGparameter param);
 #endif
 
-	BOOL ExportUsedParamAndSamplerIdxByPass();
-	BOOL ExportUsedParamAndSamplerIdxByPass(CGpass pass);
+    BOOL ExportUsedParamAndSamplerIdxByPass();
+    BOOL ExportUsedParamAndSamplerIdxByPass(CGpass pass);
 
-	BOOL ExportProgram();
+    BOOL ExportProgram();
 
-	BOOL ExportStringBuffer();
+    BOOL ExportStringBuffer();
 
-	BOOL CompileProgram(
-		BOOL bIsVS,
-		BOOL bIsAsm,
-		LPCSTR lpszCompileCommand,
-		LPCSTR lpszShaderFile,
-		LPCSTR lpszObjDir);
+    BOOL CompileProgram(
+        BOOL bIsVS,
+        BOOL bIsAsm,
+        LPCSTR lpszCompileCommand,
+        LPCSTR lpszShaderFile,
+        LPCSTR lpszObjDir);
 
 private:
-	CGcontext m_pCgContext;
-	CGeffect m_pCgEffect;
+    CGcontext m_pCgContext;
+    CGeffect m_pCgEffect;
 
-	izanagi::S_SHD_HEADER m_ShdHeader;
+    izanagi::S_SHD_HEADER m_ShdHeader;
 
-	std::vector<CGparameter> m_TexList;
-	std::vector<CGparameter> m_SamplerList;
-	std::vector<CGparameter> m_ParamList;
+    std::vector<CGparameter> m_TexList;
+    std::vector<CGparameter> m_SamplerList;
+    std::vector<CGparameter> m_ParamList;
 
-	izanagi::CFileOutputStream m_Out;
+    izanagi::CFileOutputStream m_Out;
 
-	std::vector<izanagi::tool::CString> m_CompiledVSList;
-	std::vector<izanagi::tool::CString> m_CompiledPSList;
+    std::vector<izanagi::tool::CString> m_CompiledVSList;
+    std::vector<izanagi::tool::CString> m_CompiledPSList;
 };
 
-#endif	// #if !defined(__SHADER_CONVERTER_POSTEFFECT_CONVERTER_IMPL_H_)
+#endif  // #if !defined(__SHADER_CONVERTER_POSTEFFECT_CONVERTER_IMPL_H_)

@@ -13,8 +13,8 @@
 // α = r * π となる
 
 CAngularMapProxy::CAngularMapProxy(
-	izanagi::tool::CTextureLite* tex,
-	EnvMapType type)
+    izanagi::tool::CTextureLite* tex,
+    EnvMapType type)
 : CMirrorMapProxy(tex, type)
 {
 }
@@ -25,70 +25,70 @@ CAngularMapProxy::~CAngularMapProxy()
 
 // 反射ベクトルからUVを取得.
 void CAngularMapProxy::getUVFromRef(
-	const izanagi::math::SVector& ref,
-	IZ_FLOAT& u, IZ_FLOAT& v)
+    const izanagi::math::SVector& ref,
+    IZ_FLOAT& u, IZ_FLOAT& v)
 {
-	if (izanagi::math::CMath::IsNearyEqual(ref.z, 1.0f)) {
-		// zが手前に向いているときは中心
-		u = 0.0f;
-		v = 0.0f;
-	}
-	else {
-		// z = cosα
-		// [-π:π]
-		IZ_FLOAT alpha = ::acosf(ref.z);
+    if (izanagi::math::CMath::IsNearyEqual(ref.z, 1.0f)) {
+        // zが手前に向いているときは中心
+        u = 0.0f;
+        v = 0.0f;
+    }
+    else {
+        // z = cosα
+        // [-π:π]
+        IZ_FLOAT alpha = ::acosf(ref.z);
 
-		IZ_FLOAT r = alpha / IZ_MATH_PI;
+        IZ_FLOAT r = alpha / IZ_MATH_PI;
 
-		// sin(alpha)を計算
-		IZ_FLOAT sin = ::sqrtf(1.0f - ref.z * ref.z);
+        // sin(alpha)を計算
+        IZ_FLOAT sin = ::sqrtf(1.0f - ref.z * ref.z);
 
-		// NOTE
-		// ref.x = sin * u / r <-> u = ref.x * r / sin
-		// ref.y = sin * v / r <-> v = ref.y * r / sin
+        // NOTE
+        // ref.x = sin * u / r <-> u = ref.x * r / sin
+        // ref.y = sin * v / r <-> v = ref.y * r / sin
 
-		u = ref.x * r / (sin + IZ_MATH_EPSILON);
-		v = ref.y * r / (sin + IZ_MATH_EPSILON);
+        u = ref.x * r / (sin + IZ_MATH_EPSILON);
+        v = ref.y * r / (sin + IZ_MATH_EPSILON);
 
-		u = izanagi::math::CMath::Clamp(u, -1.0f, 1.0f);
-		v = izanagi::math::CMath::Clamp(v, -1.0f, 1.0f);
-	}
+        u = izanagi::math::CMath::Clamp(u, -1.0f, 1.0f);
+        v = izanagi::math::CMath::Clamp(v, -1.0f, 1.0f);
+    }
 
-	u = (u + 1.0f) * 0.5f;
-	v = (v + 1.0f) * 0.5f;
+    u = (u + 1.0f) * 0.5f;
+    v = (v + 1.0f) * 0.5f;
 }
 
 // XYから反射ベクトルを取得.
 void CAngularMapProxy::getRef(
-	IZ_UINT x, IZ_UINT y,
-	izanagi::math::SVector& ref,
-	izanagi::graph::E_GRAPH_CUBE_TEX_FACE face/*= izanagi::graph::E_GRAPH_CUBE_TEX_FACE_NUM*/)
+    IZ_UINT x, IZ_UINT y,
+    izanagi::math::SVector& ref,
+    izanagi::graph::E_GRAPH_CUBE_TEX_FACE face/*= izanagi::graph::E_GRAPH_CUBE_TEX_FACE_NUM*/)
 {
-	// [-1:1]に変換
-	IZ_FLOAT u = 2.0f * x * m_DivW - 1.0f;
-	IZ_FLOAT v = 2.0f * y * m_DivH - 1.0f;
+    // [-1:1]に変換
+    IZ_FLOAT u = 2.0f * x * m_DivW - 1.0f;
+    IZ_FLOAT v = 2.0f * y * m_DivH - 1.0f;
 
-	IZ_FLOAT r = ::sqrtf(u * u + v * v);
+    IZ_FLOAT r = ::sqrtf(u * u + v * v);
 
-	if (izanagi::math::CMath::IsNearyEqualZero(r)) {
-		// 中心位置の場合は正面を向く
-		ref.x = 0.0f;
-		ref.y = 0.0f;
-		ref.z = 1.0f;
-	}
-	else {
-		// α = r * π
-		IZ_FLOAT alpha = r * IZ_MATH_PI;
+    if (izanagi::math::CMath::IsNearyEqualZero(r)) {
+        // 中心位置の場合は正面を向く
+        ref.x = 0.0f;
+        ref.y = 0.0f;
+        ref.z = 1.0f;
+    }
+    else {
+        // α = r * π
+        IZ_FLOAT alpha = r * IZ_MATH_PI;
 
-		// そうは言っても正負の判定はしないといけない
-		alpha = (u < 0.0f ? -alpha : alpha);
+        // そうは言っても正負の判定はしないといけない
+        alpha = (u < 0.0f ? -alpha : alpha);
 
-		ref.z = ::cosf(alpha);
+        ref.z = ::cosf(alpha);
 
-		// sin(alpha)を計算
-		IZ_FLOAT sin = ::sqrtf(1.0f - ref.z * ref.z);
+        // sin(alpha)を計算
+        IZ_FLOAT sin = ::sqrtf(1.0f - ref.z * ref.z);
 
-		ref.x = sin * u / r;
-		ref.y = sin * v / r;
-	}
+        ref.x = sin * u / r;
+        ref.y = sin * v / r;
+    }
 }

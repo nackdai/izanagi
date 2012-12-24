@@ -14,7 +14,7 @@ extern int Preproc(COption& cOption);
 * 自分自身をプリプロセス処理モードで呼び出す
 */
 extern IZ_BOOL ExecWithPreprocMode(
-	const char* lpszExe,
-	COption& cOption);
+    const char* lpszExe,
+    COption& cOption);
 
-#endif	// #if !defined(__SHADER_CONVERTER_PREPROC_H__)
+#endif  // #if !defined(__SHADER_CONVERTER_PREPROC_H__)

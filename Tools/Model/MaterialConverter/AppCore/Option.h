@@ -7,26 +7,26 @@
 #include "izModelLib.h"
 
 struct SOption {
-	izanagi::tool::CString in;	// 入力ファイル
-	izanagi::tool::CString out;	// 出力ファイル
+    izanagi::tool::CString in;  // 入力ファイル
+    izanagi::tool::CString out; // 出力ファイル
 };
 
 class COption : public CToolOption<SOption> {
 public:
-	COption();
-	~COption();
+    COption();
+    ~COption();
 
 public:
-	// 解析
-	IZ_BOOL Analysis(int argc, char* argv[]);
+    // 解析
+    IZ_BOOL Analysis(int argc, char* argv[]);
 
-	// 出力ファイル名から拡張子を取り除く
-	IZ_BOOL RemoveExtFromExportFileName();
+    // 出力ファイル名から拡張子を取り除く
+    IZ_BOOL RemoveExtFromExportFileName();
 
-	IZ_BOOL IsValid();
+    IZ_BOOL IsValid();
 
 private:
-	IZ_BOOL AnalysisInternal();
+    IZ_BOOL AnalysisInternal();
 };
 
-#endif	// #if !defined(__OPTION_H__)
+#endif  // #if !defined(__OPTION_H__)

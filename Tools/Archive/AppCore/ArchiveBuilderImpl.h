@@ -7,15 +7,15 @@ struct SOption;
 
 class CArchiveBuilderImpl {
 private:
-	CArchiveBuilderImpl();
-	~CArchiveBuilderImpl();
+    CArchiveBuilderImpl();
+    ~CArchiveBuilderImpl();
 
 public:
-	// 出力
-	static BOOL Export(const SOption& sOption);
+    // 出力
+    static BOOL Export(const SOption& sOption);
 
-	// 中間データ出力
-	static BOOL ExportObj(const SOption& sOption);
+    // 中間データ出力
+    static BOOL ExportObj(const SOption& sOption);
 };
 
-#endif	// #if !defined(__ARCHIVE_BUILDER_IMPL_H__)
+#endif  // #if !defined(__ARCHIVE_BUILDER_IMPL_H__)

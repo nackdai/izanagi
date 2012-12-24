@@ -5,29 +5,29 @@
 #include "Importer.h"
 
 class CMshExporter {
-	static CMshExporter s_cInstance;
+    static CMshExporter s_cInstance;
 
 public:
-	static CMshExporter& GetInstance() { return s_cInstance; }
+    static CMshExporter& GetInstance() { return s_cInstance; }
 
 private:
-	CMshExporter();
-	~CMshExporter();
+    CMshExporter();
+    ~CMshExporter();
 
-	NO_COPIABLE(CMshExporter);
+    NO_COPIABLE(CMshExporter);
 
 public:
-	IZ_BOOL Export(
-		IZ_UINT maxJointMtxNum,
-		IZ_PCSTR lpszOutFile,
-		IImporter* pImporter);
+    IZ_BOOL Export(
+        IZ_UINT maxJointMtxNum,
+        IZ_PCSTR lpszOutFile,
+        IImporter* pImporter);
 
-	/** トライアングルリストで出力するかどうかを設定.
-	 */
-	void SetIsExportTriList(IZ_BOOL flag);
+    /** トライアングルリストで出力するかどうかを設定.
+     */
+    void SetIsExportTriList(IZ_BOOL flag);
 
 private:
-	izanagi::CFileOutputStream m_Out;
+    izanagi::CFileOutputStream m_Out;
 };
 
-#endif	// #if !defined(__MODEL_LIB_MDL_EXPORTER_H__)
+#endif  // #if !defined(__MODEL_LIB_MDL_EXPORTER_H__)

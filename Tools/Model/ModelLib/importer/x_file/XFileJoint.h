@@ -8,59 +8,59 @@
 struct SJointTransform;
 
 class CXFileJoint {
-	static CXFileJoint* s_pInstance;
+    static CXFileJoint* s_pInstance;
 
 private:
-	struct SJoint {
-		std::string name;		
-		izanagi::S_SKL_JOINT_POSE pose;
+    struct SJoint {
+        std::string name;       
+        izanagi::S_SKL_JOINT_POSE pose;
 
-		IZ_BOOL isMtxInvFromSkin;
-		izanagi::math::SMatrix mtxInv;
+        IZ_BOOL isMtxInvFromSkin;
+        izanagi::math::SMatrix mtxInv;
 
-		IZ_INT parent;
+        IZ_INT parent;
 
-		SJoint()
-		{
-			isMtxInvFromSkin = IZ_FALSE;
-			parent = -1;
-		}
+        SJoint()
+        {
+            isMtxInvFromSkin = IZ_FALSE;
+            parent = -1;
+        }
 
-		bool operator==(const std::string& strName)
-		{
-			return (name.compare(strName) == 0);
-		}
-	};
+        bool operator==(const std::string& strName)
+        {
+            return (name.compare(strName) == 0);
+        }
+    };
 
 public:
-	static CXFileJoint& GetInstance();
-	static void DeleteInstance();
+    static CXFileJoint& GetInstance();
+    static void DeleteInstance();
 
 private:
-	CXFileJoint();
-	~CXFileJoint();
+    CXFileJoint();
+    ~CXFileJoint();
 
 public:
-	void Clear();
+    void Clear();
 
-	IZ_BOOL Init(CXFileParser* pParser);
+    IZ_BOOL Init(CXFileParser* pParser);
 
-	IZ_UINT GetJointNum();
+    IZ_UINT GetJointNum();
 
-	IZ_PCSTR GetJointName(IZ_UINT nIdx);
+    IZ_PCSTR GetJointName(IZ_UINT nIdx);
 
-	IZ_INT GetJointParent(IZ_UINT nIdx);
+    IZ_INT GetJointParent(IZ_UINT nIdx);
 
-	void GetJointInvMtx(
-		IZ_UINT nIdx,
-		izanagi::math::SMatrix& mtx);
+    void GetJointInvMtx(
+        IZ_UINT nIdx,
+        izanagi::math::SMatrix& mtx);
 
-	void GetJointTransform(
-		IZ_UINT nIdx,
-		std::vector<SJointTransform>& tvTransform);
+    void GetJointTransform(
+        IZ_UINT nIdx,
+        std::vector<SJointTransform>& tvTransform);
 
 private:
-	std::vector<SJoint> m_JointList;
+    std::vector<SJoint> m_JointList;
 };
 
-#endif	// #if !defined(__MODEL_LIB_XFILE_JOINT_H__)
+#endif  // #if !defined(__MODEL_LIB_XFILE_JOINT_H__)

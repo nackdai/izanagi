@@ -7,148 +7,148 @@
 #include <string>
 
 struct SXFileFace {
-	std::vector<IZ_UINT> indices;
+    std::vector<IZ_UINT> indices;
 };
 
 struct SXFileUV {
-	IZ_FLOAT u;
-	IZ_FLOAT v;
+    IZ_FLOAT u;
+    IZ_FLOAT v;
 };
 
 struct SXFileTexture {
-	std::string name;
-	IZ_BOOL isNormalMap;
+    std::string name;
+    IZ_BOOL isNormalMap;
 
-	SXFileTexture() { isNormalMap = IZ_FALSE; }
+    SXFileTexture() { isNormalMap = IZ_FALSE; }
 };
 
 struct SXFileMaterial {
-	std::string name;
-	izanagi::math::SVector diffuse;
-	IZ_FLOAT specularExp;
-	izanagi::math::SVector specular;
-	izanagi::math::SVector emisssion;
+    std::string name;
+    izanagi::math::SVector diffuse;
+    IZ_FLOAT specularExp;
+    izanagi::math::SVector specular;
+    izanagi::math::SVector emisssion;
 
-	std::vector<SXFileTexture> textures;
+    std::vector<SXFileTexture> textures;
 };
 
 struct SXFileBone {
-	std::string name;
-	izanagi::math::SMatrix mtx;
+    std::string name;
+    izanagi::math::SMatrix mtx;
 };
 
 struct SXFileSkin {
-	SXFileBone bone;
+    SXFileBone bone;
 
-	std::vector<IZ_UINT> vertex;
-	std::vector<IZ_FLOAT> weight;
+    std::vector<IZ_UINT> vertex;
+    std::vector<IZ_FLOAT> weight;
 
-	IZ_BOOL IsEmpty() { return vertex.empty(); }
+    IZ_BOOL IsEmpty() { return vertex.empty(); }
 
-	bool operator==(const std::string& strName) const
-	{
-		return (bone.name.compare(strName) == 0);
-	}
+    bool operator==(const std::string& strName) const
+    {
+        return (bone.name.compare(strName) == 0);
+    }
 };
 
 struct SXFileNode;
 
 struct SXFileMesh {
-	SXFileNode* node;
+    SXFileNode* node;
 
-	std::string name;
+    std::string name;
 
-	std::vector<izanagi::math::SVector> positions;
-	std::vector<izanagi::math::SVector> normals;
-	std::vector<SXFileUV> texcoords;
-	std::vector<IZ_COLOR> colors;
+    std::vector<izanagi::math::SVector> positions;
+    std::vector<izanagi::math::SVector> normals;
+    std::vector<SXFileUV> texcoords;
+    std::vector<IZ_COLOR> colors;
 
-	std::vector<SXFileFace> pos_faces;
-	std::vector<SXFileFace> nml_faces;
-	std::vector<IZ_UINT> mtrl_idx;
+    std::vector<SXFileFace> pos_faces;
+    std::vector<SXFileFace> nml_faces;
+    std::vector<IZ_UINT> mtrl_idx;
 
-	std::vector<SXFileMaterial> mtrls;
+    std::vector<SXFileMaterial> mtrls;
 
-	std::vector<SXFileSkin> skins;
+    std::vector<SXFileSkin> skins;
 
-	SXFileMesh() { node = IZ_NULL; }
+    SXFileMesh() { node = IZ_NULL; }
 };
 
 struct SXFileNode {
-	std::string name;
-	SXFileNode* parent;
-	izanagi::math::SMatrix mtxTransform;
+    std::string name;
+    SXFileNode* parent;
+    izanagi::math::SMatrix mtxTransform;
 
-	std::vector<SXFileMesh*> meshes;
+    std::vector<SXFileMesh*> meshes;
 
-	std::vector<SXFileNode*> children;
+    std::vector<SXFileNode*> children;
 
-	SXFileNode() { parent = IZ_NULL; }
-	SXFileNode(SXFileNode* pParent) { parent = pParent; }
+    SXFileNode() { parent = IZ_NULL; }
+    SXFileNode(SXFileNode* pParent) { parent = pParent; }
 
-	~SXFileNode()
-	{
-		for (size_t i = 0; i < meshes.size(); i++) {
-			delete meshes[i];
-		}
-	}
+    ~SXFileNode()
+    {
+        for (size_t i = 0; i < meshes.size(); i++) {
+            delete meshes[i];
+        }
+    }
 };
 
 ///////////////////////////////////////////////
 
 struct SXFileAnmKey {
-	IZ_INT time;
+    IZ_INT time;
 
-	union {
-		struct {
-			IZ_UINT quat	: 1;
-			IZ_UINT scale	: 1;
-			IZ_UINT trans	: 1;
-			IZ_UINT mtx		: 1;
-		};
-		IZ_UINT val;
-	} type;
+    union {
+        struct {
+            IZ_UINT quat    : 1;
+            IZ_UINT scale   : 1;
+            IZ_UINT trans   : 1;
+            IZ_UINT mtx     : 1;
+        };
+        IZ_UINT val;
+    } type;
 
-	union {
-		izanagi::S_SKL_JOINT_POSE pose;
-		izanagi::math::SMatrix mtx;
-	} data;
+    union {
+        izanagi::S_SKL_JOINT_POSE pose;
+        izanagi::math::SMatrix mtx;
+    } data;
 
-	SXFileAnmKey()
-	{
-		time = -1;
-		type.val = 0;
-	}
+    SXFileAnmKey()
+    {
+        time = -1;
+        type.val = 0;
+    }
 };
 
 struct SXFileAnm {
-	std::string name;
+    std::string name;
 
-	std::vector<SXFileAnmKey> keys;
+    std::vector<SXFileAnmKey> keys;
 };
 
 struct SXFileAnmSet {
-	std::string name;
+    std::string name;
 
-	std::vector<SXFileAnm*> anm;
+    std::vector<SXFileAnm*> anm;
 
-	~SXFileAnmSet()
-	{
-		for (size_t i = 0; i < anm.size(); i++) {
-			delete anm[i];
-		}
-	}
+    ~SXFileAnmSet()
+    {
+        for (size_t i = 0; i < anm.size(); i++) {
+            delete anm[i];
+        }
+    }
 };
 
 ///////////////////////////////////////////////
 
 class CXFileMathUtil {
 public:
-	static IZ_BOOL BreakDownMatrix(
-		const izanagi::math::SMatrix& mtx,
-		izanagi::S_SKL_JOINT_POSE& sPose);
+    static IZ_BOOL BreakDownMatrix(
+        const izanagi::math::SMatrix& mtx,
+        izanagi::S_SKL_JOINT_POSE& sPose);
 
-	static IZ_BOOL HasScale(const izanagi::math::SMatrix& mtx);
+    static IZ_BOOL HasScale(const izanagi::math::SMatrix& mtx);
 };
 
-#endif	// #if !defined(__MODEL_LIB_XFILE_HELPER_H__)
+#endif  // #if !defined(__MODEL_LIB_XFILE_HELPER_H__)

@@ -11,4 +11,4 @@
 // サンプリング頂点シェーダ
 #include "VS/VSSampling.fxh"
 
-#endif	// #if !defined(__IZANAGI_POSTEFFECT_VS_FXH__)
+#endif  // #if !defined(__IZANAGI_POSTEFFECT_VS_FXH__)

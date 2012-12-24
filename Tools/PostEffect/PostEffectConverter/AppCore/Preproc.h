@@ -14,7 +14,7 @@ extern int Preproc(COption& cOption);
 * 自分自身をプリプロセス処理モードで呼び出す
 */
 extern BOOL ExecWithPreprocMode(
-	const char* lpszExe,
-	COption& cOption);
+    const char* lpszExe,
+    COption& cOption);
 
-#endif	// #if !defined(__POSTEFFECT_CONVERTER_PREPROC_H__)
+#endif  // #if !defined(__POSTEFFECT_CONVERTER_PREPROC_H__)

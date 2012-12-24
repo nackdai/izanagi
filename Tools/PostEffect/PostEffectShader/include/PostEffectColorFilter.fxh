@@ -2,7 +2,7 @@
 #define __IZANAGI_POSTEFFECT_COLOR_FILTER_FXH__
 
 /********************************************
-	カラーフィルタいろいろ
+    カラーフィルタいろいろ
 ********************************************/
 
 // ガンマ補正
@@ -20,4 +20,4 @@
 // ユーザ任意
 #include "ColorFilter/ColorFilterUserDefs.fxh"
 
-#endif	// #if !defined(__IZANAGI_POSTEFFECT_COLOR_FILTER_FXH__)
+#endif  // #if !defined(__IZANAGI_POSTEFFECT_COLOR_FILTER_FXH__)
