@@ -2,9 +2,9 @@
 
 <textures>
   <plane
-	  path="./dummy.png"
-	  fmt="rgba8"/>
+      path="./dummy.png"
+      fmt="rgba8"/>
   <plane
-	  path="./eye2.bmp"
-	  fmt="rgba8"/>
+      path="./eye2.bmp"
+      fmt="rgba8"/>
 </textures>

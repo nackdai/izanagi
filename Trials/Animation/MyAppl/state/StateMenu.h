@@ -7,27 +7,27 @@
 
 class CStateMenu : public izanagi::CSceneStateBase {
 public:
-	CStateMenu();
-	~CStateMenu();
+    CStateMenu();
+    ~CStateMenu();
 
 public:
-	IZ_BOOL Init();
-	IZ_BOOL Render(izanagi::graph::CGraphicsDevice* device);
-	IZ_BOOL Update();
-	IZ_BOOL Destroy();
-	IZ_BOOL Enter(izanagi::IMemoryAllocator* allocator, void* val);
-	IZ_BOOL Leave();
+    IZ_BOOL Init();
+    IZ_BOOL Render(izanagi::graph::CGraphicsDevice* device);
+    IZ_BOOL Update();
+    IZ_BOOL Destroy();
+    IZ_BOOL Enter(izanagi::IMemoryAllocator* allocator, void* val);
+    IZ_BOOL Leave();
 
-	IZ_BOOL OnKeyDown(IZ_UINT nChar);
-	//IZ_BOOL OnMouseMove(IZ_INT x, IZ_INT y);
-	//IZ_BOOL OnMouseWheel(IZ_SHORT zDelta); 
-
-protected:
-	void Render2D();
+    IZ_BOOL OnKeyDown(IZ_UINT nChar);
+    //IZ_BOOL OnMouseMove(IZ_INT x, IZ_INT y);
+    //IZ_BOOL OnMouseWheel(IZ_SHORT zDelta); 
 
 protected:
-	IZ_INT m_nPos;
-	IZ_BOOL m_bDecide;
+    void Render2D();
+
+protected:
+    IZ_INT m_nPos;
+    IZ_BOOL m_bDecide;
 };
 
-#endif	// #if !defined(__STATE_MENU_H__)
+#endif    // #if !defined(__STATE_MENU_H__)

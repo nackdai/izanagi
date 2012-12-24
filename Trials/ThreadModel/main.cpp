@@ -14,5 +14,5 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     //TestJobQueue(&allocator);
     TestMessageQueue(&allocator);
 
-	return 0;
+    return 0;
 }

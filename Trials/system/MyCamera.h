@@ -5,60 +5,60 @@
 
 class CMyCamera {
 protected:
-	static CMyCamera s_cInstance;
+    static CMyCamera s_cInstance;
 
 public:
-	static CMyCamera& GetInstance() { return s_cInstance; }
+    static CMyCamera& GetInstance() { return s_cInstance; }
 
 protected:
-	CMyCamera() {}
-	~CMyCamera() {}
+    CMyCamera() {}
+    ~CMyCamera() {}
 
-	CMyCamera(const CMyCamera& rhs);
-	const CMyCamera& operator =(const CMyCamera& rhs);
+    CMyCamera(const CMyCamera& rhs);
+    const CMyCamera& operator =(const CMyCamera& rhs);
 
 public:
-	void Init(
-		const izanagi::math::CVector& vPos,
-		const izanagi::math::CVector& vRef,
-		const izanagi::math::CVector& vUp,
-		IZ_FLOAT fNear, IZ_FLOAT fFar,
-		IZ_FLOAT fFov,
-		IZ_FLOAT fAspect);
+    void Init(
+        const izanagi::math::CVector& vPos,
+        const izanagi::math::CVector& vRef,
+        const izanagi::math::CVector& vUp,
+        IZ_FLOAT fNear, IZ_FLOAT fFar,
+        IZ_FLOAT fFov,
+        IZ_FLOAT fAspect);
 
-	inline void Update();
+    inline void Update();
 #if 0
-	inline void RenderCamera(izanagi::graph::CGraphicsDevice* pDevice);
+    inline void RenderCamera(izanagi::graph::CGraphicsDevice* pDevice);
 #endif
 
 public:
-	void Dolly(IZ_FLOAT fDistScale);
-	void Rotate(IZ_FLOAT fLatitude, IZ_FLOAT fLongitude);
-	void Move(IZ_FLOAT fOffsetX, IZ_FLOAT fOffsetY);
+    void Dolly(IZ_FLOAT fDistScale);
+    void Rotate(IZ_FLOAT fLatitude, IZ_FLOAT fLongitude);
+    void Move(IZ_FLOAT fOffsetX, IZ_FLOAT fOffsetY);
 
 protected:
-	izanagi::CCamera m_cCamera;
+    izanagi::CCamera m_cCamera;
 
-	IZ_FLOAT m_fYaw;
-	IZ_FLOAT m_fPitch;
-	IZ_FLOAT m_fRoll;
+    IZ_FLOAT m_fYaw;
+    IZ_FLOAT m_fPitch;
+    IZ_FLOAT m_fRoll;
 
 public:
-	izanagi::CCamera& GetRawInterface() { return m_cCamera; }
+    izanagi::CCamera& GetRawInterface() { return m_cCamera; }
 };
 
 // inline ********************************
 
 void CMyCamera::Update()
 {
-	m_cCamera.Update();
+    m_cCamera.Update();
 }
 
 #if 0
 void CMyCamera::RenderCamera(izanagi::graph::CGraphicsDevice* pDevice)
 {
-	m_cCamera.Update();
+    m_cCamera.Update();
 }
 #endif
 
-#endif	// #if !defined(__IZ_CAMERA_H__)
+#endif    // #if !defined(__IZ_CAMERA_H__)

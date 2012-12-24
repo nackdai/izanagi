@@ -58,5 +58,5 @@ int TestSemaphore()
     thread_2.Join();
     thread_3.Join();
 
-	return 0;
+    return 0;
 }

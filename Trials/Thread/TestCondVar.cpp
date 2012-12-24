@@ -130,5 +130,5 @@ int TestCondVar()
 
     g_Cond.Destroy();
 
-	return 0;
+    return 0;
 }

@@ -5,38 +5,38 @@
 #include "Character.h"
 #include "Scene.h"
 
-#define SCREEN_WIDTH	1280
-#define SCREEN_HEIGHT	720
+#define SCREEN_WIDTH    1280
+#define SCREEN_HEIGHT    720
 
 class CMyAppl {
 private:
-	static CMyAppl s_cInstance;
+    static CMyAppl s_cInstance;
 
 public:
-	static CMyAppl& GetInstance() { return s_cInstance; }
+    static CMyAppl& GetInstance() { return s_cInstance; }
 
 private:
-	CMyAppl();
-	~CMyAppl() {}
+    CMyAppl();
+    ~CMyAppl() {}
 
 public:
-	// 初期化
-	IZ_BOOL Init(
-		HWND hDeviceWindow,
-		HWND hFocusWindow);
+    // 初期化
+    IZ_BOOL Init(
+        HWND hDeviceWindow,
+        HWND hFocusWindow);
 
-	// 開放
-	void Release();
+    // 開放
+    void Release();
 
-	IZ_BOOL Update();
-	IZ_BOOL Render();
+    IZ_BOOL Update();
+    IZ_BOOL Render();
 
-	CCharacter* GetCharacter() { return m_Character; }
-	CScene* GetScene() { return &m_Scene; }
+    CCharacter* GetCharacter() { return m_Character; }
+    CScene* GetScene() { return &m_Scene; }
 
 protected:
-	CCharacter* m_Character;
-	CScene m_Scene;
+    CCharacter* m_Character;
+    CScene m_Scene;
 };
 
-#endif	// #if !defined(__IZ_APPL_H__)
+#endif    // #if !defined(__IZ_APPL_H__)

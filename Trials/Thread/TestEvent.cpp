@@ -73,5 +73,5 @@ int TestEvent()
     thread_1.Join();
     g_Event.Close();
 
-	return 0;
+    return 0;
 }
