@@ -12,27 +12,27 @@ class CCharacter;
 
 class CScene {
 public:
-	CScene();
-	~CScene();
+    CScene();
+    ~CScene();
 
 public:
-	IZ_BOOL Init(
-		izanagi::IMemoryAllocator* allocator,
-		izanagi::graph::CGraphicsDevice* device);
+    IZ_BOOL Init(
+        izanagi::IMemoryAllocator* allocator,
+        izanagi::graph::CGraphicsDevice* device);
 
-	void Clear();
+    void Clear();
 
-	void Render(
-		CCharacter* character,
-		izanagi::graph::CGraphicsDevice* device);
+    void Render(
+        CCharacter* character,
+        izanagi::graph::CGraphicsDevice* device);
 
 private:
-	izanagi::CShaderBasic* m_pShader;
+    izanagi::CShaderBasic* m_pShader;
 
-	izanagi::CDebugMeshAxis* m_pAxis;
+    izanagi::CDebugMeshAxis* m_pAxis;
 
-	izanagi::CRenderGraph* m_GeomSorter;
-	izanagi::CSceneRenderer* m_SceneRenderer;
+    izanagi::CRenderGraph* m_GeomSorter;
+    izanagi::CSceneRenderer* m_SceneRenderer;
 };
 
-#endif	// #if !defined(__CHARACETER_H__)
+#endif    // #if !defined(__CHARACETER_H__)

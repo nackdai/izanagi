@@ -10,29 +10,29 @@
 
 class CStateAnmBlend : public izanagi::CSceneStateBase {
 public:
-	CStateAnmBlend();
-	~CStateAnmBlend();
+    CStateAnmBlend();
+    ~CStateAnmBlend();
 
 public:
-	IZ_BOOL Init();
-	IZ_BOOL Render(izanagi::graph::CGraphicsDevice* device);
-	IZ_BOOL Update();
-	IZ_BOOL Destroy();
-	IZ_BOOL Enter(izanagi::IMemoryAllocator* allocator, void* val);
-	IZ_BOOL Leave();
+    IZ_BOOL Init();
+    IZ_BOOL Render(izanagi::graph::CGraphicsDevice* device);
+    IZ_BOOL Update();
+    IZ_BOOL Destroy();
+    IZ_BOOL Enter(izanagi::IMemoryAllocator* allocator, void* val);
+    IZ_BOOL Leave();
 
-	IZ_BOOL OnKeyDown(IZ_UINT nChar);
-
-protected:
-	void Render2D();
-	void Render3D();
+    IZ_BOOL OnKeyDown(IZ_UINT nChar);
 
 protected:
-	izanagi::CAnimation* m_pAnm[2];
-	izanagi::CAnmLinearBlender* m_AnmBlender;
-	izanagi::CStdTimeline m_Timeline;
+    void Render2D();
+    void Render3D();
 
-	IZ_BOOL m_IsBack;
+protected:
+    izanagi::CAnimation* m_pAnm[2];
+    izanagi::CAnmLinearBlender* m_AnmBlender;
+    izanagi::CStdTimeline m_Timeline;
+
+    IZ_BOOL m_IsBack;
 };
 
-#endif	// #if !defined(__STATE_ANM_BLEND_H__)
+#endif    // #if !defined(__STATE_ANM_BLEND_H__)

@@ -8,13 +8,13 @@ extern void HalfFloatTest();
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 #if 0
-	test0();
-	test1();
+    test0();
+    test1();
 
-	NumericalAnalysisTest();
+    NumericalAnalysisTest();
 #endif
 
     HalfFloatTest();
 
-	return 0;
+    return 0;
 }

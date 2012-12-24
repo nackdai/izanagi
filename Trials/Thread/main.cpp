@@ -40,5 +40,5 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     TestMonitor();
 #endif
 
-	return 0;
+    return 0;
 }

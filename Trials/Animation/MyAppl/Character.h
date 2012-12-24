@@ -8,42 +8,42 @@
 
 class CCharacter : public izanagi::CObject {
 private:
-	static CCharacter* sInstance;
+    static CCharacter* sInstance;
 
 public:
-	static CCharacter* GetInstance() { return sInstance; }
+    static CCharacter* GetInstance() { return sInstance; }
 
-	static CCharacter* CreateCharacter(
-		izanagi::IMemoryAllocator* allocator,
-		izanagi::graph::CGraphicsDevice* device);
-
-private:
-	CCharacter();
-	~CCharacter();
+    static CCharacter* CreateCharacter(
+        izanagi::IMemoryAllocator* allocator,
+        izanagi::graph::CGraphicsDevice* device);
 
 private:
-	void InternalRelease();
+    CCharacter();
+    ~CCharacter();
 
-	IZ_BOOL Init();
+private:
+    void InternalRelease();
+
+    IZ_BOOL Init();
 
 public:
-	void Update(
-		IZ_FLOAT time,
-		izanagi::IAnimation* animation);
+    void Update(
+        IZ_FLOAT time,
+        izanagi::IAnimation* animation);
 
-	void SetShader(izanagi::IShader* shader);
+    void SetShader(izanagi::IShader* shader);
 
-	izanagi::CModel* GetMdl() { return m_pMdl; }
+    izanagi::CModel* GetMdl() { return m_pMdl; }
 
 private:
-	izanagi::IMemoryAllocator* m_Allocator;
-	izanagi::graph::CGraphicsDevice* m_Device;
+    izanagi::IMemoryAllocator* m_Allocator;
+    izanagi::graph::CGraphicsDevice* m_Device;
 
-	izanagi::graph::CTexture* m_pTex[2];
-	izanagi::CModel* m_pMdl;
-	izanagi::CMesh* m_pMsh;
-	izanagi::CSkeleton* m_pSkl;
-	izanagi::CMaterial* m_pMtrl[2];
+    izanagi::graph::CTexture* m_pTex[2];
+    izanagi::CModel* m_pMdl;
+    izanagi::CMesh* m_pMsh;
+    izanagi::CSkeleton* m_pSkl;
+    izanagi::CMaterial* m_pMtrl[2];
 };
 
-#endif	// #if !defined(__CHARACETER_H__)
+#endif    // #if !defined(__CHARACETER_H__)
