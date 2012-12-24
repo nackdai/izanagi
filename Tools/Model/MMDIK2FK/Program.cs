@@ -35,11 +35,11 @@ namespace MMDIK2FK
             {
                 var model = (MMDModel1)ModelManager.Read(
                     pmd,
-                    MikuMikuDance.Model.CoordinateType.LeftHandedCoordinate);
+                    MikuMikuDance.Model.CoordinateType.RightHandedCoordinate);
 
                 var motion = (MMDMotion2)MotionManager.Read(
                     vmd,
-                    MikuMikuDance.Motion.CoordinateType.LeftHandedCoordinate);
+                    MikuMikuDance.Motion.CoordinateType.RightHandedCoordinate);
 
                 var dstMotion = IKBaker.bake(motion, model);
                 MotionManager.Write(dst, dstMotion);
