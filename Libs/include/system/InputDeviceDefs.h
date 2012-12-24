@@ -8,11 +8,11 @@ namespace izanagi
 namespace sys
 {
     // 入力デバイス初期化パラメータ
-	struct SInputDeviceInitParam
+    struct SInputDeviceInitParam
     {
-		void* systemData;
-		void* nativeWindowHandle;
-	};
+        void* systemData;
+        void* nativeWindowHandle;
+    };
 
 #ifndef __DINPUT_INCLUDED__
     enum DIK
@@ -180,6 +180,6 @@ namespace sys
     };
 #endif  // #ifndef __DINPUT_INCLUDED__
 }   // namespace sys
-}	// namespace izanagi
+}   // namespace izanagi
 
-#endif	// #if !defined(__IZANAGI_SYSTEM_INPUT_DEVICE_DEFS_H__)
+#endif  // #if !defined(__IZANAGI_SYSTEM_INPUT_DEVICE_DEFS_H__)

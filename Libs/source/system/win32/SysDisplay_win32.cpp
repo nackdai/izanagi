@@ -10,7 +10,7 @@ namespace sys
 
     void CSysDisplay::Init(void* nativeWndHandle)
     {
-	    g_HDC = (HDC)nativeWndHandle;
+        g_HDC = (HDC)nativeWndHandle;
     }
 
     /**
@@ -18,9 +18,9 @@ namespace sys
     */
     IZ_UINT CSysDisplay::GetPixelWidth()
     {
-	    IZ_ASSERT(g_HDC != IZ_NULL);
-	    IZ_UINT ret = ::GetDeviceCaps(g_HDC, HORZRES);
-	    return ret;
+        IZ_ASSERT(g_HDC != IZ_NULL);
+        IZ_UINT ret = ::GetDeviceCaps(g_HDC, HORZRES);
+        return ret;
     }
 
     /**
@@ -28,9 +28,9 @@ namespace sys
     */
     IZ_UINT CSysDisplay::GetPixelHeight()
     {
-	    IZ_ASSERT(g_HDC != IZ_NULL);
-	    IZ_UINT ret = ::GetDeviceCaps(g_HDC, VERTRES);
-	    return ret;
+        IZ_ASSERT(g_HDC != IZ_NULL);
+        IZ_UINT ret = ::GetDeviceCaps(g_HDC, VERTRES);
+        return ret;
     }
 
     /**
@@ -38,9 +38,9 @@ namespace sys
     */
     IZ_UINT CSysDisplay::GetPhysicalWidth()
     {
-	    IZ_ASSERT(g_HDC != IZ_NULL);
-	    IZ_UINT ret = ::GetDeviceCaps(g_HDC, HORZSIZE);
-	    return ret;
+        IZ_ASSERT(g_HDC != IZ_NULL);
+        IZ_UINT ret = ::GetDeviceCaps(g_HDC, HORZSIZE);
+        return ret;
     }
 
     /**
@@ -48,9 +48,9 @@ namespace sys
     */
     IZ_UINT CSysDisplay::GetPhysicalHeight()
     {
-	    IZ_ASSERT(g_HDC != IZ_NULL);
-	    IZ_UINT ret = ::GetDeviceCaps(g_HDC, VERTSIZE);
-	    return ret;
+        IZ_ASSERT(g_HDC != IZ_NULL);
+        IZ_UINT ret = ::GetDeviceCaps(g_HDC, VERTSIZE);
+        return ret;
     }
 
     /**
@@ -58,9 +58,9 @@ namespace sys
     */
     IZ_UINT CSysDisplay::GetHorizontalDPI()
     {
-	    IZ_ASSERT(g_HDC != IZ_NULL);
-	    IZ_UINT ret = ::GetDeviceCaps(g_HDC, LOGPIXELSX);
-	    return ret;
+        IZ_ASSERT(g_HDC != IZ_NULL);
+        IZ_UINT ret = ::GetDeviceCaps(g_HDC, LOGPIXELSX);
+        return ret;
     }
 
     /**
@@ -68,9 +68,9 @@ namespace sys
     */
     IZ_UINT CSysDisplay::GetVerticalDPI()
     {
-	    IZ_ASSERT(g_HDC != IZ_NULL);
-	    IZ_UINT ret = ::GetDeviceCaps(g_HDC, LOGPIXELSY);
-	    return ret;
+        IZ_ASSERT(g_HDC != IZ_NULL);
+        IZ_UINT ret = ::GetDeviceCaps(g_HDC, LOGPIXELSY);
+        return ret;
     }
 
     /**
@@ -78,9 +78,9 @@ namespace sys
     */
     IZ_UINT CSysDisplay::GetRefreshRate()
     {
-	    IZ_ASSERT(g_HDC != IZ_NULL);
-	    IZ_UINT ret = ::GetDeviceCaps(g_HDC, VREFRESH);
-	    return ret;
+        IZ_ASSERT(g_HDC != IZ_NULL);
+        IZ_UINT ret = ::GetDeviceCaps(g_HDC, VREFRESH);
+        return ret;
     }
 }   // namespace sys
 }   // namespace izanagi

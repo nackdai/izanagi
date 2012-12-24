@@ -7,67 +7,67 @@
 #include "ResourceManager.h"
 
 namespace izanagi {
-	/**
-	*/
-	class CResource : public CPlacementNew {
-		friend class CResourceManager;
+    /**
+    */
+    class CResource : public CPlacementNew {
+        friend class CResourceManager;
 
-	protected:
-		CResource();
-		~CResource() { Clear(); }
+    protected:
+        CResource();
+        ~CResource() { Clear(); }
 
-		NO_COPIABLE(CResource);
+        NO_COPIABLE(CResource);
 
-	protected:
-		IZ_BOOL Init(
-			CResourceManager* pRscMgr,
-			CObject* pData,
-			const CKey& cKey,
-			const CRscType& cType);
+    protected:
+        IZ_BOOL Init(
+            CResourceManager* pRscMgr,
+            CObject* pData,
+            const CKey& cKey,
+            const CRscType& cType);
 
-		void Clear();
+        void Clear();
 
-		void ReleaseResource();
+        void ReleaseResource();
 
-		// Return whether this has data.
-		IZ_BOOL IsValid() const { return (m_pData != IZ_NULL); }
+        // Return whether this has data.
+        IZ_BOOL IsValid() const { return (m_pData != IZ_NULL); }
 
-		void SetAllocator(IMemoryAllocator* pAllocator) { m_Allocator = pAllocator; }
-		IMemoryAllocator* GetAllocator() { return m_Allocator; }
+        void SetAllocator(IMemoryAllocator* pAllocator) { m_Allocator = pAllocator; }
+        IMemoryAllocator* GetAllocator() { return m_Allocator; }
 
-		CResourceManager::CRscHashItem* GetHashItem() { return &m_HashItem; }
-		CResourceManager::CFreeRscListItem* GetFreeListItem() { return &m_FreeListItem; }
+        CResourceManager::CRscHashItem* GetHashItem() { return &m_HashItem; }
+        CResourceManager::CFreeRscListItem* GetFreeListItem() { return &m_FreeListItem; }
 
-	public:
-		// Return resource type.
-		const CRscType& GetType() const { return m_Type; }
-		IZ_PCSTR GetTypeAsString() const { return m_Type.GetString(); }
+    public:
+        // Return resource type.
+        const CRscType& GetType() const { return m_Type; }
+        IZ_PCSTR GetTypeAsString() const { return m_Type.GetString(); }
 
-		// Return resource raw data.
-		CObject* GetData() { return m_pData; }
+        // Return resource raw data.
+        CObject* GetData() { return m_pData; }
 
-		// Return resource raw data.
-		template <typename _T>
-		_T* GetData() { return reinterpret_cast<_T*>(m_pData); }
+        // Return resource raw data.
+        template <typename _T>
+        _T* GetData() { return reinterpret_cast<_T*>(m_pData); }
 
-		// Return resource id.
-		const CKey& GetKey() const { m_HashItem.GetKey(); }
+        // Return resource id.
+        const CKey& GetKey() const { m_HashItem.GetKey(); }
 
-	protected:
-		enum {
-			STR_SIZE = 7,
-		};
+    protected:
+        enum {
+            STR_SIZE = 7,
+        };
 
-		IMemoryAllocator* m_Allocator;
+        IMemoryAllocator* m_Allocator;
 
-		CRscType m_Type;
-		CObject* m_pData;
+        CRscType m_Type;
+        CObject* m_pData;
 
-		CResourceManager::CRscHashItem m_HashItem;
-		CResourceManager::CFreeRscListItem m_FreeListItem;
+        CResourceManager::CRscHashItem m_HashItem;
+        CResourceManager::CFreeRscListItem m_FreeListItem;
 
-		CResourceManager* m_pRscMgr;
-	};
-}	// namespace izanagi
+        CResourceManager* m_pRscMgr;
+    };
+}   // namespace izanagi
 
-#endif	// #if !defined(__IZANAGI_RESOURCE_RESOURCE_H__)
+#endif  // #if !defined(__IZANAGI_RESOURCE_RESOURCE_H__)

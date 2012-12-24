@@ -17,156 +17,156 @@
 #include "ShaderDefs.h"
 
 namespace izanagi {
-	class IInputStream;
+    class IInputStream;
 
-	/**
-	*/
-	class CShaderBasic : public IShader {
-	public:
-		/**
-		* Creates an instance of CShaderBasic.
-		*/
-		template <typename _SHADER>
-		static _SHADER* CreateShader(
-			IMemoryAllocator* pAllocator,
-			graph::CGraphicsDevice* pDevice,
-			IInputStream* pIn)
-		{
-			void* pBuf = ALLOC_ZERO(pAllocator, sizeof(_SHADER));
-			VRETURN_NULL(pBuf != IZ_NULL);
+    /**
+    */
+    class CShaderBasic : public IShader {
+    public:
+        /**
+        * Creates an instance of CShaderBasic.
+        */
+        template <typename _SHADER>
+        static _SHADER* CreateShader(
+            IMemoryAllocator* pAllocator,
+            graph::CGraphicsDevice* pDevice,
+            IInputStream* pIn)
+        {
+            void* pBuf = ALLOC_ZERO(pAllocator, sizeof(_SHADER));
+            VRETURN_NULL(pBuf != IZ_NULL);
 
-			_SHADER* pInstance = new(pBuf) _SHADER;
-			{
-				pInstance->AddRef();
-				pInstance->m_Allocator = pAllocator;
-				SAFE_REPLACE(pInstance->m_pDevice, pDevice);
+            _SHADER* pInstance = new(pBuf) _SHADER;
+            {
+                pInstance->AddRef();
+                pInstance->m_Allocator = pAllocator;
+                SAFE_REPLACE(pInstance->m_pDevice, pDevice);
 
-				if (!pInstance->Init(pDevice, pIn)) {
-					SAFE_RELEASE(pInstance);
-					IZ_ASSERT(IZ_FALSE);
-				}
-			}
+                if (!pInstance->Init(pDevice, pIn)) {
+                    SAFE_RELEASE(pInstance);
+                    IZ_ASSERT(IZ_FALSE);
+                }
+            }
 
-			return pInstance;
-		}
+            return pInstance;
+        }
 
-	protected:
-		CShaderBasic();
-		virtual ~CShaderBasic();
+    protected:
+        CShaderBasic();
+        virtual ~CShaderBasic();
 
-		NO_COPIABLE(CShaderBasic);
+        NO_COPIABLE(CShaderBasic);
 
-	protected:
-		IZ_BOOL Init(
-			graph::CGraphicsDevice* pDevice,
-			IInputStream* pIn);
+    protected:
+        IZ_BOOL Init(
+            graph::CGraphicsDevice* pDevice,
+            IInputStream* pIn);
 
-		IZ_UINT8* CreatePass(
-			graph::CGraphicsDevice* pDevice,
-			IInputStream* pIn,
-			IZ_UINT8* pBuffer);
+        IZ_UINT8* CreatePass(
+            graph::CGraphicsDevice* pDevice,
+            IInputStream* pIn,
+            IZ_UINT8* pBuffer);
 
-	public:
-		IZ_PCSTR GetName() const { return m_Header.name.GetString(); }
-		IZ_UINT GetKey() const { return m_Header.nameKey; }
+    public:
+        IZ_PCSTR GetName() const { return m_Header.name.GetString(); }
+        IZ_UINT GetKey() const { return m_Header.nameKey; }
 
-		/**
-		 * シェーダの名前を設定
-		 */
-		IZ_BOOL SetName(IZ_PCSTR name);
+        /**
+         * シェーダの名前を設定
+         */
+        IZ_BOOL SetName(IZ_PCSTR name);
 
-		virtual IZ_UINT Begin(
-			IZ_UINT nTechIdx,
-			IZ_BOOL bIsSaveState);
-		virtual IZ_BOOL End();
+        virtual IZ_UINT Begin(
+            IZ_UINT nTechIdx,
+            IZ_BOOL bIsSaveState);
+        virtual IZ_BOOL End();
 
-		virtual IZ_BOOL BeginPass(IZ_UINT nPassIdx);
-		virtual IZ_BOOL EndPass();
+        virtual IZ_BOOL BeginPass(IZ_UINT nPassIdx);
+        virtual IZ_BOOL EndPass();
 
-		virtual IZ_BOOL CommitChanges();
+        virtual IZ_BOOL CommitChanges();
 
-		virtual IZ_UINT GetTechNum() const;
+        virtual IZ_UINT GetTechNum() const;
 
-		virtual IZ_UINT GetAttrNum() const;
-		virtual IZ_PCSTR GetAttrName(IZ_UINT idx) const;
-		virtual IZ_BOOL CmpAttr(const CShaderAttr& attr) const;
-		virtual IZ_BOOL CmpAttrValue(IZ_PCSTR attrName, IZ_UINT val) const;
-		virtual IZ_BOOL CmpAttrValue(IZ_PCSTR attrName, IZ_FLOAT val) const;
-		virtual IZ_BOOL CmpAttrValue(IZ_PCSTR attrName, IZ_BOOL val) const;
+        virtual IZ_UINT GetAttrNum() const;
+        virtual IZ_PCSTR GetAttrName(IZ_UINT idx) const;
+        virtual IZ_BOOL CmpAttr(const CShaderAttr& attr) const;
+        virtual IZ_BOOL CmpAttrValue(IZ_PCSTR attrName, IZ_UINT val) const;
+        virtual IZ_BOOL CmpAttrValue(IZ_PCSTR attrName, IZ_FLOAT val) const;
+        virtual IZ_BOOL CmpAttrValue(IZ_PCSTR attrName, IZ_BOOL val) const;
 
-	private:
-		template <typename _T>
-		IZ_BOOL CmpAttrValue(
-			IZ_PCSTR attrName, 
-			E_SHADER_PARAMETER_TYPE type,
-			_T val) const;
+    private:
+        template <typename _T>
+        IZ_BOOL CmpAttrValue(
+            IZ_PCSTR attrName, 
+            E_SHADER_PARAMETER_TYPE type,
+            _T val) const;
 
-	public:
-		virtual IZ_SHADER_HANDLE GetParameterByName(IZ_PCSTR pszName);
-		virtual IZ_SHADER_HANDLE GetParameterBySemantic(IZ_PCSTR pszSemantic);
+    public:
+        virtual IZ_SHADER_HANDLE GetParameterByName(IZ_PCSTR pszName);
+        virtual IZ_SHADER_HANDLE GetParameterBySemantic(IZ_PCSTR pszSemantic);
 
-		IZ_BOOL GetParameterDesc(
-			IZ_SHADER_HANDLE handle, 
-			SShaderParamDesc& sDesc) const;
+        IZ_BOOL GetParameterDesc(
+            IZ_SHADER_HANDLE handle, 
+            SShaderParamDesc& sDesc) const;
 
-		IZ_BOOL SetParamValue(
-			IZ_SHADER_HANDLE hParam,
-			const void* pValue,
-			IZ_UINT nBytes);
+        IZ_BOOL SetParamValue(
+            IZ_SHADER_HANDLE hParam,
+            const void* pValue,
+            IZ_UINT nBytes);
 
-		IZ_BOOL SetParamValue(
-			IZ_PCSTR name,
-			const void* value,
-			IZ_UINT bytes);
+        IZ_BOOL SetParamValue(
+            IZ_PCSTR name,
+            const void* value,
+            IZ_UINT bytes);
 
-		// シェーダで利用するテクスチャを設定.
-		IZ_BOOL SetTexture(
-			IZ_SHADER_HANDLE hTex,
-			graph::CBaseTexture* pTex);
+        // シェーダで利用するテクスチャを設定.
+        IZ_BOOL SetTexture(
+            IZ_SHADER_HANDLE hTex,
+            graph::CBaseTexture* pTex);
 
-		// シェーダで利用するテクスチャを設定.
-		IZ_BOOL SetTexture(
-			IZ_PCSTR name,
-			graph::CBaseTexture* tex);
+        // シェーダで利用するテクスチャを設定.
+        IZ_BOOL SetTexture(
+            IZ_PCSTR name,
+            graph::CBaseTexture* tex);
 
-		// シェーダで利用するテクスチャをサンプラに設定.
-		IZ_BOOL SetTextureToSampler(
-			IZ_SHADER_HANDLE hSmpl,
-			graph::CBaseTexture* pTex);
+        // シェーダで利用するテクスチャをサンプラに設定.
+        IZ_BOOL SetTextureToSampler(
+            IZ_SHADER_HANDLE hSmpl,
+            graph::CBaseTexture* pTex);
 
-		// シェーダで利用するテクスチャをサンプラに設定.
-		IZ_BOOL SetTextureToSampler(
-			IZ_PCSTR name,
-			graph::CBaseTexture* tex);
+        // シェーダで利用するテクスチャをサンプラに設定.
+        IZ_BOOL SetTextureToSampler(
+            IZ_PCSTR name,
+            graph::CBaseTexture* tex);
 
-		graph::CGraphicsDevice* GetDevice();
+        graph::CGraphicsDevice* GetDevice();
 
-	private:
-		IZ_BOOL SetParamValue(
-			IZ_UINT idx,
-			CShaderPass& cPass,
-			graph::IShader* pShd,
-			IZ_BOOL bIsVS);
+    private:
+        IZ_BOOL SetParamValue(
+            IZ_UINT idx,
+            CShaderPass& cPass,
+            graph::IShader* pShd,
+            IZ_BOOL bIsVS);
 
-	protected:
-		IZ_UINT8* m_pBuffer;
+    protected:
+        IZ_UINT8* m_pBuffer;
 
-		S_SHD_HEADER m_Header;
+        S_SHD_HEADER m_Header;
 
-		CShaderStringBuffer   m_StringBuffer;	// strings of shader.
-		CShaderParameterTable m_ParamTbl;		// paramters of shader.
-		CShaderTextureTable   m_TexTbl;			// textures of shader.
-		CShaderSamplerTable   m_SmplTbl;		// samplers of shader.
-		CShaderPassTable      m_PassTbl;		// passed of shader.
-		CShaderTechTable      m_TechTbl;		// techniques of shader.
-		CShaderAttrTable      m_AttrTbl;
+        CShaderStringBuffer   m_StringBuffer;   // strings of shader.
+        CShaderParameterTable m_ParamTbl;       // paramters of shader.
+        CShaderTextureTable   m_TexTbl;         // textures of shader.
+        CShaderSamplerTable   m_SmplTbl;        // samplers of shader.
+        CShaderPassTable      m_PassTbl;        // passed of shader.
+        CShaderTechTable      m_TechTbl;        // techniques of shader.
+        CShaderAttrTable      m_AttrTbl;
 
-		CShaderPass* m_pPass;
+        CShaderPass* m_pPass;
 
-		IZ_BOOL m_bIsSavedRS;
-		IZ_INT16 m_nCurTech;
-		IZ_INT16 m_nCurPass;
-	};
-}	// namespace izanagi
+        IZ_BOOL m_bIsSavedRS;
+        IZ_INT16 m_nCurTech;
+        IZ_INT16 m_nCurPass;
+    };
+}   // namespace izanagi
 
-#endif	// #if !defined(__IZANAGI_SHADER_SHADER_BASIC_H__)
+#endif  // #if !defined(__IZANAGI_SHADER_SHADER_BASIC_H__)

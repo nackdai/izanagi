@@ -9,34 +9,34 @@
 // MDL = MoDeL
 
 namespace izanagi {
-	enum {
-		// TODO
-		MDL_CHUNK_MAGIC_MESH      = 0x01234567,
-		MDL_CHUNK_MAGIC_SKELETON  = 0x12345678,
-		MDL_CHUNK_MAGIC_TERMINATE = 0x7fffffff,
-	};
+    enum {
+        // TODO
+        MDL_CHUNK_MAGIC_MESH      = 0x01234567,
+        MDL_CHUNK_MAGIC_SKELETON  = 0x12345678,
+        MDL_CHUNK_MAGIC_TERMINATE = 0x7fffffff,
+    };
 
-	// NOTE
-	// フォーマット
-	// +--------------------+
-	// |   ファイルヘッダ   |
-	// +--------------------+
-	// |  メッシュチャンク  |
-	// +--------------------+
-	// | スケルトンチャンク |
-	// +--------------------+
-	
-	struct S_MDL_HEADER {
-		IZ_UINT magic;
-		IZ_UINT version;
+    // NOTE
+    // フォーマット
+    // +--------------------+
+    // |   ファイルヘッダ   |
+    // +--------------------+
+    // |  メッシュチャンク  |
+    // +--------------------+
+    // | スケルトンチャンク |
+    // +--------------------+
+    
+    struct S_MDL_HEADER {
+        IZ_UINT magic;
+        IZ_UINT version;
 
-		IZ_UINT sizeHeader;
-		IZ_UINT sizeFile;
-	};
+        IZ_UINT sizeHeader;
+        IZ_UINT sizeFile;
+    };
 
-	struct S_MDL_CHUNK_HEADER {
-		IZ_UINT magicChunk;
-	};
-}	// namespace izanagi
+    struct S_MDL_CHUNK_HEADER {
+        IZ_UINT magicChunk;
+    };
+}   // namespace izanagi
 
-#endif	// #if !defined(__IZANAGI_SCENEGRAPH_MDL_FORMAT_H__)
+#endif  // #if !defined(__IZANAGI_SCENEGRAPH_MDL_FORMAT_H__)

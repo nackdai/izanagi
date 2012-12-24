@@ -3,4 +3,4 @@
 
 #include "graph/dx9/GraphicsDevice.h"
 
-#endif	// #if !defined(__IZANAGI_GRAPH_GRAPHICS_DEVICE_PROXY_H__)
+#endif  // #if !defined(__IZANAGI_GRAPH_GRAPHICS_DEVICE_PROXY_H__)

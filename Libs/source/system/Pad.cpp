@@ -37,12 +37,12 @@ namespace sys
     // コンストラクタ
     CPad::CPad()
     {
-	    m_Allocator = IZ_NULL;
+        m_Allocator = IZ_NULL;
 
-	    FILL_ZERO(&m_CurState, sizeof(m_CurState));
-	    FILL_ZERO(&m_LastState, sizeof(m_LastState));
+        FILL_ZERO(&m_CurState, sizeof(m_CurState));
+        FILL_ZERO(&m_LastState, sizeof(m_LastState));
 
-	    m_bSucceedUpdate = IZ_FALSE;
+        m_bSucceedUpdate = IZ_FALSE;
     }
 
     // デストラクタ

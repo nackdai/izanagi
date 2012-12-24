@@ -4,61 +4,61 @@
 #include "izDefs.h"
 
 namespace izanagi {
-	/**
-	*/
-	class CShaderStringBuffer {
-		friend class CShaderBasic;
+    /**
+    */
+    class CShaderStringBuffer {
+        friend class CShaderBasic;
 
-	private:
-		inline CShaderStringBuffer();
-		~CShaderStringBuffer() {}
+    private:
+        inline CShaderStringBuffer();
+        ~CShaderStringBuffer() {}
 
-		NO_COPIABLE(CShaderStringBuffer);
+        NO_COPIABLE(CShaderStringBuffer);
 
-	private:
-		// 初期化
-		inline IZ_UINT8* Init(IZ_UINT size, IZ_UINT8* p);
+    private:
+        // 初期化
+        inline IZ_UINT8* Init(IZ_UINT size, IZ_UINT8* p);
 
-		// 文字列取得
-		inline IZ_PCSTR GetString(IZ_UINT pos) const;
+        // 文字列取得
+        inline IZ_PCSTR GetString(IZ_UINT pos) const;
 
-	private:
-		// バッファサイズ
-		IZ_UINT m_nSize;
+    private:
+        // バッファサイズ
+        IZ_UINT m_nSize;
 
-		// バッファ
-		IZ_INT8* m_pBuffer;
-	};
+        // バッファ
+        IZ_INT8* m_pBuffer;
+    };
 
-	// inline *********************************
+    // inline *********************************
 
-	// コンストラクタ
-	CShaderStringBuffer::CShaderStringBuffer()
-	{
-		m_nSize = 0;
-		m_pBuffer = IZ_NULL;
-	}
+    // コンストラクタ
+    CShaderStringBuffer::CShaderStringBuffer()
+    {
+        m_nSize = 0;
+        m_pBuffer = IZ_NULL;
+    }
 
-	// 初期化
-	IZ_UINT8* CShaderStringBuffer::Init(IZ_UINT size, IZ_UINT8* p)
-	{
-		m_nSize = size;
-		m_pBuffer = reinterpret_cast<IZ_INT8*>(p);
+    // 初期化
+    IZ_UINT8* CShaderStringBuffer::Init(IZ_UINT size, IZ_UINT8* p)
+    {
+        m_nSize = size;
+        m_pBuffer = reinterpret_cast<IZ_INT8*>(p);
 
-		return (p + size);
-	}
+        return (p + size);
+    }
 
-	// 文字列取得
-	IZ_PCSTR CShaderStringBuffer::GetString(IZ_UINT pos) const
-	{
-		IZ_PCSTR ret = IZ_NULL;
+    // 文字列取得
+    IZ_PCSTR CShaderStringBuffer::GetString(IZ_UINT pos) const
+    {
+        IZ_PCSTR ret = IZ_NULL;
 
-		if (pos < m_nSize) {
-			ret = m_pBuffer + pos;
-		}
+        if (pos < m_nSize) {
+            ret = m_pBuffer + pos;
+        }
 
-		return ret;
-	}
-}	// namespace izanagi
+        return ret;
+    }
+}   // namespace izanagi
 
-#endif	// #if !defined(__IZANAGI_SHADER_SHADER_STRING_BUFFER_H__)
+#endif  // #if !defined(__IZANAGI_SHADER_SHADER_STRING_BUFFER_H__)

@@ -13,4 +13,4 @@
 
 #include "resource/archive/ArchiveProxy.h"
 
-#endif	// #if !defined(__IZANAGI_RESOURCE_H__)
+#endif  // #if !defined(__IZANAGI_RESOURCE_H__)

@@ -19,8 +19,8 @@ namespace sys
     // コンストラクタ
     CMouse::CMouse()
     {
-	    m_Allocator = IZ_NULL;
-	    m_bSucceedUpdate = IZ_FALSE;
+        m_Allocator = IZ_NULL;
+        m_bSucceedUpdate = IZ_FALSE;
     }
 
     // デストラクタ

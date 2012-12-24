@@ -22,4 +22,4 @@
 
 #include "system/SysWindow.h"
 
-#endif	// #if !defined(__IZANAGI_SYSTEM_H__)
+#endif  // #if !defined(__IZANAGI_SYSTEM_H__)

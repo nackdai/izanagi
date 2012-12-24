@@ -5,4 +5,4 @@
 #include "shader/base/ShaderBasic.h"
 #include "shader/ShaderManager.h"
 
-#endif	// #if !defined(__IZANAGI_SHADER_H__)
+#endif  // #if !defined(__IZANAGI_SHADER_H__)

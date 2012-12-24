@@ -8,21 +8,21 @@ namespace izanagi
 {
 namespace graph
 {
-	/**
+    /**
      */
-	class CGraphResource : public CObject
+    class CGraphResource : public CObject
     {
-	protected:
-		CGraphResource()
+    protected:
+        CGraphResource()
         {
             m_Allocator = IZ_NULL;
         }
 
         virtual ~CGraphResource() {};
 
-		NO_COPIABLE(CGraphResource);
+        NO_COPIABLE(CGraphResource);
 
-	    IZ_DEFINE_INTERNAL_RELEASE();
+        IZ_DEFINE_INTERNAL_RELEASE();
 
     public:
         virtual IZ_BOOL IsPrepared() const
@@ -40,10 +40,10 @@ namespace graph
             return IZ_TRUE;
         }
 
-	protected:
-		IMemoryAllocator* m_Allocator;
-	};
+    protected:
+        IMemoryAllocator* m_Allocator;
+    };
 }   // namespace graph
-}	// namespace izanagi
+}   // namespace izanagi
 
-#endif	// #if !defined(__IZANAGI_GRAPH_GRAPH_RESOURCE_H__)
+#endif  // #if !defined(__IZANAGI_GRAPH_GRAPH_RESOURCE_H__)

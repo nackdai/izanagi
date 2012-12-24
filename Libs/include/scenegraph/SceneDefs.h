@@ -2,6 +2,6 @@
 #define __IZANAGI_SCENEGRAPH_SCENE_DEFS_H__
 
 namespace izanagi {
-}	// namespace izanagi
+}   // namespace izanagi
 
-#endif	// #if !defined(__IZANAGI_SCENEGRAPH_SCENE_DEFS_H__)
+#endif  // #if !defined(__IZANAGI_SCENEGRAPH_SCENE_DEFS_H__)

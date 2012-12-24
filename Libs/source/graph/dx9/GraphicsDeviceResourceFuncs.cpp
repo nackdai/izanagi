@@ -16,170 +16,170 @@ namespace graph
     * メモリからテクスチャ作成
     */
     CTexture* CGraphicsDeviceDX9::CreateTextureFromMemory(
-	    void* data,
-	    IZ_UINT dataSize,
-	    E_GRAPH_PIXEL_FMT fmt)
+        void* data,
+        IZ_UINT dataSize,
+        E_GRAPH_PIXEL_FMT fmt)
     {
-	    CTexture* pTexture = CTextureDX9::CreateTextureFromMemory(
-							    this,
-							    m_Allocator,
-							    data,
-							    dataSize,
-							    fmt);
-	    return pTexture;
+        CTexture* pTexture = CTextureDX9::CreateTextureFromMemory(
+                                this,
+                                m_Allocator,
+                                data,
+                                dataSize,
+                                fmt);
+        return pTexture;
     }
 
     /**
     * テクスチャ作成
     */
     CTexture* CGraphicsDeviceDX9::CreateTexture(
-	    IZ_UINT width,
-	    IZ_UINT height,
-	    IZ_UINT mipLevel,
-	    E_GRAPH_PIXEL_FMT fmt,
-	    E_GRAPH_RSC_TYPE rscType)
+        IZ_UINT width,
+        IZ_UINT height,
+        IZ_UINT mipLevel,
+        E_GRAPH_PIXEL_FMT fmt,
+        E_GRAPH_RSC_TYPE rscType)
     {
-	    CTextureDX9* pTexture = CTextureDX9::CreateTexture(
-							    this,
-							    m_Allocator,
-							    width, height,
-							    mipLevel,
-							    fmt,
-							    rscType);
+        CTextureDX9* pTexture = CTextureDX9::CreateTexture(
+                                this,
+                                m_Allocator,
+                                width, height,
+                                mipLevel,
+                                fmt,
+                                rscType);
 
-	    if ((pTexture != IZ_NULL) && pTexture->IsOnVram()) {
-		    // リセット用リストに登録
-		    m_ResetTexture = InsertResource(pTexture, m_ResetTexture);
-	    }
+        if ((pTexture != IZ_NULL) && pTexture->IsOnVram()) {
+            // リセット用リストに登録
+            m_ResetTexture = InsertResource(pTexture, m_ResetTexture);
+        }
 
-	    return pTexture;
+        return pTexture;
     }
 
     /**
     * キューブテクスチャ作成
     */
     CCubeTexture* CGraphicsDeviceDX9::CreateCubeTexture(
-	    IZ_UINT width,
-	    IZ_UINT height,
-	    IZ_UINT mipLevel,
-	    E_GRAPH_PIXEL_FMT fmt,
-	    IZ_BOOL bIsDynamic)
+        IZ_UINT width,
+        IZ_UINT height,
+        IZ_UINT mipLevel,
+        E_GRAPH_PIXEL_FMT fmt,
+        IZ_BOOL bIsDynamic)
     {
-	    CCubeTexture* pTexture = CCubeTextureDX9::CreateCubeTexture(
-								    this,
-								    m_Allocator,
-								    width,
-								    height,
-								    mipLevel,
-								    fmt);
-	    return pTexture;
+        CCubeTexture* pTexture = CCubeTextureDX9::CreateCubeTexture(
+                                    this,
+                                    m_Allocator,
+                                    width,
+                                    height,
+                                    mipLevel,
+                                    fmt);
+        return pTexture;
     }
 
     /**
     * レンダーターゲット作成
     */
     CTexture* CGraphicsDeviceDX9::CreateRenderTarget(
-	    IZ_UINT width, IZ_UINT height,
-	    E_GRAPH_PIXEL_FMT fmt)
+        IZ_UINT width, IZ_UINT height,
+        E_GRAPH_PIXEL_FMT fmt)
     {
-	    CTextureDX9* pRT = CTextureDX9::CreateRenderTarget(
-						    this,
-						    m_Allocator,
-						    width,
-						    height,
-						    fmt);
+        CTextureDX9* pRT = CTextureDX9::CreateRenderTarget(
+                            this,
+                            m_Allocator,
+                            width,
+                            height,
+                            fmt);
 
-	    if (pRT != IZ_NULL) {
-		    // リセット用リストに登録
-		    m_ResetTexture = InsertResource(pRT, m_ResetTexture);
-	    }
+        if (pRT != IZ_NULL) {
+            // リセット用リストに登録
+            m_ResetTexture = InsertResource(pRT, m_ResetTexture);
+        }
 
-	    return pRT;
+        return pRT;
     }
 
     // 深度・ステンシルサーフェス作成
     CSurface* CGraphicsDeviceDX9::CreateDepthStencilSurface(
-	    IZ_UINT width, 
-	    IZ_UINT height,
-	    E_GRAPH_PIXEL_FMT fmt)
+        IZ_UINT width, 
+        IZ_UINT height,
+        E_GRAPH_PIXEL_FMT fmt)
     {
-	    CSurface* ret = CSurfaceDX9::CreateDepthStencilSurface(
-						    m_Allocator,
-						    this,
-						    width, height,
-						    fmt);
+        CSurface* ret = CSurfaceDX9::CreateDepthStencilSurface(
+                            m_Allocator,
+                            this,
+                            width, height,
+                            fmt);
 
-	    return ret;
+        return ret;
     }
 
     /**
     * システムメモリ上にテクスチャ作成
     */
     CTexture* CGraphicsDeviceDX9::CreateTextureOnSysMem(
-	    IZ_UINT width, IZ_UINT height,
-	    E_GRAPH_PIXEL_FMT fmt,
-	    IZ_UINT mipLevel)
+        IZ_UINT width, IZ_UINT height,
+        E_GRAPH_PIXEL_FMT fmt,
+        IZ_UINT mipLevel)
     {
-	    CTexture* pTexture = CTextureDX9::CreateTexture(
-							    this,
-							    m_Allocator,
-							    width,
-							    height,
-							    mipLevel,
-							    fmt,
-							    E_GRAPH_RSC_TYPE_STATIC,
-							    IZ_TRUE);
-	    return pTexture;
+        CTexture* pTexture = CTextureDX9::CreateTexture(
+                                this,
+                                m_Allocator,
+                                width,
+                                height,
+                                mipLevel,
+                                fmt,
+                                E_GRAPH_RSC_TYPE_STATIC,
+                                IZ_TRUE);
+        return pTexture;
     }
 
     /**
     * 頂点バッファ作成
     */
     CVertexBuffer* CGraphicsDeviceDX9::CreateVertexBuffer(
-	    IZ_UINT stride,
-	    IZ_UINT vtxNum,
-	    E_GRAPH_RSC_TYPE createType)
+        IZ_UINT stride,
+        IZ_UINT vtxNum,
+        E_GRAPH_RSC_TYPE createType)
     {
-	    CVertexBufferDX9* pVB = CVertexBufferDX9::CreateVertexBuffer(
-							    this,
-							    m_Allocator,
-							    stride,
-							    vtxNum,
-							    createType);
+        CVertexBufferDX9* pVB = CVertexBufferDX9::CreateVertexBuffer(
+                                this,
+                                m_Allocator,
+                                stride,
+                                vtxNum,
+                                createType);
 
-	    if ((pVB != IZ_NULL)
-		    && pVB->IsDynamic())
-	    {
-		    // リセット用リストに登録
-		    m_ResetVB = InsertResource(pVB, m_ResetVB);
-	    }
+        if ((pVB != IZ_NULL)
+            && pVB->IsDynamic())
+        {
+            // リセット用リストに登録
+            m_ResetVB = InsertResource(pVB, m_ResetVB);
+        }
 
-	    return pVB;
+        return pVB;
     }
 
     /**
     * インデックスバッファ作成
     */
     CIndexBuffer* CGraphicsDeviceDX9::CreateIndexBuffer(
-	    IZ_UINT nIdxNum,
-	    E_GRAPH_INDEX_BUFFER_FMT fmt,
-	    E_GRAPH_RSC_TYPE createType)
+        IZ_UINT nIdxNum,
+        E_GRAPH_INDEX_BUFFER_FMT fmt,
+        E_GRAPH_RSC_TYPE createType)
     {
-	    CIndexBufferDX9* pIB = CIndexBufferDX9::CreateIndexBuffer(
-							    this,
-							    m_Allocator,
-							    nIdxNum,
-							    fmt,
-							    createType);
+        CIndexBufferDX9* pIB = CIndexBufferDX9::CreateIndexBuffer(
+                                this,
+                                m_Allocator,
+                                nIdxNum,
+                                fmt,
+                                createType);
 
-	    if ((pIB != IZ_NULL)
-		    && pIB->IsDynamic())
-	    {
-		    // リセット用リストに登録
-		    m_ResetIB = InsertResource(pIB, m_ResetIB);
-	    }
+        if ((pIB != IZ_NULL)
+            && pIB->IsDynamic())
+        {
+            // リセット用リストに登録
+            m_ResetIB = InsertResource(pIB, m_ResetIB);
+        }
 
-	    return pIB;
+        return pIB;
     }
 
     /**
@@ -187,11 +187,11 @@ namespace graph
     */
     CVertexShader* CGraphicsDeviceDX9::CreateVertexShader(const void* pProgram)
     {
-	    CVertexShader* ret = CVertexShaderDX9::CreateVertexShader(
-							    this,
-							    m_Allocator,
-							    pProgram);
-	    return ret;
+        CVertexShader* ret = CVertexShaderDX9::CreateVertexShader(
+                                this,
+                                m_Allocator,
+                                pProgram);
+        return ret;
     }
 
     /**
@@ -199,11 +199,11 @@ namespace graph
     */
     CPixelShader* CGraphicsDeviceDX9::CreatePixelShader(const void* pProgram)
     {
-	    CPixelShader* ret = CPixelShaderDX9::CreatePixelShader(
-							    this,
-							    m_Allocator,
-							    pProgram);
-	    return ret;
+        CPixelShader* ret = CPixelShaderDX9::CreatePixelShader(
+                                this,
+                                m_Allocator,
+                                pProgram);
+        return ret;
     }
 
     /**
@@ -211,77 +211,77 @@ namespace graph
     */
     CVertexDeclaration* CGraphicsDeviceDX9::CreateVertexDeclaration(const SVertexElement* pElem, IZ_UINT nNum)
     {
-	    CVertexDeclaration* ret = CVertexDeclarationDX9::CreateVertexDeclaration(
-								    this,
-								    m_Allocator,
-								    pElem,
-								    nNum);
-	    return ret;
+        CVertexDeclaration* ret = CVertexDeclarationDX9::CreateVertexDeclaration(
+                                    this,
+                                    m_Allocator,
+                                    pElem,
+                                    nNum);
+        return ret;
     }
 
     // リソース挿入
     template <class _T>
     _T* CGraphicsDeviceDX9::InsertResource(_T* p, _T* pListTop)
     {
-	    if (pListTop == IZ_NULL) {
-		    pListTop = p;
-	    }
-	    else {
-		    _T* pElem = pListTop;
-		    _T* pTail = IZ_NULL;
+        if (pListTop == IZ_NULL) {
+            pListTop = p;
+        }
+        else {
+            _T* pElem = pListTop;
+            _T* pTail = IZ_NULL;
 
-		    while (pElem != IZ_NULL) {
-			    pTail = pElem;
-			    pElem = pElem->m_Next;
-		    }
+            while (pElem != IZ_NULL) {
+                pTail = pElem;
+                pElem = pElem->m_Next;
+            }
 
-		    pTail->m_Next = p;
-	    }
+            pTail->m_Next = p;
+        }
 
-	    return pListTop;
+        return pListTop;
     }
 
     // リソース解放
     template <class _T>
     _T* CGraphicsDeviceDX9::RemoveResource(_T* p, _T* pListTop)
     {
-	    if (pListTop == p) {
-		    pListTop = pListTop->m_Next;
-	    }
-	    else {
-		    _T* pElem = pListTop;
-		    _T* prev = IZ_NULL;
+        if (pListTop == p) {
+            pListTop = pListTop->m_Next;
+        }
+        else {
+            _T* pElem = pListTop;
+            _T* prev = IZ_NULL;
 
-		    while (pElem != IZ_NULL) {
-			    if (pElem == p) {
-				    prev->m_Next = pElem->m_Next;
-				    break;
-			    }
+            while (pElem != IZ_NULL) {
+                if (pElem == p) {
+                    prev->m_Next = pElem->m_Next;
+                    break;
+                }
 
-			    prev = pElem;
-			    pElem = pElem->m_Next;
-		    }
-	    }
+                prev = pElem;
+                pElem = pElem->m_Next;
+            }
+        }
 
-	    return pListTop;
+        return pListTop;
     }
 
     // テクスチャ削除
     void CGraphicsDeviceDX9::RemoveTexture(CTextureDX9* p)
     {
-	    m_ResetTexture = RemoveResource(p, m_ResetTexture);
+        m_ResetTexture = RemoveResource(p, m_ResetTexture);
     }
 
     // 頂点バッファ削除
     void CGraphicsDeviceDX9::RemoveVertexBuffer(CVertexBufferDX9* p)
     {
-	    m_ResetVB = RemoveResource(p, m_ResetVB);
+        m_ResetVB = RemoveResource(p, m_ResetVB);
     }
 
     // インデックスバッファ削除
     void CGraphicsDeviceDX9::RemoveIndexBuffer(CIndexBufferDX9* p)
     {
-	    m_ResetIB = RemoveResource(p, m_ResetIB);
+        m_ResetIB = RemoveResource(p, m_ResetIB);
     }
 }   // namespace graph
 }   // namespace izanagi

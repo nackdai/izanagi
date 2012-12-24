@@ -18,4 +18,4 @@
 
 #include "graph/dx9/GraphPerf.h"
 
-#endif	// #if !defined(__IZANAGI_GRAPH_H__)
+#endif  // #if !defined(__IZANAGI_GRAPH_H__)
