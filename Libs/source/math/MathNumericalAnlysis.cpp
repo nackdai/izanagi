@@ -72,9 +72,10 @@ namespace math
 
 		for (IZ_UINT i = 0; i < loopCnt; i++)
 		{
-			IZ_FLOAT f = func(x);
+#if 0
+			IZ_FLOAT f = func(x) - init;
 			IZ_FLOAT fd = funcd(x);
-
+			
 			if (CMath::IsNearyEqualZero(fd))
 			{
 				return newX;
@@ -93,6 +94,23 @@ namespace math
 			}
 
 			x = newX;
+#else
+            IZ_FLOAT v = func(x) - init;
+
+            if (CMath::IsNearyEqualZero(v * v))
+            {
+                return x;
+            }
+
+            IZ_FLOAT tt = funcd(x);
+
+            if (CMath::IsNearyEqualZero(tt))
+            {
+                return x;
+            }
+
+            x -= v / tt;
+#endif
 		}
 
 		// Žû‘©‚µ‚È‚©‚Á‚½‚Æ‚«‚É‚±‚±‚É‚­‚é
