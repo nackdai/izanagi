@@ -46,56 +46,56 @@ static const float3 YCbCr2G = { 1.00000f, -0.34414f, -0.71414f };
 static const float3 YCbCr2B = { 1.00000f,  1.77200f,  0.00000f };
 
 static const float3x3 RGB2YCbCCr = {
-	{ 0.29891f, -0.16874f,  0.50000f },
-	{ 0.58661f, -0.33126f, -0.41869f },
-	{ 0.11448f,  0.50000f, -0.08131f },
+    { 0.29891f, -0.16874f,  0.50000f },
+    { 0.58661f, -0.33126f, -0.41869f },
+    { 0.11448f,  0.50000f, -0.08131f },
 };
 static const float3x3 YCbCr2RGB = {
-	{ 1.00000f,  1.00000f, 1.00000f },
-	{ 0.00000f, -0.34564f, 1.77104f },
-	{ 1.40218f, -0.71448f, 0.00000f },
+    { 1.00000f,  1.00000f, 1.00000f },
+    { 0.00000f, -0.34564f, 1.77104f },
+    { 1.40218f, -0.71448f, 0.00000f },
 };
 
 // RGB -> YCbCr
 float3 RGBToYCbCr(float3 vRGB)
 {
-	return mul(vRGB, RGB2YCbCCr);
+    return mul(vRGB, RGB2YCbCCr);
 }
 
 // RGB -> Cb
 float RGBToCb(float3 vRGB)
 {
-	return dot(vRGB, RGB2Cb);
+    return dot(vRGB, RGB2Cb);
 }
 
 // RGB -> Cr
 float RGBToCr(float3 vRGB)
 {
-	return dot(vRGB, RGB2Cr);
+    return dot(vRGB, RGB2Cr);
 }
 
 // YCbCr -> RGB
 float3 YCbCrToRGB(float3 vYCbCr)
 {
-	return mul(vYCbCr, YCbCr2RGB);
+    return mul(vYCbCr, YCbCr2RGB);
 }
 
 // YCbCr -> R
 float YCbCrToR(float3 vYCbCr)
 {
-	return dot(vYCbCr, YCbCr2R);
+    return dot(vYCbCr, YCbCr2R);
 }
 
 // YCbCr -> G
 float YCbCrToG(float3 vYCbCr)
 {
-	return dot(vYCbCr, YCbCr2G);
+    return dot(vYCbCr, YCbCr2G);
 }
 
 // YCbCr -> B
 float YCbCrToB(float3 vYCbCr)
 {
-	return dot(vYCbCr, YCbCr2B);
+    return dot(vYCbCr, YCbCr2B);
 }
 
-#endif	// #if !defined(__IZANAGI_POSTEFFECT_COLORSPACE_YCbCr_FXH__)
+#endif  // #if !defined(__IZANAGI_POSTEFFECT_COLORSPACE_YCbCr_FXH__)

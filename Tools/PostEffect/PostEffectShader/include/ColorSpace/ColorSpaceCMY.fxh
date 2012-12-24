@@ -19,13 +19,13 @@
 // RGB -> CMY
 float3 RGBToCMY(float3 vRGB)
 {
-	return (float3(1.0f, 1.0f, 1.0f) - vRGB);
+    return (float3(1.0f, 1.0f, 1.0f) - vRGB);
 }
 
 // CMY -> RGB
 float3 CMYToRGB(float3 vCMY)
 {
-	return (float3(1.0f, 1.0f, 1.0f) - vCMY);
+    return (float3(1.0f, 1.0f, 1.0f) - vCMY);
 }
 
-#endif	// #if !defined(__IZANAGI_POSTEFFECT_COLORSPACE_CMY_FXH__)
+#endif  // #if !defined(__IZANAGI_POSTEFFECT_COLORSPACE_CMY_FXH__)

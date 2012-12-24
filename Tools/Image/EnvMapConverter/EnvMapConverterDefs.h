@@ -5,15 +5,15 @@
 
 // 環境マップのタイプ
 enum EnvMapType {
-	EnvMapTypeMirror = 0,
-	EnvMapTypeLatLong,
-	EnvMapTypeAngular,
-	EnvMapTypeCube,
+    EnvMapTypeMirror = 0,
+    EnvMapTypeLatLong,
+    EnvMapTypeAngular,
+    EnvMapTypeCube,
     EnvMapTypeCross,
 
-	EnvMapTypeNum,
+    EnvMapTypeNum,
 };
 
 // ファイルの出力
 
-#endif	// #if !defined(__ENV_MAP_CONVERTER_DEFS_H__)
+#endif  // #if !defined(__ENV_MAP_CONVERTER_DEFS_H__)

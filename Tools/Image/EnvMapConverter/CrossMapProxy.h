@@ -20,34 +20,34 @@ public:
     }
 
 public:
-	CCrossMapProxy(
-		izanagi::tool::CTextureLite* tex,
-		EnvMapType type);
-	virtual ~CCrossMapProxy();
+    CCrossMapProxy(
+        izanagi::tool::CTextureLite* tex,
+        EnvMapType type);
+    virtual ~CCrossMapProxy();
 
 public:
-	/** XYから反射ベクトルを取得.
-	 */
-	virtual void getRef(
-		IZ_UINT x, IZ_UINT y,
-		izanagi::math::SVector& ref,
-		izanagi::graph::E_GRAPH_CUBE_TEX_FACE face = izanagi::graph::E_GRAPH_CUBE_TEX_FACE_NUM);
+    /** XYから反射ベクトルを取得.
+     */
+    virtual void getRef(
+        IZ_UINT x, IZ_UINT y,
+        izanagi::math::SVector& ref,
+        izanagi::graph::E_GRAPH_CUBE_TEX_FACE face = izanagi::graph::E_GRAPH_CUBE_TEX_FACE_NUM);
 
-	/** UVから色を取得.
-	 */
-	virtual void getColor(
-		IZ_FLOAT u, IZ_FLOAT v,
-		SFloatColor& color);
+    /** UVから色を取得.
+     */
+    virtual void getColor(
+        IZ_FLOAT u, IZ_FLOAT v,
+        SFloatColor& color);
 
-	/** 指定位置に描きこみ.
-	 */
-	virtual void putColor(
-		IZ_UINT x, IZ_UINT y,
-		const SFloatColor& color);
+    /** 指定位置に描きこみ.
+     */
+    virtual void putColor(
+        IZ_UINT x, IZ_UINT y,
+        const SFloatColor& color);
 
-	/** XYが正しい位置かどうか.
-	 */
-	virtual IZ_BOOL isValid(IZ_UINT x, IZ_UINT y) const;
+    /** XYが正しい位置かどうか.
+     */
+    virtual IZ_BOOL isValid(IZ_UINT x, IZ_UINT y) const;
 
 protected:
     izanagi::tool::CTextureLite* m_Tex;
@@ -59,4 +59,4 @@ protected:
     IZ_UINT m_HeightPerFace;
 };
 
-#endif	// #if !defined(__CROSS_MAP_PROXY_H__)
+#endif  // #if !defined(__CROSS_MAP_PROXY_H__)

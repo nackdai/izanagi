@@ -89,4 +89,4 @@ void* izGetPixelDataAsBGRA8(void* p);
  */
 void izReleasePixelData(void* p);
 
-#endif	// #if !defined(__IZANAGI_IMG_LIB_DLL_H__)
+#endif  // #if !defined(__IZANAGI_IMG_LIB_DLL_H__)

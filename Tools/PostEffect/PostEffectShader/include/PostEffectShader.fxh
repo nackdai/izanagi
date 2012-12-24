@@ -22,4 +22,4 @@
 // サンプリングパラメータ
 //#include "PostEffectSamplingParam.fxh"
 
-#endif	// #if !defined(__IZANAGI_POSTEFFECT_SHADER_FXH__)
+#endif  // #if !defined(__IZANAGI_POSTEFFECT_SHADER_FXH__)

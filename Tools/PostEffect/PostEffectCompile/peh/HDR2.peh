@@ -1,5 +1,5 @@
 -c   "%DXSDK_DIR%Utilities\Bin\x86\fxc"
 -co  "/nologo"
 -src "../../PostEffectShader/fx/PostEffectHDR2.fx"
--I	 "../../PostEffectShader/include"
+-I   "../../PostEffectShader/include"
 -asm

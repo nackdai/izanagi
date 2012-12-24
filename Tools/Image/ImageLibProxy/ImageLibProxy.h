@@ -7,8 +7,8 @@ using namespace System;
 namespace izanagi {
     namespace tool {
 
-	public ref class ImageLibProxy
-	{
+    public ref class ImageLibProxy
+    {
     private:
         ImageLibProxy();
         ~ImageLibProxy();
@@ -40,7 +40,7 @@ namespace izanagi {
         static IntPtr GetPixelDataAsBGRA8(IntPtr p);
 
         static void ReleasePixelData(IntPtr p);
-	};
+    };
 
     }
 }

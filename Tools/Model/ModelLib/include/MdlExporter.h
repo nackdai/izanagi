@@ -5,25 +5,25 @@
 #include "Importer.h"
 
 class CMdlExporter {
-	static CMdlExporter s_cInstance;
+    static CMdlExporter s_cInstance;
 
 public:
-	static CMdlExporter& GetInstance() { return s_cInstance; }
+    static CMdlExporter& GetInstance() { return s_cInstance; }
 
 private:
-	CMdlExporter();
-	~CMdlExporter();
+    CMdlExporter();
+    ~CMdlExporter();
 
-	NO_COPIABLE(CMdlExporter);
+    NO_COPIABLE(CMdlExporter);
 
 public:
-	IZ_BOOL Export(
-		IZ_UINT maxJointMtxNum,
-		IZ_PCSTR lpszOutFile,
-		IImporter* pImporter);
+    IZ_BOOL Export(
+        IZ_UINT maxJointMtxNum,
+        IZ_PCSTR lpszOutFile,
+        IImporter* pImporter);
 
 private:
-	izanagi::CFileOutputStream m_Out;
+    izanagi::CFileOutputStream m_Out;
 };
 
-#endif	// #if !defined(__MODEL_LIB_MDL_EXPORTER_H__)
+#endif  // #if !defined(__MODEL_LIB_MDL_EXPORTER_H__)

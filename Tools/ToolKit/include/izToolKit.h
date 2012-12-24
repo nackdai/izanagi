@@ -11,4 +11,4 @@
 #include "ToolKitXml.h"
 #endif
 
-#endif	// #if !defined(__IZANAGI_TOOL_KIT_TOOL_KIT_H__)
+#endif  // #if !defined(__IZANAGI_TOOL_KIT_TOOL_KIT_H__)

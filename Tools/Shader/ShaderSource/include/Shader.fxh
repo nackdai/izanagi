@@ -9,4 +9,4 @@
 #include "MaterialDefs.fxh"
 #include "LightUtil.fxh"
 
-#endif	// #if !defined(__IZANAGI_SHADER_SHADER_FXH__)
+#endif  // #if !defined(__IZANAGI_SHADER_SHADER_FXH__)

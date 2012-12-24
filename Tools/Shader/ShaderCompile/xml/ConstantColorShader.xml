@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <shd
-	compiler="%DXSDK_DIR%Utilities\Bin\x86\fxc"
-	src="../../ShaderSource/fx/ConstantColorShader.fx"
-	option="/nologo"
-	is_asm="true">
+    compiler="%DXSDK_DIR%Utilities\Bin\x86\fxc"
+    src="../../ShaderSource/fx/ConstantColorShader.fx"
+    option="/nologo"
+    is_asm="true">
 
-	<include path="../../ShaderSource/include"/>
+    <include path="../../ShaderSource/include"/>
 
 </shd>

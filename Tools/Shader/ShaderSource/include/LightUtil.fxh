@@ -10,9 +10,9 @@
 */
 float3 ComputeHalfVectorEx(int idxParallelLight, float4 vPos_L2W)
 {
-	// 視点からの方向
-	float3 vV = ComputeDirFromEye(vPos_L2W);
-	return normalize(GetParallelLightDir(idxParallelLight) + vV);
+    // 視点からの方向
+    float3 vV = ComputeDirFromEye(vPos_L2W);
+    return normalize(GetParallelLightDir(idxParallelLight) + vV);
 }
 
 /**
@@ -20,7 +20,7 @@ float3 ComputeHalfVectorEx(int idxParallelLight, float4 vPos_L2W)
 */
 float3 ComputeHalfVector(int idxParallelLight, float4 vPos)
 {
-	return ComputeHalfVectorEx(idxParallelLight, ApplyL2W(vPos));
+    return ComputeHalfVectorEx(idxParallelLight, ApplyL2W(vPos));
 }
 
 /**
@@ -28,27 +28,27 @@ float3 ComputeHalfVector(int idxParallelLight, float4 vPos)
 */
 float4 ComputeAmbientLight()
 {
-	return GetMtrlAmbient() * GetAmbientLightColor();
+    return GetMtrlAmbient() * GetAmbientLightColor();
 }
 
 /**
 * Phongライト計算
 */
 float3 ComputePhongLight(
-	int idxParallelLight,
-	float3 vNormal,
-	float3 vHalf)
+    int idxParallelLight,
+    float3 vNormal,
+    float3 vHalf)
 {
-	float4 sParallelLightClr = GetParallelLightColor(idxParallelLight);
-	float3 sParallelLightDir = GetParallelLightDir(idxParallelLight);
-	
-	// Diffuse = Md * ∑(C * max(N・L, 0))
-	float3 ret = GetMtrlDiffuse().rgb * sParallelLightClr.rgb * max(0.0f, dot(vNormal, sParallelLightDir));
+    float4 sParallelLightClr = GetParallelLightColor(idxParallelLight);
+    float3 sParallelLightDir = GetParallelLightDir(idxParallelLight);
+    
+    // Diffuse = Md * ∑(C * max(N・L, 0))
+    float3 ret = GetMtrlDiffuse().rgb * sParallelLightClr.rgb * max(0.0f, dot(vNormal, sParallelLightDir));
 
-	// Specular = Ms * ∑(C * pow(max(N・H, 0), m))
-	ret += GetMtrlSpecular().rgb * sParallelLightClr.rgb * pow(max(0.0f, dot(vNormal, vHalf)), GetMtrlSpecular().w);
+    // Specular = Ms * ∑(C * pow(max(N・H, 0), m))
+    ret += GetMtrlSpecular().rgb * sParallelLightClr.rgb * pow(max(0.0f, dot(vNormal, vHalf)), GetMtrlSpecular().w);
 
-	return ret;
+    return ret;
 }
 
-#endif	// #if !defined(__IZANAGI_SHADER_LIGHT_UTIL_FXH__)
+#endif  // #if !defined(__IZANAGI_SHADER_LIGHT_UTIL_FXH__)

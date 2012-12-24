@@ -6,52 +6,52 @@
 #include "XFileParser.h"
 
 class CXFileMaterial {
-	static CXFileMaterial* s_pInstance;
+    static CXFileMaterial* s_pInstance;
 
 public:
-	static CXFileMaterial& GetInstance();
-	static void DeleteInstance();
+    static CXFileMaterial& GetInstance();
+    static void DeleteInstance();
 
 private:
-	CXFileMaterial();
-	~CXFileMaterial() {}
+    CXFileMaterial();
+    ~CXFileMaterial() {}
 
 public:
-	void SetNameForInvalidMaterial(IZ_PCSTR pszName);
+    void SetNameForInvalidMaterial(IZ_PCSTR pszName);
 
-	IZ_BOOL Begin(const CXFileParser* pParser);
+    IZ_BOOL Begin(const CXFileParser* pParser);
 
-	IZ_UINT GetMaterialNum();
+    IZ_UINT GetMaterialNum();
 
-	IZ_BOOL GetMaterial(
-		IZ_UINT nMtrlIdx,
-		izanagi::S_MTRL_MATERIAL& sMtrl);
+    IZ_BOOL GetMaterial(
+        IZ_UINT nMtrlIdx,
+        izanagi::S_MTRL_MATERIAL& sMtrl);
 
-	void GetMaterialTexture(
-		IZ_UINT nMtrlIdx,
-		IZ_UINT nTexIdx,
-		izanagi::S_MTRL_TEXTURE& sTex);
+    void GetMaterialTexture(
+        IZ_UINT nMtrlIdx,
+        IZ_UINT nTexIdx,
+        izanagi::S_MTRL_TEXTURE& sTex);
 
-	void GetMaterialShader(
-		IZ_UINT nMtrlIdx,
-		IZ_UINT nShaderIdx,
-		izanagi::S_MTRL_SHADER& sShader);
+    void GetMaterialShader(
+        IZ_UINT nMtrlIdx,
+        IZ_UINT nShaderIdx,
+        izanagi::S_MTRL_SHADER& sShader);
 
-	void GetMaterialParam(
-		IZ_UINT nMtrlIdx,
-		IZ_UINT nParamIdx,
-		izanagi::S_MTRL_PARAM& sParam);
+    void GetMaterialParam(
+        IZ_UINT nMtrlIdx,
+        IZ_UINT nParamIdx,
+        izanagi::S_MTRL_PARAM& sParam);
 
-	void GetMaterialParamValue(
-		IZ_UINT nMtrlIdx,
-		IZ_UINT nParamIdx,
-		std::vector<IZ_FLOAT>& tvValue);
+    void GetMaterialParamValue(
+        IZ_UINT nMtrlIdx,
+        IZ_UINT nParamIdx,
+        std::vector<IZ_FLOAT>& tvValue);
 
 private:
-	std::vector<SXFileMaterial> m_MtrlList;
+    std::vector<SXFileMaterial> m_MtrlList;
 
-	std::string m_NameForInvalidMtrl;
-	IZ_UINT m_nInvalidMtrlCount;
+    std::string m_NameForInvalidMtrl;
+    IZ_UINT m_nInvalidMtrlCount;
 };
 
-#endif	// #if !defined(__MODEL_LIB_XFILE_MATERIAL_H__)
+#endif  // #if !defined(__MODEL_LIB_XFILE_MATERIAL_H__)

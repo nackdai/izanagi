@@ -7,29 +7,29 @@
 
 namespace izanagi {
 namespace tool {
-	class CDXTFormatConverter {
-	private:
-		CDXTFormatConverter();
-		~CDXTFormatConverter();
+    class CDXTFormatConverter {
+    private:
+        CDXTFormatConverter();
+        ~CDXTFormatConverter();
 
-		NO_COPIABLE(CDXTFormatConverter);
+        NO_COPIABLE(CDXTFormatConverter);
 
-	public:
-		static void Compress(
-			IZ_UINT width,
-			IZ_UINT height,
-			const void* src,
-			void* dst,
-			graph::E_GRAPH_PIXEL_FMT fmt);
+    public:
+        static void Compress(
+            IZ_UINT width,
+            IZ_UINT height,
+            const void* src,
+            void* dst,
+            graph::E_GRAPH_PIXEL_FMT fmt);
 
-		static void Decompress(
-			IZ_UINT width,
-			IZ_UINT height,
-			const void* src,
-			void* dst,
-			graph::E_GRAPH_PIXEL_FMT fmt);
-	};
-}	// namespace tool
-}	// namespace izanagi
+        static void Decompress(
+            IZ_UINT width,
+            IZ_UINT height,
+            const void* src,
+            void* dst,
+            graph::E_GRAPH_PIXEL_FMT fmt);
+    };
+}   // namespace tool
+}   // namespace izanagi
 
-#endif	// #if !defined(__IZANAGI_IMAGE_LIB_DXT_FORMAT_CONVERTER_H__)
+#endif  // #if !defined(__IZANAGI_IMAGE_LIB_DXT_FORMAT_CONVERTER_H__)

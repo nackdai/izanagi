@@ -9,34 +9,34 @@
 // ファイルツリー
 class CFileTree {
 private:
-	static CFileTree s_cInstance;
+    static CFileTree s_cInstance;
 
 public:
-	static CFileTree& GetInstance() { return s_cInstance; }
+    static CFileTree& GetInstance() { return s_cInstance; }
 
-	typedef std::vector<SFile>::iterator FILE_LIST_ITER;
+    typedef std::vector<SFile>::iterator FILE_LIST_ITER;
 
 private:
-	CFileTree() {}
-	~CFileTree() {}
+    CFileTree() {}
+    ~CFileTree() {}
 
 public:
-	// XMLから情報を読み込む
-	BOOL ReadFromXML(LPCSTR lpszIn);
+    // XMLから情報を読み込む
+    BOOL ReadFromXML(LPCSTR lpszIn);
 
-	// 指定ディレクトリの情報を登録する
-	BOOL RegisterFileTree(LPCSTR lpszPath);
+    // 指定ディレクトリの情報を登録する
+    BOOL RegisterFileTree(LPCSTR lpszPath);
 
-	std::vector<SFile>& GetFileList() { return m_FileList; }
-
-private:
-	void RegisterFileTreeInternal(LPCSTR lpszDir);
+    std::vector<SFile>& GetFileList() { return m_FileList; }
 
 private:
-	std::map<izanagi::CKey, SFile> m_FileInfoMap;
-	std::vector<SFile> m_FileList;
+    void RegisterFileTreeInternal(LPCSTR lpszDir);
 
-	std::vector<izanagi::tool::CString> m_TmpDirList;
+private:
+    std::map<izanagi::CKey, SFile> m_FileInfoMap;
+    std::vector<SFile> m_FileList;
+
+    std::vector<izanagi::tool::CString> m_TmpDirList;
 };
 
-#endif	// #if !defined(__FILE_TREE_H__)
+#endif  // #if !defined(__FILE_TREE_H__)

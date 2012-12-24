@@ -4,8 +4,8 @@
 #include "izToolKit.h"
 
 namespace {
-	// オプションで共有するバッファ
-	CHAR s_BUF[1024]; 
+    // オプションで共有するバッファ
+    CHAR s_BUF[1024]; 
 }
 
 /**
@@ -13,8 +13,8 @@ namespace {
 */
 COption::COption()
 {
-	isPreproc = FALSE;
-	isCompileAsm = FALSE;
+    isPreproc = FALSE;
+    isCompileAsm = FALSE;
 }
 
 /**
@@ -22,131 +22,131 @@ COption::COption()
 */
 BOOL COption::Analysis(int argc, char* argv[])
 {
-	for (int i = 1; i < argc; i++) {
-		BOOL result = FALSE;
-		izanagi::tool::CString cmd(argv[i]);
+    for (int i = 1; i < argc; i++) {
+        BOOL result = FALSE;
+        izanagi::tool::CString cmd(argv[i]);
 
-		if (i < argc - 1) {
-			if (result = (cmd == "-c")) {
-				// -c
-				compiler.format("%s", argv[i + 1]);
-				i++;
-			}
-			else if (result = (cmd == "-co")) {
-				// -co
-				compileOpt.format("%s", argv[i + 1]);
-				i++;
-			}
-			else if (result = (cmd == "-I")) {
-				// -I
-				izanagi::tool::CString tmp;
-				tmp.format("%s", argv[i + 1]);
+        if (i < argc - 1) {
+            if (result = (cmd == "-c")) {
+                // -c
+                compiler.format("%s", argv[i + 1]);
+                i++;
+            }
+            else if (result = (cmd == "-co")) {
+                // -co
+                compileOpt.format("%s", argv[i + 1]);
+                i++;
+            }
+            else if (result = (cmd == "-I")) {
+                // -I
+                izanagi::tool::CString tmp;
+                tmp.format("%s", argv[i + 1]);
 
-				includes.push_back(tmp);
+                includes.push_back(tmp);
 
-				i++;
-			}
-			else if (result = (cmd == "-D")) {
-				// -D
-				izanagi::tool::CString tmp;
-				tmp.format("%s", argv[i + 1]);
+                i++;
+            }
+            else if (result = (cmd == "-D")) {
+                // -D
+                izanagi::tool::CString tmp;
+                tmp.format("%s", argv[i + 1]);
 
-				defines.push_back(tmp);
+                defines.push_back(tmp);
 
-				i++;
-			}
-			else if (result = (cmd == "-obj")) {
-				// -obj
-				objDir.format("%s", argv[i + 1]);
-				i++;
-			}
-			else if (result = (cmd == "-src")) {
-				// -src
-				shader.format("%s", argv[i + 1]);
-				i++;
-			}
-			else if (result = (cmd == "-o")) {
-				// -o
-				outFile.format("%s", argv[i + 1]);
-				i++;
-			}
-			else if (result = (cmd == "-E")) {
-				// -E
-				shader.format("%s", argv[i + 1]);
-				i++;
+                i++;
+            }
+            else if (result = (cmd == "-obj")) {
+                // -obj
+                objDir.format("%s", argv[i + 1]);
+                i++;
+            }
+            else if (result = (cmd == "-src")) {
+                // -src
+                shader.format("%s", argv[i + 1]);
+                i++;
+            }
+            else if (result = (cmd == "-o")) {
+                // -o
+                outFile.format("%s", argv[i + 1]);
+                i++;
+            }
+            else if (result = (cmd == "-E")) {
+                // -E
+                shader.format("%s", argv[i + 1]);
+                i++;
 
-				isPreproc = TRUE;
-			}
-			else if (result = (cmd == "-l")) {
-				// -l
-				optionFile.format("%s", argv[i + 1]);
-				i++;
-			}
-		}
+                isPreproc = TRUE;
+            }
+            else if (result = (cmd == "-l")) {
+                // -l
+                optionFile.format("%s", argv[i + 1]);
+                i++;
+            }
+        }
 
-		if (!result) {
-			// 引数無しオプション
-			if (result = (cmd == "-asm")) {
-				// -asm
-				isCompileAsm = TRUE;
-			}
-		}
+        if (!result) {
+            // 引数無しオプション
+            if (result = (cmd == "-asm")) {
+                // -asm
+                isCompileAsm = TRUE;
+            }
+        }
 
-		if (!result) {
-			// TODO
-			printf("無効なオプションです[%s]\n\n", cmd);
-			//IZ_ASSERT(FALSE);
-			return FALSE;
-		}
-	}
+        if (!result) {
+            // TODO
+            printf("無効なオプションです[%s]\n\n", cmd);
+            //IZ_ASSERT(FALSE);
+            return FALSE;
+        }
+    }
 
-	if (optionFile.empty()) {
-		// 設定ファイルが指定されていない
-		if (!AnalysisInternal()) {
-			return FALSE;
-		}
-	}
-	else {
-		std::vector<izanagi::tool::CString> tvArgsList;
+    if (optionFile.empty()) {
+        // 設定ファイルが指定されていない
+        if (!AnalysisInternal()) {
+            return FALSE;
+        }
+    }
+    else {
+        std::vector<izanagi::tool::CString> tvArgsList;
 
-		// 設定ファイル解析
-		if (AnalysisOptionFile(tvArgsList)) {
-			if (!tvArgsList.empty()) {
-				// うーん・・・
-				std::vector<char*> args_tmp;
-				{
-					// 最初にはダミーを入れる
-					args_tmp.push_back("");
+        // 設定ファイル解析
+        if (AnalysisOptionFile(tvArgsList)) {
+            if (!tvArgsList.empty()) {
+                // うーん・・・
+                std::vector<char*> args_tmp;
+                {
+                    // 最初にはダミーを入れる
+                    args_tmp.push_back("");
 
-					std::vector<izanagi::tool::CString>::iterator it = tvArgsList.begin();
-					while (it != tvArgsList.end()) {
-						const char* p = *it;
-						args_tmp.push_back(const_cast<char*>(p));
-						it++;
-					}
-				}
+                    std::vector<izanagi::tool::CString>::iterator it = tvArgsList.begin();
+                    while (it != tvArgsList.end()) {
+                        const char* p = *it;
+                        args_tmp.push_back(const_cast<char*>(p));
+                        it++;
+                    }
+                }
 
-				// 再度解析
-				if (!Analysis((int)args_tmp.size(), &args_tmp[0])) {
-					IZ_ASSERT(FALSE);
+                // 再度解析
+                if (!Analysis((int)args_tmp.size(), &args_tmp[0])) {
+                    IZ_ASSERT(FALSE);
 
-					// TODO
+                    // TODO
 
-					return FALSE;
-				}
-			}
-			else {
-				// 設定ファイルが空て・・・
-				IZ_ASSERT(FALSE);
+                    return FALSE;
+                }
+            }
+            else {
+                // 設定ファイルが空て・・・
+                IZ_ASSERT(FALSE);
 
-				// TODO
+                // TODO
 
-				return FALSE;
-			}
-		}
-	}
+                return FALSE;
+            }
+        }
+    }
 
-	return TRUE;
+    return TRUE;
 }
 
 /**
@@ -154,221 +154,221 @@ BOOL COption::Analysis(int argc, char* argv[])
 */
 BOOL COption::IsValid()
 {
-	if (shader.empty()) {
-		// シェーダファイルが空
-		// TODO
+    if (shader.empty()) {
+        // シェーダファイルが空
+        // TODO
 
-		return FALSE;
-	}
-	else if (!PathFileExists(shader)) {
-		// ファイルの存在を確認
-		// TODO
+        return FALSE;
+    }
+    else if (!PathFileExists(shader)) {
+        // ファイルの存在を確認
+        // TODO
 
-		return FALSE;
-	}
+        return FALSE;
+    }
 
-	if (!IsPreproc()) {
-		// プリプロセスモードのときは調べない
-		if (compiler.empty()) {
-			// コンパイルコマンドが空
-			// TODO
+    if (!IsPreproc()) {
+        // プリプロセスモードのときは調べない
+        if (compiler.empty()) {
+            // コンパイルコマンドが空
+            // TODO
 
-			return FALSE;
-		}
-	}
+            return FALSE;
+        }
+    }
 
-	if (outFile.empty()) {
-		// 出力ファイルが空
-		// TODO
+    if (outFile.empty()) {
+        // 出力ファイルが空
+        // TODO
 
-		return FALSE;
-	}
-	else if (izanagi::tool::CFileUtility::IsReadOnly(outFile)) {
-		// 出力ファイルが上書き不可
-		// TODO
+        return FALSE;
+    }
+    else if (izanagi::tool::CFileUtility::IsReadOnly(outFile)) {
+        // 出力ファイルが上書き不可
+        // TODO
 
-		return FALSE;
-	}
+        return FALSE;
+    }
 
-	return TRUE;
+    return TRUE;
 }
 
 #if 0
-#define ENABLE_LINEAR_SAMPLE	"__ENABLE_LINEAR_SAMPLE__"
+#define ENABLE_LINEAR_SAMPLE    "__ENABLE_LINEAR_SAMPLE__"
 #endif
-#define Z_RGB				"__Z_RGB__"
-#define Z_GBA				"__Z_GBA__"
+#define Z_RGB               "__Z_RGB__"
+#define Z_GBA               "__Z_GBA__"
 
 namespace {
-	inline void _DeleteString(
-		std::vector<izanagi::tool::CString>& tvList,
-		LPCSTR lpszStr)
-	{
-		std::vector<izanagi::tool::CString>::iterator it = tvList.begin();
-		while (it != tvList.end()) {
-			if (*it == lpszStr) {
-				it = tvList.erase(it);
-				break;
-			}
-			else {
-				it++;
-			}
-		}
-	}
+    inline void _DeleteString(
+        std::vector<izanagi::tool::CString>& tvList,
+        LPCSTR lpszStr)
+    {
+        std::vector<izanagi::tool::CString>::iterator it = tvList.begin();
+        while (it != tvList.end()) {
+            if (*it == lpszStr) {
+                it = tvList.erase(it);
+                break;
+            }
+            else {
+                it++;
+            }
+        }
+    }
 
-	inline void _PushString(
-		std::vector<izanagi::tool::CString>& tvList,
-		LPCSTR lpszStr)
-	{
-		izanagi::tool::CString str(lpszStr);
-		tvList.push_back(str);
-	}
-}	// namespace
+    inline void _PushString(
+        std::vector<izanagi::tool::CString>& tvList,
+        LPCSTR lpszStr)
+    {
+        izanagi::tool::CString str(lpszStr);
+        tvList.push_back(str);
+    }
+}   // namespace
 
 /**
 * オプション解析内部処理
 */
 BOOL COption::AnalysisInternal()
 {
-	memset(s_BUF, 0, sizeof(s_BUF));
+    memset(s_BUF, 0, sizeof(s_BUF));
 
-	// 環境変数の展開
-	if (!shader.empty()) {
-		if (izanagi::tool::CEnvVarHelper::ExpandEnvStrings(
-				s_BUF,
-				sizeof(s_BUF),
-				shader))
-		{
-			shader.format("%s", s_BUF);
-			shader.replace('\\', '/');
-			memset(s_BUF, 0, sizeof(s_BUF));
-		}
-	}
+    // 環境変数の展開
+    if (!shader.empty()) {
+        if (izanagi::tool::CEnvVarHelper::ExpandEnvStrings(
+                s_BUF,
+                sizeof(s_BUF),
+                shader))
+        {
+            shader.format("%s", s_BUF);
+            shader.replace('\\', '/');
+            memset(s_BUF, 0, sizeof(s_BUF));
+        }
+    }
 
-	if (compiler.empty()) {
-		// コンパイラの指定がないので、デフォルトを指定
-		compiler.format("%%DXSDK_DIR%%Utilities/Bin/x86/fxc");
-	}
+    if (compiler.empty()) {
+        // コンパイラの指定がないので、デフォルトを指定
+        compiler.format("%%DXSDK_DIR%%Utilities/Bin/x86/fxc");
+    }
 
-	if (!compiler.empty()) {
-		if (izanagi::tool::CEnvVarHelper::ExpandEnvStrings(
-				s_BUF,
-				sizeof(s_BUF),
-				compiler))
-		{
-			compiler.format("%s", s_BUF);
-			compiler.replace('\\', '/');
-			memset(s_BUF, 0, sizeof(s_BUF));
-		}
+    if (!compiler.empty()) {
+        if (izanagi::tool::CEnvVarHelper::ExpandEnvStrings(
+                s_BUF,
+                sizeof(s_BUF),
+                compiler))
+        {
+            compiler.format("%s", s_BUF);
+            compiler.replace('\\', '/');
+            memset(s_BUF, 0, sizeof(s_BUF));
+        }
 
-		// コンパイルオプションとの結合
-		izanagi::tool::CString tmp;
-		tmp.format("\"\"%s\"\" %s", compiler.c_str(), compileOpt.c_str());
-		compiler = tmp;
-	}
+        // コンパイルオプションとの結合
+        izanagi::tool::CString tmp;
+        tmp.format("\"\"%s\"\" %s", compiler.c_str(), compileOpt.c_str());
+        compiler = tmp;
+    }
 
-	// 出力ファイル
-	if (outFile.empty() && !shader.empty()) {
-		// 出力ファイルが空
-		IZ_BOOL result = (::sprintf_s(s_BUF, sizeof(s_BUF), "%s\0", shader.c_str()) >= 0);
-		VRETURN(result);
+    // 出力ファイル
+    if (outFile.empty() && !shader.empty()) {
+        // 出力ファイルが空
+        IZ_BOOL result = (::sprintf_s(s_BUF, sizeof(s_BUF), "%s\0", shader.c_str()) >= 0);
+        VRETURN(result);
 
-		// ファイル名取得
-		std::string file_name(izanagi::tool::CFileUtility::GetFileNameFromPath(s_BUF));
+        // ファイル名取得
+        std::string file_name(izanagi::tool::CFileUtility::GetFileNameFromPath(s_BUF));
 
-		// 拡張子削除
-		result = izanagi::tool::CFileUtility::RemoveExtension(s_BUF, sizeof(s_BUF), file_name.c_str());
-		VRETURN(result);
+        // 拡張子削除
+        result = izanagi::tool::CFileUtility::RemoveExtension(s_BUF, sizeof(s_BUF), file_name.c_str());
+        VRETURN(result);
 
-		outFile.format("%s.pes", s_BUF);
-		memset(s_BUF, 0, sizeof(s_BUF));
-	}
+        outFile.format("%s.pes", s_BUF);
+        memset(s_BUF, 0, sizeof(s_BUF));
+    }
 
-	if (!shader.empty()) {
-		// プリプロセス済みファイル
-		{
-			// 出力ファイルが空
-			IZ_BOOL result = (::sprintf_s(s_BUF, sizeof(s_BUF), "%s\0", shader.c_str()) >= 0);
-			VRETURN(result);
+    if (!shader.empty()) {
+        // プリプロセス済みファイル
+        {
+            // 出力ファイルが空
+            IZ_BOOL result = (::sprintf_s(s_BUF, sizeof(s_BUF), "%s\0", shader.c_str()) >= 0);
+            VRETURN(result);
 
-			// ファイル名取得
-			std::string file_name(izanagi::tool::CFileUtility::GetFileNameFromPath(s_BUF));
+            // ファイル名取得
+            std::string file_name(izanagi::tool::CFileUtility::GetFileNameFromPath(s_BUF));
 
-			// 拡張子削除
-			result = izanagi::tool::CFileUtility::RemoveExtension(s_BUF, sizeof(s_BUF), file_name.c_str());
-			VRETURN(result);
+            // 拡張子削除
+            result = izanagi::tool::CFileUtility::RemoveExtension(s_BUF, sizeof(s_BUF), file_name.c_str());
+            VRETURN(result);
 
-			if (objDir.empty()) {
-				preprocFile.format("%s.fx_", s_BUF);
-			}
-			else {
-				// 中間ディレクトリに出力する
-				izanagi::tool::CFileUtility::CombinePath(
-					s_BUF,
-					sizeof(s_BUF),
-					objDir.c_str(),
-					file_name.c_str());
+            if (objDir.empty()) {
+                preprocFile.format("%s.fx_", s_BUF);
+            }
+            else {
+                // 中間ディレクトリに出力する
+                izanagi::tool::CFileUtility::CombinePath(
+                    s_BUF,
+                    sizeof(s_BUF),
+                    objDir.c_str(),
+                    file_name.c_str());
 
-				preprocFile.format("%s.fx_", s_BUF);
-			}
+                preprocFile.format("%s.fx_", s_BUF);
+            }
 
-			memset(s_BUF, 0, sizeof(s_BUF));
-		}
+            memset(s_BUF, 0, sizeof(s_BUF));
+        }
 
-		// シェーダパス
-		if (!baseDir.empty()
-			&& izanagi::tool::CFileUtility::IsRelativePath(shader))
-		{
-			// ベースディレクトリ相対のシェーダファイルのパスを作る
-			izanagi::tool::CFileUtility::CombinePath(
-				s_BUF,
-				sizeof(s_BUF),
-				baseDir.c_str(),
-				shader);
-			shader.format("%s", s_BUF);
-		}
-	}
+        // シェーダパス
+        if (!baseDir.empty()
+            && izanagi::tool::CFileUtility::IsRelativePath(shader))
+        {
+            // ベースディレクトリ相対のシェーダファイルのパスを作る
+            izanagi::tool::CFileUtility::CombinePath(
+                s_BUF,
+                sizeof(s_BUF),
+                baseDir.c_str(),
+                shader);
+            shader.format("%s", s_BUF);
+        }
+    }
 
-	{
-		std::vector<izanagi::tool::CString>::iterator it = includes.begin();
-		while (it != includes.end()) {
-			izanagi::tool::CString& str = *it;
+    {
+        std::vector<izanagi::tool::CString>::iterator it = includes.begin();
+        while (it != includes.end()) {
+            izanagi::tool::CString& str = *it;
 
-			// includeパスの環境変数の展開
-			if (izanagi::tool::CEnvVarHelper::ExpandEnvStrings(
-					s_BUF,
-					sizeof(s_BUF),
-					str.c_str()))
-			{
-				str.format("%s", s_BUF);
-				str.replace('\\', '/');
+            // includeパスの環境変数の展開
+            if (izanagi::tool::CEnvVarHelper::ExpandEnvStrings(
+                    s_BUF,
+                    sizeof(s_BUF),
+                    str.c_str()))
+            {
+                str.format("%s", s_BUF);
+                str.replace('\\', '/');
 
-				if (!baseDir.empty()
-					&& izanagi::tool::CFileUtility::IsRelativePath(str))
-				{
-					// ベースディレクトリ相対のインクルートパスを作成
-					izanagi::tool::CFileUtility::CombinePath(
-						s_BUF,
-						sizeof(s_BUF),
-						baseDir.c_str(),
-						str);
+                if (!baseDir.empty()
+                    && izanagi::tool::CFileUtility::IsRelativePath(str))
+                {
+                    // ベースディレクトリ相対のインクルートパスを作成
+                    izanagi::tool::CFileUtility::CombinePath(
+                        s_BUF,
+                        sizeof(s_BUF),
+                        baseDir.c_str(),
+                        str);
 
-					str.format("%s", s_BUF);
-				}
+                    str.format("%s", s_BUF);
+                }
 
-				memset(s_BUF, 0, sizeof(s_BUF));
-			}
-			
-			it++;
-		}
-	}
+                memset(s_BUF, 0, sizeof(s_BUF));
+            }
+            
+            it++;
+        }
+    }
 
-	if (!IsPreproc()) {
-		// TODO
-		// デフォルトincludeパスの追加
-	}
+    if (!IsPreproc()) {
+        // TODO
+        // デフォルトincludeパスの追加
+    }
 
-	return TRUE;
+    return TRUE;
 }
 
 /**
@@ -376,23 +376,23 @@ BOOL COption::AnalysisInternal()
 */
 void COption::Copy(const COption& rhs)
 {
-	// 一応
-	Clear();
+    // 一応
+    Clear();
 
-	compiler = rhs.compiler;
+    compiler = rhs.compiler;
 
-	objDir = rhs.objDir;
+    objDir = rhs.objDir;
 
-	shader = rhs.shader;
-	preprocFile = rhs.preprocFile;
-	outFile = rhs.outFile;
+    shader = rhs.shader;
+    preprocFile = rhs.preprocFile;
+    outFile = rhs.outFile;
 
-	defines.insert(defines.end(), rhs.defines.begin(), rhs.defines.end());
-	includes.insert(includes.end(), rhs.includes.begin(), rhs.includes.end());
-	
-	isPreproc = rhs.isPreproc;
+    defines.insert(defines.end(), rhs.defines.begin(), rhs.defines.end());
+    includes.insert(includes.end(), rhs.includes.begin(), rhs.includes.end());
+    
+    isPreproc = rhs.isPreproc;
 
-	optionFile = rhs.optionFile;
+    optionFile = rhs.optionFile;
 }
 
 /**
@@ -400,182 +400,182 @@ void COption::Copy(const COption& rhs)
 */
 void COption::Clear()
 {
-	compiler.clear();
-	objDir.clear();
-	shader.clear();
-	preprocFile.clear();
-	outFile.clear();
+    compiler.clear();
+    objDir.clear();
+    shader.clear();
+    preprocFile.clear();
+    outFile.clear();
 
-	defines.clear();
-	includes.clear();
+    defines.clear();
+    includes.clear();
 
-	isPreproc = FALSE;
+    isPreproc = FALSE;
 
-	optionFile.clear();
+    optionFile.clear();
 }
 
 namespace {
-	// テンポラリファイル名を作成する
-	inline void _CreateTmpFileName(izanagi::tool::CString& strFile)
-	{
+    // テンポラリファイル名を作成する
+    inline void _CreateTmpFileName(izanagi::tool::CString& strFile)
+    {
         izanagi::tool::CString tmp;
         izanagi::tool::CFileUtility::CreateTmpFileName(tmp);
 
         strFile.format("__tmp_%s__", tmp.c_str());
-	}
+    }
 
-	// オプションを表している文字列かどうか
-	inline BOOL _IsOptionString(LPCSTR str)
-	{
-		// NOTE
-		// 先頭が'-'かどうかで判定
+    // オプションを表している文字列かどうか
+    inline BOOL _IsOptionString(LPCSTR str)
+    {
+        // NOTE
+        // 先頭が'-'かどうかで判定
 
-		// 先頭にある空白は除く
-		UINT pos = 0;
-		while (str[pos] == ' ') {
-			pos++;
-		}
+        // 先頭にある空白は除く
+        UINT pos = 0;
+        while (str[pos] == ' ') {
+            pos++;
+        }
 
-		return (str[pos] == '-');
-	}
+        return (str[pos] == '-');
+    }
 
-	// 文字列を分解
-	void _BreakString(
-		LPCSTR str,
-		std::vector<izanagi::tool::CString>& tvRet)
-	{
-		UINT len = (UINT)strlen(str);
-		UINT pos = 0;
-		BOOL bIsQuotationArea = FALSE;	// ""で囲まれている部分かどうか
+    // 文字列を分解
+    void _BreakString(
+        LPCSTR str,
+        std::vector<izanagi::tool::CString>& tvRet)
+    {
+        UINT len = (UINT)strlen(str);
+        UINT pos = 0;
+        BOOL bIsQuotationArea = FALSE;  // ""で囲まれている部分かどうか
 
-		for (UINT i = 0; i < len; i++) {
-			CHAR c = str[i];
+        for (UINT i = 0; i < len; i++) {
+            CHAR c = str[i];
 
-			if (((c == ' ') && !bIsQuotationArea)
-				|| (c == '\n'))
-			{
-				s_BUF[pos] = '\0';
+            if (((c == ' ') && !bIsQuotationArea)
+                || (c == '\n'))
+            {
+                s_BUF[pos] = '\0';
 
-				izanagi::tool::CString str;
-				str.format("%s", s_BUF);
+                izanagi::tool::CString str;
+                str.format("%s", s_BUF);
 
-				tvRet.push_back(str);
+                tvRet.push_back(str);
 
-				pos = 0;
-			}
-			else if (c == '\"') {
-				if (str[i - 1] != '\\') {
-					//「"」の前の文字が「\」でなければ、文字としての「"」でない
-					bIsQuotationArea = !bIsQuotationArea;
-				}
-				else {
-					s_BUF[pos++] = c;
-				}
-			}
-			else {
-				s_BUF[pos++] = c;
-			}
-		}
-	}
-}	// namespace
+                pos = 0;
+            }
+            else if (c == '\"') {
+                if (str[i - 1] != '\\') {
+                    //「"」の前の文字が「\」でなければ、文字としての「"」でない
+                    bIsQuotationArea = !bIsQuotationArea;
+                }
+                else {
+                    s_BUF[pos++] = c;
+                }
+            }
+            else {
+                s_BUF[pos++] = c;
+            }
+        }
+    }
+}   // namespace
 
 /**
 * オプションファイル解析
 */
 BOOL COption::AnalysisOptionFile(std::vector<izanagi::tool::CString>& tvArgs)
 {
-	BOOL ret = TRUE;
+    BOOL ret = TRUE;
 
-	FILE* fp = NULL;
+    FILE* fp = NULL;
 
-	// テンポラリファイル名を作成する
-	izanagi::tool::CString strTmp;
-	_CreateTmpFileName(strTmp);
-		
-	// プリプロセスする
-	{
-		// プリプロセス用
-		COption cOpt;
-		cOpt.Copy(*this);
-		{
-			// プリプロセス用にいろいろ変更・・・
-			cOpt.shader = cOpt.optionFile;		// 入力
-			cOpt.preprocFile = strTmp;			// 出力
-		}
+    // テンポラリファイル名を作成する
+    izanagi::tool::CString strTmp;
+    _CreateTmpFileName(strTmp);
+        
+    // プリプロセスする
+    {
+        // プリプロセス用
+        COption cOpt;
+        cOpt.Copy(*this);
+        {
+            // プリプロセス用にいろいろ変更・・・
+            cOpt.shader = cOpt.optionFile;      // 入力
+            cOpt.preprocFile = strTmp;          // 出力
+        }
 
-		// exe名
-		izanagi::tool::CFileUtility::GetExeModuleName(s_BUF, sizeof(s_BUF));
+        // exe名
+        izanagi::tool::CFileUtility::GetExeModuleName(s_BUF, sizeof(s_BUF));
 
-		// 自分自身をプリプロセス処理モードで呼び出す
-		ret = ExecWithPreprocMode(s_BUF, cOpt);
+        // 自分自身をプリプロセス処理モードで呼び出す
+        ret = ExecWithPreprocMode(s_BUF, cOpt);
 
-		if (!ret) {
-			// 失敗・・・
-			IZ_ASSERT(FALSE);
+        if (!ret) {
+            // 失敗・・・
+            IZ_ASSERT(FALSE);
 
-			// TODO
+            // TODO
 
-			goto __EXIT__;
-		}
-	}
+            goto __EXIT__;
+        }
+    }
 
-	// オプションを引数リストに戻す
-	ConvetOptionToArgs(tvArgs);
+    // オプションを引数リストに戻す
+    ConvetOptionToArgs(tvArgs);
 
-	// ファイル開く
-	fopen_s(&fp, strTmp, "rt");
-	if (fp == NULL) {
-		IZ_ASSERT(FALSE);
+    // ファイル開く
+    fopen_s(&fp, strTmp, "rt");
+    if (fp == NULL) {
+        IZ_ASSERT(FALSE);
 
-		// TODO
+        // TODO
 
-		return FALSE;
-	}
+        return FALSE;
+    }
 
-	memset(s_BUF, 0, sizeof(s_BUF));
+    memset(s_BUF, 0, sizeof(s_BUF));
 
-	// リストファイルを解析
-	while (fgets(s_BUF, sizeof(s_BUF), fp) != NULL) {
-		izanagi::tool::CString str;
-		str.format("%s", s_BUF);
+    // リストファイルを解析
+    while (fgets(s_BUF, sizeof(s_BUF), fp) != NULL) {
+        izanagi::tool::CString str;
+        str.format("%s", s_BUF);
 
-		if (strlen(str) > 0) {
-			if (_IsOptionString(str)) {
-				// オプションを表している文字列
-				std::vector<izanagi::tool::CString> tvTmp;
+        if (strlen(str) > 0) {
+            if (_IsOptionString(str)) {
+                // オプションを表している文字列
+                std::vector<izanagi::tool::CString> tvTmp;
 
-				_BreakString(str, tvTmp);
+                _BreakString(str, tvTmp);
 
-				// リストに登録
-				tvArgs.insert(tvArgs.end(), tvTmp.begin(), tvTmp.end());
-			}
-		}
+                // リストに登録
+                tvArgs.insert(tvArgs.end(), tvTmp.begin(), tvTmp.end());
+            }
+        }
 
-		// 次に向けてクリア
-		memset(s_BUF, 0, sizeof(s_BUF));
-	}
+        // 次に向けてクリア
+        memset(s_BUF, 0, sizeof(s_BUF));
+    }
 
 __EXIT__:
-	// ファイル閉じる
-	if (fp != NULL) {
-		fclose(fp);
-	}
+    // ファイル閉じる
+    if (fp != NULL) {
+        fclose(fp);
+    }
 
-	// テンポラリファイルを削除
-	DeleteFile(strTmp);
+    // テンポラリファイルを削除
+    DeleteFile(strTmp);
 
-	if (!optionFile.empty()) {
-		optionFile.replace('/', '\\');
-		ret = izanagi::tool::CFileUtility::GetPathWithoutFileName(s_BUF, sizeof(s_BUF), optionFile);
-		VRETURN(ret);
+    if (!optionFile.empty()) {
+        optionFile.replace('/', '\\');
+        ret = izanagi::tool::CFileUtility::GetPathWithoutFileName(s_BUF, sizeof(s_BUF), optionFile);
+        VRETURN(ret);
 
-		baseDir.append(s_BUF);
-	}
+        baseDir.append(s_BUF);
+    }
 
-	// クリアする
-	Clear();
-	
-	return ret;
+    // クリアする
+    Clear();
+    
+    return ret;
 }
 
 /**
@@ -583,38 +583,38 @@ __EXIT__:
 */
 void COption::ConvetOptionToArgs(std::vector<izanagi::tool::CString>& tvArgs)
 {
-	// コンパイルコマンド
-	if (!compiler.empty()) {
-		tvArgs.push_back(izanagi::tool::CString("-c"));
-		tvArgs.push_back(compiler);
-	}
+    // コンパイルコマンド
+    if (!compiler.empty()) {
+        tvArgs.push_back(izanagi::tool::CString("-c"));
+        tvArgs.push_back(compiler);
+    }
 
-	// コンパイルオプション
-	if (!compileOpt.empty()) {
-		tvArgs.push_back(izanagi::tool::CString("-co"));
-		tvArgs.push_back(compileOpt);
-	}
+    // コンパイルオプション
+    if (!compileOpt.empty()) {
+        tvArgs.push_back(izanagi::tool::CString("-co"));
+        tvArgs.push_back(compileOpt);
+    }
 
-	// 中間ファイルディレクトリ
-	if (!objDir.empty()) {
-		tvArgs.push_back(izanagi::tool::CString("-obj"));
-		tvArgs.push_back(objDir);
-	}
+    // 中間ファイルディレクトリ
+    if (!objDir.empty()) {
+        tvArgs.push_back(izanagi::tool::CString("-obj"));
+        tvArgs.push_back(objDir);
+    }
 
-	// コンパイルするシェーダ
-	if (!shader.empty()) {
-		tvArgs.push_back(izanagi::tool::CString("-src"));
-		tvArgs.push_back(shader);
-	}
+    // コンパイルするシェーダ
+    if (!shader.empty()) {
+        tvArgs.push_back(izanagi::tool::CString("-src"));
+        tvArgs.push_back(shader);
+    }
 
-	// 出力ファイル
-	if (!outFile.empty()) {
-		tvArgs.push_back(izanagi::tool::CString("-o"));
-		tvArgs.push_back(outFile);
-	}
+    // 出力ファイル
+    if (!outFile.empty()) {
+        tvArgs.push_back(izanagi::tool::CString("-o"));
+        tvArgs.push_back(outFile);
+    }
 
-	// アセンブラ表示のためのコンパイルをするかどうか
-	if (isCompileAsm) {
-		tvArgs.push_back(izanagi::tool::CString("-asm"));
-	}
+    // アセンブラ表示のためのコンパイルをするかどうか
+    if (isCompileAsm) {
+        tvArgs.push_back(izanagi::tool::CString("-asm"));
+    }
 }

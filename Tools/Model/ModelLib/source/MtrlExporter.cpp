@@ -9,162 +9,162 @@ CMtrlExporter::CMtrlExporter()
 
 CMtrlExporter::~CMtrlExporter()
 {
-	m_Out.Finalize();
+    m_Out.Finalize();
 }
 
 IZ_BOOL CMtrlExporter::Export(
-	IZ_PCSTR lpszOutFile,
-	IImporter* pImporter,
-	IZ_UINT nMtrlIdx)
+    IZ_PCSTR lpszOutFile,
+    IImporter* pImporter,
+    IZ_UINT nMtrlIdx)
 {
-	IZ_BOOL ret = IZ_TRUE;
+    IZ_BOOL ret = IZ_TRUE;
 
-	VRETURN(pImporter->BeginMaterial());
+    VRETURN(pImporter->BeginMaterial());
 
-	IZ_UINT nMtrlNum = pImporter->GetMaterialNum();
-	IZ_ASSERT(nMtrlIdx < nMtrlNum);
+    IZ_UINT nMtrlNum = pImporter->GetMaterialNum();
+    IZ_ASSERT(nMtrlIdx < nMtrlNum);
 
-	// Open file.
-	VRETURN(m_Out.Open(lpszOutFile));
+    // Open file.
+    VRETURN(m_Out.Open(lpszOutFile));
 
-	izanagi::S_MTRL_HEADER sHeader;
-	{
-		FILL_ZERO(&sHeader, sizeof(sHeader));
+    izanagi::S_MTRL_HEADER sHeader;
+    {
+        FILL_ZERO(&sHeader, sizeof(sHeader));
 
-		sHeader.sizeHeader = sizeof(sHeader);
+        sHeader.sizeHeader = sizeof(sHeader);
 
-		// TODO
-		// magic number, version...
-	}
+        // TODO
+        // magic number, version...
+    }
 
-	// Blank for file's header and jump table.
-	izanagi::tool::CIoStreamSeekHelper cSeekHelper(&m_Out);
+    // Blank for file's header and jump table.
+    izanagi::tool::CIoStreamSeekHelper cSeekHelper(&m_Out);
 #if 0
-	VRETURN(cSeekHelper.Skip(sizeof(sHeader) + sizeof(IZ_UINT) * nMtrlNum));
+    VRETURN(cSeekHelper.Skip(sizeof(sHeader) + sizeof(IZ_UINT) * nMtrlNum));
 
-	// Jump table
-	std::vector<IZ_UINT> tvJumpTbl;
+    // Jump table
+    std::vector<IZ_UINT> tvJumpTbl;
 
-	for (IZ_UINT i = 0; i < nMtrlNum; i++) {
-		// Add position to jump table.,
-		tvJumpTbl.push_back(m_Out.GetCurPos());
+    for (IZ_UINT i = 0; i < nMtrlNum; i++) {
+        // Add position to jump table.,
+        tvJumpTbl.push_back(m_Out.GetCurPos());
 
-		VRETURN(ExportMaterial(i, pImporter));
-	}
+        VRETURN(ExportMaterial(i, pImporter));
+    }
 #else
-	VRETURN(cSeekHelper.Skip(sizeof(sHeader)));
-	VRETURN(ExportMaterial(nMtrlIdx, pImporter));
+    VRETURN(cSeekHelper.Skip(sizeof(sHeader)));
+    VRETURN(ExportMaterial(nMtrlIdx, pImporter));
 #endif
 
-	VRETURN(pImporter->EndMaterial());
+    VRETURN(pImporter->EndMaterial());
 
-	// Export files's header and jump table.
-	{
+    // Export files's header and jump table.
+    {
 #if 0
-		sHeader.numMtrl = nMtrlNum;
+        sHeader.numMtrl = nMtrlNum;
 #endif
 
-		sHeader.sizeFile = m_Out.GetCurPos();
+        sHeader.sizeFile = m_Out.GetCurPos();
 
-		// Return to file's top.
-		VRETURN(cSeekHelper.Return());
+        // Return to file's top.
+        VRETURN(cSeekHelper.Return());
 
-		// Export files' header.
-		IZ_OUTPUT_WRITE_VRETURN(&m_Out, &sHeader, 0, sizeof(sHeader));
+        // Export files' header.
+        IZ_OUTPUT_WRITE_VRETURN(&m_Out, &sHeader, 0, sizeof(sHeader));
 
 #if 0
-		// Export jump table.
-		IZ_OUTPUT_WRITE_VRETURN(&m_Out, &tvJumpTbl[0], 0, sizeof(IZ_UINT) * nMtrlNum);
+        // Export jump table.
+        IZ_OUTPUT_WRITE_VRETURN(&m_Out, &tvJumpTbl[0], 0, sizeof(IZ_UINT) * nMtrlNum);
 #endif
-	}
+    }
 
-	m_Out.Finalize();
+    m_Out.Finalize();
 
-	return IZ_TRUE;
+    return IZ_TRUE;
 }
 
 IZ_BOOL CMtrlExporter::ExportMaterial(
-	IZ_UINT nMtrlIdx,
-	IImporter* pImporter)
+    IZ_UINT nMtrlIdx,
+    IImporter* pImporter)
 {
-	izanagi::S_MTRL_MATERIAL sMtrl;
-	FILL_ZERO(&sMtrl, sizeof(sMtrl));
+    izanagi::S_MTRL_MATERIAL sMtrl;
+    FILL_ZERO(&sMtrl, sizeof(sMtrl));
 
-	VRETURN(
-		pImporter->GetMaterial(
-			nMtrlIdx,
-			sMtrl));
+    VRETURN(
+        pImporter->GetMaterial(
+            nMtrlIdx,
+            sMtrl));
 
-	IZ_OUTPUT_WRITE_VRETURN(&m_Out, &sMtrl, 0, sizeof(sMtrl));
+    IZ_OUTPUT_WRITE_VRETURN(&m_Out, &sMtrl, 0, sizeof(sMtrl));
 
-	// Export textrure's info.
-	for (IZ_UINT i = 0; i < sMtrl.numTex; i++) {
-		izanagi::S_MTRL_TEXTURE sTex;
-		FILL_ZERO(&sTex, sizeof(sTex));
+    // Export textrure's info.
+    for (IZ_UINT i = 0; i < sMtrl.numTex; i++) {
+        izanagi::S_MTRL_TEXTURE sTex;
+        FILL_ZERO(&sTex, sizeof(sTex));
 
-		pImporter->GetMaterialTexture(
-			nMtrlIdx,
-			i,
-			sTex);
+        pImporter->GetMaterialTexture(
+            nMtrlIdx,
+            i,
+            sTex);
 
-		IZ_OUTPUT_WRITE_VRETURN(&m_Out, &sTex, 0, sizeof(sTex));
-	}
+        IZ_OUTPUT_WRITE_VRETURN(&m_Out, &sTex, 0, sizeof(sTex));
+    }
 
-	// Export shader's info.
-	for (IZ_UINT i = 0; i < sMtrl.numShader; i++) {
-		izanagi::S_MTRL_SHADER sShader;
-		FILL_ZERO(&sShader, sizeof(sShader));
+    // Export shader's info.
+    for (IZ_UINT i = 0; i < sMtrl.numShader; i++) {
+        izanagi::S_MTRL_SHADER sShader;
+        FILL_ZERO(&sShader, sizeof(sShader));
 
-		pImporter->GetMaterialShader(
-			nMtrlIdx,
-			i,
-			sShader);
+        pImporter->GetMaterialShader(
+            nMtrlIdx,
+            i,
+            sShader);
 
-		IZ_OUTPUT_WRITE_VRETURN(&m_Out, &sShader, 0, sizeof(sShader));
-	}
+        IZ_OUTPUT_WRITE_VRETURN(&m_Out, &sShader, 0, sizeof(sShader));
+    }
 
-	std::vector<izanagi::S_MTRL_PARAM> tvParam(sMtrl.numParam);
+    std::vector<izanagi::S_MTRL_PARAM> tvParam(sMtrl.numParam);
 
-	// Export parameter's info.
-	for (IZ_UINT i = 0; i < sMtrl.numParam; i++) {
-		izanagi::S_MTRL_PARAM& sParam = tvParam[i];
-		FILL_ZERO(&sParam, sizeof(sParam));
+    // Export parameter's info.
+    for (IZ_UINT i = 0; i < sMtrl.numParam; i++) {
+        izanagi::S_MTRL_PARAM& sParam = tvParam[i];
+        FILL_ZERO(&sParam, sizeof(sParam));
 
-		pImporter->GetMaterialParam(
-			nMtrlIdx,
-			i,
-			sParam);
+        pImporter->GetMaterialParam(
+            nMtrlIdx,
+            i,
+            sParam);
 
-		IZ_OUTPUT_WRITE_VRETURN(&m_Out, &sParam, 0, sizeof(sParam));
-	}
+        IZ_OUTPUT_WRITE_VRETURN(&m_Out, &sParam, 0, sizeof(sParam));
+    }
 
-	// Export parameter's value.
-	for (IZ_UINT i = 0; i < sMtrl.numParam; i++) {
-		const izanagi::S_MTRL_PARAM& sParam = tvParam[i];
+    // Export parameter's value.
+    for (IZ_UINT i = 0; i < sMtrl.numParam; i++) {
+        const izanagi::S_MTRL_PARAM& sParam = tvParam[i];
 
-		if (sParam.elements > 0) {
-			std::vector<IZ_FLOAT> tvValue;
-			pImporter->GetMaterialParamValue(
-				nMtrlIdx,
-				i,
-				tvValue);
+        if (sParam.elements > 0) {
+            std::vector<IZ_FLOAT> tvValue;
+            pImporter->GetMaterialParamValue(
+                nMtrlIdx,
+                i,
+                tvValue);
 
-			switch (sParam.type) {
-			case izanagi::E_MTRL_PARAM_TYPE_FLOAT:
-			case izanagi::E_MTRL_PARAM_TYPE_VECTOR:
-			case izanagi::E_MTRL_PARAM_TYPE_MATRIX:
-			{
-				IZ_OUTPUT_WRITE_VRETURN(&m_Out, &tvValue[0], 0, sParam.bytes);
-				break;
-			}
-			case izanagi::E_MTRL_PARAM_TYPE_UINT:
-			case izanagi::E_MTRL_PARAM_TYPE_BOOL:
-				// TODO
-				IZ_ASSERT(IZ_FALSE);
-				break;
-			}
-		}
-	}
+            switch (sParam.type) {
+            case izanagi::E_MTRL_PARAM_TYPE_FLOAT:
+            case izanagi::E_MTRL_PARAM_TYPE_VECTOR:
+            case izanagi::E_MTRL_PARAM_TYPE_MATRIX:
+            {
+                IZ_OUTPUT_WRITE_VRETURN(&m_Out, &tvValue[0], 0, sParam.bytes);
+                break;
+            }
+            case izanagi::E_MTRL_PARAM_TYPE_UINT:
+            case izanagi::E_MTRL_PARAM_TYPE_BOOL:
+                // TODO
+                IZ_ASSERT(IZ_FALSE);
+                break;
+            }
+        }
+    }
 
-	return IZ_TRUE;
+    return IZ_TRUE;
 }

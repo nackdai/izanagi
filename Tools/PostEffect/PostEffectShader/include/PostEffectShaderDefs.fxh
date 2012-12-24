@@ -6,7 +6,7 @@
 ********************************************/
 
 // シェーダIDをセット
-#define PES_ID(str)	string __pes_ID__ = str
+#define PES_ID(str) string __pes_ID__ = str
 
 // パラメータ
 #include "ShaderDefs/ShaderDefsParam.fxh"
@@ -23,4 +23,4 @@
 // スクリプト
 #include "ShaderDefs/ShaderDefsScript.fxh"
 
-#endif	// #if !defined(__IZANAGI_POSTEFFECT_SHADER_DEFS_FXH__)
+#endif  // #if !defined(__IZANAGI_POSTEFFECT_SHADER_DEFS_FXH__)

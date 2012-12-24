@@ -49,86 +49,86 @@
 // RGB -> HSV
 float3 RGBToHSV(float3 vRGB)
 {
-	float3 vHSV = (float3)0.0f;
+    float3 vHSV = (float3)0.0f;
 
-	float fMax = _GetMaxChannel(vRGB);
-	float fMin = _GetMinChannel(vRGB);
-	float fDelta = fMax - fMin;
-	
-	// V
-	vHSV.z = fMax;
+    float fMax = _GetMaxChannel(vRGB);
+    float fMin = _GetMinChannel(vRGB);
+    float fDelta = fMax - fMin;
+    
+    // V
+    vHSV.z = fMax;
 
-	if (fDelta != 0.0f) {
-		// S
-		vHSV.y = fDelta / fMax;
+    if (fDelta != 0.0f) {
+        // S
+        vHSV.y = fDelta / fMax;
 
-		// H
-		vHSV.x = _ComputeHue(vRGB, fMax, fDelta);
-	}
+        // H
+        vHSV.x = _ComputeHue(vRGB, fMax, fDelta);
+    }
 
-	return vHSV;
+    return vHSV;
 }
 
 // HSV -> RGB
 float3 HSVToRGB(float3 vHSV)
 {
-	float3 vRGB = vHSV.z;
+    float3 vRGB = vHSV.z;
 
-	if (vHSV.y != 0.0f) {
-		// H/60
-		// 0 - 1 -> 0 -> 360 に変換して、60で割る
-		// H x 360 / 60 -> H x 6
-		float val = vHSV.x * 6.0f;
+    if (vHSV.y != 0.0f) {
+        // H/60
+        // 0 - 1 -> 0 -> 360 に変換して、60で割る
+        // H x 360 / 60 -> H x 6
+        float val = vHSV.x * 6.0f;
 
-		// H/60の整数部
-		int i = (int)val;
+        // H/60の整数部
+        int i = (int)val;
 
-		// H/60の小数部
-		float f = frac(val);
+        // H/60の小数部
+        float f = frac(val);
 
-		float p1 = vHSV.z * (1.0f - vHSV.y);				// V * (1 - S)
-		float p2 = vHSV.z * (1.0f - vHSV.y * f);			// V * (1 - S * f)
-		float p3 = vHSV.z * (1.0f - vHSV.y * (1.0f - f));	// V * (1 - S * (1 - f))
+        float p1 = vHSV.z * (1.0f - vHSV.y);                // V * (1 - S)
+        float p2 = vHSV.z * (1.0f - vHSV.y * f);            // V * (1 - S * f)
+        float p3 = vHSV.z * (1.0f - vHSV.y * (1.0f - f));   // V * (1 - S * (1 - f))
 
-		if (i == 0) {
-			// i = 0: R = V,  G = p3, B = p1
-			vRGB.r = vHSV.z;
-			vRGB.g = p3;
-			vRGB.b = p1;
-		}
-		else if (i == 1) {
-			// i = 1: R = p2, G = V,  B = p1
-			vRGB.r = p2;
-			vRGB.g = vHSV.z;
-			vRGB.b = p1;
-		}
-		else if (i == 2) {
-			// i = 2: R = p1, G = V,  B = p3
-			vRGB.r = p1;
-			vRGB.g = vHSV.z;
-			vRGB.b = p3;
-		}
-		else if (i == 3) {
-			// i = 3: R = p1, G = p2, B = V
-			vRGB.r = p1;
-			vRGB.g = p2;
-			vRGB.b = vHSV.z;
-		}
-		else if (i == 4) {
-			// i = 4: R = p3, G = p1, B = V
-			vRGB.r = p3;
-			vRGB.g = p1;
-			vRGB.b = vHSV.z;
-		}
-		else if (i == 5) {
-			// i = 5: R = V,  G = p1, B = p2
-			vRGB.r = vHSV.z;
-			vRGB.g = p1;
-			vRGB.b = p2;
-		}
-	}
+        if (i == 0) {
+            // i = 0: R = V,  G = p3, B = p1
+            vRGB.r = vHSV.z;
+            vRGB.g = p3;
+            vRGB.b = p1;
+        }
+        else if (i == 1) {
+            // i = 1: R = p2, G = V,  B = p1
+            vRGB.r = p2;
+            vRGB.g = vHSV.z;
+            vRGB.b = p1;
+        }
+        else if (i == 2) {
+            // i = 2: R = p1, G = V,  B = p3
+            vRGB.r = p1;
+            vRGB.g = vHSV.z;
+            vRGB.b = p3;
+        }
+        else if (i == 3) {
+            // i = 3: R = p1, G = p2, B = V
+            vRGB.r = p1;
+            vRGB.g = p2;
+            vRGB.b = vHSV.z;
+        }
+        else if (i == 4) {
+            // i = 4: R = p3, G = p1, B = V
+            vRGB.r = p3;
+            vRGB.g = p1;
+            vRGB.b = vHSV.z;
+        }
+        else if (i == 5) {
+            // i = 5: R = V,  G = p1, B = p2
+            vRGB.r = vHSV.z;
+            vRGB.g = p1;
+            vRGB.b = p2;
+        }
+    }
 
-	return vRGB;
+    return vRGB;
 }
 
-#endif	// #if !defined(__IZANAGI_POSTEFFECT_COLORSPACE_HSV_FXH__)
+#endif  // #if !defined(__IZANAGI_POSTEFFECT_COLORSPACE_HSV_FXH__)

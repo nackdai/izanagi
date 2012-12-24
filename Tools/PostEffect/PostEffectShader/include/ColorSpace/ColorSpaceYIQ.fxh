@@ -61,57 +61,57 @@ static const float3 YIQ2G = { 1.00000f, -0.27177f, -0.64863f };
 static const float3 YIQ2B = { 1.00000f, -1.10560f,  1.70249f };
 
 static const float3x3 RGB2YIQ = {
-	{ 0.29891f,  0.59598f,  0.21145f },
-	{ 0.58661f, -0.27417f, -0.52260f },
-	{ 0.11448f, -0.32181f,  0.31115f },
+    { 0.29891f,  0.59598f,  0.21145f },
+    { 0.58661f, -0.27417f, -0.52260f },
+    { 0.11448f, -0.32181f,  0.31115f },
 };
 static const float3x3 YIQ2RGB = {
-	{ 1.00000f,  1.00000f,  1.00000f },
-	{ 0.95608f, -0.27177f, -1.10560f },
-	{ 0.62089f, -0.64863f,  1.70249f },
+    { 1.00000f,  1.00000f,  1.00000f },
+    { 0.95608f, -0.27177f, -1.10560f },
+    { 0.62089f, -0.64863f,  1.70249f },
 };
 
 // RGB -> YIQ
 float3 RGBToYIQ(float3 vRGB)
 {
-	return mul(vRGB, RGB2YIQ);
+    return mul(vRGB, RGB2YIQ);
 }
 
 // RGB -> I
 float RGBToI(float vRGB)
 {
-	return dot(vRGB, RGB2I);
+    return dot(vRGB, RGB2I);
 }
 
 // RGB -> Q
 float RGBToQ(float vRGB)
 {
-	return dot(vRGB, RGB2Q);
+    return dot(vRGB, RGB2Q);
 }
 
 // YIQ -> RGB
 float3 YIQToRGB(float3 vYIQ)
 {
-	return mul(vYIQ, YIQ2RGB);
+    return mul(vYIQ, YIQ2RGB);
 }
 
 // YIQ -> R
 float YIQToR(float3 vYIQ)
 {
-	return dot(vYIQ, YIQ2R);
+    return dot(vYIQ, YIQ2R);
 }
 
 // YIQ -> G
 float YIQToG(float3 vYIQ)
 {
-	return dot(vYIQ, YIQ2G);
+    return dot(vYIQ, YIQ2G);
 }
 
 // YIQ -> B
 float YIQToB(float3 vYIQ)
 {
-	return dot(vYIQ, YIQ2B);
+    return dot(vYIQ, YIQ2B);
 }
 
 
-#endif	// #if !defined(__IZANAGI_POSTEFFECT_COLORSPACE_YIQ_FXH__)
+#endif  // #if !defined(__IZANAGI_POSTEFFECT_COLORSPACE_YIQ_FXH__)

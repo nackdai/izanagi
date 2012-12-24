@@ -7,27 +7,27 @@
 #include "izModelLib.h"
 
 struct SOption {
-	izanagi::tool::CString in;	// 入力ファイル
-	izanagi::tool::CString out;	// 出力ファイル
+    izanagi::tool::CString in;  // 入力ファイル
+    izanagi::tool::CString out; // 出力ファイル
 
-	std::string base;	// ベースモデルファイル
+    std::string base;   // ベースモデルファイル
 
-	IZ_UINT idx;
+    IZ_UINT idx;
 };
 
 class COption : public CToolOption<SOption> {
 public:
-	COption();
-	~COption();
+    COption();
+    ~COption();
 
 public:
-	// 解析
-	IZ_BOOL Analysis(int argc, char* argv[]);
+    // 解析
+    IZ_BOOL Analysis(int argc, char* argv[]);
 
-	IZ_BOOL IsValid();
+    IZ_BOOL IsValid();
 
 private:
-	IZ_BOOL AnalysisInternal();
+    IZ_BOOL AnalysisInternal();
 };
 
-#endif	// #if !defined(__OPTION_H__)
+#endif  // #if !defined(__OPTION_H__)

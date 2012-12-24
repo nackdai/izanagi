@@ -10,69 +10,69 @@
 // イメージビルダー
 class CImageBuilder : public xercesc::DefaultHandler {
 private:
-	static CImageBuilder s_cInstance;
+    static CImageBuilder s_cInstance;
 
 public:
-	static CImageBuilder& GetInstance() { return s_cInstance; }
+    static CImageBuilder& GetInstance() { return s_cInstance; }
 
 private:
-	CImageBuilder() {}
-	~CImageBuilder() {}
+    CImageBuilder() {}
+    ~CImageBuilder() {}
 
-	CImageBuilder(const CImageBuilder& rhs);
-	const CImageBuilder& operator=(const CImageBuilder& rhs);
+    CImageBuilder(const CImageBuilder& rhs);
+    const CImageBuilder& operator=(const CImageBuilder& rhs);
 
 public:
-	// For SAX
+    // For SAX
 
-	void startDocument();
-	void endDeocument();
+    void startDocument();
+    void endDeocument();
 
-	void startElement(
-		const XMLCh* const uri, 
-		const XMLCh* const localname, 
-		const XMLCh* const qname, 
-		const xercesc::Attributes& attrs);
+    void startElement(
+        const XMLCh* const uri, 
+        const XMLCh* const localname, 
+        const XMLCh* const qname, 
+        const xercesc::Attributes& attrs);
 
-	void endElement(
-		const XMLCh* const uri,
-		const XMLCh* const localname,
-		const XMLCh* const qname);
+    void endElement(
+        const XMLCh* const uri,
+        const XMLCh* const localname,
+        const XMLCh* const qname);
 
 private:
-	// 属性セット
-	void SetPlaneAttrs(const xercesc::Attributes& attrs);
-	void SetCubeAttrs(const xercesc::Attributes& attrs);
+    // 属性セット
+    void SetPlaneAttrs(const xercesc::Attributes& attrs);
+    void SetCubeAttrs(const xercesc::Attributes& attrs);
 
-	// 共通属性セット
-	void SetCommonAttrs(
-		SImageInfo* pImageInfo,
-		const xercesc::Attributes& attrs);
+    // 共通属性セット
+    void SetCommonAttrs(
+        SImageInfo* pImageInfo,
+        const xercesc::Attributes& attrs);
 
-	void SetElementAttr(
-		SImageInfo* imageInfo,
-		const xercesc::Attributes& attrs);
+    void SetElementAttr(
+        SImageInfo* imageInfo,
+        const xercesc::Attributes& attrs);
 
 public:
-	// IMGデータ作成
-	BOOL BuildIMG(LPCSTR lpszExport);
+    // IMGデータ作成
+    BOOL BuildIMG(LPCSTR lpszExport);
 
-	void SetBasePath(const char* path);
+    void SetBasePath(const char* path);
 
 private:
-	std::vector<SImageInfo> m_ImageInfoList;
-	izanagi::tool::CString m_BasePath;
+    std::vector<SImageInfo> m_ImageInfoList;
+    izanagi::tool::CString m_BasePath;
 
-	// ルートが正しく設定されているかどうか
-	IZ_BOOL m_IsStartRoot;
+    // ルートが正しく設定されているかどうか
+    IZ_BOOL m_IsStartRoot;
 
-	enum State {
-		StateNormal = 0,
-		StateCube,
-		StateVolume,
-	};
+    enum State {
+        StateNormal = 0,
+        StateCube,
+        StateVolume,
+    };
 
-	State m_State;
+    State m_State;
 };
 
-#endif	// #if !defined(__IMAGE_BUILDER_IMPL_H__)
+#endif  // #if !defined(__IMAGE_BUILDER_IMPL_H__)

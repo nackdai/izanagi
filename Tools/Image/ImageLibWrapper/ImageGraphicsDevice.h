@@ -16,6 +16,6 @@ void ReleaseGraphicsDevice();
 // グラフィックスデバイス取得
 tool::CGraphicsDeviceLite* GetGraphicsDevice();
 
-}	// namespace izanagi
+}   // namespace izanagi
 
-#endif	// #if !defined(__IZANAGI_IMG_LIB_DLL_H__)
+#endif  // #if !defined(__IZANAGI_IMG_LIB_DLL_H__)

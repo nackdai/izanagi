@@ -8,14 +8,14 @@
 
 class CSamplerUtil {
 public:
-	static BOOL SetStateValue(
-		izanagi::S_SHD_SAMPLER& sDesc, 
-		CGparameter param);
+    static BOOL SetStateValue(
+        izanagi::S_SHD_SAMPLER& sDesc, 
+        CGparameter param);
 
-	static BOOL BindTexture(
-		izanagi::S_SHD_SAMPLER& sDesc, 
-		CGparameter param,
-		std::vector<CGparameter>& tvTexList);
+    static BOOL BindTexture(
+        izanagi::S_SHD_SAMPLER& sDesc, 
+        CGparameter param,
+        std::vector<CGparameter>& tvTexList);
 };
 
-#endif	 //#if !defined(__SHADER_CONVERTER_SAMPLER_UTIL_H__)
+#endif   //#if !defined(__SHADER_CONVERTER_SAMPLER_UTIL_H__)

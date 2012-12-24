@@ -4,24 +4,24 @@
 #include "izToolKit.h"
 
 struct SFile {
-	izanagi::tool::CString path;	// パス
+    izanagi::tool::CString path;    // パス
 
-	struct {
-		UINT isCompress	: 1;	// 圧縮
-		UINT isEncrypt	: 1;	// 暗号化
-		UINT isIgnore	: 1;
-	};
+    struct {
+        UINT isCompress : 1;    // 圧縮
+        UINT isEncrypt  : 1;    // 暗号化
+        UINT isIgnore   : 1;
+    };
 
-	UINT name_pos;		// 名前位置
+    UINT name_pos;      // 名前位置
 
-	SFile()
-	{
-		isCompress = FALSE;
-		isEncrypt = FALSE;
-		isIgnore = FALSE;
+    SFile()
+    {
+        isCompress = FALSE;
+        isEncrypt = FALSE;
+        isIgnore = FALSE;
 
-		name_pos = 0;
-	}
+        name_pos = 0;
+    }
 };
 
-#endif	// #if !defined(__FILE_DEFS_H__)
+#endif  // #if !defined(__FILE_DEFS_H__)

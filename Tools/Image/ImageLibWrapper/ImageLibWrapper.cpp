@@ -9,21 +9,21 @@
  */
 IZ_BOOL izInitImageLib(void* hWnd)
 {
-	izanagi::tool::CGraphicsDeviceLite* device = izanagi::InitGraphicsDevice(hWnd);
-	
-	if (device != IZ_NULL) {
-		// テクスチャ読み込み処理をセット
-		izanagi::tool::CImageReader::GetInstance().SetReadFunc(CImageReaderImpl::Read);
-	}
+    izanagi::tool::CGraphicsDeviceLite* device = izanagi::InitGraphicsDevice(hWnd);
+    
+    if (device != IZ_NULL) {
+        // テクスチャ読み込み処理をセット
+        izanagi::tool::CImageReader::GetInstance().SetReadFunc(CImageReaderImpl::Read);
+    }
 
-	return (device != IZ_NULL);
+    return (device != IZ_NULL);
 }
 
 /** ImageLibの解放.
  */
 void izReleaseImageLib()
 {
-	izanagi::ReleaseGraphicsDevice();
+    izanagi::ReleaseGraphicsDevice();
 }
 
 /** イメージマスタデータの読み込み.
@@ -33,15 +33,15 @@ void izReleaseImageLib()
  */
 void* izReadImageMaster(const char* path)
 {
-	izanagi::tool::CGraphicsDeviceLite* device = izanagi::GetGraphicsDevice();
-	VRETURN_NULL(device != IZ_NULL);
+    izanagi::tool::CGraphicsDeviceLite* device = izanagi::GetGraphicsDevice();
+    VRETURN_NULL(device != IZ_NULL);
 
-	// TODO
-	izanagi::tool::CIMGMaster* master = izanagi::tool::CImageReader::GetInstance().Read(
-		path,
-		izanagi::graph::E_GRAPH_TEX_TYPE_PLANE);
+    // TODO
+    izanagi::tool::CIMGMaster* master = izanagi::tool::CImageReader::GetInstance().Read(
+        path,
+        izanagi::graph::E_GRAPH_TEX_TYPE_PLANE);
 
-	return master;
+    return master;
 }
 
 /** イメージマスタデータの解放.
@@ -50,9 +50,9 @@ void* izReadImageMaster(const char* path)
  */
 void izReleaseImageMaster(void* p)
 {
-	VRETURN_NONE(p != IZ_NULL);
-	izanagi::tool::CIMGMaster* master =  reinterpret_cast<izanagi::tool::CIMGMaster*>(p);
-	izanagi::tool::CImageReader::GetInstance().Delete(master);
+    VRETURN_NONE(p != IZ_NULL);
+    izanagi::tool::CIMGMaster* master =  reinterpret_cast<izanagi::tool::CIMGMaster*>(p);
+    izanagi::tool::CImageReader::GetInstance().Delete(master);
 }
 
 /** テクスチャ数取得.
@@ -62,10 +62,10 @@ void izReleaseImageMaster(void* p)
  */
 IZ_UINT izGetTexNumInMaster(void* p)
 {
-	VRETURN_ZERO(p != IZ_NULL);
-	izanagi::tool::CIMGMaster* master =  reinterpret_cast<izanagi::tool::CIMGMaster*>(p);
-	IZ_UINT ret = master->GetTexNum();
-	return ret;
+    VRETURN_ZERO(p != IZ_NULL);
+    izanagi::tool::CIMGMaster* master =  reinterpret_cast<izanagi::tool::CIMGMaster*>(p);
+    IZ_UINT ret = master->GetTexNum();
+    return ret;
 }
 
 /** テクスチャデータ取得.
@@ -76,13 +76,13 @@ IZ_UINT izGetTexNumInMaster(void* p)
  */
 void* izGetTextureInMaster(void* p, IZ_UINT texIdx)
 {
-	VRETURN_NULL(p != IZ_NULL);
+    VRETURN_NULL(p != IZ_NULL);
 
-	izanagi::tool::CIMGMaster* master =  reinterpret_cast<izanagi::tool::CIMGMaster*>(p);
-	VRETURN_NULL(texIdx < master->GetTexNum());
+    izanagi::tool::CIMGMaster* master =  reinterpret_cast<izanagi::tool::CIMGMaster*>(p);
+    VRETURN_NULL(texIdx < master->GetTexNum());
 
-	izanagi::tool::CIMGTexture* tex = master->GetTexture(texIdx);
-	return tex;
+    izanagi::tool::CIMGTexture* tex = master->GetTexture(texIdx);
+    return tex;
 }
 
 /** テクスチャ内のイメージ数を取得.
@@ -92,10 +92,10 @@ void* izGetTextureInMaster(void* p, IZ_UINT texIdx)
  */
 IZ_UINT izGetImageNumInTexture(void* p)
 {
-	VRETURN_ZERO(p != IZ_NULL);
-	izanagi::tool::CIMGTexture* tex = reinterpret_cast<izanagi::tool::CIMGTexture*>(p);
-	IZ_UINT ret = tex->GetImageNum();
-	return ret;
+    VRETURN_ZERO(p != IZ_NULL);
+    izanagi::tool::CIMGTexture* tex = reinterpret_cast<izanagi::tool::CIMGTexture*>(p);
+    IZ_UINT ret = tex->GetImageNum();
+    return ret;
 }
 
 /** テクスチャのミップマップ数を取得.
@@ -105,13 +105,13 @@ IZ_UINT izGetImageNumInTexture(void* p)
  */
 IZ_UINT izGetMipMapNumInTexture(void* p)
 {
-	VRETURN_ZERO(p != IZ_NULL);
-	izanagi::tool::CIMGTexture* tex = reinterpret_cast<izanagi::tool::CIMGTexture*>(p);
+    VRETURN_ZERO(p != IZ_NULL);
+    izanagi::tool::CIMGTexture* tex = reinterpret_cast<izanagi::tool::CIMGTexture*>(p);
 
-	// NOTE
-	// どのイメージでもミップマップ数は同じ
-	size_t ret = tex->GetImage(0).size();
-	return (IZ_UINT)ret;
+    // NOTE
+    // どのイメージでもミップマップ数は同じ
+    size_t ret = tex->GetImage(0).size();
+    return (IZ_UINT)ret;
 }
 
 /** イメージデータを取得.
@@ -123,12 +123,12 @@ IZ_UINT izGetMipMapNumInTexture(void* p)
  */
 void* izGetImageInTexture(void* p, IZ_UINT imgIdx, IZ_UINT level)
 {
-	VRETURN_NULL(p != IZ_NULL);
-	izanagi::tool::CIMGTexture* tex = reinterpret_cast<izanagi::tool::CIMGTexture*>(p);
-	
-	VRETURN_ZERO(imgIdx < izGetImageNumInTexture(p));
-	VRETURN_ZERO(level < izGetMipMapNumInTexture(p));
-	return tex->GetImage(imgIdx)[level];
+    VRETURN_NULL(p != IZ_NULL);
+    izanagi::tool::CIMGTexture* tex = reinterpret_cast<izanagi::tool::CIMGTexture*>(p);
+    
+    VRETURN_ZERO(imgIdx < izGetImageNumInTexture(p));
+    VRETURN_ZERO(level < izGetMipMapNumInTexture(p));
+    return tex->GetImage(imgIdx)[level];
 }
 
 /** イメージデータの幅を取得.
@@ -138,10 +138,10 @@ void* izGetImageInTexture(void* p, IZ_UINT imgIdx, IZ_UINT level)
  */
 IZ_UINT izGetImageWidth(void* p)
 {
-	VRETURN_ZERO(p != IZ_NULL);
-	izanagi::tool::CIMGImage* img = reinterpret_cast<izanagi::tool::CIMGImage*>(p);
-	IZ_UINT ret = img->GetWidth();
-	return ret;
+    VRETURN_ZERO(p != IZ_NULL);
+    izanagi::tool::CIMGImage* img = reinterpret_cast<izanagi::tool::CIMGImage*>(p);
+    IZ_UINT ret = img->GetWidth();
+    return ret;
 }
 
 /** イメージデータの高さを取得.
@@ -151,10 +151,10 @@ IZ_UINT izGetImageWidth(void* p)
  */
 IZ_UINT izGetImageHeight(void* p)
 {
-	VRETURN_ZERO(p != IZ_NULL);
-	izanagi::tool::CIMGImage* img = reinterpret_cast<izanagi::tool::CIMGImage*>(p);
-	IZ_UINT ret = img->GetHeight();
-	return ret;
+    VRETURN_ZERO(p != IZ_NULL);
+    izanagi::tool::CIMGImage* img = reinterpret_cast<izanagi::tool::CIMGImage*>(p);
+    IZ_UINT ret = img->GetHeight();
+    return ret;
 }
 
 /** BGRA8としてピクセルデータを取得.
@@ -164,9 +164,9 @@ IZ_UINT izGetImageHeight(void* p)
  */
 void* izGetPixelDataAsBGRA8(void* p)
 {
-	VRETURN_ZERO(p != IZ_NULL);
-	izanagi::tool::CIMGImage* img = reinterpret_cast<izanagi::tool::CIMGImage*>(p);
-	return img->GetPixelDataAsBGRA8();
+    VRETURN_ZERO(p != IZ_NULL);
+    izanagi::tool::CIMGImage* img = reinterpret_cast<izanagi::tool::CIMGImage*>(p);
+    return img->GetPixelDataAsBGRA8();
 }
 
 /** 取得したピクセルデータを解放.
@@ -175,121 +175,121 @@ void* izGetPixelDataAsBGRA8(void* p)
  */
 void izReleasePixelData(void* p)
 {
-	VRETURN_VAL(p != IZ_NULL,);
-	izanagi::tool::CIMGImage* img = reinterpret_cast<izanagi::tool::CIMGImage*>(p);
-	img->ClearTemporaryBuffer();
+    VRETURN_VAL(p != IZ_NULL,);
+    izanagi::tool::CIMGImage* img = reinterpret_cast<izanagi::tool::CIMGImage*>(p);
+    img->ClearTemporaryBuffer();
 }
 
 static const char* format[] = {
-	"RGBA8",
-	"BGRA8",
+    "RGBA8",
+    "BGRA8",
 
-	"RGBA4",
-	"RGB10A2",
-	"A8",
-	
-	"R32F",
-	"RGBA16F",
-	"RGBA32F",
+    "RGBA4",
+    "RGB10A2",
+    "A8",
+    
+    "R32F",
+    "RGBA16F",
+    "RGBA32F",
 
-	"DXT1",
-	"DXT3",
-	"DXT5",
+    "DXT1",
+    "DXT3",
+    "DXT5",
 
-	"RGBX8",
-	"D24S8",
+    "RGBX8",
+    "D24S8",
 };
 
 static const char* address[] = {
-	"WRAP",
-	"MIRROR",
-	"CLAMP",
-	"BORDER",
-	"MIRRORONCE",
+    "WRAP",
+    "MIRROR",
+    "CLAMP",
+    "BORDER",
+    "MIRRORONCE",
 };
 
 static const char* filter[] = {
-	"NONE",				// filtering disabled (valid for mip filter only)
-	"POINT",			// nearest
-	"LINEAR",			// linear interpolation
-	"ANISOTROPIC",		// anisotropic
-	"PYRAMIDALQUAD",	// 4-sample tent
-	"GAUSSIANQUAD",
+    "NONE",             // filtering disabled (valid for mip filter only)
+    "POINT",            // nearest
+    "LINEAR",           // linear interpolation
+    "ANISOTROPIC",      // anisotropic
+    "PYRAMIDALQUAD",    // 4-sample tent
+    "GAUSSIANQUAD",
 };
 
 static const char* GetString(
-	const char* strings[],
-	IZ_UINT type)
+    const char* strings[],
+    IZ_UINT type)
 {
-	VRETURN_NULL(type < COUNTOF(strings));
-	return strings[type];
+    VRETURN_NULL(type < COUNTOF(strings));
+    return strings[type];
 }
 
 const char* izGetImagePixelFormat(void* p)
 {
-	izanagi::tool::CIMGTexture* tex = reinterpret_cast<izanagi::tool::CIMGTexture*>(p);
-	if (tex != IZ_NULL) {
-		izanagi::graph::E_GRAPH_PIXEL_FMT fmt = tex->GetTexInfo().fmt;
-		VRETURN_NULL(fmt < COUNTOF(format));
-		return format[fmt];
-	}
-	return IZ_NULL;
+    izanagi::tool::CIMGTexture* tex = reinterpret_cast<izanagi::tool::CIMGTexture*>(p);
+    if (tex != IZ_NULL) {
+        izanagi::graph::E_GRAPH_PIXEL_FMT fmt = tex->GetTexInfo().fmt;
+        VRETURN_NULL(fmt < COUNTOF(format));
+        return format[fmt];
+    }
+    return IZ_NULL;
 }
 
 const char* izGetAddressU(void* p)
 {
-	izanagi::tool::CIMGTexture* tex = reinterpret_cast<izanagi::tool::CIMGTexture*>(p);
-	if (tex != IZ_NULL) {
-		const char* ret = GetString(address, tex->GetTexInfo().addressU);
-		return ret;
-	}
-	return IZ_NULL;
+    izanagi::tool::CIMGTexture* tex = reinterpret_cast<izanagi::tool::CIMGTexture*>(p);
+    if (tex != IZ_NULL) {
+        const char* ret = GetString(address, tex->GetTexInfo().addressU);
+        return ret;
+    }
+    return IZ_NULL;
 }
 
 const char* izGetAddressV(void* p)
 {
-	izanagi::tool::CIMGTexture* tex = reinterpret_cast<izanagi::tool::CIMGTexture*>(p);
-	if (tex != IZ_NULL) {
-		const char* ret = GetString(address, tex->GetTexInfo().addressV);
-		return ret;
-	}
-	return IZ_NULL;
+    izanagi::tool::CIMGTexture* tex = reinterpret_cast<izanagi::tool::CIMGTexture*>(p);
+    if (tex != IZ_NULL) {
+        const char* ret = GetString(address, tex->GetTexInfo().addressV);
+        return ret;
+    }
+    return IZ_NULL;
 }
 
 const char* izGetMinFilger(void* p)
 {
-	izanagi::tool::CIMGTexture* tex = reinterpret_cast<izanagi::tool::CIMGTexture*>(p);
-	if (tex != IZ_NULL) {
-		const char* ret = GetString(address, tex->GetTexInfo().minFilter);
-		return ret;
-	}
-	return IZ_NULL;
+    izanagi::tool::CIMGTexture* tex = reinterpret_cast<izanagi::tool::CIMGTexture*>(p);
+    if (tex != IZ_NULL) {
+        const char* ret = GetString(address, tex->GetTexInfo().minFilter);
+        return ret;
+    }
+    return IZ_NULL;
 }
 
 const char* izGetMagFilger(void* p)
 {
-	izanagi::tool::CIMGTexture* tex = reinterpret_cast<izanagi::tool::CIMGTexture*>(p);
-	if (tex != IZ_NULL) {
-		const char* ret = GetString(address, tex->GetTexInfo().magFilter);
-		return ret;
-	}
-	return IZ_NULL;
+    izanagi::tool::CIMGTexture* tex = reinterpret_cast<izanagi::tool::CIMGTexture*>(p);
+    if (tex != IZ_NULL) {
+        const char* ret = GetString(address, tex->GetTexInfo().magFilter);
+        return ret;
+    }
+    return IZ_NULL;
 }
 
 const char* izGetMipFilger(void* p)
 {
-	izanagi::tool::CIMGTexture* tex = reinterpret_cast<izanagi::tool::CIMGTexture*>(p);
-	if (tex != IZ_NULL) {
-		const char* ret = GetString(address, tex->GetTexInfo().mipFilter);
-		return ret;
-	}
-	return IZ_NULL;
+    izanagi::tool::CIMGTexture* tex = reinterpret_cast<izanagi::tool::CIMGTexture*>(p);
+    if (tex != IZ_NULL) {
+        const char* ret = GetString(address, tex->GetTexInfo().mipFilter);
+        return ret;
+    }
+    return IZ_NULL;
 }
 
 IZ_BOOL izConvertFormat(void* p, IZ_UINT fmt)
 {
-	// TODO
-	return IZ_TRUE;
+    // TODO
+    return IZ_TRUE;
 }
 
 void izSetAddressU(void* p, IZ_UINT addr)

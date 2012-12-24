@@ -7,4 +7,4 @@
 #include "./std/SimpleMemoryAllocator.h"
 #include "./std/ErrorUtil.h"
 
-#endif	// #if !defined(__IZANAGI_TOOL_KIT_TOOL_KIT_STD_DEFS_H__)
+#endif  // #if !defined(__IZANAGI_TOOL_KIT_TOOL_KIT_STD_DEFS_H__)

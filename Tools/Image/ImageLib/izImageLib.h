@@ -9,4 +9,4 @@
 #include "include/MipMapCreator.h"
 #include "include/PixelFormatConverter.h"
 
-#endif	// #if !defined(__IZANAGI_IMAGE_LIB_IMAGE_LIB_H__)
+#endif  // #if !defined(__IZANAGI_IMAGE_LIB_IMAGE_LIB_H__)

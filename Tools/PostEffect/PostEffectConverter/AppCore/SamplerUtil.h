@@ -8,14 +8,14 @@
 
 class CSamplerUtil {
 public:
-	static BOOL SetStateValue(
-		izanagi::S_PES_SAMPLER_STATE& sState, 
-		CGparameter param);
+    static BOOL SetStateValue(
+        izanagi::S_PES_SAMPLER_STATE& sState, 
+        CGparameter param);
 
-	static BOOL BindTexture(
-		izanagi::S_PES_SAMPLER_STATE& sState, 
-		CGparameter param,
-		std::vector<CGparameter>& tvTexList);
+    static BOOL BindTexture(
+        izanagi::S_PES_SAMPLER_STATE& sState, 
+        CGparameter param,
+        std::vector<CGparameter>& tvTexList);
 };
 
-#endif	 //#if !defined(__POSTEFFECT_CONVERTER_SAMPLER_UTIL_H__)
+#endif   //#if !defined(__POSTEFFECT_CONVERTER_SAMPLER_UTIL_H__)

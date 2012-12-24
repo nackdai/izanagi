@@ -8,152 +8,152 @@
 
 namespace izanagi {
 namespace tool {
-	class CGraphicsDeviceLite;
+    class CGraphicsDeviceLite;
 
-	/**
-	*/
-	class CTextureLite : public CObject {
-		friend class CGraphicsDeviceLite;
+    /**
+    */
+    class CTextureLite : public CObject {
+        friend class CGraphicsDeviceLite;
 
-	private:
-		// ファイルからテクスチャ作成
-		static CTextureLite* CreateTextureFromFile(
-			CGraphicsDeviceLite* pDevice,
-			IMemoryAllocator* pAllocator,
-			IZ_PCSTR lpszPath,
+    private:
+        // ファイルからテクスチャ作成
+        static CTextureLite* CreateTextureFromFile(
+            CGraphicsDeviceLite* pDevice,
+            IMemoryAllocator* pAllocator,
+            IZ_PCSTR lpszPath,
             IZ_BOOL needNonPow2 = IZ_FALSE);
 
-		// テクスチャ作成
-		static CTextureLite* CreateTexture(
-			CGraphicsDeviceLite* pDevice,
-			IMemoryAllocator* pAllocator,
-			IZ_UINT nWidth,
-			IZ_UINT nHeight,
-			D3DFORMAT fmt);
+        // テクスチャ作成
+        static CTextureLite* CreateTexture(
+            CGraphicsDeviceLite* pDevice,
+            IMemoryAllocator* pAllocator,
+            IZ_UINT nWidth,
+            IZ_UINT nHeight,
+            D3DFORMAT fmt);
 
-		// テクスチャ作成
-		static CTextureLite* CreateTexture(
-			CGraphicsDeviceLite* pDevice,
-			IMemoryAllocator* pAllocator,
-			IZ_UINT nWidth,
-			IZ_UINT nHeight,
-			izanagi::graph::E_GRAPH_PIXEL_FMT fmt);
+        // テクスチャ作成
+        static CTextureLite* CreateTexture(
+            CGraphicsDeviceLite* pDevice,
+            IMemoryAllocator* pAllocator,
+            IZ_UINT nWidth,
+            IZ_UINT nHeight,
+            izanagi::graph::E_GRAPH_PIXEL_FMT fmt);
 
-		// テクスチャ保存
-		static IZ_BOOL SaveTexture(
-			IZ_PCSTR path,
-			CTextureLite* texture,
-			TextureExportType type);
+        // テクスチャ保存
+        static IZ_BOOL SaveTexture(
+            IZ_PCSTR path,
+            CTextureLite* texture,
+            TextureExportType type);
 
-	private:
-		inline CTextureLite();
-		inline ~CTextureLite();
+    private:
+        inline CTextureLite();
+        inline ~CTextureLite();
 
-		NO_COPIABLE(CTextureLite);
+        NO_COPIABLE(CTextureLite);
 
-	private:
-		// 解放
-		inline void InternalRelease();
-		
-	public:
-		// ロック
-		IZ_UINT Lock(
-			UINT nLevel,
-			void** data);
+    private:
+        // 解放
+        inline void InternalRelease();
+        
+    public:
+        // ロック
+        IZ_UINT Lock(
+            UINT nLevel,
+            void** data);
 
-		// アンロック
-		IZ_BOOL Unlock(IZ_UINT nLevel);
+        // アンロック
+        IZ_BOOL Unlock(IZ_UINT nLevel);
 
-	public:
-		// 幅取得
-		inline IZ_UINT GetWidth(IZ_UINT level = 0) const;
+    public:
+        // 幅取得
+        inline IZ_UINT GetWidth(IZ_UINT level = 0) const;
 
-		// 高さ取得
-		inline IZ_UINT GetHeight(IZ_UINT level = 0) const;
+        // 高さ取得
+        inline IZ_UINT GetHeight(IZ_UINT level = 0) const;
 
-		// フォーマット取得
-		inline graph::E_GRAPH_PIXEL_FMT GetPixelFormat() const;
+        // フォーマット取得
+        inline graph::E_GRAPH_PIXEL_FMT GetPixelFormat() const;
 
-		// MIPMAP数取得
-		inline IZ_UINT GetMipMapNum() const;
+        // MIPMAP数取得
+        inline IZ_UINT GetMipMapNum() const;
 
-		// オリジナルフォーマット取得
-		D3DFORMAT GetOriginalFormat() const
-		{
-			return m_Desc.Format;
-		}
+        // オリジナルフォーマット取得
+        D3DFORMAT GetOriginalFormat() const
+        {
+            return m_Desc.Format;
+        }
 
-	public:
-		D3D_TEXTURE* GetRawInterface() { return m_pTexture; }
+    public:
+        D3D_TEXTURE* GetRawInterface() { return m_pTexture; }
 
-	private:
-		IMemoryAllocator* m_pAllocator;
+    private:
+        IMemoryAllocator* m_pAllocator;
 
-		// 本体
-		D3D_TEXTURE* m_pTexture;
+        // 本体
+        D3D_TEXTURE* m_pTexture;
 
-		D3DSURFACE_DESC m_Desc;
-		IZ_UINT m_nMipLevels;
-		graph::E_GRAPH_PIXEL_FMT m_nFmt;
-	};
+        D3DSURFACE_DESC m_Desc;
+        IZ_UINT m_nMipLevels;
+        graph::E_GRAPH_PIXEL_FMT m_nFmt;
+    };
 
-	// inline ***********************************
+    // inline ***********************************
 
-	// コンストラクタ
-	CTextureLite::CTextureLite()
-	{
-		m_pAllocator = IZ_NULL;
-		m_pTexture = IZ_NULL;
+    // コンストラクタ
+    CTextureLite::CTextureLite()
+    {
+        m_pAllocator = IZ_NULL;
+        m_pTexture = IZ_NULL;
 
-		memset(&m_Desc, 0, sizeof(m_Desc));
-		m_nMipLevels = 0;
-		m_nFmt = graph::E_GRAPH_PIXEL_FMT_RGBA8;
-	}
+        memset(&m_Desc, 0, sizeof(m_Desc));
+        m_nMipLevels = 0;
+        m_nFmt = graph::E_GRAPH_PIXEL_FMT_RGBA8;
+    }
 
-	// デストラクタ
-	CTextureLite::~CTextureLite()
-	{	
-		SAFE_RELEASE(m_pTexture);
-	}
+    // デストラクタ
+    CTextureLite::~CTextureLite()
+    {   
+        SAFE_RELEASE(m_pTexture);
+    }
 
-	// 解放
-	void CTextureLite::InternalRelease()
-	{
-		delete this;
+    // 解放
+    void CTextureLite::InternalRelease()
+    {
+        delete this;
 
-		if (m_pAllocator != IZ_NULL) {
-			m_pAllocator->Free(this);
-		}
-	}
+        if (m_pAllocator != IZ_NULL) {
+            m_pAllocator->Free(this);
+        }
+    }
 
-	// 幅取得
-	IZ_UINT CTextureLite::GetWidth(IZ_UINT level/*= 0*/) const
-	{
-		IZ_ASSERT(level < m_nMipLevels);
-		IZ_UINT ret = (m_Desc.Width >> level);
-		return ret;
-	}
+    // 幅取得
+    IZ_UINT CTextureLite::GetWidth(IZ_UINT level/*= 0*/) const
+    {
+        IZ_ASSERT(level < m_nMipLevels);
+        IZ_UINT ret = (m_Desc.Width >> level);
+        return ret;
+    }
 
-	// 高さ取得
-	IZ_UINT CTextureLite::GetHeight(IZ_UINT level/*= 0*/) const
-	{
-		IZ_ASSERT(level < m_nMipLevels);
-		IZ_UINT ret = (m_Desc.Height >> level);
-		return ret;
-	}
+    // 高さ取得
+    IZ_UINT CTextureLite::GetHeight(IZ_UINT level/*= 0*/) const
+    {
+        IZ_ASSERT(level < m_nMipLevels);
+        IZ_UINT ret = (m_Desc.Height >> level);
+        return ret;
+    }
 
-	// フォーマット取得
-	graph::E_GRAPH_PIXEL_FMT CTextureLite::GetPixelFormat() const
-	{
-		return m_nFmt;
-	}
+    // フォーマット取得
+    graph::E_GRAPH_PIXEL_FMT CTextureLite::GetPixelFormat() const
+    {
+        return m_nFmt;
+    }
 
-	// MIPMAP数取得
-	IZ_UINT CTextureLite::GetMipMapNum() const
-	{
-		return m_nMipLevels;
-	}
-}	// namespace tool
-}	// namespace izanagi
+    // MIPMAP数取得
+    IZ_UINT CTextureLite::GetMipMapNum() const
+    {
+        return m_nMipLevels;
+    }
+}   // namespace tool
+}   // namespace izanagi
 
-#endif	// #if !defined(__IZANAGI_TOOL_KIT_GRAPH_TEXTURE_LIGHT_H__)
+#endif  // #if !defined(__IZANAGI_TOOL_KIT_GRAPH_TEXTURE_LIGHT_H__)

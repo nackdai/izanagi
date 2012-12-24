@@ -10,4 +10,4 @@
 
 #include "ToolOption.h"
 
-#endif	// #if !defined(__IZANAGI_MODEL_LIB_MODE_LIB_H__)
+#endif  // #if !defined(__IZANAGI_MODEL_LIB_MODE_LIB_H__)

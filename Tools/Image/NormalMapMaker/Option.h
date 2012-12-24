@@ -4,27 +4,27 @@
 #include "izToolKit.h"
 
 struct SOption {
-	izanagi::tool::CString in;
-	izanagi::tool::CString out;
+    izanagi::tool::CString in;
+    izanagi::tool::CString out;
 
-	IZ_FLOAT scale;
+    IZ_FLOAT scale;
 };
 
 class COption : public SOption {
 public:
-	COption()
-	{
-		scale = 1.0f;
-	}
-	~COption() {}
+    COption()
+    {
+        scale = 1.0f;
+    }
+    ~COption() {}
 
 public:
-	IZ_BOOL Analysis(int argc, TCHAR* argv[]);
+    IZ_BOOL Analysis(int argc, TCHAR* argv[]);
 
-	IZ_BOOL IsValid() const;
+    IZ_BOOL IsValid() const;
 
 private:
-	IZ_BOOL AfterAnalysis();
+    IZ_BOOL AfterAnalysis();
 };
 
-#endif	// #if !defined(__OPTION_H__)
+#endif  // #if !defined(__OPTION_H__)
