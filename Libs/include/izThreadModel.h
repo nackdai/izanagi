@@ -10,4 +10,4 @@
 // MessageQueue
 #include "threadmodel/ThreadModelMessageQueue.h"
 
-#endif	// #if !defined(__IZANAGI_THREAD_MODEL_H__)
+#endif  // #if !defined(__IZANAGI_THREAD_MODEL_H__)

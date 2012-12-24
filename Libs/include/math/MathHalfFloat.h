@@ -7,28 +7,28 @@ namespace izanagi
 {
 namespace math
 {
-	// NOTE
+    // NOTE
     // 単精度浮動小数
     // +-----------+-----------+-----------+
-	// | 符号部(s) | 指数部(e) | 仮数部(m) |
-	// +-----------+-----------+-----------+
-	//      31      30       23 22         0
+    // | 符号部(s) | 指数部(e) | 仮数部(m) |
+    // +-----------+-----------+-----------+
+    //      31      30       23 22         0
     // 指数部 : 23bit / 指数部 : 8bit / 符号部 : 1bit
     // 
-	// ((-1)^s) * (2 ^ (e - 127)) * (1 + m / (2 ^ 10))
+    // ((-1)^s) * (2 ^ (e - 127)) * (1 + m / (2 ^ 10))
     //
-	// 半精度浮動小数
-	// +-----------+-----------+-----------+
-	// | 符号部(s) | 指数部(e) | 仮数部(m) |
-	// +-----------+-----------+-----------+
-	//      15      14       10 9          0
+    // 半精度浮動小数
+    // +-----------+-----------+-----------+
+    // | 符号部(s) | 指数部(e) | 仮数部(m) |
+    // +-----------+-----------+-----------+
+    //      15      14       10 9          0
     // 指数部 : 10bit / 指数部 : 5bit / 符号部 : 1bit
-	// 
-	// ((-1)^s) * (2 ^ (e - 15)) * (1 + m / (2 ^ 10))
+    // 
+    // ((-1)^s) * (2 ^ (e - 15)) * (1 + m / (2 ^ 10))
 
-	/** 半精度浮動小数
-	 */
-	class CFloat16
+    /** 半精度浮動小数
+     */
+    class CFloat16
     {
     private:
         enum
@@ -44,15 +44,15 @@ namespace math
             FLOAT_FRACTION_MAX = ((1 << 23) - 1),
         };
 
-	public:
+    public:
         /** 
          */
-		static IZ_UINT16 Float32ToFloat16(IZ_FLOAT f)
-		{
-			IZ_UINT u = *(IZ_UINT*)&f;
+        static IZ_UINT16 Float32ToFloat16(IZ_FLOAT f)
+        {
+            IZ_UINT u = *(IZ_UINT*)&f;
 
-			IZ_INT sign = (u >> 31);                    // 符号部
-			IZ_INT expo = (u >> 23) & FLOAT_EXP_MAX;    // 指数部
+            IZ_INT sign = (u >> 31);                    // 符号部
+            IZ_INT expo = (u >> 23) & FLOAT_EXP_MAX;    // 指数部
             IZ_INT frac = u & FLOAT_FRACTION_MAX;       // 仮数部
 
             expo = expo - 127;
@@ -93,8 +93,8 @@ namespace math
                         | (frac >> 13);
             }
 
-			return ret;
-		}
+            return ret;
+        }
 
         /**
          */
@@ -149,31 +149,31 @@ namespace math
             return f;
         }
 
-	public:
+    public:
         CFloat16()
         {
             m_Val = 0;
         }
 
-		CFloat16(IZ_UINT16 u)
+        CFloat16(IZ_UINT16 u)
         {
             m_Val = u;
         }
 
-		CFloat16(IZ_FLOAT f)
+        CFloat16(IZ_FLOAT f)
         {
             m_Val = Float32ToFloat16(f);
         }
 
-		CFloat16(const CFloat16& rhs)
+        CFloat16(const CFloat16& rhs)
         {
             m_Val = rhs.m_Val;
         }
 
         ~CFloat16() {}
 
-	public:
-		operator IZ_FLOAT()
+    public:
+        operator IZ_FLOAT()
         {
             IZ_FLOAT ret = Float16ToFloat32(*this);
             return ret;
@@ -206,24 +206,24 @@ namespace math
             return !(*this == rhs);
         }
 
-		IZ_UINT16 GetVal() const { return m_Val; }
+        IZ_UINT16 GetVal() const { return m_Val; }
 
         void SetFloat(IZ_FLOAT value)
         {
             m_Val = Float32ToFloat16(value);
         }
 
-	private:
-		union {
-			IZ_UINT16 m_Val;
-			struct {
-				IZ_UINT16 m_Frac	: 10;	// 仮数部
-				IZ_UINT16 m_Exp		: 5;	// 指数部
-				IZ_UINT16 m_Sign	: 1;	// 符号部
-			};
-		};
-	};
+    private:
+        union {
+            IZ_UINT16 m_Val;
+            struct {
+                IZ_UINT16 m_Frac    : 10;   // 仮数部
+                IZ_UINT16 m_Exp     : 5;    // 指数部
+                IZ_UINT16 m_Sign    : 1;    // 符号部
+            };
+        };
+    };
 }   // namespace math
-}	// namespace izanagi
+}   // namespace izanagi
 
-#endif	// #if !defined(__IZANAGI_MATH_MATH_HALF_FLOAT_H__)
+#endif  // #if !defined(__IZANAGI_MATH_MATH_HALF_FLOAT_H__)

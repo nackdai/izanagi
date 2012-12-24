@@ -40,4 +40,4 @@
 #include "std/dependency_property/BindingOperations.h"
 #include "std/dependency_property/BindingExpression.h"
 
-#endif	// #if !defined(__IZANAGI_STD_H__)
+#endif  // #if !defined(__IZANAGI_STD_H__)

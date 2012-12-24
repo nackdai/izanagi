@@ -12,30 +12,30 @@ namespace graph
 {
     /**
      */
-	class CTexture : public CBaseTexture
+    class CTexture : public CBaseTexture
     {
-	protected:
+    protected:
         CTexture() {}
         virtual ~CTexture() {}
 
-		NO_COPIABLE(CTexture);
+        NO_COPIABLE(CTexture);
 
-	public:
-		// ロック
+    public:
+        // ロック
         PURE_VIRTUAL(
-		    IZ_UINT Lock(
-			    UINT level,
-			    void** data,
-			    IZ_BOOL isReadOnly,
-			    IZ_BOOL isDiscard = IZ_FALSE));
+            IZ_UINT Lock(
+                UINT level,
+                void** data,
+                IZ_BOOL isReadOnly,
+                IZ_BOOL isDiscard = IZ_FALSE));
 
-		// アンロック
-		PURE_VIRTUAL(IZ_BOOL Unlock(IZ_UINT level));
+        // アンロック
+        PURE_VIRTUAL(IZ_BOOL Unlock(IZ_UINT level));
 
-		// サーフェス取得
-		PURE_VIRTUAL(CSurface* GetSurface(IZ_UINT idx));
-	};
+        // サーフェス取得
+        PURE_VIRTUAL(CSurface* GetSurface(IZ_UINT idx));
+    };
 }   // namespace graph
-}	// namespace izanagi
+}   // namespace izanagi
 
-#endif	// #if !defined(__IZANAGI_GRAPH_TEXTURE_H__)
+#endif  // #if !defined(__IZANAGI_GRAPH_TEXTURE_H__)

@@ -7,20 +7,20 @@ namespace izanagi
 {
 namespace sys
 {
-	/**
-	*/
-	class CSysCpu {
-	private:
-		CSysCpu();
-		~CSysCpu();
+    /**
+    */
+    class CSysCpu {
+    private:
+        CSysCpu();
+        ~CSysCpu();
 
-		NO_COPIABLE(CSysCpu);
+        NO_COPIABLE(CSysCpu);
 
-	public:
-		// Return CPU num.
-		static IZ_UINT GetCpuNum();
-	};
+    public:
+        // Return CPU num.
+        static IZ_UINT GetCpuNum();
+    };
 }   // namespace sys
-}	// namespace izanagi
+}   // namespace izanagi
 
-#endif	// #if !defined(__IZANAGI_SYSTEM_SYS_CPU_H__)
+#endif  // #if !defined(__IZANAGI_SYSTEM_SYS_CPU_H__)

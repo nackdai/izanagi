@@ -4,52 +4,52 @@
 using namespace izanagi;
 
 struct CStandardMemoryAllocator::SHeapHeader
-	: public IZ_DEBUG_HEAP_HEADER_BASE
+    : public IZ_DEBUG_HEAP_HEADER_BASE
 {
-	IZ_UINT8* buf;
-	IZ_UINT size;
-	SHeapHeader* prev;
-	SHeapHeader* next;
+    IZ_UINT8* buf;
+    IZ_UINT size;
+    SHeapHeader* prev;
+    SHeapHeader* next;
 
-	void Init()
-	{
-		buf = IZ_NULL;
-		size = 0;
-		prev = IZ_NULL;
-		next = IZ_NULL;
+    void Init()
+    {
+        buf = IZ_NULL;
+        size = 0;
+        prev = IZ_NULL;
+        next = IZ_NULL;
 
-		ClearDebugInfo();
-	}
+        ClearDebugInfo();
+    }
 
-	IZ_UINT8* GetTopAddr() const
-	{
-		return (IZ_UINT8*)this;
-	}
+    IZ_UINT8* GetTopAddr() const
+    {
+        return (IZ_UINT8*)this;
+    }
 
-	IZ_UINT8* GetTailAddr() const
-	{
-		return buf + size;
-	}
+    IZ_UINT8* GetTailAddr() const
+    {
+        return buf + size;
+    }
 
-	IZ_UINT GetAllSize() const
-	{
-		IZ_ASSERT(buf > reinterpret_cast<IZ_UINT8*>(const_cast<SHeapHeader*>(this)));
-		IZ_UINT sub = (IZ_UINT)(buf - reinterpret_cast<IZ_UINT8*>(const_cast<SHeapHeader*>(this)));
-		return size + sub;
-	}
+    IZ_UINT GetAllSize() const
+    {
+        IZ_ASSERT(buf > reinterpret_cast<IZ_UINT8*>(const_cast<SHeapHeader*>(this)));
+        IZ_UINT sub = (IZ_UINT)(buf - reinterpret_cast<IZ_UINT8*>(const_cast<SHeapHeader*>(this)));
+        return size + sub;
+    }
 };
 
 
 CStandardMemoryAllocator::CStandardMemoryAllocator()
 {
-	m_nBufSize = 0;
-	m_pBuf = IZ_NULL;
+    m_nBufSize = 0;
+    m_pBuf = IZ_NULL;
 }
 
 CStandardMemoryAllocator::CStandardMemoryAllocator(IZ_UINT nBufSize, void* pBuf)
 {
-	IZ_BOOL result = Init(nBufSize, pBuf);
-	IZ_ASSERT(result);
+    IZ_BOOL result = Init(nBufSize, pBuf);
+    IZ_ASSERT(result);
 }
 
 CStandardMemoryAllocator::~CStandardMemoryAllocator()
@@ -61,27 +61,27 @@ CStandardMemoryAllocator::~CStandardMemoryAllocator()
 */
 IZ_BOOL CStandardMemoryAllocator::Init(IZ_UINT nBufSize, void* pBuf)
 {
-	IZ_ASSERT(!m_AllocList.HasItem());
+    IZ_ASSERT(!m_AllocList.HasItem());
 
-	m_FreeList.Clear();
+    m_FreeList.Clear();
 
-	IZ_BOOL ret = IZ_FALSE;
+    IZ_BOOL ret = IZ_FALSE;
 
-	m_nBufSize = nBufSize;
-	m_pBuf = reinterpret_cast<IZ_UINT8*>(pBuf);
+    m_nBufSize = nBufSize;
+    m_pBuf = reinterpret_cast<IZ_UINT8*>(pBuf);
 
-	// フリーリスト初期化
-	SHeapHeader* p = GetHeapHeader(m_pBuf);
+    // フリーリスト初期化
+    SHeapHeader* p = GetHeapHeader(m_pBuf);
 
-	if (p != IZ_NULL) {
-		p->buf = m_pBuf + sizeof(SHeapHeader);
-		p->size = m_nBufSize - sizeof(SHeapHeader);
-		m_FreeList.AddTop(p);
+    if (p != IZ_NULL) {
+        p->buf = m_pBuf + sizeof(SHeapHeader);
+        p->size = m_nBufSize - sizeof(SHeapHeader);
+        m_FreeList.AddTop(p);
 
-		ret = IZ_TRUE;
-	}
+        ret = IZ_TRUE;
+    }
 
-	return ret;
+    return ret;
 }
 
 /**
@@ -89,8 +89,8 @@ IZ_BOOL CStandardMemoryAllocator::Init(IZ_UINT nBufSize, void* pBuf)
 */
 void* CStandardMemoryAllocator::Alloc(size_t size, const IZ_CHAR* file, IZ_UINT line)
 {
-	void* ret = AllocInternal(size, file, line);
-	return ret;
+    void* ret = AllocInternal(size, file, line);
+    return ret;
 }
 
 /**
@@ -98,11 +98,11 @@ void* CStandardMemoryAllocator::Alloc(size_t size, const IZ_CHAR* file, IZ_UINT 
 */
 void* CStandardMemoryAllocator::AllocZero(size_t size, const IZ_CHAR* file, IZ_UINT line)
 {
-	void* ret = Alloc(size, file, line);
-	if (ret != IZ_NULL) {
-		FILL_ZERO(ret, size);
-	}
-	return ret;
+    void* ret = Alloc(size, file, line);
+    if (ret != IZ_NULL) {
+        FILL_ZERO(ret, size);
+    }
+    return ret;
 }
 
 /**
@@ -110,8 +110,8 @@ void* CStandardMemoryAllocator::AllocZero(size_t size, const IZ_CHAR* file, IZ_U
 */
 void* CStandardMemoryAllocator::AllocAlign(size_t size, IZ_UINT align, const IZ_CHAR* file, IZ_UINT line)
 {
-	void* ret = AllocInternal(size, align, file, line);
-	return ret;
+    void* ret = AllocInternal(size, align, file, line);
+    return ret;
 }
 
 /**
@@ -119,11 +119,11 @@ void* CStandardMemoryAllocator::AllocAlign(size_t size, IZ_UINT align, const IZ_
 */
 void* CStandardMemoryAllocator::AllocAlignZero(size_t size, IZ_UINT align, const IZ_CHAR* file, IZ_UINT line)
 {
-	void* ret = AllocAlign(size, align, file, line);
-	if (ret != IZ_NULL) {
-		FILL_ZERO(ret, size);
-	}
-	return ret;
+    void* ret = AllocAlign(size, align, file, line);
+    if (ret != IZ_NULL) {
+        FILL_ZERO(ret, size);
+    }
+    return ret;
 }
 
 /**
@@ -131,69 +131,69 @@ void* CStandardMemoryAllocator::AllocAlignZero(size_t size, IZ_UINT align, const
 */
 void* CStandardMemoryAllocator::Realloc(void* ptr, size_t size, const IZ_CHAR* file, IZ_UINT line)
 {
-	IZ_ASSERT(ptr != IZ_NULL);
-	IZ_ASSERT(size > 0);
+    IZ_ASSERT(ptr != IZ_NULL);
+    IZ_ASSERT(size > 0);
 
-	SHeapHeader* p = FindAllocatedHeapHeader(ptr);
-	VRETURN_NULL(p != IZ_NULL);
+    SHeapHeader* p = FindAllocatedHeapHeader(ptr);
+    VRETURN_NULL(p != IZ_NULL);
 
-	if (p->size == size) {
-		// Nothing is done.
-		return ptr;
-	}
-	else {
-		if (p->size < size) {
-			IZ_UINT nReallocSize = size - p->size;
+    if (p->size == size) {
+        // Nothing is done.
+        return ptr;
+    }
+    else {
+        if (p->size < size) {
+            IZ_UINT nReallocSize = size - p->size;
 
-			// Realloc可能なフリーのメモリ領域を探す
-			SHeapHeader* pFree = FindReallocableFreedHeapHeader(ptr, nReallocSize);
+            // Realloc可能なフリーのメモリ領域を探す
+            SHeapHeader* pFree = FindReallocableFreedHeapHeader(ptr, nReallocSize);
 
-			if (pFree != IZ_NULL) {
-				m_FreeList.Remove(pFree);
+            if (pFree != IZ_NULL) {
+                m_FreeList.Remove(pFree);
 
-				IZ_UINT nFreedSize = pFree->GetAllSize();
+                IZ_UINT nFreedSize = pFree->GetAllSize();
 
-				// 新たにフリーリストに登録する
-				SHeapHeader* pNew = IZ_NULL;
-				if (nFreedSize > nReallocSize + sizeof(SHeapHeader)) {
-					IZ_UINT8* pFreeTop = pFree->GetTopAddr();
+                // 新たにフリーリストに登録する
+                SHeapHeader* pNew = IZ_NULL;
+                if (nFreedSize > nReallocSize + sizeof(SHeapHeader)) {
+                    IZ_UINT8* pFreeTop = pFree->GetTopAddr();
 
-					pNew = reinterpret_cast<SHeapHeader*>(pFreeTop + nReallocSize);
+                    pNew = reinterpret_cast<SHeapHeader*>(pFreeTop + nReallocSize);
 
-					pNew->Init();
-					pNew->buf = reinterpret_cast<IZ_UINT8*>(pNew) + sizeof(SHeapHeader);
-					pNew->size = nFreedSize - nReallocSize - sizeof(SHeapHeader);
+                    pNew->Init();
+                    pNew->buf = reinterpret_cast<IZ_UINT8*>(pNew) + sizeof(SHeapHeader);
+                    pNew->size = nFreedSize - nReallocSize - sizeof(SHeapHeader);
 
-					InsertFreeList(pNew);
-				}
+                    InsertFreeList(pNew);
+                }
 
-				// サイズ更新
-				p->size += (pNew != IZ_NULL ? nReallocSize : nFreedSize);
-				return p->buf;
-			}
-			else {
-				// 解放する
-				m_AllocList.Remove(p);
-				InsertFreeList(p);
+                // サイズ更新
+                p->size += (pNew != IZ_NULL ? nReallocSize : nFreedSize);
+                return p->buf;
+            }
+            else {
+                // 解放する
+                m_AllocList.Remove(p);
+                InsertFreeList(p);
 
-				// 新たにデータを確保する
-				void* ret = AllocZero(size, file, line);
-				VRETURN_NULL(ret != IZ_NULL);
+                // 新たにデータを確保する
+                void* ret = AllocZero(size, file, line);
+                VRETURN_NULL(ret != IZ_NULL);
 
-				// コピーする
-				memcpy(ret, ptr, size);
+                // コピーする
+                memcpy(ret, ptr, size);
 
-				return ret;
-			}
-		}
-		else {
-			// TODO
-			// 元のサイズより小さくなることは許さない
-			IZ_ASSERT(IZ_FALSE);
-		}
-	}
+                return ret;
+            }
+        }
+        else {
+            // TODO
+            // 元のサイズより小さくなることは許さない
+            IZ_ASSERT(IZ_FALSE);
+        }
+    }
 
-	return IZ_NULL;
+    return IZ_NULL;
 }
 
 /**
@@ -201,32 +201,32 @@ void* CStandardMemoryAllocator::Realloc(void* ptr, size_t size, const IZ_CHAR* f
 */
 IZ_BOOL CStandardMemoryAllocator::Free(void* data)
 {
-	if (data == IZ_NULL) {
-		// 何もすることはない
-		return IZ_TRUE;
-	}
+    if (data == IZ_NULL) {
+        // 何もすることはない
+        return IZ_TRUE;
+    }
 
-	IZ_BOOL ret = IZ_FALSE;
+    IZ_BOOL ret = IZ_FALSE;
 
-	SHeapHeader* p = FindAllocatedHeapHeader(data);
-	if (p != IZ_NULL) {
-		// アロケートリストから外す
-		m_AllocList.Remove(p);
+    SHeapHeader* p = FindAllocatedHeapHeader(data);
+    if (p != IZ_NULL) {
+        // アロケートリストから外す
+        m_AllocList.Remove(p);
 
-		// フリーリストに挿入
-		InsertFreeList(p);
+        // フリーリストに挿入
+        InsertFreeList(p);
 
-		ret = IZ_TRUE;
-	}
+        ret = IZ_TRUE;
+    }
 
-	return ret;
+    return ret;
 }
 
 /**
 */
 IZ_UINT CStandardMemoryAllocator::GetSize()
 {
-	return m_nBufSize;
+    return m_nBufSize;
 }
 
 /**
@@ -234,15 +234,15 @@ IZ_UINT CStandardMemoryAllocator::GetSize()
 */
 IZ_UINT CStandardMemoryAllocator::GetAllocatedSize()
 {
-	IZ_UINT ret = 0;
+    IZ_UINT ret = 0;
 
-	SHeapHeader* p = m_AllocList.GetTop();
-	while (p != IZ_NULL) {
-		ret += p->size;
-		p = p->next;
-	}
+    SHeapHeader* p = m_AllocList.GetTop();
+    while (p != IZ_NULL) {
+        ret += p->size;
+        p = p->next;
+    }
 
-	return ret;
+    return ret;
 }
 
 /**
@@ -250,11 +250,11 @@ IZ_UINT CStandardMemoryAllocator::GetAllocatedSize()
 */
 IZ_UINT CStandardMemoryAllocator::GetFreedSize()
 {
-	IZ_UINT nAllocatedSize = GetAllocatedSize();
-	IZ_ASSERT(nAllocatedSize <= m_nBufSize);
+    IZ_UINT nAllocatedSize = GetAllocatedSize();
+    IZ_ASSERT(nAllocatedSize <= m_nBufSize);
 
-	IZ_UINT ret = m_nBufSize - nAllocatedSize;
-	return ret;
+    IZ_UINT ret = m_nBufSize - nAllocatedSize;
+    return ret;
 }
 
 /**
@@ -262,312 +262,312 @@ IZ_UINT CStandardMemoryAllocator::GetFreedSize()
 */
 IZ_BOOL CStandardMemoryAllocator::Dump()
 {
-	IZ_PRINTF("Dump Memory---\n");
+    IZ_PRINTF("Dump Memory---\n");
 
-	SHeapHeader* p = m_AllocList.GetTop();
-	while (p != IZ_NULL) {
-		// 情報表示
-		p->Dump();
+    SHeapHeader* p = m_AllocList.GetTop();
+    while (p != IZ_NULL) {
+        // 情報表示
+        p->Dump();
 
-		IZ_PRINTF(
-			" buf[0x%x] size[%d]\n",
-			p->buf,
-			p->size);
+        IZ_PRINTF(
+            " buf[0x%x] size[%d]\n",
+            p->buf,
+            p->size);
 
-		p = p->next;
-	}
+        p = p->next;
+    }
 
-	IZ_PRINTF("--------------\n");
+    IZ_PRINTF("--------------\n");
 
-	IZ_ASSERT(m_FreeList.HasItem());
-	IZ_ASSERT(m_FreeList.GetTop()->next == IZ_NULL);
-	IZ_ASSERT(m_FreeList.GetTop()->size + sizeof(SHeapHeader) == m_nBufSize);
+    IZ_ASSERT(m_FreeList.HasItem());
+    IZ_ASSERT(m_FreeList.GetTop()->next == IZ_NULL);
+    IZ_ASSERT(m_FreeList.GetTop()->size + sizeof(SHeapHeader) == m_nBufSize);
 
-	IZ_BOOL hasItem = m_AllocList.HasItem();
-	return !hasItem;
+    IZ_BOOL hasItem = m_AllocList.HasItem();
+    return !hasItem;
 }
 
 // メモリ確保
 void* CStandardMemoryAllocator::AllocInternal(
-	size_t size,
-	const IZ_CHAR* file,
-	IZ_UINT line)
+    size_t size,
+    const IZ_CHAR* file,
+    IZ_UINT line)
 {
-	if (!m_FreeList.HasItem()) {
-		return IZ_NULL;
-	}
+    if (!m_FreeList.HasItem()) {
+        return IZ_NULL;
+    }
 
-	IncrementAllocCnt();
+    IncrementAllocCnt();
 
-	void* ret = IZ_NULL;
+    void* ret = IZ_NULL;
 
-	// ヘッダ分を足す
-	size_t nSize = size + sizeof(SHeapHeader);
+    // ヘッダ分を足す
+    size_t nSize = size + sizeof(SHeapHeader);
 
-	SHeapHeader* pFree = m_FreeList.GetTop();
+    SHeapHeader* pFree = m_FreeList.GetTop();
 
-	while (pFree != IZ_NULL) {
-		if (pFree->size >= nSize) {
-			// 指定サイズを確保できる
+    while (pFree != IZ_NULL) {
+        if (pFree->size >= nSize) {
+            // 指定サイズを確保できる
 
-			// 後ろからとっていく
-			SHeapHeader* pNew = GetHeapHeader(pFree->GetTailAddr() - nSize);
-			pNew->buf = (IZ_BYTE*)pNew + sizeof(SHeapHeader);
-			pNew->size = (IZ_UINT)size;
-			pNew->SetDebugInfo(GetAllocCnt() - 1, line, file);
+            // 後ろからとっていく
+            SHeapHeader* pNew = GetHeapHeader(pFree->GetTailAddr() - nSize);
+            pNew->buf = (IZ_BYTE*)pNew + sizeof(SHeapHeader);
+            pNew->size = (IZ_UINT)size;
+            pNew->SetDebugInfo(GetAllocCnt() - 1, line, file);
 
-			ret = pNew->buf;
+            ret = pNew->buf;
 
-			// アロケートリストに追加
-			m_AllocList.AddTail(pNew);
+            // アロケートリストに追加
+            m_AllocList.AddTail(pNew);
 
-			pFree->size -= (IZ_UINT)nSize;
-			if (pFree->size == 0) {
-				// フリーリストから削除
-				m_FreeList.Remove(pFree);
-			}
+            pFree->size -= (IZ_UINT)nSize;
+            if (pFree->size == 0) {
+                // フリーリストから削除
+                m_FreeList.Remove(pFree);
+            }
 
-			break;
-		}
+            break;
+        }
 
-		pFree = pFree->next;
-	}
+        pFree = pFree->next;
+    }
 
-	return ret;
+    return ret;
 }
 
 namespace {
-	// アライン可能かどうか
-	inline IZ_BOOL _EnableAlign(IZ_UINT align)
-	{
-		// NOTE
-		// アラインは４の倍数でしかできない
+    // アライン可能かどうか
+    inline IZ_BOOL _EnableAlign(IZ_UINT align)
+    {
+        // NOTE
+        // アラインは４の倍数でしかできない
 
-		IZ_BOOL ret = IZ_FALSE;
+        IZ_BOOL ret = IZ_FALSE;
 
-		if ((align > 0)
-			&& ((align & 0x03) == 0))
-		{
-			ret = IZ_TRUE;
-		}
+        if ((align > 0)
+            && ((align & 0x03) == 0))
+        {
+            ret = IZ_TRUE;
+        }
 
-		return ret;
-	}
+        return ret;
+    }
 
-	// アラインサイズ計算
-	template <typename _T>
-	inline _T _ComputeAlignValue(_T v, IZ_UINT align)
-	{
-		_T ret = (v + (align - 1)) / align * align;
-		return ret;
-	}
-}	// namespace
+    // アラインサイズ計算
+    template <typename _T>
+    inline _T _ComputeAlignValue(_T v, IZ_UINT align)
+    {
+        _T ret = (v + (align - 1)) / align * align;
+        return ret;
+    }
+}   // namespace
 
 // メモリ確保(アライン有り)
 void* CStandardMemoryAllocator::AllocInternal(
-	size_t size,
-	IZ_UINT align,
-	const IZ_CHAR* file,
-	IZ_UINT line)
+    size_t size,
+    IZ_UINT align,
+    const IZ_CHAR* file,
+    IZ_UINT line)
 {
-	// フリーバッファはあるか
-	if (!m_FreeList.HasItem()) {
-		return IZ_NULL;
-	}
+    // フリーバッファはあるか
+    if (!m_FreeList.HasItem()) {
+        return IZ_NULL;
+    }
 
-	// アライン可能か
-	if ((align == 0) || !_EnableAlign(align)) {
-		return IZ_NULL;
-	}
+    // アライン可能か
+    if ((align == 0) || !_EnableAlign(align)) {
+        return IZ_NULL;
+    }
 
-	IncrementAllocCnt();
+    IncrementAllocCnt();
 
-	void* ret = IZ_NULL;
+    void* ret = IZ_NULL;
 
-	// アラインサイズ計算
-	size = _ComputeAlignValue(size, align);
+    // アラインサイズ計算
+    size = _ComputeAlignValue(size, align);
 
-	// ヘッダ分を足す
-	size_t nSize = size + sizeof(SHeapHeader);
+    // ヘッダ分を足す
+    size_t nSize = size + sizeof(SHeapHeader);
 
-	SHeapHeader* pFree = m_FreeList.GetTop();
+    SHeapHeader* pFree = m_FreeList.GetTop();
 
-	while (pFree != IZ_NULL) {
-		if (pFree->size >= nSize) {
-			// 指定サイズを確保できる
+    while (pFree != IZ_NULL) {
+        if (pFree->size >= nSize) {
+            // 指定サイズを確保できる
 
-			IZ_BYTE* pBuf = pFree->GetTailAddr() - nSize;
-			pBuf += sizeof(SHeapHeader);
-			IZ_BYTE* pAlignBuf = CStdUtil::ConvIntToPtr<IZ_BYTE, IZ_UINT>(
-									CStdUtil::ConvPtrToInt<IZ_UINT>(pBuf) / align * align);
+            IZ_BYTE* pBuf = pFree->GetTailAddr() - nSize;
+            pBuf += sizeof(SHeapHeader);
+            IZ_BYTE* pAlignBuf = CStdUtil::ConvIntToPtr<IZ_BYTE, IZ_UINT>(
+                                    CStdUtil::ConvPtrToInt<IZ_UINT>(pBuf) / align * align);
 
-			// 差分
-			IZ_ASSERT(pBuf >= pAlignBuf);
-			IZ_UINT nSub = (IZ_UINT)(pBuf - pAlignBuf);
+            // 差分
+            IZ_ASSERT(pBuf >= pAlignBuf);
+            IZ_UINT nSub = (IZ_UINT)(pBuf - pAlignBuf);
 
-			size_t nAlignSize = nSize + nSub;
+            size_t nAlignSize = nSize + nSub;
 
-			if (pFree->size >= nAlignSize) {
-				// 後ろからとっていく
-				SHeapHeader* pNew = GetHeapHeader(pFree->GetTailAddr() - nAlignSize);
-				pNew->buf = (IZ_BYTE*)pNew + sizeof(SHeapHeader) + nSub;
-				pNew->size = (IZ_UINT)(nAlignSize - sizeof(SHeapHeader));
-				pNew->SetDebugInfo(GetAllocCnt() - 1, line, file);
+            if (pFree->size >= nAlignSize) {
+                // 後ろからとっていく
+                SHeapHeader* pNew = GetHeapHeader(pFree->GetTailAddr() - nAlignSize);
+                pNew->buf = (IZ_BYTE*)pNew + sizeof(SHeapHeader) + nSub;
+                pNew->size = (IZ_UINT)(nAlignSize - sizeof(SHeapHeader));
+                pNew->SetDebugInfo(GetAllocCnt() - 1, line, file);
 
-				ret = pNew->buf;
-				IZ_ASSERT((CStdUtil::ConvPtrToInt<IZ_UINT>(ret) & (align - 1)) == 0);
+                ret = pNew->buf;
+                IZ_ASSERT((CStdUtil::ConvPtrToInt<IZ_UINT>(ret) & (align - 1)) == 0);
 
-				// アロケートリストに追加
-				m_AllocList.AddTail(pNew);
+                // アロケートリストに追加
+                m_AllocList.AddTail(pNew);
 
-				pFree->size -= (IZ_UINT)nAlignSize;
-				if (pFree->size == 0) {
-					// フリーリストから削除
-					m_FreeList.Remove(pFree);
-				}
+                pFree->size -= (IZ_UINT)nAlignSize;
+                if (pFree->size == 0) {
+                    // フリーリストから削除
+                    m_FreeList.Remove(pFree);
+                }
 
-				break;
-			}
-		}
+                break;
+            }
+        }
 
-		pFree = pFree->next;
-	}
+        pFree = pFree->next;
+    }
 
-	return ret;
+    return ret;
 }
 
 // フリーリストに挿入
 void CStandardMemoryAllocator::InsertFreeList(SHeapHeader* pFree)
 {
-	pFree->prev = IZ_NULL;
-	pFree->next = IZ_NULL;
-	pFree->ClearDebugInfo();
+    pFree->prev = IZ_NULL;
+    pFree->next = IZ_NULL;
+    pFree->ClearDebugInfo();
 
-	if (m_FreeList.HasItem()) {
-		SHeapHeader* p = m_FreeList.GetTop();
-		IZ_BOOL bIsInserted = IZ_FALSE;
+    if (m_FreeList.HasItem()) {
+        SHeapHeader* p = m_FreeList.GetTop();
+        IZ_BOOL bIsInserted = IZ_FALSE;
 
-		// まずはアドレス位置の順にソートされた状態でリストに挿入する
-		while (p != IZ_NULL) {
-			if (pFree->buf <= p->buf) {
-				m_FreeList.JoinBefore(p, pFree);
-				bIsInserted = IZ_TRUE;
-				break;
-			}
+        // まずはアドレス位置の順にソートされた状態でリストに挿入する
+        while (p != IZ_NULL) {
+            if (pFree->buf <= p->buf) {
+                m_FreeList.JoinBefore(p, pFree);
+                bIsInserted = IZ_TRUE;
+                break;
+            }
 
-			p = p->next;
-		}
+            p = p->next;
+        }
 
-		if (!bIsInserted) {
-			m_FreeList.AddTail(pFree);
-		}
+        if (!bIsInserted) {
+            m_FreeList.AddTail(pFree);
+        }
 
-		p = m_FreeList.GetTop();
+        p = m_FreeList.GetTop();
 
-		// 今度はリストがくっつくか調べる
-		IZ_UINT8* pFreeTop = pFree->GetTopAddr();
-		IZ_UINT8* pFreeTail = pFree->GetTailAddr();
+        // 今度はリストがくっつくか調べる
+        IZ_UINT8* pFreeTop = pFree->GetTopAddr();
+        IZ_UINT8* pFreeTail = pFree->GetTailAddr();
 
-		while (p != IZ_NULL) {
-			IZ_UINT8* top = p->GetTopAddr();
-			IZ_UINT8* tail = p->GetTailAddr();
+        while (p != IZ_NULL) {
+            IZ_UINT8* top = p->GetTopAddr();
+            IZ_UINT8* tail = p->GetTailAddr();
 
-			if (pFreeTop == tail) {
-				// 上とくっつく
-				p->size += pFree->GetAllSize();
+            if (pFreeTop == tail) {
+                // 上とくっつく
+                p->size += pFree->GetAllSize();
 
 #if 0
-				p->next = pFree->next;
+                p->next = pFree->next;
 
-				if (p->next != IZ_NULL) {
-					p->next->prev = p;
-				}
+                if (p->next != IZ_NULL) {
+                    p->next->prev = p;
+                }
 #else
-				m_FreeList.Remove(pFree);
+                m_FreeList.Remove(pFree);
 #endif
-				
-				top = p->GetTopAddr();
-				pFree = p;
-			}
+                
+                top = p->GetTopAddr();
+                pFree = p;
+            }
 
-			if (pFreeTail == top) {
-				// 下とくっつく
-				pFree->size += p->GetAllSize();
+            if (pFreeTail == top) {
+                // 下とくっつく
+                pFree->size += p->GetAllSize();
 #if 0
-				pFree->next = p->next;
+                pFree->next = p->next;
 
-				if (p->next != IZ_NULL) {
-					p->next->prev = pFree;
-				}
+                if (p->next != IZ_NULL) {
+                    p->next->prev = pFree;
+                }
 #else
-				m_FreeList.Remove(p);
+                m_FreeList.Remove(p);
 #endif
 
-				tail = p->GetTailAddr();
-				p = pFree;
-			}
+                tail = p->GetTailAddr();
+                p = pFree;
+            }
 
-			p = p->next;
-		}
-	}
-	else {
-		m_FreeList.AddTop(pFree);
-	}
+            p = p->next;
+        }
+    }
+    else {
+        m_FreeList.AddTop(pFree);
+    }
 }
 
 // Realloc可能なフリーのメモリ領域を探す
 CStandardMemoryAllocator::SHeapHeader* CStandardMemoryAllocator::FindReallocableFreedHeapHeader(void* ptr, size_t size)
 {
-	IZ_UINT8* pTopPtr = reinterpret_cast<IZ_UINT8*>(ptr);
-	IZ_UINT8* pTailPtr = pTopPtr + size;
+    IZ_UINT8* pTopPtr = reinterpret_cast<IZ_UINT8*>(ptr);
+    IZ_UINT8* pTailPtr = pTopPtr + size;
 
-	SHeapHeader* p = m_FreeList.GetTop();
+    SHeapHeader* p = m_FreeList.GetTop();
 
-	while (p != IZ_NULL) {
-		IZ_UINT nFreedSize = p->GetAllSize();
+    while (p != IZ_NULL) {
+        IZ_UINT nFreedSize = p->GetAllSize();
 
-		if (nFreedSize >= size) {
-			// サイズに余裕がある
-			IZ_UINT8* top = p->GetTopAddr();
-			IZ_UINT8* tail = p->GetTailAddr();
+        if (nFreedSize >= size) {
+            // サイズに余裕がある
+            IZ_UINT8* top = p->GetTopAddr();
+            IZ_UINT8* tail = p->GetTailAddr();
 
-			if (pTailPtr == top) {
-				// 連続する
-				return p;
-			}
-		}
-	}
+            if (pTailPtr == top) {
+                // 連続する
+                return p;
+            }
+        }
+    }
 
-	return IZ_NULL;
+    return IZ_NULL;
 }
 
 // SHeapHeader探索
 CStandardMemoryAllocator::SHeapHeader* CStandardMemoryAllocator::FindAllocatedHeapHeader(void* ptr)
 {
-	IZ_UINT8* pFreeAddr = reinterpret_cast<IZ_UINT8*>(ptr);
+    IZ_UINT8* pFreeAddr = reinterpret_cast<IZ_UINT8*>(ptr);
 
-	SHeapHeader* p = m_AllocList.GetTop();
+    SHeapHeader* p = m_AllocList.GetTop();
 
-	while (p != IZ_NULL) {
-		if (p->buf == pFreeAddr) {
-			break;
-		}
+    while (p != IZ_NULL) {
+        if (p->buf == pFreeAddr) {
+            break;
+        }
 
-		p = p->next;
-	}
+        p = p->next;
+    }
 
-	return p;
+    return p;
 }
 
 // SHeapHeader確保
 CStandardMemoryAllocator::SHeapHeader* CStandardMemoryAllocator::GetHeapHeader(IZ_UINT8* buf)
 {
-	SHeapHeader* ret = IZ_NULL;
+    SHeapHeader* ret = IZ_NULL;
 
-	if (buf + sizeof(SHeapHeader) < m_pBuf + m_nBufSize) {
-		ret = reinterpret_cast<SHeapHeader*>(buf);
-		ret->Init();
-	}
+    if (buf + sizeof(SHeapHeader) < m_pBuf + m_nBufSize) {
+        ret = reinterpret_cast<SHeapHeader*>(buf);
+        ret->Init();
+    }
 
-	return ret;
+    return ret;
 }

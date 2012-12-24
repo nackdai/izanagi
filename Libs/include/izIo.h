@@ -12,4 +12,4 @@
 #include "io/FileOutputStream.h"
 #include "io/MemoryOutputStream.h"
 
-#endif	// #if !defined(__IZANAGI_IO_H__)
+#endif  // #if !defined(__IZANAGI_IO_H__)

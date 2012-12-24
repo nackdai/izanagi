@@ -48,4 +48,4 @@
 #include "scenegraph/mtrl/MTRLFormat.h"
 #include "scenegraph/mtrl/izMaterial.h"
 
-#endif	// #if !defined(__IZANAGI_SCENE_GRAPH_H__)
+#endif  // #if !defined(__IZANAGI_SCENE_GRAPH_H__)

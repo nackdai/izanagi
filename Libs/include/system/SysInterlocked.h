@@ -19,4 +19,4 @@
 #else
 #endif
 
-#endif	// #if !defined(__IZANAGI_SYSTEM_SYS_INTERLOCKED_H__)
+#endif  // #if !defined(__IZANAGI_SYSTEM_SYS_INTERLOCKED_H__)

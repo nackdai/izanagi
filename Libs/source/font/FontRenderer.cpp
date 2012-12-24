@@ -8,27 +8,27 @@ using namespace izanagi;
 /**
 */
 CFontRenderer* CFontRenderer::CreateFontRendererBmp(
-	IMemoryAllocator* pAllocator,
-	graph::CGraphicsDevice* pDevice,
-	IZ_UINT	nMaxRegisterNum,
-	IInputStream* in)
+    IMemoryAllocator* pAllocator,
+    graph::CGraphicsDevice* pDevice,
+    IZ_UINT nMaxRegisterNum,
+    IInputStream* in)
 {
-	CFontRenderer* ret = CFontRendererBmp::CreateFontRendererBmp(
-							pAllocator,
-							pDevice,
-							nMaxRegisterNum,
-							in);
-	return ret;
+    CFontRenderer* ret = CFontRendererBmp::CreateFontRendererBmp(
+                            pAllocator,
+                            pDevice,
+                            nMaxRegisterNum,
+                            in);
+    return ret;
 }
 
 /**
 */
 CFontRenderer* CreateFontRendererFT(
-	IMemoryAllocator* pAllocator,
-	graph::CGraphicsDevice* pDevice,
-	IZ_UINT	nMaxRegisterNum)
+    IMemoryAllocator* pAllocator,
+    graph::CGraphicsDevice* pDevice,
+    IZ_UINT nMaxRegisterNum)
 {
-	// TODO
-	IZ_ASSERT(IZ_FALSE);
-	return IZ_NULL;
+    // TODO
+    IZ_ASSERT(IZ_FALSE);
+    return IZ_NULL;
 }

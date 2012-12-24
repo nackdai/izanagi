@@ -8,37 +8,37 @@ namespace izanagi
 namespace graph
 {
     class CGraphicsDeviceDX9;
-	class CTexture;
+    class CTexture;
 
     // サーフェース
-	class CSurfaceDX9 : public CSurface
+    class CSurfaceDX9 : public CSurface
     {
         friend class CTextureDX9;
         friend class CGraphicsDeviceDX9;
 
-	private:
-		// サーフェース作成.
-		static CSurface* CreateDepthStencilSurface(
-			IMemoryAllocator* allocator,
-			CGraphicsDeviceDX9* device,
-			IZ_UINT width, 
-			IZ_UINT height,
-			E_GRAPH_PIXEL_FMT fmt);
+    private:
+        // サーフェース作成.
+        static CSurface* CreateDepthStencilSurface(
+            IMemoryAllocator* allocator,
+            CGraphicsDeviceDX9* device,
+            IZ_UINT width, 
+            IZ_UINT height,
+            E_GRAPH_PIXEL_FMT fmt);
 
-		// サーフェス作成
-		static CSurfaceDX9* CreateSurface(IMemoryAllocator* allocator);
+        // サーフェス作成
+        static CSurfaceDX9* CreateSurface(IMemoryAllocator* allocator);
 
-	protected:
-		inline CSurfaceDX9();
-		virtual inline ~CSurfaceDX9();
+    protected:
+        inline CSurfaceDX9();
+        virtual inline ~CSurfaceDX9();
 
     public:
-		virtual IZ_UINT GetWidth() const
+        virtual IZ_UINT GetWidth() const
         {
             return m_Desc.Width;
         }
 
-		virtual IZ_UINT GetHeight() const
+        virtual IZ_UINT GetHeight() const
         {
             return m_Desc.Height;
         }
@@ -48,28 +48,28 @@ namespace graph
             return GetRawInterface();
         }
 
-	public:
-		// リセット
-		virtual IZ_BOOL Reset(
-			CTexture* texture,
-			IZ_UINT level);
+    public:
+        // リセット
+        virtual IZ_BOOL Reset(
+            CTexture* texture,
+            IZ_UINT level);
 
-		// うーん・・・
-		IZ_BOOL SetDesc();
+        // うーん・・・
+        IZ_BOOL SetDesc();
 
-		void ReleaseResource();
+        void ReleaseResource();
 
-	public:
-		D3D_SURFACE* GetRawInterface() { return m_Surface; }
+    public:
+        D3D_SURFACE* GetRawInterface() { return m_Surface; }
 
-	private:
-		// 本体
-		D3D_SURFACE* m_Surface;
+    private:
+        // 本体
+        D3D_SURFACE* m_Surface;
 
-		// 記述
-		D3DSURFACE_DESC m_Desc;
-	};
+        // 記述
+        D3DSURFACE_DESC m_Desc;
+    };
 }   // namespace graph
-}	// namespace izanagi
+}   // namespace izanagi
 
-#endif	// #if !defined(__IZANAGI_GRAPH_SURFACE_DX9_H__)
+#endif  // #if !defined(__IZANAGI_GRAPH_SURFACE_DX9_H__)

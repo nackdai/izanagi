@@ -13,36 +13,36 @@ namespace sys
         IMemoryAllocator* pAllocator,
         IZ_FLOAT analogStickDeadZone)
     {
-	    IZ_UINT8* pBuf = IZ_NULL;
-	    CPadXInput* pInstance = IZ_NULL;
-	    IZ_BOOL result = IZ_FALSE;
+        IZ_UINT8* pBuf = IZ_NULL;
+        CPadXInput* pInstance = IZ_NULL;
+        IZ_BOOL result = IZ_FALSE;
 
-	    // メモリ確保
-	    pBuf = (IZ_UINT8*)ALLOC_ZERO(pAllocator, sizeof(CPadXInput));
-	    result = (pBuf != IZ_NULL);
-	    if (!result) {
-		    IZ_ASSERT(IZ_FALSE);
-		    goto __EXIT__;
-	    }
+        // メモリ確保
+        pBuf = (IZ_UINT8*)ALLOC_ZERO(pAllocator, sizeof(CPadXInput));
+        result = (pBuf != IZ_NULL);
+        if (!result) {
+            IZ_ASSERT(IZ_FALSE);
+            goto __EXIT__;
+        }
 
-	    // インスタンス作成
-	    pInstance = new(pBuf) CPadXInput;
-	    {
-		    pInstance->AddRef();
-		    pInstance->m_Allocator = pAllocator;
+        // インスタンス作成
+        pInstance = new(pBuf) CPadXInput;
+        {
+            pInstance->AddRef();
+            pInstance->m_Allocator = pAllocator;
             pInstance->m_AnalogStickDeadZone = analogStickDeadZone;
-	    }
+        }
 
     __EXIT__:
-	    if (!result) {
-		    if (pInstance != IZ_NULL) {
-			    SAFE_RELEASE(pInstance);
-		    }
-		    else {
-			    pAllocator->Free(pBuf);
-		    }
-	    }
-	    return pInstance;
+        if (!result) {
+            if (pInstance != IZ_NULL) {
+                SAFE_RELEASE(pInstance);
+            }
+            else {
+                pAllocator->Free(pBuf);
+            }
+        }
+        return pInstance;
     }
 
     // コンストラクタ
@@ -88,30 +88,30 @@ namespace sys
         if (ret)
         {
             // 前の状態を保持
-		    memcpy(&m_LastState, &m_CurState, sizeof(m_CurState));
+            memcpy(&m_LastState, &m_CurState, sizeof(m_CurState));
 
             static IZ_UINT btnflags[] =
             {
                 XINPUT_GAMEPAD_A,               // E_PAD_BUTTON_R_DOWN,
-		        XINPUT_GAMEPAD_B,               // E_PAD_BUTTON_R_RIGHT,
+                XINPUT_GAMEPAD_B,               // E_PAD_BUTTON_R_RIGHT,
                 XINPUT_GAMEPAD_X,               // E_PAD_BUTTON_R_LEFT,
                 XINPUT_GAMEPAD_Y,               // E_PAD_BUTTON_R_UP,
 
-		        XINPUT_GAMEPAD_LEFT_SHOULDER,   // E_PAD_BUTTON_L_1,
-		        XINPUT_GAMEPAD_RIGHT_SHOULDER,  // E_PAD_BUTTON_R_1,
+                XINPUT_GAMEPAD_LEFT_SHOULDER,   // E_PAD_BUTTON_L_1,
+                XINPUT_GAMEPAD_RIGHT_SHOULDER,  // E_PAD_BUTTON_R_1,
 
-		        XINPUT_GAMEPAD_BACK,            // E_PAD_BUTTON_SELECT,
-		        XINPUT_GAMEPAD_START,           // E_PAD_BUTTON_START,
+                XINPUT_GAMEPAD_BACK,            // E_PAD_BUTTON_SELECT,
+                XINPUT_GAMEPAD_START,           // E_PAD_BUTTON_START,
 
-		        XINPUT_GAMEPAD_LEFT_THUMB,      // E_PAD_BUTTON_L_3,
-		        XINPUT_GAMEPAD_RIGHT_THUMB,     // E_PAD_BUTTON_R_3,
+                XINPUT_GAMEPAD_LEFT_THUMB,      // E_PAD_BUTTON_L_3,
+                XINPUT_GAMEPAD_RIGHT_THUMB,     // E_PAD_BUTTON_R_3,
 
                 // TODO
                 0,
-		        0,
+                0,
 
                 XINPUT_GAMEPAD_DPAD_UP,         // E_PAD_BUTTON_L_UP,
-		        XINPUT_GAMEPAD_DPAD_RIGHT,      // E_PAD_BUTTON_L_RIGHT,
+                XINPUT_GAMEPAD_DPAD_RIGHT,      // E_PAD_BUTTON_L_RIGHT,
                 XINPUT_GAMEPAD_DPAD_DOWN,       // E_PAD_BUTTON_L_DOWN,
                 XINPUT_GAMEPAD_DPAD_LEFT,       // E_PAD_BUTTON_L_LEFT,
             };

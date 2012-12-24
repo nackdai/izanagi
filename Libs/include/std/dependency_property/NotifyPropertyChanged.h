@@ -5,25 +5,25 @@
 #include "std/StdEvent.h"
 
 namespace izanagi {
-	class DependencyProperty;
+    class DependencyProperty;
 
-	/**
-	 */
-	class NullClass {};
+    /**
+     */
+    class NullClass {};
 
-	/** プロパティの変更を通知するためのインターフェース
-	 */
-	template <typename T = NullClass>
-	class INotifyPropertyChanged : public T
-	{
-	public:
-		INotifyPropertyChanged() {}
-		virtual ~INotifyPropertyChanged() {}
+    /** プロパティの変更を通知するためのインターフェース
+     */
+    template <typename T = NullClass>
+    class INotifyPropertyChanged : public T
+    {
+    public:
+        INotifyPropertyChanged() {}
+        virtual ~INotifyPropertyChanged() {}
 
-		/**
-		 */
-		virtual CStdEvent<void, const DependencyProperty&>& PropertyChanged() = 0;
-	};
-}	// namespace izanagi
+        /**
+         */
+        virtual CStdEvent<void, const DependencyProperty&>& PropertyChanged() = 0;
+    };
+}   // namespace izanagi
 
-#endif	// #if !defined(__IZANAGI_STD_NOTIFY_PROPERTY_CHANGED_H__)
+#endif  // #if !defined(__IZANAGI_STD_NOTIFY_PROPERTY_CHANGED_H__)

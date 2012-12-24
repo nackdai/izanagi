@@ -2,5 +2,5 @@
 
 namespace izanagi
 {
-	IZ_UINT Binding::PropertyNameMax = DependencyProperty::PropertyNameMax;
-}	// namespace izanagi
+    IZ_UINT Binding::PropertyNameMax = DependencyProperty::PropertyNameMax;
+}   // namespace izanagi

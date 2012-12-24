@@ -24,16 +24,16 @@ namespace izanagi
         /** 登録要素数取得
          */
         IZ_UINT GetItemNum() const
-		{
+        {
             return m_List.GetItemNum();
-		}
+        }
 
         /** 要素が登録されているかどうか
          */
-		IZ_BOOL HasItem()
-		{
+        IZ_BOOL HasItem()
+        {
             return m_List.HasItem();
-		}
+        }
 
         /** エンキュー
          */
@@ -101,6 +101,6 @@ namespace izanagi
     private:
         CStdList<_T> m_List;
     };
-}	// namespace izanagi
+}   // namespace izanagi
 
-#endif	// #if !defined(__IZANAGI_STD_LIST_H__)
+#endif  // #if !defined(__IZANAGI_STD_LIST_H__)

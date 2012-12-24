@@ -5,4 +5,4 @@
 #include "animation/TweenerInterpolater.h"
 #include "animation/FuncCurveInterpolater.h"
 
-#endif	// #if !defined(__IZANAGI_ANIMATION_H__)
+#endif  // #if !defined(__IZANAGI_ANIMATION_H__)

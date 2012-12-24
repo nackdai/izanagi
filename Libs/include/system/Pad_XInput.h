@@ -13,22 +13,22 @@ namespace sys
     {
         friend class CPad;
 
-	private:
-		// インスタンス作成
-		static CPad* CreatePad(
+    private:
+        // インスタンス作成
+        static CPad* CreatePad(
             IMemoryAllocator* pAllocator,
             IZ_FLOAT analogStickDeadZone);
 
-	private:
-		CPadXInput();
-		virtual ~CPadXInput();
+    private:
+        CPadXInput();
+        virtual ~CPadXInput();
 
-	private:
+    private:
         // 初期化
-		IZ_BOOL Init(IZ_FLOAT analogStickDeadZone);
+        IZ_BOOL Init(IZ_FLOAT analogStickDeadZone);
 
-		// 更新
-		virtual IZ_BOOL Update();
+        // 更新
+        virtual IZ_BOOL Update();
 
         virtual IZ_BOOL IsEnableVibrate() const
         {
@@ -40,10 +40,10 @@ namespace sys
             return &m_RawState;
         }
 
-	protected:
+    protected:
         XINPUT_STATE m_RawState;
-	};
+    };
 }   // namespace sys
-}	// namespace izanagi
+}   // namespace izanagi
 
-#endif	// #if !defined(__IZANAGI_SYSTEM_PAD_XINPUT_H__)
+#endif  // #if !defined(__IZANAGI_SYSTEM_PAD_XINPUT_H__)

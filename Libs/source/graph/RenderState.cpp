@@ -7,7 +7,7 @@ namespace graph
     // コンストラクタ
     CRenderState::CRenderState()
     {
-	    m_IsSavedRS = IZ_FALSE;
+        m_IsSavedRS = IZ_FALSE;
     }
 
     // デストラクタ
@@ -18,42 +18,42 @@ namespace graph
     // 現在のレンダーステートを保存
     IZ_BOOL CRenderState::Save()
     {
-	    // 保持中でないこと
-	    IZ_ASSERT(!m_IsSavedRS);
+        // 保持中でないこと
+        IZ_ASSERT(!m_IsSavedRS);
 
-	    IZ_BOOL ret = IZ_FALSE;
+        IZ_BOOL ret = IZ_FALSE;
 
-	    if (!m_IsSavedRS) {
-		    memcpy(&m_SaveRS.dwRS, this->dwRS, sizeof(m_SaveRS.dwRS));
+        if (!m_IsSavedRS) {
+            memcpy(&m_SaveRS.dwRS, this->dwRS, sizeof(m_SaveRS.dwRS));
 
-		    m_IsSavedRS = IZ_TRUE;
-		    ret = IZ_TRUE;
-	    }
+            m_IsSavedRS = IZ_TRUE;
+            ret = IZ_TRUE;
+        }
 
-	    return ret;
+        return ret;
     }
 
     // 保存したレンダーステートを元に戻す
     IZ_BOOL CRenderState::Load(CGraphicsDevice* pDevice)
     {
-	    // 保持中であること
-	    IZ_ASSERT(m_IsSavedRS);
+        // 保持中であること
+        IZ_ASSERT(m_IsSavedRS);
 
-	    IZ_BOOL ret = IZ_FALSE;
+        IZ_BOOL ret = IZ_FALSE;
 
-	    if (m_IsSavedRS) {
-		    for (IZ_UINT i = 0; i < E_GRAPH_RS_NUM; ++i) {
-			    SetRenderState(
-				    pDevice,
-				    static_cast<E_GRAPH_RENDER_STATE>(i),
-				    m_SaveRS.dwRS[i]);
-		    }
+        if (m_IsSavedRS) {
+            for (IZ_UINT i = 0; i < E_GRAPH_RS_NUM; ++i) {
+                SetRenderState(
+                    pDevice,
+                    static_cast<E_GRAPH_RENDER_STATE>(i),
+                    m_SaveRS.dwRS[i]);
+            }
 
-		    m_IsSavedRS = IZ_FALSE;
-		    ret = IZ_TRUE;
-	    }
+            m_IsSavedRS = IZ_FALSE;
+            ret = IZ_TRUE;
+        }
 
-	    return ret;
+        return ret;
     }
 }   // namespace graph
 }   // namespace izanagi

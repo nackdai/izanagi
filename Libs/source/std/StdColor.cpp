@@ -3,12 +3,12 @@
 
 using namespace izanagi;
 
-#define SET_COLOR_VAL(p, v)	if (p != IZ_NULL) { *(p) = (v); }
+#define SET_COLOR_VAL(p, v) if (p != IZ_NULL) { *(p) = (v); }
 
 static const IZ_FLOAT _Div = 1.0f / 255.0f;
-#define BYTE_TO_FLOAT(n)	n * _Div;
+#define BYTE_TO_FLOAT(n)    n * _Div;
 
-#define SATURATE(v)	math::CMath::Clamp(v, 0.0f, 1.0f)
+#define SATURATE(v) math::CMath::Clamp(v, 0.0f, 1.0f)
 
 ///////////////////////////////////////////////////////////////
 // YUV
@@ -38,30 +38,30 @@ static const IZ_FLOAT _Div = 1.0f / 255.0f;
 
 void CColor::SetYUV(IZ_FLOAT _y, IZ_FLOAT _u, IZ_FLOAT _v)
 {
-	_y = math::CMath::Clamp(_y, 0.0f, 1.0f);
-	_u = math::CMath::Clamp(_u, -0.70109f, 0.70109f);
-	_v = math::CMath::Clamp(_v, -0.88552f, 0.88552f);
+    _y = math::CMath::Clamp(_y, 0.0f, 1.0f);
+    _u = math::CMath::Clamp(_u, -0.70109f, 0.70109f);
+    _v = math::CMath::Clamp(_v, -0.88552f, 0.88552f);
 
-	IZ_FLOAT fR = SATURATE(_y + _u);
-	IZ_FLOAT fG = SATURATE(_y - 0.50955f * _u - 0.19516f * _v);
-	IZ_FLOAT fB = SATURATE(_y + _v);
+    IZ_FLOAT fR = SATURATE(_y + _u);
+    IZ_FLOAT fG = SATURATE(_y - 0.50955f * _u - 0.19516f * _v);
+    IZ_FLOAT fB = SATURATE(_y + _v);
 
-	r = static_cast<IZ_BYTE>(fR * 255);
-	g = static_cast<IZ_BYTE>(fG * 255);
-	b = static_cast<IZ_BYTE>(fB * 255);
+    r = static_cast<IZ_BYTE>(fR * 255);
+    g = static_cast<IZ_BYTE>(fG * 255);
+    b = static_cast<IZ_BYTE>(fB * 255);
 }
 
 void CColor::GetYUV(IZ_FLOAT* _y, IZ_FLOAT* _u, IZ_FLOAT* _v)
 {
-	IZ_FLOAT fR = BYTE_TO_FLOAT(r);
-	IZ_FLOAT fG = BYTE_TO_FLOAT(g);
-	IZ_FLOAT fB = BYTE_TO_FLOAT(b);
+    IZ_FLOAT fR = BYTE_TO_FLOAT(r);
+    IZ_FLOAT fG = BYTE_TO_FLOAT(g);
+    IZ_FLOAT fB = BYTE_TO_FLOAT(b);
 
-	IZ_FLOAT y = SATURATE(0.29891f * fR + 0.58661f * fG + 0.11448f * fB);
+    IZ_FLOAT y = SATURATE(0.29891f * fR + 0.58661f * fG + 0.11448f * fB);
 
-	SET_COLOR_VAL(_y, y);
-	SET_COLOR_VAL(_u, fR - y);
-	SET_COLOR_VAL(_v, fB - y);
+    SET_COLOR_VAL(_y, y);
+    SET_COLOR_VAL(_u, fR - y);
+    SET_COLOR_VAL(_v, fB - y);
 }
 
 ///////////////////////////////////////////////////////////////
@@ -101,28 +101,28 @@ void CColor::GetYUV(IZ_FLOAT* _y, IZ_FLOAT* _u, IZ_FLOAT* _v)
 
 void CColor::SetYCbCr(IZ_FLOAT y, IZ_FLOAT cb, IZ_FLOAT cr)
 {
-	y = math::CMath::Clamp(y,  0.0f, 1.0f);
-	cb = math::CMath::Clamp(cb, -0.5f, 0.5f);
-	cr = math::CMath::Clamp(cr, -0.5f, 0.5f);
+    y = math::CMath::Clamp(y,  0.0f, 1.0f);
+    cb = math::CMath::Clamp(cb, -0.5f, 0.5f);
+    cr = math::CMath::Clamp(cr, -0.5f, 0.5f);
 
-	IZ_FLOAT fR = SATURATE(y + 1.40218f * cr);
-	IZ_FLOAT fG = SATURATE(y - 0.50955f * 1.40218f * cr - 0.19516f * 1.77104f * cb);
-	IZ_FLOAT fB = SATURATE(y + 1.77104f * cb);
+    IZ_FLOAT fR = SATURATE(y + 1.40218f * cr);
+    IZ_FLOAT fG = SATURATE(y - 0.50955f * 1.40218f * cr - 0.19516f * 1.77104f * cb);
+    IZ_FLOAT fB = SATURATE(y + 1.77104f * cb);
 
-	r = static_cast<IZ_BYTE>(fR * 255);
-	g = static_cast<IZ_BYTE>(fG * 255);
-	b = static_cast<IZ_BYTE>(fB * 255);
+    r = static_cast<IZ_BYTE>(fR * 255);
+    g = static_cast<IZ_BYTE>(fG * 255);
+    b = static_cast<IZ_BYTE>(fB * 255);
 }
 
 void CColor::GetYCbCr(IZ_FLOAT* y, IZ_FLOAT* cb, IZ_FLOAT* cr)
 {
-	IZ_FLOAT fR = BYTE_TO_FLOAT(r);
-	IZ_FLOAT fG = BYTE_TO_FLOAT(g);
-	IZ_FLOAT fB = BYTE_TO_FLOAT(b);
+    IZ_FLOAT fR = BYTE_TO_FLOAT(r);
+    IZ_FLOAT fG = BYTE_TO_FLOAT(g);
+    IZ_FLOAT fB = BYTE_TO_FLOAT(b);
 
-	SET_COLOR_VAL(y,   0.29891f * fR + 0.58661f * fG + 0.11448f * fB);
-	SET_COLOR_VAL(cb, -0.16878f * fR - 0.33122f * fG + 0.50000f * fB);
-	SET_COLOR_VAL(cr,  0.50000f * fR - 0.41836f * fG - 0.08164f * fB);
+    SET_COLOR_VAL(y,   0.29891f * fR + 0.58661f * fG + 0.11448f * fB);
+    SET_COLOR_VAL(cb, -0.16878f * fR - 0.33122f * fG + 0.50000f * fB);
+    SET_COLOR_VAL(cr,  0.50000f * fR - 0.41836f * fG - 0.08164f * fB);
 }
 
 ///////////////////////////////////////////////////////////////
@@ -177,21 +177,21 @@ void CColor::GetYCbCr(IZ_FLOAT* y, IZ_FLOAT* cb, IZ_FLOAT* cr)
 
 void CColor::SetYIQ(IZ_FLOAT y, IZ_FLOAT i, IZ_FLOAT q)
 {
-	IZ_FLOAT u = 0.95608f * i + 0.62089f * q;
-	IZ_FLOAT _v = -1.10560f * i + 1.70249f *q;
+    IZ_FLOAT u = 0.95608f * i + 0.62089f * q;
+    IZ_FLOAT _v = -1.10560f * i + 1.70249f *q;
 
-	SetYUV(y, u, _v);
+    SetYUV(y, u, _v);
 }
 
 void CColor::GetYIQ(IZ_FLOAT* y, IZ_FLOAT* i, IZ_FLOAT* q)
 {
-	IZ_FLOAT fR = BYTE_TO_FLOAT(r);
-	IZ_FLOAT fG = BYTE_TO_FLOAT(g);
-	IZ_FLOAT fB = BYTE_TO_FLOAT(b);
+    IZ_FLOAT fR = BYTE_TO_FLOAT(r);
+    IZ_FLOAT fG = BYTE_TO_FLOAT(g);
+    IZ_FLOAT fB = BYTE_TO_FLOAT(b);
 
-	SET_COLOR_VAL(y, 0.29891f * fR + 0.58661f * fG + 0.11448f * fB);
-	SET_COLOR_VAL(i, 0.59598f * fR - 0.27417f * fG - 0.32181f * fB);
-	SET_COLOR_VAL(q, 0.21145f * fR - 0.52260f * fG + 0.31115f * fB);
+    SET_COLOR_VAL(y, 0.29891f * fR + 0.58661f * fG + 0.11448f * fB);
+    SET_COLOR_VAL(i, 0.59598f * fR - 0.27417f * fG - 0.32181f * fB);
+    SET_COLOR_VAL(q, 0.21145f * fR - 0.52260f * fG + 0.31115f * fB);
 }
 
 ///////////////////////////////////////////////////////////////
@@ -215,28 +215,28 @@ void CColor::GetYIQ(IZ_FLOAT* y, IZ_FLOAT* i, IZ_FLOAT* q)
 
 void CColor::SetHLS(IZ_FLOAT h, IZ_FLOAT l, IZ_FLOAT s)
 {
-	IZ_FLOAT fSin, fCos;
-	math::CMath::GetSinCosF(h, fSin, fCos);
+    IZ_FLOAT fSin, fCos;
+    math::CMath::GetSinCosF(h, fSin, fCos);
 
-	IZ_FLOAT u = s * fSin;
-	IZ_FLOAT _v = s * fCos;
+    IZ_FLOAT u = s * fSin;
+    IZ_FLOAT _v = s * fCos;
 
-	SetYUV(l, u, _v);
+    SetYUV(l, u, _v);
 }
 
 void CColor::GetHLS(IZ_FLOAT* h, IZ_FLOAT* l, IZ_FLOAT* s)
 {
-	IZ_FLOAT fR = BYTE_TO_FLOAT(r);
-	IZ_FLOAT fG = BYTE_TO_FLOAT(g);
-	IZ_FLOAT fB = BYTE_TO_FLOAT(b);
+    IZ_FLOAT fR = BYTE_TO_FLOAT(r);
+    IZ_FLOAT fG = BYTE_TO_FLOAT(g);
+    IZ_FLOAT fB = BYTE_TO_FLOAT(b);
 
-	IZ_FLOAT _y = SATURATE(0.29891f * fR + 0.58661f * fG + 0.11448f * fB);
-	IZ_FLOAT _u = fR - _y;
-	IZ_FLOAT _v = fB - _y;
+    IZ_FLOAT _y = SATURATE(0.29891f * fR + 0.58661f * fG + 0.11448f * fB);
+    IZ_FLOAT _u = fR - _y;
+    IZ_FLOAT _v = fB - _y;
 
-	SET_COLOR_VAL(l, _y);
-	SET_COLOR_VAL(h, atanf(_u / _v));
-	SET_COLOR_VAL(s, sqrtf(_u * _u + _v * _v));
+    SET_COLOR_VAL(l, _y);
+    SET_COLOR_VAL(h, atanf(_u / _v));
+    SET_COLOR_VAL(s, sqrtf(_u * _u + _v * _v));
 }
 
 ///////////////////////////////////////////////////////////////
@@ -256,14 +256,14 @@ void CColor::GetHLS(IZ_FLOAT* h, IZ_FLOAT* l, IZ_FLOAT* s)
 
 void CColor::SetCMY(IZ_UINT8 c, IZ_UINT8 m, IZ_UINT8 y)
 {
-	r = 255 - c;
-	g = 255 - m;
-	b = 255 - y;
+    r = 255 - c;
+    g = 255 - m;
+    b = 255 - y;
 }
 
 void CColor::GetCMY(IZ_UINT8* c, IZ_UINT8* m, IZ_UINT8* y)
 {
-	SET_COLOR_VAL(c, 255 - r);
-	SET_COLOR_VAL(m, 255 - g);
-	SET_COLOR_VAL(y, 255 - b);
+    SET_COLOR_VAL(c, 255 - r);
+    SET_COLOR_VAL(m, 255 - g);
+    SET_COLOR_VAL(y, 255 - b);
 }

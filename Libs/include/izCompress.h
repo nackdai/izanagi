@@ -4,4 +4,4 @@
 #include "compress/Compressor.h"
 #include "compress/CMPFormat.h"
 
-#endif	// #if !defined(__IZANAGI_COMREPSS_H__)
+#endif  // #if !defined(__IZANAGI_COMREPSS_H__)

@@ -7,21 +7,21 @@ namespace izanagi
 {
 namespace sys
 {
-	/**
-	*/
-	class CSysUtil {
-	private:
-		CSysUtil();
-		~CSysUtil();
+    /**
+    */
+    class CSysUtil {
+    private:
+        CSysUtil();
+        ~CSysUtil();
 
-		NO_COPIABLE(CSysUtil);
+        NO_COPIABLE(CSysUtil);
 
-	public:
-		/** 実行プログラムの位置からカレントディレクトリを設定.
-		 */
-		static IZ_BOOL SetCurrentDirectoryFromExe();
-	};
+    public:
+        /** 実行プログラムの位置からカレントディレクトリを設定.
+         */
+        static IZ_BOOL SetCurrentDirectoryFromExe();
+    };
 }   // namespace sys
-}	// namespace izanagi
+}   // namespace izanagi
 
-#endif	// #if !defined(__IZANAGI_SYSTEM_SYS_UTIL_H__)
+#endif  // #if !defined(__IZANAGI_SYSTEM_SYS_UTIL_H__)

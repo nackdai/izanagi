@@ -4,76 +4,76 @@
 #include "MSHFormat.h"
 
 namespace izanagi {
-	class graph::CGraphicsDevice;
-	class graph::CVertexDeclaration;
-	class IInputStream;
-	class CPrimitiveSet;
-	class CSkeletonInstance;
-	class IMshRenderHandler;
+    class graph::CGraphicsDevice;
+    class graph::CVertexDeclaration;
+    class IInputStream;
+    class CPrimitiveSet;
+    class CSkeletonInstance;
+    class IMshRenderHandler;
 
-	/** メッシュセット.
-	 *
-	 * マテリアルごとのプリミティブセットの集まり
-	 */
-	class CMeshSet : public CObject {
-		friend class CMesh;
-		friend class CMeshGroup;
-		friend class CMeshSetInstance;
+    /** メッシュセット.
+     *
+     * マテリアルごとのプリミティブセットの集まり
+     */
+    class CMeshSet : public CObject {
+        friend class CMesh;
+        friend class CMeshGroup;
+        friend class CMeshSetInstance;
 
-	private:
-		CMeshSet();
-		~CMeshSet();
+    private:
+        CMeshSet();
+        ~CMeshSet();
 
-		NO_COPIABLE(CMeshSet);
+        NO_COPIABLE(CMeshSet);
 
-		void InternalRelease() { delete this; }
+        void InternalRelease() { delete this; }
 
-	private:
-		/** 描画.
-		 */
-		IZ_BOOL Render(
-			graph::CGraphicsDevice* pDevice,
-			CSkeletonInstance* pSkeleton,
-			IMshRenderHandler* pRenderHandler);
+    private:
+        /** 描画.
+         */
+        IZ_BOOL Render(
+            graph::CGraphicsDevice* pDevice,
+            CSkeletonInstance* pSkeleton,
+            IMshRenderHandler* pRenderHandler);
 
-		IZ_UINT8* Read(
-			IZ_UINT8* pBuf,
-			graph::CGraphicsDevice* pDevice,
-			IInputStream* pIn);
+        IZ_UINT8* Read(
+            IZ_UINT8* pBuf,
+            graph::CGraphicsDevice* pDevice,
+            IInputStream* pIn);
 
-		CPrimitiveSet* GetPrimSet(IZ_UINT idx);
+        CPrimitiveSet* GetPrimSet(IZ_UINT idx);
 
-		inline void GetCenter(math::SVector& vPos);
+        inline void GetCenter(math::SVector& vPos);
 
-		/** マテリアル情報の取得.
-		 */
-		const S_MSH_MTRL& GetMtrlInfo() const { return m_Info.mtrl; }
+        /** マテリアル情報の取得.
+         */
+        const S_MSH_MTRL& GetMtrlInfo() const { return m_Info.mtrl; }
 
-		/** プリミティブセット総数を取得.
-		 */
-		IZ_UINT GetPrimSetNum() const { return m_Info.numSubset; }
+        /** プリミティブセット総数を取得.
+         */
+        IZ_UINT GetPrimSetNum() const { return m_Info.numSubset; }
 
-		/** 描画に利用する頂点宣言を取得.
-		 */
-		graph::CVertexDeclaration* GetVD() { return m_VD; }
+        /** 描画に利用する頂点宣言を取得.
+         */
+        graph::CVertexDeclaration* GetVD() { return m_VD; }
 
-	private:
-		S_MSH_MESH_SET m_Info;
+    private:
+        S_MSH_MESH_SET m_Info;
 
-		graph::CVertexDeclaration* m_VD;
-		
-		CPrimitiveSet** m_pPrimSet;
-	};
+        graph::CVertexDeclaration* m_VD;
+        
+        CPrimitiveSet** m_pPrimSet;
+    };
 
-	// inline *************************************
+    // inline *************************************
 
-	void CMeshSet::GetCenter(math::SVector& vPos)
-	{
-		vPos.x = m_Info.center[0];
-		vPos.y = m_Info.center[1];
-		vPos.z = m_Info.center[2];
-		vPos.w = 1.0f;
-	}
-}	// namespace izanagi
+    void CMeshSet::GetCenter(math::SVector& vPos)
+    {
+        vPos.x = m_Info.center[0];
+        vPos.y = m_Info.center[1];
+        vPos.z = m_Info.center[2];
+        vPos.w = 1.0f;
+    }
+}   // namespace izanagi
 
-#endif	// #if !defined(__IZANAGI_SCENEGRAPH_MDL_MESH_H__)
+#endif  // #if !defined(__IZANAGI_SCENEGRAPH_MDL_MESH_H__)

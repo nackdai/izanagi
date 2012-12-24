@@ -11,26 +11,26 @@ namespace sys
     // 実行プログラムの位置からカレントディレクトリを設定.
     IZ_BOOL CSysUtil::SetCurrentDirectoryFromExe()
     {
-	    static izChar buf[_MAX_PATH];
+        static izChar buf[_MAX_PATH];
 
-	    // 実行プログラムのフルパスを取得
-	    {
-		    DWORD result = ::GetModuleFileName(
-						    IZ_NULL,
-						    buf,
-						    sizeof(buf));
-		    VRETURN(result > 0);
-	    }
+        // 実行プログラムのフルパスを取得
+        {
+            DWORD result = ::GetModuleFileName(
+                            IZ_NULL,
+                            buf,
+                            sizeof(buf));
+            VRETURN(result > 0);
+        }
 
-	    // ファイル名を取り除く
-	    BOOL result = ::PathRemoveFileSpec(buf);
-	    VRETURN(result);
+        // ファイル名を取り除く
+        BOOL result = ::PathRemoveFileSpec(buf);
+        VRETURN(result);
 
-	    // カレントディレクトリを設定
-	    result = ::SetCurrentDirectory(buf);
-	    VRETURN(result);
+        // カレントディレクトリを設定
+        result = ::SetCurrentDirectory(buf);
+        VRETURN(result);
 
-	    return result;
+        return result;
     }
 }   // namespace sys
 }   // namespace izanagi

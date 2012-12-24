@@ -9,65 +9,65 @@ namespace sys
 {
     CEvent::CEvent()
     {
-	    m_Handle = IZ_NULL;
+        m_Handle = IZ_NULL;
     }
 
     CEvent::~CEvent()
     {
-	    Close();
+        Close();
     }
 
     // 初期化.
     IZ_BOOL CEvent::Open()
     {
-	    // NOTE
-	    // ・自動リセット
-	    // 　-> 待機関数が制御を返す前に自動的に非シグナル状態になるようにする
-	    // 　-> Wait終了時に自動で非シグナル状態になる
-	    // ・手動リセット
-	    //   -> ResetEvent() 関数を使って明示的に非シグナル状態に再設定しなければならない
+        // NOTE
+        // ・自動リセット
+        // 　-> 待機関数が制御を返す前に自動的に非シグナル状態になるようにする
+        // 　-> Wait終了時に自動で非シグナル状態になる
+        // ・手動リセット
+        //   -> ResetEvent() 関数を使って明示的に非シグナル状態に再設定しなければならない
 
-	    // 手動リセット
-	    // 非シグナル状態
-	    m_Handle = ::CreateEvent(
-				    IZ_NULL,	// Security
-				    IZ_TRUE,	// ManualReset
-				    IZ_FALSE,	// InitialState -> TRUEだとシグナル状態、FALSEだと非シグナル状態
-				    IZ_NULL);	// EventName
+        // 手動リセット
+        // 非シグナル状態
+        m_Handle = ::CreateEvent(
+                    IZ_NULL,    // Security
+                    IZ_TRUE,    // ManualReset
+                    IZ_FALSE,   // InitialState -> TRUEだとシグナル状態、FALSEだと非シグナル状態
+                    IZ_NULL);   // EventName
 
-	    IZ_ASSERT(m_Handle != IZ_NULL);
+        IZ_ASSERT(m_Handle != IZ_NULL);
 
-	    return (m_Handle != IZ_NULL);
+        return (m_Handle != IZ_NULL);
     }
 
     // 終了.
     void CEvent::Close()
     {
-	    if (m_Handle != IZ_NULL) {
-		    // 念のため
-		    Set();
+        if (m_Handle != IZ_NULL) {
+            // 念のため
+            Set();
 
-		    ::CloseHandle(m_Handle);
-		    m_Handle = IZ_NULL;
-	    }
+            ::CloseHandle(m_Handle);
+            m_Handle = IZ_NULL;
+        }
     }
 
     // シグナル状態にする.
     void CEvent::Set()
     {
-	    IZ_ASSERT(m_Handle != IZ_NULL);
-	    ::SetEvent(m_Handle);
+        IZ_ASSERT(m_Handle != IZ_NULL);
+        ::SetEvent(m_Handle);
     }
 
     // シグナル状態になるのを待つ.
     IZ_BOOL CEvent::Wait()
     {
-	    IZ_ASSERT(m_Handle != IZ_NULL);
+        IZ_ASSERT(m_Handle != IZ_NULL);
 
-	    IZ_DWORD result = ::WaitForSingleObject(m_Handle, INFINITE);
-	    IZ_ASSERT(result == WAIT_OBJECT_0);
+        IZ_DWORD result = ::WaitForSingleObject(m_Handle, INFINITE);
+        IZ_ASSERT(result == WAIT_OBJECT_0);
 
-	    return (result == WAIT_OBJECT_0);
+        return (result == WAIT_OBJECT_0);
     }
 
     // NOTE
@@ -78,9 +78,9 @@ namespace sys
     // 非シグナル状態にする.
     void CEvent::Reset()
     {
-	    IZ_ASSERT(m_Handle != IZ_NULL);
-	    ::ResetEvent(m_Handle);
+        IZ_ASSERT(m_Handle != IZ_NULL);
+        ::ResetEvent(m_Handle);
     }
 }   // namespace sys
 }   // namespace iznaagi
-#endif	// #if defined(WIN32) || defined(WIN64)
+#endif  // #if defined(WIN32) || defined(WIN64)

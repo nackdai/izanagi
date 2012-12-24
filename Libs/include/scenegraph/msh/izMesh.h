@@ -4,60 +4,60 @@
 #include "MSHFormat.h"
 
 namespace izanagi {
-	class graph::CGraphicsDevice;
-	class graph::CVertexBuffer;
-	class IInputStream;
-	class CMeshGroup;
-	class CSkeletonInstance;
-	class IMshRenderHandler;
+    class graph::CGraphicsDevice;
+    class graph::CVertexBuffer;
+    class IInputStream;
+    class CMeshGroup;
+    class CSkeletonInstance;
+    class IMshRenderHandler;
 
-	/** メッシュデータ.
-	 */
-	class CMesh : public CObject {
-		friend class CModel;
+    /** メッシュデータ.
+     */
+    class CMesh : public CObject {
+        friend class CModel;
 
-	public:
-		static CMesh* CreateMesh(
-			IMemoryAllocator* pAllocator,
-			graph::CGraphicsDevice* pDevice,
-			IInputStream* pIn);
+    public:
+        static CMesh* CreateMesh(
+            IMemoryAllocator* pAllocator,
+            graph::CGraphicsDevice* pDevice,
+            IInputStream* pIn);
 
-	private:
-		CMesh();
-		~CMesh();
+    private:
+        CMesh();
+        ~CMesh();
 
-		NO_COPIABLE(CMesh);
+        NO_COPIABLE(CMesh);
 
-		IZ_DEFINE_INTERNAL_RELEASE();
+        IZ_DEFINE_INTERNAL_RELEASE();
 
-	public:
-		/** メッシュを描画.
-		 */
-		IZ_BOOL Render(
-			CSkeletonInstance* pSkl,
-			IMshRenderHandler* pRenderHandler);
+    public:
+        /** メッシュを描画.
+         */
+        IZ_BOOL Render(
+            CSkeletonInstance* pSkl,
+            IMshRenderHandler* pRenderHandler);
 
-	public:
-		/** メッシュグループ（= メッシュセットの集まり）を取得.
-		 */
-		CMeshGroup* GetMeshGroup(IZ_UINT idx);
+    public:
+        /** メッシュグループ（= メッシュセットの集まり）を取得.
+         */
+        CMeshGroup* GetMeshGroup(IZ_UINT idx);
 
-		const S_MSH_HEADER& GetHeader() const { return m_Header; }
+        const S_MSH_HEADER& GetHeader() const { return m_Header; }
 
-		/** メッシュグループ総数を取得.
-		 */
-		IZ_UINT GetMeshGroupNum() const { return m_Header.numMeshGroup; }
+        /** メッシュグループ総数を取得.
+         */
+        IZ_UINT GetMeshGroupNum() const { return m_Header.numMeshGroup; }
 
-		graph::CGraphicsDevice* GetGraphicsDevice() { return m_pDevice; }
+        graph::CGraphicsDevice* GetGraphicsDevice() { return m_pDevice; }
 
-	private:
-		IMemoryAllocator* m_Allocator;
-		graph::CGraphicsDevice* m_pDevice;
+    private:
+        IMemoryAllocator* m_Allocator;
+        graph::CGraphicsDevice* m_pDevice;
 
-		S_MSH_HEADER m_Header;
+        S_MSH_HEADER m_Header;
 
-		CMeshGroup** m_pMeshGroup;
-	};
-}	// namespace izanagi
+        CMeshGroup** m_pMeshGroup;
+    };
+}   // namespace izanagi
 
-#endif	// #if !defined(__IZANAGI_SCENEGRAPH_IZ_MESH_H__)
+#endif  // #if !defined(__IZANAGI_SCENEGRAPH_IZ_MESH_H__)

@@ -8,47 +8,47 @@ namespace izanagi
 {
 namespace sys
 {
-	/**
-	 */
-	class CMutex {
-		friend class CCondVar;
+    /**
+     */
+    class CMutex {
+        friend class CCondVar;
 
-	public:
-		CMutex();
-		~CMutex();
+    public:
+        CMutex();
+        ~CMutex();
 
-		NO_COPIABLE(CMutex);
+        NO_COPIABLE(CMutex);
 
-	public:
-		/** 初期化.
-		 */
-		IZ_BOOL Open();
+    public:
+        /** 初期化.
+         */
+        IZ_BOOL Open();
 
-		/** 終了.
-		 */
-		void Close();
+        /** 終了.
+         */
+        void Close();
 
-		/** 同期開始.
-		 */
-		void Lock();
+        /** 同期開始.
+         */
+        void Lock();
 
-		/** 同期終了.
-		 */
-		void Unlock();
+        /** 同期終了.
+         */
+        void Unlock();
 
-		/** 呼び出しスレッドID取得.
-		 */
-		const ThreadId& GetOwnerThreadId() const
-		{
-			return m_OwnerThreadId;
-		}
+        /** 呼び出しスレッドID取得.
+         */
+        const ThreadId& GetOwnerThreadId() const
+        {
+            return m_OwnerThreadId;
+        }
 
-	protected:
-		MutexHandle m_Handle;
+    protected:
+        MutexHandle m_Handle;
 
-		ThreadId m_OwnerThreadId;
-	};
+        ThreadId m_OwnerThreadId;
+    };
 }   // namespace sys
-}	// namespace izanagi
+}   // namespace izanagi
 
-#endif	// #if !defined(__IZANAGI_SYSTEM_SYS_MUTEX_H__)
+#endif  // #if !defined(__IZANAGI_SYSTEM_SYS_MUTEX_H__)

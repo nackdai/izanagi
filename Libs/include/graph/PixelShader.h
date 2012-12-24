@@ -7,14 +7,14 @@ namespace izanagi
 {
 namespace graph
 {
-	/** ピクセルシェーダ
-	 */
-	class CPixelShader : public IShader {
-	protected:
+    /** ピクセルシェーダ
+     */
+    class CPixelShader : public IShader {
+    protected:
         CPixelShader() {}
         virtual ~CPixelShader() {}
-	};
+    };
 }   // namespace graph
-}	// namespace izanagi
+}   // namespace izanagi
 
-#endif	// #if !defined(__IZANAGI_GRAPH_PIXEL_SHADER_H__)
+#endif  // #if !defined(__IZANAGI_GRAPH_PIXEL_SHADER_H__)

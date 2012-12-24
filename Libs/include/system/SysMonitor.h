@@ -7,56 +7,56 @@
 
 namespace izanagi
 {
-	class IMemoryAllocator;
+    class IMemoryAllocator;
 
 namespace sys
 {
-	/**
-	 */
-	class CMonitor {
-		friend class CSyncronized;
+    /**
+     */
+    class CMonitor {
+        friend class CSyncronized;
 
-	public:
-		CMonitor();
-		~CMonitor();
+    public:
+        CMonitor();
+        ~CMonitor();
 
-		NO_COPIABLE(CMonitor);		
+        NO_COPIABLE(CMonitor);      
 
-	public:
-		/** 初期化.
-		 */
-		IZ_BOOL Init();
+    public:
+        /** 初期化.
+         */
+        IZ_BOOL Init();
 
-		/** 終了.
-		 */
-		void Destroy();
+        /** 終了.
+         */
+        void Destroy();
 
         /** syncronized開始.
          */
-		void Lock();
+        void Lock();
 
-		/** syncronized終了.
+        /** syncronized終了.
          */
-		void Unlock();
+        void Unlock();
 
-		/** 待機.
-		 */
-		void Wait();
+        /** 待機.
+         */
+        void Wait();
 
-		/** 待機中のスレッドを１つ起こす.
-		 */
-		void Notify();
+        /** 待機中のスレッドを１つ起こす.
+         */
+        void Notify();
 
-		/** 待機中のスレッドを全て起こす.
-		 */
-		void NotifyAll();
+        /** 待機中のスレッドを全て起こす.
+         */
+        void NotifyAll();
 
-	private:
-		CMutex m_LockMutex;
-		CCondVar m_WaitCond;
+    private:
+        CMutex m_LockMutex;
+        CCondVar m_WaitCond;
         IZ_BOOL m_IsLocked;
-	};
+    };
 }   // namespace sys
-}	// namespace izanagi
+}   // namespace izanagi
 
-#endif	// #if !defined(__IZANAGI_SYSTEM_SYS_MONITOR_H__)
+#endif  // #if !defined(__IZANAGI_SYSTEM_SYS_MONITOR_H__)

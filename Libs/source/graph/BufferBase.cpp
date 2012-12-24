@@ -6,9 +6,9 @@ namespace graph
 {
     IZ_BOOL CBufferBase::LockBuffer(
         IZ_UINT offset,
-		IZ_UINT size,
-		IZ_BOOL isReadOnly,
-		IZ_BOOL isDiscard/*= IZ_FALSE*/)
+        IZ_UINT size,
+        IZ_BOOL isReadOnly,
+        IZ_BOOL isDiscard/*= IZ_FALSE*/)
     {
         IZ_ASSERT(m_LockedBuffer == IZ_NULL);
 

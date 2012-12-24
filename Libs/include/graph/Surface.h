@@ -13,10 +13,10 @@ namespace graph
 
     /**
      */
-	class CSurface : public CObject
+    class CSurface : public CObject
     {
-	protected:
-		CSurface()
+    protected:
+        CSurface()
         {
             m_Allocator = IZ_NULL;
             m_Fmt = E_GRAPH_PIXEL_FMT_FORCE_INT32;
@@ -24,16 +24,16 @@ namespace graph
 
         virtual ~CSurface() {};
 
-		NO_COPIABLE(CSurface);
+        NO_COPIABLE(CSurface);
 
         IZ_DEFINE_INTERNAL_RELEASE();
 
-	public:
-		PURE_VIRTUAL(IZ_UINT GetWidth() const);
+    public:
+        PURE_VIRTUAL(IZ_UINT GetWidth() const);
 
-		PURE_VIRTUAL(IZ_UINT GetHeight() const);
+        PURE_VIRTUAL(IZ_UINT GetHeight() const);
 
-		E_GRAPH_PIXEL_FMT GetPixelFormat() const
+        E_GRAPH_PIXEL_FMT GetPixelFormat() const
         {
             return m_Fmt;
         }
@@ -42,15 +42,15 @@ namespace graph
 
     protected:
         PURE_VIRTUAL(
-		    IZ_BOOL Reset(
-			    CTexture* texture,
-			    IZ_UINT level));
+            IZ_BOOL Reset(
+                CTexture* texture,
+                IZ_UINT level));
 
-	protected:
-		IMemoryAllocator* m_Allocator;
-		E_GRAPH_PIXEL_FMT m_Fmt;
-	};
+    protected:
+        IMemoryAllocator* m_Allocator;
+        E_GRAPH_PIXEL_FMT m_Fmt;
+    };
 }   // namespace graph
-}	// namespace izanagi
+}   // namespace izanagi
 
-#endif	// #if !defined(__IZANAGI_GRAPH_SURFACE_H__)
+#endif  // #if !defined(__IZANAGI_GRAPH_SURFACE_H__)

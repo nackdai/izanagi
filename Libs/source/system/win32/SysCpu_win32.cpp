@@ -11,10 +11,10 @@ namespace sys
     */
     IZ_UINT CSysCpu::GetCpuNum()
     {
-	    SYSTEM_INFO info;
-	    ::GetSystemInfo(&info);
-	
-	    return info.dwNumberOfProcessors;
+        SYSTEM_INFO info;
+        ::GetSystemInfo(&info);
+    
+        return info.dwNumberOfProcessors;
     }
 }   // namespace sys
 }   // namespace izanagi
