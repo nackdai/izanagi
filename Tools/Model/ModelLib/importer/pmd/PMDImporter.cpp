@@ -409,13 +409,13 @@ namespace
 		std::vector<IZ_FLOAT>& value)
 	{
 		value.push_back(0.0f);
-		value.push_back(params[idx * 4 + 0] * attn);
-		value.push_back(params[idx * 4 + 1] * attn);
+		value.push_back(params[idx + 4 * 0] * attn);
+		value.push_back(params[idx + 4 * 1] * attn);
 		value.push_back(1.0f);
 
 		value.push_back(0.0f);
-		value.push_back(params[idx * 4 + 2] * attn);
-		value.push_back(params[idx * 4 + 3] * attn);
+		value.push_back(params[idx + 4 * 2] * attn);
+		value.push_back(params[idx + 4 * 3] * attn);
 		value.push_back(1.0f);
 	}
 }
