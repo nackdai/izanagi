@@ -11,6 +11,7 @@ struct Func : public izanagi::math::CNumericalAnalysis::Func
 
 	IZ_FLOAT operator()(IZ_FLOAT t)
 	{
+#if 0
 		IZ_FLOAT s = 1.0f - t;
 		IZ_FLOAT s2 = s * s;
 		IZ_FLOAT s3 = s2 * s;
@@ -20,9 +21,12 @@ struct Func : public izanagi::math::CNumericalAnalysis::Func
 
 		//IZ_FLOAT ret = s3 * x0 + 3.0f * s2 * t * x1 + 3.0f * s * t2 * x2 + t3 * x3;
 		IZ_FLOAT ret = ((1 + 3 * x1 - 3 * x2) * t * t * t + (3 * x2 - 6 * x1) * t * t + 3 * x1 * t);
-		ret -= x;
 
 		return ret;
+#else
+        IZ_FLOAT ret = 3 * (1 - t) * (1 - t) * t * x1 + 3 * (1 - t) * t * t * x2 + t * t * t;
+        return ret;
+#endif
 	}
 };
 
@@ -35,6 +39,7 @@ struct FuncD : public izanagi::math::CNumericalAnalysis::Func
 
 	IZ_FLOAT operator()(IZ_FLOAT t)
 	{
+#if 0
 		IZ_FLOAT s3_dt = -3.0f * (1.0f - t);
 		IZ_FLOAT s2_t_dt = 1.0f - 4.0f * t + 3.0f * t * t;
 		IZ_FLOAT s_t2_dt = 1.0f - 2.0f * t;
@@ -44,6 +49,10 @@ struct FuncD : public izanagi::math::CNumericalAnalysis::Func
 		IZ_FLOAT ret = ((3 + 9 * x1 - 9 * x2) * t * t + (6 * x2 - 12 * x1) * t + 3 * x1);
 
 		return ret;
+#else
+        return -6 * (1 - t) * t * x1 + 3 * (1 - t) * (1 - t) * x1
+                - 3 * t * t * x2 + 6 * (1 - t) * t * x2 + 3 * t * t;
+#endif
 	}
 };
 
