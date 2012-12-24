@@ -3,8 +3,8 @@
 
 CPostEffectApp::CPostEffectApp()
 {
-	m_Allocator = IZ_NULL;
-	m_Device = IZ_NULL;
+    m_Allocator = IZ_NULL;
+    m_Device = IZ_NULL;
 }
 
 CPostEffectApp::~CPostEffectApp()
@@ -25,23 +25,23 @@ IZ_BOOL CPostEffectApp::OnKeyDown(IZ_UINT nChar)
 
 // 初期化.
 IZ_BOOL CPostEffectApp::InitInternal(
-	izanagi::IMemoryAllocator* allocator,
-	izanagi::graph::CGraphicsDevice* device,
-	izanagi::sample::CSampleCamera& camera)
+    izanagi::IMemoryAllocator* allocator,
+    izanagi::graph::CGraphicsDevice* device,
+    izanagi::sample::CSampleCamera& camera)
 {
-	m_Allocator = allocator;
-	SAFE_REPLACE(m_Device, device);
+    m_Allocator = allocator;
+    SAFE_REPLACE(m_Device, device);
 
-	// カメラ
-	camera.Init(
-		izanagi::math::CVector(0.0f, 0.0f, 30.0f, 1.0f),
-		izanagi::math::CVector(0.0f, 0.0f, 0.0f, 1.0f),
-		izanagi::math::CVector(0.0f, 1.0f, 0.0f, 1.0f),
-		1.0f,
-		500.0f,
-		izanagi::math::CMath::Deg2Rad(60.0f),
-		(IZ_FLOAT)SCREEN_WIDTH / SCREEN_HEIGHT);
-	camera.Update();
+    // カメラ
+    camera.Init(
+        izanagi::math::CVector(0.0f, 0.0f, 30.0f, 1.0f),
+        izanagi::math::CVector(0.0f, 0.0f, 0.0f, 1.0f),
+        izanagi::math::CVector(0.0f, 1.0f, 0.0f, 1.0f),
+        1.0f,
+        500.0f,
+        izanagi::math::CMath::Deg2Rad(60.0f),
+        (IZ_FLOAT)SCREEN_WIDTH / SCREEN_HEIGHT);
+    camera.Update();
 
     VRETURN(
         CSceneRenderer::GetInstance()->Init(
@@ -54,8 +54,8 @@ IZ_BOOL CPostEffectApp::InitInternal(
             device));
 
     CStateManager::GetInstance().Create(
-		this,
-		const_cast<izanagi::SCameraParam&>(camera.GetParam()));
+        this,
+        const_cast<izanagi::SCameraParam&>(camera.GetParam()));
 
     return CStateManager::GetInstance().Init();
 }
@@ -63,10 +63,10 @@ IZ_BOOL CPostEffectApp::InitInternal(
 // 解放.
 void CPostEffectApp::ReleaseInternal()
 {
-	CStateManager::GetInstance().Destroy();
+    CStateManager::GetInstance().Destroy();
     CSceneRenderer::GetInstance()->Release();
     CPostEffectSample::GetInstance()->Release();
-	SAFE_RELEASE(m_Device);
+    SAFE_RELEASE(m_Device);
 }
 
 // 更新.

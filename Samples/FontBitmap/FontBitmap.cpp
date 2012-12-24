@@ -6,34 +6,34 @@
 
 class CFontBitmapApp : public izanagi::sample::CSampleApp {
 public:
-	CFontBitmapApp();
-	virtual ~CFontBitmapApp();
+    CFontBitmapApp();
+    virtual ~CFontBitmapApp();
 
 protected:
-	// 初期化.
-	virtual IZ_BOOL InitInternal(
-		izanagi::IMemoryAllocator* allocator,
-		izanagi::graph::CGraphicsDevice* device,
-		izanagi::sample::CSampleCamera& camera);
+    // 初期化.
+    virtual IZ_BOOL InitInternal(
+        izanagi::IMemoryAllocator* allocator,
+        izanagi::graph::CGraphicsDevice* device,
+        izanagi::sample::CSampleCamera& camera);
 
-	// 解放.
-	virtual void ReleaseInternal();
+    // 解放.
+    virtual void ReleaseInternal();
 
-	// 更新.
-	virtual void UpdateInternal(izanagi::graph::CGraphicsDevice* device);
+    // 更新.
+    virtual void UpdateInternal(izanagi::graph::CGraphicsDevice* device);
 
-	// 描画.
-	virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device);
+    // 描画.
+    virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device);
 
 private:
-	izanagi::CFontRenderer* m_FontUtf8;
-	izanagi::CFontRenderer* m_FontSjis;
+    izanagi::CFontRenderer* m_FontUtf8;
+    izanagi::CFontRenderer* m_FontSjis;
 };
 
 CFontBitmapApp::CFontBitmapApp()
 {
-	m_FontUtf8 = IZ_NULL;
-	m_FontSjis = IZ_NULL;
+    m_FontUtf8 = IZ_NULL;
+    m_FontSjis = IZ_NULL;
 }
 
 CFontBitmapApp::~CFontBitmapApp()
@@ -42,76 +42,76 @@ CFontBitmapApp::~CFontBitmapApp()
 
 // 初期化.
 IZ_BOOL CFontBitmapApp::InitInternal(
-	izanagi::IMemoryAllocator* allocator,
-	izanagi::graph::CGraphicsDevice* device,
-	izanagi::sample::CSampleCamera& camera)
+    izanagi::IMemoryAllocator* allocator,
+    izanagi::graph::CGraphicsDevice* device,
+    izanagi::sample::CSampleCamera& camera)
 {
-	// UTF8
-	{
-		izanagi::CFileInputStream in;
-		VRETURN(in.Open("./data/FontSample_Utf8.fnt"));
+    // UTF8
+    {
+        izanagi::CFileInputStream in;
+        VRETURN(in.Open("./data/FontSample_Utf8.fnt"));
 
-		// FNT読み込み
-		m_FontUtf8 = izanagi::CFontRenderer::CreateFontRendererBmp(
-					allocator,
-					device,
-					40,
-					&in);
+        // FNT読み込み
+        m_FontUtf8 = izanagi::CFontRenderer::CreateFontRendererBmp(
+                    allocator,
+                    device,
+                    40,
+                    &in);
 
-		VRETURN(m_FontUtf8 != IZ_NULL);
-	}
+        VRETURN(m_FontUtf8 != IZ_NULL);
+    }
 
-	// SJIS
-	{
-		izanagi::CFileInputStream in;
-		VRETURN(in.Open("./data/FontSample_Sjis.fnt"));
+    // SJIS
+    {
+        izanagi::CFileInputStream in;
+        VRETURN(in.Open("./data/FontSample_Sjis.fnt"));
 
-		// FNT読み込み
-		m_FontSjis = izanagi::CFontRenderer::CreateFontRendererBmp(
-					allocator,
-					device,
-					40,
-					&in);
-		VRETURN(m_FontSjis != IZ_NULL);
-	}
+        // FNT読み込み
+        m_FontSjis = izanagi::CFontRenderer::CreateFontRendererBmp(
+                    allocator,
+                    device,
+                    40,
+                    &in);
+        VRETURN(m_FontSjis != IZ_NULL);
+    }
 
-	return IZ_TRUE;
+    return IZ_TRUE;
 }
 
 // 解放.
 void CFontBitmapApp::ReleaseInternal()
 {
-	SAFE_RELEASE(m_FontUtf8);
-	SAFE_RELEASE(m_FontSjis);
+    SAFE_RELEASE(m_FontUtf8);
+    SAFE_RELEASE(m_FontSjis);
 }
 
 // 更新.
 void CFontBitmapApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
-	// Nothing is done...
+    // Nothing is done...
 }
 
 // 描画.
 void CFontBitmapApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
-	if (device->Begin2D()) {
-		// フォント描画
-		m_FontUtf8->Register(fontUTF8);
-		m_FontUtf8->Render(
-			fontUTF8,
-			0, 200,
-			izanagi::CColor::GREEN);
+    if (device->Begin2D()) {
+        // フォント描画
+        m_FontUtf8->Register(fontUTF8);
+        m_FontUtf8->Render(
+            fontUTF8,
+            0, 200,
+            izanagi::CColor::GREEN);
 
 #if 1
-		m_FontSjis->Register(fontSJIS);
-		m_FontSjis->Render(
-			fontSJIS,
-			0, 300,
-			izanagi::CColor::GREEN);
+        m_FontSjis->Register(fontSJIS);
+        m_FontSjis->Render(
+            fontSJIS,
+            0, 300,
+            izanagi::CColor::GREEN);
 #endif
 
-		device->End2D();
-	}
+        device->End2D();
+    }
 }
 
 static const IZ_UINT BUF_SIZE = 1 * 1024 * 1024;
@@ -125,15 +125,15 @@ static const IZ_UINT SCREEN_HEIGHT = 720;
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-	CFontBitmapApp app;
+    CFontBitmapApp app;
 
-	int ret = SampleMain(
-		hInstance,
-		&app,
-		"FontBitmap",
-		SCREEN_WIDTH, SCREEN_HEIGHT,
-		BUF, BUF_SIZE,
-		GFX_BUF, GFX_BUF_SIZE);
+    int ret = SampleMain(
+        hInstance,
+        &app,
+        "FontBitmap",
+        SCREEN_WIDTH, SCREEN_HEIGHT,
+        BUF, BUF_SIZE,
+        GFX_BUF, GFX_BUF_SIZE);
 
-	return ret;
+    return ret;
 }

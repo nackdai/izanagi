@@ -5,26 +5,26 @@
 #include "izDebugUtil.h"
 
 namespace izanagi {
-	namespace sample {
-		class CSampleApp;
-	}
+    namespace sample {
+        class CSampleApp;
+    }
 }
 
 class CStateBase : public izanagi::CSceneStateBase {
 public:
-	CStateBase(
-		izanagi::sample::CSampleApp* app,
-		izanagi::SCameraParam& camera);
-	virtual ~CStateBase() {}
+    CStateBase(
+        izanagi::sample::CSampleApp* app,
+        izanagi::SCameraParam& camera);
+    virtual ~CStateBase() {}
 
 protected:
-	void RenderName(
-		izanagi::graph::CGraphicsDevice* device,
-		const char* name);
+    void RenderName(
+        izanagi::graph::CGraphicsDevice* device,
+        const char* name);
 
 protected:
-	izanagi::sample::CSampleApp* m_App;
-	izanagi::SCameraParam& m_Camera;
+    izanagi::sample::CSampleApp* m_App;
+    izanagi::SCameraParam& m_Camera;
 };
 
-#endif	// #if !defined(__STATE_BASE_H__)
+#endif    // #if !defined(__STATE_BASE_H__)

@@ -7,22 +7,22 @@
 
 class CStateSpotLight : public CStateBase {
 public:
-	CStateSpotLight(
-		izanagi::sample::CSampleApp* app,
-		izanagi::SCameraParam& camera);
-	virtual ~CStateSpotLight();
+    CStateSpotLight(
+        izanagi::sample::CSampleApp* app,
+        izanagi::SCameraParam& camera);
+    virtual ~CStateSpotLight();
 
 public:
-	// 描画.
-	virtual IZ_BOOL Render(izanagi::graph::CGraphicsDevice* device);
+    // 描画.
+    virtual IZ_BOOL Render(izanagi::graph::CGraphicsDevice* device);
 
-	// 開始
-	virtual IZ_BOOL Enter(
-		izanagi::IMemoryAllocator* allocator,
-		void* val);
+    // 開始
+    virtual IZ_BOOL Enter(
+        izanagi::IMemoryAllocator* allocator,
+        void* val);
 
-	// ステートから抜ける（終了）.
-	virtual IZ_BOOL Leave();
+    // ステートから抜ける（終了）.
+    virtual IZ_BOOL Leave();
 
     virtual IZ_BOOL EnableBgColor() const { return IZ_TRUE; }
     virtual IZ_COLOR GetBgColor() const { return IZ_COLOR_RGBA(0x00, 0x00, 0x00, 0xff); }
@@ -34,15 +34,15 @@ private:
         const izanagi::math::SVector& position);
 
 protected:
-	izanagi::CShaderBasic* m_Shader;
+    izanagi::CShaderBasic* m_Shader;
 
     izanagi::SSpotLightParam m_SpotLight;
 
-	izanagi::CDebugMesh* m_Light;
+    izanagi::CDebugMesh* m_Light;
 
     izanagi::CDebugMesh* m_Sphere;
     izanagi::CDebugMesh* m_Cube;
     izanagi::CDebugMesh* m_Plane;
 };
 
-#endif	// #if !defined(__STATE_SPOT_LIGHT_H__)
+#endif    // #if !defined(__STATE_SPOT_LIGHT_H__)

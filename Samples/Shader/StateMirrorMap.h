@@ -7,27 +7,27 @@
 
 class CStateMirrorMap : public CStateBase {
 public:
-	CStateMirrorMap(
-		izanagi::sample::CSampleApp* app,
-		izanagi::SCameraParam& camera);
-	virtual ~CStateMirrorMap();
+    CStateMirrorMap(
+        izanagi::sample::CSampleApp* app,
+        izanagi::SCameraParam& camera);
+    virtual ~CStateMirrorMap();
 
 public:
-	// 描画.
-	virtual IZ_BOOL Render(izanagi::graph::CGraphicsDevice* device);
+    // 描画.
+    virtual IZ_BOOL Render(izanagi::graph::CGraphicsDevice* device);
 
-	// 開始
-	virtual IZ_BOOL Enter(
-		izanagi::IMemoryAllocator* allocator,
-		void* val);
+    // 開始
+    virtual IZ_BOOL Enter(
+        izanagi::IMemoryAllocator* allocator,
+        void* val);
 
-	// ステートから抜ける（終了）.
-	virtual IZ_BOOL Leave();
+    // ステートから抜ける（終了）.
+    virtual IZ_BOOL Leave();
 
 protected:
-	izanagi::CImage* m_Img;
-	izanagi::CShaderBasic* m_Shader;
-	izanagi::CDebugMeshSphere* m_Sphere;
+    izanagi::CImage* m_Img;
+    izanagi::CShaderBasic* m_Shader;
+    izanagi::CDebugMeshSphere* m_Sphere;
 };
 
-#endif	// #if !defined(__STATE_MIRROR_MAP_H__)
+#endif    // #if !defined(__STATE_MIRROR_MAP_H__)

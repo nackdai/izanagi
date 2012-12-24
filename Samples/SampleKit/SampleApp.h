@@ -12,140 +12,140 @@
 
 namespace izanagi {
 namespace sample {
-	class CSampleWndProc;
+    class CSampleWndProc;
 
-	enum {
-		SAMPLE_TIMER_NUM = 2,
-	};
+    enum {
+        SAMPLE_TIMER_NUM = 2,
+    };
 
-	/** サンプルアプリケーション初期化パラメータ
-	 */
-	struct SSampleAppParams {
-		izanagi::IMemoryAllocator* allocator;			///< メモリアロケータ
+    /** サンプルアプリケーション初期化パラメータ
+     */
+    struct SSampleAppParams {
+        izanagi::IMemoryAllocator* allocator;            ///< メモリアロケータ
 
-		izanagi::IMemoryAllocator* allocatorForGraph;	///< グラフィックスデバイス用メモリアロケータ
+        izanagi::IMemoryAllocator* allocatorForGraph;    ///< グラフィックスデバイス用メモリアロケータ
 
-		IZ_UINT screenWidth;					///< スクリーン幅
-		IZ_UINT screenHeight;					///< スクリーン高さ
+        IZ_UINT screenWidth;                    ///< スクリーン幅
+        IZ_UINT screenHeight;                    ///< スクリーン高さ
 
-		CSampleWndProc* wndProc;				///< メッセージハンドラへのポインタ
+        CSampleWndProc* wndProc;                ///< メッセージハンドラへのポインタ
 
-		// ここから下はプラットフォーム依存
-		void* deviceWindow;						///< デバイスウインドウハンドル
-		void* focusWindow;						///< フォーカスウインドウハンドル（基本的にはデバイスウインドウハンドルと同じ）
-		void* instanceHandle;					///< インスタンスハンドル
-	};
+        // ここから下はプラットフォーム依存
+        void* deviceWindow;                        ///< デバイスウインドウハンドル
+        void* focusWindow;                        ///< フォーカスウインドウハンドル（基本的にはデバイスウインドウハンドルと同じ）
+        void* instanceHandle;                    ///< インスタンスハンドル
+    };
 
-	/** サンプルアプリケーションベースクラス.
-	 */
-	class CSampleApp {
-	public:
-		CSampleApp();
-		virtual ~CSampleApp() = 0;
+    /** サンプルアプリケーションベースクラス.
+     */
+    class CSampleApp {
+    public:
+        CSampleApp();
+        virtual ~CSampleApp() = 0;
 
-		NO_COPIABLE(CSampleApp);
+        NO_COPIABLE(CSampleApp);
 
-	public:
-		/** 初期化.
-		 */
-		IZ_BOOL Init(const SSampleAppParams& params);
+    public:
+        /** 初期化.
+         */
+        IZ_BOOL Init(const SSampleAppParams& params);
 
-		/** 解放.
-		 */
-		void Release();
+        /** 解放.
+         */
+        void Release();
 
-		/** 更新.
-		 */
-		void Update();
+        /** 更新.
+         */
+        void Update();
 
-		/** 描画.
-		 */
-		void Render();
+        /** 描画.
+         */
+        void Render();
 
-		/** V同期.
-		 */
-		void Present();
+        /** V同期.
+         */
+        void Present();
 
-		/** スクリーン幅取得
-		 */
-		IZ_UINT GetScreenWidth() const;
+        /** スクリーン幅取得
+         */
+        IZ_UINT GetScreenWidth() const;
 
-		/** スクリーン高さ取得
-		 */
-		IZ_UINT GetScreenHeight() const;
+        /** スクリーン高さ取得
+         */
+        IZ_UINT GetScreenHeight() const;
 
-		/** タイマ取得.
-		 */
-		izanagi::sys::CTimer& GetTimer(IZ_UINT idx);
+        /** タイマ取得.
+         */
+        izanagi::sys::CTimer& GetTimer(IZ_UINT idx);
 
-		/** カメラ取得.
-		 */
-		CSampleCamera& GetCamera();
+        /** カメラ取得.
+         */
+        CSampleCamera& GetCamera();
 
-		/** デバッグフォント取得
-		 */
-		izanagi::CDebugFont* GetDebugFont() { return m_DebugFont; }
+        /** デバッグフォント取得
+         */
+        izanagi::CDebugFont* GetDebugFont() { return m_DebugFont; }
 
-		/** キーボード押下
-		 */
-		virtual IZ_BOOL OnKeyDown(IZ_UINT nChar) { return IZ_TRUE; }
+        /** キーボード押下
+         */
+        virtual IZ_BOOL OnKeyDown(IZ_UINT nChar) { return IZ_TRUE; }
 
-		/** キーボードアップ
-		 */
-		virtual void OnKeyUp(IZ_UINT nChar) {}
+        /** キーボードアップ
+         */
+        virtual void OnKeyUp(IZ_UINT nChar) {}
 
-		/** マウス左ボタン押下
-		 */
-		virtual IZ_BOOL OnMouseLBtnDown(const CIntPoint& point) { return IZ_TRUE; }
+        /** マウス左ボタン押下
+         */
+        virtual IZ_BOOL OnMouseLBtnDown(const CIntPoint& point) { return IZ_TRUE; }
 
 
 
-	protected:
-		/** 背景色取得.
-		 */
-		virtual IZ_COLOR GetBgColor() const;
+    protected:
+        /** 背景色取得.
+         */
+        virtual IZ_COLOR GetBgColor() const;
 
-		/** 初期化.
-		 */
-		virtual IZ_BOOL InitInternal(
-			izanagi::IMemoryAllocator* allocator,
-			izanagi::graph::CGraphicsDevice* device,
-			izanagi::sample::CSampleCamera& camera) = 0;
+        /** 初期化.
+         */
+        virtual IZ_BOOL InitInternal(
+            izanagi::IMemoryAllocator* allocator,
+            izanagi::graph::CGraphicsDevice* device,
+            izanagi::sample::CSampleCamera& camera) = 0;
 
-		/** 解放.
-		 */
-		virtual void ReleaseInternal() = 0;
+        /** 解放.
+         */
+        virtual void ReleaseInternal() = 0;
 
-		/** 更新.
-		 */
-		virtual void UpdateInternal(izanagi::graph::CGraphicsDevice* device) = 0;
+        /** 更新.
+         */
+        virtual void UpdateInternal(izanagi::graph::CGraphicsDevice* device) = 0;
 
-		/** 描画.
-		 */
-		virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device) = 0;
+        /** 描画.
+         */
+        virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device) = 0;
 
         izanagi::sys::CPad* GetPad()
         {
             return m_Pad;
         }
 
-	protected:
-		izanagi::graph::CGraphicsDevice* m_Device;
-		izanagi::IMemoryAllocator* m_Allocator;
+    protected:
+        izanagi::graph::CGraphicsDevice* m_Device;
+        izanagi::IMemoryAllocator* m_Allocator;
 
-		izanagi::CDebugFont* m_DebugFont;
+        izanagi::CDebugFont* m_DebugFont;
 
-		izanagi::sys::CPad* m_Pad;
-		izanagi::sys::CKeyboard* m_Keyboard;
+        izanagi::sys::CPad* m_Pad;
+        izanagi::sys::CKeyboard* m_Keyboard;
 
-		IZ_UINT m_ScreenWidth;
-		IZ_UINT m_ScreenHeight;
+        IZ_UINT m_ScreenWidth;
+        IZ_UINT m_ScreenHeight;
 
-		izanagi::sys::CTimer m_Timer[SAMPLE_TIMER_NUM];
+        izanagi::sys::CTimer m_Timer[SAMPLE_TIMER_NUM];
 
-		CSampleCamera m_Camera;
-	};
+        CSampleCamera m_Camera;
+    };
 }
 }
 
-#endif	// #if !defined(__IZ_SAMPLE_SAMPLE_APP_H__)
+#endif    // #if !defined(__IZ_SAMPLE_SAMPLE_APP_H__)

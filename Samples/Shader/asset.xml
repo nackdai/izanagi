@@ -5,6 +5,6 @@
     path="../data/tile.bmp"
     fmt="dxt5"/>
   <plane
-	  path="../data/four_NM_height.dds"
-	  fmt="rgba8"/>
+      path="../data/four_NM_height.dds"
+      fmt="rgba8"/>
 </textures>

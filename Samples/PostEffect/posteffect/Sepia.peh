@@ -1,5 +1,5 @@
 -c   "%DXSDK_DIR%Utilities\Bin\x86\fxc"
 -co  "/nologo"
 -src "PostEffectSepia.fx"
--I	 "../../../Tools/PostEffect/PostEffectShader/include"
+-I     "../../../Tools/PostEffect/PostEffectShader/include"
 -asm

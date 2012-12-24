@@ -3,4 +3,4 @@
 
 const char* fontSJIS = "SJIS ‚©‚«‚­‚¯‚±\n‚ ‚¢‚¤‚¦‚¨";
 
-#endif	// #define __FONT_SJIS_H__
+#endif    // #define __FONT_SJIS_H__

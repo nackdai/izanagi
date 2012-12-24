@@ -7,4 +7,4 @@
 #include "SampleWindowProc.h"
 #include "SampleEnvBox.h"
 
-#endif	// #if !defined(__IZ_SAMPLE_KIT_H__)
+#endif    // #if !defined(__IZ_SAMPLE_KIT_H__)

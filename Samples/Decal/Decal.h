@@ -11,101 +11,101 @@
 class CDecal : public izanagi::CObject
 {
 public:
-	static CDecal* Create(
-		izanagi::IMemoryAllocator* allocator,
-		const izanagi::math::SVector& point,
-		const izanagi::math::SVector& normal,
-		IZ_FLOAT rectangleLengthX,
-		IZ_FLOAT rectangleLengthZ);
+    static CDecal* Create(
+        izanagi::IMemoryAllocator* allocator,
+        const izanagi::math::SVector& point,
+        const izanagi::math::SVector& normal,
+        IZ_FLOAT rectangleLengthX,
+        IZ_FLOAT rectangleLengthZ);
 
 private:
-	CDecal();
-	virtual ~CDecal();
+    CDecal();
+    virtual ~CDecal();
 
-	NO_COPIABLE(CDecal);
+    NO_COPIABLE(CDecal);
 
-	IZ_DEFINE_INTERNAL_RELEASE();
+    IZ_DEFINE_INTERNAL_RELEASE();
 
 public:
-	void SetRectangle(
-		const izanagi::math::SVector& point,
-		const izanagi::math::SVector& normal,
-		IZ_FLOAT rectangleLengthX,
-		IZ_FLOAT rectangleLengthZ);
+    void SetRectangle(
+        const izanagi::math::SVector& point,
+        const izanagi::math::SVector& normal,
+        IZ_FLOAT rectangleLengthX,
+        IZ_FLOAT rectangleLengthZ);
 
-	void DoScissoring(
-		const izanagi::math::CTriangle tri[],
-		IZ_UINT triNum);
+    void DoScissoring(
+        const izanagi::math::CTriangle tri[],
+        IZ_UINT triNum);
 
-	void CreateGraphicsObject(izanagi::graph::CGraphicsDevice* device);
+    void CreateGraphicsObject(izanagi::graph::CGraphicsDevice* device);
 
-	void Draw(izanagi::graph::CGraphicsDevice* device);
+    void Draw(izanagi::graph::CGraphicsDevice* device);
 
-	const izanagi::math::SVector& GetCenter() const;
-
-private:
-	void ComputeNewTriNumByScissoring(
-		const izanagi::math::CTriangle tri[],
-		IZ_UINT triNum);
+    const izanagi::math::SVector& GetCenter() const;
 
 private:
-	typedef std::vector<izanagi::math::CTriangle, izanagi::STLMemoryAllocator<izanagi::math::CTriangle> > TriangleVector;
+    void ComputeNewTriNumByScissoring(
+        const izanagi::math::CTriangle tri[],
+        IZ_UINT triNum);
 
-	struct STriListProxy
-	{
-		TriangleVector triList_0;
-		TriangleVector triList_1;
+private:
+    typedef std::vector<izanagi::math::CTriangle, izanagi::STLMemoryAllocator<izanagi::math::CTriangle> > TriangleVector;
 
-		TriangleVector& Get(IZ_UINT idx)
-		{
-			if (idx == 0)
-			{
-				return triList_0;
-			}
-			else
-			{
-				return triList_1;
-			}
-		}
+    struct STriListProxy
+    {
+        TriangleVector triList_0;
+        TriangleVector triList_1;
 
-		void Clear()
-		{
-			triList_0.clear();
-			triList_1.clear();
-		}
-	};
+        TriangleVector& Get(IZ_UINT idx)
+        {
+            if (idx == 0)
+            {
+                return triList_0;
+            }
+            else
+            {
+                return triList_1;
+            }
+        }
 
-	izanagi::IMemoryAllocator* m_Allocator;
+        void Clear()
+        {
+            triList_0.clear();
+            triList_1.clear();
+        }
+    };
 
-	izanagi::math::CRectangle m_Rectangle;
+    izanagi::IMemoryAllocator* m_Allocator;
 
-	enum {
-		PLANE_LEFT,
-		PLANE_RIGHT,
-		PLANE_BOTTOM,
-		PLANE_TOP,
-		PLANE_FRONT,
-		PLANE_BACK,
+    izanagi::math::CRectangle m_Rectangle;
 
-		PLANE_NUM,
-	};
+    enum {
+        PLANE_LEFT,
+        PLANE_RIGHT,
+        PLANE_BOTTOM,
+        PLANE_TOP,
+        PLANE_FRONT,
+        PLANE_BACK,
 
-	izanagi::math::CPlane m_Planes[PLANE_NUM];
+        PLANE_NUM,
+    };
 
-	IZ_UINT m_TriNum;
-	izanagi::math::CTriangle* m_Triangles;
+    izanagi::math::CPlane m_Planes[PLANE_NUM];
 
-	struct SVtx {
-		izanagi::math::SVector point;
-		IZ_COLOR color;
-		IZ_FLOAT uv[2];
-	};
+    IZ_UINT m_TriNum;
+    izanagi::math::CTriangle* m_Triangles;
 
-	IZ_BOOL m_NeedCreateGraphicsObject;
+    struct SVtx {
+        izanagi::math::SVector point;
+        IZ_COLOR color;
+        IZ_FLOAT uv[2];
+    };
 
-	izanagi::graph::CVertexBuffer* m_VB;
-	izanagi::graph::CVertexDeclaration* m_VD;
+    IZ_BOOL m_NeedCreateGraphicsObject;
+
+    izanagi::graph::CVertexBuffer* m_VB;
+    izanagi::graph::CVertexDeclaration* m_VD;
 };
 
 
-#endif	// #if !defined(__DECAL_H__)
+#endif    // #if !defined(__DECAL_H__)

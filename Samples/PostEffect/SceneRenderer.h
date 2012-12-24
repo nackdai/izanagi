@@ -57,11 +57,11 @@ private:
     izanagi::CShaderBasic* m_Shader;
 
     izanagi::sample::CSampleEnvBox* m_EnvBox;
-	izanagi::CImage* m_EnvImg;
-	izanagi::CShaderBasic* m_EnvShader;
+    izanagi::CImage* m_EnvImg;
+    izanagi::CShaderBasic* m_EnvShader;
 
     izanagi::math::SMatrix m_L2W;
     izanagi::SParallelLightParam m_ParallelLight;
 };
 
-#endif	// #if !defined(__SCENE_RENDERER_H__)
+#endif    // #if !defined(__SCENE_RENDERER_H__)

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <shd
-	compiler="%DXSDK_DIR%Utilities\Bin\x86\fxc"
-	src="PhongShader.fx"
-	option="/nologo /Od /Zi"
-	is_asm="false"/>
+    compiler="%DXSDK_DIR%Utilities\Bin\x86\fxc"
+    src="PhongShader.fx"
+    option="/nologo /Od /Zi"
+    is_asm="false"/>

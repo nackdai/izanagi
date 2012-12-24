@@ -2,9 +2,9 @@
 
 <textures>
   <plane
-	  path="./boy_10.dds"
-	  fmt="dxt1"/>
+      path="./boy_10.dds"
+      fmt="dxt1"/>
   <plane
-	  path="./Tiny_skin.dds"
-	  fmt="dxt1"/>
+      path="./Tiny_skin.dds"
+      fmt="dxt1"/>
 </textures>

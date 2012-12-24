@@ -7,19 +7,19 @@
 
 class CStateMonotone : public CStatePostEffect {
 public:
-	CStateMonotone(
-		izanagi::sample::CSampleApp* app,
-		izanagi::SCameraParam& camera);
-	virtual ~CStateMonotone();
+    CStateMonotone(
+        izanagi::sample::CSampleApp* app,
+        izanagi::SCameraParam& camera);
+    virtual ~CStateMonotone();
 
 public:
-	// 描画.
-	virtual IZ_BOOL Render(izanagi::graph::CGraphicsDevice* device);
+    // 描画.
+    virtual IZ_BOOL Render(izanagi::graph::CGraphicsDevice* device);
 
-	// 開始
-	virtual IZ_BOOL Enter(
-		izanagi::IMemoryAllocator* allocator,
-		void* val);
+    // 開始
+    virtual IZ_BOOL Enter(
+        izanagi::IMemoryAllocator* allocator,
+        void* val);
 };
 
-#endif	// #if !defined(__STATE_PHONG_SHADER_H__)
+#endif    // #if !defined(__STATE_PHONG_SHADER_H__)
