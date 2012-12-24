@@ -96,7 +96,7 @@ static CSampleMdlRenderHandler* s_MdlRenderHandler = IZ_NULL;
 //#define ANM_FILE_NAME   "data/walk.anm"
 #define ANM_FILE_NAME   "data/walk2.anm"
 #define IMG_IDX		(0)
-#define CAMERA_Z	(30.0f)
+#define CAMERA_Z	(-30.0f)
 
 CModelApp::CModelApp()
 {
@@ -326,8 +326,7 @@ void CModelApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 	}
 	m_RenderGraph->EndRegister();
 
-    //m_Timeline.Advance(fElapsed);
-    m_Timeline.Advance(0.5f);
+    m_Timeline.Advance(fElapsed * 30.0f);
 }
 
 namespace {
