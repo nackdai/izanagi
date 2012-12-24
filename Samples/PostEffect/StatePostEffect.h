@@ -6,29 +6,29 @@
 
 class CStatePostEffect : public CStateBase {
 public:
-	CStatePostEffect(
-		izanagi::sample::CSampleApp* app,
-		izanagi::SCameraParam& camera);
-	virtual ~CStatePostEffect();
+    CStatePostEffect(
+        izanagi::sample::CSampleApp* app,
+        izanagi::SCameraParam& camera);
+    virtual ~CStatePostEffect();
 
 public:
     // 初期化.
-	virtual IZ_BOOL Init();
+    virtual IZ_BOOL Init();
 
-	// 更新.
-	virtual IZ_BOOL Update();
+    // 更新.
+    virtual IZ_BOOL Update();
 
-	// 描画.
-	virtual IZ_BOOL Render(izanagi::graph::CGraphicsDevice* device);
+    // 描画.
+    virtual IZ_BOOL Render(izanagi::graph::CGraphicsDevice* device);
 
-	// 終了.
-	virtual IZ_BOOL Destroy();
+    // 終了.
+    virtual IZ_BOOL Destroy();
 
-	// ステートから抜ける（終了）.
-	virtual IZ_BOOL Leave();
+    // ステートから抜ける（終了）.
+    virtual IZ_BOOL Leave();
 
-	// キー押下
-	virtual IZ_BOOL OnKeyDown(IZ_UINT nChar);
+    // キー押下
+    virtual IZ_BOOL OnKeyDown(IZ_UINT nChar);
 };
 
-#endif	// #if !defined(__STATE_POST_EFFCT_H__)
+#endif    // #if !defined(__STATE_POST_EFFCT_H__)

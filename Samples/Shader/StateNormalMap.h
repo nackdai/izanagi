@@ -7,36 +7,36 @@
 
 class CStateNormalMap : public CStateBase {
 public:
-	CStateNormalMap(
-		izanagi::sample::CSampleApp* app,
-		izanagi::SCameraParam& camera);
-	virtual ~CStateNormalMap();
+    CStateNormalMap(
+        izanagi::sample::CSampleApp* app,
+        izanagi::SCameraParam& camera);
+    virtual ~CStateNormalMap();
 
 public:
-	// 描画.
-	virtual IZ_BOOL Render(izanagi::graph::CGraphicsDevice* device);
+    // 描画.
+    virtual IZ_BOOL Render(izanagi::graph::CGraphicsDevice* device);
 
-	// 開始
-	virtual IZ_BOOL Enter(
-		izanagi::IMemoryAllocator* allocator,
-		void* val);
+    // 開始
+    virtual IZ_BOOL Enter(
+        izanagi::IMemoryAllocator* allocator,
+        void* val);
 
-	// ステートから抜ける（終了）.
-	virtual IZ_BOOL Leave();
+    // ステートから抜ける（終了）.
+    virtual IZ_BOOL Leave();
 
 protected:
-	izanagi::CShaderBasic* m_Shader;
+    izanagi::CShaderBasic* m_Shader;
 
     izanagi::CDebugMeshAxis* m_Axis;
     izanagi::CDebugMeshRectangle* m_Plane;
 
     izanagi::CImage* m_Image;
 
-	izanagi::math::SMatrix m_L2W;
+    izanagi::math::SMatrix m_L2W;
 
-	izanagi::SParallelLightParam m_ParallelLight;
+    izanagi::SParallelLightParam m_ParallelLight;
     izanagi::SAmbientLightParam m_Ambient;
     izanagi::SMaterialParam m_Mtrl;
 };
 
-#endif	// #if !defined(__STATE_NORMAL_MAP_H__)
+#endif    // #if !defined(__STATE_NORMAL_MAP_H__)

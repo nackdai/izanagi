@@ -4,8 +4,8 @@
 #include "PostEffectSample.h"
 
 CStateSepia::CStateSepia(
-	izanagi::sample::CSampleApp* app,
-	izanagi::SCameraParam& camera)
+    izanagi::sample::CSampleApp* app,
+    izanagi::SCameraParam& camera)
 : CStatePostEffect(app, camera)
 {
 }
@@ -18,15 +18,15 @@ CStateSepia::~CStateSepia()
 IZ_BOOL CStateSepia::Render(izanagi::graph::CGraphicsDevice* device)
 {
     CStatePostEffect::Render(device);
-	RenderName(device, "Sepia");
+    RenderName(device, "Sepia");
 
-	return IZ_TRUE;
+    return IZ_TRUE;
 }
 
 // 開始
 IZ_BOOL CStateSepia::Enter(
-	izanagi::IMemoryAllocator* allocator,
-	void* val)
+    izanagi::IMemoryAllocator* allocator,
+    void* val)
 {
     IZ_BOOL ret = CPostEffectSample::GetInstance()->Read("data/Sepia.pes");
     return ret;

@@ -7,19 +7,19 @@
 
 class CStateBloomStarMGF : public CStatePostEffect {
 public:
-	CStateBloomStarMGF(
-		izanagi::sample::CSampleApp* app,
-		izanagi::SCameraParam& camera);
-	virtual ~CStateBloomStarMGF();
+    CStateBloomStarMGF(
+        izanagi::sample::CSampleApp* app,
+        izanagi::SCameraParam& camera);
+    virtual ~CStateBloomStarMGF();
 
 public:
-	// 描画.
-	virtual IZ_BOOL Render(izanagi::graph::CGraphicsDevice* device);
+    // 描画.
+    virtual IZ_BOOL Render(izanagi::graph::CGraphicsDevice* device);
 
-	// 開始
-	virtual IZ_BOOL Enter(
-		izanagi::IMemoryAllocator* allocator,
-		void* val);
+    // 開始
+    virtual IZ_BOOL Enter(
+        izanagi::IMemoryAllocator* allocator,
+        void* val);
 };
 
-#endif	// #if !defined(__STATE_BLOOM_STAR_MGF_H__)
+#endif    // #if !defined(__STATE_BLOOM_STAR_MGF_H__)

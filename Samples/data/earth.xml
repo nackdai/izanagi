@@ -2,6 +2,6 @@
 
 <textures>
   <plane
-	  path="./earth.bmp"
-	  fmt="dxt5"/>
+      path="./earth.bmp"
+      fmt="dxt5"/>
 </textures>

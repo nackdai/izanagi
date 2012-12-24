@@ -4,8 +4,8 @@
 #include "PostEffectSample.h"
 
 CStateMonotone::CStateMonotone(
-	izanagi::sample::CSampleApp* app,
-	izanagi::SCameraParam& camera)
+    izanagi::sample::CSampleApp* app,
+    izanagi::SCameraParam& camera)
 : CStatePostEffect(app, camera)
 {
 }
@@ -18,15 +18,15 @@ CStateMonotone::~CStateMonotone()
 IZ_BOOL CStateMonotone::Render(izanagi::graph::CGraphicsDevice* device)
 {
     CStatePostEffect::Render(device);
-	RenderName(device, "Monotone");
+    RenderName(device, "Monotone");
 
-	return IZ_TRUE;
+    return IZ_TRUE;
 }
 
 // 開始
 IZ_BOOL CStateMonotone::Enter(
-	izanagi::IMemoryAllocator* allocator,
-	void* val)
+    izanagi::IMemoryAllocator* allocator,
+    void* val)
 {
     IZ_BOOL ret = CPostEffectSample::GetInstance()->Read("data/Monotone.pes");
     return ret;

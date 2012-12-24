@@ -4,8 +4,8 @@
 #include "PostEffectSample.h"
 
 CStateBloomStarMGF::CStateBloomStarMGF(
-	izanagi::sample::CSampleApp* app,
-	izanagi::SCameraParam& camera)
+    izanagi::sample::CSampleApp* app,
+    izanagi::SCameraParam& camera)
 : CStatePostEffect(app, camera)
 {
 }
@@ -18,15 +18,15 @@ CStateBloomStarMGF::~CStateBloomStarMGF()
 IZ_BOOL CStateBloomStarMGF::Render(izanagi::graph::CGraphicsDevice* device)
 {
     CStatePostEffect::Render(device);
-	RenderName(device, "BloomStarMGF");
+    RenderName(device, "BloomStarMGF");
 
-	return IZ_TRUE;
+    return IZ_TRUE;
 }
 
 // 開始
 IZ_BOOL CStateBloomStarMGF::Enter(
-	izanagi::IMemoryAllocator* allocator,
-	void* val)
+    izanagi::IMemoryAllocator* allocator,
+    void* val)
 {
     IZ_BOOL ret = CPostEffectSample::GetInstance()->Read("data/BloomStarMGF.pes");
     return ret;

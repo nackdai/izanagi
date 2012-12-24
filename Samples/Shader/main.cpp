@@ -13,41 +13,41 @@ static const IZ_UINT SCREEN_HEIGHT = 720;
 
 class CShaderApp : public izanagi::sample::CSampleApp {
 public:
-	CShaderApp();
-	virtual ~CShaderApp();
+    CShaderApp();
+    virtual ~CShaderApp();
 
 public:
-	// キーボード押下
-	virtual IZ_BOOL OnKeyDown(IZ_UINT nChar);
+    // キーボード押下
+    virtual IZ_BOOL OnKeyDown(IZ_UINT nChar);
 
 protected:
-	// 初期化.
-	virtual IZ_BOOL InitInternal(
-		izanagi::IMemoryAllocator* allocator,
-		izanagi::graph::CGraphicsDevice* device,
-		izanagi::sample::CSampleCamera& camera);
+    // 初期化.
+    virtual IZ_BOOL InitInternal(
+        izanagi::IMemoryAllocator* allocator,
+        izanagi::graph::CGraphicsDevice* device,
+        izanagi::sample::CSampleCamera& camera);
 
-	// 解放.
-	virtual void ReleaseInternal();
+    // 解放.
+    virtual void ReleaseInternal();
 
-	// 更新.
-	virtual void UpdateInternal(izanagi::graph::CGraphicsDevice* device);
+    // 更新.
+    virtual void UpdateInternal(izanagi::graph::CGraphicsDevice* device);
 
-	// 描画.
-	virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device);
+    // 描画.
+    virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device);
 
     // 背景色取得.
-	virtual IZ_COLOR GetBgColor() const;
+    virtual IZ_COLOR GetBgColor() const;
 
 private:
-	izanagi::IMemoryAllocator* m_Allocator;
-	izanagi::graph::CGraphicsDevice* m_Device;
+    izanagi::IMemoryAllocator* m_Allocator;
+    izanagi::graph::CGraphicsDevice* m_Device;
 };
 
 CShaderApp::CShaderApp()
 {
-	m_Allocator = IZ_NULL;
-	m_Device = IZ_NULL;
+    m_Allocator = IZ_NULL;
+    m_Device = IZ_NULL;
 }
 
 CShaderApp::~CShaderApp()
@@ -57,53 +57,53 @@ CShaderApp::~CShaderApp()
 // キーボード押下
 IZ_BOOL CShaderApp::OnKeyDown(IZ_UINT nChar)
 {
-	return CStateManager::GetInstance().OnKeyDown(nChar);
+    return CStateManager::GetInstance().OnKeyDown(nChar);
 }
 
 // 初期化.
 IZ_BOOL CShaderApp::InitInternal(
-	izanagi::IMemoryAllocator* allocator,
-	izanagi::graph::CGraphicsDevice* device,
-	izanagi::sample::CSampleCamera& camera)
+    izanagi::IMemoryAllocator* allocator,
+    izanagi::graph::CGraphicsDevice* device,
+    izanagi::sample::CSampleCamera& camera)
 {
-	m_Allocator = allocator;
-	SAFE_REPLACE(m_Device, device);
+    m_Allocator = allocator;
+    SAFE_REPLACE(m_Device, device);
 
-	// カメラ
-	camera.Init(
-		izanagi::math::CVector(0.0f, 10.0f, 30.0f, 1.0f),
-		izanagi::math::CVector(0.0f, 0.0f, 0.0f, 1.0f),
-		izanagi::math::CVector(0.0f, 1.0f, 0.0f, 1.0f),
-		1.0f,
-		500.0f,
-		izanagi::math::CMath::Deg2Rad(60.0f),
-		(IZ_FLOAT)SCREEN_WIDTH / SCREEN_HEIGHT);
-	camera.Update();
+    // カメラ
+    camera.Init(
+        izanagi::math::CVector(0.0f, 10.0f, 30.0f, 1.0f),
+        izanagi::math::CVector(0.0f, 0.0f, 0.0f, 1.0f),
+        izanagi::math::CVector(0.0f, 1.0f, 0.0f, 1.0f),
+        1.0f,
+        500.0f,
+        izanagi::math::CMath::Deg2Rad(60.0f),
+        (IZ_FLOAT)SCREEN_WIDTH / SCREEN_HEIGHT);
+    camera.Update();
 
-	CStateManager::GetInstance().Create(
-		this,
-		const_cast<izanagi::SCameraParam&>(camera.GetParam()));
+    CStateManager::GetInstance().Create(
+        this,
+        const_cast<izanagi::SCameraParam&>(camera.GetParam()));
 
-	return CStateManager::GetInstance().Init();
+    return CStateManager::GetInstance().Init();
 }
 
 // 解放.
 void CShaderApp::ReleaseInternal()
 {
-	CStateManager::GetInstance().Destroy();
-	SAFE_RELEASE(m_Device);
+    CStateManager::GetInstance().Destroy();
+    SAFE_RELEASE(m_Device);
 }
 
 // 更新.
 void CShaderApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
-	CStateManager::GetInstance().Update(m_Allocator, m_Device);
+    CStateManager::GetInstance().Update(m_Allocator, m_Device);
 }
 
 // 描画.
 void CShaderApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
-	CStateManager::GetInstance().Render(device);
+    CStateManager::GetInstance().Render(device);
 }
 
 // 背景色取得.
@@ -123,15 +123,15 @@ IZ_COLOR CShaderApp::GetBgColor() const
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-	CShaderApp app;
+    CShaderApp app;
 
-	int ret = SampleMain(
-		hInstance,
-		&app,
-		"Shader",
-		SCREEN_WIDTH, SCREEN_HEIGHT,
-		BUF, BUF_SIZE,
-		GFX_BUF, GFX_BUF_SIZE);
+    int ret = SampleMain(
+        hInstance,
+        &app,
+        "Shader",
+        SCREEN_WIDTH, SCREEN_HEIGHT,
+        BUF, BUF_SIZE,
+        GFX_BUF, GFX_BUF_SIZE);
 
-	return ret;
+    return ret;
 }

@@ -5,27 +5,27 @@
 #include "izDebugUtil.h"
 
 namespace izanagi {
-	namespace sample {
-		class CSampleApp;
-	}
+    namespace sample {
+        class CSampleApp;
+    }
 }
 
 class CStateBase : public izanagi::CSceneStateBase {
 public:
-	CStateBase(
-		izanagi::sample::CSampleApp* app,
-		izanagi::SCameraParam& camera);
-	virtual ~CStateBase() {}
+    CStateBase(
+        izanagi::sample::CSampleApp* app,
+        izanagi::SCameraParam& camera);
+    virtual ~CStateBase() {}
 
 public:
     // 初期化.
-	virtual IZ_BOOL Init();
+    virtual IZ_BOOL Init();
 
-	// 更新.
-	virtual IZ_BOOL Update();
+    // 更新.
+    virtual IZ_BOOL Update();
 
     // 終了.
-	virtual IZ_BOOL Destroy();
+    virtual IZ_BOOL Destroy();
 
     // キー押下
     virtual IZ_BOOL OnKeyDown(IZ_UINT nChar);
@@ -34,19 +34,19 @@ public:
     virtual IZ_COLOR GetBgColor() const { return 0xffffffff; }
 
 protected:
-	void RenderName(
-		izanagi::graph::CGraphicsDevice* device,
-		const char* name);
+    void RenderName(
+        izanagi::graph::CGraphicsDevice* device,
+        const char* name);
 
     static void SetShaderParam(
-		izanagi::CShaderBasic* shader,
-		const char* name,
-		const void* value,
-		IZ_UINT bytes);
+        izanagi::CShaderBasic* shader,
+        const char* name,
+        const void* value,
+        IZ_UINT bytes);
 
 protected:
-	izanagi::sample::CSampleApp* m_App;
-	izanagi::SCameraParam& m_Camera;
+    izanagi::sample::CSampleApp* m_App;
+    izanagi::SCameraParam& m_Camera;
 };
 
-#endif	// #if !defined(__STATE_BASE_H__)
+#endif    // #if !defined(__STATE_BASE_H__)

@@ -5,65 +5,65 @@
 
 class CPostEffectSample {
 private:
-	static CPostEffectSample s_Instance;
+    static CPostEffectSample s_Instance;
 
 public:
-	static inline CPostEffectSample* GetInstance() { return &s_Instance; }
+    static inline CPostEffectSample* GetInstance() { return &s_Instance; }
 
 private:
-	CPostEffectSample();
-	~CPostEffectSample();
+    CPostEffectSample();
+    ~CPostEffectSample();
 
-	NO_COPIABLE(CPostEffectSample);
+    NO_COPIABLE(CPostEffectSample);
 
 public:
-	// 初期化
-	IZ_BOOL Init(
-		izanagi::IMemoryAllocator* allocator,
-		izanagi::graph::CGraphicsDevice* device);
+    // 初期化
+    IZ_BOOL Init(
+        izanagi::IMemoryAllocator* allocator,
+        izanagi::graph::CGraphicsDevice* device);
 
-	// 開放
-	void Release();
+    // 開放
+    void Release();
 
-	// ポストエフェクト読み込み
-	IZ_BOOL Read(IZ_PCSTR filapath);
+    // ポストエフェクト読み込み
+    IZ_BOOL Read(IZ_PCSTR filapath);
 
-	// シーン描画開始
-	IZ_BOOL BeginScene(izanagi::graph::CGraphicsDevice* device);
+    // シーン描画開始
+    IZ_BOOL BeginScene(izanagi::graph::CGraphicsDevice* device);
 
-	// ポストエフェクト実行
-	IZ_BOOL Apply(izanagi::graph::CGraphicsDevice* device);
+    // ポストエフェクト実行
+    IZ_BOOL Apply(izanagi::graph::CGraphicsDevice* device);
 
-	// 深度テクスチャセット
-	void SetDepthTexture(izanagi::graph::CTexture* pTex);
+    // 深度テクスチャセット
+    void SetDepthTexture(izanagi::graph::CTexture* pTex);
 
     // ポストエフェクト実行可能かどうか
-	IZ_BOOL EnablePostEffect();
+    IZ_BOOL EnablePostEffect();
 
     // ポストエフェクト実行フラグ切り替え
-	void ToggleEnablePostEffect();
+    void ToggleEnablePostEffect();
 
     // ポストエフェクトテクニック切り替え
-	void ChangePostEffectTechnique(IZ_UINT techIdx);
+    void ChangePostEffectTechnique(IZ_UINT techIdx);
 
     // テクニック数取得
     IZ_UINT GetTechniqueNum() const;
 
     // 現在のポストエフェクトテクニック取得
-	IZ_UINT GetCurrentPostEffectTechnique() const;
+    IZ_UINT GetCurrentPostEffectTechnique() const;
 
-	izanagi::CPostEffect* GetPostEffect() { return m_PostEffect; }
+    izanagi::CPostEffect* GetPostEffect() { return m_PostEffect; }
 
 private:
-	izanagi::CPostEffectSystem* m_System;
-	izanagi::CPostEffect* m_PostEffect;
-	izanagi::CPostEffectTextureCreator* m_TexCreator;
+    izanagi::CPostEffectSystem* m_System;
+    izanagi::CPostEffect* m_PostEffect;
+    izanagi::CPostEffectTextureCreator* m_TexCreator;
 
-	izanagi::graph::CTexture* m_SrcTex;
+    izanagi::graph::CTexture* m_SrcTex;
 
-	IZ_BOOL m_Enable;
+    IZ_BOOL m_Enable;
 
-	IZ_UINT m_CurTechIdx;
+    IZ_UINT m_CurTechIdx;
 };
 
-#endif	// #if !defined(__POSTEFFECT_SAMPLE_H__)
+#endif    // #if !defined(__POSTEFFECT_SAMPLE_H__)

@@ -5,16 +5,16 @@
 
 namespace izanagi {
 namespace sample {
-	class CSampleApp;
+    class CSampleApp;
 }
 }
 
 IZ_INT SampleMain(
-	void* systemData,
-	izanagi::sample::CSampleApp* app,
-	const char* title,
-	IZ_UINT screenWidth, IZ_UINT screenHeight,
-	void* allocatorBuf, IZ_UINT bufSize,
-	void* graphBuf, IZ_UINT graphBufSize);
+    void* systemData,
+    izanagi::sample::CSampleApp* app,
+    const char* title,
+    IZ_UINT screenWidth, IZ_UINT screenHeight,
+    void* allocatorBuf, IZ_UINT bufSize,
+    void* graphBuf, IZ_UINT graphBufSize);
 
-#endif	// #if !defined(__IZ_SAMPLE_SAMPLE_MAIN_H__)
+#endif    // #if !defined(__IZ_SAMPLE_SAMPLE_MAIN_H__)

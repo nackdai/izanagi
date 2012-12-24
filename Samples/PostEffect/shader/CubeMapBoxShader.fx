@@ -1,15 +1,15 @@
 // Basic Shader
 
 struct SVSInput {
-	float4 vPos	: POSITION;
+    float4 vPos    : POSITION;
 };
 
 struct SPSInput {
-	float4 vPos	: POSITION;
-	float3 vUV	: TEXCOORD0;
+    float4 vPos    : POSITION;
+    float3 vUV    : TEXCOORD0;
 };
 
-#define SVSOutput		SPSInput
+#define SVSOutput        SPSInput
 
 /////////////////////////////////////////////////////////////
 
@@ -20,39 +20,39 @@ texture tex;
 
 samplerCUBE sTex = sampler_state
 {
-	Texture = tex;
+    Texture = tex;
 };
 
 /////////////////////////////////////////////////////////////
 
 SVSOutput mainVS(SVSInput In)
 {
-	SVSOutput Out = (SVSOutput)0;
+    SVSOutput Out = (SVSOutput)0;
 
-	Out.vPos = mul(In.vPos, g_mL2W);
-	Out.vPos = mul(Out.vPos, g_mW2C);
+    Out.vPos = mul(In.vPos, g_mL2W);
+    Out.vPos = mul(Out.vPos, g_mW2C);
 
-	// NOTE
-	// -1.0f - 1.0f �̃{�b�N�X�ł��邱�ƁI�I
-	Out.vUV = In.vPos.xyz;
-	
-	return Out;
+    // NOTE
+    // -1.0f - 1.0f �̃{�b�N�X�ł��邱�ƁI�I
+    Out.vUV = In.vPos.xyz;
+    
+    return Out;
 }
 
 float4 mainPS(SPSInput In) : COLOR
 {
-	float4 vOut = texCUBE(sTex, In.vUV);
+    float4 vOut = texCUBE(sTex, In.vUV);
 
-	return vOut;
+    return vOut;
 }
 
 /////////////////////////////////////////////////////////////
 
 technique BasicShader
 {
-	pass P0
-	{
-		VertexShader = compile vs_2_0 mainVS();
-		PixelShader = compile ps_2_0 mainPS();
-	}
+    pass P0
+    {
+        VertexShader = compile vs_2_0 mainVS();
+        PixelShader = compile ps_2_0 mainPS();
+    }
 }

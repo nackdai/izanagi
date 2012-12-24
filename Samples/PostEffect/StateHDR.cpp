@@ -4,8 +4,8 @@
 #include "PostEffectSample.h"
 
 CStateHDR::CStateHDR(
-	izanagi::sample::CSampleApp* app,
-	izanagi::SCameraParam& camera)
+    izanagi::sample::CSampleApp* app,
+    izanagi::SCameraParam& camera)
 : CStatePostEffect(app, camera)
 {
 }
@@ -18,15 +18,15 @@ CStateHDR::~CStateHDR()
 IZ_BOOL CStateHDR::Render(izanagi::graph::CGraphicsDevice* device)
 {
     CStatePostEffect::Render(device);
-	RenderName(device, "HDR");
+    RenderName(device, "HDR");
 
-	return IZ_TRUE;
+    return IZ_TRUE;
 }
 
 // 開始
 IZ_BOOL CStateHDR::Enter(
-	izanagi::IMemoryAllocator* allocator,
-	void* val)
+    izanagi::IMemoryAllocator* allocator,
+    void* val)
 {
     IZ_BOOL ret = CPostEffectSample::GetInstance()->Read("data/HDR.pes");
     return ret;

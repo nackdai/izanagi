@@ -9,15 +9,15 @@ static IZ_UINT GFX_BUF[GFX_BUF_SIZE];
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-	CDebugMeshApp app;
+    CDebugMeshApp app;
 
-	int ret = SampleMain(
-		hInstance,
-		&app,
-		"DebugMesh",
-		SCREEN_WIDTH, SCREEN_HEIGHT,
-		BUF, BUF_SIZE,
-		GFX_BUF, GFX_BUF_SIZE);
+    int ret = SampleMain(
+        hInstance,
+        &app,
+        "DebugMesh",
+        SCREEN_WIDTH, SCREEN_HEIGHT,
+        BUF, BUF_SIZE,
+        GFX_BUF, GFX_BUF_SIZE);
 
-	return ret;
+    return ret;
 }
