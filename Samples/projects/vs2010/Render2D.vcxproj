@@ -81,7 +81,7 @@
     <ClCompile Include="..\..\Render2D\Render2D.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\..\data\earth.xml">
+    <CustomBuild Include="..\..\..\Media\earth.xml">
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(PROJECT_MAIN_DIR)data\%(Filename).img;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(TOOL_DIR)Release\ImageBuilder.exe -i "%(FullPath)" -o "$(PROJECT_MAIN_DIR)data\%(Filename).img"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">Performing Custom Build Tools</Message>

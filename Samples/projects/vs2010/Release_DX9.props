@@ -3,7 +3,7 @@
   <PropertyGroup Label="UserMacros">
     <PROJECT_MAIN_DIR>$(ProjectDir)..\..\$(ProjectName)\</PROJECT_MAIN_DIR>
     <TOOL_DIR>$(ProjectDir)..\..\..\Tools\tools\</TOOL_DIR>
-    <DATA_DIR>$(ProjectDir)..\..\data\</DATA_DIR>
+    <DATA_DIR>$(ProjectDir)..\..\..\Media\</DATA_DIR>
   </PropertyGroup>
   <PropertyGroup>
     <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>

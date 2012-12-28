@@ -25,18 +25,18 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\data\FontSample_Sjis.txt">
+    <None Include="..\..\..\Media\FontSample_Sjis.txt">
       <Filter>asset</Filter>
     </None>
-    <None Include="..\..\data\FontSample_Utf8.txt">
+    <None Include="..\..\..\Media\FontSample_Utf8.txt">
       <Filter>asset</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\..\data\FontSample_Sjis.list">
+    <CustomBuild Include="..\..\..\Media\FontSample_Sjis.list">
       <Filter>asset</Filter>
     </CustomBuild>
-    <CustomBuild Include="..\..\data\FontSample_Utf8.list">
+    <CustomBuild Include="..\..\..\Media\FontSample_Utf8.list">
       <Filter>asset</Filter>
     </CustomBuild>
   </ItemGroup>

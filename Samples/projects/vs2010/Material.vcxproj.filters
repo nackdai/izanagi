@@ -34,10 +34,10 @@
     <CustomBuild Include="..\..\Material\shader\SkinShader.xml">
       <Filter>shader</Filter>
     </CustomBuild>
-    <CustomBuild Include="..\..\data\ModelImage.xml">
+    <CustomBuild Include="..\..\..\Media\ModelImage.xml">
       <Filter>asset</Filter>
     </CustomBuild>
-    <CustomBuild Include="..\..\data\Seymour.dae">
+    <CustomBuild Include="..\..\..\Media\Seymour.dae">
       <Filter>asset</Filter>
     </CustomBuild>
   </ItemGroup>

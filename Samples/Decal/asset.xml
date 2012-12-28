@@ -2,9 +2,9 @@
 
 <textures>
   <plane
-      path="../data/earth.bmp"
+      path="../../Media/earth.bmp"
       fmt="dxt5"/>
   <plane
-    path="../data/a.png"
+    path="../../Media/a.png"
     fmt="dxt5"/>
 </textures>

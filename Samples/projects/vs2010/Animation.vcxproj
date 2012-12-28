@@ -106,7 +106,7 @@
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">%(RootDir)%(Directory)%(Filename).fx;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
     </CustomBuild>
-    <CustomBuild Include="..\..\data\miku.pmd">
+    <CustomBuild Include="..\..\..\Media\miku.pmd">
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ModelConverter.exe -i "%(FullPath)" -mtx 48 -list
 move %(RootDir)%(Directory)\%(Filename).msh $(TargetDir)\data
@@ -114,13 +114,13 @@ move %(RootDir)%(Directory)\%(Filename).skl $(TargetDir)\data</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(FullPath);%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(TargetDir)\data\%(Filename).msh;%(Outputs)</Outputs>
     </CustomBuild>
-    <CustomBuild Include="..\..\data\miku_step.vmd">
+    <CustomBuild Include="..\..\..\Media\miku_step.vmd">
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\AnimationConverter.exe -i "%(FullPath)" -b "%(RootDir)%(Directory)miku.pmd" -o $(TargetDir)\data\%(Filename).anm</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(FullPath);%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(TargetDir)\data\%(Filename).anm;%(Outputs)</Outputs>
     </CustomBuild>
-    <CustomBuild Include="..\..\data\ModelImage.xml">
+    <CustomBuild Include="..\..\..\Media\ModelImage.xml">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(TOOL_DIR)Release\ImageBuilder.exe -i "%(FullPath)" -o "$(PROJECT_MAIN_DIR)data\%(Filename).img"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(PROJECT_MAIN_DIR)data\%(Filename).img;%(Outputs)</Outputs>
@@ -128,7 +128,7 @@ move %(RootDir)%(Directory)\%(Filename).skl $(TargetDir)\data</Command>
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(PROJECT_MAIN_DIR)data\%(Filename).img;%(Outputs)</Outputs>
     </CustomBuild>
-    <CustomBuild Include="..\..\data\Seymour.dae">
+    <CustomBuild Include="..\..\..\Media\Seymour.dae">
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(TOOL_DIR)Release\ModelConverter.exe -i "%(FullPath)" -mtx 48
 move "$(DATA_DIR)%(Filename).msh" "$(PROJECT_MAIN_DIR)data"
@@ -147,7 +147,7 @@ move "$(DATA_DIR)%(Filename).anm" "$(PROJECT_MAIN_DIR)data"</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">%(FullPath);%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(DATA_DIR)%(Filename).msh;%(Outputs)</Outputs>
     </CustomBuild>
-    <CustomBuild Include="..\..\data\tiny.x">
+    <CustomBuild Include="..\..\..\Media\tiny.x">
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(TOOL_DIR)Release\ModelConverter.exe -i "%(FullPath)" -mtx 48
 move "$(DATA_DIR)%(Filename).msh" "$(PROJECT_MAIN_DIR)data"

@@ -96,7 +96,7 @@
     <CustomBuild Include="..\..\Shader\shader\PhongShader.xml">
       <Filter>shader</Filter>
     </CustomBuild>
-    <CustomBuild Include="..\..\data\EnvMap.xml">
+    <CustomBuild Include="..\..\..\Media\EnvMap.xml">
       <Filter>asset</Filter>
     </CustomBuild>
     <CustomBuild Include="..\..\Shader\shader\PointLightShader.xml">

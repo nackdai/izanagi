@@ -150,7 +150,7 @@
     <CustomBuild Include="..\..\PostEffect\shader\PhongShader.xml">
       <Filter>shader</Filter>
     </CustomBuild>
-    <CustomBuild Include="..\..\data\EnvMap.xml">
+    <CustomBuild Include="..\..\..\Media\EnvMap.xml">
       <Filter>asset</Filter>
     </CustomBuild>
     <CustomBuild Include="..\..\PostEffect\shader\CubeMapBoxShader.xml">

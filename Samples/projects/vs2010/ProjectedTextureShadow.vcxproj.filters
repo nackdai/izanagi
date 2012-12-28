@@ -42,7 +42,7 @@
     <CustomBuild Include="..\..\ProjectedTextureShadow\shader\BasicShader.xml">
       <Filter>shader</Filter>
     </CustomBuild>
-    <CustomBuild Include="..\..\data\earth.xml">
+    <CustomBuild Include="..\..\..\Media\earth.xml">
       <Filter>asset</Filter>
     </CustomBuild>
   </ItemGroup>

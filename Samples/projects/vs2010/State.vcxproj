@@ -95,7 +95,7 @@
     <ClInclude Include="..\..\State\StateManager.h" />
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\..\data\StateImage.xml">
+    <CustomBuild Include="..\..\..\Media\StateImage.xml">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(TOOL_DIR)Release\ImageBuilder.exe -i "%(FullPath)" -o "$(PROJECT_MAIN_DIR)data\%(Filename).img"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(PROJECT_MAIN_DIR)data\%(Filename).img;%(Outputs)</Outputs>
