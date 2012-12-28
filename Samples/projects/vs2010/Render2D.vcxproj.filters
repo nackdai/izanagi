@@ -17,7 +17,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\..\data\earth.xml">
+    <CustomBuild Include="..\..\..\Media\earth.xml">
       <Filter>asset</Filter>
     </CustomBuild>
   </ItemGroup>

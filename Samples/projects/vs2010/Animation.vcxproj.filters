@@ -40,19 +40,19 @@
     <CustomBuild Include="..\..\Animation\shader\SkinShader.xml">
       <Filter>shader</Filter>
     </CustomBuild>
-    <CustomBuild Include="..\..\data\miku.pmd">
+    <CustomBuild Include="..\..\..\Media\miku.pmd">
       <Filter>asset</Filter>
     </CustomBuild>
-    <CustomBuild Include="..\..\data\miku_step.vmd">
+    <CustomBuild Include="..\..\..\Media\miku_step.vmd">
       <Filter>asset</Filter>
     </CustomBuild>
-    <CustomBuild Include="..\..\data\ModelImage.xml">
+    <CustomBuild Include="..\..\..\Media\ModelImage.xml">
       <Filter>asset</Filter>
     </CustomBuild>
-    <CustomBuild Include="..\..\data\Seymour.dae">
+    <CustomBuild Include="..\..\..\Media\Seymour.dae">
       <Filter>asset</Filter>
     </CustomBuild>
-    <CustomBuild Include="..\..\data\tiny.x">
+    <CustomBuild Include="..\..\..\Media\tiny.x">
       <Filter>asset</Filter>
     </CustomBuild>
   </ItemGroup>

@@ -98,13 +98,13 @@
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">%(RootDir)%(Directory)%(Filename).fx;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
     </CustomBuild>
-    <CustomBuild Include="..\..\data\ModelImage.xml">
+    <CustomBuild Include="..\..\..\Media\ModelImage.xml">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(TOOL_DIR)Release\ImageBuilder.exe -i "%(FullPath)" -o "$(PROJECT_MAIN_DIR)data\%(Filename).img"</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(PROJECT_MAIN_DIR)data\%(Filename).img;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(TOOL_DIR)Release\ImageBuilder.exe -i "%(FullPath)" -o "$(PROJECT_MAIN_DIR)data\%(Filename).img"</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(PROJECT_MAIN_DIR)data\%(Filename).img;%(Outputs)</Outputs>
     </CustomBuild>
-    <CustomBuild Include="..\..\data\Seymour.dae">
+    <CustomBuild Include="..\..\..\Media\Seymour.dae">
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(TOOL_DIR)Release\ModelConverter.exe -i "%(FullPath)" -mtx 48
 move "$(DATA_DIR)%(Filename).msh" "$(PROJECT_MAIN_DIR)data"
@@ -119,7 +119,7 @@ move "$(DATA_DIR)%(Filename).skl" "$(PROJECT_MAIN_DIR)data"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">Performing Custom Build Tools</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">Performing Custom Build Tools</Message>
     </CustomBuild>
-    <CustomBuild Include="..\..\data\tiny.x">
+    <CustomBuild Include="..\..\..\Media\tiny.x">
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(TOOL_DIR)Release\ModelConverter.exe -i "%(FullPath)" -mtx 48
 move "$(DATA_DIR)%(Filename).msh" "$(PROJECT_MAIN_DIR)data"

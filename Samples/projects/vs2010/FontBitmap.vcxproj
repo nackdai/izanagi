@@ -87,7 +87,7 @@
     <ClCompile Include="..\..\FontBitmap\FontBitmap.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\..\data\FontSample_Sjis.list">
+    <CustomBuild Include="..\..\..\Media\FontSample_Sjis.list">
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(TOOL_DIR)Release\FontConverter.exe -i "%(FullPath)" -o "$(PROJECT_MAIN_DIR)data\%(Filename).fnt" -aa 4 -c sjis</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(DATA_DIR)%(Filename).txt;%(AdditionalInputs)</AdditionalInputs>
@@ -96,8 +96,8 @@
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(DATA_DIR)%(Filename).txt;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(PROJECT_MAIN_DIR)data\%(Filename).fnt;%(Outputs)</Outputs>
     </CustomBuild>
-    <None Include="..\..\data\FontSample_Sjis.txt" />
-    <CustomBuild Include="..\..\data\FontSample_Utf8.list">
+    <None Include="..\..\..\Media\FontSample_Sjis.txt" />
+    <CustomBuild Include="..\..\..\Media\FontSample_Utf8.list">
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(TOOL_DIR)Release\FontConverter.exe -i "%(FullPath)" -o "$(PROJECT_MAIN_DIR)data\%(Filename).fnt" -aa 4 -c utf8
 </Command>
@@ -108,7 +108,7 @@
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(DATA_DIR)%(Filename).txt;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(PROJECT_MAIN_DIR)data\%(Filename).fnt;%(Outputs)</Outputs>
     </CustomBuild>
-    <None Include="..\..\data\FontSample_Utf8.txt" />
+    <None Include="..\..\..\Media\FontSample_Utf8.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="SampleKit.vcxproj">

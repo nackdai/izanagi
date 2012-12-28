@@ -58,7 +58,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\..\data\StateImage.xml">
+    <CustomBuild Include="..\..\..\Media\StateImage.xml">
       <Filter>asset</Filter>
     </CustomBuild>
   </ItemGroup>
