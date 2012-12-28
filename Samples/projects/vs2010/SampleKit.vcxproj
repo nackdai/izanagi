@@ -60,7 +60,7 @@
       <DisableSpecificWarnings>4819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Lib>
-      <AdditionalDependencies>Std.lib;Graph.lib;Io.lib;DebugUtil.lib;System.lib;SceneGraph.lib;Math.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Std.lib;Graph.lib;DebugUtil.lib;System.lib;SceneGraph.lib;Math.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\..\Libs\project\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
@@ -82,7 +82,7 @@ copy $(ProjectDir)$(ProjectName)\$(Configuration)\$(ProjectName).lib $(ProjectDi
       <DisableSpecificWarnings>4819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Lib>
-      <AdditionalDependencies>Std.lib;Graph.lib;Io.lib;DebugUtil.lib;System.lib;SceneGraph.lib;Math.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Std.lib;Graph.lib;DebugUtil.lib;System.lib;SceneGraph.lib;Math.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\..\Libs\project\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
