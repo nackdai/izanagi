@@ -12,7 +12,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6D78EAB7-35DC-434A-B0D2-75D3B66F0411}</ProjectGuid>
-    <RootNamespace>Animation</RootNamespace>
+    <RootNamespace>Motion</RootNamespace>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -80,21 +80,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Animation\AnimationApp.h" />
+    <ClInclude Include="..\..\Motion\MotionApp.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Animation\AnimationApp.cpp" />
-    <ClCompile Include="..\..\Animation\main.cpp" />
+    <ClCompile Include="..\..\Motion\MotionApp.cpp" />
+    <ClCompile Include="..\..\Motion\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\..\Animation\shader\SkinShader.fx">
+    <CustomBuild Include="..\..\Motion\shader\SkinShader.fx">
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">
       </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">
       </Command>
     </CustomBuild>
-    <CustomBuild Include="..\..\Animation\shader\SkinShader.xml">
+    <CustomBuild Include="..\..\Motion\shader\SkinShader.xml">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(RootDir)%(Directory)%(Filename).fx;%(AdditionalInputs)</AdditionalInputs>

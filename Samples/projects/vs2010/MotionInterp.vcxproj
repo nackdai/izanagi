@@ -12,7 +12,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9DB34A96-C943-42A2-B726-CF877EFA2E46}</ProjectGuid>
-    <RootNamespace>Animation</RootNamespace>
+    <RootNamespace>MotionInterp</RootNamespace>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -86,13 +86,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\AnimationMotionInterp\CustomInterp.cpp" />
-    <ClCompile Include="..\..\AnimationMotionInterp\main.cpp" />
-    <ClCompile Include="..\..\AnimationMotionInterp\MotionInterpApp.cpp" />
+    <ClCompile Include="..\..\MotionInterp\CustomInterp.cpp" />
+    <ClCompile Include="..\..\MotionInterp\main.cpp" />
+    <ClCompile Include="..\..\MotionInterp\MotionInterpApp.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\AnimationMotionInterp\CustomInterp.h" />
-    <ClInclude Include="..\..\AnimationMotionInterp\MotionInterpApp.h" />
+    <ClInclude Include="..\..\MotionInterp\CustomInterp.h" />
+    <ClInclude Include="..\..\MotionInterp\MotionInterpApp.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\..\Media\miku.pmd">
@@ -144,8 +144,8 @@ move "$(DATA_DIR)%(Filename).anm" "$(PROJECT_MAIN_DIR)data"</Command>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\AnimationMotionInterp\shader\SkinShader.fx" />
-    <CustomBuild Include="..\..\AnimationMotionInterp\shader\SkinShader.xml">
+    <None Include="..\..\MotionInterp\shader\SkinShader.fx" />
+    <CustomBuild Include="..\..\MotionInterp\shader\SkinShader.xml">
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd</Outputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(RootDir)%(Directory)%(Filename).fx</AdditionalInputs>

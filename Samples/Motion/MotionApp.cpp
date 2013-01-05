@@ -1,4 +1,4 @@
-#include "AnimationApp.h"
+#include "MotionApp.h"
 
 /////////////////////////////////////////////////
 
@@ -104,7 +104,7 @@ static CSampleMdlRenderHandler* s_MdlRenderHandler = IZ_NULL;
     #define CAMERA_Z    (300.0f)
 #endif
 
-CAnimationApp::CAnimationApp()
+CMotionApp::CMotionApp()
 {
     m_Img = IZ_NULL;
     m_Mdl = IZ_NULL;
@@ -114,12 +114,12 @@ CAnimationApp::CAnimationApp()
     m_Anm = IZ_NULL;
 }
 
-CAnimationApp::~CAnimationApp()
+CMotionApp::~CMotionApp()
 {
 }
 
 // 初期化.
-IZ_BOOL CAnimationApp::InitInternal(
+IZ_BOOL CMotionApp::InitInternal(
     izanagi::IMemoryAllocator* allocator,
     izanagi::graph::CGraphicsDevice* device,
     izanagi::sample::CSampleCamera& camera)
@@ -236,7 +236,7 @@ __EXIT__:
 }
 
 // 解放.
-void CAnimationApp::ReleaseInternal()
+void CMotionApp::ReleaseInternal()
 {
     SAFE_RELEASE(m_Img);
     SAFE_RELEASE(m_Mdl);
@@ -249,7 +249,7 @@ void CAnimationApp::ReleaseInternal()
 }
 
 // 更新.
-void CAnimationApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
+void CMotionApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
     GetCamera().Update();
 
@@ -285,7 +285,7 @@ namespace {
 }
 
 // 描画.
-void CAnimationApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
+void CMotionApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
     izanagi::sample::CSampleCamera& camera = GetCamera();
 

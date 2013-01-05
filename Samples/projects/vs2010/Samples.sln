@@ -17,7 +17,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "State", "State.vcxproj", "{
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Model", "Model.vcxproj", "{3E4CC7BD-7CE1-4854-ADCF-96ABE7F7A317}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Animation", "Animation.vcxproj", "{6D78EAB7-35DC-434A-B0D2-75D3B66F0411}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Motion", "Motion.vcxproj", "{6D78EAB7-35DC-434A-B0D2-75D3B66F0411}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Material", "Material.vcxproj", "{C92ED3CD-028A-4025-B6C7-5ED0A5C4CB9A}"
 EndProject
@@ -43,7 +43,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GamePad", "GamePad.vcxproj"
 		{DD5D28B8-93F1-4F26-8AD1-DD224CCB9A4F} = {DD5D28B8-93F1-4F26-8AD1-DD224CCB9A4F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AnimationMotionInterp", "AnimationMotionInterp.vcxproj", "{9DB34A96-C943-42A2-B726-CF877EFA2E46}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MotionInterp", "MotionInterp.vcxproj", "{9DB34A96-C943-42A2-B726-CF877EFA2E46}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
