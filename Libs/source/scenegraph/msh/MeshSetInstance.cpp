@@ -97,7 +97,8 @@ IZ_BOOL CMeshSetInstance::IsTranslucent() const
     IZ_ASSERT(m_Mtrl != IZ_NULL);
 
     // マテリアル自体が半透明設定されているかどうか
-    IZ_BOOL isTranslucent = (m_Mtrl->GetAlpha() == IZ_UINT8_MAX);
+    // 最大値でなければ半透明となる
+    IZ_BOOL isTranslucent = (m_Mtrl->GetAlpha() != IZ_UINT8_MAX);
 
     // 半透明テクスチャの有無をチェック
     IZ_BOOL isTransTex = IZ_FALSE;
