@@ -15,25 +15,14 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Animation\AnimationApp.h">
-      <Filter>include</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\Animation\AnimationApp.cpp">
+    <ClCompile Include="..\..\Motion\main.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Animation\main.cpp">
+    <ClCompile Include="..\..\Motion\MotionApp.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\..\Animation\shader\SkinShader.fx">
-      <Filter>shader</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\..\Animation\shader\SkinShader.xml">
-      <Filter>shader</Filter>
-    </CustomBuild>
     <CustomBuild Include="..\..\..\Media\ModelImage.xml">
       <Filter>asset</Filter>
     </CustomBuild>
@@ -43,5 +32,16 @@
     <CustomBuild Include="..\..\..\Media\tiny.x">
       <Filter>asset</Filter>
     </CustomBuild>
+    <CustomBuild Include="..\..\Motion\shader\SkinShader.fx">
+      <Filter>shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\Motion\shader\SkinShader.xml">
+      <Filter>shader</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Motion\MotionApp.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

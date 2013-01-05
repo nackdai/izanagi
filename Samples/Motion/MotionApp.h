@@ -7,10 +7,10 @@
 static const IZ_UINT SCREEN_WIDTH = 1280;
 static const IZ_UINT SCREEN_HEIGHT = 720;
 
-class CAnimationApp : public izanagi::sample::CSampleApp {
+class CMotionApp : public izanagi::sample::CSampleApp {
 public:
-    CAnimationApp();
-    virtual ~CAnimationApp();
+    CMotionApp();
+    virtual ~CMotionApp();
 
 protected:
     // 初期化.

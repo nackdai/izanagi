@@ -15,21 +15,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\AnimationMotionInterp\MotionInterpApp.cpp">
+    <ClCompile Include="..\..\MotionInterp\CustomInterp.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\AnimationMotionInterp\CustomInterp.cpp">
+    <ClCompile Include="..\..\MotionInterp\MotionInterpApp.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\AnimationMotionInterp\main.cpp">
+    <ClCompile Include="..\..\MotionInterp\main.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\AnimationMotionInterp\CustomInterp.h">
+    <ClInclude Include="..\..\MotionInterp\CustomInterp.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\AnimationMotionInterp\MotionInterpApp.h">
+    <ClInclude Include="..\..\MotionInterp\MotionInterpApp.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
@@ -46,12 +46,12 @@
     <CustomBuild Include="..\..\..\Media\MikuImage.xml">
       <Filter>asset</Filter>
     </CustomBuild>
-    <CustomBuild Include="..\..\AnimationMotionInterp\shader\SkinShader.xml">
+    <CustomBuild Include="..\..\MotionInterp\shader\SkinShader.xml">
       <Filter>shader</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\AnimationMotionInterp\shader\SkinShader.fx">
+    <None Include="..\..\MotionInterp\shader\SkinShader.fx">
       <Filter>shader</Filter>
     </None>
   </ItemGroup>
