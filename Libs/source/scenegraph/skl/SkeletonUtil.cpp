@@ -29,7 +29,7 @@ namespace {
             paramNum = 1;
             paramPos = 3;
             break;
-        case E_ANM_TRANSFORM_TYPE_XYZ:  // XWZのみ
+        case E_ANM_TRANSFORM_TYPE_XYZ:  // XYZのみ
             math::SVector::CopyXYZ(
                 *(reinterpret_cast<math::SVector*>(dst)),
                 src);
