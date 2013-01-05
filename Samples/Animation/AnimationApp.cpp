@@ -1,5 +1,4 @@
 #include "AnimationApp.h"
-#include "CustomInterp.h"
 
 /////////////////////////////////////////////////
 
@@ -97,13 +96,6 @@ static CSampleMdlRenderHandler* s_MdlRenderHandler = IZ_NULL;
     #define ANM_FILE_NAME    "data/Seymour.anm"
     #define IMG_IDX        (0)
     #define CAMERA_Z    (30.0f)
-#elif 0
-    #define MSH_FILE_NAME    "data/miku.msh"
-    #define SKL_FILE_NAME    "data/miku.skl"
-    #define ANM_FILE_NAME    "data/miku_step.anm"
-    #define IMG_IDX        (0)
-    #define CAMERA_Z    (30.0f)
-
 #else
     #define MSH_FILE_NAME    "data/tiny.msh"
     #define SKL_FILE_NAME    "data/tiny.skl"
@@ -182,9 +174,6 @@ IZ_BOOL CAnimationApp::InitInternal(
                     &in);
 
         VGOTO(result = (m_Anm != IZ_NULL), __EXIT__);
-
-        izanagi::CAnimation::SetUserFuncInterpScalar(CCustomInterp::InterpScalar);
-        izanagi::CAnimation::SetUserFuncInterpVector(CCustomInterp::InterpVector);
     }
 
     // Shader
