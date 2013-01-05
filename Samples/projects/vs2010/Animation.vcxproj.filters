@@ -18,15 +18,9 @@
     <ClInclude Include="..\..\Animation\AnimationApp.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Animation\CustomInterp.h">
-      <Filter>include</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Animation\AnimationApp.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Animation\CustomInterp.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Animation\main.cpp">
@@ -39,12 +33,6 @@
     </CustomBuild>
     <CustomBuild Include="..\..\Animation\shader\SkinShader.xml">
       <Filter>shader</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\Media\miku.pmd">
-      <Filter>asset</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\Media\miku_step.vmd">
-      <Filter>asset</Filter>
     </CustomBuild>
     <CustomBuild Include="..\..\..\Media\ModelImage.xml">
       <Filter>asset</Filter>
