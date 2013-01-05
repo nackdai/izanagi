@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<textures>
+  <plane
+      path="./dummy.png"
+      fmt="rgba8"/>
+  <plane
+      path="./eye2.bmp"
+      fmt="rgba8"/>
+</textures>
