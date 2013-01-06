@@ -37,9 +37,6 @@
     <CustomBuild Include="..\..\..\Media\miku.pmd">
       <Filter>asset</Filter>
     </CustomBuild>
-    <CustomBuild Include="..\..\..\Media\miku_run.vmd">
-      <Filter>asset</Filter>
-    </CustomBuild>
     <CustomBuild Include="..\..\..\Media\miku_walk.vmd">
       <Filter>asset</Filter>
     </CustomBuild>
