@@ -82,7 +82,7 @@ IZ_BOOL CAnimationInterp::SetAnimation(
 
 namespace
 {
-    void _SetDefaulsePoseParameter(S_SKL_JOINT_POSE& pose)
+    inline void _SetDefaulsePoseParameter(S_SKL_JOINT_POSE& pose)
     {
         pose.trans[0] = pose.trans[1] = pose.trans[2] = 0.0f;
         math::SQuat::SetDefaultZero(pose.quat);
