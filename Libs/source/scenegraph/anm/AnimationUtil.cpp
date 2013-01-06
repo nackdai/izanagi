@@ -120,6 +120,11 @@ IZ_FLOAT CAnimationUtil::ComputeNomralizedTime(
     nPrev = 0;
     nNext = -1;
 
+    if (nKeyNum == 1)
+    {
+        return 0.0f;
+    }
+
     IZ_FLOAT fPrevTime = pKeys[0]->keyTime;
 
     for (IZ_UINT i = 1; i < nKeyNum; ++i) {
