@@ -26,6 +26,16 @@ IZ_BOOL CAnmLinearBlender::Init()
     return IZ_TRUE;
 }
 
+namespace
+{
+    inline void _SetDefaulsePoseParameter(S_SKL_JOINT_POSE& pose)
+    {
+        pose.trans[0] = pose.trans[1] = pose.trans[2] = 0.0f;
+        math::SQuat::SetDefaultZero(pose.quat);
+        pose.scale[0] = pose.scale[1] = pose.scale[2] = 1.0f;
+    }
+}
+
 IZ_UINT CAnmLinearBlender::ApplyAnimation(
     IZ_FLOAT time,
     IZ_UINT nJointIdx,
@@ -38,6 +48,9 @@ IZ_UINT CAnmLinearBlender::ApplyAnimation(
     
     S_SKL_JOINT_POSE poseStart;
     S_SKL_JOINT_POSE poseGoal;
+
+    _SetDefaulsePoseParameter(poseStart);
+    _SetDefaulsePoseParameter(poseGoal);
 
     IZ_UINT updateFlagStart = 0;
     IZ_UINT updateFlagGoal = 0;
