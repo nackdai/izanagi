@@ -11,7 +11,7 @@ namespace izanagi {
 
     /**
     */
-    class CAnimation : public IAnimation {
+    class CAnimation : public CAnimationCachable {
         static const IZ_UINT HASH_SIZE = 16;
 
         struct SAnmNodeInstance;

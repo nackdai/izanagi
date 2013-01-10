@@ -6,7 +6,7 @@
 namespace izanagi {
     /** モーションブレンディングのベースとなるインターフェースクラス
      */
-    class IAnimationBlender : public IAnimation {
+    class IAnimationBlender : public CAnimationCachable {
     public:
         template <class _T>
         static _T* CreateAnmBlender(IMemoryAllocator* allocator)

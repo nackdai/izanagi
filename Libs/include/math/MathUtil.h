@@ -89,7 +89,16 @@ namespace math
         static inline IZ_BOOL IsNearyEqual(IZ_FLOAT a, IZ_FLOAT b)
         {
             //return ((a < b + IZ_MATH_EPSILON) && (a > b - IZ_MATH_EPSILON));
-            return ((b - 1e-5f <= a) && (a <= b + 1e-5f));
+            return IsNearyEqual(a, b, 1e-5f);
+        }
+
+        /**
+        * ２つの値が「だいたい」等しいかどうか比べる
+        */
+        static inline IZ_BOOL IsNearyEqual(IZ_FLOAT a, IZ_FLOAT b, IZ_FLOAT lamda)
+        {
+            //return ((a < b + IZ_MATH_EPSILON) && (a > b - IZ_MATH_EPSILON));
+            return ((b - lamda <= a) && (a <= b + lamda));
         }
 
         /**

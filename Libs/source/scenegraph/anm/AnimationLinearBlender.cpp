@@ -43,6 +43,11 @@ IZ_UINT CAnmLinearBlender::ApplyAnimation(
 {
     IZ_UINT updateFlag = 0;
 
+    if (IsCachedAnimation(time, updateFlag))
+    {
+        return updateFlag;
+    }
+
     // 姿勢情報更新開始
     VRETURN_VAL(poseUpdater.BeginUpdate(nJointIdx), 0);
     
@@ -111,6 +116,8 @@ IZ_UINT CAnmLinearBlender::ApplyAnimation(
     poseUpdater.EndUpdate(
         nJointIdx,
         updateFlag);
+
+    SetUpdatedFlag(updateFlag);
 
     return updateFlag;
 }
