@@ -24,13 +24,15 @@ CAnimationBinder* CAnimationBinder::CreateAnimationBinder(
     // インスタンス作成
     CAnimationBinder* instance = new(buf) CAnimationBinder;
     {
-        buf += sizeof(SJointInfo) * jointNum;
+        buf += sizeof(CAnimationBinder);
 
         instance->AddRef();
 
         instance->m_Allocator = allocator;
         instance->m_JointNum = jointNum;
+
         instance->m_Joints = reinterpret_cast<SJointInfo*>(buf);
+        buf += sizeof(SJointInfo) * jointNum;
 
         SAFE_REPLACE(
             instance->m_Skl,
