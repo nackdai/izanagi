@@ -25,7 +25,10 @@ struct SOption {
     IZ_UINT maxJointMtxNum;
 
     // トライアングルリストで出力するかどうか
-    IZ_BOOL isExportTriList;
+    IZ_BOOL needExportTriList;
+
+    // 骨情報を出力するかどうか
+    IZ_BOOL needExportBoneInfo;
 };
 
 class COption : public CToolOption<SOption> {

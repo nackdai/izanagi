@@ -244,8 +244,8 @@ IZ_PCSTR CPmdImporter::GetJointName(IZ_UINT nIdx)
 {
     // TODO
 #if 1
-    izanagi::tool::CString str;
-    str.format("Joint_%d", nIdx);
+    static izanagi::tool::CString str;
+    str.format("Joint_%d\0", nIdx);
     return str.c_str();
 #else
     const SPmdBone& bone = m_PmdLoader.GetBone(nIdx);
