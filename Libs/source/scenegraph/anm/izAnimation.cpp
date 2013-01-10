@@ -152,11 +152,17 @@ IZ_UINT CAnimation::ApplyAnimation(
     const S_ANM_NODE* anmNode,
     CPoseUpdater& poseUpdater)
 {
+    IZ_UINT updateFlag = 0;
+
+    if (IsCachedAnimation(time, updateFlag))
+    {
+        return updateFlag;
+    }
+
     const S_ANM_NODE& sAnmNode = *anmNode;
     const IZ_UINT nJointIdx = sAnmNode.targetIdx;
 
     math::SVector param;
-    IZ_UINT updateFlag = 0;
 
     // 姿勢情報更新開始
     VRETURN_VAL(poseUpdater.BeginUpdate(nJointIdx), 0);
@@ -245,6 +251,8 @@ IZ_UINT CAnimation::ApplyAnimation(
     poseUpdater.EndUpdate(
         nJointIdx,
         updateFlag);
+
+    SetUpdatedFlag(updateFlag);
 
     return updateFlag;
 }

@@ -42,9 +42,38 @@ namespace izanagi {
                 S_SKL_JOINT_POSE& pose,
                 IZ_UINT idx,
                 IZ_FLOAT time));
+    };
+
+    class CAnimationCachable : public IAnimation
+    {
+    protected:
+        CAnimationCachable()
+        {
+            m_AppliedTime = -1.0f;
+            m_UpdatedFlag = 0;
+        }
+        virtual ~CAnimationCachable() {}
 
     protected:
-        
+        IZ_BOOL IsCachedAnimation(IZ_FLOAT time, IZ_UINT& updateFlag)
+        {
+            IZ_BOOL disable = math::CMath::IsNearyEqual(m_AppliedTime, time, 1.0f / 60.0f);
+            IZ_BOOL enable = !disable;
+
+            m_AppliedTime = time;
+            updateFlag = m_UpdatedFlag;
+
+            return IZ_FALSE;;
+        }
+
+        void SetUpdatedFlag(IZ_UINT updateFlag)
+        {
+            m_UpdatedFlag = updateFlag;
+        }
+
+    private:
+        IZ_FLOAT m_AppliedTime;
+        IZ_UINT m_UpdatedFlag;
     };
 }   // namespace izanagi
 
