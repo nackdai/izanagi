@@ -40,6 +40,7 @@ namespace {
             "\n"
             " -list     : メッシュをトライアングルリストとして出力\n"
             "             デフォルトではトライアングルストリップとして出力\n"
+            " -bone_info : 骨情報を出力\n"
         );
     }
 }
@@ -69,8 +70,9 @@ int main(int argc, char* argv[])
         INVALID_RET_VAL);
 
     // トライアングルリストで出力するかどうかを設定.
-    CMshExporter::GetInstance().SetIsExportTriList(option.isExportTriList);
+    CMshExporter::GetInstance().SetIsExportTriList(option.needExportTriList);
 
+#if 1
     // 出力
     if (option.exportType == ExportTypeMdl) {
         // Model
@@ -94,6 +96,31 @@ int main(int argc, char* argv[])
         VRETURN_VAL(
             CSklExporter::GetInstance().Export(
                 option.outSkl.c_str(),
+                importer),
+            INVALID_RET_VAL);
+    }
+#endif
+
+    if (option.needExportBoneInfo)
+    {
+        // TODO
+        static char tmp[256];
+        izanagi::tool::CFileUtility::GetPathWithoutFileName(
+            tmp,
+            sizeof(tmp),
+            option.outSkl.c_str());
+
+        izanagi::tool::CString boneInfo;
+        if (::strlen(tmp) == 0)
+        {
+            tmp[0] = '.';
+            tmp[1] = 0;
+        }
+        boneInfo.format("%s\\bone_info.txt", tmp);
+
+        VRETURN_VAL(
+            CSklExporter::GetInstance().ExportBoneInfo(
+                boneInfo.c_str(),
                 importer),
             INVALID_RET_VAL);
     }

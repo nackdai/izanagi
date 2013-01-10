@@ -5,7 +5,8 @@ COption::COption()
 {
     exportType = ExportTypeMsh | ExportTypeSkl;
     maxJointMtxNum = 0;
-    isExportTriList = IZ_FALSE;
+    needExportTriList = IZ_FALSE;
+    needExportBoneInfo = IZ_FALSE;
 }
 
 COption::~COption()
@@ -53,7 +54,11 @@ IZ_BOOL COption::Analysis(int argc, char* argv[])
         {
             if (result = (opt == "-list"))
             {
-                isExportTriList = IZ_TRUE;
+                needExportTriList = IZ_TRUE;
+            }
+            else if (result = (opt == "-bone_info"))
+            {
+                needExportBoneInfo = IZ_TRUE;
             }
         }
 

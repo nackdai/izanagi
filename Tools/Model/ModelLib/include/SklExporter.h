@@ -21,6 +21,10 @@ public:
         IZ_PCSTR lpszOutFile,
         IImporter* pImporter);
 
+    IZ_BOOL ExportBoneInfo(
+        IZ_PCSTR outFile,
+        IImporter* importer);
+
 private:
     izanagi::CFileOutputStream m_Out;
 };
