@@ -79,7 +79,7 @@ namespace izanagi {
         inline const CKey& operator=(const CKey& rhs);
 
     protected:
-        CKey(const CKey& rhs);
+        CKey(const CKey& rhs) { IZ_ASSERT(IZ_FALSE); }
 
     public:
         inline IZ_UINT GetValue() const;
