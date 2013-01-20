@@ -431,7 +431,11 @@ BOOL CFontConverter::CreateFontImage(
     std::set<IZ_UINT>::const_iterator itChar = tsCharList.begin();
 
     GLYPHMETRICS sGlyphMetrics;
-    const MAT2 mat = {{0, 1},{0, 0},{0, 0},{0, 1}};
+    const MAT2 mat = 
+    {
+        {0, 1},{0, 0},  // 1, 0
+        {0, 0},{0, 1}   // 0, 1
+    };
 
     // TODO
     IZ_UINT nTMAscent, nTMHeight;
