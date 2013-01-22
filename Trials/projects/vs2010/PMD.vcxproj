@@ -12,7 +12,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{BB75A8D8-E50F-4E53-B715-578424CF6504}</ProjectGuid>
-    <RootNamespace>ThreadModel</RootNamespace>
+    <RootNamespace>PMD</RootNamespace>
     <Keyword>MFCProj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -116,7 +116,7 @@
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(RootDir)%(Directory)%(Filename).fx</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">%(RootDir)%(Directory)%(Filename).fx</AdditionalInputs>
     </CustomBuild>
-    <None Include="..\..\ThreadModel\ReadMe.txt" />
+    <None Include="..\..\PMD\ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\PMD\CustomInterp.cpp" />
