@@ -10,10 +10,10 @@
     <ClInclude Include="..\..\PMD\CustomInterp.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\ThreadModel\ReadMe.txt" />
     <None Include="..\..\PMD\shader\SkinShader.fx">
       <Filter>shader</Filter>
     </None>
+    <None Include="..\..\PMD\ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="shader">
