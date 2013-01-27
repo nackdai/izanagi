@@ -1,0 +1,251 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="headers">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="ressources">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="sources">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\harfbuzz\src\hb-blob.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\harfbuzz\src\hb-buffer.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\harfbuzz\src\hb-common.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\harfbuzz\src\hb-font.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\harfbuzz\src\hb-ft.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\harfbuzz\src\hb-ot-layout.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\harfbuzz\src\hb-ot-tag.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\harfbuzz\src\hb-ot.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\harfbuzz\src\hb-set.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\harfbuzz\src\hb-shape-plan.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\harfbuzz\src\hb-shape.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\harfbuzz\src\hb-unicode.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\harfbuzz\src\hb-uniscribe.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\harfbuzz\src\hb-version.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\harfbuzz\src\hb.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\harfbuzz\src\hb-blob.cc">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\harfbuzz\src\hb-buffer.cc">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\harfbuzz\src\hb-common.cc">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\harfbuzz\src\hb-fallback-shape.cc">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\harfbuzz\src\hb-font.cc">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\harfbuzz\src\hb-ft.cc">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\harfbuzz\src\hb-ot-layout.cc">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\harfbuzz\src\hb-ot-map.cc">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\harfbuzz\src\hb-ot-shape-complex-arabic.cc">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\harfbuzz\src\hb-ot-shape-complex-indic.cc">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\harfbuzz\src\hb-ot-shape-fallback.cc">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\harfbuzz\src\hb-ot-shape-normalize.cc">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\harfbuzz\src\hb-ot-shape.cc">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\harfbuzz\src\hb-ot-tag.cc">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\harfbuzz\src\hb-set.cc">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\harfbuzz\src\hb-shape-plan.cc">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\harfbuzz\src\hb-shape.cc">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\harfbuzz\src\hb-shaper.cc">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\harfbuzz\src\hb-tt-font.cc">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\harfbuzz\src\hb-unicode.cc">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\harfbuzz\src\hb-uniscribe.cc">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\harfbuzz\src\hb-warning.cc">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\harfbuzz\src\hb-ot-shape-complex-default.cc">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\harfbuzz\src\hb-ot-shape-complex-thai.cc">
+      <Filter>sources</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\harfbuzz\src\hb-atomic-private.hh">
+      <Filter>headers</Filter>
+    </None>
+    <None Include="..\harfbuzz\src\hb-unicode-private.hh">
+      <Filter>headers</Filter>
+    </None>
+    <None Include="..\harfbuzz\src\hb-buffer-private.hh">
+      <Filter>headers</Filter>
+    </None>
+    <None Include="..\harfbuzz\src\hb-cache-private.hh">
+      <Filter>headers</Filter>
+    </None>
+    <None Include="..\harfbuzz\src\hb-fallback-shape-private.hh">
+      <Filter>headers</Filter>
+    </None>
+    <None Include="..\harfbuzz\src\hb-font-private.hh">
+      <Filter>headers</Filter>
+    </None>
+    <None Include="..\harfbuzz\src\hb-mutex-private.hh">
+      <Filter>headers</Filter>
+    </None>
+    <None Include="..\harfbuzz\src\hb-object-private.hh">
+      <Filter>headers</Filter>
+    </None>
+    <None Include="..\harfbuzz\src\hb-open-file-private.hh">
+      <Filter>headers</Filter>
+    </None>
+    <None Include="..\harfbuzz\src\hb-open-type-private.hh">
+      <Filter>headers</Filter>
+    </None>
+    <None Include="..\harfbuzz\src\hb-ot-head-table.hh">
+      <Filter>headers</Filter>
+    </None>
+    <None Include="..\harfbuzz\src\hb-ot-hhea-table.hh">
+      <Filter>headers</Filter>
+    </None>
+    <None Include="..\harfbuzz\src\hb-ot-hmtx-table.hh">
+      <Filter>headers</Filter>
+    </None>
+    <None Include="..\harfbuzz\src\hb-ot-layout-common-private.hh">
+      <Filter>headers</Filter>
+    </None>
+    <None Include="..\harfbuzz\src\hb-ot-layout-gdef-table.hh">
+      <Filter>headers</Filter>
+    </None>
+    <None Include="..\harfbuzz\src\hb-ot-layout-gpos-table.hh">
+      <Filter>headers</Filter>
+    </None>
+    <None Include="..\harfbuzz\src\hb-ot-layout-gsub-table.hh">
+      <Filter>headers</Filter>
+    </None>
+    <None Include="..\harfbuzz\src\hb-ot-layout-gsubgpos-private.hh">
+      <Filter>headers</Filter>
+    </None>
+    <None Include="..\harfbuzz\src\hb-ot-layout-private.hh">
+      <Filter>headers</Filter>
+    </None>
+    <None Include="..\harfbuzz\src\hb-ot-map-private.hh">
+      <Filter>headers</Filter>
+    </None>
+    <None Include="..\harfbuzz\src\hb-ot-maxp-table.hh">
+      <Filter>headers</Filter>
+    </None>
+    <None Include="..\harfbuzz\src\hb-ot-name-table.hh">
+      <Filter>headers</Filter>
+    </None>
+    <None Include="..\harfbuzz\src\hb-ot-shape-complex-arabic-fallback.hh">
+      <Filter>headers</Filter>
+    </None>
+    <None Include="..\harfbuzz\src\hb-ot-shape-complex-arabic-table.hh">
+      <Filter>headers</Filter>
+    </None>
+    <None Include="..\harfbuzz\src\hb-ot-shape-complex-indic-machine.hh">
+      <Filter>headers</Filter>
+    </None>
+    <None Include="..\harfbuzz\src\hb-ot-shape-complex-indic-private.hh">
+      <Filter>headers</Filter>
+    </None>
+    <None Include="..\harfbuzz\src\hb-ot-shape-complex-indic-table.hh">
+      <Filter>headers</Filter>
+    </None>
+    <None Include="..\harfbuzz\src\hb-ot-shape-complex-private.hh">
+      <Filter>headers</Filter>
+    </None>
+    <None Include="..\harfbuzz\src\hb-ot-shape-fallback-private.hh">
+      <Filter>headers</Filter>
+    </None>
+    <None Include="..\harfbuzz\src\hb-ot-shape-normalize-private.hh">
+      <Filter>headers</Filter>
+    </None>
+    <None Include="..\harfbuzz\src\hb-ot-shape-private.hh">
+      <Filter>headers</Filter>
+    </None>
+    <None Include="..\harfbuzz\src\hb-private.hh">
+      <Filter>headers</Filter>
+    </None>
+    <None Include="..\harfbuzz\src\hb-set-private.hh">
+      <Filter>headers</Filter>
+    </None>
+    <None Include="..\harfbuzz\src\hb-shape-plan-private.hh">
+      <Filter>headers</Filter>
+    </None>
+    <None Include="..\harfbuzz\src\hb-shaper-impl-private.hh">
+      <Filter>headers</Filter>
+    </None>
+    <None Include="..\harfbuzz\src\hb-shaper-list.hh">
+      <Filter>headers</Filter>
+    </None>
+    <None Include="..\harfbuzz\src\hb-shaper-private.hh">
+      <Filter>headers</Filter>
+    </None>
+  </ItemGroup>
+</Project>
