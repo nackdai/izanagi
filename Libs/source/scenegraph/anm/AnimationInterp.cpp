@@ -50,6 +50,8 @@ CAnimationInterp::CAnimationInterp()
 
     mKeys[0] = &mStartKey;
     mKeys[1] = &mGoalKey;
+
+    m_ProgressedTime = 0.0f;
 }
 
 IZ_BOOL CAnimationInterp::SetAnimation(
@@ -131,7 +133,7 @@ IZ_UINT CAnimationInterp::ApplyAnimation(
         IZ_UINT updateFlagStart = 0;
         IZ_UINT updateFlagGoal = 0;
 
-        IZ_FLOAT addTime = (m_Type == E_INTERP_TYPE_FROZEN
+        m_ProgressedTime = (m_Type == E_INTERP_TYPE_FROZEN
                             ? 0.0f
                             : time);
 
@@ -139,7 +141,7 @@ IZ_UINT CAnimationInterp::ApplyAnimation(
         updateFlagStart = m_InterpAnm[0].anm->GetPoseByIdx(
                             poseStart,
                             nJointIdx, 
-                            m_InterpAnm[0].targetTime + addTime);
+                            m_InterpAnm[0].targetTime + m_ProgressedTime);
 
         CBit32Flag bitFlagStart(updateFlagStart);
 
@@ -147,7 +149,7 @@ IZ_UINT CAnimationInterp::ApplyAnimation(
         updateFlagGoal = m_InterpAnm[1].anm->GetPoseByIdx(
                             poseGoal,
                             nJointIdx, 
-                            m_InterpAnm[1].targetTime + addTime);
+                            m_InterpAnm[1].targetTime + m_ProgressedTime);
 
         CBit32Flag bitFlagGoal(updateFlagGoal);
 
