@@ -124,10 +124,6 @@ namespace animation {
         }
 
         if (bIsOver) {
-            if (m_TimeOverHandler != IZ_NULL) {
-                m_TimeOverHandler->Handle(*this);
-            }
-
             if (IsLoop()) {
                 if (IsReverse()) {
                     // 向きを変える
@@ -141,6 +137,10 @@ namespace animation {
             if (IsLoop()) {
                 // ループするので再開
                 Start();
+            }
+
+			if (m_TimeOverHandler != IZ_NULL) {
+                m_TimeOverHandler->Handle(*this);
             }
         }
     }

@@ -50,6 +50,8 @@ namespace izanagi {
     public:
         IZ_FLOAT GetAnimationTime() const { return m_InterpTime; }
 
+        IZ_FLOAT GetProgressedTime() const { return m_ProgressedTime; }
+
     protected:
         IZ_UINT ApplyAnimation(
             IZ_FLOAT time,
@@ -119,6 +121,8 @@ namespace izanagi {
         // 補間計算用キーパラメータバッファ
         IZ_FLOAT mStartKeyParamBuf[4];
         IZ_FLOAT mGoalKeyParamBuf[4];
+
+        IZ_FLOAT m_ProgressedTime;
     };
 }   // namespace izanagi
 
