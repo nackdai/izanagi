@@ -1,5 +1,5 @@
-#include "font/FontRenderer.h"
-#include "font/FontRendererBmp.h"
+#include "text/FontRenderer.h"
+#include "text/FontRendererBmp.h"
 #include "izIo.h"
 #include "izGraph.h"
 
