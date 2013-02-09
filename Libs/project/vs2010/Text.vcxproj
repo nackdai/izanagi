@@ -16,7 +16,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{53711729-EFD1-49C0-8592-45A4B0F569E8}</ProjectGuid>
-    <RootNamespace>Font</RootNamespace>
+    <RootNamespace>Text</RootNamespace>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -89,14 +89,14 @@ xcopy /R /Y "$(TargetDir)$(ProjectName).pdb" ..\lib\$(IntDir)
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\source\font\FontRenderer.cpp" />
-    <ClCompile Include="..\..\source\font\FontRendererBmp.cpp" />
+    <ClCompile Include="..\..\source\text\FontRenderer.cpp" />
+    <ClCompile Include="..\..\source\text\FontRendererBmp.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\font\FNTFormat.h" />
-    <ClInclude Include="..\..\include\font\FontDefs.h" />
-    <ClInclude Include="..\..\include\font\FontRenderer.h" />
-    <ClInclude Include="..\..\include\font\FontRendererBmp.h" />
+    <ClInclude Include="..\..\include\text\FNTFormat.h" />
+    <ClInclude Include="..\..\include\text\FontDefs.h" />
+    <ClInclude Include="..\..\include\text\FontRenderer.h" />
+    <ClInclude Include="..\..\include\text\FontRendererBmp.h" />
     <ClInclude Include="..\..\include\izFont.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,4 +1,4 @@
-#include "font/FontRendererBmp.h"
+#include "text/FontRendererBmp.h"
 #include "izIo.h"
 #include "std/StdUtf.h"
 #include "izGraph.h"
