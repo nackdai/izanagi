@@ -26,6 +26,9 @@ void CMotionInterpApp::CTimeOverHandler::Handle(const izanagi::animation::CTimel
         0.0f);
     m_App->m_Timeline.Reset();
     m_App->m_Timeline.Start();
+
+    IZ_FLOAT advanced = m_App->m_AnmInterp->GetProgressedTime();
+    m_App->m_Timeline.Advance(advanced);
 }
 
 /////////////////////////////////////////////////
@@ -449,7 +452,8 @@ void CMotionInterpApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
 IZ_BOOL CMotionInterpApp::OnKeyDown(IZ_UINT nChar)
 {
-    static const izanagi::CAnimationInterp::E_INTERP_TYPE type = izanagi::CAnimationInterp::E_INTERP_TYPE_FROZEN;
+    //static const izanagi::CAnimationInterp::E_INTERP_TYPE type = izanagi::CAnimationInterp::E_INTERP_TYPE_FROZEN;
+    static const izanagi::CAnimationInterp::E_INTERP_TYPE type = izanagi::CAnimationInterp::E_INTERP_TYPE_SMOOTH;
     static const IZ_FLOAT interpTime = 10.0f;
 
     if (nChar == VK_RETURN)
