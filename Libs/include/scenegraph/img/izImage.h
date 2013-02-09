@@ -31,7 +31,6 @@ namespace izanagi {
             IZ_UINT nPitch,
             IZ_UINT nHeight,
             graph::E_GRAPH_PIXEL_FMT nFmt,
-            IZ_BYTE* pBuf,
             IInputStream* input);
 
         // テクスチャ作成
@@ -41,7 +40,6 @@ namespace izanagi {
             IZ_UINT nHeight,
             IZ_UINT nMipLevel,
             graph::E_GRAPH_PIXEL_FMT nFmt,
-            IZ_BYTE* pBuf,
             IInputStream* input);
 
         // キューブテクスチャ作成
@@ -51,14 +49,12 @@ namespace izanagi {
             IZ_UINT nHeight,
             IZ_UINT nMipLevel,
             graph::E_GRAPH_PIXEL_FMT nFmt,
-            IZ_BYTE* pBuf,
             IInputStream* input);
 
         // テクスチャ作成
         static inline graph::CBaseTexture* CreateTexture(
             graph::CGraphicsDevice* pDevice,
             const S_IMG_TEX_HEADER& sTexHeader,
-            IZ_BYTE* pBuf,
             IInputStream* input);
 
     protected:
