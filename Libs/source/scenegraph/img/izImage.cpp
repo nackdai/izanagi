@@ -92,28 +92,26 @@ void CImage::ReadData(
     IZ_UINT nPitch,
     IZ_UINT nHeight,
     graph::E_GRAPH_PIXEL_FMT nFmt,
-    IZ_BYTE* pBuf,
     IInputStream* input)
 {
+#if 0
     IZ_UINT restSize = ComputeSize(nPitch, nHeight, nFmt);;
 
     for (IZ_UINT y = 0; y < nHeight; y++)
     {
         IZ_UINT readSize = (nPitch < restSize ? nPitch : restSize);
 
-        IZ_BOOL result = IZ_INPUT_READ(input, pBuf, 0, readSize);
+        IZ_BOOL result = IZ_INPUT_READ(input, dst, 0, readSize);
         IZ_ASSERT(result);
-
-        memcpy(dst, pBuf, readSize);
-
-        if (readSize >= restSize)
-        {
-            break;
-        }
 
         dst += readSize;
         restSize -= readSize;
     }
+#else
+	IZ_UINT readSize = ComputeSize(nPitch, nHeight, nFmt);
+	IZ_BOOL result = IZ_INPUT_READ(input, dst, 0, readSize);
+    IZ_ASSERT(result);
+#endif
 }
 
 // テクスチャ作成
@@ -123,7 +121,6 @@ graph::CBaseTexture* CImage::CreatePlaneTexture(
     IZ_UINT nHeight,
     IZ_UINT nMipLevel,
     graph::E_GRAPH_PIXEL_FMT nFmt,
-    IZ_BYTE* pBuf,
     IInputStream* input)
 {
     // NOTE
@@ -154,25 +151,14 @@ graph::CBaseTexture* CImage::CreatePlaneTexture(
         result = (nPitch > 0);
         VGOTO(result, __EXIT__);
 
-#if 0
-        IZ_UINT nSize = _ComputeSize(nPitch, nHeight, nFmt);
-
-        memcpy(data, pBuf, nSize); 
-
-        pTex->Unlock(nLevel);
-
-        pBuf += nSize;
-#else
         ReadData(
             reinterpret_cast<IZ_UINT8*>(data),
             nPitch,
             nHeight,
             nFmt,
-            pBuf,
             input);
 
         pTex->Unlock(nLevel);
-#endif
 
         nWidth >>= 1;
         nHeight >>= 1;
@@ -192,7 +178,6 @@ graph::CBaseTexture* CImage::CreateCubeTexture(
     IZ_UINT nHeight,
     IZ_UINT nMipLevel,
     graph::E_GRAPH_PIXEL_FMT nFmt,
-    IZ_BYTE* pBuf,
     IInputStream* input)
 {
     // テクスチャ作成
@@ -226,25 +211,14 @@ graph::CBaseTexture* CImage::CreateCubeTexture(
             result = (nPitch > 0);
             VGOTO(result, __EXIT__);
 
-#if 0
-            IZ_UINT nSize = _ComputeSize(nPitch, nHeight, nFmt);
-
-            memcpy(data, pBuf, nSize); 
-
-            pTex->Unlock(face, nLevel);
-
-            pBuf += nSize;
-#else
             ReadData(
                 reinterpret_cast<IZ_UINT8*>(data),
                 nPitch,
                 nHeight,
                 nFmt,
-                pBuf,
                 input);
 
             pTex->Unlock(face, nLevel);
-#endif
 
             nW >>= 1;
             nH >>= 1;
@@ -262,7 +236,6 @@ __EXIT__:
 graph::CBaseTexture* CImage::CreateTexture(
     graph::CGraphicsDevice* pDevice,
     const S_IMG_TEX_HEADER& sTexHeader,
-    IZ_BYTE* pBuf,
     IInputStream* input)
 {
     IZ_ASSERT(pDevice != IZ_NULL);
@@ -277,7 +250,7 @@ graph::CBaseTexture* CImage::CreateTexture(
     graph::E_GRAPH_TEX_TYPE nType = static_cast<graph::E_GRAPH_TEX_TYPE>(sTexHeader.type);
 
     // テクスチャ作成関数テーブル
-    typedef graph::CBaseTexture* (*CreateTexFunc)(graph::CGraphicsDevice*, IZ_UINT, IZ_UINT, IZ_UINT, graph::E_GRAPH_PIXEL_FMT, IZ_BYTE*, IInputStream*);
+    typedef graph::CBaseTexture* (*CreateTexFunc)(graph::CGraphicsDevice*, IZ_UINT, IZ_UINT, IZ_UINT, graph::E_GRAPH_PIXEL_FMT, IInputStream*);
     static CreateTexFunc FuncTbl[] = {
         CImage::CreatePlaneTexture,
         CImage::CreateCubeTexture,
@@ -296,7 +269,6 @@ graph::CBaseTexture* CImage::CreateTexture(
                 nHeight,
                 nMipLevel,
                 nFmt,
-                pBuf,
                 input);
 
     IZ_ASSERT(pTex != IZ_NULL);
@@ -312,17 +284,6 @@ IZ_BOOL CImage::ReadTexture(
     IZ_ASSERT(pDevice != IZ_NULL);
     IZ_ASSERT(pInputStream != IZ_NULL);
 
-    // 読み込みバッファメモリ確保
-#if 0
-    IZ_BYTE* pBuf = (IZ_BYTE*)ALLOC_ZERO(m_Allocator, m_Header.sizeMax);
-#else
-    IZ_BYTE* pBuf = (IZ_BYTE*)ALLOC_ZERO(m_Allocator, m_Header.maxPitch);
-#endif
-    VRETURN(pBuf != IZ_NULL);
-
-    // バッファ先頭位置を保持
-    IZ_BYTE* pBufTop = pBuf;
-
     // ジャンプテーブル分飛ばす
     IZ_BOOL ret = pInputStream->Seek(m_Header.numTextures * sizeof(IZ_UINT), E_IO_STREAM_SEEK_POS_CUR);
     VGOTO(ret, __EXIT__);
@@ -335,17 +296,10 @@ IZ_BOOL CImage::ReadTexture(
         ret = IZ_INPUT_READ(pInputStream, &sTexHeader, 0, sizeof(sTexHeader));
         VGOTO(ret, __EXIT__);
 
-#if 0
-        // データ読み込み
-        ret = IZ_INPUT_READ(pInputStream, pBuf, 0, sTexHeader.size);
-        VGOTO(ret, __EXIT__);
-#endif
-
         // テクスチャ作成
         m_pTexture[i] = CreateTexture(
                             pDevice,
                             sTexHeader,
-                            pBuf,
                             pInputStream);
         ret = (m_pTexture[i] != IZ_NULL);
         VGOTO(ret, __EXIT__);
@@ -361,6 +315,5 @@ IZ_BOOL CImage::ReadTexture(
     }
 
 __EXIT__:
-    FREE(m_Allocator, pBufTop);
     return ret;
 }
