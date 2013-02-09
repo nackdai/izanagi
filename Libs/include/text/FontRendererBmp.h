@@ -34,9 +34,9 @@ namespace izanagi {
     private:
         // インスタンス作成
         static CFontRenderer* CreateFontRendererBmp(
-            IMemoryAllocator* pAllocator,
-            graph::CGraphicsDevice* pDevice,
-            IZ_UINT nMaxRegisterNum,
+            IMemoryAllocator* allocator,
+            graph::CGraphicsDevice* device,
+            IZ_UINT maxRegisterNum,
             IInputStream* in);
 
     private:
@@ -54,33 +54,33 @@ namespace izanagi {
 
     public:
         // 登録
-        IZ_BOOL Register(const void* pStr);
+        IZ_BOOL Register(const void* str);
 
         // 描画
         // 登録されていない場合は、描画しない
         void Render(
-            const void* pStr,
+            const void* str,
             IZ_INT nX, IZ_INT nY,
-            IZ_COLOR nColor = IZ_COLOR_RGBA(255, 255, 255, 255));
+            IZ_COLOR color = IZ_COLOR_RGBA(255, 255, 255, 255));
 
         // 描画
         // 登録されていない場合は、登録を行う
         IZ_BOOL RenderImmediate(
-            void* pStr,
+            void* str,
             IZ_INT nX, IZ_INT nY,
-            IZ_COLOR nColor = IZ_COLOR_RGBA(255, 255, 255, 255));
+            IZ_COLOR color = IZ_COLOR_RGBA(255, 255, 255, 255));
 
         // ピクセル幅取得
-        IZ_UINT GetWidth(void* pStr);
+        IZ_UINT GetWidth(void* str);
 
         // 登録済みかどうか
         IZ_BOOL IsRegistered(IZ_UINT code);
 
         // ピクセル高さ取得
-        IZ_UINT GetHeight() const { return m_sHeader.fontHeight; }
+        IZ_UINT GetHeight() const { return m_Header.fontHeight; }
 
         // 文字コード取得
-        E_FONT_CHAR_ENCODE GetCharEncode() const { return m_sHeader.charEncode; }
+        E_FONT_CHAR_ENCODE GetCharEncode() const { return m_Header.charEncode; }
 
     private:
         // フォント登録
@@ -102,7 +102,7 @@ namespace izanagi {
         void RenderToSrcTex(
             SRegInfo* pRegInfo,
             IZ_UINT code,
-            IZ_BOOL bRegister);
+            IZ_BOOL needRegister);
 
         // 転送
         IZ_BOOL UpdateSurface();
@@ -110,8 +110,8 @@ namespace izanagi {
         // フォント描画
         void RenderInternal(
             IZ_UINT code,
-            CIntPoint* pDstPoint,
-            IZ_COLOR nColor);
+            CIntPoint* ptDst,
+            IZ_COLOR color);
 
     private:
         enum {
@@ -123,20 +123,20 @@ namespace izanagi {
         typedef CStdList<CFntHashItem>  CFntOrderList;
 
         IMemoryAllocator* m_Allocator;
-        graph::CGraphicsDevice* m_pDevice;
+        graph::CGraphicsDevice* m_Device;
 
         // ヘッダ
-        S_FNT_HEADER m_sHeader;
+        S_FNT_HEADER m_Header;
 
         // フォントマップ情報
-        S_FNT_MAP* m_pMapList;
+        S_FNT_MAP* m_MapList;
 
         // フォントイメージ情報
-        S_FNT_IMAGE* m_pImageList;
+        S_FNT_IMAGE* m_ImageList;
 
         // フォントテクスチャ
-        graph::CTexture* m_pSrcTex;
-        graph::CTexture* m_pDstTex;
+        graph::CTexture* m_SrcTex;
+        graph::CTexture* m_DstTex;
 
         // イメージ情報
         struct {
@@ -145,16 +145,16 @@ namespace izanagi {
 
             IZ_UINT8* data;
             IZ_UINT32 pitch;
-        } m_sImageInfo;
+        } m_ImageInfo;
 
         // 最大登録可能文字数
-        IZ_UINT m_nMaxRegisterNum;
+        IZ_UINT m_MaxRegisterNum;
 
         // 登録数
-        IZ_UINT m_nRegNum;
+        IZ_UINT m_RegNum;
 
         // 登録情報
-        SRegInfo* m_pRegList;
+        SRegInfo* m_RegList;
 
         CFntHash m_FontHash;
 

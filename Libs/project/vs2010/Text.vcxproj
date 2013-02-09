@@ -91,6 +91,7 @@ xcopy /R /Y "$(TargetDir)$(ProjectName).pdb" ..\lib\$(IntDir)
   <ItemGroup>
     <ClCompile Include="..\..\source\text\FontRenderer.cpp" />
     <ClCompile Include="..\..\source\text\FontRendererBmp.cpp" />
+    <ClCompile Include="..\..\source\text\FontRendererFT.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\text\FNTFormat.h" />
@@ -98,6 +99,7 @@ xcopy /R /Y "$(TargetDir)$(ProjectName).pdb" ..\lib\$(IntDir)
     <ClInclude Include="..\..\include\text\FontRenderer.h" />
     <ClInclude Include="..\..\include\text\FontRendererBmp.h" />
     <ClInclude Include="..\..\include\izFont.h" />
+    <ClInclude Include="..\..\include\text\FontRendererFT.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

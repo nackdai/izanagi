@@ -15,23 +15,23 @@ namespace izanagi {
     public:
         /**
         */
-        typedef IZ_UINT (*RenderFontHandler)(graph::CGraphicsDevice* pDevice, IZ_UINT code, const SIntRect& rc, IZ_UINT x, IZ_UINT y, IZ_COLOR color);
+        typedef IZ_UINT (*RenderFontHandler)(graph::CGraphicsDevice* device, IZ_UINT code, const SIntRect& rc, IZ_UINT x, IZ_UINT y, IZ_COLOR color);
 
         /**
         */
         static CFontRenderer* CreateFontRendererBmp(
-            IMemoryAllocator* pAllocator,
-            graph::CGraphicsDevice* pDevice,
-            IZ_UINT nMaxRegisterNum,
+            IMemoryAllocator* allocator,
+            graph::CGraphicsDevice* device,
+            IZ_UINT maxRegisterNum,
             IInputStream* in);
 
         // TODO
         /**
         */
         static CFontRenderer* CreateFontRendererFT(
-            IMemoryAllocator* pAllocator,
-            graph::CGraphicsDevice* pDevice,
-            IZ_UINT nMaxRegisterNum);
+            IMemoryAllocator* allocator,
+            graph::CGraphicsDevice* device,
+            IZ_UINT maxRegisterNum);
 
     protected:
         enum {
@@ -43,31 +43,31 @@ namespace izanagi {
         };
 
     protected:
-        CFontRenderer() { m_pRenderFontHadler = IZ_NULL; }
+        CFontRenderer() { m_RenderFontHadler = IZ_NULL; }
         virtual ~CFontRenderer() {}
 
         NO_COPIABLE(CFontRenderer);
 
     public:
         // 登録
-        virtual IZ_BOOL Register(const void* pStr) = 0;
+        virtual IZ_BOOL Register(const void* str) = 0;
 
         // 描画
         // 登録されていない場合は、描画しない
         virtual void Render(
-            const void* pStr,
+            const void* str,
             IZ_INT nX, IZ_INT nY,
-            IZ_COLOR nColor = IZ_COLOR_RGBA(255, 255, 255, 255)) = 0;
+            IZ_COLOR color = IZ_COLOR_RGBA(255, 255, 255, 255)) = 0;
 
         // 描画
         // 登録されていない場合は、登録を行う
         virtual IZ_BOOL RenderImmediate(
-            void* pStr,
+            void* str,
             IZ_INT nX, IZ_INT nY,
-            IZ_COLOR nColor = IZ_COLOR_RGBA(255, 255, 255, 255)) = 0;
+            IZ_COLOR color = IZ_COLOR_RGBA(255, 255, 255, 255)) = 0;
 
         // ピクセル幅取得
-        virtual IZ_UINT GetWidth(void* pStr) = 0;
+        virtual IZ_UINT GetWidth(void* str) = 0;
 
         // 登録済みかどうか
         virtual IZ_BOOL IsRegistered(IZ_UINT code) = 0;
@@ -79,10 +79,10 @@ namespace izanagi {
         virtual E_FONT_CHAR_ENCODE GetCharEncode() const = 0;
 
         // フォント描画ハンドラセット
-        void SetFonrRenderHandler(RenderFontHandler* pHandler) { m_pRenderFontHadler = pHandler; }
+        void SetFonrRenderHandler(RenderFontHandler* pHandler) { m_RenderFontHadler = pHandler; }
 
     protected:
-        RenderFontHandler* m_pRenderFontHadler;
+        RenderFontHandler* m_RenderFontHadler;
     };
 }   // namespace izanagi
 

@@ -11,26 +11,32 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\source\font\FontRenderer.cpp">
+    <ClCompile Include="..\..\source\text\FontRenderer.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\font\FontRendererBmp.cpp">
+    <ClCompile Include="..\..\source\text\FontRendererBmp.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\text\FontRendererFT.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\font\FNTFormat.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\font\FontDefs.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\font\FontRenderer.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\font\FontRendererBmp.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\izFont.h" />
+    <ClInclude Include="..\..\include\text\FNTFormat.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\text\FontDefs.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\text\FontRenderer.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\text\FontRendererBmp.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\text\FontRendererFT.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
