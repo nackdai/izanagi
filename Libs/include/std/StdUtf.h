@@ -14,11 +14,15 @@ namespace izanagi {
             IZ_UINT nDstSize,
             IZ_CHAR* src);
 
+        static IZ_UINT ConvertUtf8ToUtf16(IZ_UINT code);
+
         // Converts UTF16 to UTF8
         static void ConvertUtf16ToUtf8(
             void* dst,
             IZ_UINT nDstSize,
             IZ_UINT16* src);
+
+        static IZ_UINT ConvertUtf16ToUtf8(IZ_UINT code);
 
         // Get a character code as specified character encode.
         static void* GetOneCharCodeAsUTF8(void* src, IZ_UINT* ret);

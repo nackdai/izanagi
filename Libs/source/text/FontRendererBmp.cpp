@@ -300,7 +300,7 @@ IZ_BOOL CFontRendererBmp::Register(const void* str)
     void* tmp = const_cast<void*>(str);
 
     for (;;) {
-        str = _GetOneCharCode(
+        tmp = _GetOneCharCode(
                 tmp,
                 &nCode,
                 encode);
