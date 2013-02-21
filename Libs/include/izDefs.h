@@ -109,7 +109,9 @@ typedef const wchar_t*  IZ_PCWSTR;
 
 #ifndef DEBUG_BREAK
     #ifdef WINDOWS
-        #define DEBUG_BREAK     ::DebugBreak
+        //#define DEBUG_BREAK()     ::DebugBreak()
+        //#define DEBUG_BREAK()       assert(false)
+        #define DEBUG_BREAK()       __debugbreak()
     #else
         // TODO
     #endif
@@ -279,7 +281,11 @@ inline void _OutputDebugString(izPcstr pszFormat, ...)
 
 #ifndef PURE_VIRTUAL
     #define PURE_VIRTUAL(d) virtual d = 0
-#endif  // #ifndef PURE
+#endif  // #ifndef PURE_VIRTUAL
+
+#ifndef VIRTUAL
+    #define VIRTUAL(d) virtual d
+#endif  // #ifndef VIRTUAL
 
 #ifndef NO_COPIABLE
     #define NO_COPIABLE(clazz)\
@@ -295,6 +301,10 @@ inline void _OutputDebugString(izPcstr pszFormat, ...)
 #ifndef COUNT_BIT
     #define COUNT_BIT(n)    (sizeof(n) << 3)
 #endif  // #ifndef COUNT_BIT
+
+#ifndef CONST_CAST
+#define CONST_CAST(t1, t2, p) reinterpret_cast<t1>(const_cast<t2>(p))
+#endif  // #ifndef CONST_CAST
 
 /////////////////////////////////////////////////////////////
 // カラー

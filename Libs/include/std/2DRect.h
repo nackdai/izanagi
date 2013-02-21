@@ -182,7 +182,7 @@ namespace izanagi {
             MoveToY(y);
         }
 
-        // 定されたオフセットで移動
+        // 指定されたオフセットで移動
         void OffsetRect(_T x, _T y)
         {
             left += x;
@@ -205,6 +205,16 @@ namespace izanagi {
         _T Height() const
         {
             return (bottom - top);
+        }
+
+        void SetWidth(_T width)
+        {
+            right = left + width;
+        }
+
+        void SetHeight(_T height)
+        {
+            bottom = top + height;
         }
 
         // 空かどうかを調べる(高さと幅のどちらかまたはその両方が 0 のときに空になる)

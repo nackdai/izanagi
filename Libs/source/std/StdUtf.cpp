@@ -61,41 +61,44 @@ namespace {
 
         sChar.code = nCode;
 
+        IZ_UINT bytes = 0;
+
         if (nCode <= 0x7f) {
             // ASCII
-            cBitOut.Out(nCode, 16);
-            cBitOut.Flush();
+            nDstCode = nCode & (0xffff);
+            bytes = 2;
         }
-        else if ((nCode & 0xe0) == 0xc0) {
-            cBitOut.Out(sChar.ch[0], 6);
-            cBitOut.Out(sChar.ch[1], 5);
-            cBitOut.Flush();
-        }
-        else if ((nCode & 0xf0) == 0xe0) {
-            cBitOut.Out(sChar.ch[0], 6);
-            cBitOut.Out(sChar.ch[1], 6);
-            cBitOut.Out(sChar.ch[2], 4);
-            cBitOut.Flush();
-        }
-        else if ((nCode & 0xf8) == 0xf0) {
-            cBitOut.Out(sChar.ch[0], 6);
-            cBitOut.Out(sChar.ch[1], 6);
-            cBitOut.Out(sChar.ch[2], 6);
-            cBitOut.Out(sChar.ch[3], 3);
-            cBitOut.Flush();
+        else
+        {
+            if (((nCode >> 24) & 0xf8) == 0xf0) {
+                nDstCode = sChar.ch[3] & 0x07;
+                nDstCode = (nDstCode << 6) | (sChar.ch[0] & 0x3f);
+                nDstCode = (nDstCode << 6) | (sChar.ch[0] & 0x3f);
+                nDstCode = (nDstCode << 6) | (sChar.ch[0] & 0x3f);
 
-            nDstCode = _ConvertToSurrogate(nDstCode);
-        }
-        else {
-            // Not surpported yet...
-            IZ_ASSERT(IZ_FALSE);
+                nDstCode = _ConvertToSurrogate(nDstCode);
+
+                bytes = 4;
+            }
+            else if (((nCode >> 16) & 0xf0) == 0xe0) {
+                nDstCode = sChar.ch[2] & 0x0f;
+                nDstCode = (nDstCode << 6) | (sChar.ch[1] & 0x3f);
+                nDstCode = (nDstCode << 6) | (sChar.ch[0] & 0x3f);
+                bytes = 2;
+            }
+            else if (((nCode >> 8) & 0xe0) == 0xc0) {
+                nDstCode = sChar.ch[1] & 0x1f;
+                nDstCode = (nDstCode << 6) | (sChar.ch[1] & 0x3f);
+                bytes = 2;
+            }
+            else {
+                // Not surpported yet...
+                IZ_ASSERT(IZ_FALSE);
+            }
         }
 
-        IZ_ASSERT(cBitOut.IsValid());
-
-        IZ_UINT nDstByte = cBitOut.GetOutByte();
         if (pDstByte != IZ_NULL) {
-            *pDstByte = nDstByte;
+            *pDstByte = bytes;
         }
 
         return nDstCode;
@@ -185,6 +188,13 @@ void CStdUtf::ConvertUtf8ToUtf16(
     }
 
     return;
+}
+
+IZ_UINT CStdUtf::ConvertUtf8ToUtf16(IZ_UINT code)
+{
+    IZ_UINT bytes = 0;
+    IZ_UINT ret = _ConvertUTF8toUTF16(code, &bytes);
+    return ret;
 }
 
 namespace {
@@ -289,6 +299,13 @@ void CStdUtf::ConvertUtf16ToUtf8(
 
         nPos += nDstByte;
     }
+}
+
+IZ_UINT CStdUtf::ConvertUtf16ToUtf8(IZ_UINT code)
+{
+    IZ_UINT ret = 0;
+    _ConvertUTF16toUTF8((IZ_CHAR*)&ret, code);
+    return ret;
 }
 
 namespace {

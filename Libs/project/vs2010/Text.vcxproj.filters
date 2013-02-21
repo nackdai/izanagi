@@ -20,6 +20,15 @@
     <ClCompile Include="..\..\source\text\FontRendererFT.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\text\UString.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\text\FontHostFT.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\text\FontGlyphCache.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\izFont.h" />
@@ -36,6 +45,15 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\text\FontRendererFT.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\text\UString.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\text\FontHostFT.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\text\FontGlyphCache.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
