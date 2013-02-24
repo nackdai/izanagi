@@ -1,4 +1,6 @@
 #include "text/FontGlyphCache.h"
+#include "text/UString.h"
+#include "text/FontHostFT.h"
 #include "izGraph.h"
 #include "izMath.h"
 
@@ -6,24 +8,24 @@ namespace izanagi
 {
 namespace text
 {
-    IZ_BOOL CGlyphCacheBase::Register(
+    SGlyphCacheItem* CGlyphCacheBase::Register(
         IZ_UINT code,
         const SGlyphMetrics& metrics,
         const SGlyphImage& image)
     {
         SGlyphCacheItem* item = FindCache(code);
-        IZ_BOOL ret = (item != IZ_NULL);
+        IZ_BOOL isRegistered = (item != IZ_NULL);
 
-        if (ret)
+        if (isRegistered)
         {
             Regsiter(item, image);
         }
         else
         {
             item = CreateCacheItem(code);
-            ret = (item != IZ_NULL);
+            isRegistered = (item != IZ_NULL);
 
-            if (ret)
+            if (isRegistered)
             {
                 item->code = code;
 
@@ -35,9 +37,38 @@ namespace text
                     item->metrics.height = metrics.height;
                 }
 
-                ret = Regsiter(item, image);
+                isRegistered = Regsiter(item, image);
             }
         }
+
+        return item;
+    }
+
+    IZ_BOOL CGlyphCacheBase::Register(
+        CUString* string,
+        IFontHost* host)
+    {
+        IZ_BOOL ret = IZ_TRUE;
+
+        string->BeginIter();
+
+        IZ_UINT code = 0;
+        while ((code = string->GetNextAsUnicode()) != 0)
+        {
+            SGlyphImage image;
+            SGlyphMetrics metrics;
+
+            host->GetImage(code, image, metrics);
+
+            SGlyphCacheItem* item = Register(code, metrics, image);
+            if (item == IZ_NULL)
+            {
+                ret = IZ_FALSE;
+                break;
+            }
+        }
+
+        string->EndIter();
 
         return ret;
     }
@@ -184,6 +215,18 @@ namespace text
         IZ_ASSERT(m_FontMap != IZ_NULL);
         m_FontMap->Unlock(0);
         m_FontMapData = IZ_NULL;
+    }
+
+    void CGlyphCache::Clear()
+    {
+        m_PosX = CHAR_MARGIN;
+        m_PosY = CHAR_MARGIN;
+
+        m_CachePos = 0;
+
+        m_RegisteredNum = 0;
+
+        m_Hash.Clear();
     }
 
     SGlyphCacheItem* CGlyphCache::CreateCacheItem(IZ_UINT code)

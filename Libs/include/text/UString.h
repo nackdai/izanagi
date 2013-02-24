@@ -17,7 +17,7 @@ namespace text
         {
             m_Encode = encode;
             m_Num = 0;
-            m_IsInIter = IZ_FALSE;
+            m_Iter = IZ_NULL;
         }
         virtual ~CUString() {}
 
@@ -40,30 +40,31 @@ namespace text
 
         void BeginIter()
         {
-            m_IsInIter = IZ_TRUE;
-            m_IterTmp = m_Text;
+            m_Iter = m_Text;
         }
 
         void EndIter()
         {
-            // Nothing...
+            m_Iter = IZ_NULL;
         }
 
         IZ_UINT GetNext()
         {
             IZ_UINT ret = 0;
 
-            if (m_IsInIter)
+            if (m_Iter != IZ_NULL)
             {
-                m_IterTmp = GetNextInternal(m_IterTmp, &ret);
+                m_Iter = GetNextInternal(m_Iter, &ret);
                 if (ret == 0)
                 {
-                    m_IsInIter = IZ_FALSE;
+                    m_Iter = IZ_NULL;
                 }
             }
 
             return ret;
         }
+
+        PURE_VIRTUAL(IZ_UINT GetNextAsUnicode());
 
     protected:
          PURE_VIRTUAL(void* GetNextInternal(void* data, IZ_UINT* code));
@@ -76,8 +77,7 @@ namespace text
 
         IZ_UINT m_Num;
 
-        IZ_BOOL m_IsInIter;
-        void* m_IterTmp;
+        void* m_Iter;
     };
 
     /**
@@ -95,6 +95,8 @@ namespace text
 
     public:
         virtual IZ_UINT GetNum();
+
+        virtual IZ_UINT GetNextAsUnicode();
 
     protected:
         virtual void* GetNextInternal(void* data, IZ_UINT* code);
