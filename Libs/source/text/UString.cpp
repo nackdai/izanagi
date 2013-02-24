@@ -24,6 +24,18 @@ namespace text
         return m_Num;
     }
 
+    IZ_UINT CUtf8String::GetNextAsUnicode()
+    {
+        IZ_UINT code = GetNext();
+
+        if (m_Encode == E_FONT_CHAR_ENCODE_UTF8)
+        {
+            code = CStdUtf::ConvertUtf8ToUnicode(code);
+        }
+
+        return code;
+    }
+
     void* CUtf8String::GetNextInternal(void* data, IZ_UINT* code)
     {
         void* ret = CStdUtf::GetOneCharCodeAsUTF8(data, code);

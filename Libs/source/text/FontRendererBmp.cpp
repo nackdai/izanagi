@@ -267,7 +267,7 @@ namespace {
             src = CStdUtf::GetOneCharCodeAsSJIS(src, ret);
             break;
         case E_FONT_CHAR_ENCODE_UTF16:
-            src = CStdUtf::GetOneCharCodeAsUTF16(src, ret);
+            src = CStdUtf::GetOneCharCodeAsUnicode(src, ret);
             break;
         case E_FONT_CHAR_ENCODE_UTF8:
             src = CStdUtf::GetOneCharCodeAsUTF8(src, ret);

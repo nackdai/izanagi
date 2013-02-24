@@ -12,10 +12,24 @@ namespace izanagi
 
 namespace text
 {
+    class IFontHost : public CObject
+    {
+    protected:
+        IFontHost() {}
+        virtual ~IFontHost() {}
+
+    public:
+        PURE_VIRTUAL(
+            IZ_BOOL GetImage(
+                IZ_UINT code,
+                SGlyphImage& image,
+                SGlyphMetrics& metrics));
+    };
+
     /**
     * フォントレンダラ
     */
-    class CFontHostFT : public CObject
+    class CFontHostFT : public IFontHost
     {
         friend class CFontRendererFT;
 
@@ -47,7 +61,7 @@ namespace text
 
         void SetPixelSize(IZ_UINT height);
 
-        IZ_BOOL GetImage(
+        virtual IZ_BOOL GetImage(
             IZ_UINT code,
             SGlyphImage& image,
             SGlyphMetrics& metrics);
