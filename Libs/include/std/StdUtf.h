@@ -8,25 +8,23 @@ namespace izanagi {
     */
     class CStdUtf {
     public:
-        // Converts UTF8 to UTF16
-        static void ConvertUtf8ToUtf16(
+        // Converts UTF8 to Unicode
+        static void ConvertUtf8ToUnicode(
             void* dst,
             IZ_UINT nDstSize,
             IZ_CHAR* src);
 
-        static IZ_UINT ConvertUtf8ToUtf16(IZ_UINT code);
+        static IZ_UINT ConvertUtf8ToUnicode(IZ_UINT code);
 
-        // Converts UTF16 to UTF8
-        static void ConvertUtf16ToUtf8(
+        // Converts UTF16 to Unicode
+        static void ConvertUTF16ToUnicode(
             void* dst,
             IZ_UINT nDstSize,
             IZ_UINT16* src);
 
-        static IZ_UINT ConvertUtf16ToUtf8(IZ_UINT code);
-
         // Get a character code as specified character encode.
         static void* GetOneCharCodeAsUTF8(void* src, IZ_UINT* ret);
-        static void* GetOneCharCodeAsUTF16(void* src, IZ_UINT* ret);
+        static void* GetOneCharCodeAsUnicode(void* src, IZ_UINT* ret);
         static void* GetOneCharCodeAsSJIS(void* src, IZ_UINT* ret);
 
         /**
