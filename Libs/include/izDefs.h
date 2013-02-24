@@ -283,10 +283,6 @@ inline void _OutputDebugString(izPcstr pszFormat, ...)
     #define PURE_VIRTUAL(d) virtual d = 0
 #endif  // #ifndef PURE_VIRTUAL
 
-#ifndef VIRTUAL
-    #define VIRTUAL(d) virtual d
-#endif  // #ifndef VIRTUAL
-
 #ifndef NO_COPIABLE
     #define NO_COPIABLE(clazz)\
         private:\

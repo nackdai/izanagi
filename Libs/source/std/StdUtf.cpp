@@ -49,7 +49,7 @@ namespace {
 }   // namespace
 
 namespace {
-    IZ_UINT _ConvertUTF8toUTF16(IZ_UINT nCode, IZ_UINT* pDstByte)
+    IZ_UINT _ConvertUTF8toUnicode(IZ_UINT code, IZ_UINT* pDstByte)
     {
         union {
             IZ_UINT code;
@@ -59,18 +59,18 @@ namespace {
         IZ_UINT nDstCode = 0;
         CStdBitOutput cBitOut(&nDstCode, sizeof(nDstCode));
 
-        sChar.code = nCode;
+        sChar.code = code;
 
         IZ_UINT bytes = 0;
 
-        if (nCode <= 0x7f) {
+        if (code <= 0x7f) {
             // ASCII
-            nDstCode = nCode & (0xffff);
+            nDstCode = code & (0xffff);
             bytes = 2;
         }
         else
         {
-            if (((nCode >> 24) & 0xf8) == 0xf0) {
+            if (((code >> 24) & 0xf8) == 0xf0) {
                 nDstCode = sChar.ch[3] & 0x07;
                 nDstCode = (nDstCode << 6) | (sChar.ch[0] & 0x3f);
                 nDstCode = (nDstCode << 6) | (sChar.ch[0] & 0x3f);
@@ -80,13 +80,13 @@ namespace {
 
                 bytes = 4;
             }
-            else if (((nCode >> 16) & 0xf0) == 0xe0) {
+            else if (((code >> 16) & 0xf0) == 0xe0) {
                 nDstCode = sChar.ch[2] & 0x0f;
                 nDstCode = (nDstCode << 6) | (sChar.ch[1] & 0x3f);
                 nDstCode = (nDstCode << 6) | (sChar.ch[0] & 0x3f);
                 bytes = 2;
             }
-            else if (((nCode >> 8) & 0xe0) == 0xc0) {
+            else if (((code >> 8) & 0xe0) == 0xc0) {
                 nDstCode = sChar.ch[1] & 0x1f;
                 nDstCode = (nDstCode << 6) | (sChar.ch[1] & 0x3f);
                 bytes = 2;
@@ -147,9 +147,9 @@ namespace {
 }   // namespace
 
 /**
-* Converts UTF8 to UTF16
+* Converts UTF8 to Unicode
 */
-void CStdUtf::ConvertUtf8ToUtf16(
+void CStdUtf::ConvertUtf8ToUnicode(
     void* dst,
     IZ_UINT nDstSize,
     IZ_CHAR* src)
@@ -169,94 +169,38 @@ void CStdUtf::ConvertUtf8ToUtf16(
             return;
         }
 
-        IZ_UINT nCode = 0;
+        IZ_UINT code = 0;
 
         if (ch <= 0x7f) {
             // ASCII
-            nCode = ch;
+            code = ch;
         }
         else {
-            pSrc = _GetUTF8Code(pSrc, &nCode);
+            pSrc = _GetUTF8Code(pSrc, &code);
         }
 
-        nCode = _ConvertUTF8toUTF16(nCode, &nDstByte);
+        code = _ConvertUTF8toUnicode(code, &nDstByte);
 
         __RETURN((nPos + nDstByte) >= nDstSize);
 
-        memcpy(dst, &nCode, nDstByte);
+        memcpy(dst, &code, nDstByte);
         nPos += nDstByte;
     }
 
     return;
 }
 
-IZ_UINT CStdUtf::ConvertUtf8ToUtf16(IZ_UINT code)
+IZ_UINT CStdUtf::ConvertUtf8ToUnicode(IZ_UINT code)
 {
     IZ_UINT bytes = 0;
-    IZ_UINT ret = _ConvertUTF8toUTF16(code, &bytes);
+    IZ_UINT ret = _ConvertUTF8toUnicode(code, &bytes);
     return ret;
 }
 
-namespace {
-    inline IZ_UINT _GetUTF8Byte(IZ_UINT32 nChar)
-    {
-        IZ_UINT ret = 0;
-
-        if (nChar <= 0x7f) {
-            // ASCII
-            ret = 1;
-        }
-        else if (nChar <= 0x7ff) {
-            ret = 2;
-        }
-        else if (nChar <= 0xffff) {
-            ret = 3;
-        }
-        else if (nChar <= 0x10ffff) {
-            ret = 4;
-        }
-        else {
-            // Not surpported yet...
-            IZ_ASSERT(IZ_FALSE);
-        }
-
-        return ret;
-    }
-
-    inline IZ_CHAR* _ConvertUTF16toUTF8(IZ_CHAR* dst, IZ_UINT32 nChar)
-    {
-        if (nChar <= 0x7f) {
-            // ASCII
-            *(dst++) = (IZ_CHAR)nChar;
-        }
-        else if (nChar <= 0x7ff) {
-            *(dst++) = (0x80 | (nChar >> 0) & 0x3f);
-            *(dst++) = (0xc0 | (nChar >> 6) & 0x1f);
-        }
-        else if (nChar <= 0xffff) {
-            *(dst++) = (0x80 | (nChar >> 0) & 0x3f);
-            *(dst++) = (0x80 | (nChar >> 6) & 0x3f);
-            *(dst++) = (0xe0 | (nChar >> 12) & 0x0f);
-        }
-        else if (nChar <= 0x10ffff) {
-            *(dst++) = (0x80 | (nChar >> 0) & 0x3f);
-            *(dst++) = (0x80 | (nChar >> 6) & 0x3f);
-            *(dst++) = (0x80 | (nChar >> 12) & 0x3f);
-            *(dst++) = (0xf0 | (nChar >> 18) & 0x07);
-        }
-        else {
-            // Not surpported yet...
-            IZ_ASSERT(IZ_FALSE);
-        }
-
-        return dst;
-    }
-}   // namespace
-
 /**
-* Converts UTF16 to UTF8
+* Converts UTF16 to Unicode
 */
-void CStdUtf::ConvertUtf16ToUtf8(
+void CStdUtf::ConvertUTF16ToUnicode(
     void* dst,
     IZ_UINT nDstSize,
     IZ_UINT16* src)
@@ -276,7 +220,8 @@ void CStdUtf::ConvertUtf16ToUtf8(
             return;
         }
 
-        IZ_UINT nCode = 0;
+        IZ_UINT code = ch;
+        IZ_UINT bytes = 2;
 
         if (_IsSurrogate(ch)) {
             // Surrogate
@@ -289,23 +234,20 @@ void CStdUtf::ConvertUtf16ToUtf8(
             IZ_ASSERT(_IsSurrogate(upper));
 
             // Surrogate -> char code
-            nCode = _ConvertFromSurrogate(upper, lower);
+            code = _ConvertFromSurrogate(upper, lower);
+
+            bytes = 4;
         }
 
-        nDstByte = _GetUTF8Byte(nCode);
+        IZ_CHAR* ptrCode = reinterpret_cast<IZ_CHAR*>(&code);
 
-        __RETURN((nPos + nDstByte) >= nDstSize);
-        pDst = _ConvertUTF16toUTF8(pDst, nCode);
+        for (IZ_UINT i = 0; i < bytes; i++)
+        {
+            pDst[i] = ptrCode[i];
+        }
 
-        nPos += nDstByte;
+        nPos += bytes;
     }
-}
-
-IZ_UINT CStdUtf::ConvertUtf16ToUtf8(IZ_UINT code)
-{
-    IZ_UINT ret = 0;
-    _ConvertUTF16toUTF8((IZ_CHAR*)&ret, code);
-    return ret;
 }
 
 namespace {
@@ -318,7 +260,7 @@ namespace {
 }   // namespace
 
 /**
-* Get a character code as specified character encode.
+* Get a character code as specified character ecode.
 */
 void* CStdUtf::GetOneCharCodeAsUTF8(void* src, IZ_UINT* ret)
 {
@@ -352,9 +294,9 @@ __EXIT__:
 }
 
 /**
-* Get a character code as specified character encode.
+* Get a character code as specified character ecode.
 */
-void* CStdUtf::GetOneCharCodeAsUTF16(void* src, IZ_UINT* ret)
+void* CStdUtf::GetOneCharCodeAsUnicode(void* src, IZ_UINT* ret)
 {
     // If ret is NULL, nothing is done.
     VRETURN_VAL(ret != IZ_NULL, src);
@@ -377,7 +319,7 @@ void* CStdUtf::GetOneCharCodeAsUTF16(void* src, IZ_UINT* ret)
         IZ_UINT16 upper = *(pSrc++);
         IZ_ASSERT(_IsSurrogate(upper));
 
-        *ret = ((upper << 16) | lower);
+        *ret = _ConvertFromSurrogate(upper, lower);
     }
     else {
         *ret = ch;
@@ -388,7 +330,7 @@ __EXIT__:
 }
 
 /**
-* Get a character code as specified character encode.
+* Get a character code as specified character ecode.
 */
 void* CStdUtf::GetOneCharCodeAsSJIS(void* src, IZ_UINT* ret)
 {
