@@ -299,7 +299,7 @@ inline void _OutputDebugString(izPcstr pszFormat, ...)
 #endif  // #ifndef COUNT_BIT
 
 #ifndef CONST_CAST
-#define CONST_CAST(t1, t2, p) reinterpret_cast<t1>(const_cast<t2>(p))
+    #define CONST_CAST(t1, t2, p) reinterpret_cast<t1>(const_cast<t2>(p))
 #endif  // #ifndef CONST_CAST
 
 /////////////////////////////////////////////////////////////

@@ -5,6 +5,17 @@ using namespace izanagi;
 
 #define __RETURN(b) if (b) { return; }
 
+void* CStdUtf::SFuncIfLowMemory::operator()(
+    void* ptr, 
+    IZ_UINT size)
+{
+    if (funcIfLowMem != IZ_NULL)
+    {
+        return (*funcIfLowMem)(allocator, ptr, size);
+    }
+    return IZ_NULL;
+}
+
 namespace {
     // Returns whether character code is surrogate.
     inline IZ_BOOL _IsSurrogate(IZ_UINT16 ch)
@@ -104,27 +115,26 @@ namespace {
         return nDstCode;
     }
 
-    IZ_BYTE* _GetUTF8Code(IZ_BYTE* src, IZ_UINT* pRet)
+    IZ_BYTE* _GetUTF8Code(const IZ_BYTE* src, IZ_UINT* pRet)
     {
-        IZ_BYTE ch = *src;
+        IZ_BYTE* ptrSrc = const_cast<IZ_BYTE*>(src);
+
+        IZ_BYTE ch = *(ptrSrc++);
 
         if (ch <= 0x7f) {
-            return src;
+            return ptrSrc;
         }
-
-        ++src;
 
         IZ_UINT count = 1;
         IZ_UINT code = ch;
 
-        for (;; src++) {
-            ch = *src;
-            count++;
+        for (;;) {
+            ch = *(ptrSrc++);
 
-            if (ch <= 0x7f) {
-                break;
-            }
-            else if ((ch & 0xc0) == 0x80) {
+            IZ_ASSERT(ch > 0x7f);
+
+#if 0
+            if ((ch & 0xc0) == 0x80) {
                 IZ_ASSERT(count <= 4);
                 code = ((code << 8) | ch);
             }
@@ -134,15 +144,36 @@ namespace {
             {
                 break;
             }
+#else
+            if ((ch & 0xc0) == 0x80
+                || ((ch & 0xe0) == 0xc0)
+                || ((ch & 0xf0) == 0xe0)
+                || ((ch & 0xf8) == 0xf0))
+            {
+                IZ_ASSERT(count <= 4);
+
+                IZ_UINT tmp = ch;
+                code = ((tmp << (count * 8)) | code);
+
+                if (((ch & 0xe0) == 0xc0)
+                    || ((ch & 0xf0) == 0xe0)
+                    || ((ch & 0xf8) == 0xf0))
+                {
+                    break;
+                }
+            }
+#endif
             else {
                 // Not surpported yet...
                 IZ_ASSERT(IZ_FALSE);
             }
+
+            count++;
         }
 
         *pRet = code;
 
-        return src;
+        return ptrSrc;
     }
 }   // namespace
 
@@ -152,38 +183,64 @@ namespace {
 void CStdUtf::ConvertUtf8ToUnicode(
     void* dst,
     IZ_UINT nDstSize,
-    IZ_CHAR* src)
+    const void* src)
+{
+    SFuncIfLowMemory func = 
+    {
+        IZ_NULL,
+        IZ_NULL,
+    };
+
+    ConvertUtf8ToUnicode(
+        dst,
+        nDstSize,
+        src,
+        func);
+}
+
+void CStdUtf::ConvertUtf8ToUnicode(
+    void* dst,
+    IZ_UINT nDstSize,
+    const void* src,
+    SFuncIfLowMemory& func)
 {
     // 一応
-    FILL_ZERO(dst, nDstSize);
+    //FILL_ZERO(dst, nDstSize);
+
+    IZ_UINT8* pDst = reinterpret_cast<IZ_UINT8*>(dst);
 
     IZ_UINT nPos = 0;
     IZ_UINT nDstByte = 0;
 
-    IZ_BYTE* pSrc = reinterpret_cast<IZ_BYTE*>(src);
+    IZ_BYTE* pSrc = CONST_CAST(IZ_BYTE*, void*, src);
 
     for (;;) {
-        IZ_BYTE ch = *(pSrc++);
+        IZ_BYTE ch = *pSrc;
 
         if (ch == 0) {
             return;
         }
 
         IZ_UINT code = 0;
-
-        if (ch <= 0x7f) {
-            // ASCII
-            code = ch;
-        }
-        else {
-            pSrc = _GetUTF8Code(pSrc, &code);
-        }
-
+        pSrc = _GetUTF8Code(pSrc, &code);
         code = _ConvertUTF8toUnicode(code, &nDstByte);
 
-        __RETURN((nPos + nDstByte) >= nDstSize);
+        if ((nPos + nDstByte) >= nDstSize)
+        {
+            // 出力先メモリが足りない場合
+            IZ_UINT8* tmp = (IZ_UINT8*)func(dst, nDstSize);
 
-        memcpy(dst, &code, nDstByte);
+            if (tmp != IZ_NULL)
+            {
+                pDst = tmp + nPos;
+            }
+            else
+            {
+                return;
+            }
+        }
+
+        memcpy(pDst + nPos, &code, nDstByte);
         nPos += nDstByte;
     }
 
@@ -200,21 +257,41 @@ IZ_UINT CStdUtf::ConvertUtf8ToUnicode(IZ_UINT code)
 /**
 * Converts UTF16 to Unicode
 */
-void CStdUtf::ConvertUTF16ToUnicode(
+void CStdUtf::ConvertUtf16ToUnicode(
     void* dst,
     IZ_UINT nDstSize,
-    IZ_UINT16* src)
+    const void* src)
+{
+    SFuncIfLowMemory func = 
+    {
+        IZ_NULL,
+        IZ_NULL,
+    };
+
+    ConvertUtf16ToUnicode(
+        dst,
+        nDstSize,
+        src,
+        func);
+}
+
+void CStdUtf::ConvertUtf16ToUnicode(
+    void* dst,
+    IZ_UINT nDstSize,
+    const void* src,
+    SFuncIfLowMemory& func)
 {
     // 一応
-    FILL_ZERO(dst, nDstSize);
+    //FILL_ZERO(dst, nDstSize);
 
-    IZ_CHAR* pDst = reinterpret_cast<IZ_CHAR*>(dst);
+    IZ_UINT8* pDst = reinterpret_cast<IZ_UINT8*>(dst);
+    IZ_UINT16* ptrSrc = CONST_CAST(IZ_UINT16*, void*, src);
 
     IZ_UINT nPos = 0;
     IZ_UINT nDstByte = 0;
 
     for (;;) {
-        IZ_UINT16 ch = *(src++);
+        IZ_UINT16 ch = *(ptrSrc++);
 
         if (ch == 0) {
             return;
@@ -230,7 +307,7 @@ void CStdUtf::ConvertUTF16ToUnicode(
             IZ_UINT16 lower = ch;
 
             // Upper Surrogate
-            IZ_UINT16 upper = *(src++);
+            IZ_UINT16 upper = *(ptrSrc++);
             IZ_ASSERT(_IsSurrogate(upper));
 
             // Surrogate -> char code
@@ -239,11 +316,26 @@ void CStdUtf::ConvertUTF16ToUnicode(
             bytes = 4;
         }
 
-        IZ_CHAR* ptrCode = reinterpret_cast<IZ_CHAR*>(&code);
+        if ((nPos + bytes) >= nDstSize)
+        {
+            // 出力先メモリが足りない場合
+            IZ_UINT8* tmp = (IZ_UINT8*)func(dst, nDstSize);
+
+            if (tmp != IZ_NULL)
+            {
+                pDst = tmp + nPos;
+            }
+            else
+            {
+                return;
+            }
+        }
+
+        IZ_UINT8* ptrCode = reinterpret_cast<IZ_UINT8*>(&code);
 
         for (IZ_UINT i = 0; i < bytes; i++)
         {
-            pDst[i] = ptrCode[i];
+            pDst[nPos + i] = ptrCode[i];
         }
 
         nPos += bytes;
@@ -262,15 +354,15 @@ namespace {
 /**
 * Get a character code as specified character ecode.
 */
-void* CStdUtf::GetOneCharCodeAsUTF8(void* src, IZ_UINT* ret)
+void* CStdUtf::GetOneCharCodeAsUTF8(const void* src, IZ_UINT* ret)
 {
+    IZ_ASSERT(src != IZ_NULL);
+    IZ_BYTE* pSrc = CONST_CAST(IZ_BYTE*, void*, src);
+
     // If ret is NULL, nothing is done.
-    VRETURN_VAL(ret != IZ_NULL, src);
+    VRETURN_VAL(ret != IZ_NULL, pSrc);
 
     *ret = 0;
-
-    IZ_ASSERT(src != IZ_NULL);
-    IZ_BYTE* pSrc = reinterpret_cast<IZ_BYTE*>(src);
 
     IZ_BYTE ch = *pSrc;
 
@@ -296,15 +388,15 @@ __EXIT__:
 /**
 * Get a character code as specified character ecode.
 */
-void* CStdUtf::GetOneCharCodeAsUnicode(void* src, IZ_UINT* ret)
+void* CStdUtf::GetOneCharCodeAsUnicode(const void* src, IZ_UINT* ret)
 {
+    IZ_ASSERT(src != IZ_NULL);
+    IZ_UINT16* pSrc = CONST_CAST(IZ_UINT16*, void*, src);
+
     // If ret is NULL, nothing is done.
-    VRETURN_VAL(ret != IZ_NULL, src);
+    VRETURN_VAL(ret != IZ_NULL, pSrc);
 
     *ret = 0;
-
-    IZ_ASSERT(src != IZ_NULL);
-    IZ_UINT16* pSrc = reinterpret_cast<IZ_UINT16*>(src);
 
     IZ_UINT16 ch = *(pSrc++);
 
@@ -332,15 +424,15 @@ __EXIT__:
 /**
 * Get a character code as specified character ecode.
 */
-void* CStdUtf::GetOneCharCodeAsSJIS(void* src, IZ_UINT* ret)
+void* CStdUtf::GetOneCharCodeAsSJIS(const void* src, IZ_UINT* ret)
 {
+    IZ_ASSERT(src != IZ_NULL);
+    IZ_BYTE* pSrc = CONST_CAST(IZ_BYTE*, void*, src);
+
     // If ret is NULL, nothing is done.
-    VRETURN_VAL(ret != IZ_NULL, src);
+    VRETURN_VAL(ret != IZ_NULL, pSrc);
 
     *ret = 0;
-
-    IZ_ASSERT(src != IZ_NULL);
-    IZ_BYTE* pSrc = reinterpret_cast<IZ_BYTE*>(src);
 
     IZ_BYTE ch = *(pSrc++);
 

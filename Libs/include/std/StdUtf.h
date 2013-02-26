@@ -3,29 +3,54 @@
 
 #include "izDefs.h"
 
-namespace izanagi {
+namespace izanagi
+{
+    class IMemoryAllocator;
+
     /**
     */
-    class CStdUtf {
+    class CStdUtf
+    {
+    public:
+        struct SFuncIfLowMemory
+        {
+            IMemoryAllocator* allocator;
+            void* (*funcIfLowMem)(IMemoryAllocator*, void*, IZ_UINT);
+
+            void* operator()(void* ptr, IZ_UINT size);
+        };
+
     public:
         // Converts UTF8 to Unicode
         static void ConvertUtf8ToUnicode(
             void* dst,
             IZ_UINT nDstSize,
-            IZ_CHAR* src);
+            const void* src);
+
+        static void ConvertUtf8ToUnicode(
+            void* dst,
+            IZ_UINT nDstSize,
+            const void* src,
+            SFuncIfLowMemory& func);
 
         static IZ_UINT ConvertUtf8ToUnicode(IZ_UINT code);
 
         // Converts UTF16 to Unicode
-        static void ConvertUTF16ToUnicode(
+        static void ConvertUtf16ToUnicode(
             void* dst,
             IZ_UINT nDstSize,
-            IZ_UINT16* src);
+            const void* src);
+
+        static void ConvertUtf16ToUnicode(
+            void* dst,
+            IZ_UINT nDstSize,
+            const void* src,
+            SFuncIfLowMemory& func);
 
         // Get a character code as specified character encode.
-        static void* GetOneCharCodeAsUTF8(void* src, IZ_UINT* ret);
-        static void* GetOneCharCodeAsUnicode(void* src, IZ_UINT* ret);
-        static void* GetOneCharCodeAsSJIS(void* src, IZ_UINT* ret);
+        static void* GetOneCharCodeAsUTF8(const void* src, IZ_UINT* ret);
+        static void* GetOneCharCodeAsUnicode(const void* src, IZ_UINT* ret);
+        static void* GetOneCharCodeAsSJIS(const void* src, IZ_UINT* ret);
 
         /**
         * Returns whether character code is ASCII.
