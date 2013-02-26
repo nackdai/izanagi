@@ -6,6 +6,8 @@
 
 namespace izanagi
 {
+    class IInputStream;
+
 namespace text
 {
     /**
@@ -13,6 +15,8 @@ namespace text
     class CUString
     {
     protected:
+        CUString::CUString() {}
+
         CUString(E_FONT_CHAR_ENCODE encode)
         {
             m_Encode = encode;
@@ -22,7 +26,7 @@ namespace text
         virtual ~CUString() {}
 
     public:
-        PURE_VIRTUAL(IZ_UINT GetNum());
+        virtual IZ_UINT GetNum();
 
         IZ_UINT GetOne(IZ_UINT index)
         {
@@ -64,10 +68,10 @@ namespace text
             return ret;
         }
 
-        PURE_VIRTUAL(IZ_UINT GetNextAsUnicode());
+        virtual IZ_UINT GetNextAsUnicode();
 
     protected:
-         PURE_VIRTUAL(void* GetNextInternal(void* data, IZ_UINT* code));
+         virtual void* GetNextInternal(void* data, IZ_UINT* code);
 
     protected:
         E_FONT_CHAR_ENCODE m_Encode;
@@ -92,14 +96,25 @@ namespace text
             m_Bytes = bytes;
         }
         virtual ~CUtf8String() {}
+    };
+
+    /**
+     */
+    class CUnicodeString : public CUString
+    {
+    public:
+        CUnicodeString(IMemoryAllocator* allocator);
+        ~CUnicodeString();
 
     public:
-        virtual IZ_UINT GetNum();
-
-        virtual IZ_UINT GetNextAsUnicode();
+        IZ_BOOL Read(IInputStream* stream);
+        IZ_BOOL Read(
+            E_FONT_CHAR_ENCODE encode,
+            const void* src, 
+            IZ_UINT bytes);
 
     protected:
-        virtual void* GetNextInternal(void* data, IZ_UINT* code);
+        IMemoryAllocator* m_Allocator;
     };
 }    // namespace text
 }   // namespace izanagi
