@@ -32,6 +32,15 @@
     <ClCompile Include="..\..\source\text\FontMap.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\text\TextLine.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\text\Paragraph.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\text\ParagraphGroup.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\izFont.h" />
@@ -63,6 +72,15 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\text\FontHost.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\text\ParagraphGroup.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\text\TextLine.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\text\Paragraph.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
