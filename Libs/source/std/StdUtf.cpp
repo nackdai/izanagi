@@ -180,7 +180,7 @@ namespace {
 /**
 * Converts UTF8 to Unicode
 */
-void CStdUtf::ConvertUtf8ToUnicode(
+IZ_UINT CStdUtf::ConvertUtf8ToUnicode(
     void* dst,
     IZ_UINT nDstSize,
     const void* src)
@@ -191,14 +191,14 @@ void CStdUtf::ConvertUtf8ToUnicode(
         IZ_NULL,
     };
 
-    ConvertUtf8ToUnicode(
+    return ConvertUtf8ToUnicode(
         dst,
         nDstSize,
         src,
         func);
 }
 
-void CStdUtf::ConvertUtf8ToUnicode(
+IZ_UINT CStdUtf::ConvertUtf8ToUnicode(
     void* dst,
     IZ_UINT nDstSize,
     const void* src,
@@ -212,13 +212,15 @@ void CStdUtf::ConvertUtf8ToUnicode(
     IZ_UINT nPos = 0;
     IZ_UINT nDstByte = 0;
 
+    IZ_UINT count = 0;
+
     IZ_BYTE* pSrc = CONST_CAST(IZ_BYTE*, void*, src);
 
     for (;;) {
         IZ_BYTE ch = *pSrc;
 
         if (ch == 0) {
-            return;
+            break;
         }
 
         IZ_UINT code = 0;
@@ -228,6 +230,7 @@ void CStdUtf::ConvertUtf8ToUnicode(
         if ((nPos + nDstByte) >= nDstSize)
         {
             // 出力先メモリが足りない場合
+            nDstSize *= 2;
             IZ_UINT8* tmp = (IZ_UINT8*)func(dst, nDstSize);
 
             if (tmp != IZ_NULL)
@@ -236,15 +239,22 @@ void CStdUtf::ConvertUtf8ToUnicode(
             }
             else
             {
-                return;
+                break;
             }
         }
 
         memcpy(pDst + nPos, &code, nDstByte);
         nPos += nDstByte;
+
+        count++;
     }
 
-    return;
+    if (nPos <= nDstByte)
+    {
+        pDst[nPos + 1] = 0;
+    }
+
+    return count;
 }
 
 IZ_UINT CStdUtf::ConvertUtf8ToUnicode(IZ_UINT code)
@@ -257,7 +267,7 @@ IZ_UINT CStdUtf::ConvertUtf8ToUnicode(IZ_UINT code)
 /**
 * Converts UTF16 to Unicode
 */
-void CStdUtf::ConvertUtf16ToUnicode(
+IZ_UINT CStdUtf::ConvertUtf16ToUnicode(
     void* dst,
     IZ_UINT nDstSize,
     const void* src)
@@ -268,14 +278,14 @@ void CStdUtf::ConvertUtf16ToUnicode(
         IZ_NULL,
     };
 
-    ConvertUtf16ToUnicode(
+    return ConvertUtf16ToUnicode(
         dst,
         nDstSize,
         src,
         func);
 }
 
-void CStdUtf::ConvertUtf16ToUnicode(
+IZ_UINT CStdUtf::ConvertUtf16ToUnicode(
     void* dst,
     IZ_UINT nDstSize,
     const void* src,
@@ -290,11 +300,13 @@ void CStdUtf::ConvertUtf16ToUnicode(
     IZ_UINT nPos = 0;
     IZ_UINT nDstByte = 0;
 
+    IZ_UINT count = 0;
+
     for (;;) {
         IZ_UINT16 ch = *(ptrSrc++);
 
         if (ch == 0) {
-            return;
+            break;
         }
 
         IZ_UINT code = ch;
@@ -319,6 +331,7 @@ void CStdUtf::ConvertUtf16ToUnicode(
         if ((nPos + bytes) >= nDstSize)
         {
             // 出力先メモリが足りない場合
+            nDstSize *= 2;
             IZ_UINT8* tmp = (IZ_UINT8*)func(dst, nDstSize);
 
             if (tmp != IZ_NULL)
@@ -327,7 +340,7 @@ void CStdUtf::ConvertUtf16ToUnicode(
             }
             else
             {
-                return;
+                break;
             }
         }
 
@@ -339,7 +352,15 @@ void CStdUtf::ConvertUtf16ToUnicode(
         }
 
         nPos += bytes;
+        count++;
     }
+
+    if (nPos <= nDstSize)
+    {
+        pDst[nPos + 1] = 0;
+    }
+
+    return count;
 }
 
 namespace {
