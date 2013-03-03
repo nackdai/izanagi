@@ -22,12 +22,12 @@ namespace izanagi
 
     public:
         // Converts UTF8 to Unicode
-        static void ConvertUtf8ToUnicode(
+        static IZ_UINT ConvertUtf8ToUnicode(
             void* dst,
             IZ_UINT nDstSize,
             const void* src);
 
-        static void ConvertUtf8ToUnicode(
+        static IZ_UINT ConvertUtf8ToUnicode(
             void* dst,
             IZ_UINT nDstSize,
             const void* src,
@@ -36,12 +36,12 @@ namespace izanagi
         static IZ_UINT ConvertUtf8ToUnicode(IZ_UINT code);
 
         // Converts UTF16 to Unicode
-        static void ConvertUtf16ToUnicode(
+        static IZ_UINT ConvertUtf16ToUnicode(
             void* dst,
             IZ_UINT nDstSize,
             const void* src);
 
-        static void ConvertUtf16ToUnicode(
+        static IZ_UINT ConvertUtf16ToUnicode(
             void* dst,
             IZ_UINT nDstSize,
             const void* src,
