@@ -41,27 +41,27 @@ IZ_BOOL CLog::IsLoggable(LOG_TYPE type)
         }\
     } while (0)
 
-void CLog::LogDebug(IZ_PCSTR format, ...)
+void CLog::Debug(IZ_PCSTR format, ...)
 {
     OUT_STRING(LOG_TYPE_DEBUG, "Debug   :"); 
 }
 
-void CLog::LogError(IZ_PCSTR format, ...)
+void CLog::Error(IZ_PCSTR format, ...)
 {
     OUT_STRING(LOG_TYPE_ERROR, "Error   :"); 
 }
 
-void CLog::LogInfo(IZ_PCSTR format, ...)
+void CLog::Info(IZ_PCSTR format, ...)
 {
     OUT_STRING(LOG_TYPE_INFO, "Info    :"); 
 }
 
-void CLog::LogVerbose(IZ_PCSTR format, ...)
+void CLog::Verbose(IZ_PCSTR format, ...)
 {
     OUT_STRING(LOG_TYPE_VERBOSE, "Verbose :"); 
 }
 
-void CLog::LogWarn(IZ_PCSTR format, ...)
+void CLog::Warn(IZ_PCSTR format, ...)
 {
     OUT_STRING(LOG_TYPE_WARN, "Warn    :"); 
 }
@@ -78,27 +78,27 @@ void CLog::LogWarn(IZ_PCSTR format, ...)
         }\
     } while(IZ_FALSE)
 
-void CLog::LogDebug(IZ_PCSTR tag, IZ_PCSTR format, ...)
+void CLog::Debug(IZ_PCSTR tag, IZ_PCSTR format, ...)
 {
     OUT_STRING(LOG_TYPE_DEBUG, "Debug [%s] : ", tag);
 }
 
-void CLog::LogError(IZ_PCSTR tag, IZ_PCSTR format, ...)
+void CLog::Error(IZ_PCSTR tag, IZ_PCSTR format, ...)
 {
     OUT_STRING(LOG_TYPE_ERROR, "Error [%s] : ", tag);
 }
 
-void CLog::LogInfo(IZ_PCSTR tag, IZ_PCSTR format, ...)
+void CLog::Info(IZ_PCSTR tag, IZ_PCSTR format, ...)
 {
     OUT_STRING(LOG_TYPE_INFO, "Info [%s] : ", tag);
 }
 
-void CLog::LogVerbose(IZ_PCSTR tag, IZ_PCSTR format, ...)
+void CLog::Verbose(IZ_PCSTR tag, IZ_PCSTR format, ...)
 {
     OUT_STRING(LOG_TYPE_VERBOSE, "Verbose [%s] : ", tag);
 }
 
-void CLog::LogWarn(IZ_PCSTR tag, IZ_PCSTR format, ...)
+void CLog::Warn(IZ_PCSTR tag, IZ_PCSTR format, ...)
 {
     OUT_STRING(LOG_TYPE_WARN, "Warn [%s] : ", tag);
 }

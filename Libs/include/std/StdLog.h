@@ -27,25 +27,25 @@ namespace izanagi {
         static void SetEnableFlag(IZ_UINT flag);
         static IZ_BOOL IsLoggable(LOG_TYPE type);
 
-        static void LogDebug(IZ_PCSTR format, ...);
-        static void LogError(IZ_PCSTR format, ...);
-        static void LogInfo(IZ_PCSTR format, ...);
-        static void LogVerbose(IZ_PCSTR format, ...);
-        static void LogWarn(IZ_PCSTR format, ...);
+        static void Debug(IZ_PCSTR format, ...);
+        static void Error(IZ_PCSTR format, ...);
+        static void Info(IZ_PCSTR format, ...);
+        static void Verbose(IZ_PCSTR format, ...);
+        static void Warn(IZ_PCSTR format, ...);
 
-        static void LogDebug(IZ_PCSTR tag, IZ_PCSTR format, ...);
-        static void LogError(IZ_PCSTR tag, IZ_PCSTR format, ...);
-        static void LogInfo(IZ_PCSTR tag, IZ_PCSTR format, ...);
-        static void LogVerbose(IZ_PCSTR tag, IZ_PCSTR format, ...);
-        static void LogWarn(IZ_PCSTR tag, IZ_PCSTR format, ...);
+        static void Debug(IZ_PCSTR tag, IZ_PCSTR format, ...);
+        static void Error(IZ_PCSTR tag, IZ_PCSTR format, ...);
+        static void Info(IZ_PCSTR tag, IZ_PCSTR format, ...);
+        static void Verbose(IZ_PCSTR tag, IZ_PCSTR format, ...);
+        static void Warn(IZ_PCSTR tag, IZ_PCSTR format, ...);
     };
 }   // namespace izanagi
 
-#define IZ_LOGD(t, f, ...)      izanagi::CLog::LogDebug(t, f, __VA_ARGS__)
-#define IZ_LOGE(t, f, ...)      izanagi::CLog::LogError(t, f, __VA_ARGS__)
-#define IZ_LOGI(t, f, ...)      izanagi::CLog::LogInfo(t, f, __VA_ARGS__)
-#define IZ_LOGV(t, f, ...)      izanagi::CLog::LogVerbose(t, f, __VA_ARGS__)
-#define IZ_LOGW(t, f, ...)      izanagi::CLog::LogWarn(t, f, __VA_ARGS__)
+#define IZ_LOGD(t, f, ...)      izanagi::CLog::Debug(t, f, __VA_ARGS__)
+#define IZ_LOGE(t, f, ...)      izanagi::CLog::Error(t, f, __VA_ARGS__)
+#define IZ_LOGI(t, f, ...)      izanagi::CLog::Info(t, f, __VA_ARGS__)
+#define IZ_LOGV(t, f, ...)      izanagi::CLog::Verbose(t, f, __VA_ARGS__)
+#define IZ_LOGW(t, f, ...)      izanagi::CLog::Warn(t, f, __VA_ARGS__)
 
 #define IZ_LOG_ASSERT(b, t, f, ...)         if (!b) { IZ_LOGE(t, f, __VA_ARGS__); IZ_ASSERT(IZ_FALSE); }
 #define IZ_LOG_VRETURN(b, t, f, ...)        if (!b) { IZ_LOGE(t, f, __VA_ARGS__); VRETURN(IZ_FALSE); }
