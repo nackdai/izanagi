@@ -3,7 +3,7 @@
 
 #include "izDefs.h"
 #include "FNTFormat.h"
-#include "FontDefs.h"
+#include "FontHost.h"
 
 namespace izanagi
 {
@@ -12,23 +12,6 @@ namespace izanagi
 
 namespace text
 {
-    class IFontHost : public CObject
-    {
-    protected:
-        IFontHost() {}
-        virtual ~IFontHost() {}
-
-    public:
-        PURE_VIRTUAL(
-            IZ_BOOL GetImage(
-                IZ_UINT code,
-                SGlyphImage& image,
-                SGlyphMetrics& metrics));
-    };
-
-    /**
-    * フォントレンダラ
-    */
     class CFontHostFT : public IFontHost
     {
         friend class CFontRendererFT;
@@ -37,7 +20,8 @@ namespace text
         // インスタンス作成
         static CFontHostFT* CreateFontHostFT(
             IMemoryAllocator* allocator,
-            IInputStream* in);
+            IInputStream* in,
+            IZ_UINT pixelSize);
 
         static void SetAllocatorForFreetype(IMemoryAllocator* allocator);
 
@@ -53,18 +37,30 @@ namespace text
 
         void SetFace(IZ_UINT id);
 
-        IZ_UINT GetGlyphID(IZ_UINT code);
+        virtual IZ_UINT GetGlyphID(IZ_UINT code);
 
-        IZ_BOOL GetGlyphMetricsByID(IZ_UINT id, SGlyphMetrics& metrics);
+        virtual IZ_BOOL GetGlyphMetricsByID(IZ_UINT id, SGlyphMetrics& metrics);
 
-        IZ_BOOL GetGlyphMetricsByCode(IZ_UINT code, SGlyphMetrics& metrics);
+        virtual IZ_BOOL GetGlyphMetricsByCode(IZ_UINT code, SGlyphMetrics& metrics);
 
-        void SetPixelSize(IZ_UINT height);
+        virtual IZ_UINT GetPixelSize();
 
         virtual IZ_BOOL GetImage(
             IZ_UINT code,
             SGlyphImage& image,
             SGlyphMetrics& metrics);
+
+        virtual IZ_BOOL GetImageByID(
+            IZ_UINT id,
+            SGlyphImage& image,
+            SGlyphMetrics& metrics);
+
+        virtual IZ_UINT GetAscender();
+        virtual IZ_UINT GetDescender();
+        virtual IZ_UINT GetUnitsPerEM();
+
+    private:
+        void SetPixelSize(IZ_UINT size);
 
     private:
         IMemoryAllocator* m_Allocator;
@@ -74,6 +70,8 @@ namespace text
 
     private:
         Impl* GetImpl();
+
+        IZ_UINT m_PixelSize;
     };
 }    // namespace text
 }   // namespace izanagi

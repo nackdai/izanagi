@@ -29,6 +29,9 @@
     <ClCompile Include="..\..\source\text\FontGlyphCache.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\text\FontMap.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\izFont.h" />
@@ -54,6 +57,12 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\text\FontGlyphCache.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\text\FontMap.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\text\FontHost.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

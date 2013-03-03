@@ -91,6 +91,7 @@ xcopy /R /Y "$(TargetDir)$(ProjectName).pdb" ..\lib\$(IntDir)
   <ItemGroup>
     <ClCompile Include="..\..\source\text\FontGlyphCache.cpp" />
     <ClCompile Include="..\..\source\text\FontHostFT.cpp" />
+    <ClCompile Include="..\..\source\text\FontMap.cpp" />
     <ClCompile Include="..\..\source\text\FontRenderer.cpp" />
     <ClCompile Include="..\..\source\text\FontRendererBmp.cpp" />
     <ClCompile Include="..\..\source\text\FontRendererFT.cpp" />
@@ -100,7 +101,9 @@ xcopy /R /Y "$(TargetDir)$(ProjectName).pdb" ..\lib\$(IntDir)
     <ClInclude Include="..\..\include\text\FNTFormat.h" />
     <ClInclude Include="..\..\include\text\FontDefs.h" />
     <ClInclude Include="..\..\include\text\FontGlyphCache.h" />
+    <ClInclude Include="..\..\include\text\FontHost.h" />
     <ClInclude Include="..\..\include\text\FontHostFT.h" />
+    <ClInclude Include="..\..\include\text\FontMap.h" />
     <ClInclude Include="..\..\include\text\FontRenderer.h" />
     <ClInclude Include="..\..\include\text\FontRendererBmp.h" />
     <ClInclude Include="..\..\include\izFont.h" />

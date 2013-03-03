@@ -36,7 +36,11 @@ namespace text
 
         FT_GlyphSlot GetGlyphSlotByID(IZ_UINT id);
 
-        void SetPixelSize(IZ_UINT height);
+        void SetPixelSize(IZ_UINT size);
+
+        IZ_UINT GetAscender();
+        IZ_UINT GetDescender();
+        IZ_UINT GetUnitsPerEM();
 
     private:
         IMemoryAllocator* m_Allocator;
@@ -151,21 +155,48 @@ namespace text
         return m_FaceList[m_FaceIdx].ftFace->glyph;
     }
 
-    void CFontHostFT::Impl::SetPixelSize(IZ_UINT height)
+    void CFontHostFT::Impl::SetPixelSize(IZ_UINT size)
     {
         FT_Error err = FT_Set_Pixel_Sizes(
             m_FaceList[m_FaceIdx].ftFace,
             0,
-            height);
+            size);
 
         IZ_ASSERT(err == 0);
+    }
+
+    IZ_UINT CFontHostFT::Impl::GetAscender()
+    {
+        FT_Face face = m_FaceList[m_FaceIdx].ftFace;
+        FT_Size_Metrics metrics = face->size->metrics;
+        return metrics.ascender >> 6;
+    }
+
+    IZ_UINT CFontHostFT::Impl::GetDescender()
+    {
+        FT_Face face = m_FaceList[m_FaceIdx].ftFace;
+        FT_Size_Metrics metrics = face->size->metrics;
+
+        // TODO
+        IZ_UINT ret = (metrics.descender < 0
+            ? -metrics.descender
+            : metrics.descender);
+
+        return ret >> 6;
+    }
+
+    IZ_UINT CFontHostFT::Impl::GetUnitsPerEM()
+    {
+        FT_Face face = m_FaceList[m_FaceIdx].ftFace;
+        return face->units_per_EM >> 6;
     }
 
 //////////////////////////////////////////////////
 
     CFontHostFT* CFontHostFT::CreateFontHostFT(
         IMemoryAllocator* allocator,
-        IInputStream* in)
+        IInputStream* in,
+        IZ_UINT pixelSize)
     {
         IZ_UINT8* buf = (IZ_UINT8*)ALLOC(allocator, sizeof(CFontHostFT));
 
@@ -175,6 +206,7 @@ namespace text
 
             instance->m_Allocator = allocator;
             instance->m_Impl = Impl::Create(allocator, in);
+            instance->SetPixelSize(pixelSize);
         }
 
         return instance;
@@ -234,9 +266,9 @@ namespace text
         return GetGlyphMetricsByID(id, metrics);
     }
 
-    void CFontHostFT::SetPixelSize(IZ_UINT height)
+    IZ_UINT CFontHostFT::GetPixelSize()
     {
-        m_Impl->SetPixelSize(height);
+        return m_PixelSize;
     }
 
     IZ_BOOL CFontHostFT::GetImage(
@@ -247,6 +279,19 @@ namespace text
         IZ_UINT id = GetGlyphID(code);
         VRETURN(id);
 
+        IZ_BOOL ret = GetImageByID(
+            id,
+            image,
+            metrics);
+
+        return ret;
+    }
+
+    IZ_BOOL CFontHostFT::GetImageByID(
+        IZ_UINT id,
+        SGlyphImage& image,
+        SGlyphMetrics& metrics)
+    {
         FT_GlyphSlot glyph = GetImpl()->GetGlyphSlotByID(id);
 
         FT_Error err = FT_Render_Glyph(glyph, FT_RENDER_MODE_NORMAL);
@@ -273,6 +318,27 @@ namespace text
         }
 
         return IZ_TRUE;
+    }
+
+    void CFontHostFT::SetPixelSize(IZ_UINT size)
+    {
+        m_Impl->SetPixelSize(size);
+        m_PixelSize = size;
+    }
+
+    IZ_UINT CFontHostFT::GetAscender()
+    {
+        return m_Impl->GetAscender();
+    }
+
+    IZ_UINT CFontHostFT::GetDescender()
+    {
+        return m_Impl->GetDescender();
+    }
+
+    IZ_UINT CFontHostFT::GetUnitsPerEM()
+    {
+        return m_Impl->GetUnitsPerEM();
     }
 }    // namespace text
 }    // namespace izanagi
