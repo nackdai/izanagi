@@ -48,7 +48,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\Libs\external\freetype\include;$(ProjectDir)..\..\..\Libs\external\harfbuzz\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\Libs\external\freetype\include;$(ProjectDir)..\..\..\Libs\external\harfbuzz\src;$(ProjectDir)..\..\..\Libs\include;$(ProjectDir)..\..\..\Libs\external\icu\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <PrecompiledHeader>
@@ -60,7 +60,7 @@
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>$(ProjectDir)..\..\..\Libs\external\freetype\objs\win32\vc2010\freetype2411MT_D.lib;$(ProjectDir)..\..\..\Libs\external\harfbuzz-win32\libs\Debug\harfbuzzd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Text.lib;$(ProjectDir)..\..\..\Libs\external\freetype\objs\win32\vc2010\freetype2411MT_D.lib;$(ProjectDir)..\..\..\Libs\external\harfbuzz-win32\libs\Debug\harfbuzzd.lib;$(ProjectDir)..\..\..\Libs\external\icu\lib\iculxd.lib;$(ProjectDir)..\..\..\Libs\external\icu\lib\iculed.lib;$(ProjectDir)..\..\..\Libs\external\icu\lib\icuucd.lib;$(ProjectDir)..\..\..\Libs\external\icu\lib\icuind.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
@@ -103,11 +103,15 @@
   <ItemGroup>
     <ClInclude Include="..\..\FreeType\FreeTypeApp.h" />
     <ClInclude Include="..\..\FreeType\HarfBuzzApp.h" />
+    <ClInclude Include="..\..\FreeType\ParagraphCache.h" />
+    <ClInclude Include="..\..\FreeType\SimpleTextApp.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\FreeType\FreeTypeApp.cpp" />
     <ClCompile Include="..\..\FreeType\HarfBuzzApp.cpp" />
     <ClCompile Include="..\..\FreeType\main.cpp" />
+    <ClCompile Include="..\..\FreeType\ParagraphCache.cpp" />
+    <ClCompile Include="..\..\FreeType\SimpleTextApp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\FreeType\ReadMe.txt" />
