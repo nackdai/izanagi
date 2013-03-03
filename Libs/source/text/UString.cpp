@@ -80,17 +80,6 @@ namespace text
 
     //////////////////////////////////////////
 
-    CUnicodeString::CUnicodeString(IMemoryAllocator* allocator)
-    {
-        m_Allocator = allocator;
-        m_Encode = E_FONT_CHAR_ENCODE_UNICODE;
-    }
-
-    CUnicodeString::~CUnicodeString()
-    {
-        FREE(m_Allocator, m_Text);
-    }
-
     void* Realloc(
         IMemoryAllocator* allocator, 
         void* ptr, 
@@ -98,6 +87,38 @@ namespace text
     {
         void* ret = REALLOC(allocator, ptr, size);
         return ret;
+    }
+
+    void* CUtf8String::ConvertToUnicode(IMemoryAllocator* allocator/*= IZ_NULL*/)
+    {
+        void* dst = ALLOC(allocator, m_Bytes + 1);
+
+        CStdUtf::SFuncIfLowMemory func =
+        {
+            allocator,
+            Realloc,
+        };
+
+        CStdUtf::ConvertUtf8ToUnicode(
+            dst,
+            m_Bytes,
+            m_Text,
+            func);
+
+        return dst;
+    }
+
+    //////////////////////////////////////////
+
+    CUnicodeString::CUnicodeString(IMemoryAllocator* allocator)
+        : CUString(E_FONT_CHAR_ENCODE_UNICODE)
+    {
+        m_Allocator = allocator;
+    }
+
+    CUnicodeString::~CUnicodeString()
+    {
+        FREE(m_Allocator, m_Text);
     }
 
     IZ_BOOL CUnicodeString::Read(IInputStream* stream)
@@ -137,8 +158,9 @@ namespace text
 
         IZ_UINT byteSize = stream->GetSize() - signatureBytes;
 
-        IZ_CHAR* src = (IZ_CHAR*)ALLOC(m_Allocator, byteSize);
+        IZ_CHAR* src = (IZ_CHAR*)ALLOC(m_Allocator, byteSize + 1);
         stream->Read(src, 0, byteSize);
+        src[byteSize] = 0;
 
         IZ_BOOL ret = Read(encode, src, byteSize);
 
@@ -152,12 +174,12 @@ namespace text
         const void* src, 
         IZ_UINT bytes)
     {
-        if (m_Text == IZ_NULL)
+        if (m_Text != IZ_NULL)
         {
             return IZ_FALSE;
         }
 
-        m_Text = (IZ_UINT8*)ALLOC(m_Allocator, bytes);
+        m_Text = (IZ_UINT8*)ALLOC(m_Allocator, bytes + 1);
 
         CStdUtf::SFuncIfLowMemory func =
         {

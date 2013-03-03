@@ -21,6 +21,8 @@ namespace text
         {
             m_Encode = encode;
             m_Num = 0;
+            m_Text = IZ_NULL;
+            m_Bytes = 0;
             m_Iter = IZ_NULL;
         }
         virtual ~CUString() {}
@@ -70,6 +72,8 @@ namespace text
 
         virtual IZ_UINT GetNextAsUnicode();
 
+        virtual void* ConvertToUnicode(IMemoryAllocator* allocator = IZ_NULL) { return m_Text; }
+
     protected:
          virtual void* GetNextInternal(void* data, IZ_UINT* code);
 
@@ -96,6 +100,9 @@ namespace text
             m_Bytes = bytes;
         }
         virtual ~CUtf8String() {}
+
+    public:
+        virtual void* ConvertToUnicode(IMemoryAllocator* allocator = IZ_NULL);
     };
 
     /**
