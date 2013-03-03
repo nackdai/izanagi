@@ -19,14 +19,47 @@ IZ_BOOL CFreeTypeApp::InitInternal(
 
    FT_Error err = FT_Init_FreeType(&m_Library);
 
+#if 0
    err = FT_New_Face(
        m_Library,
        "font/azuki.ttf",
        0,
        &m_Face);
+#else
+   izanagi::CFileInputStream in;
+   in.Open("font/azuki.ttf");
+
+   void* readBuf = ALLOC(allocator, (size_t)in.GetSize());
+
+        result = IZ_INPUT_READ(&in, readBuf, 0, (size_t)in.GetSize());
+        VRETURN(result);
+
+        FT_Open_Args arg;
+        {
+            arg.flags = FT_OPEN_MEMORY;
+            arg.memory_base = reinterpret_cast<const FT_Byte*>(readBuf);
+            arg.memory_size = (FT_Long)in.GetSize();
+            arg.pathname = IZ_NULL;
+            arg.stream = IZ_NULL;
+            arg.driver = IZ_NULL;
+            arg.num_params = 0;
+            arg.params = IZ_NULL;
+        }
+
+        err = FT_Open_Face(
+            m_Library,
+            &arg,
+            0,
+            &m_Face);
+        VRETURN(result);
+
+        in.Close();
+#endif
+
+        FT_Face face = m_Face;
 
    err = FT_Set_Pixel_Sizes(
-       m_Face,
+       face,
        0,
        32);
 
@@ -84,7 +117,7 @@ void RenderGlyphToBitmap(
         for (IZ_UINT y = 0; y < face->glyph->bitmap.rows; y++)
         {
             memcpy(
-                cur + (posY + 20 + y) * pitch + face->glyph->bitmap_left - face->glyph->bitmap_top * pitch,
+                cur + (posY + 32 + y) * pitch + face->glyph->bitmap_left - face->glyph->bitmap_top * pitch,
                 face->glyph->bitmap.buffer + y * face->glyph->bitmap.pitch,
                 face->glyph->bitmap.pitch);
         }
@@ -178,7 +211,7 @@ void CFreeTypeApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 
    IZ_BOOL hasKerning = FT_HAS_KERNING(m_Face);
 
-#if 0
+#if 1
    RenderGlyphToBitmap(
        device,
        m_Face,
