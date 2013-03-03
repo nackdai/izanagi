@@ -22,14 +22,9 @@ namespace izanagi
         class CGraphicsDevice;
     }
 
-namespace text
-{
-    class CUString;
-    class IFontHost;
-
     /**
      */
-    class CLine : public CObject
+    class CLine : public text::CLine
     {
         friend class CParagraph;
 
@@ -40,36 +35,28 @@ namespace text
 
     private:
         CLine();
-        ~CLine();
+        virtual ~CLine();
 
         NO_COPIABLE(CLine);
         IZ_DEFINE_INTERNAL_RELEASE();
 
-    private:
-        CStdList<CLine>::Item* GetListItem() { return &m_ListItem; }
+    public:
+        virtual IZ_UINT GetLineWidth();
 
+    protected:
         virtual void Prepare(
-            IZ_UINT height,
+            IZ_UINT8* dst,
+            IZ_UINT pitch,
             IZ_UINT ascent,
-            IFontHost* host,
-            graph::CGraphicsDevice* device);
-
-        virtual void Render(
-            IZ_UINT x,
-            IZ_UINT y,
-            graph::CGraphicsDevice* device);
+            text::IFontHost* host);
 
     private:
-        IMemoryAllocator* m_Allocator;
-
         const ParagraphLayout::Line* m_Line;
-
-        CStdList<CLine>::Item m_ListItem;
-
-        graph::CTexture* m_Texture;
     };
 
-    class CParagraph : public CObject
+    /**
+     */
+    class CParagraph : public text::CParagraph
     {
         friend class CParagraphGroup;
 
@@ -88,44 +75,21 @@ namespace text
         IZ_DEFINE_INTERNAL_RELEASE();
 
     private:
-        CStdList<CParagraph>::Item* GetListItem()
-        {
-            return &m_ListItem;
-        }
-
         virtual void Layout(IZ_UINT width);
 
-        virtual void ReleaseLines();
-
-        virtual void Prepare(
-            IZ_UINT height,
-            IZ_UINT ascent,
-            IFontHost* host,
-            graph::CGraphicsDevice* device);
-
-        virtual void Render(
-            IZ_UINT x,
-            IZ_UINT y,
-            IZ_UINT height,
-            graph::CGraphicsDevice* device);
-
     private:
-        IMemoryAllocator* m_Allocator;
         ParagraphLayout* m_Layout;
         void* m_Text;
-
-        CStdList<CParagraph>::Item m_ListItem;
-        CStdList<CLine> m_LineList;
     };
 
     /**
      */
-    class CParagraphGroup : public CObject
+    class CParagraphGroup : public text::CParagraphGroup
     {
     public:
         static CParagraphGroup* CreateParagraphGroup(
             IMemoryAllocator* allocator,
-            CUString& text,
+            text::CUString& text,
             const LEFontInstance* font);
 
     protected:
@@ -136,43 +100,18 @@ namespace text
         IZ_DEFINE_INTERNAL_RELEASE();
 
     protected:
-        virtual CParagraph* CreateParagraph(
+        CParagraph* CreateParagraph(
             IMemoryAllocator* allocator,
             void* text,
             IZ_UINT bytes,
             void* data);
 
-    public:
-        virtual void Layout(
-            IZ_UINT width,
-            IZ_UINT height);
-
-        virtual void Prepare(
-            IFontHost* host,
-            graph::CGraphicsDevice* device);
-
-        virtual void Render(
-            IZ_UINT x,
-            IZ_UINT y,
-            graph::CGraphicsDevice* device);
-
     private:
-        void Init(CUString& text, const FontRuns* fontRuns);
+        void Init(text::CUString& text, const FontRuns* fontRuns);
        
     protected:
-        IMemoryAllocator* m_Allocator;
-
         UBiDiLevel m_Level;
-
-        CStdList<CParagraph> m_Paragraphs;
-
-        IZ_UINT m_Width;
-        IZ_UINT m_Height;
-
-        IZ_UINT m_LineHeight;
-        IZ_UINT m_Ascent;
     };
-}    // namespace text
 }   // namespace izanagi
 
 #endif  // #if !defined(__IZANAGI_TEXT_PARAGRAPH_CACHE_H__)

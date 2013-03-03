@@ -300,7 +300,7 @@ void CSimpleTextApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     CSampleFontInstance fontInst;
     fontInst.Init(host);
 
-    izanagi::text::CParagraphGroup* group = izanagi::text::CParagraphGroup::CreateParagraphGroup(
+    izanagi::text::CParagraphGroup* group = izanagi::CParagraphGroup::CreateParagraphGroup(
         m_Allocator,
         str,
         &fontInst);
