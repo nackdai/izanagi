@@ -181,7 +181,7 @@ namespace {
 * Converts UTF8 to Unicode
 */
 IZ_UINT CStdUtf::ConvertUtf8ToUnicode(
-    void* dst,
+    void** dst,
     IZ_UINT nDstSize,
     const void* src)
 {
@@ -199,7 +199,7 @@ IZ_UINT CStdUtf::ConvertUtf8ToUnicode(
 }
 
 IZ_UINT CStdUtf::ConvertUtf8ToUnicode(
-    void* dst,
+    void** dst,
     IZ_UINT nDstSize,
     const void* src,
     SFuncIfLowMemory& func)
@@ -207,7 +207,7 @@ IZ_UINT CStdUtf::ConvertUtf8ToUnicode(
     // 一応
     //FILL_ZERO(dst, nDstSize);
 
-    IZ_UINT8* pDst = reinterpret_cast<IZ_UINT8*>(dst);
+    IZ_UINT8* pDst = reinterpret_cast<IZ_UINT8*>(*dst);
 
     IZ_UINT nPos = 0;
     IZ_UINT nDstByte = 0;
@@ -268,7 +268,7 @@ IZ_UINT CStdUtf::ConvertUtf8ToUnicode(IZ_UINT code)
 * Converts UTF16 to Unicode
 */
 IZ_UINT CStdUtf::ConvertUtf16ToUnicode(
-    void* dst,
+    void** dst,
     IZ_UINT nDstSize,
     const void* src)
 {
@@ -286,7 +286,7 @@ IZ_UINT CStdUtf::ConvertUtf16ToUnicode(
 }
 
 IZ_UINT CStdUtf::ConvertUtf16ToUnicode(
-    void* dst,
+    void** dst,
     IZ_UINT nDstSize,
     const void* src,
     SFuncIfLowMemory& func)
@@ -294,7 +294,7 @@ IZ_UINT CStdUtf::ConvertUtf16ToUnicode(
     // 一応
     //FILL_ZERO(dst, nDstSize);
 
-    IZ_UINT8* pDst = reinterpret_cast<IZ_UINT8*>(dst);
+    IZ_UINT8* pDst = reinterpret_cast<IZ_UINT8*>(*dst);
     IZ_UINT16* ptrSrc = CONST_CAST(IZ_UINT16*, void*, src);
 
     IZ_UINT nPos = 0;

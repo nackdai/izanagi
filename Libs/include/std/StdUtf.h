@@ -23,12 +23,12 @@ namespace izanagi
     public:
         // Converts UTF8 to Unicode
         static IZ_UINT ConvertUtf8ToUnicode(
-            void* dst,
+            void** dst,
             IZ_UINT nDstSize,
             const void* src);
 
         static IZ_UINT ConvertUtf8ToUnicode(
-            void* dst,
+            void** dst,
             IZ_UINT nDstSize,
             const void* src,
             SFuncIfLowMemory& func);
@@ -37,12 +37,12 @@ namespace izanagi
 
         // Converts UTF16 to Unicode
         static IZ_UINT ConvertUtf16ToUnicode(
-            void* dst,
+            void** dst,
             IZ_UINT nDstSize,
             const void* src);
 
         static IZ_UINT ConvertUtf16ToUnicode(
-            void* dst,
+            void** dst,
             IZ_UINT nDstSize,
             const void* src,
             SFuncIfLowMemory& func);
