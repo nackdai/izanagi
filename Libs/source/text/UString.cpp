@@ -100,7 +100,7 @@ namespace text
         };
 
         CStdUtf::ConvertUtf8ToUnicode(
-            dst,
+            &dst,
             m_Bytes,
             m_Text,
             func);
@@ -190,7 +190,7 @@ namespace text
         if (encode == E_FONT_CHAR_ENCODE_UTF8)
         {
             CStdUtf::ConvertUtf8ToUnicode(
-                m_Text,
+                (void**)&m_Text,
                 bytes,
                 src,
                 func);
@@ -198,7 +198,7 @@ namespace text
         else if (encode == E_FONT_CHAR_ENCODE_UTF16)
         {
             CStdUtf::ConvertUtf16ToUnicode(
-                m_Text,
+                (void**)&m_Text,
                 bytes,
                 src,
                 func);
