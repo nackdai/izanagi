@@ -3,29 +3,48 @@
 
 #include "izDefs.h"
 #include "izStd.h"
-#include "text/FontHostFT.h"
 
 namespace izanagi
 {
-    class IMemoryAllocator;
+    class IInputStream;
 
     namespace graph
     {
-        class CTexture;
         class CGraphicsDevice;
     }
 
 namespace text
 {
+    class IFontHost;
+    class CParagraphGroup;
+
     /**
      */
-    class CFontRendererFT
+    class CFontRendererFT : public CObject
     {
     public:
-        CFontRendererFT(){}
-        ~CFontRendererFT(){}
+        static CFontRendererFT* CreateFontRenderer(
+            IMemoryAllocator* allocator,
+            IInputStream* in,
+            IZ_UINT pixelSize);
+
+    private:
+        CFontRendererFT();
+        ~CFontRendererFT();
+
+        NO_COPIABLE(CFontRendererFT);
+        IZ_DEFINE_INTERNAL_RELEASE();
 
     public:
+        void Render(
+            IZ_UINT x, IZ_UINT y,
+            IZ_UINT width, IZ_UINT height,
+            CParagraphGroup& paragraphGroup,
+            graph::CGraphicsDevice* device);
+
+    private:
+        IMemoryAllocator* m_Allocator;
+        IFontHost* m_FontHost;
     };
 }    // namespace text
 }   // namespace izanagi
