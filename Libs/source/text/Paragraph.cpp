@@ -17,6 +17,17 @@ namespace text
         Clear();
     }
 
+    void CParagraph::Layout(IZ_UINT width)
+    {
+        ReleaseLines();
+
+        CLine* line = IZ_NULL;
+        while ((line = CreateLine(width)) != IZ_NULL)
+        {
+            AddLine(line);
+        }
+    }
+
     void CParagraph::ReleaseLines()
     {
         CStdList<CLine>::Item* lineListItem = m_LineList.GetTop();

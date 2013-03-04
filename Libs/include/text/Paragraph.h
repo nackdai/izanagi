@@ -30,7 +30,9 @@ namespace text
         IZ_DEFINE_INTERNAL_RELEASE();
 
     protected:
-        PURE_VIRTUAL(void Layout(IZ_UINT width));
+        void Layout(IZ_UINT width);
+
+        PURE_VIRTUAL(CLine* CreateLine(IZ_UINT width));
 
         void ReleaseLines();
         void AddLine(CLine* line);

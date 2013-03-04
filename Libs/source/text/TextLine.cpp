@@ -47,6 +47,37 @@ namespace text
         }
     }
 
+    IZ_UINT CLine::CopyImage(
+        IZ_UINT glyphID,
+        IZ_UINT8* dst,
+        IZ_UINT x,
+        IZ_UINT pitch,
+        IZ_UINT ascent,
+        IFontHost* host)
+    {
+        IZ_UINT posX = x;
+        IZ_UINT posY = ascent;
+
+        text::SGlyphImage image;
+        text::SGlyphMetrics metrics;
+        host->GetImageByID(
+            glyphID,
+            image,
+            metrics);
+
+        for (IZ_UINT y = 0; y < image.rows; y++)
+        {
+            memcpy(
+                dst + posX + (posY + y) * pitch + image.leftOffset - image.topOffset * pitch,
+                image.bmp + y * image.pitch,
+                image.pitch);
+        }
+
+        posX += metrics.advance;
+
+        return posX;
+    }
+
     void CLine::Clear()
     {
         SAFE_RELEASE(m_Texture);

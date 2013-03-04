@@ -45,6 +45,14 @@ namespace text
                 IZ_UINT ascent,
                 IFontHost* host));
 
+        IZ_UINT CopyImage(
+            IZ_UINT glyphID,
+            IZ_UINT8* dst,
+            IZ_UINT x,
+            IZ_UINT pitch,
+            IZ_UINT ascent,
+            IFontHost* host);
+
         void Clear();
 
         void Render(
