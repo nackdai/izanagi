@@ -75,11 +75,12 @@ namespace izanagi
         IZ_DEFINE_INTERNAL_RELEASE();
 
     private:
-        virtual void Layout(IZ_UINT width);
+        virtual CLine* CreateLine(IZ_UINT width);
 
     private:
         ParagraphLayout* m_Layout;
         void* m_Text;
+        IZ_BOOL m_IsReflowed;
     };
 
     /**

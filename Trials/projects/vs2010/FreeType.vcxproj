@@ -60,7 +60,7 @@
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>Text.lib;$(ProjectDir)..\..\..\Libs\external\freetype\objs\win32\vc2010\freetype2411MT_D.lib;$(ProjectDir)..\..\..\Libs\external\harfbuzz-win32\libs\Debug\harfbuzzd.lib;$(ProjectDir)..\..\..\Libs\external\icu\lib\iculxd.lib;$(ProjectDir)..\..\..\Libs\external\icu\lib\iculed.lib;$(ProjectDir)..\..\..\Libs\external\icu\lib\icuucd.lib;$(ProjectDir)..\..\..\Libs\external\icu\lib\icuind.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Text.lib;$(ProjectDir)..\..\..\Libs\external\freetype\objs\win32\vc2010\freetype2411MT_D.lib;$(ProjectDir)..\..\..\Libs\external\icu\lib\iculxd.lib;$(ProjectDir)..\..\..\Libs\external\icu\lib\iculed.lib;$(ProjectDir)..\..\..\Libs\external\icu\lib\icuucd.lib;$(ProjectDir)..\..\..\Libs\external\icu\lib\icuind.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
