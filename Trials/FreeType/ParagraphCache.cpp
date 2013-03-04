@@ -162,11 +162,34 @@ namespace izanagi
 
     CParagraph::CParagraph()
     {
+        m_IsReflowed = IZ_FALSE;
     }
 
     CParagraph::~CParagraph()
     {
         delete m_Layout;
+    }
+
+    CLine* CParagraph::CreateLine(IZ_UINT width)
+    {
+        if (!m_IsReflowed)
+        {
+            m_Layout->reflow();
+            m_IsReflowed = IZ_TRUE;
+        }
+
+        CLine* ret = IZ_NULL;
+
+        ParagraphLayout::Line* line = m_Layout->nextLine(width);
+        if (line != IZ_NULL)
+        {
+            ret = CLine::CreateLine(
+                m_Allocator,
+                line);
+        }
+
+        return ret;
+
     }
 
     CParagraph* CParagraphGroup::CreateParagraph(
@@ -210,20 +233,6 @@ namespace izanagi
         }
 
         return paragraph;
-    }
-
-    void CParagraph::Layout(IZ_UINT width)
-    {
-        ReleaseLines();
-
-        m_Layout->reflow();
-
-        const ParagraphLayout::Line* line;
-        while ((line = m_Layout->nextLine(width)) != NULL)
-        {
-            CLine* l = CLine::CreateLine(m_Allocator, line);
-            AddLine(l);
-        }
     }
 
     CLine::CLine()
@@ -288,22 +297,13 @@ namespace izanagi
 
                 if (ttGlyph < 0xFFFE)
                 {
-                    text::SGlyphImage image;
-                    text::SGlyphMetrics metrics;
-                    host->GetImageByID(
+                    posX = CopyImage(
                         ttGlyph,
-                        image,
-                        metrics);
-
-                    for (IZ_UINT y = 0; y < image.rows; y++)
-                    {
-                        memcpy(
-                            dst + posX + (posY + y) * pitch + image.leftOffset - image.topOffset * pitch,
-                            image.bmp + y * image.pitch,
-                            image.pitch);
-                    }
-
-                    posX += metrics.advance;
+                        dst,
+                        posX,
+                        pitch,
+                        ascent,
+                        host);
                 }
             }
         }

@@ -1,3 +1,4 @@
+#if 0
 #include "HarfBuzzApp.h"
 #include FT_GLYPH_H
 
@@ -137,3 +138,4 @@ void CHarfBuzzApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
     device->End2D();
 }
+#endif
