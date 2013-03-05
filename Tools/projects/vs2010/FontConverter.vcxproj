@@ -47,7 +47,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)../../Font/AppCore;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>
@@ -61,7 +61,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)../../Font/AppCore;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>
@@ -79,26 +79,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Font\FontConverter\CharList.cpp" />
     <ClCompile Include="..\..\Font\FontConverter\FontConverter.cpp" />
-    <ClCompile Include="..\..\Font\AppCore\CharList.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\Font\AppCore\FontConverterImpl.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\Font\AppCore\Option.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\Font\AppCore\CharList.h" />
-    <ClInclude Include="..\..\Font\AppCore\FontConverterDefs.h" />
-    <ClInclude Include="..\..\Font\AppCore\FontConverterImpl.h" />
-    <ClInclude Include="..\..\Font\AppCore\Option.h" />
+    <ClCompile Include="..\..\Font\FontConverter\FontConverterImpl.cpp" />
+    <ClCompile Include="..\..\Font\FontConverter\Option.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Font\FontConverter\ReadMe.txt" />
@@ -108,6 +92,12 @@
       <Project>{e39712e8-aa2f-4764-975b-40b54164b95e}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Font\FontConverter\CharList.h" />
+    <ClInclude Include="..\..\Font\FontConverter\FontConverterDefs.h" />
+    <ClInclude Include="..\..\Font\FontConverter\FontConverterImpl.h" />
+    <ClInclude Include="..\..\Font\FontConverter\Option.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

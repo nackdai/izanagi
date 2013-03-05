@@ -8,45 +8,36 @@
     <Filter Include="include">
       <UniqueIdentifier>{dab991cd-38e1-4f3f-add3-2ea386c1ab7e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="AppCore">
-      <UniqueIdentifier>{6627a214-e362-4e4a-b1d3-25f9f1f185a3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="AppCore\include">
-      <UniqueIdentifier>{14e43800-b57c-43c5-b2cc-064c345a62e3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="AppCore\source">
-      <UniqueIdentifier>{baf625db-2ed6-4a14-afc3-750423877245}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Font\FontConverter\FontConverter.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Font\AppCore\CharList.cpp">
-      <Filter>AppCore\source</Filter>
+    <ClCompile Include="..\..\Font\FontConverter\FontConverterImpl.cpp">
+      <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Font\AppCore\FontConverterImpl.cpp">
-      <Filter>AppCore\source</Filter>
+    <ClCompile Include="..\..\Font\FontConverter\Option.cpp">
+      <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Font\AppCore\Option.cpp">
-      <Filter>AppCore\source</Filter>
+    <ClCompile Include="..\..\Font\FontConverter\CharList.cpp">
+      <Filter>source</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\Font\AppCore\CharList.h">
-      <Filter>AppCore\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Font\AppCore\FontConverterDefs.h">
-      <Filter>AppCore\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Font\AppCore\FontConverterImpl.h">
-      <Filter>AppCore\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Font\AppCore\Option.h">
-      <Filter>AppCore\include</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Font\FontConverter\ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Font\FontConverter\Option.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Font\FontConverter\CharList.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Font\FontConverter\FontConverterImpl.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Font\FontConverter\FontConverterDefs.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
