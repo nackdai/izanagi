@@ -1,111 +1,61 @@
 #if !defined(__FONT_CONVERTER_IMPL_H__)
 #define __FONT_CONVERTER_IMPL_H__
 
-#include <vector>
-#include <set>
-#include "izToolKit.h"
-#include "izFont.h"
+#include "FontConverterBase.h"
 
-#define _TEX_FMT_A8_
-
-class CFontConverter {
-private:
-    static CFontConverter s_cInstance;
+class CFontConverterGDI : public CFontConverterBase
+{
+public:
+    CFontConverterGDI();
+    virtual ~CFontConverterGDI();
 
 public:
-    static CFontConverter& GetInstance() { return s_cInstance; }
+    virtual IZ_BOOL Init(
+        void* initializeData,
+        const SOption& sOption);
 
-public:
-    struct SOption {
-        IZ_UINT fontSize;       // フォントサイズ
-        IZ_UINT texWidth;       // テクスチャ幅
-        IZ_UINT texHeight;      // テクスチャ高さ
-
-        // アンチエイリアス
-        IZ_UINT typeAA;
-
-        izanagi::tool::CString fontFace;
-
-        izanagi::E_FONT_CHAR_ENCODE charEncode;
-
-        struct {
-            IZ_UINT isFixedPitch    : 1;    // 固定ピッチ
-            IZ_UINT isBold          : 1;    // Bold
-            IZ_UINT isItalic        : 1;    // Italic
-            IZ_UINT reserved        : 29;
-        };
-    };
-
-protected:
-    CFontConverter();
-    ~CFontConverter();
-
-    CFontConverter(const CFontConverter& rhs);
-    const CFontConverter& operator=(const CFontConverter& rhs);
-
-public:
     // 開放
-    void Release();
+    virtual void Release();
 
-    // 出力
-    BOOL ExportAsDDS();
+private:
+    virtual IZ_BOOL BeginCreateFontImage(const SOption& option);
 
-    // 初期化
-    BOOL Init(
-        HDC hDC,
-        const SOption& sOption);
+    virtual IZ_UINT GetGlyphMetrics(
+        IZ_UINT code,
+        const SOption& option,
+        SGlyphMetrics&  metrics);
 
-    // フォントイメージ作成
-    BOOL CreateFontImage(
-        HDC hDC,
-        const SOption& sOption);
+    virtual IZ_BOOL GetGlyphImage(
+        IZ_UINT code,
+        const SOption& option,
+        SGlyphMetrics& metrics,
+        void* dst,
+        IZ_UINT dstBytes);
 
-    // 出力
-    BOOL Export(
-        izanagi::IOutputStream* pOut,
-        const SOption& sOption);
+    virtual void WriteImage(
+        const SOption& option,
+        const SGlyphMetrics& metrics,
+        void* src,
+        void* dst,
+        IZ_UINT pitch, IZ_UINT bpp,
+        IZ_UINT x, IZ_UINT y,
+        IZ_UINT leftOffset, IZ_UINT topOffset);
 
-public:
-//  std::vector<LPDIRECT3DTEXTURE9>& GetTexList() { return m_TexList; }
+    virtual IZ_UINT GetTextMetricsHeight();
 
 protected:
-    // ファイルフォーマットを指定してイメージ出力
-    BOOL ExportAs(
-        izanagi::tool::CTextureLite* pTex,
-        LPCSTR pszName,
-        D3DXIMAGE_FILEFORMAT nFileFmt);
-
-    // イメージデータ部出力
-    UINT ExportFontImageData(izanagi::IOutputStream* pOut);
-
-private:
-#ifdef _TEX_FMT_A8_
-    static const D3DFORMAT D3D_TEX_FMT = D3DFMT_A8;
-    static const izanagi::graph::E_GRAPH_PIXEL_FMT IZ_TEX_FMT = izanagi::graph::E_GRAPH_PIXEL_FMT_A8;
-    static const UINT TEX_BPP = 1;
-#else
-    static const D3DFORMAT D3D_TEX_FMT = D3DFMT_A8B8G8R8;
-    static const izanagi::graph::E_GRAPH_PIXEL_FMT IZ_TEX_FMT = izanagi::graph::E_GRAPH_PIXEL_FMT_BGRA8
-    static const UINT TEX_BPP = 4;
-#endif
-    static const IZ_INT MARGIN = 1;
-        
-private:
-    std::vector<izanagi::tool::CTextureLite*> m_TexList;
+    HDC m_hDC;
 
     HFONT m_hFont;
     HFONT m_hOldFont;
 
+    IZ_UINT m_AALevel;
+
     struct {
         IZ_UINT height;
-        IZ_UINT ascent;
-    } m_TexMetrics;
-
-    // フォントイメージ情報リスト
-    std::vector<izanagi::S_FNT_IMAGE> m_FontImgList;
-
-    // フォントマップ情報リスト
-    std::vector<izanagi::S_FNT_MAP> m_FontMapList;
+        IZ_UINT ascender;
+        IZ_UINT desscender;
+    } m_TextMetrics;
 };
 
 #endif  // #if !defined(__FONT_CONVERTER_IMPL_H__)

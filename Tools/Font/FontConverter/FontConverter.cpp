@@ -1,20 +1,12 @@
 // FontCoverter.cpp : コンソール アプリケーションのエントリ ポイントを定義します。
 //
 
-#ifndef _WIN32_WINNT        // Windows XP 以降のバージョンに固有の機能の使用を許可します。                   
-#define _WIN32_WINNT 0x0501 // これを Windows の他のバージョン向けに適切な値に変更してください。
-#endif                      
-
 #include <windows.h>
 
 #include "CharList.h"
 #include "Option.h"
 #include "FontConverterImpl.h"
 #include "izToolKit.h"
-
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
 
 using namespace std;
 
@@ -61,6 +53,8 @@ namespace {
 int main(int argc, char* argv[])
 {
     int nRetCode = 0;
+
+    CFontConverterBase* fontConverter = IZ_NULL;
 
     COption cOption;
     izanagi::tool::CGraphicsDeviceLite* pDevice = IZ_NULL;
@@ -115,14 +109,16 @@ int main(int argc, char* argv[])
     HDC hDC = ::GetDC(hWnd);
     _VGOTO(hDC != NULL, __EXIT__);
 
+    fontConverter = new CFontConverterGDI();
+
     // 準備
     _VGOTO(
-        CFontConverter::GetInstance().Init(hDC, cOption),
+        fontConverter->Init(hDC, cOption),
         __EXIT__);
 
     // フォントイメージデータ作成
     _VGOTO(
-        CFontConverter::GetInstance().CreateFontImage(hDC, cOption),
+        fontConverter->CreateFontImage(cOption, CCharList::GetInstance().GetCharList()),
         __EXIT__);
 
     // 出力
@@ -136,7 +132,7 @@ int main(int argc, char* argv[])
         __EXIT__);
 
     _VGOTO(
-        CFontConverter::GetInstance().Export(&cOut, cOption),
+        fontConverter->Export(&cOut, cOption, CCharList::GetInstance().GetCharList()),
         __EXIT__);
 
     cOut.Finalize();
@@ -144,7 +140,7 @@ int main(int argc, char* argv[])
 
 __EXIT__:
     // 開放
-    CFontConverter::GetInstance().Release();
+    SAFE_DELETE(fontConverter);
     SAFE_RELEASE(pDevice);
 
     return nRetCode;

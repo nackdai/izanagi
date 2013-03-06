@@ -81,6 +81,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\Font\FontConverter\CharList.cpp" />
     <ClCompile Include="..\..\Font\FontConverter\FontConverter.cpp" />
+    <ClCompile Include="..\..\Font\FontConverter\FontConverterBase.cpp" />
     <ClCompile Include="..\..\Font\FontConverter\FontConverterImpl.cpp" />
     <ClCompile Include="..\..\Font\FontConverter\Option.cpp" />
   </ItemGroup>
@@ -95,6 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Font\FontConverter\CharList.h" />
+    <ClInclude Include="..\..\Font\FontConverter\FontConverterBase.h" />
     <ClInclude Include="..\..\Font\FontConverter\FontConverterDefs.h" />
     <ClInclude Include="..\..\Font\FontConverter\FontConverterImpl.h" />
     <ClInclude Include="..\..\Font\FontConverter\Option.h" />
