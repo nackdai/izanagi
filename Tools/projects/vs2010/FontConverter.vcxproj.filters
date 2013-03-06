@@ -22,6 +22,9 @@
     <ClCompile Include="..\..\Font\FontConverter\CharList.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Font\FontConverter\FontConverterBase.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Font\FontConverter\ReadMe.txt" />
@@ -37,6 +40,9 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Font\FontConverter\FontConverterDefs.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Font\FontConverter\FontConverterBase.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
