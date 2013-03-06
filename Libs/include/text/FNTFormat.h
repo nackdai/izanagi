@@ -7,7 +7,10 @@
 
 // FNT = FoNT
 
-namespace izanagi {
+namespace izanagi
+{
+namespace text
+{
     // FNTファイルバージョン
     enum E_FNT_VERSION {
         E_FNT_VERSION_0010 = 0x30303130,                // バージョン0010
@@ -93,16 +96,19 @@ namespace izanagi {
         IZ_UINT16 srcX;
         IZ_UINT16 srcY;
 
-        IZ_UINT16 fontWidth;    // フォント幅
         IZ_UINT8 texID;         // 所属テクスチャ
         IZ_UINT8 reserved;
+
+        SGlyphMetrics metrics;
+        SGlyphImage image;
     };
+}   // namespace text
 }   // namespace izanagi
 
 // FNTフォーマットかどうか
-#define IS_FMT_ENCODE(f)            ((f) == izanagi::FNT_MAGIC_NUMBER)
+#define IS_FMT_ENCODE(f)            ((f) == izanagi::text::FNT_MAGIC_NUMBER)
 
 // 最新バージョンかどうか
-#define IS_CURRENT_FNT_VERSION(v)   ((v) == izanagi::E_FNT_VERSION_CURRENT)
+#define IS_CURRENT_FNT_VERSION(v)   ((v) == izanagi::text::E_FNT_VERSION_CURRENT)
 
 #endif  // #if !defined(__IZANAGI_FONT_FNT_ENCODE_H__)
