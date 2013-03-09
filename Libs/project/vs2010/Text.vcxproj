@@ -90,6 +90,7 @@ xcopy /R /Y "$(TargetDir)$(ProjectName).pdb" ..\lib\$(IntDir)
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\text\FontGlyphCache.cpp" />
+    <ClCompile Include="..\..\source\text\FontHostFNT.cpp" />
     <ClCompile Include="..\..\source\text\FontHostFT.cpp" />
     <ClCompile Include="..\..\source\text\FontMap.cpp" />
     <ClCompile Include="..\..\source\text\FontRenderer.cpp" />
@@ -105,6 +106,7 @@ xcopy /R /Y "$(TargetDir)$(ProjectName).pdb" ..\lib\$(IntDir)
     <ClInclude Include="..\..\include\text\FontDefs.h" />
     <ClInclude Include="..\..\include\text\FontGlyphCache.h" />
     <ClInclude Include="..\..\include\text\FontHost.h" />
+    <ClInclude Include="..\..\include\text\FontHostFNT.h" />
     <ClInclude Include="..\..\include\text\FontHostFT.h" />
     <ClInclude Include="..\..\include\text\FontMap.h" />
     <ClInclude Include="..\..\include\text\FontRenderer.h" />
