@@ -211,15 +211,26 @@ IZ_BOOL CFontConverterBase::CreateFontImage(
             // マップ情報
             izanagi::text::S_FNT_MAP& sFntMap = m_FontMapList[nOutFontNum];
             {
-                sFntMap.idx = nOutFontNum;
+                // NOTE
+                // 0は未定義の意味に使う
+                sFntMap.idx = nOutFontNum + 1;
+
                 sFntMap.code = code;
                 sFntMap.srcX = x;
                 sFntMap.srcY = y;
                 sFntMap.texID = nTexNum;
 
-                // TODO
                 // metrics
-                // image
+                {
+                    sFntMap.metrics.advance = metrics.advance;
+                    sFntMap.metrics.bearingX = metrics.bearingX;
+                    sFntMap.metrics.bearingY = metrics.bearingY;
+                    sFntMap.metrics.height = metrics.height;
+                    sFntMap.metrics.width = metrics.width;
+                }
+                
+                sFntMap.leftOffset = image.leftOffset;
+                sFntMap.topOffset = image.topOffset;
             }
 
             // フォントサイズ分移動
@@ -371,7 +382,10 @@ BOOL CFontConverterBase::Export(
 
         sHeader.numFont = static_cast<IZ_UINT16>(tsCharList.size());
         sHeader.numTex = static_cast<IZ_UINT8>(m_TexList.size());
-        sHeader.fontHeight = GetTextMetricsHeight();
+        sHeader.pixelSize = sOption.fontSize;
+
+        sHeader.ascender = GetTextAscender();
+        sHeader.descender = GetTextDescender();
 
         sHeader.charEncode = sOption.charEncode;
         

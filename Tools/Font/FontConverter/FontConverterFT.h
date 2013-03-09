@@ -46,6 +46,8 @@ private:
 
     virtual IZ_UINT GetTextMetricsHeight();
 
+    virtual IZ_UINT GetTextAscender();
+
 protected:
     FT_Library m_FTLibrary;
     FT_Face m_Face;

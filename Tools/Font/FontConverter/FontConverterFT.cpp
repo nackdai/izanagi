@@ -132,3 +132,8 @@ IZ_UINT CFontConverterFT::GetTextMetricsHeight()
 {
     return (m_Face->height >> 6);
 }
+
+IZ_UINT CFontConverterFT::GetTextAscender()
+{
+    return (m_Face->ascender >> 6);
+}

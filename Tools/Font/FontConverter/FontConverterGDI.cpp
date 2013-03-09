@@ -358,3 +358,13 @@ IZ_UINT CFontConverterGDI::GetTextMetricsHeight()
 {
     return m_TextMetrics.height;
 }
+
+IZ_UINT CFontConverterGDI::GetTextAscender()
+{
+    return m_TextMetrics.ascender;
+}
+
+IZ_UINT CFontConverterGDI::GetTextDescender()
+{
+    return m_TextMetrics.descender;
+}
