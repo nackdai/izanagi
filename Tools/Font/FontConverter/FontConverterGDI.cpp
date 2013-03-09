@@ -179,7 +179,8 @@ static const MAT2 mat =
 IZ_UINT CFontConverterGDI::GetGlyphMetrics(
     IZ_UINT code,
     const SOption& option,
-    SGlyphMetrics&  metrics)
+    SGlyphMetrics&  metrics,
+    SGlyphImage& image)
 {
     // NOTE
     // わたってくる文字コードは必ずUnicode
@@ -212,7 +213,6 @@ IZ_UINT CFontConverterGDI::GetGlyphMetrics(
 IZ_BOOL CFontConverterGDI::GetGlyphImage(
     IZ_UINT code,
     const SOption& option,
-    SGlyphMetrics& metrics,
     void* dst,
     IZ_UINT dstBytes)
 {

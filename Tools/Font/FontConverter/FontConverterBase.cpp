@@ -9,7 +9,6 @@ CFontConverterBase::CFontConverterBase()
 // デストラクタ
 CFontConverterBase::~CFontConverterBase()
 {
-    Release();
 }
 
 namespace
@@ -158,13 +157,15 @@ IZ_BOOL CFontConverterBase::CreateFontImage(
                 code);
 
             SGlyphMetrics metrics;
+            SGlyphImage image;
 
             // NOTE
             // Unicodeで渡すこと!
             IZ_UINT size = GetGlyphMetrics(
                 code,
                 sOption,
-                metrics);
+                metrics,
+                image);
 
             // 文字データ取得
             std::vector<IZ_BYTE> buf(size, 0);
@@ -172,7 +173,6 @@ IZ_BOOL CFontConverterBase::CreateFontImage(
             GetGlyphImage(
                 code,
                 sOption,
-                metrics,
                 &buf[0],
                 size);
 

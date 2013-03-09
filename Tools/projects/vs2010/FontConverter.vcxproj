@@ -47,21 +47,22 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)../../External/freetype/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>
       </PrecompiledHeader>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>d3d9.lib;d3dx9d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d9.lib;d3dx9d.lib;freetype2411_D.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalLibraryDirectories>$(ProjectDir)../../External/freetype/objs/win32/vc2010;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)../../External/freetype/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>
@@ -70,19 +71,21 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>d3d9.lib;d3dx9.lib;dxerr.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d9.lib;d3dx9.lib;dxerr.lib;freetype2411.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalLibraryDirectories>$(ProjectDir)../../External/freetype/objs/win32/vc2010;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Font\FontConverter\CharList.cpp" />
     <ClCompile Include="..\..\Font\FontConverter\FontConverter.cpp" />
     <ClCompile Include="..\..\Font\FontConverter\FontConverterBase.cpp" />
-    <ClCompile Include="..\..\Font\FontConverter\FontConverterImpl.cpp" />
+    <ClCompile Include="..\..\Font\FontConverter\FontConverterFT.cpp" />
+    <ClCompile Include="..\..\Font\FontConverter\FontConverterGDI.cpp" />
     <ClCompile Include="..\..\Font\FontConverter\Option.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -98,7 +101,8 @@
     <ClInclude Include="..\..\Font\FontConverter\CharList.h" />
     <ClInclude Include="..\..\Font\FontConverter\FontConverterBase.h" />
     <ClInclude Include="..\..\Font\FontConverter\FontConverterDefs.h" />
-    <ClInclude Include="..\..\Font\FontConverter\FontConverterImpl.h" />
+    <ClInclude Include="..\..\Font\FontConverter\FontConverterFT.h" />
+    <ClInclude Include="..\..\Font\FontConverter\FontConverterGDI.h" />
     <ClInclude Include="..\..\Font\FontConverter\Option.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

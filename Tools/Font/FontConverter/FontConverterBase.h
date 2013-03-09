@@ -22,6 +22,12 @@ struct SGlyphMetrics
     IZ_UINT8 padding;
 };
 
+struct SGlyphImage
+{
+    IZ_UINT leftOffset;
+    IZ_UINT topOffset;
+};
+
 class CFontConverterBase
 {
 public:
@@ -63,13 +69,13 @@ protected:
         IZ_UINT GetGlyphMetrics(
             IZ_UINT code,
             const SOption& option,
-            SGlyphMetrics&  metrics));
+            SGlyphMetrics&  metrics,
+            SGlyphImage& image));
 
     PURE_VIRTUAL(
         IZ_BOOL GetGlyphImage(
             IZ_UINT code,
             const SOption& option,
-            SGlyphMetrics& metrics,
             void* dst,
             IZ_UINT dstBytes));
 

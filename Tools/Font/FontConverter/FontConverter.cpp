@@ -5,7 +5,7 @@
 
 #include "CharList.h"
 #include "Option.h"
-#include "FontConverterImpl.h"
+#include "FontConverterFT.h"
 #include "izToolKit.h"
 
 using namespace std;
@@ -109,7 +109,8 @@ int main(int argc, char* argv[])
     HDC hDC = ::GetDC(hWnd);
     _VGOTO(hDC != NULL, __EXIT__);
 
-    fontConverter = new CFontConverterGDI();
+    //fontConverter = new CFontConverterGDI();
+    fontConverter = new CFontConverterFT();
 
     // 準備
     _VGOTO(
