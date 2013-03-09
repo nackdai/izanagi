@@ -12,6 +12,65 @@ CFontConverterBase::~CFontConverterBase()
     Release();
 }
 
+namespace
+{
+    IZ_UINT _GetUnicode(
+        izanagi::E_FONT_CHAR_ENCODE encode,
+        IZ_UINT code)
+    {
+        // TODO
+        // endianが逆？
+
+        IZ_UINT ret = code;
+
+        if (izanagi::tool::CCharCodeUtility::IsAsciiExt(ret))
+        {
+            return ret;
+        }
+
+        union 
+        {
+            IZ_UINT code;
+            IZ_UINT8 ch[4];
+        } tmp;
+
+        tmp.code = code;
+
+        int tmpSize = 0;
+        std::vector<BYTE> tmpBuf;
+
+        switch (encode)
+        {
+        case izanagi::E_FONT_CHAR_ENCODE_UTF8:
+            {
+                ret = ((tmp.ch[0] << 24) | (tmp.ch[1] << 16) | (tmp.ch[2] << 8) | tmp.ch[3]);
+                tmpSize = ::MultiByteToWideChar(CP_UTF8, 0, (LPCSTR)&ret, -1, NULL, 0);
+                tmpBuf.resize(tmpSize * 2 + 2);
+                ::MultiByteToWideChar(CP_UTF8, 0, (LPCSTR)&ret, -1, (LPWSTR)&tmpBuf[0], tmpBuf.size());
+            }
+            break;
+        case izanagi::E_FONT_CHAR_ENCODE_SJIS:
+            {
+                ret = ((tmp.ch[0] << 8) | tmp.ch[1]);
+                tmpSize = ::MultiByteToWideChar(CP_ACP, 0, (LPCSTR)&ret, -1, NULL, 0);
+                tmpBuf.resize(tmpSize * 2 + 2);
+                ::MultiByteToWideChar(CP_ACP, 0, (LPCSTR)&ret, -1, (LPWSTR)&tmpBuf[0], tmpBuf.size());
+            }
+            break;
+        default:
+            break;
+        }
+
+        if (tmpSize > 0)
+        {
+            size_t size = ::strlen((const char*)&tmpBuf[0]);
+            memcpy(&ret, &tmpBuf[0], size);
+        }
+
+        return ret;
+    }
+}
+
 // フォントイメージ作成
 IZ_BOOL CFontConverterBase::CreateFontImage(
     const SOption& sOption,
@@ -93,8 +152,10 @@ IZ_BOOL CFontConverterBase::CreateFontImage(
             // 文字コード
             UINT code = *itChar;
 
-            // TODO
             // Unicodeに変換
+            code = _GetUnicode(
+                sOption.charEncode,
+                code);
 
             SGlyphMetrics metrics;
 
@@ -115,8 +176,8 @@ IZ_BOOL CFontConverterBase::CreateFontImage(
                 &buf[0],
                 size);
 
-            IZ_UINT fontWidth = metrics.width;
-            IZ_UINT fontHeight = metrics.height;
+            IZ_UINT fontWidth = metrics.advance;
+            IZ_UINT fontHeight = GetTextMetricsHeight();
 
             // テクスチャ内に収まるかチェック
             if (x + fontWidth + MARGIN > sOption.texWidth) {
@@ -133,8 +194,10 @@ IZ_BOOL CFontConverterBase::CreateFontImage(
                 }
             }
 
-            IZ_UINT offsetX = 0;
-            IZ_UINT offsetY = 0;
+            // TODO
+            IZ_UINT offsetX = metrics.bearingX;
+            IZ_UINT offsetY = metrics.ascender - metrics.bearingY;
+            //IZ_UINT offsetY = 0;
 
             WriteImage(
                 sOption,

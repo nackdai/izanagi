@@ -54,7 +54,7 @@ protected:
     struct {
         IZ_UINT height;
         IZ_UINT ascender;
-        IZ_UINT desscender;
+        IZ_UINT descender;
     } m_TextMetrics;
 };
 
