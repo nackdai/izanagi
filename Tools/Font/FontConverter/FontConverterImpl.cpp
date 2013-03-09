@@ -139,7 +139,7 @@ IZ_BOOL CFontConverterGDI::BeginCreateFontImage(const SOption& option)
         GetTextMetricsW(m_hDC, &tm);
 
         m_TextMetrics.ascender = tm.tmAscent;
-        m_TextMetrics.desscender = tm.tmDescent;
+        m_TextMetrics.descender = tm.tmDescent;
         m_TextMetrics.height = tm.tmHeight;
     }
     else
@@ -148,7 +148,7 @@ IZ_BOOL CFontConverterGDI::BeginCreateFontImage(const SOption& option)
         GetTextMetricsA(m_hDC, &tm);
 
         m_TextMetrics.ascender = tm.tmAscent;
-        m_TextMetrics.desscender = tm.tmDescent;
+        m_TextMetrics.descender = tm.tmDescent;
         m_TextMetrics.height = tm.tmHeight;
     }
 
@@ -203,6 +203,7 @@ IZ_UINT CFontConverterGDI::GetGlyphMetrics(
         metrics.bearingX = gdiMetrics.gmptGlyphOrigin.x;
         metrics.bearingY = gdiMetrics.gmptGlyphOrigin.y;
         metrics.ascender = m_TextMetrics.ascender;
+        metrics.descender = m_TextMetrics.descender;
     }
 
     return ret;
@@ -223,7 +224,7 @@ IZ_BOOL CFontConverterGDI::GetGlyphImage(
     IZ_UINT ret = ::GetGlyphOutlineW(
         m_hDC,
         code,
-        m_AALevel,
+        option.typeAA,
         &gdiMetrics,
         dstBytes,
         dst,
@@ -245,7 +246,7 @@ namespace
     {
         UINT nPitch = (1 + (metrics.advance / 32)) * 4;
 
-        UINT nHeight = textMetricsHeight;
+        UINT nHeight = metrics.height;
         UINT nWidth = metrics.advance;
 
         for (UINT y = 0; y < nHeight; y++) {
@@ -287,9 +288,9 @@ namespace
         UINT nDstLeft, UINT nDstTop,
         UINT nAALevel)
     {
-        UINT nPitch = (1 + (metrics.advance / 32)) * 4;
+        UINT nPitch = (metrics.width + 3) & 0xfffc;
 
-        UINT nHeight = textMetricsHeight;
+        UINT nHeight = metrics.height;
         UINT nWidth = metrics.advance;
 
         for (UINT y = 0; y < nHeight; y++) {
@@ -326,12 +327,14 @@ void CFontConverterGDI::WriteImage(
     IZ_UINT x, IZ_UINT y,
     IZ_UINT leftOffset, IZ_UINT topOffset)
 {
+    BYTE* srcPtr = (BYTE*)src;
+
     if (option.typeAA == GGO_BITMAP)
     {
         _WriteColor(
             metrics,
             m_TextMetrics.ascender,
-            (BYTE*)src,
+            srcPtr,
             (BYTE*)dst,
             pitch, bpp,
             x, y,
@@ -342,7 +345,7 @@ void CFontConverterGDI::WriteImage(
         _WriteColorWithAA(
             metrics,
             m_TextMetrics.ascender,
-            (BYTE*)src,
+            srcPtr,
             (BYTE*)dst,
             pitch, bpp,
             x, y,
