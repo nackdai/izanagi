@@ -91,6 +91,9 @@ protected:
 
     PURE_VIRTUAL(IZ_UINT GetTextMetricsHeight());
 
+    PURE_VIRTUAL(IZ_UINT GetTextAscender());
+    PURE_VIRTUAL(IZ_UINT GetTextDescender());
+
     // ファイルフォーマットを指定してイメージ出力
     BOOL ExportAs(
         izanagi::tool::CTextureLite* pTex,
