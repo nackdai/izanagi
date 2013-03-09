@@ -1,5 +1,5 @@
-#if !defined(__FONT_CONVERTER_IMPL_H__)
-#define __FONT_CONVERTER_IMPL_H__
+#if !defined(__FONT_CONVERTER_GDI_H__)
+#define __FONT_CONVERTER_GDI_H__
 
 #include "FontConverterBase.h"
 
@@ -58,4 +58,4 @@ protected:
     } m_TextMetrics;
 };
 
-#endif  // #if !defined(__FONT_CONVERTER_IMPL_H__)
+#endif  // #if !defined(__FONT_CONVERTER_GDI_H__)

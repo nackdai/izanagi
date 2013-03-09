@@ -3,7 +3,6 @@
 
 #include <vector>
 #include "FontConverterDefs.h"
-#include "FontConverterImpl.h"
 #include "izFont.h"
 
 struct SOption
