@@ -23,12 +23,12 @@ private:
     virtual IZ_UINT GetGlyphMetrics(
         IZ_UINT code,
         const SOption& option,
-        SGlyphMetrics&  metrics);
+        SGlyphMetrics&  metrics,
+        SGlyphImage& image);
 
     virtual IZ_BOOL GetGlyphImage(
         IZ_UINT code,
         const SOption& option,
-        SGlyphMetrics& metrics,
         void* dst,
         IZ_UINT dstBytes);
 

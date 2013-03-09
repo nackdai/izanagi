@@ -4,6 +4,7 @@
 #include <vector>
 #include "FontConverterDefs.h"
 #include "izFont.h"
+#include "izToolKit.h"
 
 struct SOption
 {

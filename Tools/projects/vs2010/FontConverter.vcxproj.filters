@@ -13,9 +13,6 @@
     <ClCompile Include="..\..\Font\FontConverter\FontConverter.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Font\FontConverter\FontConverterImpl.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Font\FontConverter\Option.cpp">
       <Filter>source</Filter>
     </ClCompile>
@@ -23,6 +20,12 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Font\FontConverter\FontConverterBase.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Font\FontConverter\FontConverterGDI.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Font\FontConverter\FontConverterFT.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -36,13 +39,16 @@
     <ClInclude Include="..\..\Font\FontConverter\CharList.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Font\FontConverter\FontConverterImpl.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Font\FontConverter\FontConverterDefs.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Font\FontConverter\FontConverterBase.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Font\FontConverter\FontConverterGDI.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Font\FontConverter\FontConverterFT.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
