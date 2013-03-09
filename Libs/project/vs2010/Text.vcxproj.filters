@@ -41,6 +41,9 @@
     <ClCompile Include="..\..\source\text\ParagraphGroup.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\text\FontHostFNT.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\izFont.h" />
@@ -81,6 +84,9 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\text\Paragraph.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\text\FontHostFNT.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

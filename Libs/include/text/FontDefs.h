@@ -20,23 +20,28 @@ namespace text
 {
     struct SGlyphMetrics
     {
-        IZ_INT width;
-        IZ_INT height;
+        IZ_UINT8 width;
+        IZ_UINT8 height;
 
-        IZ_INT bearingX;
-        IZ_INT bearingY;
-        IZ_INT advance;
+        IZ_UINT8 bearingX;
+        IZ_UINT8 bearingY;
+        IZ_UINT8 advance;
+
+        IZ_UINT8 padding[3];
     };
 
     struct SGlyphImage
     {
-        IZ_UINT8* bmp;
-        IZ_UINT8 pitch;
+        const IZ_UINT8* bmp;
+
+        IZ_UINT16 pitch;
         IZ_UINT8 rows;
         IZ_UINT8 rowBytes;
+
         IZ_UINT8 leftOffset;
         IZ_UINT8 topOffset;
-        IZ_UINT8 padding[3];
+
+        IZ_UINT8 padding[2];
     };
 }   // namespace text
 }   // namespace izanagi

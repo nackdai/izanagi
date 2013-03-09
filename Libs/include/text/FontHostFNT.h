@@ -1,5 +1,5 @@
-#if !defined(__IZANAGI_TEXT_FONT_HOST_FT_H__)
-#define __IZANAGI_TEXT_FONT_HOST_FT_H__
+#if !defined(__IZANAGI_TEXT_FONT_HOST_FNT_H__)
+#define __IZANAGI_TEXT_FONT_HOST_FNT_H__
 
 #include "izDefs.h"
 #include "FNTFormat.h"
@@ -12,31 +12,31 @@ namespace izanagi
 
 namespace text
 {
-    class CFontHostFT : public IFontHost
+    class CFontHostFNT : public IFontHost
     {
-        friend class CFontRendererFT;
-
     public:
         // インスタンス作成
-        static CFontHostFT* CreateFontHostFT(
+        static CFontHostFNT* CreateFontHostFNT(
             IMemoryAllocator* allocator,
-            IInputStream* in,
-            IZ_UINT pixelSize);
-
-        static void SetAllocatorForFreetype(IMemoryAllocator* allocator);
+            IInputStream* in);
 
     private:
-        CFontHostFT() {}
-        virtual ~CFontHostFT();
+        CFontHostFNT();
+        virtual ~CFontHostFNT();
 
-        NO_COPIABLE(CFontHostFT);
+        NO_COPIABLE(CFontHostFNT);
         IZ_DEFINE_INTERNAL_RELEASE();
 
+    private:
+        IZ_BOOL Read(
+            IInputStream* in,
+            IZ_UINT8* buf);
+
+        const S_FNT_MAP* GetFontMap(IZ_UINT code);
+
+        const S_FNT_MAP* GetFontMapByID(IZ_UINT id);
+
     public:
-        IZ_UINT GetFaceNum() const;
-
-        void SetFace(IZ_UINT id);
-
         virtual IZ_UINT GetGlyphID(IZ_UINT code);
 
         virtual IZ_BOOL GetGlyphMetricsByID(IZ_UINT id, SGlyphMetrics& metrics);
@@ -60,20 +60,17 @@ namespace text
         virtual IZ_UINT GetUnitsPerEM();
 
     private:
-        void SetPixelSize(IZ_UINT size);
-
-    private:
         IMemoryAllocator* m_Allocator;
 
-        class Impl;
-        Impl* m_Impl;
+        S_FNT_HEADER m_Header;
 
-    private:
-        Impl* GetImpl();
+        // フォントマップ情報
+        S_FNT_MAP* m_MapList;
 
-        IZ_UINT m_PixelSize;
+        // フォントイメージ情報
+        S_FNT_IMAGE* m_ImageList;
     };
 }    // namespace text
 }   // namespace izanagi
 
-#endif  // #if !defined(__IZANAGI_TEXT_FONT_HOST_FT_H__)
+#endif  // #if !defined(__IZANAGI_TEXT_FONT_HOST_FNT_H__)

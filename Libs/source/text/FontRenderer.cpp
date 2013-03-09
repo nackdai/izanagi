@@ -13,7 +13,7 @@ CFontRenderer* CFontRenderer::CreateFontRendererBmp(
     IZ_UINT maxRegisterNum,
     IInputStream* in)
 {
-    CFontRenderer* ret = CFontRendererBmp::CreateFontRendererBmp(
+    CFontRenderer* ret = text::CFontRendererBmp::CreateFontRendererBmp(
                             allocator,
                             device,
                             maxRegisterNum,

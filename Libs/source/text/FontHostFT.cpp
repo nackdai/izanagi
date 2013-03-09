@@ -246,14 +246,14 @@ namespace text
         FT_GlyphSlot glyph = m_Impl->GetGlyphSlotByID(id);
         VRETURN(glyph != IZ_NULL);
 
-        metrics.width = glyph->metrics.width >> 6;
-        metrics.height = glyph->metrics.height >> 6;
+        metrics.width = static_cast<IZ_UINT8>(glyph->metrics.width >> 6);
+        metrics.height = static_cast<IZ_UINT8>(glyph->metrics.height >> 6);
 
         // TODO
         // horizontal or vertical
-        metrics.bearingX = glyph->metrics.horiBearingX >> 6;
-        metrics.bearingY = glyph->metrics.horiBearingY >> 6;
-        metrics.advance = glyph->metrics.horiAdvance >> 6;
+        metrics.bearingX = static_cast<IZ_UINT8>(glyph->metrics.horiBearingX >> 6);
+        metrics.bearingY = static_cast<IZ_UINT8>(glyph->metrics.horiBearingY >> 6);
+        metrics.advance = static_cast<IZ_UINT8>(glyph->metrics.horiAdvance >> 6);
 
         return IZ_TRUE;
     }
@@ -307,14 +307,14 @@ namespace text
         }
 
         {
-            metrics.width = glyph->metrics.width >> 6;
-            metrics.height = glyph->metrics.height >> 6;
+            metrics.width = static_cast<IZ_UINT8>(glyph->metrics.width >> 6);
+            metrics.height = static_cast<IZ_UINT8>(glyph->metrics.height >> 6);
 
             // TODO
             // horizontal or vertical
-            metrics.bearingX = glyph->metrics.horiBearingX >> 6;
-            metrics.bearingY = glyph->metrics.horiBearingY >> 6;
-            metrics.advance = glyph->metrics.horiAdvance >> 6;
+            metrics.bearingX = static_cast<IZ_UINT8>(glyph->metrics.horiBearingX >> 6);
+            metrics.bearingY = static_cast<IZ_UINT8>(glyph->metrics.horiBearingY >> 6);
+            metrics.advance = static_cast<IZ_UINT8>(glyph->metrics.horiAdvance >> 6);
         }
 
         return IZ_TRUE;

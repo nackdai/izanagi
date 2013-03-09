@@ -5,12 +5,19 @@
 #include "FNTFormat.h"
 #include "FontRenderer.h"
 
-namespace izanagi {
+namespace izanagi
+{
     class IInputStream;
     class IMemoryAllocator;
-    class graph::CGraphicsDevice;
-    class CTexture;
 
+    namespace grapj
+    {
+        class CGraphicsDevice;
+        class CTexture;
+    }
+
+namespace text
+{
     /**
     * フォントレンダラ
     */
@@ -77,7 +84,7 @@ namespace izanagi {
         IZ_BOOL IsRegistered(IZ_UINT code);
 
         // ピクセル高さ取得
-        IZ_UINT GetHeight() const { return m_Header.fontHeight; }
+        IZ_UINT GetHeight() const { return m_Header.pixelSize; }
 
         // 文字コード取得
         E_FONT_CHAR_ENCODE GetCharEncode() const { return m_Header.charEncode; }
@@ -162,6 +169,7 @@ namespace izanagi {
             IZ_UINT isNeedUpdateSurface : 1;    // UpdateSurfaceが必要かどうか
         } m_Flags;
     };
+}   // namespace text
 }   // namespace izanagi
 
 #endif  // #if !defined(__IZANAGI_FONT_FONT_RENDERER_BMP_H__)

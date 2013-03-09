@@ -57,10 +57,12 @@ namespace text
         IZ_UINT sizeHeader;         // ヘッダ長
 
         IZ_UINT16 numFont;          // フォント数
-        IZ_UINT8 numTex;            // テクスチャ数
-        IZ_UINT8 fontHeight;        // フォント高さ
+        IZ_UINT16 sizeMaxImage;       // 最大イメージサイズ
 
-        IZ_UINT sizeMaxImage;       // 最大イメージサイズ
+        IZ_UINT8 numTex;            // テクスチャ数
+        IZ_UINT8 pixelSize;         // ピクセルサイズ
+        IZ_UINT8 ascender;          // アセンダ
+        IZ_UINT8 descender;
 
         E_FONT_CHAR_ENCODE charEncode;  // 文字コード
 
@@ -87,8 +89,10 @@ namespace text
 
     // フォントマップ情報
     struct S_FNT_MAP {
+        // NOTE
+        // 0は未定義の意味に使う
         IZ_UINT16 idx;          // 自分は何番目か
-        IZ_UINT16 padding;
+        IZ_UINT16 reserved;
 
         IZ_UINT code;           // 文字コード
 
@@ -96,11 +100,13 @@ namespace text
         IZ_UINT16 srcX;
         IZ_UINT16 srcY;
 
-        IZ_UINT8 texID;         // 所属テクスチャ
-        IZ_UINT8 reserved;
-
         SGlyphMetrics metrics;
-        SGlyphImage image;
+
+        IZ_UINT8 texID;         // 所属テクスチャ
+        
+        IZ_UINT8 leftOffset;
+        IZ_UINT8 topOffset;
+        IZ_UINT8 padding;
     };
 }   // namespace text
 }   // namespace izanagi
