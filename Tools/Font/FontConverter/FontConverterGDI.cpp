@@ -2,7 +2,7 @@
 #define _WIN32_WINNT 0x0501 // これを Windows の他のバージョン向けに適切な値に変更してください。
 #endif                      
 
-#include "FontConverterImpl.h"
+#include "FontConverterGDI.h"
 #include "CharList.h"
 #include "Option.h"
 
