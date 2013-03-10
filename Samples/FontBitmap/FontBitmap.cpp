@@ -4,7 +4,8 @@
 #include "FontUTF8.h"
 #include "FontSJIS.h"
 
-class CFontBitmapApp : public izanagi::sample::CSampleApp {
+class CFontBitmapApp : public izanagi::sample::CSampleApp
+{
 public:
     CFontBitmapApp();
     virtual ~CFontBitmapApp();
@@ -26,14 +27,17 @@ protected:
     virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device);
 
 private:
-    izanagi::CFontRenderer* m_FontUtf8;
-    izanagi::CFontRenderer* m_FontSjis;
+    izanagi::text::IFontHost* m_FontUtf8;
+    izanagi::text::IFontHost* m_FontSjis;
+
+    izanagi::text::CGlyphCacheBase* m_Cache;
 };
 
 CFontBitmapApp::CFontBitmapApp()
 {
     m_FontUtf8 = IZ_NULL;
     m_FontSjis = IZ_NULL;
+    m_Cache = IZ_NULL;
 }
 
 CFontBitmapApp::~CFontBitmapApp()
@@ -52,28 +56,34 @@ IZ_BOOL CFontBitmapApp::InitInternal(
         VRETURN(in.Open("./data/FontSample_Utf8.fnt"));
 
         // FNT読み込み
-        m_FontUtf8 = izanagi::CFontRenderer::CreateFontRendererBmp(
-                    allocator,
-                    device,
-                    40,
-                    &in);
+        m_FontUtf8 = izanagi::text::CFontHostFNT::CreateFontHostFNT(
+            allocator,
+            &in);
 
         VRETURN(m_FontUtf8 != IZ_NULL);
     }
 
+#if 0
     // SJIS
     {
         izanagi::CFileInputStream in;
         VRETURN(in.Open("./data/FontSample_Sjis.fnt"));
 
         // FNT読み込み
-        m_FontSjis = izanagi::CFontRenderer::CreateFontRendererBmp(
-                    allocator,
-                    device,
-                    40,
-                    &in);
+        m_FontSjis = izanagi::text::CFontHostFNT::CreateFontHostFNT(
+            allocator,
+            &in);
         VRETURN(m_FontSjis != IZ_NULL);
     }
+#endif
+
+    m_Cache = izanagi::text::CGlyphCache::CreateGlyphCache(
+        allocator,
+        device,
+        izanagi::text::E_FONT_CHAR_ENCODE_UTF8,
+        32,
+        m_FontUtf8->GetPixelSize(),
+        IZ_FALSE);
 
     return IZ_TRUE;
 }
@@ -83,32 +93,71 @@ void CFontBitmapApp::ReleaseInternal()
 {
     SAFE_RELEASE(m_FontUtf8);
     SAFE_RELEASE(m_FontSjis);
+    SAFE_RELEASE(m_Cache);
 }
 
 // 更新.
 void CFontBitmapApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
-    // Nothing is done...
+    m_Cache->BeginRegister();
+
+    izanagi::text::CUtf8String str(fontUTF8);
+    m_Cache->Register(&str, m_FontUtf8);
+
+    m_Cache->EndRegister();
 }
 
 // 描画.
 void CFontBitmapApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
+    void* tmp = CONST_CAST(void*, char*, fontUTF8);
+
+    izanagi::text::CUtf8String str(fontUTF8);
+
+    m_Cache->Prepare(device);
+
     if (device->Begin2D()) {
         // フォント描画
-        m_FontUtf8->Register(fontUTF8);
-        m_FontUtf8->Render(
-            fontUTF8,
-            0, 200,
-            izanagi::CColor::GREEN);
 
-#if 1
-        m_FontSjis->Register(fontSJIS);
-        m_FontSjis->Render(
-            fontSJIS,
-            0, 300,
-            izanagi::CColor::GREEN);
-#endif
+        IZ_FLOAT width = device->GetTexture(0)->GetWidth();
+        IZ_FLOAT height = device->GetTexture(0)->GetHeight();
+
+        IZ_UINT posX = 100;
+        IZ_UINT posY = 100;
+
+        IZ_UINT code = 0;
+
+        str.BeginIter();
+
+        while ((code = str.GetNext()) != 0)
+        {
+            izanagi::text::SGlyphCacheItem* item = m_Cache->FindCache(code);
+
+            if (item == IZ_NULL)
+            {
+            }
+            else
+            {
+                IZ_FLOAT left = item->rect.left / width;
+                IZ_FLOAT right = item->rect.right / width;
+                IZ_FLOAT top = item->rect.top / height;
+                IZ_FLOAT bottom = item->rect.bottom / height;
+
+                IZ_UINT w = item->rect.Width();
+                IZ_UINT h = item->rect.Height();
+
+                IZ_UINT x = posX + item->leftOffset;
+                IZ_UINT y = posY;
+
+                device->Draw2DSprite(
+                    izanagi::CFloatRect(left, top, right, bottom),
+                    izanagi::CIntRect(x, y, x + w, y + h));
+
+                posX += item->metrics.advance;
+            }
+        }
+
+        str.EndIter();
 
         device->End2D();
     }
