@@ -3,32 +3,37 @@
 #include "izIo.h"
 #include "izGraph.h"
 
-using namespace izanagi;
-
-/**
-*/
-CFontRenderer* CFontRenderer::CreateFontRendererBmp(
-    IMemoryAllocator* allocator,
-    graph::CGraphicsDevice* device,
-    IZ_UINT maxRegisterNum,
-    IInputStream* in)
+namespace izanagi
 {
-    CFontRenderer* ret = text::CFontRendererBmp::CreateFontRendererBmp(
-                            allocator,
-                            device,
-                            maxRegisterNum,
-                            in);
-    return ret;
+namespace text
+{
+
+    /**
+    */
+    CFontRenderer* CFontRenderer::CreateFontRendererBmp(
+        IMemoryAllocator* allocator,
+        graph::CGraphicsDevice* device,
+        IZ_UINT maxRegisterNum,
+        IInputStream* in)
+    {
+        CFontRenderer* ret = text::CFontRendererBmp::CreateFontRendererBmp(
+                                allocator,
+                                device,
+                                maxRegisterNum,
+                                in);
+        return ret;
+    }
+
+    /**
+    */
+    CFontRenderer* CreateFontRendererFT(
+        IMemoryAllocator* allocator,
+        graph::CGraphicsDevice* device,
+        IZ_UINT maxRegisterNum)
+    {
+        // TODO
+        IZ_ASSERT(IZ_FALSE);
+        return IZ_NULL;
+    }
 }
-
-/**
-*/
-CFontRenderer* CreateFontRendererFT(
-    IMemoryAllocator* allocator,
-    graph::CGraphicsDevice* device,
-    IZ_UINT maxRegisterNum)
-{
-    // TODO
-    IZ_ASSERT(IZ_FALSE);
-    return IZ_NULL;
 }

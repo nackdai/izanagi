@@ -24,15 +24,18 @@ namespace text
     {
         IZ_UINT code;
         SGlyphMetrics metrics;
-        IZ_UINT16 leftOffset;
-        IZ_UINT16 topOffset;
+        IZ_INT16 leftOffset;
+        IZ_INT16 topOffset;
         CIntRect rect;
     };
 
     class CGlyphCacheBase : public CObject
     {   
     protected:
-        CGlyphCacheBase() {}
+        CGlyphCacheBase()
+        {
+            m_Encode = E_FONT_CHAR_ENCODE_UNICODE;
+        }
         ~CGlyphCacheBase() {}
 
         NO_COPIABLE(CGlyphCacheBase);
@@ -68,6 +71,7 @@ namespace text
 
     protected:
         IMemoryAllocator* m_Allocator;
+        E_FONT_CHAR_ENCODE m_Encode;
     };
 
     class CGlyphCache : public CGlyphCacheBase
@@ -76,6 +80,7 @@ namespace text
         static CGlyphCache* CreateGlyphCache(
             IMemoryAllocator* allocator,
             graph::CGraphicsDevice* device,
+            E_FONT_CHAR_ENCODE encode,
             IZ_UINT maxRegisterNum,
             IZ_UINT height,
             IZ_BOOL enableExchange);

@@ -93,12 +93,13 @@ namespace text
     class CUtf8String : public CUString
     {
     public:
-        CUtf8String(const char* text, IZ_UINT bytes)
+        CUtf8String(const void* text, IZ_UINT bytes)
             : CUString(E_FONT_CHAR_ENCODE_UTF8)
         {
-            m_Text = CONST_CAST(IZ_UINT8*, char*, text);
+            m_Text = CONST_CAST(IZ_UINT8*, void*, text);
             m_Bytes = bytes;
         }
+        CUtf8String(const void* text);
         virtual ~CUtf8String() {}
 
     public:

@@ -103,10 +103,10 @@ namespace text
         SGlyphMetrics metrics;
 
         IZ_UINT8 texID;         // 所属テクスチャ
+        IZ_UINT8 padding[3];
         
-        IZ_UINT8 leftOffset;
-        IZ_UINT8 topOffset;
-        IZ_UINT8 padding;
+        IZ_INT16 leftOffset;
+        IZ_INT16 topOffset;
     };
 }   // namespace text
 }   // namespace izanagi

@@ -3,7 +3,10 @@
 
 #include "izDefs.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace text
+{
     /**
     */
     enum E_FONT_CHAR_ENCODE {
@@ -16,8 +19,6 @@ namespace izanagi {
         E_FONT_CHAR_ENCODE_FORCE_INT32 = 0x7fffffff,
     };
 
-namespace text
-{
     struct SGlyphMetrics
     {
         IZ_UINT8 width;
@@ -38,10 +39,8 @@ namespace text
         IZ_UINT8 rows;
         IZ_UINT8 rowBytes;
 
-        IZ_UINT8 leftOffset;
-        IZ_UINT8 topOffset;
-
-        IZ_UINT8 padding[2];
+        IZ_INT16 leftOffset;
+        IZ_INT16 topOffset;
     };
 }   // namespace text
 }   // namespace izanagi

@@ -170,7 +170,7 @@ __EXIT__:
                     break;
                 }
             }
-            IZ_ASSERT(ret != IZ_NULL);
+            //IZ_ASSERT(ret != IZ_NULL);
         }
 
         return ret;
@@ -182,7 +182,7 @@ __EXIT__:
         // 0‚Í–¢’è‹`‚ÌˆÓ–¡‚È‚Ì‚Å -1 ‚·‚é•K—v‚ª‚ ‚é
         IZ_ASSERT(id - 1 < m_Header.numFont);
 
-        S_FNT_MAP& map = m_MapList[id];
+        S_FNT_MAP& map = m_MapList[id - 1];
 
         return &map;
     }
@@ -231,6 +231,12 @@ __EXIT__:
         SGlyphMetrics& metrics)
     {
         IZ_UINT id = GetGlyphID(code);
+        
+        if (id == 0)
+        {
+            return IZ_FALSE;
+        }
+
         return GetImageByID(id, image, metrics);
     }
 
@@ -249,7 +255,7 @@ __EXIT__:
             image.rows = map->metrics.height;
             image.pitch = fntImage.width;
 
-            image.bmp = fntImage.images + map->srcX + map->srcX * image.pitch;
+            image.bmp = fntImage.images + map->srcX + map->srcY * image.pitch;
         }
 
         {

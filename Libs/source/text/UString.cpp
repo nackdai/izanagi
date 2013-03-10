@@ -80,6 +80,21 @@ namespace text
 
     //////////////////////////////////////////
 
+    CUtf8String::CUtf8String(const void* text)
+        : CUString(E_FONT_CHAR_ENCODE_UTF8)
+    {
+        m_Text = CONST_CAST(IZ_UINT8*, void*, text);
+
+        // TODO
+        m_Bytes = 0;
+        IZ_UINT8 ch = 0;
+        IZ_UINT i = 0;
+        while  ((ch = m_Text[i++]) != 0)
+        {
+            m_Bytes++;
+        }
+    }
+
     void* Realloc(
         IMemoryAllocator* allocator, 
         void* ptr, 
