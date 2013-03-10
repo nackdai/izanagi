@@ -17,9 +17,9 @@ COption::COption()
 
     typeAA = GGO_BITMAP;
 
-    charEncode = izanagi::E_FONT_CHAR_ENCODE_SJIS;
+    charEncode = izanagi::text::E_FONT_CHAR_ENCODE_SJIS;
 
-    fontFace.format("%s", "ＭＳ 明朝");
+    //fontFace.format("%s", "ＭＳ 明朝");
 
     isFixedPitch = FALSE;
     isBold = FALSE;
@@ -61,15 +61,15 @@ BOOL COption::Analysis(int argc, TCHAR* argv[])
                 izanagi::tool::CString tmp(argv[++i]);
 
                 if (tmp.compare_no_case("SJIS") == 0) {
-                    charEncode = izanagi::E_FONT_CHAR_ENCODE_SJIS;
+                    charEncode = izanagi::text::E_FONT_CHAR_ENCODE_SJIS;
                 }
                 else if ((tmp.compare_no_case("UTF16") == 0)
                         || (tmp.compare_no_case("UNICODE") == 0))
                 {
-                    charEncode = izanagi::E_FONT_CHAR_ENCODE_UTF16;
+                    charEncode = izanagi::text::E_FONT_CHAR_ENCODE_UTF16;
                 }
                 else if (tmp.compare_no_case("UTF8") == 0) {
-                    charEncode = izanagi::E_FONT_CHAR_ENCODE_UTF8;
+                    charEncode = izanagi::text::E_FONT_CHAR_ENCODE_UTF8;
                 }
                 else {
                     result = FALSE;

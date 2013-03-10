@@ -13,8 +13,48 @@ CFontConverterBase::~CFontConverterBase()
 
 namespace
 {
+    inline void _Swap(IZ_BYTE ch[4])
+    {
+        IZ_UINT num = 0;
+        for (IZ_UINT i = 0; i < COUNTOF(ch); i++, num++)
+        {
+            if (ch[i] == 0)
+            {
+                break;
+            }
+        }
+
+        switch (num) {
+        case 2:
+            {
+                IZ_BYTE tmp = ch[0];
+                ch[0] = ch[1];
+                ch[1] = tmp;
+            }
+            break;
+        case 3:
+            {
+                IZ_BYTE tmp = ch[0];
+                ch[0] = ch[2];
+                ch[2] = tmp;
+            }
+            break;
+        case 4:
+            {
+                IZ_BYTE tmp = ch[0];
+                ch[0] = ch[3];
+                ch[3] = ch[0];
+
+                tmp = ch[1];
+                ch[1] = ch[2];
+                ch[2] = tmp;
+            }
+            break;
+        }
+    }
+
     IZ_UINT _GetUnicode(
-        izanagi::E_FONT_CHAR_ENCODE encode,
+        izanagi::text::E_FONT_CHAR_ENCODE encode,
         IZ_UINT code)
     {
         // TODO
@@ -40,15 +80,16 @@ namespace
 
         switch (encode)
         {
-        case izanagi::E_FONT_CHAR_ENCODE_UTF8:
+        case izanagi::text::E_FONT_CHAR_ENCODE_UTF8:
             {
-                ret = ((tmp.ch[0] << 24) | (tmp.ch[1] << 16) | (tmp.ch[2] << 8) | tmp.ch[3]);
+                _Swap(tmp.ch);
+                ret = tmp.code;
                 tmpSize = ::MultiByteToWideChar(CP_UTF8, 0, (LPCSTR)&ret, -1, NULL, 0);
                 tmpBuf.resize(tmpSize * 2 + 2);
                 ::MultiByteToWideChar(CP_UTF8, 0, (LPCSTR)&ret, -1, (LPWSTR)&tmpBuf[0], tmpBuf.size());
             }
             break;
-        case izanagi::E_FONT_CHAR_ENCODE_SJIS:
+        case izanagi::text::E_FONT_CHAR_ENCODE_SJIS:
             {
                 ret = ((tmp.ch[0] << 8) | tmp.ch[1]);
                 tmpSize = ::MultiByteToWideChar(CP_ACP, 0, (LPCSTR)&ret, -1, NULL, 0);
@@ -62,8 +103,7 @@ namespace
 
         if (tmpSize > 0)
         {
-            size_t size = ::strlen((const char*)&tmpBuf[0]);
-            memcpy(&ret, &tmpBuf[0], size);
+            memcpy(&ret, &tmpBuf[0], sizeof(ret));
         }
 
         return ret;
@@ -149,12 +189,12 @@ IZ_BOOL CFontConverterBase::CreateFontImage(
 
         for (UINT nCharNum = 0; ; nCharNum++) {
             // 文字コード
-            UINT code = *itChar;
+            UINT originalCode = *itChar;
 
             // Unicodeに変換
-            code = _GetUnicode(
+            IZ_UINT code = _GetUnicode(
                 sOption.charEncode,
-                code);
+                originalCode);
 
             SGlyphMetrics metrics;
             SGlyphImage image;
@@ -195,7 +235,8 @@ IZ_BOOL CFontConverterBase::CreateFontImage(
             }
 
             // TODO
-            IZ_UINT offsetX = metrics.bearingX;
+            //IZ_UINT offsetX = metrics.bearingX;
+            IZ_UINT offsetX = 0;
             IZ_UINT offsetY = metrics.ascender - metrics.bearingY;
             //IZ_UINT offsetY = 0;
 
@@ -215,7 +256,7 @@ IZ_BOOL CFontConverterBase::CreateFontImage(
                 // 0は未定義の意味に使う
                 sFntMap.idx = nOutFontNum + 1;
 
-                sFntMap.code = code;
+                sFntMap.code = originalCode;
                 sFntMap.srcX = x;
                 sFntMap.srcY = y;
                 sFntMap.texID = nTexNum;
