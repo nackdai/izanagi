@@ -77,7 +77,7 @@ namespace {
         if (code <= 0x7f) {
             // ASCII
             nDstCode = code & (0xffff);
-            bytes = 2;
+            bytes = 1;
         }
         else
         {

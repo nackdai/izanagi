@@ -53,12 +53,29 @@ namespace text
         string->BeginIter();
 
         IZ_UINT code = 0;
-        while ((code = string->GetNextAsUnicode()) != 0)
+        for (;;)
         {
+            if (m_Encode == E_FONT_CHAR_ENCODE_UNICODE)
+            {
+                code = string->GetNextAsUnicode();
+            }
+            else
+            {
+                code = string->GetNext();
+            }
+
+            if (code == 0)
+            {
+                break;
+            }
+
             SGlyphImage image;
             SGlyphMetrics metrics;
 
-            host->GetImage(code, image, metrics);
+            if (!host->GetImage(code, image, metrics))
+            {
+                continue;
+            }
 
             SGlyphCacheItem* item = Register(code, metrics, image);
             if (item == IZ_NULL)
@@ -84,6 +101,7 @@ namespace text
     CGlyphCache* CGlyphCache::CreateGlyphCache(
         IMemoryAllocator* allocator,
         graph::CGraphicsDevice* device,
+        E_FONT_CHAR_ENCODE encode,
         IZ_UINT maxRegisterNum,
         IZ_UINT height,
         IZ_BOOL enableExchange)
@@ -100,6 +118,8 @@ namespace text
             instance->AddRef();
 
             instance->m_Allocator = allocator;
+
+            instance->m_Encode = encode;
 
             instance->m_MaxRegisterNum = maxRegisterNum;
             instance->m_FontHeight = height;

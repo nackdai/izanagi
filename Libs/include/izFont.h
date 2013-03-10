@@ -3,7 +3,6 @@
 
 #include "text/FontDefs.h"
 #include "text/FNTFormat.h"
-#include "text/FontRenderer.h"
 
 #include "text/UString.h"
 #include "text/FontHost.h"
@@ -14,6 +13,8 @@
 #include "text/TextLine.h"
 
 #include "text/FontHostFT.h"
+#include "text/FontHostFNT.h"
+
 #include "text/FontRendererFT.h"
 
 #endif  // #if !defined(__IZANAGI_FONT_H__)

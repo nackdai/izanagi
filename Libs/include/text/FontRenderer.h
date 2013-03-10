@@ -7,7 +7,10 @@
 #include "izIo.h"
 #include "FontDefs.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace text
+{
     /**
     * フォントレンダラ
     */
@@ -84,6 +87,7 @@ namespace izanagi {
     protected:
         RenderFontHandler* m_RenderFontHadler;
     };
+}
 }   // namespace izanagi
 
 #endif  // #if !defined(__IZANAGI_FONT_FONT_RENDERER_H__)

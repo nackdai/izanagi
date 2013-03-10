@@ -257,7 +257,7 @@ namespace text
         inline void* _GetOneCharCode(
             void* src,
             IZ_UINT *ret,
-            izanagi::E_FONT_CHAR_ENCODE encode)
+            E_FONT_CHAR_ENCODE encode)
         {
             IZ_ASSERT(src != IZ_NULL);
             IZ_ASSERT(ret != IZ_NULL);
