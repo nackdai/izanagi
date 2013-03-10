@@ -24,7 +24,7 @@ public:
     static CCharList& GetInstance() { return s_cInstance; }
 
 private:
-    CCharList() { m_nCharFmt = izanagi::E_FONT_CHAR_ENCODE_SJIS; }
+    CCharList() { m_nCharFmt = izanagi::text::E_FONT_CHAR_ENCODE_SJIS; }
     ~CCharList() {}
 
     NO_COPIABLE(CCharList);
@@ -32,7 +32,7 @@ private:
 public:
     // Registers characters from a file.
     void Register(
-        izanagi::E_FONT_CHAR_ENCODE nCharFmt,
+        izanagi::text::E_FONT_CHAR_ENCODE nCharFmt,
         izanagi::IInputStream* pIn);
 
     // Returns character code bytes by character format.
@@ -62,7 +62,7 @@ public:
     IZ_UINT GetCharNum() const { return static_cast<IZ_UINT>(m_CharList.size()); }
 
 protected:
-    izanagi::E_FONT_CHAR_ENCODE m_nCharFmt;
+    izanagi::text::E_FONT_CHAR_ENCODE m_nCharFmt;
     std::set<IZ_UINT> m_CharList;
 };
 

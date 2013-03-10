@@ -24,8 +24,8 @@ struct SGlyphMetrics
 
 struct SGlyphImage
 {
-    IZ_UINT leftOffset;
-    IZ_UINT topOffset;
+    IZ_INT leftOffset;
+    IZ_INT topOffset;
 };
 
 class CFontConverterBase

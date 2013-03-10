@@ -57,19 +57,19 @@ IZ_UINT CFontConverterFT::GetGlyphMetrics(
         FT_LOAD_DEFAULT);
     VRETURN(err == 0);
 
-    metrics.advance = m_Face->glyph->advance.x >> 6;
-    metrics.ascender = m_Face->size->metrics.ascender >> 6;
-    metrics.descender = (m_Face->size->metrics.descender * -1) >> 6;
-    metrics.bearingX = m_Face->glyph->metrics.horiBearingX >> 6;
-    metrics.bearingY = m_Face->glyph->metrics.horiBearingY >> 6;
-    metrics.width = m_Face->glyph->metrics.width >> 6;
-    metrics.height = m_Face->glyph->metrics.height >> 6;
+    metrics.advance = static_cast<IZ_UINT8>(m_Face->glyph->advance.x >> 6);
+    metrics.ascender = static_cast<IZ_UINT8>(m_Face->size->metrics.ascender >> 6);
+    metrics.descender = static_cast<IZ_UINT8>((m_Face->size->metrics.descender * -1) >> 6);
+    metrics.bearingX = static_cast<IZ_UINT8>(m_Face->glyph->metrics.horiBearingX >> 6);
+    metrics.bearingY = static_cast<IZ_UINT8>(m_Face->glyph->metrics.horiBearingY >> 6);
+    metrics.width = static_cast<IZ_UINT8>(m_Face->glyph->metrics.width >> 6);
+    metrics.height = static_cast<IZ_UINT8>(m_Face->glyph->metrics.height >> 6);
 
     err = FT_Render_Glyph(m_Face->glyph, FT_RENDER_MODE_NORMAL);
     VRETURN(err == 0);
 
     image.leftOffset = m_Face->glyph->bitmap_left;
-    image.topOffset = metrics.height - m_Face->glyph->bitmap_top;
+    image.topOffset = m_Face->glyph->bitmap_top;
 
     IZ_ASSERT(metrics.width == m_Face->glyph->bitmap.pitch);
     IZ_ASSERT(metrics.height == m_Face->glyph->bitmap.rows);
@@ -136,4 +136,9 @@ IZ_UINT CFontConverterFT::GetTextMetricsHeight()
 IZ_UINT CFontConverterFT::GetTextAscender()
 {
     return (m_Face->ascender >> 6);
+}
+
+IZ_UINT CFontConverterFT::GetTextDescender()
+{
+    return (m_Face->descender >> 6);
 }

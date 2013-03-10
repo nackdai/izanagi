@@ -51,7 +51,7 @@ CCharList CCharList::s_cInstance;
 
 // Registers characters from a file.
 void CCharList::Register(
-    izanagi::E_FONT_CHAR_ENCODE nCharFmt,
+    izanagi::text::E_FONT_CHAR_ENCODE nCharFmt,
     izanagi::IInputStream* pIn)
 {
     m_nCharFmt = nCharFmt;
@@ -79,15 +79,15 @@ void CCharList::Register(
     CBufferStream cInStream(&tvBuffer[0], tvBuffer.size());
 
     switch (nCharFmt) {
-    case izanagi::E_FONT_CHAR_ENCODE_SJIS:
+    case izanagi::text::E_FONT_CHAR_ENCODE_SJIS:
         // SJIS
         RegisterSJIS(&cInStream);
         break;
-    case izanagi::E_FONT_CHAR_ENCODE_UTF16:
+    case izanagi::text::E_FONT_CHAR_ENCODE_UTF16:
         // UTF16
         RegisterUTF16(&cInStream);
         break;
-    case izanagi::E_FONT_CHAR_ENCODE_UTF8:
+    case izanagi::text::E_FONT_CHAR_ENCODE_UTF8:
         // UTF8
         RegisterUTF8(&cInStream);
         break;
@@ -216,15 +216,15 @@ IZ_UINT CCharList::GetCharBytes(IZ_UINT code)
     IZ_UINT ret = 0;
 
     switch (m_nCharFmt) {
-    case izanagi::E_FONT_CHAR_ENCODE_SJIS:
+    case izanagi::text::E_FONT_CHAR_ENCODE_SJIS:
         // SJIS
         ret = GetCharBytesAsSJIS(code);
         break;
-    case izanagi::E_FONT_CHAR_ENCODE_UTF16:
+    case izanagi::text::E_FONT_CHAR_ENCODE_UTF16:
         // UTF16
         ret = GetCharBytesAsUTF16(code);
         break;
-    case izanagi::E_FONT_CHAR_ENCODE_UTF8:
+    case izanagi::text::E_FONT_CHAR_ENCODE_UTF8:
         // UTF8
         ret = GetCharBytesAsUTF8(code);
         break;

@@ -17,7 +17,7 @@ struct SOption
 
     izanagi::tool::CString fontFace;
 
-    izanagi::E_FONT_CHAR_ENCODE charEncode;
+    izanagi::text::E_FONT_CHAR_ENCODE charEncode;
 
     struct {
         IZ_UINT isFixedPitch    : 1;    // 固定ピッチ

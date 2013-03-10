@@ -23,11 +23,11 @@ CFontConverterGDI::~CFontConverterGDI()
 namespace {
     inline IZ_UINT _GetTextHeight(
         HDC hDC,
-        izanagi::E_FONT_CHAR_ENCODE encode)
+        izanagi::text::E_FONT_CHAR_ENCODE encode)
     {
         IZ_UINT ret = 0;
 
-        if (encode == izanagi::E_FONT_CHAR_ENCODE_UTF16) {
+        if (encode == izanagi::text::E_FONT_CHAR_ENCODE_UTF16) {
             TEXTMETRICW tm;
             GetTextMetricsW(hDC, &tm);
             ret = tm.tmHeight;
@@ -133,7 +133,7 @@ IZ_BOOL CFontConverterGDI::BeginCreateFontImage(const SOption& option)
         VRETURN(m_hOldFont);
     }
 
-    if (option.charEncode == izanagi::E_FONT_CHAR_ENCODE_UTF16)
+    if (option.charEncode == izanagi::text::E_FONT_CHAR_ENCODE_UTF16)
     {
         TEXTMETRICW tm;
         GetTextMetricsW(m_hDC, &tm);
