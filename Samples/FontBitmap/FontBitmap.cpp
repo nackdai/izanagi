@@ -127,6 +127,8 @@ void CFontBitmapApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
         IZ_UINT code = 0;
 
+        const IZ_UINT baseline = 16;
+
         str.BeginIter();
 
         while ((code = str.GetNext()) != 0)
@@ -147,7 +149,7 @@ void CFontBitmapApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
                 IZ_UINT h = item->rect.Height();
 
                 IZ_UINT x = posX + item->leftOffset;
-                IZ_UINT y = posY;
+                IZ_UINT y = posY + baseline - item->metrics.bearingY;
 
                 device->Draw2DSprite(
                     izanagi::CFloatRect(left, top, right, bottom),
