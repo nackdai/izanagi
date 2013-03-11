@@ -129,22 +129,11 @@ namespace {
         IZ_UINT code = ch;
 
         for (;;) {
+#if 0
             ch = *(ptrSrc++);
 
             IZ_ASSERT(ch > 0x7f);
 
-#if 0
-            if ((ch & 0xc0) == 0x80) {
-                IZ_ASSERT(count <= 4);
-                code = ((code << 8) | ch);
-            }
-            else if (((ch & 0xe0) == 0xc0)
-                    || ((ch & 0xf0) == 0xe0)
-                    || ((ch & 0xf8) == 0xf0))
-            {
-                break;
-            }
-#else
             if ((ch & 0xc0) == 0x80
                 || ((ch & 0xe0) == 0xc0)
                 || ((ch & 0xf0) == 0xe0)
@@ -161,6 +150,29 @@ namespace {
                 {
                     break;
                 }
+            }
+#else
+            ch = *ptrSrc;
+
+            if (ch <= 0x7f)
+            {
+                break;
+            }
+
+            if ((ch & 0xc0) == 0x80
+                || ((ch & 0xe0) == 0xc0)
+                || ((ch & 0xf0) == 0xe0)
+                || ((ch & 0xf8) == 0xf0))
+            {
+                if (((ch & 0xe0) == 0xc0)
+                    || ((ch & 0xf0) == 0xe0)
+                    || ((ch & 0xf8) == 0xf0))
+                {
+                    break;
+                }
+
+                code = ((code << 8) | ch);
+                ptrSrc++;
             }
 #endif
             else {
