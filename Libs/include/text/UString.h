@@ -124,6 +124,24 @@ namespace text
     protected:
         IMemoryAllocator* m_Allocator;
     };
+
+    /**
+     */
+    class CSjisString : public CUString
+    {
+    public:
+        CSjisString(const void* text, IZ_UINT bytes)
+            : CUString(E_FONT_CHAR_ENCODE_SJIS)
+        {
+            m_Text = CONST_CAST(IZ_UINT8*, void*, text);
+            m_Bytes = bytes;
+        }
+        CSjisString(const void* text);
+        virtual ~CSjisString() {}
+
+    public:
+        virtual void* ConvertToUnicode(IMemoryAllocator* allocator = IZ_NULL);
+    };
 }    // namespace text
 }   // namespace izanagi
 
