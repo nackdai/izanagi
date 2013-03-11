@@ -359,7 +359,7 @@ namespace text
         realItem->leftOffset = image.leftOffset;
         realItem->topOffset = image.topOffset;
 
-        m_PosX += item->metrics.advance;
+        m_PosX += item->metrics.advance + CHAR_MARGIN;
 
         m_Hash.Add(&realItem->hashItem);
         m_RegisteredNum++;
