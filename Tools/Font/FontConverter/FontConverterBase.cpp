@@ -237,8 +237,8 @@ IZ_BOOL CFontConverterBase::CreateFontImage(
             // TODO
             //IZ_UINT offsetX = metrics.bearingX;
             IZ_UINT offsetX = 0;
-            IZ_UINT offsetY = metrics.ascender - metrics.bearingY;
-            //IZ_UINT offsetY = 0;
+            //IZ_UINT offsetY = metrics.ascender - metrics.bearingY;
+            IZ_UINT offsetY = 0;
 
             WriteImage(
                 sOption,
