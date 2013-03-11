@@ -23,6 +23,9 @@ namespace text
                 case E_FONT_CHAR_ENCODE_UNICODE:
                     tmp = CStdUtf::GetOneCharCodeAsUnicode(tmp, &code);
                     break;
+                case E_FONT_CHAR_ENCODE_SJIS:
+                    tmp = CStdUtf::GetOneCharCodeAsSJIS(tmp, &code);
+                    break;
                 default:
                     IZ_ASSERT(IZ_FALSE);
                     break;
@@ -69,6 +72,9 @@ namespace text
             break;
         case E_FONT_CHAR_ENCODE_UNICODE:
             ret = CStdUtf::GetOneCharCodeAsUnicode(data, code);
+            break;
+        case E_FONT_CHAR_ENCODE_SJIS:
+            ret = CStdUtf::GetOneCharCodeAsSJIS(data, code);
             break;
         default:
             IZ_ASSERT(IZ_FALSE);
@@ -220,6 +226,32 @@ namespace text
         }
 
         return IZ_TRUE;
+    }
+
+    //////////////////////////////////////////
+
+    CSjisString::CSjisString(const void* text)
+        : CUString(E_FONT_CHAR_ENCODE_SJIS)
+    {
+        m_Text = CONST_CAST(IZ_UINT8*, void*, text);
+
+        // TODO
+        m_Bytes = 0;
+        IZ_UINT8 ch = 0;
+        IZ_UINT i = 0;
+        while  ((ch = m_Text[i++]) != 0)
+        {
+            m_Bytes++;
+        }
+    }
+
+    void* CSjisString::ConvertToUnicode(IMemoryAllocator* allocator/*= IZ_NULL*/)
+    {
+        // TODO
+        // It is difficult to convert to unicode from sjis without API supoorted by OS.
+
+        IZ_ASSERT(IZ_FALSE);
+        return IZ_NULL;
     }
 }    // namespace text
 }    // namespace izanagi
