@@ -58,14 +58,8 @@ namespace izanagi
      */
     class CParagraph : public text::CParagraph
     {
+        friend class text::CParagraph;
         friend class CParagraphGroup;
-
-    private:
-        static CParagraph* CreateParagraph(
-            IMemoryAllocator* allocator,
-            void* text,
-            IZ_UINT bytes,
-            ParagraphLayout* layout);
 
     private:
         CParagraph();
@@ -75,11 +69,11 @@ namespace izanagi
         IZ_DEFINE_INTERNAL_RELEASE();
 
     private:
+        virtual IZ_BOOL Init(void* userData);
         virtual CLine* CreateLine(IZ_UINT width);
 
     private:
         ParagraphLayout* m_Layout;
-        void* m_Text;
         IZ_BOOL m_IsReflowed;
     };
 
@@ -87,12 +81,7 @@ namespace izanagi
      */
     class CParagraphGroup : public text::CParagraphGroup
     {
-    public:
-        static CParagraphGroup* CreateParagraphGroup(
-            IMemoryAllocator* allocator,
-            text::CUString& text,
-            const LEFontInstance* font);
-
+        friend class izanagi::text::CParagraphGroup;
     protected:
         CParagraphGroup() {}
         ~CParagraphGroup() {}
@@ -108,7 +97,8 @@ namespace izanagi
             void* data);
 
     private:
-        void Init(text::CUString& text, const FontRuns* fontRuns);
+        virtual IZ_BOOL Init(text::CUString& str, const void* userData);
+        void InitInternal(text::CUString& text, const FontRuns* fontRuns);
        
     protected:
         UBiDiLevel m_Level;
