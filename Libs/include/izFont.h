@@ -15,6 +15,6 @@
 #include "text/FontHostFT.h"
 #include "text/FontHostFNT.h"
 
-#include "text/FontRendererFT.h"
+#include "text/FontRenderer.h"
 
 #endif  // #if !defined(__IZANAGI_FONT_H__)
