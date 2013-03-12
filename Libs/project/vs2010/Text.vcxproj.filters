@@ -14,12 +14,6 @@
     <ClCompile Include="..\..\source\text\FontRenderer.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\text\FontRendererBmp.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\text\FontRendererFT.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\text\UString.cpp">
       <Filter>source</Filter>
     </ClCompile>
@@ -54,12 +48,6 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\text\FontRenderer.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\text\FontRendererBmp.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\text\FontRendererFT.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\text\UString.h">
