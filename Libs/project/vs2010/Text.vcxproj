@@ -94,8 +94,6 @@ xcopy /R /Y "$(TargetDir)$(ProjectName).pdb" ..\lib\$(IntDir)
     <ClCompile Include="..\..\source\text\FontHostFT.cpp" />
     <ClCompile Include="..\..\source\text\FontMap.cpp" />
     <ClCompile Include="..\..\source\text\FontRenderer.cpp" />
-    <ClCompile Include="..\..\source\text\FontRendererBmp.cpp" />
-    <ClCompile Include="..\..\source\text\FontRendererFT.cpp" />
     <ClCompile Include="..\..\source\text\Paragraph.cpp" />
     <ClCompile Include="..\..\source\text\ParagraphGroup.cpp" />
     <ClCompile Include="..\..\source\text\TextLine.cpp" />
@@ -110,9 +108,7 @@ xcopy /R /Y "$(TargetDir)$(ProjectName).pdb" ..\lib\$(IntDir)
     <ClInclude Include="..\..\include\text\FontHostFT.h" />
     <ClInclude Include="..\..\include\text\FontMap.h" />
     <ClInclude Include="..\..\include\text\FontRenderer.h" />
-    <ClInclude Include="..\..\include\text\FontRendererBmp.h" />
     <ClInclude Include="..\..\include\izFont.h" />
-    <ClInclude Include="..\..\include\text\FontRendererFT.h" />
     <ClInclude Include="..\..\include\text\Paragraph.h" />
     <ClInclude Include="..\..\include\text\ParagraphGroup.h" />
     <ClInclude Include="..\..\include\text\TextLine.h" />
