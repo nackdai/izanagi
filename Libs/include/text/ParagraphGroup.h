@@ -15,11 +15,39 @@ namespace text
 {
     class IFontHost;
     class CParagraph;
+    class CUString;
 
     /**
      */
     class CParagraphGroup : public CObject
     {
+    public:
+        template <typename _T>
+        static CParagraphGroup* CreateParagraphGroup(
+            IMemoryAllocator* allocator,
+            CUString& text,
+            const void* userData)
+        {
+            IZ_BOOL result = IZ_TRUE;
+            void* buf = ALLOC(allocator, sizeof(_T));
+
+            CParagraphGroup* instance = new(buf) _T;
+            {
+                instance->AddRef();
+
+                instance->m_Allocator = allocator;
+
+                result = instance->Init(text, userData);
+            }
+
+            if (!result)
+            {
+                SAFE_RELEASE(instance);
+            }
+
+            return instance;
+        }
+
     protected:
         CParagraphGroup();
         virtual ~CParagraphGroup() {}
@@ -42,6 +70,7 @@ namespace text
             graph::CGraphicsDevice* device);
 
     protected:
+        PURE_VIRTUAL(IZ_BOOL Init(CUString& str, const void* userData));
         void AddParagraph(CParagraph* paragraph);
        
     protected:

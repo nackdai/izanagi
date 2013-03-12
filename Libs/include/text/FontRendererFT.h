@@ -1,5 +1,5 @@
-#if !defined(__IZANAGI_TEXT_FONT_RENDERER_FT_H__)
-#define __IZANAGI_TEXT_FONT_RENDERER_FT_H__
+#if !defined(__IZANAGI_TEXT_FONT_RENDERER_H__)
+#define __IZANAGI_TEXT_FONT_RENDERER_H__
 
 #include "izDefs.h"
 #include "izStd.h"
@@ -16,37 +16,108 @@ namespace izanagi
 namespace text
 {
     class IFontHost;
+    class CUString;
     class CParagraphGroup;
+    class CGlyphCache;
 
     /**
      */
-    class CFontRendererFT : public CObject
+    class CFontRenderer : public CObject
     {
     public:
-        static CFontRendererFT* CreateFontRenderer(
+        template <typename _T>
+        static CFontRenderer* CreateFontRenderer(
             IMemoryAllocator* allocator,
             IInputStream* in,
-            IZ_UINT pixelSize);
+            IZ_UINT pixelSize)
+        {
+            IZ_BOOL result = IZ_TRUE;
 
-    private:
-        CFontRendererFT();
-        ~CFontRendererFT();
+            void* buf = ALLOC(allocator, sizeof(_T));
+            _T* instance = new(buf) _T;
+            {
+                instance->AddRef();
+                instance->m_Allocator = allocator;
+                result = instance->Init(allocator, in, pixelSize);
+            }
 
-        NO_COPIABLE(CFontRendererFT);
+            if (!result)
+            {
+                SAFE_RELEASE(instance);
+            }
+            return instance;
+        }
+
+    protected:
+        CFontRenderer();
+        virtual ~CFontRenderer();
+
+        NO_COPIABLE(CFontRenderer);
         IZ_DEFINE_INTERNAL_RELEASE();
 
     public:
         void Render(
+            graph::CGraphicsDevice* device,
             IZ_UINT x, IZ_UINT y,
             IZ_UINT width, IZ_UINT height,
-            CParagraphGroup& paragraphGroup,
-            graph::CGraphicsDevice* device);
+            CParagraphGroup& paragraphGroup);
 
-    private:
+        void Render(
+            graph::CGraphicsDevice* device,
+            CUString& str,
+            CIntPoint& pos,
+            IZ_UINT baseline,
+            CGlyphCache& glyphCache);
+
+    protected:
+        PURE_VIRTUAL(
+            IZ_BOOL Init(
+                IInputStream* in,
+                IZ_UINT pixelSize));
+
+        PURE_VIRTUAL(IZ_UINT GetNextChar(CUString& string));
+
+    protected:
         IMemoryAllocator* m_Allocator;
         IFontHost* m_FontHost;
+    };
+
+    /**
+     */
+    class CFontRendererFT : public CFontRenderer
+    {
+        friend class CFontRenderer;
+
+    private:
+        CFontRendererFT() {}
+        virtual ~CFontRendererFT() {}
+
+    private:
+        IZ_BOOL Init(
+            IInputStream* in,
+            IZ_UINT pixelSize);
+
+        virtual IZ_UINT GetNextChar(CUString& string);
+    };
+
+    /**
+     */
+    class CFontRendererFNT : public CFontRenderer
+    {
+        friend class CFontRenderer;
+
+    private:
+        CFontRendererFNT() {}
+        virtual ~CFontRendererFNT() {}
+
+    private:
+        IZ_BOOL Init(
+            IInputStream* in,
+            IZ_UINT pixelSize);
+
+        virtual IZ_UINT GetNextChar(CUString& string);
     };
 }    // namespace text
 }   // namespace izanagi
 
-#endif  // #if !defined(__IZANAGI_TEXT_FONT_RENDERER_FT_H__)
+#endif  // #if !defined(__IZANAGI_TEXT_FONT_RENDERER_H__)

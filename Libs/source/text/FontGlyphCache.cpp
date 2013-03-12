@@ -8,7 +8,7 @@ namespace izanagi
 {
 namespace text
 {
-    SGlyphCacheItem* CGlyphCacheBase::Register(
+    SGlyphCacheItem* CGlyphCache::Register(
         IZ_UINT code,
         const SGlyphMetrics& metrics,
         const SGlyphImage& image)
@@ -44,7 +44,7 @@ namespace text
         return item;
     }
 
-    IZ_BOOL CGlyphCacheBase::Register(
+    IZ_BOOL CGlyphCache::Register(
         CUString* string,
         IFontHost* host)
     {
@@ -90,7 +90,7 @@ namespace text
         return ret;
     }
 
-    IZ_BOOL CGlyphCacheBase::IsRegistered(IZ_UINT code)
+    IZ_BOOL CGlyphCache::IsRegistered(IZ_UINT code)
     {
         SGlyphCacheItem* item = FindCache(code);
         return (item != IZ_NULL);
@@ -98,7 +98,7 @@ namespace text
 
     /////////////////////////////////////////////////
 
-    CGlyphCache* CGlyphCache::CreateGlyphCache(
+    CDefaultGlyphCache* CDefaultGlyphCache::CreateGlyphCache(
         IMemoryAllocator* allocator,
         graph::CGraphicsDevice* device,
         E_FONT_CHAR_ENCODE encode,
@@ -106,14 +106,14 @@ namespace text
         IZ_UINT height,
         IZ_BOOL enableExchange)
     {
-        size_t size = sizeof(CGlyphCache);
+        size_t size = sizeof(CDefaultGlyphCache);
         size += sizeof(SGlyphCacheItemImpl) * maxRegisterNum;
 
         IZ_UINT8* buf = (IZ_UINT8*)ALLOC(allocator, size);
 
-        CGlyphCache* instance = new (buf) CGlyphCache();
+        CDefaultGlyphCache* instance = new (buf) CDefaultGlyphCache();
         {
-            buf += sizeof(CGlyphCache);
+            buf += sizeof(CDefaultGlyphCache);
 
             instance->AddRef();
 
@@ -137,7 +137,7 @@ namespace text
         return instance;
     }
 
-    CGlyphCache::CGlyphCache()
+    CDefaultGlyphCache::CDefaultGlyphCache()
     {
         m_RegisteredNum = 0;
 
@@ -149,12 +149,12 @@ namespace text
         m_CachePos = 0;
     }
 
-    CGlyphCache::~CGlyphCache()
+    CDefaultGlyphCache::~CDefaultGlyphCache()
     {
         SAFE_RELEASE(m_FontMap);
     }
 
-    IZ_BOOL CGlyphCache::CreateFontMap(
+    IZ_BOOL CDefaultGlyphCache::CreateFontMap(
         IMemoryAllocator* allocator,
         graph::CGraphicsDevice* device,
         IZ_UINT maxRegisterNum,
@@ -204,7 +204,7 @@ namespace text
         return (m_FontMap != IZ_NULL);
     }
 
-    void CGlyphCache::Unregister(IZ_UINT code)
+    void CDefaultGlyphCache::Unregister(IZ_UINT code)
     {
         Hash::Item* hashItem = m_Hash.Find(code);
         if (hashItem != IZ_NULL)
@@ -213,13 +213,13 @@ namespace text
         }
     }
 
-    IZ_BOOL CGlyphCache::Prepare(graph::CGraphicsDevice* device)
+    IZ_BOOL CDefaultGlyphCache::Prepare(graph::CGraphicsDevice* device)
     {
         IZ_ASSERT(device != IZ_NULL);
         return device->SetTexture(0, m_FontMap);
     }
 
-    void CGlyphCache::BeginRegister()
+    void CDefaultGlyphCache::BeginRegister()
     {
         IZ_ASSERT(m_FontMap != IZ_NULL);
         IZ_ASSERT(m_FontMapData == IZ_NULL);
@@ -230,14 +230,14 @@ namespace text
             IZ_FALSE);
     }
 
-    void CGlyphCache::EndRegister()
+    void CDefaultGlyphCache::EndRegister()
     {
         IZ_ASSERT(m_FontMap != IZ_NULL);
         m_FontMap->Unlock(0);
         m_FontMapData = IZ_NULL;
     }
 
-    void CGlyphCache::Clear()
+    void CDefaultGlyphCache::Clear()
     {
         m_PosX = CHAR_MARGIN;
         m_PosY = CHAR_MARGIN;
@@ -249,7 +249,7 @@ namespace text
         m_Hash.Clear();
     }
 
-    SGlyphCacheItem* CGlyphCache::CreateCacheItem(IZ_UINT code)
+    SGlyphCacheItem* CDefaultGlyphCache::CreateCacheItem(IZ_UINT code)
     {
         SGlyphCacheItemImpl* item = (SGlyphCacheItemImpl*)FindCache(code);
 
@@ -283,19 +283,19 @@ namespace text
         return item;
     }
 
-    SGlyphCacheItem* CGlyphCache::FindCache(IZ_UINT code)
+    SGlyphCacheItem* CDefaultGlyphCache::FindCache(IZ_UINT code)
     {
         SGlyphCacheItemImpl* item = m_Hash.FindData(code);
         return item;
     }
 
-    void CGlyphCache::UnregisterCache(SGlyphCacheItem* item)
+    void CDefaultGlyphCache::UnregisterCache(SGlyphCacheItem* item)
     {
         SGlyphCacheItemImpl* realItem = (SGlyphCacheItemImpl*)item;
         realItem->hashItem.Leave();
     }
     
-    IZ_BOOL CGlyphCache::Regsiter(
+    IZ_BOOL CDefaultGlyphCache::Regsiter(
         SGlyphCacheItem* item,
         const SGlyphImage& image)
     {

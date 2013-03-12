@@ -29,16 +29,16 @@ namespace text
         CIntRect rect;
     };
 
-    class CGlyphCacheBase : public CObject
+    class CGlyphCache : public CObject
     {   
     protected:
-        CGlyphCacheBase()
+        CGlyphCache()
         {
             m_Encode = E_FONT_CHAR_ENCODE_UNICODE;
         }
-        ~CGlyphCacheBase() {}
+        ~CGlyphCache() {}
 
-        NO_COPIABLE(CGlyphCacheBase);
+        NO_COPIABLE(CGlyphCache);
         IZ_DEFINE_INTERNAL_RELEASE();
 
     public:
@@ -74,10 +74,10 @@ namespace text
         E_FONT_CHAR_ENCODE m_Encode;
     };
 
-    class CGlyphCache : public CGlyphCacheBase
+    class CDefaultGlyphCache : public CGlyphCache
     {
     public:
-        static CGlyphCache* CreateGlyphCache(
+        static CDefaultGlyphCache* CreateGlyphCache(
             IMemoryAllocator* allocator,
             graph::CGraphicsDevice* device,
             E_FONT_CHAR_ENCODE encode,
@@ -86,8 +86,8 @@ namespace text
             IZ_BOOL enableExchange);
 
     protected:
-        CGlyphCache();
-        virtual ~CGlyphCache();
+        CDefaultGlyphCache();
+        virtual ~CDefaultGlyphCache();
 
     protected:
         IZ_BOOL CreateFontMap(
