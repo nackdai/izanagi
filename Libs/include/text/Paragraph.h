@@ -22,6 +22,44 @@ namespace text
     {
         friend class CParagraphGroup;
 
+    public:
+        template <typename _T>
+        static CParagraph* CreateParagraph(
+            IMemoryAllocator* allocator,
+            void* text,
+            IZ_UINT bytes,
+            void* userData)
+        {
+            IZ_BOOL result = IZ_TRUE;
+            IZ_UINT8* buf = (IZ_UINT8*)ALLOC(allocator, sizeof(_T) + bytes + 1);
+
+            CParagraph* paragraph = new(buf) _T;
+            {
+                buf += sizeof(_T);
+
+                paragraph->AddRef();
+
+                paragraph->m_Allocator = allocator;
+
+                paragraph->m_Text = buf;
+                buf = (IZ_UINT8*)paragraph->m_Text;
+                buf[bytes] = 0;
+                memcpy(
+                    paragraph->m_Text,
+                    text,
+                    bytes);
+
+                result = paragraph->Init(userData);
+            }
+
+            if (!result)
+            {
+                SAFE_RELEASE(paragraph);
+            }
+
+            return paragraph;
+        }
+
     protected:
         CParagraph();
         virtual ~CParagraph();
@@ -30,6 +68,8 @@ namespace text
         IZ_DEFINE_INTERNAL_RELEASE();
 
     protected:
+        PURE_VIRTUAL(IZ_BOOL Init(void* userData));
+
         void Layout(IZ_UINT width);
 
         PURE_VIRTUAL(CLine* CreateLine(IZ_UINT width));
@@ -59,6 +99,8 @@ namespace text
 
     protected:
         IMemoryAllocator* m_Allocator;
+
+        void* m_Text;
 
         CStdList<CParagraph>::Item m_ListItem;
         CStdList<CLine> m_LineList;

@@ -9,6 +9,7 @@ namespace text
 {
     CParagraph::CParagraph()
     {
+        m_Text = IZ_NULL;
         m_ListItem.Init(this);
     }
 

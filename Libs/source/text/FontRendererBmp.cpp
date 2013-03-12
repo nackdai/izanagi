@@ -1,3 +1,4 @@
+#if 0
 #include "text/FontRendererBmp.h"
 #include "izIo.h"
 #include "std/StdUtf.h"
@@ -828,3 +829,4 @@ namespace text
     }
 }   // namespace text
 }   // namespace izanagi
+#endif

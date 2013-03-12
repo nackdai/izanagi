@@ -1,3 +1,4 @@
+#if 0
 #if !defined(__IZANAGI_FONT_FONT_RENDERER_BMP_H__)
 #define __IZANAGI_FONT_FONT_RENDERER_BMP_H__
 
@@ -173,3 +174,4 @@ namespace text
 }   // namespace izanagi
 
 #endif  // #if !defined(__IZANAGI_FONT_FONT_RENDERER_BMP_H__)
+#endif
