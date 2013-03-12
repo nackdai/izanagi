@@ -1,11 +1,10 @@
 #include "SimpleTextApp.h"
 #include "izFont.h"
 
-//const char* chars = "\xE3\x81\x82\xE3\x81\x84\xE3\x81\x86";
-const char* chars = "\x82\x81\xE3\x84\x81\xE3\x86\x81\xE3";
+const char* chars = "\xE3\x81\x82\xE3\x81\x84\xE3\x81\x86";
 //const char* chars = "ghijklmn";
 izanagi::text::CFontHostFT* host;
-izanagi::text::CGlyphCacheBase* cache;
+izanagi::text::CGlyphCache* cache;
 
 CSimpleTextApp::CSimpleTextApp()
 {
@@ -34,9 +33,10 @@ IZ_BOOL CSimpleTextApp::InitInternal(
        32);
    in.Close();
 
-   cache = izanagi::text::CGlyphCache::CreateGlyphCache(
+   cache = izanagi::text::CDefaultGlyphCache::CreateGlyphCache(
        allocator,
        device,
+       izanagi::text::E_FONT_CHAR_ENCODE_UTF8,
        100,
        32,
        IZ_TRUE);
@@ -293,17 +293,18 @@ void CSimpleTextApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     //izanagi::text::CUtf8String str(chars, strlen(chars));
     izanagi::text::CUnicodeString str(m_Allocator);
     str.Read(
-        izanagi::E_FONT_CHAR_ENCODE_UTF8,
+        izanagi::text::E_FONT_CHAR_ENCODE_UTF8,
         chars,
         strlen(chars));
 
     CSampleFontInstance fontInst;
     fontInst.Init(host);
 
-    izanagi::text::CParagraphGroup* group = izanagi::CParagraphGroup::CreateParagraphGroup(
+    izanagi::CParagraphGroup* group;
+    group = (izanagi::CParagraphGroup*)izanagi::text::CParagraphGroup::CreateParagraphGroup<izanagi::CParagraphGroup>(
         m_Allocator,
         str,
-        &fontInst);
+        (void*)&fontInst);
 
     group->Layout(70, 100);
 

@@ -20,25 +20,14 @@ namespace izanagi
         0x0000
     };
 
-    CParagraphGroup* CParagraphGroup::CreateParagraphGroup(
-        IMemoryAllocator* allocator,
-        text::CUString& text,
-        const LEFontInstance* font)
+
+    IZ_BOOL CParagraphGroup::Init(text::CUString& str, const void* userData)
     {
-        void* buf = ALLOC(allocator, sizeof(CParagraphGroup));
+        FontRuns fontRuns(0);
+        fontRuns.add((const LEFontInstance*)userData, str.GetNum());
+        InitInternal(str, &fontRuns);
 
-        CParagraphGroup* instance = new(buf) CParagraphGroup();
-        {
-            instance->AddRef();
-
-            instance->m_Allocator = allocator;
-
-            FontRuns fontRuns(0);
-            fontRuns.add(font, text.GetNum());
-            instance->Init(text, &fontRuns);
-        }
-
-        return instance;
+        return IZ_TRUE;
     }
 
     #define CH_LF 0x000A
@@ -88,7 +77,7 @@ namespace izanagi
         }
     }
 
-    void CParagraphGroup::Init(
+    void CParagraphGroup::InitInternal(
         text::CUString& text, 
         const FontRuns* fontRuns)
     {
@@ -198,41 +187,19 @@ namespace izanagi
         IZ_UINT bytes,
         void* data)
     {
-        CParagraph* ret = CParagraph::CreateParagraph(
+        CParagraph* ret = (CParagraph*)izanagi::text::CParagraph::CreateParagraph<CParagraph>(
             allocator,
             text,
             bytes,
-            reinterpret_cast<ParagraphLayout*>(data));
+            data);
         return ret;
     }
 
-    CParagraph* CParagraph::CreateParagraph(
-        IMemoryAllocator* allocator,
-        void* text,
-        IZ_UINT bytes,
-        ParagraphLayout* layout)
+    IZ_BOOL CParagraph::Init(void* userData)
     {
-        IZ_UINT8* buf = (IZ_UINT8*)ALLOC(allocator, sizeof(CParagraph) + bytes + 1);
-
-        CParagraph* paragraph = new(buf) CParagraph;
-        {
-            buf += sizeof(CParagraph);
-
-            paragraph->AddRef();
-
-            paragraph->m_Allocator = allocator;
-            paragraph->m_Layout = layout;
-
-            paragraph->m_Text = buf;
-            buf = (IZ_UINT8*)paragraph->m_Text;
-            buf[bytes] = 0;
-            memcpy(
-                paragraph->m_Text,
-                text,
-                bytes);
-        }
-
-        return paragraph;
+        ParagraphLayout* layout = (ParagraphLayout*)userData;
+        m_Layout = layout;
+        return IZ_TRUE;
     }
 
     CLine::CLine()
