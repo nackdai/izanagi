@@ -21,8 +21,13 @@ namespace izanagi
     };
 
 
-    IZ_BOOL CParagraphGroup::Init(text::CUString& str, const void* userData)
+    IZ_BOOL CParagraphGroup::Init(
+        izanagi::text::IFontHost* host,
+        izanagi::text::CUString& str, 
+        void* userData)
     {
+        SAFE_REPLACE(m_Host, host);
+
         FontRuns fontRuns(0);
         fontRuns.add((const LEFontInstance*)userData, str.GetNum());
         InitInternal(str, &fontRuns);
@@ -127,6 +132,8 @@ namespace izanagi
 
                 CParagraph* paragraph = CreateParagraph(
                     m_Allocator,
+                    m_Host,
+                    text.GetCharCode(),
                     start,
                     (end - start) * sizeof(LEUnicode),
                     layout);
@@ -174,6 +181,7 @@ namespace izanagi
         {
             ret = CLine::CreateLine(
                 m_Allocator,
+                m_Host,
                 line);
         }
 
@@ -183,20 +191,30 @@ namespace izanagi
 
     CParagraph* CParagraphGroup::CreateParagraph(
         IMemoryAllocator* allocator,
+        izanagi::text::IFontHost* host, 
+        izanagi::text::E_FONT_CHAR_ENCODE encode,
         void* text,
         IZ_UINT bytes,
         void* data)
     {
         CParagraph* ret = (CParagraph*)izanagi::text::CParagraph::CreateParagraph<CParagraph>(
             allocator,
+            host,
+            encode,
             text,
             bytes,
             data);
         return ret;
     }
 
-    IZ_BOOL CParagraph::Init(void* userData)
+    IZ_BOOL CParagraph::Init(
+        izanagi::text::IFontHost* host,
+        izanagi::text::E_FONT_CHAR_ENCODE encode,
+        void* text,
+        IZ_UINT bytes,
+        void* userData)
     {
+        SAFE_REPLACE(m_Host, host);
         ParagraphLayout* layout = (ParagraphLayout*)userData;
         m_Layout = layout;
         return IZ_TRUE;
@@ -213,24 +231,24 @@ namespace izanagi
 
     CLine* CLine::CreateLine(
         IMemoryAllocator* allocator,
-        const ParagraphLayout::Line* line)
+        izanagi::text::IFontHost* host,
+        ParagraphLayout::Line* line)
     {
-        void* buf = ALLOC(allocator, sizeof(CLine));
-
-        CLine* instance = new(buf) CLine;
-        {
-            instance->AddRef();
-
-            instance->m_Allocator = allocator;
-            instance->m_Line = line;
-        }
-
-        return instance;
+        CLine* ret = (CLine*)izanagi::text::CLine::CreateLine<izanagi::CLine>(
+            allocator,
+            host,
+            (void*)line);
+        return ret;
     }
 
     IZ_UINT CLine::GetLineWidth()
     {
         return m_Line->getWidth();
+    }
+
+    IZ_BOOL Init(void* userData)
+    {
+        return IZ_TRUE;
     }
 
     void CLine::Prepare(
@@ -269,8 +287,7 @@ namespace izanagi
                         dst,
                         posX,
                         pitch,
-                        ascent,
-                        host);
+                        ascent);
                 }
             }
         }
