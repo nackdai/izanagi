@@ -37,6 +37,11 @@ namespace text
 
         void SetFace(IZ_UINT id);
 
+        virtual E_FONT_CHAR_ENCODE GetEncodeType() const
+        {
+            return E_FONT_CHAR_ENCODE_UNICODE;
+        }
+
         virtual IZ_UINT GetGlyphID(IZ_UINT code);
 
         virtual IZ_BOOL GetGlyphMetricsByID(IZ_UINT id, SGlyphMetrics& metrics);

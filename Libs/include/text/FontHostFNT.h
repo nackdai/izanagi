@@ -37,6 +37,8 @@ namespace text
         const S_FNT_MAP* GetFontMapByID(IZ_UINT id);
 
     public:
+        virtual E_FONT_CHAR_ENCODE GetEncodeType() const;
+
         virtual IZ_UINT GetGlyphID(IZ_UINT code);
 
         virtual IZ_BOOL GetGlyphMetricsByID(IZ_UINT id, SGlyphMetrics& metrics);

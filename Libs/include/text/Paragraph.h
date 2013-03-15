@@ -3,6 +3,8 @@
 
 #include "izDefs.h"
 #include "izStd.h"
+#include "FontDefs.h"
+#include "UString.h"
 
 namespace izanagi
 {
@@ -26,6 +28,8 @@ namespace text
         template <typename _T>
         static CParagraph* CreateParagraph(
             IMemoryAllocator* allocator,
+            IFontHost* host,
+            E_FONT_CHAR_ENCODE encode,
             void* text,
             IZ_UINT bytes,
             void* userData)
@@ -40,16 +44,7 @@ namespace text
                 paragraph->AddRef();
 
                 paragraph->m_Allocator = allocator;
-
-                paragraph->m_Text = buf;
-                buf = (IZ_UINT8*)paragraph->m_Text;
-                buf[bytes] = 0;
-                memcpy(
-                    paragraph->m_Text,
-                    text,
-                    bytes);
-
-                result = paragraph->Init(userData);
+                result = paragraph->Init(host, encode, text, bytes, userData);
             }
 
             if (!result)
@@ -68,9 +63,18 @@ namespace text
         IZ_DEFINE_INTERNAL_RELEASE();
 
     protected:
-        PURE_VIRTUAL(IZ_BOOL Init(void* userData));
+        PURE_VIRTUAL(
+            IZ_BOOL Init(
+                IFontHost* host,
+                E_FONT_CHAR_ENCODE encode,
+                void* text,
+                IZ_UINT bytes,
+                void* userData));
 
         void Layout(IZ_UINT width);
+
+        virtual void BeginCreateLine() {}
+        virtual void EndCreateLine() {}
 
         PURE_VIRTUAL(CLine* CreateLine(IZ_UINT width));
 
@@ -80,7 +84,6 @@ namespace text
         void Prepare(
             IZ_UINT height,
             IZ_UINT ascent,
-            IFontHost* host,
             graph::CGraphicsDevice* device);
 
         void Render(
@@ -100,10 +103,63 @@ namespace text
     protected:
         IMemoryAllocator* m_Allocator;
 
-        void* m_Text;
-
         CStdList<CParagraph>::Item m_ListItem;
         CStdList<CLine> m_LineList;
+    };
+
+    /**
+     */
+    class CDefaultParagraph : public CParagraph
+    {
+        friend class CParagraph;
+        friend class CDefaultLine;
+
+    public:
+        static CParagraph* CreateParagraph(
+            IMemoryAllocator* allocator,
+            IFontHost* host,
+            E_FONT_CHAR_ENCODE encode,
+            void* text,
+            IZ_UINT bytes,
+            void* userData)
+        {
+            CParagraph* ret = CParagraph::CreateParagraph<CDefaultParagraph>(
+                allocator,
+                host,
+                encode,
+                text,
+                bytes,
+                userData);
+            return ret;
+        }
+
+    private:
+        CDefaultParagraph();
+        virtual ~CDefaultParagraph();
+
+    private:
+        virtual IZ_BOOL Init(
+            IFontHost* host,
+            E_FONT_CHAR_ENCODE encode,
+            void* text,
+            IZ_UINT bytes,
+            void* userData);
+
+        virtual void BeginCreateLine();
+        virtual void EndCreateLine();
+
+        virtual CLine* CreateLine(IZ_UINT width);
+
+    private:
+        struct SLineParam
+        {
+            const void* text;
+            IZ_UINT bytes;
+        };
+
+    private:
+        IFontHost* m_FontHost;
+        CUString m_String;
     };
 }    // namespace text
 }   // namespace izanagi

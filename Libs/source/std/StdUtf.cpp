@@ -1,5 +1,6 @@
 #include "std/StdUtf.h"
 #include "std/StdBit.h"
+#include "std/StdUtil.h"
 
 using namespace izanagi;
 
@@ -488,4 +489,34 @@ void* CStdUtf::GetOneCharCodeAsSJIS(const void* src, IZ_UINT* ret)
 
 __EXIT__:
     return pSrc;
+}
+
+void* CStdUtf::GetOneCharCodeAsUTF8(const void* src, IZ_UINT* ret, IZ_UINT* bytes)
+{
+    void* retPtr = GetOneCharCodeAsUTF8(src, ret);
+    if (ret != 0 && bytes != IZ_NULL)
+    {
+        *bytes = static_cast<IZ_UINT>(CStdUtil::GetPtrDistance((const IZ_UINT8*)src, (const IZ_UINT8*)retPtr));
+    }
+    return retPtr;
+}
+
+void* CStdUtf::GetOneCharCodeAsUnicode(const void* src, IZ_UINT* ret, IZ_UINT* bytes)
+{
+    void* retPtr = GetOneCharCodeAsUnicode(src, ret);
+    if (ret != 0 && bytes != IZ_NULL)
+    {
+        *bytes = static_cast<IZ_UINT>(CStdUtil::GetPtrDistance((const IZ_UINT8*)src, (const IZ_UINT8*)retPtr));
+    }
+    return retPtr;
+}
+
+void* CStdUtf::GetOneCharCodeAsSJIS(const void* src, IZ_UINT* ret, IZ_UINT* bytes)
+{
+    void* retPtr = GetOneCharCodeAsSJIS(src, ret);
+    if (ret != 0 && bytes != IZ_NULL)
+    {
+        *bytes = static_cast<IZ_UINT>(CStdUtil::GetPtrDistance((const IZ_UINT8*)src, (const IZ_UINT8*)retPtr));
+    }
+    return retPtr;
 }

@@ -1,4 +1,4 @@
-#include "text/FontRendererFT.h"
+#include "text/FontRenderer.h"
 #include "text/FontHostFT.h"
 #include "text/FontHostFNT.h"
 #include "text/ParagraphGroup.h"
@@ -28,7 +28,7 @@ namespace text
         CParagraphGroup& paragraphGroup)
     {
         paragraphGroup.Layout(x, y);
-        paragraphGroup.Prepare(m_FontHost, device);
+        paragraphGroup.Prepare(device);
         paragraphGroup.Render(width, height, device);
     }
 

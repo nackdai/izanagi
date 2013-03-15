@@ -25,8 +25,9 @@ namespace text
         template <typename _T>
         static CParagraphGroup* CreateParagraphGroup(
             IMemoryAllocator* allocator,
+            IFontHost* host,
             CUString& text,
-            const void* userData)
+            void* userData)
         {
             IZ_BOOL result = IZ_TRUE;
             void* buf = ALLOC(allocator, sizeof(_T));
@@ -37,7 +38,7 @@ namespace text
 
                 instance->m_Allocator = allocator;
 
-                result = instance->Init(text, userData);
+                result = instance->Init(host, text, userData);
             }
 
             if (!result)
@@ -50,7 +51,7 @@ namespace text
 
     protected:
         CParagraphGroup();
-        virtual ~CParagraphGroup() {}
+        virtual ~CParagraphGroup();
 
         NO_COPIABLE(CParagraphGroup);
         IZ_DEFINE_INTERNAL_RELEASE();
@@ -60,9 +61,7 @@ namespace text
             IZ_UINT width,
             IZ_UINT height);
 
-        void Prepare(
-            IFontHost* host,
-            graph::CGraphicsDevice* device);
+        void Prepare(graph::CGraphicsDevice* device);
 
         void Render(
             IZ_UINT x,
@@ -70,7 +69,12 @@ namespace text
             graph::CGraphicsDevice* device);
 
     protected:
-        PURE_VIRTUAL(IZ_BOOL Init(CUString& str, const void* userData));
+        PURE_VIRTUAL(
+            IZ_BOOL Init(
+                IFontHost* host,
+                CUString& str, 
+                void* userData));
+
         void AddParagraph(CParagraph* paragraph);
        
     protected:
@@ -83,6 +87,40 @@ namespace text
 
         IZ_UINT m_LineHeight;
         IZ_UINT m_Ascent;
+    };
+
+    /**
+     */
+    class CDefaultParagraphGroup : public CParagraphGroup
+    {
+        friend class CParagraphGroup;
+
+    public:
+        static CParagraphGroup* CreateParagraphGroup(
+            IMemoryAllocator* allocator,
+            IFontHost* host,
+            CUString& text,
+            void* userData)
+        {
+            return CParagraphGroup::CreateParagraphGroup<CDefaultParagraphGroup>(
+                allocator,
+                host,
+                text,
+                userData);
+        }
+
+    private:
+        CDefaultParagraphGroup();
+        virtual ~CDefaultParagraphGroup();
+
+    private:
+        virtual IZ_BOOL Init(
+            IFontHost* host,
+            CUString& str,
+            void* userData);
+
+    private:
+        IFontHost* m_FontHost;
     };
 }    // namespace text
 }   // namespace izanagi

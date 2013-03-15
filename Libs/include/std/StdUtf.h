@@ -52,6 +52,11 @@ namespace izanagi
         static void* GetOneCharCodeAsUnicode(const void* src, IZ_UINT* ret);
         static void* GetOneCharCodeAsSJIS(const void* src, IZ_UINT* ret);
 
+        // Get a character code as specified character encode.
+        static void* GetOneCharCodeAsUTF8(const void* src, IZ_UINT* ret, IZ_UINT* bytes);
+        static void* GetOneCharCodeAsUnicode(const void* src, IZ_UINT* ret, IZ_UINT* bytes);
+        static void* GetOneCharCodeAsSJIS(const void* src, IZ_UINT* ret, IZ_UINT* bytes);
+
         /**
         * Returns whether character code is ASCII.
         */

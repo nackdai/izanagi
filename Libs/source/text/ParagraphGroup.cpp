@@ -1,6 +1,7 @@
 #include "text/ParagraphGroup.h"
 #include "text/Paragraph.h"
 #include "text/FontHost.h"
+#include "text/UString.h"
 #include "izGraph.h"
 
 namespace izanagi
@@ -14,6 +15,10 @@ namespace text
         
         m_LineHeight = 0;
         m_Ascent = 0;
+    }
+
+    CParagraphGroup::~CParagraphGroup()
+    {
     }
 
     void CParagraphGroup::Layout(
@@ -42,16 +47,14 @@ namespace text
         }
     }
 
-    void CParagraphGroup::Prepare(
-        IFontHost* host,
-        graph::CGraphicsDevice* device)
+    void CParagraphGroup::Prepare(graph::CGraphicsDevice* device)
     {
         CStdList<CParagraph>::Item* paragraphListItem = m_Paragraphs.GetTop();
         while (paragraphListItem != IZ_NULL)
         {
             CParagraph* paragraph = paragraphListItem->GetData();
 
-            paragraph->Prepare(m_LineHeight, m_Ascent, host, device);
+            paragraph->Prepare(m_LineHeight, m_Ascent, device);
 
             paragraphListItem = paragraphListItem->GetNext();
         }
@@ -76,6 +79,109 @@ namespace text
     void CParagraphGroup::AddParagraph(CParagraph* paragraph)
     {
         m_Paragraphs.AddTail(paragraph->GetListItem());
+    }
+
+    /////////////////////////////////////////////////////////
+
+    CDefaultParagraphGroup::CDefaultParagraphGroup()
+    {
+        m_FontHost = IZ_NULL;
+    }
+
+    CDefaultParagraphGroup::~CDefaultParagraphGroup()
+    {
+        SAFE_RELEASE(m_FontHost);
+    }
+
+    #define CH_LF   (0x000A)
+    #define CH_CR   (0x000D)
+    #define CH_LSEP (0x2028)
+    #define CH_PSEP (0x2029)
+
+    // 改行コード
+	// Mac OS X を含む Unix（LF）
+	// クラシック Mac OS（CR）
+	// Windows（CR + LF）
+	// ユニコード行／段落区切り（LSEP／PSEP）
+    static const IZ_UINT separators[] = {
+        CH_LF,      // LF
+        CH_CR,      // CR
+        CH_LSEP,    // LSEP
+        CH_PSEP,    // PSEP
+    };
+
+    namespace
+    {
+        inline IZ_BOOL _IsSeparator(IZ_UINT code)
+        {
+            for (size_t i = 0; i < COUNTOF(separators); i++)
+            {
+                if (separators[i] == code)
+                {
+                    return IZ_TRUE;
+                }
+            }
+
+            return IZ_FALSE;
+        }
+    }
+
+    IZ_BOOL CDefaultParagraphGroup::Init(
+        IFontHost* host,
+        CUString& str, 
+        void* userData)
+    {
+        SAFE_REPLACE(m_FontHost, host);
+
+        IZ_UINT prev = 0;
+        IZ_UINT code = 0;
+
+        IZ_BOOL isSeparated = IZ_FALSE;
+
+        const IZ_UINT8* start = str.GetTextPtr();
+
+        str.BeginIter();
+
+        for (;;)
+        {
+            code = str.GetNext();
+
+            if (prev == CH_CR && code == CH_LF)
+            {
+                // skip
+                code = str.GetNext();
+            }
+
+            prev = code;
+
+            if (isSeparated)
+            {
+                start = str.GetTextPtr();
+
+                isSeparated = IZ_FALSE;
+            }
+
+            if (_IsSeparator(code) || code == 0)
+            {
+                IZ_UINT bytes = static_cast<IZ_UINT>(str.GetIterDistance());
+
+                // TODO
+                // Create paragraph
+
+                if (code == 0)
+                {
+                    break;
+                }
+                else
+                {
+                    isSeparated = IZ_TRUE;
+                }
+            }
+        }
+
+        str.EndIter();
+
+        return IZ_TRUE;
     }
 }   // namespace text
 }   // namespace izanagi

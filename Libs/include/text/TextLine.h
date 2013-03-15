@@ -15,11 +15,40 @@ namespace izanagi
 
 namespace text
 {
+    class CUString;
+
     /**
      */
     class CLine : public CObject
     {
         friend class CParagraph;
+
+    public:
+        template <typename _T>
+        static CLine* CreateLine(
+            IMemoryAllocator* allocator,
+            IFontHost* host,
+            void* userData)
+        {
+            IZ_BOOL result = IZ_FALSE;
+            void* buf = ALLOC(allocator, sizeof(_T));
+
+            _T* instance = new(buf) _T;
+            {
+                instance->AddRef();
+
+                instance->m_Allocator = allocator;
+                SAFE_REPLACE(instance->m_FontHost, host);
+                result = instance->Init(userData);
+            }
+
+            if (!result)
+            {
+                SAFE_RELEASE(instance);
+            }
+
+            return instance;
+        }
 
     protected:
         CLine();
@@ -32,10 +61,11 @@ namespace text
         PURE_VIRTUAL(IZ_UINT GetLineWidth());
 
     protected:
+        PURE_VIRTUAL(IZ_BOOL Init(void* userData));
+
         void Prepare(
             IZ_UINT height,
             IZ_UINT ascent,
-            IFontHost* host,
             graph::CGraphicsDevice* device);
 
         PURE_VIRTUAL(
@@ -50,8 +80,7 @@ namespace text
             IZ_UINT8* dst,
             IZ_UINT x,
             IZ_UINT pitch,
-            IZ_UINT ascent,
-            IFontHost* host);
+            IZ_UINT ascent);
 
         void Clear();
 
@@ -66,9 +95,47 @@ namespace text
     protected:
         IMemoryAllocator* m_Allocator;
 
+        IFontHost* m_FontHost;
         graph::CTexture* m_Texture;
 
         CStdList<CLine>::Item m_ListItem;
+    };
+
+    /**
+     */
+    class CDefaultLine : public CLine
+    {
+        friend class CLine;
+
+    public:
+        static CLine* CreateLine(
+            IMemoryAllocator* allocator,
+            IFontHost* host,
+            void* userData)
+        {
+            CLine* ret = CLine::CreateLine<CDefaultLine>(allocator, host, userData);
+            return ret;
+        }
+
+    private:
+        CDefaultLine();
+        virtual ~CDefaultLine() {}
+
+    public:
+        virtual IZ_UINT GetLineWidth();
+
+    private:
+        virtual IZ_BOOL Init(void* userData);
+
+        virtual void Prepare(
+            IZ_UINT8* dst,
+            IZ_UINT pitch,
+            IZ_UINT ascent,
+            IFontHost* host);
+
+    private:
+        const void* m_Text;
+        IZ_UINT m_Bytes;
     };
 }    // namespace text
 }   // namespace izanagi

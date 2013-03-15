@@ -5,6 +5,48 @@ namespace izanagi
 {
 namespace text
 {
+    CUString::CUString(E_FONT_CHAR_ENCODE encode, const void* text)
+    {
+        m_Encode = encode;
+        Init(text);
+    }
+
+    CUString::CUString(E_FONT_CHAR_ENCODE encode, const void* text, IZ_UINT bytes)
+    {
+        m_Encode = encode;
+        Init(text, bytes);
+    }
+
+    void CUString::Init(const void* text)
+    {
+        
+
+        m_Text = CONST_CAST(IZ_UINT8*, void*, text);
+
+        // TODO
+        m_Bytes = 0;
+        IZ_UINT8 ch = 0;
+        IZ_UINT i = 0;
+        while  ((ch = m_Text[i++]) != 0)
+        {
+            m_Bytes++;
+        }
+
+        m_Num = 0;
+        m_Iter = IZ_NULL;
+        m_ReadBytes = 0;
+    }
+
+    void CUString::Init(const void* text, IZ_UINT bytes)
+    {
+        m_Text = CONST_CAST(IZ_UINT8*, void*, text);
+        m_Bytes = bytes;
+
+        m_Num = 0;
+        m_Iter = IZ_NULL;
+        m_ReadBytes = 0;
+    }
+
     IZ_UINT CUString::GetNum()
     {
         if (m_Num == 0)
@@ -61,46 +103,6 @@ namespace text
         return code;
     }
 
-    void* CUString::GetNextInternal(void* data, IZ_UINT* code)
-    {
-        void* ret = IZ_NULL;
-        
-        switch (m_Encode)
-        {
-        case E_FONT_CHAR_ENCODE_UTF8:
-            ret = CStdUtf::GetOneCharCodeAsUTF8(data, code);
-            break;
-        case E_FONT_CHAR_ENCODE_UNICODE:
-            ret = CStdUtf::GetOneCharCodeAsUnicode(data, code);
-            break;
-        case E_FONT_CHAR_ENCODE_SJIS:
-            ret = CStdUtf::GetOneCharCodeAsSJIS(data, code);
-            break;
-        default:
-            IZ_ASSERT(IZ_FALSE);
-            break;
-        }
-
-        return ret;
-    }
-
-    //////////////////////////////////////////
-
-    CUtf8String::CUtf8String(const void* text)
-        : CUString(E_FONT_CHAR_ENCODE_UTF8)
-    {
-        m_Text = CONST_CAST(IZ_UINT8*, void*, text);
-
-        // TODO
-        m_Bytes = 0;
-        IZ_UINT8 ch = 0;
-        IZ_UINT i = 0;
-        while  ((ch = m_Text[i++]) != 0)
-        {
-            m_Bytes++;
-        }
-    }
-
     void* Realloc(
         IMemoryAllocator* allocator, 
         void* ptr, 
@@ -110,45 +112,80 @@ namespace text
         return ret;
     }
 
-    void* CUtf8String::ConvertToUnicode(IMemoryAllocator* allocator/*= IZ_NULL*/)
+    void* CUString::ConvertToUnicode(IMemoryAllocator* allocator/*= IZ_NULL*/)
     {
-        void* dst = ALLOC(allocator, m_Bytes + 1);
-
-        CStdUtf::SFuncIfLowMemory func =
+        if (m_Encode == E_FONT_CHAR_ENCODE_UTF8)
         {
-            allocator,
-            Realloc,
-        };
+            void* dst = ALLOC(allocator, m_Bytes + 1);
 
-        CStdUtf::ConvertUtf8ToUnicode(
-            &dst,
-            m_Bytes,
-            m_Text,
-            func);
+            CStdUtf::SFuncIfLowMemory func =
+            {
+                allocator,
+                Realloc,
+            };
 
-        return dst;
+            CStdUtf::ConvertUtf8ToUnicode(
+                &dst,
+                m_Bytes,
+                m_Text,
+                func);
+
+            return dst;
+        }
+        else if (m_Encode == E_FONT_CHAR_ENCODE_SJIS)
+        {
+            IZ_ASSERT(IZ_FALSE);
+            return IZ_NULL;
+        }
+
+        return m_Text;
+    }
+
+    void* CUString::GetNextInternal(void* data, IZ_UINT* code)
+    {
+        if (m_ReadBytes > m_Bytes)
+        {
+            return 0;
+        }
+
+        void* ret = IZ_NULL;
+
+        IZ_UINT bytes = 0;
+        
+        switch (m_Encode)
+        {
+        case E_FONT_CHAR_ENCODE_UTF8:
+            ret = CStdUtf::GetOneCharCodeAsUTF8(data, code, &bytes);
+            break;
+        case E_FONT_CHAR_ENCODE_UNICODE:
+            ret = CStdUtf::GetOneCharCodeAsUnicode(data, code, &bytes);
+            break;
+        case E_FONT_CHAR_ENCODE_SJIS:
+            ret = CStdUtf::GetOneCharCodeAsSJIS(data, code, &bytes);
+            break;
+        default:
+            IZ_ASSERT(IZ_FALSE);
+            break;
+        }
+
+        m_ReadBytes += bytes;
+
+        return ret;
     }
 
     //////////////////////////////////////////
 
-    CUnicodeString::CUnicodeString(IMemoryAllocator* allocator)
-        : CUString(E_FONT_CHAR_ENCODE_UNICODE)
-    {
-        m_Allocator = allocator;
-    }
+    //////////////////////////////////////////
 
     CUnicodeString::~CUnicodeString()
     {
         FREE(m_Allocator, m_Text);
     }
 
-    IZ_BOOL CUnicodeString::Read(IInputStream* stream)
+    IZ_BOOL CUnicodeString::Read(
+        IMemoryAllocator* allocator,
+        IInputStream* stream)
     {
-        if (m_Text == IZ_NULL)
-        {
-            return IZ_FALSE;
-        }
-
         IZ_CHAR signature[4];
         stream->Read(signature, 0, 4);
 
@@ -179,32 +216,41 @@ namespace text
 
         IZ_UINT byteSize = stream->GetSize() - signatureBytes;
 
-        IZ_CHAR* src = (IZ_CHAR*)ALLOC(m_Allocator, byteSize + 1);
+        IZ_CHAR* src = (IZ_CHAR*)ALLOC(allocator, byteSize + 1);
         stream->Read(src, 0, byteSize);
         src[byteSize] = 0;
 
-        IZ_BOOL ret = Read(encode, src, byteSize);
+        IZ_BOOL ret = Read(allocator, encode, src, byteSize);
 
-        FREE(m_Allocator, src);
+        FREE(allocator, src);
 
         return ret;
     }
 
     IZ_BOOL CUnicodeString::Read(
+        IMemoryAllocator* allocator,
         E_FONT_CHAR_ENCODE encode,
         const void* src, 
         IZ_UINT bytes)
     {
         if (m_Text != IZ_NULL)
         {
-            return IZ_FALSE;
+            FREE(m_Allocator, m_Text);
+            m_Allocator = IZ_NULL;
+            m_Bytes = 0;
         }
 
-        m_Text = (IZ_UINT8*)ALLOC(m_Allocator, bytes + 1);
+        // TODO
+        // 4バイトアラインする？
+
+        m_Text = (IZ_UINT8*)ALLOC(allocator, bytes + 1);
+        m_Text[bytes] = 0;
+
+        m_Bytes = bytes;
 
         CStdUtf::SFuncIfLowMemory func =
         {
-            m_Allocator,
+            allocator,
             Realloc,
         };
 
@@ -225,33 +271,9 @@ namespace text
                 func);
         }
 
+        m_Allocator = allocator;
+
         return IZ_TRUE;
-    }
-
-    //////////////////////////////////////////
-
-    CSjisString::CSjisString(const void* text)
-        : CUString(E_FONT_CHAR_ENCODE_SJIS)
-    {
-        m_Text = CONST_CAST(IZ_UINT8*, void*, text);
-
-        // TODO
-        m_Bytes = 0;
-        IZ_UINT8 ch = 0;
-        IZ_UINT i = 0;
-        while  ((ch = m_Text[i++]) != 0)
-        {
-            m_Bytes++;
-        }
-    }
-
-    void* CSjisString::ConvertToUnicode(IMemoryAllocator* allocator/*= IZ_NULL*/)
-    {
-        // TODO
-        // It is difficult to convert to unicode from sjis without API supoorted by OS.
-
-        IZ_ASSERT(IZ_FALSE);
-        return IZ_NULL;
     }
 }    // namespace text
 }    // namespace izanagi

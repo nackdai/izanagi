@@ -15,6 +15,8 @@ namespace text
         virtual ~IFontHost() {}
 
     public:
+        PURE_VIRTUAL(E_FONT_CHAR_ENCODE GetEncodeType() const);
+
         PURE_VIRTUAL(IZ_UINT GetGlyphID(IZ_UINT code));
 
         PURE_VIRTUAL(IZ_BOOL GetGlyphMetricsByID(IZ_UINT id, SGlyphMetrics& metrics));
