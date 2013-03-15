@@ -31,7 +31,7 @@ protected:
 private:
     izanagi::text::IFontHost* m_FontHost;
 
-    izanagi::text::CGlyphCacheBase* m_Cache;
+    izanagi::text::CGlyphCache* m_Cache;
 };
 
 CFontBitmapApp::CFontBitmapApp()
@@ -67,7 +67,7 @@ IZ_BOOL CFontBitmapApp::InitInternal(
         VRETURN(m_FontHost != IZ_NULL);
     }
 
-    m_Cache = izanagi::text::CGlyphCache::CreateGlyphCache(
+    m_Cache = izanagi::text::CDefaultGlyphCache::CreateGlyphCache(
         allocator,
         device,
 #ifdef ENABLE_UTF8
