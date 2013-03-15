@@ -291,8 +291,9 @@ void CSampleFontInstance::Init(izanagi::text::IFontHost* host)
 void CSimpleTextApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
     //izanagi::text::CUtf8String str(chars, strlen(chars));
-    izanagi::text::CUnicodeString str(m_Allocator);
+    izanagi::text::CUnicodeString str;
     str.Read(
+        m_Allocator,
         izanagi::text::E_FONT_CHAR_ENCODE_UTF8,
         chars,
         strlen(chars));
@@ -303,12 +304,13 @@ void CSimpleTextApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     izanagi::CParagraphGroup* group;
     group = (izanagi::CParagraphGroup*)izanagi::text::CParagraphGroup::CreateParagraphGroup<izanagi::CParagraphGroup>(
         m_Allocator,
+        host,
         str,
         (void*)&fontInst);
 
     group->Layout(70, 100);
 
-    group->Prepare(host, device);
+    group->Prepare(device);
 
     device->Begin2D();
 
