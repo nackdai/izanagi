@@ -17,7 +17,7 @@ namespace izanagi {
     {
         friend class CEventHandlerHelper;
 
-    public:
+    protected:
         Delegate(void* object, void* func) : m_Object(object), m_Func(func) { m_Allocator = IZ_NULL; }
         Delegate(const Delegate& rhs)
         {
@@ -54,19 +54,18 @@ namespace izanagi {
     template <typename RETURN, typename ARG>
     class DelgateArg1 : public Delegate
     {
-    public:
+    protected:
         DelgateArg1(void* object, void* func) : Delegate(object, func) {}
         DelgateArg1(const DelgateArg1& rhs) : Delegate(rhs) {}
         virtual ~DelgateArg1() {}
 
+    public:
         RETURN operator()(ARG arg1)
         {
             CValue val = Execute(arg1);
             RETURN ret = val.GetValue<RETURN>();
             return ret;
         }
-
-        virtual Delegate Clone() = 0;
 
     protected:
         virtual CValue Execute(ARG arg1) = 0;
@@ -79,17 +78,16 @@ namespace izanagi {
     template <typename ARG>
     class DelgateArg1<void, ARG> : public Delegate
     {
-    public:
+    protected:
         DelgateArg1(void* object, void* func) : Delegate(object, func) {}
         DelgateArg1(const DelgateArg1& rhs) : Delegate(rhs) {}
         virtual ~DelgateArg1() {}
 
+    public:
         void operator()(ARG arg1)
         {
             Execute(arg1);
         }
-
-        virtual Delegate Clone() = 0;
 
     protected:
         virtual void Execute(ARG arg1) = 0;
@@ -102,7 +100,7 @@ namespace izanagi {
     template <typename ARG>
     class ActionDelegate : public DelgateArg1<void, ARG>
     {
-    public:
+    protected:
         ActionDelegate(void* object, void* func) : DelgateArg1(object, func) {}
         ActionDelegate(void* func) : DelgateArg1(IZ_NULL, func) {}
         ActionDelegate(const ActionDelegate& rhs) : DelgateArg1(rhs) {}
@@ -126,15 +124,10 @@ namespace izanagi {
 
         IZ_DECL_PLACEMENT_NEW();
 
-    public:
+    protected:
         ActionDelegateInstance(O* object, FUNC func) : ActionDelegate(object, &func), m_Func(func) {}
         ActionDelegateInstance(const ActionDelegateInstance& rhs) : ActionDelegate(rhs) { m_Func = rhs.m_Func; }
         virtual ~ActionDelegateInstance() {}
-
-        virtual Delegate Clone()
-        {
-            return ActionDelegateInstance(*this);
-        }
 
     protected:
         virtual void Execute(ARG arg1)
@@ -164,15 +157,10 @@ namespace izanagi {
 
         IZ_DECL_PLACEMENT_NEW();
 
-    public:
+    protected:
         ActionDelegateStatic(FUNC func) : ActionDelegate(func) {}
         ActionDelegateStatic(const ActionDelegateStatic& rhs) : ActionDelegate(rhs) {}
         virtual ~ActionDelegateStatic() {}
-
-        virtual Delegate Clone()
-        {
-            return ActionDelegateStatic(*this);
-        }
 
     protected:
         virtual void Execute(ARG arg1)
@@ -192,7 +180,7 @@ namespace izanagi {
     template <typename RETURN, typename ARG>
     class FuncDelegate : public DelgateArg1<RETURN, ARG>
     {
-    public:
+    protected:
         FuncDelegate(void* object, void* func) : DelgateArg1(object, func) {}
         FuncDelegate(void* func) : DelgateArg1(IZ_NULL, func) {}
         FuncDelegate(const FuncDelegate& rhs) : DelgateArg1(rhs) {}
@@ -217,15 +205,10 @@ namespace izanagi {
 
         IZ_DECL_PLACEMENT_NEW();
 
-    public:
+    protected:
         FuncDelegateInstance(O* object, FUNC func) : FuncDelegate(object, &func), m_Func(func) {}
         FuncDelegateInstance(const FuncDelegateInstance& rhs) : FuncDelegate(rhs) { m_Func = rhs.m_Func; }
         virtual ~FuncDelegateInstance() {}
-
-        virtual Delegate Clone()
-        {
-            return FuncDelegateInstance(*this);
-        }
 
     protected:
         virtual CValue Execute(ARG arg1)
@@ -257,15 +240,10 @@ namespace izanagi {
 
         IZ_DECL_PLACEMENT_NEW();
 
-    public:
+    protected:
         FuncDelegateStatic(FUNC func) : FuncDelegate(func) {}
         FuncDelegateStatic(const FuncDelegateStatic& rhs) : FuncDelegate(rhs) {}
         virtual ~FuncDelegateStatic() {}
-
-        virtual Delegate Clone()
-        {
-            return FuncDelegateStatic(*this);
-        }
 
     protected:
         virtual CValue Execute(ARG arg1)
@@ -509,6 +487,11 @@ namespace izanagi {
     class CStdEvent : public CStdEventBaseProxy<RETURN, ARG>
     {
     public:
+        CStdEvent()
+        {
+            m_DeleteFunc = IZ_NULL;
+        }
+
         virtual ~CStdEvent()
         {
             CStdList<DELEGATE>::Item* item = m_List.GetTop();
@@ -517,13 +500,21 @@ namespace izanagi {
                 CStdList<DELEGATE>::Item* next = item->GetNext();
                 DELEGATE* data = item->GetData();
                 m_List.Remove((CStdListEx<DELEGATE>::Item*)item);
-                delete data;
+
+                if (m_DeleteFunc != IZ_NULL)
+                {
+                    (*m_DeleteFunc)(data);
+                }
+
                 item = next;
             }
         }
 
-        void Init(IMemoryAllocator* allocator)
+        void Init(
+            IMemoryAllocator* allocator,
+            void (*deleteFunc)(DELEGATE*))
         {
+            m_DeleteFunc = deleteFunc;
             m_List.Init(allocator);
         }
 
@@ -558,6 +549,7 @@ namespace izanagi {
 
     private:
         CStdListEx<DELEGATE> m_List;
+        void (*m_DeleteFunc)(DELEGATE*);
     };
 
     /**
@@ -566,14 +558,28 @@ namespace izanagi {
     class CStdEventSTL : public CStdEventBaseProxy<RETURN, ARG>
     {
     public:
+        CStdEventSTL()
+        {
+            m_DeleteFunc = IZ_NULL;
+        }
+
         virtual ~CStdEventSTL()
         {
             IZ_UINT count = GetCount();
             for (IZ_UINT i = 0; i < count; i++)
             {
                 DELEGATE* delegate = Get(i);
-                delete delegate;
+
+                if (m_DeleteFunc != IZ_NULL)
+                {
+                    (*m_DeleteFunc)(data);
+                }
             }
+        }
+
+        void Init(void (*deleteFunc)(DELEGATE*))
+        {
+            m_DeleteFunc = deleteFunc;
         }
 
         virtual IZ_UINT GetCount()
@@ -628,6 +634,7 @@ namespace izanagi {
 
     private:
         std::list<DELEGATE, izanagi::STLMemoryAllocator<DELEGATE> > m_List;
+        void (*m_DeleteFunc)(DELEGATE*);
     };
 }   // namespace izanagi
 
