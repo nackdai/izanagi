@@ -134,6 +134,11 @@ __EXIT__:
         return IZ_TRUE;
     }
 
+    E_FONT_CHAR_ENCODE CFontHostFNT::GetEncodeType() const
+    {
+        return m_Header.charEncode;
+    }
+
     // ƒ}ƒbƒvî•ñæ“¾
     const S_FNT_MAP* CFontHostFNT::GetFontMap(IZ_UINT code)
     {

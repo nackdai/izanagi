@@ -2,6 +2,7 @@
 #define __IZANAGI_TEXT_USTRING_H__
 
 #include "izDefs.h"
+#include "izStd.h"
 #include "FNTFormat.h"
 
 namespace izanagi
@@ -14,21 +15,29 @@ namespace text
      */
     class CUString
     {
-    protected:
-        CUString::CUString() {}
+    public:
+        CUString() {}
+        CUString(E_FONT_CHAR_ENCODE encode, const void* text);
+        CUString(E_FONT_CHAR_ENCODE encode, const void* text, IZ_UINT bytes);
 
         CUString(E_FONT_CHAR_ENCODE encode)
         {
             m_Encode = encode;
-            m_Num = 0;
+
             m_Text = IZ_NULL;
             m_Bytes = 0;
+
+            m_Num = 0;
             m_Iter = IZ_NULL;
+            m_ReadBytes = 0;
         }
         virtual ~CUString() {}
 
     public:
-        virtual IZ_UINT GetNum();
+        void Init(const void* text);
+        void Init(const void* text, IZ_UINT bytes);
+
+        IZ_UINT GetNum();
 
         IZ_UINT GetOne(IZ_UINT index)
         {
@@ -47,6 +56,7 @@ namespace text
         void BeginIter()
         {
             m_Iter = m_Text;
+            m_ReadBytes = 0;
         }
 
         void EndIter()
@@ -70,12 +80,32 @@ namespace text
             return ret;
         }
 
-        virtual IZ_UINT GetNextAsUnicode();
+        IZ_UINT GetNextAsUnicode();
 
-        virtual void* ConvertToUnicode(IMemoryAllocator* allocator = IZ_NULL) { return m_Text; }
+        void* ConvertToUnicode(IMemoryAllocator* allocator = IZ_NULL);
+
+        const IZ_UINT8* GetTextPtr() const
+        {
+            return m_Text;
+        }
+
+        const IZ_UINT8* GetIterPtr() const
+        {
+            return reinterpret_cast<IZ_UINT8*>(m_Iter);
+        }
+
+        IZ_UINT64 GetIterDistance() const
+        {
+            IZ_UINT64 ret = CStdUtil::GetPtrDistance(
+                (const IZ_UINT8*)m_Text, 
+                (const IZ_UINT8*)m_Iter);
+            return ret;
+        }
+
+        E_FONT_CHAR_ENCODE GetCharCode() const { return m_Encode; }
 
     protected:
-         virtual void* GetNextInternal(void* data, IZ_UINT* code);
+         void* GetNextInternal(void* data, IZ_UINT* code);
 
     protected:
         E_FONT_CHAR_ENCODE m_Encode;
@@ -86,6 +116,7 @@ namespace text
         IZ_UINT m_Num;
 
         void* m_Iter;
+        IZ_UINT m_ReadBytes;
     };
 
     /**
@@ -93,17 +124,20 @@ namespace text
     class CUtf8String : public CUString
     {
     public:
-        CUtf8String(const void* text, IZ_UINT bytes)
+        CUtf8String()
             : CUString(E_FONT_CHAR_ENCODE_UTF8)
         {
-            m_Text = CONST_CAST(IZ_UINT8*, void*, text);
-            m_Bytes = bytes;
         }
-        CUtf8String(const void* text);
-        virtual ~CUtf8String() {}
+        CUtf8String(const void* text, IZ_UINT bytes)
+            : CUString(E_FONT_CHAR_ENCODE_UTF8, text, bytes)
+        {
+        }
+        CUtf8String(const void* text)
+            : CUString(E_FONT_CHAR_ENCODE_UTF8, text)
+        {
+        }
 
-    public:
-        virtual void* ConvertToUnicode(IMemoryAllocator* allocator = IZ_NULL);
+        virtual ~CUtf8String() {}
     };
 
     /**
@@ -111,12 +145,30 @@ namespace text
     class CUnicodeString : public CUString
     {
     public:
-        CUnicodeString(IMemoryAllocator* allocator);
-        ~CUnicodeString();
+        CUnicodeString()
+            : CUString(E_FONT_CHAR_ENCODE_UNICODE)
+        {
+            m_Allocator = IZ_NULL;
+        }
+        CUnicodeString(const void* text, IZ_UINT bytes)
+            : CUString(E_FONT_CHAR_ENCODE_UNICODE, text, bytes)
+        {
+            m_Allocator = IZ_NULL;
+        }
+        CUnicodeString(const void* text)
+            : CUString(E_FONT_CHAR_ENCODE_UNICODE, text)
+        {
+            m_Allocator = IZ_NULL;
+        }
+
+        virtual ~CUnicodeString();
 
     public:
-        IZ_BOOL Read(IInputStream* stream);
         IZ_BOOL Read(
+            IMemoryAllocator* allocator,
+            IInputStream* stream);
+        IZ_BOOL Read(
+            IMemoryAllocator* allocator,
             E_FONT_CHAR_ENCODE encode,
             const void* src, 
             IZ_UINT bytes);
@@ -130,17 +182,20 @@ namespace text
     class CSjisString : public CUString
     {
     public:
-        CSjisString(const void* text, IZ_UINT bytes)
+        CSjisString()
             : CUString(E_FONT_CHAR_ENCODE_SJIS)
         {
-            m_Text = CONST_CAST(IZ_UINT8*, void*, text);
-            m_Bytes = bytes;
         }
-        CSjisString(const void* text);
-        virtual ~CSjisString() {}
+        CSjisString(const void* text, IZ_UINT bytes)
+            : CUString(E_FONT_CHAR_ENCODE_SJIS, text, bytes)
+        {
+        }
+        CSjisString(const void* text)
+            : CUString(E_FONT_CHAR_ENCODE_SJIS, text)
+        {
+        }
 
-    public:
-        virtual void* ConvertToUnicode(IMemoryAllocator* allocator = IZ_NULL);
+        virtual ~CSjisString() {}
     };
 }    // namespace text
 }   // namespace izanagi
