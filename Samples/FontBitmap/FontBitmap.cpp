@@ -85,7 +85,7 @@ IZ_BOOL CFontBitmapApp::InitInternal(
         m_Cache[i] = izanagi::text::CDefaultGlyphCache::CreateGlyphCache(
             allocator,
             device,
-            parameters[i].charcode,
+            m_FontHost[i]->GetEncodeType(),
             32,
             m_FontHost[i]->GetPixelSize(),
             IZ_FALSE);
