@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{1302380f-871c-4532-a956-eb35cd0f7c68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{5dc6e820-3bc4-4eda-8251-ee30717f295a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="asset">
+      <UniqueIdentifier>{ea4ae41f-dd67-4bca-8e40-c842b4c61f19}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\FontFreeType\FontUTF8.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\FontFreeType\FontFreeType.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\..\Media\mikachan.ttf">
+      <Filter>asset</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>
