@@ -4,8 +4,6 @@
 #include "FontUTF8.h"
 #include "FontSJIS.h"
 
-//#define ENABLE_UTF8
-
 class CFontBitmapApp : public izanagi::sample::CSampleApp
 {
 public:
@@ -29,15 +27,37 @@ protected:
     virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device);
 
 private:
-    izanagi::text::IFontHost* m_FontHost;
+    izanagi::text::IFontHost* m_FontHost[2];
 
-    izanagi::text::CGlyphCache* m_Cache;
+    izanagi::text::CGlyphCache* m_Cache[2];
+};
+
+struct
+{
+    const void* text;
+    izanagi::text::E_FONT_CHAR_ENCODE charcode;
+    const char* file;
+} parameters[2] =
+{
+    {
+        fontUTF8,
+        izanagi::text::E_FONT_CHAR_ENCODE_UTF8,
+        "./data/FontSample_Utf8.fnt",
+    },
+    {
+        fontSJIS,
+        izanagi::text::E_FONT_CHAR_ENCODE_SJIS,
+        "./data/FontSample_Sjis.fnt"
+    },
 };
 
 CFontBitmapApp::CFontBitmapApp()
 {
-    m_FontHost = IZ_NULL;
-    m_Cache = IZ_NULL;
+    m_FontHost[0] = IZ_NULL;
+    m_FontHost[1] = IZ_NULL;
+
+    m_Cache[0] = IZ_NULL;
+    m_Cache[1] = IZ_NULL;
 }
 
 CFontBitmapApp::~CFontBitmapApp()
@@ -50,34 +70,27 @@ IZ_BOOL CFontBitmapApp::InitInternal(
     izanagi::graph::CGraphicsDevice* device,
     izanagi::sample::CSampleCamera& camera)
 {
-    // UTF8
+    for (IZ_UINT i = 0; i < 2; i++)
     {
         izanagi::CFileInputStream in;
-#ifdef ENABLE_UTF8
-        VRETURN(in.Open("./data/FontSample_Utf8.fnt"));
-#else
-        VRETURN(in.Open("./data/FontSample_Sjis.fnt"));
-#endif
+
+        VRETURN(in.Open(parameters[i].file));
 
         // FNT読み込み
-        m_FontHost = izanagi::text::CFontHostFNT::CreateFontHostFNT(
+        m_FontHost[i] = izanagi::text::CFontHostFNT::CreateFontHostFNT(
             allocator,
             &in);
+        VRETURN(m_FontHost[i] != IZ_NULL);
 
-        VRETURN(m_FontHost != IZ_NULL);
+        m_Cache[i] = izanagi::text::CDefaultGlyphCache::CreateGlyphCache(
+            allocator,
+            device,
+            parameters[i].charcode,
+            32,
+            m_FontHost[i]->GetPixelSize(),
+            IZ_FALSE);
+        VRETURN(m_Cache[i] != IZ_NULL);
     }
-
-    m_Cache = izanagi::text::CDefaultGlyphCache::CreateGlyphCache(
-        allocator,
-        device,
-#ifdef ENABLE_UTF8
-        izanagi::text::E_FONT_CHAR_ENCODE_UTF8,
-#else
-        izanagi::text::E_FONT_CHAR_ENCODE_SJIS,
-#endif
-        32,
-        m_FontHost->GetPixelSize(),
-        IZ_FALSE);
 
     return IZ_TRUE;
 }
@@ -85,82 +98,90 @@ IZ_BOOL CFontBitmapApp::InitInternal(
 // 解放.
 void CFontBitmapApp::ReleaseInternal()
 {
-    SAFE_RELEASE(m_FontHost);
-    SAFE_RELEASE(m_Cache);
+    for (IZ_UINT i = 0; i < 2; i++)
+    {
+        SAFE_RELEASE(m_FontHost[i]);
+        SAFE_RELEASE(m_Cache[i]);
+    }
 }
 
 // 更新.
 void CFontBitmapApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
-    m_Cache->BeginRegister();
+    for (IZ_UINT i = 0; i < 2; i++)
+    {
+        m_Cache[i]->BeginRegister();
 
-#ifdef ENABLE_UTF8
-    izanagi::text::CUtf8String str(fontUTF8);
-#else
-    izanagi::text::CSjisString str(fontSJIS);
-#endif
-    m_Cache->Register(&str, m_FontHost);
+        izanagi::text::CUString str(
+            parameters[i].charcode,
+            parameters[i].text);
 
-    m_Cache->EndRegister();
+        m_Cache[i]->Register(&str, m_FontHost[i]);
+
+        m_Cache[i]->EndRegister();
+    }
 }
 
 // 描画.
 void CFontBitmapApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
-    void* tmp = CONST_CAST(void*, char*, fontUTF8);
-
-#ifdef ENABLE_UTF8
-    izanagi::text::CUtf8String str(fontUTF8);
-#else
-    izanagi::text::CSjisString str(fontSJIS);
-#endif
-
-    m_Cache->Prepare(device);
-
     if (device->Begin2D()) {
         // フォント描画
 
-        IZ_FLOAT width = device->GetTexture(0)->GetWidth();
-        IZ_FLOAT height = device->GetTexture(0)->GetHeight();
-
-        IZ_UINT posX = 100;
-        IZ_UINT posY = 100;
-
-        IZ_UINT code = 0;
-
-        const IZ_UINT baseline = 16;
-
-        str.BeginIter();
-
-        while ((code = str.GetNext()) != 0)
+        for (IZ_UINT i = 0; i < 2; i++)
         {
-            izanagi::text::SGlyphCacheItem* item = m_Cache->FindCache(code);
+            izanagi::text::CUString str(
+                parameters[i].charcode,
+                parameters[i].text);
 
-            if (item == IZ_NULL)
+            m_Cache[i]->Prepare(device);
+
+            IZ_FLOAT width = device->GetTexture(0)->GetWidth();
+            IZ_FLOAT height = device->GetTexture(0)->GetHeight();
+
+            IZ_UINT posX = 100;
+            IZ_UINT posY = 100 * (i + 1);
+
+            IZ_UINT code = 0;
+
+            const IZ_UINT baseline = 16;
+
+            str.BeginIter();
+
+            while ((code = str.GetNext()) != 0)
             {
+                izanagi::text::SGlyphCacheItem* item = m_Cache[i]->FindCache(code);
+
+                if (item == IZ_NULL)
+                {
+                    if (code == 0x20)
+                    {
+                        posX += 10;
+                    }
+                }
+                else
+                {
+                    IZ_FLOAT left = item->rect.left / width;
+                    IZ_FLOAT right = item->rect.right / width;
+                    IZ_FLOAT top = item->rect.top / height;
+                    IZ_FLOAT bottom = item->rect.bottom / height;
+
+                    IZ_UINT w = item->rect.Width();
+                    IZ_UINT h = item->rect.Height();
+
+                    IZ_UINT x = posX + item->leftOffset;
+                    IZ_UINT y = posY + baseline - item->metrics.bearingY;
+
+                    device->Draw2DSprite(
+                        izanagi::CFloatRect(left, top, right, bottom),
+                        izanagi::CIntRect(x, y, x + w, y + h));
+
+                    posX += item->metrics.advance;
+                }
             }
-            else
-            {
-                IZ_FLOAT left = item->rect.left / width;
-                IZ_FLOAT right = item->rect.right / width;
-                IZ_FLOAT top = item->rect.top / height;
-                IZ_FLOAT bottom = item->rect.bottom / height;
 
-                IZ_UINT w = item->rect.Width();
-                IZ_UINT h = item->rect.Height();
-
-                IZ_UINT x = posX + item->leftOffset;
-                IZ_UINT y = posY + baseline - item->metrics.bearingY;
-
-                device->Draw2DSprite(
-                    izanagi::CFloatRect(left, top, right, bottom),
-                    izanagi::CIntRect(x, y, x + w, y + h));
-
-                posX += item->metrics.advance;
-            }
+            str.EndIter();
         }
-
-        str.EndIter();
 
         device->End2D();
     }
