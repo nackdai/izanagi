@@ -25,15 +25,23 @@ protected:
     // 描画.
     virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device);
 
+    virtual IZ_BOOL OnKeyDown(IZ_UINT nChar);
+
 private:
     izanagi::text::IFontHost* m_FontHost;
     izanagi::text::CParagraphGroup* m_Paragraphs;
+
+    IZ_UINT m_Width;
+    IZ_UINT m_Height;
 };
 
 CTextParagraphApp::CTextParagraphApp()
 {
     m_FontHost = IZ_NULL;
     m_Paragraphs = IZ_NULL;
+
+    m_Width = 100;
+    m_Height = 200;
 }
 
 CTextParagraphApp::~CTextParagraphApp()
@@ -80,7 +88,7 @@ void CTextParagraphApp::ReleaseInternal()
 // 更新.
 void CTextParagraphApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
-    m_Paragraphs->Layout(100, 200);
+    m_Paragraphs->Layout(m_Width, m_Height);
 }
 
 // 描画.
@@ -93,9 +101,52 @@ void CTextParagraphApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
         m_Paragraphs->Prepare(device);
         m_Paragraphs->Render(100, 100, device);
+
+        izanagi::CDebugFont* debugFont = GetDebugFont();
+
+        debugFont->Begin(0, 40);
+        debugFont->DBPrint(
+            0xffffffff,
+            "width[%d] height[%d]",
+            m_Width, m_Height);
+        debugFont->End();
         
         device->End2D();
     }
+}
+
+IZ_BOOL CTextParagraphApp::OnKeyDown(IZ_UINT nChar)
+{
+    if (nChar == VK_RIGHT)
+    {
+        if (m_Width < 1000)
+        {
+            m_Width += 10;
+        }
+    }
+    else if (nChar == VK_LEFT)
+    {
+        if (m_Width > 50)
+        {
+            m_Width -= 10;
+        }
+    }
+    else if (nChar == VK_UP)
+    {
+        if (m_Height < 500)
+        {
+            m_Height += 10;
+        }
+    }
+    else if (nChar == VK_DOWN)
+    {
+        if (m_Height > 50)
+        {
+            m_Height -= 10;
+        }
+    }
+
+    return IZ_TRUE;
 }
 
 static const IZ_UINT BUF_SIZE = 4 * 1024 * 1024;
