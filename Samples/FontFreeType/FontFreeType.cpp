@@ -84,9 +84,7 @@ void CFontFreeTypeApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
     m_Cache->BeginRegister();
 
-    izanagi::text::CUString str(
-        izanagi::text::E_FONT_CHAR_ENCODE_UTF8,
-        fontUTF8);
+    izanagi::text::CUtf8String str(fontUTF8);
 
     m_Cache->Register(&str, m_FontHost);
 
@@ -99,9 +97,7 @@ void CFontFreeTypeApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     if (device->Begin2D()) {
         // フォント描画
 
-        izanagi::text::CUString str(
-            izanagi::text::E_FONT_CHAR_ENCODE_UTF8,
-            fontUTF8);
+        izanagi::text::CUtf8String str(fontUTF8);
 
         m_Cache->Prepare(device);
 
@@ -170,7 +166,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     int ret = SampleMain(
         hInstance,
         &app,
-        "FontBitmap",
+        "FontFreeType",
         SCREEN_WIDTH, SCREEN_HEIGHT,
         BUF, BUF_SIZE,
         GFX_BUF, GFX_BUF_SIZE);
