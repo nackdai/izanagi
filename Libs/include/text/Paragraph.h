@@ -73,6 +73,8 @@ namespace text
 
         void Layout(IZ_UINT width);
 
+        IZ_UINT GetHeight();
+
         virtual void BeginCreateLine() {}
         virtual void EndCreateLine() {}
 
@@ -83,13 +85,14 @@ namespace text
 
         void Prepare(
             IZ_UINT height,
+            IZ_UINT lineHeight,
             IZ_UINT ascent,
             graph::CGraphicsDevice* device);
 
         IZ_INT Render(
+            IZ_UINT height,
             IZ_INT x,
             IZ_INT y,
-            IZ_UINT height,
             graph::CGraphicsDevice* device);
 
         void Clear();

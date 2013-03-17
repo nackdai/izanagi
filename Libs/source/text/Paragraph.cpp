@@ -38,6 +38,23 @@ namespace text
         }
     }
 
+    IZ_UINT CParagraph::GetHeight()
+    {
+        IZ_UINT height = 0;
+
+        CStdList<CLine>::Item* lineListItem = m_LineList.GetTop();
+        while (lineListItem != IZ_NULL)
+        {
+            CLine* line = lineListItem->GetData();
+
+            height += line->GetLineHeight();
+
+            lineListItem = lineListItem->GetNext();
+        }
+
+        return height;
+    }
+
     void CParagraph::ReleaseLines()
     {
         CStdList<CLine>::Item* lineListItem = m_LineList.GetTop();
@@ -57,33 +74,52 @@ namespace text
 
     void CParagraph::Prepare(
         IZ_UINT height,
+        IZ_UINT lineHeight,
         IZ_UINT ascent,
         graph::CGraphicsDevice* device)
     {
+        IZ_UINT allHeight = 0;
+
         CStdList<CLine>::Item* lineListItem = m_LineList.GetTop();
         while (lineListItem != IZ_NULL)
         {
+            if (allHeight + lineHeight > height)
+            {
+                break;
+            }
+
             CLine* line = lineListItem->GetData();
 
-            line->Prepare(height, ascent, device);
+            line->Prepare(lineHeight, ascent, device);
+            allHeight += lineHeight;
 
             lineListItem = lineListItem->GetNext();
         }
     }
 
     IZ_INT CParagraph::Render(
+        IZ_UINT height,
         IZ_INT x,
         IZ_INT y,
-        IZ_UINT height,
         graph::CGraphicsDevice* device)
     {
+        IZ_UINT allHeight = 0;
+
         CStdList<CLine>::Item* listItem = this->m_LineList.GetTop();
         while (listItem != IZ_NULL)
         {
             CLine* line = listItem->GetData();
+            IZ_UINT lineHeight = line->GetLineHeight();
+
+            if (allHeight + lineHeight > height)
+            {
+                break;
+            }
 
             line->Render(x, y, device);
-            y += height;
+
+            y += lineHeight;
+            allHeight += lineHeight;
 
             listItem = listItem->GetNext();
         }

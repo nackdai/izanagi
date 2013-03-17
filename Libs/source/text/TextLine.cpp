@@ -13,12 +13,18 @@ namespace text
         m_ListItem.Init(this);
         m_FontHost = IZ_NULL;
         m_Texture = IZ_NULL;
+        m_Height = 0;
     }
 
     CLine::~CLine()
     {
         SAFE_RELEASE(m_FontHost);
         SAFE_RELEASE(m_Texture);
+    }
+
+    IZ_UINT CLine::GetLineHeight()
+    {
+        return m_Height;
     }
 
     void CLine::Prepare(
@@ -28,6 +34,7 @@ namespace text
     {
         if (m_Texture == IZ_NULL)
         {
+            m_Height = height;
             IZ_UINT width = GetLineWidth();
 
             if (width > 0)

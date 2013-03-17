@@ -60,6 +60,8 @@ namespace text
     public:
         PURE_VIRTUAL(IZ_UINT GetLineWidth());
 
+        IZ_UINT GetLineHeight();
+
     protected:
         PURE_VIRTUAL(IZ_BOOL Init(void* userData));
 
@@ -97,6 +99,8 @@ namespace text
 
         IFontHost* m_FontHost;
         graph::CTexture* m_Texture;
+
+        IZ_UINT m_Height;
 
         CStdList<CLine>::Item m_ListItem;
     };

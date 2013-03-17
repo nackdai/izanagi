@@ -52,16 +52,31 @@ namespace text
 
             paragraphListItem = paragraphListItem->GetNext();
         }
+
+        m_Width = width;
     }
 
     void CParagraphGroup::Prepare(graph::CGraphicsDevice* device)
     {
+        IZ_UINT prevHeight = 0;
+
         CStdList<CParagraph>::Item* paragraphListItem = m_Paragraphs.GetTop();
         while (paragraphListItem != IZ_NULL)
         {
+            if (m_Height < prevHeight)
+            {
+                break;
+            }
+
             CParagraph* paragraph = paragraphListItem->GetData();
 
-            paragraph->Prepare(m_LineHeight, m_Ascent, device);
+            paragraph->Prepare(
+                m_Height - prevHeight,
+                m_LineHeight, 
+                m_Ascent, 
+                device);
+
+            prevHeight += paragraph->GetHeight();
 
             paragraphListItem = paragraphListItem->GetNext();
         }
@@ -72,14 +87,26 @@ namespace text
         IZ_INT y,
         graph::CGraphicsDevice* device)
     {
+        IZ_UINT prevHeight = 0;
         IZ_INT posY = y;
 
         CStdList<CParagraph>::Item* listItem = m_Paragraphs.GetTop();
         while (listItem != IZ_NULL)
         {
+            if (m_Height < prevHeight)
+            {
+                break;
+            }
+
             CParagraph* paragraph = listItem->GetData();
 
-            posY = paragraph->Render(x, posY, m_LineHeight, device);
+            posY = paragraph->Render(
+                m_Height - prevHeight,
+                x,
+                posY,
+                device);
+
+            prevHeight += paragraph->GetHeight();
 
             listItem = listItem->GetNext();
         }
