@@ -27,9 +27,9 @@ namespace text
         IZ_UINT width, IZ_UINT height,
         CParagraphGroup& paragraphGroup)
     {
-        paragraphGroup.Layout(x, y);
+        paragraphGroup.Layout(width, height);
         paragraphGroup.Prepare(device);
-        paragraphGroup.Render(width, height, device);
+        paragraphGroup.Render(x, y, device);
     }
 
     void CFontRenderer::Render(
