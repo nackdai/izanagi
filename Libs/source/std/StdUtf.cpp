@@ -425,34 +425,44 @@ __EXIT__:
 void* CStdUtf::GetOneCharCodeAsUnicode(const void* src, IZ_UINT* ret)
 {
     IZ_ASSERT(src != IZ_NULL);
-    IZ_UINT16* pSrc = CONST_CAST(IZ_UINT16*, void*, src);
+    IZ_UINT8* pSrc = CONST_CAST(IZ_UINT8*, void*, src);
 
     // If ret is NULL, nothing is done.
     VRETURN_VAL(ret != IZ_NULL, pSrc);
 
     *ret = 0;
 
-    IZ_UINT16 ch = *(pSrc++);
+    IZ_UINT8 ch = *pSrc;
 
     if (ch == 0) {
-        goto __EXIT__;
+        return pSrc;
     }
 
-    if (_IsSurrogate(ch)){
-        // Lower Surrogate
-        IZ_UINT16 lower = ch;
+    if (IsAscii(ch)
+        || IsSpace(ch))
+    {
+        pSrc++;
+        *ret = ch;
+        return pSrc;
+    }
 
-        IZ_UINT16 upper = *(pSrc++);
+    IZ_UINT16* uniPtr = reinterpret_cast<IZ_UINT16*>(pSrc);
+    IZ_UINT16 uniChar = *(uniPtr++);
+
+    if (_IsSurrogate(uniChar)){
+        // Lower Surrogate
+        IZ_UINT16 lower = uniChar;
+
+        IZ_UINT16 upper = *(uniPtr++);
         IZ_ASSERT(_IsSurrogate(upper));
 
         *ret = _ConvertFromSurrogate(upper, lower);
     }
     else {
-        *ret = ch;
+        *ret = uniChar;
     }
 
-__EXIT__:
-    return pSrc;
+    return uniPtr;
 }
 
 /**
