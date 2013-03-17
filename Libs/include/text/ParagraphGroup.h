@@ -64,8 +64,8 @@ namespace text
         void Prepare(graph::CGraphicsDevice* device);
 
         void Render(
-            IZ_UINT x,
-            IZ_UINT y,
+            IZ_INT x,
+            IZ_INT y,
             graph::CGraphicsDevice* device);
 
     protected:

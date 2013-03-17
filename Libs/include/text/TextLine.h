@@ -85,8 +85,8 @@ namespace text
         void Clear();
 
         void Render(
-            IZ_UINT x,
-            IZ_UINT y,
+            IZ_INT x,
+            IZ_INT y,
             graph::CGraphicsDevice* device);
 
     private:
@@ -134,6 +134,7 @@ namespace text
             IFontHost* host);
 
     private:
+        E_FONT_CHAR_ENCODE m_Encode;
         const void* m_Text;
         IZ_UINT m_Bytes;
     };

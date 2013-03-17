@@ -19,6 +19,13 @@ namespace text
 
     CParagraphGroup::~CParagraphGroup()
     {
+        CStdList<CParagraph>::Item* item = m_Paragraphs.GetTop();
+        while (item != IZ_NULL)
+        {
+            CParagraph* paragraph = item->GetData();
+            item = item->GetNext();
+            SAFE_RELEASE(paragraph);
+        }
     }
 
     void CParagraphGroup::Layout(
@@ -61,16 +68,18 @@ namespace text
     }
 
     void CParagraphGroup::Render(
-        IZ_UINT x,
-        IZ_UINT y,
+        IZ_INT x,
+        IZ_INT y,
         graph::CGraphicsDevice* device)
     {
+        IZ_INT posY = y;
+
         CStdList<CParagraph>::Item* listItem = m_Paragraphs.GetTop();
         while (listItem != IZ_NULL)
         {
             CParagraph* paragraph = listItem->GetData();
 
-            paragraph->Render(x, y, m_LineHeight, device);
+            posY = paragraph->Render(x, posY, m_LineHeight, device);
 
             listItem = listItem->GetNext();
         }
@@ -133,17 +142,28 @@ namespace text
     {
         SAFE_REPLACE(m_FontHost, host);
 
+        m_LineHeight = m_FontHost->GetPixelSize();
+        m_Ascent = m_FontHost->GetAscender();
+
         IZ_UINT prev = 0;
         IZ_UINT code = 0;
 
         IZ_BOOL isSeparated = IZ_FALSE;
 
         const IZ_UINT8* start = str.GetTextPtr();
+        IZ_UINT lastPos = 1;
 
         str.BeginIter();
 
         for (;;)
         {
+            if (isSeparated)
+            {
+                start = str.GetIterPtr();
+
+                isSeparated = IZ_FALSE;
+            }
+
             code = str.GetNext();
 
             if (prev == CH_CR && code == CH_LF)
@@ -154,19 +174,21 @@ namespace text
 
             prev = code;
 
-            if (isSeparated)
-            {
-                start = str.GetTextPtr();
-
-                isSeparated = IZ_FALSE;
-            }
-
             if (_IsSeparator(code) || code == 0)
             {
-                IZ_UINT bytes = static_cast<IZ_UINT>(str.GetIterDistance());
+                IZ_UINT pos = static_cast<IZ_UINT>(str.GetIterDistance());
+                IZ_UINT bytes = pos - lastPos;
+                lastPos = pos;
 
-                // TODO
-                // Create paragraph
+                CParagraph* paragraph = CDefaultParagraph::CreateParagraph(
+                    m_Allocator,
+                    host,
+                    str.GetCharCode(),
+                    start,
+                    bytes,
+                    userData);
+
+                AddParagraph(paragraph);
 
                 if (code == 0)
                 {

@@ -16,7 +16,7 @@ namespace text
     class CUString
     {
     public:
-        CUString() {}
+        CUString();
         CUString(E_FONT_CHAR_ENCODE encode, const void* text);
         CUString(E_FONT_CHAR_ENCODE encode, const void* text, IZ_UINT bytes);
 
@@ -36,6 +36,9 @@ namespace text
     public:
         void Init(const void* text);
         void Init(const void* text, IZ_UINT bytes);
+
+        void Init(E_FONT_CHAR_ENCODE encode, const void* text);
+        void Init(E_FONT_CHAR_ENCODE encode, const void* text, IZ_UINT bytes);
 
         IZ_UINT GetNum();
 
@@ -64,22 +67,10 @@ namespace text
             m_Iter = IZ_NULL;
         }
 
-        IZ_UINT GetNext()
-        {
-            IZ_UINT ret = 0;
+        IZ_UINT GetCurrent();
+        IZ_UINT GetCurrentAsUnicode();
 
-            if (m_Iter != IZ_NULL)
-            {
-                m_Iter = GetNextInternal(m_Iter, &ret);
-                if (ret == 0)
-                {
-                    m_Iter = IZ_NULL;
-                }
-            }
-
-            return ret;
-        }
-
+        IZ_UINT GetNext();
         IZ_UINT GetNextAsUnicode();
 
         void* ConvertToUnicode(IMemoryAllocator* allocator = IZ_NULL);

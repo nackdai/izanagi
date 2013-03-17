@@ -5,6 +5,11 @@ namespace izanagi
 {
 namespace text
 {
+    CUString::CUString()
+    {
+        m_Encode = E_FONT_CHAR_ENCODE_NUM;
+    }
+
     CUString::CUString(E_FONT_CHAR_ENCODE encode, const void* text)
     {
         m_Encode = encode;
@@ -19,8 +24,6 @@ namespace text
 
     void CUString::Init(const void* text)
     {
-        
-
         m_Text = CONST_CAST(IZ_UINT8*, void*, text);
 
         // TODO
@@ -45,6 +48,20 @@ namespace text
         m_Num = 0;
         m_Iter = IZ_NULL;
         m_ReadBytes = 0;
+    }
+
+    void CUString::Init(E_FONT_CHAR_ENCODE encode, const void* text)
+    {
+        IZ_ASSERT(m_Encode == E_FONT_CHAR_ENCODE_NUM);
+        m_Encode = encode;
+        Init(text);
+    }
+
+    void CUString::Init(E_FONT_CHAR_ENCODE encode, const void* text, IZ_UINT bytes)
+    {
+        IZ_ASSERT(m_Encode == E_FONT_CHAR_ENCODE_NUM);
+        m_Encode = encode;
+        Init(text, bytes);
     }
 
     IZ_UINT CUString::GetNum()
@@ -81,6 +98,76 @@ namespace text
             }
         }
         return m_Num;
+    }
+
+    IZ_UINT CUString::GetCurrent()
+    {
+        IZ_UINT ret = 0;
+        
+        if (m_ReadBytes >= m_Bytes)
+        {
+            return ret;
+        }
+
+        if (m_Iter != IZ_NULL)
+        {
+            void* tmp;
+            IZ_UINT bytes = 0;
+        
+            switch (m_Encode)
+            {
+            case E_FONT_CHAR_ENCODE_UTF8:
+                tmp = CStdUtf::GetOneCharCodeAsUTF8(m_Iter, &ret);
+                break;
+            case E_FONT_CHAR_ENCODE_UNICODE:
+                tmp = CStdUtf::GetOneCharCodeAsUnicode(m_Iter, &ret);
+                break;
+            case E_FONT_CHAR_ENCODE_SJIS:
+                tmp = CStdUtf::GetOneCharCodeAsSJIS(m_Iter, &ret);
+                break;
+            default:
+                IZ_ASSERT(IZ_FALSE);
+                break;
+            }
+        }
+
+        return ret;
+    }
+
+    IZ_UINT CUString::GetCurrentAsUnicode()
+    {
+        IZ_UINT code = GetCurrent();
+
+        switch (m_Encode)
+        {
+        case E_FONT_CHAR_ENCODE_UTF8:
+            code = CStdUtf::ConvertUtf8ToUnicode(code);
+            break;
+        case E_FONT_CHAR_ENCODE_UNICODE:
+            // Nothing
+            break;
+        default:
+            IZ_ASSERT(IZ_FALSE);
+            break;
+        }
+
+        return code;
+    }
+
+    IZ_UINT CUString::GetNext()
+    {
+        IZ_UINT ret = 0;
+
+        if (m_Iter != IZ_NULL)
+        {
+            m_Iter = GetNextInternal(m_Iter, &ret);
+            if (ret == 0)
+            {
+                //m_Iter = IZ_NULL;
+            }
+        }
+
+        return ret;
     }
 
     IZ_UINT CUString::GetNextAsUnicode()
@@ -143,9 +230,10 @@ namespace text
 
     void* CUString::GetNextInternal(void* data, IZ_UINT* code)
     {
-        if (m_ReadBytes > m_Bytes)
+        if (m_ReadBytes >= m_Bytes)
         {
-            return 0;
+            *code = 0;
+            return m_Iter;
         }
 
         void* ret = IZ_NULL;
