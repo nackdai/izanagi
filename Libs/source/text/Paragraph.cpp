@@ -9,6 +9,7 @@ namespace text
 {
     CParagraph::CParagraph()
     {
+        m_Width = 0;
         m_ListItem.Init(this);
     }
 
@@ -19,17 +20,22 @@ namespace text
 
     void CParagraph::Layout(IZ_UINT width)
     {
-        ReleaseLines();
-
-        BeginCreateLine();
-
-        CLine* line = IZ_NULL;
-        while ((line = CreateLine(width)) != IZ_NULL)
+        if (m_Width != width)
         {
-            AddLine(line);
-        }
+            ReleaseLines();
 
-        EndCreateLine();
+            BeginCreateLine();
+
+            CLine* line = IZ_NULL;
+            while ((line = CreateLine(width)) != IZ_NULL)
+            {
+                AddLine(line);
+            }
+
+            EndCreateLine();
+
+            m_Width = width;
+        }
     }
 
     void CParagraph::ReleaseLines()
@@ -65,9 +71,9 @@ namespace text
         }
     }
 
-    void CParagraph::Render(
-        IZ_UINT x,
-        IZ_UINT y,
+    IZ_INT CParagraph::Render(
+        IZ_INT x,
+        IZ_INT y,
         IZ_UINT height,
         graph::CGraphicsDevice* device)
     {
@@ -81,6 +87,8 @@ namespace text
 
             listItem = listItem->GetNext();
         }
+
+        return y;
     }
 
     void CParagraph::Clear()
@@ -109,16 +117,18 @@ namespace text
     IZ_BOOL CDefaultParagraph::Init(
         IFontHost* host,
         E_FONT_CHAR_ENCODE encode,
-        void* text,
+        const void* text,
         IZ_UINT bytes,
         void* userData)
     {
-        m_String.Init(text, bytes);
+        SAFE_REPLACE(m_FontHost, host);
+        m_String.Init(encode, text, bytes);
         return IZ_TRUE;
     }
 
     void CDefaultParagraph::BeginCreateLine()
     {
+        m_LastPos = 0;
         m_String.BeginIter();
     }
 
@@ -129,7 +139,7 @@ namespace text
 
     CLine* CDefaultParagraph::CreateLine(IZ_UINT width)
     {
-        E_FONT_CHAR_ENCODE encode = m_String.GetCharCode();
+        E_FONT_CHAR_ENCODE encode = m_FontHost->GetEncodeType();
 
         CLine* ret = IZ_NULL;
 
@@ -138,48 +148,69 @@ namespace text
 
         const void* ptr = m_String.GetIterPtr();
 
-        for (;;)
+        for (IZ_UINT count = 0; ; count++)
         {
             if (encode == E_FONT_CHAR_ENCODE_UNICODE)
             {
-                code = m_String.GetNextAsUnicode();
+                code = m_String.GetCurrentAsUnicode();
             }
             else
             {
-                code = m_String.GetNext();
+                code = m_String.GetCurrent();
             }
+
+            IZ_BOOL isFinishLine = IZ_FALSE;
 
             if (code == 0)
             {
-                break;
+                isFinishLine = IZ_TRUE;
+            }
+            else
+            {
+                IZ_UINT id = m_FontHost->GetGlyphID(code);
+
+                SGlyphMetrics metrics;
+
+                if (m_FontHost->GetGlyphMetricsByID(id, metrics))
+                {
+                    if (advanced + metrics.advance >= width)
+                    {
+                        isFinishLine = IZ_TRUE;;
+                    }
+                    else
+                    {
+                        advanced += metrics.advance;
+                        m_String.GetNext();
+                    }
+                }
+                else
+                {
+                    // TODO
+                }
             }
 
-            IZ_UINT id = m_FontHost->GetGlyphID(code);
-
-            SGlyphMetrics metrics;
-
-            if (m_FontHost->GetGlyphMetricsByID(id, metrics))
+            if (isFinishLine)
             {
-                if (advanced + metrics.advance >= width)
+                if (count > 0)
                 {
+                    IZ_UINT pos = static_cast<IZ_UINT>(m_String.GetIterDistance());
+                    IZ_UINT bytes = pos - m_LastPos;
+                    m_LastPos = pos;
+
                     SLineParam param;
                     {
+                        param.encode = m_String.GetCharCode();
                         param.text = ptr;
-                        param.bytes = static_cast<IZ_UINT>(m_String.GetIterDistance());
+                        param.bytes = bytes;
                     }
 
                     ret = CDefaultLine::CreateLine(
                         m_Allocator,
                         m_FontHost,
                         &param);
-
-                    break;
                 }
-                advanced += metrics.advance;
-            }
-            else
-            {
-                // TODO
+
+                break;
             }
         }
 

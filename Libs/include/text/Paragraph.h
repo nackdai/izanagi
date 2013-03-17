@@ -30,7 +30,7 @@ namespace text
             IMemoryAllocator* allocator,
             IFontHost* host,
             E_FONT_CHAR_ENCODE encode,
-            void* text,
+            const void* text,
             IZ_UINT bytes,
             void* userData)
         {
@@ -67,7 +67,7 @@ namespace text
             IZ_BOOL Init(
                 IFontHost* host,
                 E_FONT_CHAR_ENCODE encode,
-                void* text,
+                const void* text,
                 IZ_UINT bytes,
                 void* userData));
 
@@ -86,9 +86,9 @@ namespace text
             IZ_UINT ascent,
             graph::CGraphicsDevice* device);
 
-        void Render(
-            IZ_UINT x,
-            IZ_UINT y,
+        IZ_INT Render(
+            IZ_INT x,
+            IZ_INT y,
             IZ_UINT height,
             graph::CGraphicsDevice* device);
 
@@ -102,6 +102,8 @@ namespace text
 
     protected:
         IMemoryAllocator* m_Allocator;
+
+        IZ_UINT m_Width;
 
         CStdList<CParagraph>::Item m_ListItem;
         CStdList<CLine> m_LineList;
@@ -119,7 +121,7 @@ namespace text
             IMemoryAllocator* allocator,
             IFontHost* host,
             E_FONT_CHAR_ENCODE encode,
-            void* text,
+            const void* text,
             IZ_UINT bytes,
             void* userData)
         {
@@ -141,7 +143,7 @@ namespace text
         virtual IZ_BOOL Init(
             IFontHost* host,
             E_FONT_CHAR_ENCODE encode,
-            void* text,
+            const void* text,
             IZ_UINT bytes,
             void* userData);
 
@@ -153,6 +155,7 @@ namespace text
     private:
         struct SLineParam
         {
+            E_FONT_CHAR_ENCODE encode;
             const void* text;
             IZ_UINT bytes;
         };
@@ -160,6 +163,7 @@ namespace text
     private:
         IFontHost* m_FontHost;
         CUString m_String;
+        IZ_UINT m_LastPos;
     };
 }    // namespace text
 }   // namespace izanagi

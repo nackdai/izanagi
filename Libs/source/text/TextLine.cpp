@@ -89,8 +89,8 @@ namespace text
     }
 
     void CLine::Render(
-        IZ_UINT x,
-        IZ_UINT y,
+        IZ_INT x,
+        IZ_INT y,
         graph::CGraphicsDevice* device)
     {
         if (m_Texture != IZ_NULL)
@@ -122,7 +122,7 @@ namespace text
         }
 
         CUString string;
-        string.Init(m_Text, m_Bytes);
+        string.Init(m_Encode, m_Text, m_Bytes);
 
         IZ_UINT width = 0;
         IZ_UINT code = 0;
@@ -165,6 +165,7 @@ namespace text
     IZ_BOOL CDefaultLine::Init(void* userData)
     {
         CDefaultParagraph::SLineParam* param = reinterpret_cast<CDefaultParagraph::SLineParam*>(userData);
+        m_Encode = param->encode;
         m_Text = param->text;
         m_Bytes = param->bytes;
         return IZ_TRUE;
@@ -179,7 +180,7 @@ namespace text
         IZ_UINT code = 0;
 
         CUString string;
-        string.Init(m_Text, m_Bytes);
+        string.Init(m_Encode, m_Text, m_Bytes);
 
         string.BeginIter();
 
@@ -207,7 +208,7 @@ namespace text
 
             if (m_FontHost->GetGlyphMetricsByID(id, metrics))
             {
-                this->CopyImage(
+                x = this->CopyImage(
                     id,
                     dst,
                     x,
