@@ -82,9 +82,9 @@ void CFontFreeTypeApp::ReleaseInternal()
 // 更新.
 void CFontFreeTypeApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
-    m_Cache->BeginRegister();
-
     izanagi::text::CUtf8String str(fontUTF8);
+
+    m_Cache->BeginRegister();
 
     m_Cache->Register(&str, m_FontHost);
 
