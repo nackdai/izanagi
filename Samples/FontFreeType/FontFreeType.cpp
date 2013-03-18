@@ -115,12 +115,6 @@ void CFontFreeTypeApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
         while ((code = str.GetNextAsUnicode()) != 0)
         {
-            if (code == 0x20)
-            {
-                posX += 10;
-                continue;
-            }
-
             izanagi::text::SGlyphCacheItem* item = m_Cache->FindCache(code);
 
             if (item != IZ_NULL)
