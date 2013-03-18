@@ -110,11 +110,11 @@ void CFontBitmapApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
     for (IZ_UINT i = 0; i < 2; i++)
     {
-        m_Cache[i]->BeginRegister();
-
         izanagi::text::CUString str(
             parameters[i].charcode,
             parameters[i].text);
+
+        m_Cache[i]->BeginRegister();
 
         m_Cache[i]->Register(&str, m_FontHost[i]);
 
