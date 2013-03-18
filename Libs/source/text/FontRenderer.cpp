@@ -46,8 +46,33 @@ namespace text
 
         IZ_UINT code = 0;
 
-        while ((code = GetNextChar(str)) != 0)
+        IZ_UINT posX = pos.x;
+        IZ_UINT posY = pos.y;
+
+        E_FONT_CHAR_ENCODE encode = m_FontHost->GetEncodeType();
+
+        str.BeginIter();
+
+        for (;;)
         {
+            if (encode == E_FONT_CHAR_ENCODE_UNICODE)
+            {
+                code = str.GetNextAsUnicode();
+            }
+            else if (encode == str.GetCharCode())
+            {
+                code = str.GetNext();
+            }
+            else
+            {
+                IZ_ASSERT(IZ_FALSE);
+            }
+
+            if (code == 0)
+            {
+                break;
+            }
+
             // TODO
             // 改行コード
 
@@ -67,17 +92,21 @@ namespace text
                 IZ_UINT w = item->rect.Width();
                 IZ_UINT h = item->rect.Height();
 
-                IZ_UINT posX = pos.x + item->leftOffset;
-                IZ_UINT posY = pos.y + baseline - item->metrics.bearingY;
+                IZ_UINT x = posX + item->leftOffset;
+                IZ_UINT y = posY + baseline - item->metrics.bearingY;
 
                 device->Draw2DSprite(
                     izanagi::CFloatRect(left, top, right, bottom),
-                    izanagi::CIntRect(posX, posY, posX + w, posY + h));
+                    izanagi::CIntRect(x, y, x + w, y + h));
 
                 posX += item->metrics.advance;
-                pos.x = posX;
             }
         }
+
+        pos.x = posX;
+        pos.y = posY;
+
+        str.EndIter();
     }
 
     ///////////////////////////////////////////////
