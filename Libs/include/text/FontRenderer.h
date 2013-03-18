@@ -38,7 +38,7 @@ namespace text
             {
                 instance->AddRef();
                 instance->m_Allocator = allocator;
-                result = instance->Init(allocator, in, pixelSize);
+                result = instance->Init(in, pixelSize);
             }
 
             if (!result)
@@ -68,6 +68,11 @@ namespace text
             CIntPoint& pos,
             IZ_UINT baseline,
             CGlyphCache& glyphCache);
+
+        IFontHost* GetFontHost()
+        {
+            return m_FontHost;
+        }
 
     protected:
         PURE_VIRTUAL(
