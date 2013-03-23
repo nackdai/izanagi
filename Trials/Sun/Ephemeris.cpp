@@ -56,7 +56,25 @@ void CEphemeris::ConvertPolarToMatrix(
     izanagi::math::SMatrix tmp;
     izanagi::math::SMatrix::GetRotByZ(tmp, polar.latitude);
 
-    izanagi::math::SMatrix::GetRotByY(mtx, polar.longitude);
+    // NOTE
+    // 真上(y軸+方向）から見た場合 => x-z平面
+    // z
+    // |
+    // |
+    // +---->x 
+    //
+    // 極座標を考える場合は、x-z平面は数学的に２次元で考えられて、すると、それはよくある x-y平面 とみなすことができる
+    // すると、回転の方向は x->y に向けて、つまり反時計まわりとなる。
+    // しかし、右手座標系の回転は z->x に向けて、つまり時計まわりとなるため
+    // 回転の方向に矛盾が生じる。
+    // そこで、正規化をする必要がある。
+
+    // TODO
+    // 本来は、極座標を右手座標系に合わせる必要がある
+
+    IZ_FLOAT longitude = IZ_MATH_PI2 - polar.longitude;
+
+    izanagi::math::SMatrix::GetRotByY(mtx, longitude);
 
     izanagi::math::SMatrix::Mul(mtx, tmp, mtx);
 }

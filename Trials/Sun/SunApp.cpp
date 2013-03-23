@@ -5,6 +5,7 @@
 CSunApp::CSunApp()
 {    
     m_Shader = IZ_NULL;
+    m_Axis = IZ_NULL;
 }
 
 CSunApp::~CSunApp()
@@ -42,11 +43,15 @@ IZ_BOOL CSunApp::InitInternal(
             IZ_COLOR_RGBA(0xff, 0, 0, 0xff),
             1.0f,
             10, 10);
+
+        m_Axis = izanagi::CDebugMeshAxis::CreateDebugMeshAxisDefault(
+            allocator,
+            device);
     }
 
     // カメラ
     camera.Init(
-        izanagi::math::CVector(0.0f, 5.0f, -30.0f, 1.0f),
+        izanagi::math::CVector(0.0f, 0.0f, -30.0f, 1.0f),
         izanagi::math::CVector(0.0f, 5.0f, 0.0f, 1.0f),
         izanagi::math::CVector(0.0f, 1.0f, 0.0f, 1.0f),
         1.0f,
@@ -72,7 +77,9 @@ IZ_BOOL CSunApp::InitInternal(
     {
         p.radius = 1.0f;
         p.latitude = IZ_DEG2RAD(-4.070f);
+        //p.latitude = 0.0f;
         p.longitude = IZ_DEG2RAD(281.0f);
+        //p.longitude = IZ_DEG2RAD(90.0f);
 
         //p.latitude = IZ_DEG2RAD(45.0f);
         //p.longitude = IZ_DEG2RAD(45.0f);
@@ -127,6 +134,7 @@ void CSunApp::ReleaseInternal()
 {
     SAFE_RELEASE(m_Shader);
     SAFE_RELEASE(m_Sphere);
+    SAFE_RELEASE(m_Axis);
 }
 
 IZ_FLOAT angle = 0.0f;
@@ -140,6 +148,7 @@ void CSunApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
     izanagi::CCamera& camera = GetCamera();
     camera.Update();
 
+#if 0
     angle -= 1.0f;
 
     izanagi::math::SMatrix::GetTrans(
@@ -150,6 +159,36 @@ void CSunApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
     izanagi::math::SMatrix::GetRotByY(rot, IZ_DEG2RAD(angle));
 
     izanagi::math::SMatrix::Mul(mtx, mtx, rot);
+#else
+    izanagi::math::SMatrix trans;
+    izanagi::math::SMatrix::GetTrans(
+        trans,
+        radius, 0.0f, 0.0f);
+
+    angle += 1.0f;
+
+    if (angle >= 360.0f)
+    {
+        angle -= 360.0f;
+    }
+
+    SPolarCoord polar;
+    {
+        polar.radius = 1.0f;
+        polar.latitude = IZ_DEG2RAD(0.0f);
+        polar.longitude = IZ_DEG2RAD(angle);
+    }
+
+    izanagi::math::SVector eq;
+    CEphemeris::ConvertElipticToEquatorial(polar, eq);
+
+    CEphemeris::ConvertRectangularToPolar(eq, polar);
+
+    izanagi::math::SMatrix rot;
+    CEphemeris::ConvertPolarToMatrix(polar, rot);
+
+    izanagi::math::SMatrix::Mul(mtx, trans, rot);
+#endif
 }
 
 namespace {
@@ -195,6 +234,16 @@ void CSunApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
         m_Shader->CommitChanges();
 
         m_Sphere->Draw();
+
+        _SetShaderParam(
+            m_Shader,
+            "g_mL2W",
+            (void*)&izanagi::math::SMatrix::GetUnit(),
+            sizeof(izanagi::math::SMatrix));
+
+        m_Shader->CommitChanges();
+
+        m_Axis->Draw();
 
         m_Shader->EndPass();
     }
