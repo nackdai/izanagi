@@ -150,6 +150,11 @@ namespace math
             return atanf(f);
         }
 
+        static inline IZ_FLOAT ArcTan2F(IZ_FLOAT y, IZ_FLOAT x)
+        {
+            return atan2f(y, x);
+        }
+
 #if 0
         /**
         * 一番近い２の乗数の指数を計算する
