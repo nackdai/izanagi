@@ -34,19 +34,41 @@ void CEphemeris::ConvertRectangularToPolar(
     const izanagi::math::SVector& ortho,
     SPolarCoord& polar)
 {
-    // TODO
-    // ゼロチェック
-
     polar.longitude = izanagi::math::CMath::ArcTan2F(ortho.z, ortho.x);
 
     IZ_FLOAT sinLong = izanagi::math::CMath::SinF(polar.longitude);
 
-    IZ_FLOAT z = ortho.z / sinLong;
-    polar.latitude = izanagi::math::CMath::ArcTan2F(ortho.y, z);
+    if (sinLong != 0.0f)
+    {
+        IZ_FLOAT z = ortho.z / sinLong;
+        polar.latitude = izanagi::math::CMath::ArcTan2F(ortho.y, z);
+    }
+    else
+    {
+        IZ_FLOAT cosLong = izanagi::math::CMath::CosF(polar.longitude);
+        IZ_FLOAT x = ortho.x / cosLong;
+        polar.latitude = izanagi::math::CMath::ArcTan2F(ortho.y, x);
+    }
 
-    IZ_FLOAT sinLat = izanagi::math::CMath::SinF(polar.latitude);
+    if (ortho.y != 0.0f)
+    {
+        IZ_FLOAT sinLat = izanagi::math::CMath::SinF(polar.latitude);
+        polar.radius = ortho.y / sinLat;
+    }
+    else
+    {
+        IZ_FLOAT cosLat = izanagi::math::CMath::CosF(polar.latitude);
 
-    polar.radius = ortho.y / sinLat;
+        if (ortho.z != 0.0f)
+        {
+            polar.radius = ortho.z / (cosLat * sinLong);
+        }
+        else
+        {
+            IZ_FLOAT cosLong = izanagi::math::CMath::CosF(polar.longitude);
+            polar.radius = ortho.x / (cosLat * cosLong);
+        }
+    }
 }
 
 void CEphemeris::ConvertPolarToMatrix(

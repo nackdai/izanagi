@@ -184,6 +184,11 @@ void CSunApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 
     CEphemeris::ConvertRectangularToPolar(eq, polar);
 
+    izanagi::math::SVector v;
+    CEphemeris::ConvertPolarToRectangular(polar, v);
+
+    //IZ_PRINTF("%f\n", v.y);
+
     izanagi::math::SMatrix rot;
     CEphemeris::ConvertPolarToMatrix(polar, rot);
 
