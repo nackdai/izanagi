@@ -32,6 +32,7 @@ private:
     izanagi::CShaderBasic* m_Shader;
     izanagi::CDebugMeshSphere* m_Sphere;
     izanagi::CDebugMeshAxis* m_Axis;
+    izanagi::CDebugMeshRectangle* m_Plane;
 };
 
 #endif    // #if !defined(__SUN_APP_H__)

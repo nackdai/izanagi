@@ -1,5 +1,6 @@
 #include "Ephemeris.h"
 
+// 極座標から直行座標に変換.
 void CEphemeris::ConvertPolarToRectangular(
     const SPolarCoord& polar,
     izanagi::math::SVector& ortho)
@@ -30,6 +31,7 @@ void CEphemeris::ConvertPolarToRectangular(
     ortho.w = 0.0f;
 }
 
+// 直行座標から極座標に変換. 
 void CEphemeris::ConvertRectangularToPolar(
     const izanagi::math::SVector& ortho,
     SPolarCoord& polar)
@@ -71,6 +73,7 @@ void CEphemeris::ConvertRectangularToPolar(
     }
 }
 
+// 極座標から回転行列に変換.
 void CEphemeris::ConvertPolarToMatrix(
     const SPolarCoord& polar,
     izanagi::math::SMatrix& mtx)
@@ -87,7 +90,7 @@ void CEphemeris::ConvertPolarToMatrix(
     //
     // 極座標を考える場合は、x-z平面は数学的に２次元で考えられて、すると、それはよくある x-y平面 とみなすことができる
     // すると、回転の方向は x->y に向けて、つまり反時計まわりとなる。
-    // しかし、右手座標系の回転は z->x に向けて、つまり時計まわりとなるため
+    // しかし、左手座標系の回転は z->x に向けて、つまり時計まわりとなるため
     // 回転の方向に矛盾が生じる。
     // そこで、正規化をする必要がある。
 
@@ -101,6 +104,7 @@ void CEphemeris::ConvertPolarToMatrix(
     izanagi::math::SMatrix::Mul(mtx, tmp, mtx);
 }
 
+// 黄道座標から赤道座標に変換.
 void CEphemeris::ConvertElipticToEquatorial(
     const SPolarCoord& eliptic, 
     izanagi::math::SVector& equatorial)
@@ -111,6 +115,7 @@ void CEphemeris::ConvertElipticToEquatorial(
     ConvertElipticToEquatorial(coord, equatorial);
 }
 
+// 黄道座標から赤道座標に変換.
 void CEphemeris::ConvertElipticToEquatorial(
     const izanagi::math::SVector& eliptic, 
     izanagi::math::SVector& equatorial)
@@ -124,6 +129,7 @@ void CEphemeris::ConvertElipticToEquatorial(
         mtx);
 }
 
+// 赤道座標から地平座標に変換.
 void CEphemeris::ConvertEquatorialToHorizontal(
     const SPolarCoord& equatorial, 
     IZ_FLOAT latitude,
@@ -139,6 +145,7 @@ void CEphemeris::ConvertEquatorialToHorizontal(
         horizontal);
 }
 
+// 赤道座標から地平座標に変換.
 void CEphemeris::ConvertEquatorialToHorizontal(
     const izanagi::math::SVector& equatorial, 
     IZ_FLOAT latitude,
@@ -155,6 +162,7 @@ void CEphemeris::ConvertEquatorialToHorizontal(
     izanagi::math::SMatrix::ApplyXYZ(horizontal, horizontal, mtxLat);
 }
 
+// 黄道座標から地平座標に変換.
 void CEphemeris::ConvertElipticToHorizontal(
     const SPolarCoord& eliptic,
     IZ_FLOAT latitude,
@@ -170,6 +178,7 @@ void CEphemeris::ConvertElipticToHorizontal(
         horizontal);
 }
 
+// 黄道座標から地平座標に変換.
 void CEphemeris::ConvertElipticToHorizontal(
     const izanagi::math::SVector& eliptic, 
     IZ_FLOAT latitude,
@@ -182,5 +191,48 @@ void CEphemeris::ConvertElipticToHorizontal(
     ConvertEquatorialToHorizontal(
         equatorial, 
         latitude, hourAngle,
+        horizontal);
+}
+
+// 時角を取得.
+IZ_FLOAT CEphemeris::GetHourAngle(
+    const SUniversalTime& ut,
+    IZ_FLOAT longitude,
+    IZ_FLOAT rightAscension)
+{
+    IZ_FLOAT localSiderealTime = CTime::GetLocalSiderealTimeByUT(ut, longitude);
+    IZ_FLOAT hourAngle = localSiderealTime - rightAscension;
+    return hourAngle;
+}
+
+// 黄道座標から時角を取得.
+IZ_FLOAT CEphemeris::GetHourAngleByEliptic(
+    const SUniversalTime& ut,
+    IZ_FLOAT longitude,
+    const SPolarCoord& eliptic)
+{
+    izanagi::math::SVector equatorial;
+    ConvertElipticToEquatorial(eliptic, equatorial);
+
+    SPolarCoord polarEquatorial;
+    ConvertRectangularToPolar(equatorial, polarEquatorial);
+
+    IZ_FLOAT hourAngle = GetHourAngle(ut, longitude, polarEquatorial.longitude);
+    return hourAngle;
+}
+
+// 黄道座標から地平座標に変換.
+void CEphemeris::ConvertElipticToHorizontal(
+    const SPolarCoord& eliptic,
+    const SUniversalTime& ut,
+    const SPolarCoord& polar,
+    izanagi::math::SVector& horizontal)
+{
+    IZ_FLOAT hourAngle = GetHourAngleByEliptic(ut, polar.longitude, eliptic);
+
+    ConvertElipticToHorizontal(
+        eliptic,
+        polar.latitude,
+        hourAngle,
         horizontal);
 }
