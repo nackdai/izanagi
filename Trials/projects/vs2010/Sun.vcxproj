@@ -108,12 +108,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Sun\Ephemeris.h" />
+    <ClInclude Include="..\..\Sun\Sun.h" />
     <ClInclude Include="..\..\Sun\SunApp.h" />
     <ClInclude Include="..\..\Sun\Time.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Sun\Ephemeris.cpp" />
     <ClCompile Include="..\..\Sun\main.cpp" />
+    <ClCompile Include="..\..\Sun\Sun.cpp" />
     <ClCompile Include="..\..\Sun\SunApp.cpp" />
     <ClCompile Include="..\..\Sun\Time.cpp" />
   </ItemGroup>

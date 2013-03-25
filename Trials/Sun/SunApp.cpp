@@ -47,12 +47,19 @@ IZ_BOOL CSunApp::InitInternal(
         m_Axis = izanagi::CDebugMeshAxis::CreateDebugMeshAxisDefault(
             allocator,
             device);
+
+        m_Plane = izanagi::CDebugMeshRectangle::CreateDebugMeshRectangle(
+            allocator,
+            device,
+            flag,
+            0xffffffff,
+            1, 1, 100.0f, 100.0f);
     }
 
     // カメラ
     camera.Init(
-        izanagi::math::CVector(0.0f, 0.0f, -30.0f, 1.0f),
-        izanagi::math::CVector(0.0f, 5.0f, 0.0f, 1.0f),
+        izanagi::math::CVector(0.0f, 10.0f, 0.0f, 1.0f),
+        izanagi::math::CVector(10.0f, 10.0f, 0.0f, 1.0f),
         izanagi::math::CVector(0.0f, 1.0f, 0.0f, 1.0f),
         1.0f,
         500.0f,
@@ -70,7 +77,7 @@ IZ_BOOL CSunApp::InitInternal(
         day.second = 0;
     }
 
-    SJulianDay jd;
+    SDay jd;
     CTime::GetJDByUT(day, jd);
 
     SPolarCoord p;
@@ -135,10 +142,11 @@ void CSunApp::ReleaseInternal()
     SAFE_RELEASE(m_Shader);
     SAFE_RELEASE(m_Sphere);
     SAFE_RELEASE(m_Axis);
+    SAFE_RELEASE(m_Plane);
 }
 
 IZ_FLOAT angle = 0.0f;
-IZ_FLOAT radius = 10.0f;
+IZ_FLOAT radius = 100.0f;
 
 izanagi::math::SMatrix mtx;
 
@@ -239,6 +247,16 @@ void CSunApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
         m_Shader->CommitChanges();
 
         m_Sphere->Draw();
+
+        _SetShaderParam(
+            m_Shader,
+            "g_mL2W",
+            (void*)&izanagi::math::SMatrix::GetUnit(),
+            sizeof(izanagi::math::SMatrix));
+
+        m_Shader->CommitChanges();
+
+        m_Plane->Draw();
 
         _SetShaderParam(
             m_Shader,
