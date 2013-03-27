@@ -14,7 +14,7 @@ namespace math
         /**
         * 与えられた整数値をアラインメントする
         */
-        static inline IZ_INT Align(IZ_UINT nValue, IZ_UINT nAlign)
+        static IZ_INT Align(IZ_UINT nValue, IZ_UINT nAlign)
         {
 #if 0
             return nAlign * ((nValue + nAlign - 1) / nAlign);
@@ -29,7 +29,7 @@ namespace math
         /**
         * Convets degree to radian.
         */
-        static inline IZ_FLOAT Deg2Rad(IZ_FLOAT fDeg)
+        static IZ_FLOAT Deg2Rad(IZ_FLOAT fDeg)
         {
             return IZ_MATH_PI * fDeg / 180.0f;
         }
@@ -37,7 +37,7 @@ namespace math
         /**
         * Converts radian to degree.
         */
-        static inline IZ_FLOAT Rad2Deg(IZ_FLOAT fRad)
+        static IZ_FLOAT Rad2Deg(IZ_FLOAT fRad)
         {
             return fRad * 180.0f / IZ_MATH_PI;
         }
@@ -45,7 +45,7 @@ namespace math
         /**
         * IZ_FLOATの絶対値を取得する
         */
-        static inline IZ_FLOAT Absf(IZ_FLOAT val)
+        static IZ_FLOAT Absf(IZ_FLOAT val)
         {
             return (IZ_FLOAT)fabs(val);
         }
@@ -86,7 +86,7 @@ namespace math
         /**
         * ２つの値が「だいたい」等しいかどうか比べる
         */
-        static inline IZ_BOOL IsNearyEqual(IZ_FLOAT a, IZ_FLOAT b)
+        static IZ_BOOL IsNearyEqual(IZ_FLOAT a, IZ_FLOAT b)
         {
             //return ((a < b + IZ_MATH_EPSILON) && (a > b - IZ_MATH_EPSILON));
             return IsNearyEqual(a, b, 1e-5f);
@@ -95,7 +95,7 @@ namespace math
         /**
         * ２つの値が「だいたい」等しいかどうか比べる
         */
-        static inline IZ_BOOL IsNearyEqual(IZ_FLOAT a, IZ_FLOAT b, IZ_FLOAT lamda)
+        static IZ_BOOL IsNearyEqual(IZ_FLOAT a, IZ_FLOAT b, IZ_FLOAT lamda)
         {
             //return ((a < b + IZ_MATH_EPSILON) && (a > b - IZ_MATH_EPSILON));
             return ((b - lamda <= a) && (a <= b + lamda));
@@ -104,7 +104,7 @@ namespace math
         /**
         * 値が「だいたい」０になっているかどうか調べる
         */
-        static inline IZ_BOOL IsNearyEqualZero(IZ_FLOAT val)
+        static IZ_BOOL IsNearyEqualZero(IZ_FLOAT val)
         {
             return IsNearyEqual(val, 0.0f);
         }
@@ -112,7 +112,7 @@ namespace math
         /**
         * sinθ
         */
-        static inline IZ_FLOAT SinF(IZ_FLOAT fTheta)
+        static IZ_FLOAT SinF(IZ_FLOAT fTheta)
         {
             return sinf(fTheta);
         }
@@ -120,7 +120,7 @@ namespace math
         /**
         * cosθ
         */
-        static inline IZ_FLOAT CosF(IZ_FLOAT fTheta)
+        static IZ_FLOAT CosF(IZ_FLOAT fTheta)
         {
             return cosf(fTheta);
         }
@@ -128,7 +128,7 @@ namespace math
         /**
         * sinθ, cosθ を求める。ただし、-2π < θ < 2π
         */
-        static inline void GetSinCosF(IZ_FLOAT fTheta, IZ_FLOAT& sin, IZ_FLOAT& cos)
+        static void GetSinCosF(IZ_FLOAT fTheta, IZ_FLOAT& sin, IZ_FLOAT& cos)
         {
             sin = ::sinf(fTheta);
             cos = 1.0f - (sin * sin);
@@ -137,7 +137,7 @@ namespace math
         /**
         * tanθ
         */
-        static inline IZ_FLOAT TanF(IZ_FLOAT fTheta)
+        static IZ_FLOAT TanF(IZ_FLOAT fTheta)
         {
             return tanf(fTheta);
         }
@@ -145,21 +145,62 @@ namespace math
         /**
         * arctan
         */
-        static inline IZ_FLOAT ArcTanF(IZ_FLOAT f)
+        static IZ_FLOAT ArcTanF(IZ_FLOAT f)
         {
             return atanf(f);
         }
 
-        static inline IZ_FLOAT ArcTan2F(IZ_FLOAT y, IZ_FLOAT x)
+        static IZ_FLOAT ArcTan2F(IZ_FLOAT y, IZ_FLOAT x)
         {
             return atan2f(y, x);
+        }
+
+        static IZ_FLOAT GetFrac(IZ_FLOAT f)
+        {
+            IZ_FLOAT integer;
+            IZ_FLOAT frac = ::modff(f, &integer);
+            return frac;
+        }
+
+        static IZ_DOUBLE GetFrac(IZ_DOUBLE f)
+        {
+            IZ_DOUBLE integer;
+            IZ_DOUBLE frac = ::modf(f, &integer);
+            return frac;
+        }
+
+        /** 指定した精度に切り捨てる
+         */
+        static IZ_FLOAT ToRoundDown(IZ_FLOAT value, int digits)
+        {
+            IZ_FLOAT coef = ::powf(10.0, (IZ_FLOAT)digits);
+
+            IZ_FLOAT ret = (value > 0
+                ? ::floorf(value * coef) / coef
+                : ::ceilf(value * coef) / coef);
+
+            return ret;
+        }
+
+        /** 指定した精度に切り捨てる
+         */
+        static IZ_DOUBLE ToRoundDown(IZ_DOUBLE value, int digits)
+        {
+            IZ_DOUBLE coef = ::pow(10.0, digits);
+
+            IZ_DOUBLE ret = (value > 0
+                ? ::floor(value * coef)
+                : ::ceil(value * coef));
+            ret /= coef;
+
+            return ret;
         }
 
 #if 0
         /**
         * 一番近い２の乗数の指数を計算する
         */
-        static inline IZ_UINT ComputeExponentBy2(IZ_FLOAT fVal)
+        static IZ_UINT ComputeExponentBy2(IZ_FLOAT fVal)
         {
             // NOTE
             // 対数の底の変換
@@ -171,7 +212,7 @@ namespace math
         /**
         * http://aggregate.org/MAGIC/#Population%20Count%20%28Ones%20Count%29
         */
-        static inline IZ_UINT CountOnes(IZ_UINT x)
+        static IZ_UINT CountOnes(IZ_UINT x)
         {
             /**
             * 32-bit recursive reduction using SWAR...
@@ -190,7 +231,7 @@ namespace math
         * Count Leading Zero (= CLZ)
         * http://aggregate.org/MAGIC/#Leading%20Zero%20Count
         */
-        static inline IZ_UINT CountLeadingZero(IZ_UINT x)
+        static IZ_UINT CountLeadingZero(IZ_UINT x)
         {
             if (x == 0) {
                 return 32;
@@ -208,7 +249,7 @@ namespace math
         /**
         * http://aggregate.org/MAGIC/#Next%20Largest%20Power%20of%202
         */
-        static inline IZ_UINT ComputeNextPow2(IZ_INT n)
+        static IZ_UINT ComputeNextPow2(IZ_INT n)
         {
             if (n <= 0) {
                 return 0;
@@ -231,7 +272,7 @@ namespace math
         /**
         * http://aggregate.org/MAGIC/#Log2%20of%20an%20Integer
         */
-        static inline IZ_UINT ComputeFloorLog2(IZ_UINT x)
+        static IZ_UINT ComputeFloorLog2(IZ_UINT x)
         {
             if (x <= 0) {
                 return 0;
@@ -248,7 +289,7 @@ namespace math
 
         /**
         */
-        static inline IZ_UINT ComputeNextLog2(IZ_UINT n)
+        static IZ_UINT ComputeNextLog2(IZ_UINT n)
         {
             n = ComputeNextPow2(n);
             return ComputeFloorLog2(n);
@@ -257,7 +298,7 @@ namespace math
         /**
         * Return whether float value is valid.
         */
-        static inline IZ_BOOL IsValidFloat(IZ_FLOAT f)
+        static IZ_BOOL IsValidFloat(IZ_FLOAT f)
         {
             IZ_UINT nVal = *(IZ_UINT*)&f;
             IZ_UINT nExp = (nVal >> 23) & 0x0f;
@@ -268,7 +309,7 @@ namespace math
         /**
         * Return whether float value is Not a Number(= NaN).
         */
-        static inline IZ_BOOL IsFloatNaN(IZ_FLOAT f)
+        static IZ_BOOL IsFloatNaN(IZ_FLOAT f)
         {
             IZ_UINT nVal = *(IZ_UINT*)&f;
             IZ_UINT nExp = (nVal >> 23) & 0x0f;
@@ -280,7 +321,7 @@ namespace math
         /**
         * Return whether float value is Zero.
         */
-        static inline IZ_BOOL IsFloatZero(IZ_FLOAT f)
+        static IZ_BOOL IsFloatZero(IZ_FLOAT f)
         {
             IZ_UINT nVal = *(IZ_UINT*)&f;
             return (nVal == 0);
@@ -289,7 +330,7 @@ namespace math
         /**
         * Return whether float value is inifinite.
         */
-        static inline IZ_BOOL IsFloatInfinite(IZ_FLOAT f)
+        static IZ_BOOL IsFloatInfinite(IZ_FLOAT f)
         {
             IZ_UINT nVal = *(IZ_UINT*)&f;
             IZ_UINT nExp = (nVal >> 23) & 0x0f;
@@ -301,7 +342,7 @@ namespace math
         /**
         * Return whether float value is not normal.
         */
-        static inline IZ_BOOL IsFloatNotNormal(IZ_FLOAT f)
+        static IZ_BOOL IsFloatNotNormal(IZ_FLOAT f)
         {
             IZ_UINT nVal = *(IZ_UINT*)&f;
             IZ_UINT nExp = (nVal >> 23) & 0x0f;
