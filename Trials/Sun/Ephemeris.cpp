@@ -5,25 +5,16 @@ void CEphemeris::ConvertPolarToRectangular(
     const SPolarCoord& polar,
     izanagi::math::SVector& ortho)
 {
+    IZ_FLOAT latitude  = IZ_DEG2RAD(polar.latitude);
+    IZ_FLOAT longitude = IZ_DEG2RAD(polar.longitude);
+
     IZ_FLOAT sinLat, cosLat;
-#if 0
-    izanagi::math::CMath::GetSinCosF(
-        polar.latitude,
-        sinLat, cosLat);
-#else
-    sinLat = izanagi::math::CMath::SinF(polar.latitude);
-    cosLat = izanagi::math::CMath::CosF(polar.latitude);
-#endif
+    sinLat = izanagi::math::CMath::SinF(latitude);
+    cosLat = izanagi::math::CMath::CosF(latitude);
 
     IZ_FLOAT sinLong, cosLong;
-#if 0
-    izanagi::math::CMath::GetSinCosF(
-        polar.longitude,
-        sinLong, cosLong);
-#else
-    sinLong = izanagi::math::CMath::SinF(polar.longitude);
-    cosLong = izanagi::math::CMath::CosF(polar.longitude);
-#endif
+    sinLong = izanagi::math::CMath::SinF(longitude);
+    cosLong = izanagi::math::CMath::CosF(longitude);
 
     ortho.x = polar.radius * cosLat * cosLong;
     ortho.y = polar.radius * sinLat;
@@ -71,6 +62,9 @@ void CEphemeris::ConvertRectangularToPolar(
             polar.radius = ortho.x / (cosLat * cosLong);
         }
     }
+
+    polar.latitude  = IZ_RAD2DEG(polar.latitude);
+    polar.longitude = IZ_RAD2DEG(polar.longitude);
 }
 
 // 極座標から回転行列に変換.
@@ -78,8 +72,11 @@ void CEphemeris::ConvertPolarToMatrix(
     const SPolarCoord& polar,
     izanagi::math::SMatrix& mtx)
 {
+    IZ_FLOAT latitude  = IZ_DEG2RAD(polar.latitude);
+    IZ_FLOAT longitude = IZ_DEG2RAD(polar.longitude);
+
     izanagi::math::SMatrix tmp;
-    izanagi::math::SMatrix::GetRotByZ(tmp, polar.latitude);
+    izanagi::math::SMatrix::GetRotByZ(tmp, latitude);
 
     // NOTE
     // 真上(y軸+方向）から見た場合 => x-z平面
@@ -97,9 +94,7 @@ void CEphemeris::ConvertPolarToMatrix(
     // TODO
     // 本来は、極座標を右手座標系に合わせる必要がある
 
-    IZ_FLOAT longitude = IZ_MATH_PI2 - polar.longitude;
-
-    izanagi::math::SMatrix::GetRotByY(mtx, longitude);
+    izanagi::math::SMatrix::GetRotByY(mtx, IZ_MATH_PI2 - longitude);
 
     izanagi::math::SMatrix::Mul(mtx, tmp, mtx);
 }
@@ -152,11 +147,14 @@ void CEphemeris::ConvertEquatorialToHorizontal(
     IZ_FLOAT hourAngle,
     izanagi::math::SVector& horizontal)
 {
+    IZ_FLOAT lat = IZ_DEG2RAD(latitude);
+    IZ_FLOAT hAngle = IZ_DEG2RAD(hourAngle);
+
     izanagi::math::SMatrix mtxLong;
-    izanagi::math::SMatrix::GetRotByY(mtxLong, -hourAngle);
+    izanagi::math::SMatrix::GetRotByY(mtxLong, -hAngle);
 
     izanagi::math::SMatrix mtxLat;
-    izanagi::math::SMatrix::GetRotByY(mtxLong, IZ_MATH_PI1_2 - latitude);
+    izanagi::math::SMatrix::GetRotByY(mtxLong, IZ_MATH_PI1_2 - lat);
 
     izanagi::math::SMatrix::ApplyXYZ(horizontal, equatorial, mtxLong);
     izanagi::math::SMatrix::ApplyXYZ(horizontal, horizontal, mtxLat);
@@ -200,9 +198,13 @@ IZ_FLOAT CEphemeris::GetHourAngle(
     IZ_FLOAT longitude,
     IZ_FLOAT rightAscension)
 {
-    IZ_FLOAT localSiderealTime = CTime::GetLocalSiderealTimeByUT(ut, longitude);
+    // TODO
+    /*
+    IZ_FLOAT localSiderealTime = CTime::GetLSTByUT(ut, longitude);
     IZ_FLOAT hourAngle = localSiderealTime - rightAscension;
     return hourAngle;
+    */
+    return 0.0f;
 }
 
 // 黄道座標から時角を取得.

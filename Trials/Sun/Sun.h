@@ -46,20 +46,22 @@ public:
         const SUniversalTime& veDay);
 
     /** その年における春分点からの経過日数から黄経を取得.
+     *
+     * 春分点より前の場合は前年の春分点の経過日数.
      */
-    static IZ_FLOAT GetElipticLongitudeByElapsedDay(const SDay& day);
+    static IZ_FLOAT GetElipticLongitudeByElapsedDay(const SLongTime& day);
 
     /** その年における春分点からの経過日数から黄道座標を取得.
      */
     static void GetElipticByElapsedDay(
         SPolarCoord& eliptic,
-        const SDay& day);
+        const SLongTime& day);
 
     /** その年における春分点からの経過日数から黄道座標を取得.
      */
     static void GetElipticByElapsedDay(
         izanagi::math::SVector& eliptic,
-        const SDay& day);
+        const SLongTime& day);
 };
 
 #endif    // #if !defined(__EPHEMERIS_H__)

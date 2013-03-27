@@ -1,6 +1,7 @@
 #include "SunApp.h"
 #include "Time.h"
 #include "Ephemeris.h"
+#include "Sun.h"
 
 CSunApp::CSunApp()
 {    
@@ -77,15 +78,15 @@ IZ_BOOL CSunApp::InitInternal(
         day.second = 0;
     }
 
-    SDay jd;
+    SLongTime jd;
     CTime::GetJDByUT(day, jd);
 
     SPolarCoord p;
     {
         p.radius = 1.0f;
-        p.latitude = IZ_DEG2RAD(-4.070f);
+        p.latitude = -4.070f;
         //p.latitude = 0.0f;
-        p.longitude = IZ_DEG2RAD(281.0f);
+        p.longitude = 281.0f;
         //p.longitude = IZ_DEG2RAD(90.0f);
 
         //p.latitude = IZ_DEG2RAD(45.0f);
@@ -106,14 +107,14 @@ IZ_BOOL CSunApp::InitInternal(
     CEphemeris::ConvertPolarToRectangular(p, v);
     CEphemeris::ConvertRectangularToPolar(v, p);
 
-    IZ_FLOAT lat = IZ_RAD2DEG(p.latitude);
-    IZ_FLOAT log = IZ_RAD2DEG(p.longitude);
+    IZ_FLOAT lat = p.latitude;
+    IZ_FLOAT log = p.longitude;
 
     SPolarCoord eliptic;
     {
         eliptic.radius = 1.0f;
-        eliptic.latitude = IZ_DEG2RAD(18.927f);
-        eliptic.longitude = IZ_DEG2RAD(281.608f);
+        eliptic.latitude = 18.927f;
+        eliptic.longitude = 281.608f;
 
         //eliptic.latitude = IZ_DEG2RAD(90.0f);
         //eliptic.longitude = IZ_DEG2RAD(0.0f);
@@ -125,8 +126,20 @@ IZ_BOOL CSunApp::InitInternal(
     SPolarCoord polar;
     CEphemeris::ConvertRectangularToPolar(equatorial, polar);
 
-    lat = IZ_RAD2DEG(polar.latitude);
-    log = IZ_RAD2DEG(polar.longitude);
+    lat = polar.latitude;
+    log = polar.longitude;
+
+    SUniversalTime ut;
+    {
+        ut.year = 2012;
+        ut.month = 5;
+        ut.day = 31;
+        ut.hour = 2;
+        ut.minute = 57;
+        ut.second = 31;
+    }
+    SUniversalTime lst;
+    CTime::GetLSTByUT(ut, 135.0f, lst);
 
 __EXIT__:
     if (!result) {
@@ -148,7 +161,8 @@ void CSunApp::ReleaseInternal()
 IZ_FLOAT angle = 0.0f;
 IZ_FLOAT radius = 100.0f;
 
-izanagi::math::SMatrix mtx;
+izanagi::math::SMatrix g_Eliptic;
+izanagi::math::SMatrix g_Horizon;
 
 // 更新.
 void CSunApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
@@ -156,52 +170,82 @@ void CSunApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
     izanagi::CCamera& camera = GetCamera();
     camera.Update();
 
-#if 0
-    angle -= 1.0f;
+    SPolarCoord polarEliptic;
 
-    izanagi::math::SMatrix::GetTrans(
-        mtx,
-        radius, 0.0f, 0.0f);
+    SUniversalTime day;
+    {
+        day.year = 2013;
+        day.month = 7;
+        day.day = 18;
+        day.hour = 12;
+        day.minute = 0;
+        day.second = 0;
+    }
 
-    izanagi::math::SMatrix rot;
-    izanagi::math::SMatrix::GetRotByY(rot, IZ_DEG2RAD(angle));
-
-    izanagi::math::SMatrix::Mul(mtx, mtx, rot);
-#else
     izanagi::math::SMatrix trans;
     izanagi::math::SMatrix::GetTrans(
         trans,
         radius, 0.0f, 0.0f);
 
-    angle += 1.0f;
-
-    if (angle >= 360.0f)
+    // Sun
     {
-        angle -= 360.0f;
+        SUniversalTime veDay;
+        {
+            veDay.year = 2013;
+            veDay.month = 3;
+            veDay.day = 21;
+            veDay.hour = 12;
+            veDay.minute = 0;
+            veDay.second = 0;
+        }
+        IZ_FLOAT longitude = CSun::GetElipticLongitudeByUniversalTime(day, veDay);
+
+        {
+            polarEliptic.radius = 1.0f;
+            polarEliptic.latitude = 0.0f;
+            polarEliptic.longitude = longitude;
+        }
+
+        izanagi::math::SVector eq;
+        CEphemeris::ConvertElipticToEquatorial(polarEliptic, eq);
+
+        SPolarCoord polar;
+        CEphemeris::ConvertRectangularToPolar(eq, polar);
+
+        izanagi::math::SVector v;
+        CEphemeris::ConvertPolarToRectangular(polar, v);
+
+        //IZ_PRINTF("%f\n", v.y);
+
+        izanagi::math::SMatrix rot;
+        CEphemeris::ConvertPolarToMatrix(polar, rot);
+
+        izanagi::math::SMatrix::Mul(g_Eliptic, trans, rot);
     }
 
-    SPolarCoord polar;
+    // Horizon
     {
-        polar.radius = 1.0f;
-        polar.latitude = IZ_DEG2RAD(0.0f);
-        polar.longitude = IZ_DEG2RAD(angle);
+        SPolarCoord polar;
+        {
+            polar.longitude = IZ_DEG2RAD(135);
+            polar.latitude = IZ_DEG2RAD(35);
+        }
+
+        izanagi::math::SVector horizontal;
+
+        CEphemeris::ConvertElipticToHorizontal(
+            polarEliptic,
+            day,
+            polar,
+            horizontal);
+
+        CEphemeris::ConvertRectangularToPolar(horizontal, polar);
+
+        izanagi::math::SMatrix rot;
+        CEphemeris::ConvertPolarToMatrix(polar, rot);
+
+        izanagi::math::SMatrix::Mul(g_Horizon, trans, rot);
     }
-
-    izanagi::math::SVector eq;
-    CEphemeris::ConvertElipticToEquatorial(polar, eq);
-
-    CEphemeris::ConvertRectangularToPolar(eq, polar);
-
-    izanagi::math::SVector v;
-    CEphemeris::ConvertPolarToRectangular(polar, v);
-
-    //IZ_PRINTF("%f\n", v.y);
-
-    izanagi::math::SMatrix rot;
-    CEphemeris::ConvertPolarToMatrix(polar, rot);
-
-    izanagi::math::SMatrix::Mul(mtx, trans, rot);
-#endif
 }
 
 namespace {
@@ -234,8 +278,8 @@ void CSunApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
         _SetShaderParam(
             m_Shader,
             "g_mL2W",
-            (void*)&mtx,
-            sizeof(mtx));
+            (void*)&g_Eliptic,
+            sizeof(g_Eliptic));
 
         _SetShaderParam(
             m_Shader,

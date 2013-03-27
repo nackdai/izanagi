@@ -1,9 +1,10 @@
 #include "Time.h"
+#include "izMath.h"
 
 #define _FLOOR_F2I_(f)  ((IZ_UINT)::floorf(f))
 
 // Get JD(Julian Day) by UT(Universal Time).
-void CTime::GetJDByUT(const SUniversalTime& ut, SDay& out)
+void CTime::GetJDByUT(const SUniversalTime& ut, SLongTime& out)
 {
     IZ_UINT year = ut.year;
     IZ_UINT month = ut.month;
@@ -15,13 +16,13 @@ void CTime::GetJDByUT(const SUniversalTime& ut, SDay& out)
     }
 
 #if 1
-    out.day = _FLOOR_F2I_(365.25f * year) + _FLOOR_F2I_(year / 400.0f) - _FLOOR_F2I_(year / 100.0f)
+    out.integer = _FLOOR_F2I_(365.25f * year) + _FLOOR_F2I_(year / 400.0f) - _FLOOR_F2I_(year / 100.0f)
         + _FLOOR_F2I_(30.59f * (month - 2)) + ut.day + 1721088;
     out.frac = 0.5f + (ut.hour + ut.minute / 60 + ut.second / 3600.0f) / 24.0f;
 
     if (out.frac >= 1.0f)
     {
-        out.day += 1;
+        out.integer += 1;
         out.frac -= 1.0f;
     }
 #else
@@ -47,9 +48,9 @@ void CTime::GetJDByUT(const SUniversalTime& ut, SDay& out)
 }
 
 // Get TJD(Truncated Julian Day) by JD(Julian Day).
-IZ_FLOAT CTime::GetTJDByJD(const SDay& jd)
+IZ_FLOAT CTime::GetTJDByJD(const SLongTime& jd)
 {
-    IZ_UINT i = jd.day - 2440000;
+    IZ_UINT i = jd.integer - 2440000;
     IZ_FLOAT f = jd.frac - 0.5f;
     IZ_FLOAT tjd = i + f;
     return tjd;
@@ -58,73 +59,105 @@ IZ_FLOAT CTime::GetTJDByJD(const SDay& jd)
 // Get TJD(Truncated Julian Day) by UT(Universal Time).
 IZ_FLOAT CTime::GetTJDByUT(const SUniversalTime& ut)
 {
-    SDay jd;
+    SLongTime jd;
     GetJDByUT(ut, jd);
     IZ_FLOAT tjd = GetTJDByJD(jd);
     return tjd;
 }
 
 // Get Greenwich Sidereal Time by UT(Universal Time).
-IZ_FLOAT CTime::GetGreenwichSiderealTimeByUT(const SUniversalTime& ut)
+IZ_DOUBLE CTime::GetGSTByUT(const SUniversalTime& ut)
 {
-    IZ_FLOAT tjd = GetTJDByUT(ut);
-    return GetGreenwichSiderealTimeByTJD(tjd);
-}
-
-// Get Greenwich Sidereal Time by JD(Julian Day).
-IZ_FLOAT CTime::GetGreenwichSiderealTimeByJD(const SDay& jd)
-{
-    IZ_FLOAT tjd = GetTJDByJD(jd);
-    return GetGreenwichSiderealTimeByTJD(tjd);
-}
-
-// Get Greenwich Sidereal Time by TJD(Truncated Julian Day).
-IZ_FLOAT CTime::GetGreenwichSiderealTimeByTJD(IZ_FLOAT tjd)
-{
-    IZ_FLOAT thetaG = 24.0f * (0.671262f + 1.0027379094f * tjd);
-    return thetaG;
-}
-
-// Get Local Sidereal Time by Greenwich Sidereal Time.
-IZ_FLOAT CTime::GetLocalSiderealByGreenwichSiderealTime(IZ_FLOAT time, IZ_FLOAT longitude)
-{
+#if 1
     // NOTE
-    // 東経の場合には負、西経の場合は正
+    // JD は必ず0時UTでなければいけない
 
-    IZ_FLOAT ret = time - longitude / 15.0f;
+    SUniversalTime tmp = ut;
+    tmp.hour = 0;
+    tmp.minute = 0;
+    tmp.second = 0;
 
-    if (ret < 0.0f)
+    SLongTime jd;
+    GetJDByUT(tmp, jd);
+
+    IZ_DOUBLE JD = jd.integer + jd.frac;
+    IZ_DOUBLE T = (JD - 2451545.0) / 36525.0;
+
+#if 1
+    // 秒単位
+    IZ_DOUBLE t = ut.hour * 3600.0 + ut.minute * 60 + ut.second;
+
+    IZ_DOUBLE gst = 24110.54841 + 8640184.812866 * T + 0.093104 * T * T - 0.0000062 * T * T * T;
+    gst += 1.00273790935 * t;
+#else
+    // 時間単位
+    IZ_DOUBLE t = ut.hour + (IZ_DOUBLE)ut.minute / 24.0 + (IZ_DOUBLE)ut.second / (24.0 * 60.0);
+    IZ_DOUBLE gst = 6.697374558 + 1.0027379093 * t + 2400.051336 * T + 0.000025862 * T * T;
+
+    if (gst > 24.0)
     {
-        ret += 24.0f;
+        gst = gst - ((IZ_INT)(gst / 24.0f)) * 24.0;
     }
-    else
-    {
-        while (ret >= 24.0f)
-        {
-            ret -= 24.0f;
-        }
-    }
+#endif
+#else
+    SLongTime jd;
+    GetJDByUT(ut, jd);
 
-    return ret;
+    IZ_DOUBLE JD = jd.integer + jd.frac;
+    IZ_DOUBLE T = (JD - 2451545.0) / 36525.0;
+
+    IZ_DOUBLE gst = 280.46061837 + 360.98564736629 * (JD - 2451545.0) + 0.0002879337 * T * T - T * T * T / 38710000;
+#endif
+    
+    return gst;
+}
+
+// Get Greenwich Sidereal Time by UT(Universal Time).
+IZ_FLOAT CTime::GetGSTByUTAsFloat(const SUniversalTime& ut)
+{
+    IZ_DOUBLE gst = GetGSTByUT(ut);
+    return (IZ_FLOAT)gst;
 }
 
 // Get Local Sidereal Time by UT(Universal Time).
-IZ_FLOAT CTime::GetLocalSiderealTimeByUT(const SUniversalTime& ut, IZ_FLOAT longitude)
+void CTime::GetLSTByUT(
+    const SUniversalTime& ut,
+    IZ_FLOAT longitude,
+    SUniversalTime& lst)
 {
-    IZ_FLOAT thetaG = GetGreenwichSiderealTimeByUT(ut);
-    return GetLocalSiderealByGreenwichSiderealTime(thetaG, longitude);
-}
+    // NOTE
+    // 東経が+、西経が-
 
-// Get Local Sidereal Time by JD(Julian Day).
-IZ_FLOAT CTime::GetLocalSiderealTimeByJD(const SDay& jd, IZ_FLOAT longitude)
-{
-    IZ_FLOAT thetaG = GetGreenwichSiderealTimeByJD(jd);
-    return GetLocalSiderealByGreenwichSiderealTime(thetaG, longitude);
-}
+    IZ_DOUBLE gst = GetGSTByUT(ut);
 
-// Get Local Sidereal Time by TJD(Truncated Julian Day).
-IZ_FLOAT CTime::GetLocalSiderealTimeByTJD(IZ_FLOAT tjd, IZ_FLOAT longitude)
-{
-    IZ_FLOAT thetaG = GetGreenwichSiderealTimeByTJD(tjd);
-    return GetLocalSiderealByGreenwichSiderealTime(thetaG, longitude);
+#if 0
+    IZ_DOUBLE t = longitude / 15.0;
+    gst += t;
+
+    IZ_DOUBLE hour = gst;
+    IZ_DOUBLE frac = izanagi::math::CMath::GetFrac(hour);
+
+    IZ_DOUBLE minute = frac * 60.0;
+    frac = izanagi::math::CMath::GetFrac(minute);
+
+    IZ_DOUBLE second = frac * 60.0;
+#else
+    IZ_DOUBLE t = longitude / 15.0 * 3600.0;
+    gst += t;
+
+    t = gst / (24.0 * 60.0 * 60.0);
+    IZ_DOUBLE frac = izanagi::math::CMath::GetFrac(t);
+
+    IZ_DOUBLE hour = frac * 24.0;
+    frac = izanagi::math::CMath::GetFrac(hour);
+
+    IZ_DOUBLE minute = frac * 60.0;
+    frac = izanagi::math::CMath::GetFrac(minute);
+
+    IZ_DOUBLE second = frac * 60.0;
+#endif
+
+    lst.hour = (IZ_UINT8)hour;
+    lst.minute = (IZ_UINT8)minute;
+    lst.second = (IZ_UINT8)second;
 }

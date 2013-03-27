@@ -3,7 +3,7 @@
 const IZ_FLOAT CSun::DEFAULT_SOLAR_YEAR = 365.242194f;
 
 IZ_FLOAT CSun::g_SloarYear = DEFAULT_SOLAR_YEAR;
-IZ_FLOAT CSun::g_AnglePerSolarYear = IZ_MATH_PI2 / DEFAULT_SOLAR_YEAR;
+IZ_FLOAT CSun::g_AnglePerSolarYear = 360.0f / DEFAULT_SOLAR_YEAR;
 
 IZ_FLOAT CSun::GetSolarYear()
 {
@@ -41,20 +41,20 @@ IZ_FLOAT CSun::GetElipticLongitudeByUniversalTime(
         base.second = veDay.second;
     }
 
-    SDay baseJD;
+    SLongTime baseJD;
     CTime::GetJDByUT(base, baseJD);
 
-    SDay targetJD;
+    SLongTime targetJD;
     CTime::GetJDByUT(day, targetJD);
 
-    SDay elapsed;
+    SLongTime elapsed;
     {
-        elapsed.day = targetJD.day - baseJD.day;
+        elapsed.integer = targetJD.integer - baseJD.integer;
         elapsed.frac = targetJD.frac - baseJD.frac;
 
         if (elapsed.frac < 0.0f)
         {
-            elapsed.day -= 1;
+            elapsed.integer -= 1;
             elapsed.frac += 1.0f;
         }
     }
@@ -90,11 +90,11 @@ void CSun::GetElipticByUniversalTime(
 }
 
 // その年における春分点からの経過日数から黄経を取得.
-IZ_FLOAT CSun::GetElipticLongitudeByElapsedDay(const SDay& day)
+IZ_FLOAT CSun::GetElipticLongitudeByElapsedDay(const SLongTime& day)
 {
     IZ_FLOAT anglePerSolarYear = GetAnglePerSolarYear();
 
-    IZ_FLOAT angle = anglePerSolarYear * day.day;
+    IZ_FLOAT angle = anglePerSolarYear * day.integer;
     angle += anglePerSolarYear * day.frac;
 
     return angle;
@@ -103,7 +103,7 @@ IZ_FLOAT CSun::GetElipticLongitudeByElapsedDay(const SDay& day)
 // その年における春分点からの経過日数から黄道座標を取得.
 void CSun::GetElipticByElapsedDay(
     SPolarCoord& eliptic,
-    const SDay& day)
+    const SLongTime& day)
 {
     IZ_FLOAT longitude = GetElipticLongitudeByElapsedDay(day);
 
@@ -115,7 +115,7 @@ void CSun::GetElipticByElapsedDay(
 // その年における春分点からの経過日数から黄道座標を取得.
 void CSun::GetElipticByElapsedDay(
     izanagi::math::SVector& eliptic,
-    const SDay& day)
+    const SLongTime& day)
 {
     SPolarCoord polar;
     GetElipticByElapsedDay(polar, day);
