@@ -14,9 +14,9 @@ struct SUniversalTime
     IZ_UINT8 padding[3];
 };
 
-struct SDay
+struct SLongTime
 {
-    IZ_UINT day;
+    IZ_UINT integer;
     IZ_FLOAT frac;
 };
 
@@ -29,11 +29,11 @@ private:
 public:
     /** Get JD(Julian Day) by UT(Universal Time).
      */
-    static void GetJDByUT(const SUniversalTime& ut, SDay& out);
+    static void GetJDByUT(const SUniversalTime& ut, SLongTime& out);
 
     /** Get TJD(Truncated Julian Day) by JD(Julian Day).
      */
-    static IZ_FLOAT GetTJDByJD(const SDay& jd);
+    static IZ_FLOAT GetTJDByJD(const SLongTime& jd);
 
     /** Get TJD(Truncated Julian Day) by UT(Universal Time).
      */
@@ -41,31 +41,18 @@ public:
 
     /** Get Greenwich Sidereal Time by UT(Universal Time).
      */
-    static IZ_FLOAT GetGreenwichSiderealTimeByUT(const SUniversalTime& ut);
+    static IZ_DOUBLE GetGSTByUT(const SUniversalTime& ut);
 
-    /** Get Greenwich Sidereal Time by JD(Julian Day).
+    /** Get Greenwich Sidereal Time by UT(Universal Time).
      */
-    static IZ_FLOAT GetGreenwichSiderealTimeByJD(const SDay& jd);
-
-    /** Get Greenwich Sidereal Time by TJD(Truncated Julian Day).
-     */
-    static IZ_FLOAT GetGreenwichSiderealTimeByTJD(IZ_FLOAT tjd);
-
-    /** Get Local Sidereal Time by Greenwich Sidereal Time.
-     */
-    static IZ_FLOAT GetLocalSiderealByGreenwichSiderealTime(IZ_FLOAT time, IZ_FLOAT longitude);
+    static IZ_FLOAT GetGSTByUTAsFloat(const SUniversalTime& ut);
 
     /** Get Local Sidereal Time by UT(Universal Time).
      */
-    static IZ_FLOAT GetLocalSiderealTimeByUT(const SUniversalTime& ut, IZ_FLOAT longitude);
-
-    /** Get Local Sidereal Time by JD(Julian Day).
-     */
-    static IZ_FLOAT GetLocalSiderealTimeByJD(const SDay& jd, IZ_FLOAT longitude);
-
-    /** Get Local Sidereal Time by TJD(Truncated Julian Day).
-     */
-    static IZ_FLOAT GetLocalSiderealTimeByTJD(IZ_FLOAT tjd, IZ_FLOAT longitude);
+    static void GetLSTByUT(
+        const SUniversalTime& ut,
+        IZ_FLOAT longitude,
+        SUniversalTime& lst);
 };
 
 #endif    // #if !defined(__SUN_H__)

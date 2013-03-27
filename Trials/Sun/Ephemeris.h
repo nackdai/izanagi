@@ -97,7 +97,7 @@ public:
 
     /** â©ìπç¿ïWÇ©ÇÁínïΩç¿ïWÇ…ïœä∑.
      */
-    void ConvertElipticToHorizontal(
+    static void ConvertElipticToHorizontal(
         const SPolarCoord& eliptic,
         const SUniversalTime& ut,
         const SPolarCoord& polar,
