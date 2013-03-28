@@ -141,6 +141,16 @@ IZ_BOOL CSunApp::InitInternal(
     SUniversalTime lst;
     CTime::GetLSTByUT(ut, 135.0f, lst);
 
+    {
+        ut.year = 2013;
+        ut.month = 3;
+        ut.day = 28;
+        ut.hour = 14;
+        ut.minute = 43;
+        ut.second = 0;
+    }
+    CEphemeris::GetHourAngle(ut, 135.0f, 37.5);
+
 __EXIT__:
     if (!result) {
         ReleaseInternal();

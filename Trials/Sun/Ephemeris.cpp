@@ -1,4 +1,5 @@
 #include "Ephemeris.h"
+#include "Time.h"
 
 // 極座標から直行座標に変換.
 void CEphemeris::ConvertPolarToRectangular(
@@ -198,13 +199,15 @@ IZ_FLOAT CEphemeris::GetHourAngle(
     IZ_FLOAT longitude,
     IZ_FLOAT rightAscension)
 {
-    // TODO
-    /*
-    IZ_FLOAT localSiderealTime = CTime::GetLSTByUT(ut, longitude);
-    IZ_FLOAT hourAngle = localSiderealTime - rightAscension;
-    return hourAngle;
-    */
-    return 0.0f;
+    SUniversalTime lst;
+    CTime::GetLSTByUT(ut, longitude, lst);
+
+    IZ_FLOAT hour = lst.hour + lst.minute / 60.0f + lst.second / 3600.0f;
+    IZ_FLOAT angle = hour * 15.0f;
+
+    angle -= rightAscension;
+
+    return angle;
 }
 
 // 黄道座標から時角を取得.
