@@ -89,15 +89,16 @@
     <Compile Include="ImageViewerTreeView.xaml.cs">
       <DependentUpon>ImageViewerTreeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Infra\IImgObject.cs" />
-    <Compile Include="Infra\ImageLibDllProxy.cs" />
-    <Compile Include="Infra\ImgImage.cs" />
-    <Compile Include="Infra\ImgMaster.cs" />
-    <Compile Include="Infra\ImgTexture.cs" />
+    <Compile Include="Project.cs" />
     <Compile Include="PropertyView\ImgMasterPropertyControl.xaml.cs">
       <DependentUpon>ImgMasterPropertyControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ImgObjectManager.cs" />
+    <Compile Include="Proxy\IImgObject.cs" />
+    <Compile Include="Proxy\ImageLibDllProxy.cs" />
+    <Compile Include="Proxy\ImgImage.cs" />
+    <Compile Include="Proxy\ImgMaster.cs" />
+    <Compile Include="Proxy\ImgTexture.cs" />
     <Compile Include="TreeViewNode.cs" />
     <Compile Include="TreeViewRoot.cs" />
     <Compile Include="PropertyView\ImgMasterPropertyViewModel.cs" />
