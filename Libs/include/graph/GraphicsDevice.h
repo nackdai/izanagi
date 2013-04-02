@@ -13,6 +13,7 @@ namespace graph
 {
     class CBaseTexture;
     class CTexture;
+    class CRenderTarget;
     class CCubeTexture;
     class CSurface;
     class CVertexBuffer;
@@ -74,7 +75,7 @@ namespace graph
 
         // レンダーターゲット作成
         PURE_VIRTUAL(
-            CTexture* CreateRenderTarget(
+            CRenderTarget* CreateRenderTarget(
                 IZ_UINT nWidth, IZ_UINT nHeight,
                 E_GRAPH_PIXEL_FMT fmt));
         

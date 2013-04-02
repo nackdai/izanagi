@@ -41,14 +41,6 @@ namespace graph
             E_GRAPH_RSC_TYPE rscType,
             IZ_BOOL isOnSysMem = IZ_FALSE);
 
-        // レンダーターゲット作成
-        static CTextureDX9* CreateRenderTarget(
-            CGraphicsDeviceDX9* device,
-            IMemoryAllocator* allocator,
-            IZ_UINT width,
-            IZ_UINT height,
-            E_GRAPH_PIXEL_FMT fmt);
-
     private:
         inline CTextureDX9();
         virtual inline ~CTextureDX9();
@@ -72,18 +64,8 @@ namespace graph
             E_GRAPH_RSC_TYPE createType,
             IZ_BOOL isOnSysMem);
 
-        // 本体作成（レンダーターゲット）
-        IZ_BOOL CreateBody_RenderTarget(
-            IZ_UINT width,
-            IZ_UINT height,
-            E_GRAPH_PIXEL_FMT fmt,
-            IZ_UINT mipLevel);
-
         // テクスチャ情報取得
         void GetTextureInfo();
-
-        // サーフェス作成
-        IZ_BOOL CreateSurface();
 
     public:
         // ロック
@@ -104,9 +86,6 @@ namespace graph
         virtual IZ_BOOL Restore();
 
     private:
-        // サーフェス取得
-        virtual CSurface* GetSurface(IZ_UINT idx);
-
         virtual TEX_HANDLE GetTexHandle()
         {
             return m_Texture;
@@ -120,9 +99,6 @@ namespace graph
 
         // 本体
         D3D_TEXTURE* m_Texture;
-
-        // サーフェス
-        CSurfaceDX9** m_Surface;
 
         CTextureDX9* m_Next;
     };

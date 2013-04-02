@@ -401,12 +401,18 @@ IZ_BOOL CPostEffectFunctorMGF::ApplyMGFMerge(
     // レンダーターゲット切り替え
     // 手動で行う・・・
     
-    graph::CSurface* pSurf = pFinalDst->GetSurface(0);
-    ret = pDevice->BeginScene(
-            &pSurf, 1,
-            graph::E_GRAPH_CLEAR_FLAG_COLOR,
-            0);
+    graph::CSurface* pSurf = pFinalDst->GetSurface();
+    ret = (pSurf != IZ_NULL);
     IZ_ASSERT(ret);
+
+    if (ret)
+    {
+        ret = pDevice->BeginScene(
+                &pSurf, 1,
+                graph::E_GRAPH_CLEAR_FLAG_COLOR,
+                0);
+        IZ_ASSERT(ret);
+    }
 
     // テクスチャ座標
     SFloatRect rcTex;
