@@ -13,7 +13,7 @@ namespace graph
     // サーフェース
     class CSurfaceDX9 : public CSurface
     {
-        friend class CTextureDX9;
+        friend class CRenderTargetDX9;
         friend class CGraphicsDeviceDX9;
 
     private:

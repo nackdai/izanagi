@@ -305,7 +305,7 @@ IZ_BOOL CPostEffectShader::BeginRender(
 
     // レンダーターゲット切り替え
     if (pTex != IZ_NULL) {
-        graph::CSurface* pSurf = pTex->GetSurface(0);
+        graph::CSurface* pSurf = pTex->GetSurface();
         IZ_ASSERT(pSurf != IZ_NULL);
 
         IZ_UINT nClearFlag = 0;

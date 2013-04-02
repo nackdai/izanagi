@@ -22,18 +22,27 @@ namespace graph
 
     public:
         // ロック
-        PURE_VIRTUAL(
-            IZ_UINT Lock(
-                UINT level,
-                void** data,
-                IZ_BOOL isReadOnly,
-                IZ_BOOL isDiscard = IZ_FALSE));
+        virtual IZ_UINT Lock(
+            UINT level,
+            void** data,
+            IZ_BOOL isReadOnly,
+            IZ_BOOL isDiscard = IZ_FALSE)
+        {
+            IZ_ASSERT(IZ_FALSE);
+            return 0;
+        }
 
         // アンロック
-        PURE_VIRTUAL(IZ_BOOL Unlock(IZ_UINT level));
+        virtual IZ_BOOL Unlock(IZ_UINT level)
+        {
+            IZ_ASSERT(IZ_FALSE);
+            return IZ_FALSE;
+        }
 
-        // サーフェス取得
-        PURE_VIRTUAL(CSurface* GetSurface(IZ_UINT idx));
+        virtual CSurface* GetSurface()
+        {
+            return IZ_NULL;
+        }
     };
 }   // namespace graph
 }   // namespace izanagi

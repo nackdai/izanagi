@@ -126,7 +126,7 @@ graph::CTexture* CPostEffectTextureCreator::Create(
 
     // 無いので作る
     if (bIsRenderTarget) {
-        ret = m_pDevice->CreateRenderTarget(
+        ret = (graph::CTexture*)m_pDevice->CreateRenderTarget(
                 nWidth,
                 nHeight,
                 fmt);

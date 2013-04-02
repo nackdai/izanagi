@@ -122,7 +122,7 @@ IZ_BOOL CPostEffectSample::BeginScene(izanagi::graph::CGraphicsDevice* device)
         izanagi::graph::CSurface* surfs[2];
         IZ_UINT surfaceNum = 0;
 
-        surfs[surfaceNum++] = m_SrcTex->GetSurface(0);
+        surfs[surfaceNum++] = m_SrcTex->GetSurface();
 
         IZ_BOOL ret = device->BeginScene(
             surfs,

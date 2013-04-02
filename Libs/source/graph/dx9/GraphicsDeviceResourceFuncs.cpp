@@ -7,6 +7,7 @@
 #include "graph/dx9/VertexShader_DX9.h"
 #include "graph/dx9/PixelShader_DX9.h"
 #include "graph/dx9/VertexDeclaration_DX9.h"
+#include "graph/dx9/RenderTarget_DX9.h"
 
 namespace izanagi
 {
@@ -78,11 +79,11 @@ namespace graph
     /**
     * レンダーターゲット作成
     */
-    CTexture* CGraphicsDeviceDX9::CreateRenderTarget(
+    CRenderTarget* CGraphicsDeviceDX9::CreateRenderTarget(
         IZ_UINT width, IZ_UINT height,
         E_GRAPH_PIXEL_FMT fmt)
     {
-        CTextureDX9* pRT = CTextureDX9::CreateRenderTarget(
+        CRenderTargetDX9* pRT = CRenderTargetDX9::CreateRenderTarget(
                             this,
                             m_Allocator,
                             width,
@@ -91,7 +92,7 @@ namespace graph
 
         if (pRT != IZ_NULL) {
             // リセット用リストに登録
-            m_ResetTexture = InsertResource(pRT, m_ResetTexture);
+            m_ResetRT = InsertResource(pRT, m_ResetRT);
         }
 
         return pRT;
@@ -282,6 +283,12 @@ namespace graph
     void CGraphicsDeviceDX9::RemoveIndexBuffer(CIndexBufferDX9* p)
     {
         m_ResetIB = RemoveResource(p, m_ResetIB);
+    }
+
+    // レンダーターゲット削除
+    void CGraphicsDeviceDX9::RemoveRenderTarget(CRenderTargetDX9* p)
+    {
+        m_ResetRT = RemoveResource(p, m_ResetRT);
     }
 }   // namespace graph
 }   // namespace izanagi

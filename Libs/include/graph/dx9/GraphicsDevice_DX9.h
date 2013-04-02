@@ -13,6 +13,7 @@ namespace graph
     class CTextureDX9;
     class CVertexBufferDX9;
     class CIndexBufferDX9;
+    class CRenderTargetDX9;
 
     // グラフィックスデバイス
     class CGraphicsDeviceDX9 : public CGraphicsDevice
@@ -21,6 +22,7 @@ namespace graph
         friend class CTextureDX9;
         friend class CVertexBufferDX9;
         friend class CIndexBufferDX9;
+        friend class CRenderTargetDX9;
 
     private:
         CGraphicsDeviceDX9();
@@ -53,7 +55,7 @@ namespace graph
             IZ_BOOL bIsDynamic);
 
         // レンダーターゲット作成
-        virtual CTexture* CreateRenderTarget(
+        virtual CRenderTarget* CreateRenderTarget(
             IZ_UINT nWidth, IZ_UINT nHeight,
             E_GRAPH_PIXEL_FMT fmt);
 
@@ -108,6 +110,7 @@ namespace graph
         void RemoveTexture(CTextureDX9* p);
         void RemoveVertexBuffer(CVertexBufferDX9* p);
         void RemoveIndexBuffer(CIndexBufferDX9* p);
+        void RemoveRenderTarget(CRenderTargetDX9* p);
 
         // 本体作成
         IZ_BOOL CreateBody(const SGraphicsDeviceInitParams& sParams);
@@ -337,6 +340,7 @@ namespace graph
         CTextureDX9* m_ResetTexture;
         CVertexBufferDX9* m_ResetVB;
         CIndexBufferDX9* m_ResetIB;
+        CRenderTargetDX9* m_ResetRT;
 
         // リセット用コールバック
         GraphicsDeviceResetCallBack m_ResetCallBack;
