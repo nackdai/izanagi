@@ -58,12 +58,9 @@ IZ_BOOL CShadow::BeginShadowRender(
     const izanagi::math::SVector& lightPos,
     const izanagi::math::SVector& lightDir)
 {
-    izanagi::graph::CSurface* srf = m_RT->GetSurface(0);
-    izanagi::graph::CSurface* depth = m_DepthRT;
-
     IZ_BOOL ret = device->BeginScene(
-                    &srf, 1,
-                    depth,
+                    &m_RT, 1,
+                    m_DepthRT,
                     izanagi::graph::E_GRAPH_CLEAR_FLAG_ALL);
     IZ_ASSERT(ret);
 

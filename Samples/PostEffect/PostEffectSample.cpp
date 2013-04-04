@@ -119,14 +119,17 @@ IZ_BOOL CPostEffectSample::BeginScene(izanagi::graph::CGraphicsDevice* device)
     IZ_BOOL ret = IZ_TRUE;
 
     if (EnablePostEffect()) {
-        izanagi::graph::CSurface* surfs[2];
-        IZ_UINT surfaceNum = 0;
+        izanagi::graph::CRenderTarget* rt[2];
+        IZ_UINT rtNum = 0;
 
-        surfs[surfaceNum++] = m_SrcTex->GetSurface();
+        rt[rtNum] = m_SrcTex->AsRenderTarget();
+        IZ_ASSERT(rt[rtNum] != IZ_NULL);
+
+        rtNum++;
 
         IZ_BOOL ret = device->BeginScene(
-            surfs,
-            surfaceNum,
+            rt,
+            rtNum,
             0,
             0, 1.0f, 0);
     }
