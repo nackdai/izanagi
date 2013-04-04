@@ -297,7 +297,7 @@ void* CStandardMemoryAllocator::AllocInternal(
         return IZ_NULL;
     }
 
-    IncrementAllocCnt();
+    CheckAllocCnt();
 
     void* ret = IZ_NULL;
 
@@ -380,7 +380,7 @@ void* CStandardMemoryAllocator::AllocInternal(
         return IZ_NULL;
     }
 
-    IncrementAllocCnt();
+    CheckAllocCnt();
 
     void* ret = IZ_NULL;
 
