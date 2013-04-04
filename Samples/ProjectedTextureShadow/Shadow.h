@@ -25,8 +25,8 @@ public:
 
     void EndShadowRender(izanagi::graph::CGraphicsDevice* device);
 
-    izanagi::graph::CTexture* GetRT() { return m_RT; }
-    izanagi::graph::CSurface* GetDepthRT() { return m_DepthRT; }
+    izanagi::graph::CRenderTarget* GetRT() { return m_RT; }
+    izanagi::graph::CRenderTarget* GetDepthRT() { return m_DepthRT; }
 
     const izanagi::math::SMatrix& GetLightViewProjMtx() const;
     const izanagi::math::SMatrix& GetShadowTexMtx() const;
@@ -34,8 +34,8 @@ public:
 private:
     izanagi::IMemoryAllocator* m_Allocator;
 
-    izanagi::graph::CTexture* m_RT;
-    izanagi::graph::CSurface* m_DepthRT;
+    izanagi::graph::CRenderTarget* m_RT;
+    izanagi::graph::CRenderTarget* m_DepthRT;
 
     izanagi::CCamera m_Light;
 
