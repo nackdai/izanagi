@@ -99,16 +99,25 @@ namespace graph
     }
 
     // 深度・ステンシルサーフェス作成
-    CSurface* CGraphicsDeviceDX9::CreateDepthStencilSurface(
+    CRenderTarget* CGraphicsDeviceDX9::CreateDepthStencilSurface(
         IZ_UINT width, 
         IZ_UINT height,
         E_GRAPH_PIXEL_FMT fmt)
     {
-        CSurface* ret = CSurfaceDX9::CreateDepthStencilSurface(
+        CSurfaceDX9* surface = CSurfaceDX9::CreateDepthStencilSurface(
                             m_Allocator,
                             this,
                             width, height,
                             fmt);
+
+        CRenderTargetDX9* ret = CRenderTargetDX9::CreateRenderTarget(this, m_Allocator, surface);
+        IZ_ASSERT(ret != IZ_NULL);
+
+        ret->SetDesc();
+
+        // NOTE
+        // 管理は引き継いだので、もういらない
+        SAFE_RELEASE(surface);
 
         return ret;
     }

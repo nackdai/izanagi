@@ -10,6 +10,8 @@ namespace izanagi
 {
 namespace graph
 {
+    class CRenderTarget;
+
     /**
      */
     class CTexture : public CBaseTexture
@@ -39,7 +41,7 @@ namespace graph
             return IZ_FALSE;
         }
 
-        virtual CSurface* GetSurface()
+        virtual CRenderTarget* AsRenderTarget()
         {
             return IZ_NULL;
         }

@@ -80,7 +80,7 @@ namespace graph
 
         IZ_BOOL IsRenderTarget() const
         {
-            return m_TexInfo.is_dynamic;
+            return m_TexInfo.is_rendertarget;
         }
 
         IZ_BOOL IsDynamic() const

@@ -14,7 +14,7 @@ namespace graph
     class CVertexShader;
     class CPixelShader;
     class CVertexDeclaration;
-    class CSurface;
+    class CRenderTarget;
 
     /** レンダーステートパラメータ
      */
@@ -64,8 +64,8 @@ namespace graph
         CVertexDeclaration* curVD;  // 頂点宣言
 
         // レンダーターゲット
-        CSurface* curRT[MAX_MRT_NUM];
-        CSurface* curDepth;
+        CRenderTarget* curRT[MAX_MRT_NUM];
+        CRenderTarget* curDepth;
     };
 
     /** レンダーステート

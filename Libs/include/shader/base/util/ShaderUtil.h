@@ -32,7 +32,7 @@ namespace izanagi {
 		static inline IZ_BOOL BeginScene(
 			graph::CGraphicsDevice* pDevice,
 			IZ_INT nColorBufferNum,
-			graph::CSurface** pColorBuffer,
+            graph::CRenderTarget** pColorBuffer,
 			IZ_BOOL bIsResetViewport,
 			IZ_INT nTarget,
 			IZ_DWORD nClearColor,
@@ -113,7 +113,7 @@ namespace izanagi {
 	IZ_BOOL CShaderUtil::BeginScene(
 		graph::CGraphicsDevice* pDevice,
 		IZ_INT nColorBufferNum,
-		graph::CSurface** pColorBuffer,
+		graph::CRenderTarget** pColorBuffer,
 		IZ_BOOL bIsResetViewport,
 		IZ_INT nTarget,
 		IZ_DWORD nClearColor,

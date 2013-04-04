@@ -400,15 +400,17 @@ IZ_BOOL CPostEffectFunctorMGF::ApplyMGFMerge(
 
     // レンダーターゲット切り替え
     // 手動で行う・・・
+
+    IZ_ASSERT(pFinalDst->IsRenderTarget());
+    graph::CRenderTarget* rt = pFinalDst->AsRenderTarget();
     
-    graph::CSurface* pSurf = pFinalDst->GetSurface();
-    ret = (pSurf != IZ_NULL);
+    ret = (rt != IZ_NULL);
     IZ_ASSERT(ret);
 
     if (ret)
     {
         ret = pDevice->BeginScene(
-                &pSurf, 1,
+                &rt, 1,
                 graph::E_GRAPH_CLEAR_FLAG_COLOR,
                 0);
         IZ_ASSERT(ret);

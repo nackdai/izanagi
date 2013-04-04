@@ -19,6 +19,12 @@ namespace graph
         virtual ~CRenderTarget() {}
 
         NO_COPIABLE(CRenderTarget);
+
+    public:
+        virtual CRenderTarget* AsRenderTarget()
+        {
+            return this;
+        }
     };
 }   // namespace graph
 }   // namespace izanagi

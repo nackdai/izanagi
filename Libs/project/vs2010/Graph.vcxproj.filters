@@ -133,9 +133,6 @@
     <ClInclude Include="..\..\include\graph\RenderState.h">
       <Filter>include\base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\graph\Surface.h">
-      <Filter>include\base</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\graph\Texture.h">
       <Filter>include\base</Filter>
     </ClInclude>

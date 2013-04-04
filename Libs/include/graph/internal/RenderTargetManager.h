@@ -3,7 +3,7 @@
 
 #include "izDefs.h"
 #include "std/StdStack.h"
-#include "graph/Surface.h"
+#include "graph/RenderTarget.h"
 
 namespace izanagi
 {
@@ -21,7 +21,7 @@ namespace graph
 
     public:
         // プッシュ
-        IZ_BOOL Push(CSurface* pSurf)
+        IZ_BOOL Push(CRenderTarget* rt)
         {
             IZ_BOOL ret = IZ_FALSE;
 
@@ -31,7 +31,7 @@ namespace graph
 
                 ret = m_Stack.Push();
                 if (ret) {
-                    SAFE_REPLACE(sItem.rt, pSurf);
+                    SAFE_REPLACE(sItem.rt, rt);
                 }
             }
 
@@ -41,9 +41,9 @@ namespace graph
         }
 
         // ポップ
-        CSurface* Pop()
+        CRenderTarget* Pop()
         {
-            CSurface* ret = IZ_NULL;
+            CRenderTarget* ret = IZ_NULL;
 
             if (!m_Stack.IsEmpty()) {
                 // 空でない
@@ -71,7 +71,7 @@ namespace graph
 
     private:
         struct SItem {
-            CSurface* rt;
+            CRenderTarget* rt;
 
             SItem()
             {

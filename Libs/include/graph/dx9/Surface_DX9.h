@@ -1,7 +1,8 @@
 #if !defined(__IZANAGI_GRAPH_SURFACE_DX9_H__)
 #define __IZANAGI_GRAPH_SURFACE_DX9_H__
 
-#include "graph/Surface.h"
+#include "izStd.h"
+#include "graph/GraphDefs.h"
 
 namespace izanagi
 {
@@ -11,14 +12,14 @@ namespace graph
     class CTexture;
 
     // サーフェース
-    class CSurfaceDX9 : public CSurface
+    class CSurfaceDX9 : public CObject
     {
         friend class CRenderTargetDX9;
         friend class CGraphicsDeviceDX9;
 
     private:
         // サーフェース作成.
-        static CSurface* CreateDepthStencilSurface(
+        static CSurfaceDX9* CreateDepthStencilSurface(
             IMemoryAllocator* allocator,
             CGraphicsDeviceDX9* device,
             IZ_UINT width, 
@@ -32,6 +33,10 @@ namespace graph
         inline CSurfaceDX9();
         virtual inline ~CSurfaceDX9();
 
+        NO_COPIABLE(CSurfaceDX9);
+
+        IZ_DEFINE_INTERNAL_RELEASE();
+
     public:
         virtual IZ_UINT GetWidth() const
         {
@@ -41,6 +46,11 @@ namespace graph
         virtual IZ_UINT GetHeight() const
         {
             return m_Desc.Height;
+        }
+
+        E_GRAPH_PIXEL_FMT GetPixelFormat() const
+        {
+            return m_Fmt;
         }
 
         virtual void* GetPlatformInterface()
@@ -63,6 +73,9 @@ namespace graph
         D3D_SURFACE* GetRawInterface() { return m_Surface; }
 
     private:
+        IMemoryAllocator* m_Allocator;
+        E_GRAPH_PIXEL_FMT m_Fmt;
+
         // 本体
         D3D_SURFACE* m_Surface;
 

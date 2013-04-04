@@ -206,7 +206,6 @@ fxc /T ps_2_0 /E main_OpNoTexAlpha /Fh %(RootDir)%(Directory)/%(Filename)_OpNoTe
     <ClInclude Include="..\..\include\graph\RenderState.h" />
     <ClInclude Include="..\..\include\graph\RenderTarget.h" />
     <ClInclude Include="..\..\include\graph\ShaderBase.h" />
-    <ClInclude Include="..\..\include\graph\Surface.h" />
     <ClInclude Include="..\..\include\graph\Texture.h" />
     <ClInclude Include="..\..\include\graph\VertexBuffer.h" />
     <ClInclude Include="..\..\include\graph\VertexDeclaration.h" />

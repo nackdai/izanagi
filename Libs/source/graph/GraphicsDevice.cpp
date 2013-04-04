@@ -57,7 +57,7 @@ namespace graph
 
     // シーン描画開始
     IZ_BOOL CGraphicsDevice::BeginScene(
-        CSurface** pRT,
+        CRenderTarget** pRT,
         IZ_UINT nCount,
         IZ_DWORD nClearFlags,
         IZ_COLOR nClearColor/*= 0*/,
@@ -76,8 +76,7 @@ namespace graph
     // シーン描画終了
     void CGraphicsDevice::EndScene(IZ_UINT flag/* = 0xffffffff*/)
     {
-        CSurface* pRTList[MAX_MRT_NUM];
-        memset(pRTList, 0, sizeof(pRTList));
+        CRenderTarget* pRTList[MAX_MRT_NUM];
 
         IZ_UINT nRTNum = 0;
 
@@ -95,7 +94,7 @@ namespace graph
 
         if ((flag & E_GRAPH_END_SCENE_FLAG_DEPTH_STENCIL) > 0) {
             // 深度・ステンシル
-            CSurface* pDepth = m_DepthMgr.Pop();
+            CRenderTarget* pDepth = m_DepthMgr.Pop();
             if (pDepth != IZ_NULL) {
                 SetDepthStencil(pDepth);
             }
@@ -289,9 +288,9 @@ namespace graph
     }
 
     // レンダーターゲットセット
-    IZ_BOOL CGraphicsDevice::PushRenderTarget(CSurface** pSurface, IZ_UINT num)
+    IZ_BOOL CGraphicsDevice::PushRenderTarget(CRenderTarget** rt, IZ_UINT num)
     {
-        IZ_ASSERT(pSurface != IZ_NULL);
+        IZ_ASSERT(rt != IZ_NULL);
 
         // TODO
         // MRTは許さない
@@ -302,10 +301,9 @@ namespace graph
 
         // 現在のレンダーターゲットをプッシュ
         for (IZ_UINT i = 0; i < num; ++i) {
-            CSurface* curRT = GetRenderTarget(i);
+            CRenderTarget* curRT = GetRenderTarget(i);
 
-            if ((pSurface[i] != IZ_NULL)
-                && (curRT != pSurface[i]))
+            if ((rt != IZ_NULL) && (curRT != rt[i]))
             {
                 ret = m_RTMgr[i].Push(curRT);
                 if (!ret) {
@@ -315,16 +313,16 @@ namespace graph
         }
 
         if (ret) {
-            SetRenderTarget(pSurface, num);
+            SetRenderTarget(rt, num);
         }
 
         return ret;
     }
 
-    void CGraphicsDevice::SetRenderTarget(CSurface** pSurface, IZ_UINT num)
+    void CGraphicsDevice::SetRenderTarget(CRenderTarget** rt, IZ_UINT num)
     {
         // レンダーターゲットを入れ替える
-        SetRenderTargetInternal(pSurface, num);
+        SetRenderTargetInternal(rt, num);
 
         // TODO
         // 強制的に０番目のサーフェスのサイズにビューポートを変換する
@@ -332,27 +330,27 @@ namespace graph
         SViewport vp;
         memcpy(&vp, &curVp, sizeof(vp));
         vp.x = vp.y = 0;
-        vp.width = pSurface[0]->GetWidth();
-        vp.height = pSurface[0]->GetHeight();
+        vp.width = rt[0]->GetWidth();
+        vp.height = rt[0]->GetHeight();
         SetViewport(vp);
     }
 
     // 深度・ステンシルセット
-    IZ_BOOL CGraphicsDevice::PushDepthStencil(CSurface* pSurface)
+    IZ_BOOL CGraphicsDevice::PushDepthStencil(CRenderTarget* rt)
     {
         IZ_BOOL ret = IZ_FALSE;
 
-        CSurface* curDepthRT = GetDepthSrencil();
+        CRenderTarget* curDepthRT = GetDepthSrencil();
 
         // 現在の深度をプッシュ
-        if ((pSurface != IZ_NULL)
-            && (curDepthRT != pSurface))
+        if ((rt != IZ_NULL)
+            && (curDepthRT != rt))
         {
             ret = m_DepthMgr.Push(curDepthRT);
         }
 
         if (ret) {
-            SetDepthStencil(pSurface);
+            SetDepthStencil(rt);
         }
 
         return ret;

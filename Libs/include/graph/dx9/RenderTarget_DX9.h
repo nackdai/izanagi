@@ -23,6 +23,12 @@ namespace graph
             IZ_UINT height,
             E_GRAPH_PIXEL_FMT fmt);
 
+        // レンダーターゲット作成
+        static CRenderTargetDX9* CreateRenderTarget(
+            CGraphicsDeviceDX9* device,
+            IMemoryAllocator* allocator,
+            CSurfaceDX9* surface);
+
     private:
         inline CRenderTargetDX9();
         virtual inline ~CRenderTargetDX9();
@@ -35,7 +41,7 @@ namespace graph
             E_GRAPH_PIXEL_FMT fmt);
 
         // テクスチャ情報取得
-        void GetTextureInfo();
+        void SetDesc();
 
         // サーフェス作成
         IZ_BOOL CreateSurface();
@@ -48,7 +54,7 @@ namespace graph
         virtual IZ_BOOL Restore();
 
     private:
-        CSurface* GetSurface();
+        CSurfaceDX9* GetSurface();
 
         virtual TEX_HANDLE GetTexHandle()
         {
