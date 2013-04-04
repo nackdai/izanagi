@@ -124,7 +124,7 @@ CPostEffect* CPostEffectSystem::CreatePostEffect(IInputStream* in)
 
 namespace {
     IZ_BOOL _CheckColorSurface(
-        graph::CSurface** pColorBuffer,
+        graph::CRenderTarget** pColorBuffer,
         IZ_UINT nColorBufferNum)
     {
         if (nColorBufferNum < 1) {

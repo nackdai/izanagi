@@ -2,6 +2,7 @@
 #include "graph/dx9/Texture_DX9.h"
 #include "graph/dx9/CubeTexture_DX9.h"
 #include "graph/dx9/Surface_DX9.h"
+#include "graph/dx9/RenderTarget_DX9.h"
 #include "graph/dx9/VertexBuffer_DX9.h"
 #include "graph/dx9/IndexBuffer_DX9.h"
 #include "graph/dx9/VertexShader_DX9.h"
@@ -175,21 +176,41 @@ namespace graph
             // サーフェスのリセット
             //（フレームバッファのリセット）
             {
-                CSurfaceDX9*& renderTarget = reinterpret_cast<CSurfaceDX9*&>(m_RT);
-                CSurfaceDX9*& deptthStencil = reinterpret_cast<CSurfaceDX9*&>(m_Depth);
+                CRenderTargetDX9*& renderTarget = reinterpret_cast<CRenderTargetDX9*&>(m_RT);
+                CRenderTargetDX9*& deptthStencil = reinterpret_cast<CRenderTargetDX9*&>(m_Depth);
 
                 if (m_RT != IZ_NULL) {
-                    renderTarget->Reset(IZ_NULL, 0);
+                    CSurfaceDX9* rtSurface = renderTarget->GetSurface();
+                    rtSurface->Reset(IZ_NULL, 0);
                 }
                 else {
-                    m_RT = CSurfaceDX9::CreateSurface(m_Allocator);
+                    CSurfaceDX9* surface = CSurfaceDX9::CreateSurface(m_Allocator);
+                    IZ_ASSERT(surface != IZ_NULL);
+
+                    m_RT = CRenderTargetDX9::CreateRenderTarget(this, m_Allocator, surface);
+
+                    // コピーしたのでもういらない
+                    SAFE_RELEASE(surface);
+
+                    // グラフィックスデバイスとの相互参照を外す
+                    this->Release();
                 }
 
                 if (m_Depth != IZ_NULL) {
-                    deptthStencil->Reset(IZ_NULL, 0);
+                    CSurfaceDX9* depthStencilSurface = deptthStencil->GetSurface();
+                    depthStencilSurface->Reset(IZ_NULL, 0);
                 }
                 else {
-                    m_Depth = CSurfaceDX9::CreateSurface(m_Allocator);
+                    CSurfaceDX9* surface = CSurfaceDX9::CreateSurface(m_Allocator);
+                    IZ_ASSERT(surface != IZ_NULL);
+
+                    m_Depth = CRenderTargetDX9::CreateRenderTarget(this, m_Allocator, surface);
+
+                    // コピーしたのでもういらない
+                    SAFE_RELEASE(surface);
+
+                    // グラフィックスデバイスとの相互参照を外す
+                    this->Release();
                 }
 
                 ret = ((m_RT != IZ_NULL) && (m_Depth != IZ_NULL));
@@ -197,10 +218,13 @@ namespace graph
             
                 if (ret) {
                     // フレームバッファサーフェースを取ってくる・・・
-                    m_Device->GetRenderTarget(0, &renderTarget->m_Surface);
-                    m_Device->GetDepthStencilSurface(&deptthStencil->m_Surface);
+                    m_Device->GetRenderTarget(0, &renderTarget->m_Surface->m_Surface);
+                    m_Device->GetDepthStencilSurface(&deptthStencil->m_Surface->m_Surface);
 
                     // 明示的に記述をセットする
+                    renderTarget->m_Surface->SetDesc();
+                    deptthStencil->m_Surface->SetDesc();
+
                     renderTarget->SetDesc();
                     deptthStencil->SetDesc();
 
@@ -435,9 +459,9 @@ namespace graph
     }
 
     IZ_BOOL CGraphicsDeviceDX9::BeginScene(
-        CSurface** pRT,
+        CRenderTarget** pRT,
         IZ_UINT nCount,
-        CSurface* pDepth,
+        CRenderTarget* pDepth,
         IZ_DWORD nClearFlags,
         IZ_COLOR nClearColor/*= 0*/,
         IZ_FLOAT fClearZ/*= 1.0f*/,
@@ -475,8 +499,7 @@ namespace graph
     */
     void CGraphicsDeviceDX9::EndScene(IZ_UINT flag/* = 0xffffffff*/)
     {
-        CSurface* pRTList[MAX_MRT_NUM];
-        memset(pRTList, 0, sizeof(pRTList));
+        CRenderTarget* pRTList[MAX_MRT_NUM];
 
         IZ_UINT nRTNum = 0;
 
@@ -494,7 +517,7 @@ namespace graph
 
         if ((flag & E_GRAPH_END_SCENE_FLAG_DEPTH_STENCIL) > 0) {
             // 深度・ステンシル
-            CSurface* pDepth = m_DepthMgr.Pop();
+            CRenderTarget* pDepth = m_DepthMgr.Pop();
             if (pDepth != IZ_NULL) {
                 SetDepthStencil(pDepth);
             }
@@ -545,15 +568,15 @@ namespace graph
         return ret;
     }
 
-    void CGraphicsDeviceDX9::SetDepthStencil(CSurface* pSurface)
+    void CGraphicsDeviceDX9::SetDepthStencil(CRenderTarget* rt)
     {
-        IZ_ASSERT(pSurface != IZ_NULL);
+        IZ_ASSERT(rt != IZ_NULL);
 
-        if (m_RenderState.curDepth != pSurface) {
+        if (m_RenderState.curDepth != rt) {
             // レンダーターゲットを入れ替える
-            CSurfaceDX9* dx9Surface = reinterpret_cast<CSurfaceDX9*>(pSurface);
-            m_Device->SetDepthStencilSurface(dx9Surface->GetRawInterface());
-            SAFE_REPLACE(m_RenderState.curDepth, pSurface);
+            CRenderTargetDX9* dx9RT = reinterpret_cast<CRenderTargetDX9*>(rt);
+            m_Device->SetDepthStencilSurface(dx9RT->GetSurface()->GetRawInterface());
+            SAFE_REPLACE(m_RenderState.curDepth, rt);
         }
     }
 
@@ -896,16 +919,16 @@ namespace graph
         return IZ_TRUE;
     }
 
-    void CGraphicsDeviceDX9::SetRenderTargetInternal(CSurface** pSurface, IZ_UINT num)
+    void CGraphicsDeviceDX9::SetRenderTargetInternal(CRenderTarget** rt, IZ_UINT num)
     {
         // レンダーターゲットを入れ替える
         for (IZ_UINT i = 0; i < num; ++i) {
-            if (m_RenderState.curRT[i] != pSurface[i]) {
-                CSurfaceDX9* dx9Surface = reinterpret_cast<CSurfaceDX9*>(pSurface[i]);
-                IZ_ASSERT(dx9Surface->GetRawInterface() != IZ_NULL);
+            if (m_RenderState.curRT[i] != rt[i]) {
+                CRenderTargetDX9* dx9RT = reinterpret_cast<CRenderTargetDX9*>(rt[i]);
+                IZ_ASSERT(dx9RT->GetSurface() != IZ_NULL);
 
-                m_Device->SetRenderTarget(i, dx9Surface->GetRawInterface());
-                SAFE_REPLACE(m_RenderState.curRT[i], pSurface[i]);
+                m_Device->SetRenderTarget(i, dx9RT->GetSurface()->GetRawInterface());
+                SAFE_REPLACE(m_RenderState.curRT[i], rt[i]);
             }
         }
     }

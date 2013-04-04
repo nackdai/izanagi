@@ -305,8 +305,8 @@ IZ_BOOL CPostEffectShader::BeginRender(
 
     // レンダーターゲット切り替え
     if (pTex != IZ_NULL) {
-        graph::CSurface* pSurf = pTex->GetSurface();
-        IZ_ASSERT(pSurf != IZ_NULL);
+        graph::CRenderTarget* rt = pTex->AsRenderTarget();
+        IZ_ASSERT(rt != IZ_NULL);
 
         IZ_UINT nClearFlag = 0;
         IZ_COLOR nClearColor = 0;
@@ -322,7 +322,7 @@ IZ_BOOL CPostEffectShader::BeginRender(
 
         // レンダーターゲットを切り替える
         ret = m_pDevice->BeginScene(
-                &pSurf,
+                &rt,
                 1,
                 nClearFlag,
                 nClearColor);

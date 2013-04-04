@@ -43,10 +43,8 @@ namespace graph
 
         // メモリ確保
         buf = (IZ_UINT8*)ALLOC_ZERO(allocator, size);
-        if (!(result = (buf != IZ_NULL))) {
-            IZ_ASSERT(IZ_FALSE);
-            goto __EXIT__;
-        }
+        result = (buf != IZ_NULL);
+        VGOTO(result, __EXIT__);
 
         IZ_UINT8* top = buf;
 
@@ -67,14 +65,57 @@ namespace graph
         result = instance->CreateBody_RenderTarget(
                     width, height,
                     fmt);
-        if (!result) {
-            goto __EXIT__;
-        }
+        VGOTO(result, __EXIT__);
 
         // サーフェス作成
         result = instance->CreateSurface();
+        VGOTO(result, __EXIT__);
+
+    __EXIT__:
         if (!result) {
-            goto __EXIT__;
+            if (instance != IZ_NULL) {
+                SAFE_RELEASE(instance);
+            }
+            else if (buf != IZ_NULL) {
+                allocator->Free(buf);
+            }
+        }
+
+        return instance;
+    }
+
+    // レンダーターゲット作成
+    CRenderTargetDX9* CRenderTargetDX9::CreateRenderTarget(
+        CGraphicsDeviceDX9* device,
+        IMemoryAllocator* allocator,
+        CSurfaceDX9* surface)
+    {
+        IZ_ASSERT(device != IZ_NULL);
+
+        IZ_BOOL result = IZ_TRUE;
+        IZ_UINT8* buf = IZ_NULL;
+        CRenderTargetDX9* instance = IZ_NULL;
+
+        size_t size = sizeof(CRenderTargetDX9) + sizeof(CSurfaceDX9);
+
+        // メモリ確保
+        buf = (IZ_UINT8*)ALLOC_ZERO(allocator, size);
+        result = (buf != IZ_NULL);
+        VGOTO(result, __EXIT__);
+
+        IZ_UINT8* top = buf;
+
+        // インスタンス作成
+        instance = new (buf) CRenderTargetDX9;
+        {
+            buf += sizeof(CRenderTargetDX9);
+
+            instance->AddRef();
+
+            instance->m_Allocator = allocator;
+            SAFE_REPLACE(instance->m_Device, device);
+
+            SAFE_REPLACE(instance->m_Surface, surface);
         }
 
     __EXIT__:
@@ -120,39 +161,59 @@ namespace graph
         VRETURN(SUCCEEDED(hr));
 
         // テクスチャ情報取得
-        GetTextureInfo();
+        SetDesc();
 
         return IZ_TRUE;
     }
 
     // テクスチャ情報取得
-    void CRenderTargetDX9::GetTextureInfo()
+    void CRenderTargetDX9::SetDesc()
     {
-        IZ_ASSERT(m_Texture != IZ_NULL);
+        if (m_Texture != IZ_NULL)
+        {
+            D3DSURFACE_DESC desc;
 
-        D3DSURFACE_DESC desc;
+            m_Texture->GetLevelDesc(0, &desc);
 
-        m_Texture->GetLevelDesc(0, &desc);
-
-        m_TexInfo.width = desc.Width;
-        m_TexInfo.height = desc.Height;
+            m_TexInfo.width = desc.Width;
+            m_TexInfo.height = desc.Height;
     
-        m_TexInfo.level = static_cast<IZ_UINT8>(m_Texture->GetLevelCount());
-        m_TexInfo.fmt = IZ_GET_ABST_PIXEL_FMT(desc.Format);
+            m_TexInfo.level = static_cast<IZ_UINT8>(m_Texture->GetLevelCount());
+            m_TexInfo.fmt = IZ_GET_ABST_PIXEL_FMT(desc.Format);
 
-        m_TexInfo.is_rendertarget = (desc.Usage == D3DUSAGE_RENDERTARGET);
-        m_TexInfo.is_dynamic = ((desc.Usage & D3DUSAGE_DYNAMIC) > 0);
-        m_TexInfo.is_on_sysmem = (desc.Pool == D3DPOOL_SYSTEMMEM);
-        m_TexInfo.is_on_vram = (desc.Pool == D3DPOOL_DEFAULT);
+            m_TexInfo.is_rendertarget = (desc.Usage == D3DUSAGE_RENDERTARGET);
+            m_TexInfo.is_dynamic = ((desc.Usage & D3DUSAGE_DYNAMIC) > 0);
+            m_TexInfo.is_on_sysmem = (desc.Pool == D3DPOOL_SYSTEMMEM);
+            m_TexInfo.is_on_vram = (desc.Pool == D3DPOOL_DEFAULT);
 
-        m_TexInfo.typeRsc = E_GRAPH_RSC_TYPE_STATIC;
-        if (m_TexInfo.is_dynamic) {
-            if (m_TexInfo.is_on_vram) {
-                m_TexInfo.typeRsc = E_GRAPH_RSC_TYPE_STATIC_DYNAMIC;
+            m_TexInfo.typeRsc = E_GRAPH_RSC_TYPE_STATIC;
+            if (m_TexInfo.is_dynamic) {
+                if (m_TexInfo.is_on_vram) {
+                    m_TexInfo.typeRsc = E_GRAPH_RSC_TYPE_STATIC_DYNAMIC;
+                }
+                else {
+                    m_TexInfo.typeRsc = E_GRAPH_RSC_TYPE_DYNAMIC;
+                }
             }
-            else {
-                m_TexInfo.typeRsc = E_GRAPH_RSC_TYPE_DYNAMIC;
-            }
+        }
+        else if (m_Surface != IZ_NULL) {
+            m_TexInfo.width = m_Surface->GetWidth();
+            m_TexInfo.height = m_Surface->GetHeight();
+    
+            m_TexInfo.level = 1;
+            m_TexInfo.fmt = m_Surface->GetPixelFormat();
+
+            m_TexInfo.is_rendertarget = IZ_TRUE;
+
+            // TODO
+            // 本当？
+            m_TexInfo.is_dynamic = IZ_FALSE;
+            m_TexInfo.is_on_sysmem = IZ_FALSE;
+            m_TexInfo.is_on_vram = IZ_TRUE;
+            m_TexInfo.typeRsc = E_GRAPH_RSC_TYPE_STATIC;
+        }
+        else {
+            IZ_ASSERT(IZ_FALSE);
         }
     }
 
@@ -219,7 +280,7 @@ namespace graph
     }
 
     // サーフェス取得
-    CSurface* CRenderTargetDX9::GetSurface()
+    CSurfaceDX9* CRenderTargetDX9::GetSurface()
     {
         return m_Surface;
     }

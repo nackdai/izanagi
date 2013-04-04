@@ -60,7 +60,7 @@ namespace graph
             E_GRAPH_PIXEL_FMT fmt);
 
         // 深度・ステンシルサーフェス作成
-        virtual CSurface* CreateDepthStencilSurface(
+        virtual CRenderTarget* CreateDepthStencilSurface(
             IZ_UINT width, 
             IZ_UINT height,
             E_GRAPH_PIXEL_FMT fmt);
@@ -140,9 +140,9 @@ namespace graph
             IZ_DWORD nClearStencil);
 
         virtual IZ_BOOL BeginScene(
-            CSurface** pRT,
+            CRenderTarget** pRT,
             IZ_UINT nCount,
-            CSurface* pDepth,
+            CRenderTarget* pDepth,
             IZ_DWORD nClearFlags,
             IZ_COLOR nClearColor = 0,
             IZ_FLOAT fClearZ = 1.0f,
@@ -318,10 +318,10 @@ namespace graph
 
     private:
         virtual IZ_BOOL SetTextureInternal(IZ_UINT nStage, CBaseTexture* pTex);
-        virtual void SetRenderTargetInternal(CSurface** pSurface, IZ_UINT num);
+        virtual void SetRenderTargetInternal(CRenderTarget** rt, IZ_UINT num);
 
         // 深度・ステンシルセット
-        virtual void SetDepthStencil(CSurface* pSurface);
+        virtual void SetDepthStencil(CRenderTarget* rt);
 
     public:
         virtual D3D_DEVICE* GetRawInterface() { return m_Device; }

@@ -8,7 +8,7 @@ namespace izanagi
 namespace graph
 {
     // サーフェース作成.
-    CSurface* CSurfaceDX9::CreateDepthStencilSurface(
+    CSurfaceDX9* CSurfaceDX9::CreateDepthStencilSurface(
         IMemoryAllocator* allocator,
         CGraphicsDeviceDX9* device,
         IZ_UINT width, 
@@ -84,6 +84,8 @@ namespace graph
     // コンストラクタ
     CSurfaceDX9::CSurfaceDX9()
     {
+        m_Allocator = IZ_NULL;
+        m_Fmt = E_GRAPH_PIXEL_FMT_FORCE_INT32;
         m_Surface = IZ_NULL;
         FILL_ZERO(&m_Desc, sizeof(m_Desc));
     }

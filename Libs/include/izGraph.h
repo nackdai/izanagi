@@ -9,7 +9,7 @@
 #include "graph/BaseTexture.h"
 #include "graph/Texture.h"
 #include "graph/CubeTexture.h"
-#include "graph/Surface.h"
+#include "graph/RenderTarget.h"
 #include "graph/VertexBuffer.h"
 #include "graph/IndexBuffer.h"
 #include "graph/VertexShader.h"

@@ -15,7 +15,6 @@ namespace graph
     class CTexture;
     class CRenderTarget;
     class CCubeTexture;
-    class CSurface;
     class CVertexBuffer;
     class CIndexBuffer;;
     class CVertexDeclaration;
@@ -88,7 +87,7 @@ namespace graph
 
         // 深度・ステンシルサーフェス作成
         PURE_VIRTUAL(
-            CSurface* CreateDepthStencilSurface(
+            CRenderTarget* CreateDepthStencilSurface(
                 IZ_UINT width, 
                 IZ_UINT height,
                 E_GRAPH_PIXEL_FMT fmt));
@@ -150,7 +149,7 @@ namespace graph
             IZ_DWORD nClearStencil = 0);
 
         IZ_BOOL BeginScene(
-            CSurface** pRT,
+            CRenderTarget** pRT,
             IZ_UINT nCount,
             IZ_DWORD nClearFlags,
             IZ_COLOR nClearColor = 0,
@@ -159,9 +158,9 @@ namespace graph
 
         PURE_VIRTUAL(
             IZ_BOOL BeginScene(
-                CSurface** pRT,
+                CRenderTarget** pRT,
                 IZ_UINT nCount,
-                CSurface* pDepth,
+                CRenderTarget* pDepth,
                 IZ_DWORD nClearFlags,
                 IZ_COLOR nClearColor = 0,
                 IZ_FLOAT fClearZ = 1.0f,
@@ -300,13 +299,13 @@ namespace graph
 
     public:
         // レンダーターゲット取得
-        CSurface* GetRenderTarget(IZ_UINT idx)
+        CRenderTarget* GetRenderTarget(IZ_UINT idx)
         {
             IZ_ASSERT(idx < MAX_MRT_NUM);
             return m_RenderState.curRT[idx];
         }
 
-        CSurface* GetDepthSrencil()
+        CRenderTarget* GetDepthSrencil()
         {
             return m_RenderState.curDepth;
         }
@@ -342,15 +341,15 @@ namespace graph
 
     protected:
         PURE_VIRTUAL(IZ_BOOL SetTextureInternal(IZ_UINT nStage, CBaseTexture* pTex));
-        PURE_VIRTUAL(void SetRenderTargetInternal(CSurface** pSurface, IZ_UINT num));
+        PURE_VIRTUAL(void SetRenderTargetInternal(CRenderTarget** rt, IZ_UINT num));
 
         // レンダーターゲットセット
-        IZ_BOOL PushRenderTarget(CSurface** pSurface, IZ_UINT num);
-        void SetRenderTarget(CSurface** pSurface, IZ_UINT num);
+        IZ_BOOL PushRenderTarget(CRenderTarget** rt, IZ_UINT num);
+        void SetRenderTarget(CRenderTarget** rt, IZ_UINT num);
 
         // 深度・ステンシルセット
-        IZ_BOOL PushDepthStencil(CSurface* pSurface);
-        PURE_VIRTUAL(void SetDepthStencil(CSurface* pSurface));
+        IZ_BOOL PushDepthStencil(CRenderTarget* rt);
+        PURE_VIRTUAL(void SetDepthStencil(CRenderTarget* rt));
 
     protected:
         enum {
@@ -369,8 +368,8 @@ namespace graph
         S_SAMPLER_STATE m_SamplerState[TEX_STAGE_NUM];
 
         // フレームバッファ
-        CSurface* m_RT;
-        CSurface* m_Depth;
+        CRenderTarget* m_RT;
+        CRenderTarget* m_Depth;
 
         // レンダーターゲット管理
         CRenderTargetManager<RT_QUEUE_MAX> m_RTMgr[MAX_MRT_NUM];

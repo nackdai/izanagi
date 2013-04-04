@@ -152,11 +152,11 @@ void CPostEffectVS::SetCommonShaderParameter(
 {
     // 位置オフセット
     {
-        graph::CSurface* pSurface = m_pDevice->GetRenderTarget(0);
-        IZ_ASSERT(pSurface != IZ_NULL);
+        graph::CRenderTarget* rt = m_pDevice->GetRenderTarget(0);
+        IZ_ASSERT(rt != IZ_NULL);
 
-        IZ_FLOAT fWidth = (IZ_FLOAT)pSurface->GetWidth();
-        IZ_FLOAT fHeight = (IZ_FLOAT)pSurface->GetHeight();
+        IZ_FLOAT fWidth = (IZ_FLOAT)rt->GetWidth();
+        IZ_FLOAT fHeight = (IZ_FLOAT)rt->GetHeight();
 
         // テクセル中心となるようなオフセット位置
         // ポリゴンの描画位置を-0.5fずらすことで、テクセル位置が0.5fずれるようにするらしい
