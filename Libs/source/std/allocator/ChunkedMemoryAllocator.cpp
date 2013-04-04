@@ -292,7 +292,7 @@ void* CChunkedMemoryAllocator::AllocInternal(
         return IZ_NULL;
     }
 
-    IncrementAllocCnt();
+    CheckAllocCnt();
 
     void* ret = IZ_NULL;
 

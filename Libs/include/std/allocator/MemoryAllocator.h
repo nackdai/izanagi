@@ -67,9 +67,7 @@ namespace izanagi {
         }
 
     protected:
-        /** メモリ確保回数を増やす.
-         */
-        virtual void IncrementAllocCnt()
+        virtual void CheckAllocCnt()
         {
             // Nothing is done...
         }
@@ -102,17 +100,18 @@ namespace izanagi {
         virtual ~CDebugMemoryAllocator() {}
 
     protected:
-        // メモリ確保回数を増やす.
-        virtual void IncrementAllocCnt()
+        virtual void CheckAllocCnt()
         {
             IZ_ASSERT(m_nDebugIdx != m_nAllocCnt);
-            ++m_nAllocCnt;
         }
 
         // メモリ確保回数を取得.
         virtual IZ_UINT64 GetAllocCnt()
         {
-            return m_nAllocCnt;
+            // NOTE
+            // 0 is invalid.
+            IZ_UINT64 ret = ++m_nAllocCnt;
+            return ret;
         }
 
     public:
