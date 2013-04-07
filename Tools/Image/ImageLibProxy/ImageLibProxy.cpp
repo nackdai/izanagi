@@ -6,7 +6,7 @@
 #include "ImageLibWrapper.h"
 
 namespace izanagi {
-    namespace tool {
+namespace tool {
 
     ImageLibProxy::ImageLibProxy()
     {
@@ -85,5 +85,5 @@ namespace izanagi {
         izReleasePixelData((void*)p);
     }
 
-    }
-}
+}   // namespace tool
+}   // namespace izanagi

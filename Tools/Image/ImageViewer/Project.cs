@@ -18,7 +18,6 @@ namespace ImageViewer
         }
     }
 
-    [XmlElement("plane")]
     class PlaneElement : TextureItem
     {
         [XmlAttribute("path")]
@@ -29,7 +28,6 @@ namespace ImageViewer
         }
     }
 
-    [XmlElement("cube")]
     class CubeElement
     {
         public ObservableCollection<CubeItemElement> Items
@@ -49,7 +47,6 @@ namespace ImageViewer
         zn,
     }
 
-    [XmlElement("element")]
     class CubeItemElement
     {
         [XmlAttribute("path")]
@@ -85,7 +82,5 @@ namespace ImageViewer
                 ListingFiles(dir, files);
             }
         }
-
-        public ObservableCollection<TextureItem> 
     }
 }

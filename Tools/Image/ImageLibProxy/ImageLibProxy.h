@@ -5,7 +5,7 @@
 using namespace System;
 
 namespace izanagi {
-    namespace tool {
+namespace tool {
 
     public ref class ImageLibProxy
     {
@@ -42,5 +42,5 @@ namespace izanagi {
         static void ReleasePixelData(IntPtr p);
     };
 
-    }
-}
+}   // namespace tool
+}   // namespace izanagi
