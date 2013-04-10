@@ -9,15 +9,24 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
+    <Filter Include="include\host">
+      <UniqueIdentifier>{c5cd47d5-f6a2-4614-9258-93bf39dadd19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\paragraph">
+      <UniqueIdentifier>{09b07d7d-d3c3-40ca-a341-f34dc95ff3d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\host">
+      <UniqueIdentifier>{8121abb2-5753-4e07-98eb-4eda1fa6c01d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\paragraph">
+      <UniqueIdentifier>{fd5b213e-aed9-4f35-a72a-28936a44052b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\text\FontRenderer.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\text\UString.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\text\FontHostFT.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\text\FontGlyphCache.cpp">
@@ -29,14 +38,17 @@
     <ClCompile Include="..\..\source\text\TextLine.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\text\FontHostFNT.cpp">
+      <Filter>source\host</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\text\FontHostFT.cpp">
+      <Filter>source\host</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\source\text\Paragraph.cpp">
-      <Filter>source</Filter>
+      <Filter>source\paragraph</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\text\ParagraphGroup.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\text\FontHostFNT.cpp">
-      <Filter>source</Filter>
+      <Filter>source\paragraph</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -53,9 +65,6 @@
     <ClInclude Include="..\..\include\text\UString.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\text\FontHostFT.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\text\FontGlyphCache.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -63,19 +72,22 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\text\FontHost.h">
-      <Filter>include</Filter>
+      <Filter>include\host</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\text\ParagraphGroup.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\text\TextLine.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\text\Paragraph.h">
-      <Filter>include</Filter>
+    <ClInclude Include="..\..\include\text\FontHostFT.h">
+      <Filter>include\host</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\text\FontHostFNT.h">
-      <Filter>include</Filter>
+      <Filter>include\host</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\text\Paragraph.h">
+      <Filter>include\paragraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\text\ParagraphGroup.h">
+      <Filter>include\paragraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\text\TextLine.h">
+      <Filter>include\paragraph</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
