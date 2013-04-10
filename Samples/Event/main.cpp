@@ -33,13 +33,13 @@ void DoEvent(izanagi::IMemoryAllocator* allocator)
     CSample sample;
 
     izanagi::CStdEvent<void, IZ_UINT> event1;
-    event1.Init(allocator, IZ_NULL);
+    event1.SetDeleteFunc(IZ_NULL);
     event1 += izanagi::EventHandler(allocator, OnEvent);
     event1 += izanagi::EventHandler(allocator, &sample, &CSample::OnEvent);
     event1(1);
 
     izanagi::CStdEvent<IZ_BOOL, IZ_UINT> event2;
-    event2.Init(allocator, IZ_NULL);
+    event2.SetDeleteFunc(IZ_NULL);
     event2 += izanagi::EventHandler(allocator, OnEventEx);
     event2 += izanagi::EventHandler(allocator, &sample, &CSample::OnEventEx);
     event2(1);
