@@ -24,32 +24,44 @@ namespace izanagi {
         }
 
     protected:
-        Delegate(void* object, void* func) : m_Object(object), m_Func(func) { m_Allocator = IZ_NULL; }
+        Delegate(void* object, void* func) : m_Object(object), m_Func(func)
+        {
+            m_Allocator = IZ_NULL;
+            m_ListItem.Init(this);
+        }
         Delegate(const Delegate& rhs)
         {
             m_Object = rhs.m_Object;
             m_Func = rhs.m_Func;
             m_Allocator = rhs.m_Allocator;
+            m_ListItem.Init(this);
         }
         virtual ~Delegate()
         {
             FREE(m_Allocator, this);
         }
 
+    protected:
         IZ_BOOL Equals(const Delegate& rhs)
         {
             return (m_Object == rhs.m_Object && m_Func == rhs.m_Func);
         }
 
-    protected:
         void* GetObject() { return m_Object; }
         void* GetFunc() { return m_Func; }
+
+    public:
+        CStdList<Delegate>::Item* GetListItem()
+        {
+            return &m_ListItem;
+        }
 
     protected:
         void* m_Object;
         void* m_Func;
 
         IMemoryAllocator* m_Allocator;
+        CStdList<Delegate>::Item m_ListItem;
     };
 
     /** 引数が１つのデリゲート
@@ -125,7 +137,6 @@ namespace izanagi {
     {
         typedef void (T::* FUNC)(ARG);
 
-        friend class CEventHandlerHelper;
         friend class CDelegateFactory;
 
         IZ_DECL_PLACEMENT_NEW();
@@ -158,7 +169,6 @@ namespace izanagi {
     {
         typedef void (*FUNC)(ARG);
         
-        friend class CEventHandlerHelper;
         friend class CDelegateFactory;
 
         IZ_DECL_PLACEMENT_NEW();
@@ -206,7 +216,6 @@ namespace izanagi {
     {
         typedef RETURN (T::* FUNC)(ARG);
 
-        friend class CEventHandlerHelper;
         friend class CDelegateFactory;
 
         IZ_DECL_PLACEMENT_NEW();
@@ -241,7 +250,6 @@ namespace izanagi {
     {
         typedef RETURN (*FUNC)(ARG);
 
-        friend class CEventHandlerHelper;
         friend class CDelegateFactory;
 
         IZ_DECL_PLACEMENT_NEW();
@@ -408,9 +416,9 @@ namespace izanagi {
          */
         void operator+=(DELEGATE& delegate)
         {
-            if (!Find(delegate))
+            if (!Find(&delegate))
             {
-                Add(delegate);
+                Add(&delegate);
             }
         }
 
@@ -418,9 +426,9 @@ namespace izanagi {
          */
         void operator-=(DELEGATE& delegate)
         {
-            if (Find(delegate))
+            if (Find(&delegate))
             {
-                Remove(delegate);
+                Remove(&delegate);
             }
         }
 
@@ -434,13 +442,13 @@ namespace izanagi {
 
     protected:
         // 指定されたデリゲートを探す
-        virtual IZ_BOOL Find(DELEGATE& delegate) = 0;
+        virtual IZ_BOOL Find(Delegate* delegate) = 0;
 
         // デリゲートを追加
-        virtual IZ_BOOL Add(DELEGATE& delegate) = 0;
+        virtual IZ_BOOL Add(Delegate* delegate) = 0;
 
         // 指定されたデリゲートをイベントから削除
-        virtual IZ_BOOL Remove(DELEGATE& delegate) = 0;
+        virtual IZ_BOOL Remove(Delegate* delegate) = 0;
     };
 
     /**
@@ -500,12 +508,12 @@ namespace izanagi {
 
         virtual ~CStdEvent()
         {
-            CStdList<DELEGATE>::Item* item = m_List.GetTop();
+            CStdList<Delegate>::Item* item = m_List.GetTop();
             while (item != IZ_NULL)
             {
-                CStdList<DELEGATE>::Item* next = item->GetNext();
-                DELEGATE* data = item->GetData();
-                m_List.Remove((CStdListEx<DELEGATE>::Item*)item);
+                CStdList<Delegate>::Item* next = item->GetNext();
+                Delegate* data = item->GetData();
+                item->Leave();
 
                 if (m_DeleteFunc != IZ_NULL)
                 {
@@ -520,12 +528,9 @@ namespace izanagi {
             }
         }
 
-        void Init(
-            IMemoryAllocator* allocator,
-            void (*deleteFunc)(DELEGATE*))
+        void SetDeleteFunc(void (*deleteFunc)(Delegate*))
         {
             m_DeleteFunc = deleteFunc;
-            m_List.Init(allocator);
         }
 
         virtual IZ_UINT GetCount()
@@ -535,116 +540,32 @@ namespace izanagi {
 
         virtual DELEGATE* Get(IZ_UINT idx)
         {
-            CStdList<DELEGATE>::Item* item = m_List.GetAt(idx);
+            CStdList<Delegate>::Item* item = m_List.GetAt(idx);
             IZ_ASSERT(item != IZ_NULL);
-            return item->GetData();
+            return (DELEGATE*)item->GetData();
         }
 
     private:
-        virtual IZ_BOOL Find(DELEGATE& delegate)
+        virtual IZ_BOOL Find(Delegate* delegate)
         {
-            IZ_INT idx = m_List.Find(&delegate);
+            IZ_INT idx = m_List.Find(delegate);
             return (idx >= 0);
         }
 
-        virtual IZ_BOOL Add(DELEGATE& delegate)
+        virtual IZ_BOOL Add(Delegate* delegate)
         {
-            return m_List.AddTail(&delegate);
+            return m_List.AddTail(delegate->GetListItem());
         }
 
-        virtual IZ_BOOL Remove(DELEGATE& delegate)
+        virtual IZ_BOOL Remove(Delegate* delegate)
         {
-            return m_List.Remove(&delegate);
-        }
-
-    private:
-        CStdListEx<DELEGATE> m_List;
-        void (*m_DeleteFunc)(DELEGATE*);
-    };
-
-    /**
-     */
-    template <typename RETURN, typename ARG>
-    class CStdEventSTL : public CStdEventBaseProxy<RETURN, ARG>
-    {
-    public:
-        CStdEventSTL()
-        {
-            m_DeleteFunc = IZ_NULL;
-        }
-
-        virtual ~CStdEventSTL()
-        {
-            IZ_UINT count = GetCount();
-            for (IZ_UINT i = 0; i < count; i++)
-            {
-                DELEGATE* delegate = Get(i);
-
-                if (m_DeleteFunc != IZ_NULL)
-                {
-                    (*m_DeleteFunc)(data);
-                }
-            }
-        }
-
-        void Init(void (*deleteFunc)(DELEGATE*))
-        {
-            m_DeleteFunc = deleteFunc;
-        }
-
-        virtual IZ_UINT GetCount()
-        {
-            return m_List.size();
-        }
-
-        virtual DELEGATE* Get(IZ_UINT idx)
-        {
-            return &m_List[idx];
-        }
-
-    private:
-        template <typename T>
-        class FindFunc
-        {
-        public:
-            FindFunc(const T* obj) : m_Obj(obj) {}
-
-            bool operator()(const T& obj)
-            {
-                return ((*m_Obj) == obj);
-            }
-
-        private:
-            const T* m_Obj;
-        };
-
-        virtual IZ_BOOL Find(DELEGATE& delegate)
-        {
-            return (std::find_if(m_List.begin(), m_List.end(), FindFunc(&delegate)) != m_List.end());
-        }
-
-        virtual IZ_BOOL Add(DELEGATE& delegate)
-        {
-            m_List.push_back(delegate);
+            delegate->GetListItem()->Leave();
             return IZ_TRUE;
         }
 
-        virtual IZ_BOOL Remove(DELEGATE& delegate)
-        {
-            std::list<DELEGATE, izanagi::STLMemoryAllocator<DELEGATE> >::iterator it = std::find_if(
-                m_List.begin(),
-                m_List.end(),
-                FindFunc(&delegate));
-
-            if (it != m_List.end())
-            {
-                m_List.erase(it);
-            }
-        }
-
     private:
-        std::list<DELEGATE, izanagi::STLMemoryAllocator<DELEGATE> > m_List;
-        void (*m_DeleteFunc)(DELEGATE*);
+        CStdList<Delegate> m_List;
+        void (*m_DeleteFunc)(Delegate*);
     };
 }   // namespace izanagi
 
