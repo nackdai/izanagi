@@ -13,9 +13,15 @@
 namespace izanagi {
     /**
      */
-    class Delegate
+    class Delegate : public CPlacementNew
     {
         friend class CEventHandlerHelper;
+
+    public:
+        static void Delete(Delegate* deletgate)
+        {
+            SAFE_DELETE(deletgate);
+        }
 
     protected:
         Delegate(void* object, void* func) : m_Object(object), m_Func(func) { m_Allocator = IZ_NULL; }
@@ -224,7 +230,7 @@ namespace izanagi {
         FUNC m_Func;
     };
 
-    /** C#‚ÌAction‚É‘Š“–
+    /** C#‚ÌFunc‚É‘Š“–
      * “à•”‚Å‚Ístatic‚ÈŠÖ”‚ğŒÄ‚Ño‚·
      *
      * @tparam RETURN •Ô‚è’l‚ÌŒ^
@@ -504,6 +510,10 @@ namespace izanagi {
                 if (m_DeleteFunc != IZ_NULL)
                 {
                     (*m_DeleteFunc)(data);
+                }
+                else
+                {
+                    Delegate::Delete(data);
                 }
 
                 item = next;
