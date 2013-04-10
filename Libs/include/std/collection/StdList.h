@@ -245,6 +245,25 @@ namespace izanagi {
             return IZ_NULL;
         }
         
+        IZ_INT Find(_T* data)
+        {
+            IZ_UINT idx = 0;
+
+            CStdList::Item* item = GetTop();
+            while (item != IZ_NULL)
+            {
+                _T* d = item->GetData();
+                if (d == data)
+                {
+                    return idx;
+                }
+
+                item = item->GetNext();
+                idx++;
+            }
+
+            return -1;
+        }
 
     private:
         IZ_UINT32 m_nNum;
