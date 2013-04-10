@@ -31,6 +31,16 @@ namespace threadmodel
         }
     }
 
+    void CJob::OnExecute()
+    {
+        OnExecute(IZ_NULL);
+    }
+
+    void CJob::OnFinished()
+    {
+        // Nothing...
+    }
+
     // 指定されたジョブキューに登録済みかどうか
     IZ_BOOL CJob::IsRegistered(CJobQueue* jobQueue)
     {

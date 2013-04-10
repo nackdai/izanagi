@@ -10,4 +10,9 @@
 // MessageQueue
 #include "threadmodel/ThreadModelMessageQueue.h"
 
+// Parallel
+#include "threadmodel/Parallel.h"
+#include "threadmodel/ParallelInvoke.h"
+#include "threadmodel/ParallelFor.h"
+
 #endif  // #if !defined(__IZANAGI_THREAD_MODEL_H__)

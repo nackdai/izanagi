@@ -88,6 +88,9 @@ xcopy /R /Y "$(TargetDir)$(ProjectName).pdb" ..\lib\$(IntDir)
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\izThreadModel.h" />
+    <ClInclude Include="..\..\include\threadmodel\Parallel.h" />
+    <ClInclude Include="..\..\include\threadmodel\ParallelFor.h" />
+    <ClInclude Include="..\..\include\threadmodel\ParallelInvoke.h" />
     <ClInclude Include="..\..\include\threadmodel\ThreadModelJob.h" />
     <ClInclude Include="..\..\include\threadmodel\ThreadModelJobQueue.h" />
     <ClInclude Include="..\..\include\threadmodel\ThreadModelJobWorker.h" />
@@ -97,6 +100,9 @@ xcopy /R /Y "$(TargetDir)$(ProjectName).pdb" ..\lib\$(IntDir)
     <ClInclude Include="..\..\include\threadmodel\ThreadSafeValue.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\source\threadmodel\Parallel.cpp" />
+    <ClCompile Include="..\..\source\threadmodel\ParallelFor.cpp" />
+    <ClCompile Include="..\..\source\threadmodel\ParallelInvoke.cpp" />
     <ClCompile Include="..\..\source\threadmodel\ThreadModelJob.cpp" />
     <ClCompile Include="..\..\source\threadmodel\ThreadModelJobQueue.cpp" />
     <ClCompile Include="..\..\source\threadmodel\ThreadModelJobWorker.cpp" />
