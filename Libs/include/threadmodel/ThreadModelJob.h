@@ -26,7 +26,7 @@ namespace threadmodel
     public:
         /**
          */
-        virtual void OnExecute();
+        virtual void OnExecute() = 0;
 
         /**
          */
@@ -58,8 +58,6 @@ namespace threadmodel
         }
 
     private:
-        virtual void OnExecute(void* data) = 0;
-
         CStdQueue<CJob>::Item* GetQueueItem() { return &m_QueueItem; }
 
         // 指定されたジョブキューに登録済みかどうか

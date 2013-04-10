@@ -48,7 +48,7 @@ namespace threadmodel
             IZ_DECL_PLACEMENT_NEW();
 
         public:
-            virtual void OnExecute(void* data)
+            virtual void OnExecute()
             {
                 if (m_Func != IZ_NULL) {
                     (*m_Func)(m_Idx);
