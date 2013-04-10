@@ -339,6 +339,7 @@ namespace izanagi {
             {
                 item->Leave();
                 delete item;
+                FREE(m_Allocator, item);
                 return IZ_TRUE;
             }
             return IZ_FALSE;
