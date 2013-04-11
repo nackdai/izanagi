@@ -71,6 +71,7 @@ namespace threadmodel
             VRETURN(m_Buf != IZ_NULL);
 
             m_WaitEvent.Open();
+            m_WaitEventSafe.Open();
 
             IZ_UINT8* buf = m_Buf;
 
@@ -129,9 +130,9 @@ namespace threadmodel
             return IZ_TRUE;
         }
 
-        if (m_IsTerminated)
+        if (m_IsTerminated || m_IsWaiting)
         {
-            // もう止まっているの何もしない
+            // もう止まっている or 終了待機中なので何もしない
             return IZ_FALSE;
         }
 
@@ -181,8 +182,9 @@ namespace threadmodel
     // 実行待ちキューが終了するまで待つ.
     void CJobQueue::WaitForFinishJobQueue()
     {
-        if (m_IsTerminated)
+        if (m_IsTerminated || m_IsWaiting)
         {
+            // もう止まっている or 終了待機中なので何もしない
             return;
         }
 
@@ -192,10 +194,14 @@ namespace threadmodel
             m_JobWorker[i]->Suspend();
         }
 
+        // 待機中
         m_IsWaiting = IZ_TRUE;
         m_WorkingThreadNum = m_JobWorkerNum;
 
-        m_WaitEvent.Reset();
+        {
+            sys::CGuarder guard(m_WaitEventSafe);
+            m_WaitEvent.Reset();
+        }
 
         // 動かす
         for (IZ_UINT i = 0; i < m_JobWorkerNum; i++)
@@ -203,10 +209,8 @@ namespace threadmodel
             m_JobWorker[i]->Resume();
         }
 
-        while (m_WorkingThreadNum > 0)
-        {
-            m_WaitEvent.Set();
-        }
+        // ワーカーが待機状態になるのを待つ
+        m_WaitEvent.Wait();
 
         m_IsWaiting = IZ_FALSE;
     }
@@ -285,6 +289,8 @@ namespace threadmodel
 
             if (m_WorkingThreadNum == 0)
             {
+                // ワーカーがすべて待機状態になったのでシグナル化
+                sys::CGuarder guard(m_WaitEventSafe);
                 m_WaitEvent.Set();
             }
         }

@@ -40,6 +40,7 @@ namespace threadmodel
         CJobQueue* m_JobQueue;
         
         sys::CEvent m_Event;
+        sys::CMutex m_EventSafe;
 
         IZ_BOOL m_WillJoin;
     };

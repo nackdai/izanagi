@@ -11,6 +11,7 @@ namespace threadmodel
     {
         m_JobQueue = jobQueue;
         m_Event.Open();
+        m_EventSafe.Open();
         m_WillJoin = IZ_FALSE;
     }
 
@@ -47,7 +48,7 @@ namespace threadmodel
                 }
                 else
                 {
-                    m_Event.Reset();
+                    Suspend();
                 }
             }
 
@@ -68,11 +69,13 @@ namespace threadmodel
 
     void CJobWorker::Resume()
     {
+        sys::CGuarder guard(m_EventSafe);
         m_Event.Set();
     }
 
     void CJobWorker::Suspend()
     {
+        sys::CGuarder guard(m_EventSafe);
         m_Event.Reset();
     }
 }   // namespace threadmodel

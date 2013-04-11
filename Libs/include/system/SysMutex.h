@@ -48,6 +48,24 @@ namespace sys
 
         ThreadId m_OwnerThreadId;
     };
+
+    class CGuarder
+    {
+    public:
+        CGuarder(CMutex& mutex) : m_Mutex(mutex)
+        {
+            m_Mutex.Lock();
+        }
+        ~CGuarder()
+        {
+            m_Mutex.Unlock();
+        }
+
+        NO_COPIABLE(CGuarder);
+
+    private:
+        CMutex& m_Mutex;
+    };
 }   // namespace sys
 }   // namespace izanagi
 

@@ -111,6 +111,8 @@ namespace threadmodel
         IZ_UINT8* m_Buf;
 
         sys::CEvent m_WaitEvent;
+        sys::CMutex m_WaitEventSafe;
+
         IZ_INT m_WorkingThreadNum;
 
         IZ_BOOL m_IsTerminated;
