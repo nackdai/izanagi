@@ -42,9 +42,20 @@ namespace izanagi {
         IZ_DECL_PLACEMENT_NEW();
 
     public:
-        /** 値の更新.
+        /** バインディング ソース プロパティまたはバインディング ターゲット プロパティの
+         *  どちらかにかかわらず強制的に値を送信
          */
         void Update();
+
+        /** 現在のバインディングターゲット値を
+         *  TwoWay バインディングまたは OneWayToSource バインディングの
+         *  バインディング ソース プロパティに送信
+         */
+        void UpdateSource();
+
+        /** バインディング ソース プロパティからバインディング ターゲット プロパティへデータを強制的に転送
+         */
+        void UpdateTarget();
 
     private:
         BindingOperations::Dictionary::Item* GetItem()
@@ -55,8 +66,13 @@ namespace izanagi {
     private:
         IMemoryAllocator* m_Allocator;
 
+        // バインディング ターゲット オブジェクト
         DependencyObjectBase& m_Target;
+
+        // バインディング ターゲット プロパティ
         DependencyProperty& m_Property;
+
+        // バインディング ターゲット オブジェクトのプロパティと任意のデータ ソース とを接続
         Binding* m_Binding;
 
         BindingOperations::Dictionary::Item m_Item;

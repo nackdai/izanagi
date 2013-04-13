@@ -9,7 +9,7 @@
 namespace izanagi {
     class BindingExpression;
 
-    /** データバインディング実行
+    /** Binding オブジェクトのバインディングを操作するための静的メソッドを提供する.
      */
     class BindingOperations
     {
@@ -21,6 +21,20 @@ namespace izanagi {
         NO_COPIABLE(BindingOperations);
 
     public:
+        template <typename _T>
+        static void SetBindings(
+            IMemoryAllocator* allocator,
+            _T* target,
+            DependencyProperty& property,
+            Binding* binding)
+        {
+            SetBindings(
+                allocator,
+                *(DependencyObjectBase*)target,
+                property,
+                binding);
+        }
+
         /** データバインディングを設定.
          */
         static void SetBindings(
@@ -29,11 +43,11 @@ namespace izanagi {
             DependencyProperty& property,
             Binding* binding);
 
-        /** 指定されたプロパティに対するデータバインディングを取得.
+        /** 指定されたオブジェクト上の指定されたバインディング ターゲット プロパティに関連付けられた BindingExpression オブジェクトを取得.
          */
         static BindingExpression* GetBindingExpression(const DependencyProperty& property);
 
-        /** 指定されたプロパティに対するデータバインディングを削除.
+        /** 指定されたオブジェクト上の指定されたバインディング ターゲット プロパティに関連付けられた BindingExpression オブジェクトを削除.
          */
         static IZ_BOOL RemoveBindingExpression(const DependencyProperty& property);
 

@@ -136,7 +136,6 @@ xcopy /R /Y "$(TargetDir)$(ProjectName).pdb" ..\lib\$(IntDir)
     <ClInclude Include="..\..\include\std\dependency_property\DependencyObject.h" />
     <ClInclude Include="..\..\include\std\dependency_property\DependencyProperty.h" />
     <ClInclude Include="..\..\include\std\dependency_property\DependencyPropertyChangedEventArgs.h" />
-    <ClInclude Include="..\..\include\std\dependency_property\NotifyPropertyChanged.h" />
     <ClInclude Include="..\..\include\std\dependency_property\PropertyMetaData.h" />
     <ClInclude Include="..\..\include\izStd.h" />
   </ItemGroup>

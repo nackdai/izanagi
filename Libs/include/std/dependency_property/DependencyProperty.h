@@ -6,7 +6,7 @@
 #include "std/StdString.h"
 
 namespace izanagi {
-    /** 依存性プロパティ
+    /** 依存関係プロパティ
      */
     class DependencyProperty
     {
@@ -15,8 +15,10 @@ namespace izanagi {
         IZ_DECL_PLACEMENT_NEW();
 
     public:
+        // プロパティ名最大文字数
         static const IZ_UINT PropertyNameMax = 63;
 
+        // プロパティ名の型
         typedef CStdString<IZ_CHAR, PropertyNameMax> PropertyName;
 
     private:
@@ -36,14 +38,14 @@ namespace izanagi {
 
         ~DependencyProperty() {}
 
-        /**
+        /** プロパティ名を取得
          */
         const CStdString<IZ_CHAR, PropertyNameMax>& GetName() const
         {
             return m_Name;
         }
 
-        /**
+        /** プロパティ名のキー値を取得
          */
         IZ_UINT GetKey() const
         {
