@@ -8,19 +8,28 @@ namespace izanagi
         m_Flags.isValueChanged = IZ_FALSE;
     }
 
+    // プロパティ情報をすべてクリア
     void DependencyObjectBase::ClearAll()
     {
-        CStdList<CStdHash<IZ_UINT, Element, HASH_NUM>::Item>::Item* item = m_Dictionary.GetOrderTop();
-        while (item != IZ_NULL)
-        {
-            CStdList<CStdHash<IZ_UINT, Element, HASH_NUM>::Item>::Item* next = item->GetNext();
-            Element* element = item->GetData()->GetData();
-            delete element;
-            FreeForDependencyObject(element);
-            item = next;
-        }
+        // NOTE
+        // DependencyObjectBase のデストラクタで呼び出すべきだが
+        // FreeForDependencyObject が仮想関数なのでデストラクタなので呼び出せない
+        // そこで m_Flags.isCalledClearAll で呼び出されたかどうかをチェックする
 
-        m_Flags.isCalledClearAll = IZ_TRUE;
+        if(!m_Flags.isCalledClearAll)
+        {
+            CStdList<CStdHash<IZ_UINT, Element, HASH_NUM>::Item>::Item* item = m_Dictionary.GetOrderTop();
+            while (item != IZ_NULL)
+            {
+                CStdList<CStdHash<IZ_UINT, Element, HASH_NUM>::Item>::Item* next = item->GetNext();
+                Element* element = item->GetData()->GetData();
+                delete element;
+                FreeForDependencyObject(element);
+                item = next;
+            }
+
+            m_Flags.isCalledClearAll = IZ_TRUE;
+        }
     }   
 
     CStdHash<IZ_UINT, DependencyObjectBase::Element, DependencyObjectBase::HASH_NUM>::Item* DependencyObjectBase::Find(const DependencyProperty& prop)
@@ -30,7 +39,7 @@ namespace izanagi
         return item;
     }
 
-
+    // 依存関係プロパティに値をセット
     void DependencyObjectBase::SetValueInternal(const DependencyProperty& prop, const CValue& value)
     {
         // プロパティに該当するハッシュアイテムを探す
@@ -38,6 +47,7 @@ namespace izanagi
 
         m_Flags.isValueChanged = IZ_FALSE;
 
+        // 元の値を覚えておく
         CValue oldVal;
         
         if (item != IZ_NULL)
@@ -86,8 +96,10 @@ namespace izanagi
         }
     }
 
+    // 依存関係プロパティから値を取得
     IZ_BOOL DependencyObjectBase::GetValueInternal(const DependencyProperty& prop, CValue& ret)
     {
+        // 
         CStdHash<IZ_UINT, Element, HASH_NUM>::Item* item = Find(prop);
 
         if (item != IZ_NULL)

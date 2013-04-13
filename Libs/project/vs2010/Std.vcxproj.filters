@@ -151,9 +151,6 @@
     <ClInclude Include="..\..\include\std\dependency_property\DependencyPropertyChangedEventArgs.h">
       <Filter>include\dependency_property</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\std\dependency_property\NotifyPropertyChanged.h">
-      <Filter>include\dependency_property</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\std\dependency_property\PropertyMetaData.h">
       <Filter>include\dependency_property</Filter>
     </ClInclude>
