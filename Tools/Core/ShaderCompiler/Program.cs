@@ -18,6 +18,9 @@ namespace ShaderCompiler
 
     static public unsafe class Compiler
     {
+        /// <summary>
+        /// 使い方を表示
+        /// </summary>
         static void DisplayUsage()
         {
             Console.WriteLine("Usage : ShaderCompiler <options>");
@@ -29,11 +32,19 @@ namespace ShaderCompiler
             Console.WriteLine("-p <profile>");
             Console.WriteLine("-I <includes>");
             Console.WriteLine("-D <defines>");
-            Console.WriteLine("-opt <options> : options for native compiler");
+            Console.WriteLine("-opt <options> : options for native compiler (fxc.exe)");
         }
 
+        /// <summary>
+        /// Preproc.exe のプロセスを実行するための準備
+        /// </summary>
+        /// <param name="option"></param>
+        /// <returns>Preproc.exe のプロセス開始情報</returns>
         static ProcessStartInfo PrepareProcessPreproc(Option option)
         {
+            // NOTE
+            // Preproc.exe は実行ファイルと同じパスにあること
+
             var asm = Assembly.GetEntryAssembly();
             string path = asm.Location;
 
@@ -77,6 +88,10 @@ namespace ShaderCompiler
             return info;
         }
 
+        /// <summary>
+        /// Preproc.exe を実行
+        /// </summary>
+        /// <param name="option"></param>
         static void RunPreprocess(Option option)
         {
             var process = new Process();
@@ -87,8 +102,14 @@ namespace ShaderCompiler
             process.WaitForExit();
         }
 
+        /// <summary>
+        /// fxc.exe のプロセスを実行するための準備
+        /// </summary>
+        /// <param name="option"></param>
+        /// <returns>fxc.exe のプロセス開始情報</returns>
         static ProcessStartInfo PrepareProcessFxc(Option option)
         {
+            // DXSDKのディレクトリのパスを環境変数より取得
             var dxDir = System.Environment.GetEnvironmentVariable("DXSDK_DIR");
             if (string.IsNullOrEmpty(dxDir))
             {
@@ -97,6 +118,7 @@ namespace ShaderCompiler
 
             ProcessStartInfo info = new ProcessStartInfo();
 
+            // fxc.exe のパス
             info.FileName = Path.Combine(dxDir, @"Utilities\bin\x64", "fxc.exe");
 
             info.Arguments = "/nologo";
@@ -113,6 +135,10 @@ namespace ShaderCompiler
             return info;
         }
 
+        /// <summary>
+        /// fxc.exe を実行
+        /// </summary>
+        /// <param name="option"></param>
         static void RunFxc(Option option)
         {
             var process = new Process();
@@ -153,18 +179,54 @@ namespace ShaderCompiler
         }
     }
 
+    /// <summary>
+    /// オプション
+    /// </summary>
     class Option
     {
+        /// <summary>
+        /// 入力ファイル名
+        /// </summary>
         public string Input;
+
+        /// <summary>
+        /// 出力ファイル名
+        /// </summary>
         public string Output;
+
+        /// <summary>
+        /// エントリポイント
+        /// </summary>
         public string Entry;
+
+        /// <summary>
+        /// プロファイル（vs_2_0, ps_2_0 など）
+        /// </summary>
         public string Profile;
 
+        /// <summary>
+        /// プリプロセスされたファイル名
+        /// </summary>
         public string PreprocessedFile;
+
+        /// <summary>
+        /// バイトコード出力されたファイル名
+        /// </summary>
         public string ByteCodedFile;
 
+        /// <summary>
+        /// インクルードパス指定
+        /// </summary>
         public string Includes;
+
+        /// <summary>
+        /// デファイン指定
+        /// </summary>
         public string Defines;
+
+        /// <summary>
+        /// fxc.exe に直接設定するオプション
+        /// </summary>
         public string Options;
 
         public Option(string[] args)
@@ -240,6 +302,7 @@ namespace ShaderCompiler
                 }
             }
 
+            // 入力ファイル名からプリプロセスされたファイル名とバイトコード出力されたファイル名を作成する
             if (!string.IsNullOrEmpty(this.Input))
             {
                 this.ByteCodedFile = Path.GetFileNameWithoutExtension(this.Input);
