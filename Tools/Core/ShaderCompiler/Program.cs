@@ -167,15 +167,42 @@ namespace ShaderCompiler
             RunFxc(option);
 
             char* bytecode = (char*)System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi(option.ByteCodedFile);
-            char* output = (char*)System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi(option.Output);
+
+            var tmp = DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss") + ".txt";
+            char* output = (char*)System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi(tmp);
 
             bool result = izanagi.tool.MojoShaderProxy.Parse((sbyte*)bytecode, (sbyte*)output);
 
-            if (!result)
+            if (result)
             {
                 // TODO
-                return;
+                // For GLESSL
+
+                int count = 0;
+
+                using (var sr = new StreamReader(tmp, Encoding.ASCII))
+                {
+                    using (var sw = new StreamWriter(option.Output, false, Encoding.ASCII))
+                    {
+                        while (sr.Peek() >= 0)
+                        {
+                            var line = sr.ReadLine();
+                            if (count == 0)
+                            {
+                                sw.WriteLine("precision highp float;");
+                                sw.WriteLine();
+                            }
+                            else
+                            {
+                                sw.WriteLine(line);
+                            }
+                            count++;
+                        }
+                    }
+                }
             }
+
+            File.Delete(tmp);
         }
     }
 
