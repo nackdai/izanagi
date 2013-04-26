@@ -123,7 +123,7 @@ void CSampleEnvBox::Render(izanagi::graph::CGraphicsDevice* device)
 
     device->DrawIndexedPrimitive(
         izanagi::graph::E_GRAPH_PRIM_TYPE_TRIANGLESTRIP,
-        0, 0,
+        0,
         VTX_NUM, 0,
         IDX_NUM - 2);
 }

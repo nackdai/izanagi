@@ -94,7 +94,6 @@ IZ_BOOL CDebugMesh::Draw(IZ_BOOL bEnableDrawDebugAxis/*= IZ_FALSE*/)
         m_pDevice->DrawIndexedPrimitive(
             m_PrimType,
             0,
-            0,
             m_pVB->GetVtxNum(),
             0,
             m_nPrimCnt);

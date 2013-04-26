@@ -313,7 +313,6 @@ namespace graph
         IZ_BOOL ret = device->DrawIndexedPrimitive(
                         PrimType[m_nPrimType],
                         nBaseIdx,   // BaseIdx
-                        nMinIdx,    // MinIdx
                         vtxNum, // VtxNum
                         nStartIdx,  // StartIdx
                         nPrimNum);  // PrimCnt

@@ -147,7 +147,6 @@ IZ_BOOL CPrimitiveSet::Render(
         pDevice->DrawIndexedPrimitive(
             m_Info.typePrim,
             0,              // BaseVertexIndex
-            m_Info.minIdx,  // MinIndex
             nVtxNum,        // NumVertices
             0,              // StartIndex
             m_PrimNum));
@@ -243,7 +242,6 @@ IZ_BOOL CPrimitiveSet::DebugRender(
         pDevice->DrawIndexedPrimitive(
             m_Info.typePrim,
             0,              // BaseVertexIndex
-            m_Info.minIdx,  // MinIndex
             nVtxNum,        // NumVertices
             0,              // StartIndex
             m_PrimNum));
