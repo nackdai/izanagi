@@ -303,8 +303,8 @@ namespace graph
         IZ_INT nMinIdx = (*ComputeMinIdx[m_nPrimType])(m_nCurIdx, m_nCurPrimNum);
         nMinIdx = (nMinIdx < 0 ? 0 : nMinIdx);  // 一応・・・
 
-        IZ_UINT nBaseIdx = m_sVBInfo.offset / m_pVB->GetStride();
-        IZ_UINT nStartIdx = m_sIBInfo.offset / m_pIB->GetStride();
+        IZ_UINT vtxOffset = m_sVBInfo.offset / m_pVB->GetStride();
+        IZ_UINT idxOffset = m_sIBInfo.offset / m_pIB->GetStride();
 
         // NOTE
         // インデックスは必ず０から始まる
@@ -312,9 +312,9 @@ namespace graph
         // 描画
         IZ_BOOL ret = device->DrawIndexedPrimitive(
                         PrimType[m_nPrimType],
-                        nBaseIdx,   // BaseIdx
+                        vtxOffset,   // BaseIdx
                         vtxNum, // VtxNum
-                        nStartIdx,  // StartIdx
+                        idxOffset,  // StartIdx
                         nPrimNum);  // PrimCnt
 
         m_nCurIdx = 0;
