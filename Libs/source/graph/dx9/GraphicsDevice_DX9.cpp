@@ -712,7 +712,6 @@ namespace graph
     IZ_BOOL CGraphicsDeviceDX9::DrawIndexedPrimitive(
         E_GRAPH_PRIM_TYPE prim_type,
         IZ_UINT nBaseIdx,
-        IZ_UINT nMinIdx,
         IZ_UINT nVtxNum,
         IZ_UINT nStartIdx,
         IZ_UINT nPrimCnt)
@@ -720,7 +719,7 @@ namespace graph
         HRESULT hr = m_Device->DrawIndexedPrimitive(
                         IZ_GET_TARGET_PRIM_TYPE(prim_type),
                         nBaseIdx,
-                        nMinIdx,
+                        0,
                         nVtxNum,
                         nStartIdx,
                         nPrimCnt);

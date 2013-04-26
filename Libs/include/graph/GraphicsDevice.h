@@ -239,7 +239,6 @@ namespace graph
             IZ_BOOL DrawIndexedPrimitive(
                 E_GRAPH_PRIM_TYPE prim_type,
                 IZ_UINT nBaseIdx,
-                IZ_UINT nMinIdx,
                 IZ_UINT vtxNum,
                 IZ_UINT nStartIdx,
                 IZ_UINT nPrimCnt));
