@@ -238,16 +238,16 @@ namespace graph
         PURE_VIRTUAL(
             IZ_BOOL DrawIndexedPrimitive(
                 E_GRAPH_PRIM_TYPE prim_type,
-                IZ_UINT nBaseIdx,
+                IZ_UINT vtxOffset,
                 IZ_UINT vtxNum,
-                IZ_UINT nStartIdx,
+                IZ_UINT idxOffset,
                 IZ_UINT nPrimCnt));
 
         // インデックスバッファなし描画
         PURE_VIRTUAL(
             IZ_BOOL DrawPrimitive(
                 E_GRAPH_PRIM_TYPE prim_type,
-                IZ_UINT nStartIdx,
+                IZ_UINT idxOffset,
                 IZ_UINT nPrimCnt));
 
     public:

@@ -177,15 +177,15 @@ namespace graph
         // インデックスバッファ描画
         virtual IZ_BOOL DrawIndexedPrimitive(
             E_GRAPH_PRIM_TYPE prim_type,
-            IZ_UINT nBaseIdx,
+            IZ_UINT vtxOffset,
             IZ_UINT nVtxNum,
-            IZ_UINT nStartIdx,
+            IZ_UINT idxOffset,
             IZ_UINT nPrimCnt);
 
         // インデックスバッファなし描画
         virtual IZ_BOOL DrawPrimitive(
             E_GRAPH_PRIM_TYPE prim_type,
-            IZ_UINT nStartIdx,
+            IZ_UINT idxOffset,
             IZ_UINT nPrimCnt);      
 
     public:
