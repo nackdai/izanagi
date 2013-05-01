@@ -1,13 +1,21 @@
 #if !defined(__IZANAGI_GRAPH_PARAM_VALUE_CONVERTER_H__)
 #define __IZANAGI_GRAPH_PARAM_VALUE_CONVERTER_H__
 
-#include "graph/dx9/D3D9ParamValueConverter.h"
+#if __IZ_DX9__
+    #include "graph/dx9/D3D9ParamValueConverter.h"
+#elif __IZ_GLES2__
+    #include "graph/gles2/ParamValueConverter_GLES2.h"
+#endif
 
 namespace izanagi
 {
 namespace graph
 {
+#if __IZ_DX9__
     typedef CD3D9ParamValueConverter CTargetParamValueConverter;
+#elif __IZ_GLES2__
+    typedef CParamValueConverterGLES2 CTargetParamValueConverter;
+#endif
 }   // namespace graph
 }   // namespace izanagi
 

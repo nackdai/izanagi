@@ -30,6 +30,12 @@
     <Filter Include="include\base">
       <UniqueIdentifier>{673e5b54-011e-4a13-95fc-ec4367bede85}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\gles2">
+      <UniqueIdentifier>{4fd85433-050a-4d79-98b8-8173ee2ef602}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\gles2">
+      <UniqueIdentifier>{644dc45c-3a79-46ec-b1b4-9de2c2020c2a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\graph\2d\2DRenderer.cpp">
@@ -83,8 +89,41 @@
     <ClCompile Include="..\..\source\graph\BufferBase.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\graph\dx9\RenderTarget_DX9.cpp">
-      <Filter>source\dx9</Filter>
+    <ClCompile Include="..\..\source\graph\gles2\IndexBuffer_GLES2.cpp">
+      <Filter>source\gles2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\gles2\ParamValueConverter_GLES2.cpp">
+      <Filter>source\gles2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\gles2\PixelShader_GLES2.cpp">
+      <Filter>source\gles2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\gles2\RenderState_GLES2.cpp">
+      <Filter>source\gles2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\gles2\Surface_GLES2.cpp">
+      <Filter>source\gles2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\gles2\Texture_GLES2.cpp">
+      <Filter>source\gles2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\gles2\VertexBuffer_GLES2.cpp">
+      <Filter>source\gles2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\gles2\VertexDeclaration_GLES2.cpp">
+      <Filter>source\gles2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\gles2\VertexShader_GLES2.cpp">
+      <Filter>source\gles2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\gles2\CubeTexture_GLES2.cpp">
+      <Filter>source\gles2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\gles2\GraphicsDevice_GLES2.cpp">
+      <Filter>source\gles2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\gles2\GraphicsDeviceResourceFuncs.cpp">
+      <Filter>source\gles2</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -113,9 +152,6 @@
     </ClInclude>
     <ClInclude Include="..\..\include\graph\internal\RenderTargetManager.h">
       <Filter>include\internal</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\izD3DDefs.h">
-      <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\izGraph.h" />
     <ClInclude Include="..\..\include\graph\BaseTexture.h">
@@ -193,11 +229,47 @@
     <ClInclude Include="..\..\include\graph\GraphResource.h">
       <Filter>include\base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\graph\RenderTarget.h">
-      <Filter>include\base</Filter>
+    <ClInclude Include="..\..\include\graph\gles2\IndexBuffer_GLES2.h">
+      <Filter>include\gles2</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\graph\dx9\RenderTarget_DX9.h">
+    <ClInclude Include="..\..\include\graph\gles2\PixelShader_GLES2.h">
+      <Filter>include\gles2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\gles2\ShaderProxy.h">
+      <Filter>include\gles2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\gles2\Surface_GLE2.h">
+      <Filter>include\gles2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\gles2\Texture_GLES2.h">
+      <Filter>include\gles2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\gles2\VertexBuffer_GLES2.h">
+      <Filter>include\gles2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\gles2\VertexDeclaration_GLES2.h">
+      <Filter>include\gles2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\gles2\VertexShader_GLES2.h">
+      <Filter>include\gles2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\gles2\2DRenderer_GLES2.h">
+      <Filter>include\gles2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\gles2\CubeTexture_GLES2.h">
+      <Filter>include\gles2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\gles2\GraphicsDevice_GLES2.h">
+      <Filter>include\gles2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\gles2\izGLES2Defs.h">
+      <Filter>include\gles2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\dx9\izD3DDefs.h">
       <Filter>include\dx9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\gles2\ParamValueConverter_GLES2.h">
+      <Filter>include\gles2</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
