@@ -1,13 +1,13 @@
-#include "graph/dx9/GraphicsDevice_DX9.h"
-#include "graph/dx9/Texture_DX9.h"
-#include "graph/dx9/CubeTexture_DX9.h"
-#include "graph/dx9/Surface_DX9.h"
-#include "graph/dx9/VertexBuffer_DX9.h"
-#include "graph/dx9/IndexBuffer_DX9.h"
-#include "graph/dx9/VertexShader_DX9.h"
-#include "graph/dx9/PixelShader_DX9.h"
-#include "graph/dx9/VertexDeclaration_DX9.h"
-#include "graph/dx9/2DRenderer_DX9.h"
+#include "graph/gles2/GraphicsDevice_GLES2.h"
+#include "graph/gles2/Texture_GLES2.h"
+#include "graph/gles2/CubeTexture_GLES2.h"
+#include "graph/gles2/Surface_GLES2.h"
+#include "graph/gles2/VertexBuffer_GLES2.h"
+#include "graph/gles2/IndexBuffer_GLES2.h"
+#include "graph/gles2/VertexShader_GLES2.h"
+#include "graph/gles2/PixelShader_GLES2.h"
+#include "graph/gles2/VertexDeclaration_GLES2.h"
+#include "graph/gles2/2DRenderer_GLES2.h"
 
 namespace izanagi
 {
@@ -29,14 +29,14 @@ namespace graph
 
         IZ_BOOL result = IZ_TRUE;
         IZ_UINT8* buf = IZ_NULL;
-        CGraphicsDeviceDX9* instance = IZ_NULL;
+        CGraphicsDeviceGLES2* instance = IZ_NULL;
 
         // メモリ確保
-        buf = (IZ_UINT8*)ALLOC_ZERO(allocator, sizeof(CGraphicsDeviceDX9));
+        buf = (IZ_UINT8*)ALLOC_ZERO(allocator, sizeof(CGraphicsDeviceGLES2));
         VGOTO(buf != IZ_NULL, __EXIT__);
 
         // インスタンス作成
-        instance = new(buf) CGraphicsDeviceDX9;
+        instance = new(buf) CGraphicsDeviceGLES2;
         {
             instance->m_Allocator = allocator;
 
@@ -77,7 +77,7 @@ namespace graph
     }
 
     // コンストラクタ
-    CGraphicsDeviceDX9::CGraphicsDeviceDX9()
+    CGraphicsDeviceGLES2::CGraphicsDeviceGLES2()
     {
         m_D3D = IZ_NULL;
 
@@ -91,7 +91,7 @@ namespace graph
     }
 
     // デストラクタ
-    CGraphicsDeviceDX9::~CGraphicsDeviceDX9()
+    CGraphicsDeviceGLES2::~CGraphicsDeviceGLES2()
     {
         SAFE_RELEASE(m_Device);
         SAFE_RELEASE(m_D3D);
@@ -99,7 +99,7 @@ namespace graph
         ClearRenderState();
     }
 
-    void CGraphicsDeviceDX9::ClearRenderState()
+    void CGraphicsDeviceGLES2::ClearRenderState()
     {
         SetVertexShader(IZ_NULL);
         SetPixelShader(IZ_NULL);
@@ -128,7 +128,7 @@ namespace graph
     /**
     * リセット
     */
-    IZ_BOOL CGraphicsDeviceDX9::Reset(const void* initialParam)
+    IZ_BOOL CGraphicsDeviceGLES2::Reset(const void* initialParam)
     {
         // NOTE
         // izanagiでは左手座標系なので
@@ -145,7 +145,7 @@ namespace graph
 
             if (ret) {
                 // 2D描画初期化
-                m_2DRenderer = C2DRendererDX9::Create2DRenderer(this, m_Allocator);
+                m_2DRenderer = C2DRendererGLES2::Create2DRenderer(this, m_Allocator);
                 ret = (m_2DRenderer != IZ_NULL);
                 IZ_ASSERT(ret);
             }
@@ -180,21 +180,21 @@ namespace graph
             // サーフェスのリセット
             //（フレームバッファのリセット）
             {
-                CSurfaceDX9*& renderTarget = reinterpret_cast<CSurfaceDX9*&>(m_RT);
-                CSurfaceDX9*& deptthStencil = reinterpret_cast<CSurfaceDX9*&>(m_Depth);
+                CSurfaceGLES2*& renderTarget = reinterpret_cast<CSurfaceGLES2*&>(m_RT);
+                CSurfaceGLES2*& deptthStencil = reinterpret_cast<CSurfaceGLES2*&>(m_Depth);
 
                 if (m_RT != IZ_NULL) {
                     renderTarget->Reset(IZ_NULL, 0);
                 }
                 else {
-                    m_RT = CSurfaceDX9::CreateSurface(m_Allocator);
+                    m_RT = CSurfaceGLES2::CreateSurface(m_Allocator);
                 }
 
                 if (m_Depth != IZ_NULL) {
                     deptthStencil->Reset(IZ_NULL, 0);
                 }
                 else {
-                    m_Depth = CSurfaceDX9::CreateSurface(m_Allocator);
+                    m_Depth = CSurfaceGLES2::CreateSurface(m_Allocator);
                 }
 
                 ret = ((m_RT != IZ_NULL) && (m_Depth != IZ_NULL));
@@ -220,7 +220,7 @@ namespace graph
     }
 
     // 本体作成
-    IZ_BOOL CGraphicsDeviceDX9::CreateBody(const SGraphicsDeviceInitParams& sParams)
+    IZ_BOOL CGraphicsDeviceGLES2::CreateBody(const SGraphicsDeviceInitParams& sParams)
     {
         IZ_ASSERT(m_D3D != IZ_NULL);
 
@@ -278,7 +278,7 @@ namespace graph
     }
 
     template <typename _T>
-    void CGraphicsDeviceDX9::DisableResource(_T* pList)
+    void CGraphicsDeviceGLES2::DisableResource(_T* pList)
     {
         for (_T* p = pList; p != IZ_NULL; p = p->m_Next) {
             p->Disable();
@@ -286,17 +286,17 @@ namespace graph
     }
 
     template <typename _T>
-    void CGraphicsDeviceDX9::RestoreResource(_T* pList)
+    void CGraphicsDeviceGLES2::RestoreResource(_T* pList)
     {
         for (_T* p = pList; p != IZ_NULL; p = p->m_Next) {
             p->Restore();
         }
     }
 
-    IZ_BOOL CGraphicsDeviceDX9::ResetInternal(const SGraphicsDeviceInitParams& sParams)
+    IZ_BOOL CGraphicsDeviceGLES2::ResetInternal(const SGraphicsDeviceInitParams& sParams)
     {
-        CSurfaceDX9* renderTarget = reinterpret_cast<CSurfaceDX9*>(m_RT);
-        CSurfaceDX9* deptthStencil = reinterpret_cast<CSurfaceDX9*>(m_Depth);
+        CSurfaceGLES2* renderTarget = reinterpret_cast<CSurfaceGLES2*>(m_RT);
+        CSurfaceGLES2* deptthStencil = reinterpret_cast<CSurfaceGLES2*>(m_Depth);
 
         // リソースを解放する
         {
@@ -353,7 +353,7 @@ namespace graph
     /**
     * 描画開始
     */
-    IZ_BOOL CGraphicsDeviceDX9::BeginRender(
+    IZ_BOOL CGraphicsDeviceGLES2::BeginRender(
         IZ_DWORD nClearFlags,
         IZ_COLOR nClearColor,
         IZ_FLOAT fClearZ,
@@ -390,7 +390,7 @@ namespace graph
     /**
     * 描画終了
     */
-    void CGraphicsDeviceDX9::EndRender()
+    void CGraphicsDeviceGLES2::EndRender()
     {
         // 念のため
         EndScene();
@@ -414,7 +414,7 @@ namespace graph
     /**
     * クリア
     */
-    void CGraphicsDeviceDX9::Clear(
+    void CGraphicsDeviceGLES2::Clear(
         IZ_DWORD nClearFlags,
         IZ_COLOR nClearColor,
         IZ_FLOAT fClearZ,
@@ -439,7 +439,7 @@ namespace graph
         }
     }
 
-    IZ_BOOL CGraphicsDeviceDX9::BeginScene(
+    IZ_BOOL CGraphicsDeviceGLES2::BeginScene(
         CSurface** pRT,
         IZ_UINT nCount,
         CSurface* pDepth,
@@ -478,7 +478,7 @@ namespace graph
     /**
     * シーン描画終了
     */
-    void CGraphicsDeviceDX9::EndScene(IZ_UINT flag/* = 0xffffffff*/)
+    void CGraphicsDeviceGLES2::EndScene(IZ_UINT flag/* = 0xffffffff*/)
     {
         CSurface* pRTList[MAX_MRT_NUM];
         memset(pRTList, 0, sizeof(pRTList));
@@ -509,7 +509,7 @@ namespace graph
     /**
     * 同期
     */
-    IZ_BOOL CGraphicsDeviceDX9::Present()
+    IZ_BOOL CGraphicsDeviceGLES2::Present()
     {
         IZ_BOOL ret = IZ_TRUE;
 
@@ -550,14 +550,14 @@ namespace graph
         return ret;
     }
 
-    void CGraphicsDeviceDX9::SetDepthStencil(CSurface* pSurface)
+    void CGraphicsDeviceGLES2::SetDepthStencil(CSurface* pSurface)
     {
         IZ_ASSERT(pSurface != IZ_NULL);
 
         if (m_RenderState.curDepth != pSurface) {
             // レンダーターゲットを入れ替える
-            CSurfaceDX9* dx9Surface = reinterpret_cast<CSurfaceDX9*>(pSurface);
-            m_Device->SetDepthStencilSurface(dx9Surface->GetRawInterface());
+            CSurfaceGLES2* gles2Surface = reinterpret_cast<CSurfaceGLES2*>(pSurface);
+            m_Device->SetDepthStencilSurface(gles2Surface->GetRawInterface());
             SAFE_REPLACE(m_RenderState.curDepth, pSurface);
         }
     }
@@ -565,7 +565,7 @@ namespace graph
     /**
     * 頂点バッファセット
     */
-    IZ_BOOL CGraphicsDeviceDX9::SetVertexBuffer(
+    IZ_BOOL CGraphicsDeviceGLES2::SetVertexBuffer(
         IZ_UINT nStreamIdx,
         IZ_UINT nOffsetByte,
         IZ_UINT nStride,
@@ -576,12 +576,12 @@ namespace graph
             return IZ_TRUE;
         }
 
-        CVertexBufferDX9* dx9VB = reinterpret_cast<CVertexBufferDX9*>(pVB);
+        CVertexBufferGLES2* gles2VB = reinterpret_cast<CVertexBufferGLES2*>(pVB);
 
         {
             HRESULT hr = m_Device->SetStreamSource(
                             nStreamIdx,
-                            pVB != IZ_NULL ? dx9VB->GetRawInterface() : IZ_NULL,
+                            pVB != IZ_NULL ? gles2VB->GetRawInterface() : IZ_NULL,
                             nOffsetByte,
                             nStride);
             VRETURN(SUCCEEDED(hr));
@@ -596,18 +596,18 @@ namespace graph
     /**
     * インデックスバッファセット
     */
-    IZ_BOOL CGraphicsDeviceDX9::SetIndexBuffer(CIndexBuffer* pIB)
+    IZ_BOOL CGraphicsDeviceGLES2::SetIndexBuffer(CIndexBuffer* pIB)
     {
         if (m_RenderState.curIB == pIB) {
             // すでに設定されている
             return IZ_TRUE;
         }
 
-        CIndexBufferDX9* dx9IB = reinterpret_cast<CIndexBufferDX9*>(pIB);
+        CIndexBufferGLES2* gles2IB = reinterpret_cast<CIndexBufferGLES2*>(pIB);
 
         {
             HRESULT hr = m_Device->SetIndices(
-                            pIB != IZ_NULL ? dx9IB->GetRawInterface() : IZ_NULL);
+                            pIB != IZ_NULL ? gles2IB->GetRawInterface() : IZ_NULL);
             VRETURN(SUCCEEDED(hr));
 
             // 現在設定されているものとして保持
@@ -620,18 +620,18 @@ namespace graph
     /**
     * 頂点シェーダセット
     */
-    IZ_BOOL CGraphicsDeviceDX9::SetVertexShader(CVertexShader* pVS)
+    IZ_BOOL CGraphicsDeviceGLES2::SetVertexShader(CVertexShader* pVS)
     {
         if (m_RenderState.curVS == pVS) {
             // すでに設定されている
             return IZ_TRUE;
         }
 
-        CVertexShaderDX9* dx9VS = reinterpret_cast<CVertexShaderDX9*>(pVS);
+        CVertexShaderGLES2* gles2VS = reinterpret_cast<CVertexShaderGLES2*>(pVS);
 
         {
             HRESULT hr = m_Device->SetVertexShader(
-                            pVS != IZ_NULL ? dx9VS->GetRawInterface() : IZ_NULL);
+                            pVS != IZ_NULL ? gles2VS->GetRawInterface() : IZ_NULL);
             VRETURN(SUCCEEDED(hr));
 
             // 現在設定されているものとして保持
@@ -644,18 +644,18 @@ namespace graph
     /**
     * ピクセルシェーダセット
     */
-    IZ_BOOL CGraphicsDeviceDX9::SetPixelShader(CPixelShader* pPS)
+    IZ_BOOL CGraphicsDeviceGLES2::SetPixelShader(CPixelShader* pPS)
     {
         if (m_RenderState.curPS == pPS) {
             // すでに設定されている
             return IZ_TRUE;
         }
 
-        CPixelShaderDX9* dx9PS = reinterpret_cast<CPixelShaderDX9*>(pPS);
+        CPixelShaderGLES2* gles2PS = reinterpret_cast<CPixelShaderGLES2*>(pPS);
 
         {
             HRESULT hr = m_Device->SetPixelShader(
-                            pPS != IZ_NULL ? dx9PS->GetRawInterface() : IZ_NULL);
+                            pPS != IZ_NULL ? gles2PS->GetRawInterface() : IZ_NULL);
             VRETURN(SUCCEEDED(hr));
 
             // 現在設定されているものとして保持
@@ -668,17 +668,17 @@ namespace graph
     /**
     * 頂点宣言セット
     */
-    IZ_BOOL CGraphicsDeviceDX9::SetVertexDeclaration(CVertexDeclaration* pVD)
+    IZ_BOOL CGraphicsDeviceGLES2::SetVertexDeclaration(CVertexDeclaration* pVD)
     {
         if (m_RenderState.curVD == pVD) {
             // すでに設定されている
             return IZ_TRUE;
         }
 
-        CVertexDeclarationDX9* dx9VD = reinterpret_cast<CVertexDeclarationDX9*>(pVD);
+        CVertexDeclarationGLES2* gles2VD = reinterpret_cast<CVertexDeclarationGLES2*>(pVD);
 
         if (pVD != IZ_NULL) {
-            HRESULT hr = m_Device->SetVertexDeclaration(dx9VD->GetRawInterface());
+            HRESULT hr = m_Device->SetVertexDeclaration(gles2VD->GetRawInterface());
             VRETURN(SUCCEEDED(hr));
         }
 
@@ -691,7 +691,7 @@ namespace graph
     /**
     * インデックスバッファ描画
     */
-    IZ_BOOL CGraphicsDeviceDX9::DrawIndexedPrimitive(
+    IZ_BOOL CGraphicsDeviceGLES2::DrawIndexedPrimitive(
         E_GRAPH_PRIM_TYPE prim_type,
         IZ_UINT nBaseIdx,
         IZ_UINT nMinIdx,
@@ -714,7 +714,7 @@ namespace graph
     /**
     * インデックスバッファなし描画
     */
-    IZ_BOOL CGraphicsDeviceDX9::DrawPrimitive(
+    IZ_BOOL CGraphicsDeviceGLES2::DrawPrimitive(
         E_GRAPH_PRIM_TYPE prim_type,
         IZ_UINT nStartIdx,
         IZ_UINT nPrimCnt)
@@ -731,7 +731,7 @@ namespace graph
     /**
     * ビューポートセット
     */
-    IZ_BOOL CGraphicsDeviceDX9::SetViewport(const SViewport& vp)
+    IZ_BOOL CGraphicsDeviceGLES2::SetViewport(const SViewport& vp)
     {
         if (m_Flags.is_render_2d) {
             // TODO
@@ -774,7 +774,7 @@ namespace graph
     /**
     * デフォルトのレンダーステートを設定
     */
-    void CGraphicsDeviceDX9::SetDefaultRenderState()
+    void CGraphicsDeviceGLES2::SetDefaultRenderState()
     {
         CGraphicsDevice::SetRenderState(E_GRAPH_RS_ZWRITEENABLE, IZ_TRUE);
         CGraphicsDevice::SetRenderState(E_GRAPH_RS_ZENABLE, IZ_TRUE);
@@ -833,7 +833,7 @@ namespace graph
     /**
     * レンダーステート一括セット
     */
-    void CGraphicsDeviceDX9::SetRenderState(const S_RENDER_STATE& sRS)
+    void CGraphicsDeviceGLES2::SetRenderState(const S_RENDER_STATE& sRS)
     {
         SetViewport(sRS.vp);
 
@@ -847,7 +847,7 @@ namespace graph
         SetScissorTestRect(sRS.rcScissor);
     }
 
-    IZ_BOOL CGraphicsDeviceDX9::SetTextureInternal(IZ_UINT nStage, CBaseTexture* pTex)
+    IZ_BOOL CGraphicsDeviceGLES2::SetTextureInternal(IZ_UINT nStage, CBaseTexture* pTex)
     {
         HRESULT hr = m_Device->SetTexture(
             nStage,
@@ -901,15 +901,15 @@ namespace graph
         return IZ_TRUE;
     }
 
-    void CGraphicsDeviceDX9::SetRenderTargetInternal(CSurface** pSurface, IZ_UINT num)
+    void CGraphicsDeviceGLES2::SetRenderTargetInternal(CSurface** pSurface, IZ_UINT num)
     {
         // レンダーターゲットを入れ替える
         for (IZ_UINT i = 0; i < num; ++i) {
             if (m_RenderState.curRT[i] != pSurface[i]) {
-                CSurfaceDX9* dx9Surface = reinterpret_cast<CSurfaceDX9*>(pSurface[i]);
-                IZ_ASSERT(dx9Surface->GetRawInterface() != IZ_NULL);
+                CSurfaceGLES2* gles2Surface = reinterpret_cast<CSurfaceGLES2*>(pSurface[i]);
+                IZ_ASSERT(gles2Surface->GetRawInterface() != IZ_NULL);
 
-                m_Device->SetRenderTarget(i, dx9Surface->GetRawInterface());
+                m_Device->SetRenderTarget(i, gles2Surface->GetRawInterface());
                 SAFE_REPLACE(m_RenderState.curRT[i], pSurface[i]);
             }
         }
