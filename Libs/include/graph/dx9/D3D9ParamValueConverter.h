@@ -2,6 +2,7 @@
 #define __IZANAGI_GRAPH_D3D9_PARAM_VALUE_CONVERTER_H__
 
 #include "izDefs.h"
+#include "izD3DDefs.h"
 #include "graph/GraphDefs.h"
 
 #define FUNC_ABSTRACT_TO_TARGET(p, ret, arg)    ret ConvAbstractToTarget_##p(arg v)
@@ -68,6 +69,8 @@ namespace graph
         // 頂点データの使い方
         FUNC_CONV_PARAM_VAL(VtxDeclUsage, D3DDECLUSAGE, E_GRAPH_VTX_DECL_USAGE);
     };
+
+    typedef CD3D9ParamValueConverter CTargetParamValueConverter;
 }   // namespace graph
 }   // namespace izanagi
 

@@ -1,5 +1,5 @@
+#include "system/izDInput.h"
 #include "izStd.h"
-#include "izD3DDefs.h"
 #include "system/InputDeviceDefs.h"
 
 IZ_BOOL InitDirectInput(

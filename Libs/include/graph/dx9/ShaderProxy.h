@@ -1,6 +1,7 @@
 #if !defined(__IZANAGI_GRAPH_SHADER_PROXY_H__)
 #define __IZANAGI_GRAPH_SHADER_PROXY_H__
 
+#include "izD3DDefs.h"
 #include "izDefs.h"
 #include "izStd.h"
 #include "izMath.h"
@@ -30,14 +31,14 @@ namespace graph
         // ハンドル取得
         virtual SHADER_PARAM_HANDLE GetHandleByIdx(IZ_UINT idx)
         {
-            SHADER_PARAM_HANDLE ret = m_ConstTable->GetConstant(IZ_NULL, idx);
+            SHADER_PARAM_HANDLE ret = (SHADER_PARAM_HANDLE)m_ConstTable->GetConstant(IZ_NULL, idx);
             return ret;
         }
 
         // ハンドル取得
         virtual SHADER_PARAM_HANDLE GetHandleByName(IZ_PCSTR pName)
         {
-            SHADER_PARAM_HANDLE ret = m_ConstTable->GetConstantByName(IZ_NULL, pName);
+            SHADER_PARAM_HANDLE ret = (SHADER_PARAM_HANDLE)m_ConstTable->GetConstantByName(IZ_NULL, pName);
             return ret;
         }
 
@@ -49,7 +50,7 @@ namespace graph
             D3DXCONSTANT_DESC desc;
             IZ_UINT count = 1;
 
-            HRESULT hr = m_ConstTable->GetConstantDesc(handle, &desc, &count);
+            HRESULT hr = m_ConstTable->GetConstantDesc((SHADER_PARAM_HANDLE_DX9)handle, &desc, &count);
             if (SUCCEEDED(hr)) {
                 ret = desc.Elements;
             }
@@ -59,7 +60,7 @@ namespace graph
 
         virtual IZ_UINT GetSamplerIndex(SHADER_PARAM_HANDLE handle)
         {
-            IZ_UINT ret = m_ConstTable->GetSamplerIndex(handle);
+            IZ_UINT ret = m_ConstTable->GetSamplerIndex((SHADER_PARAM_HANDLE_DX9)handle);
             return ret;
         }
 
@@ -76,7 +77,7 @@ namespace graph
         {
             HRESULT hr = m_ConstTable->SetBool(
                             GetDeviceRawInterface(device),
-                            handle,
+                            (SHADER_PARAM_HANDLE_DX9)handle,
                             b);
             IZ_ASSERT(SUCCEEDED(hr));
             return SUCCEEDED(hr);
@@ -89,7 +90,7 @@ namespace graph
 
             HRESULT hr = m_ConstTable->SetBoolArray(
                             GetDeviceRawInterface(device),
-                            handle,
+                            (SHADER_PARAM_HANDLE_DX9)handle,
                             (const BOOL*)pB, num);
             IZ_ASSERT(SUCCEEDED(hr));
             return SUCCEEDED(hr);
@@ -100,7 +101,7 @@ namespace graph
         {
             HRESULT hr = m_ConstTable->SetFloat(
                             GetDeviceRawInterface(device),
-                            handle,
+                            (SHADER_PARAM_HANDLE_DX9)handle,
                             f);
             IZ_ASSERT(SUCCEEDED(hr));
             return SUCCEEDED(hr);
@@ -111,7 +112,7 @@ namespace graph
         {
             HRESULT hr = m_ConstTable->SetFloatArray(
                             GetDeviceRawInterface(device),
-                            handle,
+                            (SHADER_PARAM_HANDLE_DX9)handle,
                             pF, num);
             IZ_ASSERT(SUCCEEDED(hr));
             return SUCCEEDED(hr);
@@ -122,7 +123,7 @@ namespace graph
         {
             HRESULT hr = m_ConstTable->SetInt(
                             GetDeviceRawInterface(device),
-                            handle,
+                            (SHADER_PARAM_HANDLE_DX9)handle,
                             n);
             IZ_ASSERT(SUCCEEDED(hr));
             return SUCCEEDED(hr);
@@ -133,7 +134,7 @@ namespace graph
         {
             HRESULT hr = m_ConstTable->SetIntArray(
                             GetDeviceRawInterface(device),
-                            handle,
+                            (SHADER_PARAM_HANDLE_DX9)handle,
                             pN, num);
             IZ_ASSERT(SUCCEEDED(hr));
             return SUCCEEDED(hr);
@@ -146,7 +147,7 @@ namespace graph
 
             HRESULT hr = m_ConstTable->SetMatrix(
                             GetDeviceRawInterface(device),
-                            handle,
+                            (SHADER_PARAM_HANDLE_DX9)handle,
                             (const D3DXMATRIX*)&m);
             IZ_ASSERT(SUCCEEDED(hr));
             return SUCCEEDED(hr);
@@ -159,7 +160,7 @@ namespace graph
 
             HRESULT hr = m_ConstTable->SetMatrixArray(
                             GetDeviceRawInterface(device),
-                            handle,
+                            (SHADER_PARAM_HANDLE_DX9)handle,
                             (const D3DXMATRIX*)pM, num);
             IZ_ASSERT(SUCCEEDED(hr));
             return SUCCEEDED(hr);
@@ -172,7 +173,7 @@ namespace graph
 
             HRESULT hr = m_ConstTable->SetVector(
                             GetDeviceRawInterface(device),
-                            handle,
+                            (SHADER_PARAM_HANDLE_DX9)handle,
                             (const D3DXVECTOR4*)&v);
             IZ_ASSERT(SUCCEEDED(hr));
             return SUCCEEDED(hr);
@@ -185,7 +186,7 @@ namespace graph
 
             HRESULT hr = m_ConstTable->SetVectorArray(
                             GetDeviceRawInterface(device),
-                            handle,
+                            (SHADER_PARAM_HANDLE_DX9)handle,
                             (const D3DXVECTOR4*)pV, num);
             IZ_ASSERT(SUCCEEDED(hr));
             return SUCCEEDED(hr);
@@ -196,7 +197,7 @@ namespace graph
         {
             HRESULT hr = m_ConstTable->SetValue(
                             GetDeviceRawInterface(device),
-                            handle,
+                            (SHADER_PARAM_HANDLE_DX9)handle,
                             p, size);
             IZ_ASSERT(SUCCEEDED(hr));
             return SUCCEEDED(hr);

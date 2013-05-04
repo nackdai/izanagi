@@ -102,6 +102,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\system\InputDeviceDefs.h" />
+    <ClInclude Include="..\..\include\system\izDInput.h" />
     <ClInclude Include="..\..\include\system\Keyboard.h" />
     <ClInclude Include="..\..\include\system\Keyboard_DInput.h" />
     <ClInclude Include="..\..\include\system\Mouse.h" />

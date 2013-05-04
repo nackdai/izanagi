@@ -1,6 +1,7 @@
 #if !defined(__IZANAGI_SYSTEM_KEYBOARD_DINPUT_H__)
 #define __IZANAGI_SYSTEM_KEYBOARD_DINPUT_H__
 
+#include "izDInput.h"
 #include "izStd.h"
 #include "InputDeviceDefs.h"
 #include "Keyboard.h"

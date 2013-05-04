@@ -868,7 +868,7 @@ namespace graph
     {
         HRESULT hr = m_Device->SetTexture(
             nStage,
-            pTex != NULL ? pTex->GetTexHandle() : NULL);
+            pTex != NULL ? (TEX_HANDLE_DX9)pTex->GetTexHandle() : NULL);
         VRETURN(SUCCEEDED(hr));
 
         // 保持しておく

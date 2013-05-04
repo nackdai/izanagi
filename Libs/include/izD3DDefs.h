@@ -7,13 +7,6 @@
 
 #include <d3dx9shader.h>
 
-#ifndef DIRECTINPUT_VERSION
-#define DIRECTINPUT_VERSION 0x0800 
-#endif
-
-#include <dinput.h>
-#include <XInput.h>
-
 #define D3D_INST        IDirect3D9
 #define D3D_DEVICE      IDirect3DDevice9
 #define D3D_TEXTURE     IDirect3DTexture9
@@ -32,14 +25,11 @@
 
 #define D3D_VIEWPORT    D3DVIEWPORT9
 
-#define D_INPUT         IDirectInput8
-#define D_INPUT_DEVICE  IDirectInputDevice8
-
 // TODO
-typedef IDirect3DBaseTexture9* TEX_HANDLE;
+typedef IDirect3DBaseTexture9* TEX_HANDLE_DX9;
 
 // シェーダ定数ハンドル
-typedef D3DXHANDLE  SHADER_PARAM_HANDLE;
+typedef D3DXHANDLE  SHADER_PARAM_HANDLE_DX9;
 
 namespace izanagi
 {

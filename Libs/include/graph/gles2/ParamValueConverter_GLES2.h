@@ -70,6 +70,8 @@ namespace graph
         // 頂点データの使い方
         FUNC_CONV_PARAM_VAL(VtxDeclUsage, GLenum, E_GRAPH_VTX_DECL_USAGE);
     };
+
+    typedef CParamValueConverterGLES2 CTargetParamValueConverter;
 }   // namespace graph
 }   // namespace izanagi
 

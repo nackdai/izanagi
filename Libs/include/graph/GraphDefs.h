@@ -4,6 +4,9 @@
 #include "izDefs.h"
 #include "izStd.h"
 
+typedef void* TEX_HANDLE;
+typedef void* SHADER_PARAM_HANDLE;
+
 namespace izanagi
 {
 namespace graph

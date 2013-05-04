@@ -1,6 +1,7 @@
 #if !defined(__IZANAGI_GRAPH_INDEX_BUFFER_DX9_H__)
 #define __IZANAGI_GRAPH_INDEX_BUFFER_DX9_H__
 
+#include "izD3DDefs.h"
 #include "graph/IndexBuffer.h"
 
 namespace izanagi
