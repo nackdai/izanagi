@@ -103,6 +103,8 @@ namespace graph
             return m_TexInfo.typeRsc;
         }
 
+        PURE_VIRTUAL(E_GRAPH_TEX_TYPE GetTexType());
+
         PURE_VIRTUAL(TEX_HANDLE GetTexHandle());
 
     protected:

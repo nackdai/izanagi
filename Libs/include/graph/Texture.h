@@ -23,6 +23,11 @@ namespace graph
         NO_COPIABLE(CTexture);
 
     public:
+        virtual E_GRAPH_TEX_TYPE GetTexType()
+        {
+            return E_GRAPH_TEX_TYPE_PLANE;
+        }
+
         // ロック
         virtual IZ_UINT Lock(
             UINT level,
