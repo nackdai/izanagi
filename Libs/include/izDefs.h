@@ -11,7 +11,7 @@
 
 #include "izTypes.h"
 
-#include "izPlatformProxy.h"
+#include "izD3DDefs.h"
 
 #ifndef WINDOWS
     #if defined(WIN32) || defined(WIN64)
