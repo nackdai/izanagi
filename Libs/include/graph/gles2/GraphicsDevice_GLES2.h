@@ -1,7 +1,7 @@
 #if !defined(__IZANAGI_GRPAH_GRAPHICS_DEVICE_DX9_H__)
 #define __IZANAGI_GRPAH_GRAPHICS_DEVICE_DX9_H__
 
-#include "izD3DDefs.h"
+//#include "izGLES2.h"
 #include "graph/GraphicsDevice.h"
 #include "graph/RenderState.h"
 #include "graph/internal/ParamValueConverter.h"

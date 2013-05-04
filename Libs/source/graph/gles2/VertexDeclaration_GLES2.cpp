@@ -62,10 +62,10 @@ namespace graph
         return m_Elements;
     }
 
-    IZ_BOOL CVertexDeclarationGLES2::Apply(CGraphicsDeviceGLES2* device
+    IZ_BOOL CVertexDeclarationGLES2::Apply(CGraphicsDeviceGLES2* device)
     {
         for (IZ_UINT i = 0; i < m_ElemNum; i++) {
-            SVertexElement& element = m_Elements[i];
+            const SVertexElement& element = m_Elements[i];
 
             // NOTE
             // VBOを使う場合は常に１ストリームのみ
@@ -167,8 +167,58 @@ namespace graph
                 size * num,
                 (void*)element.Offset);
 
-            // TODO
-            //::glBindAttribLocation
+            static const char* names[] = 
+            {
+                "position",
+                "texcoord_0",
+                "texcoord_1",
+                "texcoord_2",
+                "texcoord_3",
+                "texcoord_4",
+                "texcoord_5",
+                "texcoord_6",
+                "texcoord_7",
+                "color_0",
+                "color_1",
+                "color_2",
+                "color_3",
+                "normal",
+                "tangent",
+            };
+
+            static const IZ_UINT positionNameIdx = 0;
+            static const IZ_UINT texcoordNameIdx = 1;
+            static const IZ_UINT colorNameIdx = 9;
+            static const IZ_UINT normalNameIdx = 13;
+            static const IZ_UINT tangentNameIdx = 14;
+
+            const char* name;
+
+            switch (element.Usage)
+            {
+            case E_GRAPH_VTX_DECL_USAGE_POSITION:
+                name = names[positionNameIdx];
+                break;
+            case E_GRAPH_VTX_DECL_USAGE_NORMAL:
+                name = names[normalNameIdx];
+                break;
+            case E_GRAPH_VTX_DECL_USAGE_TEXCOORD:
+                name = names[texcoordNameIdx + element.UsageIndex];
+                break;
+            case E_GRAPH_VTX_DECL_USAGE_TANGENT:
+                name = names[tangentNameIdx];
+                break;
+            case E_GRAPH_VTX_DECL_USAGE_COLOR:
+                name = names[colorNameIdx + element.UsageIndex];
+                break;
+            default:
+                IZ_ASSERT(IZ_FALSE);
+                break;
+            }
+
+            // NOTE
+            // ShaderCompilerによってSemanticに応じたアトリビュート名が設定されている
+            //::glBindAttribLocation(
         }
 
         return IZ_TRUE;

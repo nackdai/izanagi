@@ -134,6 +134,9 @@
     <ClCompile Include="..\..\source\graph\2d\2DShader.cpp">
       <Filter>source\2d</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\graph\gles2\ShaderProgram_GLES2.cpp">
+      <Filter>source\gles2</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\source\graph\2d\shader\2DShader.hlsl">
@@ -159,7 +162,6 @@
     <ClInclude Include="..\..\include\graph\internal\RenderTargetManager.h">
       <Filter>include\internal</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\izGraph.h" />
     <ClInclude Include="..\..\include\graph\BaseTexture.h">
       <Filter>include\base</Filter>
     </ClInclude>
@@ -209,9 +211,6 @@
       <Filter>include\base</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\graph\dx9\VertexShader_DX9.h">
-      <Filter>include\dx9</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\graph\dx9\ShaderProxy.h">
       <Filter>include\dx9</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\graph\dx9\PixelShader_DX9.h">
@@ -271,9 +270,6 @@
     <ClInclude Include="..\..\include\graph\RenderTarget.h">
       <Filter>include\base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\izD3DDefs.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\graph\ShaderProgram.h">
       <Filter>include\base</Filter>
     </ClInclude>
@@ -281,6 +277,18 @@
       <Filter>include\dx9</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\graph\dx9\2DShader_DX9.h">
+      <Filter>include\dx9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\gles2\ShaderProgram_GLES2.h">
+      <Filter>include\gles2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\dx9\ShaderProxy_DX9.h">
+      <Filter>include\dx9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\gles2\ShaderProxy_GLES2.h">
+      <Filter>include\gles2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\dx9\izDX9Defs.h">
       <Filter>include\dx9</Filter>
     </ClInclude>
   </ItemGroup>
