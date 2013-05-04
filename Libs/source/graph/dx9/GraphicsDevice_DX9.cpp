@@ -107,7 +107,8 @@ namespace graph
         SetVertexBuffer(0, 0, 0, IZ_NULL);
         SetIndexBuffer(IZ_NULL);
 
-        SAFE_RELEASE(m_RenderState.curVD);
+        //SAFE_RELEASE(m_RenderState.curVD);
+        SetVertexDeclaration(IZ_NULL);
 
         for (IZ_UINT i = 0; i < MAX_MRT_NUM; ++i) {
             // チェック
@@ -875,7 +876,8 @@ namespace graph
         VRETURN(SUCCEEDED(hr));
 
         // 保持しておく
-        m_Texture[nStage] = pTex;
+        //m_Texture[nStage] = pTex;
+        SAFE_REPLACE(m_Texture[nStage], pTex);
 
         // うーん・・・
         // ステート
