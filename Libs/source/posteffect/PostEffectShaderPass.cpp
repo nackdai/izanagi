@@ -23,13 +23,13 @@ namespace izanagi
         graph::CGraphicsDevice* device,
         const SFloatRect& rcTexCoord)
     {
+        device->SetShaderProgram(m_Shader);
+
         m_pVS->PrepareRender(
             device,
             m_Shader,
             0.0f, 0.0f,
             &rcTexCoord);
-
-        device->SetShaderProgram(m_Shader);
 
         // NOTE
         // 頂点数を指定する

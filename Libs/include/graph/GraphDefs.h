@@ -4,7 +4,11 @@
 #include "izDefs.h"
 #include "izStd.h"
 
+#ifdef __IZ_DX9__
 #include "izD3DDefs.h"
+#elif __IZ_GLES2__
+#include "graph/gles2/izGLES2Defs.h"
+#endif
 
 typedef void* TEX_HANDLE;
 

@@ -1,5 +1,5 @@
-#if !defined(__IZANAGI_GRAPH_SHADER_PROXY_H__)
-#define __IZANAGI_GRAPH_SHADER_PROXY_H__
+#if !defined(__IZANAGI_GRAPH_SHADER_PROXY_DX9_H__)
+#define __IZANAGI_GRAPH_SHADER_PROXY_DX9_H__
 
 #include "izD3DDefs.h"
 #include "izDefs.h"
@@ -186,4 +186,4 @@ namespace graph
 }   // namespace graph
 }   // namespace izanagi
 
-#endif  // #if !defined(__IZANAGI_GRAPH_SHADER_PROXY_H__)
+#endif  // #if !defined(__IZANAGI_GRAPH_SHADER_PROXY_DX9_H__)

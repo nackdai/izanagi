@@ -27,15 +27,21 @@ namespace graph
         m_IsDirtyPS = IZ_FALSE;
     }
 
-    IZ_BOOL CShaderProgramDX9::OnAttachVertexShader(CVertexShader* vs)
+    IZ_BOOL CShaderProgramDX9::AttachVertexShader(CVertexShader* vs)
     {
-        m_IsDirtyVS = IZ_TRUE;
+        if (m_VS != vs) {
+            SAFE_REPLACE(m_VS, vs);
+            m_IsDirtyVS = IZ_TRUE;
+        }        
         return IZ_TRUE;
     }
 
-    IZ_BOOL CShaderProgramDX9::OnAttachPixelShader(CPixelShader* ps)
+    IZ_BOOL CShaderProgramDX9::AttachPixelShader(CPixelShader* ps)
     {
-        m_IsDirtyPS = IZ_TRUE;
+        if (m_PS != ps) {
+            SAFE_REPLACE(m_PS, ps);
+            m_IsDirtyPS = IZ_TRUE;
+        }        
         return IZ_TRUE;
     }
 
@@ -123,6 +129,7 @@ namespace graph
     IZ_BOOL CShaderProgramDX9::SetBool(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, IZ_BOOL b)
     {
         IZ_ASSERT(IsValid());
+        IZ_ASSERT(device->GetShaderProgram() == this);
 
         _EXEC_FUNC(SetBool, device, b);
     }
@@ -130,6 +137,7 @@ namespace graph
     IZ_BOOL CShaderProgramDX9::SetBoolArray(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const IZ_BOOL* b, IZ_UINT num)
     {
         IZ_ASSERT(IsValid());
+        IZ_ASSERT(device->GetShaderProgram() == this);
 
         _EXEC_ARRAY_FUNC(SetBoolArray, device, b, num);
     }
@@ -137,6 +145,7 @@ namespace graph
     IZ_BOOL CShaderProgramDX9::SetFloat(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, IZ_FLOAT f)
     {
         IZ_ASSERT(IsValid());
+        IZ_ASSERT(device->GetShaderProgram() == this);
 
         _EXEC_FUNC(SetFloat, device, f);
     }
@@ -144,6 +153,7 @@ namespace graph
     IZ_BOOL CShaderProgramDX9::SetFloatArray(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const IZ_FLOAT* f, IZ_UINT num)
     {
         IZ_ASSERT(IsValid());
+        IZ_ASSERT(device->GetShaderProgram() == this);
 
         _EXEC_ARRAY_FUNC(SetFloatArray, device, f, num);
     }
@@ -151,6 +161,7 @@ namespace graph
     IZ_BOOL CShaderProgramDX9::SetInt(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, IZ_INT n)
     {
         IZ_ASSERT(IsValid());
+        IZ_ASSERT(device->GetShaderProgram() == this);
 
         _EXEC_FUNC(SetInt, device, n);
     }
@@ -158,6 +169,7 @@ namespace graph
     IZ_BOOL CShaderProgramDX9::SetIntArray(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const IZ_INT* n, IZ_UINT num)
     {
         IZ_ASSERT(IsValid());
+        IZ_ASSERT(device->GetShaderProgram() == this);
 
         _EXEC_ARRAY_FUNC(SetIntArray, device, n, num);
     }
@@ -165,6 +177,7 @@ namespace graph
     IZ_BOOL CShaderProgramDX9::SetMatrix(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const math::SMatrix& m)
     {
         IZ_ASSERT(IsValid());
+        IZ_ASSERT(device->GetShaderProgram() == this);
 
         _EXEC_FUNC(SetMatrix, device, m);
     }
@@ -172,6 +185,7 @@ namespace graph
     IZ_BOOL CShaderProgramDX9::SetMatrixArray(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const math::SMatrix* m, IZ_UINT num)
     {
         IZ_ASSERT(IsValid());
+        IZ_ASSERT(device->GetShaderProgram() == this);
 
         _EXEC_ARRAY_FUNC(SetMatrixArray, device, m, num);
     }
@@ -179,6 +193,7 @@ namespace graph
     IZ_BOOL CShaderProgramDX9::SetVector(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const math::SVector& v)
     {
         IZ_ASSERT(IsValid());
+        IZ_ASSERT(device->GetShaderProgram() == this);
 
         _EXEC_FUNC(SetVector, device, v);
     }
@@ -186,6 +201,7 @@ namespace graph
     IZ_BOOL CShaderProgramDX9::SetVectorArray(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const math::SVector* v, IZ_UINT num)
     {
         IZ_ASSERT(IsValid());
+        IZ_ASSERT(device->GetShaderProgram() == this);
 
         _EXEC_ARRAY_FUNC(SetVectorArray, device, v, num);
     }
@@ -193,6 +209,7 @@ namespace graph
     IZ_BOOL CShaderProgramDX9::SetValue(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const void* p, IZ_UINT size)
     {
         IZ_ASSERT(IsValid());
+        IZ_ASSERT(device->GetShaderProgram() == this);
 
         _EXEC_ARRAY_FUNC(SetValue, device, p, size);
     }

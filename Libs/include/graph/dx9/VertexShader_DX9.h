@@ -3,7 +3,7 @@
 
 #include "izD3DDefs.h"
 #include "graph/VertexShader.h"
-#include "graph/dx9/ShaderProxy.h"
+#include "graph/dx9/ShaderProxy_DX9.h"
 
 namespace izanagi
 {
