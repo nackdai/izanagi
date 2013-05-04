@@ -83,11 +83,11 @@ namespace {
     {
         static struct {
             IZ_PCSTR strFmt;
-            izanagi::graph::E_GRAPH_RSC_TYPE type;
+            izanagi::graph::E_GRAPH_RSC_USAGE type;
         } tbl[] = {
-            {"STATIC", izanagi::graph::E_GRAPH_RSC_TYPE_STATIC},
-            {"DYNAMIC", izanagi::graph::E_GRAPH_RSC_TYPE_DYNAMIC},
-            {"STATIC_DYNAMIC", izanagi::graph::E_GRAPH_RSC_TYPE_STATIC_DYNAMIC},
+            {"STATIC", izanagi::graph::E_GRAPH_RSC_USAGE_STATIC},
+            {"DYNAMIC", izanagi::graph::E_GRAPH_RSC_USAGE_DYNAMIC},
+            {"STATIC_DYNAMIC", izanagi::graph::E_GRAPH_RSC_USAGE_STATIC_DYNAMIC},
         };
 
         IZ_PCSTR fmt = ::cgGetStringAnnotationValue(ann);
