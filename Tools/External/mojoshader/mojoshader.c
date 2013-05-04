@@ -2530,11 +2530,9 @@ static void emit_GLSL_attribute(Context *ctx, RegisterType regtype, int regnum,
 
         if (regtype == REG_TYPE_INPUT)
         {
-#if 0
             push_output(ctx, &ctx->globals);
             output_line(ctx, "attribute vec4 %s;", var);
             pop_output(ctx);
-#endif
         } // if
 
         else if (regtype == REG_TYPE_OUTPUT)
@@ -8064,7 +8062,7 @@ static void parse_constant_table(Context *ctx, const uint32 *tokens,
     // !!! FIXME: check that (start+target) points to "ps_3_0", etc.
 
     ctab->symbol_count = constants;
-    ctab->symbols = (MOJOSHADER_symbol*)Malloc(ctx, sizeof (MOJOSHADER_symbol) * constants);
+    ctab->symbols = Malloc(ctx, sizeof (MOJOSHADER_symbol) * constants);
     if (ctab->symbols == NULL)
         return;
     memset(ctab->symbols, '\0', sizeof (MOJOSHADER_symbol) * constants);
@@ -9313,9 +9311,7 @@ static void process_definitions(Context *ctx)
             } // for
         } // if
 
-#if 0
         ctx->profile->uniform_emitter(ctx, item->regtype, item->regnum, var);
-#endif
 
         if (arraysize < 0)  // not part of an array?
         {
@@ -9330,7 +9326,6 @@ static void process_definitions(Context *ctx)
         } // if
     } // for
 
-#if 0
     // ...and samplers...
     for (item = ctx->samplers.next; item != NULL; item = item->next)
     {
@@ -9339,7 +9334,6 @@ static void process_definitions(Context *ctx)
                                       (TextureType) item->index,
                                       item->misc != 0);
     } // for
-#endif
 
     // ...and attributes...
     for (item = ctx->attributes.next; item != NULL; item = item->next)
@@ -9458,166 +9452,14 @@ const MOJOSHADER_parseData *MOJOSHADER_parse(const char *profile,
             fail(ctx, "r0 (pixel shader 1.x color output) never written to");
     } // if
 
-    char shader[4];
-    if (shader_is_pixel(ctx))
-    {
-        sprintf(shader, "ps");
-    }
-    else
-    {
-        sprintf(shader, "vs");
-    }
-
-    output_line(ctx, "");
-
-    for (int i = 0; i < ctx->ctab.symbol_count; i++)
-    {
-        char type[32];
-
-        switch (ctx->ctab.symbols[i].info.parameter_type)
-        {
-        case MOJOSHADER_SYMTYPE_FLOAT:
-            {
-                if (ctx->ctab.symbols[i].info.rows == 1)
-                {
-                    sprintf(type, "float\0");
-                }
-                else
-                {
-                    sprintf(type, "vec%d\0", ctx->ctab.symbols[i].info.rows);
-                }
-            }
-            break;
-        case MOJOSHADER_SYMTYPE_SAMPLER2D:
-            sprintf(type, "sampler2D");
-            break;
-        default:
-            assert(false);
-            break;
-        }
-
-        if (ctx->ctab.symbols[i].info.parameter_class == MOJOSHADER_SYMCLASS_OBJECT)
-        {
-            output_line(
-                ctx,
-                "uniform %s %s;",
-                type,
-                ctx->ctab.symbols[i].name);
-
-            if (ctx->ctab.symbols[i].info.parameter_type >= MOJOSHADER_SYMTYPE_SAMPLER
-                && ctx->ctab.symbols[i].info.parameter_type <= MOJOSHADER_SYMTYPE_SAMPLER3D)
-            {
-                output_line(
-                    ctx,
-                    "#define %s_s%d %s;",
-                    shader,
-                    ctx->ctab.symbols[i].register_index,
-                    ctx->ctab.symbols[i].name);
-            }
-        }
-        else
-        {
-            if (ctx->ctab.symbols[i].info.columns == 1)
-            {
-                output_line(
-                    ctx,
-                    "uniform %s %s;",
-                    type,
-                    ctx->ctab.symbols[i].name);
-
-                output_line(
-                    ctx,
-                    "#define %s_c%d %s;",
-                    shader,
-                    ctx->ctab.symbols[i].register_index,
-                    ctx->ctab.symbols[i].name);
-            }
-            else
-            {
-                output_line(
-                    ctx,
-                    "uniform %s %s[%d];",
-                    type,
-                    ctx->ctab.symbols[i].name,
-                    ctx->ctab.symbols[i].info.columns);
-
-                for (int n = 0; n < ctx->ctab.symbols[i].info.columns; n++)
-                {
-                    output_line(
-                        ctx,
-                        "#define %s_c%d %s[%d];",
-                        shader,
-                        ctx->ctab.symbols[i].register_index + n,
-                        ctx->ctab.symbols[i].name,
-                        n);
-                }
-            }
-        }
-
-        output_line(ctx, "");
-    }
-
-    if (shader_is_vertex(ctx))
-    {
-        for (RegisterList* item = ctx->attributes.next; item != NULL; item = item->next)
-        {
-            char name[64];
-
-            switch (item->usage)
-            {
-            case MOJOSHADER_USAGE_POSITION:
-                sprintf(name, "position\0");
-                break;
-            case MOJOSHADER_USAGE_TEXCOORD:
-                sprintf(name, "texcoord_%d\0", item->index);
-                break;
-            case MOJOSHADER_USAGE_COLOR:
-                sprintf(name, "color_%d\0", item->index);
-                break;
-            case MOJOSHADER_USAGE_NORMAL:
-                sprintf(name, "normal");
-                break;
-            case MOJOSHADER_USAGE_TANGENT:
-                sprintf(name, "tangent");
-                break;
-            case MOJOSHADER_USAGE_BLENDWEIGHT:
-            case MOJOSHADER_USAGE_BLENDINDICES:
-            case MOJOSHADER_USAGE_POINTSIZE:
-            case MOJOSHADER_USAGE_BINORMAL:
-            case MOJOSHADER_USAGE_TESSFACTOR:
-            case MOJOSHADER_USAGE_POSITIONT:
-            case MOJOSHADER_USAGE_FOG:
-            case MOJOSHADER_USAGE_DEPTH:
-            case MOJOSHADER_USAGE_SAMPLE:
-                break;
-            }
-
-            output_line(
-                ctx,
-                "attribute vec4 %s;",
-                name);
-
-            output_line(
-                ctx,
-                "#define %s_v%d %s;",
-                shader,
-                item->regnum,
-                name);
-
-            output_line(ctx, "");
-        }
-    }
-
     if (!failed)
     {
         process_definitions(ctx);
         failed = isfail(ctx);
     } // if
 
-#if 0
     if (!failed)
         ctx->profile->finalize_emitter(ctx);
-#endif
 
     ctx->isfail = failed;
     retval = build_parsedata(ctx);
