@@ -15,13 +15,6 @@ namespace graph
         friend class CGraphicsDeviceGLES2;
 
     private:
-        // ファイルからテクスチャ作成
-        static CCubeTexture* CreateCubeTextureFromFile(
-            CGraphicsDevice* device,
-            IMemoryAllocator* allocator,
-            IZ_PCSTR path,
-            E_GRAPH_PIXEL_FMT fmt);
-
         // テクスチャ作成
         static CCubeTexture* CreateCubeTexture(
             CGraphicsDevice* device,
@@ -51,15 +44,6 @@ namespace graph
         virtual inline ~CCubeTextureGLES2();
 
     private:
-        // ファイルからテクスチャ作成
-        IZ_BOOL CreateTextureFromFileImpl(
-            CGraphicsDevice* device,
-            IZ_PCSTR path,
-            IZ_UINT width,
-            IZ_UINT height,
-            IZ_UINT mipLevel,
-            E_GRAPH_PIXEL_FMT fmt);
-
         // テクスチャ作成
         IZ_BOOL CreateTextureImpl(
             CGraphicsDevice* device,
@@ -70,7 +54,14 @@ namespace graph
             E_GRAPH_PIXEL_FMT fmt);
 
         // テクスチャ情報取得
-        void GetTextureInfo();
+        void SetTextureInfo(
+            IZ_UINT width,
+            IZ_UINT height,
+            IZ_UINT mipLevel,
+            E_GRAPH_PIXEL_FMT fmt,
+            E_GRAPH_RSC_USAGE usage);
+
+        void Initialize();
 
     public:
         // ロック
@@ -89,8 +80,23 @@ namespace graph
         virtual TEX_HANDLE GetTexHandle();
 
     private:
+        CGraphicsDeviceGLES2* m_Device;
+
         // 本体
         GLuint m_Texture;
+
+        IZ_BOOL m_IsInitialized;
+
+        IZ_UINT m_Size;
+
+        GLenum m_GLFormat;
+        GLenum m_GLType;
+
+        IZ_UINT m_LockedSize;
+        IZ_INT m_LockedLevel;
+        E_GRAPH_CUBE_TEX_FACE m_LockedFace;
+
+        void* m_TemporaryData;
     };
 }   // namesace graph
 }   // namespace izanagi

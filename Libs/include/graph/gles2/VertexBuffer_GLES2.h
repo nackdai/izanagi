@@ -35,6 +35,8 @@ namespace graph
             IZ_UINT vtxNum,
             E_GRAPH_RSC_USAGE usage);
 
+        void Initialize();
+
     public:
         // ロック
         virtual IZ_BOOL Lock(
@@ -62,6 +64,8 @@ namespace graph
 
         // 本体
         GLuint m_VB;
+
+        IZ_BOOL m_IsInitialized;
 
         size_t m_Size;
 

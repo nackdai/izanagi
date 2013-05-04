@@ -17,13 +17,6 @@ namespace graph
         friend class CGraphicsDeviceDX9;
 
     private:
-        // ファイルからテクスチャ作成
-        static CCubeTexture* CreateCubeTextureFromFile(
-            CGraphicsDeviceDX9* device,
-            IMemoryAllocator* allocator,
-            IZ_PCSTR path,
-            E_GRAPH_PIXEL_FMT fmt);
-
         // テクスチャ作成
         static CCubeTexture* CreateCubeTexture(
             CGraphicsDeviceDX9* device,
@@ -53,15 +46,6 @@ namespace graph
         virtual inline ~CCubeTextureDX9();
 
     private:
-        // ファイルからテクスチャ作成
-        IZ_BOOL CreateTextureFromFileImpl(
-            CGraphicsDeviceDX9* device,
-            IZ_PCSTR path,
-            IZ_UINT width,
-            IZ_UINT height,
-            IZ_UINT mipLevel,
-            E_GRAPH_PIXEL_FMT fmt);
-
         // テクスチャ作成
         IZ_BOOL CreateTextureImpl(
             CGraphicsDeviceDX9* device,

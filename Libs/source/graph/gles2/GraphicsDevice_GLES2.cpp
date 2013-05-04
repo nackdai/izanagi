@@ -414,6 +414,7 @@ namespace graph
 
         if (gles2VB != IZ_NULL) {
             ::glBindBuffer(GL_ARRAY_BUFFER, gles2VB->GetRawInterface());
+            gles2VB->Initialize();
         }
         else {
             ::glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -441,6 +442,7 @@ namespace graph
 
         if (gles2IB != IZ_NULL) {
             ::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gles2IB->GetRawInterface());
+            gles2IB->Initialize();
         }
         else {
             ::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -752,6 +754,17 @@ namespace graph
 
         // 保持しておく
         SAFE_REPLACE(m_Texture[nStage], pTex);
+
+        if (pTex->GetTexType() == E_GRAPH_TEX_TYPE_PLANE) {
+            ((CTextureGLES2*)pTex)->Initialize();
+        }
+        else if (pTex->GetTexType() == E_GRAPH_TEX_TYPE_CUBE) {
+            ((CCubeTextureGLES2*)pTex)->Initialize();
+        }
+        else {
+            // TODO
+            IZ_ASSERT(IZ_FALSE);
+        }
 
         // うーん・・・
         // ステート
