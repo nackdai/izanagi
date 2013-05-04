@@ -16,12 +16,12 @@ namespace graph
     CGraphicsDevice* CGraphicsDevice::s_Instance = IZ_NULL;
 
     /**
-    * ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ä½œæˆ
+    * ƒCƒ“ƒXƒ^ƒ“ƒXì¬
     */
     CGraphicsDevice* CGraphicsDevice::CreateGraphicsDevice(IMemoryAllocator* allocator)
     {
         if (s_Instance != IZ_NULL) {
-            // ä½œæˆæ¸ˆã¿ãªã®ã§ä½•ã‚‚ã—ãªã„
+            // ì¬Ï‚İ‚È‚Ì‚Å‰½‚à‚µ‚È‚¢
             return s_Instance;
         }
 
@@ -31,21 +31,21 @@ namespace graph
         IZ_UINT8* buf = IZ_NULL;
         CGraphicsDeviceGLES2* instance = IZ_NULL;
 
-        // ãƒ¡ãƒ¢ãƒªç¢ºä¿
+        // ƒƒ‚ƒŠŠm•Û
         buf = (IZ_UINT8*)ALLOC_ZERO(allocator, sizeof(CGraphicsDeviceGLES2));
         VGOTO(buf != IZ_NULL, __EXIT__);
 
-        // ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ä½œæˆ
+        // ƒCƒ“ƒXƒ^ƒ“ƒXì¬
         instance = new(buf) CGraphicsDeviceGLES2;
         {
             instance->m_Allocator = allocator;
 
-            // IDirect3D9 ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã®å–å¾—
+            // IDirect3D9 ƒCƒ“ƒ^[ƒtƒF[ƒX‚Ìæ“¾
             instance->m_D3D = Direct3DCreate9(D3D_SDK_VERSION);
             result = (instance->m_D3D != IZ_NULL);
             IZ_ASSERT(result);
 
-            // ç¾åœ¨ã®ç”»é¢ãƒ¢ãƒ¼ãƒ‰ã®å–å¾—
+            // Œ»İ‚Ì‰æ–Êƒ‚[ƒh‚Ìæ“¾
             if (result) {
                 HRESULT hr = instance->m_D3D->GetAdapterDisplayMode(
                                 D3DADAPTER_DEFAULT,
@@ -76,7 +76,7 @@ namespace graph
         return instance;
     }
 
-    // ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+    // ƒRƒ“ƒXƒgƒ‰ƒNƒ^
     CGraphicsDeviceGLES2::CGraphicsDeviceGLES2()
     {
         m_D3D = IZ_NULL;
@@ -90,7 +90,7 @@ namespace graph
         m_LostDeviceCallBack = IZ_NULL;
     }
 
-    // ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+    // ƒfƒXƒgƒ‰ƒNƒ^
     CGraphicsDeviceGLES2::~CGraphicsDeviceGLES2()
     {
         SAFE_RELEASE(m_Device);
@@ -109,13 +109,13 @@ namespace graph
         SAFE_RELEASE(m_RenderState.curVD);
 
         for (IZ_UINT i = 0; i < MAX_MRT_NUM; ++i) {
-            // ãƒã‚§ãƒƒã‚¯
+            // ƒ`ƒFƒbƒN
             IZ_ASSERT(m_RTMgr[i].IsEmpty());
 
             SAFE_RELEASE(m_RenderState.curRT[i]);
         }
 
-        // ãƒã‚§ãƒƒã‚¯
+        // ƒ`ƒFƒbƒN
         IZ_ASSERT(m_DepthMgr.IsEmpty());
 
         SAFE_RELEASE(m_RenderState.curDepth);
@@ -126,13 +126,13 @@ namespace graph
     }
 
     /**
-    * ãƒªã‚»ãƒƒãƒˆ
+    * ƒŠƒZƒbƒg
     */
     IZ_BOOL CGraphicsDeviceGLES2::Reset(const void* initialParam)
     {
         // NOTE
-        // izanagiã§ã¯å·¦æ‰‹åº§æ¨™ç³»ãªã®ã§
-        // ã‚«ãƒªãƒ³ã‚°ã®æ¨™æº–ã¯CounterClockWiseã«ã™ã‚‹
+        // izanagi‚Å‚Í¶èÀ•WŒn‚È‚Ì‚Å
+        // ƒJƒŠƒ“ƒO‚Ì•W€‚ÍCounterClockWise‚É‚·‚é
         glFrontFace(GL_CCW);
 
         const SGraphicsDeviceInitParams& param = *(reinterpret_cast<const SGraphicsDeviceInitParams*>(initialParam));
@@ -140,23 +140,23 @@ namespace graph
         IZ_BOOL ret = IZ_TRUE;
 
         if (m_Device == IZ_NULL) {
-            // æœ¬ä½“ä½œæˆ
+            // –{‘Ìì¬
             ret = CreateBody(param);
 
             if (ret) {
-                // 2Dæç”»åˆæœŸåŒ–
+                // 2D•`‰æ‰Šú‰»
                 m_2DRenderer = C2DRendererGLES2::Create2DRenderer(this, m_Allocator);
                 ret = (m_2DRenderer != IZ_NULL);
                 IZ_ASSERT(ret);
             }
         }
         else {
-            // ãƒªã‚»ãƒƒãƒˆ
+            // ƒŠƒZƒbƒg
             ret = ResetInternal(param);
         }
 
         if (ret) {
-            // ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆ
+            // ƒrƒ…[ƒ|[ƒg
             SViewport vp;
             {
                 vp.x = 0;
@@ -168,17 +168,17 @@ namespace graph
             }
             SetViewport(vp);
 
-            // ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¹ãƒ†ãƒ¼ãƒˆã®ç¾åœ¨å€¤ã‚’å–å¾—
+            // ƒŒƒ“ƒ_[ƒXƒe[ƒg‚ÌŒ»İ’l‚ğæ“¾
             m_RenderState.GetParamsFromGraphicsDevice(this);
 
-            // ã‚¹ãƒ†ãƒ¼ãƒˆ
-            // å¼·åˆ¶è¨­å®š
+            // ƒXƒe[ƒg
+            // ‹­§İ’è
             m_Flags.is_force_set_state = IZ_TRUE;
             SetDefaultRenderState();
             m_Flags.is_force_set_state = IZ_FALSE;
 
-            // ã‚µãƒ¼ãƒ•ã‚§ã‚¹ã®ãƒªã‚»ãƒƒãƒˆ
-            //ï¼ˆãƒ•ãƒ¬ãƒ¼ãƒ ãƒãƒƒãƒ•ã‚¡ã®ãƒªã‚»ãƒƒãƒˆï¼‰
+            // ƒT[ƒtƒFƒX‚ÌƒŠƒZƒbƒg
+            //iƒtƒŒ[ƒ€ƒoƒbƒtƒ@‚ÌƒŠƒZƒbƒgj
             {
                 CSurfaceGLES2*& renderTarget = reinterpret_cast<CSurfaceGLES2*&>(m_RT);
                 CSurfaceGLES2*& deptthStencil = reinterpret_cast<CSurfaceGLES2*&>(m_Depth);
@@ -201,15 +201,15 @@ namespace graph
                 IZ_ASSERT(ret);
             
                 if (ret) {
-                    // ãƒ•ãƒ¬ãƒ¼ãƒ ãƒãƒƒãƒ•ã‚¡ã‚µãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚’å–ã£ã¦ãã‚‹ãƒ»ãƒ»ãƒ»
+                    // ƒtƒŒ[ƒ€ƒoƒbƒtƒ@ƒT[ƒtƒF[ƒX‚ğæ‚Á‚Ä‚­‚éEEE
                     m_Device->GetRenderTarget(0, &renderTarget->m_Surface);
                     m_Device->GetDepthStencilSurface(&deptthStencil->m_Surface);
 
-                    // æ˜ç¤ºçš„ã«è¨˜è¿°ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
+                    // –¾¦“I‚É‹Lq‚ğƒZƒbƒg‚·‚é
                     renderTarget->SetDesc();
                     deptthStencil->SetDesc();
 
-                    // ç¾åœ¨ã®ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã¨ã—ã¦ä¿æŒ
+                    // Œ»İ‚ÌƒŒƒ“ƒ_[ƒ^[ƒQƒbƒg‚Æ‚µ‚Ä•Û
                     SAFE_REPLACE(m_RenderState.curRT[0], m_RT);
                     SAFE_REPLACE(m_RenderState.curDepth, m_Depth);
                 }
@@ -219,7 +219,7 @@ namespace graph
         return ret;
     }
 
-    // æœ¬ä½“ä½œæˆ
+    // –{‘Ìì¬
     IZ_BOOL CGraphicsDeviceGLES2::CreateBody(const SGraphicsDeviceInitParams& sParams)
     {
         IZ_ASSERT(m_D3D != IZ_NULL);
@@ -228,37 +228,37 @@ namespace graph
 
         m_hFocusWindow = sParams.hFocusWindow;
 
-        // D3DPRESENT_PARAMETERS ã®è¨­å®š
+        // D3DPRESENT_PARAMETERS ‚Ìİ’è
         {
             FILL_ZERO(&m_PresentParameters, sizeof(m_PresentParameters));
 
             m_PresentParameters.BackBufferCount = 2;
 
-            m_PresentParameters.Windowed = sParams.Windowed;                    // ç”»é¢ãƒ¢ãƒ¼ãƒ‰(ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦ãƒ¢ãƒ¼ãƒ‰)
-            m_PresentParameters.BackBufferWidth = sParams.BackBufferWidth;      // ãƒãƒƒã‚¯ãƒãƒƒãƒ•ã‚¡ã®å¹…
-            m_PresentParameters.BackBufferHeight = sParams.BackBufferHeight;    // ãƒãƒƒã‚¯ãƒãƒƒãƒ•ã‚¡ã®é«˜ã•
+            m_PresentParameters.Windowed = sParams.Windowed;                    // ‰æ–Êƒ‚[ƒh(ƒEƒCƒ“ƒhƒEƒ‚[ƒh)
+            m_PresentParameters.BackBufferWidth = sParams.BackBufferWidth;      // ƒoƒbƒNƒoƒbƒtƒ@‚Ì•
+            m_PresentParameters.BackBufferHeight = sParams.BackBufferHeight;    // ƒoƒbƒNƒoƒbƒtƒ@‚Ì‚‚³
 
-            // ãƒãƒƒã‚¯ãƒãƒƒãƒ•ã‚¡ã®ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ
+            // ƒoƒbƒNƒoƒbƒtƒ@‚ÌƒtƒH[ƒ}ƒbƒg
             m_PresentParameters.BackBufferFormat = m_DisplayMode.Format;
 
-            m_PresentParameters.MultiSampleType = sParams.MultiSampleType;      // ãƒãƒ«ãƒãƒ»ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ã®ç¨®é¡
+            m_PresentParameters.MultiSampleType = sParams.MultiSampleType;      // ƒ}ƒ‹ƒ`EƒTƒ“ƒvƒŠƒ“ƒO‚Ìí—Ş
 
-            // ã‚¹ãƒ¯ãƒƒãƒ—ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®ç¨®é¡
+            // ƒXƒƒbƒvƒGƒtƒFƒNƒg‚Ìí—Ş
             m_PresentParameters.SwapEffect = D3DSWAPEFFECT_DISCARD;
 
             m_PresentParameters.hDeviceWindow = sParams.hDeviceWindow;
 
 #if 1
-            // Zãƒãƒƒãƒ•ã‚¡ã®è‡ªå‹•ä½œæˆ
+            // Zƒoƒbƒtƒ@‚Ì©“®ì¬
             m_PresentParameters.EnableAutoDepthStencil = IZ_TRUE;
             //m_PresentParameters.AutoDepthStencilFormat = D3DFMT_D24S8;
             m_PresentParameters.AutoDepthStencilFormat = sParams.DepthStencilFormat;
 #else
-            // Zãƒãƒƒãƒ•ã‚¡ã‚’è‡ªå‹•ä½œæˆã—ãªã„
+            // Zƒoƒbƒtƒ@‚ğ©“®ì¬‚µ‚È‚¢
             m_PresentParameters.EnableAutoDepthStencil = IZ_FALSE;
 #endif
 
-            // VSyncã®ã‚¿ã‚¤ãƒ—
+            // VSync‚Ìƒ^ƒCƒv
             m_PresentParameters.PresentationInterval = sParams.PresentationInterval;
         }
 
@@ -270,7 +270,7 @@ namespace graph
                     &m_PresentParameters,
                     &m_Device)))
         {
-            // çµå±€å¤±æ•—ã—ãŸ
+            // Œ‹‹Ç¸”s‚µ‚½
             ret = IZ_FALSE;
         }
 
@@ -298,7 +298,7 @@ namespace graph
         CSurfaceGLES2* renderTarget = reinterpret_cast<CSurfaceGLES2*>(m_RT);
         CSurfaceGLES2* deptthStencil = reinterpret_cast<CSurfaceGLES2*>(m_Depth);
 
-        // ãƒªã‚½ãƒ¼ã‚¹ã‚’è§£æ”¾ã™ã‚‹
+        // ƒŠƒ\[ƒX‚ğ‰ğ•ú‚·‚é
         {
             renderTarget->ReleaseResource();
             deptthStencil->ReleaseResource();
@@ -310,11 +310,11 @@ namespace graph
             DisableResource(m_ResetIB);
         }
 
-        // ã‚¯ãƒªã‚¢ã•ã‚Œã‚‹ã‚‚ã®ã‚’ä¿å­˜ã—ã¦ãŠã
+        // ƒNƒŠƒA‚³‚ê‚é‚à‚Ì‚ğ•Û‘¶‚µ‚Ä‚¨‚­
         IZ_UINT nBackBufferCount = m_PresentParameters.BackBufferCount;
         D3DFORMAT fmt = m_PresentParameters.BackBufferFormat;
 
-        // æ–°ã—ãè¨­å®šã•ã‚Œã‚‹ã‚‚ã®
+        // V‚µ‚­İ’è‚³‚ê‚é‚à‚Ì
         m_PresentParameters.BackBufferWidth = sParams.BackBufferWidth;
         m_PresentParameters.BackBufferHeight = sParams.BackBufferHeight;
 
@@ -324,11 +324,11 @@ namespace graph
         IZ_BOOL ret = SUCCEEDED(hr);
 
         if (ret) {
-            // ã‚¯ãƒªã‚¢ã•ã‚ŒãŸã®ã§è¨­å®šå€¤ã«å¤‰æ›´ã™ã‚‹
+            // ƒNƒŠƒA‚³‚ê‚½‚Ì‚Åİ’è’l‚É•ÏX‚·‚é
             m_PresentParameters.BackBufferCount = nBackBufferCount;
             m_PresentParameters.BackBufferFormat = fmt;
 
-            // ãƒªã‚½ãƒ¼ã‚¹ã‚’ãƒªã‚»ãƒƒãƒˆã™ã‚‹
+            // ƒŠƒ\[ƒX‚ğƒŠƒZƒbƒg‚·‚é
             {
                 renderTarget->Reset(IZ_NULL, 0);
                 deptthStencil->Reset(IZ_NULL, 0);
@@ -340,7 +340,7 @@ namespace graph
                 RestoreResource(m_ResetIB);
             }
 
-            // ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
+            // ƒR[ƒ‹ƒoƒbƒN
             if (m_ResetCallBack != IZ_NULL) {
                 ret = (*m_ResetCallBack)();
                 IZ_ASSERT(ret);
@@ -351,7 +351,7 @@ namespace graph
     }
 
     /**
-    * æç”»é–‹å§‹
+    * •`‰æŠJn
     */
     IZ_BOOL CGraphicsDeviceGLES2::BeginRender(
         IZ_DWORD nClearFlags,
@@ -364,7 +364,7 @@ namespace graph
         IZ_BOOL ret = IZ_FALSE;
 
         if (!m_Flags.is_lost_device) {
-            // ãƒ‡ãƒã‚¤ã‚¹ãƒ­ã‚¹ãƒˆã—ã¦ãªã„ã®ã§ã€é€šå¸¸ã®æç”»é–‹å§‹å‡¦ç†ã‚’è¡Œã†
+            // ƒfƒoƒCƒXƒƒXƒg‚µ‚Ä‚È‚¢‚Ì‚ÅA’Êí‚Ì•`‰æŠJnˆ—‚ğs‚¤
             m_Device->BeginScene();
             m_Flags.is_call_begin = IZ_TRUE;
 
@@ -374,11 +374,11 @@ namespace graph
                 fClearZ,
                 nClearStencil);
 
-            // ãƒ•ãƒ¬ãƒ¼ãƒ ãƒãƒƒãƒ•ã‚¡ã‚µãƒ¼ãƒ•ã‚§ã‚¹ã‚’ç¾åœ¨ã®ã‚µãƒ¼ãƒ•ã‚§ã‚¹ã¨ã—ã¦ã‚»ãƒƒãƒˆ
+            // ƒtƒŒ[ƒ€ƒoƒbƒtƒ@ƒT[ƒtƒFƒX‚ğŒ»İ‚ÌƒT[ƒtƒFƒX‚Æ‚µ‚ÄƒZƒbƒg
             SAFE_REPLACE(m_RenderState.curRT[0], m_RT);
             SAFE_REPLACE(m_RenderState.curDepth, m_Depth);
 
-            // 2Då‡¦ç†é–‹å§‹
+            // 2Dˆ—ŠJn
             m_2DRenderer->BeginFrame();
 
             ret = IZ_TRUE;
@@ -388,11 +388,11 @@ namespace graph
     }
 
     /**
-    * æç”»çµ‚äº†
+    * •`‰æI—¹
     */
     void CGraphicsDeviceGLES2::EndRender()
     {
-        // å¿µã®ãŸã‚
+        // ”O‚Ì‚½‚ß
         EndScene();
 
         if (m_Flags.is_call_begin) {
@@ -401,7 +401,7 @@ namespace graph
 
         m_Flags.is_call_begin = IZ_FALSE;
 
-        // ã‚¯ãƒªã‚¢ã—ã¦ã¿ã‚‹
+        // ƒNƒŠƒA‚µ‚Ä‚İ‚é
         ClearRenderState();
     }
 
@@ -412,7 +412,7 @@ namespace graph
     #endif
 
     /**
-    * ã‚¯ãƒªã‚¢
+    * ƒNƒŠƒA
     */
     void CGraphicsDeviceGLES2::Clear(
         IZ_DWORD nClearFlags,
@@ -423,7 +423,7 @@ namespace graph
         IZ_ASSERT(m_Device != NULL);
 
         if (nClearFlags > 0) {
-            // DirectX ã®ã‚¯ãƒªã‚¢ãƒ•ãƒ©ã‚°ã«å¤‰æ›ã™ã‚‹
+            // DirectX ‚ÌƒNƒŠƒAƒtƒ‰ƒO‚É•ÏŠ·‚·‚é
             IZ_DWORD nDXClearFlag = 0;
             nDXClearFlag |= _CONV_CLEAR_FLAG(nClearFlags, E_GRAPH_CLEAR_FLAG_COLOR,   D3DCLEAR_TARGET);
             nDXClearFlag |= _CONV_CLEAR_FLAG(nClearFlags, E_GRAPH_CLEAR_FLAG_DEPTH,   D3DCLEAR_ZBUFFER);
@@ -451,21 +451,21 @@ namespace graph
         IZ_ASSERT(m_Device != NULL);
 
         // TODO
-        // MRTã¯ç„¡ã—ã§ãƒ»ãƒ»ãƒ»
+        // MRT‚Í–³‚µ‚ÅEEE
         IZ_ASSERT(nCount <= 1);
 
         IZ_BOOL ret = IZ_TRUE;
 
         if ((nCount > 0) && (pRT != IZ_NULL)) {
-            // ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚»ãƒƒãƒˆ
+            // ƒŒƒ“ƒ_[ƒ^[ƒQƒbƒgƒZƒbƒg
             PushRenderTarget(pRT, nCount);
         }
         if (pDepth != IZ_NULL) {
-            // æ·±åº¦ãƒ»ã‚¹ãƒ†ãƒ³ã‚·ãƒ«ã‚»ãƒƒãƒˆ
+            // [“xEƒXƒeƒ“ƒVƒ‹ƒZƒbƒg
             PushDepthStencil(pDepth);
         }
 
-        // ã‚¯ãƒªã‚¢
+        // ƒNƒŠƒA
         Clear(
             nClearFlags,
             nClearColor,
@@ -476,7 +476,7 @@ namespace graph
     }
 
     /**
-    * ã‚·ãƒ¼ãƒ³æç”»çµ‚äº†
+    * ƒV[ƒ“•`‰æI—¹
     */
     void CGraphicsDeviceGLES2::EndScene(IZ_UINT flag/* = 0xffffffff*/)
     {
@@ -485,7 +485,7 @@ namespace graph
 
         IZ_UINT nRTNum = 0;
 
-        // ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆ
+        // ƒŒƒ“ƒ_[ƒ^[ƒQƒbƒg
         for (IZ_UINT i = 0; i < MAX_MRT_NUM; ++i) {
             if ((flag & (1 << i)) > 0) {
                 pRTList[i] = m_RTMgr[i].Pop();
@@ -498,7 +498,7 @@ namespace graph
         }
 
         if ((flag & E_GRAPH_END_SCENE_FLAG_DEPTH_STENCIL) > 0) {
-            // æ·±åº¦ãƒ»ã‚¹ãƒ†ãƒ³ã‚·ãƒ«
+            // [“xEƒXƒeƒ“ƒVƒ‹
             CSurface* pDepth = m_DepthMgr.Pop();
             if (pDepth != IZ_NULL) {
                 SetDepthStencil(pDepth);
@@ -507,7 +507,7 @@ namespace graph
     }
 
     /**
-    * åŒæœŸ
+    * “¯Šú
     */
     IZ_BOOL CGraphicsDeviceGLES2::Present()
     {
@@ -520,10 +520,10 @@ namespace graph
                         IZ_NULL);
 
         if (hr == D3DERR_DEVICELOST) {
-            // ãƒ‡ãƒã‚¤ã‚¹ãƒ­ã‚¹ãƒˆã—ãŸ
+            // ƒfƒoƒCƒXƒƒXƒg‚µ‚½
             m_Flags.is_lost_device = IZ_TRUE;
 
-            // ãƒ‡ãƒã‚¤ã‚¹ãƒ­ã‚¹ãƒˆã—ãŸã¨ãã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
+            // ƒfƒoƒCƒXƒƒXƒg‚µ‚½‚Æ‚«‚ÌƒR[ƒ‹ƒoƒbƒN
             if (m_LostDeviceCallBack != IZ_NULL) {
                 (*m_LostDeviceCallBack)();
             }
@@ -534,11 +534,11 @@ namespace graph
                 sParams.BackBufferHeight = m_PresentParameters.BackBufferHeight;
             }
 
-            // å¾©å¸°ã‚’ã“ã“ã‚ã¿ã‚‹
+            // •œ‹A‚ğ‚±‚±‚ë‚İ‚é
             ret = Reset(&sParams);
 
             if (ret) {
-                // å¾©å¸°ã—ãŸ
+                // •œ‹A‚µ‚½
                 m_Flags.is_lost_device = IZ_FALSE;
             }
         }
@@ -555,7 +555,7 @@ namespace graph
         IZ_ASSERT(pSurface != IZ_NULL);
 
         if (m_RenderState.curDepth != pSurface) {
-            // ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚’å…¥ã‚Œæ›¿ãˆã‚‹
+            // ƒŒƒ“ƒ_[ƒ^[ƒQƒbƒg‚ğ“ü‚ê‘Ö‚¦‚é
             CSurfaceGLES2* gles2Surface = reinterpret_cast<CSurfaceGLES2*>(pSurface);
             m_Device->SetDepthStencilSurface(gles2Surface->GetRawInterface());
             SAFE_REPLACE(m_RenderState.curDepth, pSurface);
@@ -563,7 +563,7 @@ namespace graph
     }
 
     /**
-    * é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ã‚»ãƒƒãƒˆ
+    * ’¸“_ƒoƒbƒtƒ@ƒZƒbƒg
     */
     IZ_BOOL CGraphicsDeviceGLES2::SetVertexBuffer(
         IZ_UINT nStreamIdx,
@@ -572,7 +572,7 @@ namespace graph
         CVertexBuffer* pVB)
     {
         if (m_RenderState.curVB == pVB) {
-            // ã™ã§ã«è¨­å®šã•ã‚Œã¦ã„ã‚‹
+            // ‚·‚Å‚Éİ’è‚³‚ê‚Ä‚¢‚é
             return IZ_TRUE;
         }
 
@@ -586,7 +586,7 @@ namespace graph
                             nStride);
             VRETURN(SUCCEEDED(hr));
 
-            // ç¾åœ¨è¨­å®šã•ã‚Œã¦ã„ã‚‹ã‚‚ã®ã¨ã—ã¦ä¿æŒ
+            // Œ»İİ’è‚³‚ê‚Ä‚¢‚é‚à‚Ì‚Æ‚µ‚Ä•Û
             SAFE_REPLACE(m_RenderState.curVB, pVB);
         }
 
@@ -594,12 +594,12 @@ namespace graph
     }
 
     /**
-    * ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ã‚»ãƒƒãƒˆ
+    * ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@ƒZƒbƒg
     */
     IZ_BOOL CGraphicsDeviceGLES2::SetIndexBuffer(CIndexBuffer* pIB)
     {
         if (m_RenderState.curIB == pIB) {
-            // ã™ã§ã«è¨­å®šã•ã‚Œã¦ã„ã‚‹
+            // ‚·‚Å‚Éİ’è‚³‚ê‚Ä‚¢‚é
             return IZ_TRUE;
         }
 
@@ -610,7 +610,7 @@ namespace graph
                             pIB != IZ_NULL ? gles2IB->GetRawInterface() : IZ_NULL);
             VRETURN(SUCCEEDED(hr));
 
-            // ç¾åœ¨è¨­å®šã•ã‚Œã¦ã„ã‚‹ã‚‚ã®ã¨ã—ã¦ä¿æŒ
+            // Œ»İİ’è‚³‚ê‚Ä‚¢‚é‚à‚Ì‚Æ‚µ‚Ä•Û
             SAFE_REPLACE(m_RenderState.curIB, pIB);
         }
 
@@ -618,12 +618,12 @@ namespace graph
     }
 
     /**
-    * é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€ã‚»ãƒƒãƒˆ
+    * ’¸“_ƒVƒF[ƒ_ƒZƒbƒg
     */
     IZ_BOOL CGraphicsDeviceGLES2::SetVertexShader(CVertexShader* pVS)
     {
         if (m_RenderState.curVS == pVS) {
-            // ã™ã§ã«è¨­å®šã•ã‚Œã¦ã„ã‚‹
+            // ‚·‚Å‚Éİ’è‚³‚ê‚Ä‚¢‚é
             return IZ_TRUE;
         }
 
@@ -634,7 +634,7 @@ namespace graph
                             pVS != IZ_NULL ? gles2VS->GetRawInterface() : IZ_NULL);
             VRETURN(SUCCEEDED(hr));
 
-            // ç¾åœ¨è¨­å®šã•ã‚Œã¦ã„ã‚‹ã‚‚ã®ã¨ã—ã¦ä¿æŒ
+            // Œ»İİ’è‚³‚ê‚Ä‚¢‚é‚à‚Ì‚Æ‚µ‚Ä•Û
             SAFE_REPLACE(m_RenderState.curVS, pVS);
         }
 
@@ -642,12 +642,12 @@ namespace graph
     }
 
     /**
-    * ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€ã‚»ãƒƒãƒˆ
+    * ƒsƒNƒZƒ‹ƒVƒF[ƒ_ƒZƒbƒg
     */
     IZ_BOOL CGraphicsDeviceGLES2::SetPixelShader(CPixelShader* pPS)
     {
         if (m_RenderState.curPS == pPS) {
-            // ã™ã§ã«è¨­å®šã•ã‚Œã¦ã„ã‚‹
+            // ‚·‚Å‚Éİ’è‚³‚ê‚Ä‚¢‚é
             return IZ_TRUE;
         }
 
@@ -658,7 +658,7 @@ namespace graph
                             pPS != IZ_NULL ? gles2PS->GetRawInterface() : IZ_NULL);
             VRETURN(SUCCEEDED(hr));
 
-            // ç¾åœ¨è¨­å®šã•ã‚Œã¦ã„ã‚‹ã‚‚ã®ã¨ã—ã¦ä¿æŒ
+            // Œ»İİ’è‚³‚ê‚Ä‚¢‚é‚à‚Ì‚Æ‚µ‚Ä•Û
             SAFE_REPLACE(m_RenderState.curPS, pPS);
         }
 
@@ -666,12 +666,12 @@ namespace graph
     }
 
     /**
-    * é ‚ç‚¹å®£è¨€ã‚»ãƒƒãƒˆ
+    * ’¸“_éŒ¾ƒZƒbƒg
     */
     IZ_BOOL CGraphicsDeviceGLES2::SetVertexDeclaration(CVertexDeclaration* pVD)
     {
         if (m_RenderState.curVD == pVD) {
-            // ã™ã§ã«è¨­å®šã•ã‚Œã¦ã„ã‚‹
+            // ‚·‚Å‚Éİ’è‚³‚ê‚Ä‚¢‚é
             return IZ_TRUE;
         }
 
@@ -682,14 +682,14 @@ namespace graph
             VRETURN(SUCCEEDED(hr));
         }
 
-        // ç¾åœ¨è¨­å®šã•ã‚Œã¦ã„ã‚‹ã‚‚ã®ã¨ã—ã¦ä¿æŒ
+        // Œ»İİ’è‚³‚ê‚Ä‚¢‚é‚à‚Ì‚Æ‚µ‚Ä•Û
         SAFE_REPLACE(m_RenderState.curVD, pVD);
 
         return IZ_TRUE;
     }
 
     /**
-    * ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡æç”»
+    * ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@•`‰æ
     */
     IZ_BOOL CGraphicsDeviceGLES2::DrawIndexedPrimitive(
         E_GRAPH_PRIM_TYPE prim_type,
@@ -712,7 +712,7 @@ namespace graph
     }
 
     /**
-    * ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ãªã—æç”»
+    * ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@‚È‚µ•`‰æ
     */
     IZ_BOOL CGraphicsDeviceGLES2::DrawPrimitive(
         E_GRAPH_PRIM_TYPE prim_type,
@@ -729,13 +729,13 @@ namespace graph
     }
 
     /**
-    * ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆã‚»ãƒƒãƒˆ
+    * ƒrƒ…[ƒ|[ƒgƒZƒbƒg
     */
     IZ_BOOL CGraphicsDeviceGLES2::SetViewport(const SViewport& vp)
     {
         if (m_Flags.is_render_2d) {
             // TODO
-            // 2Dæç”»ä¸­ã¯ä¸å¯
+            // 2D•`‰æ’†‚Í•s‰Â
             return IZ_TRUE;
         }
 
@@ -772,7 +772,7 @@ namespace graph
     }
 
     /**
-    * ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¹ãƒ†ãƒ¼ãƒˆã‚’è¨­å®š
+    * ƒfƒtƒHƒ‹ƒg‚ÌƒŒƒ“ƒ_[ƒXƒe[ƒg‚ğİ’è
     */
     void CGraphicsDeviceGLES2::SetDefaultRenderState()
     {
@@ -791,7 +791,7 @@ namespace graph
 
         CGraphicsDevice::SetRenderState(E_GRAPH_RS_CULLMODE, E_GRAPH_CULL_DEFAULT);
 
-        // ã†ãƒ¼ã‚“ãƒ»ãƒ»ãƒ»
+        // ‚¤[‚ñEEE
         for (IZ_UINT i = 0; i < TEX_STAGE_NUM; ++i) {
             // MIN_FILTER
             SetSamplerStateFilter(
@@ -831,7 +831,7 @@ namespace graph
     }
 
     /**
-    * ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¹ãƒ†ãƒ¼ãƒˆä¸€æ‹¬ã‚»ãƒƒãƒˆ
+    * ƒŒƒ“ƒ_[ƒXƒe[ƒgˆêŠ‡ƒZƒbƒg
     */
     void CGraphicsDeviceGLES2::SetRenderState(const S_RENDER_STATE& sRS)
     {
@@ -843,7 +843,7 @@ namespace graph
                 sRS.dwRS[i]);
         }
 
-        // ã‚·ã‚¶ãƒ¼çŸ©å½¢
+        // ƒVƒU[‹éŒ`
         SetScissorTestRect(sRS.rcScissor);
     }
 
@@ -854,11 +854,11 @@ namespace graph
             pTex != NULL ? pTex->GetTexHandle() : NULL);
         VRETURN(SUCCEEDED(hr));
 
-        // ä¿æŒã—ã¦ãŠã
+        // •Û‚µ‚Ä‚¨‚­
         m_Texture[nStage] = pTex;
 
-        // ã†ãƒ¼ã‚“ãƒ»ãƒ»ãƒ»
-        // ã‚¹ãƒ†ãƒ¼ãƒˆ
+        // ‚¤[‚ñEEE
+        // ƒXƒe[ƒg
         if (pTex != NULL) {
             // MIN_FILTER
             SetSamplerStateFilter(
@@ -903,7 +903,7 @@ namespace graph
 
     void CGraphicsDeviceGLES2::SetRenderTargetInternal(CSurface** pSurface, IZ_UINT num)
     {
-        // ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚’å…¥ã‚Œæ›¿ãˆã‚‹
+        // ƒŒƒ“ƒ_[ƒ^[ƒQƒbƒg‚ğ“ü‚ê‘Ö‚¦‚é
         for (IZ_UINT i = 0; i < num; ++i) {
             if (m_RenderState.curRT[i] != pSurface[i]) {
                 CSurfaceGLES2* gles2Surface = reinterpret_cast<CSurfaceGLES2*>(pSurface[i]);
