@@ -770,6 +770,9 @@ __EXIT__:
         FREE(m_Allocator, pProgramBuf);
     }
 
+    // パスパラメータ初期化
+    InitPassParameter(m_pDevice);
+
     return IZ_TRUE;
 }
 
@@ -816,6 +819,18 @@ IZ_UINT8* CPostEffectShader::CreatePass(
         // オーナーをパスに委譲する
         cPass.SetShaderProgram(shader);
         SAFE_RELEASE(shader);
+    }
+
+    FREE(m_Allocator, pProgramBuf);
+
+    return pBuffer;
+}
+
+IZ_BOOL CPostEffectShader::InitPassParameter(graph::CGraphicsDevice* device)
+{
+    for (IZ_UINT i = 0; i < m_sHeader.numPass; ++i) {
+        CPostEffectPass& cPass = m_pPass[i];
+        const S_PES_PASS* pDesc = m_cPassTable.GetDesc(i);
 
         // パラメータ情報初期化
         for (IZ_UINT n = 0; n < pDesc->numConst; ++n) {
@@ -840,14 +855,9 @@ IZ_UINT8* CPostEffectShader::CreatePass(
             IZ_PCSTR pszName = m_cStrTable.GetString(pSmplDesc->posName);
             IZ_ASSERT(pszName != IZ_NULL);
 
-            VGOTO(
-                cPass.InitSampler(n, nSmplIdx, pszName),
-                __EXIT__);
+            VRETURN(cPass.InitSampler(n, nSmplIdx, pszName));
         }
     }
 
-__EXIT__:
-    FREE(m_Allocator, pProgramBuf);
-
-    return pBuffer;
+    return IZ_TRUE;
 }

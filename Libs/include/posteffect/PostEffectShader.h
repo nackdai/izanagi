@@ -101,6 +101,8 @@ namespace izanagi {
             IZ_UINT8* pBuffer,
             IInputStream* in);
 
+        IZ_BOOL InitPassParameter(graph::CGraphicsDevice* device);
+
     private:
         template <typename _T, typename _U>
         const _T* GetDesc(_U& cDescTbl, IZ_PCSTR name) const;
