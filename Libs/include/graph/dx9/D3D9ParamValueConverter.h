@@ -1,3 +1,4 @@
+#ifdef __IZ_DX9__
 #if !defined(__IZANAGI_GRAPH_D3D9_PARAM_VALUE_CONVERTER_H__)
 #define __IZANAGI_GRAPH_D3D9_PARAM_VALUE_CONVERTER_H__
 
@@ -76,3 +77,4 @@ namespace graph
 
 
 #endif  // #if !defined(__IZANAGI_GRAPH_D3D9_PARAM_VALUE_CONVERTER_H__)
+#endif  // #ifdef __IZ_DX9__
