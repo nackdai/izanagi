@@ -348,13 +348,13 @@ namespace graph
         m_TexInfo.is_on_sysmem = (desc.Pool == D3DPOOL_SYSTEMMEM);
         m_TexInfo.is_on_vram = (desc.Pool == D3DPOOL_DEFAULT);
 
-        m_TexInfo.typeRsc = E_GRAPH_RSC_USAGE_STATIC;
+        m_TexInfo.usage = E_GRAPH_RSC_USAGE_STATIC;
         if (m_TexInfo.is_dynamic) {
             if (m_TexInfo.is_on_vram) {
-                m_TexInfo.typeRsc = E_GRAPH_RSC_USAGE_STATIC_DYNAMIC;
+                m_TexInfo.usage = E_GRAPH_RSC_USAGE_STATIC_DYNAMIC;
             }
             else {
-                m_TexInfo.typeRsc = E_GRAPH_RSC_USAGE_DYNAMIC;
+                m_TexInfo.usage = E_GRAPH_RSC_USAGE_DYNAMIC;
             }
         }
     }

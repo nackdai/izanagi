@@ -56,13 +56,6 @@ namespace graph
 
         virtual IZ_BOOL Restore();
 
-    private:
-        // 動的リソースかどうか
-        IZ_BOOL IsDynamic() const
-        {
-            return (m_CreateType == E_GRAPH_RSC_USAGE_DYNAMIC);
-        }
-
     public:
         D3D_VB* GetRawInterface() { return m_VB; }
 

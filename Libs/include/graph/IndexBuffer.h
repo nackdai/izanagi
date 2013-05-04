@@ -55,6 +55,13 @@ namespace graph
             return m_Fmt;
         }
 
+        /** 動的リソースかどうか
+         */
+        IZ_BOOL IsDynamic() const
+        {
+            return (m_CreateType == E_GRAPH_RSC_USAGE_DYNAMIC);
+        }
+
     protected:
         IZ_UINT m_IdxNum;               // インデックス数
         E_GRAPH_INDEX_BUFFER_FMT m_Fmt; // フォーマット

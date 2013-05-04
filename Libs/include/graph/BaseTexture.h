@@ -100,7 +100,7 @@ namespace graph
 
         E_GRAPH_RSC_USAGE GetRscType() const
         {
-            return m_TexInfo.typeRsc;
+            return m_TexInfo.usage;
         }
 
         PURE_VIRTUAL(E_GRAPH_TEX_TYPE GetTexType());
@@ -125,7 +125,7 @@ namespace graph
 
             E_GRAPH_PIXEL_FMT fmt;
 
-            E_GRAPH_RSC_USAGE typeRsc;
+            E_GRAPH_RSC_USAGE usage;
         } m_TexInfo;        
 
         // ステート
