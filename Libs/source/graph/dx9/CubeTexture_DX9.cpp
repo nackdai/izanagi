@@ -6,24 +6,6 @@ namespace izanagi
 {
 namespace graph
 {
-    // ファイルからテクスチャ作成
-    CCubeTexture* CCubeTextureDX9::CreateCubeTextureFromFile(
-        CGraphicsDeviceDX9* device,
-        IMemoryAllocator* allocator,
-        IZ_PCSTR path,
-        E_GRAPH_PIXEL_FMT fmt)
-    {
-        CCubeTexture* instance = CreateInternal(
-                                    device,
-                                    allocator,
-                                    path,
-                                    0, 0, 0,        // 使用しないので適当
-                                    fmt,
-                                    &CCubeTextureDX9::CreateTextureFromFileImpl);
-
-        return instance;
-    }
-
     // テクスチャ作成
     CCubeTexture* CCubeTextureDX9::CreateCubeTexture(
         CGraphicsDeviceDX9* device,
@@ -115,47 +97,6 @@ namespace graph
     CCubeTextureDX9::~CCubeTextureDX9()
     {
         SAFE_RELEASE(m_Texture);
-    }
-
-    // ファイルからテクスチャ作成
-    IZ_BOOL CCubeTextureDX9::CreateTextureFromFileImpl(
-        CGraphicsDeviceDX9* device,
-        IZ_PCSTR path,
-        IZ_UINT width,
-        IZ_UINT height,
-        IZ_UINT mipLevel,
-        E_GRAPH_PIXEL_FMT fmt)
-    {
-        IZ_ASSERT(device != IZ_NULL);
-
-        D3D_DEVICE* d3dDev = device->GetRawInterface();
-
-        D3DFORMAT d3dFmt = (fmt >= E_GRAPH_PIXEL_FMT_NUM
-                            ? D3DFMT_FROM_FILE
-                            : IZ_GET_TARGET_PIXEL_FMT(fmt));
-
-        HRESULT hr;
-        hr = D3DXCreateCubeTextureFromFileEx(
-                d3dDev,
-                path,
-                D3DX_DEFAULT,       // size
-                D3DFMT_FROM_FILE,   // mip levels
-                0,                  // usage
-                d3dFmt,             // format
-                D3DPOOL_MANAGED,    // pool
-                D3DX_FILTER_LINEAR, // filter
-                D3DX_FILTER_LINEAR, // mip filter
-                0,                  // color key
-                NULL,
-                NULL,
-                &m_Texture);
-
-        VRETURN(SUCCEEDED(hr));
-
-        // テクスチャ情報取得
-        GetTextureInfo();
-
-        return IZ_TRUE;
     }
 
     // テクスチャ作成

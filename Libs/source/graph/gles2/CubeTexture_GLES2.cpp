@@ -1,32 +1,15 @@
-#include "graph/dx9/CubeTexture_DX9.h"
+#include "graph/GraphUtil.h"
+#include "graph/gles2/CubeTexture_GLES2.h"
 #include "graph/internal/ParamValueConverter.h"
-#include "graph/dx9/GraphicsDevice_DX9.h"
+#include "graph/gles2/GraphicsDevice_GLES2.h"
 
 namespace izanagi
 {
 namespace graph
 {
-    // ファイルからテクスチャ作成
-    CCubeTexture* CCubeTextureDX9::CreateCubeTextureFromFile(
-        CGraphicsDeviceDX9* device,
-        IMemoryAllocator* allocator,
-        IZ_PCSTR path,
-        E_GRAPH_PIXEL_FMT fmt)
-    {
-        CCubeTexture* instance = CreateInternal(
-                                    device,
-                                    allocator,
-                                    path,
-                                    0, 0, 0,        // 使用しないので適当
-                                    fmt,
-                                    &CCubeTextureDX9::CreateTextureFromFileImpl);
-
-        return instance;
-    }
-
     // テクスチャ作成
-    CCubeTexture* CCubeTextureDX9::CreateCubeTexture(
-        CGraphicsDeviceDX9* device,
+    CCubeTexture* CCubeTextureGLES2::CreateCubeTexture(
+        CGraphicsDevice* device,
         IMemoryAllocator* allocator,
         IZ_UINT width,
         IZ_UINT height,
@@ -41,13 +24,13 @@ namespace graph
                                     height,
                                     mipLevel,
                                     fmt,
-                                    &CCubeTextureDX9::CreateTextureImpl);
+                                    &CCubeTextureGLES2::CreateTextureImpl);
 
         return instance;
     }
 
-    CCubeTexture* CCubeTextureDX9::CreateInternal(
-        CGraphicsDeviceDX9* device,
+    CCubeTexture* CCubeTextureGLES2::CreateInternal(
+        CGraphicsDevice* device,
         IMemoryAllocator* allocator,
         IZ_PCSTR path,
         IZ_UINT width,
@@ -59,21 +42,19 @@ namespace graph
         IZ_ASSERT(device != IZ_NULL);
         IZ_ASSERT(pCreateTexFunc != IZ_NULL);
 
-        D3D_DEVICE* d3dDev = device->GetRawInterface();
-
         IZ_BOOL result = IZ_TRUE;
         IZ_UINT8* buf = IZ_NULL;
-        CCubeTextureDX9* instance = IZ_NULL;
+        CCubeTextureGLES2* instance = IZ_NULL;
 
         // メモリ確保
-        buf = (IZ_UINT8*)ALLOC_ZERO(allocator, sizeof(CCubeTextureDX9));
+        buf = (IZ_UINT8*)ALLOC_ZERO(allocator, sizeof(CCubeTextureGLES2));
         if (!(result = (buf != IZ_NULL))) {
             IZ_ASSERT(IZ_FALSE);
             goto __EXIT__;
         }
 
         // インスタンス作成
-        instance = new (buf)CCubeTextureDX9;
+        instance = new (buf)CCubeTextureGLES2;
         {
             instance->m_Allocator = allocator;
             instance->AddRef();
@@ -106,61 +87,38 @@ namespace graph
     }
 
     // コンストラクタ
-    CCubeTextureDX9::CCubeTextureDX9()
+    CCubeTextureGLES2::CCubeTextureGLES2()
     {
-        m_Texture = IZ_NULL;
+        m_Texture = 0;
+
+        m_IsInitialized = IZ_FALSE;
+
+        m_Size = 0;
+
+        m_LockedSize = 0;
+        m_LockedLevel = -1;
+
+        m_TemporaryData = IZ_NULL;
+
+        m_GLFormat = GL_RGBA;
+        m_GLType = GL_UNSIGNED_BYTE;
     }
 
     // デストラクタ
-    CCubeTextureDX9::~CCubeTextureDX9()
+    CCubeTextureGLES2::~CCubeTextureGLES2()
     {
-        SAFE_RELEASE(m_Texture);
-    }
+        SAFE_RELEASE(m_Device);
 
-    // ファイルからテクスチャ作成
-    IZ_BOOL CCubeTextureDX9::CreateTextureFromFileImpl(
-        CGraphicsDeviceDX9* device,
-        IZ_PCSTR path,
-        IZ_UINT width,
-        IZ_UINT height,
-        IZ_UINT mipLevel,
-        E_GRAPH_PIXEL_FMT fmt)
-    {
-        IZ_ASSERT(device != IZ_NULL);
+        if (m_Texture > 0) {
+            ::glDeleteTextures(1, &m_Texture);
+        }
 
-        D3D_DEVICE* d3dDev = device->GetRawInterface();
-
-        D3DFORMAT d3dFmt = (fmt >= E_GRAPH_PIXEL_FMT_NUM
-                            ? D3DFMT_FROM_FILE
-                            : IZ_GET_TARGET_PIXEL_FMT(fmt));
-
-        HRESULT hr;
-        hr = D3DXCreateCubeTextureFromFileEx(
-                d3dDev,
-                path,
-                D3DX_DEFAULT,       // size
-                D3DFMT_FROM_FILE,   // mip levels
-                0,                  // usage
-                d3dFmt,             // format
-                D3DPOOL_MANAGED,    // pool
-                D3DX_FILTER_LINEAR, // filter
-                D3DX_FILTER_LINEAR, // mip filter
-                0,                  // color key
-                NULL,
-                NULL,
-                &m_Texture);
-
-        VRETURN(SUCCEEDED(hr));
-
-        // テクスチャ情報取得
-        GetTextureInfo();
-
-        return IZ_TRUE;
+        FREE(m_Allocator, m_TemporaryData);
     }
 
     // テクスチャ作成
-    IZ_BOOL CCubeTextureDX9::CreateTextureImpl(
-        CGraphicsDeviceDX9* device,
+    IZ_BOOL CCubeTextureGLES2::CreateTextureImpl(
+        CGraphicsDevice* device,
         IZ_PCSTR path,
         IZ_UINT width,
         IZ_UINT height,
@@ -170,126 +128,161 @@ namespace graph
         IZ_ASSERT(device != IZ_NULL);
         IZ_ASSERT(width == height);
 
-        D3D_DEVICE* d3dDev = device->GetRawInterface();
+        ::glGenTextures(1, &m_Texture);
 
-        D3DFORMAT d3dFmt = IZ_GET_TARGET_PIXEL_FMT(fmt);
-
-        HRESULT hr;
-        hr = D3DXCreateCubeTexture(
-                d3dDev,
-                width,              // size
-                mipLevel,           // mip levels
-                0,                  // usage
-                d3dFmt,             // format
-                D3DPOOL_MANAGED,    // pool
-                &m_Texture);
-
-        VRETURN(SUCCEEDED(hr));
+        VRETURN(m_Texture > 0);
 
         // テクスチャ情報取得
-        GetTextureInfo();
+        SetTextureInfo(
+            width, height,
+            mipLevel,
+            fmt,
+            E_GRAPH_RSC_USAGE_STATIC);
 
         return IZ_TRUE;
     }
 
     // テクスチャ情報取得
-    void CCubeTextureDX9::GetTextureInfo()
+    void CCubeTextureGLES2::SetTextureInfo(
+        IZ_UINT width,
+        IZ_UINT height,
+        IZ_UINT mipLevel,
+        E_GRAPH_PIXEL_FMT fmt,
+        E_GRAPH_RSC_USAGE usage)
     {
-        IZ_ASSERT(m_Texture != IZ_NULL);
+        IZ_ASSERT(m_Texture > 0);
 
-        D3DSURFACE_DESC sDesc;
-
-        m_Texture->GetLevelDesc(0, &sDesc);
-
-        m_TexInfo.width = sDesc.Width;
-        m_TexInfo.height = sDesc.Height;
+        m_TexInfo.width = width;
+        m_TexInfo.height = height;
     
-        m_TexInfo.level = static_cast<IZ_UINT8>(m_Texture->GetLevelCount());
-        m_TexInfo.fmt = IZ_GET_ABST_PIXEL_FMT(sDesc.Format);
+        m_TexInfo.level = mipLevel;
+        m_TexInfo.fmt = fmt;
 
-        m_TexInfo.is_rendertarget = (sDesc.Usage == D3DUSAGE_RENDERTARGET);
-        m_TexInfo.is_dynamic = ((sDesc.Usage & D3DUSAGE_DYNAMIC) > 0);
-        m_TexInfo.is_on_sysmem = (sDesc.Pool == D3DPOOL_SYSTEMMEM);
+        m_TexInfo.is_rendertarget = IZ_FALSE;
+        m_TexInfo.is_dynamic = IsDynamic();
+        m_TexInfo.is_on_sysmem = IZ_FALSE;
+    }
+
+    void CCubeTextureGLES2::Initialize()
+    {
+        if (!m_IsInitialized) {
+            GLuint width = GetWidth();
+            GLuint height = GetHeight();
+
+            for (IZ_UINT i = 0; i < E_GRAPH_CUBE_TEX_FACE_NUM; i++) {
+                ::glTexImage2D(
+                    GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
+                    m_TexInfo.level,
+                    m_GLFormat,
+                    width, height,
+                    0,
+                    m_GLFormat,
+                    m_GLType,
+                    IZ_NULL);
+            }
+
+            m_IsInitialized = IZ_TRUE;
+        }
     }
 
     /**
     * ロック
     */
-    IZ_UINT CCubeTextureDX9::Lock(
+    IZ_UINT CCubeTextureGLES2::Lock(
         E_GRAPH_CUBE_TEX_FACE face,
         UINT level,
         void** data,
         IZ_BOOL isReadOnly,
         IZ_BOOL isDiscard/*= IZ_FALSE*/)
     {
-        IZ_ASSERT(m_Texture != IZ_NULL);
+        IZ_ASSERT(m_Texture > 0);
 
-#if 0
-        if (!IsDynamic() && !IsOnSysMem()) {
-            // 動的テクスチャ以外ではロック不可
-            // ただし、システムメモリ上にあるときはＯＫ
-            IZ_ASSERT(IZ_FALSE);
-            return 0;
-        }
-#endif
+        // レベル指定
+        VRETURN_VAL(level < m_TexInfo.level, 0);
 
-        if (level >= m_TexInfo.level) {
-            // レベル指定オーバー
-            IZ_ASSERT(IZ_FALSE);
-            return 0;
-        }
+        IZ_UINT width = GetWidth(level);
+        IZ_UINT bpp = CGraphUtil::GetBPP(GetPixelFormat());
 
-        DWORD flag = 0;
-        if (isReadOnly) {
-            flag = D3DLOCK_READONLY;
+        IZ_UINT pitch = width * bpp;
+
+        // TODO
+        // Align
+
+        size_t size = pitch * GetHeight(level);
+
+        if (m_TemporaryData == IZ_NULL) {
+            m_TemporaryData = ALLOC(m_Allocator, size);
         }
-        else if (IsDynamic()) {
-            if (isDiscard) {
-                flag = D3DLOCK_DISCARD;
-            }
-            else {
-                flag = D3DLOCK_NOOVERWRITE;
-            }
+        else if (size > m_Size) {
+            m_TemporaryData = REALLOC(m_Allocator, m_TemporaryData, size);
         }
 
-        D3DLOCKED_RECT rect;
-        HRESULT hr = m_Texture->LockRect(
-                        IZ_GET_TARGET_CUBE_FACE(face),
-                        level,
-                        &rect,
-                        NULL,
-                        flag);
-        IZ_ASSERT(SUCCEEDED(hr));
+        VRETURN(m_TemporaryData != IZ_NULL);
 
-        UINT ret = 0;
+        m_LockedSize = size;
+        m_LockedLevel = level;
+        m_LockedFace = face;
 
-        if (SUCCEEDED(hr)) {
-            *data = rect.pBits;
-            ret = rect.Pitch;
-        }
+        *data = m_TemporaryData;
 
-        return ret;
+        return pitch;
     }
 
     /**
     * アンロック
     */
-    IZ_BOOL CCubeTextureDX9::Unlock(
+    IZ_BOOL CCubeTextureGLES2::Unlock(
         E_GRAPH_CUBE_TEX_FACE face,
         IZ_UINT level)
     {
-        IZ_ASSERT(m_Texture != IZ_NULL);
+        VRETURN(m_LockedLevel == level);
+        VRETURN(m_LockedFace == face);
 
-        HRESULT hr = m_Texture->UnlockRect(
-                        IZ_GET_TARGET_CUBE_FACE(face),
-                        level);
-        IZ_BOOL ret = SUCCEEDED(hr);
-        IZ_ASSERT(ret);
+        IZ_BOOL isLocked = (m_LockedSize > 0);
 
-        return ret;
+        if (isLocked) {
+            CBaseTexture* curTex = m_Device->GetTexture(0);
+            GLenum glFace = IZ_GET_ABST_CUBE_FACE(face);
+
+            if (curTex != this) {
+                ::glBindTexture(GL_TEXTURE_CUBE_MAP, m_Texture);
+                
+                Initialize();
+            }
+            
+            IZ_UINT width = GetWidth(level);
+            IZ_UINT height = GetHeight(level);
+
+            ::glTexSubImage2D(
+                glFace,
+                level,
+                0, 0,
+                width, height,
+                m_GLFormat,
+                m_GLType,
+                m_TemporaryData);
+
+            // 元に戻す
+            if (curTex != this) {
+                ::glBindTexture(
+                    curTex->GetTexType() == E_GRAPH_TEX_TYPE_PLANE ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP,
+                    ((CCubeTextureGLES2*)curTex)->m_Texture);
+            }
+
+            m_LockedSize = 0;
+        }
+
+        if (!IsDynamic()) {
+            FREE(m_Allocator, m_TemporaryData);
+            m_TemporaryData = IZ_NULL;
+        }
+
+        m_LockedLevel = -1;
+
+        return IZ_TRUE;
     }
 
-    TEX_HANDLE CCubeTextureDX9::GetTexHandle()
+    TEX_HANDLE CCubeTextureGLES2::GetTexHandle()
     {
         return m_Texture;
     }

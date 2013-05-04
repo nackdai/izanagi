@@ -62,6 +62,8 @@ namespace graph
 
         m_IB = 0;
 
+        m_IsInitialized = IZ_FALSE;
+
         m_Size = 0;
 
         m_LockOffset = 0;
@@ -97,16 +99,6 @@ namespace graph
         GLsizeiptr size = idxNum;
         size *= (fmt == E_GRAPH_INDEX_BUFFER_FMT_INDEX16 ? sizeof(GLushort) : sizeof(GLuint));
 
-        GLenum glUsage = (usage == E_GRAPH_RSC_USAGE_STATIC
-            ? GL_STATIC_DRAW
-            : GL_DYNAMIC_DRAW);
-
-        ::glBufferData(
-            GL_ELEMENT_ARRAY_BUFFER,
-            size,
-            NULL,
-            glUsage);
-
         m_IdxNum = idxNum;
         m_Fmt = fmt;
         m_Size = size;
@@ -114,6 +106,23 @@ namespace graph
         m_CreateType = usage;
 
         return ret;
+    }
+
+    void CIndexBufferGLES2::Initialize()
+    {
+        if (!m_IsInitialized) {
+            GLenum glUsage = (m_CreateType == E_GRAPH_RSC_USAGE_STATIC
+                ? GL_STATIC_DRAW
+                : GL_DYNAMIC_DRAW);
+
+            ::glBufferData(
+                GL_ELEMENT_ARRAY_BUFFER,
+                m_Size,
+                NULL,
+                glUsage);
+
+            m_IsInitialized = IZ_TRUE;
+        }
     }
 
     // ロック
@@ -164,6 +173,9 @@ namespace graph
 
             if (curIB != this) {
                 ::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IB);
+
+                // もしかしたら
+                Initialize();
             }
 
             ::glBufferSubData(

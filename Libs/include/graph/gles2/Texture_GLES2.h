@@ -54,8 +54,7 @@ namespace graph
             E_GRAPH_PIXEL_FMT fmt,
             E_GRAPH_RSC_USAGE rscType);
 
-        // サーフェス作成
-        IZ_BOOL CreateSurface();
+        void Initialize();
 
     public:
         // ロック
@@ -90,10 +89,12 @@ namespace graph
         // 本体
         GLuint m_Texture;
 
+        IZ_BOOL m_IsInitialized;
+
         IZ_UINT m_Size;
 
-        GLenum glFormat;
-        GLenum glType;
+        GLenum m_GLFormat;
+        GLenum m_GLType;
 
         IZ_UINT m_LockedSize;
         IZ_INT m_LockedLevel;

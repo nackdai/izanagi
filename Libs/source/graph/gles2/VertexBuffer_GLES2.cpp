@@ -61,6 +61,8 @@ namespace graph
 
         m_VB = 0;
 
+        m_IsInitialized = IZ_FALSE;
+
         m_Size = 0;
 
         m_LockOffset = 0;
@@ -95,16 +97,6 @@ namespace graph
 
         GLsizeiptr size = vtxNum * stride;
 
-        GLenum glUsage = (usage == E_GRAPH_RSC_USAGE_STATIC
-            ? GL_STATIC_DRAW
-            : GL_DYNAMIC_DRAW);
-
-        ::glBufferData(
-            GL_ARRAY_BUFFER,
-            size,
-            NULL,
-            glUsage);
-
         m_Stride = stride;
         m_VtxNum = vtxNum;
 
@@ -113,6 +105,23 @@ namespace graph
         m_CreateType = usage;
 
         return ret;
+    }
+
+    void CVertexBufferGLES2::Initialize()
+    {
+        if (!m_IsInitialized) {
+            GLenum glUsage = (m_CreateType == E_GRAPH_RSC_USAGE_STATIC
+                ? GL_STATIC_DRAW
+                : GL_DYNAMIC_DRAW);
+
+            ::glBufferData(
+                GL_ARRAY_BUFFER,
+                m_Size,
+                NULL,
+                glUsage);
+
+            m_IsInitialized = IZ_TRUE;
+        }
     }
 
     // ロック
@@ -163,6 +172,9 @@ namespace graph
 
             if (curVB != this) {
                 ::glBindBuffer(GL_ARRAY_BUFFER, m_VB);
+
+                // もしかしたら
+                Initialize();
             }
 
             ::glBufferSubData(

@@ -22,7 +22,11 @@ namespace graph
     // コンストラクタ
     CTextureGLES2::CTextureGLES2()
     {
-        m_Texture = IZ_NULL;
+        m_Device = IZ_NULL;
+
+        m_Texture = 0;
+
+        m_IsInitialized = IZ_FALSE;
 
         m_Size = 0;
 
@@ -31,13 +35,15 @@ namespace graph
 
         m_TemporaryData = IZ_NULL;
 
-        glFormat = GL_RGBA;
-        glType = GL_UNSIGNED_BYTE;
+        m_GLFormat = GL_RGBA;
+        m_GLType = GL_UNSIGNED_BYTE;
     }
 
     // デストラクタ
     CTextureGLES2::~CTextureGLES2()
     {
+        SAFE_RELEASE(m_Device);
+
         ::glDeleteTextures(1, &m_Texture);
 
         FREE(m_Allocator, m_TemporaryData);
@@ -170,9 +176,30 @@ namespace graph
 
         m_Size = width * height * bpp;
 
-        // TODO
-        // glFormat
-        // glType
+        CTargetParamValueConverter::ConvAbstractToTarget_PixelFormat(
+            fmt,
+            m_GLFormat,
+            m_GLType);
+    }
+
+    void CTextureGLES2::Initialize()
+    {
+        if (!m_IsInitialized) {
+            GLuint width = GetWidth();
+            GLuint height = GetHeight();
+
+            ::glTexImage2D(
+                GL_TEXTURE_2D,
+                m_TexInfo.level,
+                m_GLFormat,
+                width, height,
+                0,
+                m_GLFormat,
+                m_GLType,
+                IZ_NULL);
+
+            m_IsInitialized = IZ_TRUE;
+        }
     }
 
     /**
@@ -230,6 +257,8 @@ namespace graph
 
             if (curTex != this) {
                 ::glBindTexture(GL_TEXTURE_2D, m_Texture);
+                
+                Initialize();
             }
             
             IZ_UINT width = GetWidth(level);
@@ -240,14 +269,14 @@ namespace graph
                 level,
                 0, 0,
                 width, height,
-                glFormat,
-                glType,
+                m_GLFormat,
+                m_GLType,
                 m_TemporaryData);
 
             // 元に戻す
             if (curTex != this) {
                 ::glBindTexture(
-                    GL_TEXTURE_2D,
+                    curTex->GetTexType() == E_GRAPH_TEX_TYPE_PLANE ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP,
                     ((CTextureGLES2*)curTex)->m_Texture);
             }
 
