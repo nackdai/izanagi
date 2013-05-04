@@ -30,7 +30,10 @@ namespace graph
 
         const SVertexElement* GetElements() const;
 
-        IZ_BOOL Apply(CGraphicsDeviceGLES2* device);
+        IZ_BOOL Apply(
+            CGraphicsDeviceGLES2* device,
+            IZ_UINT vtxOffset,
+            IZ_UINT vtxStride);
 
     protected:
         IMemoryAllocator* m_Allocator;

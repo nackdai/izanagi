@@ -67,8 +67,11 @@ namespace graph
         E_GRAPH_BLEND_OP_ADD = 0,
         E_GRAPH_BLEND_OP_SUBTRACT,
         E_GRAPH_BLEND_OP_REVSUBTRACT,
+
+#if 0
         E_GRAPH_BLEND_OP_MIN,
         E_GRAPH_BLEND_OP_MAX,
+#endif
 
         E_GRAPH_BLEND_OP_NUM,
         E_GRAPH_BLEND_OP_FORCE_INT32 = 0x7fffffff,
@@ -89,8 +92,6 @@ namespace graph
         E_GRAPH_BLEND_DESTCOLOR,
         E_GRAPH_BLEND_INVDESTCOLOR,
         E_GRAPH_BLEND_SRCALPHASAT,
-        E_GRAPH_BLEND_BOTHSRCALPHA,
-        E_GRAPH_BLEND_BOTHINVSRCALPHA,
 
         E_GRAPH_BLEND_NUM,
         E_GRAPH_BLEND_FORCE_INT32 = 0x7fffffff,
@@ -138,8 +139,11 @@ namespace graph
         E_GRAPH_TEX_ADDRESS_WRAP = 0,
         E_GRAPH_TEX_ADDRESS_MIRROR,
         E_GRAPH_TEX_ADDRESS_CLAMP,
+
+#if 0
         E_GRAPH_TEX_ADDRESS_BORDER,
         E_GRAPH_TEX_ADDRESS_MIRRORONCE,
+#endif
 
         E_GRAPH_TEX_ADDRESS_NUM,
         E_GRAPH_TEX_ADDRESS_FORCE_INT32 = 0x7ffffff,
@@ -153,8 +157,11 @@ namespace graph
         E_GRAPH_TEX_FILTER_POINT,           // nearest
         E_GRAPH_TEX_FILTER_LINEAR,          // linear interpolation
         E_GRAPH_TEX_FILTER_ANISOTROPIC,     // anisotropic
+
+#if 0
         E_GRAPH_TEX_FILTER_PYRAMIDALQUAD,   // 4-sample tent
         E_GRAPH_TEX_FILTER_GAUSSIANQUAD,    // 4-sample gaussian
+#endif
 
         E_GRAPH_TEX_FILTER_NUM,
         E_GRAPH_TEX_FILTER_FORCE_INT32 = 0x7fffffff,
@@ -334,6 +341,8 @@ namespace graph
     enum E_GRAPH_RSC_USAGE {
         E_GRAPH_RSC_USAGE_STATIC  = 1 << 0,
         E_GRAPH_RSC_USAGE_DYNAMIC = 1 << 1,
+
+        // Internal Use Only
         E_GRAPH_RSC_USAGE_STATIC_DYNAMIC = E_GRAPH_RSC_USAGE_DYNAMIC | E_GRAPH_RSC_USAGE_STATIC,
 
         E_GRAPH_RSC_USAGE_FORCE_INT32 = 0x7fffffff,

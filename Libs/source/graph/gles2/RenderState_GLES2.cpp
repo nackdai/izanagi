@@ -1,7 +1,5 @@
 #include "graph/RenderState.h"
 #include "graph/internal/ParamValueConverter.h"
-//#include "graph/dx9/GraphicsDevice_DX9.h"
-
 #include "graph/gles2/izGLES2Defs.h"
 
 namespace izanagi
@@ -51,7 +49,7 @@ namespace graph
     void CRenderState::EnableZWrite(CGraphicsDevice* device, IZ_DWORD flag)
     {
         if (isZWriteEnable != flag) {
-            glDepthMask(flag);
+            ::glDepthMask(flag);
             isZWriteEnable = flag;
         }
     }
@@ -61,10 +59,10 @@ namespace graph
     {
         if (isZTestEnable != flag) {
             if (flag) {
-                glEnable(GL_DEPTH_TEST);
+                ::glEnable(GL_DEPTH_TEST);
             }
             else {
-                glDisable(GL_DEPTH_TEST);
+                ::glDisable(GL_DEPTH_TEST);
             }
             isZTestEnable = flag;
         }
@@ -106,10 +104,10 @@ namespace graph
     {
         if (isAlphaBlendEnable != flag) {
             if (flag) {
-                glEnable(GL_BLEND);
+                ::glEnable(GL_BLEND);
             }
             else {
-                glDisable(GL_BLEND);
+                ::glDisable(GL_BLEND);
             }
         }
     }
@@ -146,7 +144,7 @@ namespace graph
         if (cullMode != cull) {
             GLenum raelCull = IZ_GET_TARGET_CULL((E_GRAPH_CULL)cull);
 
-            glCullFace(raelCull);
+            ::glCullFace(raelCull);
             cullMode = cull;
         }
     }
@@ -155,7 +153,7 @@ namespace graph
     void CRenderState::EnableRenderColorRGB(CGraphicsDevice* device, IZ_DWORD enableRGB)
     {
         if (isEnableRenderRGB != enableRGB) {
-            glColorMask(
+            ::glColorMask(
                 enableRGB,
                 enableRGB,
                 enableRGB,
@@ -168,7 +166,7 @@ namespace graph
     void CRenderState::EnableRenderColorA(CGraphicsDevice* device, IZ_DWORD enableA)
     {
         if (isEnableRenderA != enableA) {
-            glColorMask(
+            ::glColorMask(
                 isEnableRenderRGB,
                 isEnableRenderRGB,
                 isEnableRenderRGB,
@@ -183,10 +181,10 @@ namespace graph
     {
         if (isScissorEnable != flag) {
             if (flag) {
-                glEnable(GL_SCISSOR_TEST);
+                ::glEnable(GL_SCISSOR_TEST);
             }
             else {
-                glDisable(GL_SCISSOR_TEST);
+                ::glDisable(GL_SCISSOR_TEST);
             }
             isScissorEnable = flag;
         }
@@ -198,7 +196,7 @@ namespace graph
         IZ_C_ASSERT(sizeof(RECT) == sizeof(CIntRect));
 
         if (rcScissor != rc) {
-            glScissor(
+            ::glScissor(
                 rc.left,
                 rc.top,
                 rc.right - rc.left,

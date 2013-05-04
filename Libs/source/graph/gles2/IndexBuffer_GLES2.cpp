@@ -1,4 +1,5 @@
 #include "graph/gles2/IndexBuffer_GLES2.h"
+#include "graph/gles2/GraphicsDevice_GLES2.h"
 #include "graph/internal/ParamValueConverter.h"
 
 namespace izanagi
@@ -130,9 +131,13 @@ namespace graph
 
         IZ_ASSERT(m_IB > 0);
 
-        if (m_TemporaryData == IZ_NULL)
-        {
-            m_TemporaryData = ALLOC(m_Allocator, m_Size);
+        size = (size == 0 ? m_Size : size);
+
+        if (m_TemporaryData == IZ_NULL) {
+            m_TemporaryData = ALLOC(m_Allocator, size);
+        }
+        else if (size > m_LockSize) {
+            m_TemporaryData = REALLOC(m_Allocator, m_TemporaryData, size);
         }
 
         VRETURN(m_TemporaryData != IZ_NULL);
@@ -140,7 +145,7 @@ namespace graph
         *data = m_TemporaryData;
 
         m_LockOffset = offset;
-        m_LockSize = (size == 0 ? m_Size : size);
+        m_LockSize = size;
 
         return IZ_TRUE;
     }
@@ -155,14 +160,32 @@ namespace graph
         IZ_BOOL isLocked = (m_LockSize > 0);
 
         if (isLocked) {
+            CIndexBuffer* curIB = m_Device->GetRenderState().curIB;
+
+            if (curIB != this) {
+                ::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IB);
+            }
+
             ::glBufferSubData(
                 GL_ELEMENT_ARRAY_BUFFER,
                 m_LockOffset,
                 m_LockSize,
                 m_TemporaryData);
 
+            // 元に戻す
+            if (curIB != this) {
+                ::glBindBuffer(
+                    GL_ELEMENT_ARRAY_BUFFER,
+                    ((CIndexBufferGLES2*)curIB)->m_IB);
+            }
+
             m_LockOffset = 0;
             m_LockSize = 0;
+        }
+
+        if (!IsDynamic()) {
+            FREE(m_Allocator, m_TemporaryData);
+            m_TemporaryData = IZ_NULL;
         }
 
         return isLocked;

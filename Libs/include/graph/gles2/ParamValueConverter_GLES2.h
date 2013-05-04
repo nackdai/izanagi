@@ -53,7 +53,10 @@ namespace graph
         FUNC_CONV_PARAM_VAL(SamplerStateType, GLenum, E_GRAPH_SAMPLER_STATE_TYPE);
 
         // ピクセルフォーマット
-        FUNC_CONV_PARAM_VAL(PixelFormat, GLenum, E_GRAPH_PIXEL_FMT);
+        void ConvAbstractToTarget_PixelFormat(
+            E_GRAPH_PIXEL_FMT fmt,
+            GLenum& glFormat,
+            GLenum& glType);
 
         // インデックスバッファフォーマット
         FUNC_CONV_PARAM_VAL(IdxBufFmt, GLenum, E_GRAPH_INDEX_BUFFER_FMT);

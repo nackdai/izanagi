@@ -159,16 +159,15 @@ namespace graph
         // インデックスバッファ描画
         virtual IZ_BOOL DrawIndexedPrimitive(
             E_GRAPH_PRIM_TYPE prim_type,
-            IZ_UINT nBaseIdx,
-            IZ_UINT nMinIdx,
+            IZ_UINT vtxOffset,
             IZ_UINT nVtxNum,
-            IZ_UINT nStartIdx,
+            IZ_UINT idxOffset,
             IZ_UINT nPrimCnt);
 
         // インデックスバッファなし描画
         virtual IZ_BOOL DrawPrimitive(
             E_GRAPH_PRIM_TYPE prim_type,
-            IZ_UINT nStartIdx,
+            IZ_UINT idxOffset,
             IZ_UINT nPrimCnt);      
 
     public:
@@ -181,78 +180,19 @@ namespace graph
         virtual void SetRenderState(const S_RENDER_STATE& sRS);
 
     private:
-        // テクスチャステージステート設定
-        template <typename _TS, typename _T>
-        void SetTextureStageState(
-            IZ_DWORD stage,
-            _TS nTSType,
-            _T& old_val, _T new_val)
-        {
-            if (m_Flags.is_force_set_state) {
-                m_Device->SetTextureStageState(stage, nTSType, new_val);
-                old_val = new_val;
-            }
-            else {
-                if (old_val != new_val) {
-                    m_Device->SetTextureStageState(stage, nTSType, new_val);
-                    old_val = new_val;
-                }
-            }
-        }
-
         // サンプラステート設定
         template <typename _SS, typename _T>
         void SetSamplerStateAddr(
-            IZ_DWORD stage,
+            IZ_BOOL isPlane,
             _SS nSSType,
-            _T& old_val, _T new_val)
-        {
-            if (m_Flags.is_force_set_state) {
-                m_Device->SetSamplerState(
-                    stage, 
-                    IZ_GET_TARGET_SAMPLER_STATE_TYPE(nSSType),
-                    IZ_GET_TARGET_TEX_ADDR(new_val));
-
-                old_val = new_val;
-            }
-            else {
-                if (old_val != new_val) {
-                    m_Device->SetSamplerState(
-                        stage, 
-                        IZ_GET_TARGET_SAMPLER_STATE_TYPE(nSSType), 
-                        IZ_GET_TARGET_TEX_ADDR(new_val));
-
-                    old_val = new_val;
-                }
-            }
-        }
+            _T& old_val, _T new_val);
 
         // サンプラステート設定
         template <typename _SS, typename _T>
         void SetSamplerStateFilter(
-            IZ_DWORD stage,
+            IZ_BOOL isPlane,
             _SS nSSType,
-            _T& old_val, _T new_val)
-        {
-            if (m_Flags.is_force_set_state) {
-                m_Device->SetSamplerState(
-                    stage, 
-                    IZ_GET_TARGET_SAMPLER_STATE_TYPE(nSSType),
-                    IZ_GET_TARGET_TEX_FILTER(new_val));
-
-                old_val = new_val;
-            }
-            else {
-                if (old_val != new_val) {
-                    m_Device->SetSamplerState(
-                        stage, 
-                        IZ_GET_TARGET_SAMPLER_STATE_TYPE(nSSType), 
-                        IZ_GET_TARGET_TEX_FILTER(new_val));
-
-                    old_val = new_val;
-                }
-            }
-        }
+            _T& old_val, _T new_val);
 
     public:
         // リセット用コールバックセット
