@@ -93,6 +93,9 @@
     <ClInclude Include="..\..\include\system\Mouse_DInput.h">
       <Filter>include\device</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\system\izDInput.h">
+      <Filter>include\device</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\system\win32\thread\SysMonitor_win32.cpp">

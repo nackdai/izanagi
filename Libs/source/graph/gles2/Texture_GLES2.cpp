@@ -138,73 +138,6 @@ namespace graph
         return instance;
     }
 
-    // レンダーターゲット作成
-    CTextureGLES2* CTextureGLES2::CreateRenderTarget(
-        IMemoryAllocator* allocator,
-        IZ_UINT width, 
-        IZ_UINT height,
-        E_GRAPH_PIXEL_FMT fmt)
-    {
-        IZ_UINT mipLevel = 1;
-
-        IZ_BOOL result = IZ_TRUE;
-        IZ_UINT8* buf = IZ_NULL;
-        CTextureGLES2* instance = IZ_NULL;
-
-        size_t size = sizeof(CTextureGLES2) + sizeof(CSurfaceGLES2*) * mipLevel;
-
-        // メモリ確保
-        buf = (IZ_UINT8*)ALLOC_ZERO(allocator, size);
-        if (!(result = (buf != IZ_NULL))) {
-            IZ_ASSERT(IZ_FALSE);
-            goto __EXIT__;
-        }
-
-        IZ_UINT8* top = buf;
-
-        // インスタンス作成
-        instance = new (buf)CTextureGLES2;
-        {
-            buf += sizeof(CTextureGLES2);
-
-            instance->m_Allocator = allocator;
-
-            instance->m_Surface = reinterpret_cast<CSurfaceGLES2**>(buf);
-            buf += sizeof(CSurfaceGLES2*) * mipLevel;
-
-            instance->AddRef();
-        }
-
-        IZ_ASSERT(CStdUtil::GetPtrDistance(top, buf) == size);
-
-        // 本体作成
-        result = instance->CreateBody_RenderTarget(
-                    width, height,
-                    fmt,
-                    mipLevel);
-        if (!result) {
-            goto __EXIT__;
-        }
-
-        // サーフェス作成
-        result = instance->CreateSurface();
-        if (!result) {
-            goto __EXIT__;
-        }
-
-    __EXIT__:
-        if (!result) {
-            if (instance != IZ_NULL) {
-                SAFE_RELEASE(instance);
-            }
-            else if (buf != IZ_NULL) {
-                allocator->Free(buf);
-            }
-        }
-
-        return instance;
-    }
-
     // 本体作成（テクスチャ）
     IZ_BOOL CTextureGLES2::CreateBody_Texture(
         IZ_UINT width,
@@ -223,25 +156,6 @@ namespace graph
             width, height,
             mipLevel,
             fmt, rscType);
-
-        return IZ_TRUE;
-    }
-
-    // 本体作成（レンダーターゲット）
-    IZ_BOOL CTextureGLES2::CreateBody_RenderTarget(
-        IZ_UINT width, 
-        IZ_UINT height,
-        E_GRAPH_PIXEL_FMT fmt,
-        IZ_UINT mipLevel)
-    {
-        // TODO
-
-        SetTextureInfo(
-            IZ_TRUE,
-            width, height,
-            mipLevel,
-            fmt,
-            E_GRAPH_RSC_TYPE_STATIC);
 
         return IZ_TRUE;
     }
@@ -269,29 +183,6 @@ namespace graph
         m_TexInfo.is_dynamic = (rscType == E_GRAPH_RSC_TYPE_DYNAMIC);
         m_TexInfo.is_on_sysmem = IZ_FALSE;
         m_TexInfo.is_on_vram = isRT;
-    }
-
-    // サーフェス作成
-    IZ_BOOL CTextureGLES2::CreateSurface()
-    {
-        // サーフェス作成
-        if (m_Surface != IZ_NULL) {
-            for (IZ_UINT i = 0; i < m_TexInfo.level; ++i) {
-                m_Surface[i] = CSurfaceGLES2::CreateSurface(m_Allocator);
-                IZ_BOOL result = (m_Surface != IZ_NULL);
-
-                if (result) {
-                    result = m_Surface[i]->Reset(this, i);
-                    VRETURN(result);
-                }
-                else {
-                    IZ_ASSERT(IZ_FALSE);
-                    return IZ_FALSE;
-                }
-            }
-        }
-
-        return IZ_TRUE;
     }
 
     /**
@@ -354,12 +245,6 @@ namespace graph
     // 本体解放
     IZ_BOOL CTextureGLES2::Disable()
     {
-        if (m_Surface != IZ_NULL) {
-            for (IZ_UINT32 i = 0; i < GetMipMapNum(); ++i) {
-                m_Surface[i]->ReleaseResource();
-            }
-        }
-
         glDeleteTextures(1, &m_Texture);
         m_Texture = 0;
 
@@ -373,13 +258,5 @@ namespace graph
 
         return IZ_TRUE;
     }
-
-    // サーフェス取得
-    CSurface* CTextureGLES2::GetSurface(IZ_UINT idx)
-    {
-        IZ_ASSERT(idx < GetMipMapNum());
-        return m_Surface[idx];
-    }
-
 }   // namespace graph
 }   // namespace izanagi

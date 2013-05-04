@@ -9,7 +9,6 @@ namespace izanagi
 namespace graph
 {
     class CGraphicsDeviceGLES2;
-    class CSurfaceGLES2;
 
     class CTextureGLES2 : public CTexture
     {
@@ -32,13 +31,6 @@ namespace graph
             E_GRAPH_PIXEL_FMT fmt,
             E_GRAPH_RSC_TYPE rscType);
 
-        // レンダーターゲット作成
-        static CTextureGLES2* CreateRenderTarget(
-            IMemoryAllocator* allocator,
-            IZ_UINT width,
-            IZ_UINT height,
-            E_GRAPH_PIXEL_FMT fmt);
-
     private:
         inline CTextureGLES2();
         virtual inline ~CTextureGLES2();
@@ -51,13 +43,6 @@ namespace graph
             IZ_UINT mipLevel,
             E_GRAPH_PIXEL_FMT fmt,
             E_GRAPH_RSC_TYPE createType);
-
-        // 本体作成（レンダーターゲット）
-        IZ_BOOL CreateBody_RenderTarget(
-            IZ_UINT width,
-            IZ_UINT height,
-            E_GRAPH_PIXEL_FMT fmt,
-            IZ_UINT mipLevel);
 
         void SetTextureInfo(
             IZ_BOOL isRT,
@@ -89,9 +74,6 @@ namespace graph
         virtual IZ_BOOL Restore();
 
     private:
-        // サーフェス取得
-        virtual CSurface* GetSurface(IZ_UINT idx);
-
         virtual TEX_HANDLE GetTexHandle()
         {
             return m_Texture;

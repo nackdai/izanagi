@@ -253,7 +253,6 @@ fxc /T ps_2_0 /E main_OpNoTexAlpha /Fh %(RootDir)%(Directory)/%(Filename)_OpNoTe
     <ClInclude Include="..\..\include\graph\dx9\D3D9ParamValueConverter.h" />
     <ClInclude Include="..\..\include\graph\dx9\GraphicsDevice_DX9.h" />
     <ClInclude Include="..\..\include\graph\dx9\IndexBuffer_DX9.h" />
-    <ClInclude Include="..\..\include\graph\dx9\izD3DDefs.h" />
     <ClInclude Include="..\..\include\graph\dx9\PixelShader_DX9.h" />
     <ClInclude Include="..\..\include\graph\dx9\RenderTarget_DX9.h" />
     <ClInclude Include="..\..\include\graph\dx9\ShaderProxy.h" />
@@ -277,7 +276,6 @@ fxc /T ps_2_0 /E main_OpNoTexAlpha /Fh %(RootDir)%(Directory)/%(Filename)_OpNoTe
     <ClInclude Include="..\..\include\graph\gles2\VertexShader_GLES2.h" />
     <ClInclude Include="..\..\include\graph\GraphDefs.h" />
     <ClInclude Include="..\..\include\graph\GraphicsDevice.h" />
-    <ClInclude Include="..\..\include\graph\GraphicsDeviceUtil.h" />
     <ClInclude Include="..\..\include\graph\GraphResource.h" />
     <ClInclude Include="..\..\include\graph\GraphUtil.h" />
     <ClInclude Include="..\..\include\graph\2d\2DRenderer.h" />
@@ -293,6 +291,7 @@ fxc /T ps_2_0 /E main_OpNoTexAlpha /Fh %(RootDir)%(Directory)/%(Filename)_OpNoTe
     <ClInclude Include="..\..\include\graph\VertexBuffer.h" />
     <ClInclude Include="..\..\include\graph\VertexDeclaration.h" />
     <ClInclude Include="..\..\include\graph\VertexShader.h" />
+    <ClInclude Include="..\..\include\izD3DDefs.h" />
     <ClInclude Include="..\..\include\izGraph.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

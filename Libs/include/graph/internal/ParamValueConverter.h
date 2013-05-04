@@ -7,18 +7,6 @@
     #include "graph/gles2/ParamValueConverter_GLES2.h"
 #endif
 
-namespace izanagi
-{
-namespace graph
-{
-#if __IZ_DX9__
-    typedef CD3D9ParamValueConverter CTargetParamValueConverter;
-#elif __IZ_GLES2__
-    typedef CParamValueConverterGLES2 CTargetParamValueConverter;
-#endif
-}   // namespace graph
-}   // namespace izanagi
-
 #define IZ_CONV_PARAM_TO_TARGET(p)  izanagi::graph::CTargetParamValueConverter::ConvAbstractToTarget_##p
 #define IZ_CONV_PARAM_TO_ABST(p)    izanagi::graph::CTargetParamValueConverter::ConvTargetToAbstract_##p
 

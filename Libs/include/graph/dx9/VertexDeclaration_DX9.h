@@ -1,6 +1,7 @@
 #if !defined(__IZANAGI_GRAPH_VERTEX_DECLARATION_DX9_H__)
 #define __IZANAGI_GRAPH_VERTEX_DECLARATION_DX9_H__
 
+#include "izD3DDefs.h"
 #include "graph/VertexDeclaration.h"
 
 namespace izanagi

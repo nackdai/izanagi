@@ -1,6 +1,7 @@
 #if !defined(__IZANAGI_SYSTEM_MOUSE_DINPUT_H__)
 #define __IZANAGI_SYSTEM_MOUSE_DINPUT_H__
 
+#include "izDInput.h"
 #include "Mouse.h"
 
 namespace izanagi
