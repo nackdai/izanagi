@@ -211,13 +211,6 @@ namespace izanagi {
         IZ_PCSTR name)
     {
         IZ_BOOL result = InitInfo<SParamInfo>(m_Params, idx, nParamIdx, name);
-
-#if 0
-        if (result) {
-            m_Params.list[idx].elements = m_pPS->GetArrayLengthOf(m_Params.list[idx].handle);
-            m_Params.list[idx].type = type;
-        }
-#endif
     }
 
     // 初期化

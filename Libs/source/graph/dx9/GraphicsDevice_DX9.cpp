@@ -7,6 +7,7 @@
 #include "graph/dx9/IndexBuffer_DX9.h"
 #include "graph/dx9/VertexShader_DX9.h"
 #include "graph/dx9/PixelShader_DX9.h"
+#include "graph/dx9/ShaderProgram_DX9.h"
 #include "graph/dx9/VertexDeclaration_DX9.h"
 #include "graph/dx9/2DRenderer_DX9.h"
 
@@ -102,8 +103,7 @@ namespace graph
 
     void CGraphicsDeviceDX9::ClearRenderState()
     {
-        SetVertexShader(IZ_NULL);
-        SetPixelShader(IZ_NULL);
+        SetShaderProgram(IZ_NULL);
         SetVertexBuffer(0, 0, 0, IZ_NULL);
         SetIndexBuffer(IZ_NULL);
 
@@ -635,50 +635,53 @@ namespace graph
         return IZ_TRUE;
     }
 
-    /**
-    * 頂点シェーダセット
-    */
-    IZ_BOOL CGraphicsDeviceDX9::SetVertexShader(CVertexShader* pVS)
+    // シェーダプログラムセット
+    IZ_BOOL CGraphicsDeviceDX9::SetShaderProgram(CShaderProgram* program)
     {
-        if (m_RenderState.curVS == pVS) {
-            // すでに設定されている
-            return IZ_TRUE;
+        if (m_RenderState.curShader == program) {
+            if (program == IZ_NULL
+                || (program != IZ_NULL && !program->IsDirty()))
+            {
+                // すでに設定されている かつ ダーティでない
+                return IZ_TRUE;
+            }
         }
 
-        CVertexShaderDX9* dx9VS = reinterpret_cast<CVertexShaderDX9*>(pVS);
+        IZ_BOOL isNewShader = (m_RenderState.curShader != program);
 
-        {
-            HRESULT hr = m_Device->SetVertexShader(
-                            pVS != IZ_NULL ? dx9VS->GetRawInterface() : IZ_NULL);
+        if (program == IZ_NULL) {
+            HRESULT hr = m_Device->SetVertexShader(IZ_NULL);
             VRETURN(SUCCEEDED(hr));
 
-            // 現在設定されているものとして保持
-            SAFE_REPLACE(m_RenderState.curVS, pVS);
-        }
-
-        return IZ_TRUE;
-    }
-
-    /**
-    * ピクセルシェーダセット
-    */
-    IZ_BOOL CGraphicsDeviceDX9::SetPixelShader(CPixelShader* pPS)
-    {
-        if (m_RenderState.curPS == pPS) {
-            // すでに設定されている
-            return IZ_TRUE;
-        }
-
-        CPixelShaderDX9* dx9PS = reinterpret_cast<CPixelShaderDX9*>(pPS);
-
-        {
-            HRESULT hr = m_Device->SetPixelShader(
-                            pPS != IZ_NULL ? dx9PS->GetRawInterface() : IZ_NULL);
+            hr = m_Device->SetPixelShader(IZ_NULL);
             VRETURN(SUCCEEDED(hr));
-
-            // 現在設定されているものとして保持
-            SAFE_REPLACE(m_RenderState.curPS, pPS);
         }
+        else if (program->IsDirty() || isNewShader)
+        {
+            VRETURN(program->IsValid());
+
+            CShaderProgramDX9* shader = reinterpret_cast<CShaderProgramDX9*>(program);
+            
+            if (shader->IsDirtyVS() || isNewShader)
+            {
+                CVertexShaderDX9* dxVS = shader->VertexShader();
+                HRESULT hr = m_Device->SetVertexShader(dxVS->GetRawInterface());
+                VRETURN(SUCCEEDED(hr));
+            }
+
+            if (shader->IsDirtyPS() || isNewShader)
+            {
+                CPixelShaderDX9* dxPS = shader->PixelShader();
+                HRESULT hr = m_Device->SetPixelShader(dxPS->GetRawInterface());
+                VRETURN(SUCCEEDED(hr));
+            }
+
+            // ダーティフラグをクリア
+            ClearShaderProgramDirty(program);
+        }
+
+        // 現在設定されているものとして保持
+        SAFE_REPLACE(m_RenderState.curShader, program);
 
         return IZ_TRUE;
     }

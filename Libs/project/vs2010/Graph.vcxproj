@@ -103,7 +103,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\source\graph\2d\2DShader.cpp" />
     <ClCompile Include="..\..\source\graph\BufferBase.cpp" />
+    <ClCompile Include="..\..\source\graph\dx9\2DShader_DX9.cpp" />
     <ClCompile Include="..\..\source\graph\dx9\CubeTexture_DX9.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">true</ExcludedFromBuild>
     </ClCompile>
@@ -128,6 +130,7 @@
     <ClCompile Include="..\..\source\graph\dx9\RenderTarget_DX9.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\..\source\graph\dx9\ShaderProgram_DX9.cpp" />
     <ClCompile Include="..\..\source\graph\dx9\Surface_DX9.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">true</ExcludedFromBuild>
     </ClCompile>
@@ -189,8 +192,8 @@
     </ClCompile>
     <ClCompile Include="..\..\source\graph\GraphicsDevice.cpp" />
     <ClCompile Include="..\..\source\graph\2d\2DRenderer.cpp" />
-    <ClCompile Include="..\..\source\graph\2d\2DShader.cpp" />
     <ClCompile Include="..\..\source\graph\RenderState.cpp" />
+    <ClCompile Include="..\..\source\graph\ShaderProgram.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\source\graph\2d\shader\2DPS.hlsl">
@@ -245,12 +248,14 @@ fxc /T ps_2_0 /E main_OpNoTexAlpha /Fh %(RootDir)%(Directory)/%(Filename)_OpNoTe
     <ClInclude Include="..\..\include\graph\BufferBase.h" />
     <ClInclude Include="..\..\include\graph\CubeTexture.h" />
     <ClInclude Include="..\..\include\graph\dx9\2DRenderer_DX9.h" />
+    <ClInclude Include="..\..\include\graph\dx9\2DShader_DX9.h" />
     <ClInclude Include="..\..\include\graph\dx9\CubeTexture_DX9.h" />
     <ClInclude Include="..\..\include\graph\dx9\D3D9ParamValueConverter.h" />
     <ClInclude Include="..\..\include\graph\dx9\GraphicsDevice_DX9.h" />
     <ClInclude Include="..\..\include\graph\dx9\IndexBuffer_DX9.h" />
     <ClInclude Include="..\..\include\graph\dx9\PixelShader_DX9.h" />
     <ClInclude Include="..\..\include\graph\dx9\RenderTarget_DX9.h" />
+    <ClInclude Include="..\..\include\graph\dx9\ShaderProgram_DX9.h" />
     <ClInclude Include="..\..\include\graph\dx9\ShaderProxy.h" />
     <ClInclude Include="..\..\include\graph\dx9\Surface_DX9.h" />
     <ClInclude Include="..\..\include\graph\dx9\Texture_DX9.h" />
@@ -264,7 +269,6 @@ fxc /T ps_2_0 /E main_OpNoTexAlpha /Fh %(RootDir)%(Directory)/%(Filename)_OpNoTe
     <ClInclude Include="..\..\include\graph\gles2\izGLES2Defs.h" />
     <ClInclude Include="..\..\include\graph\gles2\ParamValueConverter_GLES2.h" />
     <ClInclude Include="..\..\include\graph\gles2\PixelShader_GLES2.h" />
-    <ClInclude Include="..\..\include\graph\gles2\ShaderProxy.h" />
     <ClInclude Include="..\..\include\graph\gles2\Texture_GLES2.h" />
     <ClInclude Include="..\..\include\graph\gles2\VertexBuffer_GLES2.h" />
     <ClInclude Include="..\..\include\graph\gles2\VertexDeclaration_GLES2.h" />
@@ -281,7 +285,7 @@ fxc /T ps_2_0 /E main_OpNoTexAlpha /Fh %(RootDir)%(Directory)/%(Filename)_OpNoTe
     <ClInclude Include="..\..\include\graph\PixelShader.h" />
     <ClInclude Include="..\..\include\graph\RenderState.h" />
     <ClInclude Include="..\..\include\graph\RenderTarget.h" />
-    <ClInclude Include="..\..\include\graph\ShaderBase.h" />
+    <ClInclude Include="..\..\include\graph\ShaderProgram.h" />
     <ClInclude Include="..\..\include\graph\Texture.h" />
     <ClInclude Include="..\..\include\graph\VertexBuffer.h" />
     <ClInclude Include="..\..\include\graph\VertexDeclaration.h" />

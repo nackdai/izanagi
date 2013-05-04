@@ -6,6 +6,7 @@
 #include "graph/dx9/IndexBuffer_DX9.h"
 #include "graph/dx9/VertexShader_DX9.h"
 #include "graph/dx9/PixelShader_DX9.h"
+#include "graph/dx9/ShaderProgram_DX9.h"
 #include "graph/dx9/VertexDeclaration_DX9.h"
 #include "graph/dx9/RenderTarget_DX9.h"
 
@@ -190,6 +191,13 @@ namespace graph
         }
 
         return pIB;
+    }
+
+    // シェーダプログラム作成
+    CShaderProgram* CGraphicsDeviceDX9::CreateShaderProgram()
+    {
+        CShaderProgram* ret = CShaderProgramDX9::CreateShaderProgram(m_Allocator);
+        return ret;
     }
 
     /**

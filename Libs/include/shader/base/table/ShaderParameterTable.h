@@ -141,8 +141,7 @@ namespace izanagi {
 
         memcpy(sDesc.ptrParam, pValue, nBytes);
 
-        sDesc.isDirtyVS = IZ_TRUE;
-        sDesc.isDirtyPS = IZ_TRUE;
+        sDesc.isDirty = IZ_TRUE;
 
         return IZ_TRUE;
     }
@@ -237,8 +236,7 @@ namespace izanagi {
         IZ_ASSERT(m_pDesc != IZ_NULL);
 
         S_SHD_PARAMETER& sDesc = m_pDesc[idx];
-        sDesc.isDirtyVS = IZ_FALSE;
-        sDesc.isDirtyPS = IZ_FALSE;
+        sDesc.isDirty = IZ_FALSE;
     }
 
     void CShaderParameterTable::ResetAll()
@@ -247,8 +245,7 @@ namespace izanagi {
 
         for (IZ_UINT i = 0; i < m_Header.numParameter; ++i) {
             S_SHD_PARAMETER& sDesc = m_pDesc[i];
-            sDesc.isDirtyVS = IZ_FALSE;
-            sDesc.isDirtyPS = IZ_FALSE;
+            sDesc.isDirty = IZ_FALSE;
         }
     }
 }   // namespace izanagi

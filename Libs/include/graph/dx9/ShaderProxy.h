@@ -6,7 +6,6 @@
 #include "izStd.h"
 #include "izMath.h"
 #include "graph/GraphDefs.h"
-#include "graph/ShaderBase.h"
 #include "graph/GraphicsDevice.h"
 
 namespace izanagi
@@ -29,51 +28,20 @@ namespace graph
 
     public:
         // ハンドル取得
-        virtual SHADER_PARAM_HANDLE GetHandleByIdx(IZ_UINT idx)
+        virtual SHADER_PARAM_HANDLE_DX9 GetHandleByName(IZ_PCSTR pName)
         {
-            SHADER_PARAM_HANDLE ret = (SHADER_PARAM_HANDLE)m_ConstTable->GetConstant(IZ_NULL, idx);
+            SHADER_PARAM_HANDLE_DX9 ret = (SHADER_PARAM_HANDLE_DX9)m_ConstTable->GetConstantByName(IZ_NULL, pName);
             return ret;
         }
 
-        // ハンドル取得
-        virtual SHADER_PARAM_HANDLE GetHandleByName(IZ_PCSTR pName)
-        {
-            SHADER_PARAM_HANDLE ret = (SHADER_PARAM_HANDLE)m_ConstTable->GetConstantByName(IZ_NULL, pName);
-            return ret;
-        }
-
-        // パラメータの配列数取得
-        virtual IZ_UINT GetArrayLengthOf(CGraphicsDevice* device, SHADER_PARAM_HANDLE handle)
-        {
-            IZ_UINT ret = 0;
-
-            D3DXCONSTANT_DESC desc;
-            IZ_UINT count = 1;
-
-            HRESULT hr = m_ConstTable->GetConstantDesc((SHADER_PARAM_HANDLE_DX9)handle, &desc, &count);
-            if (SUCCEEDED(hr)) {
-                ret = desc.Elements;
-            }
-
-            return ret;
-        }
-
-        virtual IZ_UINT GetSamplerIndex(SHADER_PARAM_HANDLE handle)
+        virtual IZ_UINT GetSamplerIndex(SHADER_PARAM_HANDLE_DX9 handle)
         {
             IZ_UINT ret = m_ConstTable->GetSamplerIndex((SHADER_PARAM_HANDLE_DX9)handle);
             return ret;
         }
 
-        // 定数をデフォルト値に設定
-        virtual IZ_BOOL SetDefaults(CGraphicsDevice* device)
-        {
-            HRESULT hr = m_ConstTable->SetDefaults(GetDeviceRawInterface(device));
-            IZ_ASSERT(SUCCEEDED(hr));
-            return SUCCEEDED(hr);
-        }
-
         // ブール値を設定
-        virtual IZ_BOOL SetBool(CGraphicsDevice* device, SHADER_PARAM_HANDLE handle, IZ_BOOL b)
+        virtual IZ_BOOL SetBool(CGraphicsDevice* device, SHADER_PARAM_HANDLE_DX9 handle, IZ_BOOL b)
         {
             HRESULT hr = m_ConstTable->SetBool(
                             GetDeviceRawInterface(device),
@@ -84,7 +52,7 @@ namespace graph
         }
 
         // ブール値を設定
-        virtual IZ_BOOL SetBoolArray(CGraphicsDevice* device, SHADER_PARAM_HANDLE handle, const IZ_BOOL* pB, IZ_UINT num)
+        virtual IZ_BOOL SetBoolArray(CGraphicsDevice* device, SHADER_PARAM_HANDLE_DX9 handle, const IZ_BOOL* pB, IZ_UINT num)
         {
             IZ_C_ASSERT(sizeof(BOOL) == sizeof(IZ_BOOL));
 
@@ -97,7 +65,7 @@ namespace graph
         }
 
         // 浮動小数点数を設定
-        virtual IZ_BOOL SetFloat(CGraphicsDevice* device, SHADER_PARAM_HANDLE handle, IZ_FLOAT f)
+        virtual IZ_BOOL SetFloat(CGraphicsDevice* device, SHADER_PARAM_HANDLE_DX9 handle, IZ_FLOAT f)
         {
             HRESULT hr = m_ConstTable->SetFloat(
                             GetDeviceRawInterface(device),
@@ -108,7 +76,7 @@ namespace graph
         }
 
         // 浮動小数点数を設定
-        virtual IZ_BOOL SetFloatArray(CGraphicsDevice* device, SHADER_PARAM_HANDLE handle, const IZ_FLOAT* pF, IZ_UINT num)
+        virtual IZ_BOOL SetFloatArray(CGraphicsDevice* device, SHADER_PARAM_HANDLE_DX9 handle, const IZ_FLOAT* pF, IZ_UINT num)
         {
             HRESULT hr = m_ConstTable->SetFloatArray(
                             GetDeviceRawInterface(device),
@@ -119,7 +87,7 @@ namespace graph
         }
 
         // 整数値を設定
-        virtual IZ_BOOL SetInt(CGraphicsDevice* device, SHADER_PARAM_HANDLE handle, IZ_INT n)
+        virtual IZ_BOOL SetInt(CGraphicsDevice* device, SHADER_PARAM_HANDLE_DX9 handle, IZ_INT n)
         {
             HRESULT hr = m_ConstTable->SetInt(
                             GetDeviceRawInterface(device),
@@ -130,7 +98,7 @@ namespace graph
         }
 
         // 整数値を設定
-        virtual IZ_BOOL SetIntArray(CGraphicsDevice* device, SHADER_PARAM_HANDLE handle, const IZ_INT* pN, IZ_UINT num)
+        virtual IZ_BOOL SetIntArray(CGraphicsDevice* device, SHADER_PARAM_HANDLE_DX9 handle, const IZ_INT* pN, IZ_UINT num)
         {
             HRESULT hr = m_ConstTable->SetIntArray(
                             GetDeviceRawInterface(device),
@@ -141,7 +109,7 @@ namespace graph
         }
 
         // 行列を設定
-        virtual IZ_BOOL SetMatrix(CGraphicsDevice* device, SHADER_PARAM_HANDLE handle, const math::SMatrix& m)
+        virtual IZ_BOOL SetMatrix(CGraphicsDevice* device, SHADER_PARAM_HANDLE_DX9 handle, const math::SMatrix& m)
         {
             IZ_C_ASSERT(sizeof(D3DXMATRIX) == sizeof(math::SMatrix));
 
@@ -154,7 +122,7 @@ namespace graph
         }
 
         // 行列を設定
-        virtual IZ_BOOL SetMatrixArray(CGraphicsDevice* device, SHADER_PARAM_HANDLE handle, const math::SMatrix* pM, IZ_UINT num)
+        virtual IZ_BOOL SetMatrixArray(CGraphicsDevice* device, SHADER_PARAM_HANDLE_DX9 handle, const math::SMatrix* pM, IZ_UINT num)
         {
             IZ_C_ASSERT(sizeof(D3DXMATRIX) == sizeof(math::SMatrix));
 
@@ -167,7 +135,7 @@ namespace graph
         }
 
         // 4D ベクトルを設定
-        virtual IZ_BOOL SetVector(CGraphicsDevice* device, SHADER_PARAM_HANDLE handle, const math::SVector& v)
+        virtual IZ_BOOL SetVector(CGraphicsDevice* device, SHADER_PARAM_HANDLE_DX9 handle, const math::SVector& v)
         {
             IZ_C_ASSERT(sizeof(D3DXVECTOR4) == sizeof(math::SVector));
 
@@ -180,7 +148,7 @@ namespace graph
         }
 
         // 4D ベクトルを設定
-        virtual IZ_BOOL SetVectorArray(CGraphicsDevice* device, SHADER_PARAM_HANDLE handle, const math::SVector* pV, IZ_UINT num)
+        virtual IZ_BOOL SetVectorArray(CGraphicsDevice* device, SHADER_PARAM_HANDLE_DX9 handle, const math::SVector* pV, IZ_UINT num)
         {
             IZ_C_ASSERT(sizeof(D3DXVECTOR4) == sizeof(math::SVector));
 
@@ -193,7 +161,7 @@ namespace graph
         }
 
         // バッファの内容を定数テーブルに設定
-        virtual IZ_BOOL SetValue(CGraphicsDevice* device, SHADER_PARAM_HANDLE handle, const void* p, IZ_UINT size)
+        virtual IZ_BOOL SetValue(CGraphicsDevice* device, SHADER_PARAM_HANDLE_DX9 handle, const void* p, IZ_UINT size)
         {
             HRESULT hr = m_ConstTable->SetValue(
                             GetDeviceRawInterface(device),

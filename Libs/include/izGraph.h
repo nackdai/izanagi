@@ -12,6 +12,7 @@
 #include "graph/IndexBuffer.h"
 #include "graph/VertexShader.h"
 #include "graph/PixelShader.h"
+#include "graph/ShaderProgram.h"
 #include "graph/VertexDeclaration.h"
 
 #include "graph/dx9/GraphPerf.h"

@@ -101,6 +101,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\source\shader\ShaderManager.cpp" />
     <ClCompile Include="..\..\source\shader\base\ShaderBasic.cpp" />
+    <ClCompile Include="..\..\source\shader\ShaderUtil.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\shader\ShaderManager.h" />

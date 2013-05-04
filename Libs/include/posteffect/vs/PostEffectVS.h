@@ -3,6 +3,7 @@
 
 #include "izStd.h"
 #include "izGraph.h"
+#include "izMath.h"
 #include "../PostEffectDefs.h"
 
 namespace izanagi {

@@ -41,9 +41,6 @@
     <ClCompile Include="..\..\source\graph\2d\2DRenderer.cpp">
       <Filter>source\2d</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\graph\2d\2DShader.cpp">
-      <Filter>source\2d</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\graph\dx9\IndexBuffer_DX9.cpp">
       <Filter>source\dx9</Filter>
     </ClCompile>
@@ -125,6 +122,18 @@
     <ClCompile Include="..\..\source\graph\dx9\RenderTarget_DX9.cpp">
       <Filter>source\dx9</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\graph\ShaderProgram.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\dx9\ShaderProgram_DX9.cpp">
+      <Filter>source\dx9</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\dx9\2DShader_DX9.cpp">
+      <Filter>source\dx9</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\2d\2DShader.cpp">
+      <Filter>source\2d</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\source\graph\2d\shader\2DShader.hlsl">
@@ -193,9 +202,6 @@
     <ClInclude Include="..\..\include\graph\dx9\CubeTexture_DX9.h">
       <Filter>include\dx9</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\graph\ShaderBase.h">
-      <Filter>include\base</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\graph\PixelShader.h">
       <Filter>include\base</Filter>
     </ClInclude>
@@ -230,9 +236,6 @@
       <Filter>include\gles2</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\graph\gles2\PixelShader_GLES2.h">
-      <Filter>include\gles2</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\graph\gles2\ShaderProxy.h">
       <Filter>include\gles2</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\graph\gles2\Texture_GLES2.h">
@@ -270,6 +273,15 @@
     </ClInclude>
     <ClInclude Include="..\..\include\izD3DDefs.h">
       <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\ShaderProgram.h">
+      <Filter>include\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\dx9\ShaderProgram_DX9.h">
+      <Filter>include\dx9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\dx9\2DShader_DX9.h">
+      <Filter>include\dx9</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

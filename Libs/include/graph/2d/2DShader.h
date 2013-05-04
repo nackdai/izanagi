@@ -11,6 +11,7 @@ namespace graph
 {
     class CVertexShader;
     class CPixelShader;
+    class CShaderProgram;
     class CGraphicsDevice;
 
     // 2D描画用シェーダ
@@ -23,34 +24,38 @@ namespace graph
             IMemoryAllocator* allocator,
             CGraphicsDevice* device);
 
-    private:
+    protected:
         C2DShader();
-        ~C2DShader();
+        virtual ~C2DShader();
 
-        C2DShader(const C2DShader& rhs);
-        const C2DShader& operator=(const C2DShader& rhs);
+        NO_COPIABLE(C2DShader);
 
-    private:
-        // 開放
-        inline void InternalRelease();
+        IZ_DEFINE_INTERNAL_RELEASE();
 
+    protected:
         // シェーダ作成
-        IZ_BOOL CreateShader(CGraphicsDevice* device);
+        PURE_VIRTUAL(IZ_BOOL CreateShader(CGraphicsDevice* device));
+
+        // シェーダパラメータセット
+        PURE_VIRTUAL(IZ_BOOL SetShaderParams(CGraphicsDevice* device));
 
         // シェーダセット
         IZ_BOOL SetShader(CGraphicsDevice* device);
 
-        // シェーダパラメータセット
-        IZ_BOOL SetShaderParams(CGraphicsDevice* device);
-
-    private:
+    protected:
         // 描画設定をセット
-        inline void SetRenderOp(E_GRAPH_2D_RENDER_OP nOp);
+        void SetRenderOp(E_GRAPH_2D_RENDER_OP nOp)
+        {
+            m_nOp = nOp;
+        }
 
         // 描画設定を取得
-        inline E_GRAPH_2D_RENDER_OP GetRenderOp() const;
+        E_GRAPH_2D_RENDER_OP GetRenderOp() const
+        {
+            return m_nOp;
+        }
 
-    private:
+    protected:
         // シェーダパラメータ
         enum {
             VTX_PARAM_INV_SCREEN,       // スクリーンサイズの逆数
@@ -58,39 +63,17 @@ namespace graph
             VTX_PARAM_NUM,
         };
 
-    private:
+    protected:
         IMemoryAllocator* m_Allocator;
+
+        CShaderProgram* m_ShaderProgram;
 
         CVertexShader* m_pVS;
         CPixelShader* m_pPS[E_GRAPH_2D_RENDER_OP_NUM];
 
         // 描画設定
         E_GRAPH_2D_RENDER_OP m_nOp;
-
-        // シェーダパラメータハンドル
-        SHADER_PARAM_HANDLE m_hVtxParam[VTX_PARAM_NUM];
-    };
-
-    // 開放
-    void C2DShader::InternalRelease()
-    {
-        delete this;
-        if (m_Allocator != IZ_NULL) {
-            m_Allocator->Free(this);
-        }
-    }
-
-    // 描画設定をセット
-    void C2DShader::SetRenderOp(E_GRAPH_2D_RENDER_OP nOp)
-    {
-        m_nOp = nOp;
-    }
-
-    // 描画設定を取得
-    E_GRAPH_2D_RENDER_OP C2DShader::GetRenderOp() const
-    {
-        return m_nOp;
-    }
+    };    
 }   // namespace graph
 }   // namespace izanagi
 

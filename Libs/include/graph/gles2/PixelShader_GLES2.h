@@ -1,5 +1,5 @@
-#if !defined(__IZANAGI_GRAPH_PIXEL_SHADER_DX9_H__)
-#define __IZANAGI_GRAPH_PIXEL_SHADER_DX9_H__
+#if !defined(__IZANAGI_GRAPH_PIXEL_SHADER_GLES2_H__)
+#define __IZANAGI_GRAPH_PIXEL_SHADER_GLES2_H__
 
 #include "graph/PixelShader.h"
 #include "graph/dx9/ShaderProxy.h"
@@ -37,4 +37,4 @@ namespace graph
 }   // namespace graph
 }   // namespace izanagi
 
-#endif  // #if !defined(__IZANAGI_GRAPH_PIXEL_SHADER_DX9_H__)
+#endif  // #if !defined(__IZANAGI_GRAPH_PIXEL_SHADER_GLES2_H__)
