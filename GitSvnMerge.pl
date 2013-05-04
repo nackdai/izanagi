@@ -28,7 +28,7 @@ DoCmd("git svn dcommit");
 
 # É^ÉO
 DoCmd("git checkout master");
-DoCmd("git tag $tag");
+DoCmd("git tag -f $tag");
 DoCmd("git push -f origin $tag");
 
 #=========================================
