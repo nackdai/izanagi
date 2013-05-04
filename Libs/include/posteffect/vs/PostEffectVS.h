@@ -7,7 +7,6 @@
 #include "../PostEffectDefs.h"
 
 namespace izanagi {
-    ///////////////////////////////////////////////////
     // 頂点シェーダ基本
     class CPostEffectVS : public CObject {
         friend class CPostEffectVSManager;
@@ -24,48 +23,54 @@ namespace izanagi {
         CPostEffectVS();
         virtual ~CPostEffectVS();
 
-        CPostEffectVS(const CPostEffectVS& rhs);
-        const CPostEffectVS& operator=(const CPostEffectVS& rhs);
+        NO_COPIABLE(CPostEffectVS);
+
+        IZ_DEFINE_INTERNAL_RELEASE();
 
     protected:
-        // 解放
-        void InternalRelease();
-
         // シェーダ作成
         IZ_BOOL CreateShader(
-            graph::CGraphicsDevice* pDevice,
+            graph::CGraphicsDevice* device,
             IZ_UINT8* pProgram);
 
-        // シェーダ定数ハンドル取得
-        IZ_BOOL GetHandleByName(
-            IZ_UINT num,
-            IZ_PCSTR pNameList[],
-            SHADER_PARAM_HANDLE* pHandleList);
-
     public:
+        // シェーダパラメータ初期化済みかどうか
+        virtual IZ_BOOL IsInitilizedShaderParameter();
+
+        // シェーダパラメータ初期化
+        virtual void InitShaderParameter(
+            graph::CGraphicsDevice* device,
+            graph::CShaderProgram* program);
+
         // 描画
-        virtual void Render(
+        void PrepareRender(
+            graph::CGraphicsDevice* device,
+            graph::CShaderProgram* program,
             IZ_FLOAT fPosOffsetX = 0.0f,
             IZ_FLOAT fPosOffsetY = 0.0f,
             const SFloatRect* pTexCoord = IZ_NULL);
 
         // パラメータセット
-        virtual void SetParameter(
+        virtual void RegisterParameter(
             const math::SVector* pVector,
             IZ_UINT num);
 
+        // 頂点シェーダ本体を取得
+        graph::CVertexShader* GetVertexShader();
+
     protected:
         // 共通パラメータセット
-        void SetCommonShaderParameter(
+        void ApplyShaderParameter(
+            graph::CGraphicsDevice* device,
+            graph::CShaderProgram* program,
             IZ_FLOAT fPosOffsetX,
             IZ_FLOAT fPosOffsetY,
             const SFloatRect* pTexCoord);
 
         // パラメータセット
-        virtual void SetShaderParameter();
-
-        // 初期化
-        virtual IZ_BOOL InternalInit();
+        virtual void ApplyShaderParameter(
+            graph::CGraphicsDevice* device,
+            graph::CShaderProgram* program);
 
     protected:
         // 頂点バッファセット
@@ -87,7 +92,6 @@ namespace izanagi {
 
     protected:
         IMemoryAllocator* m_Allocator;
-        graph::CGraphicsDevice* m_pDevice;
 
         E_POSTEFFECT_VTX_SHADER m_Type;
 

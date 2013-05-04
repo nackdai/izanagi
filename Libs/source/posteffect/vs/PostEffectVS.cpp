@@ -11,7 +11,6 @@ using namespace izanagi;
 CPostEffectVS::CPostEffectVS()
 {
     m_Allocator = IZ_NULL;
-    m_pDevice = IZ_NULL;
 
     m_pShader = IZ_NULL;
     m_pVB = IZ_NULL;
@@ -29,72 +28,48 @@ CPostEffectVS::~CPostEffectVS()
     SAFE_RELEASE(m_pShader);
     SAFE_RELEASE(m_pVB);
     SAFE_RELEASE(m_pVtxDecl);
-    SAFE_RELEASE(m_pDevice);
-}
-
-// 解放
-void CPostEffectVS::InternalRelease()
-{
-    delete this;
-
-    if (m_Allocator != IZ_NULL) {
-        m_Allocator->Free(this);
-    }
 }
 
 // シェーダ作成
 IZ_BOOL CPostEffectVS::CreateShader(
-    graph::CGraphicsDevice* pDevice,
+    graph::CGraphicsDevice* device,
     IZ_UINT8* pProgram)
 {
     IZ_BOOL result = IZ_FALSE;
 
     // 頂点シェーダ作成
-    m_pShader = pDevice->CreateVertexShader(pProgram);
+    m_pShader = device->CreateVertexShader(pProgram);
     result = (m_pShader != IZ_NULL);
-
-    if (result) {
-        SAFE_REPLACE(m_pDevice, pDevice);
-
-        // 内部初期化
-        result = InternalInit();
-
-        if (result) {
-            // 共通シェーダ定数ハンドルを取得
-            static IZ_PCSTR name[COMMON_HANDLE_NUM] = {
-                "g_vPosOffset",
-                "g_vTexParam",
-            };
-
-            result = GetHandleByName(
-                        COMMON_HANDLE_NUM,
-                        name,
-                        m_hCommonHandle);
-        }
-    }
 
     return result;
 }
 
-// シェーダ定数ハンドル取得
-IZ_BOOL CPostEffectVS::GetHandleByName(
-    IZ_UINT num,
-    IZ_PCSTR pNameList[],
-    SHADER_PARAM_HANDLE* pHandleList)
+// シェーダパラメータ初期化済みかどうか
+IZ_BOOL CPostEffectVS::IsInitilizedShaderParameter()
 {
-    for (IZ_UINT i = 0; i < num; ++i) {
-        pHandleList[i] = m_pShader->GetHandleByName(pNameList[i]);
-        if (pHandleList[i] == IZ_NULL) {
-            IZ_ASSERT(IZ_FALSE);
-            return IZ_FALSE;
-        }
-    }
+    return (m_hCommonHandle[0] != 0);
+}
 
-    return IZ_TRUE;
+// シェーダパラメータ初期化
+void CPostEffectVS::InitShaderParameter(
+    graph::CGraphicsDevice* device,
+    graph::CShaderProgram* program)
+{
+    // 共通シェーダ定数ハンドルを取得
+    static IZ_PCSTR name[COMMON_HANDLE_NUM] = {
+        "g_vPosOffset",
+        "g_vTexParam",
+    };
+
+    for (IZ_UINT i = 0; i < COUNTOF(name); i++) {
+        m_hCommonHandle[i] = program->GetHandleByName(name[i]);
+    }
 }
 
 // 描画
-void CPostEffectVS::Render(
+void CPostEffectVS::PrepareRender(
+    graph::CGraphicsDevice* device,
+    graph::CShaderProgram* program,
     IZ_FLOAT fPosOffsetX,
     IZ_FLOAT fPosOffsetY,
     const SFloatRect* pTexCoord)
@@ -102,40 +77,32 @@ void CPostEffectVS::Render(
     IZ_ASSERT(m_pVB != IZ_NULL);
     IZ_ASSERT(m_pVtxDecl != IZ_NULL);
     IZ_ASSERT(m_pShader != IZ_NULL);
-    IZ_ASSERT(m_pDevice != IZ_NULL);
-
-    // 頂点シェーダ
-    m_pDevice->SetVertexShader(m_pShader);
+    IZ_ASSERT(device != IZ_NULL);
 
     // 共通パラメータセット
-    SetCommonShaderParameter(
+    ApplyShaderParameter(
+        device,
+        program,
         fPosOffsetX,
         fPosOffsetY,
         pTexCoord);
 
     // パラメータセット
-    SetShaderParameter();
+    ApplyShaderParameter(device, program);
 
     // 頂点宣言
-    m_pDevice->SetVertexDeclaration(m_pVtxDecl);
+    device->SetVertexDeclaration(m_pVtxDecl);
 
     // 頂点バッファ
-    m_pDevice->SetVertexBuffer(
+    device->SetVertexBuffer(
         0, 
         0,
         sizeof(CPostEffectVSManager::CUSTOM_FVF),
         m_pVB);
-
-    // NOTE
-    // 頂点数を指定する
-    m_pDevice->DrawPrimitive(
-        graph::E_GRAPH_PRIM_TYPE_TRIANGLESTRIP, 
-        0, 
-        CPostEffectVSManager::PRIM_NUM);
 }
 
 // パラメータセット
-void CPostEffectVS::SetParameter(
+void CPostEffectVS::RegisterParameter(
     const math::SVector* pVector,
     IZ_UINT num)
 {
@@ -144,15 +111,23 @@ void CPostEffectVS::SetParameter(
     UNUSED_ALWAYS(num);
 }
 
+// 頂点シェーダ本体を取得
+graph::CVertexShader* CPostEffectVS::GetVertexShader()
+{
+    return m_pShader;
+}
+
 // 共通パラメータセット
-void CPostEffectVS::SetCommonShaderParameter(
+void CPostEffectVS::ApplyShaderParameter(
+    graph::CGraphicsDevice* device,
+    graph::CShaderProgram* program,
     IZ_FLOAT fPosOffsetX,
     IZ_FLOAT fPosOffsetY,
     const SFloatRect* pTexCoord)
 {
     // 位置オフセット
     {
-        graph::CRenderTarget* rt = m_pDevice->GetRenderTarget(0);
+        graph::CRenderTarget* rt = device->GetRenderTarget(0);
         IZ_ASSERT(rt != IZ_NULL);
 
         IZ_FLOAT fWidth = (IZ_FLOAT)rt->GetWidth();
@@ -170,8 +145,8 @@ void CPostEffectVS::SetCommonShaderParameter(
             fOffsetX, fOffsetY,
             0.0f, 0.0f);
 
-        m_pShader->SetVector(
-            m_pDevice,
+        program->SetVector(
+            device,
             m_hCommonHandle[COMMON_HANDLE_PosOffset],
             m_vecPosOffset);
     }
@@ -196,28 +171,17 @@ void CPostEffectVS::SetCommonShaderParameter(
             fTexScaleX, fTexScaleY,
             fTexOffsetX, fTexOffsetY);
 
-        m_pShader->SetVector(
-            m_pDevice,
+        program->SetVector(
+            device,
             m_hCommonHandle[COMMON_HANDLE_TexParam],
             m_vecTexParam);
     }
 }
 
 // パラメータセット
-void CPostEffectVS::SetShaderParameter()
+void CPostEffectVS::ApplyShaderParameter(
+    graph::CGraphicsDevice* device,
+    graph::CShaderProgram* program)
 {
     // 何もしない
 }
-
-// 初期化
-IZ_BOOL CPostEffectVS::InternalInit()
-{
-    // 何もしない
-    return IZ_TRUE;
-}
-
-///////////////////////////////////////////////////
-// デフォルト頂点シェーダ
-
-///////////////////////////////////////////////////
-// 周囲Ｎ点をサンプリングする頂点シェーダ

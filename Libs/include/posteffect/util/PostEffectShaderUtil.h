@@ -25,11 +25,6 @@ namespace izanagi {
             IZ_UINT nElements);
 
     public:
-        // サンプラのリソースインデックスをハンドルから引いてくる
-        static inline IZ_UINT GetSamplerResourceIndexByHandle(
-            graph::CPixelShader* pShader,
-            SHADER_PARAM_HANDLE handle);
-
         static inline IZ_BOOL BeginScene(
             graph::CGraphicsDevice* pDevice,
             IZ_INT nColorBufferNum,
@@ -103,38 +98,6 @@ namespace izanagi {
         }
 
         IZ_ASSERT(ret);
-        return ret;
-    }
-
-    // inline *******************************
-
-    // サンプラのリソースインデックスをハンドルから引いてくる
-    IZ_UINT CPostEffectShaderUtil::GetSamplerResourceIndexByHandle(
-        graph::CPixelShader* pShader,
-        SHADER_PARAM_HANDLE handle)
-    {
-        IZ_UINT ret = pShader->GetSamplerIndex(handle);
-        return ret;
-    }
-
-    IZ_BOOL CPostEffectShaderUtil::BeginScene(
-        graph::CGraphicsDevice* pDevice,
-        IZ_INT nColorBufferNum,
-        graph::CRenderTarget** pColorBuffer,
-        IZ_BOOL bIsResetViewport,
-        IZ_INT nTarget,
-        IZ_DWORD nClearColor,
-        IZ_FLOAT fClearZ,
-        IZ_INT nClearStencil)
-    {
-        IZ_BOOL ret = pDevice->BeginScene(
-                        pColorBuffer,
-                        nColorBufferNum,
-                        //bIsResetViewport, // TODO
-                        nTarget,
-                        nClearColor,
-                        fClearZ,
-                        nClearStencil);
         return ret;
     }
 }   // namespace izanagi

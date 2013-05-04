@@ -71,6 +71,12 @@
     <ClCompile Include="..\..\source\posteffect\vs\PostEffectVSManager.cpp">
       <Filter>source\vs</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\posteffect\PostEffectShaderPass.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\posteffect\util\PostEffectShaderUtil.cpp">
+      <Filter>source\util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\posteffect\PESFormat.h">

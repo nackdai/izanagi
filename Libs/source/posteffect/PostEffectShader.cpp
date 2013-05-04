@@ -217,7 +217,7 @@ IZ_BOOL CPostEffectShader::Render(
         &rcDst);
 
     // 描画
-    pPass->Render(rcTexCoord);
+    pPass->Render(m_pDevice, rcTexCoord);
 
     if (bIsScissor) {
         // シザリングを解除
@@ -245,7 +245,7 @@ IZ_BOOL CPostEffectShader::Render(const SFloatRect& rcTexCoord)
                                 m_RenderParam.pass_idx);
 
     // 描画
-    pPass->Render(rcTexCoord);
+    pPass->Render(m_pDevice, rcTexCoord);
 
     return IZ_TRUE;
 }
@@ -337,9 +337,6 @@ IZ_BOOL CPostEffectShader::BeginRender(
     }
 
     if (ret) {
-        // ピクセルシェーダセット
-        m_pDevice->SetPixelShader(pPass->GetPS());
-
         // 描画パラメータ保持
         m_RenderParam.tech_idx = nTechIdx;
         m_RenderParam.pass_idx = nPassIdx;
@@ -530,7 +527,7 @@ IZ_BOOL CPostEffectShader::SetTextureOffsetParameter(
                                 m_RenderParam.pass_idx);
 
     // パラメータセット
-    pPass->GetVS()->SetParameter(pVector, num);
+    pPass->GetPostEffectVS()->RegisterParameter(pVector, num);
 
     return IZ_TRUE;
 }
@@ -639,7 +636,7 @@ IZ_BOOL CPostEffectShader::CommitChanges()
 
             ret = CPostEffectShaderUtil::SetValue(
                     m_pDevice,
-                    pPass->GetPS(),
+                    pPass->GetShaderProgram(),
                     handle,
                     pValue,
                     pParamDesc->Type,
@@ -760,7 +757,13 @@ IZ_BOOL CPostEffectShader::Init(
             CPostEffectVS* pVS = pVSMgr->GetVS(pDesc->VSType);
             IZ_ASSERT(pVS != IZ_NULL);
 
-            cPass.SetVS(pVS);
+            cPass.SetPostEffectVS(pVS);
+
+            if (!pVS->IsInitilizedShaderParameter()) {
+                pVS->InitShaderParameter(
+                    m_pDevice,
+                    cPass.GetShaderProgram());
+            }
         }
 
 __EXIT__:
@@ -802,8 +805,17 @@ IZ_UINT8* CPostEffectShader::CreatePass(
         graph::CPixelShader* pPS = m_pDevice->CreatePixelShader(pProgramBuf);
         IZ_ASSERT(pPS != IZ_NULL);
 
-        cPass.SetPS(pPS);
+        // シェーダプログラム作成
+        graph::CShaderProgram* shader = m_pDevice->CreateShaderProgram();
+        IZ_ASSERT(shader != IZ_NULL);
+
+        // オーナーをシェーダプログラムに委譲する
+        shader->AttachPixelShader(pPS);
         SAFE_RELEASE(pPS);
+
+        // オーナーをパスに委譲する
+        cPass.SetShaderProgram(shader);
+        SAFE_RELEASE(shader);
 
         // パラメータ情報初期化
         for (IZ_UINT n = 0; n < pDesc->numConst; ++n) {

@@ -64,7 +64,7 @@ namespace izanagi {
         {
             IZ_ASSERT(idx < sParams.num);
             sParams.list[idx].idx = nIdxInPass;
-            sParams.list[idx].handle = m_pPS->GetHandleByName(name);
+            sParams.list[idx].handle = m_Shader->GetHandleByName(name);
             return (sParams.list[idx].handle != IZ_NULL);
         }
 
@@ -88,14 +88,16 @@ namespace izanagi {
         }
 
     private:
-        inline CPostEffectPass();
-        inline ~CPostEffectPass();
+        CPostEffectPass();
+        ~CPostEffectPass();
 
         NO_COPIABLE(CPostEffectPass);
 
     private:
         // 描画
-        inline void Render(const SFloatRect& rcTexCoord);
+        void Render(
+            graph::CGraphicsDevice* device,
+            const SFloatRect& rcTexCoord);
 
         // バッファ割り当て
         IZ_UINT8* SetParamBuffer(IZ_UINT num, IZ_UINT8* p)
@@ -108,29 +110,35 @@ namespace izanagi {
         }
 
         // 初期化
-        inline void Init(
+        void Init(
             IZ_UINT idx, 
             const S_PES_PASS* pDesc);
 
         // 初期化
-        inline void InitParam(
+        void InitParam(
             IZ_UINT idx,
             IZ_UINT nParamIdx,
             IZ_PCSTR name);
 
         // 初期化
-        inline IZ_BOOL InitSampler(
+        IZ_BOOL InitSampler(
             IZ_UINT idx,
             IZ_UINT nSmpleIdx,
             IZ_PCSTR name);
 
-        inline void Clear();
+        void Clear();
 
-        // ピクセルシェーダのセット
-        void SetPS(graph::CPixelShader* pPS) { SAFE_REPLACE(m_pPS, pPS); }
+        // シェーダプログラムのセット
+        void SetShaderProgram(graph::CShaderProgram* program);
 
-        // ピクセルシェーダ取得
-        graph::CPixelShader* GetPS() { return m_pPS; }
+        // シェーダプログラムの取得
+        graph::CShaderProgram* GetShaderProgram();
+
+        // 頂点シェーダのセット
+        void SetPostEffectVS(CPostEffectVS* pVS);
+
+        // 頂点シェーダの取得
+        CPostEffectVS* GetPostEffectVS();
 
         // パラメータ数取得
         IZ_UINT GetParamNum() const { return m_Params.num; }
@@ -141,12 +149,6 @@ namespace izanagi {
         // ホルダ取得
         const SParamInfo* GetParamInfo(IZ_UINT idx) const { return GetInfo(m_Params, idx); }
         const SSamplerInfo* GetSamplerInfo(IZ_UINT idx) const { return GetInfo(m_Samplers, idx); }
-
-        // 頂点シェーダのセット
-        void SetVS(CPostEffectVS* pVS) { SAFE_REPLACE(m_pVS, pVS); }
-
-        // 頂点シェーダの取得
-        CPostEffectVS* GetVS() { return m_pVS; }
 
         IZ_UINT GetIdx() const { return m_nIdx; }
 
@@ -160,86 +162,12 @@ namespace izanagi {
         SParams<SParamInfo> m_Params;
         SParams<SSamplerInfo> m_Samplers;
 
-        // ピクセルシェーダ
-        graph::CPixelShader* m_pPS;
+        // シェーダプログラム
+        graph::CShaderProgram* m_Shader;
 
         // 頂点シェーダ
         CPostEffectVS* m_pVS;
     };
-
-    // inline ***************************************
-
-    // コンストラクタ
-    CPostEffectPass::CPostEffectPass()
-    {
-        m_nIdx = 0;
-        m_pDesc = IZ_NULL;
-        m_pPS = IZ_NULL;
-        m_pVS = IZ_NULL;
-    }
-
-    // デストラクタ
-    CPostEffectPass::~CPostEffectPass()
-    {
-        Clear();
-    }
-
-    // 描画
-    void CPostEffectPass::Render(const SFloatRect& rcTexCoord)
-    {
-        m_pVS->Render(
-            0.0f, 0.0f,
-            &rcTexCoord);
-    }
-
-    // 初期化
-    void CPostEffectPass::Init(
-        IZ_UINT idx, 
-        const S_PES_PASS* pDesc)
-    {
-        m_nIdx = idx;
-        m_pDesc = pDesc;
-
-        m_pPS = IZ_NULL;
-        m_pVS = IZ_NULL;
-    }
-
-    // 初期化
-    void CPostEffectPass::InitParam(
-        IZ_UINT idx,
-        IZ_UINT nParamIdx,
-        IZ_PCSTR name)
-    {
-        IZ_BOOL result = InitInfo<SParamInfo>(m_Params, idx, nParamIdx, name);
-    }
-
-    // 初期化
-    IZ_BOOL CPostEffectPass::InitSampler(
-        IZ_UINT idx,
-        IZ_UINT nSmpleIdx,
-        IZ_PCSTR name)
-    {
-        IZ_BOOL ret = InitInfo<SSamplerInfo>(m_Samplers, idx, nSmpleIdx, name);
-        
-        if (ret) {
-            m_Samplers.list[idx].resource_id = (IZ_UINT16)CPostEffectShaderUtil::GetSamplerResourceIndexByHandle(
-                                                            m_pPS,
-                                                            m_Samplers.list[idx].handle);
-
-            // NOTE
-            // サンプラレジスタ 0 - 7 の８個まで
-            ret = (m_Samplers.list[idx].resource_id < 8);
-            IZ_ASSERT(ret);
-        }
-
-        return ret;
-    }
-
-    void CPostEffectPass::Clear()
-    {
-        SAFE_RELEASE(m_pPS);
-        SAFE_RELEASE(m_pVS);
-    }
 }   // namespace izanagi
 
 #endif  // #if !defined(__IZANAGI_POSTEFFET_PASS_H__)
