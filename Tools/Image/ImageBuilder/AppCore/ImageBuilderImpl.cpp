@@ -211,8 +211,10 @@ namespace {
             "wrap",         // graph::E_GRAPH_TEX_ADDRESS_WRAP
             "mirror",       // graph::E_GRAPH_TEX_ADDRESS_MIRROR
             "clamp",        // graph::E_GRAPH_TEX_ADDRESS_CLAMP
+#if 0
             "border",       // graph::E_GRAPH_TEX_ADDRESS_BORDER
             "mirroronce",   // graph::E_GRAPH_TEX_ADDRESS_MIRRORONCE
+#endif
         };
         C_ASSERT(COUNTOF(str) == izanagi::graph::E_GRAPH_TEX_ADDRESS_NUM);
 
@@ -232,8 +234,10 @@ namespace {
             "point",        // graph::E_GRAPH_TEX_FILTER_POINT
             "linear",       // graph::E_GRAPH_TEX_FILTER_LINEAR
             "aniso",        // graph::E_GRAPH_TEX_FILTER_ANISOTROPIC
+#if 0
             "pyramidquad",  // graph::E_GRAPH_TEX_FILTER_PYRAMIDALQUAD
             "gaussquad",    // graph::E_GRAPH_TEX_FILTER_GAUSSIANQUAD
+#endif
         };
         C_ASSERT(COUNTOF(str) == izanagi::graph::E_GRAPH_TEX_FILTER_NUM);
 
