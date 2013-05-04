@@ -1,3 +1,4 @@
+#ifdef __IZ_DX9__
 #if !defined(__IZANAGI_GRAPH_SHADER_PROXY_DX9_H__)
 #define __IZANAGI_GRAPH_SHADER_PROXY_DX9_H__
 
@@ -187,3 +188,4 @@ namespace graph
 }   // namespace izanagi
 
 #endif  // #if !defined(__IZANAGI_GRAPH_SHADER_PROXY_DX9_H__)
+#endif  // #ifdef __IZ_DX9__
