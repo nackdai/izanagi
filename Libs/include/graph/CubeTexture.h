@@ -18,6 +18,11 @@ namespace graph
         NO_COPIABLE(CCubeTexture);
 
     public:
+        virtual E_GRAPH_TEX_TYPE GetTexType()
+        {
+            return E_GRAPH_TEX_TYPE_CUBE;
+        }
+
         // ロック
         PURE_VIRTUAL(
             IZ_UINT Lock(
