@@ -2,7 +2,7 @@
 #if !defined(__IZANAGI_GRAPH_PIXEL_SHADER_DX9_H__)
 #define __IZANAGI_GRAPH_PIXEL_SHADER_DX9_H__
 
-#include "izD3DDefs.h"
+#include "izDX9Defs.h"
 #include "graph/PixelShader.h"
 #include "graph/dx9/ShaderProxy_DX9.h"
 

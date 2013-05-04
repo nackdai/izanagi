@@ -2,7 +2,7 @@
 #if !defined(__IZANAGI_GRAPH_INTERNAL_2D_RENDERER_DX9_H__)
 #define __IZANAGI_GRAPH_INTERNAL_2D_RENDERER_DX9_H__
 
-#include "izD3DDefs.h"
+#include "izDX9Defs.h"
 #include "graph/2d/2DRenderer.h"
 
 namespace izanagi

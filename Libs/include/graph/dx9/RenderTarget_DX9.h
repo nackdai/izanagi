@@ -2,7 +2,7 @@
 #if !defined(__IZANAGI_GRAPH_RENDER_TARGET_DX9_H__)
 #define __IZANAGI_GRAPH_RENDER_TARGET_DX9_H__
 
-#include "izD3DDefs.h"
+#include "izDX9Defs.h"
 #include "graph/RenderTarget.h"
 
 namespace izanagi

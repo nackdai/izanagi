@@ -2,7 +2,7 @@
 #define __IZANAGI_GRAPH_PERF_H__
 
 #include "izDefs.h"
-#include "izD3DDefs.h"
+#include "izDX9Defs.h"
 
 namespace izanagi {
     class CGraphPerf {

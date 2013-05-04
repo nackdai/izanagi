@@ -2,7 +2,7 @@
 #if !defined(__IZANAGI_GRPAH_GRAPHICS_DEVICE_DX9_H__)
 #define __IZANAGI_GRPAH_GRAPHICS_DEVICE_DX9_H__
 
-#include "izD3DDefs.h"
+#include "izDX9Defs.h"
 #include "graph/GraphicsDevice.h"
 #include "graph/RenderState.h"
 #include "graph/internal/ParamValueConverter.h"

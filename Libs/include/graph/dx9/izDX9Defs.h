@@ -1,6 +1,6 @@
 #ifdef __IZ_DX9__
-#if !defined(__IZANAGI_D3D_DEFS_H__)
-#define __IZANAGI_D3D_DEFS_H__
+#if !defined(__IZANAGI_DX9_DEFS_H__)
+#define __IZANAGI_DX9_DEFS_H__
 
 #include <d3d9.h>
 #include <d3dx9.h>
@@ -95,5 +95,5 @@ namespace graph
 }   // namespace graph
 }   // namespace izanagi
 
-#endif  // #if !defined(__IZANAGI_D3D_DEFS_H__)
+#endif  // #if !defined(__IZANAGI_DX9_DEFS_H__)
 #endif  // #ifdef __IZ_DX9__
