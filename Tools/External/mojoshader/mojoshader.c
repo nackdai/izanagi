@@ -8062,7 +8062,7 @@ static void parse_constant_table(Context *ctx, const uint32 *tokens,
     // !!! FIXME: check that (start+target) points to "ps_3_0", etc.
 
     ctab->symbol_count = constants;
-    ctab->symbols = Malloc(ctx, sizeof (MOJOSHADER_symbol) * constants);
+    ctab->symbols = (MOJOSHADER_symbol*)Malloc(ctx, sizeof (MOJOSHADER_symbol) * constants);
     if (ctab->symbols == NULL)
         return;
     memset(ctab->symbols, '\0', sizeof (MOJOSHADER_symbol) * constants);
@@ -9516,7 +9516,11 @@ void MOJOSHADER_freeParseData(const MOJOSHADER_parseData *_data)
 
 int MOJOSHADER_version(void)
 {
+#if 0
     return MOJOSHADER_VERSION;
+#else
+    return 0;
+#endif
 } // MOJOSHADER_version
 
 
