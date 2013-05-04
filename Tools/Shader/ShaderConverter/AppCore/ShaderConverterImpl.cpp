@@ -340,7 +340,7 @@ BOOL CShaderConverter::ExportTexture()
 
                 sTex.ann.isRenderTarget = IZ_TRUE;
                 sTex.ann.isDynamic = IZ_FALSE;
-                sTex.ann.typeRsc = izanagi::graph::E_GRAPH_RSC_TYPE_STATIC;
+                sTex.ann.typeRsc = izanagi::graph::E_GRAPH_RSC_USAGE_STATIC;
 
                 VRETURN(
                     CTextureUtil::SetAnnValue(
