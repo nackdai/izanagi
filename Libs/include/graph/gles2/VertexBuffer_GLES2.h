@@ -8,6 +8,8 @@ namespace izanagi
 {
 namespace graph
 {
+    class CGraphicsDeviceGLES2;
+
     // 頂点バッファ
     class CVertexBufferGLES2 : public CVertexBuffer
     {

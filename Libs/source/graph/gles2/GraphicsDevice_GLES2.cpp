@@ -505,10 +505,9 @@ namespace graph
     */
     IZ_BOOL CGraphicsDeviceGLES2::DrawIndexedPrimitive(
         E_GRAPH_PRIM_TYPE prim_type,
-        IZ_UINT nBaseIdx,
-        IZ_UINT nMinIdx,
+        IZ_UINT vtxOffset,
         IZ_UINT nVtxNum,
-        IZ_UINT nStartIdx,
+        IZ_UINT idxOffset,
         IZ_UINT nPrimCnt)
     {
         // NOTE
@@ -521,8 +520,12 @@ namespace graph
 
         if (isDirty) {
             IZ_ASSERT(m_RenderState.curVD != IZ_NULL);
+            IZ_ASSERT(m_RenderState.curVB != IZ_NULL);
 
-            ((CVertexDeclarationGLES2*)m_RenderState.curVD)->Apply(this);
+            ((CVertexDeclarationGLES2*)m_RenderState.curVD)->Apply(
+                this,
+                vtxOffset,
+                m_RenderState.curVB->GetStride());
         }
 
         m_IsDirtyVB = IZ_FALSE;
@@ -562,9 +565,48 @@ namespace graph
             m_IsDirtyTex[i] = IZ_FALSE;
         }
 
-        // TODO
-        //::glDrawElements(
+        IZ_UINT idxNum = 0;
 
+        // プリミティブタイプからインデックス数を計算
+        switch (prim_type)
+        {
+        case E_GRAPH_PRIM_TYPE_POINTLIST:
+            idxNum = nPrimCnt;
+            break;
+        case E_GRAPH_PRIM_TYPE_LINELIST:
+            idxNum = nPrimCnt * 2;
+            break;
+        case E_GRAPH_PRIM_TYPE_LINESTRIP:
+            idxNum = nPrimCnt - 1;
+            break;
+        case E_GRAPH_PRIM_TYPE_TRIANGLELIST:
+            idxNum = nPrimCnt * 3;
+            break;
+        case E_GRAPH_PRIM_TYPE_TRIANGLESTRIP:
+            idxNum = nPrimCnt - 2;
+            break;
+        case E_GRAPH_PRIM_TYPE_TRIANGLEFAN:
+            idxNum = nPrimCnt - 2;
+            break;
+        default:
+            IZ_ASSERT(IZ_FALSE);
+            break;
+        }
+
+        GLenum mode = CParamValueConverterGLES2::ConvAbstractToTarget_PrimType(prim_type);
+
+        IZ_ASSERT(m_RenderState.curIB != IZ_NULL);
+
+        GLenum type = GL_UNSIGNED_SHORT;
+
+        // TODO
+        IZ_ASSERT(m_RenderState.curIB->GetIdxNum() <= IZ_UINT16_MAX);
+
+        ::glDrawElements(
+            mode,
+            idxNum,
+            type,
+            (const GLvoid*)idxOffset);
 
         return IZ_TRUE;
     }
@@ -574,7 +616,7 @@ namespace graph
     */
     IZ_BOOL CGraphicsDeviceGLES2::DrawPrimitive(
         E_GRAPH_PRIM_TYPE prim_type,
-        IZ_UINT nStartIdx,
+        IZ_UINT idxOffset,
         IZ_UINT nPrimCnt)
     {
         // TODO
@@ -700,10 +742,13 @@ namespace graph
 
     IZ_BOOL CGraphicsDeviceGLES2::SetTextureInternal(IZ_UINT nStage, CBaseTexture* pTex)
     {
-        HRESULT hr = m_Device->SetTexture(
-            nStage,
-            pTex != NULL ? pTex->GetTexHandle() : NULL);
-        VRETURN(SUCCEEDED(hr));
+        ::glActiveTexture(GL_TEXTURE0 + nStage);
+
+        IZ_BOOL isPlane = (pTex->GetTexType() == E_GRAPH_TEX_TYPE_PLANE);
+
+        ::glBindTexture(
+            isPlane ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP,
+            pTex->GetTexHandle());
 
         // 保持しておく
         SAFE_REPLACE(m_Texture[nStage], pTex);
@@ -713,14 +758,14 @@ namespace graph
         if (pTex != NULL) {
             // MIN_FILTER
             SetSamplerStateFilter(
-                nStage,
+                isPlane,
                 E_GRAPH_SAMPLER_STATE_TYPE_MINFILTER,
                 m_SamplerState[nStage].minFilter,
                 pTex->GetState().minFilter);
 
             // MAG_FILTER
             SetSamplerStateFilter(
-                nStage,
+                isPlane,
                 E_GRAPH_SAMPLER_STATE_TYPE_MAGFILTER,
                 m_SamplerState[nStage].magFilter,
                 pTex->GetState().magFilter);
@@ -728,7 +773,7 @@ namespace graph
             // MIP_FILTER
             if (pTex->GetMipMapNum() > 1) {
                 SetSamplerStateFilter(
-                    nStage,
+                    isPlane,
                     E_GRAPH_SAMPLER_STATE_TYPE_MIPFILTER,
                     m_SamplerState[nStage].mipFilter,
                     pTex->GetState().mipFilter);
@@ -736,14 +781,14 @@ namespace graph
 
             // ADDRESS_U
             SetSamplerStateAddr(
-                nStage,
+                isPlane,
                 E_GRAPH_SAMPLER_STATE_TYPE_ADDRESSU,
                 m_SamplerState[nStage].addressU,
                 pTex->GetState().addressU);
 
             // ADDRESS_V
             SetSamplerStateAddr(
-                nStage,
+                isPlane,
                 E_GRAPH_SAMPLER_STATE_TYPE_ADDRESSV,
                 m_SamplerState[nStage].addressV,
                 pTex->GetState().addressV);
@@ -752,17 +797,51 @@ namespace graph
         return IZ_TRUE;
     }
 
-    void CGraphicsDeviceGLES2::SetRenderTargetInternal(CSurface** pSurface, IZ_UINT num)
+    void CGraphicsDeviceGLES2::SetRenderTargetInternal(CRenderTarget** rt, IZ_UINT num)
     {
         // レンダーターゲットを入れ替える
         for (IZ_UINT i = 0; i < num; ++i) {
-            if (m_RenderState.curRT[i] != pSurface[i]) {
-                CSurfaceGLES2* gles2Surface = reinterpret_cast<CSurfaceGLES2*>(pSurface[i]);
-                IZ_ASSERT(gles2Surface->GetRawInterface() != IZ_NULL);
-
-                m_Device->SetRenderTarget(i, gles2Surface->GetRawInterface());
-                SAFE_REPLACE(m_RenderState.curRT[i], pSurface[i]);
+            if (m_RenderState.curRT[i] != rt[i]) {
+                // TODO
             }
+        }
+    }
+    
+    // サンプラステート設定
+    template <typename _SS, typename _T>
+    void CGraphicsDeviceGLES2::SetSamplerStateAddr(
+        IZ_BOOL isPlane,
+        _SS nSSType,
+        _T& old_val, _T new_val)
+    {
+        IZ_BOOL needUpdate = (m_Flags.is_force_set_state || (old_val != new_val));
+
+        if (needUpdate) {
+            ::glTexParameteri(
+                isPlane ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP,
+                IZ_GET_TARGET_SAMPLER_STATE_TYPE(nSSType),
+                IZ_GET_TARGET_TEX_ADDR(new_val));
+
+            old_val = new_val;
+        }
+    }
+
+    // サンプラステート設定
+    template <typename _SS, typename _T>
+    void CGraphicsDeviceGLES2::SetSamplerStateFilter(
+        IZ_BOOL isPlane,
+        _SS nSSType,
+        _T& old_val, _T new_val)
+    {
+        IZ_BOOL needUpdate = (m_Flags.is_force_set_state || (old_val != new_val));
+
+        if (needUpdate) {
+            ::glTexParameteri(
+                isPlane ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP,
+                IZ_GET_TARGET_SAMPLER_STATE_TYPE(nSSType),
+                IZ_GET_TARGET_TEX_FILTER(new_val));
+
+            old_val = new_val;
         }
     }
 }   // namespace graph

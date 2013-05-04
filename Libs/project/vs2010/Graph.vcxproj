@@ -278,6 +278,7 @@ fxc /T ps_2_0 /E main_OpNoTexAlpha /Fh %(RootDir)%(Directory)/%(Filename)_OpNoTe
     <ClInclude Include="..\..\include\graph\gles2\izGLES2Defs.h" />
     <ClInclude Include="..\..\include\graph\gles2\ParamValueConverter_GLES2.h" />
     <ClInclude Include="..\..\include\graph\gles2\PixelShader_GLES2.h" />
+    <ClInclude Include="..\..\include\graph\gles2\RenderTarget_GLES2.h" />
     <ClInclude Include="..\..\include\graph\gles2\ShaderProgram_GLES2.h" />
     <ClInclude Include="..\..\include\graph\gles2\ShaderProxy_GLES2.h" />
     <ClInclude Include="..\..\include\graph\gles2\Texture_GLES2.h" />

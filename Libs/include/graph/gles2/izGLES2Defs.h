@@ -17,15 +17,15 @@ namespace graph
         EGLNativeWindowType window;
         EGLNativeDisplayType display;
 
-        IZ_UINT screenWidth;
-        IZ_UINT screenHeight;
+        GLuint screenWidth;
+        GLuint screenHeight;
 
-        IZ_UINT8 rgba[4];
+        GLubyte rgba[4];
 
-        IZ_UINT8 depth;
-        IZ_UINT8 stencil;
+        GLubyte depth;
+        GLubyte stencil;
 
-        IZ_BOOL enableMultiSample;
+        GLboolean enableMultiSample;
     };
 }   // namespace graph
 }   // namespace izanagi

@@ -291,6 +291,9 @@
     <ClInclude Include="..\..\include\graph\dx9\izDX9Defs.h">
       <Filter>include\dx9</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\graph\gles2\RenderTarget_GLES2.h">
+      <Filter>include\gles2</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\source\graph\2d\shader\2DPS.hlsl">

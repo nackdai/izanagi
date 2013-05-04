@@ -1,7 +1,7 @@
 #include "graph/GraphUtil.h"
 #include "graph/gles2/Texture_GLES2.h"
 #include "graph/internal/ParamValueConverter.h"
-//#include "graph/gles2/GraphicsDevice_GLES2.h"
+#include "graph/gles2/GraphicsDevice_GLES2.h"
 
 namespace izanagi
 {
@@ -9,12 +9,14 @@ namespace graph
 {
     // データからテクスチャ作成
     CTextureGLES2* CTextureGLES2::CreateTextureFromMemory(
+        CGraphicsDeviceGLES2* device,
         IMemoryAllocator* allocator,
         const void* data,
         IZ_UINT dataSize,
         E_GRAPH_PIXEL_FMT fmt)
     {
-        
+        // TODO
+        return IZ_FALSE;
     }
 
     // コンストラクタ
@@ -22,7 +24,15 @@ namespace graph
     {
         m_Texture = IZ_NULL;
 
+        m_Size = 0;
+
+        m_LockedSize = 0;
+        m_LockedLevel = -1;
+
         m_TemporaryData = IZ_NULL;
+
+        glFormat = GL_RGBA;
+        glType = GL_UNSIGNED_BYTE;
     }
 
     // デストラクタ
@@ -35,6 +45,7 @@ namespace graph
 
     // テクスチャ作成
     CTextureGLES2* CTextureGLES2::CreateTexture(
+        CGraphicsDeviceGLES2* device,
         IMemoryAllocator* allocator,
         IZ_UINT width,
         IZ_UINT height,
@@ -81,6 +92,8 @@ namespace graph
 
             instance->AddRef();
             instance->m_Allocator = allocator;
+
+            SAFE_REPLACE(instance->m_Device, device);
         }
 
         IZ_ASSERT(CStdUtil::GetPtrDistance(top, buf) == size);
@@ -120,8 +133,6 @@ namespace graph
         ::glGenTextures(1, &m_Texture);
         VRETURN(m_Texture > 0);
 
-        ::glBindTexture(GL_TEXTURE_2D, m_Texture);
-
         SetTextureInfo(
             IZ_FALSE,
             width, height,
@@ -138,7 +149,7 @@ namespace graph
         IZ_UINT height,
         IZ_UINT mipLevel,
         E_GRAPH_PIXEL_FMT fmt,
-        E_GRAPH_RSC_USAGE rscType)
+        E_GRAPH_RSC_USAGE usage)
     {
         IZ_ASSERT(m_Texture != 0);
 
@@ -148,12 +159,20 @@ namespace graph
         m_TexInfo.level = mipLevel;
         m_TexInfo.fmt = fmt;
 
-        m_TexInfo.typeRsc = rscType;
+        m_TexInfo.usage = usage;
 
         m_TexInfo.is_rendertarget = isRT;
-        m_TexInfo.is_dynamic = (rscType == E_GRAPH_RSC_USAGE_DYNAMIC);
+        m_TexInfo.is_dynamic = (usage == E_GRAPH_RSC_USAGE_DYNAMIC);
         m_TexInfo.is_on_sysmem = IZ_FALSE;
         m_TexInfo.is_on_vram = isRT;
+
+        IZ_UINT bpp = CGraphUtil::GetBPP(fmt);
+
+        m_Size = width * height * bpp;
+
+        // TODO
+        // glFormat
+        // glType
     }
 
     /**
@@ -167,13 +186,10 @@ namespace graph
     {
         IZ_ASSERT(m_Texture != 0);
 
-        if (level >= m_TexInfo.level) {
-            // レベル指定オーバー
-            IZ_ASSERT(IZ_FALSE);
-            return 0;
-        }
+        // レベル指定
+        VRETURN_VAL(level < m_TexInfo.level, 0);
 
-        IZ_UINT width = GetWidth();
+        IZ_UINT width = GetWidth(level);
         IZ_UINT bpp = CGraphUtil::GetBPP(GetPixelFormat());
 
         IZ_UINT pitch = width * bpp;
@@ -181,13 +197,19 @@ namespace graph
         // TODO
         // Align
 
-        if (m_TemporaryData == IZ_NULL)
-        {
-            size_t size = pitch * GetHeight();
+        size_t size = pitch * GetHeight(level);
+
+        if (m_TemporaryData == IZ_NULL) {
             m_TemporaryData = ALLOC(m_Allocator, size);
+        }
+        else if (size > m_Size) {
+            m_TemporaryData = REALLOC(m_Allocator, m_TemporaryData, size);
         }
 
         VRETURN(m_TemporaryData != IZ_NULL);
+
+        m_LockedSize = size;
+        m_LockedLevel = level;
 
         *data = m_TemporaryData;
 
@@ -199,11 +221,45 @@ namespace graph
     */
     IZ_BOOL CTextureGLES2::Unlock(IZ_UINT level)
     {
-        if (!IsDynamic())
-        {
+        VRETURN(m_LockedLevel == level);
+
+        IZ_BOOL isLocked = (m_LockedSize > 0);
+
+        if (isLocked) {
+            CBaseTexture* curTex = m_Device->GetTexture(0);
+
+            if (curTex != this) {
+                ::glBindTexture(GL_TEXTURE_2D, m_Texture);
+            }
+            
+            IZ_UINT width = GetWidth(level);
+            IZ_UINT height = GetHeight(level);
+
+            ::glTexSubImage2D(
+                GL_TEXTURE_2D,
+                level,
+                0, 0,
+                width, height,
+                glFormat,
+                glType,
+                m_TemporaryData);
+
+            // 元に戻す
+            if (curTex != this) {
+                ::glBindTexture(
+                    GL_TEXTURE_2D,
+                    ((CTextureGLES2*)curTex)->m_Texture);
+            }
+
+            m_LockedSize = 0;
+        }
+
+        if (!IsDynamic()) {
             FREE(m_Allocator, m_TemporaryData);
             m_TemporaryData = IZ_NULL;
         }
+
+        m_LockedLevel = -1;
 
         return IZ_TRUE;
     }
@@ -216,7 +272,7 @@ namespace graph
     // 本体解放
     IZ_BOOL CTextureGLES2::Disable()
     {
-        glDeleteTextures(1, &m_Texture);
+        ::glDeleteTextures(1, &m_Texture);
         m_Texture = 0;
 
         return IZ_TRUE;

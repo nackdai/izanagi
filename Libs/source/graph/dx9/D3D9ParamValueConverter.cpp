@@ -44,8 +44,10 @@ namespace graph
             D3DBLENDOP_ADD,
             D3DBLENDOP_SUBTRACT,
             D3DBLENDOP_REVSUBTRACT,
+#if 0
             D3DBLENDOP_MIN,
             D3DBLENDOP_MAX,
+#endif
         };
         IZ_C_ASSERT(COUNTOF(BlendOpTbl) == E_GRAPH_BLEND_OP_NUM);
     }   // namespace
@@ -68,8 +70,6 @@ namespace graph
             D3DBLEND_DESTCOLOR,
             D3DBLEND_INVDESTCOLOR,
             D3DBLEND_SRCALPHASAT,
-            D3DBLEND_BOTHSRCALPHA,
-            D3DBLEND_BOTHINVSRCALPHA,
         };
         IZ_C_ASSERT(COUNTOF(BlendTbl) == E_GRAPH_BLEND_NUM);
     }   // namespace
@@ -117,8 +117,10 @@ namespace graph
             D3DTADDRESS_WRAP,
             D3DTADDRESS_MIRROR,
             D3DTADDRESS_CLAMP,
+#if 0
             D3DTADDRESS_BORDER,
             D3DTADDRESS_MIRRORONCE,
+#endif
         };
         IZ_C_ASSERT(COUNTOF(TexAddrTbl) == E_GRAPH_TEX_ADDRESS_NUM);
     }   // namespace
@@ -134,8 +136,11 @@ namespace graph
             D3DTEXF_POINT,
             D3DTEXF_LINEAR,
             D3DTEXF_ANISOTROPIC,
+
+#if 0
             D3DTEXF_PYRAMIDALQUAD,
             D3DTEXF_GAUSSIANQUAD,
+#endif
         };
         IZ_C_ASSERT(COUNTOF(TexFilterTbl) == E_GRAPH_TEX_FILTER_NUM);
     }   // namespace

@@ -8,7 +8,7 @@ namespace izanagi
 {
 namespace graph
 {
-    class CGraphicsDevice;
+    class CGraphicsDeviceGLES2;
 
     class CTextureGLES2 : public CTexture
     {
@@ -17,6 +17,7 @@ namespace graph
     private:
         // データからテクスチャ作成
         static CTextureGLES2* CreateTextureFromMemory(
+            CGraphicsDeviceGLES2* device,
             IMemoryAllocator* allocator,
             const void* data,
             IZ_UINT dataSize,
@@ -24,6 +25,7 @@ namespace graph
 
         // テクスチャ作成
         static CTextureGLES2* CreateTexture(
+            CGraphicsDeviceGLES2* device,
             IMemoryAllocator* allocator,
             IZ_UINT width,
             IZ_UINT height,
@@ -83,8 +85,18 @@ namespace graph
         GLuint GetRawInterface() { return m_Texture; }
 
     private:
+        CGraphicsDeviceGLES2* m_Device;
+
         // 本体
         GLuint m_Texture;
+
+        IZ_UINT m_Size;
+
+        GLenum glFormat;
+        GLenum glType;
+
+        IZ_UINT m_LockedSize;
+        IZ_INT m_LockedLevel;
 
         void* m_TemporaryData;
     };

@@ -65,11 +65,12 @@ namespace graph
         return m_Elements;
     }
 
-    IZ_BOOL CVertexDeclarationGLES2::Apply(CGraphicsDeviceGLES2* device)
+    IZ_BOOL CVertexDeclarationGLES2::Apply(
+        CGraphicsDeviceGLES2* device,
+        IZ_UINT vtxOffset,
+        IZ_UINT vtxStride)
     {
         CShaderProgramGLES2* program = (CShaderProgramGLES2*)device->GetShaderProgram();
-
-        IZ_UINT stride = device->GetRenderState().curVB->GetStride();
 
         for (IZ_UINT i = 0; i < m_ElemNum; i++) {
             const SVertexElement& element = m_Elements[i];
@@ -171,8 +172,8 @@ namespace graph
                 size,
                 type,
                 needNormalized,
-                stride,
-                (void*)element.Offset);
+                vtxStride,
+                (void*)(vtxOffset + element.Offset));
 
             static const char* names[] = 
             {

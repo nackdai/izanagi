@@ -15,7 +15,7 @@ namespace graph
                 break;\
             }\
         }\
-        IZ_ASSERT(ret >= 0);\
+        IZ_ASSERT(ret > 0);\
         return static_cast<abst>(ret)
 
     #define DEF_FUNC_CONV_PARAM_VAL(p, target, abst, tbl)\
@@ -31,41 +31,37 @@ namespace graph
     // ブレンド方法
 
     namespace {
-        D3DBLENDOP BlendOpTbl[] = {
-            D3DBLENDOP_ADD,
-            D3DBLENDOP_SUBTRACT,
-            D3DBLENDOP_REVSUBTRACT,
-            D3DBLENDOP_MIN,
-            D3DBLENDOP_MAX,
+        GLenum BlendOpTbl[] = {
+            GL_FUNC_ADD,
+            GL_FUNC_SUBTRACT,
+            GL_FUNC_REVERSE_SUBTRACT,
         };
         IZ_C_ASSERT(COUNTOF(BlendOpTbl) == E_GRAPH_BLEND_OP_NUM);
     }   // namespace
 
-    DEF_FUNC_CONV_PARAM_VAL(BlendOp, D3DBLENDOP, E_GRAPH_BLEND_OP, BlendOpTbl)
+    DEF_FUNC_CONV_PARAM_VAL(BlendOp, GLenum, E_GRAPH_BLEND_OP, BlendOpTbl)
 
     //////////////////////////////////////////
     // ブレンド係数
 
     namespace {
-        D3DBLEND BlendTbl[] = {
-            D3DBLEND_ZERO,
-            D3DBLEND_ONE,
-            D3DBLEND_SRCCOLOR,
-            D3DBLEND_INVSRCCOLOR,
-            D3DBLEND_SRCALPHA,
-            D3DBLEND_INVSRCALPHA,
-            D3DBLEND_DESTALPHA,
-            D3DBLEND_INVDESTALPHA,
-            D3DBLEND_DESTCOLOR,
-            D3DBLEND_INVDESTCOLOR,
-            D3DBLEND_SRCALPHASAT,
-            D3DBLEND_BOTHSRCALPHA,
-            D3DBLEND_BOTHINVSRCALPHA,
+        GLenum BlendTbl[] = {
+            GL_ZERO,
+            GL_ONE,
+            GL_SRC_COLOR,
+            GL_ONE_MINUS_SRC_COLOR,
+            GL_SRC_ALPHA,
+            GL_ONE_MINUS_SRC_ALPHA,
+            GL_DST_ALPHA,
+            GL_ONE_MINUS_DST_ALPHA,
+            GL_DST_COLOR,
+            GL_ONE_MINUS_DST_COLOR,
+            GL_SRC_ALPHA_SATURATE,
         };
         IZ_C_ASSERT(COUNTOF(BlendTbl) == E_GRAPH_BLEND_NUM);
     }   // namespace
 
-    DEF_FUNC_CONV_PARAM_VAL(Blend, D3DBLEND, E_GRAPH_BLEND, BlendTbl)
+    DEF_FUNC_CONV_PARAM_VAL(Blend, GLenum, E_GRAPH_BLEND, BlendTbl)
 
     //////////////////////////////////////////
     // カリングモード
@@ -88,143 +84,141 @@ namespace graph
     // 比較処理
 
     namespace {
-        D3DCMPFUNC CmpTbl[] = {
-            D3DCMP_NEVER,
-            D3DCMP_LESS,
-            D3DCMP_EQUAL,
-            D3DCMP_LESSEQUAL,
-            D3DCMP_GREATER,
-            D3DCMP_NOTEQUAL,
-            D3DCMP_GREATEREQUAL,
-            D3DCMP_ALWAYS,
+        GLenum CmpTbl[] = {
+            GL_NEVER,
+            GL_LESS,
+            GL_EQUAL,
+            GL_LEQUAL,
+            GL_GREATER,
+            GL_NOTEQUAL,
+            GL_GEQUAL,
+            GL_ALWAYS,
         };
         IZ_C_ASSERT(COUNTOF(CmpTbl) == E_GRAPH_CMP_FUNC_NUM);
     }   // namespace
 
-    DEF_FUNC_CONV_PARAM_VAL(Cmp, D3DCMPFUNC, E_GRAPH_CMP_FUNC, CmpTbl)
+    DEF_FUNC_CONV_PARAM_VAL(Cmp, GLenum, E_GRAPH_CMP_FUNC, CmpTbl)
 
     //////////////////////////////////////////
     // テクスチャアドレッシング
 
     namespace {
-        D3DTEXTUREADDRESS TexAddrTbl[] = {
-            D3DTADDRESS_WRAP,
-            D3DTADDRESS_MIRROR,
-            D3DTADDRESS_CLAMP,
-            D3DTADDRESS_BORDER,
-            D3DTADDRESS_MIRRORONCE,
+        GLenum TexAddrTbl[] = {
+            GL_REPEAT,
+            GL_MIRRORED_REPEAT,
+            GL_CLAMP_TO_EDGE,
         };
         IZ_C_ASSERT(COUNTOF(TexAddrTbl) == E_GRAPH_TEX_ADDRESS_NUM);
     }   // namespace
 
-    DEF_FUNC_CONV_PARAM_VAL(TexAddr, D3DTEXTUREADDRESS, E_GRAPH_TEX_ADDRESS, TexAddrTbl)
+    DEF_FUNC_CONV_PARAM_VAL(TexAddr, GLenum, E_GRAPH_TEX_ADDRESS, TexAddrTbl)
 
     //////////////////////////////////////////
     // テクスチャフィルタ
 
     namespace {
-        D3DTEXTUREFILTERTYPE TexFilterTbl[] = {
-            D3DTEXF_NONE,
-            D3DTEXF_POINT,
-            D3DTEXF_LINEAR,
-            D3DTEXF_ANISOTROPIC,
-            D3DTEXF_PYRAMIDALQUAD,
-            D3DTEXF_GAUSSIANQUAD,
+        GLenum TexFilterTbl[] = {
+            0,
+            GL_NEAREST,
+            GL_LINEAR,
+            0,
         };
         IZ_C_ASSERT(COUNTOF(TexFilterTbl) == E_GRAPH_TEX_FILTER_NUM);
     }   // namespace
 
-    DEF_FUNC_CONV_PARAM_VAL(TexFilter, D3DTEXTUREFILTERTYPE, E_GRAPH_TEX_FILTER, TexFilterTbl)
+    DEF_FUNC_CONV_PARAM_VAL(TexFilter, GLenum, E_GRAPH_TEX_FILTER, TexFilterTbl)
 
     //////////////////////////////////////////
     // サンプラーステートタイプ
 
     namespace {
-        D3DSAMPLERSTATETYPE SamplerStateTypeTbl[] = {
-            D3DSAMP_ADDRESSU,
-            D3DSAMP_ADDRESSV,
-            D3DSAMP_ADDRESSW,
-            D3DSAMP_MAGFILTER,
-            D3DSAMP_MINFILTER,
-            D3DSAMP_MIPFILTER,
+        GLenum SamplerStateTypeTbl[] = {
+            GL_TEXTURE_WRAP_S,
+            GL_TEXTURE_WRAP_T,
+            0,
+            GL_TEXTURE_MAG_FILTER,
+            GL_TEXTURE_MIN_FILTER,
+            0,
         };
         IZ_C_ASSERT(COUNTOF(SamplerStateTypeTbl) == E_GRAPH_SAMPLER_STATE_TYPE_NUM);
     }   // namespace
 
-    DEF_FUNC_CONV_PARAM_VAL(SamplerStateType, D3DSAMPLERSTATETYPE, E_GRAPH_SAMPLER_STATE_TYPE, SamplerStateTypeTbl)
+    DEF_FUNC_CONV_PARAM_VAL(SamplerStateType, GLenum, E_GRAPH_SAMPLER_STATE_TYPE, SamplerStateTypeTbl)
 
     //////////////////////////////////////////
     // ピクセルフォーマット
 
-    namespace {
-        D3DFORMAT PixelFormatTbl[] = {
-            D3DFMT_A8R8G8B8,
-            D3DFMT_A8B8G8R8,
-            D3DFMT_A4R4G4B4,
-            D3DFMT_A2R10G10B10,
-            D3DFMT_A8,
-            D3DFMT_R32F,
-            D3DFMT_A16B16G16R16F,
-            D3DFMT_A32B32G32R32F,
-            D3DFMT_DXT1,
-            D3DFMT_DXT3,
-            D3DFMT_DXT5,
-            D3DFMT_X8R8G8B8,
-            D3DFMT_D24S8,
-        };
-        IZ_C_ASSERT(COUNTOF(PixelFormatTbl) == E_GRAPH_PIXEL_FMT_NUM);
-    }   // namespace
-
-    DEF_FUNC_CONV_PARAM_VAL(PixelFormat, D3DFORMAT, E_GRAPH_PIXEL_FMT, PixelFormatTbl)
-
-    //////////////////////////////////////////
-    // インデックスバッファフォーマット
-
-    // Nothing...
+    void CParamValueConverterGLES2::ConvAbstractToTarget_PixelFormat(
+        E_GRAPH_PIXEL_FMT fmt,
+        GLenum& glFormat,
+        GLenum& glType)
+    {
+        switch (fmt)
+        {
+        case E_GRAPH_PIXEL_FMT_RGBA8:
+            glFormat = GL_RGBA;
+            glType = GL_UNSIGNED_BYTE;
+            break;
+        case E_GRAPH_PIXEL_FMT_RGBA4:
+            glFormat = GL_RGBA;
+            glType = GL_UNSIGNED_SHORT_4_4_4_4;
+            break;
+        case E_GRAPH_PIXEL_FMT_A8:
+            glFormat = GL_ALPHA;
+            glType = GL_UNSIGNED_BYTE;
+            break;
+        case E_GRAPH_PIXEL_FMT_RGBX8:
+            glFormat = GL_RGB;
+            glType = GL_UNSIGNED_BYTE;
+            break;
+        case E_GRAPH_PIXEL_FMT_BGRA8:
+        case E_GRAPH_PIXEL_FMT_RGB10A2:
+        case E_GRAPH_PIXEL_FMT_R32F:
+        case E_GRAPH_PIXEL_FMT_RGBA16F:
+        case E_GRAPH_PIXEL_FMT_RGBA32F:
+        case E_GRAPH_PIXEL_FMT_DXT1:
+        case E_GRAPH_PIXEL_FMT_DXT3:
+        case E_GRAPH_PIXEL_FMT_DXT5:
+        case E_GRAPH_PIXEL_FMT_D24S8:
+        default:
+            // Not Supported
+            IZ_ASSERT(IZ_FALSE);
+            break;
+        }
+    }
 
     //////////////////////////////////////////
     // プリミティブタイプ
 
     namespace {
-        D3DPRIMITIVETYPE PrimTypeTbl[] = {
-            D3DPT_POINTLIST,
-            D3DPT_LINELIST,
-            D3DPT_LINESTRIP,
-            D3DPT_TRIANGLELIST,
-            D3DPT_TRIANGLESTRIP,
-            D3DPT_TRIANGLEFAN,
+        GLenum PrimTypeTbl[] = {
+            GL_POINTS,
+            GL_LINES,
+            GL_LINE_STRIP,
+            GL_TRIANGLES,
+            GL_TRIANGLE_STRIP,
+            GL_TRIANGLE_FAN,
         };
         IZ_C_ASSERT(COUNTOF(PrimTypeTbl) == E_GRAPH_PRIM_TYPE_NUM);
     }   // namespace
 
-    DEF_FUNC_CONV_PARAM_VAL(PrimType, D3DPRIMITIVETYPE, E_GRAPH_PRIM_TYPE, PrimTypeTbl)
+    DEF_FUNC_CONV_PARAM_VAL(PrimType, GLenum, E_GRAPH_PRIM_TYPE, PrimTypeTbl)
 
     //////////////////////////////////////////
     // キューブフェイス
 
     namespace {
-        D3DCUBEMAP_FACES CubeFaceTbl[] = {
-            D3DCUBEMAP_FACE_POSITIVE_X,
-            D3DCUBEMAP_FACE_NEGATIVE_X,
-            D3DCUBEMAP_FACE_POSITIVE_Y,
-            D3DCUBEMAP_FACE_NEGATIVE_Y,
-            D3DCUBEMAP_FACE_POSITIVE_Z,
-            D3DCUBEMAP_FACE_NEGATIVE_Z,
+        GLenum CubeFaceTbl[] = {
+            GL_TEXTURE_CUBE_MAP_POSITIVE_X,
+            GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
+            GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
+            GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
+            GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
+            GL_TEXTURE_CUBE_MAP_NEGATIVE_Z,
         };
         IZ_C_ASSERT(COUNTOF(CubeFaceTbl) == E_GRAPH_CUBE_TEX_FACE_NUM);
     }   // namespace
 
-    DEF_FUNC_CONV_PARAM_VAL(CubeFace, D3DCUBEMAP_FACES, E_GRAPH_CUBE_TEX_FACE, CubeFaceTbl);
-
-    //////////////////////////////////////////
-    // 頂点宣言のデータ型
-
-    // Nothing...
-
-    //////////////////////////////////////////
-    // 頂点データの使い方
-
-    // Nothing...
-
+    DEF_FUNC_CONV_PARAM_VAL(CubeFace, GLenum, E_GRAPH_CUBE_TEX_FACE, CubeFaceTbl);
 }   // namespace graph
 }   // namespace izanagi
