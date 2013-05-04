@@ -66,12 +66,6 @@ namespace graph
             IZ_UINT height,
             E_GRAPH_PIXEL_FMT fmt);
         
-        // システムメモリ上にテクスチャ作成
-        virtual CTexture* CreateTextureOnSysMem(
-            IZ_UINT nWidth, IZ_UINT nHeight,
-            E_GRAPH_PIXEL_FMT fmt,
-            IZ_UINT nMipLevel);
-
         // 頂点バッファ作成
         virtual CVertexBuffer* CreateVertexBuffer(
             IZ_UINT nStride,
@@ -199,13 +193,6 @@ namespace graph
         virtual void SetRenderState(const S_RENDER_STATE& sRS);
 
     private:
-        // テクスチャステージステート設定
-        template <typename _TS, typename _T>
-        void SetTextureStageState(
-            IZ_DWORD stage,
-            _TS nTSType,
-            _T& old_val, _T new_val);
-
         // サンプラステート設定
         template <typename _SS, typename _T>
         void SetSamplerStateAddr(

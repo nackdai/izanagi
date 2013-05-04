@@ -124,26 +124,6 @@ namespace graph
     }
 
     /**
-    * システムメモリ上にテクスチャ作成
-    */
-    CTexture* CGraphicsDeviceDX9::CreateTextureOnSysMem(
-        IZ_UINT width, IZ_UINT height,
-        E_GRAPH_PIXEL_FMT fmt,
-        IZ_UINT mipLevel)
-    {
-        CTexture* pTexture = CTextureDX9::CreateTexture(
-                                this,
-                                m_Allocator,
-                                width,
-                                height,
-                                mipLevel,
-                                fmt,
-                                E_GRAPH_RSC_USAGE_STATIC,
-                                IZ_TRUE);
-        return pTexture;
-    }
-
-    /**
     * 頂点バッファ作成
     */
     CVertexBuffer* CGraphicsDeviceDX9::CreateVertexBuffer(

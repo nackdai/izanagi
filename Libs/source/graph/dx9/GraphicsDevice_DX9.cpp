@@ -937,25 +937,6 @@ namespace graph
         }
     }
 
-    // テクスチャステージステート設定
-    template <typename _TS, typename _T>
-    void CGraphicsDeviceDX9::SetTextureStageState(
-        IZ_DWORD stage,
-        _TS nTSType,
-        _T& old_val, _T new_val)
-    {
-        if (m_Flags.is_force_set_state) {
-            m_Device->SetTextureStageState(stage, nTSType, new_val);
-            old_val = new_val;
-        }
-        else {
-            if (old_val != new_val) {
-                m_Device->SetTextureStageState(stage, nTSType, new_val);
-                old_val = new_val;
-            }
-        }
-    }
-
     // サンプラステート設定
     template <typename _SS, typename _T>
     void CGraphicsDeviceDX9::SetSamplerStateAddr(
@@ -963,23 +944,15 @@ namespace graph
         _SS nSSType,
         _T& old_val, _T new_val)
     {
-        if (m_Flags.is_force_set_state) {
+        IZ_BOOL needUpdate = (m_Flags.is_force_set_state || (old_val != new_val));
+
+        if (needUpdate) {
             m_Device->SetSamplerState(
                 stage, 
                 IZ_GET_TARGET_SAMPLER_STATE_TYPE(nSSType),
                 IZ_GET_TARGET_TEX_ADDR(new_val));
 
             old_val = new_val;
-        }
-        else {
-            if (old_val != new_val) {
-                m_Device->SetSamplerState(
-                    stage, 
-                    IZ_GET_TARGET_SAMPLER_STATE_TYPE(nSSType), 
-                    IZ_GET_TARGET_TEX_ADDR(new_val));
-
-                old_val = new_val;
-            }
         }
     }
 
@@ -990,23 +963,15 @@ namespace graph
         _SS nSSType,
         _T& old_val, _T new_val)
     {
-        if (m_Flags.is_force_set_state) {
+        IZ_BOOL needUpdate = (m_Flags.is_force_set_state || (old_val != new_val));
+
+        if (needUpdate) {
             m_Device->SetSamplerState(
                 stage, 
                 IZ_GET_TARGET_SAMPLER_STATE_TYPE(nSSType),
                 IZ_GET_TARGET_TEX_FILTER(new_val));
 
             old_val = new_val;
-        }
-        else {
-            if (old_val != new_val) {
-                m_Device->SetSamplerState(
-                    stage, 
-                    IZ_GET_TARGET_SAMPLER_STATE_TYPE(nSSType), 
-                    IZ_GET_TARGET_TEX_FILTER(new_val));
-
-                old_val = new_val;
-            }
         }
     }
 }   // namespace graph

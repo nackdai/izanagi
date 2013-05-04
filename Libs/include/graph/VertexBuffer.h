@@ -45,6 +45,13 @@ namespace graph
             return m_Stride * m_VtxNum;
         }
 
+        /** 動的リソースかどうか
+         */
+        IZ_BOOL IsDynamic() const
+        {
+            return (m_CreateType == E_GRAPH_RSC_USAGE_DYNAMIC);
+        }
+
     protected:
         IZ_UINT m_Stride;   // 頂点サイズ
         IZ_UINT m_VtxNum;   // 頂点数
