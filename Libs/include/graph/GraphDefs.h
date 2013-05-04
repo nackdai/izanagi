@@ -5,12 +5,13 @@
 #include "izStd.h"
 
 #ifdef __IZ_DX9__
-#include "izD3DDefs.h"
+#include "graph/dx9/izDX9Defs.h"
 #elif __IZ_GLES2__
 #include "graph/gles2/izGLES2Defs.h"
+#else
+typedef IZ_UINT TEX_HANDLE;
+typedef IZ_UINT SHADER_PARAM_HANDLE;
 #endif
-
-typedef void* TEX_HANDLE;
 
 namespace izanagi
 {

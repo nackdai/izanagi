@@ -3,7 +3,7 @@
 #define __IZANAGI_GRAPH_D3D9_PARAM_VALUE_CONVERTER_H__
 
 #include "izDefs.h"
-#include "izD3DDefs.h"
+#include "izDX9Defs.h"
 #include "graph/GraphDefs.h"
 
 #define FUNC_ABSTRACT_TO_TARGET(p, ret, arg)    ret ConvAbstractToTarget_##p(arg v)

@@ -2,7 +2,7 @@
 #if !defined(__IZANAGI_GRAPH_SHADER_PROXY_DX9_H__)
 #define __IZANAGI_GRAPH_SHADER_PROXY_DX9_H__
 
-#include "izD3DDefs.h"
+#include "izDX9Defs.h"
 #include "izDefs.h"
 #include "izStd.h"
 #include "izMath.h"
