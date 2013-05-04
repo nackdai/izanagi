@@ -1,6 +1,9 @@
 #if !defined(__IZANAGI_TOOL_KIT_GRAPH_TEXTURE_LIGHT_H__)
 #define __IZANAGI_TOOL_KIT_GRAPH_TEXTURE_LIGHT_H__
 
+#include <d3d9.h>
+#include <d3dx9.h>
+
 #include "izDefs.h"
 #include "izStd.h"
 #include "izGraph.h"
@@ -84,13 +87,13 @@ namespace tool {
         }
 
     public:
-        D3D_TEXTURE* GetRawInterface() { return m_pTexture; }
+        LPDIRECT3DTEXTURE9 GetRawInterface() { return m_pTexture; }
 
     private:
         IMemoryAllocator* m_pAllocator;
 
         // 本体
-        D3D_TEXTURE* m_pTexture;
+        LPDIRECT3DTEXTURE9 m_pTexture;
 
         D3DSURFACE_DESC m_Desc;
         IZ_UINT m_nMipLevels;
