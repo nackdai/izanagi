@@ -171,10 +171,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\..\source\graph\gles2\Surface_GLES2.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="..\..\source\graph\gles2\Texture_GLES2.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">true</ExcludedFromBuild>
@@ -269,7 +265,6 @@ fxc /T ps_2_0 /E main_OpNoTexAlpha /Fh %(RootDir)%(Directory)/%(Filename)_OpNoTe
     <ClInclude Include="..\..\include\graph\gles2\ParamValueConverter_GLES2.h" />
     <ClInclude Include="..\..\include\graph\gles2\PixelShader_GLES2.h" />
     <ClInclude Include="..\..\include\graph\gles2\ShaderProxy.h" />
-    <ClInclude Include="..\..\include\graph\gles2\Surface_GLE2.h" />
     <ClInclude Include="..\..\include\graph\gles2\Texture_GLES2.h" />
     <ClInclude Include="..\..\include\graph\gles2\VertexBuffer_GLES2.h" />
     <ClInclude Include="..\..\include\graph\gles2\VertexDeclaration_GLES2.h" />

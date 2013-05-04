@@ -1,39 +1,39 @@
-#if !defined(__IZANAGI_GRAPH_INDEX_BUFFER_DX9_H__)
-#define __IZANAGI_GRAPH_INDEX_BUFFER_DX9_H__
+#if !defined(__IZANAGI_GRAPH_INDEX_BUFFER_GLES2_H__)
+#define __IZANAGI_GRAPH_INDEX_BUFFER_GLES2_H__
 
+#include "izGLES2Defs.h"
 #include "graph/IndexBuffer.h"
 
 namespace izanagi
 {
 namespace graph
 {
-    class CGraphicsDeviceDX9;
+    class CGraphicsDeviceGLES2;
 
     // インデックスバッファ
-    class CIndexBufferDX9 : public CIndexBuffer
+    class CIndexBufferGLES2 : public CIndexBuffer
     {
-        friend class CGraphicsDeviceDX9;
+        friend class CGraphicsDeviceGLES2;
 
     private:
         // インスタンス作成
-        static CIndexBufferDX9* CreateIndexBuffer(
-            CGraphicsDeviceDX9* device,
+        static CIndexBufferGLES2* CreateIndexBuffer(
+            CGraphicsDeviceGLES2* device,
             IMemoryAllocator* allocator,
             IZ_UINT idxNum,
             E_GRAPH_INDEX_BUFFER_FMT fmt,
-            E_GRAPH_RSC_TYPE createType);
+            E_GRAPH_RSC_USAGE usage);
 
     private:
-        inline CIndexBufferDX9();
-        virtual inline ~CIndexBufferDX9();
+        inline CIndexBufferGLES2();
+        virtual inline ~CIndexBufferGLES2();
 
     private:
         // 本体作成
         IZ_BOOL CreateBody(
-            CGraphicsDeviceDX9* device,
             IZ_UINT idxNum,
             E_GRAPH_INDEX_BUFFER_FMT fmt,
-            E_GRAPH_RSC_TYPE createType);
+            E_GRAPH_RSC_USAGE usage);
 
     public:
         // ロック
@@ -54,25 +54,22 @@ namespace graph
 
         virtual IZ_BOOL Restore();
 
-    private:
-        // 動的リソースかどうか
-        IZ_BOOL IsDynamic() const
-        {
-            return (m_CreateType == E_GRAPH_RSC_TYPE_DYNAMIC);
-        }
-
     public:
-        D3D_IB* GetRawInterface() { return m_IB; }
+        GLuint GetRawInterface() { return m_IB; }
 
     private:
-        CGraphicsDeviceDX9* m_Device;
+        CGraphicsDeviceGLES2* m_Device;
 
         // 本体
-        D3D_IB* m_IB;
+        GLuint m_IB;
 
-        CIndexBufferDX9* m_Next;
+        size_t m_Size;
+
+        IZ_UINT m_LockOffset;
+        IZ_UINT m_LockSize;
+        void* m_TemporaryData;
     };
 }   // namespace graph
 }   // namespace izanagi
 
-#endif  // #if !defined(__IZANAGI_GRAPH_INDEX_BUFFER_DX9_H__)
+#endif  // #if !defined(__IZANAGI_GRAPH_INDEX_BUFFER_GLES2_H__)

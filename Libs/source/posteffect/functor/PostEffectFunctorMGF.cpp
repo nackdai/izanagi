@@ -110,7 +110,7 @@ IZ_BOOL CPostEffectFunctorMGF::CreateTexture(
                                 nH + 2,
                                 fmt,
                                 IZ_TRUE, 
-                                graph::E_GRAPH_RSC_TYPE_STATIC, // RenderTargetなので何でもいい
+                                graph::E_GRAPH_RSC_USAGE_STATIC, // RenderTargetなので何でもいい
                                 E_POSTEFFECT_TEXTURE_TYPE_NONE);
 
             SAFE_REPLACE(m_DownScaleState[i].pDst, pDst);
@@ -180,7 +180,7 @@ IZ_BOOL CPostEffectFunctorMGF::CreateTexture(
                         pDst->GetHeight(),
                         pDst->GetPixelFormat(),
                         IZ_TRUE,
-                        graph::E_GRAPH_RSC_TYPE_STATIC,
+                        graph::E_GRAPH_RSC_USAGE_STATIC,
                         E_POSTEFFECT_TEXTURE_TYPE_NONE);
                 VRETURN(pDst != IZ_NULL);
 
@@ -211,7 +211,7 @@ IZ_BOOL CPostEffectFunctorMGF::CreateTexture(
                                     nH,
                                     fmt,
                                     IZ_TRUE,
-                                    graph::E_GRAPH_RSC_TYPE_STATIC,
+                                    graph::E_GRAPH_RSC_USAGE_STATIC,
                                     E_POSTEFFECT_TEXTURE_TYPE_NONE);
                 VRETURN(pDst != IZ_NULL);
 
@@ -257,7 +257,7 @@ IZ_BOOL CPostEffectFunctorMGF::CreateTexture(
                                     nH,
                                     fmt,
                                     IZ_TRUE,
-                                    graph::E_GRAPH_RSC_TYPE_STATIC,
+                                    graph::E_GRAPH_RSC_USAGE_STATIC,
                                     E_POSTEFFECT_TEXTURE_TYPE_NONE);
                 VRETURN(pDst != IZ_NULL);
 

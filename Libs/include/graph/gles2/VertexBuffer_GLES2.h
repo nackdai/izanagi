@@ -1,39 +1,37 @@
-#if !defined(__IZANAGI_GRAPH_VERTEX_BUFFER_DX9_H__)
-#define __IZANAGI_GRAPH_VERTEX_BUFFER_DX9_H__
+#if !defined(__IZANAGI_GRAPH_VERTEX_BUFFER_GLES2_H__)
+#define __IZANAGI_GRAPH_VERTEX_BUFFER_GLES2_H__
 
+#include "izGLES2Defs.h"
 #include "graph/VertexBuffer.h"
 
 namespace izanagi
 {
 namespace graph
 {
-    class CGraphicsDeviceDX9;
-
     // 頂点バッファ
-    class CVertexBufferDX9 : public CVertexBuffer
+    class CVertexBufferGLES2 : public CVertexBuffer
     {
-        friend class CGraphicsDeviceDX9;
+        friend class CGraphicsDeviceGLES2;
 
     private:
         // インスタンス作成
-        static CVertexBufferDX9* CreateVertexBuffer(
-            CGraphicsDeviceDX9* device,
+        static CVertexBufferGLES2* CreateVertexBuffer(
+            CGraphicsDeviceGLES2* device,
             IMemoryAllocator* allocator,
             IZ_UINT stride,
             IZ_UINT vtxNum,
-            E_GRAPH_RSC_TYPE createType);
+            E_GRAPH_RSC_USAGE usage);
 
     private:
-        inline CVertexBufferDX9();
-        virtual inline ~CVertexBufferDX9();
+        inline CVertexBufferGLES2();
+        virtual inline ~CVertexBufferGLES2();
 
     private:
         // 本体作成
         IZ_BOOL CreateBody(
-            CGraphicsDeviceDX9* device,
             IZ_UINT stride,
             IZ_UINT vtxNum,
-            E_GRAPH_RSC_TYPE createType);
+            E_GRAPH_RSC_USAGE usage);
 
     public:
         // ロック
@@ -55,24 +53,18 @@ namespace graph
         virtual IZ_BOOL Restore();
 
     private:
-        // 動的リソースかどうか
-        IZ_BOOL IsDynamic() const
-        {
-            return (m_CreateType == E_GRAPH_RSC_TYPE_DYNAMIC);
-        }
-
-    public:
-        D3D_VB* GetRawInterface() { return m_VB; }
-
-    private:
-        CGraphicsDeviceDX9* m_Device;
+        CGraphicsDeviceGLES2* m_Device;
 
         // 本体
-        D3D_VB* m_VB;
+        GLuint m_VB;
 
-        CVertexBufferDX9* m_Next;
+        size_t m_Size;
+
+        IZ_UINT m_LockOffset;
+        IZ_UINT m_LockSize;
+        void* m_TemporaryData;
     };
 }   // namespace graph
 }   // namespace izanagi
 
-#endif  // #if !defined(__IZANAGI_GRAPH_VERTEX_BUFFER_DX9_H__)
+#endif  // #if !defined(__IZANAGI_GRAPH_VERTEX_BUFFER_GLES2_H__)

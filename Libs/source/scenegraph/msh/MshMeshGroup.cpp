@@ -108,7 +108,7 @@ namespace {
         graph::CVertexBuffer* pVB = pDevice->CreateVertexBuffer(
                                 sVtxInfo.sizeVtx,
                                 sVtxInfo.numVtx,
-                                graph::E_GRAPH_RSC_TYPE_STATIC);
+                                graph::E_GRAPH_RSC_USAGE_STATIC);
         IZ_BOOL ret = (pVB != IZ_NULL);
         VGOTO(ret, __EXIT__);
 

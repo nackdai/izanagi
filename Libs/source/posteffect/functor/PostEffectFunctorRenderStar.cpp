@@ -333,7 +333,7 @@ IZ_BOOL CPostEffectFunctorRenderStar::CreateTexture(
                             pSrcTex->GetHeight(),
                             pSrcTex->GetPixelFormat(),
                             IZ_TRUE,
-                            graph::E_GRAPH_RSC_TYPE_STATIC, // RenderTargetなので何でもいい
+                            graph::E_GRAPH_RSC_USAGE_STATIC, // RenderTargetなので何でもいい
                             E_POSTEFFECT_TEXTURE_TYPE_PRIVATE);
 
         VRETURN(pTex != IZ_NULL);

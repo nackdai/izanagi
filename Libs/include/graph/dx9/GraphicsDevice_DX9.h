@@ -44,7 +44,7 @@ namespace graph
             IZ_UINT nHeight,
             IZ_UINT nMipLevel,
             E_GRAPH_PIXEL_FMT fmt,
-            E_GRAPH_RSC_TYPE nRscType);
+            E_GRAPH_RSC_USAGE nRscType);
 
         // キューブテクスチャ作成
         virtual CCubeTexture* CreateCubeTexture(
@@ -75,13 +75,13 @@ namespace graph
         virtual CVertexBuffer* CreateVertexBuffer(
             IZ_UINT nStride,
             IZ_UINT nVtxNum,
-            E_GRAPH_RSC_TYPE nCreateType);
+            E_GRAPH_RSC_USAGE nCreateType);
 
         // インデックスバッファ作成
         virtual CIndexBuffer* CreateIndexBuffer(
             IZ_UINT nIdxNum,
             E_GRAPH_INDEX_BUFFER_FMT fmt,
-            E_GRAPH_RSC_TYPE nCreateType);
+            E_GRAPH_RSC_USAGE nCreateType);
 
         // 頂点シェーダ作成
         virtual CVertexShader* CreateVertexShader(const void* pProgram);

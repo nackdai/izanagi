@@ -97,7 +97,7 @@ namespace graph
             m_pVB = device->CreateVertexBuffer(
                         VTX_STRIDE,
                         MAX_VERTEX_NUM,
-                        E_GRAPH_RSC_TYPE_DYNAMIC);
+                        E_GRAPH_RSC_USAGE_DYNAMIC);
             VRETURN(m_pVB != IZ_NULL);
 
             // かなり無茶するが・・・
@@ -110,7 +110,7 @@ namespace graph
             m_pIB = device->CreateIndexBuffer(
                         MAX_INDEX_NUM,
                         E_GRAPH_INDEX_BUFFER_FMT_INDEX16,   // TODO とりあえず・・・
-                        E_GRAPH_RSC_TYPE_DYNAMIC);
+                        E_GRAPH_RSC_USAGE_DYNAMIC);
             VRETURN(m_pIB != IZ_NULL);
 
             // かなり無茶するが・・・

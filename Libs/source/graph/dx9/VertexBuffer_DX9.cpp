@@ -11,7 +11,7 @@ namespace graph
         IMemoryAllocator* allocator,
         IZ_UINT stride,
         IZ_UINT vtxNum,
-        E_GRAPH_RSC_TYPE createType)
+        E_GRAPH_RSC_USAGE usage)
     {
         IZ_ASSERT(device != NULL);
 
@@ -39,7 +39,7 @@ namespace graph
             device,
             stride,
             vtxNum,
-            createType);
+            usage);
         if (!result) {
             goto __EXIT__;
         }
@@ -78,17 +78,17 @@ namespace graph
         CGraphicsDeviceDX9* device,
         IZ_UINT stride,
         IZ_UINT vtxNum,
-        E_GRAPH_RSC_TYPE createType)
+        E_GRAPH_RSC_USAGE usage)
     {
         IZ_ASSERT(device != IZ_NULL);
 
         D3D_DEVICE* d3dDev = device->GetRawInterface();
 
-        IZ_DWORD nUsage = (createType == E_GRAPH_RSC_TYPE_DYNAMIC
+        IZ_DWORD nUsage = (usage == E_GRAPH_RSC_USAGE_DYNAMIC
                             ? D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY
                             : 0);
 
-        D3DPOOL nPool = (createType == E_GRAPH_RSC_TYPE_DYNAMIC
+        D3DPOOL nPool = (usage == E_GRAPH_RSC_USAGE_DYNAMIC
                             ? D3DPOOL_DEFAULT
                             : D3DPOOL_MANAGED);
 
@@ -107,7 +107,7 @@ namespace graph
         m_Stride = stride;
         m_VtxNum = vtxNum;
     
-        m_CreateType = createType;
+        m_CreateType = usage;
 
         return ret;
     }

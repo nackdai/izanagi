@@ -1,45 +1,41 @@
-#include "graph/dx9/VertexBuffer_DX9.h"
-#include "graph/dx9/GraphicsDevice_DX9.h"
+#include "graph/gles2/VertexBuffer_GLES2.h"
 
 namespace izanagi
 {
 namespace graph
 {
     // インスタンス作成
-    CVertexBufferDX9* CVertexBufferDX9::CreateVertexBuffer(
-        CGraphicsDeviceDX9* device,
+    CVertexBufferGLES2* CVertexBufferGLES2::CreateVertexBuffer(
+        CGraphicsDeviceGLES2* device,
         IMemoryAllocator* allocator,
         IZ_UINT stride,
         IZ_UINT vtxNum,
-        E_GRAPH_RSC_TYPE createType)
+        E_GRAPH_RSC_USAGE usage)
     {
-        IZ_ASSERT(device != NULL);
-
         IZ_BOOL result = IZ_TRUE;
         IZ_UINT8* buf = IZ_NULL;
-        CVertexBufferDX9* instance = IZ_NULL;
+        CVertexBufferGLES2* instance = IZ_NULL;
 
         // メモリ確保
-        buf = (IZ_UINT8*)ALLOC_ZERO(allocator, sizeof(CVertexBufferDX9));
+        buf = (IZ_UINT8*)ALLOC_ZERO(allocator, sizeof(CVertexBufferGLES2));
         if (!(result = (buf != IZ_NULL))) {
             IZ_ASSERT(IZ_FALSE);
             goto __EXIT__;
         }
 
         // インスタンス作成
-        instance = new (buf)CVertexBufferDX9;
+        instance = new (buf)CVertexBufferGLES2;
         {
-            SAFE_REPLACE(instance->m_Device, device);
-            instance->m_Allocator = allocator;
             instance->AddRef();
+            instance->m_Allocator = allocator;
+            SAFE_REPLACE(instance->m_Device, device);
         }
 
         // 本体作成
         result = instance->CreateBody(
-            device,
             stride,
             vtxNum,
-            createType);
+            usage);
         if (!result) {
             goto __EXIT__;
         }
@@ -58,62 +54,68 @@ namespace graph
     }
 
     // コンストラクタ
-    CVertexBufferDX9::CVertexBufferDX9()
+    CVertexBufferGLES2::CVertexBufferGLES2()
     {
         m_Device = IZ_NULL;
-        m_VB = IZ_NULL;
+
+        m_VB = 0;
+
+        m_Size = 0;
+
+        m_LockOffset = 0;
+        m_LockSize = 0;
+        m_TemporaryData = IZ_NULL;
     }
 
     // デストラクタ
-    CVertexBufferDX9::~CVertexBufferDX9()
+    CVertexBufferGLES2::~CVertexBufferGLES2()
     {
-        m_Device->RemoveVertexBuffer(this);
-
-        SAFE_RELEASE(m_VB);
         SAFE_RELEASE(m_Device);
+
+        ::glDeleteBuffers(1, &m_VB);
+        
+        FREE(m_Allocator, m_TemporaryData);
     }
 
     // 本体作成
-    IZ_BOOL CVertexBufferDX9::CreateBody(
-        CGraphicsDeviceDX9* device,
+    IZ_BOOL CVertexBufferGLES2::CreateBody(
         IZ_UINT stride,
         IZ_UINT vtxNum,
-        E_GRAPH_RSC_TYPE createType)
+        E_GRAPH_RSC_USAGE usage)
     {
-        IZ_ASSERT(device != IZ_NULL);
+        ::glGenBuffers(1, &m_VB);
+        VRETURN(m_VB > 0);
 
-        D3D_DEVICE* d3dDev = device->GetRawInterface();
+        IZ_BOOL ret = (m_VB > 0);
 
-        IZ_DWORD nUsage = (createType == E_GRAPH_RSC_TYPE_DYNAMIC
-                            ? D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY
-                            : 0);
+        ::glBindBuffer(
+            GL_ARRAY_BUFFER,
+            m_VB);
 
-        D3DPOOL nPool = (createType == E_GRAPH_RSC_TYPE_DYNAMIC
-                            ? D3DPOOL_DEFAULT
-                            : D3DPOOL_MANAGED);
+        GLsizeiptr size = vtxNum * stride;
 
-        // 本体作成
-        HRESULT hr = d3dDev->CreateVertexBuffer(
-                        stride * vtxNum,
-                        nUsage,
-                        0,
-                        nPool,
-                        &m_VB,
-                        IZ_NULL);
+        GLenum glUsage = (usage == E_GRAPH_RSC_USAGE_STATIC
+            ? GL_STATIC_DRAW
+            : GL_DYNAMIC_DRAW);
 
-        IZ_BOOL ret = SUCCEEDED(hr);
-        IZ_ASSERT(ret);
+        ::glBufferData(
+            GL_ARRAY_BUFFER,
+            size,
+            NULL,
+            glUsage);
 
         m_Stride = stride;
         m_VtxNum = vtxNum;
+
+        m_Size = size;
     
-        m_CreateType = createType;
+        m_CreateType = usage;
 
         return ret;
     }
 
     // ロック
-    IZ_BOOL CVertexBufferDX9::Lock(
+    IZ_BOOL CVertexBufferGLES2::Lock(
         IZ_UINT offset,
         IZ_UINT size,
         void** data,
@@ -121,83 +123,67 @@ namespace graph
         IZ_BOOL isDiscard/*= IZ_FALSE*/)
     {
         // NOTE
-        // 高速化のために IsDynamic のときは WRITEONLYで
-        // 作成しているので、READONLY は不可
+        // isReadOnly, isDiscard は無効
 
-        IZ_ASSERT(m_VB != IZ_NULL);
+        VRETURN(size + offset <= m_Size);
 
-        DWORD flag = 0;
+        IZ_ASSERT(m_VB > 0);
 
-        if (IsDynamic()) {
-            // READONLY不可
-            VRETURN(!isReadOnly);
-        
-            if (isDiscard) {
-                flag = D3DLOCK_DISCARD;
-            }
-            else {
-                flag = D3DLOCK_NOOVERWRITE;
-            }
-        }
-        else if (isReadOnly) {
-            flag = D3DLOCK_READONLY;
+        if (m_TemporaryData == IZ_NULL)
+        {
+            m_TemporaryData = ALLOC(m_Allocator, m_Size);
         }
 
-        HRESULT hr = m_VB->Lock(
-                        offset,
-                        size,
-                        data,
-                        flag);
+        VRETURN(m_TemporaryData != IZ_NULL);
 
-        IZ_BOOL ret = SUCCEEDED(hr);
+        *data = m_TemporaryData;
 
-        return ret;
+        m_LockOffset = offset;
+        m_LockSize = (size == 0 ? m_Size : size);
+
+        return IZ_TRUE;
     }
 
     /**
     * アンロック
     */
-    IZ_BOOL CVertexBufferDX9::Unlock()
+    IZ_BOOL CVertexBufferGLES2::Unlock()
     {
-        IZ_ASSERT(m_VB != IZ_NULL);
+        IZ_ASSERT(m_VB > 0);
     
-        HRESULT hr = m_VB->Unlock();
-        IZ_BOOL ret = SUCCEEDED(hr);
+        IZ_BOOL isLocked = (m_LockSize > 0);
 
-        return ret;
+        if (isLocked) {
+            ::glBufferSubData(
+                GL_ARRAY_BUFFER,
+                m_LockOffset,
+                m_LockSize,
+                m_TemporaryData);
+
+            m_LockOffset = 0;
+            m_LockSize = 0;
+        }
+
+        return isLocked;
     }
 
-    IZ_BOOL CVertexBufferDX9::IsPrepared() const
+    IZ_BOOL CVertexBufferGLES2::IsPrepared() const
     {
-        return (m_VB != IZ_NULL);
+        return (m_VB != 0);
     }
 
-    IZ_BOOL CVertexBufferDX9::Disable()
+    IZ_BOOL CVertexBufferGLES2::Disable()
     {
-        SAFE_RELEASE(m_VB);
+        ::glDeleteBuffers(1, &m_VB);
         return IZ_TRUE;
     }
 
     // リセット
-    IZ_BOOL CVertexBufferDX9::Restore()
+    IZ_BOOL CVertexBufferGLES2::Restore()
     {
-        IZ_BOOL ret = IZ_TRUE;
+        // Nothing is done...
 
-        // NOTE
-        // Dynamicでないときは、D3DPOOL_MANAGEDで作成されているので再作成する必要はない
-
-        if (IsDynamic()) {
-            SAFE_RELEASE(m_VB);
-
-            // 本体作成
-            ret = CreateBody(
-                    m_Device,
-                    m_Stride,
-                    m_VtxNum,
-                    m_CreateType);
-        }
-
-        return ret;
+        return IZ_TRUE;
     }
 }   // namespace graph
 }   // namespace izanagi

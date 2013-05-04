@@ -1,6 +1,5 @@
 #include "graph/GraphUtil.h"
 #include "graph/gles2/Texture_GLES2.h"
-#include "graph/gles2/Surface_GLES2.h"
 #include "graph/internal/ParamValueConverter.h"
 //#include "graph/gles2/GraphicsDevice_GLES2.h"
 
@@ -24,8 +23,6 @@ namespace graph
         m_Texture = IZ_NULL;
 
         m_TemporaryData = IZ_NULL;
-
-        m_Surface = IZ_NULL;
     }
 
     // デストラクタ
@@ -34,14 +31,6 @@ namespace graph
         glDeleteTextures(1, &m_Texture);
 
         FREE(m_Allocator, m_TemporaryData);
-
-        if (m_Surface != NULL)
-        {
-            for (IZ_UINT i = 0; i < GetMipMapNum(); ++i)
-            {
-                SAFE_RELEASE(m_Surface[i]);
-            }
-        }
     }
 
     // テクスチャ作成
@@ -51,7 +40,7 @@ namespace graph
         IZ_UINT height,
         IZ_UINT mipLevel,
         E_GRAPH_PIXEL_FMT fmt,
-        E_GRAPH_RSC_TYPE rscType)
+        E_GRAPH_RSC_USAGE rscType)
     {
         IZ_BOOL result = IZ_TRUE;
         IZ_UINT8* buf = IZ_NULL;
@@ -71,12 +60,8 @@ namespace graph
 
         size_t size = sizeof(CTextureGLES2);
 
-        // サーフェースを作る必要があるかどうか
-        IZ_BOOL needCreateSurface = (mipLevel <= maxMipLevel);
-
-        if (needCreateSurface) {
+        if (mipLevel <= maxMipLevel) {
             mipLevel = (mipLevel == 0 ? maxMipLevel : mipLevel);
-            size += sizeof(CSurfaceGLES2*) * mipLevel;
         }
         else {
             mipLevel = 1;
@@ -94,14 +79,8 @@ namespace graph
         {
             buf += sizeof(CTextureGLES2);
 
-            instance->m_Allocator = allocator;
-
-            if (needCreateSurface) {
-                instance->m_Surface = reinterpret_cast<CSurfaceGLES2**>(buf);
-                buf += sizeof(CSurfaceGLES2*) * mipLevel;
-            }
-
             instance->AddRef();
+            instance->m_Allocator = allocator;
         }
 
         IZ_ASSERT(CStdUtil::GetPtrDistance(top, buf) == size);
@@ -115,14 +94,6 @@ namespace graph
                     rscType);
         if (!result) {
             goto __EXIT__;
-        }
-
-        if (needCreateSurface) {
-            // サーフェス作成
-            result = instance->CreateSurface();
-            if (!result) {
-                goto __EXIT__;
-            }
         }
 
     __EXIT__:
@@ -144,7 +115,7 @@ namespace graph
         IZ_UINT height,
         IZ_UINT mipLevel,
         E_GRAPH_PIXEL_FMT fmt,
-        E_GRAPH_RSC_TYPE rscType)
+        E_GRAPH_RSC_USAGE rscType)
     {
         glGenTextures(1, &m_Texture);
         VRETURN(m_Texture > 0);
@@ -167,7 +138,7 @@ namespace graph
         IZ_UINT height,
         IZ_UINT mipLevel,
         E_GRAPH_PIXEL_FMT fmt,
-        E_GRAPH_RSC_TYPE rscType)
+        E_GRAPH_RSC_USAGE rscType)
     {
         IZ_ASSERT(m_Texture != 0);
 
@@ -180,7 +151,7 @@ namespace graph
         m_TexInfo.typeRsc = rscType;
 
         m_TexInfo.is_rendertarget = isRT;
-        m_TexInfo.is_dynamic = (rscType == E_GRAPH_RSC_TYPE_DYNAMIC);
+        m_TexInfo.is_dynamic = (rscType == E_GRAPH_RSC_USAGE_DYNAMIC);
         m_TexInfo.is_on_sysmem = IZ_FALSE;
         m_TexInfo.is_on_vram = isRT;
     }

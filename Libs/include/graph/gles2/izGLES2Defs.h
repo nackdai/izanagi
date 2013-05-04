@@ -4,7 +4,8 @@
 #include <EGL/egl.h>
 #include <GLES2/gl2.h>
 
-typedef GLuint TEX_HANDLE;
+typedef GLuint TEX_HANDLE_GLES2;
+typedef GLuint SHADER_PARAM_HANDLE_GLES2;
 
 namespace izanagi
 {

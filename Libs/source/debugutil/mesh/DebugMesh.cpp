@@ -129,7 +129,7 @@ IZ_BOOL CDebugMesh::CreateVB(
     m_pVB = m_pDevice->CreateVertexBuffer(
                 nStride,
                 nVtxNum,
-                graph::E_GRAPH_RSC_TYPE_STATIC);
+                graph::E_GRAPH_RSC_USAGE_STATIC);
 
     return (m_pVB != IZ_NULL);
 }
@@ -142,7 +142,7 @@ IZ_BOOL CDebugMesh::CreateIB(
     m_pIB = m_pDevice->CreateIndexBuffer(
                 nIdxNum,
                 fmt,
-                graph::E_GRAPH_RSC_TYPE_STATIC);
+                graph::E_GRAPH_RSC_USAGE_STATIC);
 
     return (m_pIB != IZ_NULL);
 }

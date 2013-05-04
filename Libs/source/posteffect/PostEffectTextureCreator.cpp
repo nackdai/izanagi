@@ -105,7 +105,7 @@ graph::CTexture* CPostEffectTextureCreator::Create(
     IZ_UINT16 nHeight,
     graph::E_GRAPH_PIXEL_FMT fmt,
     IZ_BOOL bIsRenderTarget,
-    graph::E_GRAPH_RSC_TYPE nRscType,
+    graph::E_GRAPH_RSC_USAGE nRscType,
     E_POSTEFFECT_TEXTURE_TYPE type)
 {
     graph::CTexture* ret = IZ_NULL;
@@ -161,7 +161,7 @@ graph::CTexture* CPostEffectTextureCreator::Find(
     IZ_UINT16 nHeight,
     graph::E_GRAPH_PIXEL_FMT fmt,
     IZ_BOOL bIsRenderTarget,
-    graph::E_GRAPH_RSC_TYPE nRscType)
+    graph::E_GRAPH_RSC_USAGE nRscType)
 {
     if (!m_bEnableFind) {
         return IZ_NULL;
