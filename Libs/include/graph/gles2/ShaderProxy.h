@@ -28,13 +28,6 @@ namespace graph
 
     public:
         // ハンドル取得
-        virtual SHADER_PARAM_HANDLE GetHandleByIdx(IZ_UINT idx)
-        {
-            SHADER_PARAM_HANDLE ret = m_ConstTable->GetConstant(IZ_NULL, idx);
-            return ret;
-        }
-
-        // ハンドル取得
         virtual SHADER_PARAM_HANDLE GetHandleByName(IZ_PCSTR pName)
         {
             SHADER_PARAM_HANDLE ret = m_ConstTable->GetConstantByName(IZ_NULL, pName);
@@ -61,14 +54,6 @@ namespace graph
         {
             IZ_UINT ret = m_ConstTable->GetSamplerIndex(handle);
             return ret;
-        }
-
-        // 定数をデフォルト値に設定
-        virtual IZ_BOOL SetDefaults(CGraphicsDevice* device)
-        {
-            HRESULT hr = m_ConstTable->SetDefaults(GetDeviceRawInterface(device));
-            IZ_ASSERT(SUCCEEDED(hr));
-            return SUCCEEDED(hr);
         }
 
         // ブール値を設定
@@ -202,6 +187,7 @@ namespace graph
             return SUCCEEDED(hr);
         }
 
+    private:
         D3D_DEVICE* GetDeviceRawInterface(CGraphicsDevice* device)
         {
             return (D3D_DEVICE*)device->GetPlatformInterface();

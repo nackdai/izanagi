@@ -62,7 +62,7 @@ namespace graph
         return m_Elements;
     }
 
-    IZ_BOOL CVertexDeclarationGLES2::Apply(CGraphicsDeviceGLES2* device)
+    IZ_BOOL CVertexDeclarationGLES2::Apply(CGraphicsDeviceGLES2* device
     {
         for (IZ_UINT i = 0; i < m_ElemNum; i++) {
             SVertexElement& element = m_Elements[i];
@@ -157,6 +157,8 @@ namespace graph
                 continue;
             }
 
+            ::glEnableVertexAttribArray(i);
+
             ::glVertexAttribPointer(
                 i,
                 num,
@@ -164,6 +166,9 @@ namespace graph
                 needNormalized,
                 size * num,
                 (void*)element.Offset);
+
+            // TODO
+            //::glBindAttribLocation
         }
 
         return IZ_TRUE;

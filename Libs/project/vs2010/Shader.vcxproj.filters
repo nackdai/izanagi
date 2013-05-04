@@ -29,6 +29,9 @@
     <ClCompile Include="..\..\source\shader\base\ShaderBasic.cpp">
       <Filter>source\base</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\shader\ShaderUtil.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\shader\ShaderManager.h">

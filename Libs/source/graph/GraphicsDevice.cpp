@@ -5,6 +5,7 @@
 #include "graph/BaseTexture.h"
 #include "graph/VertexShader.h"
 #include "graph/PixelShader.h"
+#include "graph/ShaderProgram.h"
 #include "graph/2d/2DRenderer.h"
 
 namespace izanagi
@@ -121,8 +122,7 @@ namespace graph
             SetRenderState(E_GRAPH_RS_FILLMODE, E_GRAPH_FILL_MODE_SOLID);
             SetRenderState(E_GRAPH_RS_CULLMODE, E_GRAPH_CULL_DEFAULT);
 
-            SetVertexShader(IZ_NULL);
-            SetPixelShader(IZ_NULL);
+            SetShaderProgram(IZ_NULL);
 
             m_Flags.is_render_2d = IZ_TRUE;
         }
@@ -355,5 +355,14 @@ namespace graph
 
         return ret;
     }
+    
+    // シェーダプログラムのダーティフラグをクリア
+    void CGraphicsDevice::ClearShaderProgramDirty(CShaderProgram* program)
+    {
+        if (program != IZ_NULL) {
+            program->ClearDirty();
+        }
+    }
+
 }   // namespace graph
 }   // namespace izanagi

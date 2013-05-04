@@ -4,8 +4,9 @@
 #include "izDefs.h"
 #include "izStd.h"
 
+#include "izD3DDefs.h"
+
 typedef void* TEX_HANDLE;
-typedef void* SHADER_PARAM_HANDLE;
 
 namespace izanagi
 {

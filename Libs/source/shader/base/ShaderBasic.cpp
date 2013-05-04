@@ -140,30 +140,36 @@ IZ_UINT8* CShaderBasic::CreatePass(
         cPass.SetDesc(pDesc);
 
         // Vertex Program
-        {
-            VGOTO(
-                IZ_INPUT_READ(pIn, pProgramBuf, 0, pDesc->sizeVS),
-                __EXIT__);
+        VGOTO(
+            IZ_INPUT_READ(pIn, pProgramBuf, 0, pDesc->sizeVS),
+            __EXIT__);
             
-            graph::CVertexShader* pVS = pDevice->CreateVertexShader(pProgramBuf);
-            VGOTO(pVS != IZ_NULL, __EXIT__);
-
-            cPass.SetVS(pVS);
-            SAFE_RELEASE(pVS);
-        }
+        graph::CVertexShader* pVS = pDevice->CreateVertexShader(pProgramBuf);
+        VGOTO(pVS != IZ_NULL, __EXIT__);
 
         // Pixel Program
-        {
-            VGOTO(
-                IZ_INPUT_READ(pIn, pProgramBuf, 0, pDesc->sizePS),
-                __EXIT__);
+        VGOTO(
+            IZ_INPUT_READ(pIn, pProgramBuf, 0, pDesc->sizePS),
+            __EXIT__);
 
-            graph::CPixelShader* pPS = pDevice->CreatePixelShader(pProgramBuf);
-            VGOTO(pPS != IZ_NULL, __EXIT__);
+        graph::CPixelShader* pPS = pDevice->CreatePixelShader(pProgramBuf);
+        VGOTO(pPS != IZ_NULL, __EXIT__);
 
-            cPass.SetPS(pPS);
-            SAFE_RELEASE(pPS);
-        }
+        // Shader Program
+        graph::CShaderProgram* program = pDevice->CreateShaderProgram();
+        VGOTO(program != IZ_NULL, __EXIT__);
+
+        program->AttachVertexShader(pVS);
+        program->AttachPixelShader(pPS);
+
+        // ShaderProgramにオーナーを委譲する
+        SAFE_RELEASE(pVS);
+        SAFE_RELEASE(pPS);
+
+        cPass.SetShaderProgram(program);
+
+        // Passにオーナーを委譲する
+        SAFE_RELEASE(program);
 
         pBuffer = cPass.SetParamBuffer(pDesc->numConst, pBuffer);
         pBuffer = cPass.SetSamplerBuffer(pDesc->numSampler, pBuffer);
@@ -192,7 +198,7 @@ IZ_UINT8* CShaderBasic::CreatePass(
             IZ_ASSERT(pszName != IZ_NULL);
 
             VGOTO(
-                cPass.InitSampler(n, nSmplIdx, pszName),
+                cPass.InitSampler(pDevice, n, nSmplIdx, pszName),
                 __EXIT__);
         }
     }
@@ -326,38 +332,15 @@ IZ_BOOL CShaderBasic::CommitChanges()
         m_pDevice->SetRenderState(graph::E_GRAPH_RS_ZFUNC,            pDesc->state.ZFunc);
     }
 
-    // Set VertexShader.
-    {
-        graph::CVertexShader* pVS = cPass.GetVS();
-        m_pDevice->SetVertexShader(pVS);
+    // Set Shader.
+    graph::CShaderProgram* shader = cPass.GetShaderProgram();
+    m_pDevice->SetShaderProgram(shader);
 
-        IZ_UINT nBytes = 0;
+    IZ_UINT nBytes = 0;
 
-        // Set parameters.
-        for (IZ_UINT i = 0; i < pDesc->numConst; i++) {
-            if (pDesc->IsVSConst(i)) {
-                VRETURN(SetParamValue(i, cPass, pVS, IZ_TRUE));
-            }
-        }
-
-        // Set samplers.
-        // TODO
-    }
-
-    // Set PixelShader.
-    {
-        graph::CPixelShader* pPS = cPass.GetPS();
-        m_pDevice->SetPixelShader(pPS);
-
-        // Set parameters.
-        for (IZ_UINT i = 0; i < pDesc->numConst; i++) {
-            if (pDesc->IsPSConst(i)) {
-                VRETURN(SetParamValue(i, cPass, pPS, IZ_FALSE));
-            }
-        }
-
-        // Set samplers.
-        // TODO
+    // Set parameters.
+    for (IZ_UINT i = 0; i < pDesc->numConst; i++) {
+        VRETURN(SetParamValue(i, cPass, shader));
     }
 
     return IZ_TRUE;
@@ -474,8 +457,7 @@ IZ_BOOL CShaderBasic::CmpAttrValue(
 IZ_BOOL CShaderBasic::SetParamValue(
     IZ_UINT idx,
     CShaderPass& cPass,
-    graph::IShader* pShd,
-    IZ_BOOL bIsVS)
+    graph::CShaderProgram* pShd)
 {
     const CShaderPass::SParamInfo* pParamInfo = cPass.GetParamInfo(idx);
 
@@ -491,13 +473,12 @@ IZ_BOOL CShaderBasic::SetParamValue(
 #endif
 
     // パラメータに変化があったときだけ
-    IZ_BOOL bIsDirty = (bIsVS ? pParamDesc->isDirtyVS : pParamDesc->isDirtyPS);
-
+    IZ_BOOL bIsDirty = pParamDesc->isDirty;
     
     if (bIsDirty) {
-        SHADER_PARAM_HANDLE handle = (bIsVS ? pParamInfo->handleVS : pParamInfo->handlePS);
+        const SHADER_PARAM_HANDLE& handle = pParamInfo->handle;
 
-        if (handle > 0) {
+        if (handle != 0) {
             // 有効なハンドル
             IZ_UINT nBytes = 0;
 
@@ -511,12 +492,7 @@ IZ_BOOL CShaderBasic::SetParamValue(
                     pParam,
                     nBytes));
 
-            if (bIsVS) {
-                pParamDesc->isDirtyVS = IZ_FALSE;
-            }
-            else {
-                pParamDesc->isDirtyPS = IZ_FALSE;
-            }
+             pParamDesc->isDirty = IZ_FALSE;
         }
     }
 

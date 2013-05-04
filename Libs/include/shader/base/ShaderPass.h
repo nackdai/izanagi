@@ -14,17 +14,15 @@ namespace izanagi {
 
         // パラメータホルダ
         struct SParamInfo {
-            IZ_UINT idx;                        // パラメータインデックス（そのパスの中で何番目のパラメータか）
-            SHADER_PARAM_HANDLE handleVS;       // パラメータハンドル（頂点シェーダ）
-            SHADER_PARAM_HANDLE handlePS;       // パラメータハンドル（ピクセルシェーダ）
+            IZ_UINT idx;                // パラメータインデックス（そのパスの中で何番目のパラメータか）
+            SHADER_PARAM_HANDLE handle; // パラメータハンドル（頂点シェーダ）
         };
 
         // サンプラホルダ
         struct SSamplerInfo {
-            IZ_UINT16 idx;                  // パラメータインデックス（そのパスの中で何番目のサンプラか）
-            IZ_UINT16 resource_id;          // リソースID (0〜7のいずれか)
-            SHADER_PARAM_HANDLE handleVS;   // パラメータハンドル
-            SHADER_PARAM_HANDLE handlePS;   // パラメータハンドル
+            IZ_UINT16 idx;              // パラメータインデックス（そのパスの中で何番目のサンプラか）
+            IZ_UINT16 resource_id;      // リソースID (0〜7のいずれか)
+            SHADER_PARAM_HANDLE handle; // パラメータハンドル
         };
 
         template <typename _T>
@@ -58,22 +56,15 @@ namespace izanagi {
             SParams<_T>& sParams,
             IZ_UINT idx,
             IZ_UINT nIdxInParam,
-            IZ_PCSTR name,
-            IZ_BOOL bIsVS)
+            IZ_PCSTR name)
         {
             IZ_ASSERT(idx < sParams.num);
 
             IZ_BOOL ret = IZ_FALSE;
 
             sParams.list[idx].idx = nIdxInParam;
-            if (bIsVS) {
-                sParams.list[idx].handleVS = m_pVS->GetHandleByName(name);
-                ret = (sParams.list[idx].handleVS != IZ_NULL);
-            }
-            else {
-                sParams.list[idx].handlePS = m_pPS->GetHandleByName(name);
-                ret = (sParams.list[idx].handlePS != IZ_NULL);
-            }
+            sParams.list[idx].handle = m_Program->GetHandleByName(name);
+            ret = (sParams.list[idx].handle != 0);
 
             return ret;
         }
@@ -127,17 +118,12 @@ namespace izanagi {
 
         // 初期化
         inline IZ_BOOL InitSampler(
+            graph::CGraphicsDevice* device,
             IZ_UINT idx,
             IZ_UINT nSmplIdx,
             IZ_PCSTR name);
 
         inline void Clear();
-
-        // ピクセルシェーダのセット
-        void SetPS(graph::CPixelShader* pPS) { SAFE_REPLACE(m_pPS, pPS); }
-
-        // ピクセルシェーダ取得
-        graph::CPixelShader* GetPS() { return m_pPS; }
 
         // パラメータ数取得
         IZ_UINT GetParamNum() const { return m_Params.num; }
@@ -149,11 +135,15 @@ namespace izanagi {
         const SParamInfo* GetParamInfo(IZ_UINT idx) const { return GetInfo(m_Params, idx); }
         const SSamplerInfo* GetSamplerInfo(IZ_UINT idx) const { return GetInfo(m_Samplers, idx); }
 
-        // 頂点シェーダのセット
-        void SetVS(graph::CVertexShader* pVS) { SAFE_REPLACE(m_pVS, pVS); }
+        void SetShaderProgram(graph::CShaderProgram* program)
+        {
+            SAFE_REPLACE(m_Program, program);
+        }
 
-        // 頂点シェーダの取得
-        graph::CVertexShader* GetVS() { return m_pVS; }
+        graph::CShaderProgram* GetShaderProgram()
+        {
+            return m_Program;
+        }
 
         IZ_UINT GetIdx() const { return m_nIdx; }
 
@@ -168,11 +158,7 @@ namespace izanagi {
         SParams<SParamInfo> m_Params;
         SParams<SSamplerInfo> m_Samplers;
 
-        // ピクセルシェーダ
-        graph::CPixelShader* m_pPS;
-
-        // 頂点シェーダ
-        graph::CVertexShader* m_pVS;
+        graph::CShaderProgram* m_Program;
     };
 
     // inline ***************************************
@@ -182,8 +168,7 @@ namespace izanagi {
     {
         m_nIdx = 0;
         m_pDesc = IZ_NULL;
-        m_pPS = IZ_NULL;
-        m_pVS = IZ_NULL;
+        m_Program = IZ_NULL;
     }
 
     // デストラクタ
@@ -200,8 +185,7 @@ namespace izanagi {
         m_nIdx = idx;
         m_pDesc = pDesc;
 
-        m_pPS = IZ_NULL;
-        m_pVS = IZ_NULL;
+        m_Program = IZ_NULL;
     }
 
     // 初期化
@@ -212,59 +196,31 @@ namespace izanagi {
     {
         IZ_ASSERT(m_pDesc != IZ_NULL);
 
-        IZ_BOOL bIsVS = m_pDesc->IsVSConst(idx);
-        IZ_BOOL bIsPS = m_pDesc->IsPSConst(idx);
-
-        IZ_ASSERT(bIsVS || bIsPS);
-
-        IZ_BOOL result = IZ_FALSE;
-        
-        if (bIsVS) {
-            result = InitInfo<SParamInfo>(
-                        m_Params, 
-                        idx, 
-                        nParamIdx, 
-                        name,
-                        IZ_TRUE);
-        }
-        if (bIsPS) {
-            result = InitInfo<SParamInfo>(
-                        m_Params, 
-                        idx, 
-                        nParamIdx, 
-                        name,
-                        IZ_FALSE);
-        }
-
-#if 0
-        if (result) {
-            m_Params.list[idx].elements = m_pPS->GetArrayLengthOf(m_Params.list[idx].handle);
-            m_Params.list[idx].type = type;
-        }
-#endif
+        IZ_BOOL result = InitInfo<SParamInfo>(
+            m_Params, 
+            idx, 
+            nParamIdx, 
+            name);
     }
 
     // 初期化
     IZ_BOOL CShaderPass::InitSampler(
+        graph::CGraphicsDevice* device,
         IZ_UINT idx,
         IZ_UINT nSmplIdx,
         IZ_PCSTR name)
     {
-        IZ_BOOL bIsPS = m_pDesc->IsPSSampler(nSmplIdx);
-
-        IZ_ASSERT(bIsPS);
-
         IZ_BOOL ret = InitInfo<SSamplerInfo>(
                         m_Samplers, 
                         idx, 
                         nSmplIdx, 
-                        name,
-                        IZ_FALSE);
+                        name);
         
         if (ret) {
             m_Samplers.list[idx].resource_id = (IZ_UINT16)CShaderUtil::GetSamplerResourceIndexByHandle(
-                                                            m_pPS,
-                                                            m_Samplers.list[idx].handlePS);
+                device,
+                m_Program,
+                m_Samplers.list[idx].handle);
 
             // NOTE
             // サンプラレジスタ 0 - 7 の８個まで
@@ -277,8 +233,7 @@ namespace izanagi {
 
     void CShaderPass::Clear()
     {
-        SAFE_RELEASE(m_pPS);
-        SAFE_RELEASE(m_pVS);
+        SAFE_RELEASE(m_Program);
     }
 }   // namespace izanagi
 

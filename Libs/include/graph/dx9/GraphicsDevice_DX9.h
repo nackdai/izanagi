@@ -83,6 +83,9 @@ namespace graph
             E_GRAPH_INDEX_BUFFER_FMT fmt,
             E_GRAPH_RSC_USAGE nCreateType);
 
+        // シェーダプログラム作成
+        virtual CShaderProgram* CreateShaderProgram();
+
         // 頂点シェーダ作成
         virtual CVertexShader* CreateVertexShader(const void* pProgram);
 
@@ -165,11 +168,8 @@ namespace graph
         // インデックスバッファセット
         virtual IZ_BOOL SetIndexBuffer(CIndexBuffer* pIB);
 
-        // 頂点シェーダセット
-        virtual IZ_BOOL SetVertexShader(CVertexShader* pVS);
-
-        // ピクセルシェーダセット
-        virtual IZ_BOOL SetPixelShader(CPixelShader* pPS);
+        // シェーダプログラムセット
+        virtual IZ_BOOL SetShaderProgram(CShaderProgram* program);
 
         // 頂点宣言セット
         virtual IZ_BOOL SetVertexDeclaration(CVertexDeclaration* pVD);

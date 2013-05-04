@@ -18,6 +18,7 @@ namespace graph
     class CVertexBuffer;
     class CIndexBuffer;;
     class CVertexDeclaration;
+    class CShaderProgram;
     class CVertexShader;
     class CPixelShader;
     class C2DRenderer;
@@ -105,6 +106,9 @@ namespace graph
                 IZ_UINT nIdxNum,
                 E_GRAPH_INDEX_BUFFER_FMT fmt,
                 E_GRAPH_RSC_USAGE usage));
+
+        // シェーダプログラム作成
+        PURE_VIRTUAL(CShaderProgram* CreateShaderProgram());
 
         // 頂点シェーダ作成
         PURE_VIRTUAL(CVertexShader* CreateVertexShader(const void* pProgram));
@@ -228,11 +232,8 @@ namespace graph
         // 頂点宣言セット
         PURE_VIRTUAL(IZ_BOOL SetVertexDeclaration(CVertexDeclaration* pVD));
 
-        // 頂点シェーダセット
-        PURE_VIRTUAL(IZ_BOOL SetVertexShader(CVertexShader* pVS));
-
-        // ピクセルシェーダセット
-        PURE_VIRTUAL(IZ_BOOL SetPixelShader(CPixelShader* pPS));
+        // シェーダプログラムセット
+        PURE_VIRTUAL(IZ_BOOL SetShaderProgram(CShaderProgram* program));
 
         // インデックスバッファ描画
         PURE_VIRTUAL(
@@ -349,6 +350,9 @@ namespace graph
         // 深度・ステンシルセット
         IZ_BOOL PushDepthStencil(CRenderTarget* rt);
         PURE_VIRTUAL(void SetDepthStencil(CRenderTarget* rt));
+
+        // シェーダプログラムのダーティフラグをクリア
+        void ClearShaderProgramDirty(CShaderProgram* program);
 
     protected:
         enum {

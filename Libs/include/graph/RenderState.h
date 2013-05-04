@@ -11,8 +11,7 @@ namespace graph
     class CGraphicsDevice;
     class CVertexBuffer;
     class CIndexBuffer;
-    class CVertexShader;
-    class CPixelShader;
+    class CShaderProgram;
     class CVertexDeclaration;
     class CRenderTarget;
 
@@ -58,8 +57,7 @@ namespace graph
         CVertexBuffer* curVB;       // 頂点バッファ
         CIndexBuffer* curIB;        // インデックスバッファ
 
-        CVertexShader* curVS;       // 頂点シェーダ
-        CPixelShader* curPS;        // ピクセルシェーダ
+        CShaderProgram* curShader;
 
         CVertexDeclaration* curVD;  // 頂点宣言
 

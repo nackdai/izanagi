@@ -145,8 +145,7 @@ namespace izanagi {
         IZ_BOOL SetParamValue(
             IZ_UINT idx,
             CShaderPass& cPass,
-            graph::IShader* pShd,
-            IZ_BOOL bIsVS);
+            graph::CShaderProgram* pShd);
 
     protected:
         IZ_UINT8* m_pBuffer;

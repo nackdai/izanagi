@@ -80,7 +80,7 @@ IZ_BOOL CSampleEnvBox::Init(izanagi::graph::CGraphicsDevice* device)
         m_VB = device->CreateVertexBuffer(
                     sizeof(SVertex),
                     VTX_NUM,
-                    izanagi::graph::E_GRAPH_RSC_TYPE_STATIC);
+                    izanagi::graph::E_GRAPH_RSC_USAGE_STATIC);
         VRETURN(m_VB != IZ_NULL);
 
         SVertex* data;
@@ -94,7 +94,7 @@ IZ_BOOL CSampleEnvBox::Init(izanagi::graph::CGraphicsDevice* device)
         m_IB = device->CreateIndexBuffer(
                     IDX_NUM,
                     izanagi::graph::E_GRAPH_INDEX_BUFFER_FMT_INDEX16,
-                    izanagi::graph::E_GRAPH_RSC_TYPE_STATIC);
+                    izanagi::graph::E_GRAPH_RSC_USAGE_STATIC);
         VRETURN(m_IB != IZ_NULL);
 
         IZ_UINT16* data;

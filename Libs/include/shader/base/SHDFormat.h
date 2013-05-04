@@ -192,8 +192,7 @@ namespace izanagi {
             IZ_UINT32 Public        : 1;    // ユーザに公開するパラメータか
             IZ_UINT32 DoNotStrip    : 1;    // エフェクト内では使用しないけど削除しない
             IZ_UINT32 hasAnn        : 1;    // アノテーションを持つか
-            IZ_UINT32 isDirtyVS     : 1;
-            IZ_UINT32 isDirtyPS     : 1;
+            IZ_UINT32 isDirty       : 1;
         };
 
         IZ_UINT16 AnnotationIdx;    // アノテーションインデックス
@@ -311,11 +310,8 @@ namespace izanagi {
         S_SHD_PARAM_IDX* ptrConst;
         S_SHD_PARAM_IDX* ptrSampler;
 
-        IZ_BOOL IsVSConst(IZ_UINT idx) const { return ptrConst[idx].isVS; }
-        IZ_BOOL IsVSSampler(IZ_UINT idx) const { return ptrSampler[idx].isVS; }
-
-        IZ_BOOL IsPSConst(IZ_UINT idx) const { return ptrConst[idx].isPS; }
-        IZ_BOOL IsPSSampler(IZ_UINT idx) const { return ptrSampler[idx].isPS; }
+        const S_SHD_PARAM_IDX& GetConst(IZ_UINT idx) const { return ptrConst[idx]; }
+        const S_SHD_PARAM_IDX& GetSmpl(IZ_UINT idx) const { return ptrSampler[idx]; }
 
         IZ_UINT GetConstIdx(IZ_UINT idx) const { return ptrConst[idx].idx; }
         IZ_UINT GetSmplIdx(IZ_UINT idx) const { return ptrSampler[idx].idx; }

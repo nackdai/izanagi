@@ -1,5 +1,5 @@
-#if !defined(__IZANAGI_GRAPH_VERTEX_SHADER_DX9_H__)
-#define __IZANAGI_GRAPH_VERTEX_SHADER_DX9_H__
+#if !defined(__IZANAGI_GRAPH_VERTEX_SHADER_GLES2_H__)
+#define __IZANAGI_GRAPH_VERTEX_SHADER_GLES2_H__
 
 #include "graph/VertexShader.h"
 #include "graph/dx9/ShaderProxy.h"
@@ -8,23 +8,23 @@ namespace izanagi
 {
 namespace graph
 {
-    class CGraphicsDeviceDX9;
+    class CGraphicsDeviceGLES2;
 
     // 頂点シェーダ
-    class CVertexShaderDX9 : public CShaderProxy<CVertexShader>
+    class CVertexShaderGLES2 : public CVertexShader
     {
-        friend class CGraphicsDeviceDX9;
+        friend class CGraphicsDeviceGLES2;
 
     private:
         // インスタンス作成
         static CVertexShader* CreateVertexShader(
-            CGraphicsDeviceDX9* device,
+            CGraphicsDeviceGLES2* device,
             IMemoryAllocator* allocator,
             const void* program);
 
     protected:
-        inline CVertexShaderDX9();
-        virtual inline ~CVertexShaderDX9();
+        inline CVertexShaderGLES2();
+        virtual inline ~CVertexShaderGLES2();
 
     public:
         D3D_VS* GetRawInterface() { return m_VS; }
@@ -36,4 +36,4 @@ namespace graph
 }   // namespace graph
 }   // namespace izanagi
 
-#endif  // #if !defined(__IZANAGI_GRAPH_VERTEX_SHADER_DX9_H__)
+#endif  // #if !defined(__IZANAGI_GRAPH_VERTEX_SHADER_GLES2_H__)
