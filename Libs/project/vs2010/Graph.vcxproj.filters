@@ -125,6 +125,9 @@
     <ClCompile Include="..\..\source\graph\gles2\GraphicsDeviceResourceFuncs.cpp">
       <Filter>source\gles2</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\graph\dx9\RenderTarget_DX9.cpp">
+      <Filter>source\dx9</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\source\graph\2d\shader\2DShader.hlsl">
@@ -265,11 +268,17 @@
     <ClInclude Include="..\..\include\graph\gles2\izGLES2Defs.h">
       <Filter>include\gles2</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\graph\dx9\izD3DDefs.h">
-      <Filter>include\dx9</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\graph\gles2\ParamValueConverter_GLES2.h">
       <Filter>include\gles2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\dx9\izD3DDefs.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\dx9\RenderTarget_DX9.h">
+      <Filter>include\dx9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\RenderTarget.h">
+      <Filter>include\base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
