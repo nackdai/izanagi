@@ -1,3 +1,4 @@
+#ifdef __IZ_DX9__
 #if !defined(__IZANAGI_D3D_DEFS_H__)
 #define __IZANAGI_D3D_DEFS_H__
 
@@ -66,6 +67,8 @@ struct SHADER_PARAM_HANDLE
     }
 };
 
+typedef void* TEX_HANDLE;
+
 namespace izanagi
 {
 namespace graph
@@ -93,3 +96,4 @@ namespace graph
 }   // namespace izanagi
 
 #endif  // #if !defined(__IZANAGI_D3D_DEFS_H__)
+#endif  // #ifdef __IZ_DX9__
