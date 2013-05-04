@@ -9509,7 +9509,7 @@ const MOJOSHADER_parseData *MOJOSHADER_parse(const char *profile,
             {
                 output_line(
                     ctx,
-                    "#define %s_s%d %s;",
+                    "#define %s_s%d %s",
                     shader,
                     ctx->ctab.symbols[i].register_index,
                     ctx->ctab.symbols[i].name);
@@ -9527,7 +9527,7 @@ const MOJOSHADER_parseData *MOJOSHADER_parse(const char *profile,
 
                 output_line(
                     ctx,
-                    "#define %s_c%d %s;",
+                    "#define %s_c%d %s",
                     shader,
                     ctx->ctab.symbols[i].register_index,
                     ctx->ctab.symbols[i].name);
@@ -9545,7 +9545,7 @@ const MOJOSHADER_parseData *MOJOSHADER_parse(const char *profile,
                 {
                     output_line(
                         ctx,
-                        "#define %s_c%d %s[%d];",
+                        "#define %s_c%d %s[%d]",
                         shader,
                         ctx->ctab.symbols[i].register_index + n,
                         ctx->ctab.symbols[i].name,
@@ -9599,7 +9599,7 @@ const MOJOSHADER_parseData *MOJOSHADER_parse(const char *profile,
 
             output_line(
                 ctx,
-                "#define %s_v%d %s;",
+                "#define %s_v%d %s",
                 shader,
                 item->regnum,
                 name);
