@@ -1,5 +1,8 @@
 #include "izSampleKit.h"
 
+#include <dinput.h>
+#include <XInput.h>
+
 class CGamePadApp : public izanagi::sample::CSampleApp {
 public:
     CGamePadApp();
