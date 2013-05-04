@@ -22,7 +22,7 @@ namespace graph
             IMemoryAllocator* allocator,
             IZ_UINT idxNum,
             E_GRAPH_INDEX_BUFFER_FMT fmt,
-            E_GRAPH_RSC_TYPE createType);
+            E_GRAPH_RSC_USAGE usage);
 
     private:
         inline CIndexBufferDX9();
@@ -34,7 +34,7 @@ namespace graph
             CGraphicsDeviceDX9* device,
             IZ_UINT idxNum,
             E_GRAPH_INDEX_BUFFER_FMT fmt,
-            E_GRAPH_RSC_TYPE createType);
+            E_GRAPH_RSC_USAGE usage);
 
     public:
         // ロック
@@ -59,7 +59,7 @@ namespace graph
         // 動的リソースかどうか
         IZ_BOOL IsDynamic() const
         {
-            return (m_CreateType == E_GRAPH_RSC_TYPE_DYNAMIC);
+            return (m_CreateType == E_GRAPH_RSC_USAGE_DYNAMIC);
         }
 
     public:

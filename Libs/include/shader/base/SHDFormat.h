@@ -217,7 +217,7 @@ namespace izanagi {
         IZ_UINT16 Dimensions[2];    // テクスチャサイズ
         IZ_FLOAT ViewportRatio[2];  // テクスチャ比率
 
-        graph::E_GRAPH_RSC_TYPE typeRsc;
+        graph::E_GRAPH_RSC_USAGE typeRsc;
 
         struct {
             IZ_UINT32 isRenderTarget    : 1;    // レンダーターゲットかどうか

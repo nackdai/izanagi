@@ -34,7 +34,7 @@ namespace {
         graph::CIndexBuffer* pIB = pDevice->CreateIndexBuffer(
                                 sMeshSubset.numIdx,
                                 sMeshSubset.fmtIdx,
-                                graph::E_GRAPH_RSC_TYPE_STATIC);
+                                graph::E_GRAPH_RSC_USAGE_STATIC);
         IZ_BOOL ret = (pIB != IZ_NULL);
         VGOTO(ret, __EXIT__);
 

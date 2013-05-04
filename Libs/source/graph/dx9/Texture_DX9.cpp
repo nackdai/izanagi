@@ -204,7 +204,7 @@ namespace graph
         IZ_UINT height,
         IZ_UINT mipLevel,
         E_GRAPH_PIXEL_FMT fmt,
-        E_GRAPH_RSC_TYPE rscType,
+        E_GRAPH_RSC_USAGE rscType,
         IZ_BOOL isOnSysMem/*= IZ_FALSE*/)
     {
         IZ_ASSERT(device != IZ_NULL);
@@ -285,7 +285,7 @@ namespace graph
         IZ_UINT height,
         IZ_UINT mipLevel,
         E_GRAPH_PIXEL_FMT fmt,
-        E_GRAPH_RSC_TYPE rscType,
+        E_GRAPH_RSC_USAGE rscType,
         IZ_BOOL isOnSysMem)
     {
         IZ_ASSERT(m_Device != IZ_NULL);
@@ -294,14 +294,14 @@ namespace graph
     
         IZ_DWORD nUsage = 0;
         if (!isOnSysMem) {
-            nUsage = (rscType & E_GRAPH_RSC_TYPE_STATIC
+            nUsage = (rscType & E_GRAPH_RSC_USAGE_STATIC
                         ? 0
                         : D3DUSAGE_DYNAMIC);
         }
 
         D3DPOOL pool = D3DPOOL_SYSTEMMEM;
         if (!isOnSysMem) {
-            pool = (rscType & E_GRAPH_RSC_TYPE_DYNAMIC
+            pool = (rscType & E_GRAPH_RSC_USAGE_DYNAMIC
                         ? D3DPOOL_DEFAULT
                         : D3DPOOL_MANAGED);
         }
@@ -348,13 +348,13 @@ namespace graph
         m_TexInfo.is_on_sysmem = (desc.Pool == D3DPOOL_SYSTEMMEM);
         m_TexInfo.is_on_vram = (desc.Pool == D3DPOOL_DEFAULT);
 
-        m_TexInfo.typeRsc = E_GRAPH_RSC_TYPE_STATIC;
+        m_TexInfo.typeRsc = E_GRAPH_RSC_USAGE_STATIC;
         if (m_TexInfo.is_dynamic) {
             if (m_TexInfo.is_on_vram) {
-                m_TexInfo.typeRsc = E_GRAPH_RSC_TYPE_STATIC_DYNAMIC;
+                m_TexInfo.typeRsc = E_GRAPH_RSC_USAGE_STATIC_DYNAMIC;
             }
             else {
-                m_TexInfo.typeRsc = E_GRAPH_RSC_TYPE_DYNAMIC;
+                m_TexInfo.typeRsc = E_GRAPH_RSC_USAGE_DYNAMIC;
             }
         }
     }
@@ -463,7 +463,7 @@ namespace graph
                     GetHeight(),
                     GetMipMapNum(),
                     GetPixelFormat(),
-                    E_GRAPH_RSC_TYPE_DYNAMIC,
+                    E_GRAPH_RSC_USAGE_DYNAMIC,
                     IsOnSysMem());
             IZ_ASSERT(ret);
         }

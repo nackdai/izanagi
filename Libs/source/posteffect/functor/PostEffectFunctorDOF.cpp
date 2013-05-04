@@ -47,7 +47,7 @@ IZ_BOOL CPostEffectFunctorDOFMerge::CreateTexture(
                             sTexAnn.Dimensions[1],
                             1,
                             fmt,
-                            E_GRAPH_RSC_TYPE_DYNAMIC);
+                            E_GRAPH_RSC_USAGE_DYNAMIC);
 
         ret = (m_pWeightTex[i] != IZ_NULL);
         if (!ret) {

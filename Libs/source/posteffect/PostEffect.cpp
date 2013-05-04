@@ -396,9 +396,9 @@ graph::CTexture* CPostEffect::CreateTexture(
         nWidth,
         nHeight);
 
-    graph::E_GRAPH_RSC_TYPE nCreateType = (pTexDesc->ann.isDynamic
-                                    ? graph::E_GRAPH_RSC_TYPE_DYNAMIC 
-                                    : graph::E_GRAPH_RSC_TYPE_STATIC);
+    graph::E_GRAPH_RSC_USAGE nCreateType = (pTexDesc->ann.isDynamic
+                                    ? graph::E_GRAPH_RSC_USAGE_DYNAMIC 
+                                    : graph::E_GRAPH_RSC_USAGE_STATIC);
 
     // テクスチャ作成
     graph::CTexture* pTex = pTexCreator->Create(

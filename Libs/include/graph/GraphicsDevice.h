@@ -61,7 +61,7 @@ namespace graph
                 IZ_UINT nHeight,
                 IZ_UINT nMipLevel,
                 E_GRAPH_PIXEL_FMT fmt,
-                E_GRAPH_RSC_TYPE nRscType));
+                E_GRAPH_RSC_USAGE nRscType));
 
         // キューブテクスチャ作成
         PURE_VIRTUAL(
@@ -97,14 +97,14 @@ namespace graph
             CVertexBuffer* CreateVertexBuffer(
                 IZ_UINT stride,
                 IZ_UINT vtxNum,
-                E_GRAPH_RSC_TYPE createType));
+                E_GRAPH_RSC_USAGE usage));
 
         // インデックスバッファ作成
         PURE_VIRTUAL(
             CIndexBuffer* CreateIndexBuffer(
                 IZ_UINT nIdxNum,
                 E_GRAPH_INDEX_BUFFER_FMT fmt,
-                E_GRAPH_RSC_TYPE createType));
+                E_GRAPH_RSC_USAGE usage));
 
         // 頂点シェーダ作成
         PURE_VIRTUAL(CVertexShader* CreateVertexShader(const void* pProgram));

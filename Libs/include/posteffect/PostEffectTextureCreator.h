@@ -37,7 +37,7 @@ namespace izanagi {
             IZ_UINT16 nHeight,
             graph::E_GRAPH_PIXEL_FMT fmt,
             IZ_BOOL bIsRenderTarget,
-            graph::E_GRAPH_RSC_TYPE nCreateType,
+            graph::E_GRAPH_RSC_USAGE nCreateType,
             E_POSTEFFECT_TEXTURE_TYPE type);
 
         // テクスチャを探す
@@ -46,7 +46,7 @@ namespace izanagi {
             IZ_UINT16 nHeight,
             graph::E_GRAPH_PIXEL_FMT fmt,
             IZ_BOOL bIsRenderTarget,
-            graph::E_GRAPH_RSC_TYPE nCreateType);
+            graph::E_GRAPH_RSC_USAGE nCreateType);
 
         void ClearAll();
 

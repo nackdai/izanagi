@@ -37,7 +37,7 @@ namespace graph
         IZ_UINT height,
         IZ_UINT mipLevel,
         E_GRAPH_PIXEL_FMT fmt,
-        E_GRAPH_RSC_TYPE rscType)
+        E_GRAPH_RSC_USAGE rscType)
     {
         CTextureDX9* pTexture = CTextureDX9::CreateTexture(
                                 this,
@@ -127,7 +127,7 @@ namespace graph
                                 height,
                                 mipLevel,
                                 fmt,
-                                E_GRAPH_RSC_TYPE_STATIC,
+                                E_GRAPH_RSC_USAGE_STATIC,
                                 IZ_TRUE);
         return pTexture;
     }
@@ -138,14 +138,14 @@ namespace graph
     CVertexBuffer* CGraphicsDeviceDX9::CreateVertexBuffer(
         IZ_UINT stride,
         IZ_UINT vtxNum,
-        E_GRAPH_RSC_TYPE createType)
+        E_GRAPH_RSC_USAGE usage)
     {
         CVertexBufferDX9* pVB = CVertexBufferDX9::CreateVertexBuffer(
                                 this,
                                 m_Allocator,
                                 stride,
                                 vtxNum,
-                                createType);
+                                usage);
 
         if ((pVB != IZ_NULL)
             && pVB->IsDynamic())
@@ -163,14 +163,14 @@ namespace graph
     CIndexBuffer* CGraphicsDeviceDX9::CreateIndexBuffer(
         IZ_UINT nIdxNum,
         E_GRAPH_INDEX_BUFFER_FMT fmt,
-        E_GRAPH_RSC_TYPE createType)
+        E_GRAPH_RSC_USAGE usage)
     {
         CIndexBufferDX9* pIB = CIndexBufferDX9::CreateIndexBuffer(
                                 this,
                                 m_Allocator,
                                 nIdxNum,
                                 fmt,
-                                createType);
+                                usage);
 
         if ((pIB != IZ_NULL)
             && pIB->IsDynamic())

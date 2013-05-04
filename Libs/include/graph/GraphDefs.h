@@ -325,12 +325,12 @@ namespace graph
     /**
     * リソースタイプ
     */
-    enum E_GRAPH_RSC_TYPE {
-        E_GRAPH_RSC_TYPE_STATIC  = 1 << 0,
-        E_GRAPH_RSC_TYPE_DYNAMIC = 1 << 1,
-        E_GRAPH_RSC_TYPE_STATIC_DYNAMIC = E_GRAPH_RSC_TYPE_DYNAMIC | E_GRAPH_RSC_TYPE_STATIC,
+    enum E_GRAPH_RSC_USAGE {
+        E_GRAPH_RSC_USAGE_STATIC  = 1 << 0,
+        E_GRAPH_RSC_USAGE_DYNAMIC = 1 << 1,
+        E_GRAPH_RSC_USAGE_STATIC_DYNAMIC = E_GRAPH_RSC_USAGE_DYNAMIC | E_GRAPH_RSC_USAGE_STATIC,
 
-        E_GRAPH_RSC_TYPE_FORCE_INT32 = 0x7fffffff,
+        E_GRAPH_RSC_USAGE_FORCE_INT32 = 0x7fffffff,
     };
 
     /**

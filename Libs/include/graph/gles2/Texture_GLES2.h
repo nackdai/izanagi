@@ -29,7 +29,7 @@ namespace graph
             IZ_UINT height,
             IZ_UINT mipLevel,
             E_GRAPH_PIXEL_FMT fmt,
-            E_GRAPH_RSC_TYPE rscType);
+            E_GRAPH_RSC_USAGE rscType);
 
     private:
         inline CTextureGLES2();
@@ -42,7 +42,7 @@ namespace graph
             IZ_UINT height,
             IZ_UINT mipLevel,
             E_GRAPH_PIXEL_FMT fmt,
-            E_GRAPH_RSC_TYPE createType);
+            E_GRAPH_RSC_USAGE usage);
 
         void SetTextureInfo(
             IZ_BOOL isRT,
@@ -50,7 +50,7 @@ namespace graph
             IZ_UINT height,
             IZ_UINT mipLevel,
             E_GRAPH_PIXEL_FMT fmt,
-            E_GRAPH_RSC_TYPE rscType);
+            E_GRAPH_RSC_USAGE rscType);
 
         // サーフェス作成
         IZ_BOOL CreateSurface();
@@ -76,7 +76,7 @@ namespace graph
     private:
         virtual TEX_HANDLE GetTexHandle()
         {
-            return m_Texture;
+            return &m_Texture;
         }
 
     public:
@@ -87,9 +87,6 @@ namespace graph
         GLuint m_Texture;
 
         void* m_TemporaryData;
-
-        // サーフェス
-        CSurfaceGLES2** m_Surface;
     };
 }   // namespace graph
 }   // namespace izanagi

@@ -44,7 +44,7 @@ namespace text
                     height,
                     1,
                     graph::E_GRAPH_PIXEL_FMT_A8,
-                    graph::E_GRAPH_RSC_TYPE_STATIC);
+                    graph::E_GRAPH_RSC_USAGE_STATIC);
 
                 IZ_UINT8* data;
                 IZ_UINT pitch = m_Texture->Lock(0, (void**)&data, IZ_FALSE);

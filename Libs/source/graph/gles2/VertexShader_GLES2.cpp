@@ -1,22 +1,22 @@
-#include "graph/dx9/VertexShader_DX9.h"
-#include "graph/dx9/GraphicsDevice_DX9.h"
+#include "graph/gles2/VertexShader_GLES2.h"
+#include "graph/gles2/GraphicsDevice_GLES2.h"
 
 namespace izanagi
 {
 namespace graph
 {
     // インスタンス作成
-    CVertexShader* CVertexShaderDX9::CreateVertexShader(
-        CGraphicsDeviceDX9* device,
+    CVertexShader* CVertexShaderGLES2::CreateVertexShader(
+        CGraphicsDeviceGLES2* device,
         IMemoryAllocator* allocator,
         const void* program)
     {
-        CVertexShaderDX9* instance = IZ_NULL;
+        CVertexShaderGLES2* instance = IZ_NULL;
         IZ_UINT8* buf = IZ_NULL;
         IZ_BOOL result = IZ_TRUE;
 
         // メモリ確保
-        buf = (IZ_UINT8*)ALLOC_ZERO(allocator, sizeof(CVertexShaderDX9));
+        buf = (IZ_UINT8*)ALLOC_ZERO(allocator, sizeof(CVertexShaderGLES2));
         result = (buf != IZ_NULL);
         if (!result) {
             IZ_ASSERT(IZ_FALSE);
@@ -24,7 +24,7 @@ namespace graph
         }
 
         // インスタンス作成
-        instance = new(buf) CVertexShaderDX9;
+        instance = new(buf) CVertexShaderGLES2;
         {
             instance->AddRef();
             instance->m_Allocator = allocator;
@@ -66,12 +66,12 @@ namespace graph
         return instance;
     }
 
-    CVertexShaderDX9::CVertexShaderDX9()
+    CVertexShaderGLES2::CVertexShaderGLES2()
     {
         m_VS = IZ_NULL;
     }
 
-    CVertexShaderDX9::~CVertexShaderDX9()
+    CVertexShaderGLES2::~CVertexShaderGLES2()
     {
         SAFE_RELEASE(m_VS);
     }

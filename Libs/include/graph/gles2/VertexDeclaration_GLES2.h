@@ -30,6 +30,8 @@ namespace graph
 
         const SVertexElement* GetElements() const;
 
+        IZ_BOOL Apply(CGraphicsDeviceGLES2* device);
+
     protected:
         IMemoryAllocator* m_Allocator;
 

@@ -101,9 +101,6 @@
     <ClCompile Include="..\..\source\graph\gles2\RenderState_GLES2.cpp">
       <Filter>source\gles2</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\graph\gles2\Surface_GLES2.cpp">
-      <Filter>source\gles2</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\graph\gles2\Texture_GLES2.cpp">
       <Filter>source\gles2</Filter>
     </ClCompile>
@@ -236,9 +233,6 @@
       <Filter>include\gles2</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\graph\gles2\ShaderProxy.h">
-      <Filter>include\gles2</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\graph\gles2\Surface_GLE2.h">
       <Filter>include\gles2</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\graph\gles2\Texture_GLES2.h">

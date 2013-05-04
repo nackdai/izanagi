@@ -21,7 +21,7 @@ namespace graph
 
             m_IdxNum = 0;
             m_Fmt = E_GRAPH_INDEX_BUFFER_FMT_FORCE_INT32;
-            m_CreateType = E_GRAPH_RSC_TYPE_STATIC;
+            m_CreateType = E_GRAPH_RSC_USAGE_STATIC;
         }
 
         virtual ~CIndexBuffer() {};
@@ -59,7 +59,7 @@ namespace graph
         IZ_UINT m_IdxNum;               // インデックス数
         E_GRAPH_INDEX_BUFFER_FMT m_Fmt; // フォーマット
 
-        E_GRAPH_RSC_TYPE m_CreateType;
+        E_GRAPH_RSC_USAGE m_CreateType;
     };
 }   // namespace graph
 }   // namespace izanagi

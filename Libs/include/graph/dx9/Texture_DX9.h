@@ -39,7 +39,7 @@ namespace graph
             IZ_UINT height,
             IZ_UINT mipLevel,
             E_GRAPH_PIXEL_FMT fmt,
-            E_GRAPH_RSC_TYPE rscType,
+            E_GRAPH_RSC_USAGE rscType,
             IZ_BOOL isOnSysMem = IZ_FALSE);
 
     private:
@@ -62,7 +62,7 @@ namespace graph
             IZ_UINT height,
             IZ_UINT mipLevel,
             E_GRAPH_PIXEL_FMT fmt,
-            E_GRAPH_RSC_TYPE createType,
+            E_GRAPH_RSC_USAGE usage,
             IZ_BOOL isOnSysMem);
 
         // テクスチャ情報取得

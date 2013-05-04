@@ -21,7 +21,7 @@ namespace graph
 
             m_Stride = 0;
             m_VtxNum = 0;
-            m_CreateType = E_GRAPH_RSC_TYPE_STATIC;
+            m_CreateType = E_GRAPH_RSC_USAGE_STATIC;
         }
 
         virtual ~CVertexBuffer() {};
@@ -49,7 +49,7 @@ namespace graph
         IZ_UINT m_Stride;   // 頂点サイズ
         IZ_UINT m_VtxNum;   // 頂点数
 
-        E_GRAPH_RSC_TYPE m_CreateType;
+        E_GRAPH_RSC_USAGE m_CreateType;
     };
 }   // namespace graph
 }   // namespace izanagi

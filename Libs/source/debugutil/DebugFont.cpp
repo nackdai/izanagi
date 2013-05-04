@@ -129,7 +129,7 @@ IZ_BOOL CDebugFont::CreateTexture()
                     IMAGE_HEIGHT,
                     0xffffffff,
                     graph::E_GRAPH_PIXEL_FMT_RGBA8,
-                    graph::E_GRAPH_RSC_TYPE_STATIC);
+                    graph::E_GRAPH_RSC_USAGE_STATIC);
     VRETURN(m_pFontTex != IZ_NULL);
     
     // データセット

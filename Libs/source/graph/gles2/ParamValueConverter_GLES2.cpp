@@ -25,16 +25,7 @@ namespace graph
     //////////////////////////////////////////
     // フィルモード
 
-    namespace {
-        D3DFILLMODE FillModeTbl[] = {
-            D3DFILL_POINT,
-            D3DFILL_WIREFRAME,
-            D3DFILL_SOLID,
-        };
-        IZ_C_ASSERT(COUNTOF(FillModeTbl) == E_GRAPH_FILL_MODE_NUM);
-    }   // namespace
-
-    DEF_FUNC_CONV_PARAM_VAL(FillMode, D3DFILLMODE, E_GRAPH_FILL_MODE, FillModeTbl)
+    // Nothing...
 
     //////////////////////////////////////////
     // ブレンド方法
@@ -189,15 +180,7 @@ namespace graph
     //////////////////////////////////////////
     // インデックスバッファフォーマット
 
-    namespace {
-        D3DFORMAT IdxBufFmtTbl[] = {
-            D3DFMT_INDEX16,
-            D3DFMT_INDEX32,
-        };
-        IZ_C_ASSERT(COUNTOF(IdxBufFmtTbl) == E_GRAPH_INDEX_BUFFER_FMT_NUM);
-    }   // namespace
-
-    DEF_FUNC_CONV_PARAM_VAL(IdxBufFmt, D3DFORMAT, E_GRAPH_INDEX_BUFFER_FMT, IdxBufFmtTbl)
+    // Nothing...
 
     //////////////////////////////////////////
     // プリミティブタイプ
@@ -236,57 +219,12 @@ namespace graph
     //////////////////////////////////////////
     // 頂点宣言のデータ型
 
-    namespace {
-        D3DDECLTYPE VtxDeclTypeTbl[] = {
-            D3DDECLTYPE_FLOAT1,
-            D3DDECLTYPE_FLOAT2,
-            D3DDECLTYPE_FLOAT3,
-            D3DDECLTYPE_FLOAT4,
-            D3DDECLTYPE_D3DCOLOR,
-                             
-            D3DDECLTYPE_UBYTE4,
-            D3DDECLTYPE_SHORT2,
-            D3DDECLTYPE_SHORT4,
-
-            D3DDECLTYPE_UBYTE4N,
-            D3DDECLTYPE_SHORT2N,
-            D3DDECLTYPE_SHORT4N,
-            D3DDECLTYPE_USHORT2N,
-            D3DDECLTYPE_USHORT4N,
-            D3DDECLTYPE_UDEC3,
-            D3DDECLTYPE_DEC3N,
-            D3DDECLTYPE_FLOAT16_2,
-            D3DDECLTYPE_FLOAT16_4,
-            D3DDECLTYPE_UNUSED,
-        };
-        IZ_C_ASSERT(COUNTOF(VtxDeclTypeTbl) == E_GRAPH_VTX_DECL_TYPE_NUM);
-    }   // namespace
-
-    DEF_FUNC_CONV_PARAM_VAL(VtxDeclType, D3DDECLTYPE, E_GRAPH_VTX_DECL_TYPE, VtxDeclTypeTbl);
+    // Nothing...
 
     //////////////////////////////////////////
     // 頂点データの使い方
 
-    namespace {
-        D3DDECLUSAGE VtxDeclUsageTbl[] = {
-            D3DDECLUSAGE_POSITION,
-            D3DDECLUSAGE_BLENDWEIGHT, 
-            D3DDECLUSAGE_BLENDINDICES,
-            D3DDECLUSAGE_NORMAL,      
-            D3DDECLUSAGE_PSIZE,       
-            D3DDECLUSAGE_TEXCOORD,    
-            D3DDECLUSAGE_TANGENT,     
-            D3DDECLUSAGE_BINORMAL,    
-            D3DDECLUSAGE_TESSFACTOR,  
-            D3DDECLUSAGE_POSITIONT,   
-            D3DDECLUSAGE_COLOR,       
-            D3DDECLUSAGE_FOG,         
-            D3DDECLUSAGE_DEPTH,       
-            D3DDECLUSAGE_SAMPLE,      
-        };
-        IZ_C_ASSERT(COUNTOF(VtxDeclUsageTbl) == E_GRAPH_VTX_DECL_USAGE_NUM);
-    }   // namespace
+    // Nothing...
 
-    DEF_FUNC_CONV_PARAM_VAL(VtxDeclUsage, D3DDECLUSAGE, E_GRAPH_VTX_DECL_USAGE, VtxDeclUsageTbl);
 }   // namespace graph
 }   // namespace izanagi

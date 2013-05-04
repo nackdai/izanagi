@@ -134,7 +134,7 @@ graph::CBaseTexture* CImage::CreatePlaneTexture(
             nHeight,
             nMipLevel,
             nFmt,
-            graph::E_GRAPH_RSC_TYPE_STATIC);
+            graph::E_GRAPH_RSC_USAGE_STATIC);
 
     VRETURN_NULL(pTex != IZ_NULL);
 

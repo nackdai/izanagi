@@ -12,7 +12,7 @@ namespace graph
         IMemoryAllocator* allocator,
         IZ_UINT idxNum,
         E_GRAPH_INDEX_BUFFER_FMT fmt,
-        E_GRAPH_RSC_TYPE createType)
+        E_GRAPH_RSC_USAGE usage)
     {
         IZ_ASSERT(device != NULL);
 
@@ -40,7 +40,7 @@ namespace graph
             device,
             idxNum,
             fmt,
-            createType);
+            usage);
         if (!result) {
             goto __EXIT__;
         }
@@ -79,7 +79,7 @@ namespace graph
         CGraphicsDeviceDX9* device,
         IZ_UINT idxNum,
         E_GRAPH_INDEX_BUFFER_FMT fmt,
-        E_GRAPH_RSC_TYPE createType)
+        E_GRAPH_RSC_USAGE usage)
     {
         IZ_ASSERT(device != IZ_NULL);
 
@@ -88,17 +88,17 @@ namespace graph
         D3DFORMAT d3dFmt = IZ_GET_TARGET_IDX_BUF_FMT(fmt);
         IZ_UINT stride = (d3dFmt == D3DFMT_INDEX16 ? sizeof(IZ_UINT16) : sizeof(IZ_UINT32));
 
-        IZ_DWORD usage = (createType == E_GRAPH_RSC_TYPE_DYNAMIC
+        IZ_DWORD dxUsage = (usage == E_GRAPH_RSC_USAGE_DYNAMIC
                             ? D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY
                             : 0);
 
-        D3DPOOL pool = (createType == E_GRAPH_RSC_TYPE_DYNAMIC
-                            ? D3DPOOL_DEFAULT
-                            : D3DPOOL_MANAGED);
+        D3DPOOL pool = (usage == E_GRAPH_RSC_USAGE_DYNAMIC
+                        ? D3DPOOL_DEFAULT
+                        : D3DPOOL_MANAGED);
 
         HRESULT hr = d3dDev->CreateIndexBuffer(
             idxNum * stride,
-            usage,
+            dxUsage,
             d3dFmt,
             pool,
             &m_IB,
@@ -110,7 +110,7 @@ namespace graph
         m_IdxNum = idxNum;
         m_Fmt = fmt;
     
-        m_CreateType = createType;
+        m_CreateType = usage;
 
         return ret;
     }

@@ -98,7 +98,7 @@ namespace graph
             return m_TexInfo.is_on_vram;
         }
 
-        E_GRAPH_RSC_TYPE GetRscType() const
+        E_GRAPH_RSC_USAGE GetRscType() const
         {
             return m_TexInfo.typeRsc;
         }
@@ -123,7 +123,7 @@ namespace graph
 
             E_GRAPH_PIXEL_FMT fmt;
 
-            E_GRAPH_RSC_TYPE typeRsc;
+            E_GRAPH_RSC_USAGE typeRsc;
         } m_TexInfo;        
 
         // ステート

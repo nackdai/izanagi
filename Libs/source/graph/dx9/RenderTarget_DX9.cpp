@@ -186,13 +186,13 @@ namespace graph
             m_TexInfo.is_on_sysmem = (desc.Pool == D3DPOOL_SYSTEMMEM);
             m_TexInfo.is_on_vram = (desc.Pool == D3DPOOL_DEFAULT);
 
-            m_TexInfo.typeRsc = E_GRAPH_RSC_TYPE_STATIC;
+            m_TexInfo.typeRsc = E_GRAPH_RSC_USAGE_STATIC;
             if (m_TexInfo.is_dynamic) {
                 if (m_TexInfo.is_on_vram) {
-                    m_TexInfo.typeRsc = E_GRAPH_RSC_TYPE_STATIC_DYNAMIC;
+                    m_TexInfo.typeRsc = E_GRAPH_RSC_USAGE_STATIC_DYNAMIC;
                 }
                 else {
-                    m_TexInfo.typeRsc = E_GRAPH_RSC_TYPE_DYNAMIC;
+                    m_TexInfo.typeRsc = E_GRAPH_RSC_USAGE_DYNAMIC;
                 }
             }
         }
@@ -210,7 +210,7 @@ namespace graph
             m_TexInfo.is_dynamic = IZ_FALSE;
             m_TexInfo.is_on_sysmem = IZ_FALSE;
             m_TexInfo.is_on_vram = IZ_TRUE;
-            m_TexInfo.typeRsc = E_GRAPH_RSC_TYPE_STATIC;
+            m_TexInfo.typeRsc = E_GRAPH_RSC_USAGE_STATIC;
         }
         else {
             IZ_ASSERT(IZ_FALSE);
