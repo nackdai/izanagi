@@ -23,9 +23,9 @@ namespace graph
         virtual ~CShaderProgramDX9() {}
 
     public:
-        virtual IZ_BOOL OnAttachVertexShader(CVertexShader* vs);
+        virtual IZ_BOOL AttachVertexShader(CVertexShader* vs);
 
-        virtual IZ_BOOL OnAttachPixelShader(CPixelShader* ps);
+        virtual IZ_BOOL AttachPixelShader(CPixelShader* ps);
 
         virtual IZ_BOOL Link();
 

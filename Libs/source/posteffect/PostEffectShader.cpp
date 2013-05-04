@@ -634,6 +634,8 @@ IZ_BOOL CPostEffectShader::CommitChanges()
                                     ? pParamDesc->Elements
                                     : 1);
 
+            m_pDevice->SetShaderProgram(pPass->GetShaderProgram());
+
             ret = CPostEffectShaderUtil::SetValue(
                     m_pDevice,
                     pPass->GetShaderProgram(),

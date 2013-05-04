@@ -287,6 +287,12 @@ namespace graph
         return m_Texture[nStage];
     }
 
+    // シェーダプログラム取得
+    CShaderProgram* CGraphicsDevice::GetShaderProgram()
+    {
+        return m_RenderState.curShader;
+    }
+
     // レンダーターゲットセット
     IZ_BOOL CGraphicsDevice::PushRenderTarget(CRenderTarget** rt, IZ_UINT num)
     {

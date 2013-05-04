@@ -19,24 +19,6 @@ namespace graph
         SAFE_RELEASE(m_PS);
     }
 
-    IZ_BOOL CShaderProgram::AttachVertexShader(CVertexShader* vs)
-    {
-        if (m_VS != vs) {
-            SAFE_REPLACE(m_VS, vs);
-        }
-
-        return OnAttachVertexShader(vs);
-    }
-
-    IZ_BOOL CShaderProgram::AttachPixelShader(CPixelShader* ps)
-    {
-        if (m_PS != ps) {
-            SAFE_REPLACE(m_PS, ps);
-        }
-
-        return OnAttachPixelShader(ps);
-    }
-
     CVertexShader* CShaderProgram::GetVertexShader()
     {
         return m_VS;

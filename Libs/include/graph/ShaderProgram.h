@@ -29,9 +29,9 @@ namespace graph
         IZ_DEFINE_INTERNAL_RELEASE();
 
     public:
-        IZ_BOOL AttachVertexShader(CVertexShader* vs);
+        PURE_VIRTUAL(IZ_BOOL AttachVertexShader(CVertexShader* vs));
 
-        IZ_BOOL AttachPixelShader(CPixelShader* ps);
+        PURE_VIRTUAL(IZ_BOOL AttachPixelShader(CPixelShader* ps));
 
         PURE_VIRTUAL(IZ_BOOL Link());
 
@@ -45,10 +45,6 @@ namespace graph
 
     protected:
         PURE_VIRTUAL(void ClearDirty());
-
-        PURE_VIRTUAL(IZ_BOOL OnAttachVertexShader(CVertexShader* vs));
-
-        PURE_VIRTUAL(IZ_BOOL OnAttachPixelShader(CPixelShader* ps));
 
     public:
         PURE_VIRTUAL(SHADER_PARAM_HANDLE GetHandleByName(IZ_PCSTR name));

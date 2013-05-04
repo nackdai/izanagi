@@ -235,6 +235,9 @@ namespace graph
         // シェーダプログラムセット
         PURE_VIRTUAL(IZ_BOOL SetShaderProgram(CShaderProgram* program));
 
+        // シェーダプログラム取得
+        CShaderProgram* GetShaderProgram();
+
         // インデックスバッファ描画
         PURE_VIRTUAL(
             IZ_BOOL DrawIndexedPrimitive(
