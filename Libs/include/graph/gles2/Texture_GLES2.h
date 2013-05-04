@@ -1,14 +1,14 @@
 #if !defined(__IZANAGI_GRAPH_TEXTURE_GLES2_H__)
 #define __IZANAGI_GRAPH_TEXTURE_GLES2_H__
 
-#include "graph/Texture.h"
 #include "izGLES2Defs.h"
+#include "graph/Texture.h"
 
 namespace izanagi
 {
 namespace graph
 {
-    class CGraphicsDeviceGLES2;
+    class CGraphicsDevice;
 
     class CTextureGLES2 : public CTexture
     {
@@ -76,7 +76,7 @@ namespace graph
     private:
         virtual TEX_HANDLE GetTexHandle()
         {
-            return &m_Texture;
+            return m_Texture;
         }
 
     public:

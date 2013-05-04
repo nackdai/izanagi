@@ -307,6 +307,11 @@ inline void _OutputDebugString(izPcstr pszFormat, ...)
 #define IZ_COLOR_RGBA(r, g, b, a)\
     ((IZ_COLOR)((((a) & 0xff) << 24) | (((r) & 0xff) << 16) | (((g) & 0xff) << 8) | ((b) & 0xff)))
 
+#define IZ_COLOR_R(color)   (((color) >> 16) & 0xff)
+#define IZ_COLOR_G(color)   (((color) >>  8) & 0xff)
+#define IZ_COLOR_B(color)   ((color) & 0xff)
+#define IZ_COLOR_A(color)   (((color) >> 24) & 0xff)
+
 /////////////////////////////////////////////////////////////
 // サイズチェック
 
