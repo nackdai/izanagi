@@ -1,5 +1,5 @@
-#if !defined(__IZANAGI_GRPAH_GRAPHICS_DEVICE_DX9_H__)
-#define __IZANAGI_GRPAH_GRAPHICS_DEVICE_DX9_H__
+#if !defined(__IZANAGI_GRPAH_GRAPHICS_DEVICE_GLES2_H__)
+#define __IZANAGI_GRPAH_GRAPHICS_DEVICE_GLES2_H__
 
 //#include "izGLES2.h"
 #include "graph/GraphicsDevice.h"
@@ -10,21 +10,21 @@ namespace izanagi
 {
 namespace graph
 {
-    class CTextureDX9;
-    class CVertexBufferDX9;
-    class CIndexBufferDX9;
+    class CTextureGLES2;
+    class CVertexBufferGLES2;
+    class CIndexBufferGLES2;
 
     // グラフィックスデバイス
-    class CGraphicsDeviceDX9 : public CGraphicsDevice
+    class CGraphicsDeviceGLES2 : public CGraphicsDevice
     {
         friend class CGraphicsDevice;
-        friend class CTextureDX9;
-        friend class CVertexBufferDX9;
-        friend class CIndexBufferDX9;
+        friend class CTextureGLES2;
+        friend class CVertexBufferGLES2;
+        friend class CIndexBufferGLES2;
 
     private:
-        CGraphicsDeviceDX9();
-        virtual ~CGraphicsDeviceDX9();
+        CGraphicsDeviceGLES2();
+        virtual ~CGraphicsDeviceGLES2();
 
     private:
         void ClearRenderState();
@@ -53,21 +53,9 @@ namespace graph
             IZ_BOOL bIsDynamic);
 
         // レンダーターゲット作成
-        virtual CTexture* CreateRenderTarget(
+        virtual CRenderTarget* CreateRenderTarget(
             IZ_UINT nWidth, IZ_UINT nHeight,
             E_GRAPH_PIXEL_FMT fmt);
-
-        // 深度・ステンシルサーフェス作成
-        virtual CSurface* CreateDepthStencilSurface(
-            IZ_UINT width, 
-            IZ_UINT height,
-            E_GRAPH_PIXEL_FMT fmt);
-        
-        // システムメモリ上にテクスチャ作成
-        virtual CTexture* CreateTextureOnSysMem(
-            IZ_UINT nWidth, IZ_UINT nHeight,
-            E_GRAPH_PIXEL_FMT fmt,
-            IZ_UINT nMipLevel);
 
         // 頂点バッファ作成
         virtual CVertexBuffer* CreateVertexBuffer(
@@ -80,6 +68,9 @@ namespace graph
             IZ_UINT nIdxNum,
             E_GRAPH_INDEX_BUFFER_FMT fmt,
             E_GRAPH_RSC_USAGE nCreateType);
+
+        // シェーダプログラム作成
+        virtual CShaderProgram* CreateShaderProgram();
 
         // 頂点シェーダ作成
         virtual CVertexShader* CreateVertexShader(const void* pProgram);
@@ -105,15 +96,12 @@ namespace graph
         template <class _T>
         void RestoreResource(_T* pList);
 
-        void RemoveTexture(CTextureDX9* p);
-        void RemoveVertexBuffer(CVertexBufferDX9* p);
-        void RemoveIndexBuffer(CIndexBufferDX9* p);
+        void RemoveTexture(CTextureGLES2* p);
+        void RemoveVertexBuffer(CVertexBufferGLES2* p);
+        void RemoveIndexBuffer(CIndexBufferGLES2* p);
 
         // 本体作成
         IZ_BOOL CreateBody(const SGraphicsDeviceInitParams& sParams);
-
-        // リセット
-        IZ_BOOL ResetInternal(const SGraphicsDeviceInitParams& sParams);
 
     public:
         // リセット
@@ -137,9 +125,9 @@ namespace graph
             IZ_DWORD nClearStencil);
 
         virtual IZ_BOOL BeginScene(
-            CSurface** pRT,
+            CRenderTarget** pRT,
             IZ_UINT nCount,
-            CSurface* pDepth,
+            CRenderTarget* pDepth,
             IZ_DWORD nClearFlags,
             IZ_COLOR nClearColor = 0,
             IZ_FLOAT fClearZ = 1.0f,
@@ -162,11 +150,8 @@ namespace graph
         // インデックスバッファセット
         virtual IZ_BOOL SetIndexBuffer(CIndexBuffer* pIB);
 
-        // 頂点シェーダセット
-        virtual IZ_BOOL SetVertexShader(CVertexShader* pVS);
-
-        // ピクセルシェーダセット
-        virtual IZ_BOOL SetPixelShader(CPixelShader* pPS);
+        // シェーダプログラムセット
+        virtual IZ_BOOL SetShaderProgram(CShaderProgram* program);
 
         // 頂点宣言セット
         virtual IZ_BOOL SetVertexDeclaration(CVertexDeclaration* pVD);
@@ -273,78 +258,52 @@ namespace graph
         // リセット用コールバックセット
         virtual void SetResetCallBack(GraphicsDeviceResetCallBack pCallBack)
         {
-            m_ResetCallBack = pCallBack;
+            // Nothing...
         }
 
 
         // デバイスロスト用コールバックセット
         virtual void SetLostDeviceCallBack(GraphicsDeviceLostDeviceCallBack pCallBack)
         {
-            m_LostDeviceCallBack = pCallBack;
+            // Nothing...
         }
 
         virtual IZ_UINT GetBackBufferWidth() const
         {
-            return m_PresentParameters.BackBufferWidth;
+            return m_ScreenWidth;
         }
 
         virtual IZ_UINT GetBackBufferHeight() const
         {
-            return m_PresentParameters.BackBufferHeight;
+            return m_ScreenHeight;
         }
 
-        virtual void* GetPlatformInterface() { return GetRawInterface(); }
-
-        // ディスプレイモード取得
-        const D3DDISPLAYMODE& GetDisplayMode() const
-        {
-            return m_DisplayMode;
-        }
-
-        // プレゼントパラメータ取得
-        const D3DPRESENT_PARAMETERS& GetPresentParam() const
-        {
-            return m_PresentParameters;
-        }
-
-        // リフレッシュレート取得
-        IZ_UINT GetRefreshRate() const
-        {
-            return m_DisplayMode.RefreshRate;
-        }
+        // TODO
+        virtual void* GetPlatformInterface() { return IZ_NULL; }
 
     private:
         virtual IZ_BOOL SetTextureInternal(IZ_UINT nStage, CBaseTexture* pTex);
-        virtual void SetRenderTargetInternal(CSurface** pSurface, IZ_UINT num);
+        virtual void SetRenderTargetInternal(CRenderTarget** rt, IZ_UINT num);
 
         // 深度・ステンシルセット
-        virtual void SetDepthStencil(CSurface* pSurface);
-
-    public:
-        virtual D3D_DEVICE* GetRawInterface() { return m_Device; }
+        virtual void SetDepthStencil(CRenderTarget* rt);
 
     private:
-        D3D_INST* m_D3D;
+        EGLDisplay m_Display;
+        EGLSurface m_Surface;
+        EGLContext m_Context;
 
-        // 本体
-        D3D_DEVICE* m_Device;
+        IZ_UINT m_ScreenWidth;
+        IZ_UINT m_ScreenHeight;
 
-        D3DDISPLAYMODE m_DisplayMode;
-        D3DPRESENT_PARAMETERS m_PresentParameters;
-        HWND m_hFocusWindow;
+        IZ_BOOL m_IsDirtyVB;
+        IZ_BOOL m_IsDirtyVD;
+        IZ_BOOL m_IsDirtyShaderProgram;
+        IZ_BOOL m_IsDirtyTex[TEX_STAGE_NUM];
 
-        // リセット対策用
-        CTextureDX9* m_ResetTexture;
-        CVertexBufferDX9* m_ResetVB;
-        CIndexBufferDX9* m_ResetIB;
-
-        // リセット用コールバック
-        GraphicsDeviceResetCallBack m_ResetCallBack;
-
-        // デバイスロスト用コールバック
-        GraphicsDeviceLostDeviceCallBack m_LostDeviceCallBack;
+        GLuint m_SamplerHandle[TEX_STAGE_NUM];
     };
 }   // namespace graph
 }   // namespace izanagi
 
-#endif  // #if !defined(__IZANAGI_GRPAH_GRAPHICS_DEVICE_DX9_H__)
+#endif  // #if !defined(__IZANAGI_GRPAH_GRAPHICS_DEVICE_GLES2_H__)

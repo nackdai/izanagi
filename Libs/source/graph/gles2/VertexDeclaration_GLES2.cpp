@@ -1,5 +1,8 @@
 #include "graph/gles2/VertexDeclaration_GLES2.h"
+#include "graph/gles2/ShaderProgram_GLES2.h"
+#include "graph/gles2/GraphicsDevice_GLES2.h"
 #include "graph/internal/ParamValueConverter.h"
+#include "graph/VertexBuffer.h"
 
 namespace izanagi
 {
@@ -64,6 +67,10 @@ namespace graph
 
     IZ_BOOL CVertexDeclarationGLES2::Apply(CGraphicsDeviceGLES2* device)
     {
+        CShaderProgramGLES2* program = (CShaderProgramGLES2*)device->GetShaderProgram();
+
+        IZ_UINT stride = device->GetRenderState().curVB->GetStride();
+
         for (IZ_UINT i = 0; i < m_ElemNum; i++) {
             const SVertexElement& element = m_Elements[i];
 
@@ -161,10 +168,10 @@ namespace graph
 
             ::glVertexAttribPointer(
                 i,
-                num,
+                size,
                 type,
                 needNormalized,
-                size * num,
+                stride,
                 (void*)element.Offset);
 
             static const char* names[] = 
@@ -218,7 +225,10 @@ namespace graph
 
             // NOTE
             // ShaderCompilerによってSemanticに応じたアトリビュート名が設定されている
-            //::glBindAttribLocation(
+            ::glBindAttribLocation(
+                program->GetRawInterface(),
+                i,
+                name);
         }
 
         return IZ_TRUE;

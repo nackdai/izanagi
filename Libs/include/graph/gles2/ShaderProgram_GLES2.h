@@ -16,6 +16,7 @@ namespace graph
     class CShaderProgramGLES2 : public CShaderProgram
     {
         friend class CGraphicsDeviceGLES2;
+        friend class CVertexDeclarationGLES2;
 
         static CShaderProgram* CreateShaderProgram(IMemoryAllocator* allocator);
 
@@ -35,6 +36,8 @@ namespace graph
         virtual IZ_BOOL IsDirty();
 
         virtual void ClearDirty();
+
+        IZ_BOOL IsLinked();
 
     public:
         virtual SHADER_PARAM_HANDLE GetHandleByName(IZ_PCSTR name);
@@ -64,8 +67,12 @@ namespace graph
         CPixelShaderGLES2* PixelShader();
 
     private:
+        GLuint GetRawInterface() { return m_Program; }
+
+    private:
         GLuint m_Program;
         IZ_BOOL m_IsDirty;
+        IZ_BOOL m_IsLinked;
     };
 }   // namespace graph
 }   // namespace izanagi

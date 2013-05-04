@@ -53,6 +53,9 @@ namespace graph
         virtual IZ_BOOL Restore();
 
     private:
+        GLuint GetRawInterface() { return m_VB; }
+
+    private:
         CGraphicsDeviceGLES2* m_Device;
 
         // 本体

@@ -1,14 +1,13 @@
-#if !defined(__IZANAGI_GRAPH_INTERNAL_2D_RENDERER_DX9_H__)
-#define __IZANAGI_GRAPH_INTERNAL_2D_RENDERER_DX9_H__
+#if !defined(__IZANAGI_GRAPH_INTERNAL_2D_RENDERER_GLES2_H__)
+#define __IZANAGI_GRAPH_INTERNAL_2D_RENDERER_GLES2_H__
 
 #include "graph/2d/2DRenderer.h"
-#include "graph/dx9/Surface_DX9.h"
 
 namespace izanagi
 {
 namespace graph
 {
-    class C2DRendererDX9 : public C2DRenderer
+    class C2DRendererGLES2 : public C2DRenderer
     {
     public:
         // インスタンス作成
@@ -22,4 +21,4 @@ namespace graph
 }   // namespace graph
 }   // namespace izanagi
 
-#endif  // #if !defined(__IZANAGI_GRAPH_INTERNAL_2D_RENDERER_DX9_H__)
+#endif  // #if !defined(__IZANAGI_GRAPH_INTERNAL_2D_RENDERER_GLES2_H__)

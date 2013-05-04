@@ -1,5 +1,5 @@
-#if !defined(__IZANAGI_GRAPH_CUBE_TEXTURE_DX9_H__)
-#define __IZANAGI_GRAPH_CUBE_TEXTURE_DX9_H__
+#if !defined(__IZANAGI_GRAPH_CUBE_TEXTURE_GLES2_H__)
+#define __IZANAGI_GRAPH_CUBE_TEXTURE_GLES2_H__
 
 #include "graph/CubeTexture.h"
 
@@ -7,24 +7,24 @@ namespace izanagi
 {
 namespace graph
 {
-    class CGraphicsDeviceDX9;
+    class CGraphicsDevice;
 
     // キューブテクスチャ
-    class CCubeTextureDX9 : public CCubeTexture
+    class CCubeTextureGLES2 : public CCubeTexture
     {
-        friend class CGraphicsDeviceDX9;
+        friend class CGraphicsDeviceGLES2;
 
     private:
         // ファイルからテクスチャ作成
         static CCubeTexture* CreateCubeTextureFromFile(
-            CGraphicsDeviceDX9* device,
+            CGraphicsDevice* device,
             IMemoryAllocator* allocator,
             IZ_PCSTR path,
             E_GRAPH_PIXEL_FMT fmt);
 
         // テクスチャ作成
         static CCubeTexture* CreateCubeTexture(
-            CGraphicsDeviceDX9* device,
+            CGraphicsDevice* device,
             IMemoryAllocator* allocator,
             IZ_UINT width,
             IZ_UINT height,
@@ -32,12 +32,12 @@ namespace graph
             E_GRAPH_PIXEL_FMT fmt);
 
     private:
-        typedef IZ_BOOL (CCubeTextureDX9::*CreateTexFunc)(
-            CGraphicsDeviceDX9*,
+        typedef IZ_BOOL (CCubeTextureGLES2::*CreateTexFunc)(
+            CGraphicsDevice* device,
             IZ_PCSTR, IZ_UINT, IZ_UINT, IZ_UINT, E_GRAPH_PIXEL_FMT);
 
         static CCubeTexture* CreateInternal(
-            CGraphicsDeviceDX9* device,
+            CGraphicsDevice* device,
             IMemoryAllocator* allocator,
             IZ_PCSTR path,
             IZ_UINT width,
@@ -47,13 +47,13 @@ namespace graph
             CreateTexFunc pCreateTexFunc);
 
     private:
-        inline CCubeTextureDX9();
-        virtual inline ~CCubeTextureDX9();
+        inline CCubeTextureGLES2();
+        virtual inline ~CCubeTextureGLES2();
 
     private:
         // ファイルからテクスチャ作成
         IZ_BOOL CreateTextureFromFileImpl(
-            CGraphicsDeviceDX9* device,
+            CGraphicsDevice* device,
             IZ_PCSTR path,
             IZ_UINT width,
             IZ_UINT height,
@@ -62,7 +62,7 @@ namespace graph
 
         // テクスチャ作成
         IZ_BOOL CreateTextureImpl(
-            CGraphicsDeviceDX9* device,
+            CGraphicsDevice* device,
             IZ_PCSTR path,
             IZ_UINT width,
             IZ_UINT height,
@@ -88,14 +88,11 @@ namespace graph
 
         virtual TEX_HANDLE GetTexHandle();
 
-    public:
-        D3D_CUBETEXTURE* GetRawInterface() { return m_Texture; }
-
     private:
         // 本体
-        D3D_CUBETEXTURE* m_Texture;
+        GLuint m_Texture;
     };
 }   // namesace graph
 }   // namespace izanagi
 
-#endif  // #if !defined(__IZANAGI_GRAPH_CUBE_TEXTURE_DX9_H__)
+#endif  // #if !defined(__IZANAGI_GRAPH_CUBE_TEXTURE_GLES2_H__)

@@ -31,6 +31,7 @@ namespace graph
     {
         m_Program = 0;
         m_IsDirty = IZ_FALSE;
+        m_IsLinked = IZ_TRUE;
     }
 
     IZ_BOOL CShaderProgramGLES2::AttachVertexShader(CVertexShader* vs)
@@ -54,6 +55,7 @@ namespace graph
             SAFE_REPLACE(m_VS, vs);
 
             m_IsDirty = IZ_TRUE;
+            m_IsLinked = IZ_FALSE;
         }
         
         return IZ_TRUE;
@@ -80,6 +82,7 @@ namespace graph
             SAFE_REPLACE(m_PS, ps);
 
             m_IsDirty = IZ_TRUE;
+            m_IsLinked = IZ_FALSE;
         }
         
         return IZ_TRUE;
@@ -87,6 +90,10 @@ namespace graph
 
     IZ_BOOL CShaderProgramGLES2::Link()
     {
+        if (m_IsLinked) {
+            return IZ_TRUE;
+        }
+
         IZ_ASSERT(m_Program != 0);
         IZ_ASSERT(IsValid());
 
@@ -94,6 +101,9 @@ namespace graph
             ::glLinkProgram(m_Program);
 
             // TODO
+            // リンク結果をチェック
+
+            m_IsLinked = IZ_TRUE;
         }
 
         return IZ_TRUE;
@@ -112,6 +122,11 @@ namespace graph
     void CShaderProgramGLES2::ClearDirty()
     {
         m_IsDirty = IZ_FALSE;
+    }
+
+    IZ_BOOL CShaderProgramGLES2::IsLinked()
+    {
+        return m_IsLinked;
     }
 
     CVertexShaderGLES2* CShaderProgramGLES2::VertexShader()

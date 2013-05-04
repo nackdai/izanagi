@@ -1,11 +1,9 @@
 #include "graph/gles2/GraphicsDevice_GLES2.h"
 #include "graph/gles2/Texture_GLES2.h"
 #include "graph/gles2/CubeTexture_GLES2.h"
-#include "graph/gles2/Surface_GLES2.h"
 #include "graph/gles2/VertexBuffer_GLES2.h"
 #include "graph/gles2/IndexBuffer_GLES2.h"
-#include "graph/gles2/VertexShader_GLES2.h"
-#include "graph/gles2/PixelShader_GLES2.h"
+#include "graph/gles2/ShaderProgram_GLES2.h"
 #include "graph/gles2/VertexDeclaration_GLES2.h"
 #include "graph/gles2/2DRenderer_GLES2.h"
 
@@ -39,21 +37,6 @@ namespace graph
         instance = new(buf) CGraphicsDeviceGLES2;
         {
             instance->m_Allocator = allocator;
-
-            // IDirect3D9 インターフェースの取得
-            instance->m_D3D = Direct3DCreate9(D3D_SDK_VERSION);
-            result = (instance->m_D3D != IZ_NULL);
-            IZ_ASSERT(result);
-
-            // 現在の画面モードの取得
-            if (result) {
-                HRESULT hr = instance->m_D3D->GetAdapterDisplayMode(
-                                D3DADAPTER_DEFAULT,
-                                &instance->m_DisplayMode);
-                result = SUCCEEDED(hr);
-                IZ_ASSERT(result);
-            }
-
             instance->AddRef();
         }
 
@@ -79,30 +62,20 @@ namespace graph
     // コンストラクタ
     CGraphicsDeviceGLES2::CGraphicsDeviceGLES2()
     {
-        m_D3D = IZ_NULL;
-
-        m_Device = IZ_NULL;
-        FILL_ZERO(&m_PresentParameters, sizeof(m_PresentParameters));
-
-        m_hFocusWindow = IZ_NULL;;
-
-        m_ResetCallBack = IZ_NULL;
-        m_LostDeviceCallBack = IZ_NULL;
+        // TODO
     }
 
     // デストラクタ
     CGraphicsDeviceGLES2::~CGraphicsDeviceGLES2()
     {
-        SAFE_RELEASE(m_Device);
-        SAFE_RELEASE(m_D3D);
+        // TODO
 
         ClearRenderState();
     }
 
     void CGraphicsDeviceGLES2::ClearRenderState()
     {
-        SetVertexShader(IZ_NULL);
-        SetPixelShader(IZ_NULL);
+        SetShaderProgram(IZ_NULL);
         SetVertexBuffer(0, 0, 0, IZ_NULL);
         SetIndexBuffer(IZ_NULL);
 
@@ -133,13 +106,13 @@ namespace graph
         // NOTE
         // izanagiでは左手座標系なので
         // カリングの標準はCounterClockWiseにする
-        glFrontFace(GL_CCW);
+        ::glFrontFace(GL_CCW);
 
         const SGraphicsDeviceInitParams& param = *(reinterpret_cast<const SGraphicsDeviceInitParams*>(initialParam));
 
-        IZ_BOOL ret = IZ_TRUE;
+        IZ_BOOL ret = IZ_FALSE;
 
-        if (m_Device == IZ_NULL) {
+        if (m_Display == EGL_NO_DISPLAY) {
             // 本体作成
             ret = CreateBody(param);
 
@@ -150,10 +123,6 @@ namespace graph
                 IZ_ASSERT(ret);
             }
         }
-        else {
-            // リセット
-            ret = ResetInternal(param);
-        }
 
         if (ret) {
             // ビューポート
@@ -161,8 +130,8 @@ namespace graph
             {
                 vp.x = 0;
                 vp.y = 0;
-                vp.width = m_PresentParameters.BackBufferWidth;
-                vp.height = m_PresentParameters.BackBufferHeight;
+                vp.width = param.screenWidth;
+                vp.height = param.screenHeight;
                 vp.minZ = 0.0f;
                 vp.maxZ = 1.0f;
             }
@@ -177,43 +146,10 @@ namespace graph
             SetDefaultRenderState();
             m_Flags.is_force_set_state = IZ_FALSE;
 
+            // TODO
+            // いる？
             // サーフェスのリセット
             //（フレームバッファのリセット）
-            {
-                CSurfaceGLES2*& renderTarget = reinterpret_cast<CSurfaceGLES2*&>(m_RT);
-                CSurfaceGLES2*& deptthStencil = reinterpret_cast<CSurfaceGLES2*&>(m_Depth);
-
-                if (m_RT != IZ_NULL) {
-                    renderTarget->Reset(IZ_NULL, 0);
-                }
-                else {
-                    m_RT = CSurfaceGLES2::CreateSurface(m_Allocator);
-                }
-
-                if (m_Depth != IZ_NULL) {
-                    deptthStencil->Reset(IZ_NULL, 0);
-                }
-                else {
-                    m_Depth = CSurfaceGLES2::CreateSurface(m_Allocator);
-                }
-
-                ret = ((m_RT != IZ_NULL) && (m_Depth != IZ_NULL));
-                IZ_ASSERT(ret);
-            
-                if (ret) {
-                    // フレームバッファサーフェースを取ってくる・・・
-                    m_Device->GetRenderTarget(0, &renderTarget->m_Surface);
-                    m_Device->GetDepthStencilSurface(&deptthStencil->m_Surface);
-
-                    // 明示的に記述をセットする
-                    renderTarget->SetDesc();
-                    deptthStencil->SetDesc();
-
-                    // 現在のレンダーターゲットとして保持
-                    SAFE_REPLACE(m_RenderState.curRT[0], m_RT);
-                    SAFE_REPLACE(m_RenderState.curDepth, m_Depth);
-                }
-            }
         }
 
         return ret;
@@ -222,132 +158,75 @@ namespace graph
     // 本体作成
     IZ_BOOL CGraphicsDeviceGLES2::CreateBody(const SGraphicsDeviceInitParams& sParams)
     {
-        IZ_ASSERT(m_D3D != IZ_NULL);
+        // Get Display
+        m_Display = ::eglGetDisplay(sParams.display);
+        VRETURN(m_Display == EGL_NO_DISPLAY);
 
-        IZ_BOOL ret = IZ_TRUE;
+        // Initialize EGL
+        EGLint major, minor;
+        VRETURN(::eglInitialize(m_Display, &major, &minor));
 
-        m_hFocusWindow = sParams.hFocusWindow;
+        // Get configs
+        EGLint numConfigs;
+        VRETURN(::eglGetConfigs(m_Display, IZ_NULL, 0, &numConfigs));
 
-        // D3DPRESENT_PARAMETERS の設定
+        EGLint configAttribList[] =
         {
-            FILL_ZERO(&m_PresentParameters, sizeof(m_PresentParameters));
+            EGL_RED_SIZE,       sParams.rgba[0],
+            EGL_GREEN_SIZE,     sParams.rgba[1],
+            EGL_BLUE_SIZE,      sParams.rgba[2],
+            EGL_ALPHA_SIZE,     (sParams.rgba[3] > 0 ? sParams.rgba[3] : EGL_DONT_CARE),
+            EGL_DEPTH_SIZE,     (sParams.depth > 0 ? sParams.depth : EGL_DONT_CARE),
+            EGL_STENCIL_SIZE,   (sParams.stencil > 0 ? sParams.stencil : EGL_DONT_CARE),
+            EGL_SAMPLE_BUFFERS, (sParams.enableMultiSample ? 1 : 0),
+            EGL_NONE,
+        };
 
-            m_PresentParameters.BackBufferCount = 2;
+        // Choose config
+        EGLConfig config;
+        VRETURN(
+            ::eglChooseConfig(
+                m_Display,
+                configAttribList,
+                &config,
+                1,
+                &numConfigs));
 
-            m_PresentParameters.Windowed = sParams.Windowed;                    // 画面モード(ウインドウモード)
-            m_PresentParameters.BackBufferWidth = sParams.BackBufferWidth;      // バックバッファの幅
-            m_PresentParameters.BackBufferHeight = sParams.BackBufferHeight;    // バックバッファの高さ
-
-            // バックバッファのフォーマット
-            m_PresentParameters.BackBufferFormat = m_DisplayMode.Format;
-
-            m_PresentParameters.MultiSampleType = sParams.MultiSampleType;      // マルチ・サンプリングの種類
-
-            // スワップエフェクトの種類
-            m_PresentParameters.SwapEffect = D3DSWAPEFFECT_DISCARD;
-
-            m_PresentParameters.hDeviceWindow = sParams.hDeviceWindow;
-
-#if 1
-            // Zバッファの自動作成
-            m_PresentParameters.EnableAutoDepthStencil = IZ_TRUE;
-            //m_PresentParameters.AutoDepthStencilFormat = D3DFMT_D24S8;
-            m_PresentParameters.AutoDepthStencilFormat = sParams.DepthStencilFormat;
-#else
-            // Zバッファを自動作成しない
-            m_PresentParameters.EnableAutoDepthStencil = IZ_FALSE;
-#endif
-
-            // VSyncのタイプ
-            m_PresentParameters.PresentationInterval = sParams.PresentationInterval;
-        }
-
-        if (FAILED(m_D3D->CreateDevice(
-                    sParams.Adapter, 
-                    sParams.DeviceType,
-                    sParams.hFocusWindow,
-                    sParams.BehaviorFlags,
-                    &m_PresentParameters,
-                    &m_Device)))
+        static const EGLint surfaceAttribList[] =
         {
-            // 結局失敗した
-            ret = IZ_FALSE;
-        }
+            EGL_RENDER_BUFFER, EGL_BACK_BUFFER,
+            EGL_NONE,
+        };
 
-        return ret;
-    }
+        // Create a surface
+        m_Surface = ::eglCreateWindowSurface(
+            m_Display,
+            config,
+            sParams.window,
+            surfaceAttribList);
+        VRETURN(m_Surface != EGL_NO_SURFACE);
 
-    template <typename _T>
-    void CGraphicsDeviceGLES2::DisableResource(_T* pList)
-    {
-        for (_T* p = pList; p != IZ_NULL; p = p->m_Next) {
-            p->Disable();
-        }
-    }
-
-    template <typename _T>
-    void CGraphicsDeviceGLES2::RestoreResource(_T* pList)
-    {
-        for (_T* p = pList; p != IZ_NULL; p = p->m_Next) {
-            p->Restore();
-        }
-    }
-
-    IZ_BOOL CGraphicsDeviceGLES2::ResetInternal(const SGraphicsDeviceInitParams& sParams)
-    {
-        CSurfaceGLES2* renderTarget = reinterpret_cast<CSurfaceGLES2*>(m_RT);
-        CSurfaceGLES2* deptthStencil = reinterpret_cast<CSurfaceGLES2*>(m_Depth);
-
-        // リソースを解放する
+        static const EGLint contextAtrribs[] =
         {
-            renderTarget->ReleaseResource();
-            deptthStencil->ReleaseResource();
+            EGL_CONTEXT_CLIENT_VERSION, 2,
+            EGL_NONE, EGL_NONE,
+        };
 
-            m_2DRenderer->DisableResource();
+        // Create a GL context
+        m_Context = ::eglCreateContext(
+            m_Display,
+            config,
+            EGL_NO_CONTEXT,
+            contextAtrribs);
+        VRETURN(m_Context != EGL_NO_CONTEXT);
 
-            DisableResource(m_ResetTexture);
-            DisableResource(m_ResetVB);
-            DisableResource(m_ResetIB);
-        }
+        // Make the context current
+        VRETURN(::eglMakeCurrent(m_Display, m_Surface, EGL_NO_SURFACE, m_Context));
 
-        // クリアされるものを保存しておく
-        IZ_UINT nBackBufferCount = m_PresentParameters.BackBufferCount;
-        D3DFORMAT fmt = m_PresentParameters.BackBufferFormat;
+        m_ScreenWidth = sParams.screenWidth;
+        m_ScreenHeight = sParams.screenHeight;
 
-        // 新しく設定されるもの
-        m_PresentParameters.BackBufferWidth = sParams.BackBufferWidth;
-        m_PresentParameters.BackBufferHeight = sParams.BackBufferHeight;
-
-        HRESULT hr = m_Device->Reset(&m_PresentParameters);
-        IZ_ASSERT(hr != D3DERR_DRIVERINTERNALERROR);
-
-        IZ_BOOL ret = SUCCEEDED(hr);
-
-        if (ret) {
-            // クリアされたので設定値に変更する
-            m_PresentParameters.BackBufferCount = nBackBufferCount;
-            m_PresentParameters.BackBufferFormat = fmt;
-
-            // リソースをリセットする
-            {
-                renderTarget->Reset(IZ_NULL, 0);
-                deptthStencil->Reset(IZ_NULL, 0);
-
-                m_2DRenderer->RestoreResource();
-
-                RestoreResource(m_ResetTexture);
-                RestoreResource(m_ResetVB);
-                RestoreResource(m_ResetIB);
-            }
-
-            // コールバック
-            if (m_ResetCallBack != IZ_NULL) {
-                ret = (*m_ResetCallBack)();
-                IZ_ASSERT(ret);
-            }
-        }
-
-        return ret;
+        return IZ_TRUE;
     }
 
     /**
@@ -359,32 +238,18 @@ namespace graph
         IZ_FLOAT fClearZ,
         IZ_DWORD nClearStencil)
     {
-        IZ_ASSERT(m_Device != NULL);
+        m_Flags.is_call_begin = IZ_TRUE;
 
-        IZ_BOOL ret = IZ_FALSE;
+        Clear(
+            nClearFlags,
+            nClearColor,
+            fClearZ,
+            nClearStencil);
 
-        if (!m_Flags.is_lost_device) {
-            // デバイスロストしてないので、通常の描画開始処理を行う
-            m_Device->BeginScene();
-            m_Flags.is_call_begin = IZ_TRUE;
+        // 2D処理開始
+        m_2DRenderer->BeginFrame();
 
-            Clear(
-                nClearFlags,
-                nClearColor,
-                fClearZ,
-                nClearStencil);
-
-            // フレームバッファサーフェスを現在のサーフェスとしてセット
-            SAFE_REPLACE(m_RenderState.curRT[0], m_RT);
-            SAFE_REPLACE(m_RenderState.curDepth, m_Depth);
-
-            // 2D処理開始
-            m_2DRenderer->BeginFrame();
-
-            ret = IZ_TRUE;
-        }
-
-        return ret;
+        return IZ_TRUE;
     }
 
     /**
@@ -395,21 +260,19 @@ namespace graph
         // 念のため
         EndScene();
 
-        if (m_Flags.is_call_begin) {
-            m_Device->EndScene();
-        }
-
         m_Flags.is_call_begin = IZ_FALSE;
 
         // クリアしてみる
         ClearRenderState();
     }
 
-    #ifndef _CONV_CLEAR_FLAG
-    #define _CONV_CLEAR_FLAG(flag, mask, dst)   ((flag) & (mask) ? (dst) : 0)
+    #ifndef _IS_CLEAR
+    #define _IS_CLEAR(flag, mask)   (((flag) & (mask)) > 0)
     #else
     IZ_C_ASSERT(IZ_FALSE);
     #endif
+
+    static const IZ_FLOAT clr_div = 1.0f / 255.0f;
 
     /**
     * クリア
@@ -420,36 +283,43 @@ namespace graph
         IZ_FLOAT fClearZ,
         IZ_DWORD nClearStencil)
     {
-        IZ_ASSERT(m_Device != NULL);
-
         if (nClearFlags > 0) {
-            // DirectX のクリアフラグに変換する
-            IZ_DWORD nDXClearFlag = 0;
-            nDXClearFlag |= _CONV_CLEAR_FLAG(nClearFlags, E_GRAPH_CLEAR_FLAG_COLOR,   D3DCLEAR_TARGET);
-            nDXClearFlag |= _CONV_CLEAR_FLAG(nClearFlags, E_GRAPH_CLEAR_FLAG_DEPTH,   D3DCLEAR_ZBUFFER);
-            nDXClearFlag |= _CONV_CLEAR_FLAG(nClearFlags, E_GRAPH_CLEAR_FLAG_STENCIL, D3DCLEAR_STENCIL);
+            if (_IS_CLEAR(nClearFlags, E_GRAPH_CLEAR_FLAG_COLOR))
+            {
+                ::glClearColor(
+                    IZ_COLOR_R(nClearColor) * clr_div,
+                    IZ_COLOR_G(nClearColor) * clr_div,
+                    IZ_COLOR_B(nClearColor) * clr_div,
+                    IZ_COLOR_A(nClearColor) * clr_div);
 
-            m_Device->Clear(
-                0,
-                NULL,
-                nDXClearFlag,
-                nClearColor,
-                fClearZ,
-                nClearStencil);
+                ::glClear(GL_COLOR_BUFFER_BIT);
+            }
+
+            if (_IS_CLEAR(nClearFlags, E_GRAPH_CLEAR_FLAG_DEPTH))
+            {
+                ::glClearDepthf(fClearZ);
+
+                ::glClear(GL_DEPTH_BUFFER_BIT);
+            }
+
+            if (_IS_CLEAR(nClearFlags, E_GRAPH_CLEAR_FLAG_STENCIL))
+            {
+                ::glClearStencil(nClearStencil);
+
+                ::glClear(GL_STENCIL_BUFFER_BIT);
+            }
         }
     }
 
     IZ_BOOL CGraphicsDeviceGLES2::BeginScene(
-        CSurface** pRT,
+        CRenderTarget** pRT,
         IZ_UINT nCount,
-        CSurface* pDepth,
+        CRenderTarget* pDepth,
         IZ_DWORD nClearFlags,
         IZ_COLOR nClearColor/*= 0*/,
         IZ_FLOAT fClearZ/*= 1.0f*/,
         IZ_DWORD nClearStencil/*= 0*/)
     {
-        IZ_ASSERT(m_Device != NULL);
-
         // TODO
         // MRTは無しで・・・
         IZ_ASSERT(nCount <= 1);
@@ -480,7 +350,7 @@ namespace graph
     */
     void CGraphicsDeviceGLES2::EndScene(IZ_UINT flag/* = 0xffffffff*/)
     {
-        CSurface* pRTList[MAX_MRT_NUM];
+        CRenderTarget* pRTList[MAX_MRT_NUM];
         memset(pRTList, 0, sizeof(pRTList));
 
         IZ_UINT nRTNum = 0;
@@ -499,7 +369,7 @@ namespace graph
 
         if ((flag & E_GRAPH_END_SCENE_FLAG_DEPTH_STENCIL) > 0) {
             // 深度・ステンシル
-            CSurface* pDepth = m_DepthMgr.Pop();
+            CRenderTarget* pDepth = m_DepthMgr.Pop();
             if (pDepth != IZ_NULL) {
                 SetDepthStencil(pDepth);
             }
@@ -511,54 +381,18 @@ namespace graph
     */
     IZ_BOOL CGraphicsDeviceGLES2::Present()
     {
-        IZ_BOOL ret = IZ_TRUE;
-
-        HRESULT hr = m_Device->Present(
-                        IZ_NULL,
-                        IZ_NULL,
-                        m_hFocusWindow,
-                        IZ_NULL);
-
-        if (hr == D3DERR_DEVICELOST) {
-            // デバイスロストした
-            m_Flags.is_lost_device = IZ_TRUE;
-
-            // デバイスロストしたときのコールバック
-            if (m_LostDeviceCallBack != IZ_NULL) {
-                (*m_LostDeviceCallBack)();
-            }
-
-            SGraphicsDeviceInitParams sParams;
-            {
-                sParams.BackBufferWidth = m_PresentParameters.BackBufferWidth;
-                sParams.BackBufferHeight = m_PresentParameters.BackBufferHeight;
-            }
-
-            // 復帰をこころみる
-            ret = Reset(&sParams);
-
-            if (ret) {
-                // 復帰した
-                m_Flags.is_lost_device = IZ_FALSE;
-            }
-        }
-        else {
-            ret = SUCCEEDED(hr);
-        }
-
-        IZ_ASSERT(ret);
-        return ret;
+        ::eglSwapBuffers(m_Display, m_Surface);
+        return IZ_TRUE;
     }
 
-    void CGraphicsDeviceGLES2::SetDepthStencil(CSurface* pSurface)
+    void CGraphicsDeviceGLES2::SetDepthStencil(CRenderTarget* pSurface)
     {
         IZ_ASSERT(pSurface != IZ_NULL);
 
         if (m_RenderState.curDepth != pSurface) {
             // レンダーターゲットを入れ替える
-            CSurfaceGLES2* gles2Surface = reinterpret_cast<CSurfaceGLES2*>(pSurface);
-            m_Device->SetDepthStencilSurface(gles2Surface->GetRawInterface());
-            SAFE_REPLACE(m_RenderState.curDepth, pSurface);
+            // TODO
+            IZ_ASSERT(IZ_FALSE);
         }
     }
 
@@ -578,17 +412,17 @@ namespace graph
 
         CVertexBufferGLES2* gles2VB = reinterpret_cast<CVertexBufferGLES2*>(pVB);
 
-        {
-            HRESULT hr = m_Device->SetStreamSource(
-                            nStreamIdx,
-                            pVB != IZ_NULL ? gles2VB->GetRawInterface() : IZ_NULL,
-                            nOffsetByte,
-                            nStride);
-            VRETURN(SUCCEEDED(hr));
-
-            // 現在設定されているものとして保持
-            SAFE_REPLACE(m_RenderState.curVB, pVB);
+        if (gles2VB != IZ_NULL) {
+            ::glBindBuffer(GL_ARRAY_BUFFER, gles2VB->GetRawInterface());
         }
+        else {
+            ::glBindBuffer(GL_ARRAY_BUFFER, 0);
+        }
+
+        // 現在設定されているものとして保持
+        SAFE_REPLACE(m_RenderState.curVB, pVB);
+
+        m_IsDirtyVB = IZ_TRUE;
 
         return IZ_TRUE;
     }
@@ -605,62 +439,45 @@ namespace graph
 
         CIndexBufferGLES2* gles2IB = reinterpret_cast<CIndexBufferGLES2*>(pIB);
 
-        {
-            HRESULT hr = m_Device->SetIndices(
-                            pIB != IZ_NULL ? gles2IB->GetRawInterface() : IZ_NULL);
-            VRETURN(SUCCEEDED(hr));
-
-            // 現在設定されているものとして保持
-            SAFE_REPLACE(m_RenderState.curIB, pIB);
+        if (gles2IB != IZ_NULL) {
+            ::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gles2IB->GetRawInterface());
         }
+        else {
+            ::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        }
+
+        // 現在設定されているものとして保持
+        SAFE_REPLACE(m_RenderState.curIB, pIB);
 
         return IZ_TRUE;
     }
 
-    /**
-    * 頂点シェーダセット
-    */
-    IZ_BOOL CGraphicsDeviceGLES2::SetVertexShader(CVertexShader* pVS)
+    // シェーダプログラムセット
+    IZ_BOOL CGraphicsDeviceGLES2::SetShaderProgram(CShaderProgram* program)
     {
-        if (m_RenderState.curVS == pVS) {
-            // すでに設定されている
+        if (m_RenderState.curShader == program) {
             return IZ_TRUE;
         }
 
-        CVertexShaderGLES2* gles2VS = reinterpret_cast<CVertexShaderGLES2*>(pVS);
+        CShaderProgramGLES2* gles2Program = reinterpret_cast<CShaderProgramGLES2*>(program);
 
-        {
-            HRESULT hr = m_Device->SetVertexShader(
-                            pVS != IZ_NULL ? gles2VS->GetRawInterface() : IZ_NULL);
-            VRETURN(SUCCEEDED(hr));
+        IZ_ASSERT(gles2Program->IsValid());
 
-            // 現在設定されているものとして保持
-            SAFE_REPLACE(m_RenderState.curVS, pVS);
+        if (gles2Program != IZ_NULL) {
+            if (!gles2Program->IsLinked()) {
+                gles2Program->Link();
+            }
+
+            ::glUseProgram(gles2Program->GetRawInterface());
+        }
+        else {
+            ::glUseProgram(0);
         }
 
-        return IZ_TRUE;
-    }
+        m_IsDirtyShaderProgram = IZ_TRUE;
 
-    /**
-    * ピクセルシェーダセット
-    */
-    IZ_BOOL CGraphicsDeviceGLES2::SetPixelShader(CPixelShader* pPS)
-    {
-        if (m_RenderState.curPS == pPS) {
-            // すでに設定されている
-            return IZ_TRUE;
-        }
-
-        CPixelShaderGLES2* gles2PS = reinterpret_cast<CPixelShaderGLES2*>(pPS);
-
-        {
-            HRESULT hr = m_Device->SetPixelShader(
-                            pPS != IZ_NULL ? gles2PS->GetRawInterface() : IZ_NULL);
-            VRETURN(SUCCEEDED(hr));
-
-            // 現在設定されているものとして保持
-            SAFE_REPLACE(m_RenderState.curPS, pPS);
-        }
+        // 現在設定されているものとして保持
+        SAFE_REPLACE(m_RenderState.curShader, gles2Program);
 
         return IZ_TRUE;
     }
@@ -675,15 +492,10 @@ namespace graph
             return IZ_TRUE;
         }
 
-        CVertexDeclarationGLES2* gles2VD = reinterpret_cast<CVertexDeclarationGLES2*>(pVD);
-
-        if (pVD != IZ_NULL) {
-            HRESULT hr = m_Device->SetVertexDeclaration(gles2VD->GetRawInterface());
-            VRETURN(SUCCEEDED(hr));
-        }
-
         // 現在設定されているものとして保持
         SAFE_REPLACE(m_RenderState.curVD, pVD);
+
+        m_IsDirtyVD = IZ_TRUE;
 
         return IZ_TRUE;
     }
@@ -699,14 +511,60 @@ namespace graph
         IZ_UINT nStartIdx,
         IZ_UINT nPrimCnt)
     {
-        HRESULT hr = m_Device->DrawIndexedPrimitive(
-                        IZ_GET_TARGET_PRIM_TYPE(prim_type),
-                        nBaseIdx,
-                        nMinIdx,
-                        nVtxNum,
-                        nStartIdx,
-                        nPrimCnt);
-        VRETURN(SUCCEEDED(hr));
+        // NOTE
+        // ShaderProgramがセットされないとシェーダユニフォームの取得、設定ができないので
+        // 頂点宣言の反映、テクスチャのセットなどをこのタイミングでやる
+
+        IZ_BOOL isDirty = (m_IsDirtyVB
+            || m_IsDirtyVD
+            || m_IsDirtyShaderProgram);
+
+        if (isDirty) {
+            IZ_ASSERT(m_RenderState.curVD != IZ_NULL);
+
+            ((CVertexDeclarationGLES2*)m_RenderState.curVD)->Apply(this);
+        }
+
+        m_IsDirtyVB = IZ_FALSE;
+        m_IsDirtyVD = IZ_FALSE;
+        m_IsDirtyShaderProgram = IZ_FALSE;
+
+        CShaderProgramGLES2* gles2Program = reinterpret_cast<CShaderProgramGLES2*>(m_RenderState.curShader);
+
+        // NOTE
+        // ShaderCompilerによってsamplerレジスタに応じたユニフォーム名が設定されている
+        static const char* samplerName[TEX_STAGE_NUM] = 
+        {
+            "s0", "s1", "s2", "s3", "s4", "s5", "s6", "s7",
+        };
+
+        for (IZ_UINT i = 0; i < TEX_STAGE_NUM; i++) {
+            if (m_IsDirtyTex[i]
+                && m_Texture[i] != IZ_NULL)
+            {
+                if (isDirty) {
+                    m_SamplerHandle[i] = ::glGetUniformLocation(gles2Program->GetRawInterface(), samplerName[i]);
+                }
+
+                ::glActiveTexture(GL_TEXTURE0 + i);
+
+                GLenum type = (m_Texture[i]->GetTexType() == E_GRAPH_TEX_TYPE_PLANE
+                    ? GL_TEXTURE_2D
+                    : GL_TEXTURE_CUBE_MAP);
+
+                GLuint handle = m_Texture[i]->GetTexHandle();
+
+                ::glBindTexture(type, handle);
+
+                ::glUniform1i(m_SamplerHandle[i], i);
+            }
+
+            m_IsDirtyTex[i] = IZ_FALSE;
+        }
+
+        // TODO
+        //::glDrawElements(
+
 
         return IZ_TRUE;
     }
@@ -719,11 +577,8 @@ namespace graph
         IZ_UINT nStartIdx,
         IZ_UINT nPrimCnt)
     {
-        HRESULT hr = m_Device->DrawPrimitive(
-                        IZ_GET_TARGET_PRIM_TYPE(prim_type),
-                        nStartIdx,
-                        nPrimCnt);
-        VRETURN(SUCCEEDED(hr));
+        // TODO
+        IZ_ASSERT(IZ_FALSE);
 
         return IZ_TRUE;
     }
@@ -740,7 +595,6 @@ namespace graph
         }
 
         IZ_BOOL ret = IZ_TRUE;
-        HRESULT hr = S_OK;
 
         if ((m_RenderState.vp.width != vp.width)
             || (m_RenderState.vp.height != vp.height)
@@ -749,19 +603,16 @@ namespace graph
             || (m_RenderState.vp.minZ != vp.minZ)
             || (m_RenderState.vp.maxZ != vp.maxZ))
         {
-            D3D_VIEWPORT sD3DViewport;
-            {
-                sD3DViewport.X = vp.x;
-                sD3DViewport.Y = vp.y;
-                sD3DViewport.Width = vp.width;
-                sD3DViewport.Height = vp.height;
-                sD3DViewport.MinZ = vp.minZ;
-                sD3DViewport.MaxZ = vp.maxZ;
-            }
+            ::glViewport(
+                vp.x,
+                vp.y,
+                vp.width,
+                vp.height);
 
-            hr = m_Device->SetViewport(&sD3DViewport);
-
-            ret = SUCCEEDED(hr);
+            ::glDepthRangef(
+                vp.minZ,
+                vp.maxZ);
+            
             if (ret) {
                 memcpy(&m_RenderState.vp, &vp, sizeof(vp));
             }
@@ -855,7 +706,7 @@ namespace graph
         VRETURN(SUCCEEDED(hr));
 
         // 保持しておく
-        m_Texture[nStage] = pTex;
+        SAFE_REPLACE(m_Texture[nStage], pTex);
 
         // うーん・・・
         // ステート
