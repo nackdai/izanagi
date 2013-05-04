@@ -84,6 +84,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\source\posteffect\PostEffect.cpp" />
     <ClCompile Include="..\..\source\posteffect\PostEffectShader.cpp" />
+    <ClCompile Include="..\..\source\posteffect\PostEffectShaderPass.cpp" />
     <ClCompile Include="..\..\source\posteffect\PostEffectSystem.cpp" />
     <ClCompile Include="..\..\source\posteffect\PostEffectTextureCreator.cpp" />
     <ClCompile Include="..\..\source\posteffect\functor\PostEffectFunctor.cpp" />
@@ -92,6 +93,7 @@
     <ClCompile Include="..\..\source\posteffect\functor\PostEffectFunctorMGF.cpp" />
     <ClCompile Include="..\..\source\posteffect\functor\PostEffectFunctorRenderStar.cpp" />
     <ClCompile Include="..\..\source\posteffect\functor\PostEffectFunctorSwitchTex.cpp" />
+    <ClCompile Include="..\..\source\posteffect\util\PostEffectShaderUtil.cpp" />
     <ClCompile Include="..\..\source\posteffect\util\PostEffectUtilityRect.cpp" />
     <ClCompile Include="..\..\source\posteffect\vs\PostEffectVS.cpp" />
     <ClCompile Include="..\..\source\posteffect\vs\PostEffectVSManager.cpp" />

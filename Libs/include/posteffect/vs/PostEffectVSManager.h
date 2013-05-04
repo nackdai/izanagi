@@ -13,6 +13,7 @@ namespace izanagi {
     class CPostEffectVSManager {
         friend class CPostEffectSystem;
         friend class CPostEffectShader;
+        friend class CPostEffectPass;
         friend class CPostEffectVS;
 
     private:

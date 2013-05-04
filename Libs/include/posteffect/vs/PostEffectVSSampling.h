@@ -25,73 +25,60 @@ namespace izanagi {
 
     public:
         // パラメータセット
-        void SetParameter(
+        virtual void RegisterParameter(
             const math::SVector* pVector,
-            IZ_UINT num);
+            IZ_UINT num)
+        {
+            IZ_ASSERT(num <= _VECTOR_NUM);
 
-    protected:
-        // 初期化
-        IZ_BOOL InternalInit();
+            for (IZ_UINT i = 0; i < num; ++i) {
+                math::SVector::Copy(m_vOffset[i], pVector[i]);
+            }
+        }
+
+        // シェーダパラメータ初期化済みかどうか
+        virtual IZ_BOOL IsInitilizedShaderParameter()
+        {
+            if (CPostEffectVS::IsInitilizedShaderParameter())
+            {
+                if (m_hOffset != 0)
+                {
+                    return IZ_TRUE;
+                }
+            }
+            return IZ_FALSE;
+        }
+
+        // シェーダパラメータ初期化
+        virtual void InitShaderParameter(
+            graph::CGraphicsDevice* device,
+            graph::CShaderProgram* program)
+        {
+            CPostEffectVS::InitShaderParameter(device, program);
+
+            static IZ_PCSTR name = "g_vUVOffsetSampling";
+            m_hOffset = program->GetHandleByName(name);
+            IZ_ASSERT(m_hOffset != 0);
+        }
 
         // パラメータセット
-        void SetShaderParameter();
+        virtual void ApplyShaderParameter(
+            graph::CGraphicsDevice* device,
+            graph::CShaderProgram* program)
+        {
+            IZ_ASSERT(m_hOffset != IZ_NULL);
+
+            program->SetVectorArray(
+                device,
+                m_hOffset,
+                m_vOffset,
+                COUNTOF(m_vOffset));
+        }
 
     protected:
         SHADER_PARAM_HANDLE m_hOffset;
         math::SVector m_vOffset[_VECTOR_NUM];
     };
-
-    // パラメータセット
-    template
-    <
-        IZ_UINT _NUM,
-        IZ_UINT _VECTOR_NUM
-    >
-    void CPostEffectVSSampling<_NUM, _VECTOR_NUM>::SetParameter(
-        const math::SVector* pVector,
-        IZ_UINT num)
-    {
-        IZ_ASSERT(num <= _VECTOR_NUM);
-
-        for (IZ_UINT i = 0; i < num; ++i) {
-            math::SVector::Copy(m_vOffset[i], pVector[i]);
-        }
-    }
-
-    // 初期化
-    template
-    <
-        IZ_UINT _NUM,
-        IZ_UINT _VECTOR_NUM
-    >
-    IZ_BOOL CPostEffectVSSampling<_NUM, _VECTOR_NUM>::InternalInit()
-    {
-        static IZ_PCSTR name = "g_vUVOffsetSampling";
-
-        IZ_BOOL result = GetHandleByName(
-                            1,
-                            &name,
-                            &m_hOffset);
-
-        return result;
-    }
-
-    // パラメータセット
-    template
-    <
-        IZ_UINT _NUM,
-        IZ_UINT _VECTOR_NUM
-    >
-    void CPostEffectVSSampling<_NUM, _VECTOR_NUM>::SetShaderParameter()
-    {
-        IZ_ASSERT(m_hOffset != IZ_NULL);
-
-        m_pShader->SetVectorArray(
-            m_pDevice,
-            m_hOffset,
-            m_vOffset,
-            COUNTOF(m_vOffset));
-    }
 
     ////////////////////////////////
     /**
