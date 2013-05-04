@@ -204,73 +204,21 @@ namespace graph
         void SetTextureStageState(
             IZ_DWORD stage,
             _TS nTSType,
-            _T& old_val, _T new_val)
-        {
-            if (m_Flags.is_force_set_state) {
-                m_Device->SetTextureStageState(stage, nTSType, new_val);
-                old_val = new_val;
-            }
-            else {
-                if (old_val != new_val) {
-                    m_Device->SetTextureStageState(stage, nTSType, new_val);
-                    old_val = new_val;
-                }
-            }
-        }
+            _T& old_val, _T new_val);
 
         // サンプラステート設定
         template <typename _SS, typename _T>
         void SetSamplerStateAddr(
             IZ_DWORD stage,
             _SS nSSType,
-            _T& old_val, _T new_val)
-        {
-            if (m_Flags.is_force_set_state) {
-                m_Device->SetSamplerState(
-                    stage, 
-                    IZ_GET_TARGET_SAMPLER_STATE_TYPE(nSSType),
-                    IZ_GET_TARGET_TEX_ADDR(new_val));
-
-                old_val = new_val;
-            }
-            else {
-                if (old_val != new_val) {
-                    m_Device->SetSamplerState(
-                        stage, 
-                        IZ_GET_TARGET_SAMPLER_STATE_TYPE(nSSType), 
-                        IZ_GET_TARGET_TEX_ADDR(new_val));
-
-                    old_val = new_val;
-                }
-            }
-        }
+            _T& old_val, _T new_val);
 
         // サンプラステート設定
         template <typename _SS, typename _T>
         void SetSamplerStateFilter(
             IZ_DWORD stage,
             _SS nSSType,
-            _T& old_val, _T new_val)
-        {
-            if (m_Flags.is_force_set_state) {
-                m_Device->SetSamplerState(
-                    stage, 
-                    IZ_GET_TARGET_SAMPLER_STATE_TYPE(nSSType),
-                    IZ_GET_TARGET_TEX_FILTER(new_val));
-
-                old_val = new_val;
-            }
-            else {
-                if (old_val != new_val) {
-                    m_Device->SetSamplerState(
-                        stage, 
-                        IZ_GET_TARGET_SAMPLER_STATE_TYPE(nSSType), 
-                        IZ_GET_TARGET_TEX_FILTER(new_val));
-
-                    old_val = new_val;
-                }
-            }
-        }
+            _T& old_val, _T new_val);
 
     public:
         // リセット用コールバックセット
