@@ -28,7 +28,7 @@ namespace graph
     // デストラクタ
     CTextureGLES2::~CTextureGLES2()
     {
-        glDeleteTextures(1, &m_Texture);
+        ::glDeleteTextures(1, &m_Texture);
 
         FREE(m_Allocator, m_TemporaryData);
     }
@@ -117,10 +117,10 @@ namespace graph
         E_GRAPH_PIXEL_FMT fmt,
         E_GRAPH_RSC_USAGE rscType)
     {
-        glGenTextures(1, &m_Texture);
+        ::glGenTextures(1, &m_Texture);
         VRETURN(m_Texture > 0);
 
-        glBindTexture(GL_TEXTURE_2D, m_Texture);
+        ::glBindTexture(GL_TEXTURE_2D, m_Texture);
 
         SetTextureInfo(
             IZ_FALSE,

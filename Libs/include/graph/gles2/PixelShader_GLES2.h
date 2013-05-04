@@ -1,38 +1,39 @@
 #if !defined(__IZANAGI_GRAPH_PIXEL_SHADER_GLES2_H__)
 #define __IZANAGI_GRAPH_PIXEL_SHADER_GLES2_H__
 
+#include "izGLES2Defs.h"
 #include "graph/PixelShader.h"
-#include "graph/dx9/ShaderProxy.h"
+#include "ShaderProxy_GLES2.h"
 
 namespace izanagi
 {
 namespace graph
 {
-    class CGraphicsDeviceDX9;
+    class CGraphicsDevice;
 
     /** ピクセルシェーダ
      */
-    class CPixelShaderDX9 : public CShaderProxy<CPixelShader>
+    class CPixelShaderGLES2 : public CShaderProxy<CPixelShader>
     {
-        friend class CGraphicsDeviceDX9;
+        friend class CGraphicsDeviceGLES2;
 
     private:
         // インスタンス作成
         static CPixelShader* CreatePixelShader(
-            CGraphicsDeviceDX9* device,
+            CGraphicsDevice* device,
             IMemoryAllocator* allocator,
             const void* program);
 
     protected:
-        inline CPixelShaderDX9();
-        virtual inline ~CPixelShaderDX9();
+        inline CPixelShaderGLES2();
+        virtual inline ~CPixelShaderGLES2();
 
     public:
-        D3D_PS* GetRawInterface() { return m_PS; }
+        GLuint GetRawInterface() { return m_PS; }
 
     protected:
         // 本体
-        D3D_PS* m_PS;
+        GLuint m_PS;
     };
 }   // namespace graph
 }   // namespace izanagi
