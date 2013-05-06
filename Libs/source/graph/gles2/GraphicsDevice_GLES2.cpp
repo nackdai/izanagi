@@ -103,11 +103,6 @@ namespace graph
     */
     IZ_BOOL CGraphicsDeviceGLES2::Reset(const void* initialParam)
     {
-        // NOTE
-        // izanagiでは左手座標系なので
-        // カリングの標準はCounterClockWiseにする
-        ::glFrontFace(GL_CCW);
-
         const SGraphicsDeviceInitParams& param = *(reinterpret_cast<const SGraphicsDeviceInitParams*>(initialParam));
 
         IZ_BOOL ret = IZ_FALSE;
@@ -125,6 +120,11 @@ namespace graph
         }
 
         if (ret) {
+            // NOTE
+            // izanagiでは左手座標系なので
+            // カリングの標準はCounterClockWiseにする
+            ::glFrontFace(GL_CCW);
+
             // ビューポート
             SViewport vp;
             {
@@ -160,15 +160,17 @@ namespace graph
     {
         // Get Display
         m_Display = ::eglGetDisplay(sParams.display);
-        VRETURN(m_Display == EGL_NO_DISPLAY);
+        VRETURN(m_Display != EGL_NO_DISPLAY);
 
         // Initialize EGL
         EGLint major, minor;
-        VRETURN(::eglInitialize(m_Display, &major, &minor));
+        EGLBoolean result = ::eglInitialize(m_Display, &major, &minor);
+        VRETURN(result);
 
         // Get configs
         EGLint numConfigs;
-        VRETURN(::eglGetConfigs(m_Display, IZ_NULL, 0, &numConfigs));
+        result = ::eglGetConfigs(m_Display, IZ_NULL, 0, &numConfigs);
+        VRETURN(result);
 
         EGLint configAttribList[] =
         {
@@ -184,13 +186,13 @@ namespace graph
 
         // Choose config
         EGLConfig config;
-        VRETURN(
-            ::eglChooseConfig(
+        result = ::eglChooseConfig(
                 m_Display,
                 configAttribList,
                 &config,
                 1,
-                &numConfigs));
+                &numConfigs);
+        VRETURN(result);
 
         static const EGLint surfaceAttribList[] =
         {
@@ -221,7 +223,8 @@ namespace graph
         VRETURN(m_Context != EGL_NO_CONTEXT);
 
         // Make the context current
-        VRETURN(::eglMakeCurrent(m_Display, m_Surface, EGL_NO_SURFACE, m_Context));
+        result = ::eglMakeCurrent(m_Display, m_Surface, m_Surface, m_Context);
+        VRETURN(result);
 
         m_ScreenWidth = sParams.screenWidth;
         m_ScreenHeight = sParams.screenHeight;
@@ -284,6 +287,8 @@ namespace graph
         IZ_DWORD nClearStencil)
     {
         if (nClearFlags > 0) {
+            GLbitfield flag = 0;
+
             if (_IS_CLEAR(nClearFlags, E_GRAPH_CLEAR_FLAG_COLOR))
             {
                 ::glClearColor(
@@ -292,21 +297,25 @@ namespace graph
                     IZ_COLOR_B(nClearColor) * clr_div,
                     IZ_COLOR_A(nClearColor) * clr_div);
 
-                ::glClear(GL_COLOR_BUFFER_BIT);
+                flag |= GL_COLOR_BUFFER_BIT;
             }
 
             if (_IS_CLEAR(nClearFlags, E_GRAPH_CLEAR_FLAG_DEPTH))
             {
                 ::glClearDepthf(fClearZ);
 
-                ::glClear(GL_DEPTH_BUFFER_BIT);
+                flag |= GL_DEPTH_BUFFER_BIT;
             }
 
             if (_IS_CLEAR(nClearFlags, E_GRAPH_CLEAR_FLAG_STENCIL))
             {
                 ::glClearStencil(nClearStencil);
 
-                ::glClear(GL_STENCIL_BUFFER_BIT);
+                flag |= GL_STENCIL_BUFFER_BIT;
+            }
+
+            if (flag > 0) {
+                ::glClear(flag);
             }
         }
     }
@@ -463,9 +472,9 @@ namespace graph
 
         CShaderProgramGLES2* gles2Program = reinterpret_cast<CShaderProgramGLES2*>(program);
 
-        IZ_ASSERT(gles2Program->IsValid());
-
         if (gles2Program != IZ_NULL) {
+            IZ_ASSERT(gles2Program->IsValid());
+
             if (!gles2Program->IsLinked()) {
                 gles2Program->Link();
             }
@@ -746,66 +755,72 @@ namespace graph
     {
         ::glActiveTexture(GL_TEXTURE0 + nStage);
 
-        IZ_BOOL isPlane = (pTex->GetTexType() == E_GRAPH_TEX_TYPE_PLANE);
+        if (pTex != IZ_NULL) {
+            IZ_BOOL isPlane = (pTex->GetTexType() == E_GRAPH_TEX_TYPE_PLANE);
 
-        ::glBindTexture(
-            isPlane ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP,
-            pTex->GetTexHandle());
+            ::glBindTexture(
+                isPlane ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP,
+                pTex->GetTexHandle());
+
+            if (pTex->GetTexType() == E_GRAPH_TEX_TYPE_PLANE) {
+                ((CTextureGLES2*)pTex)->Initialize();
+            }
+            else if (pTex->GetTexType() == E_GRAPH_TEX_TYPE_CUBE) {
+                ((CCubeTextureGLES2*)pTex)->Initialize();
+            }
+            else {
+                // TODO
+                IZ_ASSERT(IZ_FALSE);
+            }
+
+            // うーん・・・
+            // ステート
+            {
+                // MIN_FILTER
+                SetSamplerStateFilter(
+                    isPlane,
+                    E_GRAPH_SAMPLER_STATE_TYPE_MINFILTER,
+                    m_SamplerState[nStage].minFilter,
+                    pTex->GetState().minFilter);
+
+                // MAG_FILTER
+                SetSamplerStateFilter(
+                    isPlane,
+                    E_GRAPH_SAMPLER_STATE_TYPE_MAGFILTER,
+                    m_SamplerState[nStage].magFilter,
+                    pTex->GetState().magFilter);
+
+                // MIP_FILTER
+                if (pTex->GetMipMapNum() > 1) {
+                    SetSamplerStateFilter(
+                        isPlane,
+                        E_GRAPH_SAMPLER_STATE_TYPE_MIPFILTER,
+                        m_SamplerState[nStage].mipFilter,
+                        pTex->GetState().mipFilter);
+                }
+
+                // ADDRESS_U
+                SetSamplerStateAddr(
+                    isPlane,
+                    E_GRAPH_SAMPLER_STATE_TYPE_ADDRESSU,
+                    m_SamplerState[nStage].addressU,
+                    pTex->GetState().addressU);
+
+                // ADDRESS_V
+                SetSamplerStateAddr(
+                    isPlane,
+                    E_GRAPH_SAMPLER_STATE_TYPE_ADDRESSV,
+                    m_SamplerState[nStage].addressV,
+                    pTex->GetState().addressV);
+            }
+        }
+        else {
+            ::glBindTexture(GL_TEXTURE_2D, 0);
+            ::glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+        }
 
         // 保持しておく
         SAFE_REPLACE(m_Texture[nStage], pTex);
-
-        if (pTex->GetTexType() == E_GRAPH_TEX_TYPE_PLANE) {
-            ((CTextureGLES2*)pTex)->Initialize();
-        }
-        else if (pTex->GetTexType() == E_GRAPH_TEX_TYPE_CUBE) {
-            ((CCubeTextureGLES2*)pTex)->Initialize();
-        }
-        else {
-            // TODO
-            IZ_ASSERT(IZ_FALSE);
-        }
-
-        // うーん・・・
-        // ステート
-        if (pTex != NULL) {
-            // MIN_FILTER
-            SetSamplerStateFilter(
-                isPlane,
-                E_GRAPH_SAMPLER_STATE_TYPE_MINFILTER,
-                m_SamplerState[nStage].minFilter,
-                pTex->GetState().minFilter);
-
-            // MAG_FILTER
-            SetSamplerStateFilter(
-                isPlane,
-                E_GRAPH_SAMPLER_STATE_TYPE_MAGFILTER,
-                m_SamplerState[nStage].magFilter,
-                pTex->GetState().magFilter);
-
-            // MIP_FILTER
-            if (pTex->GetMipMapNum() > 1) {
-                SetSamplerStateFilter(
-                    isPlane,
-                    E_GRAPH_SAMPLER_STATE_TYPE_MIPFILTER,
-                    m_SamplerState[nStage].mipFilter,
-                    pTex->GetState().mipFilter);
-            }
-
-            // ADDRESS_U
-            SetSamplerStateAddr(
-                isPlane,
-                E_GRAPH_SAMPLER_STATE_TYPE_ADDRESSU,
-                m_SamplerState[nStage].addressU,
-                pTex->GetState().addressU);
-
-            // ADDRESS_V
-            SetSamplerStateAddr(
-                isPlane,
-                E_GRAPH_SAMPLER_STATE_TYPE_ADDRESSV,
-                m_SamplerState[nStage].addressV,
-                pTex->GetState().addressV);
-        }
 
         return IZ_TRUE;
     }

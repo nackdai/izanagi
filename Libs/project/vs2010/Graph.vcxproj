@@ -64,12 +64,15 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\external\ANGLE\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\External\ANGLE\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>
       </PrecompiledHeader>
     </ClCompile>
     <PostBuildEvent />
+    <Lib>
+      <AdditionalDependencies>..\..\..\External\ANGLE\lib\Debug\libEGL.lib;..\..\..\External\ANGLE\lib\Debug\libGLESv2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">
     <ClCompile>
@@ -150,6 +153,10 @@
     <ClCompile Include="..\..\source\graph\dx9\VertexShader_DX9.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\..\source\graph\gles2\2DShader_GLES2.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\..\source\graph\gles2\CubeTexture_GLES2.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">true</ExcludedFromBuild>
@@ -175,6 +182,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\source\graph\gles2\RenderState_GLES2.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\gles2\RenderTarget_GLES2.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">true</ExcludedFromBuild>
     </ClCompile>
@@ -206,49 +217,46 @@
   <ItemGroup>
     <CustomBuild Include="..\..\source\graph\2d\shader\2DPS.hlsl">
       <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">fxc /T ps_2_0 /E main_OpVtx /Fh %(RootDir)%(Directory)/%(Filename)_OpVtx.h /nologo %(FullPath)
-fxc /T ps_2_0 /E main_OpTex /Fh %(RootDir)%(Directory)/%(Filename)_OpTex.h /nologo %(FullPath)
-fxc /T ps_2_0 /E main_OpModulate /Fh %(RootDir)%(Directory)/%(Filename)_OpModulate.h /nologo %(FullPath)
-fxc /T ps_2_0 /E main_OpModulate2x /Fh %(RootDir)%(Directory)/%(Filename)_OpModulate2x.h /nologo %(FullPath)
-fxc /T ps_2_0 /E main_OpModulate4x /Fh %(RootDir)%(Directory)/%(Filename)_OpModulate4x.h /nologo %(FullPath)
-fxc /T ps_2_0 /E main_OpAdd /Fh %(RootDir)%(Directory)/%(Filename)_Add.h /nologo %(FullPath)
-fxc /T ps_2_0 /E main_OpModulateAlpha /Fh %(RootDir)%(Directory)/%(Filename)_OpModulateAlpha.h /nologo %(FullPath)
-fxc /T ps_2_0 /E main_OpNoTexAlpha /Fh %(RootDir)%(Directory)/%(Filename)_OpNoTexAlpha.h /nologo %(FullPath)
-</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">fxc /T ps_2_0 /E main_OpVtx /Fh %(RootDir)%(Directory)/%(Filename)_OpVtx.h /nologo %(FullPath)
-fxc /T ps_2_0 /E main_OpTex /Fh %(RootDir)%(Directory)/%(Filename)_OpTex.h /nologo %(FullPath)
-fxc /T ps_2_0 /E main_OpModulate /Fh %(RootDir)%(Directory)/%(Filename)_OpModulate.h /nologo %(FullPath)
-fxc /T ps_2_0 /E main_OpModulate2x /Fh %(RootDir)%(Directory)/%(Filename)_OpModulate2x.h /nologo %(FullPath)
-fxc /T ps_2_0 /E main_OpModulate4x /Fh %(RootDir)%(Directory)/%(Filename)_OpModulate4x.h /nologo %(FullPath)
-fxc /T ps_2_0 /E main_OpAdd /Fh %(RootDir)%(Directory)/%(Filename)_Add.h /nologo %(FullPath)
-fxc /T ps_2_0 /E main_OpModulateAlpha /Fh %(RootDir)%(Directory)/%(Filename)_OpModulateAlpha.h /nologo %(FullPath)
-fxc /T ps_2_0 /E main_OpNoTexAlpha /Fh %(RootDir)%(Directory)/%(Filename)_OpNoTexAlpha.h /nologo %(FullPath)
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(RootDir)%(Directory)/%(Filename)_OpVtx.h;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">%(RootDir)%(Directory)/%(Filename)_OpVtx.h;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">fxc /T ps_2_0 /E main_OpVtx /Fh %(RootDir)%(Directory)/%(Filename)_OpVtx.h /nologo %(FullPath)
-fxc /T ps_2_0 /E main_OpTex /Fh %(RootDir)%(Directory)/%(Filename)_OpTex.h /nologo %(FullPath)
-fxc /T ps_2_0 /E main_OpModulate /Fh %(RootDir)%(Directory)/%(Filename)_OpModulate.h /nologo %(FullPath)
-fxc /T ps_2_0 /E main_OpModulate2x /Fh %(RootDir)%(Directory)/%(Filename)_OpModulate2x.h /nologo %(FullPath)
-fxc /T ps_2_0 /E main_OpModulate4x /Fh %(RootDir)%(Directory)/%(Filename)_OpModulate4x.h /nologo %(FullPath)
-fxc /T ps_2_0 /E main_OpAdd /Fh %(RootDir)%(Directory)/%(Filename)_Add.h /nologo %(FullPath)
-fxc /T ps_2_0 /E main_OpModulateAlpha /Fh %(RootDir)%(Directory)/%(Filename)_OpModulateAlpha.h /nologo %(FullPath)
-fxc /T ps_2_0 /E main_OpNoTexAlpha /Fh %(RootDir)%(Directory)/%(Filename)_OpNoTexAlpha.h /nologo %(FullPath)
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">%(RootDir)%(Directory)/%(Filename)_OpVtx.h;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">fxc /T ps_2_0 /E main_OpVtx /Fh %(RootDir)%(Directory)/../../dx9/%(Filename)_OpVtx.h /nologo %(FullPath)
+fxc /T ps_2_0 /E main_OpTex /Fh %(RootDir)%(Directory)/../../dx9/%(Filename)_OpTex.h /nologo %(FullPath)
+fxc /T ps_2_0 /E main_OpModulate /Fh %(RootDir)%(Directory)/../../dx9/%(Filename)_OpModulate.h /nologo %(FullPath)
+fxc /T ps_2_0 /E main_OpModulate2x /Fh %(RootDir)%(Directory)/../../dx9/%(Filename)_OpModulate2x.h /nologo %(FullPath)
+fxc /T ps_2_0 /E main_OpModulate4x /Fh %(RootDir)%(Directory)/../../dx9/%(Filename)_OpModulate4x.h /nologo %(FullPath)
+fxc /T ps_2_0 /E main_OpAdd /Fh %(RootDir)%(Directory)/../../dx9/%(Filename)_Add.h /nologo %(FullPath)
+fxc /T ps_2_0 /E main_OpModulateAlpha /Fh %(RootDir)%(Directory)/../../dx9/%(Filename)_OpModulateAlpha.h /nologo %(FullPath)
+fxc /T ps_2_0 /E main_OpNoTexAlpha /Fh %(RootDir)%(Directory)/../../dx9/%(Filename)_OpNoTexAlpha.h /nologo %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpVtx -p ps_2_0 -I %(RootDir)%(Directory) -i %(FullPath) -o %(RootDir)%(Directory)../../gles2/%(FileName)_OpVtx.ps --string-table
+$(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpTex -p ps_2_0 -I %(RootDir)%(Directory) -i %(FullPath) -o %(RootDir)%(Directory)../../gles2/%(FileName)_OpTex.ps --string-table
+$(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpModulate -p ps_2_0 -I %(RootDir)%(Directory) -i %(FullPath) -o %(RootDir)%(Directory)../../gles2/%(FileName)_OpModulate.ps --string-table
+$(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpModulate2x -p ps_2_0 -I %(RootDir)%(Directory) -i %(FullPath) -o %(RootDir)%(Directory)../../gles2/%(FileName)_OpModulate2x.ps --string-table
+$(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpModulate4x -p ps_2_0 -I %(RootDir)%(Directory) -i %(FullPath) -o %(RootDir)%(Directory)../../gles2/%(FileName)_OpModulate4x.ps --string-table
+$(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpAdd -p ps_2_0 -I %(RootDir)%(Directory) -i %(FullPath) -o %(RootDir)%(Directory)../../gles2/%(FileName)_OpAdd.ps --string-table
+$(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpModulateAlpha -p ps_2_0 -I %(RootDir)%(Directory) -i %(FullPath) -o %(RootDir)%(Directory)../../gles2/%(FileName)_OpModulateAlpha.ps --string-table
+$(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpNoTexAlpha -p ps_2_0 -I %(RootDir)%(Directory) -i %(FullPath) -o %(RootDir)%(Directory)../../gles2/%(FileName)_OpNoTexAlpha.ps --string-table</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(RootDir)%(Directory)/../../dx9/%(Filename)_OpVtx.h;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">%(RootDir)%(Directory)../../gles2/%(FileName)_OpVtx.ps;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">fxc /T ps_2_0 /E main_OpVtx /Fh %(RootDir)%(Directory)/../../dx9/%(Filename)_OpVtx.h /nologo %(FullPath)
+fxc /T ps_2_0 /E main_OpTex /Fh %(RootDir)%(Directory)/../../dx9/%(Filename)_OpTex.h /nologo %(FullPath)
+fxc /T ps_2_0 /E main_OpModulate /Fh %(RootDir)%(Directory)/../../dx9/%(Filename)_OpModulate.h /nologo %(FullPath)
+fxc /T ps_2_0 /E main_OpModulate2x /Fh %(RootDir)%(Directory)/../../dx9/%(Filename)_OpModulate2x.h /nologo %(FullPath)
+fxc /T ps_2_0 /E main_OpModulate4x /Fh %(RootDir)%(Directory)/../../dx9/%(Filename)_OpModulate4x.h /nologo %(FullPath)
+fxc /T ps_2_0 /E main_OpAdd /Fh %(RootDir)%(Directory)/../../dx9/%(Filename)_Add.h /nologo %(FullPath)
+fxc /T ps_2_0 /E main_OpModulateAlpha /Fh %(RootDir)%(Directory)/../../dx9/%(Filename)_OpModulateAlpha.h /nologo %(FullPath)
+fxc /T ps_2_0 /E main_OpNoTexAlpha /Fh %(RootDir)%(Directory)/../../dx9/%(Filename)_OpNoTexAlpha.h /nologo %(FullPath)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">%(RootDir)%(Directory)/../../dx9/%(Filename)_OpVtx.h;%(Outputs)</Outputs>
     </CustomBuild>
     <None Include="..\..\source\graph\2d\shader\2DShader.hlsl" />
     <CustomBuild Include="..\..\source\graph\2d\shader\2DVS.hlsl">
       <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">fxc /T vs_2_0 /Fh %(RootDir)%(Directory)/%(Filename).h /nologo %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">fxc /T vs_2_0 /Fh %(RootDir)%(Directory)/../../dx9/%(Filename).h /nologo %(FullPath)
 </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">fxc /T vs_2_0 /Fh %(RootDir)%(Directory)/%(Filename).h /nologo %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main -p vs_2_0 -I %(RootDir)%(Directory) -i %(FullPath) -o %(RootDir)%(Directory)../../gles2/%(FileName).vs --string-table
 </Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(RootDir)%(Directory)/%(Filename).h;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">%(RootDir)%(Directory)/%(Filename).h;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">fxc /T vs_2_0 /Fh %(RootDir)%(Directory)/%(Filename).h /nologo %(FullPath)
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(RootDir)%(Directory)/../../dx9/%(Filename).h;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">%(RootDir)%(Directory)../../gles2/%(FileName).vs;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">fxc /T vs_2_0 /Fh %(RootDir)%(Directory)/../../dx9/%(Filename).h /nologo %(FullPath)
 </Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">%(RootDir)%(Directory)/%(Filename).h;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">%(RootDir)%(Directory)/../../dx9/%(Filename).h;%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
@@ -272,6 +280,7 @@ fxc /T ps_2_0 /E main_OpNoTexAlpha /Fh %(RootDir)%(Directory)/%(Filename)_OpNoTe
     <ClInclude Include="..\..\include\graph\dx9\VertexDeclaration_DX9.h" />
     <ClInclude Include="..\..\include\graph\dx9\VertexShader_DX9.h" />
     <ClInclude Include="..\..\include\graph\gles2\2DRenderer_GLES2.h" />
+    <ClInclude Include="..\..\include\graph\gles2\2DShader_GLES2.h" />
     <ClInclude Include="..\..\include\graph\gles2\CubeTexture_GLES2.h" />
     <ClInclude Include="..\..\include\graph\gles2\GraphicsDevice_GLES2.h" />
     <ClInclude Include="..\..\include\graph\gles2\IndexBuffer_GLES2.h" />
@@ -292,11 +301,11 @@ fxc /T ps_2_0 /E main_OpNoTexAlpha /Fh %(RootDir)%(Directory)/%(Filename)_OpNoTe
     <ClInclude Include="..\..\include\graph\2d\2DRenderer.h" />
     <ClInclude Include="..\..\include\graph\2d\2DShader.h" />
     <ClInclude Include="..\..\include\graph\IndexBuffer.h" />
-    <ClInclude Include="..\..\include\graph\internal\ParamValueConverter.h" />
-    <ClInclude Include="..\..\include\graph\internal\RenderTargetManager.h" />
+    <ClInclude Include="..\..\include\graph\ParamValueConverter.h" />
     <ClInclude Include="..\..\include\graph\PixelShader.h" />
     <ClInclude Include="..\..\include\graph\RenderState.h" />
     <ClInclude Include="..\..\include\graph\RenderTarget.h" />
+    <ClInclude Include="..\..\include\graph\RenderTargetManager.h" />
     <ClInclude Include="..\..\include\graph\ShaderProgram.h" />
     <ClInclude Include="..\..\include\graph\Texture.h" />
     <ClInclude Include="..\..\include\graph\VertexBuffer.h" />

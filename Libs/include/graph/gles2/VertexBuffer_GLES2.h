@@ -69,6 +69,8 @@ namespace graph
 
         size_t m_Size;
 
+        IZ_UINT m_AllocSize;
+
         IZ_UINT m_LockOffset;
         IZ_UINT m_LockSize;
         void* m_TemporaryData;

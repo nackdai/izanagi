@@ -3,15 +3,15 @@
 #include "graph/dx9/PixelShader_DX9.h"
 #include "graph/GraphicsDevice.h"
 
-#include "../2d/shader/2DVS.h"
-#include "../2d/shader/2DPS_OpVtx.h"
-#include "../2d/shader/2DPS_OpTex.h"
-#include "../2d/shader/2DPS_OpModulate.h"
-#include "../2d/shader/2DPS_OpModulate2x.h"
-#include "../2d/shader/2DPS_OpModulate4x.h"
-#include "../2d/shader/2DPS_Add.h"
-#include "../2d/shader/2DPS_OpModulateAlpha.h"
-#include "../2d/shader/2DPS_OpNoTexAlpha.h"
+#include "2DVS.h"
+#include "2DPS_OpVtx.h"
+#include "2DPS_OpTex.h"
+#include "2DPS_OpModulate.h"
+#include "2DPS_OpModulate2x.h"
+#include "2DPS_OpModulate4x.h"
+#include "2DPS_Add.h"
+#include "2DPS_OpModulateAlpha.h"
+#include "2DPS_OpNoTexAlpha.h"
 
 static const IZ_BYTE* PS_Programs[] = {
     (const IZ_BYTE*)g_ps20_main_OpVtx,

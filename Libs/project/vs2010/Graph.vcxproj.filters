@@ -24,9 +24,6 @@
     <Filter Include="include\2d">
       <UniqueIdentifier>{dc73ec76-d5a1-429b-a14d-ec92e384ca3e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\internal">
-      <UniqueIdentifier>{e3e6a58a-de3d-42a3-9612-ed20adfedaee}</UniqueIdentifier>
-    </Filter>
     <Filter Include="include\base">
       <UniqueIdentifier>{673e5b54-011e-4a13-95fc-ec4367bede85}</UniqueIdentifier>
     </Filter>
@@ -137,6 +134,12 @@
     <ClCompile Include="..\..\source\graph\gles2\ShaderProgram_GLES2.cpp">
       <Filter>source\gles2</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\graph\gles2\2DShader_GLES2.cpp">
+      <Filter>source\gles2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\gles2\RenderTarget_GLES2.cpp">
+      <Filter>source\gles2</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\source\graph\2d\shader\2DShader.hlsl">
@@ -155,12 +158,6 @@
     </ClInclude>
     <ClInclude Include="..\..\include\graph\2d\2DShader.h">
       <Filter>include\2d</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\graph\internal\ParamValueConverter.h">
-      <Filter>include\internal</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\graph\internal\RenderTargetManager.h">
-      <Filter>include\internal</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\graph\BaseTexture.h">
       <Filter>include\base</Filter>
@@ -292,6 +289,15 @@
       <Filter>include\dx9</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\graph\gles2\RenderTarget_GLES2.h">
+      <Filter>include\gles2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\ParamValueConverter.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\RenderTargetManager.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\gles2\2DShader_GLES2.h">
       <Filter>include\gles2</Filter>
     </ClInclude>
   </ItemGroup>

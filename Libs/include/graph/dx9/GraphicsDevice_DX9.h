@@ -5,7 +5,7 @@
 #include "izDX9Defs.h"
 #include "graph/GraphicsDevice.h"
 #include "graph/RenderState.h"
-#include "graph/internal/ParamValueConverter.h"
+#include "graph/ParamValueConverter.h"
 
 namespace izanagi
 {

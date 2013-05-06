@@ -36,8 +36,6 @@ namespace graph
             IZ_UINT vtxStride);
 
     protected:
-        IMemoryAllocator* m_Allocator;
-
         IZ_UINT m_ElemNum;
         SVertexElement* m_Elements;
     };

@@ -5,7 +5,7 @@
 #include "izStd.h"
 #include "graph/GraphDefs.h"
 #include "graph/RenderState.h"
-#include "graph/internal/RenderTargetManager.h"
+#include "graph/RenderTargetManager.h"
 
 namespace izanagi
 {

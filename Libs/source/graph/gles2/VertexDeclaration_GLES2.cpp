@@ -1,7 +1,7 @@
 #include "graph/gles2/VertexDeclaration_GLES2.h"
 #include "graph/gles2/ShaderProgram_GLES2.h"
 #include "graph/gles2/GraphicsDevice_GLES2.h"
-#include "graph/internal/ParamValueConverter.h"
+#include "graph/ParamValueConverter.h"
 #include "graph/VertexBuffer.h"
 
 namespace izanagi

@@ -1,6 +1,6 @@
 #include "graph/GraphUtil.h"
 #include "graph/gles2/Texture_GLES2.h"
-#include "graph/internal/ParamValueConverter.h"
+#include "graph/ParamValueConverter.h"
 #include "graph/gles2/GraphicsDevice_GLES2.h"
 
 namespace izanagi
@@ -188,15 +188,20 @@ namespace graph
             GLuint width = GetWidth();
             GLuint height = GetHeight();
 
-            ::glTexImage2D(
-                GL_TEXTURE_2D,
-                m_TexInfo.level,
-                m_GLFormat,
-                width, height,
-                0,
-                m_GLFormat,
-                m_GLType,
-                IZ_NULL);
+            for (IZ_UINT i = 0; i < m_TexInfo.level; i++) {
+                GLuint w = width >> i;
+                GLuint h = height >> i;
+
+                ::glTexImage2D(
+                    GL_TEXTURE_2D,
+                    i,
+                    m_GLFormat,
+                    w, h,
+                    0,
+                    m_GLFormat,
+                    m_GLType,
+                    IZ_NULL);
+            }
 
             m_IsInitialized = IZ_TRUE;
         }
@@ -275,9 +280,14 @@ namespace graph
 
             // 元に戻す
             if (curTex != this) {
-                ::glBindTexture(
-                    curTex->GetTexType() == E_GRAPH_TEX_TYPE_PLANE ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP,
-                    ((CTextureGLES2*)curTex)->m_Texture);
+                if (curTex == IZ_NULL) {
+                    ::glBindTexture(GL_TEXTURE_2D, 0);
+                }
+                else {
+                    ::glBindTexture(
+                        curTex->GetTexType() == E_GRAPH_TEX_TYPE_PLANE ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP,
+                        ((CTextureGLES2*)curTex)->m_Texture);
+                }
             }
 
             m_LockedSize = 0;
