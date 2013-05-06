@@ -32,6 +32,7 @@ namespace ShaderCompiler
             Console.WriteLine("-p <profile>");
             Console.WriteLine("-I <includes>");
             Console.WriteLine("-D <defines>");
+            Console.WriteLine("--string-table");
             Console.WriteLine("-opt <options> : options for native compiler (fxc.exe)");
         }
 
@@ -184,25 +185,47 @@ namespace ShaderCompiler
                 {
                     using (var sw = new StreamWriter(option.Output, false, Encoding.ASCII))
                     {
+                        if (option.IsExportAsStringTable)
+                        {
+                            sw.WriteLine("const char* " + option.Entry + " = {");
+                        }
+
                         while (sr.Peek() >= 0)
                         {
                             var line = sr.ReadLine();
                             if (count == 0)
                             {
-                                sw.WriteLine("precision highp float;");
-                                sw.WriteLine();
+                                WriteLine(option, sw, "precision highp float;");
+                                WriteLine(option, sw, "");
                             }
                             else
                             {
-                                sw.WriteLine(line);
+                                WriteLine(option, sw, line);
                             }
                             count++;
+                        }
+
+                        if (option.IsExportAsStringTable)
+                        {
+                            sw.WriteLine("};");
                         }
                     }
                 }
             }
 
             File.Delete(tmp);
+        }
+
+        static void WriteLine(Option option, StreamWriter sw, string line)
+        {
+            string output = line;
+
+            if (option.IsExportAsStringTable)
+            {
+                output = string.Format("\"{0}\"", line);
+            }
+
+            sw.WriteLine(output);
         }
     }
 
@@ -256,6 +279,11 @@ namespace ShaderCompiler
         /// </summary>
         public string Options;
 
+        /// <summary>
+        /// 文字列テーブルとして出力するかどうか
+        /// </summary>
+        public bool IsExportAsStringTable;
+
         public Option(string[] args)
         {
             bool isOptions = false;
@@ -293,6 +321,10 @@ namespace ShaderCompiler
                 else if (arg == "-p")
                 {
                     this.Profile = args[++i];
+                }
+                else if (arg == "--string-table")
+                {
+                    this.IsExportAsStringTable = true;
                 }
                 else if (isOptions)
                 {

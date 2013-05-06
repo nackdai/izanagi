@@ -58,6 +58,9 @@
   <PropertyGroup>
     <PreBuildEvent>copy /y "$(SolutionDir)..\..\tools\$(Configuration)\Preproc.exe" ".\"</PreBuildEvent>
   </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>copy /y "$(ProjectDir)$(OutDir)*" "$(SolutionDir)..\..\tools\$(ConfigurationName)"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
