@@ -1,6 +1,6 @@
 #include "graph/dx9/Surface_DX9.h"
 #include "graph/dx9/Texture_DX9.h"
-#include "graph/internal/ParamValueConverter.h"
+#include "graph/ParamValueConverter.h"
 #include "graph/dx9/GraphicsDevice_DX9.h"
 
 namespace izanagi

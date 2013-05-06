@@ -38,8 +38,24 @@ namespace graph
             
             ::glCompileShader(m_Shader);
 
-            // TODO
+#ifdef __IZ_DEBUG__
             // Error Check
+            GLint isCompiled = 0;
+            ::glGetShaderiv(m_Shader, GL_COMPILE_STATUS, &isCompiled);
+
+            if (!isCompiled) {
+                GLint infoLen = 0;
+                ::glGetShaderiv(m_Shader, GL_INFO_LOG_LENGTH, &infoLen);
+
+                if (infoLen > 1) {
+                    char* log = (char*)ALLOC_ZERO(m_Allocator, infoLen);
+                    ::glGetShaderInfoLog(m_Shader, infoLen, NULL, log);
+                    IZ_PRINTF("Shader Compile Log **** \n");
+                    IZ_PRINTF("%s", log);
+                    FREE(m_Allocator, log);
+                }
+            }
+#endif  // #ifdef __IZ_DEBUG__
 
             return IZ_TRUE;
         }

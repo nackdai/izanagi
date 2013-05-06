@@ -20,7 +20,7 @@ namespace graph
             IZ_ASSERT(instance->m_Program != 0);
         }
 
-        if (instance->m_Program) {
+        if (instance->m_Program == 0) {
             SAFE_RELEASE(instance);
         }
 
@@ -100,8 +100,27 @@ namespace graph
         if (IsValid() && IsDirty()) {
             ::glLinkProgram(m_Program);
 
-            // TODO
+#ifdef __IZ_DEBUG__
             // リンク結果をチェック
+            GLint isLinked = 0;
+
+            ::glGetProgramiv(m_Program, GL_LINK_STATUS, &isLinked);
+
+            if (!isLinked) {
+                GLint infoLen = 0;
+
+                ::glGetProgramiv(m_Program, GL_INFO_LOG_LENGTH, &infoLen);
+
+                if (infoLen > 1) {
+                    char* log = (char*)ALLOC_ZERO(m_Allocator, infoLen);
+
+                    ::glGetProgramInfoLog(m_Program, infoLen, NULL, log);
+                    IZ_PRINTF("ShaderProgram Link Log : [%s]\n", log);
+
+                    FREE(m_Allocator, log);
+                }
+            }
+#endif  // #ifdef __IZ_DEBUG__
 
             m_IsLinked = IZ_TRUE;
         }

@@ -55,6 +55,11 @@ namespace graph
             return m_nOp;
         }
 
+        CShaderProgram* GetShaderProgram()
+        {
+            return m_ShaderProgram;
+        }
+
     protected:
         // シェーダパラメータ
         enum {
