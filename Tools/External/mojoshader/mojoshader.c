@@ -2184,7 +2184,11 @@ static void emit_GLSL_start(Context *ctx, const char *profilestr)
     {
         // No gl_FragData[] before GLSL 1.10, so we have to force the version.
         push_output(ctx, &ctx->preflight);
+#if 0
         output_line(ctx, "#version 110");
+#else
+        output_line(ctx, "");
+#endif
         pop_output(ctx);
     } // else if
 
@@ -2193,7 +2197,11 @@ static void emit_GLSL_start(Context *ctx, const char *profilestr)
     {
         ctx->profile_supports_glsl120 = 1;
         push_output(ctx, &ctx->preflight);
+#if 0
         output_line(ctx, "#version 120");
+#else
+        output_line(ctx, "");
+#endif
         pop_output(ctx);
     } // else if
     #endif
@@ -2545,21 +2553,41 @@ static void emit_GLSL_attribute(Context *ctx, RegisterType regtype, int regnum,
                     usage_str = "gl_Position";
                     break;
                 case MOJOSHADER_USAGE_POINTSIZE:
+#if 0
                     usage_str = "gl_PointSize";
+#else
+                    usage_str = "var_PointSize";
+#endif
                     break;
                 case MOJOSHADER_USAGE_COLOR:
                     index_str[0] = '\0';  // no explicit number.
                     if (index == 0)
+#if 0
                         usage_str = "gl_FrontColor";
+#else
+                        usage_str = "var_Color";
+#endif
                     else if (index == 1)
+#if 0
                         usage_str = "gl_FrontSecondaryColor";
+#else
+                        usage_str = "var_FrontSecondaryColor";
+#endif
                     break;
                 case MOJOSHADER_USAGE_FOG:
+#if 0
                     usage_str = "gl_FogFragCoord";
+#else
+                    usage_str = "var_FogFragCoord";
+#endif
                     break;
                 case MOJOSHADER_USAGE_TEXCOORD:
                     snprintf(index_str, sizeof (index_str), "%u", (uint) index);
+#if 0
                     usage_str = "gl_TexCoord";
+#else
+                    usage_str = "var_TexCoord";
+#endif
                     arrayleft = "[";
                     arrayright = "]";
                     break;
@@ -2576,8 +2604,25 @@ static void emit_GLSL_attribute(Context *ctx, RegisterType regtype, int regnum,
                 output_line(ctx, "vec4 %s;", var);
             else
             {
+#if 0
                 output_line(ctx, "#define %s %s%s%s%s", var, usage_str,
                             arrayleft, index_str, arrayright);
+#else
+                if (strcmp(usage_str, "gl_Position") != 0) {
+                    if (strlen(index_str) > 0) {
+                        output_line(ctx, "#define %s %s_%s", var, usage_str, index_str);
+                        output_line(ctx, "varying vec4 %s_%s;", usage_str, index_str);
+                    }
+                    else {
+                        output_line(ctx, "#define %s %s", var, usage_str);
+                        output_line(ctx, "varying vec4 %s;", usage_str);
+                    }
+                }
+                else {
+                    output_line(ctx, "#define %s %s%s%s%s", var, usage_str,
+                            arrayleft, index_str, arrayright);
+                }
+#endif
             } // else
             pop_output(ctx);
         } // else if
@@ -2612,7 +2657,11 @@ static void emit_GLSL_attribute(Context *ctx, RegisterType regtype, int regnum,
         } // if
 
         else if (regtype == REG_TYPE_DEPTHOUT)
+#if 0
             usage_str = "gl_FragDepth";
+#else
+            usage_str = "var_FragDepth";
+#endif
 
         // !!! FIXME: can you actualy have a texture register with COLOR usage?
         else if ((regtype == REG_TYPE_TEXTURE) || (regtype == REG_TYPE_INPUT))
@@ -2624,7 +2673,11 @@ static void emit_GLSL_attribute(Context *ctx, RegisterType regtype, int regnum,
                 if (shader_version_atleast(ctx, 1, 4))
                 {
                     snprintf(index_str, sizeof (index_str), "%u", (uint) index);
+#if 0
                     usage_str = "gl_TexCoord";
+#else
+                    usage_str = "var_TexCoord";
+#endif
                     arrayleft = "[";
                     arrayright = "]";
                 } // if
@@ -2634,9 +2687,17 @@ static void emit_GLSL_attribute(Context *ctx, RegisterType regtype, int regnum,
             {
                 index_str[0] = '\0';  // no explicit number.
                 if (index == 0)
+#if 0
                     usage_str = "gl_Color";
+#else
+                    usage_str = "var_Color";
+#endif
                 else if (index == 1)
+#if 0
                     usage_str = "gl_SecondaryColor";
+#else
+                    usage_str = "var_SecondaryColor";
+#endif
                 else
                     fail(ctx, "unsupported color index");
             } // else if
@@ -2670,8 +2731,25 @@ static void emit_GLSL_attribute(Context *ctx, RegisterType regtype, int regnum,
         if (usage_str != NULL)
         {
             push_output(ctx, &ctx->globals);
+#if 0
             output_line(ctx, "#define %s %s%s%s%s", var, usage_str,
                         arrayleft, index_str, arrayright);
+#else
+            if (strcmp(usage_str, "gl_FragColor") != 0) {
+                if (strlen(index_str) > 0) {
+                    output_line(ctx, "#define %s %s_%s", var, usage_str, index_str);
+                    output_line(ctx, "varying vec4 %s_%s;", usage_str, index_str);
+                }
+                else {
+                    output_line(ctx, "#define %s %s", var, usage_str);
+                    output_line(ctx, "varying vec4 %s;", usage_str);
+                }
+            }
+            else {
+                output_line(ctx, "#define %s %s%s%s%s", var, usage_str,
+                        arrayleft, index_str, arrayright);
+            }
+#endif
             pop_output(ctx);
         } // if
     } // else if
@@ -9478,13 +9556,13 @@ const MOJOSHADER_parseData *MOJOSHADER_parse(const char *profile,
         {
         case MOJOSHADER_SYMTYPE_FLOAT:
             {
-                if (ctx->ctab.symbols[i].info.rows == 1)
+                if (ctx->ctab.symbols[i].info.columns == 1)
                 {
                     sprintf(type, "float\0");
                 }
                 else
                 {
-                    sprintf(type, "vec%d\0", ctx->ctab.symbols[i].info.rows);
+                    sprintf(type, "vec%d\0", ctx->ctab.symbols[i].info.columns);
                 }
             }
             break;
@@ -9517,7 +9595,7 @@ const MOJOSHADER_parseData *MOJOSHADER_parse(const char *profile,
         }
         else
         {
-            if (ctx->ctab.symbols[i].info.columns == 1)
+            if (ctx->ctab.symbols[i].info.rows == 1)
             {
                 output_line(
                     ctx,
@@ -9541,7 +9619,7 @@ const MOJOSHADER_parseData *MOJOSHADER_parse(const char *profile,
                     ctx->ctab.symbols[i].name,
                     ctx->ctab.symbols[i].info.columns);
 
-                for (int n = 0; n < ctx->ctab.symbols[i].info.columns; n++)
+                for (int n = 0; n < ctx->ctab.symbols[i].info.rows; n++)
                 {
                     output_line(
                         ctx,
