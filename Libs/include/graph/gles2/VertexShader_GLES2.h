@@ -26,13 +26,6 @@ namespace graph
     protected:
         inline CVertexShaderGLES2();
         virtual inline ~CVertexShaderGLES2();
-
-    public:
-        GLuint GetRawInterface() { return m_VS; }
-
-    protected:
-        // 本体
-        GLuint m_VS;
     };
 }   // namespace graph
 }   // namespace izanagi

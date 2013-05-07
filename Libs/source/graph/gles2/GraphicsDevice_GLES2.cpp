@@ -475,11 +475,11 @@ namespace graph
         if (gles2Program != IZ_NULL) {
             IZ_ASSERT(gles2Program->IsValid());
 
+            ::glUseProgram(gles2Program->GetRawInterface());
+
             if (!gles2Program->IsLinked()) {
                 gles2Program->Link();
             }
-
-            ::glUseProgram(gles2Program->GetRawInterface());
         }
         else {
             ::glUseProgram(0);
