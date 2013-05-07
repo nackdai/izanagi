@@ -269,7 +269,7 @@ namespace ShaderCompiler
 
             if (option.IsExportAsStringTable)
             {
-                output = string.Format("\"{0}\"", line);
+                output = string.Format("\"{0}\\n\"", line);
             }
 
             sw.WriteLine(output);
