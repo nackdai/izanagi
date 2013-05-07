@@ -1,4 +1,6 @@
-﻿using System;
+﻿//#define ENABLE_DEBUG_MSG
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +14,14 @@ namespace ShaderCompiler
     {
         static void Main(string[] args)
         {
-            Compiler.Do(args);
+            try
+            {
+                Compiler.Do(args);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
     }
 
@@ -40,8 +49,11 @@ namespace ShaderCompiler
         /// Preproc.exe のプロセスを実行するための準備
         /// </summary>
         /// <param name="option"></param>
+        /// <param name="enableLineDirectives"></param>
         /// <returns>Preproc.exe のプロセス開始情報</returns>
-        static ProcessStartInfo PrepareProcessPreproc(Option option)
+        static ProcessStartInfo PrepareProcessPreproc(
+            Option option,
+            bool enableLineDirectives)
         {
             // NOTE
             // Preproc.exe は実行ファイルと同じパスにあること
@@ -70,7 +82,10 @@ namespace ShaderCompiler
                 args += "-D" + " " + option.Defines;
             }
 
-            //args += " " + "-EP";
+            if (!enableLineDirectives)
+            {
+                args += " " + "-EP";
+            }
 
             args += " " + option.Input;
             args += " " + option.PreprocessedFile;
@@ -93,11 +108,16 @@ namespace ShaderCompiler
         /// Preproc.exe を実行
         /// </summary>
         /// <param name="option"></param>
-        static void RunPreprocess(Option option)
+        /// <param name="enableLineDirectives"></param>
+        static void RunPreprocess(
+            Option option,
+            bool enableLineDirectives = true)
         {
             var process = new Process();
 
-            process.StartInfo = PrepareProcessPreproc(option);
+            process.StartInfo = PrepareProcessPreproc(option, enableLineDirectives);
+
+            DebugWriteLine("{0} {1}", process.StartInfo.FileName, process.StartInfo.Arguments);
 
             process.Start();
             process.WaitForExit();
@@ -146,6 +166,8 @@ namespace ShaderCompiler
 
             process.StartInfo = PrepareProcessFxc(option);
 
+            DebugWriteLine("{0} {1}", process.StartInfo.FileName, process.StartInfo.Arguments);
+
             process.Start();
             process.WaitForExit();
 
@@ -169,15 +191,40 @@ namespace ShaderCompiler
 
             char* bytecode = (char*)System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi(option.ByteCodedFile);
 
+            var dir = Path.GetDirectoryName(option.Input);
+
             var tmp = DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss") + ".txt";
+            tmp = Path.Combine(dir, tmp);
+
+            DebugWriteLine("{0}", tmp);
+
             char* output = (char*)System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi(tmp);
 
             bool result = izanagi.tool.MojoShaderProxy.Parse((sbyte*)bytecode, (sbyte*)output);
 
+            DebugWriteLine("{0}", result ? "Succeeded" : "Failed");
+
             if (result)
             {
+                DebugWriteLine("Export to [{0}]", option.Output);
+
                 // TODO
                 // For GLESSL
+
+#if true
+                var preprocessed = tmp + ".pp";
+
+                RunPreprocess(
+                    new Option()
+                    {
+                        Input = tmp,
+                        PreprocessedFile = preprocessed,
+                    });
+
+                File.Delete(tmp);
+
+                tmp = preprocessed;
+#endif
 
                 int count = 0;
 
@@ -226,6 +273,21 @@ namespace ShaderCompiler
             }
 
             sw.WriteLine(output);
+        }
+
+        static void DebugWriteLine(string format, params object[] args)
+        {
+#if ENABLE_DEBUG_MSG
+            var msg = string.Format(format, args);
+            DebugWriteLine(msg);
+#endif
+        }
+
+        static void DebugWriteLine(string msg)
+        {
+#if ENABLE_DEBUG_MSG
+            Console.WriteLine(msg);
+#endif
         }
     }
 
@@ -364,11 +426,17 @@ namespace ShaderCompiler
             // 入力ファイル名からプリプロセスされたファイル名とバイトコード出力されたファイル名を作成する
             if (!string.IsNullOrEmpty(this.Input))
             {
+                var dir = Path.GetDirectoryName(this.Input);
                 this.ByteCodedFile = Path.GetFileNameWithoutExtension(this.Input);
+                this.ByteCodedFile = Path.Combine(dir, this.ByteCodedFile);
                 this.ByteCodedFile += ".bc";
 
                 this.PreprocessedFile = this.Input + "_";
             }
+        }
+
+        public Option()
+        {
         }
 
         public bool IsValid
