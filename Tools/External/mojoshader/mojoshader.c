@@ -9576,20 +9576,41 @@ const MOJOSHADER_parseData *MOJOSHADER_parse(const char *profile,
 
         if (ctx->ctab.symbols[i].info.parameter_class == MOJOSHADER_SYMCLASS_OBJECT)
         {
-            output_line(
-                ctx,
-                "uniform %s %s;",
-                type,
-                ctx->ctab.symbols[i].name);
-
             if (ctx->ctab.symbols[i].info.parameter_type >= MOJOSHADER_SYMTYPE_SAMPLER
                 && ctx->ctab.symbols[i].info.parameter_type <= MOJOSHADER_SYMTYPE_SAMPLER3D)
             {
+#if 0
+                output_line(
+                    ctx,
+                    "uniform %s %s;",
+                    type,
+                    ctx->ctab.symbols[i].name);
                 output_line(
                     ctx,
                     "#define %s_s%d %s",
                     shader,
                     ctx->ctab.symbols[i].register_index,
+                    ctx->ctab.symbols[i].name);
+#else
+                output_line(
+                    ctx,
+                    "uniform %s s%d;",
+                    type,
+                    ctx->ctab.symbols[i].register_index);
+                output_line(
+                    ctx,
+                    "#define %s_s%d s%d",
+                    shader,
+                    ctx->ctab.symbols[i].register_index,
+                    ctx->ctab.symbols[i].register_index);
+#endif
+            }
+            else
+            {
+                output_line(
+                    ctx,
+                    "uniform %s %s;",
+                    type,
                     ctx->ctab.symbols[i].name);
             }
         }
