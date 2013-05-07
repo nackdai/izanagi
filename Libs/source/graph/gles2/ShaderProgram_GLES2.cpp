@@ -100,13 +100,17 @@ namespace graph
         if (IsValid() && IsDirty()) {
             ::glLinkProgram(m_Program);
 
-#ifdef __IZ_DEBUG__
+            // TODO
             // リンク結果をチェック
             GLint isLinked = 0;
 
             ::glGetProgramiv(m_Program, GL_LINK_STATUS, &isLinked);
 
-            if (!isLinked) {
+            if (isLinked) {
+                m_IsLinked = IZ_TRUE;
+            }
+#ifdef __IZ_DEBUG__
+            else {
                 GLint infoLen = 0;
 
                 ::glGetProgramiv(m_Program, GL_INFO_LOG_LENGTH, &infoLen);
@@ -121,8 +125,6 @@ namespace graph
                 }
             }
 #endif  // #ifdef __IZ_DEBUG__
-
-            m_IsLinked = IZ_TRUE;
         }
 
         return IZ_TRUE;

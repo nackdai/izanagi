@@ -27,13 +27,6 @@ namespace graph
     protected:
         inline CPixelShaderGLES2();
         virtual inline ~CPixelShaderGLES2();
-
-    public:
-        GLuint GetRawInterface() { return m_PS; }
-
-    protected:
-        // 本体
-        GLuint m_PS;
     };
 }   // namespace graph
 }   // namespace izanagi

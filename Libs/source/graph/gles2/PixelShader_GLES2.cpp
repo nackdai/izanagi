@@ -50,14 +50,10 @@ namespace graph
 
     CPixelShaderGLES2::CPixelShaderGLES2()
     {
-        m_PS = 0;
     }
 
     CPixelShaderGLES2::~CPixelShaderGLES2()
     {
-        if (m_PS != 0) {
-            ::glDeleteShader(m_PS);
-        }
     }
 }   // namespace graph
 }   // namespace izanagi

@@ -60,6 +60,9 @@ namespace graph
             return IZ_TRUE;
         }
 
+    public:
+        GLuint GetRawInterface() { return m_Shader; }
+
     protected:
         GLuint m_Shader;
     };

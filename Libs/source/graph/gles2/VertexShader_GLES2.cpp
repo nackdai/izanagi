@@ -51,12 +51,10 @@ namespace graph
 
     CVertexShaderGLES2::CVertexShaderGLES2()
     {
-        m_VS = 0;
     }
 
     CVertexShaderGLES2::~CVertexShaderGLES2()
     {
-        ::glDeleteShader(m_VS);
     }
 }   // namespace graph
 }   // namespace izanagi
