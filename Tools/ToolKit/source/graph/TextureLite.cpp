@@ -2,7 +2,7 @@
 #include "graph/GraphicsDeviceLite.h"
 
 // 力技だが・・・
-#include "graph/internal/ParamValueConverter.h"
+#include "graph/ParamValueConverter.h"
 
 using namespace izanagi;
 using namespace tool;
