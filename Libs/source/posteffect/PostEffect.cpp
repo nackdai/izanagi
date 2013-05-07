@@ -466,7 +466,7 @@ IZ_BOOL CPostEffect::Apply(
 
 #ifdef __IZ_DEBUG__
         IZ_PCSTR pszPassName = m_pShader->GetString(pPassDesc->posName);
-        CGraphPerf::BeginEvent(0, pszPassName);
+        graph::CGraphPerf::BeginEvent(0, pszPassName);
 #endif  // #ifdef __IZ_DEBUG__
 
         // ファンクタ取得
@@ -479,7 +479,7 @@ IZ_BOOL CPostEffect::Apply(
         VGOTO(result, __EXIT__);
 
 #ifdef __IZ_DEBUG__
-        CGraphPerf::EndEvent();
+        graph::CGraphPerf::EndEvent();
 #endif  // #ifdef __IZ_DEBUG__
     }
 

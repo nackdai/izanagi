@@ -27,7 +27,7 @@ IZ_BOOL CPostEffectFunctorMGF::Apply(
     }
 
 #ifdef __IZ_DEBUG__
-        CGraphPerf::BeginEvent(0, "passMGFMerge");
+        graph::CGraphPerf::BeginEvent(0, "passMGFMerge");
 #endif  // #ifdef __IZ_DEBUG__
 
     // マージ
@@ -40,7 +40,7 @@ IZ_BOOL CPostEffectFunctorMGF::Apply(
     }
 
 #ifdef __IZ_DEBUG__
-        CGraphPerf::EndEvent();
+        graph::CGraphPerf::EndEvent();
 #endif  // #ifdef __IZ_DEBUG__
 
 __EXIT__:
@@ -305,8 +305,7 @@ IZ_BOOL CPostEffectFunctorMGF::ApplyMGFDownScale(
             m_DownScaleState[nLoopCnt].pDst);
 
 #ifdef __IZ_DEBUG__
-        IZ_SPRINTF(tmp, "passMGFDownScale_%d", nLoopCnt);
-        CGraphPerf::BeginEvent(0, tmp);
+        graph::CGraphPerf::BeginEvent(0, "passMGFDownScale_%d", nLoopCnt);
 #endif  // #ifdef __IZ_DEBUG__
 
         ret = ApplyCore(
@@ -316,7 +315,7 @@ IZ_BOOL CPostEffectFunctorMGF::ApplyMGFDownScale(
         VRETURN(ret);
 
 #ifdef __IZ_DEBUG__
-        CGraphPerf::EndEvent();
+        graph::CGraphPerf::EndEvent();
 #endif  // #ifdef __IZ_DEBUG__
     }
 
@@ -356,8 +355,7 @@ IZ_BOOL CPostEffectFunctorMGF::ApplyMGFRenderBloom(
             m_nPassIdx = GetConnectPassIdx(nState);
 
 #ifdef __IZ_DEBUG__
-        IZ_SPRINTF(tmp, "passMGFBloom_%d_%d", nLoopCnt, nState);
-        CGraphPerf::BeginEvent(0, tmp);
+        graph::CGraphPerf::BeginEvent(0, "passMGFBloom_%d_%d", nLoopCnt, nState);
 #endif  // #ifdef __IZ_DEBUG__
 
             ret = ApplyCore(
@@ -367,7 +365,7 @@ IZ_BOOL CPostEffectFunctorMGF::ApplyMGFRenderBloom(
             VRETURN(ret);
 
 #ifdef __IZ_DEBUG__
-        CGraphPerf::EndEvent();
+        graph::CGraphPerf::EndEvent();
 #endif  // #ifdef __IZ_DEBUG__
         }
     }

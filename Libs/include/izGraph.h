@@ -15,6 +15,6 @@
 #include "graph/ShaderProgram.h"
 #include "graph/VertexDeclaration.h"
 
-#include "graph/dx9/GraphPerf.h"
+#include "graph/GraphPerf.h"
 
 #endif  // #if !defined(__IZANAGI_GRAPH_H__)
