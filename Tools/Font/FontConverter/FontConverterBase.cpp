@@ -351,7 +351,7 @@ BOOL CFontConverterBase::ExportAs(
 {
     BOOL ret = TRUE;
 
-    D3D_TEXTURE* pD3DTex = pTex->GetRawInterface();
+    LPDIRECT3DTEXTURE9 pD3DTex = pTex->GetRawInterface();
 
     HRESULT hr = D3DXSaveTextureToFile(
                     pszName,
