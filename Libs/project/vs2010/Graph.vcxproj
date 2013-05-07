@@ -123,6 +123,9 @@
     <ClCompile Include="..\..\source\graph\dx9\GraphicsDevice_DX9.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\..\source\graph\dx9\GraphPerf_DX9.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\..\source\graph\dx9\IndexBuffer_DX9.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">true</ExcludedFromBuild>
     </ClCompile>
@@ -166,6 +169,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\source\graph\gles2\GraphicsDevice_GLES2.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\gles2\GraphPerf_GLES2.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">true</ExcludedFromBuild>
     </ClCompile>
@@ -296,6 +303,7 @@ fxc /T ps_2_0 /E main_OpNoTexAlpha /Fh %(RootDir)%(Directory)/../../dx9/%(Filena
     <ClInclude Include="..\..\include\graph\gles2\VertexShader_GLES2.h" />
     <ClInclude Include="..\..\include\graph\GraphDefs.h" />
     <ClInclude Include="..\..\include\graph\GraphicsDevice.h" />
+    <ClInclude Include="..\..\include\graph\GraphPerf.h" />
     <ClInclude Include="..\..\include\graph\GraphResource.h" />
     <ClInclude Include="..\..\include\graph\GraphUtil.h" />
     <ClInclude Include="..\..\include\graph\2d\2DRenderer.h" />
@@ -311,6 +319,7 @@ fxc /T ps_2_0 /E main_OpNoTexAlpha /Fh %(RootDir)%(Directory)/../../dx9/%(Filena
     <ClInclude Include="..\..\include\graph\VertexBuffer.h" />
     <ClInclude Include="..\..\include\graph\VertexDeclaration.h" />
     <ClInclude Include="..\..\include\graph\VertexShader.h" />
+    <ClInclude Include="..\..\include\izGraph.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -166,8 +166,7 @@ IZ_BOOL CPostEffectFunctorRenderStar::Apply(
         m_nWorkTexIdx = 0;
 
         for (IZ_INT nPass = 0; nPass < sStarData.nPasses; ++nPass) {
-            sprintf_s(tmp, sizeof(tmp), "passStar_%d_%d\0", nLine, nPass);
-            CGraphPerf::BeginEvent(0, tmp);
+            graph::CGraphPerf::BeginEvent(0, "passStar_%d_%d\0", nLine, nPass);
 
             // 描画先の決定
             graph::CTexture* pDst = IZ_NULL;
@@ -297,7 +296,7 @@ IZ_BOOL CPostEffectFunctorRenderStar::Apply(
                 ToggleWorkTex();
             }
 
-            CGraphPerf::EndEvent();
+            graph::CGraphPerf::EndEvent();
         }   // end of for
     }
 
