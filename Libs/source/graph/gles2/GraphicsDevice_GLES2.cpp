@@ -62,7 +62,7 @@ namespace graph
     // コンストラクタ
     CGraphicsDeviceGLES2::CGraphicsDeviceGLES2()
     {
-        // TODO
+        ::memset(m_SamplerHandle, 0xff, sizeof(m_SamplerHandle));
     }
 
     // デストラクタ
@@ -558,6 +558,7 @@ namespace graph
             {
                 if (isDirty) {
                     m_SamplerHandle[i] = ::glGetUniformLocation(gles2Program->GetRawInterface(), samplerName[i]);
+                    IZ_ASSERT(m_SamplerHandle[i] >= 0);
                 }
 
                 ::glActiveTexture(GL_TEXTURE0 + i);
@@ -588,16 +589,16 @@ namespace graph
             idxNum = nPrimCnt * 2;
             break;
         case E_GRAPH_PRIM_TYPE_LINESTRIP:
-            idxNum = nPrimCnt - 1;
+            idxNum = nPrimCnt + 1;
             break;
         case E_GRAPH_PRIM_TYPE_TRIANGLELIST:
             idxNum = nPrimCnt * 3;
             break;
         case E_GRAPH_PRIM_TYPE_TRIANGLESTRIP:
-            idxNum = nPrimCnt - 2;
+            idxNum = nPrimCnt + 2;
             break;
         case E_GRAPH_PRIM_TYPE_TRIANGLEFAN:
-            idxNum = nPrimCnt - 2;
+            idxNum = nPrimCnt + 2;
             break;
         default:
             IZ_ASSERT(IZ_FALSE);
@@ -821,6 +822,8 @@ namespace graph
 
         // 保持しておく
         SAFE_REPLACE(m_Texture[nStage], pTex);
+
+        m_IsDirtyTex[nStage] = IZ_TRUE;
 
         return IZ_TRUE;
     }

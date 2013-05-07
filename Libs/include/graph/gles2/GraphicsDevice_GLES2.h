@@ -241,7 +241,7 @@ namespace graph
         IZ_BOOL m_IsDirtyShaderProgram;
         IZ_BOOL m_IsDirtyTex[TEX_STAGE_NUM];
 
-        GLuint m_SamplerHandle[TEX_STAGE_NUM];
+        GLint m_SamplerHandle[TEX_STAGE_NUM];
     };
 }   // namespace graph
 }   // namespace izanagi

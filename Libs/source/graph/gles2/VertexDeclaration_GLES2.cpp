@@ -87,7 +87,12 @@ namespace graph
             GLenum type = GL_BYTE;
             size_t size = 4;
 
-            switch (element.Type)
+            E_GRAPH_VTX_DECL_TYPE elemType = element.Type;
+            if (element.Usage == E_GRAPH_VTX_DECL_USAGE_POSITION) {
+                elemType = E_GRAPH_VTX_DECL_TYPE_FLOAT3;
+            }
+
+            switch (elemType)
             {
             case E_GRAPH_VTX_DECL_TYPE_FLOAT1:
                 size = sizeof(GLfloat);
@@ -169,7 +174,7 @@ namespace graph
 
             ::glVertexAttribPointer(
                 i,
-                size,
+                num,
                 type,
                 needNormalized,
                 vtxStride,
