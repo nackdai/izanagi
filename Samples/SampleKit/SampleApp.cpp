@@ -45,6 +45,7 @@ IZ_BOOL CSampleApp::Init(const SSampleAppParams& params)
 
     // グラフィックスデバイス設定
     izanagi::graph::SGraphicsDeviceInitParams gfxDevParams;
+#ifdef __IZ_DX9__
     {
         gfxDevParams.hFocusWindow = (HWND)params.focusWindow;
         gfxDevParams.hDeviceWindow = (HWND)params.deviceWindow;
@@ -65,6 +66,27 @@ IZ_BOOL CSampleApp::Init(const SSampleAppParams& params)
         //gfxDevParams.PresentationInterval = D3DPRESENT_INTERVAL_DEFAULT;
         gfxDevParams.PresentationInterval = D3DPRESENT_INTERVAL_ONE;
     }
+#elif __IZ_GLES2__
+    {
+        gfxDevParams.display = (EGLNativeDisplayType)izanagi::sys::CSysWindow::GetNativeDisplayHandle(params.deviceWindow);
+        gfxDevParams.window = (EGLNativeWindowType)params.deviceWindow;
+
+        gfxDevParams.screenWidth = params.screenWidth;
+        gfxDevParams.screenHeight = params.screenHeight;
+
+        gfxDevParams.rgba[0] = 8;
+        gfxDevParams.rgba[1] = 8;
+        gfxDevParams.rgba[2] = 8;
+        gfxDevParams.rgba[3] = 8;
+
+        gfxDevParams.depth = 24;
+        gfxDevParams.stencil = 8;
+
+        gfxDevParams.enableMultiSample = GL_FALSE;
+    }
+#else
+    IZ_C_ASSERT(IZ_FALSE);
+#endif
 
     // デバイスリセット
     ret = m_Device->Reset((const void*)&gfxDevParams);
