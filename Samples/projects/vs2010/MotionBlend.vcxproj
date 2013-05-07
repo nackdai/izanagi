@@ -5,6 +5,10 @@
       <Configuration>Debug_DX9</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug_GLES2|Win32">
+      <Configuration>Debug_GLES2</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release_DX9|Win32">
       <Configuration>Release_DX9</Configuration>
       <Platform>Win32</Platform>
@@ -25,6 +29,10 @@
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
@@ -36,13 +44,37 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="PropertySeet\Debug_DX9.props" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="PropertySeet\Debug_GLES2.props" />
+  </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">false</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>Shader.lib;Animation.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -103,6 +135,12 @@ move "$(DATA_DIR)%(Filename).skl" "$(PROJECT_MAIN_DIR)data"
 
 $(TOOL_DIR)Release\MaterialConverter.exe -i "%(FullPath)"
 move "$(DATA_DIR)%(Filename)*.mtrl" "$(PROJECT_MAIN_DIR)data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(TOOL_DIR)Release\ModelConverter.exe -i "%(FullPath)" -list
+move "$(DATA_DIR)%(Filename).msh" "$(PROJECT_MAIN_DIR)data"
+move "$(DATA_DIR)%(Filename).skl" "$(PROJECT_MAIN_DIR)data"
+
+$(TOOL_DIR)Release\MaterialConverter.exe -i "%(FullPath)"
+move "$(DATA_DIR)%(Filename)*.mtrl" "$(PROJECT_MAIN_DIR)data"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(TOOL_DIR)Release\ModelConverter.exe -i "%(FullPath)" -list
 move "$(DATA_DIR)%(Filename).msh" "$(PROJECT_MAIN_DIR)data"
 move "$(DATA_DIR)%(Filename).skl" "$(PROJECT_MAIN_DIR)data"
@@ -110,23 +148,31 @@ move "$(DATA_DIR)%(Filename).skl" "$(PROJECT_MAIN_DIR)data"
 $(TOOL_DIR)Release\MaterialConverter.exe -i "%(FullPath)"
 move "$(DATA_DIR)%(Filename)*.mtrl" "$(PROJECT_MAIN_DIR)data"</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(DATA_DIR)%(Filename).msh;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(DATA_DIR)%(Filename).msh;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(DATA_DIR)%(Filename).msh;%(Outputs)</Outputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(FullPath);%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">%(FullPath);%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">%(FullPath);%(AdditionalInputs)</AdditionalInputs>
     </CustomBuild>
     <CustomBuild Include="..\..\..\Media\MikuImage.xml">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(TOOL_DIR)Release\ImageBuilder.exe -i "%(FullPath)" -o "$(PROJECT_MAIN_DIR)data\%(Filename).img"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(TOOL_DIR)Release\ImageBuilder.exe -i "%(FullPath)" -o "$(PROJECT_MAIN_DIR)data\%(Filename).img"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(TOOL_DIR)Release\ImageBuilder.exe -i "%(FullPath)" -o "$(PROJECT_MAIN_DIR)data\%(Filename).img"</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(PROJECT_MAIN_DIR)data\%(Filename).img</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(PROJECT_MAIN_DIR)data\%(Filename).img</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(PROJECT_MAIN_DIR)data\%(Filename).img</Outputs>
     </CustomBuild>
     <CustomBuild Include="..\..\..\Media\miku_walk.vmd">
       <FileType>Document</FileType>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(DATA_DIR)%(Filename).anm;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(DATA_DIR)%(Filename).anm;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(DATA_DIR)%(Filename).anm;%(Outputs)</Outputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(FullPath);%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">%(FullPath);%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">%(FullPath);%(AdditionalInputs)</AdditionalInputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(TOOL_DIR)Release\AnimationConverter.exe -i "%(FullPath)" -b "$(TargetDir)..\..\Media\miku.pmd"
+move "$(DATA_DIR)%(Filename).anm" "$(PROJECT_MAIN_DIR)data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(TOOL_DIR)Release\AnimationConverter.exe -i "%(FullPath)" -b "$(TargetDir)..\..\Media\miku.pmd"
 move "$(DATA_DIR)%(Filename).anm" "$(PROJECT_MAIN_DIR)data"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(TOOL_DIR)Release\AnimationConverter.exe -i "%(FullPath)" -b "$(TargetDir)..\..\Media\miku.pmd"
 move "$(DATA_DIR)%(Filename).anm" "$(PROJECT_MAIN_DIR)data"</Command>
@@ -137,20 +183,27 @@ move "$(DATA_DIR)%(Filename).anm" "$(PROJECT_MAIN_DIR)data"</Command>
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(TOOL_DIR)Release\AnimationConverter.exe -i "%(FullPath)" -b "$(TargetDir)..\..\Media\miku.pmd"
 move "$(DATA_DIR)%(Filename).anm" "$(PROJECT_MAIN_DIR)data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(TOOL_DIR)Release\AnimationConverter.exe -i "%(FullPath)" -b "$(TargetDir)..\..\Media\miku.pmd"
+move "$(DATA_DIR)%(Filename).anm" "$(PROJECT_MAIN_DIR)data"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(TOOL_DIR)Release\AnimationConverter.exe -i "%(FullPath)" -b "$(TargetDir)..\..\Media\miku.pmd"
 move "$(DATA_DIR)%(Filename).anm" "$(PROJECT_MAIN_DIR)data"</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(DATA_DIR)%(Filename).anm;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(DATA_DIR)%(Filename).anm;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(DATA_DIR)%(Filename).anm;%(Outputs)</Outputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(FullPath);%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">%(FullPath);%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">%(FullPath);%(AdditionalInputs)</AdditionalInputs>
     </CustomBuild>
     <None Include="..\..\MotionBlend\shader\SkinShader.fx" />
     <CustomBuild Include="..\..\MotionBlend\shader\SkinShader.xml">
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd</Outputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(RootDir)%(Directory)%(Filename).fx</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">%(RootDir)%(Directory)%(Filename).fx</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">%(RootDir)%(Directory)%(Filename).fx</AdditionalInputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
     </CustomBuild>
   </ItemGroup>

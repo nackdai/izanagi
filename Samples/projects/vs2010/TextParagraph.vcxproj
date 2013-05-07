@@ -5,6 +5,10 @@
       <Configuration>Debug_DX9</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug_GLES2|Win32">
+      <Configuration>Debug_GLES2</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release_DX9|Win32">
       <Configuration>Release_DX9</Configuration>
       <Platform>Win32</Platform>
@@ -25,6 +29,10 @@
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
@@ -36,13 +44,38 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="PropertySeet\Debug_DX9.props" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="PropertySeet\Debug_GLES2.props" />
+  </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">false</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>Text.lib;freetype2411MT_D.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalLibraryDirectories>..\..\..\Libs\external\freetype\objs\win32\vc2010;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -91,8 +124,10 @@
     <CustomBuild Include="..\..\..\Media\mikachan.ttf">
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">copy /B /Y "%(FullPath)" "$(ProjectDir)..\..\$(ProjectName)\data\%(FileName).%(Extension)"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">copy /B /Y "%(FullPath)" "$(ProjectDir)..\..\$(ProjectName)\data\%(FileName).%(Extension)"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">copy /B /Y "%(FullPath)" "$(ProjectDir)..\..\$(ProjectName)\data\%(FileName).%(Extension)"</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\$(ProjectName)\data\%(FileName).%(Extension);%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(ProjectDir)..\..\$(ProjectName)\data\%(FileName).%(Extension);%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\$(ProjectName)\data\%(FileName).%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>
