@@ -1,1 +1,1 @@
-call BuildLibs.bat Release_DX9
+call BuildLibs.bat Release DX9
