@@ -68,7 +68,7 @@ IZ_BOOL CSampleApp::Init(const SSampleAppParams& params)
     }
 #elif __IZ_GLES2__
     {
-        gfxDevParams.display = (EGLNativeDisplayType)izanagi::sys::CSysWindow::GetNativeDisplayHandle(params.deviceWindow);
+        gfxDevParams.display = (EGLNativeDisplayType)::GetDC((HWND)(params.deviceWindow));
         gfxDevParams.window = (EGLNativeWindowType)params.deviceWindow;
 
         gfxDevParams.screenWidth = params.screenWidth;

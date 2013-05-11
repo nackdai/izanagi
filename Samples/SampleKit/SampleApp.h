@@ -26,14 +26,14 @@ namespace sample {
         izanagi::IMemoryAllocator* allocatorForGraph;    ///< グラフィックスデバイス用メモリアロケータ
 
         IZ_UINT screenWidth;                    ///< スクリーン幅
-        IZ_UINT screenHeight;                    ///< スクリーン高さ
+        IZ_UINT screenHeight;                   ///< スクリーン高さ
 
         CSampleWndProc* wndProc;                ///< メッセージハンドラへのポインタ
 
         // ここから下はプラットフォーム依存
-        void* deviceWindow;                        ///< デバイスウインドウハンドル
-        void* focusWindow;                        ///< フォーカスウインドウハンドル（基本的にはデバイスウインドウハンドルと同じ）
-        void* instanceHandle;                    ///< インスタンスハンドル
+        void* deviceWindow;                     ///< デバイスウインドウハンドル
+        void* focusWindow;                      ///< フォーカスウインドウハンドル（基本的にはデバイスウインドウハンドルと同じ）
+        void* instanceHandle;                   ///< インスタンスハンドル
     };
 
     /** サンプルアプリケーションベースクラス.
