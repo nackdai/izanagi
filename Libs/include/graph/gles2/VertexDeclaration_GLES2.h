@@ -8,6 +8,7 @@ namespace izanagi
 namespace graph
 {
     class CGraphicsDeviceGLES2;
+    class CShaderProgramGLES2;
 
     // 頂点宣言
     class CVertexDeclarationGLES2 : public CVertexDeclaration
@@ -31,9 +32,10 @@ namespace graph
         const SVertexElement* GetElements() const;
 
         IZ_BOOL Apply(
-            CGraphicsDeviceGLES2* device,
             IZ_UINT vtxOffset,
             IZ_UINT vtxStride);
+
+        void Bind(CShaderProgramGLES2* program);
 
     protected:
         IZ_UINT m_ElemNum;

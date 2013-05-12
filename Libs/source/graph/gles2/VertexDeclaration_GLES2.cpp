@@ -66,12 +66,9 @@ namespace graph
     }
 
     IZ_BOOL CVertexDeclarationGLES2::Apply(
-        CGraphicsDeviceGLES2* device,
         IZ_UINT vtxOffset,
         IZ_UINT vtxStride)
     {
-        CShaderProgramGLES2* program = (CShaderProgramGLES2*)device->GetShaderProgram();
-
         for (IZ_UINT i = 0; i < m_ElemNum; i++) {
             const SVertexElement& element = m_Elements[i];
 
@@ -179,6 +176,22 @@ namespace graph
                 (void*)(vtxOffset + element.Offset));
 
             ::glEnableVertexAttribArray(i);
+        }
+
+        return IZ_TRUE;
+    }
+
+    void CVertexDeclarationGLES2::Bind(CShaderProgramGLES2* program)
+    {
+        // NOTE
+        // glBindAttribLocation は必ず glLinkProgram よりも前に呼ばれなければいけない
+
+        for (IZ_UINT i = 0; i < m_ElemNum; i++) {
+            const SVertexElement& element = m_Elements[i];
+
+            // NOTE
+            // VBOを使う場合は常に１ストリームのみ
+            IZ_ASSERT(element.Stream == 0);
 
             static const char* names[] = 
             {
@@ -236,8 +249,6 @@ namespace graph
                 i,
                 name);
         }
-
-        return IZ_TRUE;
     }
 }   // namespace graph
 }   // namespace izanagi
