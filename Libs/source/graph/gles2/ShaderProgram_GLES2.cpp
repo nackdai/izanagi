@@ -90,9 +90,11 @@ namespace graph
 
     IZ_BOOL CShaderProgramGLES2::Link()
     {
+#if 0
         if (m_IsLinked) {
             return IZ_TRUE;
         }
+#endif
 
         IZ_ASSERT(m_Program != 0);
         IZ_ASSERT(IsValid());
@@ -163,8 +165,7 @@ namespace graph
     SHADER_PARAM_HANDLE CShaderProgramGLES2::GetHandleByName(IZ_PCSTR name)
     {
         IZ_ASSERT(IsValid());
-
-        Link();
+        IZ_ASSERT(IsLinked());
 
         SHADER_PARAM_HANDLE ret = ::glGetUniformLocation(
             m_Program,
@@ -184,8 +185,7 @@ namespace graph
     IZ_BOOL CShaderProgramGLES2::SetBool(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, IZ_BOOL b)
     {
         IZ_ASSERT(IsValid());
-
-        Link();
+        IZ_ASSERT(IsLinked());
 
         ::glUniform1i(handle, b);
         return IZ_TRUE;
@@ -194,8 +194,7 @@ namespace graph
     IZ_BOOL CShaderProgramGLES2::SetBoolArray(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const IZ_BOOL* b, IZ_UINT num)
     {
         IZ_ASSERT(IsValid());
-
-        Link();
+        IZ_ASSERT(IsLinked());
 
         ::glUniform1iv(handle, num, b);
         return IZ_TRUE;
@@ -204,8 +203,7 @@ namespace graph
     IZ_BOOL CShaderProgramGLES2::SetFloat(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, IZ_FLOAT f)
     {
         IZ_ASSERT(IsValid());
-
-        Link();
+        IZ_ASSERT(IsLinked());
 
         ::glUniform1f(handle, f);
         return IZ_TRUE;
@@ -214,8 +212,7 @@ namespace graph
     IZ_BOOL CShaderProgramGLES2::SetFloatArray(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const IZ_FLOAT* f, IZ_UINT num)
     {
         IZ_ASSERT(IsValid());
-
-        Link();
+        IZ_ASSERT(IsLinked());
 
         ::glUniform1fv(handle, num, f);
         return IZ_TRUE;
@@ -224,8 +221,7 @@ namespace graph
     IZ_BOOL CShaderProgramGLES2::SetInt(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, IZ_INT n)
     {
         IZ_ASSERT(IsValid());
-
-        Link();
+        IZ_ASSERT(IsLinked());
 
         ::glUniform1i(handle, n);
         return IZ_TRUE;
@@ -234,8 +230,7 @@ namespace graph
     IZ_BOOL CShaderProgramGLES2::SetIntArray(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const IZ_INT* n, IZ_UINT num)
     {
         IZ_ASSERT(IsValid());
-
-        Link();
+        IZ_ASSERT(IsLinked());
 
         ::glUniform1iv(handle, num, n);
         return IZ_TRUE;
@@ -244,8 +239,7 @@ namespace graph
     IZ_BOOL CShaderProgramGLES2::SetMatrix(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const math::SMatrix& m)
     {
         IZ_ASSERT(IsValid());
-
-        Link();
+        IZ_ASSERT(IsLinked());
 
         ::glUniformMatrix4fv(
             handle,
@@ -258,8 +252,7 @@ namespace graph
     IZ_BOOL CShaderProgramGLES2::SetMatrixArray(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const math::SMatrix* m, IZ_UINT num)
     {
         IZ_ASSERT(IsValid());
-
-        Link();
+        IZ_ASSERT(IsLinked());
 
         ::glUniformMatrix4fv(
             handle,
@@ -272,8 +265,7 @@ namespace graph
     IZ_BOOL CShaderProgramGLES2::SetVector(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const math::SVector& v)
     {
         IZ_ASSERT(IsValid());
-
-        Link();
+        IZ_ASSERT(IsLinked());
 
         ::glUniform4f(
             handle,
@@ -284,8 +276,7 @@ namespace graph
     IZ_BOOL CShaderProgramGLES2::SetVectorArray(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const math::SVector* v, IZ_UINT num)
     {
         IZ_ASSERT(IsValid());
-
-        Link();
+        IZ_ASSERT(IsLinked());
 
         ::glUniform4fv(handle, num, (const GLfloat*)v);
         return IZ_TRUE;
@@ -294,6 +285,7 @@ namespace graph
     IZ_BOOL CShaderProgramGLES2::SetValue(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const void* p, IZ_UINT size)
     {
         IZ_ASSERT(IsValid());
+        IZ_ASSERT(IsLinked());
 
         // TODO
         IZ_ASSERT(IZ_FALSE);

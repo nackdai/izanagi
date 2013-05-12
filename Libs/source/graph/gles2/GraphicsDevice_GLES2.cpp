@@ -62,6 +62,21 @@ namespace graph
     // コンストラクタ
     CGraphicsDeviceGLES2::CGraphicsDeviceGLES2()
     {
+        m_Display = EGL_NO_DISPLAY;
+        m_Surface = EGL_NO_SURFACE;
+        m_Context = EGL_NO_CONTEXT;
+
+        m_ScreenWidth = 0;
+        m_ScreenHeight = 0;
+
+        m_IsDirtyVB = IZ_FALSE;
+        m_IsDirtyVD = IZ_FALSE;
+        m_IsDirtyShaderProgram = IZ_FALSE;
+        
+        for (IZ_UINT i = 0; i < COUNTOF(m_IsDirtyTex); i++) {
+            m_IsDirtyTex[i] = 0;
+        }
+        
         ::memset(m_SamplerHandle, 0xff, sizeof(m_SamplerHandle));
     }
 
@@ -467,7 +482,10 @@ namespace graph
     IZ_BOOL CGraphicsDeviceGLES2::SetShaderProgram(CShaderProgram* program)
     {
         if (m_RenderState.curShader == program) {
-            return IZ_TRUE;
+            // ダーティなら処理をすすめる
+            if (program != IZ_NULL && !program->IsDirty()) {
+                return IZ_TRUE;
+            }
         }
 
         CShaderProgramGLES2* gles2Program = reinterpret_cast<CShaderProgramGLES2*>(program);
@@ -475,20 +493,24 @@ namespace graph
         if (gles2Program != IZ_NULL) {
             IZ_ASSERT(gles2Program->IsValid());
 
-            ::glUseProgram(gles2Program->GetRawInterface());
-
-            if (!gles2Program->IsLinked()) {
-                gles2Program->Link();
+            if (m_RenderState.curVD != IZ_NULL) {
+                CVertexDeclarationGLES2* vd = reinterpret_cast<CVertexDeclarationGLES2*>(m_RenderState.curVD);
+                vd->Bind(gles2Program);
+                m_IsBinded = IZ_TRUE;
             }
+
+            gles2Program->Link();
+
+            ::glUseProgram(gles2Program->GetRawInterface());
         }
         else {
             ::glUseProgram(0);
         }
 
-        m_IsDirtyShaderProgram = IZ_TRUE;
-
         // 現在設定されているものとして保持
         SAFE_REPLACE(m_RenderState.curShader, gles2Program);
+
+        m_IsDirtyShaderProgram = IZ_TRUE;
 
         return IZ_TRUE;
     }
@@ -507,6 +529,7 @@ namespace graph
         SAFE_REPLACE(m_RenderState.curVD, pVD);
 
         m_IsDirtyVD = IZ_TRUE;
+        m_IsBinded = IZ_FALSE;
 
         return IZ_TRUE;
     }
@@ -533,10 +556,18 @@ namespace graph
             IZ_ASSERT(m_RenderState.curVD != IZ_NULL);
             IZ_ASSERT(m_RenderState.curVB != IZ_NULL);
 
-            ((CVertexDeclarationGLES2*)m_RenderState.curVD)->Apply(
-                this,
+            CVertexDeclarationGLES2* vd = reinterpret_cast<CVertexDeclarationGLES2*>(m_RenderState.curVD);
+
+            vd->Apply(
                 vtxOffset,
                 m_RenderState.curVB->GetStride());
+
+            if (!m_IsBinded) {
+                CShaderProgramGLES2* shader = reinterpret_cast<CShaderProgramGLES2*>(m_RenderState.curShader);
+
+                vd->Bind(shader);
+                shader->Link();
+            }
         }
 
         m_IsDirtyVB = IZ_FALSE;
@@ -631,9 +662,102 @@ namespace graph
         IZ_UINT idxOffset,
         IZ_UINT nPrimCnt)
     {
-        // TODO
-        IZ_ASSERT(IZ_FALSE);
+        // NOTE
+        // ShaderProgramがセットされないとシェーダユニフォームの取得、設定ができないので
+        // 頂点宣言の反映、テクスチャのセットなどをこのタイミングでやる
 
+        IZ_BOOL isDirty = (m_IsDirtyVB
+            || m_IsDirtyVD
+            || m_IsDirtyShaderProgram);
+
+        if (isDirty) {
+            IZ_ASSERT(m_RenderState.curVD != IZ_NULL);
+            IZ_ASSERT(m_RenderState.curVB != IZ_NULL);
+
+            CVertexDeclarationGLES2* vd = reinterpret_cast<CVertexDeclarationGLES2*>(m_RenderState.curVD);
+
+            vd->Apply(
+                0,
+                m_RenderState.curVB->GetStride());
+
+            if (!m_IsBinded) {
+                CShaderProgramGLES2* shader = reinterpret_cast<CShaderProgramGLES2*>(m_RenderState.curShader);
+
+                vd->Bind(shader);
+                shader->Link();
+            }
+        }
+
+        m_IsDirtyVB = IZ_FALSE;
+        m_IsDirtyVD = IZ_FALSE;
+        m_IsDirtyShaderProgram = IZ_FALSE;
+
+        CShaderProgramGLES2* gles2Program = reinterpret_cast<CShaderProgramGLES2*>(m_RenderState.curShader);
+
+        // NOTE
+        // ShaderCompilerによってsamplerレジスタに応じたユニフォーム名が設定されている
+        static const char* samplerName[TEX_STAGE_NUM] = 
+        {
+            "s0", "s1", "s2", "s3", "s4", "s5", "s6", "s7",
+        };
+
+        for (IZ_UINT i = 0; i < TEX_STAGE_NUM; i++) {
+            if (m_IsDirtyTex[i]
+                && m_Texture[i] != IZ_NULL)
+            {
+                if (isDirty) {
+                    m_SamplerHandle[i] = ::glGetUniformLocation(gles2Program->GetRawInterface(), samplerName[i]);
+                    IZ_ASSERT(m_SamplerHandle[i] >= 0);
+                }
+
+                ::glActiveTexture(GL_TEXTURE0 + i);
+
+                GLenum type = (m_Texture[i]->GetTexType() == E_GRAPH_TEX_TYPE_PLANE
+                    ? GL_TEXTURE_2D
+                    : GL_TEXTURE_CUBE_MAP);
+
+                GLuint handle = m_Texture[i]->GetTexHandle();
+
+                ::glBindTexture(type, handle);
+
+                ::glUniform1i(m_SamplerHandle[i], i);
+            }
+
+            m_IsDirtyTex[i] = IZ_FALSE;
+        }
+
+        IZ_UINT vtxNum = 0;
+
+        // プリミティブタイプからインデックス数を計算
+        switch (prim_type)
+        {
+        case E_GRAPH_PRIM_TYPE_POINTLIST:
+            vtxNum = nPrimCnt;
+            break;
+        case E_GRAPH_PRIM_TYPE_LINELIST:
+            vtxNum = nPrimCnt * 2;
+            break;
+        case E_GRAPH_PRIM_TYPE_LINESTRIP:
+            vtxNum = nPrimCnt + 1;
+            break;
+        case E_GRAPH_PRIM_TYPE_TRIANGLELIST:
+            vtxNum = nPrimCnt * 3;
+            break;
+        case E_GRAPH_PRIM_TYPE_TRIANGLESTRIP:
+            vtxNum = nPrimCnt + 2;
+            break;
+        case E_GRAPH_PRIM_TYPE_TRIANGLEFAN:
+            vtxNum = nPrimCnt + 2;
+            break;
+        default:
+            IZ_ASSERT(IZ_FALSE);
+            break;
+        }
+
+        GLenum mode = CParamValueConverterGLES2::ConvAbstractToTarget_PrimType(prim_type);
+
+        ::glDrawArrays(mode, idxOffset, vtxNum);
+        
         return IZ_TRUE;
     }
 

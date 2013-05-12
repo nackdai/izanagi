@@ -39,8 +39,6 @@ namespace graph
         VRETURN(m_ShaderProgram->AttachVertexShader(m_pVS));
         VRETURN(m_ShaderProgram->AttachPixelShader(m_pPS[m_nOp]));
 
-        VRETURN(m_ShaderProgram->Link());
-
         VRETURN(device->SetShaderProgram(m_ShaderProgram));
 
         return IZ_TRUE;

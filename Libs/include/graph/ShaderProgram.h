@@ -33,8 +33,6 @@ namespace graph
 
         PURE_VIRTUAL(IZ_BOOL AttachPixelShader(CPixelShader* ps));
 
-        PURE_VIRTUAL(IZ_BOOL Link());
-
         PURE_VIRTUAL(IZ_BOOL IsValid());
 
         PURE_VIRTUAL(IZ_BOOL IsDirty());
@@ -44,6 +42,7 @@ namespace graph
         CPixelShader* GetPixelShader();
 
     protected:
+        PURE_VIRTUAL(IZ_BOOL Link());
         PURE_VIRTUAL(void ClearDirty());
 
     public:
