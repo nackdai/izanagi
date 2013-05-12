@@ -15,14 +15,14 @@
 #include "2DPS_OpVtx.ps"
 
 static const char* PS_Programs[] = {
-    main_OpAdd,
+    main_OpVtx,
+    main_OpTex,
     main_OpModulate,
     main_OpModulate2x,
     main_OpModulate4x,
+    main_OpAdd,
     main_OpModulateAlpha,
     main_OpNoTexAlpha,
-    main_OpTex,
-    main_OpVtx,
 };
 
 C_ASSERT(COUNTOF(PS_Programs) == izanagi::graph::E_GRAPH_2D_RENDER_OP_NUM);
