@@ -42,8 +42,6 @@ namespace graph
             float u, v;
         };
 
-        //static const DWORD FVF_CUSTOMVERTEX = (D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1);
-
         enum PRIM_TYPE {
             PRIM_TYPE_SPRITE = 0,
             PRIM_TYPE_RECT,

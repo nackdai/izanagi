@@ -170,15 +170,15 @@ namespace graph
                 continue;
             }
 
-            ::glEnableVertexAttribArray(i);
-
             ::glVertexAttribPointer(
                 i,
                 num,
                 type,
-                needNormalized,
+                needNormalized ? GL_TRUE : GL_FALSE,
                 vtxStride,
                 (void*)(vtxOffset + element.Offset));
+
+            ::glEnableVertexAttribArray(i);
 
             static const char* names[] = 
             {
