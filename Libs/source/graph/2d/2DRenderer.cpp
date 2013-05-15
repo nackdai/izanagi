@@ -318,7 +318,7 @@ namespace graph
                         idxOffset,  // StartIdx
                         nPrimNum);  // PrimCnt
 #else
-        IZ_BOOL ret = device->DrawPrimitive(PrimType[m_nPrimType], 0, nPrimNum);
+        IZ_BOOL ret = device->DrawPrimitive(PrimType[m_nPrimType], vtxOffset, nPrimNum);
 #endif
 
         m_nCurIdx = 0;
