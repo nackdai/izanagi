@@ -707,20 +707,21 @@ namespace graph
             {
                 if (isDirty) {
                     m_SamplerHandle[i] = ::glGetUniformLocation(gles2Program->GetRawInterface(), samplerName[i]);
-                    IZ_ASSERT(m_SamplerHandle[i] >= 0);
                 }
 
-                ::glActiveTexture(GL_TEXTURE0 + i);
+                if (m_SamplerHandle[i] >= 0) {
+                    ::glActiveTexture(GL_TEXTURE0 + i);
 
-                GLenum type = (m_Texture[i]->GetTexType() == E_GRAPH_TEX_TYPE_PLANE
-                    ? GL_TEXTURE_2D
-                    : GL_TEXTURE_CUBE_MAP);
+                    GLenum type = (m_Texture[i]->GetTexType() == E_GRAPH_TEX_TYPE_PLANE
+                        ? GL_TEXTURE_2D
+                        : GL_TEXTURE_CUBE_MAP);
 
-                GLuint handle = m_Texture[i]->GetTexHandle();
+                    GLuint handle = m_Texture[i]->GetTexHandle();
 
-                ::glBindTexture(type, handle);
+                    ::glBindTexture(type, handle);
 
-                ::glUniform1i(m_SamplerHandle[i], i);
+                    ::glUniform1i(m_SamplerHandle[i], i);
+                }
             }
 
             m_IsDirtyTex[i] = IZ_FALSE;
