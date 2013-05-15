@@ -118,10 +118,10 @@ namespace graph
 
     namespace {
         GLenum TexFilterTbl[] = {
-            0,
+            GL_NEAREST,
             GL_NEAREST,
             GL_LINEAR,
-            0,
+            GL_LINEAR,
         };
         IZ_C_ASSERT(COUNTOF(TexFilterTbl) == E_GRAPH_TEX_FILTER_NUM);
     }   // namespace
