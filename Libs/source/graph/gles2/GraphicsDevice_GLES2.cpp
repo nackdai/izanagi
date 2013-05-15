@@ -898,7 +898,7 @@ namespace graph
                 IZ_ASSERT(IZ_FALSE);
             }
 
-            // うーん・・・
+            // TODO
             // ステート
             {
                 // MIN_FILTER
