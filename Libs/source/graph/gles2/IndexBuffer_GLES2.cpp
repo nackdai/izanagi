@@ -163,6 +163,12 @@ namespace graph
         m_LockOffset = offset;
         m_LockSize = size;
 
+        if (m_LockOffset > 0
+            && m_LockSize + m_LockOffset > m_Size)
+        {
+            m_LockSize = m_Size - m_LockOffset;
+        }
+
         return IZ_TRUE;
     }
 
@@ -185,11 +191,14 @@ namespace graph
                 Initialize();
             }
 
+            IZ_UINT8* tmp = reinterpret_cast<IZ_UINT8*>(m_TemporaryData);
+            tmp += m_LockOffset;
+
             ::glBufferSubData(
                 GL_ELEMENT_ARRAY_BUFFER,
                 m_LockOffset,
                 m_LockSize,
-                m_TemporaryData);
+                tmp);
 
             // 元に戻す
             if (curIB != this) {
