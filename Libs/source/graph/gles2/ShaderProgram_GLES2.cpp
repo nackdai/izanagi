@@ -39,14 +39,13 @@ namespace graph
         IZ_ASSERT(m_Program != 0);
 
         if (m_VS != vs) {
-            if (vs == IZ_NULL) {
-                if (m_VS != IZ_NULL) {
-                    ::glDetachShader(
-                        m_Program,
-                        VertexShader()->GetRawInterface());
-                }
+            if (m_VS != IZ_NULL) {
+                ::glDetachShader(
+                    m_Program,
+                    VertexShader()->GetRawInterface());
             }
-            else {
+
+            if (vs != IZ_NULL) {
                 ::glAttachShader(
                     m_Program,
                     ((CVertexShaderGLES2*)vs)->GetRawInterface());
@@ -66,14 +65,13 @@ namespace graph
         IZ_ASSERT(m_Program != 0);
 
         if (m_PS != ps) {
-            if (ps == IZ_NULL) {
-                if (m_PS != IZ_NULL) {
-                    ::glDetachShader(
-                        m_Program,
-                        PixelShader()->GetRawInterface());
-                }
+            if (m_PS != IZ_NULL) {
+                ::glDetachShader(
+                    m_Program,
+                    PixelShader()->GetRawInterface());
             }
-            else {
+
+            if (ps != IZ_NULL) {
                 ::glAttachShader(
                     m_Program,
                     ((CPixelShaderGLES2*)ps)->GetRawInterface());
