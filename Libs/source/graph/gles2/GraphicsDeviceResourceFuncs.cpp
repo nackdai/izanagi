@@ -88,6 +88,17 @@ namespace graph
         return pRT;
     }
 
+    // 深度・ステンシルサーフェス作成
+    CRenderTarget* CGraphicsDeviceGLES2::CreateDepthStencilSurface(
+        IZ_UINT width, 
+        IZ_UINT height,
+        E_GRAPH_PIXEL_FMT fmt)
+    {
+        // TODO
+        IZ_ASSERT(IZ_FALSE);
+        return IZ_NULL;
+    }
+
     /**
     * 頂点バッファ作成
     */
