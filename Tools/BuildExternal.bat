@@ -12,7 +12,7 @@ cd External
 call BuildMojoShader.bat %CONFIG%
 cd ..
 
-%MSBUILD% External\freetype\builds\win32\vc2010\freetype.sln /t:%TARGET% /p:Configuration=%CONFIG% || goto error
+%MSBUILD% ..\External\freetype\builds\win32\vc2010\freetype.sln /t:%TARGET% /p:Configuration=%CONFIG% || goto error
 
 @echo off
 exit /b 1
