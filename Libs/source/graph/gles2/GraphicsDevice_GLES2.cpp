@@ -647,11 +647,17 @@ namespace graph
         // TODO
         IZ_ASSERT(m_RenderState.curIB->GetIdxNum() <= IZ_UINT16_MAX);
 
+        // NOTE
+        // glDrawElements に渡すオフセットはバイト数
+        // しかし、ここにわたってくるオフセットはインデックス位置のオフセット
+        // そのため、バイトオフセットに変換する
+        IZ_UINT offset = idxOffset * sizeof(IZ_USHORT);
+
         ::glDrawElements(
             mode,
             idxNum,
             type,
-            (const GLvoid*)idxOffset);
+            (const GLvoid*)offset);
 
         return IZ_TRUE;
     }
