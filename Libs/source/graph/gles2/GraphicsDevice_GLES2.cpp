@@ -78,6 +78,8 @@ namespace graph
         }
         
         ::memset(m_SamplerHandle, 0xff, sizeof(m_SamplerHandle));
+
+        FILL_ZERO(m_TexSamplerParamInitialized, sizeof(m_TexSamplerParamInitialized));
     }
 
     // デストラクタ
@@ -820,44 +822,6 @@ namespace graph
         CGraphicsDevice::SetRenderState(E_GRAPH_RS_FILLMODE, E_GRAPH_FILL_MODE_SOLID);
 
         CGraphicsDevice::SetRenderState(E_GRAPH_RS_CULLMODE, E_GRAPH_CULL_DEFAULT);
-
-        // うーん・・・
-        for (IZ_UINT i = 0; i < TEX_STAGE_NUM; ++i) {
-            // MIN_FILTER
-            SetSamplerStateFilter(
-                i, 
-                E_GRAPH_SAMPLER_STATE_TYPE_MINFILTER,
-                m_SamplerState[i].minFilter,
-                E_GRAPH_TEX_FILTER_LINEAR);
-
-            // MAG_FILTER
-            SetSamplerStateFilter(
-                i,
-                E_GRAPH_SAMPLER_STATE_TYPE_MAGFILTER,
-                m_SamplerState[i].magFilter,
-                E_GRAPH_TEX_FILTER_LINEAR);
-
-            // MIP_FILTER
-            SetSamplerStateFilter(
-                i,
-                E_GRAPH_SAMPLER_STATE_TYPE_MIPFILTER,
-                m_SamplerState[i].mipFilter,
-                E_GRAPH_TEX_FILTER_LINEAR);
-
-            // ADDRESS_U
-            SetSamplerStateAddr(
-                i,
-                E_GRAPH_SAMPLER_STATE_TYPE_ADDRESSU,
-                m_SamplerState[i].addressU,
-                E_GRAPH_TEX_ADDRESS_CLAMP);
-
-            // ADDRESS_V
-            SetSamplerStateAddr(
-                i, 
-                E_GRAPH_SAMPLER_STATE_TYPE_ADDRESSV,
-                m_SamplerState[i].addressV,
-                E_GRAPH_TEX_ADDRESS_CLAMP);
-        }
     }
 
     /**
@@ -899,6 +863,14 @@ namespace graph
                 IZ_ASSERT(IZ_FALSE);
             }
 
+            IZ_BOOL orgValue = m_Flags.is_force_set_state;
+
+            if (!m_TexSamplerParamInitialized[nStage])
+            {
+                // 最初だけは強制変更する
+                m_Flags.is_force_set_state = IZ_TRUE;
+            }
+
             // TODO
             // ステート
             {
@@ -938,6 +910,13 @@ namespace graph
                     E_GRAPH_SAMPLER_STATE_TYPE_ADDRESSV,
                     m_SamplerState[nStage].addressV,
                     pTex->GetState().addressV);
+            }
+
+            // 元に戻す
+            if (!m_TexSamplerParamInitialized[nStage])
+            {
+                m_Flags.is_force_set_state = orgValue;
+                m_TexSamplerParamInitialized[nStage] = IZ_TRUE;
             }
         }
         else {
