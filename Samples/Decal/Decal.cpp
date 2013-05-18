@@ -237,7 +237,7 @@ void CDecal::CreateGraphicsObject(izanagi::graph::CGraphicsDevice* device)
     m_VB = device->CreateVertexBuffer(
         sizeof(SVtx),
         vtxNum,
-        izanagi::graph::E_GRAPH_RSC_TYPE_STATIC);
+        izanagi::graph::E_GRAPH_RSC_USAGE_STATIC);
     IZ_ASSERT(m_VB != IZ_NULL);
 
     struct {
