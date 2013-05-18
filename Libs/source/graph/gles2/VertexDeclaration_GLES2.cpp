@@ -167,13 +167,19 @@ namespace graph
                 continue;
             }
 
+            // NOTE
+            // glVertexAttribPointer に渡すオフセットはバイト数
+            // しかし、ここにわたってくるオフセットは頂点位置のオフセット
+            // そのため、バイトオフセットに変換する
+            IZ_UINT offset = vtxOffset * vtxStride;
+
             ::glVertexAttribPointer(
                 i,
                 num,
                 type,
                 needNormalized ? GL_TRUE : GL_FALSE,
                 vtxStride,
-                (void*)(vtxOffset + element.Offset));
+                (void*)(offset + element.Offset));
 
             ::glEnableVertexAttribArray(i);
         }

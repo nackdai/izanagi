@@ -310,16 +310,12 @@ namespace graph
         // インデックスは必ず０から始まる
 
         // 描画
-#if 0
         IZ_BOOL ret = device->DrawIndexedPrimitive(
                         PrimType[m_nPrimType],
                         vtxOffset,   // BaseIdx
                         vtxNum, // VtxNum
                         idxOffset,  // StartIdx
                         nPrimNum);  // PrimCnt
-#else
-        IZ_BOOL ret = device->DrawPrimitive(PrimType[m_nPrimType], vtxOffset, nPrimNum);
-#endif
 
         m_nCurIdx = 0;
         m_nCurPrimNum = 0;
