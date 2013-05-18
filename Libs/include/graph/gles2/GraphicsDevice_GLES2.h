@@ -244,6 +244,8 @@ namespace graph
         IZ_BOOL m_IsBinded;
 
         GLint m_SamplerHandle[TEX_STAGE_NUM];
+
+        IZ_BOOL m_TexSamplerParamInitialized[TEX_STAGE_NUM];
     };
 }   // namespace graph
 }   // namespace izanagi
