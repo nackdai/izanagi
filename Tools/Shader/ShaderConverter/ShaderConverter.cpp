@@ -108,9 +108,22 @@ namespace {
 
         return IZ_TRUE;
     }
-}   // namespace
 
-#pragma optimize("", off) 
+    void _DisplayUsage()
+    {
+        printf(
+            "ShaderConverter Usage\n"
+            "\n"
+            "[Usage]\n"
+            "ShaderConverter -src [in] [options]\n"
+            "\n"
+            "   -src [in]  : Shader file path\n"
+            "   -o [export fir] : Director for exporting files\n"
+            "   -I [inclue paths] : Include paths for compiling shader file\n"
+            "   -D [deines] : Defines for compiling shader file\n"
+            "   -obj [dir] : Temporary directory for obj files\n");
+    }
+}   // namespace
 
 int main(int argc, char* argv[])
 {
