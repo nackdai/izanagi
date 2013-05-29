@@ -142,6 +142,7 @@ BOOL CSamplerUtil::BindTexture(
                                                         tex);
             VRETURN(it != tvTexList.end());
 
+            // サンプラにバインドするテクスチャのインデックス
             sDesc.BindTexIdx = static_cast<IZ_INT>(std::distance(tvTexList.begin(), it));
 
             break;
