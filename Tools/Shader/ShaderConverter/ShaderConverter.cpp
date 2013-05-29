@@ -100,6 +100,10 @@ namespace {
                 file_name));
 
         if (lpszExportDir != IZ_NULL) {
+            if (!izanagi::tool::CFileUtility::IsExist(lpszExportDir)) {
+                izanagi::tool::CFileUtility::CreateDir(lpszExportDir);
+            }
+
             sConfig.out.format("%s/%s.shd", lpszExportDir, s_BUF);
         }
         else {
@@ -117,11 +121,12 @@ namespace {
             "[Usage]\n"
             "ShaderConverter -src [in] [options]\n"
             "\n"
-            "   -src [in]  : Shader file path\n"
-            "   -o [export fir] : Director for exporting files\n"
-            "   -I [inclue paths] : Include paths for compiling shader file\n"
-            "   -D [deines] : Defines for compiling shader file\n"
-            "   -obj [dir] : Temporary directory for obj files\n");
+            "   -src [in]  : Shader list file path(*.xml)\n"
+            "   -o [export dir] : Directory for exporting files\n"
+            "   -obj [dir] : Temporary directory for obj files\n"
+            " Usually belows are not used\n"
+            "   -I [inclue paths] : Include paths for preprocessing shader list file\n"
+            "   -D [deines] : Defines for preprocessing shader list file\n");
     }
 }   // namespace
 

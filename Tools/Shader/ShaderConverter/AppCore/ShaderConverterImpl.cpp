@@ -403,6 +403,7 @@ BOOL CShaderConverter::ExportSampler()
                             sSampler,
                             param));
 
+                    // 対象となるテクスチャとのバインド情報を設定
                     VRETURN(
                         CSamplerUtil::BindTexture(
                             sSampler,
