@@ -1,7 +1,7 @@
 #if !defined(__IZANAGI_SHADER_SHADER_SAMPLER_TABLE_H__)
 #define __IZANAGI_SHADER_SHADER_SAMPLER_TABLE_H__
 
-#include "SHDFormat.h"
+#include "shader/base/SHDFormat.h"
 
 namespace izanagi {
     /**
@@ -11,6 +11,7 @@ namespace izanagi {
     */
     class CShaderSamplerTable {
         friend class CShaderBasic;
+        friend class CShaderPass;
 
     private:
         inline CShaderSamplerTable();

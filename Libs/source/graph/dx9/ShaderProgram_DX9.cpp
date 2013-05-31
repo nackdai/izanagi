@@ -88,18 +88,6 @@ namespace graph
         return ret;
     }
 
-    IZ_UINT CShaderProgramDX9::GetSamplerIndex(const SHADER_PARAM_HANDLE& handle)
-    {
-        // TODO
-        // VTF‚Ìê‡‚ÍH
-
-        IZ_ASSERT(m_VS != IZ_NULL);
-
-        IZ_UINT ret = PixelShader()->GetSamplerIndex(handle.psParam);
-
-        return ret;
-    }
-
 #define _EXEC_FUNC(func, device, param)\
     IZ_BOOL b1, b2; \
     b1 = b2 = IZ_TRUE; \

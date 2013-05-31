@@ -39,8 +39,6 @@ namespace graph
     public:
         virtual SHADER_PARAM_HANDLE GetHandleByName(IZ_PCSTR name);
 
-        virtual IZ_UINT GetSamplerIndex(const SHADER_PARAM_HANDLE& handle);
-
     public:
         virtual IZ_BOOL SetBool(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, IZ_BOOL b);
         virtual IZ_BOOL SetBoolArray(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const IZ_BOOL* b, IZ_UINT num);

@@ -256,6 +256,8 @@ namespace izanagi {
         // If BindTexIdx is -1, specified texture is nothing.
         IZ_INT BindTexIdx;
 
+        IZ_INT resource_id;
+
         E_SHADER_PARAMETER_TYPE Type;
 
         graph::S_SAMPLER_STATE state;

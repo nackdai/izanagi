@@ -106,6 +106,9 @@
       <Filter>system\include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ToolKit\include\izToolKit.h" />
+    <ClInclude Include="..\..\ToolKit\include\graph\ShaderConstTableLite.h">
+      <Filter>graph\include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\ToolKit\source\graph\GraphicsDeviceLite.cpp">
@@ -128,6 +131,9 @@
     </ClCompile>
     <ClCompile Include="..\..\ToolKit\source\system\CharCodeUtility.cpp">
       <Filter>system\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ToolKit\source\graph\ShaderCosntTableLite.cpp">
+      <Filter>graph\source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

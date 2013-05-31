@@ -12,6 +12,7 @@ namespace izanagi {
     class CPostEffectSamplerTable{
         friend class CPostEffectShader;
         friend class CPostEffectSystem;
+        friend class CPostEffectPass;
 
     private:
         inline CPostEffectSamplerTable();

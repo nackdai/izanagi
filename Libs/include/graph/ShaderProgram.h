@@ -48,8 +48,6 @@ namespace graph
     public:
         PURE_VIRTUAL(SHADER_PARAM_HANDLE GetHandleByName(IZ_PCSTR name));
 
-        PURE_VIRTUAL(IZ_UINT GetSamplerIndex(const SHADER_PARAM_HANDLE& handle));
-
     public:
         PURE_VIRTUAL(IZ_BOOL SetBool(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, IZ_BOOL b));
         PURE_VIRTUAL(IZ_BOOL SetBoolArray(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const IZ_BOOL* b, IZ_UINT num));

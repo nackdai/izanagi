@@ -270,6 +270,8 @@ namespace izanagi {
         IZ_UINT keyName;        // 名前ハッシュ値
         IZ_UINT keySemantic;    // セマンティックハッシュ値
 
+        IZ_INT resource_id;
+
         S_PES_SAMPLER_STATE state;
     };
 

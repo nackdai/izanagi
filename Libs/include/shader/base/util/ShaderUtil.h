@@ -24,12 +24,6 @@ namespace izanagi {
 			E_SHADER_PARAMETER_TYPE type,
 			IZ_UINT nElements);
 
-		// サンプラのリソースインデックスをハンドルから引いてくる
-		static IZ_UINT GetSamplerResourceIndexByHandle(
-            graph::CGraphicsDevice* device,
-			graph::CShaderProgram* pShader,
-			SHADER_PARAM_HANDLE handle);
-
 		static IZ_BOOL BeginScene(
 			graph::CGraphicsDevice* pDevice,
 			IZ_INT nColorBufferNum,

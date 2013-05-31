@@ -1,5 +1,5 @@
-#if !defined(__IZANAGI_TOOL_KIT_GRAPH_TEXTURE_LIGHT_H__)
-#define __IZANAGI_TOOL_KIT_GRAPH_TEXTURE_LIGHT_H__
+#if !defined(__IZANAGI_TOOL_KIT_GRAPH_TEXTURE_LITE_H__)
+#define __IZANAGI_TOOL_KIT_GRAPH_TEXTURE_LITE_H__
 
 #include <d3d9.h>
 #include <d3dx9.h>
@@ -49,14 +49,12 @@ namespace tool {
             TextureExportType type);
 
     private:
-        inline CTextureLite();
-        inline ~CTextureLite();
+        CTextureLite();
+        ~CTextureLite();
 
         NO_COPIABLE(CTextureLite);
 
-    private:
-        // 解放
-        inline void InternalRelease();
+        IZ_DEFINE_INTERNAL_RELEASE();
         
     public:
         // ロック
@@ -69,16 +67,16 @@ namespace tool {
 
     public:
         // 幅取得
-        inline IZ_UINT GetWidth(IZ_UINT level = 0) const;
+        IZ_UINT GetWidth(IZ_UINT level = 0) const;
 
         // 高さ取得
-        inline IZ_UINT GetHeight(IZ_UINT level = 0) const;
+        IZ_UINT GetHeight(IZ_UINT level = 0) const;
 
         // フォーマット取得
-        inline graph::E_GRAPH_PIXEL_FMT GetPixelFormat() const;
+        graph::E_GRAPH_PIXEL_FMT GetPixelFormat() const;
 
         // MIPMAP数取得
-        inline IZ_UINT GetMipMapNum() const;
+        IZ_UINT GetMipMapNum() const;
 
         // オリジナルフォーマット取得
         D3DFORMAT GetOriginalFormat() const
@@ -90,7 +88,7 @@ namespace tool {
         LPDIRECT3DTEXTURE9 GetRawInterface() { return m_pTexture; }
 
     private:
-        IMemoryAllocator* m_pAllocator;
+        IMemoryAllocator* m_Allocator;
 
         // 本体
         LPDIRECT3DTEXTURE9 m_pTexture;
@@ -99,64 +97,7 @@ namespace tool {
         IZ_UINT m_nMipLevels;
         graph::E_GRAPH_PIXEL_FMT m_nFmt;
     };
-
-    // inline ***********************************
-
-    // コンストラクタ
-    CTextureLite::CTextureLite()
-    {
-        m_pAllocator = IZ_NULL;
-        m_pTexture = IZ_NULL;
-
-        memset(&m_Desc, 0, sizeof(m_Desc));
-        m_nMipLevels = 0;
-        m_nFmt = graph::E_GRAPH_PIXEL_FMT_RGBA8;
-    }
-
-    // デストラクタ
-    CTextureLite::~CTextureLite()
-    {   
-        SAFE_RELEASE(m_pTexture);
-    }
-
-    // 解放
-    void CTextureLite::InternalRelease()
-    {
-        delete this;
-
-        if (m_pAllocator != IZ_NULL) {
-            m_pAllocator->Free(this);
-        }
-    }
-
-    // 幅取得
-    IZ_UINT CTextureLite::GetWidth(IZ_UINT level/*= 0*/) const
-    {
-        IZ_ASSERT(level < m_nMipLevels);
-        IZ_UINT ret = (m_Desc.Width >> level);
-        return ret;
-    }
-
-    // 高さ取得
-    IZ_UINT CTextureLite::GetHeight(IZ_UINT level/*= 0*/) const
-    {
-        IZ_ASSERT(level < m_nMipLevels);
-        IZ_UINT ret = (m_Desc.Height >> level);
-        return ret;
-    }
-
-    // フォーマット取得
-    graph::E_GRAPH_PIXEL_FMT CTextureLite::GetPixelFormat() const
-    {
-        return m_nFmt;
-    }
-
-    // MIPMAP数取得
-    IZ_UINT CTextureLite::GetMipMapNum() const
-    {
-        return m_nMipLevels;
-    }
 }   // namespace tool
 }   // namespace izanagi
 
-#endif  // #if !defined(__IZANAGI_TOOL_KIT_GRAPH_TEXTURE_LIGHT_H__)
+#endif  // #if !defined(__IZANAGI_TOOL_KIT_GRAPH_TEXTURE_LITE_H__)
