@@ -35,12 +35,6 @@ namespace graph
             return ret;
         }
 
-        virtual IZ_UINT GetSamplerIndex(SHADER_PARAM_HANDLE_DX9 handle)
-        {
-            IZ_UINT ret = m_ConstTable->GetSamplerIndex((SHADER_PARAM_HANDLE_DX9)handle);
-            return ret;
-        }
-
         // ブール値を設定
         virtual IZ_BOOL SetBool(CGraphicsDevice* device, SHADER_PARAM_HANDLE_DX9 handle, IZ_BOOL b)
         {

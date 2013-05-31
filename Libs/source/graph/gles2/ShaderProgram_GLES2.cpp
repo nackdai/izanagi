@@ -173,13 +173,6 @@ namespace graph
         return ret;
     }
 
-    IZ_UINT CShaderProgramGLES2::GetSamplerIndex(const SHADER_PARAM_HANDLE& handle)
-    {
-        // TODO
-        IZ_ASSERT(IZ_FALSE);
-        return 0;
-    }
-
     IZ_BOOL CShaderProgramGLES2::SetBool(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, IZ_BOOL b)
     {
         IZ_ASSERT(IsValid());

@@ -378,11 +378,34 @@ BOOL CShaderConverter::ExportSampler()
 
     CGparameter param = ::cgGetFirstEffectParameter(m_pCgEffect);
 
+    // パスを取得
+    std::vector<CGpass> passList;
+    {
+        CGtechnique tech = ::cgGetFirstTechnique(m_pCgEffect);
+        while (tech != NULL) {
+            CGpass pass = ::cgGetFirstPass(tech);
+            while (pass != NULL) {
+                passList.push_back(pass);
+                pass = ::cgGetNextPass(pass);
+            }
+            tech = ::cgGetNextTechnique(tech);
+        }
+    }
+
     while (param != NULL) {
         if (::cgIsParameterUsed(param, m_pCgEffect)) {
             VRETURN(CParamUtil::IsValidParameter(param));
 
             if (CParamUtil::IsSampler(param)) {
+                // 対象となるパスのインデックスを取得
+                IZ_INT passIdx = -1;
+                for (IZ_UINT i = 0; i < passList.size(); i++) {
+                    if (::cgIsParameterUsed(param, passList[i])) {
+                        passIdx = i;
+                        break;
+                    }
+                }
+
                 izanagi::S_SHD_SAMPLER sSampler;
                 {
                     FILL_ZERO(&sSampler, sizeof(sSampler));
@@ -409,6 +432,27 @@ BOOL CShaderConverter::ExportSampler()
                             sSampler,
                             param,
                             m_TexList));
+
+                    if (passIdx >= 0) {
+                        // シェーダ定数テーブルを作成
+                        IZ_ASSERT(passIdx < m_CompiledPSList.size());
+
+                        izanagi::tool::CSimpleMemoryAllocator allocator;
+
+                        izanagi::tool::CShaderConstTableLite* constTbl = izanagi::tool::CShaderConstTableLite::CreateShaderConstTableLite(
+                            &allocator,
+                            m_CompiledPSList[passIdx]);
+
+                        const char* paramName = ::cgGetParameterName(param);
+
+                        sSampler.resource_id = constTbl->GetSamplerIndex(paramName);
+
+                        SAFE_RELEASE(constTbl);
+                    }
+                    else {
+                        // ある？
+                        sSampler.resource_id = -1;
+                    }
                 }
 
                 m_SamplerList.push_back(param);

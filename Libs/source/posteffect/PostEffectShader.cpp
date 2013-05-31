@@ -726,13 +726,19 @@ IZ_BOOL CPostEffectShader::Init(
         pBuf = m_cTexTable.SetTexBuffer(pBuf);
     }
 
+    IZ_UINT64 tmp = CStdUtil::GetPtrDistance(pBuf, pBuffer);
+
     // パスデータ作成
     pBuf = CreatePass(pBuf, in);
+
+    tmp = CStdUtil::GetPtrDistance(pBuf, pBuffer);
 
     // テクスチャテーブル（テンポラリ）
     pBuf = m_cTexTableTmp.SetTexBufferDirectly(
             m_sHeader.numTex,
             pBuf);
+
+    tmp = CStdUtil::GetPtrDistance(pBuf, pBuffer);
 
     // チェック
     IZ_BOOL ret = (CStdUtil::GetPtrDistance(pBuf, pBuffer) == nBufSize);
@@ -857,7 +863,10 @@ IZ_BOOL CPostEffectShader::InitPassParameter(graph::CGraphicsDevice* device)
             IZ_PCSTR pszName = m_cStrTable.GetString(pSmplDesc->posName);
             IZ_ASSERT(pszName != IZ_NULL);
 
-            VRETURN(cPass.InitSampler(n, nSmplIdx, pszName));
+            VRETURN(
+                cPass.InitSampler(
+                    m_cSmplTable,
+                    n, nSmplIdx, pszName));
         }
     }
 

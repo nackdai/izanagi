@@ -7,6 +7,8 @@
 #include "vs/PostEffectVS.h"
 
 namespace izanagi {
+    class CPostEffectSamplerTable;
+
     /**
     * シェーダのパス
     */
@@ -122,6 +124,7 @@ namespace izanagi {
 
         // 初期化
         IZ_BOOL InitSampler(
+            const CPostEffectSamplerTable& samplerTbl,
             IZ_UINT idx,
             IZ_UINT nSmpleIdx,
             IZ_PCSTR name);

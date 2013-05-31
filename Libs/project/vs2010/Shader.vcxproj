@@ -99,6 +99,7 @@
     <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\source\shader\base\ShaderPass.cpp" />
     <ClCompile Include="..\..\source\shader\ShaderManager.cpp" />
     <ClCompile Include="..\..\source\shader\base\ShaderBasic.cpp" />
     <ClCompile Include="..\..\source\shader\ShaderUtil.cpp" />

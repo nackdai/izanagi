@@ -68,6 +68,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\ToolKit\include\graph\ShaderConstTableLite.h" />
     <ClInclude Include="..\..\ToolKit\include\ToolKitGraph.h" />
     <ClInclude Include="..\..\ToolKit\include\graph\GraphicsDeviceLite.h" />
     <ClInclude Include="..\..\ToolKit\include\graph\TextureLite.h" />
@@ -90,6 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\ToolKit\source\graph\GraphicsDeviceLite.cpp" />
+    <ClCompile Include="..\..\ToolKit\source\graph\ShaderCosntTableLite.cpp" />
     <ClCompile Include="..\..\ToolKit\source\graph\TextureLite.cpp" />
     <ClCompile Include="..\..\ToolKit\source\std\ErrorUtil.cpp" />
     <ClCompile Include="..\..\ToolKit\source\std\SimpleMemoryAllocator.cpp" />

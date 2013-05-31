@@ -1,5 +1,6 @@
-﻿#include "posteffect/PostEffectShaderPass.h"
+#include "posteffect/PostEffectShaderPass.h"
 #include "posteffect/vs/PostEffectVSManager.h"
+#include "posteffect/table//PostEffectShaderSamplerTable.h"
 
 namespace izanagi
 {
@@ -62,6 +63,7 @@ namespace izanagi
 
     // 初期化
     IZ_BOOL CPostEffectPass::InitSampler(
+        const CPostEffectSamplerTable& samplerTbl,
         IZ_UINT idx,
         IZ_UINT nSmpleIdx,
         IZ_PCSTR name)
@@ -69,8 +71,9 @@ namespace izanagi
         IZ_BOOL ret = InitInfo<SSamplerInfo>(m_Samplers, idx, nSmpleIdx, name);
         
         if (ret) {
-            IZ_ASSERT(m_Shader->IsValid());
-            m_Samplers.list[idx].resource_id = (IZ_UINT16)m_Shader->GetSamplerIndex(m_Samplers.list[idx].handle);
+            const S_PES_SAMPLER* samplerDesc = samplerTbl.GetDesc(nSmpleIdx);
+ 
+            m_Samplers.list[idx].resource_id = samplerDesc->resource_id;
 
             // NOTE
             // サンプラレジスタ 0 - 7 の８個まで

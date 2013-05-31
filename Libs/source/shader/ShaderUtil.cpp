@@ -65,16 +65,6 @@ namespace izanagi {
 		return ret;
 	}
 
-	// サンプラのリソースインデックスをハンドルから引いてくる
-	IZ_UINT CShaderUtil::GetSamplerResourceIndexByHandle(
-        graph::CGraphicsDevice* device,
-		graph::CShaderProgram* pShader,
-		SHADER_PARAM_HANDLE handle)
-	{
-		IZ_UINT ret = pShader->GetSamplerIndex(handle);
-		return ret;
-	}
-
 	IZ_BOOL CShaderUtil::BeginScene(
 		graph::CGraphicsDevice* pDevice,
 		IZ_INT nColorBufferNum,

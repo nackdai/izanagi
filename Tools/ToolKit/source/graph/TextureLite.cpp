@@ -92,7 +92,7 @@ CTextureLite* CTextureLite::CreateTextureFromFile(
     pInstance = new(pBuf) CTextureLite;
     {
         pInstance->AddRef();
-        pInstance->m_pAllocator = pAllocator;
+        pInstance->m_Allocator = pAllocator;
 
         LPDIRECT3DDEVICE9 pD3DDevice = pDevice->GetRawInterface();
 
@@ -168,7 +168,7 @@ CTextureLite* CTextureLite::CreateTexture(
     pInstance = new(pBuf) CTextureLite;
     {
         pInstance->AddRef();
-        pInstance->m_pAllocator = pAllocator;
+        pInstance->m_Allocator = pAllocator;
 
         LPDIRECT3DDEVICE9 pD3DDevice = pDevice->GetRawInterface();
 
@@ -306,4 +306,49 @@ IZ_BOOL CTextureLite::Unlock(IZ_UINT nLevel)
     IZ_ASSERT(ret);
 
     return ret;
+}
+
+// コンストラクタ
+CTextureLite::CTextureLite()
+{
+    m_Allocator = IZ_NULL;
+    m_pTexture = IZ_NULL;
+
+    memset(&m_Desc, 0, sizeof(m_Desc));
+    m_nMipLevels = 0;
+    m_nFmt = graph::E_GRAPH_PIXEL_FMT_RGBA8;
+}
+
+// デストラクタ
+CTextureLite::~CTextureLite()
+{   
+    SAFE_RELEASE(m_pTexture);
+}
+
+// 幅取得
+IZ_UINT CTextureLite::GetWidth(IZ_UINT level/*= 0*/) const
+{
+    IZ_ASSERT(level < m_nMipLevels);
+    IZ_UINT ret = (m_Desc.Width >> level);
+    return ret;
+}
+
+// 高さ取得
+IZ_UINT CTextureLite::GetHeight(IZ_UINT level/*= 0*/) const
+{
+    IZ_ASSERT(level < m_nMipLevels);
+    IZ_UINT ret = (m_Desc.Height >> level);
+    return ret;
+}
+
+// フォーマット取得
+graph::E_GRAPH_PIXEL_FMT CTextureLite::GetPixelFormat() const
+{
+    return m_nFmt;
+}
+
+// MIPMAP数取得
+IZ_UINT CTextureLite::GetMipMapNum() const
+{
+    return m_nMipLevels;
 }

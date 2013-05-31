@@ -32,6 +32,9 @@
     <ClCompile Include="..\..\source\shader\ShaderUtil.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\shader\base\ShaderPass.cpp">
+      <Filter>source\base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\shader\ShaderManager.h">
