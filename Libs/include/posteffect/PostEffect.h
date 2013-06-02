@@ -18,18 +18,6 @@ namespace izanagi {
         friend class CPostEffectSystem;
         friend class CPostEffectFunctor;
 
-    public:
-        // For Tool
-        static size_t ComputeSizePassBuffForParamIdx(
-            IZ_UINT nConstNum,
-            IZ_UINT nSamplerNum)
-        {
-            size_t ret = CPostEffectPass::ComputeBufferSize(
-                            nConstNum,
-                            nSamplerNum);
-            return ret;
-        }
-
     private:
         // インスタンス作成
         static CPostEffect* CreatePostEffect(

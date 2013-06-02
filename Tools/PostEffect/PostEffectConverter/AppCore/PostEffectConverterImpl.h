@@ -50,7 +50,9 @@ protected:
     BOOL ExportParameter();
     BOOL ExportPass();
 
-    BOOL ExportParamAnn(IZ_INT nAnnNum = -1);
+    BOOL ExportParamAnn(
+        izanagi::S_PES_PARAM_HEADER& paramHader,
+        IZ_INT nAnnNum = -1);
 
     BOOL DoNotRemoveParam(CGparameter param);
 

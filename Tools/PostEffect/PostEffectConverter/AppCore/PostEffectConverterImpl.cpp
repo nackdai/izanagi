@@ -352,6 +352,15 @@ BOOL CPostEffectConverter::ExportTexture()
 
 BOOL CPostEffectConverter::ExportSampler()
 {
+    izanagi::S_PES_SAMPLER_HEADER smplHeader;
+    {
+        smplHeader.numSampler = 0;
+    }
+
+    // Blank for pass's header.
+    izanagi::tool::CIoStreamSeekHelper cSeekHelper(&m_Out);
+    VRETURN(cSeekHelper.Skip(sizeof(smplHeader)));
+
     // パスを取得
     std::vector<CGpass> passList;
     {
@@ -432,12 +441,21 @@ BOOL CPostEffectConverter::ExportSampler()
                 // 出力
                 VRETURN(ExportData(sSampler));
 
-                m_PesHeader.numSampler++;
+                smplHeader.numSampler++;
             }
         }
 
         param = ::cgGetNextParameter(param);
     }
+
+    // Return to paremter's header position with anchor.
+    VRETURN(cSeekHelper.ReturnWithAnchor());
+
+    // Export paramter's header.
+    IZ_OUTPUT_WRITE_VRETURN(&m_Out, &smplHeader, 0, sizeof(smplHeader));
+
+    // Return to anchored position.
+    VRETURN(cSeekHelper.ReturnToAnchor());
 
     return TRUE;
 }
@@ -463,6 +481,16 @@ namespace {
 BOOL CPostEffectConverter::ExportParameter()
 {
     IZ_UINT nAnnIdx = 0;
+
+    izanagi::S_PES_PARAM_HEADER paramHader;
+    {
+        paramHader.numParameter = 0;
+        paramHader.numParamAnn = 0;
+    }
+
+    // Blank for pass's header.
+    izanagi::tool::CIoStreamSeekHelper cSeekHelper(&m_Out);
+    VRETURN(cSeekHelper.Skip(sizeof(paramHader)));
 
     // For description.
     CGparameter param = ::cgGetFirstEffectParameter(m_pCgEffect);
@@ -506,14 +534,14 @@ BOOL CPostEffectConverter::ExportParameter()
                 // 出力
                 VRETURN(ExportData(sParam));
 
-                m_PesHeader.numParam++;
+                paramHader.numParameter++;
             }
         }
 
         param = ::cgGetNextParameter(param);
     }
 
-    VRETURN(ExportParamAnn(nAnnIdx));
+    VRETURN(ExportParamAnn(paramHader, nAnnIdx));
 
     // Export initial value.
     m_PesHeader.sizeValueBuffer = CDataBuffer::GetInstance().GetBufferSize();
@@ -527,10 +555,21 @@ BOOL CPostEffectConverter::ExportParameter()
             m_PesHeader.sizeValueBuffer);
     }
 
+    // Return to paremter's header position with anchor.
+    VRETURN(cSeekHelper.ReturnWithAnchor());
+
+    // Export paramter's header.
+    IZ_OUTPUT_WRITE_VRETURN(&m_Out, &paramHader, 0, sizeof(paramHader));
+
+    // Return to anchored position.
+    VRETURN(cSeekHelper.ReturnToAnchor());
+
     return TRUE;
 }
 
-BOOL CPostEffectConverter::ExportParamAnn(IZ_INT nAnnNum/*= -1*/)
+BOOL CPostEffectConverter::ExportParamAnn(
+    izanagi::S_PES_PARAM_HEADER& paramHader,
+    IZ_INT nAnnNum/*= -1*/)
 {
     IZ_UINT nAnnCnt = 0;
 
@@ -561,7 +600,7 @@ BOOL CPostEffectConverter::ExportParamAnn(IZ_INT nAnnNum/*= -1*/)
                 ? (nAnnCnt == nAnnNum)
                 : TRUE);
 
-    m_PesHeader.numParamAnn = nAnnCnt;
+    paramHader.numParamAnn = nAnnCnt;
 
     IZ_ASSERT(ret);
     return ret;
@@ -781,10 +820,10 @@ BOOL CPostEffectConverter::ExportPass()
         nTechIdx++;
     }
 
-    // Compute size of buffer for indices for parameters which a pass uses.
-    m_PesHeader.sizePassBuffForParamIdx = (IZ_UINT)izanagi::CPostEffect::ComputeSizePassBuffForParamIdx(
-                                                    nConstNum,
-                                                    nSamplerNum);
+    // NOTE
+    // 全体でのシェーダ定数、サンプラの総数を知りたい
+    m_PesHeader.numParam = nConstNum;
+    m_PesHeader.numSampler = nSamplerNum;
 
     return TRUE;
 }
