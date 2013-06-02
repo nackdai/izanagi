@@ -91,18 +91,13 @@ namespace izanagi {
         IZ_UINT16 numSampler;           // サンプラ
         IZ_UINT16 numPass;              // パス
         IZ_UINT16 numTech;              // テクニック
-
-        // アノテーション数
-        IZ_UINT16 numParamAnn;          // パラメータ
+        IZ_UINT16 padding;
 
         // 頂点プログラム
         IZ_UINT numVtxProgram;          // 頂点プログラム数
 
         // 文字列バッファサイズ
         IZ_UINT sizeStringBuffer;
-
-        // パス用割り当てバッファサイズ
-        IZ_UINT sizePassBuffForParamIdx;
 
         // パラメータ初期値バッファサイズ
         IZ_UINT sizeValueBuffer;
@@ -218,6 +213,11 @@ namespace izanagi {
     ///////////////////////////////////////////////////////
     // Description
 
+    struct S_PES_PARAM_HEADER {
+        IZ_UINT16 numParameter;     // パラメータ数
+        IZ_UINT16 numParamAnn;      // パラメータアノテーション数
+    };
+
     // パラメータ
     struct S_PES_PARAMETER {
         IZ_UINT16 posName;
@@ -260,6 +260,10 @@ namespace izanagi {
         E_POSTEFFECT_TEXTURE_TYPE type; // テクスチャタイプ
 
         S_PES_TEXTURE_ANN ann;
+    };
+
+    struct S_PES_SAMPLER_HEADER {
+        IZ_UINT numSampler;       // サンプラ数
     };
 
     // サンプラ

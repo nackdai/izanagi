@@ -98,8 +98,12 @@ namespace izanagi {
         // |    バッファ    |
         // +----------------+
 
-        m_nParamNum = sHeader.numParam;
-        m_nParamAnnNum = sHeader.numParamAnn;
+        S_PES_PARAM_HEADER paramHeader;
+        memcpy(&paramHeader, p, sizeof(S_PES_PARAM_HEADER));
+        p += sizeof(S_PES_PARAM_HEADER);
+
+        m_nParamNum = paramHeader.numParameter;
+        m_nParamAnnNum = paramHeader.numParamAnn;
 
         // パラメータ記述
         if (m_nParamNum > 0) {

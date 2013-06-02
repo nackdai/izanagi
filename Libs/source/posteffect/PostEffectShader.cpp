@@ -67,7 +67,10 @@ CPostEffectShader* CPostEffectShader::CreatePostEffectShader(
     nBufSize += CPostEffectTextureTable::ComputeTexBufferSize(sHeader.numTex);
     nBufSize += CPostEffectTextureTable::ComputeTexBufferSize(sHeader.numTex);  // for temporaly
     nBufSize += sizeof(CPostEffectPass) * sHeader.numPass;
-    nBufSize += sHeader.sizePassBuffForParamIdx;
+
+    nBufSize += CPostEffectPass::ComputeBufferSize(
+        sHeader.numParam,
+        sHeader.numSampler);
 
     // バッファ確保
     IZ_UINT8* pBuffer = reinterpret_cast<IZ_UINT8*>(ALLOC_ZERO(pAllocator, nInstanceSize + nBufSize));

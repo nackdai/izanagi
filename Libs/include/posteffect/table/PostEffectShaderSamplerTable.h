@@ -56,7 +56,11 @@ namespace izanagi {
         // |サンプラテーブル|
         // +----------------+
 
-        m_nSmplNum = sHeader.numSampler;
+        S_PES_SAMPLER_HEADER smplHeader;
+        memcpy(&smplHeader, p, sizeof(smplHeader));
+        p += sizeof(smplHeader);
+
+        m_nSmplNum = smplHeader.numSampler;
 
         if (m_nSmplNum > 0) {
             // サンプラ記述
