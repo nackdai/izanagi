@@ -104,10 +104,12 @@ namespace {
             sConfig.compiler.format("%s", s_BUF);
             sConfig.compiler.replace('\\', '/');
 
+#if 0
             // コンパイルオプションとの結合
             izanagi::tool::CString tmp;
             tmp.format("\"\"%s\"\" %s", sConfig.compiler.c_str(), sConfig.compile_opt.c_str());
             sConfig.compiler = tmp;
+#endif
         }
 
         if (sConfig.name.empty()) {

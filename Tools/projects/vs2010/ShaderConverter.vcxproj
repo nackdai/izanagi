@@ -64,6 +64,11 @@
       <SubSystem>Console</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
+    <PreBuildEvent>
+      <Command>xcopy /R /Y /D "$(SolutionDir)..\..\External\xerces\Build\Win32\VC10\$(Configuration)\xerces-c_3_1D.dll" "$(SolutionDir)..\..\tools\$(ConfigurationName)"
+xcopy /R /Y /D "$(SolutionDir)..\..\External\Cg\dll\cg.dll" "$(SolutionDir)..\..\tools\$(ConfigurationName)"
+xcopy /R /Y /D "$(SolutionDir)..\..\External\Cg\dll\cgD3D9.dll" "$(SolutionDir)..\..\tools\$(ConfigurationName)"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -83,6 +88,11 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
+    <PreBuildEvent>
+      <Command>xcopy /R /Y /D "$(SolutionDir)..\..\External\xerces\Build\Win32\VC10\$(Configuration)\xerces-c_3_1.dll" "$(SolutionDir)..\..\tools\$(ConfigurationName)"
+xcopy /R /Y /D "$(SolutionDir)..\..\External\Cg\dll\cg.dll" "$(SolutionDir)..\..\tools\$(ConfigurationName)"
+xcopy /R /Y /D "$(SolutionDir)..\..\External\Cg\dll\cgD3D9.dll" "$(SolutionDir)..\..\tools\$(ConfigurationName)"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Shader\ShaderConverter\ShaderConverter.cpp" />

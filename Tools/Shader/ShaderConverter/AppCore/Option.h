@@ -4,6 +4,8 @@
 #include <vector>
 #include "izToolKit.h"
 
+#include "ShaderConfig.h"
+
 /**
 * オプション構造体
 */
@@ -17,11 +19,13 @@ struct SOption {
 
     izanagi::tool::CString out_file;        // 出力ファイル
 
-    izanagi::tool::CString obj_dir;     // 中間ファイルディレクトリ
+    izanagi::tool::CString obj_dir;         // 中間ファイルディレクトリ
     izanagi::tool::CString export_dir;
 
+    ShaderCompilerType type;                // シェーダコンパイルタイプ
+
     struct {
-        UINT isPreproc          : 1;    // プリプロセス処理のみを行うかどうか
+        UINT isPreproc          : 1;        // プリプロセス処理のみを行うかどうか
         UINT isPreprocShader    : 1;
     };
 };

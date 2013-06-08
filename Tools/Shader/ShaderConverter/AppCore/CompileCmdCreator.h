@@ -3,6 +3,7 @@
 
 #include "Cg/cg.h"
 #include "izToolKit.h"
+#include "ShaderConfig.h"
 
 /**
 * シェーダコンパイルタイプ
@@ -18,57 +19,44 @@ enum COMPILE_TYPE {
 * シェーダコンパイル用コマンド作成
 */
 class CCompileCmdCreator {
-private:
-    static CCompileCmdCreator s_cInstance;
-
 public:
-    static CCompileCmdCreator& GetInstance() { return s_cInstance; }
+    static CCompileCmdCreator& GetInstance(ShaderCompilerType type);
 
-private:
-    CCompileCmdCreator();
-    ~CCompileCmdCreator();
+protected:
+    CCompileCmdCreator() { m_bIsVS = IZ_FALSE; }
+    virtual ~CCompileCmdCreator() {}
 
-    CCompileCmdCreator(const CCompileCmdCreator& rhs);
-    const CCompileCmdCreator& operator=(const CCompileCmdCreator& rhs);
+    NO_COPIABLE(CCompileCmdCreator);
 
 public:
     // コマンド作成
-    void CreateCompileCommand(
+    virtual void CreateCompileCommand(
         izanagi::tool::CString& cmd,
         izanagi::tool::CString& out,
         COMPILE_TYPE type,
-        LPCSTR lpszCompileCommand,
-        LPCSTR lpszShaderFile,
-        LPCSTR lpszEntryPoint,
-        CGprofile profile);
+        const SShaderConfig& config,
+        IZ_PCSTR entry,
+        CGprofile profile) = 0;
 
-public:
-    inline void SetIsVS(BOOL flag);
+    /**
+    * 頂点シェーダかどうかセット
+    */
+    void SetIsVS(BOOL flag)
+    {
+        m_bIsVS = flag;
+    }
 
-private:
-    inline BOOL IsVS();
+    /**
+    * 頂点シェーダかどうか
+    */
+    BOOL IsVS()
+    {
+        return m_bIsVS;
+    }
 
 private:
     // 頂点シェーダかどうか
     BOOL m_bIsVS;
 };
-
-// inline *******************************
-
-/**
-* 頂点シェーダかどうかセット
-*/
-void CCompileCmdCreator::SetIsVS(BOOL flag)
-{
-    m_bIsVS = flag;
-}
-
-/**
-* 頂点シェーダかどうか
-*/
-BOOL CCompileCmdCreator::IsVS()
-{
-    return m_bIsVS;
-}
 
 #endif  // #if !defined(__SHADER_CONVERTER_COMPILE_CMD_CREATEOR_H__)

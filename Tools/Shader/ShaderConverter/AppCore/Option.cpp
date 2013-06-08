@@ -13,6 +13,8 @@ namespace {
 */
 COption::COption()
 {
+    type = ShaderCompilerType_DX9;
+
     isPreproc = FALSE;
     isPreprocShader = FALSE;
 }
@@ -71,6 +73,23 @@ BOOL COption::Analysis(int argc, char* argv[])
                 // -o
                 export_dir.format("%s", argv[i + 1]);
                 i++;
+            }
+            else if (result = (cmd == "-t")) {
+                // -t
+                izanagi::tool::CString strType(argv[i + 1]);
+                strType = strType.make_lower();
+
+                result = IZ_TRUE;
+
+                if (strType == "dx9") {
+                    type = ShaderCompilerType_DX9;
+                }
+                else if (strType == "gles2") {
+                    type = ShaderCompilerType_GLES2;
+                }
+                else {
+                    result = IZ_FALSE;
+                }
             }
         }
 

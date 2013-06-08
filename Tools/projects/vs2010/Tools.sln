@@ -41,6 +41,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ShaderCompile", "ShaderCompile.vcxproj", "{72385CA4-C72A-4F85-BC0E-079F3290005E}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ShaderConverter", "ShaderConverter.vcxproj", "{527F2B12-FA4F-42D1-B81F-D4EC25208797}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C2ED175C-CEEC-421A-986B-88A8FD0C1B9B} = {C2ED175C-CEEC-421A-986B-88A8FD0C1B9B}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ShaderSource", "ShaderSource.vcxproj", "{2C70FF41-A6EB-48AD-9184-DB92A8B254FC}"
 EndProject
