@@ -296,6 +296,7 @@ IZ_C_ASSERT(sizeof(size_t) == sizeof(IZ_UINT))
 namespace izanagi {
     enum E_PLATFORM {
         E_PLATFORM_DX9 = 0,
+        E_PLATFORM_GLES2,
 
         E_PLATFORM_NUM,
     };
