@@ -966,19 +966,17 @@ namespace {
     BOOL _CompileShaderInternal(
         izanagi::tool::CString& out,
         COMPILE_TYPE type,
-        LPCSTR lpszCompileCommand,
-        LPCSTR lpszShaderFile,
-        LPCSTR lpszEntryPoint,
+        const SShaderConfig& config,
+        IZ_PCSTR entry,
         CGprofile profile)
     {
         // コマンド作成
         izanagi::tool::CString cmd;
-        CCompileCmdCreator::GetInstance().CreateCompileCommand(
+        CCompileCmdCreator::GetInstance(config.type).CreateCompileCommand(
             cmd, out,
             type,
-            lpszCompileCommand,
-            lpszShaderFile,
-            lpszEntryPoint,
+            config,
+            entry,
             profile);
 
         int result = 0;
@@ -1004,10 +1002,8 @@ namespace {
     // コンパイラ実行
     BOOL _CompileShader(
         izanagi::tool::CString& out,
-        BOOL bIsAsm,
-        LPCSTR lpszCompileCommand,
-        LPCSTR lpszShaderFile,
-        LPCSTR lpszEntryPoint,
+        const SShaderConfig& config,
+        IZ_PCSTR entry,
         CGprofile profile)
     {
         izanagi::tool::CString tmp = out;
@@ -1018,19 +1014,17 @@ namespace {
         ret = _CompileShaderInternal(
                 out,
                 COMPILE_TYPE_SHADER,
-                lpszCompileCommand,
-                lpszShaderFile,
-                lpszEntryPoint,
+                config,
+                entry,
                 profile);
 
-        if (ret && bIsAsm) {
+        if (ret && config.isCompileAsm) {
             // アセンブラ出力
             ret = _CompileShaderInternal(
                     tmp,
                     COMPILE_TYPE_SHADER_ASM,
-                    lpszCompileCommand,
-                    lpszShaderFile,
-                    lpszEntryPoint,
+                    config,
+                    entry,
                     profile);
         }
 
@@ -1077,25 +1071,19 @@ namespace {
 * シェーダコンパイル
 */
 BOOL CShaderConverter::CompileShader(
-    BOOL bIsAsm,
-    LPCSTR lpszCompileCommand,
-    LPCSTR lpszShaderFile,
+    const SShaderConfig& config,
     LPCSTR lpszObjDir)
 {
     // 頂点プログラムをコンパイル
     BOOL b0 = CompileProgram(
                 TRUE,
-                bIsAsm,
-                lpszCompileCommand,
-                lpszShaderFile,
+                config,
                 lpszObjDir);
 
     // ピクセルプログラムをコンパイル
     BOOL b1 = CompileProgram(
                 FALSE,
-                bIsAsm,
-                lpszCompileCommand,
-                lpszShaderFile,
+                config,
                 lpszObjDir);
 
     return (b0 && b1);
@@ -1103,12 +1091,10 @@ BOOL CShaderConverter::CompileShader(
 
 BOOL CShaderConverter::CompileProgram(
     BOOL bIsVS,
-    BOOL bIsAsm,
-    LPCSTR lpszCompileCommand,
-    LPCSTR lpszShaderFile,
+    const SShaderConfig& config,
     LPCSTR lpszObjDir)
 {
-    CCompileCmdCreator::GetInstance().SetIsVS(FALSE);
+    CCompileCmdCreator::GetInstance(config.type).SetIsVS(FALSE);
 
     IZ_UINT nPassCnt = 0;
 
@@ -1123,16 +1109,16 @@ BOOL CShaderConverter::CompileProgram(
             _MakeOutFile(
                 strOut,
                 nPassCnt,
-                lpszShaderFile,
+                config.shader,
                 lpszObjDir);
 
-            CCompileCmdCreator::GetInstance().SetIsVS(bIsVS);
+            CCompileCmdCreator::GetInstance(config.type).SetIsVS(bIsVS);
 
             CGprogram program = (bIsVS
                                     ? CPassUtil::GetVSProgram(pass)
                                     : CPassUtil::GetPSProgram(pass));
 
-            IZ_PCSTR pszEntryPoint = ::cgGetProgramString(program, CG_PROGRAM_ENTRY);
+            IZ_PCSTR entry = ::cgGetProgramString(program, CG_PROGRAM_ENTRY);
             
             IZ_PCSTR pszProfile = ::cgGetProgramString(program, CG_PROGRAM_PROFILE);
             CGprofile profile = ::cgGetProfile(pszProfile);
@@ -1140,10 +1126,8 @@ BOOL CShaderConverter::CompileProgram(
             // コンパイル
             if (!_CompileShader(
                     strOut,
-                    bIsAsm,
-                    lpszCompileCommand,
-                    lpszShaderFile,
-                    pszEntryPoint,
+                    config,
+                    entry,
                     profile))
             {
                 IZ_ASSERT(FALSE);

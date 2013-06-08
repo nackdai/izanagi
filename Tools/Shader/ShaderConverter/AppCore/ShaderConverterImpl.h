@@ -34,9 +34,7 @@ public:
 
     // シェーダコンパイル
     BOOL CompileShader(
-        BOOL bIsAsm,
-        LPCSTR lpszCompileCommand,
-        LPCSTR lpszShaderFile,
+        const SShaderConfig& sConfig,
         LPCSTR lpszObjDir);
 
 protected:
@@ -66,9 +64,7 @@ protected:
 
     BOOL CompileProgram(
         BOOL bIsVS,
-        BOOL bIsAsm,
-        LPCSTR lpszCompileCommand,
-        LPCSTR lpszShaderFile,
+        const SShaderConfig& config,
         LPCSTR lpszObjDir);
 
 private:

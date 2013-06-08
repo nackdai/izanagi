@@ -124,6 +124,9 @@ namespace {
             "   -src [in]  : Shader list file path(*.xml)\n"
             "   -o [export dir] : Directory for exporting files\n"
             "   -obj [dir] : Temporary directory for obj files\n"
+            "   -t [type] : Compile type\n"
+            "     dx9   : DirectX9\n"
+            "     gles2 : OpenGLES2\n"
             " Usually belows are not used\n"
             "   -I [inclue paths] : Include paths for preprocessing shader list file\n"
             "   -D [deines] : Defines for preprocessing shader list file\n");
@@ -173,6 +176,9 @@ int main(int argc, char* argv[])
         for (UINT i = 0; i < nConfigNum; i++) {
             SShaderConfig& sConfig = CShaderConfigManager::GetInstance().GetConfig(i);
 
+            // コンパイルタイプの反映
+            sConfig.type = cOption.type;
+
             // Prepare preproc.
             VRETURN(_PreparePreproc(cOption, sConfig));
 
@@ -191,9 +197,7 @@ int main(int argc, char* argv[])
 
             _VGOTO(
                 CShaderConverter::GetInstance().CompileShader(
-                    sConfig.isCompileAsm,
-                    sConfig.compiler,
-                    sConfig.preproc_file,
+                    sConfig,
                     cOption.obj_dir),
                 __EXIT__);
 
