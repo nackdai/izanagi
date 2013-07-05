@@ -7,6 +7,7 @@ using System.Text;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace ShaderCompiler
 {
@@ -16,11 +17,22 @@ namespace ShaderCompiler
         {
             try
             {
-                Compiler.Do(args);
+                var option = new Option(args);
+
+                if (option.IsAnaylizeMode)
+                {
+                    int index = Analyzer.GetSamplerIndex(option.Input, option.Entry);
+                    Console.WriteLine(index);
+                }
+                else
+                {
+                    Compiler.Do(option);
+                }
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
             }
         }
     }
@@ -35,14 +47,15 @@ namespace ShaderCompiler
             Console.WriteLine("Usage : ShaderCompiler <options>");
             Console.WriteLine();
             Console.WriteLine("options ****");
-            Console.WriteLine("-i <input>");
-            Console.WriteLine("-o <output>");
-            Console.WriteLine("-e <etnry>");
-            Console.WriteLine("-p <profile>");
-            Console.WriteLine("-I <includes>");
-            Console.WriteLine("-D <defines>");
-            Console.WriteLine("--string-table");
-            Console.WriteLine("-opt <options> : options for native compiler (fxc.exe)");
+            Console.WriteLine(" -i <input>");
+            Console.WriteLine(" -o <output>");
+            Console.WriteLine(" -e <etnry>");
+            Console.WriteLine(" -p <profile>");
+            Console.WriteLine(" -I <includes>");
+            Console.WriteLine(" -D <defines>");
+            Console.WriteLine(" --string-table");
+            Console.WriteLine(" -opt <options> : options for native compiler (fxc.exe)");
+            Console.WriteLine(" --analyze <file> <name> : If this option is set, other options are ignored.");
         }
 
         /// <summary>
@@ -176,10 +189,29 @@ namespace ShaderCompiler
             Console.WriteLine(output);
         }
 
-        static public void Do(string[] args)
-        {
-            var option = new Option(args);
+        static public readonly string SamplerOrignalNameTag = "// original name:";
 
+        static void AnalyzeSamplerName(string path, Dictionary<string, string> samplerNameDefs)
+        {
+            using (var sr = new StreamReader(path, Encoding.ASCII))
+            {
+                while (sr.Peek() >= 0)
+                {
+                    var line = sr.ReadLine();
+
+                    if (line.Contains(SamplerOrignalNameTag))
+                    {
+                        var trimmed = line.Substring(SamplerOrignalNameTag.Length);
+                        var names = trimmed.Split('/');
+
+                        samplerNameDefs.Add(names[0], names[1]);
+                    }
+                }
+            }
+        }
+
+        static internal void Do(Option option)
+        {
             if (!option.IsValid)
             {
                 DisplayUsage();
@@ -208,9 +240,10 @@ namespace ShaderCompiler
             {
                 DebugWriteLine("Export to [{0}]", option.Output);
 
-                // TODO
-                // For GLESSL
+                Dictionary<string, string> samplerNameDefs = new Dictionary<string, string>();
+                AnalyzeSamplerName(tmp, samplerNameDefs);
 
+                // GLSLにプリプロセスを行う
 #if true
                 var preprocessed = tmp + ".pp";
 
@@ -225,6 +258,8 @@ namespace ShaderCompiler
 
                 tmp = preprocessed;
 #endif
+
+                // 後処理を行う
 
                 int count = 0;
 
@@ -242,12 +277,29 @@ namespace ShaderCompiler
                             var line = sr.ReadLine();
                             if (count == 0)
                             {
+                                // 先頭に浮動小数の精度を定義する
                                 WriteLine(option, sw, "precision highp float;");
                                 WriteLine(option, sw, "");
                             }
                             else
                             {
-                                WriteLine(option, sw, line);
+                                sw.WriteLine();
+                                Write(option, sw, line);
+
+                                // サンプラの元の名前をコメントとして挿入する
+                                if (line.Contains("uniform sampler"))
+                                {
+                                    sw.WriteLine();
+
+                                    foreach (var pair in samplerNameDefs)
+                                    {
+                                        var comment = string.Format("// original name:{0}/{1}", pair.Key, pair.Value);
+                                        WriteLine(option, sw, comment);
+                                    }
+
+                                    // すべてを挿入したのでクリアする
+                                    samplerNameDefs.Clear();
+                                }
                             }
                             count++;
                         }
@@ -270,9 +322,27 @@ namespace ShaderCompiler
             if (option.IsExportAsStringTable)
             {
                 output = string.Format("\"{0}\\n\"", line);
+                sw.WriteLine(output);
             }
+            else
+            {
+                sw.Write(output + "\n");
+            }
+        }
 
-            sw.WriteLine(output);
+        static void Write(Option option, StreamWriter sw, string line)
+        {
+            string output = line;
+
+            if (option.IsExportAsStringTable)
+            {
+                output = string.Format("\"{0}\\n\"", line);
+                sw.Write(output);
+            }
+            else
+            {
+                sw.Write(output);
+            }
         }
 
         static void DebugWriteLine(string format, params object[] args)
@@ -346,6 +416,11 @@ namespace ShaderCompiler
         /// </summary>
         public bool IsExportAsStringTable;
 
+        /// <summary>
+        /// 解析モードかどうか
+        /// </summary>
+        public bool IsAnaylizeMode;
+
         public Option(string[] args)
         {
             bool isOptions = false;
@@ -387,6 +462,15 @@ namespace ShaderCompiler
                 else if (arg == "--string-table")
                 {
                     this.IsExportAsStringTable = true;
+                }
+                else if (arg == "--analyze")
+                {
+                    this.IsAnaylizeMode = true;
+                    this.Input = args[++i];
+                    this.Entry = args[++i];
+
+                    // 他のオプションはすべて無視するのでここで終了
+                    return;
                 }
                 else if (isOptions)
                 {
@@ -452,6 +536,59 @@ namespace ShaderCompiler
 
                 return !isInvalid;
             }
+        }
+    }
+
+    // -i BasicShader.fx -o test.ff -e mainPS -p ps_2_0
+
+    static class Analyzer
+    {
+        static internal int GetSamplerIndex(string path, string originalName)
+        {
+            try
+            {
+                using (var sr = new StreamReader(path, Encoding.UTF8))
+                {
+                    for (; ; )
+                    {
+                        string line = sr.ReadLine();
+
+                        if (line == null)
+                        {
+                            break;
+                        }
+
+                        // 先頭のスペースを削除
+                        line = line.TrimStart(' ');
+
+                        // "uniform samplerXX sN;"
+                        if (line.StartsWith(Compiler.SamplerOrignalNameTag))
+                        {
+                            var trimmed = line.Substring(Compiler.SamplerOrignalNameTag.Length);
+                            var names = trimmed.Split('/');
+
+                            if (names[1] == originalName)
+                            {
+                                var strIndex = names[0].Substring(1);
+
+                                int index;
+
+                                if (int.TryParse(strIndex, out index))
+                                {
+                                    return index;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                // TODO
+                // 確実の値を返したいので例外は握りつぶす
+            }
+
+            return -1;
         }
     }
 }
