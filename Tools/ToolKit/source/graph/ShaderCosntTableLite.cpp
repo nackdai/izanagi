@@ -33,6 +33,9 @@ namespace tool {
                     &instance->m_ConstTable);
             result = SUCCEEDED(hr);
 
+            result = (instance->m_ConstTable != IZ_NULL);
+            IZ_ASSERT(result);
+
             FREE(allocator, program);
         }
 
