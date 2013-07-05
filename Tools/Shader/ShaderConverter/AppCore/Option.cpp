@@ -77,6 +77,8 @@ BOOL COption::Analysis(int argc, char* argv[])
             else if (result = (cmd == "-t")) {
                 // -t
                 izanagi::tool::CString strType(argv[i + 1]);
+                i++;
+
                 strType = strType.make_lower();
 
                 result = IZ_TRUE;

@@ -24,6 +24,7 @@ using namespace std;
 namespace {
     izChar s_BUF[1024];
 
+    // プリプロセス準備
     inline BOOL _PreparePreproc(
         const COption& cOption,
         SShaderConfig& sConfig)
@@ -64,6 +65,7 @@ namespace {
         return IZ_TRUE;
     }
 
+    // プリプロセス実行
     inline BOOL _RunPreproc(const SShaderConfig& sConfig)
     {
         COption cOptTmp;
@@ -79,6 +81,7 @@ namespace {
         return TRUE;
     }
 
+    // 出力準備
     inline BOOL _PrepareExport(
         IZ_PCSTR lpszExportDir,
         SShaderConfig& sConfig)
@@ -111,6 +114,29 @@ namespace {
         }
 
         return IZ_TRUE;
+    }
+
+    // コンパイラ準備
+    inline void _PrepareCompiler(
+        const COption& option,
+        SShaderConfig& config)
+    {
+        IZ_ASSERT(!config.compiler.empty());
+        IZ_ASSERT(!option.in_file.empty());
+
+        // もしコンパイラが相対パスで指定されていたら
+        // 入力ファイルからパスを作成する
+
+        if (::PathIsRelative(config.compiler.c_str()))
+        {
+            // ディレクトリのみ取得
+            izanagi::tool::CFileUtility::GetPathWithoutFileName(s_BUF, sizeof(s_BUF), option.in_file.c_str());
+
+            // 退避させておく
+            izanagi::tool::CString compiler = config.compiler;
+
+            config.compiler.format("%s/%s\0", s_BUF, compiler.c_str());
+        }
     }
 
     void _DisplayUsage()
@@ -178,6 +204,9 @@ int main(int argc, char* argv[])
 
             // コンパイルタイプの反映
             sConfig.type = cOption.type;
+
+            // コンパイラ準備
+            _PrepareCompiler(cOption, sConfig);
 
             // Prepare preproc.
             VRETURN(_PreparePreproc(cOption, sConfig));

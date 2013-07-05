@@ -90,10 +90,14 @@ namespace {
             sConfig.shader.replace('\\', '/');
         }
 
+        // コンパイラの指定がされていない場合
         if (sConfig.compiler.empty()) {
+            // TODO
+            // とりあえず fxc を使う
             sConfig.compiler.format("%%DXSDK_DIR%%Utilities/Bin/x86/fxc");
         }
 
+        // コンパイラの指定がされている場合
         if (!sConfig.compiler.empty()) {
             VRETURN(
                 izanagi::tool::CEnvVarHelper::ExpandEnvStrings(
