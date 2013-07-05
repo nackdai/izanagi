@@ -165,10 +165,10 @@ BOOL CShaderConverter::Export(const SShaderConfig& sConfig)
 
     ExportParameter();
     ExportTexture();
-    ExportSampler();
+    ExportSampler(sConfig);
     ExportTechnique();
     
-    ExportPass();
+    ExportPass(sConfig);
 
     ExportStringBuffer();
 
@@ -178,7 +178,7 @@ BOOL CShaderConverter::Export(const SShaderConfig& sConfig)
     // プログラム開始位置
     m_ShdHeader.posProgram = m_Out.GetCurPos();
 
-    ExportProgram();
+    ExportProgram(sConfig);
 
     // Export chunk's terminater.
     //_ExportChunkHeader(m_Out, izanagi::SHD_PROGRAM_CHUNK_TERMINATER);
@@ -365,7 +365,7 @@ BOOL CShaderConverter::ExportTexture()
     return TRUE;
 }
 
-BOOL CShaderConverter::ExportSampler()
+BOOL CShaderConverter::ExportSampler(const SShaderConfig& config)
 {
     VRETURN(_ExportChunkHeader(m_Out, izanagi::SHD_CHUNK_MAGIC_NUMBER_SMPL));
 
@@ -437,17 +437,54 @@ BOOL CShaderConverter::ExportSampler()
                         // シェーダ定数テーブルを作成
                         IZ_ASSERT(passIdx < m_CompiledPSList.size());
 
-                        izanagi::tool::CSimpleMemoryAllocator allocator;
+                        if (config.type == ShaderCompilerType_DX9)
+                        {
+                            izanagi::tool::CSimpleMemoryAllocator allocator;
 
-                        izanagi::tool::CShaderConstTableLite* constTbl = izanagi::tool::CShaderConstTableLite::CreateShaderConstTableLite(
-                            &allocator,
-                            m_CompiledPSList[passIdx]);
+                            // ピクセルシェーダを読み込む
+                            izanagi::tool::CShaderConstTableLite* constTbl = izanagi::tool::CShaderConstTableLite::CreateShaderConstTableLite(
+                                &allocator,
+                                m_CompiledPSList[passIdx].c_str());
 
-                        const char* paramName = ::cgGetParameterName(param);
+                            const char* paramName = ::cgGetParameterName(param);
 
-                        sSampler.resource_id = constTbl->GetSamplerIndex(paramName);
+                            // シェーダからサンプラのインデックスを取得
+                            sSampler.resource_id = constTbl->GetSamplerIndex(paramName);
 
-                        SAFE_RELEASE(constTbl);
+                            SAFE_RELEASE(constTbl);
+                        }
+                        else if (config.type == ShaderCompilerType_GLES2)
+                        {
+                            const char* paramName = ::cgGetParameterName(param);
+
+                            // ShaderCompilerに任せる
+                            izanagi::tool::CString command;
+                            command.format(
+                                "%s --analyze %s %s\0",
+                                config.compiler.c_str(),
+                                m_CompiledPSList[passIdx].c_str(),
+                                paramName);
+
+                            // ShaderCompilerを起動
+                            FILE* fp = _popen(command.c_str(), "r");
+                            VRETURN(fp != NULL);
+
+                            static char buf[4];
+
+                            // 標準出力に出力された数値を取得
+                            while(fgets(buf, sizeof(buf), fp) != NULL)
+                            {
+                                int index = ::atoi(buf);
+                                sSampler.resource_id = index;
+                            }
+
+                            int result = _pclose(fp);
+                            VRETURN(result == 0);
+                        }
+                        else
+                        {
+                            IZ_ASSERT(IZ_FALSE);
+                        }
                     }
                     else {
                         // ある？
@@ -718,19 +755,27 @@ namespace {
         return ret;
     }
 
-    inline IZ_UINT _GetFileSize(IZ_PCSTR pszFile)
+    inline IZ_UINT _GetFileSize(
+        const SShaderConfig& config,
+        IZ_PCSTR pszFile)
     {
         izanagi::CFileInputStream in;
         VRETURN_VAL(in.Open(pszFile), 0);
 
         IZ_UINT ret = static_cast<IZ_UINT>(in.GetSize());
 
+        if (config.type == ShaderCompilerType_GLES2) {
+            // 4バイトアラインする
+            IZ_UINT paddingSize = 4 - (ret % 4);
+            ret += paddingSize;
+        }
+
         return ret;
     }
 }   // namespace
 
 // パス解析
-BOOL CShaderConverter::ExportPass()
+BOOL CShaderConverter::ExportPass(const SShaderConfig& config)
 {
     _ExportChunkHeader(m_Out, izanagi::SHD_CHUNK_MAGIC_NUMBER_PASS);
 
@@ -768,8 +813,8 @@ BOOL CShaderConverter::ExportPass()
                 sPass.numConst = _GetUsedParamNum(m_ParamList, pass);
                 sPass.numSampler = _GetUsedParamNum(m_SamplerList, pass);
 
-                sPass.sizeVS = _GetFileSize(m_CompiledVSList[nPassIdx]);
-                sPass.sizePS = _GetFileSize(m_CompiledPSList[nPassIdx]);
+                sPass.sizeVS = _GetFileSize(config, m_CompiledVSList[nPassIdx]);
+                sPass.sizePS = _GetFileSize(config, m_CompiledPSList[nPassIdx]);
 
                 nConstNum += sPass.numConst;
                 nSamplerNum += sPass.numSampler;
@@ -902,6 +947,7 @@ BOOL CShaderConverter::ExportUsedParamAndSamplerIdxByPass(CGpass pass)
 
 namespace {
     BOOL _ExportFile(
+        const SShaderConfig& config,
         const izanagi::tool::CString& strIn,
         izanagi::IOutputStream* pOut)
     {
@@ -911,21 +957,33 @@ namespace {
         izanagi::CFileInputStream cIn;
         VRETURN(cIn.Open(strIn));
 
+        IZ_UINT exportedSize = 0;
+
         for (;;) {
             IZ_UINT nReadSize = cIn.Read(BUF, 0, BUF_SIZE);
 
             IZ_OUTPUT_WRITE_VRETURN(pOut, BUF, 0, nReadSize);
+            exportedSize += nReadSize;
 
             if (nReadSize != BUF_SIZE) {
                 break;
             }
         }
 
+        if (config.type == ShaderCompilerType_GLES2)
+        {
+            static IZ_BYTE padding[4] = {0, 0, 0, 0};
+
+            // 4バイトアラインする
+            IZ_UINT paddingSize = 4 - (exportedSize % 4);
+            IZ_OUTPUT_WRITE_VRETURN(pOut, padding, 0, paddingSize);
+        }
+
         return TRUE;
     }
 }   // namespace
 
-BOOL CShaderConverter::ExportProgram()
+BOOL CShaderConverter::ExportProgram(const SShaderConfig& config)
 {
     VRETURN(m_CompiledPSList.size() == m_CompiledVSList.size());
 
@@ -933,8 +991,8 @@ BOOL CShaderConverter::ExportProgram()
         const izanagi::tool::CString strVS = m_CompiledVSList[i];
         const izanagi::tool::CString strPS = m_CompiledPSList[i];
 
-        VRETURN(_ExportFile(strVS, &m_Out));
-        VRETURN(_ExportFile(strPS, &m_Out));
+        VRETURN(_ExportFile(config, strVS, &m_Out));
+        VRETURN(_ExportFile(config, strPS, &m_Out));
     }
 
     return TRUE;

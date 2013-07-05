@@ -43,9 +43,9 @@ protected:
 
     BOOL ExportTechnique();
     BOOL ExportTexture();
-    BOOL ExportSampler();
+    BOOL ExportSampler(const SShaderConfig& config);
     BOOL ExportParameter();
-    BOOL ExportPass();
+    BOOL ExportPass(const SShaderConfig& config);
 
     BOOL ExportParamAnn(
         izanagi::S_SHD_PARAM_HEADER& sParamHeader,
@@ -58,7 +58,7 @@ protected:
     BOOL ExportUsedParamAndSamplerIdxByPass();
     BOOL ExportUsedParamAndSamplerIdxByPass(CGpass pass);
 
-    BOOL ExportProgram();
+    BOOL ExportProgram(const SShaderConfig& config);
 
     BOOL ExportStringBuffer();
 

@@ -121,8 +121,8 @@ void CCompileCmdCreator_GLES2::CreateCompileCommand(
 
     cmd.format(
         bIsAsm
-            ? "\"%s\" -i \"%s\" -o \"%s\" -p %s -e %s"
-            : "\"%s\" -i \"%s\" -o \"%s\" -p %s -e %s",
+            ? "\"%s\" -i %s -o %s -p %s -e %s"
+            : "\"%s\" -i %s -o %s -p %s -e %s",
         config.compiler.c_str(),
         config.preproc_file.c_str(),
         out.c_str(),
@@ -132,9 +132,11 @@ void CCompileCmdCreator_GLES2::CreateCompileCommand(
     // nativeのコンパイラに渡すコンパイルオプション
     if (!config.compile_opt.empty())
     {
-        cmd += "opt ";
+        cmd += " -opt ";
         cmd += config.compile_opt;
     }
+
+    printf("%s\n", cmd.c_str());
 }
 
 CCompileCmdCreator_DX9 s_InstanceDX9;
