@@ -163,7 +163,9 @@ namespace graph
     SHADER_PARAM_HANDLE CShaderProgramGLES2::GetHandleByName(IZ_PCSTR name)
     {
         IZ_ASSERT(IsValid());
-        IZ_ASSERT(IsLinked());
+        //IZ_ASSERT(IsLinked());
+
+        Link();
 
         SHADER_PARAM_HANDLE ret = ::glGetUniformLocation(
             m_Program,
