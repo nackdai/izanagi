@@ -9599,6 +9599,11 @@ const MOJOSHADER_parseData *MOJOSHADER_parse(const char *profile,
                     ctx->ctab.symbols[i].register_index);
                 output_line(
                     ctx,
+                    "// original name:s%d/%s",
+                    ctx->ctab.symbols[i].register_index,
+                    ctx->ctab.symbols[i].name);
+                output_line(
+                    ctx,
                     "#define %s_s%d s%d",
                     shader,
                     ctx->ctab.symbols[i].register_index,
