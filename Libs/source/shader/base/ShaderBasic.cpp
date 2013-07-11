@@ -1,4 +1,5 @@
 #include "shader/base/ShaderBasic.h"
+#include "shader/base/util/ShaderUtil.h"
 #include "izIo.h"
 
 using namespace izanagi;
@@ -487,12 +488,23 @@ IZ_BOOL CShaderBasic::SetParamValue(
             const void* pParam = m_ParamTbl.GetParam(pParamInfo->idx, &nBytes);
             IZ_ASSERT(pParam != IZ_NULL);
 
+#if 0
             VRETURN(
                 pShd->SetValue(
                     m_pDevice,
                     handle,
                     pParam,
                     nBytes));
+#else
+            IZ_BOOL result = CShaderUtil::SetValue(
+                m_pDevice,
+                pShd,
+                handle,
+                pParam,
+                pParamDesc->Type,
+                pParamDesc->Elements);
+            VRETURN(result);
+#endif
 
              pParamDesc->isDirty = IZ_FALSE;
         }
