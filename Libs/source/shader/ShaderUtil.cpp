@@ -17,27 +17,42 @@ namespace izanagi {
 
 		if (CShaderParamUtil::IsBoolType(type)) {
 			// BOOL
-			pShader->SetBoolArray(
-                device,
-				handle,
-				(const IZ_BOOL*)pValue,
-				nRow * nColumn * nElements);
+            if (nElements == 0) {
+                pShader->SetBool(device, handle, *(IZ_BOOL*)pValue);
+            }
+            else {
+			    pShader->SetBoolArray(
+                    device,
+				    handle,
+				    (const IZ_BOOL*)pValue,
+				    nRow * nColumn * nElements);
+            }
 		}
 		else if (CShaderParamUtil::IsIntType(type)) {
 			// INT
-			pShader->SetIntArray(
-                device,
-				handle,
-				(const IZ_INT*)pValue,
-				nRow * nColumn * nElements);
+            if (nElements == 0) {
+                pShader->SetInt(device, handle, *(IZ_INT*)pValue);
+            }
+            else {
+			    pShader->SetIntArray(
+                    device,
+				    handle,
+				    (const IZ_INT*)pValue,
+				    nRow * nColumn * nElements);
+            }
 		}
 		else if (CShaderParamUtil::IsMatrixType(type)) {
 			// FLOAT4x4 -> MATRIX
-			pShader->SetMatrixArray(
-                device,
-				handle,
-				(const math::SMatrix*)pValue,
-				nElements);
+            if (nElements == 0) {
+                pShader->SetMatrix(device, handle, *(const math::SMatrix*)pValue);
+            }
+            else {
+			    pShader->SetMatrixArray(
+                    device,
+				    handle,
+				    (const math::SMatrix*)pValue,
+				    nElements);
+            }
 		}
 		else if (CShaderParamUtil::IsFloatType(type)) {
 			if (nColumn < 4) {
@@ -50,11 +65,16 @@ namespace izanagi {
 			}
 			else {
 				// FLOAT4xN -> VECTOR4 x N
-				pShader->SetVectorArray(
-                    device,
-					handle,
-					(const math::SVector*)pValue,
-					nRow * nElements);
+                if (nElements == 0) {
+                    pShader->SetVector(device, handle, *(const math::SVector*)pValue);
+                }
+                else {
+				    pShader->SetVectorArray(
+                        device,
+					    handle,
+					    (const math::SVector*)pValue,
+					    nRow * nElements);
+                }
 			}
 		}
 		else {

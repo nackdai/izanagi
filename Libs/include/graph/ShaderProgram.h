@@ -37,6 +37,7 @@ namespace graph
 
         PURE_VIRTUAL(IZ_BOOL IsDirty());
 
+
         CVertexShader* GetVertexShader();
 
         CPixelShader* GetPixelShader();
@@ -47,6 +48,8 @@ namespace graph
 
     public:
         PURE_VIRTUAL(SHADER_PARAM_HANDLE GetHandleByName(IZ_PCSTR name));
+
+        PURE_VIRTUAL(IZ_BOOL IsValidHandle(const SHADER_PARAM_HANDLE& handle));
 
     public:
         PURE_VIRTUAL(IZ_BOOL SetBool(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, IZ_BOOL b));

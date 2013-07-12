@@ -471,7 +471,8 @@ IZ_BOOL CShaderBasic::SetParamValue(
 #if 0
     IZ_PCSTR name = m_StringBuffer.GetString(pParamDesc->posName);
 
-    SHADER_PARAM_HANDLE handle = pShd->GetHandleByName(name);
+    SHADER_PARAM_HANDLE handle = pShd->
+        GetHandleByName(name);
     IZ_ASSERT(handle == (bIsVS ? pParamInfo->handleVS : pParamInfo->handlePS));
 #endif
 
@@ -481,7 +482,7 @@ IZ_BOOL CShaderBasic::SetParamValue(
     if (bIsDirty) {
         const SHADER_PARAM_HANDLE& handle = pParamInfo->handle;
 
-        if (handle != 0) {
+        if (pShd->IsValidHandle(handle)) {
             // 有効なハンドル
             IZ_UINT nBytes = 0;
 
