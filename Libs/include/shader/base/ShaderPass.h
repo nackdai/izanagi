@@ -66,7 +66,7 @@ namespace izanagi {
 
             sParams.list[idx].idx = nIdxInParam;
             sParams.list[idx].handle = m_Program->GetHandleByName(name);
-            ret = (sParams.list[idx].handle != 0);
+            ret = m_Program->IsValidHandle(sParams.list[idx].handle);
 
             return ret;
         }

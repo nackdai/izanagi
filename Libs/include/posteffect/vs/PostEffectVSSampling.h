@@ -58,7 +58,7 @@ namespace izanagi {
 
             static IZ_PCSTR name = "g_vUVOffsetSampling";
             m_hOffset = program->GetHandleByName(name);
-            IZ_ASSERT(m_hOffset != 0);
+            IZ_ASSERT(program->IsValidHandle(m_hOffset));
         }
 
         // パラメータセット
@@ -66,7 +66,7 @@ namespace izanagi {
             graph::CGraphicsDevice* device,
             graph::CShaderProgram* program)
         {
-            IZ_ASSERT(m_hOffset != IZ_NULL);
+            IZ_ASSERT(program->IsValidHandle(m_hOffset));
 
             program->SetVectorArray(
                 device,

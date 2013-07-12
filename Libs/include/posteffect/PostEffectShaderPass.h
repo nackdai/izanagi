@@ -67,7 +67,7 @@ namespace izanagi {
             IZ_ASSERT(idx < sParams.num);
             sParams.list[idx].idx = nIdxInPass;
             sParams.list[idx].handle = m_Shader->GetHandleByName(name);
-            return (sParams.list[idx].handle != IZ_NULL);
+            return m_Shader->IsValidHandle(sParams.list[idx].handle);
         }
 
         template <typename _T>

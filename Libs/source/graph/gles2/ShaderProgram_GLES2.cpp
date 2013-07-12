@@ -88,7 +88,7 @@ namespace graph
 
     IZ_BOOL CShaderProgramGLES2::Link()
     {
-#if 0
+#if 1
         if (m_IsLinked) {
             return IZ_TRUE;
         }
@@ -173,6 +173,11 @@ namespace graph
         IZ_ASSERT(ret >= 0);
 
         return ret;
+    }
+
+    IZ_BOOL CShaderProgramGLES2::IsValidHandle(const SHADER_PARAM_HANDLE& handle)
+    {
+        return (handle >= 0);
     }
 
     IZ_BOOL CShaderProgramGLES2::SetBool(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, IZ_BOOL b)

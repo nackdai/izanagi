@@ -88,6 +88,11 @@ namespace graph
         return ret;
     }
 
+    IZ_BOOL CShaderProgramDX9::IsValidHandle(const SHADER_PARAM_HANDLE& handle)
+    {
+        return (handle != 0);
+    }
+
 #define _EXEC_FUNC(func, device, param)\
     IZ_BOOL b1, b2; \
     b1 = b2 = IZ_TRUE; \
