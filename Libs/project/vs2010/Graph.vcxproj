@@ -103,6 +103,9 @@
       </PrecompiledHeader>
     </ClCompile>
     <PostBuildEvent />
+    <Lib>
+      <AdditionalDependencies>..\..\..\External\ANGLE\lib\Debug\libEGL.lib;..\..\..\External\ANGLE\lib\Debug\libGLESv2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
     <Reference Include="System">
