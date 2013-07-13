@@ -7,6 +7,11 @@ namespace izanagi
 {
 namespace graph
 {
+    IZ_BOOL CShaderProgram::IsValidHandle(const SHADER_PARAM_HANDLE& handle)
+    {
+        return (handle != 0);
+    }
+
     CShaderProgram* CShaderProgramDX9::CreateShaderProgram(IMemoryAllocator* allocator)
     {
         void* buf = ALLOC(allocator, sizeof(CShaderProgramDX9));
@@ -86,11 +91,6 @@ namespace graph
         ret.psParam = PixelShader()->GetHandleByName(name);
 
         return ret;
-    }
-
-    IZ_BOOL CShaderProgramDX9::IsValidHandle(const SHADER_PARAM_HANDLE& handle)
-    {
-        return (handle != 0);
     }
 
 #define _EXEC_FUNC(func, device, param)\

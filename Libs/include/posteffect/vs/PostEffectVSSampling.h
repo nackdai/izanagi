@@ -17,7 +17,7 @@ namespace izanagi {
     protected:
         CPostEffectVSSampling()
         {
-            m_hOffset = IZ_NULL;
+            m_hOffset = 0;
             FILL_ZERO(m_vOffset, sizeof(m_vOffset));
         }
 
@@ -41,7 +41,7 @@ namespace izanagi {
         {
             if (CPostEffectVS::IsInitilizedShaderParameter())
             {
-                if (m_hOffset != 0)
+                if (graph::CShaderProgram::IsValidHandle(m_hOffset))
                 {
                     return IZ_TRUE;
                 }
@@ -58,7 +58,7 @@ namespace izanagi {
 
             static IZ_PCSTR name = "g_vUVOffsetSampling";
             m_hOffset = program->GetHandleByName(name);
-            IZ_ASSERT(program->IsValidHandle(m_hOffset));
+            IZ_ASSERT(graph::CShaderProgram::IsValidHandle(m_hOffset));
         }
 
         // パラメータセット
@@ -66,7 +66,7 @@ namespace izanagi {
             graph::CGraphicsDevice* device,
             graph::CShaderProgram* program)
         {
-            IZ_ASSERT(program->IsValidHandle(m_hOffset));
+            IZ_ASSERT(graph::CShaderProgram::IsValidHandle(m_hOffset));
 
             program->SetVectorArray(
                 device,
