@@ -13,6 +13,10 @@
       <Configuration>Release_DX9</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Release_GLES2|Win32">
+      <Configuration>Release_GLES2</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B1A551DC-8998-4E69-8716-5BECE3FEDFC8}</ProjectGuid>
@@ -21,6 +25,11 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -40,6 +49,10 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="PropertySeet\Release_DX9.props" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="PropertySeet\Release_GLES2.props" />
+  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="PropertySeet\Debug_DX9.props" />
@@ -54,6 +67,7 @@
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">false</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">
     <ClCompile>
@@ -111,6 +125,24 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>Shader.lib;PostEffect.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemGroup>
     <ProjectReference Include="SampleKit.vcxproj">
       <Project>{dd5d28b8-93f1-4f26-8ad1-dd224ccb9a4f}</Project>
@@ -122,72 +154,88 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(TOOL_DIR)Release\ImageBuilder.exe -i "%(FullPath)" -o "$(PROJECT_MAIN_DIR)data\%(Filename).img"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(TOOL_DIR)Release\ImageBuilder.exe -i "%(FullPath)" -o "$(PROJECT_MAIN_DIR)data\%(Filename).img"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(TOOL_DIR)Release\ImageBuilder.exe -i "%(FullPath)" -o "$(PROJECT_MAIN_DIR)data\%(Filename).img"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(TOOL_DIR)Release\ImageBuilder.exe -i "%(FullPath)" -o "$(PROJECT_MAIN_DIR)data\%(Filename).img"</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(PROJECT_MAIN_DIR)data\%(Filename).img;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(PROJECT_MAIN_DIR)data\%(Filename).img;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(PROJECT_MAIN_DIR)data\%(Filename).img;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(PROJECT_MAIN_DIR)data\%(Filename).img;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="..\..\PostEffect\posteffect\Monotone.peh">
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="..\..\PostEffect\posteffect\Negative.peh">
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="..\..\PostEffect\posteffect\Sepia.peh">
       <FileType>Document</FileType>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
     </CustomBuild>
     <CustomBuild Include="..\..\PostEffect\posteffect\BloomStar.peh">
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="..\..\PostEffect\posteffect\BloomStarMGF.peh">
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="..\..\PostEffect\posteffect\HDR.peh">
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="..\..\PostEffect\posteffect\HDR2.peh">
       <FileType>Document</FileType>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
     </CustomBuild>
     <None Include="..\..\PostEffect\posteffect\PostEffectBloomStar.fx" />
     <None Include="..\..\PostEffect\posteffect\PostEffectBloomStarMGF.fx" />
@@ -201,18 +249,22 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
     </CustomBuild>
     <None Include="..\..\PostEffect\shader\PhongShader.fx" />
     <CustomBuild Include="..\..\PostEffect\shader\PhongShader.xml">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
