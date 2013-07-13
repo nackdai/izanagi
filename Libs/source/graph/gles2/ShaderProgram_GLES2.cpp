@@ -6,6 +6,11 @@ namespace izanagi
 {
 namespace graph
 {
+    IZ_BOOL CShaderProgram::IsValidHandle(const SHADER_PARAM_HANDLE& handle)
+    {
+        return (handle >= 0);
+    }
+
     CShaderProgram* CShaderProgramGLES2::CreateShaderProgram(IMemoryAllocator* allocator)
     {
         void* buf = ALLOC(allocator, sizeof(CShaderProgramGLES2));
@@ -173,11 +178,6 @@ namespace graph
         IZ_ASSERT(ret >= 0);
 
         return ret;
-    }
-
-    IZ_BOOL CShaderProgramGLES2::IsValidHandle(const SHADER_PARAM_HANDLE& handle)
-    {
-        return (handle >= 0);
     }
 
     IZ_BOOL CShaderProgramGLES2::SetBool(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, IZ_BOOL b)

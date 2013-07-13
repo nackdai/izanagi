@@ -482,7 +482,7 @@ IZ_BOOL CShaderBasic::SetParamValue(
     if (bIsDirty) {
         const SHADER_PARAM_HANDLE& handle = pParamInfo->handle;
 
-        if (pShd->IsValidHandle(handle)) {
+        if (graph::CShaderProgram::IsValidHandle(handle)) {
             // 有効なハンドル
             IZ_UINT nBytes = 0;
 

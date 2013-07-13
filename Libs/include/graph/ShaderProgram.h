@@ -29,6 +29,8 @@ namespace graph
         IZ_DEFINE_INTERNAL_RELEASE();
 
     public:
+        static IZ_BOOL IsValidHandle(const SHADER_PARAM_HANDLE& handle);
+
         PURE_VIRTUAL(IZ_BOOL AttachVertexShader(CVertexShader* vs));
 
         PURE_VIRTUAL(IZ_BOOL AttachPixelShader(CPixelShader* ps));
@@ -36,7 +38,6 @@ namespace graph
         PURE_VIRTUAL(IZ_BOOL IsValid());
 
         PURE_VIRTUAL(IZ_BOOL IsDirty());
-
 
         CVertexShader* GetVertexShader();
 
@@ -48,8 +49,6 @@ namespace graph
 
     public:
         PURE_VIRTUAL(SHADER_PARAM_HANDLE GetHandleByName(IZ_PCSTR name));
-
-        PURE_VIRTUAL(IZ_BOOL IsValidHandle(const SHADER_PARAM_HANDLE& handle));
 
     public:
         PURE_VIRTUAL(IZ_BOOL SetBool(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, IZ_BOOL b));
