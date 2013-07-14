@@ -468,7 +468,7 @@ namespace graph
             SHADER_PARAM_HANDLE ret = ::glGetUniformLocation(
                 m_Program,
                 name));
-        IZ_ASSERT(ret >= 0);
+        //IZ_ASSERT(ret >= 0);
 
         return ret;
 #else
