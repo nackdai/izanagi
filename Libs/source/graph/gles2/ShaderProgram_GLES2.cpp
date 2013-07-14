@@ -189,6 +189,7 @@ namespace graph
 
     IZ_BOOL CShaderProgramGLES2::GetUniformInfo()
     {
+#if !ENABLE_SET_UNIFORM_IMMEDIATERY
         // クリアしておく
         ClearUniformInfo();
 
@@ -230,8 +231,6 @@ namespace graph
             // NOTE
             // 問い合わせるuniform変数が配列の場合、この変数にはprogramで使用される配列の最大数（+1）が書き込まれる
             // 問い合わせるuniform変数が配列でない場合、この値は１になります
-
-            size = (size == 1 ? size : size - 1);
 
             // Compute allocation size.
             switch (type)
@@ -301,6 +300,7 @@ namespace graph
             m_Uniforms[i].handle = -1;
             m_Uniforms[i].isDirty = IZ_FALSE;
         }
+#endif
 
         return IZ_TRUE;
     }
@@ -334,6 +334,7 @@ namespace graph
 
     IZ_BOOL CShaderProgramGLES2::CommitChanges(SHADER_PARAM_HANDLE location)
     {
+#if !ENABLE_SET_UNIFORM_IMMEDIATERY
         SUniform& uniform = m_Uniforms[location];
 
         if (uniform.isDirty) {
@@ -415,6 +416,7 @@ namespace graph
                 }
             }
         }
+#endif
 
         return IZ_TRUE;
     }
@@ -542,7 +544,7 @@ namespace graph
         CALL_GLES2_API(::glUniform1fv(handle, num, f));
 #else
         IZ_ASSERT(handle >= 0);
-        IZ_ASSERT(m_Uniforms[handle].bufferSize <= sizeof(GLfloat) * num);
+        IZ_ASSERT(m_Uniforms[handle].bufferSize >= sizeof(GLfloat) * num);
 
         memcpy(m_Uniforms[handle].buffer, f, sizeof(GLfloat) * num);
         m_Uniforms[handle].isDirty = IZ_TRUE;
@@ -576,7 +578,7 @@ namespace graph
         CALL_GLES2_API(::glUniform1iv(handle, num, n));
 #else
         IZ_ASSERT(handle >= 0);
-        IZ_ASSERT(m_Uniforms[handle].bufferSize <= sizeof(GLint) * num);
+        IZ_ASSERT(m_Uniforms[handle].bufferSize >= sizeof(GLint) * num);
 
         memcpy(m_Uniforms[handle].buffer, n, sizeof(GLint) * num);
         m_Uniforms[handle].isDirty = IZ_TRUE;
@@ -620,7 +622,7 @@ namespace graph
                 (const GLfloat*)m));
 #else
         IZ_ASSERT(handle >= 0);
-        IZ_ASSERT(m_Uniforms[handle].bufferSize <= sizeof(GLfloat) * 16 * num);
+        IZ_ASSERT(m_Uniforms[handle].bufferSize >= sizeof(GLfloat) * 16 * num);
 
         memcpy(m_Uniforms[handle].buffer, m, sizeof(GLfloat) * 16 * num);
         m_Uniforms[handle].isDirty = IZ_TRUE;
@@ -657,7 +659,7 @@ namespace graph
         CALL_GLES2_API(::glUniform4fv(handle, num, (const GLfloat*)v));
 #else
         IZ_ASSERT(handle >= 0);
-        IZ_ASSERT(m_Uniforms[handle].bufferSize <= sizeof(GLfloat) * 4 * num);
+        IZ_ASSERT(m_Uniforms[handle].bufferSize >= sizeof(GLfloat) * 4 * num);
 
         memcpy(m_Uniforms[handle].buffer, v, sizeof(GLfloat) * 4 * num);
         m_Uniforms[handle].isDirty = IZ_TRUE;
