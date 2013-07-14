@@ -6,6 +6,8 @@
 #include "izShader.h"
 #include "StringChunk.h"
 
+struct SShaderConfig;
+
 class CParamUtil {
 public:
     static CGtype GetCgType(CGparameter param)
@@ -101,6 +103,7 @@ public:
     static BOOL DoNotStrip(CGparameter param);
 
     static BOOL SetDescValue(
+        const SShaderConfig& config,
         izanagi::S_SHD_PARAMETER& sDesc,
         CGparameter param);
 

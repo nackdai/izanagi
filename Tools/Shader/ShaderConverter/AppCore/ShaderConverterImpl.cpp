@@ -163,7 +163,7 @@ BOOL CShaderConverter::Export(const SShaderConfig& sConfig)
     // ファイルヘッダ分空ける
     VRETURN(m_Out.Seek(sizeof(m_ShdHeader), izanagi::E_IO_STREAM_SEEK_POS_START));
 
-    ExportParameter();
+    ExportParameter(sConfig);
     ExportTexture();
     ExportSampler(sConfig);
     ExportTechnique();
@@ -514,7 +514,7 @@ BOOL CShaderConverter::ExportSampler(const SShaderConfig& config)
 /**
 * パラメータ解析
 */
-BOOL CShaderConverter::ExportParameter()
+BOOL CShaderConverter::ExportParameter(const SShaderConfig& config)
 {
     _ExportChunkHeader(m_Out, izanagi::SHD_CHUNK_MAGIC_NUMBER_PARAM);
 
@@ -555,6 +555,7 @@ BOOL CShaderConverter::ExportParameter()
 
                 VRETURN(
                     CParamUtil::SetDescValue(
+                        config,
                         sParam,
                         param));
 
