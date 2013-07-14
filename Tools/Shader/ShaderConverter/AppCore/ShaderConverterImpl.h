@@ -44,7 +44,7 @@ protected:
     BOOL ExportTechnique();
     BOOL ExportTexture();
     BOOL ExportSampler(const SShaderConfig& config);
-    BOOL ExportParameter();
+    BOOL ExportParameter(const SShaderConfig& config);
     BOOL ExportPass(const SShaderConfig& config);
 
     BOOL ExportParamAnn(
