@@ -77,7 +77,7 @@ namespace graph
     {
         SAFE_RELEASE(m_Device);
 
-        ::glDeleteBuffers(1, &m_VB);
+        CALL_GLES2_API(::glDeleteBuffers(1, &m_VB));
         
         FREE(m_Allocator, m_TemporaryData);
     }
@@ -88,14 +88,15 @@ namespace graph
         IZ_UINT vtxNum,
         E_GRAPH_RSC_USAGE usage)
     {
-        ::glGenBuffers(1, &m_VB);
+        CALL_GLES2_API(::glGenBuffers(1, &m_VB));
         VRETURN(m_VB > 0);
 
         IZ_BOOL ret = (m_VB > 0);
 
-        ::glBindBuffer(
-            GL_ARRAY_BUFFER,
-            m_VB);
+        CALL_GLES2_API(
+            ::glBindBuffer(
+                GL_ARRAY_BUFFER,
+                m_VB));
 
         GLsizeiptr size = vtxNum * stride;
 
@@ -116,11 +117,12 @@ namespace graph
                 ? GL_STATIC_DRAW
                 : GL_DYNAMIC_DRAW);
 
-            ::glBufferData(
-                GL_ARRAY_BUFFER,
-                m_Size,
-                NULL,
-                glUsage);
+            CALL_GLES2_API(
+                ::glBufferData(
+                    GL_ARRAY_BUFFER,
+                    m_Size,
+                    NULL,
+                    glUsage));
 
             m_IsInitialized = IZ_TRUE;
         }
@@ -184,7 +186,7 @@ namespace graph
             CVertexBuffer* curVB = m_Device->GetRenderState().curVB;
 
             if (curVB != this) {
-                ::glBindBuffer(GL_ARRAY_BUFFER, m_VB);
+                CALL_GLES2_API(::glBindBuffer(GL_ARRAY_BUFFER, m_VB));
 
                 // もしかしたら
                 Initialize();
@@ -193,21 +195,23 @@ namespace graph
             IZ_UINT8* tmp = reinterpret_cast<IZ_UINT8*>(m_TemporaryData);
             tmp += m_LockOffset;
 
-            ::glBufferSubData(
-                GL_ARRAY_BUFFER,
-                m_LockOffset,
-                m_LockSize,
-                tmp);
+            CALL_GLES2_API(
+                ::glBufferSubData(
+                    GL_ARRAY_BUFFER,
+                    m_LockOffset,
+                    m_LockSize,
+                    tmp));
 
             // 元に戻す
             if (curVB != this) {
                 if (curVB == IZ_NULL) {
-                    ::glBindBuffer(GL_ARRAY_BUFFER, 0);
+                    CALL_GLES2_API(::glBindBuffer(GL_ARRAY_BUFFER, 0));
                 }
                 else {
-                    ::glBindBuffer(
-                        GL_ARRAY_BUFFER,
-                        ((CVertexBufferGLES2*)curVB)->m_VB);
+                    CALL_GLES2_API(
+                        ::glBindBuffer(
+                            GL_ARRAY_BUFFER,
+                            ((CVertexBufferGLES2*)curVB)->m_VB));
                 }
             }
 
@@ -231,7 +235,7 @@ namespace graph
 
     IZ_BOOL CVertexBufferGLES2::Disable()
     {
-        ::glDeleteBuffers(1, &m_VB);
+        CALL_GLES2_API(::glDeleteBuffers(1, &m_VB));
         return IZ_TRUE;
     }
 

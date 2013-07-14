@@ -110,7 +110,7 @@ namespace graph
         SAFE_RELEASE(m_Device);
 
         if (m_Texture > 0) {
-            ::glDeleteTextures(1, &m_Texture);
+            CALL_GLES2_API(::glDeleteTextures(1, &m_Texture));
         }
 
         FREE(m_Allocator, m_TemporaryData);
@@ -128,7 +128,7 @@ namespace graph
         IZ_ASSERT(device != IZ_NULL);
         IZ_ASSERT(width == height);
 
-        ::glGenTextures(1, &m_Texture);
+        CALL_GLES2_API(::glGenTextures(1, &m_Texture));
 
         VRETURN(m_Texture > 0);
 
@@ -174,15 +174,16 @@ namespace graph
                     GLuint w = width >> i;
                     GLuint h = height >> i;
 
-                    ::glTexImage2D(
-                        GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
-                        i,
-                        m_GLFormat,
-                        w, h,
-                        0,
-                        m_GLFormat,
-                        m_GLType,
-                        IZ_NULL);
+                    CALL_GLES2_API(
+                        ::glTexImage2D(
+                            GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
+                            i,
+                            m_GLFormat,
+                            w, h,
+                            0,
+                            m_GLFormat,
+                            m_GLType,
+                            IZ_NULL));
                 }
             }
 
@@ -250,7 +251,7 @@ namespace graph
             GLenum glFace = IZ_GET_ABST_CUBE_FACE(face);
 
             if (curTex != this) {
-                ::glBindTexture(GL_TEXTURE_CUBE_MAP, m_Texture);
+                CALL_GLES2_API(::glBindTexture(GL_TEXTURE_CUBE_MAP, m_Texture));
                 
                 Initialize();
             }
@@ -258,24 +259,26 @@ namespace graph
             IZ_UINT width = GetWidth(level);
             IZ_UINT height = GetHeight(level);
 
-            ::glTexSubImage2D(
-                glFace,
-                level,
-                0, 0,
-                width, height,
-                m_GLFormat,
-                m_GLType,
-                m_TemporaryData);
+            CALL_GLES2_API(
+                ::glTexSubImage2D(
+                    glFace,
+                    level,
+                    0, 0,
+                    width, height,
+                    m_GLFormat,
+                    m_GLType,
+                    m_TemporaryData));
 
             // 元に戻す
             if (curTex != this) {
                 if (curTex == IZ_NULL) {
-                    ::glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+                    CALL_GLES2_API(::glBindTexture(GL_TEXTURE_CUBE_MAP, 0));
                 }
                 else {
-                    ::glBindTexture(
-                        curTex->GetTexType() == E_GRAPH_TEX_TYPE_PLANE ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP,
-                        ((CCubeTextureGLES2*)curTex)->m_Texture);
+                    CALL_GLES2_API(
+                        ::glBindTexture(
+                            curTex->GetTexType() == E_GRAPH_TEX_TYPE_PLANE ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP,
+                            ((CCubeTextureGLES2*)curTex)->m_Texture));
                 }
             }
 

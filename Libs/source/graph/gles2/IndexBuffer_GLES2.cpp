@@ -78,7 +78,7 @@ namespace graph
     {
         SAFE_RELEASE(m_Device);
 
-        ::glDeleteBuffers(1, &m_IB);
+        CALL_GLES2_API(::glDeleteBuffers(1, &m_IB));
         
         FREE(m_Allocator, m_TemporaryData);
     }
@@ -89,14 +89,15 @@ namespace graph
         E_GRAPH_INDEX_BUFFER_FMT fmt,
         E_GRAPH_RSC_USAGE usage)
     {
-        ::glGenBuffers(1, &m_IB);
+        CALL_GLES2_API(::glGenBuffers(1, &m_IB));
         VRETURN(m_IB > 0);
 
         IZ_BOOL ret = (m_IB > 0);
 
-        ::glBindBuffer(
-            GL_ELEMENT_ARRAY_BUFFER,
-            m_IB);
+        CALL_GLES2_API(
+            ::glBindBuffer(
+                GL_ELEMENT_ARRAY_BUFFER,
+                m_IB));
 
         GLsizeiptr size = idxNum;
         size *= (fmt == E_GRAPH_INDEX_BUFFER_FMT_INDEX16 ? sizeof(GLushort) : sizeof(GLuint));
@@ -117,11 +118,12 @@ namespace graph
                 ? GL_STATIC_DRAW
                 : GL_DYNAMIC_DRAW);
 
-            ::glBufferData(
-                GL_ELEMENT_ARRAY_BUFFER,
-                m_Size,
-                NULL,
-                glUsage);
+            CALL_GLES2_API(
+                ::glBufferData(
+                    GL_ELEMENT_ARRAY_BUFFER,
+                    m_Size,
+                    NULL,
+                    glUsage));
 
             m_IsInitialized = IZ_TRUE;
         }
@@ -185,7 +187,7 @@ namespace graph
             CIndexBuffer* curIB = m_Device->GetRenderState().curIB;
 
             if (curIB != this) {
-                ::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IB);
+                CALL_GLES2_API(::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IB));
 
                 // もしかしたら
                 Initialize();
@@ -194,21 +196,23 @@ namespace graph
             IZ_UINT8* tmp = reinterpret_cast<IZ_UINT8*>(m_TemporaryData);
             tmp += m_LockOffset;
 
-            ::glBufferSubData(
-                GL_ELEMENT_ARRAY_BUFFER,
-                m_LockOffset,
-                m_LockSize,
-                tmp);
+            CALL_GLES2_API(
+                ::glBufferSubData(
+                    GL_ELEMENT_ARRAY_BUFFER,
+                    m_LockOffset,
+                    m_LockSize,
+                    tmp));
 
             // 元に戻す
             if (curIB != this) {
                 if (curIB == IZ_NULL) {
-                    ::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+                    CALL_GLES2_API(::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
                 }
                 else {
-                    ::glBindBuffer(
-                        GL_ELEMENT_ARRAY_BUFFER,
-                        ((CIndexBufferGLES2*)curIB)->m_IB);
+                    CALL_GLES2_API(
+                        ::glBindBuffer(
+                            GL_ELEMENT_ARRAY_BUFFER,
+                            ((CIndexBufferGLES2*)curIB)->m_IB));
                 }
             }
 
@@ -232,7 +236,7 @@ namespace graph
 
     IZ_BOOL CIndexBufferGLES2::Disable()
     {
-        ::glDeleteBuffers(1, &m_IB);
+        CALL_GLES2_API(::glDeleteBuffers(1, &m_IB));
         return IZ_TRUE;
     }
 

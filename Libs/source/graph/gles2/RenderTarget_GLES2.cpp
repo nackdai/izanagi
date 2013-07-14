@@ -16,7 +16,7 @@ namespace graph
     CRenderTargetGLES2::~CRenderTargetGLES2()
     {
         if (m_Texture > 0) {
-            ::glDeleteTextures(1, &m_Texture);
+            CALL_GLES2_API(::glDeleteTextures(1, &m_Texture));
         }
     }
 

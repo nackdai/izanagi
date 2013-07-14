@@ -21,7 +21,7 @@ namespace graph
             instance->AddRef();
             instance->m_Allocator = allocator;
 
-            instance->m_Program = ::glCreateProgram();
+            CALL_GLES2_API(instance->m_Program = ::glCreateProgram());
             IZ_ASSERT(instance->m_Program != 0);
         }
 
@@ -45,15 +45,17 @@ namespace graph
 
         if (m_VS != vs) {
             if (m_VS != IZ_NULL) {
-                ::glDetachShader(
-                    m_Program,
-                    VertexShader()->GetRawInterface());
+                CALL_GLES2_API(
+                    ::glDetachShader(
+                        m_Program,
+                        VertexShader()->GetRawInterface()));
             }
 
             if (vs != IZ_NULL) {
-                ::glAttachShader(
-                    m_Program,
-                    ((CVertexShaderGLES2*)vs)->GetRawInterface());
+                CALL_GLES2_API(
+                    ::glAttachShader(
+                        m_Program,
+                        ((CVertexShaderGLES2*)vs)->GetRawInterface()));
             }
 
             SAFE_REPLACE(m_VS, vs);
@@ -71,15 +73,17 @@ namespace graph
 
         if (m_PS != ps) {
             if (m_PS != IZ_NULL) {
-                ::glDetachShader(
-                    m_Program,
-                    PixelShader()->GetRawInterface());
+                CALL_GLES2_API(
+                    ::glDetachShader(
+                        m_Program,
+                        PixelShader()->GetRawInterface()));
             }
 
             if (ps != IZ_NULL) {
-                ::glAttachShader(
-                    m_Program,
-                    ((CPixelShaderGLES2*)ps)->GetRawInterface());
+                CALL_GLES2_API(
+                    ::glAttachShader(
+                        m_Program,
+                        ((CPixelShaderGLES2*)ps)->GetRawInterface()));
             }
 
             SAFE_REPLACE(m_PS, ps);
@@ -103,13 +107,16 @@ namespace graph
         IZ_ASSERT(IsValid());
 
         if (IsValid() && IsDirty()) {
-            ::glLinkProgram(m_Program);
+            GLint num;
+            glGetProgramiv(m_Program, GL_ACTIVE_UNIFORMS, &num);
+
+            CALL_GLES2_API(::glLinkProgram(m_Program));
 
             // TODO
             // リンク結果をチェック
             GLint isLinked = 0;
 
-            ::glGetProgramiv(m_Program, GL_LINK_STATUS, &isLinked);
+            CALL_GLES2_API(::glGetProgramiv(m_Program, GL_LINK_STATUS, &isLinked));
 
             if (isLinked) {
                 m_IsLinked = IZ_TRUE;
@@ -172,9 +179,10 @@ namespace graph
 
         Link();
 
-        SHADER_PARAM_HANDLE ret = ::glGetUniformLocation(
-            m_Program,
-            name);
+        CALL_GLES2_API(
+            SHADER_PARAM_HANDLE ret = ::glGetUniformLocation(
+                m_Program,
+                name));
         IZ_ASSERT(ret >= 0);
 
         return ret;
@@ -185,7 +193,7 @@ namespace graph
         IZ_ASSERT(IsValid());
         IZ_ASSERT(IsLinked());
 
-        ::glUniform1i(handle, b);
+        CALL_GLES2_API(::glUniform1i(handle, b));
         return IZ_TRUE;
     }
 
@@ -194,7 +202,7 @@ namespace graph
         IZ_ASSERT(IsValid());
         IZ_ASSERT(IsLinked());
 
-        ::glUniform1iv(handle, num, b);
+        CALL_GLES2_API(::glUniform1iv(handle, num, b));
         return IZ_TRUE;
     }
     
@@ -203,7 +211,7 @@ namespace graph
         IZ_ASSERT(IsValid());
         IZ_ASSERT(IsLinked());
 
-        ::glUniform1f(handle, f);
+        CALL_GLES2_API(::glUniform1f(handle, f));
         return IZ_TRUE;
     }
 
@@ -212,7 +220,7 @@ namespace graph
         IZ_ASSERT(IsValid());
         IZ_ASSERT(IsLinked());
 
-        ::glUniform1fv(handle, num, f);
+        CALL_GLES2_API(::glUniform1fv(handle, num, f));
         return IZ_TRUE;
     }
     
@@ -221,7 +229,7 @@ namespace graph
         IZ_ASSERT(IsValid());
         IZ_ASSERT(IsLinked());
 
-        ::glUniform1i(handle, n);
+        CALL_GLES2_API(::glUniform1i(handle, n));
         return IZ_TRUE;
     }
 
@@ -230,7 +238,7 @@ namespace graph
         IZ_ASSERT(IsValid());
         IZ_ASSERT(IsLinked());
 
-        ::glUniform1iv(handle, num, n);
+        CALL_GLES2_API(::glUniform1iv(handle, num, n));
         return IZ_TRUE;
     }
     
@@ -239,11 +247,12 @@ namespace graph
         IZ_ASSERT(IsValid());
         IZ_ASSERT(IsLinked());
 
-        ::glUniformMatrix4fv(
-            handle,
-            1,
-            GL_FALSE,
-            m.a);
+        CALL_GLES2_API(
+            ::glUniformMatrix4fv(
+                handle,
+                1,
+                GL_FALSE,
+                m.a));
         return IZ_TRUE;
     }
 
@@ -252,11 +261,12 @@ namespace graph
         IZ_ASSERT(IsValid());
         IZ_ASSERT(IsLinked());
 
-        ::glUniformMatrix4fv(
-            handle,
-            num,
-            GL_FALSE,
-            (const GLfloat*)m);
+        CALL_GLES2_API(
+            ::glUniformMatrix4fv(
+                handle,
+                num,
+                GL_FALSE,
+                (const GLfloat*)m));
         return IZ_TRUE;
     }
     
@@ -265,9 +275,10 @@ namespace graph
         IZ_ASSERT(IsValid());
         IZ_ASSERT(IsLinked());
 
-        ::glUniform4f(
-            handle,
-            v.x, v.y, v.z, v.w);
+        CALL_GLES2_API(
+            ::glUniform4f(
+                handle,
+                v.x, v.y, v.z, v.w));
         return IZ_TRUE;
     }
 
@@ -276,7 +287,7 @@ namespace graph
         IZ_ASSERT(IsValid());
         IZ_ASSERT(IsLinked());
 
-        ::glUniform4fv(handle, num, (const GLfloat*)v);
+        CALL_GLES2_API(::glUniform4fv(handle, num, (const GLfloat*)v));
         return IZ_TRUE;
     }
     

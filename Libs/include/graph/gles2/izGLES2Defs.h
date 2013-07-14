@@ -7,6 +7,17 @@
 typedef GLuint TEX_HANDLE;
 typedef GLuint SHADER_PARAM_HANDLE;
 
+#ifdef __IZ_DEBUG__
+    #define CALL_GLES2_API(func)\
+        func;\
+        {\
+            GLenum __gl_err__ = ::glGetError();\
+            if (__gl_err__ != GL_NO_ERROR) IZ_ASSERT(IZ_FALSE);\
+        }
+#else
+    #define CALL_GLES2_API(func) func
+#endif
+
 namespace izanagi
 {
 namespace graph
