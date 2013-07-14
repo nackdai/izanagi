@@ -173,15 +173,16 @@ namespace graph
             // そのため、バイトオフセットに変換する
             IZ_UINT offset = vtxOffset * vtxStride;
 
-            ::glVertexAttribPointer(
-                i,
-                num,
-                type,
-                needNormalized ? GL_TRUE : GL_FALSE,
-                vtxStride,
-                (void*)(offset + element.Offset));
+            CALL_GLES2_API(
+                ::glVertexAttribPointer(
+                    i,
+                    num,
+                    type,
+                    needNormalized ? GL_TRUE : GL_FALSE,
+                    vtxStride,
+                    (void*)(offset + element.Offset)));
 
-            ::glEnableVertexAttribArray(i);
+            CALL_GLES2_API(::glEnableVertexAttribArray(i));
         }
 
         return IZ_TRUE;
@@ -250,10 +251,11 @@ namespace graph
 
             // NOTE
             // ShaderCompilerによってSemanticに応じたアトリビュート名が設定されている
-            ::glBindAttribLocation(
-                program->GetRawInterface(),
-                i,
-                name);
+            CALL_GLES2_API(
+                ::glBindAttribLocation(
+                    program->GetRawInterface(),
+                    i,
+                    name));
         }
     }
 }   // namespace graph

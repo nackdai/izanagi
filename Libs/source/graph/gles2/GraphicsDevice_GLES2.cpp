@@ -140,7 +140,7 @@ namespace graph
             // NOTE
             // izanagiでは左手座標系なので
             // カリングの標準はCounterClockWiseにする
-            ::glFrontFace(GL_CCW);
+            CALL_GLES2_API(::glFrontFace(GL_CCW));
 
             // ビューポート
             SViewport vp;
@@ -308,31 +308,32 @@ namespace graph
 
             if (_IS_CLEAR(nClearFlags, E_GRAPH_CLEAR_FLAG_COLOR))
             {
-                ::glClearColor(
-                    IZ_COLOR_R(nClearColor) * clr_div,
-                    IZ_COLOR_G(nClearColor) * clr_div,
-                    IZ_COLOR_B(nClearColor) * clr_div,
-                    IZ_COLOR_A(nClearColor) * clr_div);
+                CALL_GLES2_API(
+                    ::glClearColor(
+                        IZ_COLOR_R(nClearColor) * clr_div,
+                        IZ_COLOR_G(nClearColor) * clr_div,
+                        IZ_COLOR_B(nClearColor) * clr_div,
+                        IZ_COLOR_A(nClearColor) * clr_div));
 
                 flag |= GL_COLOR_BUFFER_BIT;
             }
 
             if (_IS_CLEAR(nClearFlags, E_GRAPH_CLEAR_FLAG_DEPTH))
             {
-                ::glClearDepthf(fClearZ);
+                CALL_GLES2_API(::glClearDepthf(fClearZ));
 
                 flag |= GL_DEPTH_BUFFER_BIT;
             }
 
             if (_IS_CLEAR(nClearFlags, E_GRAPH_CLEAR_FLAG_STENCIL))
             {
-                ::glClearStencil(nClearStencil);
+                CALL_GLES2_API(::glClearStencil(nClearStencil));
 
                 flag |= GL_STENCIL_BUFFER_BIT;
             }
 
             if (flag > 0) {
-                ::glClear(flag);
+                CALL_GLES2_API(::glClear(flag));
             }
         }
     }
@@ -439,11 +440,11 @@ namespace graph
         CVertexBufferGLES2* gles2VB = reinterpret_cast<CVertexBufferGLES2*>(pVB);
 
         if (gles2VB != IZ_NULL) {
-            ::glBindBuffer(GL_ARRAY_BUFFER, gles2VB->GetRawInterface());
+            CALL_GLES2_API(::glBindBuffer(GL_ARRAY_BUFFER, gles2VB->GetRawInterface()));
             gles2VB->Initialize();
         }
         else {
-            ::glBindBuffer(GL_ARRAY_BUFFER, 0);
+            CALL_GLES2_API(::glBindBuffer(GL_ARRAY_BUFFER, 0));
         }
 
         // 現在設定されているものとして保持
@@ -467,11 +468,11 @@ namespace graph
         CIndexBufferGLES2* gles2IB = reinterpret_cast<CIndexBufferGLES2*>(pIB);
 
         if (gles2IB != IZ_NULL) {
-            ::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gles2IB->GetRawInterface());
+            CALL_GLES2_API(::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gles2IB->GetRawInterface()));
             gles2IB->Initialize();
         }
         else {
-            ::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+            CALL_GLES2_API(::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
         }
 
         // 現在設定されているものとして保持
@@ -503,10 +504,10 @@ namespace graph
 
             gles2Program->Link();
 
-            ::glUseProgram(gles2Program->GetRawInterface());
+            CALL_GLES2_API(::glUseProgram(gles2Program->GetRawInterface()));
         }
         else {
-            ::glUseProgram(0);
+            CALL_GLES2_API(::glUseProgram(0));
         }
 
         // 現在設定されているものとして保持
@@ -568,6 +569,8 @@ namespace graph
                 CShaderProgramGLES2* shader = reinterpret_cast<CShaderProgramGLES2*>(m_RenderState.curShader);
 
                 vd->Bind(shader);
+                m_IsBinded = IZ_TRUE;
+
                 shader->Link();
             }
         }
@@ -590,11 +593,12 @@ namespace graph
                 && m_Texture[i] != IZ_NULL)
             {
                 if (isDirty) {
-                    m_SamplerHandle[i] = ::glGetUniformLocation(gles2Program->GetRawInterface(), samplerName[i]);
+                    CALL_GLES2_API(
+                        m_SamplerHandle[i] = ::glGetUniformLocation(gles2Program->GetRawInterface(), samplerName[i]));
                     IZ_ASSERT(m_SamplerHandle[i] >= 0);
                 }
 
-                ::glActiveTexture(GL_TEXTURE0 + i);
+                CALL_GLES2_API(::glActiveTexture(GL_TEXTURE0 + i));
 
                 GLenum type = (m_Texture[i]->GetTexType() == E_GRAPH_TEX_TYPE_PLANE
                     ? GL_TEXTURE_2D
@@ -602,9 +606,9 @@ namespace graph
 
                 GLuint handle = m_Texture[i]->GetTexHandle();
 
-                ::glBindTexture(type, handle);
+                CALL_GLES2_API(::glBindTexture(type, handle));
 
-                ::glUniform1i(m_SamplerHandle[i], i);
+                CALL_GLES2_API(::glUniform1i(m_SamplerHandle[i], i));
             }
 
             m_IsDirtyTex[i] = IZ_FALSE;
@@ -653,11 +657,12 @@ namespace graph
         // そのため、バイトオフセットに変換する
         IZ_UINT offset = idxOffset * sizeof(IZ_USHORT);
 
-        ::glDrawElements(
-            mode,
-            idxNum,
-            type,
-            (const GLvoid*)offset);
+        CALL_GLES2_API(
+            ::glDrawElements(
+                mode,
+                idxNum,
+                type,
+                (const GLvoid*)offset));
 
         return IZ_TRUE;
     }
@@ -692,6 +697,8 @@ namespace graph
                 CShaderProgramGLES2* shader = reinterpret_cast<CShaderProgramGLES2*>(m_RenderState.curShader);
 
                 vd->Bind(shader);
+                m_IsBinded = IZ_TRUE;
+
                 shader->Link();
             }
         }
@@ -714,11 +721,12 @@ namespace graph
                 && m_Texture[i] != IZ_NULL)
             {
                 if (isDirty) {
-                    m_SamplerHandle[i] = ::glGetUniformLocation(gles2Program->GetRawInterface(), samplerName[i]);
+                    CALL_GLES2_API(
+                        m_SamplerHandle[i] = ::glGetUniformLocation(gles2Program->GetRawInterface(), samplerName[i]));
                 }
 
                 if (m_SamplerHandle[i] >= 0) {
-                    ::glActiveTexture(GL_TEXTURE0 + i);
+                    CALL_GLES2_API(::glActiveTexture(GL_TEXTURE0 + i));
 
                     GLenum type = (m_Texture[i]->GetTexType() == E_GRAPH_TEX_TYPE_PLANE
                         ? GL_TEXTURE_2D
@@ -726,9 +734,9 @@ namespace graph
 
                     GLuint handle = m_Texture[i]->GetTexHandle();
 
-                    ::glBindTexture(type, handle);
+                    CALL_GLES2_API(::glBindTexture(type, handle));
 
-                    ::glUniform1i(m_SamplerHandle[i], i);
+                    CALL_GLES2_API(::glUniform1i(m_SamplerHandle[i], i));
                 }
             }
 
@@ -765,7 +773,7 @@ namespace graph
 
         GLenum mode = CParamValueConverterGLES2::ConvAbstractToTarget_PrimType(prim_type);
 
-        ::glDrawArrays(mode, idxOffset, vtxNum);
+        CALL_GLES2_API(::glDrawArrays(mode, idxOffset, vtxNum));
         
         return IZ_TRUE;
     }
@@ -790,15 +798,17 @@ namespace graph
             || (m_RenderState.vp.minZ != vp.minZ)
             || (m_RenderState.vp.maxZ != vp.maxZ))
         {
-            ::glViewport(
-                vp.x,
-                vp.y,
-                vp.width,
-                vp.height);
+            CALL_GLES2_API(
+                ::glViewport(
+                    vp.x,
+                    vp.y,
+                    vp.width,
+                    vp.height));
 
-            ::glDepthRangef(
-                vp.minZ,
-                vp.maxZ);
+            CALL_GLES2_API(
+                ::glDepthRangef(
+                    vp.minZ,
+                    vp.maxZ));
             
             if (ret) {
                 memcpy(&m_RenderState.vp, &vp, sizeof(vp));
@@ -849,14 +859,15 @@ namespace graph
 
     IZ_BOOL CGraphicsDeviceGLES2::SetTextureInternal(IZ_UINT nStage, CBaseTexture* pTex)
     {
-        ::glActiveTexture(GL_TEXTURE0 + nStage);
+        CALL_GLES2_API(::glActiveTexture(GL_TEXTURE0 + nStage));
 
         if (pTex != IZ_NULL) {
             IZ_BOOL isPlane = (pTex->GetTexType() == E_GRAPH_TEX_TYPE_PLANE);
 
-            ::glBindTexture(
-                isPlane ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP,
-                pTex->GetTexHandle());
+            CALL_GLES2_API(
+                ::glBindTexture(
+                    isPlane ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP,
+                    pTex->GetTexHandle()));
 
             if (pTex->GetTexType() == E_GRAPH_TEX_TYPE_PLANE) {
                 ((CTextureGLES2*)pTex)->Initialize();
@@ -926,8 +937,8 @@ namespace graph
             }
         }
         else {
-            ::glBindTexture(GL_TEXTURE_2D, 0);
-            ::glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+            CALL_GLES2_API(::glBindTexture(GL_TEXTURE_2D, 0));
+            CALL_GLES2_API(::glBindTexture(GL_TEXTURE_CUBE_MAP, 0));
         }
 
         // 保持しておく
@@ -958,10 +969,11 @@ namespace graph
         IZ_BOOL needUpdate = (m_Flags.is_force_set_state || (old_val != new_val));
 
         if (needUpdate) {
-            ::glTexParameteri(
-                isPlane ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP,
-                IZ_GET_TARGET_SAMPLER_STATE_TYPE(nSSType),
-                IZ_GET_TARGET_TEX_ADDR(new_val));
+            CALL_GLES2_API(
+                ::glTexParameteri(
+                    isPlane ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP,
+                    IZ_GET_TARGET_SAMPLER_STATE_TYPE(nSSType),
+                    IZ_GET_TARGET_TEX_ADDR(new_val)));
 
             old_val = new_val;
         }
@@ -977,10 +989,11 @@ namespace graph
         IZ_BOOL needUpdate = (m_Flags.is_force_set_state || (old_val != new_val));
 
         if (needUpdate) {
-            ::glTexParameteri(
-                isPlane ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP,
-                IZ_GET_TARGET_SAMPLER_STATE_TYPE(nSSType),
-                IZ_GET_TARGET_TEX_FILTER(new_val));
+            CALL_GLES2_API(
+                ::glTexParameteri(
+                    isPlane ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP,
+                    IZ_GET_TARGET_SAMPLER_STATE_TYPE(nSSType),
+                    IZ_GET_TARGET_TEX_FILTER(new_val)));
 
             old_val = new_val;
         }

@@ -44,7 +44,7 @@ namespace graph
     {
         SAFE_RELEASE(m_Device);
 
-        ::glDeleteTextures(1, &m_Texture);
+        CALL_GLES2_API(::glDeleteTextures(1, &m_Texture));
 
         FREE(m_Allocator, m_TemporaryData);
     }
@@ -136,7 +136,7 @@ namespace graph
         E_GRAPH_PIXEL_FMT fmt,
         E_GRAPH_RSC_USAGE rscType)
     {
-        ::glGenTextures(1, &m_Texture);
+        CALL_GLES2_API(::glGenTextures(1, &m_Texture));
         VRETURN(m_Texture > 0);
 
         SetTextureInfo(
@@ -192,15 +192,16 @@ namespace graph
                 GLuint w = width >> i;
                 GLuint h = height >> i;
 
-                ::glTexImage2D(
-                    GL_TEXTURE_2D,
-                    i,
-                    m_GLFormat,
-                    w, h,
-                    0,
-                    m_GLFormat,
-                    m_GLType,
-                    IZ_NULL);
+                CALL_GLES2_API(
+                    ::glTexImage2D(
+                        GL_TEXTURE_2D,
+                        i,
+                        m_GLFormat,
+                        w, h,
+                        0,
+                        m_GLFormat,
+                        m_GLType,
+                        IZ_NULL));
             }
 
             m_IsInitialized = IZ_TRUE;
@@ -261,7 +262,7 @@ namespace graph
             CBaseTexture* curTex = m_Device->GetTexture(0);
 
             if (curTex != this) {
-                ::glBindTexture(GL_TEXTURE_2D, m_Texture);
+                CALL_GLES2_API(::glBindTexture(GL_TEXTURE_2D, m_Texture));
                 
                 Initialize();
             }
@@ -269,24 +270,26 @@ namespace graph
             IZ_UINT width = GetWidth(level);
             IZ_UINT height = GetHeight(level);
 
-            ::glTexSubImage2D(
-                GL_TEXTURE_2D,
-                level,
-                0, 0,
-                width, height,
-                m_GLFormat,
-                m_GLType,
-                m_TemporaryData);
+            CALL_GLES2_API(
+                ::glTexSubImage2D(
+                    GL_TEXTURE_2D,
+                    level,
+                    0, 0,
+                    width, height,
+                    m_GLFormat,
+                    m_GLType,
+                    m_TemporaryData));
 
             // 元に戻す
             if (curTex != this) {
                 if (curTex == IZ_NULL) {
-                    ::glBindTexture(GL_TEXTURE_2D, 0);
+                    CALL_GLES2_API(::glBindTexture(GL_TEXTURE_2D, 0));
                 }
                 else {
-                    ::glBindTexture(
-                        curTex->GetTexType() == E_GRAPH_TEX_TYPE_PLANE ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP,
-                        ((CTextureGLES2*)curTex)->m_Texture);
+                    CALL_GLES2_API(
+                        ::glBindTexture(
+                            curTex->GetTexType() == E_GRAPH_TEX_TYPE_PLANE ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP,
+                            ((CTextureGLES2*)curTex)->m_Texture));
                 }
             }
 
@@ -311,7 +314,7 @@ namespace graph
     // 本体解放
     IZ_BOOL CTextureGLES2::Disable()
     {
-        ::glDeleteTextures(1, &m_Texture);
+        CALL_GLES2_API(::glDeleteTextures(1, &m_Texture));
         m_Texture = 0;
 
         return IZ_TRUE;

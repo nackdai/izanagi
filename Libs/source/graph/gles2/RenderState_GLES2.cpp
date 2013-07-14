@@ -49,7 +49,7 @@ namespace graph
     void CRenderState::EnableZWrite(CGraphicsDevice* device, IZ_DWORD flag)
     {
         if (isZWriteEnable != flag) {
-            ::glDepthMask(flag);
+            CALL_GLES2_API(::glDepthMask(flag));
             isZWriteEnable = flag;
         }
     }
@@ -59,10 +59,10 @@ namespace graph
     {
         if (isZTestEnable != flag) {
             if (flag) {
-                ::glEnable(GL_DEPTH_TEST);
+                CALL_GLES2_API(::glEnable(GL_DEPTH_TEST));
             }
             else {
-                ::glDisable(GL_DEPTH_TEST);
+                CALL_GLES2_API(::glDisable(GL_DEPTH_TEST));
             }
             isZTestEnable = flag;
         }
@@ -104,10 +104,10 @@ namespace graph
     {
         if (isAlphaBlendEnable != flag) {
             if (flag) {
-                ::glEnable(GL_BLEND);
+                CALL_GLES2_API(::glEnable(GL_BLEND));
             }
             else {
-                ::glDisable(GL_BLEND);
+                CALL_GLES2_API(::glDisable(GL_BLEND));
             }
         }
     }
@@ -144,7 +144,7 @@ namespace graph
         if (cullMode != cull) {
             GLenum raelCull = IZ_GET_TARGET_CULL((E_GRAPH_CULL)cull);
 
-            ::glCullFace(raelCull);
+            CALL_GLES2_API(::glCullFace(raelCull));
             cullMode = cull;
         }
     }
@@ -153,11 +153,12 @@ namespace graph
     void CRenderState::EnableRenderColorRGB(CGraphicsDevice* device, IZ_DWORD enableRGB)
     {
         if (isEnableRenderRGB != enableRGB) {
-            ::glColorMask(
-                enableRGB,
-                enableRGB,
-                enableRGB,
-                isEnableRenderA);
+            CALL_GLES2_API(
+                ::glColorMask(
+                    enableRGB,
+                    enableRGB,
+                    enableRGB,
+                    isEnableRenderA));
 
             isEnableRenderRGB = enableRGB;
         }
@@ -166,11 +167,12 @@ namespace graph
     void CRenderState::EnableRenderColorA(CGraphicsDevice* device, IZ_DWORD enableA)
     {
         if (isEnableRenderA != enableA) {
-            ::glColorMask(
-                isEnableRenderRGB,
-                isEnableRenderRGB,
-                isEnableRenderRGB,
-                enableA);
+            CALL_GLES2_API(
+                ::glColorMask(
+                    isEnableRenderRGB,
+                    isEnableRenderRGB,
+                    isEnableRenderRGB,
+                    enableA));
 
             isEnableRenderA = enableA;
         }
@@ -181,10 +183,10 @@ namespace graph
     {
         if (isScissorEnable != flag) {
             if (flag) {
-                ::glEnable(GL_SCISSOR_TEST);
+                CALL_GLES2_API(::glEnable(GL_SCISSOR_TEST));
             }
             else {
-                ::glDisable(GL_SCISSOR_TEST);
+                CALL_GLES2_API(::glDisable(GL_SCISSOR_TEST));
             }
             isScissorEnable = flag;
         }
@@ -196,11 +198,12 @@ namespace graph
         IZ_C_ASSERT(sizeof(RECT) == sizeof(CIntRect));
 
         if (rcScissor != rc) {
-            ::glScissor(
-                rc.left,
-                rc.top,
-                rc.right - rc.left,
-                rc.bottom - rc.top);
+            CALL_GLES2_API(
+                ::glScissor(
+                    rc.left,
+                    rc.top,
+                    rc.right - rc.left,
+                    rc.bottom - rc.top));
 
             rcScissor = rc;
         }
