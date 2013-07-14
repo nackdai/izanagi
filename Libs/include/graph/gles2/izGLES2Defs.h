@@ -5,7 +5,7 @@
 #include <GLES2/gl2.h>
 
 typedef GLuint TEX_HANDLE;
-typedef GLuint SHADER_PARAM_HANDLE;
+typedef GLint SHADER_PARAM_HANDLE;
 
 #ifdef __IZ_DEBUG__
     #define CALL_GLES2_API(func)\

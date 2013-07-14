@@ -22,7 +22,7 @@ namespace graph
 
     private:
         CShaderProgramGLES2();
-        virtual ~CShaderProgramGLES2() {}
+        virtual ~CShaderProgramGLES2();
 
     public:
         virtual IZ_BOOL AttachVertexShader(CVertexShader* vs);
@@ -31,6 +31,12 @@ namespace graph
 
         virtual IZ_BOOL Link();
 
+        IZ_BOOL LinkForcibly();
+
+        IZ_BOOL CommitChanges();
+        IZ_BOOL CommitChanges(SHADER_PARAM_HANDLE location);
+        void ClearCommitChanges();
+
         virtual IZ_BOOL IsValid();
 
         virtual IZ_BOOL IsDirty();
@@ -38,6 +44,10 @@ namespace graph
         virtual void ClearDirty();
 
         IZ_BOOL IsLinked();
+
+    private:
+        IZ_BOOL GetUniformInfo();
+        void ClearUniformInfo();
 
     public:
         virtual SHADER_PARAM_HANDLE GetHandleByName(IZ_PCSTR name);
@@ -68,9 +78,30 @@ namespace graph
         GLuint GetRawInterface() { return m_Program; }
 
     private:
+        struct SUniform
+        {
+            char name[32];
+
+            GLenum type;
+            void* buffer;
+
+            IZ_UINT16 bufferSize;
+            IZ_BYTE nameLength;
+            IZ_BYTE arraySize;
+
+            SHADER_PARAM_HANDLE handle;
+            IZ_BOOL isDirty;
+        };
+
+    private:
         GLuint m_Program;
         IZ_BOOL m_IsDirty;
         IZ_BOOL m_IsLinked;
+
+        IZ_BOOL m_IsCommitChanged;
+
+        GLint m_UniformNum;
+        SUniform* m_Uniforms;
     };
 }   // namespace graph
 }   // namespace izanagi
