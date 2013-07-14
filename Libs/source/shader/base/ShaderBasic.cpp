@@ -198,11 +198,17 @@ IZ_UINT8* CShaderBasic::CreatePass(
             IZ_PCSTR pszName = m_StringBuffer.GetString(pSmplDesc->posName);
             IZ_ASSERT(pszName != IZ_NULL);
 
+#if 0
             VGOTO(
                 cPass.InitSampler(
                     m_SmplTbl,
                     pDevice, n, nSmplIdx, pszName),
                 __EXIT__);
+#else
+            cPass.InitSampler(
+                m_SmplTbl,
+                pDevice, n, nSmplIdx, pszName);
+#endif
         }
     }
 

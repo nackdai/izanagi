@@ -502,7 +502,8 @@ namespace graph
                 m_IsBinded = IZ_TRUE;
             }
 
-            gles2Program->Link();
+            gles2Program->LinkForcibly();
+            gles2Program->ClearCommitChanges();
 
             CALL_GLES2_API(::glUseProgram(gles2Program->GetRawInterface()));
         }
@@ -547,6 +548,8 @@ namespace graph
         IZ_UINT idxOffset,
         IZ_UINT nPrimCnt)
     {
+        CShaderProgramGLES2* shader = reinterpret_cast<CShaderProgramGLES2*>(m_RenderState.curShader);
+
         // NOTE
         // ShaderProgramがセットされないとシェーダユニフォームの取得、設定ができないので
         // 頂点宣言の反映、テクスチャのセットなどをこのタイミングでやる
@@ -566,12 +569,10 @@ namespace graph
                 m_RenderState.curVB->GetStride());
 
             if (!m_IsBinded) {
-                CShaderProgramGLES2* shader = reinterpret_cast<CShaderProgramGLES2*>(m_RenderState.curShader);
-
                 vd->Bind(shader);
                 m_IsBinded = IZ_TRUE;
 
-                shader->Link();
+                shader->LinkForcibly();
             }
         }
 
@@ -592,6 +593,7 @@ namespace graph
             if (m_IsDirtyTex[i]
                 && m_Texture[i] != IZ_NULL)
             {
+#if 0
                 if (isDirty) {
                     CALL_GLES2_API(
                         m_SamplerHandle[i] = ::glGetUniformLocation(gles2Program->GetRawInterface(), samplerName[i]));
@@ -609,6 +611,24 @@ namespace graph
                 CALL_GLES2_API(::glBindTexture(type, handle));
 
                 CALL_GLES2_API(::glUniform1i(m_SamplerHandle[i], i));
+#else
+                if (isDirty) {
+                    m_SamplerHandle[i] = gles2Program->GetHandleByName(samplerName[i]);
+                    IZ_ASSERT(m_SamplerHandle[i] >= 0);
+                }
+
+                CALL_GLES2_API(::glActiveTexture(GL_TEXTURE0 + i));
+
+                GLenum type = (m_Texture[i]->GetTexType() == E_GRAPH_TEX_TYPE_PLANE
+                    ? GL_TEXTURE_2D
+                    : GL_TEXTURE_CUBE_MAP);
+
+                GLuint handle = m_Texture[i]->GetTexHandle();
+
+                CALL_GLES2_API(::glBindTexture(type, handle));
+
+                gles2Program->SetInt(this, m_SamplerHandle[i], i);
+#endif
             }
 
             m_IsDirtyTex[i] = IZ_FALSE;
@@ -657,6 +677,9 @@ namespace graph
         // そのため、バイトオフセットに変換する
         IZ_UINT offset = idxOffset * sizeof(IZ_USHORT);
 
+        // Uniform変数を反映
+        shader->CommitChanges();
+
         CALL_GLES2_API(
             ::glDrawElements(
                 mode,
@@ -675,6 +698,8 @@ namespace graph
         IZ_UINT idxOffset,
         IZ_UINT nPrimCnt)
     {
+        CShaderProgramGLES2* shader = reinterpret_cast<CShaderProgramGLES2*>(m_RenderState.curShader);
+
         // NOTE
         // ShaderProgramがセットされないとシェーダユニフォームの取得、設定ができないので
         // 頂点宣言の反映、テクスチャのセットなどをこのタイミングでやる
@@ -694,12 +719,10 @@ namespace graph
                 m_RenderState.curVB->GetStride());
 
             if (!m_IsBinded) {
-                CShaderProgramGLES2* shader = reinterpret_cast<CShaderProgramGLES2*>(m_RenderState.curShader);
-
                 vd->Bind(shader);
                 m_IsBinded = IZ_TRUE;
 
-                shader->Link();
+                shader->LinkForcibly();
             }
         }
 
@@ -720,6 +743,7 @@ namespace graph
             if (m_IsDirtyTex[i]
                 && m_Texture[i] != IZ_NULL)
             {
+#if 0
                 if (isDirty) {
                     CALL_GLES2_API(
                         m_SamplerHandle[i] = ::glGetUniformLocation(gles2Program->GetRawInterface(), samplerName[i]));
@@ -738,6 +762,25 @@ namespace graph
 
                     CALL_GLES2_API(::glUniform1i(m_SamplerHandle[i], i));
                 }
+#else
+                if (isDirty) {
+                    m_SamplerHandle[i] = gles2Program->GetHandleByName(samplerName[i]);
+                }
+
+                if (m_SamplerHandle[i] >= 0) {
+                    CALL_GLES2_API(::glActiveTexture(GL_TEXTURE0 + i));
+
+                    GLenum type = (m_Texture[i]->GetTexType() == E_GRAPH_TEX_TYPE_PLANE
+                        ? GL_TEXTURE_2D
+                        : GL_TEXTURE_CUBE_MAP);
+
+                    GLuint handle = m_Texture[i]->GetTexHandle();
+
+                    CALL_GLES2_API(::glBindTexture(type, handle));
+
+                    gles2Program->SetInt(this, m_SamplerHandle[i], i);
+                }
+#endif
             }
 
             m_IsDirtyTex[i] = IZ_FALSE;
@@ -770,6 +813,9 @@ namespace graph
             IZ_ASSERT(IZ_FALSE);
             break;
         }
+
+        // Uniform変数を反映
+        shader->CommitChanges();
 
         GLenum mode = CParamValueConverterGLES2::ConvAbstractToTarget_PrimType(prim_type);
 

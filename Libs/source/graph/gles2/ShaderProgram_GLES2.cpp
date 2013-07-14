@@ -2,6 +2,8 @@
 #include "graph/gles2/VertexShader_GLES2.h"
 #include "graph/gles2/PixelShader_GLES2.h"
 
+#define ENABLE_SET_UNIFORM_IMMEDIATERY  (0)
+
 namespace izanagi
 {
 namespace graph
@@ -37,6 +39,16 @@ namespace graph
         m_Program = 0;
         m_IsDirty = IZ_FALSE;
         m_IsLinked = IZ_TRUE;
+
+        m_IsCommitChanged = IZ_TRUE;
+
+        m_UniformNum = 0;
+        m_Uniforms = IZ_NULL;
+    }
+
+    CShaderProgramGLES2::~CShaderProgramGLES2()
+    {
+        ClearUniformInfo();
     }
 
     IZ_BOOL CShaderProgramGLES2::AttachVertexShader(CVertexShader* vs)
@@ -97,19 +109,14 @@ namespace graph
 
     IZ_BOOL CShaderProgramGLES2::Link()
     {
-#if 1
         if (m_IsLinked) {
             return IZ_TRUE;
         }
-#endif
 
         IZ_ASSERT(m_Program != 0);
         IZ_ASSERT(IsValid());
 
         if (IsValid() && IsDirty()) {
-            GLint num;
-            glGetProgramiv(m_Program, GL_ACTIVE_UNIFORMS, &num);
-
             CALL_GLES2_API(::glLinkProgram(m_Program));
 
             // TODO
@@ -120,6 +127,8 @@ namespace graph
 
             if (isLinked) {
                 m_IsLinked = IZ_TRUE;
+
+                VRETURN(GetUniformInfo());
             }
 #ifdef __IZ_DEBUG__
             else {
@@ -140,6 +149,279 @@ namespace graph
         }
 
         return IZ_TRUE;
+    }
+
+    IZ_BOOL CShaderProgramGLES2::LinkForcibly()
+    {
+        IZ_ASSERT(m_Program != 0);
+        IZ_ASSERT(IsValid());
+
+        if (IsValid()) {
+            CALL_GLES2_API(::glLinkProgram(m_Program));
+
+            // TODO
+            // リンク結果をチェック
+            GLint isLinked = 0;
+
+            CALL_GLES2_API(::glGetProgramiv(m_Program, GL_LINK_STATUS, &isLinked));
+
+            if (isLinked) {
+                m_IsLinked = IZ_TRUE;
+
+                if (m_Uniforms == IZ_NULL) {
+                    VRETURN(GetUniformInfo());
+                }
+                else {
+                    // NOTE
+                    // ShaderProgram を Link すると uniform 変数の location の値は保証されないので
+                    // 再度取得しなおす必要があるため、値をクリアしておく
+                    for (GLint i = 0; i < m_UniformNum; i++) {
+                        m_Uniforms[i].handle = -1;
+                    }
+                }
+            }
+
+            return IZ_TRUE;
+        }
+
+        return IZ_FALSE;
+    }
+
+    IZ_BOOL CShaderProgramGLES2::GetUniformInfo()
+    {
+        // クリアしておく
+        ClearUniformInfo();
+
+        // Get number of attributes
+        CALL_GLES2_API(::glGetProgramiv(m_Program, GL_ACTIVE_UNIFORMS, &m_UniformNum));
+
+        void* buf = ALLOC_ZERO(m_Allocator, m_UniformNum * sizeof(SUniform));
+        VRETURN(buf != IZ_NULL);
+
+        m_Uniforms = reinterpret_cast<SUniform*>(buf);
+
+        // Get attribute informations.
+        for (GLint i = 0; i < m_UniformNum; i++) {
+            GLint nameLength;
+            GLenum type;
+            GLint size;
+
+            CALL_GLES2_API(
+                ::glGetActiveUniform(
+                    m_Program,
+                    i,
+                    sizeof(m_Uniforms[i].name),
+                    &nameLength,
+                    &size,
+                    &type,
+                    m_Uniforms[i].name));
+
+            for (GLint pos = 0; pos < nameLength; pos++) {
+                if (m_Uniforms[i].name[pos] == ' '
+                    || m_Uniforms[i].name[pos] == '[')
+                {
+                    m_Uniforms[i].name[pos] = 0;
+                }
+            }
+
+            m_Uniforms[i].nameLength = nameLength;
+            m_Uniforms[i].type = type;
+
+            // NOTE
+            // 問い合わせるuniform変数が配列の場合、この変数にはprogramで使用される配列の最大数（+1）が書き込まれる
+            // 問い合わせるuniform変数が配列でない場合、この値は１になります
+
+            size = (size == 1 ? size : size - 1);
+
+            // Compute allocation size.
+            switch (type)
+            {
+            case GL_FLOAT:
+                m_Uniforms[i].bufferSize = size * sizeof(GLfloat);
+                break;
+            case GL_FLOAT_VEC2:
+                m_Uniforms[i].bufferSize = size * sizeof(GLfloat) * 2;
+                break;
+            case GL_FLOAT_VEC3:
+                m_Uniforms[i].bufferSize = size * sizeof(GLfloat) * 3;
+                break;
+            case GL_FLOAT_VEC4:
+                m_Uniforms[i].bufferSize = size * sizeof(GLfloat) * 4;
+                break;
+            case GL_INT:
+                m_Uniforms[i].bufferSize = size * sizeof(GLint);
+                break;
+            case GL_INT_VEC2:
+                m_Uniforms[i].bufferSize = size * sizeof(GLint) * 2;
+                break;
+            case GL_INT_VEC3:
+                m_Uniforms[i].bufferSize = size * sizeof(GLint) * 3;
+                break;
+            case GL_INT_VEC4:
+                m_Uniforms[i].bufferSize = size * sizeof(GLint) * 4;
+                break;
+            case GL_BOOL:
+                m_Uniforms[i].bufferSize = size * sizeof(GLboolean);
+                break;
+            case GL_BOOL_VEC2:
+                m_Uniforms[i].bufferSize = size * sizeof(GLboolean) * 2;
+                break;
+            case GL_BOOL_VEC3:
+                m_Uniforms[i].bufferSize = size * sizeof(GLboolean) * 3;
+                break;
+            case GL_BOOL_VEC4:
+                m_Uniforms[i].bufferSize = size * sizeof(GLboolean) * 4;
+                break;
+            case GL_FLOAT_MAT2:
+                // TODO
+                m_Uniforms[i].bufferSize = size * sizeof(GLfloat) * 2 * 2;
+                break;
+            case GL_FLOAT_MAT3:
+                // TODO
+                m_Uniforms[i].bufferSize = size * sizeof(GLfloat) * 3 * 3;
+                break;
+            case GL_FLOAT_MAT4:
+                m_Uniforms[i].bufferSize = size * sizeof(GLfloat) * 4 * 4;
+                break;
+            case GL_SAMPLER_2D:
+            case GL_SAMPLER_CUBE:
+                m_Uniforms[i].bufferSize = size * sizeof(GLint);
+                break;
+            default:
+                VRETURN(IZ_FALSE);
+                break;
+            }
+
+            void* param = ALLOC_ZERO(m_Allocator, m_Uniforms[i].bufferSize);
+            VRETURN(param != IZ_NULL);
+
+            m_Uniforms[i].buffer = param;
+            m_Uniforms[i].arraySize = size;
+
+            m_Uniforms[i].handle = -1;
+            m_Uniforms[i].isDirty = IZ_FALSE;
+        }
+
+        return IZ_TRUE;
+    }
+
+    void CShaderProgramGLES2::ClearUniformInfo()
+    {
+        for (GLint i = 0; i < m_UniformNum; i++) {
+            FREE(m_Allocator, m_Uniforms[i].buffer);
+        }
+
+        FREE(m_Allocator, m_Uniforms);
+
+        m_Uniforms = IZ_NULL;
+        m_UniformNum = 0;
+    }
+
+    IZ_BOOL CShaderProgramGLES2::CommitChanges()
+    {
+        if (m_IsCommitChanged) {
+            return IZ_TRUE;
+        }
+
+        m_IsCommitChanged = IZ_TRUE;
+
+        for (GLint i = 0; i < m_UniformNum; i++) {
+            CommitChanges(i);
+        }
+
+        return IZ_TRUE;
+    }
+
+    IZ_BOOL CShaderProgramGLES2::CommitChanges(SHADER_PARAM_HANDLE location)
+    {
+        SUniform& uniform = m_Uniforms[location];
+
+        if (uniform.isDirty) {
+            SHADER_PARAM_HANDLE handle = uniform.handle;
+
+            //m_Uniforms[i].isDirty = IZ_FALSE;
+
+            // If not assigned handle
+            if (handle < 0) {
+                CALL_GLES2_API(handle = ::glGetUniformLocation(m_Program, uniform.name));
+                IZ_ASSERT(handle >= 0);
+
+                uniform.handle = handle;
+            }
+
+            if (handle >= 0) {
+                GLenum type = uniform.type;
+                GLsizei num = uniform.arraySize;
+
+                switch (type)
+                {
+                case GL_FLOAT:
+                    {
+                        if (num == 1) {
+                            GLfloat f = *(GLfloat*)uniform.buffer;
+                            CALL_GLES2_API(::glUniform1f(handle, f));
+                        }
+                        else {
+                            GLfloat* f = (GLfloat*)uniform.buffer;
+                            CALL_GLES2_API(::glUniform1fv(handle, num, f));
+                        }
+                    }
+                    break;
+                case GL_FLOAT_VEC4:
+                    {
+                        GLfloat* fv = (GLfloat*)uniform.buffer;
+
+                        if (num == 1) {
+                            CALL_GLES2_API(::glUniform4f(handle, fv[0], fv[1], fv[2], fv[3]));
+                        }
+                        else {
+                            CALL_GLES2_API(::glUniform4fv(handle, num, fv));
+                        }
+                    }
+                    break;
+                case GL_INT:
+                    {
+                        if (num == 1) {
+                            GLint n = *(GLint*)uniform.buffer;
+                            CALL_GLES2_API(::glUniform1i(handle, n));
+                        }
+                        else {
+                            GLint* n = (GLint*)uniform.buffer;
+                            CALL_GLES2_API(::glUniform1iv(handle, num, n));
+                        }
+                    }
+                    break;
+                case GL_BOOL:
+                    {
+                        GLboolean b = *(GLboolean*)uniform.buffer;
+                        CALL_GLES2_API(::glUniform1i(handle, b));
+                    }
+                    break;
+                case GL_FLOAT_MAT4:
+                    {
+                        GLfloat* mtx = (GLfloat*)uniform.buffer;
+                        CALL_GLES2_API(::glUniformMatrix4fv(handle, num, IZ_FALSE, mtx));
+                    }
+                    break;
+                case GL_SAMPLER_2D:
+                    {
+                        GLint n = *(GLint*)uniform.buffer;
+                        CALL_GLES2_API(::glUniform1i(handle, n));
+                    }
+                    break;
+                default:
+                    IZ_ASSERT(IZ_FALSE);
+                    break;
+                }
+            }
+        }
+
+        return IZ_TRUE;
+    }
+
+    void CShaderProgramGLES2::ClearCommitChanges()
+    {
+        m_IsCommitChanged = IZ_FALSE;
     }
 
     IZ_BOOL CShaderProgramGLES2::IsValid()
@@ -179,6 +461,7 @@ namespace graph
 
         Link();
 
+#if ENABLE_SET_UNIFORM_IMMEDIATERY
         CALL_GLES2_API(
             SHADER_PARAM_HANDLE ret = ::glGetUniformLocation(
                 m_Program,
@@ -186,6 +469,20 @@ namespace graph
         IZ_ASSERT(ret >= 0);
 
         return ret;
+#else
+        size_t len = ::strlen(name);
+
+        for (GLint i = 0; i < m_UniformNum; i++) {
+            size_t maxCount = IZ_MAX(len, m_Uniforms[i].nameLength);
+
+            if (::strncmp(m_Uniforms[i].name, name, maxCount) == 0) {
+                return i;
+            }
+        }
+
+        //IZ_ASSERT(IZ_FALSE);
+        return -1;
+#endif
     }
 
     IZ_BOOL CShaderProgramGLES2::SetBool(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, IZ_BOOL b)
@@ -193,7 +490,15 @@ namespace graph
         IZ_ASSERT(IsValid());
         IZ_ASSERT(IsLinked());
 
+#if ENABLE_SET_UNIFORM_IMMEDIATERY
         CALL_GLES2_API(::glUniform1i(handle, b));
+#else
+        IZ_ASSERT(handle >= 0);
+        IZ_ASSERT(m_Uniforms[handle].bufferSize == sizeof(GLboolean));
+
+        *(GLboolean*)(m_Uniforms[handle].buffer) = b;
+        m_Uniforms[handle].isDirty = IZ_TRUE;
+#endif
         return IZ_TRUE;
     }
 
@@ -202,7 +507,12 @@ namespace graph
         IZ_ASSERT(IsValid());
         IZ_ASSERT(IsLinked());
 
+#if ENABLE_SET_UNIFORM_IMMEDIATERY
         CALL_GLES2_API(::glUniform1iv(handle, num, b));
+#else
+        // Not implemented
+        IZ_ASSERT(IZ_FALSE);
+#endif
         return IZ_TRUE;
     }
     
@@ -211,7 +521,15 @@ namespace graph
         IZ_ASSERT(IsValid());
         IZ_ASSERT(IsLinked());
 
+#if ENABLE_SET_UNIFORM_IMMEDIATERY
         CALL_GLES2_API(::glUniform1f(handle, f));
+#else
+        IZ_ASSERT(handle >= 0);
+        IZ_ASSERT(m_Uniforms[handle].bufferSize == sizeof(GLfloat));
+
+        *(GLfloat*)(m_Uniforms[handle].buffer) = f;
+        m_Uniforms[handle].isDirty = IZ_TRUE;
+#endif
         return IZ_TRUE;
     }
 
@@ -220,7 +538,15 @@ namespace graph
         IZ_ASSERT(IsValid());
         IZ_ASSERT(IsLinked());
 
+#if ENABLE_SET_UNIFORM_IMMEDIATERY
         CALL_GLES2_API(::glUniform1fv(handle, num, f));
+#else
+        IZ_ASSERT(handle >= 0);
+        IZ_ASSERT(m_Uniforms[handle].bufferSize <= sizeof(GLfloat) * num);
+
+        memcpy(m_Uniforms[handle].buffer, f, sizeof(GLfloat) * num);
+        m_Uniforms[handle].isDirty = IZ_TRUE;
+#endif
         return IZ_TRUE;
     }
     
@@ -229,7 +555,15 @@ namespace graph
         IZ_ASSERT(IsValid());
         IZ_ASSERT(IsLinked());
 
+#if ENABLE_SET_UNIFORM_IMMEDIATERY
         CALL_GLES2_API(::glUniform1i(handle, n));
+#else
+        IZ_ASSERT(handle >= 0);
+        IZ_ASSERT(m_Uniforms[handle].bufferSize == sizeof(GLint));
+
+        *(GLint*)(m_Uniforms[handle].buffer) = n;
+        m_Uniforms[handle].isDirty = IZ_TRUE;
+#endif
         return IZ_TRUE;
     }
 
@@ -238,7 +572,15 @@ namespace graph
         IZ_ASSERT(IsValid());
         IZ_ASSERT(IsLinked());
 
+#if ENABLE_SET_UNIFORM_IMMEDIATERY
         CALL_GLES2_API(::glUniform1iv(handle, num, n));
+#else
+        IZ_ASSERT(handle >= 0);
+        IZ_ASSERT(m_Uniforms[handle].bufferSize <= sizeof(GLint) * num);
+
+        memcpy(m_Uniforms[handle].buffer, n, sizeof(GLint) * num);
+        m_Uniforms[handle].isDirty = IZ_TRUE;
+#endif
         return IZ_TRUE;
     }
     
@@ -247,12 +589,20 @@ namespace graph
         IZ_ASSERT(IsValid());
         IZ_ASSERT(IsLinked());
 
+#if ENABLE_SET_UNIFORM_IMMEDIATERY
         CALL_GLES2_API(
             ::glUniformMatrix4fv(
                 handle,
                 1,
                 GL_FALSE,
                 m.a));
+#else
+        IZ_ASSERT(handle >= 0);
+        IZ_ASSERT(m_Uniforms[handle].bufferSize == sizeof(GLfloat) * 16);
+
+        memcpy(m_Uniforms[handle].buffer, m.a, sizeof(GLfloat) * 16);
+        m_Uniforms[handle].isDirty = IZ_TRUE;
+#endif
         return IZ_TRUE;
     }
 
@@ -261,12 +611,20 @@ namespace graph
         IZ_ASSERT(IsValid());
         IZ_ASSERT(IsLinked());
 
+#if ENABLE_SET_UNIFORM_IMMEDIATERY
         CALL_GLES2_API(
             ::glUniformMatrix4fv(
                 handle,
                 num,
                 GL_FALSE,
                 (const GLfloat*)m));
+#else
+        IZ_ASSERT(handle >= 0);
+        IZ_ASSERT(m_Uniforms[handle].bufferSize <= sizeof(GLfloat) * 16 * num);
+
+        memcpy(m_Uniforms[handle].buffer, m, sizeof(GLfloat) * 16 * num);
+        m_Uniforms[handle].isDirty = IZ_TRUE;
+#endif
         return IZ_TRUE;
     }
     
@@ -275,19 +633,35 @@ namespace graph
         IZ_ASSERT(IsValid());
         IZ_ASSERT(IsLinked());
 
+#if ENABLE_SET_UNIFORM_IMMEDIATERY
         CALL_GLES2_API(
             ::glUniform4f(
                 handle,
                 v.x, v.y, v.z, v.w));
+#else
+        IZ_ASSERT(handle >= 0);
+        IZ_ASSERT(m_Uniforms[handle].bufferSize == sizeof(GLfloat) * 4);
+
+        memcpy(m_Uniforms[handle].buffer, v.v, sizeof(GLfloat) * 4);
+        m_Uniforms[handle].isDirty = IZ_TRUE;
+#endif
         return IZ_TRUE;
     }
 
     IZ_BOOL CShaderProgramGLES2::SetVectorArray(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const math::SVector* v, IZ_UINT num)
     {
+#if ENABLE_SET_UNIFORM_IMMEDIATERY
         IZ_ASSERT(IsValid());
         IZ_ASSERT(IsLinked());
 
         CALL_GLES2_API(::glUniform4fv(handle, num, (const GLfloat*)v));
+#else
+        IZ_ASSERT(handle >= 0);
+        IZ_ASSERT(m_Uniforms[handle].bufferSize <= sizeof(GLfloat) * 4 * num);
+
+        memcpy(m_Uniforms[handle].buffer, v, sizeof(GLfloat) * 4 * num);
+        m_Uniforms[handle].isDirty = IZ_TRUE;
+#endif
         return IZ_TRUE;
     }
     
@@ -296,7 +670,7 @@ namespace graph
         IZ_ASSERT(IsValid());
         IZ_ASSERT(IsLinked());
 
-        // TODO
+        // Not implemented
         IZ_ASSERT(IZ_FALSE);
         return IZ_TRUE;
     }
