@@ -45,6 +45,7 @@ IZ_BOOL CDebugMeshApp::InitInternal(
                     | izanagi::E_DEBUG_MESH_VTX_FORM_NORMAL
                     | izanagi::E_DEBUG_MESH_VTX_FORM_TANGENT;
 
+#if 0
     // Sphere
     {
         m_Mesh[MESH_TYPE_SPHERE] = izanagi::CDebugMeshSphere::CreateDebugMeshSphere(
@@ -91,6 +92,7 @@ IZ_BOOL CDebugMeshApp::InitInternal(
                                         10, 10);
         VGOTO(result = (m_Mesh[MESH_TYPE_TORUS] != IZ_NULL), __EXIT__);
     }
+#endif
 
     // Plane
     {
@@ -130,7 +132,7 @@ IZ_BOOL CDebugMeshApp::InitInternal(
 
     // カメラ
     camera.Init(
-        izanagi::math::CVector(0.0f, 0.0f, 30.0f, 1.0f),
+        izanagi::math::CVector(0.0f, 10.0f, 30.0f, 1.0f),
         izanagi::math::CVector(0.0f, 0.0f, 0.0f, 1.0f),
         izanagi::math::CVector(0.0f, 1.0f, 0.0f, 1.0f),
         1.0f,
@@ -216,13 +218,14 @@ void CDebugMeshApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
             m_Shader->CommitChanges();
 
             m_Grid->Draw();
-            m_Axis->Draw();
+            //m_Axis->Draw();
 
             m_Shader->EndPass();
         }
     }
     m_Shader->End();
 
+#if 0
     device->SetTexture(0, m_Img->GetTexture(0));
 
     // テクスチャあり
@@ -322,4 +325,5 @@ void CDebugMeshApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
         }
     }
     m_Shader->End();
+#endif
 }
