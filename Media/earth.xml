@@ -3,5 +3,5 @@
 <textures>
   <plane
       path="./earth.bmp"
-      fmt="dxt5"/>
+      fmt="rgba8"/>
 </textures>
