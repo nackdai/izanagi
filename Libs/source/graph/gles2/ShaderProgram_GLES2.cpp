@@ -345,7 +345,7 @@ namespace graph
             // If not assigned handle
             if (handle < 0) {
                 CALL_GLES2_API(handle = ::glGetUniformLocation(m_Program, uniform.name));
-                IZ_ASSERT(handle >= 0);
+                //IZ_ASSERT(handle >= 0);
 
                 uniform.handle = handle;
             }
