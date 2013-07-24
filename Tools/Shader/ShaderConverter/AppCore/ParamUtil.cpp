@@ -190,6 +190,8 @@ BOOL CParamUtil::SetDescValue(
     sDesc.Class = CShaderConvUtil::CgParamClassToIzanagiShaderParamClass(classParam);
     sDesc.Type = CShaderConvUtil::CgParamTypeToIzanagiShaderParamType(typeParam);
 
+    sDesc.originalType = sDesc.Type;
+
     sDesc.Rows = ::cgGetParameterRows(param);
     sDesc.Columns = ::cgGetParameterColumns(param);
 
