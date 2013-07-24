@@ -1,4 +1,5 @@
 #include "shader/base/util/ShaderUtil.h"
+#include "shader/base/SHDFormat.h"
 
 namespace izanagi {
     // パラメータをセットする
@@ -7,10 +8,12 @@ namespace izanagi {
 		graph::CShaderProgram* pShader,
 		SHADER_PARAM_HANDLE handle,
 		const void* pValue,
-		E_SHADER_PARAMETER_TYPE type,
-		IZ_UINT nElements)
+        const S_SHD_PARAMETER& desc)
 	{
 		IZ_BOOL ret = IZ_TRUE;
+
+        E_SHADER_PARAMETER_TYPE type = desc.Type;
+        IZ_UINT nElements = desc.Elements;
 
 		IZ_UINT nRow = CShaderParamUtil::GetParamRowFromParamType(type);
 		IZ_UINT nColumn = CShaderParamUtil::GetParamColumnFromParamType(type);
@@ -69,11 +72,21 @@ namespace izanagi {
                     pShader->SetVector(device, handle, *(const math::SVector*)pValue);
                 }
                 else {
-				    pShader->SetVectorArray(
-                        device,
-					    handle,
-					    (const math::SVector*)pValue,
-					    nRow * nElements);
+                    if (type != desc.originalType) {
+                        if (CShaderParamUtil::IsMatrixType(desc.originalType)) {
+                            pShader->SetMatrixAsVectorArray(device, handle, *(const math::SMatrix*)pValue);
+                        }
+                        else {
+                            IZ_ASSERT(IZ_FALSE);
+                        }
+                    }
+                    else {
+				        pShader->SetVectorArray(
+                            device,
+					        handle,
+					        (const math::SVector*)pValue,
+					        nRow * nElements);
+                    }
                 }
 			}
 		}

@@ -182,6 +182,8 @@ namespace izanagi {
         E_SHADER_PARAMETER_CLASS Class; // パラメータのクラス
         E_SHADER_PARAMETER_TYPE Type;   // パラメータのタイプ
 
+        E_SHADER_PARAMETER_TYPE originalType;
+
         IZ_UINT8 Rows;              // 配列内の行の数
         IZ_UINT8 Columns;           // 配列内の列の数
         IZ_UINT8 Elements;          // 配列内の要素の数

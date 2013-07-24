@@ -68,6 +68,8 @@ namespace graph
 
         PURE_VIRTUAL(IZ_BOOL SetValue(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const void* p, IZ_UINT size));
 
+        PURE_VIRTUAL(IZ_BOOL SetMatrixAsVectorArray(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const math::SMatrix& m));
+
     protected:
         IMemoryAllocator* m_Allocator;
 

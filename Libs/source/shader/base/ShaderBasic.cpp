@@ -508,8 +508,7 @@ IZ_BOOL CShaderBasic::SetParamValue(
                 pShd,
                 handle,
                 pParam,
-                pParamDesc->Type,
-                pParamDesc->Elements);
+                *pParamDesc);
             VRETURN(result);
 #endif
 
