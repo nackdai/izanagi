@@ -6,6 +6,8 @@
 #include "ShaderParamUtil.h"
 
 namespace izanagi {
+    struct S_SHD_PARAMETER;
+
 	class CShaderUtil {
 	private:
 		CShaderUtil();
@@ -21,8 +23,7 @@ namespace izanagi {
             graph::CShaderProgram* pShader,
 			SHADER_PARAM_HANDLE handle,
 			const void* pValue,
-			E_SHADER_PARAMETER_TYPE type,
-			IZ_UINT nElements);
+			const S_SHD_PARAMETER& desc);
 
 		static IZ_BOOL BeginScene(
 			graph::CGraphicsDevice* pDevice,

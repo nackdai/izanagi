@@ -676,5 +676,13 @@ namespace graph
         IZ_ASSERT(IZ_FALSE);
         return IZ_TRUE;
     }
+
+    IZ_BOOL CShaderProgramGLES2::SetMatrixAsVectorArray(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const math::SMatrix& m)
+    {
+        math::SMatrix transposed;
+        math::SMatrix::Transpose(transposed, m);
+
+        return SetVectorArray(device, handle, transposed.v, 4);
+    }
 }   // namespace graph
 }   // namespace izanagi
