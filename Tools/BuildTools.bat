@@ -1,5 +1,5 @@
 set MSBUILD="C:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"
-set TARGET=Rebuild
+set TARGET=Build
 set CONFIG=%1
 
 %MSBUILD% projects\vs2010\Tools.sln /t:%TARGET% /p:Configuration=%CONFIG% || goto error
