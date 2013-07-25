@@ -1,0 +1,1 @@
+call BuildLibs.bat Release GLES2
