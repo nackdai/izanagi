@@ -676,10 +676,15 @@ namespace graph
 
         IZ_ASSERT(m_RenderState.curIB != IZ_NULL);
 
+#if 1
+        E_GRAPH_INDEX_BUFFER_FMT idxFmt = m_RenderState.curIB->GetFormat();
+        GLenum type = CTargetParamValueConverter::ConvAbstractToTarget_IdxBufFmt(idxFmt);
+#else
         GLenum type = GL_UNSIGNED_SHORT;
 
         // TODO
         IZ_ASSERT(m_RenderState.curIB->GetIdxNum() <= IZ_UINT16_MAX);
+#endif
 
         // NOTE
         // glDrawElements に渡すオフセットはバイト数
