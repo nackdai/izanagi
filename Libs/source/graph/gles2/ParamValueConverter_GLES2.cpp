@@ -188,6 +188,19 @@ namespace graph
     }
 
     //////////////////////////////////////////
+    // インデックスバッファフォーマット
+
+    namespace {
+        GLenum IdxBufFmtTbl[] = {
+            GL_UNSIGNED_SHORT,
+            GL_UNSIGNED_INT,
+        };
+        IZ_C_ASSERT(COUNTOF(IdxBufFmtTbl) == E_GRAPH_INDEX_BUFFER_FMT_NUM);
+    }   // namespace
+
+    DEF_FUNC_CONV_PARAM_VAL(IdxBufFmt, GLenum, E_GRAPH_INDEX_BUFFER_FMT, IdxBufFmtTbl)
+
+    //////////////////////////////////////////
     // プリミティブタイプ
 
     namespace {
