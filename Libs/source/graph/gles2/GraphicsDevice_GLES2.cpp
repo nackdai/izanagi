@@ -569,10 +569,20 @@ namespace graph
                 m_RenderState.curVB->GetStride());
 
             if (!m_IsBinded) {
+                IZ_BOOL needLink = IZ_TRUE;
+
+                if (!m_IsDirtyShaderProgram
+                    && shader->IsLinked())
+                {
+                    needLink = IZ_FALSE;
+                }
+
                 vd->Bind(shader);
                 m_IsBinded = IZ_TRUE;
 
-                shader->LinkForcibly();
+                if (needLink) {
+                    shader->LinkForcibly();
+                }
             }
         }
 
@@ -719,10 +729,20 @@ namespace graph
                 m_RenderState.curVB->GetStride());
 
             if (!m_IsBinded) {
+                IZ_BOOL needLink = IZ_TRUE;
+
+                if (!m_IsDirtyShaderProgram
+                    && shader->IsLinked())
+                {
+                    needLink = IZ_FALSE;
+                }
+
                 vd->Bind(shader);
                 m_IsBinded = IZ_TRUE;
 
-                shader->LinkForcibly();
+                if (needLink) {
+                    shader->LinkForcibly();
+                }
             }
         }
 
