@@ -142,16 +142,16 @@ void CCompileCmdCreator_GLES2::CreateCompileCommand(
 CCompileCmdCreator_DX9 s_InstanceDX9;
 CCompileCmdCreator_GLES2 s_InstanceGLES2;
 
-CCompileCmdCreator& CCompileCmdCreator::GetInstance(ShaderCompilerType type)
+CCompileCmdCreator& CCompileCmdCreator::GetInstance(izanagi::E_PLATFORM type)
 {
     CCompileCmdCreator* ret = IZ_NULL;
 
     switch (type)
     {
-    case ShaderCompilerType_DX9:
+    case izanagi::E_PLATFORM_DX9:
         ret = (CCompileCmdCreator*)&s_InstanceDX9;
         break;
-    case ShaderCompilerType_GLES2:
+    case izanagi::E_PLATFORM_GLES2:
         ret = (CCompileCmdCreator*)&s_InstanceGLES2;
         break;
     default:

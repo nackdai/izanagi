@@ -20,7 +20,7 @@ enum COMPILE_TYPE {
 */
 class CCompileCmdCreator {
 public:
-    static CCompileCmdCreator& GetInstance(ShaderCompilerType type);
+    static CCompileCmdCreator& GetInstance(izanagi::E_PLATFORM type);
 
 protected:
     CCompileCmdCreator() { m_bIsVS = IZ_FALSE; }

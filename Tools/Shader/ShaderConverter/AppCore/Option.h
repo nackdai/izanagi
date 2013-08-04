@@ -22,7 +22,7 @@ struct SOption {
     izanagi::tool::CString obj_dir;         // 中間ファイルディレクトリ
     izanagi::tool::CString export_dir;
 
-    ShaderCompilerType type;                // シェーダコンパイルタイプ
+    izanagi::E_PLATFORM type;                // シェーダコンパイルタイプ
 
     struct {
         UINT isPreproc          : 1;        // プリプロセス処理のみを行うかどうか
