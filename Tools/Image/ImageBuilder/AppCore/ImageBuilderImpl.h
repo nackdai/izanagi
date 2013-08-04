@@ -55,7 +55,9 @@ private:
 
 public:
     // IMGデータ作成
-    BOOL BuildIMG(LPCSTR lpszExport);
+    BOOL BuildIMG(
+        izanagi::E_PLATFORM type,
+        LPCSTR lpszExport);
 
     void SetBasePath(const char* path);
 

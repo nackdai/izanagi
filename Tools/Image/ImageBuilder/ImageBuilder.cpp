@@ -32,6 +32,9 @@ namespace {
             " -i [xml] : 入力XMLファイル\n"
             " -o [out] : 出力ファイル名\n"
             "            指定がない場合は入力XMLファイルから自動的に設定\n"
+            " -p [type] : specify graphics platform\n"
+            "             dx9 : DirectX9\n"
+            "             gles2 : OpenGLES2\n"
         );
     }
 
@@ -104,7 +107,9 @@ int main(int argc, char* argv[])
 
         parser->parse(cOption.in);
 
-        result = CImageBuilder::GetInstance().BuildIMG(cOption.out.c_str());
+        result = CImageBuilder::GetInstance().BuildIMG(
+            cOption.type,
+            cOption.out.c_str());
         VGOTO(result);
     }
     catch (izanagi::tool::CException* e) {

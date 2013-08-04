@@ -40,7 +40,9 @@ namespace tool {
             IZ_BOOL bIsAllocBuffer = IZ_TRUE);
 
         // フォーマット変換
-        IZ_BOOL ConvertPixelFormat(graph::E_GRAPH_PIXEL_FMT nFmt);
+        IZ_BOOL ConvertPixelFormat(
+            izanagi::E_PLATFORM type,
+            graph::E_GRAPH_PIXEL_FMT nFmt);
 
         /** RGBA8としてピクセルデータを取得.
          */
