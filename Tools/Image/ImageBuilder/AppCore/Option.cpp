@@ -6,6 +6,11 @@ namespace {
     CHAR s_BUF[1024]; 
 }
 
+COption::COption()
+{
+    type = izanagi::E_PLATFORM_DX9;
+}
+
 /**
 * 解析
 */
@@ -24,6 +29,21 @@ BOOL COption::Analysis(int argc, TCHAR* argv[])
             else if (result = (cmd == "-o")) {
                 // -o
                 out.format("%s", argv[++i]);
+            }
+            else if (result = (cmd == "-p")) {
+                // -p
+                izanagi::tool::CString tmp(argv[++i]);
+                tmp = tmp.make_lower();
+
+                if (tmp == "dx9") {
+                    type = izanagi::E_PLATFORM_DX9;
+                }
+                else if (tmp == "gles2") {
+                    type = izanagi::E_PLATFORM_GLES2;
+                }
+                else {
+                    result = FALSE;
+                }
             }
         }
 

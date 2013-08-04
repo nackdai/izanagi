@@ -394,6 +394,7 @@ namespace {
     // テクスチャ出力
     BOOL _ExportTex(
         izanagi::IOutputStream* pOut,
+        izanagi::E_PLATFORM type,
         izanagi::S_IMG_HEADER* pHeader,
         const SImageInfo& sImageInfo,
         izanagi::tool::CIMGTexture* pTex)
@@ -404,7 +405,9 @@ namespace {
         BOOL result = TRUE;
 
         // フォーマット変換
-        result = pTex->ConvertPixelFormat(sImageInfo.info.fmt);
+        result = pTex->ConvertPixelFormat(
+            type,
+            sImageInfo.info.fmt);
         THROW_EXCEPTION(
             result,
             CErrorLog,
@@ -458,6 +461,7 @@ namespace {
     // テクスチャ出力
     IZ_BOOL _ExportTex(
         izanagi::CFileOutputStream* out,
+        izanagi::E_PLATFORM type,
         izanagi::S_IMG_HEADER* header,
         const SImageInfo& imageInfo)
     {
@@ -484,6 +488,7 @@ namespace {
                 // テクスチャ出力
                 ret = _ExportTex(
                         out,
+                        type,
                         header,
                         imageInfo,
                         tex);
@@ -500,6 +505,7 @@ namespace {
                     // テクスチャ出力
                     ret = _ExportTex(
                             out,
+                            type,
                             header,
                             imageInfo,
                             tex);
@@ -517,6 +523,7 @@ namespace {
     // キューブテクスチャ出力
     IZ_BOOL _ExportCubeTex(
         izanagi::CFileOutputStream* out,
+        izanagi::E_PLATFORM type,
         izanagi::S_IMG_HEADER* header,
         const SImageInfo& imageInfo)
     {
@@ -591,6 +598,7 @@ namespace {
         if (ret) {
             ret = _ExportTex(
                     out,
+                    type,
                     header,
                     imageInfo,
                     exportTex);
@@ -606,7 +614,9 @@ __EXIT__:
 }   // namespace
 
 // IMGデータ作成
-BOOL CImageBuilder::BuildIMG(LPCSTR lpszExport)
+BOOL CImageBuilder::BuildIMG(
+    izanagi::E_PLATFORM type,
+    LPCSTR lpszExport)
 {
     izanagi::CFileOutputStream cOut;
     THROW_EXCEPTION(
@@ -652,13 +662,13 @@ BOOL CImageBuilder::BuildIMG(LPCSTR lpszExport)
         tJumpTable.push_back(cOut.GetSize());
 
         if (sImageInfo.info.type == izanagi::graph::E_GRAPH_TEX_TYPE_CUBE) {
-            ret = _ExportCubeTex(&cOut, &sHeader, sImageInfo);
+            ret = _ExportCubeTex(&cOut, type, &sHeader, sImageInfo);
             VGOTO(ret, __EXIT__);
         }
         else if (sImageInfo.info.type == izanagi::graph::E_GRAPH_TEX_TYPE_VOLUME) {
         }
         else {
-            ret = _ExportTex(&cOut, &sHeader, sImageInfo);
+            ret = _ExportTex(&cOut, type, &sHeader, sImageInfo);
             VGOTO(ret, __EXIT__);
         }
     }

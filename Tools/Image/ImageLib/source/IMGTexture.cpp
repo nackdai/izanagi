@@ -225,7 +225,9 @@ void CIMGTexture::Clear()
 /**
 * フォーマット変換
 */
-IZ_BOOL CIMGTexture::ConvertPixelFormat(graph::E_GRAPH_PIXEL_FMT nFmt)
+IZ_BOOL CIMGTexture::ConvertPixelFormat(
+    izanagi::E_PLATFORM type,
+    graph::E_GRAPH_PIXEL_FMT nFmt)
 {
     IZ_BOOL ret = IZ_FALSE;
 
@@ -241,7 +243,7 @@ IZ_BOOL CIMGTexture::ConvertPixelFormat(graph::E_GRAPH_PIXEL_FMT nFmt)
             CIMGImage* pImage = tImageList[nLevel];
 
             // フォーマット変換
-            ret = pImage->ConvertPixelFormat(nFmt);
+            ret = pImage->ConvertPixelFormat(type, nFmt);
             if (!ret) {
                 IZ_ASSERT(IZ_FALSE);
                 break;

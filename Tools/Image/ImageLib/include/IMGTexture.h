@@ -62,7 +62,9 @@ namespace tool {
         void Clear();
 
         // フォーマット変換
-        IZ_BOOL ConvertPixelFormat(graph::E_GRAPH_PIXEL_FMT nFmt);
+        IZ_BOOL ConvertPixelFormat(
+            izanagi::E_PLATFORM type,
+            graph::E_GRAPH_PIXEL_FMT nFmt);
 
         // MIPMAP作成
         IZ_BOOL CreateMipMap(IZ_UINT nMipLevel = 1000);

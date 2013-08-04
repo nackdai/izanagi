@@ -6,10 +6,14 @@
 struct SOption {
     izanagi::tool::CString in;
     izanagi::tool::CString out;
+
+    izanagi::E_PLATFORM type;
 };
 
 class COption : public SOption {
 public:
+    COption();
+
     BOOL Analysis(int argc, TCHAR* argv[]);
 
     BOOL IsValid() const;
