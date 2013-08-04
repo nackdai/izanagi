@@ -6,16 +6,6 @@
 #include <xercesc/sax2/DefaultHandler.hpp>
 #include "izToolKit.h"
 
-/** シェーダコンパイルタイプ
- */
-enum ShaderCompilerType
-{
-    ShaderCompilerType_DX9,      // DX9
-    ShaderCompilerType_GLES2,    // GLES2
-};
-
-/////////////////////////////////////////////
-
 struct SShaderConfig {
     izanagi::tool::CString compiler;        // コンパイルコマンド
     izanagi::tool::CString compile_opt;     // コンパイルオプション
@@ -34,7 +24,7 @@ struct SShaderConfig {
 
     izanagi::tool::CString name;
 
-    ShaderCompilerType type;     // コンパイラタイプ
+    izanagi::E_PLATFORM type;     // コンパイラタイプ
 };
 
 /////////////////////////////////////////////

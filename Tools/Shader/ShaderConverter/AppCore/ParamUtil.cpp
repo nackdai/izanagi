@@ -214,7 +214,7 @@ BOOL CParamUtil::SetDescValue(
     sDesc.Public = _IsPublic(param);
     sDesc.DoNotStrip = _DoNotStrip(param);
 
-    if (config.type == ShaderCompilerType_GLES2) {
+    if (config.type == izanagi::E_PLATFORM_GLES2) {
         // For GLES2
         if (izanagi::E_SHADER_PARAMETER_TYPE_FLOAT1x1 <= sDesc.Type
             && sDesc.Type <= izanagi::E_SHADER_PARAMETER_TYPE_FLOAT4x4)

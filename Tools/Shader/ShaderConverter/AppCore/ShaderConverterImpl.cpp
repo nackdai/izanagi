@@ -437,7 +437,7 @@ BOOL CShaderConverter::ExportSampler(const SShaderConfig& config)
                         // シェーダ定数テーブルを作成
                         IZ_ASSERT(passIdx < m_CompiledPSList.size());
 
-                        if (config.type == ShaderCompilerType_DX9)
+                        if (config.type == izanagi::E_PLATFORM_DX9)
                         {
                             izanagi::tool::CSimpleMemoryAllocator allocator;
 
@@ -453,7 +453,7 @@ BOOL CShaderConverter::ExportSampler(const SShaderConfig& config)
 
                             SAFE_RELEASE(constTbl);
                         }
-                        else if (config.type == ShaderCompilerType_GLES2)
+                        else if (config.type == izanagi::E_PLATFORM_GLES2)
                         {
                             const char* paramName = ::cgGetParameterName(param);
 
@@ -765,7 +765,7 @@ namespace {
 
         IZ_UINT ret = static_cast<IZ_UINT>(in.GetSize());
 
-        if (config.type == ShaderCompilerType_GLES2) {
+        if (config.type == izanagi::E_PLATFORM_GLES2) {
             // 4バイトアラインする
             IZ_UINT paddingSize = 4 - (ret % 4);
             ret += paddingSize;
@@ -971,7 +971,7 @@ namespace {
             }
         }
 
-        if (config.type == ShaderCompilerType_GLES2)
+        if (config.type == izanagi::E_PLATFORM_GLES2)
         {
             static IZ_BYTE padding[4] = {0, 0, 0, 0};
 

@@ -13,7 +13,7 @@ namespace {
 */
 COption::COption()
 {
-    type = ShaderCompilerType_DX9;
+    type = izanagi::E_PLATFORM_DX9;
 
     isPreproc = FALSE;
     isPreprocShader = FALSE;
@@ -84,10 +84,10 @@ BOOL COption::Analysis(int argc, char* argv[])
                 result = IZ_TRUE;
 
                 if (strType == "dx9") {
-                    type = ShaderCompilerType_DX9;
+                    type = izanagi::E_PLATFORM_DX9;
                 }
                 else if (strType == "gles2") {
-                    type = ShaderCompilerType_GLES2;
+                    type = izanagi::E_PLATFORM_GLES2;
                 }
                 else {
                     result = IZ_FALSE;
