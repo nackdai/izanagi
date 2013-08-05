@@ -9638,12 +9638,14 @@ const MOJOSHADER_parseData *MOJOSHADER_parse(const char *profile,
             }
             else
             {
+                unsigned int size = ctx->ctab.symbols[i].info.columns * ctx->ctab.symbols[i].info.elements;
+
                 output_line(
                     ctx,
                     "uniform %s %s[%d];",
                     type,
                     ctx->ctab.symbols[i].name,
-                    ctx->ctab.symbols[i].info.columns);
+                    size);
 
                 for (int n = 0; n < ctx->ctab.symbols[i].info.rows; n++)
                 {
@@ -9685,7 +9687,11 @@ const MOJOSHADER_parseData *MOJOSHADER_parse(const char *profile,
                 sprintf(name, "tangent");
                 break;
             case MOJOSHADER_USAGE_BLENDWEIGHT:
+                sprintf(name, "blendweight");
+                break;
             case MOJOSHADER_USAGE_BLENDINDICES:
+                sprintf(name, "blendindices");
+                break;
             case MOJOSHADER_USAGE_POINTSIZE:
             case MOJOSHADER_USAGE_BINORMAL:
             case MOJOSHADER_USAGE_TESSFACTOR:
