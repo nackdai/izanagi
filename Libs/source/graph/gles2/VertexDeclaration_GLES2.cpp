@@ -217,6 +217,8 @@ namespace graph
                 "color_3",
                 "normal",
                 "tangent",
+                "blendweight",
+                "blendindices",
             };
 
             static const IZ_UINT positionNameIdx = 0;
@@ -224,6 +226,8 @@ namespace graph
             static const IZ_UINT colorNameIdx = 9;
             static const IZ_UINT normalNameIdx = 13;
             static const IZ_UINT tangentNameIdx = 14;
+            static const IZ_UINT blendWeightNameIdx = 15;
+            static const IZ_UINT blendIndicesNameIdx = 16;
 
             const char* name;
 
@@ -243,6 +247,12 @@ namespace graph
                 break;
             case E_GRAPH_VTX_DECL_USAGE_COLOR:
                 name = names[colorNameIdx + element.UsageIndex];
+                break;
+            case E_GRAPH_VTX_DECL_USAGE_BLENDWEIGHT:
+                name = names[blendWeightNameIdx];
+                break;
+            case E_GRAPH_VTX_DECL_USAGE_BLENDINDICES:
+                name = names[blendIndicesNameIdx];
                 break;
             default:
                 IZ_ASSERT(IZ_FALSE);
