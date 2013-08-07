@@ -177,6 +177,8 @@ typedef struct Context
 #if SUPPORT_PROFILE_GLSL120
     int profile_supports_glsl120;
 #endif
+
+    char alias_vs_uniform_vec4[64];
 } Context;
 
 
@@ -2077,6 +2079,17 @@ static const char *make_GLSL_srcarg_string(Context *ctx, const size_t idx,
             {
                 regtype_str = get_GLSL_uniform_array_varname(ctx, arg->regtype,
                                                       (char *) alloca(64), 64);
+
+                if (strlen(ctx->alias_vs_uniform_vec4) == 0)
+                {
+                    get_GLSL_varname_in_buf(
+                        ctx,
+                        arg->regtype,
+                        arg->regnum,
+                        ctx->alias_vs_uniform_vec4,
+                        sizeof(ctx->alias_vs_uniform_vec4));
+                }
+
                 if (offset == 0)
                 {
                     snprintf(rel_offset, sizeof (rel_offset),
@@ -9647,15 +9660,44 @@ const MOJOSHADER_parseData *MOJOSHADER_parse(const char *profile,
                     ctx->ctab.symbols[i].name,
                     size);
 
-                for (int n = 0; n < ctx->ctab.symbols[i].info.rows; n++)
+                int isAlias = 0;
+
+                if (strlen(ctx->alias_vs_uniform_vec4) > 0)
+                {
+                    char buf[32];
+
+                    sprintf(
+                        buf,
+                        "%s_c%d", 
+                        shader,
+                        ctx->ctab.symbols[i].register_index,
+                        ctx->ctab.symbols[i].name);
+
+                    if (memcmp(ctx->alias_vs_uniform_vec4, buf, strlen(buf)) == 0)
+                    {
+                        isAlias = 1;
+                    }
+                }
+
+                if (isAlias)
                 {
                     output_line(
                         ctx,
-                        "#define %s_c%d %s[%d]",
-                        shader,
-                        ctx->ctab.symbols[i].register_index + n,
-                        ctx->ctab.symbols[i].name,
-                        n);
+                        "#define vs_uniforms_vec4 %s",
+                        ctx->ctab.symbols[i].name);
+                }
+                else
+                {
+                    for (int n = 0; n < ctx->ctab.symbols[i].info.rows; n++)
+                    {
+                        output_line(
+                            ctx,
+                            "#define %s_c%d %s[%d]",
+                            shader,
+                            ctx->ctab.symbols[i].register_index + n,
+                            ctx->ctab.symbols[i].name,
+                            n);
+                    }
                 }
             }
         }
