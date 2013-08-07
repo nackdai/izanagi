@@ -76,11 +76,12 @@ IZ_BOOL CIMGImage::ConvertPixelFormat(
     // TODO
     // 変換フォーマット
     graph::E_GRAPH_PIXEL_FMT convFmt = nFmt;
-#if 0
-    if (convFmt == graph::E_GRAPH_PIXEL_FMT_RGBA8) {
-        convFmt = graph::E_GRAPH_PIXEL_FMT_BGRA8;
+
+    if (type == izanagi::E_PLATFORM_DX9) {
+        if (convFmt == graph::E_GRAPH_PIXEL_FMT_RGBA8) {
+            convFmt = graph::E_GRAPH_PIXEL_FMT_BGRA8;
+        }
     }
-#endif
 
     // 変換
     IZ_BOOL ret = CPixelFormatConverter::GetInstance()->Convert(
