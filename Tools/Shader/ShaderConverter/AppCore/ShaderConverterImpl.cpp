@@ -569,6 +569,17 @@ BOOL CShaderConverter::ExportParameter(const SShaderConfig& config)
                         sParam,
                         param));
 
+                if (config.type == izanagi::E_PLATFORM_GLES2) {
+                    // For GLES2
+                    if (izanagi::E_SHADER_PARAMETER_TYPE_FLOAT1x1 <= sParam.Type
+                        && sParam.Type <= izanagi::E_SHADER_PARAMETER_TYPE_FLOAT4x4)
+                    {
+                        // TODO
+                        sParam.Type = izanagi::E_SHADER_PARAMETER_TYPE_FLOAT4;
+                        sParam.Elements = (sParam.Elements > 0 ? sParam.Elements * 4 : 4);
+                    }
+                }
+
                 m_ParamList.push_back(param);
 
                 // 出力
