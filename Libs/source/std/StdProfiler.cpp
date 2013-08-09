@@ -6,7 +6,7 @@ using namespace izanagi;
 
 namespace {
     IMemoryAllocator* s_Allocator = IZ_NULL;
-    IStdProfilePrinter* s_Printer = IZ_NULL;
+    IStdProfileWriter* s_Writer = IZ_NULL;
     IStdProfilerTimer* s_Timer = IZ_NULL;
 
     IZ_BOOL s_Enable = IZ_FALSE;
@@ -31,7 +31,7 @@ namespace {
 
     inline IZ_BOOL IsValid()
     {
-        return ((s_Printer != IZ_NULL)
+        return ((s_Writer != IZ_NULL)
                 && (s_Timer != IZ_NULL)
                 && (s_Items != IZ_NULL));
     }
@@ -42,7 +42,7 @@ IZ_BOOL CStdProfiler::Init(
     IMemoryAllocator* allocator,
     IZ_UINT maxStackNum,
     IStdProfilerTimer* timer,
-    IStdProfilePrinter* printer)
+    IStdProfileWriter* writer)
 {
     VRETURN(s_Items == NULL);
 
@@ -57,7 +57,7 @@ IZ_BOOL CStdProfiler::Init(
     s_ItemPos = 0;
 
     s_Allocator = allocator;
-    s_Printer = printer;
+    s_Writer = writer;
     s_Timer = timer;
 
     Reset();
@@ -108,9 +108,9 @@ void CStdProfiler::Dump()
         return;
     }
 
-    s_Printer->Print("+-------+--------+--------+------+\n");
-    s_Printer->Print("| Max   | Min    | Ave    | name |\n");
-    s_Printer->Print("+-------+--------+--------+------+\n");
+    s_Writer->Write("+-------+--------+--------+------+\n");
+    s_Writer->Write("| Max   | Min    | Ave    | name |\n");
+    s_Writer->Write("+-------+--------+--------+------+\n");
 
     for (IZ_UINT i = 0; i < s_ItemMax; i++) {
         if (s_Items[i].name == NULL) {
@@ -132,7 +132,7 @@ void CStdProfiler::Dump()
             strlen(s_Items[i].name) + (s_Items[i].indentLevel << 2),
             s_Items[i].name);
 
-        s_Printer->Print(buf);
+        s_Writer->Write(buf);
     }
 }
 

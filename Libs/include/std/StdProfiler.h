@@ -8,17 +8,17 @@ namespace izanagi {
 
     /**
      */
-    class IStdProfilePrinter {
+    class IStdProfileWriter {
     protected:
-        IStdProfilePrinter() {}
-        virtual ~IStdProfilePrinter() {}
+        IStdProfileWriter() {}
+        virtual ~IStdProfileWriter() {}
 
-        NO_COPIABLE(IStdProfilePrinter);
+        NO_COPIABLE(IStdProfileWriter);
 
     public:
         /**
          */
-        virtual void Print(const char* str) = 0;
+        virtual void Write(const char* str) = 0;
     };
 
     /**
@@ -60,7 +60,7 @@ namespace izanagi {
             IMemoryAllocator* allocator,
             IZ_UINT maxStackNum,
             IStdProfilerTimer* timer,
-            IStdProfilePrinter* printer);
+            IStdProfileWriter* writer);
 
         /** 後始末.
          */
