@@ -67,14 +67,14 @@ typedef const wchar_t*  IZ_PCWSTR;
     #define UNUSED_ALWAYS(v)    (v)
 #endif  // #ifndef UNUSED
 
-inline void _OutputDebugString(izPcstr pszFormat, ...)
+inline void _OutputDebugString(const char* format, ...)
 {
     va_list argp;
-    izChar pszBuf[256];
-    va_start(argp, pszFormat);
-    IZ_VSPRINTF(pszBuf, sizeof(pszBuf), pszFormat, argp);
+    izChar buf[256];
+    va_start(argp, format);
+    IZ_VSPRINTF(buf, sizeof(buf), format, argp);
     va_end(argp);
-    ::OutputDebugString(pszBuf);
+    ::OutputDebugString(buf);
 }
 
 #ifndef IZ_PRINTF
