@@ -2,6 +2,7 @@
 #define __IZANAGI_STD_STD_PROFILER_H__
 
 #include "izDefs.h"
+#include "std/collection//StdList.h"
 
 namespace izanagi {
     class IMemoryAllocator;
@@ -18,7 +19,7 @@ namespace izanagi {
     public:
         /**
          */
-        virtual void Write(const char* str) = 0;
+        virtual void Write(const char* format, ...) const = 0;
     };
 
     /**
@@ -31,22 +32,18 @@ namespace izanagi {
         NO_COPIABLE(IStdProfilerTimer);
 
     public:
-        /** 時間取得.
+        /** 計測開始.
          */
-        virtual IZ_INT64 GetTime() = 0;
+        virtual void Begin() = 0;
 
-        /** 時間計算.
+        /** 経過時間取得.
          */
-        virtual IZ_FLOAT Compute(IZ_INT64 begin, IZ_INT64 end) = 0;
+        virtual IZ_FLOAT GetElapsedTime() = 0;
     };
 
     /** 
      */
     class CStdProfiler {
-        enum {
-            STACK_MAX = 64,
-        };
-
     private:
         CStdProfiler();
         ~CStdProfiler();
@@ -56,35 +53,43 @@ namespace izanagi {
     public:
         /** 初期化
          */
-        static IZ_BOOL Init(
+        static void Init(
             IMemoryAllocator* allocator,
-            IZ_UINT maxStackNum,
             IStdProfilerTimer* timer,
-            IStdProfileWriter* writer);
+            const IStdProfileWriter* writer);
 
         /** 後始末.
          */
-        static void Release();
-
-        /** 内部データをリセット.
-         */
-        static void Reset();
-
-        /** プロファイル結果を出力.
-         */
-        static void Dump();
+        static void Terminate();
 
         /** プロファイル開始.
          */
-        static IZ_BOOL Begin(const char* name);
+        static void Begin(const char* tag);
 
         /** プロファイル終了.
          */
-        static IZ_BOOL End();
+        static void End();
 
         /** プロファイル有効・無効設定.
          */
         static void Enable(IZ_BOOL enable);
+
+    private:
+        class CProfileItem;
+
+        typedef CStdList<CProfileItem>::Item CListItem;
+
+        static IZ_BOOL s_Enable;
+
+        static CStdList<CProfileItem> s_ItemList;
+
+        static IMemoryAllocator* s_Allocator;
+        static IStdProfilerTimer* s_Timer;
+        static const IStdProfileWriter* s_Writer;
+
+        static CProfileItem* s_Current;
+
+        static IZ_INT s_Depth;
     };
 }   // namespace izanagi
 
