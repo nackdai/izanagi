@@ -116,19 +116,33 @@ namespace graph
     void CRenderState::SetAlphaBlendMethod(CGraphicsDevice* device, IZ_DWORD method)
     {
         // 新しい設定値
-        IZ_DWORD nNewOp = IZ_GRAPH_GET_ALPHA_BLEND_OP(method);
-        IZ_DWORD nNewSrc = IZ_GRAPH_GET_ALPHA_BLEND_SRC(method);
-        IZ_DWORD nNewDst = IZ_GRAPH_GET_ALPHA_BLEND_DST(method);
+        IZ_DWORD newOp = IZ_GRAPH_GET_ALPHA_BLEND_OP(method);
+        IZ_DWORD newSrc = IZ_GRAPH_GET_ALPHA_BLEND_SRC(method);
+        IZ_DWORD newDst = IZ_GRAPH_GET_ALPHA_BLEND_DST(method);
 
         // 現在の設定値
-        IZ_DWORD nCurOp = IZ_GRAPH_GET_ALPHA_BLEND_OP(methodAlphaBlend);
-        IZ_DWORD nCurSrc = IZ_GRAPH_GET_ALPHA_BLEND_SRC(methodAlphaBlend);
-        IZ_DWORD nCurDst = IZ_GRAPH_GET_ALPHA_BLEND_DST(methodAlphaBlend);
+        IZ_DWORD curOp = IZ_GRAPH_GET_ALPHA_BLEND_OP(methodAlphaBlend);
+        IZ_DWORD curSrc = IZ_GRAPH_GET_ALPHA_BLEND_SRC(methodAlphaBlend);
+        IZ_DWORD curDst = IZ_GRAPH_GET_ALPHA_BLEND_DST(methodAlphaBlend);
 
-        // TODO
+        if (newOp != curOp) {
+            ::glBlendEquationSeparate(
+                GL_FUNC_ADD,
+                CTargetParamValueConverter::ConvAbstractToTarget_BlendOp((E_GRAPH_BLEND_OP)newOp));
+        }
+
+        if (newSrc != curSrc
+            || newDst != curDst)
+        {
+            ::glBlendFuncSeparate(
+                GL_ONE,
+                GL_ZERO,
+                CTargetParamValueConverter::ConvAbstractToTarget_Blend((E_GRAPH_BLEND)newSrc),
+                CTargetParamValueConverter::ConvAbstractToTarget_Blend((E_GRAPH_BLEND)newDst));
+        }
 
         // 更新
-        methodAlphaBlend = IZ_GRAPH_ALPHA_BLEND_VAL(nNewOp, nNewSrc, nNewDst);
+        methodAlphaBlend = IZ_GRAPH_ALPHA_BLEND_VAL(newOp, newSrc, newDst);
     }
 
     // フィルモード
