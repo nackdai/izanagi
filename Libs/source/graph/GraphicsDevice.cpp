@@ -361,14 +361,6 @@ namespace graph
 
         return ret;
     }
-    
-    // シェーダプログラムのダーティフラグをクリア
-    void CGraphicsDevice::ClearShaderProgramDirty(CShaderProgram* program)
-    {
-        if (program != IZ_NULL) {
-            program->ClearDirty();
-        }
-    }
 
 }   // namespace graph
 }   // namespace izanagi

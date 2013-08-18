@@ -37,15 +37,9 @@ namespace graph
 
         PURE_VIRTUAL(IZ_BOOL IsValid());
 
-        PURE_VIRTUAL(IZ_BOOL IsDirty());
-
         CVertexShader* GetVertexShader();
 
         CPixelShader* GetPixelShader();
-
-    protected:
-        PURE_VIRTUAL(IZ_BOOL Link());
-        PURE_VIRTUAL(void ClearDirty());
 
     public:
         PURE_VIRTUAL(SHADER_PARAM_HANDLE GetHandleByName(IZ_PCSTR name));

@@ -28,13 +28,7 @@ namespace graph
 
         virtual IZ_BOOL AttachPixelShader(CPixelShader* ps);
 
-        virtual IZ_BOOL Link();
-
         virtual IZ_BOOL IsValid();
-
-        virtual IZ_BOOL IsDirty();
-
-        virtual void ClearDirty();
 
     public:
         virtual SHADER_PARAM_HANDLE GetHandleByName(IZ_PCSTR name);
@@ -62,13 +56,6 @@ namespace graph
     private:
         CVertexShaderDX9* VertexShader();
         CPixelShaderDX9* PixelShader();
-
-        IZ_BOOL IsDirtyVS() { return m_IsDirtyVS; }
-        IZ_BOOL IsDirtyPS() { return m_IsDirtyPS; }
-
-    private:
-        IZ_BOOL m_IsDirtyVS;
-        IZ_BOOL m_IsDirtyPS;
     };
 }   // namespace graph
 }   // namespace izanagi

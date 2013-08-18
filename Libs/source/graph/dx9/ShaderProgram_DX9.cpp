@@ -28,47 +28,31 @@ namespace graph
 
     CShaderProgramDX9::CShaderProgramDX9()
     {
-        m_IsDirtyVS = IZ_FALSE;
-        m_IsDirtyPS = IZ_FALSE;
     }
 
     IZ_BOOL CShaderProgramDX9::AttachVertexShader(CVertexShader* vs)
     {
+        IZ_ASSERT(vs != IZ_NULL);
+
         if (m_VS != vs) {
             SAFE_REPLACE(m_VS, vs);
-            m_IsDirtyVS = IZ_TRUE;
-        }        
+        }
         return IZ_TRUE;
     }
 
     IZ_BOOL CShaderProgramDX9::AttachPixelShader(CPixelShader* ps)
     {
+        IZ_ASSERT(ps != IZ_NULL);
+        
         if (m_PS != ps) {
             SAFE_REPLACE(m_PS, ps);
-            m_IsDirtyPS = IZ_TRUE;
-        }        
+        }
         return IZ_TRUE;
-    }
-
-    IZ_BOOL CShaderProgramDX9::Link()
-    {
-        return IsValid();
     }
 
     IZ_BOOL CShaderProgramDX9::IsValid()
     {
         return (m_VS != IZ_NULL && m_PS != IZ_NULL);
-    }
-
-    IZ_BOOL CShaderProgramDX9::IsDirty()
-    {
-        return (m_IsDirtyVS || m_IsDirtyPS);
-    }
-
-    void CShaderProgramDX9::ClearDirty()
-    {
-        m_IsDirtyVS = IZ_FALSE;
-        m_IsDirtyPS = IZ_FALSE;
     }
 
     CVertexShaderDX9* CShaderProgramDX9::VertexShader()
