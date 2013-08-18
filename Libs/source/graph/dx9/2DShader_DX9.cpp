@@ -90,16 +90,16 @@ namespace graph
     {
         IZ_ASSERT(device != NULL);
 
-        // シェーダプログラム
-        m_ShaderProgram = device->CreateShaderProgram();
-        VRETURN(m_ShaderProgram != IZ_NULL);
-
         // 頂点シェーダ
         m_pVS = device->CreateVertexShader(g_vs20_main);
         VRETURN(m_pVS != IZ_NULL);
 
-        // ピクセルシェーダ
         for (IZ_UINT i = 0; i < E_GRAPH_2D_RENDER_OP_NUM; ++i) {
+            // シェーダプログラム
+            m_ShaderProgram[i] = device->CreateShaderProgram();
+            VRETURN(m_ShaderProgram[i] != IZ_NULL);
+
+            // ピクセルシェーダ
             m_pPS[i] = device->CreatePixelShader(PS_Programs[i]);
             VRETURN(m_pPS[i] != IZ_NULL);
         }

@@ -29,25 +29,23 @@ namespace graph
 
         virtual IZ_BOOL AttachPixelShader(CPixelShader* ps);
 
-        virtual IZ_BOOL Link();
-
-        IZ_BOOL LinkForcibly();
+        IZ_BOOL Link();
 
         IZ_BOOL CommitChanges();
         IZ_BOOL CommitChanges(SHADER_PARAM_HANDLE location);
-        void ClearCommitChanges();
 
         virtual IZ_BOOL IsValid();
-
-        virtual IZ_BOOL IsDirty();
-
-        virtual void ClearDirty();
 
         IZ_BOOL IsLinked();
 
     private:
         IZ_BOOL GetUniformInfo();
         void ClearUniformInfo();
+
+        IZ_BOOL GetAttributeInfo();
+        void ClearAttributeInfo();
+
+        IZ_INT GetAttribIndex(const char* name);
 
     public:
         virtual SHADER_PARAM_HANDLE GetHandleByName(IZ_PCSTR name);
@@ -95,15 +93,23 @@ namespace graph
             IZ_BOOL isDirty;
         };
 
+        struct SAttribute
+        {
+            char name[32];
+
+            IZ_INT index;
+            GLsizei nameLength;
+        };
+
     private:
         GLuint m_Program;
-        IZ_BOOL m_IsDirty;
         IZ_BOOL m_IsLinked;
-
-        IZ_BOOL m_IsCommitChanged;
 
         GLint m_UniformNum;
         SUniform* m_Uniforms;
+
+        GLint m_AttribNum;
+        SAttribute* m_Attribs;
     };
 }   // namespace graph
 }   // namespace izanagi

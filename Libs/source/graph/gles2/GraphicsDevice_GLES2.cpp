@@ -485,27 +485,13 @@ namespace graph
     IZ_BOOL CGraphicsDeviceGLES2::SetShaderProgram(CShaderProgram* program)
     {
         if (m_RenderState.curShader == program) {
-            // ダーティなら処理をすすめる
-            if (program != IZ_NULL && !program->IsDirty()) {
-                return IZ_TRUE;
-            }
+            return IZ_TRUE;
         }
 
         CShaderProgramGLES2* gles2Program = reinterpret_cast<CShaderProgramGLES2*>(program);
 
         if (gles2Program != IZ_NULL) {
             IZ_ASSERT(gles2Program->IsValid());
-
-            if (m_RenderState.curVD != IZ_NULL) {
-                CVertexDeclarationGLES2* vd = reinterpret_cast<CVertexDeclarationGLES2*>(m_RenderState.curVD);
-                vd->Bind(gles2Program);
-                m_IsBinded = IZ_TRUE;
-            }
-
-            gles2Program->LinkForcibly();
-            gles2Program->ClearCommitChanges();
-
-            CALL_GLES2_API(::glUseProgram(gles2Program->GetRawInterface()));
         }
         else {
             CALL_GLES2_API(::glUseProgram(0));
@@ -533,7 +519,6 @@ namespace graph
         SAFE_REPLACE(m_RenderState.curVD, pVD);
 
         m_IsDirtyVD = IZ_TRUE;
-        m_IsBinded = IZ_FALSE;
 
         return IZ_TRUE;
     }
@@ -565,24 +550,12 @@ namespace graph
             CVertexDeclarationGLES2* vd = reinterpret_cast<CVertexDeclarationGLES2*>(m_RenderState.curVD);
 
             vd->Apply(
+                shader,
                 vtxOffset,
                 m_RenderState.curVB->GetStride());
 
-            if (!m_IsBinded) {
-                IZ_BOOL needLink = IZ_TRUE;
-
-                if (!m_IsDirtyShaderProgram
-                    && shader->IsLinked())
-                {
-                    needLink = IZ_FALSE;
-                }
-
-                vd->Bind(shader);
-                m_IsBinded = IZ_TRUE;
-
-                if (needLink) {
-                    shader->LinkForcibly();
-                }
+            if (m_IsDirtyShaderProgram) {
+                CALL_GLES2_API(::glUseProgram(shader->GetRawInterface()));
             }
         }
 
@@ -730,24 +703,12 @@ namespace graph
             CVertexDeclarationGLES2* vd = reinterpret_cast<CVertexDeclarationGLES2*>(m_RenderState.curVD);
 
             vd->Apply(
+                shader,
                 0,
                 m_RenderState.curVB->GetStride());
 
-            if (!m_IsBinded) {
-                IZ_BOOL needLink = IZ_TRUE;
-
-                if (!m_IsDirtyShaderProgram
-                    && shader->IsLinked())
-                {
-                    needLink = IZ_FALSE;
-                }
-
-                vd->Bind(shader);
-                m_IsBinded = IZ_TRUE;
-
-                if (needLink) {
-                    shader->LinkForcibly();
-                }
+            if (m_IsDirtyShaderProgram) {
+                CALL_GLES2_API(::glUseProgram(shader->GetRawInterface()));
             }
         }
 

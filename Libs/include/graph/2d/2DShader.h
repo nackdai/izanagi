@@ -57,7 +57,7 @@ namespace graph
 
         CShaderProgram* GetShaderProgram()
         {
-            return m_ShaderProgram;
+            return m_ShaderProgram[m_nOp];
         }
 
     protected:
@@ -71,7 +71,7 @@ namespace graph
     protected:
         IMemoryAllocator* m_Allocator;
 
-        CShaderProgram* m_ShaderProgram;
+        CShaderProgram* m_ShaderProgram[E_GRAPH_2D_RENDER_OP_NUM];
 
         CVertexShader* m_pVS;
         CPixelShader* m_pPS[E_GRAPH_2D_RENDER_OP_NUM];

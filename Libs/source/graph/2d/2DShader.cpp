@@ -11,7 +11,7 @@ namespace graph
     // コンストラクタ
     C2DShader::C2DShader()
     {
-        m_ShaderProgram = IZ_NULL;
+        FILL_ZERO(m_ShaderProgram, sizeof(m_ShaderProgram));;
 
         m_pVS = IZ_NULL;
         FILL_ZERO(m_pPS, sizeof(m_pPS));
@@ -25,10 +25,9 @@ namespace graph
         SAFE_RELEASE(m_pVS);
 
         for (IZ_UINT i = 0; i < COUNTOF(m_pPS); ++i) {
+            SAFE_RELEASE(m_ShaderProgram[i]);
             SAFE_RELEASE(m_pPS[i]);
         }
-
-        SAFE_RELEASE(m_ShaderProgram);
     }
 
     // シェーダセット
@@ -36,10 +35,10 @@ namespace graph
     {
         IZ_ASSERT(device != NULL);
 
-        VRETURN(m_ShaderProgram->AttachVertexShader(m_pVS));
-        VRETURN(m_ShaderProgram->AttachPixelShader(m_pPS[m_nOp]));
+        VRETURN(m_ShaderProgram[m_nOp]->AttachVertexShader(m_pVS));
+        VRETURN(m_ShaderProgram[m_nOp]->AttachPixelShader(m_pPS[m_nOp]));
 
-        VRETURN(device->SetShaderProgram(m_ShaderProgram));
+        VRETURN(device->SetShaderProgram(m_ShaderProgram[m_nOp]));
 
         return IZ_TRUE;
     }

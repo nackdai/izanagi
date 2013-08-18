@@ -34,7 +34,7 @@ namespace graph
     {
         IZ_ASSERT(vs != IZ_NULL);
 
-        if (m_VS != vs) {
+        if (m_VS == IZ_NULL) {
             SAFE_REPLACE(m_VS, vs);
         }
         return IZ_TRUE;
@@ -44,7 +44,7 @@ namespace graph
     {
         IZ_ASSERT(ps != IZ_NULL);
         
-        if (m_PS != ps) {
+        if (m_PS == IZ_NULL) {
             SAFE_REPLACE(m_PS, ps);
         }
         return IZ_TRUE;
