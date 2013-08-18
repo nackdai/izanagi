@@ -32,10 +32,11 @@ namespace graph
         const SVertexElement* GetElements() const;
 
         IZ_BOOL Apply(
+            CShaderProgramGLES2* program,
             IZ_UINT vtxOffset,
             IZ_UINT vtxStride);
 
-        void Bind(CShaderProgramGLES2* program);
+        const char* GetAttribName(IZ_UINT elementIdx);
 
     protected:
         IZ_UINT m_ElemNum;

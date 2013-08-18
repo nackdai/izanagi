@@ -37,43 +37,42 @@ namespace graph
     CShaderProgramGLES2::CShaderProgramGLES2()
     {
         m_Program = 0;
-        m_IsDirty = IZ_FALSE;
-        m_IsLinked = IZ_TRUE;
 
-        m_IsCommitChanged = IZ_TRUE;
+        m_IsLinked = IZ_TRUE;
 
         m_UniformNum = 0;
         m_Uniforms = IZ_NULL;
+
+        m_AttribNum = 0;
+        m_Attribs = IZ_NULL;
     }
 
     CShaderProgramGLES2::~CShaderProgramGLES2()
     {
         ClearUniformInfo();
+        ClearAttributeInfo();
     }
 
     IZ_BOOL CShaderProgramGLES2::AttachVertexShader(CVertexShader* vs)
     {
         IZ_ASSERT(m_Program != 0);
+        IZ_ASSERT(vs != IZ_NULL);
 
-        if (m_VS != vs) {
-            if (m_VS != IZ_NULL) {
-                CALL_GLES2_API(
-                    ::glDetachShader(
-                        m_Program,
-                        VertexShader()->GetRawInterface()));
-            }
-
-            if (vs != IZ_NULL) {
-                CALL_GLES2_API(
-                    ::glAttachShader(
-                        m_Program,
-                        ((CVertexShaderGLES2*)vs)->GetRawInterface()));
-            }
+        if (m_VS == IZ_NULL) {
+            CALL_GLES2_API(
+                ::glAttachShader(
+                    m_Program,
+                    ((CVertexShaderGLES2*)vs)->GetRawInterface()));
 
             SAFE_REPLACE(m_VS, vs);
 
-            m_IsDirty = IZ_TRUE;
             m_IsLinked = IZ_FALSE;
+
+            if (IsValid()) {
+                Link();
+                GetUniformInfo();
+                GetAttributeInfo();
+            }
         }
         
         return IZ_TRUE;
@@ -82,26 +81,23 @@ namespace graph
     IZ_BOOL CShaderProgramGLES2::AttachPixelShader(CPixelShader* ps)
     {
         IZ_ASSERT(m_Program != 0);
-
-        if (m_PS != ps) {
-            if (m_PS != IZ_NULL) {
-                CALL_GLES2_API(
-                    ::glDetachShader(
-                        m_Program,
-                        PixelShader()->GetRawInterface()));
-            }
-
-            if (ps != IZ_NULL) {
-                CALL_GLES2_API(
-                    ::glAttachShader(
-                        m_Program,
-                        ((CPixelShaderGLES2*)ps)->GetRawInterface()));
-            }
+        IZ_ASSERT(ps != IZ_NULL);
+        
+        if (m_PS == IZ_NULL) {
+            CALL_GLES2_API(
+                ::glAttachShader(
+                    m_Program,
+                    ((CPixelShaderGLES2*)ps)->GetRawInterface()));
 
             SAFE_REPLACE(m_PS, ps);
 
-            m_IsDirty = IZ_TRUE;
             m_IsLinked = IZ_FALSE;
+
+            if (IsValid()) {
+                Link();
+                GetUniformInfo();
+                GetAttributeInfo();
+            }
         }
         
         return IZ_TRUE;
@@ -116,7 +112,7 @@ namespace graph
         IZ_ASSERT(m_Program != 0);
         IZ_ASSERT(IsValid());
 
-        if (IsValid() && IsDirty()) {
+        if (IsValid()) {
             CALL_GLES2_API(::glLinkProgram(m_Program));
 
             // TODO
@@ -151,55 +147,18 @@ namespace graph
         return IZ_TRUE;
     }
 
-    IZ_BOOL CShaderProgramGLES2::LinkForcibly()
-    {
-        IZ_ASSERT(m_Program != 0);
-        IZ_ASSERT(IsValid());
-
-        if (IsValid()) {
-            CALL_GLES2_API(::glLinkProgram(m_Program));
-
-            // TODO
-            // リンク結果をチェック
-            GLint isLinked = 0;
-
-            CALL_GLES2_API(::glGetProgramiv(m_Program, GL_LINK_STATUS, &isLinked));
-
-            if (isLinked) {
-                m_IsLinked = IZ_TRUE;
-
-                if (m_Uniforms == IZ_NULL) {
-                    VRETURN(GetUniformInfo());
-                }
-                else {
-                    // NOTE
-                    // ShaderProgram を Link すると uniform 変数の location の値は保証されないので
-                    // 再度取得しなおす必要があるため、値をクリアしておく
-                    for (GLint i = 0; i < m_UniformNum; i++) {
-                        m_Uniforms[i].handle = -1;
-                    }
-                }
-            }
-
-            return IZ_TRUE;
-        }
-
-        return IZ_FALSE;
-    }
-
     IZ_BOOL CShaderProgramGLES2::GetUniformInfo()
     {
 #if !ENABLE_SET_UNIFORM_IMMEDIATERY
-        // クリアしておく
-        ClearUniformInfo();
-
         // Get number of attributes
         CALL_GLES2_API(::glGetProgramiv(m_Program, GL_ACTIVE_UNIFORMS, &m_UniformNum));
 
-        void* buf = ALLOC_ZERO(m_Allocator, m_UniformNum * sizeof(SUniform));
-        VRETURN(buf != IZ_NULL);
+        if (m_UniformNum > 0) {
+            void* buf = ALLOC_ZERO(m_Allocator, m_UniformNum * sizeof(SUniform));
+            VRETURN(buf != IZ_NULL);
 
-        m_Uniforms = reinterpret_cast<SUniform*>(buf);
+            m_Uniforms = reinterpret_cast<SUniform*>(buf);
+        }
 
         // Get attribute informations.
         for (GLint i = 0; i < m_UniformNum; i++) {
@@ -317,14 +276,58 @@ namespace graph
         m_UniformNum = 0;
     }
 
-    IZ_BOOL CShaderProgramGLES2::CommitChanges()
+    IZ_BOOL CShaderProgramGLES2::GetAttributeInfo()
     {
-        if (m_IsCommitChanged) {
-            return IZ_TRUE;
+        CALL_GLES2_API(::glGetProgramiv(m_Program, GL_ACTIVE_ATTRIBUTES, &m_AttribNum));
+
+        if (m_AttribNum > 0) {
+            void* buf = ALLOC(m_Allocator, sizeof(SAttribute) * m_AttribNum);
+            VRETURN(buf != IZ_NULL);
+
+            m_Attribs = reinterpret_cast<SAttribute*>(buf);
         }
 
-        m_IsCommitChanged = IZ_TRUE;
+        for (GLint i = 0; i < m_AttribNum; i++) {
+            m_Attribs[i].index = i;
 
+            GLint size = 0;
+            GLenum type = 0;
+
+            CALL_GLES2_API(
+                ::glGetActiveAttrib(
+                    m_Program,
+                    i,
+                    sizeof(m_Attribs[i].name),
+                    &m_Attribs[i].nameLength,
+                    &size,
+                    &type,
+                    m_Attribs[i].name));
+        }
+
+        return IZ_TRUE;
+    }
+
+    void CShaderProgramGLES2::ClearAttributeInfo()
+    {
+        FREE(m_Allocator, m_Attribs);
+
+        m_Attribs = IZ_NULL;
+        m_AttribNum = 0;
+    }
+
+    IZ_INT CShaderProgramGLES2::GetAttribIndex(const char* name)
+    {
+        for (GLint i = 0; i < m_AttribNum; i++) {
+            if (::strcmp(m_Attribs[i].name, name) == 0) {
+                return m_Attribs[i].index;
+            }
+        }
+
+        return -1;
+    }
+
+    IZ_BOOL CShaderProgramGLES2::CommitChanges()
+    {
         for (GLint i = 0; i < m_UniformNum; i++) {
             CommitChanges(i);
         }
@@ -421,24 +424,9 @@ namespace graph
         return IZ_TRUE;
     }
 
-    void CShaderProgramGLES2::ClearCommitChanges()
-    {
-        m_IsCommitChanged = IZ_FALSE;
-    }
-
     IZ_BOOL CShaderProgramGLES2::IsValid()
     {
         return (m_VS != IZ_NULL && m_PS != IZ_NULL);
-    }
-
-    IZ_BOOL CShaderProgramGLES2::IsDirty()
-    {
-        return m_IsDirty;
-    }
-
-    void CShaderProgramGLES2::ClearDirty()
-    {
-        m_IsDirty = IZ_FALSE;
     }
 
     IZ_BOOL CShaderProgramGLES2::IsLinked()
@@ -459,11 +447,10 @@ namespace graph
     SHADER_PARAM_HANDLE CShaderProgramGLES2::GetHandleByName(IZ_PCSTR name)
     {
         IZ_ASSERT(IsValid());
-        //IZ_ASSERT(IsLinked());
-
-        Link();
 
 #if ENABLE_SET_UNIFORM_IMMEDIATERY
+        Link();
+
         CALL_GLES2_API(
             SHADER_PARAM_HANDLE ret = ::glGetUniformLocation(
                 m_Program,
