@@ -347,9 +347,6 @@ namespace graph
         IZ_BOOL PushDepthStencil(CRenderTarget* rt);
         PURE_VIRTUAL(void SetDepthStencil(CRenderTarget* rt));
 
-        // シェーダプログラムのダーティフラグをクリア
-        void ClearShaderProgramDirty(CShaderProgram* program);
-
     protected:
         enum {
             // レンダーターゲットのキュー数

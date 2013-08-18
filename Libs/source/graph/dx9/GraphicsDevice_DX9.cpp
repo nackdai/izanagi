@@ -640,12 +640,8 @@ namespace graph
     IZ_BOOL CGraphicsDeviceDX9::SetShaderProgram(CShaderProgram* program)
     {
         if (m_RenderState.curShader == program) {
-            if (program == IZ_NULL
-                || (program != IZ_NULL && !program->IsDirty()))
-            {
-                // すでに設定されている かつ ダーティでない
-                return IZ_TRUE;
-            }
+            // すでに設定されている
+            return IZ_TRUE;
         }
 
         IZ_BOOL isNewShader = (m_RenderState.curShader != program);
@@ -657,28 +653,23 @@ namespace graph
             hr = m_Device->SetPixelShader(IZ_NULL);
             VRETURN(SUCCEEDED(hr));
         }
-        else if (program->IsDirty() || isNewShader)
+        else if (isNewShader)
         {
             VRETURN(program->IsValid());
 
             CShaderProgramDX9* shader = reinterpret_cast<CShaderProgramDX9*>(program);
-            
-            if (shader->IsDirtyVS() || isNewShader)
+           
             {
                 CVertexShaderDX9* dxVS = shader->VertexShader();
                 HRESULT hr = m_Device->SetVertexShader(dxVS->GetRawInterface());
                 VRETURN(SUCCEEDED(hr));
             }
 
-            if (shader->IsDirtyPS() || isNewShader)
             {
                 CPixelShaderDX9* dxPS = shader->PixelShader();
                 HRESULT hr = m_Device->SetPixelShader(dxPS->GetRawInterface());
                 VRETURN(SUCCEEDED(hr));
             }
-
-            // ダーティフラグをクリア
-            ClearShaderProgramDirty(program);
         }
 
         // 現在設定されているものとして保持
