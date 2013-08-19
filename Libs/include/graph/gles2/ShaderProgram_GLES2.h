@@ -31,17 +31,11 @@ namespace graph
 
         IZ_BOOL Link();
 
-        IZ_BOOL CommitChanges();
-        IZ_BOOL CommitChanges(SHADER_PARAM_HANDLE location);
-
         virtual IZ_BOOL IsValid();
 
         IZ_BOOL IsLinked();
 
     private:
-        IZ_BOOL GetUniformInfo();
-        void ClearUniformInfo();
-
         IZ_BOOL GetAttributeInfo();
         void ClearAttributeInfo();
 
@@ -78,21 +72,6 @@ namespace graph
         GLuint GetRawInterface() { return m_Program; }
 
     private:
-        struct SUniform
-        {
-            char name[32];
-
-            GLenum type;
-            void* buffer;
-
-            IZ_UINT16 bufferSize;
-            IZ_BYTE nameLength;
-            IZ_BYTE arraySize;
-
-            SHADER_PARAM_HANDLE handle;
-            IZ_BOOL isDirty;
-        };
-
         struct SAttribute
         {
             char name[32];
@@ -104,9 +83,6 @@ namespace graph
     private:
         GLuint m_Program;
         IZ_BOOL m_IsLinked;
-
-        GLint m_UniformNum;
-        SUniform* m_Uniforms;
 
         GLint m_AttribNum;
         SAttribute* m_Attribs;

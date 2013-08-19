@@ -628,9 +628,6 @@ namespace graph
         IZ_UINT offset = idxOffset * sizeof(IZ_USHORT);
 #endif
 
-        // Uniform•Ï”‚ð”½‰f
-        gles2Program->CommitChanges();
-
         CALL_GLES2_API(
             ::glDrawElements(
                 mode,
@@ -726,9 +723,6 @@ namespace graph
             IZ_ASSERT(IZ_FALSE);
             break;
         }
-
-        // Uniform•Ï”‚ð”½‰f
-        gles2Program->CommitChanges();
 
         GLenum mode = CParamValueConverterGLES2::ConvAbstractToTarget_PrimType(prim_type);
 
