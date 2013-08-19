@@ -242,8 +242,6 @@ namespace graph
         IZ_UINT m_ScreenWidth;
         IZ_UINT m_ScreenHeight;
 
-        IZ_BOOL m_IsDirtyVB;
-        IZ_BOOL m_IsDirtyVD;
         IZ_BOOL m_IsDirtyShaderProgram;
         IZ_BOOL m_IsDirtyTex[TEX_STAGE_NUM];
 
