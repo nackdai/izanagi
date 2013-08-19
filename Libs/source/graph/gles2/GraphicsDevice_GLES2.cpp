@@ -492,6 +492,7 @@ namespace graph
 
         if (gles2Program != IZ_NULL) {
             IZ_ASSERT(gles2Program->IsValid());
+            CALL_GLES2_API(::glUseProgram(gles2Program->GetRawInterface()));
         }
         else {
             CALL_GLES2_API(::glUseProgram(0));
@@ -533,37 +534,21 @@ namespace graph
         IZ_UINT idxOffset,
         IZ_UINT nPrimCnt)
     {
-        CShaderProgramGLES2* shader = reinterpret_cast<CShaderProgramGLES2*>(m_RenderState.curShader);
+        CShaderProgramGLES2* gles2Program = reinterpret_cast<CShaderProgramGLES2*>(m_RenderState.curShader);
+        CVertexDeclarationGLES2* vd = reinterpret_cast<CVertexDeclarationGLES2*>(m_RenderState.curVD);
 
         // NOTE
         // ShaderProgramがセットされないとシェーダユニフォームの取得、設定ができないので
         // 頂点宣言の反映、テクスチャのセットなどをこのタイミングでやる
 
-        IZ_BOOL isDirty = (m_IsDirtyVB
-            || m_IsDirtyVD
-            || m_IsDirtyShaderProgram);
+        IZ_ASSERT(m_RenderState.curVD != IZ_NULL);
+        IZ_ASSERT(m_RenderState.curVB != IZ_NULL);
 
-        if (isDirty) {
-            IZ_ASSERT(m_RenderState.curVD != IZ_NULL);
-            IZ_ASSERT(m_RenderState.curVB != IZ_NULL);
-
-            CVertexDeclarationGLES2* vd = reinterpret_cast<CVertexDeclarationGLES2*>(m_RenderState.curVD);
-
-            vd->Apply(
-                shader,
-                vtxOffset,
-                m_RenderState.curVB->GetStride());
-
-            if (m_IsDirtyShaderProgram) {
-                CALL_GLES2_API(::glUseProgram(shader->GetRawInterface()));
-            }
-        }
-
-        m_IsDirtyVB = IZ_FALSE;
-        m_IsDirtyVD = IZ_FALSE;
-        m_IsDirtyShaderProgram = IZ_FALSE;
-
-        CShaderProgramGLES2* gles2Program = reinterpret_cast<CShaderProgramGLES2*>(m_RenderState.curShader);
+        vd->Apply(
+            gles2Program,
+            vtxOffset,
+            m_RenderState.curVB->GetStride());
+        
 
         // NOTE
         // ShaderCompilerによってsamplerレジスタに応じたユニフォーム名が設定されている
@@ -576,26 +561,7 @@ namespace graph
             if (m_IsDirtyTex[i]
                 && m_Texture[i] != IZ_NULL)
             {
-#if 0
-                if (isDirty) {
-                    CALL_GLES2_API(
-                        m_SamplerHandle[i] = ::glGetUniformLocation(gles2Program->GetRawInterface(), samplerName[i]));
-                    IZ_ASSERT(m_SamplerHandle[i] >= 0);
-                }
-
-                CALL_GLES2_API(::glActiveTexture(GL_TEXTURE0 + i));
-
-                GLenum type = (m_Texture[i]->GetTexType() == E_GRAPH_TEX_TYPE_PLANE
-                    ? GL_TEXTURE_2D
-                    : GL_TEXTURE_CUBE_MAP);
-
-                GLuint handle = m_Texture[i]->GetTexHandle();
-
-                CALL_GLES2_API(::glBindTexture(type, handle));
-
-                CALL_GLES2_API(::glUniform1i(m_SamplerHandle[i], i));
-#else
-                if (isDirty) {
+                if (m_IsDirtyShaderProgram) {
                     m_SamplerHandle[i] = gles2Program->GetHandleByName(samplerName[i]);
                     IZ_ASSERT(m_SamplerHandle[i] >= 0);
                 }
@@ -611,7 +577,6 @@ namespace graph
                 CALL_GLES2_API(::glBindTexture(type, handle));
 
                 gles2Program->SetInt(this, m_SamplerHandle[i], i);
-#endif
             }
 
             m_IsDirtyTex[i] = IZ_FALSE;
@@ -652,21 +617,25 @@ namespace graph
 #if 1
         E_GRAPH_INDEX_BUFFER_FMT idxFmt = m_RenderState.curIB->GetFormat();
         GLenum type = CTargetParamValueConverter::ConvAbstractToTarget_IdxBufFmt(idxFmt);
+
+        IZ_UINT offset = idxFmt == E_GRAPH_INDEX_BUFFER_FMT_INDEX16
+            ? idxOffset * sizeof(IZ_UINT16)
+            : idxOffset * sizeof(IZ_UINT32);
 #else
         GLenum type = GL_UNSIGNED_SHORT;
 
         // TODO
         IZ_ASSERT(m_RenderState.curIB->GetIdxNum() <= IZ_UINT16_MAX);
-#endif
 
         // NOTE
         // glDrawElements に渡すオフセットはバイト数
         // しかし、ここにわたってくるオフセットはインデックス位置のオフセット
         // そのため、バイトオフセットに変換する
         IZ_UINT offset = idxOffset * sizeof(IZ_USHORT);
+#endif
 
         // Uniform変数を反映
-        shader->CommitChanges();
+        gles2Program->CommitChanges();
 
         CALL_GLES2_API(
             ::glDrawElements(
@@ -674,6 +643,10 @@ namespace graph
                 idxNum,
                 type,
                 (const GLvoid*)offset));
+
+        m_IsDirtyVB = IZ_FALSE;
+        m_IsDirtyVD = IZ_FALSE;
+        m_IsDirtyShaderProgram = IZ_FALSE;
 
         return IZ_TRUE;
     }
