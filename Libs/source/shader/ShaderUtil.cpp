@@ -74,7 +74,11 @@ namespace izanagi {
                 else {
                     if (type != desc.originalType) {
                         if (CShaderParamUtil::IsMatrixType(desc.originalType)) {
-                            pShader->SetMatrixAsVectorArray(device, handle, *(const math::SMatrix*)pValue);
+                            pShader->SetMatrixArrayAsVectorArray(
+                                device,
+                                handle, 
+                                (const math::SMatrix*)pValue,
+                                nElements);
                         }
                         else {
                             IZ_ASSERT(IZ_FALSE);

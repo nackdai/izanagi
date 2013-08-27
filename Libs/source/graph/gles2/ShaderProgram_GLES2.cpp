@@ -336,12 +336,27 @@ namespace graph
         return IZ_TRUE;
     }
 
-    IZ_BOOL CShaderProgramGLES2::SetMatrixAsVectorArray(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const math::SMatrix& m)
+    IZ_BOOL CShaderProgramGLES2::SetMatrixArrayAsVectorArray(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const math::SMatrix* m, IZ_UINT num)
     {
-        math::SMatrix transposed;
-        math::SMatrix::Transpose(transposed, m);
+        // TODO
+        // transposeæ‚Ìƒƒ‚ƒŠ‚ğ‚Ç‚¤‚·‚é‚©
 
-        return SetVectorArray(device, handle, transposed.v, 4);
+        math::SMatrix* tmp = const_cast<math::SMatrix*>(m);
+
+        // NOTE
+        // Œ³‚ª Matrix(float4x4) ‚Ì‚Æ‚±‚ë‚ğ Vector(float4) ‚Æ‚µ‚Äˆµ‚¤
+        // ‚»‚Ì‚½‚ßAnum ‚Í Vector ‚Æ‚µ‚ÄŒ©‚½ê‡‚ÌŒÂ”‚ª‚­‚é
+        // ‚µ‚©‚µAˆÈ‰º‚Ìˆ—‚Í Matrix(float4x4) ‚Æ‚µ‚Äˆµ‚¤‚Ì‚Å
+        // 1/4 ‚µ‚½”‚ğŒÂ”‚Æ‚µ‚Ä‚İ‚È‚¢‚Æ‚¢‚¯‚È‚¢
+
+        for (IZ_UINT i = 0; i < (num >> 2); i++) {
+            const math::SMatrix& mtx = m[i];
+            math::SMatrix::Transpose(tmp[i], mtx);
+        }
+
+        math::SVector* buf = reinterpret_cast<math::SVector*>(tmp);
+
+        return SetVectorArray(device, handle, buf, num);
     }
 }   // namespace graph
 }   // namespace izanagi
