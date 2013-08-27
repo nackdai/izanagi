@@ -56,8 +56,11 @@ namespace graph
         // インスタンス作成
         instance = new (buf)CCubeTextureGLES2;
         {
-            instance->m_Allocator = allocator;
             instance->AddRef();
+            instance->m_Allocator = allocator;
+
+            CGraphicsDeviceGLES2* glesDevice = reinterpret_cast<CGraphicsDeviceGLES2*>(device);
+            SAFE_REPLACE(instance->m_Device, glesDevice);
         }
 
         // 初期化
@@ -169,15 +172,15 @@ namespace graph
             GLuint width = GetWidth();
             GLuint height = GetHeight();
 
-            for (IZ_UINT i = 0; i < E_GRAPH_CUBE_TEX_FACE_NUM; i++) {
-                for (IZ_UINT i = 0; i < m_TexInfo.level; i++) {
-                    GLuint w = width >> i;
-                    GLuint h = height >> i;
+            for (IZ_UINT face = 0; face < E_GRAPH_CUBE_TEX_FACE_NUM; face++) {
+                for (IZ_UINT level = 0; level < m_TexInfo.level; level++) {
+                    GLuint w = width >> level;
+                    GLuint h = height >> level;
 
                     CALL_GLES2_API(
                         ::glTexImage2D(
-                            GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
-                            i,
+                            GL_TEXTURE_CUBE_MAP_POSITIVE_X + face,
+                            level,
                             m_GLFormat,
                             w, h,
                             0,
@@ -248,7 +251,7 @@ namespace graph
 
         if (isLocked) {
             CBaseTexture* curTex = m_Device->GetTexture(0);
-            GLenum glFace = IZ_GET_ABST_CUBE_FACE(face);
+            GLenum glFace = IZ_GET_TARGET_CUBE_FACE(face);
 
             if (curTex != this) {
                 CALL_GLES2_API(::glBindTexture(GL_TEXTURE_CUBE_MAP, m_Texture));
