@@ -9582,15 +9582,18 @@ const MOJOSHADER_parseData *MOJOSHADER_parse(const char *profile,
         case MOJOSHADER_SYMTYPE_SAMPLER2D:
             sprintf(type, "sampler2D");
             break;
+        case MOJOSHADER_SYMTYPE_SAMPLERCUBE:
+            sprintf(type, "samplerCube");
+            break;
         default:
             assert(false);
-            break;
+            return NULL;
         }
 
         if (ctx->ctab.symbols[i].info.parameter_class == MOJOSHADER_SYMCLASS_OBJECT)
         {
             if (ctx->ctab.symbols[i].info.parameter_type >= MOJOSHADER_SYMTYPE_SAMPLER
-                && ctx->ctab.symbols[i].info.parameter_type <= MOJOSHADER_SYMTYPE_SAMPLER3D)
+                && ctx->ctab.symbols[i].info.parameter_type <= MOJOSHADER_SYMTYPE_SAMPLERCUBE)
             {
 #if 0
                 output_line(
@@ -9651,7 +9654,8 @@ const MOJOSHADER_parseData *MOJOSHADER_parse(const char *profile,
             }
             else
             {
-                unsigned int size = ctx->ctab.symbols[i].info.columns * ctx->ctab.symbols[i].info.elements;
+                //unsigned int size = ctx->ctab.symbols[i].info.columns * ctx->ctab.symbols[i].info.elements;
+                unsigned int size = ctx->ctab.symbols[i].register_count;
 
                 output_line(
                     ctx,
@@ -9688,7 +9692,7 @@ const MOJOSHADER_parseData *MOJOSHADER_parse(const char *profile,
                 }
                 else
                 {
-                    for (int n = 0; n < ctx->ctab.symbols[i].info.rows; n++)
+                    for (unsigned int n = 0; n < ctx->ctab.symbols[i].register_count; n++)
                     {
                         output_line(
                             ctx,
