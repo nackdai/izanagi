@@ -79,7 +79,7 @@ IZ_BOOL CSampleApp::Init(const SSampleAppParams& params)
         gfxDevParams.rgba[2] = 8;
         gfxDevParams.rgba[3] = 8;
 
-        gfxDevParams.depth = 24;
+        gfxDevParams.depth = 16;
         gfxDevParams.stencil = 8;
 
         gfxDevParams.enableMultiSample = GL_FALSE;
