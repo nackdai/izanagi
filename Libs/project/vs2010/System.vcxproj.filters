@@ -47,9 +47,6 @@
     <ClInclude Include="..\..\include\system\SysEvent.h">
       <Filter>include\thread</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\system\SysMonitor.h">
-      <Filter>include\thread</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\system\SysMutex.h">
       <Filter>include\thread</Filter>
     </ClInclude>
@@ -98,9 +95,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\source\system\win32\thread\SysMonitor_win32.cpp">
-      <Filter>source\win32\thread</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\system\win32\thread\SysMutex_win32.cpp">
       <Filter>source\win32\thread</Filter>
     </ClCompile>
