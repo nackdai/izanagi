@@ -131,6 +131,34 @@ namespace graph
         return instance;
     }
 
+    // レンダーターゲット作成
+    CRenderTargetDX9* CRenderTargetDX9::CreateDepthStencilRenderTarget(
+        CGraphicsDeviceDX9* device,
+        IMemoryAllocator* allocator,
+        IZ_UINT width, 
+        IZ_UINT height)
+    {
+        CSurfaceDX9* surface = CSurfaceDX9::CreateDepthStencilSurface(
+                            allocator,
+                            device,
+                            width, height,
+                            E_GRAPH_PIXEL_FMT_D24S8);
+
+        CRenderTargetDX9* instance = IZ_NULL;
+        
+        if (surface != IZ_NULL) {
+            instance = CreateRenderTarget(device, allocator, surface);
+
+            if (instance != IZ_NULL) {
+                // NOTE
+                // 管理は引き継いだので、もういらない
+                SAFE_RELEASE(surface);
+            }
+        }
+
+        return instance;
+    }
+
     // 本体作成（レンダーターゲット）
     IZ_BOOL CRenderTargetDX9::CreateBody_RenderTarget(
         IZ_UINT width, 
