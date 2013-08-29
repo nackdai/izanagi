@@ -508,8 +508,12 @@ namespace graph
         for (IZ_UINT i = 0; i < MAX_MRT_NUM; ++i) {
             if ((flag & (1 << i)) > 0) {
                 pRTList[i] = m_RTMgr[i].Pop();
-                nRTNum = (pRTList[i] != IZ_NULL ? nRTNum + 1 : nRTNum);
             }
+            else {
+                pRTList[i] = m_RTMgr[i].GetCurrent();
+            }
+
+            nRTNum = (pRTList[i] != IZ_NULL ? nRTNum + 1 : nRTNum);
         }
 
         if (nRTNum > 0) {

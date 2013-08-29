@@ -387,8 +387,10 @@ namespace graph
     */
     void CGraphicsDeviceGLES2::EndScene(IZ_UINT flag/* = 0xffffffff*/)
     {
+        IZ_BOOL endColor = IZ_FALSE;
+        IZ_BOOL endDepth = IZ_FALSE;
+
         CRenderTarget* pRTList[MAX_MRT_NUM];
-        memset(pRTList, 0, sizeof(pRTList));
 
         IZ_UINT nRTNum = 0;
 
@@ -396,12 +398,19 @@ namespace graph
         for (IZ_UINT i = 0; i < MAX_MRT_NUM; ++i) {
             if ((flag & (1 << i)) > 0) {
                 pRTList[i] = m_RTMgr[i].Pop();
-                nRTNum = (pRTList[i] != IZ_NULL ? nRTNum + 1 : nRTNum);
             }
+            else {
+                pRTList[i] = m_RTMgr[i].GetCurrent();
+            }
+
+            nRTNum = (pRTList[i] != IZ_NULL ? nRTNum + 1 : nRTNum);
         }
 
         if (nRTNum > 0) {
             SetRenderTarget(pRTList, nRTNum);
+        }
+        else {
+            endColor = IZ_TRUE;
         }
 
         if ((flag & E_GRAPH_END_SCENE_FLAG_DEPTH_STENCIL) > 0) {
@@ -410,11 +419,14 @@ namespace graph
             if (pDepth != IZ_NULL) {
                 SetDepthStencil(pDepth);
             }
+            else {
+                endDepth = IZ_TRUE;
+            }
         }
 
-        // オフスクリーン終了（設定されていれば）
+        // オフスクリーン終了
         IZ_ASSERT(m_FBO != IZ_NULL);
-        m_FBO->EndOffScreen();
+        m_FBO->EndOffScreen(endColor, endDepth);
     }
 
     /**

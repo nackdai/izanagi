@@ -62,6 +62,17 @@ namespace graph
             return ret;
         }
 
+        CRenderTarget* GetCurrent()
+        {
+            CRenderTarget* ret = IZ_NULL;
+
+            if (!m_Stack.IsEmpty()) {
+                // 空でない
+                ret = m_Stack.Get().rt;
+            }
+
+            return ret;
+        }
 
         // 空かどうか
         IZ_BOOL IsEmpty() const
