@@ -27,7 +27,7 @@ CShadow* CShadow::Create(
                 izanagi::graph::E_GRAPH_TEX_ADDRESS_CLAMP,
                 izanagi::graph::E_GRAPH_TEX_ADDRESS_CLAMP);
 
-            instance->m_DepthRT = device->CreateDepthStencilSurface(
+            instance->m_DepthRT = device->CreateRenderTarget(
                                     width, height,
                                     fmtDepth);
             result = (instance->m_DepthRT != IZ_NULL);
