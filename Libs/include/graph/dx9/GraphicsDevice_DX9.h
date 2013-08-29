@@ -59,12 +59,6 @@ namespace graph
         virtual CRenderTarget* CreateRenderTarget(
             IZ_UINT nWidth, IZ_UINT nHeight,
             E_GRAPH_PIXEL_FMT fmt);
-
-        // 深度・ステンシルサーフェス作成
-        virtual CRenderTarget* CreateDepthStencilSurface(
-            IZ_UINT width, 
-            IZ_UINT height,
-            E_GRAPH_PIXEL_FMT fmt);
         
         // 頂点バッファ作成
         virtual CVertexBuffer* CreateVertexBuffer(

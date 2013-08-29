@@ -84,12 +84,23 @@ namespace graph
         IZ_UINT width, IZ_UINT height,
         E_GRAPH_PIXEL_FMT fmt)
     {
-        CRenderTargetDX9* pRT = CRenderTargetDX9::CreateRenderTarget(
-                            this,
-                            m_Allocator,
-                            width,
-                            height,
-                            fmt);
+        CRenderTargetDX9* pRT = IZ_NULL;
+
+        if (fmt == E_GRAPH_PIXEL_FMT_D24S8) {
+            pRT = CRenderTargetDX9::CreateDepthStencilRenderTarget(
+                this,
+                m_Allocator,
+                width,
+                height);
+        }
+        else {
+            pRT = CRenderTargetDX9::CreateRenderTarget(
+                this,
+                m_Allocator,
+                width,
+                height,
+                fmt);
+        }
 
         if (pRT != IZ_NULL) {
             // リセット用リストに登録
@@ -97,30 +108,6 @@ namespace graph
         }
 
         return pRT;
-    }
-
-    // 深度・ステンシルサーフェス作成
-    CRenderTarget* CGraphicsDeviceDX9::CreateDepthStencilSurface(
-        IZ_UINT width, 
-        IZ_UINT height,
-        E_GRAPH_PIXEL_FMT fmt)
-    {
-        CSurfaceDX9* surface = CSurfaceDX9::CreateDepthStencilSurface(
-                            m_Allocator,
-                            this,
-                            width, height,
-                            fmt);
-
-        CRenderTargetDX9* ret = CRenderTargetDX9::CreateRenderTarget(this, m_Allocator, surface);
-        IZ_ASSERT(ret != IZ_NULL);
-
-        ret->SetDesc();
-
-        // NOTE
-        // 管理は引き継いだので、もういらない
-        SAFE_RELEASE(surface);
-
-        return ret;
     }
 
     /**

@@ -31,6 +31,13 @@ namespace graph
             IMemoryAllocator* allocator,
             CSurfaceDX9* surface);
 
+        // レンダーターゲット作成
+        static CRenderTargetDX9* CreateDepthStencilRenderTarget(
+            CGraphicsDeviceDX9* device,
+            IMemoryAllocator* allocator,
+            IZ_UINT width, 
+            IZ_UINT height);
+
     private:
         inline CRenderTargetDX9();
         virtual inline ~CRenderTargetDX9();
