@@ -118,6 +118,12 @@ namespace izanagi {
             return nKey % rhs;
         }
 
+        const CStdString<_T, _NUM>& operator=(const _T* rhs)
+        {
+            SetString(rhs);
+            return *this;
+        }
+
     protected:
         enum {
             SIZE = sizeof(_T) * (_NUM + 1),
