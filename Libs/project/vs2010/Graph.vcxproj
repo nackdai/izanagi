@@ -204,6 +204,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\..\source\graph\gles2\FrameBufferObject.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\..\source\graph\gles2\GraphicsDeviceResourceFuncs.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">true</ExcludedFromBuild>
@@ -341,6 +345,7 @@ $(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpNoTexAlp
     <ClInclude Include="..\..\include\graph\gles2\2DRenderer_GLES2.h" />
     <ClInclude Include="..\..\include\graph\gles2\2DShader_GLES2.h" />
     <ClInclude Include="..\..\include\graph\gles2\CubeTexture_GLES2.h" />
+    <ClInclude Include="..\..\include\graph\gles2\FrameBufferObject.h" />
     <ClInclude Include="..\..\include\graph\gles2\GraphicsDevice_GLES2.h" />
     <ClInclude Include="..\..\include\graph\gles2\IndexBuffer_GLES2.h" />
     <ClInclude Include="..\..\include\graph\gles2\izGLES2Defs.h" />

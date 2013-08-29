@@ -12,7 +12,7 @@ typedef GLint SHADER_PARAM_HANDLE;
         func;\
         {\
             GLenum __gl_err__ = ::glGetError();\
-            if (__gl_err__ != GL_NO_ERROR) IZ_ASSERT(IZ_FALSE);\
+            if (__gl_err__ != GL_NO_ERROR) { IZ_PRINTF("GLES2 ERROR [0x%x]\n", __gl_err__); IZ_ASSERT(IZ_FALSE); }\
         }
 #else
     #define CALL_GLES2_API(func) func

@@ -259,11 +259,9 @@ namespace graph
         IZ_BOOL isLocked = (m_LockedSize > 0);
 
         if (isLocked) {
-            CBaseTexture* curTex = m_Device->GetTexture(0);
+            CTextureOperator texOp(m_Device, m_Texture);
 
-            if (curTex != this) {
-                CALL_GLES2_API(::glBindTexture(GL_TEXTURE_2D, m_Texture));
-                
+            if (texOp != this) {
                 Initialize();
             }
             
@@ -279,19 +277,6 @@ namespace graph
                     m_GLFormat,
                     m_GLType,
                     m_TemporaryData));
-
-            // 元に戻す
-            if (curTex != this) {
-                if (curTex == IZ_NULL) {
-                    CALL_GLES2_API(::glBindTexture(GL_TEXTURE_2D, 0));
-                }
-                else {
-                    CALL_GLES2_API(
-                        ::glBindTexture(
-                            curTex->GetTexType() == E_GRAPH_TEX_TYPE_PLANE ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP,
-                            ((CTextureGLES2*)curTex)->m_Texture));
-                }
-            }
 
             m_LockedSize = 0;
         }
@@ -327,5 +312,33 @@ namespace graph
 
         return IZ_TRUE;
     }
+
+    /////////////////////////////////////////////////
+
+    CTextureOperator::CTextureOperator(CGraphicsDeviceGLES2* device, GLuint targetTexHandle)
+    {
+        m_CurTex = device->GetTexture(0);
+        m_TargetTexHandle = targetTexHandle;
+
+        if (m_CurTex == IZ_NULL
+            || m_CurTex->GetTexHandle() != targetTexHandle)
+        {
+            CALL_GLES2_API(::glBindTexture(GL_TEXTURE_2D, targetTexHandle));
+        }
+    }
+
+    CTextureOperator::~CTextureOperator()
+    {
+        if (m_CurTex == IZ_NULL) {
+            CALL_GLES2_API(::glBindTexture(GL_TEXTURE_2D, 0));
+        }
+        else {
+            CALL_GLES2_API(
+                ::glBindTexture(
+                    m_CurTex->GetTexType() == E_GRAPH_TEX_TYPE_PLANE ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP,
+                    m_CurTex->GetTexHandle()));
+        }
+    }
+
 }   // namespace graph
 }   // namespace izanagi

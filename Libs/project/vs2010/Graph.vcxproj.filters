@@ -146,6 +146,9 @@
     <ClCompile Include="..\..\source\graph\gles2\GraphPerf_GLES2.cpp">
       <Filter>source\gles2</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\graph\gles2\FrameBufferObject.cpp">
+      <Filter>source\gles2</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\source\graph\2d\shader\2DShader.hlsl">
@@ -311,6 +314,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\graph\GraphPerf.h">
       <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\gles2\FrameBufferObject.h">
+      <Filter>include\gles2</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
