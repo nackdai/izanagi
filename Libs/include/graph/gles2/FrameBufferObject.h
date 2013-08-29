@@ -36,7 +36,7 @@ namespace graph
         IZ_BOOL SetRenderTarget(CRenderTarget* rt, IZ_BOOL isDepth);
 
         IZ_BOOL StartOffScreen();
-        IZ_BOOL EndOffScreen();
+        IZ_BOOL EndOffScreen(IZ_BOOL endColor, IZ_BOOL endDepth);
 
         GLuint GetRawInterface() { return m_FBO; }
 

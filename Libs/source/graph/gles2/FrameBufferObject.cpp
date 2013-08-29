@@ -65,12 +65,10 @@ namespace graph
 
         if (isDepth) {
             // Depth
-            IZ_ASSERT(m_Depth == IZ_NULL);
             SAFE_REPLACE(m_Depth, rt);
         }
         else {
             // Color
-            IZ_ASSERT(m_Color == IZ_NULL);
             SAFE_REPLACE(m_Color, rt);
         }
 
@@ -86,46 +84,49 @@ namespace graph
         {
             m_IsOnOffScreen = IZ_TRUE;
 
-            ::glBindFramebuffer(
-                GL_FRAMEBUFFER,
-                m_FBO);
+            CALL_GLES2_API(
+                ::glBindFramebuffer(
+                    GL_FRAMEBUFFER,
+                    m_FBO));
 
             if (m_Color != IZ_NULL)
             {
-                ::glFramebufferTexture2D(
-                    GL_FRAMEBUFFER,
-                    GL_COLOR_ATTACHMENT0,
-                    GL_TEXTURE_2D,
-                    m_Color->GetTexHandle(),
-                    0);
+                CALL_GLES2_API(
+                    ::glFramebufferTexture2D(
+                        GL_FRAMEBUFFER,
+                        GL_COLOR_ATTACHMENT0,
+                        GL_TEXTURE_2D,
+                        m_Color->GetTexHandle(),
+                        0));
             }
 
             if (m_Depth != IZ_NULL)
             {
-                ::glFramebufferRenderbuffer(
-                    GL_FRAMEBUFFER,
-                    GL_DEPTH_ATTACHMENT,
-                    GL_RENDERBUFFER,
-                    m_Depth->GetTexHandle());
+                CALL_GLES2_API(
+                    ::glFramebufferRenderbuffer(
+                        GL_FRAMEBUFFER,
+                        GL_DEPTH_ATTACHMENT,
+                        GL_RENDERBUFFER,
+                        m_Depth->GetTexHandle()));
             }
         }
 
         return IZ_TRUE;
     }
 
-    IZ_BOOL CFrameBufferObject::EndOffScreen()
+    IZ_BOOL CFrameBufferObject::EndOffScreen(IZ_BOOL endColor, IZ_BOOL endDepth)
     {
         if (m_IsOnOffScreen) {
-            ::glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            CALL_GLES2_API(::glBindFramebuffer(GL_FRAMEBUFFER, 0));
 
             m_IsOnOffScreen = IZ_FALSE;
 
-            if (m_Color != IZ_NULL)
+            if (endColor && m_Color != IZ_NULL)
             {
                 SAFE_RELEASE(m_Color);
             }
 
-            if (m_Depth != IZ_NULL)
+            if (endDepth && m_Depth != IZ_NULL)
             {
                 SAFE_RELEASE(m_Depth);
             }
