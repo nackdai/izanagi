@@ -137,7 +137,6 @@
     <ClInclude Include="..\..\include\system\SysWindow.h" />
     <ClInclude Include="..\..\include\system\SysCond.h" />
     <ClInclude Include="..\..\include\system\SysEvent.h" />
-    <ClInclude Include="..\..\include\system\SysMonitor.h" />
     <ClInclude Include="..\..\include\system\SysMutex.h" />
     <ClInclude Include="..\..\include\system\SysSemaphore.h" />
     <ClInclude Include="..\..\include\system\SysThread.h" />
@@ -161,7 +160,6 @@
     <ClCompile Include="..\..\source\system\win32\SysWindow_win32.cpp" />
     <ClCompile Include="..\..\source\system\win32\thread\SysCond_win32.cpp" />
     <ClCompile Include="..\..\source\system\win32\thread\SysEvent_win32.cpp" />
-    <ClCompile Include="..\..\source\system\win32\thread\SysMonitor_win32.cpp" />
     <ClCompile Include="..\..\source\system\win32\thread\SysMutex_win32.cpp" />
     <ClCompile Include="..\..\source\system\win32\thread\SysSemaphore_win32.cpp" />
     <ClCompile Include="..\..\source\system\win32\thread\SysThread_win32.cpp" />
