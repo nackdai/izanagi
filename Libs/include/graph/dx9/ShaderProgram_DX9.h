@@ -51,7 +51,7 @@ namespace graph
 
         virtual IZ_BOOL SetValue(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const void* p, IZ_UINT size);
 
-        virtual IZ_BOOL SetMatrixAsVectorArray(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const math::SMatrix& m);
+        virtual IZ_BOOL SetMatrixArrayAsVectorArray(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const math::SMatrix* m, IZ_UINT num);
 
     private:
         CVertexShaderDX9* VertexShader();

@@ -191,9 +191,11 @@ namespace graph
         _EXEC_ARRAY_FUNC(SetValue, device, p, size);
     }
 
-    IZ_BOOL CShaderProgramDX9::SetMatrixAsVectorArray(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const math::SMatrix& m)
+    IZ_BOOL CShaderProgramDX9::SetMatrixArrayAsVectorArray(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const math::SMatrix* m, IZ_UINT num)
     {
-        return SetVectorArray(device, handle, m.v, 4);
+        // TODO
+        IZ_ASSERT(IZ_FALSE);
+        return IZ_FALSE;
     }
 }   // namespace graph
 }   // namespace izanagi
