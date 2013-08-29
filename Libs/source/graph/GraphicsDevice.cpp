@@ -74,34 +74,6 @@ namespace graph
                 nClearStencil);
     }
 
-    // シーン描画終了
-    void CGraphicsDevice::EndScene(IZ_UINT flag/* = 0xffffffff*/)
-    {
-        CRenderTarget* pRTList[MAX_MRT_NUM];
-
-        IZ_UINT nRTNum = 0;
-
-        // レンダーターゲット
-        for (IZ_UINT i = 0; i < MAX_MRT_NUM; ++i) {
-            if ((flag & (1 << i)) > 0) {
-                pRTList[i] = m_RTMgr[i].Pop();
-                nRTNum = (pRTList[i] != IZ_NULL ? nRTNum + 1 : nRTNum);
-            }
-        }
-
-        if (nRTNum > 0) {
-            SetRenderTarget(pRTList, nRTNum);
-        }
-
-        if ((flag & E_GRAPH_END_SCENE_FLAG_DEPTH_STENCIL) > 0) {
-            // 深度・ステンシル
-            CRenderTarget* pDepth = m_DepthMgr.Pop();
-            if (pDepth != IZ_NULL) {
-                SetDepthStencil(pDepth);
-            }
-        }
-    }
-
     // 2D描画開始
     IZ_BOOL CGraphicsDevice::Begin2D()
     {

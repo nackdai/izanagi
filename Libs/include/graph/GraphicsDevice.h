@@ -157,7 +157,7 @@ namespace graph
                 IZ_DWORD nClearStencil = 0));
 
         // シーン描画終了
-        void EndScene(IZ_UINT flag = 0xffffffff);
+        PURE_VIRTUAL(void EndScene(IZ_UINT flag = 0xffffffff));
 
         // 同期
         PURE_VIRTUAL(IZ_BOOL Present());
