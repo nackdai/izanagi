@@ -78,25 +78,25 @@ namespace graph
         IZ_UINT width, IZ_UINT height,
         E_GRAPH_PIXEL_FMT fmt)
     {
-        CRenderTargetGLES2* pRT = CRenderTargetGLES2::CreateRenderTarget(
-                            this,
-                            m_Allocator,
-                            width,
-                            height,
-                            fmt);
+        CRenderTargetGLES2* pRT = IZ_NULL;
+
+        if (fmt == E_GRAPH_PIXEL_FMT_D24S8) {
+            pRT = CRenderTargetGLES2::CreateDepthStencilRenderTarget(
+                this,
+                m_Allocator,
+                width,
+                height);
+        }
+        else {
+            pRT = CRenderTargetGLES2::CreateRenderTarget(
+                this,
+                m_Allocator,
+                width,
+                height,
+                fmt);
+        }
 
         return pRT;
-    }
-
-    // 深度・ステンシルサーフェス作成
-    CRenderTarget* CGraphicsDeviceGLES2::CreateDepthStencilSurface(
-        IZ_UINT width, 
-        IZ_UINT height,
-        E_GRAPH_PIXEL_FMT fmt)
-    {
-        // TODO
-        IZ_ASSERT(IZ_FALSE);
-        return IZ_NULL;
     }
 
     /**

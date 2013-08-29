@@ -23,6 +23,13 @@ namespace graph
             IZ_UINT height,
             E_GRAPH_PIXEL_FMT fmt);
 
+        // レンダーターゲット作成
+        static CRenderTargetGLES2* CreateDepthStencilRenderTarget(
+            CGraphicsDeviceGLES2* device,
+            IMemoryAllocator* allocator,
+            IZ_UINT width, 
+            IZ_UINT height);
+
     private:
         inline CRenderTargetGLES2();
         virtual inline ~CRenderTargetGLES2();
@@ -34,11 +41,15 @@ namespace graph
             IZ_UINT height,
             E_GRAPH_PIXEL_FMT fmt);
 
-        // テクスチャ情報取得
-        void SetDesc();
+        IZ_BOOL CreateBody_DepthStencilRenderTarget(
+            IZ_UINT width,
+            IZ_UINT height);
 
-        // サーフェス作成
-        IZ_BOOL CreateSurface();
+        // テクスチャ情報取得
+         void SetTextureInfo(
+            IZ_UINT width,
+            IZ_UINT height,
+            E_GRAPH_PIXEL_FMT fmt);
 
     public:
         virtual IZ_BOOL IsPrepared() const;

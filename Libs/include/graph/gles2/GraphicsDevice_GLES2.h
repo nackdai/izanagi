@@ -13,6 +13,7 @@ namespace graph
     class CTextureGLES2;
     class CVertexBufferGLES2;
     class CIndexBufferGLES2;
+    class CFrameBufferObject;
 
     // グラフィックスデバイス
     class CGraphicsDeviceGLES2 : public CGraphicsDevice
@@ -55,12 +56,6 @@ namespace graph
         // レンダーターゲット作成
         virtual CRenderTarget* CreateRenderTarget(
             IZ_UINT nWidth, IZ_UINT nHeight,
-            E_GRAPH_PIXEL_FMT fmt);
-
-        // 深度・ステンシルサーフェス作成
-        virtual CRenderTarget* CreateDepthStencilSurface(
-            IZ_UINT width, 
-            IZ_UINT height,
             E_GRAPH_PIXEL_FMT fmt);
 
         // 頂点バッファ作成
@@ -248,6 +243,8 @@ namespace graph
         GLint m_SamplerHandle[TEX_STAGE_NUM];
 
         IZ_BOOL m_TexSamplerParamInitialized[TEX_STAGE_NUM];
+
+        CFrameBufferObject* m_FBO;
     };
 }   // namespace graph
 }   // namespace izanagi

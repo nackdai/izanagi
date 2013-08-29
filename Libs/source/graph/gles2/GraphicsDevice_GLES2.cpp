@@ -6,6 +6,7 @@
 #include "graph/gles2/ShaderProgram_GLES2.h"
 #include "graph/gles2/VertexDeclaration_GLES2.h"
 #include "graph/gles2/2DRenderer_GLES2.h"
+#include "graph/gles2/FrameBufferObject.h"
 
 namespace izanagi
 {
@@ -78,6 +79,8 @@ namespace graph
         ::memset(m_SamplerHandle, 0xff, sizeof(m_SamplerHandle));
 
         FILL_ZERO(m_TexSamplerParamInitialized, sizeof(m_TexSamplerParamInitialized));
+
+        m_FBO = IZ_NULL;
     }
 
     // デストラクタ
@@ -86,6 +89,8 @@ namespace graph
         // TODO
 
         ClearRenderState();
+
+        SAFE_RELEASE(m_FBO);
     }
 
     void CGraphicsDeviceGLES2::ClearRenderState()
@@ -129,8 +134,11 @@ namespace graph
             if (ret) {
                 // 2D描画初期化
                 m_2DRenderer = C2DRendererGLES2::Create2DRenderer(this, m_Allocator);
-                ret = (m_2DRenderer != IZ_NULL);
-                IZ_ASSERT(ret);
+                VRETURN(m_2DRenderer != IZ_NULL);
+
+                // FBO
+                m_FBO = CFrameBufferObject::CreateFBO(this, m_Allocator);
+                VRETURN(m_FBO != IZ_NULL);
             }
         }
 
@@ -360,6 +368,10 @@ namespace graph
             PushDepthStencil(pDepth);
         }
 
+        // オフスクリーン開始（設定されていれば）
+        IZ_ASSERT(m_FBO != IZ_NULL);
+        m_FBO->StartOffScreen();
+
         // クリア
         Clear(
             nClearFlags,
@@ -399,6 +411,10 @@ namespace graph
                 SetDepthStencil(pDepth);
             }
         }
+
+        // オフスクリーン終了（設定されていれば）
+        IZ_ASSERT(m_FBO != IZ_NULL);
+        m_FBO->EndOffScreen();
     }
 
     /**
@@ -413,11 +429,11 @@ namespace graph
     void CGraphicsDeviceGLES2::SetDepthStencil(CRenderTarget* pSurface)
     {
         IZ_ASSERT(pSurface != IZ_NULL);
+        IZ_ASSERT(m_FBO != IZ_NULL);
 
         if (m_RenderState.curDepth != pSurface) {
             // レンダーターゲットを入れ替える
-            // TODO
-            IZ_ASSERT(IZ_FALSE);
+            m_FBO->SetRenderTarget(pSurface, IZ_TRUE);
         }
     }
 
@@ -906,10 +922,18 @@ namespace graph
 
     void CGraphicsDeviceGLES2::SetRenderTargetInternal(CRenderTarget** rt, IZ_UINT num)
     {
+        // TODO
+        // MRTは無しで・・・
+        IZ_ASSERT(num == 1);
+
+        IZ_ASSERT(m_FBO != IZ_NULL);
+
         // レンダーターゲットを入れ替える
         for (IZ_UINT i = 0; i < num; ++i) {
             if (m_RenderState.curRT[i] != rt[i]) {
-                // TODO
+                m_FBO->SetRenderTarget(rt[i], IZ_FALSE);
+
+                SAFE_REPLACE(m_RenderState.curRT[i], rt[i]);
             }
         }
     }

@@ -101,6 +101,26 @@ namespace graph
 
         void* m_TemporaryData;
     };
+
+    class CTextureOperator
+    {
+    public:
+        CTextureOperator(CGraphicsDeviceGLES2* device, GLuint targetTexHandle);
+        ~CTextureOperator();
+
+        IZ_BOOL operator==(const CBaseTexture* rhs)
+        {
+            return (m_CurTex == rhs);
+        }
+        IZ_BOOL operator!=(const CBaseTexture* rhs)
+        {
+            return (m_CurTex != rhs);
+        }
+
+    private:
+        CBaseTexture* m_CurTex;
+        GLuint m_TargetTexHandle;
+    };
 }   // namespace graph
 }   // namespace izanagi
 
