@@ -120,6 +120,11 @@ SVSOutput_WithShadow mainVS_WithShadow(SVSInput_NoTex In)
 float4 mainPS_WithShadow(SPSInput_WithShadow In) : COLOR
 {
     float2 uv = In.vShadowUV.xy / In.vShadowUV.w;
+
+    // TODO
+    // OpenGLはテクスチャのY座標がDirectXに対して反転している
+    // uv.y = 1f - uv.y;
+
     float4 Out = In.vColor;
     Out.rgb *= (1.0f - tex2D(sTex, uv).rgb);
 
