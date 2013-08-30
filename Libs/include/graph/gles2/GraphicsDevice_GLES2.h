@@ -14,7 +14,6 @@ namespace graph
     class CVertexBufferGLES2;
     class CIndexBufferGLES2;
     class CFrameBufferObject;
-    class CRenderTargetGLES2;
 
     // グラフィックスデバイス
     class CGraphicsDeviceGLES2 : public CGraphicsDevice
@@ -246,7 +245,6 @@ namespace graph
         IZ_BOOL m_TexSamplerParamInitialized[TEX_STAGE_NUM];
 
         CFrameBufferObject* m_FBO;
-        CRenderTargetGLES2* m_RT;
     };
 }   // namespace graph
 }   // namespace izanagi

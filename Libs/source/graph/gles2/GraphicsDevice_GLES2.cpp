@@ -82,7 +82,6 @@ namespace graph
         FILL_ZERO(m_TexSamplerParamInitialized, sizeof(m_TexSamplerParamInitialized));
 
         m_FBO = IZ_NULL;
-        m_RT = IZ_NULL;
     }
 
     // デストラクタ
@@ -93,7 +92,6 @@ namespace graph
         ClearRenderState();
 
         SAFE_RELEASE(m_FBO);
-        SAFE_RELEASE(m_RT);
     }
 
     void CGraphicsDeviceGLES2::ClearRenderState()
@@ -175,7 +173,6 @@ namespace graph
             // DummyRenderTarget
             {
                 m_RT = CRenderTargetGLES2::CreateDummyRenderTarget(
-                    this,
                     m_Allocator,
                     param.screenWidth, param.screenHeight);
                 VRETURN(m_RT != IZ_NULL);

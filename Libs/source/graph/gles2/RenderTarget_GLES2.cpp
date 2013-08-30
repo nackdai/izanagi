@@ -121,13 +121,10 @@ namespace graph
     }
 
     CRenderTargetGLES2* CRenderTargetGLES2::CreateDummyRenderTarget(
-        CGraphicsDeviceGLES2* device,
         IMemoryAllocator* allocator,
         IZ_UINT width,
         IZ_UINT height)
     {
-        IZ_ASSERT(device != IZ_NULL);
-
         IZ_BOOL result = IZ_TRUE;
         IZ_UINT8* buf = IZ_NULL;
         CRenderTargetGLES2* instance = IZ_NULL;
@@ -143,7 +140,6 @@ namespace graph
         instance = new (buf) CRenderTargetGLES2;
         {
             instance->m_Allocator = allocator;
-            SAFE_REPLACE(instance->m_Device, device);
 
             instance->AddRef();
         }
