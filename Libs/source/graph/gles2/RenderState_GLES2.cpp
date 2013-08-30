@@ -126,21 +126,18 @@ namespace graph
         IZ_DWORD curDst = IZ_GRAPH_GET_ALPHA_BLEND_DST(methodAlphaBlend);
 
         if (newOp != curOp) {
-            CALL_GLES2_API(
-                ::glBlendEquationSeparate(
-                    GL_FUNC_ADD,
-                    CTargetParamValueConverter::ConvAbstractToTarget_BlendOp((E_GRAPH_BLEND_OP)newOp)));
+            GLenum glOp = CTargetParamValueConverter::ConvAbstractToTarget_BlendOp((E_GRAPH_BLEND_OP)newOp);
+
+            CALL_GLES2_API(::glBlendEquation(glOp));
         }
 
         if (newSrc != curSrc
             || newDst != curDst)
         {
-            CALL_GLES2_API(
-                ::glBlendFuncSeparate(
-                    GL_ONE,
-                    GL_ZERO,
-                    CTargetParamValueConverter::ConvAbstractToTarget_Blend((E_GRAPH_BLEND)newSrc),
-                    CTargetParamValueConverter::ConvAbstractToTarget_Blend((E_GRAPH_BLEND)newDst)));
+            GLenum glSrc = CTargetParamValueConverter::ConvAbstractToTarget_Blend((E_GRAPH_BLEND)newSrc);
+            GLenum glDst = CTargetParamValueConverter::ConvAbstractToTarget_Blend((E_GRAPH_BLEND)newDst);
+
+            CALL_GLES2_API(::glBlendFunc(glSrc, glDst));
         }
 
         // 更新
