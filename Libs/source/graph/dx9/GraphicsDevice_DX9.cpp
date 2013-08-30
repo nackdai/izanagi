@@ -506,18 +506,26 @@ namespace graph
 
         // レンダーターゲット
         for (IZ_UINT i = 0; i < MAX_MRT_NUM; ++i) {
+            CRenderTarget* rt = m_RTMgr[i].GetCurrent();
+
             if ((flag & (1 << i)) > 0) {
-                pRTList[i] = m_RTMgr[i].Pop();
-            }
-            else {
-                pRTList[i] = m_RTMgr[i].GetCurrent();
+                CRenderTarget* tmp = m_RTMgr[i].Pop();
+                if (tmp != IZ_NULL) {
+                    rt = tmp;
+                }
             }
 
-            nRTNum = (pRTList[i] != IZ_NULL ? nRTNum + 1 : nRTNum);
+            pRTList[i] = rt;
+            nRTNum = (rt != IZ_NULL ? nRTNum + 1 : nRTNum);
+        }
+
+        if (pRTList[0] == IZ_NULL) {
+            pRTList[0] = m_RT;
+            nRTNum += 1;
         }
 
         if (nRTNum > 0) {
-            SetRenderTarget(pRTList, nRTNum);
+            SetRenderTarget(pRTList, MAX_MRT_NUM);
         }
 
         if ((flag & E_GRAPH_END_SCENE_FLAG_DEPTH_STENCIL) > 0) {

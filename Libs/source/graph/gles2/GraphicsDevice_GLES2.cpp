@@ -7,6 +7,7 @@
 #include "graph/gles2/VertexDeclaration_GLES2.h"
 #include "graph/gles2/2DRenderer_GLES2.h"
 #include "graph/gles2/FrameBufferObject.h"
+#include "graph/gles2/RenderTarget_GLES2.h"
 
 namespace izanagi
 {
@@ -81,6 +82,7 @@ namespace graph
         FILL_ZERO(m_TexSamplerParamInitialized, sizeof(m_TexSamplerParamInitialized));
 
         m_FBO = IZ_NULL;
+        m_RT = IZ_NULL;
     }
 
     // デストラクタ
@@ -91,6 +93,7 @@ namespace graph
         ClearRenderState();
 
         SAFE_RELEASE(m_FBO);
+        SAFE_RELEASE(m_RT);
     }
 
     void CGraphicsDeviceGLES2::ClearRenderState()
@@ -169,10 +172,17 @@ namespace graph
             SetDefaultRenderState();
             m_Flags.is_force_set_state = IZ_FALSE;
 
-            // TODO
-            // いる？
-            // サーフェスのリセット
-            //（フレームバッファのリセット）
+            // DummyRenderTarget
+            {
+                m_RT = CRenderTargetGLES2::CreateDummyRenderTarget(
+                    this,
+                    m_Allocator,
+                    param.screenWidth, param.screenHeight);
+                VRETURN(m_RT != IZ_NULL);
+                
+                // 現在のレンダーターゲットとして保持
+                SAFE_REPLACE(m_RenderState.curRT[0], m_RT);
+            }
         }
 
         return ret;
@@ -387,30 +397,39 @@ namespace graph
     */
     void CGraphicsDeviceGLES2::EndScene(IZ_UINT flag/* = 0xffffffff*/)
     {
-        IZ_BOOL endColor = IZ_FALSE;
-        IZ_BOOL endDepth = IZ_FALSE;
+        // オフスクリーン終了
+        IZ_ASSERT(m_FBO != IZ_NULL);
+        m_FBO->EndOffScreen();
 
         CRenderTarget* pRTList[MAX_MRT_NUM];
 
         IZ_UINT nRTNum = 0;
 
         // レンダーターゲット
+        // レンダーターゲット
         for (IZ_UINT i = 0; i < MAX_MRT_NUM; ++i) {
+            CRenderTarget* rt = m_RTMgr[i].GetCurrent();
+
             if ((flag & (1 << i)) > 0) {
-                pRTList[i] = m_RTMgr[i].Pop();
-            }
-            else {
-                pRTList[i] = m_RTMgr[i].GetCurrent();
+                CRenderTarget* tmp = m_RTMgr[i].Pop();
+                if (tmp != IZ_NULL) {
+                    rt = tmp;
+                }
             }
 
-            nRTNum = (pRTList[i] != IZ_NULL ? nRTNum + 1 : nRTNum);
+            pRTList[i] = rt;
+            nRTNum = (rt != IZ_NULL ? nRTNum + 1 : nRTNum);
+        }
+
+        if (pRTList[0] == IZ_NULL) {
+            pRTList[0] = m_RT;
+            nRTNum += 1;
         }
 
         if (nRTNum > 0) {
-            SetRenderTarget(pRTList, nRTNum);
-        }
-        else {
-            endColor = IZ_TRUE;
+            // TODO
+            // MRTは１枚までに制限されている
+            SetRenderTarget(pRTList, 1);
         }
 
         if ((flag & E_GRAPH_END_SCENE_FLAG_DEPTH_STENCIL) > 0) {
@@ -419,14 +438,7 @@ namespace graph
             if (pDepth != IZ_NULL) {
                 SetDepthStencil(pDepth);
             }
-            else {
-                endDepth = IZ_TRUE;
-            }
         }
-
-        // オフスクリーン終了
-        IZ_ASSERT(m_FBO != IZ_NULL);
-        m_FBO->EndOffScreen(endColor, endDepth);
     }
 
     /**
