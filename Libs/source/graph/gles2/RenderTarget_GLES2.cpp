@@ -47,8 +47,6 @@ namespace graph
         result = (buf != IZ_NULL);
         VGOTO(result, __EXIT__);
 
-        IZ_UINT8* top = buf;
-
         // インスタンス作成
         instance = new (buf) CRenderTargetGLES2;
         {
@@ -96,8 +94,6 @@ namespace graph
         result = (buf != IZ_NULL);
         VGOTO(result, __EXIT__);
 
-        IZ_UINT8* top = buf;
-
         // インスタンス作成
         instance = new (buf) CRenderTargetGLES2;
         {
@@ -110,6 +106,53 @@ namespace graph
         // 本体作成
         result = instance->CreateBody_DepthStencilRenderTarget(width, height);
         VGOTO(result, __EXIT__);
+
+    __EXIT__:
+        if (!result) {
+            if (instance != IZ_NULL) {
+                SAFE_RELEASE(instance);
+            }
+            else if (buf != IZ_NULL) {
+                allocator->Free(buf);
+            }
+        }
+
+        return instance;
+    }
+
+    CRenderTargetGLES2* CRenderTargetGLES2::CreateDummyRenderTarget(
+        CGraphicsDeviceGLES2* device,
+        IMemoryAllocator* allocator,
+        IZ_UINT width,
+        IZ_UINT height)
+    {
+        IZ_ASSERT(device != IZ_NULL);
+
+        IZ_BOOL result = IZ_TRUE;
+        IZ_UINT8* buf = IZ_NULL;
+        CRenderTargetGLES2* instance = IZ_NULL;
+
+        size_t size = sizeof(CRenderTargetGLES2);
+
+        // メモリ確保
+        buf = (IZ_UINT8*)ALLOC_ZERO(allocator, size);
+        result = (buf != IZ_NULL);
+        VGOTO(result, __EXIT__);
+
+        // インスタンス作成
+        instance = new (buf) CRenderTargetGLES2;
+        {
+            instance->m_Allocator = allocator;
+            SAFE_REPLACE(instance->m_Device, device);
+
+            instance->AddRef();
+        }
+
+        // 情報をセット
+        // PixelFormatはダミー
+        instance->SetTextureInfo(
+            width, height,
+            E_GRAPH_PIXEL_FMT_RGBA8);
 
     __EXIT__:
         if (!result) {
@@ -190,7 +233,7 @@ namespace graph
         IZ_UINT height,
         E_GRAPH_PIXEL_FMT fmt)
     {
-        IZ_ASSERT(m_Texture != 0);
+        //IZ_ASSERT(m_Texture != 0);
 
         m_TexInfo.width = width;
         m_TexInfo.height = height;

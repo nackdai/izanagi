@@ -30,6 +30,12 @@ namespace graph
             IZ_UINT width, 
             IZ_UINT height);
 
+        static CRenderTargetGLES2* CreateDummyRenderTarget(
+            CGraphicsDeviceGLES2* device,
+            IMemoryAllocator* allocator,
+            IZ_UINT width,
+            IZ_UINT height);
+
     private:
         inline CRenderTargetGLES2();
         virtual inline ~CRenderTargetGLES2();

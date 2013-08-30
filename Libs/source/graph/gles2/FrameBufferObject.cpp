@@ -89,47 +89,39 @@ namespace graph
                     GL_FRAMEBUFFER,
                     m_FBO));
 
-            if (m_Color != IZ_NULL)
-            {
-                CALL_GLES2_API(
-                    ::glFramebufferTexture2D(
-                        GL_FRAMEBUFFER,
-                        GL_COLOR_ATTACHMENT0,
-                        GL_TEXTURE_2D,
-                        m_Color->GetTexHandle(),
-                        0));
-            }
+            GLuint colorTexHandle = (m_Color != IZ_NULL
+                ? m_Color->GetTexHandle()
+                : 0);
 
-            if (m_Depth != IZ_NULL)
-            {
-                CALL_GLES2_API(
-                    ::glFramebufferRenderbuffer(
-                        GL_FRAMEBUFFER,
-                        GL_DEPTH_ATTACHMENT,
-                        GL_RENDERBUFFER,
-                        m_Depth->GetTexHandle()));
-            }
+            CALL_GLES2_API(
+                ::glFramebufferTexture2D(
+                    GL_FRAMEBUFFER,
+                    GL_COLOR_ATTACHMENT0,
+                    GL_TEXTURE_2D,
+                    colorTexHandle,
+                    0));
+
+            GLuint depthHandle = (m_Depth != IZ_NULL
+                ? m_Depth->GetTexHandle()
+                : 0);
+
+            CALL_GLES2_API(
+                ::glFramebufferRenderbuffer(
+                    GL_FRAMEBUFFER,
+                    GL_DEPTH_ATTACHMENT,
+                    GL_RENDERBUFFER,
+                    depthHandle));
         }
 
         return IZ_TRUE;
     }
 
-    IZ_BOOL CFrameBufferObject::EndOffScreen(IZ_BOOL endColor, IZ_BOOL endDepth)
+    IZ_BOOL CFrameBufferObject::EndOffScreen()
     {
         if (m_IsOnOffScreen) {
             CALL_GLES2_API(::glBindFramebuffer(GL_FRAMEBUFFER, 0));
 
             m_IsOnOffScreen = IZ_FALSE;
-
-            if (endColor && m_Color != IZ_NULL)
-            {
-                SAFE_RELEASE(m_Color);
-            }
-
-            if (endDepth && m_Depth != IZ_NULL)
-            {
-                SAFE_RELEASE(m_Depth);
-            }
         }
 
         return IZ_TRUE;
