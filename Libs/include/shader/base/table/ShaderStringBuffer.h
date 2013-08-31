@@ -3,7 +3,10 @@
 
 #include "izDefs.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace shader
+{
     /**
     */
     class CShaderStringBuffer {
@@ -59,6 +62,7 @@ namespace izanagi {
 
         return ret;
     }
+}   // namespace shader
 }   // namespace izanagi
 
 #endif  // #if !defined(__IZANAGI_SHADER_SHADER_STRING_BUFFER_H__)

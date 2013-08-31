@@ -45,7 +45,7 @@ CSceneRenderer::~CSceneRenderer()
 
 // 描画開始
 IZ_UINT CSceneRenderer::BeginRender(
-    IShader* shader,
+    izanagi::shader::IShader* shader,
     IZ_UINT techIdx)
 {
     IZ_ASSERT(shader != IZ_NULL);

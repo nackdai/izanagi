@@ -21,6 +21,9 @@
     <Filter Include="include\base\util">
       <UniqueIdentifier>{8993fa2c-55c5-4be3-b32e-bfb36972972e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\base\table">
+      <UniqueIdentifier>{41863cef-27d6-4997-9a84-39c7a4fdaf3b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\shader\ShaderManager.cpp">
@@ -34,6 +37,9 @@
     </ClCompile>
     <ClCompile Include="..\..\source\shader\base\ShaderPass.cpp">
       <Filter>source\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\shader\base\table\ShaderSamplerTable.cpp">
+      <Filter>source\base\table</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,7 +1,10 @@
 ﻿#include "shader/base/ShaderPass.h"
 #include "shader/base/table/ShaderSamplerTable.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace shader
+{
     // コンストラクタ
     CShaderPass::CShaderPass()
     {
@@ -79,4 +82,5 @@ namespace izanagi {
     {
         SAFE_RELEASE(m_Program);
     }
+}   // namespace shader
 }   // namespace izanagi

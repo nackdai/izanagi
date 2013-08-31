@@ -5,9 +5,12 @@
 #include "izGraph.h"
 
 namespace izanagi {
+    namespace shader {
+        class IShader;
+    }
+
     class IRenderElement;
     class IMshRenderHandler;
-    class IShader;
 
     /**
      */
@@ -25,7 +28,7 @@ namespace izanagi {
          */
         PURE_VIRTUAL(
             IZ_UINT BeginRender(
-                IShader* shader,
+                shader::IShader* shader,
                 IZ_UINT techIdx));
 
         /** 描画途中.

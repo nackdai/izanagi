@@ -1,9 +1,12 @@
 #if !defined(__IZANAGI_SHADER_SHADER_TECH_TABLE_H__)
 #define __IZANAGI_SHADER_SHADER_TECH_TABLE_H__
 
-#include "SHDFormat.h"
+#include "shader/base/SHDFormat.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace shader
+{
     /**
     * テクニックテーブル
     *
@@ -90,6 +93,7 @@ namespace izanagi {
 
         return ret;
     }
+}   // namespace shader
 }   // namespace izanagi
 
 #endif  // #if !defined(__IZANAGI_SHADER_SHADER_TECH_TABLE_H__)

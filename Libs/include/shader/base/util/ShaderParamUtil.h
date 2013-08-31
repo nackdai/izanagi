@@ -4,7 +4,10 @@
 #include "izStd.h"
 #include "shader/base/ShaderDefs.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace shader
+{
 	/**
 	* ポストエフェクトのパラメータに関するユーティリティ
 	*/
@@ -137,6 +140,7 @@ namespace izanagi {
 	{
 		return (type == E_SHADER_PARAMETER_TYPE_TEXTURE);
 	}
+}   // namespace shader
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_SHADER_SHADER_PARAM_UTIL_H__)

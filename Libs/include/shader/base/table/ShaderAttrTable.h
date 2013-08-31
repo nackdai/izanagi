@@ -1,9 +1,12 @@
 #if !defined(__IZANAGI_SHADER_SHADER_ATTR_TABLE_H__)
 #define __IZANAGI_SHADER_SHADER_ATTR_TABLE_H__
 
-#include "SHDFormat.h"
+#include "shader/base/SHDFormat.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace shader
+{
     // Table of shader's attributes.
     class CShaderAttrTable {
         friend class CShaderBasic;
@@ -73,6 +76,7 @@ namespace izanagi {
         
         return (pItem != IZ_NULL ? pItem->GetData() : IZ_NULL);
     }
+}   // namespace shader
 }   // namespace izanagi
 
 #endif  // #if !defined(__IZANAGI_SHADER_SHADER_ATTR_TABLE_H__)

@@ -225,7 +225,7 @@ IZ_BOOL CMaterial::Prepare(graph::CGraphicsDevice* pDevice)
     // TODO
     IZ_ASSERT((m_Header.numShader == 1) && (m_pShaderInfo != IZ_NULL));
     IZ_ASSERT(m_pShaderInfo->shader != IZ_NULL);
-    izanagi::IShader* pShader = m_pShaderInfo->shader;
+    izanagi::shader::IShader* pShader = m_pShaderInfo->shader;
 
     // Textures.
 #if 0
@@ -360,7 +360,7 @@ IZ_BOOL CMaterial::SetTexture(
 }
 
 // マテリアルにシェーダを追加.
-IZ_BOOL CMaterial::AddShader(IShader* pShader)
+IZ_BOOL CMaterial::AddShader(shader::IShader* pShader)
 {
     IZ_BOOL ret = IZ_TRUE;
 
@@ -402,7 +402,7 @@ IZ_BOOL CMaterial::AddShader(IShader* pShader)
 }
 
 // マテリアルに関連付けられているシェーダをセット.
-IZ_BOOL CMaterial::SetShader(IShader* pShader)
+IZ_BOOL CMaterial::SetShader(shader::IShader* pShader)
 {
     IZ_ASSERT(pShader != IZ_NULL);
 

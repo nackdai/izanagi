@@ -7,8 +7,11 @@
 #include "scenegraph/SceneParam.h"
 
 namespace izanagi {
+    namespace shader {
+        class IShader;
+    }
+
     class CMaterial;
-    class IShader;
     class IMeshSet;
     class IMshRenderHandler;
 
@@ -34,7 +37,7 @@ namespace izanagi {
         /** 描画開始.
          */
         virtual IZ_UINT BeginRender(
-            IShader* shader,
+            shader::IShader* shader,
             IZ_UINT techIdx);
 
         /** 描画途中.
@@ -63,7 +66,7 @@ namespace izanagi {
 
         CSceneParam* m_pSceneParam;
 
-        IShader* m_pCurShader;
+        shader::IShader* m_pCurShader;
         IZ_UINT m_nCurShaderPassNum;
         IZ_INT m_nCurShaderPass;
 

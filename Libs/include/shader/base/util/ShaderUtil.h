@@ -5,7 +5,10 @@
 #include "izMath.h"
 #include "ShaderParamUtil.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace shader
+{
     struct S_SHD_PARAMETER;
 
 	class CShaderUtil {
@@ -35,6 +38,7 @@ namespace izanagi {
 			IZ_FLOAT fClearZ,
 			IZ_INT nClearStencil);
 	};
+}   // namespace shader
 }	// namespace izanagi
 
 #endif	// #if !defined(__IZANAGI_SHADER_SHADER_UTIL_H__)
