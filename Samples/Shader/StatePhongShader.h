@@ -25,7 +25,7 @@ public:
     virtual IZ_BOOL Leave();
 
 protected:
-    izanagi::CShaderBasic* m_Shader;
+    izanagi::shader::CShaderBasic* m_Shader;
 
     izanagi::CDebugMeshAxis* m_Axis;
     izanagi::CDebugMeshSphere* m_Sphere;

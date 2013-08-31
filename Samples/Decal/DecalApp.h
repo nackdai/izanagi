@@ -41,7 +41,7 @@ private:
 
     izanagi::CImage* m_Img;
 
-    izanagi::CShaderBasic* m_Shader;
+    izanagi::shader::CShaderBasic* m_Shader;
 };
 
 #endif    // #if !defined(__DECAL_APP_H__)

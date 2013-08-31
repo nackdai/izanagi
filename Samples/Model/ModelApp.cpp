@@ -31,20 +31,20 @@ public:
     virtual void CommitChanges();
 
 public:
-    void SetShader(izanagi::IShader* pShader)
+    void SetShader(izanagi::shader::IShader* pShader)
     {
         SAFE_REPLACE(m_pShader, pShader);
     }
 
-    izanagi::IShader* GetShader() { return m_pShader; }
+    izanagi::shader::IShader* GetShader() { return m_pShader; }
 
 private:
-    izanagi::IShader* m_pShader;
+    izanagi::shader::IShader* m_pShader;
 
     IZ_UINT m_nCnt;
     izanagi::math::SMatrix m_Mtx[48];
 
-    izanagi::IZ_SHADER_HANDLE m_Handle;
+    izanagi::shader::IZ_SHADER_HANDLE m_Handle;
 };
 
 void CSampleMdlRenderHandler::BeginRenderMesh()
@@ -166,7 +166,7 @@ IZ_BOOL CModelApp::InitInternal(
         izanagi::CFileInputStream in;
         VRETURN(in.Open("data/SkinShader.shd"));
 
-        m_Shd = izanagi::CShaderBasic::CreateShader<izanagi::CShaderBasic>(
+        m_Shd = izanagi::shader::CShaderBasic::CreateShader<izanagi::shader::CShaderBasic>(
                     allocator,
                     device,
                     &in);
@@ -230,12 +230,12 @@ void CModelApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 
 namespace {
     inline void _SetShaderParam(
-        izanagi::CShaderBasic* shader,
+        izanagi::shader::CShaderBasic* shader,
         const char* name,
         const void* value,
         IZ_UINT bytes)
     {
-        izanagi::IZ_SHADER_HANDLE handle = shader->GetParameterByName(name);
+        izanagi::shader::IZ_SHADER_HANDLE handle = shader->GetParameterByName(name);
         IZ_ASSERT(handle != 0);
 
         shader->SetParamValue(

@@ -39,7 +39,7 @@ private:
 
     izanagi::CImage* m_Img;
 
-    izanagi::CShaderBasic* m_Shader;
+    izanagi::shader::CShaderBasic* m_Shader;
 
     CShadow* m_Shadow;
 };
