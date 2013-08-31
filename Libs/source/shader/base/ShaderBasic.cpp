@@ -30,7 +30,11 @@ namespace shader
                             m_Header.numSmpl);
         }
 
-        size_t dataBufSize = CShaderTextureTable::ComputeBufferSize(m_Header.numTexture);
+        size_t dataBufSize = 0;
+        {
+            dataBufSize += CShaderTextureTable::ComputeBufferSize(m_Header.numTexture);
+            dataBufSize += CShaderParameterTable::ComputeBufferSize(m_Header.numParam);
+        }
 
         // Allocate buffer.
         IZ_UINT8* pBuffer = reinterpret_cast<IZ_UINT8*>(ALLOC_ZERO(m_Allocator, readBufSize + dataBufSize));
@@ -60,6 +64,7 @@ namespace shader
             else if (sChunkHeader.magicChunk ==  SHD_CHUNK_MAGIC_NUMBER_PARAM) {
                 // Parameters.
                 pBuffer = m_ParamTbl.Init(pBuffer);
+                dataBuffer = m_ParamTbl.SetInternalBuffer(dataBuffer);
             }
             else if (sChunkHeader.magicChunk ==  SHD_CHUNK_MAGIC_NUMBER_TEX) {
                 // Textures.
