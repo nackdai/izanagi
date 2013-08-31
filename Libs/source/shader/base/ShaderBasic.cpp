@@ -35,6 +35,7 @@ namespace shader
             dataBufSize += CShaderTextureTable::ComputeBufferSize(m_Header.numTexture);
             dataBufSize += CShaderParameterTable::ComputeBufferSize(m_Header.numParam);
             dataBufSize += CShaderAttrTable::ComputeBufferSize(m_Header.numAttr);
+            dataBufSize += CShaderPassTable::ComputeBufferSize(m_Header.numAttr);
         }
 
         // Allocate buffer.
@@ -79,6 +80,7 @@ namespace shader
             else if (sChunkHeader.magicChunk ==  SHD_CHUNK_MAGIC_NUMBER_PASS) {
                 // Passes
                 pBuffer = m_PassTbl.Init(pBuffer);
+                dataBuffer = m_PassTbl.SetInternalBuffer(dataBuffer);
             }
             else if (sChunkHeader.magicChunk ==  SHD_CHUNK_MAGIC_NUMBER_TECH) {
                 // Techniques.
@@ -149,9 +151,9 @@ namespace shader
         void* pProgramBuf = ALLOC(m_Allocator, m_Header.maxProgamSize);
         VRETURN_NULL(pProgramBuf != IZ_NULL);
 
-        for (IZ_UINT i = 0; i < m_Header.numPass; ++i) {
-            CShaderPass& cPass = m_pPass[i];
-            const S_SHD_PASS* pDesc = m_PassTbl.GetDesc(i);
+        for (IZ_UINT passIdx = 0; passIdx < m_Header.numPass; ++passIdx) {
+            CShaderPass& cPass = m_pPass[passIdx];
+            const S_SHD_PASS* pDesc = m_PassTbl.GetDesc(passIdx);
 
             cPass.SetDesc(pDesc);
 
@@ -191,8 +193,8 @@ namespace shader
             pBuffer = cPass.SetSamplerBuffer(pDesc->numSampler, pBuffer);
 
             // For parameters.
-            for (IZ_UINT n = 0; n < pDesc->numConst; n++) {
-                IZ_UINT nParamIdx = pDesc->GetConstIdx(n);
+            for (IZ_UINT constPos = 0; constPos < pDesc->numConst; constPos++) {
+                IZ_UINT nParamIdx = m_PassTbl.GetConstIdx(passIdx, constPos);
 
                 const S_SHD_PARAMETER* pParamDesc = m_ParamTbl.GetDesc(nParamIdx);
                 IZ_ASSERT(pParamDesc != IZ_NULL);
@@ -200,12 +202,12 @@ namespace shader
                 IZ_PCSTR pszName = m_StringBuffer.GetString(pParamDesc->posName);
                 IZ_ASSERT(pszName != IZ_NULL);
 
-                cPass.InitParam(n, nParamIdx, pszName);
+                cPass.InitParam(constPos, nParamIdx, pszName);
             }
 
             // For samplers.
-            for (IZ_UINT n = 0; n < pDesc->numSampler; n++) {
-                IZ_UINT nSmplIdx = pDesc->GetSmplIdx(n);
+            for (IZ_UINT smplPos = 0; smplPos < pDesc->numSampler; smplPos++) {
+                IZ_UINT nSmplIdx = m_PassTbl.GetSmplIdx(passIdx, smplPos);
 
                 const S_SHD_SAMPLER* pSmplDesc = m_SmplTbl.GetDesc(nSmplIdx);
                 IZ_ASSERT(pSmplDesc != IZ_NULL);
@@ -222,7 +224,8 @@ namespace shader
     #else
                 cPass.InitSampler(
                     m_SmplTbl,
-                    pDevice, n, nSmplIdx, pszName);
+                    pDevice,
+                    smplPos, nSmplIdx, pszName);
     #endif
             }
         }

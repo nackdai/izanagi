@@ -47,6 +47,9 @@
     <ClCompile Include="..\..\source\shader\base\table\ShaderAttrTable.cpp">
       <Filter>source\base\table</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\shader\base\table\ShaderPassTable.cpp">
+      <Filter>source\base\table</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\shader\ShaderManager.h">
