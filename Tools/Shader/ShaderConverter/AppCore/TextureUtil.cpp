@@ -4,7 +4,7 @@
 #if 0
 namespace {
     // format
-    BOOL _SetValueFormat(izanagi::S_SHD_TEXTURE_ANN& sAnn, CGannotation ann)
+    BOOL _SetValueFormat(izanagi::shader::S_SHD_TEXTURE_ANN& sAnn, CGannotation ann)
     {
         static struct {
             IZ_PCSTR strFmt;
@@ -32,7 +32,7 @@ namespace {
     }
 
     // Dimensions
-    BOOL _SetValueDimensions(izanagi::S_SHD_TEXTURE_ANN& sAnn, CGannotation ann)
+    BOOL _SetValueDimensions(izanagi::shader::S_SHD_TEXTURE_ANN& sAnn, CGannotation ann)
     {
         INT num;
         const float* p = cgGetFloatAnnotationValues(ann, &num);
@@ -45,7 +45,7 @@ namespace {
     }
 
     // ViewportRatio
-    BOOL _SetValueViewportRatio(izanagi::S_SHD_TEXTURE_ANN& sAnn, CGannotation ann)
+    BOOL _SetValueViewportRatio(izanagi::shader::S_SHD_TEXTURE_ANN& sAnn, CGannotation ann)
     {
         INT num;
         const float* p = cgGetFloatAnnotationValues(ann, &num);
@@ -58,7 +58,7 @@ namespace {
     }
 
     // IsRenderTarget
-    BOOL _SetValueIsRenderTarget(izanagi::S_SHD_TEXTURE_ANN& sAnn, CGannotation ann)
+    BOOL _SetValueIsRenderTarget(izanagi::shader::S_SHD_TEXTURE_ANN& sAnn, CGannotation ann)
     {
         int num;
         const CGbool* p = cgGetBoolAnnotationValues(ann, &num);
@@ -69,7 +69,7 @@ namespace {
     }
 
     // IsDynamic
-    BOOL _SetValueIsDynamic(izanagi::S_SHD_TEXTURE_ANN& sAnn, CGannotation ann)
+    BOOL _SetValueIsDynamic(izanagi::shader::S_SHD_TEXTURE_ANN& sAnn, CGannotation ann)
     {
         int num;
         const CGbool* p = cgGetBoolAnnotationValues(ann, &num);
@@ -80,7 +80,7 @@ namespace {
     }
 
     // RscType
-    BOOL _SetValueRscType(izanagi::S_SHD_TEXTURE_ANN& sAnn, CGannotation ann)
+    BOOL _SetValueRscType(izanagi::shader::S_SHD_TEXTURE_ANN& sAnn, CGannotation ann)
     {
         static struct {
             IZ_PCSTR strFmt;
@@ -106,12 +106,12 @@ namespace {
 
     // 各種アノテーションをセット
     BOOL _SetAnnValue(
-        izanagi::S_SHD_TEXTURE_ANN& sAnn, 
+        izanagi::shader::S_SHD_TEXTURE_ANN& sAnn, 
         CGannotation ann)
     {
         static struct {
             const char* Name;
-            BOOL (*Func)(izanagi::S_SHD_TEXTURE_ANN&, CGannotation);
+            BOOL (*Func)(izanagi::shader::S_SHD_TEXTURE_ANN&, CGannotation);
         } AnnTable[] = {
             {"format", _SetValueFormat},                    // ピクセルフォーマット
             {"Dimensions", _SetValueDimensions},            // サイズ
@@ -138,7 +138,7 @@ namespace {
 }   // namespace
 
 BOOL CTextureUtil::SetAnnValue(
-    izanagi::S_SHD_TEXTURE_ANN& sAnn, 
+    izanagi::shader::S_SHD_TEXTURE_ANN& sAnn, 
     ::CGparameter param)
 {
     CGannotation ann = ::cgGetFirstParameterAnnotation(param);

@@ -92,7 +92,7 @@ public:
 
 public:
     static BOOL SetAnnValue(
-        izanagi::S_SHD_PARAM_ANN& sAnn,
+        izanagi::shader::S_SHD_PARAM_ANN& sAnn,
         CGparameter param);
 
     static BOOL HasAnn(CGparameter param)
@@ -104,11 +104,11 @@ public:
 
     static BOOL SetDescValue(
         const SShaderConfig& config,
-        izanagi::S_SHD_PARAMETER& sDesc,
+        izanagi::shader::S_SHD_PARAMETER& sDesc,
         CGparameter param);
 
     static BOOL GetInitValue(
-        izanagi::S_SHD_PARAMETER& sDesc,
+        izanagi::shader::S_SHD_PARAMETER& sDesc,
         CGparameter param);
 };
 

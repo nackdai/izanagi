@@ -112,10 +112,10 @@ public:
     ///////////////////////////////////////////
 
     // CGparameterclass -> E_SHADER_PARAMETER_CLASS
-    static izanagi::E_SHADER_PARAMETER_CLASS CgParamClassToIzanagiShaderParamClass(CGparameterclass nClass);
+    static izanagi::shader::E_SHADER_PARAMETER_CLASS CgParamClassToIzanagiShaderParamClass(CGparameterclass nClass);
 
     // CGtype -> E_SHADER_PARAMETER_TYPE
-    static izanagi::E_SHADER_PARAMETER_TYPE CgParamTypeToIzanagiShaderParamType(CGtype type);
+    static izanagi::shader::E_SHADER_PARAMETER_TYPE CgParamTypeToIzanagiShaderParamType(CGtype type);
 };
 
 #endif  // #if !defined(__SHADER_CONVERTER_POSTEFFECT_CONVERTER_UTIL_H__)

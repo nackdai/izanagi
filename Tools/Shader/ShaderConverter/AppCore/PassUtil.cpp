@@ -6,7 +6,7 @@
 #if 0
 namespace {
     // FunctorName
-    BOOL _SetValueFunctorName(izanagi::S_SHD_PASS_ANN& sAnn, CGannotation ann)
+    BOOL _SetValueFunctorName(izanagi::shader::S_SHD_PASS_ANN& sAnn, CGannotation ann)
     {
         const char* name = ::cgGetStringAnnotationValue(ann);
 
@@ -22,7 +22,7 @@ namespace {
     }
 
     // FunctorArgsF
-    BOOL _SetValueFunctorArgsF(izanagi::S_SHD_PASS_ANN& sAnn, CGannotation ann)
+    BOOL _SetValueFunctorArgsF(izanagi::shader::S_SHD_PASS_ANN& sAnn, CGannotation ann)
     {
         INT num;
         const float* p = ::cgGetFloatAnnotationValues(ann, &num);
@@ -40,7 +40,7 @@ namespace {
     }
 
     // ScissorRectInflate
-    BOOL _SetValueScissorRectInflate(izanagi::S_SHD_PASS_ANN& sAnn, CGannotation ann)
+    BOOL _SetValueScissorRectInflate(izanagi::shader::S_SHD_PASS_ANN& sAnn, CGannotation ann)
     {
         INT num;
         const int* p = ::cgGetIntAnnotationValues(ann, &num);
@@ -57,7 +57,7 @@ namespace {
     }
 
     // SrcTexRectInflate
-    BOOL _SetValueSrcTexRectInflate(izanagi::S_SHD_PASS_ANN& sAnn, CGannotation ann)
+    BOOL _SetValueSrcTexRectInflate(izanagi::shader::S_SHD_PASS_ANN& sAnn, CGannotation ann)
     {
         INT num;
         const int* p = ::cgGetIntAnnotationValues(ann, &num);
@@ -74,7 +74,7 @@ namespace {
     }
 
     // ClearColor
-    BOOL _SetValueClearColor(izanagi::S_SHD_PASS_ANN& sAnn, CGannotation ann)
+    BOOL _SetValueClearColor(izanagi::shader::S_SHD_PASS_ANN& sAnn, CGannotation ann)
     {
         INT num;
         const int* p = ::cgGetIntAnnotationValues(ann, &num);
@@ -91,7 +91,7 @@ namespace {
     }
 
     // TextureOffset
-    BOOL _SetValueTextureOffset(izanagi::S_SHD_PASS_ANN& sAnn, CGannotation ann)
+    BOOL _SetValueTextureOffset(izanagi::shader::S_SHD_PASS_ANN& sAnn, CGannotation ann)
     {
         // Nothing is done.
         // See _GetTexOffsetParamIdx in PostEffectConverterImpl.cpp...
@@ -99,11 +99,11 @@ namespace {
     }
 
     // 各種アノテーションをセット
-    BOOL _SetAnnValue(izanagi::S_SHD_PASS_ANN& sAnn, CGannotation ann)
+    BOOL _SetAnnValue(izanagi::shader::S_SHD_PASS_ANN& sAnn, CGannotation ann)
     {
         static struct {
             const char* Name;
-            BOOL (*Func)(izanagi::S_SHD_PASS_ANN&, CGannotation);
+            BOOL (*Func)(izanagi::shader::S_SHD_PASS_ANN&, CGannotation);
         } AnnTable[] = {
             {"FunctorName", _SetValueFunctorName},
             {"FunctorArgsF", _SetValueFunctorArgsF},                // ファンクタ引数（Float)
@@ -129,7 +129,7 @@ namespace {
 }   // namepsace
 
 BOOL CPassUtil::SetAnnValue(
-    izanagi::S_SHD_PASS_ANN& sAnn,
+    izanagi::shader::S_SHD_PASS_ANN& sAnn,
     CGpass pass)
 {
     CGannotation ann = ::cgGetFirstPassAnnotation(pass);
@@ -159,7 +159,7 @@ BOOL CPassUtil::SetAnnValue(
 
 namespace {
     // AlphaBlendEnable
-    BOOL _SetValueAlphaBlendEnable(izanagi::S_SHD_PASS_STATE& sState, CGstateassignment sa)
+    BOOL _SetValueAlphaBlendEnable(izanagi::shader::S_SHD_PASS_STATE& sState, CGstateassignment sa)
     {
         INT num;
         const CGbool* p = ::cgGetBoolStateAssignmentValues(sa, &num);
@@ -174,7 +174,7 @@ namespace {
     }
 
     // AlphaFunc
-    BOOL _SetValueAlphaFunc(izanagi::S_SHD_PASS_STATE& sState, CGstateassignment sa)
+    BOOL _SetValueAlphaFunc(izanagi::shader::S_SHD_PASS_STATE& sState, CGstateassignment sa)
     {
         INT num;
         const float* p = ::cgGetFloatStateAssignmentValues(sa, &num);
@@ -193,7 +193,7 @@ namespace {
     }
 
     // AlphaTestEnable
-    BOOL _SetValueAlphaTestEnable(izanagi::S_SHD_PASS_STATE& sState, CGstateassignment sa)
+    BOOL _SetValueAlphaTestEnable(izanagi::shader::S_SHD_PASS_STATE& sState, CGstateassignment sa)
     {
         INT num;
         const CGbool* p = ::cgGetBoolStateAssignmentValues(sa, &num);
@@ -208,7 +208,7 @@ namespace {
     }
 
     // ZWriteEnable
-    BOOL _SetValueZWriteEnable(izanagi::S_SHD_PASS_STATE& sState, CGstateassignment sa)
+    BOOL _SetValueZWriteEnable(izanagi::shader::S_SHD_PASS_STATE& sState, CGstateassignment sa)
     {
         INT num;
         const CGbool* p = ::cgGetBoolStateAssignmentValues(sa, &num);
@@ -223,7 +223,7 @@ namespace {
     }
 
     // ZEnable
-    BOOL _SetValueZEnable(izanagi::S_SHD_PASS_STATE& sState, CGstateassignment sa)
+    BOOL _SetValueZEnable(izanagi::shader::S_SHD_PASS_STATE& sState, CGstateassignment sa)
     {
         INT num;
         const CGbool* p = ::cgGetBoolStateAssignmentValues(sa, &num);
@@ -238,7 +238,7 @@ namespace {
     }
 
     // ZFunc
-    BOOL _SetValueZFunc(izanagi::S_SHD_PASS_STATE& sState, CGstateassignment sa)
+    BOOL _SetValueZFunc(izanagi::shader::S_SHD_PASS_STATE& sState, CGstateassignment sa)
     {
         INT num;
         const int* p = ::cgGetIntStateAssignmentValues(sa, &num);
@@ -254,11 +254,11 @@ namespace {
 
 
     // 各種ステートをセット
-    BOOL _SetStateValue(izanagi::S_SHD_PASS_STATE& sState, CGstateassignment sa)
+    BOOL _SetStateValue(izanagi::shader::S_SHD_PASS_STATE& sState, CGstateassignment sa)
     {
         static struct {
             const char* Name;
-            BOOL (*Func)(izanagi::S_SHD_PASS_STATE&, CGstateassignment);
+            BOOL (*Func)(izanagi::shader::S_SHD_PASS_STATE&, CGstateassignment);
         } StateTable[] = {
             {"AlphaBlendEnable", _SetValueAlphaBlendEnable},
             {"AlphaFunc",        _SetValueAlphaFunc},
@@ -308,7 +308,7 @@ namespace {
 }   // namespace
 
 BOOL CPassUtil::SetStateValue(
-    izanagi::S_SHD_PASS_STATE& sState,
+    izanagi::shader::S_SHD_PASS_STATE& sState,
     CGpass pass)
 {
     // デフォルト値
@@ -381,7 +381,7 @@ BOOL CPassUtil::SetStateValue(
 
 #if 0
 BOOL CPassUtil::SetVSType(
-    izanagi::S_SHD_PASS& sPass,
+    izanagi::shader::S_SHD_PASS& sPass,
     CGpass pass)
 {
     CGprogram progVS = GetVSProgram(pass);
