@@ -120,6 +120,7 @@
     <ClCompile Include="..\..\source\shader\base\ShaderPass.cpp" />
     <ClCompile Include="..\..\source\shader\base\table\ShaderAttrTable.cpp" />
     <ClCompile Include="..\..\source\shader\base\table\ShaderParameterTable.cpp" />
+    <ClCompile Include="..\..\source\shader\base\table\ShaderPassTable.cpp" />
     <ClCompile Include="..\..\source\shader\base\table\ShaderSamplerTable.cpp" />
     <ClCompile Include="..\..\source\shader\ShaderManager.cpp" />
     <ClCompile Include="..\..\source\shader\base\ShaderBasic.cpp" />

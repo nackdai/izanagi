@@ -299,20 +299,6 @@ namespace shader
         IZ_UINT16 numSampler;
 
         S_SHD_PASS_STATE state;
-
-    private:
-        friend class CShaderPassTable;
-        friend class CShaderBasic;
-        friend class CShaderPass;
-
-        S_SHD_PARAM_IDX* ptrConst;
-        S_SHD_PARAM_IDX* ptrSampler;
-
-        const S_SHD_PARAM_IDX& GetConst(IZ_UINT idx) const { return ptrConst[idx]; }
-        const S_SHD_PARAM_IDX& GetSmpl(IZ_UINT idx) const { return ptrSampler[idx]; }
-
-        IZ_UINT GetConstIdx(IZ_UINT idx) const { return ptrConst[idx].idx; }
-        IZ_UINT GetSmplIdx(IZ_UINT idx) const { return ptrSampler[idx].idx; }
     };
 
     //////////////////////////////////////////////////////////
