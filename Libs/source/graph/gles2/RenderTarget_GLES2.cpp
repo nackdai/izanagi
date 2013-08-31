@@ -24,6 +24,8 @@ namespace graph
                 CALL_GLES2_API(::glDeleteTextures(1, &m_Texture));
             }
         }
+
+        SAFE_RELEASE(m_Device);
     }
 
     // レンダーターゲット作成
