@@ -39,7 +39,7 @@ protected:
         const char* name);
 
     static void SetShaderParam(
-        izanagi::CShaderBasic* shader,
+        izanagi::shader::CShaderBasic* shader,
         const char* name,
         const void* value,
         IZ_UINT bytes);

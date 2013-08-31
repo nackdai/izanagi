@@ -34,7 +34,7 @@ private:
     izanagi::CModel* m_Mdl;
     izanagi::CMesh* m_Msh;
     izanagi::CSkeleton* m_Skl;
-    izanagi::CShaderBasic* m_Shd;
+    izanagi::shader::CShaderBasic* m_Shd;
     izanagi::CMaterial* m_Mtrl[17];
 
     izanagi::CRenderGraph* m_RenderGraph;

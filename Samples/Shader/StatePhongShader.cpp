@@ -154,7 +154,7 @@ IZ_BOOL CStatePhongShader::Enter(
         izanagi::CFileInputStream in;
         VRETURN(in.Open("data/PhongShader.shd"));
 
-        m_Shader = izanagi::CShaderBasic::CreateShader<izanagi::CShaderBasic>(
+        m_Shader = izanagi::shader::CShaderBasic::CreateShader<izanagi::shader::CShaderBasic>(
                     allocator,
                     device,
                     &in);

@@ -34,7 +34,7 @@ private:
         const izanagi::math::SVector& position);
 
 protected:
-    izanagi::CShaderBasic* m_Shader;
+    izanagi::shader::CShaderBasic* m_Shader;
 
     izanagi::SPointLightParam m_PointLight;
 

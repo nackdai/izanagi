@@ -38,7 +38,7 @@ private:
         izanagi::math::SMatrix mtx;
     } m_Rectangles[4];
 
-    izanagi::CShaderBasic* m_Shader;
+    izanagi::shader::CShaderBasic* m_Shader;
 
     IZ_BOOL m_IsPressKey;
     izanagi::CIntPoint m_MousePoint;

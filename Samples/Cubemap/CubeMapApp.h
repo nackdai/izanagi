@@ -31,7 +31,7 @@ private:
     izanagi::sample::CSampleEnvBox* m_Cube;
 
     izanagi::CImage* m_Img;
-    izanagi::CShaderBasic* m_Shader;
+    izanagi::shader::CShaderBasic* m_Shader;
 
     izanagi::math::SMatrix m_L2W;
 };

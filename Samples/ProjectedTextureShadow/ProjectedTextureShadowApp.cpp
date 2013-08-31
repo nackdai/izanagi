@@ -81,7 +81,7 @@ IZ_BOOL CProjectedTextureShadowApp::InitInternal(
         izanagi::CFileInputStream in;
         VGOTO(result = in.Open("data/BasicShader.shd"), __EXIT__);
 
-        m_Shader = izanagi::CShaderBasic::CreateShader<izanagi::CShaderBasic>(
+        m_Shader = izanagi::shader::CShaderBasic::CreateShader<izanagi::shader::CShaderBasic>(
                     allocator,
                     device,
                     &in);
@@ -136,12 +136,12 @@ void CProjectedTextureShadowApp::UpdateInternal(izanagi::graph::CGraphicsDevice*
 
 namespace {
     inline void _SetShaderParam(
-        izanagi::CShaderBasic* shader,
+        izanagi::shader::CShaderBasic* shader,
         const char* name,
         const void* value,
         IZ_UINT bytes)
     {
-        izanagi::IZ_SHADER_HANDLE handle = shader->GetParameterByName(name);
+        izanagi::shader::IZ_SHADER_HANDLE handle = shader->GetParameterByName(name);
         IZ_ASSERT(handle != 0);
 
         shader->SetParamValue(

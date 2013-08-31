@@ -54,11 +54,11 @@ private:
 
 private:
     izanagi::CDebugMesh* m_Torus;
-    izanagi::CShaderBasic* m_Shader;
+    izanagi::shader::CShaderBasic* m_Shader;
 
     izanagi::sample::CSampleEnvBox* m_EnvBox;
     izanagi::CImage* m_EnvImg;
-    izanagi::CShaderBasic* m_EnvShader;
+    izanagi::shader::CShaderBasic* m_EnvShader;
 
     izanagi::math::SMatrix m_L2W;
     izanagi::SParallelLightParam m_ParallelLight;

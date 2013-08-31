@@ -20,12 +20,12 @@ CSceneRenderer::~CSceneRenderer()
 
 namespace {
     inline void _SetShaderParam(
-        izanagi::CShaderBasic* shader,
+        izanagi::shader::CShaderBasic* shader,
         const char* name,
         const void* value,
         IZ_UINT bytes)
     {
-        izanagi::IZ_SHADER_HANDLE handle = shader->GetParameterByName(name);
+        izanagi::shader::IZ_SHADER_HANDLE handle = shader->GetParameterByName(name);
         if (handle > 0) {
             shader->SetParamValue(
                 handle,
@@ -64,7 +64,7 @@ IZ_BOOL CSceneRenderer::InitTorus(
         izanagi::CFileInputStream in;
         VRETURN(in.Open("data/PhongShader.shd"));
 
-        m_Shader = izanagi::CShaderBasic::CreateShader<izanagi::CShaderBasic>(
+        m_Shader = izanagi::shader::CShaderBasic::CreateShader<izanagi::shader::CShaderBasic>(
                     allocator,
                     device,
                     &in);
@@ -125,7 +125,7 @@ IZ_BOOL CSceneRenderer::InitEnvBox(
         izanagi::CFileInputStream in;
         VGOTO(result = in.Open("data/CubeMapBoxShader.shd"), __EXIT__);
 
-        m_EnvShader = izanagi::CShaderBasic::CreateShader<izanagi::CShaderBasic>(
+        m_EnvShader = izanagi::shader::CShaderBasic::CreateShader<izanagi::shader::CShaderBasic>(
             allocator,
             device,
             &in);
