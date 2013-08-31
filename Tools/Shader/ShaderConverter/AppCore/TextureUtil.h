@@ -10,7 +10,7 @@ class CTextureUtil {
 public:
 #if 0
     static BOOL CTextureUtil::SetAnnValue(
-        izanagi::S_SHD_TEXTURE_ANN& sAnn, 
+        izanagi::shader::S_SHD_TEXTURE_ANN& sAnn, 
         ::CGparameter param);
 #endif
 };

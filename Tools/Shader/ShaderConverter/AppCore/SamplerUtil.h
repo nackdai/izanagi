@@ -9,11 +9,11 @@
 class CSamplerUtil {
 public:
     static BOOL SetStateValue(
-        izanagi::S_SHD_SAMPLER& sDesc, 
+        izanagi::shader::S_SHD_SAMPLER& sDesc, 
         CGparameter param);
 
     static BOOL BindTexture(
-        izanagi::S_SHD_SAMPLER& sDesc, 
+        izanagi::shader::S_SHD_SAMPLER& sDesc, 
         CGparameter param,
         std::vector<CGparameter>& tvTexList);
 };

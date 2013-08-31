@@ -23,7 +23,7 @@ namespace {
 #endif
 
     // UIName
-    BOOL _SetValueUIName(izanagi::S_SHD_PARAM_ANN& sAnn, CGannotation ann)
+    BOOL _SetValueUIName(izanagi::shader::S_SHD_PARAM_ANN& sAnn, CGannotation ann)
     {
         _SetString(sAnn.UIName, ann);
         sAnn.hasUIName = TRUE;
@@ -31,7 +31,7 @@ namespace {
     }
 
     // UIHelp
-    BOOL _SetValueUIHelp(izanagi::S_SHD_PARAM_ANN& sAnn, CGannotation ann)
+    BOOL _SetValueUIHelp(izanagi::shader::S_SHD_PARAM_ANN& sAnn, CGannotation ann)
     {
         _SetString(sAnn.UIHelp, ann);
         sAnn.hasUIHelp = TRUE;
@@ -39,7 +39,7 @@ namespace {
     }
 
     // UIWidget
-    BOOL _SetValueUIWidget(izanagi::S_SHD_PARAM_ANN& sAnn, CGannotation ann)
+    BOOL _SetValueUIWidget(izanagi::shader::S_SHD_PARAM_ANN& sAnn, CGannotation ann)
     {
         _SetString(sAnn.UIWidget, ann);
         sAnn.hasUIWidget = TRUE;
@@ -47,7 +47,7 @@ namespace {
     }
 
     // UIMax
-    BOOL _SetValueUIMax(izanagi::S_SHD_PARAM_ANN& sAnn, CGannotation ann)
+    BOOL _SetValueUIMax(izanagi::shader::S_SHD_PARAM_ANN& sAnn, CGannotation ann)
     {
         int num = 0;
         const float* p = cgGetFloatAnnotationValues(ann, &num);
@@ -58,7 +58,7 @@ namespace {
     }
 
     // UIMin
-    BOOL _SetValueUIMin(izanagi::S_SHD_PARAM_ANN& sAnn, CGannotation ann)
+    BOOL _SetValueUIMin(izanagi::shader::S_SHD_PARAM_ANN& sAnn, CGannotation ann)
     {
         int num = 0;
         const float* p = cgGetFloatAnnotationValues(ann, &num);
@@ -69,7 +69,7 @@ namespace {
     }
 
     // UIStep
-    BOOL _SetValueUIStep(izanagi::S_SHD_PARAM_ANN& sAnn, CGannotation ann)
+    BOOL _SetValueUIStep(izanagi::shader::S_SHD_PARAM_ANN& sAnn, CGannotation ann)
     {
         int num = 0;
         const float* p = cgGetFloatAnnotationValues(ann, &num);
@@ -81,12 +81,12 @@ namespace {
 
     // 各種アノテーションをセット
     BOOL _SetAnnValue(
-        izanagi::S_SHD_PARAM_ANN& sAnn, 
+        izanagi::shader::S_SHD_PARAM_ANN& sAnn, 
         CGannotation ann)
     {
         static struct {
             const char* Name;
-            BOOL (*Func)(izanagi::S_SHD_PARAM_ANN&, CGannotation);
+            BOOL (*Func)(izanagi::shader::S_SHD_PARAM_ANN&, CGannotation);
         } AnnTable[] = {
             {"UIName", _SetValueUIName},
             {"UIHelp", _SetValueUIHelp},
@@ -112,7 +112,7 @@ namespace {
 }   // namespace
 
 BOOL CParamUtil::SetAnnValue(
-    izanagi::S_SHD_PARAM_ANN& sAnn,
+    izanagi::shader::S_SHD_PARAM_ANN& sAnn,
     CGparameter param)
 {
     CGannotation ann = ::cgGetFirstParameterAnnotation(param);
@@ -181,7 +181,7 @@ namespace {
 
 BOOL CParamUtil::SetDescValue(
     const SShaderConfig& config,
-    izanagi::S_SHD_PARAMETER& sDesc,
+    izanagi::shader::S_SHD_PARAMETER& sDesc,
     CGparameter param)
 {
     CGparameterclass classParam = ::cgGetParameterClass(param);
@@ -218,7 +218,7 @@ BOOL CParamUtil::SetDescValue(
 }
 
 BOOL CParamUtil::GetInitValue(
-    izanagi::S_SHD_PARAMETER& sDesc,
+    izanagi::shader::S_SHD_PARAMETER& sDesc,
     CGparameter param)
 {
     IZ_UINT nElements = sDesc.Rows * sDesc.Columns;

@@ -109,7 +109,7 @@ namespace {
 }   // namespace
 
 BOOL CSamplerUtil::SetStateValue(
-    izanagi::S_SHD_SAMPLER& sDesc, 
+    izanagi::shader::S_SHD_SAMPLER& sDesc, 
     CGparameter param)
 {
     CGstateassignment sa = ::cgGetFirstSamplerStateAssignment(param);
@@ -123,7 +123,7 @@ BOOL CSamplerUtil::SetStateValue(
 }
 
 BOOL CSamplerUtil::BindTexture(
-    izanagi::S_SHD_SAMPLER& sDesc,
+    izanagi::shader::S_SHD_SAMPLER& sDesc,
     CGparameter param,
     std::vector<CGparameter>& tvTexList)
 {

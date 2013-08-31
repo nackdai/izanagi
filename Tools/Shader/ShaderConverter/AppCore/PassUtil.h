@@ -10,17 +10,17 @@ class CPassUtil {
 public:
 #if 0
     static BOOL SetAnnValue(
-        izanagi::S_SHD_PASS_ANN& sAnn,
+        izanagi::shader::S_SHD_PASS_ANN& sAnn,
         CGpass pass);
 #endif
 
     static BOOL SetStateValue(
-        izanagi::S_SHD_PASS_STATE& sDesc,
+        izanagi::shader::S_SHD_PASS_STATE& sDesc,
         CGpass pass);
 
 #if 0
     static BOOL SetVSType(
-        izanagi::S_SHD_PASS& sPass,
+        izanagi::shader::S_SHD_PASS& sPass,
         CGpass pass);
 #endif
 

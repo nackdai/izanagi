@@ -48,7 +48,7 @@ protected:
     BOOL ExportPass(const SShaderConfig& config);
 
     BOOL ExportParamAnn(
-        izanagi::S_SHD_PARAM_HEADER& sParamHeader,
+        izanagi::shader::S_SHD_PARAM_HEADER& sParamHeader,
         IZ_INT nAnnNum = -1);
 
 #if 0
@@ -71,7 +71,7 @@ private:
     CGcontext m_pCgContext;
     CGeffect m_pCgEffect;
 
-    izanagi::S_SHD_HEADER m_ShdHeader;
+    izanagi::shader::S_SHD_HEADER m_ShdHeader;
 
     std::vector<CGparameter> m_TexList;
     std::vector<CGparameter> m_SamplerList;

@@ -83,7 +83,7 @@ namespace {
         izanagi::CFileOutputStream& cOut,
         IZ_UINT nMagicNumber)
     {
-        izanagi::S_SHD_CHUNK_HEADER sChunkHeader;
+        izanagi::shader::S_SHD_CHUNK_HEADER sChunkHeader;
         sChunkHeader.magicChunk = nMagicNumber;
 
         IZ_BOOL ret = IZ_OUTPUT_WRITE(&cOut, &sChunkHeader, 0, sizeof(sChunkHeader));
@@ -173,7 +173,7 @@ BOOL CShaderConverter::Export(const SShaderConfig& sConfig)
     ExportStringBuffer();
 
     // Export program chunk's header.
-    _ExportChunkHeader(m_Out, izanagi::SHD_CHUNK_MAGIC_NUMBER_PROG);
+    _ExportChunkHeader(m_Out, izanagi::shader::SHD_CHUNK_MAGIC_NUMBER_PROG);
 
     // プログラム開始位置
     m_ShdHeader.posProgram = m_Out.GetCurPos();
@@ -258,9 +258,9 @@ namespace {
 */
 BOOL CShaderConverter::ExportTechnique()
 {
-    VRETURN(_ExportChunkHeader(m_Out, izanagi::SHD_CHUNK_MAGIC_NUMBER_TECH));
+    VRETURN(_ExportChunkHeader(m_Out, izanagi::shader::SHD_CHUNK_MAGIC_NUMBER_TECH));
 
-    izanagi::S_SHD_TECH_HEADER sTechHeader;
+    izanagi::shader::S_SHD_TECH_HEADER sTechHeader;
     FILL_ZERO(&sTechHeader, sizeof(sTechHeader));
 
     // Blank for technique's header.
@@ -274,7 +274,7 @@ BOOL CShaderConverter::ExportTechnique()
 
     if (tech != NULL) {
         while (tech != NULL) {
-            izanagi::S_SHD_TECHNIQUE sTech;
+            izanagi::shader::S_SHD_TECHNIQUE sTech;
             {
                 FILL_ZERO(&sTech, sizeof(sTech));
 
@@ -314,9 +314,9 @@ BOOL CShaderConverter::ExportTechnique()
 
 BOOL CShaderConverter::ExportTexture()
 {
-    VRETURN(_ExportChunkHeader(m_Out, izanagi::SHD_CHUNK_MAGIC_NUMBER_TEX));
+    VRETURN(_ExportChunkHeader(m_Out, izanagi::shader::SHD_CHUNK_MAGIC_NUMBER_TEX));
 
-    izanagi::S_SHD_TEXTRUE_HEADER sTexHeader;
+    izanagi::shader::S_SHD_TEXTRUE_HEADER sTexHeader;
     FILL_ZERO(&sTexHeader, sizeof(sTexHeader));
 
     // Blank for texture's header.
@@ -329,7 +329,7 @@ BOOL CShaderConverter::ExportTexture()
 
     while (param != NULL) {
         if (CParamUtil::IsTexture(param)) {
-            izanagi::S_SHD_TEXTURE sTex;
+            izanagi::shader::S_SHD_TEXTURE sTex;
             {
                 FILL_ZERO(&sTex, sizeof(sTex));
 
@@ -362,14 +362,16 @@ BOOL CShaderConverter::ExportTexture()
 
     VRETURN(_EndExportChunk(sTexHeader, cSeekHelper));
 
+    m_ShdHeader.numTexture = sTexHeader.numTexture;
+
     return TRUE;
 }
 
 BOOL CShaderConverter::ExportSampler(const SShaderConfig& config)
 {
-    VRETURN(_ExportChunkHeader(m_Out, izanagi::SHD_CHUNK_MAGIC_NUMBER_SMPL));
+    VRETURN(_ExportChunkHeader(m_Out, izanagi::shader::SHD_CHUNK_MAGIC_NUMBER_SMPL));
 
-    izanagi::S_SHD_SAMPLER_HEADER sSmplHeader;
+    izanagi::shader::S_SHD_SAMPLER_HEADER sSmplHeader;
     FILL_ZERO(&sSmplHeader, sizeof(sSmplHeader));
 
     // Blank for texture's header.
@@ -406,7 +408,7 @@ BOOL CShaderConverter::ExportSampler(const SShaderConfig& config)
                     }
                 }
 
-                izanagi::S_SHD_SAMPLER sSampler;
+                izanagi::shader::S_SHD_SAMPLER sSampler;
                 {
                     FILL_ZERO(&sSampler, sizeof(sSampler));
 
@@ -516,9 +518,9 @@ BOOL CShaderConverter::ExportSampler(const SShaderConfig& config)
 */
 BOOL CShaderConverter::ExportParameter(const SShaderConfig& config)
 {
-    _ExportChunkHeader(m_Out, izanagi::SHD_CHUNK_MAGIC_NUMBER_PARAM);
+    _ExportChunkHeader(m_Out, izanagi::shader::SHD_CHUNK_MAGIC_NUMBER_PARAM);
 
-    izanagi::S_SHD_PARAM_HEADER sParamHeader;
+    izanagi::shader::S_SHD_PARAM_HEADER sParamHeader;
     FILL_ZERO(&sParamHeader, sizeof(sParamHeader));
 
     // Blank for parameter's header.
@@ -538,7 +540,7 @@ BOOL CShaderConverter::ExportParameter(const SShaderConfig& config)
 
             VRETURN(CParamUtil::IsValidParameter(param));
 
-            izanagi::S_SHD_PARAMETER sParam;
+            izanagi::shader::S_SHD_PARAMETER sParam;
             FILL_ZERO(&sParam, sizeof(sParam));
             
             sParam.DoNotStrip = CParamUtil::DoNotStrip(param);
@@ -571,11 +573,11 @@ BOOL CShaderConverter::ExportParameter(const SShaderConfig& config)
 
                 if (config.type == izanagi::E_PLATFORM_GLES2) {
                     // For GLES2
-                    if (izanagi::E_SHADER_PARAMETER_TYPE_FLOAT1x1 <= sParam.Type
-                        && sParam.Type <= izanagi::E_SHADER_PARAMETER_TYPE_FLOAT4x4)
+                    if (izanagi::shader::E_SHADER_PARAMETER_TYPE_FLOAT1x1 <= sParam.Type
+                        && sParam.Type <= izanagi::shader::E_SHADER_PARAMETER_TYPE_FLOAT4x4)
                     {
                         // TODO
-                        sParam.Type = izanagi::E_SHADER_PARAMETER_TYPE_FLOAT4;
+                        sParam.Type = izanagi::shader::E_SHADER_PARAMETER_TYPE_FLOAT4;
                         sParam.Elements = (sParam.Elements > 0 ? sParam.Elements * 4 : 4);
                     }
                 }
@@ -614,7 +616,7 @@ BOOL CShaderConverter::ExportParameter(const SShaderConfig& config)
 }
 
 BOOL CShaderConverter::ExportParamAnn(
-    izanagi::S_SHD_PARAM_HEADER& sParamHeader,
+    izanagi::shader::S_SHD_PARAM_HEADER& sParamHeader,
     IZ_INT nAnnNum/*= -1*/)
 {
     IZ_UINT nAnnCnt = 0;
@@ -626,7 +628,7 @@ BOOL CShaderConverter::ExportParamAnn(
         CGparameter param = *it;
 
         if (CParamUtil::HasAnn(param)) {
-            izanagi::S_SHD_PARAM_ANN sAnn;
+            izanagi::shader::S_SHD_PARAM_ANN sAnn;
             
             FILL_ZERO(&sAnn, sizeof(sAnn));
 
@@ -789,9 +791,9 @@ namespace {
 // パス解析
 BOOL CShaderConverter::ExportPass(const SShaderConfig& config)
 {
-    _ExportChunkHeader(m_Out, izanagi::SHD_CHUNK_MAGIC_NUMBER_PASS);
+    _ExportChunkHeader(m_Out, izanagi::shader::SHD_CHUNK_MAGIC_NUMBER_PASS);
 
-    izanagi::S_SHD_PASS_HEADER sPassHeader;
+    izanagi::shader::S_SHD_PASS_HEADER sPassHeader;
     FILL_ZERO(&sPassHeader, sizeof(sPassHeader));
 
     // Blank for pass's header.
@@ -809,7 +811,7 @@ BOOL CShaderConverter::ExportPass(const SShaderConfig& config)
     while (tech != NULL) {
         CGpass pass = ::cgGetFirstPass(tech);
         while (pass != NULL) {
-            izanagi::S_SHD_PASS sPass;
+            izanagi::shader::S_SHD_PASS sPass;
             {
                 FILL_ZERO(&sPass, sizeof(sPass));
 
@@ -910,7 +912,7 @@ namespace {
                 IZ_BOOL bIsUsedInVS = ::cgIsParameterUsed(param, progVS);
                 IZ_BOOL bIsUsedInPS = ::cgIsParameterUsed(param, progPS);
 
-                izanagi::S_SHD_PARAM_IDX sParamIdx;
+                izanagi::shader::S_SHD_PARAM_IDX sParamIdx;
                 {
                     sParamIdx.isVS = IZ_FALSE;
                     sParamIdx.isPS = IZ_FALSE;
@@ -1012,7 +1014,7 @@ BOOL CShaderConverter::ExportProgram(const SShaderConfig& config)
 
 BOOL CShaderConverter::ExportStringBuffer()
 {
-    _ExportChunkHeader(m_Out, izanagi::SHD_CHUNK_MAGIC_NUMBER_STRING);
+    _ExportChunkHeader(m_Out, izanagi::shader::SHD_CHUNK_MAGIC_NUMBER_STRING);
 
     m_ShdHeader.sizeStringBuffer = CStringChunk::GetInstance().GetBufferSize();
 
