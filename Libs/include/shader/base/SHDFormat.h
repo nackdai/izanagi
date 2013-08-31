@@ -207,11 +207,6 @@ namespace shader
 
         IZ_UINT Bytes;              // パラメータのサイズ(バイト単位)
         IZ_UINT Pos;                // パラメータバッファ位置(バイト単位)
-
-    private:
-        friend class CShaderParameterTable;
-
-        void* ptrParam;
     };
 
     //////////////////////////////////////////////////////////
