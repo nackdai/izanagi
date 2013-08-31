@@ -334,14 +334,6 @@ namespace shader
 
         E_SHADER_PARAMETER_TYPE type;   // float or int or bool
         IZ_UINT8 param[4];
-
-    private:
-        friend class CShaderAttrTable;
-
-        CStdHash<IZ_UINT, S_SHD_ATTRIBUTE, SHD_ATTR_HASH_MAX>::Item hashItem;
-
-        void InitHash() { hashItem.Init(keyName, this); }
-        CStdHash<IZ_UINT, S_SHD_ATTRIBUTE, SHD_ATTR_HASH_MAX>::Item* GetHashItem() { return &hashItem; }
     };
 }   // namespace shader
 }   // namespace izanagi

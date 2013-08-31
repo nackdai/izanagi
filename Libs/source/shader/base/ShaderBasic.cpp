@@ -34,6 +34,7 @@ namespace shader
         {
             dataBufSize += CShaderTextureTable::ComputeBufferSize(m_Header.numTexture);
             dataBufSize += CShaderParameterTable::ComputeBufferSize(m_Header.numParam);
+            dataBufSize += CShaderAttrTable::ComputeBufferSize(m_Header.numAttr);
         }
 
         // Allocate buffer.
@@ -96,6 +97,7 @@ namespace shader
             else if (sChunkHeader.magicChunk == SHD_CHUNK_MAGIC_NUMBER_ATTR) {
                 // Attributes.
                 pBuffer = m_AttrTbl.Init(pBuffer);
+                dataBuffer = m_AttrTbl.SetInternalBuffer(dataBuffer);
             }
         }
 
