@@ -186,7 +186,7 @@ IZ_BOOL CRenderGraph::RenderInternal(
         VRETURN(mtrl != IZ_NULL);
 
         // マテリアルに設定されているシェーダ取得
-        IShader* shader = mtrl->GetShader();
+        shader::IShader* shader = mtrl->GetShader();
         VRETURN(shader != IZ_NULL);
 
         // シーン描画開始

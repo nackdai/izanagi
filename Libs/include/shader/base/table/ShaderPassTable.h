@@ -1,9 +1,12 @@
 #if !defined(__IZANAGI_SHADER_SHADER_PASS_TABLE_H__)
 #define __IZANAGI_SHADER_SHADER_PASS_TABLE_H__
 
-#include "SHDFormat.h"
+#include "shader/base/SHDFormat.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace shader
+{
     /**
     * パステーブル
     *
@@ -109,6 +112,7 @@ namespace izanagi {
         S_SHD_PASS* ret = &m_pDesc[idx];
         return ret;
     }
+}   // namespace shader
 }   // namespace izanagi
 
 #endif  // #if !defined(__IZANAGI_SHADER_SHADER_PASS_TABLE_H__)

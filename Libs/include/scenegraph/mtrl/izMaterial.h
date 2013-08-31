@@ -5,9 +5,12 @@
 #include "MTRLFormat.h"
 
 namespace izanagi {
+    namespace shader {
+        class IShader;
+    }
+
     class IInputStream;
     class graph::CGraphicsDevice;
-    class IShader;
 
     /**
     */
@@ -74,11 +77,11 @@ namespace izanagi {
          *
          * マテリアルに関連付けられていないテクスチャを追加
          */
-        IZ_BOOL AddShader(IShader* pShader);
+        IZ_BOOL AddShader(shader::IShader* pShader);
 
         /** マテリアルに関連付けられているシェーダをセット.
          */
-        IZ_BOOL SetShader(IShader* pShader);
+        IZ_BOOL SetShader(shader::IShader* pShader);
 
         /** マテリアルにパラメータを追加.
          *
@@ -153,7 +156,7 @@ namespace izanagi {
         IShader* GetShaderByName(IZ_PCSTR pszName);
         IShader* GetShaderByKey(const CKey& key);
 #else
-        IShader* GetShader()
+        shader::IShader* GetShader()
         {
             return (m_pShaderInfo != IZ_NULL ? m_pShaderInfo->shader : IZ_NULL);
         }

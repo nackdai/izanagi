@@ -6,7 +6,10 @@
 
 #include "ShaderDefs.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace shader
+{
     enum {
         SHD_HASH_MAX = 5,
     };
@@ -246,6 +249,7 @@ namespace izanagi {
     private:
         CStdHash<IZ_UINT, IShader, SHD_HASH_MAX>::Item m_HashItem;
     };
+}   // namespace shader
 }   // namespace izanagi
 
 #endif  // #if !defined(__IZANAGI_SHADER_SHADER_H__)

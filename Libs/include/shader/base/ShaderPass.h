@@ -2,10 +2,13 @@
 #define __IZANAGI_SHADER_SHADER_PASS_H__
 
 #include "izGraph.h"
-#include "SHDFormat.h"
+#include "shader/base/SHDFormat.h"
 #include "util/ShaderUtil.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace shader
+{
     class CShaderSamplerTable;
 
     /**
@@ -163,6 +166,7 @@ namespace izanagi {
 
         graph::CShaderProgram* m_Program;
     };
+}   // namespace shader
 }   // namespace izanagi
 
 #endif  // #if !defined(__IZANAGI_SHADER_SHADER_PASS_H__)

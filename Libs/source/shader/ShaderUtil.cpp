@@ -1,7 +1,10 @@
 #include "shader/base/util/ShaderUtil.h"
 #include "shader/base/SHDFormat.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace shader
+{
     // パラメータをセットする
 	IZ_BOOL CShaderUtil::SetValue(
         graph::CGraphicsDevice* device,
@@ -122,4 +125,5 @@ namespace izanagi {
 						nClearStencil);
 		return ret;
 	}
+}   // namespace shader
 }	// namespace izanagi

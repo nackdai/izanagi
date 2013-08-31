@@ -6,7 +6,10 @@
 
 // SHD = SHaDer
 
-namespace izanagi {
+namespace izanagi
+{
+namespace shader
+{
     // File version of SHD file.
     enum E_SHD_VERSION {
         E_SHD_VERSION_0010 = 0x30303130,                // "0010"
@@ -95,6 +98,8 @@ namespace izanagi {
         IZ_UINT16 numParam;
         IZ_UINT16 numSmpl;
         IZ_UINT16 numAttr;
+        IZ_UINT16 numTexture;
+        IZ_UINT16 padding;
 
         // プログラムの最大サイズ
         IZ_UINT maxProgamSize;
@@ -235,13 +240,7 @@ namespace izanagi {
         IZ_UINT keyName;        // 名前ハッシュ値
         IZ_UINT keySemantic;    // セマンティックハッシュ値
 
-        //S_SHD_TEXTURE_ANN ann;
-
-    private:
-        friend class CShaderTextureTable;
-
-        IZ_BOOL isDirty;
-        graph::CBaseTexture* tex;
+        //S_SHD_TEXTURE_ANN ann;        
     };
 
     //////////////////////////////////////////////////////////
@@ -349,6 +348,7 @@ namespace izanagi {
         void InitHash() { hashItem.Init(keyName, this); }
         CStdHash<IZ_UINT, S_SHD_ATTRIBUTE, SHD_ATTR_HASH_MAX>::Item* GetHashItem() { return &hashItem; }
     };
+}   // namespace shader
 }   // namespace izanagi
 
 // Returns whether format is SHD file's format.

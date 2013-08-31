@@ -5,7 +5,10 @@
 #include "base/Shader.h"
 #include "base/ShaderDefs.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace shader
+{
     /**
     */
     class CShaderManager : public CObject {
@@ -47,6 +50,7 @@ namespace izanagi {
 
         typedef CStdHash<IZ_UINT, IShader, SHD_HASH_MAX>::Item CShaderHashItem;
     };
+}   // namespace shader
 }   // namespace izanagi
 
 #endif  // #if !defined(__IZANAGI_SHADER_SHADER_MANAGER_H__)

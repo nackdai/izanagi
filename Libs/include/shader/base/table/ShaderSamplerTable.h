@@ -3,7 +3,10 @@
 
 #include "shader/base/SHDFormat.h"
 
-namespace izanagi {
+namespace izanagi
+{
+namespace shader
+{
     /**
     * サンプラテーブル
     *
@@ -96,6 +99,7 @@ namespace izanagi {
 
         return -1;
     }
+}   // namespace shader
 }   // namespace izanagi
 
 #endif  // #if !defined(__IZANAGI_SHADER_SHADER_SAMPLER_TABLE_H__)

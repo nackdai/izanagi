@@ -16,9 +16,12 @@
 #include "ShaderPass.h"
 #include "ShaderDefs.h"
 
-namespace izanagi {
+namespace izanagi
+{
     class IInputStream;
 
+namespace shader
+{
     /**
     */
     class CShaderBasic : public IShader {
@@ -166,6 +169,7 @@ namespace izanagi {
         IZ_INT16 m_nCurTech;
         IZ_INT16 m_nCurPass;
     };
+}   // namespace shader
 }   // namespace izanagi
 
 #endif  // #if !defined(__IZANAGI_SHADER_SHADER_BASIC_H__)

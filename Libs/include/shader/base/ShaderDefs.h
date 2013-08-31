@@ -20,7 +20,10 @@
     ((type) & 0x01)
 
 
-namespace izanagi {
+namespace izanagi
+{
+namespace shader
+{
     /**
     * シェーダパラメータのクラス
     */
@@ -168,6 +171,7 @@ namespace izanagi {
     };
 
     typedef IZ_UINT IZ_SHADER_HANDLE;
+}   // namespace shader
 }   // namespace izanagi
 
 #endif  // #if !defined(__IZANAGI_SHADER_SHADER_DEFS_H__)

@@ -111,7 +111,7 @@ namespace izanagi {
 
     private:
         // シェーダ
-        IShader* shader;
+        shader::IShader* shader;
 
         // 使用するテクニックインデックス
         IZ_UINT tech_idx;
@@ -135,7 +135,7 @@ namespace izanagi {
         void* param;
 
         // シェーダパラメータハンドル
-        IZ_SHADER_HANDLE handle;
+        shader::IZ_SHADER_HANDLE handle;
 
         friend class CMaterial;
     };
