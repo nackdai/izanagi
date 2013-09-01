@@ -102,6 +102,8 @@ IZ_BOOL CMtrlExporter::ExportMaterial(
         izanagi::S_MTRL_TEXTURE sTex;
         FILL_ZERO(&sTex, sizeof(sTex));
 
+        sTex.idx = i;
+
         pImporter->GetMaterialTexture(
             nMtrlIdx,
             i,
