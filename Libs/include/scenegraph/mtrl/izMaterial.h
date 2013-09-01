@@ -197,6 +197,15 @@ namespace izanagi {
         void AttachParamBuf();
 
     private:
+        struct STextureHolder {
+            S_MTRL_TEXTURE* info;
+            graph::CBaseTexture* tex;
+        };
+
+        struct SParameterHolder {
+        };
+
+    private:
         IMemoryAllocator* m_Allocator;
 
         IZ_BOOL m_EnableRender;
@@ -209,6 +218,7 @@ namespace izanagi {
         S_MTRL_MATERIAL m_Header;
 
         S_MTRL_TEXTURE* m_pTexInfo;
+        STextureHolder* m_TexHolder;
 
         S_MTRL_SHADER* m_pShaderInfo;
 
