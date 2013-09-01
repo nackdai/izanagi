@@ -91,16 +91,12 @@ namespace izanagi {
     /** マテリアルテクスチャ情報.
      */
     struct S_MTRL_TEXTURE {
+        IZ_UINT idx;    ///< インデックス
+
         CStdString<izChar, MTRL_TEXTURE_NAME_LEN> name; ///< テクスチャ名
         IZ_UINT key;
 
         S_MTRL_TEXTURE_TYPE type;   ///< テクスチャタイプ
-
-    private:
-        // テクスチャ
-        graph::CBaseTexture* tex;
-
-        friend class CMaterial;
     };
 
     /** マテリアルシェーダ情報.
