@@ -118,6 +118,8 @@ namespace izanagi {
     /** マテリアルパラメータ情報.
      */
     struct S_MTRL_PARAM {
+        IZ_UINT idx;
+
         CStdString<izChar, MTRL_PARAM_NAME_LEN> name;   ///< パラメータ名.
         IZ_UINT key;
 
@@ -125,15 +127,6 @@ namespace izanagi {
 
         IZ_UINT16 elements;     ///< 要素数.
         IZ_UINT16 bytes;        ///< データサイズ.
-
-    private:
-        // パラメータ保持用バッファ
-        void* param;
-
-        // シェーダパラメータハンドル
-        shader::IZ_SHADER_HANDLE handle;
-
-        friend class CMaterial;
     };
 }   // namespace izanagi
 

@@ -198,11 +198,15 @@ namespace izanagi {
 
     private:
         struct STextureHolder {
-            S_MTRL_TEXTURE* info;
             graph::CBaseTexture* tex;
         };
 
         struct SParameterHolder {
+            // パラメータ保持用バッファ
+            void* param;
+
+            // シェーダパラメータハンドル
+            shader::IZ_SHADER_HANDLE handle;
         };
 
     private:
@@ -224,6 +228,8 @@ namespace izanagi {
 
         S_MTRL_PARAM* m_pParamInfo;
         IZ_UINT8* m_pParamBuf;
+
+        SParameterHolder* m_ParamHolder;
 
         // 透明度
         IZ_UINT8 m_Alpha;
