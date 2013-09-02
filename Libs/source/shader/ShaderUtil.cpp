@@ -17,48 +17,34 @@ namespace shader
 
         E_SHADER_PARAMETER_TYPE type = desc.Type;
         IZ_UINT nElements = desc.Elements;
+        nElements = (nElements == 0 ? 1 : nElements);
 
 		IZ_UINT nRow = CShaderParamUtil::GetParamRowFromParamType(type);
 		IZ_UINT nColumn = CShaderParamUtil::GetParamColumnFromParamType(type);
 
 		if (CShaderParamUtil::IsBoolType(type)) {
 			// BOOL
-            if (nElements == 0) {
-                pShader->SetBool(device, handle, *(IZ_BOOL*)pValue);
-            }
-            else {
-			    pShader->SetBoolArray(
-                    device,
-				    handle,
-				    (const IZ_BOOL*)pValue,
-				    nRow * nColumn * nElements);
-            }
+			pShader->SetBoolArray(
+                device,
+				handle,
+				(const IZ_BOOL*)pValue,
+				nRow * nColumn * nElements);
 		}
 		else if (CShaderParamUtil::IsIntType(type)) {
 			// INT
-            if (nElements == 0) {
-                pShader->SetInt(device, handle, *(IZ_INT*)pValue);
-            }
-            else {
-			    pShader->SetIntArray(
-                    device,
-				    handle,
-				    (const IZ_INT*)pValue,
-				    nRow * nColumn * nElements);
-            }
+			pShader->SetIntArray(
+                device,
+				handle,
+				(const IZ_INT*)pValue,
+				nRow * nColumn * nElements);
 		}
 		else if (CShaderParamUtil::IsMatrixType(type)) {
 			// FLOAT4x4 -> MATRIX
-            if (nElements == 0) {
-                pShader->SetMatrix(device, handle, *(const math::SMatrix*)pValue);
-            }
-            else {
-			    pShader->SetMatrixArray(
-                    device,
-				    handle,
-				    (const math::SMatrix*)pValue,
-				    nElements);
-            }
+			pShader->SetMatrixArray(
+                device,
+				handle,
+				(const math::SMatrix*)pValue,
+				nElements);
 		}
 		else if (CShaderParamUtil::IsFloatType(type)) {
 			if (nColumn < 4) {
@@ -71,30 +57,26 @@ namespace shader
 			}
 			else {
 				// FLOAT4xN -> VECTOR4 x N
-                if (nElements == 0) {
-                    pShader->SetVector(device, handle, *(const math::SVector*)pValue);
-                }
-                else {
-                    if (type != desc.originalType) {
-                        if (CShaderParamUtil::IsMatrixType(desc.originalType)) {
-                            pShader->SetMatrixArrayAsVectorArray(
-                                device,
-                                handle, 
-                                (const math::SMatrix*)pValue,
-                                nElements);
-                        }
-                        else {
-                            IZ_ASSERT(IZ_FALSE);
-                        }
+				if (type != desc.originalType) {
+                    if (CShaderParamUtil::IsMatrixType(desc.originalType)) {
+                        pShader->SetMatrixArrayAsVectorArray(
+                            device,
+                            handle, 
+                            (const math::SMatrix*)pValue,
+                            nElements);
                     }
                     else {
-				        pShader->SetVectorArray(
-                            device,
-					        handle,
-					        (const math::SVector*)pValue,
-					        nRow * nElements);
+                        IZ_ASSERT(IZ_FALSE);
                     }
                 }
+                else {
+				    pShader->SetVectorArray(
+                        device,
+				        handle,
+				        (const math::SVector*)pValue,
+				        nRow * nElements);
+                }
+                    
 			}
 		}
 		else {
