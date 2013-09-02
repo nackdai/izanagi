@@ -137,6 +137,8 @@ IZ_BOOL CMtrlExporter::ExportMaterial(
             i,
             sParam);
 
+        sParam.idx = i;
+
         IZ_OUTPUT_WRITE_VRETURN(&m_Out, &sParam, 0, sizeof(sParam));
     }
 

@@ -111,12 +111,14 @@ CMaterial* CMaterial::CreateMaterial(
     size_t nParamDataSize = nParamBytes;
 
     size_t texHolderSize = sizeof(STextureHolder) * nTexNum;
+    size_t paramHolderSize = sizeof(SParameterHolder) * nParamNum;
 
     nSize += nTexInfoSize;
     nSize += nShaderInfoSize;
     nSize += nParamInfoSize;
     nSize += nParamDataSize;
     nSize += texHolderSize;
+    nSize += paramHolderSize;
 
     // Allocate memory.
     IZ_UINT8* pBuf = reinterpret_cast<IZ_UINT8*>(ALLOC_ZERO(pAllocator, nSize));
@@ -146,6 +148,9 @@ CMaterial* CMaterial::CreateMaterial(
         pInstance->m_pParamInfo = reinterpret_cast<S_MTRL_PARAM*>(pBuf);
         pBuf += nParamInfoSize;
 
+        pInstance->m_ParamHolder = reinterpret_cast<SParameterHolder*>(pBuf);
+        pBuf += paramHolderSize;
+
         pInstance->m_pParamBuf = reinterpret_cast<IZ_UINT8*>(pBuf);
         pBuf += nParamDataSize;
     }
@@ -172,10 +177,12 @@ CMaterial::CMaterial()
     FILL_ZERO(&m_Header, sizeof(m_Header));
 
     m_pTexInfo = IZ_NULL;
+    m_TexHolder = IZ_NULL;
 
     m_pShaderInfo = IZ_NULL;
 
     m_pParamInfo = IZ_NULL;
+    m_ParamHolder = IZ_NULL;
     m_pParamBuf = IZ_NULL;
 
     m_Alpha = IZ_UINT8_MAX;
@@ -212,7 +219,7 @@ void CMaterial::AttachParamBuf()
         S_MTRL_PARAM& sParam = m_pParamInfo[i];
 
         if (sParam.bytes > 0) {
-            sParam.param = m_pParamBuf + nPos;
+            m_ParamHolder[i].param = m_pParamBuf + nPos;
             nPos += sParam.bytes;
         }
     }
@@ -256,14 +263,14 @@ IZ_BOOL CMaterial::Prepare(graph::CGraphicsDevice* pDevice)
     for (IZ_UINT i = 0; i < m_Header.numParam; i++) {
         S_MTRL_PARAM& sParamInfo = m_pParamInfo[i];
         
-        if (sParamInfo.handle == 0) {
-            sParamInfo.handle = pShader->GetParameterByName(sParamInfo.name.GetString());
+        if (m_ParamHolder[i].handle == 0) {
+            m_ParamHolder[i].handle = pShader->GetParameterByName(sParamInfo.name.GetString());
         }
 
-        if (sParamInfo.handle > 0) {
+        if (m_ParamHolder[i].handle > 0) {
             pShader->SetParamValue(
-                sParamInfo.handle,
-                sParamInfo.param,
+                m_ParamHolder[i].handle,
+                m_ParamHolder[i].param,
                 sParamInfo.bytes);
         }
     }
@@ -483,13 +490,15 @@ IZ_BOOL CMaterial::AddParameter(
             ret = (m_nAttachBufPos + pInfo->bytes < m_Header.paramBytes);
             VRETURN(ret);
 
+            IZ_UINT idx = pInfo->idx;
+
             // Attach buffer for parameter.
-            pInfo->param = m_pParamBuf + m_nAttachBufPos;
+            m_ParamHolder[idx].param = m_pParamBuf + m_nAttachBufPos;
 
             // Advance position of buffer.
             m_nAttachBufPos += pInfo->bytes;
                 
-            memcpy(pInfo->param, pValue, pInfo->bytes);
+            memcpy(m_ParamHolder[idx].param, pValue, pInfo->bytes);
         }
     }
 
@@ -520,9 +529,12 @@ IZ_BOOL CMaterial::SetParameter(
                                 nKey);
     VRETURN(pParamInfo != IZ_NULL);
     VRETURN(pParamInfo->bytes == nBytes);
-    VRETURN(pParamInfo->param != IZ_NULL);
 
-    memcpy(pParamInfo->param, pValue, nBytes);
+    IZ_UINT idx = pParamInfo->idx;
+
+    VRETURN(m_ParamHolder[idx].param != IZ_NULL);
+
+    memcpy(m_ParamHolder[idx].param, pValue, nBytes);
 
     return IZ_TRUE;
 }
@@ -715,7 +727,8 @@ const void* CMaterial::GetParamByIdx(IZ_UINT idx) const
 {
     const S_MTRL_PARAM* pInfo = GetParamInfoByIdx(idx);
     if (pInfo != IZ_NULL) {
-        return pInfo->param;
+        IZ_UINT idx = pInfo->idx;
+        return m_ParamHolder[idx].param;
     }
     return IZ_NULL;
 }
@@ -724,7 +737,8 @@ const void* CMaterial::GetParamByName(IZ_PCSTR pszName) const
 {
     const S_MTRL_PARAM* pInfo = GetParamInfoByName(pszName);
     if (pInfo != IZ_NULL) {
-        return pInfo->param;
+        IZ_UINT idx = pInfo->idx;
+        return m_ParamHolder[idx].param;
     }
     return IZ_NULL;
 }
@@ -733,7 +747,8 @@ const void* CMaterial::GetParamByKey(const CKey& key) const
 {
     const S_MTRL_PARAM* pInfo = GetParamInfoByKey(key);
     if (pInfo != IZ_NULL) {
-        return pInfo->param;
+        IZ_UINT idx = pInfo->idx;
+        return m_ParamHolder[idx].param;
     }
     return IZ_NULL;
 }
