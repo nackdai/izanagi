@@ -169,6 +169,8 @@ void CSampleApp::Release()
     SAFE_RELEASE(m_Pad);
     SAFE_RELEASE(m_Keyboard);
 
+    m_Device->Terminate();
+
     SAFE_RELEASE(m_Device);
 
     if (allocator) {

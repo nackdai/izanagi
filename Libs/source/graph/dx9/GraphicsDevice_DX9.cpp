@@ -98,10 +98,10 @@ namespace graph
         SAFE_RELEASE(m_Device);
         SAFE_RELEASE(m_D3D);
 
-        ClearRenderState();
+        Terminate();
     }
 
-    void CGraphicsDeviceDX9::ClearRenderState()
+    void CGraphicsDeviceDX9::Terminate()
     {
         SetShaderProgram(IZ_NULL);
         SetVertexBuffer(0, 0, 0, IZ_NULL);
@@ -420,9 +420,6 @@ namespace graph
         }
 
         m_Flags.is_call_begin = IZ_FALSE;
-
-        // クリアしてみる
-        ClearRenderState();
     }
 
     #ifndef _CONV_CLEAR_FLAG
