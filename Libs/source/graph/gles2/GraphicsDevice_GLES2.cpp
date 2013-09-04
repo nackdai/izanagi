@@ -117,6 +117,9 @@ namespace graph
         for (IZ_UINT i = 0; i < TEX_STAGE_NUM; ++i) {
             SetTexture(i, IZ_NULL);
         }
+
+        m_FBO->SetRenderTarget(IZ_NULL, IZ_TRUE);
+        m_FBO->SetRenderTarget(IZ_NULL, IZ_FALSE);
     }
 
     /**
@@ -176,9 +179,15 @@ namespace graph
                     m_Allocator,
                     param.screenWidth, param.screenHeight);
                 VRETURN(m_RT != IZ_NULL);
+
+                m_Depth = CRenderTargetGLES2::CreateDummyRenderTarget(
+                    m_Allocator,
+                    param.screenWidth, param.screenHeight);
+                VRETURN(m_Depth != IZ_NULL);
                 
                 // 現在のレンダーターゲットとして保持
                 SAFE_REPLACE(m_RenderState.curRT[0], m_RT);
+                SAFE_REPLACE(m_RenderState.curDepth, m_Depth);
             }
         }
 
@@ -403,7 +412,6 @@ namespace graph
         IZ_UINT nRTNum = 0;
 
         // レンダーターゲット
-        // レンダーターゲット
         for (IZ_UINT i = 0; i < MAX_MRT_NUM; ++i) {
             CRenderTarget* rt = m_RTMgr[i].GetCurrent();
 
@@ -455,6 +463,7 @@ namespace graph
         if (m_RenderState.curDepth != pSurface) {
             // レンダーターゲットを入れ替える
             m_FBO->SetRenderTarget(pSurface, IZ_TRUE);
+            SAFE_REPLACE(m_RenderState.curDepth, pSurface);
         }
     }
 
