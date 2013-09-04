@@ -44,9 +44,6 @@ namespace graph
 
         IZ_DEFINE_INTERNAL_RELEASE();
 
-    protected:
-        PURE_VIRTUAL(void ClearRenderState());
-
     public:
         // メモリからテクスチャ作成
         PURE_VIRTUAL(
@@ -111,6 +108,8 @@ namespace graph
     public:
         // リセット
         PURE_VIRTUAL(IZ_BOOL Reset(const void* initialParam));
+
+        PURE_VIRTUAL(void Terminate());
 
         // 描画開始
         PURE_VIRTUAL(

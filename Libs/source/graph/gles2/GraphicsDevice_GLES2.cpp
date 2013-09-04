@@ -89,12 +89,12 @@ namespace graph
     {
         // TODO
 
-        ClearRenderState();
+        Terminate();
 
         SAFE_RELEASE(m_FBO);
     }
 
-    void CGraphicsDeviceGLES2::ClearRenderState()
+    void CGraphicsDeviceGLES2::Terminate()
     {
         SetShaderProgram(IZ_NULL);
         SetVertexBuffer(0, 0, 0, IZ_NULL);
@@ -303,9 +303,6 @@ namespace graph
         EndScene();
 
         m_Flags.is_call_begin = IZ_FALSE;
-
-        // ƒNƒŠƒA‚µ‚Ä‚Ý‚é
-        ClearRenderState();
     }
 
     #ifndef _IS_CLEAR

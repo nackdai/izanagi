@@ -27,9 +27,6 @@ namespace graph
         CGraphicsDeviceGLES2();
         virtual ~CGraphicsDeviceGLES2();
 
-    private:
-        void ClearRenderState();
-
     public:
         // メモリからテクスチャ作成
         virtual CTexture* CreateTextureFromMemory(
@@ -107,6 +104,8 @@ namespace graph
     public:
         // リセット
         virtual IZ_BOOL Reset(const void* initialParam);
+
+        virtual void Terminate();
         
         // 描画開始
         virtual IZ_BOOL BeginRender(
