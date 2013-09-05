@@ -4,42 +4,31 @@
 #include "izStd.h"
 #include "izSystem.h"
 
-#include "threadmodel/ThreadModelMessage.h"
-
 namespace izanagi
 {
 namespace threadmodel
 {
+    class CMessage;
+
     /**
      */
     class CMessageQueue
     {
     public:
-        CMessageQueue()
-        {
-            m_Event.Open();
-            m_Event.Set();
-            m_Mutex.Open();
-        }
-        ~CMessageQueue() {}
+        CMessageQueue();
+        ~CMessageQueue();
 
         NO_COPIABLE(CMessageQueue);
 
     public:
-        CMessage* PeekWithMatchFull(IZ_UINT key);
-        CMessage* Peek(IZ_UINT key);
+        CMessage* Peek();
+        CMessage* Get();
 
-        CMessage* GetWithMatchFull(IZ_UINT key);
-        CMessage* Get(IZ_UINT key);
-
-        void Post(IZ_UINT key, CMessage* msg);
+        void Post(CMessage* msg);
 
     private:
-        static const IZ_UINT HASH_NUM = 5;  // TODO
-        typedef CStdQueue<CMessage> QUEUE;
-        typedef CStdList<CMessage> LIST;
+        CStdList<CMessage> m_MessageList;
 
-        QUEUE m_Queue[HASH_NUM];
         sys::CEvent m_Event;
         sys::CMutex m_Mutex;
     };
