@@ -1,138 +1,76 @@
 #include "threadmodel/ThreadModelMessageQueue.h"
+#include "threadmodel/ThreadModelMessage.h"
 
 namespace izanagi
 {
 namespace threadmodel
 {
-    CMessage* CMessageQueue::PeekWithMatchFull(IZ_UINT key)
+    CMessageQueue::CMessageQueue()
     {
-        CMessage* ret = IZ_NULL;
+        m_Event.Open();
+        m_Mutex.Open();
+    }
 
-        IZ_UINT pos = key % HASH_NUM;
-
+    CMessageQueue::~CMessageQueue()
+    {
         m_Mutex.Lock();
         {
-            LIST& list = (LIST&)m_Queue[pos];
-
-            LIST::Item* item = list.GetTop();
-            while (item != IZ_NULL)
-            {
-                CMessage* data = item->GetData();
-                if (data->GetKey() == key)
-                {
-                    ret = data;
-                    break;
-                }
-                item = item->GetNext();
-            }
+            IZ_ASSERT(m_MessageList.GetItemNum() == 0);
         }
         m_Mutex.Unlock();
 
-        return ret;
+        m_Event.Close();
+        m_Mutex.Close();
     }
 
-    CMessage* CMessageQueue::Peek(IZ_UINT key)
+    CMessage* CMessageQueue::Peek()
     {
+        sys::CGuarder guard(m_Mutex);
+
+        m_Event.Wait();
+
+        CStdList<CMessage>::Item* item = m_MessageList.GetTop();
+
         CMessage* ret = IZ_NULL;
 
-        IZ_UINT pos = key % HASH_NUM;
-
-        m_Mutex.Lock();
-        {
-            QUEUE::Item* item = m_Queue[pos].Dequeue();
-            if (item != IZ_NULL)
-            {
-                ret = item->GetData();
-            }
+        if (item != IZ_NULL) {
+            ret = item->GetData();
+            item->Leave();
         }
-        m_Mutex.Unlock();
-
+        else {
+            m_Event.Reset();
+        }
+            
         return ret;
     }
 
-    CMessage* CMessageQueue::GetWithMatchFull(IZ_UINT key)
+    CMessage* CMessageQueue::Get()
     {
+        sys::CGuarder guard(m_Mutex);
+
+        m_Event.Wait();
+
+        CStdList<CMessage>::Item* item = m_MessageList.GetTop();
+
         CMessage* ret = IZ_NULL;
 
-        IZ_UINT pos = key % HASH_NUM;
-
-        while (m_Event.Wait())
-        {
-            m_Mutex.Lock();
-            {
-                LIST& list = (LIST&)m_Queue[pos];
-
-                if (list.GetItemNum() == 0)
-                {
-                    m_Event.Reset();
-                }
-                else
-                {
-                    LIST::Item* item = list.GetTop();
-                    while (item != IZ_NULL)
-                    {
-                        CMessage* data = item->GetData();
-                        if (data->GetKey() == key)
-                        {
-                            ret = data;
-                            goto __EXIT__;
-                        }
-                        item = item->GetNext();
-                    }
-
-                    goto __EXIT__;
-                }
-            }
-            m_Mutex.Unlock();
+        if (item != IZ_NULL) {
+            ret = item->GetData();
         }
-
-        __EXIT__:
+        else {
+            m_Event.Reset();
+        }
+            
         return ret;
     }
 
-    CMessage* CMessageQueue::Get(IZ_UINT key)
+    void CMessageQueue::Post(CMessage* msg)
     {
-        CMessage* ret = IZ_NULL;
+        IZ_ASSERT(msg != IZ_NULL);
 
-        IZ_UINT pos = key % HASH_NUM;
+        sys::CGuarder guard(m_Mutex);
 
-        while (m_Event.Wait())
-        {
-            m_Mutex.Lock();
-            {
-                QUEUE& queue = m_Queue[pos];
-
-                if (queue.GetItemNum() == 0)
-                {
-                    m_Event.Reset();
-                }
-                else
-                {
-                    QUEUE::Item* item = queue.Dequeue();
-                    if (item != IZ_NULL)
-                    {
-                        ret = item->GetData();
-                        break;
-                    }
-                }
-            }
-            m_Mutex.Unlock();
-        }
-
-        return ret;
-    }
-
-    void CMessageQueue::Post(IZ_UINT key, CMessage* msg)
-    {
-        IZ_UINT pos = key % HASH_NUM;
-
-        msg->SetKey(key);
-
-        m_Mutex.Lock();
-        {
-            m_Queue[pos].Enqueue(msg->GetItem());
-        }
-        m_Mutex.Unlock();
+        m_MessageList.AddTail(msg->GetItem());
 
         m_Event.Set();
     }
