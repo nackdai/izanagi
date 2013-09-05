@@ -8,7 +8,7 @@ namespace izanagi
 {
 namespace threadmodel
 {
-    class CJobQueue;
+    class CJob;
 
     /** ジョブを実行するワーカースレッド
      */
@@ -17,8 +17,19 @@ namespace threadmodel
         friend class CJobQueue;
 
     private:
-        CJobWorker(CJobQueue* jobQueue);
-        ~CJobWorker() {}
+        enum State
+        {
+            State_Waiting = 0,
+            State_Registered,
+            State_Running,
+            State_WillJoin,
+            State_Joined,
+        };
+
+    private:
+        CJobWorker();
+        CJobWorker(const sys::ThreadName& name);
+        virtual ~CJobWorker();
 
         NO_COPIABLE(CJobWorker);
 
@@ -27,22 +38,22 @@ namespace threadmodel
     private:
         virtual void Run();
 
-        // このスレッドの実行を開始.
-        IZ_BOOL Start();
+        void Register(CJob* job);
 
-        void Resume();
+        void Join();
 
-        void Suspend();
+        // 状態を取得
+        State GetState();
 
-        void WillJoin() { m_WillJoin = IZ_TRUE; }
+        IZ_BOOL IsWaiting();
 
     private:
-        CJobQueue* m_JobQueue;
-        
-        sys::CEvent m_Event;
-        sys::CMutex m_EventSafe;
+        sys::CSemaphore m_Sema;
+        sys::CMutex m_Mutex;
 
-        IZ_BOOL m_WillJoin;
+        CJob* m_Job;
+
+        State m_State;
     };
 }   // namespace threadmodel
 }   // namespace izanagi

@@ -4,9 +4,6 @@
 #include "izStd.h"
 #include "izSystem.h"
 
-#include "threadmodel/ThreadSafeValue.h"
-#include "threadmodel/ThreadSafeQueue.h"
-
 namespace izanagi
 {
 namespace threadmodel
@@ -18,15 +15,10 @@ namespace threadmodel
      */
     class CJobQueue
     {
-        friend class CJobWorker;
-        friend class CJob;
+        static sys::CMutex s_QueueListGuarder;
 
-    private:
-        // バッファサイズを計算
-        static size_t ComputeBufferSize(IZ_UINT threadNum);
-
-        // エンキュー時の処理
-        static void EnqueueAction(CJob* job, void* jobQueue);
+        // JobQueue登録リスト
+        static CStdList<CJobQueue> s_JobQueueList;
 
     public:
         CJobQueue();
@@ -41,25 +33,13 @@ namespace threadmodel
             IMemoryAllocator* allocator,
             IZ_UINT threadNum);
 
-        /** 開始
+        /** 開始.
          */
-        void Start();
+        IZ_BOOL Start();
 
         /** ジョブをキューに積む.
          */
-        IZ_BOOL Enqueue(CJob* job, IZ_BOOL isSync = IZ_FALSE);
-
-        /** 更新処理.
-         *
-         * メインスレッドで呼ぶこと
-         */
-        void Update();
-
-        /** 実行待ちキューが終了するまで待つ.
-         *
-         * メインスレッドで呼ぶこと
-         */
-        void WaitForFinishJobQueue();
+        IZ_BOOL Enqueue(CJob* job);
 
         /** スレッド終了.
          *
@@ -68,56 +48,45 @@ namespace threadmodel
          *
          * @return 終了待ちキューが存在する場合はtrueを返す
          */
-        IZ_BOOL Join();
+        void WaitEmpty();
 
-        /** 実行待ちキューに登録されているジョブが存在するかどうか.
+        /** 登録ジョブのキャンセル.
          */
-        IZ_BOOL HasJob();
+        void CancelAllJobs();
 
-        /** 終了待ちキューに登録されているジョブが存在するかどうか.
+        /** JobQueueの終了.
          */
-        IZ_BOOL HasFinishJob();
+        void Terminate();
+
+        /** すべてのJobQueueの更新.
+         */
+        static void UpdateQueues();
+
+        /** JobQueueシステムの終了.
+         */
+        static void TerminateJobQueue();
 
     private:
-        // デキュー
-        CJob* Dequeue();
+        // 更新処理.
+        void Update();
 
-        // 終了ジョブとしてエンキュー
-        IZ_BOOL EnqueueAsFinishJob(CJob* job);
-
-        // 終了ジョブキューからデキュー
-        CJob* DequeueFromFinishJobQueue();
-
-        // ワーカースレッドが停止したことを通知
-        void NotifyWorkerThreadSuspend();
-
-        // ジョブをキャンセル
-        IZ_BOOL Cancel(CJob* job);
+        // 空いているワーカーを取得.
+        CJobWorker* GetWaitingJobWorker();
 
     private:
         IMemoryAllocator* m_Allocator;
 
-        // 実行待ちキュー
-        CThreadSafeQueue<CJob> m_ExecJobQueue;
+        IZ_UINT m_WorkerNum;
+        CJobWorker** m_Workers;
 
-        // 終了待ちキュー
-        CThreadSafeQueue<CJob> m_FinishJobQueue;
+        sys::CMutex m_JobListGuarder;
 
-        // ワーカースレッドリスト
-        CJobWorker** m_JobWorker;
-        IZ_UINT m_JobWorkerNum;
+        // Job登録リスト
+        CStdList<CJob> m_JobList;
 
-        // バッファ
-        IZ_UINT8* m_Buf;
-
-        sys::CEvent m_WaitEvent;
-        sys::CMutex m_WaitEventSafe;
-
-        IZ_INT m_WorkingThreadNum;
+        CStdList<CJobQueue>::Item m_ListItem;
 
         IZ_BOOL m_IsTerminated;
-        IZ_BOOL m_IsStarted;
-        CThreadSafeFlag m_IsWaiting;
     };
 }   // namespace threadmodel
 }   // namespace izanagi

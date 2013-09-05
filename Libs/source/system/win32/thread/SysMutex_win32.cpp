@@ -23,11 +23,13 @@ namespace sys
     */
     IZ_BOOL CMutex::Open()
     {
-        m_Handle = ::CreateMutex(
-                    NULL,
-                    FALSE,
-                    NULL);
-        IZ_ASSERT(m_Handle != IZ_NULL);
+        if (m_Handle == IZ_NULL) {
+            m_Handle = ::CreateMutex(
+                        NULL,
+                        FALSE,
+                        NULL);
+            IZ_ASSERT(m_Handle != IZ_NULL);
+        }
 
         return (m_Handle != IZ_NULL);
     }

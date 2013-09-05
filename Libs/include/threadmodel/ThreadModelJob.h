@@ -16,69 +16,69 @@ namespace threadmodel
         friend class CJobQueue;
         friend class CJobWorker;
 
+    public:
+        enum State
+        {
+            State_None = 0,
+            State_Waiting,
+            State_Registered,
+            State_Running,
+            State_WillFinish,
+            State_Finished,
+        };
+
     protected:
         CJob();
-
-        virtual ~CJob()
-        {
-        }
+        virtual ~CJob();
 
     public:
-        /**
-         */
-        virtual void OnExecute() = 0;
-
-        /**
-         */
-        virtual void OnFinished();
-
         /** キャンセル.
          */
         void Cancel();
 
-        /** キャンセルリクエストされているかどうか
+        /** 状態を取得
          */
-        IZ_BOOL WillCancel()
-        {
-            return m_WillCancel;
-        }
+        State GetState();
 
         /** キャンセルされたかどうか
          */
-        IZ_BOOL IsCanceled()
-        {
-            return m_IsCanceled;
-        }
+        IZ_BOOL IsCanceled();
 
-        /** すでに終了しているかどうか
+    protected:
+        /**
          */
-        IZ_BOOL IsFinished()
-        {
-            return m_IsFinished;
-        }
+        virtual IZ_BOOL OnRun() = 0;
+
+        /**
+         */
+        virtual void OnFinish(IZ_BOOL runResult);
+
+        /**
+         */
+        virtual void OnCancel();
 
     private:
-        CStdQueue<CJob>::Item* GetQueueItem() { return &m_QueueItem; }
+        void Run();
+        void Finish();
+
+        CStdList<CJob>::Item* GetListItem() { return &m_ListItem; }
+
+        void SetState(State state);
 
         // 指定されたジョブキューに登録済みかどうか
         IZ_BOOL IsRegistered(CJobQueue* jobQueue);
 
-        // エンキューのための準備
-        void Prepare(CJobQueue* jobQueue);
-
-        // 処理が終了してジョブキューから外れるときに呼ばれる
-        void Detach();
-
-        void NotifyCancel();
-
     private:
-        CStdQueue<CJob>::Item m_QueueItem;
+        CStdList<CJob>::Item m_ListItem;
 
         // 登録されているジョブキュー
         CJobQueue* m_JobQueue;
 
-        IZ_BOOL m_IsFinished;
-        IZ_BOOL m_WillCancel;
+        sys::CMutex m_Mutex;
+
+        State m_State;
+        IZ_BOOL m_RunResult;
+
         IZ_BOOL m_IsCanceled;
     };
 }   // namespace threadmodel
