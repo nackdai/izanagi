@@ -6,77 +6,108 @@ namespace izanagi
 {
 namespace threadmodel
 {
-
-    CJobWorker::CJobWorker(CJobQueue* jobQueue)
+    CJobWorker::CJobWorker()
     {
-        m_JobQueue = jobQueue;
-        m_Event.Open();
-        m_EventSafe.Open();
-        m_WillJoin = IZ_FALSE;
+        m_Sema.Init(0);
+        m_Mutex.Open();
+
+        m_Job = IZ_NULL;
+
+        m_State = State_Waiting;
+    }
+
+    CJobWorker::CJobWorker(const sys::ThreadName& name)
+        : sys::CThread(name)
+    {
+        m_Sema.Init(0);
+        m_Mutex.Open();
+
+        m_Job = IZ_NULL;
+
+        m_State = State_Waiting;
+    }
+
+    CJobWorker::~CJobWorker()
+    {
+        // 念のため
+        Join();
+
+        m_Sema.Close();
+        m_Mutex.Close();
+    }
+
+    void CJobWorker::Register(CJob* job)
+    {
+        sys::CGuarder guard(m_Mutex);
+        {
+            IZ_ASSERT(m_Job == IZ_NULL);
+
+            if (m_State == State_Waiting)
+            {
+                m_Job = job;
+                m_State = State_Registered;
+            }
+        }
+
+        m_Sema.Release();
     }
 
     void CJobWorker::Run()
     {
-        IZ_ASSERT(m_JobQueue != IZ_NULL);
-
-        while (m_Event.Wait())
+        while (IZ_TRUE)
         {
-            CJob* job = m_JobQueue->Dequeue();
+            if (m_Sema.Wait()) {
+                sys::CGuarder guard(m_Mutex);
+                {
+                    if (m_State == State_WillJoin) {
+                        m_State = State_Joined;
+                        break;
+                    }
 
-            if (job != IZ_NULL)
-            {
-                if (job->WillCancel())
-                {
-                    job->NotifyCancel();
-                    job->Detach();
-                }
-                else
-                {
-                    job->OnExecute();
+                    IZ_ASSERT(m_Job != IZ_NULL);
 
-                    // 終了待ちキューに積む
-                    m_JobQueue->EnqueueAsFinishJob(job);
-                }
-            }
-            else
-            {
-                m_JobQueue->NotifyWorkerThreadSuspend();
+                    m_State = State_Running;
 
-                if (m_WillJoin)
-                {
-                    break;
-                }
-                else
-                {
-                    Suspend();
+                    m_Job->Run();
+                    m_Job = IZ_NULL;
+
+                    m_State = State_Waiting;
                 }
             }
-
-            sys::CThread::YieldThread();
         }
     }
 
-    // このスレッドの実行を開始.
-    IZ_BOOL CJobWorker::Start()
+    void CJobWorker::Join()
     {
-        IZ_BOOL ret = sys::CThread::Start();
-        if (ret)
+        sys::CGuarder guard(m_Mutex);
         {
-            Resume();
+            if (m_State == State_Joined) {
+                return;
+            }
+
+            m_State = State_WillJoin;
+
+            // 止まっているかもしれないので起こす
+            m_Sema.Release();
+
+            sys::CThread::Join();
         }
-        return ret;
     }
 
-    void CJobWorker::Resume()
+    CJobWorker::State CJobWorker::GetState()
     {
-        sys::CGuarder guard(m_EventSafe);
-        m_Event.Set();
+        sys::CGuarder guard(m_Mutex);
+        {
+            return m_State;
+        }
     }
 
-    void CJobWorker::Suspend()
+    IZ_BOOL CJobWorker::IsWaiting()
     {
-        sys::CGuarder guard(m_EventSafe);
-        m_Event.Reset();
+        sys::CGuarder guard(m_Mutex);
+        {
+            return m_State == State_Waiting;
+        }
     }
 }   // namespace threadmodel
 }   // namespace izanagi

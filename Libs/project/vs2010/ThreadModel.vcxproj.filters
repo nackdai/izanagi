@@ -13,18 +13,6 @@
     <Filter Include="source\JobQueue">
       <UniqueIdentifier>{d61513bd-5b18-40f4-9e49-b1748200eec8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\MessageQueue">
-      <UniqueIdentifier>{9903585f-4133-4e4a-83e3-5bd516809c40}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\MessageQueue">
-      <UniqueIdentifier>{a6100f70-a887-424d-a04f-7da2d17352ac}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\Parallel">
-      <UniqueIdentifier>{d144d14f-b1f4-4f9b-b2a2-0b7bf74305a8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="include\Parallel">
-      <UniqueIdentifier>{bf90ec94-b4ea-43f4-91fd-dded21c2a6ab}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\threadmodel\ThreadModelJob.h">
@@ -37,27 +25,6 @@
       <Filter>include\JobQueue</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\izThreadModel.h" />
-    <ClInclude Include="..\..\include\threadmodel\ThreadSafeValue.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\threadmodel\ThreadSafeQueue.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\threadmodel\ThreadModelMessageQueue.h">
-      <Filter>include\MessageQueue</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\threadmodel\ThreadModelMessage.h">
-      <Filter>include\MessageQueue</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\threadmodel\Parallel.h">
-      <Filter>include\Parallel</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\threadmodel\ParallelInvoke.h">
-      <Filter>include\Parallel</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\threadmodel\ParallelFor.h">
-      <Filter>include\Parallel</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\threadmodel\ThreadModelJobQueue.cpp">
@@ -68,18 +35,6 @@
     </ClCompile>
     <ClCompile Include="..\..\source\threadmodel\ThreadModelJob.cpp">
       <Filter>source\JobQueue</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\threadmodel\ThreadModelMessageQueue.cpp">
-      <Filter>source\MessageQueue</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\threadmodel\ParallelFor.cpp">
-      <Filter>source\Parallel</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\threadmodel\ParallelInvoke.cpp">
-      <Filter>source\Parallel</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\threadmodel\Parallel.cpp">
-      <Filter>source\Parallel</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

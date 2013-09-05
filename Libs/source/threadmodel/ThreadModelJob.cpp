@@ -6,34 +6,87 @@ namespace izanagi
 {
 namespace threadmodel
 {
-
     CJob::CJob()
     {
-        m_QueueItem.Init(this);
+        m_ListItem.Init(this);
         m_JobQueue = IZ_NULL;
 
-        m_IsFinished = IZ_FALSE;
-        m_WillCancel = IZ_FALSE;
+        m_Mutex.Open();
+
+        m_State = State_None;
+
+        m_RunResult = IZ_FALSE;
         m_IsCanceled = IZ_FALSE;
+    }
+
+    CJob::~CJob()
+    {
+        m_Mutex.Close();
+    }
+
+    void CJob::Run()
+    {
+        m_RunResult = IZ_FALSE;
+
+        {
+            sys::CGuarder guard(m_Mutex);
+            {
+                if (m_IsCanceled) {
+                    return;
+                }
+                m_State = State_Running;
+            }
+        }
+
+        m_RunResult = OnRun();
+
+        {
+            sys::CGuarder guard(m_Mutex);
+            {
+                m_State = State_WillFinish;
+            }
+        }
+    }
+
+    void CJob::Finish()
+    {
+        OnFinish(m_RunResult);
+        m_State = State_Finished;
     }
 
     // キャンセル.
     void CJob::Cancel()
     {
-        if (m_JobQueue->Cancel(this))
+        sys::CGuarder guard(m_Mutex);
         {
-            NotifyCancel();
-            Detach();
-        }
-        else
-        {
-            m_WillCancel = IZ_TRUE;
+            OnCancel();
+            m_IsCanceled = IZ_TRUE;
         }
     }
 
-    void CJob::OnFinished()
+    // 状態を取得
+    CJob::State CJob::GetState()
     {
-        // Nothing...
+        sys::CGuarder guard(m_Mutex);
+        {
+            return m_State;
+        }
+    }
+
+    IZ_BOOL CJob::IsCanceled()
+    {
+        sys::CGuarder guard(m_Mutex);
+        {
+            return m_IsCanceled;
+        }
+    }
+
+    void CJob::SetState(CJob::State state)
+    {
+        sys::CGuarder guard(m_Mutex);
+        {
+            m_State = state;
+        }
     }
 
     // 指定されたジョブキューに登録済みかどうか
@@ -42,40 +95,14 @@ namespace threadmodel
         return (m_JobQueue == jobQueue);
     }
 
-    // エンキューのための準備
-    void CJob::Prepare(CJobQueue* jobQueue)
+    void CJob::OnFinish(IZ_BOOL runResult)
     {
-        // NOTE
-        // ロックされている状態で呼び出されることが保証される
-
-        // フラグをリセット
-        m_IsFinished = IZ_FALSE;
-        m_WillCancel = IZ_FALSE;
-        m_IsCanceled = IZ_FALSE;
-
-        m_JobQueue = jobQueue;
+        // Nothing...
     }
 
-    // 処理が終了してジョブキューから外れるときに呼ばれる
-    void CJob::Detach()
+    void CJob::OnCancel()
     {
-        // NOTE
-        // ロックされている状態で呼び出されることが保証される
-
-        if (m_QueueItem.HasList())
-        {
-            m_QueueItem.Leave();
-        }
-
-        m_JobQueue = IZ_NULL;
-        m_IsFinished = IZ_TRUE;
+        // Nothing...
     }
-
-    void CJob::NotifyCancel()
-    {
-        m_WillCancel = IZ_FALSE;
-        m_IsCanceled = IZ_TRUE;
-    }
-
 }   // namespace threadmodel
 }   // namespace izanagi

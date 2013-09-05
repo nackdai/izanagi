@@ -102,25 +102,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\izThreadModel.h" />
-    <ClInclude Include="..\..\include\threadmodel\Parallel.h" />
-    <ClInclude Include="..\..\include\threadmodel\ParallelFor.h" />
-    <ClInclude Include="..\..\include\threadmodel\ParallelInvoke.h" />
     <ClInclude Include="..\..\include\threadmodel\ThreadModelJob.h" />
     <ClInclude Include="..\..\include\threadmodel\ThreadModelJobQueue.h" />
     <ClInclude Include="..\..\include\threadmodel\ThreadModelJobWorker.h" />
-    <ClInclude Include="..\..\include\threadmodel\ThreadModelMessage.h" />
-    <ClInclude Include="..\..\include\threadmodel\ThreadModelMessageQueue.h" />
-    <ClInclude Include="..\..\include\threadmodel\ThreadSafeQueue.h" />
-    <ClInclude Include="..\..\include\threadmodel\ThreadSafeValue.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\source\threadmodel\Parallel.cpp" />
-    <ClCompile Include="..\..\source\threadmodel\ParallelFor.cpp" />
-    <ClCompile Include="..\..\source\threadmodel\ParallelInvoke.cpp" />
     <ClCompile Include="..\..\source\threadmodel\ThreadModelJob.cpp" />
     <ClCompile Include="..\..\source\threadmodel\ThreadModelJobQueue.cpp" />
     <ClCompile Include="..\..\source\threadmodel\ThreadModelJobWorker.cpp" />
-    <ClCompile Include="..\..\source\threadmodel\ThreadModelMessageQueue.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -6,306 +6,250 @@ namespace izanagi
 {
 namespace threadmodel
 {
-    // バッファサイズを計算
-    size_t CJobQueue::ComputeBufferSize(IZ_UINT threadNum)
-    {
-        IZ_ASSERT(threadNum > 0);
-
-        size_t ret = threadNum * sizeof(CJobWorker*);
-        ret += threadNum * sizeof(CJobWorker);
-
-        return ret;
-    }
-
-    // エンキュー時の処理
-    void CJobQueue::EnqueueAction(CJob* job, void* jobQueue)
-    {
-        job->Prepare(reinterpret_cast<CJobQueue*>(jobQueue));
-    }
+    sys::CMutex CJobQueue::s_QueueListGuarder;
+    CStdList<CJobQueue> CJobQueue::s_JobQueueList;
 
     CJobQueue::CJobQueue()
     {
         m_Allocator = IZ_NULL;
 
-        m_JobWorker = IZ_NULL;
-        m_JobWorkerNum = 0;
-
-        m_Buf = IZ_NULL;
+        m_WorkerNum = 0;
+        m_Workers = IZ_NULL;
 
         m_IsTerminated = IZ_FALSE;
-        m_IsStarted = IZ_FALSE;
-        m_IsWaiting = IZ_FALSE;
+
+        m_ListItem.Init(this);
     }
 
     CJobQueue::~CJobQueue()
     {
-        // 一応
-        Join();
-
-        if (m_JobWorkerNum > 0)
-        {
-            for (IZ_UINT i = 0; i < m_JobWorkerNum; i++)
-            {
-                delete m_JobWorker[i];
-            }
-        }
-
-        FREE(m_Allocator, m_Buf);
+        // �O�̂���
+        Terminate();
     }
 
-    // 初期化
     IZ_BOOL CJobQueue::Init(
         IMemoryAllocator* allocator,
         IZ_UINT threadNum)
     {
-        IZ_ASSERT(threadNum > 0);
+        VRETURN(!m_IsTerminated);
 
-        IZ_BOOL ret = (m_Buf != IZ_NULL);
-
-        if (!ret)
-        {
-            // バッファサイズを計算
-            size_t bufSize = ComputeBufferSize(threadNum);
-
-            m_Buf = reinterpret_cast<IZ_UINT8*>(ALLOC_ZERO(allocator, bufSize));
-            VRETURN(m_Buf != IZ_NULL);
-
-            m_WaitEvent.Open();
-            m_WaitEventSafe.Open();
-
-            IZ_UINT8* buf = m_Buf;
-
-            // スレッドリスト作成
-            m_JobWorker = reinterpret_cast<CJobWorker**>(buf);
-            buf += threadNum * sizeof(CJobWorker*);
-
-            for (IZ_UINT i = 0; i < threadNum; i++)
-            {
-                m_JobWorker[i] = new (buf) CJobWorker(this);
-                buf += sizeof(CJobWorker);
-            }
-
-            IZ_ASSERT(CStdUtil::GetPtrDistance(buf, m_Buf) == bufSize);
-
-            m_JobWorkerNum = threadNum;
-            m_WorkingThreadNum = 0;
-
-            m_IsTerminated = IZ_FALSE;
-            m_IsStarted = IZ_FALSE;
-            m_IsWaiting = IZ_FALSE;
+        if (m_Workers != IZ_NULL) {
+            return IZ_TRUE;
         }
 
-        return ret;
+        void* buf = ALLOC(
+            allocator, 
+            sizeof(CJobWorker*) * threadNum + sizeof(CJobWorker) * threadNum);
+        VRETURN(buf != IZ_NULL);
+
+        IZ_UINT8* p = (IZ_UINT8*)buf;
+
+        m_Workers = reinterpret_cast<CJobWorker**>(p);
+        p += sizeof(CJobWorker*) * threadNum; 
+
+        for (IZ_UINT i = 0; i < threadNum; i++) {
+            m_Workers[i] = new(p) CJobWorker();
+        }
+
+        m_WorkerNum = threadNum;
+        m_Allocator = allocator;
+
+        m_JobListGuarder.Open();
+
+        VRETURN(s_QueueListGuarder.Open());
+
+        sys::CGuarder guard(s_QueueListGuarder);
+        {
+            s_JobQueueList.AddTail(&m_ListItem);
+        }
+
+        return IZ_TRUE;
     }
 
-    // 開始
-    void CJobQueue::Start()
+    IZ_BOOL CJobQueue::Start()
     {
-        if (m_IsTerminated || m_IsWaiting)
-        {
-            return;
+        VRETURN(m_Workers != IZ_NULL);
+
+        for (IZ_UINT i = 0; i < m_WorkerNum; i++) {
+            VRETURN(!m_Workers[i]->Start());
         }
 
-        if (!m_IsStarted)
-        {
-            m_IsStarted = IZ_TRUE;
-
-            for (IZ_UINT i = 0; i < m_JobWorkerNum; i++)
-            {
-                m_JobWorker[i]->Start();
-            }
-        }
+        return IZ_TRUE;
     }
 
-    // ジョブをキューに積む.
-    IZ_BOOL CJobQueue::Enqueue(CJob* job, IZ_BOOL isSync/*= IZ_FALSE*/)
+    IZ_BOOL CJobQueue::Enqueue(CJob* job)
     {
         IZ_ASSERT(job != IZ_NULL);
 
-        if (isSync)
+        VRETURN(m_Workers != IZ_NULL);
+
+        sys::CGuarder guard(m_JobListGuarder);
         {
-            // 同期待ちするので、即実行
-            job->OnExecute();
-            job->OnFinished();
-            return IZ_TRUE;
+            // Job��ҋ@��ԂɃZ�b�g
+            job->SetState(CJob::State_Waiting);
+
+            // ���X�g�ɓo�^
+            m_JobList.AddTail(job->GetListItem());
         }
 
-        if (m_IsTerminated || m_IsWaiting)
-        {
-            // もう止まっている or 終了待機中なので何もしない
-            return IZ_FALSE;
-        }
-
-        IZ_BOOL ret = m_ExecJobQueue.Enqueue(
-            job->GetQueueItem(),
-            this,
-            EnqueueAction);
-
-        // キューに積まれたのでワーカーを動かす
-        for (IZ_UINT i = 0; i < m_JobWorkerNum; i++)
-        {
-            m_JobWorker[i]->Resume();
-        }
-
-        return ret;
+        return IZ_TRUE;
     }
 
-    // 更新処理.
+    void CJobQueue::WaitEmpty()
+    {
+        while (IZ_TRUE) {
+            IZ_UINT jobNum = 0;
+
+            sys::CGuarder guard(m_JobListGuarder);
+            {
+                jobNum = m_JobList.GetItemNum();
+            }
+
+            if (jobNum == 0) {
+                break;
+            }
+
+            sys::CThread::YieldThread();
+        }
+    }
+
+    void CJobQueue::CancelAllJobs()
+    {
+        sys::CGuarder guard(m_JobListGuarder);
+        {
+            CStdList<CJob>::Item* item = m_JobList.GetTop();
+
+            while (item != IZ_NULL) {
+                CJob* job = item->GetData();
+                job->Cancel();
+
+                item = item->GetNext();
+            }
+        }
+    }
+
+    void CJobQueue::Terminate()
+    {
+        CancelAllJobs();
+
+        // ���X�g����ɂȂ�܂ŏ�������
+        while (IZ_TRUE) {
+            IZ_UINT jobNum = 0;
+
+            sys::CGuarder guard(m_JobListGuarder);
+            {
+                jobNum = m_JobList.GetItemNum();
+            }
+
+            if (jobNum == 0) {
+                break;
+            }
+
+            Update();
+        }
+
+        // ���[�J�[��Join����
+        for (IZ_UINT i = 0; i < m_WorkerNum; i++) {
+            m_Workers[i]->Join();
+            delete m_Workers[i];
+        }
+
+        FREE(m_Allocator, m_Workers);
+        m_WorkerNum = 0;
+
+        m_JobListGuarder.Close();
+
+        // JobQueue���X�g���甲��
+        sys::CGuarder guard(s_QueueListGuarder);
+        {
+            m_ListItem.Leave();
+        }
+    }
+
     void CJobQueue::Update()
     {
-        // 終了待ちジョブを片付ける
-        m_FinishJobQueue.Lock();
-        {
-            CStdQueue<CJob>::Item* item = m_FinishJobQueue.GetQueue().Dequeue();
+        IZ_ASSERT(m_Workers != IZ_NULL);
 
-            while (item != IZ_NULL)
-            {
+        sys::CGuarder guard(m_JobListGuarder);
+        {
+            CStdList<CJob>::Item* item = m_JobList.GetTop();
+
+            while (item != IZ_NULL) {
+                // �ҋ@��Ԃ̃��[�J�[���擾
+                CJobWorker* worker = GetWaitingJobWorker();
+
+                if (worker == IZ_NULL) {
+                    // �󂢂Ă��郏�[�J�[���Ȃ��̂ŏI��
+                    return;
+                }
+
                 CJob* job = item->GetData();
 
-                if (job->WillCancel())
-                {
-                    job->NotifyCancel();
+                IZ_BOOL isFinish = IZ_FALSE;
+
+                if (job->GetState() == CJob::State_Waiting) {
+                    worker->Register(job);
                 }
-                else
-                {
-                    job->OnFinished();
+                else if (job->GetState() == CJob::State_WillFinish) {
+                    job->Finish();
+                    isFinish = IZ_TRUE;
                 }
 
-                job->Detach();
+                CStdList<CJob>::Item* next = item->GetNext();
 
-                item = m_FinishJobQueue.GetQueue().Dequeue();
-            }
-        }
-        m_FinishJobQueue.Unlock();
-    }
+                if (isFinish) {
+                    item->Leave();
+                }
 
-    // 実行待ちキューが終了するまで待つ.
-    void CJobQueue::WaitForFinishJobQueue()
-    {
-        if (m_IsTerminated || m_IsWaiting)
-        {
-            // もう止まっている or 終了待機中なので何もしない
-            return;
-        }
-
-        // 一度止める
-        for (IZ_UINT i = 0; i < m_JobWorkerNum; i++)
-        {
-            m_JobWorker[i]->Suspend();
-        }
-
-        // 待機中
-        m_IsWaiting = IZ_TRUE;
-        m_WorkingThreadNum = m_JobWorkerNum;
-
-        {
-            sys::CGuarder guard(m_WaitEventSafe);
-            m_WaitEvent.Reset();
-        }
-
-        // 動かす
-        for (IZ_UINT i = 0; i < m_JobWorkerNum; i++)
-        {
-            m_JobWorker[i]->Resume();
-        }
-
-        // ワーカーが待機状態になるのを待つ
-        m_WaitEvent.Wait();
-
-        m_IsWaiting = IZ_FALSE;
-    }
-
-    // スレッド終了.
-    IZ_BOOL CJobQueue::Join()
-    {
-        if (m_IsTerminated)
-        {
-            return IZ_TRUE;
-        }
-
-        for (IZ_UINT i = 0; i < m_JobWorkerNum; i++)
-        {
-            m_JobWorker[i]->WillJoin();
-
-            // 止まっているかもしれないので動かす
-            m_JobWorker[i]->Resume();
-        }
-
-        for (IZ_UINT i = 0; i < m_JobWorkerNum; i++)
-        {
-            m_JobWorker[i]->Join();
-        }
-
-        m_IsTerminated = IZ_TRUE;
-
-        // NOTE
-        // この時点でスレッドは回っていないので
-        // ロックする必要はない
-        IZ_BOOL ret = m_FinishJobQueue.GetQueue().HasItem();
-
-        return ret;
-    }
-
-    // 実行待ちキューに登録されているジョブが存在するかどうか.
-    IZ_BOOL CJobQueue::HasJob()
-    {
-        IZ_BOOL ret = m_ExecJobQueue.HasItem();
-        return ret;
-    }
-
-    // 終了待ちキューに登録されているジョブが存在するかどうか.
-    IZ_BOOL CJobQueue::HasFinishJob()
-    {
-        IZ_BOOL ret = m_FinishJobQueue.HasItem();
-        return ret;
-    }
-
-    // デキュー
-    CJob* CJobQueue::Dequeue()
-    {
-        CJob* ret = m_ExecJobQueue.Dequeue();
-        return ret;
-    }
-
-    // 終了ジョブとしてエンキュー
-    IZ_BOOL CJobQueue::EnqueueAsFinishJob(CJob* job)
-    {
-        return m_FinishJobQueue.Enqueue(job->GetQueueItem(), this, IZ_NULL);
-    }
-
-    // 終了ジョブキューからデキュー
-    CJob* CJobQueue::DequeueFromFinishJobQueue()
-    {
-        return m_FinishJobQueue.Dequeue();
-    }
-
-    // ワーカースレッドが停止したことを通知
-    void CJobQueue::NotifyWorkerThreadSuspend()
-    {
-        if (m_IsWaiting)
-        {
-            IZ_INTERLOCKED_DECREMENT(&m_WorkingThreadNum);
-            IZ_ASSERT(m_WorkingThreadNum >= 0);
-
-            if (m_WorkingThreadNum == 0)
-            {
-                // ワーカーがすべて待機状態になったのでシグナル化
-                sys::CGuarder guard(m_WaitEventSafe);
-                m_WaitEvent.Set();
+                item = next;
             }
         }
     }
 
-    // ジョブをキャンセル
-    IZ_BOOL CJobQueue::Cancel(CJob* job)
+    // �󂢂Ă��郏�[�J�[���擾.
+    CJobWorker* CJobQueue::GetWaitingJobWorker()
     {
-        IZ_BOOL ret = m_ExecJobQueue.Remove(job->GetQueueItem());
-        if (!ret)
-        {
-            ret = m_FinishJobQueue.Remove(job->GetQueueItem());
+        for (IZ_UINT i = 0; i < m_WorkerNum; i++) {
+            if (m_Workers[i]->IsWaiting()) {
+                return m_Workers[i];
+            }
         }
-        return ret;
+
+        return IZ_NULL;
     }
 
+    void CJobQueue::UpdateQueues()
+    {
+        sys::CGuarder guard(s_QueueListGuarder);
+        {
+            CStdList<CJobQueue>::Item* item = s_JobQueueList.GetTop();
+
+            while (item != IZ_NULL) {
+                CJobQueue* jobQueue = item->GetData();
+                jobQueue->Update();
+
+                item = item->GetNext();
+            }
+        }
+    }
+
+    void CJobQueue::TerminateJobQueue()
+    {
+        sys::CGuarder guard(s_QueueListGuarder);
+        {
+            CStdList<CJobQueue>::Item* item = s_JobQueueList.GetTop();
+
+            while (item != IZ_NULL) {
+                CJobQueue* jobQueue = item->GetData();
+                item = item->GetNext();
+
+                jobQueue->Terminate();
+            }
+
+            s_JobQueueList.Clear();
+        }
+
+        s_QueueListGuarder.Close();
+    }
 }   // namespace threadmodel
 }   // namespace izanagi
