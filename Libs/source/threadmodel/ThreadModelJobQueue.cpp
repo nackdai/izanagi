@@ -49,6 +49,7 @@ namespace threadmodel
 
         for (IZ_UINT i = 0; i < threadNum; i++) {
             m_Workers[i] = new(p) CJobWorker();
+            p += sizeof(CJobWorker);
         }
 
         m_WorkerNum = threadNum;
