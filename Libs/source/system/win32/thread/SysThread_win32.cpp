@@ -108,6 +108,21 @@ namespace sys
         }
     }
 
+    void CThread::Init(
+        const ThreadName* name,
+        IRunnable* runnable,
+        void* userData)
+    {
+        Init(0, name, runnable, userData);
+    }
+
+    void CThread::Init(
+        IRunnable* runnable,
+        void* userData)
+    {
+        Init(0, IZ_NULL, runnable, userData);
+    }
+
     // このスレッドの実行を開始.
     IZ_BOOL CThread::Start()
     {
