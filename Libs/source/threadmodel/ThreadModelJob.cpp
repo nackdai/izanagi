@@ -8,6 +8,8 @@ namespace threadmodel
 {
     CJob::CJob()
     {
+        m_Allocator = IZ_NULL;
+
         m_ListItem.Init(this);
         m_JobQueue = IZ_NULL;
 
@@ -17,11 +19,15 @@ namespace threadmodel
 
         m_RunResult = IZ_FALSE;
         m_IsCanceled = IZ_FALSE;
+
+        m_EnableDeleteWhenFinish = IZ_FALSE;
     }
 
     CJob::~CJob()
     {
         m_Mutex.Close();
+
+        FREE(m_Allocator, this);
     }
 
     void CJob::Run()
@@ -93,6 +99,16 @@ namespace threadmodel
     IZ_BOOL CJob::IsRegistered(CJobQueue* jobQueue)
     {
         return (m_JobQueue == jobQueue);
+    }
+
+    void CJob::SetEnableDeleteWhenFinish()
+    {
+        m_EnableDeleteWhenFinish = IZ_TRUE;
+    }
+
+    IZ_BOOL CJob::EnableDeleteWhenFinish()
+    {
+        return m_EnableDeleteWhenFinish;
     }
 
     void CJob::OnFinish(IZ_BOOL runResult)

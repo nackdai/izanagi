@@ -72,13 +72,13 @@ namespace threadmodel
         VRETURN(m_Workers != IZ_NULL);
 
         for (IZ_UINT i = 0; i < m_WorkerNum; i++) {
-            VRETURN(!m_Workers[i]->Start());
+            VRETURN(m_Workers[i]->Start());
         }
 
         return IZ_TRUE;
     }
 
-    IZ_BOOL CJobQueue::Enqueue(CJob* job)
+    IZ_BOOL CJobQueue::Enqueue(CJob* job, IZ_BOOL deleteJobWhenFinish/*= IZ_FALSE*/)
     {
         IZ_ASSERT(job != IZ_NULL);
 
@@ -88,6 +88,10 @@ namespace threadmodel
         {
             // Jobを待機状態にセット
             job->SetState(CJob::State_Waiting);
+
+            if (deleteJobWhenFinish) {
+                job->SetEnableDeleteWhenFinish();
+            }
 
             // リストに登録
             m_JobList.AddTail(job->GetListItem());
@@ -101,8 +105,9 @@ namespace threadmodel
         while (IZ_TRUE) {
             IZ_UINT jobNum = 0;
 
-            sys::CGuarder guard(m_JobListGuarder);
             {
+                sys::CGuarder guard(m_JobListGuarder);
+
                 jobNum = m_JobList.GetItemNum();
             }
 
@@ -131,14 +136,19 @@ namespace threadmodel
 
     void CJobQueue::Terminate()
     {
+        if (m_IsTerminated) {
+            return;
+        }
+
         CancelAllJobs();
 
         // リストが空になるまで処理する
         while (IZ_TRUE) {
             IZ_UINT jobNum = 0;
 
-            sys::CGuarder guard(m_JobListGuarder);
             {
+                sys::CGuarder guard(m_JobListGuarder);
+
                 jobNum = m_JobList.GetItemNum();
             }
 
@@ -165,6 +175,8 @@ namespace threadmodel
         {
             m_ListItem.Leave();
         }
+
+        m_IsTerminated = IZ_TRUE;
     }
 
     void CJobQueue::Update()
@@ -200,6 +212,10 @@ namespace threadmodel
 
                 if (isFinish) {
                     item->Leave();
+
+                    if (job->EnableDeleteWhenFinish()) {
+                        delete job;
+                    }
                 }
 
                 item = next;
@@ -236,8 +252,9 @@ namespace threadmodel
 
     void CJobQueue::TerminateJobQueue()
     {
-        sys::CGuarder guard(s_QueueListGuarder);
         {
+            sys::CGuarder guard(s_QueueListGuarder);
+
             CStdList<CJobQueue>::Item* item = s_JobQueueList.GetTop();
 
             while (item != IZ_NULL) {

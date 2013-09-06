@@ -38,8 +38,9 @@ namespace threadmodel
 
     void CJobWorker::Register(CJob* job)
     {
-        sys::CGuarder guard(m_Mutex);
         {
+            sys::CGuarder guard(m_Mutex);
+
             IZ_ASSERT(m_Job == IZ_NULL);
 
             if (m_State == State_Waiting)
@@ -79,19 +80,20 @@ namespace threadmodel
 
     void CJobWorker::Join()
     {
-        sys::CGuarder guard(m_Mutex);
         {
+            sys::CGuarder guard(m_Mutex);
+
             if (m_State == State_Joined) {
                 return;
             }
 
             m_State = State_WillJoin;
-
-            // Ž~‚Ü‚Á‚Ä‚¢‚é‚©‚à‚µ‚ê‚È‚¢‚Ì‚Å‹N‚±‚·
-            m_Sema.Release();
-
-            sys::CThread::Join();
         }
+
+        // Ž~‚Ü‚Á‚Ä‚¢‚é‚©‚à‚µ‚ê‚È‚¢‚Ì‚Å‹N‚±‚·
+        m_Sema.Release();
+
+        sys::CThread::Join();
     }
 
     CJobWorker::State CJobWorker::GetState()
