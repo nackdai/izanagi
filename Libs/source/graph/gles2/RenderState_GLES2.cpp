@@ -154,6 +154,13 @@ namespace graph
     // カリングモード
     void CRenderState::SetCullMode(CGraphicsDevice* device, IZ_DWORD cull)
     {
+        if (cull == E_GRAPH_CULL_NONE) {
+            CALL_GLES2_API(::glDisable(GL_CULL_FACE));
+        }
+        else {
+            CALL_GLES2_API(::glEnable(GL_CULL_FACE));
+        }
+
         if (cullMode != cull) {
             GLenum raelCull = IZ_GET_TARGET_CULL((E_GRAPH_CULL)cull);
 
