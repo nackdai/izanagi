@@ -11,7 +11,7 @@ namespace threadmodel
 
     /** ジョブのベース
      */
-    class CJob : CPlacementNew
+    class CJob : public CPlacementNew
     {
         friend class CJobQueue;
         friend class CJobWorker;
@@ -39,6 +39,12 @@ namespace threadmodel
             }
 
             return ret;
+        }
+
+        static void DeleteJob(CJob*& job)
+        {
+            delete job;
+            FREE(job->m_Allocator, job);
         }
 
     protected:
