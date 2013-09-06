@@ -73,10 +73,19 @@ namespace sys
 
         NO_COPIABLE(CThread);
 
-    private:
+    public:
         void Init(
             IZ_UINT cpu,
             const ThreadName* name,
+            IRunnable* runnable,
+            void* userData);
+
+        void Init(
+            const ThreadName* name,
+            IRunnable* runnable,
+            void* userData);
+
+        void Init(
             IRunnable* runnable,
             void* userData);
 
