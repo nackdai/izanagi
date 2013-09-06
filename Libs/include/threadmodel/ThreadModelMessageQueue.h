@@ -22,9 +22,16 @@ namespace threadmodel
 
     public:
         CMessage* Peek();
+        CMessage* PeekWithWaitingIfNoMessage();
+
         CMessage* Get();
+        CMessage* GetWithWaitingIfNoMessage();
 
         void Post(CMessage* msg);
+
+        IZ_UINT GetPostedMessageNum();
+
+        void WaitEmpty(IZ_BOOL deleteMsg);
 
     private:
         CStdList<CMessage> m_MessageList;
