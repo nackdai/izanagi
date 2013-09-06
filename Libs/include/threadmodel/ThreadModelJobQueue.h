@@ -39,7 +39,7 @@ namespace threadmodel
 
         /** ジョブをキューに積む.
          */
-        IZ_BOOL Enqueue(CJob* job);
+        IZ_BOOL Enqueue(CJob* job, IZ_BOOL deleteJobWhenFinish = IZ_FALSE);
 
         /** スレッド終了.
          *

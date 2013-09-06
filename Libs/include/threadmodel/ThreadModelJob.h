@@ -11,7 +11,7 @@ namespace threadmodel
 
     /** ジョブのベース
      */
-    class CJob
+    class CJob : CPlacementNew
     {
         friend class CJobQueue;
         friend class CJobWorker;
@@ -27,9 +27,25 @@ namespace threadmodel
             State_Finished,
         };
 
+        template <typename _T>
+        static CJob* CreateJob(IMemoryAllocator* allocator)
+        {
+            void* buf = ALLOC(allocator, sizeof(_T));
+            VRETURN_NULL(buf != IZ_NULL);
+
+            _T* ret = new(buf) _T();
+            {
+                ret->m_Allocator = allocator;
+            }
+
+            return ret;
+        }
+
     protected:
         CJob();
         virtual ~CJob();
+
+        IZ_DEFINE_INTERNAL_RELEASE();
 
     public:
         /** キャンセル.
@@ -68,7 +84,12 @@ namespace threadmodel
         // 指定されたジョブキューに登録済みかどうか
         IZ_BOOL IsRegistered(CJobQueue* jobQueue);
 
+        void SetEnableDeleteWhenFinish();
+        IZ_BOOL EnableDeleteWhenFinish();
+
     private:
+        IMemoryAllocator* m_Allocator;
+
         CStdList<CJob>::Item m_ListItem;
 
         // 登録されているジョブキュー
@@ -80,6 +101,8 @@ namespace threadmodel
         IZ_BOOL m_RunResult;
 
         IZ_BOOL m_IsCanceled;
+
+        IZ_BOOL m_EnableDeleteWhenFinish;
     };
 }   // namespace threadmodel
 }   // namespace izanagi
