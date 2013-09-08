@@ -129,13 +129,11 @@
     <ClInclude Include="..\..\include\system\Pad.h" />
     <ClInclude Include="..\..\include\system\Pad_DInput.h" />
     <ClInclude Include="..\..\include\system\Pad_XInput.h" />
-    <ClInclude Include="..\..\include\system\SysCpu.h" />
-    <ClInclude Include="..\..\include\system\SysDisplay.h" />
+    <ClInclude Include="..\..\include\system\SysEnvironment.h" />
     <ClInclude Include="..\..\include\system\SysInterlocked.h" />
     <ClInclude Include="..\..\include\system\SysTimer.h" />
     <ClInclude Include="..\..\include\system\SysUtil.h" />
     <ClInclude Include="..\..\include\system\SysWindow.h" />
-    <ClInclude Include="..\..\include\system\SysCond.h" />
     <ClInclude Include="..\..\include\system\SysEvent.h" />
     <ClInclude Include="..\..\include\system\SysMutex.h" />
     <ClInclude Include="..\..\include\system\SysSemaphore.h" />
@@ -155,10 +153,10 @@
     <ClCompile Include="..\..\source\system\win32\device\Pad_XInput.cpp" />
     <ClCompile Include="..\..\source\system\win32\SysCpu_win32.cpp" />
     <ClCompile Include="..\..\source\system\win32\SysDisplay_win32.cpp" />
+    <ClCompile Include="..\..\source\system\win32\SysEnvironment_win32 .cpp" />
     <ClCompile Include="..\..\source\system\win32\SysTimer_win32.cpp" />
     <ClCompile Include="..\..\source\system\win32\SysUtil_win32.cpp" />
     <ClCompile Include="..\..\source\system\win32\SysWindow_win32.cpp" />
-    <ClCompile Include="..\..\source\system\win32\thread\SysCond_win32.cpp" />
     <ClCompile Include="..\..\source\system\win32\thread\SysEvent_win32.cpp" />
     <ClCompile Include="..\..\source\system\win32\thread\SysMutex_win32.cpp" />
     <ClCompile Include="..\..\source\system\win32\thread\SysSemaphore_win32.cpp" />

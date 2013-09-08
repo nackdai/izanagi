@@ -26,12 +26,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\system\SysCpu.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\system\SysDisplay.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\system\SysTimer.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -40,9 +34,6 @@
     </ClInclude>
     <ClInclude Include="..\..\include\system\SysWindow.h">
       <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\system\SysCond.h">
-      <Filter>include\thread</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\system\SysEvent.h">
       <Filter>include\thread</Filter>
@@ -93,6 +84,9 @@
     <ClInclude Include="..\..\include\system\izDInput.h">
       <Filter>include\device</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\system\SysEnvironment.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\system\win32\thread\SysMutex_win32.cpp">
@@ -102,9 +96,6 @@
       <Filter>source\win32\thread</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\system\win32\thread\SysThread_win32.cpp">
-      <Filter>source\win32\thread</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\system\win32\thread\SysCond_win32.cpp">
       <Filter>source\win32\thread</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\system\win32\thread\SysEvent_win32.cpp">
@@ -148,6 +139,9 @@
     </ClCompile>
     <ClCompile Include="..\..\source\system\win32\device\Mouse_DInput.cpp">
       <Filter>source\win32\device</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\win32\SysEnvironment_win32 .cpp">
+      <Filter>source\win32</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
