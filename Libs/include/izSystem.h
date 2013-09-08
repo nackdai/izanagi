@@ -1,9 +1,8 @@
 #if !defined(__IZANAGI_SYSTEM_H__)
 #define __IZANAGI_SYSTEM_H__
 
+#include "system/SysEnvironment.h"
 #include "system/SysTimer.h"
-#include "system/SysDisplay.h"
-#include "system/SysCpu.h"
 #include "system/SysUtil.h"
 
 // Thread
@@ -11,7 +10,6 @@
 #include "system/SysMutex.h"
 #include "system/SysEvent.h"
 #include "system/SysSemaphore.h"
-#include "system/SysCond.h"
 #include "system/SysInterlocked.h"
 
 // Device
