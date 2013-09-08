@@ -149,6 +149,12 @@ namespace sys
         return IZ_TRUE;
     }
 
+    // スレッド実行中かどうかを取得.
+    IZ_BOOL CThread::IsRunning()
+    {
+        return (m_Handle != IZ_NULL);
+    }
+
     // このスレッドが終了するのを待機.
     void CThread::Join()
     {
@@ -192,6 +198,12 @@ namespace sys
     void CThread::SetName(ThreadName name)
     {
         m_Name.SetString(name.GetString());
+    }
+
+    // ユーザーデータを取得.
+    void* CThread::GetUserData()
+    {
+        return m_UserData;
     }
 }   // namespace sys
 }   // namespace izanagi

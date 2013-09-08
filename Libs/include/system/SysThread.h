@@ -94,6 +94,10 @@ namespace sys
          */
         IZ_BOOL Start();
 
+        /** スレッド実行中かどうかを取得.
+         */
+        IZ_BOOL IsRunning();
+
         /** このスレッドが終了するのを待機.
          */
         void Join();
@@ -117,6 +121,10 @@ namespace sys
         /** 名前設定.
          */
         void SetName(ThreadName name);
+
+        /** ユーザーデータを取得.
+         */
+        void* GetUserData();
 
     protected:
         ThreadHandle m_Handle;
