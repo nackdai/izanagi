@@ -111,6 +111,28 @@ namespace izanagi {
         virtual void Execute(ARG arg1) = 0;
     };
 
+    /** 返り値が無い、かつ引数が無いデリゲート
+     *
+     * @tparam ARG 引数の型
+     */
+    template <>
+    class DelgateArg1<void, void> : public Delegate
+    {
+    protected:
+        DelgateArg1(void* object, void* func) : Delegate(object, func) {}
+        DelgateArg1(const DelgateArg1& rhs) : Delegate(rhs) {}
+        virtual ~DelgateArg1() {}
+
+    public:
+        void operator()()
+        {
+            Execute();
+        }
+
+    protected:
+        virtual void Execute() = 0;
+    };
+
     /** C#のActionに相当
      *
      * @tparam ARG 引数の型
@@ -155,6 +177,14 @@ namespace izanagi {
             (object->*m_Func)(arg1);
         }
 
+        virtual void Execute()
+        {
+            O* object = (O*)GetObject();
+            IZ_ASSERT(object != IZ_NULL);
+            
+            (object->*m_Func)();
+        }
+
     private:
         FUNC m_Func;
     };
@@ -185,6 +215,14 @@ namespace izanagi {
             IZ_ASSERT(func != IZ_NULL);
 
             (*func)(arg1);
+        }
+
+        virtual void Execute()
+        {           
+            FUNC func = (FUNC)GetFunc();
+            IZ_ASSERT(func != IZ_NULL);
+
+            (*func)();
         }
     };
 
