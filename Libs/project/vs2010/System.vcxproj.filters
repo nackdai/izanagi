@@ -101,9 +101,6 @@
     <ClCompile Include="..\..\source\system\win32\thread\SysEvent_win32.cpp">
       <Filter>source\win32\thread</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\system\win32\SysDisplay_win32.cpp">
-      <Filter>source\win32</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\system\win32\SysTimer_win32.cpp">
       <Filter>source\win32</Filter>
     </ClCompile>
@@ -111,9 +108,6 @@
       <Filter>source\win32</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\system\win32\SysWindow_win32.cpp">
-      <Filter>source\win32</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\system\win32\SysCpu_win32.cpp">
       <Filter>source\win32</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\system\win32\device\Pad_DInput.cpp">
