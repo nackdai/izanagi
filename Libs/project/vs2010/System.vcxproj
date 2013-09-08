@@ -151,8 +151,6 @@
     <ClCompile Include="..\..\source\system\win32\device\Mouse_DInput.cpp" />
     <ClCompile Include="..\..\source\system\win32\device\Pad_DInput.cpp" />
     <ClCompile Include="..\..\source\system\win32\device\Pad_XInput.cpp" />
-    <ClCompile Include="..\..\source\system\win32\SysCpu_win32.cpp" />
-    <ClCompile Include="..\..\source\system\win32\SysDisplay_win32.cpp" />
     <ClCompile Include="..\..\source\system\win32\SysEnvironment_win32 .cpp" />
     <ClCompile Include="..\..\source\system\win32\SysTimer_win32.cpp" />
     <ClCompile Include="..\..\source\system\win32\SysUtil_win32.cpp" />
