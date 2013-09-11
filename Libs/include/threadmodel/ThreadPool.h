@@ -28,6 +28,7 @@ namespace threadmodel
 
         public:
             void SetRunnable(sys::IRunnable* runnable);
+            sys::IRunnable* GetRunnable();
 
             CStdList<CThread>::Item* GetListItem() { return &m_ListItem; }
 

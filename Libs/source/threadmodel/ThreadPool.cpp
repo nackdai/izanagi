@@ -26,6 +26,11 @@ namespace threadmodel
         m_Sema.Release();
     }
 
+    sys::IRunnable* CThreadPool::CThread::GetRunnable()
+    {
+        return m_Runnable;
+    }
+
     void CThreadPool::CThread::Run()
     {
         for (;;) {

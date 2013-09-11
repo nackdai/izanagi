@@ -7,6 +7,7 @@ namespace threadmodel
 {
     static const IZ_INT PARALLEL_CHUNK_SIZE = 4;
 
+    // インデックス取得
     class CIndexProxy
     {
     public:
@@ -25,11 +26,13 @@ namespace threadmodel
         }
 
     public:
+        // スレッドセーフで開始、終了インデックスを取得
         IZ_BOOL GetIndex(IZ_INT& from, IZ_INT& to)
         {
             sys::CGuarder guarder(m_Mutex);
 
             if (m_Current >= m_To) {
+                // 範囲を超えた
                 return IZ_FALSE;
             }
 
@@ -67,12 +70,18 @@ namespace threadmodel
             return ret;
         }
 
+        static void Delete(IMemoryAllocator* allocator, CParallelFor* runnable)
+        {
+            delete runnable;
+            FREE(allocator, runnable);
+        }
+
     protected:
         CParallelFor(CIndexProxy& proxy)
             : m_Proxy(proxy)
         {
         }
-        virtual ~CParallelFor();
+        virtual ~CParallelFor() {}
 
     public:
         virtual void Run(void* data)
@@ -87,12 +96,13 @@ namespace threadmodel
             }
         }
 
-        virtual void RunInternal(IZ_INT idx);
+        virtual void RunInternal(IZ_INT idx) = 0;
 
     protected:
         CIndexProxy& m_Proxy;
     };
 
+    // Actionデリゲートで処理を実行する
     class CParallelForAction : public CParallelFor
     {
     public:
@@ -115,7 +125,7 @@ namespace threadmodel
             : CParallelFor(proxy), m_Action(action)
         {
         }
-        virtual ~CParallelForAction();
+        virtual ~CParallelForAction() {}
 
         virtual void RunInternal(IZ_INT idx)
         {
@@ -126,6 +136,7 @@ namespace threadmodel
         ActionDelegate<IZ_INT>& m_Action;
     };
 
+    // 関数ポインタで処理を実行する
     class CParallelForFunc : public CParallelFor
     {
     public:
@@ -148,7 +159,7 @@ namespace threadmodel
             : CParallelFor(proxy), m_Func(func)
         {
         }
-        virtual ~CParallelForFunc();
+        virtual ~CParallelForFunc() {}
 
         virtual void RunInternal(IZ_INT idx)
         {
@@ -172,7 +183,8 @@ namespace threadmodel
 
         CIndexProxy proxy(fromInclusive, toExclusive);
 
-        for (IZ_UINT i = 0; i < threadCount; i++) { 
+        for (IZ_UINT i = 0; i < threadCount; i++) {
+            // 実行インスタンスを作成
             _T* runnable = _T::Create(
                 allocator,
                 proxy,
@@ -181,6 +193,7 @@ namespace threadmodel
             IZ_ASSERT(runnable != IZ_NULL);
 
             // TODO
+            // スレッド取得
             CThreadPool::CThread* thread = CThreadPool::GetThread(runnable);
             IZ_ASSERT(thread != IZ_NULL);
 
@@ -193,7 +206,11 @@ namespace threadmodel
                 break;
             }
 
+            _T* runnable = (_T*)threadArray[i]->GetRunnable();
+
+            // スレッド終了を待つ
             threadArray[i]->Join();
+            CParallelFor::Delete(allocator, runnable);
         }
     }
 
@@ -219,6 +236,7 @@ namespace threadmodel
             func);
     }
 
+    // データを取得
     class CDataProxy
     {
     public:
@@ -236,7 +254,8 @@ namespace threadmodel
         }
 
     public:
-        IZ_UINT8* GetData(IZ_UINT count)
+        // データを取得
+        IZ_UINT8* GetData(IZ_UINT& count)
         {
             sys::CGuarder guarder(m_Mutex);
 
@@ -244,14 +263,24 @@ namespace threadmodel
                 return IZ_NULL;
             }
 
+            // データ先頭位置を計算
             IZ_UINT8* ret = m_Data + m_Stride * m_Current;
+
+            // データ数
             count = PARALLEL_CHUNK_SIZE;
 
             if (m_Current + PARALLEL_CHUNK_SIZE > m_Count) {
+                // オーバーするので再計算
                 count = m_Count - m_Current;
                 m_Current = m_Count;
+
+                if (count == 0) {
+                    // ある？
+                    ret = IZ_NULL;
+                }
             }
             else {
+                // 次に呼ばれた時の位置を更新
                 m_Current += PARALLEL_CHUNK_SIZE;
             }
 
@@ -286,6 +315,12 @@ namespace threadmodel
             return ret;
         }
 
+        static void Delete(IMemoryAllocator* allocator, CParallelForEach* runnable)
+        {
+            delete runnable;
+            FREE(allocator, runnable);
+        }
+
     protected:
         CParallelForEach(CDataProxy& proxy)
             : m_Proxy(proxy)
@@ -315,6 +350,7 @@ namespace threadmodel
         CDataProxy& m_Proxy;
     };
 
+    // Actionデリゲートで処理を実行
     class CParallelForEachAction : public CParallelForEach
     {
     public:
@@ -338,7 +374,7 @@ namespace threadmodel
         {
         }
 
-        virtual ~CParallelForEachAction();
+        virtual ~CParallelForEachAction() {}
 
     public:
         virtual void RunInternal(void* data)
@@ -350,6 +386,7 @@ namespace threadmodel
         ActionDelegate<void*>& m_Action;
     };
 
+    // 関数ポインタで処理を実行
     class CParallelForEachFunc : public CParallelForEach
     {
     public:
@@ -373,7 +410,7 @@ namespace threadmodel
         {
         }
 
-        virtual ~CParallelForEachFunc();
+        virtual ~CParallelForEachFunc() {}
 
     public:
         virtual void RunInternal(void* data)
@@ -400,6 +437,7 @@ namespace threadmodel
         CDataProxy proxy(data, stride, count);
 
         for (IZ_UINT i = 0; i < threadCount; i++) {
+            // 実行インスタンスを作成
             _T* runnable = _T::Create(
                 allocator,
                 proxy,
@@ -408,6 +446,7 @@ namespace threadmodel
             IZ_ASSERT(runnable != IZ_NULL);
 
             // TODO
+            // スレッドを取得
             CThreadPool::CThread* thread = CThreadPool::GetThread(runnable);
             IZ_ASSERT(thread != IZ_NULL);
 
@@ -420,7 +459,11 @@ namespace threadmodel
                 break;
             }
 
+            _T* runnable = (_T*)threadArray[i]->GetRunnable();
+
+            // 終了を待つ
             threadArray[i]->Join();
+            CParallelForEach::Delete(allocator, runnable);
         }
     }
 
