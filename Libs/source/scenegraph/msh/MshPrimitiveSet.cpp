@@ -9,6 +9,8 @@ using namespace izanagi;
 
 CPrimitiveSet::CPrimitiveSet()
 {
+    m_Joints = IZ_NULL;
+
     m_VB = IZ_NULL;
     m_IB = IZ_NULL;
 
@@ -70,11 +72,11 @@ IZ_UINT8* CPrimitiveSet::Read(
     // 所属関節へのインデックス
     if (m_Info.numJoints > 0) {
         // バッファ確保
-        m_Info.joints = reinterpret_cast<IZ_INT16*>(buf);
+        m_Joints = reinterpret_cast<IZ_INT16*>(buf);
         size_t size = sizeof(IZ_UINT16) * m_Info.numJoints;
 
         // 読み込み
-        IZ_INPUT_READ_ASSERT(pIn, m_Info.joints, 0, size);
+        IZ_INPUT_READ_ASSERT(pIn, m_Joints, 0, size);
 
         buf += size;
     }
@@ -110,8 +112,8 @@ IZ_BOOL CPrimitiveSet::Render(
     if (pRenderHandler != IZ_NULL) {
         if (pSkeleton != IZ_NULL) {
             for (IZ_UINT i = 0; i < m_Info.numJoints; ++i) {
-                if (m_Info.joints[i] >= 0) {
-                    IZ_UINT16 idx = m_Info.joints[i];
+                if (m_Joints[i] >= 0) {
+                    IZ_UINT16 idx = m_Joints[i];
                     const math::SMatrix* pMtx = pSkeleton->GetJointMtx(idx);
 
                     pRenderHandler->SetJointMatrix(
@@ -174,7 +176,7 @@ IZ_BOOL CPrimitiveSet::DebugRender(
     };
 
     for (IZ_UINT i = 0; i < m_Info.numJoints; ++i) {
-        IZ_INT idx = m_Info.joints[i];
+        IZ_INT idx = m_Joints[i];
         if (idx >= 0) {
             tblJointMtx[i] = pSkeleton->GetJointMtx(idx);
         }

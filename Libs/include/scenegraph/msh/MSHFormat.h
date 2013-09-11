@@ -138,8 +138,6 @@ namespace izanagi {
 
         IZ_UINT numIdx;                     ///< インデックス数
         graph::E_GRAPH_INDEX_BUFFER_FMT fmtIdx; ///< インデックスフォーマット
-
-        IZ_INT16* joints;   ///< ジョイントインデックスバッファ
     };
 }   // namespace izanagi
 
