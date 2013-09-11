@@ -4,9 +4,6 @@
 #include "izStd.h"
 #include "izSystem.h"
 
-#include "threadmodel/ThreadModelJob.h"
-#include "threadmodel/ThreadModelJobQueue.h"
-
 namespace izanagi
 {
 namespace threadmodel
@@ -15,51 +12,46 @@ namespace threadmodel
      */
     class CParallel
     {
-    protected:
+    private:
         CParallel();
-        virtual ~CParallel();
-
-        NO_COPIABLE(CParallel);
+        ~CParallel();
 
     public:
-        void Start();
+        void For(
+            IMemoryAllocator* allocator,
+            IZ_INT fromInclusive, IZ_INT toExclusive, 
+            ActionDelegate<IZ_INT>& action);
 
-        void Join();
+        void For(
+            IMemoryAllocator* allocator,
+            IZ_INT fromInclusive, IZ_INT toExclusive, 
+            void (*func)(IZ_INT));
 
-    protected:
-        IZ_BOOL IsRunning() const;
+        void ForEach(
+            IMemoryAllocator* allocator,
+            void* data, size_t stride,
+            IZ_UINT count,
+            ActionDelegate<void*>& action);
 
-    protected:
-        IMemoryAllocator* m_Allocator;
+        void ForEach(
+            IMemoryAllocator* allocator,
+            void* data, size_t stride,
+            IZ_UINT count,
+            void (*func)(void*));
 
-        CJobQueue m_JobQueue;
+    private:
+        template <typename _T, typename _CALLBACK>
+        void For(
+            IMemoryAllocator* allocator,
+            IZ_INT fromInclusive, IZ_INT toExclusive, 
+            _CALLBACK callback);
 
-        IZ_BOOL m_IsRunning;
-
-        class CParallelJob : public CJob
-        {
-        public:
-            CParallelJob()
-            {
-                m_Delegate = IZ_NULL;
-            }
-
-            virtual ~CParallelJob()
-            {
-                if (m_Delegate != IZ_NULL)
-                {
-                    Delegate::Delete(m_Delegate);
-                }
-            }
-
-            void SetDelegate(Delegate* delegate)
-            {
-                m_Delegate = delegate;
-            }
-
-        protected:
-            Delegate* m_Delegate;
-        };
+        template <typename _T, typename _CALLBACK>
+        void ForEach(
+            IMemoryAllocator* allocator,
+            void* data, size_t stride,
+            IZ_UINT count,
+            _CALLBACK callback);
     };
 }   // namespace threadmodel
 }   // namespace izanagi
