@@ -37,6 +37,12 @@
     <ClInclude Include="..\..\include\threadmodel\ThreadModelMessage.h">
       <Filter>include\MessageQueue</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\threadmodel\ThreadPool.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\threadmodel\Parallel.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\threadmodel\ThreadModelJobQueue.cpp">
@@ -50,6 +56,12 @@
     </ClCompile>
     <ClCompile Include="..\..\source\threadmodel\ThreadModelMessageQueue.cpp">
       <Filter>source\MessageQueue</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\threadmodel\ThreadPool.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\threadmodel\Parallel.cpp">
+      <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

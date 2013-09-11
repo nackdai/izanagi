@@ -12,7 +12,7 @@ namespace threadmodel
 
     /** ジョブを実行するワーカースレッド
      */
-    class CJobWorker : public sys::CThread
+    class CJobWorker
     {
         friend class CJobQueue;
 
@@ -28,7 +28,6 @@ namespace threadmodel
 
     private:
         CJobWorker();
-        CJobWorker(const sys::ThreadName& name);
         virtual ~CJobWorker();
 
         NO_COPIABLE(CJobWorker);
@@ -36,9 +35,9 @@ namespace threadmodel
         IZ_DECL_PLACEMENT_NEW();
 
     private:
-        virtual void Run();
-
         void Register(CJob* job);
+
+        void Start();
 
         void Join();
 
@@ -54,6 +53,21 @@ namespace threadmodel
         CJob* m_Job;
 
         State m_State;
+
+        sys::CThread* m_Thread;
+
+        class CRunnable : public sys::IRunnable
+        {
+        public:
+            CRunnable() {}
+            ~CRunnable() {}
+
+            virtual void Run(void* data);
+
+            CJobWorker* worker;
+        };
+
+        CRunnable m_Runner;
     };
 }   // namespace threadmodel
 }   // namespace izanagi

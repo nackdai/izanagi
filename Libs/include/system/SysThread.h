@@ -100,7 +100,7 @@ namespace sys
 
         /** このスレッドが終了するのを待機.
          */
-        void Join();
+        virtual void Join();
 
         /** 処理実行.
          */
