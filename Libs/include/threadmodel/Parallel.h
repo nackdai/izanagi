@@ -17,23 +17,23 @@ namespace threadmodel
         ~CParallel();
 
     public:
-        void For(
+        static void For(
             IMemoryAllocator* allocator,
             IZ_INT fromInclusive, IZ_INT toExclusive, 
             ActionDelegate<IZ_INT>& action);
 
-        void For(
+        static void For(
             IMemoryAllocator* allocator,
             IZ_INT fromInclusive, IZ_INT toExclusive, 
             void (*func)(IZ_INT));
 
-        void ForEach(
+        static void ForEach(
             IMemoryAllocator* allocator,
             void* data, size_t stride,
             IZ_UINT count,
             ActionDelegate<void*>& action);
 
-        void ForEach(
+        static void ForEach(
             IMemoryAllocator* allocator,
             void* data, size_t stride,
             IZ_UINT count,
@@ -41,13 +41,13 @@ namespace threadmodel
 
     private:
         template <typename _T, typename _CALLBACK>
-        void For(
+        static void For(
             IMemoryAllocator* allocator,
             IZ_INT fromInclusive, IZ_INT toExclusive, 
             _CALLBACK callback);
 
         template <typename _T, typename _CALLBACK>
-        void ForEach(
+        static void ForEach(
             IMemoryAllocator* allocator,
             void* data, size_t stride,
             IZ_UINT count,
