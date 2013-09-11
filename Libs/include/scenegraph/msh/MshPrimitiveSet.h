@@ -55,6 +55,9 @@ namespace izanagi {
     private:
         S_MSH_PRIM_SET m_Info;
 
+        // ジョイントインデックスバッファ
+        IZ_INT16* m_Joints;
+
         IZ_UINT m_PrimNum;
 
         graph::CVertexBuffer* m_VB;
