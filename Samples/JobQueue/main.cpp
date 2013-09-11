@@ -125,7 +125,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     int ret = SampleMain(
         hInstance,
         &app,
-        "JobQueueApp",
+        "JobQueue",
         SCREEN_WIDTH, SCREEN_HEIGHT,
         BUF, BUF_SIZE,
         GFX_BUF, GFX_BUF_SIZE);
