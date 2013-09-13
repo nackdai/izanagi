@@ -101,21 +101,16 @@ IZ_UINT8* CAnimation::Init(
     // 読み込んだチャンネル情報分減らす
     nDataSize -= sizeof(S_ANM_CHANNEL) * m_Header.numChannels;
 
-    // ノード情報とチャンネル情報を関連付ける
-    for (IZ_UINT nKeyIdx = 0; nKeyIdx < m_Header.numNodes; ++nKeyIdx) {
-        S_ANM_NODE& sNode = *m_pNodes[nKeyIdx].node;
-
-        sNode.channels = reinterpret_cast<S_ANM_CHANNEL*>(pBuf);
-        pBuf += sizeof(S_ANM_CHANNEL) * sNode.numChannels;
-    }
+    m_Channels = reinterpret_cast<S_ANM_CHANNEL*>(pBuf);
+    pBuf += sizeof(S_ANM_CHANNEL) * m_Header.numChannels;
 
     // チャンネル情報にキー情報用のバッファを割り当てる
     for (IZ_UINT nKeyIdx = 0; nKeyIdx < m_Header.numNodes; ++nKeyIdx) {
         S_ANM_NODE& sNode = *m_pNodes[nKeyIdx].node;
 
         for (IZ_UINT nChannelIdx = 0; nChannelIdx < sNode.numChannels; ++nChannelIdx) {
-            sNode.channels[nChannelIdx].keys = reinterpret_cast<S_ANM_KEY**>(pBuf);
-            pBuf += sizeof(S_ANM_KEY*) * sNode.channels[nChannelIdx].numKeys;
+            m_Channels[nChannelIdx + sNode.channelIdx].keys = reinterpret_cast<S_ANM_KEY**>(pBuf);
+            pBuf += sizeof(S_ANM_KEY*) * m_Channels[nChannelIdx].numKeys;
         }
     }
 
@@ -128,7 +123,7 @@ IZ_UINT8* CAnimation::Init(
         S_ANM_NODE& sNode = *m_pNodes[nKeyIdx].node;
 
         for (IZ_UINT nChannelIdx = 0; nChannelIdx < sNode.numChannels; ++nChannelIdx) {
-            S_ANM_CHANNEL& sChannel = sNode.channels[nChannelIdx];
+            S_ANM_CHANNEL& sChannel = m_Channels[nChannelIdx + sNode.channelIdx];
 
             for (IZ_UINT nKeyIdx = 0; nKeyIdx < sChannel.numKeys; ++nKeyIdx) {
                 sChannel.keys[nKeyIdx] = reinterpret_cast<S_ANM_KEY*>(pBuf);
@@ -168,7 +163,7 @@ IZ_UINT CAnimation::ApplyAnimation(
     VRETURN_VAL(poseUpdater.BeginUpdate(nJointIdx), 0);
 
     for (IZ_UINT nChannelIdx = 0; nChannelIdx < sAnmNode.numChannels; ++nChannelIdx) {
-        const S_ANM_CHANNEL& sChannel = sAnmNode.channels[nChannelIdx];
+        const S_ANM_CHANNEL& sChannel = m_Channels[nChannelIdx + sAnmNode.channelIdx];
 
         IZ_UINT nParamType = (sChannel.type & E_ANM_TRANSFORM_TYPE_PARAM_MASK);
         IZ_UINT nTransformType = (sChannel.type & E_ANM_TRANSFORM_TYPE_TRANSFORM_MASK);

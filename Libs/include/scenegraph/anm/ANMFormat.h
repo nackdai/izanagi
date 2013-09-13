@@ -157,7 +157,7 @@ namespace izanagi {
         IZ_UINT16 targetIdx;    ///< 適用対象のジョイントのインデックス.
         IZ_UINT16 numChannels;  ///< チャンネル数.
 
-        S_ANM_CHANNEL* channels;
+        IZ_UINT channelIdx;
     };
 
     /** スカラー値の補間処理.
