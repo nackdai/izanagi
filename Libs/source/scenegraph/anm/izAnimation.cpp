@@ -66,7 +66,10 @@ void CAnimation::SetUserFuncInterpVector(FuncInterpVector func)
 CAnimation::CAnimation()
 {
     m_Allocator = IZ_NULL;
+
     m_pNodes = IZ_NULL;
+    m_Channels = IZ_NULL;
+    m_Keys = IZ_NULL;
 
     FILL_ZERO(&m_Header, sizeof(m_Header));
 }
@@ -104,6 +107,9 @@ IZ_UINT8* CAnimation::Init(
     m_Channels = reinterpret_cast<S_ANM_CHANNEL*>(pBuf);
     pBuf += sizeof(S_ANM_CHANNEL) * m_Header.numChannels;
 
+    m_Keys = reinterpret_cast<S_ANM_KEY**>(pBuf);
+    pBuf += sizeof(S_ANM_KEY*) * m_Header.numKeys;
+#if 0
     // チャンネル情報にキー情報用のバッファを割り当てる
     for (IZ_UINT nKeyIdx = 0; nKeyIdx < m_Header.numNodes; ++nKeyIdx) {
         S_ANM_NODE& sNode = *m_pNodes[nKeyIdx].node;
@@ -113,6 +119,7 @@ IZ_UINT8* CAnimation::Init(
             pBuf += sizeof(S_ANM_KEY*) * m_Channels[nChannelIdx].numKeys;
         }
     }
+#endif
 
     // 残りのデータ（キー情報）読み込み
     result = IZ_INPUT_READ(pIn, pBuf, 0, nDataSize);
@@ -126,15 +133,14 @@ IZ_UINT8* CAnimation::Init(
             S_ANM_CHANNEL& sChannel = m_Channels[nChannelIdx + sNode.channelIdx];
 
             for (IZ_UINT nKeyIdx = 0; nKeyIdx < sChannel.numKeys; ++nKeyIdx) {
-                sChannel.keys[nKeyIdx] = reinterpret_cast<S_ANM_KEY*>(pBuf);
+                m_Keys[nKeyIdx + sChannel.keyIdx] = reinterpret_cast<S_ANM_KEY*>(pBuf);
                 pBuf += sizeof(S_ANM_KEY);
-#if 0
-                pBuf += sizeof(IZ_FLOAT) * (sChannel.keys[nKeyIdx]->numParams - 1);
-#else
+
+                S_ANM_KEY* key = m_Keys[nKeyIdx + sChannel.keyIdx];
+
                 // パラメータへのポインタへ実データを割り当てる
-                sChannel.keys[nKeyIdx]->params = reinterpret_cast<IZ_FLOAT*>(pBuf);
-                pBuf += sizeof(IZ_FLOAT) * (sChannel.keys[nKeyIdx]->numParams);
-#endif
+                key->params = reinterpret_cast<IZ_FLOAT*>(pBuf);
+                pBuf += sizeof(IZ_FLOAT) * (key->numParams);
             }
         }
     }
@@ -185,7 +191,7 @@ IZ_UINT CAnimation::ApplyAnimation(
 
         const E_ANM_INTERP_TYPE nInterp = static_cast<E_ANM_INTERP_TYPE>(sChannel.interp);
         const IZ_UINT nKeyNum = sChannel.numKeys;
-        const S_ANM_KEY** pKey = (const S_ANM_KEY**)sChannel.keys;
+        const S_ANM_KEY** pKey = (const S_ANM_KEY**)&m_Keys[sChannel.keyIdx];
 
         if (CAnimationUtil::IsScalarInterp(sChannel.interp)) {
             switch (nParamType) {

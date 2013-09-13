@@ -76,6 +76,8 @@ IZ_BOOL CAnmExporter::Export(
     IZ_UINT nChannelNum = 0;
     std::vector<IZ_UINT> tvKeyNum;
 
+    IZ_UINT keyIdx = 0;
+
     // Export channels,
     for (IZ_UINT nNodeIdx = 0; nNodeIdx < nNodeNum; nNodeIdx++) {
         IZ_UINT nChannelCnt = pImporter->GetAnmChannelNum(nNodeIdx);
@@ -89,6 +91,9 @@ IZ_BOOL CAnmExporter::Export(
                     nNodeIdx,
                     nChannelIdx,
                     sChannel));
+
+            sChannel.keyIdx = keyIdx;
+            keyIdx += sChannel.numKeys;
 
             IZ_OUTPUT_WRITE_VRETURN(&m_Out, &sChannel, 0, sizeof(sChannel));
 

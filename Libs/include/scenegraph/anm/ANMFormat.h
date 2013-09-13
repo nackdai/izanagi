@@ -141,9 +141,9 @@ namespace izanagi {
         IZ_UINT8 stride;
         IZ_UINT16 numKeys;  ///< キーフレーム情報数.
 
-        IZ_UINT type;       ///< アニメーションを行うパラメータのタイプ.
+        IZ_UINT keyIdx;
 
-        S_ANM_KEY** keys;
+        IZ_UINT type;       ///< アニメーションを行うパラメータのタイプ.
     };
 
     /** アニメーションノード.
