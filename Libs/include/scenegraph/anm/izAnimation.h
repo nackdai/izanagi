@@ -104,7 +104,9 @@ namespace izanagi {
         S_ANM_HEADER m_Header;
 
         SAnmNodeInstance* m_pNodes;
+
         S_ANM_CHANNEL* m_Channels;
+        S_ANM_KEY** m_Keys;
 
         CNodeHash m_NodeHash;
     };
