@@ -197,10 +197,6 @@ namespace izanagi {
         void AttachParamBuf();
 
     private:
-        struct STextureHolder {
-            graph::CBaseTexture* tex;
-        };
-
         struct SParameterHolder {
             // パラメータ保持用バッファ
             void* param;
@@ -222,7 +218,7 @@ namespace izanagi {
         S_MTRL_MATERIAL m_Header;
 
         S_MTRL_TEXTURE* m_pTexInfo;
-        STextureHolder* m_TexHolder;
+        graph::CBaseTexture** m_Textures;
 
         S_MTRL_SHADER* m_pShaderInfo;
 

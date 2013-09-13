@@ -106,18 +106,18 @@ CMaterial* CMaterial::CreateMaterial(
     // Compute size of allocating memory.
     size_t nSize = sizeof(CMaterial);
     size_t nTexInfoSize = sizeof(S_MTRL_TEXTURE) * nTexNum;
+    size_t texArraySize = sizeof(graph::CBaseTexture*) * nTexNum;
     size_t nShaderInfoSize = sizeof(S_MTRL_SHADER) * nShaderNum;
     size_t nParamInfoSize = sizeof(S_MTRL_PARAM) * nParamNum;
     size_t nParamDataSize = nParamBytes;
 
-    size_t texHolderSize = sizeof(STextureHolder) * nTexNum;
     size_t paramHolderSize = sizeof(SParameterHolder) * nParamNum;
 
     nSize += nTexInfoSize;
+    nSize += texArraySize;
     nSize += nShaderInfoSize;
     nSize += nParamInfoSize;
     nSize += nParamDataSize;
-    nSize += texHolderSize;
     nSize += paramHolderSize;
 
     // Allocate memory.
@@ -139,8 +139,8 @@ CMaterial* CMaterial::CreateMaterial(
         pInstance->m_pTexInfo = reinterpret_cast<S_MTRL_TEXTURE*>(pBuf);
         pBuf += nTexInfoSize;
 
-        pInstance->m_TexHolder = reinterpret_cast<STextureHolder*>(pBuf);
-        pBuf += texHolderSize;
+        pInstance->m_Textures = reinterpret_cast<graph::CBaseTexture**>(pBuf);
+        pBuf += texArraySize;
 
         pInstance->m_pShaderInfo = reinterpret_cast<S_MTRL_SHADER*>(pBuf);
         pBuf += nShaderInfoSize;
@@ -177,7 +177,7 @@ CMaterial::CMaterial()
     FILL_ZERO(&m_Header, sizeof(m_Header));
 
     m_pTexInfo = IZ_NULL;
-    m_TexHolder = IZ_NULL;
+    m_Textures = IZ_NULL;
 
     m_pShaderInfo = IZ_NULL;
 
@@ -191,7 +191,7 @@ CMaterial::CMaterial()
 CMaterial::~CMaterial()
 {
     for (IZ_UINT i = 0; i < m_Header.numTex; ++i) {
-        SAFE_RELEASE(m_TexHolder[i].tex);
+        SAFE_RELEASE(m_Textures[i]);
     }
 
     for (IZ_UINT i = 0; i < m_Header.numShader; ++i) {
@@ -251,9 +251,9 @@ IZ_BOOL CMaterial::Prepare(graph::CGraphicsDevice* pDevice)
     IZ_UINT texIdx = 0;
     for (IZ_UINT i = 0; i < m_Header.numTex; i++)
     {
-        if (m_TexHolder[i].tex != IZ_NULL)
+        if (m_Textures[i] != IZ_NULL)
         {
-            pDevice->SetTexture(texIdx, m_TexHolder[i].tex);
+            pDevice->SetTexture(texIdx, m_Textures[i]);
             texIdx++;
         }
     }
@@ -336,8 +336,7 @@ IZ_BOOL CMaterial::AddTexture(
             pInfo->key = pInfo->name.GetKeyValue();
 
             pInfo->type.flags = type.flags;
-
-            SAFE_REPLACE(m_TexHolder[pInfo->idx].tex, pTex);
+            SAFE_REPLACE(m_Textures[pInfo->idx], pTex);
         }
     }
 
@@ -367,7 +366,7 @@ IZ_BOOL CMaterial::SetTexture(
     
     if (ret)
     {
-        SAFE_REPLACE(m_TexHolder[pTexInfo->idx].tex, pTex);
+        SAFE_REPLACE(m_Textures[pTexInfo->idx], pTex);
     }
 
     return ret;
@@ -543,9 +542,7 @@ IZ_BOOL CMaterial::SetParameter(
 IZ_BOOL CMaterial::IsValid() const
 {
     for (IZ_UINT i = 0; i < m_Header.numTex; i++) {
-        IZ_UINT idx = m_pTexInfo[i].idx;
-
-        if (m_TexHolder[idx].tex == IZ_NULL) {
+        if (m_Textures[i] == IZ_NULL) {
             return IZ_FALSE;
         }
     }
@@ -647,7 +644,7 @@ graph::CBaseTexture* CMaterial::GetTextureByIdx(IZ_UINT idx)
     IZ_ASSERT(pInfo->idx == idx);
 
     if (pInfo != IZ_NULL) {
-        return m_TexHolder[idx].tex;
+        return m_Textures[pInfo->idx];
     }
     return IZ_NULL;
 }
@@ -656,7 +653,7 @@ graph::CBaseTexture* CMaterial::GetTextureByName(IZ_PCSTR pszName)
 {
     S_MTRL_TEXTURE* pInfo = const_cast<S_MTRL_TEXTURE*>(GetTexInfoByName(pszName));
     if (pInfo != IZ_NULL) {
-        return m_TexHolder[pInfo->idx].tex;
+        return m_Textures[pInfo->idx];
     }
     return IZ_NULL;
 }
@@ -665,7 +662,7 @@ graph::CBaseTexture* CMaterial::GetTextureByKey(const CKey& key)
 {
     S_MTRL_TEXTURE* pInfo = const_cast<S_MTRL_TEXTURE*>(GetTexInfoByKey(key));
     if (pInfo != IZ_NULL) {
-        return m_TexHolder[pInfo->idx].tex;
+        return m_Textures[pInfo->idx];
     }
     return IZ_NULL;
 }
