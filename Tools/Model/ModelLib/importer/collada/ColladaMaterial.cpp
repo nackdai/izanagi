@@ -459,10 +459,6 @@ IZ_BOOL CColladaMaterial::GetMaterial(
 
     sMtrl.numTex = (IZ_UINT16)effect.texName.size();
 
-    // NOTE
-    // １つしかない（はず）
-    sMtrl.numShader = 1;
-
     sMtrl.numParam = (IZ_UINT16)effect.params.size();
 
     sMtrl.paramBytes = 0;

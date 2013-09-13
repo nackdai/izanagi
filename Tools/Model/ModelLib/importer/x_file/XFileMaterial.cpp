@@ -90,8 +90,6 @@ IZ_BOOL CXFileMaterial::GetMaterial(
     // XFile's material does not have any shader,
     // so mtrl has a shader which is default.
 
-    sMtrl.numShader = 1;
-
     // NOTE
     // XFile's material has fixed count of parameters,
     // so mtrl has same count of parameters.

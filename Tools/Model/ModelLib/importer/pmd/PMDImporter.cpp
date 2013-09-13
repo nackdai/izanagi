@@ -533,9 +533,6 @@ IZ_BOOL CPmdImporter::GetMaterial(
     IZ_BOOL hasTex = (::strlen(pmdMtrl.texFileName) > 0);
     sMtrl.numTex = (hasTex ? 2 : 1);
 
-    // シェーダは必ず１つ
-    sMtrl.numShader = 1;
-
     // パラメータ数は固定
     // diffuse, specular, ambient
     sMtrl.numParam = PMD_MTRL_PARAM_NUM;

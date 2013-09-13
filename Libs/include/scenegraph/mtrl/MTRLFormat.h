@@ -69,10 +69,10 @@ namespace izanagi {
         IZ_UINT keyMaterial;
 
         IZ_UINT16 numTex;       ///< テクスチャ数.
-        IZ_UINT16 numShader;    ///< シェーダ数.
-
         IZ_UINT16 numParam;     ///< パラメータ数.
         IZ_UINT16 paramBytes;   ///< パラメータの総バイト数.
+
+        IZ_UINT16 padding;
     };
 
     /** マテリアルテクスチャタイプ.
@@ -105,14 +105,8 @@ namespace izanagi {
         CStdString<izChar, MTRL_SHADER_NAME_LEN> name;  ///< シェーダ名
         IZ_UINT key;
 
-    private:
-        // シェーダ
-        shader::IShader* shader;
-
         // 使用するテクニックインデックス
         IZ_UINT tech_idx;
-
-        friend class CMaterial;
     };
 
     /** マテリアルパラメータ情報.
