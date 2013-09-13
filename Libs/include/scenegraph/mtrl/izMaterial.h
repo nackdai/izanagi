@@ -126,22 +126,14 @@ namespace izanagi {
         IZ_UINT GetKey() const { return m_Header.keyMaterial; }
 
         IZ_UINT GetTexNum() const { return m_Header.numTex; }
-#if 0
-        IZ_UINT GetShaderNum() const { return m_Header.numShader; }
-#endif
+
         IZ_UINT GetParamNum() const { return m_Header.numParam; }
 
         const S_MTRL_TEXTURE* GetTexInfoByIdx(IZ_UINT idx) const;
         const S_MTRL_TEXTURE* GetTexInfoByName(IZ_PCSTR pszName) const;
         const S_MTRL_TEXTURE* GetTexInfoByKey(const CKey& key) const;
 
-#if 0
-        const S_MTRL_SHADER* GetShaderInfoByIdx(IZ_UINT idx) const;
-        const S_MTRL_SHADER* GetShaderInfoByName(IZ_PCSTR pszName) const;
-        const S_MTRL_SHADER* GetShaderInfoByKey(const CKey& key) const;
-#else
         const S_MTRL_SHADER* GetShaderInfo() const { return m_pShaderInfo; }
-#endif
 
         const S_MTRL_PARAM* GetParamInfoByIdx(IZ_UINT idx) const;
         const S_MTRL_PARAM* GetParamInfoByName(IZ_PCSTR pszName) const;
@@ -151,16 +143,10 @@ namespace izanagi {
         graph::CBaseTexture* GetTextureByName(IZ_PCSTR pszName);
         graph::CBaseTexture* GetTextureByKey(const CKey& key);
 
-#if 0
-        IShader* GetShaderByIdx(IZ_UINT idx);
-        IShader* GetShaderByName(IZ_PCSTR pszName);
-        IShader* GetShaderByKey(const CKey& key);
-#else
         shader::IShader* GetShader()
         {
-            return (m_pShaderInfo != IZ_NULL ? m_pShaderInfo->shader : IZ_NULL);
+            return m_Shader;
         }
-#endif
 
         /** Set technique index of shader.
          */
@@ -221,6 +207,7 @@ namespace izanagi {
         graph::CBaseTexture** m_Textures;
 
         S_MTRL_SHADER* m_pShaderInfo;
+        shader::IShader* m_Shader;
 
         S_MTRL_PARAM* m_pParamInfo;
         IZ_UINT8* m_pParamBuf;

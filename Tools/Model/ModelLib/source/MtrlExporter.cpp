@@ -113,7 +113,11 @@ IZ_BOOL CMtrlExporter::ExportMaterial(
     }
 
     // Export shader's info.
-    for (IZ_UINT i = 0; i < sMtrl.numShader; i++) {
+    //for (IZ_UINT i = 0; i < sMtrl.numShader; i++) {
+
+    // NOTE
+    // Material has only one shader.
+    for (IZ_UINT i = 0; i < 1; i++) {
         izanagi::S_MTRL_SHADER sShader;
         FILL_ZERO(&sShader, sizeof(sShader));
 
