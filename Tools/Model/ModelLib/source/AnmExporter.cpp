@@ -57,13 +57,20 @@ IZ_BOOL CAnmExporter::Export(
     IZ_UINT nNodeNum = pImporter->GetAnmNodeNum();
 
     // Export nodes.
-    for (IZ_UINT i = 0; i < nNodeNum; i++) {
-        izanagi::S_ANM_NODE sNode;
-        FILL_ZERO(&sNode, sizeof(sNode));
+    {
+        IZ_UINT channelIdx = 0;
 
-        VRETURN(pImporter->GetAnmNode(i, sNode));
+        for (IZ_UINT i = 0; i < nNodeNum; i++) {
+            izanagi::S_ANM_NODE sNode;
+            FILL_ZERO(&sNode, sizeof(sNode));
 
-        IZ_OUTPUT_WRITE_VRETURN(&m_Out, &sNode, 0, sizeof(sNode));
+            VRETURN(pImporter->GetAnmNode(i, sNode));
+
+            sNode.channelIdx = channelIdx;
+            channelIdx += sNode.numChannels;
+
+            IZ_OUTPUT_WRITE_VRETURN(&m_Out, &sNode, 0, sizeof(sNode));
+        }
     }
 
     IZ_UINT nChannelNum = 0;
