@@ -132,7 +132,7 @@ IZ_BOOL CAnmExporter::Export(
                 fMaxTime = (sKey.keyTime > fMaxTime ? sKey.keyTime : fMaxTime);
 
                 sKey.numParams = static_cast<IZ_UINT8>(tvValue.size());
-                sKey.params = IZ_NULL;
+                sKey.value = 0;
 
                 IZ_OUTPUT_WRITE_VRETURN(&m_Out, &sKey, 0, sizeof(sKey));
 

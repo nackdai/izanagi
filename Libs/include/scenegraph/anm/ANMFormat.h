@@ -125,11 +125,12 @@ namespace izanagi {
         IZ_UINT8 stride;        ///< １パラメータあたりのバイトサイズ.
         IZ_UINT8 reserved[2];
 
-#if 0
-        IZ_FLOAT params[1];
-#else
-        IZ_FLOAT* params;
-#endif
+        // TODO
+        // Work around...
+        union {
+            IZ_UINT64 value;
+            IZ_FLOAT* params;
+        };
     };
 
     /** アニメーションチャンネル
