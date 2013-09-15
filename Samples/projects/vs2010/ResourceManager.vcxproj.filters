@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="asset">
+      <UniqueIdentifier>{0cdf02f8-59c0-4e66-8019-95095828db11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{236d19f4-06b9-4751-9749-9d2676451d83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{d9da30e6-23f1-4b37-8b95-eb86a67d0cdf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shader">
+      <UniqueIdentifier>{3cdf5a0b-5dd6-416d-8cb2-b615cadc863f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\ResourceManager\main.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ResourceManager\ResourceManager.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\..\Media\Seymour.dae">
+      <Filter>asset</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\ModelImage.xml">
+      <Filter>asset</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\ResourceManager\shader\SkinShader.xml">
+      <Filter>shader</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\ResourceManager\ResourceManager.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\ResourceManager\shader\SkinShader.fx">
+      <Filter>shader</Filter>
+    </None>
+  </ItemGroup>
+</Project>
