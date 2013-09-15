@@ -106,20 +106,10 @@
   <ItemGroup>
     <ClCompile Include="..\..\source\resource\Resource.cpp" />
     <ClCompile Include="..\..\source\resource\ResourceManager.cpp" />
-    <ClCompile Include="..\..\source\resource\archive\ArchiveDummy.cpp" />
-    <ClCompile Include="..\..\source\resource\archive\ArchiveImpl.cpp" />
-    <ClCompile Include="..\..\source\resource\archive\ArchiveProxy.cpp" />
-    <ClCompile Include="..\..\source\resource\archive\ArchiveZip.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\resource\Resource.h" />
     <ClInclude Include="..\..\include\resource\ResourceManager.h" />
-    <ClInclude Include="..\..\include\resource\archive\ARCFormat.h" />
-    <ClInclude Include="..\..\include\resource\archive\Archive.h" />
-    <ClInclude Include="..\..\include\resource\archive\ArchiveDummy.h" />
-    <ClInclude Include="..\..\include\resource\archive\ArchiveImpl.h" />
-    <ClInclude Include="..\..\include\resource\archive\ArchiveProxy.h" />
-    <ClInclude Include="..\..\include\resource\archive\ArchiveZip.h" />
     <ClInclude Include="..\..\include\izResource.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

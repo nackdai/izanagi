@@ -8,7 +8,7 @@
 namespace izanagi {
     // ARCファイルバージョン
     enum E_ARC_VERSION {
-        E_ARC_VERSION_0010 = 0x30303130,                // バージョン0010
+        E_ARC_VERSION_0010 = IZ_CC4('0', '0', '1', '0'),                // バージョン0010
 
         E_ARC_VERSION_CURRENT = E_ARC_VERSION_0010,     // 現在のバージョン
         E_ARC_VERSION_FORCE_INT32 = 0x7FFFFFFF,         // enum のサイズを IZ_INT と同じにするため.
@@ -16,7 +16,7 @@ namespace izanagi {
 
     enum {
         // "ARC "
-        ARC_MAGIC_NUMBER = 0x464E5400,
+        ARC_MAGIC_NUMBER = IZ_CC4('A', 'R', 'C', ' '),
     };
 
     enum {

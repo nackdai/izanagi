@@ -5,15 +5,9 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="source\archive">
-      <UniqueIdentifier>{2581c0a1-fa3e-4856-ad89-4a3183127968}</UniqueIdentifier>
-    </Filter>
     <Filter Include="include">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="include\archive">
-      <UniqueIdentifier>{737564df-cd47-4527-9667-70329d6d631c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -23,18 +17,6 @@
     <ClCompile Include="..\..\source\resource\ResourceManager.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\resource\archive\ArchiveDummy.cpp">
-      <Filter>source\archive</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\resource\archive\ArchiveImpl.cpp">
-      <Filter>source\archive</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\resource\archive\ArchiveProxy.cpp">
-      <Filter>source\archive</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\resource\archive\ArchiveZip.cpp">
-      <Filter>source\archive</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\resource\Resource.h">
@@ -42,24 +24,6 @@
     </ClInclude>
     <ClInclude Include="..\..\include\resource\ResourceManager.h">
       <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\resource\archive\ARCFormat.h">
-      <Filter>include\archive</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\resource\archive\Archive.h">
-      <Filter>include\archive</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\resource\archive\ArchiveDummy.h">
-      <Filter>include\archive</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\resource\archive\ArchiveImpl.h">
-      <Filter>include\archive</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\resource\archive\ArchiveProxy.h">
-      <Filter>include\archive</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\resource\archive\ArchiveZip.h">
-      <Filter>include\archive</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\izResource.h" />
   </ItemGroup>

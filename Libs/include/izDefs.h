@@ -249,7 +249,11 @@ inline void _OutputDebugString(const char* format, ...)
 #endif  // #ifndef CONST_CAST
 
 #ifndef IZ_CC4
-    #define IZ_CC4(c1, c2, c3, c4)  ((c4 << 32) | (c3 << 24) | (c2 << 16) | c1)
+    #define IZ_CC4(c1, c2, c3, c4)  (((c4 & 0xff) << 24) | ((c3 & 0xff) << 16) | ((c2 & 0xff) << 8) | (c1 & 0xff))
+#endif  // #ifndef IZ_CC4
+
+#ifndef IZ_CC3
+    #define IZ_CC3(c1, c2, c3)  IZ_CC4(c1, c2, c3, 0)
 #endif  // #ifndef IZ_CC4
 
 /////////////////////////////////////////////////////////////
