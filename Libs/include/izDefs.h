@@ -248,6 +248,10 @@ inline void _OutputDebugString(const char* format, ...)
     #define CONST_CAST(t1, t2, p) reinterpret_cast<t1>(const_cast<t2>(p))
 #endif  // #ifndef CONST_CAST
 
+#ifndef IZ_CC4
+    #define IZ_CC4(c1, c2, c3, c4)  ((c4 << 32) | (c3 << 24) | (c2 << 16) | c1)
+#endif  // #ifndef IZ_CC4
+
 /////////////////////////////////////////////////////////////
 // カラー
 
