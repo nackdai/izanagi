@@ -1,5 +1,5 @@
-#if !defined(__MODEL_APP_H__)
-#define __MODEL_APP_H__
+#if !defined(__RESOURCE_MANAGER_APP_H__)
+#define __RESOURCE_MANAGER_APP_H__
 
 #include "izSampleKit.h"
 #include "izResource.h"
@@ -32,4 +32,4 @@ private:
     izanagi::resource::CResourceManager* m_RscMgr;
 };
 
-#endif    // #if !defined(__MODEL_APP_H__)
+#endif    // #if !defined(__RESOURCE_MANAGER_APP_H__)
