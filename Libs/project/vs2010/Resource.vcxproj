@@ -104,10 +104,14 @@
     <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\source\resource\archive\Archive.cpp" />
     <ClCompile Include="..\..\source\resource\Resource.cpp" />
     <ClCompile Include="..\..\source\resource\ResourceManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\include\resource\archive\ARCFormat.h" />
+    <ClInclude Include="..\..\include\resource\archive\Archive.h" />
+    <ClInclude Include="..\..\include\resource\archive\ArchiveInterface.h" />
     <ClInclude Include="..\..\include\resource\Resource.h" />
     <ClInclude Include="..\..\include\resource\ResourceManager.h" />
     <ClInclude Include="..\..\include\izResource.h" />

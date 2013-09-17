@@ -1,79 +1,82 @@
-#if !defined(__IZANAGI_ARCHIVE_ARCHIVE_IMPL_H__)
-#define __IZANAGI_ARCHIVE_ARCHIVE_IMPL_H__
+#if !defined(__IZANAGI_RESOURCE_ARCHIVE_IMPL_H__)
+#define __IZANAGI_RESOURCE_ARCHIVE_IMPL_H__
 
 #include "izStd.h"
-#include "io/InputStream.h"
-#include "Archive.h"
+#include "resource/archive/ARCFormat.h"
+#include "resource/archive/ArchiveInterface.h"
 
-namespace izanagi {
+namespace izanagi
+{
+    class IInputStream;
+
+namespace resource
+{
     //
     class CArchive : public IArchive {
     public:
-        // インスタンス作成
+        /** インスタンス作成
+         */
         static CArchive* CreateArchive(
-            IMemoryAllocator* pAllocator,
-            IInputStream* pInput);
+            IMemoryAllocator* allocator,
+            IInputStream* input);
 
     private:
         static CArchive* CreateArchive(
-            const S_ARC_HEADER& sHeader,
-            IMemoryAllocator* pAllocator,
-            IInputStream* pInput);
+            const S_ARC_HEADER& header,
+            IMemoryAllocator* allocator,
+            IInputStream* input);
 
     protected:
         CArchive();
-        ~CArchive();
+        virtual ~CArchive();
 
-        NO_COPIABLE(CArchive);
+        IZ_DEFINE_INTERNAL_RELEASE();
 
-    protected:
-        void InternalRelease()
-        {
-            delete this;
-            FREE(m_Allocator, this);
-        }
+    public:
+        /** Get num of files in ARC.
+         */
+        virtual IZ_UINT GetFileNum() const { return m_sHeader.numFiles; }
 
-    protected:
-        // Get num of files in ARC.
-        IZ_UINT GetFileNum() const { return m_sHeader.numFiles; }
+        /** Get max file size in ARC.
+         */
+        virtual IZ_UINT GetMaxFileSize() const { return m_sHeader.maxFileSize; }
 
-        // Get max file size in ARC.
-        IZ_UINT GetMaxFileSize() const { return m_sHeader.maxFileSize; }
-
-        // Get InputStream.
+        /** Get InputStream.
+         */
         IInputStream* GetInputStream() { return m_pInput; }
 
-        // Seek file by key.
-        IZ_BOOL Seek(IZ_UINT nKey);
+        /** Seek file by key.
+         */
+        virtual IZ_BOOL SeekByKey(
+            IZ_UINT key,
+            SArchiveFileDesc* desc);
 
-        // Seek file by path.
-        IZ_BOOL Seek(IZ_PCSTR path);
+        /** Seek file by path.
+         */
+        virtual IZ_BOOL SeekByPath(
+            IZ_PCSTR path,
+            SArchiveFileDesc* desc);
 
-        // Return current file's description.
-        IZ_BOOL GetFileDesc(SArchiveFileDesc* pDesc);
+        /** Read data.
+         */
+        virtual IZ_BOOL Read(
+            void* dst,
+            const SArchiveFileDesc& desc);
 
     protected:
+        // Seek input stream.
         IZ_BOOL SeekStream(IZ_UINT nPos);
 
-        IZ_BOOL GetFileDesc(
-            IZ_UINT nKey,
-            SArchiveFileDesc* pDesc);
-
-        // Get file's size by key.
-        IZ_UINT GetSize(IZ_UINT nKey) const;
+        // Set file description.
+        void SetFileDesc(
+            SArchiveFileDesc* dst,
+            const S_ARC_FILE_HEADER& src);
 
         // Get file's name.
-        IZ_PCSTR GetName(IZ_UINT nPos) const;
+        IZ_PCSTR GetName(IZ_UINT pos) const;
 
         // Get file header.
-        const S_ARC_FILE_HEADER* GetFileHeader(IZ_UINT nKey) const
-        {
-            IZ_UINT nNumAlls = m_sHeader.numFiles;
-            VRETURN_NULL(nKey < nNumAlls);
-
-            IZ_ASSERT(m_pFileHeaders != IZ_NULL);
-            return &m_pFileHeaders[nKey];
-        }
+        const S_ARC_FILE_HEADER* GetFileHeaderByIdx(IZ_UINT nKey) const;
 
     protected:
         enum {
@@ -93,11 +96,12 @@ namespace izanagi {
         IZ_BYTE* m_pNameBuffer;
         S_ARC_FILE_HEADER* m_pFileHeaders;
 
+        const S_ARC_FILE_HEADER* m_CurrentFielHeader;
+
         CArcHashItem* m_pHashItems;
         CArcHash m_HashList;
-
-        const S_ARC_FILE_HEADER* m_pCurFileHeader;
     };
+}   // namespace resource
 }   // namespace izanagi
 
-#endif  // #if !defined(__IZANAGI_ARCHIVE_ARCHIVE_IMPL_H__)
+#endif  // #if !defined(__IZANAGI_RESOURCE_ARCHIVE_IMPL_H__)

@@ -1,11 +1,14 @@
-#if !defined(__IZANAGI_ARCHIVE_ARC_FORMAT_H__)
-#define __IZANAGI_ARCHIVE_ARC_FORMAT_H__
+#if !defined(__IZANAGI_RESOURCE_ARC_FORMAT_H__)
+#define __IZANAGI_RESOURCE_ARC_FORMAT_H__
 
 #include "izDefs.h"
 
 // ARC = ARChive
 
-namespace izanagi {
+namespace izanagi
+{
+namespace resource
+{
     // ARCファイルバージョン
     enum E_ARC_VERSION {
         E_ARC_VERSION_0010 = IZ_CC4('0', '0', '1', '0'),                // バージョン0010
@@ -61,29 +64,30 @@ namespace izanagi {
     /**
     */
     struct S_ARC_FILE_HEADER {
-        IZ_UINT sizeName;           // size of name
-        IZ_UINT posName;            // position of name
+        IZ_UINT sizeName;           // size of name.
+        IZ_UINT posName;            // position of name.
 
-        // file size
-        IZ_UINT size;
+        IZ_UINT size;   ///< file size.
 
-        // position of file in ARC
-        IZ_UINT pos;
+        IZ_UINT pos;    ///< position of file in ARC.
 
-        IZ_UINT sizeCompressed; // compressed file size. If equals size, not compressed.
+        IZ_UINT key;    ///< key of file in ARC.
+
+        IZ_UINT sizeCompressed; ///< compressed file size. If sizeCompressed is 0, not compressed.
         IZ_UINT crc32;
 
         struct {
-            IZ_UINT isCompressed    : 1;    // whether file is compressed
-            IZ_UINT isEncrypted     : 1;    // whether file is encrypted
+            IZ_UINT isCompressed    : 1;    // whether file is compressed.
+            IZ_UINT isEncrypted     : 1;    // whether file is encrypted.
         };
     };
+}   // namespace resource
 }   // namespace izanagi
 
 // ARCフォーマットかどうか
-#define IS_ARC_FORMAT(f)            ((f) == izanagi::ARC_MAGIC_NUMBER)
+#define IS_ARC_FORMAT(f)            ((f) == izanagi::resource::ARC_MAGIC_NUMBER)
 
 // 最新バージョンかどうか
-#define IS_CURRENT_ARC_VERSION(v)   ((v) == izanagi::E_ARC_VERSION_CURRENT)
+#define IS_CURRENT_ARC_VERSION(v)   ((v) == izanagi::resource::E_ARC_VERSION_CURRENT)
 
-#endif  // #if !defined(__IZANAGI_ARCHIVE_ARC_FORMAT_H__)
+#endif  // #if !defined(__IZANAGI_RESOURCE_ARC_FORMAT_H__)

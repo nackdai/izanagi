@@ -3,10 +3,10 @@
 
 #include "resource/ResourceManager.h"
 
-#if 0
 #include "resource/archive/ARCFormat.h"
 #include "resource/archive/Archive.h"
 
+#if 0
 #include "resource/archive/ArchiveImpl.h"
 #include "resource/archive/ArchiveZip.h"
 #include "resource/archive/ArchiveDummy.h"
