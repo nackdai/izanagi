@@ -1,330 +1,339 @@
-#include "resource/archive/ArchiveImpl.h"
+#include "resource/archive/Archive.h"
+#include "izIo.h"
 
-using namespace izanagi;
-
-/**
-* インスタンス作成
-*/
-CArchive* CArchive::CreateArchive(
-    IMemoryAllocator* pAllocator,
-    IInputStream* pInput)
+namespace izanagi
 {
-    IZ_ASSERT(pInput != IZ_NULL);
+namespace resource
+{
+    // インスタンス作成
+    CArchive* CArchive::CreateArchive(
+        IMemoryAllocator* allocator,
+        IInputStream* input)
+    {
+        IZ_ASSERT(input != IZ_NULL);
 
-    CArchive* pInstance = IZ_NULL;
+        CArchive* instance = IZ_NULL;
 
-    // ファイルヘッダ読み込み
-    S_ARC_HEADER sHeader;
-    IZ_BOOL result = IZ_INPUT_READ(pInput, &sHeader, 0, sizeof(sHeader));
-    VGOTO(result, __EXIT__);
+        // ファイルヘッダ読み込み
+        S_ARC_HEADER header;
+        IZ_BOOL result = IZ_INPUT_READ(input, &header, 0, sizeof(S_ARC_HEADER));
+        VGOTO(result, __EXIT__);
 
-    // マジックナンバーチェック
-    result = IS_ARC_FORMAT(sHeader.magic);
-    VGOTO(result, __EXIT__);
+        // マジックナンバーチェック
+        result = IS_ARC_FORMAT(header.magic);
+        VGOTO(result, __EXIT__);
 
-    pInstance = CreateArchive(
-                    sHeader,
-                    pAllocator,
-                    pInput);
+        instance = CreateArchive(
+            header,
+            allocator,
+            input);
 
-__EXIT__:
-    if (!result) {
-        if (pInstance != IZ_NULL) {
-            SAFE_RELEASE(pInstance);
+    __EXIT__:
+        if (!result) {
+            if (instance != IZ_NULL) {
+                SAFE_RELEASE(instance);
+            }
         }
+
+        return instance;
     }
-
-    return pInstance;
-}
-
-// インスタンス作成
-CArchive* CArchive::CreateArchive(
-    const S_ARC_HEADER& sHeader,
-    IMemoryAllocator* pAllocator,
-    IInputStream* pInput)
-{
-    IZ_ASSERT(pAllocator != IZ_NULL);
-    IZ_ASSERT(pInput != IZ_NULL);
-
-    IZ_BOOL result = IZ_FALSE;
-    IZ_UINT8* pBuf = IZ_NULL;
-    IZ_UINT8* pBufTop = IZ_NULL;
-    CArchive* pInstance = IZ_NULL;
-
-    IZ_UINT nFileHeaderNum = sHeader.numFiles;
-
-    // 確保メモリサイズ
-    size_t nSize = sizeof(CArchive);
-    nSize += sHeader.sizeName;
-    nSize += sHeader.sizeFileHeader;
-    nSize += nFileHeaderNum * sizeof(CArcHashItem);
-
-    // メモリ確保
-    pBuf = (IZ_UINT8*)ALLOC_ZERO(pAllocator, nSize);
-    result = (pBuf != IZ_NULL);
-    VGOTO(result, __EXIT__);
-
-    // 先頭位置保持
-    pBufTop = pBuf;
 
     // インスタンス作成
-    pInstance = new(pBuf) CArchive;
+    CArchive* CArchive::CreateArchive(
+        const S_ARC_HEADER& header,
+        IMemoryAllocator* allocator,
+        IInputStream* input)
     {
-        pBuf += sizeof(CArchive);
+        IZ_ASSERT(allocator != IZ_NULL);
+        IZ_ASSERT(input != IZ_NULL);
 
-        pInstance->AddRef();
+        IZ_BOOL result = IZ_FALSE;
+        IZ_UINT8* buf = IZ_NULL;
+        IZ_UINT8* bufTop = IZ_NULL;
+        CArchive* instance = IZ_NULL;
 
-        pInstance->m_Allocator = pAllocator;
-        pInstance->m_pInput = pInput;
+        IZ_UINT fileNum = header.numFiles;
 
-        // ヘッダ
-        memcpy(&pInstance->m_sHeader, &sHeader, sizeof(sHeader));
+        // 確保メモリサイズ
+        size_t size = sizeof(CArchive);
+        size += header.sizeName;
+        size += header.sizeFileHeader;
+        size += fileNum * sizeof(CArcHashItem);
 
-        // ファイル情報
-        if (nFileHeaderNum > 0) {
-            pInstance->m_pFileHeaders = reinterpret_cast<S_ARC_FILE_HEADER*>(pBuf);
+        // メモリ確保
+        buf = (IZ_UINT8*)ALLOC_ZERO(allocator, size);
+        result = (buf != IZ_NULL);
+        VGOTO(result, __EXIT__);
 
-            size_t size = nFileHeaderNum * sizeof(S_ARC_FILE_HEADER);
-            result = IZ_INPUT_READ(
-                        pInput, 
-                        pInstance->m_pFileHeaders, 
-                        0, size);
-            VGOTO(result, __EXIT__);
+        // 先頭位置保持
+        bufTop = buf;
 
-            pBuf += size;
-        }
+        // インスタンス作成
+        instance = new(buf) CArchive;
+        {
+            buf += sizeof(CArchive);
 
-        // 名前バッファ
-        if (sHeader.sizeName > 0) {
-            pInstance->m_pNameBuffer = pBuf;
+            instance->AddRef();
 
-            result = IZ_INPUT_READ(
-                        pInput, 
-                        pInstance->m_pNameBuffer, 
-                        0, 
-                        sHeader.sizeName);
-            VGOTO(result, __EXIT__);
+            instance->m_Allocator = allocator;
+            instance->m_pInput = input;
 
-            pBuf += sHeader.sizeName;
-        }
+            // ヘッダ
+            memcpy(&instance->m_sHeader, &header, sizeof(header));
 
-        // ハッシュ要素
-        if (pInstance->m_pFileHeaders != IZ_NULL) {
-            pInstance->m_pHashItems = reinterpret_cast<CArcHashItem*>(pBuf);
+            // ファイル情報
+            if (fileNum > 0) {
+                instance->m_pFileHeaders = reinterpret_cast<S_ARC_FILE_HEADER*>(buf);
 
-            for (IZ_UINT i = 0; i < nFileHeaderNum; ++i) {
-                const S_ARC_FILE_HEADER& sFileHeader = *(pInstance->GetFileHeader(i));
+                size_t readSize = fileNum * sizeof(S_ARC_FILE_HEADER);
+                result = IZ_INPUT_READ(
+                            input, 
+                            instance->m_pFileHeaders, 
+                            0, readSize);
+                VGOTO(result, __EXIT__);
 
-                IZ_PCSTR name = pInstance->GetName(sFileHeader.posName);
-                IZ_ASSERT(name != IZ_NULL);
+                buf += readSize;
+            }
 
-                // Set data to hash item,
-                pInstance->m_pHashItems[i].Init(
-                    CKey(name), 
-                    const_cast<S_ARC_FILE_HEADER*>(&sFileHeader));
+            // 名前バッファ
+            if (header.sizeName > 0) {
+                instance->m_pNameBuffer = buf;
 
-                // Add hash item to hash list.
-                pInstance->m_HashList.Add(&pInstance->m_pHashItems[i]);
+                result = IZ_INPUT_READ(
+                            input, 
+                            instance->m_pNameBuffer, 
+                            0, 
+                            header.sizeName);
+                VGOTO(result, __EXIT__);
+
+                buf += header.sizeName;
+            }
+
+            // ハッシュ要素
+            if (instance->m_pFileHeaders != IZ_NULL) {
+                instance->m_pHashItems = reinterpret_cast<CArcHashItem*>(buf);
+
+                for (IZ_UINT i = 0; i < fileNum; ++i) {
+                    const S_ARC_FILE_HEADER& fileHeader = *(instance->GetFileHeaderByIdx(i));
+
+                    IZ_PCSTR name = instance->GetName(fileHeader.posName);
+                    IZ_ASSERT(name != IZ_NULL);
+
+                    // Set data to hash item,
+                    instance->m_pHashItems[i].Init(
+                        CKey(name), 
+                        const_cast<S_ARC_FILE_HEADER*>(&fileHeader));
+
+                    // Add hash item to hash list.
+                    instance->m_HashList.Add(&instance->m_pHashItems[i]);
+                }
+
+                // Remember initial file header.
+                instance->m_CurrentFielHeader = &instance->m_pFileHeaders[0];
             }
         }
+
+        IZ_ASSERT(CStdUtil::GetPtrDistance(buf, bufTop) == size);
+
+    __EXIT__:
+        if (!result) {
+            if (bufTop != IZ_NULL) {
+                FREE(allocator, bufTop);
+            }
+            else if (instance != IZ_NULL) {
+                SAFE_RELEASE(instance);
+            }
+        }
+
+        return instance;
     }
 
-__EXIT__:
-    if (!result) {
-        if (pBufTop != IZ_NULL) {
-            FREE(pAllocator, pBufTop);
-        }
-        else if (pInstance != IZ_NULL) {
-            SAFE_RELEASE(pInstance);
-        }
-    }
-
-    return pInstance;
-}
-
-// コンストラクタ
-CArchive::CArchive()
-{
-    m_pInput = IZ_NULL;
-
-    FILL_ZERO(&m_sHeader, sizeof(m_sHeader));
-
-    m_pNameBuffer = IZ_NULL;
-    m_pFileHeaders = IZ_NULL;
-
-    m_pCurFileHeader = IZ_NULL;
-}
-
-// デストラクタ
-CArchive::~CArchive()
-{
-    if (m_pInput != IZ_NULL) {
-        m_pInput->Finalize();
+    // コンストラクタ
+    CArchive::CArchive()
+    {
         m_pInput = IZ_NULL;
-    }
-}
 
-/**
-* Seek file by key.
-*/
-IZ_BOOL CArchive::Seek(IZ_UINT nKey)
-{
-    IZ_ASSERT(m_pFileHeaders != IZ_NULL);
+        FILL_ZERO(&m_sHeader, sizeof(m_sHeader));
 
-    // TODO
-    IZ_UINT nIdx = nKey;
-    IZ_ASSERT(nIdx < m_sHeader.numFiles);
+        m_pNameBuffer = IZ_NULL;
+        m_pFileHeaders = IZ_NULL;
 
-    // Get file's header.
-    const S_ARC_FILE_HEADER* pFileHeader = GetFileHeader(nIdx);
-    VRETURN(pFileHeader != IZ_NULL);
-
-    // Seek in stream.
-    IZ_BOOL ret = SeekStream(pFileHeader->pos);
-
-    if (ret) {
-        m_pCurFileHeader = pFileHeader;
+        m_CurrentFielHeader = IZ_NULL;
     }
 
-    return IZ_TRUE;
-}
-
-namespace {
-    // Return whether character is path separator.
-    inline IZ_BOOL _IsPathSeparator(IZ_CHAR ch)
+    // デストラクタ
+    CArchive::~CArchive()
     {
-        return ((ch == '/') || (ch == '\\'));
-    }
-
-    // Replace '\\' to '/'
-    inline void _ReplacePathSeparetor(IZ_CHAR* str)
-    {
-        for (IZ_UINT i = 0; ; ++i) {
-            IZ_CHAR ch = str[i];
-            if (ch == '\0') {
-                break;
-            }
-            
-            if (ch == '\\') {
-                str[i] = '/';
-            }
+        if (m_pInput != IZ_NULL) {
+            m_pInput->Finalize();
+            m_pInput = IZ_NULL;
         }
     }
-}   // namespace
 
-// Seek archive by name
-IZ_BOOL CArchive::Seek(IZ_PCSTR path)
-{
-    IZ_ASSERT(m_pFileHeaders != IZ_NULL);
+    // Seek file by key.
+    IZ_BOOL CArchive::SeekByKey(
+        IZ_UINT key,
+        SArchiveFileDesc* desc)
+    {
+        IZ_ASSERT(m_pFileHeaders != IZ_NULL);
 
-    // Replace '\\' to '/'
-    //_ReplacePathSeparetor(const_cast<IZ_CHAR*>(path));
+        IZ_UINT idx = key;
+        IZ_ASSERT(idx < m_sHeader.numFiles);
 
-    // Create key for seeking.
-    CKey cSeekKey(path);
+        // Get file's header.
+        const S_ARC_FILE_HEADER* fileHeader = GetFileHeaderByIdx(idx);
+        VRETURN(fileHeader != IZ_NULL);
 
-    // Find file's header.
-    S_ARC_FILE_HEADER* pFileHeader = m_HashList.FindData(cSeekKey);
-    VRETURN(pFileHeader != IZ_NULL);
+        m_CurrentFielHeader = fileHeader;
 
-    // Seek in stream.
-    IZ_BOOL ret = SeekStream(pFileHeader->pos);
+        // Seek in stream.
+        IZ_BOOL ret = SeekStream(fileHeader->pos);
 
-    if (ret) {
-        m_pCurFileHeader = pFileHeader;
+        if (ret) {
+            if (desc != IZ_NULL) {
+
+                SetFileDesc(desc, *m_CurrentFielHeader);
+            }
+        }
+
+        return ret;
     }
 
-    return IZ_TRUE;
-}
+    namespace {
+        // Return whether character is path separator.
+        inline IZ_BOOL _IsPathSeparator(IZ_CHAR ch)
+        {
+            return ((ch == '/') || (ch == '\\'));
+        }
 
-IZ_BOOL CArchive::SeekStream(IZ_UINT nPos)
-{
-    IZ_ASSERT(m_pInput != IZ_NULL);
-    IZ_ASSERT(nPos > 0);
+        // Replace '\\' to '/'
+        inline void _ReplacePathSeparetor(IZ_CHAR* str)
+        {
+            for (IZ_UINT i = 0; ; ++i) {
+                IZ_CHAR ch = str[i];
+                if (ch == '\0') {
+                    break;
+                }
+            
+                if (ch == '\\') {
+                    str[i] = '/';
+                }
+            }
+        }
+    }   // namespace
 
-    IZ_BOOL ret = IZ_FALSE;
+    // Seek archive by name
+    IZ_BOOL CArchive::SeekByPath(
+        IZ_PCSTR path,
+        SArchiveFileDesc* desc)
+    {
+        IZ_ASSERT(m_pFileHeaders != IZ_NULL);
+
+        // Replace '\\' to '/'
+        _ReplacePathSeparetor(const_cast<IZ_CHAR*>(path));
+
+        // Create key for seeking.
+        CKey key(path);
+
+        // Find file's header.
+        S_ARC_FILE_HEADER* fileHeader = m_HashList.FindData(key);
+        VRETURN(fileHeader != IZ_NULL);
+
+        m_CurrentFielHeader = fileHeader;
+
+        // Seek in stream.
+        IZ_BOOL ret = SeekStream(fileHeader->pos);
+
+        if (ret) {
+            if (desc != IZ_NULL) {
+                SetFileDesc(desc, *m_CurrentFielHeader);
+            }
+        }
+
+        return ret;
+    }
+
+    // Read data.
+    IZ_BOOL CArchive::Read(
+        void* dst,
+        const SArchiveFileDesc& desc)
+    {
+        VRETURN(SeekByKey(desc.key, IZ_NULL));
+
+        if (IZ_INPUT_READ(
+            m_pInput,
+            dst,
+            0,
+            desc.size))
+        {
+            return IZ_TRUE;
+        }
+
+        IZ_ASSERT(IZ_FALSE);
+        return IZ_FALSE;
+    }
+
+    // Seek input stream.
+    IZ_BOOL CArchive::SeekStream(IZ_UINT pos)
+    {
+        IZ_ASSERT(m_pInput != IZ_NULL);
+        IZ_ASSERT(pos > 0);
+
+        IZ_BOOL ret = IZ_FALSE;
     
-    // Get current position
-    const IZ_UINT nCurPos = static_cast<const IZ_UINT>(m_pInput->GetCurPos());
+        // Get current position
+        const IZ_UINT curPos = static_cast<const IZ_UINT>(m_pInput->GetCurPos());
 
-    if (nCurPos == nPos) {
-        // Nothing is done.
-        ret = IZ_TRUE;
-    }
-    else if (nCurPos == 0) {
-        ret = m_pInput->Seek(nPos, E_IO_STREAM_SEEK_POS_START);
-    }
-    else {
-        IZ_INT nOffset = nPos - nCurPos;
-        E_IO_STREAM_SEEK_POS nSeekPos = E_IO_STREAM_SEEK_POS_CUR;
-        ret = m_pInput->Seek(nOffset, nSeekPos);
-    }
+        if (curPos == pos) {
+            // Nothing is done.
+            ret = IZ_TRUE;
+        }
+        else if (curPos == 0) {
+            ret = m_pInput->Seek(pos, E_IO_STREAM_SEEK_POS_START);
+        }
+        else {
+            IZ_INT offset = pos - curPos;
+            ret = m_pInput->Seek(offset, E_IO_STREAM_SEEK_POS_CUR);
+        }
 
-    IZ_ASSERT(ret);
+        IZ_ASSERT(ret);
 
-    return ret;
-}
-
-/**
-* Return current file's description.
-*/
-IZ_BOOL CArchive::GetFileDesc(SArchiveFileDesc* pDesc)
-{
-    IZ_BOOL ret = (m_pCurFileHeader != IZ_NULL);
-
-    if (ret) {
-        // TODO
-
-        IZ_UINT nKey = CStdUtil::GetPtrAdvanced(
-                        m_pFileHeaders,
-                        const_cast<S_ARC_FILE_HEADER*>(m_pCurFileHeader));
-        
-        ret = GetFileDesc(nKey, pDesc);
+        return ret;
     }
 
-    return ret;
-}
+    // Set file description.
+    void CArchive::SetFileDesc(
+        SArchiveFileDesc* dst,
+        const S_ARC_FILE_HEADER& src)
+    {
+        dst->size = src.size;
+        dst->sizeCompressed = 0;
 
-// Get file's description by key.
-IZ_BOOL CArchive::GetFileDesc(
-    IZ_UINT nKey,
-    SArchiveFileDesc* pDesc)
-{
-    IZ_ASSERT(pDesc != IZ_NULL);
+        dst->key = src.key;
 
-    const S_ARC_FILE_HEADER* pHeader = GetFileHeader(nKey);
-    VRETURN(pHeader != IZ_NULL);
+        dst->isCompressed = src.isCompressed;
+        dst->isEncrypted = src.isEncrypted;
 
-    pDesc->size = GetSize(nKey);
-    pDesc->sizeCompressed = 0;
-    
-    pDesc->isCompressed = IZ_FALSE;
-    pDesc->isEncrypted = IZ_FALSE;
+        dst->name = GetName(src.posName);
+        dst->filePos = src.pos;
+    }
 
-    pDesc->name = GetName(pHeader->posName);
-    pDesc->key = nKey;
-    
-    pDesc->sizeCompressed = pHeader->sizeCompressed;
-    pDesc->isCompressed = pHeader->isCompressed;
-    pDesc->isEncrypted = pHeader->isEncrypted;
+    // Get file's name.
+    IZ_PCSTR CArchive::GetName(IZ_UINT pos) const
+    {
+        IZ_ASSERT(m_pNameBuffer != IZ_NULL);
+        IZ_ASSERT(pos < m_sHeader.sizeName);
 
-    return IZ_TRUE;
-}
+        return reinterpret_cast<IZ_PCSTR>(m_pNameBuffer + pos);
+    }
 
-// Get file's size by key.
-IZ_UINT CArchive::GetSize(IZ_UINT nKey) const
-{
-    const S_ARC_FILE_HEADER* pFileHeader = GetFileHeader(nKey);
-    VRETURN_VAL(pFileHeader != IZ_NULL, 0);
+    // Get file header.
+    const S_ARC_FILE_HEADER* CArchive::GetFileHeaderByIdx(IZ_UINT idx) const
+    {
+        VRETURN_NULL(idx < m_sHeader.numFiles);
 
-    return pFileHeader->size;
-}
-
-// Get file's name.
-IZ_PCSTR CArchive::GetName(IZ_UINT nPos) const
-{
-    IZ_ASSERT(m_pNameBuffer != IZ_NULL);
-    IZ_ASSERT(nPos < m_sHeader.sizeName);
-
-    return reinterpret_cast<IZ_PCSTR>(m_pNameBuffer + nPos);
-}
+        IZ_ASSERT(m_pFileHeaders != IZ_NULL);
+        return &m_pFileHeaders[idx];
+    }
+}   // namespace resource
+}   // namespace izanagi

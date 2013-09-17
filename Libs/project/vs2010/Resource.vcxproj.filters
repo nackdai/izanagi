@@ -9,6 +9,12 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
+    <Filter Include="include\archive">
+      <UniqueIdentifier>{bb970577-015e-4ab4-b43b-dbe018cdb2d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\archive">
+      <UniqueIdentifier>{44554177-d6fd-43fd-bd9b-069fe081ae42}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\resource\Resource.cpp">
@@ -16,6 +22,9 @@
     </ClCompile>
     <ClCompile Include="..\..\source\resource\ResourceManager.cpp">
       <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\resource\archive\Archive.cpp">
+      <Filter>source\archive</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -26,5 +35,14 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\izResource.h" />
+    <ClInclude Include="..\..\include\resource\archive\Archive.h">
+      <Filter>include\archive</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\resource\archive\ArchiveInterface.h">
+      <Filter>include\archive</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\resource\archive\ARCFormat.h">
+      <Filter>include\archive</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
