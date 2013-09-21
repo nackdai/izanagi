@@ -211,6 +211,11 @@ namespace graph
                 IZ_UINT stride,
                 CVertexBuffer* pVB));
 
+       virtual IZ_BOOL SetVertexBufferInstanced(
+            IZ_UINT streamIdx,
+            E_GRAPH_VB_USAGE usage,
+            IZ_UINT divisor);
+
         // インデックスバッファセット
         PURE_VIRTUAL(IZ_BOOL SetIndexBuffer(CIndexBuffer* pIB));
 

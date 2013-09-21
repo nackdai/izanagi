@@ -114,6 +114,31 @@ IZ_BOOL CDebugMesh::Draw(IZ_BOOL bEnableDrawDebugAxis/*= IZ_FALSE*/)
     return IZ_TRUE;
 }
 
+graph::CVertexBuffer* CDebugMesh::GetVB()
+{
+    return m_pVB;
+}
+
+graph::CVertexDeclaration* CDebugMesh::GetVD()
+{
+    return m_pVD;
+}
+
+graph::CIndexBuffer* CDebugMesh::GetIB()
+{
+    return m_pIB;
+}
+
+IZ_UINT CDebugMesh::GetPrimitiveCount()
+{
+    return m_nPrimCnt;
+}
+
+graph::E_GRAPH_PRIM_TYPE CDebugMesh::GetPrimitiveType()
+{
+    return m_PrimType;
+}
+
 // 頂点バッファ作成
 IZ_BOOL CDebugMesh::CreateVB(
     IZ_UINT flag,

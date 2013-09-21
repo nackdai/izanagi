@@ -402,6 +402,17 @@ namespace graph
     };
 
     /**
+     * 頂点バッファの使い方
+     */
+    enum E_GRAPH_VB_USAGE {
+        E_GRAPH_VB_USAGE_INDEXEDDATA = 0,
+        E_GRAPH_VB_USAGE_INSTANCEDATA,
+
+        E_GRAPH_VB_USAGE_NUM,
+        E_GRAPH_VB_USAGE__FORCE_INT32 = 0x7fffffff,
+    };
+
+    /**
     * ビューポート
     */
     struct SViewport {

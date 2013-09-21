@@ -54,7 +54,7 @@ namespace graph
         // TODO
         // ステンシル
 
-        CVertexBuffer* curVB;       // 頂点バッファ
+        CVertexBuffer* curVB[4];       // 頂点バッファ
         CIndexBuffer* curIB;        // インデックスバッファ
 
         CShaderProgram* curShader;

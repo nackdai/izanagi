@@ -29,6 +29,9 @@ namespace graph
         CVertexDeclaration()
         {
             m_Allocator = IZ_NULL;
+
+            m_ElemNum = 0;
+            m_Elements = IZ_NULL;
         }
 
         virtual ~CVertexDeclaration() {};
@@ -37,8 +40,16 @@ namespace graph
 
         IZ_DEFINE_INTERNAL_RELEASE();
 
+    public:
+        IZ_UINT GetElementNum() const { return m_ElemNum; }
+
+        const SVertexElement* GetElement() const { return m_Elements; }
+
     protected:
         IMemoryAllocator* m_Allocator;
+
+        IZ_UINT m_ElemNum;
+        SVertexElement* m_Elements;
     };
 }   // namespace graph
 }   // namespace izanagi

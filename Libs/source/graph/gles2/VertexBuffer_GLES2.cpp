@@ -183,7 +183,7 @@ namespace graph
         IZ_BOOL isLocked = (m_LockSize > 0);
 
         if (isLocked) {
-            CVertexBuffer* curVB = m_Device->GetRenderState().curVB;
+            CVertexBuffer* curVB = m_Device->GetRenderState().curVB[0];
 
             if (curVB != this) {
                 CALL_GLES2_API(::glBindBuffer(GL_ARRAY_BUFFER, m_VB));

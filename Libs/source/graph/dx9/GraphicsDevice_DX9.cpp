@@ -104,8 +104,11 @@ namespace graph
     void CGraphicsDeviceDX9::Terminate()
     {
         SetShaderProgram(IZ_NULL);
-        SetVertexBuffer(0, 0, 0, IZ_NULL);
         SetIndexBuffer(IZ_NULL);
+
+        for (IZ_UINT i = 0; i < COUNTOF(m_RenderState.curVB); i++) {
+            SetVertexBuffer(i, 0, 0, IZ_NULL);
+        }
 
         //SAFE_RELEASE(m_RenderState.curVD);
         SetVertexDeclaration(IZ_NULL);
@@ -599,7 +602,9 @@ namespace graph
         IZ_UINT nStride,
         CVertexBuffer* pVB)
     {
-        if (m_RenderState.curVB == pVB) {
+        IZ_ASSERT(nStreamIdx < COUNTOF(m_RenderState.curVB));
+
+        if (m_RenderState.curVB[nStreamIdx] == pVB) {
             // すでに設定されている
             return IZ_TRUE;
         }
@@ -615,8 +620,28 @@ namespace graph
             VRETURN(SUCCEEDED(hr));
 
             // 現在設定されているものとして保持
-            SAFE_REPLACE(m_RenderState.curVB, pVB);
+            SAFE_REPLACE(m_RenderState.curVB[nStreamIdx], pVB);
         }
+
+        return IZ_TRUE;
+    }
+
+    IZ_BOOL CGraphicsDeviceDX9::SetVertexBufferInstanced(
+        IZ_UINT streamIdx,
+        E_GRAPH_VB_USAGE usage,
+        IZ_UINT divisor)
+    {
+        VRETURN(m_RenderState.curVB[streamIdx] != IZ_NULL);
+        VRETURN(usage < E_GRAPH_VB_USAGE_NUM);
+
+        IZ_UINT frequencyParameter = (usage == E_GRAPH_VB_USAGE_INSTANCEDATA
+            ? D3DSTREAMSOURCE_INSTANCEDATA
+            : D3DSTREAMSOURCE_INDEXEDDATA);
+        
+        HRESULT hr = m_Device->SetStreamSourceFreq(
+            streamIdx,
+            frequencyParameter | divisor);
+        VRETURN(SUCCEEDED(hr));
 
         return IZ_TRUE;
     }
