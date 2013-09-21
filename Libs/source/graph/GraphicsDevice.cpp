@@ -252,6 +252,16 @@ namespace graph
         return IZ_TRUE;
     }
 
+    IZ_BOOL CGraphicsDevice::SetVertexBufferInstanced(
+        IZ_UINT streamIdx,
+        E_GRAPH_VB_USAGE usage,
+        IZ_UINT divisor)
+    {
+        // Not supported...
+        IZ_ASSERT(IZ_FALSE);
+        return IZ_TRUE;
+    }
+
     // テクスチャ取得
     CBaseTexture* CGraphicsDevice::GetTexture(IZ_UINT nStage)
     {

@@ -52,6 +52,13 @@ namespace izanagi {
 
         IZ_UINT GetVtxFormFlag() const { return m_nVtxFormFlag; }
 
+        graph::CVertexBuffer* GetVB();
+        graph::CVertexDeclaration* GetVD();
+        graph::CIndexBuffer* GetIB();
+
+        IZ_UINT GetPrimitiveCount();
+        graph::E_GRAPH_PRIM_TYPE GetPrimitiveType();
+
     protected:
         struct SMeshFace;
 

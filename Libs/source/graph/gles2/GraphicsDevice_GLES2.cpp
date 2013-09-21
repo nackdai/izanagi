@@ -97,8 +97,11 @@ namespace graph
     void CGraphicsDeviceGLES2::Terminate()
     {
         SetShaderProgram(IZ_NULL);
-        SetVertexBuffer(0, 0, 0, IZ_NULL);
         SetIndexBuffer(IZ_NULL);
+
+        // NOTE
+        // VBOのセットでストリームの指定をしないのでストリームインデックスは常にゼロ
+        SetVertexBuffer(0, 0, 0, IZ_NULL);
 
         SAFE_RELEASE(m_RenderState.curVD);
 
@@ -473,7 +476,12 @@ namespace graph
         IZ_UINT nStride,
         CVertexBuffer* pVB)
     {
-        if (m_RenderState.curVB == pVB) {
+        // NOTE
+        // VBOのセットでストリームの指定をせずに
+        // 頂点属性の設定ストリームの指定を行う
+        VRETURN(nStreamIdx == 0);
+
+        if (m_RenderState.curVB[0] == pVB) {
             // すでに設定されている
             return IZ_TRUE;
         }
@@ -489,7 +497,7 @@ namespace graph
         }
 
         // 現在設定されているものとして保持
-        SAFE_REPLACE(m_RenderState.curVB, pVB);
+        SAFE_REPLACE(m_RenderState.curVB[0], pVB);
 
         return IZ_TRUE;
     }
@@ -584,7 +592,7 @@ namespace graph
         vd->Apply(
             gles2Program,
             vtxOffset,
-            m_RenderState.curVB->GetStride());
+            m_RenderState.curVB[0]->GetStride());
         
 
         // NOTE
@@ -704,7 +712,7 @@ namespace graph
         vd->Apply(
             gles2Program,
             0,
-            m_RenderState.curVB->GetStride());
+            m_RenderState.curVB[0]->GetStride());
 
         // NOTE
         // ShaderCompilerによってsamplerレジスタに応じたユニフォーム名が設定されている

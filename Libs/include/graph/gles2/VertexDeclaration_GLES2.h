@@ -36,11 +36,7 @@ namespace graph
             IZ_UINT vtxOffset,
             IZ_UINT vtxStride);
 
-        const char* GetAttribName(IZ_UINT elementIdx);
-
-    protected:
-        IZ_UINT m_ElemNum;
-        SVertexElement* m_Elements;
+        const char* GetAttribName(IZ_UINT elementIdx);        
     };
 }   // namespace graph
 }   // namespace izanagi

@@ -21,12 +21,6 @@ namespace graph
         static CVertexDeclaration* CreateVertexDeclaration(
             CGraphicsDeviceDX9* device,
             IMemoryAllocator* allocator,
-            const D3D_VTX_ELEMENT* pElem);
-
-        // インスタンス作成
-        static CVertexDeclaration* CreateVertexDeclaration(
-            CGraphicsDeviceDX9* device,
-            IMemoryAllocator* allocator,
             const SVertexElement* pElem,
             IZ_UINT nElemNum);
 
