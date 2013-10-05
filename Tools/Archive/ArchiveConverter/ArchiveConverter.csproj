@@ -45,6 +45,9 @@
   <ItemGroup>
     <Compile Include="AbstractXmlSerializer.cs" />
     <Compile Include="ArchiveItem.cs" />
+    <Compile Include="Config.cs" />
+    <Compile Include="Exporter.cs" />
+    <Compile Include="Option.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
