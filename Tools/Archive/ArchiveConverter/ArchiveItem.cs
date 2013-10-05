@@ -7,6 +7,7 @@ using System.Xml.Serialization;
 using System.Xml.Schema;
 using Utility.Xml;
 using System.Reflection;
+using System.IO;
 
 namespace ArchiveConverter
 {
@@ -51,6 +52,17 @@ namespace ArchiveConverter
         /// </summary>
         static public string BasePath = "";
 
+        static public ArchiveRoot Deserialize(string path)
+        {
+            using (var fs = new FileStream(path, FileMode.Open, FileAccess.Read))
+            {
+                var serializer = new XmlSerializer(typeof(ArchiveRoot));
+
+                var ret = (ArchiveRoot)serializer.Deserialize(fs);
+                return ret;
+            }
+        }
+
         public ArchiveRoot()
         {
         }
@@ -83,6 +95,18 @@ namespace ArchiveConverter
                         {
                             // Typeが空の場合は要素名を設定.
                             item.Type = name;
+                        }
+
+                        // ベースのパスが指定されていれば、それを付加する
+                        if (!string.IsNullOrEmpty(ArchiveRoot.BasePath))
+                        {
+                            item.Source = ArchiveRoot.BasePath + "/" + item.Source;
+                        }
+
+                        // 出力ファイル名はファイル名のみが有効
+                        if (!string.IsNullOrEmpty(item.Dest))
+                        {
+                            item.Dest = Path.GetFileName(item.Dest);
                         }
 
                         this.Items.Add(item);
@@ -125,7 +149,14 @@ namespace ArchiveConverter
             set;
         }
 
-        [XmlAttribute("option")]
+        [XmlAttribute("dst")]
+        public string Dest
+        {
+            get;
+            set;
+        }
+
+        [XmlAttribute("opt")]
         public string Option
         {
             get;
