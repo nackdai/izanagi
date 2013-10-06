@@ -81,16 +81,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Image\ImageBuilder\ImageBuilder.cpp" />
-    <ClCompile Include="..\..\Image\ImageBuilder\AppCore\ImageBuilderImpl.cpp" />
-    <ClCompile Include="..\..\Image\ImageBuilder\AppCore\ImageReaderImpl.cpp" />
-    <ClCompile Include="..\..\Image\ImageBuilder\AppCore\Option.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\Image\ImageBuilder\AppCore\AppError.h" />
-    <ClInclude Include="..\..\Image\ImageBuilder\AppCore\ImageBuilderDefs.h" />
-    <ClInclude Include="..\..\Image\ImageBuilder\AppCore\ImageBuilderImpl.h" />
-    <ClInclude Include="..\..\Image\ImageBuilder\AppCore\ImageReaderImpl.h" />
-    <ClInclude Include="..\..\Image\ImageBuilder\AppCore\Option.h" />
+    <ClCompile Include="..\..\Image\ImageBuilder\ImageBuilderImpl.cpp" />
+    <ClCompile Include="..\..\Image\ImageBuilder\ImageReaderImpl.cpp" />
+    <ClCompile Include="..\..\Image\ImageBuilder\Option.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -104,6 +97,12 @@
       <Project>{e39712e8-aa2f-4764-975b-40b54164b95e}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Image\ImageBuilder\ImageBuilderDefs.h" />
+    <ClInclude Include="..\..\Image\ImageBuilder\ImageBuilderImpl.h" />
+    <ClInclude Include="..\..\Image\ImageBuilder\ImageReaderImpl.h" />
+    <ClInclude Include="..\..\Image\ImageBuilder\Option.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
