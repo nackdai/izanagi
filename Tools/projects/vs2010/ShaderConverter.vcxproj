@@ -95,33 +95,19 @@ xcopy /R /Y /D "$(SolutionDir)..\..\External\Cg\dll\cgD3D9.dll" "$(SolutionDir).
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Shader\ShaderConverter\CompileCmdCreator.cpp" />
+    <ClCompile Include="..\..\Shader\ShaderConverter\DataBuffer.cpp" />
+    <ClCompile Include="..\..\Shader\ShaderConverter\Option.cpp" />
+    <ClCompile Include="..\..\Shader\ShaderConverter\ParamUtil.cpp" />
+    <ClCompile Include="..\..\Shader\ShaderConverter\PassUtil.cpp" />
+    <ClCompile Include="..\..\Shader\ShaderConverter\Preproc.cpp" />
+    <ClCompile Include="..\..\Shader\ShaderConverter\SamplerUtil.cpp" />
+    <ClCompile Include="..\..\Shader\ShaderConverter\ShaderConfig.cpp" />
     <ClCompile Include="..\..\Shader\ShaderConverter\ShaderConverter.cpp" />
-    <ClCompile Include="..\..\Shader\ShaderConverter\AppCore\CompileCmdCreator.cpp" />
-    <ClCompile Include="..\..\Shader\ShaderConverter\AppCore\DataBuffer.cpp" />
-    <ClCompile Include="..\..\Shader\ShaderConverter\AppCore\Option.cpp" />
-    <ClCompile Include="..\..\Shader\ShaderConverter\AppCore\Preproc.cpp" />
-    <ClCompile Include="..\..\Shader\ShaderConverter\AppCore\ShaderConfig.cpp" />
-    <ClCompile Include="..\..\Shader\ShaderConverter\AppCore\ShaderConverterImpl.cpp" />
-    <ClCompile Include="..\..\Shader\ShaderConverter\AppCore\StringChunk.cpp" />
-    <ClCompile Include="..\..\Shader\ShaderConverter\AppCore\ParamUtil.cpp" />
-    <ClCompile Include="..\..\Shader\ShaderConverter\AppCore\PassUtil.cpp" />
-    <ClCompile Include="..\..\Shader\ShaderConverter\AppCore\SamplerUtil.cpp" />
-    <ClCompile Include="..\..\Shader\ShaderConverter\AppCore\ShaderConverterUtil.cpp" />
-    <ClCompile Include="..\..\Shader\ShaderConverter\AppCore\TextureUtil.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\Shader\ShaderConverter\AppCore\CompileCmdCreator.h" />
-    <ClInclude Include="..\..\Shader\ShaderConverter\AppCore\DataBuffer.h" />
-    <ClInclude Include="..\..\Shader\ShaderConverter\AppCore\Option.h" />
-    <ClInclude Include="..\..\Shader\ShaderConverter\AppCore\Preproc.h" />
-    <ClInclude Include="..\..\Shader\ShaderConverter\AppCore\ShaderConfig.h" />
-    <ClInclude Include="..\..\Shader\ShaderConverter\AppCore\ShaderConverterImpl.h" />
-    <ClInclude Include="..\..\Shader\ShaderConverter\AppCore\StringChunk.h" />
-    <ClInclude Include="..\..\Shader\ShaderConverter\AppCore\ParamUtil.h" />
-    <ClInclude Include="..\..\Shader\ShaderConverter\AppCore\PassUtil.h" />
-    <ClInclude Include="..\..\Shader\ShaderConverter\AppCore\SamplerUtil.h" />
-    <ClInclude Include="..\..\Shader\ShaderConverter\AppCore\ShaderConverterUtil.h" />
-    <ClInclude Include="..\..\Shader\ShaderConverter\AppCore\TextureUtil.h" />
+    <ClCompile Include="..\..\Shader\ShaderConverter\ShaderConverterImpl.cpp" />
+    <ClCompile Include="..\..\Shader\ShaderConverter\ShaderConverterUtil.cpp" />
+    <ClCompile Include="..\..\Shader\ShaderConverter\StringChunk.cpp" />
+    <ClCompile Include="..\..\Shader\ShaderConverter\TextureUtil.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -131,6 +117,20 @@ xcopy /R /Y /D "$(SolutionDir)..\..\External\Cg\dll\cgD3D9.dll" "$(SolutionDir).
       <Project>{e39712e8-aa2f-4764-975b-40b54164b95e}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Shader\ShaderConverter\CompileCmdCreator.h" />
+    <ClInclude Include="..\..\Shader\ShaderConverter\DataBuffer.h" />
+    <ClInclude Include="..\..\Shader\ShaderConverter\Option.h" />
+    <ClInclude Include="..\..\Shader\ShaderConverter\ParamUtil.h" />
+    <ClInclude Include="..\..\Shader\ShaderConverter\PassUtil.h" />
+    <ClInclude Include="..\..\Shader\ShaderConverter\Preproc.h" />
+    <ClInclude Include="..\..\Shader\ShaderConverter\SamplerUtil.h" />
+    <ClInclude Include="..\..\Shader\ShaderConverter\ShaderConfig.h" />
+    <ClInclude Include="..\..\Shader\ShaderConverter\ShaderConverterImpl.h" />
+    <ClInclude Include="..\..\Shader\ShaderConverter\ShaderConverterUtil.h" />
+    <ClInclude Include="..\..\Shader\ShaderConverter\StringChunk.h" />
+    <ClInclude Include="..\..\Shader\ShaderConverter\TextureUtil.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
