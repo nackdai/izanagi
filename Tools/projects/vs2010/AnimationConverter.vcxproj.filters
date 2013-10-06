@@ -9,30 +9,21 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="AppCore">
-      <UniqueIdentifier>{bc17a0ff-387e-4013-a352-7bc01fe6e0bf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="AppCore\include">
-      <UniqueIdentifier>{5152af3d-bf6f-4f4c-b7d5-3c9525d90915}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="AppCore\source">
-      <UniqueIdentifier>{8523c83f-1973-449a-9d79-a0dfa902da76}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Model\AnmConverter\AnimationConverter.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Model\AnmConverter\AppCore\Option.cpp">
-      <Filter>AppCore\source</Filter>
+    <ClCompile Include="..\..\Model\AnmConverter\Option.cpp">
+      <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Model\AnmConverter\AppCore\Option.h">
-      <Filter>AppCore\include</Filter>
-    </ClInclude>
+    <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ReadMe.txt" />
+    <ClInclude Include="..\..\Model\AnmConverter\Option.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -9,30 +9,21 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="AppCore">
-      <UniqueIdentifier>{f3ddced4-e1d4-46cc-aa0f-f4fdd8c23655}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="AppCore\include">
-      <UniqueIdentifier>{ed864055-d9d9-4794-9991-03f9bf175e93}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="AppCore\source">
-      <UniqueIdentifier>{09883e5c-527c-44a1-a091-acb22e3599ae}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Model\ModelConverter\ModelConverter.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Model\ModelConverter\AppCore\Option.cpp">
-      <Filter>AppCore\source</Filter>
+    <ClCompile Include="..\..\Model\ModelConverter\Option.cpp">
+      <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Model\ModelConverter\AppCore\Option.h">
-      <Filter>AppCore\include</Filter>
-    </ClInclude>
+    <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ReadMe.txt" />
+    <ClInclude Include="..\..\Model\ModelConverter\Option.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
