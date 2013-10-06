@@ -149,7 +149,7 @@ namespace ArchiveConverter
             set;
         }
 
-        [XmlAttribute("dst")]
+        [XmlIgnore]
         public string Dest
         {
             get;

@@ -8,6 +8,18 @@ namespace ArchiveConverter
 {
     class Program
     {
+        static void DisplayUsage()
+        {
+            Console.WriteLine("Usage : ArchiveConverter <options>");
+            Console.WriteLine("");
+            Console.WriteLine("options ****");
+            Console.WriteLine(" -i <input>");
+            Console.WriteLine(" -o <output>");
+            Console.WriteLine(" -c <config>");
+            Console.WriteLine(" -d <directory>");
+            Console.WriteLine("    base directory for files. relative path from input file.");
+        }
+
         static void Main(string[] args)
         {
             try
