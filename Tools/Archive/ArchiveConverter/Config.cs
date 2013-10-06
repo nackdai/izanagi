@@ -8,7 +8,7 @@ using System.IO;
 namespace ArchiveConverter
 {
     [XmlRoot("config")]
-    public class Config : List<ExeCmdItem>
+    public class Config : List<CommandExecutor>
     {
         public Config()
         {
@@ -18,7 +18,7 @@ namespace ArchiveConverter
         {
         }
 
-        public ExeCmdItem this[string type]
+        public CommandExecutor this[string type]
         {
             private set
             {
@@ -64,7 +64,7 @@ namespace ArchiveConverter
     }
 
     [XmlRoot("item")]
-    public class ExeCmdItem
+    public class CommandExecutor
     {
         [XmlAttribute("type")]
         public string Type
@@ -73,6 +73,9 @@ namespace ArchiveConverter
             set;
         }
 
+        /// <summary>
+        /// 実行ファイルパス
+        /// </summary>
         [XmlAttribute("exe")]
         public string Exe
         {
@@ -80,6 +83,9 @@ namespace ArchiveConverter
             set;
         }
 
+        /// <summary>
+        /// 入力ファイル設定のためのオプション
+        /// </summary>
         [XmlAttribute("in")]
         public string InputOption
         {
@@ -87,6 +93,9 @@ namespace ArchiveConverter
             set;
         }
 
+        /// <summary>
+        /// 出力ファイル設定のためのオプション
+        /// </summary>
         [XmlAttribute("out")]
         public string OutputOption
         {
@@ -94,6 +103,9 @@ namespace ArchiveConverter
             set;
         }
 
+        /// <summary>
+        /// 実行ファイルに設定するオプション
+        /// </summary>
         [XmlAttribute("opt")]
         public string Option
         {
@@ -101,12 +113,20 @@ namespace ArchiveConverter
             set;
         }
 
+        /// <summary>
+        /// コマンド実行
+        /// </summary>
+        /// <param name="dir">実行ファイルのあるディレクトリ</param>
+        /// <param name="input">実行ファイルに渡す入力ファイル</param>
+        /// <param name="output">実行ファイルに出力されるファイル</param>
+        /// <param name="option">実行ファイルに設定するオプション</param>
         public void DoCmd(
             string dir, 
             string input,
             string output,
             string option)
         {
+            // 入出力ファイルが設定されていないといけない
             if (string.IsNullOrEmpty(input)
                 || string.IsNullOrEmpty(output))
             {
@@ -120,6 +140,7 @@ namespace ArchiveConverter
                 cmd = dir + "/" + cmd;
             }
 
+            // 入出力ファイルを設定
             cmd += " " + this.InputOption + input;
             cmd += " " + this.OutputOption + output;
 
