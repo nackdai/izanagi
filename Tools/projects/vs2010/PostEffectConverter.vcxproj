@@ -80,31 +80,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\PostEffect\PostEffectConverter\CompileCmdCreator.cpp" />
+    <ClCompile Include="..\..\PostEffect\PostEffectConverter\DataBuffer.cpp" />
+    <ClCompile Include="..\..\PostEffect\PostEffectConverter\Option.cpp" />
+    <ClCompile Include="..\..\PostEffect\PostEffectConverter\ParamUtil.cpp" />
+    <ClCompile Include="..\..\PostEffect\PostEffectConverter\PassUtil.cpp" />
     <ClCompile Include="..\..\PostEffect\PostEffectConverter\PostEffectConverter.cpp" />
-    <ClCompile Include="..\..\PostEffect\PostEffectConverter\AppCore\CompileCmdCreator.cpp" />
-    <ClCompile Include="..\..\PostEffect\PostEffectConverter\AppCore\DataBuffer.cpp" />
-    <ClCompile Include="..\..\PostEffect\PostEffectConverter\AppCore\Option.cpp" />
-    <ClCompile Include="..\..\PostEffect\PostEffectConverter\AppCore\PostEffectConverterImpl.cpp" />
-    <ClCompile Include="..\..\PostEffect\PostEffectConverter\AppCore\PostEffectConverterUtil.cpp" />
-    <ClCompile Include="..\..\PostEffect\PostEffectConverter\AppCore\Preproc.cpp" />
-    <ClCompile Include="..\..\PostEffect\PostEffectConverter\AppCore\StringChunk.cpp" />
-    <ClCompile Include="..\..\PostEffect\PostEffectConverter\AppCore\ParamUtil.cpp" />
-    <ClCompile Include="..\..\PostEffect\PostEffectConverter\AppCore\PassUtil.cpp" />
-    <ClCompile Include="..\..\PostEffect\PostEffectConverter\AppCore\SamplerUtil.cpp" />
-    <ClCompile Include="..\..\PostEffect\PostEffectConverter\AppCore\TextureUtil.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\PostEffect\PostEffectConverter\AppCore\CompileCmdCreator.h" />
-    <ClInclude Include="..\..\PostEffect\PostEffectConverter\AppCore\DataBuffer.h" />
-    <ClInclude Include="..\..\PostEffect\PostEffectConverter\AppCore\Option.h" />
-    <ClInclude Include="..\..\PostEffect\PostEffectConverter\AppCore\PostEffectConverterImpl.h" />
-    <ClInclude Include="..\..\PostEffect\PostEffectConverter\AppCore\Preproc.h" />
-    <ClInclude Include="..\..\PostEffect\PostEffectConverter\AppCore\StringChunk.h" />
-    <ClInclude Include="..\..\PostEffect\PostEffectConverter\AppCore\ParamUtil.h" />
-    <ClInclude Include="..\..\PostEffect\PostEffectConverter\AppCore\PassUtil.h" />
-    <ClInclude Include="..\..\PostEffect\PostEffectConverter\AppCore\PostEffectConverterUtil.h" />
-    <ClInclude Include="..\..\PostEffect\PostEffectConverter\AppCore\SamplerUtil.h" />
-    <ClInclude Include="..\..\PostEffect\PostEffectConverter\AppCore\TextureUtil.h" />
+    <ClCompile Include="..\..\PostEffect\PostEffectConverter\PostEffectConverterImpl.cpp" />
+    <ClCompile Include="..\..\PostEffect\PostEffectConverter\PostEffectConverterUtil.cpp" />
+    <ClCompile Include="..\..\PostEffect\PostEffectConverter\Preproc.cpp" />
+    <ClCompile Include="..\..\PostEffect\PostEffectConverter\SamplerUtil.cpp" />
+    <ClCompile Include="..\..\PostEffect\PostEffectConverter\StringChunk.cpp" />
+    <ClCompile Include="..\..\PostEffect\PostEffectConverter\TextureUtil.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -114,6 +101,19 @@
       <Project>{e39712e8-aa2f-4764-975b-40b54164b95e}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\PostEffect\PostEffectConverter\CompileCmdCreator.h" />
+    <ClInclude Include="..\..\PostEffect\PostEffectConverter\DataBuffer.h" />
+    <ClInclude Include="..\..\PostEffect\PostEffectConverter\Option.h" />
+    <ClInclude Include="..\..\PostEffect\PostEffectConverter\ParamUtil.h" />
+    <ClInclude Include="..\..\PostEffect\PostEffectConverter\PassUtil.h" />
+    <ClInclude Include="..\..\PostEffect\PostEffectConverter\PostEffectConverterImpl.h" />
+    <ClInclude Include="..\..\PostEffect\PostEffectConverter\PostEffectConverterUtil.h" />
+    <ClInclude Include="..\..\PostEffect\PostEffectConverter\Preproc.h" />
+    <ClInclude Include="..\..\PostEffect\PostEffectConverter\SamplerUtil.h" />
+    <ClInclude Include="..\..\PostEffect\PostEffectConverter\StringChunk.h" />
+    <ClInclude Include="..\..\PostEffect\PostEffectConverter\TextureUtil.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
