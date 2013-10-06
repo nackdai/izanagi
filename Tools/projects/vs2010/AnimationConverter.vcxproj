@@ -86,10 +86,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Model\AnmConverter\AnimationConverter.cpp" />
-    <ClCompile Include="..\..\Model\AnmConverter\AppCore\Option.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\Model\AnmConverter\AppCore\Option.h" />
+    <ClCompile Include="..\..\Model\AnmConverter\Option.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -103,6 +100,9 @@
       <Project>{e39712e8-aa2f-4764-975b-40b54164b95e}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Model\AnmConverter\Option.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
