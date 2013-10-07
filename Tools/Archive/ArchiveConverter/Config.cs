@@ -20,11 +20,11 @@ namespace ArchiveConverter
 
         public CommandExecutor this[string type]
         {
-            private set
+            set
             {
                 // Nothing...
             }
-            public get
+            get
             {
                 var ret = this.Find((item) =>
                 {
@@ -35,11 +35,12 @@ namespace ArchiveConverter
                     return false;
                 });
 
+#if false
                 if (ret == null)
                 {
                     throw new InvalidOperationException(string.Format("There is not config item({0}).", type));
                 }
-
+#endif
                 return ret;
             }
         }

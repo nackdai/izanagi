@@ -169,6 +169,13 @@ namespace ArchiveConverter
             get;
             set;
         }
+
+        [XmlIgnore]
+        internal int Size
+        {
+            get;
+            set;
+        }
     }
 
     [XmlRoot("img")]
