@@ -8,25 +8,47 @@ namespace ArchiveConverter
 {
     class Option
     {
+        /// <summary>
+        /// コンフィグファイル.
+        /// </summary>
         public string Config
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// 入力ファイル.
+        /// </summary>
         public string Input
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// 出力ファイル.
+        /// </summary>
         public string Output
         {
             get;
             private set;
         }
 
-        public string ObjDir
+        /// <summary>
+        /// ベースディレクトリ.
+        /// </summary>
+        public string BaseDir
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// ツールディレクトリ.
+        /// ファイルコンバータなどのツールのあるディレクトリ.
+        /// </summary>
+        public string ToolDir
         {
             get;
             private set;
@@ -56,7 +78,12 @@ namespace ArchiveConverter
                 else if (arg == "-d")
                 {
                     // object dir.
-                    this.ObjDir = args[i + 1];
+                    this.BaseDir = args[i + 1];
+                }
+                else if (arg == "-td")
+                {
+                    // tool dir.
+                    this.ToolDir = args[i + 1];
                 }
             }
         }

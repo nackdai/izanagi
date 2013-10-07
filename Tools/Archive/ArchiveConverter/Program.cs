@@ -18,6 +18,8 @@ namespace ArchiveConverter
             Console.WriteLine(" -c <config>");
             Console.WriteLine(" -d <directory>");
             Console.WriteLine("    base directory for files. relative path from input file.");
+            Console.WriteLine(" -td <directory>");
+            Console.WriteLine("    tool directory. relative path from ArchiveConverter.");
         }
 
         static void Main(string[] args)
