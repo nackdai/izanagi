@@ -97,6 +97,8 @@ namespace ArchiveConverter
                             item.Type = name;
                         }
 
+                        item.Name = item.Source;
+
                         // ベースのパスが指定されていれば、それを付加する
                         if (!string.IsNullOrEmpty(ArchiveRoot.BasePath))
                         {
@@ -144,6 +146,13 @@ namespace ArchiveConverter
     {
         [XmlAttribute("src")]
         public string Source
+        {
+            get;
+            set;
+        }
+
+        [XmlIgnore]
+        public string Name
         {
             get;
             set;
