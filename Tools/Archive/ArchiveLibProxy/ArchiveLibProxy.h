@@ -15,10 +15,10 @@ namespace tool {
         !ArchiveLibProxy();
 
     public:
-        void BeginExport(int fileNum, int maxFileSize);
+        void BeginExport(char* path, int fileNum, int maxFileSize);
         void EndExport();
 
-        void ExportFile(char* name, int fileSize);
+        void Register(char* name, char* path);
 	};
 }
 }

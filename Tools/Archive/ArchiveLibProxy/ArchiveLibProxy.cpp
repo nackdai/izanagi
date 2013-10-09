@@ -19,9 +19,9 @@ namespace tool {
     {
     }
 
-    void ArchiveLibProxy::BeginExport(int fileNum, int maxFileSize)
+    void ArchiveLibProxy::BeginExport(char* path, int fileNum, int maxFileSize)
     {
-        ::BeginExport(fileNum, maxFileSize);
+        ::BeginExport(path, fileNum, maxFileSize);
     }
 
     void ArchiveLibProxy::EndExport()
@@ -29,9 +29,9 @@ namespace tool {
         ::EndExport();
     }
 
-    void ArchiveLibProxy::ExportFile(char* name, int fileSize)
+    void ArchiveLibProxy::Register(char* name, char* path)
     {
-        ::ExportFile(name, fileSize);
+        ::Register(name, path);
     }
 }
 }
