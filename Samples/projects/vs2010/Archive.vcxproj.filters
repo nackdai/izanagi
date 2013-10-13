@@ -18,6 +18,9 @@
     <CustomBuild Include="..\..\Archive\shader\SkinShader.xml">
       <Filter>shader</Filter>
     </CustomBuild>
+    <CustomBuild Include="..\..\Archive\Archive.xml">
+      <Filter>asset</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="asset">
@@ -37,9 +40,15 @@
     <None Include="..\..\Archive\shader\SkinShader.fx">
       <Filter>shader</Filter>
     </None>
+    <None Include="..\..\Archive\Config.xml">
+      <Filter>asset</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Archive\Archive.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Archive\data\Archive.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
