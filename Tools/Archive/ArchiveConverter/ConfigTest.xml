@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
 <config>
-  <item type="img" exe="ImageBuilder.exe" in="-i" out="-o" opt=""/>
-  <item type="mdl" exe="ModelConverter.exe" in="-i" out="-o" opt="-e mdl"/>
+  <Command type="img" exe="ImageBuilder.exe" in="-i" out="-o" opt=""/>
+  <Command type="mdl" exe="ModelConverter.exe" in="-i" out="-o" opt="-e mdl"/>
 </config>

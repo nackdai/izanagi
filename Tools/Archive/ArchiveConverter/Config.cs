@@ -9,7 +9,7 @@ using System.Diagnostics;
 namespace ArchiveConverter
 {
     [XmlRoot("config")]
-    public class Config : List<CommandExecutor>
+    public class Config : List<Command>
     {
         public Config()
         {
@@ -19,7 +19,7 @@ namespace ArchiveConverter
         {
         }
 
-        public CommandExecutor this[string type]
+        public Command this[string type]
         {
             set
             {
@@ -46,6 +46,16 @@ namespace ArchiveConverter
             }
         }
 
+        static public void Serialize(Config config, string path)
+        {
+            using (var fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write))
+            {
+                var serilizer = new XmlSerializer(typeof(Config));
+
+                serilizer.Serialize(fs, config);
+            }
+        }
+
         static public Config Deserialize(string path)
         {
             if (string.IsNullOrEmpty(path))
@@ -65,8 +75,7 @@ namespace ArchiveConverter
         
     }
 
-    [XmlRoot("item")]
-    public class CommandExecutor
+    public class Command
     {
         [XmlAttribute("type")]
         public string Type
@@ -115,6 +124,16 @@ namespace ArchiveConverter
             set;
         }
 
+        void ReceiveStandardOutput(object sender, DataReceivedEventArgs args)
+        {
+            Console.WriteLine(args.Data);
+        }
+
+        void ReceiveStandardError(object sender, DataReceivedEventArgs args)
+        {
+            Console.WriteLine(args.Data);
+        }
+
         /// <summary>
         /// コマンド実行
         /// </summary>
@@ -148,21 +167,39 @@ namespace ArchiveConverter
                 throw new FileNotFoundException("{0} is not found.", exe);
             }
 
-            // Do command
-            var procStartInfo = new ProcessStartInfo(exe);
-            procStartInfo.Arguments = this.InputOption + " " + input;
-            procStartInfo.Arguments = this.OutputOption + " " + output;
+            exe = Path.GetFullPath(exe);
+
+            var proc = new Process();
+            proc.StartInfo.CreateNoWindow = false;
+            proc.StartInfo.RedirectStandardError = false;
+            proc.StartInfo.RedirectStandardOutput = false;
+            proc.StartInfo.UseShellExecute = false;
+
+            //proc.OutputDataReceived += new DataReceivedEventHandler(ReceiveStandardOutput);
+            //proc.ErrorDataReceived += new DataReceivedEventHandler(ReceiveStandardError);
+
+            proc.StartInfo.Arguments = this.InputOption + " " + input;
+            proc.StartInfo.Arguments += " " + this.OutputOption + " " + output;
 
             if (!string.IsNullOrEmpty(this.Option))
             {
-                procStartInfo.Arguments += " " + this.Option;
+                proc.StartInfo.Arguments += " " + this.Option;
             }
             if (!string.IsNullOrEmpty(option))
             {
-                procStartInfo.Arguments += " " + option;
+                proc.StartInfo.Arguments += " " + option;
             }
 
-            var proc = Process.Start(procStartInfo);
+            proc.StartInfo.FileName = exe;
+
+            proc.Start();
+
+            //proc.BeginOutputReadLine();
+            //proc.BeginErrorReadLine();
+
+            //var stderr = proc.StandardError.ReadToEnd();
+            //var stdout = proc.StandardOutput.ReadToEnd();
+
             proc.WaitForExit();
         }
     }
