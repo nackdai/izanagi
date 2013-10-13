@@ -23,15 +23,16 @@ using namespace std;
 namespace {
     inline void _DispUsage()
     {
-        printf(
+        ::fprintf(
+            stdout,
             "ImageBuilder Ver.0.01\n"
             "\n"
             "[USAGE]\n"
             "ImageBuilder.exe -i [xml] -o [out]\n"
             "\n"
-            " -i [xml] : 入力XMLファイル\n"
-            " -o [out] : 出力ファイル名\n"
-            "            指定がない場合は入力XMLファイルから自動的に設定\n"
+            " -i [xml] : input xml file\n"
+            " -o [out] : ouput file name\n"
+            "            If name is not specified, this tool set name from input file name.\n"
             " -p [type] : specify graphics platform\n"
             "             dx9 : DirectX9\n"
             "             gles2 : OpenGLES2\n"
@@ -40,7 +41,7 @@ namespace {
 
     void _PrintString(IZ_PCSTR pszStr)
     {
-        printf("%s\n", pszStr);
+        ::fprintf(stderr, "%s\n", pszStr);
     }
 }   // namespace
 
@@ -55,6 +56,11 @@ static IZ_CHAR BUF[MAX_PATH];
 int main(int argc, char* argv[])
 {
     int nRetCode = 0;
+
+    if (argc == 1) {
+        _DispUsage();
+        return 1;
+    }
 
     // エラーストリング表示用関数セット
     izanagi::tool::CException::SetPrintLogFunc(_PrintString);
@@ -117,7 +123,7 @@ int main(int argc, char* argv[])
         VGOTO(FALSE);
     }
     catch (...) {
-        printf("Failed\n");
+        ::fprintf(stderr, "Failed\n");
         VGOTO(FALSE);
     }
 

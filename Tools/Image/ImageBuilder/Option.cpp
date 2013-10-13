@@ -20,11 +20,14 @@ BOOL COption::Analysis(int argc, TCHAR* argv[])
         BOOL result = FALSE;
         izanagi::tool::CString cmd(argv[i]);
 
+		::fprintf(stdout, "%s\n", cmd.c_str());
+
         if (i < argc - 1) {
             if (result = (cmd == "-i")) {
                 // -i
                 in.format("%s", argv[++i]);
                 in.replace('/', '\\');
+                ::fprintf(stdout, "--> %s\n", in.c_str());
             }
             else if (result = (cmd == "-o")) {
                 // -o
@@ -53,7 +56,7 @@ BOOL COption::Analysis(int argc, TCHAR* argv[])
 
         if (!result) {
             // TODO
-            printf("無効なオプションです[%s]\n\n", cmd);
+            ::fprintf(stderr, "Invalid Option [%s]\n\n", cmd.c_str());
             //IZ_ASSERT(FALSE);
             return FALSE;
         }
