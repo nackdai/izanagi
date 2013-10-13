@@ -156,7 +156,7 @@ namespace ArchiveConverter
             }
 
             var exe = this.Exe;
-            if (!string.IsNullOrEmpty(dir))
+            if (!string.IsNullOrEmpty(dir) && !Path.IsPathRooted(exe))
             {
                 exe = dir + "/" + exe;
             }

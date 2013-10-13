@@ -40,6 +40,8 @@ CArchiveExporter::CArchiveExporter(
     m_Header.numFiles = fileNum;
     m_Header.maxFileSize = maxFileSize;
 
+    m_Header.sizeHeader = sizeof(m_Header);
+
     m_Dst = NULL;
     ::fopen_s(&m_Dst, path, "wb");
     ::fseek(m_Dst, sizeof(m_Header), SEEK_SET);
@@ -69,9 +71,15 @@ void CArchiveExporter::Register(char* name, char* path)
 
 void CArchiveExporter::Export()
 {
-    ExportHeaderChunk();
+    ::fseek(m_Dst, m_Header.sizeFileHeader, SEEK_CUR);
+
     ExportNameChunk();
     ExportDataChunk();
+
+    m_Header.sizeFile = ::ftell(m_Dst);
+
+    ::fseek(m_Dst, m_Header.sizeHeader, SEEK_SET);
+    ExportHeaderChunk();
 
     ::fseek(m_Dst, 0, SEEK_SET);
     ::fwrite(&m_Header, sizeof(m_Header), 1, m_Dst);
@@ -91,7 +99,7 @@ void CArchiveExporter::ExportNameChunk()
             ? 0
             : 4 - (size & 0x03));
 
-        m_HeaderList[i].posName = ::ftell(m_Dst);
+        m_HeaderList[i].posName = ::ftell(m_Dst) - m_Header.posName;
         m_HeaderList[i].sizeName = size + padding;
 
         ::fwrite(name.c_str(), sizeof(char), name.size(), m_Dst);
@@ -99,6 +107,9 @@ void CArchiveExporter::ExportNameChunk()
             ::fwrite(zero, sizeof(char), padding, m_Dst);
         }
     }
+
+    size_t pos = ::ftell(m_Dst);
+    m_Header.sizeName = pos - m_Header.posName;
 }
 
 void CArchiveExporter::ExportDataChunk()
