@@ -1,4 +1,5 @@
 #include "Archive.h"
+#include "data/Archive.h"
 
 /////////////////////////////////////////////////
 
@@ -124,7 +125,7 @@ IZ_BOOL CArchiveApp::InitInternal(
     // Texture
     {
         izanagi::resource::SArchiveFileDesc desc;
-        m_Archive->SeekByKey(0, &desc);
+        m_Archive->SeekByKey(Archive::ModelImage, &desc);
 
         void* buf = ALLOC(allocator, desc.size);
         m_Archive->Read(buf, desc);
@@ -161,7 +162,7 @@ IZ_BOOL CArchiveApp::InitInternal(
     // Model
     {
         izanagi::resource::SArchiveFileDesc desc;
-        m_Archive->SeekByKey(1, &desc);
+        m_Archive->SeekByKey(Archive::Seymour, &desc);
 
         void* buf = ALLOC(allocator, desc.size);
         m_Archive->Read(buf, desc);
