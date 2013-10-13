@@ -6,7 +6,7 @@ using System.IO;
 
 namespace ArchiveConverter
 {
-    static class Exporter
+    static unsafe class Exporter
     {
         /// <summary>
         /// 出力可能ファイル数
@@ -47,7 +47,7 @@ namespace ArchiveConverter
                     else
                     {
                         cmdItem.DoCmd(
-                            "", // TODO
+                            option.ToolDir,
                             item.Source,
                             item.Dest,
                             item.Option);
@@ -71,6 +71,29 @@ namespace ArchiveConverter
             }
         }
 
+        static void BeginExport(string output)
+        {
+            char* tmp = (char*)System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi(output);
+
+            izanagi.tool.ArchiveLibProxy.BeginExport(
+                (sbyte*)tmp,
+                exportableFileNum,
+                (int)maxFileSize);
+        }
+
+        static void EndExport()
+        {
+            izanagi.tool.ArchiveLibProxy.EndExport();
+        }
+
+        static void Register(string name, string path)
+        {
+            char* nameTmp = (char*)System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi(name);
+            char* pathTmp = (char*)System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi(path);
+
+            izanagi.tool.ArchiveLibProxy.Register((sbyte*)nameTmp, (sbyte*)pathTmp);
+        }
+
         static public void Export(
             Config config,
             Option option,
@@ -78,15 +101,19 @@ namespace ArchiveConverter
         {
             Convert(config, option, root);
 
+            BeginExport(option.Output);
+
             foreach (var item in root.Items)
             {
                 // 出力先が空の場合は失敗している
 
                 if (!string.IsNullOrEmpty(item.Dest))
                 {
-
+                    Register(item.Name, item.Dest);
                 }
             }
+
+            EndExport();
         }
     }
 }

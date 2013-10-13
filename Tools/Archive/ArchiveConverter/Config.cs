@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 using System.IO;
+using System.Diagnostics;
 
 namespace ArchiveConverter
 {
@@ -135,27 +136,34 @@ namespace ArchiveConverter
                 throw new InvalidOperationException("");
             }
 
-            var cmd = this.Exe;
+            var exe = this.Exe;
             if (!string.IsNullOrEmpty(dir))
             {
-                cmd = dir + "/" + cmd;
+                exe = dir + "/" + exe;
             }
 
-            // 入出力ファイルを設定
-            cmd += " " + this.InputOption + input;
-            cmd += " " + this.OutputOption + output;
+            if (!File.Exists(exe))
+            {
+                // 実行ファイルが存在しない
+                throw new FileNotFoundException("{0} is not found.", exe);
+            }
+
+            // Do command
+            var procStartInfo = new ProcessStartInfo(exe);
+            procStartInfo.Arguments = this.InputOption + " " + input;
+            procStartInfo.Arguments = this.OutputOption + " " + output;
 
             if (!string.IsNullOrEmpty(this.Option))
             {
-                cmd += " " + this.Option;
+                procStartInfo.Arguments += " " + this.Option;
             }
             if (!string.IsNullOrEmpty(option))
             {
-                cmd += " " + option;
+                procStartInfo.Arguments += " " + option;
             }
 
-            // TODO
-            // Do command
+            var proc = Process.Start(procStartInfo);
+            proc.WaitForExit();
         }
     }
 }
