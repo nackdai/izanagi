@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <archives>
-  <img src="ModelImage.xml" opt="" />
-  <mdl src="Seymour.dae" opt="-mtx 48" />
+  <img src="Media/ModelImage.xml" opt="" key="modelImage"/>
+  <mdl src="Media/Seymour.dae" opt="-mtx 48" />
 </archives>

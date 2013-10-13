@@ -29,21 +29,18 @@ namespace ArchiveConverter
                 var option = new Option(args);
                 option.CheckValidation();
 
-                //var config = new Config();
-                //config.Add(
-                //    new CommandExecutor()
-                //    {
-                //        Type = "img",
-                //        Exe = "hoge.exe",
-                //    });
-                //Config.Serialize(config, "testconfig.xml");
                 var config = Config.Deserialize(option.Config);
-                //var config = Config.Deserialize("testconfig.xml");
 
                 ArchiveRoot.BasePath = option.BaseDir;
                 var root = ArchiveRoot.Deserialize(option.Input);
 
                 Exporter.Export(config, option, root);
+
+                if (!string.IsNullOrEmpty(option.HeaderFile))
+                {
+                    KeyDefsFileExporter.Register(root, "Archive");
+                    KeyDefsFileExporter.Export(option.HeaderFile);
+                }
             }
             catch (Exception e)
             {
