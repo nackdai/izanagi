@@ -15,10 +15,24 @@ namespace tool {
         !ArchiveLibProxy();
 
     public:
-        void BeginExport(char* path, int fileNum, int maxFileSize);
-        void EndExport();
+        /** Archive出力準備
+         *
+         * @param path[in] Archive出力ファイルパス
+         * @param fileNum[in] パックするファイル数
+         * @param maxFileSize[in] パックするファイルの最大バイト数
+         */
+        static void BeginExport(char* path, int fileNum, int maxFileSize);
 
-        void Register(char* name, char* path);
+        /** Archive出力終了
+         */
+        static void EndExport();
+
+        /** Archiveに含めるファイルを登録
+         *
+         * @param name[in] ファイル名
+         * @param path[in] ファイルパス
+         */
+        static void Register(char* name, char* path);
 	};
 }
 }

@@ -31,14 +31,18 @@ namespace ArchiveConverter
 
                 var config = Config.Deserialize(option.Config);
 
-                ArchiveRoot.BasePath = Path.GetDirectoryName(option.Input);
+                ArchiveRoot.BasePath = option.BaseDir;
                 var root = ArchiveRoot.Deserialize(option.Input);
+
+                Exporter.Export(config, option, root);
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+
+                DisplayUsage();
             }
         }
     }
-
-    
 }
