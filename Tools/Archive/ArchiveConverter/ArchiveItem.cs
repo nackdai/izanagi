@@ -144,6 +144,9 @@ namespace ArchiveConverter
 
     public class ArchiveItem
     {
+        /// <summary>
+        /// 入力ファイル
+        /// </summary>
         [XmlAttribute("src")]
         public string Source
         {
@@ -151,6 +154,9 @@ namespace ArchiveConverter
             set;
         }
 
+        /// <summary>
+        /// アーカイブファイルに出力する名前
+        /// </summary>
         [XmlIgnore]
         public string Name
         {
@@ -158,6 +164,9 @@ namespace ArchiveConverter
             set;
         }
 
+        /// <summary>
+        /// 出力パス
+        /// </summary>
         [XmlIgnore]
         public string Dest
         {
@@ -165,6 +174,9 @@ namespace ArchiveConverter
             set;
         }
 
+        /// <summary>
+        /// タイプに応じたツールに渡すオプション
+        /// </summary>
         [XmlAttribute("opt")]
         public string Option
         {
@@ -172,6 +184,9 @@ namespace ArchiveConverter
             set;
         }
 
+        /// <summary>
+        /// ファイルタイプ
+        /// </summary>
         [XmlAttribute("type")]
         public string Type
         {
@@ -179,6 +194,19 @@ namespace ArchiveConverter
             set;
         }
 
+        /// <summary>
+        /// キー定義ファイルに出力する際のキー
+        /// </summary>
+        [XmlAttribute("key")]
+        public string Key
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// ツール変換後のファイルサイズ
+        /// </summary>
         [XmlIgnore]
         internal int Size
         {
