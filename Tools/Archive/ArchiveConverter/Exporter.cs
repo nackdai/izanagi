@@ -23,6 +23,15 @@ namespace ArchiveConverter
             Option option,
             ArchiveRoot root)
         {
+            // ツールディレクトリをフルパスに変換
+            var toolDir = option.ToolDir;
+            if (!Path.IsPathRooted(option.ToolDir))
+            {
+                toolDir = Path.GetDirectoryName(option.Input);
+                toolDir = Path.Combine(toolDir, option.ToolDir);
+                toolDir = Path.GetFullPath(toolDir);
+            }
+
             foreach (var item in root.Items)
             {
                 if (!File.Exists(item.Source))
@@ -39,10 +48,14 @@ namespace ArchiveConverter
                     var file = Path.GetTempFileName();
                     item.Dest = Path.Combine(dir, file);
 
-                    // フルパスに変換
-                    var baseDir = Path.GetDirectoryName(option.Input);
-                    var src = Path.Combine(baseDir, item.Source);
-                    src = Path.GetFullPath(src);
+                    // ソースデータをフルパスに変換
+                    var src = item.Source;
+                    if (!Path.IsPathRooted(item.Source))
+                    {
+                        var baseDir = Path.GetDirectoryName(option.Input);
+                        src = Path.Combine(baseDir, item.Source);
+                        src = Path.GetFullPath(src);
+                    }
 
                     if (cmdItem == null)
                     {
@@ -52,7 +65,7 @@ namespace ArchiveConverter
                     else
                     {
                         cmdItem.DoCmd(
-                            option.ToolDir,
+                            toolDir,
                             src,
                             item.Dest,
                             item.Option);
