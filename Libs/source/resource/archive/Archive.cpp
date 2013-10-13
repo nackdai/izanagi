@@ -112,6 +112,7 @@ namespace resource
             // ハッシュ要素
             if (instance->m_pFileHeaders != IZ_NULL) {
                 instance->m_pHashItems = reinterpret_cast<CArcHashItem*>(buf);
+                buf += sizeof(CArcHashItem) * fileNum;
 
                 for (IZ_UINT i = 0; i < fileNum; ++i) {
                     const S_ARC_FILE_HEADER& fileHeader = *(instance->GetFileHeaderByIdx(i));
@@ -164,6 +165,8 @@ namespace resource
     // デストラクタ
     CArchive::~CArchive()
     {
+        FREE(m_Allocator, this);
+
         if (m_pInput != IZ_NULL) {
             m_pInput->Finalize();
             m_pInput = IZ_NULL;
