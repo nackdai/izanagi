@@ -86,6 +86,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ResourceManager", "ResourceManager.vcxproj", "{DF1D011A-2372-4533-A3D3-E753F99F1752}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Archive", "Archive.vcxproj", "{80B550C3-8B67-4F7F-9DE6-164E425FA1D5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DD5D28B8-93F1-4F26-8AD1-DD224CCB9A4F} = {DD5D28B8-93F1-4F26-8AD1-DD224CCB9A4F}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Instancing", "Instancing.vcxproj", "{C439FE0E-4B0C-4600-AC2C-36A2FC57F01D}"
 EndProject
