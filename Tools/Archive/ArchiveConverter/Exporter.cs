@@ -39,16 +39,21 @@ namespace ArchiveConverter
                     var file = Path.GetTempFileName();
                     item.Dest = Path.Combine(dir, file);
 
+                    // フルパスに変換
+                    var baseDir = Path.GetDirectoryName(option.Input);
+                    var src = Path.Combine(baseDir, item.Source);
+                    src = Path.GetFullPath(src);
+
                     if (cmdItem == null)
                     {
                         // そのままコピー
-                        File.Copy(item.Source, item.Dest);
+                        File.Copy(src, item.Dest);
                     }
                     else
                     {
                         cmdItem.DoCmd(
                             option.ToolDir,
-                            item.Source,
+                            src,
                             item.Dest,
                             item.Option);
                     }
@@ -114,6 +119,14 @@ namespace ArchiveConverter
             }
 
             EndExport();
+
+            foreach (var item in root.Items)
+            {
+                if (File.Exists(item.Dest))
+                {
+                    File.Delete(item.Dest);
+                }
+            }
         }
     }
 }
