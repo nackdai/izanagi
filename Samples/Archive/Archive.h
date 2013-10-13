@@ -32,6 +32,11 @@ private:
     izanagi::resource::IArchive* m_Archive;
 
     izanagi::CImage* m_Img;
+    izanagi::CModel* m_Mdl;
+
+    izanagi::shader::CShaderBasic* m_Shd;
+
+    izanagi::CFileInputStream m_Input;
 };
 
 #endif    // #if !defined(__MODEL_APP_H__)

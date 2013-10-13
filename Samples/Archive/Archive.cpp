@@ -92,7 +92,9 @@ static CSampleMdlRenderHandler* s_MdlRenderHandler = IZ_NULL;
 
 CArchiveApp::CArchiveApp()
 {
-    m_Archive = IZ_NULL;
+    m_Img = IZ_NULL;
+    m_Mdl = IZ_NULL;
+    m_Shd = IZ_NULL;
 }
 
 CArchiveApp::~CArchiveApp()
@@ -108,12 +110,11 @@ IZ_BOOL CArchiveApp::InitInternal(
     IZ_BOOL result = IZ_TRUE;
 
     {
-        izanagi::CFileInputStream in;
-        VRETURN(in.Open("data/Archive.arc"));
+        VRETURN(m_Input.Open("data/Archive.arc"));
 
         m_Archive = izanagi::resource::CArchive::CreateArchive(
             allocator,
-            &in);
+            &m_Input);
         IZ_ASSERT(m_Archive != IZ_NULL);
     }
 
@@ -126,7 +127,7 @@ IZ_BOOL CArchiveApp::InitInternal(
         m_Archive->SeekByKey(0, &desc);
 
         void* buf = ALLOC(allocator, desc.size);
-        m_Archive->Read(buf);
+        m_Archive->Read(buf, desc);
 
         izanagi::CMemoryInputStream in(buf, desc.size);
 
@@ -139,78 +140,42 @@ IZ_BOOL CArchiveApp::InitInternal(
         VGOTO(result = (m_Img != IZ_NULL), __EXIT__);
     }
 
-    // Mesh
-    {
-        izanagi::CFileInputStream in;
-        VRETURN(in.Open("data/Seymour.msh"));
-
-        msh = izanagi::CMesh::CreateMesh(
-            allocator,
-            device,
-            &in);
-        
-        VGOTO(result = (msh != IZ_NULL), __EXIT__);
-    }
-
-    // Skelton
-    {
-        izanagi::CFileInputStream in;
-        VRETURN(in.Open("data/Seymour.skl"));
-
-        skl = izanagi::CSkeleton::CreateSkeleton(
-            allocator,
-            &in);
-
-        VGOTO(result = (skl != IZ_NULL), __EXIT__);
-    }
-
     // Shader
     {
         izanagi::CFileInputStream in;
         VRETURN(in.Open("data/SkinShader.shd"));
 
-        izanagi::shader::CShaderBasic* shd = izanagi::shader::CShaderBasic::CreateShader<izanagi::shader::CShaderBasic>(
-                    allocator,
-                    device,
-                    &in);
+        m_Shd = izanagi::shader::CShaderBasic::CreateShader<izanagi::shader::CShaderBasic>(
+            allocator,
+            device,
+            &in);
 
-        VGOTO(result = (shd != IZ_NULL), __EXIT__);
+        VGOTO(result = (m_Shd != IZ_NULL), __EXIT__);
 
         // ジョイントマトリクスを描画時に設定するためのハンドラ
         s_MdlRenderHandler = izanagi::IMshRenderHandler::CreateMshRenderHandler<CSampleMdlRenderHandler>(allocator);
-        s_MdlRenderHandler->SetShader(shd);
+        s_MdlRenderHandler->SetShader(m_Shd);
         VGOTO(result = (s_MdlRenderHandler != IZ_NULL), __EXIT__);
-
-        m_RscMgr->Add(
-            shd,
-            IZ_CC3('s', 'h', 'd'),
-            izanagi::CKey("SkinShader.shd"));
-
-        // Archiveに登録したのでもういらない
-        SAFE_RELEASE(shd);
     }
 
     // Model
     {
-        izanagi::CModel* mdl = izanagi::CModel::CreateModel(
+        izanagi::resource::SArchiveFileDesc desc;
+        m_Archive->SeekByKey(1, &desc);
+
+        void* buf = ALLOC(allocator, desc.size);
+        m_Archive->Read(buf, desc);
+
+        izanagi::CMemoryInputStream in(buf, desc.size);
+
+        m_Mdl = izanagi::CModel::CreateModel(
             allocator,
-            msh,
-            skl,
+            device,
+            &in,
             s_MdlRenderHandler);
 
-        VGOTO(result = (mdl != IZ_NULL), __EXIT__);
-
-        // Modelに登録したのでもういらない
-        SAFE_RELEASE(msh);
-        SAFE_RELEASE(skl);
-
-        m_RscMgr->Add(
-            mdl,
-            IZ_CC3('m', 'd', 'l'),
-            izanagi::CKey("Seymour.mdl"));
-
-        // Archiveに登録したのでもういらない
-        SAFE_RELEASE(mdl);
+        FREE(allocator, buf);
+        VGOTO(result = (m_Img != IZ_NULL), __EXIT__);
     }
 
     // カメラ
@@ -237,22 +202,21 @@ void CArchiveApp::ReleaseInternal()
 {
     SAFE_RELEASE(s_MdlRenderHandler);
 
-    m_RscMgr->RemoveAll();
-    SAFE_RELEASE(m_RscMgr);
+    SAFE_RELEASE(m_Archive);
+
+    SAFE_RELEASE(m_Img);
+    SAFE_RELEASE(m_Mdl);
+    SAFE_RELEASE(m_Shd);
+
+    m_Input.Close();
 }
 
 // 更新.
 void CArchiveApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
     GetCamera().Update();
-    
-    izanagi::CObject* obj = m_RscMgr->Find(
-        IZ_CC3('m', 'd', 'l'),
-        izanagi::CKey("Seymour.mdl"));
-    if (obj != IZ_NULL) {
-        izanagi::CModel* mdl = (izanagi::CModel*)obj;
-        mdl->Update();
-    }
+
+    m_Mdl->Update();
 }
 
 namespace {
@@ -275,61 +239,31 @@ namespace {
 // 描画.
 void CArchiveApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
-    izanagi::CModel* mdl = IZ_NULL;
-    {
-        izanagi::CObject* obj = m_RscMgr->Find(
-            IZ_CC3('m', 'd', 'l'),
-            izanagi::CKey("Seymour.mdl"));
-        if (obj != IZ_NULL) {
-            mdl = (izanagi::CModel*)obj;
-        }
-    }
-
-    izanagi::CImage* img = IZ_NULL;
-    {
-        izanagi::CObject* obj = m_RscMgr->Find(
-            IZ_CC3('i', 'm', 'g'),
-            izanagi::CKey("ModelImage.img"));
-        if (obj != IZ_NULL) {
-            img = (izanagi::CImage*)obj;
-        }
-    }
-    
-    izanagi::shader::CShaderBasic* shd = IZ_NULL;
-    {
-        izanagi::CObject* obj = m_RscMgr->Find(
-            IZ_CC3('s', 'h', 'd'),
-            izanagi::CKey("SkinShader.shd"));
-        if (obj != IZ_NULL) {
-            shd = (izanagi::shader::CShaderBasic*)obj;
-        }
-    }
-
     izanagi::sample::CSampleCamera& camera = GetCamera();
 
-    IZ_UINT passCnt = shd->Begin(0, IZ_FALSE);
+    IZ_UINT passCnt = m_Shd->Begin(0, IZ_FALSE);
     {
         IZ_ASSERT(passCnt >= 1);
-        if (shd->BeginPass(0)) {
+        if (m_Shd->BeginPass(0)) {
             // シェーダ定数セット
             {
                 _SetShaderParam(
-                    shd,
+                    m_Shd,
                     "g_mW2C",
                     (void*)&camera.GetParam().mtxW2C,
                     sizeof(camera.GetParam().mtxW2C));
             }
 
             // テクスチャセット
-            device->SetTexture(0, img->GetTexture(0));
+            device->SetTexture(0, m_Img->GetTexture(0));
 
-            shd->CommitChanges();
+            m_Shd->CommitChanges();
 
             // モデル描画
-            mdl->Render();
+            m_Mdl->Render();
 
-            shd->EndPass();
+            m_Shd->EndPass();
         }
     }
-    shd->End();
+    m_Shd->End();
 }
