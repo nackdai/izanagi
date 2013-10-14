@@ -58,6 +58,9 @@
     <Filter Include="importer\pmd">
       <UniqueIdentifier>{5bd6e254-004b-49c2-be92-1cd350ee97c5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="importer\json">
+      <UniqueIdentifier>{74ebcead-4336-41fe-b3fc-d81054f5df0b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Model\ModelLib\include\Importer.h">
@@ -147,6 +150,9 @@
     <ClInclude Include="..\..\Model\ModelLib\importer\pmd\VMDLoader.h">
       <Filter>importer\pmd</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Model\ModelLib\importer\json\JsonImporter.h">
+      <Filter>importer\json</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Model\ModelLib\source\Importer.cpp">
@@ -220,6 +226,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Model\ModelLib\importer\pmd\VMDLoader.cpp">
       <Filter>importer\pmd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Model\ModelLib\importer\json\JsonImporter.cpp">
+      <Filter>importer\json</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

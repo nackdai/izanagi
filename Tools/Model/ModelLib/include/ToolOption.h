@@ -34,6 +34,9 @@ public:
         else if (ret = ((ext == "pmd") || (ext == "vmd"))) {
             modelType = ModelTypePMD;
         }
+        else if (ret = ((ext == "json") || (ext == "js"))) {
+            modelType = ModelTypeJSON;
+        }
 
         return ret;
     }

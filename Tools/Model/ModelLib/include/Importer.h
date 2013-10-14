@@ -13,6 +13,7 @@ enum ModelType {
     ModelTypeXFile,
     ModelTypeFBX,
     ModelTypePMD,
+    ModelTypeJSON,
 
     ModelTypeUnknown,
 

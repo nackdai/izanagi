@@ -2,6 +2,7 @@
 #include "../importer/collada/ColladaImporter.h"
 #include "../importer/x_file/XFileImporter.h"
 #include "../importer/pmd/PMDImporter.h"
+#include "../importer/json/JSONImporter.h"
 
 IImporter* IImporter::CreateImporter(ModelType type)
 {
@@ -20,6 +21,9 @@ IImporter* IImporter::CreateImporter(ModelType type)
         break;
     case ModelTypePMD:
         ret = new CPmdImporter();
+        break;
+    case ModelTypeJSON:
+        ret = new CJsonImporter();
         break;
     default:
         IZ_ASSERT(IZ_FALSE);
