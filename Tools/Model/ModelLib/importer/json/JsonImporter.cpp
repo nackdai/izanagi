@@ -19,8 +19,7 @@ IZ_BOOL CJsonImporter::Open(IZ_PCSTR pszName)
     IZ_BOOL ret = !m_Document.ParseStream<0>(*m_FileStream).HasParseError();
     IZ_ASSERT(ret);
 
-    bool b = m_Document.HasMember("metadata");
-    b = m_Document["metadata"].IsObject();
+    VRETURN(m_Geometry.Read(m_Document));
 
     return ret;
 }
