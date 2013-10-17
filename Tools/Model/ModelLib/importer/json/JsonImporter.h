@@ -4,6 +4,7 @@
 #include "Importer.h"
 #include <rapidjson/document.h>
 #include <rapidjson/filestream.h>
+#include "JsonGeometry.h"
 
 class CJsonImporter : public IImporter {
     friend class IImporter;
@@ -175,6 +176,8 @@ protected:
 
     FILE* m_FP;
     rapidjson::FileStream* m_FileStream;
+
+    CJsonGeometry m_Geometry;
 };
 
 #endif  // #if !defined(__MODEL_LIB_JSON_IMPORTER_H__)
