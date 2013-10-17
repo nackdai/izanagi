@@ -6,17 +6,17 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Image\ImageBuilder\AppCore\ImageReaderImpl.cpp">
-      <Filter>external</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Image\ImageLibWrapper\ImageGraphicsDevice.cpp" />
     <ClCompile Include="..\..\Image\ImageLibWrapper\ImageLibWrapper.cpp" />
+    <ClCompile Include="..\..\Image\ImageBuilder\ImageReaderImpl.cpp">
+      <Filter>external</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Image\ImageBuilder\AppCore\ImageReaderImpl.h">
-      <Filter>external</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Image\ImageLibWrapper\ImageGraphicsDevice.h" />
     <ClInclude Include="..\..\Image\ImageLibWrapper\ImageLibWrapper.h" />
+    <ClInclude Include="..\..\Image\ImageBuilder\ImageReaderImpl.h">
+      <Filter>external</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
