@@ -222,8 +222,12 @@ inline void _OutputDebugString(const char* format, ...)
 #endif  // #ifndef COUNTOF
 
 #ifndef OFFSETOF
-    #define OFFSETOF(s,m)   (size_t)&(((s *)0)->m)
+    #define OFFSETOF(type, member)   (size_t)&(((type*)0)->member)
 #endif  // #ifndef OFFSETOF
+
+#ifndef MEMBER_COUNTOF
+    #define MEMBER_COUNTOF(type, memberArray)   COUNTOF(((type*)0)->memberArray)
+#endif
 
 #ifndef PURE_VIRTUAL
     #define PURE_VIRTUAL(d) virtual d = 0
