@@ -153,6 +153,9 @@
     <ClInclude Include="..\..\Model\ModelLib\importer\json\JsonImporter.h">
       <Filter>importer\json</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Model\ModelLib\importer\json\JsonGeometry.h">
+      <Filter>importer\json</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Model\ModelLib\source\Importer.cpp">
@@ -228,6 +231,9 @@
       <Filter>importer\pmd</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Model\ModelLib\importer\json\JsonImporter.cpp">
+      <Filter>importer\json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Model\ModelLib\importer\json\JsonGeometry.cpp">
       <Filter>importer\json</Filter>
     </ClCompile>
   </ItemGroup>
