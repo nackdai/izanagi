@@ -43,7 +43,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)../../Image/ImageLib;$(ProjectDir)../../Image/ImageBuilder/AppCore;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)../../Image/ImageLib;$(ProjectDir)../../Image/ImageBuilder;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>
@@ -67,7 +67,7 @@ copy $(ProjectDir)..\..\tools\$(Configuration)\$(ProjectName).lib $(ProjectDir).
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)../../Image/ImageLib;$(ProjectDir)../../Image/ImageBuilder/AppCore;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)../../Image/ImageLib;$(ProjectDir)../../Image/ImageBuilder;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>
@@ -91,12 +91,12 @@ copy $(ProjectDir)..\..\tools\$(Configuration)\$(ProjectName).lib $(ProjectDir).
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Image\ImageBuilder\AppCore\ImageReaderImpl.cpp" />
+    <ClCompile Include="..\..\Image\ImageBuilder\ImageReaderImpl.cpp" />
     <ClCompile Include="..\..\Image\ImageLibWrapper\ImageGraphicsDevice.cpp" />
     <ClCompile Include="..\..\Image\ImageLibWrapper\ImageLibWrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Image\ImageBuilder\AppCore\ImageReaderImpl.h" />
+    <ClInclude Include="..\..\Image\ImageBuilder\ImageReaderImpl.h" />
     <ClInclude Include="..\..\Image\ImageLibWrapper\ImageGraphicsDevice.h" />
     <ClInclude Include="..\..\Image\ImageLibWrapper\ImageLibWrapper.h" />
   </ItemGroup>
