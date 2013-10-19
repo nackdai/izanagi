@@ -24,9 +24,6 @@
     <ClInclude Include="..\..\Decal\Cube.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Decal\Decal.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Decal\DecalApp.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -36,9 +33,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Decal\Cube.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Decal\Decal.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Decal\DecalApp.cpp">

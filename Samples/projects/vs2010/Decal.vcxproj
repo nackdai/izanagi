@@ -217,13 +217,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Decal\Cube.h" />
-    <ClInclude Include="..\..\Decal\Decal.h" />
     <ClInclude Include="..\..\Decal\DecalApp.h" />
     <ClInclude Include="..\..\Decal\Sphere.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Decal\Cube.cpp" />
-    <ClCompile Include="..\..\Decal\Decal.cpp" />
     <ClCompile Include="..\..\Decal\DecalApp.cpp" />
     <ClCompile Include="..\..\Decal\main.cpp" />
     <ClCompile Include="..\..\Decal\Sphere.cpp" />
