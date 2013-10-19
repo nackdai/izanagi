@@ -9,6 +9,7 @@
 #define ENABLE_STL
 
 namespace izanagi {
+namespace scenegraph {
     /** デカール
      */
     class CDecal : public izanagi::CObject
@@ -51,17 +52,35 @@ namespace izanagi {
             IZ_FLOAT rectangleLengthX,
             IZ_FLOAT rectangleLengthZ);
 
+        /** 指定された三角形に対してシザリングを実行
+         *
+         * @param[in] シザリングを行う三角形の配列
+         * @param[in] 三角形の数
+         */
         void DoScissoring(
             const izanagi::math::CTriangle tri[],
             IZ_UINT triNum);
 
+        /** デカール描画用のグラフィックスオブジェクトを作成
+         *
+         * @param[in] device グラフィックスデバイス
+         */
         void CreateGraphicsObject(izanagi::graph::CGraphicsDevice* device);
 
+        /** デカール描画
+         *
+         * @param[in] device グラフィックスデバイス
+         */
         void Draw(izanagi::graph::CGraphicsDevice* device);
 
+        /** デカール中心を取得
+         *
+         * @return デカール中心
+         */
         const izanagi::math::SVector& GetCenter() const;
 
     private:
+        // シザリングによって新しく作成される三角形の数を計算する
         void ComputeNewTriNumByScissoring(
             const izanagi::math::CTriangle tri[],
             IZ_UINT triNum);
@@ -124,6 +143,7 @@ namespace izanagi {
         izanagi::graph::CVertexBuffer* m_VB;
         izanagi::graph::CVertexDeclaration* m_VD;
     };
+}   // namespace scenegraph
 }   // namespace izanagi
 
 #endif    // #if !defined(__IZ_SCENEGRAPH_DECAL_H__)

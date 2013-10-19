@@ -2,7 +2,7 @@
 #include "scenegraph/SceneGraphUtil.h"
 
 namespace izanagi {
-
+namespace scenegraph {
     CDecal* CDecal::Create(
         izanagi::IMemoryAllocator* allocator,
         const izanagi::math::SVector& point,
@@ -351,4 +351,5 @@ namespace izanagi {
         }
     #endif
     }
+}   // namespace scenegraph
 }   // namespace izanagi
