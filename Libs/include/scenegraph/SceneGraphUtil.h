@@ -37,7 +37,6 @@ namespace izanagi {
          */
         static void Screen2Clip(
             math::SVector& vClip,
-            const SCameraParam& sCamera,
             const graph::SViewport& vp,
             IZ_INT nX, IZ_INT nY,
             IZ_FLOAT fZ);
@@ -50,10 +49,21 @@ namespace izanagi {
             const graph::SViewport& vp,
             IZ_INT nX,
             IZ_INT nY);
+    };
 
+    /**
+     */
+    class CScissoring {
+    private:
+        CScissoring();
+        ~CScissoring();
+
+        NO_COPIABLE(CScissoring);
+
+    public:
         /** シザリングで作成される三角形の数を計算する.
          */
-        static IZ_UINT ComputeTriNumBySissoring(
+        static IZ_UINT ComputeTriNumByScissoring(
             const math::CPlane& sissorPlane,
             const math::CTriangle triangle[],
             IZ_UINT triNum);
@@ -66,7 +76,7 @@ namespace izanagi {
 
         /** シザリング.
          */
-        static IZ_UINT Sissoring(
+        static IZ_UINT Scissor(
             const math::CPlane& sissorPlane,
             const math::CTriangle triangle[],
             IZ_UINT triNum,
@@ -75,7 +85,7 @@ namespace izanagi {
 
         /** シザリング.
          */
-        static IZ_UINT Sissoring(
+        static IZ_UINT Scissor(
             const math::CPlane& sissorPlane,
             const math::CTriangle triangle[],
             IZ_UINT triNum,

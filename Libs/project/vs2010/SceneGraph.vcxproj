@@ -102,6 +102,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\scenegraph\Camera.cpp" />
+    <ClCompile Include="..\..\source\scenegraph\Decal.cpp" />
     <ClCompile Include="..\..\source\scenegraph\rendergraph\SceneRenderer.cpp" />
     <ClCompile Include="..\..\source\scenegraph\SceneGraphUtil.cpp" />
     <ClCompile Include="..\..\source\scenegraph\SceneParam.cpp" />
@@ -130,6 +131,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\scenegraph\Camera.h" />
+    <ClInclude Include="..\..\include\scenegraph\Decal.h" />
     <ClInclude Include="..\..\include\scenegraph\FixedSceneStateManager.h" />
     <ClInclude Include="..\..\include\scenegraph\LightParam.h" />
     <ClInclude Include="..\..\include\scenegraph\SceneDefs.h" />

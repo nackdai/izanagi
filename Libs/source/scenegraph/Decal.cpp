@@ -1,8 +1,7 @@
-#include "highgraph/Decal.h"
-#include "highgraph/GraphMath.h"
+#include "scenegraph/Decal.h"
+#include "scenegraph/SceneGraphUtil.h"
 
 namespace izanagi {
-namespace highgraph {
 
     CDecal* CDecal::Create(
         izanagi::IMemoryAllocator* allocator,
@@ -352,5 +351,4 @@ namespace highgraph {
         }
     #endif
     }
-}   // namespace highgraph
 }   // namespace izanagi
