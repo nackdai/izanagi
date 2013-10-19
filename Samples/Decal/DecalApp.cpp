@@ -69,7 +69,7 @@ IZ_BOOL CDecalApp::InitInternal(
         // TODO
         decalNormal.Set(0.0f, 0.0f, -1.0f, 0.0f);
 
-        m_Decal = CDecal::Create(
+        m_Decal = izanagi::scenegraph::CDecal::Create(
             allocator,
             decalPoint,
             decalNormal,

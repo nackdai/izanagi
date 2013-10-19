@@ -4,7 +4,6 @@
 #include "izSampleKit.h"
 #include "Sphere.h"
 #include "Cube.h"
-#include "Decal.h"
 
 static const IZ_UINT SCREEN_WIDTH = 1280;
 static const IZ_UINT SCREEN_HEIGHT = 720;
@@ -37,7 +36,7 @@ protected:
 private:
     CSphere* m_Sphere;
     //CCube* m_Sphere;
-    CDecal* m_Decal;
+    izanagi::scenegraph::CDecal* m_Decal;
 
     izanagi::CImage* m_Img;
 
