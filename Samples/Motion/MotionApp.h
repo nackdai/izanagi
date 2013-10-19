@@ -12,6 +12,10 @@ public:
     CMotionApp();
     virtual ~CMotionApp();
 
+public:
+    // キーボード押下
+    virtual IZ_BOOL OnKeyDown(IZ_UINT nChar);
+
 protected:
     // 初期化.
     virtual IZ_BOOL InitInternal(
@@ -28,15 +32,8 @@ protected:
     // 描画.
     virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device);
 
-private:
-    izanagi::CImage* m_Img;
-    izanagi::CModel* m_Mdl;
-    izanagi::CMesh* m_Msh;
-    izanagi::CSkeleton* m_Skl;
-    izanagi::shader::CShaderBasic* m_Shd;
-    izanagi::CAnimation* m_Anm;
-
-    izanagi::animation::CTimeline m_Timeline;
+    // 背景色取得.
+    virtual IZ_COLOR GetBgColor() const;
 };
 
 #endif    // #if !defined(__ANIMATION_APP_H__)

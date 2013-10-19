@@ -21,6 +21,18 @@
     <ClCompile Include="..\..\Motion\MotionApp.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Motion\StateManager.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Motion\StateXFile.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Motion\StateBase.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Motion\StateCollada.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\..\Media\ModelImage.xml">
@@ -41,6 +53,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Motion\MotionApp.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Motion\StateManager.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Motion\StateBase.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Motion\StateCollada.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Motion\StateXFile.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
