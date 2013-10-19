@@ -137,6 +137,9 @@
     <ClCompile Include="..\..\source\scenegraph\rendergraph\SceneRenderer.cpp">
       <Filter>source\rendergraph</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\scenegraph\Decal.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\scenegraph\Camera.h">
@@ -260,5 +263,8 @@
       <Filter>include\rendergraph</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\izSceneGraph.h" />
+    <ClInclude Include="..\..\include\scenegraph\Decal.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

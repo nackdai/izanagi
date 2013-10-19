@@ -1,5 +1,5 @@
-#if !defined(__IZ_HIGHGRAPH_DECAL_H__)
-#define __IZ_HIGHGRAPH_DECAL_H__
+#if !defined(__IZ_SCENEGRAPH_DECAL_H__)
+#define __IZ_SCENEGRAPH_DECAL_H__
 
 #include "izGraph.h"
 #include "izMath.h"
@@ -9,7 +9,6 @@
 #define ENABLE_STL
 
 namespace izanagi {
-namespace highgraph {
     /** ÉfÉJÅ[Éã
      */
     class CDecal : public izanagi::CObject
@@ -125,7 +124,6 @@ namespace highgraph {
         izanagi::graph::CVertexBuffer* m_VB;
         izanagi::graph::CVertexDeclaration* m_VD;
     };
-}   // namespace highgraph
 }   // namespace izanagi
 
-#endif    // #if !defined(__IZ_HIGHGRAPH_DECAL_H__)
+#endif    // #if !defined(__IZ_SCENEGRAPH_DECAL_H__)

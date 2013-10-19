@@ -2,198 +2,196 @@
 
 namespace izanagi {
 
-// Clip - Screen 座標変換マトリクス計算
-void CSceneGraphUtil::ComputeC2S(
-    math::SMatrix& mtxC2S,
-    IZ_INT screenWidth,
-    IZ_INT screenHeight,
-    IZ_FLOAT minZ,
-    IZ_FLOAT maxZ)
-{
-    math::SMatrix::SetUnit(mtxC2S);
+    // Clip - Screen 座標変換マトリクス計算
+    void CSceneGraphUtil::ComputeC2S(
+        math::SMatrix& mtxC2S,
+        IZ_INT screenWidth,
+        IZ_INT screenHeight,
+        IZ_FLOAT minZ,
+        IZ_FLOAT maxZ)
+    {
+        math::SMatrix::SetUnit(mtxC2S);
 
-    mtxC2S.m[0][0] = screenWidth * 0.5f;;
-    mtxC2S.m[1][1] = -screenHeight * 0.5f;;
+        mtxC2S.m[0][0] = screenWidth * 0.5f;;
+        mtxC2S.m[1][1] = -screenHeight * 0.5f;;
 
-    mtxC2S.m[2][2] = maxZ - minZ;
-    mtxC2S.m[3][2] = minZ;
+        mtxC2S.m[2][2] = maxZ - minZ;
+        mtxC2S.m[3][2] = minZ;
 
-    mtxC2S.m[3][0] = screenWidth * 0.5f;;
-    mtxC2S.m[3][1] = screenHeight * 0.5f;
-}
+        mtxC2S.m[3][0] = screenWidth * 0.5f;;
+        mtxC2S.m[3][1] = screenHeight * 0.5f;
+    }
 
-// スクリーン距離計算
-IZ_FLOAT CSceneGraphUtil::ComputeScreenDistance(
-    IZ_FLOAT screenHeight,
-    IZ_FLOAT fov)
-{
-    // NOTE
-    // (H/2)/S = tan(θ/2) <=> S = (H/2)/tan(θ/2)
-    IZ_FLOAT ret = screenHeight * 0.5f / tanf(fov * 0.5f);
-    return ret;
-}
+    // スクリーン距離計算
+    IZ_FLOAT CSceneGraphUtil::ComputeScreenDistance(
+        IZ_FLOAT screenHeight,
+        IZ_FLOAT fov)
+    {
+        // NOTE
+        // (H/2)/S = tan(θ/2) <=> S = (H/2)/tan(θ/2)
+        IZ_FLOAT ret = screenHeight * 0.5f / tanf(fov * 0.5f);
+        return ret;
+    }
 
-// クリップ座標取得
-void CSceneGraphUtil::Screen2Clip(
-    math::SVector& vClip,
-    const SCameraParam& camera,
-    const graph::SViewport& vp,
-    IZ_INT nX, IZ_INT nY,
-    IZ_FLOAT fZ)
-{
-    IZ_INT nW = vp.width;
-    IZ_INT nH = vp.height;
-    IZ_INT nCx = nW >> 1;
-    IZ_INT nCy = nH >> 1;
+    // クリップ座標取得
+    void CSceneGraphUtil::Screen2Clip(
+        math::SVector& vClip,
+        const graph::SViewport& vp,
+        IZ_INT nX, IZ_INT nY,
+        IZ_FLOAT fZ)
+    {
+        IZ_INT nW = vp.width;
+        IZ_INT nH = vp.height;
+        IZ_INT nCx = nW >> 1;
+        IZ_INT nCy = nH >> 1;
 
-    vClip.Set(
-        2.0f * (nX - nCx) / nW,
-        -2.0f * (nY - nCy) / nH,
-        (fZ - vp.minZ) / (vp.maxZ - vp.minZ),
-        1.0f);
-}
+        vClip.Set(
+            2.0f * (nX - nCx) / nW,
+            -2.0f * (nY - nCy) / nH,
+            (fZ - vp.minZ) / (vp.maxZ - vp.minZ),
+            1.0f);
+    }
 
-// 光線を取得
-void CSceneGraphUtil::Point2Ray(
-    math::SVector& ray,
-    const SCameraParam& camera,
-    const graph::SViewport& vp,
-    IZ_INT nX,
-    IZ_INT nY)
-{
+    // 光線を取得
+    void CSceneGraphUtil::Point2Ray(
+        math::SVector& ray,
+        const SCameraParam& camera,
+        const graph::SViewport& vp,
+        IZ_INT nX,
+        IZ_INT nY)
+    {
 #if 0
-    math::SMatrix mtxS2C;
-    ComputeC2S(
-        mtxS2C,
-        vp.width, vp.height,
-        vp.minZ, vp.maxZ);
-    math::SMatrix::Inverse(mtxS2C, mtxS2C);
+        math::SMatrix mtxS2C;
+        ComputeC2S(
+            mtxS2C,
+            vp.width, vp.height,
+            vp.minZ, vp.maxZ);
+        math::SMatrix::Inverse(mtxS2C, mtxS2C);
 
-    math::SVector clip;
+        math::SVector clip;
 
-    // Screen -> Clip
-    math::SMatrix::Apply(
-        clip,
-        math::CVector((IZ_FLOAT)nX, (IZ_FLOAT)nY, 1.0f, 1.0f),
-        mtxS2C);
+        // Screen -> Clip
+        math::SMatrix::Apply(
+            clip,
+            math::CVector((IZ_FLOAT)nX, (IZ_FLOAT)nY, 1.0f, 1.0f),
+            mtxS2C);
 
-    math::SMatrix mtxC2V;
-    math::SMatrix::Inverse(mtxC2V, camera.mtxV2C);
+        math::SMatrix mtxC2V;
+        math::SMatrix::Inverse(mtxC2V, camera.mtxV2C);
 
-    math::SMatrix mtxV2W;
-    math::SMatrix::Inverse(mtxV2W, camera.mtxW2V);
+        math::SMatrix mtxV2W;
+        math::SMatrix::Inverse(mtxV2W, camera.mtxW2V);
 
-    math::SVector rayFar;
-    {
-        // Clip -> View
-        izanagi::math::SMatrix::Apply(rayFar, clip, mtxC2V);
+        math::SVector rayFar;
+        {
+            // Clip -> View
+            izanagi::math::SMatrix::Apply(rayFar, clip, mtxC2V);
 
-        // View -> World
-        izanagi::math::SMatrix::Apply(rayFar, rayFar, mtxV2W);
+            // View -> World
+            izanagi::math::SMatrix::Apply(rayFar, rayFar, mtxV2W);
 
-        izanagi::math::SVector::Div(rayFar, rayFar, rayFar.w);
-    }
+            izanagi::math::SVector::Div(rayFar, rayFar, rayFar.w);
+        }
 
-    izanagi::math::SVector::Sub(ray, rayFar, camera.pos);
+        izanagi::math::SVector::Sub(ray, rayFar, camera.pos);
 #elif 0
-    math::SVector clip;
+        math::SVector clip;
 
-    // Screen -> Clip
-    Screen2Clip(
-        clip,
-        camera,
-        vp,
-        nX, nY,
-        1.0f);
+        // Screen -> Clip
+        Screen2Clip(
+            clip,
+            camera,
+            vp,
+            nX, nY,
+            1.0f);
 
-    math::SMatrix mtxC2V;
-    math::SMatrix::Inverse(mtxC2V, camera.mtxV2C);
+        math::SMatrix mtxC2V;
+        math::SMatrix::Inverse(mtxC2V, camera.mtxV2C);
 
-    math::SMatrix mtxV2W;
-    math::SMatrix::Inverse(mtxV2W, camera.mtxW2V);
+        math::SMatrix mtxV2W;
+        math::SMatrix::Inverse(mtxV2W, camera.mtxW2V);
 
-    math::SVector rayFar;
-    {
-        // Clip -> View
-        izanagi::math::SMatrix::Apply(rayFar, clip, mtxC2V);
+        math::SVector rayFar;
+        {
+            // Clip -> View
+            izanagi::math::SMatrix::Apply(rayFar, clip, mtxC2V);
 
-        // View -> World
-        izanagi::math::SMatrix::Apply(rayFar, rayFar, mtxV2W);
+            // View -> World
+            izanagi::math::SMatrix::Apply(rayFar, rayFar, mtxV2W);
 
-        izanagi::math::SVector::Div(rayFar, rayFar, rayFar.w);
+            izanagi::math::SVector::Div(rayFar, rayFar, rayFar.w);
+        }
+
+        izanagi::math::SVector::Sub(ray, rayFar, camera.pos);
+#else
+        // NOTE
+        //
+        // Clip->Screen変換
+        // | W/2  0        0       0 |
+        // |  0 -H/2       0       0 |
+        // |  0   0   maxZ - minZ  0 |
+        // | W/2 H/2     -minZ     1 |
+        //
+        // 逆行列
+        // | 1/(W/2)   0      0 0 |
+        // |  0      -1/(H/2) 0 0 |
+        // |  0        0      a 0 |
+        // | -1        1      b 1 |
+        //
+        // a = 1 / (maxZ - miinZ)
+        // b = -minZ / (maxZ - miinZ)
+        //
+        // ここから、(x, y, z, 1)のスクリーン座標をClip座標に変換すると
+        // (x/(W/2) - 1, -y/(H/2) + 1, (z - minZ) / (maxZ - minZ), 1)
+        //
+        // Scree->View変換の逆行列
+        // | 1/Sx  0   0    0     |
+        // |   0  1/Sy 0    0     |
+        // |   0   0   0 -1/(SzN) |
+        // |   0   0   1   1/N    |
+        //
+        // Sx = 1/(a・tan(θ/2))
+        // Sy = 1/tan(θ/2)
+        // Sz = F/(F - N)
+        //
+        // ここにClip座標に変換した座標をかけると
+        //  2a(x - W/2)       -2(y - H/2)           -Z(F - N) + F
+        // (-----------tanθ, ------------tanθ, 1, -------------)
+        //       W                 H                      FN
+        //
+        // Z = (z - minZ) / (maxZ - minZ)
+        //
+        // となる
+
+        const IZ_INT nW = vp.width;
+        const IZ_INT nH = vp.height;
+        const IZ_INT nCx = nW >> 1;
+        const IZ_INT nCy = nH >> 1;
+
+        const IZ_FLOAT fTan = tanf(camera.fov * 0.5f);
+        const IZ_FLOAT fAspect = camera.aspect;
+
+        // Scree -> Clip
+        IZ_FLOAT x = 2.0f * fAspect * (nX - nCx) * fTan / nW;
+        IZ_FLOAT y = -2.0f * (nY - nCy) * fTan / nH;
+
+        const IZ_FLOAT F = camera.cameraFar;
+        const IZ_FLOAT N = camera.cameraNear;
+        IZ_FLOAT z = (1.0f - vp.minZ) / (vp.maxZ - vp.minZ);
+        IZ_FLOAT w = (-z * (F - N) + F) / (F * N);
+
+        math::SMatrix mtx;
+        math::SMatrix::Inverse(mtx, camera.mtxW2V);
+
+        math::CVector rayFar(x, y, 1.0f, w);
+
+        math::SMatrix::Apply(rayFar, rayFar, mtx);
+        math::SVector::Div(rayFar, rayFar, rayFar.w);
+
+        math::SVector::Sub(ray, rayFar, camera.pos);
+#endif
     }
 
-    izanagi::math::SVector::Sub(ray, rayFar, camera.pos);
-#else
-    // NOTE
-    //
-    // Clip->Screen変換
-    // | W/2  0        0       0 |
-    // |  0 -H/2       0       0 |
-    // |  0   0   maxZ - minZ  0 |
-    // | W/2 H/2     -minZ     1 |
-    //
-    // 逆行列
-    // | 1/(W/2)   0      0 0 |
-    // |  0      -1/(H/2) 0 0 |
-    // |  0        0      a 0 |
-    // | -1        1      b 1 |
-    //
-    // a = 1 / (maxZ - miinZ)
-    // b = -minZ / (maxZ - miinZ)
-    //
-    // ここから、(x, y, z, 1)のスクリーン座標をClip座標に変換すると
-    // (x/(W/2) - 1, -y/(H/2) + 1, (z - minZ) / (maxZ - minZ), 1)
-    //
-    // Scree->View変換の逆行列
-    // | 1/Sx  0   0    0     |
-    // |   0  1/Sy 0    0     |
-    // |   0   0   0 -1/(SzN) |
-    // |   0   0   1   1/N    |
-    //
-    // Sx = 1/(a・tan(θ/2))
-    // Sy = 1/tan(θ/2)
-    // Sz = F/(F - N)
-    //
-    // ここにClip座標に変換した座標をかけると
-    //  2a(x - W/2)       -2(y - H/2)           -Z(F - N) + F
-    // (-----------tanθ, ------------tanθ, 1, -------------)
-    //       W                 H                      FN
-    //
-    // Z = (z - minZ) / (maxZ - minZ)
-    //
-    // となる
-
-    const IZ_INT nW = vp.width;
-    const IZ_INT nH = vp.height;
-    const IZ_INT nCx = nW >> 1;
-    const IZ_INT nCy = nH >> 1;
-
-    const IZ_FLOAT fTan = tanf(camera.fov * 0.5f);
-    const IZ_FLOAT fAspect = camera.aspect;
-
-    // Scree -> Clip
-    IZ_FLOAT x = 2.0f * fAspect * (nX - nCx) * fTan / nW;
-    IZ_FLOAT y = -2.0f * (nY - nCy) * fTan / nH;
-
-    const IZ_FLOAT F = camera.cameraFar;
-    const IZ_FLOAT N = camera.cameraNear;
-    IZ_FLOAT z = (1.0f - vp.minZ) / (vp.maxZ - vp.minZ);
-    IZ_FLOAT w = (-z * (F - N) + F) / (F * N);
-
-    math::SMatrix mtx;
-    math::SMatrix::Inverse(mtx, camera.mtxW2V);
-
-    math::CVector rayFar(x, y, 1.0f, w);
-
-    math::SMatrix::Apply(rayFar, rayFar, mtx);
-    math::SVector::Div(rayFar, rayFar, rayFar.w);
-
-    math::SVector::Sub(ray, rayFar, camera.pos);
-#endif
-}
-
-namespace {
     inline IZ_BOOL _IsCross(
         const math::CPlane& sissorPlane,
         const math::STriangle& tri,
@@ -210,100 +208,106 @@ namespace {
         IZ_BOOL isCross = sissorPlane.IsCross(ray);
         return isCross;
     }
-}
 
-// シザリングで作成される三角形の数を計算する.
-IZ_UINT CSceneGraphUtil::ComputeTriNumBySissoring(
-    const math::CPlane& sissorPlane,
-    const math::CTriangle triangle[],
-    IZ_UINT triNum)
-{
-    IZ_UINT newTriNum = 0;
-
-    // 交差する点と面の法線側にある点の数を数える
-    for (IZ_UINT i = 0; i < triNum; i++)
+    // シザリングで作成される三角形の数を計算する.
+    IZ_UINT CScissoring::ComputeTriNumByScissoring(
+        const math::CPlane& scissorPlane,
+        const math::CTriangle triangle[],
+        IZ_UINT triNum)
     {
-        IZ_UINT pointNum = 0;
+        IZ_UINT newTriNum = 0;
 
-        if (sissorPlane.IsPositive(triangle[i].pt[0]))
+        // 交差する点と面の法線側にある点の数を数える
+        for (IZ_UINT i = 0; i < triNum; i++)
         {
-            pointNum++;
-        }
-        if (sissorPlane.IsPositive(triangle[i].pt[1]))
-        {
-            pointNum++;
-        }
-        if (sissorPlane.IsPositive(triangle[i].pt[2]))
-        {
-            pointNum++;
-        }
+            IZ_UINT pointNum = 0;
 
-        // ひとつでも面の負の側に点が存在するかどうか
-        if ((0 < pointNum) && (pointNum < 3))
-        {
-            // 平面と交差する点の数を計算する
-            IZ_UINT crossNum = GetCrossNum(sissorPlane, triangle[i]);
-
-            if (crossNum > 0)
+            if (scissorPlane.IsPositive(triangle[i].pt[0]))
             {
-                pointNum += crossNum;
+                pointNum++;
+            }
+            if (scissorPlane.IsPositive(triangle[i].pt[1]))
+            {
+                pointNum++;
+            }
+            if (scissorPlane.IsPositive(triangle[i].pt[2]))
+            {
+                pointNum++;
+            }
 
-                // 作成する三角形の数を計算
-                newTriNum += pointNum - 2;
+            // ひとつでも面の負の側に点が存在するかどうか
+            if ((0 < pointNum) && (pointNum < 3))
+            {
+                // 平面と交差する点の数を計算する
+                IZ_UINT crossNum = GetCrossNum(scissorPlane, triangle[i]);
+
+                if (crossNum > 0)
+                {
+                    pointNum += crossNum;
+
+                    // 作成する三角形の数を計算
+                    newTriNum += pointNum - 2;
+                }
             }
         }
+
+        return newTriNum;
     }
 
-    return newTriNum;
-}
-
-// 平面と交差する点の数を計算する.
-IZ_UINT CSceneGraphUtil::GetCrossNum(
-    const math::CPlane& sissorPlane,
-    const math::CTriangle& triangle)
-{
+    // 平面と交差する点の数を計算する.
+    IZ_UINT CScissoring::GetCrossNum(
+        const math::CPlane& scissorPlane,
+        const math::CTriangle& triangle)
+    {
 #if 0
-    IZ_UINT crossNum = 0;
+        IZ_UINT crossNum = 0;
 
-    if (_IsCross(sissorPlane, triangle, 0, 1))
-    {
-        crossNum++;
-    }
-    if (_IsCross(sissorPlane, triangle, 1, 2))
-    {
-        crossNum++;
-    }
-    if (_IsCross(sissorPlane, triangle, 2, 0))
-    {
-        crossNum++;
-    }
+        if (_IsCross(scissorPlane, triangle, 0, 1))
+        {
+            crossNum++;
+        }
+        if (_IsCross(scissorPlane, triangle, 1, 2))
+        {
+            crossNum++;
+        }
+        if (_IsCross(scissorPlane, triangle, 2, 0))
+        {
+            crossNum++;
+        }
 
-    return crossNum;
+        return crossNum;
 #else
-    // １点でも交差すれば
-    // 平面に対しては必ず２点の交差点が存在する
+        // １点でも交差すれば
+        // 平面に対しては必ず２点の交差点が存在する
 
-    if (_IsCross(sissorPlane, triangle, 0, 1))
-    {
-        return 2;
-    }
-    if (_IsCross(sissorPlane, triangle, 1, 2))
-    {
-        return 2;
-    }
-    if (_IsCross(sissorPlane, triangle, 2, 0))
-    {
-        return 2;
-    }
+        if (_IsCross(scissorPlane, triangle, 0, 1))
+        {
+            return 2;
+        }
+        if (_IsCross(scissorPlane, triangle, 1, 2))
+        {
+            return 2;
+        }
+        if (_IsCross(scissorPlane, triangle, 2, 0))
+        {
+            return 2;
+        }
 
-    return 0;
+        return 0;
 #endif
-}
+    }
 
-namespace {
+    // 指定された三角形の辺と面の交点を計算する
+    //
+    // @param[out] ret 交点
+    // @param[in] scissorPlane 面
+    // @param[in] tri 三角形
+    // @param[in] pos0 三角形の頂点インデックス
+    // @param[in] pos1 三角形の頂点インデックス
+    // @return 辺と面が交わるかどうか
     inline IZ_BOOL _GetCrossPoint(
         math::SVector& ret,
-        const math::CPlane& sissorPlane,
+        const math::CPlane& scissorPlane,
         const math::STriangle& tri,
         IZ_UINT pos0, IZ_UINT pos1)
     {
@@ -316,10 +320,10 @@ namespace {
 
         math::CRay ray(tri.pt[pos0], dir);
 
-        IZ_BOOL isCross = sissorPlane.GetCrossPoint(ray, ret);
+        IZ_BOOL isCross = scissorPlane.GetCrossPoint(ray, ret);
         return isCross;
 #else
-        IZ_BOOL isCross = sissorPlane.GetCrossPoint(
+        IZ_BOOL isCross = scissorPlane.GetCrossPoint(
             tri.pt[pos0],
             tri.pt[pos1],
             ret);
@@ -327,13 +331,14 @@ namespace {
 #endif
     }
 
-    struct FuncSissor
+    // For array
+    struct FuncScissor
     {
         void operator()(
             const math::SVector point[],
             const IZ_UINT idxTbl[][3],
             IZ_UINT triNum,
-            math::CTriangle* newTri)
+            math::CTriangle* newTriArray)
         {
             for (IZ_UINT i = 0; i < triNum; i++)
             {
@@ -341,7 +346,7 @@ namespace {
                 {
                     IZ_UINT idx = idxTbl[i][n];
 
-                    newTri[i].pt[n].Set(
+                    newTriArray[i].pt[n].Set(
                         point[idx].x,
                         point[idx].y,
                         point[idx].z);
@@ -350,7 +355,8 @@ namespace {
         }
     };
 
-    struct FuncSissorSTL
+    // For STL vector
+    struct FuncScissorSTL
     {
         void operator()(
             const math::SVector point[],
@@ -376,11 +382,11 @@ namespace {
         }
     };
 
-    template <typename TriListType, typename Func>
-    IZ_UINT _Sissoring(
-        const math::CPlane& sissorPlane,
+    template <typename TriArrayType, typename Func>
+    IZ_UINT _Scissoring(
+        const math::CPlane& scissorPlane,
         const math::STriangle& triangle,
-        TriListType newTri,
+        TriArrayType newTriArray,
         Func& func)
     {
         IZ_UINT positivePointNum = 0;
@@ -389,7 +395,7 @@ namespace {
         IZ_INT basePos = -1;
         for (IZ_UINT i = 0; i < 3; i++)
         {
-            if (sissorPlane.IsPositive(triangle.pt[i]))
+            if (scissorPlane.IsPositive(triangle.pt[i]))
             {
                 if (basePos < 0)
                 {
@@ -438,7 +444,7 @@ namespace {
             // 面の法線側にある点
             if (i > 0)
             {
-                if (sissorPlane.IsPositive(triangle.pt[idx0]))
+                if (scissorPlane.IsPositive(triangle.pt[idx0]))
                 {
                     IZ_ASSERT(vtxNum + 1 <= COUNTOF(tmp));
 
@@ -452,7 +458,7 @@ namespace {
             // 交点
             if (_GetCrossPoint(
                 tmp[vtxNum],
-                sissorPlane,
+                scissorPlane,
                 triangle,
                 idx0, idx1))
             {
@@ -484,56 +490,54 @@ namespace {
             tmp,
             triVtxTbl,
             triNum,
-            newTri);
+            newTriArray);
             
         return triNum;
     }
-}
 
-// シザリング
-IZ_UINT CSceneGraphUtil::Sissoring(
-    const math::CPlane& sissorPlane,
-    const math::CTriangle triangle[],
-    IZ_UINT triNum,
-    math::CTriangle newTriangle[],
-    IZ_UINT newTriNum)
-{
-    IZ_UINT triPos = 0;
-    FuncSissor func;
-
-    for (IZ_UINT i = 0; i < triNum; i++)
+    // シザリング
+    IZ_UINT CScissoring::Scissor(
+        const math::CPlane& scissorPlane,
+        const math::CTriangle triangle[],
+        IZ_UINT triNum,
+        math::CTriangle newTriangle[],
+        IZ_UINT newTriNum)
     {
-        triPos += _Sissoring(
-            sissorPlane,
-            triangle[i],
-            &newTriangle[triPos],
-            func);
+        IZ_UINT triPos = 0;
+        FuncScissor func;
 
-        IZ_ASSERT(triPos <= newTriNum);
+        for (IZ_UINT i = 0; i < triNum; i++)
+        {
+            triPos += _Scissoring(
+                scissorPlane,
+                triangle[i],
+                &newTriangle[triPos],
+                func);
+
+            IZ_ASSERT(triPos <= newTriNum);
+        }
+
+        return triPos;
     }
 
-    return triPos;
-}
-
-IZ_UINT CSceneGraphUtil::Sissoring(
-    const math::CPlane& sissorPlane,
-    const math::CTriangle triangle[],
-    IZ_UINT triNum,
-    std::vector<math::CTriangle, STLMemoryAllocator<math::CTriangle> >& newTriangle)
-{
-    IZ_UINT triPos = 0;
-    FuncSissorSTL func;
-
-    for (IZ_UINT i = 0; i < triNum; i++)
+    IZ_UINT CScissoring::Scissor(
+        const math::CPlane& scissorPlane,
+        const math::CTriangle triangle[],
+        IZ_UINT triNum,
+        std::vector<math::CTriangle, STLMemoryAllocator<math::CTriangle> >& newTriangle)
     {
-        triPos += _Sissoring<std::vector<math::CTriangle, STLMemoryAllocator<math::CTriangle> >&>(
-            sissorPlane,
-            triangle[i],
-            newTriangle,
-            func);
+        IZ_UINT triPos = 0;
+        FuncScissorSTL func;
+
+        for (IZ_UINT i = 0; i < triNum; i++)
+        {
+            triPos += _Scissoring<std::vector<math::CTriangle, STLMemoryAllocator<math::CTriangle> >&>(
+                scissorPlane,
+                triangle[i],
+                newTriangle,
+                func);
+        }
+
+        return triPos;
     }
-
-    return triPos;
-}
-
 }   // namespace izanagi
