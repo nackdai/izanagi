@@ -18,12 +18,36 @@
     <ClInclude Include="..\..\Model\ModelApp.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Model\StateBase.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Model\StateManager.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Model\StateCollada.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Model\StateXFile.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Model\main.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Model\ModelApp.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Model\StateBase.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Model\StateManager.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Model\StateCollada.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Model\StateXFile.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
