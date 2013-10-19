@@ -51,11 +51,17 @@ SVSOutput mainVS(SVSInput In)
     Out.vPos = mul(Out.vPos, g_mW2C);
 
     Out.vUV = In.vUV;
-#if 1
-    Out.vUV.y = 1.0f - Out.vUV.y;
-#endif
     
     return Out;
+}
+
+SVSOutput mainVSWithReversingUV(SVSInput In)
+{
+   SVSOutput Out = mainVS(In);
+
+   Out.vUV.y = 1.0f - Out.vUV.y;
+
+   return Out;
 }
 
 float4 mainPS(SPSInput In) : COLOR
@@ -70,6 +76,11 @@ float4 mainPS(SPSInput In) : COLOR
 technique t0
 {
     pass p0
+    {
+        VertexShader = compile vs_2_0 mainVSWithReversingUV();
+        PixelShader = compile ps_2_0 mainPS();
+    }
+    pass p1
     {
         VertexShader = compile vs_2_0 mainVS();
         PixelShader = compile ps_2_0 mainPS();

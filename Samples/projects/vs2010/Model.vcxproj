@@ -145,10 +145,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Model\ModelApp.h" />
+    <ClInclude Include="..\..\Model\StateBase.h" />
+    <ClInclude Include="..\..\Model\StateCollada.h" />
+    <ClInclude Include="..\..\Model\StateManager.h" />
+    <ClInclude Include="..\..\Model\StateXFile.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Model\main.cpp" />
     <ClCompile Include="..\..\Model\ModelApp.cpp" />
+    <ClCompile Include="..\..\Model\StateBase.cpp" />
+    <ClCompile Include="..\..\Model\StateCollada.cpp" />
+    <ClCompile Include="..\..\Model\StateManager.cpp" />
+    <ClCompile Include="..\..\Model\StateXFile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Model\shader\SkinShader.fx" />
