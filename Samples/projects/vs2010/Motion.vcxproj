@@ -145,10 +145,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Motion\MotionApp.h" />
+    <ClInclude Include="..\..\Motion\StateBase.h" />
+    <ClInclude Include="..\..\Motion\StateCollada.h" />
+    <ClInclude Include="..\..\Motion\StateManager.h" />
+    <ClInclude Include="..\..\Motion\StateXFile.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Motion\MotionApp.cpp" />
     <ClCompile Include="..\..\Motion\main.cpp" />
+    <ClCompile Include="..\..\Motion\StateBase.cpp" />
+    <ClCompile Include="..\..\Motion\StateCollada.cpp" />
+    <ClCompile Include="..\..\Motion\StateManager.cpp" />
+    <ClCompile Include="..\..\Motion\StateXFile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\Motion\shader\SkinShader.fx">
