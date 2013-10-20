@@ -2,18 +2,27 @@
 #define __MODEL_LIB_JSON_GEOMETRY_H__
 
 #include <vector>
+#include <set>
+#include <map>
 #include "izToolKit.h"
+#include "GeometryCommon.h"
 #include <rapidjson/document.h>
 
 class CJsonGeometry
 {
+    struct SVector2 {
+        IZ_FLOAT u, v;
+    };
+
     struct SVector3 {
-        union {
-            IZ_FLOAT v[3];
-            struct {
-                IZ_FLOAT x, y, z;
-            };
-        };
+        IZ_FLOAT x, y, z;
+    };
+
+    struct SFace {
+        IZ_UINT id;
+
+        IZ_UINT idx[3];
+        IZ_UINT mtrl;
     };
 
 public:
@@ -25,16 +34,35 @@ public:
 public:
     IZ_BOOL Read(rapidjson::Document& document);
 
+    IZ_UINT GetMeshNum() const;
+
+    void Begin(IZ_UINT meshIdx);
+    void End();
+
+    IZ_UINT GetTriangle(std::vector<STri>& tvTriList);
+
+    IZ_UINT GetVtxSize() const;
+    IZ_UINT GetVtxFmt() const;
+
+    IZ_BOOL GetVertex(
+        IZ_UINT idx,
+        izanagi::math::SVector& vec,
+        izanagi::E_MSH_VTX_FMT_TYPE type);
+
 private:
-    template <typename _T, typename Func>
-    IZ_BOOL ReadArray(
-        rapidjson::Value& entry,
-        std::vector<_T>& list,
-        Func& func);
+    IZ_BOOL ReadVertices(rapidjson::Document& document);
 
 private:
     std::vector<SVector3> m_Vertices;
     std::vector<SVector3> m_Normals;
+
+    std::vector<SVector2> m_FaceUVs;
+
+    // マテリアルをキーとしてfaceをまとめる
+    std::map<IZ_UINT, std::vector<SFace> > m_Faces;
+
+    IZ_UINT m_CurMeshIdx;
+    IZ_UINT m_VtxFmt;
 };
 
 #endif  // #if !defined(__MODEL_LIB_JSON_GEOMETRY_H__)

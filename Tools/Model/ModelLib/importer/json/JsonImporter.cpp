@@ -45,15 +45,17 @@ void CJsonImporter::ExportGeometryCompleted()
 
 void CJsonImporter::BeginMesh(IZ_UINT nIdx)
 {
+    m_Geometry.Begin(nIdx);
 }
 
 void CJsonImporter::EndMesh()
 {
+    m_Geometry.End();
 }
 
 IZ_UINT CJsonImporter::GetMeshNum()
 {
-    return 0;
+    return m_Geometry.GetMeshNum();
 }
 
 // 指定されているメッシュに関連するスキニング情報を取得.
@@ -65,7 +67,8 @@ void CJsonImporter::GetSkinList(std::vector<SSkin>& tvSkinList)
 // 指定されているメッシュに含まれる三角形を取得.
 IZ_UINT CJsonImporter::GetTriangles(std::vector<STri>& tvTriList)
 {
-    return 0;
+    IZ_UINT ret = m_Geometry.GetTriangle(tvTriList);
+    return ret;
 }
 
 IZ_UINT CJsonImporter::GetSkinIdxAffectToVtx(IZ_UINT nVtxIdx)
@@ -75,12 +78,14 @@ IZ_UINT CJsonImporter::GetSkinIdxAffectToVtx(IZ_UINT nVtxIdx)
 
 IZ_UINT CJsonImporter::GetVtxSize()
 {
-    return 0;
+    IZ_UINT ret = m_Geometry.GetVtxSize();
+    return ret;
 }
 
 IZ_UINT CJsonImporter::GetVtxFmt()
 {
-    return 0;
+    IZ_UINT ret = m_Geometry.GetVtxFmt();
+    return ret;
 }
 
 IZ_BOOL CJsonImporter::GetVertex(
@@ -88,7 +93,8 @@ IZ_BOOL CJsonImporter::GetVertex(
     izanagi::math::SVector& vec,
     izanagi::E_MSH_VTX_FMT_TYPE type)
 {
-    return IZ_FALSE;
+    IZ_BOOL ret = m_Geometry.GetVertex(nIdx, vec, type);
+    return ret;
 }
 
 void CJsonImporter::GetMaterialForMesh(
@@ -106,7 +112,7 @@ void CJsonImporter::ExportJointCompleted()
 
 IZ_BOOL CJsonImporter::BeginJoint()
 {
-    return IZ_FALSE;
+    return IZ_TRUE;
 }
 
 void CJsonImporter::EndJoint()
