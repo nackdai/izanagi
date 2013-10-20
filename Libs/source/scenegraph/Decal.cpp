@@ -3,32 +3,6 @@
 
 namespace izanagi {
 namespace scenegraph {
-    CDecal* CDecal::Create(
-        izanagi::IMemoryAllocator* allocator,
-        const izanagi::math::SVector& point,
-        const izanagi::math::SVector& normal,
-        IZ_FLOAT rectangleLengthX,
-        IZ_FLOAT rectangleLengthZ)
-    {
-        izanagi::STLMemoryAllocatorProxy::SetAllocator(allocator);
-
-        void* buf = ALLOC_ZERO(allocator, sizeof(CDecal));
-
-        CDecal* instance = new(buf) CDecal;
-        {
-            instance->m_Allocator = allocator;
-            instance->AddRef();
-
-            instance->SetRectangle(
-                point, 
-                normal,
-                rectangleLengthX,
-                rectangleLengthZ);
-        }
-
-        return instance;
-    }
-
     CDecal::CDecal()
     {
         m_Allocator = IZ_NULL;
@@ -114,112 +88,7 @@ namespace scenegraph {
         m_Planes[PLANE_BACK].Set(n, d - dotNP);
     }
 
-    void CDecal::DoScissoring(
-        const izanagi::math::CTriangle tri[],
-        IZ_UINT triNum)
-    {
-    #ifndef ENABLE_STL
-        ComputeNewTriNumByScissoring(tri, triNum);
-
-        if (m_TriNum == 0)
-        {
-            return;
-        }
-    #endif
-
-        FREE(m_Allocator, m_Triangles);
-
-        STriListProxy triListProxy;
-
-        IZ_UINT tmpBufPos = 0;
-
-        // 一時的なバッファ
-    #ifdef ENABLE_STL
-        izanagi::math::CTriangle triBuf[2];
-
-        TriangleVector* triDst = &triListProxy.Get(tmpBufPos);
-    #else
-        izanagi::math::CTriangle* tmp[2];
-        {
-            tmp[0] = (izanagi::math::CTriangle*)ALLOC_ZERO(m_Allocator, sizeof(izanagi::math::CTriangle) * m_TriNum);
-            tmp[1] = (izanagi::math::CTriangle*)ALLOC_ZERO(m_Allocator, sizeof(izanagi::math::CTriangle) * m_TriNum);
-        }
-        izanagi::math::CTriangle* triDst = tmp[tmpBufPos];
-    #endif
-        const izanagi::math::CTriangle* triSrc = tri;
-        IZ_UINT srcNum = triNum;
-
-        tmpBufPos = 1 - tmpBufPos;
-
-        for (IZ_UINT n = 0; n < PLANE_NUM; n++)
-        {
-            IZ_UINT newTriNum = 0;
-
-    #if 0
-            // Fro Debug...
-            for (IZ_UINT i = 0; i < srcNum; i++)
-            {
-                newTriNum += izanagi::CSceneGraphUtil::Sissoring(
-                    m_Planes[n],
-                    &triSrc[i], 1,
-                    &triDst[newTriNum],
-                    m_TriNum);
-
-                IZ_ASSERT(newTriNum < m_TriNum);
-            }
-    #else
-    #ifdef ENABLE_STL
-            newTriNum = CScissoring::Scissor(
-                m_Planes[n],
-                triSrc, srcNum,
-                *triDst);
-    #else
-            newTriNum = izanagi::CSceneGraphUtil::Sissoring(
-                m_Planes[n],
-                triSrc, srcNum,
-                triDst,
-                m_TriNum);
-
-            IZ_ASSERT(newTriNum < m_TriNum);
-    #endif
-    #endif
-            srcNum = newTriNum;
-
-            if (srcNum == 0)
-            {
-                break;
-            }
-
-    #ifdef ENABLE_STL
-            triSrc = &(*triDst)[0];
-            triDst = &triListProxy.Get(tmpBufPos);
-
-            // 次に向けてクリア
-            triDst->clear();
-    #else
-            triSrc = triDst;
-            triDst = tmp[tmpBufPos];
-    #endif
-            tmpBufPos = 1 - tmpBufPos;
-        }
-
-        m_TriNum = srcNum;
-
-        if (m_TriNum > 0)
-        {
-            m_Triangles = (izanagi::math::CTriangle*)ALLOC_ZERO(m_Allocator, sizeof(izanagi::math::CTriangle) * m_TriNum);
-
-            memcpy(m_Triangles, &triSrc[0], sizeof(izanagi::math::CTriangle) * m_TriNum);
-
-            m_NeedCreateGraphicsObject = IZ_TRUE;
-        }
-
-    #ifndef ENABLE_STL
-        FREE(m_Allocator, tmp[0]);
-        FREE(m_Allocator, tmp[1]);
-    #endif
-    }
-
+    // デカール描画用のグラフィックスオブジェクトを作成
     void CDecal::CreateGraphicsObject(izanagi::graph::CGraphicsDevice* device)
     {
         if (!m_NeedCreateGraphicsObject)
@@ -236,17 +105,16 @@ namespace scenegraph {
 
         IZ_UINT vtxNum = m_TriNum * 3;
 
+        // Vertex Buffer
         m_VB = device->CreateVertexBuffer(
             sizeof(SVtx),
             vtxNum,
             izanagi::graph::E_GRAPH_RSC_USAGE_STATIC);
         IZ_ASSERT(m_VB != IZ_NULL);
 
-        struct {
-            izanagi::math::SVector pos;
-            IZ_COLOR color;
-            IZ_FLOAT uv[2];
-        }* data = IZ_NULL;
+        SVtx* data = IZ_NULL;
+
+        // Write vertices
         m_VB->Lock(0, 0, (void**)&data, IZ_FALSE);
         {
             IZ_UINT vtxPos = 0;
@@ -257,7 +125,7 @@ namespace scenegraph {
 
                 for (IZ_UINT n = 0; n < 3; n++)
                 {
-                    data[vtxPos + n].pos.Set(
+                    data[vtxPos + n].point.Set(
                         tri.pt[n].x,
                         tri.pt[n].y,
                         tri.pt[n].z);
@@ -274,6 +142,8 @@ namespace scenegraph {
         }
         m_VB->Unlock();
 
+        // Vertex Declaration
+
         static const izanagi::graph::SVertexElement elems[] =
         {
             {0,  0, izanagi::graph::E_GRAPH_VTX_DECL_TYPE_FLOAT4, izanagi::graph::E_GRAPH_VTX_DECL_USAGE_POSITION, 0},    // 座標
@@ -285,6 +155,7 @@ namespace scenegraph {
         IZ_ASSERT(m_VD != IZ_NULL);
     }
 
+    // デカール描画
     void CDecal::Draw(izanagi::graph::CGraphicsDevice* device)
     {
         IZ_ASSERT(device != IZ_NULL);
@@ -297,7 +168,7 @@ namespace scenegraph {
         device->SetVertexDeclaration(m_VD);
         device->SetVertexBuffer(0, 0, m_VB->GetStride(), m_VB);
 
-    #if 0
+#if 0
         device->SetRenderState(
             izanagi::graph::E_GRAPH_RS_ZENABLE,
             IZ_FALSE);
@@ -309,23 +180,106 @@ namespace scenegraph {
         device->SetRenderState(
             izanagi::graph::E_GRAPH_RS_ZENABLE,
             IZ_TRUE);
-    #else
+#else
         device->DrawPrimitive(
             izanagi::graph::E_GRAPH_PRIM_TYPE_TRIANGLELIST,
             0, m_TriNum);
-    #endif
+#endif
     }
 
+    // デカール中心を取得
     const izanagi::math::SVector& CDecal::GetCenter() const
     {
         return m_Rectangle.pt;
     }
 
-    void CDecal::ComputeNewTriNumByScissoring(
+    ////////////////////////////////////////////////////
+
+    // 指定された三角形をもとにデカールメッシュを計算
+    void CDecalAlloc::ComputeDecalMesh(
         const izanagi::math::CTriangle tri[],
         IZ_UINT triNum)
     {
-    #if 1
+        // シザリングによって新しく作成される三角形の数を計算する
+        ComputeNewTriNumByScissoring(tri, triNum);
+
+        if (m_TriNum == 0)
+        {
+            // シザリングによって新しく作成される三角形がないので終了
+            return;
+        }
+
+        // 念のため
+        FREE(m_Allocator, m_Triangles);
+
+        IZ_UINT tmpBufPos = 0;
+
+        // 一時的なバッファ
+        izanagi::math::CTriangle* tmp[2];
+        {
+            tmp[0] = (izanagi::math::CTriangle*)ALLOC_ZERO(m_Allocator, sizeof(izanagi::math::CTriangle) * m_TriNum);
+            tmp[1] = (izanagi::math::CTriangle*)ALLOC_ZERO(m_Allocator, sizeof(izanagi::math::CTriangle) * m_TriNum);
+        }
+
+        // 生成された三角形の出力先
+        izanagi::math::CTriangle* triDst = tmp[tmpBufPos];
+
+        // 元の三角形
+        const izanagi::math::CTriangle* triSrc = tri;
+        IZ_UINT srcNum = triNum;
+
+        tmpBufPos = 1 - tmpBufPos;
+
+        // 面ごとにシザリングする
+        for (IZ_UINT n = 0; n < PLANE_NUM; n++)
+        {
+            IZ_UINT newTriNum = 0;
+
+            newTriNum = izanagi::CScissoring::Scissor(
+                m_Planes[n],
+                triSrc, srcNum,
+                triDst,
+                m_TriNum);
+
+            IZ_ASSERT(newTriNum < m_TriNum);
+
+            srcNum = newTriNum;
+
+            if (srcNum == 0)
+            {
+                break;
+            }
+
+            // シザリングされた結果をさらにシザリングする
+            triSrc = triDst;
+            triDst = tmp[tmpBufPos];
+
+            tmpBufPos = 1 - tmpBufPos;
+        }
+
+        // 最終的に生成された三角形数
+        m_TriNum = srcNum;
+
+        if (m_TriNum > 0)
+        {
+            // 結果を格納する
+            m_Triangles = (izanagi::math::CTriangle*)ALLOC_ZERO(m_Allocator, sizeof(izanagi::math::CTriangle) * m_TriNum);
+
+            memcpy(m_Triangles, &triSrc[0], sizeof(izanagi::math::CTriangle) * m_TriNum);
+
+            m_NeedCreateGraphicsObject = IZ_TRUE;
+        }
+
+        FREE(m_Allocator, tmp[0]);
+        FREE(m_Allocator, tmp[1]);
+    }
+
+    // シザリングによって新しく作成される三角形の数を計算する
+    void CDecalAlloc::ComputeNewTriNumByScissoring(
+        const izanagi::math::CTriangle tri[],
+        IZ_UINT triNum)
+    {
+#if 1
         m_TriNum = 0;
 
         for (IZ_UINT n = 0; n < PLANE_NUM; n++)
@@ -335,7 +289,7 @@ namespace scenegraph {
                 tri,
                 triNum);
         }
-    #else
+#else
         m_TriNum = 0;
 
         for (IZ_UINT i = 0; i < triNum; i++)
@@ -349,7 +303,75 @@ namespace scenegraph {
                 m_TriNum++;
             }
         }
-    #endif
+#endif
+    }
+
+    ////////////////////////////////////////////////////
+
+    // 指定された三角形をもとにデカールメッシュを計算
+    void CDecalSTL::ComputeDecalMesh(
+        const izanagi::math::CTriangle tri[],
+        IZ_UINT triNum)
+    {
+        // 念のため
+        FREE(m_Allocator, m_Triangles);
+
+        STriListProxy triListProxy;
+
+        IZ_UINT tmpBufPos = 0;
+
+        // 一時的なバッファ
+        izanagi::math::CTriangle triBuf[2];
+
+        // 生成された三角形の出力先
+        TriangleVector* triDst = &triListProxy.Get(tmpBufPos);
+
+        // 元の三角形
+        const izanagi::math::CTriangle* triSrc = tri;
+        IZ_UINT srcNum = triNum;
+
+        tmpBufPos = 1 - tmpBufPos;
+
+        // 面ごとにシザリングする
+        for (IZ_UINT n = 0; n < PLANE_NUM; n++)
+        {
+            IZ_UINT newTriNum = 0;
+
+
+            newTriNum = CScissoring::Scissor(
+                m_Planes[n],
+                triSrc, srcNum,
+                *triDst);
+
+            srcNum = newTriNum;
+
+            if (srcNum == 0)
+            {
+                break;
+            }
+
+            // シザリングされた結果をさらにシザリングする
+            triSrc = &(*triDst)[0];
+            triDst = &triListProxy.Get(tmpBufPos);
+
+            // 次に向けてクリア
+            triDst->clear();
+
+            tmpBufPos = 1 - tmpBufPos;
+        }
+
+        // 最終的に生成された三角形数
+        m_TriNum = srcNum;
+
+        if (m_TriNum > 0)
+        {
+            // 結果を格納する
+            m_Triangles = (izanagi::math::CTriangle*)ALLOC_ZERO(m_Allocator, sizeof(izanagi::math::CTriangle) * m_TriNum);
+
+            memcpy(m_Triangles, &triSrc[0], sizeof(izanagi::math::CTriangle) * m_TriNum);
+
+            m_NeedCreateGraphicsObject = IZ_TRUE;
+        }
     }
 }   // namespace scenegraph
 }   // namespace izanagi
