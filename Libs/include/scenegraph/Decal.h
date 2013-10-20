@@ -14,23 +14,43 @@ namespace scenegraph {
      */
     class CDecal : public izanagi::CObject
     {
-    public:
+    protected:
         /** インスタンス作成
          *
          * @param[in] allocator
          * @param[in] point デカール中心
          * @param[in] normal デカール法線
-         * @param[in] rectangleLengthX デカール矩形の長さ
-         * @param[in] rectangleLengthZ デカール矩形の長さ
+         * @param[in] rectangleLengthX デカール矩形のX軸方向長さ
+         * @param[in] rectangleLengthZ デカール矩形のZ軸方向長さ
          */
+        template <typename _DECAL>
         static CDecal* Create(
             izanagi::IMemoryAllocator* allocator,
             const izanagi::math::SVector& point,
             const izanagi::math::SVector& normal,
             IZ_FLOAT rectangleLengthX,
-            IZ_FLOAT rectangleLengthZ);
+            IZ_FLOAT rectangleLengthZ)
+        {
+            izanagi::STLMemoryAllocatorProxy::SetAllocator(allocator);
 
-    private:
+            void* buf = ALLOC_ZERO(allocator, sizeof(CDecal));
+
+            CDecal* instance = new(buf) _DECAL;
+            {
+                instance->m_Allocator = allocator;
+                instance->AddRef();
+
+                instance->SetRectangle(
+                    point, 
+                    normal,
+                    rectangleLengthX,
+                    rectangleLengthZ);
+            }
+
+            return instance;
+        }
+
+    protected:
         CDecal();
         virtual ~CDecal();
 
@@ -43,8 +63,8 @@ namespace scenegraph {
          *
          * @param[in] point デカール中心
          * @param[in] normal デカール法線
-         * @param[in] rectangleLengthX デカール矩形の長さ
-         * @param[in] rectangleLengthZ デカール矩形の長さ
+         * @param[in] rectangleLengthX デカール矩形のX軸方向長さ
+         * @param[in] rectangleLengthZ デカール矩形のZ軸方向長さ
          */
         void SetRectangle(
             const izanagi::math::SVector& point,
@@ -52,14 +72,14 @@ namespace scenegraph {
             IZ_FLOAT rectangleLengthX,
             IZ_FLOAT rectangleLengthZ);
 
-        /** 指定された三角形に対してシザリングを実行
+        /** 指定された三角形をもとにデカールメッシュを計算
          *
          * @param[in] シザリングを行う三角形の配列
          * @param[in] 三角形の数
          */
-        void DoScissoring(
+        virtual void ComputeDecalMesh(
             const izanagi::math::CTriangle tri[],
-            IZ_UINT triNum);
+            IZ_UINT triNum) = 0;
 
         /** デカール描画用のグラフィックスオブジェクトを作成
          *
@@ -79,9 +99,116 @@ namespace scenegraph {
          */
         const izanagi::math::SVector& GetCenter() const;
 
+    protected:
+        izanagi::IMemoryAllocator* m_Allocator;
+
+        izanagi::math::CRectangle m_Rectangle;
+
+        enum {
+            PLANE_LEFT,
+            PLANE_RIGHT,
+            PLANE_BOTTOM,
+            PLANE_TOP,
+            PLANE_FRONT,
+            PLANE_BACK,
+
+            PLANE_NUM,
+        };
+
+        // シザリング用の面
+        izanagi::math::CPlane m_Planes[PLANE_NUM];
+
+        // デカールを構成する三角形数
+        IZ_UINT m_TriNum;
+
+        // デカールを構成する三角形
+        izanagi::math::CTriangle* m_Triangles;
+
+        struct SVtx {
+            izanagi::math::SVector point;
+            IZ_COLOR color;
+            IZ_FLOAT uv[2];
+        };
+
+        // グラフィックスオブジェクトを作成する必要があるかどうか
+        IZ_BOOL m_NeedCreateGraphicsObject;
+
+        izanagi::graph::CVertexBuffer* m_VB;
+        izanagi::graph::CVertexDeclaration* m_VD;
+    };
+
+    /**
+     */
+    class CDecalAlloc : public CDecal {
+        friend class CDecal;
+
+    public:
+        static CDecal* Create(
+            izanagi::IMemoryAllocator* allocator,
+            const izanagi::math::SVector& point,
+            const izanagi::math::SVector& normal,
+            IZ_FLOAT rectangleLengthX,
+            IZ_FLOAT rectangleLengthZ)
+        {
+            CDecal* ret = CDecal::Create<CDecalAlloc>(
+                allocator,
+                point, normal,
+                rectangleLengthX, rectangleLengthZ);
+            return ret;
+        }
+
+    protected:
+        CDecalAlloc() {}
+        virtual ~CDecalAlloc() {}
+
+    public:
+        /** 指定された三角形をもとにデカールメッシュを計算
+         *
+         * @param[in] シザリングを行う三角形の配列
+         * @param[in] 三角形の数
+         */
+        virtual void ComputeDecalMesh(
+            const izanagi::math::CTriangle tri[],
+            IZ_UINT triNum);
+
     private:
         // シザリングによって新しく作成される三角形の数を計算する
         void ComputeNewTriNumByScissoring(
+            const izanagi::math::CTriangle tri[],
+            IZ_UINT triNum);
+    };
+
+    /**
+     */
+    class CDecalSTL : public CDecal {
+     friend class CDecal;
+
+    public:
+        static CDecal* Create(
+            izanagi::IMemoryAllocator* allocator,
+            const izanagi::math::SVector& point,
+            const izanagi::math::SVector& normal,
+            IZ_FLOAT rectangleLengthX,
+            IZ_FLOAT rectangleLengthZ)
+        {
+            CDecal* ret = CDecal::Create<CDecalSTL>(
+                allocator,
+                point, normal,
+                rectangleLengthX, rectangleLengthZ);
+            return ret;
+        }
+
+    protected:
+        CDecalSTL() {}
+        virtual ~CDecalSTL() {}
+
+    public:
+        /** 指定された三角形をもとにデカールメッシュを計算
+         *
+         * @param[in] シザリングを行う三角形の配列
+         * @param[in] 三角形の数
+         */
+        virtual void ComputeDecalMesh(
             const izanagi::math::CTriangle tri[],
             IZ_UINT triNum);
 
@@ -111,37 +238,6 @@ namespace scenegraph {
                 triList_1.clear();
             }
         };
-
-        izanagi::IMemoryAllocator* m_Allocator;
-
-        izanagi::math::CRectangle m_Rectangle;
-
-        enum {
-            PLANE_LEFT,
-            PLANE_RIGHT,
-            PLANE_BOTTOM,
-            PLANE_TOP,
-            PLANE_FRONT,
-            PLANE_BACK,
-
-            PLANE_NUM,
-        };
-
-        izanagi::math::CPlane m_Planes[PLANE_NUM];
-
-        IZ_UINT m_TriNum;
-        izanagi::math::CTriangle* m_Triangles;
-
-        struct SVtx {
-            izanagi::math::SVector point;
-            IZ_COLOR color;
-            IZ_FLOAT uv[2];
-        };
-
-        IZ_BOOL m_NeedCreateGraphicsObject;
-
-        izanagi::graph::CVertexBuffer* m_VB;
-        izanagi::graph::CVertexDeclaration* m_VD;
     };
 }   // namespace scenegraph
 }   // namespace izanagi
