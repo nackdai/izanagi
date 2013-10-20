@@ -65,15 +65,15 @@ IZ_BOOL CJsonGeometry::Read(rapidjson::Document& document)
             SFace faceA;
             {
                 faceA.idx[0] = faces[rapidjson::SizeType(offset)].GetInt();
-                faceA.idx[1] = faces[rapidjson::SizeType(offset + 3)].GetInt();
-                faceA.idx[2] = faces[rapidjson::SizeType(offset + 1)].GetInt();
+                faceA.idx[1] = faces[rapidjson::SizeType(offset + 1)].GetInt();
+                faceA.idx[2] = faces[rapidjson::SizeType(offset + 3)].GetInt();
             }
 
             SFace faceB;
             {
                 faceB.idx[0] = faces[rapidjson::SizeType(offset + 1)].GetInt();
-                faceB.idx[1] = faces[rapidjson::SizeType(offset + 3)].GetInt();
-                faceB.idx[2] = faces[rapidjson::SizeType(offset + 2)].GetInt();
+                faceB.idx[1] = faces[rapidjson::SizeType(offset + 2)].GetInt();
+                faceB.idx[2] = faces[rapidjson::SizeType(offset + 3)].GetInt();
             }
 
             offset += 4;
@@ -190,8 +190,8 @@ IZ_BOOL CJsonGeometry::Read(rapidjson::Document& document)
             SFace face;
             {
                 face.idx[0] = faces[rapidjson::SizeType(offset)].GetInt();
-                face.idx[1] = faces[rapidjson::SizeType(offset + 2)].GetInt();
-                face.idx[2] = faces[rapidjson::SizeType(offset + 1)].GetInt();
+                face.idx[1] = faces[rapidjson::SizeType(offset + 1)].GetInt();
+                face.idx[2] = faces[rapidjson::SizeType(offset + 2)].GetInt();
             }
 
             offset += 3;
