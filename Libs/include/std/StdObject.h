@@ -6,20 +6,38 @@
 namespace izanagi {
     class CObject {
     protected:
-        inline CObject();
+        CObject()
+        {
+            m_nRefCnt = 0;
+        }
         virtual ~CObject() {}
 
         NO_COPIABLE(CObject);
 
     public:
         // 参照カウンタ増加
-        inline void AddRef();
+        void AddRef()
+        {
+            ++m_nRefCnt;
+        }
 
         // 解放
-        inline void Release();
+        void Release()
+        {
+            if (m_nRefCnt > 0) {
+                m_nRefCnt--;
+
+                if (m_nRefCnt == 0) {
+                    InternalRelease();
+                }
+            }
+        }
 
         // 参照カウンタ取得
-        inline IZ_INT GetRefCnt() const;
+        IZ_INT GetRefCnt() const
+        {
+            return m_nRefCnt;
+        }
 
     private:
         void* operator new(size_t size)
@@ -50,36 +68,6 @@ namespace izanagi {
         // 参照カウンタ
         IZ_INT m_nRefCnt;
     };
-
-    // コンストラクタ
-    CObject::CObject()
-    {
-        m_nRefCnt = 0;
-    }
-
-    // 参照カウンタ増加
-    void CObject::AddRef()
-    {
-        ++m_nRefCnt;
-    }
-
-    // 解放
-    void CObject::Release()
-    {
-        if (m_nRefCnt > 0) {
-            m_nRefCnt--;
-
-            if (m_nRefCnt == 0) {
-                InternalRelease();
-            }
-        }
-    }
-
-    // 参照カウンタ取得
-    IZ_INT CObject::GetRefCnt() const
-    {
-        return m_nRefCnt;
-    }
 }   // namespace izanagi
 
 /**
