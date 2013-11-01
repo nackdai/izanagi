@@ -35,7 +35,7 @@ namespace math
     private:
         /** 平面上でレイと交差する点を取得
          */
-        static IZ_BOOL GetCrossPoint(
+        static IZ_BOOL GetIntersectPoint(
             const CPlane& plane,
             const SRay& ray,
             SVector& refPtr);
@@ -81,20 +81,20 @@ namespace math
 
         /** レイと交差する点を取得.
          */
-        IZ_BOOL GetCrossPoint(
+        IZ_BOOL GetIntersectPoint(
             const SRay& ray,
             SVector& refPtr) const;
 
         /** 線分と交差する点を取得.
          */
-        IZ_BOOL GetCrossPoint(
+        IZ_BOOL GetIntersectPoint(
             const SVector& from,
             const SVector& to,
             SVector& refPtr) const;
 
         /** レイと交差するかどうか.
          */
-        IZ_BOOL IsCross(const SRay& ray) const;
+        IZ_BOOL IsIntersect(const SRay& ray) const;
 
         /** 面の正側（法線の向き側）に点があるかどうか.
          */

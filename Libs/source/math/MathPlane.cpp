@@ -7,12 +7,12 @@ namespace izanagi
 namespace math
 {
     // 平面上でレイと交差する点を取得
-    IZ_BOOL CPlane::GetCrossPoint(
+    IZ_BOOL CPlane::GetIntersectPoint(
         const CPlane& plane,
         const SRay& ray,
         SVector& refPtr)
     {
-        return plane.GetCrossPoint(ray, refPtr);
+        return plane.GetIntersectPoint(ray, refPtr);
     }
 
     CPlane::CPlane()
@@ -72,7 +72,7 @@ namespace math
         CRay ray(
             CVector(0.0f, 0.0f, 0.0f),
             nml);
-        GetCrossPoint(ray, this->pt);
+        GetIntersectPoint(ray, this->pt);
     }
 
     // 原点からの距離を取得.
@@ -105,7 +105,7 @@ namespace math
     }
 
     // レイと交差する点を取得
-    IZ_BOOL CPlane::GetCrossPoint(
+    IZ_BOOL CPlane::GetIntersectPoint(
         const SRay& ray,
         SVector& refPtr) const
     {
@@ -149,7 +149,7 @@ namespace math
     }
 
     // 線分と交差する点を取得.
-    IZ_BOOL CPlane::GetCrossPoint(
+    IZ_BOOL CPlane::GetIntersectPoint(
         const SVector& from,
         const SVector& to,
         SVector& refPtr) const
@@ -162,7 +162,7 @@ namespace math
                 from,
                 CVector(to, from, CVector::INIT_SUB));
 
-            IZ_BOOL ret = GetCrossPoint(ray, refPtr);
+            IZ_BOOL ret = GetIntersectPoint(ray, refPtr);
             return ret;
         }
 
@@ -170,7 +170,7 @@ namespace math
     }
 
     // レイと交差するかどうか
-    IZ_BOOL CPlane::IsCross(const SRay& ray) const
+    IZ_BOOL CPlane::IsIntersect(const SRay& ray) const
     {
         CVector plane(a, b, c, d);
 

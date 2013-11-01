@@ -58,9 +58,9 @@ IZ_BOOL CMouseHit::InitInternal(
             Length, Length);
 
         m_Rectangles[i].rc.Set(
-            //izanagi::math::CVector(-Length * 0.5f, 0.0f, Length * 0.5f),
-            izanagi::math::CVector(0.0f, 0.0f, 0.0f),
-            Length, Length);
+            izanagi::math::CVector(-Length * 0.5f, 0.0f, Length * 0.5f),
+            izanagi::math::CVector(        Length, 0.0f,          0.0f),
+            izanagi::math::CVector(          0.0f, 0.0f,       -Length));
 
         m_Rectangles[i].rc.Transform(m_Rectangles[i].mtx);
     }
@@ -134,7 +134,7 @@ void CMouseHit::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 
             for (IZ_UINT i = 0; i < COUNTOF(m_Rectangles); i++)
             {
-                if (m_Rectangles[i].rc.IsCross(ray))
+                if (m_Rectangles[i].rc.IsIntersect(ray))
                 {
                     m_CrossRectIdx = i;
                     break;

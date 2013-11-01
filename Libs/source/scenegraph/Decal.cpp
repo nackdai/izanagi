@@ -30,10 +30,10 @@ namespace scenegraph {
         IZ_FLOAT rectangleLengthX,
         IZ_FLOAT rectangleLengthZ)
     {
-        m_Rectangle.Set(
-            point,
-            rectangleLengthX,
-            rectangleLengthZ);
+        const math::CVector vecX(rectangleLengthX, 0.0f, 0.0f, 0.0f);
+        const math::CVector vecZ(0.0f, 0.0f, rectangleLengthZ, 0.0f);
+
+        m_Rectangle.Set(point, vecX, vecZ);
 
         // 矩形の法線が指定された法線に一致する回転を計算する
         izanagi::math::SQuat rotQuat;
@@ -47,11 +47,11 @@ namespace scenegraph {
         izanagi::math::SQuat::MatrixFromQuat(rotMtx, rotQuat);
         m_Rectangle.Transform(rotMtx);
 
-        IZ_FLOAT width = m_Rectangle.GetWidth() * 0.5f;
-        IZ_FLOAT height = m_Rectangle.GetHeight() * 0.5f;
+        IZ_FLOAT width = rectangleLengthX * 0.5f;
+        IZ_FLOAT height = rectangleLengthZ * 0.5f;
 
-        const izanagi::math::SVector& t = m_Rectangle.GetX();
-        const izanagi::math::SVector& b = m_Rectangle.GetY();
+        const izanagi::math::SVector& t = m_Rectangle.v[0];
+        const izanagi::math::SVector& b = m_Rectangle.v[1];
         const izanagi::math::SVector& n = m_Rectangle.nml;
 
         izanagi::math::CVector minusT(-t.x, -t.y, -t.z, 0.0f);

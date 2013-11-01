@@ -21,6 +21,14 @@ namespace math
         Set(point);
     }
 
+    CTriangle::CTriangle(
+        const SVector& pt0,
+        const SVector& pt1,
+        const SVector& pt2)
+    {
+        Set(pt0, pt1, pt2);
+    }
+
     CTriangle::CTriangle(const CTriangle& rhs)
     {
         *this = rhs;
@@ -131,29 +139,29 @@ namespace math
     }
 
     // ÉåÉCÇ∆åç∑Ç∑ÇÈì_ÇéÊìæ
-    IZ_BOOL CTriangle::GetCrossPoint(
+    IZ_BOOL CTriangle::GetIntersectPoint(
         const SRay& ray,
         SVector& refPtr) const
     {
         CPlane plane(nml, pt[0]);
 
-        IZ_BOOL isCross = plane.GetCrossPoint(ray, refPtr);
+        IZ_BOOL isIntersect = plane.GetIntersectPoint(ray, refPtr);
 
-        if (isCross)
+        if (isIntersect)
         {
-            isCross = IsOnTriangle(refPtr);
+            isIntersect = IsOnTriangle(refPtr);
         }
 
-        return isCross;
+        return isIntersect;
     }
 
     // ÉåÉCÇ∆åç∑Ç∑ÇÈÇ©Ç«Ç§Ç©
-    IZ_BOOL CTriangle::IsCross(const SRay& ray)
+    IZ_BOOL CTriangle::IsIntersect(const SRay& ray)
     {
         SVector tmp;
 
-        IZ_BOOL isCross = GetCrossPoint(ray, tmp);
-        return isCross;
+        IZ_BOOL isIntersect = GetIntersectPoint(ray, tmp);
+        return isIntersect;
     }
 }   // namespace math
 }   // namespace izanagi

@@ -192,7 +192,7 @@ namespace izanagi {
 #endif
     }
 
-    inline IZ_BOOL _IsCross(
+    inline IZ_BOOL _IsIntersect(
         const math::CPlane& sissorPlane,
         const math::STriangle& tri,
         IZ_UINT pos0, IZ_UINT pos1)
@@ -205,8 +205,8 @@ namespace izanagi {
 
         math::CRay ray(tri.pt[pos0], dir);
 
-        IZ_BOOL isCross = sissorPlane.IsCross(ray);
-        return isCross;
+        IZ_BOOL isIntersect = sissorPlane.IsIntersect(ray);
+        return isIntersect;
     }
 
     // シザリングで作成される三角形の数を計算する.
@@ -262,15 +262,15 @@ namespace izanagi {
 #if 0
         IZ_UINT crossNum = 0;
 
-        if (_IsCross(scissorPlane, triangle, 0, 1))
+        if (_IsIntersect(scissorPlane, triangle, 0, 1))
         {
             crossNum++;
         }
-        if (_IsCross(scissorPlane, triangle, 1, 2))
+        if (_IsIntersect(scissorPlane, triangle, 1, 2))
         {
             crossNum++;
         }
-        if (_IsCross(scissorPlane, triangle, 2, 0))
+        if (_IsIntersect(scissorPlane, triangle, 2, 0))
         {
             crossNum++;
         }
@@ -280,15 +280,15 @@ namespace izanagi {
         // １点でも交差すれば
         // 平面に対しては必ず２点の交差点が存在する
 
-        if (_IsCross(scissorPlane, triangle, 0, 1))
+        if (_IsIntersect(scissorPlane, triangle, 0, 1))
         {
             return 2;
         }
-        if (_IsCross(scissorPlane, triangle, 1, 2))
+        if (_IsIntersect(scissorPlane, triangle, 1, 2))
         {
             return 2;
         }
-        if (_IsCross(scissorPlane, triangle, 2, 0))
+        if (_IsIntersect(scissorPlane, triangle, 2, 0))
         {
             return 2;
         }
@@ -323,11 +323,11 @@ namespace izanagi {
         IZ_BOOL isCross = scissorPlane.GetCrossPoint(ray, ret);
         return isCross;
 #else
-        IZ_BOOL isCross = scissorPlane.GetCrossPoint(
+        IZ_BOOL isIntersect = scissorPlane.GetIntersectPoint(
             tri.pt[pos0],
             tri.pt[pos1],
             ret);
-        return isCross;
+        return isIntersect;
 #endif
     }
 
