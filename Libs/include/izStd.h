@@ -32,11 +32,11 @@
 #include "std/allocator/SimpleMemoryAllocator.h"
 #include "std/allocator/STLMemoryAllocator.h"
 
-#include "std/dependency_property/DependencyObject.h"
-#include "std/dependency_property/DependencyProperty.h"
-#include "std/dependency_property/DependencyPropertyChangedEventArgs.h"
-#include "std/dependency_property/Binding.h"
-#include "std/dependency_property/BindingOperations.h"
-#include "std/dependency_property/BindingExpression.h"
+#include "std/binding/DependencyObject.h"
+#include "std/binding/DependencyProperty.h"
+#include "std/binding/DependencyPropertyChangedEventArgs.h"
+#include "std/binding/Binding.h"
+#include "std/binding/BindingOperations.h"
+#include "std/binding/BindingExpression.h"
 
 #endif  // #if !defined(__IZANAGI_STD_H__)

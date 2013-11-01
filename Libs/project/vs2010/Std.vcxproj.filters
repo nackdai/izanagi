@@ -8,9 +8,6 @@
     <Filter Include="source\allocator">
       <UniqueIdentifier>{1f05be49-9191-4937-8fdf-1b3cfcd6b9cc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source\dependency_property">
-      <UniqueIdentifier>{e7daed04-d43c-4b56-9926-094c5b28cf32}</UniqueIdentifier>
-    </Filter>
     <Filter Include="include">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
@@ -18,11 +15,14 @@
     <Filter Include="include\allocator">
       <UniqueIdentifier>{d214c9c9-914e-4f6a-bef8-048d1ad93ad3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\dependency_property">
-      <UniqueIdentifier>{0125b681-bccb-4a49-8a97-ce7987b6c51b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="include\collection">
       <UniqueIdentifier>{46608c66-7b09-4936-8231-da371ab75d30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\binding">
+      <UniqueIdentifier>{0125b681-bccb-4a49-8a97-ce7987b6c51b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\binding">
+      <UniqueIdentifier>{e7daed04-d43c-4b56-9926-094c5b28cf32}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -53,20 +53,20 @@
     <ClCompile Include="..\..\source\std\allocator\STLMemoryAllocator.cpp">
       <Filter>source\allocator</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\std\dependency_property\Binding.cpp">
-      <Filter>source\dependency_property</Filter>
+    <ClCompile Include="..\..\source\std\binding\DependencyObject.cpp">
+      <Filter>source\binding</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\std\dependency_property\BindingExpression.cpp">
-      <Filter>source\dependency_property</Filter>
+    <ClCompile Include="..\..\source\std\binding\DependencyPropertyChangedEventArgs.cpp">
+      <Filter>source\binding</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\std\dependency_property\BindingOperations.cpp">
-      <Filter>source\dependency_property</Filter>
+    <ClCompile Include="..\..\source\std\binding\Binding.cpp">
+      <Filter>source\binding</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\std\dependency_property\DependencyObject.cpp">
-      <Filter>source\dependency_property</Filter>
+    <ClCompile Include="..\..\source\std\binding\BindingExpression.cpp">
+      <Filter>source\binding</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\std\dependency_property\DependencyPropertyChangedEventArgs.cpp">
-      <Filter>source\dependency_property</Filter>
+    <ClCompile Include="..\..\source\std\binding\BindingOperations.cpp">
+      <Filter>source\binding</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -133,27 +133,6 @@
     <ClInclude Include="..\..\include\std\allocator\STLMemoryAllocator.h">
       <Filter>include\allocator</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\std\dependency_property\Binding.h">
-      <Filter>include\dependency_property</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\std\dependency_property\BindingExpression.h">
-      <Filter>include\dependency_property</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\std\dependency_property\BindingOperations.h">
-      <Filter>include\dependency_property</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\std\dependency_property\DependencyObject.h">
-      <Filter>include\dependency_property</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\std\dependency_property\DependencyProperty.h">
-      <Filter>include\dependency_property</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\std\dependency_property\DependencyPropertyChangedEventArgs.h">
-      <Filter>include\dependency_property</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\std\dependency_property\PropertyMetaData.h">
-      <Filter>include\dependency_property</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\izStd.h" />
     <ClInclude Include="..\..\include\std\collection\StdRecycleArray.h">
       <Filter>include\collection</Filter>
@@ -172,6 +151,27 @@
     </ClInclude>
     <ClInclude Include="..\..\include\std\collection\StdQueue.h">
       <Filter>include\collection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\binding\DependencyObject.h">
+      <Filter>include\binding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\binding\DependencyProperty.h">
+      <Filter>include\binding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\binding\DependencyPropertyChangedEventArgs.h">
+      <Filter>include\binding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\binding\PropertyMetaData.h">
+      <Filter>include\binding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\binding\Binding.h">
+      <Filter>include\binding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\binding\BindingExpression.h">
+      <Filter>include\binding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\binding\BindingOperations.h">
+      <Filter>include\binding</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

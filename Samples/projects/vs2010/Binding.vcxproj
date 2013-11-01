@@ -174,10 +174,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\DependencyProperty\main.cpp" />
+    <ClCompile Include="..\..\Binding\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\DependencyProperty\ReadMe.txt" />
+    <None Include="..\..\Binding\ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Samples\projects\vs2005\SampleKit.vcxproj">
