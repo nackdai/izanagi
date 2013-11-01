@@ -24,7 +24,7 @@ namespace izanagi {
         }
 
     protected:
-        Delegate(void* object, void* func) : m_Object(object), m_Func(func)
+        Delegate(void* object, void* func) : m_Object(object)
         {
             m_Allocator = IZ_NULL;
             m_ListItem.Init(this);
@@ -32,7 +32,6 @@ namespace izanagi {
         Delegate(const Delegate& rhs)
         {
             m_Object = rhs.m_Object;
-            m_Func = rhs.m_Func;
             m_Allocator = rhs.m_Allocator;
             m_ListItem.Init(this);
         }
@@ -42,13 +41,10 @@ namespace izanagi {
         }
 
     protected:
-        IZ_BOOL Equals(const Delegate& rhs)
+        void* GetObject()
         {
-            return (m_Object == rhs.m_Object && m_Func == rhs.m_Func);
+            return m_Object;
         }
-
-        void* GetObject() { return m_Object; }
-        void* GetFunc() { return m_Func; }
 
     public:
         CStdList<Delegate>::Item* GetListItem()
@@ -58,7 +54,6 @@ namespace izanagi {
 
     protected:
         void* m_Object;
-        void* m_Func;
 
         IMemoryAllocator* m_Allocator;
         CStdList<Delegate>::Item m_ListItem;
@@ -142,7 +137,6 @@ namespace izanagi {
     {
     protected:
         ActionDelegate(void* object, void* func) : DelgateArg1(object, func) {}
-        ActionDelegate(void* func) : DelgateArg1(IZ_NULL, func) {}
         ActionDelegate(const ActionDelegate& rhs) : DelgateArg1(rhs) {}
         virtual ~ActionDelegate() {}
     };
@@ -157,15 +151,15 @@ namespace izanagi {
     template <typename O, typename T, typename ARG>
     class ActionDelegateInstance : public ActionDelegate<ARG>
     {
-        typedef void (T::* FUNC)(ARG);
+        typedef void (T::* Func)(ARG);
 
         friend class CDelegateFactory;
 
         IZ_DECL_PLACEMENT_NEW();
 
     protected:
-        ActionDelegateInstance(O* object, FUNC func) : ActionDelegate(object, &func), m_Func(func) {}
-        ActionDelegateInstance(const ActionDelegateInstance& rhs) : ActionDelegate(rhs) { m_Func = rhs.m_Func; }
+        ActionDelegateInstance(O* object, Func func) : ActionDelegate(object, IZ_NULL), m_Func(func) {}
+        ActionDelegateInstance(const ActionDelegateInstance& rhs) : ActionDelegate(rhs), m_Func(rhs.m_Func) {}
         virtual ~ActionDelegateInstance() {}
 
     protected:
@@ -173,20 +167,14 @@ namespace izanagi {
         {
             O* object = (O*)GetObject();
             IZ_ASSERT(object != IZ_NULL);
+
+            IZ_ASSERT(m_Func != IZ_NULL);
             
             (object->*m_Func)(arg1);
         }
 
-        virtual void Execute()
-        {
-            O* object = (O*)GetObject();
-            IZ_ASSERT(object != IZ_NULL);
-            
-            (object->*m_Func)();
-        }
-
     private:
-        FUNC m_Func;
+        Func m_Func;
     };
 
     /** C#のActionに相当
@@ -197,33 +185,27 @@ namespace izanagi {
     template <typename ARG>
     class ActionDelegateStatic : public ActionDelegate<ARG>
     {
-        typedef void (*FUNC)(ARG);
+        typedef void (*Func)(ARG);
         
         friend class CDelegateFactory;
 
         IZ_DECL_PLACEMENT_NEW();
 
     protected:
-        ActionDelegateStatic(FUNC func) : ActionDelegate(func) {}
-        ActionDelegateStatic(const ActionDelegateStatic& rhs) : ActionDelegate(rhs) {}
+        ActionDelegateStatic(Func func) : ActionDelegate(IZ_NULL, IZ_NULL), m_Func(func) {}
+        ActionDelegateStatic(const ActionDelegateStatic& rhs) : ActionDelegate(rhs), m_Func(rhs.m_Func) {}
         virtual ~ActionDelegateStatic() {}
 
     protected:
         virtual void Execute(ARG arg1)
         {           
-            FUNC func = (FUNC)GetFunc();
-            IZ_ASSERT(func != IZ_NULL);
+            IZ_ASSERT(m_Func != IZ_NULL);
 
-            (*func)(arg1);
+            (*m_Func)(arg1);
         }
 
-        virtual void Execute()
-        {           
-            FUNC func = (FUNC)GetFunc();
-            IZ_ASSERT(func != IZ_NULL);
-
-            (*func)();
-        }
+    private:
+        Func m_Func;
     };
 
     /** C#のFuncに相当
@@ -236,7 +218,6 @@ namespace izanagi {
     {
     protected:
         FuncDelegate(void* object, void* func) : DelgateArg1(object, func) {}
-        FuncDelegate(void* func) : DelgateArg1(IZ_NULL, func) {}
         FuncDelegate(const FuncDelegate& rhs) : DelgateArg1(rhs) {}
         virtual ~FuncDelegate() {}
     };
@@ -259,8 +240,8 @@ namespace izanagi {
         IZ_DECL_PLACEMENT_NEW();
 
     protected:
-        FuncDelegateInstance(O* object, FUNC func) : FuncDelegate(object, &func), m_Func(func) {}
-        FuncDelegateInstance(const FuncDelegateInstance& rhs) : FuncDelegate(rhs) { m_Func = rhs.m_Func; }
+        FuncDelegateInstance(O* object, FUNC func) : FuncDelegate(object, IZ_NULL), m_Func(func) {}
+        FuncDelegateInstance(const FuncDelegateInstance& rhs) : FuncDelegate(rhs), m_Func(rhs.m_Func) {}
         virtual ~FuncDelegateInstance() {}
 
     protected:
@@ -268,6 +249,8 @@ namespace izanagi {
         {
             O* object = (O*)GetObject();
             IZ_ASSERT(object != IZ_NULL);
+
+            IZ_ASSERT(m_Func != IZ_NULL);
 
             RETURN tmp = (object->*m_Func)(arg1);
             return CValue(tmp); 
@@ -293,19 +276,21 @@ namespace izanagi {
         IZ_DECL_PLACEMENT_NEW();
 
     protected:
-        FuncDelegateStatic(FUNC func) : FuncDelegate(func) {}
-        FuncDelegateStatic(const FuncDelegateStatic& rhs) : FuncDelegate(rhs) {}
+        FuncDelegateStatic(FUNC func) : FuncDelegate(IZ_NULL, IZ_NULL), m_Func(func) {}
+        FuncDelegateStatic(const FuncDelegateStatic& rhs) : FuncDelegate(rhs), m_Func(rhs.m_Func) {}
         virtual ~FuncDelegateStatic() {}
 
     protected:
         virtual CValue Execute(ARG arg1)
         {           
-            FUNC func = (FUNC)GetFunc();
-            IZ_ASSERT(func != IZ_NULL);
+            IZ_ASSERT(m_Func != IZ_NULL);
 
-            RETURN tmp = (*func)(arg1);
+            RETURN tmp = (*m_Func)(arg1);
             return CValue(tmp);
         }
+
+    private:
+        FUNC m_Func;
     };
 
     /** デリゲートファクトリ
