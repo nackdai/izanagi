@@ -59,7 +59,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FontRenderer", "FontRendere
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Event", "Event.vcxproj", "{5052960D-D515-4A5D-873C-786CFA4393E7}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DependencyProperty", "DependencyProperty.vcxproj", "{4CA4E984-A7D0-48D0-91AB-EA986438F6C2}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Binding", "Binding.vcxproj", "{4CA4E984-A7D0-48D0-91AB-EA986438F6C2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "std", "std", "{AE369C5E-AF8E-495B-94C5-1D1606CD188F}"
 EndProject
