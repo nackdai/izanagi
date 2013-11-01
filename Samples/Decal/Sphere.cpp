@@ -232,7 +232,7 @@ IZ_BOOL CSphere::GetCrossPoint(
 #if 0
     for (IZ_UINT i = 0; i < m_TriNum; i++)
     {
-        if (m_Triangles[i].GetCrossPoint(ray, refPtr))
+        if (m_Triangles[i].GetIntersectPoint(ray, refPtr))
         {
             if (normal != IZ_NULL)
             {
@@ -254,7 +254,7 @@ IZ_BOOL CSphere::GetCrossPoint(
 
     for (IZ_UINT i = 0; i < m_TriNum; i++)
     {
-        if (m_Triangles[i].GetCrossPoint(ray, tmpPtr))
+        if (m_Triangles[i].GetIntersectPoint(ray, tmpPtr))
         {
             isCross = IZ_TRUE;
 
@@ -269,7 +269,7 @@ IZ_BOOL CSphere::GetCrossPoint(
 
     if (isCross)
     {
-        m_Triangles[crossTriPos].GetCrossPoint(ray, refPtr);
+        m_Triangles[crossTriPos].GetIntersectPoint(ray, refPtr);
 
         if (normal != IZ_NULL)
         {

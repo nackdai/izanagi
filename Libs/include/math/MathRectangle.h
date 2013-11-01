@@ -12,14 +12,14 @@ namespace math
     struct SPlane;
     class CPlane;
 
+    /** 矩形パラメータ構造体
+     */
     struct SRectangle {
-        SVector pt;
-        struct {
-            SVector dir;
-            IZ_FLOAT length;
-        } v[2];
+        SVector pt;     ///< 左上原点
+        SVector v[2];   ///< 原点から伸びる矩形を形成する２ベクトル
+
         union {
-            SVector nml;
+            SVector nml;    ///< 法線
             struct {
                 IZ_FLOAT a;
                 IZ_FLOAT b;
@@ -27,16 +27,18 @@ namespace math
                 IZ_FLOAT padding;
             };
         };
-        IZ_FLOAT d;
+        IZ_FLOAT d;     ///< 原点からの距離
     };
 
+    /** 矩形クラス
+     */
     class CRectangle : public SRectangle {
     public:
         CRectangle();
         CRectangle(
             const SVector& point,
-            IZ_FLOAT lengthX,
-            IZ_FLOAT lengthZ);
+            const SVector& v0,
+            const SVector& v1);
         CRectangle(const CRectangle& rhs);
 
         ~CRectangle() {}
@@ -48,8 +50,8 @@ namespace math
          */
         void Set(
             const SVector& point,
-            IZ_FLOAT lengthX,
-            IZ_FLOAT lengthZ);
+            const SVector& v0,
+            const SVector& v1);
 
         /** 原点からの距離を取得.
          */
@@ -65,39 +67,23 @@ namespace math
 
         /** レイと交差する点を取得.
          */
-        IZ_BOOL GetCrossPoint(
+        IZ_BOOL GetIntersectPoint(
             const SRay& ray,
             SVector& refPtr) const;
 
         /** レイと交差するかどうか.
          */
-        IZ_BOOL IsCross(const SRay& ray);
+        IZ_BOOL IsIntersect(const SRay& ray);
 
         /** 平面を取得.
          */
         void GetPlane(SPlane& plane) const;
 
-        /** X方向のベクトルを取得.
-         */
-        const SVector& GetX() const;
-
-        /** Y方向のベクトルを取得.
-         */
-        const SVector& GetY() const;
-
-        /** 幅を取得.
-         */
-        IZ_FLOAT GetWidth() const;
-
-        /** 高さを取得.
-         */
-        IZ_FLOAT GetHeight() const;
-
     private:
         typedef IZ_BOOL (*GetCrossPointFunc)(const CPlane& plane, const SRay& ray, SVector& refPtr);
 
         // レイと交差する点を取得
-        IZ_BOOL GetCrossPoint(
+        IZ_BOOL GetIntersectPoint(
             GetCrossPointFunc func,
             const SRay& ray,
             SVector& refPtr) const;

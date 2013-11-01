@@ -31,6 +31,10 @@ namespace math
     public:
         CTriangle();
         CTriangle(const SVector point[3]);
+        CTriangle(
+            const SVector& pt0,
+            const SVector& pt1,
+            const SVector& pt2);
         CTriangle(const CTriangle& rhs);
 
         ~CTriangle() {}
@@ -55,13 +59,13 @@ namespace math
 
         /** ƒŒƒC‚ÆŒğ·‚·‚é“_‚ğæ“¾.
          */
-        IZ_BOOL GetCrossPoint(
+        IZ_BOOL GetIntersectPoint(
             const SRay& ray,
             SVector& refPtr) const;
 
         /** ƒŒƒC‚ÆŒğ·‚·‚é‚©‚Ç‚¤‚©.
          */
-        IZ_BOOL IsCross(const SRay& ray);
+        IZ_BOOL IsIntersect(const SRay& ray);
     };
 }   // namespace math
 }   // namespace izanagi

@@ -177,7 +177,7 @@ IZ_BOOL CCube::GetCrossPoint(
 
     for (IZ_UINT i = 0; i < m_TriNum; i++)
     {
-        if (m_Triangles[i].GetCrossPoint(ray, tmpPtr))
+        if (m_Triangles[i].GetIntersectPoint(ray, tmpPtr))
         {
             isCross = IZ_TRUE;
 
@@ -192,7 +192,7 @@ IZ_BOOL CCube::GetCrossPoint(
 
     if (isCross)
     {
-        m_Triangles[crossTriPos].GetCrossPoint(ray, refPtr);
+        m_Triangles[crossTriPos].GetIntersectPoint(ray, refPtr);
 
         if (normal != IZ_NULL)
         {
