@@ -1,4 +1,4 @@
-#include "std/dependency_property/BindingExpression.h"
+#include "std/binding/BindingExpression.h"
 
 namespace izanagi
 {
