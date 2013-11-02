@@ -106,6 +106,7 @@ IZ_BOOL CPostEffectFunctorMGF::CreateTexture(
 
             // 出力
             graph::CTexture* pDst = pTexCreator->Create(
+                                pDevice,
                                 nW + 2,
                                 nH + 2,
                                 fmt,
@@ -176,6 +177,7 @@ IZ_BOOL CPostEffectFunctorMGF::CreateTexture(
 
                 // 出力は新規作成する
                 pDst = pTexCreator->Create(
+                        pDevice,
                         pDst->GetWidth(),
                         pDst->GetHeight(),
                         pDst->GetPixelFormat(),
@@ -207,6 +209,7 @@ IZ_BOOL CPostEffectFunctorMGF::CreateTexture(
                 // 出力
                 // 同じサイズで作成する
                 graph::CTexture* pDst = pTexCreator->Create(
+                                    pDevice,
                                     nW,
                                     nH,
                                     fmt,
@@ -253,6 +256,7 @@ IZ_BOOL CPostEffectFunctorMGF::CreateTexture(
 
                 // 出力は新規作成
                 graph::CTexture* pDst = pTexCreator->Create(
+                                    pDevice,
                                     nW,
                                     nH,
                                     fmt,

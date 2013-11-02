@@ -70,10 +70,9 @@ CPostEffectSystem* CPostEffectSystem::CreatePostEffectSystem(
     pInstance = new(pBuf) CPostEffectSystem;
     {
         pInstance->m_Allocator = pAllocator;
-        SAFE_REPLACE(pInstance->m_pDevice, pDevice);
 
         // 初期化
-        result = pInstance->InitInternal();
+        result = pInstance->InitInternal(pDevice);
         VGOTO(result, __EXIT__);
     }
 
@@ -94,26 +93,26 @@ __EXIT__:
 CPostEffectSystem::CPostEffectSystem()
 {
     m_Allocator = IZ_NULL;
-    m_pDevice = IZ_NULL;
     m_pTexCreator = IZ_NULL;
 }
 
 // デストラクタ
 CPostEffectSystem::~CPostEffectSystem()
 {
-    SAFE_RELEASE(m_pDevice);
     SAFE_RELEASE(m_pTexCreator);
 }
 
 /**
 * ポストエフェクト作成
 */
-CPostEffect* CPostEffectSystem::CreatePostEffect(IInputStream* in)
+CPostEffect* CPostEffectSystem::CreatePostEffect(
+    graph::CGraphicsDevice* device,
+    IInputStream* in)
 {
     // ポストエフェクト作成
     CPostEffect* pPostEffect = CPostEffect::CreatePostEffect(
                                 m_Allocator,
-                                m_pDevice,
+                                device,
                                 m_pTexCreator,
                                 &m_cVSMgr,
                                 in);
@@ -167,12 +166,12 @@ void CPostEffectSystem::InternalRelease()
 }
 
 // 初期化
-IZ_BOOL CPostEffectSystem::InitInternal()
+IZ_BOOL CPostEffectSystem::InitInternal(graph::CGraphicsDevice* device)
 {
     IZ_BOOL result = IZ_TRUE;
 
     // 頂点シェーダマネージャ初期化
-    result = m_cVSMgr.InitRenderer(m_pDevice);
+    result = m_cVSMgr.InitRenderer(device);
 
     // ファンクタクリエータを登録
     for (IZ_UINT i = 0; i < COUNTOF(_tblFunctorCreator); ++i) {

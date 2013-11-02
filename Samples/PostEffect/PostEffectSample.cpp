@@ -55,6 +55,8 @@ IZ_BOOL CPostEffectSample::Init(
         if (ret) {
             // システムにセット
             m_System->SetTextureCreator(m_TexCreator);
+
+            SAFE_REPLACE(m_Device, device);
         }
     }
 
@@ -70,6 +72,8 @@ __EXIT__:
 // 開放
 void CPostEffectSample::Release()
 {
+    SAFE_RELEASE(m_Device);
+
     SAFE_RELEASE(m_PostEffect);
     SAFE_RELEASE(m_System);
     SAFE_RELEASE(m_TexCreator);
@@ -94,7 +98,7 @@ IZ_BOOL CPostEffectSample::Read(IZ_PCSTR filapath)
         m_System->GetTextureCreator()->ClearAll();
 
         // ポストエフェクト作成
-        m_PostEffect = m_System->CreatePostEffect(&in);
+        m_PostEffect = m_System->CreatePostEffect(m_Device, &in);
         ret = (m_PostEffect != IZ_NULL);
 
         if (ret) {
@@ -148,6 +152,7 @@ IZ_BOOL CPostEffectSample::Apply(izanagi::graph::CGraphicsDevice* device)
         device->EndScene(endSceneTargetFlag);
 
         ret = m_PostEffect->Apply(
+            device,
             m_SrcTex,
             m_CurTechIdx);
     }

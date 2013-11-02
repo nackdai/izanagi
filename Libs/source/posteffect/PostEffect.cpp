@@ -38,8 +38,6 @@ CPostEffect* CPostEffect::CreatePostEffect(
         pInstance->AddRef();
         pInstance->m_Allocator = pAllocator;
 
-        SAFE_REPLACE(pInstance->m_pDevice, pDevice);
-
         pInstance->m_pShader = pShader;
     }
 
@@ -52,7 +50,7 @@ CPostEffect* CPostEffect::CreatePostEffect(
     IZ_ASSERT(CStdUtil::GetPtrDistance(pBuffer, pBufTop) == nSize);
 
     // テクスチャ作成
-    result = pInstance->CreateTexture(pTexCreator);
+    result = pInstance->CreateTexture(pDevice, pTexCreator);
     VGOTO(result, __EXIT__);
 
 __EXIT__:
@@ -90,7 +88,6 @@ size_t CPostEffect::ComputeFunctorSize(CPostEffectShader* pShader)
 CPostEffect::CPostEffect()
 {
     m_Allocator = IZ_NULL;
-    m_pDevice = IZ_NULL;
 
     m_pShader = IZ_NULL;
 
@@ -103,8 +100,6 @@ CPostEffect::CPostEffect()
 // デストラクタ
 CPostEffect::~CPostEffect()
 {
-    SAFE_RELEASE(m_pDevice);
-
     SAFE_RELEASE(m_pShader);
 
     CStdList<CFunctorHashItem>::Item* pItem = m_FunctorHash.GetOrderTop();
@@ -178,7 +173,9 @@ IZ_UINT8* CPostEffect::CreateFunctor(IZ_UINT8* pBuffer)
 }
 
 // テクスチャ作成
-IZ_BOOL CPostEffect::CreateTexture(CPostEffectTextureCreator* pTexCreator)
+IZ_BOOL CPostEffect::CreateTexture(
+    graph::CGraphicsDevice* device,
+    CPostEffectTextureCreator* pTexCreator)
 {
     IZ_ASSERT(m_pShader != IZ_NULL);
 
@@ -210,6 +207,7 @@ IZ_BOOL CPostEffect::CreateTexture(CPostEffectTextureCreator* pTexCreator)
 
         VRETURN(
             CreateTexture(
+                device,
                 pTexCreator,
                 nPassIdx,
                 nCreatedTexTblPos,
@@ -224,6 +222,7 @@ IZ_BOOL CPostEffect::CreateTexture(CPostEffectTextureCreator* pTexCreator)
 
             VRETURN(
                 CreateTexture(
+                    device,
                     pTexCreator,
                     nSubPassIdx,
                     nCreatedTexTblPos,
@@ -236,7 +235,7 @@ IZ_BOOL CPostEffect::CreateTexture(CPostEffectTextureCreator* pTexCreator)
                 this,
                 GetShader(),
                 pTexCreator,
-                m_pDevice));
+                device));
 
         // テクスチャ作成終了
         pTexCreator->EndCreate();
@@ -248,6 +247,7 @@ IZ_BOOL CPostEffect::CreateTexture(CPostEffectTextureCreator* pTexCreator)
 }
 
 IZ_BOOL CPostEffect::CreateTexture(
+    graph::CGraphicsDevice* device,
     CPostEffectTextureCreator* pTexCreator,
     IZ_UINT nPassIdx,
     IZ_UINT& nCreatedTexTblPos,
@@ -293,6 +293,7 @@ IZ_BOOL CPostEffect::CreateTexture(
             // テクスチャ作成
             pTexCreator->SetEnableFind(IZ_TRUE);
             pTex = CreateTexture(
+                    device,
                     pTexCreator,
                     pTexDesc);
             VRETURN(pTex != IZ_NULL);
@@ -301,6 +302,7 @@ IZ_BOOL CPostEffect::CreateTexture(
                 // 入力と出力が一致するので強制的に作り直し・・・
                 pTexCreator->SetEnableFind(IZ_FALSE);
                 pTex = CreateTexture(
+                        device,
                         pTexCreator,
                         pTexDesc);
                 VRETURN(pTex != IZ_NULL);
@@ -331,6 +333,7 @@ IZ_BOOL CPostEffect::CreateTexture(
             // テクスチャ作成
             pTexCreator->SetEnableFind(IZ_TRUE);
             graph::CTexture* pTex = CreateTexture(
+                                device,
                                 pTexCreator,
                                 pTexDesc);
             VRETURN(pTex != IZ_NULL);
@@ -341,6 +344,7 @@ IZ_BOOL CPostEffect::CreateTexture(
                     // 一致するので、強制的に作る
                     pTexCreator->SetEnableFind(IZ_FALSE);
                     pTex = CreateTexture(
+                            device,
                             pTexCreator,
                             pTexDesc);
                     VRETURN(pTex != IZ_NULL);
@@ -384,12 +388,13 @@ namespace {
 
 // テクスチャ作成
 graph::CTexture* CPostEffect::CreateTexture(
+    graph::CGraphicsDevice* device,
     CPostEffectTextureCreator* pTexCreator,
     const S_PES_TEXTURE* pTexDesc)
 {
     // テクスチャサイズ計算
-    IZ_INT nWidth = m_pDevice->GetBackBufferWidth();
-    IZ_INT nHeight = m_pDevice->GetBackBufferHeight();
+    IZ_INT nWidth = device->GetBackBufferWidth();
+    IZ_INT nHeight = device->GetBackBufferHeight();
 
     _ComputeTexSize(
         pTexDesc->ann,
@@ -402,6 +407,7 @@ graph::CTexture* CPostEffect::CreateTexture(
 
     // テクスチャ作成
     graph::CTexture* pTex = pTexCreator->Create(
+                        device,
                         nWidth,
                         nHeight,
                         pTexDesc->ann.fmt,
@@ -416,10 +422,11 @@ graph::CTexture* CPostEffect::CreateTexture(
 * ポストエフェクト実行
 */
 IZ_BOOL CPostEffect::Apply(
+    graph::CGraphicsDevice* device,
     graph::CTexture* pInputSceneTex,
     IZ_UINT nEnableTechIdx)
 {
-    IZ_ASSERT(m_pDevice != IZ_NULL);
+    IZ_ASSERT(device != IZ_NULL);
     IZ_ASSERT(nEnableTechIdx < m_pShader->GetHeader().numTech);
 
     IZ_BOOL ret = IZ_FALSE;
@@ -439,13 +446,13 @@ IZ_BOOL CPostEffect::Apply(
 
     // レンダーステートの保持
     graph::S_RENDER_STATE sRS;
-    memcpy(&sRS, &m_pDevice->GetRenderState(), sizeof(sRS));
+    memcpy(&sRS, &device->GetRenderState(), sizeof(sRS));
 
     // Z
-    m_pDevice->SetRenderState(
+    device->SetRenderState(
         graph::E_GRAPH_RS_ZWRITEENABLE,
         IZ_FALSE);
-    m_pDevice->SetRenderState(
+    device->SetRenderState(
         graph::E_GRAPH_RS_ZENABLE,
         IZ_FALSE);
 
@@ -474,7 +481,7 @@ IZ_BOOL CPostEffect::Apply(
         IZ_ASSERT(pFunctor != IZ_NULL);
 
         IZ_BOOL result = pFunctor->Apply(
-                            m_pDevice,
+                            device,
                             m_pShader);
         VGOTO(result, __EXIT__);
 
@@ -485,7 +492,7 @@ IZ_BOOL CPostEffect::Apply(
 
 __EXIT__:
     // レンダーステートを元に戻す
-    m_pDevice->SetRenderState(sRS);
+    device->SetRenderState(sRS);
 
     return ret;
 }

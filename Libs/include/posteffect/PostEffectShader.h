@@ -40,24 +40,30 @@ namespace izanagi {
     public:
         // 描画
         IZ_BOOL Render(
+            graph::CGraphicsDevice* device,
             const SIntRect* pSrcRect,
             const SIntRect* pDstRect);
-        IZ_BOOL Render(const SFloatRect& rcTexCoord);
+        IZ_BOOL Render(
+            graph::CGraphicsDevice* device,
+            const SFloatRect& rcTexCoord);
 
         // 描画開始
         IZ_BOOL BeginRender(
+            graph::CGraphicsDevice* device,
             CPostEffectFunctor* pFunctor,
             IZ_UINT nTechIdx,
             IZ_UINT nPassIdx,
             graph::CTexture* pTex,
             IZ_BOOL bIsClear);
+
         IZ_BOOL BeginRender(
+            graph::CGraphicsDevice* device,
             CPostEffectFunctor* pFunctor,
             IZ_UINT nTechIdx,
             IZ_UINT nPassIdx);
 
         // 描画終了
-        IZ_BOOL EndRender();
+        IZ_BOOL EndRender(graph::CGraphicsDevice* device);
 
         IZ_POSTEFFECT_HANDLE GetParamHandleByName(IZ_PCSTR pszName) const;
         IZ_POSTEFFECT_HANDLE GetParamHandleBySemantic(IZ_PCSTR pszSemantic) const;
@@ -85,11 +91,12 @@ namespace izanagi {
         IZ_BOOL SetTextureOffsetParameter(const graph::CTexture* pTex);
 
         // コミットチェンジ
-        IZ_BOOL CommitChanges();        
+        IZ_BOOL CommitChanges(graph::CGraphicsDevice* device);        
 
     private:
         // 初期化
         IZ_BOOL Init(
+            graph::CGraphicsDevice* device,
             size_t nBufSize,
             IZ_UINT8* pBuffer,
             const S_PES_HEADER* pHeader,
@@ -98,6 +105,7 @@ namespace izanagi {
 
         // パスデータ作成
         IZ_UINT8* CreatePass(
+            graph::CGraphicsDevice* device,
             IZ_UINT8* pBuffer,
             IInputStream* in);
 
@@ -268,7 +276,6 @@ namespace izanagi {
 
     private:
         IMemoryAllocator* m_Allocator;
-        graph::CGraphicsDevice* m_pDevice;
 
         // ファイルヘッダ
         S_PES_HEADER m_sHeader;

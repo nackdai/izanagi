@@ -15,7 +15,7 @@ IZ_BOOL CPostEffectFunctorSwitchTex::ApplyCore(
     IZ_BOOL ret = IZ_TRUE;
 
     // 描画開始
-    if (pShader->BeginRender(this, GetTechIdx(), GetPassIdx())) {
+    if (pShader->BeginRender(pDevice, this, GetTechIdx(), GetPassIdx())) {
         {
             IZ_POSTEFFECT_HANDLE nTexHandle_0 = pShader->GetTexHandleByIdx(m_nSwapTexIdx[0]);
             IZ_POSTEFFECT_HANDLE nTexHandle_1 = pShader->GetTexHandleByIdx(m_nSwapTexIdx[1]);
@@ -47,15 +47,15 @@ IZ_BOOL CPostEffectFunctorSwitchTex::ApplyCore(
         VGOTO(ret, __EXIT__);
         
         // コミットチェンジ
-        ret = pShader->CommitChanges();
+        ret = pShader->CommitChanges(pDevice);
         VGOTO(ret, __EXIT__);
 
         // 描画
-        ret = pShader->Render(IZ_NULL, IZ_NULL);
+        ret = pShader->Render(pDevice, IZ_NULL, IZ_NULL);
         VGOTO(ret, __EXIT__);
 
         // 描画終了
-        ret = pShader->EndRender();
+        ret = pShader->EndRender(pDevice);
         VGOTO(ret, __EXIT__);
     }
 

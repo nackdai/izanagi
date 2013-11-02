@@ -225,6 +225,7 @@ IZ_BOOL CPostEffectFunctorRenderStar::Apply(
                     graph::E_GRAPH_ALPHA_BLEND_Cs_Cd);
 
                 result = pShader->BeginRender(
+                            pDevice,
                             this,
                             m_nTechIdx,
                             m_nPassIdx,
@@ -269,15 +270,15 @@ IZ_BOOL CPostEffectFunctorRenderStar::Apply(
             VRETURN(result);
             
             // コミットチェンジ
-            result = pShader->CommitChanges();
+            result = pShader->CommitChanges(pDevice);
             VRETURN(result);
 
             // 描画
-            result = pShader->Render(IZ_NULL, IZ_NULL);
+            result = pShader->Render(pDevice, IZ_NULL, IZ_NULL);
             VRETURN(result);
 
             // 描画終了
-            result = pShader->EndRender();
+            result = pShader->EndRender(pDevice);
             VRETURN(result);
 
             // 次への準備
@@ -328,6 +329,7 @@ IZ_BOOL CPostEffectFunctorRenderStar::CreateTexture(
     for (IZ_UINT i = 0; i < num; ++i) {
         // 作成
         graph::CTexture* pTex = pTexCreator->Create(
+                            pDevice,
                             pSrcTex->GetWidth(),
                             pSrcTex->GetHeight(),
                             pSrcTex->GetPixelFormat(),

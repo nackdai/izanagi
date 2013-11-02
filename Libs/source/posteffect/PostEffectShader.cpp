@@ -83,7 +83,6 @@ CPostEffectShader* CPostEffectShader::CreatePostEffectShader(
         pInstance->AddRef();
 
         pInstance->m_Allocator = pAllocator;
-        SAFE_REPLACE(pInstance->m_pDevice, pDevice);
     }
 
     // ヘッダ直後からプログラム直前までをまとめて読む
@@ -91,6 +90,7 @@ CPostEffectShader* CPostEffectShader::CreatePostEffectShader(
     VGOTO(result, __EXIT__);
 
     result = pInstance->Init(
+                pDevice,
                 nBufSize,
                 pBuffer,
                 &sHeader,
@@ -109,7 +109,6 @@ __EXIT__:
 CPostEffectShader::CPostEffectShader()
 {
     m_Allocator = IZ_NULL;
-    m_pDevice = IZ_NULL;
 
     m_pPass = IZ_NULL;
 
@@ -122,14 +121,13 @@ CPostEffectShader::~CPostEffectShader()
     for (IZ_UINT i = 0; i < m_sHeader.numPass; ++i) {
         m_pPass[i].Clear();
     }
-
-    SAFE_RELEASE(m_pDevice);
 }
 
 /**
 * 描画
 */
 IZ_BOOL CPostEffectShader::Render(
+    graph::CGraphicsDevice* device,
     const SIntRect* pSrcRect,
     const SIntRect* pDstRect)
 {
@@ -201,10 +199,10 @@ IZ_BOOL CPostEffectShader::Render(
         if (!CPostEffectRectUtil::CmpRect(rcDst, rcRenderTarget)) {
             // レンダーターゲットの矩形と出力矩形が一致しない
             // シザリング設定
-            m_pDevice->SetRenderState(
+            device->SetRenderState(
                 graph::E_GRAPH_RS_SCISSORTESTENABLE,
                 IZ_TRUE);
-            m_pDevice->SetScissorTestRect(rcDst);
+            device->SetScissorTestRect(rcDst);
 
             bIsScissor = IZ_TRUE;
         }
@@ -220,11 +218,11 @@ IZ_BOOL CPostEffectShader::Render(
         &rcDst);
 
     // 描画
-    pPass->Render(m_pDevice, rcTexCoord);
+    pPass->Render(device, rcTexCoord);
 
     if (bIsScissor) {
         // シザリングを解除
-        m_pDevice->SetRenderState(
+        device->SetRenderState(
             graph::E_GRAPH_RS_SCISSORTESTENABLE,
             IZ_FALSE);
     }
@@ -235,7 +233,9 @@ IZ_BOOL CPostEffectShader::Render(
 /**
 * 描画
 */
-IZ_BOOL CPostEffectShader::Render(const SFloatRect& rcTexCoord)
+IZ_BOOL CPostEffectShader::Render(
+    graph::CGraphicsDevice* device,
+    const SFloatRect& rcTexCoord)
 {
     if (!m_RenderParam.IsValid()) {
         IZ_ASSERT(IZ_FALSE);
@@ -248,7 +248,7 @@ IZ_BOOL CPostEffectShader::Render(const SFloatRect& rcTexCoord)
                                 m_RenderParam.pass_idx);
 
     // 描画
-    pPass->Render(m_pDevice, rcTexCoord);
+    pPass->Render(device, rcTexCoord);
 
     return IZ_TRUE;
 }
@@ -257,6 +257,7 @@ IZ_BOOL CPostEffectShader::Render(const SFloatRect& rcTexCoord)
 * 描画開始
 */
 IZ_BOOL CPostEffectShader::BeginRender(
+    graph::CGraphicsDevice* device,
     CPostEffectFunctor* pFunctor,
     IZ_UINT nTechIdx,
     IZ_UINT nPassIdx,
@@ -284,8 +285,8 @@ IZ_BOOL CPostEffectShader::BeginRender(
                 nMethod = m_StateAlphaBlend.method;
             }
 
-            m_pDevice->SetRenderState(graph::E_GRAPH_RS_ALPHABLENDENABLE, bEnable);
-            m_pDevice->SetRenderState(graph::E_GRAPH_RS_BLENDMETHOD, nMethod);
+            device->SetRenderState(graph::E_GRAPH_RS_ALPHABLENDENABLE, bEnable);
+            device->SetRenderState(graph::E_GRAPH_RS_BLENDMETHOD, nMethod);
         }
 
         // アルファテスト
@@ -300,9 +301,9 @@ IZ_BOOL CPostEffectShader::BeginRender(
                 nRef = m_StateAlphaTest.ref;
             }
 
-            m_pDevice->SetRenderState(graph::E_GRAPH_RS_ALPHABLENDENABLE, bEnable);
-            m_pDevice->SetRenderState(graph::E_GRAPH_RS_ALPHAFUNC, nFunc);
-            m_pDevice->SetRenderState(graph::E_GRAPH_RS_ALPHAREF, nRef);
+            device->SetRenderState(graph::E_GRAPH_RS_ALPHABLENDENABLE, bEnable);
+            device->SetRenderState(graph::E_GRAPH_RS_ALPHAFUNC, nFunc);
+            device->SetRenderState(graph::E_GRAPH_RS_ALPHAREF, nRef);
         }
     }
 
@@ -324,7 +325,7 @@ IZ_BOOL CPostEffectShader::BeginRender(
         }
 
         // レンダーターゲットを切り替える
-        ret = m_pDevice->BeginScene(
+        ret = device->BeginScene(
                 &rt,
                 1,
                 nClearFlag,
@@ -353,6 +354,7 @@ IZ_BOOL CPostEffectShader::BeginRender(
 * 描画開始
 */
 IZ_BOOL CPostEffectShader::BeginRender(
+    graph::CGraphicsDevice* device,
     CPostEffectFunctor* pFunctor,
     IZ_UINT nTechIdx,
     IZ_UINT nPassIdx)
@@ -371,6 +373,7 @@ IZ_BOOL CPostEffectShader::BeginRender(
     }
 
     ret = BeginRender(
+            device,
             pFunctor,
             nTechIdx,
             nPassIdx,
@@ -383,11 +386,11 @@ IZ_BOOL CPostEffectShader::BeginRender(
 /**
 * 描画終了
 */
-IZ_BOOL CPostEffectShader::EndRender()
+IZ_BOOL CPostEffectShader::EndRender(graph::CGraphicsDevice* device)
 {
     if (m_bIsBeginScene) {
         // BeginRender()が呼ばれている
-        m_pDevice->EndScene(graph::E_GRAPH_END_SCENE_FLAG_RT_0);
+        device->EndScene(graph::E_GRAPH_END_SCENE_FLAG_RT_0);
         m_bIsBeginScene = IZ_FALSE;
     }
 
@@ -409,7 +412,7 @@ IZ_BOOL CPostEffectShader::EndRender()
         IZ_UINT nRscId = pPass->GetSamplerInfo(i)->resource_id;
 
         if (handle != IZ_NULL) {
-            m_pDevice->SetTexture(
+            device->SetTexture(
                 nRscId,
                 IZ_NULL);
         }
@@ -605,7 +608,7 @@ IZ_BOOL CPostEffectShader::SetTextureOffsetParameter(const graph::CTexture* pTex
 /**
 * コミットチェンジ
 */
-IZ_BOOL CPostEffectShader::CommitChanges()
+IZ_BOOL CPostEffectShader::CommitChanges(graph::CGraphicsDevice* device)
 {
     VRETURN(m_RenderParam.IsValid());
 
@@ -637,10 +640,10 @@ IZ_BOOL CPostEffectShader::CommitChanges()
                                     ? pParamDesc->Elements
                                     : 1);
 
-            m_pDevice->SetShaderProgram(pPass->GetShaderProgram());
+            device->SetShaderProgram(pPass->GetShaderProgram());
 
             ret = CPostEffectShaderUtil::SetValue(
-                    m_pDevice,
+                    device,
                     pPass->GetShaderProgram(),
                     handle,
                     pValue,
@@ -681,7 +684,7 @@ IZ_BOOL CPostEffectShader::CommitChanges()
                     graph::E_GRAPH_TEX_FILTER_NONE);
 
                 // テクスチャセット
-                m_pDevice->SetTexture(
+                device->SetTexture(
                     nRscId,
                     pTex);
             }
@@ -695,6 +698,7 @@ IZ_BOOL CPostEffectShader::CommitChanges()
 
 // 初期化
 IZ_BOOL CPostEffectShader::Init(
+    graph::CGraphicsDevice* device,
     size_t nBufSize,
     IZ_UINT8* pBuffer,
     const S_PES_HEADER* pHeader,
@@ -732,7 +736,7 @@ IZ_BOOL CPostEffectShader::Init(
     IZ_UINT64 tmp = CStdUtil::GetPtrDistance(pBuf, pBuffer);
 
     // パスデータ作成
-    pBuf = CreatePass(pBuf, in);
+    pBuf = CreatePass(device, pBuf, in);
 
     tmp = CStdUtil::GetPtrDistance(pBuf, pBuffer);
 
@@ -755,7 +759,7 @@ IZ_BOOL CPostEffectShader::Init(
         ret = pVSMgr->CreateVS(
                 m_sHeader.numVtxProgram,
                 m_Allocator,
-                m_pDevice,
+                device,
                 reinterpret_cast<IZ_UINT8*>(pProgramBuf),
                 in);
         VGOTO(ret, __EXIT__);
@@ -772,7 +776,7 @@ IZ_BOOL CPostEffectShader::Init(
 
             if (!pVS->IsInitilizedShaderParameter()) {
                 pVS->InitShaderParameter(
-                    m_pDevice,
+                    device,
                     cPass.GetShaderProgram());
             }
         }
@@ -782,18 +786,19 @@ __EXIT__:
     }
 
     // パスパラメータ初期化
-    InitPassParameter(m_pDevice);
+    InitPassParameter(device);
 
     return IZ_TRUE;
 }
 
 // パスデータ作成
 IZ_UINT8* CPostEffectShader::CreatePass(
+    graph::CGraphicsDevice* device,
     IZ_UINT8* pBuffer,
     IInputStream* in)
 {
     IZ_ASSERT(m_Allocator != IZ_NULL);
-    IZ_ASSERT(m_pDevice != IZ_NULL);
+    IZ_ASSERT(device != IZ_NULL);
 
     // プログラム読み込み用バッファ
     void* pProgramBuf = ALLOC(m_Allocator, m_sHeader.maxProgamSize);
@@ -816,11 +821,11 @@ IZ_UINT8* CPostEffectShader::CreatePass(
         IZ_INPUT_READ_ASSERT(in, pProgramBuf, 0, pDesc->sizeProgram);
 
         // ピクセルシェーダ作成
-        graph::CPixelShader* pPS = m_pDevice->CreatePixelShader(pProgramBuf);
+        graph::CPixelShader* pPS = device->CreatePixelShader(pProgramBuf);
         IZ_ASSERT(pPS != IZ_NULL);
 
         // シェーダプログラム作成
-        graph::CShaderProgram* shader = m_pDevice->CreateShaderProgram();
+        graph::CShaderProgram* shader = device->CreateShaderProgram();
         IZ_ASSERT(shader != IZ_NULL);
 
         // オーナーをシェーダプログラムに委譲する

@@ -33,6 +33,7 @@ namespace izanagi {
 
         // テクスチャ作成
         graph::CTexture* Create(
+            graph::CGraphicsDevice* device,
             IZ_UINT16 nWidth,
             IZ_UINT16 nHeight,
             graph::E_GRAPH_PIXEL_FMT fmt,
@@ -65,7 +66,6 @@ namespace izanagi {
 
     private:
         IMemoryAllocator* m_Allocator;
-        graph::CGraphicsDevice* m_pDevice;
 
         // テクスチャリスト
         STexHolder* m_pTexList;
