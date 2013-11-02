@@ -180,7 +180,7 @@ void CSceneRenderer::RenderTorus(
 {
     izanagi::math::SMatrix::SetUnit(m_L2W);
 
-    m_Shader->Begin(0, IZ_FALSE);
+    m_Shader->Begin(device, 0, IZ_FALSE);
     {
         if (m_Shader->BeginPass(0)) {
             // ƒpƒ‰ƒ[ƒ^Ý’è
@@ -223,12 +223,12 @@ void CSceneRenderer::RenderTorus(
                     sizeof(parallelLightLocalDir));
             }
 
-            m_Shader->CommitChanges();
+            m_Shader->CommitChanges(device);
 
             m_Torus->Draw(device);
         }
     }
-    m_Shader->End();
+    m_Shader->End(device);
 }
 
 void CSceneRenderer::RenderEnvBox(

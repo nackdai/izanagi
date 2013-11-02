@@ -123,7 +123,7 @@ IZ_BOOL CPrimitiveSet::Render(
             }
         }
 
-        pRenderHandler->CommitChanges();
+        pRenderHandler->CommitChanges(pDevice);
     }
 
     IZ_UINT nStride = m_VB->GetStride();

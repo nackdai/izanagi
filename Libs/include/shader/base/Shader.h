@@ -97,10 +97,9 @@ namespace shader
         IShader()
         {
             m_Allocator = IZ_NULL;
-            m_pDevice = IZ_NULL;
         }
 
-        virtual ~IShader() { SAFE_RELEASE(m_pDevice); }
+        virtual ~IShader() {}
 
         NO_COPIABLE(IShader);
 
@@ -119,12 +118,13 @@ namespace shader
          */
         PURE_VIRTUAL(
             IZ_UINT Begin(
+                graph::CGraphicsDevice* device,
                 IZ_UINT nTechIdx,
                 IZ_BOOL bIsSaveState));
 
         /** テクニック終了.
          */
-        PURE_VIRTUAL(IZ_BOOL End());
+        PURE_VIRTUAL(IZ_BOOL End(graph::CGraphicsDevice* device));
 
         /** パス開始.
          */
@@ -136,7 +136,7 @@ namespace shader
 
         /** 変更内容の確定.
          */
-        PURE_VIRTUAL(IZ_BOOL CommitChanges());
+        PURE_VIRTUAL(IZ_BOOL CommitChanges(graph::CGraphicsDevice* device));
 
         /** シェーダパラメータハンドルを名前から取得.
          */
@@ -244,7 +244,6 @@ namespace shader
 
     protected:
         IMemoryAllocator* m_Allocator;
-        graph::CGraphicsDevice* m_pDevice;
 
     private:
         CStdHash<IZ_UINT, IShader, SHD_HASH_MAX>::Item m_HashItem;

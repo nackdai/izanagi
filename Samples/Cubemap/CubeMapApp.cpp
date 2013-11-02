@@ -122,7 +122,7 @@ void CCubeMapApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     device->SetTexture(0, m_Img->GetTexture(1));
 
     // テクスチャあり
-    m_Shader->Begin(0, IZ_FALSE);
+    m_Shader->Begin(device, 0, IZ_FALSE);
     {
         if (m_Shader->BeginPass(0)) {
             // パラメータ設定
@@ -138,12 +138,12 @@ void CCubeMapApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
                 (void*)&m_L2W,
                 sizeof(m_L2W));
 
-            m_Shader->CommitChanges();
+            m_Shader->CommitChanges(device);
 
             m_Cube->Render(device);
 
             m_Shader->EndPass();
         }
     }
-    m_Shader->End();
+    m_Shader->End(device);
 }

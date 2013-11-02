@@ -162,7 +162,7 @@ void CProjectedTextureShadowApp::RenderInternal(izanagi::graph::CGraphicsDevice*
     izanagi::math::SMatrix::SetUnit(mtxL2W);
 
     // テクスチャなし
-    m_Shader->Begin(1, IZ_FALSE);
+    m_Shader->Begin(device, 1, IZ_FALSE);
     {
         if (m_Shader->BeginPass(0)) {
             // パラメータ設定
@@ -179,20 +179,20 @@ void CProjectedTextureShadowApp::RenderInternal(izanagi::graph::CGraphicsDevice*
                 sizeof(camera.GetParam().mtxW2C));
 
             // シェーダ設定
-            m_Shader->CommitChanges();
+            m_Shader->CommitChanges(device);
 
             m_Axis->Draw(device);
 
             m_Shader->EndPass();
         }
     }
-    m_Shader->End();
+    m_Shader->End(device);
 
     // 影テクスチャセット
     device->SetTexture(0, m_Shadow->GetRT());
 
     // 影付き
-    m_Shader->Begin(3, IZ_FALSE);
+    m_Shader->Begin(device, 3, IZ_FALSE);
     {
         if (m_Shader->BeginPass(0)) {
             // パラメータ設定
@@ -221,7 +221,7 @@ void CProjectedTextureShadowApp::RenderInternal(izanagi::graph::CGraphicsDevice*
                     (void*)&mtxL2W,
                     sizeof(izanagi::math::SMatrix));
 
-                m_Shader->CommitChanges();
+                m_Shader->CommitChanges(device);
 
                 m_Plane->Draw(device);
             }
@@ -229,12 +229,12 @@ void CProjectedTextureShadowApp::RenderInternal(izanagi::graph::CGraphicsDevice*
             m_Shader->EndPass();
         }
     }
-    m_Shader->End();
+    m_Shader->End(device);
 
     device->SetTexture(0, m_Img->GetTexture(0));
 
     // テクスチャあり
-    m_Shader->Begin(0, IZ_FALSE);
+    m_Shader->Begin(device, 0, IZ_FALSE);
     {
         if (m_Shader->BeginPass(0)) {
             // パラメータ設定
@@ -256,7 +256,7 @@ void CProjectedTextureShadowApp::RenderInternal(izanagi::graph::CGraphicsDevice*
                     (void*)&mtxL2W,
                     sizeof(izanagi::math::SMatrix));
 
-                m_Shader->CommitChanges();
+                m_Shader->CommitChanges(device);
 
                 m_Torus->Draw(device);
             }
@@ -264,7 +264,7 @@ void CProjectedTextureShadowApp::RenderInternal(izanagi::graph::CGraphicsDevice*
             m_Shader->EndPass();
         }
     }
-    m_Shader->End();
+    m_Shader->End(device);
 }
 
 void CProjectedTextureShadowApp::RenderForShadow(izanagi::graph::CGraphicsDevice* device)
@@ -278,7 +278,7 @@ void CProjectedTextureShadowApp::RenderForShadow(izanagi::graph::CGraphicsDevice
         izanagi::math::CVector(-1.0f, -1.0f, -1.0f));    // ライトの向き
 
     // 影用
-    m_Shader->Begin(2, IZ_FALSE);
+    m_Shader->Begin(device, 2, IZ_FALSE);
     {
         if (m_Shader->BeginPass(0)) {
             // パラメータ設定
@@ -300,7 +300,7 @@ void CProjectedTextureShadowApp::RenderForShadow(izanagi::graph::CGraphicsDevice
                     (void*)&mtxL2W,
                     sizeof(izanagi::math::SMatrix));
 
-                m_Shader->CommitChanges();
+                m_Shader->CommitChanges(device);
 
                 m_Torus->Draw(device);
             }
@@ -308,7 +308,7 @@ void CProjectedTextureShadowApp::RenderForShadow(izanagi::graph::CGraphicsDevice
             m_Shader->EndPass();
         }
     }
-    m_Shader->End();
+    m_Shader->End(device);
 
     m_Shadow->EndShadowRender(device);
 }

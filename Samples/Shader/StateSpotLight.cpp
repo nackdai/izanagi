@@ -28,7 +28,7 @@ IZ_BOOL CStateSpotLight::Render(izanagi::graph::CGraphicsDevice* device)
     izanagi::math::SMatrix mtxL2W;
     izanagi::math::SMatrix::SetUnit(mtxL2W);
 
-    m_Shader->Begin(0, IZ_FALSE);
+    m_Shader->Begin(device, 0, IZ_FALSE);
     {
         if (m_Shader->BeginPass(0)) {
             // パラメータ設定
@@ -113,7 +113,7 @@ IZ_BOOL CStateSpotLight::Render(izanagi::graph::CGraphicsDevice* device)
                 m_SpotLight.vPos);
         }
     }
-    m_Shader->End();
+    m_Shader->End(device);
 
     RenderName(device, "SpotLight");
 
@@ -134,7 +134,7 @@ void CStateSpotLight::RenderScene(
         (void*)&mtxL2W,
         sizeof(mtxL2W));
 
-    m_Shader->CommitChanges();
+    m_Shader->CommitChanges(device);
 
     mesh->Draw(device);
 }

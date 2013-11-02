@@ -169,7 +169,7 @@ void CDecalApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
         camera.GetParam().mtxW2V,
         mtxDecalW2C);
 
-    m_Shader->Begin(0, IZ_FALSE);
+    m_Shader->Begin(device, 0, IZ_FALSE);
     {        
         if (m_Shader->BeginPass(0)) {
             _SetShaderParam(
@@ -188,7 +188,7 @@ void CDecalApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
             device->SetTexture(0, m_Img->GetTexture(0));
 
             // シェーダ設定
-            m_Shader->CommitChanges();
+            m_Shader->CommitChanges(device);
 
             // 球
             m_Sphere->Draw(device);
@@ -203,7 +203,7 @@ void CDecalApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
                 sizeof(mtxDecalW2C));
 
             // シェーダ設定
-            m_Shader->CommitChanges();
+            m_Shader->CommitChanges(device);
 
             m_Decal->Draw(device);
 
@@ -211,7 +211,7 @@ void CDecalApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
         }
     }
 
-    m_Shader->End();
+    m_Shader->End(device);
 }
 
 IZ_BOOL CDecalApp::OnKeyDown(IZ_UINT nChar)

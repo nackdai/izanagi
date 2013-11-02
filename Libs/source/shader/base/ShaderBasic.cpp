@@ -114,7 +114,6 @@ namespace shader
     CShaderBasic::CShaderBasic()
     {
         m_Allocator = IZ_NULL;
-        m_pDevice = IZ_NULL;
 
         m_pBuffer = IZ_NULL;
 
@@ -134,7 +133,6 @@ namespace shader
             m_pPass[i].Clear();
         }
 
-        SAFE_RELEASE(m_pDevice);
         FREE(m_Allocator, m_pBuffer);
     }
 
@@ -144,7 +142,7 @@ namespace shader
         IZ_UINT8* pBuffer)
     {
         IZ_ASSERT(m_Allocator != IZ_NULL);
-        IZ_ASSERT(m_pDevice != IZ_NULL);
+        IZ_ASSERT(pDevice != IZ_NULL);
         IZ_ASSERT(m_pPass != IZ_NULL);
 
         // プログラム読み込み用バッファ
@@ -247,14 +245,15 @@ namespace shader
     }
 
     IZ_UINT CShaderBasic::Begin(
+        graph::CGraphicsDevice* device,
         IZ_UINT nTechIdx,
         IZ_BOOL bIsSaveState)
     {
-        IZ_ASSERT(m_pDevice != IZ_NULL);
+        IZ_ASSERT(device != IZ_NULL);
         IZ_ASSERT(nTechIdx < m_TechTbl.GetTechNum());
 
         if (bIsSaveState) {
-            VRETURN_VAL(m_pDevice->SaveRenderState(), 0);
+            VRETURN_VAL(device->SaveRenderState(), 0);
             m_bIsSavedRS = bIsSaveState;
         }
 
@@ -267,12 +266,12 @@ namespace shader
         return ret;
     }
 
-    IZ_BOOL CShaderBasic::End()
+    IZ_BOOL CShaderBasic::End(graph::CGraphicsDevice* device)
     {
-        IZ_ASSERT(m_pDevice != IZ_NULL);
+        IZ_ASSERT(device != IZ_NULL);
 
         if (m_bIsSavedRS) {
-            VRETURN(m_pDevice->LoadRenderState());
+            VRETURN(device->LoadRenderState());
             m_bIsSavedRS = IZ_FALSE;
         }
 
@@ -327,7 +326,7 @@ namespace shader
         return IZ_TRUE;
     }
 
-    IZ_BOOL CShaderBasic::CommitChanges()
+    IZ_BOOL CShaderBasic::CommitChanges(graph::CGraphicsDevice* device)
     {
         IZ_ASSERT(m_nCurPass >= 0);
 
@@ -348,26 +347,26 @@ namespace shader
 
         // Set RenderStates.
         {
-            m_pDevice->SetRenderState(graph::E_GRAPH_RS_ALPHABLENDENABLE, pDesc->state.AlphaBlendEnable);
-            m_pDevice->SetRenderState(graph::E_GRAPH_RS_BLENDMETHOD,      pDesc->state.AlphaBlendMethod);
-            m_pDevice->SetRenderState(graph::E_GRAPH_RS_ALPHATESTENABLE,  pDesc->state.AlphaTestEnable);
-            m_pDevice->SetRenderState(graph::E_GRAPH_RS_ALPHAREF,         pDesc->state.AlphaTestRef);
-            m_pDevice->SetRenderState(graph::E_GRAPH_RS_ALPHAFUNC,        pDesc->state.AlphaTestFunc);
+            device->SetRenderState(graph::E_GRAPH_RS_ALPHABLENDENABLE, pDesc->state.AlphaBlendEnable);
+            device->SetRenderState(graph::E_GRAPH_RS_BLENDMETHOD,      pDesc->state.AlphaBlendMethod);
+            device->SetRenderState(graph::E_GRAPH_RS_ALPHATESTENABLE,  pDesc->state.AlphaTestEnable);
+            device->SetRenderState(graph::E_GRAPH_RS_ALPHAREF,         pDesc->state.AlphaTestRef);
+            device->SetRenderState(graph::E_GRAPH_RS_ALPHAFUNC,        pDesc->state.AlphaTestFunc);
 
-            m_pDevice->SetRenderState(graph::E_GRAPH_RS_ZENABLE,          pDesc->state.ZEnable);
-            m_pDevice->SetRenderState(graph::E_GRAPH_RS_ZWRITEENABLE,     pDesc->state.ZWriteEnable);
-            m_pDevice->SetRenderState(graph::E_GRAPH_RS_ZFUNC,            pDesc->state.ZFunc);
+            device->SetRenderState(graph::E_GRAPH_RS_ZENABLE,          pDesc->state.ZEnable);
+            device->SetRenderState(graph::E_GRAPH_RS_ZWRITEENABLE,     pDesc->state.ZWriteEnable);
+            device->SetRenderState(graph::E_GRAPH_RS_ZFUNC,            pDesc->state.ZFunc);
         }
 
         // Set Shader.
         graph::CShaderProgram* shader = cPass.GetShaderProgram();
-        m_pDevice->SetShaderProgram(shader);
+        device->SetShaderProgram(shader);
 
         IZ_UINT nBytes = 0;
 
         // Set parameters.
         for (IZ_UINT i = 0; i < pDesc->numConst; i++) {
-            VRETURN(SetParamValue(i, cPass, shader));
+            VRETURN(SetParamValue(device, i, cPass, shader));
         }
 
         return IZ_TRUE;
@@ -482,6 +481,7 @@ namespace shader
     }
 
     IZ_BOOL CShaderBasic::SetParamValue(
+        graph::CGraphicsDevice* device,
         IZ_UINT idx,
         CShaderPass& cPass,
         graph::CShaderProgram* pShd)
@@ -516,13 +516,13 @@ namespace shader
     #if 0
                 VRETURN(
                     pShd->SetValue(
-                        m_pDevice,
+                        device,
                         handle,
                         pParam,
                         nBytes));
     #else
                 IZ_BOOL result = CShaderUtil::SetValue(
-                    m_pDevice,
+                    device,
                     pShd,
                     handle,
                     pParam,
@@ -579,11 +579,6 @@ namespace shader
 
         IZ_SHADER_HANDLE ret = _IZ_SHADER_HANDLE_PARAM(idx);
         return ret;
-    }
-
-    graph::CGraphicsDevice* CShaderBasic::GetDevice()
-    {
-        return m_pDevice;
     }
 
     IZ_BOOL CShaderBasic::GetParameterDesc(

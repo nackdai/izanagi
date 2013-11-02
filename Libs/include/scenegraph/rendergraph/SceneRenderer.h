@@ -37,6 +37,7 @@ namespace izanagi {
         /** 描画開始.
          */
         virtual IZ_UINT BeginRender(
+            izanagi::graph::CGraphicsDevice* device,
             shader::IShader* shader,
             IZ_UINT techIdx);
 
@@ -50,7 +51,7 @@ namespace izanagi {
 
         /** 描画終了.
          */
-        virtual IZ_BOOL EndRender();
+        virtual IZ_BOOL EndRender(izanagi::graph::CGraphicsDevice* device);
 
     public:
         /** シーン描画パラメータセット.
