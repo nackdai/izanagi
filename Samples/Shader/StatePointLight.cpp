@@ -131,7 +131,7 @@ void CStatePointLight::RenderScene(
 
     m_Shader->CommitChanges();
 
-    mesh->Draw();
+    mesh->Draw(device);
 }
 
 // 開始

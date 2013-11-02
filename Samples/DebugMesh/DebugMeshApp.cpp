@@ -215,8 +215,8 @@ void CDebugMeshApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
             // シェーダ設定
             m_Shader->CommitChanges();
 
-            m_Grid->Draw();
-            m_Axis->Draw();
+            m_Grid->Draw(device);
+            m_Axis->Draw(device);
 
             m_Shader->EndPass();
         }
@@ -246,7 +246,7 @@ void CDebugMeshApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
                 m_Shader->CommitChanges();
 
-                m_Mesh[MESH_TYPE_SPHERE]->Draw(isDrawTangentSpaceAxis);
+                m_Mesh[MESH_TYPE_SPHERE]->Draw(device, isDrawTangentSpaceAxis);
             }
 
             // Cube
@@ -263,7 +263,7 @@ void CDebugMeshApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
                 m_Shader->CommitChanges();
 
-                m_Mesh[MESH_TYPE_CUBE]->Draw(isDrawTangentSpaceAxis);
+                m_Mesh[MESH_TYPE_CUBE]->Draw(device, isDrawTangentSpaceAxis);
             }
 
             // Cylinder
@@ -280,7 +280,7 @@ void CDebugMeshApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
                 m_Shader->CommitChanges();
 
-                m_Mesh[MESH_TYPE_CYLINDER]->Draw(isDrawTangentSpaceAxis);
+                m_Mesh[MESH_TYPE_CYLINDER]->Draw(device, isDrawTangentSpaceAxis);
             }
 
 
@@ -298,7 +298,7 @@ void CDebugMeshApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
                 m_Shader->CommitChanges();
 
-                m_Mesh[MESH_TYPE_TORUS]->Draw(isDrawTangentSpaceAxis);
+                m_Mesh[MESH_TYPE_TORUS]->Draw(device, isDrawTangentSpaceAxis);
             }
 
             // Plane
@@ -315,7 +315,7 @@ void CDebugMeshApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
                 m_Shader->CommitChanges();
 
-                m_Mesh[MESH_TYPE_PLANE]->Draw(isDrawTangentSpaceAxis);
+                m_Mesh[MESH_TYPE_PLANE]->Draw(device, isDrawTangentSpaceAxis);
             }
 
             m_Shader->EndPass();

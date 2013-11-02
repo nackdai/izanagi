@@ -181,7 +181,7 @@ void CProjectedTextureShadowApp::RenderInternal(izanagi::graph::CGraphicsDevice*
             // シェーダ設定
             m_Shader->CommitChanges();
 
-            m_Axis->Draw();
+            m_Axis->Draw(device);
 
             m_Shader->EndPass();
         }
@@ -223,7 +223,7 @@ void CProjectedTextureShadowApp::RenderInternal(izanagi::graph::CGraphicsDevice*
 
                 m_Shader->CommitChanges();
 
-                m_Plane->Draw();
+                m_Plane->Draw(device);
             }
 
             m_Shader->EndPass();
@@ -258,7 +258,7 @@ void CProjectedTextureShadowApp::RenderInternal(izanagi::graph::CGraphicsDevice*
 
                 m_Shader->CommitChanges();
 
-                m_Torus->Draw();
+                m_Torus->Draw(device);
             }
 
             m_Shader->EndPass();
@@ -302,7 +302,7 @@ void CProjectedTextureShadowApp::RenderForShadow(izanagi::graph::CGraphicsDevice
 
                 m_Shader->CommitChanges();
 
-                m_Torus->Draw();
+                m_Torus->Draw(device);
             }
 
             m_Shader->EndPass();

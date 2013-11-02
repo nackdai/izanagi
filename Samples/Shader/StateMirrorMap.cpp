@@ -50,7 +50,7 @@ IZ_BOOL CStateMirrorMap::Render(izanagi::graph::CGraphicsDevice* device)
 
             m_Shader->CommitChanges();
 
-            m_Sphere->Draw();
+            m_Sphere->Draw(device);
         }
     }
     m_Shader->End();

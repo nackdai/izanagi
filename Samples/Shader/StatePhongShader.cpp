@@ -42,7 +42,7 @@ IZ_BOOL CStatePhongShader::Render(izanagi::graph::CGraphicsDevice* device)
 
             m_Shader->CommitChanges();
 
-            m_Axis->Draw();
+            m_Axis->Draw(device);
 
             m_Shader->EndPass();
         }
@@ -130,7 +130,7 @@ IZ_BOOL CStatePhongShader::Render(izanagi::graph::CGraphicsDevice* device)
 
             m_Shader->CommitChanges();
 
-            m_Sphere->Draw();
+            m_Sphere->Draw(device);
         }
     }
     m_Shader->End();

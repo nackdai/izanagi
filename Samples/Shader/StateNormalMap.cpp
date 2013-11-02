@@ -46,7 +46,7 @@ IZ_BOOL CStateNormalMap::Render(izanagi::graph::CGraphicsDevice* device)
 
             m_Shader->CommitChanges();
 
-            m_Axis->Draw();
+            m_Axis->Draw(device);
 
             m_Shader->EndPass();
         }
@@ -118,7 +118,7 @@ IZ_BOOL CStateNormalMap::Render(izanagi::graph::CGraphicsDevice* device)
 
             m_Shader->CommitChanges();
 
-            m_Plane->Draw();
+            m_Plane->Draw(device);
         }
     }
     m_Shader->End();

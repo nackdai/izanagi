@@ -218,10 +218,10 @@ IZ_BOOL CSphere::CreateTriangles(
     return IZ_TRUE;
 }
 
-IZ_BOOL CSphere::Draw()
+IZ_BOOL CSphere::Draw(izanagi::graph::CGraphicsDevice* device)
 {
     IZ_ASSERT(m_Mesh != IZ_NULL);
-    return m_Mesh->Draw();
+    return m_Mesh->Draw(device);
 }
 
 IZ_BOOL CSphere::GetCrossPoint(
