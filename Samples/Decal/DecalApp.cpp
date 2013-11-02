@@ -191,7 +191,7 @@ void CDecalApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
             m_Shader->CommitChanges();
 
             // 球
-            m_Sphere->Draw();
+            m_Sphere->Draw(device);
 
             // デカール
             device->SetTexture(0, m_Img->GetTexture(1));

@@ -61,23 +61,26 @@ void CGamePadApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 namespace
 {
     void DumpDInputPad(
+        izanagi::graph::CGraphicsDevice* device,
         izanagi::CDebugFont* font,
         izanagi::sys::CPad* pad)
     {
-        font->DBPrint("DirectInput ----\n");
+        font->DBPrint(device, "DirectInput ----\n");
 
         const DIJOYSTATE& raw = *(reinterpret_cast<const DIJOYSTATE*>(pad->GetRawState()));
         
-        font->DBPrint("AxisPos [%d][%d][%d]\n", raw.lX, raw.lY, raw.lZ);
-        font->DBPrint("AxisRot [%d][%d][%d]\n", raw.lRx, raw.lRy, raw.lRz);
-        font->DBPrint("Slider  [%d][%d]\n", raw.rglSlider[0], raw.rglSlider[1]);
+        font->DBPrint(device, "AxisPos [%d][%d][%d]\n", raw.lX, raw.lY, raw.lZ);
+        font->DBPrint(device, "AxisRot [%d][%d][%d]\n", raw.lRx, raw.lRy, raw.lRz);
+        font->DBPrint(device, "Slider  [%d][%d]\n", raw.rglSlider[0], raw.rglSlider[1]);
         font->DBPrint(
+            device, 
             "Pov     [%d][%d][%d][%d]\n", 
             raw.rgdwPOV[0], raw.rgdwPOV[1], raw.rgdwPOV[2], raw.rgdwPOV[3]);
 
         for (IZ_UINT i = 0; i < 32; i += 2)
         {
             font->DBPrint(
+                device, 
                 "Button  %d[%d] %d[%d]\n",
                 i, raw.rgbButtons[i],
                 i + 1, raw.rgbButtons[i + 1]);
@@ -85,26 +88,30 @@ namespace
     }
 
     void DumpXInputPad(
+        izanagi::graph::CGraphicsDevice* device,
         izanagi::CDebugFont* font,
         izanagi::sys::CPad* pad)
     {
-        font->DBPrint("XInput ----\n");
+        font->DBPrint(device, "XInput ----\n");
 
         const XINPUT_STATE& raw = *(reinterpret_cast<const XINPUT_STATE*>(pad->GetRawState()));
         
-        font->DBPrint("Button [%x]\n", raw.Gamepad.wButtons);
+        font->DBPrint(device, "Button [%x]\n", raw.Gamepad.wButtons);
 
         font->DBPrint(
+            device,
             "Trigger L[%d] R[%d]\n",
             raw.Gamepad.bLeftTrigger,
             raw.Gamepad.bRightTrigger);
 
         font->DBPrint(
+            device,
             "TumpL X[%d] Y[%d]\n",
             raw.Gamepad.sThumbLX,
             raw.Gamepad.sThumbLY);
 
         font->DBPrint(
+            device,
             "TumpR X[%d] Y[%d]\n",
             raw.Gamepad.sThumbRX,
             raw.Gamepad.sThumbRY);
@@ -119,30 +126,31 @@ void CGamePadApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
     if (device->Begin2D())
     {
-        font->Begin(0, 100);
+        font->Begin(device, 0, 100);
         {
             if (pad != IZ_NULL)
             {
-                font->DBPrint("raw ----\n");
+                font->DBPrint(device, "raw ----\n");
 
                 if (pad->GetType() == izanagi::sys::E_PAD_TYPE_X_INPUT)
                 {
-                    DumpXInputPad(font, pad);
+                    DumpXInputPad(device, font, pad);
                 }
                 else
                 {
-                    DumpDInputPad(font, pad);
+                    DumpDInputPad(device, font, pad);
                 }
 
-                font->DBPrint("\n");
-                font->DBPrint("izanagi ----\n");
+                font->DBPrint(device, "\n");
+                font->DBPrint(device, "izanagi ----\n");
 
                 const izanagi::sys::PadState& state = pad->GetCurState();
 
-                font->DBPrint("AxisX x[%f] y[%f]\n", state.axisLeft[0], state.axisLeft[1]);
-                font->DBPrint("AxisY x[%f] y[%f]\n", state.axisRight[0], state.axisRight[1]);
+                font->DBPrint(device, "AxisX x[%f] y[%f]\n", state.axisLeft[0], state.axisLeft[1]);
+                font->DBPrint(device,"AxisY x[%f] y[%f]\n", state.axisRight[0], state.axisRight[1]);
 
                 font->DBPrint(
+                    device,
                     "Trigger L[%f] R[%f]\n",
                     state.triggerLeft,
                     state.triggerRight);
@@ -160,19 +168,19 @@ void CGamePadApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
                 for (IZ_UINT i = 0; i < izanagi::sys::E_PAD_BUTTON_NUM;)
                 {
-                    font->DBPrint("%s [%d] ", names[i], state.buttons[i]);
+                    font->DBPrint(device, "%s [%d] ", names[i], state.buttons[i]);
                     i++;
 
                     if (i < izanagi::sys::E_PAD_BUTTON_NUM)
                     {
-                        font->DBPrint("%s [%d]\n", names[i], state.buttons[i]);
+                        font->DBPrint(device, "%s [%d]\n", names[i], state.buttons[i]);
                         i++;
                     }
                 }
             }
             else
             {
-                font->DBPrint("No GamePad");
+                font->DBPrint(device, "No GamePad");
             }
         }
         font->End();

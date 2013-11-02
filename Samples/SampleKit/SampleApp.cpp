@@ -203,13 +203,14 @@ void CSampleApp::Render()
 
         // 時間表示
         if (m_Device->Begin2D()) {
-            m_DebugFont->Begin();
+            m_DebugFont->Begin(m_Device);
 
             {
                 IZ_FLOAT time = GetTimer(0).GetTime();
                 IZ_FLOAT fps = 1000.0f / time;
 
                 m_DebugFont->DBPrint(
+                    m_Device,
                     "%.2f[ms] %.2f[fps]\n",
                     time, fps);
             }
@@ -218,6 +219,7 @@ void CSampleApp::Render()
                 IZ_FLOAT fps = 1000.0f / time;
 
                 m_DebugFont->DBPrint(
+                    m_Device,
                     "%.2f[ms] %.2f[fps]\n",
                     time, fps);
             }

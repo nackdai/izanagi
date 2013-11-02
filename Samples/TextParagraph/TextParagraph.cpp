@@ -104,8 +104,9 @@ void CTextParagraphApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
         izanagi::CDebugFont* debugFont = GetDebugFont();
 
-        debugFont->Begin(0, 40);
+        debugFont->Begin(m_Device, 0, 40);
         debugFont->DBPrint(
+            m_Device,
             0xffffffff,
             "width[%d] height[%d]",
             m_Width, m_Height);
