@@ -55,6 +55,8 @@ public:
     izanagi::CPostEffect* GetPostEffect() { return m_PostEffect; }
 
 private:
+    izanagi::graph::CGraphicsDevice* m_Device;
+    
     izanagi::CPostEffectSystem* m_System;
     izanagi::CPostEffect* m_PostEffect;
     izanagi::CPostEffectTextureCreator* m_TexCreator;

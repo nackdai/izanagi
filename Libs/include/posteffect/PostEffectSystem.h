@@ -39,7 +39,9 @@ namespace izanagi {
 
     public:
         // ポストエフェクトの作成
-        CPostEffect* CreatePostEffect(IInputStream* in);
+        CPostEffect* CreatePostEffect(
+            graph::CGraphicsDevice* device,
+            IInputStream* in);
 
         // ファンクタクリエイタをセット
         IZ_BOOL AddFunctorCreator(IPostEffectFunctorCreator* pFunctorCreator);
@@ -53,7 +55,7 @@ namespace izanagi {
         void InternalRelease();
 
         // 初期化
-        IZ_BOOL InitInternal();
+        IZ_BOOL InitInternal(graph::CGraphicsDevice* device);
 
         // ファンクタ作成
         CPostEffectFunctor* CreateFunctor(
@@ -75,7 +77,6 @@ namespace izanagi {
 
     private:
         IMemoryAllocator* m_Allocator;
-        graph::CGraphicsDevice* m_pDevice;
 
         // テクスチャ作成用
         CPostEffectTextureCreator* m_pTexCreator;

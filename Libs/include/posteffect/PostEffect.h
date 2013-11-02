@@ -40,19 +40,24 @@ namespace izanagi {
     private:
         IZ_UINT8* CreateFunctor(IZ_UINT8* pBuffer);
 
-        IZ_BOOL CreateTexture(CPostEffectTextureCreator* pTexCreator);
         IZ_BOOL CreateTexture(
+            graph::CGraphicsDevice* device,
+            CPostEffectTextureCreator* pTexCreator);
+        IZ_BOOL CreateTexture(
+            graph::CGraphicsDevice* device,
             CPostEffectTextureCreator* pTexCreator,
             IZ_UINT nPassIdx,
             IZ_UINT& nCreatedTexTblPos,
             const graph::CTexture* tblCreatedTex[]);
         graph::CTexture* CreateTexture(
+            graph::CGraphicsDevice* device,
             CPostEffectTextureCreator* pTexCreator,
             const S_PES_TEXTURE* pTexDesc);
 
     public:
         // ポストエフェクト実行
         IZ_BOOL Apply(
+            graph::CGraphicsDevice* device,
             graph::CTexture* pInputSceneTex,
             IZ_UINT nEnableTechIdx);
 
@@ -122,7 +127,6 @@ namespace izanagi {
     
     private:
         IMemoryAllocator* m_Allocator;
-        graph::CGraphicsDevice* m_pDevice;
 
         CPostEffectShader* m_pShader;
 

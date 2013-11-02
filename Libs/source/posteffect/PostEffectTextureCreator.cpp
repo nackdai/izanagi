@@ -50,8 +50,6 @@ CPostEffectTextureCreator* CPostEffectTextureCreator::CreatePostEffectTextureCre
         pInstance->AddRef();
         pInstance->m_Allocator = pAllocator;
 
-        SAFE_REPLACE(pInstance->m_pDevice, pDevice);
-
         pInstance->m_pTexList = reinterpret_cast<STexHolder*>(pBuf);
         pInstance->m_nTexNum = nMaxTexNum;
     }
@@ -63,7 +61,6 @@ CPostEffectTextureCreator* CPostEffectTextureCreator::CreatePostEffectTextureCre
 CPostEffectTextureCreator::CPostEffectTextureCreator()
 {
     m_Allocator = IZ_NULL;
-    m_pDevice = IZ_NULL;
 
     m_pTexList = IZ_NULL;
 
@@ -76,8 +73,6 @@ CPostEffectTextureCreator::CPostEffectTextureCreator()
 // デストラクタ
 CPostEffectTextureCreator::~CPostEffectTextureCreator()
 {
-    SAFE_RELEASE(m_pDevice);
-
     if (m_pTexList != IZ_NULL) {
         for (IZ_UINT i = 0; i < m_nTexNum; ++i) {
             SAFE_RELEASE(m_pTexList[i].tex);
@@ -101,6 +96,7 @@ void CPostEffectTextureCreator::BeginCreate()
 * テクスチャ作成
 */
 graph::CTexture* CPostEffectTextureCreator::Create(
+    graph::CGraphicsDevice* device,
     IZ_UINT16 nWidth,
     IZ_UINT16 nHeight,
     graph::E_GRAPH_PIXEL_FMT fmt,
@@ -126,13 +122,13 @@ graph::CTexture* CPostEffectTextureCreator::Create(
 
     // 無いので作る
     if (bIsRenderTarget) {
-        ret = (graph::CTexture*)m_pDevice->CreateRenderTarget(
+        ret = (graph::CTexture*)device->CreateRenderTarget(
                 nWidth,
                 nHeight,
                 fmt);
     }
     else {
-        ret = m_pDevice->CreateTexture(
+        ret = device->CreateTexture(
                 nWidth,
                 nHeight,
                 1,

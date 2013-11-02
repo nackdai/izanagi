@@ -38,21 +38,21 @@ IZ_BOOL CPostEffectFunctorDefault::ApplyCore(
     IZ_BOOL ret = IZ_TRUE;
 
     // 描画開始
-    if (pShader->BeginRender(this, GetTechIdx(), GetPassIdx())) {
+    if (pShader->BeginRender(pDevice, this, GetTechIdx(), GetPassIdx())) {
         // テクスチャオフセットをセット
         ret = SetTextureOffset(pShader);
         VGOTO(ret, __EXIT__);
         
         // コミットチェンジ
-        ret = pShader->CommitChanges();
+        ret = pShader->CommitChanges(pDevice);
         VGOTO(ret, __EXIT__);
 
         // 描画
-        ret = pShader->Render(IZ_NULL, IZ_NULL);
+        ret = pShader->Render(pDevice, IZ_NULL, IZ_NULL);
         VGOTO(ret, __EXIT__);
 
         // 描画終了
-        ret = pShader->EndRender();
+        ret = pShader->EndRender(pDevice);
         VGOTO(ret, __EXIT__);
     }
 
