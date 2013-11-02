@@ -196,7 +196,7 @@ void CDebugMeshApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     izanagi::math::SMatrix::SetUnit(mtxL2W);
 
     // テクスチャなし
-    m_Shader->Begin(1, IZ_FALSE);
+    m_Shader->Begin(device, 1, IZ_FALSE);
     {
         if (m_Shader->BeginPass(0)) {
             // パラメータ設定
@@ -213,7 +213,7 @@ void CDebugMeshApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
                 sizeof(camera.GetParam().mtxW2C));
 
             // シェーダ設定
-            m_Shader->CommitChanges();
+            m_Shader->CommitChanges(device);
 
             m_Grid->Draw(device);
             m_Axis->Draw(device);
@@ -221,12 +221,12 @@ void CDebugMeshApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
             m_Shader->EndPass();
         }
     }
-    m_Shader->End();
+    m_Shader->End(device);
 
     device->SetTexture(0, m_Img->GetTexture(0));
 
     // テクスチャあり
-    m_Shader->Begin(0, IZ_FALSE);
+    m_Shader->Begin(device, 0, IZ_FALSE);
     {
         if (m_Shader->BeginPass(0)) {
             // パラメータ設定
@@ -244,7 +244,7 @@ void CDebugMeshApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
                     (void*)&mtxL2W,
                     sizeof(izanagi::math::SMatrix));
 
-                m_Shader->CommitChanges();
+                m_Shader->CommitChanges(device);
 
                 m_Mesh[MESH_TYPE_SPHERE]->Draw(device, isDrawTangentSpaceAxis);
             }
@@ -261,7 +261,7 @@ void CDebugMeshApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
                     (void*)&mtxL2W,
                     sizeof(izanagi::math::SMatrix));
 
-                m_Shader->CommitChanges();
+                m_Shader->CommitChanges(device);
 
                 m_Mesh[MESH_TYPE_CUBE]->Draw(device, isDrawTangentSpaceAxis);
             }
@@ -278,7 +278,7 @@ void CDebugMeshApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
                     (void*)&mtxL2W,
                     sizeof(izanagi::math::SMatrix));
 
-                m_Shader->CommitChanges();
+                m_Shader->CommitChanges(device);
 
                 m_Mesh[MESH_TYPE_CYLINDER]->Draw(device, isDrawTangentSpaceAxis);
             }
@@ -296,7 +296,7 @@ void CDebugMeshApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
                     (void*)&mtxL2W,
                     sizeof(izanagi::math::SMatrix));
 
-                m_Shader->CommitChanges();
+                m_Shader->CommitChanges(device);
 
                 m_Mesh[MESH_TYPE_TORUS]->Draw(device, isDrawTangentSpaceAxis);
             }
@@ -313,7 +313,7 @@ void CDebugMeshApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
                     (void*)&mtxL2W,
                     sizeof(izanagi::math::SMatrix));
 
-                m_Shader->CommitChanges();
+                m_Shader->CommitChanges(device);
 
                 m_Mesh[MESH_TYPE_PLANE]->Draw(device, isDrawTangentSpaceAxis);
             }
@@ -321,5 +321,5 @@ void CDebugMeshApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
             m_Shader->EndPass();
         }
     }
-    m_Shader->End();
+    m_Shader->End(device);
 }

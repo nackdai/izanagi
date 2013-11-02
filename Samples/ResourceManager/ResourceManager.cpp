@@ -71,7 +71,7 @@ void CSampleMdlRenderHandler::SetJointMatrix(
     m_nCnt++;
 }
 
-void CSampleMdlRenderHandler::CommitChanges()
+void CSampleMdlRenderHandler::CommitChanges(izanagi::graph::CGraphicsDevice* device)
 {
     if (m_Handle == 0) {
         m_Handle = m_pShader->GetParameterByName("vJointMatrix");
@@ -303,7 +303,7 @@ void CResourceManagerApp::RenderInternal(izanagi::graph::CGraphicsDevice* device
 
     izanagi::sample::CSampleCamera& camera = GetCamera();
 
-    IZ_UINT passCnt = shd->Begin(0, IZ_FALSE);
+    IZ_UINT passCnt = shd->Begin(device, 0, IZ_FALSE);
     {
         IZ_ASSERT(passCnt >= 1);
         if (shd->BeginPass(0)) {
@@ -319,7 +319,7 @@ void CResourceManagerApp::RenderInternal(izanagi::graph::CGraphicsDevice* device
             // テクスチャセット
             device->SetTexture(0, img->GetTexture(0));
 
-            shd->CommitChanges();
+            shd->CommitChanges(device);
 
             // モデル描画
             mdl->Render(device);
@@ -327,5 +327,5 @@ void CResourceManagerApp::RenderInternal(izanagi::graph::CGraphicsDevice* device
             shd->EndPass();
         }
     }
-    shd->End();
+    shd->End(device);
 }

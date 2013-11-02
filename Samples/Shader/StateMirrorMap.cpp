@@ -26,7 +26,7 @@ IZ_BOOL CStateMirrorMap::Render(izanagi::graph::CGraphicsDevice* device)
 
     device->SetTexture(0, m_Img->GetTexture(0));
 
-    m_Shader->Begin(0, IZ_FALSE);
+    m_Shader->Begin(device, 0, IZ_FALSE);
     {
         if (m_Shader->BeginPass(0)) {
             // パラメータ設定
@@ -48,12 +48,12 @@ IZ_BOOL CStateMirrorMap::Render(izanagi::graph::CGraphicsDevice* device)
                 (void*)&m_Camera.mtxW2V,
                 sizeof(m_Camera.mtxW2V));
 
-            m_Shader->CommitChanges();
+            m_Shader->CommitChanges(device);
 
             m_Sphere->Draw(device);
         }
     }
-    m_Shader->End();
+    m_Shader->End(device);
 
     RenderName(device, "MirrorMap");
 

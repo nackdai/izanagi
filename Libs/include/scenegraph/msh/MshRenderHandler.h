@@ -40,7 +40,7 @@ namespace izanagi {
                 IZ_UINT nIdx,
                 const math::SMatrix& mtx));
 
-        PURE_VIRTUAL(void CommitChanges());
+        PURE_VIRTUAL(void CommitChanges(graph::CGraphicsDevice* device));
 
     protected:
         IMemoryAllocator* m_Allocator;

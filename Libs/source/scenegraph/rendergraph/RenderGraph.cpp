@@ -192,7 +192,7 @@ IZ_BOOL CRenderGraph::RenderInternal(
         // シーン描画開始
         // TODO
         // テクニック指定
-        IZ_UINT passNum = sceneRenderer->BeginRender(shader, 0);
+        IZ_UINT passNum = sceneRenderer->BeginRender(device, shader, 0);
 
         // シェーダが切り替わるときに一連のシェーダの開始位置に戻ることがあるので
         // それを覚えておく
@@ -218,7 +218,7 @@ IZ_BOOL CRenderGraph::RenderInternal(
 
                     if (passCnt == passNum - 1) {
                         // 全パス描画したので、このシェーダでの描画は終了
-                        VRETURN(sceneRenderer->EndRender());
+                        VRETURN(sceneRenderer->EndRender(device));
                         break;
                     }
 

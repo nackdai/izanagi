@@ -28,6 +28,7 @@ namespace izanagi {
          */
         PURE_VIRTUAL(
             IZ_UINT BeginRender(
+                izanagi::graph::CGraphicsDevice* device,
                 shader::IShader* shader,
                 IZ_UINT techIdx));
 
@@ -42,7 +43,7 @@ namespace izanagi {
 
         /** 描画終了.
          */
-        PURE_VIRTUAL(IZ_BOOL EndRender());
+        PURE_VIRTUAL(IZ_BOOL EndRender(izanagi::graph::CGraphicsDevice* device));
     };
 }   // namespace izanagi
 

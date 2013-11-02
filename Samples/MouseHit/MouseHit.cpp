@@ -175,7 +175,7 @@ void CMouseHit::RenderInternal(izanagi::graph::CGraphicsDevice* device)
         { 1.0f, 1.0f, 1.0f, 0.5f },
     };
 
-    m_Shader->Begin(0, IZ_FALSE);
+    m_Shader->Begin(device, 0, IZ_FALSE);
 
     for (IZ_UINT i = 0; i < COUNTOF(m_Rectangles); i++)
     {
@@ -202,7 +202,7 @@ void CMouseHit::RenderInternal(izanagi::graph::CGraphicsDevice* device)
                 sizeof(clr));
 
             // シェーダ設定
-            m_Shader->CommitChanges();
+            m_Shader->CommitChanges(device);
 
             m_Rectangles[i].mesh->Draw(device);
 
@@ -210,7 +210,7 @@ void CMouseHit::RenderInternal(izanagi::graph::CGraphicsDevice* device)
         }
     }
 
-    m_Shader->End();
+    m_Shader->End(device);
 }
 
 IZ_BOOL CMouseHit::OnKeyDown(IZ_UINT nChar)

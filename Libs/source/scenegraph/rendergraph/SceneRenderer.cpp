@@ -45,6 +45,7 @@ CSceneRenderer::~CSceneRenderer()
 
 // 描画開始
 IZ_UINT CSceneRenderer::BeginRender(
+    izanagi::graph::CGraphicsDevice* device,
     izanagi::shader::IShader* shader,
     IZ_UINT techIdx)
 {
@@ -57,7 +58,7 @@ IZ_UINT CSceneRenderer::BeginRender(
         // 異なるシェーダを使用する場合
         SAFE_REPLACE(m_pCurShader, shader);
 
-        m_nCurShaderPassNum = shader->Begin(techIdx, IZ_FALSE);
+        m_nCurShaderPassNum = shader->Begin(device, techIdx, IZ_FALSE);
     }
 
     // これから使用するシェーダのパス数を返す
@@ -107,7 +108,7 @@ IZ_BOOL CSceneRenderer::IterRender(
         if (isPreparedMtrl) {
             // マテリアルに応じた変更が発生したので
             // シェーダのCommitChangeを行う
-            VRETURN(m_pCurShader->CommitChanges());
+            VRETURN(m_pCurShader->CommitChanges(device));
         }
 
         // 要素の描画
@@ -120,11 +121,11 @@ IZ_BOOL CSceneRenderer::IterRender(
     return IZ_TRUE;
 }
 
-IZ_BOOL CSceneRenderer::EndRender()
+IZ_BOOL CSceneRenderer::EndRender(izanagi::graph::CGraphicsDevice* device)
 {
     IZ_ASSERT(m_pCurShader != IZ_NULL);
 
-    VRETURN(m_pCurShader->End());
+    VRETURN(m_pCurShader->End(device));
 
     SAFE_RELEASE(m_pCurShader);
     m_nCurShaderPassNum = 0;

@@ -42,7 +42,6 @@ namespace shader
             {
                 pInstance->AddRef();
                 pInstance->m_Allocator = pAllocator;
-                SAFE_REPLACE(pInstance->m_pDevice, pDevice);
 
                 if (!pInstance->Init(pDevice, pIn)) {
                     SAFE_RELEASE(pInstance);
@@ -79,14 +78,15 @@ namespace shader
         IZ_BOOL SetName(IZ_PCSTR name);
 
         virtual IZ_UINT Begin(
+            graph::CGraphicsDevice* device,
             IZ_UINT nTechIdx,
             IZ_BOOL bIsSaveState);
-        virtual IZ_BOOL End();
+        virtual IZ_BOOL End(graph::CGraphicsDevice* device);
 
         virtual IZ_BOOL BeginPass(IZ_UINT nPassIdx);
         virtual IZ_BOOL EndPass();
 
-        virtual IZ_BOOL CommitChanges();
+        virtual IZ_BOOL CommitChanges(graph::CGraphicsDevice* device);
 
         virtual IZ_UINT GetTechNum() const;
 
@@ -142,10 +142,9 @@ namespace shader
             IZ_PCSTR name,
             graph::CBaseTexture* tex);
 
-        graph::CGraphicsDevice* GetDevice();
-
     private:
         IZ_BOOL SetParamValue(
+            graph::CGraphicsDevice* device,
             IZ_UINT idx,
             CShaderPass& cPass,
             graph::CShaderProgram* pShd);

@@ -176,7 +176,7 @@ void CInstancingApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     device->SetTexture(0, m_Img->GetTexture(0));
 
     // テクスチャあり
-    m_Shader->Begin(0, IZ_FALSE);
+    m_Shader->Begin(device, 0, IZ_FALSE);
     {
         if (m_Shader->BeginPass(0)) {
             // パラメータ設定
@@ -186,7 +186,7 @@ void CInstancingApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
                 (void*)&camera.GetParam().mtxW2C,
                 sizeof(izanagi::math::SMatrix));
 
-            m_Shader->CommitChanges();
+            m_Shader->CommitChanges(device);
 
             device->SetIndexBuffer(m_Mesh->GetIB());
 
@@ -220,5 +220,5 @@ void CInstancingApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
             m_Shader->EndPass();
         }
     }
-    m_Shader->End();
+    m_Shader->End(device);
 }
