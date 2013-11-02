@@ -33,7 +33,7 @@ namespace izanagi {
         };
 
     protected:
-        IZ_BOOL Init();
+        IZ_BOOL Init(graph::CGraphicsDevice* device);
 
         IZ_BOOL SetVtx(
             IZ_COLOR nColor,

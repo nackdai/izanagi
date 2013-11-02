@@ -87,7 +87,7 @@ namespace {
 
 // 初期化
 IZ_BOOL CDebugMeshCylinder::Init(
-    graph::CGraphicsDevice* pDevice,
+    graph::CGraphicsDevice* device,
     IZ_UINT flag,
     IZ_UINT nSlices,
     IZ_UINT nStacks)
@@ -105,15 +105,17 @@ IZ_BOOL CDebugMeshCylinder::Init(
 
     VRETURN(
         CreateVB(
+            device,
             flag, 
             nVtxNum));
 
     VRETURN(
         CreateIB(
+            device,
             nIdxNum, 
             fmt));
 
-    VRETURN(CreateVD(flag));
+    VRETURN(CreateVD(device, flag));
 
     m_PrimType = graph::E_GRAPH_PRIM_TYPE_TRIANGLELIST;
     m_nPrimCnt = nIdxNum / 3;
@@ -125,6 +127,7 @@ IZ_BOOL CDebugMeshCylinder::Init(
 
     VRETURN(
         CreateDebugAxis(
+            device,
             nVtxNum,
             flag));
 

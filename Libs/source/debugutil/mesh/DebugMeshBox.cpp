@@ -136,7 +136,7 @@ __EXIT__:
 
 // 初期化
 IZ_BOOL CDebugMeshBox::Init(
-    graph::CGraphicsDevice* pDevice,
+    graph::CGraphicsDevice* device,
     IZ_UINT flag)
 {
     IZ_UINT nVtxNum = PRIM_NUM * VTX_NUM_PER_FACE;
@@ -144,15 +144,17 @@ IZ_BOOL CDebugMeshBox::Init(
 
     VRETURN(
         CreateVB(
+            device,
             flag, 
             nVtxNum));
 
     VRETURN(
         CreateIB(
+            device,
             nIdxNum, 
             graph::E_GRAPH_INDEX_BUFFER_FMT_INDEX32));
 
-    VRETURN(CreateVD(flag));
+    VRETURN(CreateVD(device, flag));
 
     m_PrimType = graph::E_GRAPH_PRIM_TYPE_TRIANGLELIST;
     m_nPrimCnt = nIdxNum / 3;
@@ -164,6 +166,7 @@ IZ_BOOL CDebugMeshBox::Init(
 
     VRETURN(
         CreateDebugAxis(
+            device,
             nVtxNum,
             flag));
 
