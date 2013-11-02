@@ -37,6 +37,7 @@ namespace izanagi {
         /** 描画.
          */
         IZ_BOOL Render(
+            graph::CGraphicsDevice* device,
             IZ_UINT level,
             CSkeletonInstance* pSkl,
             IMshRenderHandler* pRenderHandler);

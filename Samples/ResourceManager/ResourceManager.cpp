@@ -322,7 +322,7 @@ void CResourceManagerApp::RenderInternal(izanagi::graph::CGraphicsDevice* device
             shd->CommitChanges();
 
             // モデル描画
-            mdl->Render();
+            mdl->Render(device);
 
             shd->EndPass();
         }

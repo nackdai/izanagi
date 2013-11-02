@@ -45,8 +45,6 @@ CMesh* CMesh::CreateMesh(
 
         memcpy(&pInstance->m_Header, &sHeader, sizeof(sHeader));
 
-        SAFE_REPLACE(pInstance->m_pDevice, pDevice);
-
         pInstance->m_pMeshGroup = reinterpret_cast<CMeshGroup**>(pBuf);
         pBuf += sizeof(CMeshGroup*) * sHeader.numMeshGroup;
 
@@ -74,7 +72,6 @@ __EXIT__:
 CMesh::CMesh()
 {
     m_Allocator = IZ_NULL;
-    m_pDevice = IZ_NULL;
 
     FILL_ZERO(&m_Header, sizeof(m_Header));
 
@@ -86,18 +83,17 @@ CMesh::~CMesh()
     for (IZ_UINT i = 0; i < m_Header.numMeshGroup; ++i) {
         SAFE_RELEASE(m_pMeshGroup[i]);
     }
-
-    SAFE_RELEASE(m_pDevice);
 }
 
 IZ_BOOL CMesh::Render(
+    graph::CGraphicsDevice* device,
     CSkeletonInstance* pSkl,
     IMshRenderHandler* pRenderHandler)
 {
     // TODO
 
     IZ_BOOL ret = m_pMeshGroup[0]->Render(
-                    m_pDevice,
+                    device,
                     pSkl,
                     pRenderHandler);
     return ret;

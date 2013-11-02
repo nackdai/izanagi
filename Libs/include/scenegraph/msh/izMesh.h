@@ -34,6 +34,7 @@ namespace izanagi {
         /** メッシュを描画.
          */
         IZ_BOOL Render(
+            graph::CGraphicsDevice* device,
             CSkeletonInstance* pSkl,
             IMshRenderHandler* pRenderHandler);
 
@@ -48,11 +49,8 @@ namespace izanagi {
          */
         IZ_UINT GetMeshGroupNum() const { return m_Header.numMeshGroup; }
 
-        graph::CGraphicsDevice* GetGraphicsDevice() { return m_pDevice; }
-
     private:
         IMemoryAllocator* m_Allocator;
-        graph::CGraphicsDevice* m_pDevice;
 
         S_MSH_HEADER m_Header;
 

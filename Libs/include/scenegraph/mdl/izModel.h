@@ -68,7 +68,7 @@ namespace izanagi {
     public:
         /** 描画.
          */
-        IZ_BOOL Render();
+        IZ_BOOL Render(graph::CGraphicsDevice* device);
 
         /** 適用されたモーションに基づき更新.
          */
