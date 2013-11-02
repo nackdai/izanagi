@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<textures>
+  <plane
+      path="../../Media/futta0847-1920x1080.jpg"
+      fmt="rgba8"/>
+  <plane
+      path="../../Media/waterdrop.png"
+      fmt="rgba8"/>
+</textures>
