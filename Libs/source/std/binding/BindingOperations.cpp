@@ -1,5 +1,5 @@
-﻿#include "std/dependency_property/BindingOperations.h"
-#include "std/dependency_property/BindingExpression.h"
+﻿#include "std/binding/BindingOperations.h"
+#include "std/binding/BindingExpression.h"
 
 namespace izanagi
 {

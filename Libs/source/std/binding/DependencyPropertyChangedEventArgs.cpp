@@ -1,4 +1,4 @@
-#include "std/dependency_property/DependencyPropertyChangedEventArgs.h"
+#include "std/binding/DependencyPropertyChangedEventArgs.h"
 
 namespace izanagi {
     DependencyPropertyChangedEventArgs::DependencyPropertyChangedEventArgs(
