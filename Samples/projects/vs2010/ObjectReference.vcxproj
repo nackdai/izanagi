@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{4CA4E984-A7D0-48D0-91AB-EA986438F6C2}</ProjectGuid>
-    <RootNamespace>Binding</RootNamespace>
+    <ProjectGuid>{65CF6BE3-EE87-46bd-8D5F-781AD4B965F4}</ProjectGuid>
+    <RootNamespace>ObjectReference</RootNamespace>
     <Keyword>MFCProj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -174,16 +174,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Binding\main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\Binding\ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\..\Samples\projects\vs2005\SampleKit.vcxproj">
       <Project>{dd5d28b8-93f1-4f26-8ad1-dd224ccb9a4f}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\ObjectReference\ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\ObjectReference\main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
