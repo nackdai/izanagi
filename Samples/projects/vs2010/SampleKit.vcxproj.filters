@@ -27,6 +27,9 @@
     <ClInclude Include="..\..\SampleKit\SampleWindowProc.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\SampleKit\SampleModelRenderHandler.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\SampleKit\SampleApp.cpp">
@@ -42,6 +45,9 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\SampleKit\SampleWindowProc.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SampleKit\SampleModelRenderHandler.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>

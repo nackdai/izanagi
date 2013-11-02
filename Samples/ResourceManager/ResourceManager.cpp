@@ -1,94 +1,6 @@
 #include "ResourceManager.h"
 
-/////////////////////////////////////////////////
-
-// ジョイントマトリクスを描画時に設定するためのハンドラ
-class CSampleMdlRenderHandler : public izanagi::IMshRenderHandler {
-    // NOTE
-    // IMshRenderHandlerが持つインスタンス作成用メソッドに対して
-    // コンストラクタを見せるために必要
-    friend class izanagi::IMshRenderHandler;
-
-private:
-    CSampleMdlRenderHandler()
-    {
-        m_pShader = IZ_NULL;
-    }
-
-    ~CSampleMdlRenderHandler()
-    {
-        SAFE_RELEASE(m_pShader);
-    }
-
-public:
-    virtual void BeginRenderMesh();
-    virtual void EndRenderMesh();
-
-    virtual void SetJointMatrix(
-        IZ_UINT nIdx,
-        const izanagi::math::SMatrix& mtx);
-
-    virtual void CommitChanges();
-
-public:
-    void SetShader(izanagi::shader::IShader* pShader)
-    {
-        SAFE_REPLACE(m_pShader, pShader);
-    }
-
-    izanagi::shader::IShader* GetShader() { return m_pShader; }
-
-private:
-    izanagi::shader::IShader* m_pShader;
-
-    IZ_UINT m_nCnt;
-    izanagi::math::SMatrix m_Mtx[48];
-
-    izanagi::shader::IZ_SHADER_HANDLE m_Handle;
-};
-
-void CSampleMdlRenderHandler::BeginRenderMesh()
-{
-    m_nCnt = 0;
-
-    izanagi::math::SMatrix::SetUnit(m_Mtx[0]);
-    izanagi::math::SMatrix::SetUnit(m_Mtx[1]);
-    izanagi::math::SMatrix::SetUnit(m_Mtx[2]);
-    izanagi::math::SMatrix::SetUnit(m_Mtx[3]);
-
-    m_Handle = 0;
-}
-
-void CSampleMdlRenderHandler::EndRenderMesh()
-{
-}
-
-void CSampleMdlRenderHandler::SetJointMatrix(
-    IZ_UINT nIdx,
-    const izanagi::math::SMatrix& mtx)
-{
-    izanagi::math::SMatrix::Copy(m_Mtx[m_nCnt], mtx);
-    m_nCnt++;
-}
-
-void CSampleMdlRenderHandler::CommitChanges(izanagi::graph::CGraphicsDevice* device)
-{
-    if (m_Handle == 0) {
-        m_Handle = m_pShader->GetParameterByName("vJointMatrix");
-        IZ_ASSERT(m_Handle > 0);
-    }
-
-    m_pShader->SetParamValue(
-        m_Handle,
-        m_Mtx,
-        sizeof(izanagi::math::SMatrix) * m_nCnt);
-
-    m_pShader->CommitChanges();
-}
-
-static CSampleMdlRenderHandler* s_MdlRenderHandler = IZ_NULL;
-
-/////////////////////////////////////////////////
+static izanagi::sample::CSampleMdlRenderHandler* s_MdlRenderHandler = IZ_NULL;
 
 CResourceManagerApp::CResourceManagerApp()
 {
@@ -173,7 +85,7 @@ IZ_BOOL CResourceManagerApp::InitInternal(
         VGOTO(result = (shd != IZ_NULL), __EXIT__);
 
         // ジョイントマトリクスを描画時に設定するためのハンドラ
-        s_MdlRenderHandler = izanagi::IMshRenderHandler::CreateMshRenderHandler<CSampleMdlRenderHandler>(allocator);
+        s_MdlRenderHandler = izanagi::IMshRenderHandler::CreateMshRenderHandler<izanagi::sample::CSampleMdlRenderHandler>(allocator);
         s_MdlRenderHandler->SetShader(shd);
         VGOTO(result = (s_MdlRenderHandler != IZ_NULL), __EXIT__);
 

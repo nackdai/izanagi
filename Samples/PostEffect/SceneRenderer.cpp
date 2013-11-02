@@ -246,7 +246,7 @@ void CSceneRenderer::RenderEnvBox(
     device->SetTexture(0, m_EnvImg->GetTexture(2));
 
     // テクスチャあり
-    m_EnvShader->Begin(0, IZ_FALSE);
+    m_EnvShader->Begin(device, 0, IZ_FALSE);
     {
         if (m_EnvShader->BeginPass(0)) {
             // パラメータ設定
@@ -262,14 +262,14 @@ void CSceneRenderer::RenderEnvBox(
                 (void*)&m_L2W,
                 sizeof(m_L2W));
 
-            m_EnvShader->CommitChanges();
+            m_EnvShader->CommitChanges(device);
 
             m_EnvBox->Render(device);
 
             m_EnvShader->EndPass();
         }
     }
-    m_EnvShader->End();
+    m_EnvShader->End(device);
 }
 
 void CSceneRenderer::Release()

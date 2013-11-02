@@ -6,5 +6,6 @@
 #include "SampleMain.h"
 #include "SampleWindowProc.h"
 #include "SampleEnvBox.h"
+#include "SampleModelRenderHandler.h"
 
 #endif    // #if !defined(__IZ_SAMPLE_KIT_H__)

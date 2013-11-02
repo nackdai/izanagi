@@ -171,6 +171,7 @@ copy $(ProjectDir)$(ProjectName)\$(Configuration)\$(ProjectName).lib $(ProjectDi
     <ClInclude Include="..\..\SampleKit\SampleCamera.h" />
     <ClInclude Include="..\..\SampleKit\SampleEnvBox.h" />
     <ClInclude Include="..\..\SampleKit\SampleMain.h" />
+    <ClInclude Include="..\..\SampleKit\SampleModelRenderHandler.h" />
     <ClInclude Include="..\..\SampleKit\SampleWindowProc.h" />
   </ItemGroup>
   <ItemGroup>
@@ -178,6 +179,7 @@ copy $(ProjectDir)$(ProjectName)\$(Configuration)\$(ProjectName).lib $(ProjectDi
     <ClCompile Include="..\..\SampleKit\SampleCamera.cpp" />
     <ClCompile Include="..\..\SampleKit\SampleEnvBox.cpp" />
     <ClCompile Include="..\..\SampleKit\SampleMain.cpp" />
+    <ClCompile Include="..\..\SampleKit\SampleModelRenderHandler.cpp" />
     <ClCompile Include="..\..\SampleKit\SampleWindowProc.cpp" />
   </ItemGroup>
   <ItemGroup>
