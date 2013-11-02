@@ -35,30 +35,38 @@ namespace izanagi {
 		void InternalRelease();
 
 	public:
-		void Begin();
-		void Begin(IZ_INT left, IZ_INT top);
+		void Begin(graph::CGraphicsDevice* device);
+		void Begin(
+            graph::CGraphicsDevice* device,
+            IZ_INT left, IZ_INT top);
 
 		void End();
 
 		void DBPrint(
+            graph::CGraphicsDevice* device,
 			const IZ_CHAR* str, ...);
 		void DBPrint(
+            graph::CGraphicsDevice* device,
 			IZ_DWORD color,
 			const IZ_CHAR* str, ...);
 		void DBPrint(
+            graph::CGraphicsDevice* device,
 			IZ_INT left, IZ_INT top,
 			const IZ_CHAR* str, ...);
 		void DBPrint(
+            graph::CGraphicsDevice* device,
 			IZ_INT left, IZ_INT top,
 			IZ_DWORD color,
 			const IZ_CHAR* str, ...);
 
 	protected:
 		// テクスチャ作成
-		IZ_BOOL CreateTexture();
+		IZ_BOOL CreateTexture(graph::CGraphicsDevice* device);
 
 		// 文字描画
-		void DrawFont(const IZ_CHAR* str);
+		void DrawFont(
+            graph::CGraphicsDevice* device,
+            const IZ_CHAR* str);
 
 	protected:
 		// 切り出し矩形をセットする
@@ -88,7 +96,6 @@ namespace izanagi {
 
 	protected:
 		IMemoryAllocator* m_Allocator;
-		graph::CGraphicsDevice* m_pDevice;
 
 		graph::CTexture* m_pFontTex;
 

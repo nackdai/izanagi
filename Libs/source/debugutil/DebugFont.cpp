@@ -34,10 +34,9 @@ CDebugFont* CDebugFont::CreateDebugFont(
         pInstance->AddRef();
 
         pInstance->m_Allocator = pAllocator;
-        SAFE_REPLACE(pInstance->m_pDevice, pDevice);
 
         // テクスチャ作成
-        result = pInstance->CreateTexture();
+        result = pInstance->CreateTexture(pDevice);
         VGOTO(result, __EXIT__);
     }
 
@@ -54,7 +53,6 @@ __EXIT__:
 CDebugFont::CDebugFont()
 {
     m_Allocator = IZ_NULL;
-    m_pDevice = IZ_NULL;
 
     m_pFontTex = IZ_NULL;
 
@@ -71,7 +69,6 @@ CDebugFont::CDebugFont()
 CDebugFont::~CDebugFont()
 {
     SAFE_RELEASE(m_pFontTex);
-    SAFE_RELEASE(m_pDevice);
 }
 
 // 解放
@@ -87,17 +84,19 @@ void CDebugFont::InternalRelease()
 /**
 * 描画開始
 */
-void CDebugFont::Begin()
+void CDebugFont::Begin(graph::CGraphicsDevice* device)
 {
-    Begin(0, 0);
+    Begin(device, 0, 0);
 }
 
-void CDebugFont::Begin(IZ_INT left, IZ_INT top)
+void CDebugFont::Begin(
+    graph::CGraphicsDevice* device,
+    IZ_INT left, IZ_INT top)
 {
-    IZ_ASSERT(m_pDevice != IZ_NULL);
+    IZ_ASSERT(device != IZ_NULL);
     IZ_ASSERT(m_pFontTex != IZ_NULL);
 
-    m_pDevice->SetTexture(0, m_pFontTex);
+    device->SetTexture(0, m_pFontTex);
     m_bIsBegin = IZ_TRUE;
 
     m_nLeft = left;
@@ -118,13 +117,13 @@ void CDebugFont::End()
 /////////////////////////////////////////////////
 
 // テクスチャ作成
-IZ_BOOL CDebugFont::CreateTexture()
+IZ_BOOL CDebugFont::CreateTexture(graph::CGraphicsDevice* device)
 {
-    IZ_ASSERT(m_pDevice != IZ_NULL);
+    IZ_ASSERT(device != IZ_NULL);
     IZ_ASSERT(m_pFontTex == IZ_NULL);
 
     // テクスチャ本体作成
-    m_pFontTex = m_pDevice->CreateTexture(
+    m_pFontTex = device->CreateTexture(
                     IMAGE_WIDTH,
                     IMAGE_HEIGHT,
                     0xffffffff,
@@ -151,13 +150,15 @@ IZ_BOOL CDebugFont::CreateTexture()
 }
 
 // 文字描画
-void CDebugFont::DrawFont(const IZ_CHAR* str)
+void CDebugFont::DrawFont(
+    graph::CGraphicsDevice* device,
+    const IZ_CHAR* str)
 {
-    IZ_ASSERT(m_pDevice != NULL);
+    IZ_ASSERT(device != NULL);
     IZ_ASSERT(m_pFontTex != NULL);
     IZ_ASSERT(m_bIsBegin);
 
-    m_pDevice->SetTexture(0, m_pFontTex);
+    device->SetTexture(0, m_pFontTex);
 
     CIntRect rcSrc;
 
@@ -185,7 +186,7 @@ void CDebugFont::DrawFont(const IZ_CHAR* str)
             SetTexRect(ch, rcSrc);
 
             // 描画
-            m_pDevice->Draw2DSpriteEx(
+            device->Draw2DSpriteEx(
                 rcSrc, rcDst,
                 m_nColor);
 
@@ -203,6 +204,7 @@ static IZ_CHAR BUF[BUF_SIZE];
 * 描画
 */
 void CDebugFont::DBPrint(
+    graph::CGraphicsDevice* device,
     const IZ_CHAR* str, ...)
 {
     FILL_ZERO(BUF, sizeof(BUF));
@@ -215,13 +217,14 @@ void CDebugFont::DBPrint(
 
     va_end(ap);
 
-    DrawFont(BUF);
+    DrawFont(device, BUF);
 }
 
 /**
 * 描画
 */
 void CDebugFont::DBPrint(
+    graph::CGraphicsDevice* device,
     IZ_DWORD color,
     const IZ_CHAR* str, ...)
 {
@@ -241,7 +244,7 @@ void CDebugFont::DBPrint(
 #endif
 
     SetFontColor(color);
-    DrawFont(BUF);
+    DrawFont(device, BUF);
 
 #if 0
     // 元に戻す
@@ -253,6 +256,7 @@ void CDebugFont::DBPrint(
 * 描画
 */
 void CDebugFont::DBPrint(
+    graph::CGraphicsDevice* device,
     IZ_INT left, IZ_INT top,
     const IZ_CHAR* str, ...)
 {
@@ -273,7 +277,7 @@ void CDebugFont::DBPrint(
 #endif
 
     SetFontPos(left, top);
-    DrawFont(BUF);
+    DrawFont(device, BUF);
 
 #if 0
     // 元に戻す
@@ -285,6 +289,7 @@ void CDebugFont::DBPrint(
 * 描画
 */
 void CDebugFont::DBPrint(
+    graph::CGraphicsDevice* device,
     IZ_INT left, IZ_INT top,
     IZ_DWORD color,
     const IZ_CHAR* str, ...)
@@ -308,7 +313,7 @@ void CDebugFont::DBPrint(
 
     SetFontPos(left, top);
     SetFontColor(color);
-    DrawFont(BUF);
+    DrawFont(device, BUF);
 
 #if 0
     // 元に戻す
