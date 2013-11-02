@@ -204,7 +204,7 @@ void CMouseHit::RenderInternal(izanagi::graph::CGraphicsDevice* device)
             // シェーダ設定
             m_Shader->CommitChanges();
 
-            m_Rectangles[i].mesh->Draw();
+            m_Rectangles[i].mesh->Draw(device);
 
             m_Shader->EndPass();
         }

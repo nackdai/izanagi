@@ -141,10 +141,10 @@ IZ_BOOL CCube::CreateTriangles(
     return IZ_TRUE;
 }
 
-IZ_BOOL CCube::Draw()
+IZ_BOOL CCube::Draw(izanagi::graph::CGraphicsDevice* device)
 {
     IZ_ASSERT(m_Mesh != IZ_NULL);
-    return m_Mesh->Draw();
+    return m_Mesh->Draw(device);
 }
 
 IZ_BOOL CCube::GetCrossPoint(

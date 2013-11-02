@@ -31,7 +31,7 @@ private:
         IZ_FLOAT size);
 
 public:
-    IZ_BOOL Draw();
+    IZ_BOOL Draw(izanagi::graph::CGraphicsDevice* device);
 
     IZ_BOOL GetCrossPoint(
         const izanagi::math::CRay& ray,

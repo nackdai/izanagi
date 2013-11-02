@@ -225,7 +225,7 @@ void CSceneRenderer::RenderTorus(
 
             m_Shader->CommitChanges();
 
-            m_Torus->Draw();
+            m_Torus->Draw(device);
         }
     }
     m_Shader->End();
