@@ -3,94 +3,6 @@
 #include "StateManager.h"
 #include "ModelApp.h"
 
-/////////////////////////////////////////////////
-
-// ジョイントマトリクスを描画時に設定するためのハンドラ
-class CSampleMdlRenderHandler : public izanagi::IMshRenderHandler {
-    // NOTE
-    // IMshRenderHandlerが持つインスタンス作成用メソッドに対して
-    // コンストラクタを見せるために必要
-    friend class izanagi::IMshRenderHandler;
-
-private:
-    CSampleMdlRenderHandler()
-    {
-        m_pShader = IZ_NULL;
-    }
-
-    ~CSampleMdlRenderHandler()
-    {
-        SAFE_RELEASE(m_pShader);
-    }
-
-public:
-    virtual void BeginRenderMesh();
-    virtual void EndRenderMesh();
-
-    virtual void SetJointMatrix(
-        IZ_UINT nIdx,
-        const izanagi::math::SMatrix& mtx);
-
-    virtual void CommitChanges();
-
-public:
-    void SetShader(izanagi::shader::IShader* pShader)
-    {
-        SAFE_REPLACE(m_pShader, pShader);
-    }
-
-    izanagi::shader::IShader* GetShader() { return m_pShader; }
-
-private:
-    izanagi::shader::IShader* m_pShader;
-
-    IZ_UINT m_nCnt;
-    izanagi::math::SMatrix m_Mtx[48];
-
-    izanagi::shader::IZ_SHADER_HANDLE m_Handle;
-};
-
-void CSampleMdlRenderHandler::BeginRenderMesh()
-{
-    m_nCnt = 0;
-
-    izanagi::math::SMatrix::SetUnit(m_Mtx[0]);
-    izanagi::math::SMatrix::SetUnit(m_Mtx[1]);
-    izanagi::math::SMatrix::SetUnit(m_Mtx[2]);
-    izanagi::math::SMatrix::SetUnit(m_Mtx[3]);
-
-    m_Handle = 0;
-}
-
-void CSampleMdlRenderHandler::EndRenderMesh()
-{
-}
-
-void CSampleMdlRenderHandler::SetJointMatrix(
-    IZ_UINT nIdx,
-    const izanagi::math::SMatrix& mtx)
-{
-    izanagi::math::SMatrix::Copy(m_Mtx[m_nCnt], mtx);
-    m_nCnt++;
-}
-
-void CSampleMdlRenderHandler::CommitChanges()
-{
-    if (m_Handle == 0) {
-        m_Handle = m_pShader->GetParameterByName("vJointMatrix");
-        IZ_ASSERT(m_Handle > 0);
-    }
-
-    m_pShader->SetParamValue(
-        m_Handle,
-        m_Mtx,
-        sizeof(izanagi::math::SMatrix) * m_nCnt);
-
-    m_pShader->CommitChanges();
-}
-
-/////////////////////////////////////////////////
-
 CStateBase::CStateBase(izanagi::sample::CSampleApp* app)
 : m_App(app)
 {
@@ -138,9 +50,10 @@ void CStateBase::RenderName(
     izanagi::CDebugFont* debugFont = m_App->GetDebugFont();
 
     if (device->Begin2D()) {
-        debugFont->Begin(0, izanagi::CDebugFont::FONT_SIZE * 2);
+        debugFont->Begin(device, 0, izanagi::CDebugFont::FONT_SIZE * 2);
 
         debugFont->DBPrint(
+            device,
             "%s\n",
             name);
 
@@ -173,7 +86,7 @@ IZ_BOOL CStateBase::Render(izanagi::graph::CGraphicsDevice* device)
 {
     izanagi::sample::CSampleCamera& camera = m_App->GetCamera();
 
-    IZ_UINT passCnt = m_Shd->Begin(0, IZ_FALSE);
+    IZ_UINT passCnt = m_Shd->Begin(device, 0, IZ_FALSE);
     {
         IZ_ASSERT(passCnt >= 1);
         if (m_Shd->BeginPass(GetShaderPassIdx())) {
@@ -189,7 +102,7 @@ IZ_BOOL CStateBase::Render(izanagi::graph::CGraphicsDevice* device)
             // テクスチャセット
             device->SetTexture(0, m_Img->GetTexture(GetTexIdx()));
 
-            m_Shd->CommitChanges();
+            m_Shd->CommitChanges(device);
 
             // モデル描画
             m_Mdl->Render(device);
@@ -197,7 +110,7 @@ IZ_BOOL CStateBase::Render(izanagi::graph::CGraphicsDevice* device)
             m_Shd->EndPass();
         }
     }
-    m_Shd->End();
+    m_Shd->End(device);
 
     return IZ_TRUE;
 }
@@ -264,7 +177,7 @@ IZ_BOOL CStateBase::InitObject(
         VGOTO(result = (m_Shd != IZ_NULL), __EXIT__);
 
         // ジョイントマトリクスを描画時に設定するためのハンドラ
-        m_MdlRenderHandler = izanagi::IMshRenderHandler::CreateMshRenderHandler<CSampleMdlRenderHandler>(allocator);
+        m_MdlRenderHandler = izanagi::IMshRenderHandler::CreateMshRenderHandler<izanagi::sample::CSampleMdlRenderHandler>(allocator);
         m_MdlRenderHandler->SetShader(m_Shd);
         VGOTO(result = (m_MdlRenderHandler != IZ_NULL), __EXIT__);
     }

@@ -8,10 +8,9 @@
 namespace izanagi {
     namespace sample {
         class CSampleApp;
+        class CSampleMdlRenderHandler;
     }
 }
-
-class CSampleMdlRenderHandler;
 
 class CStateBase : public izanagi::CSceneStateBase {
 public:
@@ -77,7 +76,7 @@ protected:
 
     izanagi::animation::CTimeline m_Timeline;
 
-    CSampleMdlRenderHandler* m_MdlRenderHandler;
+    izanagi::sample::CSampleMdlRenderHandler* m_MdlRenderHandler;
 };
 
 #endif    // #if !defined(__STATE_BASE_H__)
