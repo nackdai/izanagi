@@ -67,7 +67,7 @@ __EXIT__:
 
 // 初期化
 IZ_BOOL CDebugMeshRectangle::Init(
-    graph::CGraphicsDevice* pDevice,
+    graph::CGraphicsDevice* device,
     IZ_UINT flag,
     IZ_UINT nDivideX,
     IZ_UINT nDivideY,
@@ -79,16 +79,16 @@ IZ_BOOL CDebugMeshRectangle::Init(
     IZ_UINT nVtxNum = (nDivideX + 1) * (nDivideY + 1);
     IZ_UINT nIdxNum = nRectNum * 6;
 
-    VRETURN(CreateVB(flag, nVtxNum));
-    VRETURN(CreateIB(nIdxNum, graph::E_GRAPH_INDEX_BUFFER_FMT_INDEX32));
-    VRETURN(CreateVD(flag));
+    VRETURN(CreateVB(device, flag, nVtxNum));
+    VRETURN(CreateIB(device, nIdxNum, graph::E_GRAPH_INDEX_BUFFER_FMT_INDEX32));
+    VRETURN(CreateVD(device, flag));
 
     m_PrimType = graph::E_GRAPH_PRIM_TYPE_TRIANGLELIST;
     m_nPrimCnt = nRectNum * 2;
 
     VRETURN(CreateDataBuffer(nVtxNum, nIdxNum));
 
-    VRETURN(CreateDebugAxis(nVtxNum, flag));
+    VRETURN(CreateDebugAxis(device, nVtxNum, flag));
 
     return IZ_TRUE;
 }

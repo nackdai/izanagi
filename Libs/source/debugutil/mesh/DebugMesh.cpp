@@ -34,7 +34,6 @@ CDebugMesh::GetElemSizeFunc CDebugMesh::GetElemSizeFuncTbl[] = {
 CDebugMesh::CDebugMesh()
 {
     m_Allocator = IZ_NULL;
-    m_pDevice = IZ_NULL;
     
     m_pVB = IZ_NULL;
     m_pIB = IZ_NULL;
@@ -56,7 +55,6 @@ CDebugMesh::CDebugMesh()
 */
 CDebugMesh::~CDebugMesh()
 {
-    SAFE_RELEASE(m_pDevice);
     SAFE_RELEASE(m_pVB);
     SAFE_RELEASE(m_pIB);
     SAFE_RELEASE(m_pVD);
@@ -69,29 +67,32 @@ CDebugMesh::~CDebugMesh()
 /**
 * 描画
 */
-IZ_BOOL CDebugMesh::Draw(IZ_BOOL bEnableDrawDebugAxis/*= IZ_FALSE*/)
+IZ_BOOL CDebugMesh::Draw(
+    graph::CGraphicsDevice* device,
+    IZ_BOOL bEnableDrawDebugAxis/*= IZ_FALSE*/)
 {
+    IZ_ASSERT(device != IZ_NULL);
     IZ_ASSERT(m_pVB != IZ_NULL);
     IZ_ASSERT(m_pVD != IZ_NULL);
 
     // 頂点バッファ
-    m_pDevice->SetVertexBuffer(
+    device->SetVertexBuffer(
         0,
         0,
         m_pVB->GetStride(),
         m_pVB);
 
     // 頂点宣言
-    m_pDevice->SetVertexDeclaration(m_pVD);
+    device->SetVertexDeclaration(m_pVD);
 
     // インデックスバッファ
     if (m_pIB != IZ_NULL) {
-        m_pDevice->SetIndexBuffer(m_pIB);
+        device->SetIndexBuffer(m_pIB);
     }
 
     // 描画
     if (m_pIB != IZ_NULL) {
-        m_pDevice->DrawIndexedPrimitive(
+        device->DrawIndexedPrimitive(
             m_PrimType,
             0,
             m_pVB->GetVtxNum(),
@@ -99,7 +100,7 @@ IZ_BOOL CDebugMesh::Draw(IZ_BOOL bEnableDrawDebugAxis/*= IZ_FALSE*/)
             m_nPrimCnt);
     }
     else {
-        m_pDevice->DrawPrimitive(
+        device->DrawPrimitive(
             m_PrimType,
             0,
             m_nPrimCnt);
@@ -107,7 +108,7 @@ IZ_BOOL CDebugMesh::Draw(IZ_BOOL bEnableDrawDebugAxis/*= IZ_FALSE*/)
 
     if (bEnableDrawDebugAxis) {
         if (m_pDebugAxis != IZ_NULL) {
-            m_pDebugAxis->Draw();
+            m_pDebugAxis->Draw(device);
         }
     }
 
@@ -141,6 +142,7 @@ graph::E_GRAPH_PRIM_TYPE CDebugMesh::GetPrimitiveType()
 
 // 頂点バッファ作成
 IZ_BOOL CDebugMesh::CreateVB(
+    graph::CGraphicsDevice* device,
     IZ_UINT flag,
     IZ_UINT nVtxNum)
 {
@@ -151,7 +153,7 @@ IZ_BOOL CDebugMesh::CreateVB(
         nStride += (*GetElemSizeFuncTbl[i])(flag);
     }
 
-    m_pVB = m_pDevice->CreateVertexBuffer(
+    m_pVB = device->CreateVertexBuffer(
                 nStride,
                 nVtxNum,
                 graph::E_GRAPH_RSC_USAGE_STATIC);
@@ -161,10 +163,11 @@ IZ_BOOL CDebugMesh::CreateVB(
 
 // インデックスバッファ作成
 IZ_BOOL CDebugMesh::CreateIB(
+    graph::CGraphicsDevice* device,
     IZ_UINT nIdxNum,
     graph::E_GRAPH_INDEX_BUFFER_FMT fmt)
 {
-    m_pIB = m_pDevice->CreateIndexBuffer(
+    m_pIB = device->CreateIndexBuffer(
                 nIdxNum,
                 fmt,
                 graph::E_GRAPH_RSC_USAGE_STATIC);
@@ -173,7 +176,9 @@ IZ_BOOL CDebugMesh::CreateIB(
 }
 
 // 頂点宣言作成
-IZ_BOOL CDebugMesh::CreateVD(IZ_UINT flag)
+IZ_BOOL CDebugMesh::CreateVD(
+    graph::CGraphicsDevice* device,
+    IZ_UINT flag)
 {
     IZ_C_ASSERT(COUNTOF(SetElemFuncTbl) == E_DEBUG_MESH_VTX_FORM_NUM);
 
@@ -188,7 +193,7 @@ IZ_BOOL CDebugMesh::CreateVD(IZ_UINT flag)
         pos = (*SetElemFuncTbl[i])(flag, VtxElement, pos, &nOffset);
     }
 
-    m_pVD = m_pDevice->CreateVertexDeclaration(VtxElement, pos);
+    m_pVD = device->CreateVertexDeclaration(VtxElement, pos);
 
     return (m_pVD != IZ_NULL);
 }
@@ -211,6 +216,7 @@ IZ_BOOL CDebugMesh::CreateDataBuffer(
 
 // デバッグ用軸メッシュ作成
 IZ_BOOL CDebugMesh::CreateDebugAxis(
+    graph::CGraphicsDevice* device,
     IZ_UINT nVtxNum,
     IZ_UINT flag)
 {
@@ -222,7 +228,7 @@ IZ_BOOL CDebugMesh::CreateDebugAxis(
 
     m_pDebugAxis = CDebugMeshAxis::CreateDebugMeshAxis(
                     m_Allocator,
-                    m_pDevice,
+                    device,
                     nAxisFlag,
                     nVtxNum);
     IZ_ASSERT(m_pDebugAxis != IZ_NULL);

@@ -48,7 +48,9 @@ namespace izanagi {
 
     public:
         // 描画
-        virtual IZ_BOOL Draw(IZ_BOOL bEnableDrawDebugAxis = IZ_FALSE);
+        virtual IZ_BOOL Draw(
+            graph::CGraphicsDevice* device,
+            IZ_BOOL bEnableDrawDebugAxis = IZ_FALSE);
 
         IZ_UINT GetVtxFormFlag() const { return m_nVtxFormFlag; }
 
@@ -114,16 +116,20 @@ namespace izanagi {
     protected:
         // 頂点バッファ作成
         IZ_BOOL CreateVB(
+            graph::CGraphicsDevice* device,
             IZ_UINT flag,
             IZ_UINT nVtxNum);
 
         // インデックスバッファ作成
         IZ_BOOL CreateIB(
+            graph::CGraphicsDevice* device,
             IZ_UINT nIdxNum,
             graph::E_GRAPH_INDEX_BUFFER_FMT fmt);
 
         // 頂点宣言作成
-        IZ_BOOL CreateVD(IZ_UINT flag);
+        IZ_BOOL CreateVD(
+            graph::CGraphicsDevice* device,
+            IZ_UINT flag);
 
         // データバッファ作成
         IZ_BOOL CreateDataBuffer(
@@ -132,6 +138,7 @@ namespace izanagi {
 
         // デバッグ用軸メッシュ作成
         IZ_BOOL CreateDebugAxis(
+            graph::CGraphicsDevice* device,
             IZ_UINT nVtxNum,
             IZ_UINT flag);
 
@@ -223,7 +230,6 @@ namespace izanagi {
 
             ret->AddRef();
             ret->m_Allocator = pAllocator;
-            SAFE_REPLACE(ret->m_pDevice, pDevice);
 
             ret->m_nVtxFormFlag = nVtxFormFlag;
 
@@ -269,7 +275,6 @@ namespace izanagi {
 
     protected:
         IMemoryAllocator* m_Allocator;
-        graph::CGraphicsDevice* m_pDevice;
 
         graph::CVertexBuffer* m_pVB;
         graph::CIndexBuffer* m_pIB;

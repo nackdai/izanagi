@@ -6,7 +6,7 @@ using namespace izanagi;
 // インスタンス作成
 CDebugMeshAxis* CDebugMeshAxis::CreateDebugMeshAxis(
     IMemoryAllocator* pAllocator,
-    graph::CGraphicsDevice* pDevice,
+    graph::CGraphicsDevice* device,
     IZ_UINT flag,
     IZ_UINT nPointNum/*= 0*/)
 {
@@ -22,7 +22,7 @@ CDebugMeshAxis* CDebugMeshAxis::CreateDebugMeshAxis(
     IZ_BOOL result = IZ_FALSE;
 
     // インスタンス作成
-    pInstance = CreateMesh<CDebugMeshAxis>(pBuf, pAllocator, pDevice, flag);
+    pInstance = CreateMesh<CDebugMeshAxis>(pBuf, pAllocator, device, flag);
     VGOTO(result != (pInstance != IZ_NULL), __EXIT__);
 
     {
@@ -46,7 +46,7 @@ CDebugMeshAxis* CDebugMeshAxis::CreateDebugMeshAxis(
     }
 
     result = pInstance->Init(
-                pDevice,
+                device,
                 AXIS_VTX_FLAG);
     VGOTO(result, __EXIT__);
 
@@ -61,11 +61,11 @@ __EXIT__:
 
 CDebugMeshAxis* CDebugMeshAxis::CreateDebugMeshAxisDefault(
     IMemoryAllocator* pAllocator,
-    graph::CGraphicsDevice* pDevice)
+    graph::CGraphicsDevice* device)
 {
     CDebugMeshAxis* pInstance = CreateDebugMeshAxis(
                                     pAllocator,
-                                    pDevice,
+                                    device,
                                     izanagi::E_DEBUG_MESH_AXIS_X | izanagi::E_DEBUG_MESH_AXIS_Y | izanagi::E_DEBUG_MESH_AXIS_Z);
     VRETURN(pInstance != IZ_NULL);
 
@@ -99,26 +99,27 @@ CDebugMeshAxis::~CDebugMeshAxis()
 
 // 初期化
 IZ_BOOL CDebugMeshAxis::Init(
-    graph::CGraphicsDevice* pDevice,
+    graph::CGraphicsDevice* device,
     IZ_UINT flag)
 {
     VRETURN(
         CreateVB(
+            device,
             flag, 
             m_nPrimCnt * 2));   // １ライン２頂点
 
-    VRETURN(CreateVD(flag));
+    VRETURN(CreateVD(device, flag));
 
     return IZ_TRUE;
 }
 
 // 描画
-IZ_BOOL CDebugMeshAxis::Draw()
+IZ_BOOL CDebugMeshAxis::Draw(graph::CGraphicsDevice* device)
 {
     IZ_BOOL ret = (m_nSetPrimCnt == 0);
 
     if (!ret && (m_nSetPrimCnt == m_nPrimCnt)) {
-        ret = CDebugMesh::Draw();
+        ret = CDebugMesh::Draw(device);
     }
 
     IZ_ASSERT(ret);

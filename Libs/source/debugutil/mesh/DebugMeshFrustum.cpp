@@ -24,7 +24,7 @@ CDebugMeshFrustum* CDebugMeshFrustum::CreateDebugMeshFrustum(
     IZ_BOOL result = IZ_FALSE;
 
     // Initialize instance.
-    result = pInstance->Init();
+    result = pInstance->Init(pDevice);
     VGOTO(result, __EXIT__);
 
     // Set vertex data.
@@ -42,16 +42,15 @@ __EXIT__:
     return pInstance;
 }
 
-IZ_BOOL CDebugMeshFrustum::Init()
+IZ_BOOL CDebugMeshFrustum::Init(graph::CGraphicsDevice* device)
 {
-    IZ_ASSERT(m_pDevice != IZ_NULL);
-
     VRETURN(
         CreateVB(
+            device,
             VTX_FORM_FLAG, 
             VTX_NUM));
 
-    VRETURN(CreateVD(VTX_FORM_FLAG));
+    VRETURN(CreateVD(device, VTX_FORM_FLAG));
 
     m_PrimType = graph::E_GRAPH_PRIM_TYPE_TRIANGLELIST;
     m_nPrimCnt = 4 + 2;

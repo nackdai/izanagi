@@ -93,12 +93,12 @@ namespace {
 
 // 初期化
 IZ_BOOL CDebugMeshTorus::Init(
-    graph::CGraphicsDevice* pDevice,
+    graph::CGraphicsDevice* device,
     IZ_UINT flag,
     IZ_UINT nSides, 
     IZ_UINT nRings)
 {
-    IZ_ASSERT(pDevice != IZ_NULL);
+    IZ_ASSERT(device != IZ_NULL);
 
     nSides = IZ_MAX(3, nSides);
     nRings = IZ_MAX(3, nRings);
@@ -116,16 +116,18 @@ IZ_BOOL CDebugMeshTorus::Init(
 
     VRETURN(
         CreateVB(
+            device,
             flag, 
             nVtxNum));
 
     VRETURN(
         CreateIB(
+            device,
             nIdxNum, 
             fmt));
 
     VRETURN(
-        CreateVD(flag));
+        CreateVD(device, flag));
 
     m_PrimType = graph::E_GRAPH_PRIM_TYPE_TRIANGLELIST;
     m_nPrimCnt = nIdxNum / 3;
@@ -137,6 +139,7 @@ IZ_BOOL CDebugMeshTorus::Init(
 
     VRETURN(
         CreateDebugAxis(
+            device,
             nVtxNum,
             flag));
 

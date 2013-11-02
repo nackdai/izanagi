@@ -16,13 +16,13 @@ namespace izanagi {
         // インスタンス作成
         static CDebugMeshAxis* CreateDebugMeshAxis(
             IMemoryAllocator* pAllocator,
-            graph::CGraphicsDevice* pDevice,
+            graph::CGraphicsDevice* device,
             IZ_UINT flag,
             IZ_UINT nPointNum = 0);
 
         static CDebugMeshAxis* CreateDebugMeshAxisDefault(
             IMemoryAllocator* pAllocator,
-            graph::CGraphicsDevice* pDevice);
+            graph::CGraphicsDevice* device);
 
     protected:
         CDebugMeshAxis() : m_pVtxDst(IZ_NULL), m_nAxisFlag(0), m_nSetPrimCnt(0) {}
@@ -35,12 +35,12 @@ namespace izanagi {
 
         // 初期化
         IZ_BOOL Init(
-            graph::CGraphicsDevice* pDevice,
+            graph::CGraphicsDevice* device,
             IZ_UINT flag);
 
     public:
         // 描画
-        IZ_BOOL Draw();
+        IZ_BOOL Draw(graph::CGraphicsDevice* device);
 
         IZ_BOOL BeginRegister();
         IZ_BOOL EndRegister();

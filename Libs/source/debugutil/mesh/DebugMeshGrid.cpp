@@ -50,15 +50,15 @@ __EXIT__:
 
 // 初期化
 IZ_BOOL CDebugMeshGrid::Init(
-    graph::CGraphicsDevice* pDevice,
+    graph::CGraphicsDevice* device,
     IZ_UINT flag,
     IZ_UINT nGridNumX,
     IZ_UINT nGridNumY)
 {
     IZ_UINT nVtxNum = ((nGridNumX + 1) + (nGridNumY + 1)) * 2;
 
-    VRETURN(CreateVB(flag, nVtxNum));
-    VRETURN(CreateVD(flag));
+    VRETURN(CreateVB(device, flag, nVtxNum));
+    VRETURN(CreateVD(device, flag));
 
     m_PrimType = graph::E_GRAPH_PRIM_TYPE_LINELIST;
     m_nPrimCnt = (nGridNumX + 1) + (nGridNumY + 1);
