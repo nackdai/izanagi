@@ -153,12 +153,13 @@ CModel::~CModel()
 }
 
 // 描画
-IZ_BOOL CModel::Render()
+IZ_BOOL CModel::Render(graph::CGraphicsDevice* device)
 {
     IZ_ASSERT(m_pMesh != IZ_NULL);
     IZ_ASSERT(m_nCurLODLevel < GetMaxLODLevel());
 
     IZ_BOOL ret = m_pMesh->Render(
+                    device,
                     m_nCurLODLevel,
                     m_pSkeleton,
                     m_pRenderHandler);

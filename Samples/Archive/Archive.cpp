@@ -261,7 +261,7 @@ void CArchiveApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
             m_Shd->CommitChanges();
 
             // モデル描画
-            m_Mdl->Render();
+            m_Mdl->Render(device);
 
             m_Shd->EndPass();
         }

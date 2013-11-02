@@ -276,6 +276,7 @@ CMeshInstance::~CMeshInstance()
 
 // 描画
 IZ_BOOL CMeshInstance::Render(
+    graph::CGraphicsDevice* device,
     IZ_UINT level,
     CSkeletonInstance* pSkl,
     IMshRenderHandler* pRenderHandler)
@@ -283,15 +284,13 @@ IZ_BOOL CMeshInstance::Render(
     IZ_ASSERT(m_pBody != IZ_NULL);
     IZ_ASSERT(m_pGroups != IZ_NULL);
     IZ_ASSERT(level < m_nGroupNum);
-
-    graph::CGraphicsDevice* pDevice = m_pBody->GetGraphicsDevice();
-    IZ_ASSERT(pDevice != IZ_NULL);
+    IZ_ASSERT(device != IZ_NULL);
 
     // スケルトン設定
     m_pGroups[level]->SetSkeleton(pSkl);
 
     // 描画
-    IZ_BOOL ret = m_pGroups[level]->Render(pDevice, pRenderHandler);
+    IZ_BOOL ret = m_pGroups[level]->Render(device, pRenderHandler);
 
     return ret;
 }
