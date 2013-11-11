@@ -31,6 +31,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ModelLib", "ModelLib.vcxproj", "{EF4D87C6-8948-4325-8F97-A7CEA9F2B243}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PostEffectCompile", "PostEffectCompile.vcxproj", "{3FCA0C02-EB59-45C2-9BC0-45AD0E342215}"
+	ProjectSection(ProjectDependencies) = postProject
+		{ECA80E2D-1BB5-4C71-9676-5E2EA803A20E} = {ECA80E2D-1BB5-4C71-9676-5E2EA803A20E}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PostEffectConverter", "PostEffectConverter.vcxproj", "{ECA80E2D-1BB5-4C71-9676-5E2EA803A20E}"
 EndProject
