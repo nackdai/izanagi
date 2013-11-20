@@ -36,6 +36,16 @@ namespace graph
         SAFE_RELEASE(m_Depth);
     }
 
+    C2DRenderer* CGraphicsDevice::Create2DRenderer()
+    {
+        C2DRenderer* ret = C2DRenderer::Create2DRenderer(
+            this,
+            m_Allocator);
+        IZ_ASSERT(ret != IZ_NULL);
+
+        return ret;
+    }
+
     // シーン描画開始
     IZ_BOOL CGraphicsDevice::BeginScene(
         IZ_DWORD nClearFlags,

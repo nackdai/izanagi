@@ -105,6 +105,9 @@ namespace graph
                 const SVertexElement* pElem, 
                 IZ_UINT nNum));
 
+        // 2D描画作成
+        C2DRenderer* Create2DRenderer();
+
     public:
         // リセット
         PURE_VIRTUAL(IZ_BOOL Reset(const void* initialParam));

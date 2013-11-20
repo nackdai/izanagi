@@ -20,7 +20,9 @@ namespace graph
     */
     class C2DRenderer : public CObject
     {
-    public:
+        friend class CGraphicsDevice;
+
+    private:
         // インスタンス作成
         static C2DRenderer* Create2DRenderer(
             CGraphicsDevice* device,

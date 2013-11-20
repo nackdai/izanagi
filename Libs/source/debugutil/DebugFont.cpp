@@ -39,7 +39,7 @@ CDebugFont* CDebugFont::CreateDebugFont(
         result = pInstance->CreateTexture(pDevice);
         VGOTO(result, __EXIT__);
 
-        pInstance->m_Renderer = graph::C2DRenderer::Create2DRenderer(pDevice, pAllocator);
+        pInstance->m_Renderer = pDevice->Create2DRenderer();
         result = (pInstance->m_Renderer != IZ_NULL);
         VGOTO(result, __EXIT__);
     }
