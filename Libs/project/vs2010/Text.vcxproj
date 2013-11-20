@@ -111,7 +111,10 @@
     <ClCompile Include="..\..\source\text\FontRenderer.cpp" />
     <ClCompile Include="..\..\source\text\Paragraph.cpp" />
     <ClCompile Include="..\..\source\text\ParagraphGroup.cpp" />
+    <ClCompile Include="..\..\source\text\ParagraphGroupImpl.cpp" />
+    <ClCompile Include="..\..\source\text\ParagraphImpl.cpp" />
     <ClCompile Include="..\..\source\text\TextLine.cpp" />
+    <ClCompile Include="..\..\source\text\TextLineImpl.cpp" />
     <ClCompile Include="..\..\source\text\UString.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -126,7 +129,10 @@
     <ClInclude Include="..\..\include\izFont.h" />
     <ClInclude Include="..\..\include\text\Paragraph.h" />
     <ClInclude Include="..\..\include\text\ParagraphGroup.h" />
+    <ClInclude Include="..\..\include\text\ParagraphGroupImpl.h" />
+    <ClInclude Include="..\..\include\text\ParagraphImpl.h" />
     <ClInclude Include="..\..\include\text\TextLine.h" />
+    <ClInclude Include="..\..\include\text\TextLineImpl.h" />
     <ClInclude Include="..\..\include\text\UString.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
