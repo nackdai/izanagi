@@ -52,9 +52,7 @@ IZ_BOOL CRender2DApp::InitInternal(
                 &in);
     IZ_ASSERT(m_Img != IZ_NULL);
 
-    m_2DRenderer = izanagi::graph::C2DRenderer::Create2DRenderer(
-        device,
-        allocator);
+    m_2DRenderer = device->Create2DRenderer();
     IZ_ASSERT(m_2DRenderer != IZ_NULL);
 
     return IZ_TRUE;
