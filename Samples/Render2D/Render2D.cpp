@@ -23,11 +23,14 @@ protected:
 
 private:
     izanagi::CImage* m_Img;
+
+    izanagi::graph::C2DRenderer* m_2DRenderer;
 };
 
 CRender2DApp::CRender2DApp()
 {
     m_Img = IZ_NULL;
+    m_2DRenderer = IZ_NULL;
 }
 
 CRender2DApp::~CRender2DApp()
@@ -47,14 +50,21 @@ IZ_BOOL CRender2DApp::InitInternal(
                 allocator,
                 device,
                 &in);
+    IZ_ASSERT(m_Img != IZ_NULL);
 
-    return (m_Img != IZ_NULL);
+    m_2DRenderer = izanagi::graph::C2DRenderer::Create2DRenderer(
+        device,
+        allocator);
+    IZ_ASSERT(m_2DRenderer != IZ_NULL);
+
+    return IZ_TRUE;
 }
 
 // 解放.
 void CRender2DApp::ReleaseInternal()
 {
     SAFE_RELEASE(m_Img);
+    SAFE_RELEASE(m_2DRenderer);
 }
 
 // 更新.
@@ -66,27 +76,31 @@ void CRender2DApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 // 描画.
 void CRender2DApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
-    if (device->Begin2D()) {
+    m_2DRenderer->Begin();
+
+    if (m_2DRenderer->BeginDraw(device)) {
         // スプライト
-        device->SetTexture(0, m_Img->GetTexture(0));
-        device->Set2DRenderOp(izanagi::graph::E_GRAPH_2D_RENDER_OP_MODULATE);
-        device->Draw2DSprite(
+        m_2DRenderer->SetTexture(0, m_Img->GetTexture(0));
+        m_2DRenderer->SetRenderOp(izanagi::graph::E_GRAPH_2D_RENDER_OP_MODULATE);
+        m_2DRenderer->DrawSpriteByUVCoord(
             izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),
             izanagi::CIntRect(300, 100, 556, 228));
 
         // 塗りつぶし矩形
-        device->Draw2DRect(
+        m_2DRenderer->DrawRect(
             izanagi::CIntRect(100, 100, 200, 200),
             IZ_COLOR_RGBA(0, 0xff, 0, 0xff));
 
         // ライン
-        device->Draw2DLine(
+        m_2DRenderer->DrawLine(
             izanagi::CIntPoint(100, 100),    // 始点
             izanagi::CIntPoint(200, 200),    // 終点
             IZ_COLOR_RGBA(0xff, 0, 0, 0xff));
 
-        device->End2D();
+        m_2DRenderer->EndDraw();
     }
+
+    m_2DRenderer->End();
 }
 
 static const IZ_UINT BUF_SIZE = 1 * 1024 * 1024;

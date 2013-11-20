@@ -36,7 +36,17 @@ namespace graph
         IZ_ASSERT(device != NULL);
 
         VRETURN(m_ShaderProgram[m_nOp]->AttachVertexShader(m_pVS));
-        VRETURN(m_ShaderProgram[m_nOp]->AttachPixelShader(m_pPS[m_nOp]));
+
+        if (m_nOp == E_GRAPH_2D_RENDER_OP_USER_DEFS
+            && m_UserDefsPS.IsAlive())
+        {
+            CPixelShader* ps = (CPixelShader*)m_UserDefsPS.GetTarget();
+
+            VRETURN(m_ShaderProgram[m_nOp]->AttachPixelShader(ps));
+        }
+        else {
+            VRETURN(m_ShaderProgram[m_nOp]->AttachPixelShader(m_pPS[m_nOp]));
+        }
 
         VRETURN(device->SetShaderProgram(m_ShaderProgram[m_nOp]));
 
