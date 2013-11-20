@@ -33,6 +33,9 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(PROJECT_MAIN_DIR)data\%(Filename).img;%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\WaterDrop\WaterDropPS.hlsl" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{909B7F5F-8631-4e67-ACC5-28E899FA9DCD}</ProjectGuid>
     <RootNamespace>WaterDrop</RootNamespace>

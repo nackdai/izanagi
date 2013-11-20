@@ -60,6 +60,11 @@ namespace graph
             return m_ShaderProgram[m_nOp];
         }
 
+        void SetPixelShader(CPixelShader* ps)
+        {
+            m_UserDefsPS.Set((CObject*)ps);
+        }
+
     protected:
         // シェーダパラメータ
         enum {
@@ -75,6 +80,8 @@ namespace graph
 
         CVertexShader* m_pVS;
         CPixelShader* m_pPS[E_GRAPH_2D_RENDER_OP_NUM];
+
+        ObjectReference m_UserDefsPS;
 
         // 描画設定
         E_GRAPH_2D_RENDER_OP m_nOp;

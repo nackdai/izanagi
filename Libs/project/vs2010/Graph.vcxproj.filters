@@ -228,9 +228,6 @@
     <ClInclude Include="..\..\include\graph\dx9\GraphicsDevice_DX9.h">
       <Filter>include\dx9</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\graph\dx9\2DRenderer_DX9.h">
-      <Filter>include\dx9</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\graph\BufferBase.h">
       <Filter>include\base</Filter>
     </ClInclude>
@@ -253,9 +250,6 @@
       <Filter>include\gles2</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\graph\gles2\VertexShader_GLES2.h">
-      <Filter>include\gles2</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\graph\gles2\2DRenderer_GLES2.h">
       <Filter>include\gles2</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\graph\gles2\CubeTexture_GLES2.h">
@@ -309,15 +303,13 @@
     <ClInclude Include="..\..\include\graph\gles2\2DShader_GLES2.h">
       <Filter>include\gles2</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\izGraph.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\graph\GraphPerf.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\graph\gles2\FrameBufferObject.h">
       <Filter>include\gles2</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\izGraph.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\source\graph\2d\shader\2DPS.hlsl">

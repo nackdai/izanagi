@@ -162,41 +162,6 @@ namespace graph
         PURE_VIRTUAL(IZ_BOOL Present());
 
     public:
-        // 2D描画開始
-        IZ_BOOL Begin2D();
-
-        // 2D描画終了
-        IZ_BOOL End2D();
-
-        // 2D描画バッファフラッシュ
-        IZ_BOOL Flush2D();
-
-        // 2Dスプライト描画
-        IZ_BOOL Draw2DSprite(
-            const CFloatRect& rcSrc,
-            const CIntRect& rcDst,
-            const IZ_COLOR color = IZ_COLOR_RGBA(255, 255, 255, 255));
-        IZ_BOOL Draw2DSpriteEx(
-            const CIntRect& rcSrc,
-            const CIntRect& rcDst,
-            const IZ_COLOR color = IZ_COLOR_RGBA(255, 255, 255, 255));
-
-        // 2D矩形描画
-        IZ_BOOL Draw2DRect(
-            const CIntRect& rcDst,
-            const IZ_COLOR color);
-
-        // 2Dライン描画
-        IZ_BOOL Draw2DLine(
-            const CIntPoint& ptStart,
-            const CIntPoint& ptGoal,
-            const IZ_COLOR color);
-
-        // 2D描画モード
-        void Set2DRenderOp(E_GRAPH_2D_RENDER_OP nOp);
-        E_GRAPH_2D_RENDER_OP Get2DRenderOp() const;
-
-    public:
         // テクスチャセット
         IZ_BOOL SetTexture(IZ_UINT nStage, CBaseTexture* pTex);
 
@@ -367,9 +332,6 @@ namespace graph
         // レンダーターゲット管理
         CRenderTargetManager<RT_QUEUE_MAX> m_RTMgr[MAX_MRT_NUM];
         CRenderTargetManager<RT_QUEUE_MAX> m_DepthMgr;
-
-        // 2D描画用
-        C2DRenderer* m_2DRenderer;
 
         // フラグ
         struct {
