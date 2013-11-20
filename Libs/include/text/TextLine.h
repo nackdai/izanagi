@@ -104,44 +104,6 @@ namespace text
 
         CStdList<CLine>::Item m_ListItem;
     };
-
-    /**
-     */
-    class CDefaultLine : public CLine
-    {
-        friend class CLine;
-
-    public:
-        static CLine* CreateLine(
-            IMemoryAllocator* allocator,
-            IFontHost* host,
-            void* userData)
-        {
-            CLine* ret = CLine::CreateLine<CDefaultLine>(allocator, host, userData);
-            return ret;
-        }
-
-    private:
-        CDefaultLine();
-        virtual ~CDefaultLine() {}
-
-    public:
-        virtual IZ_UINT GetLineWidth();
-
-    private:
-        virtual IZ_BOOL Init(void* userData);
-
-        virtual void Prepare(
-            IZ_UINT8* dst,
-            IZ_UINT pitch,
-            IZ_UINT ascent,
-            IFontHost* host);
-
-    private:
-        E_FONT_CHAR_ENCODE m_Encode;
-        const void* m_Text;
-        IZ_UINT m_Bytes;
-    };
 }    // namespace text
 }   // namespace izanagi
 

@@ -88,40 +88,6 @@ namespace text
         IZ_UINT m_LineHeight;
         IZ_UINT m_Ascent;
     };
-
-    /**
-     */
-    class CDefaultParagraphGroup : public CParagraphGroup
-    {
-        friend class CParagraphGroup;
-
-    public:
-        static CParagraphGroup* CreateParagraphGroup(
-            IMemoryAllocator* allocator,
-            IFontHost* host,
-            CUString& text,
-            void* userData)
-        {
-            return CParagraphGroup::CreateParagraphGroup<CDefaultParagraphGroup>(
-                allocator,
-                host,
-                text,
-                userData);
-        }
-
-    private:
-        CDefaultParagraphGroup();
-        virtual ~CDefaultParagraphGroup();
-
-    private:
-        virtual IZ_BOOL Init(
-            IFontHost* host,
-            CUString& str,
-            void* userData);
-
-    private:
-        IFontHost* m_FontHost;
-    };
 }    // namespace text
 }   // namespace izanagi
 
