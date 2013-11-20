@@ -240,6 +240,9 @@ IZ_BOOL CPostEffect::CreateTexture(
         // テクスチャ作成終了
         pTexCreator->EndCreate();
 
+        // ファンクタ独自の2DRenderer作成
+        VRETURN(pFunctor->Create2DRenderer(device));
+
         pItem = pItem->GetNext();
     }
 

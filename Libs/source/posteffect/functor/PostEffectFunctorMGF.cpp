@@ -2,6 +2,28 @@
 
 using namespace izanagi;
 
+// コンストラクタ
+CPostEffectFunctorMGF::CPostEffectFunctorMGF()
+{
+    m_2DRenderer = IZ_NULL;
+}
+
+// デストラクタ
+CPostEffectFunctorMGF::~CPostEffectFunctorMGF()
+{
+    for (IZ_UINT i = 0; i < MGF_LOOP_NUM; ++i) {
+        m_DownScaleState[i].Release();
+    }
+
+    for (IZ_UINT i = 0; i < MGF_LOOP_NUM; ++i) {
+        for (IZ_UINT n = 0; n < MGF_BLOOM_STATE_NUM; ++n) {
+            m_BloomState[i][n].Release();
+        }
+    }
+
+    SAFE_RELEASE(m_2DRenderer);
+}
+
 IZ_BOOL CPostEffectFunctorMGF::Apply(
     graph::CGraphicsDevice* pDevice,
     CPostEffectShader* pShader)
@@ -279,6 +301,14 @@ IZ_BOOL CPostEffectFunctorMGF::CreateTexture(
     return IZ_TRUE;
 }
 
+// ファンクタ独自の2DRenderer作成
+IZ_BOOL CPostEffectFunctorMGF::Create2DRenderer(graph::CGraphicsDevice* device)
+{
+    m_2DRenderer = device->Create2DRenderer();
+
+    return (m_2DRenderer != IZ_NULL);
+}
+
 static char tmp[256];
 
 // 縮小
@@ -441,7 +471,9 @@ IZ_BOOL CPostEffectFunctorMGF::ApplyMGFMerge(
 
     if (ret) {
         // 2D描画
-        ret = pDevice->Begin2D();
+        m_2DRenderer->Begin();
+        ret = m_2DRenderer->BeginDraw(pDevice);
+
         if (ret) {
             // レンダーステート設定
             {
@@ -469,13 +501,14 @@ IZ_BOOL CPostEffectFunctorMGF::ApplyMGFMerge(
                 if (tex != IZ_NULL) {
                     pDevice->SetTexture(0, tex);
 
-                    pDevice->Draw2DSprite(
+                    m_2DRenderer->DrawSpriteByUVCoord(
                         rcTex, rcDst,
                         nColor);
                 }
             }
 
-            pDevice->End2D();
+            m_2DRenderer->EndDraw();
+            m_2DRenderer->End();
         }
 
         // 戻す
