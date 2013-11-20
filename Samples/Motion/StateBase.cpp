@@ -67,17 +67,16 @@ void CStateBase::RenderName(
 {
     izanagi::CDebugFont* debugFont = m_App->GetDebugFont();
 
-    if (device->Begin2D()) {
-        debugFont->Begin(device, 0, izanagi::CDebugFont::FONT_SIZE * 2);
-
+    if (debugFont->Begin(
+        device,
+        0, izanagi::CDebugFont::FONT_SIZE * 2))
+    {
         debugFont->DBPrint(
             device,
             "%s\n",
             name);
 
         debugFont->End();
-
-        device->End2D();
     }
 }
 
