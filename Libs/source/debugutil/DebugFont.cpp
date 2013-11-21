@@ -38,10 +38,6 @@ CDebugFont* CDebugFont::CreateDebugFont(
         // テクスチャ作成
         result = pInstance->CreateTexture(pDevice);
         VGOTO(result, __EXIT__);
-
-        pInstance->m_Renderer = pDevice->Create2DRenderer();
-        result = (pInstance->m_Renderer != IZ_NULL);
-        VGOTO(result, __EXIT__);
     }
 
 __EXIT__:
@@ -58,8 +54,6 @@ CDebugFont::CDebugFont()
 {
     m_Allocator = IZ_NULL;
 
-    m_Renderer = IZ_NULL;
-
     m_pFontTex = IZ_NULL;
 
     m_nLeft = 0;
@@ -74,7 +68,6 @@ CDebugFont::CDebugFont()
 // デストラクタ
 CDebugFont::~CDebugFont()
 {
-    SAFE_RELEASE(m_Renderer);
     SAFE_RELEASE(m_pFontTex);
 }
 
@@ -91,12 +84,12 @@ void CDebugFont::InternalRelease()
 /**
 * 描画開始
 */
-IZ_BOOL CDebugFont::Begin(graph::CGraphicsDevice* device)
+void CDebugFont::Begin(graph::CGraphicsDevice* device)
 {
-    return Begin(device, 0, 0);
+    Begin(device, 0, 0);
 }
 
-IZ_BOOL CDebugFont::Begin(
+void CDebugFont::Begin(
     graph::CGraphicsDevice* device,
     IZ_INT left, IZ_INT top)
 {
@@ -111,12 +104,6 @@ IZ_BOOL CDebugFont::Begin(
     m_nColor = 0xffffffff;
 
     m_nLeftBase = 0;
-
-    m_Renderer->Begin();
-
-    IZ_BOOL ret = m_Renderer->BeginDraw(device);
-
-    return ret;
 }
 
 /**
@@ -125,9 +112,6 @@ IZ_BOOL CDebugFont::Begin(
 void CDebugFont::End()
 {
     m_bIsBegin = IZ_FALSE;
-
-    m_Renderer->EndDraw();
-    m_Renderer->End();
 }
 
 /////////////////////////////////////////////////
@@ -174,7 +158,7 @@ void CDebugFont::DrawFont(
     IZ_ASSERT(m_pFontTex != NULL);
     IZ_ASSERT(m_bIsBegin);
 
-    m_Renderer->SetTexture(0, m_pFontTex);
+    device->SetTexture(0, m_pFontTex);
 
     CIntRect rcSrc;
 
@@ -202,7 +186,7 @@ void CDebugFont::DrawFont(
             SetTexRect(ch, rcSrc);
 
             // 描画
-            m_Renderer->DrawSprite(
+            device->Draw2DSpriteEx(
                 rcSrc, rcDst,
                 m_nColor);
 
@@ -211,20 +195,6 @@ void CDebugFont::DrawFont(
             m_nLeft += FONT_SIZE;
         }
     }
-}
-
-// 切り出し矩形をセットする
-void CDebugFont::SetTexRect(
-	IZ_CHAR ch,
-	CIntRect& rc)
-{
-	IZ_INT nPosY = ch / FONT_NUM_PER_LINE_IN_IMAGE;
-	IZ_INT nPosX = ch % FONT_NUM_PER_LINE_IN_IMAGE;
-
-	rc.left = FONT_SIZE * nPosX;
-	rc.top = FONT_SIZE * nPosY;
-	rc.right = rc.left + FONT_SIZE;
-	rc.bottom = rc.top + FONT_SIZE;
 }
 
 static const IZ_INT BUF_SIZE = 1024;

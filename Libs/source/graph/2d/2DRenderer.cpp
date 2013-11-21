@@ -66,8 +66,6 @@ namespace graph
     {
         m_Allocator = IZ_NULL;
 
-        m_Device = IZ_NULL;
-
         m_pVB = IZ_NULL;
         m_pIB = IZ_NULL;
         m_pVD = IZ_NULL;
@@ -87,10 +85,6 @@ namespace graph
         SAFE_RELEASE(m_pIB);
         SAFE_RELEASE(m_pVD);
         SAFE_RELEASE(m_pShader);
-
-        // 念のため
-        IZ_ASSERT(m_Device == IZ_NULL);
-        SAFE_RELEASE(m_Device);
     }
 
     // 初期化
@@ -99,28 +93,41 @@ namespace graph
         IZ_ASSERT(device != IZ_NULL);
 
         // 頂点バッファ
-        m_pVB = device->CreateVertexBuffer(
-                    VTX_STRIDE,
-                    MAX_VERTEX_NUM,
-                    E_GRAPH_RSC_USAGE_DYNAMIC);
-        VRETURN(m_pVB != IZ_NULL);
+        {
+            m_pVB = device->CreateVertexBuffer(
+                        VTX_STRIDE,
+                        MAX_VERTEX_NUM,
+                        E_GRAPH_RSC_USAGE_DYNAMIC);
+            VRETURN(m_pVB != IZ_NULL);
+
+            // かなり無茶するが・・・
+            // m_pVBの分のデバイスの参照カウントを減らす
+            device->Release();
+        }
 
         // インデックスバッファ
-        m_pIB = device->CreateIndexBuffer(
-                    MAX_INDEX_NUM,
-                    E_GRAPH_INDEX_BUFFER_FMT_INDEX16,   // TODO とりあえず・・・
-                    E_GRAPH_RSC_USAGE_DYNAMIC);
-        VRETURN(m_pIB != IZ_NULL);
+        {
+            m_pIB = device->CreateIndexBuffer(
+                        MAX_INDEX_NUM,
+                        E_GRAPH_INDEX_BUFFER_FMT_INDEX16,   // TODO とりあえず・・・
+                        E_GRAPH_RSC_USAGE_DYNAMIC);
+            VRETURN(m_pIB != IZ_NULL);
 
-        // 頂点宣言
+            // かなり無茶するが・・・
+            // m_pIBの分のデバイスの参照カウントを減らす
+            device->Release();
+        }
+
         static const SVertexElement VtxElement[] = {
             {0,  0, E_GRAPH_VTX_DECL_TYPE_FLOAT4, E_GRAPH_VTX_DECL_USAGE_POSITION, 0},  // 座標
             {0, 16, E_GRAPH_VTX_DECL_TYPE_COLOR,  E_GRAPH_VTX_DECL_USAGE_COLOR,    0},  // 頂点カラー
             {0, 20, E_GRAPH_VTX_DECL_TYPE_FLOAT2, E_GRAPH_VTX_DECL_USAGE_TEXCOORD, 0},  // テクスチャ座標
         };
 
-        m_pVD = device->CreateVertexDeclaration(VtxElement, COUNTOF(VtxElement));
-        VRETURN(m_pVD != IZ_NULL);
+        {
+            m_pVD = device->CreateVertexDeclaration(VtxElement, COUNTOF(VtxElement));
+            VRETURN(m_pVD != IZ_NULL);
+        }
 
         // シェーダ
         m_pShader = C2DShader::Create2DShader(
@@ -132,7 +139,7 @@ namespace graph
     }
 
     // フレーム開始時に呼ぶこと
-    void C2DRenderer::Begin()
+    void C2DRenderer::BeginFrame()
     {
         m_sVBInfo.Clear();
         m_sIBInfo.Clear();
@@ -141,68 +148,22 @@ namespace graph
         m_nCurPrimNum = 0;
     }
 
-    // 終了時に呼ぶこと
-    void C2DRenderer::End()
-    {
-    }
-
     // 描画開始
-    IZ_BOOL C2DRenderer::BeginDraw(CGraphicsDevice* device)
+    IZ_BOOL C2DRenderer::BeginDraw()
     {
-        VRETURN(m_Device == IZ_NULL);
-
-        SAFE_REPLACE(m_Device, device);
-
         m_sVBInfo.buf_ptr = IZ_NULL;
         m_sIBInfo.buf_ptr = IZ_NULL;
 
         m_bIsLock = IZ_FALSE;
 
-        // 2D描画用レンダーステート設定
-        {
-            m_Device->SaveRenderState();
-
-            m_Device->SetRenderState(E_GRAPH_RS_ZWRITEENABLE, IZ_FALSE);
-            m_Device->SetRenderState(E_GRAPH_RS_ZENABLE, IZ_FALSE);
-            m_Device->SetRenderState(E_GRAPH_RS_ALPHATESTENABLE, IZ_FALSE);
-            m_Device->SetRenderState(E_GRAPH_RS_ALPHABLENDENABLE, IZ_TRUE);
-            m_Device->SetRenderState(E_GRAPH_RS_BLENDMETHOD, E_GRAPH_ALPHA_BLEND_NORMAL);
-            m_Device->SetRenderState(E_GRAPH_RS_FILLMODE, E_GRAPH_FILL_MODE_SOLID);
-            m_Device->SetRenderState(E_GRAPH_RS_CULLMODE, E_GRAPH_CULL_DEFAULT);
-
-            m_Device->SetShaderProgram(IZ_NULL);
-        }
-
         return IZ_TRUE;
     }
 
     // 描画終了
-    IZ_BOOL C2DRenderer::EndDraw()
+    IZ_BOOL C2DRenderer::EndDraw(CGraphicsDevice* device)
     {
-        IZ_ASSERT(m_Device != IZ_NULL);
-
         // といってもフラッシュするだけ・・・
-        IZ_BOOL ret = Flush();
-
-        m_Device->LoadRenderState();
-
-        SAFE_RELEASE(m_Device);
-
-        return ret;
-    }
-
-    // テクスチャセット
-    IZ_BOOL C2DRenderer::SetTexture(IZ_UINT stage, CBaseTexture* tex)
-    {
-        IZ_ASSERT(m_Device != IZ_NULL);
-
-        CBaseTexture* setTex = m_Device->GetTexture(stage);
-
-        if (tex != setTex) {
-            VRETURN(Flush());
-        }
-
-        IZ_BOOL ret = m_Device->SetTexture(stage, tex);
+        IZ_BOOL ret = Flush(device);
 
         return ret;
     }
@@ -296,14 +257,12 @@ namespace graph
     }   // namespace
 
     // 描画コマンドをフラッシュ
-    IZ_BOOL C2DRenderer::Flush()
+    IZ_BOOL C2DRenderer::Flush(CGraphicsDevice* device)
     {
         IZ_C_ASSERT(COUNTOF(GetVtxNum) == PRIM_TYPE_NUM);
         IZ_C_ASSERT(COUNTOF(ComputeRealPrimNum) == PRIM_TYPE_NUM);
         IZ_C_ASSERT(COUNTOF(ComputeMinIdx) == PRIM_TYPE_NUM);
         IZ_C_ASSERT(COUNTOF(PrimType) == PRIM_TYPE_NUM);
-
-        IZ_ASSERT(m_Device != IZ_NULL);
 
         // アンロック
         Unlock();
@@ -315,23 +274,23 @@ namespace graph
 
         {
             // インデックスバッファのセット
-            m_Device->SetIndexBuffer(m_pIB);
+            device->SetIndexBuffer(m_pIB);
 
             // 頂点宣言のセット
-            m_Device->SetVertexDeclaration(m_pVD);
+            device->SetVertexDeclaration(m_pVD);
 
             // 頂点バッファのセット
-            m_Device->SetVertexBuffer(
+            device->SetVertexBuffer(
                 0,
                 0,
                 m_pVB->GetStride(),
                 m_pVB);
 
             // シェーダのセット
-            m_pShader->SetShader(m_Device);
+            m_pShader->SetShader(device);
 
             // シェーダパラメータのセット
-            m_pShader->SetShaderParams(m_Device);
+            m_pShader->SetShaderParams(device);
         }
 
         // 頂点数
@@ -351,7 +310,7 @@ namespace graph
         // インデックスは必ず０から始まる
 
         // 描画
-        IZ_BOOL ret = m_Device->DrawIndexedPrimitive(
+        IZ_BOOL ret = device->DrawIndexedPrimitive(
                         PrimType[m_nPrimType],
                         vtxOffset,   // BaseIdx
                         vtxNum, // VtxNum
@@ -365,15 +324,16 @@ namespace graph
     }
 
     // スプライト描画
-    IZ_BOOL C2DRenderer::DrawSpriteByUVCoord(
+    IZ_BOOL C2DRenderer::DrawSprite(
+        CGraphicsDevice* device,
         const CFloatRect& rcSrc,
         const CIntRect& rcDst,
         const IZ_COLOR color/*= IZ_COLOR_RGBA(255, 255, 255, 255)*/)
     {
-        IZ_ASSERT(m_Device != IZ_NULL);
-
         // 描画準備
-        VRETURN(PrepareDraw(PRIM_TYPE_SPRITE));
+        VRETURN(PrepareDraw(
+                    device,
+                    PRIM_TYPE_SPRITE));
 
         // ロック
         VRETURN(Lock());
@@ -382,7 +342,7 @@ namespace graph
         CFloatRect rcUV(rcSrc);
         {
             // テクセルの中心をサンプリングするようにする
-            CBaseTexture* pTex = m_Device->GetTexture(0);
+            CBaseTexture* pTex = device->GetTexture(0);
             IZ_FLOAT fTexWidth = (IZ_FLOAT)pTex->GetWidth();
             IZ_FLOAT fTexHeight = (IZ_FLOAT)pTex->GetHeight();
         
@@ -406,15 +366,16 @@ namespace graph
     }
 
     // スプライト描画
-    IZ_BOOL C2DRenderer::DrawSprite(
+    IZ_BOOL C2DRenderer::DrawSpriteEx(
+        CGraphicsDevice* device,
         const CIntRect& rcSrc,
         const CIntRect& rcDst,
         const IZ_COLOR color/*= IZ_COLOR_RGBA(255, 255, 255, 255)*/)
     {
-        IZ_ASSERT(m_Device != IZ_NULL);
-
         // 描画準備
-        VRETURN(PrepareDraw(PRIM_TYPE_SPRITE));
+        VRETURN(PrepareDraw(
+                    device,
+                    PRIM_TYPE_SPRITE));
 
         // ロック
         VRETURN(Lock());
@@ -434,7 +395,7 @@ namespace graph
                 fTexRight += 0.5f;
                 fTexBottom += 0.5f;
 
-                CBaseTexture* pTex = m_Device->GetTexture(0);
+                CBaseTexture* pTex = device->GetTexture(0);
                 IZ_FLOAT fTexWidth = (IZ_FLOAT)pTex->GetWidth();
                 IZ_FLOAT fTexHeight = (IZ_FLOAT)pTex->GetHeight();
             
@@ -460,19 +421,22 @@ namespace graph
 
     // 矩形描画
     IZ_BOOL C2DRenderer::DrawRect(
+        CGraphicsDevice* device,
         const CIntRect& rcDst,
         const IZ_COLOR color)
     {
-        IZ_ASSERT(m_Device != IZ_NULL);
-
         // 元の値を覚えておく
         E_GRAPH_2D_RENDER_OP nPrevOp = GetRenderOp();
 
         // テクスチャを張らないので強制的に
-        VRETURN(SetRenderOp(E_GRAPH_2D_RENDER_OP_VTX));
+        VRETURN(SetRenderOp(
+                    device,
+                    E_GRAPH_2D_RENDER_OP_VTX));
 
         // 描画準備
-        VRETURN(PrepareDraw(PRIM_TYPE_RECT));
+        VRETURN(PrepareDraw(
+                    device,
+                    PRIM_TYPE_RECT));
 
         // ロック
         VRETURN(Lock());
@@ -489,27 +453,32 @@ namespace graph
         ++m_nCurPrimNum;
 
         // 元に戻す
-        VRETURN(SetRenderOp(nPrevOp));
+        VRETURN(SetRenderOp(
+                    device,
+                    nPrevOp));
 
         return IZ_TRUE;
     }
 
     // 線描画
     IZ_BOOL C2DRenderer::DrawLine(
+        CGraphicsDevice* device,
         const CIntPoint& ptStart,
         const CIntPoint& ptGoal,
         const IZ_COLOR color)
     {
-        IZ_ASSERT(m_Device != IZ_NULL);
-
         // 元の値を覚えておく
         E_GRAPH_2D_RENDER_OP nPrevOp = GetRenderOp();
 
         // テクスチャを張らないので強制的に
-        VRETURN(SetRenderOp(E_GRAPH_2D_RENDER_OP_VTX));
+        VRETURN(SetRenderOp(
+                    device,
+                    E_GRAPH_2D_RENDER_OP_VTX));
 
         // 描画準備
-        VRETURN(PrepareDraw(PRIM_TYPE_LINE));
+        VRETURN(PrepareDraw(
+                    device,
+                    PRIM_TYPE_LINE));
 
         // ロック
         VRETURN(Lock());
@@ -552,19 +521,23 @@ namespace graph
         ++m_nCurPrimNum;
 
         // 元に戻す
-        VRETURN(SetRenderOp(nPrevOp));
+        VRETURN(SetRenderOp(
+                    device,
+                    nPrevOp));
 
         return IZ_TRUE;
     }
 
     // 描画設定セット
-    IZ_BOOL C2DRenderer::SetRenderOp(E_GRAPH_2D_RENDER_OP nOp)
+    IZ_BOOL C2DRenderer::SetRenderOp(
+        CGraphicsDevice* device,
+        E_GRAPH_2D_RENDER_OP nOp)
     {
         IZ_ASSERT(m_pShader != IZ_NULL);
 
         // 前と異なるときはフラッシュする
         if (m_pShader->GetRenderOp() != nOp) {
-            VRETURN(Flush());
+            VRETURN(Flush(device));
         }
 
         m_pShader->SetRenderOp(nOp);
@@ -572,18 +545,14 @@ namespace graph
         return IZ_TRUE;
     }
 
-    // ユーザー独自の2D描画用のピクセルシェーダをセット.
-    void C2DRenderer::SetUserDefsShader(CPixelShader* ps)
-    {
-        m_pShader->SetPixelShader(ps);
-    }
-
     // 描画準備
-    IZ_BOOL C2DRenderer::PrepareDraw(PRIM_TYPE nPrimType)
+    IZ_BOOL C2DRenderer::PrepareDraw(
+        CGraphicsDevice* device,
+        PRIM_TYPE nPrimType)
     {
         if (m_nPrimType != nPrimType) {
             // プリミティブタイプが違うときはフラッシュする
-            VRETURN(Flush());
+            VRETURN(Flush(device));
         }
 
         m_nPrimType = nPrimType;
@@ -611,7 +580,7 @@ namespace graph
             if (size > m_pVB->GetSize()) {
                 IZ_ASSERT(IZ_FALSE);    // 一応
 
-                Flush();
+                Flush(device);
                 m_sVBInfo.Clear();
 
                 m_sVBInfo.next_lock_discard = IZ_TRUE;
@@ -641,7 +610,7 @@ namespace graph
             if (size > m_pIB->GetSize()) {
                 IZ_ASSERT(IZ_FALSE);    // 一応
 
-                Flush();
+                Flush(device);
                 m_sIBInfo.Clear();
 
                 m_sIBInfo.next_lock_discard = IZ_TRUE;
@@ -820,6 +789,26 @@ namespace graph
             m_sIBInfo.buf_ptr = pIdx;
             m_sIBInfo.num += 6;
         }
+    }
+
+    // リソースリセット
+    void C2DRenderer::DisableResource()
+    {
+        IZ_ASSERT(m_pVB != IZ_NULL);
+        IZ_ASSERT(m_pIB != IZ_NULL);
+
+        m_pVB->Disable();
+        m_pIB->Disable();
+    }
+
+    // リセット
+    void C2DRenderer::RestoreResource()
+    {
+        IZ_ASSERT(m_pVB != IZ_NULL);
+        IZ_ASSERT(m_pIB != IZ_NULL);
+
+        m_pVB->Restore();
+        m_pIB->Restore();
     }
 }   // namespace graph
 }   // namespace izanagi

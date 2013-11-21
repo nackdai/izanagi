@@ -15,8 +15,8 @@ namespace izanagi {
         friend class CPostEffectFunctor;
 
     protected:
-        CPostEffectFunctorMGF();
-        virtual ~CPostEffectFunctorMGF();
+        inline CPostEffectFunctorMGF();
+        inline ~CPostEffectFunctorMGF();
 
         NO_COPIABLE(CPostEffectFunctorMGF);
 
@@ -65,14 +65,11 @@ namespace izanagi {
             CPostEffectShader* pShader);
 
         // ファンクタ独自のテクスチャ作成
-        virtual IZ_BOOL CreateTexture(
+        IZ_BOOL CreateTexture(
             CPostEffect* pPostEffect,
             CPostEffectShader* pShader,
             CPostEffectTextureCreator* pTexCreator,
             graph::CGraphicsDevice* pDevice);
-
-        // ファンクタ独自の2DRenderer作成
-        virtual IZ_BOOL Create2DRenderer(graph::CGraphicsDevice* device);
 
     protected:
         // 縮小
@@ -94,9 +91,28 @@ namespace izanagi {
         // ステートリスト
         SMGFStateListItem m_DownScaleState[MGF_LOOP_NUM];
         SMGFStateListItem m_BloomState[MGF_LOOP_NUM][MGF_BLOOM_STATE_NUM];
+    };
 
-        graph::C2DRenderer* m_2DRenderer;
-    };    
+    // inline *****************************************
+
+    // コンストラクタ
+    CPostEffectFunctorMGF::CPostEffectFunctorMGF()
+    {
+    }
+
+    // デストラクタ
+    CPostEffectFunctorMGF::~CPostEffectFunctorMGF()
+    {
+        for (IZ_UINT i = 0; i < MGF_LOOP_NUM; ++i) {
+            m_DownScaleState[i].Release();
+        }
+
+        for (IZ_UINT i = 0; i < MGF_LOOP_NUM; ++i) {
+            for (IZ_UINT n = 0; n < MGF_BLOOM_STATE_NUM; ++n) {
+                m_BloomState[i][n].Release();
+            }
+        }
+    }
 }   // namespace izanagi
 
 #endif  // #if !defined(__IZANAGI_POSTEFFECT_FUNCTOR_MGF_H__)

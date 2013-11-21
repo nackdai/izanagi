@@ -49,12 +49,6 @@ namespace izanagi {
             return IZ_TRUE;
         }
 
-        // ファンクタ独自の2DRenderer作成
-        virtual IZ_BOOL Create2DRenderer(graph::CGraphicsDevice* device)
-        {
-            return IZ_TRUE;
-        }
-
         // リセット
         virtual void Reset() {}
 

@@ -17,6 +17,4 @@
 
 #include "graph/GraphPerf.h"
 
-#include "graph/2d//2DRenderer.h"
-
 #endif  // #if !defined(__IZANAGI_GRAPH_H__)
