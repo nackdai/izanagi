@@ -16,6 +16,8 @@
 #include "text/ParagraphImpl.h"
 #include "text/TextLineImpl.h"
 
+#include "text/FontGlyphCacheImpl.h"
+
 #include "text/FontHostFT.h"
 #include "text/FontHostFNT.h"
 

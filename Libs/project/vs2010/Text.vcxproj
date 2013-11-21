@@ -105,6 +105,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\text\FontGlyphCache.cpp" />
+    <ClCompile Include="..\..\source\text\FontGlyphCacheImpl.cpp" />
     <ClCompile Include="..\..\source\text\FontHostFNT.cpp" />
     <ClCompile Include="..\..\source\text\FontHostFT.cpp" />
     <ClCompile Include="..\..\source\text\FontMap.cpp" />
@@ -121,6 +122,7 @@
     <ClInclude Include="..\..\include\text\FNTFormat.h" />
     <ClInclude Include="..\..\include\text\FontDefs.h" />
     <ClInclude Include="..\..\include\text\FontGlyphCache.h" />
+    <ClInclude Include="..\..\include\text\FontGlyphCacheImpl.h" />
     <ClInclude Include="..\..\include\text\FontHost.h" />
     <ClInclude Include="..\..\include\text\FontHostFNT.h" />
     <ClInclude Include="..\..\include\text\FontHostFT.h" />

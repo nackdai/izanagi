@@ -67,7 +67,7 @@ IZ_BOOL CTextParagraphApp::InitInternal(
     }
 
     {
-        m_Paragraphs = izanagi::text::CDefaultParagraphGroup::CreateParagraphGroup(
+        m_Paragraphs = izanagi::text::CParagraphGroupImpl::CreateParagraphGroup(
             allocator,
             m_FontHost,
             izanagi::text::CUtf8String(textUTF8),

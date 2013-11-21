@@ -17,10 +17,10 @@ namespace text
 
     /**
      */
-    class CDefaultParagraph : public CParagraph
+    class CParagraphImpl : public CParagraph
     {
         friend class CParagraph;
-        friend class CDefaultLine;
+        friend class CLineImpl;
 
     public:
         static CParagraph* CreateParagraph(
@@ -31,7 +31,7 @@ namespace text
             IZ_UINT bytes,
             void* userData)
         {
-            CParagraph* ret = CParagraph::CreateParagraph<CDefaultParagraph>(
+            CParagraph* ret = CParagraph::CreateParagraph<CParagraphImpl>(
                 allocator,
                 host,
                 encode,
@@ -42,8 +42,8 @@ namespace text
         }
 
     private:
-        CDefaultParagraph();
-        virtual ~CDefaultParagraph();
+        CParagraphImpl();
+        virtual ~CParagraphImpl();
 
     private:
         virtual IZ_BOOL Init(

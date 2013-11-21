@@ -7,17 +7,17 @@ namespace izanagi
 {
 namespace text
 {
-    CDefaultParagraph::CDefaultParagraph()
+    CParagraphImpl::CParagraphImpl()
     {
         m_FontHost = IZ_NULL;
     }
 
-    CDefaultParagraph::~CDefaultParagraph()
+    CParagraphImpl::~CParagraphImpl()
     {
         SAFE_RELEASE(m_FontHost);
     }
 
-    IZ_BOOL CDefaultParagraph::Init(
+    IZ_BOOL CParagraphImpl::Init(
         IFontHost* host,
         E_FONT_CHAR_ENCODE encode,
         const void* text,
@@ -29,18 +29,18 @@ namespace text
         return IZ_TRUE;
     }
 
-    void CDefaultParagraph::BeginCreateLine()
+    void CParagraphImpl::BeginCreateLine()
     {
         m_LastPos = 0;
         m_String.BeginIter();
     }
 
-    void CDefaultParagraph::EndCreateLine()
+    void CParagraphImpl::EndCreateLine()
     {
         m_String.EndIter();
     }
 
-    CLine* CDefaultParagraph::CreateLine(IZ_UINT width)
+    CLine* CParagraphImpl::CreateLine(IZ_UINT width)
     {
         E_FONT_CHAR_ENCODE encode = m_FontHost->GetEncodeType();
 
@@ -107,7 +107,7 @@ namespace text
                         param.bytes = bytes;
                     }
 
-                    ret = CDefaultLine::CreateLine(
+                    ret = CLineImpl::CreateLine(
                         m_Allocator,
                         m_FontHost,
                         &param);
