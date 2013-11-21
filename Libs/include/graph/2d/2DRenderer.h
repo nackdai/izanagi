@@ -14,7 +14,6 @@ namespace graph
     class CVertexBuffer;
     class CIndexBuffer;
     class CVertexDeclaration;
-    class CBaseTexture;
 
     /**
     */
@@ -22,13 +21,13 @@ namespace graph
     {
         friend class CGraphicsDevice;
 
-    private:
+    protected:
         // インスタンス作成
         static C2DRenderer* Create2DRenderer(
             CGraphicsDevice* device,
             IMemoryAllocator* allocator);
 
-    private:
+    protected:
         C2DRenderer();
         ~C2DRenderer();
 
@@ -36,7 +35,7 @@ namespace graph
 
         IZ_DEFINE_INTERNAL_RELEASE();
 
-    private:
+    protected:
         struct CUSTOM_VERTEX {
             float x, y, z, w;
             IZ_COLOR color;
@@ -52,72 +51,57 @@ namespace graph
             PRIM_TYPE_FORCE_INT32 = 0x7fffffff,
         };
 
-    private:
+    protected:
         // 初期化
         IZ_BOOL Init(CGraphicsDevice* device);
 
     public:
-        /** 開始時に呼ぶこと
-         */
-        void Begin();
+        // フレーム開始時に呼ぶこと
+        void BeginFrame();
 
-        /** 終了時に呼ぶこと
-         */
-        void End();
+        // 描画開始
+        IZ_BOOL BeginDraw();
 
-        /** 描画開始
-         */
-        IZ_BOOL BeginDraw(CGraphicsDevice* device);
+        // 描画終了
+        IZ_BOOL EndDraw(CGraphicsDevice* device);
 
-        /** 描画終了
-         */
-        IZ_BOOL EndDraw();
+        // 描画コマンドをフラッシュ
+        IZ_BOOL Flush(CGraphicsDevice* device);
 
-        /** テクスチャセット
-         */
-        IZ_BOOL SetTexture(IZ_UINT stage, CBaseTexture* tex);
-
-        /** スプライト描画
-         */
-        IZ_BOOL DrawSpriteByUVCoord(
+        // スプライト描画
+        IZ_BOOL DrawSprite(
+            CGraphicsDevice* device,
             const CFloatRect& rcSrc,
             const CIntRect& rcDst,
             const IZ_COLOR color = IZ_COLOR_RGBA(255, 255, 255, 255));
-
-        /** スプライト描画
-         */
-        IZ_BOOL DrawSprite(
+        IZ_BOOL DrawSpriteEx(
+            CGraphicsDevice* device,
             const CIntRect& rcSrc,
             const CIntRect& rcDst,
             const IZ_COLOR color = IZ_COLOR_RGBA(255, 255, 255, 255));
 
-        /** 矩形描画
-         */
+        // 矩形描画
         IZ_BOOL DrawRect(
+            CGraphicsDevice* device,
             const CIntRect& rcDst,
             const IZ_COLOR color);
 
-        /** 線描画
-         */
+        // 線描画
         IZ_BOOL DrawLine(
+            CGraphicsDevice* device,
             const CIntPoint& ptStart,
             const CIntPoint& ptGoal,
             const IZ_COLOR color);
 
-        /** 描画設定
-         */
-        IZ_BOOL SetRenderOp(E_GRAPH_2D_RENDER_OP nOp);
-
-        /** ユーザー独自の2D描画用のピクセルシェーダをセット.
-         */
-        void SetUserDefsShader(CPixelShader* ps);
-
-    private:
-        // 描画コマンドをフラッシュ
-        IZ_BOOL Flush();
+        // 描画設定
+        IZ_BOOL SetRenderOp(
+            CGraphicsDevice* device,
+            E_GRAPH_2D_RENDER_OP nOp);
 
         // 描画準備
-        IZ_BOOL PrepareDraw(PRIM_TYPE nPrimType);
+        IZ_BOOL PrepareDraw(
+            CGraphicsDevice* device,
+            PRIM_TYPE nPrimType);
 
         // ロック
         IZ_BOOL Lock();
@@ -134,7 +118,13 @@ namespace graph
         // インデックスデータセット
         void SetIdx();
 
-    private:
+        // リソースリセット
+        void DisableResource();
+
+        // リセット
+        void RestoreResource();
+
+    protected:
         // ロックフラグ制御
         IZ_BOOL IsLock() const { return m_bIsLock; }
         void ToggleIsLock() { m_bIsLock = !m_bIsLock; }
@@ -146,7 +136,7 @@ namespace graph
             return m_pShader->GetRenderOp();
         }
 
-    private:
+    protected:
         enum {
             MAX_RECT_NUM = 1000,
 
@@ -168,7 +158,7 @@ namespace graph
             //VTX_FVF = FVF_CUSTOMVERTEX,
         };
 
-    private:
+    protected:
         // バッファ情報
         struct SBufferInfo {
             IZ_UINT offset; // オフセット
@@ -192,10 +182,8 @@ namespace graph
             }
         };
 
-    private:
+    protected:
         IMemoryAllocator* m_Allocator;
-
-        CGraphicsDevice* m_Device;
 
         CVertexBuffer* m_pVB;       // 頂点バッファ
         CIndexBuffer* m_pIB;        // インデックスバッファ

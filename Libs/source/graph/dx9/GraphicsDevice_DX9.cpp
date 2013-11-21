@@ -9,6 +9,7 @@
 #include "graph/dx9/PixelShader_DX9.h"
 #include "graph/dx9/ShaderProgram_DX9.h"
 #include "graph/dx9/VertexDeclaration_DX9.h"
+#include "graph/dx9/2DRenderer_DX9.h"
 
 namespace izanagi
 {
@@ -141,6 +142,13 @@ namespace graph
         if (m_Device == IZ_NULL) {
             // 本体作成
             ret = CreateBody(param);
+
+            if (ret) {
+                // 2D描画初期化
+                m_2DRenderer = C2DRendererDX9::Create2DRenderer(this, m_Allocator);
+                ret = (m_2DRenderer != IZ_NULL);
+                IZ_ASSERT(ret);
+            }
         }
         else {
             // リセット
@@ -318,6 +326,8 @@ namespace graph
             renderTarget->ReleaseResource();
             deptthStencil->ReleaseResource();
 
+            m_2DRenderer->DisableResource();
+
             DisableResource(m_ResetTexture);
             DisableResource(m_ResetVB);
             DisableResource(m_ResetIB);
@@ -345,6 +355,8 @@ namespace graph
             {
                 renderTarget->Reset(IZ_NULL, 0);
                 deptthStencil->Reset(IZ_NULL, 0);
+
+                m_2DRenderer->RestoreResource();
 
                 RestoreResource(m_ResetTexture);
                 RestoreResource(m_ResetVB);
@@ -388,6 +400,9 @@ namespace graph
             // フレームバッファサーフェスを現在のサーフェスとしてセット
             SAFE_REPLACE(m_RenderState.curRT[0], m_RT);
             SAFE_REPLACE(m_RenderState.curDepth, m_Depth);
+
+            // 2D処理開始
+            m_2DRenderer->BeginFrame();
 
             ret = IZ_TRUE;
         }

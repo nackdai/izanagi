@@ -13,9 +13,4 @@
       <Filter>asset</Filter>
     </CustomBuild>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\WaterDrop\WaterDropPS.hlsl">
-      <Filter>asset</Filter>
-    </None>
-  </ItemGroup>
 </Project>

@@ -23,14 +23,11 @@ protected:
 
 private:
     izanagi::CImage* m_Img;
-
-    izanagi::graph::C2DRenderer* m_2DRenderer;
 };
 
 CRender2DApp::CRender2DApp()
 {
     m_Img = IZ_NULL;
-    m_2DRenderer = IZ_NULL;
 }
 
 CRender2DApp::~CRender2DApp()
@@ -50,19 +47,14 @@ IZ_BOOL CRender2DApp::InitInternal(
                 allocator,
                 device,
                 &in);
-    IZ_ASSERT(m_Img != IZ_NULL);
 
-    m_2DRenderer = device->Create2DRenderer();
-    IZ_ASSERT(m_2DRenderer != IZ_NULL);
-
-    return IZ_TRUE;
+    return (m_Img != IZ_NULL);
 }
 
 // 解放.
 void CRender2DApp::ReleaseInternal()
 {
     SAFE_RELEASE(m_Img);
-    SAFE_RELEASE(m_2DRenderer);
 }
 
 // 更新.
@@ -74,31 +66,27 @@ void CRender2DApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 // 描画.
 void CRender2DApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
-    m_2DRenderer->Begin();
-
-    if (m_2DRenderer->BeginDraw(device)) {
+    if (device->Begin2D()) {
         // スプライト
-        m_2DRenderer->SetTexture(0, m_Img->GetTexture(0));
-        m_2DRenderer->SetRenderOp(izanagi::graph::E_GRAPH_2D_RENDER_OP_MODULATE);
-        m_2DRenderer->DrawSpriteByUVCoord(
+        device->SetTexture(0, m_Img->GetTexture(0));
+        device->Set2DRenderOp(izanagi::graph::E_GRAPH_2D_RENDER_OP_MODULATE);
+        device->Draw2DSprite(
             izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),
             izanagi::CIntRect(300, 100, 556, 228));
 
         // 塗りつぶし矩形
-        m_2DRenderer->DrawRect(
+        device->Draw2DRect(
             izanagi::CIntRect(100, 100, 200, 200),
             IZ_COLOR_RGBA(0, 0xff, 0, 0xff));
 
         // ライン
-        m_2DRenderer->DrawLine(
+        device->Draw2DLine(
             izanagi::CIntPoint(100, 100),    // 始点
             izanagi::CIntPoint(200, 200),    // 終点
             IZ_COLOR_RGBA(0xff, 0, 0, 0xff));
 
-        m_2DRenderer->EndDraw();
+        device->End2D();
     }
-
-    m_2DRenderer->End();
 }
 
 static const IZ_UINT BUF_SIZE = 1 * 1024 * 1024;

@@ -300,8 +300,6 @@ namespace graph
         E_GRAPH_2D_RENDER_OP_MODULATE_ALPHA,    ///< Dst = Vtx x Tex.a
         E_GRAPH_2D_RENDER_OP_NO_TEX_ALPHA,      ///< Dst = Vtx x (Tex.rgb, 1.0)
 
-        E_GRAPH_2D_RENDER_OP_USER_DEFS,
-
         E_GRAPH_2D_RENDER_OP_NUM,
         E_GRAPH_2D_RENDER_OP_FORCE_INT32 = 0x7fffffff,
     };
