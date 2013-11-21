@@ -15,7 +15,7 @@ namespace text
 
     /**
      */
-    class CDefaultLine : public CLine
+    class CLineImpl : public CLine
     {
         friend class CLine;
 
@@ -25,13 +25,13 @@ namespace text
             IFontHost* host,
             void* userData)
         {
-            CLine* ret = CLine::CreateLine<CDefaultLine>(allocator, host, userData);
+            CLine* ret = CLine::CreateLine<CLineImpl>(allocator, host, userData);
             return ret;
         }
 
     private:
-        CDefaultLine();
-        virtual ~CDefaultLine() {}
+        CLineImpl();
+        virtual ~CLineImpl() {}
 
     public:
         virtual IZ_UINT GetLineWidth();

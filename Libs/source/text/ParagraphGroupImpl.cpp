@@ -8,12 +8,12 @@ namespace izanagi
 {
 namespace text
 {
-    CDefaultParagraphGroup::CDefaultParagraphGroup()
+    CParagraphGroupImpl::CParagraphGroupImpl()
     {
         m_FontHost = IZ_NULL;
     }
 
-    CDefaultParagraphGroup::~CDefaultParagraphGroup()
+    CParagraphGroupImpl::~CParagraphGroupImpl()
     {
         SAFE_RELEASE(m_FontHost);
     }
@@ -51,7 +51,7 @@ namespace text
         }
     }
 
-    IZ_BOOL CDefaultParagraphGroup::Init(
+    IZ_BOOL CParagraphGroupImpl::Init(
         IFontHost* host,
         CUString& str, 
         void* userData)
@@ -96,7 +96,7 @@ namespace text
                 IZ_UINT bytes = pos - lastPos;
                 lastPos = pos;
 
-                CParagraph* paragraph = CDefaultParagraph::CreateParagraph(
+                CParagraph* paragraph = CParagraphImpl::CreateParagraph(
                     m_Allocator,
                     host,
                     str.GetCharCode(),

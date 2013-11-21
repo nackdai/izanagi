@@ -16,7 +16,7 @@ namespace text
 
     /**
      */
-    class CDefaultParagraphGroup : public CParagraphGroup
+    class CParagraphGroupImpl : public CParagraphGroup
     {
         friend class CParagraphGroup;
 
@@ -27,7 +27,7 @@ namespace text
             CUString& text,
             void* userData)
         {
-            return CParagraphGroup::CreateParagraphGroup<CDefaultParagraphGroup>(
+            return CParagraphGroup::CreateParagraphGroup<CParagraphGroupImpl>(
                 allocator,
                 host,
                 text,
@@ -35,8 +35,8 @@ namespace text
         }
 
     private:
-        CDefaultParagraphGroup();
-        virtual ~CDefaultParagraphGroup();
+        CParagraphGroupImpl();
+        virtual ~CParagraphGroupImpl();
 
     private:
         virtual IZ_BOOL Init(

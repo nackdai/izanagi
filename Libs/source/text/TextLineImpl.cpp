@@ -8,13 +8,13 @@ namespace izanagi
 {
 namespace text
 {
-    CDefaultLine::CDefaultLine()
+    CLineImpl::CLineImpl()
     {
         m_Text = IZ_NULL;
         m_Bytes = 0;
     }
 
-    IZ_UINT CDefaultLine::GetLineWidth()
+    IZ_UINT CLineImpl::GetLineWidth()
     {
         if (m_Text == IZ_NULL)
         {
@@ -62,16 +62,16 @@ namespace text
         return width;
     }
 
-    IZ_BOOL CDefaultLine::Init(void* userData)
+    IZ_BOOL CLineImpl::Init(void* userData)
     {
-        CDefaultParagraph::SLineParam* param = reinterpret_cast<CDefaultParagraph::SLineParam*>(userData);
+        CParagraphImpl::SLineParam* param = reinterpret_cast<CParagraphImpl::SLineParam*>(userData);
         m_Encode = param->encode;
         m_Text = param->text;
         m_Bytes = param->bytes;
         return IZ_TRUE;
     }
 
-    void CDefaultLine::Prepare(
+    void CLineImpl::Prepare(
         IZ_UINT8* dst,
         IZ_UINT pitch,
         IZ_UINT ascent,

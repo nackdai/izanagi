@@ -65,6 +65,9 @@
     <ClCompile Include="..\..\source\text\TextLineImpl.cpp">
       <Filter>source\paragraph\impl</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\text\FontGlyphCacheImpl.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\izFont.h" />
@@ -112,6 +115,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\text\TextLineImpl.h">
       <Filter>include\paragraph\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\text\FontGlyphCacheImpl.h">
+      <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

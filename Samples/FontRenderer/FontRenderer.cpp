@@ -59,7 +59,7 @@ IZ_BOOL CFontRendererApp::InitInternal(
     }
 
     {
-        m_Cache = izanagi::text::CDefaultGlyphCache::CreateGlyphCache(
+        m_Cache = izanagi::text::CGlyphCacheImpl::CreateGlyphCache(
             allocator,
             device,
             m_Renderer->GetFontHost()->GetEncodeType(),
