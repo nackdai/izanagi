@@ -5,9 +5,9 @@
 #include "graph/gles2/IndexBuffer_GLES2.h"
 #include "graph/gles2/ShaderProgram_GLES2.h"
 #include "graph/gles2/VertexDeclaration_GLES2.h"
-#include "graph/gles2/2DRenderer_GLES2.h"
 #include "graph/gles2/FrameBufferObject.h"
 #include "graph/gles2/RenderTarget_GLES2.h"
+#include "graph/2d/2DRenderer.h"
 
 namespace izanagi
 {
@@ -140,7 +140,7 @@ namespace graph
 
             if (ret) {
                 // 2Dï`âÊèâä˙âª
-                m_2DRenderer = C2DRendererGLES2::Create2DRenderer(this, m_Allocator);
+                m_2DRenderer = C2DRenderer::Create2DRenderer(this, m_Allocator);
                 VRETURN(m_2DRenderer != IZ_NULL);
 
                 // FBO
