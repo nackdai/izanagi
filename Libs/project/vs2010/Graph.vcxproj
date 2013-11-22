@@ -326,7 +326,6 @@ $(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpNoTexAlp
     <ClInclude Include="..\..\include\graph\BaseTexture.h" />
     <ClInclude Include="..\..\include\graph\BufferBase.h" />
     <ClInclude Include="..\..\include\graph\CubeTexture.h" />
-    <ClInclude Include="..\..\include\graph\dx9\2DRenderer_DX9.h" />
     <ClInclude Include="..\..\include\graph\dx9\2DShader_DX9.h" />
     <ClInclude Include="..\..\include\graph\dx9\CubeTexture_DX9.h" />
     <ClInclude Include="..\..\include\graph\dx9\D3D9ParamValueConverter.h" />
@@ -342,7 +341,6 @@ $(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpNoTexAlp
     <ClInclude Include="..\..\include\graph\dx9\VertexBuffer_DX9.h" />
     <ClInclude Include="..\..\include\graph\dx9\VertexDeclaration_DX9.h" />
     <ClInclude Include="..\..\include\graph\dx9\VertexShader_DX9.h" />
-    <ClInclude Include="..\..\include\graph\gles2\2DRenderer_GLES2.h" />
     <ClInclude Include="..\..\include\graph\gles2\2DShader_GLES2.h" />
     <ClInclude Include="..\..\include\graph\gles2\CubeTexture_GLES2.h" />
     <ClInclude Include="..\..\include\graph\gles2\FrameBufferObject.h" />

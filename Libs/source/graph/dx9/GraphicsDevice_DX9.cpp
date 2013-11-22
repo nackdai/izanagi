@@ -9,7 +9,7 @@
 #include "graph/dx9/PixelShader_DX9.h"
 #include "graph/dx9/ShaderProgram_DX9.h"
 #include "graph/dx9/VertexDeclaration_DX9.h"
-#include "graph/dx9/2DRenderer_DX9.h"
+#include "graph/2d/2DRenderer.h"
 
 namespace izanagi
 {
@@ -145,7 +145,7 @@ namespace graph
 
             if (ret) {
                 // 2D描画初期化
-                m_2DRenderer = C2DRendererDX9::Create2DRenderer(this, m_Allocator);
+                m_2DRenderer = C2DRenderer::Create2DRenderer(this, m_Allocator);
                 ret = (m_2DRenderer != IZ_NULL);
                 IZ_ASSERT(ret);
             }

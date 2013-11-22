@@ -21,7 +21,7 @@ namespace graph
     {
         friend class CGraphicsDevice;
 
-    protected:
+    public:
         // インスタンス作成
         static C2DRenderer* Create2DRenderer(
             CGraphicsDevice* device,
