@@ -121,8 +121,8 @@ namespace izanagi {
 
 		rc.left = FONT_SIZE * nPosX;
 		rc.top = FONT_SIZE * nPosY;
-		rc.right = rc.left + FONT_SIZE;
-		rc.bottom = rc.top + FONT_SIZE;
+		rc.width = FONT_SIZE;
+		rc.height = FONT_SIZE;
 	}
 
 	// 描画パラメータセット

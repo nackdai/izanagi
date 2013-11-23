@@ -228,6 +228,24 @@ namespace graph
         return m_2DRenderer->GetRenderOp();
     }
 
+    // ユーザー定義のシェーダをセット
+    void CGraphicsDevice::SetUserDefs2DShader(
+        CVertexShader* vs,
+        CPixelShader* ps)
+    {
+        IZ_ASSERT(m_2DRenderer != IZ_NULL);
+        m_2DRenderer->SetUserDefsShader(vs, ps);
+    }
+
+    // 描画モードがユーザー定義の時のみ2D用のシェーダープログラムを取得
+    CShaderProgram* CGraphicsDevice::Get2DShaderProgramIfRenderOpIsUserDefs()
+    {
+        IZ_ASSERT(m_2DRenderer != IZ_NULL);
+        CShaderProgram* ret = m_2DRenderer->Get2DShaderProgramIfRenderOpIsUserDefs();
+
+        return ret;
+    }
+
     // テクスチャセット
     IZ_BOOL CGraphicsDevice::SetTexture(IZ_UINT nStage, CBaseTexture* pTex)
     {

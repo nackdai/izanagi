@@ -12,5 +12,8 @@
     <CustomBuild Include="..\..\WaterDrop\WaterDrop.xml">
       <Filter>asset</Filter>
     </CustomBuild>
+    <CustomBuild Include="..\..\WaterDrop\WaterDrop.hlsl">
+      <Filter>asset</Filter>
+    </CustomBuild>
   </ItemGroup>
 </Project>

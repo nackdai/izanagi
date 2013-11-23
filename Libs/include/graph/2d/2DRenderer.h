@@ -98,6 +98,15 @@ namespace graph
             CGraphicsDevice* device,
             E_GRAPH_2D_RENDER_OP nOp);
 
+        // ユーザー定義のシェーダをセット
+        void SetUserDefsShader(
+            CVertexShader* vs,
+            CPixelShader* ps);
+
+        // 描画モードがユーザー定義の時のみ2D用のシェーダープログラムを取得
+        CShaderProgram* Get2DShaderProgramIfRenderOpIsUserDefs();
+
+    public:
         // 描画準備
         IZ_BOOL PrepareDraw(
             CGraphicsDevice* device,

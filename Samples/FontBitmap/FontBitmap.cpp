@@ -82,7 +82,7 @@ IZ_BOOL CFontBitmapApp::InitInternal(
             &in);
         VRETURN(m_FontHost[i] != IZ_NULL);
 
-        m_Cache[i] = izanagi::text::CDefaultGlyphCache::CreateGlyphCache(
+        m_Cache[i] = izanagi::text::CGlyphCacheImpl::CreateGlyphCache(
             allocator,
             device,
             m_FontHost[i]->GetEncodeType(),
@@ -162,19 +162,19 @@ void CFontBitmapApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
                 else
                 {
                     IZ_FLOAT left = item->rect.left / width;
-                    IZ_FLOAT right = item->rect.right / width;
+                    IZ_FLOAT right = item->rect.right() / width;
                     IZ_FLOAT top = item->rect.top / height;
-                    IZ_FLOAT bottom = item->rect.bottom / height;
+                    IZ_FLOAT bottom = item->rect.bottom() / height;
 
-                    IZ_UINT w = item->rect.Width();
-                    IZ_UINT h = item->rect.Height();
+                    IZ_UINT w = item->rect.width;
+                    IZ_UINT h = item->rect.height;
 
                     IZ_UINT x = posX + item->leftOffset;
                     IZ_UINT y = posY + baseline - item->metrics.bearingY;
 
                     device->Draw2DSprite(
                         izanagi::CFloatRect(left, top, right, bottom),
-                        izanagi::CIntRect(x, y, x + w, y + h));
+                        izanagi::CIntRect(x, y, w, h));
 
                     posX += item->metrics.advance;
                 }
