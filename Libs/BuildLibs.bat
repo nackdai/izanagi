@@ -7,6 +7,8 @@ if %GFX%==GLES2 (
     %MSBUILD% ..\External\ANGLE\src\ANGLE.sln /t:%TARGET% /p:Configuration=%CONFIG% /p:Platform=Win32 || goto error
 )
 
+%MSBUILD% ..\External\freetype\builds\win32\vc2010\freetype.sln /t:%TARGET% /p:Configuration="%CONFIG% Multithreaded" || goto error
+
 %MSBUILD% project\vs2010\izanagi.sln /t:%TARGET% /p:Configuration=%CONFIG%_%GFX% || goto error
 
 @echo off
