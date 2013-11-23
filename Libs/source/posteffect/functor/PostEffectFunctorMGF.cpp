@@ -432,8 +432,8 @@ IZ_BOOL CPostEffectFunctorMGF::ApplyMGFMerge(
     {
         rcDst.left = 0;
         rcDst.top = 0;
-        rcDst.right = pFinalDst->GetWidth();
-        rcDst.bottom = pFinalDst->GetHeight();
+        rcDst.width = pFinalDst->GetWidth();
+        rcDst.height = pFinalDst->GetHeight();
     }
 
     // カラー

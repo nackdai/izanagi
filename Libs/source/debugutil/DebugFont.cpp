@@ -166,8 +166,8 @@ void CDebugFont::DrawFont(
     {
         rcDst.left = m_nLeft;
         rcDst.top = m_nTop;
-        rcDst.right = rcDst.left + FONT_SIZE;
-        rcDst.bottom = rcDst.top + FONT_SIZE;
+        rcDst.width = FONT_SIZE;
+        rcDst.height = FONT_SIZE;
     }
 
     IZ_UINT nLength = (IZ_UINT)strlen(str);

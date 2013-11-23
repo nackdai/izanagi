@@ -62,8 +62,8 @@ namespace izanagi {
 
         pRect->left = 0;
         pRect->top = 0;
-        pRect->right = pTex->GetWidth();
-        pRect->bottom = pTex->GetHeight();
+        pRect->width = pTex->GetWidth();
+        pRect->height = pTex->GetHeight();
     }
 
     /**
@@ -78,8 +78,8 @@ namespace izanagi {
 
         pRect->left = 0;
         pRect->top = 0;
-        pRect->right = pTex->GetWidth();
-        pRect->bottom = pTex->GetHeight();
+        pRect->width = pTex->GetWidth();
+        pRect->height = pTex->GetHeight();
     }
 
     /**
@@ -89,11 +89,9 @@ namespace izanagi {
         SIntRect* pRect,
         IZ_INT x, IZ_INT y)
     {
-        pRect->left -= x;
-        pRect->right += x;
-
-        pRect->top -= y;
-        pRect->bottom += y;
+        CIntRect::InflateRect(
+            *pRect,
+            x, y, x, y);
     }
 
     /**
@@ -104,11 +102,10 @@ namespace izanagi {
         const SIntRect& rcSrc,
         IZ_INT x, IZ_INT y)
     {
-        pDst->left = rcSrc.left - x;
-        pDst->right = rcSrc.right + x;
-
-        pDst->top = rcSrc.top - y;
-        pDst->bottom = rcSrc.bottom + y;
+        CIntRect::InflateRect(
+            *pDst,
+            rcSrc,
+            x, y, x, y);
     }
 
     /**
@@ -120,8 +117,8 @@ namespace izanagi {
     {
         return ((rc0.left == rc1.left)
                 && (rc0.top == rc1.top)
-                && (rc0.right == rc1.right)
-                && (rc0.bottom == rc1.bottom));
+                && (rc0.width == rc1.width)
+                && (rc0.height == rc1.height));
     }
 }   // namespace izanagi
 

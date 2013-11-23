@@ -383,10 +383,10 @@ namespace graph
         // UV座標矩形
         CFloatRect rcUV;
         {
-            IZ_FLOAT fTexLeft = static_cast<IZ_FLOAT>(rcSrc.left);
-            IZ_FLOAT fTexTop = static_cast<IZ_FLOAT>(rcSrc.top);
-            IZ_FLOAT fTexRight = static_cast<IZ_FLOAT>(rcSrc.right);
-            IZ_FLOAT fTexBottom = static_cast<IZ_FLOAT>(rcSrc.bottom);
+            IZ_FLOAT fTexLeft = (IZ_FLOAT)(rcSrc.left);
+            IZ_FLOAT fTexTop = (IZ_FLOAT)(rcSrc.top);
+            IZ_FLOAT fTexRight = (IZ_FLOAT)(rcSrc.right());
+            IZ_FLOAT fTexBottom = (IZ_FLOAT)(rcSrc.bottom());
 
             {
                 // テクセルの中心をサンプリングするようにする
@@ -545,6 +545,27 @@ namespace graph
         return IZ_TRUE;
     }
 
+    // ユーザー定義のシェーダをセット
+    void C2DRenderer::SetUserDefsShader(
+        CVertexShader* vs,
+        CPixelShader* ps)
+    {
+        IZ_ASSERT(m_pShader != IZ_NULL);
+        m_pShader->SetUserDefsShader(vs, ps);
+    }
+
+    // 描画モードがユーザー定義の時のみ2D用のシェーダープログラムを取得
+    CShaderProgram* C2DRenderer::Get2DShaderProgramIfRenderOpIsUserDefs()
+    {
+        IZ_ASSERT(m_pShader != IZ_NULL);
+
+        if (m_pShader->GetRenderOp() == E_GRAPH_2D_RENDER_OP_USER_DEFS) {
+            return m_pShader->GetShaderProgram();
+        }
+
+        return IZ_NULL;
+    }
+
     // 描画準備
     IZ_BOOL C2DRenderer::PrepareDraw(
         CGraphicsDevice* device,
@@ -697,10 +718,10 @@ namespace graph
 
         // 転送先矩形
         {
-            IZ_FLOAT fLeft = static_cast<IZ_FLOAT>(rcDst.left);
-            IZ_FLOAT fTop = static_cast<IZ_FLOAT>(rcDst.top);
-            IZ_FLOAT fRight = static_cast<IZ_FLOAT>(rcDst.right);
-            IZ_FLOAT fBottom = static_cast<IZ_FLOAT>(rcDst.bottom);
+            IZ_FLOAT fLeft = (IZ_FLOAT)(rcDst.left);
+            IZ_FLOAT fTop = (IZ_FLOAT)(rcDst.top);
+            IZ_FLOAT fRight = (IZ_FLOAT)(rcDst.right());
+            IZ_FLOAT fBottom = (IZ_FLOAT)(rcDst.bottom());
 
             v[0].x = fLeft;
             v[0].y = fTop;

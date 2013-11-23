@@ -109,7 +109,7 @@ namespace text
 
             device->Draw2DSprite(
                 izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),
-                izanagi::CIntRect(x, y, x + width, y + height));
+                izanagi::CIntRect(x, y, width, height));
         }
     }
 }   // namespace text

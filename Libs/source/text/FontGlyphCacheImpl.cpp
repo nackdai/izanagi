@@ -263,8 +263,8 @@ namespace text
 
         realItem->rect.left = m_PosX;
         realItem->rect.top = m_PosY;
-        realItem->rect.SetWidth(item->metrics.advance);
-        realItem->rect.SetHeight(m_FontHeight);
+        realItem->rect.width = item->metrics.advance;
+        realItem->rect.height = m_FontHeight;
 
         realItem->leftOffset = image.leftOffset;
         realItem->topOffset = image.topOffset;

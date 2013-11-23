@@ -60,6 +60,11 @@ namespace graph
             return m_ShaderProgram[m_nOp];
         }
 
+        // ユーザー定義のシェーダをセット
+        void SetUserDefsShader(
+            CVertexShader* vs,
+            CPixelShader* ps);
+
     protected:
         // シェーダパラメータ
         enum {
@@ -74,6 +79,8 @@ namespace graph
         CShaderProgram* m_ShaderProgram[E_GRAPH_2D_RENDER_OP_NUM];
 
         CVertexShader* m_pVS;
+        CVertexShader* m_UserDefsVS;
+
         CPixelShader* m_pPS[E_GRAPH_2D_RENDER_OP_NUM];
 
         // 描画設定

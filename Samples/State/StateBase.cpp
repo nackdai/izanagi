@@ -29,7 +29,7 @@ IZ_BOOL CStateBase::Render(izanagi::graph::CGraphicsDevice* device)
         device->Set2DRenderOp(izanagi::graph::E_GRAPH_2D_RENDER_OP_MODULATE);
         device->Draw2DSprite(
             izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),
-            izanagi::CIntRect(300, 100, 556, 228));
+            izanagi::CIntRect(300, 100, 256, 128));
 
         device->End2D();
     }

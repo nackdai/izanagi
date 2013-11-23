@@ -33,8 +33,8 @@ void CPostEffectRectUtil::GetTextureCoord(
 
         pTexCoord->left += pSrcRect->left * fU;
         pTexCoord->top += pSrcRect->top * fV;
-        pTexCoord->right -= (nWidth - pSrcRect->right) * fU;
-        pTexCoord->bottom -= (nHeight - pSrcRect->bottom) * fV;
+        pTexCoord->right -= (nWidth - CIntRect::right(*pSrcRect)) * fU;
+        pTexCoord->bottom -= (nHeight - CIntRect::bottom(*pSrcRect)) * fV;
     }
 
     if ((pDstRect != IZ_NULL) && (pDstTex != IZ_NULL)) {
@@ -47,7 +47,7 @@ void CPostEffectRectUtil::GetTextureCoord(
 
         pTexCoord->left -= pDstRect->left * fU;
         pTexCoord->top -= pDstRect->top * fV;
-        pTexCoord->right += (nWidth - pDstRect->right) * fU;
-        pTexCoord->bottom += (nHeight - pDstRect->bottom) * fV;
+        pTexCoord->right += (nWidth - CIntRect::right(*pDstRect)) * fU;
+        pTexCoord->bottom += (nHeight - CIntRect::bottom(*pDstRect)) * fV;
     }
 }

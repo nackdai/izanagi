@@ -14,6 +14,8 @@ namespace graph
         FILL_ZERO(m_ShaderProgram, sizeof(m_ShaderProgram));;
 
         m_pVS = IZ_NULL;
+        m_UserDefsVS = IZ_NULL;
+
         FILL_ZERO(m_pPS, sizeof(m_pPS));
 
         m_nOp = E_GRAPH_2D_RENDER_OP_MODULATE;
@@ -23,6 +25,7 @@ namespace graph
     C2DShader::~C2DShader()
     {
         SAFE_RELEASE(m_pVS);
+        SAFE_RELEASE(m_UserDefsVS);
 
         for (IZ_UINT i = 0; i < COUNTOF(m_pPS); ++i) {
             SAFE_RELEASE(m_ShaderProgram[i]);
@@ -33,14 +36,32 @@ namespace graph
     // シェーダセット
     IZ_BOOL C2DShader::SetShader(CGraphicsDevice* device)
     {
-        IZ_ASSERT(device != NULL);
+        IZ_ASSERT(device != IZ_NULL);
+        IZ_ASSERT(m_pPS[m_nOp] != IZ_NULL);
 
-        VRETURN(m_ShaderProgram[m_nOp]->AttachVertexShader(m_pVS));
+        if (m_nOp == E_GRAPH_2D_RENDER_OP_USER_DEFS
+            && m_UserDefsVS != IZ_NULL)
+        {
+            VRETURN(m_ShaderProgram[m_nOp]->AttachVertexShader(m_UserDefsVS));
+        }
+        else {
+            VRETURN(m_ShaderProgram[m_nOp]->AttachVertexShader(m_pVS));
+        }
+
         VRETURN(m_ShaderProgram[m_nOp]->AttachPixelShader(m_pPS[m_nOp]));
 
         VRETURN(device->SetShaderProgram(m_ShaderProgram[m_nOp]));
 
         return IZ_TRUE;
+    }
+
+    // ユーザー定義のシェーダをセット
+    void C2DShader::SetUserDefsShader(
+        CVertexShader* vs,
+        CPixelShader* ps)
+    {
+        SAFE_REPLACE(m_UserDefsVS, vs);
+        SAFE_REPLACE(m_pPS[E_GRAPH_2D_RENDER_OP_USER_DEFS], ps);
     }
 }   // namespace graph
 }   // namespace izanagi

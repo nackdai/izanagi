@@ -196,6 +196,16 @@ namespace graph
         void Set2DRenderOp(E_GRAPH_2D_RENDER_OP nOp);
         E_GRAPH_2D_RENDER_OP Get2DRenderOp() const;
 
+        /** ユーザー定義のシェーダをセット
+         */
+        void SetUserDefs2DShader(
+            CVertexShader* vs,
+            CPixelShader* ps);
+
+        /** 描画モードがユーザー定義の時のみ2D用のシェーダープログラムを取得
+         */
+        CShaderProgram* Get2DShaderProgramIfRenderOpIsUserDefs();
+
     public:
         // テクスチャセット
         IZ_BOOL SetTexture(IZ_UINT nStage, CBaseTexture* pTex);

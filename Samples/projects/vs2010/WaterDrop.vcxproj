@@ -33,6 +33,17 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(PROJECT_MAIN_DIR)data\%(Filename).img;%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\WaterDrop\WaterDrop.hlsl">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">fxc /T vs_2_0 /E mainVS /Fo %(RootDir)%(Directory)data/%(Filename)VS.o /nologo %(FullPath)
+fxc /T ps_2_0 /E mainPS /Fo %(RootDir)%(Directory)data/%(Filename)PS.o /nologo %(FullPath)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(RootDir)%(Directory)data/%(Filename)VS.o;%(RootDir)%(Directory)data/%(Filename)PS.o;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">fxc /T vs_2_0 /E mainVS /Fo %(RootDir)%(Directory)data/%(Filename)VS.o /nologo %(FullPath)
+fxc /T ps_2_0 /E mainPS /Fo %(RootDir)%(Directory)data/%(Filename)PS.o /nologo %(FullPath)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">%(RootDir)%(Directory)data/%(Filename)VS.o;%(RootDir)%(Directory)data/%(Filename)PS.o;%(Outputs)</Outputs>
+    </CustomBuild>
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{909B7F5F-8631-4e67-ACC5-28E899FA9DCD}</ProjectGuid>
     <RootNamespace>WaterDrop</RootNamespace>
