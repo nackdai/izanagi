@@ -185,6 +185,8 @@ void CDebugFont::DrawFont(
         else {
             SetTexRect(ch, rcSrc);
 
+            device->Set2DRenderOp(graph::E_GRAPH_2D_RENDER_OP_MODULATE);
+
             // 描画
             device->Draw2DSpriteEx(
                 rcSrc, rcDst,

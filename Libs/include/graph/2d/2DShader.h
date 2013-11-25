@@ -44,7 +44,9 @@ namespace graph
 
     protected:
         // 描画設定をセット
-        void SetRenderOp(E_GRAPH_2D_RENDER_OP nOp)
+        virtual void SetRenderOp(
+            CGraphicsDevice* device,
+            E_GRAPH_2D_RENDER_OP nOp)
         {
             m_nOp = nOp;
         }

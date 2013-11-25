@@ -222,8 +222,8 @@ namespace graph
                 ::glScissor(
                     rc.left,
                     rc.top,
-                    rc.right - rc.left,
-                    rc.bottom - rc.top));
+                    rc.width,
+                    rc.height));
 
             rcScissor = rc;
         }

@@ -144,5 +144,17 @@ namespace graph
 
         return IZ_TRUE;
     }
+
+    // 描画設定をセット
+    void C2DShaderDX9::SetRenderOp(
+        CGraphicsDevice* device,
+        E_GRAPH_2D_RENDER_OP nOp)
+    {
+        m_nOp = nOp;
+
+        if (m_nOp == E_GRAPH_2D_RENDER_OP_USER_DEFS) {
+            device->SetShaderProgram(m_ShaderProgram[m_nOp]);
+        }
+    }
 }   // namespace graph
 }   // namespace izanagi

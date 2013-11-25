@@ -459,8 +459,7 @@ IZ_BOOL CPostEffectFunctorMGF::ApplyMGFMerge(
                     IZ_FALSE);
             }
 
-            // TODO
-            // TEXOP_RGBA_MODULATE);
+            pDevice->Set2DRenderOp(graph::E_GRAPH_2D_RENDER_OP_MODULATE);
 
             // 描画
             for (IZ_UINT i = 0; i < MGF_LOOP_NUM; ++i) {

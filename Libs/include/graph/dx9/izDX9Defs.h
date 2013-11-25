@@ -67,6 +67,8 @@ struct SHADER_PARAM_HANDLE
     }
 };
 
+#define IS_VALID_SHADER_PARAM_HANDLE(handle)    (((handle).vsParam != 0) || ((handle).psParam != 0))
+
 typedef void* TEX_HANDLE;
 
 namespace izanagi

@@ -540,7 +540,7 @@ namespace graph
             VRETURN(Flush(device));
         }
 
-        m_pShader->SetRenderOp(nOp);
+        m_pShader->SetRenderOp(device, nOp);
 
         return IZ_TRUE;
     }
