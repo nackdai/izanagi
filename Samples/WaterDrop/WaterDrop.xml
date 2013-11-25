@@ -2,7 +2,7 @@
 
 <textures>
   <plane
-      path="../../Media/futta0847-1920x1080.jpg"
+      path="../../Media/sunset.jpg"
       fmt="rgba8"/>
   <plane
       path="../../Media/waterdrop.png"

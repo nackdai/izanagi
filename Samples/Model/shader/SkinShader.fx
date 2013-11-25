@@ -38,6 +38,7 @@ SVSOutput mainVS(SVSInput In)
 {
     SVSOutput Out = (SVSOutput)0;
 
+#if 0
     for (int i = 0; i < 4; i++) {
         float idx = In.vIndices[i];
         float weight = In.vWeight[i];
@@ -49,6 +50,9 @@ SVSOutput mainVS(SVSInput In)
     }
         
     Out.vPos = mul(Out.vPos, g_mW2C);
+#else
+    Out.vPos = mul(In.vPos, g_mW2C);
+#endif
 
     Out.vUV = In.vUV;
     
