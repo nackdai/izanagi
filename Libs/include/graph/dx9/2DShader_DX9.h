@@ -27,6 +27,11 @@ namespace graph
         // シェーダパラメータセット
         virtual IZ_BOOL SetShaderParams(CGraphicsDevice* device);
 
+        // 描画設定をセット
+        virtual void SetRenderOp(
+            CGraphicsDevice* device,
+            E_GRAPH_2D_RENDER_OP nOp);
+
     private:
         // シェーダパラメータハンドル
         SHADER_PARAM_HANDLE m_hVtxParam[VTX_PARAM_NUM];

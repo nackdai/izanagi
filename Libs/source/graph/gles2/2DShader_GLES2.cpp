@@ -23,6 +23,7 @@ static const char* PS_Programs[] = {
     main_OpAdd,
     main_OpModulateAlpha,
     main_OpNoTexAlpha,
+    IZ_NULL,
 };
 
 C_ASSERT(COUNTOF(PS_Programs) == izanagi::graph::E_GRAPH_2D_RENDER_OP_NUM);
@@ -97,15 +98,20 @@ namespace graph
 
         for (IZ_UINT i = 0; i < E_GRAPH_2D_RENDER_OP_NUM; ++i) {
             // ピクセルシェーダ
-            m_pPS[i] = device->CreatePixelShader(PS_Programs[i]);
-            VRETURN(m_pPS[i] != IZ_NULL);
+            if (PS_Programs[i] != IZ_NULL) {
+                m_pPS[i] = device->CreatePixelShader(PS_Programs[i]);
+                VRETURN(m_pPS[i] != IZ_NULL);
+            }
 
             // シェーダプログラム
             m_ShaderProgram[i] = device->CreateShaderProgram();
             VRETURN(m_ShaderProgram[i] != IZ_NULL);
 
             m_ShaderProgram[i]->AttachVertexShader(m_pVS);
-            m_ShaderProgram[i]->AttachPixelShader(m_pPS[i]);
+
+            if (m_pPS[i] != IZ_NULL) {
+                m_ShaderProgram[i]->AttachPixelShader(m_pPS[i]);
+            }
         }
 
         return IZ_TRUE;

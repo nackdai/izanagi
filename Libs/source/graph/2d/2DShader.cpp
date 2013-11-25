@@ -62,6 +62,16 @@ namespace graph
     {
         SAFE_REPLACE(m_UserDefsVS, vs);
         SAFE_REPLACE(m_pPS[E_GRAPH_2D_RENDER_OP_USER_DEFS], ps);
+
+        if (m_UserDefsVS != IZ_NULL)
+        {
+            m_ShaderProgram[E_GRAPH_2D_RENDER_OP_USER_DEFS]->AttachVertexShader(m_UserDefsVS);
+        }
+        else {
+            m_ShaderProgram[E_GRAPH_2D_RENDER_OP_USER_DEFS]->AttachVertexShader(m_pVS);
+        }
+
+        m_ShaderProgram[E_GRAPH_2D_RENDER_OP_USER_DEFS]->AttachPixelShader(m_pPS[E_GRAPH_2D_RENDER_OP_USER_DEFS]);
     }
 }   // namespace graph
 }   // namespace izanagi

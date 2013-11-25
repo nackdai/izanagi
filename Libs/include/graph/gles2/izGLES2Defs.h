@@ -7,6 +7,8 @@
 typedef GLuint TEX_HANDLE;
 typedef GLint SHADER_PARAM_HANDLE;
 
+#define IS_VALID_SHADER_PARAM_HANDLE(handle)    ((handel) != 0)
+
 #ifdef __IZ_DEBUG__
     #define CALL_GLES2_API(func)\
         func;\
