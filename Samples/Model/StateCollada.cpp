@@ -25,7 +25,7 @@ IZ_BOOL CStateCollada::Enter(
         device,
         30.0f,
         "data/ModelImage.img",
-        "data/Seymour.msh",
+        "data/buffalo.msh",
         "data/Seymour.skl",
         "data/SkinShader.shd");
 
