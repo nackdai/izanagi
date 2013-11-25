@@ -61,6 +61,28 @@ namespace {
     }
 }   // namespace
 
+IZ_BOOL CTextureLite::GetTextureInfo(
+    IZ_PCSTR path,
+    SImagInfo& info)
+{
+    // テクスチャ情報取得
+    D3DXIMAGE_INFO sImageInfo;
+
+    HRESULT hr = D3DXGetImageInfoFromFile(
+                    path,
+                    &sImageInfo);
+    IZ_BOOL result = SUCCEEDED(hr);
+    VRETURN(result);
+
+    info.width = sImageInfo.Width;
+    info.height = sImageInfo.Height;
+    info.depth = sImageInfo.Depth;
+    info.mipLevels = sImageInfo.MipLevels;
+    info.format = _GetPixelFmt(sImageInfo.Format);
+
+    return IZ_TRUE;
+}
+
 // ファイルからテクスチャ作成
 CTextureLite* CTextureLite::CreateTextureFromFile(
     CGraphicsDeviceLite* pDevice,
