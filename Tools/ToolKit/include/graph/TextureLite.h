@@ -13,10 +13,23 @@ namespace izanagi {
 namespace tool {
     class CGraphicsDeviceLite;
 
+    struct SImagInfo {
+        IZ_UINT width;
+        IZ_UINT height;
+        IZ_UINT depth;
+        IZ_UINT mipLevels;
+        graph::E_GRAPH_PIXEL_FMT format;
+    };
+
     /**
     */
     class CTextureLite : public CObject {
         friend class CGraphicsDeviceLite;
+
+    public:
+        static IZ_BOOL GetTextureInfo(
+            IZ_PCSTR path,
+            SImagInfo& info);
 
     private:
         // ファイルからテクスチャ作成
