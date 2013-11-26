@@ -170,6 +170,40 @@ namespace threadmodel
         void (*m_Func)(IZ_INT);
     };
 
+    // 関数オブジェクトで処理を実行する
+    class CParallelForFunctor : public CParallelFor
+    {
+    public:
+        static CParallelForFunctor* Create(
+            IMemoryAllocator* allocator,
+            CIndexProxy& proxy, 
+            CParallel::SFuncFor& func)
+        {
+            CParallelForFunctor* ret = CParallelFor::Create<CParallelForFunctor, CParallel::SFuncFor&>(
+                allocator,
+                proxy,
+                func);
+            return ret;
+        }
+
+    public:
+        CParallelForFunctor(
+            CIndexProxy& proxy, 
+            CParallel::SFuncFor& func)
+            : CParallelFor(proxy), m_Func(func)
+        {
+        }
+        virtual ~CParallelForFunctor() {}
+
+        virtual void RunInternal(IZ_INT idx)
+        {
+            m_Func(idx);
+        }
+
+    private:
+        CParallel::SFuncFor& m_Func;
+    };
+
     template <typename _T, typename _CALLBACK>
     void CParallel::For(
         IMemoryAllocator* allocator,
@@ -231,6 +265,17 @@ namespace threadmodel
         void (*func)(IZ_INT))
     {
         For<CParallelForFunc, void(*)(IZ_INT)>(
+            allocator,
+            fromInclusive, toExclusive,
+            func);
+    }
+
+    void CParallel::For(
+        IMemoryAllocator* allocator,
+        IZ_INT fromInclusive, IZ_INT toExclusive, 
+        SFuncFor& func)
+    {
+        For<CParallelForFunctor, SFuncFor&>(
             allocator,
             fromInclusive, toExclusive,
             func);
@@ -422,6 +467,42 @@ namespace threadmodel
         void (*m_Func)(void*);
     };
 
+    // 関数オブジェクトで処理を実行
+    class CParallelForEachFunctor : public CParallelForEach
+    {
+    public:
+        static CParallelForEachFunctor* Create(
+            IMemoryAllocator* allocator,
+            CDataProxy& proxy, 
+            CParallel::SFuncForEach& func)
+        {
+            CParallelForEachFunctor* ret = CParallelForEach::Create<CParallelForEachFunctor, CParallel::SFuncForEach&>(
+                allocator,
+                proxy,
+                func);
+            return ret;
+        }
+
+    public:
+        CParallelForEachFunctor(
+            CDataProxy& proxy, 
+            CParallel::SFuncForEach& func)
+            : CParallelForEach(proxy), m_Func(func)
+        {
+        }
+
+        virtual ~CParallelForEachFunctor() {}
+
+    public:
+        virtual void RunInternal(void* data)
+        {
+            m_Func(data);
+        }
+
+    private:
+        CParallel::SFuncForEach& m_Func;
+    };
+
     template <typename _T, typename _CALLBACK>
     void CParallel::ForEach(
         IMemoryAllocator* allocator,
@@ -487,6 +568,19 @@ namespace threadmodel
         void (*func)(void*))
     {
         ForEach<CParallelForEachFunc, void(*)(void*)>(
+            allocator,
+            data, stride,
+            count,
+            func);
+    }
+
+    void CParallel::ForEach(
+        IMemoryAllocator* allocator,
+        void* data, size_t stride,
+        IZ_UINT count,
+        CParallel::SFuncForEach& func)
+    {
+        ForEach<CParallelForEachFunctor, CParallel::SFuncForEach&>(
             allocator,
             data, stride,
             count,
