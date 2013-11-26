@@ -17,18 +17,18 @@ namespace threadmodel
         ~CParallel();
 
     public:
-        class SFuncFor {
+        class CFuncFor {
         public:
-            SFuncFor() {}
-            virtual ~SFuncFor() {}
+            CFuncFor() {}
+            virtual ~CFuncFor() {}
 
             virtual void operator()(IZ_INT) = 0;
         };
 
-        class SFuncForEach {
+        class CFuncForEach {
         public:
-            SFuncForEach() {}
-            virtual ~SFuncForEach() {}
+            CFuncForEach() {}
+            virtual ~CFuncForEach() {}
 
             virtual void operator()(void*) = 0;
         };
@@ -47,7 +47,7 @@ namespace threadmodel
         static void For(
             IMemoryAllocator* allocator,
             IZ_INT fromInclusive, IZ_INT toExclusive, 
-            SFuncFor& func);
+            CFuncFor& func);
 
         static void ForEach(
             IMemoryAllocator* allocator,
@@ -65,7 +65,7 @@ namespace threadmodel
             IMemoryAllocator* allocator,
             void* data, size_t stride,
             IZ_UINT count,
-            SFuncForEach& func);
+            CFuncForEach& func);
 
     private:
         template <typename _T, typename _CALLBACK>
