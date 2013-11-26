@@ -177,9 +177,9 @@ namespace threadmodel
         static CParallelForFunctor* Create(
             IMemoryAllocator* allocator,
             CIndexProxy& proxy, 
-            CParallel::SFuncFor& func)
+            CParallel::CFuncFor& func)
         {
-            CParallelForFunctor* ret = CParallelFor::Create<CParallelForFunctor, CParallel::SFuncFor&>(
+            CParallelForFunctor* ret = CParallelFor::Create<CParallelForFunctor, CParallel::CFuncFor&>(
                 allocator,
                 proxy,
                 func);
@@ -189,7 +189,7 @@ namespace threadmodel
     public:
         CParallelForFunctor(
             CIndexProxy& proxy, 
-            CParallel::SFuncFor& func)
+            CParallel::CFuncFor& func)
             : CParallelFor(proxy), m_Func(func)
         {
         }
@@ -201,7 +201,7 @@ namespace threadmodel
         }
 
     private:
-        CParallel::SFuncFor& m_Func;
+        CParallel::CFuncFor& m_Func;
     };
 
     template <typename _T, typename _CALLBACK>
@@ -273,9 +273,9 @@ namespace threadmodel
     void CParallel::For(
         IMemoryAllocator* allocator,
         IZ_INT fromInclusive, IZ_INT toExclusive, 
-        SFuncFor& func)
+        CFuncFor& func)
     {
-        For<CParallelForFunctor, SFuncFor&>(
+        For<CParallelForFunctor, CFuncFor&>(
             allocator,
             fromInclusive, toExclusive,
             func);
@@ -474,9 +474,9 @@ namespace threadmodel
         static CParallelForEachFunctor* Create(
             IMemoryAllocator* allocator,
             CDataProxy& proxy, 
-            CParallel::SFuncForEach& func)
+            CParallel::CFuncForEach& func)
         {
-            CParallelForEachFunctor* ret = CParallelForEach::Create<CParallelForEachFunctor, CParallel::SFuncForEach&>(
+            CParallelForEachFunctor* ret = CParallelForEach::Create<CParallelForEachFunctor, CParallel::CFuncForEach&>(
                 allocator,
                 proxy,
                 func);
@@ -486,7 +486,7 @@ namespace threadmodel
     public:
         CParallelForEachFunctor(
             CDataProxy& proxy, 
-            CParallel::SFuncForEach& func)
+            CParallel::CFuncForEach& func)
             : CParallelForEach(proxy), m_Func(func)
         {
         }
@@ -500,7 +500,7 @@ namespace threadmodel
         }
 
     private:
-        CParallel::SFuncForEach& m_Func;
+        CParallel::CFuncForEach& m_Func;
     };
 
     template <typename _T, typename _CALLBACK>
@@ -578,9 +578,9 @@ namespace threadmodel
         IMemoryAllocator* allocator,
         void* data, size_t stride,
         IZ_UINT count,
-        CParallel::SFuncForEach& func)
+        CParallel::CFuncForEach& func)
     {
-        ForEach<CParallelForEachFunctor, CParallel::SFuncForEach&>(
+        ForEach<CParallelForEachFunctor, CParallel::CFuncForEach&>(
             allocator,
             data, stride,
             count,
