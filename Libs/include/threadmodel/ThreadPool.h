@@ -20,6 +20,16 @@ namespace threadmodel
     private:
         class CThread : public sys::CThread
         {
+            enum State
+            {
+                State_None = 0,
+                State_Waiting,
+                State_Registered,
+                State_Running,
+                State_WillFinish,
+                State_Finished,
+            };
+
         public:
             CThread();
             virtual ~CThread() {}
@@ -37,17 +47,14 @@ namespace threadmodel
 
             void Terminate();
 
-            IZ_BOOL IsWaiting()
-            {
-                return m_IsWaiting;
-            }
+            IZ_BOOL IsWaiting();
 
         private:
             sys::CSemaphore m_Sema;
-            IZ_BOOL m_IsTerminated;
-            IZ_BOOL m_IsWaiting;
-
-            sys::CMutex m_RunnableGuarder;
+            sys::CEvent m_Event;
+            sys::CMutex m_Mutex;
+            
+            State m_State;
 
             CStdList<CThread>::Item m_ListItem;
         };
