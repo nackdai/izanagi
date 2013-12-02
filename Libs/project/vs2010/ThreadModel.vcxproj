@@ -108,6 +108,7 @@
     <ClInclude Include="..\..\include\threadmodel\ThreadModelJobWorker.h" />
     <ClInclude Include="..\..\include\threadmodel\ThreadModelMessage.h" />
     <ClInclude Include="..\..\include\threadmodel\ThreadModelMessageQueue.h" />
+    <ClInclude Include="..\..\include\threadmodel\ThreadModelTask.h" />
     <ClInclude Include="..\..\include\threadmodel\ThreadPool.h" />
   </ItemGroup>
   <ItemGroup>
@@ -116,6 +117,7 @@
     <ClCompile Include="..\..\source\threadmodel\ThreadModelJobQueue.cpp" />
     <ClCompile Include="..\..\source\threadmodel\ThreadModelJobWorker.cpp" />
     <ClCompile Include="..\..\source\threadmodel\ThreadModelMessageQueue.cpp" />
+    <ClCompile Include="..\..\source\threadmodel\ThreadModelTask.cpp" />
     <ClCompile Include="..\..\source\threadmodel\ThreadPool.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

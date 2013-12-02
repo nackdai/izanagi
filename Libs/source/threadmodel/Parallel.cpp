@@ -1,5 +1,6 @@
 #include "threadmodel/Parallel.h"
 #include "threadmodel/ThreadPool.h"
+#include "threadmodel/ThreadModelTask.h"
 
 namespace izanagi
 {
@@ -7,7 +8,7 @@ namespace threadmodel
 {
     static const IZ_INT PARALLEL_CHUNK_SIZE = 4;
 
-    class CParallelFor : public sys::IRunnable, public CPlacementNew
+    class CParallelFor : public CTask
     {
     public:
         template <typename _T, typename _CALLBACK>
@@ -23,12 +24,6 @@ namespace threadmodel
             return ret;
         }
 
-        static void Delete(IMemoryAllocator* allocator, CParallelFor* runnable)
-        {
-            delete runnable;
-            FREE(allocator, runnable);
-        }
-
     protected:
         CParallelFor(IZ_INT from, IZ_INT to)
         {
@@ -38,11 +33,12 @@ namespace threadmodel
         virtual ~CParallelFor() {}
 
     public:
-        virtual void Run(void* data)
+        virtual IZ_BOOL RunTask()
         {
             for (IZ_INT i = m_From; i < m_To; i++) {
                 RunInternal(i);
             }
+            return IZ_TRUE;
         }
 
         virtual void RunInternal(IZ_INT idx) = 0;
@@ -166,13 +162,12 @@ namespace threadmodel
             fromInclusive = tmp;
         }
 
+        _T* tasks[10] = { IZ_NULL };
+
         IZ_INT threadCount = sys::CEnvironment::GetProcessorNum();
 
-        // TODO
-        CThreadPool::CThread* threadArray[10] = { IZ_NULL };
-
-        if (threadCount > COUNTOF(threadArray)) {
-            threadCount = COUNTOF(threadArray);
+        if (threadCount > COUNTOF(tasks)) {
+            threadCount = COUNTOF(tasks);
         }
 
         IZ_INT step = (toExclusive - fromInclusive) / threadCount;
@@ -198,18 +193,16 @@ namespace threadmodel
             }
 
             // 実行インスタンスを作成
-            _T* runnable = _T::Create(
+            _T* task = _T::Create(
                 allocator,
                 from, to,
                 callback);
 
-            IZ_ASSERT(runnable != IZ_NULL);
+            IZ_ASSERT(task != IZ_NULL);
 
-            // スレッド取得
-            CThreadPool::CThread* thread = CThreadPool::GetThread(runnable);
-            IZ_ASSERT(thread != IZ_NULL);
+            tasks[i] = task;
 
-            threadArray[i] = thread;
+            CThreadPool::Enqueue(task, IZ_TRUE);
 
             from = to;
             if (from >= toExclusive) {
@@ -218,23 +211,10 @@ namespace threadmodel
         }
 
         for (IZ_INT i = 0; i < threadCount; i++) {
-            if (threadArray[i] == IZ_NULL) {
+            if (tasks[i] == IZ_NULL) {
                 break;
             }
-
-            threadArray[i]->Start();
-        }
-
-        for (IZ_INT i = 0; i < threadCount; i++) {
-            if (threadArray[i] == IZ_NULL) {
-                break;
-            }
-
-            _T* runnable = (_T*)threadArray[i]->GetRunnable();
-
-            // スレッド終了を待つ
-            threadArray[i]->Join();
-            CParallelFor::Delete(allocator, runnable);
+            tasks[i]->Wait();
         }
     }
 
@@ -273,7 +253,7 @@ namespace threadmodel
 
     ////////////////////////////////////////////////////////
 
-    class CParallelForEach : public sys::IRunnable, public CPlacementNew
+    class CParallelForEach : public CTask
     {
     public:
         template <typename _T, typename _CALLBACK>
@@ -289,12 +269,6 @@ namespace threadmodel
             return ret;
         }
 
-        static void Delete(IMemoryAllocator* allocator, CParallelForEach* runnable)
-        {
-            delete runnable;
-            FREE(allocator, runnable);
-        }
-
     protected:
         CParallelForEach(IZ_UINT8* p, size_t stride, IZ_UINT from, IZ_UINT to)
         {
@@ -306,7 +280,7 @@ namespace threadmodel
 
         virtual ~CParallelForEach() {}
 
-        virtual void Run(void* data)
+        virtual IZ_BOOL RunTask()
         {
             if (m_Ptr != IZ_NULL) {
                 IZ_UINT8* ptr = m_Ptr;
@@ -316,6 +290,7 @@ namespace threadmodel
                     RunInternal(p);
                 }
             }
+            return IZ_TRUE;
         }
 
         virtual void RunInternal(void* data) = 0;
@@ -444,11 +419,10 @@ namespace threadmodel
     {
         IZ_UINT threadCount = sys::CEnvironment::GetProcessorNum();
 
-        // TODO
-        CThreadPool::CThread* threadArray[10] = { IZ_NULL };
+        _T* tasks[10] = { IZ_NULL };
 
-        if (threadCount > COUNTOF(threadArray)) {
-            threadCount = COUNTOF(threadArray);
+        if (threadCount > COUNTOF(tasks)) {
+            threadCount = COUNTOF(tasks);
         }
 
         IZ_UINT step = count / threadCount;
@@ -479,18 +453,16 @@ namespace threadmodel
             }
 
             // 実行インスタンスを作成
-            _T* runnable = _T::Create(
+            _T* task = _T::Create(
                 allocator,
                 ptr, stride, from, to,
                 callback);
 
-            IZ_ASSERT(runnable != IZ_NULL);
+            IZ_ASSERT(task != IZ_NULL);
 
-            // スレッドを取得
-            CThreadPool::CThread* thread = CThreadPool::GetThread(runnable);
-            IZ_ASSERT(thread != IZ_NULL);
+            tasks[i] = task;
 
-            threadArray[i] = thread;
+            CThreadPool::Enqueue(task, IZ_TRUE);
 
             from = to;
             if (from >= count) {
@@ -499,22 +471,11 @@ namespace threadmodel
         }
 
         for (IZ_UINT i = 0; i < threadCount; i++) {
-            if (threadArray[i] == IZ_NULL) {
-                break;
-            }
-            threadArray[i]->Start();
-        }
-
-        for (IZ_UINT i = 0; i < threadCount; i++) {
-            if (threadArray[i] == IZ_NULL) {
+            if (tasks[i] == IZ_NULL) {
                 break;
             }
 
-            _T* runnable = (_T*)threadArray[i]->GetRunnable();
-
-            // 終了を待つ
-            threadArray[i]->Join();
-            CParallelForEach::Delete(allocator, runnable);
+            tasks[i]->Wait();
         }
     }
 
