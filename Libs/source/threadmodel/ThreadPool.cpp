@@ -11,18 +11,24 @@ namespace threadmodel
     CThreadPool::CThread::CThread()
     {
         m_Sema.Init(0);
-        m_IsTerminated = IZ_FALSE;
-        m_IsWaiting = IZ_TRUE;
+        m_Event.Open();
+        m_Mutex.Open();
 
-        m_RunnableGuarder.Open();
+        m_State = State_Waiting;
 
         m_ListItem.Init(this);
     }
 
     void CThreadPool::CThread::SetRunnable(sys::IRunnable* runnable)
     {
-        m_IsWaiting = IZ_FALSE;
-        m_Runnable = runnable;
+        m_Mutex.Lock();
+        {
+            m_State = State_Registered;
+            m_Runnable = runnable;
+        }
+        m_Mutex.Unlock();
+
+        m_Event.Reset();
         m_Sema.Release();
     }
 
@@ -33,49 +39,63 @@ namespace threadmodel
 
     void CThreadPool::CThread::Run()
     {
-        for (;;) {
-            if (m_IsTerminated) {
-                break;
-            }
-
-            IZ_BOOL isRunning = IZ_FALSE;
-
-            m_RunnableGuarder.Lock();
+        while (m_Sema.Wait()) {
             {
+                sys::CGuarder guard(m_Mutex);
+
+                if (m_State == State_WillFinish) {
+                    m_State = State_Finished;
+                    m_Event.Set();
+                    break;
+                }
+
+                m_State = State_Running;
+
                 if (m_Runnable != IZ_NULL) {
-                    isRunning = IZ_TRUE;
                     m_Runnable->Run(GetUserData());
                 }
-            }
-            m_RunnableGuarder.Unlock();
 
-            if (!isRunning) {
-                m_IsWaiting = IZ_TRUE;
-                m_Sema.Wait();
+                m_State = State_Waiting;
             }
+
+            m_Event.Set();
         }
     }
 
     void CThreadPool::CThread::Join()
     {
         // NOTE
-        // ここでは本当にJoinはせずに、Runを待たせる
-
-        sys::CGuarder guarder(m_RunnableGuarder);
-
-        m_Runnable = IZ_NULL;
-        m_IsWaiting = IZ_TRUE;
+        // ここでは本当にJoinはせずに、Runが１周するのを待つ
+        m_Event.Wait();
     }
 
     void CThreadPool::CThread::Terminate()
     {
-        m_IsTerminated = IZ_TRUE;
+        {
+            sys::CGuarder guard(m_Mutex);
+
+            if (m_State == State_Finished) {
+                return;
+            }
+
+            m_State = State_WillFinish;
+        }
+
+        // 止まっているかもしれないので起こす
         m_Sema.Release();
 
         sys::CThread::Join();
 
         m_Sema.Close();
-        m_RunnableGuarder.Close();
+        m_Event.Close();
+        m_Mutex.Close();
+    }
+
+    IZ_BOOL CThreadPool::CThread::IsWaiting()
+    {
+        sys::CGuarder guard(m_Mutex);
+
+        return (m_State == State_Waiting);
     }
 
     void CThreadPool::Init(IMemoryAllocator* allocator)
