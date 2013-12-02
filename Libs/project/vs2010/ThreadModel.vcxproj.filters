@@ -43,6 +43,9 @@
     <ClInclude Include="..\..\include\threadmodel\Parallel.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\threadmodel\ThreadModelTask.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\threadmodel\ThreadModelJobQueue.cpp">
@@ -61,6 +64,9 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\threadmodel\Parallel.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\threadmodel\ThreadModelTask.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>

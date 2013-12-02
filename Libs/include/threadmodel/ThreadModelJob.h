@@ -2,6 +2,7 @@
 #define __IZANAGI_THREAD_MODEL_JOB_H__
 
 #include "izStd.h"
+#include "izSystem.h"
 
 namespace izanagi
 {
@@ -15,6 +16,7 @@ namespace threadmodel
     {
         friend class CJobQueue;
         friend class CJobWorker;
+        friend class CThreadPool;
 
     public:
         enum State

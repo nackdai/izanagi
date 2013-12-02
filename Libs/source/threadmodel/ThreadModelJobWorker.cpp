@@ -1,7 +1,6 @@
 #include "threadmodel/ThreadModelJobWorker.h"
 #include "threadmodel/ThreadModelJob.h"
 #include "threadmodel/ThreadModelJobQueue.h"
-#include "threadmodel/ThreadPool.h"
 
 namespace izanagi
 {
@@ -15,8 +14,17 @@ namespace threadmodel
         m_Job = IZ_NULL;
 
         m_State = State_Waiting;
+    }
 
-        m_Runner.worker = this;
+    CJobWorker::CJobWorker(const sys::ThreadName& name)
+        : sys::CThread(name)
+    {
+        m_Sema.Init(0);
+        m_Mutex.Open();
+
+        m_Job = IZ_NULL;
+
+        m_State = State_Waiting;
     }
 
     CJobWorker::~CJobWorker()
@@ -45,33 +53,26 @@ namespace threadmodel
         m_Sema.Release();
     }
 
-    void CJobWorker::Start()
-    {
-        // TODO
-        m_Thread = CThreadPool::GetThreadForcibliyIfNoWaitedThread(&m_Runner);
-        m_Thread->Start();
-    }
-
-    void CJobWorker::CRunnable::Run(void* data)
+    void CJobWorker::Run()
     {
         while (IZ_TRUE)
         {
-            if (worker->m_Sema.Wait()) {
-                sys::CGuarder guard(worker->m_Mutex);
+            if (m_Sema.Wait()) {
+                sys::CGuarder guard(m_Mutex);
                 {
-                    if (worker->m_State == State_WillJoin) {
-                        worker->m_State = State_Joined;
+                    if (m_State == State_WillJoin) {
+                        m_State = State_Joined;
                         break;
                     }
 
-                    IZ_ASSERT(worker->m_Job != IZ_NULL);
+                    IZ_ASSERT(m_Job != IZ_NULL);
 
-                    worker->m_State = State_Running;
+                    m_State = State_Running;
 
-                    worker->m_Job->Run();
-                    worker->m_Job = IZ_NULL;
+                    m_Job->Run();
+                    m_Job = IZ_NULL;
 
-                    worker->m_State = State_Waiting;
+                    m_State = State_Waiting;
                 }
             }
         }
@@ -92,7 +93,7 @@ namespace threadmodel
         // Ž~‚Ü‚Á‚Ä‚¢‚é‚©‚à‚µ‚ê‚È‚¢‚Ì‚Å‹N‚±‚·
         m_Sema.Release();
 
-        m_Thread->Join();
+        sys::CThread::Join();
     }
 
     CJobWorker::State CJobWorker::GetState()

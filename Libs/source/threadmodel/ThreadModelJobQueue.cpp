@@ -214,7 +214,7 @@ namespace threadmodel
                     item->Leave();
 
                     if (job->EnableDeleteWhenFinish()) {
-                        delete job;
+                        CJob::DeleteJob(job);
                     }
                 }
 
