@@ -80,6 +80,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MesssageQueue", "MesssageQu
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Parallel", "Parallel.vcxproj", "{25777F2A-1213-4486-8A2C-A665DF42ED5A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DD5D28B8-93F1-4F26-8AD1-DD224CCB9A4F} = {DD5D28B8-93F1-4F26-8AD1-DD224CCB9A4F}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "resource", "resource", "{AD4321EC-E33E-417C-9D6F-1E2FA14D80D4}"
 EndProject
