@@ -7,6 +7,7 @@ static void ParallelForFunc(IZ_INT idx)
 {
     IZ_PRINTF("For Func : %d\n", idx);
     Data[idx] -= 1;
+    izanagi::sys::CThread::Sleep(10);
 }
 
 static void ParallelForEachFunc(void* data)
@@ -14,6 +15,7 @@ static void ParallelForEachFunc(void* data)
     IZ_UINT value = *(IZ_UINT*)data;
     IZ_PRINTF("ForEach Func : %d\n", value);
     Data[value] -= 1;
+    izanagi::sys::CThread::Sleep(10);
 }
 
 class CForFunctor : public izanagi::threadmodel::CParallel::CFuncFor
@@ -23,6 +25,7 @@ public:
     {
         IZ_PRINTF("For Functor : %d\n", idx);
         Data[idx] -= 1;
+        izanagi::sys::CThread::Sleep(10);
     }
 };
 
