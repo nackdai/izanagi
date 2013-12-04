@@ -2,18 +2,20 @@
 #define __IZANAGI_THREAD_MODEL_TASK_H__
 
 #include "izStd.h"
-#include "threadmodel/ThreadModelJob.h"
+#include "izSystem.h"
 
 namespace izanagi
 {
 namespace threadmodel
 {
-    class CJobQueue;
-
-    /** ジョブのベース
+    /**
      */
-    class CTask : public CJob
+    class CTask : public CPlacementNew, public sys::IRunnable
     {
+        friend class CTaskScheduler;
+        friend class CParallel;
+
+    public:
         template <typename _T>
         static CTask* CreateTask(IMemoryAllocator* allocator)
         {
@@ -28,10 +30,7 @@ namespace threadmodel
             return ret;
         }
 
-        static void DeleteTask(CTask*& task)
-        {
-            CJob::DeleteJob((CJob*&)task);
-        }
+        static void DeleteTask(CTask* task);
 
     protected:
         CTask();
@@ -45,19 +44,22 @@ namespace threadmodel
     protected:
         /**
          */
-        virtual IZ_BOOL RunTask() = 0;
+        virtual void OnRun() = 0;
 
     private:
-        virtual IZ_BOOL OnRun();
+        virtual void Run(void* userData);
+
+        CStdList<CTask>::Item* GetListItem() { return &m_ListItem; }
+        void SetAllocator(IMemoryAllocator* allocator)
+        {
+            m_Allocator = allocator;
+        }
 
     private:
-        void Cancel() {}
-        IZ_BOOL IsCanceled() { return IZ_FALSE; }
+        IMemoryAllocator* m_Allocator;
 
-        virtual void OnFinish(IZ_BOOL runResult) {}
-        virtual void OnCancel() {}
+        CStdList<CTask>::Item m_ListItem;
 
-    private:
         sys::CEvent m_Event;
     };
 }   // namespace threadmodel

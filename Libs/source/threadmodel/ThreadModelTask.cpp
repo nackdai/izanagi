@@ -4,9 +4,18 @@ namespace izanagi
 {
 namespace threadmodel
 {
+    void CTask::DeleteTask(CTask* task)
+    {
+        delete task;
+        FREE(task->m_Allocator, task);
+    }
+
     CTask::CTask()
     {
+        m_Allocator = IZ_NULL;
         m_Event.Open();
+
+        m_ListItem.Init(this);
     }
 
     CTask::~CTask()
@@ -19,11 +28,10 @@ namespace threadmodel
         m_Event.Wait();
     }
 
-    IZ_BOOL CTask::OnRun()
+    void CTask::Run(void* userData)
     {
-        IZ_BOOL ret = RunTask();
+        OnRun();
         m_Event.Set();
-        return ret;
     }
 }   // namespace threadmodel
 }   // namespace izanagi
