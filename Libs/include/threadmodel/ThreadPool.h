@@ -8,47 +8,84 @@ namespace izanagi
 {
 namespace threadmodel
 {
-    class CJobWorker;
-    class CTask;
-
     class CThreadPool
     {
-    private:
-        CThreadPool() {}
-        ~CThreadPool() {}
+        friend class CJobWorker;
+        friend class CParallel;
 
-        NO_COPIABLE(CThreadPool);
+    private:
+        CThreadPool();
+        ~CThreadPool();
+
+    private:
+        class CThread : public sys::CThread
+        {
+            enum State
+            {
+                State_None = 0,
+                State_Waiting,
+                State_Registered,
+                State_Running,
+                State_WillFinish,
+                State_Finished,
+            };
+
+        public:
+            CThread();
+            virtual ~CThread() {}
+
+            IZ_DECL_PLACEMENT_NEW();
+
+        public:
+            void SetRunnable(sys::IRunnable* runnable);
+            sys::IRunnable* GetRunnable();
+
+            CStdList<CThread>::Item* GetListItem() { return &m_ListItem; }
+
+            virtual void Run();
+            virtual void Join();
+
+            void Terminate();
+
+            IZ_BOOL IsWaiting();
+
+        private:
+            sys::CSemaphore m_Sema;
+            sys::CEvent m_Event;
+            sys::CMutex m_Mutex;
+            
+            State m_State;
+
+            CStdList<CThread>::Item m_ListItem;
+        };
 
     public:
-        /** 初期化.
-         */
-        static IZ_BOOL Init(
+        static void Init(IMemoryAllocator* allocator);
+
+        static void Init(
             IMemoryAllocator* allocator,
             IZ_UINT threadNum);
 
-        /** タスクをキューに積む.
-         */
-        static IZ_BOOL Enqueue(CTask* task, IZ_BOOL deleteTaskWhenFinish = IZ_FALSE);
+        static CThread* GetThread(sys::IRunnable* runnable);
 
-        /**
-         */
-        static void WaitEmpty();
+        static CThread* GetThreadUntilThreadIsEmpty(sys::IRunnable* runnable);
 
-        /** ThreadPoolの終了.
-         */
         static void Terminate();
 
+        static IZ_UINT GetMaxThreadNum();
+
     private:
-        // 空いているワーカーを取得.
-        CJobWorker* GetWaitingJobWorker();
+        static CThread* CreateThread();
+        static CThread* GetThreadCore(sys::IRunnable* runnable);
 
     private:
         static IMemoryAllocator* s_Allocator;
+        static sys::CMutex s_Mutex;
 
-        static IZ_UINT s_WorkerNum;
-        static CJobWorker** s_Workers;
+        static IZ_UINT s_MaxThreadNum;
+        static CStdList<CThread> s_ThreadList;
 
-        static IZ_BOOL s_IsTerminated;
+        typedef CStdList<CThread>::Item ListItem;
     };
 }   // namespace threadmodel
 }   // namespace izanagi
