@@ -19,6 +19,12 @@
     <Filter Include="source\MessageQueue">
       <UniqueIdentifier>{416334cd-04bf-44ac-b686-3f178f472a7d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\Task">
+      <UniqueIdentifier>{8116aed2-6fbe-42f5-aa56-4ecdefad4ea5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Task">
+      <UniqueIdentifier>{1a65090b-96d3-42c7-9162-7505efab270f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\threadmodel\ThreadModelJob.h">
@@ -44,7 +50,10 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\threadmodel\ThreadModelTask.h">
-      <Filter>include</Filter>
+      <Filter>include\Task</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\threadmodel\ThreadModelTaskScheduler.h">
+      <Filter>include\Task</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -67,7 +76,10 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\threadmodel\ThreadModelTask.cpp">
-      <Filter>source</Filter>
+      <Filter>source\Task</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\threadmodel\ThreadModelTaskScheduler.cpp">
+      <Filter>source\Task</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
