@@ -11,6 +11,10 @@
 #include "threadmodel/ThreadModelMessage.h"
 #include "threadmodel/ThreadModelMessageQueue.h"
 
+// Task
+#include "threadmodel/ThreadModelTask.h"
+#include "threadmodel/ThreadModelTaskScheduler.h"
+
 // Parallel
 #include "threadmodel/Parallel.h"
 
