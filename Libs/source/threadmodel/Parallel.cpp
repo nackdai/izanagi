@@ -1,11 +1,17 @@
 #include "threadmodel/Parallel.h"
 #include "threadmodel/ThreadPool.h"
 #include "threadmodel/ThreadModelTask.h"
+#include "threadmodel/ThreadModelTaskScheduler.h"
 
 namespace izanagi
 {
 namespace threadmodel
 {
+    void CParallel::SetAllocator(CTask* task, IMemoryAllocator* allocator)
+    {
+        task->SetAllocator(allocator);
+    }
+
     static const IZ_INT PARALLEL_CHUNK_SIZE = 4;
 
     class CParallelFor : public CTask
@@ -33,12 +39,11 @@ namespace threadmodel
         virtual ~CParallelFor() {}
 
     public:
-        virtual IZ_BOOL RunTask()
+        virtual void OnRun()
         {
             for (IZ_INT i = m_From; i < m_To; i++) {
                 RunInternal(i);
             }
-            return IZ_TRUE;
         }
 
         virtual void RunInternal(IZ_INT idx) = 0;
@@ -165,6 +170,7 @@ namespace threadmodel
         _T* tasks[10] = { IZ_NULL };
 
         IZ_INT threadCount = sys::CEnvironment::GetProcessorNum();
+        threadCount = ((IZ_INT)CThreadPool::GetMaxThreadNum() > threadCount ? threadCount : CThreadPool::GetMaxThreadNum());
 
         if (threadCount > COUNTOF(tasks)) {
             threadCount = COUNTOF(tasks);
@@ -186,6 +192,8 @@ namespace threadmodel
         
         IZ_INT from = fromInclusive;
 
+        CTaskScheduler scheduler;
+
         for (IZ_INT i = 0; i < threadCount; i++) {
             IZ_INT to = from + step;
             if (to >= toExclusive) {
@@ -200,9 +208,10 @@ namespace threadmodel
 
             IZ_ASSERT(task != IZ_NULL);
 
+            SetAllocator(task, allocator);
             tasks[i] = task;
 
-            CThreadPool::Enqueue(task, IZ_TRUE);
+            scheduler.Enqueue(*task);
 
             from = to;
             if (from >= toExclusive) {
@@ -215,6 +224,7 @@ namespace threadmodel
                 break;
             }
             tasks[i]->Wait();
+            CTask::DeleteTask(tasks[i]);
         }
     }
 
@@ -280,7 +290,7 @@ namespace threadmodel
 
         virtual ~CParallelForEach() {}
 
-        virtual IZ_BOOL RunTask()
+        virtual void OnRun()
         {
             if (m_Ptr != IZ_NULL) {
                 IZ_UINT8* ptr = m_Ptr;
@@ -290,7 +300,6 @@ namespace threadmodel
                     RunInternal(p);
                 }
             }
-            return IZ_TRUE;
         }
 
         virtual void RunInternal(void* data) = 0;
@@ -418,6 +427,7 @@ namespace threadmodel
         _CALLBACK callback)
     {
         IZ_UINT threadCount = sys::CEnvironment::GetProcessorNum();
+        threadCount = ((IZ_INT)CThreadPool::GetMaxThreadNum() > threadCount ? threadCount : CThreadPool::GetMaxThreadNum());
 
         _T* tasks[10] = { IZ_NULL };
 
@@ -446,6 +456,8 @@ namespace threadmodel
         IZ_UINT8* ptr = (IZ_UINT8*)data;
         IZ_UINT from = 0;
 
+        CTaskScheduler scheduler;
+
         for (IZ_UINT i = 0; i < threadCount; i++) {
             IZ_UINT to = from + step;
             if (to >= count) {
@@ -460,9 +472,10 @@ namespace threadmodel
 
             IZ_ASSERT(task != IZ_NULL);
 
+            SetAllocator(task, allocator);
             tasks[i] = task;
 
-            CThreadPool::Enqueue(task, IZ_TRUE);
+            scheduler.Enqueue(*task);
 
             from = to;
             if (from >= count) {
@@ -476,6 +489,7 @@ namespace threadmodel
             }
 
             tasks[i]->Wait();
+            CTask::DeleteTask(tasks[i]);
         }
     }
 

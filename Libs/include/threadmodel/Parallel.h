@@ -8,10 +8,15 @@ namespace izanagi
 {
 namespace threadmodel
 {
+    class CTask;
+
     /**
      */
     class CParallel
     {
+        class CParallelFor;
+        class CParallelForEach;
+
     private:
         CParallel();
         ~CParallel();
@@ -80,6 +85,8 @@ namespace threadmodel
             void* data, size_t stride,
             IZ_UINT count,
             _CALLBACK callback);
+
+        static void SetAllocator(CTask* task, IMemoryAllocator* allocator);
     };
 }   // namespace threadmodel
 }   // namespace izanagi
