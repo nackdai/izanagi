@@ -85,6 +85,10 @@ namespace threadmodel
         static IZ_UINT s_MaxThreadNum;
         static CStdList<CThread> s_ThreadList;
 
+        static sys::CMutex s_CurrentThreadNumLocker;
+        static sys::CEvent s_ThreadEmptyWaiter;
+        static IZ_UINT s_CurrentThreadNum;
+
         typedef CStdList<CThread>::Item ListItem;
     };
 }   // namespace threadmodel

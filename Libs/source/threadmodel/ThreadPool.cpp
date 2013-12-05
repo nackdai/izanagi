@@ -10,6 +10,10 @@ namespace threadmodel
     IZ_UINT CThreadPool::s_MaxThreadNum = 0;
     CStdList<CThreadPool::CThread> CThreadPool::s_ThreadList;
 
+    sys::CMutex CThreadPool::s_CurrentThreadNumLocker;
+    sys::CEvent CThreadPool::s_ThreadEmptyWaiter;
+    IZ_UINT CThreadPool::s_CurrentThreadNum = 0;
+
     CThreadPool::CThread::CThread()
     {
         m_Sema.Init(0);
@@ -23,6 +27,17 @@ namespace threadmodel
 
     void CThreadPool::CThread::SetRunnable(sys::IRunnable* runnable)
     {
+        // スレッドが最大数を超えたら空になるまで待たせる
+        s_CurrentThreadNumLocker.Lock();
+        {
+            s_CurrentThreadNum++;
+
+            if (s_CurrentThreadNum >= s_MaxThreadNum) {
+                s_ThreadEmptyWaiter.Reset();
+            }
+        }
+        s_CurrentThreadNumLocker.Unlock();
+
         m_Mutex.Lock();
         {
             m_State = State_Registered;
@@ -58,9 +73,21 @@ namespace threadmodel
                 }
 
                 m_State = State_Waiting;
+
+                // スレッドループが１周したことを通知する
+                m_Event.Set();
             }
 
-            m_Event.Set();
+            // スレッドが空いたことを通知する
+            s_CurrentThreadNumLocker.Lock();
+            {
+                s_CurrentThreadNum--;
+
+                if (s_CurrentThreadNum < s_MaxThreadNum) {
+                    s_ThreadEmptyWaiter.Set();
+                }
+            }
+            s_CurrentThreadNumLocker.Unlock();
         }
     }
 
@@ -126,6 +153,11 @@ namespace threadmodel
 
             s_ThreadList.AddTail(thread->GetListItem());
         }
+
+        s_CurrentThreadNumLocker.Open();
+
+        s_ThreadEmptyWaiter.Open();
+        s_ThreadEmptyWaiter.Set();
     }
 
     CThreadPool::CThread* CThreadPool::CreateThread()
@@ -183,40 +215,8 @@ namespace threadmodel
 
     CThreadPool::CThread* CThreadPool::GetThreadUntilThreadIsEmpty(sys::IRunnable* runnable)
     {
-        sys::CGuarder gurader(s_Mutex);
-
-        ListItem* item = s_ThreadList.GetTop();
-
-        while (item != IZ_NULL) {
-            CThread* thread = item->GetData();
-
-            if (thread->IsWaiting()) {
-                thread->SetRunnable(runnable);
-                return thread;
-            }
-
-            item = item->GetNext();
-        }
-
-        // ここに来た時点で空きスレッドが無いので待つ
-        item = s_ThreadList.GetTop();
-
-        while (item != IZ_NULL) {
-            CThread* thread = item->GetData();
-
-            if (!thread->IsWaiting()) {
-                // TODO
-                // とりあえず、最初に見つかった空いていないスレッドが空くのを待つ
-                thread->Join();
-            }
-
-            thread->SetRunnable(runnable);
-            return thread;
-        }
-
-        // ある？
-        IZ_ASSERT(IZ_FALSE);
-        return IZ_NULL;
+        s_ThreadEmptyWaiter.Wait();
+        return GetThread(runnable);
     }
 
     IZ_UINT CThreadPool::GetMaxThreadNum()
