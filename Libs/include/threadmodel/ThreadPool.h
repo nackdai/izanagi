@@ -8,6 +8,8 @@ namespace izanagi
 {
 namespace threadmodel
 {
+    class CTask;
+
     class CThreadPool
     {
         friend class CJobWorker;
@@ -22,9 +24,7 @@ namespace threadmodel
         {
             enum State
             {
-                State_None = 0,
-                State_Waiting,
-                State_Registered,
+                State_Waiting = 0,
                 State_Running,
                 State_WillFinish,
                 State_Finished,
@@ -32,26 +32,20 @@ namespace threadmodel
 
         public:
             CThread();
-            virtual ~CThread() {}
+            virtual ~CThread();
 
             IZ_DECL_PLACEMENT_NEW();
 
         public:
-            void SetRunnable(sys::IRunnable* runnable);
-            sys::IRunnable* GetRunnable();
-
             CStdList<CThread>::Item* GetListItem() { return &m_ListItem; }
 
             virtual void Run();
-            virtual void Join();
 
             void Terminate();
 
             IZ_BOOL IsWaiting();
 
         private:
-            sys::CSemaphore m_Sema;
-            sys::CEvent m_Event;
             sys::CMutex m_Mutex;
             
             State m_State;
@@ -66,9 +60,9 @@ namespace threadmodel
             IMemoryAllocator* allocator,
             IZ_UINT threadNum);
 
-        static CThread* GetThread(sys::IRunnable* runnable);
+        static void EneueueTask(CTask* task);
 
-        static CThread* GetThreadUntilThreadIsEmpty(sys::IRunnable* runnable);
+        static void WaitEmpty();
 
         static void Terminate();
 
@@ -76,20 +70,28 @@ namespace threadmodel
 
     private:
         static CThread* CreateThread();
-        static CThread* GetThreadCore(sys::IRunnable* runnable);
+
+        static CTask* DequeueTask();
 
     private:
         static IMemoryAllocator* s_Allocator;
-        static sys::CMutex s_Mutex;
+
+        static sys::CMutex s_TaskListLocker;
+        static sys::CEvent s_TaskWaiter;
+        static CStdList<CTask> s_TaskList;
+
+        static sys::CEvent s_TaskEmptyWaiter;
 
         static IZ_UINT s_MaxThreadNum;
         static CStdList<CThread> s_ThreadList;
 
-        static sys::CMutex s_CurrentThreadNumLocker;
-        static sys::CEvent s_ThreadEmptyWaiter;
-        static IZ_UINT s_CurrentThreadNum;
+        enum State {
+            State_Running = 0,
+            State_WillTerminate,
+            State_Terminated,
+        };
 
-        typedef CStdList<CThread>::Item ListItem;
+        static State s_State;
     };
 }   // namespace threadmodel
 }   // namespace izanagi

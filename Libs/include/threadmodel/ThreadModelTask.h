@@ -12,7 +12,7 @@ namespace threadmodel
      */
     class CTask : public CPlacementNew, public sys::IRunnable
     {
-        friend class CTaskScheduler;
+        friend class CThreadPool;
         friend class CParallel;
 
     public:
@@ -50,10 +50,9 @@ namespace threadmodel
         virtual void Run(void* userData);
 
         CStdList<CTask>::Item* GetListItem() { return &m_ListItem; }
-        void SetAllocator(IMemoryAllocator* allocator)
-        {
-            m_Allocator = allocator;
-        }
+
+        void SetIsDeleteSelf(IZ_BOOL isDeleteSelf);
+        IZ_BOOL IsDeleteSelf();
 
     private:
         IMemoryAllocator* m_Allocator;
@@ -61,6 +60,8 @@ namespace threadmodel
         CStdList<CTask>::Item m_ListItem;
 
         sys::CEvent m_Event;
+
+        IZ_BOOL m_IsDeleteSelf;
     };
 }   // namespace threadmodel
 }   // namespace izanagi

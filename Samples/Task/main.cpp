@@ -38,15 +38,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     izanagi::CStandardMemoryAllocator allocator;
     allocator.Init(sizeof(buffer), buffer);
 
-    izanagi::threadmodel::CTaskScheduler scheduler;
-
     CTask tasks[4];
     tasks[0].SetRange( 0,  25);
     tasks[1].SetRange(25,  50);
     tasks[2].SetRange(50,  75);
     tasks[3].SetRange(75, 100);
 
-#if 0
+#if 1
     // Sample1
     // Simple Sample
     {
@@ -57,7 +55,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         }
 
         for (IZ_UINT i = 0; i < COUNTOF(tasks); i++) {
-            scheduler.Enqueue(tasks[i], IZ_FALSE);
+            izanagi::threadmodel::CThreadPool::EneueueTask(&tasks[i]);
         }
 
         for (IZ_UINT i = 0; i < COUNTOF(tasks); i++) {
@@ -73,7 +71,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     }
 #elif 0
     // Sample2
-    // If thread is not empty, task execute on main thread.
+    // Only one thread.
     {
         izanagi::threadmodel::CThreadPool::Init(&allocator, 1);
 
@@ -82,7 +80,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         }
 
         for (IZ_UINT i = 0; i < COUNTOF(tasks); i++) {
-            scheduler.Enqueue(tasks[i], IZ_FALSE);
+            izanagi::threadmodel::CThreadPool::EneueueTask(&tasks[i]);
         }
 
         for (IZ_UINT i = 0; i < COUNTOF(tasks); i++) {
@@ -92,31 +90,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         for (IZ_UINT i = 0; i < COUNTOF(Data); i++) {
             if (Data[i] != i - 1) {
                 IZ_PRINTF("Failed Sample2 !!!\n");
-                IZ_ASSERT(IZ_FALSE);
-            }
-        }
-    }
-#elif 1
-    // Sample3
-    // If thread is not empty, task wait for task is empty.
-    {
-        izanagi::threadmodel::CThreadPool::Init(&allocator, 1);
-
-        for (IZ_UINT i = 0; i < COUNTOF(Data); i++) {
-            Data[i] = i;
-        }
-
-        for (IZ_UINT i = 0; i < COUNTOF(tasks); i++) {
-            scheduler.Enqueue(tasks[i], IZ_TRUE);
-        }
-
-        for (IZ_UINT i = 0; i < COUNTOF(tasks); i++) {
-            tasks[i].Wait();
-        }
-    
-        for (IZ_UINT i = 0; i < COUNTOF(Data); i++) {
-            if (Data[i] != i - 1) {
-                IZ_PRINTF("Failed Sample3 !!!\n");
                 IZ_ASSERT(IZ_FALSE);
             }
         }

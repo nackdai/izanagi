@@ -1,7 +1,6 @@
 #include "threadmodel/Parallel.h"
 #include "threadmodel/ThreadPool.h"
 #include "threadmodel/ThreadModelTask.h"
-#include "threadmodel/ThreadModelTaskScheduler.h"
 
 namespace izanagi
 {
@@ -9,7 +8,7 @@ namespace threadmodel
 {
     void CParallel::SetAllocator(CTask* task, IMemoryAllocator* allocator)
     {
-        task->SetAllocator(allocator);
+        //task->SetAllocator(allocator);
     }
 
     static const IZ_INT PARALLEL_CHUNK_SIZE = 4;
@@ -192,8 +191,6 @@ namespace threadmodel
         
         IZ_INT from = fromInclusive;
 
-        CTaskScheduler scheduler;
-
         for (IZ_INT i = 0; i < threadCount; i++) {
             IZ_INT to = from + step;
             if (to >= toExclusive) {
@@ -211,7 +208,7 @@ namespace threadmodel
             SetAllocator(task, allocator);
             tasks[i] = task;
 
-            scheduler.Enqueue(*task);
+            CThreadPool::EneueueTask(task);
 
             from = to;
             if (from >= toExclusive) {
@@ -456,8 +453,6 @@ namespace threadmodel
         IZ_UINT8* ptr = (IZ_UINT8*)data;
         IZ_UINT from = 0;
 
-        CTaskScheduler scheduler;
-
         for (IZ_UINT i = 0; i < threadCount; i++) {
             IZ_UINT to = from + step;
             if (to >= count) {
@@ -475,7 +470,7 @@ namespace threadmodel
             SetAllocator(task, allocator);
             tasks[i] = task;
 
-            scheduler.Enqueue(*task);
+            CThreadPool::EneueueTask(task);
 
             from = to;
             if (from >= count) {
