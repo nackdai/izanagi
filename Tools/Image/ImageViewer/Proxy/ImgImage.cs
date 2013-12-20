@@ -8,7 +8,10 @@ using System.Windows;
 
 namespace ImageViewer
 {
-    public class ImgImage : IImgObject
+    /// <summary>
+    /// イメージデータ
+    /// </summary>
+    public class ImgImage : DisposableObject, IImgObject
     {
         private ImgTexture parent = null;
         private IntPtr imageBody = IntPtr.Zero;
@@ -16,6 +19,10 @@ namespace ImageViewer
         private int width = -1;
         private int height = -1;
 
+        /// <summary>
+        /// 親のイメージオブジェクト
+        /// 親はテクスチャデータ
+        /// </summary>
         public IImgObject Parent
         {
             get
@@ -30,6 +37,9 @@ namespace ImageViewer
             private set;
         }
 
+        /// <summary>
+        /// イメージの幅
+        /// </summary>
         public int Width
         {
             get
@@ -42,6 +52,9 @@ namespace ImageViewer
             }
         }
 
+        /// <summary>
+        /// イメージの高さ
+        /// </summary>
         public int Height
         {
             get
@@ -58,6 +71,11 @@ namespace ImageViewer
         {
         }
 
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="tex">親のテクスチャデータ</param>
+        /// <param name="body">イメージデータ</param>
         internal ImgImage(ImgTexture tex, IntPtr body)
         {
             parent = tex;
@@ -65,25 +83,22 @@ namespace ImageViewer
             ID = ImgMaster.ImgObjID++;
         }
 
-        internal void Dispose(bool byInternal)
+        protected override void Disposing()
         {
-            if (!byInternal)
-            {
-                parent.RemoveImage(this);
-            }
+            parent.RemoveImage(this);
         }
 
-        public void Dispose()
-        {
-            Dispose(false);
-        }
-
+        /// <summary>
+        /// 表示用のイメージソースを取得
+        /// </summary>
+        /// <returns>イメージソース</returns>
         public ImageSource GetImageSource()
         {
             // TODO
             // 異なるフォーマットのピクセルデータを取得する場合は
             // 前のデータを解放する
 
+            // Get data as BGRA8.
             pixelData = ImageLibDllProxy.GetPixelDataAsBGRA8(imageBody);
 
             if (pixelData != IntPtr.Zero)

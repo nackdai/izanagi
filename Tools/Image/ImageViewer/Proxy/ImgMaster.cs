@@ -5,14 +5,27 @@ using System.Text;
 
 namespace ImageViewer
 {
-    public class ImgMaster : IImgObject
+    /// <summary>
+    /// イメージデータのルート
+    /// 基本的にはイメージファイルと１対１になる.
+    /// </summary>
+    public class ImgMaster : DisposableObject, IImgObject
     {
+        /// <summary>
+        /// イメージオブジェクト全体でのID生成用
+        /// </summary>
         static internal int ImgObjID = 0;
 
         private IntPtr masterBody = IntPtr.Zero;
 
+        /// <summary>
+        /// マスタデータに含まれるテクスチャのリスト
+        /// </summary>
         private List<ImgTexture> texList = new List<ImgTexture>();
 
+        /// <summary>
+        /// ルートなので常にnullを返す.
+        /// </summary>
         public IImgObject Parent
         {
             get
@@ -36,6 +49,9 @@ namespace ImageViewer
         private bool pathUpdated = false;
         public string _path = null;
 
+        /// <summary>
+        /// マスタデータの元になったファイルパス
+        /// </summary>
         public string Path
         {
             get
@@ -53,7 +69,7 @@ namespace ImageViewer
         }
 
         /// <summary>
-        /// テクスチャ数
+        /// マスタデータに含まれるテクスチャ数
         /// </summary>
         public int TextureNum
         {
@@ -63,19 +79,33 @@ namespace ImageViewer
             }
         }
 
+        /// <summary>
+        /// 指定されたパスからマスタデータ作成
+        /// </summary>
+        /// <param name="path">ファイルパス</param>
+        /// <returns>作成されたマスタデータ</returns>
         static public ImgMaster CreateImgMaster(string path)
         {
+            // Get name from path.
             string name = System.IO.Path.GetFileNameWithoutExtension(path);
 
             ImgMaster ret = CreateImgMaster(name, path);
             return ret;
         }
 
+        /// <summary>
+        /// 指定されたパスからマスタデータ作成
+        /// </summary>
+        /// <param name="name">名前</param>
+        /// <param name="path">ファイルパス</param>
+        /// <returns>作成されたマスタデータ</returns>
         static public ImgMaster CreateImgMaster(
             string name,
             string path)
         {
+            // Read data from path.
             IntPtr ptr = ImageLibDllProxy.Read(path);
+
             if (ptr != IntPtr.Zero)
             {
                 ImgMaster ret = new ImgMaster(name, path, ptr);
@@ -129,6 +159,10 @@ namespace ImageViewer
             return texList[idx];
         }
 
+        /// <summary>
+        /// マスタデータ内のテクスチャを取得
+        /// </summary>
+        /// <returns>テクスチャ</returns>
         public IEnumerable<ImgTexture> GetTexture()
         {
             foreach (var tex in texList)
@@ -145,7 +179,7 @@ namespace ImageViewer
             }
         }
 
-        public void Dispose()
+        protected override void Disposing()
         {
             foreach (var tex in texList)
             {

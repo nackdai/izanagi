@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ImageViewer
 {
-    public interface IImgObject : IDisposable
+    public interface IImgObject
     {
         IImgObject Parent
         {
@@ -16,5 +16,37 @@ namespace ImageViewer
         {
             get;
         }
+    }
+
+    public abstract class DisposableObject : IDisposable
+    {
+        ~DisposableObject()
+        {
+            this.Dispose(false);
+        }
+
+        public void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private bool disposed = false;
+
+        private void Dispose(bool disposing)
+        {
+            if (this.disposed)
+            {
+                return;
+            }
+            this.disposed = true;
+
+            if (disposing)
+            {
+                Disposing();
+            }
+        }
+
+        protected abstract void Disposing();
     }
 }
