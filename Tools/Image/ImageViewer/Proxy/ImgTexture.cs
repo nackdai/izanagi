@@ -5,7 +5,10 @@ using System.Text;
 
 namespace ImageViewer
 {
-    public class ImgTexture : IImgObject
+    /// <summary>
+    /// テクスチャデータ
+    /// </summary>
+    public class ImgTexture : DisposableObject, IImgObject
     {
         private ImgMaster parent = null;
         private IntPtr texBody = IntPtr.Zero;
@@ -14,6 +17,7 @@ namespace ImageViewer
 
         /// <summary>
         /// 親のイメージオブジェクト
+        /// 親はマスターデータ
         /// </summary>
         public IImgObject Parent
         {
@@ -89,6 +93,11 @@ namespace ImageViewer
         {
         }
 
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="master">親のマスタデータ</param>
+        /// <param name="body">テクスチャデータ</param>
         internal ImgTexture(ImgMaster master, IntPtr body)
         {
             parent = master;
@@ -97,7 +106,12 @@ namespace ImageViewer
             if (texBody != IntPtr.Zero)
             {
                 ID = ImgMaster.ImgObjID++;
+
+                // Get number of images in texture.
                 var num = ImageLibDllProxy.GetImageNumInTexture(texBody);
+
+                // TODO
+                // テクスチャの中には複数のイメージがあるのに、ミップマップ数をそれぞれから取得できていない
                 var mipmap = ImageLibDllProxy.GetMipMapNumInTexture(texBody);
 
                 // ImageImageのキャッシュ用リストを作成
@@ -117,6 +131,12 @@ namespace ImageViewer
             }
         }
 
+        /// <summary>
+        /// イメージデータを取得
+        /// </summary>
+        /// <param name="idx">取得したいイメージデータのインデックス</param>
+        /// <param name="level">取得したいミップマップのレベル</param>
+        /// <returns>イメージデータオブジェクト</returns>
         public ImgImage GetImage(int idx, int level)
         {
             idx = Math.Min(idx, ImageNum - 1);
@@ -148,17 +168,9 @@ namespace ImageViewer
             }
         }
 
-        internal void Dispose(bool byInternal)
+        protected override void Disposing()
         {
-            if (!byInternal)
-            {
-                parent.RemoveTexture(this);
-            }
-        }
-
-        public void Dispose()
-        {
-            Dispose(false);
+            parent.RemoveTexture(this);
         }
     }
 }

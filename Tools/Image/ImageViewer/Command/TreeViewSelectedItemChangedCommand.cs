@@ -9,6 +9,7 @@ namespace ImageViewer
 {
     class TreeViewSelectedItemChangedCommand : ICommand
     {
+
         static private TreeViewSelectedItemChangedCommand instance = new TreeViewSelectedItemChangedCommand();
 
         static public TreeViewSelectedItemChangedCommand Command
