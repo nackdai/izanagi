@@ -1,23 +1,25 @@
 #include "threadmodel/ThreadPool.h"
+#include "threadmodel/ThreadModelTask.h"
 
 namespace izanagi
 {
 namespace threadmodel
 {
     IMemoryAllocator* CThreadPool::s_Allocator = IZ_NULL;
-    sys::CMutex CThreadPool::s_Mutex;
+
+    sys::CMutex CThreadPool::s_TaskListLocker;
+    sys::CEvent CThreadPool::s_TaskWaiter;
+    CStdList<CTask> CThreadPool::s_TaskList;
+
+    sys::CEvent CThreadPool::s_TaskEmptyWaiter;
 
     IZ_UINT CThreadPool::s_MaxThreadNum = 0;
     CStdList<CThreadPool::CThread> CThreadPool::s_ThreadList;
 
-    sys::CMutex CThreadPool::s_CurrentThreadNumLocker;
-    sys::CEvent CThreadPool::s_ThreadEmptyWaiter;
-    IZ_UINT CThreadPool::s_CurrentThreadNum = 0;
+    CThreadPool::State CThreadPool::s_State;
 
     CThreadPool::CThread::CThread()
     {
-        m_Sema.Init(0);
-        m_Event.Open();
         m_Mutex.Open();
 
         m_State = State_Waiting;
@@ -25,99 +27,45 @@ namespace threadmodel
         m_ListItem.Init(this);
     }
 
-    void CThreadPool::CThread::SetRunnable(sys::IRunnable* runnable)
+    CThreadPool::CThread::~CThread()
     {
-        // スレッドが最大数を超えたら空になるまで待たせる
-        s_CurrentThreadNumLocker.Lock();
-        {
-            s_CurrentThreadNum++;
-
-            if (s_CurrentThreadNum >= s_MaxThreadNum) {
-                s_ThreadEmptyWaiter.Reset();
-            }
-        }
-        s_CurrentThreadNumLocker.Unlock();
-
-        m_Mutex.Lock();
-        {
-            m_State = State_Registered;
-            m_Runnable = runnable;
-        }
-        m_Mutex.Unlock();
-
-        m_Event.Reset();
-        m_Sema.Release();
-    }
-
-    sys::IRunnable* CThreadPool::CThread::GetRunnable()
-    {
-        return m_Runnable;
+        m_Mutex.Close();
     }
 
     void CThreadPool::CThread::Run()
     {
-        while (m_Sema.Wait()) {
-            {
-                sys::CGuarder guard(m_Mutex);
+        while (IZ_TRUE) {
+            CTask* task = CThreadPool::DequeueTask();
 
-                if (m_State == State_WillFinish) {
-                    m_State = State_Finished;
-                    m_Event.Set();
-                    break;
-                }
+            sys::CGuarder guarder(m_Mutex);
 
+            if (m_State == State_WillFinish) {
+                m_State = State_Finished;
+                break;
+            }
+
+            if (task != IZ_NULL) {
                 m_State = State_Running;
+                task->Run(IZ_NULL);
 
-                if (m_Runnable != IZ_NULL) {
-                    m_Runnable->Run(GetUserData());
-                }
-
-                m_State = State_Waiting;
-
-                // スレッドループが１周したことを通知する
-                m_Event.Set();
-            }
-
-            // スレッドが空いたことを通知する
-            s_CurrentThreadNumLocker.Lock();
-            {
-                s_CurrentThreadNum--;
-
-                if (s_CurrentThreadNum < s_MaxThreadNum) {
-                    s_ThreadEmptyWaiter.Set();
+                if (task->IsDeleteSelf()) {
+                    // TODO
                 }
             }
-            s_CurrentThreadNumLocker.Unlock();
+
+            m_State = State_Waiting;
         }
-    }
-
-    void CThreadPool::CThread::Join()
-    {
-        // NOTE
-        // ここでは本当にJoinはせずに、Runが１周するのを待つ
-        m_Event.Wait();
     }
 
     void CThreadPool::CThread::Terminate()
     {
-        {
-            sys::CGuarder guard(m_Mutex);
+        sys::CGuarder guard(m_Mutex);
 
-            if (m_State == State_Finished) {
-                return;
-            }
-
-            m_State = State_WillFinish;
+        if (m_State == State_Finished) {
+            return;
         }
 
-        // 止まっているかもしれないので起こす
-        m_Sema.Release();
-
-        sys::CThread::Join();
-
-        m_Sema.Close();
-        m_Event.Close();
-        m_Mutex.Close();
+        m_State = State_WillFinish;
     }
 
     IZ_BOOL CThreadPool::CThread::IsWaiting()
@@ -142,7 +90,11 @@ namespace threadmodel
             return;
         }
 
-        s_Mutex.Open();
+        s_State = State_Running;
+
+        s_TaskListLocker.Open();
+        s_TaskWaiter.Open();
+        s_TaskEmptyWaiter.Open();
 
         s_Allocator = allocator;
 
@@ -153,11 +105,32 @@ namespace threadmodel
 
             s_ThreadList.AddTail(thread->GetListItem());
         }
+    }
 
-        s_CurrentThreadNumLocker.Open();
+    void CThreadPool::EneueueTask(CTask* task)
+    {
+        {
+            sys::CGuarder guarder(s_TaskListLocker);
 
-        s_ThreadEmptyWaiter.Open();
-        s_ThreadEmptyWaiter.Set();
+            if (s_State == State_WillTerminate
+                || s_State == State_Terminated)
+            {
+                return;
+            }
+
+            s_TaskList.AddTail(task->GetListItem());
+        }
+
+        // Notify a task is queued.
+        s_TaskWaiter.Set();
+    }
+
+    void CThreadPool::WaitEmpty()
+    {
+        s_TaskEmptyWaiter.Wait();
+
+        // If WaitEmpty is called again, s_TaskEmptyWaiter will wait.
+        s_TaskEmptyWaiter.Reset();
     }
 
     CThreadPool::CThread* CThreadPool::CreateThread()
@@ -173,14 +146,35 @@ namespace threadmodel
 
     void CThreadPool::Terminate()
     {
-        ListItem* item = s_ThreadList.GetTop();
+        s_TaskListLocker.Lock();
+        {
+            s_State = State_WillTerminate;
+        }
+        s_TaskListLocker.Unlock();
 
+        // Wait queued tasks are empty.
+        WaitEmpty();
+
+        CStdList<CThread>::Item* item = s_ThreadList.GetTop();
+
+        // Notify thread will terminate.
+        while (item != IZ_NULL) {
+            CThread* thread = item->GetData();
+            thread->Terminate();
+            item = item->GetNext();
+        }
+
+        item = s_ThreadList.GetTop();
+
+        // Joint threads.
         while (item != IZ_NULL) {
             CThread* thread = item->GetData();
 
-            ListItem* next = item->GetNext();
+            CStdList<CThread>::Item* next = item->GetNext();
 
-            thread->Terminate();
+            s_TaskWaiter.Set();
+
+            thread->Join();
             delete thread;
 
             FREE(s_Allocator, thread);
@@ -190,38 +184,36 @@ namespace threadmodel
 
         IZ_ASSERT(s_ThreadList.GetItemNum() == 0);
 
-        s_Mutex.Close();
-    }
-
-    CThreadPool::CThread* CThreadPool::GetThread(sys::IRunnable* runnable)
-    {
-        sys::CGuarder gurader(s_Mutex);
-
-        ListItem* item = s_ThreadList.GetTop();
-
-        while (item != IZ_NULL) {
-            CThread* thread = item->GetData();
-
-            if (thread->IsWaiting()) {
-                thread->SetRunnable(runnable);
-                return thread;
-            }
-
-            item = item->GetNext();
-        }
-
-        return IZ_NULL;
-    }
-
-    CThreadPool::CThread* CThreadPool::GetThreadUntilThreadIsEmpty(sys::IRunnable* runnable)
-    {
-        s_ThreadEmptyWaiter.Wait();
-        return GetThread(runnable);
+        s_TaskListLocker.Close();
+        s_TaskWaiter.Close();
+        s_TaskEmptyWaiter.Close();
     }
 
     IZ_UINT CThreadPool::GetMaxThreadNum()
     {
         return s_MaxThreadNum;
+    }
+
+    CTask* CThreadPool::DequeueTask()
+    {
+        s_TaskWaiter.Wait();
+
+        sys::CGuarder guarder(s_TaskListLocker);
+
+        CStdList<CTask>::Item* item = s_TaskList.GetTop();
+
+        if (item == IZ_NULL) {
+            s_TaskWaiter.Reset();
+            s_TaskEmptyWaiter.Set();
+
+            return IZ_NULL;
+        }
+
+        item->Leave();
+
+        CTask* ret = item->GetData();
+
+        return ret;
     }
 }   // namespace threadmodel
 }   // namespace izanagi

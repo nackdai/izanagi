@@ -16,6 +16,8 @@ namespace threadmodel
         m_Event.Open();
 
         m_ListItem.Init(this);
+
+        m_IsDeleteSelf = IZ_FALSE;
     }
 
     CTask::~CTask()
@@ -32,6 +34,16 @@ namespace threadmodel
     {
         OnRun();
         m_Event.Set();
+    }
+
+    void CTask::SetIsDeleteSelf(IZ_BOOL isDeleteSelf)
+    {
+        m_IsDeleteSelf = isDeleteSelf;
+    }
+
+    IZ_BOOL CTask::IsDeleteSelf()
+    {
+        return m_IsDeleteSelf;
     }
 }   // namespace threadmodel
 }   // namespace izanagi
