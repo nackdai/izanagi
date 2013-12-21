@@ -23,6 +23,8 @@ namespace ImageViewer
         {
             InitializeComponent();
 
+            this.DataContext = new ImageDetailViewModel();
+
             TreeViewSelectedItemChangedCommand.Command.OnSelectedItemChanged += OnSelectedItemChanged;
         }
 
@@ -41,8 +43,17 @@ namespace ImageViewer
                 }
                 imgCtrl.EndInit();
 
-                Scroller.Content = imgCtrl;
+                this.Scroller.Content = imgCtrl;
+
+                (this.DataContext as ImageDetailViewModel).TargetImage = img;
             }
+        }
+
+        private void Scroller_MouseMove(object sender, MouseEventArgs e)
+        {
+            var vm = this.DataContext as ImageDetailViewModel;
+            var position = e.GetPosition(this.Scroller);
+            vm.SetPosition(position.X, position.Y);
         }
     }
 }

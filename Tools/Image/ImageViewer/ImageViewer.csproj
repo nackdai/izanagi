@@ -83,6 +83,7 @@
     <Compile Include="Command\TreeViewSelectedItemChangedCommand.cs" />
     <Compile Include="DisposableObject.cs" />
     <Compile Include="EmbeddedResourceProxy.cs" />
+    <Compile Include="ImageDetailViewModel.cs" />
     <Compile Include="ImageTreeViewNode.cs" />
     <Compile Include="ImageViewerImageView.xaml.cs">
       <DependentUpon>ImageViewerImageView.xaml</DependentUpon>
