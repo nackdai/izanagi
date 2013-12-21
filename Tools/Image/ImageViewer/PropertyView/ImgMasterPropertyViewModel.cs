@@ -18,10 +18,38 @@ namespace ImageViewer
             }
         }
 
-        private string hoge = "hoge";
+        private ImgMaster imgMaster;
+
+        public ImgMaster ImgMaster
+        {
+            private get
+            {
+                return this.imgMaster;
+            }
+            set
+            {
+                if (this.imgMaster != value)
+                {
+                    this.imgMaster = value;
+
+                    NotifyPropertyChanged("ImageType");
+                }
+            }
+        }
+
         public string ImageType
         {
-            get { return hoge; }
+            get
+            {
+                if (this.ImgMaster != null)
+                {
+                    return this.ImgMaster.Ext;
+                }
+                else
+                {
+                    return "";
+                }
+            }
         }
     }
 }

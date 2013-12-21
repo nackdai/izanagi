@@ -93,6 +93,7 @@ namespace ImageViewer
 
             if (selectedObj is ImgMaster)
             {
+                ImgMasterPropertyView.SetImageMaster(selectedObj as ImgMaster);
                 ImgMasterPropertyView.Visibility = Visibility.Visible;
             }
             else

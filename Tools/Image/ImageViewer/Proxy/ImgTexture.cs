@@ -110,8 +110,10 @@ namespace ImageViewer
                 // Get number of images in texture.
                 var num = ImageLibDllProxy.GetImageNumInTexture(texBody);
 
-                // TODO
-                // テクスチャの中には複数のイメージがあるのに、ミップマップ数をそれぞれから取得できていない
+                // NOTE
+                // どのイメージでもミップマップ数は同じ
+                // テクスチャが複数のイメージを持つ場合はキューブマップのときのみで
+                // キューブマップの場合はすべてが同じミップマップ数になる
                 var mipmap = ImageLibDllProxy.GetMipMapNumInTexture(texBody);
 
                 // ImageImageのキャッシュ用リストを作成
