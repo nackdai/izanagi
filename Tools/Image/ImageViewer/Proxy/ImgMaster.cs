@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.IO;
 
 namespace ImageViewer
 {
@@ -65,6 +64,15 @@ namespace ImageViewer
                     _path = value;
                     pathUpdated = true;
                 }
+            }
+        }
+
+        public string Ext
+        {
+            get
+            {
+                var ext = System.IO.Path.GetExtension(this.Path);
+                return ext;
             }
         }
 

@@ -26,5 +26,10 @@ namespace ImageViewer
 
             this.DataContext = new ImgMasterPropertyViewModel();
         }
+
+        public void SetImageMaster(ImgMaster imgMaster)
+        {
+            (this.DataContext as ImgMasterPropertyViewModel).ImgMaster = imgMaster;
+        }
     }
 }
