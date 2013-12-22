@@ -110,6 +110,8 @@ IZ_UINT izGetMipMapNumInTexture(void* p)
 
     // NOTE
     // どのイメージでもミップマップ数は同じ
+    // テクスチャが複数のイメージを持つ場合はキューブマップのときのみで
+    // キューブマップの場合はすべてが同じミップマップ数になる
     size_t ret = tex->GetImage(0).size();
     return (IZ_UINT)ret;
 }
