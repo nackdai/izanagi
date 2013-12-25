@@ -133,6 +133,19 @@ void* izGetImageInTexture(void* p, IZ_UINT imgIdx, IZ_UINT level)
     return tex->GetImage(imgIdx)[level];
 }
 
+/** テクスチャタイプを取得.
+ *
+ * @param[in] p テクスチャデータ (CIMGTexture).
+ * @return テクスチャタイプ.
+ */
+IZ_UINT izGetTextureType(void* p)
+{
+    VRETURN_NULL(p != IZ_NULL);
+    izanagi::tool::CIMGTexture* tex = reinterpret_cast<izanagi::tool::CIMGTexture*>(p);
+
+    return tex->GetTexInfo().type;
+}
+
 /** イメージデータの幅を取得.
  *
  * @param[in] p イメージデータ (CIMGImage)

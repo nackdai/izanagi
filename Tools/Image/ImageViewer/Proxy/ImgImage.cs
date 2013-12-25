@@ -8,6 +8,14 @@ using System.Windows;
 
 namespace ImageViewer
 {
+    public struct IntRGBA
+    {
+        int r;
+        int g;
+        int b;
+        int a;
+    }
+
     /// <summary>
     /// イメージデータ
     /// </summary>
@@ -27,7 +35,7 @@ namespace ImageViewer
         {
             get
             {
-                return parent;
+                return this.parent;
             }
         }
 
@@ -44,11 +52,11 @@ namespace ImageViewer
         {
             get
             {
-                if (width < 0)
+                if (this.width < 0)
                 {
-                    width = (int)ImageLibDllProxy.GetImageWidth(imageBody);
+                    this.width = (int)ImageLibDllProxy.GetImageWidth(imageBody);
                 }
-                return width;
+                return this.width;
             }
         }
 
@@ -59,11 +67,11 @@ namespace ImageViewer
         {
             get
             {
-                if (height < 0)
+                if (this.height < 0)
                 {
-                    height = (int)ImageLibDllProxy.GetImageHeight(imageBody);
+                    this.height = (int)ImageLibDllProxy.GetImageHeight(imageBody);
                 }
-                return height;
+                return this.height;
             }
         }
 
@@ -78,14 +86,14 @@ namespace ImageViewer
         /// <param name="body">イメージデータ</param>
         internal ImgImage(ImgTexture tex, IntPtr body)
         {
-            parent = tex;
-            imageBody = body;
-            ID = ImgMaster.ImgObjID++;
+            this.parent = tex;
+            this.imageBody = body;
+            this.ID = ImgMaster.ImgObjID++;
         }
 
         protected override void Disposing()
         {
-            parent.RemoveImage(this);
+            this.parent.RemoveImage(this);
         }
 
         /// <summary>
@@ -99,23 +107,32 @@ namespace ImageViewer
             // 前のデータを解放する
 
             // Get data as BGRA8.
-            pixelData = ImageLibDllProxy.GetPixelDataAsBGRA8(imageBody);
+            this.pixelData = ImageLibDllProxy.GetPixelDataAsBGRA8(imageBody);
 
-            if (pixelData != IntPtr.Zero)
+            if (this.pixelData != IntPtr.Zero)
             {
                 int stride = Width * PixelFormats.Bgra32.BitsPerPixel / 8;
                 int size = stride * Width;
 
                 var ret = BitmapSource.Create(
-                    Width, Height,
+                    this.Width, this.Height,
                     96, 96,
                     PixelFormats.Bgra32,
                     null,
-                    pixelData,
+                    this.pixelData,
                     size,
                     stride);
 
                 return ret;
+            }
+
+            return null;
+        }
+
+        public IntRGBA? GetRGBAFromPosition(int x, int y)
+        {
+            if (this.pixelData != IntPtr.Zero)
+            {
             }
 
             return null;
