@@ -36,6 +36,16 @@ namespace threadmodel
         m_Event.Set();
     }
 
+    CStdList<CTask>::Item* CTask::GetListItem()
+    {
+        return &m_ListItem;
+    }
+
+    void CTask::SetAllocator(IMemoryAllocator* allocator)
+    {
+        m_Allocator = allocator;
+    }
+
     void CTask::SetIsDeleteSelf(IZ_BOOL isDeleteSelf)
     {
         m_IsDeleteSelf = isDeleteSelf;

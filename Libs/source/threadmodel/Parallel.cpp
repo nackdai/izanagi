@@ -8,7 +8,7 @@ namespace threadmodel
 {
     void CParallel::SetAllocator(CTask* task, IMemoryAllocator* allocator)
     {
-        //task->SetAllocator(allocator);
+        task->SetAllocator(allocator);
     }
 
     static const IZ_INT PARALLEL_CHUNK_SIZE = 4;
