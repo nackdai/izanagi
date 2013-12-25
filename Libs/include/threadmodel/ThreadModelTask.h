@@ -49,7 +49,9 @@ namespace threadmodel
     private:
         virtual void Run(void* userData);
 
-        CStdList<CTask>::Item* GetListItem() { return &m_ListItem; }
+        CStdList<CTask>::Item* GetListItem();
+
+        void SetAllocator(IMemoryAllocator* allocator);
 
         void SetIsDeleteSelf(IZ_BOOL isDeleteSelf);
         IZ_BOOL IsDeleteSelf();
