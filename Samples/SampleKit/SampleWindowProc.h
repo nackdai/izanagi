@@ -20,8 +20,8 @@ namespace sample {
         void Init(CSampleApp* app);
 
     public:
-        virtual void OnKeyDown(IZ_UINT nChar);
-        virtual void OnKeyUp(IZ_UINT nChar);
+        virtual void OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key);
+        virtual void OnKeyUp(izanagi::sys::E_KEYBOARD_BUTTON key);
 
         virtual void OnMouseLBtnDown(const izanagi::CIntPoint& point);
         virtual void OnMouseLBtnUp(const izanagi::CIntPoint& point);

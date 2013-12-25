@@ -11,9 +11,9 @@ CModelApp::~CModelApp()
 }
 
 // キーボード押下
-IZ_BOOL CModelApp::OnKeyDown(IZ_UINT nChar)
+IZ_BOOL CModelApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
 {
-    return CStateManager::GetInstance().OnKeyDown(nChar);
+    return CStateManager::GetInstance().OnKeyDown(key);
 }
 
 // 初期化.

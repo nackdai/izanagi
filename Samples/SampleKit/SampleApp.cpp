@@ -11,7 +11,6 @@ CSampleApp::CSampleApp()
 
     m_DebugFont = IZ_NULL;
     m_Pad = IZ_NULL;
-    m_Keyboard = IZ_NULL;
 
     m_ScreenWidth = 1;
     m_ScreenHeight = 1;
@@ -167,7 +166,6 @@ void CSampleApp::Release()
     
     SAFE_RELEASE(m_DebugFont);
     SAFE_RELEASE(m_Pad);
-    SAFE_RELEASE(m_Keyboard);
 
     m_Device->Terminate();
 

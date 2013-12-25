@@ -362,13 +362,13 @@ void CMotionInterpApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 #endif
 }
 
-IZ_BOOL CMotionInterpApp::OnKeyDown(IZ_UINT nChar)
+IZ_BOOL CMotionInterpApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
 {
     //static const izanagi::CAnimationInterp::E_INTERP_TYPE type = izanagi::CAnimationInterp::E_INTERP_TYPE_FROZEN;
     static const izanagi::CAnimationInterp::E_INTERP_TYPE type = izanagi::CAnimationInterp::E_INTERP_TYPE_SMOOTH;
     static const IZ_FLOAT interpTime = 10.0f;
 
-    if (nChar == VK_RETURN)
+    if (key == izanagi::sys::E_KEYBOARD_BUTTON_RETURN)
     {
         if (m_TargetAnmIdx == 1)
         {

@@ -11,9 +11,9 @@ CMotionApp::~CMotionApp()
 }
 
 // キーボード押下
-IZ_BOOL CMotionApp::OnKeyDown(IZ_UINT nChar)
+IZ_BOOL CMotionApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
 {
-    return CStateManager::GetInstance().OnKeyDown(nChar);
+    return CStateManager::GetInstance().OnKeyDown(key);
 }
 
 // 初期化.

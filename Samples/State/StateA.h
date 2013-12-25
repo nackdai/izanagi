@@ -17,7 +17,7 @@ public:
     // For Windows
 
     // ÉLÅ[âüâ∫
-    virtual IZ_BOOL OnKeyDown(IZ_UINT nChar);
+    virtual IZ_BOOL OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key);
 };
 
 #endif    // #if !defined(__STATE_A_H__)

@@ -18,7 +18,7 @@ public:
 
 public:
     // キーボード押下
-    virtual IZ_BOOL OnKeyDown(IZ_UINT nChar);
+    virtual IZ_BOOL OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key);
 
 protected:
     // 初期化.
@@ -55,9 +55,9 @@ CShaderApp::~CShaderApp()
 }
 
 // キーボード押下
-IZ_BOOL CShaderApp::OnKeyDown(IZ_UINT nChar)
+IZ_BOOL CShaderApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
 {
-    return CStateManager::GetInstance().OnKeyDown(nChar);
+    return CStateManager::GetInstance().OnKeyDown(key);
 }
 
 // 初期化.

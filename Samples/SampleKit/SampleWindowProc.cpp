@@ -21,14 +21,14 @@ void CSampleWndProc::Init(CSampleApp* app)
     m_App = app;
 }
 
-void CSampleWndProc::OnKeyDown(IZ_UINT nChar)
+void CSampleWndProc::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
 {
-    m_App->OnKeyDown(nChar);
+    m_App->OnKeyDown(key);
 }
 
-void CSampleWndProc::OnKeyUp(IZ_UINT nChar)
+void CSampleWndProc::OnKeyUp(izanagi::sys::E_KEYBOARD_BUTTON key)
 {
-    m_App->OnKeyUp(nChar);
+    m_App->OnKeyUp(key);
 }
 
 void CSampleWndProc::OnMouseLBtnDown(const izanagi::CIntPoint& point)

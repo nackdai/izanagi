@@ -42,7 +42,7 @@ protected:
     // 描画.
     virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device);
 
-    virtual IZ_BOOL OnKeyDown(IZ_UINT nChar);
+    virtual IZ_BOOL OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key);
 
 private:
     izanagi::CImage* m_Img;

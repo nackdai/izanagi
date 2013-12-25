@@ -213,13 +213,13 @@ void CMouseHit::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     m_Shader->End(device);
 }
 
-IZ_BOOL CMouseHit::OnKeyDown(IZ_UINT nChar)
+IZ_BOOL CMouseHit::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
 {
     m_IsPressKey = IZ_TRUE;
     return IZ_TRUE;
 }
 
-void CMouseHit::OnKeyUp(IZ_UINT nChar)
+void CMouseHit::OnKeyUp(izanagi::sys::E_KEYBOARD_BUTTON key)
 {
     m_IsPressKey = IZ_FALSE;
 }
