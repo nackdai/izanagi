@@ -13,7 +13,7 @@ public:
 
 public:
     // キーボード押下
-    virtual IZ_BOOL OnKeyDown(IZ_UINT nChar);
+    virtual IZ_BOOL OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key);
 
 protected:
     // 初期化.

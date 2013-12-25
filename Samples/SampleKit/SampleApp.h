@@ -88,11 +88,11 @@ namespace sample {
 
         /** キーボード押下
          */
-        virtual IZ_BOOL OnKeyDown(IZ_UINT nChar) { return IZ_TRUE; }
+        virtual IZ_BOOL OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key) { return IZ_TRUE; }
 
         /** キーボードアップ
          */
-        virtual void OnKeyUp(IZ_UINT nChar) {}
+        virtual void OnKeyUp(izanagi::sys::E_KEYBOARD_BUTTON key) {}
 
         /** マウス左ボタン押下
          */
@@ -136,7 +136,6 @@ namespace sample {
         izanagi::CDebugFont* m_DebugFont;
 
         izanagi::sys::CPad* m_Pad;
-        izanagi::sys::CKeyboard* m_Keyboard;
 
         IZ_UINT m_ScreenWidth;
         IZ_UINT m_ScreenHeight;

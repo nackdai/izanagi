@@ -56,14 +56,14 @@ IZ_BOOL CStatePostEffect::Leave()
 }
 
 // キー押下
-IZ_BOOL CStatePostEffect::OnKeyDown(IZ_UINT nChar)
+IZ_BOOL CStatePostEffect::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
 {
     State cur = CStateManager::GetInstance().GetCurrentState();
 
-    if (nChar == VK_UP) {
+    if (key == izanagi::sys::E_KEYBOARD_BUTTON_UP) {
         CStateManager::GetInstance().ChangeState(cur + 1);
     }
-    else if (nChar == VK_DOWN) {
+    else if (key == izanagi::sys::E_KEYBOARD_BUTTON_DOWN) {
         CStateManager::GetInstance().ChangeState(cur - 1);
     }
 

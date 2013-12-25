@@ -30,7 +30,7 @@ public:
     virtual IZ_BOOL Render(izanagi::graph::CGraphicsDevice* device);
 
     // キー押下
-    virtual IZ_BOOL OnKeyDown(IZ_UINT nChar);
+    virtual IZ_BOOL OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key);
 
     virtual IZ_BOOL EnableBgColor() const { return IZ_FALSE; }
     virtual IZ_COLOR GetBgColor() const { return 0xffffffff; }

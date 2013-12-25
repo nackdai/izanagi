@@ -214,12 +214,12 @@ void CDecalApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     m_Shader->End(device);
 }
 
-IZ_BOOL CDecalApp::OnKeyDown(IZ_UINT nChar)
+IZ_BOOL CDecalApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
 {
     return IZ_TRUE;
 }
 
-void CDecalApp::OnKeyUp(IZ_UINT nChar)
+void CDecalApp::OnKeyUp(izanagi::sys::E_KEYBOARD_BUTTON key)
 {
 }
 

@@ -12,15 +12,15 @@ CPostEffectApp::~CPostEffectApp()
 }
 
 // キーボード押下
-IZ_BOOL CPostEffectApp::OnKeyDown(IZ_UINT nChar)
+IZ_BOOL CPostEffectApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
 {
-    if (nChar == VK_SPACE)
+    if (key == izanagi::sys::E_KEYBOARD_BUTTON_SPACE)
     {
         CPostEffectSample::GetInstance()->ToggleEnablePostEffect();
         return IZ_TRUE;
     }
 
-    return CStateManager::GetInstance().OnKeyDown(nChar);
+    return CStateManager::GetInstance().OnKeyDown(key);
 }
 
 // 初期化.

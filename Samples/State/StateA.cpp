@@ -19,15 +19,15 @@ IZ_UINT CStateA::GetIndex()
 }
 
 // ÉLÅ[âüâ∫
-IZ_BOOL CStateA::OnKeyDown(IZ_UINT nChar)
+IZ_BOOL CStateA::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
 {
-    if (nChar == VK_BACK) {
+    if (key == izanagi::sys::E_KEYBOARD_BUTTON_BACK) {
         m_IsBack = IZ_TRUE;
     }
-    else if (nChar == VK_UP) {
+    else if (key == izanagi::sys::E_KEYBOARD_BUTTON_UP) {
         CStateManager::GetInstance().ChangeState(State_C);
     }
-    else if (nChar == VK_DOWN) {
+    else if (key == izanagi::sys::E_KEYBOARD_BUTTON_DOWN) {
         CStateManager::GetInstance().ChangeState(State_B);
     }
 

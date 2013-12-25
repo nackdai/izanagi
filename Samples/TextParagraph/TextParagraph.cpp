@@ -25,7 +25,7 @@ protected:
     // 描画.
     virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device);
 
-    virtual IZ_BOOL OnKeyDown(IZ_UINT nChar);
+    virtual IZ_BOOL OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key);
 
 private:
     izanagi::text::IFontHost* m_FontHost;
@@ -116,30 +116,30 @@ void CTextParagraphApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     }
 }
 
-IZ_BOOL CTextParagraphApp::OnKeyDown(IZ_UINT nChar)
+IZ_BOOL CTextParagraphApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
 {
-    if (nChar == VK_RIGHT)
+    if (key == izanagi::sys::E_KEYBOARD_BUTTON_RIGHT)
     {
         if (m_Width < 1000)
         {
             m_Width += 10;
         }
     }
-    else if (nChar == VK_LEFT)
+    else if (key == izanagi::sys::E_KEYBOARD_BUTTON_LEFT)
     {
         if (m_Width > 50)
         {
             m_Width -= 10;
         }
     }
-    else if (nChar == VK_UP)
+    else if (key == izanagi::sys::E_KEYBOARD_BUTTON_UP)
     {
         if (m_Height < 500)
         {
             m_Height += 10;
         }
     }
-    else if (nChar == VK_DOWN)
+    else if (key == izanagi::sys::E_KEYBOARD_BUTTON_DOWN)
     {
         if (m_Height > 50)
         {
