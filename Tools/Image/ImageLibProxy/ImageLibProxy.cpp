@@ -65,6 +65,11 @@ namespace tool {
         return (IntPtr)izGetImageInTexture((void*)p, imgIdx, level);
     }
 
+    unsigned int ImageLibProxy::GetTextureType(IntPtr p)
+    {
+        return izGetTextureType((void*)p);
+    }
+
     unsigned int ImageLibProxy::GetImageWidth(IntPtr p)
     {
         return izGetImageWidth((void*)p);

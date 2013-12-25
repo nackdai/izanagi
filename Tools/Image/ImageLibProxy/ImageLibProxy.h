@@ -33,6 +33,8 @@ namespace tool {
 
         static IntPtr GetImageInTexture(IntPtr p, unsigned int imgIdx, unsigned int level);
 
+        static unsigned int GetTextureType(IntPtr p);
+
         static unsigned int GetImageWidth(IntPtr p);
 
         static unsigned int GetImageHeight(IntPtr p);

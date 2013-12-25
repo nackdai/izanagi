@@ -23,7 +23,7 @@ namespace ImageViewer
         {
             get
             {
-                return parent;
+                return this.parent;
             }
         }
 
@@ -40,7 +40,7 @@ namespace ImageViewer
         {
             get
             {
-                return imageList.Count;
+                return this.imageList.Count;
             }
         }
 
@@ -51,9 +51,9 @@ namespace ImageViewer
         {
             get
             {
-                if (imageList.Count > 0)
+                if (this.imageList.Count > 0)
                 {
-                    return imageList[0].Count;
+                    return this.imageList[0].Count;
                 }
                 return 0;
             }
@@ -66,9 +66,9 @@ namespace ImageViewer
         {
             get
             {
-                if (ImageNum > 0 && MipMapNum > 0)
+                if (this.ImageNum > 0 && this.MipMapNum > 0)
                 {
-                    return imageList[0][0].Width;
+                    return this.imageList[0][0].Width;
                 }
                 return 0;
             }
@@ -81,11 +81,28 @@ namespace ImageViewer
         {
             get
             {
-                if (ImageNum > 0 && MipMapNum > 0)
+                if (this.ImageNum > 0 && this.MipMapNum > 0)
                 {
-                    return imageList[0][0].Height;
+                    return this.imageList[0][0].Height;
                 }
                 return 0;
+            }
+        }
+
+        public enum TextureType
+        {
+            Plane,
+            Cube,
+            Volume,
+        }
+
+        public TextureType Type
+        {
+            get
+            {
+                uint type = ImageLibDllProxy.GetTextureType(this.texBody);
+                TextureType ret = (TextureType)type;
+                return ret;
             }
         }
 
@@ -100,12 +117,12 @@ namespace ImageViewer
         /// <param name="body">テクスチャデータ</param>
         internal ImgTexture(ImgMaster master, IntPtr body)
         {
-            parent = master;
-            texBody = body;
+            this.parent = master;
+            this.texBody = body;
 
-            if (texBody != IntPtr.Zero)
+            if (this.texBody != IntPtr.Zero)
             {
-                ID = ImgMaster.ImgObjID++;
+                this.ID = ImgMaster.ImgObjID++;
 
                 // Get number of images in texture.
                 var num = ImageLibDllProxy.GetImageNumInTexture(texBody);
@@ -128,7 +145,7 @@ namespace ImageViewer
                         list.Add(img);
                     }
 
-                    imageList.Add(list);
+                    this.imageList.Add(list);
                 }
             }
         }
@@ -149,7 +166,7 @@ namespace ImageViewer
 
         public IEnumerable<ImgImage> GetImage()
         {
-            foreach (var list in imageList)
+            foreach (var list in this.imageList)
             {
                 foreach (var img in list)
                 {
@@ -160,7 +177,7 @@ namespace ImageViewer
 
         internal void RemoveImage(ImgImage img)
         {
-            foreach (var list in imageList)
+            foreach (var list in this.imageList)
             {
                 if (list.Remove(img))
                 {
@@ -172,7 +189,7 @@ namespace ImageViewer
 
         protected override void Disposing()
         {
-            parent.RemoveTexture(this);
+            this.parent.RemoveTexture(this);
         }
     }
 }

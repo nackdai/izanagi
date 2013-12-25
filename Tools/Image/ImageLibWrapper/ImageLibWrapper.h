@@ -62,6 +62,13 @@ IZ_UINT izGetMipMapNumInTexture(void* p);
  */
 void* izGetImageInTexture(void* p, IZ_UINT imgIdx, IZ_UINT level);
 
+/** テクスチャタイプを取得.
+ *
+ * @param[in] p テクスチャデータ (CIMGTexture).
+ * @return テクスチャタイプ.
+ */
+IZ_UINT izGetTextureType(void* p);
+
 /** イメージデータの幅を取得.
  *
  * @param[in] p イメージデータ (CIMGImage)

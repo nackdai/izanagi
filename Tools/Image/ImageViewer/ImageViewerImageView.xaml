@@ -6,7 +6,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <DockPanel>
-        <TextBox x:Name="Position" Text="{Binding Position, Mode=OneWay}" Height="50" DockPanel.Dock="Bottom"/>
+        <StatusBar DockPanel.Dock="Bottom">
+            <TextBox x:Name="Position" Text="{Binding Position, Mode=OneWay}"/>
+        </StatusBar>
         <ScrollViewer Name="Scroller" Background="Gray" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" MouseMove="Scroller_MouseMove"/>
     </DockPanel>
 </UserControl>

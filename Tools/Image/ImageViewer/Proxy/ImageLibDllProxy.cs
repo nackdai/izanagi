@@ -138,6 +138,17 @@ namespace ImageViewer
         }
 
         /// <summary>
+        /// テクスチャタイプを取得.
+        /// </summary>
+        /// <param name="p">テクスチャハンドル</param>
+        /// <returns>テクスチャタイプ</returns>
+        static public uint GetTextureType(IntPtr p)
+        {
+            uint ret = izanagi.tool.ImageLibProxy.GetTextureType(p);
+            return ret;
+        }
+
+        /// <summary>
         /// イメージ幅を取得
         /// </summary>
         /// <param name="p">イメージハンドル</param>

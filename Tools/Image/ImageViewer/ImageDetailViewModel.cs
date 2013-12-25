@@ -45,11 +45,14 @@ namespace ImageViewer
                 var width = this.TargetImage.Width;
                 var height = this.TargetImage.Height;
 
-                posX = (posX >= width ? width - 1 : posX);
-                posY = (posY >= height ? height - 1 : posY);
+                if (posX < width && posY < height)
+                {
+                    posX = (posX >= width ? width - 1 : posX);
+                    posY = (posY >= height ? height - 1 : posY);
 
-                // Notify property is changed to binding target in XAML.
-                NotifyPropertyChanged("Position");
+                    // Notify property is changed to binding target in XAML.
+                    NotifyPropertyChanged("Position");
+                }
             }
         }
     }
