@@ -125,13 +125,15 @@ namespace sys
 
         case WM_KEYDOWN:
             if (msgHandler) {
-                msgHandler->OnKeyDown((IZ_UINT)wParam);
+                E_KEYBOARD_BUTTON key = CSysWindow::GetKeyMap((IZ_UINT)wParam);
+                msgHandler->OnKeyDown(key);
             }
             break;
 
         case WM_KEYUP:
             if (msgHandler) {
-                msgHandler->OnKeyUp((IZ_UINT)wParam);
+                E_KEYBOARD_BUTTON key = CSysWindow::GetKeyMap((IZ_UINT)wParam);
+                msgHandler->OnKeyUp(key);
             }
             break;
 
@@ -378,6 +380,47 @@ namespace sys
     {
         CWindow* window = (CWindow*)handle;
         return window->GetHDC();
+    }
+
+    E_KEYBOARD_BUTTON CSysWindow::GetKeyMap(IZ_UINT key)
+    {
+        if ('0' <= key && key <= '9') {
+            key = key - '0';
+            return (E_KEYBOARD_BUTTON)(E_KEYBOARD_BUTTON_0 + key);
+        }
+        else if ('A' <= key && key <= 'Z') {
+            key = key - 'A';
+            return (E_KEYBOARD_BUTTON)(E_KEYBOARD_BUTTON_A + key);
+        }
+        else {
+            switch (key) {
+            case VK_UP:
+                return E_KEYBOARD_BUTTON_UP;
+            case VK_LEFT:
+                return E_KEYBOARD_BUTTON_LEFT;
+            case VK_DOWN:
+                return E_KEYBOARD_BUTTON_DOWN;
+            case VK_RIGHT:
+                return E_KEYBOARD_BUTTON_RIGHT;
+            case VK_CONTROL:
+                return E_KEYBOARD_BUTTON_CONTROL;
+            case VK_SHIFT:
+                return E_KEYBOARD_BUTTON_SHIFT;
+            case VK_RETURN:
+                return E_KEYBOARD_BUTTON_RETURN;
+            case VK_SPACE:
+                return E_KEYBOARD_BUTTON_SPACE;
+            case VK_BACK:
+                return E_KEYBOARD_BUTTON_BACK;
+            case VK_DELETE:
+                return E_KEYBOARD_BUTTON_DELETE;
+            default:
+                break;
+            }
+        }
+
+        IZ_ASSERT(IZ_FALSE);
+        return E_KEYBOARD_BUTTON_UNDEFINED;
     }
 }   // namespace sys
 }   // namespace izanagi
