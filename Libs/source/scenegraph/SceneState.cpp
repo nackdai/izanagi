@@ -35,7 +35,7 @@ IZ_BOOL CSceneStateBase::Leave()
     return IZ_TRUE;
 }
 
-IZ_BOOL CSceneStateBase::OnKeyDown(IZ_UINT nChar)
+IZ_BOOL CSceneStateBase::OnKeyDown(sys::E_KEYBOARD_BUTTON key)
 {
     return IZ_TRUE;
 }

@@ -122,15 +122,12 @@
   <ItemGroup>
     <ClInclude Include="..\..\include\system\InputDeviceDefs.h" />
     <ClInclude Include="..\..\include\system\izDInput.h" />
-    <ClInclude Include="..\..\include\system\Keyboard.h" />
-    <ClInclude Include="..\..\include\system\Keyboard_DInput.h" />
-    <ClInclude Include="..\..\include\system\Mouse.h" />
-    <ClInclude Include="..\..\include\system\Mouse_DInput.h" />
     <ClInclude Include="..\..\include\system\Pad.h" />
     <ClInclude Include="..\..\include\system\Pad_DInput.h" />
     <ClInclude Include="..\..\include\system\Pad_XInput.h" />
     <ClInclude Include="..\..\include\system\SysEnvironment.h" />
     <ClInclude Include="..\..\include\system\SysInterlocked.h" />
+    <ClInclude Include="..\..\include\system\SysKeyDefs.h" />
     <ClInclude Include="..\..\include\system\SysTimer.h" />
     <ClInclude Include="..\..\include\system\SysUtil.h" />
     <ClInclude Include="..\..\include\system\SysWindow.h" />
@@ -143,12 +140,8 @@
     <ClInclude Include="..\..\include\izSystem.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\source\system\Keyboard.cpp" />
-    <ClCompile Include="..\..\source\system\Mouse.cpp" />
     <ClCompile Include="..\..\source\system\Pad.cpp" />
     <ClCompile Include="..\..\source\system\win32\device\DeviceUtil.cpp" />
-    <ClCompile Include="..\..\source\system\win32\device\Keyboard _DInput.cpp" />
-    <ClCompile Include="..\..\source\system\win32\device\Mouse_DInput.cpp" />
     <ClCompile Include="..\..\source\system\win32\device\Pad_DInput.cpp" />
     <ClCompile Include="..\..\source\system\win32\device\Pad_XInput.cpp" />
     <ClCompile Include="..\..\source\system\win32\SysEnvironment_win32 .cpp" />

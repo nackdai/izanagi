@@ -4,6 +4,7 @@
 #include "izDefs.h"
 #include "izStd.h"
 #include "izGraph.h"
+#include "izSystem.h"
 
 namespace izanagi {
     /** ステートベース.
@@ -48,7 +49,7 @@ namespace izanagi {
 
         /** キー押下
          */
-        virtual IZ_BOOL OnKeyDown(IZ_UINT nChar);
+        virtual IZ_BOOL OnKeyDown(sys::E_KEYBOARD_BUTTON key);
 
         /** マウス移動.
          */

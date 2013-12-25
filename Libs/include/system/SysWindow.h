@@ -3,6 +3,7 @@
 
 #include "izDefs.h"
 #include "izStd.h"
+#include "SysKeyDefs.h"
 
 namespace izanagi
 {
@@ -26,9 +27,9 @@ namespace sys
         NO_COPIABLE(CMessageHandler);
 
     public:
-        virtual void OnKeyDown(IZ_UINT nChar) {}
+        virtual void OnKeyDown(E_KEYBOARD_BUTTON key) {}
 
-        virtual void OnKeyUp(IZ_UINT nChar) {}
+        virtual void OnKeyUp(E_KEYBOARD_BUTTON key) {}
 
         virtual void OnMouseLBtnDown(const CIntPoint& point) {}
 
@@ -88,6 +89,8 @@ namespace sys
         static void* GetNativeWindowHandle(const WindowHandle& handle);
 
         static void* GetNativeDisplayHandle(const WindowHandle& handle);
+
+        static E_KEYBOARD_BUTTON GetKeyMap(IZ_UINT key);
     };
 }   // namespace sys
 }   // namespace izanagi

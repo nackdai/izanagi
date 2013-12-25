@@ -3,6 +3,7 @@
 
 #include "izDefs.h"
 #include "izGraph.h"
+#include "izSystem.h"
 #include "SceneState.h"
 
 namespace izanagi {
@@ -131,9 +132,9 @@ namespace izanagi {
 
         /** キー押下.
          */
-        IZ_BOOL OnKeyDown(IZ_UINT nChar)
+        IZ_BOOL OnKeyDown(sys::E_KEYBOARD_BUTTON key)
         {
-            return GetState(GetCurrentState())->OnKeyDown(nChar);
+            return GetState(GetCurrentState())->OnKeyDown(key);
         }
 
         /** マウス移動.
