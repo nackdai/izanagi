@@ -3,8 +3,6 @@
 
 #include "izStd.h"
 #include "SysThreadDefs.h"
-#include "SysMutex.h"
-#include "SysEvent.h"
 
 namespace izanagi
 {

@@ -1,16 +1,6 @@
 #if !defined(__IZANAGI_DEFS_H__)
 #define __IZANAGI_DEFS_H__
 
-#include <windows.h>
-#include <stdio.h>
-#include <memory.h>
-#include <assert.h>
-
-#include <float.h>
-
-#include "izLimits.h"
-#include "izTypes.h"
-
 #ifndef WINDOWS
     #if defined(WIN32) || defined(WIN64)
         #define WINDOWS
@@ -18,12 +8,24 @@
 #endif  // #ifndef WINDOWS
 
 #ifdef WINDOWS
+    #include <windows.h>
+
     #ifdef _WINDLL
         #define IZ_API  __declspec(dllexport)
     #else
         #define IZ_API  __declspec(dllimport)
     #endif
 #endif  // #ifdef WINDOWS
+
+#include <stdio.h>
+#include <stdarg.h>
+#include <memory.h>
+#include <assert.h>
+
+#include <float.h>
+
+#include "izLimits.h"
+#include "izTypes.h"
 
 #ifndef IZ_API
     #define IZ_API
@@ -43,10 +45,14 @@ typedef const wchar_t*  IZ_PCWSTR;
 #else   // #ifdef _UNICODE
     typedef char            izChar;
     typedef const char*     izPcstr;
-    #ifdef WIN32
+    #ifdef WINDOWS
         #define IZ_VSPRINTF     vsprintf_s
         #define IZ_SPRINTF      sprintf_s
         #define IZ_FPRINTF      fprintf_s
+    #else
+        #define IZ_VSPRINTF     vsnprintf
+        #define IZ_SPRINTF      snprintf
+        #define IZ_FPRINTF      fnprintf
     #endif
 #endif  // #ifdef _UNICODE
 
@@ -74,7 +80,11 @@ inline void _OutputDebugString(const char* format, ...)
     va_start(argp, format);
     IZ_VSPRINTF(buf, sizeof(buf), format, argp);
     va_end(argp);
+#ifdef WINDOWS
     ::OutputDebugString(buf);
+#else
+    printf("%s", buf);
+#endif
 }
 
 #ifndef IZ_PRINTF

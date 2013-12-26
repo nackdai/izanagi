@@ -1,6 +1,3 @@
-#if defined(WIN32) || defined(WIN64)
-
-#include <process.h>
 #include "system/SysThread.h"
 #include "system/SysThreadUtil.h"
 
@@ -8,6 +5,7 @@ namespace izanagi
 {
 namespace sys
 {
+#if 0
     // Get current thread id.
     ThreadId CThread::GetCurrentThreadId()
     {
@@ -34,15 +32,16 @@ namespace sys
     {
         CThread::Sleep(0);
     }
+#endif
 
     // スレッド実行関数
-    static UINT __stdcall procThreadFunc(LPVOID param)
+    void procThreadFunc(void* param)
     {
         CThread* thread = (CThread*)param;
 
         thread->Run();
 
-        return 0;
+        return;
     }
 
     CThread::CThread()
@@ -96,8 +95,6 @@ namespace sys
         IRunnable* runnable,
         void* userData)
     {
-        m_Handle = IZ_NULL;
-        m_Id = 0;
         m_Cpu = cpu;
 
         m_UserData = userData;
@@ -126,8 +123,13 @@ namespace sys
     // このスレッドの実行を開始.
     IZ_BOOL CThread::Start()
     {
-        if (m_Handle == IZ_NULL) {
-            // スレッドハンドル作成
+        // スレッドハンドル作成
+        ::pthread_create(
+            &m_Handle,
+            NULL,
+            procThreadFunc,
+            (void*)this);
+
             m_Handle = (ThreadHandle)::_beginthreadex(
                             NULL,
                             256 * 1024,
@@ -207,4 +209,3 @@ namespace sys
     }
 }   // namespace sys
 }   // namespace izanagi
-#endif  // #if defined(WIN32) || defined(WIN64)

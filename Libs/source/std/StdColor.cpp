@@ -1,5 +1,5 @@
-﻿#include "std/StdColor.h"
-#include "izMath.h"
+﻿#include <math.h>
+#include "std/StdColor.h"
 
 using namespace izanagi;
 
@@ -8,7 +8,7 @@ using namespace izanagi;
 static const IZ_FLOAT _Div = 1.0f / 255.0f;
 #define BYTE_TO_FLOAT(n)    n * _Div;
 
-#define SATURATE(v) math::CMath::Clamp(v, 0.0f, 1.0f)
+#define SATURATE(v) CLAMP(v, 0.0f, 1.0f)
 
 ///////////////////////////////////////////////////////////////
 // YUV
@@ -38,9 +38,9 @@ static const IZ_FLOAT _Div = 1.0f / 255.0f;
 
 void CColor::SetYUV(IZ_FLOAT _y, IZ_FLOAT _u, IZ_FLOAT _v)
 {
-    _y = math::CMath::Clamp(_y, 0.0f, 1.0f);
-    _u = math::CMath::Clamp(_u, -0.70109f, 0.70109f);
-    _v = math::CMath::Clamp(_v, -0.88552f, 0.88552f);
+    _y = CLAMP(_y, 0.0f, 1.0f);
+    _u = CLAMP(_u, -0.70109f, 0.70109f);
+    _v = CLAMP(_v, -0.88552f, 0.88552f);
 
     IZ_FLOAT fR = SATURATE(_y + _u);
     IZ_FLOAT fG = SATURATE(_y - 0.50955f * _u - 0.19516f * _v);
@@ -101,9 +101,9 @@ void CColor::GetYUV(IZ_FLOAT* _y, IZ_FLOAT* _u, IZ_FLOAT* _v)
 
 void CColor::SetYCbCr(IZ_FLOAT y, IZ_FLOAT cb, IZ_FLOAT cr)
 {
-    y = math::CMath::Clamp(y,  0.0f, 1.0f);
-    cb = math::CMath::Clamp(cb, -0.5f, 0.5f);
-    cr = math::CMath::Clamp(cr, -0.5f, 0.5f);
+    y = CLAMP(y,  0.0f, 1.0f);
+    cb = CLAMP(cb, -0.5f, 0.5f);
+    cr = CLAMP(cr, -0.5f, 0.5f);
 
     IZ_FLOAT fR = SATURATE(y + 1.40218f * cr);
     IZ_FLOAT fG = SATURATE(y - 0.50955f * 1.40218f * cr - 0.19516f * 1.77104f * cb);
@@ -130,7 +130,7 @@ void CColor::GetYCbCr(IZ_FLOAT* y, IZ_FLOAT* cb, IZ_FLOAT* cr)
 
 // NOTE
 // YIQはNTSC(National Television System Committee)方式のカラーテレビ放送で使われるカラーモデルである。
-// Y信号は0〜4MHz帯域、I信号は1.5MHz帯域、Q信号は0.6MHz帯域である。
+// Y信号は0?4MHz帯域、I信号は1.5MHz帯域、Q信号は0.6MHz帯域である。
 // Yはカラー映像を白黒映像にすることに使用できる。(白黒テレビと互換性がある。)
 //
 // Y : 輝度
@@ -215,8 +215,8 @@ void CColor::GetYIQ(IZ_FLOAT* y, IZ_FLOAT* i, IZ_FLOAT* q)
 
 void CColor::SetHLS(IZ_FLOAT h, IZ_FLOAT l, IZ_FLOAT s)
 {
-    IZ_FLOAT fSin, fCos;
-    math::CMath::GetSinCosF(h, fSin, fCos);
+    IZ_FLOAT fSin = sinf(h);
+    IZ_FLOAT fCos = cosf(h);
 
     IZ_FLOAT u = s * fSin;
     IZ_FLOAT _v = s * fCos;

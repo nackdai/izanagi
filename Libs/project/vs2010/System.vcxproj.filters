@@ -24,6 +24,12 @@
     <Filter Include="source\win32\device">
       <UniqueIdentifier>{7b14f92d-b41b-4349-8bf8-4864087dc02a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\linux">
+      <UniqueIdentifier>{09b352d5-3bd1-4a97-ba7c-74d90fbbe5fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\linux\thread">
+      <UniqueIdentifier>{cd38b3f8-01ab-45c2-89c9-a4365a532d3a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\system\SysTimer.h">
@@ -115,6 +121,18 @@
     </ClCompile>
     <ClCompile Include="..\..\source\system\win32\SysEnvironment_win32 .cpp">
       <Filter>source\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\linux\thread\SysEvent_pthread.cpp">
+      <Filter>source\linux\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\linux\thread\SysMutex_pthread.cpp">
+      <Filter>source\linux\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\linux\thread\SysThread_pthread.cpp">
+      <Filter>source\linux\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\linux\thread\SysSemaphore_pthread.cpp">
+      <Filter>source\linux\thread</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
