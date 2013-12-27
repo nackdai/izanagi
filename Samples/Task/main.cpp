@@ -44,8 +44,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     tasks[2].SetRange(50,  75);
     tasks[3].SetRange(75, 100);
 
-#if 1
-    // Sample1
+#if 0
+    // Sample 1
     // Simple Sample
     {
         izanagi::threadmodel::CThreadPool::Init(&allocator, 4);
@@ -70,7 +70,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         }
     }
 #elif 0
-    // Sample2
+    // Sample 2
     // Only one thread.
     {
         izanagi::threadmodel::CThreadPool::Init(&allocator, 1);
@@ -90,6 +90,39 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         for (IZ_UINT i = 0; i < COUNTOF(Data); i++) {
             if (Data[i] != i - 1) {
                 IZ_PRINTF("Failed Sample2 !!!\n");
+                IZ_ASSERT(IZ_FALSE);
+            }
+        }
+    }
+#elif 1
+    // Sample 3
+    // Cancel task.
+    {
+        izanagi::threadmodel::CThreadPool::Init(&allocator, 4);
+
+        for (IZ_UINT i = 0; i < COUNTOF(Data); i++) {
+            Data[i] = i;
+        }
+
+        for (IZ_UINT i = 0; i < COUNTOF(tasks); i++) {
+            izanagi::threadmodel::CThreadPool::EneueueTask(&tasks[i]);
+        }
+
+        tasks[COUNTOF(tasks) - 1].Cancel();
+
+        for (IZ_UINT i = 0; i < COUNTOF(tasks); i++) {
+            tasks[i].Wait();
+        }
+    
+        for (IZ_UINT i = 0; i < COUNTOF(Data); i++) {
+            if (75 <= i && i < 100) {
+                if (Data[i] != i) {
+                    IZ_PRINTF("Failed Sample3 !!!\n");
+                    IZ_ASSERT(IZ_FALSE);
+                }
+            }
+            else if (Data[i] != i - 1) {
+                IZ_PRINTF("Failed Sample3 !!!\n");
                 IZ_ASSERT(IZ_FALSE);
             }
         }

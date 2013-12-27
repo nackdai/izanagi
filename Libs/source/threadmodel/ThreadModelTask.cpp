@@ -18,11 +18,15 @@ namespace threadmodel
         m_ListItem.Init(this);
 
         m_IsDeleteSelf = IZ_FALSE;
+
+        m_StateLocker.Open();
+        m_State = State_Init;
     }
 
     CTask::~CTask()
     {
         m_Event.Close();
+        m_StateLocker.Close();
     }
 
     void CTask::Wait()
@@ -30,9 +34,52 @@ namespace threadmodel
         m_Event.Wait();
     }
 
+    IZ_BOOL CTask::Cancel()
+    {
+        sys::CGuarder guard(m_StateLocker);
+        
+        if (m_State != State_Canceled
+            && m_State != State_Running
+            && m_State != State_Finished)
+        {
+            m_State = State_WillCancel;
+            return IZ_TRUE;
+        }
+
+        return IZ_FALSE;
+    }
+
+    IZ_BOOL CTask::WillCancel()
+    {
+        sys::CGuarder guard(m_StateLocker);
+        return (m_State == State_WillCancel);
+    }
+
+    IZ_BOOL CTask::IsCanceled()
+    {
+        sys::CGuarder guard(m_StateLocker);
+        return (m_State == State_Canceled);
+    }
+
+    IZ_BOOL CTask::IsFinished()
+    {
+        sys::CGuarder guard(m_StateLocker);
+        return (m_State == State_Finished);
+    }
+
     void CTask::Run(void* userData)
     {
-        OnRun();
+        sys::CGuarder guard(m_StateLocker);
+
+        if (m_State == State_WillCancel) {
+            m_State = State_Canceled;
+        }
+        else {
+            m_State = State_Running;
+            OnRun();
+            m_State = State_Finished;
+        }
+
         m_Event.Set();
     }
 
