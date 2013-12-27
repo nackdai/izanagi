@@ -41,6 +41,22 @@ namespace threadmodel
          */
         void Wait();
 
+        /**
+         */
+        IZ_BOOL Cancel();
+
+        /**
+         */
+        IZ_BOOL WillCancel();
+
+        /**
+         */
+        IZ_BOOL IsCanceled();
+
+        /**
+         */
+        IZ_BOOL IsFinished();
+
     protected:
         /**
          */
@@ -64,6 +80,18 @@ namespace threadmodel
         sys::CEvent m_Event;
 
         IZ_BOOL m_IsDeleteSelf;
+
+        enum State {
+            State_Init = 0,
+            State_Registered,
+            State_Running,
+            State_Finished,
+            State_WillCancel,
+            State_Canceled,
+        };
+
+        sys::CMutex m_StateLocker;
+        State m_State;
     };
 }   // namespace threadmodel
 }   // namespace izanagi
