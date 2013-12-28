@@ -148,4 +148,3 @@ clean:
 	rm -f ../lib/gccRelease_GLES2/*.dll
 	rm -f ../lib/gccRelease_GLES2/*.exe
 
-

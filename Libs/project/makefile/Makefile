@@ -90,4 +90,3 @@ clean:
 	make --directory="." --file=SceneGraph.makefile clean
 	make --directory="." --file=Terra.makefile clean
 
-
