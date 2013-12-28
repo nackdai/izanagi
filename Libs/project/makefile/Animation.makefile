@@ -32,49 +32,49 @@ build_all_configurations: Debug_GLES2 Release_GLES2
 
 # Builds the Debug_GLES2 configuration...
 .PHONY: Debug_GLES2
-Debug_GLES2: create_folders gccDebug_GLES2/../../source/animation/FuncCurveInterpolater.o gccDebug_GLES2/../../source/animation/Timeline.o gccDebug_GLES2/../../source/animation/TweenerInterpolater.o 
-	ar rcs ../lib/gccDebug_GLES2/libAnimation.a gccDebug_GLES2/../../source/animation/FuncCurveInterpolater.o gccDebug_GLES2/../../source/animation/Timeline.o gccDebug_GLES2/../../source/animation/TweenerInterpolater.o  $(Debug_GLES2_Implicitly_Linked_Objects)
+Debug_GLES2: create_folders gccDebug_GLES2/../../../source/animation/FuncCurveInterpolater.o gccDebug_GLES2/../../../source/animation/Timeline.o gccDebug_GLES2/../../../source/animation/TweenerInterpolater.o 
+	ar rcs ../lib/gccDebug_GLES2/libAnimation.a gccDebug_GLES2/../../../source/animation/FuncCurveInterpolater.o gccDebug_GLES2/../../../source/animation/Timeline.o gccDebug_GLES2/../../../source/animation/TweenerInterpolater.o  $(Debug_GLES2_Implicitly_Linked_Objects)
 
 # Compiles file ../../source/animation/FuncCurveInterpolater.cpp for the Debug_GLES2 configuration...
--include gccDebug_GLES2/../../source/animation/FuncCurveInterpolater.d
-gccDebug_GLES2/../../source/animation/FuncCurveInterpolater.o: ../../source/animation/FuncCurveInterpolater.cpp
-	$(CPP_COMPILER) $(Debug_GLES2_Preprocessor_Definitions) $(Debug_GLES2_Compiler_Flags) -c ../../source/animation/FuncCurveInterpolater.cpp $(Debug_GLES2_Include_Path) -o gccDebug_GLES2/../../source/animation/FuncCurveInterpolater.o
-	$(CPP_COMPILER) $(Debug_GLES2_Preprocessor_Definitions) $(Debug_GLES2_Compiler_Flags) -MM ../../source/animation/FuncCurveInterpolater.cpp $(Debug_GLES2_Include_Path) > gccDebug_GLES2/../../source/animation/FuncCurveInterpolater.d
+-include gccDebug_GLES2/../../../source/animation/FuncCurveInterpolater.d
+gccDebug_GLES2/../../../source/animation/FuncCurveInterpolater.o: ../../source/animation/FuncCurveInterpolater.cpp
+	$(CPP_COMPILER) $(Debug_GLES2_Preprocessor_Definitions) $(Debug_GLES2_Compiler_Flags) -c ../../source/animation/FuncCurveInterpolater.cpp $(Debug_GLES2_Include_Path) -o gccDebug_GLES2/../../../source/animation/FuncCurveInterpolater.o
+	$(CPP_COMPILER) $(Debug_GLES2_Preprocessor_Definitions) $(Debug_GLES2_Compiler_Flags) -MM ../../source/animation/FuncCurveInterpolater.cpp $(Debug_GLES2_Include_Path) > gccDebug_GLES2/../../../source/animation/FuncCurveInterpolater.d
 
 # Compiles file ../../source/animation/Timeline.cpp for the Debug_GLES2 configuration...
--include gccDebug_GLES2/../../source/animation/Timeline.d
-gccDebug_GLES2/../../source/animation/Timeline.o: ../../source/animation/Timeline.cpp
-	$(CPP_COMPILER) $(Debug_GLES2_Preprocessor_Definitions) $(Debug_GLES2_Compiler_Flags) -c ../../source/animation/Timeline.cpp $(Debug_GLES2_Include_Path) -o gccDebug_GLES2/../../source/animation/Timeline.o
-	$(CPP_COMPILER) $(Debug_GLES2_Preprocessor_Definitions) $(Debug_GLES2_Compiler_Flags) -MM ../../source/animation/Timeline.cpp $(Debug_GLES2_Include_Path) > gccDebug_GLES2/../../source/animation/Timeline.d
+-include gccDebug_GLES2/../../../source/animation/Timeline.d
+gccDebug_GLES2/../../../source/animation/Timeline.o: ../../source/animation/Timeline.cpp
+	$(CPP_COMPILER) $(Debug_GLES2_Preprocessor_Definitions) $(Debug_GLES2_Compiler_Flags) -c ../../source/animation/Timeline.cpp $(Debug_GLES2_Include_Path) -o gccDebug_GLES2/../../../source/animation/Timeline.o
+	$(CPP_COMPILER) $(Debug_GLES2_Preprocessor_Definitions) $(Debug_GLES2_Compiler_Flags) -MM ../../source/animation/Timeline.cpp $(Debug_GLES2_Include_Path) > gccDebug_GLES2/../../../source/animation/Timeline.d
 
 # Compiles file ../../source/animation/TweenerInterpolater.cpp for the Debug_GLES2 configuration...
--include gccDebug_GLES2/../../source/animation/TweenerInterpolater.d
-gccDebug_GLES2/../../source/animation/TweenerInterpolater.o: ../../source/animation/TweenerInterpolater.cpp
-	$(CPP_COMPILER) $(Debug_GLES2_Preprocessor_Definitions) $(Debug_GLES2_Compiler_Flags) -c ../../source/animation/TweenerInterpolater.cpp $(Debug_GLES2_Include_Path) -o gccDebug_GLES2/../../source/animation/TweenerInterpolater.o
-	$(CPP_COMPILER) $(Debug_GLES2_Preprocessor_Definitions) $(Debug_GLES2_Compiler_Flags) -MM ../../source/animation/TweenerInterpolater.cpp $(Debug_GLES2_Include_Path) > gccDebug_GLES2/../../source/animation/TweenerInterpolater.d
+-include gccDebug_GLES2/../../../source/animation/TweenerInterpolater.d
+gccDebug_GLES2/../../../source/animation/TweenerInterpolater.o: ../../source/animation/TweenerInterpolater.cpp
+	$(CPP_COMPILER) $(Debug_GLES2_Preprocessor_Definitions) $(Debug_GLES2_Compiler_Flags) -c ../../source/animation/TweenerInterpolater.cpp $(Debug_GLES2_Include_Path) -o gccDebug_GLES2/../../../source/animation/TweenerInterpolater.o
+	$(CPP_COMPILER) $(Debug_GLES2_Preprocessor_Definitions) $(Debug_GLES2_Compiler_Flags) -MM ../../source/animation/TweenerInterpolater.cpp $(Debug_GLES2_Include_Path) > gccDebug_GLES2/../../../source/animation/TweenerInterpolater.d
 
 # Builds the Release_GLES2 configuration...
 .PHONY: Release_GLES2
-Release_GLES2: create_folders gccRelease_GLES2/../../source/animation/FuncCurveInterpolater.o gccRelease_GLES2/../../source/animation/Timeline.o gccRelease_GLES2/../../source/animation/TweenerInterpolater.o 
-	ar rcs ../lib/gccRelease_GLES2/libAnimation.a gccRelease_GLES2/../../source/animation/FuncCurveInterpolater.o gccRelease_GLES2/../../source/animation/Timeline.o gccRelease_GLES2/../../source/animation/TweenerInterpolater.o  $(Release_GLES2_Implicitly_Linked_Objects)
+Release_GLES2: create_folders gccRelease_GLES2/../../../source/animation/FuncCurveInterpolater.o gccRelease_GLES2/../../../source/animation/Timeline.o gccRelease_GLES2/../../../source/animation/TweenerInterpolater.o 
+	ar rcs ../lib/gccRelease_GLES2/libAnimation.a gccRelease_GLES2/../../../source/animation/FuncCurveInterpolater.o gccRelease_GLES2/../../../source/animation/Timeline.o gccRelease_GLES2/../../../source/animation/TweenerInterpolater.o  $(Release_GLES2_Implicitly_Linked_Objects)
 
 # Compiles file ../../source/animation/FuncCurveInterpolater.cpp for the Release_GLES2 configuration...
--include gccRelease_GLES2/../../source/animation/FuncCurveInterpolater.d
-gccRelease_GLES2/../../source/animation/FuncCurveInterpolater.o: ../../source/animation/FuncCurveInterpolater.cpp
-	$(CPP_COMPILER) $(Release_GLES2_Preprocessor_Definitions) $(Release_GLES2_Compiler_Flags) -c ../../source/animation/FuncCurveInterpolater.cpp $(Release_GLES2_Include_Path) -o gccRelease_GLES2/../../source/animation/FuncCurveInterpolater.o
-	$(CPP_COMPILER) $(Release_GLES2_Preprocessor_Definitions) $(Release_GLES2_Compiler_Flags) -MM ../../source/animation/FuncCurveInterpolater.cpp $(Release_GLES2_Include_Path) > gccRelease_GLES2/../../source/animation/FuncCurveInterpolater.d
+-include gccRelease_GLES2/../../../source/animation/FuncCurveInterpolater.d
+gccRelease_GLES2/../../../source/animation/FuncCurveInterpolater.o: ../../source/animation/FuncCurveInterpolater.cpp
+	$(CPP_COMPILER) $(Release_GLES2_Preprocessor_Definitions) $(Release_GLES2_Compiler_Flags) -c ../../source/animation/FuncCurveInterpolater.cpp $(Release_GLES2_Include_Path) -o gccRelease_GLES2/../../../source/animation/FuncCurveInterpolater.o
+	$(CPP_COMPILER) $(Release_GLES2_Preprocessor_Definitions) $(Release_GLES2_Compiler_Flags) -MM ../../source/animation/FuncCurveInterpolater.cpp $(Release_GLES2_Include_Path) > gccRelease_GLES2/../../../source/animation/FuncCurveInterpolater.d
 
 # Compiles file ../../source/animation/Timeline.cpp for the Release_GLES2 configuration...
--include gccRelease_GLES2/../../source/animation/Timeline.d
-gccRelease_GLES2/../../source/animation/Timeline.o: ../../source/animation/Timeline.cpp
-	$(CPP_COMPILER) $(Release_GLES2_Preprocessor_Definitions) $(Release_GLES2_Compiler_Flags) -c ../../source/animation/Timeline.cpp $(Release_GLES2_Include_Path) -o gccRelease_GLES2/../../source/animation/Timeline.o
-	$(CPP_COMPILER) $(Release_GLES2_Preprocessor_Definitions) $(Release_GLES2_Compiler_Flags) -MM ../../source/animation/Timeline.cpp $(Release_GLES2_Include_Path) > gccRelease_GLES2/../../source/animation/Timeline.d
+-include gccRelease_GLES2/../../../source/animation/Timeline.d
+gccRelease_GLES2/../../../source/animation/Timeline.o: ../../source/animation/Timeline.cpp
+	$(CPP_COMPILER) $(Release_GLES2_Preprocessor_Definitions) $(Release_GLES2_Compiler_Flags) -c ../../source/animation/Timeline.cpp $(Release_GLES2_Include_Path) -o gccRelease_GLES2/../../../source/animation/Timeline.o
+	$(CPP_COMPILER) $(Release_GLES2_Preprocessor_Definitions) $(Release_GLES2_Compiler_Flags) -MM ../../source/animation/Timeline.cpp $(Release_GLES2_Include_Path) > gccRelease_GLES2/../../../source/animation/Timeline.d
 
 # Compiles file ../../source/animation/TweenerInterpolater.cpp for the Release_GLES2 configuration...
--include gccRelease_GLES2/../../source/animation/TweenerInterpolater.d
-gccRelease_GLES2/../../source/animation/TweenerInterpolater.o: ../../source/animation/TweenerInterpolater.cpp
-	$(CPP_COMPILER) $(Release_GLES2_Preprocessor_Definitions) $(Release_GLES2_Compiler_Flags) -c ../../source/animation/TweenerInterpolater.cpp $(Release_GLES2_Include_Path) -o gccRelease_GLES2/../../source/animation/TweenerInterpolater.o
-	$(CPP_COMPILER) $(Release_GLES2_Preprocessor_Definitions) $(Release_GLES2_Compiler_Flags) -MM ../../source/animation/TweenerInterpolater.cpp $(Release_GLES2_Include_Path) > gccRelease_GLES2/../../source/animation/TweenerInterpolater.d
+-include gccRelease_GLES2/../../../source/animation/TweenerInterpolater.d
+gccRelease_GLES2/../../../source/animation/TweenerInterpolater.o: ../../source/animation/TweenerInterpolater.cpp
+	$(CPP_COMPILER) $(Release_GLES2_Preprocessor_Definitions) $(Release_GLES2_Compiler_Flags) -c ../../source/animation/TweenerInterpolater.cpp $(Release_GLES2_Include_Path) -o gccRelease_GLES2/../../../source/animation/TweenerInterpolater.o
+	$(CPP_COMPILER) $(Release_GLES2_Preprocessor_Definitions) $(Release_GLES2_Compiler_Flags) -MM ../../source/animation/TweenerInterpolater.cpp $(Release_GLES2_Include_Path) > gccRelease_GLES2/../../../source/animation/TweenerInterpolater.d
 
 # Creates the intermediate and output folders for each configuration...
 .PHONY: create_folders
