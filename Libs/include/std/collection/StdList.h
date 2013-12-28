@@ -278,7 +278,7 @@ namespace izanagi {
     class CStdListEx : public CStdList<T>
     {
     public:
-        class Item : CStdList::Item
+        class Item : CStdList<T>::Item
         {
             friend class CStdListEx<T>;
 
@@ -287,12 +287,12 @@ namespace izanagi {
         protected:
             void Leave()
             {
-                CStdList::Item::Leave();
+                CStdList<T>::Item::Leave();
             }
         };
 
     public:
-        CStdListEx() : CStdList()
+        CStdListEx() : CStdList<T>()
         {
             m_Allocator = IZ_NULL;
         }
@@ -302,7 +302,7 @@ namespace izanagi {
     public:
         void Init(IMemoryAllocator* allocator)
         {
-            CStdList::Init();
+            CStdList<T>::Init();
             m_Allocator = allocator;
         }
 
@@ -336,7 +336,7 @@ namespace izanagi {
         {
             IZ_UINT idx = 0;
 
-            CStdList::Item* item = GetTop();
+            Item* item = this->GetTop();
             while (item != IZ_NULL)
             {
                 T* d = item->GetData();
@@ -368,7 +368,7 @@ namespace izanagi {
         {
             IZ_ASSERT(data != IZ_NULL);
 
-            CStdList::Item* item = GetTop();
+            Item* item = this->GetTop();
             while (item != IZ_NULL)
             {
                 T* d = item->GetData();
@@ -389,12 +389,12 @@ namespace izanagi {
     private:
         IZ_BOOL AddTop(Item* pItem)
         {
-            return CStdList::AddTop(pItem);
+            return CStdList<T>::AddTop(pItem);
         }
 
         IZ_BOOL AddTail(Item* pItem)
         {
-            return CStdList::AddTail(pItem);
+            return CStdList<T>::AddTail(pItem);
         }
 
     private:

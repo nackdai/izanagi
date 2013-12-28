@@ -25,15 +25,15 @@ namespace izanagi {
     public:
         /** メモリ確保.
          */
-        virtual void* Alloc(size_t size, const IZ_CHAR* file = IZ_NULL, IZ_UINT line = IZ_NULL) = 0;
+        virtual void* Alloc(size_t size, const IZ_CHAR* file = IZ_NULL, IZ_UINT line = 0) = 0;
 
         /** メモリを確保して、ゼロで埋める.
          */
-        virtual void* AllocZero(size_t size, const IZ_CHAR* file = IZ_NULL, IZ_UINT line = IZ_NULL) = 0;
+        virtual void* AllocZero(size_t size, const IZ_CHAR* file = IZ_NULL, IZ_UINT line = 0) = 0;
 
         /** メモリ再確保.
          */
-        virtual void* Realloc(void* ptr, size_t size, const IZ_CHAR* file = IZ_NULL, IZ_UINT line = IZ_NULL) = 0;
+        virtual void* Realloc(void* ptr, size_t size, const IZ_CHAR* file = IZ_NULL, IZ_UINT line = 0) = 0;
 
         /** メモリ解放.
          */

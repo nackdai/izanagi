@@ -11,9 +11,9 @@ namespace {
 
         va_list argp;
         va_start(argp, pszFormat);
-        vsprintf_s(pszBuf, sizeof(pszBuf), pszFormat, argp);
+        IZ_VSPRINTF(pszBuf, sizeof(pszBuf), pszFormat, argp);
         va_end(argp);
-        ::OutputDebugString(pszBuf);
+        IZ_DEBUG_PRINT(pszBuf);
 
         IZ_BOOL ret = (pszBuf[strlen(pszBuf)] != '\n');
         return ret;

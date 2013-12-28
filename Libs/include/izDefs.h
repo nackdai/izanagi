@@ -65,13 +65,19 @@ typedef const wchar_t*  IZ_PCWSTR;
         //#define DEBUG_BREAK()       assert(false)
         #define DEBUG_BREAK()       __debugbreak()
     #else
-        // TODO
+        #define DEBUG_BREAK()
     #endif
 #endif  // #ifndef DEBUG_BREAK
 
 #ifndef UNUSED_ALWAYS
     #define UNUSED_ALWAYS(v)    (v)
 #endif  // #ifndef UNUSED
+
+#ifdef WINDOWS
+    #define IZ_DEBUG_PRINT(str)    ::OutputDebugString(str)
+#else
+    #define IZ_DEBUG_PRINT(str)    printf("%s", str)
+#endif
 
 inline void _OutputDebugString(const char* format, ...)
 {
@@ -80,11 +86,8 @@ inline void _OutputDebugString(const char* format, ...)
     va_start(argp, format);
     IZ_VSPRINTF(buf, sizeof(buf), format, argp);
     va_end(argp);
-#ifdef WINDOWS
-    ::OutputDebugString(buf);
-#else
-    printf("%s", buf);
-#endif
+
+    IZ_DEBUG_PRINT(buf);
 }
 
 #ifndef IZ_PRINTF

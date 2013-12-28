@@ -7,7 +7,11 @@
 #define IZ_TRUE     (1)
 #define IZ_FALSE    (0)
 
-#define IZ_NULL     (0)
+#ifdef WINDOWS
+    #define IZ_NULL     (0)
+#else
+    #define IZ_NULL     NULL
+#endif
 
 /////////////////////////////////////////////////////////////
 // 型

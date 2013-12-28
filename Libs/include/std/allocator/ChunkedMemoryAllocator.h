@@ -28,10 +28,10 @@ namespace izanagi {
         IZ_BOOL Init(IZ_UINT nBufSize, void* pBuf, IZ_UINT nChunkSize);
 
         // メモリ確保
-        void* Alloc(size_t size, const IZ_CHAR* file = IZ_NULL, IZ_UINT line = IZ_NULL);
-        void* AllocZero(size_t size, const IZ_CHAR* file = IZ_NULL, IZ_UINT line = IZ_NULL);
+        void* Alloc(size_t size, const IZ_CHAR* file = IZ_NULL, IZ_UINT line = 0);
+        void* AllocZero(size_t size, const IZ_CHAR* file = IZ_NULL, IZ_UINT line = 0);
 
-        void* Realloc(void* ptr, size_t size, const IZ_CHAR* file = IZ_NULL, IZ_UINT line = IZ_NULL);
+        void* Realloc(void* ptr, size_t size, const IZ_CHAR* file = IZ_NULL, IZ_UINT line = 0);
 
         // メモリ解放
         IZ_BOOL Free(void* data);
