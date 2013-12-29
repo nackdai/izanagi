@@ -270,7 +270,7 @@ IZ_BOOL CStandardMemoryAllocator::Dump()
         p->Dump();
 
         IZ_PRINTF(
-            " buf[0x%x] size[%d]\n",
+            " buf[0x%p] size[%d]\n",
             p->buf,
             p->size);
 

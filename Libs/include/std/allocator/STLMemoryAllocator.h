@@ -1,6 +1,7 @@
 #if !defined(__IZANAGI_STD_STL_MEMORY_ALLOCATOR_H__)
 #define __IZANAGI_STD_STL_MEMORY_ALLOCATOR_H__
 
+#include <stddef.h>
 #include "izDefs.h"
 #include "MemoryAllocator.h"
 
@@ -99,7 +100,7 @@ namespace izanagi {
             {
                 size_t size = num * sizeof(T);
 
-                IZ_ASSERT(s_AllocatedSize >= size);
+                IZ_ASSERT(s_AllocatedSize >= (ptrdiff_t) size);
                 s_AllocatedSize -= size;
             }
 

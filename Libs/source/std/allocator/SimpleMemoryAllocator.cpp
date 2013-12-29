@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "std/allocator/SimpleMemoryAllocator.h"
 
 namespace izanagi
