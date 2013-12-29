@@ -140,10 +140,6 @@
     <ClInclude Include="..\..\include\izSystem.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\source\system\linux\thread\SysEvent_pthread.cpp" />
-    <ClCompile Include="..\..\source\system\linux\thread\SysMutex_pthread.cpp" />
-    <ClCompile Include="..\..\source\system\linux\thread\SysSemaphore_pthread.cpp" />
-    <ClCompile Include="..\..\source\system\linux\thread\SysThread_pthread.cpp" />
     <ClCompile Include="..\..\source\system\Pad.cpp" />
     <ClCompile Include="..\..\source\system\win32\device\DeviceUtil.cpp" />
     <ClCompile Include="..\..\source\system\win32\device\Pad_DInput.cpp" />
