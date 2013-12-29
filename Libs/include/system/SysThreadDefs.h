@@ -1,8 +1,6 @@
 #if !defined(__IZANAGI_SYSTEM_SYS_THREAD_DEFS_H__)
 #define __IZANAGI_SYSTEM_SYS_THREAD_DEFS_H__
 
-#undef WINDOWS
-
 #if defined(WINDOWS)
     #include <windows.h>
 
