@@ -64,70 +64,6 @@ namespace izanagi {
             IZ_ASSERT(IZ_FALSE);
         }
 
-        /** 依存関係プロパティに値をセット
-         */
-        template <>
-        void SetValue(const DependencyProperty& prop, IZ_INT8 value)
-        {
-            SetValueInternal(prop, CValue(value));
-        }
-
-        /** 依存関係プロパティに値をセット
-         */
-        template <>
-        void SetValue(const DependencyProperty& prop, IZ_UINT8 value)
-        {
-            SetValueInternal(prop, CValue(value));
-        }
-
-        /** 依存関係プロパティに値をセット
-         */
-        template <>
-        void SetValue(const DependencyProperty& prop, IZ_INT16 value)
-        {
-            SetValueInternal(prop, CValue(value));
-        }
-
-        /** 依存関係プロパティに値をセット
-         */
-        template <>
-        void SetValue(const DependencyProperty& prop, IZ_UINT16 value)
-        {
-            SetValueInternal(prop, CValue(value));
-        }
-
-        /** 依存関係プロパティに値をセット
-         */
-        template <>
-        void SetValue(const DependencyProperty& prop, IZ_INT32 value)
-        {
-            SetValueInternal(prop, CValue(value));
-        }
-
-        /** 依存関係プロパティに値をセット
-         */
-        template <>
-        void SetValue(const DependencyProperty& prop, IZ_UINT32 value)
-        {
-            SetValueInternal(prop, CValue(value));
-        }
-
-        /** 依存関係プロパティに値をセット
-         */
-        template <>
-        void SetValue(const DependencyProperty& prop, IZ_FLOAT value)
-        {
-            SetValueInternal(prop, CValue(value));
-        }
-
-        /** 依存関係プロパティに値をセット
-         */
-        template <>
-        void SetValue(const DependencyProperty& prop, void* value)
-        {
-            SetValueInternal(prop, CValue(value));
-        }
-
         /** 依存関係プロパティから値を取得
          */
         IZ_BOOL GetValue(const DependencyProperty& prop, CValue& value)
@@ -172,6 +108,70 @@ namespace izanagi {
             IZ_UINT32 isValueChanged    : 1;    // 値の変化が起きたかどうか
         } m_Flags;
     };
+
+    /** 依存関係プロパティに値をセット
+     */
+    template <>
+    inline void DependencyObjectBase::SetValue(const DependencyProperty& prop, IZ_INT8 value)
+    {
+        SetValueInternal(prop, CValue(value));
+    }
+
+    /** 依存関係プロパティに値をセット
+     */
+    template <>
+    inline void DependencyObjectBase::SetValue(const DependencyProperty& prop, IZ_UINT8 value)
+    {
+        SetValueInternal(prop, CValue(value));
+    }
+
+    /** 依存関係プロパティに値をセット
+     */
+    template <>
+    inline void DependencyObjectBase::SetValue(const DependencyProperty& prop, IZ_INT16 value)
+    {
+        SetValueInternal(prop, CValue(value));
+    }
+
+    /** 依存関係プロパティに値をセット
+     */
+    template <>
+    inline void DependencyObjectBase::SetValue(const DependencyProperty& prop, IZ_UINT16 value)
+    {
+        SetValueInternal(prop, CValue(value));
+    }
+
+    /** 依存関係プロパティに値をセット
+     */
+    template <>
+    inline void DependencyObjectBase::SetValue(const DependencyProperty& prop, IZ_INT32 value)
+    {
+        SetValueInternal(prop, CValue(value));
+    }
+
+    /** 依存関係プロパティに値をセット
+     */
+    template <>
+    inline void DependencyObjectBase::SetValue(const DependencyProperty& prop, IZ_UINT32 value)
+    {
+        SetValueInternal(prop, CValue(value));
+    }
+
+    /** 依存関係プロパティに値をセット
+     */
+    template <>
+    inline void DependencyObjectBase::SetValue(const DependencyProperty& prop, IZ_FLOAT value)
+    {
+        SetValueInternal(prop, CValue(value));
+    }
+
+    /** 依存関係プロパティに値をセット
+     */
+    template <>
+    inline void DependencyObjectBase::SetValue(const DependencyProperty& prop, void* value)
+    {
+        SetValueInternal(prop, CValue(value));
+    }
 
     /** 依存関係プロパティを持つオブジェクト
      */

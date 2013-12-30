@@ -162,25 +162,25 @@ namespace izanagi {
     };
 
     template <>
-    IZ_INT8 CValue::GetValue<IZ_INT8>() const { return static_cast<IZ_INT8>(m_ValInt64); }
+    inline IZ_INT8 CValue::GetValue<IZ_INT8>() const { return static_cast<IZ_INT8>(m_ValInt64); }
 
     template <>
-    IZ_UINT8 CValue::GetValue<IZ_UINT8>() const { return static_cast<IZ_UINT8>(m_ValUInt64); }
+    inline IZ_UINT8 CValue::GetValue<IZ_UINT8>() const { return static_cast<IZ_UINT8>(m_ValUInt64); }
 
     template <>
-    IZ_INT16 CValue::GetValue<IZ_INT16>() const { return static_cast<IZ_INT16>(m_ValInt64); }
+    inline IZ_INT16 CValue::GetValue<IZ_INT16>() const { return static_cast<IZ_INT16>(m_ValInt64); }
 
     template <>
-    IZ_UINT16 CValue::GetValue<IZ_UINT16>() const { return static_cast<IZ_UINT16>(m_ValUInt64); }
+    inline IZ_UINT16 CValue::GetValue<IZ_UINT16>() const { return static_cast<IZ_UINT16>(m_ValUInt64); }
 
     template <>
-    IZ_INT32 CValue::GetValue<IZ_INT32>() const { return static_cast<IZ_INT32>(m_ValInt64); }
+    inline IZ_INT32 CValue::GetValue<IZ_INT32>() const { return static_cast<IZ_INT32>(m_ValInt64); }
 
     template <>
-    IZ_UINT32 CValue::GetValue<IZ_UINT32>() const { return static_cast<IZ_UINT32>(m_ValUInt64); }
+    inline IZ_UINT32 CValue::GetValue<IZ_UINT32>() const { return static_cast<IZ_UINT32>(m_ValUInt64); }
 
     template <>
-    IZ_FLOAT CValue::GetValue<IZ_FLOAT>() const { return m_ValFloat; }
+    inline IZ_FLOAT CValue::GetValue<IZ_FLOAT>() const { return m_ValFloat; }
 }   // namespace izanagi
 
 #endif  // #if !defined(__IZANAGI_STD_STD_VALUE_H__)

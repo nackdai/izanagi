@@ -173,5 +173,8 @@
     <ClInclude Include="..\..\include\std\binding\BindingOperations.h">
       <Filter>include\binding</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\std\collection\StdHashBase.h">
+      <Filter>include\collection</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
