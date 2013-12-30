@@ -87,144 +87,120 @@ namespace izanagi {
         }
 
         // 登録
-        IZ_BOOL Add(Item* pItem);
+        IZ_BOOL Add(Item* pItem)
+        {
+            IZ_ASSERT(pItem != IZ_NULL);
 
-        Item* Find(const _KEY& tKey);
+            CStdList<Item>* pHashList = GetHashList(pItem->GetKey());
+            IZ_ASSERT(pHashList != IZ_NULL);
+            
+            // ハッシュリストに登録
+            IZ_BOOL ret = pHashList->AddTail(pItem->GetHashItem());
+            if (ret) {
+                // オーダーリストに登録
+                ret = m_OrderList.AddTail(pItem->GetOrderItem());
+            }
+
+            if (!ret) {
+                // 登録に失敗したので、リストから外す
+                pItem->GetHashItem()->Leave();
+                pItem->GetOrderItem()->Leave();
+            }
+
+            return ret;
+        }
+
+        Item* Find(const _KEY& tKey)
+        {
+            // 該当するハッシュリスト
+            CStdList<Item>* pHashList = GetHashList(tKey);
+            IZ_ASSERT(pHashList != IZ_NULL);
+            
+            // 探す
+            typename CStdList<Item>::Item* pListItem = pHashList->GetTop();
+            while (pListItem != IZ_NULL) {
+                Item* pHashItem = pListItem->GetData();
+
+                if (pHashItem->m_Key == tKey) {
+                    // 見つかった
+                    return pHashItem;
+                }
+
+                pListItem = pListItem->GetNext();
+            }
+
+            return IZ_NULL;
+        }
 
         // キーに該当するデータを探す
-        _T* FindData(const _KEY& tKey);
+        _T* FindData(const _KEY& tKey)
+        {
+            _T* ret = IZ_NULL;
 
-        Item* GetOrderTopHashItem();
-        Item* GetOrderTailHashItem();
-        Item* GetOrderAtHashItem(IZ_UINT idx);
+            // 該当するハッシュリスト
+            CStdList<Item>* pHashList = GetHashList(tKey);
+            IZ_ASSERT(pHashList != IZ_NULL);
+            
+            // 探す
+            typename CStdList<Item>::Item* pListItem = pHashList->GetTop();
+            while (pListItem != IZ_NULL) {
+                Item* pHashItem = pListItem->GetData();
+
+                if (pHashItem->m_Key == tKey) {
+                    // 見つかった
+                    ret = pHashItem->GetData();
+                    break;
+                }
+
+                pListItem = pListItem->GetNext();
+            }
+
+            return ret;
+        }
+
+        Item* GetOrderTopHashItem()
+        {
+            typename CStdList<Item>::Item* pOrderListItem = m_OrderList.GetTop();
+            return (pOrderListItem != IZ_NULL ? pOrderListItem->GetData() : IZ_NULL);
+        }
+
+        Item* GetOrderTailHashItem()
+        {
+            typename CStdList<Item>::Item* pOrderListItem = m_OrderList.GetTail();
+            return (pOrderListItem != IZ_NULL ? pOrderListItem->GetData() : IZ_NULL);
+        }
+
+        Item* GetOrderAtHashItem(IZ_UINT idx)
+        {
+            typename CStdList<Item>::Item* pOrderListItem = m_OrderList.GetAt(idx);
+            return (pOrderListItem != IZ_NULL ? pOrderListItem->GetData() : IZ_NULL);
+        }
 
         // うーん・・・
-        typename CStdList<Item>::Item* GetOrderTop();
-        typename CStdList<Item>::Item* GetOrderTail();
+        typename CStdList<Item>::Item* GetOrderTop()
+        {
+           return this->m_OrderList.GetTop();
+        }
+     
+        typename CStdList<Item>::Item* GetOrderTail()
+        {
+            return this->m_OrderList.GetTail();
+        }
 
-        typename CStdList<Item>::Item* GetHashTop(const _KEY& tKey);
+        typename CStdList<Item>::Item* GetHashTop(const _KEY& tKey)
+        {
+            CStdList<Item>* pHashList = GetHashList(tKey);
+            IZ_ASSERT(pHashList != IZ_NULL);
+
+            return pHashList->GetTop();
+        }
 
     protected:
         // 登録された順に並ぶリスト
         CStdList<Item> m_OrderList;
 
         CStdList<Item>* (_SELF::*m_GetHashListFunc)(const _KEY&);
-    };
-
-    template <typename _KEY, typename _T, typename _SELF>
-    IZ_BOOL CStdHashBase<_KEY, _T, _SELF>::Add(typename CStdHashBase<_KEY, _T, _SELF>::Item* pItem)
-    {
-        IZ_ASSERT(pItem != IZ_NULL);
-
-        CStdList<Item>* pHashList = GetHashList(pItem->GetKey());
-        IZ_ASSERT(pHashList != IZ_NULL);
-            
-        // ハッシュリストに登録
-        IZ_BOOL ret = pHashList->AddTail(pItem->GetHashItem());
-        if (ret) {
-            // オーダーリストに登録
-            ret = m_OrderList.AddTail(pItem->GetOrderItem());
-        }
-
-        if (!ret) {
-            // 登録に失敗したので、リストから外す
-            pItem->GetHashItem()->Leave();
-            pItem->GetOrderItem()->Leave();
-        }
-
-        return ret;
-    }
-
-    template <typename _KEY, typename _T, typename _SELF>
-    typename CStdHashBase<_KEY, _T, _SELF>::Item* CStdHashBase<_KEY, _T, _SELF>::Find(const _KEY& tKey)
-    {
-        // 該当するハッシュリスト
-        CStdList<Item>* pHashList = GetHashList(tKey);
-        IZ_ASSERT(pHashList != IZ_NULL);
-            
-        // 探す
-        typename CStdList<Item>::Item* pListItem = pHashList->GetTop();
-        while (pListItem != IZ_NULL) {
-            Item* pHashItem = pListItem->GetData();
-
-            if (pHashItem->m_Key == tKey) {
-                // 見つかった
-                return pHashItem;
-            }
-
-            pListItem = pListItem->GetNext();
-        }
-
-        return IZ_NULL;
-    }
-
-    template <typename _KEY, typename _T, typename _SELF>
-    _T* CStdHashBase<_KEY, _T, _SELF>::FindData(const _KEY& tKey)
-    {
-        _T* ret = IZ_NULL;
-
-        // 該当するハッシュリスト
-        CStdList<Item>* pHashList = GetHashList(tKey);
-        IZ_ASSERT(pHashList != IZ_NULL);
-            
-        // 探す
-        typename CStdList<Item>::Item* pListItem = pHashList->GetTop();
-        while (pListItem != IZ_NULL) {
-            Item* pHashItem = pListItem->GetData();
-
-            if (pHashItem->m_Key == tKey) {
-                // 見つかった
-                ret = pHashItem->GetData();
-                break;
-            }
-
-            pListItem = pListItem->GetNext();
-        }
-
-        return ret;
-    }
-
-    template <typename _KEY, typename _T, typename _SELF>
-    typename CStdHashBase<_KEY, _T, _SELF>::Item* CStdHashBase<_KEY, _T, _SELF>::GetOrderTopHashItem()
-    {
-        typename CStdList<typename CStdHashBase<_KEY, _T, _SELF>::Item>::Item* pOrderListItem = m_OrderList.GetTop();
-        return (pOrderListItem != IZ_NULL ? pOrderListItem->GetData() : IZ_NULL);
-    }
-
-    template <typename _KEY, typename _T, typename _SELF>
-    typename CStdHashBase<_KEY, _T, _SELF>::Item* CStdHashBase<_KEY, _T, _SELF>::GetOrderTailHashItem()
-    {
-        typename CStdList<typename CStdHashBase<_KEY, _T, _SELF>::Item>::Item* pOrderListItem = m_OrderList.GetTail();
-        return (pOrderListItem != IZ_NULL ? pOrderListItem->GetData() : IZ_NULL);
-    }
-
-    template <typename _KEY, typename _T, typename _SELF>
-    typename CStdHashBase<_KEY, _T, _SELF>::Item* CStdHashBase<_KEY, _T, _SELF>::GetOrderAtHashItem(IZ_UINT idx)
-    {
-        typename CStdList<typename CStdHashBase<_KEY, _T, _SELF>::Item>::Item* pOrderListItem = m_OrderList.GetAt(idx);
-        return (pOrderListItem != IZ_NULL ? pOrderListItem->GetData() : IZ_NULL);
-    }
-
-    template <typename _KEY, typename _T, typename _SELF>
-    typename CStdList<typename CStdHashBase<_KEY, _T, _SELF>::Item>::Item* CStdHashBase<_KEY, _T, _SELF>::GetOrderTop()
-    {
-        return this->m_OrderList.GetTop();
-    }
-
-    template <typename _KEY, typename _T, typename _SELF>
-    typename CStdList<typename CStdHashBase<_KEY, _T, _SELF>::Item>::Item* CStdHashBase<_KEY, _T, _SELF>::GetOrderTail()
-    {
-        return this->m_OrderList.GetTail();
-    }
-
-    template <typename _KEY, typename _T, typename _SELF>
-    typename CStdList<typename CStdHashBase<_KEY, _T, _SELF>::Item>::Item* CStdHashBase<_KEY, _T, _SELF>::GetHashTop(const _KEY& tKey)
-    {
-        CStdList<typename CStdHashBase<_KEY, _T, _SELF>::Item>* pHashList = GetHashList(tKey);
-        IZ_ASSERT(pHashList != IZ_NULL);
-
-        return pHashList->GetTop();
-    }
+    };    
 }   // namespace izanagi
 
 #endif  // #if !defined(__IZANAGI_STD_HASH_BASE_H__)

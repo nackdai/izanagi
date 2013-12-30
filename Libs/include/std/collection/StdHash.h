@@ -8,11 +8,14 @@ namespace izanagi {
     */
     template <typename _KEY, typename _T, IZ_UINT _NUM>
     class CStdHash : public CStdHashBase<_KEY, _T, CStdHash<_KEY, _T, _NUM> > {
+        typedef CStdHashBase<_KEY, _T, CStdHash<_KEY, _T, _NUM> > HashBase;
+        typedef typename CStdHashBase<_KEY, _T, CStdHash<_KEY, _T, _NUM> >::Item HashItem;
+
     public:
         // コンストラクタ
         CStdHash()
         {
-            m_GetHashListFunc = &CStdHash<_KEY, _T, _NUM>::GetHashListInternal;
+            HashBase::m_GetHashListFunc = &CStdHash<_KEY, _T, _NUM>::GetHashListInternal;
         }
 
         // デストラクタ
@@ -35,11 +38,11 @@ namespace izanagi {
                 m_HashList[i].Clear();
             }
 
-            m_OrderList.Clear();
+            this->m_OrderList.Clear();
         }
 
     protected:
-        CStdList<Item>* GetHashListInternal(const _KEY& tKey)
+        CStdList<CStdHash::HashItem>* GetHashListInternal(const _KEY& tKey)
         {
             IZ_UINT64 idx = tKey % _NUM;
             return &m_HashList[idx];
@@ -47,15 +50,19 @@ namespace izanagi {
 
     private:
         // ハッシュリスト
-        CStdList<Item> m_HashList[_NUM];
+        CStdList<HashItem> m_HashList[_NUM];
 
         IZ_C_ASSERT(_NUM > 0);
     };
 
+#if 0
     /**
     */
     template <typename _KEY, typename _T>
     class CStdHashEx : public CStdHashBase<_KEY, _T, CStdHashEx<_KEY, _T> > {
+        typedef CStdHashBase<_KEY, _T, CStdHashEx<_KEY, _T> > HashBase;
+        typedef typename CStdHashBase<_KEY, _T, CStdHashEx<_KEY, _T> >::Item HashItem;
+
     public:
         // コンストラクタ
         CStdHashEx()
@@ -65,7 +72,7 @@ namespace izanagi {
             m_nSize = 0;
             m_pHashList = NULL;
 
-            m_GetHashListFunc = GetHashListInternal;
+            HashBase::m_GetHashListFunc = GetHashListInternal;
         }
 
         // デストラクタ
@@ -79,7 +86,7 @@ namespace izanagi {
         IZ_BOOL Init(IMemoryAllocator* pAllocator, IZ_UINT nHashSize)
         {
             IZ_ASSERT(pAllocator != IZ_NULL);
-            IZ_ASSERT(nSize > 0);
+            IZ_ASSERT(nHashSize > 0);
 
             if (m_Allocator != NULL) {
                 Clear();
@@ -137,7 +144,7 @@ namespace izanagi {
         }
 
     protected:
-        CStdList<Item>* GetHashListInternal(const _KEY& tKey)
+        CStdList<HashItem>* GetHashListInternal(const _KEY& tKey)
         {
             IZ_ASSERT(m_pHashList != IZ_NULL);
             IZ_UINT idx = tKey % m_nSize;
@@ -149,8 +156,9 @@ namespace izanagi {
 
         // ハッシュリスト
         IZ_UINT m_nSize;
-        CStdList<Item>* m_pHashList;
+        CStdList<HashItem>* m_pHashList;
     };
+#endif
 }   // namespace izanagi
 
 #endif  // #if !defined(__IZANAGI_STD_HASH_H__)
