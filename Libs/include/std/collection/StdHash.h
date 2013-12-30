@@ -42,7 +42,7 @@ namespace izanagi {
         }
 
     protected:
-        CStdList<CStdHash::HashItem>* GetHashListInternal(const _KEY& tKey)
+        CStdList<HashItem>* GetHashListInternal(const _KEY& tKey)
         {
             IZ_UINT64 idx = tKey % _NUM;
             return &m_HashList[idx];
