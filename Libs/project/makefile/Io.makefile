@@ -43,9 +43,7 @@ Release_GLES2: create_folders
 # Creates the intermediate and output folders for each configuration...
 .PHONY: create_folders
 create_folders:
-	mkdir -p gccDebug_GLES2/source
 	mkdir -p ../lib/gccDebug_GLES2
-	mkdir -p gccRelease_GLES2/source
 	mkdir -p ../lib/gccRelease_GLES2
 
 # Cleans intermediate and output files (objects, libraries, executables)...
@@ -53,14 +51,8 @@ create_folders:
 clean:
 	rm -f gccDebug_GLES2/*.o
 	rm -f gccDebug_GLES2/*.d
-	rm -f ../lib/gccDebug_GLES2/*.a
-	rm -f ../lib/gccDebug_GLES2/*.so
-	rm -f ../lib/gccDebug_GLES2/*.dll
-	rm -f ../lib/gccDebug_GLES2/*.exe
+	rm -f ../lib/gccDebug_GLES2/libIo.a
 	rm -f gccRelease_GLES2/*.o
 	rm -f gccRelease_GLES2/*.d
-	rm -f ../lib/gccRelease_GLES2/*.a
-	rm -f ../lib/gccRelease_GLES2/*.so
-	rm -f ../lib/gccRelease_GLES2/*.dll
-	rm -f ../lib/gccRelease_GLES2/*.exe
+	rm -f ../lib/gccRelease_GLES2/libIo.a
 
