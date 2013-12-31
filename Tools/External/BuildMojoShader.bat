@@ -8,9 +8,12 @@ if not defined TARGET (
     set TARGET=Rebuild
 )
 
-if not defined CONFIG (
-    set CONFIG=%1
+if not "%1"=="" (
+    set MojoShaderConfig=%1
+)else if defined CONFIG (
+    set MojoShaderConfig=%CONFIG%
 )
+
 
 set SOLUTION=".\mojoshader\MojoShader.sln"
 
@@ -20,7 +23,7 @@ if not exist %SOLUTION% (
     cd ..
 )
 
-%MSBUILD% %SOLUTION% /t:%TARGET% /p:Configuration=%CONFIG% || goto error
+%MSBUILD% %SOLUTION% /t:%TARGET% /p:Configuration=%MojoShaderConfig% || goto error
 
 @echo off
 exit /b 1
