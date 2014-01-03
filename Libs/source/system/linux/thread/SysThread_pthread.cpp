@@ -26,22 +26,22 @@ namespace sys
     {
         ::Sleep(millisec);
     }
+#endif
 
     // 現在実行中のスレッドを一時的に休止させ、ほかのスレッドが実行できるようにする.
     void CThread::YieldThread()
     {
-        CThread::Sleep(0);
+        ::sched_yield();
     }
-#endif
 
     // スレッド実行関数
-    void procThreadFunc(void* param)
+    void* procThreadFunc(void* param)
     {
         CThread* thread = (CThread*)param;
 
         thread->Run();
 
-        return;
+        return NULL;
     }
 
     CThread::CThread()
@@ -95,6 +95,8 @@ namespace sys
         IRunnable* runnable,
         void* userData)
     {
+        m_ThreadResult = -1;
+
         m_Cpu = cpu;
 
         m_UserData = userData;
@@ -123,29 +125,19 @@ namespace sys
     // このスレッドの実行を開始.
     IZ_BOOL CThread::Start()
     {
-        // スレッドハンドル作成
-        ::pthread_create(
-            &m_Handle,
-            NULL,
-            procThreadFunc,
-            (void*)this);
+        if (m_ThreadResult != 0) {
+            // スレッドハンドル作成
+            m_ThreadResult = ::pthread_create(
+                &m_Handle,
+                NULL,
+                procThreadFunc,
+                (void*)this);
 
-            m_Handle = (ThreadHandle)::_beginthreadex(
-                            NULL,
-                            256 * 1024,
-                            procThreadFunc,
-                            (void*)this,
-                            CREATE_SUSPENDED,   // 待機
-                            &m_Id);
-
-            if (m_Handle == IZ_NULL) {
+            if (m_ThreadResult != 0) {
                 IZ_ASSERT(IZ_FALSE);
                 Join();
                 return IZ_FALSE;
             }
-
-            // 実行開始
-            ::ResumeThread(m_Handle);
         }
 
         return IZ_TRUE;
@@ -154,17 +146,17 @@ namespace sys
     // スレッド実行中かどうかを取得.
     IZ_BOOL CThread::IsRunning()
     {
-        return (m_Handle != IZ_NULL);
+        return (m_ThreadResult != 0);
     }
 
     // このスレッドが終了するのを待機.
     void CThread::Join()
     {
-        if (m_Handle) {
-            ::WaitForSingleObject(m_Handle, INFINITE);
-            ::CloseHandle(m_Handle);
+        if (m_ThreadResult != 0) {
+            int result = ::pthread_join(m_Handle, NULL);
+            IZ_ASSERT(result == 0);
 
-            m_Handle = IZ_NULL;
+            m_ThreadResult = -1;
         }
     }
 

@@ -1,5 +1,3 @@
-#if defined(WIN32) || defined(WIN64)
-
 #include "system/SysEvent.h"
 #include "system/SysThread.h"
 
@@ -9,7 +7,8 @@ namespace sys
 {
     CEvent::CEvent()
     {
-        m_Handle = IZ_NULL;
+        m_Handle.mutex = IZ_NULL;
+        m_Handle.cond = IZ_NULL;
     }
 
     CEvent::~CEvent()
@@ -20,67 +19,60 @@ namespace sys
     // 初期化.
     IZ_BOOL CEvent::Open()
     {
-        // NOTE
-        // ・自動リセット
-        // 　-> 待機関数が制御を返す前に自動的に非シグナル状態になるようにする
-        // 　-> Wait終了時に自動で非シグナル状態になる
-        // ・手動リセット
-        //   -> ResetEvent() 関数を使って明示的に非シグナル状態に再設定しなければならない
+        ::pthread_cond_init(&m_Handle.cond, NULL);
+        VRETURN(m_Handle.cond != IZ_NULL);
 
-        // 手動リセット
-        // 非シグナル状態
-        m_Handle = ::CreateEvent(
-                    IZ_NULL,    // Security
-                    IZ_TRUE,    // ManualReset
-                    IZ_FALSE,   // InitialState -> TRUEだとシグナル状態、FALSEだと非シグナル状態
-                    IZ_NULL);   // EventName
+        ::pthread_mutex_init(&m_Handle.mutex, NULL);
+        VRETURN(m_Handle.mutex != IZ_NULL);
 
-        IZ_ASSERT(m_Handle != IZ_NULL);
-
-        return (m_Handle != IZ_NULL);
+        return IZ_TRUE;
     }
 
     // 終了.
     void CEvent::Close()
     {
-        if (m_Handle != IZ_NULL) {
+        if (m_Handle.cond != IZ_NULL
+            && m_Handle.mutex != IZ_NULL)
+        {
             // 念のため
             Set();
 
-            ::CloseHandle(m_Handle);
-            m_Handle = IZ_NULL;
+            ::pthread_mutex_destroy(&m_Handle.mutex);
+            ::pthread_cond_destroy(&m_Handle.cond);
+
+            m_Handle.mutex = IZ_NULL;
+            m_Handle.cond = IZ_NULL;
         }
     }
 
     // シグナル状態にする.
     void CEvent::Set()
     {
-        IZ_ASSERT(m_Handle != IZ_NULL);
-        ::SetEvent(m_Handle);
+        IZ_ASSERT(m_Handle.cond != IZ_NULL);
+        IZ_ASSERT(m_Handle.mutex != IZ_NULL);
+
+        ::pthread_mutex_lock(&m_Handle.mutex);
+        ::pthread_cond_signal(&m_Handle.cond);
+        ::pthread_mutex_unlock(&m_Handle.mutex);
     }
 
     // シグナル状態になるのを待つ.
     IZ_BOOL CEvent::Wait()
     {
-        IZ_ASSERT(m_Handle != IZ_NULL);
+        IZ_ASSERT(m_Handle.cond != IZ_NULL);
+        IZ_ASSERT(m_Handle.mutex != IZ_NULL);
 
-        IZ_DWORD result = ::WaitForSingleObject(m_Handle, INFINITE);
-        IZ_ASSERT(result == WAIT_OBJECT_0);
+        ::pthread_mutex_lock(&m_Handle.mutex);
+        int result = ::pthread_cond_wait(&m_Handle.cond, &m_Handle.mutex);
+        ::pthread_mutex_unlock(&m_Handle.mutex);
 
-        return (result == WAIT_OBJECT_0);
+        return (result >= 0);
     }
-
-    // NOTE
-    // 自動リセットではWait終了時に自動で非シグナル状態になるので
-    // 明示的に非シグナル状態にする必要がない
-    // 今回は手動リセット
 
     // 非シグナル状態にする.
     void CEvent::Reset()
     {
-        IZ_ASSERT(m_Handle != IZ_NULL);
-        ::ResetEvent(m_Handle);
+        // Nothing is done...
     }
 }   // namespace sys
 }   // namespace iznaagi
-#endif  // #if defined(WIN32) || defined(WIN64)

@@ -16,6 +16,7 @@ namespace sys
     typedef HANDLE  SemaHandle;
 #else
     #include <pthread.h>
+    #include <semaphore.h>
 
 namespace izanagi
 {
@@ -25,6 +26,12 @@ namespace sys
 
     typedef pthread_t       ThreadHandle;
     typedef pthread_mutex_t MutexHandle;
+    typedef sem_t           SemaHandle;
+
+    typedef struct {
+        MutexHandle mutex;
+        pthread_cond_t cond;
+    } EventHandle;
 #endif
 }   // namespace sys
 }   // namespace izanagi

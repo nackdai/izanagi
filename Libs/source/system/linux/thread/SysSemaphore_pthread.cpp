@@ -1,5 +1,3 @@
-#if defined(WIN32) || defined(WIN64)
-
 #include "system/SysSemaphore.h"
 
 namespace izanagi
@@ -19,25 +17,21 @@ namespace sys
     // 初期化.
     IZ_BOOL CSemaphore::Init(IZ_UINT16 initialCount)
     {
-        IZ_ASSERT(m_Handle == IZ_NULL);
+        int result = ::sem_init(
+            &m_Handle,
+            0,
+            initialCount);
 
-        m_Handle = ::CreateSemaphore(
-                        IZ_NULL,
-                        initialCount,   // 初期カウント
-                        IZ_INT16_MAX,   // 最大カウント
-                        IZ_NULL);
+        IZ_ASSERT(result >= 0);
 
-        IZ_BOOL ret = (m_Handle != IZ_NULL);
-        IZ_ASSERT(ret);
-
-        return ret;
+        return (result >= 0);
     }
 
     // 終了.
     void CSemaphore::Close()
     {
-        if (m_Handle) {
-            ::CloseHandle(m_Handle);
+        if (m_Handle != IZ_NULL) {
+            ::sem_destroy(&m_Handle);
             m_Handle = IZ_NULL;
         }
     }
@@ -52,12 +46,9 @@ namespace sys
 
         IZ_ASSERT(m_Handle != IZ_NULL);
 
-        IZ_DWORD result = ::WaitForSingleObject(
-                            m_Handle,
-                            (timeout < 0 ? INFINITE : timeout));
-        IZ_ASSERT(result == WAIT_OBJECT_0);
+        ::sem_wait(&m_Handle);
 
-        return (result == WAIT_OBJECT_0);
+        return IZ_TRUE;
     }
 
     // セマフォカウントを指定された数だけ増やす.
@@ -70,9 +61,7 @@ namespace sys
         // ０なんてある？
         count = (count == 0 ? 1 : count);
 
-        IZ_BOOL result = ::ReleaseSemaphore(m_Handle, count, IZ_NULL);
-        IZ_ASSERT(result);
+        ::sem_post_multiple(&m_Handle, count);
     }
 }   // namespace sys
 }   // namespace izanagi
-#endif  // #if defined(WIN32) || defined(WIN64)

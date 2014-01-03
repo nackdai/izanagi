@@ -125,6 +125,8 @@ namespace sys
         void* GetUserData();
 
     protected:
+        IZ_INT m_ThreadResult;
+
         ThreadHandle m_Handle;
 
         ThreadId m_Id;
