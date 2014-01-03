@@ -1,28 +1,18 @@
 #if !defined(__IZANAGI_DEFS_H__)
 #define __IZANAGI_DEFS_H__
 
-#ifndef WINDOWS
-    #if defined(WIN32) || defined(WIN64)
-        #define WINDOWS
-    #endif
-#endif  // #ifndef WINDOWS
-
-#ifdef WINDOWS
-    #include <windows.h>
-
-    #ifdef _WINDLL
-        #define IZ_API  __declspec(dllexport)
-    #else
-        #define IZ_API  __declspec(dllimport)
-    #endif
-#endif  // #ifdef WINDOWS
-
 #include <stdio.h>
 #include <stdarg.h>
 #include <memory.h>
 #include <assert.h>
 
 #include <float.h>
+
+#if defined(WIN32) || defined(WIN64)
+    #include "izDefs_windows.h"
+#else
+    #include "izDefs_linux.h"
+#endif
 
 #include "izLimits.h"
 #include "izTypes.h"
@@ -45,39 +35,14 @@ typedef const wchar_t*  IZ_PCWSTR;
 #else   // #ifdef _UNICODE
     typedef char            izChar;
     typedef const char*     izPcstr;
-    #ifdef WINDOWS
-        #define IZ_VSPRINTF     vsprintf_s
-        #define IZ_SPRINTF      sprintf_s
-        #define IZ_FPRINTF      fprintf_s
-    #else
-        #define IZ_VSPRINTF     vsnprintf
-        #define IZ_SPRINTF      snprintf
-        #define IZ_FPRINTF      fnprintf
-    #endif
 #endif  // #ifdef _UNICODE
 
 /////////////////////////////////////////////////////////////
 // いろいろ便利系
 
-#ifndef DEBUG_BREAK
-    #ifdef WINDOWS
-        //#define DEBUG_BREAK()     ::DebugBreak()
-        //#define DEBUG_BREAK()       assert(false)
-        #define DEBUG_BREAK()       __debugbreak()
-    #else
-        #define DEBUG_BREAK()
-    #endif
-#endif  // #ifndef DEBUG_BREAK
-
 #ifndef UNUSED_ALWAYS
     #define UNUSED_ALWAYS(v)    (v)
 #endif  // #ifndef UNUSED
-
-#ifdef WINDOWS
-    #define IZ_DEBUG_PRINT(str)    ::OutputDebugString(str)
-#else
-    #define IZ_DEBUG_PRINT(str)    printf("%s", str)
-#endif
 
 inline void _OutputDebugString(const char* format, ...)
 {
@@ -89,14 +54,6 @@ inline void _OutputDebugString(const char* format, ...)
 
     IZ_DEBUG_PRINT(buf);
 }
-
-#ifndef IZ_PRINTF
-    #ifdef WINDOWS
-        #define IZ_PRINTF   _OutputDebugString
-    #else
-        #define IZ_PRINTF   printf
-    #endif
-#endif  // #ifndef IZ_PRINTF
 
 #ifndef IZ_ASSERT
     #ifdef __IZ_DEBUG__
