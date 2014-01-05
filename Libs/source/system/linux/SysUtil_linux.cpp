@@ -1,8 +1,6 @@
-#include <windows.h>
-#include <shlwapi.h>
+#include <unistd.h>
+#include <string.h>
 #include "system/SysUtil.h"
-
-#pragma comment(lib, "shlwapi.lib")
 
 namespace izanagi
 {
@@ -11,26 +9,21 @@ namespace sys
     // 実行プログラムの位置からカレントディレクトリを設定.
     IZ_BOOL CSysUtil::SetCurrentDirectoryFromExe()
     {
-        static izChar buf[_MAX_PATH];
+        static izChar buf[260];
 
         // 実行プログラムのフルパスを取得
-        {
-            DWORD result = ::GetModuleFileName(
-                            IZ_NULL,
-                            buf,
-                            sizeof(buf));
-            VRETURN(result > 0);
-        }
+        int result = readlink("/proc/self/exe", buf, sizeof(buf));
+        VRETURN(result > 0);
 
         // ファイル名を取り除く
-        BOOL result = ::PathRemoveFileSpec(buf);
-        VRETURN(result);
+        char* p = ::strrchr(buf, '\\');
+        VRETURN(p != NULL);
 
         // カレントディレクトリを設定
-        result = ::SetCurrentDirectory(buf);
-        VRETURN(result);
+        result = ::chdir(p);
+        VRETURN(result >= 0);
 
-        return result;
+        return IZ_TRUE;
     }
 }   // namespace sys
 }   // namespace izanagi
