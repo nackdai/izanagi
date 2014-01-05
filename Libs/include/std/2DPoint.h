@@ -18,39 +18,39 @@ namespace izanagi {
     public:
         C2DPoint()
         {
-            x = y = (_T)0;
+            this->x = this->y = (_T)0;
         }
 
         ~C2DPoint() {}
 
         C2DPoint(_T _x, _T _y)
         {
-            x = _x;
-            y = _y;
+            this->x = _x;
+            this->y = _y;
         }
         C2DPoint(const S2DPoint<_T>& rhs)
         {
-            x = rhs.x;
-            y = rhs.y;
+            this->x = rhs.x;
+            this->y = rhs.y;
         }
 
     public:
         void Offset(const S2DPoint<_T>& pt)
         {
-            x += pt.x;
-            y += pt.y;
+            this->x += pt.x;
+            this->y += pt.y;
         }
 
-        void Offset(_T x, _T y)
+        void Offset(_T _x, _T _y)
         {
-            x += _x;
-            y += _y;
+            this->x += _x;
+            this->y += _y;
         }
 
     public:
         IZ_BOOL operator!=(const S2DPoint<_T>& pt)
         {
-            IZ_BOOL ret = ((x != pt.x) && (y != pt.y));
+            IZ_BOOL ret = ((this->x != pt.x) && (this->y != pt.y));
             return ret;
         }
 
@@ -62,33 +62,33 @@ namespace izanagi {
 
         const C2DPoint& operator=(const S2DPoint<_T>& pt)
         {
-            x = pt.x;
-            y = pt.y;
+            this->x = pt.x;
+            this->y = pt.y;
             return *this;
         }
 
         C2DPoint operator+(const S2DPoint<_T>& pt)
         {
-            C2DPoint tmp(x + pt.x, y + pt.x);
+            C2DPoint tmp(this->x + pt.x, this->y + pt.x);
             return tmp;
         }
 
         C2DPoint operator-(const S2DPoint<_T>& pt)
         {
-            C2DPoint tmp(x - pt.x, y - pt.x);
+            C2DPoint tmp(this->x - pt.x, this->y - pt.x);
             return tmp;
         }
 
         void operator+=(const S2DPoint<_T>& pt)
         {
-            x += pt.x;
-            y += pt.y;
+            this->x += pt.x;
+            this->y += pt.y;
         }
 
         void operator-=(const S2DPoint<_T>& pt)
         {
-            x -= pt.x;
-            y -= pt.y;
+            this->x -= pt.x;
+            this->y -= pt.y;
         }
     };
 

@@ -23,7 +23,7 @@ namespace izanagi {
 
             m_nLastNewPos = 0;
 
-            m_nElementNum = 0:
+            m_nElementNum = 0;
             m_nUsedNum = 0;
             m_nFreedNum = 0;
         }
@@ -40,7 +40,7 @@ namespace izanagi {
             IZ_ASSERT(pAllocator != IZ_NULL);
             IZ_ASSERT(nNum > 0);
 
-            m_Elements = reinterpret_cast<SElement>(ALLOC_ZERO(pAllocator, sizeof(SElemet) * nNum));
+            m_Elements = reinterpret_cast<SElement*>(ALLOC_ZERO(pAllocator, sizeof(SElement) * nNum));
             VRETURN(m_Elements != IZ_NULL);
 
             m_Allocator = pAllocator;
@@ -132,9 +132,9 @@ namespace izanagi {
             IZ_BOOL ret = IZ_FALSE;
 
             for (IZ_UINT i = 0; i < m_nElementNum; ++i) {
-                ret = (&m_Elements[idx].data == pElem);
+                ret = (&m_Elements[i].data == pElem);
                 if (ret) {
-                    m_Elements[idx].isUsed = IZ_FALSE;
+                    m_Elements[i].isUsed = IZ_FALSE;
                     IncrementFreedNum();
                 }
             }
@@ -147,7 +147,7 @@ namespace izanagi {
             IZ_ASSERT(IsValid());
             IZ_ASSERT(idx < m_nElementNum);
 
-            return &m_Elements[i].data;
+            return &m_Elements[idx].data;
         }
 
         IZ_BOOL IsUsed(IZ_UINT idx)
