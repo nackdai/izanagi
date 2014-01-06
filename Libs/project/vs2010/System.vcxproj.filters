@@ -24,6 +24,15 @@
     <Filter Include="source\win32\device">
       <UniqueIdentifier>{7b14f92d-b41b-4349-8bf8-4864087dc02a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\linux">
+      <UniqueIdentifier>{df8c4a29-1e55-4f9c-b9d4-a2758973aabd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\linux\device">
+      <UniqueIdentifier>{fc3c5e1b-2b52-4178-9787-c6a17f906f79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\linux\thread">
+      <UniqueIdentifier>{c0554654-3340-4887-be3d-396d88093299}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\system\SysTimer.h">
@@ -115,6 +124,30 @@
     </ClCompile>
     <ClCompile Include="..\..\source\system\win32\SysEnvironment_win32 .cpp">
       <Filter>source\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\linux\SysTimer_linux.cpp">
+      <Filter>source\linux</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\linux\SysUtil_linux.cpp">
+      <Filter>source\linux</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\linux\device\Pad_linux.cpp">
+      <Filter>source\linux\device</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\linux\thread\SysMutex_pthread.cpp">
+      <Filter>source\linux\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\linux\thread\SysSemaphore_pthread.cpp">
+      <Filter>source\linux\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\linux\thread\SysThread_pthread.cpp">
+      <Filter>source\linux\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\linux\thread\SysEvent_pthread.cpp">
+      <Filter>source\linux\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\linux\SysEnvironment_linux.cpp">
+      <Filter>source\linux</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
