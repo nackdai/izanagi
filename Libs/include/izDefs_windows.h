@@ -33,4 +33,6 @@
 
 #define IZ_PRINTF   _OutputDebugString
 
+typedef IZ_INT64 IZ_TIME;
+
 #endif  // #if !defined(__IZANAGI_DEFS_WINDOWS_H__)

@@ -1,6 +1,4 @@
-#if 0
-#include <windows.h>
-#include <winbase.h>
+#include <unistd.h>
 #include "system/SysEnvironment.h"
 
 namespace izanagi
@@ -10,12 +8,23 @@ namespace sys
     // Return CPU num.
     IZ_UINT CEnvironment::GetProcessorNum()
     {
-        SYSTEM_INFO info;
-        ::GetSystemInfo(&info);
-    
-        return info.dwNumberOfProcessors;
+        IZ_UINT num = 0;
+
+#if 0
+        __asm
+        {
+            mov eax,01h //01h is for getting number of cores present in the processor
+            cpuid
+            mov num,ebx
+        }
+#else
+        num = sysconf(_SC_NPROCESSORS_ONLN);
+#endif
+
+        return num;
     }
 
+#if 0
     /**
     * Get display's pixel width.
     */
@@ -92,6 +101,6 @@ namespace sys
         IZ_UINT ret = ::GetDeviceCaps(hdc, VREFRESH);
         return ret;
     }
+#endif
 }   // namespace sys
 }   // namespace izanagi
-#endif

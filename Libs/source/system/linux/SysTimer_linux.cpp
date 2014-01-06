@@ -1,5 +1,3 @@
-#include <windows.h>
-#include <mmsystem.h>
 #include "system/SysTimer.h"
 
 namespace izanagi
@@ -11,15 +9,7 @@ namespace sys
     */
     CTimer::CTimer()
     {
-        LARGE_INTEGER sFreq;
-        FILL_ZERO(&sFreq, sizeof(sFreq));
-    
         m_fTime = 0.0f;
-
-        IZ_BOOL result = QueryPerformanceFrequency(&sFreq);
-        IZ_ASSERT(result);
-
-        m_Frequency = sFreq.QuadPart;
     }
 
     /**
@@ -27,13 +17,10 @@ namespace sys
     */
     void CTimer::Begin()
     {
-        LARGE_INTEGER sBegin;
-        FILL_ZERO(&sBegin, sizeof(sBegin));
+        timeval begin;
+        gettimeofday(&begin, NULL);
 
-        IZ_BOOL result = QueryPerformanceCounter(&sBegin);
-        IZ_ASSERT(result);
-
-        m_Begin = sBegin.QuadPart;
+        m_Begin = begin.tv_sec;
     }
 
     /**
@@ -41,30 +28,26 @@ namespace sys
     */
     IZ_FLOAT CTimer::End()
     {
-        LARGE_INTEGER cur;
-        QueryPerformanceCounter(&cur);
+        timeval cur;
+        gettimeofday(&cur, NULL);
 
-        m_fTime = (cur.QuadPart - m_Begin) * 1000.0f / m_Frequency;
+        m_fTime = (cur.tv_sec - m_Begin) * 1000.0f;
         return m_fTime;
     }
 
     // 現在の時間取得
-    IZ_INT64 CTimer::GetCurTime()
+    IZ_TIME CTimer::GetCurTime()
     {
-        LARGE_INTEGER time;
-        FILL_ZERO(&time, sizeof(time));
+        timeval cur;
+        gettimeofday(&cur, NULL);
 
-        IZ_BOOL result = QueryPerformanceCounter(&time);
-        IZ_ASSERT(result);
-
-        IZ_INT64 ret = time.QuadPart;
-        return ret;
+        return cur.tv_sec;
     }
 
     // 差分から計算
-    IZ_FLOAT CTimer::ComputeTime(IZ_INT64 begin, IZ_INT64 end)
+    IZ_FLOAT CTimer::ComputeTime(IZ_TIME begin, IZ_TIME end)
     {
-        IZ_FLOAT ret = (end - begin) * 1000.0f / m_Frequency;
+        IZ_FLOAT ret = (end - begin) * 1000.0f;
         return ret;
     }
 }   // namespace sys

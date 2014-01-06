@@ -28,14 +28,14 @@ namespace sys
         IZ_FLOAT GetTime() { return m_fTime; }
 
         // 現在の時間取得
-        IZ_INT64 GetCurTime();
+        IZ_TIME GetCurTime();
 
         // 差分から計算
-        IZ_FLOAT ComputeTime(IZ_INT64 begin, IZ_INT64 end);
+        IZ_FLOAT ComputeTime(IZ_TIME begin, IZ_TIME end);
 
     protected:
-        IZ_INT64 m_Frequency;
-        IZ_INT64 m_Begin;
+        IZ_TIME m_Frequency;
+        IZ_TIME m_Begin;
 
         IZ_FLOAT m_fTime;
     };
