@@ -60,6 +60,7 @@ namespace sys
         return (result == WAIT_OBJECT_0);
     }
 
+#if 0
     // セマフォカウントを指定された数だけ増やす.
     void CSemaphore::Release(IZ_UINT count/*= 1*/)
     {
@@ -73,6 +74,18 @@ namespace sys
         IZ_BOOL result = ::ReleaseSemaphore(m_Handle, count, IZ_NULL);
         IZ_ASSERT(result);
     }
+#else
+    // セマフォカウントを解放.
+    void CSemaphore::Release()
+    {
+        // もし、セマフォが非シグナル状態ならセマフォをシグナル状態にする
+
+        IZ_ASSERT(m_Handle != IZ_NULL);
+
+        IZ_BOOL result = ::ReleaseSemaphore(m_Handle, 1, IZ_NULL);
+        IZ_ASSERT(result);
+    }
+#endif
 }   // namespace sys
 }   // namespace izanagi
 #endif  // #if defined(WIN32) || defined(WIN64)

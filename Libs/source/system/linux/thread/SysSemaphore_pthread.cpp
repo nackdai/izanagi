@@ -51,6 +51,7 @@ namespace sys
         return IZ_TRUE;
     }
 
+#if 0
     // セマフォカウントを指定された数だけ増やす.
     void CSemaphore::Release(IZ_UINT count/*= 1*/)
     {
@@ -63,5 +64,16 @@ namespace sys
 
         ::sem_post_multiple(&m_Handle, count);
     }
+#else
+    // セマフォカウントを解放.
+    void CSemaphore::Release()
+    {
+        // もし、セマフォが非シグナル状態ならセマフォをシグナル状態にする
+
+        IZ_ASSERT(m_Handle != IZ_NULL);
+
+        ::sem_post(&m_Handle);
+    }
+#endif
 }   // namespace sys
 }   // namespace izanagi

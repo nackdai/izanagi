@@ -32,9 +32,9 @@ namespace sys
          */
         IZ_BOOL Wait(IZ_INT timeout = -1);
 
-        /** セマフォカウントを指定された数だけ増やす.
+        /** セマフォカウントを解放.
          */
-        void Release(IZ_UINT count = 1);
+        void Release();
 
     private:
         SemaHandle m_Handle;
