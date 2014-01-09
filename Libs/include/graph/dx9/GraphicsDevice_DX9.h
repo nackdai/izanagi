@@ -219,6 +219,12 @@ namespace graph
             m_LostDeviceCallBack = pCallBack;
         }
 
+        /** Save screen shot.
+         */
+        virtual IZ_BOOL SaveScreenShot(
+            IZ_PCSTR fileName,
+            E_GRAPH_IMAGE_FILE_FMT fmt);
+
         virtual IZ_UINT GetBackBufferWidth() const
         {
             return m_PresentParameters.BackBufferWidth;
