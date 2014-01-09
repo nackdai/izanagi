@@ -332,6 +332,15 @@ namespace graph
             // Nothing...
         }
 
+        /** Save screen shot.
+         */
+        virtual IZ_BOOL SaveScreenShot(
+            IZ_PCSTR fileName,
+            E_GRAPH_IMAGE_FILE_FMT fmt)
+        {
+            return IZ_TRUE;
+        }
+
         PURE_VIRTUAL(IZ_UINT GetBackBufferWidth() const);
         PURE_VIRTUAL(IZ_UINT GetBackBufferHeight() const);
 

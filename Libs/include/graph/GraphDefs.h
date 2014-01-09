@@ -390,7 +390,17 @@ namespace graph
         E_GRAPH_VB_USAGE_INSTANCEDATA,
 
         E_GRAPH_VB_USAGE_NUM,
-        E_GRAPH_VB_USAGE__FORCE_INT32 = 0x7fffffff,
+        E_GRAPH_VB_USAGE_FORCE_INT32 = 0x7fffffff,
+    };
+
+    /**
+     */
+    enum E_GRAPH_IMAGE_FILE_FMT {
+        E_GRAPH_IMAGE_FILE_FMT_PNG = 0,
+        E_GRAPH_IMAGE_FILE_FMT_JPG,
+
+        E_GRAPH_IMAGE_FILE_FMT_NUM,
+        E_GRAPH_IMAGE_FILE_FMT_FORCE_INT32 = 0x7fffffff,
     };
 
     /** ビューポート

@@ -893,6 +893,87 @@ namespace graph
         SetScissorTestRect(sRS.rcScissor);
     }
 
+    // Save screen shot.
+    IZ_BOOL CGraphicsDeviceDX9::SaveScreenShot(
+        IZ_PCSTR fileName,
+        E_GRAPH_IMAGE_FILE_FMT fmt)
+    {
+        IZ_ASSERT(m_Device != IZ_NULL);
+
+        LPDIRECT3DSURFACE9 surface = NULL;
+        IZ_BOOL result = IZ_TRUE;
+
+        // Create a surface to capture.
+        HRESULT hr = m_Device->CreateOffscreenPlainSurface(
+            m_DisplayMode.Width,
+            m_DisplayMode.Height,
+            D3DFMT_A8R8G8B8,
+            D3DPOOL_SCRATCH,
+            &surface,
+            NULL);
+        VGOTO(result = SUCCEEDED(hr), __EXIT__);
+
+        // Get front buffer image to a surface.
+        hr = m_Device->GetFrontBufferData(0, surface);
+        VGOTO(result = SUCCEEDED(hr), __EXIT__);
+
+        // Convert file format to d3dx file format.
+        D3DXIMAGE_FILEFORMAT  d3dFileFmt = D3DXIFF_PNG;
+        switch (fmt) {
+        case E_GRAPH_IMAGE_FILE_FMT_PNG:
+            d3dFileFmt = D3DXIFF_PNG;
+            break;
+        case E_GRAPH_IMAGE_FILE_FMT_JPG:
+            d3dFileFmt = D3DXIFF_JPG;
+            break;
+        default:
+            IZ_ASSERT(IZ_FALSE);
+            break;
+        }
+
+        if (m_PresentParameters.Windowed) {
+            RECT rect;
+            GetClientRect(m_hFocusWindow, &rect);
+
+            POINT point = {rect.left, rect.top};
+            ClientToScreen(m_hFocusWindow, &point);
+
+            int width = rect.right - rect.left;
+            int height = rect.bottom - rect.top;
+
+            rect.left = point.x;
+            rect.top = point.y;
+            rect.right = point.x + width;
+            rect.bottom = point.y + height;
+
+            // Save captured image.
+            hr = D3DXSaveSurfaceToFile(
+                fileName,
+                d3dFileFmt,
+                surface,
+                NULL,
+                &rect);
+            VGOTO(result = SUCCEEDED(hr), __EXIT__);
+        }
+        else {
+            // Save captured image.
+            hr = D3DXSaveSurfaceToFile(
+                fileName,
+                d3dFileFmt,
+                surface,
+                NULL,
+                NULL);
+            VGOTO(result = SUCCEEDED(hr), __EXIT__);
+        }
+
+__EXIT__:
+        if (surface != IZ_NULL) {
+            surface->Release();
+        }
+
+        return result;
+    }
+
     IZ_BOOL CGraphicsDeviceDX9::SetTextureInternal(IZ_UINT nStage, CBaseTexture* pTex)
     {
         HRESULT hr = m_Device->SetTexture(
