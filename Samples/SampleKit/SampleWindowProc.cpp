@@ -4,9 +4,9 @@
 using namespace izanagi;
 using namespace sample;
 
-CSampleWndProc::CSampleWndProc() 
+CSampleWndProc::CSampleWndProc(CSampleApp* app) 
 {
-    m_App = IZ_NULL;
+    m_App = app;
 
     m_Flags.onLBtn = IZ_FALSE;
     m_Flags.onRBtn = IZ_FALSE;
@@ -14,11 +14,6 @@ CSampleWndProc::CSampleWndProc()
 
 CSampleWndProc::~CSampleWndProc()
 {
-}
-
-void CSampleWndProc::Init(CSampleApp* app)
-{
-    m_App = app;
 }
 
 void CSampleWndProc::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
@@ -130,4 +125,11 @@ void CSampleWndProc::OnIdle()
     m_App->Present();
 
     m_App->GetTimer(0).End();
+}
+
+void CSampleWndProc::OnInit(const izanagi::sys::WindowHandle& handle)
+{
+    if (funcInit) {
+        (*funcInit)(handle, m_App);
+    }
 }

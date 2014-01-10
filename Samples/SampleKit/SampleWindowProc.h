@@ -2,22 +2,18 @@
 #define __IZ_SAMPLE_SAMPLE_WINDOW_H__
 
 #include "izSystem.h"
+#include "SampleApp.h"
 
 namespace izanagi {
 namespace sample {
-    class CSampleApp;
-
     /** サンプルウインドウメッセージハンドラ.
      */
     class CSampleWndProc : public izanagi::sys::CMessageHandler {
         friend class CSampleApp;
 
     public:
-        CSampleWndProc();
+        CSampleWndProc(CSampleApp* app);
         virtual ~CSampleWndProc();
-
-    private:
-        void Init(CSampleApp* app);
 
     public:
         virtual void OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key);
@@ -33,6 +29,10 @@ namespace sample {
         virtual void OnPaint();
 
         virtual void OnIdle();
+
+        virtual void OnInit(const izanagi::sys::WindowHandle& handle);
+
+        void (*funcInit)(const izanagi::sys::WindowHandle&, CSampleApp*);
 
     private:
         CSampleApp* m_App;

@@ -300,13 +300,13 @@ namespace sys
                             hDC);
         IZ_ASSERT(window != IZ_NULL);
 
-        if (window) {
-            param.handler->OnInit(window);
-        }
-
         // メッセージハンドラを保持
         if (param.handler) {
             sMsgHandlerMgr.Register(param.handler, hWnd);
+
+            if (window) {
+                param.handler->OnInit(window);
+            }
         }
 
         return window;

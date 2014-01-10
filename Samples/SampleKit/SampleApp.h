@@ -31,8 +31,6 @@ namespace sample {
         CSampleWndProc* wndProc;                ///< メッセージハンドラへのポインタ
 
         // ここから下はプラットフォーム依存
-        void* deviceWindow;                     ///< デバイスウインドウハンドル
-        void* focusWindow;                      ///< フォーカスウインドウハンドル（基本的にはデバイスウインドウハンドルと同じ）
         void* instanceHandle;                   ///< インスタンスハンドル
     };
 
@@ -48,7 +46,9 @@ namespace sample {
     public:
         /** 初期化.
          */
-        IZ_BOOL Init(const SSampleAppParams& params);
+        IZ_BOOL Init(
+            const izanagi::sys::WindowHandle& handle,
+            const SSampleAppParams& params);
 
         /** 解放.
          */

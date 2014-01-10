@@ -23,7 +23,9 @@ CSampleApp::~CSampleApp()
 }
 
 // 初期化
-IZ_BOOL CSampleApp::Init(const SSampleAppParams& params)
+IZ_BOOL CSampleApp::Init(
+    const izanagi::sys::WindowHandle& handle,
+    const SSampleAppParams& params)
 {
     IZ_BOOL ret = IZ_TRUE;
 
@@ -42,12 +44,15 @@ IZ_BOOL CSampleApp::Init(const SSampleAppParams& params)
         VGOTO(ret = (m_Device != IZ_NULL), __EXIT__);
     }
 
+    // プラットフォームごとのウインドウハンドルを取得
+    void* nativeWndHandle = izanagi::sys::CSysWindow::GetNativeWindowHandle(handle);
+
     // グラフィックスデバイス設定
     izanagi::graph::SGraphicsDeviceInitParams gfxDevParams;
 #ifdef __IZ_DX9__
     {
-        gfxDevParams.hFocusWindow = (HWND)params.focusWindow;
-        gfxDevParams.hDeviceWindow = (HWND)params.deviceWindow;
+        gfxDevParams.hFocusWindow = (HWND)nativeWndHandle;
+        gfxDevParams.hDeviceWindow = (HWND)nativeWndHandle;
         
         gfxDevParams.Windowed = IZ_TRUE;                        // 画面モード(ウインドウモード)
 
@@ -67,8 +72,8 @@ IZ_BOOL CSampleApp::Init(const SSampleAppParams& params)
     }
 #elif __IZ_GLES2__
     {
-        gfxDevParams.display = (EGLNativeDisplayType)::GetDC((HWND)(params.deviceWindow));
-        gfxDevParams.window = (EGLNativeWindowType)params.deviceWindow;
+        gfxDevParams.display = (EGLNativeDisplayType)::GetDC((HWND)(nativeWndHandle));
+        gfxDevParams.window = (EGLNativeWindowType)nativeWndHandle;
 
         gfxDevParams.screenWidth = params.screenWidth;
         gfxDevParams.screenHeight = params.screenHeight;
@@ -106,7 +111,7 @@ IZ_BOOL CSampleApp::Init(const SSampleAppParams& params)
             izanagi::sys::SInputDeviceInitParam padInitParam =
             {
                 params.instanceHandle,
-                params.deviceWindow,
+                nativeWndHandle,
             };
 
 #if 0
@@ -141,10 +146,6 @@ IZ_BOOL CSampleApp::Init(const SSampleAppParams& params)
             m_Device,
             m_Camera);
     VGOTO(ret, __EXIT__);
-
-    // メッセージハンドラにアプリを設定
-    VGOTO(ret = (params.wndProc != IZ_NULL), __EXIT__);
-    params.wndProc->Init(this);
 
 __EXIT__:
     if (!ret) {
