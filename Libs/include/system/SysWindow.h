@@ -47,6 +47,8 @@ namespace sys
 
         virtual void OnIdle() {}
 
+        virtual void OnInit(const WindowHandle& handle) {}
+
     private:
         CStdHash<IZ_UINT64, CMessageHandler, 4>::Item mHashItem;
     };

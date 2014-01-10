@@ -9,13 +9,14 @@
 #include <float.h>
 
 #if defined(WIN32) || defined(WIN64)
+    #include "izTypes_windows.h"
     #include "izDefs_windows.h"
 #else
+    #include "izTypes_linux.h"
     #include "izDefs_linux.h"
 #endif
 
 #include "izLimits.h"
-#include "izTypes.h"
 
 #ifndef IZ_API
     #define IZ_API

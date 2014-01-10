@@ -149,5 +149,8 @@
     <ClCompile Include="..\..\source\system\linux\SysEnvironment_linux.cpp">
       <Filter>source\linux</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\system\SysWindow_glut.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
