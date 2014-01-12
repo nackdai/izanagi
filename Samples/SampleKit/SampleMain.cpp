@@ -29,8 +29,14 @@ IZ_INT SampleMain(
     izanagi::sample::CSampleWndProc wndProc(app);
     wndProc.funcInit = OnInit;
 
+    char* argv[] = {
+        const_cast<char*>(izanagi::sys::CSysUtil::GetExecuteFilePath()),
+    };
+
     // ウインドウ作成用パラメータ
     izanagi::sys::WindowParams wndParam = {
+        1, 
+        argv,
         screenWidth,
         screenHeight,
         IZ_TRUE,

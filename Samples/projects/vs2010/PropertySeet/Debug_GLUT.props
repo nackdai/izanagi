@@ -27,8 +27,8 @@
   </ItemGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\..\External\ANGLE\include;..\..\..\Libs\include;..\..\SampleKit;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>__IZ_DEBUG__;__IZ_GLES2__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\..\External\glew\include;..\..\..\Libs\include;..\..\SampleKit;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>__IZ_DEBUG__;__IZ_OGL__;__IZ_GLUT__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -44,7 +44,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PreBuildEvent>
-      <Command>copy /B /Y ..\..\..\External\ANGLE\lib\Debug\*.dll ..\..\$(ProjectName)</Command>
+      <Command>copy /B /Y ..\..\..\External\glut\lib\glut\*.dll ..\..\$(ProjectName)
+copy /B /Y ..\..\..\External\glew\bin\Debug\Win32\glew32*.dll ..\..\$(ProjectName)
+</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
 </Project>

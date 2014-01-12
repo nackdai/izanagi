@@ -88,6 +88,21 @@ IZ_BOOL CSampleApp::Init(
 
         gfxDevParams.enableMultiSample = GL_FALSE;
     }
+#elif __IZ_GLUT__
+    {
+        gfxDevParams.screenWidth = params.screenWidth;
+        gfxDevParams.screenHeight = params.screenHeight;
+
+        gfxDevParams.rgba[0] = 8;
+        gfxDevParams.rgba[1] = 8;
+        gfxDevParams.rgba[2] = 8;
+        gfxDevParams.rgba[3] = 8;
+
+        gfxDevParams.depth = 16;
+        gfxDevParams.stencil = 8;
+
+        gfxDevParams.enableMultiSample = GL_FALSE;
+    }
 #else
     IZ_C_ASSERT(IZ_FALSE);
 #endif
@@ -104,6 +119,7 @@ IZ_BOOL CSampleApp::Init(
         VGOTO(ret = (m_DebugFont != IZ_NULL), __EXIT__);
     }
 
+#if defined(__IZ_DX9__)
     // 入力初期化
     {
         // パッド作成
@@ -126,17 +142,8 @@ IZ_BOOL CSampleApp::Init(
                 0.15f);
 #endif
         }
-
-#if 0
-        // キーボード作成
-        {
-            m_Keyboard = izanagi::CKeyboard::CreateKeyboard(&m_Allocator);
-            VGOTO(ret, __EXIT__);
-            
-            // TODO
-        }
-#endif
     }
+#endif  // #if defined(__IZ_DX9__)
 
     // TODO
     // リセット用コールバックセット
