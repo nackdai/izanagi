@@ -199,10 +199,10 @@ namespace graph
         return ret;
     }
 
-#ifdef __IZ_GLES2__
     // ñ{ëÃçÏê¨
     IZ_BOOL CGraphicsDeviceGLES2::CreateBody(const SGraphicsDeviceInitParams& sParams)
     {
+#ifdef __IZ_GLES2__
         // Get Display
         m_Display = ::eglGetDisplay(sParams.display);
         VRETURN(m_Display != EGL_NO_DISPLAY);
@@ -273,6 +273,7 @@ namespace graph
 
         m_ScreenWidth = sParams.screenWidth;
         m_ScreenHeight = sParams.screenHeight;
+#endif
 
         return IZ_TRUE;
     }
@@ -282,10 +283,11 @@ namespace graph
     */
     IZ_BOOL CGraphicsDeviceGLES2::Present()
     {
+#ifdef __IZ_GLES2__
         ::eglSwapBuffers(m_Display, m_Surface);
+#endif
         return IZ_TRUE;
     }
-#endif  // #ifdef __IZ_GLES2__
 
     /**
     * ï`âÊäJén

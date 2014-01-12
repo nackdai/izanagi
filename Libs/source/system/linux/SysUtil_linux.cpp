@@ -25,5 +25,16 @@ namespace sys
 
         return IZ_TRUE;
     }
+
+    const char* CSysUtil::GetExecuteFilePath()
+    {
+        static izChar buf[260];
+
+        // 実行プログラムのフルパスを取得
+        int result = readlink("/proc/self/exe", buf, sizeof(buf));
+        VRETURN_NULL(result > 0);
+
+        return buf;
+    }
 }   // namespace sys
 }   // namespace izanagi

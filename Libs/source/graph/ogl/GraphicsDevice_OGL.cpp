@@ -9,12 +9,6 @@
 #include "graph/gles2/RenderTarget_GLES2.h"
 #include "graph/2d/2DRenderer.h"
 
-#include <GL/glew.h>
-
-#ifdef WINDOWS
-#pragma comment(lib, "glut32.lib")
-#endif
-
 namespace izanagi
 {
 namespace graph

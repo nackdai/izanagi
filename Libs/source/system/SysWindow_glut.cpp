@@ -86,11 +86,36 @@ namespace sys
 
         glutCreateWindow(param.title);
 
+        if (param.handler) {
+            param.handler->OnInit(IZ_NULL);
+        }
+
         glutDisplayFunc(Display);
 
         glutMainLoop();
 
         return window;
     }
+
+    // ウインドウ破棄.
+    void CSysWindow::Destroy(WindowHandle handle)
+    {
+    }
+
+    // ループ実行.
+    void CSysWindow::RunLoop(const WindowHandle& handle)
+    {
+    }
+
+    void* CSysWindow::GetNativeWindowHandle(const WindowHandle& handle)
+    {
+        return IZ_NULL;
+    }
+
+    void* CSysWindow::GetNativeDisplayHandle(const WindowHandle& handle)
+    {
+        return IZ_NULL;
+    }
+
 }   // namespace sys
 }   // namespace izanagi

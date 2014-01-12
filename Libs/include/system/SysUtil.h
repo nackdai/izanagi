@@ -20,6 +20,8 @@ namespace sys
         /** 実行プログラムの位置からカレントディレクトリを設定.
          */
         static IZ_BOOL SetCurrentDirectoryFromExe();
+
+        static const char* GetExecuteFilePath();
     };
 }   // namespace sys
 }   // namespace izanagi

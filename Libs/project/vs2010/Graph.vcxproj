@@ -95,7 +95,8 @@
     </ClCompile>
     <PostBuildEvent />
     <Lib>
-      <AdditionalDependencies>..\..\..\External\ANGLE\lib\Debug\libEGL.lib;..\..\..\External\ANGLE\lib\Debug\libGLESv2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libEGL.lib;libGLESv2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\..\External\ANGLE\lib\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">
@@ -108,7 +109,8 @@
     </ClCompile>
     <PostBuildEvent />
     <Lib>
-      <AdditionalDependencies>..\..\..\External\ANGLE\lib\Debug\libEGL.lib;..\..\..\External\ANGLE\lib\Debug\libGLESv2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\..\External\glew\lib\Debug\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">
@@ -129,7 +131,8 @@
     </ClCompile>
     <PostBuildEvent />
     <Lib>
-      <AdditionalDependencies>..\..\..\External\ANGLE\lib\Debug\libEGL.lib;..\..\..\External\ANGLE\lib\Debug\libGLESv2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libEGL.lib;libGLESv2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\..\External\ANGLE\lib\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
