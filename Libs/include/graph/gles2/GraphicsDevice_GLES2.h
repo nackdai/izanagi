@@ -1,7 +1,6 @@
 #if !defined(__IZANAGI_GRPAH_GRAPHICS_DEVICE_GLES2_H__)
 #define __IZANAGI_GRPAH_GRAPHICS_DEVICE_GLES2_H__
 
-//#include "izGLES2.h"
 #include "graph/GraphicsDevice.h"
 #include "graph/RenderState.h"
 #include "graph/ParamValueConverter.h"
@@ -23,7 +22,7 @@ namespace graph
         friend class CVertexBufferGLES2;
         friend class CIndexBufferGLES2;
 
-    private:
+    protected:
         CGraphicsDeviceGLES2();
         virtual ~CGraphicsDeviceGLES2();
 
@@ -228,10 +227,20 @@ namespace graph
         // 深度・ステンシルセット
         virtual void SetDepthStencil(CRenderTarget* rt);
 
-    private:
-        EGLDisplay m_Display;
-        EGLSurface m_Surface;
-        EGLContext m_Context;
+    protected:
+        static CFrameBufferObject* CreateFBO(
+            CGraphicsDeviceGLES2* device,
+            IMemoryAllocator* allocator);
+
+        static CRenderTarget* CreateDummyRenderTarget(
+            IMemoryAllocator* allocator,
+            IZ_UINT width,
+            IZ_UINT height);
+
+    protected:
+        Display m_Display;
+        Surface m_Surface;
+        Context m_Context;
 
         IZ_UINT m_ScreenWidth;
         IZ_UINT m_ScreenHeight;

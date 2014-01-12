@@ -1,7 +1,7 @@
 #if !defined(__IZANAGI_GRAPH_TEXTURE_GLES2_H__)
 #define __IZANAGI_GRAPH_TEXTURE_GLES2_H__
 
-#include "izGLES2Defs.h"
+#include "graph/GraphDefs.h"
 #include "graph/Texture.h"
 
 namespace izanagi

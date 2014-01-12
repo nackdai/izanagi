@@ -33,6 +33,12 @@
     <Filter Include="source\gles2">
       <UniqueIdentifier>{644dc45c-3a79-46ec-b1b4-9de2c2020c2a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\ogl">
+      <UniqueIdentifier>{5a3b1e47-2f81-4664-b27a-887d3b619fd9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\ogl">
+      <UniqueIdentifier>{6bd80176-36d7-42d5-a8eb-1177b6aaea9b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\graph\2d\2DRenderer.cpp">
@@ -148,6 +154,9 @@
     </ClCompile>
     <ClCompile Include="..\..\source\graph\gles2\FrameBufferObject.cpp">
       <Filter>source\gles2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\ogl\GraphicsDevice_OGL.cpp">
+      <Filter>source\ogl</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -311,6 +320,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\graph\gles2\FrameBufferObject.h">
       <Filter>include\gles2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\ogl\izOGLDefs.h">
+      <Filter>include\ogl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

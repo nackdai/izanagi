@@ -2,7 +2,7 @@
 #define __IZANAGI_GRAPH_PARAM_VALUE_CONVERTER_GLES2_H__
 
 #include "izDefs.h"
-#include "izGLES2Defs.h"
+#include "graph/GraphDefs.h"
 #include "graph/GraphDefs.h"
 
 #define FUNC_ABSTRACT_TO_TARGET(p, ret, arg)    ret ConvAbstractToTarget_##p(arg v)

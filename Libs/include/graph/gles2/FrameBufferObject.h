@@ -2,7 +2,7 @@
 #define __IZANAGI_FRAME_BUFFER_OBJECT_H__
 
 #include "izStd.h"
-#include "izGLES2Defs.h"
+#include "graph/GraphDefs.h"
 
 namespace izanagi
 {

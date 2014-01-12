@@ -4,10 +4,16 @@
 #include <EGL/egl.h>
 #include <GLES2/gl2.h>
 
-typedef GLuint TEX_HANDLE;
-typedef GLint SHADER_PARAM_HANDLE;
+namespace izanagi {
+    typedef GLuint TEX_HANDLE;
+    typedef GLint SHADER_PARAM_HANDLE;
 
-#define IS_VALID_SHADER_PARAM_HANDLE(handle)    ((handel) != 0)
+    typedef EGLDisplay Display;
+    typedef EGLSurface Surface;
+    typedef EGLContext Context;
+}
+
+#define IS_VALID_SHADER_PARAM_HANDLE(handle)    ((handle) != 0)
 
 #ifdef __IZ_DEBUG__
     #define CALL_GLES2_API(func)\

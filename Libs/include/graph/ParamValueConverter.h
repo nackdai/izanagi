@@ -3,8 +3,10 @@
 
 #if __IZ_DX9__
     #include "graph/dx9/D3D9ParamValueConverter.h"
-#elif __IZ_GLES2__
-    #include "graph/gles2/ParamValueConverter_GLES2.h"
+#elif __IZ_OGL__
+    #if defined (__IZ_GLES2__) || defined (__IZ_GLUT__)
+        #include "graph/gles2/ParamValueConverter_GLES2.h"
+    #endif
 #endif
 
 #define IZ_CONV_PARAM_TO_TARGET(p)  izanagi::graph::CTargetParamValueConverter::ConvAbstractToTarget_##p

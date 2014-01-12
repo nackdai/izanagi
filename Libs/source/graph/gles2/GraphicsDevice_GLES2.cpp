@@ -15,6 +15,7 @@ namespace graph
 {
     CGraphicsDevice* CGraphicsDevice::s_Instance = IZ_NULL;
 
+#ifdef __IZ_GLES2__
     /**
     * インスタンス作成
     */
@@ -60,6 +61,7 @@ namespace graph
 
         return instance;
     }
+#endif  // #ifdef __IZ_GLES2__
 
     // コンストラクタ
     CGraphicsDeviceGLES2::CGraphicsDeviceGLES2()
@@ -197,6 +199,7 @@ namespace graph
         return ret;
     }
 
+#ifdef __IZ_GLES2__
     // 本体作成
     IZ_BOOL CGraphicsDeviceGLES2::CreateBody(const SGraphicsDeviceInitParams& sParams)
     {
@@ -273,6 +276,16 @@ namespace graph
 
         return IZ_TRUE;
     }
+
+    /**
+    * 同期
+    */
+    IZ_BOOL CGraphicsDeviceGLES2::Present()
+    {
+        ::eglSwapBuffers(m_Display, m_Surface);
+        return IZ_TRUE;
+    }
+#endif  // #ifdef __IZ_GLES2__
 
     /**
     * 描画開始
@@ -444,15 +457,6 @@ namespace graph
                 SetDepthStencil(pDepth);
             }
         }
-    }
-
-    /**
-    * 同期
-    */
-    IZ_BOOL CGraphicsDeviceGLES2::Present()
-    {
-        ::eglSwapBuffers(m_Display, m_Surface);
-        return IZ_TRUE;
     }
 
     void CGraphicsDeviceGLES2::SetDepthStencil(CRenderTarget* pSurface)
@@ -1011,6 +1015,23 @@ namespace graph
 
             old_val = new_val;
         }
+    }
+
+    CFrameBufferObject* CGraphicsDeviceGLES2::CreateFBO(
+        CGraphicsDeviceGLES2* device,
+        IMemoryAllocator* allocator)
+    {
+        return CFrameBufferObject::CreateFBO(device, allocator);
+    }
+
+    CRenderTarget* CGraphicsDeviceGLES2::CreateDummyRenderTarget(
+        IMemoryAllocator* allocator,
+        IZ_UINT width,
+        IZ_UINT height)
+    {
+        return CRenderTargetGLES2::CreateDummyRenderTarget(
+            allocator,
+            width, height);
     }
 }   // namespace graph
 }   // namespace izanagi

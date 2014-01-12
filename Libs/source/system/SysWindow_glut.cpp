@@ -70,7 +70,7 @@ namespace sys
         FREE(allocator, window);
     }
 
-    WindowHandle CSysWindow::CreateGLUT(
+    WindowHandle CSysWindow::Create(
         IMemoryAllocator* allocator,
         const WindowParams& param)
     {
@@ -85,8 +85,6 @@ namespace sys
         glutInitDisplayMode(GLUT_RGBA);
 
         glutCreateWindow(param.title);
-
-        
 
         glutDisplayFunc(Display);
 

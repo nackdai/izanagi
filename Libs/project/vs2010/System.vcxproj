@@ -71,7 +71,7 @@
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="PropertySeet\Debug_GLES2.props" />
+    <Import Project="PropertySeet\Debug_GLUT.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
@@ -110,7 +110,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\..\External\glut\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -236,7 +236,9 @@
     <ClCompile Include="..\..\source\system\win32\SysEnvironment_win32 .cpp" />
     <ClCompile Include="..\..\source\system\win32\SysTimer_win32.cpp" />
     <ClCompile Include="..\..\source\system\win32\SysUtil_win32.cpp" />
-    <ClCompile Include="..\..\source\system\win32\SysWindow_win32.cpp" />
+    <ClCompile Include="..\..\source\system\win32\SysWindow_win32.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\..\source\system\win32\thread\SysEvent_win32.cpp" />
     <ClCompile Include="..\..\source\system\win32\thread\SysMutex_win32.cpp" />
     <ClCompile Include="..\..\source\system\win32\thread\SysSemaphore_win32.cpp" />

@@ -1,6 +1,6 @@
 #include "graph/RenderState.h"
 #include "graph/ParamValueConverter.h"
-#include "graph/gles2/izGLES2Defs.h"
+#include "graph/GraphDefs.h"
 
 namespace izanagi
 {

@@ -69,7 +69,7 @@
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="PropertySeet\Debug_GLES2.props" />
+    <Import Project="PropertySeet\Debug_GLUT.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
@@ -303,6 +303,12 @@
     </ClCompile>
     <ClCompile Include="..\..\source\graph\GraphicsDevice.cpp" />
     <ClCompile Include="..\..\source\graph\2d\2DRenderer.cpp" />
+    <ClCompile Include="..\..\source\graph\ogl\GraphicsDevice_OGL.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\..\source\graph\RenderState.cpp" />
     <ClCompile Include="..\..\source\graph\ShaderProgram.cpp" />
   </ItemGroup>
@@ -417,6 +423,7 @@ $(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpNoTexAlp
     <ClInclude Include="..\..\include\graph\2d\2DRenderer.h" />
     <ClInclude Include="..\..\include\graph\2d\2DShader.h" />
     <ClInclude Include="..\..\include\graph\IndexBuffer.h" />
+    <ClInclude Include="..\..\include\graph\ogl\izOGLDefs.h" />
     <ClInclude Include="..\..\include\graph\ParamValueConverter.h" />
     <ClInclude Include="..\..\include\graph\PixelShader.h" />
     <ClInclude Include="..\..\include\graph\RenderState.h" />

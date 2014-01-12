@@ -1,7 +1,7 @@
 #if !defined(__IZANAGI_GRAPH_INDEX_BUFFER_GLES2_H__)
 #define __IZANAGI_GRAPH_INDEX_BUFFER_GLES2_H__
 
-#include "izGLES2Defs.h"
+#include "graph/GraphDefs.h"
 #include "graph/IndexBuffer.h"
 
 namespace izanagi

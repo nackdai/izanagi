@@ -56,6 +56,8 @@ namespace sys
     /**
      */
     struct WindowParams {
+        IZ_INT argc;
+        char** argv;
         IZ_UINT width;              ///< ウインドウ幅
         IZ_UINT height;             ///< ウインドウ高さ
         IZ_BOOL isWindowed;         ///< ウインドウモードにするかどうか
