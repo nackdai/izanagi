@@ -9,6 +9,8 @@
 #include "graph/gles2/RenderTarget_GLES2.h"
 #include "graph/2d/2DRenderer.h"
 
+#include <GL/glut.h>
+
 namespace izanagi
 {
 namespace graph
@@ -149,7 +151,9 @@ namespace graph
     // ñ{ëÃçÏê¨
     IZ_BOOL CGraphicsDeviceOGL::CreateBody(const SGraphicsDeviceInitParams& sParams)
     {
-        ::glewInit();
+        glewExperimental = GL_TRUE;
+        GLenum result = glewInit();
+        VRETURN(result == GLEW_OK);
 
         m_ScreenWidth = sParams.screenWidth;
         m_ScreenHeight = sParams.screenHeight;
@@ -160,6 +164,7 @@ namespace graph
     // ìØä˙
     IZ_BOOL CGraphicsDeviceOGL::Present()
     {
+        glutSwapBuffers();
         return IZ_TRUE;
     }
 }   // namespace graph

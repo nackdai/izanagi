@@ -1,4 +1,7 @@
-#include <GL/glut.h>
+extern "C" {
+    #include <GL/glut.h>
+}
+
 #include "system/SysWindow.h"
 
 namespace izanagi
@@ -34,13 +37,6 @@ namespace sys
 
     CWindowGLUT* CWindowGLUT::s_Instance = IZ_NULL;
 
-    static void Display()
-    {
-        IZ_ASSERT(CWindowGLUT::s_Instance != IZ_NULL);
-
-        CWindowGLUT::s_Instance->GetHandler()->OnIdle();
-    }
-
     // インスタンス作成
     CWindowGLUT* CWindowGLUT::Create(
         IMemoryAllocator* allocator,
@@ -70,6 +66,18 @@ namespace sys
         FREE(allocator, window);
     }
 
+    static void Display()
+    {
+        IZ_ASSERT(CWindowGLUT::s_Instance != IZ_NULL);
+
+        CWindowGLUT::s_Instance->GetHandler()->OnIdle();
+    }
+
+    static void Idle()
+    {
+        glutPostRedisplay();
+    }
+
     WindowHandle CSysWindow::Create(
         IMemoryAllocator* allocator,
         const WindowParams& param)
@@ -82,7 +90,7 @@ namespace sys
             param.argv);
 
         glutInitWindowSize(param.width, param.height);
-        glutInitDisplayMode(GLUT_RGBA);
+        glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE);
 
         glutCreateWindow(param.title);
 
@@ -91,6 +99,8 @@ namespace sys
         }
 
         glutDisplayFunc(Display);
+
+        glutIdleFunc(Idle);
 
         glutMainLoop();
 
