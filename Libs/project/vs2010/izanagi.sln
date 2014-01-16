@@ -7,6 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lower", "Lower", "{6D503A3A
 		..\..\include\izDefs_linux.h = ..\..\include\izDefs_linux.h
 		..\..\include\izDefs_windows.h = ..\..\include\izDefs_windows.h
 		..\..\include\izLimits.h = ..\..\include\izLimits.h
+		..\..\include\izTypes.h = ..\..\include\izTypes.h
 		..\..\include\izTypes_linux.h = ..\..\include\izTypes_linux.h
 		..\..\include\izTypes_windows.h = ..\..\include\izTypes_windows.h
 	EndProjectSection

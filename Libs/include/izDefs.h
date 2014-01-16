@@ -76,6 +76,18 @@ inline void _OutputDebugString(const char* format, ...)
     #endif  // #ifdef __IZ_DEBUG__
 #endif  // #ifndef IZ_ASSERT_NULL
 
+#ifndef IZ_VERIFY
+    #ifdef __IZ_DEBUG__
+        #define IZ_VERIFY(b)\
+            if (!(b)) {\
+                IZ_PRINTF("assert : %s(%d)\n", __FILE__, __LINE__);\
+                DEBUG_BREAK();\
+            }
+    #else   // #ifdef __IZ_DEBUG__
+        #define IZ_VERIFY(b)    (b)
+    #endif  // #ifdef __IZ_DEBUG__
+#endif  // #ifndef IZ_VERIFY
+
 #ifndef IZ_C_ASSERT
     #ifdef __IZ_DEBUG__
         #define IZ_C_ASSERT(b)  typedef IZ_BYTE __xxxxx__[(b) ? 1 : -1];

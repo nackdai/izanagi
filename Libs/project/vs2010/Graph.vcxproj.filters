@@ -158,6 +158,9 @@
     <ClCompile Include="..\..\source\graph\ogl\GraphicsDevice_OGL.cpp">
       <Filter>source\ogl</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\graph\gles2\GraphicsDevice_EGL.cpp">
+      <Filter>source\gles2</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\source\graph\2d\shader\2DShader.hlsl">

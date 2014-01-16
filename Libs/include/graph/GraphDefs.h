@@ -12,6 +12,9 @@
     #elif __IZ_GLES2__
         #include "graph/gles2/izGLES2Defs.h"
     #endif
+#else
+    typedef IZ_UINT TEX_HANDLE;
+    typedef IZ_UINT SHADER_PARAM_HANDLE;
 #endif
 
 namespace izanagi

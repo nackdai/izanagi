@@ -28,6 +28,8 @@ namespace graph
         IZ_BOOL CreateBody(const SGraphicsDeviceInitParams& sParams);
     };
 
+    CGraphicsDevice* CGraphicsDevice::s_Instance = IZ_NULL;
+
     // インスタンス作成
     CGraphicsDevice* CGraphicsDevice::CreateGraphicsDevice(IMemoryAllocator* allocator)
     {
