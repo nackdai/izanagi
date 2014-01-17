@@ -22,10 +22,6 @@ namespace graph
 
     public:
         virtual IZ_BOOL Reset(const void* initialParam);
-        virtual IZ_BOOL Present();
-
-    private:
-        IZ_BOOL CreateBody(const SGraphicsDeviceInitParams& sParams);
     };
 
     CGraphicsDevice* CGraphicsDevice::s_Instance = IZ_NULL;
@@ -151,7 +147,7 @@ namespace graph
     }
 
     // ñ{ëÃçÏê¨
-    IZ_BOOL CGraphicsDeviceOGL::CreateBody(const SGraphicsDeviceInitParams& sParams)
+    IZ_BOOL CGraphicsDeviceGLES2::CreateBody(const SGraphicsDeviceInitParams& sParams)
     {
         glewExperimental = GL_TRUE;
         GLenum result = glewInit();
@@ -164,7 +160,7 @@ namespace graph
     }
 
     // ìØä˙
-    IZ_BOOL CGraphicsDeviceOGL::Present()
+    IZ_BOOL CGraphicsDeviceGLES2::Present()
     {
         glutSwapBuffers();
         return IZ_TRUE;

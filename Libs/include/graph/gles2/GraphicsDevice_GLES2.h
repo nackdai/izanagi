@@ -97,6 +97,7 @@ namespace graph
         void RemoveVertexBuffer(CVertexBufferGLES2* p);
         void RemoveIndexBuffer(CIndexBufferGLES2* p);
 
+    protected:
         // 本体作成
         IZ_BOOL CreateBody(const SGraphicsDeviceInitParams& sParams);
 
