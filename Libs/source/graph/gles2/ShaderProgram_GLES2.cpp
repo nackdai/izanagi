@@ -38,7 +38,7 @@ namespace graph
 
         m_IsLinked = IZ_TRUE;
 
-        m_AttribNum = 0;
+        m_AttribNum = -1;
         m_Attribs = IZ_NULL;
     }
 
@@ -64,7 +64,6 @@ namespace graph
 
             if (IsValid()) {
                 Link();
-                GetAttributeInfo();
             }
         }
         
@@ -88,7 +87,6 @@ namespace graph
 
             if (IsValid()) {
                 Link();
-                GetAttributeInfo();
             }
         }
         
@@ -137,37 +135,6 @@ namespace graph
         return IZ_TRUE;
     }
 
-    IZ_BOOL CShaderProgramGLES2::GetAttributeInfo()
-    {
-        CALL_GLES2_API(::glGetProgramiv(m_Program, GL_ACTIVE_ATTRIBUTES, &m_AttribNum));
-
-        if (m_AttribNum > 0) {
-            void* buf = ALLOC(m_Allocator, sizeof(SAttribute) * m_AttribNum);
-            VRETURN(buf != IZ_NULL);
-
-            m_Attribs = reinterpret_cast<SAttribute*>(buf);
-        }
-
-        for (GLint i = 0; i < m_AttribNum; i++) {
-            m_Attribs[i].index = i;
-
-            GLint size = 0;
-            GLenum type = 0;
-
-            CALL_GLES2_API(
-                ::glGetActiveAttrib(
-                    m_Program,
-                    i,
-                    sizeof(m_Attribs[i].name),
-                    &m_Attribs[i].nameLength,
-                    &size,
-                    &type,
-                    m_Attribs[i].name));
-        }
-
-        return IZ_TRUE;
-    }
-
     void CShaderProgramGLES2::ClearAttributeInfo()
     {
         FREE(m_Allocator, m_Attribs);
@@ -178,8 +145,37 @@ namespace graph
 
     IZ_INT CShaderProgramGLES2::GetAttribIndex(const char* name)
     {
+        if (m_AttribNum < 0) {
+            m_AttribNum = 0;
+            CALL_GLES2_API(::glGetProgramiv(m_Program, GL_ACTIVE_ATTRIBUTES, &m_AttribNum));
+        }
+
+        if (m_AttribNum > 0) {
+            void* buf = ALLOC(m_Allocator, sizeof(SAttribute) * m_AttribNum);
+            VRETURN(buf != IZ_NULL);
+
+            m_Attribs = reinterpret_cast<SAttribute*>(buf);
+
+            for (GLint i = 0; i < m_AttribNum; i++) {
+                m_Attribs[i].index = -1;
+                m_Attribs[i].nameLength = 0;
+            }
+        }
+
         for (GLint i = 0; i < m_AttribNum; i++) {
-            if (::strcmp(m_Attribs[i].name, name) == 0) {
+            if (m_Attribs[i].index >= 0) {
+                if (::strcmp(m_Attribs[i].name, name) == 0) {
+                    return m_Attribs[i].index;
+                }
+            }
+            else {
+                IZ_ASSERT(::strlen(name) < COUNTOF(m_Attribs[i].name) - 1);
+
+                m_Attribs[i].nameLength = ::strlen(name);
+                ::strncpy(m_Attribs[i].name, name, m_Attribs[i].nameLength);
+
+                CALL_GLES2_API(m_Attribs[i].index = ::glGetAttribLocation(m_Program, name));
+
                 return m_Attribs[i].index;
             }
         }

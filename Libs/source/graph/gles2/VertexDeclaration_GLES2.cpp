@@ -187,7 +187,7 @@ namespace graph
                         vtxStride,
                         (void*)(offset + element.Offset)));
 
-                CALL_GLES2_API(::glEnableVertexAttribArray(i));
+                CALL_GLES2_API(::glEnableVertexAttribArray(attribIndex));
             }
         }
 

@@ -36,7 +36,6 @@ namespace graph
         IZ_BOOL IsLinked();
 
     private:
-        IZ_BOOL GetAttributeInfo();
         void ClearAttributeInfo();
 
         IZ_INT GetAttribIndex(const char* name);
