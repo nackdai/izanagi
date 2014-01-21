@@ -15,6 +15,14 @@ namespace graph
     {
         friend class CGraphicsDeviceGLES2;
 
+        enum State {
+            None,
+            Enabled,
+            Disabled,
+        };
+
+        static State s_EnabledAttribIndex[16];
+
     private:
         // インスタンス作成
         static CVertexDeclaration* CreateVertexDeclaration(

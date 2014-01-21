@@ -8,6 +8,8 @@ namespace izanagi
 {
 namespace graph
 {
+    CVertexDeclarationGLES2::State CVertexDeclarationGLES2::s_EnabledAttribIndex[16] = { CVertexDeclarationGLES2::None };
+
     // インスタンス作成
     CVertexDeclaration* CVertexDeclarationGLES2::CreateVertexDeclaration(
         IMemoryAllocator* allocator,
@@ -70,6 +72,10 @@ namespace graph
         IZ_UINT vtxOffset,
         IZ_UINT vtxStride)
     {
+        for (IZ_UINT i = 0; i < COUNTOF(s_EnabledAttribIndex); i++) {
+            s_EnabledAttribIndex[i] = (s_EnabledAttribIndex[i] == Enabled ? Disabled : s_EnabledAttribIndex[i]);
+        }
+
         for (IZ_UINT i = 0; i < m_ElemNum; i++) {
             const char* attribName = GetAttribName(i);
             IZ_INT attribIndex = program->GetAttribIndex(attribName);
@@ -188,6 +194,13 @@ namespace graph
                         (void*)(offset + element.Offset)));
 
                 CALL_GLES2_API(::glEnableVertexAttribArray(attribIndex));
+                s_EnabledAttribIndex[attribIndex] = Enabled;
+            }
+        }
+
+        for (IZ_UINT i = 0; i < COUNTOF(s_EnabledAttribIndex); i++) {
+            if (s_EnabledAttribIndex[i] == Disabled) {
+                CALL_GLES2_API(::glDisableVertexAttribArray(i));
             }
         }
 
