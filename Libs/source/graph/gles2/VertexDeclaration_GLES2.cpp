@@ -201,6 +201,7 @@ namespace graph
         for (IZ_UINT i = 0; i < COUNTOF(s_EnabledAttribIndex); i++) {
             if (s_EnabledAttribIndex[i] == Disabled) {
                 CALL_GLES2_API(::glDisableVertexAttribArray(i));
+                s_EnabledAttribIndex[i] = None;
             }
         }
 
