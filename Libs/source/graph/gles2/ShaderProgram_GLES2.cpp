@@ -150,7 +150,9 @@ namespace graph
             CALL_GLES2_API(::glGetProgramiv(m_Program, GL_ACTIVE_ATTRIBUTES, &m_AttribNum));
         }
 
-        if (m_AttribNum > 0) {
+        if (m_AttribNum > 0
+            && m_Attribs == IZ_NULL)
+        {
             void* buf = ALLOC(m_Allocator, sizeof(SAttribute) * m_AttribNum);
             VRETURN(buf != IZ_NULL);
 
@@ -173,6 +175,7 @@ namespace graph
 
                 m_Attribs[i].nameLength = ::strlen(name);
                 ::strncpy(m_Attribs[i].name, name, m_Attribs[i].nameLength);
+                m_Attribs[i].name[m_Attribs[i].nameLength] = 0;
 
                 CALL_GLES2_API(m_Attribs[i].index = ::glGetAttribLocation(m_Program, name));
 
