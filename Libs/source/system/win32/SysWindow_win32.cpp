@@ -199,6 +199,46 @@ namespace sys
 
     static const char* registerName = "izanagi";
 
+    static inline void _Destroy(
+        HDC hDC,
+        HWND hWnd,
+        HINSTANCE hInst)
+    {
+        if (hDC) {
+            ::ReleaseDC(hWnd, hDC);
+        }
+
+        if (hWnd) {
+            DestroyWindow(hWnd);
+        }
+
+        if (hInst) {
+            UnregisterClass(registerName, hInst);
+        }
+    }
+
+    // ウインドウ破棄.
+    void CSysWindow::Destroy(WindowHandle handle)
+    {
+        IZ_ASSERT(handle != IZ_NULL);
+
+        CWindow* window = (CWindow*)handle;
+
+        HDC hDC = NULL;
+        HWND hWnd = NULL;
+        HINSTANCE hInst = NULL;
+
+        if (window != IZ_NULL) {
+            hDC = window->GetHDC();
+            hWnd = window->GetHWND();
+            hInst = window->GetHINSTANCE();
+        }
+
+        _Destroy(hDC, hWnd, hInst);
+
+        CWindow::Destroy(window);
+    }
+
     // ウインドウ作成.
     WindowHandle CSysWindow::Create(
         IMemoryAllocator* allocator,
@@ -208,6 +248,12 @@ namespace sys
 
         HINSTANCE hInst = (HINSTANCE)param.platformParam;
         IZ_ASSERT(hInst != IZ_NULL);
+
+        HDC hDC = NULL;
+        HWND hWnd = NULL;
+
+        IZ_BOOL result = IZ_TRUE;
+        CWindow* window = IZ_NULL;
 
         WNDCLASSEX wcex;
         {
@@ -252,11 +298,11 @@ namespace sys
             exStyle = WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;
 
             // ウインドウモード
-            VRETURN_NULL(
-                ::AdjustWindowRect(
-                    &rect,
-                    style,
-                    FALSE));
+            result = ::AdjustWindowRect(
+                &rect,
+                style,
+                FALSE);
+            VGOTO(result, __EXIT__);
 
             rect.right = rect.right - rect.left;
             rect.bottom = rect.bottom - rect.top;
@@ -270,18 +316,18 @@ namespace sys
         }
 
         // ウインドウ作成
-        HWND hWnd = ::CreateWindowExA(
-                        exStyle,
-                        wcex.lpszClassName,
-                        param.title,
-                        style,
-                        rect.left, rect.top,
-                        rect.right, rect.bottom,
-                        NULL,
-                        NULL,
-                        hInst,
-                        NULL);
-        VRETURN_NULL(hWnd != NULL);
+        hWnd = ::CreateWindowExA(
+            exStyle,
+            wcex.lpszClassName,
+            param.title,
+            style,
+            rect.left, rect.top,
+            rect.right, rect.bottom,
+            NULL,
+            NULL,
+            hInst,
+            NULL);
+        VGOTO(result = (hWnd != NULL), __EXIT__);
 
         // ウインドウ表示
         ::ShowWindow(hWnd, SW_SHOWNORMAL);
@@ -290,15 +336,15 @@ namespace sys
 
         ::UpdateWindow(hWnd);
 
-        HDC hDC = ::GetDC(hWnd);
-        VRETURN_NULL(hDC != NULL);
+        hDC = ::GetDC(hWnd);
+        VGOTO(result = (hDC != NULL), __EXIT__);
 
-        CWindow* window = CWindow::Create(
-                            allocator,
-                            hInst,
-                            hWnd,
-                            hDC);
-        IZ_ASSERT(window != IZ_NULL);
+        window = CWindow::Create(
+            allocator,
+            hInst,
+            hWnd,
+            hDC);
+        VGOTO(result = (window != IZ_NULL), __EXIT__);
 
         // メッセージハンドラを保持
         if (param.handler) {
@@ -309,33 +355,12 @@ namespace sys
             }
         }
 
+__EXIT__:
+        if (!result) {
+            _Destroy(hDC, hWnd, hInst);
+        }
+
         return window;
-    }
-
-    // ウインドウ破棄.
-    void CSysWindow::Destroy(WindowHandle handle)
-    {
-        IZ_ASSERT(handle != IZ_NULL);
-
-        CWindow* window = (CWindow*)handle;
-
-        HDC hDC = window->GetHDC();
-        HWND hWnd = window->GetHWND();
-        HINSTANCE hInst = window->GetHINSTANCE();
-
-        if (hDC) {
-            ::ReleaseDC(hWnd, hDC);
-        }
-
-        if (hWnd) {
-            DestroyWindow(hWnd);
-        }
-
-        if (hInst) {
-            UnregisterClass(registerName, hInst);
-        }
-
-        CWindow::Destroy(window);
     }
 
     static IZ_BOOL ProcMsg()
@@ -356,7 +381,7 @@ namespace sys
     }
 
     // ループ実行.
-    void CSysWindow::RunLoop(const WindowHandle& handle)
+    void CSysWindow::RunLoop(WindowHandle handle)
     {
         IZ_ASSERT(handle != IZ_NULL);
     
@@ -369,6 +394,16 @@ namespace sys
             if (msgHandler) {
                 msgHandler->OnIdle();
             }
+        }
+
+        if (msgHandler) {
+            msgHandler->OnTerminate();
+        }
+
+        Destroy(handle);
+
+        if (msgHandler) {
+            msgHandler->OnDestroy();
         }
     }
 

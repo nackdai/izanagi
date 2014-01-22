@@ -49,6 +49,9 @@ namespace sys
 
         virtual void OnInit(const WindowHandle& handle) {}
 
+        virtual void OnTerminate() {}
+        virtual void OnDestroy() {}
+
     private:
         CStdHash<IZ_UINT64, CMessageHandler, 4>::Item mHashItem;
     };
@@ -75,6 +78,11 @@ namespace sys
 
         NO_COPIABLE(CSysWindow);
 
+    private:
+        /** ウインドウ破棄.
+         */
+        static void Destroy(WindowHandle handle);
+
     public:
         /** ウインドウ作成.
          */
@@ -82,13 +90,9 @@ namespace sys
             IMemoryAllocator* allocator,
             const WindowParams& param);
 
-        /** ウインドウ破棄.
-         */
-        static void Destroy(WindowHandle handle);
-
         /** ループ実行.
          */
-        static void RunLoop(const WindowHandle& handle);
+        static void RunLoop(WindowHandle handle);
 
         static void* GetNativeWindowHandle(const WindowHandle& handle);
 
