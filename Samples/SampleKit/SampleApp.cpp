@@ -178,10 +178,6 @@ void CSampleApp::Release()
     m_Device->Terminate();
 
     SAFE_RELEASE(m_Device);
-
-    if (allocator) {
-        allocator->Dump();
-    }
 }
 
 // 更新.

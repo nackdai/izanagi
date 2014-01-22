@@ -3,13 +3,26 @@
 #include "SampleApp.h"
 
 // アプリ初期化用パラメータ
-izanagi::sample::SSampleAppParams appParam = {0};
+static izanagi::sample::SSampleAppParams appParam = {0};
+
+static izanagi::CStandardMemoryAllocator allocator;
+static izanagi::CStandardMemoryAllocator allocatorForGraph;
 
 static void OnInit(
     const izanagi::sys::WindowHandle& handle,
     izanagi::sample::CSampleApp* app)
 {
     app->Init(handle, appParam);
+}
+
+static void OnTerminate(izanagi::sample::CSampleApp* app)
+{
+    app->Release();
+}
+
+static void OnDestroy()
+{
+    allocator.Dump();
 }
 
 IZ_INT SampleMain(
@@ -20,14 +33,16 @@ IZ_INT SampleMain(
     void* allocatorBuf, IZ_UINT bufSize,
     void* graphBuf, IZ_UINT graphBufSize)
 {
-    izanagi::CStandardMemoryAllocator allocator(bufSize, allocatorBuf);
-    izanagi::CStandardMemoryAllocator allocatorForGraph(graphBufSize, graphBuf);
+    allocator.Init(bufSize, allocatorBuf);
+    allocatorForGraph.Init(graphBufSize, graphBuf);
 
     // 実行ファイルから現在のパスを取得
     izanagi::sys::CSysUtil::SetCurrentDirectoryFromExe();
 
     izanagi::sample::CSampleWndProc wndProc(app);
     wndProc.funcInit = OnInit;
+    wndProc.funcTerminate = OnTerminate;
+    wndProc.funcDestroy = OnDestroy;
 
     char* argv[] = {
         const_cast<char*>(izanagi::sys::CSysUtil::GetExecuteFilePath()),
@@ -64,12 +79,6 @@ IZ_INT SampleMain(
     izanagi::sys::CSysWindow::RunLoop(wndHandle);
 
 __EXIT__:
-    app->Release();
-
-    izanagi::sys::CSysWindow::Destroy(wndHandle);
-
-    allocator.Dump();
-
     int ret = (result ? 0 : 1);
 
     return ret;

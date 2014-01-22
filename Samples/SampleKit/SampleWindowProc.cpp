@@ -10,6 +10,10 @@ CSampleWndProc::CSampleWndProc(CSampleApp* app)
 
     m_Flags.onLBtn = IZ_FALSE;
     m_Flags.onRBtn = IZ_FALSE;
+
+    funcInit = IZ_NULL;
+    funcTerminate = IZ_NULL;
+    funcDestroy = IZ_NULL;
 }
 
 CSampleWndProc::~CSampleWndProc()
@@ -131,5 +135,19 @@ void CSampleWndProc::OnInit(const izanagi::sys::WindowHandle& handle)
 {
     if (funcInit) {
         (*funcInit)(handle, m_App);
+    }
+}
+
+void CSampleWndProc::OnTerminate()
+{
+    if (funcTerminate) {
+        (*funcTerminate)(m_App);
+    }
+}
+
+void CSampleWndProc::OnDestroy()
+{
+    if (funcDestroy) {
+        (*funcDestroy)();
     }
 }

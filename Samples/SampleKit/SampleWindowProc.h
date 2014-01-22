@@ -34,6 +34,14 @@ namespace sample {
 
         void (*funcInit)(const izanagi::sys::WindowHandle&, CSampleApp*);
 
+        virtual void OnTerminate();
+
+        void (*funcTerminate)(CSampleApp*);
+
+        virtual void OnDestroy();
+
+        void (*funcDestroy)();
+
     private:
         CSampleApp* m_App;
 
