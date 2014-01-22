@@ -39,42 +39,46 @@ namespace graph
     // デストラクタ
     CGraphicsDeviceGLES2::~CGraphicsDeviceGLES2()
     {
-        // TODO
-
-        Terminate();
-
-        SAFE_RELEASE(m_FBO);
+        Terminate();    
     }
 
     void CGraphicsDeviceGLES2::Terminate()
     {
-        SetShaderProgram(IZ_NULL);
-        SetIndexBuffer(IZ_NULL);
+        if (!m_Flags.is_terminated) {
+            SetShaderProgram(IZ_NULL);
+            SetIndexBuffer(IZ_NULL);
 
-        // NOTE
-        // VBOのセットでストリームの指定をしないのでストリームインデックスは常にゼロ
-        SetVertexBuffer(0, 0, 0, IZ_NULL);
+            // NOTE
+            // VBOのセットでストリームの指定をしないのでストリームインデックスは常にゼロ
+            SetVertexBuffer(0, 0, 0, IZ_NULL);
 
-        SAFE_RELEASE(m_RenderState.curVD);
+            SAFE_RELEASE(m_RenderState.curVD);
 
-        for (IZ_UINT i = 0; i < MAX_MRT_NUM; ++i) {
+            for (IZ_UINT i = 0; i < MAX_MRT_NUM; ++i) {
+                // チェック
+                IZ_ASSERT(m_RTMgr[i].IsEmpty());
+
+                SAFE_RELEASE(m_RenderState.curRT[i]);
+            }
+
             // チェック
-            IZ_ASSERT(m_RTMgr[i].IsEmpty());
+            IZ_ASSERT(m_DepthMgr.IsEmpty());
 
-            SAFE_RELEASE(m_RenderState.curRT[i]);
+            SAFE_RELEASE(m_RenderState.curDepth);
+
+            for (IZ_UINT i = 0; i < TEX_STAGE_NUM; ++i) {
+                SetTexture(i, IZ_NULL);
+            }
+
+            m_FBO->SetRenderTarget(IZ_NULL, IZ_TRUE);
+            m_FBO->SetRenderTarget(IZ_NULL, IZ_FALSE);
+
+            SAFE_RELEASE(m_FBO);
+
+            OnTerminate();
+
+            m_Flags.is_terminated = IZ_TRUE;
         }
-
-        // チェック
-        IZ_ASSERT(m_DepthMgr.IsEmpty());
-
-        SAFE_RELEASE(m_RenderState.curDepth);
-
-        for (IZ_UINT i = 0; i < TEX_STAGE_NUM; ++i) {
-            SetTexture(i, IZ_NULL);
-        }
-
-        m_FBO->SetRenderTarget(IZ_NULL, IZ_TRUE);
-        m_FBO->SetRenderTarget(IZ_NULL, IZ_FALSE);
     }
 
     /**

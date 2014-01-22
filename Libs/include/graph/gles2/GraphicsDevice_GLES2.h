@@ -101,6 +101,8 @@ namespace graph
         // 本体作成
         IZ_BOOL CreateBody(const SGraphicsDeviceInitParams& sParams);
 
+        void OnTerminate();
+
     public:
         // リセット
         virtual IZ_BOOL Reset(const void* initialParam);

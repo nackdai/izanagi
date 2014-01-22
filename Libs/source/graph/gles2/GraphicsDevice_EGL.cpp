@@ -138,6 +138,26 @@ namespace graph
         return IZ_TRUE;
     }
 
+    void CGraphicsDeviceGLES2::OnTerminate()
+    {
+        if (m_Display != EGL_NO_DISPLAY) {
+            ::eglMakeCurrent(m_Display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+
+            if (m_Surface != EGL_NO_SURFACE) {
+                ::eglDestroySurface(m_Display, m_Surface);
+                m_Surface = EGL_NO_SURFACE;
+            }
+
+            if (m_Context != EGL_NO_CONTEXT) {
+                ::eglDestroyContext(m_Display, m_Context);
+                m_Context = EGL_NO_CONTEXT;
+            }
+
+            ::eglTerminate(m_Display);
+            m_Display = EGL_NO_DISPLAY;
+        }
+    }
+
     /**
     * “¯Šú
     */

@@ -396,6 +396,7 @@ namespace graph
             IZ_UINT is_render_2d        : 1;    // 2D描画中か
             IZ_UINT is_force_set_state  : 1;    // 強制的にステートを設定するかどうか
             IZ_UINT is_lost_device      : 1;    // デバイスロストしているかどうか
+            IZ_UINT is_terminated       : 1;
             IZ_UINT reserved            : 28;
         } m_Flags;
     };

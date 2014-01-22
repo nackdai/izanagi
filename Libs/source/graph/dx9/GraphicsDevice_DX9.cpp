@@ -95,9 +95,6 @@ namespace graph
     // デストラクタ
     CGraphicsDeviceDX9::~CGraphicsDeviceDX9()
     {
-        SAFE_RELEASE(m_Device);
-        SAFE_RELEASE(m_D3D);
-
         Terminate();
     }
 
@@ -128,6 +125,9 @@ namespace graph
         for (IZ_UINT i = 0; i < TEX_STAGE_NUM; ++i) {
             SetTexture(i, IZ_NULL);
         }
+
+        SAFE_RELEASE(m_Device);
+        SAFE_RELEASE(m_D3D);
     }
 
     /**
