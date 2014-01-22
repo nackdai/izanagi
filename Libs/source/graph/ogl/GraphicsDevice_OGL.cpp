@@ -159,6 +159,11 @@ namespace graph
         return IZ_TRUE;
     }
 
+    void CGraphicsDeviceGLES2::OnTerminate()
+    {
+        // Nothing is done...
+    }
+
     // “¯Šú
     IZ_BOOL CGraphicsDeviceGLES2::Present()
     {
