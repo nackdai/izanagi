@@ -1,5 +1,6 @@
 extern "C" {
     #include <GL/glut.h>
+    #include <GL/freeglut.h>
 }
 
 #include "system/SysWindow.h"
@@ -64,13 +65,30 @@ namespace sys
 
         delete window;
         FREE(allocator, window);
+
+        s_Instance = IZ_NULL;
     }
+
+    ///////////////////////////////////////////////////////////////////
 
     static void Display()
     {
         IZ_ASSERT(CWindowGLUT::s_Instance != IZ_NULL);
 
         CWindowGLUT::s_Instance->GetHandler()->OnIdle();
+    }
+
+    static void Close()
+    {
+        IZ_ASSERT(CWindowGLUT::s_Instance != IZ_NULL);
+
+        CMessageHandler* handler = CWindowGLUT::s_Instance->GetHandler();
+
+        handler->OnTerminate();
+        
+        CWindowGLUT::Destroy(CWindowGLUT::s_Instance);
+
+        handler->OnDestroy();
     }
 
     static void Idle()
@@ -99,8 +117,8 @@ namespace sys
         }
 
         glutDisplayFunc(Display);
-
         glutIdleFunc(Idle);
+        glutCloseFunc(Close);
 
         glutMainLoop();
 
@@ -113,7 +131,7 @@ namespace sys
     }
 
     // ループ実行.
-    void CSysWindow::RunLoop(const WindowHandle& handle)
+    void CSysWindow::RunLoop(WindowHandle handle)
     {
     }
 
