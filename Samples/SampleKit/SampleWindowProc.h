@@ -36,8 +36,6 @@ namespace sample {
 
         virtual void OnTerminate();
 
-        void (*funcTerminate)(CSampleApp*);
-
         virtual void OnDestroy();
 
         void (*funcDestroy)();

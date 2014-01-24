@@ -15,11 +15,6 @@ static void OnInit(
     app->Init(handle, appParam);
 }
 
-static void OnTerminate(izanagi::sample::CSampleApp* app)
-{
-    app->Release();
-}
-
 static void OnDestroy()
 {
     allocator.Dump();
@@ -41,7 +36,6 @@ IZ_INT SampleMain(
 
     izanagi::sample::CSampleWndProc wndProc(app);
     wndProc.funcInit = OnInit;
-    wndProc.funcTerminate = OnTerminate;
     wndProc.funcDestroy = OnDestroy;
 
     char* argv[] = {
