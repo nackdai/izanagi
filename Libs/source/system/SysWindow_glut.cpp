@@ -96,6 +96,140 @@ namespace sys
         glutPostRedisplay();
     }
 
+    static void KeyDown(unsigned char key, int x, int y)
+    {
+        IZ_ASSERT(CWindowGLUT::s_Instance != IZ_NULL);
+
+        E_KEYBOARD_BUTTON mappedKey = CSysWindow::GetKeyMap(key);
+
+        CWindowGLUT::s_Instance->GetHandler()->OnKeyUp(mappedKey);
+    }
+
+    static void KeyUp(unsigned char key, int x, int y)
+    {
+        IZ_ASSERT(CWindowGLUT::s_Instance != IZ_NULL);
+
+        E_KEYBOARD_BUTTON mappedKey = CSysWindow::GetKeyMap(key);
+
+        CWindowGLUT::s_Instance->GetHandler()->OnKeyUp(mappedKey);
+    }
+
+    static inline E_KEYBOARD_BUTTON _GetKeyMap(int key)
+    {
+        switch (key) {
+        case GLUT_KEY_UP:
+            return E_KEYBOARD_BUTTON_UP;
+        case GLUT_KEY_LEFT:
+            return E_KEYBOARD_BUTTON_LEFT;
+        case GLUT_KEY_DOWN:
+            return E_KEYBOARD_BUTTON_DOWN;
+        case GLUT_KEY_RIGHT:
+            return E_KEYBOARD_BUTTON_RIGHT;
+        }
+
+        return E_KEYBOARD_BUTTON_UNDEFINED;
+    }
+
+    static void SpecialKeyDown(int key, int x, int y)
+    {
+        IZ_ASSERT(CWindowGLUT::s_Instance != IZ_NULL);
+
+        E_KEYBOARD_BUTTON mappedKey = _GetKeyMap(key);
+
+        CWindowGLUT::s_Instance->GetHandler()->OnKeyDown(mappedKey);
+    }
+
+    static void SpecialKeyUp(int key, int x, int y)
+    {
+        IZ_ASSERT(CWindowGLUT::s_Instance != IZ_NULL);
+
+        E_KEYBOARD_BUTTON mappedKey = _GetKeyMap(key);
+
+        CWindowGLUT::s_Instance->GetHandler()->OnKeyUp(mappedKey);
+    }
+
+    static void Mouse(int button, int state, int x, int y)
+    {
+        IZ_ASSERT(CWindowGLUT::s_Instance != IZ_NULL);
+
+        CMessageHandler* handler = CWindowGLUT::s_Instance->GetHandler();
+
+        if (button == GLUT_LEFT_BUTTON) {
+            if (state == GLUT_DOWN) {
+                handler->OnMouseLBtnDown(CIntPoint(x, y));
+            }
+            else if (state == GLUT_UP) {
+                handler->OnMouseLBtnUp(CIntPoint(x, y));
+            }
+        }
+        else if (button == GLUT_RIGHT_BUTTON) {
+            if (state == GLUT_DOWN) {
+                handler->OnMouseRBtnDown(CIntPoint(x, y));
+            }
+            else if (state == GLUT_UP) {
+                handler->OnMouseRBtnUp(CIntPoint(x, y));
+            }
+        }
+    }
+
+    static void Motion(int x, int y)
+    {
+        IZ_ASSERT(CWindowGLUT::s_Instance != IZ_NULL);
+
+        CWindowGLUT::s_Instance->GetHandler()->OnMouseMove(CIntPoint(x, y));
+    }
+
+    static void Wheel(int wheel_number, int direction, int x, int y)
+    {
+        IZ_ASSERT(CWindowGLUT::s_Instance != IZ_NULL);
+
+        // NOTE
+        // We can not wheel delta on GLUT.
+        // So, I send temporary value.
+        CWindowGLUT::s_Instance->GetHandler()->OnMouseWheel(direction * 10);
+    }
+
+    E_KEYBOARD_BUTTON CSysWindow::GetKeyMap(IZ_UINT key)
+    {
+        if ('0' <= key && key <= '9') {
+            key = key - '0';
+            return (E_KEYBOARD_BUTTON)(E_KEYBOARD_BUTTON_0 + key);
+        }
+        else if ('A' <= key && key <= 'Z') {
+            key = key - 'A';
+            return (E_KEYBOARD_BUTTON)(E_KEYBOARD_BUTTON_A + key);
+        }
+        else {
+            switch (key) {
+            case VK_UP:
+                return E_KEYBOARD_BUTTON_UP;
+            case VK_LEFT:
+                return E_KEYBOARD_BUTTON_LEFT;
+            case VK_DOWN:
+                return E_KEYBOARD_BUTTON_DOWN;
+            case VK_RIGHT:
+                return E_KEYBOARD_BUTTON_RIGHT;
+            case VK_CONTROL:
+                return E_KEYBOARD_BUTTON_CONTROL;
+            case VK_SHIFT:
+                return E_KEYBOARD_BUTTON_SHIFT;
+            case VK_RETURN:
+                return E_KEYBOARD_BUTTON_RETURN;
+            case VK_SPACE:
+                return E_KEYBOARD_BUTTON_SPACE;
+            case VK_BACK:
+                return E_KEYBOARD_BUTTON_BACK;
+            case VK_DELETE:
+                return E_KEYBOARD_BUTTON_DELETE;
+            default:
+                break;
+            }
+        }
+
+        IZ_ASSERT(IZ_FALSE);
+        return E_KEYBOARD_BUTTON_UNDEFINED;
+    }
+
     WindowHandle CSysWindow::Create(
         IMemoryAllocator* allocator,
         const WindowParams& param)
@@ -103,24 +237,32 @@ namespace sys
         CWindowGLUT* window = CWindowGLUT::Create(allocator, param.handler);
         VRETURN_NULL(window != IZ_NULL);
 
-        glutInit(
+        ::glutInit(
             const_cast<int*>(&param.argc), 
             param.argv);
 
-        glutInitWindowSize(param.width, param.height);
-        glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE);
+        ::glutInitWindowSize(param.width, param.height);
+        ::glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE);
 
-        glutCreateWindow(param.title);
+        ::glutCreateWindow(param.title);
 
         if (param.handler) {
             param.handler->OnInit(IZ_NULL);
         }
 
-        glutDisplayFunc(Display);
-        glutIdleFunc(Idle);
-        glutCloseFunc(Close);
+        ::glutDisplayFunc(Display);
+        ::glutIdleFunc(Idle);
+        ::glutKeyboardFunc(KeyDown);
+        ::glutKeyboardUpFunc(KeyUp);
+        ::glutSpecialFunc(SpecialKeyDown);
+        ::glutSpecialUpFunc(SpecialKeyUp);
+        ::glutMouseFunc(Mouse);
+        ::glutMotionFunc(Motion);
+        ::glutMouseWheelFunc(Wheel);
 
-        glutMainLoop();
+        ::glutCloseFunc(Close);
+
+        ::glutMainLoop();
 
         return window;
     }

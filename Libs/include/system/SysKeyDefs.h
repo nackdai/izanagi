@@ -55,7 +55,11 @@ namespace sys
         E_KEYBOARD_BUTTON_BACK,
         E_KEYBOARD_BUTTON_DELETE,
 
-        E_KEYBOARD_BUTTON_MINUS,
+        E_KEYBOARD_BUTTON_NUM,
+
+        // I have no plans to support belows...
+
+        E_KEYBOARD_BUTTON_MINUS = E_KEYBOARD_BUTTON_NUM,
         E_KEYBOARD_BUTTON_EQUALS,
         
         E_KEYBOARD_BUTTON_TAB,

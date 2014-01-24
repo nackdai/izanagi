@@ -458,7 +458,7 @@ __EXIT__:
             }
         }
 
-        IZ_ASSERT(IZ_FALSE);
+        //IZ_ASSERT(IZ_FALSE);
         return E_KEYBOARD_BUTTON_UNDEFINED;
     }
 }   // namespace sys
