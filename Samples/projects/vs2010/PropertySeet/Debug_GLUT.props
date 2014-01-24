@@ -40,11 +40,11 @@
     <Link>
       <AdditionalDependencies>d3d9.lib;d3dx9d.lib;dxguid.lib;dinput8.lib;dxerr.lib;winmm.lib;SampleKit\$(Configuration)\SampleKit.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName).exe</OutputFile>
-      <AdditionalLibraryDirectories>..\..\..\Libs\project\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\Libs\project\lib\$(Configuration);..\..\..\External\freeglut\lib\x86\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PreBuildEvent>
-      <Command>copy /B /Y ..\..\..\External\glut\lib\glut\*.dll ..\..\$(ProjectName)
+      <Command>copy /B /Y ..\..\..\External\freeglut\lib\x86\Debug\*.dll ..\..\$(ProjectName)
 copy /B /Y ..\..\..\External\glew\bin\Debug\Win32\glew32*.dll ..\..\$(ProjectName)
 </Command>
     </PreBuildEvent>
