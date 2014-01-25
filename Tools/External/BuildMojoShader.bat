@@ -27,3 +27,8 @@ if not exist %SOLUTION% (
 
 @echo off
 exit /b 1
+
+:error
+@echo off
+echo "Error====="
+pause
