@@ -26,14 +26,8 @@ build_all_configurations: Debug_GLUT
 
 # Builds the Debug_GLUT configuration...
 .PHONY: Debug_GLUT
-Debug_GLUT: create_folders gccDebug_GLUT/source/system/Pad.o gccDebug_GLUT/source/system/SysWindow_glut.o gccDebug_GLUT/source/system/linux/SysEnvironment_linux.o gccDebug_GLUT/source/system/linux/SysTimer_linux.o gccDebug_GLUT/source/system/linux/SysUtil_linux.o gccDebug_GLUT/source/system/linux/device/Pad_linux.o gccDebug_GLUT/source/system/linux/thread/SysEvent_pthread.o gccDebug_GLUT/source/system/linux/thread/SysMutex_pthread.o gccDebug_GLUT/source/system/linux/thread/SysSemaphore_pthread.o gccDebug_GLUT/source/system/linux/thread/SysThread_pthread.o 
-	ar rcs ../lib/gccDebug_GLUT/libSystem.a gccDebug_GLUT/source/system/Pad.o gccDebug_GLUT/source/system/SysWindow_glut.o gccDebug_GLUT/source/system/linux/SysEnvironment_linux.o gccDebug_GLUT/source/system/linux/SysTimer_linux.o gccDebug_GLUT/source/system/linux/SysUtil_linux.o gccDebug_GLUT/source/system/linux/device/Pad_linux.o gccDebug_GLUT/source/system/linux/thread/SysEvent_pthread.o gccDebug_GLUT/source/system/linux/thread/SysMutex_pthread.o gccDebug_GLUT/source/system/linux/thread/SysSemaphore_pthread.o gccDebug_GLUT/source/system/linux/thread/SysThread_pthread.o  $(Debug_GLUT_Implicitly_Linked_Objects)
-
-# Compiles file ../../source/system/Pad.cpp for the Debug_GLUT configuration...
--include gccDebug_GLUT/source/system/Pad.d
-gccDebug_GLUT/source/system/Pad.o: ../../source/system/Pad.cpp
-	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -c ../../source/system/Pad.cpp $(Debug_GLUT_Include_Path) -o gccDebug_GLUT/source/system/Pad.o
-	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -MM ../../source/system/Pad.cpp $(Debug_GLUT_Include_Path) > gccDebug_GLUT/source/system/Pad.d
+Debug_GLUT: create_folders gccDebug_GLUT/source/system/SysWindow_glut.o gccDebug_GLUT/source/system/linux/SysEnvironment_linux.o gccDebug_GLUT/source/system/linux/SysTimer_linux.o gccDebug_GLUT/source/system/linux/SysUtil_linux.o gccDebug_GLUT/source/system/linux/device/Pad_linux.o gccDebug_GLUT/source/system/linux/thread/SysEvent_pthread.o gccDebug_GLUT/source/system/linux/thread/SysMutex_pthread.o gccDebug_GLUT/source/system/linux/thread/SysSemaphore_pthread.o gccDebug_GLUT/source/system/linux/thread/SysThread_pthread.o 
+	ar rcs ../lib/gccDebug_GLUT/libSystem.a gccDebug_GLUT/source/system/SysWindow_glut.o gccDebug_GLUT/source/system/linux/SysEnvironment_linux.o gccDebug_GLUT/source/system/linux/SysTimer_linux.o gccDebug_GLUT/source/system/linux/SysUtil_linux.o gccDebug_GLUT/source/system/linux/device/Pad_linux.o gccDebug_GLUT/source/system/linux/thread/SysEvent_pthread.o gccDebug_GLUT/source/system/linux/thread/SysMutex_pthread.o gccDebug_GLUT/source/system/linux/thread/SysSemaphore_pthread.o gccDebug_GLUT/source/system/linux/thread/SysThread_pthread.o  $(Debug_GLUT_Implicitly_Linked_Objects)
 
 # Compiles file ../../source/system/SysWindow_glut.cpp for the Debug_GLUT configuration...
 -include gccDebug_GLUT/source/system/SysWindow_glut.d
