@@ -16,6 +16,22 @@ if %GFX%==GLES2 (
     cd ..\Libs
 )
 
+if %GFX%==OGL (
+    %MSBUILD% ..\External\glew\build\vc10\glew.sln /t:%TARGET% /p:Configuration=%CONFIG% /p:Platform=Win32 || goto error
+    %MSBUILD% ..\External\freeglut\VisualStudio\2010\freeglut.sln /t:%TARGET% /p:Configuration=%CONFIG% /p:Platform=Win32 || goto error
+
+    cd ..\Tools
+    cd External
+    call BuildMojoShader.bat Release
+    cd ..
+    %MSBUILD% External\Preproc\Preproc_VC10.sln /t:%TARGET% /p:Configuration=Release || goto error
+    %MSBUILD% projects\vs2010\ShaderCompiler.sln /t:%TARGET% /p:Configuration=Release || goto error
+
+    cd ..\Libs
+
+    set GFX=GLUT
+)
+
 %MSBUILD% ..\External\freetype\builds\win32\vc2010\freetype.sln /t:%TARGET% /p:Configuration="%CONFIG% Multithreaded" || goto error
 
 %MSBUILD% project\vs2010\izanagi.sln /t:%TARGET% /p:Configuration=%CONFIG%_%GFX% || goto error
