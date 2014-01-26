@@ -189,6 +189,30 @@ namespace sys
         CWindowGLUT::s_Instance->GetHandler()->OnMouseWheel(direction * 10);
     }
 
+#ifndef VK_CONTROL
+    #define VK_CONTROL 0x11
+#endif
+
+#ifndef VK_SHIFT
+    #define VK_SHIFT 0x10
+#endif
+
+#ifndef VK_RETURN
+    #define VK_RETURN 0x0D
+#endif
+
+#ifndef VK_SPACE
+    #define VK_SPACE 0x20
+#endif
+
+#ifndef VK_BACK
+    #define VK_BACK 0x08
+#endif
+
+#ifndef VK_DELETE
+    #define VK_DELETE 0x2E
+#endif
+
     E_KEYBOARD_BUTTON CSysWindow::GetKeyMap(IZ_UINT key)
     {
         if ('0' <= key && key <= '9') {
@@ -201,14 +225,6 @@ namespace sys
         }
         else {
             switch (key) {
-            case VK_UP:
-                return E_KEYBOARD_BUTTON_UP;
-            case VK_LEFT:
-                return E_KEYBOARD_BUTTON_LEFT;
-            case VK_DOWN:
-                return E_KEYBOARD_BUTTON_DOWN;
-            case VK_RIGHT:
-                return E_KEYBOARD_BUTTON_RIGHT;
             case VK_CONTROL:
                 return E_KEYBOARD_BUTTON_CONTROL;
             case VK_SHIFT:

@@ -7,8 +7,6 @@ namespace sys
 {
     CMutex::CMutex()
     {
-        m_Handle = IZ_NULL;
-        //m_OwnerThreadId = 0;
     }
 
     CMutex::~CMutex()
@@ -28,9 +26,7 @@ namespace sys
     */
     void CMutex::Close()
     {
-        if (m_Handle != IZ_NULL) {
-            ::pthread_mutex_destroy(&m_Handle);
-        }
+        ::pthread_mutex_destroy(&m_Handle);
     }
 
     /**

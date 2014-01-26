@@ -6,7 +6,6 @@ namespace sys
 {
     CSemaphore::CSemaphore()
     {
-        m_Handle = IZ_NULL;
     }
 
     CSemaphore::~CSemaphore()
@@ -30,10 +29,7 @@ namespace sys
     // 終了.
     void CSemaphore::Close()
     {
-        if (m_Handle != IZ_NULL) {
-            ::sem_destroy(&m_Handle);
-            m_Handle = IZ_NULL;
-        }
+        ::sem_destroy(&m_Handle);
     }
 
     // 待機.
@@ -43,8 +39,6 @@ namespace sys
         // 待つときにカウントを減らす。
         // カウントが０になったときに非シグナル状態になる。
         // つまり、カウントが０より大きければ待たない。
-
-        IZ_ASSERT(m_Handle != IZ_NULL);
 
         ::sem_wait(&m_Handle);
 
@@ -69,8 +63,6 @@ namespace sys
     void CSemaphore::Release()
     {
         // もし、セマフォが非シグナル状態ならセマフォをシグナル状態にする
-
-        IZ_ASSERT(m_Handle != IZ_NULL);
 
         ::sem_post(&m_Handle);
     }
