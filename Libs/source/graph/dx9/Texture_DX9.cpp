@@ -363,7 +363,7 @@ namespace graph
     * ロック
     */
     IZ_UINT CTextureDX9::Lock(
-        UINT level,
+        IZ_UINT level,
         void** data,
         IZ_BOOL isReadOnly,
         IZ_BOOL isDiscard/*= IZ_FALSE*/)

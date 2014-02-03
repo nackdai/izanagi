@@ -212,7 +212,7 @@ namespace graph
     * ロック
     */
     IZ_UINT CTextureGLES2::Lock(
-        UINT level,
+        IZ_UINT level,
         void** data,
         IZ_BOOL isReadOnly,
         IZ_BOOL isDiscard/*= IZ_FALSE*/)

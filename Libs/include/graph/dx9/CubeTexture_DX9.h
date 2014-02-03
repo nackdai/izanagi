@@ -62,7 +62,7 @@ namespace graph
         // ロック
         virtual IZ_UINT Lock(
             E_GRAPH_CUBE_TEX_FACE face,
-            UINT level,
+            IZ_UINT level,
             void** data,
             IZ_BOOL isReadOnly,
             IZ_BOOL isDiscard = IZ_FALSE);

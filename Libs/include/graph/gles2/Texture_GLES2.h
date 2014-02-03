@@ -59,7 +59,7 @@ namespace graph
     public:
         // ロック
         virtual IZ_UINT Lock(
-            UINT level,
+            IZ_UINT level,
             void** data,
             IZ_BOOL isReadOnly,
             IZ_BOOL isDiscard = IZ_FALSE);
