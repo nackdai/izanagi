@@ -26,7 +26,7 @@ static const char* PS_Programs[] = {
     IZ_NULL,
 };
 
-C_ASSERT(COUNTOF(PS_Programs) == izanagi::graph::E_GRAPH_2D_RENDER_OP_NUM);
+IZ_C_ASSERT(COUNTOF(PS_Programs) == izanagi::graph::E_GRAPH_2D_RENDER_OP_NUM);
 
 namespace izanagi
 {

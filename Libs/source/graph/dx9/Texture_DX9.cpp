@@ -414,7 +414,7 @@ namespace graph
                         flag);
         IZ_ASSERT(SUCCEEDED(hr));
 
-        UINT ret = 0;
+        IZ_UINT ret = 0;
 
         if (SUCCEEDED(hr)) {
             *data = rect.pBits;

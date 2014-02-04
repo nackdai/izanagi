@@ -86,10 +86,10 @@ namespace graph
 
         // メモリ確保
         buf = (IZ_UINT8*)ALLOC_ZERO(allocator, size);
+        IZ_UINT8* top = buf;
+
         result = (buf != IZ_NULL);
         VGOTO(result, __EXIT__);
-
-        IZ_UINT8* top = buf;
 
         // インスタンス作成
         instance = new (buf)CTextureGLES2;

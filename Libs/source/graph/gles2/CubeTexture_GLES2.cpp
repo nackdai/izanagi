@@ -1,7 +1,7 @@
 #include "graph/GraphUtil.h"
+#include "graph/gles2/GraphicsDevice_GLES2.h"
 #include "graph/gles2/CubeTexture_GLES2.h"
 #include "graph/ParamValueConverter.h"
-#include "graph/gles2/GraphicsDevice_GLES2.h"
 
 namespace izanagi
 {

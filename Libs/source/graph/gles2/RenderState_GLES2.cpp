@@ -214,9 +214,6 @@ namespace graph
 
     void CRenderState::SetScissorRect(CGraphicsDevice* device, const SIntRect& rc)
     {
-        // 念のためこれくらいはチェックするか
-        IZ_C_ASSERT(sizeof(RECT) == sizeof(CIntRect));
-
         if (rcScissor != rc) {
             CALL_GLES2_API(
                 ::glScissor(

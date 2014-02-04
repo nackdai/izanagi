@@ -24,7 +24,7 @@ namespace graph
 
     protected:
         inline CFrameBufferObject();
-        virtual inline ~CFrameBufferObject();
+        virtual ~CFrameBufferObject();
 
         NO_COPIABLE(CFrameBufferObject);
 

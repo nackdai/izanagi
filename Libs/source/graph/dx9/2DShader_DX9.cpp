@@ -25,7 +25,7 @@ static const IZ_BYTE* PS_Programs[] = {
     IZ_NULL,
 };
 
-C_ASSERT(COUNTOF(PS_Programs) == izanagi::graph::E_GRAPH_2D_RENDER_OP_NUM);
+IZ_C_ASSERT(COUNTOF(PS_Programs) == izanagi::graph::E_GRAPH_2D_RENDER_OP_NUM);
 
 namespace izanagi
 {
@@ -111,7 +111,7 @@ namespace graph
         static IZ_PCSTR ParamName[] = {
             "g_vInvScreen",
         };
-        C_ASSERT(COUNTOF(ParamName) == VTX_PARAM_NUM);
+        IZ_C_ASSERT(COUNTOF(ParamName) == VTX_PARAM_NUM);
 
         for (IZ_UINT i = 0; i < VTX_PARAM_NUM; ++i) {
             m_hVtxParam[i].vsParam = ((CVertexShaderDX9*)m_pVS)->GetHandleByName(ParamName[i]);

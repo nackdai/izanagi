@@ -1,9 +1,7 @@
 #if !defined(__IZANAGI_OGL_DEFS_H__)
 #define __IZANAGI_OGL_DEFS_H__
 
-extern "C" {
-    #include <GL/glew.h>
-}
+#include <GL/glew.h>
 
 namespace izanagi {
     typedef GLuint TEX_HANDLE;

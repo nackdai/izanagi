@@ -48,11 +48,11 @@ namespace graph
                 ::glGetShaderiv(m_Shader, GL_INFO_LOG_LENGTH, &infoLen);
 
                 if (infoLen > 1) {
-                    char* log = (char*)ALLOC_ZERO(m_Allocator, infoLen);
+                    char* log = (char*)ALLOC_ZERO(_SHADER_BASE::m_Allocator, infoLen);
                     ::glGetShaderInfoLog(m_Shader, infoLen, NULL, log);
                     IZ_PRINTF("Shader Compile Log **** \n");
                     IZ_PRINTF("%s", log);
-                    FREE(m_Allocator, log);
+                    FREE(_SHADER_BASE::m_Allocator, log);
                 }
             }
 #endif  // #ifdef __IZ_DEBUG__

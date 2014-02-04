@@ -70,7 +70,7 @@ namespace graph
                 4,  // E_GRAPH_PIXEL_FMT_RGBX8,
                 0,  // E_GRAPH_PIXEL_FMT_D24S8,
             };
-            C_ASSERT(COUNTOF(bpp) == E_GRAPH_PIXEL_FMT_NUM);
+            IZ_C_ASSERT(COUNTOF(bpp) == E_GRAPH_PIXEL_FMT_NUM);
 
             IZ_UINT ret = bpp[fmt];
             IZ_ASSERT(ret > 0);

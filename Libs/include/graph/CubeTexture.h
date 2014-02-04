@@ -27,7 +27,7 @@ namespace graph
         PURE_VIRTUAL(
             IZ_UINT Lock(
                 E_GRAPH_CUBE_TEX_FACE nFace,
-                UINT level,
+                IZ_UINT level,
                 void** data,
                 IZ_BOOL isReadOnly,
                 IZ_BOOL isDiscard = IZ_FALSE));
