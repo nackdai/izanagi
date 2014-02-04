@@ -26,8 +26,8 @@ build_all_configurations: Debug_GLUT
 
 # Builds the Debug_GLUT configuration...
 .PHONY: Debug_GLUT
-Debug_GLUT: create_folders gccDebug_GLUT/source/graph/BufferBase.o gccDebug_GLUT/source/graph/GraphicsDevice.o gccDebug_GLUT/source/graph/RenderState.o gccDebug_GLUT/source/graph/ShaderProgram.o gccDebug_GLUT/source/graph/2d/2DShader.o gccDebug_GLUT/source/graph/2d/2DRenderer.o gccDebug_GLUT/source/graph/dx9/D3D9ParamValueConverter.o gccDebug_GLUT/source/graph/dx9/GraphicsDeviceResourceFuncs.o gccDebug_GLUT/source/graph/gles2/2DShader_GLES2.o gccDebug_GLUT/source/graph/gles2/CubeTexture_GLES2.o gccDebug_GLUT/source/graph/gles2/FrameBufferObject.o gccDebug_GLUT/source/graph/gles2/GraphicsDeviceResourceFuncs.o gccDebug_GLUT/source/graph/gles2/GraphicsDevice_GLES2.o gccDebug_GLUT/source/graph/gles2/GraphPerf_GLES2.o gccDebug_GLUT/source/graph/gles2/IndexBuffer_GLES2.o gccDebug_GLUT/source/graph/gles2/ParamValueConverter_GLES2.o gccDebug_GLUT/source/graph/gles2/PixelShader_GLES2.o gccDebug_GLUT/source/graph/gles2/RenderState_GLES2.o gccDebug_GLUT/source/graph/gles2/RenderTarget_GLES2.o gccDebug_GLUT/source/graph/gles2/ShaderProgram_GLES2.o gccDebug_GLUT/source/graph/gles2/Texture_GLES2.o gccDebug_GLUT/source/graph/gles2/VertexBuffer_GLES2.o gccDebug_GLUT/source/graph/gles2/VertexDeclaration_GLES2.o gccDebug_GLUT/source/graph/gles2/VertexShader_GLES2.o gccDebug_GLUT/source/graph/ogl/GraphicsDevice_OGL.o 
-	ar rcs ../lib/gccDebug_GLUT/libGraph.a gccDebug_GLUT/source/graph/BufferBase.o gccDebug_GLUT/source/graph/GraphicsDevice.o gccDebug_GLUT/source/graph/RenderState.o gccDebug_GLUT/source/graph/ShaderProgram.o gccDebug_GLUT/source/graph/2d/2DShader.o gccDebug_GLUT/source/graph/2d/2DRenderer.o gccDebug_GLUT/source/graph/dx9/D3D9ParamValueConverter.o gccDebug_GLUT/source/graph/dx9/GraphicsDeviceResourceFuncs.o gccDebug_GLUT/source/graph/gles2/2DShader_GLES2.o gccDebug_GLUT/source/graph/gles2/CubeTexture_GLES2.o gccDebug_GLUT/source/graph/gles2/FrameBufferObject.o gccDebug_GLUT/source/graph/gles2/GraphicsDeviceResourceFuncs.o gccDebug_GLUT/source/graph/gles2/GraphicsDevice_GLES2.o gccDebug_GLUT/source/graph/gles2/GraphPerf_GLES2.o gccDebug_GLUT/source/graph/gles2/IndexBuffer_GLES2.o gccDebug_GLUT/source/graph/gles2/ParamValueConverter_GLES2.o gccDebug_GLUT/source/graph/gles2/PixelShader_GLES2.o gccDebug_GLUT/source/graph/gles2/RenderState_GLES2.o gccDebug_GLUT/source/graph/gles2/RenderTarget_GLES2.o gccDebug_GLUT/source/graph/gles2/ShaderProgram_GLES2.o gccDebug_GLUT/source/graph/gles2/Texture_GLES2.o gccDebug_GLUT/source/graph/gles2/VertexBuffer_GLES2.o gccDebug_GLUT/source/graph/gles2/VertexDeclaration_GLES2.o gccDebug_GLUT/source/graph/gles2/VertexShader_GLES2.o gccDebug_GLUT/source/graph/ogl/GraphicsDevice_OGL.o  $(Debug_GLUT_Implicitly_Linked_Objects)
+Debug_GLUT: create_folders gccDebug_GLUT/source/graph/BufferBase.o gccDebug_GLUT/source/graph/GraphicsDevice.o gccDebug_GLUT/source/graph/RenderState.o gccDebug_GLUT/source/graph/ShaderProgram.o gccDebug_GLUT/source/graph/2d/2DShader.o gccDebug_GLUT/source/graph/2d/2DRenderer.o gccDebug_GLUT/source/graph/gles2/2DShader_GLES2.o gccDebug_GLUT/source/graph/gles2/CubeTexture_GLES2.o gccDebug_GLUT/source/graph/gles2/FrameBufferObject.o gccDebug_GLUT/source/graph/gles2/GraphicsDeviceResourceFuncs.o gccDebug_GLUT/source/graph/gles2/GraphicsDevice_GLES2.o gccDebug_GLUT/source/graph/gles2/GraphPerf_GLES2.o gccDebug_GLUT/source/graph/gles2/IndexBuffer_GLES2.o gccDebug_GLUT/source/graph/gles2/ParamValueConverter_GLES2.o gccDebug_GLUT/source/graph/gles2/PixelShader_GLES2.o gccDebug_GLUT/source/graph/gles2/RenderState_GLES2.o gccDebug_GLUT/source/graph/gles2/RenderTarget_GLES2.o gccDebug_GLUT/source/graph/gles2/ShaderProgram_GLES2.o gccDebug_GLUT/source/graph/gles2/Texture_GLES2.o gccDebug_GLUT/source/graph/gles2/VertexBuffer_GLES2.o gccDebug_GLUT/source/graph/gles2/VertexDeclaration_GLES2.o gccDebug_GLUT/source/graph/gles2/VertexShader_GLES2.o gccDebug_GLUT/source/graph/ogl/GraphicsDevice_OGL.o 
+	ar rcs ../lib/gccDebug_GLUT/libGraph.a gccDebug_GLUT/source/graph/BufferBase.o gccDebug_GLUT/source/graph/GraphicsDevice.o gccDebug_GLUT/source/graph/RenderState.o gccDebug_GLUT/source/graph/ShaderProgram.o gccDebug_GLUT/source/graph/2d/2DShader.o gccDebug_GLUT/source/graph/2d/2DRenderer.o gccDebug_GLUT/source/graph/gles2/2DShader_GLES2.o gccDebug_GLUT/source/graph/gles2/CubeTexture_GLES2.o gccDebug_GLUT/source/graph/gles2/FrameBufferObject.o gccDebug_GLUT/source/graph/gles2/GraphicsDeviceResourceFuncs.o gccDebug_GLUT/source/graph/gles2/GraphicsDevice_GLES2.o gccDebug_GLUT/source/graph/gles2/GraphPerf_GLES2.o gccDebug_GLUT/source/graph/gles2/IndexBuffer_GLES2.o gccDebug_GLUT/source/graph/gles2/ParamValueConverter_GLES2.o gccDebug_GLUT/source/graph/gles2/PixelShader_GLES2.o gccDebug_GLUT/source/graph/gles2/RenderState_GLES2.o gccDebug_GLUT/source/graph/gles2/RenderTarget_GLES2.o gccDebug_GLUT/source/graph/gles2/ShaderProgram_GLES2.o gccDebug_GLUT/source/graph/gles2/Texture_GLES2.o gccDebug_GLUT/source/graph/gles2/VertexBuffer_GLES2.o gccDebug_GLUT/source/graph/gles2/VertexDeclaration_GLES2.o gccDebug_GLUT/source/graph/gles2/VertexShader_GLES2.o gccDebug_GLUT/source/graph/ogl/GraphicsDevice_OGL.o  $(Debug_GLUT_Implicitly_Linked_Objects)
 
 # Compiles file ../../source/graph/BufferBase.cpp for the Debug_GLUT configuration...
 -include gccDebug_GLUT/source/graph/BufferBase.d
@@ -64,18 +64,6 @@ gccDebug_GLUT/source/graph/2d/2DShader.o: ../../source/graph/2d/2DShader.cpp
 gccDebug_GLUT/source/graph/2d/2DRenderer.o: ../../source/graph/2d/2DRenderer.cpp
 	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -c ../../source/graph/2d/2DRenderer.cpp $(Debug_GLUT_Include_Path) -o gccDebug_GLUT/source/graph/2d/2DRenderer.o
 	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -MM ../../source/graph/2d/2DRenderer.cpp $(Debug_GLUT_Include_Path) > gccDebug_GLUT/source/graph/2d/2DRenderer.d
-
-# Compiles file ../../source/graph/dx9/D3D9ParamValueConverter.cpp for the Debug_GLUT configuration...
--include gccDebug_GLUT/source/graph/dx9/D3D9ParamValueConverter.d
-gccDebug_GLUT/source/graph/dx9/D3D9ParamValueConverter.o: ../../source/graph/dx9/D3D9ParamValueConverter.cpp
-	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -c ../../source/graph/dx9/D3D9ParamValueConverter.cpp $(Debug_GLUT_Include_Path) -o gccDebug_GLUT/source/graph/dx9/D3D9ParamValueConverter.o
-	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -MM ../../source/graph/dx9/D3D9ParamValueConverter.cpp $(Debug_GLUT_Include_Path) > gccDebug_GLUT/source/graph/dx9/D3D9ParamValueConverter.d
-
-# Compiles file ../../source/graph/dx9/GraphicsDeviceResourceFuncs.cpp for the Debug_GLUT configuration...
--include gccDebug_GLUT/source/graph/dx9/GraphicsDeviceResourceFuncs.d
-gccDebug_GLUT/source/graph/dx9/GraphicsDeviceResourceFuncs.o: ../../source/graph/dx9/GraphicsDeviceResourceFuncs.cpp
-	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -c ../../source/graph/dx9/GraphicsDeviceResourceFuncs.cpp $(Debug_GLUT_Include_Path) -o gccDebug_GLUT/source/graph/dx9/GraphicsDeviceResourceFuncs.o
-	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -MM ../../source/graph/dx9/GraphicsDeviceResourceFuncs.cpp $(Debug_GLUT_Include_Path) > gccDebug_GLUT/source/graph/dx9/GraphicsDeviceResourceFuncs.d
 
 # Compiles file ../../source/graph/gles2/2DShader_GLES2.cpp for the Debug_GLUT configuration...
 -include gccDebug_GLUT/source/graph/gles2/2DShader_GLES2.d
@@ -184,7 +172,6 @@ gccDebug_GLUT/source/graph/ogl/GraphicsDevice_OGL.o: ../../source/graph/ogl/Grap
 create_folders:
 	mkdir -p gccDebug_GLUT/source/graph
 	mkdir -p gccDebug_GLUT/source/graph/2d
-	mkdir -p gccDebug_GLUT/source/graph/dx9
 	mkdir -p gccDebug_GLUT/source/graph/gles2
 	mkdir -p gccDebug_GLUT/source/graph/ogl
 	mkdir -p ../lib/gccDebug_GLUT
@@ -196,8 +183,6 @@ clean:
 	rm -f gccDebug_GLUT/source/graph/*.d
 	rm -f gccDebug_GLUT/source/graph/2d/*.o
 	rm -f gccDebug_GLUT/source/graph/2d/*.d
-	rm -f gccDebug_GLUT/source/graph/dx9/*.o
-	rm -f gccDebug_GLUT/source/graph/dx9/*.d
 	rm -f gccDebug_GLUT/source/graph/gles2/*.o
 	rm -f gccDebug_GLUT/source/graph/gles2/*.d
 	rm -f gccDebug_GLUT/source/graph/ogl/*.o
