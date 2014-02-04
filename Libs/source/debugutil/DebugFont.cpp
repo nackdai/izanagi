@@ -215,7 +215,7 @@ void CDebugFont::DBPrint(
 
     va_start(ap, str);
 
-    vsprintf_s(BUF, sizeof(BUF), str, ap);
+    IZ_VSPRINTF(BUF, sizeof(BUF), str, ap);
 
     va_end(ap);
 
@@ -236,7 +236,7 @@ void CDebugFont::DBPrint(
 
     va_start(ap, str);
 
-    vsprintf_s(BUF, sizeof(BUF), str, ap);
+    IZ_VSPRINTF(BUF, sizeof(BUF), str, ap);
 
     va_end(ap);
 
@@ -268,7 +268,7 @@ void CDebugFont::DBPrint(
 
     va_start(ap, str);
 
-    vsprintf_s(BUF, sizeof(BUF), str, ap);
+    IZ_VSPRINTF(BUF, sizeof(BUF), str, ap);
 
     va_end(ap);
 
@@ -302,7 +302,7 @@ void CDebugFont::DBPrint(
 
     va_start(ap, str);
 
-    vsprintf_s(BUF, sizeof(BUF), str, ap);
+    IZ_VSPRINTF(BUF, sizeof(BUF), str, ap);
 
     va_end(ap);
 

@@ -251,8 +251,10 @@ IZ_BOOL CDebugMesh::CopyDataToBuffer(IZ_UINT flag)
 
     IZ_BOOL ret = IZ_TRUE;
 
-    // インデックス
+    IZ_UINT8* pVtxData = IZ_NULL;
     IZ_UINT32* pIdxData = IZ_NULL;
+
+    // インデックス
     VGOTO(ret = LockIB((void**)&pIdxData), __EXIT__);
     {
         for (IZ_UINT i = 0; i < m_nPrimCnt; ++i) {
@@ -273,7 +275,6 @@ IZ_BOOL CDebugMesh::CopyDataToBuffer(IZ_UINT flag)
     VGOTO(ret = UnlockIB(), __EXIT__);
 
     // 頂点
-    IZ_UINT8* pVtxData = IZ_NULL;
     VGOTO(ret = LockVB((void**)&pVtxData), __EXIT__);
     {
         IZ_UINT nVtxNum = GetVtxNum();
