@@ -1,7 +1,7 @@
 #if !defined(__MODEL_LIB_ANM_EXPORTER_H__)
 #define __MODEL_LIB_ANM_EXPORTER_H__
 
-#include "izIo.h"
+#include "izToolKit.h"
 #include "Importer.h"
 
 class CAnmExporter {

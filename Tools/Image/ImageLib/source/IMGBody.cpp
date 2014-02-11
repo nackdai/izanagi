@@ -1,5 +1,4 @@
 #include "IMGBody.h"
-#include "izIo.h"
 #include "izToolKit.h"
 #include "ImageLibUtility.h"
 

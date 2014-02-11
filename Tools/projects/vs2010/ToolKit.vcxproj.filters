@@ -49,6 +49,9 @@
     <Filter Include="system\source">
       <UniqueIdentifier>{6a6ff835-7016-4f88-b8b5-1bc56d4f1b58}</UniqueIdentifier>
     </Filter>
+    <Filter Include="io\source">
+      <UniqueIdentifier>{c2225d38-4934-4946-9f85-fbeb4dbd41c0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\ToolKit\include\ToolKitGraph.h">
@@ -134,6 +137,9 @@
     </ClCompile>
     <ClCompile Include="..\..\ToolKit\source\graph\ShaderCosntTableLite.cpp">
       <Filter>graph\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ToolKit\source\io\FileStream.cpp">
+      <Filter>io\source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

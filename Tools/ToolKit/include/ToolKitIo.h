@@ -4,7 +4,7 @@
 // NOTE
 // izanagiのインクルードパスを通すこと
 
-#include "izIo.h"
+#include "izSystem.h"
 
 #include "./io/IoUtil.h"
 

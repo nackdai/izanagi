@@ -1,7 +1,7 @@
 #if !defined(__IZANAGI_TOOL_KIT_IO_IO_UTIL_H__)
 #define __IZANAGI_TOOL_KIT_IO_IO_UTIL_H__
 
-#include "izIo.h"
+#include "izSystem.h"
 
 namespace izanagi {
 namespace tool {

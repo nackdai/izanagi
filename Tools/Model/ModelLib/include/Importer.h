@@ -2,7 +2,7 @@
 #define __MODEL_LIB_IMPORTER_H__
 
 #include "GeometryCommon.h"
-#include "izIo.h"
+#include "izToolKit.h"
 #include "izSceneGraph.h"
 
 #include <vector>

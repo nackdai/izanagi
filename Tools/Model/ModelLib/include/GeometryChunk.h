@@ -1,7 +1,7 @@
 #if !defined(__MODEL_LIB_GEOMETRY_CHUNK_H__)
 #define __MODEL_LIB_GEOMETRY_CHUNK_H__
 
-#include "izIo.h"
+#include "izToolKit.h"
 #include "izSceneGraph.h"
 #include "Importer.h"
 #include "GeometryCommon.h"

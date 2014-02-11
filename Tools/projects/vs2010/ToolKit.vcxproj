@@ -93,6 +93,7 @@
     <ClCompile Include="..\..\ToolKit\source\graph\GraphicsDeviceLite.cpp" />
     <ClCompile Include="..\..\ToolKit\source\graph\ShaderCosntTableLite.cpp" />
     <ClCompile Include="..\..\ToolKit\source\graph\TextureLite.cpp" />
+    <ClCompile Include="..\..\ToolKit\source\io\FileStream.cpp" />
     <ClCompile Include="..\..\ToolKit\source\std\ErrorUtil.cpp" />
     <ClCompile Include="..\..\ToolKit\source\std\SimpleMemoryAllocator.cpp" />
     <ClCompile Include="..\..\ToolKit\source\util\PreprocHelper.cpp" />
