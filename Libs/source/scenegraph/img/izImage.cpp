@@ -1,5 +1,5 @@
 #include "scenegraph/img/izImage.h"
-#include "izIo.h"
+#include "izSystem.h"
 
 using namespace izanagi;
 

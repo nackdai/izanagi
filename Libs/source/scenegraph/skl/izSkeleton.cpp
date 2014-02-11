@@ -1,5 +1,5 @@
 #include "scenegraph/skl/izSkeleton.h"
-#include "izIo.h"
+#include "izSystem.h"
 
 using namespace izanagi;
 

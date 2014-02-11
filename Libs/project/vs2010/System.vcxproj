@@ -152,6 +152,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\system\InputDeviceDefs.h" />
+    <ClInclude Include="..\..\include\system\io\BufferInputStream.h" />
+    <ClInclude Include="..\..\include\system\io\FileInputStream.h" />
+    <ClInclude Include="..\..\include\system\io\FileOutputStream.h" />
+    <ClInclude Include="..\..\include\system\io\FileStream.h" />
+    <ClInclude Include="..\..\include\system\io\HeapInputStream.h" />
+    <ClInclude Include="..\..\include\system\io\InputStream.h" />
+    <ClInclude Include="..\..\include\system\io\IODefs.h" />
+    <ClInclude Include="..\..\include\system\io\MemoryInputStream.h" />
+    <ClInclude Include="..\..\include\system\io\MemoryOutputStream.h" />
+    <ClInclude Include="..\..\include\system\io\OutputStream.h" />
     <ClInclude Include="..\..\include\system\izDInput.h" />
     <ClInclude Include="..\..\include\system\Pad.h" />
     <ClInclude Include="..\..\include\system\Pad_DInput.h" />
@@ -172,6 +182,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\system\linux\device\Pad_linux.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\linux\FileStream_linux.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">true</ExcludedFromBuild>
@@ -229,6 +246,8 @@
     </ClCompile>
     <ClCompile Include="..\..\source\system\Pad.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\source\system\SysWindow_glut.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</ExcludedFromBuild>
@@ -238,13 +257,20 @@
     </ClCompile>
     <ClCompile Include="..\..\source\system\win32\device\DeviceUtil.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\source\system\win32\device\Pad_DInput.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\source\system\win32\device\Pad_XInput.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\..\source\system\win32\FileStream_win32.cpp" />
     <ClCompile Include="..\..\source\system\win32\SysEnvironment_win32 .cpp" />
     <ClCompile Include="..\..\source\system\win32\SysTimer_win32.cpp" />
     <ClCompile Include="..\..\source\system\win32\SysUtil_win32.cpp" />

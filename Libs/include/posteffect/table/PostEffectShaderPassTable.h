@@ -2,7 +2,7 @@
 #define __IZANAGI_POSTEFFECT_PASS_TABLE_H__
 
 #include "izGraph.h"
-#include "izIo.h"
+#include "izSystem.h"
 #include "posteffect/PostEffectShaderPass.h"
 #include "posteffect/PESFormat.h"
 #include "posteffect/util/PostEffectUtilityParam.h"

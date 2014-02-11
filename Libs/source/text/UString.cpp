@@ -1,5 +1,5 @@
 #include "text/UString.h"
-#include "izIo.h"
+#include "izSystem.h"
 
 namespace izanagi
 {

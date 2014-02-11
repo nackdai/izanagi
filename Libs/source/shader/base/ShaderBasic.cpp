@@ -1,6 +1,6 @@
 #include "shader/base/ShaderBasic.h"
 #include "shader/base/util/ShaderUtil.h"
-#include "izIo.h"
+#include "izSystem.h"
 
 namespace izanagi
 {

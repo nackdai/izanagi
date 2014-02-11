@@ -2,7 +2,7 @@
 #define __IZANAGI_POSTEFFECT_VS_MANAGER_H__
 
 #include "izStd.h"
-#include "izIO.h"
+#include "izSystem.h"
 #include "../PostEffectDefs.h"
 #include "PostEffectVS.h"
 

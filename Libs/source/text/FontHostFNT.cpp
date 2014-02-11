@@ -1,5 +1,5 @@
 #include "text/FontHostFNT.h"
-#include "izIo.h"
+#include "izSystem.h"
 #include "izGraph.h"
 #include "izStd.h"
 

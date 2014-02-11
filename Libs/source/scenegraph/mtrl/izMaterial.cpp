@@ -1,5 +1,5 @@
 #include "scenegraph/mtrl/izMaterial.h"
-#include "izIo.h"
+#include "izSystem.h"
 #include "izMath.h"
 #include "izGraph.h"
 

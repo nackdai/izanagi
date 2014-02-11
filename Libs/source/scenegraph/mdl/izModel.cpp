@@ -1,6 +1,6 @@
 #include "scenegraph/mdl/izModel.h"
 #include "scenegraph/mdl/MDLFormat.h"
-#include "izIo.h"
+#include "izSystem.h"
 
 #include "scenegraph/msh/izMesh.h"
 #include "scenegraph/skl/izSkeleton.h"

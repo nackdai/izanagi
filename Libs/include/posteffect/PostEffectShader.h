@@ -3,7 +3,7 @@
 
 #include "izStd.h"
 #include "izGraph.h"
-#include "izIo.h"
+#include "izSystem.h"
 #include "table/PostEffectShaderStringTable.h"
 #include "table/PostEffectShaderConstTable.h"
 #include "table/PostEffectShaderTextureTable.h"

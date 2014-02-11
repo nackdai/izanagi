@@ -2,7 +2,7 @@
 #include FT_FREETYPE_H
 
 #include "text/FontHostFT.h"
-#include "izIo.h"
+#include "izSystem.h"
 #include "izGraph.h"
 #include "izStd.h"
 

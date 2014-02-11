@@ -33,6 +33,9 @@
     <Filter Include="source\linux\thread">
       <UniqueIdentifier>{c0554654-3340-4887-be3d-396d88093299}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\io">
+      <UniqueIdentifier>{04d3daf1-a2b3-4dab-b338-5190d58445a0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\system\SysTimer.h">
@@ -86,6 +89,36 @@
     </ClInclude>
     <ClInclude Include="..\..\include\system\SysKeyDefs.h">
       <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\io\HeapInputStream.h">
+      <Filter>include\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\io\InputStream.h">
+      <Filter>include\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\io\IODefs.h">
+      <Filter>include\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\io\MemoryInputStream.h">
+      <Filter>include\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\io\MemoryOutputStream.h">
+      <Filter>include\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\io\OutputStream.h">
+      <Filter>include\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\io\BufferInputStream.h">
+      <Filter>include\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\io\FileInputStream.h">
+      <Filter>include\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\io\FileOutputStream.h">
+      <Filter>include\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\io\FileStream.h">
+      <Filter>include\io</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -151,6 +184,12 @@
     </ClCompile>
     <ClCompile Include="..\..\source\system\SysWindow_glut.cpp">
       <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\win32\FileStream_win32.cpp">
+      <Filter>source\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\linux\FileStream_linux.cpp">
+      <Filter>source\linux</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

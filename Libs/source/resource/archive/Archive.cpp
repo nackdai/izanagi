@@ -1,5 +1,5 @@
 #include "resource/archive/Archive.h"
-#include "izIo.h"
+#include "izSystem.h"
 
 namespace izanagi
 {

@@ -1,7 +1,7 @@
 #include "scenegraph/msh/MshPrimitiveSet.h"
 #include "scenegraph/msh/MshRenderHandler.h"
 #include "izGraph.h"
-#include "izIo.h"
+#include "izSystem.h"
 
 #include "scenegraph/skl/SkeletonInstance.h"
 
