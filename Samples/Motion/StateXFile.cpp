@@ -1,6 +1,6 @@
 #include "StateXFile.h"
 #include "izGraph.h"
-#include "izIo.h"
+#include "izSystem.h"
 #include "StateManager.h"
 
 CStateXFile::CStateXFile(izanagi::sample::CSampleApp* app)

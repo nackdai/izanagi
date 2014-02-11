@@ -1,6 +1,6 @@
 #include "StateBase.h"
 #include "izGraph.h"
-#include "izIo.h"
+#include "izSystem.h"
 
 CStateBase::CStateBase()
 {

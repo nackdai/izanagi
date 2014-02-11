@@ -6,7 +6,6 @@
 #include <izGraph.h>
 #include <izSystem.h>
 #include <izDebugUtil.h>
-#include <izIo.h>
 
 #include "SampleCamera.h"
 

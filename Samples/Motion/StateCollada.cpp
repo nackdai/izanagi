@@ -1,6 +1,6 @@
 #include "StateCollada.h"
 #include "izGraph.h"
-#include "izIo.h"
+#include "izSystem.h"
 #include "StateManager.h"
 
 CStateCollada::CStateCollada(izanagi::sample::CSampleApp* app)

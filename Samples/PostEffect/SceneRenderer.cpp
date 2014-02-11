@@ -1,5 +1,5 @@
 #include "SceneRenderer.h"
-#include "izIO.h"
+#include "izSystem.h"
 
 CSceneRenderer CSceneRenderer::sInstance;
 
