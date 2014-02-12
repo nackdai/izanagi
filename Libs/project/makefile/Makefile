@@ -1,16 +1,11 @@
 # Builds all the projects in the solution...
 .PHONY: all_projects
-all_projects: Graph Io Math Std System DebugUtil Text PostEffect Shader Resource Animation ThreadModel SceneGraph Terra 
+all_projects: Graph Math Std System DebugUtil Text PostEffect Shader Resource Animation ThreadModel SceneGraph Terra 
 
 # Builds project 'Graph'...
 .PHONY: Graph
 Graph: 
 	make --directory="." --file=Graph.makefile
-
-# Builds project 'Io'...
-.PHONY: Io
-Io: 
-	make --directory="." --file=Io.makefile
 
 # Builds project 'Math'...
 .PHONY: Math
@@ -76,7 +71,6 @@ Terra:
 .PHONY: clean
 clean:
 	make --directory="." --file=Graph.makefile clean
-	make --directory="." --file=Io.makefile clean
 	make --directory="." --file=Math.makefile clean
 	make --directory="." --file=Std.makefile clean
 	make --directory="." --file=System.makefile clean
