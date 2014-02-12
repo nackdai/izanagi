@@ -6,8 +6,10 @@
 #include "MeshSetInstance.h"
 
 namespace izanagi {
+    namespace graph {
+        class CGraphicsDevice;
+    }
     class IMemoryAllocator;
-    class graph::CGraphicsDevice;
     class CMesh;
     class CMeshSet;
     class IMshRenderHandler;

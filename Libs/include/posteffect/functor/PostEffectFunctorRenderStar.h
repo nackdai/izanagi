@@ -107,8 +107,8 @@ namespace izanagi {
         FILL_ZERO(m_pWorkTex, sizeof(m_pWorkTex));
         m_nWorkTexIdx = 0;
 
-        m_hStarWeight = IZ_NULL;
-        m_hStarMergeWeight = IZ_NULL;
+        m_hStarWeight = IZ_POSTEFFECT_HANDLE_NONE;
+        m_hStarMergeWeight = IZ_POSTEFFECT_HANDLE_NONE;
     }
 
     // ワークテクスチャ取得

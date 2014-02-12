@@ -282,10 +282,12 @@ void CAnimation::ApplyAnimationByIdx(
 
     const S_ANM_NODE* pAnmNode = GetAnmNodeByJointIdx(jointIdx);
     if (pAnmNode != IZ_NULL) {
+        CSklPoseUpdater sklPoseUpdater(skl);
+
         ApplyAnimation(
             time,
             pAnmNode,
-            CSklPoseUpdater(skl));
+            *(CPoseUpdater*)&sklPoseUpdater);
     }
 }
 
@@ -298,10 +300,12 @@ IZ_UINT CAnimation::GetPoseByIdx(
 
     const S_ANM_NODE* pAnmNode = GetAnmNodeByJointIdx(idx);
     if (pAnmNode != IZ_NULL) {
+        CPoseUpdater poseUpdater(&pose);
+
         updateFlag = ApplyAnimation(
                         time,
                         pAnmNode,
-                        CPoseUpdater(&pose));
+                        poseUpdater);
     }
 
     return updateFlag;

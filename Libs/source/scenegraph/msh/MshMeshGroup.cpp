@@ -104,6 +104,9 @@ namespace {
         const S_MSH_VERTICES& sVtxInfo,
         IInputStream* pIn)
     {
+        void* buf = IZ_NULL;
+        IZ_UINT nSize = 0;
+
         // Create VertexBuffer.
         graph::CVertexBuffer* pVB = pDevice->CreateVertexBuffer(
                                 sVtxInfo.sizeVtx,
@@ -112,11 +115,10 @@ namespace {
         IZ_BOOL ret = (pVB != IZ_NULL);
         VGOTO(ret, __EXIT__);
 
-        void* buf = IZ_NULL;
         ret = pVB->Lock(0, 0, &buf, IZ_FALSE);
         VGOTO(ret, __EXIT__);
 
-        IZ_UINT nSize = sVtxInfo.sizeVtx * sVtxInfo.numVtx;
+        nSize = sVtxInfo.sizeVtx * sVtxInfo.numVtx;
 
         ret = IZ_INPUT_READ(pIn, buf, 0, nSize);
 

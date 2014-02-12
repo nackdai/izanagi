@@ -18,6 +18,8 @@ CImage* CImage::CreateImage(
     IZ_BYTE* pBuf = IZ_NULL;
     CImage* pInstance = IZ_NULL;
 
+    size_t nSize = 0;
+
     // ヘッダ読み込み
     S_IMG_HEADER sHeader;
     IZ_BOOL result = IZ_INPUT_READ(pInputStream, &sHeader, 0, sizeof(sHeader));
@@ -28,7 +30,7 @@ CImage* CImage::CreateImage(
     VGOTO(result, __EXIT__);
 
     // 確保サイズ
-    size_t nSize = sizeof(CImage) + sizeof(graph::CTexture*) * sHeader.numTextures;
+    nSize = sizeof(CImage) + sizeof(graph::CTexture*) * sHeader.numTextures;
 
     // メモリ確保
     pBuf = (IZ_BYTE*)ALLOC_ZERO(pAllocator, nSize);

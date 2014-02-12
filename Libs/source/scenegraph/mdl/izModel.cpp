@@ -39,6 +39,8 @@ CModel* CModel::CreateModel(
 
     CMeshInstance* pMeshInstance = IZ_NULL;
     CSkeletonInstance* pSklInstance = IZ_NULL;
+
+    CModel* pMdl = IZ_NULL;
     
     pMeshInstance = CMeshInstance::CreateMeshInstance(pAllocator, pMesh);
     VGOTO(result = (pMeshInstance != IZ_NULL), __EXIT__);
@@ -46,11 +48,11 @@ CModel* CModel::CreateModel(
     pSklInstance = CSkeletonInstance::CreateSkeletonInstance(pAllocator, pSkl);
     VGOTO(result = (pSklInstance != IZ_NULL), __EXIT__);
 
-    CModel* pMdl = CModel::CreateModel(
-                    pAllocator,
-                    pMeshInstance,
-                    pSklInstance,
-                    pRenderHandler);
+    pMdl = CModel::CreateModel(
+        pAllocator,
+        pMeshInstance,
+        pSklInstance,
+        pRenderHandler);
     VGOTO(result = (pMdl != IZ_NULL), __EXIT__);
 
 __EXIT__:

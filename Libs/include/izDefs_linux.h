@@ -6,7 +6,7 @@
 #ifndef _UNICODE
     #define IZ_VSPRINTF     vsnprintf
     #define IZ_SPRINTF      snprintf
-    #define IZ_FPRINTF      fnprintf
+    #define IZ_FPRINTF      fprintf
 #endif  // #ifdef _UNICODE
 
 /////////////////////////////////////////////////////////////

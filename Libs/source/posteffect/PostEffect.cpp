@@ -26,10 +26,10 @@ CPostEffect* CPostEffect::CreatePostEffect(
     nSize += ComputeFunctorSize(pShader);
 
     IZ_UINT8* pBuffer = reinterpret_cast<IZ_UINT8*>(ALLOC_ZERO(pAllocator, nSize));
+    IZ_UINT8* pBufTop = pBuffer;
+
     IZ_BOOL result = (pBuffer != IZ_NULL);
     VGOTO(result, __EXIT__);
-
-    IZ_UINT8* pBufTop = pBuffer;
 
     pInstance = new(pBuffer) CPostEffect;
     {

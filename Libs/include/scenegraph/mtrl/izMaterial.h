@@ -5,12 +5,13 @@
 #include "MTRLFormat.h"
 
 namespace izanagi {
+    namespace graph {
+        class CGraphicsDevice;
+    }
     namespace shader {
         class IShader;
     }
-
     class IInputStream;
-    class graph::CGraphicsDevice;
 
     /**
     */

@@ -32,6 +32,9 @@ namespace {
         const S_MSH_PRIM_SET& sMeshSubset,
         IInputStream* pIn)
     {
+        void* buf = IZ_NULL;
+        IZ_UINT nSize = sMeshSubset.numIdx;
+
         // Create IndexBuffer.
         graph::CIndexBuffer* pIB = pDevice->CreateIndexBuffer(
                                 sMeshSubset.numIdx,
@@ -40,12 +43,9 @@ namespace {
         IZ_BOOL ret = (pIB != IZ_NULL);
         VGOTO(ret, __EXIT__);
 
-
-        void* buf = IZ_NULL;
         ret = pIB->Lock(0, 0, &buf, IZ_FALSE);
         VGOTO(ret, __EXIT__);
 
-        IZ_UINT nSize = sMeshSubset.numIdx;
         nSize *= (sMeshSubset.fmtIdx == graph::E_GRAPH_INDEX_BUFFER_FMT_INDEX32
                     ? sizeof(IZ_UINT32)
                     : sizeof(IZ_UINT16));

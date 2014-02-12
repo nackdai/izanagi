@@ -103,7 +103,7 @@ namespace izanagi {
         IZ_UINT GetTechniqueNum() const { return m_pShader->GetHeader().numTech; }
 
         // ID取得
-        IZ_PCSTR GetID() const { return m_pShader->GetHeader().pesID; }
+        IZ_PCSTR GetID() const { return (IZ_PCSTR)m_pShader->GetHeader().pesID; }
 
         // INPUT_SCENEテクスチャ取得
         graph::CTexture* GetInputSceneTex() { return m_pShader->GetTextureTable().GetTextureByTextureType(E_POSTEFFECT_TEXTURE_TYPE_INPUT_SCENE); }

@@ -4,8 +4,10 @@
 #include "MSHFormat.h"
 
 namespace izanagi {
-    class graph::CGraphicsDevice;
-    class graph::CVertexBuffer;
+    namespace graph {
+        class CGraphicsDevice;
+        class CVertexBuffer;
+    }
     class IInputStream;
     class CMeshGroup;
     class CSkeletonInstance;

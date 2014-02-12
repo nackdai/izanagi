@@ -70,13 +70,13 @@ IZ_BOOL CPostEffectFunctorRenderStar::Apply(
         {0.3f, 0.5f, 0.3f, 0.0f},   // 緑
     };
 
-    if (m_hStarWeight == IZ_NULL) {
+    if (m_hStarWeight == IZ_POSTEFFECT_HANDLE_NONE) {
         m_hStarWeight = pShader->GetParamHandleByName("g_vStarWeight");
-        IZ_ASSERT(m_hStarWeight != IZ_NULL);
+        IZ_ASSERT(m_hStarWeight != IZ_POSTEFFECT_HANDLE_NONE);
     }
-    if (m_hStarMergeWeight == IZ_NULL) {
+    if (m_hStarMergeWeight == IZ_POSTEFFECT_HANDLE_NONE) {
         m_hStarMergeWeight = pShader->GetParamHandleByName("g_fStarMergeWeight");
-        IZ_ASSERT(m_hStarMergeWeight != IZ_NULL);
+        IZ_ASSERT(m_hStarMergeWeight != IZ_POSTEFFECT_HANDLE_NONE);
     }
 
     // TODO

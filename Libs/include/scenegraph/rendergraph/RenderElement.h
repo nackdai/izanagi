@@ -5,7 +5,9 @@
 #include "scenegraph/mtrl/izMaterial.h"
 
 namespace izanagi {
-    class graph::CGraphicsDevice;
+    namespace graph {
+        class CGraphicsDevice;
+    }
 
     /**
      */
@@ -20,17 +22,17 @@ namespace izanagi {
         NO_COPIABLE(IRenderElement);
 
     public:
-        /** •`‰æ.
+        /** æç”».
          */
         virtual IZ_BOOL Render(
             graph::CGraphicsDevice* device,
             void* additional) = 0;
 
-        /** ”¼“§–¾‚©‚Ç‚¤‚©‚ğæ“¾.
+        /** åŠé€æ˜ã‹ã©ã†ã‹ã‚’å–å¾—.
          */
         virtual IZ_BOOL IsTranslucent() const = 0;
 
-        /** İ’è‚³‚ê‚Ä‚¢‚éƒ}ƒeƒŠƒAƒ‹‚ğæ“¾.
+        /** è¨­å®šã•ã‚Œã¦ã„ã‚‹ãƒãƒ†ãƒªã‚¢ãƒ«ã‚’å–å¾—.
          */
         virtual CMaterial* GetMaterial() { return IZ_NULL; }
 

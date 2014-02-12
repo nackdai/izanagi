@@ -211,10 +211,12 @@ void CAnmLinearBlender::ApplyAnimationByIdx(
     IZ_ASSERT(skl != IZ_NULL);
     IZ_ASSERT(time <= GetAnimationTime());
 
+    CSklPoseUpdater sklPoseUpdater(skl);
+
     ApplyAnimation(
         time,
         jointIdx,
-        CSklPoseUpdater(skl));
+        *(CPoseUpdater*)&sklPoseUpdater);
 }
 
 IZ_UINT CAnmLinearBlender::GetPoseByIdx(
@@ -224,10 +226,12 @@ IZ_UINT CAnmLinearBlender::GetPoseByIdx(
 {
     IZ_UINT updateFlag = 0;
 
+    CPoseUpdater poseUpdater(&pose);
+
     updateFlag = ApplyAnimation(
                     time,
                     idx,
-                    CPoseUpdater(&pose));
+                    poseUpdater);
 
     return updateFlag;
 }

@@ -4,9 +4,11 @@
 #include "MSHFormat.h"
 
 namespace izanagi {
-    class graph::CGraphicsDevice;
-    class graph::CVertexBuffer;
-    class graph::CIndexBuffer;
+    namespace graph {
+        class CGraphicsDevice;
+        class CVertexBuffer;
+        class CIndexBuffer;
+    }
     class IInputStream;
     class CSkeletonInstance;
     class IMshRenderHandler;

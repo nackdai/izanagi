@@ -5,7 +5,9 @@
 #include "MeshSetInterface.h"
 
 namespace izanagi {
-    class graph::CGraphicsDevice;
+    namespace graph {
+        class CGraphicsDevice;
+    }
     class CMeshSet;
     class CSkeletonInstance;
     class CMaterial;

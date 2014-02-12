@@ -57,7 +57,7 @@ namespace shader
         IZ_PCSTR ret = IZ_NULL;
 
         if (pos < m_nSize) {
-            ret = m_pBuffer + pos;
+            ret = (IZ_PCSTR)(m_pBuffer + pos);
         }
 
         return ret;

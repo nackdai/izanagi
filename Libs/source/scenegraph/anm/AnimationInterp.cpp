@@ -289,10 +289,12 @@ void CAnimationInterp::ApplyAnimationByIdx(
     IZ_ASSERT(skl != IZ_NULL);
     IZ_ASSERT(jointIdx < skl->GetJointNum());
 
+    CSklPoseUpdater sklPoseUpdater(skl);
+
     ApplyAnimation(
         time,
         jointIdx,
-        CSklPoseUpdater(skl));
+        *(CPoseUpdater*)&sklPoseUpdater);
 }
 
 IZ_UINT CAnimationInterp::GetPoseByIdx(
@@ -302,10 +304,12 @@ IZ_UINT CAnimationInterp::GetPoseByIdx(
 {
     IZ_UINT updateFlag = 0;
 
+    CPoseUpdater poseUpdater(&pose);
+
     updateFlag = ApplyAnimation(
                     time,
                     idx,
-                    CPoseUpdater(&pose));
+                    poseUpdater);
 
     return updateFlag;
 }

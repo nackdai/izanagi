@@ -204,6 +204,7 @@ namespace izanagi {
 
     typedef IZ_UINT IZ_POSTEFFECT_HANDLE;
     enum {
+        IZ_POSTEFFECT_HANDLE_NONE = 0,
         IZ_POSTEFFECT_HANDLE_INVALID = 0x7fffffff,
     };
 }   // namespace

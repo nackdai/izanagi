@@ -10,6 +10,7 @@ namespace izanagi {
     class CPostEffectShader;
     class CPostEffectPass;
     class CPostEffectFunctor;
+    class IPostEffectFunctorCreator;
     struct S_PES_TEXTURE;
 
     /**

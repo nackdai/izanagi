@@ -76,7 +76,7 @@ namespace izanagi
         {
             IZ_ASSERT(m_File != IZ_NULL);
 
-            int result = ::fprintf_s(m_File, "%s", text);
+            int result = IZ_FPRINTF(m_File, "%s", text);
             IZ_ASSERT(result >= 0);
 
             return (result >= 0);

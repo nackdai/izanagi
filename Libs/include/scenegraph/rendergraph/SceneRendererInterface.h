@@ -19,7 +19,7 @@ namespace izanagi {
 
     protected:
         ISceneRenderer() {}
-        virtual ~ISceneRenderer() = 0 {}
+        virtual ~ISceneRenderer() {}
 
         NO_COPIABLE(ISceneRenderer);
 

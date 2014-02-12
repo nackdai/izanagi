@@ -55,7 +55,7 @@ namespace izanagi {
         IZ_PCSTR ret = IZ_NULL;
 
         if (pos < m_nSize) {
-            ret = m_pStringBuffer + pos;
+            ret = (IZ_PCSTR)(m_pStringBuffer + pos);
         }
 
         return ret;
