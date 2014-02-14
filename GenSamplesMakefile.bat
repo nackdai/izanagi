@@ -7,8 +7,8 @@ if not exist %MAKEITSO% (
 
 %MAKEITSO% -file=Samples\projects\vs2010\Samples.sln -config=MakeItSo_Libs.config
 
-copy /Y Samples\projects\vs2010\*.makefile Samples\project\makefile\
-copy /Y Samples\projects\vs2010\Makefile Samples\project\makefile\
+copy /Y Samples\projects\vs2010\*.makefile Samples\projects\makefile\
+copy /Y Samples\projects\vs2010\Makefile Samples\projects\makefile\
 
 @echo off
 exit /b 1
