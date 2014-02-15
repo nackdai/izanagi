@@ -72,7 +72,7 @@ namespace text
     {
         IZ_BOOL ret = IZ_TRUE;
 
-        // �c���̃t�H���g��
+        // 縦横のフォント数
         IZ_UINT fontNumH = static_cast<IZ_UINT>(sqrtf((IZ_FLOAT)maxRegisterNum) + 0.5f);
         IZ_UINT fontNumV = static_cast<IZ_UINT>(static_cast<IZ_FLOAT>(maxRegisterNum) / fontNumH + 0.5f);
         while (fontNumH * fontNumV < maxRegisterNum)
@@ -87,7 +87,7 @@ namespace text
             }
         }
 
-        // �e�N�X�`���T�C�Y
+        // テクスチャサイズ
         IZ_UINT texWidth = fontNumH * height;
         IZ_UINT texHeight = fontNumV * height;
 
@@ -100,7 +100,7 @@ namespace text
 #endif
 
         // TODO
-        // �e�N�X�`���T�C�Y
+        // テクスチャサイズ
 
         m_FontMap = device->CreateTexture(
            texWidth,
@@ -175,7 +175,7 @@ namespace text
             }
             else if (m_EnableExchange)
             {
-                // �擪�ɂ�����̂��ł��Q�Ƃ���Ă��Ȃ�����
+                // 先頭にあるものが最も参照されていないもの
                 Hash::Item* hashItem = m_Hash.GetOrderTopHashItem();
                 hashItem->Leave();
 
@@ -213,14 +213,14 @@ namespace text
 
         IZ_BOOL isRegistered = realItem->hashItem.HasList();
 
-        // �Ō�ɎQ�Ƃ��ꂽ���̂̓��X�g�̍Ō�ɂ���悤�ɂ���
+        // 最後に参照されたものはリストの最後にくるようにする
         UnregisterCache(item);
 
         if (m_RegisteredNum < m_MaxRegisterNum)
         {
             if (isRegistered)
             {
-                // ���X�o�^�ς݂������̂ŁA�Ō�ɂ���悤�����ɂ���
+                // 元々登録済みだったので、最後にくるようだけにする
                 m_Hash.Add(&realItem->hashItem);
                 return IZ_TRUE;
             }
@@ -239,7 +239,7 @@ namespace text
         // TODO
         if (m_PosY + m_FontHeight - image.topOffset + image.rows > m_FontMap->GetHeight())
         {
-            // �͂ݏo��E�E�E
+            // はみ出る・・・
             IZ_ASSERT(IZ_FALSE);
             return IZ_FALSE;
         }

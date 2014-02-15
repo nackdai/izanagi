@@ -23,11 +23,11 @@ namespace text
     #define CH_LSEP (0x2028)
     #define CH_PSEP (0x2029)
 
-    // ‰üsƒR[ƒh
-	// Mac OS X ‚ðŠÜ‚Þ UnixiLFj
-	// ƒNƒ‰ƒVƒbƒN Mac OSiCRj
-	// WindowsiCR + LFj
-	// ƒ†ƒjƒR[ƒhs^’i—Ž‹æØ‚èiLSEP^PSEPj
+    // æ”¹è¡Œã‚³ãƒ¼ãƒ‰
+	// Mac OS X ã‚’å«ã‚€ Unixï¼ˆLFï¼‰
+	// ã‚¯ãƒ©ã‚·ãƒƒã‚¯ Mac OSï¼ˆCRï¼‰
+	// Windowsï¼ˆCR + LFï¼‰
+	// ãƒ¦ãƒ‹ã‚³ãƒ¼ãƒ‰è¡Œï¼æ®µè½åŒºåˆ‡ã‚Šï¼ˆLSEPï¼PSEPï¼‰
     static const IZ_UINT separators[] = {
         CH_LF,      // LF
         CH_CR,      // CR

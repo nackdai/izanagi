@@ -7,7 +7,7 @@ namespace izanagi
 {
 namespace text
 {
-    // ƒCƒ“ƒXƒ^ƒ“ƒXì¬
+    // ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ä½œæˆ
     CFontHostFNT* CFontHostFNT::CreateFontHostFNT(
         IMemoryAllocator* allocator,
         IInputStream* in)
@@ -18,17 +18,19 @@ namespace text
         IZ_UINT8* buf = IZ_NULL;
         CFontHostFNT* instance = IZ_NULL;
 
-        // ƒwƒbƒ_“Ç‚İ‚İ
+        size_t size = 0;
+
+        // ãƒ˜ãƒƒãƒ€èª­ã¿è¾¼ã¿
         S_FNT_HEADER header;
         IZ_BOOL result = IZ_INPUT_READ(in, &header, 0, sizeof(header));
         VGOTO(result, __EXIT__);
 
-        // ƒ}ƒWƒbƒNƒiƒ“ƒo[ƒ`ƒFƒbƒN
+        // ãƒã‚¸ãƒƒã‚¯ãƒŠãƒ³ãƒãƒ¼ãƒã‚§ãƒƒã‚¯
         result = IS_FMT_ENCODE(header.magic);
         VGOTO(result, __EXIT__);
 
-        // Šm•ÛƒTƒCƒYŒvZ
-        size_t size = sizeof(CFontHostFNT);
+        // ç¢ºä¿ã‚µã‚¤ã‚ºè¨ˆç®—
+        size = sizeof(CFontHostFNT);
         size += header.sizeFile - header.sizeHeader;
 
         buf = (IZ_UINT8*)ALLOC(allocator, size);
@@ -43,19 +45,19 @@ namespace text
 
             memcpy(&instance->m_Header, &header, sizeof(header));
 
-            // ƒƒ‚ƒŠŠ„‚è“–‚Ä
+            // ãƒ¡ãƒ¢ãƒªå‰²ã‚Šå½“ã¦
             {
-                // ƒtƒHƒ“ƒgƒ}ƒbƒvî•ñ
+                // ãƒ•ã‚©ãƒ³ãƒˆãƒãƒƒãƒ—æƒ…å ±
                 instance->m_MapList = reinterpret_cast<S_FNT_MAP*>(buf);
                 buf += sizeof(S_FNT_MAP) * header.numFont;
 
-                // ƒtƒHƒ“ƒgƒCƒ[ƒWî•ñ
+                // ãƒ•ã‚©ãƒ³ãƒˆã‚¤ãƒ¡ãƒ¼ã‚¸æƒ…å ±
                 instance->m_ImageList = reinterpret_cast<S_FNT_IMAGE*>(buf);
                 buf += sizeof(S_FNT_IMAGE) * header.numTex;
 
                 // NOTE
-                // ƒtƒHƒ“ƒgƒCƒ[ƒWƒf[ƒ^‚ÍAî•ñ•”‚ğ“Ç‚İ‚Ü‚È‚¢‚ÆƒTƒCƒY‚ªŠm’è‚µ‚È‚¢‚Ì‚ÅA
-                // Œã‚ÅŠ„‚è“–‚Ä‚é
+                // ãƒ•ã‚©ãƒ³ãƒˆã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ‡ãƒ¼ã‚¿ã¯ã€æƒ…å ±éƒ¨ã‚’èª­ã¿è¾¼ã¾ãªã„ã¨ã‚µã‚¤ã‚ºãŒç¢ºå®šã—ãªã„ã®ã§ã€
+                // å¾Œã§å‰²ã‚Šå½“ã¦ã‚‹
             }
 
             result = instance->Read(in, buf);
@@ -81,13 +83,13 @@ __EXIT__:
     {
         m_Allocator = IZ_NULL;
 
-        // ƒwƒbƒ_
+        // ãƒ˜ãƒƒãƒ€
         CStdUtil::FillZero(&m_Header, 1);
 
-        // ƒtƒHƒ“ƒgƒ}ƒbƒvî•ñ
+        // ãƒ•ã‚©ãƒ³ãƒˆãƒãƒƒãƒ—æƒ…å ±
         m_MapList = IZ_NULL;
 
-        // ƒtƒHƒ“ƒgƒCƒ[ƒWî•ñ
+        // ãƒ•ã‚©ãƒ³ãƒˆã‚¤ãƒ¡ãƒ¼ã‚¸æƒ…å ±
         m_ImageList = IZ_NULL;
     }
 
@@ -99,7 +101,7 @@ __EXIT__:
         IInputStream* in,
         IZ_UINT8* buf)
     {
-        // ƒtƒHƒ“ƒgƒ}ƒbƒvî•ñ“Ç‚İ‚İ
+        // ãƒ•ã‚©ãƒ³ãƒˆãƒãƒƒãƒ—æƒ…å ±èª­ã¿è¾¼ã¿
         IZ_BOOL ret = IZ_INPUT_READ(
             in, 
             m_MapList,
@@ -107,9 +109,9 @@ __EXIT__:
             sizeof(S_FNT_MAP) * m_Header.numFont);
         VRETURN(ret);
 
-        // ƒtƒHƒ“ƒgƒCƒ[ƒWî•ñ“Ç‚İ‚İ
+        // ãƒ•ã‚©ãƒ³ãƒˆã‚¤ãƒ¡ãƒ¼ã‚¸æƒ…å ±èª­ã¿è¾¼ã¿
         for (IZ_UINT i = 0; i < m_Header.numTex; ++i) {
-            // î•ñ•”“Ç‚İ‚İ
+            // æƒ…å ±éƒ¨èª­ã¿è¾¼ã¿
             ret = IZ_INPUT_READ(
                 in,
                 &m_ImageList[i],
@@ -122,7 +124,7 @@ __EXIT__:
 
             IZ_UINT8* readDst = const_cast<IZ_UINT8*>(m_ImageList[i].images);
 
-            // ƒf[ƒ^•”“Ç‚İ‚İ
+            // ãƒ‡ãƒ¼ã‚¿éƒ¨èª­ã¿è¾¼ã¿
             ret = IZ_INPUT_READ(
                 in,
                 reinterpret_cast<void*>(readDst),
@@ -139,12 +141,12 @@ __EXIT__:
         return m_Header.charEncode;
     }
 
-    // ƒ}ƒbƒvî•ñæ“¾
+    // ãƒãƒƒãƒ—æƒ…å ±å–å¾—
     const S_FNT_MAP* CFontHostFNT::GetFontMap(IZ_UINT code)
     {
         S_FNT_MAP* ret = IZ_NULL;
 
-        // “ñ•ª’Tõ‚·‚é
+        // äºŒåˆ†æ¢ç´¢ã™ã‚‹
         IZ_INT idxTop = m_MapList[0].idx;
         IZ_INT idxTail = m_MapList[m_Header.numFont - 1].idx;
 
@@ -161,14 +163,14 @@ __EXIT__:
                 VRETURN_NULL(idxTail >= 0);
             }
             else {
-                // ‚ ‚Á‚½
+                // ã‚ã£ãŸ
                 ret = pMid;
                 break;
             }
         }
 
         if (ret == IZ_NULL) {
-            // üŒ`’Tõ‚µ‚Ä‚İ‚é
+            // ç·šå½¢æ¢ç´¢ã—ã¦ã¿ã‚‹
             for (IZ_UINT i = 0; i < m_Header.numFont; i++) {
                 if (m_MapList[i].code == code) {
                     ret = &m_MapList[i];
@@ -184,7 +186,7 @@ __EXIT__:
     const S_FNT_MAP* CFontHostFNT::GetFontMapByID(IZ_UINT id)
     {
         // NOTE
-        // 0‚Í–¢’è‹`‚ÌˆÓ–¡‚È‚Ì‚Å -1 ‚·‚é•K—v‚ª‚ ‚é
+        // 0ã¯æœªå®šç¾©ã®æ„å‘³ãªã®ã§ -1 ã™ã‚‹å¿…è¦ãŒã‚ã‚‹
         IZ_ASSERT(id - 1 < m_Header.numFont);
 
         S_FNT_MAP& map = m_MapList[id - 1];
@@ -202,7 +204,7 @@ __EXIT__:
         }
 
         // NOTE
-        // 0‚Í–¢’è‹`‚ÌˆÓ–¡
+        // 0ã¯æœªå®šç¾©ã®æ„å‘³
         return 0;
     }
 

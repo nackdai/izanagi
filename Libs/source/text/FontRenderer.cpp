@@ -74,7 +74,7 @@ namespace text
             }
 
             // TODO
-            // ‰üsƒR[ƒh
+            // æ”¹è¡Œã‚³ãƒ¼ãƒ‰
 
             SGlyphCacheItem* item = glyphCache.FindCache(code);
 

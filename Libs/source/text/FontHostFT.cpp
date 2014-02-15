@@ -301,7 +301,7 @@ namespace text
             image.bmp = glyph->bitmap.buffer;
             image.pitch = glyph->bitmap.pitch;
             image.rows = glyph->bitmap.rows;
-            image.rowBytes = glyph->bitmap.pitch;   // A8フォーマットなので
+            image.rowBytes = glyph->bitmap.pitch;   // A8繝輔か繝ｼ繝槭ャ繝医↑縺ｮ縺ｧ
             image.leftOffset = glyph->bitmap_left;
             image.topOffset = glyph->bitmap_top;
         }

@@ -288,14 +288,14 @@ namespace text
         }
         else if (signature[0] == '\xEF' && signature[1] == '\xBB' && signature[2] == '\xBF')
         {
-            // BOMÇ†ÇË
+            // BOM„ÅÇ„Çä
             encode = E_FONT_CHAR_ENCODE_UTF8;
             signatureBytes = 3;
         }
         else
         {
             // TODO
-            // ïKÇ∏UTF-8àµÇ¢
+            // ÂøÖ„ÅöUTF-8Êâ±„ÅÑ
             encode = E_FONT_CHAR_ENCODE_UTF8;
             signatureBytes = 0;
         }
@@ -329,7 +329,7 @@ namespace text
         }
 
         // TODO
-        // 4ÉoÉCÉgÉAÉâÉCÉìÇ∑ÇÈÅH
+        // 4„Éê„Ç§„Éà„Ç¢„É©„Ç§„É≥„Åô„ÇãÔºü
 
         m_Text = (IZ_UINT8*)ALLOC(allocator, bytes + 1);
         m_Text[bytes] = 0;
