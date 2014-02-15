@@ -6,13 +6,13 @@ C_COMPILER = gcc
 Debug_GLUT_Include_Path=-I"../../Animation/MyAppl" -I"../../../Libs/include" -I"../../SampleKit" 
 
 # Library paths...
-Debug_GLUT_Library_Path=
+Debug_GLUT_Library_Path=-L"../../../Libs/project/lib/gccDebug_GLUT" -L"../../../External/freeglut/lib/x86/gccDebug" 
 
 # Additional libraries...
-Debug_GLUT_Libraries=-Wl,--start-group -lSceneGraph -lShader -lMath  -Wl,--end-group
+Debug_GLUT_Libraries=-Wl,--start-group -lSceneGraph -lShader -lMath -ld3d9 -ld3dx9d -ldxguid -ldinput8 -ldxerr -lwinmm -lSampleKit  -Wl,--end-group
 
 # Preprocessor definitions...
-Debug_GLUT_Preprocessor_Definitions=-D GCC_BUILD -D _WINDOWS -D _DEBUG -D __IZ_DEBUG__ -D __IZ_OGL__ -D __IZ_GLUT__ -D __IZANAGI_NO_USE_D3D__ 
+Debug_GLUT_Preprocessor_Definitions=-D GCC_BUILD -D _WINDOWS -D _DEBUG -D __IZ_DEBUG__ -D __IZ_OGL__ -D __IZ_GLUT__ 
 
 # Implictly linked object files...
 Debug_GLUT_Implicitly_Linked_Objects=

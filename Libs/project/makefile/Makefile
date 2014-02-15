@@ -1,71 +1,74 @@
 # Builds all the projects in the solution...
 .PHONY: all_projects
-all_projects: Graph Math Std System DebugUtil Text PostEffect Shader Resource Animation ThreadModel SceneGraph Terra 
+all_projects: Debug_GLUT 
+
+.PHONY: Debug_GLUT
+Debug_GLUT: Graph_Debug_GLUT Math_Debug_GLUT Std_Debug_GLUT System_Debug_GLUT DebugUtil_Debug_GLUT Text_Debug_GLUT PostEffect_Debug_GLUT Shader_Debug_GLUT Resource_Debug_GLUT Animation_Debug_GLUT ThreadModel_Debug_GLUT SceneGraph_Debug_GLUT Terra_Debug_GLUT 
 
 # Builds project 'Graph'...
-.PHONY: Graph
-Graph: 
-	make --directory="." --file=Graph.makefile
+.PHONY: Graph_Debug_GLUT
+Graph_Debug_GLUT: 
+	make --directory="." --file=Graph.makefile Debug_GLUT
 
 # Builds project 'Math'...
-.PHONY: Math
-Math: 
-	make --directory="." --file=Math.makefile
+.PHONY: Math_Debug_GLUT
+Math_Debug_GLUT: 
+	make --directory="." --file=Math.makefile Debug_GLUT
 
 # Builds project 'Std'...
-.PHONY: Std
-Std: 
-	make --directory="." --file=Std.makefile
+.PHONY: Std_Debug_GLUT
+Std_Debug_GLUT: 
+	make --directory="." --file=Std.makefile Debug_GLUT
 
 # Builds project 'System'...
-.PHONY: System
-System: 
-	make --directory="." --file=System.makefile
+.PHONY: System_Debug_GLUT
+System_Debug_GLUT: 
+	make --directory="." --file=System.makefile Debug_GLUT
 
 # Builds project 'DebugUtil'...
-.PHONY: DebugUtil
-DebugUtil: 
-	make --directory="." --file=DebugUtil.makefile
+.PHONY: DebugUtil_Debug_GLUT
+DebugUtil_Debug_GLUT: 
+	make --directory="." --file=DebugUtil.makefile Debug_GLUT
 
 # Builds project 'Text'...
-.PHONY: Text
-Text: 
-	make --directory="." --file=Text.makefile
+.PHONY: Text_Debug_GLUT
+Text_Debug_GLUT: 
+	make --directory="." --file=Text.makefile Debug_GLUT
 
 # Builds project 'PostEffect'...
-.PHONY: PostEffect
-PostEffect: 
-	make --directory="." --file=PostEffect.makefile
+.PHONY: PostEffect_Debug_GLUT
+PostEffect_Debug_GLUT: 
+	make --directory="." --file=PostEffect.makefile Debug_GLUT
 
 # Builds project 'Shader'...
-.PHONY: Shader
-Shader: 
-	make --directory="." --file=Shader.makefile
+.PHONY: Shader_Debug_GLUT
+Shader_Debug_GLUT: 
+	make --directory="." --file=Shader.makefile Debug_GLUT
 
 # Builds project 'Resource'...
-.PHONY: Resource
-Resource: 
-	make --directory="." --file=Resource.makefile
+.PHONY: Resource_Debug_GLUT
+Resource_Debug_GLUT: 
+	make --directory="." --file=Resource.makefile Debug_GLUT
 
 # Builds project 'Animation'...
-.PHONY: Animation
-Animation: 
-	make --directory="." --file=Animation.makefile
+.PHONY: Animation_Debug_GLUT
+Animation_Debug_GLUT: 
+	make --directory="." --file=Animation.makefile Debug_GLUT
 
 # Builds project 'ThreadModel'...
-.PHONY: ThreadModel
-ThreadModel: 
-	make --directory="." --file=ThreadModel.makefile
+.PHONY: ThreadModel_Debug_GLUT
+ThreadModel_Debug_GLUT: 
+	make --directory="." --file=ThreadModel.makefile Debug_GLUT
 
 # Builds project 'SceneGraph'...
-.PHONY: SceneGraph
-SceneGraph: 
-	make --directory="." --file=SceneGraph.makefile
+.PHONY: SceneGraph_Debug_GLUT
+SceneGraph_Debug_GLUT: 
+	make --directory="." --file=SceneGraph.makefile Debug_GLUT
 
 # Builds project 'Terra'...
-.PHONY: Terra
-Terra: 
-	make --directory="." --file=Terra.makefile
+.PHONY: Terra_Debug_GLUT
+Terra_Debug_GLUT: 
+	make --directory="." --file=Terra.makefile Debug_GLUT
 
 # Cleans all projects...
 .PHONY: clean
