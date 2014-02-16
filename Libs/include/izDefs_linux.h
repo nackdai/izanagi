@@ -24,6 +24,6 @@ typedef time_t IZ_TIME;
 
 #define IzMain() int main(int argc, char* argv[])
 
-#define IzGetSystemDataForMainFunc()  hInstance
+#define IzGetSystemDataForMainFunc()  NULL
 
 #endif  // #if !defined(__IZANAGI_DEFS_LINUX_H__)
