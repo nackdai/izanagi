@@ -159,12 +159,12 @@ static IZ_UINT GFX_BUF[GFX_BUF_SIZE];
 static const IZ_UINT SCREEN_WIDTH = 1280;
 static const IZ_UINT SCREEN_HEIGHT = 720;
 
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+IzMain()
 {
     CTextParagraphApp app;
 
     int ret = SampleMain(
-        hInstance,
+        IzGetSystemDataForMainFunc(),
         &app,
         "TextParagraph",
         SCREEN_WIDTH, SCREEN_HEIGHT,

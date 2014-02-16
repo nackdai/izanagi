@@ -32,6 +32,8 @@ IZ_BOOL CSampleApp::Init(
     m_ScreenWidth = params.screenWidth;
     m_ScreenHeight= params.screenHeight;
 
+    void* nativeWndHandle = IZ_NULL;
+
     m_Allocator = params.allocator;
     VGOTO(ret = (m_Allocator != IZ_NULL), __EXIT__);
 
@@ -45,7 +47,7 @@ IZ_BOOL CSampleApp::Init(
     }
 
     // プラットフォームごとのウインドウハンドルを取得
-    void* nativeWndHandle = izanagi::sys::CSysWindow::GetNativeWindowHandle(handle);
+    nativeWndHandle = izanagi::sys::CSysWindow::GetNativeWindowHandle(handle);
 
     // グラフィックスデバイス設定
     izanagi::graph::SGraphicsDeviceInitParams gfxDevParams;

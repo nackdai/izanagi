@@ -198,12 +198,12 @@ static IZ_UINT GFX_BUF[GFX_BUF_SIZE];
 static const IZ_UINT SCREEN_WIDTH = 1280;
 static const IZ_UINT SCREEN_HEIGHT = 720;
 
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+IzMain()
 {
     CGamePadApp app;
 
     int ret = SampleMain(
-        hInstance,
+        IzGetSystemDataForMainFunc(),
         &app,
         "GamePad",
         SCREEN_WIDTH, SCREEN_HEIGHT,

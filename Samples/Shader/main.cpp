@@ -121,12 +121,12 @@ IZ_COLOR CShaderApp::GetBgColor() const
     return CSampleApp::GetBgColor();
 }
 
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+IzMain()
 {
     CShaderApp app;
 
     int ret = SampleMain(
-        hInstance,
+        IzGetSystemDataForMainFunc(),
         &app,
         "Shader",
         SCREEN_WIDTH, SCREEN_HEIGHT,

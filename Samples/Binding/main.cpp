@@ -97,7 +97,7 @@ private:
 
 izanagi::DependencyProperty SampleObject::sProp("Value");
 
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+IzMain()
 {
     izanagi::CSimpleMemoryAllocator allocator;
 
