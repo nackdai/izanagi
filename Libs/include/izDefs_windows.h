@@ -35,4 +35,14 @@
 
 typedef IZ_INT64 IZ_TIME;
 
+#define IzMain() \
+int main(int argc, char* argv[], HINSTANCE hInstance);\
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)\
+{\
+    return main(0, NULL, hInstance);\
+}\
+int main(int argc, char* argv[], HINSTANCE hInstance)\
+
+#define IzGetSystemDataForMainFunc()  hInstance
+
 #endif  // #if !defined(__IZANAGI_DEFS_WINDOWS_H__)
