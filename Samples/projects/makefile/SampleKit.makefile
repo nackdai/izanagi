@@ -12,7 +12,7 @@ Debug_GLUT_Library_Path=-L"../../../Libs/project/lib/gccDebug_GLUT"
 Debug_GLUT_Libraries=-Wl,--start-group -lStd -lGraph -lDebugUtil -lSystem -lSceneGraph -lMath  -Wl,--end-group
 
 # Preprocessor definitions...
-Debug_GLUT_Preprocessor_Definitions=-D GCC_BUILD -D _DEBUG -D _LIB -D __IZ_DEBUG__ -D __IZ_OGL__ -D __IZ_GLUT__ 
+Debug_GLUT_Preprocessor_Definitions=-D GCC_BUILD -D _DEBUG -D _LIB -D __IZ_DEBUG__ -D __IZ_OGL__ -D __IZ_GLUT__ -D __IZANAGI_NO_USE_D3D__ 
 
 # Implictly linked object files...
 Debug_GLUT_Implicitly_Linked_Objects=
