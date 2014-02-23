@@ -5,7 +5,7 @@
 // スクリーンサイズの逆数
 float4 g_vInvScreen = (float4)1.0f;
 
-SVSOutput main(SVSInput sIn)
+SVSOutput mainVS(SVSInput sIn)
 {
     SVSOutput sOut;
 

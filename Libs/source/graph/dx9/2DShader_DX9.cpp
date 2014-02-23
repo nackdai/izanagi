@@ -92,7 +92,7 @@ namespace graph
         IZ_ASSERT(device != NULL);
 
         // 頂点シェーダ
-        m_pVS = device->CreateVertexShader(g_vs20_main);
+        m_pVS = device->CreateVertexShader(g_vs20_mainVS);
         VRETURN(m_pVS != IZ_NULL);
 
         for (IZ_UINT i = 0; i < E_GRAPH_2D_RENDER_OP_NUM; ++i) {
