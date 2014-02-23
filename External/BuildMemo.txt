@@ -1,0 +1,24 @@
+- freetype
+* sudo apt-get install automake
+* sudo apt-get install autoconf
+* sudo apt-get install libtool
+* chmod +x autogen.sh
+* ./autogen.sh
+* sh ./configure
+* make
+* make install
+
+- gl
+* sudo apt-get install libgl-dev (or libgl1-mesa-dev)
+* sudo apt-get install libglu1-mesa-dev
+
+- glew
+- http://glew.sourceforge.net/build.html
+* export SYSTEM=linux
+* export GLEW_DEST=<anywhere>
+* make all
+* make install
+
+- freeglut
+* sh ./configure
+* make
