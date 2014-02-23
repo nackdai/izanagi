@@ -51,6 +51,7 @@ namespace ShaderCompiler
             Console.WriteLine(" -o <output>");
             Console.WriteLine(" -e <etnry>");
             Console.WriteLine(" -p <profile>");
+            Console.WriteLine(" -t <type> : gles2, gl");
             Console.WriteLine(" -I <includes>");
             Console.WriteLine(" -D <defines>");
             Console.WriteLine(" --string-table");
@@ -277,9 +278,12 @@ namespace ShaderCompiler
                             var line = sr.ReadLine();
                             if (count == 0)
                             {
-                                // 先頭に浮動小数の精度を定義する
-                                WriteLine(option, sw, "precision highp float;");
-                                WriteLine(option, sw, "");
+                                if (option.glType == GLType.GLES2)
+                                {
+                                    // 先頭に浮動小数の精度を定義する
+                                    WriteLine(option, sw, "precision highp float;");
+                                    WriteLine(option, sw, "");
+                                }
                             }
                             else
                             {
@@ -361,6 +365,12 @@ namespace ShaderCompiler
         }
     }
 
+    enum GLType
+    {
+        GLES2,
+        GL,
+    }
+
     /// <summary>
     /// オプション
     /// </summary>
@@ -421,6 +431,11 @@ namespace ShaderCompiler
         /// </summary>
         public bool IsAnaylizeMode;
 
+        /// <summary>
+        /// GLのタイプ
+        /// </summary>
+        public GLType glType;
+
         public Option(string[] args)
         {
             bool isOptions = false;
@@ -458,6 +473,19 @@ namespace ShaderCompiler
                 else if (arg == "-p")
                 {
                     this.Profile = args[++i];
+                }
+                else if (arg == "-t")
+                {
+                    var val = args[++i];
+                    val = val.ToLower();
+                    if (val == "gl")
+                    {
+                        this.glType = GLType.GL;
+                    }
+                    else
+                    {
+                        this.glType = GLType.GLES2;
+                    }
                 }
                 else if (arg == "--string-table")
                 {
