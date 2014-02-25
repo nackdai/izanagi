@@ -3,13 +3,13 @@ CPP_COMPILER = g++
 C_COMPILER = gcc
 
 # Include paths...
-Debug_GLUT_Include_Path=-I"../../../Libs/include" -I"../../SampleKit" 
+Debug_GLUT_Include_Path=-I"../../../Libs/include" -I"../../../External/glew/include" -I"../../SampleKit" 
 
 # Library paths...
-Debug_GLUT_Library_Path=-L"../../../Libs/project/lib/gccDebug_GLUT" 
+Debug_GLUT_Library_Path=-L"../../../Libs/project/lib/gccDebug_GLUT" -L"SampleKit/gccDebug_GLUT" -L"../../../External/glew/lib" 
 
 # Additional libraries...
-Debug_GLUT_Libraries=-Wl,--start-group -lStd -lGraph -lDebugUtil -lSystem -lSceneGraph -lMath  -Wl,--end-group
+Debug_GLUT_Libraries=-Wl,--no-as-needed -Wl,--start-group -lStd -lGraph -lDebugUtil -lSystem -lSceneGraph -lMath -lglut -lGLU -lGLEW -lGL -lX11 -lXxf86vm -lXi  -Wl,--end-group
 
 # Preprocessor definitions...
 Debug_GLUT_Preprocessor_Definitions=-D GCC_BUILD -D _DEBUG -D _LIB -D __IZ_DEBUG__ -D __IZ_OGL__ -D __IZ_GLUT__ -D __IZANAGI_NO_USE_D3D__ 
