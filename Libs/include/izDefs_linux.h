@@ -10,7 +10,7 @@
 #endif  // #ifdef _UNICODE
 
 /////////////////////////////////////////////////////////////
-// Ç¢ÇÎÇ¢ÇÎï÷óòån
+// „ÅÑ„Çç„ÅÑ„Çç‰æøÂà©Á≥ª
 
 #ifndef DEBUG_BREAK
     #define DEBUG_BREAK()
@@ -20,7 +20,7 @@
 
 #define IZ_PRINTF   printf
 
-typedef time_t IZ_TIME;
+typedef timeval IZ_TIME;
 
 #define IzMain() int main(int argc, char* argv[])
 

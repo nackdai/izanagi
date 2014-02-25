@@ -20,7 +20,7 @@ namespace sys
         timeval begin;
         gettimeofday(&begin, NULL);
 
-        m_Begin = begin.tv_sec;
+        m_Begin = begin;
     }
 
     /**
@@ -31,7 +31,7 @@ namespace sys
         timeval cur;
         gettimeofday(&cur, NULL);
 
-        m_fTime = (cur.tv_sec - m_Begin) * 1000.0f;
+        m_fTime = ComputeTime(m_Begin, cur);
         return m_fTime;
     }
 
@@ -41,14 +41,16 @@ namespace sys
         timeval cur;
         gettimeofday(&cur, NULL);
 
-        return cur.tv_sec;
+        return cur;
     }
 
     // 差分から計算
     IZ_FLOAT CTimer::ComputeTime(IZ_TIME begin, IZ_TIME end)
     {
-        IZ_FLOAT ret = (end - begin) * 1000.0f;
-        return ret;
+        long sec = end.tv_sec - begin.tv_sec;
+        long usec = end.tv_usec - begin.tv_usec;
+        IZ_FLOAT msec = sec * 1000.0f + (IZ_FLOAT)usec / 1000.0f;
+        return msec;
     }
 }   // namespace sys
 }   // namespace izanagi
