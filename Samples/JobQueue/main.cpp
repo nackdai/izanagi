@@ -69,8 +69,6 @@ IZ_BOOL CJobQueueApp::InitInternal(
     izanagi::graph::CGraphicsDevice* device,
     izanagi::sample::CSampleCamera& camera)
 {
-    izanagi::threadmodel::CThreadPool::Init(allocator);
-
     VRETURN(
         m_JobQueue.Init(
             allocator,
@@ -89,8 +87,6 @@ void CJobQueueApp::ReleaseInternal()
     m_JobQueue.Terminate();
 
     izanagi::threadmodel::CJobQueue::TerminateJobQueue();
-
-    izanagi::threadmodel::CThreadPool::Terminate();
 }
 
 // 更新.
