@@ -127,10 +127,14 @@ namespace threadmodel
 
     void CThreadPool::WaitEmpty()
     {
-        s_TaskEmptyWaiter.Wait();
+        sys::CGuarder guarder(s_TaskListLocker);
 
-        // If WaitEmpty is called again, s_TaskEmptyWaiter will wait.
-        s_TaskEmptyWaiter.Reset();
+        if (s_TaskList.HasItem()) {
+            s_TaskEmptyWaiter.Wait();
+
+            // If WaitEmpty is called again, s_TaskEmptyWaiter will wait.
+            s_TaskEmptyWaiter.Reset();
+        }
     }
 
     CThreadPool::CThread* CThreadPool::CreateThread()
