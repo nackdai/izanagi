@@ -129,7 +129,14 @@ namespace threadmodel
                 CJob* job = item->GetData();
                 job->Cancel();
 
-                item = item->GetNext();
+                CStdList<CJob>::Item* next = item->GetNext();
+                item->Leave();
+
+                item = next;
+
+                if (job->EnableDeleteWhenFinish()) {
+                    CJob::DeleteJob(job);
+                }
             }
         }
     }

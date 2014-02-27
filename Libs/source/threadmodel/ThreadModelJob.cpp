@@ -6,6 +6,12 @@ namespace izanagi
 {
 namespace threadmodel
 {
+    void CJob::DeleteJob(CJob*& job)
+    {
+        delete job;
+        FREE(job->m_Allocator, job);
+    }
+
     CJob::CJob()
     {
         m_Allocator = IZ_NULL;

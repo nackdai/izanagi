@@ -15,7 +15,6 @@ namespace threadmodel
     class CJobWorker : public sys::CThread
     {
         friend class CJobQueue;
-        friend class CThreadPool;
 
     private:
         enum State

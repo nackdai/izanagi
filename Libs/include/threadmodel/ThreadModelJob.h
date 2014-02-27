@@ -16,7 +16,6 @@ namespace threadmodel
     {
         friend class CJobQueue;
         friend class CJobWorker;
-        friend class CThreadPool;
 
     public:
         enum State
@@ -43,12 +42,8 @@ namespace threadmodel
             return ret;
         }
 
-        static void DeleteJob(CJob*& job)
-        {
-            delete job;
-            FREE(job->m_Allocator, job);
-        }
-
+        static void DeleteJob(CJob*& job);
+        
     protected:
         CJob();
         virtual ~CJob();
