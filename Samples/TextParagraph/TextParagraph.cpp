@@ -67,10 +67,12 @@ IZ_BOOL CTextParagraphApp::InitInternal(
     }
 
     {
+        izanagi::text::CUtf8String str(textUTF8);
+
         m_Paragraphs = izanagi::text::CParagraphGroupImpl::CreateParagraphGroup(
             allocator,
             m_FontHost,
-            izanagi::text::CUtf8String(textUTF8),
+            str,
             IZ_NULL);
         VRETURN(m_Paragraphs != IZ_NULL);
     }

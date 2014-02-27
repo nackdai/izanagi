@@ -99,10 +99,12 @@ void CFontRendererApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
         izanagi::text::CUtf8String str(fontUTF8);
 
+        izanagi::CIntPoint ptr(100, 100);
+
         m_Renderer->Render(
             device,
             str,
-            izanagi::CIntPoint(100, 100),
+            ptr,
             28,
             *m_Cache);
 
