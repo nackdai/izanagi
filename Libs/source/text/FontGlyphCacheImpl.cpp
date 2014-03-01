@@ -107,7 +107,7 @@ namespace text
            texHeight,
            1,
            izanagi::graph::E_GRAPH_PIXEL_FMT_A8,
-           izanagi::graph::E_GRAPH_RSC_USAGE_STATIC);
+           izanagi::graph::E_GRAPH_RSC_USAGE_DYNAMIC);
 
         IZ_ASSERT(m_FontMap != IZ_NULL);
     
