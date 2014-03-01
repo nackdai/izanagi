@@ -281,10 +281,12 @@ namespace graph
             m_LockedSize = 0;
         }
 
+#if 0
         if (!IsDynamic()) {
             FREE(m_Allocator, m_TemporaryData);
             m_TemporaryData = IZ_NULL;
         }
+#endif
 
         m_LockedLevel = -1;
 

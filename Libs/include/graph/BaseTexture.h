@@ -53,7 +53,7 @@ namespace graph
         }
 
         // フィルタセット
-        void SetFilter(
+        virtual void SetFilter(
             E_GRAPH_TEX_FILTER minFilter,
             E_GRAPH_TEX_FILTER magFilter,
             E_GRAPH_TEX_FILTER mipFilter)
@@ -64,7 +64,7 @@ namespace graph
         }
 
         // アドレッシングセット
-        void SetAddress(
+        virtual void SetAddress(
             E_GRAPH_TEX_ADDRESS addressU,
             E_GRAPH_TEX_ADDRESS addressV)
         {

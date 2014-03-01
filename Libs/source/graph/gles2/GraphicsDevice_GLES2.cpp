@@ -733,6 +733,64 @@ namespace graph
         SetScissorTestRect(sRS.rcScissor);
     }
 
+    namespace {
+        template <typename _BASE>
+        IZ_BOOL IsDirtyByTexType(CTextureProxy<_BASE>* tex, E_GRAPH_SAMPLER_STATE_TYPE smplType)
+        {
+            return tex->IsDirty(smplType);
+        }
+
+        IZ_BOOL IsDirty(CBaseTexture* tex, E_GRAPH_SAMPLER_STATE_TYPE smplType)
+        {
+            E_GRAPH_TEX_TYPE texType = tex->GetTexType();
+
+            IZ_BOOL ret = IZ_FALSE;
+
+            switch (texType)
+            {
+            case E_GRAPH_TEX_TYPE_PLANE:
+                ret = IsDirtyByTexType((CTextureProxy<CTexture>*)tex, smplType);
+                break;
+            case E_GRAPH_TEX_TYPE_CUBE:
+                ret = IsDirtyByTexType((CTextureProxy<CCubeTexture>*)tex, smplType);
+                break;
+            case E_GRAPH_TEX_TYPE_VOLUME:
+            default:
+                IZ_ASSERT(IZ_FALSE);
+                break;
+            }
+
+            return ret;
+        }
+
+        template <typename _BASE>
+        void ClearDirtyByTexType(CTextureProxy<_BASE>* tex)
+        {
+            tex->ClearDirty();
+        }
+
+        void ClearDirty(CBaseTexture* tex)
+        {
+            E_GRAPH_TEX_TYPE texType = tex->GetTexType();
+
+            IZ_BOOL ret = IZ_FALSE;
+
+            switch (texType)
+            {
+            case E_GRAPH_TEX_TYPE_PLANE:
+                ClearDirtyByTexType((CTextureProxy<CTexture>*)tex);
+                break;
+            case E_GRAPH_TEX_TYPE_CUBE:
+                ClearDirtyByTexType((CTextureProxy<CCubeTexture>*)tex);
+                break;
+            case E_GRAPH_TEX_TYPE_VOLUME:
+            default:
+                IZ_ASSERT(IZ_FALSE);
+                break;
+            }
+        }
+    }
+
     IZ_BOOL CGraphicsDeviceGLES2::SetTextureInternal(IZ_UINT nStage, CBaseTexture* pTex)
     {
         CALL_GLES2_API(::glActiveTexture(GL_TEXTURE0 + nStage));
@@ -764,45 +822,63 @@ namespace graph
                 m_Flags.is_force_set_state = IZ_TRUE;
             }
 
-            // TODO
             // ステート
             {
-                // MIN_FILTER
-                SetSamplerStateFilter(
-                    isPlane,
-                    E_GRAPH_SAMPLER_STATE_TYPE_MINFILTER,
-                    m_SamplerState[nStage].minFilter,
-                    pTex->GetState().minFilter);
+                // NOTE
+                // 以下ではダーティなら必ず変更が発生するようにしたい
+                IZ_BOOL orgVal = m_Flags.is_force_set_state;
+                m_Flags.is_force_set_state = IZ_TRUE;
 
-                // MAG_FILTER
-                SetSamplerStateFilter(
-                    isPlane,
-                    E_GRAPH_SAMPLER_STATE_TYPE_MAGFILTER,
-                    m_SamplerState[nStage].magFilter,
-                    pTex->GetState().magFilter);
-
-                // MIP_FILTER
-                if (pTex->GetMipMapNum() > 1) {
+                if (IsDirty(pTex, E_GRAPH_SAMPLER_STATE_TYPE_MINFILTER)) {
+                    // MIN_FILTER
                     SetSamplerStateFilter(
                         isPlane,
-                        E_GRAPH_SAMPLER_STATE_TYPE_MIPFILTER,
-                        m_SamplerState[nStage].mipFilter,
-                        pTex->GetState().mipFilter);
+                        E_GRAPH_SAMPLER_STATE_TYPE_MINFILTER,
+                        m_SamplerState[nStage].minFilter,
+                        pTex->GetState().minFilter);
                 }
 
-                // ADDRESS_U
-                SetSamplerStateAddr(
-                    isPlane,
-                    E_GRAPH_SAMPLER_STATE_TYPE_ADDRESSU,
-                    m_SamplerState[nStage].addressU,
-                    pTex->GetState().addressU);
+                if (IsDirty(pTex, E_GRAPH_SAMPLER_STATE_TYPE_MAGFILTER)) {
+                    // MAG_FILTER
+                    SetSamplerStateFilter(
+                        isPlane,
+                        E_GRAPH_SAMPLER_STATE_TYPE_MAGFILTER,
+                        m_SamplerState[nStage].magFilter,
+                        pTex->GetState().magFilter);
+                }
 
-                // ADDRESS_V
-                SetSamplerStateAddr(
-                    isPlane,
-                    E_GRAPH_SAMPLER_STATE_TYPE_ADDRESSV,
-                    m_SamplerState[nStage].addressV,
-                    pTex->GetState().addressV);
+                if (IsDirty(pTex, E_GRAPH_SAMPLER_STATE_TYPE_MIPFILTER)) {
+                    // MIP_FILTER
+                    if (pTex->GetMipMapNum() > 1) {
+                        SetSamplerStateFilter(
+                            isPlane,
+                            E_GRAPH_SAMPLER_STATE_TYPE_MIPFILTER,
+                            m_SamplerState[nStage].mipFilter,
+                            pTex->GetState().mipFilter);
+                    }
+                }
+
+                if (IsDirty(pTex, E_GRAPH_SAMPLER_STATE_TYPE_ADDRESSU)) {
+                    // ADDRESS_U
+                    SetSamplerStateAddr(
+                        isPlane,
+                        E_GRAPH_SAMPLER_STATE_TYPE_ADDRESSU,
+                        m_SamplerState[nStage].addressU,
+                        pTex->GetState().addressU);
+                }
+
+                if (IsDirty(pTex, E_GRAPH_SAMPLER_STATE_TYPE_ADDRESSV)) {
+                    // ADDRESS_V
+                    SetSamplerStateAddr(
+                        isPlane,
+                        E_GRAPH_SAMPLER_STATE_TYPE_ADDRESSV,
+                        m_SamplerState[nStage].addressV,
+                        pTex->GetState().addressV);
+                }
+
+                m_Flags.is_force_set_state = orgVal;
+
+                ClearDirty(pTex);
             }
 
             // 元に戻す

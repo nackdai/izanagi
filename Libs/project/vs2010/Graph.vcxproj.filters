@@ -327,6 +327,9 @@
     <ClInclude Include="..\..\include\graph\ogl\izOGLDefs.h">
       <Filter>include\ogl</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\graph\gles2\TextureProxy.h">
+      <Filter>include\gles2</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\source\graph\2d\shader\2DPS.hlsl">

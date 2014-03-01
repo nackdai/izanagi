@@ -419,6 +419,7 @@ $(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpNoTexAlp
     <ClInclude Include="..\..\include\graph\gles2\RenderTarget_GLES2.h" />
     <ClInclude Include="..\..\include\graph\gles2\ShaderProgram_GLES2.h" />
     <ClInclude Include="..\..\include\graph\gles2\ShaderProxy_GLES2.h" />
+    <ClInclude Include="..\..\include\graph\gles2\TextureProxy.h" />
     <ClInclude Include="..\..\include\graph\gles2\Texture_GLES2.h" />
     <ClInclude Include="..\..\include\graph\gles2\VertexBuffer_GLES2.h" />
     <ClInclude Include="..\..\include\graph\gles2\VertexDeclaration_GLES2.h" />
