@@ -141,6 +141,7 @@ int main(int argc, char* argv[])
 
 __EXIT__:
     // 開放
+    fontConverter->Release();
     SAFE_DELETE(fontConverter);
     SAFE_RELEASE(pDevice);
 

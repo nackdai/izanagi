@@ -34,6 +34,8 @@ IZ_BOOL CFontConverterFT::Init(
 
 void CFontConverterFT::Release()
 {
+    CFontConverterBase::Release();
+
     // TODO
 }
 
