@@ -32,7 +32,7 @@ private:
     izanagi::text::CGlyphCache* m_Cache[2];
 };
 
-struct
+struct SFontParameter
 {
     const void* text;
     izanagi::text::E_FONT_CHAR_ENCODE charcode;

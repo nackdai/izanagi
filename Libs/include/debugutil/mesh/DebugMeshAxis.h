@@ -4,8 +4,6 @@
 #include "DebugMesh.h"
 
 namespace izanagi {
-    struct math::SVector;
-
     /**
     * 軸
     */
