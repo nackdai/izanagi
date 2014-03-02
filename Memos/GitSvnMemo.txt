@@ -1,0 +1,10 @@
+- Initialize git-svn
+$ git svn init <URL>
+$ git svn fetch
+
+- Delete git-svn
+$ git branch -D -r git-svn
+$ rm -rf ./.gti/svn/refs/remotes/git-svn
+
+* http://d.hatena.ne.jp/from_kyushu/20081005/1223181603
+* http://harunapple.hatenablog.com/entry/2012/08/22/004111
