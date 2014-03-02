@@ -32,25 +32,25 @@ namespace graph
         {
             // MinFilter
             if (!m_IsDirty[E_GRAPH_SAMPLER_STATE_TYPE_MINFILTER]) {
-                m_IsDirty[E_GRAPH_SAMPLER_STATE_TYPE_MINFILTER] = (m_State.minFilter != minFilter);
+                m_IsDirty[E_GRAPH_SAMPLER_STATE_TYPE_MINFILTER] = (CBaseTexture::m_State.minFilter != minFilter);
                 if (m_IsDirty[E_GRAPH_SAMPLER_STATE_TYPE_MINFILTER]) {
-                    m_State.minFilter = minFilter;
+                    CBaseTexture::m_State.minFilter = minFilter;
                 }
             }
 
             // MagFilter
             if (!m_IsDirty[E_GRAPH_SAMPLER_STATE_TYPE_MAGFILTER]) {
-                m_IsDirty[E_GRAPH_SAMPLER_STATE_TYPE_MAGFILTER] = (m_State.magFilter != magFilter);
+                m_IsDirty[E_GRAPH_SAMPLER_STATE_TYPE_MAGFILTER] = (CBaseTexture::m_State.magFilter != magFilter);
                 if (m_IsDirty[E_GRAPH_SAMPLER_STATE_TYPE_MAGFILTER]) {
-                    m_State.magFilter = magFilter;
+                    CBaseTexture::m_State.magFilter = magFilter;
                 }
             }
             
             // MipFilter
             if (!m_IsDirty[E_GRAPH_SAMPLER_STATE_TYPE_MIPFILTER]) {
-                m_IsDirty[E_GRAPH_SAMPLER_STATE_TYPE_MIPFILTER] = (m_State.mipFilter != mipFilter);
+                m_IsDirty[E_GRAPH_SAMPLER_STATE_TYPE_MIPFILTER] = (CBaseTexture::m_State.mipFilter != mipFilter);
                 if (m_IsDirty[E_GRAPH_SAMPLER_STATE_TYPE_MIPFILTER]) {
-                    m_State.mipFilter = mipFilter;
+                    CBaseTexture::m_State.mipFilter = mipFilter;
                 }
             }
         }
@@ -62,18 +62,17 @@ namespace graph
         {
             // AddressU
             if (!m_IsDirty[E_GRAPH_SAMPLER_STATE_TYPE_ADDRESSU]) {
-                m_IsDirty[E_GRAPH_SAMPLER_STATE_TYPE_ADDRESSU] = (m_State.addressU != addressU);
+                m_IsDirty[E_GRAPH_SAMPLER_STATE_TYPE_ADDRESSU] = (CBaseTexture::m_State.addressU != addressU);
                 if (m_IsDirty[E_GRAPH_SAMPLER_STATE_TYPE_ADDRESSU]) {
-                    m_State.addressU = addressU;
+                    CBaseTexture::m_State.addressU = addressU;
                 }
             }
 
             // AddressV
             if (!m_IsDirty[E_GRAPH_SAMPLER_STATE_TYPE_ADDRESSV]) {
-                m_IsDirty[E_GRAPH_SAMPLER_STATE_TYPE_ADDRESSV] = (m_State.addressV != addressV);
+                m_IsDirty[E_GRAPH_SAMPLER_STATE_TYPE_ADDRESSV] = (CBaseTexture::m_State.addressV != addressV);
                 if (m_IsDirty[E_GRAPH_SAMPLER_STATE_TYPE_ADDRESSV]) {
-                    m_State.addressV = addressV;
-                    
+                    CBaseTexture::m_State.addressV = addressV;
                 }
             }
         }
