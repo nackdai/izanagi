@@ -13,7 +13,7 @@ namespace {
         va_start(argp, pszFormat);
         IZ_VSPRINTF(pszBuf, sizeof(pszBuf), pszFormat, argp);
         va_end(argp);
-        IZ_DEBUG_PRINT(pszBuf);
+        IZ_PRINTF(pszBuf);
 
         IZ_BOOL ret = (pszBuf[strlen(pszBuf)] != '\n');
         return ret;
@@ -36,7 +36,7 @@ IZ_BOOL CLog::IsLoggable(LOG_TYPE type)
             _OutputString(str);\
             va_list argp;\
             va_start(argp, format);\
-            if (_OutputString(format, argp)) { _OutputString("\n"); }\
+            if (_OutputString(format, argp)) { IZ_PRINTF("\n"); }\
             va_end(argp);\
         }\
     } while (0)

@@ -29,7 +29,16 @@
     #define DEBUG_BREAK()       __debugbreak()
 #endif  // #ifndef DEBUG_BREAK
 
-#define IZ_DEBUG_PRINT(str)    ::OutputDebugString(str)
+inline void _OutputDebugString(const char* format, ...)
+{
+    va_list argp;
+    char buf[256];
+    va_start(argp, format);
+    IZ_VSPRINTF(buf, sizeof(buf), format, argp);
+    va_end(argp);
+
+    ::OutputDebugString(buf);
+}
 
 #define IZ_PRINTF   _OutputDebugString
 

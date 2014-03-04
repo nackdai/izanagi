@@ -45,17 +45,6 @@ typedef const wchar_t*  IZ_PCWSTR;
     #define UNUSED_ALWAYS(v)    (v)
 #endif  // #ifndef UNUSED
 
-inline void _OutputDebugString(const char* format, ...)
-{
-    va_list argp;
-    izChar buf[256];
-    va_start(argp, format);
-    IZ_VSPRINTF(buf, sizeof(buf), format, argp);
-    va_end(argp);
-
-    IZ_DEBUG_PRINT(buf);
-}
-
 #ifndef IZ_ASSERT
     #ifdef __IZ_DEBUG__
         #define IZ_ASSERT(b)\

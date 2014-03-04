@@ -16,8 +16,6 @@
     #define DEBUG_BREAK()
 #endif  // #ifndef DEBUG_BREAK
 
-#define IZ_DEBUG_PRINT(str)    printf("%s", str)
-
 #define IZ_PRINTF   printf
 
 typedef timeval IZ_TIME;
