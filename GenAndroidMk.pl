@@ -1,5 +1,9 @@
 #!/usr/bin/perl
 
+use strict;
+use constant true => 1;
+use constant false => 0;
+
 if (@ARGV != 3) {
 	# Print Usage.
 	print "GenAndroidMK.pl [configure] [src directory] [dst directory]\n";
@@ -21,6 +25,8 @@ my @makefiles = readdir(SRC);
 
 closedir(SRC);
 
+my $libs_tag = $baseconfig . "_Libraries";
+my $incs_tag = $baseconfig . "_Include_Path";
 my $defnition_tag = $baseconfig . "_Preprocessor_Definitions";
 
 foreach my $srcmk (@makefiles) {
@@ -28,24 +34,35 @@ foreach my $srcmk (@makefiles) {
 		next;
 	}
 
+	if ($srcmk !~ /[a-zA-Z0-9]\.makefile/) {
+		next;
+	}
+
 	my $name = (split(/\./, $srcmk))[0];
 
 	my $srcmk = $targetsrc . "/" . $srcmk;
-	my $dstmk = $targetdst . "/Android_" . $name . ".mk";
 
-	print("$srcmk -> $dstmk\n");
+	print("$srcmk\n");
 
 	open(IN, $srcmk) or die "Can't open $srcmk\n";
 
 	my @targets = ();
 	my @srcfiles = ();
 	my @definitions = ();
+	my @libraries = ();
+	my @includes = ();
+
+	my $is_shared = false;
 
 	while (my $line = <IN>) {
 		$line =~ s/\r//;
 		$line =~ s/\n//;
 
-		if ($line =~ /$baseconfig: /) {
+		if ($line =~ /\.exe/) {
+			#TODO
+			$is_shared = true;
+		}
+		elsif ($line =~ /$baseconfig: /) {
 			my @files = split(/ /, $line);
 			foreach my $file (@files) {
 				unless ($file =~ /\.o/) {
@@ -66,6 +83,42 @@ foreach my $srcmk (@makefiles) {
 				push(@definitions, $def);
 			}
 		}
+		elsif ($line =~ /$libs_tag=/) {
+			my $libs_tmp = (split(/=/, $line))[1];
+			my @libs = split(/ /, $libs_tmp);
+
+			foreach my $lib (@libs) {
+				if ($lib =~ /-l([a-zA-Z0-9]*)/) {
+					$lib = $1;
+					if ($lib ne "glut"
+						&& $lib ne "GLU"
+						&& $lib ne "GLEW"
+						&& $lib ne "GL"
+						&& $lib ne "X11"
+						&& $lib ne "Xxf86vm"
+						&& $lib ne "Xi")
+					{
+						push(@libraries, $lib);
+					}
+				}
+			}
+		}
+		elsif ($line =~ /$incs_tag=/) {
+			my $inc_tmp = (split(/=/, $line))[1];
+			my @incs = split(/ /, $inc_tmp);
+
+			foreach my $inc (@incs) {
+				if ($inc =~ /-I\"([\.\/a-zA-Z0-9]*)/) {
+					$inc = $1;
+					if ($inc !~ /glew/
+						&& $inc !~ /freeglut/
+						&& $inc !~ /zlib/)
+					{
+						push(@includes, $inc);
+					}
+				}
+			}
+		}
 		else {
 			foreach my $target (@targets) {
 				if ($line =~ /$target: /) {
@@ -78,6 +131,23 @@ foreach my $srcmk (@makefiles) {
 
 	close(IN);
 
+	MakeMk($is_shared, $targetdst, $name, \@libraries, \@includes, \@definitions, \@srcfiles);
+}
+
+#==========================
+
+sub MakeMk
+{
+	my $is_shared = shift;
+	my $targetdst = shift;
+	my $name = shift;
+	my $libraries_array_ref = shift;
+	my $includes_array_ref = shift;
+	my $definitions_array_ref = shift;
+	my $srcfiles_array_ref = shift;
+
+	my $dstmk = $targetdst . "/Android_" . $name . ".mk";
+
 	open(IN, ">$dstmk") or die "Can't open $dstmk\n";
 
 	print IN "LOCAL_PATH:= \$(call my-dir)\n";
@@ -88,42 +158,68 @@ foreach my $srcmk (@makefiles) {
 
 	print IN "LOCAL_MODULE     := lib$name\n";
 
-	print IN "LOCAL_LDLIBS    := -llog -lGLESv2\n";
+	{
+		print IN "LOCAL_LDLIBS     := -llog -lGLESv2";
 
-#	print IN "LOCAL_CFLAGS     := -Wno-error=format-security -DANDROID";
-#	print IN "LOCAL_CFLAGS     := -Werror -DANDROID";
-	print IN "LOCAL_CFLAGS     := -DANDROID -D__IZ_GLES2__";
-
-	foreach my $def (@definitions) {
-		print IN " -D$def";
-	}
-
-	print IN "\n";
-
-#	print IN "LOCAL_LDLIBS     := -llog -lGLESv2\n";
-	print IN "LOCAL_C_INCLUDES := \$(LOCAL_PATH)/../../include\n";
-	print IN "LOCAL_SRC_FILES  := ";
-
-	my $pos = 0;
-
-	foreach my $src (@srcfiles) {
-		if ($src =~ /glut/ || $src =~ /OGL/) {
-			next;
+		if ($is_shared) {
+			foreach my $lib (@$libraries_array_ref) {
+				print IN " -l$lib";
+			}
 		}
 
-		print IN "$src";
-		if ($pos != $#srcfiles) {
-			print IN " \\";
-		}
 		print IN "\n";
-
-		$pos++;
 	}
 
-	print IN "\n";
+	{
+		print IN "LOCAL_CFLAGS     := -DANDROID -D__IZ_GLES2__";
 
-	# TODO
-	print IN "include \$(BUILD_STATIC_LIBRARY)\n";
+		foreach my $def (@$definitions_array_ref) {
+			print IN " -D$def";
+		}
+
+		print IN "\n";
+	}
+
+	{
+		print IN "LOCAL_C_INCLUDES :=";
+
+		foreach my $inc (@$includes_array_ref) {
+			print IN " \$(LOCAL_PATH)/" . $inc;
+		}
+
+		print IN "\n";
+	}
+
+	{
+		print IN "LOCAL_SRC_FILES  := ";
+
+		my $pos = 0;
+
+		my $srcfiles_cnt = @$srcfiles_array_ref - 1;
+
+		foreach my $src (@$srcfiles_array_ref) {
+			if ($src =~ /glut/ || $src =~ /OGL/) {
+				next;
+			}
+
+			print IN "$src";
+			if ($pos != $srcfiles_cnt) {
+				print IN " \\";
+			}
+			print IN "\n";
+
+			$pos++;
+		}
+
+		print IN "\n";
+	}
+
+	if ($is_shared) {
+		print IN "include \$(BUILD_SHARED_LIBRARY)\n";
+	}
+	else {
+		print IN "include \$(BUILD_STATIC_LIBRARY)\n";
+	}
 
 	close(IN);
 
