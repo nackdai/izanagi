@@ -13,7 +13,7 @@ namespace {
         va_start(argp, pszFormat);
         IZ_VSPRINTF(pszBuf, sizeof(pszBuf), pszFormat, argp);
         va_end(argp);
-        IZ_PRINTF(pszBuf);
+        IZ_PRINTF("%s", pszBuf);
 
         IZ_BOOL ret = (pszBuf[strlen(pszBuf)] != '\n');
         return ret;

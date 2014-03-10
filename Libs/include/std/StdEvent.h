@@ -7,9 +7,6 @@
 #include "std/allocator/MemoryAllocator.h"
 #include "std/allocator/STLMemoryAllocator.h"
 
-#include <list>
-#include <algorithm>
-
 namespace izanagi {
     /**
      */

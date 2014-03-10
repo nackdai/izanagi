@@ -5,12 +5,16 @@
 #include <stdarg.h>
 #include <memory.h>
 #include <assert.h>
+#include <string.h>
 
 #include <float.h>
 
 #if defined(WIN32) || defined(WIN64)
     #include "izTypes_windows.h"
     #include "izDefs_windows.h"
+#elif defined(ANDROID)
+    #include "izTypes_linux.h"
+    #include "izDefs_android.h"
 #else
     #include "izTypes_linux.h"
     #include "izDefs_linux.h"
