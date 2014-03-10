@@ -3,7 +3,7 @@ CPP_COMPILER = g++
 C_COMPILER = gcc
 
 # Include paths...
-Debug_GLUT_Include_Path=-I"../include" -I"../../include" -I"../../../External/glew/include" -I"../../../External/freeglut/include" 
+Debug_GLUT_Include_Path=-I"../../include" -I"../../../External/glew/include" -I"../../../External/freeglut/include" 
 
 # Library paths...
 Debug_GLUT_Library_Path=
