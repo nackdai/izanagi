@@ -29,6 +29,8 @@ my $libs_tag = $baseconfig . "_Libraries";
 my $incs_tag = $baseconfig . "_Include_Path";
 my $defnition_tag = $baseconfig . "_Preprocessor_Definitions";
 
+my %projects;
+
 foreach my $srcmk (@makefiles) {
 	if ($srcmk eq "." || $srcmk eq "..") {
 		next;
@@ -131,14 +133,24 @@ foreach my $srcmk (@makefiles) {
 
 	close(IN);
 
-	MakeMk($is_shared, $targetdst, $name, \@libraries, \@includes, \@definitions, \@srcfiles);
+	$projects{$name} = $is_shared;
+
+	if ($is_shared) {
+		MakeAndroidMk_SharedLib($targetdst, $name, \@libraries, \@includes, \@definitions, \@srcfiles);
+	}
+	else {
+		MakeAndroidMk_StaticLib($targetdst, $name, \@libraries, \@includes, \@definitions, \@srcfiles);
+	}
+
+	MakeApplicationMk($targetdst, $name);
 }
+
+MakeMakefile($baseconfig, $targetdst, \%projects);
 
 #==========================
 
-sub MakeMk
+sub MakeAndroidMk_StaticLib
 {
-	my $is_shared = shift;
 	my $targetdst = shift;
 	my $name = shift;
 	my $libraries_array_ref = shift;
@@ -148,50 +160,38 @@ sub MakeMk
 
 	my $dstmk = $targetdst . "/Android_" . $name . ".mk";
 
-	open(IN, ">$dstmk") or die "Can't open $dstmk\n";
+	open(OUT, ">$dstmk") or die "Can't open $dstmk\n";
 
-	print IN "LOCAL_PATH:= \$(call my-dir)\n";
-	print IN "\n";
+	print OUT "LOCAL_PATH:= \$(call my-dir)\n";
+	print OUT "\n";
 
-	print IN "include \$(CLEAR_VARS)\n";
-	print IN "\n";
+	print OUT "include \$(CLEAR_VARS)\n";
+	print OUT "\n";
 
-	print IN "LOCAL_MODULE     := lib$name\n";
-
-	{
-		print IN "LOCAL_LDLIBS     := -llog -lGLESv2";
-
-		if ($is_shared) {
-			foreach my $lib (@$libraries_array_ref) {
-				print IN " -l$lib";
-			}
-		}
-
-		print IN "\n";
-	}
+	print OUT "LOCAL_MODULE     := lib$name\n";
 
 	{
-		print IN "LOCAL_CFLAGS     := -DANDROID -D__IZ_GLES2__";
+		print OUT "LOCAL_CFLAGS     := -DANDROID -D__IZ_GLES2__";
 
 		foreach my $def (@$definitions_array_ref) {
-			print IN " -D$def";
+			print OUT " -D$def";
 		}
 
-		print IN "\n";
+		print OUT "\n";
 	}
 
 	{
-		print IN "LOCAL_C_INCLUDES :=";
+		print OUT "LOCAL_C_INCLUDES :=";
 
 		foreach my $inc (@$includes_array_ref) {
-			print IN " \$(LOCAL_PATH)/" . $inc;
+			print OUT " \$(LOCAL_PATH)/" . $inc;
 		}
 
-		print IN "\n";
+		print OUT "\n";
 	}
 
 	{
-		print IN "LOCAL_SRC_FILES  := ";
+		print OUT "LOCAL_SRC_FILES  := ";
 
 		my $pos = 0;
 
@@ -202,35 +202,219 @@ sub MakeMk
 				next;
 			}
 
-			print IN "$src";
+			print OUT "$src";
 			if ($pos != $srcfiles_cnt) {
-				print IN " \\";
+				print OUT " \\";
 			}
-			print IN "\n";
+			print OUT "\n";
 
 			$pos++;
 		}
 
-		print IN "\n";
+		print OUT "\n";
 	}
 
-	if ($is_shared) {
-		print IN "include \$(BUILD_SHARED_LIBRARY)\n";
+	print OUT "include \$(BUILD_STATIC_LIBRARY)\n";
+
+	close(OUT);
+}
+
+sub WritePrebuildStaticLib
+{
+	my $OUT = shift;
+	my $name = shift;
+	my $is_local = shift;
+	
+	print $OUT "include \$(CLEAR_VARS)\n";
+	print $OUT "LOCAL_MODULE := prebuild-lib$name\n";
+
+	if ($is_local) {
+		print $OUT "LOCAL_SRC_FILES := \$(LOCAL_PATH)/obj/local/armeabi/lib$name.a\n";
 	}
 	else {
-		print IN "include \$(BUILD_STATIC_LIBRARY)\n";
+		print $OUT "LOCAL_SRC_FILES := \$(LOCAL_PATH)/../../../Libs/project/lib/lib$name.a\n";
+	}
+	print $OUT "include \$(PREBUILT_STATIC_LIBRARY)\n";
+	print $OUT "\n";
+}
+
+sub WriteArrayElements
+{
+	my $OUT = shift;
+	my $array_ref = shift;
+	my $is_prebuild_lib = shift;
+
+	my $pos = 0;
+
+	my $array_cnt = @$array_ref - 1;
+
+	foreach my $elem (@$array_ref) {
+		if ($elem =~ /glut/ || $elem =~ /OGL/) {
+			next;
+		}
+
+		if ($is_prebuild_lib) {
+			print $OUT "prebuild-lib" . $elem;
+		}
+		else {
+			print $OUT "$elem";
+		}
+
+		if ($pos != $array_cnt) {
+			print $OUT " \\";
+		}
+		print $OUT "\n";
+
+		$pos++;
+	}
+}
+
+sub MakeAndroidMk_SharedLib
+{
+	my $targetdst = shift;
+	my $name = shift;
+	my $libraries_array_ref = shift;
+	my $includes_array_ref = shift;
+	my $definitions_array_ref = shift;
+	my $srcfiles_array_ref = shift;
+
+	my $dstmk = $targetdst . "/Android_" . $name . ".mk";
+
+	open(my $OUT, ">$dstmk") or die "Can't open $dstmk\n";
+
+	print $OUT "LOCAL_PATH:= \$(call my-dir)\n";
+	print $OUT "\n";
+
+	foreach my $lib (@$libraries_array_ref) {
+		if ($lib =~ /SampleKit/) {
+			WritePrebuildStaticLib($OUT, $lib, true);
+		}
+		else {
+			WritePrebuildStaticLib($OUT, $lib, false);
+		}
 	}
 
-	close(IN);
+	print $OUT "include \$(CLEAR_VARS)\n";
+	print $OUT "\n";
+
+	print $OUT "LOCAL_MODULE     := lib$name\n";
+
+	{
+		print $OUT "LOCAL_LDLIBS     := -llog -lGLESv2";
+		print $OUT "\n";
+	}
+
+	{
+		print $OUT "LOCAL_CFLAGS     := -DANDROID -D__IZ_GLES2__";
+
+		foreach my $def (@$definitions_array_ref) {
+			print $OUT " -D$def";
+		}
+
+		print $OUT "\n";
+	}
+
+	{
+		print $OUT "LOCAL_C_INCLUDES :=";
+
+		foreach my $inc (@$includes_array_ref) {
+			print $OUT " \$(LOCAL_PATH)/" . $inc;
+		}
+
+		print $OUT "\n";
+	}
+
+	{
+		print $OUT "LOCAL_SRC_FILES  := ";
+
+		WriteArrayElements($OUT, $srcfiles_array_ref, false);
+
+		print $OUT "\n";
+	}
+
+	{
+		print $OUT "LOCAL_WHOLE_STATIC_LIBRARIES := ";
+
+		WriteArrayElements($OUT, $libraries_array_ref, true);
+
+		print $OUT "\n";
+	}
+
+	print $OUT "include \$(BUILD_SHARED_LIBRARY)\n";
+
+	close($OUT);
+}
+
+sub MakeApplicationMk
+{
+	my $targetdst = shift;
+	my $name = shift;
 
 	my $appmk = $targetdst . "Application_" . $name .".mk";
 
-	open(IN, ">$appmk") or die "Can't opne $appmk\n";
+	open(OUT, ">$appmk") or die "Can't opne $appmk\n";
 
-	print IN "APP_PROJECT_PATH := \$(NDK_PROJECT_PATH)\n";
-	print IN "APP_BUILD_SCRIPT := \$(APP_PROJECT_PATH)/Android_" . $name . ".mk\n";
-	print IN "APP_STL := stlport_static\n";
-	print IN "APP_PLATFORM := android-18\n";
+	print OUT "APP_PROJECT_PATH := \$(NDK_PROJECT_PATH)\n";
+	print OUT "APP_BUILD_SCRIPT := \$(APP_PROJECT_PATH)/Android_" . $name . ".mk\n";
+	print OUT "APP_STL := stlport_static\n";
+	print OUT "APP_PLATFORM := android-18\n";
+
+	close(OUT);
+}
+
+sub FindElement
+{
+	my $array = shift;
+	my $key = shift;
+
+	my $pos = 0;
+
+	foreach my $elem (@$array) {
+		if ($elem eq $key) {
+			return $pos;
+		}
+		$pos++;
+	}
+
+	return -1;
+}
+
+sub MakeMakefile
+{
+	my $config = shift;
+	my $targetdst = shift;
+	my $projects_hash = shift;
+
+	my $makefile = $targetdst . "/Makefile";
+
+	open(IN, ">$makefile") or die "Can't opne $makefile\n";
+
+	print IN "$config: create_floders\n";
+
+	my @projects = keys(%$projects_hash);
+
+	my $pos = FindElement(\@projects, "SampleKit");
+	if ($pos >= 0) {
+		splice(@projects, $pos, 1);
+		unshift(@projects, "SampleKit");
+	}
+
+	foreach my $name (@projects) {
+		my $mk = "Application_" . $name . ".mk";
+		print IN "\tndk-build NDK_PROJECT_PATH=\${PWD} NDK_APPLICATION_MK=\"./$mk\"\n";
+	}
+
+	print IN "\tcp ./obj/local/armeabi/lib*.a ../lib/\n";
+	print IN "\n";
+
+	print IN "create_floders: \n";
+	print IN "\tmkdir -p ../lib\n";
+	print IN "\n";
+
+	print IN "clean: \n";
+	print IN "\trm -rf ./obj\n";
+	print IN "\trm -rf ./libs\n";
+	print IN "\trm -rf ../lib/lib*.a\n";
 
 	close(IN);
 }
