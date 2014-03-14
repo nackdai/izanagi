@@ -27,5 +27,6 @@ LOCAL_SRC_FILES  := ../../source/graph/BufferBase.cpp \
 ../../source/graph/gles2/VertexBuffer_GLES2.cpp \
 ../../source/graph/gles2/VertexDeclaration_GLES2.cpp \
 ../../source/graph/gles2/VertexShader_GLES2.cpp \
+../../source/graph/android/GraphicsDevice_android.cpp
 
 include $(BUILD_STATIC_LIBRARY)
