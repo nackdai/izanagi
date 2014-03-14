@@ -139,7 +139,7 @@ foreach my $srcmk (@makefiles) {
 		MakeAndroidMk_SharedLib($targetdst, $name, \@libraries, \@includes, \@definitions, \@srcfiles);
 	}
 	else {
-		MakeAndroidMk_StaticLib($targetdst, $name, \@libraries, \@includes, \@definitions, \@srcfiles);
+		MakeAndroidMk_StaticLib($targetsrc, $targetdst, $name, \@libraries, \@includes, \@definitions, \@srcfiles);
 	}
 
 	MakeApplicationMk($targetdst, $name);
@@ -149,8 +149,55 @@ MakeMakefile($baseconfig, $targetdst, \%projects);
 
 #==========================
 
+sub GetRelativePath
+{
+	my $basedir = shift;
+	my $path = shift;
+
+	chomp($path);
+	chomp($path);
+
+	my @basedir_array = split(/\//, $basedir);
+	my @path_array = split(/\//, $path);
+
+	if ($path_array[0] eq ".") {
+		splice(@path_array, 0, 1);
+	}
+
+	my $basedir_cnt = @basedir_array;
+	my $path_cnt = @path_array;
+
+	my $cnt = ($basedir_cnt < $path_cnt ? $basedir_cnt : $path_cnt);
+	my $num = 0;
+
+	for (my $i = $cnt - 1; $i >= 0; $i--) {
+		if ($basedir_array[$i] eq $path_array[$i]) {
+			last;
+		}
+		$num++;
+	}
+
+	my $ret = "";
+
+	if ($num < $cnt) {
+		$ret = "..";
+		for (my $i = 1; $i < $num; $i++) {
+			$ret .= "/..";
+		}
+
+		for (my $i = $num - 1; $i < @path_array; $i++) {
+			$ret .= "/$path_array[$i]";
+		}
+
+		return $ret;
+	}
+
+	return $path;
+}
+
 sub MakeAndroidMk_StaticLib
 {
+	my $targetsrc = shift;
 	my $targetdst = shift;
 	my $name = shift;
 	my $libraries_array_ref = shift;
@@ -198,8 +245,19 @@ sub MakeAndroidMk_StaticLib
 		my $srcfiles_cnt = @$srcfiles_array_ref - 1;
 
 		foreach my $src (@$srcfiles_array_ref) {
-			if ($src =~ /glut/ || $src =~ /OGL/) {
-				next;
+			if ($src =~ /(glut)/ || $src =~ /(OGL)/) {
+				my @tmp_array = split(/\//, $src);
+				$src = $tmp_array[@tmp_array - 1];
+				$src =~ s/$1/android/;
+
+				my @fullpath = `find . -name $src`;
+				if (@fullpath == 1) {
+					$src = GetRelativePath($targetsrc, $fullpath[0]);
+				}
+				else {
+					# TODO
+					next;
+				}
 			}
 
 			print OUT "$src";
