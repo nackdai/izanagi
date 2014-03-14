@@ -107,23 +107,23 @@ namespace izanagi {
             }
         }
 
-        void* operator new(size_t size)
+        void* operator new(size_t size) throw()
         {
             // Don't uset..
         }
 
     protected:
-        void* operator new(size_t size, void* buf)
+        void* operator new(size_t size, void* buf) throw()
         {
             return buf;
         }
 
-        void operator delete(void* data)
+        void operator delete(void* data) throw()
         {
             // Nothing is done.
         }
 
-        void operator delete(void* data, void* buf)
+        void operator delete(void* data, void* buf) throw()
         {
             // Nothing is done.
         }
