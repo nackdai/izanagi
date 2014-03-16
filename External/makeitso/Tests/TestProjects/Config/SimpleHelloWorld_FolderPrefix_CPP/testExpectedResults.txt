@@ -1,2 +1,0 @@
-cppPrefixDebug/testOutput.txt = Hello, World!
-cppPrefixRelease/testOutput.txt = Hello, World!

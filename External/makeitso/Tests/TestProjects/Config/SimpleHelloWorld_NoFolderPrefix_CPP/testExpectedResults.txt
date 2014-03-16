@@ -1,2 +1,0 @@
-Debug/testOutput.txt = Hello, World!
-Release/testOutput.txt = Hello, World!

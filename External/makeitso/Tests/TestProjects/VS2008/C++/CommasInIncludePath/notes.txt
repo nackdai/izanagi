@@ -1,6 +1,0 @@
-MultipleStaticLibraries
------------------------
-The app uses two libraries which in turn rely on a function
-from a third library.
-
-All libraries are static libraries, and are explicitly linked.

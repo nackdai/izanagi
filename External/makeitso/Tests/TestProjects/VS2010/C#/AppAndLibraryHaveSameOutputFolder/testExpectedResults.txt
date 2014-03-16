@@ -1,2 +1,0 @@
-monoDebug/testOutput.txt = Hello, World!
-monoRelease/testOutput.txt = Hello, World!
