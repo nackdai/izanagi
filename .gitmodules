@@ -1,0 +1,3 @@
+[submodule "External/makeitso"]
+	path = External/makeitso
+	url = https://github.com/nakdai/makeitso.git
