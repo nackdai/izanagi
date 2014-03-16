@@ -1,3 +1,6 @@
 [submodule "External/makeitso"]
 	path = External/makeitso
 	url = https://github.com/nakdai/makeitso.git
+[submodule "Tools/External/mojoshader"]
+	path = Tools/External/mojoshader
+	url = https://github.com/nakdai/mojoshader.git
