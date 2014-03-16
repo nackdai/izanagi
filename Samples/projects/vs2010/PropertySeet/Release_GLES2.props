@@ -41,7 +41,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PreBuildEvent>
-      <Command>copy /B /Y ..\..\..\External\ANGLE\lib\Release\*.dll ..\..\$(ProjectName)</Command>
+      <Command>copy /B /Y ..\..\..\External\ANGLE\projects\src\Release_Win32\*.dll ..\..\$(ProjectName)</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
 </Project>
