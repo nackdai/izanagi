@@ -8,6 +8,10 @@ if not defined TARGET (
     set TARGET=Rebuild
 )
 
+if not defined CONFIG (
+    set CONFIG=Release
+)
+
 if not "%1"=="" (
     set MojoShaderConfig=%1
 )else if defined CONFIG (
