@@ -20,8 +20,18 @@
 
 typedef timeval IZ_TIME;
 
-#define IzMain() int main(int argc, char* argv[])
+#define IzMain(screenWidth, screenHeight) 
+    static const IZ_UINT _izScreenWidth = screenWidth;\
+    static const IZ_UINT _izScreenHeight = screenHeight;\
+    int _main(int argc, char* argv[]);\
+    int main(int argc, char* argv[])
+    {\
+        return _main(argc, argv);\
+    }\
+    int _main(int argc, char* argv[])
 
 #define IzGetSystemDataForMainFunc()  NULL
+#define IzGetScreenWidth() _izScreenWidth
+#define IzGetScreenHeight() _izScreenHeight
 
 #endif  // #if !defined(__IZANAGI_DEFS_LINUX_H__)
