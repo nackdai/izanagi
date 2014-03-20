@@ -37,7 +37,7 @@ private:
     izanagi::IMemoryAllocator* m_Allocator;
 };
 
-IzMain()
+IzMain(0, 0)
 {
     izanagi::CSimpleMemoryAllocator allocator;
 

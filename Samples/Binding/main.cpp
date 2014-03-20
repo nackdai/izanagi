@@ -97,7 +97,7 @@ private:
 
 izanagi::DependencyProperty SampleObject::sProp("Value");
 
-IzMain()
+IzMain(0, 0)
 {
     izanagi::CSimpleMemoryAllocator allocator;
 

@@ -121,7 +121,7 @@ IZ_COLOR CShaderApp::GetBgColor() const
     return CSampleApp::GetBgColor();
 }
 
-IzMain()
+IzMain(SCREEN_WIDTH, SCREEN_HEIGHT)
 {
     CShaderApp app;
 
@@ -129,7 +129,7 @@ IzMain()
         IzGetSystemDataForMainFunc(),
         &app,
         "Shader",
-        SCREEN_WIDTH, SCREEN_HEIGHT,
+        IzGetScreenWidth(), IzGetScreenHeight(),
         BUF, BUF_SIZE,
         GFX_BUF, GFX_BUF_SIZE);
 

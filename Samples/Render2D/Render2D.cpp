@@ -98,7 +98,7 @@ static IZ_UINT GFX_BUF[GFX_BUF_SIZE];
 static const IZ_UINT SCREEN_WIDTH = 1280;
 static const IZ_UINT SCREEN_HEIGHT = 720;
 
-IzMain()
+IzMain(SCREEN_WIDTH, SCREEN_HEIGHT)
 {
     CRender2DApp app;
 
@@ -106,7 +106,7 @@ IzMain()
         IzGetSystemDataForMainFunc(),
         &app,
         "Render2D",
-        SCREEN_WIDTH, SCREEN_HEIGHT,
+        IzGetScreenWidth(), IzGetScreenHeight(),
         BUF, BUF_SIZE,
         GFX_BUF, GFX_BUF_SIZE);
 

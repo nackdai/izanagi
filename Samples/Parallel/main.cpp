@@ -42,7 +42,7 @@ public:
 
 IZ_UINT8 buffer[1 * 1024 * 1024];
 
-IzMain()
+IzMain(0, 0)
 {
     izanagi::CStandardMemoryAllocator allocator;
     allocator.Init(sizeof(buffer), buffer);
