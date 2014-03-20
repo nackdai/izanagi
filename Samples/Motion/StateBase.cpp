@@ -243,7 +243,7 @@ IZ_BOOL CStateBase::InitObject(
         1.0f,
         1000.0f,
         izanagi::math::CMath::Deg2Rad(60.0f),
-        (IZ_FLOAT)SCREEN_WIDTH / SCREEN_HEIGHT);
+        (IZ_FLOAT)device->GetBackBufferWidth() / device->GetBackBufferHeight());
     m_App->GetCamera().Update();
 
 __EXIT__:

@@ -233,7 +233,7 @@ IZ_BOOL CMotionInterpApp::InitInternal(
         1.0f,
         500.0f,
         izanagi::math::CMath::Deg2Rad(60.0f),
-        (IZ_FLOAT)SCREEN_WIDTH / SCREEN_HEIGHT);
+        (IZ_FLOAT)device->GetBackBufferWidth() / device->GetBackBufferHeight());
     camera.Update();
 
 __EXIT__:
