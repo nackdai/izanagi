@@ -88,22 +88,13 @@ namespace sys
     // ウインドウ破棄.
     void CSysWindow::Destroy(WindowHandle handle)
     {
-        IZ_ASSERT(CWindowAndroid::s_Instance != IZ_NULL);
-
-        CMessageHandler* handler = CWindowAndroid::s_Instance->GetHandler();
-
-        handler->OnTerminate();
-        
-        CWindowAndroid::Destroy(CWindowAndroid::s_Instance);
-
-        handler->OnDestroy();
+        // Nothing...
     }
 
     // ループ実行.
     void CSysWindow::RunLoop(WindowHandle handle)
     {
-        IZ_ASSERT(CWindowAndroid::s_Instance != IZ_NULL);
-        CWindowAndroid::s_Instance->GetHandler()->OnIdle();
+        // Nothing...
     }
 
     void* CSysWindow::GetNativeWindowHandle(const WindowHandle& handle)
@@ -114,6 +105,27 @@ namespace sys
     void* CSysWindow::GetNativeDisplayHandle(const WindowHandle& handle)
     {
         return IZ_NULL;
+    }
+
+    ///////////////////////////////////////////////////////////////////
+
+    JNIEXPORT void JNICALL Java_izanagi_android_lib_IzanagiProxy_runLoop(JNIEnv * env, jobject obj)
+    {
+        IZ_ASSERT(CWindowAndroid::s_Instance != IZ_NULL);
+        CWindowAndroid::s_Instance->GetHandler()->OnIdle();
+    }
+
+    JNIEXPORT void JNICALL Java_izanagi_android_lib_IzanagiProxy_destroy(JNIEnv * env, jobject obj)
+    {
+        IZ_ASSERT(CWindowAndroid::s_Instance != IZ_NULL);
+
+        CMessageHandler* handler = CWindowAndroid::s_Instance->GetHandler();
+
+        handler->OnTerminate();
+        
+        CWindowAndroid::Destroy(CWindowAndroid::s_Instance);
+
+        handler->OnDestroy();
     }
 
 }   // namespace sys
