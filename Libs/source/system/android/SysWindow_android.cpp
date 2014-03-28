@@ -109,6 +109,11 @@ namespace sys
 
     ///////////////////////////////////////////////////////////////////
 
+    extern "C" {
+        JNIEXPORT void JNICALL Java_izanagi_android_lib_IzanagiProxy_runLoop(JNIEnv * env, jobject obj);
+        JNIEXPORT void JNICALL Java_izanagi_android_lib_IzanagiProxy_destroy(JNIEnv * env, jobject obj);
+    };
+
     JNIEXPORT void JNICALL Java_izanagi_android_lib_IzanagiProxy_runLoop(JNIEnv * env, jobject obj)
     {
         IZ_ASSERT(CWindowAndroid::s_Instance != IZ_NULL);
