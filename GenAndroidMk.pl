@@ -11,10 +11,11 @@ if (@ARGV != 3) {
 	exit();
 }
 
-my $baseconfig = $ARGV[0];
-my $targetsrc = $ARGV[1];
-my $targetdst = $ARGV[2];
+my $baseconfig = $ARGV[0];	# Makefile内を参照するコンフィグ
+my $targetsrc = $ARGV[1];	# 参照するMakefileがあるディレクトリ
+my $targetdst = $ARGV[2];	# 出力ディレクトリ
 
+# 出力ディレクトリが存在しない場合は作る
 unless (-d $targetdst) {
 	mkdir($targetdst);
 }
@@ -36,23 +37,27 @@ foreach my $srcmk (@makefiles) {
 		next;
 	}
 
+	# Makefile以外は無視する
 	if ($srcmk !~ /[a-zA-Z0-9]\.makefile/) {
 		next;
 	}
 
+	# ファイル名は XXXX.makefile 
+	# ここから XXXX にあたる部分を取り出す
 	my $name = (split(/\./, $srcmk))[0];
 
+	# フルパスを作成
 	my $srcmk = $targetsrc . "/" . $srcmk;
 
 	print("$srcmk\n");
 
 	open(IN, $srcmk) or die "Can't open $srcmk\n";
 
-	my @targets = ();
-	my @srcfiles = ();
-	my @definitions = ();
-	my @libraries = ();
-	my @includes = ();
+	my @targets = ();		# 参照するオブジェクトファイル
+	my @srcfiles = ();		# ソースファイル
+	my @definitions = ();	# -Dオプション
+	my @libraries = ();		# 参照ライブラリ
+	my @includes = ();		# インクルードパス
 
 	my $is_shared = false;
 
@@ -61,10 +66,13 @@ foreach my $srcmk (@makefiles) {
 		$line =~ s/\n//;
 
 		if ($line =~ /\.exe/) {
-			#TODO
+			# exeファイルはシェアドライブラリとして生成する
 			$is_shared = true;
 		}
 		elsif ($line =~ /$baseconfig: /) {
+			# 参照するコンフィグについてmakeのターゲットとして記述された行
+
+			# 参照するオブジェクトファイルを集める
 			my @files = split(/ /, $line);
 			foreach my $file (@files) {
 				unless ($file =~ /\.o/) {
@@ -74,11 +82,14 @@ foreach my $srcmk (@makefiles) {
 			}
 		}
 		elsif ($line =~ /$defnition_tag=/) {
+			# -Dオプションについて記述された行
+
 			my $defs_tmp = (split(/=/, $line))[1];
 			$defs_tmp =~ s/-D //g;
 			my @defs = split(/ /, $defs_tmp);
 
 			foreach my $def (@defs) {
+				# 関係ないものについては無視する
 				if ($def =~ /GLUT/ || $def =~ /GCC_BUILD/) {
 					next;
 				}
@@ -86,12 +97,16 @@ foreach my $srcmk (@makefiles) {
 			}
 		}
 		elsif ($line =~ /$libs_tag=/) {
+			# 参照するライブラリ
+
 			my $libs_tmp = (split(/=/, $line))[1];
 			my @libs = split(/ /, $libs_tmp);
 
 			foreach my $lib (@libs) {
 				if ($lib =~ /-l([a-zA-Z0-9]*)/) {
 					$lib = $1;
+
+					# 以下のライブラリは無いので無視する
 					if ($lib ne "glut"
 						&& $lib ne "GLU"
 						&& $lib ne "GLEW"
@@ -106,12 +121,16 @@ foreach my $srcmk (@makefiles) {
 			}
 		}
 		elsif ($line =~ /$incs_tag=/) {
+			# インクルードパス
+
 			my $inc_tmp = (split(/=/, $line))[1];
 			my @incs = split(/ /, $inc_tmp);
 
 			foreach my $inc (@incs) {
 				if ($inc =~ /-I\"([\.\/a-zA-Z0-9]*)/) {
 					$inc = $1;
+
+					# 以下の文字列が含まれるインクルードパスは無いので無視する
 					if ($inc !~ /glew/
 						&& $inc !~ /freeglut/
 						&& $inc !~ /zlib/)
@@ -122,6 +141,7 @@ foreach my $srcmk (@makefiles) {
 			}
 		}
 		else {
+			# 参照するオブジェクトファイルからソースファイルを探す
 			foreach my $target (@targets) {
 				if ($line =~ /$target: /) {
 					my $srcfile = (split(/ /, $line))[1];
@@ -133,8 +153,10 @@ foreach my $srcmk (@makefiles) {
 
 	close(IN);
 
+	# それぞれのプロジェクトがシェアドライブラリかどうかをハッシュで保持
 	$projects{$name} = $is_shared;
 
+	# Android.mkを生成
 	if ($is_shared) {
 		MakeAndroidMk_SharedLib($targetdst, $name, \@libraries, \@includes, \@definitions, \@srcfiles);
 	}
@@ -142,21 +164,25 @@ foreach my $srcmk (@makefiles) {
 		MakeAndroidMk_StaticLib($targetsrc, $targetdst, $name, \@libraries, \@includes, \@definitions, \@srcfiles);
 	}
 
+	# Application.mkを生成
 	MakeApplicationMk($targetdst, $name);
 }
 
+# 全体をビルドするためのMakefileを生成
 MakeMakefile($baseconfig, $targetdst, \%projects);
 
 #==========================
 
+# 相対パス取得
 sub GetRelativePath
 {
-	my $basedir = shift;
-	my $path = shift;
+	my $basedir = shift;	# ベースとなるディレクトリのパス
+	my $path = shift;		# 相対パスにしたいパス
 
 	chomp($path);
 	chomp($path);
 
+	# パスを分解する
 	my @basedir_array = split(/\//, $basedir);
 	my @path_array = split(/\//, $path);
 
@@ -170,6 +196,7 @@ sub GetRelativePath
 	my $cnt = ($basedir_cnt < $path_cnt ? $basedir_cnt : $path_cnt);
 	my $num = 0;
 
+	# パスを後ろから見ていき、一致する位置を探す
 	for (my $i = $cnt - 1; $i >= 0; $i--) {
 		if ($basedir_array[$i] eq $path_array[$i]) {
 			last;
@@ -179,6 +206,7 @@ sub GetRelativePath
 
 	my $ret = "";
 
+	# 一致しない分だけが相対になる
 	if ($num < $cnt) {
 		$ret = "..";
 		for (my $i = 1; $i < $num; $i++) {
@@ -195,16 +223,18 @@ sub GetRelativePath
 	return $path;
 }
 
+# スタティックライブラリを生成するMakefileを出力する
 sub MakeAndroidMk_StaticLib
 {
 	my $targetsrc = shift;
-	my $targetdst = shift;
+	my $targetdst = shift;	# 出力ディレクトリ
 	my $name = shift;
-	my $libraries_array_ref = shift;
-	my $includes_array_ref = shift;
-	my $definitions_array_ref = shift;
-	my $srcfiles_array_ref = shift;
+	my $libraries_array_ref = shift;	# 参照ライブラリの配列への参照
+	my $includes_array_ref = shift;		# インクルードパスの配列への参照
+	my $definitions_array_ref = shift;	# -Dオプションの配列への参照
+	my $srcfiles_array_ref = shift;		
 
+	# 出力Makefileのパス
 	my $dstmk = $targetdst . "/Android_" . $name . ".mk";
 
 	open(OUT, ">$dstmk") or die "Can't open $dstmk\n";
@@ -217,6 +247,7 @@ sub MakeAndroidMk_StaticLib
 
 	print OUT "LOCAL_MODULE     := lib$name\n";
 
+	# -Dオプション
 	{
 		print OUT "LOCAL_CFLAGS     := -DANDROID -D__IZ_GLES2__";
 
@@ -227,6 +258,7 @@ sub MakeAndroidMk_StaticLib
 		print OUT "\n";
 	}
 
+	# インクルードパス
 	{
 		print OUT "LOCAL_C_INCLUDES :=";
 
@@ -237,6 +269,7 @@ sub MakeAndroidMk_StaticLib
 		print OUT "\n";
 	}
 
+	# 
 	{
 		print OUT "LOCAL_SRC_FILES  := ";
 
@@ -245,17 +278,27 @@ sub MakeAndroidMk_StaticLib
 		my $srcfiles_cnt = @$srcfiles_array_ref - 1;
 
 		foreach my $src (@$srcfiles_array_ref) {
+			# ファイル名に 'glut' ot 'OGL' が含まれている場合はは 'android' に置換する
 			if ($src =~ /(glut)/ || $src =~ /(OGL)/) {
+				# パスを分解
 				my @tmp_array = split(/\//, $src);
+
+				# 末尾 = ファイル名 を取り出す
 				$src = $tmp_array[@tmp_array - 1];
+
+				# 'glut' or 'OGL' を 'android' に置換する
 				$src =~ s/$1/android/;
 
+				# 本当にファイルが存在するか探す
 				my @fullpath = `find . -name $src`;
 				if (@fullpath == 1) {
+					# 見つかった
+					# 相対パスにする
 					$src = GetRelativePath($targetsrc, $fullpath[0]);
 				}
 				else {
 					# TODO
+					# 複数ファイルが存在した場合
 					next;
 				}
 			}
@@ -277,6 +320,7 @@ sub MakeAndroidMk_StaticLib
 	close(OUT);
 }
 
+# static libraryをリンクするコードを出力
 sub WritePrebuildStaticLib
 {
 	my $OUT = shift;
@@ -296,17 +340,19 @@ sub WritePrebuildStaticLib
 	print $OUT "\n";
 }
 
+# 配列の要素を出力
 sub WriteArrayElements
 {
-	my $OUT = shift;
-	my $array_ref = shift;
-	my $is_prebuild_lib = shift;
+	my $OUT = shift;				# 出力ファイルハンドル
+	my $array_ref = shift;			# 配列の参照
+	my $is_prebuild_lib = shift;	# 参照するスタティックライブラリについて処理するかどうか
 
 	my $pos = 0;
 
 	my $array_cnt = @$array_ref - 1;
 
 	foreach my $elem (@$array_ref) {
+		# 要素に 'glut' or 'OGL' が含まれる場合は無視する
 		if ($elem =~ /glut/ || $elem =~ /OGL/) {
 			next;
 		}
@@ -327,15 +373,17 @@ sub WriteArrayElements
 	}
 }
 
+# シェアドライブラリを生成するMakefileを出力する
 sub MakeAndroidMk_SharedLib
 {
-	my $targetdst = shift;
+	my $targetdst = shift;	# 出力ディレクトリ
 	my $name = shift;
-	my $libraries_array_ref = shift;
-	my $includes_array_ref = shift;
-	my $definitions_array_ref = shift;
-	my $srcfiles_array_ref = shift;
+	my $libraries_array_ref = shift;	# 参照ライブラリの配列への参照
+	my $includes_array_ref = shift;     # インクルードパスの配列への参照
+	my $definitions_array_ref = shift;  # -Dオプションの配列への参照
+	my $srcfiles_array_ref = shift;		# ソースファイルの配列への参照
 
+	# 出力Makefileのパス
 	my $dstmk = $targetdst . "/Android_" . $name . ".mk";
 
 	open(my $OUT, ">$dstmk") or die "Can't open $dstmk\n";
@@ -343,6 +391,7 @@ sub MakeAndroidMk_SharedLib
 	print $OUT "LOCAL_PATH:= \$(call my-dir)\n";
 	print $OUT "\n";
 
+	# スタティックライブラリをリンクするコードを出力
 	foreach my $lib (@$libraries_array_ref) {
 		if ($lib =~ /SampleKit/) {
 			WritePrebuildStaticLib($OUT, $lib, true);
@@ -362,6 +411,7 @@ sub MakeAndroidMk_SharedLib
 		print $OUT "\n";
 	}
 
+	# -Dオプション
 	{
 		print $OUT "LOCAL_CFLAGS     := -DANDROID -D__IZ_GLES2__";
 
@@ -372,6 +422,7 @@ sub MakeAndroidMk_SharedLib
 		print $OUT "\n";
 	}
 
+	# インクルードパス
 	{
 		print $OUT "LOCAL_C_INCLUDES :=";
 
@@ -382,6 +433,7 @@ sub MakeAndroidMk_SharedLib
 		print $OUT "\n";
 	}
 
+	# ソースファイル
 	{
 		print $OUT "LOCAL_SRC_FILES  := ";
 
@@ -390,6 +442,7 @@ sub MakeAndroidMk_SharedLib
 		print $OUT "\n";
 	}
 
+	# 参照する自分で用意したスタティックライブラリ
 	{
 		print $OUT "LOCAL_WHOLE_STATIC_LIBRARIES := ";
 
@@ -403,6 +456,7 @@ sub MakeAndroidMk_SharedLib
 	close($OUT);
 }
 
+# Application.mkを生成する
 sub MakeApplicationMk
 {
 	my $targetdst = shift;
@@ -420,9 +474,10 @@ sub MakeApplicationMk
 	close(OUT);
 }
 
+# 指定された要素が配列内のどの位置にあるのか探す
 sub FindElement
 {
-	my $array = shift;
+	my $array = shift;	# 配列の参照
 	my $key = shift;
 
 	my $pos = 0;
@@ -437,11 +492,12 @@ sub FindElement
 	return -1;
 }
 
+# 全体をビルドするためのMakefileを生成
 sub MakeMakefile
 {
-	my $config = shift;
+	my $config = shift;			# 対象のコンフィグ
 	my $targetdst = shift;
-	my $projects_hash = shift;
+	my $projects_hash = shift;	# それぞれのプロジェクトがシェアドライブラリかどうかのハッシュの参照
 
 	my $makefile = $targetdst . "/Makefile";
 
@@ -449,8 +505,10 @@ sub MakeMakefile
 
 	print IN "$config: create_floders\n";
 
+	# ハッシュのキーの配列を取得
 	my @projects = keys(%$projects_hash);
 
+	# 'SampleKit'の文字列が配列内のどの位置にあるのか探す
 	my $pos = FindElement(\@projects, "SampleKit");
 	if ($pos >= 0) {
 		splice(@projects, $pos, 1);
