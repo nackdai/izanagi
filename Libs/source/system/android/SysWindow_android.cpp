@@ -73,8 +73,13 @@ namespace sys
     {
         WindowParams& windowParam = const_cast<WindowParams&>(param);
 
+#if 0
         IzAndroidJniParam* androidParam = (IzAndroidJniParam*)windowParam.platformParam;
         m_AndroidAssetMgr = AAssetManager_fromJava(androidParam->env, (jobject)androidParam->obj);
+#else
+        IzAndroidJniParam& androidParam = windowParam.platformParam;
+        m_AndroidAssetMgr = AAssetManager_fromJava(androidParam.env, (jobject)androidParam.obj);
+#endif
 
         IZ_ASSERT(m_AndroidAssetMgr != IZ_NULL);
 

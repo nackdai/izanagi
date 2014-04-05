@@ -159,6 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\graph\2d\2DShader.cpp" />
+    <ClCompile Include="..\..\source\graph\android\GraphicsDevice_android.cpp" />
     <ClCompile Include="..\..\source\graph\BufferBase.cpp" />
     <ClCompile Include="..\..\source\graph\dx9\2DShader_DX9.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">true</ExcludedFromBuild>

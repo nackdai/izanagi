@@ -32,21 +32,35 @@ typedef timeval IZ_TIME;
 
 #define IzMain(screenWidth, screenHeight) \
     extern "C" {\
-        JNIEXPORT int JNICALL Java_izanagi_android_lib_IzanagiProxy_init(JNIEnv * env, jobject obj,  jint width, jint height);\
+        JNIEXPORT int JNICALL Java_izanagi_android_lib_IzanagiProxy_init(JNIEnv* env, jobject obj, jobject assetManager, jint width, jint height);\
     };\
-    JNIEXPORT int JNICALL Java_izanagi_android_lib_IzanagiProxy_init(JNIEnv * env, jobject obj,  jint width, jint height)
+    JNIEXPORT int JNICALL Java_izanagi_android_lib_IzanagiProxy_init(JNIEnv* env, jobject obj, jobject assetManager, jint width, jint height)
 
-#define IzGetSystemDataForMainFunc()  NULL
+#define IzGetSystemDataForMainFunc()  izanagi::IzAndroidJniParam(env, assetManager)
 #define IzGetScreenWidth() width
 #define IzGetScreenHeight() height
 
-#define FILE_HANDLE AAsset*
+#define IZ_FILE_HANDLE AAsset*
 
 namespace izanagi {
     struct IzAndroidJniParam {
         JNIEnv* env;
-        void* obj;
+        jobject obj;
+
+        IzAndroidJniParam()
+        {
+            env = NULL;
+            obj = NULL;
+        }
+
+        IzAndroidJniParam(JNIEnv* e, jobject o)
+        {
+            env = e;
+            obj = o;
+        }
     };
 }
+
+#define IZ_PLATFORM_PARAM   izanagi::IzAndroidJniParam
 
 #endif  // #if !defined(__IZANAGI_DEFS_ANDROID_H__)

@@ -150,7 +150,7 @@ namespace izanagi
         }
 
     protected:
-        FILE_HANDLE m_File;
+        IZ_FILE_HANDLE m_File;
         IZ_LONG m_Size;
         IZ_LONG m_Pos;
     };

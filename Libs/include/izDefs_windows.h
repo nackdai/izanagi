@@ -58,6 +58,7 @@ typedef IZ_INT64 IZ_TIME;
 #define IzGetScreenWidth() _izScreenWidth
 #define IzGetScreenHeight() _izScreenHeight
 
-#define FILE_HANDLE FILE*
+#define IZ_FILE_HANDLE      FILE*
+#define IZ_PLATFORM_PARAM   void*
 
 #endif  // #if !defined(__IZANAGI_DEFS_WINDOWS_H__)

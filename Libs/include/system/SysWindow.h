@@ -65,8 +65,8 @@ namespace sys
         IZ_UINT height;             ///< ウインドウ高さ
         IZ_BOOL isWindowed;         ///< ウインドウモードにするかどうか
         IZ_PCSTR title;             ///< ウインドウタイトル
-        void* platformParam;        ///< プラットフォーム固有パラメータ
-        CMessageHandler* handler;   ///< メッセージハンドラ
+        IZ_PLATFORM_PARAM platformParam;    ///< プラットフォーム固有パラメータ
+        CMessageHandler* handler;           ///< メッセージハンドラ
     };
 
     /**

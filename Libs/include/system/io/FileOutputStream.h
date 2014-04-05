@@ -153,7 +153,7 @@ namespace izanagi
         IZ_BOOL IsEnableOutput() { return IsValid(); }
 
     private:
-        FILE_HANDLE m_File;
+        IZ_FILE_HANDLE m_File;
         IZ_UINT m_Pos;
     };
 }   // namespace izanagi

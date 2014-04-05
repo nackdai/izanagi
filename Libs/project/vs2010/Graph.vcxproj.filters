@@ -39,6 +39,9 @@
     <Filter Include="include\ogl">
       <UniqueIdentifier>{6bd80176-36d7-42d5-a8eb-1177b6aaea9b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\android">
+      <UniqueIdentifier>{550edad7-62e5-4e8c-98b2-e8de3bda8f18}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\graph\2d\2DRenderer.cpp">
@@ -160,6 +163,9 @@
     </ClCompile>
     <ClCompile Include="..\..\source\graph\gles2\GraphicsDevice_EGL.cpp">
       <Filter>source\gles2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\android\GraphicsDevice_android.cpp">
+      <Filter>source\android</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
