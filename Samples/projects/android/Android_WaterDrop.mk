@@ -38,7 +38,7 @@ include $(PREBUILT_STATIC_LIBRARY)
 include $(CLEAR_VARS)
 
 LOCAL_MODULE     := libWaterDrop
-LOCAL_LDLIBS     := -llog -lGLESv2
+LOCAL_LDLIBS     := -llog -lGLESv2 -landroid
 LOCAL_CFLAGS     := -DANDROID -D__IZ_GLES2__ -D_DEBUG -D__IZANAGI_NO_USE_D3D__ -D__IZ_DEBUG__ -D__IZ_OGL__
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../../Libs/include $(LOCAL_PATH)/../../SampleKit
 LOCAL_SRC_FILES  := ../../WaterDrop/WaterDrop.cpp
