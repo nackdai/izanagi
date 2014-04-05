@@ -4,7 +4,7 @@ set CONFIG=%1
 set GFX=%2
 
 if %GFX%==GLES2 (
-    %MSBUILD% ..\External\ANGLE\src\ANGLE.sln /t:%TARGET% /p:Configuration=%CONFIG% /p:Platform=Win32 || goto error
+    %MSBUILD% ..\External\ANGLE\projects\src\ANGLE.sln /t:%TARGET% /p:Configuration=%CONFIG% /p:Platform=Win32 || goto error
 
     cd ..\Tools
     cd External
