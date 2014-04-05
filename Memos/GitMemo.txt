@@ -13,3 +13,5 @@ $ rm -rf ./.gti/svn/refs/remotes/git-svn
 http://www.yaunix.com/2012/09/11/git%E3%81%AE%E3%83%AA%E3%83%9D%E3%82%B8%E3%83%88%E3%83%AA%E3%82%92%E7%A7%BB%E5%8B%95%E3%81%95%E3%81%9B%E3%82%8B%E6%96%B9%E6%B3%95/
 http://akio0911.net/archives/3421
 http://qiita.com/sotarok/items/0d525e568a6088f6f6bb
+
+http://stackoverflow.com/questions/3796927/how-to-git-clone-including-submodules
