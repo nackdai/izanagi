@@ -36,6 +36,9 @@
     <Filter Include="include\io">
       <UniqueIdentifier>{04d3daf1-a2b3-4dab-b338-5190d58445a0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\android">
+      <UniqueIdentifier>{5a0a9090-5f0c-4735-80c0-fe99975a392e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\system\SysTimer.h">
@@ -190,6 +193,12 @@
     </ClCompile>
     <ClCompile Include="..\..\source\system\linux\FileStream_linux.cpp">
       <Filter>source\linux</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\android\FileStream_android.cpp">
+      <Filter>source\android</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\android\SysWindow_android.cpp">
+      <Filter>source\android</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
