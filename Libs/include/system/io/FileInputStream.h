@@ -14,6 +14,7 @@ namespace izanagi
     public:
         CFileInputStream()
         {
+            m_File = IZ_NULL;
             m_Size = 0;
             m_Pos = 0;
         }
@@ -35,14 +36,12 @@ namespace izanagi
                 Close();
             }
 
-            OnOpen(path, "rb");
+            OnOpen(&m_File, path, "rb");
             ret = (m_File != IZ_NULL);
 
             if (ret) {
                 // ファイルサイズ取得
-                fseek(m_File, 0, SEEK_END);
-                m_Size = ftell(m_File);
-                fseek(m_File, 0, SEEK_SET);
+                m_Size = GetLength(m_File);
             }
 
             return ret;
@@ -51,7 +50,9 @@ namespace izanagi
         // ファイルクローズ
         void Close()
         {
-            OnClose();
+            OnClose(m_File);
+
+            m_File = IZ_NULL;
 
             m_Size = 0;
             m_Pos = 0;
@@ -65,7 +66,7 @@ namespace izanagi
             if (offset > 0) {
                 VRETURN(Seek(offset, E_IO_STREAM_SEEK_POS_CUR));
             }
-            IZ_UINT ret = (IZ_UINT)fread(buf, 1, size, m_File);
+            IZ_UINT ret = (IZ_UINT)OnRead(buf, 1, size, m_File);
 
             if (ret == size) {
                 // TODO
@@ -120,7 +121,7 @@ namespace izanagi
             IZ_BOOL ret = IZ_TRUE;
             if (nOffset != 0) {
                 // シーク
-                ret = (fseek(m_File, static_cast<IZ_INT>(offset), nPos) == 0);
+                ret = (OnSeek(m_File, static_cast<IZ_INT>(offset), nPos) == 0);
 
                 if (ret) {
                     // 現在位置更新
@@ -149,6 +150,7 @@ namespace izanagi
         }
 
     protected:
+        FILE_HANDLE m_File;
         IZ_LONG m_Size;
         IZ_LONG m_Pos;
     };

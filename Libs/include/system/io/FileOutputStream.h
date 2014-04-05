@@ -13,6 +13,7 @@ namespace izanagi
     public:
         CFileOutputStream()
         {
+            m_File = IZ_NULL;
             m_Pos = 0;
         }
         ~CFileOutputStream()
@@ -38,6 +39,7 @@ namespace izanagi
             }
 
             OnOpen(
+                &m_File,
                 path,
                 mode == E_IO_FILE_MODE_TEXT ? "wt" : "wb");
             ret = (m_File != IZ_NULL);
@@ -47,8 +49,9 @@ namespace izanagi
 
         void Finalize()
         {
-            OnClose();
+            OnClose(m_File);
 
+            m_File = IZ_NULL;
             m_Pos = 0;
         }
 
@@ -62,7 +65,7 @@ namespace izanagi
                 Seek(offset, E_IO_STREAM_SEEK_POS_CUR);
             }
 
-            IZ_UINT ret = (IZ_UINT)fwrite(buf, 1, size, m_File);
+            IZ_UINT ret = (IZ_UINT)OnWrite(buf, 1, size, m_File);
             IZ_ASSERT(ret == size);
 
             if (ret == size) {
@@ -76,7 +79,7 @@ namespace izanagi
         {
             IZ_ASSERT(m_File != IZ_NULL);
 
-            int result = IZ_FPRINTF(m_File, "%s", text);
+            int result = Print(m_File, text);
             IZ_ASSERT(result >= 0);
 
             return (result >= 0);
@@ -87,7 +90,7 @@ namespace izanagi
         {
             IZ_ASSERT(m_File != IZ_NULL);
 
-            IZ_UINT ret = ftell(m_File);
+            IZ_UINT ret = Tell(m_File);
             return ret;
         }
 
@@ -120,7 +123,7 @@ namespace izanagi
             IZ_BOOL ret = IZ_TRUE;
             {
                 // シーク
-                ret = (fseek(m_File, offset, nPos) == 0);
+                ret = (OnSeek(m_File, offset, nPos) == 0);
 
                 if (ret) {
                     // 現在位置更新
@@ -150,6 +153,7 @@ namespace izanagi
         IZ_BOOL IsEnableOutput() { return IsValid(); }
 
     private:
+        FILE_HANDLE m_File;
         IZ_UINT m_Pos;
     };
 }   // namespace izanagi

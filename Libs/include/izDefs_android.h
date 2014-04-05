@@ -4,6 +4,7 @@
 #include <jni.h>
 #include <sys/time.h>
 #include <android/log.h>
+#include <android/asset_manager.h>
 
 #ifndef _UNICODE
     #define IZ_VSPRINTF     vsnprintf
@@ -38,5 +39,14 @@ typedef timeval IZ_TIME;
 #define IzGetSystemDataForMainFunc()  NULL
 #define IzGetScreenWidth() width
 #define IzGetScreenHeight() height
+
+#define FILE_HANDLE AAsset*
+
+namespace izanagi {
+    struct IzAndroidJniParam {
+        JNIEnv* env;
+        void* obj;
+    };
+}
 
 #endif  // #if !defined(__IZANAGI_DEFS_ANDROID_H__)

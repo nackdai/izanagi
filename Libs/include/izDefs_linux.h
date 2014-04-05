@@ -34,4 +34,6 @@ typedef timeval IZ_TIME;
 #define IzGetScreenWidth() _izScreenWidth
 #define IzGetScreenHeight() _izScreenHeight
 
+#define FILE_HANDLE FILE*
+
 #endif  // #if !defined(__IZANAGI_DEFS_LINUX_H__)

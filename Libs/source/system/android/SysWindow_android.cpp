@@ -1,3 +1,4 @@
+#include <android/asset_manager_jni.h>
 #include "system/SysWindow.h"
 
 namespace izanagi
@@ -25,9 +26,14 @@ namespace sys
     public:
         CMessageHandler* GetHandler() { return m_MsgHandler; }
 
+        IZ_BOOL InitAsset(const WindowParams& param);
+        inline AAssetManager* GetAssetManagaer();
+
     private:
         IMemoryAllocator* m_Allocator;
         CMessageHandler* m_MsgHandler;
+
+        AAssetManager* m_AndroidAssetMgr;
     };
 
     CWindowAndroid* CWindowAndroid::s_Instance = IZ_NULL;
@@ -63,6 +69,23 @@ namespace sys
         s_Instance = IZ_NULL;
     }
 
+    IZ_BOOL CWindowAndroid::InitAsset(const WindowParams& param)
+    {
+        WindowParams& windowParam = const_cast<WindowParams&>(param);
+
+        IzAndroidJniParam* androidParam = (IzAndroidJniParam*)windowParam.platformParam;
+        m_AndroidAssetMgr = AAssetManager_fromJava(androidParam->env, (jobject)androidParam->obj);
+
+        IZ_ASSERT(m_AndroidAssetMgr != IZ_NULL);
+
+        return (m_AndroidAssetMgr != IZ_NULL);
+    }
+
+    AAssetManager* CWindowAndroid::GetAssetManagaer()
+    {
+        return m_AndroidAssetMgr;
+    }
+
     ///////////////////////////////////////////////////////////////////
 
     E_KEYBOARD_BUTTON CSysWindow::GetKeyMap(IZ_UINT key)
@@ -77,6 +100,8 @@ namespace sys
     {
         CWindowAndroid* window = CWindowAndroid::Create(allocator, param.handler);
         VRETURN_NULL(window != IZ_NULL);
+
+        VRETURN_NULL(window->InitAsset(param));
 
         if (param.handler) {
             param.handler->OnInit(IZ_NULL);
@@ -135,3 +160,9 @@ namespace sys
 
 }   // namespace sys
 }   // namespace izanagi
+
+AAssetManager* GetAssetManager()
+{
+    IZ_ASSERT(izanagi::sys::CWindowAndroid::s_Instance != IZ_NULL);
+    return izanagi::sys::CWindowAndroid::s_Instance->GetAssetManagaer();
+}

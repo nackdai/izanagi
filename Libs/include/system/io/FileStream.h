@@ -11,20 +11,21 @@ namespace izanagi
     class CFileStream
     {
     protected:
-        CFileStream()
-        {
-            m_File = IZ_NULL;
-        }
+        CFileStream() {}
         ~CFileStream() {}
 
         NO_COPIABLE(CFileStream);
 
     protected:
-        void OnOpen(const char* path, const char* mode);
-        void OnClose();
-
-    protected:
-        FILE* m_File;
+        void OnOpen(FILE_HANDLE* file, const char* path, const char* mode);
+        void OnClose(FILE_HANDLE file);
+        IZ_INT OnSeek(FILE_HANDLE file, IZ_INT offset, IZ_INT origin);
+        IZ_LONG GetLength(FILE_HANDLE file);
+        IZ_INT OnRead(void* buf, IZ_UINT size, IZ_UINT count, FILE_HANDLE file);
+        
+        IZ_UINT Tell(FILE_HANDLE file);
+        IZ_UINT OnWrite(const void* src, size_t size, size_t count, FILE_HANDLE file);
+        IZ_INT Print(FILE_HANDLE file, const char* str);
     };
 }   // namespace izanagi
 
