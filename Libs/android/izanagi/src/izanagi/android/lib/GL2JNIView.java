@@ -10,22 +10,23 @@ import android.opengl.GLSurfaceView;
 import android.util.Log;
 import android.content.Context;
 import android.graphics.PixelFormat;
+import android.content.res.AssetManager;
 
 public class GL2JNIView  extends GLSurfaceView {
 	private static String TAG = "GL2JNIView";
     private static final boolean DEBUG = false;
     
-    public GL2JNIView(Context context) {
+    public GL2JNIView(Context context, AssetManager assetManager) {
         super(context);
-        init(false, 0, 0);
+        init(assetManager, false, 0, 0);
     }
 
-    public GL2JNIView(Context context, boolean translucent, int depth, int stencil) {
+    public GL2JNIView(Context context, AssetManager assetManager, boolean translucent, int depth, int stencil) {
         super(context);
-        init(translucent, depth, stencil);
+        init(assetManager, translucent, depth, stencil);
     }
 
-    private void init(boolean translucent, int depth, int stencil) {
+    private void init(AssetManager assetManager, boolean translucent, int depth, int stencil) {
 
         /* By default, GLSurfaceView() creates a RGB_565 opaque surface.
          * If we want a translucent one, we should change the surface's
@@ -51,7 +52,9 @@ public class GL2JNIView  extends GLSurfaceView {
                              new ConfigChooser(5, 6, 5, 0, depth, stencil) );
 
         /* Set the renderer responsible for frame rendering */
-        setRenderer(new Renderer());
+        Renderer renderer = new Renderer();
+        renderer.setAssetManager(assetManager);
+        setRenderer(renderer);
     }
     
     private static class ContextFactory implements GLSurfaceView.EGLContextFactory {
@@ -271,12 +274,19 @@ public class GL2JNIView  extends GLSurfaceView {
     }
 	
 	private static class Renderer implements GLSurfaceView.Renderer {
+		private AssetManager mAssetManager;
+		
+		public void setAssetManager(AssetManager assetManager)
+		{
+			mAssetManager = assetManager;
+		}
+		
         public void onDrawFrame(GL10 gl) {
             IzanagiProxy.runLoop();
         }
 
         public void onSurfaceChanged(GL10 gl, int width, int height) {
-        	IzanagiProxy.init(width, height);
+        	IzanagiProxy.init(mAssetManager, width, height);
         }
 
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {

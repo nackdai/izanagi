@@ -16,19 +16,21 @@
 
 package izanagi.android.lib;
 
+import android.content.res.AssetManager;
+
 // Wrapper for native library
 
 public class IzanagiProxy {
 
      static {
-         System.loadLibrary("izanagi");
+         System.loadLibrary("Render2D");
      }
 
     /**
      * @param width the current view width
      * @param height the current view height
      */
-     public static native void init(int width, int height);
+     public static native void init(AssetManager assetManager, int width, int height);
      public static native void runLoop();
      public static native void destroy();
 }
