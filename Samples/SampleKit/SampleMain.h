@@ -10,7 +10,7 @@ namespace sample {
 }
 
 IZ_INT SampleMain(
-    void* systemData,
+    IZ_PLATFORM_PARAM systemData,
     izanagi::sample::CSampleApp* app,
     const char* title,
     IZ_UINT screenWidth, IZ_UINT screenHeight,

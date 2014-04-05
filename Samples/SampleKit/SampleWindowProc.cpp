@@ -4,9 +4,9 @@
 using namespace izanagi;
 using namespace sample;
 
-CSampleWndProc::CSampleWndProc(CSampleApp* app) 
+CSampleWndProc::CSampleWndProc() 
 {
-    m_App = app;
+    m_App = IZ_NULL;;
 
     m_Flags.onLBtn = IZ_FALSE;
     m_Flags.onRBtn = IZ_FALSE;
@@ -17,6 +17,11 @@ CSampleWndProc::CSampleWndProc(CSampleApp* app)
 
 CSampleWndProc::~CSampleWndProc()
 {
+}
+
+void CSampleWndProc::SetApp(CSampleApp* app)
+{
+    m_App = app;
 }
 
 void CSampleWndProc::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)

@@ -30,7 +30,7 @@ namespace sample {
         CSampleWndProc* wndProc;                ///< メッセージハンドラへのポインタ
 
         // ここから下はプラットフォーム依存
-        void* instanceHandle;                   ///< インスタンスハンドル
+        IZ_PLATFORM_PARAM instanceHandle;       ///< インスタンスハンドル
     };
 
     /** サンプルアプリケーションベースクラス.

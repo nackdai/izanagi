@@ -12,10 +12,12 @@ namespace sample {
         friend class CSampleApp;
 
     public:
-        CSampleWndProc(CSampleApp* app);
+        CSampleWndProc();
         virtual ~CSampleWndProc();
 
     public:
+        void SetApp(CSampleApp* app);
+
         virtual void OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key);
         virtual void OnKeyUp(izanagi::sys::E_KEYBOARD_BUTTON key);
 

@@ -8,6 +8,8 @@ static izanagi::sample::SSampleAppParams appParam = {0};
 static izanagi::CStandardMemoryAllocator allocator;
 static izanagi::CStandardMemoryAllocator allocatorForGraph;
 
+static izanagi::sample::CSampleWndProc wndProc;
+
 static void OnInit(
     const izanagi::sys::WindowHandle& handle,
     izanagi::sample::CSampleApp* app)
@@ -21,7 +23,7 @@ static void OnDestroy()
 }
 
 IZ_INT SampleMain(
-    void* systemData,
+    IZ_PLATFORM_PARAM systemData,
     izanagi::sample::CSampleApp* app,
     const char* title,
     IZ_UINT screenWidth, IZ_UINT screenHeight,
@@ -34,7 +36,7 @@ IZ_INT SampleMain(
     // 実行ファイルから現在のパスを取得
     izanagi::sys::CSysUtil::SetCurrentDirectoryFromExe();
 
-    izanagi::sample::CSampleWndProc wndProc(app);
+    wndProc.SetApp(app);
     wndProc.funcInit = OnInit;
     wndProc.funcDestroy = OnDestroy;
 
