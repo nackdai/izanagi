@@ -15,6 +15,11 @@ namespace izanagi
         }
     }
 
+    IZ_INT CFileStream::OnSeek(IZ_FILE_HANDLE file, IZ_INT offset, IZ_INT origin)
+    {
+        return fseek(file, offset, origin);
+    }
+
     IZ_LONG CFileStream::GetLength(IZ_FILE_HANDLE file)
     {
         // ファイルサイズ取得

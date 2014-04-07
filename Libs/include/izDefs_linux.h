@@ -13,26 +13,24 @@
 // いろいろ便利系
 
 #ifndef DEBUG_BREAK
-    #define DEBUG_BREAK()
+    #define DEBUG_BREAK()   __builtin_trap()
 #endif  // #ifndef DEBUG_BREAK
 
 #define IZ_PRINTF   printf
 
 typedef timeval IZ_TIME;
 
-#define IzMain(screenWidth, screenHeight) 
-    static const IZ_UINT _izScreenWidth = screenWidth;\
-    static const IZ_UINT _izScreenHeight = screenHeight;\
-    int _main(int argc, char* argv[]);\
-    int main(int argc, char* argv[])
+#define IzMain(screenWidth, screenHeight)\
+    int _main(int argc, char* argv[], IZ_UINT __width, IZ_UINT __height);\
+    int main(int argc, char* argv[])\
     {\
-        return _main(argc, argv);\
+        return _main(argc, argv, screenWidth, screenHeight);\
     }\
-    int _main(int argc, char* argv[])
+    int _main(int argc, char* argv[], IZ_UINT __width, IZ_UINT __height)
 
 #define IzGetSystemDataForMainFunc()  NULL
-#define IzGetScreenWidth() _izScreenWidth
-#define IzGetScreenHeight() _izScreenHeight
+#define IzGetScreenWidth() __width
+#define IzGetScreenHeight() __height
 
 #define IZ_FILE_HANDLE FILE*
 #define IZ_PLATFORM_PARAM   void*

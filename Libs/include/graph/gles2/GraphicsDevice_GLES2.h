@@ -1,7 +1,7 @@
 #if !defined(__IZANAGI_GRPAH_GRAPHICS_DEVICE_GLES2_H__)
 #define __IZANAGI_GRPAH_GRAPHICS_DEVICE_GLES2_H__
 
-#include "izGLES2Defs.h"
+#include "graph/GraphDefs.h"
 #include "graph/GraphicsDevice.h"
 #include "graph/RenderState.h"
 #include "graph/ParamValueConverter.h"
