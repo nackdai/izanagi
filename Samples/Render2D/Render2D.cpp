@@ -66,24 +66,20 @@ void CRender2DApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 // 描画.
 void CRender2DApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
-    IZ_PRINTF("RenderInternal\n");
-
     if (device->Begin2D()) {
         // スプライト
-        IZ_PRINTF("SetTexture\n");
         device->SetTexture(0, m_Img->GetTexture(0));
-        IZ_PRINTF("Set2DRenderOp\n");
         device->Set2DRenderOp(izanagi::graph::E_GRAPH_2D_RENDER_OP_MODULATE);
-        IZ_PRINTF("Draw2DSprite\n");
+
         device->Draw2DSprite(
             izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),
             izanagi::CIntRect(300, 100, 256, 128));
-        IZ_PRINTF("Draw2DRect\n");
+        
         // 塗りつぶし矩形
         device->Draw2DRect(
             izanagi::CIntRect(100, 100, 100, 100),
             IZ_COLOR_RGBA(0, 0xff, 0, 0xff));
-        IZ_PRINTF("Draw2DLine\n");
+        
         // ライン
         device->Draw2DLine(
             izanagi::CIntPoint(100, 100),    // 始点
