@@ -87,10 +87,10 @@ static IZ_UINT GFX_BUF[GFX_BUF_SIZE];
 static const IZ_UINT SCREEN_WIDTH = 1280;
 static const IZ_UINT SCREEN_HEIGHT = 720;
 
+CSStateApp app;
+
 IzMain(SCREEN_WIDTH, SCREEN_HEIGHT)
 {
-    CSStateApp app;
-
     int ret = SampleMain(
         IzGetSystemDataForMainFunc(),
         &app,

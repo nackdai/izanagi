@@ -121,10 +121,10 @@ IZ_COLOR CShaderApp::GetBgColor() const
     return CSampleApp::GetBgColor();
 }
 
+CShaderApp app;
+
 IzMain(SCREEN_WIDTH, SCREEN_HEIGHT)
 {
-    CShaderApp app;
-
     int ret = SampleMain(
         IzGetSystemDataForMainFunc(),
         &app,
