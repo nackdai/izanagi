@@ -49,7 +49,7 @@ namespace threadmodel
                 task->Run(IZ_NULL);
 
                 if (task->IsDeleteSelf()) {
-                    // TODO
+                    CTask::DeleteTask(task);
                 }
             }
 

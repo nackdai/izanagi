@@ -14,10 +14,11 @@ namespace threadmodel
     {
         friend class CThreadPool;
         friend class CParallel;
+        friend class CTimerThread;
 
     public:
         template <typename _T>
-        static CTask* CreateTask(IMemoryAllocator* allocator)
+        static _T* CreateTask(IMemoryAllocator* allocator)
         {
             void* buf = ALLOC(allocator, sizeof(_T));
             VRETURN_NULL(buf != IZ_NULL);

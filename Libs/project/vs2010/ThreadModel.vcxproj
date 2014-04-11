@@ -132,6 +132,7 @@
     <ClInclude Include="..\..\include\threadmodel\ThreadModelMessageQueue.h" />
     <ClInclude Include="..\..\include\threadmodel\ThreadModelTask.h" />
     <ClInclude Include="..\..\include\threadmodel\ThreadPool.h" />
+    <ClInclude Include="..\..\include\threadmodel\TimerThread.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\threadmodel\Parallel.cpp" />
@@ -141,6 +142,7 @@
     <ClCompile Include="..\..\source\threadmodel\ThreadModelMessageQueue.cpp" />
     <ClCompile Include="..\..\source\threadmodel\ThreadModelTask.cpp" />
     <ClCompile Include="..\..\source\threadmodel\ThreadPool.cpp" />
+    <ClCompile Include="..\..\source\threadmodel\TimerThread.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

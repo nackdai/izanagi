@@ -15,4 +15,7 @@
 // Parallel
 #include "threadmodel/Parallel.h"
 
+// TimerThread
+#include "threadmodel/TimerThread.h"
+
 #endif  // #if !defined(__IZANAGI_THREAD_MODEL_H__)

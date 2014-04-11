@@ -4,6 +4,12 @@ namespace izanagi
 {
 namespace sys
 {
+    void CTimer::SetTimeZero(IZ_TIME& time)
+    {
+        time.tv_sec = 0;
+        time.tv_usec = 0;
+    }
+
     /**
     * コンストラクタ
     */

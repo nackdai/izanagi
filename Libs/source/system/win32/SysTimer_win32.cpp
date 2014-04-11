@@ -6,20 +6,33 @@ namespace izanagi
 {
 namespace sys
 {
+    static IZ_TIME s_Frequency = 0;
+
+    static inline void InitTimer()
+    {
+        if (s_Frequency == 0) {
+            LARGE_INTEGER sFreq;
+            FILL_ZERO(&sFreq, sizeof(sFreq));
+
+            IZ_BOOL result = QueryPerformanceFrequency(&sFreq);
+            IZ_ASSERT(result);
+
+            s_Frequency = sFreq.QuadPart;
+        }
+    }
+
+    void CTimer::SetTimeZero(IZ_TIME& time)
+    {
+        time = 0;
+    }
+
     /**
     * コンストラクタ
     */
     CTimer::CTimer()
     {
-        LARGE_INTEGER sFreq;
-        FILL_ZERO(&sFreq, sizeof(sFreq));
-    
         m_fTime = 0.0f;
-
-        IZ_BOOL result = QueryPerformanceFrequency(&sFreq);
-        IZ_ASSERT(result);
-
-        m_Frequency = sFreq.QuadPart;
+        InitTimer();
     }
 
     /**
@@ -44,7 +57,7 @@ namespace sys
         LARGE_INTEGER cur;
         QueryPerformanceCounter(&cur);
 
-        m_fTime = (cur.QuadPart - m_Begin) * 1000.0f / m_Frequency;
+        m_fTime = (cur.QuadPart - m_Begin) * 1000.0f / s_Frequency;
         return m_fTime;
     }
 
@@ -62,9 +75,10 @@ namespace sys
     }
 
     // 差分から計算
-    IZ_FLOAT CTimer::ComputeTime(IZ_INT64 begin, IZ_INT64 end)
+    IZ_FLOAT CTimer::ComputeTime(IZ_TIME begin, IZ_TIME end)
     {
-        IZ_FLOAT ret = (end - begin) * 1000.0f / m_Frequency;
+        InitTimer();
+        IZ_FLOAT ret = (end - begin) * 1000.0f / s_Frequency;
         return ret;
     }
 }   // namespace sys

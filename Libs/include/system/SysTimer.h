@@ -12,6 +12,9 @@ namespace sys
     */
     class CTimer {
     public:
+        static void SetTimeZero(IZ_TIME& time);
+
+    public:
         CTimer();
         ~CTimer() {}
 
@@ -28,13 +31,12 @@ namespace sys
         IZ_FLOAT GetTime() { return m_fTime; }
 
         // 現在の時間取得
-        IZ_TIME GetCurTime();
+        static IZ_TIME GetCurTime();
 
         // 差分から計算
-        IZ_FLOAT ComputeTime(IZ_TIME begin, IZ_TIME end);
+        static IZ_FLOAT ComputeTime(IZ_TIME begin, IZ_TIME end);
 
     protected:
-        IZ_TIME m_Frequency;
         IZ_TIME m_Begin;
 
         IZ_FLOAT m_fTime;
