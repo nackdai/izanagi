@@ -6,18 +6,42 @@ namespace threadmodel
 {
     CTimerTask::CTimerTask()
     {
-        m_DelayMs = 0;
+        m_Type = TYPE_DELAY;
+        m_Ms = 0;
+        m_Elapsed = 0;
     }
 
-    void CTimerTask::SetDelay(IZ_FLOAT ms)
+    void CTimerTask::SetType(CTimerTask::TYPE type)
     {
-        m_DelayMs = ms;
+        m_Type = type;
     }
 
-    IZ_FLOAT CTimerTask::GetDelay()
+    CTimerTask::TYPE CTimerTask::GetType()
     {
-        return m_DelayMs;
+        return m_Type;
     }
+
+    void CTimerTask::SetTime(IZ_FLOAT ms)
+    {
+        m_Ms = ms;
+    }
+
+    IZ_FLOAT CTimerTask::GetTime()
+    {
+        return m_Ms;
+    }
+
+    void CTimerTask::SetElapsed(IZ_FLOAT ms)
+    {
+        m_Elapsed = ms;
+    }
+
+    IZ_FLOAT CTimerTask::GetElapsed()
+    {
+        return m_Elapsed;
+    }
+
+    ///////////////////////////////////////////////////
 
     CTimerThread::CThread CTimerThread::s_Thread;
     CTimerThread::STATE CTimerThread::s_State = CTimerThread::STATE_NONE;
@@ -36,7 +60,6 @@ namespace threadmodel
     void CTimerThread::CThread::Run()
     {
         IZ_FLOAT elapsed = 0;
-        IZ_FLOAT all = 0;
 
         while (IZ_TRUE) {
             if (m_WillTerminate) {
@@ -52,32 +75,51 @@ namespace threadmodel
                 ListItem* item = m_TaskList.GetTop();
                 while (item != IZ_NULL) {
                     CTimerTask* task = item->GetData();
-                    item = item->GetNext();
+                    ListItem* next = item->GetNext();
 
-                    IZ_FLOAT time = task->GetDelay();
-                    time -= elapsed;
+                    CTimerTask::TYPE type = task->GetType();
+                    IZ_FLOAT time = task->GetTime();
 
-                    all += elapsed;
+                    if (type == CTimerTask::TYPE_DELAY) {
+                        // Delay
+                        time -= elapsed;
 
-                    if (time <= 0) {
-                        //IZ_PRINTF("elpsed: %f\n", all);
+                        if (task->WillCancel()
+                            || time <= 0)
+                        {
+                            item->Leave();
+                            task->Run(IZ_NULL);
 
-                        task->Run(IZ_NULL);
-
-                        if (task->IsDeleteSelf()) {
-                            CTask::DeleteTask(task);
+                            if (task->IsDeleteSelf()) {
+                                CTask::DeleteTask(task);
+                            }
+                        }
+                        else {
+                            task->SetTime(time);
                         }
                     }
                     else {
-                        task->SetDelay(time);
+                        // Interval
+                        IZ_FLOAT taskElapsed = task->GetElapsed();
+                        taskElapsed += elapsed;
+                        
+                        if (task->WillCancel()
+                            || time <= taskElapsed)
+                        {
+                            taskElapsed -= time;
+                            task->Run(IZ_NULL);
+                        }
+
+                        task->SetElapsed(taskElapsed);
                     }
+
+                    item = next;
                 }
 
                 if (m_TaskList.GetItemNum() == 0) {
                     // There is no task, so thread wait.
                     m_Event.Reset();
                     elapsed = 0;
-                    all = 0;
                 }
             }
             m_Mutex.Unlock();
@@ -97,6 +139,22 @@ namespace threadmodel
         m_Event.Set();
 
         Join();
+
+        // ŒãŽn––
+        ListItem* item = m_TaskList.GetTop();
+        while (item != IZ_NULL) {
+            CTimerTask* task = item->GetData();
+            item = item->GetNext();
+
+            task->Cancel();
+            task->Run(IZ_NULL);
+
+            if (task->IsDeleteSelf()) {
+                CTask::DeleteTask(task);
+            }
+        }
+
+        m_TaskList.Clear();
     }
 
     IZ_BOOL CTimerThread::CThread::Enqueue(CStdList<CTimerTask>::Item* item)
@@ -116,7 +174,27 @@ namespace threadmodel
         return IZ_TRUE;
     }
 
-    IZ_BOOL CTimerThread::PostDelayedTask(CTimerTask* task, IZ_FLOAT delay, IZ_BOOL willDelete/*= IZ_FALSE*/)
+    IZ_BOOL CTimerThread::PostDelayedTask(
+        CTimerTask* task, 
+        IZ_FLOAT delay, 
+        IZ_BOOL willDelete/*= IZ_FALSE*/)
+    {
+        return PostTask(task, CTimerTask::TYPE_DELAY, delay, willDelete);
+    }
+
+    IZ_BOOL CTimerThread::PostIntervalTask(
+        CTimerTask* task, 
+        IZ_FLOAT interval, 
+        IZ_BOOL willDelete/*= IZ_FALSE*/)
+    {
+        return PostTask(task, CTimerTask::TYPE_INTERVAL, interval, willDelete);
+    }
+
+    IZ_BOOL CTimerThread::PostTask(
+        CTimerTask* task, 
+        CTimerTask::TYPE type,
+        IZ_FLOAT time, 
+        IZ_BOOL willDelete/*= IZ_FALSE*/)
     {
         if (s_State == STATE_TERMINATED) {
             return IZ_FALSE;
@@ -128,7 +206,8 @@ namespace threadmodel
         }
 
         task->SetIsDeleteSelf(willDelete);
-        task->SetDelay(delay);
+        task->SetType(type);
+        task->SetTime(time);
         return s_Thread.Enqueue(reinterpret_cast<CStdList<CTimerTask>::Item*>(task->GetListItem()));
     }
 

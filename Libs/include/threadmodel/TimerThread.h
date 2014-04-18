@@ -19,11 +19,24 @@ namespace threadmodel
         virtual ~CTimerTask() {}
 
     private:
-        void SetDelay(IZ_FLOAT ms);
-        IZ_FLOAT GetDelay();
+        enum TYPE {
+            TYPE_DELAY = 0,
+            TYPE_INTERVAL,
+        };
+
+        inline void SetType(TYPE type);
+        inline TYPE GetType();
+
+        inline void SetTime(IZ_FLOAT ms);
+        inline IZ_FLOAT GetTime();
+
+        inline void SetElapsed(IZ_FLOAT ms);
+        inline IZ_FLOAT GetElapsed();
 
     private:
-        IZ_FLOAT m_DelayMs;
+        TYPE m_Type;
+        IZ_FLOAT m_Ms;
+        IZ_FLOAT m_Elapsed;
     };
 
     class CTimerThread 
@@ -59,9 +72,24 @@ namespace threadmodel
         };
 
     public:
-        static IZ_BOOL PostDelayedTask(CTimerTask* task, IZ_FLOAT delay, IZ_BOOL willDelete = IZ_FALSE);
+        static IZ_BOOL PostDelayedTask(
+            CTimerTask* task, 
+            IZ_FLOAT delay, 
+            IZ_BOOL willDelete = IZ_FALSE);
+
+        static IZ_BOOL PostIntervalTask(
+            CTimerTask* task, 
+            IZ_FLOAT interval, 
+            IZ_BOOL willDelete = IZ_FALSE);
 
         static void Terminate();
+
+    private:
+        static IZ_BOOL PostTask(
+            CTimerTask* task, 
+            CTimerTask::TYPE type,
+            IZ_FLOAT time, 
+            IZ_BOOL willDelete = IZ_FALSE);
 
     private:
         enum STATE {
