@@ -28,16 +28,29 @@ private:
     izanagi::IMemoryAllocator* m_Allocator;
 };
 
-class CTask : public izanagi::threadmodel::CTimerTask {
+class CTaskDelay : public izanagi::threadmodel::CTimerTask {
     friend class izanagi::threadmodel::CTask;
 
 protected:
-    CTask() {}
-    virtual ~CTask() {}
+    CTaskDelay() {}
+    virtual ~CTaskDelay() {}
 
     virtual void OnRun()
     {
-        IZ_PRINTF("Run Task.\n");
+        IZ_PRINTF("Run Task Delay.\n");
+    }
+};
+
+class CTaskInterval : public izanagi::threadmodel::CTimerTask {
+    friend class izanagi::threadmodel::CTask;
+
+protected:
+    CTaskInterval() {}
+    virtual ~CTaskInterval() {}
+
+    virtual void OnRun()
+    {
+        IZ_PRINTF("Run Task Interval.\n");
     }
 };
 
@@ -56,6 +69,9 @@ IZ_BOOL CTimerThreadApp::InitInternal(
     izanagi::sample::CSampleCamera& camera)
 {
     m_Allocator = allocator;
+
+    CTaskInterval* task = izanagi::threadmodel::CTask::CreateTask<CTaskInterval>(m_Allocator);
+    izanagi::threadmodel::CTimerThread::PostIntervalTask(task, 100.0f, IZ_TRUE);
 
     return IZ_TRUE;
 }
@@ -80,7 +96,7 @@ void CTimerThreadApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 IZ_BOOL CTimerThreadApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
 {
     if (key == izanagi::sys::E_KEYBOARD_BUTTON_SPACE) {
-        CTask* task = izanagi::threadmodel::CTask::CreateTask<CTask>(m_Allocator);
+        CTaskDelay* task = izanagi::threadmodel::CTask::CreateTask<CTaskDelay>(m_Allocator);
         izanagi::threadmodel::CTimerThread::PostDelayedTask(task, 1000.0f, IZ_TRUE);
     }
     return IZ_TRUE;
