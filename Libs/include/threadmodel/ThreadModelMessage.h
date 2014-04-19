@@ -16,7 +16,7 @@ namespace threadmodel
 
     public:
         template <typename _T>
-        static CMessage* CreateMessage(IMemoryAllocator* allocator)
+        static _T* CreateMessage(IMemoryAllocator* allocator)
         {
             void* buf = ALLOC(allocator, sizeof(_T));
             VRETURN_NULL(buf != IZ_NULL);

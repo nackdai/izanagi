@@ -7,7 +7,9 @@ namespace threadmodel
     CTimerTask::CTimerTask()
     {
         m_Type = TYPE_DELAY;
-        m_Ms = 0;
+        m_Time = 0;
+        m_Prev = 0;
+        m_Interval = 0;
         m_Elapsed = 0;
     }
 
@@ -21,14 +23,34 @@ namespace threadmodel
         return m_Type;
     }
 
-    void CTimerTask::SetTime(IZ_FLOAT ms)
+    void CTimerTask::SetTime(IZ_TIME ms)
     {
-        m_Ms = ms;
+        m_Time = ms;
     }
 
-    IZ_FLOAT CTimerTask::GetTime()
+    IZ_TIME CTimerTask::GetTime()
     {
-        return m_Ms;
+        return m_Time;
+    }
+
+    void CTimerTask::SetPrev(IZ_TIME ms)
+    {
+        m_Prev = ms;
+    }
+
+    IZ_TIME CTimerTask::GetPrev()
+    {
+        return m_Prev;
+    }
+
+    void CTimerTask::SetInterval(IZ_FLOAT ms)
+    {
+        m_Interval = ms;
+    }
+
+    IZ_FLOAT CTimerTask::GetInterval()
+    {
+        return m_Interval;
     }
 
     void CTimerTask::SetElapsed(IZ_FLOAT ms)
@@ -39,6 +61,16 @@ namespace threadmodel
     IZ_FLOAT CTimerTask::GetElapsed()
     {
         return m_Elapsed;
+    }
+
+    void CTimerTask::SetTimeForRun(IZ_FLOAT time)
+    {
+        m_TempTime = time;
+    }
+
+    void CTimerTask::OnRun()
+    {
+        OnRun(m_TempTime);
     }
 
     ///////////////////////////////////////////////////
@@ -59,7 +91,7 @@ namespace threadmodel
 
     void CTimerThread::CThread::Run()
     {
-        IZ_FLOAT elapsed = 0;
+        m_Timer.Begin();
 
         while (IZ_TRUE) {
             if (m_WillTerminate) {
@@ -67,8 +99,6 @@ namespace threadmodel
             }
 
             m_Event.Wait();
-
-            m_Timer.Begin();
 
             m_Mutex.Lock();
             {
@@ -78,39 +108,44 @@ namespace threadmodel
                     ListItem* next = item->GetNext();
 
                     CTimerTask::TYPE type = task->GetType();
-                    IZ_FLOAT time = task->GetTime();
+                    IZ_TIME time = task->GetTime();
 
-                    if (type == CTimerTask::TYPE_DELAY) {
-                        // Delay
-                        time -= elapsed;
+                    IZ_TIME cur = sys::CTimer::GetCurTime();
+                    IZ_TIME base = cur;
 
-                        if (task->WillCancel()
-                            || time <= 0)
-                        {
+                    IZ_FLOAT taskElapsed = task->GetElapsed();
+                    if (taskElapsed > 0) {
+                        base = sys::CTimer::Sub(cur, taskElapsed);
+                    }
+
+                    if (task->WillCancel()
+                        || sys::CTimer::Compare(base, time))
+                    {
+                        IZ_FLOAT elapsed = sys::CTimer::ComputeTime(
+                            task->GetPrev(),
+                            cur);
+
+                        if (type == CTimerTask::TYPE_DELAY) {
                             item->Leave();
+                            task->SetTimeForRun(elapsed);
                             task->Run(IZ_NULL);
 
                             if (task->IsDeleteSelf()) {
                                 CTask::DeleteTask(task);
+                                task = IZ_NULL;
                             }
                         }
                         else {
-                            task->SetTime(time);
-                        }
-                    }
-                    else {
-                        // Interval
-                        IZ_FLOAT taskElapsed = task->GetElapsed();
-                        taskElapsed += elapsed;
-                        
-                        if (task->WillCancel()
-                            || time <= taskElapsed)
-                        {
-                            taskElapsed -= time;
+                            task->SetTimeForRun(elapsed);
                             task->Run(IZ_NULL);
-                        }
+                            
+                            IZ_FLOAT interval = task->GetInterval();
 
-                        task->SetElapsed(taskElapsed);
+                            task->SetTime(sys::CTimer::Add(cur, interval));
+                            task->SetPrev(cur);
+
+                            task->SetElapsed(elapsed - interval);
+                        }
                     }
 
                     item = next;
@@ -119,12 +154,9 @@ namespace threadmodel
                 if (m_TaskList.GetItemNum() == 0) {
                     // There is no task, so thread wait.
                     m_Event.Reset();
-                    elapsed = 0;
                 }
             }
             m_Mutex.Unlock();
-
-            elapsed = m_Timer.End();
         }
 
         m_Mutex.Close();
@@ -187,6 +219,7 @@ namespace threadmodel
         IZ_FLOAT interval, 
         IZ_BOOL willDelete/*= IZ_FALSE*/)
     {
+        task->SetInterval(interval);
         return PostTask(task, CTimerTask::TYPE_INTERVAL, interval, willDelete);
     }
 
@@ -207,7 +240,11 @@ namespace threadmodel
 
         task->SetIsDeleteSelf(willDelete);
         task->SetType(type);
-        task->SetTime(time);
+
+        IZ_TIME cur = sys::CTimer::GetCurTime();
+        task->SetTime(sys::CTimer::Add(cur, time));
+        task->SetPrev(cur);
+
         return s_Thread.Enqueue(reinterpret_cast<CStdList<CTimerTask>::Item*>(task->GetListItem()));
     }
 
