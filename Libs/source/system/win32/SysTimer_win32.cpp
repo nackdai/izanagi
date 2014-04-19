@@ -81,5 +81,41 @@ namespace sys
         IZ_FLOAT ret = (end - begin) * 1000.0f / s_Frequency;
         return ret;
     }
+
+    IZ_TIME CTimer::ConvertTime(IZ_FLOAT time)
+    {
+        IZ_INT64 ret = time * s_Frequency / 1000.0f;
+        return ret;
+    }
+
+    IZ_TIME CTimer::Add(IZ_TIME time1, IZ_TIME time2)
+    {
+        IZ_TIME ret = time1 + time2;
+        return ret;
+    }
+
+    IZ_TIME CTimer::Add(IZ_TIME time1, IZ_FLOAT time2)
+    {
+        IZ_TIME time = ConvertTime(time2);
+        return Add(time1, time);
+    }
+
+    IZ_TIME CTimer::Sub(IZ_TIME time1, IZ_TIME time2)
+    {
+        IZ_ASSERT(time1 >= time2);
+        IZ_TIME ret = time1 - time2;
+        return ret;
+    }
+
+    IZ_TIME CTimer::Sub(IZ_TIME time1, IZ_FLOAT time2)
+    {
+        IZ_TIME time = ConvertTime(time2);
+        return Sub(time1, time);
+    }
+
+    IZ_BOOL CTimer::Compare(IZ_TIME time1, IZ_TIME time2)
+    {
+        return time1 >= time2;
+    }
 }   // namespace sys
 }   // namespace izanagi

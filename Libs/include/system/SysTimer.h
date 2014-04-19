@@ -36,6 +36,16 @@ namespace sys
         // 差分から計算
         static IZ_FLOAT ComputeTime(IZ_TIME begin, IZ_TIME end);
 
+        static IZ_TIME ConvertTime(IZ_FLOAT time);
+
+        static IZ_TIME Add(IZ_TIME time1, IZ_TIME time2);
+        static IZ_TIME Add(IZ_TIME time1, IZ_FLOAT time2);
+
+        static IZ_TIME Sub(IZ_TIME time1, IZ_TIME time2);
+        static IZ_TIME Sub(IZ_TIME time1, IZ_FLOAT time2);
+
+        static IZ_BOOL Compare(IZ_TIME time1, IZ_TIME time2);
+
     protected:
         IZ_TIME m_Begin;
 

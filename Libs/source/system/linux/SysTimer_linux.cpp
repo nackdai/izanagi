@@ -58,5 +58,62 @@ namespace sys
         IZ_FLOAT msec = sec * 1000.0f + (IZ_FLOAT)usec / 1000.0f;
         return msec;
     }
+
+    IZ_TIME CTimer::ConvertTime(IZ_FLOAT time)
+    {
+        IZ_TIME ret;
+        ret.sec = (long)(time / 1000.0f);
+
+        time -= ret.sec * 1000.0f;
+        ret.usec = (long)(time * 1000.0f);
+
+        return ret;
+    }
+
+    IZ_TIME CTimer::Add(IZ_TIME time1, IZ_TIME time2)
+    {
+        IZ_TIME ret = {
+            time1.sec + time2.sec,
+            time1.usec + time2.usec,
+        };
+
+        return ret;
+    }
+
+    IZ_TIME CTimer::Add(IZ_TIME time1, IZ_FLOAT time2)
+    {
+        IZ_TIME time = ConvertTime(time2);
+        return Add(time1, time);
+    }
+
+    IZ_TIME CTimer::Sub(IZ_TIME time1, IZ_TIME time2)
+    {
+        IZ_ASSERT(time1.sec >= time2.sec);
+        IZ_FLOAT time = ComputeTime(time1, time2);
+        IZ_TIME ret = ConvertTime(time);
+        return ret;
+    }
+
+    IZ_TIME CTimer::Sub(IZ_TIME time1, IZ_FLOAT time2)
+    {
+        IZ_TIME time = ConvertTime(time2);
+        return Sub(time1, time);
+    }
+
+    IZ_BOOL CTimer::Compare(IZ_TIME time1, IZ_TIME time2)
+    {
+        if (time1.sec >= time2.sec) {
+            return IZ_TRUE;
+        }
+        else if (time1.sec < time2.sec) {
+            return IZ_FALSE;
+        }
+        else if (time1.usec >= time2.usec)
+        {
+            return IZ_TRUE;
+        }
+
+        return IZ_FALSE;
+    }
 }   // namespace sys
 }   // namespace izanagi
