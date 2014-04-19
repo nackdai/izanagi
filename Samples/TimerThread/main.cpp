@@ -1,6 +1,9 @@
 #include "izSampleKit.h"
 #include "izThreadModel.h"
 
+class CTaskDelay;
+class CTaskInterval;
+
 class CTimerThreadApp : public izanagi::sample::CSampleApp {
 public:
     CTimerThreadApp();
@@ -26,6 +29,9 @@ protected:
 
 private:
     izanagi::IMemoryAllocator* m_Allocator;
+
+    CTaskDelay* m_DelayTask;
+    CTaskInterval* m_IntervalTask;
 };
 
 class CTaskDelay : public izanagi::threadmodel::CTimerTask {
@@ -35,9 +41,9 @@ protected:
     CTaskDelay() {}
     virtual ~CTaskDelay() {}
 
-    virtual void OnRun()
+    virtual void OnRun(IZ_FLOAT time)
     {
-        IZ_PRINTF("Run Task Delay.\n");
+        IZ_PRINTF("Run Task Delay.[%f]\n", time);
     }
 };
 
@@ -48,9 +54,9 @@ protected:
     CTaskInterval() {}
     virtual ~CTaskInterval() {}
 
-    virtual void OnRun()
+    virtual void OnRun(IZ_FLOAT time)
     {
-        IZ_PRINTF("Run Task Interval.\n");
+        IZ_PRINTF("Run Task Interval.[%f]\n", time);
     }
 };
 
@@ -70,8 +76,8 @@ IZ_BOOL CTimerThreadApp::InitInternal(
 {
     m_Allocator = allocator;
 
-    CTaskInterval* task = izanagi::threadmodel::CTask::CreateTask<CTaskInterval>(m_Allocator);
-    izanagi::threadmodel::CTimerThread::PostIntervalTask(task, 100.0f, IZ_TRUE);
+    m_IntervalTask = izanagi::threadmodel::CTask::CreateTask<CTaskInterval>(m_Allocator);
+    izanagi::threadmodel::CTimerThread::PostIntervalTask(m_IntervalTask, 100.0f, IZ_TRUE);
 
     return IZ_TRUE;
 }
@@ -96,9 +102,16 @@ void CTimerThreadApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 IZ_BOOL CTimerThreadApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
 {
     if (key == izanagi::sys::E_KEYBOARD_BUTTON_SPACE) {
-        CTaskDelay* task = izanagi::threadmodel::CTask::CreateTask<CTaskDelay>(m_Allocator);
-        izanagi::threadmodel::CTimerThread::PostDelayedTask(task, 1000.0f, IZ_TRUE);
+        m_DelayTask = izanagi::threadmodel::CTask::CreateTask<CTaskDelay>(m_Allocator);
+        izanagi::threadmodel::CTimerThread::PostDelayedTask(m_DelayTask, 1000.0f, IZ_TRUE);
     }
+    else if (key == izanagi::sys::E_KEYBOARD_BUTTON_BACK) {
+        m_DelayTask->Cancel();
+    }
+    else if (key == izanagi::sys::E_KEYBOARD_BUTTON_DELETE) {
+        m_IntervalTask->Cancel();
+    }
+
     return IZ_TRUE;
 }
 

@@ -78,8 +78,7 @@ CMessageQueueApp::~CMessageQueueApp()
 void CMessageQueueApp::AddMessage()
 {
     if (m_MsgQueue.GetPostedMessageNum() < 1) {
-        izanagi::threadmodel::CMessage* msg = izanagi::threadmodel::CMessage::CreateMessage<CMessageSample>(m_Allocator);
-
+        CMessageSample* msg = izanagi::threadmodel::CMessage::CreateMessage<CMessageSample>(m_Allocator);
         m_MsgQueue.Post(msg);
     }
 }
