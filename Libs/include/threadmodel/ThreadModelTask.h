@@ -66,6 +66,8 @@ namespace threadmodel
     private:
         virtual void Run(void* userData);
 
+        void ResetState();
+
         CStdList<CTask>::Item* GetListItem();
 
         void SetAllocator(IMemoryAllocator* allocator);

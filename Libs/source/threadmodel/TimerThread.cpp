@@ -138,13 +138,25 @@ namespace threadmodel
                         else {
                             task->SetTimeForRun(elapsed);
                             task->Run(IZ_NULL);
-                            
-                            IZ_FLOAT interval = task->GetInterval();
 
-                            task->SetTime(sys::CTimer::Add(cur, interval));
-                            task->SetPrev(cur);
+                            if (task->IsCanceled()) {
+                                item->Leave();
 
-                            task->SetElapsed(elapsed - interval);
+                                if (task->IsDeleteSelf()) {
+                                    CTask::DeleteTask(task);
+                                    task = IZ_NULL;
+                                }
+                            }
+                            else {
+                                task->ResetState();
+
+                                IZ_FLOAT interval = task->GetInterval();
+
+                                task->SetTime(sys::CTimer::Add(cur, interval));
+                                task->SetPrev(cur);
+
+                                task->SetElapsed(elapsed - interval);
+                            }
                         }
                     }
 

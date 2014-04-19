@@ -83,6 +83,12 @@ namespace threadmodel
         m_Event.Set();
     }
 
+    void CTask::ResetState()
+    {
+        sys::CGuarder guard(m_StateLocker);
+        m_State = State_Init;
+    }
+
     CStdList<CTask>::Item* CTask::GetListItem()
     {
         return &m_ListItem;
