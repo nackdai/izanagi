@@ -30,6 +30,8 @@ protected:
 private:
     izanagi::IMemoryAllocator* m_Allocator;
 
+    izanagi::threadmodel::CTimerThread m_Thread;
+
     CTaskDelay* m_DelayTask;
     CTaskInterval* m_IntervalTask;
 };
@@ -76,8 +78,10 @@ IZ_BOOL CTimerThreadApp::InitInternal(
 {
     m_Allocator = allocator;
 
+    m_Thread.Start();
+
     m_IntervalTask = izanagi::threadmodel::CTask::CreateTask<CTaskInterval>(m_Allocator);
-    izanagi::threadmodel::CTimerThread::PostIntervalTask(m_IntervalTask, 100.0f, IZ_TRUE);
+    m_Thread.PostIntervalTask(m_IntervalTask, 100.0f, IZ_TRUE);
 
     return IZ_TRUE;
 }
@@ -85,7 +89,7 @@ IZ_BOOL CTimerThreadApp::InitInternal(
 // 解放.
 void CTimerThreadApp::ReleaseInternal()
 {
-    izanagi::threadmodel::CTimerThread::Terminate();
+    m_Thread.Join();
 }
 
 // 更新.
@@ -103,7 +107,7 @@ IZ_BOOL CTimerThreadApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
 {
     if (key == izanagi::sys::E_KEYBOARD_BUTTON_SPACE) {
         m_DelayTask = izanagi::threadmodel::CTask::CreateTask<CTaskDelay>(m_Allocator);
-        izanagi::threadmodel::CTimerThread::PostDelayedTask(m_DelayTask, 1000.0f, IZ_TRUE);
+        m_Thread.PostDelayedTask(m_DelayTask, 1000.0f, IZ_TRUE);
     }
     else if (key == izanagi::sys::E_KEYBOARD_BUTTON_BACK) {
         m_DelayTask->Cancel();

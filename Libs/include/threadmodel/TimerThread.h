@@ -10,55 +10,76 @@ namespace izanagi
 {
 namespace threadmodel
 {
-    class CTimerTask;
-
-    class CTimerThread 
+    class CTimerTask : public CTask
     {
+        friend class CTimerThread;
+
+    protected:
+        CTimerTask();
+        virtual ~CTimerTask() {}
+
     private:
+        enum TYPE {
+            TYPE_DELAY = 0,
+            TYPE_INTERVAL,
+        };
+
+        inline void SetType(TYPE type);
+        inline TYPE GetType();
+
+        inline void SetTime(IZ_TIME time);
+        inline IZ_TIME GetTime();
+
+        inline void SetPrev(IZ_TIME time);
+        inline IZ_TIME GetPrev();
+
+        inline void SetInterval(IZ_FLOAT ms);
+        inline IZ_FLOAT GetInterval();
+
+        inline void SetElapsed(IZ_FLOAT ms);
+        inline IZ_FLOAT GetElapsed();
+
+        inline void SetTimeForRun(IZ_FLOAT time);
+
+        virtual void OnRun();
+
+    protected:
+        virtual void OnRun(IZ_FLOAT time) = 0;
+
+    private:
+        TYPE m_Type;
+        IZ_TIME m_Time;
+        IZ_TIME m_Prev;
+        IZ_FLOAT m_Interval;
+        IZ_FLOAT m_Elapsed;
+
+        IZ_FLOAT m_TempTime;
+    };
+
+    class CTimerThread : public sys::CThread
+    {
+    public:
         CTimerThread();
         ~CTimerThread();
 
     private:
-        class CThread : public sys::CThread
-        {
-        public:
-            CThread();
-            virtual ~CThread();
-
-        public:
-            virtual void Run();
-
-            void Termnate();
-            IZ_BOOL IsTerminate();
-
-            IZ_BOOL Enqueue(CStdList<CTimerTask>::Item* item);
-
-        private:
-            sys::CTimer m_Timer;
-            sys::CMutex m_Mutex;
-            sys::CEvent m_Event;
-            CStdList<CTimerTask> m_TaskList;
-
-            typedef CStdList<CTimerTask>::Item ListItem;
-
-            IZ_BOOL m_WillTerminate;
-        };
+        virtual void Run();
 
     public:
-        static IZ_BOOL PostDelayedTask(
+        IZ_BOOL PostDelayedTask(
             CTimerTask* task, 
             IZ_FLOAT delay, 
             IZ_BOOL willDelete = IZ_FALSE);
 
-        static IZ_BOOL PostIntervalTask(
+        IZ_BOOL PostIntervalTask(
             CTimerTask* task, 
             IZ_FLOAT interval, 
             IZ_BOOL willDelete = IZ_FALSE);
 
-        static void Terminate();
+        virtual void Join();
 
     private:
-        static IZ_BOOL PostTaskInternal(
+        IZ_BOOL PostTaskInternal(
             CTimerTask* task, 
             IZ_FLOAT time, 
             IZ_BOOL willDelete = IZ_FALSE);
@@ -70,8 +91,16 @@ namespace threadmodel
             STATE_TERMINATED,
         };
 
-        static CThread s_Thread;
-        static STATE s_State;
+        STATE m_State;
+
+        sys::CTimer m_Timer;
+        sys::CMutex m_Mutex;
+        sys::CEvent m_Event;
+        CStdList<CTimerTask> m_TaskList;
+
+        typedef CStdList<CTimerTask>::Item ListItem;
+
+        IZ_BOOL m_WillTerminate;
     };
 }   // namespace threadmodel
 }   // namespace izanagi

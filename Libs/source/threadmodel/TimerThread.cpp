@@ -4,52 +4,6 @@ namespace izanagi
 {
 namespace threadmodel
 {
-    class CTimerTask : public CTask
-    {
-        friend class CTimerThread;
-
-    protected:
-        CTimerTask();
-        virtual ~CTimerTask() {}
-
-    private:
-        enum TYPE {
-            TYPE_DELAY = 0,
-            TYPE_INTERVAL,
-        };
-
-        inline void SetType(TYPE type);
-        inline TYPE GetType();
-
-        inline void SetTime(IZ_TIME time);
-        inline IZ_TIME GetTime();
-
-        inline void SetPrev(IZ_TIME time);
-        inline IZ_TIME GetPrev();
-
-        inline void SetInterval(IZ_FLOAT ms);
-        inline IZ_FLOAT GetInterval();
-
-        inline void SetElapsed(IZ_FLOAT ms);
-        inline IZ_FLOAT GetElapsed();
-
-        inline void SetTimeForRun(IZ_FLOAT time);
-
-        virtual void OnRun();
-
-    protected:
-        virtual void OnRun(IZ_FLOAT time) = 0;
-
-    private:
-        TYPE m_Type;
-        IZ_TIME m_Time;
-        IZ_TIME m_Prev;
-        IZ_FLOAT m_Interval;
-        IZ_FLOAT m_Elapsed;
-
-        IZ_FLOAT m_TempTime;
-    };
-
     CTimerTask::CTimerTask()
     {
         m_Type = TYPE_DELAY;
@@ -121,33 +75,33 @@ namespace threadmodel
 
     ///////////////////////////////////////////////////
 
-    CTimerThread::CThread CTimerThread::s_Thread;
-    CTimerThread::STATE CTimerThread::s_State = CTimerThread::STATE_NONE;
-
-    CTimerThread::CThread::CThread()
+    CTimerThread::CTimerThread()
     {
         m_WillTerminate = IZ_FALSE;
         m_Mutex.Open();
         m_Event.Open();
+
+        m_State = CTimerThread::STATE_NONE;
     }
 
-    CTimerThread::CThread::~CThread()
+    CTimerThread::~CTimerThread()
     {
     }
 
-    void CTimerThread::CThread::Run()
+    void CTimerThread::Run()
     {
         m_Timer.Begin();
 
         while (IZ_TRUE) {
-            if (m_WillTerminate) {
-                break;
-            }
-
             m_Event.Wait();
 
-            m_Mutex.Lock();
             {
+                sys::CGuarder guard(m_Mutex);
+
+                if (m_WillTerminate) {
+                    break;
+                }
+
                 ListItem* item = m_TaskList.GetTop();
                 while (item != IZ_NULL) {
                     CTimerTask* task = item->GetData();
@@ -214,21 +168,20 @@ namespace threadmodel
                     m_Event.Reset();
                 }
             }
-            m_Mutex.Unlock();
         }
 
         m_Mutex.Close();
         m_Event.Close();
     }
 
-    void CTimerThread::CThread::Termnate()
+    void CTimerThread::Join()
     {
         m_WillTerminate = IZ_TRUE;
 
         // Thread may be waited by event.
         m_Event.Set();
 
-        Join();
+        sys::CThread::Join();
 
         // å„énññ
         ListItem* item = m_TaskList.GetTop();
@@ -245,23 +198,8 @@ namespace threadmodel
         }
 
         m_TaskList.Clear();
-    }
 
-    IZ_BOOL CTimerThread::CThread::Enqueue(CStdList<CTimerTask>::Item* item)
-    {
-        if (m_WillTerminate) {
-            return IZ_FALSE;
-        }
-
-        m_Mutex.Lock();
-        {
-            m_TaskList.AddTail(item);
-        }
-        m_Mutex.Unlock();
-
-        m_Event.Set();
-
-        return IZ_TRUE;
+        m_State = STATE_TERMINATED;
     }
 
     IZ_BOOL CTimerThread::PostDelayedTask(
@@ -288,13 +226,17 @@ namespace threadmodel
         IZ_FLOAT time, 
         IZ_BOOL willDelete/*= IZ_FALSE*/)
     {
-        if (s_State == STATE_TERMINATED) {
+        if (m_WillTerminate) {
             return IZ_FALSE;
         }
 
-        if (s_State == STATE_NONE) {
-            VRETURN(s_Thread.Start());
-            s_State = STATE_INITIALIZED;
+        if (m_State == STATE_TERMINATED) {
+            return IZ_FALSE;
+        }
+
+        if (m_State == STATE_NONE) {
+            VRETURN(Start());
+            m_State = STATE_INITIALIZED;
         }
 
         task->SetIsDeleteSelf(willDelete);
@@ -303,13 +245,15 @@ namespace threadmodel
         task->SetTime(sys::CTimer::Add(cur, time));
         task->SetPrev(cur);
 
-        return s_Thread.Enqueue(reinterpret_cast<CStdList<CTimerTask>::Item*>(task->GetListItem()));
-    }
+        m_Mutex.Lock();
+        {
+            m_TaskList.AddTail(reinterpret_cast<CStdList<CTimerTask>::Item*>(task->GetListItem()));
+        }
+        m_Mutex.Unlock();
 
-    void CTimerThread::Terminate()
-    {
-        s_State = STATE_TERMINATED;
-        s_Thread.Termnate();
+        m_Event.Set();
+
+        return IZ_TRUE;
     }
 }   // namespace threadmodel
 }   // namespace izanagi
