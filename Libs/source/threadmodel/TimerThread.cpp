@@ -4,6 +4,52 @@ namespace izanagi
 {
 namespace threadmodel
 {
+    class CTimerTask : public CTask
+    {
+        friend class CTimerThread;
+
+    protected:
+        CTimerTask();
+        virtual ~CTimerTask() {}
+
+    private:
+        enum TYPE {
+            TYPE_DELAY = 0,
+            TYPE_INTERVAL,
+        };
+
+        inline void SetType(TYPE type);
+        inline TYPE GetType();
+
+        inline void SetTime(IZ_TIME time);
+        inline IZ_TIME GetTime();
+
+        inline void SetPrev(IZ_TIME time);
+        inline IZ_TIME GetPrev();
+
+        inline void SetInterval(IZ_FLOAT ms);
+        inline IZ_FLOAT GetInterval();
+
+        inline void SetElapsed(IZ_FLOAT ms);
+        inline IZ_FLOAT GetElapsed();
+
+        inline void SetTimeForRun(IZ_FLOAT time);
+
+        virtual void OnRun();
+
+    protected:
+        virtual void OnRun(IZ_FLOAT time) = 0;
+
+    private:
+        TYPE m_Type;
+        IZ_TIME m_Time;
+        IZ_TIME m_Prev;
+        IZ_FLOAT m_Interval;
+        IZ_FLOAT m_Elapsed;
+
+        IZ_FLOAT m_TempTime;
+    };
+
     CTimerTask::CTimerTask()
     {
         m_Type = TYPE_DELAY;
@@ -223,7 +269,8 @@ namespace threadmodel
         IZ_FLOAT delay, 
         IZ_BOOL willDelete/*= IZ_FALSE*/)
     {
-        return PostTask(task, CTimerTask::TYPE_DELAY, delay, willDelete);
+        task->SetType(CTimerTask::TYPE_DELAY);
+        return PostTaskInternal(task, delay, willDelete);
     }
 
     IZ_BOOL CTimerThread::PostIntervalTask(
@@ -232,12 +279,12 @@ namespace threadmodel
         IZ_BOOL willDelete/*= IZ_FALSE*/)
     {
         task->SetInterval(interval);
-        return PostTask(task, CTimerTask::TYPE_INTERVAL, interval, willDelete);
+        task->SetType(CTimerTask::TYPE_INTERVAL);
+        return PostTaskInternal(task, interval, willDelete);
     }
 
-    IZ_BOOL CTimerThread::PostTask(
+    IZ_BOOL CTimerThread::PostTaskInternal(
         CTimerTask* task, 
-        CTimerTask::TYPE type,
         IZ_FLOAT time, 
         IZ_BOOL willDelete/*= IZ_FALSE*/)
     {
@@ -251,7 +298,6 @@ namespace threadmodel
         }
 
         task->SetIsDeleteSelf(willDelete);
-        task->SetType(type);
 
         IZ_TIME cur = sys::CTimer::GetCurTime();
         task->SetTime(sys::CTimer::Add(cur, time));

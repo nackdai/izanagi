@@ -10,51 +10,7 @@ namespace izanagi
 {
 namespace threadmodel
 {
-    class CTimerTask : public CTask
-    {
-        friend class CTimerThread;
-
-    protected:
-        CTimerTask();
-        virtual ~CTimerTask() {}
-
-    private:
-        enum TYPE {
-            TYPE_DELAY = 0,
-            TYPE_INTERVAL,
-        };
-
-        inline void SetType(TYPE type);
-        inline TYPE GetType();
-
-        inline void SetTime(IZ_TIME time);
-        inline IZ_TIME GetTime();
-
-        inline void SetPrev(IZ_TIME time);
-        inline IZ_TIME GetPrev();
-
-        inline void SetInterval(IZ_FLOAT ms);
-        inline IZ_FLOAT GetInterval();
-
-        inline void SetElapsed(IZ_FLOAT ms);
-        inline IZ_FLOAT GetElapsed();
-
-        inline void SetTimeForRun(IZ_FLOAT time);
-
-        virtual void OnRun();
-
-    protected:
-        virtual void OnRun(IZ_FLOAT time) = 0;
-
-    private:
-        TYPE m_Type;
-        IZ_TIME m_Time;
-        IZ_TIME m_Prev;
-        IZ_FLOAT m_Interval;
-        IZ_FLOAT m_Elapsed;
-
-        IZ_FLOAT m_TempTime;
-    };
+    class CTimerTask;
 
     class CTimerThread 
     {
@@ -102,9 +58,8 @@ namespace threadmodel
         static void Terminate();
 
     private:
-        static IZ_BOOL PostTask(
+        static IZ_BOOL PostTaskInternal(
             CTimerTask* task, 
-            CTimerTask::TYPE type,
             IZ_FLOAT time, 
             IZ_BOOL willDelete = IZ_FALSE);
 
