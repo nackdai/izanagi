@@ -176,6 +176,10 @@ namespace threadmodel
 
     void CTimerThread::Join()
     {
+        if (m_State == STATE_TERMINATED) {
+            return;
+        }
+
         m_WillTerminate = IZ_TRUE;
 
         // Thread may be waited by event.
