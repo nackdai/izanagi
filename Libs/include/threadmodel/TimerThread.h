@@ -10,20 +10,24 @@ namespace izanagi
 {
 namespace threadmodel
 {
+    /**
+     */
     class CTimerTask : public CTask
     {
         friend class CTimerThread;
+        friend class CTimerTaskExecuter;
 
     protected:
         CTimerTask();
         virtual ~CTimerTask() {}
 
-    private:
+    public:
         enum TYPE {
             TYPE_DELAY = 0,
             TYPE_INTERVAL,
         };
 
+    private:
         inline void SetType(TYPE type);
         inline TYPE GetType();
 
@@ -56,6 +60,36 @@ namespace threadmodel
         IZ_FLOAT m_TempTime;
     };
 
+    /**
+     */
+    class CTimerTaskExecuter {
+    public:
+        CTimerTaskExecuter();
+        ~CTimerTaskExecuter();
+
+        NO_COPIABLE(CTimerTaskExecuter);
+
+    public:
+        IZ_BOOL PostTask(
+            CTimerTask* task, 
+            CTimerTask::TYPE type,
+            IZ_FLOAT time, 
+            IZ_BOOL willDelete = IZ_FALSE);
+
+        void Update();
+
+        void Clear();
+
+        IZ_UINT GetRegisteredTaskNum();
+
+    private:
+        CStdList<CTimerTask> m_TaskList;
+
+        typedef CStdList<CTimerTask>::Item ListItem;
+    };
+
+    /**
+     */
     class CTimerThread : public sys::CThread
     {
     public:
@@ -81,6 +115,7 @@ namespace threadmodel
     private:
         IZ_BOOL PostTaskInternal(
             CTimerTask* task, 
+            CTimerTask::TYPE type,
             IZ_FLOAT time, 
             IZ_BOOL willDelete = IZ_FALSE);
 
@@ -96,9 +131,8 @@ namespace threadmodel
         sys::CTimer m_Timer;
         sys::CMutex m_Mutex;
         sys::CEvent m_Event;
-        CStdList<CTimerTask> m_TaskList;
-
-        typedef CStdList<CTimerTask>::Item ListItem;
+        
+        CTimerTaskExecuter m_TaskExecuter;
 
         IZ_BOOL m_WillTerminate;
     };

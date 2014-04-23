@@ -75,6 +75,126 @@ namespace threadmodel
 
     ///////////////////////////////////////////////////
 
+    CTimerTaskExecuter::CTimerTaskExecuter()
+    {
+    }
+
+    CTimerTaskExecuter::~CTimerTaskExecuter()
+    {
+        Clear();
+    }
+
+    IZ_BOOL CTimerTaskExecuter::PostTask(
+        CTimerTask* task, 
+        CTimerTask::TYPE type,
+        IZ_FLOAT time, 
+        IZ_BOOL willDelete/*= IZ_FALSE*/)
+    {
+        task->SetType(type);
+
+        if (type == CTimerTask::TYPE_INTERVAL) {
+            task->SetInterval(time);
+        }
+
+        task->SetIsDeleteSelf(willDelete);
+
+        IZ_TIME cur = sys::CTimer::GetCurTime();
+        task->SetTime(sys::CTimer::Add(cur, time));
+        task->SetPrev(cur);
+
+        return m_TaskList.AddTail(reinterpret_cast<CStdList<CTimerTask>::Item*>(task->GetListItem()));
+    }
+
+    void CTimerTaskExecuter::Update()
+    {
+        ListItem* item = m_TaskList.GetTop();
+        while (item != IZ_NULL) {
+            CTimerTask* task = item->GetData();
+            ListItem* next = item->GetNext();
+
+            CTimerTask::TYPE type = task->GetType();
+            IZ_TIME time = task->GetTime();
+
+            IZ_TIME cur = sys::CTimer::GetCurTime();
+            IZ_TIME base = cur;
+
+            IZ_FLOAT taskElapsed = task->GetElapsed();
+            if (taskElapsed > 0) {
+                base = sys::CTimer::Sub(cur, taskElapsed);
+            }
+
+            if (task->WillCancel()
+                || sys::CTimer::Compare(base, time))
+            {
+                IZ_FLOAT elapsed = sys::CTimer::ComputeTime(
+                    task->GetPrev(),
+                    cur);
+
+                if (type == CTimerTask::TYPE_DELAY) {
+                    item->Leave();
+                    task->SetTimeForRun(elapsed);
+                    task->Run(IZ_NULL);
+
+                    if (task->IsDeleteSelf()) {
+                        CTask::DeleteTask(task);
+                        task = IZ_NULL;
+                    }
+                }
+                else {
+                    task->SetTimeForRun(elapsed);
+                    task->Run(IZ_NULL);
+
+                    if (task->IsCanceled()) {
+                        item->Leave();
+
+                        if (task->IsDeleteSelf()) {
+                            CTask::DeleteTask(task);
+                            task = IZ_NULL;
+                        }
+                    }
+                    else {
+                        task->ResetState();
+
+                        IZ_FLOAT interval = task->GetInterval();
+
+                        task->SetTime(sys::CTimer::Add(cur, interval));
+                        task->SetPrev(cur);
+
+                        task->SetElapsed(elapsed - interval);
+                    }
+                }
+            }
+
+            item = next;
+        }
+    }
+
+    void CTimerTaskExecuter::Clear()
+    {
+        // ŒãŽn––
+        ListItem* item = m_TaskList.GetTop();
+        while (item != IZ_NULL) {
+            CTimerTask* task = item->GetData();
+            item = item->GetNext();
+
+            task->Cancel();
+            task->Run(IZ_NULL);
+
+            if (task->IsDeleteSelf()) {
+                CTask::DeleteTask(task);
+            }
+        }
+
+        m_TaskList.Clear();
+    }
+
+    IZ_UINT CTimerTaskExecuter::GetRegisteredTaskNum()
+    {
+        return m_TaskList.GetItemNum();
+    }
+
+    ///////////////////////////////////////////////////
+
     CTimerThread::CTimerThread()
     {
         m_WillTerminate = IZ_FALSE;
@@ -102,68 +222,9 @@ namespace threadmodel
                     break;
                 }
 
-                ListItem* item = m_TaskList.GetTop();
-                while (item != IZ_NULL) {
-                    CTimerTask* task = item->GetData();
-                    ListItem* next = item->GetNext();
+                m_TaskExecuter.Update();
 
-                    CTimerTask::TYPE type = task->GetType();
-                    IZ_TIME time = task->GetTime();
-
-                    IZ_TIME cur = sys::CTimer::GetCurTime();
-                    IZ_TIME base = cur;
-
-                    IZ_FLOAT taskElapsed = task->GetElapsed();
-                    if (taskElapsed > 0) {
-                        base = sys::CTimer::Sub(cur, taskElapsed);
-                    }
-
-                    if (task->WillCancel()
-                        || sys::CTimer::Compare(base, time))
-                    {
-                        IZ_FLOAT elapsed = sys::CTimer::ComputeTime(
-                            task->GetPrev(),
-                            cur);
-
-                        if (type == CTimerTask::TYPE_DELAY) {
-                            item->Leave();
-                            task->SetTimeForRun(elapsed);
-                            task->Run(IZ_NULL);
-
-                            if (task->IsDeleteSelf()) {
-                                CTask::DeleteTask(task);
-                                task = IZ_NULL;
-                            }
-                        }
-                        else {
-                            task->SetTimeForRun(elapsed);
-                            task->Run(IZ_NULL);
-
-                            if (task->IsCanceled()) {
-                                item->Leave();
-
-                                if (task->IsDeleteSelf()) {
-                                    CTask::DeleteTask(task);
-                                    task = IZ_NULL;
-                                }
-                            }
-                            else {
-                                task->ResetState();
-
-                                IZ_FLOAT interval = task->GetInterval();
-
-                                task->SetTime(sys::CTimer::Add(cur, interval));
-                                task->SetPrev(cur);
-
-                                task->SetElapsed(elapsed - interval);
-                            }
-                        }
-                    }
-
-                    item = next;
-                }
-
-                if (m_TaskList.GetItemNum() == 0) {
+                if (m_TaskExecuter.GetRegisteredTaskNum() == 0) {
                     // There is no task, so thread wait.
                     m_Event.Reset();
                 }
@@ -188,20 +249,7 @@ namespace threadmodel
         sys::CThread::Join();
 
         // ŒãŽn––
-        ListItem* item = m_TaskList.GetTop();
-        while (item != IZ_NULL) {
-            CTimerTask* task = item->GetData();
-            item = item->GetNext();
-
-            task->Cancel();
-            task->Run(IZ_NULL);
-
-            if (task->IsDeleteSelf()) {
-                CTask::DeleteTask(task);
-            }
-        }
-
-        m_TaskList.Clear();
+        m_TaskExecuter.Clear();
 
         m_State = STATE_TERMINATED;
     }
@@ -211,8 +259,11 @@ namespace threadmodel
         IZ_FLOAT delay, 
         IZ_BOOL willDelete/*= IZ_FALSE*/)
     {
-        task->SetType(CTimerTask::TYPE_DELAY);
-        return PostTaskInternal(task, delay, willDelete);
+        return PostTaskInternal(
+            task,
+            CTimerTask::TYPE_DELAY,
+            delay, 
+            willDelete);
     }
 
     IZ_BOOL CTimerThread::PostIntervalTask(
@@ -220,13 +271,16 @@ namespace threadmodel
         IZ_FLOAT interval, 
         IZ_BOOL willDelete/*= IZ_FALSE*/)
     {
-        task->SetInterval(interval);
-        task->SetType(CTimerTask::TYPE_INTERVAL);
-        return PostTaskInternal(task, interval, willDelete);
+        return PostTaskInternal(
+            task, 
+            CTimerTask::TYPE_INTERVAL,
+            interval,
+            willDelete);
     }
 
     IZ_BOOL CTimerThread::PostTaskInternal(
         CTimerTask* task, 
+        CTimerTask::TYPE type,
         IZ_FLOAT time, 
         IZ_BOOL willDelete/*= IZ_FALSE*/)
     {
@@ -243,15 +297,9 @@ namespace threadmodel
             m_State = STATE_INITIALIZED;
         }
 
-        task->SetIsDeleteSelf(willDelete);
-
-        IZ_TIME cur = sys::CTimer::GetCurTime();
-        task->SetTime(sys::CTimer::Add(cur, time));
-        task->SetPrev(cur);
-
         m_Mutex.Lock();
         {
-            m_TaskList.AddTail(reinterpret_cast<CStdList<CTimerTask>::Item*>(task->GetListItem()));
+            m_TaskExecuter.PostTask(task, type, time, willDelete);
         }
         m_Mutex.Unlock();
 

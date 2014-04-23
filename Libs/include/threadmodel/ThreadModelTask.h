@@ -14,7 +14,7 @@ namespace threadmodel
     {
         friend class CThreadPool;
         friend class CParallel;
-        friend class CTimerThread;
+        friend class CTimerTaskExecuter;
 
     public:
         template <typename _T>
