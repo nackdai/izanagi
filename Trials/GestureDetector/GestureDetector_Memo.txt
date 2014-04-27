@@ -1,0 +1,8 @@
+* w’èŠÔŒã‚Éˆ—‚ğÀs‚Å‚«‚é‚æ‚¤‚É‚·‚é
+* 
+
+https://github.com/android/platform_frameworks_base/blob/master/core/java/android/view/GestureDetector.java
+https://android.googlesource.com/platform/frameworks/base/+/b267554/libs/androidfw/VelocityTracker.cpp
+https://github.com/android/platform_frameworks_base/blob/master/core/java/android/os/Handler.java
+https://github.com/android/platform_frameworks_base/blob/master/core/java/android/os/MessageQueue.java
+https://github.com/android/platform_frameworks_base/blob/master/core/jni/android_os_MessageQueue.cpp
