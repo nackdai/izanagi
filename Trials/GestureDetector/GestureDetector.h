@@ -6,50 +6,12 @@
 #include "izSystem.h"
 #include "izThreadModel.h"
 
+#include "VelocityTracker.h"
+
 namespace izanagi
 {
 namespace sys
 {
-    /**
-     */
-    class IGestureListener {
-    protected:
-        IGestureListener() {}
-        virtual ~IGestureListener() {}
-
-        NO_COPIABLE(IGestureListener);
-
-    public:
-        virtual void OnTapUp() = 0;
-        virtual void OnShowPress() = 0;
-        virtual void OnLongPress() = 0;
-        virtual void OnDrag(
-            IZ_INT x, IZ_INT y,
-            IZ_INT lastX, IZ_INT lastY) = 0;
-        virtual void OnFling() = 0;
-
-        virtual IZ_BOOL OnDown() = 0;
-    };
-
-    /**
-     */
-    class CGestureListenerImplement : public IGestureListener {
-    public:
-        CGestureListenerImplement() {}
-        virtual ~CGestureListenerImplement() {}
-
-    public:
-        virtual void OnTapUp() {}
-        virtual void OnShowPress() {}
-        virtual void OnLongPress() {}
-        virtual void OnDrag(
-            IZ_INT x, IZ_INT y,
-            IZ_INT lastX, IZ_INT lastY) {}
-        virtual void OnFling() {}
-
-        virtual IZ_BOOL OnDown()  { return IZ_FALSE; };
-    };
-
     enum E_SYS_TOUCH_EVENT {
         E_SYS_TOUCH_EVENT_DOWN = 0,
         E_SYS_TOUCH_EVENT_UP,
@@ -68,6 +30,8 @@ namespace sys
         IZ_INT x;
         IZ_INT y;
 
+        IZ_TIME eventTime;
+
         CTouchEvent(
             E_SYS_TOUCH_EVENT _type,
             IZ_INT _x,
@@ -76,8 +40,59 @@ namespace sys
             type = _type;
             x = _x;
             y = _y;
+
+            eventTime = 0;
         }
+        CTouchEvent() {}
         ~CTouchEvent() {}
+    };
+
+    /**
+     */
+    class IGestureListener {
+    protected:
+        IGestureListener() {}
+        virtual ~IGestureListener() {}
+
+        NO_COPIABLE(IGestureListener);
+
+    public:
+        virtual void OnTapUp() = 0;
+        virtual void OnShowPress() = 0;
+        virtual void OnLongPress() = 0;
+        
+        virtual void OnDrag(
+            const CTouchEvent& ev,
+            IZ_INT moveX, IZ_INT moveY) = 0;
+
+        virtual void OnFling(
+            const CTouchEvent& ev,
+            IZ_FLOAT velocityX, IZ_FLOAT velocityY) = 0;
+
+        virtual IZ_BOOL OnDown() = 0;
+    };
+
+    /**
+     */
+    class CGestureListenerImplement : public IGestureListener {
+    public:
+        CGestureListenerImplement() {}
+        virtual ~CGestureListenerImplement() {}
+
+    public:
+        virtual void OnTapUp() {}
+        virtual void OnShowPress() {}
+        virtual void OnLongPress() {}
+        
+        virtual void OnDrag(
+            const CTouchEvent& ev,
+            IZ_INT moveX, IZ_INT moveY) {}
+        
+        virtual void OnFling(
+            const CTouchEvent& ev,
+            IZ_FLOAT velocityX, IZ_FLOAT velocityY) {}
+
+        virtual IZ_BOOL OnDown()  { return IZ_FALSE; };
     };
 
     /**
@@ -87,6 +102,8 @@ namespace sys
         static IZ_UINT TAP_TIMEOUT;
         static IZ_UINT LONG_PRESS_TIMEOUT;
         static IZ_UINT TAP_RANGE_SQUARE_RADIUS;
+        static IZ_FLOAT MAX_FLING_VELOCITY;
+        static IZ_FLOAT MIN_FLING_VELOCITY;
 
     public:
         CGestureDetector();
@@ -150,20 +167,25 @@ namespace sys
 
         void Cancel(TYPE type);
 
+        void GetVelocity(IZ_FLOAT* velX, IZ_FLOAT* velY);
+
     protected:
         IMemoryAllocator* m_Allocator;
 
         IGestureListener* m_Listener;
-        threadmodel::CMessageQueue m_MsgQueue;
 
         threadmodel::CTimerTaskExecuter m_TaskExecuter;
         sys::CMutex m_Mutex;
+
+        CTouchEvent m_DownEvent;
 
         IZ_BOOL m_InDown;
         IZ_BOOL m_InMoving;
         IZ_BOOL m_InLongPress;
 
         CIntPoint m_LastPoint;
+
+        CVelocityTracker m_VelocityTracker;
     };
 }   // namespace sys
 }   // namespace izanagi

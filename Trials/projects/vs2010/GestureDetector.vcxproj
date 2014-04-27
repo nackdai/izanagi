@@ -13,9 +13,11 @@
   <ItemGroup>
     <ClCompile Include="..\..\GestureDetector\GestureDetector.cpp" />
     <ClCompile Include="..\..\GestureDetector\main.cpp" />
+    <ClCompile Include="..\..\GestureDetector\VelocityTracker.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\GestureDetector\GestureDetector.h" />
+    <ClInclude Include="..\..\GestureDetector\VelocityTracker.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{8C313426-48C1-4E66-80E8-F6740E3AD737}</ProjectGuid>

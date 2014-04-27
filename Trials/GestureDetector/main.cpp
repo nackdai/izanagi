@@ -24,13 +24,18 @@ public:
     }
 
     virtual void OnDrag(
-        IZ_INT x, IZ_INT y,
-        IZ_INT lastX, IZ_INT lastY)
+        const izanagi::sys::CTouchEvent& ev,
+        IZ_INT moveX, IZ_INT moveY)
     {
         IZ_PRINTF("OnDrag\n");
     }
 
-    virtual void OnFling() {}
+    virtual void OnFling(
+        const izanagi::sys::CTouchEvent& ev,
+        IZ_FLOAT velocityX, IZ_FLOAT velocityY)
+    {
+        IZ_PRINTF("OnFling [%f] [%f]\n", velocityX, velocityY);
+    }
 
     virtual IZ_BOOL OnDown()
     {

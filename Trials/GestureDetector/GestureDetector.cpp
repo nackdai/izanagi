@@ -39,6 +39,8 @@ namespace sys
     IZ_UINT CGestureDetector::TAP_TIMEOUT = 500;
     IZ_UINT CGestureDetector::LONG_PRESS_TIMEOUT = 1000;
     IZ_UINT CGestureDetector::TAP_RANGE_SQUARE_RADIUS = 1;
+    IZ_FLOAT CGestureDetector::MAX_FLING_VELOCITY = 1.0f;
+    IZ_FLOAT CGestureDetector::MIN_FLING_VELOCITY = 0.2f;
 
     CGestureDetector::CGestureDetector()
     {
@@ -81,6 +83,8 @@ namespace sys
     {
         IZ_ASSERT(m_Listener != IZ_NULL);
 
+        IZ_TIME cur = sys::CTimer::GetCurTime();
+
         switch (ev.type) {
         case E_SYS_TOUCH_EVENT_UP:
             {
@@ -89,6 +93,15 @@ namespace sys
                     m_InLongPress = IZ_FALSE;
                 }
                 else if (m_InMoving) {
+                    IZ_FLOAT velX, velY;
+                    GetVelocity(&velX, &velY);
+
+                    if (math::CMath::Absf(velX) >= MIN_FLING_VELOCITY
+                        || math::CMath::Absf(velY) >= MIN_FLING_VELOCITY)
+                    {
+                        m_Listener->OnFling(m_DownEvent, velX, velY);
+                        m_VelocityTracker.Clear();
+                    }
                 }
                 else {
                     m_Listener->OnTapUp();
@@ -105,43 +118,60 @@ namespace sys
             {
                 Cancel(TYPE_LONG_PRESS);
 
+                // Keep touch point.
                 m_LastPoint.x = ev.x;
                 m_LastPoint.y = ev.y;
 
+                // Post task for long press.
                 CTask* taskLongPress = threadmodel::CTask::CreateTask<CTask>(m_Allocator);
                 taskLongPress->SetGestureType(TYPE_LONG_PRESS);
                 taskLongPress->SetGestureDetector(this);
                 m_TaskExecuter.PostTask(
                     taskLongPress,
                     threadmodel::CTimerTask::TYPE_DELAY,
+                    cur,
                     TAP_TIMEOUT + LONG_PRESS_TIMEOUT,
                     IZ_TRUE);
 
+                // Post task for showing press.
                 CTask* taskShowPress = threadmodel::CTask::CreateTask<CTask>(m_Allocator);
                 taskShowPress->SetGestureType(TYPE_SHOW_PRESS);
                 taskShowPress->SetGestureDetector(this);
                 m_TaskExecuter.PostTask(
                     taskShowPress,
                     threadmodel::CTimerTask::TYPE_DELAY,
+                    cur,
                     TAP_TIMEOUT,
                     IZ_TRUE);
 
                 m_InDown = IZ_TRUE;
 
+                // Keep touch event.
+                m_DownEvent = ev;
+                m_DownEvent.eventTime = cur;
+
+                // Add event to track velocity.
+                m_VelocityTracker.Clear();
+                m_VelocityTracker.AddEvent(
+                    CMotionEvent(cur, ev.x, ev.y));
+
+                // Dispatch down event.
                 m_Listener->OnDown();
             }
             break;
         case E_SYS_TOUCH_EVENT_MOVE:
             {
                 if (m_InDown) {
+                    // Compute how distance moved.
                     IZ_INT moveX = m_LastPoint.x - ev.x;
                     IZ_INT moveY = m_LastPoint.y - ev.y;
                     IZ_UINT distance = moveX * moveX + moveY * moveY;
 
                     if (distance > TAP_RANGE_SQUARE_RADIUS) {
+                        // Dispatch first drag event.
                         m_Listener->OnDrag(
-                            ev.x, ev.y,
-                            m_LastPoint.x, m_LastPoint.y);
+                            m_DownEvent,
+                            moveX, moveY);
 
                         m_LastPoint.x = ev.x;
                         m_LastPoint.y = ev.y;
@@ -149,24 +179,30 @@ namespace sys
                         m_InDown = IZ_FALSE;
                         m_InMoving = IZ_TRUE;
 
+                        // Cancel all press events.
                         Cancel(TYPE_TAP);
                         Cancel(TYPE_SHOW_PRESS);
                         Cancel(TYPE_LONG_PRESS);
                     }
                 }
                 else if (m_InMoving) {
+                    // Compute how distance moved.
                     IZ_INT moveX = m_LastPoint.x - ev.x;
                     IZ_INT moveY = m_LastPoint.y - ev.y;
 
                     if (::abs(moveX) >= 1 || ::abs(moveY) >= 1) {
+                        // Dispatch drag event.
                         m_Listener->OnDrag(
-                            ev.x, ev.y,
-                            m_LastPoint.x, m_LastPoint.y);
+                            m_DownEvent,
+                            moveX, moveY);
 
                         m_LastPoint.x = ev.x;
                         m_LastPoint.y = ev.y;
                     }
                 }
+
+                m_VelocityTracker.AddEvent(
+                    CMotionEvent(cur, ev.x, ev.y));
             }
             break;
         default:
@@ -223,6 +259,23 @@ namespace sys
         m_TaskExecuter.Cancel(
             CGestureDetector::IsCancel,
             &type);
+    }
+
+    void CGestureDetector::GetVelocity(IZ_FLOAT* velX, IZ_FLOAT* velY)
+    {
+        if (velX) {
+            *velX = CLAMP(
+                m_VelocityTracker.GetVelocityX(),
+                -MAX_FLING_VELOCITY,
+                MAX_FLING_VELOCITY);
+        }
+
+        if (velY) {
+            *velY = CLAMP(
+                m_VelocityTracker.GetVelocityY(),
+                -MAX_FLING_VELOCITY,
+                MAX_FLING_VELOCITY);
+        }
     }
 }   // namespace sys
 }   // namespace izanagi
