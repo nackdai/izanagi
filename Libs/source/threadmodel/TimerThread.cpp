@@ -193,6 +193,32 @@ namespace threadmodel
         return m_TaskList.GetItemNum();
     }
 
+    void CTimerTaskExecuter::Cancel(
+        IZ_BOOL (*funcIsCancel)(CTimerTask* task, void* userData),
+        void* userData)
+    {
+        IZ_ASSERT(funcIsCancel);
+
+        ListItem* item = m_TaskList.GetTop();
+        while (item != IZ_NULL) {
+            ListItem* next = item->GetNext();
+            CTimerTask* task = item->GetData();
+
+            if ((*funcIsCancel)(task, userData)) {
+                item->Leave();
+
+                task->Cancel();
+                task->Run(IZ_NULL);
+
+                if (task->IsDeleteSelf()) {
+                    CTask::DeleteTask(task);
+                }
+            }
+
+            item = next;
+        }
+    }
+
     ///////////////////////////////////////////////////
 
     CTimerThread::CTimerThread()

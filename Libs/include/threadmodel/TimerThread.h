@@ -82,6 +82,10 @@ namespace threadmodel
 
         IZ_UINT GetRegisteredTaskNum();
 
+        void Cancel(
+            IZ_BOOL (*funcIsCancel)(CTimerTask* task, void* userData),
+            void* userData);
+
     private:
         CStdList<CTimerTask> m_TaskList;
 
