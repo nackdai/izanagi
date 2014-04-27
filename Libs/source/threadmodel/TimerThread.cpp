@@ -87,6 +87,7 @@ namespace threadmodel
     IZ_BOOL CTimerTaskExecuter::PostTask(
         CTimerTask* task, 
         CTimerTask::TYPE type,
+        IZ_TIME current,
         IZ_FLOAT time, 
         IZ_BOOL willDelete/*= IZ_FALSE*/)
     {
@@ -98,11 +99,26 @@ namespace threadmodel
 
         task->SetIsDeleteSelf(willDelete);
 
-        IZ_TIME cur = sys::CTimer::GetCurTime();
-        task->SetTime(sys::CTimer::Add(cur, time));
-        task->SetPrev(cur);
+        task->SetTime(sys::CTimer::Add(current, time));
+        task->SetPrev(current);
 
         return m_TaskList.AddTail(reinterpret_cast<CStdList<CTimerTask>::Item*>(task->GetListItem()));
+    }
+
+    IZ_BOOL CTimerTaskExecuter::PostTask(
+        CTimerTask* task, 
+        CTimerTask::TYPE type,
+        IZ_FLOAT time, 
+        IZ_BOOL willDelete/*= IZ_FALSE*/)
+    {
+        IZ_TIME cur = sys::CTimer::GetCurTime();
+
+        return PostTask(
+            task,
+            type,
+            cur,
+            time,
+            willDelete);
     }
 
     void CTimerTaskExecuter::Update()

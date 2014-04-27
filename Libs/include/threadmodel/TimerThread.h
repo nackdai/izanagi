@@ -73,6 +73,13 @@ namespace threadmodel
         IZ_BOOL PostTask(
             CTimerTask* task, 
             CTimerTask::TYPE type,
+            IZ_TIME current,
+            IZ_FLOAT time, 
+            IZ_BOOL willDelete = IZ_FALSE);
+
+        IZ_BOOL PostTask(
+            CTimerTask* task, 
+            CTimerTask::TYPE type,
             IZ_FLOAT time, 
             IZ_BOOL willDelete = IZ_FALSE);
 
