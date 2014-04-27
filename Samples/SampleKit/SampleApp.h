@@ -97,7 +97,11 @@ namespace sample {
          */
         virtual IZ_BOOL OnMouseLBtnDown(const CIntPoint& point) { return IZ_TRUE; }
 
+        /** マウス左ボタン押下
+         */
+        virtual IZ_BOOL OnMouseLBtnUp(const CIntPoint& point) { return IZ_TRUE; }
 
+        virtual void OnMouseMove(const izanagi::CIntPoint& point) {}
 
     protected:
         /** 背景色取得.

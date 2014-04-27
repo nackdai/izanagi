@@ -45,6 +45,8 @@ void CSampleWndProc::OnMouseLBtnDown(const izanagi::CIntPoint& point)
 void CSampleWndProc::OnMouseLBtnUp(const izanagi::CIntPoint& point)
 {
     m_Flags.onLBtn = IZ_FALSE;
+
+    m_App->OnMouseLBtnUp(point);
 }
 
 void CSampleWndProc::OnMouseRBtnDown(const izanagi::CIntPoint& point)
@@ -103,6 +105,8 @@ void CSampleWndProc::OnMouseMove(const izanagi::CIntPoint& point)
     }
 
     m_PrevPoint = point;
+
+    m_App->OnMouseMove(point);
 }
 
 void CSampleWndProc::OnMouseWheel(IZ_INT delta)
