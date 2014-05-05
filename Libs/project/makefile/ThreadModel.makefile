@@ -26,8 +26,8 @@ build_all_configurations: Debug_GLUT
 
 # Builds the Debug_GLUT configuration...
 .PHONY: Debug_GLUT
-Debug_GLUT: create_folders gccDebug_GLUT/source/threadmodel/Parallel.o gccDebug_GLUT/source/threadmodel/ThreadModelTask.o gccDebug_GLUT/source/threadmodel/ThreadPool.o gccDebug_GLUT/source/threadmodel/ThreadModelJob.o gccDebug_GLUT/source/threadmodel/ThreadModelJobQueue.o gccDebug_GLUT/source/threadmodel/ThreadModelJobWorker.o gccDebug_GLUT/source/threadmodel/ThreadModelMessageQueue.o 
-	ar rcs ../lib/gccDebug_GLUT/libThreadModel.a gccDebug_GLUT/source/threadmodel/Parallel.o gccDebug_GLUT/source/threadmodel/ThreadModelTask.o gccDebug_GLUT/source/threadmodel/ThreadPool.o gccDebug_GLUT/source/threadmodel/ThreadModelJob.o gccDebug_GLUT/source/threadmodel/ThreadModelJobQueue.o gccDebug_GLUT/source/threadmodel/ThreadModelJobWorker.o gccDebug_GLUT/source/threadmodel/ThreadModelMessageQueue.o  $(Debug_GLUT_Implicitly_Linked_Objects)
+Debug_GLUT: create_folders gccDebug_GLUT/source/threadmodel/Parallel.o gccDebug_GLUT/source/threadmodel/ThreadModelTask.o gccDebug_GLUT/source/threadmodel/ThreadPool.o gccDebug_GLUT/source/threadmodel/TimerThread.o gccDebug_GLUT/source/threadmodel/ThreadModelJob.o gccDebug_GLUT/source/threadmodel/ThreadModelJobQueue.o gccDebug_GLUT/source/threadmodel/ThreadModelJobWorker.o gccDebug_GLUT/source/threadmodel/ThreadModelMessageQueue.o 
+	ar rcs ../lib/gccDebug_GLUT/libThreadModel.a gccDebug_GLUT/source/threadmodel/Parallel.o gccDebug_GLUT/source/threadmodel/ThreadModelTask.o gccDebug_GLUT/source/threadmodel/ThreadPool.o gccDebug_GLUT/source/threadmodel/TimerThread.o gccDebug_GLUT/source/threadmodel/ThreadModelJob.o gccDebug_GLUT/source/threadmodel/ThreadModelJobQueue.o gccDebug_GLUT/source/threadmodel/ThreadModelJobWorker.o gccDebug_GLUT/source/threadmodel/ThreadModelMessageQueue.o  $(Debug_GLUT_Implicitly_Linked_Objects)
 
 # Compiles file ../../source/threadmodel/Parallel.cpp for the Debug_GLUT configuration...
 -include gccDebug_GLUT/source/threadmodel/Parallel.d
@@ -46,6 +46,12 @@ gccDebug_GLUT/source/threadmodel/ThreadModelTask.o: ../../source/threadmodel/Thr
 gccDebug_GLUT/source/threadmodel/ThreadPool.o: ../../source/threadmodel/ThreadPool.cpp
 	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -c ../../source/threadmodel/ThreadPool.cpp $(Debug_GLUT_Include_Path) -o gccDebug_GLUT/source/threadmodel/ThreadPool.o
 	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -MM ../../source/threadmodel/ThreadPool.cpp $(Debug_GLUT_Include_Path) > gccDebug_GLUT/source/threadmodel/ThreadPool.d
+
+# Compiles file ../../source/threadmodel/TimerThread.cpp for the Debug_GLUT configuration...
+-include gccDebug_GLUT/source/threadmodel/TimerThread.d
+gccDebug_GLUT/source/threadmodel/TimerThread.o: ../../source/threadmodel/TimerThread.cpp
+	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -c ../../source/threadmodel/TimerThread.cpp $(Debug_GLUT_Include_Path) -o gccDebug_GLUT/source/threadmodel/TimerThread.o
+	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -MM ../../source/threadmodel/TimerThread.cpp $(Debug_GLUT_Include_Path) > gccDebug_GLUT/source/threadmodel/TimerThread.d
 
 # Compiles file ../../source/threadmodel/ThreadModelJob.cpp for the Debug_GLUT configuration...
 -include gccDebug_GLUT/source/threadmodel/ThreadModelJob.d
