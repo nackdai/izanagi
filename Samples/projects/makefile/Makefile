@@ -3,7 +3,7 @@
 all_projects: Debug_GLUT 
 
 .PHONY: Debug_GLUT
-Debug_GLUT: State_Debug_GLUT Model_Debug_GLUT Motion_Debug_GLUT Material_Debug_GLUT MouseHit_Debug_GLUT Decal_Debug_GLUT MotionInterp_Debug_GLUT MotionBlend_Debug_GLUT MotionBind_Debug_GLUT Shader_Debug_GLUT DebugMesh_Debug_GLUT ProjectedTextureShadow_Debug_GLUT CubeMap_Debug_GLUT Render2D_Debug_GLUT PostEffect_Debug_GLUT Instancing_Debug_GLUT WaterDrop_Debug_GLUT ScreenShot_Debug_GLUT FontBitmap_Debug_GLUT FontFreeType_Debug_GLUT TextParagraph_Debug_GLUT FontRenderer_Debug_GLUT GamePad_Debug_GLUT Binding_Debug_GLUT Event_Debug_GLUT Profiler_Debug_GLUT ObjectReference_Debug_GLUT JobQueue_Debug_GLUT MesssageQueue_Debug_GLUT Parallel_Debug_GLUT Task_Debug_GLUT ResourceManager_Debug_GLUT Archive_Debug_GLUT SampleKit_Debug_GLUT 
+Debug_GLUT: State_Debug_GLUT Model_Debug_GLUT Motion_Debug_GLUT Material_Debug_GLUT MouseHit_Debug_GLUT Decal_Debug_GLUT MotionInterp_Debug_GLUT MotionBlend_Debug_GLUT MotionBind_Debug_GLUT Shader_Debug_GLUT DebugMesh_Debug_GLUT ProjectedTextureShadow_Debug_GLUT CubeMap_Debug_GLUT Render2D_Debug_GLUT PostEffect_Debug_GLUT Instancing_Debug_GLUT WaterDrop_Debug_GLUT ScreenShot_Debug_GLUT FontBitmap_Debug_GLUT FontFreeType_Debug_GLUT TextParagraph_Debug_GLUT FontRenderer_Debug_GLUT GamePad_Debug_GLUT Binding_Debug_GLUT Event_Debug_GLUT Profiler_Debug_GLUT ObjectReference_Debug_GLUT JobQueue_Debug_GLUT MesssageQueue_Debug_GLUT Parallel_Debug_GLUT Task_Debug_GLUT TimerThread_Debug_GLUT ResourceManager_Debug_GLUT Archive_Debug_GLUT SampleKit_Debug_GLUT 
 
 # Builds project 'State'...
 .PHONY: State_Debug_GLUT
@@ -160,6 +160,11 @@ Parallel_Debug_GLUT: SampleKit
 Task_Debug_GLUT: SampleKit 
 	make --directory="." --file=Task.makefile Debug_GLUT
 
+# Builds project 'TimerThread'...
+.PHONY: TimerThread_Debug_GLUT
+TimerThread_Debug_GLUT: SampleKit 
+	make --directory="." --file=TimerThread.makefile Debug_GLUT
+
 # Builds project 'ResourceManager'...
 .PHONY: ResourceManager_Debug_GLUT
 ResourceManager_Debug_GLUT: 
@@ -209,6 +214,7 @@ clean:
 	make --directory="." --file=MesssageQueue.makefile clean
 	make --directory="." --file=Parallel.makefile clean
 	make --directory="." --file=Task.makefile clean
+	make --directory="." --file=TimerThread.makefile clean
 	make --directory="." --file=ResourceManager.makefile clean
 	make --directory="." --file=Archive.makefile clean
 	make --directory="." --file=SampleKit.makefile clean
