@@ -7,8 +7,8 @@ namespace threadmodel
     CTimerTask::CTimerTask()
     {
         m_Type = TYPE_DELAY;
-        m_Time = 0;
-        m_Prev = 0;
+        sys::CTimer::SetTimeZero(m_Time);
+        sys::CTimer::SetTimeZero(m_Prev);
         m_Interval = 0;
         m_Elapsed = 0;
     }

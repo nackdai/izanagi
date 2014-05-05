@@ -62,10 +62,10 @@ namespace sys
     IZ_TIME CTimer::ConvertTime(IZ_FLOAT time)
     {
         IZ_TIME ret;
-        ret.sec = (long)(time / 1000.0f);
+        ret.tv_sec = (long)(time / 1000.0f);
 
-        time -= ret.sec * 1000.0f;
-        ret.usec = (long)(time * 1000.0f);
+        time -= ret.tv_sec * 1000.0f;
+        ret.tv_usec = (long)(time * 1000.0f);
 
         return ret;
     }
@@ -73,8 +73,8 @@ namespace sys
     IZ_TIME CTimer::Add(IZ_TIME time1, IZ_TIME time2)
     {
         IZ_TIME ret = {
-            time1.sec + time2.sec,
-            time1.usec + time2.usec,
+            time1.tv_sec + time2.tv_sec,
+            time1.tv_usec + time2.tv_usec,
         };
 
         return ret;
@@ -88,7 +88,7 @@ namespace sys
 
     IZ_TIME CTimer::Sub(IZ_TIME time1, IZ_TIME time2)
     {
-        IZ_ASSERT(time1.sec >= time2.sec);
+        IZ_ASSERT(time1.tv_sec >= time2.tv_sec);
         IZ_FLOAT time = ComputeTime(time1, time2);
         IZ_TIME ret = ConvertTime(time);
         return ret;
@@ -102,13 +102,13 @@ namespace sys
 
     IZ_BOOL CTimer::Compare(IZ_TIME time1, IZ_TIME time2)
     {
-        if (time1.sec >= time2.sec) {
+        if (time1.tv_sec >= time2.tv_sec) {
             return IZ_TRUE;
         }
-        else if (time1.sec < time2.sec) {
+        else if (time1.tv_sec < time2.tv_sec) {
             return IZ_FALSE;
         }
-        else if (time1.usec >= time2.usec)
+        else if (time1.tv_usec >= time2.tv_usec)
         {
             return IZ_TRUE;
         }
