@@ -1,8 +1,12 @@
 set CONFIG=%1
 set GFX=%2
 
-cd Tools
-call BuildExternal_%CONFIG%.bat
+set CURDIR = %CD%
+
+cd /d %~dp0
+
+cd ..\Tools
+call BuildExternal_Release.bat
 call BuildTools_%CONFIG%.bat
 cd ..
 
@@ -13,3 +17,5 @@ cd ..
 cd Samples
 call BuildSamples_%CONFIG%_%GFX%.bat
 cd ..
+
+cd /d %CURDIR%
