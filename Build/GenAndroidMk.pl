@@ -1,6 +1,8 @@
 #!/usr/bin/perl
 
 use strict;
+use File::Spec;
+
 use constant true => 1;
 use constant false => 0;
 
@@ -18,6 +20,10 @@ my $targetdst = $ARGV[2];	# 出力ディレクトリ
 # 出力ディレクトリが存在しない場合は作る
 unless (-d $targetdst) {
 	mkdir($targetdst);
+}
+
+if ($targetdst !~ /\/$/) {
+	$targetdst .= "/";
 }
 
 opendir(SRC, $targetsrc) or die "Can't open $targetsrc\n";
@@ -223,6 +229,35 @@ sub GetRelativePath
 	return $path;
 }
 
+# 相対パス取得
+sub RemoveRelativePath
+{
+	my $src = shift;
+
+	my @tmp_array = split(/\//, $src);
+
+	my @dir_array = ();
+	foreach my $t (@tmp_array) {
+		if ($t eq "..") {
+			pop(@dir_array);
+		}
+		else {
+			push(@dir_array, $t);
+		}
+	}
+
+	$src = "";
+	foreach my $d (@dir_array) {
+		$src .= $d . "/";
+	}
+
+	if ($src =~ /\/$/) {
+		chop($src);
+	}
+
+	return $src;
+}
+
 # スタティックライブラリを生成するMakefileを出力する
 sub MakeAndroidMk_StaticLib
 {
@@ -232,7 +267,7 @@ sub MakeAndroidMk_StaticLib
 	my $libraries_array_ref = shift;	# 参照ライブラリの配列への参照
 	my $includes_array_ref = shift;		# インクルードパスの配列への参照
 	my $definitions_array_ref = shift;	# -Dオプションの配列への参照
-	my $srcfiles_array_ref = shift;		
+	my $srcfiles_array_ref = shift;
 
 	# 出力Makefileのパス
 	my $dstmk = $targetdst . "/Android_" . $name . ".mk";
@@ -278,7 +313,7 @@ sub MakeAndroidMk_StaticLib
 		my $srcfiles_cnt = @$srcfiles_array_ref - 1;
 
 		foreach my $src (@$srcfiles_array_ref) {
-			# ファイル名に 'glut' ot 'OGL' or 'linux' が含まれている場合は 'android' に置換する
+			# ファイル名に 'glut' or 'OGL' or 'linux' が含まれている場合は 'android' に置換する
 			if ($src =~ /(glut)/ || $src =~ /(OGL)/ || $src =~ /linux/) {
 				# 元のパスを残しておく
 				my $org = $src;
@@ -292,13 +327,26 @@ sub MakeAndroidMk_StaticLib
 				# 'glut' or 'OGL' を 'android' に置換する
 				$src =~ s/$1/android/;
 
+				my $find_dir = "./" . $targetsrc;
+				for (my $i = 0; $i < @tmp_array - 2; $i++) {
+					$find_dir .= "/" . $tmp_array[$i];
+				}
+
 				# 本当にファイルが存在するか探す
-				my @fullpath = `find . -name $src`;
+				my @fullpath = `find $find_dir -name $src`;
 
 				if (@fullpath == 1) {
 					# 見つかった
 					# 相対パスにする
-					$src = GetRelativePath($targetsrc, $fullpath[0]);
+					chomp($fullpath[0]);
+					$src = File::Spec->rel2abs($fullpath[0]);
+					$src = RemoveRelativePath($src);
+
+					my $targetsrc = File::Spec->rel2abs($targetsrc);
+					$targetsrc = RemoveRelativePath($targetsrc);
+
+					#$src = GetRelativePath($targetsrc, $src);
+					$src = File::Spec->abs2rel($src, $targetsrc);
 				}
 				elsif (@fullpath > 1) {
 					# TODO
@@ -306,7 +354,7 @@ sub MakeAndroidMk_StaticLib
 					next;
 				}
 				else {
-					# 見つからなかった場合の元のパスに戻す
+					# 見つからなかった場合は元のパスに戻す
 					$src = $org;
 				}
 			}
