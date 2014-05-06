@@ -68,9 +68,6 @@
     <ClCompile Include="..\..\source\math\MathNumericalAnlysis.cpp">
       <Filter>source\analysis</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\math\Tweener.cpp">
-      <Filter>source\curve</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\math\MathInterpolater.cpp">
       <Filter>source\curve</Filter>
     </ClCompile>
@@ -159,9 +156,6 @@
     </ClInclude>
     <ClInclude Include="..\..\include\math\MathNumericalAnlysis.h">
       <Filter>include\analysis</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\math\Tweener.h">
-      <Filter>include\curve</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\math\MathInterpolater.h">
       <Filter>include\curve</Filter>

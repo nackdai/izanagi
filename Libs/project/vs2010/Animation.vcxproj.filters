@@ -19,6 +19,9 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\izAnimation.h" />
+    <ClInclude Include="..\..\include\animation\Tweener.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\animation\FuncCurveInterpolater.cpp">
@@ -28,6 +31,9 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\animation\TweenerInterpolater.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\animation\Tweener.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>

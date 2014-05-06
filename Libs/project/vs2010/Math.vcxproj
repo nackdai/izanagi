@@ -131,7 +131,6 @@
     <ClCompile Include="..\..\source\math\MathMatrix.cpp" />
     <ClCompile Include="..\..\source\math\SFMT\SFMT.cpp" />
     <ClCompile Include="..\..\source\math\MathNumericalAnlysis.cpp" />
-    <ClCompile Include="..\..\source\math\Tweener.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\math\dx9\MathMatrix_DX9.h" />
@@ -170,7 +169,6 @@
     <ClInclude Include="..\..\include\math\SFMT\SFMT-sse2.h" />
     <ClInclude Include="..\..\include\math\SFMT\SFMT.h" />
     <ClInclude Include="..\..\include\math\MathNumericalAnlysis.h" />
-    <ClInclude Include="..\..\include\math\Tweener.h" />
     <ClInclude Include="..\..\include\izMath.h" />
   </ItemGroup>
   <ItemGroup>
