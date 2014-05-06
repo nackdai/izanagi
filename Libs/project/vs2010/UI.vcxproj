@@ -27,6 +27,7 @@
     <ClCompile Include="..\..\source\ui\VelocityTracker.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\include\izUI.h" />
     <ClInclude Include="..\..\include\ui\GestureDetector.h" />
     <ClInclude Include="..\..\include\ui\VelocityTracker.h" />
   </ItemGroup>

@@ -23,5 +23,6 @@
     <ClInclude Include="..\..\include\ui\VelocityTracker.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\izUI.h" />
   </ItemGroup>
 </Project>
