@@ -123,6 +123,9 @@
     <ClInclude Include="..\..\include\system\io\FileStream.h">
       <Filter>include\io</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\system\TouchInput.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\system\win32\thread\SysMutex_win32.cpp">
@@ -199,6 +202,9 @@
     </ClCompile>
     <ClCompile Include="..\..\source\system\android\SysWindow_android.cpp">
       <Filter>source\android</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\TouchInput.cpp">
+      <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
