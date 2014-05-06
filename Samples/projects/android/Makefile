@@ -1,5 +1,6 @@
 Debug_GLUT: create_floders
 	ndk-build NDK_PROJECT_PATH=${PWD} NDK_APPLICATION_MK="./Application_SampleKit.mk"
+	ndk-build NDK_PROJECT_PATH=${PWD} NDK_APPLICATION_MK="./Application_TimerThread.mk"
 	ndk-build NDK_PROJECT_PATH=${PWD} NDK_APPLICATION_MK="./Application_MouseHit.mk"
 	ndk-build NDK_PROJECT_PATH=${PWD} NDK_APPLICATION_MK="./Application_Model.mk"
 	ndk-build NDK_PROJECT_PATH=${PWD} NDK_APPLICATION_MK="./Application_FontBitmap.mk"

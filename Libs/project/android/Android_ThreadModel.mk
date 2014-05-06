@@ -8,6 +8,7 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../include
 LOCAL_SRC_FILES  := ../../source/threadmodel/Parallel.cpp \
 ../../source/threadmodel/ThreadModelTask.cpp \
 ../../source/threadmodel/ThreadPool.cpp \
+../../source/threadmodel/TimerThread.cpp \
 ../../source/threadmodel/ThreadModelJob.cpp \
 ../../source/threadmodel/ThreadModelJobQueue.cpp \
 ../../source/threadmodel/ThreadModelJobWorker.cpp \
