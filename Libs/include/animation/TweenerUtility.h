@@ -1,5 +1,5 @@
-#if !defined(__IZANAGI_ANM_TWEENER_INTERPOLATER_H__)
-#define __IZANAGI_ANM_TWEENER_INTERPOLATER_H__
+#if !defined(__IZANAGI_ANM_TWEENER_UTILITY_H__)
+#define __IZANAGI_ANM_TWEENER_UTILITY_H__
 
 #include "izDefs.h"
 #include "izStd.h"
@@ -95,14 +95,14 @@ namespace animation {
 
     /**
     */
-    class CTweenerInterpolater {
+    class CTweener {
     public:
-        CTweenerInterpolater()
+        CTweener()
         {
             Init(E_ANM_TWEENER_MODE_LINEAR_EASE_IN, 0.0f, 0.0f);
         }
 
-        CTweenerInterpolater(
+        CTweener(
             E_ANM_TWEENER_MODE mode,
             IZ_FLOAT start,
             IZ_FLOAT end)
@@ -110,9 +110,9 @@ namespace animation {
             Init(mode, start, end);
         }
 
-        ~CTweenerInterpolater() {}
+        ~CTweener() {}
 
-        NO_COPIABLE(CTweenerInterpolater);
+        NO_COPIABLE(CTweener);
 
     public:
         IZ_FLOAT GetValue(const CTimeline& timeline);
@@ -151,4 +151,4 @@ namespace animation {
 }   // namespace animation
 }   // namespace izanagi
 
-#endif  // #if !defined(__IZANAGI_ANM_TWEENER_INTERPOLATER_H__)
+#endif  // #if !defined(__IZANAGI_ANM_TWEENER_UTILITY_H__)

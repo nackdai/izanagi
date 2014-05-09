@@ -8,11 +8,11 @@ namespace izanagi {
 namespace math {
     /**
      */
-    class CMathInterpolater
+    class CMatCurve
     {
     private:
-        CMathInterpolater();
-        ~CMathInterpolater();
+        CMatCurve();
+        ~CMatCurve();
 
     public:
         /** ベジェ曲線.

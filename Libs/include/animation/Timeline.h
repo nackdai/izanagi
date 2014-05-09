@@ -34,64 +34,78 @@ namespace animation {
         const CTimeline& operator=(const CTimeline& rhs);
 
     public:
-        // 初期化
+        /** Initialize timeline. 
+         */
         void Init(
             IZ_FLOAT duration,
             IZ_FLOAT delay);
 
-        // 進行
-        void Advance(IZ_FLOAT delta);
+        /** Start timeline.
+         */
+        void Start();
 
-        // リセット
+        /** Stop timeline.
+         */
+        void Stop();
+
+        /** Pause timeline
+         */
+        void Pause();
+
+        /** Reset timeline.
+         */
         void Reset();
 
-        // 開始
-        void Start() { m_Flags.isPause = IZ_FALSE; }
+        /** Advance timeline by specified delta time.
+         */
+        void Advance(IZ_FLOAT delta);
 
-        // ストップ
-        inline void Stop();
+        /** Rewind timeline.
+         */
+        void Rewind();
 
-        // ポーズ
-        void Pause() { m_Flags.isPause = IZ_TRUE; }
+        /** Set handler if timeline is over the specified time.
+         */
+        void SetTimeOverHandler(CTimeOverHandler* handler);
 
-        // 逆回し
-        void Rewind() { m_Flags.isForward = !m_Flags.isForward; }
+        /** Get current time.
+         */
+        IZ_FLOAT GetTime() const;
 
-        // タイムラインが設定時間を超えたときのハンドラをセット
-        void SetTimeOverHandler(CTimeOverHandler* handler) { m_TimeOverHandler = handler; }
+        /** Get duration.
+         */
+        IZ_FLOAT GetDuration() const;
 
-    public:
-        // 現在時間取得
-        IZ_FLOAT GetTime() const { return m_Time; }
+        /** Get normalized time.
+         */
+        IZ_FLOAT GetNormalized() const;
 
-        IZ_FLOAT GetDuration() const { return m_Duration; }
+        /** Set if timeline is loop.
+         */
+        void EnableLoop(IZ_BOOL enable);
 
-        // [0.0f - 1.0f]で取得
-        IZ_FLOAT GetFraction() const;
+        /** Get if timeline is loop.
+         */
+        IZ_BOOL IsLoop() const;
 
-        // ループフラグセット
-        void SetIsLoop(IZ_BOOL flag) { m_Flags.isLoop = flag; }
+        /** Set whether timeline is reverse when timeline is loop.
+         */
+        void EnableReverseIfLoop(IZ_BOOL enable);
 
-        // ループするかどうか
-        IZ_BOOL IsLoop() const { return m_Flags.isLoop; }
+        /** Get whether timeline is reverse when timeline is loop.
+         */ 
+        IZ_BOOL WillReverseIfLoop() const;
 
-        // 逆回転するかどうか
-        void SetIsReverse(IZ_BOOL flag) { m_Flags.is_reverse = flag; }
+        /** Get whether timeline is posed.
+         */
+        IZ_BOOL IsPaused() const;
 
-        // 逆回転するかどうか
-        IZ_BOOL IsReverse() const { return m_Flags.is_reverse; }
-
-        // ポーズ中かどうか
-        IZ_BOOL IsPause() const { return m_Flags.isPause; }
-
-        // 順方向進行にするかどうかセット
-        void EnableForwardDir(IZ_BOOL flag) { m_Flags.isForward = flag; }
-
-        // 順方向進行かどうか
-        IZ_BOOL IsForwardDir() const { return m_Flags.isForward; }
+        /** Get whether timeline runs forward.
+         */
+        IZ_BOOL IsForward() const;
 
     protected:
-        CStdList<CTimeline>::Item* GetListItem() { return &m_ListItem; }
+        CStdList<CTimeline>::Item* GetListItem();
 
     protected:
         IZ_FLOAT m_Time;        // 時間
@@ -102,8 +116,8 @@ namespace animation {
 
         struct {
             IZ_UINT isLoop      : 1;    // ループするか
-            IZ_UINT is_reverse  : 1;    // 逆回転するかどうか
-            IZ_UINT isPause : 1;    // ポーズ中かどうか
+            IZ_UINT isReverse   : 1;    // 逆回転するかどうか
+            IZ_UINT isPause     : 1;    // ポーズ中かどうか
             IZ_UINT isForward   : 1;    // 順方向進行かどうか
         } m_Flags;
 

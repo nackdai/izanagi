@@ -123,7 +123,7 @@
     <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\source\math\MathInterpolater.cpp" />
+    <ClCompile Include="..\..\source\math\MathCurve.cpp" />
     <ClCompile Include="..\..\source\math\MathPlane.cpp" />
     <ClCompile Include="..\..\source\math\MathRay.cpp" />
     <ClCompile Include="..\..\source\math\MathRectangle.cpp" />
@@ -136,7 +136,7 @@
     <ClInclude Include="..\..\include\math\dx9\MathMatrix_DX9.h" />
     <ClInclude Include="..\..\include\math\dx9\MathQuaternion_DX9.h" />
     <ClInclude Include="..\..\include\math\dx9\MathVector_DX9.h" />
-    <ClInclude Include="..\..\include\math\MathInterpolater.h" />
+    <ClInclude Include="..\..\include\math\MathCurve.h" />
     <ClInclude Include="..\..\include\math\MathPlane.h" />
     <ClInclude Include="..\..\include\math\MathRay.h" />
     <ClInclude Include="..\..\include\math\MathRectangle.h" />

@@ -25,6 +25,6 @@
 #include "math/MathNumericalAnlysis.h"
 
 // curve
-#include "math/MathInterpolater.h"
+#include "math/MathCurve.h"
 
 #endif  // #if !defined(__IZANAGI_MATH_H__)

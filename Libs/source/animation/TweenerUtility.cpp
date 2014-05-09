@@ -1,6 +1,6 @@
-#include "animation/TweenerInterpolater.h"
+#include "animation/TweenerUtility.h"
 #include "animation/Timeline.h"
-#include "math/Tweener.h"
+#include "animation/Tweener.h"
 
 namespace izanagi {
 namespace animation {
@@ -36,7 +36,7 @@ namespace animation {
     /**
     * Return animation value by timeline.
     */
-    IZ_FLOAT CTweenerInterpolater::GetValue(const CTimeline& timeline)
+    IZ_FLOAT CTweener::GetValue(const CTimeline& timeline)
     {
         math::ITweenerEasing* easing = TweenEasingTbl[m_Transition];
 
@@ -70,7 +70,7 @@ namespace animation {
     /**
     * Set animation mode.
     */
-    void CTweenerInterpolater::SetMode(E_ANM_TWEENER_MODE mode)
+    void CTweener::SetMode(E_ANM_TWEENER_MODE mode)
     {
         m_Transition = static_cast<E_ANM_TWEENER_TRANSITION>(mode & E_ANM_TWEENER_TRANSITION_MASK);
         m_Equation =  static_cast<E_ANM_TWEENER_EQUATION>(mode & E_ANM_TWEENER_EQUATION_MASK);
@@ -82,7 +82,7 @@ namespace animation {
     /**
     * Return animation mode.
     */
-    E_ANM_TWEENER_MODE CTweenerInterpolater::GetMode() const
+    E_ANM_TWEENER_MODE CTweener::GetMode() const
     {
         IZ_UINT ret = ((m_Transition << E_ANM_TWEENER_TRANSITION_SHIFT) & E_ANM_TWEENER_TRANSITION_MASK)
                         | ((m_Equation << E_ANM_TWEENER_EQUATION_SHIFT) & E_ANM_TWEENER_EQUATION_MASK);

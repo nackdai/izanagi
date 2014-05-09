@@ -126,17 +126,15 @@
     <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\animation\FuncCurveInterpolater.h" />
     <ClInclude Include="..\..\include\animation\Timeline.h" />
     <ClInclude Include="..\..\include\animation\Tweener.h" />
-    <ClInclude Include="..\..\include\animation\TweenerInterpolater.h" />
+    <ClInclude Include="..\..\include\animation\TweenerUtility.h" />
     <ClInclude Include="..\..\include\izAnimation.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\source\animation\FuncCurveInterpolater.cpp" />
     <ClCompile Include="..\..\source\animation\Timeline.cpp" />
     <ClCompile Include="..\..\source\animation\Tweener.cpp" />
-    <ClCompile Include="..\..\source\animation\TweenerInterpolater.cpp" />
+    <ClCompile Include="..\..\source\animation\TweenerUtility.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

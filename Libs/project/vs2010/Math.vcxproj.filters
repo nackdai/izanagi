@@ -68,7 +68,7 @@
     <ClCompile Include="..\..\source\math\MathNumericalAnlysis.cpp">
       <Filter>source\analysis</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\math\MathInterpolater.cpp">
+    <ClCompile Include="..\..\source\math\MathCurve.cpp">
       <Filter>source\curve</Filter>
     </ClCompile>
   </ItemGroup>
@@ -157,9 +157,6 @@
     <ClInclude Include="..\..\include\math\MathNumericalAnlysis.h">
       <Filter>include\analysis</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\math\MathInterpolater.h">
-      <Filter>include\curve</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\math\MathDefs.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -181,6 +178,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\math\dx9\MathQuaternion_DX9.h">
       <Filter>include\basic\dx9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\MathCurve.h">
+      <Filter>include\curve</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
