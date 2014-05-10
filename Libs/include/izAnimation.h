@@ -4,4 +4,9 @@
 #include "animation/Timeline.h"
 #include "animation/TweenerUtility.h"
 
+#include "animation/Interpolator.h"
+#include "animation/LuinearInterpolator.h"
+#include "animation/SplineInterpolator.h"
+#include "animation/EasingInterpolator.h"
+
 #endif  // #if !defined(__IZANAGI_ANIMATION_H__)

@@ -1,5 +1,5 @@
-#if !defined(__IZANAGI_ANM_FUNC_CURVE_INTERPOLATER_H__)
-#define __IZANAGI_ANM_FUNC_CURVE_INTERPOLATER_H__
+#if !defined(__IZANAGI_ANM_FUNC_CURVE_INTERPOLATOR_H__)
+#define __IZANAGI_ANM_FUNC_CURVE_INTERPOLATOR_H__
 
 #include "izDefs.h"
 #include "izStd.h"
@@ -23,9 +23,9 @@ namespace animation {
 
     /**
      */
-    class CFuncCurveInterpolater {
+    class CFuncCurveInterpolator {
     public:
-        CFuncCurveInterpolater()
+        CFuncCurveInterpolator()
         {
             Init(
                 E_ANM_FUNC_CURVE_MODE_BEZIER,
@@ -33,7 +33,7 @@ namespace animation {
                 math::CVector(0.0f, 0.0f, 0.0f, 0.0f));
         }
 
-        CFuncCurveInterpolater(
+        CFuncCurveInterpolator(
             E_ANM_FUNC_CURVE_MODE mode,
             IZ_FLOAT start,
             IZ_FLOAT end,
@@ -42,9 +42,9 @@ namespace animation {
             Init(mode, start, end, p);
         }
 
-        ~CFuncCurveInterpolater() {}
+        ~CFuncCurveInterpolator() {}
 
-        NO_COPIABLE(CFuncCurveInterpolater);
+        NO_COPIABLE(CFuncCurveInterpolator);
 
     public:
         IZ_FLOAT GetValue(const CTimeline& timeline);
@@ -117,4 +117,4 @@ namespace animation {
 }   // namespace animation
 }   // namespace izanagi
 
-#endif  // #if !defined(__IZANAGI_ANM_FUNC_CURVE_INTERPOLATER_H__)
+#endif  // #if !defined(__IZANAGI_ANM_FUNC_CURVE_INTERPOLATOR_H__)

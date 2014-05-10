@@ -1,10 +1,10 @@
-#include "animation/FuncCurveInterpolater.h"
+#include "animation/FuncCurveInterpolator.h"
 #include "animation/Timeline.h"
-#include "math/MathInterpolater.h"
+#include "math/MathInterpolator.h"
 
 namespace izanagi {
 namespace animation {
-    IZ_FLOAT CFuncCurveInterpolater::GetValue(const CTimeline& timeline)
+    IZ_FLOAT CFuncCurveInterpolator::GetValue(const CTimeline& timeline)
     {
         IZ_FLOAT time = timeline.GetTime();
         IZ_FLOAT duration = timeline.GetDuration();
@@ -16,15 +16,15 @@ namespace animation {
         return ret;
     }
 
-    IZ_FLOAT CFuncCurveInterpolater::GetValue(IZ_FLOAT t)
+    IZ_FLOAT CFuncCurveInterpolator::GetValue(IZ_FLOAT t)
     {
         typedef IZ_FLOAT (*Func)(IZ_FLOAT, const math::SVector&);
 
         static Func funcs[] =
         {
-            &math::CMathInterpolater::ComputeBezier,
-            &math::CMathInterpolater::ComputeHermite,
-            &math::CMathInterpolater::ComputeCatmullRom,
+            &math::CMathInterpolator::ComputeBezier,
+            &math::CMathInterpolator::ComputeHermite,
+            &math::CMathInterpolator::ComputeCatmullRom,
         };
 
         IZ_C_ASSERT(COUNTOF(funcs) == E_ANM_FUNC_CURVE_MODE_NUM);

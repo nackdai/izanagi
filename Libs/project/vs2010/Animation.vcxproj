@@ -126,12 +126,20 @@
     <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\include\animation\EasingInterpolator.h" />
+    <ClInclude Include="..\..\include\animation\Interpolator.h" />
+    <ClInclude Include="..\..\include\animation\LinearInterpolator.h" />
+    <ClInclude Include="..\..\include\animation\SplineInterpolator.h" />
     <ClInclude Include="..\..\include\animation\Timeline.h" />
     <ClInclude Include="..\..\include\animation\Tweener.h" />
     <ClInclude Include="..\..\include\animation\TweenerUtility.h" />
     <ClInclude Include="..\..\include\izAnimation.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\source\animation\EasingInterpolator.cpp" />
+    <ClCompile Include="..\..\source\animation\Interpolator.cpp" />
+    <ClCompile Include="..\..\source\animation\LinearInterpolator.cpp" />
+    <ClCompile Include="..\..\source\animation\SplineInterpolator.cpp" />
     <ClCompile Include="..\..\source\animation\Timeline.cpp" />
     <ClCompile Include="..\..\source\animation\Tweener.cpp" />
     <ClCompile Include="..\..\source\animation\TweenerUtility.cpp" />

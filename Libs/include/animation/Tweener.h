@@ -15,8 +15,8 @@
 
  **********************/
 
-#if !defined(__IZANAGI_STD_TWEENER_H__)
-#define __IZANAGI_STD_TWEENER_H__
+#if !defined(__IZANAGI_ANIMATION_TWEENER_H__)
+#define __IZANAGI_ANIMATION_TWEENER_H__
 
 #include "izDefs.h"
 
@@ -35,84 +35,84 @@ namespace math {
 
     class CTweenerBack : public ITweenerEasing {
     public:
-        IZ_FLOAT EaseIn(IZ_FLOAT t, IZ_FLOAT d);
-        IZ_FLOAT EaseOut(IZ_FLOAT t, IZ_FLOAT d);
-        IZ_FLOAT EaseInOut(IZ_FLOAT t, IZ_FLOAT d);
+        virtual IZ_FLOAT EaseIn(IZ_FLOAT t, IZ_FLOAT d);
+        virtual IZ_FLOAT EaseOut(IZ_FLOAT t, IZ_FLOAT d);
+        virtual IZ_FLOAT EaseInOut(IZ_FLOAT t, IZ_FLOAT d);
     };
 
     class CTweenerBounce : public ITweenerEasing {
     public:
-        IZ_FLOAT EaseIn(IZ_FLOAT t, IZ_FLOAT d);
-        IZ_FLOAT EaseOut(IZ_FLOAT t, IZ_FLOAT d);
-        IZ_FLOAT EaseInOut(IZ_FLOAT t, IZ_FLOAT d);
+        virtual IZ_FLOAT EaseIn(IZ_FLOAT t, IZ_FLOAT d);
+        virtual IZ_FLOAT EaseOut(IZ_FLOAT t, IZ_FLOAT d);
+        virtual IZ_FLOAT EaseInOut(IZ_FLOAT t, IZ_FLOAT d);
     };
 
     class CTweenerCirc : public ITweenerEasing {
     public:
-        IZ_FLOAT EaseIn(IZ_FLOAT t, IZ_FLOAT d);
-        IZ_FLOAT EaseOut(IZ_FLOAT t, IZ_FLOAT d);
-        IZ_FLOAT EaseInOut(IZ_FLOAT t, IZ_FLOAT d);
+        virtual IZ_FLOAT EaseIn(IZ_FLOAT t, IZ_FLOAT d);
+        virtual IZ_FLOAT EaseOut(IZ_FLOAT t, IZ_FLOAT d);
+        virtual IZ_FLOAT EaseInOut(IZ_FLOAT t, IZ_FLOAT d);
     };
 
     class CTweenerCubic : public ITweenerEasing {
     public:
-        IZ_FLOAT EaseIn(IZ_FLOAT t, IZ_FLOAT d);
-        IZ_FLOAT EaseOut(IZ_FLOAT t, IZ_FLOAT d);
-        IZ_FLOAT EaseInOut(IZ_FLOAT t, IZ_FLOAT d);
+        virtual IZ_FLOAT EaseIn(IZ_FLOAT t, IZ_FLOAT d);
+        virtual IZ_FLOAT EaseOut(IZ_FLOAT t, IZ_FLOAT d);
+        virtual IZ_FLOAT EaseInOut(IZ_FLOAT t, IZ_FLOAT d);
     };
 
     class CTweenerElastic : public ITweenerEasing {
     public:
-        IZ_FLOAT EaseIn(IZ_FLOAT t, IZ_FLOAT d);
-        IZ_FLOAT EaseOut(IZ_FLOAT t, IZ_FLOAT d);
-        IZ_FLOAT EaseInOut(IZ_FLOAT t, IZ_FLOAT d);
+        virtual IZ_FLOAT EaseIn(IZ_FLOAT t, IZ_FLOAT d);
+        virtual IZ_FLOAT EaseOut(IZ_FLOAT t, IZ_FLOAT d);
+        virtual IZ_FLOAT EaseInOut(IZ_FLOAT t, IZ_FLOAT d);
     };
 
     class CTweenerExpo : public ITweenerEasing {
     public:
-        IZ_FLOAT EaseIn(IZ_FLOAT t, IZ_FLOAT d);
-        IZ_FLOAT EaseOut(IZ_FLOAT t, IZ_FLOAT d);
-        IZ_FLOAT EaseInOut(IZ_FLOAT t, IZ_FLOAT d);
+        virtual IZ_FLOAT EaseIn(IZ_FLOAT t, IZ_FLOAT d);
+        virtual IZ_FLOAT EaseOut(IZ_FLOAT t, IZ_FLOAT d);
+        virtual IZ_FLOAT EaseInOut(IZ_FLOAT t, IZ_FLOAT d);
     };
 
     class CTweenerQuad : public ITweenerEasing {
     public:
-        IZ_FLOAT EaseIn(IZ_FLOAT t, IZ_FLOAT d);
-        IZ_FLOAT EaseOut(IZ_FLOAT t, IZ_FLOAT d);
-        IZ_FLOAT EaseInOut(IZ_FLOAT t, IZ_FLOAT d);
+        virtual IZ_FLOAT EaseIn(IZ_FLOAT t, IZ_FLOAT d);
+        virtual IZ_FLOAT EaseOut(IZ_FLOAT t, IZ_FLOAT d);
+        virtual IZ_FLOAT EaseInOut(IZ_FLOAT t, IZ_FLOAT d);
     };
 
 
     class CTweenerQuart : public ITweenerEasing {
     public:
-        IZ_FLOAT EaseIn(IZ_FLOAT t, IZ_FLOAT d);
-        IZ_FLOAT EaseOut(IZ_FLOAT t, IZ_FLOAT d);
-        IZ_FLOAT EaseInOut(IZ_FLOAT t, IZ_FLOAT d);
+        virtual IZ_FLOAT EaseIn(IZ_FLOAT t, IZ_FLOAT d);
+        virtual IZ_FLOAT EaseOut(IZ_FLOAT t, IZ_FLOAT d);
+        virtual IZ_FLOAT EaseInOut(IZ_FLOAT t, IZ_FLOAT d);
     };
 
     class CTweenerQuint : public ITweenerEasing {
     public :
-        IZ_FLOAT EaseIn(IZ_FLOAT t, IZ_FLOAT d);
-        IZ_FLOAT EaseOut(IZ_FLOAT t, IZ_FLOAT d);
-        IZ_FLOAT EaseInOut(IZ_FLOAT t, IZ_FLOAT d);
+        virtual IZ_FLOAT EaseIn(IZ_FLOAT t, IZ_FLOAT d);
+        virtual IZ_FLOAT EaseOut(IZ_FLOAT t, IZ_FLOAT d);
+        virtual IZ_FLOAT EaseInOut(IZ_FLOAT t, IZ_FLOAT d);
     };
 
     class CTweenerSine : public ITweenerEasing {
     public :
-        IZ_FLOAT EaseIn(IZ_FLOAT t, IZ_FLOAT d);
-        IZ_FLOAT EaseOut(IZ_FLOAT t, IZ_FLOAT d);
-        IZ_FLOAT EaseInOut(IZ_FLOAT t, IZ_FLOAT d);
+        virtual IZ_FLOAT EaseIn(IZ_FLOAT t, IZ_FLOAT d);
+        virtual IZ_FLOAT EaseOut(IZ_FLOAT t, IZ_FLOAT d);
+        virtual IZ_FLOAT EaseInOut(IZ_FLOAT t, IZ_FLOAT d);
     };
 
     class CTweenerLinear : public ITweenerEasing {
     public :
         IZ_FLOAT EaseNone(IZ_FLOAT t, IZ_FLOAT d);
-        IZ_FLOAT EaseIn(IZ_FLOAT t, IZ_FLOAT d);
-        IZ_FLOAT EaseOut(IZ_FLOAT t, IZ_FLOAT d);
-        IZ_FLOAT EaseInOut(IZ_FLOAT t, IZ_FLOAT d);
+        virtual IZ_FLOAT EaseIn(IZ_FLOAT t, IZ_FLOAT d);
+        virtual IZ_FLOAT EaseOut(IZ_FLOAT t, IZ_FLOAT d);
+        virtual IZ_FLOAT EaseInOut(IZ_FLOAT t, IZ_FLOAT d);
     };
 
 }   // namespace math
 }   // namespace izanagi;
 
-#endif  // #if !defined(__IZANAGI_STD_TWEENER_H__)
+#endif  // #if !defined(__IZANAGI_ANIMATION_TWEENER_H__)

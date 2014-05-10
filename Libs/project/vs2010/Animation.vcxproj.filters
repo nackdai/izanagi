@@ -19,6 +19,18 @@
     <ClInclude Include="..\..\include\animation\TweenerUtility.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\animation\Interpolator.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\animation\LinearInterpolator.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\animation\SplineInterpolator.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\animation\EasingInterpolator.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\animation\Timeline.cpp">
@@ -28,6 +40,18 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\animation\TweenerUtility.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\animation\Interpolator.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\animation\LinearInterpolator.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\animation\SplineInterpolator.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\animation\EasingInterpolator.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>

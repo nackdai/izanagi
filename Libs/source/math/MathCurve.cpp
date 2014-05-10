@@ -5,7 +5,7 @@ namespace izanagi {
 namespace math {
     /** ベジェ曲線.
      */
-    IZ_FLOAT CMatCurve::ComputeBezier(
+    IZ_FLOAT CMathCurve::ComputeBezier(
         IZ_FLOAT t,
         IZ_FLOAT x0,
         IZ_FLOAT x1,
@@ -32,7 +32,7 @@ namespace math {
 
     /** ベジェ曲線.
      */
-    IZ_FLOAT CMatCurve::ComputeBezier(
+    IZ_FLOAT CMathCurve::ComputeBezier(
         IZ_FLOAT t,
         const SVector& p)
     {
@@ -41,7 +41,7 @@ namespace math {
 
     /** Hermite曲線.
      */
-    IZ_FLOAT CMatCurve::ComputeHermite(
+    IZ_FLOAT CMathCurve::ComputeHermite(
         IZ_FLOAT t,
         IZ_FLOAT x0,
         IZ_FLOAT x1,
@@ -53,7 +53,7 @@ namespace math {
 
     /** Hermite曲線.
      */
-    IZ_FLOAT CMatCurve::ComputeHermite(
+    IZ_FLOAT CMathCurve::ComputeHermite(
         IZ_FLOAT t,
         const SVector& p)
     {
@@ -80,7 +80,7 @@ namespace math {
 
     /** Catmull-Rom曲線.
      */
-    IZ_FLOAT CMatCurve::ComputeCatmullRom(
+    IZ_FLOAT CMathCurve::ComputeCatmullRom(
         IZ_FLOAT t,
         IZ_FLOAT x0,
         IZ_FLOAT x1,
@@ -95,7 +95,7 @@ namespace math {
 
     /** Catmull-Rom曲線.
      */
-    IZ_FLOAT CMatCurve::ComputeCatmullRom(
+    IZ_FLOAT CMathCurve::ComputeCatmullRom(
         IZ_FLOAT t,
         const SVector& p)
     {
