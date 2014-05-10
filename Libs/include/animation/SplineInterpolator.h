@@ -17,6 +17,7 @@ namespace animation
             IMemoryAllocator* allocator,
             IZ_FLOAT target,
             IZ_FLOAT keytime,
+            IZ_BOOL loop,
             IZ_FLOAT cp1X, IZ_FLOAT cp1Y,
             IZ_FLOAT cp2X, IZ_FLOAT cp2Y);
 
@@ -30,6 +31,7 @@ namespace animation
         void Init(
             IZ_FLOAT target,
             IZ_FLOAT keytime,
+            IZ_BOOL loop,
             IZ_FLOAT cp1X, IZ_FLOAT cp1Y,
             IZ_FLOAT cp2X, IZ_FLOAT cp2Y);
 
@@ -45,10 +47,10 @@ namespace animation
         IZ_FLOAT m_Value;
         CTimeline m_Timeline;
 
-        IZ_FLOAT m_Cp1X;
-        IZ_FLOAT m_Cp1Y;
-        IZ_FLOAT m_Cp2X;
-        IZ_FLOAT m_Cp2Y;
+        CFloatPoint m_Cp1;
+        CFloatPoint m_Cp2;
+        CFloatPoint m_Cp3;
+        CFloatPoint m_Cp4;
     };
 }   // namespace animation
 }   // namespace izanagi

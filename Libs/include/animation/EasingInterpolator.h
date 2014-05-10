@@ -18,6 +18,7 @@ namespace animation
             IMemoryAllocator* allocator,
             IZ_FLOAT target,
             IZ_FLOAT keytime,
+            IZ_BOOL loop,
             E_ANM_TWEENER_MODE mode);
 
     private:
@@ -30,6 +31,7 @@ namespace animation
         void Init(
             IZ_FLOAT target,
             IZ_FLOAT keytime,
+            IZ_BOOL loop,
             E_ANM_TWEENER_MODE mode);
 
     public:

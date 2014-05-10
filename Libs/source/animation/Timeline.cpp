@@ -163,7 +163,7 @@ namespace animation {
 
     void CTimeline::Rewind()
     {
-        m_Flags.isForward = IZ_FALSE;
+        m_Flags.isForward = !m_Flags.isForward;
     }
 
     void CTimeline::SetTimeOverHandler(CTimeOverHandler* handler)

@@ -5,7 +5,7 @@
 #include "animation/TweenerUtility.h"
 
 #include "animation/Interpolator.h"
-#include "animation/LuinearInterpolator.h"
+#include "animation/LinearInterpolator.h"
 #include "animation/SplineInterpolator.h"
 #include "animation/EasingInterpolator.h"
 

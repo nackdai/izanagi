@@ -16,7 +16,8 @@ namespace animation
         static CLinearInterpolator* Create(
             IMemoryAllocator* allocator,
             IZ_FLOAT target,
-            IZ_FLOAT keytime);
+            IZ_FLOAT keytime,
+            IZ_BOOL loop);
 
     private:
         CLinearInterpolator();
@@ -27,7 +28,8 @@ namespace animation
     private:
         void Init(
             IZ_FLOAT target,
-            IZ_FLOAT keytime);
+            IZ_FLOAT keytime,
+            IZ_BOOL loop);
 
     public:
         virtual void Advance(IZ_FLOAT delta);
