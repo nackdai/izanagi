@@ -90,11 +90,11 @@ namespace animation {
 
         /** Set whether timeline is reverse when timeline is loop.
          */
-        void EnableReverseIfLoop(IZ_BOOL enable);
+        void AutoReverse(IZ_BOOL enable);
 
         /** Get whether timeline is reverse when timeline is loop.
          */ 
-        IZ_BOOL WillReverseIfLoop() const;
+        IZ_BOOL WillReverse() const;
 
         /** Get whether timeline is posed.
          */

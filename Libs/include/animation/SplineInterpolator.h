@@ -17,7 +17,6 @@ namespace animation
             IMemoryAllocator* allocator,
             IZ_FLOAT target,
             IZ_FLOAT keytime,
-            IZ_BOOL loop,
             IZ_FLOAT cp1X, IZ_FLOAT cp1Y,
             IZ_FLOAT cp2X, IZ_FLOAT cp2Y);
 
@@ -31,13 +30,10 @@ namespace animation
         void Init(
             IZ_FLOAT target,
             IZ_FLOAT keytime,
-            IZ_BOOL loop,
             IZ_FLOAT cp1X, IZ_FLOAT cp1Y,
             IZ_FLOAT cp2X, IZ_FLOAT cp2Y);
 
     public:
-        virtual void Advance(IZ_FLOAT delta);
-
         IZ_FLOAT GetValueX();
         IZ_FLOAT GetValueY();
 
@@ -45,7 +41,6 @@ namespace animation
 
     private:
         IZ_FLOAT m_Value;
-        CTimeline m_Timeline;
 
         CFloatPoint m_Cp1;
         CFloatPoint m_Cp2;

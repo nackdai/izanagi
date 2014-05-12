@@ -9,7 +9,6 @@ namespace animation
         IMemoryAllocator* allocator,
         IZ_FLOAT target,
         IZ_FLOAT keytime,
-        IZ_BOOL loop,
         IZ_FLOAT cp1X, IZ_FLOAT cp1Y,
         IZ_FLOAT cp2X, IZ_FLOAT cp2Y)
     {
@@ -17,10 +16,10 @@ namespace animation
         VRETURN_NULL(buf != IZ_NULL);
 
         CSplineInterpolator* ret = new(buf) CSplineInterpolator;
+        ret->AddRef();
         ret->m_Allocator = allocator;
         ret->Init(
             target, keytime,
-            loop,
             cp1X, cp1Y,
             cp2X, cp2Y);
 
@@ -38,7 +37,6 @@ namespace animation
     void CSplineInterpolator::Init(
         IZ_FLOAT target,
         IZ_FLOAT keytime,
-        IZ_BOOL loop,
         IZ_FLOAT cp1X, IZ_FLOAT cp1Y,
         IZ_FLOAT cp2X, IZ_FLOAT cp2Y)
     {
@@ -57,13 +55,6 @@ namespace animation
         m_Cp4.y = 1.0f;
 
         m_Timeline.Init(keytime, 0.0f);
-        m_Timeline.EnableLoop(loop);
-    }
-
-    void CSplineInterpolator::Advance(IZ_FLOAT delta)
-    {
-        m_Timeline.Start();
-        m_Timeline.Advance(delta);
     }
 
     IZ_FLOAT CSplineInterpolator::GetValueX()

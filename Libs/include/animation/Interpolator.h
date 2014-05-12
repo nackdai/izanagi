@@ -4,6 +4,8 @@
 #include "izDefs.h"
 #include "izStd.h"
 
+#include "Timeline.h"
+
 namespace izanagi
 {
 namespace animation
@@ -14,14 +16,23 @@ namespace animation
         virtual ~CInterpolator() {}
 
     public:
-        PURE_VIRTUAL(void Advance(IZ_FLOAT delta));
+        void Advance(IZ_FLOAT delta);
+
+        void EnableLoop(IZ_BOOL enable);
+
+        void AutoReverse(IZ_BOOL enable);
 
     private:
         CStdList<CInterpolator>::Item* GetListItem() { return &m_ListItem; }
 
     protected:
+        CTimeline& TimeLine() { return m_Timeline; }
+
+    protected:
         IMemoryAllocator* m_Allocator;
         CStdList<CInterpolator>::Item m_ListItem;
+
+        CTimeline m_Timeline;
     };
 }   // namespace animation
 }   // namespace izanagi

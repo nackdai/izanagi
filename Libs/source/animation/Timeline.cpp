@@ -136,7 +136,7 @@ namespace animation {
         if (isOver) {
             overTime = (IsForward() ? m_Time - m_Duration : abs(m_Time));
 
-            if (IsLoop() && WillReverseIfLoop()) {
+            if (IsLoop() && WillReverse()) {
                 // 向きを変える
                 Rewind();
             }
@@ -197,12 +197,12 @@ namespace animation {
         return m_Flags.isLoop;
     }
 
-    void CTimeline::EnableReverseIfLoop(IZ_BOOL enable)
+    void CTimeline::AutoReverse(IZ_BOOL enable)
     {
         m_Flags.isReverse = enable;
     }
 
-    IZ_BOOL CTimeline::WillReverseIfLoop() const
+    IZ_BOOL CTimeline::WillReverse() const
     {
         return m_Flags.isReverse;
     }
