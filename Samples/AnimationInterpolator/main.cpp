@@ -52,29 +52,29 @@ IZ_BOOL CAnimationInterpApp::InitInternal(
     m_Interp = izanagi::animation::CLinearInterpolator::Create(
         allocator,
         200.0f,
-        1000.0f,
-        IZ_TRUE);
+        1000.0f);
+    m_Interp->EnableLoop(IZ_TRUE);
 
     m_LinearInterp = izanagi::animation::CLinearInterpolator::Create(
         allocator,
         -200.0f,
-        1000.0f,
-        IZ_TRUE);
+        1000.0f);
+    m_LinearInterp->EnableLoop(IZ_TRUE);
 
     m_SplineInterp = izanagi::animation::CSplineInterpolator::Create(
         allocator,
         -200.0f,
         1000.0f,
-        IZ_TRUE,
         0.0f, 1.0f,
         1.0f, 0.0f);
+    m_SplineInterp->EnableLoop(IZ_TRUE);
 
     m_EasingInterp = izanagi::animation::CEasingInterpolator::Create(
         allocator,
         -200.0f,
         1000.0f,
-        IZ_TRUE,
         izanagi::animation::E_ANM_TWEENER_MODE_EXPO_EASE_IN);
+    m_EasingInterp->EnableLoop(IZ_TRUE);
 
     m_Timer.Begin();
 
@@ -84,6 +84,10 @@ IZ_BOOL CAnimationInterpApp::InitInternal(
 // 解放.
 void CAnimationInterpApp::ReleaseInternal()
 {
+    SAFE_RELEASE(m_Interp);
+    SAFE_RELEASE(m_LinearInterp);
+    SAFE_RELEASE(m_SplineInterp);
+    SAFE_RELEASE(m_EasingInterp);
 }
 
 // 更新.
