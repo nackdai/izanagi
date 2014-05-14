@@ -130,6 +130,7 @@
     <ClInclude Include="..\..\include\animation\Interpolator.h" />
     <ClInclude Include="..\..\include\animation\LinearInterpolator.h" />
     <ClInclude Include="..\..\include\animation\SplineInterpolator.h" />
+    <ClInclude Include="..\..\include\animation\StoryBoard.h" />
     <ClInclude Include="..\..\include\animation\Timeline.h" />
     <ClInclude Include="..\..\include\animation\Tweener.h" />
     <ClInclude Include="..\..\include\animation\TweenerUtility.h" />

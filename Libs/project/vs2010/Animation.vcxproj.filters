@@ -31,6 +31,9 @@
     <ClInclude Include="..\..\include\animation\EasingInterpolator.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\animation\StoryBoard.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\animation\Timeline.cpp">

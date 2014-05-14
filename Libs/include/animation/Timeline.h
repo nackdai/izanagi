@@ -33,6 +33,8 @@ namespace animation {
         CTimeline(const CTimeline& rhs);
         const CTimeline& operator=(const CTimeline& rhs);
 
+        IZ_DECL_PLACEMENT_NEW();
+
     public:
         /** Initialize timeline. 
          */

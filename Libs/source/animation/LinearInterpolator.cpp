@@ -6,8 +6,8 @@ namespace animation
 {
     CLinearInterpolator* CLinearInterpolator::Create(
         IMemoryAllocator* allocator,
-        IZ_FLOAT target,
-        IZ_FLOAT keytime)
+        IZ_FLOAT from, IZ_FLOAT to,
+        IZ_FLOAT duration)
     {
         void* buf = ALLOC_ZERO(allocator, sizeof(CLinearInterpolator));
         VRETURN_NULL(buf != IZ_NULL);
@@ -15,7 +15,7 @@ namespace animation
         CLinearInterpolator* ret = new(buf) CLinearInterpolator;
         ret->AddRef();
         ret->m_Allocator = allocator;
-        ret->Init(target, keytime);
+        ret->Init(from, to, duration);
 
         return ret;
     }
@@ -29,17 +29,18 @@ namespace animation
     }
 
     void CLinearInterpolator::Init(
-        IZ_FLOAT target,
-        IZ_FLOAT keytime)
+        IZ_FLOAT from, IZ_FLOAT to,
+        IZ_FLOAT duration)
     {
-        m_Value = target;
-        m_Timeline.Init(keytime, 0.0f);
+        m_From = from;
+        m_To = to;
+        m_Timeline.Init(duration, 0.0f);
     }
 
     IZ_FLOAT CLinearInterpolator::GetValue()
     {
         IZ_FLOAT t = m_Timeline.GetNormalized();
-        IZ_FLOAT ret = m_Value * t;
+        IZ_FLOAT ret = m_From + (m_To - m_From) * t;
         return ret;
     }
 }   // namespace izanagi

@@ -7,8 +7,8 @@ namespace animation
 {
     CSplineInterpolator* CSplineInterpolator::Create(
         IMemoryAllocator* allocator,
-        IZ_FLOAT target,
-        IZ_FLOAT keytime,
+        IZ_FLOAT from, IZ_FLOAT to,
+        IZ_FLOAT duration,
         IZ_FLOAT cp1X, IZ_FLOAT cp1Y,
         IZ_FLOAT cp2X, IZ_FLOAT cp2Y)
     {
@@ -19,7 +19,8 @@ namespace animation
         ret->AddRef();
         ret->m_Allocator = allocator;
         ret->Init(
-            target, keytime,
+            from, to,
+            duration,
             cp1X, cp1Y,
             cp2X, cp2Y);
 
@@ -35,12 +36,13 @@ namespace animation
     }
 
     void CSplineInterpolator::Init(
-        IZ_FLOAT target,
-        IZ_FLOAT keytime,
+        IZ_FLOAT from, IZ_FLOAT to,
+        IZ_FLOAT duration,
         IZ_FLOAT cp1X, IZ_FLOAT cp1Y,
         IZ_FLOAT cp2X, IZ_FLOAT cp2Y)
     {
-        m_Value = target;
+        m_From = from;
+        m_To = to;
 
         m_Cp1.x = 0.0f;
         m_Cp1.y = 0.0f;
@@ -54,7 +56,7 @@ namespace animation
         m_Cp4.x = 1.0f;
         m_Cp4.y = 1.0f;
 
-        m_Timeline.Init(keytime, 0.0f);
+        m_Timeline.Init(duration, 0.0f);
     }
 
     IZ_FLOAT CSplineInterpolator::GetValueX()
@@ -62,7 +64,7 @@ namespace animation
         IZ_FLOAT t = m_Timeline.GetNormalized();
 
         IZ_FLOAT ret = (1.0f - t) * (1.0f - t) * (1.0f - t) * m_Cp1.x + 3.0f * (1.0f - t) * (1.0f - t) * t * m_Cp2.x + 3.0f * (1.0f - t) * t * t * m_Cp3.x + t * t * t * m_Cp4.x;
-        ret = m_Value * ret;
+        ret = m_From + (m_To - m_From) * ret;
 
         return ret;
     }
@@ -75,7 +77,7 @@ namespace animation
         IZ_FLOAT j_1_1_t = t;
 
         IZ_FLOAT ret = (1.0f - t) * (1.0f - t) * (1.0f - t) * m_Cp1.y + 3.0f * (1.0f - t) * (1.0f - t) * t * m_Cp2.y + 3.0f * (1.0f - t) * t * t * m_Cp3.y + t * t * t * m_Cp4.y;
-        ret = m_Value * ret;
+        ret = m_From + (m_To - m_From) * ret;
 
         return ret;
     }

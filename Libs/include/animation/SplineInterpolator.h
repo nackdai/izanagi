@@ -15,8 +15,8 @@ namespace animation
     public:
         static CSplineInterpolator* Create(
             IMemoryAllocator* allocator,
-            IZ_FLOAT target,
-            IZ_FLOAT keytime,
+            IZ_FLOAT from, IZ_FLOAT to,
+            IZ_FLOAT duration,
             IZ_FLOAT cp1X, IZ_FLOAT cp1Y,
             IZ_FLOAT cp2X, IZ_FLOAT cp2Y);
 
@@ -28,8 +28,8 @@ namespace animation
 
     private:
         void Init(
-            IZ_FLOAT target,
-            IZ_FLOAT keytime,
+            IZ_FLOAT from, IZ_FLOAT to,
+            IZ_FLOAT duration,
             IZ_FLOAT cp1X, IZ_FLOAT cp1Y,
             IZ_FLOAT cp2X, IZ_FLOAT cp2Y);
 
@@ -40,8 +40,6 @@ namespace animation
         void GetValue(IZ_FLOAT* x, IZ_FLOAT* y);
 
     private:
-        IZ_FLOAT m_Value;
-
         CFloatPoint m_Cp1;
         CFloatPoint m_Cp2;
         CFloatPoint m_Cp3;

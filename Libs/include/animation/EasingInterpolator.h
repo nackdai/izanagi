@@ -16,8 +16,8 @@ namespace animation
     public:
         static CEasingInterpolator* Create(
             IMemoryAllocator* allocator,
-            IZ_FLOAT target,
-            IZ_FLOAT keytime,
+            IZ_FLOAT from, IZ_FLOAT to,
+            IZ_FLOAT duration,
             E_ANM_TWEENER_MODE mode);
 
     private:
@@ -28,17 +28,14 @@ namespace animation
 
     private:
         void Init(
-            IZ_FLOAT target,
-            IZ_FLOAT keytime,
+            IZ_FLOAT from, IZ_FLOAT to,
+            IZ_FLOAT duration,
             E_ANM_TWEENER_MODE mode);
 
     public:
         IZ_FLOAT GetValue();
 
     private:
-        IZ_FLOAT m_Value;
-        CTimeline m_Timeline;
-
         CTweener m_Tweener;
     };
 }   // namespace animation

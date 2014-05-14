@@ -11,6 +11,8 @@ namespace izanagi
 namespace animation
 {
     class CInterpolator : public CObject {
+        friend class CStoryBoard;
+
     protected:
         CInterpolator();
         virtual ~CInterpolator() {}
@@ -33,6 +35,9 @@ namespace animation
         CStdList<CInterpolator>::Item m_ListItem;
 
         CTimeline m_Timeline;
+
+        IZ_FLOAT m_From;
+        IZ_FLOAT m_To;
     };
 }   // namespace animation
 }   // namespace izanagi

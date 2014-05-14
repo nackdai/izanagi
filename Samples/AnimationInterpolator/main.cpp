@@ -51,19 +51,19 @@ IZ_BOOL CAnimationInterpApp::InitInternal(
 {
     m_Interp = izanagi::animation::CLinearInterpolator::Create(
         allocator,
-        200.0f,
+        0.0f, 200.0f,
         1000.0f);
     m_Interp->EnableLoop(IZ_TRUE);
 
     m_LinearInterp = izanagi::animation::CLinearInterpolator::Create(
         allocator,
-        -200.0f,
+        200.0f, 0.0f,
         1000.0f);
     m_LinearInterp->EnableLoop(IZ_TRUE);
 
     m_SplineInterp = izanagi::animation::CSplineInterpolator::Create(
         allocator,
-        -200.0f,
+        400.0f, 200.0f,
         1000.0f,
         0.0f, 1.0f,
         1.0f, 0.0f);
@@ -71,7 +71,7 @@ IZ_BOOL CAnimationInterpApp::InitInternal(
 
     m_EasingInterp = izanagi::animation::CEasingInterpolator::Create(
         allocator,
-        -200.0f,
+        600.0f, 400.0f,
         1000.0f,
         izanagi::animation::E_ANM_TWEENER_MODE_EXPO_EASE_IN);
     m_EasingInterp->EnableLoop(IZ_TRUE);
@@ -117,15 +117,15 @@ void CAnimationInterpApp::RenderInternal(izanagi::graph::CGraphicsDevice* device
 {
     if (device->Begin2D()) {
         device->Draw2DRect(
-            izanagi::CIntRect(m_LinearPoint.x, 200 + m_LinearPoint.y, 20, 20),
+            izanagi::CIntRect(m_LinearPoint.x, m_LinearPoint.y, 20, 20),
             IZ_COLOR_RGBA(0xff, 0, 0, 0xff));
 
         device->Draw2DRect(
-            izanagi::CIntRect(m_SplinePoint.x, 400 + m_SplinePoint.y, 20, 20),
+            izanagi::CIntRect(m_SplinePoint.x, m_SplinePoint.y, 20, 20),
             IZ_COLOR_RGBA(0, 0xff, 0, 0xff));
 
         device->Draw2DRect(
-            izanagi::CIntRect(m_EasingPoint.x, 600 + m_EasingPoint.y, 20, 20),
+            izanagi::CIntRect(m_EasingPoint.x, m_EasingPoint.y, 20, 20),
             IZ_COLOR_RGBA(0, 0, 0xff, 0xff));
 
         device->End2D();

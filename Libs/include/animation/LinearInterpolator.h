@@ -14,8 +14,8 @@ namespace animation
     public:
         static CLinearInterpolator* Create(
             IMemoryAllocator* allocator,
-            IZ_FLOAT target,
-            IZ_FLOAT keytime);
+            IZ_FLOAT from, IZ_FLOAT to,
+            IZ_FLOAT duration);
 
     private:
         CLinearInterpolator();
@@ -25,14 +25,11 @@ namespace animation
 
     private:
         void Init(
-            IZ_FLOAT target,
-            IZ_FLOAT keytime);
+            IZ_FLOAT from, IZ_FLOAT to,
+            IZ_FLOAT duration);
 
     public:
-        IZ_FLOAT GetValue();
-
-    private:
-        IZ_FLOAT m_Value;
+        IZ_FLOAT GetValue();        
     };
 }   // namespace animation
 }   // namespace izanagi
