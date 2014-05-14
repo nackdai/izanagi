@@ -52,7 +52,7 @@ namespace izanagi {
         static IZ_BOOL RemoveBindingExpression(const DependencyProperty& property);
 
     private:
-        typedef CStdHash<IZ_UINT, BindingExpression, 5> Dictionary;
+        typedef CStdHash<DependencyProperty*, BindingExpression, 5> Dictionary;
 
         static Dictionary s_Dictionary;
     };

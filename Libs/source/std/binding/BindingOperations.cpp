@@ -27,14 +27,14 @@ namespace izanagi
     // 指定されたプロパティに対するデータバインディングを取得.
     BindingExpression* BindingOperations::GetBindingExpression(const DependencyProperty& property)
     {
-        BindingExpression* exp = s_Dictionary.FindData(property.GetKey());
+        BindingExpression* exp = s_Dictionary.FindData(const_cast<DependencyProperty*>(&property));
         return exp;
     }
 
     // 指定されたプロパティに対するデータバインディングを削除.
     IZ_BOOL BindingOperations::RemoveBindingExpression(const DependencyProperty& property)
     {
-        Dictionary::Item* item = s_Dictionary.Find(property.GetKey());
+        Dictionary::Item* item = s_Dictionary.Find(const_cast<DependencyProperty*>(&property));
         if (item != IZ_NULL)
         {
             BindingExpression* exp = item->GetData();

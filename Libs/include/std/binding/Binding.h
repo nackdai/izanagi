@@ -28,21 +28,13 @@ namespace izanagi {
     class Binding : public CObject
     {
     public:
-        /** プロパティ名の最大文字数
-         */
-        static IZ_UINT PropertyNameMax;
-
-        /** プロパティ名の型
-         */
-        typedef DependencyProperty::PropertyName PropertyName;
-
         /** Binding を作成する
          *
          * @param[in] allocator
          * @param[in] name 同期対象となるプロパティ名
          */
         template <typename T>
-        static T* CreateBinding(IMemoryAllocator* allocator, IZ_PCSTR name)
+        static T* CreateBinding(IMemoryAllocator* allocator)
         {
             void* buf = ALLOC_ZERO(allocator, sizeof(T));
             VRETURN_NULL(buf != IZ_NULL);
@@ -52,7 +44,6 @@ namespace izanagi {
                 Binding* instance = ret;
                 instance->AddRef();
                 instance->m_Allocator = allocator;
-                instance->SetPropertyName(name);
             }
 
             return ret;
@@ -77,20 +68,6 @@ namespace izanagi {
             return m_Mode;
         }
 
-        /** 同期対象のプロパティ名取得
-         */
-        const PropertyName& GetPropertyName()
-        {
-            return m_PropName;
-        }
-
-        /** 同期対象のプロパティ名のキー値を取得
-         */
-        IZ_UINT GetPropertyKey()
-        {
-            return m_Key;
-        }
-
         // NOTE
         // データのモトになるオブジェクトは型の関係もあるので
         // 実装クラス側で行うようにさせる
@@ -104,19 +81,9 @@ namespace izanagi {
         virtual void SetValue(const CValue& value) = 0;
 
     private:
-        void SetPropertyName(IZ_PCSTR name)
-        {
-            m_PropName.SetString(name);
-            m_Key = m_PropName.GetKeyValue();
-        }
-
-    private:
         IMemoryAllocator* m_Allocator;
 
         E_BINDING_MODE m_Mode;
-
-        PropertyName m_PropName;
-        IZ_UINT m_Key;      
     };
 }   // namespace izanagi
 

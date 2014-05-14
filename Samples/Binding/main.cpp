@@ -95,7 +95,7 @@ private:
     BindingSource* m_Source;
 };
 
-izanagi::DependencyProperty SampleObject::sProp("Value");
+izanagi::DependencyProperty SampleObject::sProp;
 
 IzMain(0, 0)
 {
@@ -103,16 +103,16 @@ IzMain(0, 0)
 
     SampleObject object;
 
-    IZ_PRINTF("Simple DependencyProperty ****");
+    IZ_PRINTF("Simple DependencyProperty ****\n");
     {
         object.SetProperty(100);
         IZ_UINT value = object.GetProperty();
         IZ_PRINTF("%d\n", value);
     }
     
-    IZ_PRINTF("Binding ****");
+    IZ_PRINTF("Binding ****\n");
     {
-        BindingSample* binding = izanagi::Binding::CreateBinding<BindingSample>(&allocator, "Value");
+        BindingSample* binding = izanagi::Binding::CreateBinding<BindingSample>(&allocator);
 
         BindingSource source;
         binding->SetSource(&source);

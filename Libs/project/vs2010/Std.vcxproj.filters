@@ -161,9 +161,6 @@
     <ClInclude Include="..\..\include\std\binding\DependencyPropertyChangedEventArgs.h">
       <Filter>include\binding</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\std\binding\PropertyMetaData.h">
-      <Filter>include\binding</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\std\binding\Binding.h">
       <Filter>include\binding</Filter>
     </ClInclude>

@@ -147,7 +147,6 @@
     <ClInclude Include="..\..\include\std\binding\DependencyObject.h" />
     <ClInclude Include="..\..\include\std\binding\DependencyProperty.h" />
     <ClInclude Include="..\..\include\std\binding\DependencyPropertyChangedEventArgs.h" />
-    <ClInclude Include="..\..\include\std\binding\PropertyMetaData.h" />
     <ClInclude Include="..\..\include\std\collection\StdHash.h" />
     <ClInclude Include="..\..\include\std\collection\StdHashBase.h" />
     <ClInclude Include="..\..\include\std\collection\StdList.h" />

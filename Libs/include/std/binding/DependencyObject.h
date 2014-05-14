@@ -20,17 +20,18 @@ namespace izanagi {
 
         static const IZ_UINT HASH_NUM = 8;
 
+        class Element;
+        typedef CStdHash<DependencyProperty*, Element, HASH_NUM> Hash;
+        typedef CStdHash<DependencyProperty*, Element, HASH_NUM>::Item HashItem;
+
         // プロパティの情報を覚えておく用
         class Element
         {
         public:
-            // プロパティ名
-            DependencyProperty::PropertyName name;
-
             // プロパティ値
             CValue value;
 
-            CStdHash<IZ_UINT, Element, HASH_NUM>::Item hashItem;
+            HashItem hashItem;
 
             IZ_DECL_PLACEMENT_NEW();
         };
@@ -87,7 +88,7 @@ namespace izanagi {
 
     private:
         // プロパティ情報を取得
-        CStdHash<IZ_UINT, Element, HASH_NUM>::Item* Find(const DependencyProperty& prop);
+        HashItem* Find(const DependencyProperty& prop);
 
         // 依存関係プロパティに値をセット
         void SetValueInternal(const DependencyProperty& prop, const CValue& value);
@@ -100,7 +101,7 @@ namespace izanagi {
         void ClearValueChagned() { m_Flags.isValueChanged = IZ_FALSE; }
 
     private:
-        CStdHash<IZ_UINT, Element, HASH_NUM> m_Dictionary;
+        Hash m_Dictionary;
 
         struct
         {

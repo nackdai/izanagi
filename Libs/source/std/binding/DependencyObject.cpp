@@ -18,10 +18,10 @@ namespace izanagi
 
         if(!m_Flags.isCalledClearAll)
         {
-            CStdList<CStdHash<IZ_UINT, Element, HASH_NUM>::Item>::Item* item = m_Dictionary.GetOrderTop();
+            CStdList<HashItem>::Item* item = m_Dictionary.GetOrderTop();
             while (item != IZ_NULL)
             {
-                CStdList<CStdHash<IZ_UINT, Element, HASH_NUM>::Item>::Item* next = item->GetNext();
+                CStdList<HashItem>::Item* next = item->GetNext();
                 Element* element = item->GetData()->GetData();
                 delete element;
                 FreeForDependencyObject(element);
@@ -32,10 +32,9 @@ namespace izanagi
         }
     }   
 
-    CStdHash<IZ_UINT, DependencyObjectBase::Element, DependencyObjectBase::HASH_NUM>::Item* DependencyObjectBase::Find(const DependencyProperty& prop)
+    DependencyObjectBase::HashItem* DependencyObjectBase::Find(const DependencyProperty& prop)
     {
-        DependencyProperty::PropertyName name(prop.GetName());
-        CStdHash<IZ_UINT, Element, HASH_NUM>::Item* item = m_Dictionary.Find(name.GetKeyValue());
+        HashItem* item = m_Dictionary.Find(const_cast<DependencyProperty*>(&prop));
         return item;
     }
 
@@ -43,7 +42,7 @@ namespace izanagi
     void DependencyObjectBase::SetValueInternal(const DependencyProperty& prop, const CValue& value)
     {
         // プロパティに該当するハッシュアイテムを探す
-        CStdHash<IZ_UINT, Element, HASH_NUM>::Item* item = Find(prop);
+        HashItem* item = Find(prop);
 
         m_Flags.isValueChanged = IZ_FALSE;
 
@@ -74,9 +73,10 @@ namespace izanagi
 
             Element* element = new(p) Element;
             {
-                element->name.SetString(prop.GetName().GetString());
                 element->value = value;
-                element->hashItem.Init(element->name.GetKeyValue(), element);
+                element->hashItem.Init(
+                    const_cast<DependencyProperty*>(&prop),
+                    element);
             }
 
             // 登録
@@ -100,7 +100,7 @@ namespace izanagi
     IZ_BOOL DependencyObjectBase::GetValueInternal(const DependencyProperty& prop, CValue& ret)
     {
         // 
-        CStdHash<IZ_UINT, Element, HASH_NUM>::Item* item = Find(prop);
+        HashItem* item = Find(prop);
 
         if (item != IZ_NULL)
         {

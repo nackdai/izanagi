@@ -37,7 +37,7 @@ namespace izanagi
         m_Allocator = IZ_NULL;
 
         m_Item.Init(
-            property.GetKey(),
+            const_cast<DependencyProperty*>(&property),
             this);
 
         m_IsBinded = IZ_FALSE;
