@@ -59,38 +59,101 @@ namespace animation
         m_Timeline.Init(duration, 0.0f);
     }
 
-    IZ_FLOAT CSplineInterpolator::GetValueX()
+    CSplineInterpolator::Func::Func(CSplineInterpolator* interp, IZ_BOOL isDerivation)
     {
-        IZ_FLOAT t = m_Timeline.GetNormalized();
+        interpolator = interp;
+        this->isDerivation = isDerivation;
+    }
 
-        IZ_FLOAT ret = (1.0f - t) * (1.0f - t) * (1.0f - t) * m_Cp1.x + 3.0f * (1.0f - t) * (1.0f - t) * t * m_Cp2.x + 3.0f * (1.0f - t) * t * t * m_Cp3.x + t * t * t * m_Cp4.x;
-        ret = m_From + (m_To - m_From) * ret;
+    IZ_FLOAT CSplineInterpolator::Func::operator()(IZ_FLOAT t)
+    {
+        if (isDerivation) {
+            return interpolator->BezierD(t);
+        }
+        else {
+            return interpolator->BezierX(t);
+        }
+    }
+
+    IZ_FLOAT CSplineInterpolator::BezierX(IZ_FLOAT t)
+    {
+        IZ_FLOAT x1 = m_Cp2.x;
+        IZ_FLOAT x2 = m_Cp3.x;
+
+        IZ_FLOAT ret = 3 * (1 - t) * (1 - t) * t * x1 + 3 * (1 - t) * t * t * x2 + t * t * t;
+        return ret;
+    }
+
+    IZ_FLOAT CSplineInterpolator::BezierY(IZ_FLOAT t)
+    {
+        IZ_FLOAT y1 = m_Cp2.y;
+        IZ_FLOAT y2 = m_Cp3.y;
+
+        IZ_FLOAT ret = 3 * (1 - t) * (1 - t) * t * y1 + 3 * (1 - t) * t * t * y2 + t * t * t;
+        return ret;
+    }
+
+    IZ_FLOAT CSplineInterpolator::BezierD(IZ_FLOAT t)
+    {
+        IZ_FLOAT x1 = m_Cp2.x;
+        IZ_FLOAT x2 = m_Cp3.x;
+
+        IZ_FLOAT ret = -6 * (1 - t) * t * x1 + 3 * (1 - t) * (1 - t) * x1
+            - 3 * t * t * x2 + 6 * (1 - t) * t * x2 + 3 * t * t;
 
         return ret;
     }
 
-    IZ_FLOAT CSplineInterpolator::GetValueY()
+    IZ_FLOAT CSplineInterpolator::ComputeX(
+        Func& func,
+        Func& funcd,
+        IZ_FLOAT time,
+        IZ_FLOAT threshold,
+        IZ_UINT loopCnt)
     {
-        IZ_FLOAT t = m_Timeline.GetNormalized();
+        IZ_FLOAT x = time;
+        IZ_FLOAT newX = 0.0f;
 
-        IZ_FLOAT j_1_0_t = 1.0f - t;
-        IZ_FLOAT j_1_1_t = t;
+        for (IZ_UINT i = 0; i < loopCnt; i++) {
+            IZ_FLOAT v = func(x) - time;
 
-        IZ_FLOAT ret = (1.0f - t) * (1.0f - t) * (1.0f - t) * m_Cp1.y + 3.0f * (1.0f - t) * (1.0f - t) * t * m_Cp2.y + 3.0f * (1.0f - t) * t * t * m_Cp3.y + t * t * t * m_Cp4.y;
+            if (izanagi::math::CMath::Absf(v) < threshold) {
+                return x;
+            }
+
+            IZ_FLOAT dx = funcd(x);
+
+            if (izanagi::math::CMath::IsNearyEqualZero(dx)) {
+                return x;
+            }
+
+            newX = x - v /dx;
+            x = newX;
+
+            if (izanagi::math::CMath::Absf(x) < threshold) {
+                return x;
+            }
+        }
+
+        return x;
+    }
+
+    IZ_FLOAT CSplineInterpolator::GetValue()
+    {
+        IZ_FLOAT time = m_Timeline.GetNormalized();
+
+        IZ_FLOAT t = ComputeX(
+            Func(this, IZ_FALSE),
+            Func(this, IZ_TRUE),
+            time,
+            0.00001f,
+            10);
+
+        IZ_FLOAT ret = BezierY(t);
+        
         ret = m_From + (m_To - m_From) * ret;
 
         return ret;
-    }
-
-    void CSplineInterpolator::GetValue(IZ_FLOAT* x, IZ_FLOAT* y)
-    {
-        if (x) {
-            *x = GetValueX();
-        }
-
-        if (y) {
-            *y = GetValueY();
-        }
     }
 }   // namespace izanagi
 }   // namespace animation

@@ -16,6 +16,7 @@ namespace math
         IZ_FLOAT fb = func(b);
 
         // 許さない.
+        // 初期値が異なる符号でないと収束しない
         VRETURN_VAL(fa * fb > 0.0f, 0.0f);
 
         if (b - a < 0.0f)
@@ -28,10 +29,8 @@ namespace math
         // c = (a + b) / 2
         IZ_FLOAT c = (a + b) * 0.5f;
 
-        for (;;)
-        {
-            if (b - a <= threshold)
-            {
+        for (;;) {
+            if (b - a <= threshold) {
                 return c;
             }
 
@@ -41,12 +40,10 @@ namespace math
             IZ_FLOAT fc = func(c);
             IZ_FLOAT fa = func(a);
 
-            if (fc * fa < 0.0f)
-            {
+            if (fc * fa < 0.0f) {
                 b = c;
             }
-            else
-            {
+            else {
                 a = c;
             }
         }
@@ -70,47 +67,19 @@ namespace math
         // ニュートン法
         // Xn+1 = Xn - f(Xn) / f'(Xn)
 
-        for (IZ_UINT i = 0; i < loopCnt; i++)
-        {
-#if 0
-            IZ_FLOAT f = func(x) - init;
-            IZ_FLOAT fd = funcd(x);
-            
-            if (CMath::IsNearyEqualZero(fd))
-            {
-                return newX;
+        for (IZ_UINT i = 0; i < loopCnt; i++) {
+            IZ_FLOAT dx = funcd(x);
+
+            if (CMath::IsNearyEqualZero(dx)) {
+                return x;
             }
 
-            newX = x - f / fd;
-
-            if (CMath::IsNearyEqualZero(x))
-            {
-                return newX;
-            }
-
-            if (CMath::Absf((newX - x) / x) <= threshold)
-            {
-                return newX;
-            }
-
+            newX = x - func(x) / dx;
             x = newX;
-#else
-            IZ_FLOAT v = func(x) - init;
 
-            if (CMath::IsNearyEqualZero(v * v))
-            {
+            if (CMath::Absf(x) < threshold) {
                 return x;
             }
-
-            IZ_FLOAT tt = funcd(x);
-
-            if (CMath::IsNearyEqualZero(tt))
-            {
-                return x;
-            }
-
-            x -= v / tt;
-#endif
         }
 
         // 収束しなかったときにここにくる

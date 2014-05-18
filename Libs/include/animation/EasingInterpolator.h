@@ -24,8 +24,6 @@ namespace animation
         CEasingInterpolator();
         virtual ~CEasingInterpolator();
 
-        IZ_DEFINE_INTERNAL_RELEASE();
-
     private:
         void Init(
             IZ_FLOAT from, IZ_FLOAT to,
@@ -33,7 +31,7 @@ namespace animation
             E_ANM_TWEENER_MODE mode);
 
     public:
-        IZ_FLOAT GetValue();
+        virtual IZ_FLOAT GetValue();
 
     private:
         CTweener m_Tweener;

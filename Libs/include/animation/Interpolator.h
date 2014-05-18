@@ -17,6 +17,8 @@ namespace animation
         CInterpolator();
         virtual ~CInterpolator() {}
 
+        IZ_DEFINE_INTERNAL_RELEASE();
+
     public:
         void Advance(IZ_FLOAT delta);
 
@@ -24,11 +26,13 @@ namespace animation
 
         void AutoReverse(IZ_BOOL enable);
 
+        PURE_VIRTUAL(IZ_FLOAT GetValue());
+
     private:
         CStdList<CInterpolator>::Item* GetListItem() { return &m_ListItem; }
 
     protected:
-        CTimeline& TimeLine() { return m_Timeline; }
+        CTimeline& GetTimeLine() { return m_Timeline; }
 
     protected:
         IMemoryAllocator* m_Allocator;

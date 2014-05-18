@@ -21,15 +21,13 @@ namespace animation
         CLinearInterpolator();
         virtual ~CLinearInterpolator();
 
-        IZ_DEFINE_INTERNAL_RELEASE();
-
     private:
         void Init(
             IZ_FLOAT from, IZ_FLOAT to,
             IZ_FLOAT duration);
 
     public:
-        IZ_FLOAT GetValue();        
+        virtual IZ_FLOAT GetValue();        
     };
 }   // namespace animation
 }   // namespace izanagi

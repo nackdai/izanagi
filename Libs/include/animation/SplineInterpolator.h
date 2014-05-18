@@ -24,8 +24,6 @@ namespace animation
         CSplineInterpolator();
         virtual ~CSplineInterpolator();
 
-        IZ_DEFINE_INTERNAL_RELEASE();
-
     private:
         void Init(
             IZ_FLOAT from, IZ_FLOAT to,
@@ -33,11 +31,27 @@ namespace animation
             IZ_FLOAT cp1X, IZ_FLOAT cp1Y,
             IZ_FLOAT cp2X, IZ_FLOAT cp2Y);
 
-    public:
-        IZ_FLOAT GetValueX();
-        IZ_FLOAT GetValueY();
+        struct Func {
+            Func(CSplineInterpolator* interp, IZ_BOOL isDerivation);
+            IZ_FLOAT operator()(IZ_FLOAT t);
 
-        void GetValue(IZ_FLOAT* x, IZ_FLOAT* y);
+            CSplineInterpolator* interpolator;
+            IZ_BOOL isDerivation;
+        };
+
+        IZ_FLOAT BezierX(IZ_FLOAT t);
+        IZ_FLOAT BezierY(IZ_FLOAT t);
+        IZ_FLOAT BezierD(IZ_FLOAT t);
+
+        IZ_FLOAT ComputeX(
+            Func& func,
+            Func& funcd,
+            IZ_FLOAT time,
+            IZ_FLOAT threshold,
+            IZ_UINT loopCnt);
+
+    public:
+        IZ_FLOAT GetValue();
 
     private:
         CFloatPoint m_Cp1;
