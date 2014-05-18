@@ -104,7 +104,7 @@ void CAnimationInterpApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device
     m_LinearPoint.y = m_LinearInterp->GetValue();
 
     m_SplinePoint.x = m_Interp->GetValue();
-    m_SplinePoint.y = m_SplineInterp->GetValueY();
+    m_SplinePoint.y = m_SplineInterp->GetValue();
 
     m_EasingPoint.x = m_Interp->GetValue();
     m_EasingPoint.y = m_EasingInterp->GetValue();
@@ -148,7 +148,7 @@ IzMain(SCREEN_WIDTH, SCREEN_HEIGHT)
     int ret = SampleMain(
         IzGetSystemDataForMainFunc(),
         &app,
-        "Render2D",
+        "Animation",
         IzGetScreenWidth(), IzGetScreenHeight(),
         BUF, BUF_SIZE,
         GFX_BUF, GFX_BUF_SIZE);
