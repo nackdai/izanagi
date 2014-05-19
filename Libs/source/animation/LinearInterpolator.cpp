@@ -37,6 +37,13 @@ namespace animation
         m_Timeline.Init(duration, 0.0f);
     }
 
+    IZ_FLOAT CLinearInterpolator::GetValue(IZ_FLOAT time, IZ_FLOAT duration)
+    {
+        IZ_FLOAT t = (duration != 0.0f ? time / duration : 0.0f);
+        IZ_FLOAT ret = m_From + (m_To - m_From) * t;
+        return ret;
+    }
+
     IZ_FLOAT CLinearInterpolator::GetValue()
     {
         IZ_FLOAT t = m_Timeline.GetNormalized();

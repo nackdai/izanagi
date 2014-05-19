@@ -26,6 +26,8 @@ namespace animation
             IZ_FLOAT from, IZ_FLOAT to,
             IZ_FLOAT duration);
 
+        virtual IZ_FLOAT GetValue(IZ_FLOAT time, IZ_FLOAT duration);
+
     public:
         virtual IZ_FLOAT GetValue();        
     };

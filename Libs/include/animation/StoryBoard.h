@@ -18,33 +18,62 @@ namespace animation
     public:
         static CStoryBoard* Create(IMemoryAllocator* allocator);
 
-    public:
-        void SetTarget(DependencyObjectBase* object);
+    private:
+        CStoryBoard();
+        virtual ~CStoryBoard();
 
-        void Add(
-            CInterpolator* animation,
-            const DependencyProperty& prop);
+        NO_COPIABLE(CStoryBoard);
+
+        IZ_DEFINE_INTERNAL_RELEASE();
+
+    public:
+        IZ_BOOL Add(CInterpolator* animation);
+
+        IZ_BOOL Remove(CInterpolator* animation);
 
         void Advance(IZ_FLOAT delta);
 
+        void Start();
         void Pause();
-        void Resume();
+        void Stop();
+
+        IZ_BOOL IsRegistered(CInterpolator* animation);
+
+        IZ_FLOAT GetValue();
 
     private:
+        class Element : public CPlacementNew {
+        public:
+            Element();
+            ~Element();
+
+            CStdList<Element>::Item item;
+            CInterpolator* animation;
+            CTimeline timeline;
+        };
+
         class CTimeOverHandler : public CTimeline::CTimeOverHandler {
         public:
-            CTimeOverHandler() {}
-            virtual ~CTimeOverHandler() {}
+            CTimeOverHandler();
+            virtual ~CTimeOverHandler();
 
             virtual void Handle(const CTimeline& timeline);
+
+            CStoryBoard* storyboard;
         };
 
     private:
-        CStdList<CInterpolator> m_IterpList;
+        IMemoryAllocator* m_Allocator;
 
-        CInterpolator* m_CurAnimation;
+        CStdList<Element> m_List;
+
+        Element* m_CurElement;
+        Element* m_NextElement;
 
         CTimeOverHandler m_Handler;
+
+        IZ_BOOL m_IsForward;
+        IZ_BOOL m_IsPaused;
     };
 }   // namespace animation
 }   // namespace izanagi

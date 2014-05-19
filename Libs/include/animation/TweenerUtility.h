@@ -117,6 +117,8 @@ namespace animation {
     public:
         IZ_FLOAT GetValue(const CTimeline& timeline);
 
+        IZ_FLOAT GetValue(IZ_FLOAT time, IZ_FLOAT duration);
+
         void Init(
             E_ANM_TWEENER_MODE mode,
             IZ_FLOAT start,

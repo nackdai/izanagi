@@ -6,12 +6,10 @@ namespace animation
 {
     CInterpolator::CInterpolator()
     {
-        m_ListItem.Init(this);
     }
 
     void CInterpolator::Advance(IZ_FLOAT delta)
     {
-        m_Timeline.Start();
         m_Timeline.Advance(delta);
     }
 
@@ -23,6 +21,21 @@ namespace animation
     void CInterpolator::AutoReverse(IZ_BOOL enable)
     {
         m_Timeline.AutoReverse(enable);
+    }
+
+    void CInterpolator::Start()
+    {
+        m_Timeline.Start();
+    }
+
+    void CInterpolator::Pause()
+    {
+        m_Timeline.Pause();
+    }
+
+    void CInterpolator::Stop()
+    {
+        m_Timeline.Stop();
     }
 }   // namespace izanagi
 }   // namespace animation

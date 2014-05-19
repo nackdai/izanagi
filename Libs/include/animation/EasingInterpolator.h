@@ -30,6 +30,8 @@ namespace animation
             IZ_FLOAT duration,
             E_ANM_TWEENER_MODE mode);
 
+        virtual IZ_FLOAT GetValue(IZ_FLOAT time, IZ_FLOAT duration);
+
     public:
         virtual IZ_FLOAT GetValue();
 

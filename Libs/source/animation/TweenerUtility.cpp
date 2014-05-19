@@ -38,10 +38,15 @@ namespace animation {
     */
     IZ_FLOAT CTweener::GetValue(const CTimeline& timeline)
     {
-        math::ITweenerEasing* easing = TweenEasingTbl[m_Transition];
-
         IZ_FLOAT time = timeline.GetTime();
         IZ_FLOAT duration = timeline.GetDuration();
+
+        return GetValue(time, duration);
+    }
+
+    IZ_FLOAT CTweener::GetValue(IZ_FLOAT time, IZ_FLOAT duration)
+    {
+        math::ITweenerEasing* easing = TweenEasingTbl[m_Transition];
 
         IZ_FLOAT ret = 0.0f;
 

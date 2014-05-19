@@ -13,14 +13,14 @@ namespace animation {
         m_Duration = 0.0f;
         m_Delay = 0.0f;
 
+        m_OverTime = 0.0f;
+
         m_Flags.isLoop = IZ_FALSE;
         m_Flags.isReverse = IZ_TRUE;
         m_Flags.isPause = IZ_TRUE;
         m_Flags.isForward = IZ_TRUE;
 
         m_TimeOverHandler = IZ_NULL;
-
-        m_ListItem.Init(this);
     }
 
     CTimeline::CTimeline(
@@ -39,8 +39,6 @@ namespace animation {
         m_Flags.isForward = IZ_TRUE;
 
         m_TimeOverHandler = IZ_NULL;
-
-        m_ListItem.Init(this);
     }
 
     CTimeline::CTimeline(const CTimeline& rhs)
@@ -97,6 +95,7 @@ namespace animation {
     {
         m_Time = 0.0f;
         m_DelayTime = 0.0f;
+        m_OverTime = 0.0f;
         m_Flags.isForward = IZ_TRUE;
     }
 
@@ -108,11 +107,11 @@ namespace animation {
             return;
         }
 
-        if (m_DelayTime <= m_Delay) {
+        if (m_DelayTime < m_Delay) {
             // 遅延
             m_DelayTime += delta;
 
-            if (m_DelayTime <= m_Delay) {
+            if (m_DelayTime < m_Delay) {
                 // まだまだ始まらない
                 return;
             }
@@ -120,8 +119,18 @@ namespace animation {
             delta = m_DelayTime - m_Delay;
         }
 
+        if (m_OverTime != 0.0f) {
+            if (IsForward()) {
+                m_Time += m_OverTime;
+            }
+            else {
+                m_Time -= m_OverTime;
+            }
+
+            m_OverTime = 0.0f;
+        }
+
         IZ_BOOL isOver = IZ_FALSE;
-        IZ_FLOAT overTime = 0.0f;
         
         if (IsForward()) {
             m_Time += delta;
@@ -134,25 +143,21 @@ namespace animation {
         }
 
         if (isOver) {
-            overTime = (IsForward() ? m_Time - m_Duration : abs(m_Time));
+            m_OverTime = (IsForward() ? m_Time - m_Duration : abs(m_Time));
+            m_Time = (IsForward() ? m_Duration : 0.0f);
 
             if (IsLoop() && WillReverse()) {
                 // 向きを変える
                 Rewind();
             }
 
-            Stop();
+            Pause();
 
             if (IsLoop()) {
+                Stop();
+
                 // ループするので再開
                 Start();
-
-                if (IsForward()) {
-                    m_Time += overTime;
-                }
-                else {
-                    m_Time -= overTime;
-                }
             }
 
 			if (m_TimeOverHandler != IZ_NULL) {
@@ -217,10 +222,30 @@ namespace animation {
         return m_Flags.isForward;
     }
 
-    CStdList<CTimeline>::Item* CTimeline::GetListItem()
+    void CTimeline::ToggleDirection()
     {
-        return &m_ListItem;
+        m_Flags.isForward = !m_Flags.isForward;
     }
 
+    void CTimeline::SetDuration(IZ_FLOAT duration)
+    {
+        m_Duration = duration;
+    }
+
+    IZ_FLOAT CTimeline::GetOverTime()
+    {
+        return m_OverTime;
+    }
+
+    void CTimeline::SetOverTime(IZ_FLOAT over)
+    {
+        m_OverTime = over;
+    }
+
+    void CTimeline::SetTimeForcibly(IZ_FLOAT time)
+    {
+        m_Time = time;
+        m_OverTime = 0.0f;
+    }
 }   // namespace animation
 }   // namespace izanagi

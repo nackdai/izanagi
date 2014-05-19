@@ -10,6 +10,8 @@ namespace animation {
     * タイムライン
     */
     class CTimeline {
+        friend class CStoryBoard;
+
     public:
         /** タイムラインが設定時間を超えたときのハンドラ
          */
@@ -106,8 +108,15 @@ namespace animation {
          */
         IZ_BOOL IsForward() const;
 
-    protected:
-        CStdList<CTimeline>::Item* GetListItem();
+    private:
+        void ToggleDirection();
+
+        void SetDuration(IZ_FLOAT duration);
+
+        IZ_FLOAT GetOverTime();
+        void SetOverTime(IZ_FLOAT over);
+
+        void SetTimeForcibly(IZ_FLOAT time);
 
     protected:
         IZ_FLOAT m_Time;        // 時間
@@ -115,6 +124,8 @@ namespace animation {
 
         IZ_FLOAT m_Duration;    // 期間
         IZ_FLOAT m_Delay;       // 遅延
+
+        IZ_FLOAT m_OverTime;
 
         struct {
             IZ_UINT isLoop      : 1;    // ループするか
@@ -124,8 +135,6 @@ namespace animation {
         } m_Flags;
 
         CTimeOverHandler* m_TimeOverHandler;
-
-        CStdList<CTimeline>::Item m_ListItem;
     };
 
 }   // namespace animation

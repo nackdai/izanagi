@@ -26,17 +26,19 @@ namespace animation
 
         void AutoReverse(IZ_BOOL enable);
 
+        void Start();
+        void Pause();
+        void Stop();
+
         PURE_VIRTUAL(IZ_FLOAT GetValue());
 
     private:
-        CStdList<CInterpolator>::Item* GetListItem() { return &m_ListItem; }
+        CTimeline& GetTimeline() { return m_Timeline; }
 
-    protected:
-        CTimeline& GetTimeLine() { return m_Timeline; }
+        PURE_VIRTUAL(IZ_FLOAT GetValue(IZ_FLOAT time, IZ_FLOAT duration));
 
     protected:
         IMemoryAllocator* m_Allocator;
-        CStdList<CInterpolator>::Item m_ListItem;
 
         CTimeline m_Timeline;
 

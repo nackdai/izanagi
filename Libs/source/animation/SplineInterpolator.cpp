@@ -138,14 +138,19 @@ namespace animation
         return x;
     }
 
-    IZ_FLOAT CSplineInterpolator::GetValue()
+    IZ_FLOAT CSplineInterpolator::GetValue(IZ_FLOAT time, IZ_FLOAT duration)
     {
-        IZ_FLOAT time = m_Timeline.GetNormalized();
+        IZ_FLOAT normTime = (duration != 0.0f ? time / duration : 0.0f);
+        IZ_FLOAT ret = GetValue(normTime);
+        return ret;
+    }
 
+    IZ_FLOAT CSplineInterpolator::GetValue(IZ_FLOAT normTime)
+    {
         IZ_FLOAT t = ComputeX(
             Func(this, IZ_FALSE),
             Func(this, IZ_TRUE),
-            time,
+            normTime,
             0.00001f,
             10);
 
@@ -153,6 +158,13 @@ namespace animation
         
         ret = m_From + (m_To - m_From) * ret;
 
+        return ret;
+    }
+
+    IZ_FLOAT CSplineInterpolator::GetValue()
+    {
+        IZ_FLOAT time = m_Timeline.GetNormalized();
+        IZ_FLOAT ret = GetValue(time);
         return ret;
     }
 }   // namespace izanagi

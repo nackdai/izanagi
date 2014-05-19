@@ -31,6 +31,10 @@ namespace animation
             IZ_FLOAT cp1X, IZ_FLOAT cp1Y,
             IZ_FLOAT cp2X, IZ_FLOAT cp2Y);
 
+        virtual IZ_FLOAT GetValue(IZ_FLOAT time, IZ_FLOAT duration);
+
+        IZ_FLOAT GetValue(IZ_FLOAT normTime);
+
         struct Func {
             Func(CSplineInterpolator* interp, IZ_BOOL isDerivation);
             IZ_FLOAT operator()(IZ_FLOAT t);
