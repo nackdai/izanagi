@@ -30,6 +30,8 @@ private:
     izanagi::animation::CSplineInterpolator* m_SplineInterp;
     izanagi::animation::CEasingInterpolator* m_EasingInterp;
 
+    izanagi::animation::CTimeline m_Timeline;
+
     izanagi::CFloatPoint m_LinearPoint;
     izanagi::CFloatPoint m_SplinePoint;
     izanagi::CFloatPoint m_EasingPoint;
@@ -49,36 +51,28 @@ IZ_BOOL CAnimationInterpApp::InitInternal(
     izanagi::graph::CGraphicsDevice* device,
     izanagi::sample::CSampleCamera& camera)
 {
+    m_Timeline.Init(1000.0f, 0.0f);
+    m_Timeline.EnableLoop(IZ_TRUE);
+    m_Timeline.Start();
+
     m_Interp = izanagi::animation::CLinearInterpolator::Create(
         allocator,
-        0.0f, 200.0f,
-        1000.0f);
-    m_Interp->EnableLoop(IZ_TRUE);
-    m_Interp->Start();
+        0.0f, 200.0f);
 
     m_LinearInterp = izanagi::animation::CLinearInterpolator::Create(
         allocator,
-        200.0f, 0.0f,
-        1000.0f);
-    m_LinearInterp->EnableLoop(IZ_TRUE);
-    m_LinearInterp->Start();
+        200.0f, 0.0f);
 
     m_SplineInterp = izanagi::animation::CSplineInterpolator::Create(
         allocator,
         400.0f, 200.0f,
-        1000.0f,
         0.0f, 1.0f,
         1.0f, 0.0f);
-    m_SplineInterp->EnableLoop(IZ_TRUE);
-    m_SplineInterp->Start();
 
     m_EasingInterp = izanagi::animation::CEasingInterpolator::Create(
         allocator,
         600.0f, 400.0f,
-        1000.0f,
         izanagi::animation::E_ANM_TWEENER_MODE_EXPO_EASE_IN);
-    m_EasingInterp->EnableLoop(IZ_TRUE);
-    m_EasingInterp->Start();
 
     m_Timer.Begin();
 
@@ -99,19 +93,16 @@ void CAnimationInterpApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device
 {
     IZ_FLOAT delta = m_Timer.End();
 
-    m_Interp->Advance(delta);
-    m_LinearInterp->Advance(delta);
-    m_SplineInterp->Advance(delta);
-    m_EasingInterp->Advance(delta);
+    m_Timeline.Advance(delta);
 
-    m_LinearPoint.x = m_Interp->GetValue();
-    m_LinearPoint.y = m_LinearInterp->GetValue();
+    m_LinearPoint.x = m_Interp->GetValue(m_Timeline);
+    m_LinearPoint.y = m_LinearInterp->GetValue(m_Timeline);
 
-    m_SplinePoint.x = m_Interp->GetValue();
-    m_SplinePoint.y = m_SplineInterp->GetValue();
+    m_SplinePoint.x = m_Interp->GetValue(m_Timeline);
+    m_SplinePoint.y = m_SplineInterp->GetValue(m_Timeline);
 
-    m_EasingPoint.x = m_Interp->GetValue();
-    m_EasingPoint.y = m_EasingInterp->GetValue();
+    m_EasingPoint.x = m_Interp->GetValue(m_Timeline);
+    m_EasingPoint.y = m_EasingInterp->GetValue(m_Timeline);
 
     m_Timer.Begin();
 }

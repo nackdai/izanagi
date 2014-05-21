@@ -14,22 +14,17 @@ namespace animation
     public:
         static CLinearInterpolator* Create(
             IMemoryAllocator* allocator,
-            IZ_FLOAT from, IZ_FLOAT to,
-            IZ_FLOAT duration);
+            IZ_FLOAT from, IZ_FLOAT to);
 
     private:
         CLinearInterpolator();
         virtual ~CLinearInterpolator();
 
     private:
-        void Init(
-            IZ_FLOAT from, IZ_FLOAT to,
-            IZ_FLOAT duration);
-
-        virtual IZ_FLOAT GetValue(IZ_FLOAT time, IZ_FLOAT duration);
+        void Init(IZ_FLOAT from, IZ_FLOAT to);
 
     public:
-        virtual IZ_FLOAT GetValue();        
+        virtual IZ_FLOAT GetValue(const CTimeline& timeline);
     };
 }   // namespace animation
 }   // namespace izanagi

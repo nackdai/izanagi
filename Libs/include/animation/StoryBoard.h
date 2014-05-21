@@ -27,7 +27,9 @@ namespace animation
         IZ_DEFINE_INTERNAL_RELEASE();
 
     public:
-        IZ_BOOL Add(CInterpolator* animation);
+        IZ_BOOL Add(
+            CInterpolator* animation,
+            IZ_FLOAT duration);
 
         IZ_BOOL Remove(CInterpolator* animation);
 

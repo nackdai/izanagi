@@ -24,7 +24,9 @@ protected:
 
 private:
     izanagi::sys::CTimer m_Timer;
+
     izanagi::animation::CLinearInterpolator* m_Interp;
+    izanagi::animation::CTimeline m_Timeline;
 
     izanagi::animation::CLinearInterpolator* m_LinearInterp;
     izanagi::animation::CSplineInterpolator* m_SplineInterp;
@@ -49,36 +51,31 @@ IZ_BOOL CStoryboardApp::InitInternal(
 {
     m_Interp = izanagi::animation::CLinearInterpolator::Create(
         allocator,
-        0.0f, 600.0f,
-        2000.0f);
-    m_Interp->EnableLoop(IZ_TRUE);
-    m_Interp->Start();
+        0.0f, 600.0f);
+    m_Timeline.Init(2000.0f, 0.0f);
+    m_Timeline.EnableLoop(IZ_TRUE);
+    m_Timeline.Start();
+
+    m_Storyboard = izanagi::animation::CStoryBoard::Create(allocator);
 
     m_LinearInterp = izanagi::animation::CLinearInterpolator::Create(
         allocator,
-        600.0f, 400.0f,
-        650.0f);
-    m_LinearInterp->EnableLoop(IZ_TRUE);
+        600.0f, 400.0f);
+    m_Storyboard->Add(m_LinearInterp, 650.0f);
 
     m_SplineInterp = izanagi::animation::CSplineInterpolator::Create(
         allocator,
         400.0f, 200.0f,
-        650.0f,
         0.0f, 1.0f,
         1.0f, 0.0f);
-    m_SplineInterp->EnableLoop(IZ_TRUE);
+    m_Storyboard->Add(m_SplineInterp, 650.0f);
 
     m_EasingInterp = izanagi::animation::CEasingInterpolator::Create(
         allocator,
         200.0f, 0.0f,
-        700.0f,
         izanagi::animation::E_ANM_TWEENER_MODE_EXPO_EASE_IN);
-    m_EasingInterp->EnableLoop(IZ_TRUE);
-
-    m_Storyboard = izanagi::animation::CStoryBoard::Create(allocator);
-    m_Storyboard->Add(m_LinearInterp);
-    m_Storyboard->Add(m_SplineInterp);
-    m_Storyboard->Add(m_EasingInterp);
+    m_Storyboard->Add(m_EasingInterp, 700.0f);
+    
     m_Storyboard->Start();
 
     m_Timer.Begin();
@@ -102,7 +99,7 @@ void CStoryboardApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
     IZ_FLOAT delta = m_Timer.End();
     delta = 16.7f;
 
-    m_Interp->Advance(delta);
+    m_Timeline.Advance(delta);
     m_Storyboard->Advance(delta);
 
     m_Timer.Begin();
@@ -112,7 +109,7 @@ void CStoryboardApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 void CStoryboardApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
     if (device->Begin2D()) {
-        IZ_FLOAT x = m_Interp->GetValue();
+        IZ_FLOAT x = m_Interp->GetValue(m_Timeline);
         IZ_FLOAT y = m_Storyboard->GetValue();
 
         device->Draw2DRect(

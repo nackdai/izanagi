@@ -130,7 +130,9 @@ namespace animation
         FREE(m_Allocator, this);
     }
 
-    IZ_BOOL CStoryBoard::Add(CInterpolator* animation)
+    IZ_BOOL CStoryBoard::Add(
+        CInterpolator* animation,
+        IZ_FLOAT duration)
     {
         IZ_ASSERT(animation != IZ_NULL);
 
@@ -144,7 +146,7 @@ namespace animation
         Element* element = new(buf) Element();
         SAFE_REPLACE(element->animation, animation);
 
-        element->timeline.SetDuration(animation->GetTimeline().GetDuration());
+        element->timeline.SetDuration(duration);
         element->timeline.SetTimeOverHandler(&m_Handler);
         
         m_List.AddTail(&element->item);
@@ -226,7 +228,7 @@ namespace animation
             
             IZ_FLOAT time = (m_IsForward
                 ? 0.0f
-                : element->animation->GetTimeline().GetDuration());
+                : element->timeline.GetDuration());
             
             element->timeline.SetTimeForcibly(time);
 
@@ -258,10 +260,7 @@ namespace animation
     IZ_FLOAT CStoryBoard::GetValue()
     {
         if (m_CurElement != IZ_NULL) {
-            IZ_FLOAT time = m_CurElement->timeline.GetTime();
-            IZ_FLOAT duration = m_CurElement->timeline.GetDuration();
-
-            IZ_FLOAT ret = m_CurElement->animation->GetValue(time, duration);
+            IZ_FLOAT ret = m_CurElement->animation->GetValue(m_CurElement->timeline);
             return ret;
         }
 

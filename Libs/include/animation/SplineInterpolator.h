@@ -16,7 +16,6 @@ namespace animation
         static CSplineInterpolator* Create(
             IMemoryAllocator* allocator,
             IZ_FLOAT from, IZ_FLOAT to,
-            IZ_FLOAT duration,
             IZ_FLOAT cp1X, IZ_FLOAT cp1Y,
             IZ_FLOAT cp2X, IZ_FLOAT cp2Y);
 
@@ -27,13 +26,8 @@ namespace animation
     private:
         void Init(
             IZ_FLOAT from, IZ_FLOAT to,
-            IZ_FLOAT duration,
             IZ_FLOAT cp1X, IZ_FLOAT cp1Y,
             IZ_FLOAT cp2X, IZ_FLOAT cp2Y);
-
-        virtual IZ_FLOAT GetValue(IZ_FLOAT time, IZ_FLOAT duration);
-
-        IZ_FLOAT GetValue(IZ_FLOAT normTime);
 
         struct Func {
             Func(CSplineInterpolator* interp, IZ_BOOL isDerivation);
@@ -55,7 +49,7 @@ namespace animation
             IZ_UINT loopCnt);
 
     public:
-        IZ_FLOAT GetValue();
+        virtual IZ_FLOAT GetValue(const CTimeline& timeline);
 
     private:
         CFloatPoint m_Cp1;

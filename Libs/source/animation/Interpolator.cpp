@@ -6,36 +6,9 @@ namespace animation
 {
     CInterpolator::CInterpolator()
     {
-    }
-
-    void CInterpolator::Advance(IZ_FLOAT delta)
-    {
-        m_Timeline.Advance(delta);
-    }
-
-    void CInterpolator::EnableLoop(IZ_BOOL enable)
-    {
-        m_Timeline.EnableLoop(enable);
-    }
-
-    void CInterpolator::AutoReverse(IZ_BOOL enable)
-    {
-        m_Timeline.AutoReverse(enable);
-    }
-
-    void CInterpolator::Start()
-    {
-        m_Timeline.Start();
-    }
-
-    void CInterpolator::Pause()
-    {
-        m_Timeline.Pause();
-    }
-
-    void CInterpolator::Stop()
-    {
-        m_Timeline.Stop();
+        m_Allocator = IZ_NULL;
+        m_From = 0.0f;
+        m_To = 0.0f;
     }
 }   // namespace izanagi
 }   // namespace animation

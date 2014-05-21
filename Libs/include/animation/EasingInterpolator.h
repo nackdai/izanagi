@@ -17,7 +17,6 @@ namespace animation
         static CEasingInterpolator* Create(
             IMemoryAllocator* allocator,
             IZ_FLOAT from, IZ_FLOAT to,
-            IZ_FLOAT duration,
             E_ANM_TWEENER_MODE mode);
 
     private:
@@ -27,13 +26,10 @@ namespace animation
     private:
         void Init(
             IZ_FLOAT from, IZ_FLOAT to,
-            IZ_FLOAT duration,
             E_ANM_TWEENER_MODE mode);
 
-        virtual IZ_FLOAT GetValue(IZ_FLOAT time, IZ_FLOAT duration);
-
     public:
-        virtual IZ_FLOAT GetValue();
+        virtual IZ_FLOAT GetValue(const CTimeline& timeline);
 
     private:
         CTweener m_Tweener;

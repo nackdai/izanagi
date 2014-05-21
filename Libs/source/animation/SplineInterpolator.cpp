@@ -8,7 +8,6 @@ namespace animation
     CSplineInterpolator* CSplineInterpolator::Create(
         IMemoryAllocator* allocator,
         IZ_FLOAT from, IZ_FLOAT to,
-        IZ_FLOAT duration,
         IZ_FLOAT cp1X, IZ_FLOAT cp1Y,
         IZ_FLOAT cp2X, IZ_FLOAT cp2Y)
     {
@@ -20,7 +19,6 @@ namespace animation
         ret->m_Allocator = allocator;
         ret->Init(
             from, to,
-            duration,
             cp1X, cp1Y,
             cp2X, cp2Y);
 
@@ -37,7 +35,6 @@ namespace animation
 
     void CSplineInterpolator::Init(
         IZ_FLOAT from, IZ_FLOAT to,
-        IZ_FLOAT duration,
         IZ_FLOAT cp1X, IZ_FLOAT cp1Y,
         IZ_FLOAT cp2X, IZ_FLOAT cp2Y)
     {
@@ -55,8 +52,6 @@ namespace animation
 
         m_Cp4.x = 1.0f;
         m_Cp4.y = 1.0f;
-
-        m_Timeline.Init(duration, 0.0f);
     }
 
     CSplineInterpolator::Func::Func(CSplineInterpolator* interp, IZ_BOOL isDerivation)
@@ -138,19 +133,14 @@ namespace animation
         return x;
     }
 
-    IZ_FLOAT CSplineInterpolator::GetValue(IZ_FLOAT time, IZ_FLOAT duration)
+    IZ_FLOAT CSplineInterpolator::GetValue(const CTimeline& timeline)
     {
-        IZ_FLOAT normTime = (duration != 0.0f ? time / duration : 0.0f);
-        IZ_FLOAT ret = GetValue(normTime);
-        return ret;
-    }
-
-    IZ_FLOAT CSplineInterpolator::GetValue(IZ_FLOAT normTime)
-    {
+        IZ_FLOAT time = timeline.GetNormalized();
+        
         IZ_FLOAT t = ComputeX(
             Func(this, IZ_FALSE),
             Func(this, IZ_TRUE),
-            normTime,
+            time,
             0.00001f,
             10);
 
@@ -158,13 +148,6 @@ namespace animation
         
         ret = m_From + (m_To - m_From) * ret;
 
-        return ret;
-    }
-
-    IZ_FLOAT CSplineInterpolator::GetValue()
-    {
-        IZ_FLOAT time = m_Timeline.GetNormalized();
-        IZ_FLOAT ret = GetValue(time);
         return ret;
     }
 }   // namespace izanagi
