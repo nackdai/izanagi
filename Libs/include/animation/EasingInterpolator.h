@@ -28,8 +28,7 @@ namespace animation
             IZ_FLOAT from, IZ_FLOAT to,
             E_ANM_TWEENER_MODE mode);
 
-    public:
-        virtual IZ_FLOAT GetValue(const CTimeline& timeline);
+        virtual IZ_FLOAT GetValueEx(IZ_FLOAT time, IZ_FLOAT duration);
 
     private:
         CTweener m_Tweener;

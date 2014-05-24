@@ -5,80 +5,13 @@ namespace izanagi
 {
 namespace animation
 {
-    CStoryBoard::CTimeOverHandler::CTimeOverHandler()
-    {
-        storyboard = IZ_NULL;
-    }
-
-    CStoryBoard::CTimeOverHandler::~CTimeOverHandler()
-    {
-        storyboard = IZ_NULL;
-    }
-
-    void CStoryBoard::CTimeOverHandler::Handle(const CTimeline& timeline)
-    {
-        if (storyboard != IZ_NULL) {
-            // 進行方向に応じて次のアニメーションを選ぶ
-            if (storyboard->m_IsForward) {
-                CStdList<Element>::Item* item = storyboard->m_CurElement->item.GetNext();
-
-                if (item == IZ_NULL) {
-                    // 次がないので逆方向にする
-                    storyboard->m_IsForward = !storyboard->m_IsForward;
-                    item = storyboard->m_List.GetTail();
-
-                    if (item != IZ_NULL) {
-                        storyboard->m_NextElement = item->GetData();
-                    }
-                    else {
-                        storyboard->m_NextElement = IZ_NULL;
-                    }
-                }
-                else {
-                    storyboard->m_NextElement = item->GetData();
-                }
-            }
-            else {
-                CStdList<Element>::Item* item = storyboard->m_CurElement->item.GetPrev();
-
-                if (item == IZ_NULL) {
-                    // 次がないので逆方向にする
-                    storyboard->m_IsForward = !storyboard->m_IsForward;
-                    item = storyboard->m_List.GetTop();
-
-                    if (item != IZ_NULL) {
-                        storyboard->m_NextElement = item->GetData();
-                    }
-                    else {
-                        storyboard->m_NextElement = IZ_NULL;
-                    }
-                }
-                else {
-                    storyboard->m_NextElement = item->GetData();
-                }
-            }
-
-            // 超過分を次に持ち越す
-            IZ_FLOAT over = storyboard->m_CurElement->timeline.GetOverTime();
-            storyboard->m_CurElement->timeline.SetOverTime(0.0f);
-
-            if (storyboard->m_NextElement != IZ_NULL) {
-                storyboard->m_NextElement->timeline.SetOverTime(over);
-
-                // 方向が違うので合わせる
-                if (storyboard->m_NextElement->timeline.IsForward() != storyboard->m_IsForward) {
-                    storyboard->m_NextElement->timeline.ToggleDirection();
-                }
-            }
-        }
-    }
-
-    ///////////////////////////////////
-
     CStoryBoard::Element::Element()
     {
         animation = IZ_NULL;
         item.Init(this);
+
+        begin = 0.0f;
+        end = 0.0f;
     }
 
     CStoryBoard::Element::~Element()
@@ -109,10 +42,7 @@ namespace animation
         m_CurElement = IZ_NULL;
         m_NextElement = IZ_NULL;
 
-        m_Handler.storyboard = this;
-
         m_IsForward = IZ_TRUE;
-        m_IsPaused = IZ_TRUE;
     }
 
     CStoryBoard::~CStoryBoard()
@@ -146,8 +76,17 @@ namespace animation
         Element* element = new(buf) Element();
         SAFE_REPLACE(element->animation, animation);
 
-        element->timeline.SetDuration(duration);
-        element->timeline.SetTimeOverHandler(&m_Handler);
+        IZ_UINT pos = m_List.GetItemNum();
+
+        if (pos == 0) {
+            element->begin = 0;
+        }
+        else {
+            CStdList<Element>::Item* item = m_List.GetAt(pos - 1);
+            element->begin = item->GetData()->end;
+        }
+
+        element->end = element->begin + duration;
         
         m_List.AddTail(&element->item);
 
@@ -156,6 +95,8 @@ namespace animation
 
     IZ_BOOL CStoryBoard::Remove(CInterpolator* animation)
     {
+        IZ_BOOL result = IZ_FALSE;
+
         CStdList<Element>::Item* item = m_List.GetTop();
 
         while (item != IZ_NULL) {
@@ -163,7 +104,14 @@ namespace animation
 
             if (element->animation == animation) {
                 if (m_CurElement == element) {
-                    CStdList<Element>::Item* next = item->GetNext();
+                    CStdList<Element>::Item* next = IZ_NULL;
+                    if (m_IsForward) {
+                        next = item->GetNext();
+                    }
+                    else {
+                        next = item->GetPrev();
+                    }
+
                     if (next != IZ_NULL) {
                         m_CurElement = next->GetData();
                     }
@@ -177,65 +125,38 @@ namespace animation
                 delete element;
                 FREE(m_Allocator, element);
 
-                return IZ_TRUE;
+                result = IZ_TRUE;
+                break;
             }
 
             item = item->GetNext();
+        }
+
+        // Re-computing time.
+        if (result) {
+            item = m_List.GetTop();
+
+            Element* prev = IZ_NULL;
+            
+            while (item != IZ_NULL) {
+                Element* element = item->GetData();
+
+                IZ_FLOAT duration = element->end - element->begin;
+
+                if (prev == IZ_NULL) {
+                    element->begin = 0.0f;
+                }
+                else {
+                    element->begin = prev->end;
+                }
+
+                element->end = element->begin + duration;
+
+                item = item->GetNext();
+            }
         }
 
         return IZ_FALSE;
-    }
-
-    void CStoryBoard::Advance(IZ_FLOAT delta)
-    {
-        if (m_NextElement != IZ_NULL) {
-            m_CurElement = m_NextElement;
-            m_NextElement = IZ_NULL;
-        }
-
-        if (m_CurElement == IZ_NULL) {
-            CStdList<Element>::Item* item = m_List.GetTop();
-            if (item != IZ_NULL) {
-                Element* element = item->GetData();
-                m_CurElement = element;
-            }
-        }
-
-        if (m_CurElement != IZ_NULL) {
-            if (!m_IsPaused) {
-                m_CurElement->timeline.Start();
-                m_CurElement->timeline.Advance(delta);
-            }
-        }
-    }
-
-    void CStoryBoard::Start()
-    {
-        m_IsPaused = IZ_FALSE;
-    }
-
-    void CStoryBoard::Pause()
-    {
-        m_IsPaused = IZ_TRUE;
-    }
-
-    void CStoryBoard::Stop()
-    {
-        CStdList<Element>::Item* item = m_List.GetTop();
-
-        while (item != IZ_NULL) {
-            Element* element = item->GetData();
-            
-            IZ_FLOAT time = (m_IsForward
-                ? 0.0f
-                : element->timeline.GetDuration());
-            
-            element->timeline.SetTimeForcibly(time);
-
-            item = item->GetNext();
-        }
-
-        m_IsPaused = IZ_TRUE;
     }
 
     IZ_BOOL CStoryBoard::IsRegistered(CInterpolator* animation)
@@ -257,14 +178,97 @@ namespace animation
         return IZ_FALSE;
     }
 
-    IZ_FLOAT CStoryBoard::GetValue()
+    IZ_FLOAT CStoryBoard::GetDuration()
     {
+        CStdList<Element>::Item* item = m_List.GetTail();
+
+        if (item != IZ_NULL) {
+            Element* element = item->GetData();
+            return element->end;
+        }
+
+        return 0.0f;
+    }
+
+    IZ_FLOAT CStoryBoard::GetValue(const CTimeline& timeline)
+    {
+        CheckTime(timeline);
+
+        if (m_NextElement != IZ_NULL) {
+            m_CurElement = m_NextElement;
+            m_NextElement = IZ_NULL;
+        }
+
+        if (m_CurElement == IZ_NULL) {
+            CStdList<Element>::Item* item = m_List.GetTop();
+            if (item != IZ_NULL) {
+                Element* element = item->GetData();
+                m_CurElement = element;
+            }
+        }
+
         if (m_CurElement != IZ_NULL) {
-            IZ_FLOAT ret = m_CurElement->animation->GetValue(m_CurElement->timeline);
+            IZ_FLOAT duration = m_CurElement->end - m_CurElement->begin;
+
+            IZ_FLOAT time = timeline.GetTime();
+            time = time - m_CurElement->begin;
+
+            IZ_FLOAT ret = m_CurElement->animation->GetValueEx(time, duration);
             return ret;
         }
 
         return 0.0f;
+    }
+
+    void CStoryBoard::CheckTime(const CTimeline& timeline)
+    {
+        IZ_ASSERT(timeline.GetDuration() == GetDuration());
+
+        if (m_CurElement == IZ_NULL) {
+            return;
+        }
+
+        // 進行方向に応じて次のアニメーションを選ぶ
+        if (timeline.IsForward()
+            && m_CurElement->end < timeline.GetTime())
+        {
+            CStdList<Element>::Item* item = m_CurElement->item.GetNext();
+
+            if (item == IZ_NULL) {
+                // 次がないので逆方向にする
+                m_IsForward = !m_IsForward;
+                item = m_List.GetTail();
+
+                if (item != IZ_NULL) {
+                    m_NextElement = item->GetData();
+                }
+                else {
+                    m_NextElement = IZ_NULL;
+                }
+            }
+            else {
+                m_NextElement = item->GetData();
+            }
+        }
+        else if (m_CurElement->begin > timeline.GetTime()) {
+            CStdList<Element>::Item* item = m_CurElement->item.GetPrev();
+
+            if (item == IZ_NULL) {
+                // 次がないので逆方向にする
+                m_IsForward = !m_IsForward;
+                item = m_List.GetTop();
+
+                if (item != IZ_NULL) {
+                    m_NextElement = item->GetData();
+                }
+                else {
+                    m_NextElement = IZ_NULL;
+                }
+            }
+            else {
+                m_NextElement = item->GetData();
+            }
+        }
     }
 }   // namespace animation
 }   // namespace izanagi

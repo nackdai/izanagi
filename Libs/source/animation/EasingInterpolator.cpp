@@ -38,9 +38,9 @@ namespace animation
         m_Tweener.Init(mode, 0.0f, 1.0f);
     }
 
-    IZ_FLOAT CEasingInterpolator::GetValue(const CTimeline& timeline)
+    IZ_FLOAT CEasingInterpolator::GetValueEx(IZ_FLOAT time, IZ_FLOAT duration)
     {
-        IZ_FLOAT t = m_Tweener.GetValue(timeline);
+        IZ_FLOAT t = m_Tweener.GetValue(time, duration);
         IZ_FLOAT ret = m_From + (m_To - m_From) * t;
         return ret;
     }

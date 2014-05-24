@@ -48,8 +48,7 @@ namespace animation
             IZ_FLOAT threshold,
             IZ_UINT loopCnt);
 
-    public:
-        virtual IZ_FLOAT GetValue(const CTimeline& timeline);
+        virtual IZ_FLOAT GetValueEx(IZ_FLOAT time, IZ_FLOAT duration);
 
     private:
         CFloatPoint m_Cp1;

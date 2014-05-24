@@ -20,7 +20,10 @@ namespace animation
         IZ_DEFINE_INTERNAL_RELEASE();
 
     public:
-        PURE_VIRTUAL(IZ_FLOAT GetValue(const CTimeline& timeline));
+        IZ_FLOAT GetValue(const CTimeline& timeline);
+
+    private:
+        PURE_VIRTUAL(IZ_FLOAT GetValueEx(IZ_FLOAT time, IZ_FLOAT duration));
 
     protected:
         IMemoryAllocator* m_Allocator;

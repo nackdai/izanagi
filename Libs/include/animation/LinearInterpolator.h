@@ -23,8 +23,7 @@ namespace animation
     private:
         void Init(IZ_FLOAT from, IZ_FLOAT to);
 
-    public:
-        virtual IZ_FLOAT GetValue(const CTimeline& timeline);
+        virtual IZ_FLOAT GetValueEx(IZ_FLOAT time, IZ_FLOAT duration);
     };
 }   // namespace animation
 }   // namespace izanagi

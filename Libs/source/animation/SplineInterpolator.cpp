@@ -133,14 +133,14 @@ namespace animation
         return x;
     }
 
-    IZ_FLOAT CSplineInterpolator::GetValue(const CTimeline& timeline)
+    IZ_FLOAT CSplineInterpolator::GetValueEx(IZ_FLOAT time, IZ_FLOAT duration)
     {
-        IZ_FLOAT time = timeline.GetNormalized();
+        IZ_FLOAT normTime = (duration > 0.0f ? time / duration : 0.0f);
         
         IZ_FLOAT t = ComputeX(
             Func(this, IZ_FALSE),
             Func(this, IZ_TRUE),
-            time,
+            normTime,
             0.00001f,
             10);
 

@@ -76,8 +76,6 @@ IZ_BOOL CStoryboardApp::InitInternal(
         izanagi::animation::E_ANM_TWEENER_MODE_EXPO_EASE_IN);
     m_Storyboard->Add(m_EasingInterp, 700.0f);
     
-    m_Storyboard->Start();
-
     m_Timer.Begin();
 
     return IZ_TRUE;
@@ -100,7 +98,6 @@ void CStoryboardApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
     delta = 16.7f;
 
     m_Timeline.Advance(delta);
-    m_Storyboard->Advance(delta);
 
     m_Timer.Begin();
 }
@@ -110,7 +107,7 @@ void CStoryboardApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
     if (device->Begin2D()) {
         IZ_FLOAT x = m_Interp->GetValue(m_Timeline);
-        IZ_FLOAT y = m_Storyboard->GetValue();
+        IZ_FLOAT y = m_Storyboard->GetValue(m_Timeline);
 
         device->Draw2DRect(
             izanagi::CIntRect(x, y, 20, 20),

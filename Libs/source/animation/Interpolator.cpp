@@ -10,5 +10,10 @@ namespace animation
         m_From = 0.0f;
         m_To = 0.0f;
     }
+
+    IZ_FLOAT CInterpolator::GetValue(const CTimeline& timeline)
+    {
+        return GetValueEx(timeline.GetTime(), timeline.GetDuration());
+    }
 }   // namespace izanagi
 }   // namespace animation

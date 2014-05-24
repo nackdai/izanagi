@@ -33,15 +33,14 @@ namespace animation
 
         IZ_BOOL Remove(CInterpolator* animation);
 
-        void Advance(IZ_FLOAT delta);
-
-        void Start();
-        void Pause();
-        void Stop();
-
         IZ_BOOL IsRegistered(CInterpolator* animation);
 
-        IZ_FLOAT GetValue();
+        IZ_FLOAT GetDuration();
+
+        IZ_FLOAT GetValue(const CTimeline& timeline);
+
+    private:
+        void CheckTime(const CTimeline& timeline);
 
     private:
         class Element : public CPlacementNew {
@@ -51,17 +50,8 @@ namespace animation
 
             CStdList<Element>::Item item;
             CInterpolator* animation;
-            CTimeline timeline;
-        };
-
-        class CTimeOverHandler : public CTimeline::CTimeOverHandler {
-        public:
-            CTimeOverHandler();
-            virtual ~CTimeOverHandler();
-
-            virtual void Handle(const CTimeline& timeline);
-
-            CStoryBoard* storyboard;
+            IZ_FLOAT begin;
+            IZ_FLOAT end;
         };
 
     private:
@@ -72,10 +62,7 @@ namespace animation
         Element* m_CurElement;
         Element* m_NextElement;
 
-        CTimeOverHandler m_Handler;
-
         IZ_BOOL m_IsForward;
-        IZ_BOOL m_IsPaused;
     };
 }   // namespace animation
 }   // namespace izanagi
