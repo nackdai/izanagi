@@ -23,11 +23,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\AnimationInterpolator\main.cpp" />
+    <ClCompile Include="..\..\BasicAnimation\main.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{D63E6F5B-0671-4753-88EA-5F9CA95D6271}</ProjectGuid>
-    <RootNamespace>AnimationInterpolator</RootNamespace>
+    <RootNamespace>BasicAnimation</RootNamespace>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
