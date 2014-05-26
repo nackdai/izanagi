@@ -143,7 +143,7 @@ IzMain(SCREEN_WIDTH, SCREEN_HEIGHT)
     int ret = SampleMain(
         IzGetSystemDataForMainFunc(),
         &app,
-        "Animation",
+        "BasicAnimation",
         IzGetScreenWidth(), IzGetScreenHeight(),
         BUF, BUF_SIZE,
         GFX_BUF, GFX_BUF_SIZE);
