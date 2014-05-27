@@ -1,5 +1,5 @@
-#include <math.h>
 #include "animation/Timeline.h"
+#include "math/MathUtil.h"
 
 namespace izanagi {
 namespace animation {
@@ -143,7 +143,7 @@ namespace animation {
         }
 
         if (isOver) {
-            m_OverTime = (IsForward() ? m_Time - m_Duration : abs(m_Time));
+            m_OverTime = (IsForward() ? m_Time - m_Duration : math::CMath::Absf(m_Time));
             m_Time = (IsForward() ? m_Duration : 0.0f);
 
             if (IsLoop() && WillReverse()) {

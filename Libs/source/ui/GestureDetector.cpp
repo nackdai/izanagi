@@ -204,7 +204,7 @@ namespace ui
                     IZ_INT moveX = m_LastPoint.x - ev.x;
                     IZ_INT moveY = m_LastPoint.y - ev.y;
 
-                    if (::abs(moveX) >= 1 || ::abs(moveY) >= 1) {
+                    if (math::CMath::Absf(moveX) >= 1 || math::CMath::Absf(moveY) >= 1) {
                         // Dispatch drag event.
                         m_Listener->OnDrag(
                             m_DownEvent,

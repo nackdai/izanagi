@@ -33,14 +33,8 @@ namespace sys
         CTouchEvent(
             E_SYS_TOUCH_EVENT _type,
             IZ_INT _x,
-            IZ_INT _y)
-        {
-            type = _type;
-            x = _x;
-            y = _y;
+            IZ_INT _y);
 
-            eventTime = 0;
-        }
         CTouchEvent() {}
         ~CTouchEvent() {}
     };

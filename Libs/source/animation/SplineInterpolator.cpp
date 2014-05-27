@@ -136,10 +136,13 @@ namespace animation
     IZ_FLOAT CSplineInterpolator::GetValueEx(IZ_FLOAT time, IZ_FLOAT duration)
     {
         IZ_FLOAT normTime = (duration > 0.0f ? time / duration : 0.0f);
+
+        Func func(this, IZ_FALSE);
+        Func funcd(this, IZ_TRUE);
         
         IZ_FLOAT t = ComputeX(
-            Func(this, IZ_FALSE),
-            Func(this, IZ_TRUE),
+            func,
+            funcd,
             normTime,
             0.00001f,
             10);
