@@ -26,14 +26,38 @@ build_all_configurations: Debug_GLUT
 
 # Builds the Debug_GLUT configuration...
 .PHONY: Debug_GLUT
-Debug_GLUT: create_folders gccDebug_GLUT/source/animation/FuncCurveInterpolater.o gccDebug_GLUT/source/animation/Timeline.o gccDebug_GLUT/source/animation/TweenerInterpolater.o 
-	ar rcs ../lib/gccDebug_GLUT/libAnimation.a gccDebug_GLUT/source/animation/FuncCurveInterpolater.o gccDebug_GLUT/source/animation/Timeline.o gccDebug_GLUT/source/animation/TweenerInterpolater.o  $(Debug_GLUT_Implicitly_Linked_Objects)
+Debug_GLUT: create_folders gccDebug_GLUT/source/animation/EasingInterpolator.o gccDebug_GLUT/source/animation/Interpolator.o gccDebug_GLUT/source/animation/LinearInterpolator.o gccDebug_GLUT/source/animation/SplineInterpolator.o gccDebug_GLUT/source/animation/StoryBoard.o gccDebug_GLUT/source/animation/Timeline.o gccDebug_GLUT/source/animation/Tweener.o gccDebug_GLUT/source/animation/TweenerUtility.o 
+	ar rcs ../lib/gccDebug_GLUT/libAnimation.a gccDebug_GLUT/source/animation/EasingInterpolator.o gccDebug_GLUT/source/animation/Interpolator.o gccDebug_GLUT/source/animation/LinearInterpolator.o gccDebug_GLUT/source/animation/SplineInterpolator.o gccDebug_GLUT/source/animation/StoryBoard.o gccDebug_GLUT/source/animation/Timeline.o gccDebug_GLUT/source/animation/Tweener.o gccDebug_GLUT/source/animation/TweenerUtility.o  $(Debug_GLUT_Implicitly_Linked_Objects)
 
-# Compiles file ../../source/animation/FuncCurveInterpolater.cpp for the Debug_GLUT configuration...
--include gccDebug_GLUT/source/animation/FuncCurveInterpolater.d
-gccDebug_GLUT/source/animation/FuncCurveInterpolater.o: ../../source/animation/FuncCurveInterpolater.cpp
-	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -c ../../source/animation/FuncCurveInterpolater.cpp $(Debug_GLUT_Include_Path) -o gccDebug_GLUT/source/animation/FuncCurveInterpolater.o
-	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -MM ../../source/animation/FuncCurveInterpolater.cpp $(Debug_GLUT_Include_Path) > gccDebug_GLUT/source/animation/FuncCurveInterpolater.d
+# Compiles file ../../source/animation/EasingInterpolator.cpp for the Debug_GLUT configuration...
+-include gccDebug_GLUT/source/animation/EasingInterpolator.d
+gccDebug_GLUT/source/animation/EasingInterpolator.o: ../../source/animation/EasingInterpolator.cpp
+	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -c ../../source/animation/EasingInterpolator.cpp $(Debug_GLUT_Include_Path) -o gccDebug_GLUT/source/animation/EasingInterpolator.o
+	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -MM ../../source/animation/EasingInterpolator.cpp $(Debug_GLUT_Include_Path) > gccDebug_GLUT/source/animation/EasingInterpolator.d
+
+# Compiles file ../../source/animation/Interpolator.cpp for the Debug_GLUT configuration...
+-include gccDebug_GLUT/source/animation/Interpolator.d
+gccDebug_GLUT/source/animation/Interpolator.o: ../../source/animation/Interpolator.cpp
+	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -c ../../source/animation/Interpolator.cpp $(Debug_GLUT_Include_Path) -o gccDebug_GLUT/source/animation/Interpolator.o
+	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -MM ../../source/animation/Interpolator.cpp $(Debug_GLUT_Include_Path) > gccDebug_GLUT/source/animation/Interpolator.d
+
+# Compiles file ../../source/animation/LinearInterpolator.cpp for the Debug_GLUT configuration...
+-include gccDebug_GLUT/source/animation/LinearInterpolator.d
+gccDebug_GLUT/source/animation/LinearInterpolator.o: ../../source/animation/LinearInterpolator.cpp
+	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -c ../../source/animation/LinearInterpolator.cpp $(Debug_GLUT_Include_Path) -o gccDebug_GLUT/source/animation/LinearInterpolator.o
+	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -MM ../../source/animation/LinearInterpolator.cpp $(Debug_GLUT_Include_Path) > gccDebug_GLUT/source/animation/LinearInterpolator.d
+
+# Compiles file ../../source/animation/SplineInterpolator.cpp for the Debug_GLUT configuration...
+-include gccDebug_GLUT/source/animation/SplineInterpolator.d
+gccDebug_GLUT/source/animation/SplineInterpolator.o: ../../source/animation/SplineInterpolator.cpp
+	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -c ../../source/animation/SplineInterpolator.cpp $(Debug_GLUT_Include_Path) -o gccDebug_GLUT/source/animation/SplineInterpolator.o
+	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -MM ../../source/animation/SplineInterpolator.cpp $(Debug_GLUT_Include_Path) > gccDebug_GLUT/source/animation/SplineInterpolator.d
+
+# Compiles file ../../source/animation/StoryBoard.cpp for the Debug_GLUT configuration...
+-include gccDebug_GLUT/source/animation/StoryBoard.d
+gccDebug_GLUT/source/animation/StoryBoard.o: ../../source/animation/StoryBoard.cpp
+	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -c ../../source/animation/StoryBoard.cpp $(Debug_GLUT_Include_Path) -o gccDebug_GLUT/source/animation/StoryBoard.o
+	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -MM ../../source/animation/StoryBoard.cpp $(Debug_GLUT_Include_Path) > gccDebug_GLUT/source/animation/StoryBoard.d
 
 # Compiles file ../../source/animation/Timeline.cpp for the Debug_GLUT configuration...
 -include gccDebug_GLUT/source/animation/Timeline.d
@@ -41,11 +65,17 @@ gccDebug_GLUT/source/animation/Timeline.o: ../../source/animation/Timeline.cpp
 	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -c ../../source/animation/Timeline.cpp $(Debug_GLUT_Include_Path) -o gccDebug_GLUT/source/animation/Timeline.o
 	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -MM ../../source/animation/Timeline.cpp $(Debug_GLUT_Include_Path) > gccDebug_GLUT/source/animation/Timeline.d
 
-# Compiles file ../../source/animation/TweenerInterpolater.cpp for the Debug_GLUT configuration...
--include gccDebug_GLUT/source/animation/TweenerInterpolater.d
-gccDebug_GLUT/source/animation/TweenerInterpolater.o: ../../source/animation/TweenerInterpolater.cpp
-	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -c ../../source/animation/TweenerInterpolater.cpp $(Debug_GLUT_Include_Path) -o gccDebug_GLUT/source/animation/TweenerInterpolater.o
-	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -MM ../../source/animation/TweenerInterpolater.cpp $(Debug_GLUT_Include_Path) > gccDebug_GLUT/source/animation/TweenerInterpolater.d
+# Compiles file ../../source/animation/Tweener.cpp for the Debug_GLUT configuration...
+-include gccDebug_GLUT/source/animation/Tweener.d
+gccDebug_GLUT/source/animation/Tweener.o: ../../source/animation/Tweener.cpp
+	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -c ../../source/animation/Tweener.cpp $(Debug_GLUT_Include_Path) -o gccDebug_GLUT/source/animation/Tweener.o
+	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -MM ../../source/animation/Tweener.cpp $(Debug_GLUT_Include_Path) > gccDebug_GLUT/source/animation/Tweener.d
+
+# Compiles file ../../source/animation/TweenerUtility.cpp for the Debug_GLUT configuration...
+-include gccDebug_GLUT/source/animation/TweenerUtility.d
+gccDebug_GLUT/source/animation/TweenerUtility.o: ../../source/animation/TweenerUtility.cpp
+	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -c ../../source/animation/TweenerUtility.cpp $(Debug_GLUT_Include_Path) -o gccDebug_GLUT/source/animation/TweenerUtility.o
+	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -MM ../../source/animation/TweenerUtility.cpp $(Debug_GLUT_Include_Path) > gccDebug_GLUT/source/animation/TweenerUtility.d
 
 # Creates the intermediate and output folders for each configuration...
 .PHONY: create_folders

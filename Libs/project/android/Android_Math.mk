@@ -12,7 +12,6 @@ LOCAL_SRC_FILES  := ../../source/math/MathPlane.cpp \
 ../../source/math/MathMatrix.cpp \
 ../../source/math/SFMT/SFMT.cpp \
 ../../source/math/MathNumericalAnlysis.cpp \
-../../source/math/MathInterpolater.cpp \
-../../source/math/Tweener.cpp
+../../source/math/MathCurve.cpp
 
 include $(BUILD_STATIC_LIBRARY)

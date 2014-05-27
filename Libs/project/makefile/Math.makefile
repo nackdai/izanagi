@@ -26,8 +26,8 @@ build_all_configurations: Debug_GLUT
 
 # Builds the Debug_GLUT configuration...
 .PHONY: Debug_GLUT
-Debug_GLUT: create_folders gccDebug_GLUT/source/math/MathPlane.o gccDebug_GLUT/source/math/MathRay.o gccDebug_GLUT/source/math/MathRectangle.o gccDebug_GLUT/source/math/MathTriangle.o gccDebug_GLUT/source/math/MathMatrix.o gccDebug_GLUT/source/math/SFMT/SFMT.o gccDebug_GLUT/source/math/MathNumericalAnlysis.o gccDebug_GLUT/source/math/MathInterpolater.o gccDebug_GLUT/source/math/Tweener.o 
-	ar rcs ../lib/gccDebug_GLUT/libMath.a gccDebug_GLUT/source/math/MathPlane.o gccDebug_GLUT/source/math/MathRay.o gccDebug_GLUT/source/math/MathRectangle.o gccDebug_GLUT/source/math/MathTriangle.o gccDebug_GLUT/source/math/MathMatrix.o gccDebug_GLUT/source/math/SFMT/SFMT.o gccDebug_GLUT/source/math/MathNumericalAnlysis.o gccDebug_GLUT/source/math/MathInterpolater.o gccDebug_GLUT/source/math/Tweener.o  $(Debug_GLUT_Implicitly_Linked_Objects)
+Debug_GLUT: create_folders gccDebug_GLUT/source/math/MathPlane.o gccDebug_GLUT/source/math/MathRay.o gccDebug_GLUT/source/math/MathRectangle.o gccDebug_GLUT/source/math/MathTriangle.o gccDebug_GLUT/source/math/MathMatrix.o gccDebug_GLUT/source/math/SFMT/SFMT.o gccDebug_GLUT/source/math/MathNumericalAnlysis.o gccDebug_GLUT/source/math/MathCurve.o 
+	ar rcs ../lib/gccDebug_GLUT/libMath.a gccDebug_GLUT/source/math/MathPlane.o gccDebug_GLUT/source/math/MathRay.o gccDebug_GLUT/source/math/MathRectangle.o gccDebug_GLUT/source/math/MathTriangle.o gccDebug_GLUT/source/math/MathMatrix.o gccDebug_GLUT/source/math/SFMT/SFMT.o gccDebug_GLUT/source/math/MathNumericalAnlysis.o gccDebug_GLUT/source/math/MathCurve.o  $(Debug_GLUT_Implicitly_Linked_Objects)
 
 # Compiles file ../../source/math/MathPlane.cpp for the Debug_GLUT configuration...
 -include gccDebug_GLUT/source/math/MathPlane.d
@@ -71,17 +71,11 @@ gccDebug_GLUT/source/math/MathNumericalAnlysis.o: ../../source/math/MathNumerica
 	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -c ../../source/math/MathNumericalAnlysis.cpp $(Debug_GLUT_Include_Path) -o gccDebug_GLUT/source/math/MathNumericalAnlysis.o
 	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -MM ../../source/math/MathNumericalAnlysis.cpp $(Debug_GLUT_Include_Path) > gccDebug_GLUT/source/math/MathNumericalAnlysis.d
 
-# Compiles file ../../source/math/MathInterpolater.cpp for the Debug_GLUT configuration...
--include gccDebug_GLUT/source/math/MathInterpolater.d
-gccDebug_GLUT/source/math/MathInterpolater.o: ../../source/math/MathInterpolater.cpp
-	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -c ../../source/math/MathInterpolater.cpp $(Debug_GLUT_Include_Path) -o gccDebug_GLUT/source/math/MathInterpolater.o
-	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -MM ../../source/math/MathInterpolater.cpp $(Debug_GLUT_Include_Path) > gccDebug_GLUT/source/math/MathInterpolater.d
-
-# Compiles file ../../source/math/Tweener.cpp for the Debug_GLUT configuration...
--include gccDebug_GLUT/source/math/Tweener.d
-gccDebug_GLUT/source/math/Tweener.o: ../../source/math/Tweener.cpp
-	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -c ../../source/math/Tweener.cpp $(Debug_GLUT_Include_Path) -o gccDebug_GLUT/source/math/Tweener.o
-	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -MM ../../source/math/Tweener.cpp $(Debug_GLUT_Include_Path) > gccDebug_GLUT/source/math/Tweener.d
+# Compiles file ../../source/math/MathCurve.cpp for the Debug_GLUT configuration...
+-include gccDebug_GLUT/source/math/MathCurve.d
+gccDebug_GLUT/source/math/MathCurve.o: ../../source/math/MathCurve.cpp
+	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -c ../../source/math/MathCurve.cpp $(Debug_GLUT_Include_Path) -o gccDebug_GLUT/source/math/MathCurve.o
+	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -MM ../../source/math/MathCurve.cpp $(Debug_GLUT_Include_Path) > gccDebug_GLUT/source/math/MathCurve.d
 
 # Creates the intermediate and output folders for each configuration...
 .PHONY: create_folders

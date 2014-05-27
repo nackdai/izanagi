@@ -3,7 +3,7 @@
 all_projects: Debug_GLUT 
 
 .PHONY: Debug_GLUT
-Debug_GLUT: Graph_Debug_GLUT Math_Debug_GLUT Std_Debug_GLUT System_Debug_GLUT DebugUtil_Debug_GLUT Text_Debug_GLUT PostEffect_Debug_GLUT Shader_Debug_GLUT Resource_Debug_GLUT Animation_Debug_GLUT ThreadModel_Debug_GLUT SceneGraph_Debug_GLUT Terra_Debug_GLUT 
+Debug_GLUT: Graph_Debug_GLUT Math_Debug_GLUT Std_Debug_GLUT System_Debug_GLUT DebugUtil_Debug_GLUT Text_Debug_GLUT PostEffect_Debug_GLUT Shader_Debug_GLUT Resource_Debug_GLUT Animation_Debug_GLUT ThreadModel_Debug_GLUT SceneGraph_Debug_GLUT Terra_Debug_GLUT UI_Debug_GLUT 
 
 # Builds project 'Graph'...
 .PHONY: Graph_Debug_GLUT
@@ -70,6 +70,11 @@ SceneGraph_Debug_GLUT:
 Terra_Debug_GLUT: 
 	make --directory="." --file=Terra.makefile Debug_GLUT
 
+# Builds project 'UI'...
+.PHONY: UI_Debug_GLUT
+UI_Debug_GLUT: 
+	make --directory="." --file=UI.makefile Debug_GLUT
+
 # Cleans all projects...
 .PHONY: clean
 clean:
@@ -86,4 +91,5 @@ clean:
 	make --directory="." --file=ThreadModel.makefile clean
 	make --directory="." --file=SceneGraph.makefile clean
 	make --directory="." --file=Terra.makefile clean
+	make --directory="." --file=UI.makefile clean
 

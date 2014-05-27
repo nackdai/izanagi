@@ -9,6 +9,7 @@ Debug_GLUT: create_floders
 	ndk-build NDK_PROJECT_PATH=${PWD} NDK_APPLICATION_MK="./Application_Math.mk"
 	ndk-build NDK_PROJECT_PATH=${PWD} NDK_APPLICATION_MK="./Application_PostEffect.mk"
 	ndk-build NDK_PROJECT_PATH=${PWD} NDK_APPLICATION_MK="./Application_Terra.mk"
+	ndk-build NDK_PROJECT_PATH=${PWD} NDK_APPLICATION_MK="./Application_UI.mk"
 	ndk-build NDK_PROJECT_PATH=${PWD} NDK_APPLICATION_MK="./Application_Animation.mk"
 	ndk-build NDK_PROJECT_PATH=${PWD} NDK_APPLICATION_MK="./Application_SceneGraph.mk"
 	ndk-build NDK_PROJECT_PATH=${PWD} NDK_APPLICATION_MK="./Application_Std.mk"
