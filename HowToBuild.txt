@@ -1,0 +1,41 @@
+- Android
+
+1. Set path
+
+$ export NDK_ROOT=<your ndk root path>
+$ PATH=$PATH:$NDK_ROOT
+
+[example]
+$ export NDK_ROOT=/cygdrive/c/cygwin/home/var/android-ndk-r7
+$ PATH=$PATH:$NDK_ROOT
+
+2. Generate makefiles
+
+$ cd ./Build
+$ ./GenAndroidMk.sh
+
+3. Build libraries.
+
+$ cd ./Libs/project/android
+$ make
+
+4. Build samples.
+
+$ cd ./Samples/projects/android
+$ make
+
+* You can confirm only Render2D sample.
+  So, you can run only below command.
+
+$ ndk-build NDK_PROJECT_PATH=${PWD} NDK_APPLICATION_MK="./Application_SampleKit.mk"
+$ ndk-build NDK_PROJECT_PATH=${PWD} NDK_APPLICATION_MK="./Application_Render2D.mk"
+
+5. Open a project by Eclipse
+
+Project path is "./Samples/Android".
+
+6. Copy sample .so file.
+
+$ cp -r Samples/projects/armeabi Samples/Android/sample/libs
+
+7. Build and run a sample.
