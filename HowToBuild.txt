@@ -1,3 +1,8 @@
+- Windows
+
+1. Open "Build" folder.
+2. Run "BuildAll_<Configure>.bat".
+
 - Android
 
 1. Set path
@@ -39,3 +44,31 @@ Project path is "./Samples/Android".
 $ cp -r Samples/projects/armeabi Samples/Android/sample/libs
 
 7. Build and run a sample.
+
+- Linux
+
+1. Build external libraries.
+
+$ cd ./Build
+$ ./BuildExternal.sh
+
+2. Build libraries.
+
+$ cd ./Libs/project/makefile
+$ make
+
+3. Build samples.
+
+$ cd ./Samples/projects/makefile
+
+* You can confirm only Render2D sample.
+  So, you can run only below command.
+
+$ make Debug_GLUT -f SampleKit.makefile
+$ make Debug_GLUT -f Render2D.makefile
+
+4. Run a sample.
+
+Render2D sample needs img data.
+Currently, there is no way to build img data on Linux.
+So, you need to copy img data from Windows to Linux.
