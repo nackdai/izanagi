@@ -111,6 +111,8 @@ namespace izanagi {
             m_IsDirtyV2C = IZ_TRUE;
         }
 
+        math::SVector GetDir();
+
     protected:
         // World - View
         void ComputeW2V();

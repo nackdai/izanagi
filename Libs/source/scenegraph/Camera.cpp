@@ -101,6 +101,13 @@ void CCamera::GetOffsetV2C(
     mtxV2C.m[2][2] *= (1.0f + epsilon);
 }
 
+math::SVector CCamera::GetDir()
+{
+    math::SVector ret;
+    math::SVector::Sub(ret, m_Param.ref, m_Param.pos);
+    return ret;
+}
+
 // World - View
 void CCamera::ComputeW2V()
 {
