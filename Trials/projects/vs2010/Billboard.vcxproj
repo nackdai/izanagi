@@ -12,6 +12,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Billboard\main.cpp" />
+    <ClCompile Include="..\..\Billboard\main2.cpp" />
+    <ClCompile Include="..\..\Billboard\PrimitiveSphere.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Billboard\shader\BasicShader.fx" />
