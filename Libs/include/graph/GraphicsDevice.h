@@ -24,7 +24,7 @@ namespace graph
     class C2DRenderer;
     struct SVertexElement;
 
-    /** グラフィックスデバイス
+    /** Applications use this class for rendering primitives, creating resourcing, managing rendering state etc.
      */
     class CGraphicsDevice : public CObject
     {
@@ -32,7 +32,10 @@ namespace graph
         static CGraphicsDevice* s_Instance;
 
     public:
-        /**
+        /** Create an instance of graphics device.
+         *
+         * @param [in] allocator memory allocator.
+         * @return pointer to an instance of graphics device. If the method fails, the return value is IZ_NULL.
          */
         static CGraphicsDevice* CreateGraphicsDevice(IMemoryAllocator* allocator);
 
@@ -45,14 +48,28 @@ namespace graph
         IZ_DEFINE_INTERNAL_RELEASE();
 
     public:
-        // メモリからテクスチャ作成
+        /** Create a texture resource from memory data.
+         *
+         * @param [in] pData
+         * @param [in] nDataSize
+         * @param [in] fmt describing the format of all levels in the texture.
+         * @return pointer to a texture resource. If the method fails, the return value is IZ_NULL.
+         */
         PURE_VIRTUAL(
             CTexture* CreateTextureFromMemory(
                 void* pData,
                 IZ_UINT nDataSize,
                 E_GRAPH_PIXEL_FMT fmt));
 
-        // テクスチャ作成
+        /** Create a texture resource.
+         *
+         * @param [in] nWidth Width of the top-level of the texture, in pixels.
+         * @param [in] nHeight Height of the top-level of the texture, in pixels.
+         * @param [in] nMipLevel Number of mipmap levels in the texture.
+         * @param [in] fmt describing the format of all levels in the texture.
+         * @param [in] nRscType 
+         * @return pointer to a texture resource. If the method fails, the return value is IZ_NULL.
+         */
         PURE_VIRTUAL(
             CTexture* CreateTexture(
                 IZ_UINT nWidth,
@@ -61,7 +78,15 @@ namespace graph
                 E_GRAPH_PIXEL_FMT fmt,
                 E_GRAPH_RSC_USAGE nRscType));
 
-        // キューブテクスチャ作成
+        /** Create a cube texture resource.
+         *
+         * @param [in] nWidth Width of the top-level of the texture, in pixels.
+         * @param [in] nHeight Height of the top-level of the texture, in pixels.
+         * @param [in] nMipLevel Number of mipmap levels in the texture.
+         * @param [in] fmt describing the format of all levels in the texture.
+         * @param [in] bIsDynamic 
+         * @return pointer to a cube texture resource. If the method fails, the return value is IZ_NULL.
+         */
         PURE_VIRTUAL(
             CCubeTexture* CreateCubeTexture(
                 IZ_UINT nWidth,
@@ -70,7 +95,13 @@ namespace graph
                 E_GRAPH_PIXEL_FMT fmt,
                 IZ_BOOL bIsDynamic));
 
-        // レンダーターゲット作成
+        /** Create a render target resource.
+         *
+         * @param [in] nWidth Width of the top-level of the texture, in pixels.
+         * @param [in] nHeight Height of the top-level of the texture, in pixels.
+         * @param [in] fmt describing the format of all levels in the texture.
+         * @return pointer to a render target resource. If the method fails, the return value is IZ_NULL.
+         */
         PURE_VIRTUAL(
             CRenderTarget* CreateRenderTarget(
                 IZ_UINT nWidth, IZ_UINT nHeight,

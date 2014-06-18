@@ -10,7 +10,7 @@ namespace izanagi
 {
 namespace graph
 {
-    /** ベーステクスチャ
+    /** This class is base of texture classes.
      */
     class CBaseTexture : public CGraphResource
     {
@@ -24,7 +24,11 @@ namespace graph
         virtual ~CBaseTexture() {};
 
     public:
-        // 幅取得
+        /** Get texture width.
+         *
+         * @param [in] level mipmap level.
+         * @return texture width, in pixels, by mipmap level you set.
+         */
         IZ_UINT GetWidth(IZ_UINT level = 0) const
         {
             IZ_ASSERT(level < m_TexInfo.level);
@@ -32,7 +36,11 @@ namespace graph
             return ret;
         }
 
-        // 高さ取得
+        /** Get texture height.
+         *
+         * @param [in] level mipmap level.
+         * @return texture height, in pixels, by mipmap level you set.
+         */
         IZ_UINT GetHeight(IZ_UINT level = 0) const
         {
             IZ_ASSERT(level < m_TexInfo.level);
@@ -40,19 +48,30 @@ namespace graph
             return ret;
         }
 
-        // フォーマット取得
+        /** Get texture pixel format.
+         *
+         * @return texture pixel format.
+         */
         E_GRAPH_PIXEL_FMT GetPixelFormat() const
         {
             return m_TexInfo.fmt;
         }
 
-        // MIPMAP数取得
+        /** Get number of mipmap levels in this texture.
+         *
+         * @return number of mipmap levels.
+         */
         IZ_UINT GetMipMapNum() const
         {
             return m_TexInfo.level;
         }
 
-        // フィルタセット
+        /** Set filter of texture sampler state.
+         *
+         * @param [in] minFilter filter for minimize.
+         * @param [in] magFilter filter for magnifier.
+         * @param [in] mipFilter filter for mipmap.
+         */
         virtual void SetFilter(
             E_GRAPH_TEX_FILTER minFilter,
             E_GRAPH_TEX_FILTER magFilter,
@@ -63,7 +82,11 @@ namespace graph
             m_State.mipFilter = mipFilter;
         }
 
-        // アドレッシングセット
+        /** Set addressing of texture sampler state.
+         *
+         * @param [in] addressU addressing for texture U coordinate.
+         * @param [in] addressU addressing for texture V coordinate.
+         */
         virtual void SetAddress(
             E_GRAPH_TEX_ADDRESS addressU,
             E_GRAPH_TEX_ADDRESS addressV)
@@ -72,12 +95,19 @@ namespace graph
             m_State.addressV = addressV;
         }
 
-        // サンプラステート取得
+        /** Get texture sampler state.
+         *
+         * @return reference to  sampler state.
+         */
         const S_SAMPLER_STATE& GetState() const
         {
             return m_State;
         }
 
+        /** Get if this texture is render target.
+         *
+         * @return If true, this texture is render target. If false, not.
+         */
         IZ_BOOL IsRenderTarget() const
         {
             return m_TexInfo.is_rendertarget;
@@ -103,8 +133,16 @@ namespace graph
             return m_TexInfo.usage;
         }
 
+        /** Get texture type.
+         *
+         * @return texture type.
+         */
         PURE_VIRTUAL(E_GRAPH_TEX_TYPE GetTexType());
 
+        /** Get platform specified texture handle.
+         *
+         * @return platform specified texture handle.
+         */
         PURE_VIRTUAL(TEX_HANDLE GetTexHandle());
 
     protected:

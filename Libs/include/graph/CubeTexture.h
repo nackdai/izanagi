@@ -9,6 +9,8 @@ namespace graph
 {
     class CGraphicsDevice;
 
+    /** Cube texture.
+     */
     class CCubeTexture : public CBaseTexture
     {
     protected:
@@ -18,12 +20,24 @@ namespace graph
         NO_COPIABLE(CCubeTexture);
 
     public:
+        /** Get texture type.
+         *
+         * @return Return only E_GRAPH_TEX_TYPE_CUBE.
+         */
         virtual E_GRAPH_TEX_TYPE GetTexType()
         {
             return E_GRAPH_TEX_TYPE_CUBE;
         }
 
-        // ロック
+        /** Lock a range of data and obtains a pointer to the buffer memory.
+         *
+         * @param [in] nFace face of cube texture.
+         * @param [in] level mipmap level.
+         * @param [out] data VOID* pointer to a memory buffer containing the returned data.
+         * @param [in] isReadOnly read only the data to lock.
+         * @param [in] isDiscard 
+         * @return If the method succeeds, the return value is true. If the method fails, the return value is false.
+         */
         PURE_VIRTUAL(
             IZ_UINT Lock(
                 E_GRAPH_CUBE_TEX_FACE nFace,
@@ -32,7 +46,12 @@ namespace graph
                 IZ_BOOL isReadOnly,
                 IZ_BOOL isDiscard = IZ_FALSE));
 
-        // アンロック
+        /** Unlock data.
+         *
+         * @param [in] nFace locked face of cube texture.
+         * @param [in] level locked mipmap level.
+         * @return If the method succeeds, the return value is true. If the method fails, the return value is false.
+         */
         PURE_VIRTUAL(
             IZ_BOOL Unlock(
                 E_GRAPH_CUBE_TEX_FACE nFace,

@@ -9,7 +9,7 @@ namespace izanagi
 {
 namespace graph
 {
-    /**
+    /** This class is base of buffer classes which have vertex/index data.
      */
     class CBufferBase : public CGraphResource
     {
@@ -23,7 +23,15 @@ namespace graph
         virtual ~CBufferBase() {};
 
     public:
-        // ロック
+        /** Lock a range of data and obtains a pointer to the buffer memory.
+         *
+         * @param [in] offset offset in the data to lock, in bytes. To lock entire the data, specify 0 to offset and size.
+         * @param [in] size size of the data to lock, in bytes. To lock entire the data, specify 0 to offset and size.
+         * @param [out] data VOID* pointer to a memory buffer containing the returned data.
+         * @param [in] isReadOnly read only the data to lock.
+         * @param [in] isDiscard 
+         * @return If the method succeeds, the return value is true. If the method fails, the return value is false.
+         */
         PURE_VIRTUAL(
             IZ_BOOL Lock(
                 IZ_UINT offset,
@@ -32,15 +40,18 @@ namespace graph
                 IZ_BOOL isReadOnly,
                 IZ_BOOL isDiscard = IZ_FALSE));
 
-        // アンロック
+        /** Unlock data.
+         *
+         * @return If the method succeeds, the return value is true. If the method fails, the return value is false.
+         */
         PURE_VIRTUAL(IZ_BOOL Unlock());
 
     public:
         IZ_BOOL LockBuffer(
             IZ_UINT offset,
-                IZ_UINT size,
-                IZ_BOOL isReadOnly,
-                IZ_BOOL isDiscard = IZ_FALSE);
+            IZ_UINT size,
+            IZ_BOOL isReadOnly,
+            IZ_BOOL isDiscard = IZ_FALSE);
 
         IZ_BOOL UnlockBuffer();
 
