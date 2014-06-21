@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 use GenAndroidMk;
+use GenWebMk;
 
 use strict;
 use File::Spec;
@@ -10,7 +11,8 @@ use constant false => 0;
 
 if (@ARGV != 4) {
 	# Print Usage.
-	GenAndroidMk::Usage();
+	print "GenPlatformMK.pl [configure] [src directory] [dst directory] [platform]\n";
+	print " ex) \$./GenPlatformMK.pl Debug Libs/project/makefile Lib/project/android android\n";
 	exit();
 }
 
@@ -165,7 +167,17 @@ foreach my $srcmk (@makefiles) {
 	# それぞれのプロジェクトがシェアドライブラリかどうかをハッシュで保持
 	$projects{$name} = $is_shared;
 
-	GenAndroidMk::DoLoopAction($is_shared, $targetsrc, $targetdst, $name, \@libraries, \@includes, \@definitions, \@srcfiles);
+	if ($isAndroid) {
+		GenAndroidMk::DoLoopAction($is_shared, $targetsrc, $targetdst, $name, \@libraries, \@includes, \@definitions, \@srcfiles);
+	}
+	else {
+		GenWebMk::DoLoopAction($is_shared, $targetsrc, $targetdst, $name, \@libraries, \@includes, \@definitions, \@srcfiles);
+	}
 }
 
-GenAndroidMk::DoEndAction($baseconfig, $targetdst, \%projects);
+if ($isAndroid) {
+	GenAndroidMk::DoEndAction($baseconfig, $targetdst, \%projects);
+}
+else {
+	GenWebMk::DoEndAction($baseconfig, $targetdst, \%projects);
+}

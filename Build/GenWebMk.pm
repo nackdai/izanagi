@@ -1,4 +1,4 @@
-package GenAndroidMk;
+package GenWebMk;
 
 use base Exporter;
 #@ISA = qw(Exporter);
@@ -21,14 +21,11 @@ sub DoLoopAction {
 	my $srcfiles = shift;
 
 	if ($is_shared) {
-		MakeAndroidMk_SharedLib($targetdst, $name, $libraries, $includes, $definitions, $srcfiles);
+#		MakeAndroidMk_SharedLib($targetdst, $name, $libraries, $includes, $definitions, $srcfiles);
 	}
 	else {
-		MakeAndroidMk_StaticLib($targetsrc, $targetdst, $name, $libraries, $includes, $definitions, $srcfiles);
+		MakeWebMk_StaticLib($targetsrc, $targetdst, $name, $libraries, $includes, $definitions, $srcfiles);
 	}
-
-	# Application.mkã‚’ç”Ÿæˆ
-	MakeApplicationMk($targetdst, $name);
 }
 
 sub DoEndAction {
@@ -36,20 +33,20 @@ sub DoEndAction {
 	my $targetdst = shift;
 	my $projects = shift;
 
-	# å…¨ä½“ã‚’ãƒ“ãƒ«ãƒ‰ã™ã‚‹ãŸã‚ã®Makefileã‚’ç”Ÿæˆ
-	MakeMakefile($baseconfig, $targetdst, $projects);
+	# ‘S‘Ì‚ğƒrƒ‹ƒh‚·‚é‚½‚ß‚ÌMakefile‚ğ¶¬
+#	MakeMakefile($baseconfig, $targetdst, $projects);
 }
 
-# ç›¸å¯¾ãƒ‘ã‚¹å–å¾—
+# ‘Š‘ÎƒpƒXæ“¾
 sub GetRelativePath
 {
-	my $basedir = shift;	# ãƒ™ãƒ¼ã‚¹ã¨ãªã‚‹ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ãƒ‘ã‚¹
-	my $path = shift;		# ç›¸å¯¾ãƒ‘ã‚¹ã«ã—ãŸã„ãƒ‘ã‚¹
+	my $basedir = shift;	# ƒx[ƒX‚Æ‚È‚éƒfƒBƒŒƒNƒgƒŠ‚ÌƒpƒX
+	my $path = shift;		# ‘Š‘ÎƒpƒX‚É‚µ‚½‚¢ƒpƒX
 
 	chomp($path);
 	chomp($path);
 
-	# ãƒ‘ã‚¹ã‚’åˆ†è§£ã™ã‚‹
+	# ƒpƒX‚ğ•ª‰ğ‚·‚é
 	my @basedir_array = split(/\//, $basedir);
 	my @path_array = split(/\//, $path);
 
@@ -63,7 +60,7 @@ sub GetRelativePath
 	my $cnt = ($basedir_cnt < $path_cnt ? $basedir_cnt : $path_cnt);
 	my $num = 0;
 
-	# ãƒ‘ã‚¹ã‚’å¾Œã‚ã‹ã‚‰è¦‹ã¦ã„ãã€ä¸€è‡´ã™ã‚‹ä½ç½®ã‚’æ¢ã™
+	# ƒpƒX‚ğŒã‚ë‚©‚çŒ©‚Ä‚¢‚«Aˆê’v‚·‚éˆÊ’u‚ğ’T‚·
 	for (my $i = $cnt - 1; $i >= 0; $i--) {
 		if ($basedir_array[$i] eq $path_array[$i]) {
 			last;
@@ -73,7 +70,7 @@ sub GetRelativePath
 
 	my $ret = "";
 
-	# ä¸€è‡´ã—ãªã„åˆ†ã ã‘ãŒç›¸å¯¾ã«ãªã‚‹
+	# ˆê’v‚µ‚È‚¢•ª‚¾‚¯‚ª‘Š‘Î‚É‚È‚é
 	if ($num < $cnt) {
 		$ret = "..";
 		for (my $i = 1; $i < $num; $i++) {
@@ -90,7 +87,7 @@ sub GetRelativePath
 	return $path;
 }
 
-# ç›¸å¯¾ãƒ‘ã‚¹å–å¾—
+# ‘Š‘ÎƒpƒXæ“¾
 sub RemoveRelativePath
 {
 	my $src = shift;
@@ -119,86 +116,70 @@ sub RemoveRelativePath
 	return $src;
 }
 
-# ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’ç”Ÿæˆã™ã‚‹Makefileã‚’å‡ºåŠ›ã™ã‚‹
-sub MakeAndroidMk_StaticLib
+# ƒXƒ^ƒeƒBƒbƒNƒ‰ƒCƒuƒ‰ƒŠ‚ğ¶¬‚·‚éMakefile‚ğo—Í‚·‚é
+sub MakeWebMk_StaticLib
 {
 	my $targetsrc = shift;
-	my $targetdst = shift;	# å‡ºåŠ›ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+	my $targetdst = shift;	# o—ÍƒfƒBƒŒƒNƒgƒŠ
 	my $name = shift;
-	my $libraries_array_ref = shift;	# å‚ç…§ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®é…åˆ—ã¸ã®å‚ç…§
-	my $includes_array_ref = shift;		# ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰ãƒ‘ã‚¹ã®é…åˆ—ã¸ã®å‚ç…§
-	my $definitions_array_ref = shift;	# -Dã‚ªãƒ—ã‚·ãƒ§ãƒ³ã®é…åˆ—ã¸ã®å‚ç…§
+	my $libraries_array_ref = shift;	# QÆƒ‰ƒCƒuƒ‰ƒŠ‚Ì”z—ñ‚Ö‚ÌQÆ
+	my $includes_array_ref = shift;		# ƒCƒ“ƒNƒ‹[ƒhƒpƒX‚Ì”z—ñ‚Ö‚ÌQÆ
+	my $definitions_array_ref = shift;	# -DƒIƒvƒVƒ‡ƒ“‚Ì”z—ñ‚Ö‚ÌQÆ
 	my $srcfiles_array_ref = shift;
 
-	# å‡ºåŠ›Makefileã®ãƒ‘ã‚¹
-	my $dstmk = $targetdst . "/Android_" . $name . ".mk";
+	# o—ÍMakefile‚ÌƒpƒX
+	my $dstmk = $targetdst . "/Web_" . $name . ".bat";
 
 	open(OUT, ">$dstmk") or die "Can't open $dstmk\n";
 
-	print OUT "LOCAL_PATH:= \$(call my-dir)\n";
-	print OUT "\n";
+	print OUT "emcc ";
 
-	print OUT "include \$(CLEAR_VARS)\n";
-	print OUT "\n";
-
-	print OUT "LOCAL_MODULE     := lib$name\n";
-
-	# -Dã‚ªãƒ—ã‚·ãƒ§ãƒ³
+	# -DƒIƒvƒVƒ‡ƒ“
 	{
-		print OUT "LOCAL_CFLAGS     := -DANDROID -D__IZ_GLES2__";
+		print OUT "-DEMSCRIPTEN -D__IZ_GLES2__";
 
 		foreach my $def (@$definitions_array_ref) {
 			print OUT " -D$def";
 		}
-
-		print OUT "\n";
 	}
 
-	# ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰ãƒ‘ã‚¹
-	{
-		print OUT "LOCAL_C_INCLUDES :=";
-
-		foreach my $inc (@$includes_array_ref) {
-			print OUT " \$(LOCAL_PATH)/" . $inc;
-		}
-
-		print OUT "\n";
+	# ƒCƒ“ƒNƒ‹[ƒhƒpƒX
+	foreach my $inc (@$includes_array_ref) {
+		print OUT "-I" . $inc;
 	}
 
 	# 
 	{
-		print OUT "LOCAL_SRC_FILES  := ";
-
 		my $pos = 0;
 
 		my $srcfiles_cnt = @$srcfiles_array_ref - 1;
 
 		foreach my $src (@$srcfiles_array_ref) {
-			# ãƒ•ã‚¡ã‚¤ãƒ«åã« 'glut' or 'OGL' or 'linux' ãŒå«ã¾ã‚Œã¦ã„ã‚‹å ´åˆã¯ 'android' ã«ç½®æ›ã™ã‚‹
+			# ƒtƒ@ƒCƒ‹–¼‚É 'glut' or 'OGL' or 'linux' ‚ªŠÜ‚Ü‚ê‚Ä‚¢‚éê‡‚Í 'web' ‚É’uŠ·‚·‚é
 			if ($src =~ /(glut)/ || $src =~ /(OGL)/ || $src =~ /linux/) {
-				# å…ƒã®ãƒ‘ã‚¹ã‚’æ®‹ã—ã¦ãŠã
+				# Œ³‚ÌƒpƒX‚ğc‚µ‚Ä‚¨‚­
 				my $org = $src;
 
-				# ãƒ‘ã‚¹ã‚’åˆ†è§£
+				# ƒpƒX‚ğ•ª‰ğ
 				my @tmp_array = split(/\//, $src);
 
-				# æœ«å°¾ = ãƒ•ã‚¡ã‚¤ãƒ«å ã‚’å–ã‚Šå‡ºã™
+				# ––”ö = ƒtƒ@ƒCƒ‹–¼ ‚ğæ‚èo‚·
 				$src = $tmp_array[@tmp_array - 1];
 
-				# 'glut' or 'OGL' ã‚’ 'android' ã«ç½®æ›ã™ã‚‹
-				$src =~ s/$1/android/;
+				# 'glut' or 'OGL' ‚ğ 'web' ‚É’uŠ·‚·‚é
+				$src =~ s/$1/web/;
 
 				my $find_dir = "./" . $targetsrc;
 				for (my $i = 0; $i < @tmp_array - 2; $i++) {
 					$find_dir .= "/" . $tmp_array[$i];
 				}
 
-				# æœ¬å½“ã«ãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã™ã‚‹ã‹æ¢ã™
+				# –{“–‚Éƒtƒ@ƒCƒ‹‚ª‘¶İ‚·‚é‚©’T‚·
 				my @fullpath = `find $find_dir -name $src`;
 
 				if (@fullpath == 1) {
-					# è¦‹ã¤ã‹ã£ãŸ
-					# ç›¸å¯¾ãƒ‘ã‚¹ã«ã™ã‚‹
+					# Œ©‚Â‚©‚Á‚½
+					# ‘Š‘ÎƒpƒX‚É‚·‚é
 					chomp($fullpath[0]);
 					$src = File::Spec->rel2abs($fullpath[0]);
 					$src = RemoveRelativePath($src);
@@ -211,33 +192,27 @@ sub MakeAndroidMk_StaticLib
 				}
 				elsif (@fullpath > 1) {
 					# TODO
-					# è¤‡æ•°ãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã—ãŸå ´åˆ
+					# •¡”ƒtƒ@ƒCƒ‹‚ª‘¶İ‚µ‚½ê‡
 					next;
 				}
 				else {
-					# è¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸå ´åˆã¯å…ƒã®ãƒ‘ã‚¹ã«æˆ»ã™
+					# Œ©‚Â‚©‚ç‚È‚©‚Á‚½ê‡‚ÍŒ³‚ÌƒpƒX‚É–ß‚·
 					$src = $org;
 				}
 			}
 
-			print OUT "$src";
-			if ($pos != $srcfiles_cnt) {
-				print OUT " \\";
-			}
-			print OUT "\n";
+			print OUT "$src ";
 
 			$pos++;
 		}
-
-		print OUT "\n";
 	}
 
-	print OUT "include \$(BUILD_STATIC_LIBRARY)\n";
+	print OUT "-o lib" . $name . ".bc";
 
 	close(OUT);
 }
 
-# static libraryã‚’ãƒªãƒ³ã‚¯ã™ã‚‹ã‚³ãƒ¼ãƒ‰ã‚’å‡ºåŠ›
+# static library‚ğƒŠƒ“ƒN‚·‚éƒR[ƒh‚ğo—Í
 sub WritePrebuildStaticLib
 {
 	my $OUT = shift;
@@ -257,19 +232,19 @@ sub WritePrebuildStaticLib
 	print $OUT "\n";
 }
 
-# é…åˆ—ã®è¦ç´ ã‚’å‡ºåŠ›
+# ”z—ñ‚Ì—v‘f‚ğo—Í
 sub WriteArrayElements
 {
-	my $OUT = shift;				# å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ãƒãƒ³ãƒ‰ãƒ«
-	my $array_ref = shift;			# é…åˆ—ã®å‚ç…§
-	my $is_prebuild_lib = shift;	# å‚ç…§ã™ã‚‹ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã«ã¤ã„ã¦å‡¦ç†ã™ã‚‹ã‹ã©ã†ã‹
+	my $OUT = shift;				# o—Íƒtƒ@ƒCƒ‹ƒnƒ“ƒhƒ‹
+	my $array_ref = shift;			# ”z—ñ‚ÌQÆ
+	my $is_prebuild_lib = shift;	# QÆ‚·‚éƒXƒ^ƒeƒBƒbƒNƒ‰ƒCƒuƒ‰ƒŠ‚É‚Â‚¢‚Äˆ—‚·‚é‚©‚Ç‚¤‚©
 
 	my $pos = 0;
 
 	my $array_cnt = @$array_ref - 1;
 
 	foreach my $elem (@$array_ref) {
-		# è¦ç´ ã« 'glut' or 'OGL' ãŒå«ã¾ã‚Œã‚‹å ´åˆã¯ç„¡è¦–ã™ã‚‹
+		# —v‘f‚É 'glut' or 'OGL' ‚ªŠÜ‚Ü‚ê‚éê‡‚Í–³‹‚·‚é
 		if ($elem =~ /glut/ || $elem =~ /OGL/) {
 			next;
 		}
@@ -290,17 +265,17 @@ sub WriteArrayElements
 	}
 }
 
-# ã‚·ã‚§ã‚¢ãƒ‰ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’ç”Ÿæˆã™ã‚‹Makefileã‚’å‡ºåŠ›ã™ã‚‹
+# ƒVƒFƒAƒhƒ‰ƒCƒuƒ‰ƒŠ‚ğ¶¬‚·‚éMakefile‚ğo—Í‚·‚é
 sub MakeAndroidMk_SharedLib
 {
-	my $targetdst = shift;	# å‡ºåŠ›ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+	my $targetdst = shift;	# o—ÍƒfƒBƒŒƒNƒgƒŠ
 	my $name = shift;
-	my $libraries_array_ref = shift;	# å‚ç…§ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®é…åˆ—ã¸ã®å‚ç…§
-	my $includes_array_ref = shift;     # ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰ãƒ‘ã‚¹ã®é…åˆ—ã¸ã®å‚ç…§
-	my $definitions_array_ref = shift;  # -Dã‚ªãƒ—ã‚·ãƒ§ãƒ³ã®é…åˆ—ã¸ã®å‚ç…§
-	my $srcfiles_array_ref = shift;		# ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã®é…åˆ—ã¸ã®å‚ç…§
+	my $libraries_array_ref = shift;	# QÆƒ‰ƒCƒuƒ‰ƒŠ‚Ì”z—ñ‚Ö‚ÌQÆ
+	my $includes_array_ref = shift;     # ƒCƒ“ƒNƒ‹[ƒhƒpƒX‚Ì”z—ñ‚Ö‚ÌQÆ
+	my $definitions_array_ref = shift;  # -DƒIƒvƒVƒ‡ƒ“‚Ì”z—ñ‚Ö‚ÌQÆ
+	my $srcfiles_array_ref = shift;		# ƒ\[ƒXƒtƒ@ƒCƒ‹‚Ì”z—ñ‚Ö‚ÌQÆ
 
-	# å‡ºåŠ›Makefileã®ãƒ‘ã‚¹
+	# o—ÍMakefile‚ÌƒpƒX
 	my $dstmk = $targetdst . "/Android_" . $name . ".mk";
 
 	open(my $OUT, ">$dstmk") or die "Can't open $dstmk\n";
@@ -308,7 +283,7 @@ sub MakeAndroidMk_SharedLib
 	print $OUT "LOCAL_PATH:= \$(call my-dir)\n";
 	print $OUT "\n";
 
-	# ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’ãƒªãƒ³ã‚¯ã™ã‚‹ã‚³ãƒ¼ãƒ‰ã‚’å‡ºåŠ›
+	# ƒXƒ^ƒeƒBƒbƒNƒ‰ƒCƒuƒ‰ƒŠ‚ğƒŠƒ“ƒN‚·‚éƒR[ƒh‚ğo—Í
 	foreach my $lib (@$libraries_array_ref) {
 		if ($lib =~ /SampleKit/) {
 			WritePrebuildStaticLib($OUT, $lib, true);
@@ -328,7 +303,7 @@ sub MakeAndroidMk_SharedLib
 		print $OUT "\n";
 	}
 
-	# -Dã‚ªãƒ—ã‚·ãƒ§ãƒ³
+	# -DƒIƒvƒVƒ‡ƒ“
 	{
 		print $OUT "LOCAL_CFLAGS     := -DANDROID -D__IZ_GLES2__";
 
@@ -339,7 +314,7 @@ sub MakeAndroidMk_SharedLib
 		print $OUT "\n";
 	}
 
-	# ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰ãƒ‘ã‚¹
+	# ƒCƒ“ƒNƒ‹[ƒhƒpƒX
 	{
 		print $OUT "LOCAL_C_INCLUDES :=";
 
@@ -350,7 +325,7 @@ sub MakeAndroidMk_SharedLib
 		print $OUT "\n";
 	}
 
-	# ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«
+	# ƒ\[ƒXƒtƒ@ƒCƒ‹
 	{
 		print $OUT "LOCAL_SRC_FILES  := ";
 
@@ -359,7 +334,7 @@ sub MakeAndroidMk_SharedLib
 		print $OUT "\n";
 	}
 
-	# å‚ç…§ã™ã‚‹è‡ªåˆ†ã§ç”¨æ„ã—ãŸã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒª
+	# QÆ‚·‚é©•ª‚Å—pˆÓ‚µ‚½ƒXƒ^ƒeƒBƒbƒNƒ‰ƒCƒuƒ‰ƒŠ
 	{
 		print $OUT "LOCAL_WHOLE_STATIC_LIBRARIES := ";
 
@@ -373,28 +348,10 @@ sub MakeAndroidMk_SharedLib
 	close($OUT);
 }
 
-# Application.mkã‚’ç”Ÿæˆã™ã‚‹
-sub MakeApplicationMk
-{
-	my $targetdst = shift;
-	my $name = shift;
-
-	my $appmk = $targetdst . "Application_" . $name .".mk";
-
-	open(OUT, ">$appmk") or die "Can't opne $appmk\n";
-
-	print OUT "APP_PROJECT_PATH := \$(NDK_PROJECT_PATH)\n";
-	print OUT "APP_BUILD_SCRIPT := \$(APP_PROJECT_PATH)/Android_" . $name . ".mk\n";
-	print OUT "APP_STL := stlport_static\n";
-	print OUT "APP_PLATFORM := android-18\n";
-
-	close(OUT);
-}
-
-# æŒ‡å®šã•ã‚ŒãŸè¦ç´ ãŒé…åˆ—å†…ã®ã©ã®ä½ç½®ã«ã‚ã‚‹ã®ã‹æ¢ã™
+# w’è‚³‚ê‚½—v‘f‚ª”z—ñ“à‚Ì‚Ç‚ÌˆÊ’u‚É‚ ‚é‚Ì‚©’T‚·
 sub FindElement
 {
-	my $array = shift;	# é…åˆ—ã®å‚ç…§
+	my $array = shift;	# ”z—ñ‚ÌQÆ
 	my $key = shift;
 
 	my $pos = 0;
@@ -409,12 +366,12 @@ sub FindElement
 	return -1;
 }
 
-# å…¨ä½“ã‚’ãƒ“ãƒ«ãƒ‰ã™ã‚‹ãŸã‚ã®Makefileã‚’ç”Ÿæˆ
+# ‘S‘Ì‚ğƒrƒ‹ƒh‚·‚é‚½‚ß‚ÌMakefile‚ğ¶¬
 sub MakeMakefile
 {
-	my $config = shift;			# å¯¾è±¡ã®ã‚³ãƒ³ãƒ•ã‚£ã‚°
+	my $config = shift;			# ‘ÎÛ‚ÌƒRƒ“ƒtƒBƒO
 	my $targetdst = shift;
-	my $projects_hash = shift;	# ãã‚Œãã‚Œã®ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆãŒã‚·ã‚§ã‚¢ãƒ‰ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‹ã©ã†ã‹ã®ãƒãƒƒã‚·ãƒ¥ã®å‚ç…§
+	my $projects_hash = shift;	# ‚»‚ê‚¼‚ê‚ÌƒvƒƒWƒFƒNƒg‚ªƒVƒFƒAƒhƒ‰ƒCƒuƒ‰ƒŠ‚©‚Ç‚¤‚©‚ÌƒnƒbƒVƒ…‚ÌQÆ
 
 	my $makefile = $targetdst . "/Makefile";
 
@@ -422,10 +379,10 @@ sub MakeMakefile
 
 	print IN "$config: create_floders\n";
 
-	# ãƒãƒƒã‚·ãƒ¥ã®ã‚­ãƒ¼ã®é…åˆ—ã‚’å–å¾—
+	# ƒnƒbƒVƒ…‚ÌƒL[‚Ì”z—ñ‚ğæ“¾
 	my @projects = keys(%$projects_hash);
 
-	# 'SampleKit'ã®æ–‡å­—åˆ—ãŒé…åˆ—å†…ã®ã©ã®ä½ç½®ã«ã‚ã‚‹ã®ã‹æ¢ã™
+	# 'SampleKit'‚Ì•¶š—ñ‚ª”z—ñ“à‚Ì‚Ç‚ÌˆÊ’u‚É‚ ‚é‚Ì‚©’T‚·
 	my $pos = FindElement(\@projects, "SampleKit");
 	if ($pos >= 0) {
 		splice(@projects, $pos, 1);
