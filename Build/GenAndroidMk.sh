@@ -9,9 +9,9 @@ echo $dir
 
 cd $dir
 
-chmod +x GenAndroidMk.pl
+chmod +x GenPlarformMk.pl
 
-./GenAndroidMk.pl Debug_GLUT ../Libs/project/makefile ../Libs/project/android
-./GenAndroidMk.pl Debug_GLUT ../Samples/projects/makefile ../Samples/projects/android
+./GenPlarformMk.pl Debug_GLUT ../Libs/project/makefile ../Libs/project/android android
+./GenPlarformMk.pl Debug_GLUT ../Samples/projects/makefile ../Samples/projects/android android
 
 cd $cur_dir
