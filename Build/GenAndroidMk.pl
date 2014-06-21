@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+use GenAndroidMk;
+
 use strict;
 use File::Spec;
 
@@ -8,8 +10,7 @@ use constant false => 0;
 
 if (@ARGV != 3) {
 	# Print Usage.
-	print "GenAndroidMK.pl [configure] [src directory] [dst directory]\n";
-	print " ex) \$./GenAndroidMK.pl Debug Libs/project/makefile Lib/project/android\n";
+	&Usage();
 	exit();
 }
 
@@ -162,20 +163,10 @@ foreach my $srcmk (@makefiles) {
 	# それぞれのプロジェクトがシェアドライブラリかどうかをハッシュで保持
 	$projects{$name} = $is_shared;
 
-	# Android.mkを生成
-	if ($is_shared) {
-		MakeAndroidMk_SharedLib($targetdst, $name, \@libraries, \@includes, \@definitions, \@srcfiles);
-	}
-	else {
-		MakeAndroidMk_StaticLib($targetsrc, $targetdst, $name, \@libraries, \@includes, \@definitions, \@srcfiles);
-	}
-
-	# Application.mkを生成
-	MakeApplicationMk($targetdst, $name);
+	DoLoopAction($is_shared, $targetsrc, $targetdst, $name, \@libraries, \@includes, \@definitions, \@srcfiles);
 }
 
-# 全体をビルドするためのMakefileを生成
-MakeMakefile($baseconfig, $targetdst, \%projects);
+DoEndAction($baseconfig, $targetdst, \%projects);
 
 #==========================
 
