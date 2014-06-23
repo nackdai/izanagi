@@ -121,7 +121,6 @@ namespace izanagi {
 
             m_Elements[idx].isUsed = IZ_FALSE;
             IncrementFreedNum();
-            return IZ_TRUE;
         }
 
         IZ_BOOL Delete(_T* pElem)

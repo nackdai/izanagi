@@ -173,7 +173,7 @@
     <ClCompile Include="..\..\source\graph\android\GraphicsDevice_android.cpp">
       <Filter>source\android</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\graph\web\GraphicsDevice_WebGL.cpp">
+    <ClCompile Include="..\..\source\graph\web\GraphicsDevice_web.cpp">
       <Filter>source\web</Filter>
     </ClCompile>
   </ItemGroup>
