@@ -326,6 +326,13 @@
     </ClCompile>
     <ClCompile Include="..\..\source\graph\RenderState.cpp" />
     <ClCompile Include="..\..\source\graph\ShaderProgram.cpp" />
+    <ClCompile Include="..\..\source\graph\web\GraphicsDevice_WebGL.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\source\graph\2d\shader\2DPS.hlsl">
@@ -451,6 +458,7 @@ $(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpNoTexAlp
     <ClInclude Include="..\..\include\graph\VertexBuffer.h" />
     <ClInclude Include="..\..\include\graph\VertexDeclaration.h" />
     <ClInclude Include="..\..\include\graph\VertexShader.h" />
+    <ClInclude Include="..\..\include\graph\web\izWebGLDefs.h" />
     <ClInclude Include="..\..\include\izGraph.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

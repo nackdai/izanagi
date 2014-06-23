@@ -39,6 +39,9 @@
     <Filter Include="source\android">
       <UniqueIdentifier>{5a0a9090-5f0c-4735-80c0-fe99975a392e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\web">
+      <UniqueIdentifier>{3c88c542-595d-4086-aefa-857c5ff9d475}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\system\SysTimer.h">
@@ -205,6 +208,9 @@
     </ClCompile>
     <ClCompile Include="..\..\source\system\TouchInput.cpp">
       <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\web\SysWindow_web.cpp">
+      <Filter>source\web</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

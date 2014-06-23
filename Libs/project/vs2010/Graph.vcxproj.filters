@@ -42,6 +42,12 @@
     <Filter Include="source\android">
       <UniqueIdentifier>{550edad7-62e5-4e8c-98b2-e8de3bda8f18}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\web">
+      <UniqueIdentifier>{4b3e9dcf-5ac5-469c-98a9-4e8dc557bc5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\web">
+      <UniqueIdentifier>{2ea274fa-a4d7-44fc-a840-fe37046e7ac2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\graph\2d\2DRenderer.cpp">
@@ -166,6 +172,9 @@
     </ClCompile>
     <ClCompile Include="..\..\source\graph\android\GraphicsDevice_android.cpp">
       <Filter>source\android</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\web\GraphicsDevice_WebGL.cpp">
+      <Filter>source\web</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -338,6 +347,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\graph\ogl\GraphicsDevice_OGL.h">
       <Filter>include\ogl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\web\izWebGLDefs.h">
+      <Filter>include\web</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
