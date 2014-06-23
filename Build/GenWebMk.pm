@@ -132,20 +132,24 @@ sub MakeWebMk_StaticLib
 
 	open(OUT, ">$dstmk") or die "Can't open $dstmk\n";
 
+	# 共通処理を呼び出すコードを出力
+	print OUT "call PreBuild.bat\n\n";
+
+
 	print OUT "emcc ";
 
 	# -Dオプション
 	{
-		print OUT "-DEMSCRIPTEN -D__IZ_GLES2__";
+		print OUT "-DEMSCRIPTEN -D__IZ_GLES2__ ";
 
 		foreach my $def (@$definitions_array_ref) {
-			print OUT " -D$def";
+			print OUT "-D$def ";
 		}
 	}
 
 	# インクルードパス
 	foreach my $inc (@$includes_array_ref) {
-		print OUT "-I" . $inc;
+		print OUT "-I$inc ";
 	}
 
 	# 
@@ -201,13 +205,18 @@ sub MakeWebMk_StaticLib
 				}
 			}
 
+			if ($src =~ /pthread/) {
+				# pthreadはサポートされていないため無視する
+				next;
+			}
+
 			print OUT "$src ";
 
 			$pos++;
 		}
 	}
 
-	print OUT "-o lib" . $name . ".bc";
+	print OUT "-o ../lib/lib" . $name . ".bc";
 
 	close(OUT);
 }
