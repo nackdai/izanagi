@@ -439,6 +439,7 @@ $(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpNoTexAlp
     <ClInclude Include="..\..\include\graph\2d\2DRenderer.h" />
     <ClInclude Include="..\..\include\graph\2d\2DShader.h" />
     <ClInclude Include="..\..\include\graph\IndexBuffer.h" />
+    <ClInclude Include="..\..\include\graph\ogl\GraphicsDevice_OGL.h" />
     <ClInclude Include="..\..\include\graph\ogl\izOGLDefs.h" />
     <ClInclude Include="..\..\include\graph\ParamValueConverter.h" />
     <ClInclude Include="..\..\include\graph\PixelShader.h" />

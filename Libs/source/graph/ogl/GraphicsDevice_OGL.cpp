@@ -1,4 +1,4 @@
-#include "graph/gles2/GraphicsDevice_GLES2.h"
+#include "graph/ogl/GraphicsDevice_OGL.h"
 #include "graph/gles2/Texture_GLES2.h"
 #include "graph/gles2/CubeTexture_GLES2.h"
 #include "graph/gles2/VertexBuffer_GLES2.h"
@@ -15,15 +15,6 @@ namespace izanagi
 {
 namespace graph
 {
-    class CGraphicsDeviceOGL : public CGraphicsDeviceGLES2 {
-    public:
-        CGraphicsDeviceOGL();
-        virtual ~CGraphicsDeviceOGL();
-
-    public:
-        virtual IZ_BOOL Reset(const void* initialParam);
-    };
-
     CGraphicsDevice* CGraphicsDevice::s_Instance = IZ_NULL;
 
     // インスタンス作成
