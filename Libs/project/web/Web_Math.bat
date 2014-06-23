@@ -1,0 +1,3 @@
+call PreBuild.bat
+
+emcc -DEMSCRIPTEN -D__IZ_GLES2__ -D_DEBUG -D_LIB -D__IZ_DEBUG__ -D__IZ_OGL__ -D__IZANAGI_NO_USE_D3D__ -I../../include ../../source/math/MathPlane.cpp ../../source/math/MathRay.cpp ../../source/math/MathRectangle.cpp ../../source/math/MathTriangle.cpp ../../source/math/MathMatrix.cpp ../../source/math/SFMT/SFMT.cpp ../../source/math/MathNumericalAnlysis.cpp ../../source/math/MathCurve.cpp -o ../lib/libMath.bc
