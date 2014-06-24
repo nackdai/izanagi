@@ -21,7 +21,7 @@ sub DoLoopAction {
 	my $srcfiles = shift;
 
 	if ($is_shared) {
-#		MakeAndroidMk_SharedLib($targetdst, $name, $libraries, $includes, $definitions, $srcfiles);
+		MakeAndroidMk_SharedLib($targetdst, $name, $libraries, $includes, $definitions, $srcfiles);
 	}
 	else {
 		MakeWebMk_StaticLib($targetsrc, $targetdst, $name, $libraries, $includes, $definitions, $srcfiles);
@@ -135,12 +135,11 @@ sub MakeWebMk_StaticLib
 	# 共通処理を呼び出すコードを出力
 	print OUT "call PreBuild.bat\n\n";
 
-
 	print OUT "emcc ";
 
 	# -Dオプション
 	{
-		print OUT "-DEMSCRIPTEN -D__IZ_GLES2__ ";
+		print OUT "-DEMSCRIPTEN -D__IZ_GLUT__ ";
 
 		foreach my $def (@$definitions_array_ref) {
 			print OUT "-D$def ";
@@ -221,59 +220,6 @@ sub MakeWebMk_StaticLib
 	close(OUT);
 }
 
-# static libraryをリンクするコードを出力
-sub WritePrebuildStaticLib
-{
-	my $OUT = shift;
-	my $name = shift;
-	my $is_local = shift;
-	
-	print $OUT "include \$(CLEAR_VARS)\n";
-	print $OUT "LOCAL_MODULE := prebuild-lib$name\n";
-
-	if ($is_local) {
-		print $OUT "LOCAL_SRC_FILES := \$(LOCAL_PATH)/obj/local/armeabi/lib$name.a\n";
-	}
-	else {
-		print $OUT "LOCAL_SRC_FILES := \$(LOCAL_PATH)/../../../Libs/project/lib/lib$name.a\n";
-	}
-	print $OUT "include \$(PREBUILT_STATIC_LIBRARY)\n";
-	print $OUT "\n";
-}
-
-# 配列の要素を出力
-sub WriteArrayElements
-{
-	my $OUT = shift;				# 出力ファイルハンドル
-	my $array_ref = shift;			# 配列の参照
-	my $is_prebuild_lib = shift;	# 参照するスタティックライブラリについて処理するかどうか
-
-	my $pos = 0;
-
-	my $array_cnt = @$array_ref - 1;
-
-	foreach my $elem (@$array_ref) {
-		# 要素に 'glut' or 'OGL' が含まれる場合は無視する
-		if ($elem =~ /glut/ || $elem =~ /OGL/) {
-			next;
-		}
-
-		if ($is_prebuild_lib) {
-			print $OUT "prebuild-lib" . $elem;
-		}
-		else {
-			print $OUT "$elem";
-		}
-
-		if ($pos != $array_cnt) {
-			print $OUT " \\";
-		}
-		print $OUT "\n";
-
-		$pos++;
-	}
-}
-
 # シェアドライブラリを生成するMakefileを出力する
 sub MakeAndroidMk_SharedLib
 {
@@ -285,76 +231,47 @@ sub MakeAndroidMk_SharedLib
 	my $srcfiles_array_ref = shift;		# ソースファイルの配列への参照
 
 	# 出力Makefileのパス
-	my $dstmk = $targetdst . "/Android_" . $name . ".mk";
+	my $dstmk = $targetdst . "/Web_" . $name . ".bat";
 
-	open(my $OUT, ">$dstmk") or die "Can't open $dstmk\n";
+	open(OUT, ">$dstmk") or die "Can't open $dstmk\n";
 
-	print $OUT "LOCAL_PATH:= \$(call my-dir)\n";
-	print $OUT "\n";
+	# 共通処理を呼び出すコードを出力
+	print OUT "call PreBuild.bat\n\n";
+
+	print OUT "emcc ";
+
+	# -Dオプション
+	{
+		print OUT "-DEMSCRIPTEN -D__IZ_GLUT__ ";
+
+		foreach my $def (@$definitions_array_ref) {
+			print OUT "-D$def ";
+		}
+	}
+
+	# インクルードパス
+	foreach my $inc (@$includes_array_ref) {
+		print OUT " -I$inc ";
+	}
 
 	# スタティックライブラリをリンクするコードを出力
 	foreach my $lib (@$libraries_array_ref) {
 		if ($lib =~ /SampleKit/) {
-			WritePrebuildStaticLib($OUT, $lib, true);
+			print OUT "../lib/lib" . $lib . ".bc ";
 		}
 		else {
-			WritePrebuildStaticLib($OUT, $lib, false);
+			print OUT "%LIB%lib" . $lib . ".bc ";
 		}
-	}
-
-	print $OUT "include \$(CLEAR_VARS)\n";
-	print $OUT "\n";
-
-	print $OUT "LOCAL_MODULE     := lib$name\n";
-
-	{
-		print $OUT "LOCAL_LDLIBS     := -llog -lGLESv2 -landroid";
-		print $OUT "\n";
-	}
-
-	# -Dオプション
-	{
-		print $OUT "LOCAL_CFLAGS     := -DANDROID -D__IZ_GLES2__";
-
-		foreach my $def (@$definitions_array_ref) {
-			print $OUT " -D$def";
-		}
-
-		print $OUT "\n";
-	}
-
-	# インクルードパス
-	{
-		print $OUT "LOCAL_C_INCLUDES :=";
-
-		foreach my $inc (@$includes_array_ref) {
-			print $OUT " \$(LOCAL_PATH)/" . $inc;
-		}
-
-		print $OUT "\n";
 	}
 
 	# ソースファイル
-	{
-		print $OUT "LOCAL_SRC_FILES  := ";
-
-		WriteArrayElements($OUT, $srcfiles_array_ref, false);
-
-		print $OUT "\n";
+	foreach my $src (@$srcfiles_array_ref) {
+		print OUT "$src ";
 	}
 
-	# 参照する自分で用意したスタティックライブラリ
-	{
-		print $OUT "LOCAL_WHOLE_STATIC_LIBRARIES := ";
+	print OUT "-o $name" . ".html";
 
-		WriteArrayElements($OUT, $libraries_array_ref, true);
-
-		print $OUT "\n";
-	}
-
-	print $OUT "include \$(BUILD_SHARED_LIBRARY)\n";
-
-	close($OUT);
+	close(OUT);
 }
 
 # 指定された要素が配列内のどの位置にあるのか探す
