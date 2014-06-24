@@ -9,6 +9,8 @@
 #include "graph/gles2/RenderTarget_GLES2.h"
 #include "graph/2d/2DRenderer.h"
 
+#include <GL/glut.h>
+
 namespace izanagi
 {
 namespace graph

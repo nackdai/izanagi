@@ -4,7 +4,7 @@
 #if __IZ_DX9__
     #include "graph/dx9/D3D9ParamValueConverter.h"
 #elif __IZ_OGL__
-    #if defined (__IZ_GLES2__) || defined (__IZ_GLUT__)
+    #if defined (__IZ_GLES2__) || defined (__IZ_GLUT__) || defined(EMSCRIPTEN)
         #include "graph/gles2/ParamValueConverter_GLES2.h"
     #endif
 #endif
