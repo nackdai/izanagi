@@ -10,9 +10,11 @@ namespace sys
     // 実行プログラムの位置からカレントディレクトリを設定.
     IZ_BOOL CSysUtil::SetCurrentDirectoryFromExe()
     {
+        static izChar path[260];
+
         // 実行プログラムのフルパスを取得
-        const char* path = GetExecuteFilePath();
-        VRETURN(path != IZ_NULL);
+        IZ_INT pathSize = GetExecuteFilePath(path, sizeof(path));
+        VRETURN(pathSize > 0);
 
         char* tmp = const_cast<char*>(path);
 
@@ -32,15 +34,13 @@ namespace sys
         return IZ_TRUE;
     }
 
-    const char* CSysUtil::GetExecuteFilePath()
+    IZ_INT CSysUtil::GetExecuteFilePath(char* path, size_t pathBufSize)
     {
-        static izChar buf[260];
-
         // 実行プログラムのフルパスを取得
-        int result = readlink("/proc/self/exe", buf, sizeof(buf));
-        VRETURN_NULL(result > 0);
+        int result = readlink("/proc/self/exe", path, pathBufSize);
+        VRETURN_VAL(result > 0, 0);
 
-        return buf;
+        return result;
     }
 }   // namespace sys
 }   // namespace izanagi

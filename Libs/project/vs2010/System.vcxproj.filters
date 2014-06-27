@@ -212,5 +212,8 @@
     <ClCompile Include="..\..\source\system\web\SysWindow_web.cpp">
       <Filter>source\web</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\system\web\SysUtil_web.cpp">
+      <Filter>source\web</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

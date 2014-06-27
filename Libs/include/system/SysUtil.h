@@ -21,7 +21,7 @@ namespace sys
          */
         static IZ_BOOL SetCurrentDirectoryFromExe();
 
-        static const char* GetExecuteFilePath();
+        static IZ_INT GetExecuteFilePath(char* path, size_t pathBufSize);
     };
 }   // namespace sys
 }   // namespace izanagi

@@ -33,18 +33,16 @@ namespace sys
         return result;
     }
 
-    const char* CSysUtil::GetExecuteFilePath()
+    IZ_INT CSysUtil::GetExecuteFilePath(char* path, size_t pathBufSize)
     {
-        static izChar buf[_MAX_PATH];
-
         // 実行プログラムのフルパスを取得
         DWORD result = ::GetModuleFileName(
                         IZ_NULL,
-                        buf,
-                        sizeof(buf));
-        VRETURN_NULL(result > 0);
+                        path,
+                        pathBufSize);
+        VRETURN_VAL(result > 0, 0);
         
-        return buf;
+        return result;
     }
 }   // namespace sys
 }   // namespace izanagi
