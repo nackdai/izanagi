@@ -40,8 +40,11 @@ IZ_INT SampleMain(
     wndProc.funcInit = OnInit;
     wndProc.funcDestroy = OnDestroy;
 
+    char path[256];
+    izanagi::sys::CSysUtil::GetExecuteFilePath(path, sizeof(path));
+
     char* argv[] = {
-        const_cast<char*>(izanagi::sys::CSysUtil::GetExecuteFilePath()),
+        path
     };
 
     // ウインドウ作成用パラメータ
