@@ -236,7 +236,11 @@ sub MakeAndroidMk_SharedLib
 	open(OUT, ">$dstmk") or die "Can't open $dstmk\n";
 
 	# 共通処理を呼び出すコードを出力
-	print OUT "call PreBuild.bat\n\n";
+	print OUT "if exist ../lib/SampleKit.bc (\n";
+	print OUT "    call PreBuild.bat\n";
+	print OUT ") else (\n";
+	print OUT "    call Web_SampleKit.bat\n";
+	print OUT ")\n\n";
 
 	print OUT "emcc ";
 
