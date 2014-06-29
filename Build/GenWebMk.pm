@@ -242,6 +242,12 @@ sub MakeAndroidMk_SharedLib
 	print OUT "    call Web_SampleKit.bat\n";
 	print OUT ")\n\n";
 
+	print OUT "if exist ../../$name/pre.js (\n";
+	print OUT "    set PREJS=--pre-js ../../Render2D/pre.js\n";
+	print OUT ") else (\n";
+	print OUT "    set PREJS=\n";
+	print OUT ")\n\n";
+
 	print OUT "emcc ";
 
 	# -DƒIƒvƒVƒ‡ƒ“
@@ -273,7 +279,7 @@ sub MakeAndroidMk_SharedLib
 		print OUT "$src ";
 	}
 
-	print OUT "-o $name" . ".html";
+	print OUT "-o $name" . ".html %PREJS%";
 
 	close(OUT);
 }
