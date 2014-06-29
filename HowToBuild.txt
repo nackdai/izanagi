@@ -29,7 +29,7 @@ $ make
 $ cd ./Samples/projects/android
 $ make
 
-* You can confirm only Render2D sample.
+* I confirm only Render2D sample.
   So, you can run only below command.
 
 $ ndk-build NDK_PROJECT_PATH=${PWD} NDK_APPLICATION_MK="./Application_SampleKit.mk"
@@ -39,9 +39,13 @@ $ ndk-build NDK_PROJECT_PATH=${PWD} NDK_APPLICATION_MK="./Application_Render2D.m
 
 Project path is "./Samples/Android".
 
-6. Copy sample .so file.
+6. Copy sample .so file and assets.
 
 $ cp -r Samples/projects/armeabi Samples/Android/sample/libs
+$ cp -r Samples/Render2D/data/* Samples/Android/assets/data
+
+If you want to build assets, you have to build assets on Visual Studio.
+I've copied asset files for Render2D to 'assets/data' directory in Android sample directory.
 
 7. Build and run a sample.
 
@@ -72,3 +76,54 @@ $ make Debug_GLUT -f Render2D.makefile
 Render2D sample needs img data.
 Currently, there is no way to build img data on Linux.
 So, you need to copy img data from Windows to Linux.
+
+- Web
+
+1. Generate makefiles
+
+$ cd ./Build
+$ ./GenWebMk.sh
+
+2. Build libraries.
+
+$ cd ./Libs/project/web
+
+* I don't prepare a bat file to run all bat files.
+  So, you need to run each bat files.
+
+3. Build samples.
+
+$ cd ./Samples/projects/web
+
+* I don't prepare a bat file to run all bat files.
+  So, you need to run each bat files.
+
+* I confirm only Render2D sample.
+  So, you can run only below command.
+
+$ Web_Render2D.bat
+
+4. Run a sample.
+
+* I confirm only Render2D sample.
+  So, you can run only Render2D sample.
+
+Copy files.
+
+$ copy Render2D.* ..\..\Web
+
+Move directory.
+
+$ cd ..\..\Web
+
+Copy data files.
+
+$ xcopy ..\Render2D\data .\
+
+Launch Server.
+
+$ LaunchServer.bat
+
+Run browser and access below url.
+
+http://localhost:8000/Render2D.html
