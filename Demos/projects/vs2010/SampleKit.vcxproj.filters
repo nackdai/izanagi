@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{2d5df833-8ea9-4724-8389-06ccfa156ea2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{69f40d2f-fdc9-4512-a5c4-8646df6f41fe}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\SampleKit\izSampleKit.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\SampleKit\SampleApp.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\SampleKit\SampleCamera.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\SampleKit\SampleEnvBox.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\SampleKit\SampleMain.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\SampleKit\SampleWindowProc.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\SampleKit\SampleModelRenderHandler.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\SampleKit\SampleApp.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SampleKit\SampleCamera.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SampleKit\SampleEnvBox.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SampleKit\SampleMain.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SampleKit\SampleWindowProc.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SampleKit\SampleModelRenderHandler.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+</Project>
