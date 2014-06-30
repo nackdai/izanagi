@@ -10,5 +10,37 @@
     <Filter Include="data">
       <UniqueIdentifier>{de4f6e89-d8a4-4188-a50b-9745eb288d98}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shader">
+      <UniqueIdentifier>{0b9a5094-76e5-44a9-b64c-8053276ed220}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\PhotoGallery\shader\BasicShader.fx">
+      <Filter>shader</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\PhotoGallery\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PhotoGallery\PhotoGalleryApp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PhotoGallery\Seat.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\PhotoGallery\PhotoGalleryApp.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PhotoGallery\Seat.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\PhotoGallery\shader\BasicShader.xml">
+      <Filter>shader</Filter>
+    </CustomBuild>
   </ItemGroup>
 </Project>
