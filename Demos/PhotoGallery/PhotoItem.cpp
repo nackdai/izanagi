@@ -1,53 +1,61 @@
-#if !defined(__PHOTO_ITEM_MESH_H__)
-#define __PHOTO_ITEM_MESH_H__
+#include "PhotoItem.h"
+#include "PhotoItemMesh.h"
 
-#include "izSampleKit.h"
+PhotoItem* PhotoItem::Create(
+    izanagi::IMemoryAllocator* allocator,
+    izanagi::graph::CGraphicsDevice* device)
+{
+    void* buf = ALLOC(allocator, sizeof(PhotoItem));
+    VRETURN_NULL(buf != IZ_NULL);
 
-/** Photos's seat.
- */
-class PhotoItemMesh : public izanagi::CDebugMesh {
-public:
-    // Create an instance.
-    static PhotoItemMesh* Create(
-        izanagi::IMemoryAllocator* allocator,
-        izanagi::graph::CGraphicsDevice* device,
-        IZ_UINT width,
-        IZ_UINT height);
+    IZ_BOOL result = IZ_TRUE;
 
-private:
-    // Color for mesh.
-    static const IZ_COLOR Color = IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0xff);
+    PhotoItem* instance = new (buf) PhotoItem;
+    {
+        instance->AddRef();
+        instance->m_Allocator = allocator;
+        result = instance->Init(
+            allocator,
+            device);
+    }
 
-private:
-    PhotoItemMesh();
-    virtual ~PhotoItemMesh();
+    if (!result) {
+        SAFE_RELEASE(instance);
+    }
 
-private:
-    template <typename _T>
-    _T* CreateFace(
-        izanagi::IMemoryAllocator* allocator, 
-        izanagi::graph::CGraphicsDevice* device,
-        IZ_UINT width,
-        IZ_UINT height);
+    return instance;
+}
 
-    class FrontFace;
-    class SideFaces;
+PhotoItem::PhotoItem()
+{
+    m_Allocator = IZ_NULL;
+    m_Mesh = IZ_NULL;
 
-private:
-    IZ_BOOL Init(
-        izanagi::IMemoryAllocator* allocator,
-        izanagi::graph::CGraphicsDevice* device,
-        IZ_UINT width,
-        IZ_UINT height);
+    m_ListItem.Init(this);
+}
 
-public:
-    /** Render a photo item.
-     */
-    void Render(izanagi::graph::CGraphicsDevice* device);
+PhotoItem::~PhotoItem()
+{
+    SAFE_RELEASE(m_Mesh);
+}
 
-private:
-    FrontFace* m_FrontFace;
-    SideFaces* m_SideFaces;
-};
+IZ_BOOL PhotoItem::Init(
+    izanagi::IMemoryAllocator* allocator,
+    izanagi::graph::CGraphicsDevice* device)
+{
+    m_Mesh = PhotoItemMesh::Create(
+        allocator,
+        device,
+        10.0f, 10.0f, 2.0f);
+    VRETURN(m_Mesh != IZ_NULL);
 
-#endif    // #if !defined(__PHOTO_ITEM_MESH_H__)
+    return IZ_TRUE;
+}
+
+void PhotoItem::Render(izanagi::graph::CGraphicsDevice* device)
+{
+    IZ_ASSERT(device != IZ_NULL);
+
+    IZ_ASSERT(m_Mesh != IZ_NULL);
+    m_Mesh->Render(device);
+}

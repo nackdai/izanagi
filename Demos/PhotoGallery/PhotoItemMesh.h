@@ -11,8 +11,9 @@ public:
     static PhotoItemMesh* Create(
         izanagi::IMemoryAllocator* allocator,
         izanagi::graph::CGraphicsDevice* device,
-        IZ_UINT width,
-        IZ_UINT height);
+        IZ_FLOAT width,
+        IZ_FLOAT height,
+        IZ_FLOAT depth);
 
 private:
     // Color for mesh.
@@ -27,20 +28,29 @@ private:
     _T* CreateFace(
         izanagi::IMemoryAllocator* allocator, 
         izanagi::graph::CGraphicsDevice* device,
-        IZ_UINT width,
-        IZ_UINT height);
+        IZ_FLOAT width,
+        IZ_FLOAT height,
+        IZ_FLOAT depth);
 
     class FrontFace;
-    class SideFaces;
+    class TopAndSideFaces;
+
+private:
+    IZ_BOOL Init(
+        izanagi::IMemoryAllocator* allocator,
+        izanagi::graph::CGraphicsDevice* device,
+        IZ_FLOAT width,
+        IZ_FLOAT height,
+        IZ_FLOAT depth);
 
 public:
-    /** Render seat.
+    /** Render a photo item.
      */
     void Render(izanagi::graph::CGraphicsDevice* device);
 
 private:
     FrontFace* m_FrontFace;
-    SideFaces* m_SideFaces;
+    TopAndSideFaces* m_TopAndSideFaces;
 };
 
 #endif    // #if !defined(__PHOTO_ITEM_MESH_H__)

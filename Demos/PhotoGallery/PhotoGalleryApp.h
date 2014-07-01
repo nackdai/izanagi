@@ -4,6 +4,7 @@
 #include "izSampleKit.h"
 
 class Seat;
+class PhotoItem;
 
 class PhotoGalleryApp : public izanagi::sample::CSampleApp {
 public:
@@ -30,6 +31,8 @@ private:
     izanagi::shader::CShaderBasic* m_Shader;
 
     Seat* m_Seat;
+
+    PhotoItem* m_Item;
 };
 
 #endif    // #if !defined(__PHOTO_GALLERY_APP_H__)

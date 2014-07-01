@@ -351,6 +351,8 @@ Seat* Seat::Create(
 
 Seat::Seat()
 {
+    m_Allocator = IZ_NULL;
+
     m_Floor = IZ_NULL;
     m_FlontSeat = IZ_NULL;
     m_RearSeat = IZ_NULL;

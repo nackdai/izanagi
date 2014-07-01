@@ -1,53 +1,41 @@
-#if !defined(__PHOTO_ITEM_MESH_H__)
-#define __PHOTO_ITEM_MESH_H__
+#if !defined(__PHOTO_ITEM_H__)
+#define __PHOTO_ITEM_H__
 
 #include "izSampleKit.h"
 
-/** Photos's seat.
- */
-class PhotoItemMesh : public izanagi::CDebugMesh {
+class PhotoItemMesh;
+
+class PhotoItem : public izanagi::CObject {
 public:
-    // Create an instance.
-    static PhotoItemMesh* Create(
+    static PhotoItem* Create(
         izanagi::IMemoryAllocator* allocator,
-        izanagi::graph::CGraphicsDevice* device,
-        IZ_UINT width,
-        IZ_UINT height);
+        izanagi::graph::CGraphicsDevice* device);
 
 private:
-    // Color for mesh.
-    static const IZ_COLOR Color = IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0xff);
+    PhotoItem();
+    virtual ~PhotoItem();
 
-private:
-    PhotoItemMesh();
-    virtual ~PhotoItemMesh();
+    NO_COPIABLE(PhotoItem);
 
-private:
-    template <typename _T>
-    _T* CreateFace(
-        izanagi::IMemoryAllocator* allocator, 
-        izanagi::graph::CGraphicsDevice* device,
-        IZ_UINT width,
-        IZ_UINT height);
-
-    class FrontFace;
-    class SideFaces;
+    IZ_DEFINE_INTERNAL_RELEASE();
 
 private:
     IZ_BOOL Init(
         izanagi::IMemoryAllocator* allocator,
-        izanagi::graph::CGraphicsDevice* device,
-        IZ_UINT width,
-        IZ_UINT height);
+        izanagi::graph::CGraphicsDevice* device);
 
 public:
-    /** Render a photo item.
-     */
     void Render(izanagi::graph::CGraphicsDevice* device);
 
+public:
+    izanagi::CStdList<PhotoItem>::Item* GetListItem();
+
 private:
-    FrontFace* m_FrontFace;
-    SideFaces* m_SideFaces;
+    izanagi::IMemoryAllocator* m_Allocator;
+
+    izanagi::CStdList<PhotoItem>::Item m_ListItem;
+
+    PhotoItemMesh* m_Mesh;
 };
 
-#endif    // #if !defined(__PHOTO_ITEM_MESH_H__)
+#endif    // #if !defined(__PHOTO_ITEM_H__)

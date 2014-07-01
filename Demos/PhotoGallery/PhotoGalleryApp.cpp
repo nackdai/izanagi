@@ -1,10 +1,14 @@
 #include "PhotoGalleryApp.h"
 #include "Seat.h"
 
+#include "PhotoItem.h"
+
 PhotoGalleryApp::PhotoGalleryApp()
 {
     m_Shader = IZ_NULL;
     m_Seat = IZ_NULL;
+
+    m_Item = IZ_NULL;
 }
 
 PhotoGalleryApp::~PhotoGalleryApp()
@@ -34,6 +38,9 @@ IZ_BOOL PhotoGalleryApp::InitInternal(
     m_Seat = Seat::Create(allocator, device);
     VGOTO(result = (m_Seat != IZ_NULL), __EXIT__);
 
+    m_Item = PhotoItem::Create(allocator, device);
+    VGOTO(result = (m_Item != IZ_NULL), __EXIT__);
+
     // カメラ
     camera.Init(
         izanagi::math::CVector(0.0f, 10.0f, 30.0f, 1.0f),
@@ -58,6 +65,8 @@ void PhotoGalleryApp::ReleaseInternal()
 {
     SAFE_RELEASE(m_Shader);
     SAFE_RELEASE(m_Seat);
+
+    SAFE_RELEASE(m_Item);
 }
 
 // 更新.
@@ -113,7 +122,7 @@ void PhotoGalleryApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
             // シェーダ設定
             m_Shader->CommitChanges(device);
 
-            m_Seat->Render(device);
+            m_Item->Render(device);
 
             m_Shader->EndPass();
         }
