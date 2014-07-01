@@ -47,7 +47,8 @@ private:
         IZ_COLOR color,
         IZ_FLOAT radius,
         IZ_FLOAT y,
-        IZ_FLOAT longitude);
+        IZ_FLOAT longitude,
+        IZ_BOOL isTopFace = IZ_FALSE);
 
     // Set indices.
     IZ_BOOL SetIdx(IZ_UINT slices);
@@ -95,8 +96,8 @@ IZ_BOOL Seat::SeatPart::Init(
 
     // Vertex count.
     //  Inner faces = (slices + 1) * 2 [vertices]
-    //  Top faces = slices + 1 [vertices] (1 vertices group is shared with inner faces)
-    IZ_UINT vtxNum = (slices + 1) * 3;
+    //  Top faces = (slices + 1) * 2 [vertices]
+    IZ_UINT vtxNum = (slices + 1) * 4;
 
     // Index count.
     //  Inner faces = slices * 2 [triangles] = slices * 2 * 3 [indices] (1triangle = 3indices)
@@ -187,6 +188,22 @@ IZ_BOOL Seat::SeatPart::SetVtx(
         vtx++;
     }
 
+    // Innder of top faces.
+    for (IZ_UINT i = 0; i <= slices; i++) {
+        IZ_FLOAT longitude = i * longitudeStep;
+
+        ComputeVtx(
+            vtx,
+            flag,
+            color,
+            innerRadius,
+            height,
+            longitude,
+            IZ_TRUE);
+
+        vtx++;
+    }
+
     // Outer of top faces.
     for (IZ_UINT i = 0; i <= slices; i++) {
         IZ_FLOAT longitude = i * longitudeStep;
@@ -197,7 +214,8 @@ IZ_BOOL Seat::SeatPart::SetVtx(
             color,
             outerRadius,
             height,
-            longitude);
+            longitude,
+            IZ_TRUE);
 
         vtx++;
     }
@@ -213,7 +231,8 @@ void Seat::SeatPart::ComputeVtx(
     IZ_COLOR color,
     IZ_FLOAT radius,
     IZ_FLOAT y,
-    IZ_FLOAT longitude)
+    IZ_FLOAT longitude,
+    IZ_BOOL isTopFace/*= IZ_FALSE*/)
 {
     IZ_FLOAT sinLong = izanagi::math::CMath::SinF(longitude);
     IZ_FLOAT cosLong = izanagi::math::CMath::CosF(longitude);
@@ -226,10 +245,18 @@ void Seat::SeatPart::ComputeVtx(
     }
 
     if (IsNormal(flag)) {
-        vtx->nml.v[0] = -cosLong;
-        vtx->nml.v[1] = 0.0f;
-        vtx->nml.v[2] = -sinLong;
-        vtx->nml.v[3] = 0.0f;
+        if (isTopFace) {
+            vtx->nml.v[0] = 0.0f;
+            vtx->nml.v[1] = 1.0f;
+            vtx->nml.v[2] = 0.0f;
+            vtx->nml.v[3] = 0.0f;
+        }
+        else {
+            vtx->nml.v[0] = -cosLong;
+            vtx->nml.v[1] = 0.0f;
+            vtx->nml.v[2] = -sinLong;
+            vtx->nml.v[3] = 0.0f;
+        }
     }
 
     // 頂点カラー
@@ -274,18 +301,18 @@ IZ_BOOL Seat::SeatPart::SetIdx(IZ_UINT slices)
     // Top faces.
     for (IZ_UINT i = 0; i < slices; i++) {
         {
-            face->idx[0] = i + slices + 1;
-            face->idx[1] = i + (slices + 1) * 2 + 1;
-            face->idx[2] = i + (slices + 1) * 2;
+            face->idx[0] = i + (slices + 1) * 2;
+            face->idx[1] = i + (slices + 1) * 3 + 1;
+            face->idx[2] = i + (slices + 1) * 3;
 
             BindFaceToVtx(face);
             ++face;
         }
 
         {
-            face->idx[0] = i + slices + 1;
-            face->idx[1] = i + slices + 2;
-            face->idx[2] = i + (slices + 1) * 2 + 1;
+            face->idx[0] = i + (slices + 1) * 2;
+            face->idx[1] = i + (slices + 1) * 2 + 1;
+            face->idx[2] = i + (slices + 1) * 3 + 1;
 
             BindFaceToVtx(face);
             ++face;
