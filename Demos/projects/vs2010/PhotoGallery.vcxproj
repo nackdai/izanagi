@@ -45,10 +45,13 @@
   <ItemGroup>
     <ClCompile Include="..\..\PhotoGallery\main.cpp" />
     <ClCompile Include="..\..\PhotoGallery\PhotoGalleryApp.cpp" />
+    <ClCompile Include="..\..\PhotoGallery\PhotoItemMesh.cpp" />
     <ClCompile Include="..\..\PhotoGallery\Seat.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\PhotoGallery\Configure.h" />
     <ClInclude Include="..\..\PhotoGallery\PhotoGalleryApp.h" />
+    <ClInclude Include="..\..\PhotoGallery\PhotoItemMesh.h" />
     <ClInclude Include="..\..\PhotoGallery\Seat.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

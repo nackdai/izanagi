@@ -1,4 +1,5 @@
 #include "Seat.h"
+#include "Configure.h"
 
 // Raduis.
 const IZ_FLOAT Seat::InnerRadius = 10.0f;
@@ -7,6 +8,50 @@ const IZ_FLOAT Seat::MostOuterRadius = Seat::OuterRadius + 10.0f;
 
 // Height.
 const IZ_FLOAT Seat::Height = 5.0f;
+
+////////////////////////////////////////
+
+class Seat::SeatPart : public izanagi::CDebugMesh {
+public:
+    static SeatPart* Create(
+        izanagi::IMemoryAllocator* allocator,
+        izanagi::graph::CGraphicsDevice* device,
+        IZ_FLOAT innerRadius, IZ_FLOAT outerRadius,
+        IZ_FLOAT height,
+        IZ_UINT slices);
+
+private:
+    SeatPart() {}
+    virtual ~SeatPart() {}
+
+private:
+    IZ_BOOL Init(
+        izanagi::graph::CGraphicsDevice* device,
+        IZ_UINT flag,
+        IZ_FLOAT innerRadius, IZ_FLOAT outerRadius,
+        IZ_FLOAT height,
+        IZ_UINT slices);
+
+    // Set vertices.
+    IZ_BOOL SetVtx(
+        IZ_UINT flag,
+        IZ_COLOR color,
+        IZ_FLOAT innerRadius, IZ_FLOAT outerRadius,
+        IZ_FLOAT height,
+        IZ_UINT slices);
+
+    // Compute vertices.
+    void ComputeVtx(
+        SMeshVtx* vtx,
+        IZ_UINT flag,
+        IZ_COLOR color,
+        IZ_FLOAT radius,
+        IZ_FLOAT y,
+        IZ_FLOAT longitude);
+
+    // Set indices.
+    IZ_BOOL SetIdx(IZ_UINT slices);
+};
 
 Seat::SeatPart* Seat::SeatPart::Create(
     izanagi::IMemoryAllocator* allocator,
@@ -50,7 +95,7 @@ IZ_BOOL Seat::SeatPart::Init(
 
     // Vertex count.
     //  Inner faces = (slices + 1) * 2 [vertices]
-    //  Top faces = slices + 1 [vertices] (1 is share with inner faces)
+    //  Top faces = slices + 1 [vertices] (1 vertices group is shared with inner faces)
     IZ_UINT vtxNum = (slices + 1) * 3;
 
     // Index count.
@@ -110,7 +155,7 @@ IZ_BOOL Seat::SeatPart::SetVtx(
     SMeshVtx* vtx = GetVtx();
 
     //IZ_FLOAT longitudeStep = IZ_MATH_PI2 / slices;
-    IZ_FLOAT longitudeStep = IZ_MATH_PI / slices;
+    IZ_FLOAT longitudeStep = -IZ_MATH_PI / slices;
 
     // Bottom of inner faces.
     for (IZ_UINT i = 0; i <= slices; i++) {
@@ -209,8 +254,8 @@ IZ_BOOL Seat::SeatPart::SetIdx(IZ_UINT slices)
     for (IZ_UINT i = 0; i < slices; i++) {
         {
             face->idx[0] = i;
-            face->idx[1] = i + slices + 1;
-            face->idx[2] = i + slices + 2;
+            face->idx[1] = i + slices + 2;
+            face->idx[2] = i + slices + 1;
 
             BindFaceToVtx(face);
             ++face;
@@ -218,8 +263,8 @@ IZ_BOOL Seat::SeatPart::SetIdx(IZ_UINT slices)
 
         {
             face->idx[0] = i;
-            face->idx[1] = i + slices + 2;
-            face->idx[2] = i + 1;
+            face->idx[1] = i + 1;
+            face->idx[2] = i + slices + 2;
 
             BindFaceToVtx(face);
             ++face;
@@ -230,8 +275,8 @@ IZ_BOOL Seat::SeatPart::SetIdx(IZ_UINT slices)
     for (IZ_UINT i = 0; i < slices; i++) {
         {
             face->idx[0] = i + slices + 1;
-            face->idx[1] = i + (slices + 1) * 2;
-            face->idx[2] = i + (slices + 1) * 2 + 1;
+            face->idx[1] = i + (slices + 1) * 2 + 1;
+            face->idx[2] = i + (slices + 1) * 2;
 
             BindFaceToVtx(face);
             ++face;
@@ -239,8 +284,8 @@ IZ_BOOL Seat::SeatPart::SetIdx(IZ_UINT slices)
 
         {
             face->idx[0] = i + slices + 1;
-            face->idx[1] = i + (slices + 1) * 2 + 1;
-            face->idx[2] = i + slices + 2;
+            face->idx[1] = i + slices + 2;
+            face->idx[2] = i + (slices + 1) * 2 + 1;
 
             BindFaceToVtx(face);
             ++face;
@@ -297,6 +342,16 @@ IZ_BOOL Seat::Init(
 {
     IZ_ASSERT(device != IZ_NULL);
 
+    m_Floor = izanagi::CDebugMeshRectangle::CreateDebugMeshRectangle(
+        allocator,
+        device,
+        MeshFlags,
+        Color,
+        1, 1,
+        InnerRadius * 2.0f,
+        InnerRadius * 2.0f);
+    VRETURN(m_Floor != IZ_NULL);
+
     m_FlontSeat = SeatPart::Create(
         allocator,
         device,
@@ -319,6 +374,9 @@ IZ_BOOL Seat::Init(
 void Seat::Render(izanagi::graph::CGraphicsDevice* device)
 {
     IZ_ASSERT(device != IZ_NULL);
+
+    IZ_ASSERT(m_Floor != IZ_NULL);
+    m_Floor->Draw(device);
 
     IZ_ASSERT(m_FlontSeat != IZ_NULL);
     m_FlontSeat->Draw(device);

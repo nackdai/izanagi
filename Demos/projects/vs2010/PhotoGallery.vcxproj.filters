@@ -29,12 +29,21 @@
     <ClCompile Include="..\..\PhotoGallery\Seat.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\PhotoGallery\PhotoItemMesh.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\PhotoGallery\PhotoGalleryApp.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\PhotoGallery\Seat.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PhotoGallery\PhotoItemMesh.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PhotoGallery\Configure.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

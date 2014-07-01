@@ -53,47 +53,7 @@ public:
 
 private:
     // Parts of photo's seat.
-    class SeatPart : public izanagi::CDebugMesh {
-    public:
-        static SeatPart* Create(
-            izanagi::IMemoryAllocator* allocator,
-            izanagi::graph::CGraphicsDevice* device,
-            IZ_FLOAT innerRadius, IZ_FLOAT outerRadius,
-            IZ_FLOAT height,
-            IZ_UINT slices);
-
-    private:
-        SeatPart() {}
-        virtual ~SeatPart() {}
-
-    private:
-        IZ_BOOL Init(
-            izanagi::graph::CGraphicsDevice* device,
-            IZ_UINT flag,
-            IZ_FLOAT innerRadius, IZ_FLOAT outerRadius,
-            IZ_FLOAT height,
-            IZ_UINT slices);
-
-        // Set vertices.
-        IZ_BOOL SetVtx(
-            IZ_UINT flag,
-            IZ_COLOR color,
-            IZ_FLOAT innerRadius, IZ_FLOAT outerRadius,
-            IZ_FLOAT height,
-            IZ_UINT slices);
-
-        // Compute vertices.
-        void ComputeVtx(
-            SMeshVtx* vtx,
-            IZ_UINT flag,
-            IZ_COLOR color,
-            IZ_FLOAT radius,
-            IZ_FLOAT y,
-            IZ_FLOAT longitude);
-
-        // Set indices.
-        IZ_BOOL SetIdx(IZ_UINT slices);
-    };
+    class SeatPart;
 
 private:
     izanagi::IMemoryAllocator* m_Allocator;
