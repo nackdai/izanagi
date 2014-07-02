@@ -52,10 +52,28 @@ IZ_BOOL PhotoItem::Init(
     return IZ_TRUE;
 }
 
-void PhotoItem::Render(izanagi::graph::CGraphicsDevice* device)
+void PhotoItem::RenderFront(izanagi::graph::CGraphicsDevice* device)
 {
     IZ_ASSERT(device != IZ_NULL);
 
     IZ_ASSERT(m_Mesh != IZ_NULL);
-    m_Mesh->Render(device);
+    m_Mesh->RenderFront(device);
+}
+
+void PhotoItem::RenderTopAndSide(izanagi::graph::CGraphicsDevice* device)
+{
+    IZ_ASSERT(device != IZ_NULL);
+
+    IZ_ASSERT(m_Mesh != IZ_NULL);
+    m_Mesh->RenderTopAndSide(device);
+}
+
+void PhotoItem::SetTexture(izanagi::graph::CTexture* texture)
+{
+    m_Mesh->SetTexture(texture);
+}
+
+IZ_BOOL PhotoItem::HasTexture()
+{
+    return (m_Mesh->GetTexture() != IZ_NULL);
 }

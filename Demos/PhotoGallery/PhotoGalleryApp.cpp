@@ -1,7 +1,7 @@
 #include "PhotoGalleryApp.h"
 #include "Seat.h"
-
 #include "PhotoItem.h"
+#include "LoadTextureJob.h"
 
 PhotoGalleryApp::PhotoGalleryApp()
 {
@@ -52,6 +52,13 @@ IZ_BOOL PhotoGalleryApp::InitInternal(
         (IZ_FLOAT)device->GetBackBufferWidth() / device->GetBackBufferHeight());
     camera.Update();
 
+    TextureLoader::Instance().Init(allocator);
+
+    TextureLoader::Instance().AddTarget(
+        device,
+        "data/test.jpg",
+        m_Item);
+
 __EXIT__:
     if (!result) {
         ReleaseInternal();
@@ -67,12 +74,17 @@ void PhotoGalleryApp::ReleaseInternal()
     SAFE_RELEASE(m_Seat);
 
     SAFE_RELEASE(m_Item);
+
+    TextureLoader::Instance().Terminate();
+    izanagi::threadmodel::CJobQueue::TerminateJobQueue();
 }
 
 // 更新.
 void PhotoGalleryApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
     GetCamera().Update();
+
+    izanagi::threadmodel::CJobQueue::UpdateQueues();
 }
 
 namespace {
@@ -102,7 +114,32 @@ void PhotoGalleryApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     izanagi::math::SMatrix mtxL2W;
     izanagi::math::SMatrix::SetUnit(mtxL2W);
 
-    // テクスチャなし
+    m_Shader->Begin(device, 0, IZ_FALSE);
+    {
+        if (m_Shader->BeginPass(0)) {
+            // パラメータ設定
+            _SetShaderParam(
+                m_Shader,
+                "g_mL2W",
+                (void*)&mtxL2W,
+                sizeof(mtxL2W));
+
+            _SetShaderParam(
+                m_Shader,
+                "g_mW2C",
+                (void*)&camera.GetParam().mtxW2C,
+                sizeof(camera.GetParam().mtxW2C));
+
+            // シェーダ設定
+            m_Shader->CommitChanges(device);
+
+            m_Item->RenderFront(device);
+
+            m_Shader->EndPass();
+        }
+    }
+    m_Shader->End(device);
+
     m_Shader->Begin(device, 1, IZ_FALSE);
     {
         if (m_Shader->BeginPass(0)) {
@@ -122,10 +159,9 @@ void PhotoGalleryApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
             // シェーダ設定
             m_Shader->CommitChanges(device);
 
-            m_Item->Render(device);
+            m_Item->RenderTopAndSide(device);
 
             m_Shader->EndPass();
         }
     }
-    m_Shader->End(device);
 }

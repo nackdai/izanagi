@@ -43,6 +43,7 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\PhotoGallery\LoadTextureJob.cpp" />
     <ClCompile Include="..\..\PhotoGallery\main.cpp" />
     <ClCompile Include="..\..\PhotoGallery\PhotoGalleryApp.cpp" />
     <ClCompile Include="..\..\PhotoGallery\PhotoItem.cpp" />
@@ -51,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\PhotoGallery\Configure.h" />
+    <ClInclude Include="..\..\PhotoGallery\LoadTextureJob.h" />
     <ClInclude Include="..\..\PhotoGallery\PhotoGalleryApp.h" />
     <ClInclude Include="..\..\PhotoGallery\PhotoItem.h" />
     <ClInclude Include="..\..\PhotoGallery\PhotoItemMesh.h" />
@@ -127,12 +129,14 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalIncludeDirectories>..\..\..\External\libjpeg;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalDependencies>Shader.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Shader.lib;ThreadModel.lib;libjpeg.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\..\External\libjpeg\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">

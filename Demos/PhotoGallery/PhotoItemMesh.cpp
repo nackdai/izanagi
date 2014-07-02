@@ -497,12 +497,16 @@ PhotoItemMesh::PhotoItemMesh()
 {
     m_FrontFace = IZ_NULL;
     m_TopAndSideFaces = IZ_NULL;
+
+    m_Texture = IZ_NULL;
 }
 
 PhotoItemMesh::~PhotoItemMesh()
 {
     SAFE_RELEASE(m_FrontFace);
     SAFE_RELEASE(m_TopAndSideFaces);
+
+    SAFE_RELEASE(m_Texture);
 }
 
 template <typename _T>
@@ -557,13 +561,30 @@ IZ_BOOL PhotoItemMesh::Init(
     return IZ_TRUE;
 }
 
-void PhotoItemMesh::Render(izanagi::graph::CGraphicsDevice* device)
+void PhotoItemMesh::RenderFront(izanagi::graph::CGraphicsDevice* device)
 {
     IZ_ASSERT(device != IZ_NULL);
 
+    device->SetTexture(0, m_Texture);
+
     IZ_ASSERT(m_FrontFace != IZ_NULL);
     m_FrontFace->Draw(device);
+}
+
+void PhotoItemMesh::RenderTopAndSide(izanagi::graph::CGraphicsDevice* device)
+{
+    IZ_ASSERT(device != IZ_NULL);
 
     IZ_ASSERT(m_TopAndSideFaces != IZ_NULL);
     m_TopAndSideFaces->Draw(device);
+}
+
+void PhotoItemMesh::SetTexture(izanagi::graph::CTexture* texture)
+{
+    SAFE_REPLACE(m_Texture, texture);
+}
+
+izanagi::graph::CTexture* PhotoItemMesh::GetTexture()
+{
+    return m_Texture;
 }

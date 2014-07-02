@@ -35,6 +35,9 @@
     <ClCompile Include="..\..\PhotoGallery\PhotoItem.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\PhotoGallery\LoadTextureJob.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\PhotoGallery\PhotoGalleryApp.h">
@@ -50,6 +53,9 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\PhotoGallery\PhotoItem.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PhotoGallery\LoadTextureJob.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

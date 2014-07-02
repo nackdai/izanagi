@@ -44,13 +44,23 @@ private:
         IZ_FLOAT depth);
 
 public:
-    /** Render a photo item.
+    /** Render front face of photo item.
      */
-    void Render(izanagi::graph::CGraphicsDevice* device);
+    void RenderFront(izanagi::graph::CGraphicsDevice* device);
+
+    /** Render top and side faces of photo item.
+     */
+    void RenderTopAndSide(izanagi::graph::CGraphicsDevice* device);
+
+    void SetTexture(izanagi::graph::CTexture* texture);
+
+    izanagi::graph::CTexture* GetTexture();
 
 private:
     FrontFace* m_FrontFace;
     TopAndSideFaces* m_TopAndSideFaces;
+
+    izanagi::graph::CTexture* m_Texture;
 };
 
 #endif    // #if !defined(__PHOTO_ITEM_MESH_H__)

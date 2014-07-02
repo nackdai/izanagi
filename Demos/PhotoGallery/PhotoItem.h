@@ -25,10 +25,21 @@ private:
         izanagi::graph::CGraphicsDevice* device);
 
 public:
-    void Render(izanagi::graph::CGraphicsDevice* device);
+    /** Render front face of photo item.
+     */
+    void RenderFront(izanagi::graph::CGraphicsDevice* device);
 
-public:
+    /** Render top and side faces of photo item.
+     */
+    void RenderTopAndSide(izanagi::graph::CGraphicsDevice* device);
+
     izanagi::CStdList<PhotoItem>::Item* GetListItem();
+
+    void SetTexture(izanagi::graph::CTexture* texture);
+
+    /** Get if photo item has texture.
+     */
+    IZ_BOOL HasTexture();
 
 private:
     izanagi::IMemoryAllocator* m_Allocator;
