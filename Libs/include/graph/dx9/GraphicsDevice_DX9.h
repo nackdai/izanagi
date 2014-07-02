@@ -44,6 +44,12 @@ namespace graph
             E_GRAPH_PIXEL_FMT fmt,
             E_GRAPH_RSC_USAGE nRscType);
 
+        virtual CTexture* CreateTexture(
+            IZ_UINT width,
+            IZ_UINT height,
+            E_GRAPH_PIXEL_FMT fmt,
+            void* data);
+
         // キューブテクスチャ作成
         virtual CCubeTexture* CreateCubeTexture(
             IZ_UINT nWidth,

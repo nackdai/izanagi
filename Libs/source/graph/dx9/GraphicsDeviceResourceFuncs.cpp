@@ -10,6 +10,8 @@
 #include "graph/dx9/VertexDeclaration_DX9.h"
 #include "graph/dx9/RenderTarget_DX9.h"
 
+#include "graph/GraphUtil.h"
+
 namespace izanagi
 {
 namespace graph
@@ -55,6 +57,32 @@ namespace graph
         }
 
         return pTexture;
+    }
+
+    CTexture* CGraphicsDeviceDX9::CreateTexture(
+        IZ_UINT width,
+        IZ_UINT height,
+        E_GRAPH_PIXEL_FMT fmt,
+        void* data)
+    {
+        CTexture* texture = CreateTexture(
+            width, height, 1,
+            fmt,
+            E_GRAPH_RSC_USAGE_STATIC);
+        VRETURN_NULL(texture != IZ_NULL);
+
+        void* dst = IZ_NULL;
+        VRETURN_NULL(
+            texture->Lock(0, (void**)&dst, IZ_FALSE));
+
+        IZ_UINT bpp = CGraphUtil::GetBPP(fmt);
+        IZ_UINT size = width * height * bpp;
+
+        memcpy(dst, data, size);
+
+        texture->Unlock(0);
+
+        return texture;
     }
 
     /**

@@ -78,6 +78,13 @@ namespace graph
                 E_GRAPH_PIXEL_FMT fmt,
                 E_GRAPH_RSC_USAGE nRscType));
 
+        PURE_VIRTUAL(
+            CTexture* CreateTexture(
+                IZ_UINT width,
+                IZ_UINT height,
+                E_GRAPH_PIXEL_FMT fmt,
+                void* data));
+
         /** Create a cube texture resource.
          *
          * @param [in] nWidth Width of the top-level of the texture, in pixels.
