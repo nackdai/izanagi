@@ -59,6 +59,10 @@ public:
 
     PhotoItemMesh* GetMesh();
 
+    IZ_BOOL HitTest(
+        const izanagi::math::CRay& ray,
+        const izanagi::math::SMatrix& mtxRot);
+
     void SetIsRequestedLoadTexture(IZ_BOOL flag);
     IZ_BOOL IsRequestedLoadTexture();
 
@@ -70,6 +74,8 @@ private:
     PhotoItemMesh* m_Mesh;
 
     izanagi::math::SMatrix m_L2W;
+
+    izanagi::math::CRectangle m_Rectangle;
 
     IZ_BOOL m_IsRequestedLoadTexture;
 };

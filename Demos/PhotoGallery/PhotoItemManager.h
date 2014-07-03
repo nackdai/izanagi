@@ -59,6 +59,10 @@ public:
 
     void SetAngleRate(IZ_FLOAT angle);
 
+    IZ_BOOL IsRotateAnimating();
+
+    PhotoItem* HitTest(const izanagi::math::CRay& ray);
+
 private:
     PhotoItem* FindNotRequestedLoadTexture();
 

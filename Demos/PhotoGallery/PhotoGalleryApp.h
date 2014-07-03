@@ -5,6 +5,7 @@
 #include "GestureListener.h"
 
 class Seat;
+class PhotoItem;
 
 class PhotoGalleryApp : public izanagi::sample::CSampleApp {
 public:

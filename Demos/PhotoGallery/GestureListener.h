@@ -4,6 +4,8 @@
 #include "izSampleKit.h"
 #include "izUI.h"
 
+class PhotoGalleryApp;
+
 class CGestureListener : public izanagi::ui::CGestureListenerImplement
 {
 public:

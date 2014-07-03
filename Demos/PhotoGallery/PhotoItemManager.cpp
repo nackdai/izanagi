@@ -314,3 +314,27 @@ void PhotoItemManager::SetAngleRate(IZ_FLOAT angle)
 {
     m_AngleRate = angle;
 }
+
+IZ_BOOL PhotoItemManager::IsRotateAnimating()
+{
+    return (m_AngleRate != 0.0f);
+}
+
+PhotoItem* PhotoItemManager::HitTest(const izanagi::math::CRay& ray)
+{
+    for (IZ_UINT i = 0; i < COUNTOF(m_PhotoItemList); i++) {
+        izanagi::CStdList<PhotoItem>::Item* item = m_PhotoItemList[i].GetTop();
+
+        while (item != IZ_NULL) {
+            PhotoItem* photoItem = item->GetData();
+
+            if (photoItem->HitTest(ray, m_mtxRot)) {
+                return photoItem;
+            }
+
+            item = item->GetNext();
+        }
+    }
+
+    return IZ_NULL;
+}

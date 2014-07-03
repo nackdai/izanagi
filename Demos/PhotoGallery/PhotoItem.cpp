@@ -51,6 +51,10 @@ IZ_BOOL PhotoItem::Init(
     izanagi::graph::CGraphicsDevice* device,
     PhotoItemMesh* mesh)
 {
+    // TODO
+    const IZ_FLOAT Width = 10.0f;
+    const IZ_FLOAT Height = 10.0f;
+
     if (mesh != IZ_NULL) {
         SAFE_REPLACE(m_Mesh, mesh);
     }
@@ -58,11 +62,24 @@ IZ_BOOL PhotoItem::Init(
         m_Mesh = PhotoItemMesh::Create(
             allocator,
             device,
-            10.0f, 10.0f,
+            Width, Height,
             Configure::Depth);
     }
 
     VRETURN(m_Mesh != IZ_NULL);
+
+    // NOTE
+    //          +y
+    //      +---|---+
+    //      |   |   |
+    //      |   |   |
+    //      |   |   |
+    // +x <-+---0---+
+
+    m_Rectangle.Set(
+        izanagi::math::CVector(-Width * 0.5f, 0.0f, 0.0f),  // Right-Bottom point.
+        izanagi::math::CVector(Width, 0.0f, 0.0f),          // Left direction.
+        izanagi::math::CVector(0.0f, Height, 0.0f));        // Up direction.
 
     return IZ_TRUE;
 }
@@ -118,6 +135,21 @@ const izanagi::math::SMatrix& PhotoItem::GetL2W()
 PhotoItemMesh* PhotoItem::GetMesh()
 {
     return m_Mesh;
+}
+
+IZ_BOOL PhotoItem::HitTest(
+    const izanagi::math::CRay& ray,
+    const izanagi::math::SMatrix& mtxRot)
+{
+    izanagi::math::SMatrix mtx;
+    izanagi::math::SMatrix::Mul(mtx, m_L2W, mtxRot);
+
+    izanagi::math::CRectangle rc;
+    m_Rectangle.Transform(rc, mtx);
+
+    IZ_BOOL ret = m_Rectangle.IsIntersect(ray);
+
+    return ret;
 }
 
 void PhotoItem::SetIsRequestedLoadTexture(IZ_BOOL flag)
