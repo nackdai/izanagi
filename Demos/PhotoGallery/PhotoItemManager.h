@@ -17,10 +17,12 @@ public:
 public:
     void RenderWithTexture(
         izanagi::graph::CGraphicsDevice* device,
+        const izanagi::math::SMatrix& mtxRot,
         izanagi::shader::CShaderBasic* shader);
 
     void RenderWithoutTexture(
         izanagi::graph::CGraphicsDevice* device,
+        const izanagi::math::SMatrix& mtxRot,
         izanagi::shader::CShaderBasic* shader);
 };
 
@@ -49,15 +51,22 @@ public:
         izanagi::graph::CGraphicsDevice* device,
         const char* path);
 
+    void Update();
+
     void Render(
         izanagi::graph::CGraphicsDevice* device,
         const izanagi::CCamera& camera);
+
+    void SetAngleRate(IZ_FLOAT angle);
 
 private:
     PhotoItem* FindNotRequestedLoadTexture();
 
 private:
-    PhotoItemList m_PhotoItemList[1];
+    PhotoItemList m_PhotoItemList[3];
+
+    IZ_FLOAT m_AngleRate;
+    izanagi::math::SMatrix m_mtxRot;
 
     izanagi::shader::CShaderBasic* m_Shader;
 };

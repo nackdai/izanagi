@@ -84,7 +84,8 @@ void CSampleWndProc::OnMouseMove(const izanagi::CIntPoint& point)
 {
     IZ_ASSERT(m_App != IZ_NULL);
 
-    if (m_Flags.onLBtn) {
+    //if (m_Flags.onLBtn) {
+    if (m_Flags.onRBtn) {
         m_App->GetCamera().Rotate(
             izanagi::CFloatPoint(
                 _NormalizeHorizontal(m_App, m_PrevPoint.x),

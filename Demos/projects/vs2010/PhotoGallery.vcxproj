@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\PhotoGallery\Configure.cpp" />
+    <ClCompile Include="..\..\PhotoGallery\GestureListener.cpp" />
     <ClCompile Include="..\..\PhotoGallery\LoadTextureJob.cpp" />
     <ClCompile Include="..\..\PhotoGallery\main.cpp" />
     <ClCompile Include="..\..\PhotoGallery\PhotoGalleryApp.cpp" />
@@ -55,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\PhotoGallery\Configure.h" />
+    <ClInclude Include="..\..\PhotoGallery\GestureListener.h" />
     <ClInclude Include="..\..\PhotoGallery\LoadTextureJob.h" />
     <ClInclude Include="..\..\PhotoGallery\PhotoGalleryApp.h" />
     <ClInclude Include="..\..\PhotoGallery\PhotoItem.h" />
@@ -140,7 +142,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalDependencies>Shader.lib;ThreadModel.lib;libjpeg.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Shader.lib;ThreadModel.lib;UI.lib;libjpeg.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\..\External\libjpeg\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>

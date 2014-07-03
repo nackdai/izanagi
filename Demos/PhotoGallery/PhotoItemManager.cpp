@@ -16,6 +16,7 @@ PhotoItemList::~PhotoItemList()
 
 void PhotoItemList::RenderWithTexture(
     izanagi::graph::CGraphicsDevice* device,
+    const izanagi::math::SMatrix& mtxRot,
     izanagi::shader::CShaderBasic* shader)
 {
     izanagi::CStdList<PhotoItem>::Item* item = this->GetTop();
@@ -24,13 +25,16 @@ void PhotoItemList::RenderWithTexture(
         PhotoItem* photoItem = item->GetData();
 
         if (photoItem->HasTexture()) {
+            izanagi::math::SMatrix mtx;
             const izanagi::math::SMatrix& mtxL2W = photoItem->GetL2W();
+
+            izanagi::math::SMatrix::Mul(mtx, mtxL2W, mtxRot);
 
             Utility::SetShaderParam(
                 shader,
                 "g_mL2W",
-                (void*)&mtxL2W,
-                sizeof(mtxL2W));
+                (void*)&mtx,
+                sizeof(mtx));
 
             shader->CommitChanges(device);
             photoItem->RenderFront(device);
@@ -42,6 +46,7 @@ void PhotoItemList::RenderWithTexture(
 
 void PhotoItemList::RenderWithoutTexture(
     izanagi::graph::CGraphicsDevice* device,
+    const izanagi::math::SMatrix& mtxRot,
     izanagi::shader::CShaderBasic* shader)
 {
     izanagi::CStdList<PhotoItem>::Item* item = this->GetTop();
@@ -49,13 +54,16 @@ void PhotoItemList::RenderWithoutTexture(
     while (item != IZ_NULL) {
         PhotoItem* photoItem = item->GetData();
 
+        izanagi::math::SMatrix mtx;
         const izanagi::math::SMatrix& mtxL2W = photoItem->GetL2W();
+
+        izanagi::math::SMatrix::Mul(mtx, mtxL2W, mtxRot);
 
         Utility::SetShaderParam(
             shader,
             "g_mL2W",
-            (void*)&mtxL2W,
-            sizeof(mtxL2W));
+            (void*)&mtx,
+            sizeof(mtx));
 
         shader->CommitChanges(device);
 
@@ -80,6 +88,7 @@ PhotoItemManager& PhotoItemManager::Instance()
 
 PhotoItemManager::PhotoItemManager()
 {
+    m_AngleRate = 0.0f;
     m_Shader = IZ_NULL;
 }
 
@@ -93,6 +102,9 @@ IZ_BOOL PhotoItemManager::Init(
     izanagi::graph::CGraphicsDevice* device,
     IZ_UINT itemNum)
 {
+    // Init rotation matrix.
+    izanagi::math::SMatrix::SetUnit(m_mtxRot);
+
     // Compute item count per list.
     IZ_UINT itemNumPerList = itemNum / COUNTOF(m_PhotoItemList);
     itemNumPerList = (itemNumPerList == 0 ? itemNum : itemNumPerList);
@@ -210,6 +222,22 @@ IZ_BOOL PhotoItemManager::EnqueueLoadingRequest(
 
 }
 
+void PhotoItemManager::Update()
+{
+    if (m_AngleRate != 0.0f) {
+        izanagi::math::SMatrix::RotByY(
+            m_mtxRot,
+            m_mtxRot,
+            m_AngleRate);
+
+        m_AngleRate *= 0.95f;
+
+        if (izanagi::math::CMath::Absf(m_AngleRate) < IZ_MATH_PI2 / 10000.0f) {
+            m_AngleRate = 0.0f;
+        }
+    }
+}
+
 void PhotoItemManager::Render(
     izanagi::graph::CGraphicsDevice* device,
     const izanagi::CCamera& camera)
@@ -228,7 +256,10 @@ void PhotoItemManager::Render(
                 sizeof(camera.GetParam().mtxW2C));
 
             for (int i = 0; i < COUNTOF(m_PhotoItemList); i++) {
-                m_PhotoItemList[i].RenderWithTexture(device, m_Shader);
+                m_PhotoItemList[i].RenderWithTexture(
+                    device,
+                    m_mtxRot,
+                    m_Shader);
             }
 
             m_Shader->EndPass();
@@ -248,7 +279,10 @@ void PhotoItemManager::Render(
                 sizeof(camera.GetParam().mtxW2C));
 
             for (int i = 0; i < COUNTOF(m_PhotoItemList); i++) {
-                m_PhotoItemList[i].RenderWithoutTexture(device, m_Shader);
+                m_PhotoItemList[i].RenderWithoutTexture(
+                    device,
+                    m_mtxRot,
+                    m_Shader);
             }
 
             m_Shader->EndPass();
@@ -274,4 +308,9 @@ PhotoItem* PhotoItemManager::FindNotRequestedLoadTexture()
     }
 
     return IZ_NULL;
+}
+
+void PhotoItemManager::SetAngleRate(IZ_FLOAT angle)
+{
+    m_AngleRate = angle;
 }

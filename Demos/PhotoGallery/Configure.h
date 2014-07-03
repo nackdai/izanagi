@@ -25,6 +25,8 @@ public:
 
     // Depth.
     static const IZ_FLOAT Depth;
+
+    static const IZ_FLOAT MaxAngleRate;
 };
 
 #endif    // #if !defined(__CONFIGURE_H__)

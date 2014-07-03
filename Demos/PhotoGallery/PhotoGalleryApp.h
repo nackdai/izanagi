@@ -2,9 +2,9 @@
 #define __PHOTO_GALLERY_APP_H__
 
 #include "izSampleKit.h"
+#include "GestureListener.h"
 
 class Seat;
-class PhotoItem;
 
 class PhotoGalleryApp : public izanagi::sample::CSampleApp {
 public:
@@ -27,8 +27,15 @@ protected:
     // 描画.
     virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device);
 
+    virtual IZ_BOOL OnMouseLBtnDown(const izanagi::CIntPoint& point);
+    virtual IZ_BOOL OnMouseLBtnUp(const izanagi::CIntPoint& point);
+    virtual void OnMouseMove(const izanagi::CIntPoint& point);
+
 private:
     Seat* m_Seat;
+
+    izanagi::ui::CGestureDetector m_Detector;
+    CGestureListener m_Listener;
 };
 
 #endif    // #if !defined(__PHOTO_GALLERY_APP_H__)

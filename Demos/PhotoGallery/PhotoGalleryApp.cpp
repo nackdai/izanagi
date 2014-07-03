@@ -26,12 +26,12 @@ IZ_BOOL PhotoGalleryApp::InitInternal(
     PhotoItemManager::Instance().Init(
         allocator,
         device,
-        20);
+        60);
 
     // カメラ
     camera.Init(
-        izanagi::math::CVector(0.0f, 10.0f, 30.0f, 1.0f),
-        izanagi::math::CVector(0.0f, 0.0f, 0.0f, 1.0f),
+        izanagi::math::CVector(0.0f, 5.0f, -50.0f, 1.0f),
+        izanagi::math::CVector(0.0f, 5.0f, -100.0f, 1.0f),
         izanagi::math::CVector(0.0f, 1.0f, 0.0f, 1.0f),
         1.0f,
         500.0f,
@@ -40,6 +40,8 @@ IZ_BOOL PhotoGalleryApp::InitInternal(
     camera.Update();
 
     TextureLoader::Instance().Init(allocator);
+
+    m_Detector.Init(allocator, &m_Listener);
 
 #if 0
     PhotoItemManager::Instance().EnqueueLoadingRequest(
@@ -69,7 +71,11 @@ void PhotoGalleryApp::ReleaseInternal()
 // 更新.
 void PhotoGalleryApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
+    m_Detector.Update();
+
     GetCamera().Update();
+
+    PhotoItemManager::Instance().Update();
 
     izanagi::threadmodel::CJobQueue::UpdateQueues();
 }
@@ -99,4 +105,30 @@ void PhotoGalleryApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     PhotoItemManager::Instance().Render(
         device,
         camera);
+}
+
+IZ_BOOL PhotoGalleryApp::OnMouseLBtnDown(const izanagi::CIntPoint& point)
+{
+    m_Detector.PostTouchEvent(
+        izanagi::sys::CTouchEvent(
+            izanagi::sys::E_SYS_TOUCH_EVENT_DOWN,
+            point.x, point.y));
+    return IZ_TRUE;
+}
+
+IZ_BOOL PhotoGalleryApp::OnMouseLBtnUp(const izanagi::CIntPoint& point)
+{
+    m_Detector.PostTouchEvent(
+        izanagi::sys::CTouchEvent(
+            izanagi::sys::E_SYS_TOUCH_EVENT_UP,
+            point.x, point.y));
+    return IZ_TRUE;
+}
+
+void PhotoGalleryApp::OnMouseMove(const izanagi::CIntPoint& point)
+{
+    m_Detector.PostTouchEvent(
+        izanagi::sys::CTouchEvent(
+            izanagi::sys::E_SYS_TOUCH_EVENT_MOVE,
+            point.x, point.y));
 }
