@@ -112,10 +112,7 @@ namespace math
     // 4x4çsóÒÇ…ÇÊÇÈïœä∑.
     void CRectangle::Transform(const SMatrix& mtx)
     {
-        CVector p(0.0f, 0.0f, 0.0f);
-        SMatrix::Apply(p, p, mtx);
-
-        SVector::AddXYZ(pt, pt, p);
+        SMatrix::Apply(pt, pt, mtx);
 
         SMatrix::ApplyXYZ(v[0], v[0], mtx);
         SMatrix::ApplyXYZ(v[1], v[1], mtx);
