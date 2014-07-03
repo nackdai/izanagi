@@ -147,7 +147,7 @@ namespace izanagi {
             m_Tail.m_pPrev = &m_Top;
         }
 
-        ~CStdList()
+        virtual ~CStdList()
         {
             Clear();
         }

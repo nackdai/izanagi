@@ -39,7 +39,7 @@ namespace threadmodel
         // TODO
         void Init(void* buf, IZ_UINT size)
         {
-            m_Allocator.Init(buf, size);
+            m_Allocator.Init(size, buf);
         }
 
         /** ÉÅÉÇÉäämï€.
