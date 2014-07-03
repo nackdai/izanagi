@@ -25,16 +25,35 @@ IZ_BOOL CMouseHit::InitInternal(
 {
     IZ_BOOL result = IZ_TRUE;
 
-    izanagi::math::SMatrix::GetTrans(
+    izanagi::math::SMatrix::GetRotByX(
+        m_Rectangles[0].mtx,
+        IZ_MATH_PI1_2);
+    izanagi::math::SMatrix::Trans(
+        m_Rectangles[0].mtx,
         m_Rectangles[0].mtx,
         -10.0f, 0.0f, -10.0f);
-    izanagi::math::SMatrix::GetTrans(
+
+    izanagi::math::SMatrix::GetRotByX(
+        m_Rectangles[1].mtx,
+        IZ_MATH_PI1_2);
+    izanagi::math::SMatrix::Trans(
+        m_Rectangles[1].mtx,
         m_Rectangles[1].mtx,
         -10.0f, 0.0f, 10.0f);
-    izanagi::math::SMatrix::GetTrans(
+
+    izanagi::math::SMatrix::GetRotByX(
+        m_Rectangles[2].mtx,
+        IZ_MATH_PI1_2);
+    izanagi::math::SMatrix::Trans(
+        m_Rectangles[2].mtx,
         m_Rectangles[2].mtx,
         10.0f, 0.0f, -10.0f);
-    izanagi::math::SMatrix::GetTrans(
+
+    izanagi::math::SMatrix::GetRotByX(
+        m_Rectangles[3].mtx,
+        IZ_MATH_PI1_2);
+    izanagi::math::SMatrix::Trans(
+        m_Rectangles[3].mtx,
         m_Rectangles[3].mtx,
         10.0f, 0.0f, 10.0f);
 
@@ -58,9 +77,9 @@ IZ_BOOL CMouseHit::InitInternal(
             Length, Length);
 
         m_Rectangles[i].rc.Set(
-            izanagi::math::CVector(-Length * 0.5f, 0.0f, Length * 0.5f),
-            izanagi::math::CVector(        Length, 0.0f,          0.0f),
-            izanagi::math::CVector(          0.0f, 0.0f,       -Length));
+            izanagi::math::CVector(-Length * 0.5f, 0.0f, Length * 0.5f),    // Right-Bottom point
+            izanagi::math::CVector(        Length, 0.0f,          0.0f),    // Left direction vector
+            izanagi::math::CVector(          0.0f, 0.0f,       -Length));   // Up direction vector
 
         m_Rectangles[i].rc.Transform(m_Rectangles[i].mtx);
     }
