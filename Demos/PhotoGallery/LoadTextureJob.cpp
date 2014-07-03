@@ -44,13 +44,14 @@ void TextureLoader::Terminate()
     m_JobQueue.Terminate();
 }
 
-izanagi::threadmodel::CJob* TextureLoader::AddTarget(
+izanagi::threadmodel::CJob* TextureLoader::EnqueueLoadinRequest(
     izanagi::graph::CGraphicsDevice* device,
     const char* path,
     PhotoItem* target)
 {
     IZ_ASSERT(m_Allocator != IZ_NULL);
 
+    // Create loading texture job.
     LoadTextureJob* job = (LoadTextureJob*)izanagi::threadmodel::CJob::CreateJob<LoadTextureJob>(m_Allocator);
     VRETURN_NULL(job != IZ_NULL);
 
@@ -127,6 +128,7 @@ IZ_BOOL LoadTextureJob::OnRun()
 
     jpeg_start_decompress(&cinfo);
 
+    // Alloc buffer to store line data.
     IZ_UINT pitch = cinfo.output_width * cinfo.output_components;
     IZ_UINT8* lineData = (IZ_UINT8*)ALLOC(m_InternalAllocator, pitch + 10);
     VGOTO(lineData != IZ_NULL, __EXIT__);
@@ -135,6 +137,7 @@ IZ_BOOL LoadTextureJob::OnRun()
     const IZ_UINT bpp = izanagi::graph::CGraphUtil::GetBPP(izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA8);
     const IZ_UINT stride = bpp * cinfo.output_width;
 
+    // Alloc buffer to store rgba data.
     IZ_UINT bytes = cinfo.output_width * cinfo.output_height * bpp;
     m_PixelData = (IZ_UINT8*)ALLOC(m_InternalAllocator, bytes);
     VGOTO(m_PixelData != IZ_NULL, __EXIT__);
@@ -148,12 +151,14 @@ IZ_BOOL LoadTextureJob::OnRun()
 
         jpeg_read_scanlines(&cinfo, buffer, 1);
 
+        // If this job is canceld...
         if (IsCanceled()) {
             FREE(m_InternalAllocator, m_PixelData);
             ret = IZ_FALSE;
             break;
         }
 
+        // Convert to rgba.
         for (IZ_UINT i = 0; i < cinfo.output_width; i++) {
             dst[i * 4 + 0] = lineData[i * 3 + 2];
             dst[i * 4 + 1] = lineData[i * 3 + 1];
@@ -164,6 +169,7 @@ IZ_BOOL LoadTextureJob::OnRun()
         dst += stride;
     }
 
+    // Keep image size.
     m_TexWidth = cinfo.output_width;
     m_TexHeight = cinfo.output_height;
 

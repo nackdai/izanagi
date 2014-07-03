@@ -1,14 +1,6 @@
 #include "Seat.h"
 #include "Configure.h"
 
-// Raduis.
-const IZ_FLOAT Seat::InnerRadius = 10.0f;
-const IZ_FLOAT Seat::OuterRadius = Seat::InnerRadius + 10.0f;
-const IZ_FLOAT Seat::MostOuterRadius = Seat::OuterRadius + 10.0f;
-
-// Height.
-const IZ_FLOAT Seat::Height = 5.0f;
-
 ////////////////////////////////////////
 
 class Seat::SeatPart : public izanagi::CDebugMesh {
@@ -72,10 +64,10 @@ Seat::SeatPart* Seat::SeatPart::Create(
         instance->m_Allocator = allocator;
         result = instance->Init(
             device,
-            MeshFlags,
+            Configure::MeshFlags,
             innerRadius, outerRadius,
             height,
-            Slices);
+            Configure::Slices);
     }
 
     if (!result) {
@@ -133,7 +125,7 @@ IZ_BOOL Seat::SeatPart::Init(
     VRETURN(
         SetVtx(
             flag,
-            Color,
+            Configure::DefaultColor,
             innerRadius, outerRadius,
             height,
             slices));
@@ -374,27 +366,29 @@ IZ_BOOL Seat::Init(
     m_Floor = izanagi::CDebugMeshRectangle::CreateDebugMeshRectangle(
         allocator,
         device,
-        MeshFlags,
-        Color,
+        Configure::MeshFlags,
+        Configure::DefaultColor,
         1, 1,
-        InnerRadius * 2.0f,
-        InnerRadius * 2.0f);
+        Configure::InnerRadius * 2.0f,
+        Configure::InnerRadius * 2.0f);
     VRETURN(m_Floor != IZ_NULL);
 
     m_FlontSeat = SeatPart::Create(
         allocator,
         device,
-        InnerRadius, OuterRadius,
-        Height,
-        Slices);
+        Configure::InnerRadius, 
+        Configure::OuterRadius,
+        Configure::Height,
+        Configure::Slices);
     VRETURN(m_FlontSeat != IZ_NULL);
 
     m_RearSeat = SeatPart::Create(
         allocator,
         device,
-        OuterRadius, MostOuterRadius,
-        Height * 2.0f,
-        Slices);
+        Configure::OuterRadius, 
+        Configure::MostOuterRadius,
+        Configure::Height * 2.0f,
+        Configure::Slices);
     VRETURN(m_RearSeat != IZ_NULL);
 
     return IZ_TRUE;

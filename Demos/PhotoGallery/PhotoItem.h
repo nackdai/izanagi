@@ -5,8 +5,12 @@
 
 class PhotoItemMesh;
 
+/** Photo item.
+ */
 class PhotoItem : public izanagi::CObject {
 public:
+    /** Create an instance.
+     */
     static PhotoItem* Create(
         izanagi::IMemoryAllocator* allocator,
         izanagi::graph::CGraphicsDevice* device);
@@ -35,11 +39,19 @@ public:
 
     izanagi::CStdList<PhotoItem>::Item* GetListItem();
 
+    /** Set texture for rendering.
+     */
     void SetTexture(izanagi::graph::CTexture* texture);
 
     /** Get if photo item has texture.
      */
     IZ_BOOL HasTexture();
+
+    /** Set position and rotation.
+     */
+    void SetPositionAndRotation(
+        const izanagi::math::CVector& pos,
+        IZ_FLOAT rot);
 
 private:
     izanagi::IMemoryAllocator* m_Allocator;
@@ -47,6 +59,8 @@ private:
     izanagi::CStdList<PhotoItem>::Item m_ListItem;
 
     PhotoItemMesh* m_Mesh;
+
+    izanagi::math::SMatrix m_L2W;
 };
 
 #endif    // #if !defined(__PHOTO_ITEM_H__)

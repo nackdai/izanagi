@@ -31,6 +31,8 @@ PhotoItem::PhotoItem()
     m_Allocator = IZ_NULL;
     m_Mesh = IZ_NULL;
 
+    izanagi::math::SMatrix::SetUnit(m_L2W);
+
     m_ListItem.Init(this);
 }
 
@@ -68,6 +70,11 @@ void PhotoItem::RenderTopAndSide(izanagi::graph::CGraphicsDevice* device)
     m_Mesh->RenderTopAndSide(device);
 }
 
+izanagi::CStdList<PhotoItem>::Item* PhotoItem::GetListItem()
+{
+    return &m_ListItem;
+}
+
 void PhotoItem::SetTexture(izanagi::graph::CTexture* texture)
 {
     m_Mesh->SetTexture(texture);
@@ -76,4 +83,16 @@ void PhotoItem::SetTexture(izanagi::graph::CTexture* texture)
 IZ_BOOL PhotoItem::HasTexture()
 {
     return (m_Mesh->GetTexture() != IZ_NULL);
+}
+
+void PhotoItem::SetPositionAndRotation(
+    const izanagi::math::CVector& pos,
+    IZ_FLOAT rot)
+{
+    izanagi::math::SMatrix::GetRotByY(m_L2W, rot);
+
+    izanagi::math::SMatrix::Trans(
+        m_L2W,
+        m_L2W,
+        pos);
 }

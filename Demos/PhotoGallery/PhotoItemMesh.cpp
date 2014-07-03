@@ -528,7 +528,7 @@ _T* PhotoItemMesh::CreateFace(
         result = instance->Init(
             allocator,
             device,
-            MeshFlags,
+            Configure::MeshFlags,
             width, height, depth);
     }
 

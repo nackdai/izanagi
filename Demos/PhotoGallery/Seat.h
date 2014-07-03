@@ -13,26 +13,6 @@ public:
         izanagi::graph::CGraphicsDevice* device);
 
 private:
-    // Flags for vertex semantics.
-    static const IZ_UINT MeshFlags = izanagi::E_DEBUG_MESH_VTX_FORM_POS
-        | izanagi::E_DEBUG_MESH_VTX_FORM_COLOR
-        | izanagi::E_DEBUG_MESH_VTX_FORM_NORMAL;
-
-    // Slices of seat.
-    static const IZ_UINT Slices = 20;
-
-    // Color for seat.
-    static const IZ_COLOR Color = IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0xff);
-
-    // Raduis.
-    static const IZ_FLOAT InnerRadius;
-    static const IZ_FLOAT OuterRadius;
-    static const IZ_FLOAT MostOuterRadius;
-
-    // Height.
-    static const IZ_FLOAT Height;
-
-private:
     Seat();
     virtual ~Seat();
 

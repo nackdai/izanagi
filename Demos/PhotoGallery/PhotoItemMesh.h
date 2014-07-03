@@ -3,7 +3,7 @@
 
 #include "izSampleKit.h"
 
-/** Photos's seat.
+/** Mesh for photo item.
  */
 class PhotoItemMesh : public izanagi::CDebugMesh {
 public:
@@ -52,13 +52,17 @@ public:
      */
     void RenderTopAndSide(izanagi::graph::CGraphicsDevice* device);
 
+    /** Set texture for rendering.
+     */
     void SetTexture(izanagi::graph::CTexture* texture);
 
+    /** Get texture which is set for rendering.
+     */
     izanagi::graph::CTexture* GetTexture();
 
 private:
-    FrontFace* m_FrontFace;
-    TopAndSideFaces* m_TopAndSideFaces;
+    FrontFace* m_FrontFace;             //< front face which is mapped texture.
+    TopAndSideFaces* m_TopAndSideFaces; //< top and side faces which are not mapped texture.
 
     izanagi::graph::CTexture* m_Texture;
 };

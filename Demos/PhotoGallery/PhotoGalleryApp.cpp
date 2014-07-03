@@ -54,7 +54,7 @@ IZ_BOOL PhotoGalleryApp::InitInternal(
 
     TextureLoader::Instance().Init(allocator);
 
-    TextureLoader::Instance().AddTarget(
+    TextureLoader::Instance().EnqueueLoadinRequest(
         device,
         "data/test.jpg",
         m_Item);
