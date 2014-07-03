@@ -13,7 +13,8 @@ public:
      */
     static PhotoItem* Create(
         izanagi::IMemoryAllocator* allocator,
-        izanagi::graph::CGraphicsDevice* device);
+        izanagi::graph::CGraphicsDevice* device,
+        PhotoItemMesh* mesh);
 
 private:
     PhotoItem();
@@ -26,7 +27,8 @@ private:
 private:
     IZ_BOOL Init(
         izanagi::IMemoryAllocator* allocator,
-        izanagi::graph::CGraphicsDevice* device);
+        izanagi::graph::CGraphicsDevice* device,
+        PhotoItemMesh* mesh);
 
 public:
     /** Render front face of photo item.
@@ -53,6 +55,13 @@ public:
         const izanagi::math::CVector& pos,
         IZ_FLOAT rot);
 
+    const izanagi::math::SMatrix& GetL2W();
+
+    PhotoItemMesh* GetMesh();
+
+    void SetIsRequestedLoadTexture(IZ_BOOL flag);
+    IZ_BOOL IsRequestedLoadTexture();
+
 private:
     izanagi::IMemoryAllocator* m_Allocator;
 
@@ -61,6 +70,8 @@ private:
     PhotoItemMesh* m_Mesh;
 
     izanagi::math::SMatrix m_L2W;
+
+    IZ_BOOL m_IsRequestedLoadTexture;
 };
 
 #endif    // #if !defined(__PHOTO_ITEM_H__)

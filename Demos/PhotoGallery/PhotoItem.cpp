@@ -1,9 +1,11 @@
 #include "PhotoItem.h"
 #include "PhotoItemMesh.h"
+#include "Configure.h"
 
 PhotoItem* PhotoItem::Create(
     izanagi::IMemoryAllocator* allocator,
-    izanagi::graph::CGraphicsDevice* device)
+    izanagi::graph::CGraphicsDevice* device,
+    PhotoItemMesh* mesh)
 {
     void* buf = ALLOC(allocator, sizeof(PhotoItem));
     VRETURN_NULL(buf != IZ_NULL);
@@ -16,7 +18,8 @@ PhotoItem* PhotoItem::Create(
         instance->m_Allocator = allocator;
         result = instance->Init(
             allocator,
-            device);
+            device,
+            mesh);
     }
 
     if (!result) {
@@ -34,6 +37,8 @@ PhotoItem::PhotoItem()
     izanagi::math::SMatrix::SetUnit(m_L2W);
 
     m_ListItem.Init(this);
+
+    m_IsRequestedLoadTexture = IZ_FALSE;
 }
 
 PhotoItem::~PhotoItem()
@@ -43,12 +48,20 @@ PhotoItem::~PhotoItem()
 
 IZ_BOOL PhotoItem::Init(
     izanagi::IMemoryAllocator* allocator,
-    izanagi::graph::CGraphicsDevice* device)
+    izanagi::graph::CGraphicsDevice* device,
+    PhotoItemMesh* mesh)
 {
-    m_Mesh = PhotoItemMesh::Create(
-        allocator,
-        device,
-        10.0f, 10.0f, 2.0f);
+    if (mesh != IZ_NULL) {
+        SAFE_REPLACE(m_Mesh, mesh);
+    }
+    else {
+        m_Mesh = PhotoItemMesh::Create(
+            allocator,
+            device,
+            10.0f, 10.0f,
+            Configure::Depth);
+    }
+
     VRETURN(m_Mesh != IZ_NULL);
 
     return IZ_TRUE;
@@ -95,4 +108,24 @@ void PhotoItem::SetPositionAndRotation(
         m_L2W,
         m_L2W,
         pos);
+}
+
+const izanagi::math::SMatrix& PhotoItem::GetL2W()
+{
+    return m_L2W;
+}
+
+PhotoItemMesh* PhotoItem::GetMesh()
+{
+    return m_Mesh;
+}
+
+void PhotoItem::SetIsRequestedLoadTexture(IZ_BOOL flag)
+{
+    m_IsRequestedLoadTexture = flag;
+}
+
+IZ_BOOL PhotoItem::IsRequestedLoadTexture()
+{
+    return m_IsRequestedLoadTexture;
 }

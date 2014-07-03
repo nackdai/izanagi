@@ -44,7 +44,7 @@ void TextureLoader::Terminate()
     m_JobQueue.Terminate();
 }
 
-izanagi::threadmodel::CJob* TextureLoader::EnqueueLoadinRequest(
+izanagi::threadmodel::CJob* TextureLoader::EnqueueLoadingRequest(
     izanagi::graph::CGraphicsDevice* device,
     const char* path,
     PhotoItem* target)

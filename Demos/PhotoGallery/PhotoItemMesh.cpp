@@ -82,7 +82,7 @@ IZ_BOOL PhotoItemMesh::FrontFace::Init(
     VRETURN(
         SetVtx(
             flag,
-            Color,
+            Configure::DefaultColor,
             width, height));
 
     VRETURN(SetIdx());
@@ -296,7 +296,7 @@ IZ_BOOL PhotoItemMesh::TopAndSideFaces::Init(
     VRETURN(
         SetVtx(
             flag,
-            Color,
+            Configure::DefaultColor,
             width, height, depth));
 
     VRETURN(SetIdx());

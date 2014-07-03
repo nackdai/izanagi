@@ -38,6 +38,15 @@
     <ClCompile Include="..\..\PhotoGallery\LoadTextureJob.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\PhotoGallery\PhotoItemManager.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PhotoGallery\Configure.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PhotoGallery\Utility.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\PhotoGallery\PhotoGalleryApp.h">
@@ -56,6 +65,12 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\PhotoGallery\LoadTextureJob.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PhotoGallery\PhotoItemManager.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PhotoGallery\Utility.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

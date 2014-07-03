@@ -32,7 +32,7 @@ public:
 
     /** Enqueue loading request.
      */
-    izanagi::threadmodel::CJob* EnqueueLoadinRequest(
+    izanagi::threadmodel::CJob* EnqueueLoadingRequest(
         izanagi::graph::CGraphicsDevice* device,
         const char* path,
         PhotoItem* target);

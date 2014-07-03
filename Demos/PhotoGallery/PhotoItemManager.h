@@ -5,7 +5,7 @@
 
 class PhotoItem;
 
-/**
+/** List of photo items per floor.
  */
 class PhotoItemList : public izanagi::CStdList<PhotoItem> {
 public:
@@ -15,12 +15,16 @@ public:
     NO_COPIABLE(PhotoItemList);
 
 public:
-    void RenderFront(izanagi::graph::CGraphicsDevice* device);
+    void RenderWithTexture(
+        izanagi::graph::CGraphicsDevice* device,
+        izanagi::shader::CShaderBasic* shader);
 
-    void RenderTopAndSide(izanagi::graph::CGraphicsDevice* device);
+    void RenderWithoutTexture(
+        izanagi::graph::CGraphicsDevice* device,
+        izanagi::shader::CShaderBasic* shader);
 };
 
-/**
+/** Manager of photo item.
  */
 class PhotoItemManager {
 private:
@@ -39,8 +43,21 @@ public:
         izanagi::graph::CGraphicsDevice* device,
         IZ_UINT itemNum);
 
+    void Terminate();
+
+    IZ_BOOL EnqueueLoadingRequest(
+        izanagi::graph::CGraphicsDevice* device,
+        const char* path);
+
+    void Render(
+        izanagi::graph::CGraphicsDevice* device,
+        const izanagi::CCamera& camera);
+
 private:
-    PhotoItemList m_PhotoItemList[3];
+    PhotoItem* FindNotRequestedLoadTexture();
+
+private:
+    PhotoItemList m_PhotoItemList[1];
 
     izanagi::shader::CShaderBasic* m_Shader;
 };

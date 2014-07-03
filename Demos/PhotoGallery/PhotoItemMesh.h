@@ -16,10 +16,6 @@ public:
         IZ_FLOAT depth);
 
 private:
-    // Color for mesh.
-    static const IZ_COLOR Color = IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0xff);
-
-private:
     PhotoItemMesh();
     virtual ~PhotoItemMesh();
 

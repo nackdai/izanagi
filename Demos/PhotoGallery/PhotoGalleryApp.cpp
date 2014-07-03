@@ -1,14 +1,11 @@
 #include "PhotoGalleryApp.h"
 #include "Seat.h"
-#include "PhotoItem.h"
+#include "PhotoItemManager.h"
 #include "LoadTextureJob.h"
 
 PhotoGalleryApp::PhotoGalleryApp()
 {
-    m_Shader = IZ_NULL;
     m_Seat = IZ_NULL;
-
-    m_Item = IZ_NULL;
 }
 
 PhotoGalleryApp::~PhotoGalleryApp()
@@ -23,23 +20,13 @@ IZ_BOOL PhotoGalleryApp::InitInternal(
 {
     IZ_BOOL result = IZ_TRUE;
 
-    // シェーダ
-    {
-        izanagi::CFileInputStream in;
-        VGOTO(result = in.Open("data/BasicShader.shd"), __EXIT__);
-
-        m_Shader = izanagi::shader::CShaderBasic::CreateShader<izanagi::shader::CShaderBasic>(
-                    allocator,
-                    device,
-                    &in);
-        VGOTO(result = (m_Shader != IZ_NULL), __EXIT__);
-    }
-
     m_Seat = Seat::Create(allocator, device);
     VGOTO(result = (m_Seat != IZ_NULL), __EXIT__);
 
-    m_Item = PhotoItem::Create(allocator, device);
-    VGOTO(result = (m_Item != IZ_NULL), __EXIT__);
+    PhotoItemManager::Instance().Init(
+        allocator,
+        device,
+        20);
 
     // カメラ
     camera.Init(
@@ -54,10 +41,11 @@ IZ_BOOL PhotoGalleryApp::InitInternal(
 
     TextureLoader::Instance().Init(allocator);
 
-    TextureLoader::Instance().EnqueueLoadinRequest(
+#if 0
+    PhotoItemManager::Instance().EnqueueLoadingRequest(
         device,
-        "data/test.jpg",
-        m_Item);
+        "data/test.jpg");
+#endif
 
 __EXIT__:
     if (!result) {
@@ -70,13 +58,12 @@ __EXIT__:
 // 解放.
 void PhotoGalleryApp::ReleaseInternal()
 {
-    SAFE_RELEASE(m_Shader);
     SAFE_RELEASE(m_Seat);
-
-    SAFE_RELEASE(m_Item);
 
     TextureLoader::Instance().Terminate();
     izanagi::threadmodel::CJobQueue::TerminateJobQueue();
+
+    PhotoItemManager::Instance().Terminate();
 }
 
 // 更新.
@@ -107,61 +94,9 @@ namespace {
 // 描画.
 void PhotoGalleryApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
-    static const IZ_BOOL isDrawTangentSpaceAxis = IZ_FALSE;
-
     izanagi::sample::CSampleCamera& camera = GetCamera();
 
-    izanagi::math::SMatrix mtxL2W;
-    izanagi::math::SMatrix::SetUnit(mtxL2W);
-
-    m_Shader->Begin(device, 0, IZ_FALSE);
-    {
-        if (m_Shader->BeginPass(0)) {
-            // パラメータ設定
-            _SetShaderParam(
-                m_Shader,
-                "g_mL2W",
-                (void*)&mtxL2W,
-                sizeof(mtxL2W));
-
-            _SetShaderParam(
-                m_Shader,
-                "g_mW2C",
-                (void*)&camera.GetParam().mtxW2C,
-                sizeof(camera.GetParam().mtxW2C));
-
-            // シェーダ設定
-            m_Shader->CommitChanges(device);
-
-            m_Item->RenderFront(device);
-
-            m_Shader->EndPass();
-        }
-    }
-    m_Shader->End(device);
-
-    m_Shader->Begin(device, 1, IZ_FALSE);
-    {
-        if (m_Shader->BeginPass(0)) {
-            // パラメータ設定
-            _SetShaderParam(
-                m_Shader,
-                "g_mL2W",
-                (void*)&mtxL2W,
-                sizeof(mtxL2W));
-
-            _SetShaderParam(
-                m_Shader,
-                "g_mW2C",
-                (void*)&camera.GetParam().mtxW2C,
-                sizeof(camera.GetParam().mtxW2C));
-
-            // シェーダ設定
-            m_Shader->CommitChanges(device);
-
-            m_Item->RenderTopAndSide(device);
-
-            m_Shader->EndPass();
-        }
-    }
+    PhotoItemManager::Instance().Render(
+        device,
+        camera);
 }

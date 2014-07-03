@@ -43,20 +43,25 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\PhotoGallery\Configure.cpp" />
     <ClCompile Include="..\..\PhotoGallery\LoadTextureJob.cpp" />
     <ClCompile Include="..\..\PhotoGallery\main.cpp" />
     <ClCompile Include="..\..\PhotoGallery\PhotoGalleryApp.cpp" />
     <ClCompile Include="..\..\PhotoGallery\PhotoItem.cpp" />
+    <ClCompile Include="..\..\PhotoGallery\PhotoItemManager.cpp" />
     <ClCompile Include="..\..\PhotoGallery\PhotoItemMesh.cpp" />
     <ClCompile Include="..\..\PhotoGallery\Seat.cpp" />
+    <ClCompile Include="..\..\PhotoGallery\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\PhotoGallery\Configure.h" />
     <ClInclude Include="..\..\PhotoGallery\LoadTextureJob.h" />
     <ClInclude Include="..\..\PhotoGallery\PhotoGalleryApp.h" />
     <ClInclude Include="..\..\PhotoGallery\PhotoItem.h" />
+    <ClInclude Include="..\..\PhotoGallery\PhotoItemManager.h" />
     <ClInclude Include="..\..\PhotoGallery\PhotoItemMesh.h" />
     <ClInclude Include="..\..\PhotoGallery\Seat.h" />
+    <ClInclude Include="..\..\PhotoGallery\Utility.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{2660E7B2-E9E8-45d0-BE1E-D98F98E329A9}</ProjectGuid>

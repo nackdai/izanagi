@@ -22,6 +22,9 @@ public:
 
     // Height.
     static const IZ_FLOAT Height;
+
+    // Depth.
+    static const IZ_FLOAT Depth;
 };
 
 #endif    // #if !defined(__CONFIGURE_H__)
