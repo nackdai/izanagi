@@ -118,7 +118,7 @@ namespace ui
                     }
                 }
                 else {
-                    m_Listener->OnTapUp();
+                    m_Listener->OnTapUp(ev);
                 }
 
                 m_InMoving = IZ_FALSE;

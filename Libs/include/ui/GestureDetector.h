@@ -22,7 +22,7 @@ namespace ui
         virtual ~CGestureListenerImplement() {}
 
     public:
-        virtual void OnTapUp() {}
+        virtual void OnTapUp(const sys::CTouchEvent& ev) {}
         virtual void OnShowPress() {}
         virtual void OnLongPress() {}
         

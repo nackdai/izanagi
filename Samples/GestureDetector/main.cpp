@@ -8,9 +8,9 @@ public:
     virtual ~CGestureListener() {}
 
 public:
-    virtual void OnTapUp()
+    virtual void OnTapUp(const izanagi::sys::CTouchEvent& ev)
     {
-        IZ_PRINTF("OnTapUp\n");
+        IZ_PRINTF("OnTapUp [%d] [%d]\n", ev.x, ev.y);
     }
 
     virtual void OnShowPress()

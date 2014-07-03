@@ -49,7 +49,7 @@ namespace sys
         NO_COPIABLE(IGestureListener);
 
     public:
-        virtual void OnTapUp() = 0;
+        virtual void OnTapUp(const sys::CTouchEvent& ev) = 0;
         virtual void OnShowPress() = 0;
         virtual void OnLongPress() = 0;
         
