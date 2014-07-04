@@ -28,6 +28,8 @@ namespace izanagi {
             m_nNextState = (STATE)STATE_NUM;
             m_nPrevState = (STATE)STATE_NUM;
             m_nCurrentState = (STATE)STATE_NUM;
+
+            m_EnterArg = IZ_NULL;
         }
 
         ~CFixedSceneStateManager() {}
@@ -81,11 +83,9 @@ namespace izanagi {
 
         /** 更新.
          */
-        IZ_BOOL Update(
-            IMemoryAllocator* allocator,
-            void* val = IZ_NULL)
+        IZ_BOOL Update(IMemoryAllocator* allocator, void* args = IZ_NULL)
         {       
-            if (m_nNextState != STATE_NUM) {
+            if (m_nNextState != STATE_NUM && GetCurrentState() != m_nNextState) {
                 // 次のタスクへ移行
                 if (GetCurrentState() != STATE_NUM) {
                     // 現在のタスクの後始末
@@ -97,10 +97,13 @@ namespace izanagi {
                     
                 // 次のタスクの初期化
                 m_nPrevState = GetCurrentState();
-                if (! GetState(m_nNextState)->Enter(allocator, val)) {
+                if (! GetState(m_nNextState)->Enter(allocator, args != IZ_NULL ? CValue(args) : m_EnterArg)) {
                     // まだ入れないって意味にする
+                    m_EnterArg = IZ_NULL;
                     return IZ_TRUE;
                 }
+
+                m_EnterArg = IZ_NULL;
             
                 SetCurrentState(m_nNextState);
                 m_nNextState = (STATE)STATE_NUM;        
@@ -154,11 +157,17 @@ namespace izanagi {
     public:
         /** ステート変更.
          */
-        void ChangeState(STATE task)
+        void ChangeState(STATE task, CValue enterArg)
         {
             IZ_ASSERT((task >= (STATE)0) && (task < STATE_NUM));
             
             m_nNextState = task;
+            m_EnterArg = enterArg;
+        }
+
+        void ChangeState(STATE task)
+        {
+            ChangeState(task, CValue());
         }
 
         /** 前のステートに変更.
@@ -223,6 +232,8 @@ namespace izanagi {
         STATE m_nCurrentState;  // 現在のタスク
         STATE m_nNextState;     // 次に遷移するタスク
         STATE m_nPrevState;     // 遷移前のタスク
+
+        CValue m_EnterArg;
     };
 }
 

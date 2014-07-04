@@ -39,7 +39,7 @@ namespace izanagi {
          */
         virtual IZ_BOOL Enter(
             IMemoryAllocator* allocator,
-            void* val = IZ_NULL);
+            CValue& arg);
 
         /** ステートから抜ける（終了）.
          */

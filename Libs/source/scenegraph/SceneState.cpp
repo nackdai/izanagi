@@ -25,7 +25,7 @@ IZ_BOOL CSceneStateBase::Destroy()
 
 IZ_BOOL CSceneStateBase::Enter(
     IMemoryAllocator* allocator,
-    void* val/* = IZ_NULL*/)
+    CValue& value)
 {
     return IZ_TRUE;
 }
