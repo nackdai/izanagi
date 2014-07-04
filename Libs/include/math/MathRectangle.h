@@ -65,6 +65,10 @@ namespace math
          */
         void Transform(const SMatrix& mtx);
 
+        void Transform(
+            CRectangle& dst,
+            const SMatrix& mtx);
+
         /** ƒŒƒC‚ÆŒğ·‚·‚é“_‚ğæ“¾.
          */
         IZ_BOOL GetIntersectPoint(

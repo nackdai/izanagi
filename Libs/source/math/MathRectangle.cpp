@@ -129,6 +129,14 @@ namespace math
         d = -(a * pt.x + b * pt.y + c * pt.z);
     }
 
+    void CRectangle::Transform(
+        CRectangle& dst,
+        const SMatrix& mtx)
+    {
+        dst = *this;    // Copy
+        dst.Transform(mtx);
+    }
+
     // ƒŒƒC‚ÆŒğ·‚·‚é“_‚ğæ“¾
     IZ_BOOL CRectangle::GetIntersectPoint(
         const SRay& ray,
