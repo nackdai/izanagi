@@ -19,7 +19,7 @@ public:
     // 開始
     virtual IZ_BOOL Enter(
         izanagi::IMemoryAllocator* allocator,
-        void* val);
+        izanagi::CValue& arg);
 };
 
 #endif    // #if !defined(__STATE_PHONG_SHADER_H__)

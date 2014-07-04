@@ -18,7 +18,7 @@ public:
     // 開始
     virtual IZ_BOOL Enter(
         izanagi::IMemoryAllocator* allocator,
-        void* val);
+        izanagi::CValue& arg);
 
     // 終了.
     virtual IZ_BOOL Destroy();

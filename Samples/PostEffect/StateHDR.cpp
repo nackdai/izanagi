@@ -26,7 +26,7 @@ IZ_BOOL CStateHDR::Render(izanagi::graph::CGraphicsDevice* device)
 // 開始
 IZ_BOOL CStateHDR::Enter(
     izanagi::IMemoryAllocator* allocator,
-    void* val)
+    izanagi::CValue& arg)
 {
     IZ_BOOL ret = CPostEffectSample::GetInstance()->Read("data/HDR.pes");
     return ret;

@@ -229,8 +229,8 @@ IZ_BOOL CStateBase::InitObject(
         m_Timeline.Init(
             m_Anm->GetAnimationTime(),
             0.0f);
-        m_Timeline.SetIsLoop(IZ_TRUE);
-        m_Timeline.SetIsReverse(IZ_FALSE);
+        m_Timeline.EnableLoop(IZ_TRUE);
+        m_Timeline.AutoReverse(IZ_FALSE);
         m_Timeline.Start();
         m_Timeline.Reset();
     }

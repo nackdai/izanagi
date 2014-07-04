@@ -131,9 +131,9 @@ IZ_BOOL CStateNormalMap::Render(izanagi::graph::CGraphicsDevice* device)
 // 開始
 IZ_BOOL CStateNormalMap::Enter(
     izanagi::IMemoryAllocator* allocator,
-    void* val)
+    izanagi::CValue& arg)
 {
-    izanagi::graph::CGraphicsDevice* device = reinterpret_cast<izanagi::graph::CGraphicsDevice*>(val);
+    izanagi::graph::CGraphicsDevice* device = reinterpret_cast<izanagi::graph::CGraphicsDevice*>(arg.GetValueAsPtr());
 
     IZ_BOOL result = IZ_TRUE;
 
