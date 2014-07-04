@@ -13,6 +13,12 @@
     <Filter Include="shader">
       <UniqueIdentifier>{0b9a5094-76e5-44a9-b64c-8053276ed220}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\state">
+      <UniqueIdentifier>{946b76d4-4380-4753-9355-a07d6c7685c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\state">
+      <UniqueIdentifier>{37485d49-f714-4421-b38e-99d4ae15be2e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\PhotoGallery\shader\BasicShader.fx">
@@ -50,6 +56,21 @@
     <ClCompile Include="..\..\PhotoGallery\GestureListener.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\PhotoGallery\StateManager.cpp">
+      <Filter>src\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PhotoGallery\StateBase.cpp">
+      <Filter>src\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PhotoGallery\StateDefault.cpp">
+      <Filter>src\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PhotoGallery\StateRotateByFling.cpp">
+      <Filter>src\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PhotoGallery\StateChangeView.cpp">
+      <Filter>src\state</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\PhotoGallery\PhotoGalleryApp.h">
@@ -78,6 +99,27 @@
     </ClInclude>
     <ClInclude Include="..\..\PhotoGallery\GestureListener.h">
       <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PhotoGallery\StateReturnFromItem.h">
+      <Filter>include\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PhotoGallery\StateRotateByFling.h">
+      <Filter>include\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PhotoGallery\StateDefault.h">
+      <Filter>include\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PhotoGallery\StateManager.h">
+      <Filter>include\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PhotoGallery\StateMoveToItem.h">
+      <Filter>include\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PhotoGallery\StateBase.h">
+      <Filter>include\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PhotoGallery\StateChangeView.h">
+      <Filter>include\state</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -2,6 +2,7 @@
 #include "Seat.h"
 #include "PhotoItemManager.h"
 #include "LoadTextureJob.h"
+#include "StateManager.h"
 
 PhotoGalleryApp::PhotoGalleryApp()
 {
@@ -43,6 +44,9 @@ IZ_BOOL PhotoGalleryApp::InitInternal(
 
     m_Detector.Init(allocator, &m_Listener);
 
+    StateManager::Instance().Create(camera);
+    StateManager::Instance().Init();
+
 #if 0
     PhotoItemManager::Instance().EnqueueLoadingRequest(
         device,
@@ -75,7 +79,7 @@ void PhotoGalleryApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 
     GetCamera().Update();
 
-    PhotoItemManager::Instance().Update();
+    StateManager::Instance().Update(IZ_NULL);
 
     izanagi::threadmodel::CJobQueue::UpdateQueues();
 }
@@ -83,11 +87,7 @@ void PhotoGalleryApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 // 描画.
 void PhotoGalleryApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
-    izanagi::sample::CSampleCamera& camera = GetCamera();
-
-    PhotoItemManager::Instance().Render(
-        device,
-        camera);
+    StateManager::Instance().Render(device);
 }
 
 IZ_BOOL PhotoGalleryApp::OnMouseLBtnDown(const izanagi::CIntPoint& point)

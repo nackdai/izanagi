@@ -1,7 +1,7 @@
 #include "GestureListener.h"
 #include "Configure.h"
 #include "PhotoItemManager.h"
-#include "PhotoGalleryApp.h"
+#include "StateManager.h"
 
 CGestureListener::CGestureListener()
 {
@@ -14,8 +14,7 @@ CGestureListener::~CGestureListener()
 void CGestureListener::OnTapUp(const izanagi::sys::CTouchEvent& ev)
 {
     if (PhotoItemManager::Instance().IsRotateAnimating()) {
-        // Stop rotation animation.
-        PhotoItemManager::Instance().SetAngleRate(0.0f);
+        StateManager::Instance().ChangeState(State_Default);
         return;
     }
 }
@@ -35,4 +34,6 @@ void CGestureListener::OnFling(
     IZ_FLOAT angle = Configure::MaxAngleRate * velocityX;
 
     PhotoItemManager::Instance().SetAngleRate(angle);
+
+    StateManager::Instance().ChangeState(State_RotateByFling);
 }

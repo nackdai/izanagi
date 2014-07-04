@@ -52,6 +52,11 @@
     <ClCompile Include="..\..\PhotoGallery\PhotoItemManager.cpp" />
     <ClCompile Include="..\..\PhotoGallery\PhotoItemMesh.cpp" />
     <ClCompile Include="..\..\PhotoGallery\Seat.cpp" />
+    <ClCompile Include="..\..\PhotoGallery\StateBase.cpp" />
+    <ClCompile Include="..\..\PhotoGallery\StateChangeView.cpp" />
+    <ClCompile Include="..\..\PhotoGallery\StateDefault.cpp" />
+    <ClCompile Include="..\..\PhotoGallery\StateManager.cpp" />
+    <ClCompile Include="..\..\PhotoGallery\StateRotateByFling.cpp" />
     <ClCompile Include="..\..\PhotoGallery\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -63,6 +68,13 @@
     <ClInclude Include="..\..\PhotoGallery\PhotoItemManager.h" />
     <ClInclude Include="..\..\PhotoGallery\PhotoItemMesh.h" />
     <ClInclude Include="..\..\PhotoGallery\Seat.h" />
+    <ClInclude Include="..\..\PhotoGallery\StateBase.h" />
+    <ClInclude Include="..\..\PhotoGallery\StateChangeView.h" />
+    <ClInclude Include="..\..\PhotoGallery\StateDefault.h" />
+    <ClInclude Include="..\..\PhotoGallery\StateManager.h" />
+    <ClInclude Include="..\..\PhotoGallery\StateMoveToItem.h" />
+    <ClInclude Include="..\..\PhotoGallery\StateReturnFromItem.h" />
+    <ClInclude Include="..\..\PhotoGallery\StateRotateByFling.h" />
     <ClInclude Include="..\..\PhotoGallery\Utility.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
