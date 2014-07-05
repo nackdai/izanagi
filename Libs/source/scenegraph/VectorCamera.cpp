@@ -6,6 +6,7 @@ using namespace izanagi;
 CVectorCamera::CVectorCamera()
 : m_Pos(m_Param.pos), m_Y(m_Param.up)
 {
+    m_NeedUpdateByTransform = IZ_FALSE;
 }
 
 CVectorCamera::~CVectorCamera()
@@ -20,37 +21,23 @@ void CVectorCamera::Init(
     IZ_FLOAT fov,
     IZ_FLOAT aspect)
 {
-    m_Param.cameraNear = fNear;
-    m_Param.cameraFar = fFar;
-    m_Param.fov = fov;
-
-    m_Param.aspect = aspect;
-
-    m_IsDirtyW2V = IZ_TRUE;
-    m_IsDirtyV2C = IZ_TRUE;
-
-    m_Y.Set(0.0f, 1.0f, 0.0f, 0.0f);
-
-    m_Z.Set(0.0f, 0.0f, at.z - pos.z, 0.0f);
-    if (m_Z.z < 0.0f) {
-        m_Z.z = -1.0f;
-    }
-    else {
-        m_Z.z = 1.0f;
-    }
-
-    math::SVector::Cross(m_X, m_Y, m_Z);
-    m_X.w = 0.0f;
-
-    m_Pos.Set(pos.x, pos.y, pos.z);
+    CCamera::Init(
+        pos, at,
+        math::CVector(0.0f, 1.0f, 0.0f, 0.0f),
+        fNear, fFar,
+        fov,
+        aspect);
 
     math::SMatrix::SetUnit(m_Transform);
+
+    m_NeedUpdateByTransform = IZ_FALSE;
 }
 
 // カメラ更新
 void CVectorCamera::Update()
 {
     if (m_IsDirtyW2V) {
+#if 0
         math::SMatrix::SetUnit(m_Param.mtxW2V);
 
         math::SVector::Copy(m_Param.mtxW2V.v[0], m_X);
@@ -72,14 +59,55 @@ void CVectorCamera::Update()
         // 右手系なので、マイナスする
         izanagi::math::SVector::SubXYZ(m_Param.ref, m_Pos, m_Z);
 #endif
-
         {
             math::SVector::Copy(m_Transform.v[0], m_X);
             math::SVector::Copy(m_Transform.v[1], m_Y);
             math::SVector::Copy(m_Transform.v[2], m_Z);
             math::SVector::Copy(m_Transform.v[3], m_Pos);
         }
+#else
+        if (m_NeedUpdateByTransform) {
+            math::SMatrix::SetUnit(m_Param.mtxW2V);
+
+            math::SVector::Copy(m_Param.mtxW2V.v[0], m_X);
+            math::SVector::Copy(m_Param.mtxW2V.v[1], m_Y);
+            math::SVector::Copy(m_Param.mtxW2V.v[2], m_Z);
+
+            math::SMatrix::Transpose(m_Param.mtxW2V, m_Param.mtxW2V);
+
+            m_Param.mtxW2V.m[3][0] = -1.0f * math::SVector::Dot(m_X, m_Pos);
+            m_Param.mtxW2V.m[3][1] = -1.0f * math::SVector::Dot(m_Y, m_Pos);
+            m_Param.mtxW2V.m[3][2] = -1.0f * math::SVector::Dot(m_Z, m_Pos);
+            m_Param.mtxW2V.m[3][3] = 1.0f;
+
+            // 一応、注視点を更新
+            // 右手系なので、マイナスする
+            izanagi::math::SVector::SubXYZ(m_Param.ref, m_Z, m_Pos);
+
+            {
+                math::SVector::Copy(m_Transform.v[0], m_X);
+                math::SVector::Copy(m_Transform.v[1], m_Y);
+                math::SVector::Copy(m_Transform.v[2], m_Z);
+                math::SVector::Copy(m_Transform.v[3], m_Pos);
+            }
+        }
+        else {
+            ComputeW2V();
+
+            math::SMatrix::Copy(m_Transform, m_Param.mtxW2V);
+            math::SVector::Set(m_Transform.v[3], 0.0f, 0.0f, 0.0f, 1.0f);
+            math::SMatrix::Transpose(m_Transform, m_Transform);
+            math::SVector::Copy(m_Transform.v[3], m_Pos);
+
+            math::SVector::Copy(m_X, m_Transform.v[0]);
+            math::SVector::Copy(m_Y, m_Transform.v[1]);
+            math::SVector::Copy(m_Z, m_Transform.v[2]);
+        }
+
+        m_NeedUpdateByTransform = IZ_FALSE;
+#endif
     }
+
     if (m_IsDirtyV2C) {
         ComputeV2C();
     }
@@ -134,6 +162,7 @@ void CVectorCamera::Rotate(
     math::SMatrix::Apply(m_Pos, m_Pos, mtx);
 
     m_IsDirtyW2V = IZ_TRUE;
+    m_NeedUpdateByTransform = IZ_TRUE;
 }
 
 // 位置指定.
@@ -141,4 +170,15 @@ void CVectorCamera::SetPos(const math::SVector& pos)
 {
     m_Pos.Set(pos.x, pos.y, pos.z);
     m_IsDirtyW2V = IZ_TRUE;
+}
+
+void CVectorCamera::SetTransform(const math::SMatrix& mtx)
+{
+    math::SVector::Copy(m_X, mtx.v[0]);
+    math::SVector::Copy(m_Y, mtx.v[1]);
+    math::SVector::Copy(m_Z, mtx.v[2]);
+    math::SVector::Copy(m_Pos, mtx.v[3]);
+
+    m_IsDirtyW2V = IZ_TRUE;
+    m_NeedUpdateByTransform = IZ_TRUE;
 }

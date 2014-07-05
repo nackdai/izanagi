@@ -55,6 +55,8 @@ namespace izanagi {
          */
         void SetPos(const math::SVector& pos);
 
+        void SetTransform(const math::SMatrix& mtx);
+
     public:
         /** カメラのX軸取得
          */
@@ -110,6 +112,8 @@ namespace izanagi {
 
         // カメラの変換マトリクス
         math::SMatrix m_Transform;
+
+        IZ_BOOL m_NeedUpdateByTransform;
     };
 
 }   // namespace izanagi
