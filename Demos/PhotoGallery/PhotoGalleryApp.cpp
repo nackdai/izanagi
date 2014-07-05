@@ -5,11 +5,13 @@
 #include "StateManager.h"
 #include "Configure.h"
 #include "GestureListener.h"
+#include "Utility.h"
 #include "data/PhotoFiles.h"
 
 PhotoGalleryApp::PhotoGalleryApp()
 {
     m_Seat = IZ_NULL;
+    m_Shader = IZ_NULL;
 }
 
 PhotoGalleryApp::~PhotoGalleryApp()
@@ -26,6 +28,17 @@ IZ_BOOL PhotoGalleryApp::InitInternal(
 
     m_Seat = Seat::Create(allocator, device);
     VGOTO(result = (m_Seat != IZ_NULL), __EXIT__);
+
+    {
+        izanagi::CFileInputStream input;
+        VRETURN(input.Open("data/BasicShader.shd"));
+
+        m_Shader = izanagi::shader::CShaderBasic::CreateShader<izanagi::shader::CShaderBasic>(
+            allocator,
+            device,
+            &input);
+        VRETURN(m_Shader != IZ_NULL);
+    }
 
     PhotoItemManager::Instance().Init(
         allocator,
@@ -60,6 +73,8 @@ IZ_BOOL PhotoGalleryApp::InitInternal(
             files[i]);
     }
 
+    m_Timer.Begin();
+
 __EXIT__:
     if (!result) {
         ReleaseInternal();
@@ -73,6 +88,8 @@ void PhotoGalleryApp::ReleaseInternal()
 {
     SAFE_RELEASE(m_Seat);
 
+    SAFE_RELEASE(m_Shader);
+
     TextureLoader::Instance().Terminate();
     izanagi::threadmodel::CJobQueue::TerminateJobQueue();
 
@@ -82,7 +99,10 @@ void PhotoGalleryApp::ReleaseInternal()
 // 更新.
 void PhotoGalleryApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
-    StateManager::Instance().Update(IZ_NULL);
+    IZ_FLOAT time = m_Timer.End();
+    m_Timer.Begin();
+
+    StateManager::Instance().Update(time, IZ_NULL);
 
     GetCamera().Update();
 
@@ -92,6 +112,36 @@ void PhotoGalleryApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 // 描画.
 void PhotoGalleryApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
+    {
+        const izanagi::CCamera& camera = GetCamera();
+
+        izanagi::math::SMatrix mtx;
+        izanagi::math::SMatrix::SetUnit(mtx);
+
+        m_Shader->Begin(device, 1, IZ_FALSE);
+        {
+            if (m_Shader->BeginPass(0)) {
+                Utility::SetShaderParam(
+                    m_Shader,
+                    "g_mW2C",
+                    (void*)&camera.GetParam().mtxW2C,
+                    sizeof(camera.GetParam().mtxW2C));
+
+                Utility::SetShaderParam(
+                    m_Shader,
+                    "g_mL2W",
+                    (void*)&mtx,
+                    sizeof(mtx));
+
+                m_Shader->CommitChanges(device);
+
+                m_Seat->Render(device);
+            }
+            m_Shader->EndPass();
+        }
+        m_Shader->End(device);
+    }
+
     StateManager::Instance().Render(device);
 
     State state = StateManager::Instance().GetCurrentState();

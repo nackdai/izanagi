@@ -35,6 +35,10 @@ protected:
 
 private:
     Seat* m_Seat;
+
+    izanagi::shader::CShaderBasic* m_Shader;
+
+    izanagi::sys::CTimer m_Timer;
 };
 
 #endif    // #if !defined(__PHOTO_GALLERY_APP_H__)

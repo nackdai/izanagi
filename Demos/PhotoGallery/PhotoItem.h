@@ -2,6 +2,7 @@
 #define __PHOTO_ITEM_H__
 
 #include "izSampleKit.h"
+#include "izAnimation.h"
 
 class PhotoItemMesh;
 
@@ -38,6 +39,8 @@ public:
     /** Render top and side faces of photo item.
      */
     void RenderTopAndSide(izanagi::graph::CGraphicsDevice* device);
+
+    void Update(IZ_FLOAT time);
 
     izanagi::CStdList<PhotoItem>::Item* GetListItem();
 
@@ -77,6 +80,9 @@ public:
     void SetShaderParam(izanagi::shader::CShaderBasic* shader);
 
 private:
+    void ResetFadeInParams();
+
+private:
     izanagi::IMemoryAllocator* m_Allocator;
 
     izanagi::CStdList<PhotoItem>::Item m_ListItem;
@@ -89,6 +95,11 @@ private:
     izanagi::math::CRectangle m_Rectangle;
 
     IZ_BOOL m_IsRequestedLoadTexture;
+
+    IZ_BOOL m_IsFading;
+    izanagi::animation::CTimeline m_Timeline;
+    IZ_FLOAT m_FadeInAlpha;
+    IZ_FLOAT m_FadeInHeight;
 };
 
 #endif    // #if !defined(__PHOTO_ITEM_H__)

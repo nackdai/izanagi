@@ -46,6 +46,8 @@ PhotoItem::PhotoItem()
     m_ListItem.Init(this);
 
     m_IsRequestedLoadTexture = IZ_FALSE;
+
+    ResetFadeInParams();
 }
 
 PhotoItem::~PhotoItem()
@@ -106,6 +108,29 @@ void PhotoItem::RenderTopAndSide(izanagi::graph::CGraphicsDevice* device)
     m_Mesh->RenderTopAndSide(device);
 }
 
+void PhotoItem::Update(IZ_FLOAT time)
+{
+    if (!HasTexture()) {
+        return;
+    }
+
+    if (m_IsFading) {
+        m_Timeline.Advance(16.67f);
+
+        izanagi::animation::CTweenerCubic tweener;
+        IZ_FLOAT value = tweener.EaseInOut(
+            m_Timeline.GetTime(),
+            m_Timeline.GetDuration());
+
+        m_FadeInAlpha = izanagi::math::CMath::Clamp(1.0f * value, 0.0f, 1.0f);
+        m_FadeInHeight = Configure::FadeInHeight * (1.0f - value);
+
+        if (m_FadeInAlpha >= 1.0f) {
+            m_IsFading = IZ_FALSE;
+        }
+    }
+}
+
 izanagi::CStdList<PhotoItem>::Item* PhotoItem::GetListItem()
 {
     return &m_ListItem;
@@ -114,6 +139,7 @@ izanagi::CStdList<PhotoItem>::Item* PhotoItem::GetListItem()
 void PhotoItem::SetTexture(izanagi::graph::CTexture* texture)
 {
     SAFE_REPLACE(m_Texture, texture);
+    m_IsFading = IZ_TRUE;
 }
 
 IZ_BOOL PhotoItem::HasTexture()
@@ -147,8 +173,20 @@ IZ_BOOL PhotoItem::HitTest(
     const izanagi::math::CRay& ray,
     const izanagi::math::SMatrix& mtxRot)
 {
+    if (!HasTexture() || m_IsFading) {
+        return IZ_FALSE;
+    }
+
     izanagi::math::SMatrix mtx;
     izanagi::math::SMatrix::Mul(mtx, m_L2W, mtxRot);
+
+    if (HasTexture()) {
+        IZ_FLOAT scaleX = izanagi::math::CMath::Clamp(m_Texture->GetWidth() / (IZ_FLOAT)Configure::MaxTextureSize, 0.0f, 1.0f);
+        IZ_FLOAT scaleY = izanagi::math::CMath::Clamp(m_Texture->GetHeight() / (IZ_FLOAT)Configure::MaxTextureSize, 0.0f, 1.0f);
+
+        m_Rectangle.v[0].x = Width * scaleX;
+        m_Rectangle.v[1].y = Height * scaleY;
+    }
 
     izanagi::math::CRectangle rc;
     m_Rectangle.Transform(rc, mtx);
@@ -178,10 +216,17 @@ void PhotoItem::GetNormal(izanagi::math::SVector& nml)
 
 void PhotoItem::GetCenterPosition(izanagi::math::SVector& pos)
 {
+    IZ_FLOAT height = Height;
+
+    if (HasTexture()) {
+        IZ_FLOAT scaleY = izanagi::math::CMath::Clamp(m_Texture->GetHeight() / (IZ_FLOAT)Configure::MaxTextureSize, 0.0f, 1.0f);
+        height *= scaleY;
+    }
+
     izanagi::math::SVector::Set(
         pos,
         0.0f,
-        Height * 0.5f,
+        height * 0.5f,
         0.0f,
         1.0f);
 
@@ -190,7 +235,7 @@ void PhotoItem::GetCenterPosition(izanagi::math::SVector& pos)
 
 void PhotoItem::SetShaderParam(izanagi::shader::CShaderBasic* shader)
 {
-    izanagi::math::CVector params(1.0f, 1.0f, 1.0f, 1.0f);
+    izanagi::math::CVector params(1.0f, 1.0f, m_FadeInHeight, m_FadeInAlpha);
 
     if (HasTexture()) {
         params.x = izanagi::math::CMath::Clamp(m_Texture->GetWidth() / (IZ_FLOAT)Configure::MaxTextureSize, 0.0f, 1.0f);
@@ -202,4 +247,16 @@ void PhotoItem::SetShaderParam(izanagi::shader::CShaderBasic* shader)
         "g_Params",
         (void*)&params,
         sizeof(params));
+}
+
+void PhotoItem::ResetFadeInParams()
+{
+    m_IsFading = IZ_FALSE;
+
+    m_FadeInAlpha = 0.0f;
+    m_FadeInHeight = Configure::FadeInHeight;
+
+    m_Timeline.Init(Configure::FadeInDuration, 0.0f);
+    m_Timeline.Reset();
+    m_Timeline.Start();
 }

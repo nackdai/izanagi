@@ -325,13 +325,14 @@ IZ_BOOL PhotoItemMesh::TopAndSideFaces::SetVtx(
     // +x <--> -x
 
     const IZ_FLOAT halfW = width * 0.5f;
+    static const IZ_FLOAT outer = 0.5f;
 
     // Top face
     {
         const izanagi::math::CVector pt[] = {
             izanagi::math::CVector(halfW, height, 0.0f),
-            izanagi::math::CVector(halfW, height, -depth),
-            izanagi::math::CVector(-halfW, height, -depth),
+            izanagi::math::CVector(halfW + outer, height + outer, -depth),
+            izanagi::math::CVector(-halfW - outer, height + outer, -depth),
             izanagi::math::CVector(-halfW, height, 0.0f),
         };
 
@@ -353,8 +354,8 @@ IZ_BOOL PhotoItemMesh::TopAndSideFaces::SetVtx(
         const izanagi::math::CVector pt[] = {
             izanagi::math::CVector(-halfW, 0.0f, 0.0f),
             izanagi::math::CVector(-halfW, height, 0.0f),
-            izanagi::math::CVector(-halfW, height, -depth),
-            izanagi::math::CVector(-halfW, 0.0f, -depth),
+            izanagi::math::CVector(-halfW - outer, height + outer, -depth),
+            izanagi::math::CVector(-halfW - outer, 0.0f, -depth),
         };
 
         for (IZ_UINT i = 0; i < 4; i++) {
@@ -375,8 +376,8 @@ IZ_BOOL PhotoItemMesh::TopAndSideFaces::SetVtx(
         const izanagi::math::CVector pt[] = {
             izanagi::math::CVector(halfW, 0.0f, 0.0f),
             izanagi::math::CVector(halfW, height, 0.0f),
-            izanagi::math::CVector(halfW, height, -depth),
-            izanagi::math::CVector(halfW, 0.0f, -depth),
+            izanagi::math::CVector(halfW + outer, height + outer, -depth),
+            izanagi::math::CVector(halfW + outer, 0.0f, -depth),
         };
 
         for (IZ_UINT i = 0; i < 4; i++) {

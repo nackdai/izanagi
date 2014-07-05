@@ -2,6 +2,7 @@
 #include "StateManager.h"
 #include "GestureListener.h"
 #include "StateChangeView.h"
+#include "PhotoItemManager.h"
 
 StateDefault::StateDefault(izanagi::CVectorCamera& camera)
     : StateBase(camera)
@@ -12,8 +13,11 @@ StateDefault::~StateDefault()
 {
 }
 
-IZ_BOOL StateDefault::Update(izanagi::graph::CGraphicsDevice* device)
+IZ_BOOL StateDefault::Update(
+    IZ_FLOAT time,
+    izanagi::graph::CGraphicsDevice* device)
 {
+    PhotoItemManager::Instance().Update(time);
     GestureDetector::Instance().Update();
     return IZ_TRUE;
 }

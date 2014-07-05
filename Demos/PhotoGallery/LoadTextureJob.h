@@ -38,8 +38,13 @@ public:
         PhotoItem* target);
 
 private:
+    izanagi::sys::CMutex& GetMutex();
+
+private:
     izanagi::IMemoryAllocator* m_Allocator;
     izanagi::threadmodel::CJobQueue m_JobQueue;
+
+    izanagi::sys::CMutex m_Mutex;
 
     // Thread safe allocator for jobs.
     izanagi::threadmodel::CTheadSafeAllocator<izanagi::CStandardMemoryAllocator> m_JobSafeAllocator;

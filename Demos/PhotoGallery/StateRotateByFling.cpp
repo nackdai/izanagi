@@ -12,10 +12,12 @@ StateRotateByFling::~StateRotateByFling()
 {
 }
 
-IZ_BOOL StateRotateByFling::Update(izanagi::graph::CGraphicsDevice* device)
+IZ_BOOL StateRotateByFling::Update(
+    IZ_FLOAT time,
+    izanagi::graph::CGraphicsDevice* device)
 {
+    PhotoItemManager::Instance().Update(time);
     GestureDetector::Instance().Update();
-    PhotoItemManager::Instance().Update();
 
     if (!PhotoItemManager::Instance().IsRotateAnimating()) {
         StateManager::Instance().ChangeState(State_Default);

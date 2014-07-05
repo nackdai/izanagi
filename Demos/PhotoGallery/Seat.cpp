@@ -162,6 +162,8 @@ IZ_BOOL Seat::SeatPart::SetVtx(
             0.0f,
             longitude);
 
+        vtx->clr = IZ_COLOR_RGBA(50, 50, 50, 255);
+
         vtx++;
     }
 
@@ -177,10 +179,12 @@ IZ_BOOL Seat::SeatPart::SetVtx(
             height,
             longitude);
 
+        vtx->clr = IZ_COLOR_RGBA(128, 128, 128, 255);
+
         vtx++;
     }
 
-    // Innder of top faces.
+    // Inner of top faces.
     for (IZ_UINT i = 0; i <= slices; i++) {
         IZ_FLOAT longitude = i * longitudeStep;
 
@@ -192,6 +196,8 @@ IZ_BOOL Seat::SeatPart::SetVtx(
             height,
             longitude,
             IZ_TRUE);
+
+        vtx->clr = IZ_COLOR_RGBA(228, 228, 228, 255);
 
         vtx++;
     }
@@ -208,6 +214,8 @@ IZ_BOOL Seat::SeatPart::SetVtx(
             height,
             longitude,
             IZ_TRUE);
+
+        vtx->clr = IZ_COLOR_RGBA(228, 228, 228, 255);
 
         vtx++;
     }

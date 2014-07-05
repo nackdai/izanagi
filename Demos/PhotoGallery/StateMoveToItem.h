@@ -16,7 +16,9 @@ public:
         izanagi::graph::CGraphicsDevice* device,
         izanagi::CValue& arg);
 
-    virtual IZ_BOOL Update(izanagi::graph::CGraphicsDevice* device);
+    virtual IZ_BOOL Update(
+        IZ_FLOAT time,
+        izanagi::graph::CGraphicsDevice* device);
 
     virtual IZ_BOOL OnMouseLBtnDown(const izanagi::CIntPoint& point);
     virtual IZ_BOOL OnMouseLBtnUp(const izanagi::CIntPoint& point);
@@ -35,7 +37,6 @@ private:
     izanagi::math::SMatrix m_CamMtx;
     izanagi::math::SMatrix m_TargetMtx;
 
-    izanagi::sys::CTimer m_Timer;
     izanagi::animation::CTimeline m_Timeline;
 };
 

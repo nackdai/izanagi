@@ -66,14 +66,14 @@ IZ_BOOL StateMoveToItem::Enter(
     m_Timeline.Reset();
     m_Timeline.Start();
 
-    m_Timer.Begin();
-
     return IZ_TRUE;
 }
 
-IZ_BOOL StateMoveToItem::Update(izanagi::graph::CGraphicsDevice* device)
+IZ_BOOL StateMoveToItem::Update(
+    IZ_FLOAT time,
+    izanagi::graph::CGraphicsDevice* device)
 {
-    IZ_FLOAT time = m_Timer.End();
+    PhotoItemManager::Instance().Update(time);
 
     if (m_State == State_Move) {
         m_Timeline.Advance(time);
@@ -106,8 +106,6 @@ IZ_BOOL StateMoveToItem::Update(izanagi::graph::CGraphicsDevice* device)
             StateManager::Instance().ChangeState(State_Default);
         }
     }
-
-    m_Timer.Begin();
 
     return IZ_TRUE;
 }

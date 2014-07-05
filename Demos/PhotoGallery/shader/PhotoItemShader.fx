@@ -38,6 +38,10 @@ sampler sTex = sampler_state
     Texture = tex;
 };
 
+// x : scale x
+// y : scale y
+// z : height factor
+// w : alpha factor
 float4 g_Params;
 
 /////////////////////////////////////////////////////////////
@@ -48,6 +52,8 @@ SVSOutput mainVS(SVSInput In)
 
     float4 pos = In.vPos;
     pos.xy *= g_Params.xy;
+
+    pos.y += g_Params.z;
 
     Out.vPos = mul(pos, g_mL2W);
     Out.vPos = mul(Out.vPos, g_mW2C);
@@ -65,7 +71,7 @@ float4 mainPS(SPSInput In) : COLOR
     float4 vOut = tex2D(sTex, In.vUV);
 
     vOut.rgb *= In.vColor.rgb;
-    vOut.rgb *= In.vColor.a;
+    vOut.a *= In.vColor.a;
 
     return vOut;
 }
@@ -78,6 +84,8 @@ SVSOutput_NoTex mainVS_NoTex(SVSInput_NoTex In)
 
     float4 pos = In.vPos;
     pos.xy *= g_Params.xy;
+
+    pos.y += g_Params.z;
 
     Out.vPos = mul(pos, g_mL2W);
     Out.vPos = mul(Out.vPos, g_mW2C);

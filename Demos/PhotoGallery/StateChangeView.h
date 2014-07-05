@@ -23,7 +23,9 @@ public:
         izanagi::graph::CGraphicsDevice* device,
         izanagi::CValue& arg);
 
-    virtual IZ_BOOL Update(izanagi::graph::CGraphicsDevice* device);
+    virtual IZ_BOOL Update(
+        IZ_FLOAT time,
+        izanagi::graph::CGraphicsDevice* device);
 
     virtual IZ_BOOL OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key);
 
@@ -48,7 +50,6 @@ private:
 
     izanagi::math::SMatrix m_ViewMtx[ViewState_Num];
 
-    izanagi::sys::CTimer m_Timer;
     izanagi::animation::CTimeline m_Timeline;
 };
 

@@ -5,7 +5,7 @@
 
 class Configure {
 public:
-    static const IZ_UINT PHOTOS = 60;
+    static const IZ_UINT PHOTOS = 90;
 
     // Flags for vertex semantics.
     static const IZ_UINT MeshFlags = izanagi::E_DEBUG_MESH_VTX_FORM_POS
@@ -37,10 +37,13 @@ public:
 
     static const IZ_FLOAT ChangeViewDuration;
     static const IZ_FLOAT MoveToItemDuration;
+    static const IZ_FLOAT FadeInDuration;
 
     static const IZ_FLOAT CameraDistanceFromItem;
 
     static const IZ_UINT MaxTextureSize = 1280;
+
+    static const IZ_FLOAT FadeInHeight;
 };
 
 #endif    // #if !defined(__CONFIGURE_H__)

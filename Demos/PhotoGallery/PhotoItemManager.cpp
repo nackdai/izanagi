@@ -227,7 +227,7 @@ IZ_BOOL PhotoItemManager::EnqueueLoadingRequest(
 
 }
 
-void PhotoItemManager::Update()
+void PhotoItemManager::Update(IZ_FLOAT time)
 {
     if (m_AngleRate != 0.0f) {
         izanagi::math::SMatrix::RotByY(
@@ -239,6 +239,16 @@ void PhotoItemManager::Update()
 
         if (izanagi::math::CMath::Absf(m_AngleRate) < IZ_MATH_PI2 / 10000.0f) {
             m_AngleRate = 0.0f;
+        }
+    }
+
+    for (IZ_UINT i = 0; i < COUNTOF(m_PhotoItemList); i++) {
+        izanagi::CStdList<PhotoItem>::Item* item = m_PhotoItemList[i].GetTop();
+
+        while (item != IZ_NULL) {
+            PhotoItem* photoItem = item->GetData();
+            photoItem->Update(time);
+            item = item->GetNext();
         }
     }
 }

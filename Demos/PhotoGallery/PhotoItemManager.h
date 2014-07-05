@@ -51,7 +51,7 @@ public:
         izanagi::graph::CGraphicsDevice* device,
         const char* path);
 
-    void Update();
+    void Update(IZ_FLOAT time);
 
     void Render(
         izanagi::graph::CGraphicsDevice* device,

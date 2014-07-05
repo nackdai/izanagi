@@ -108,12 +108,12 @@ IZ_BOOL StateChangeView::Enter(
 
     m_Timeline.Reset();
 
-    m_Timer.Begin();
-
     return IZ_TRUE;
 }
 
-IZ_BOOL StateChangeView::Update(izanagi::graph::CGraphicsDevice* device)
+IZ_BOOL StateChangeView::Update(
+    IZ_FLOAT time,
+    izanagi::graph::CGraphicsDevice* device)
 {
     if (!m_IsAnimating
         && m_NextState != m_State)
@@ -121,8 +121,6 @@ IZ_BOOL StateChangeView::Update(izanagi::graph::CGraphicsDevice* device)
         m_IsAnimating = IZ_TRUE;
         m_Timeline.Start();
     }
-
-    IZ_FLOAT time = m_Timer.End();
 
     if (m_IsAnimating) {
         // Update animation.
@@ -148,8 +146,6 @@ IZ_BOOL StateChangeView::Update(izanagi::graph::CGraphicsDevice* device)
     if (!m_IsAnimating && m_State == ViewState_Low) {
         StateManager::Instance().ChangeState(State_Default);
     }
-
-    m_Timer.Begin();
 
     return IZ_TRUE;
 }
