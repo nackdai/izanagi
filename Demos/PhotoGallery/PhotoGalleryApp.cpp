@@ -5,6 +5,7 @@
 #include "StateManager.h"
 #include "Configure.h"
 #include "GestureListener.h"
+#include "data/PhotoFiles.h"
 
 PhotoGalleryApp::PhotoGalleryApp()
 {
@@ -29,7 +30,7 @@ IZ_BOOL PhotoGalleryApp::InitInternal(
     PhotoItemManager::Instance().Init(
         allocator,
         device,
-        60);
+        Configure::PHOTOS);
 
     // カメラ
     camera.Init(
@@ -55,11 +56,12 @@ IZ_BOOL PhotoGalleryApp::InitInternal(
     StateManager::Instance().Create(camera);
     StateManager::Instance().Init();
 
-#if 0
-    PhotoItemManager::Instance().EnqueueLoadingRequest(
-        device,
-        "data/test.jpg");
-#endif
+    IZ_UINT photoNum = (Configure::PHOTOS > COUNTOF(files) ? COUNTOF(files) : Configure::PHOTOS);
+    for (IZ_UINT i = 0; i < photoNum; i++) {
+        PhotoItemManager::Instance().EnqueueLoadingRequest(
+            device,
+            files[i]);
+    }
 
 __EXIT__:
     if (!result) {

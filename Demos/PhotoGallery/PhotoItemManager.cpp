@@ -21,6 +21,9 @@ void PhotoItemList::RenderWithTexture(
 {
     izanagi::CStdList<PhotoItem>::Item* item = this->GetTop();
 
+    // TODO
+    izanagi::math::CVector param(1.0f, 1.0f, 1.0f, 1.0f);
+
     while (item != IZ_NULL) {
         PhotoItem* photoItem = item->GetData();
 
@@ -35,6 +38,12 @@ void PhotoItemList::RenderWithTexture(
                 "g_mL2W",
                 (void*)&mtx,
                 sizeof(mtx));
+
+            Utility::SetShaderParam(
+                shader,
+                "g_Params",
+                (void*)&param,
+                sizeof(param));
 
             shader->CommitChanges(device);
             photoItem->RenderFront(device);
@@ -51,6 +60,9 @@ void PhotoItemList::RenderWithoutTexture(
 {
     izanagi::CStdList<PhotoItem>::Item* item = this->GetTop();
 
+    // TODO
+    izanagi::math::CVector param(1.0f, 1.0f, 1.0f, 1.0f);
+
     while (item != IZ_NULL) {
         PhotoItem* photoItem = item->GetData();
 
@@ -64,6 +76,12 @@ void PhotoItemList::RenderWithoutTexture(
             "g_mL2W",
             (void*)&mtx,
             sizeof(mtx));
+
+        Utility::SetShaderParam(
+            shader,
+            "g_Params",
+            (void*)&param,
+            sizeof(param));
 
         shader->CommitChanges(device);
 
@@ -172,7 +190,7 @@ IZ_BOOL PhotoItemManager::Init(
 
     // Create shader.
     izanagi::CFileInputStream in;
-    VRETURN(in.Open("data/BasicShader.shd"));
+    VRETURN(in.Open("data/PhotoItemShader.shd"));
 
     m_Shader = izanagi::shader::CShaderBasic::CreateShader<izanagi::shader::CShaderBasic>(
                 allocator,
@@ -255,7 +273,7 @@ void PhotoItemManager::Render(
                 (void*)&camera.GetParam().mtxW2C,
                 sizeof(camera.GetParam().mtxW2C));
 
-            for (int i = 0; i < COUNTOF(m_PhotoItemList); i++) {
+            for (IZ_INT i = COUNTOF(m_PhotoItemList) - 1; i >= 0 ; i--) {
                 m_PhotoItemList[i].RenderWithTexture(
                     device,
                     m_mtxRot,
@@ -278,7 +296,7 @@ void PhotoItemManager::Render(
                 (void*)&camera.GetParam().mtxW2C,
                 sizeof(camera.GetParam().mtxW2C));
 
-            for (int i = 0; i < COUNTOF(m_PhotoItemList); i++) {
+            for (IZ_INT i = COUNTOF(m_PhotoItemList) - 1; i >= 0 ; i--) {
                 m_PhotoItemList[i].RenderWithoutTexture(
                     device,
                     m_mtxRot,

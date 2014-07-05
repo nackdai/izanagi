@@ -19,9 +19,15 @@
     <Filter Include="src\state">
       <UniqueIdentifier>{37485d49-f714-4421-b38e-99d4ae15be2e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\data">
+      <UniqueIdentifier>{9e917459-585f-4c6b-b373-348fb4d4762c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\PhotoGallery\shader\BasicShader.fx">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\PhotoGallery\shader\PhotoItemShader.fx">
       <Filter>shader</Filter>
     </None>
   </ItemGroup>
@@ -121,9 +127,15 @@
     <ClInclude Include="..\..\PhotoGallery\StateChangeView.h">
       <Filter>include\state</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\PhotoGallery\data\PhotoFiles.h">
+      <Filter>include\data</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\PhotoGallery\shader\BasicShader.xml">
+      <Filter>shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\PhotoGallery\shader\PhototItemShader.xml">
       <Filter>shader</Filter>
     </CustomBuild>
   </ItemGroup>

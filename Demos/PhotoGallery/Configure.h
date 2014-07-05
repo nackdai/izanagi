@@ -5,6 +5,8 @@
 
 class Configure {
 public:
+    static const IZ_UINT PHOTOS = 60;
+
     // Flags for vertex semantics.
     static const IZ_UINT MeshFlags = izanagi::E_DEBUG_MESH_VTX_FORM_POS
         | izanagi::E_DEBUG_MESH_VTX_FORM_COLOR

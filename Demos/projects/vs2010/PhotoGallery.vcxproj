@@ -41,6 +41,12 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">%(RootDir)%(Directory)%(Filename).fx;%(AdditionalInputs)</AdditionalInputs>
     </CustomBuild>
+    <None Include="..\..\PhotoGallery\shader\PhotoItemShader.fx" />
+    <CustomBuild Include="..\..\PhotoGallery\shader\PhototItemShader.xml">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(RootDir)%(Directory)%(Filename).fx;%(AdditionalInputs)</AdditionalInputs>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\PhotoGallery\Configure.cpp" />
@@ -62,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\PhotoGallery\Configure.h" />
+    <ClInclude Include="..\..\PhotoGallery\data\PhotoFiles.h" />
     <ClInclude Include="..\..\PhotoGallery\GestureListener.h" />
     <ClInclude Include="..\..\PhotoGallery\LoadTextureJob.h" />
     <ClInclude Include="..\..\PhotoGallery\PhotoGalleryApp.h" />
