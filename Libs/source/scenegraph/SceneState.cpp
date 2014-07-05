@@ -40,9 +40,18 @@ IZ_BOOL CSceneStateBase::OnKeyDown(sys::E_KEYBOARD_BUTTON key)
     return IZ_TRUE;
 }
 
-IZ_BOOL CSceneStateBase::OnMouseMove(IZ_INT x, IZ_INT y)
+IZ_BOOL CSceneStateBase::OnMouseLBtnDown(const izanagi::CIntPoint& point)
 {
     return IZ_TRUE;
+}
+
+IZ_BOOL CSceneStateBase::OnMouseLBtnUp(const izanagi::CIntPoint& point)
+{
+    return IZ_TRUE;
+}
+
+void CSceneStateBase::OnMouseMove(const izanagi::CIntPoint& point)
+{
 }
 
 IZ_BOOL CSceneStateBase::OnMouseWheel(IZ_SHORT delta)

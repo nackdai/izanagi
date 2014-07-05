@@ -292,6 +292,9 @@ namespace math
         // マトリクスからオイラー角を取得する
         static void GetEulerFromMatrix(SVector& angle, const SMatrix& mtx, E_MATH_ROTATION_ORDER order);
 
+        // マトリクス間を補間する
+        static void Lerp(SMatrix& dst, const SMatrix& from, const SMatrix& to, IZ_FLOAT t);
+
         // マトリクスの中身をダンプする
         static void Dump(const SMatrix& mtx)
         {
