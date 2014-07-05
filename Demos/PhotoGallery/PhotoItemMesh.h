@@ -24,6 +24,7 @@ private:
     _T* CreateFace(
         izanagi::IMemoryAllocator* allocator, 
         izanagi::graph::CGraphicsDevice* device,
+        IZ_UINT flags,
         IZ_FLOAT width,
         IZ_FLOAT height,
         IZ_FLOAT depth);
@@ -59,8 +60,6 @@ public:
 private:
     FrontFace* m_FrontFace;             //< front face which is mapped texture.
     TopAndSideFaces* m_TopAndSideFaces; //< top and side faces which are not mapped texture.
-
-    izanagi::graph::CTexture* m_Texture;
 };
 
 #endif    // #if !defined(__PHOTO_ITEM_MESH_H__)

@@ -74,11 +74,14 @@ public:
 
     void GetCenterPosition(izanagi::math::SVector& pos);
 
+    void SetShaderParam(izanagi::shader::CShaderBasic* shader);
+
 private:
     izanagi::IMemoryAllocator* m_Allocator;
 
     izanagi::CStdList<PhotoItem>::Item m_ListItem;
 
+    izanagi::graph::CTexture* m_Texture;
     PhotoItemMesh* m_Mesh;
 
     izanagi::math::SMatrix m_L2W;

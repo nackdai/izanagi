@@ -43,9 +43,6 @@ IZ_BOOL PhotoGalleryApp::InitInternal(
         (IZ_FLOAT)device->GetBackBufferWidth() / device->GetBackBufferHeight());
     camera.Update();
 
-    
-    camera.Update();
-
     TextureLoader::Instance().Init(allocator);
 
     GestureDetector::Instance().Init(

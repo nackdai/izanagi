@@ -1,6 +1,7 @@
 #include "PhotoItem.h"
 #include "PhotoItemMesh.h"
 #include "Configure.h"
+#include "Utility.h"
 
 // TODO
 static const IZ_FLOAT Width = 10.0f;
@@ -36,6 +37,8 @@ PhotoItem* PhotoItem::Create(
 PhotoItem::PhotoItem()
 {
     m_Allocator = IZ_NULL;
+
+    m_Texture = IZ_NULL;
     m_Mesh = IZ_NULL;
 
     izanagi::math::SMatrix::SetUnit(m_L2W);
@@ -47,6 +50,7 @@ PhotoItem::PhotoItem()
 
 PhotoItem::~PhotoItem()
 {
+    SAFE_RELEASE(m_Texture);
     SAFE_RELEASE(m_Mesh);
 }
 
@@ -88,6 +92,8 @@ void PhotoItem::RenderFront(izanagi::graph::CGraphicsDevice* device)
 {
     IZ_ASSERT(device != IZ_NULL);
 
+    device->SetTexture(0, m_Texture);
+
     IZ_ASSERT(m_Mesh != IZ_NULL);
     m_Mesh->RenderFront(device);
 }
@@ -107,12 +113,12 @@ izanagi::CStdList<PhotoItem>::Item* PhotoItem::GetListItem()
 
 void PhotoItem::SetTexture(izanagi::graph::CTexture* texture)
 {
-    m_Mesh->SetTexture(texture);
+    SAFE_REPLACE(m_Texture, texture);
 }
 
 IZ_BOOL PhotoItem::HasTexture()
 {
-    return (m_Mesh->GetTexture() != IZ_NULL);
+    return (m_Texture != IZ_NULL);
 }
 
 void PhotoItem::SetPositionAndRotation(
@@ -180,4 +186,20 @@ void PhotoItem::GetCenterPosition(izanagi::math::SVector& pos)
         1.0f);
 
     izanagi::math::SMatrix::Apply(pos, pos, m_L2W);
+}
+
+void PhotoItem::SetShaderParam(izanagi::shader::CShaderBasic* shader)
+{
+    izanagi::math::CVector params(1.0f, 1.0f, 1.0f, 1.0f);
+
+    if (HasTexture()) {
+        params.x = izanagi::math::CMath::Clamp(m_Texture->GetWidth() / (IZ_FLOAT)Configure::MaxTextureSize, 0.0f, 1.0f);
+        params.y = izanagi::math::CMath::Clamp(m_Texture->GetHeight() / (IZ_FLOAT)Configure::MaxTextureSize, 0.0f, 1.0f);
+    }
+
+    Utility::SetShaderParam(
+        shader,
+        "g_Params",
+        (void*)&params,
+        sizeof(params));
 }

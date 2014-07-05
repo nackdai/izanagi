@@ -1,5 +1,6 @@
 #include "PhotoItemManager.h"
 #include "PhotoItem.h"
+#include "PhotoItemMesh.h"
 #include "LoadTextureJob.h"
 #include "Utility.h"
 #include "Configure.h"
@@ -21,9 +22,6 @@ void PhotoItemList::RenderWithTexture(
 {
     izanagi::CStdList<PhotoItem>::Item* item = this->GetTop();
 
-    // TODO
-    izanagi::math::CVector param(1.0f, 1.0f, 1.0f, 1.0f);
-
     while (item != IZ_NULL) {
         PhotoItem* photoItem = item->GetData();
 
@@ -39,11 +37,7 @@ void PhotoItemList::RenderWithTexture(
                 (void*)&mtx,
                 sizeof(mtx));
 
-            Utility::SetShaderParam(
-                shader,
-                "g_Params",
-                (void*)&param,
-                sizeof(param));
+            photoItem->SetShaderParam(shader);
 
             shader->CommitChanges(device);
             photoItem->RenderFront(device);
@@ -60,9 +54,6 @@ void PhotoItemList::RenderWithoutTexture(
 {
     izanagi::CStdList<PhotoItem>::Item* item = this->GetTop();
 
-    // TODO
-    izanagi::math::CVector param(1.0f, 1.0f, 1.0f, 1.0f);
-
     while (item != IZ_NULL) {
         PhotoItem* photoItem = item->GetData();
 
@@ -77,11 +68,7 @@ void PhotoItemList::RenderWithoutTexture(
             (void*)&mtx,
             sizeof(mtx));
 
-        Utility::SetShaderParam(
-            shader,
-            "g_Params",
-            (void*)&param,
-            sizeof(param));
+        photoItem->SetShaderParam(shader);
 
         shader->CommitChanges(device);
 
@@ -231,7 +218,7 @@ IZ_BOOL PhotoItemManager::EnqueueLoadingRequest(
 
     TextureLoader::Instance().EnqueueLoadingRequest(
         device,
-        "data/test.jpg",
+        path,
         photoItem);
 
     photoItem->SetIsRequestedLoadTexture(IZ_TRUE);

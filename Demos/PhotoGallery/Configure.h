@@ -39,6 +39,8 @@ public:
     static const IZ_FLOAT MoveToItemDuration;
 
     static const IZ_FLOAT CameraDistanceFromItem;
+
+    static const IZ_UINT MaxTextureSize = 1280;
 };
 
 #endif    // #if !defined(__CONFIGURE_H__)

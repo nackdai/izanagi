@@ -160,9 +160,9 @@ IZ_BOOL LoadTextureJob::OnRun()
 
         // Convert to rgba.
         for (IZ_UINT i = 0; i < cinfo.output_width; i++) {
-            dst[i * 4 + 0] = lineData[i * 3 + 0];
+            dst[i * 4 + 0] = lineData[i * 3 + 2];
             dst[i * 4 + 1] = lineData[i * 3 + 1];
-            dst[i * 4 + 2] = lineData[i * 3 + 2];
+            dst[i * 4 + 2] = lineData[i * 3 + 0];
             dst[i * 4 + 3] = 0xff;
         }
 

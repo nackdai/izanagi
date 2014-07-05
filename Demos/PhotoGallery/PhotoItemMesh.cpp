@@ -497,22 +497,19 @@ PhotoItemMesh::PhotoItemMesh()
 {
     m_FrontFace = IZ_NULL;
     m_TopAndSideFaces = IZ_NULL;
-
-    m_Texture = IZ_NULL;
 }
 
 PhotoItemMesh::~PhotoItemMesh()
 {
     SAFE_RELEASE(m_FrontFace);
     SAFE_RELEASE(m_TopAndSideFaces);
-
-    SAFE_RELEASE(m_Texture);
 }
 
 template <typename _T>
 _T* PhotoItemMesh::CreateFace(
     izanagi::IMemoryAllocator* allocator, 
     izanagi::graph::CGraphicsDevice* device,
+    IZ_UINT flags,
     IZ_FLOAT width,
     IZ_FLOAT height,
     IZ_FLOAT depth)
@@ -528,7 +525,7 @@ _T* PhotoItemMesh::CreateFace(
         result = instance->Init(
             allocator,
             device,
-            Configure::MeshFlags,
+            flags,
             width, height, depth);
     }
 
@@ -549,12 +546,14 @@ IZ_BOOL PhotoItemMesh::Init(
     m_FrontFace = CreateFace<FrontFace>(
         allocator,
         device,
+        Configure::MeshFlags | izanagi::E_DEBUG_MESH_VTX_FORM_UV,
         width, height, depth);
     VRETURN(m_FrontFace != IZ_NULL);
 
     m_TopAndSideFaces = CreateFace<TopAndSideFaces>(
         allocator,
         device,
+        Configure::MeshFlags,
         width, height, depth);
     VRETURN(m_TopAndSideFaces != IZ_NULL);
 
@@ -564,8 +563,6 @@ IZ_BOOL PhotoItemMesh::Init(
 void PhotoItemMesh::RenderFront(izanagi::graph::CGraphicsDevice* device)
 {
     IZ_ASSERT(device != IZ_NULL);
-
-    device->SetTexture(0, m_Texture);
 
     IZ_ASSERT(m_FrontFace != IZ_NULL);
     m_FrontFace->Draw(device);
@@ -577,14 +574,4 @@ void PhotoItemMesh::RenderTopAndSide(izanagi::graph::CGraphicsDevice* device)
 
     IZ_ASSERT(m_TopAndSideFaces != IZ_NULL);
     m_TopAndSideFaces->Draw(device);
-}
-
-void PhotoItemMesh::SetTexture(izanagi::graph::CTexture* texture)
-{
-    SAFE_REPLACE(m_Texture, texture);
-}
-
-izanagi::graph::CTexture* PhotoItemMesh::GetTexture()
-{
-    return m_Texture;
 }
