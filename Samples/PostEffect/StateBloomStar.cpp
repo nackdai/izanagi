@@ -26,6 +26,7 @@ IZ_BOOL CStateBloomStar::Render(izanagi::graph::CGraphicsDevice* device)
 // 開始
 IZ_BOOL CStateBloomStar::Enter(
     izanagi::IMemoryAllocator* allocator,
+    izanagi::graph::CGraphicsDevice* device,
     izanagi::CValue& arg)
 {
     IZ_BOOL ret = CPostEffectSample::GetInstance()->Read("data/BloomStar.pes");

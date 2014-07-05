@@ -21,7 +21,7 @@ public:
     virtual IZ_BOOL Init();
 
     // 更新.
-    virtual IZ_BOOL Update();
+    virtual IZ_BOOL Update(izanagi::graph::CGraphicsDevice* device);
 
     // 終了.
     virtual IZ_BOOL Destroy();

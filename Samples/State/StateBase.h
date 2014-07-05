@@ -18,6 +18,7 @@ public:
     // 開始
     virtual IZ_BOOL Enter(
         izanagi::IMemoryAllocator* allocator,
+        izanagi::graph::CGraphicsDevice* device,
         izanagi::CValue& arg);
 
     // 終了.

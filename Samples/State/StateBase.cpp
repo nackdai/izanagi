@@ -40,12 +40,11 @@ IZ_BOOL CStateBase::Render(izanagi::graph::CGraphicsDevice* device)
 // 開始
 IZ_BOOL CStateBase::Enter(
     izanagi::IMemoryAllocator* allocator,
+    izanagi::graph::CGraphicsDevice* device,
     izanagi::CValue& arg)
 {
     izanagi::CFileInputStream in;
     VRETURN(in.Open("data/StateImage.img"));
-
-    izanagi::graph::CGraphicsDevice* device = reinterpret_cast<izanagi::graph::CGraphicsDevice*>(arg.GetValueAsPtr());
 
     m_Img = izanagi::CImage::CreateImage(
                 allocator,

@@ -18,7 +18,7 @@ IZ_BOOL CStateBase::Init()
 }
 
 // çXêV
-IZ_BOOL CStateBase::Update()
+IZ_BOOL CStateBase::Update(izanagi::graph::CGraphicsDevice* device)
 {
     return IZ_TRUE;
 }

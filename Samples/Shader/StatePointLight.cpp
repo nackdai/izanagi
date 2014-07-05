@@ -137,10 +137,9 @@ void CStatePointLight::RenderScene(
 // 開始
 IZ_BOOL CStatePointLight::Enter(
     izanagi::IMemoryAllocator* allocator,
+    izanagi::graph::CGraphicsDevice* device,
     izanagi::CValue& arg)
 {
-    izanagi::graph::CGraphicsDevice* device = reinterpret_cast<izanagi::graph::CGraphicsDevice*>(arg.GetValueAsPtr());
-
     IZ_BOOL result = IZ_TRUE;
 
     // シェーダ
