@@ -12,7 +12,7 @@ StateDefault::~StateDefault()
 {
 }
 
-IZ_BOOL StateDefault::Update()
+IZ_BOOL StateDefault::Update(izanagi::graph::CGraphicsDevice* device)
 {
     GestureDetector::Instance().Update();
     return IZ_TRUE;

@@ -13,6 +13,7 @@ StateChangeView::StateChangeView(izanagi::CVectorCamera& camera)
     
     // Low
     {
+#if 0
         tmpCam.Init(
             izanagi::math::CVector(0.0f, 5.0f, -Configure::InnerRadius + Configure::CameraDistance, 1.0f),
             izanagi::math::CVector(0.0f, 5.0f, -Configure::InnerRadius, 1.0f),
@@ -23,6 +24,9 @@ StateChangeView::StateChangeView(izanagi::CVectorCamera& camera)
         tmpCam.Update();
 
         izanagi::math::SMatrix::Copy(m_ViewMtx[ViewState_Low], tmpCam.GetTransform());
+#else
+        izanagi::math::SMatrix::Copy(m_ViewMtx[ViewState_Low], camera.GetTransform());
+#endif
     }
 
     // Mid
@@ -67,7 +71,7 @@ StateChangeView::StateChangeView(izanagi::CVectorCamera& camera)
     m_IsAnimating = IZ_FALSE;
 
     m_Timeline.Init(
-        Configure::ChangeViewTime,
+        Configure::ChangeViewDuration,
         0.0f);
     m_Timeline.EnableLoop(IZ_FALSE);
     m_Timeline.AutoReverse(IZ_FALSE);
@@ -88,6 +92,7 @@ StateChangeView::ViewState StateChangeView::GetNextState(IZ_BOOL isUp)
 
 IZ_BOOL StateChangeView::Enter(
     izanagi::IMemoryAllocator* allocator,
+    izanagi::graph::CGraphicsDevice* device,
     izanagi::CValue& arg)
 {
     ChangeViewMode mode = (ChangeViewMode)arg.GetValueAsInt32();
@@ -108,7 +113,7 @@ IZ_BOOL StateChangeView::Enter(
     return IZ_TRUE;
 }
 
-IZ_BOOL StateChangeView::Update()
+IZ_BOOL StateChangeView::Update(izanagi::graph::CGraphicsDevice* device)
 {
     if (!m_IsAnimating
         && m_NextState != m_State)
@@ -121,7 +126,7 @@ IZ_BOOL StateChangeView::Update()
 
     if (m_IsAnimating) {
         // Update animation.
-        m_Timeline.Advance(16.67f);
+        m_Timeline.Advance(time);
 
         IZ_FLOAT t = m_Timeline.GetNormalized();
 
@@ -131,7 +136,7 @@ IZ_BOOL StateChangeView::Update()
         izanagi::math::SMatrix mtx;
         izanagi::math::SMatrix::Lerp(mtx, from, to, t);
 
-        m_Camera.SetTransform(mtx);
+        GetCamera().SetTransform(mtx);
 
         if (t == 1.0f) {
             m_IsAnimating = IZ_FALSE;

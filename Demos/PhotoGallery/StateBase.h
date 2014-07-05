@@ -15,7 +15,9 @@ public:
     virtual IZ_BOOL OnMouseLBtnUp(const izanagi::CIntPoint& point);
     virtual void OnMouseMove(const izanagi::CIntPoint& point);
 
-protected:
+    izanagi::CVectorCamera& GetCamera();
+
+private:
     izanagi::CVectorCamera& m_Camera;
 };
 

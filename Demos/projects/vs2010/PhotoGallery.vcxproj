@@ -56,6 +56,7 @@
     <ClCompile Include="..\..\PhotoGallery\StateChangeView.cpp" />
     <ClCompile Include="..\..\PhotoGallery\StateDefault.cpp" />
     <ClCompile Include="..\..\PhotoGallery\StateManager.cpp" />
+    <ClCompile Include="..\..\PhotoGallery\StateMoveToItem.cpp" />
     <ClCompile Include="..\..\PhotoGallery\StateRotateByFling.cpp" />
     <ClCompile Include="..\..\PhotoGallery\Utility.cpp" />
   </ItemGroup>
@@ -73,7 +74,6 @@
     <ClInclude Include="..\..\PhotoGallery\StateDefault.h" />
     <ClInclude Include="..\..\PhotoGallery\StateManager.h" />
     <ClInclude Include="..\..\PhotoGallery\StateMoveToItem.h" />
-    <ClInclude Include="..\..\PhotoGallery\StateReturnFromItem.h" />
     <ClInclude Include="..\..\PhotoGallery\StateRotateByFling.h" />
     <ClInclude Include="..\..\PhotoGallery\Utility.h" />
   </ItemGroup>

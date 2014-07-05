@@ -10,7 +10,7 @@ public:
     virtual ~StateDefault();
 
 public:
-    virtual IZ_BOOL Update();
+    virtual IZ_BOOL Update(izanagi::graph::CGraphicsDevice* device);
 
     virtual IZ_BOOL OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key);
 };

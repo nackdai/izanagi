@@ -63,6 +63,8 @@ public:
 
     PhotoItem* HitTest(const izanagi::math::CRay& ray);
 
+    const izanagi::math::SMatrix& GetRotationMtx() const;
+
 private:
     PhotoItem* FindNotRequestedLoadTexture();
 

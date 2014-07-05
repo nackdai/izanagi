@@ -55,16 +55,24 @@ public:
         const izanagi::math::CVector& pos,
         IZ_FLOAT rot);
 
-    const izanagi::math::SMatrix& GetL2W();
+    /** Get local to world matrix.
+     */
+    const izanagi::math::SMatrix& GetL2W() const;
 
     PhotoItemMesh* GetMesh();
 
+    /** Check if ray hits photo item.
+     */
     IZ_BOOL HitTest(
         const izanagi::math::CRay& ray,
         const izanagi::math::SMatrix& mtxRot);
 
     void SetIsRequestedLoadTexture(IZ_BOOL flag);
-    IZ_BOOL IsRequestedLoadTexture();
+    IZ_BOOL IsRequestedLoadTexture() const;
+
+    void GetNormal(izanagi::math::SVector& nml);
+
+    void GetCenterPosition(izanagi::math::SVector& pos);
 
 private:
     izanagi::IMemoryAllocator* m_Allocator;

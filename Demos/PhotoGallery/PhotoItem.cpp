@@ -2,6 +2,10 @@
 #include "PhotoItemMesh.h"
 #include "Configure.h"
 
+// TODO
+static const IZ_FLOAT Width = 10.0f;
+static const IZ_FLOAT Height = 10.0f;
+
 PhotoItem* PhotoItem::Create(
     izanagi::IMemoryAllocator* allocator,
     izanagi::graph::CGraphicsDevice* device,
@@ -51,10 +55,6 @@ IZ_BOOL PhotoItem::Init(
     izanagi::graph::CGraphicsDevice* device,
     PhotoItemMesh* mesh)
 {
-    // TODO
-    const IZ_FLOAT Width = 10.0f;
-    const IZ_FLOAT Height = 10.0f;
-
     if (mesh != IZ_NULL) {
         SAFE_REPLACE(m_Mesh, mesh);
     }
@@ -127,7 +127,7 @@ void PhotoItem::SetPositionAndRotation(
         pos);
 }
 
-const izanagi::math::SMatrix& PhotoItem::GetL2W()
+const izanagi::math::SMatrix& PhotoItem::GetL2W() const
 {
     return m_L2W;
 }
@@ -147,7 +147,7 @@ IZ_BOOL PhotoItem::HitTest(
     izanagi::math::CRectangle rc;
     m_Rectangle.Transform(rc, mtx);
 
-    IZ_BOOL ret = m_Rectangle.IsIntersect(ray);
+    IZ_BOOL ret = rc.IsIntersect(ray);
 
     return ret;
 }
@@ -157,7 +157,27 @@ void PhotoItem::SetIsRequestedLoadTexture(IZ_BOOL flag)
     m_IsRequestedLoadTexture = flag;
 }
 
-IZ_BOOL PhotoItem::IsRequestedLoadTexture()
+IZ_BOOL PhotoItem::IsRequestedLoadTexture() const
 {
     return m_IsRequestedLoadTexture;
+}
+
+void PhotoItem::GetNormal(izanagi::math::SVector& nml)
+{
+    izanagi::math::SMatrix::ApplyXYZ(nml, m_Rectangle.nml, m_L2W);
+    nml.w = 0.0f;
+
+    izanagi::math::SVector::Normalize(nml, nml);
+}
+
+void PhotoItem::GetCenterPosition(izanagi::math::SVector& pos)
+{
+    izanagi::math::SVector::Set(
+        pos,
+        0.0f,
+        Height * 0.5f,
+        0.0f,
+        1.0f);
+
+    izanagi::math::SMatrix::Apply(pos, pos, m_L2W);
 }

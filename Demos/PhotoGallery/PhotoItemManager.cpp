@@ -338,3 +338,8 @@ PhotoItem* PhotoItemManager::HitTest(const izanagi::math::CRay& ray)
 
     return IZ_NULL;
 }
+
+const izanagi::math::SMatrix& PhotoItemManager::GetRotationMtx() const
+{
+    return m_mtxRot;
+}

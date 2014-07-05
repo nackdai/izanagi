@@ -1,32 +1,42 @@
-#if !defined(__CONFIGURE_H__)
-#define __CONFIGURE_H__
+#if !defined(__STATE_MOVE_TO_ITEM_H__)
+#define __STATE_MOVE_TO_ITEM_H__
 
-#include "izSampleKit.h"
+#include "izSceneGraph.h"
+#include "StateBase.h"
+#include "izAnimation.h"
 
-class Configure {
+class StateMoveToItem : public StateBase {
 public:
-    // Flags for vertex semantics.
-    static const IZ_UINT MeshFlags = izanagi::E_DEBUG_MESH_VTX_FORM_POS
-        | izanagi::E_DEBUG_MESH_VTX_FORM_COLOR
-        | izanagi::E_DEBUG_MESH_VTX_FORM_NORMAL;
+    StateMoveToItem(izanagi::CVectorCamera& camera);
+    virtual ~StateMoveToItem();
 
-    // Slices of seat.
-    static const IZ_UINT Slices = 20;
+public:
+    virtual IZ_BOOL Enter(
+        izanagi::IMemoryAllocator* allocator,
+        izanagi::graph::CGraphicsDevice* device,
+        izanagi::CValue& arg);
 
-    static const IZ_COLOR DefaultColor = IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0xff);
+    virtual IZ_BOOL Update(izanagi::graph::CGraphicsDevice* device);
 
-    // Raduis.
-    static const IZ_FLOAT InnerRadius;
-    static const IZ_FLOAT OuterRadius;
-    static const IZ_FLOAT MostOuterRadius;
+    virtual IZ_BOOL OnMouseLBtnDown(const izanagi::CIntPoint& point);
+    virtual IZ_BOOL OnMouseLBtnUp(const izanagi::CIntPoint& point);
 
-    // Height.
-    static const IZ_FLOAT Height;
+private:
+    enum State {
+        State_None,
+        State_Move,
+        State_Moved,
+        State_Return,
+    };
 
-    // Depth.
-    static const IZ_FLOAT Depth;
+private:
+    State m_State;
 
-    static const IZ_FLOAT MaxAngleRate;
+    izanagi::math::SMatrix m_CamMtx;
+    izanagi::math::SMatrix m_TargetMtx;
+
+    izanagi::sys::CTimer m_Timer;
+    izanagi::animation::CTimeline m_Timeline;
 };
 
-#endif    // #if !defined(__CONFIGURE_H__)
+#endif    // #if !defined(__STATE_MOVE_TO_ITEM_H__)

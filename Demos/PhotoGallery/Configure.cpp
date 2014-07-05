@@ -2,7 +2,7 @@
 
 // Raduis.
 const IZ_FLOAT Configure::RadiusDiff = 10.0f;
-const IZ_FLOAT Configure::InnerRadius = 100.0f;
+const IZ_FLOAT Configure::InnerRadius = 80.0f;
 const IZ_FLOAT Configure::OuterRadius = Configure::InnerRadius + Configure::RadiusDiff;
 const IZ_FLOAT Configure::MostOuterRadius = Configure::OuterRadius + Configure::RadiusDiff;
 
@@ -17,4 +17,7 @@ const IZ_FLOAT Configure::Depth = 2.0f;
 
 const IZ_FLOAT Configure::MaxAngleRate = IZ_MATH_PI2 / 60.0f;
 
-const IZ_FLOAT Configure::ChangeViewTime = 500.0f; // [ms]
+const IZ_FLOAT Configure::ChangeViewDuration = 500.0f;  // [ms]
+const IZ_FLOAT Configure::MoveToItemDuration = 750.0f;  // [ms]
+
+const IZ_FLOAT Configure::CameraDistanceFromItem = 10.0f;

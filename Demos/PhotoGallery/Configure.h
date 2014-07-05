@@ -33,7 +33,10 @@ public:
 
     static const IZ_FLOAT MaxAngleRate;
 
-    static const IZ_FLOAT ChangeViewTime;
+    static const IZ_FLOAT ChangeViewDuration;
+    static const IZ_FLOAT MoveToItemDuration;
+
+    static const IZ_FLOAT CameraDistanceFromItem;
 };
 
 #endif    // #if !defined(__CONFIGURE_H__)

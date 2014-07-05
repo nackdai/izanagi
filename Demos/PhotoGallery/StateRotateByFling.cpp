@@ -12,7 +12,7 @@ StateRotateByFling::~StateRotateByFling()
 {
 }
 
-IZ_BOOL StateRotateByFling::Update()
+IZ_BOOL StateRotateByFling::Update(izanagi::graph::CGraphicsDevice* device)
 {
     GestureDetector::Instance().Update();
     PhotoItemManager::Instance().Update();

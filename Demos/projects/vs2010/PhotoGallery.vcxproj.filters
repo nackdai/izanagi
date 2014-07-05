@@ -71,6 +71,9 @@
     <ClCompile Include="..\..\PhotoGallery\StateChangeView.cpp">
       <Filter>src\state</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\PhotoGallery\StateMoveToItem.cpp">
+      <Filter>src\state</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\PhotoGallery\PhotoGalleryApp.h">
@@ -99,9 +102,6 @@
     </ClInclude>
     <ClInclude Include="..\..\PhotoGallery\GestureListener.h">
       <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\PhotoGallery\StateReturnFromItem.h">
-      <Filter>include\state</Filter>
     </ClInclude>
     <ClInclude Include="..\..\PhotoGallery\StateRotateByFling.h">
       <Filter>include\state</Filter>

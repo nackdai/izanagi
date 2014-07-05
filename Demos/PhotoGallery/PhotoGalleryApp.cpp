@@ -47,7 +47,10 @@ IZ_BOOL PhotoGalleryApp::InitInternal(
 
     TextureLoader::Instance().Init(allocator);
 
-    GestureDetector::Instance().Init(allocator);
+    GestureDetector::Instance().Init(
+        allocator,
+        this,
+        device->GetViewport());
 
     StateManager::Instance().Create(camera);
     StateManager::Instance().Init();
@@ -91,6 +94,32 @@ void PhotoGalleryApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 void PhotoGalleryApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
     StateManager::Instance().Render(device);
+
+    State state = StateManager::Instance().GetCurrentState();
+
+    const char* name[] = {
+        "Default",
+        "RotateByFling",
+        "ChnageView",
+        "MoveToItem",
+    };
+
+    izanagi::CDebugFont* font = GetDebugFont();
+
+    if (device->Begin2D()) {
+        font->Begin(device);
+
+        font->DBPrint(
+            device,
+            0,
+            100,
+            0xffffffff,
+            name[state]);
+
+        font->End();
+
+        device->End2D();
+    }
 }
 
 IZ_BOOL PhotoGalleryApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)

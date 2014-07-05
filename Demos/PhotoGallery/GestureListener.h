@@ -20,6 +20,33 @@ public:
     virtual void OnFling(
         const izanagi::sys::CTouchEvent& ev,
         IZ_FLOAT velocityX, IZ_FLOAT velocityY);
+
+    virtual void OnShowPress()
+    {
+        IZ_PRINTF("OnShowPress\n");
+    }
+
+    virtual void OnLongPress()
+    {
+        IZ_PRINTF("OnLongPress\n");
+    }
+
+    virtual void OnDrag(
+        const izanagi::sys::CTouchEvent& ev,
+        IZ_INT moveX, IZ_INT moveY)
+    {
+        IZ_PRINTF("OnDrag\n");
+    }
+
+
+public:
+    void Init(
+        PhotoGalleryApp* app,
+        const izanagi::graph::SViewport& vp);
+
+private:
+    PhotoGalleryApp* m_App;
+    izanagi::graph::SViewport m_Viewport;
 };
 
 /** Detect touch gesture.
@@ -37,7 +64,10 @@ private:
     ~GestureDetector();
 
 public:
-    void Init(izanagi::IMemoryAllocator* allocator);
+    void Init(
+        izanagi::IMemoryAllocator* allocator,
+        PhotoGalleryApp* app,
+        const izanagi::graph::SViewport& vp);
 
     void Update();
 

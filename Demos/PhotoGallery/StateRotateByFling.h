@@ -10,7 +10,7 @@ public:
     virtual ~StateRotateByFling();
 
 public:
-    virtual IZ_BOOL Update();
+    virtual IZ_BOOL Update(izanagi::graph::CGraphicsDevice* device);
 
     virtual IZ_BOOL Leave();
 };

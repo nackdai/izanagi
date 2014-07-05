@@ -41,3 +41,8 @@ void StateBase::OnMouseMove(const izanagi::CIntPoint& point)
             izanagi::sys::E_SYS_TOUCH_EVENT_MOVE,
             point.x, point.y));
 }
+
+izanagi::CVectorCamera& StateBase::GetCamera()
+{
+    return m_Camera;
+}
