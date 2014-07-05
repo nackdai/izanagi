@@ -19,7 +19,7 @@ StateManager::StateManager()
 {
 }
 
-void StateManager::Create(izanagi::CCamera& camera)
+void StateManager::Create(izanagi::CVectorCamera& camera)
 {
     _STATE(State_Default, StateDefault, camera);
     _STATE(State_RotateByFling, StateRotateByFling, camera);

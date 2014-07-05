@@ -6,7 +6,7 @@
 
 class StateRotateByFling : public StateBase {
 public:
-    StateRotateByFling(izanagi::CCamera& camera);
+    StateRotateByFling(izanagi::CVectorCamera& camera);
     virtual ~StateRotateByFling();
 
 public:

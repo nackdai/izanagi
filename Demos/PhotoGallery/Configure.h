@@ -16,17 +16,24 @@ public:
     static const IZ_COLOR DefaultColor = IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0xff);
 
     // Raduis.
+    static const IZ_FLOAT RadiusDiff;
     static const IZ_FLOAT InnerRadius;
     static const IZ_FLOAT OuterRadius;
     static const IZ_FLOAT MostOuterRadius;
 
+    static const IZ_FLOAT CameraDistance;
+    static const IZ_FLOAT CameraRadius;
+
     // Height.
-    static const IZ_FLOAT Height;
+    static const IZ_FLOAT HeightPerFloor;
+    static const IZ_FLOAT SeatHeight;
 
     // Depth.
     static const IZ_FLOAT Depth;
 
     static const IZ_FLOAT MaxAngleRate;
+
+    static const IZ_FLOAT ChangeViewTime;
 };
 
 #endif    // #if !defined(__CONFIGURE_H__)

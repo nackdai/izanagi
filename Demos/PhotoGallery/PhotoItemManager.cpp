@@ -146,7 +146,7 @@ IZ_BOOL PhotoItemManager::Init(
             // Positon.
             izanagi::math::CVector pos(
                 c * radius[i],
-                Configure::Height * i,
+                Configure::HeightPerFloor * i,
                 s * radius[i]);
 
             // Rotate.

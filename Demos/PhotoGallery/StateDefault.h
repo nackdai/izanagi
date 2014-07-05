@@ -6,7 +6,7 @@
 
 class StateDefault : public StateBase {
 public:
-    StateDefault(izanagi::CCamera& camera);
+    StateDefault(izanagi::CVectorCamera& camera);
     virtual ~StateDefault();
 
 public:

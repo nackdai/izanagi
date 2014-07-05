@@ -5,14 +5,18 @@
 
 class StateBase : public izanagi::CSceneStateBase {
 public:
-    StateBase(izanagi::CCamera& camera);
+    StateBase(izanagi::CVectorCamera& camera);
     virtual ~StateBase() {}
 
 public:
     virtual IZ_BOOL Render(izanagi::graph::CGraphicsDevice* device);
 
+    virtual IZ_BOOL OnMouseLBtnDown(const izanagi::CIntPoint& point);
+    virtual IZ_BOOL OnMouseLBtnUp(const izanagi::CIntPoint& point);
+    virtual void OnMouseMove(const izanagi::CIntPoint& point);
+
 protected:
-    izanagi::CCamera& m_Camera;
+    izanagi::CVectorCamera& m_Camera;
 };
 
 #endif    // #if !defined(__STATE_BASE_H__)

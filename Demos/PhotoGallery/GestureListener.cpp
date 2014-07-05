@@ -37,3 +37,35 @@ void CGestureListener::OnFling(
 
     StateManager::Instance().ChangeState(State_RotateByFling);
 }
+
+///////////////////////////////////
+
+GestureDetector GestureDetector::s_Instance;
+
+GestureDetector& GestureDetector::Instance()
+{
+    return s_Instance;
+}
+
+GestureDetector::GestureDetector()
+{
+}
+
+GestureDetector::~GestureDetector()
+{
+}
+
+void GestureDetector::Init(izanagi::IMemoryAllocator* allocator)
+{
+    m_Detector.Init(allocator, &m_Listener);
+}
+
+void GestureDetector::Update()
+{
+    m_Detector.Update();
+}
+
+IZ_BOOL GestureDetector::PostTouchEvent(const izanagi::sys::CTouchEvent& ev)
+{
+    return m_Detector.PostTouchEvent(ev);
+}

@@ -1,7 +1,9 @@
 #include "StateRotateByFling.h"
 #include "PhotoItemManager.h"
+#include "GestureListener.h"
+#include "StateManager.h"
 
-StateRotateByFling::StateRotateByFling(izanagi::CCamera& camera)
+StateRotateByFling::StateRotateByFling(izanagi::CVectorCamera& camera)
     : StateBase(camera)
 {
 }
@@ -12,7 +14,13 @@ StateRotateByFling::~StateRotateByFling()
 
 IZ_BOOL StateRotateByFling::Update()
 {
+    GestureDetector::Instance().Update();
     PhotoItemManager::Instance().Update();
+
+    if (!PhotoItemManager::Instance().IsRotateAnimating()) {
+        StateManager::Instance().ChangeState(State_Default);
+    }
+
     return IZ_TRUE;
 }
 

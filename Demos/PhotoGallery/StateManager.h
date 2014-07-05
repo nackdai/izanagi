@@ -23,7 +23,7 @@ private:
     virtual ~StateManager() {}
 
 public:
-    void Create(izanagi::CCamera& camera);
+    void Create(izanagi::CVectorCamera& camera);
 };
 
 #endif    // #if !defined(__STATE_MANAGER_H__)
