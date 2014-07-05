@@ -1,4 +1,5 @@
 #include "math/MathMatrix.h"
+#include "math/MathQuaternion.h"
 
 namespace izanagi
 {
@@ -172,6 +173,31 @@ namespace math
         IZ_ASSERT(funcs[order] != IZ_NULL);
 
         (*funcs[order])(angle, mtx);
+    }
+
+    // マトリクス間を補間する
+    void SMatrix::Lerp(SMatrix& dst, const SMatrix& from, const SMatrix& to, IZ_FLOAT t)
+    {
+        SQuat quatFrom;
+        SQuat::QuatFromMatrix(quatFrom, from);
+
+        SQuat quatTo;
+        SQuat::QuatFromMatrix(quatTo, to);
+
+        SQuat quatLerp;
+        SQuat::Slerp(quatLerp, quatFrom, quatTo, t);
+
+        SVector posFrom;
+        SVector::Copy(posFrom, from.v[3]);
+
+        SVector posTo;
+        SVector::Copy(posTo, to.v[3]);
+
+        SVector posLerp;
+        SVector::Lerp(posLerp, posFrom, posTo, t);
+
+        SQuat::MatrixFromQuat(dst, quatLerp);
+        SVector::Copy(dst.v[3], posLerp);
     }
 }   // namespace math
 }   // namespace izanagi
