@@ -51,9 +51,13 @@ namespace izanagi {
          */
         virtual IZ_BOOL OnKeyDown(sys::E_KEYBOARD_BUTTON key);
 
+        virtual IZ_BOOL OnMouseLBtnDown(const izanagi::CIntPoint& point);
+
+        virtual IZ_BOOL OnMouseLBtnUp(const izanagi::CIntPoint& point);
+
         /** マウス移動.
          */
-        virtual IZ_BOOL OnMouseMove(IZ_INT x, IZ_INT y);
+        virtual void OnMouseMove(const izanagi::CIntPoint& point);
 
         /** マウスホイール操作.
          */ 

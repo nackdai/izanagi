@@ -28,8 +28,6 @@ namespace izanagi {
             m_nNextState = (STATE)STATE_NUM;
             m_nPrevState = (STATE)STATE_NUM;
             m_nCurrentState = (STATE)STATE_NUM;
-
-            m_EnterArg = IZ_NULL;
         }
 
         ~CFixedSceneStateManager() {}
@@ -140,11 +138,21 @@ namespace izanagi {
             return GetState(GetCurrentState())->OnKeyDown(key);
         }
 
+        IZ_BOOL OnMouseLBtnDown(const izanagi::CIntPoint& point)
+        {
+            return GetState(GetCurrentState())->OnMouseLBtnDown(point);
+        }
+
+        IZ_BOOL OnMouseLBtnUp(const izanagi::CIntPoint& point)
+        {
+            return GetState(GetCurrentState())->OnMouseLBtnUp(point);
+        }
+
         /** マウス移動.
          */
-        IZ_BOOL OnMouseMove(IZ_INT x, IZ_INT y)
+        void OnMouseMove(const izanagi::CIntPoint& point)
         {
-            return GetState(GetCurrentState())->OnMouseMove(x, y);
+            GetState(GetCurrentState())->OnMouseMove(point);
         }
 
         /** マウスホイール操作.
