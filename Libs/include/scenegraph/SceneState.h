@@ -29,7 +29,7 @@ namespace izanagi {
 
         /** 更新.
          */
-        virtual IZ_BOOL Update();
+        virtual IZ_BOOL Update(graph::CGraphicsDevice* device);
 
         /** 終了.
          */
@@ -39,6 +39,7 @@ namespace izanagi {
          */
         virtual IZ_BOOL Enter(
             IMemoryAllocator* allocator,
+            graph::CGraphicsDevice* device,
             CValue& arg);
 
         /** ステートから抜ける（終了）.

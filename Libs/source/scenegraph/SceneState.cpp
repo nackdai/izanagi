@@ -13,7 +13,7 @@ IZ_BOOL CSceneStateBase::Render(graph::CGraphicsDevice* device)
     return IZ_TRUE;
 }
 
-IZ_BOOL CSceneStateBase::Update()
+IZ_BOOL CSceneStateBase::Update(graph::CGraphicsDevice* device)
 {
     return IZ_TRUE;
 }
@@ -25,6 +25,7 @@ IZ_BOOL CSceneStateBase::Destroy()
 
 IZ_BOOL CSceneStateBase::Enter(
     IMemoryAllocator* allocator,
+    graph::CGraphicsDevice* device,
     CValue& value)
 {
     return IZ_TRUE;

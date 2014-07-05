@@ -81,7 +81,10 @@ namespace izanagi {
 
         /** 更新.
          */
-        IZ_BOOL Update(IMemoryAllocator* allocator, void* args = IZ_NULL)
+        IZ_BOOL Update(
+            IMemoryAllocator* allocator,
+            graph::CGraphicsDevice* device = IZ_NULL,
+            void* args = IZ_NULL)
         {       
             if (m_nNextState != STATE_NUM && GetCurrentState() != m_nNextState) {
                 // 次のタスクへ移行
@@ -95,7 +98,7 @@ namespace izanagi {
                     
                 // 次のタスクの初期化
                 m_nPrevState = GetCurrentState();
-                if (! GetState(m_nNextState)->Enter(allocator, args != IZ_NULL ? CValue(args) : m_EnterArg)) {
+                if (! GetState(m_nNextState)->Enter(allocator, device, args != IZ_NULL ? CValue(args) : m_EnterArg)) {
                     // まだ入れないって意味にする
                     m_EnterArg = IZ_NULL;
                     return IZ_TRUE;
@@ -107,7 +110,7 @@ namespace izanagi {
                 m_nNextState = (STATE)STATE_NUM;        
             }
             
-            IZ_BOOL bRet = GetState(GetCurrentState())->Update();
+            IZ_BOOL bRet = GetState(GetCurrentState())->Update(device);
             
             return bRet;
         }
