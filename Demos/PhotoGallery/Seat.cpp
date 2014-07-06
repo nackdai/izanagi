@@ -125,7 +125,7 @@ IZ_BOOL Seat::SeatPart::Init(
     VRETURN(
         SetVtx(
             flag,
-            Configure::DefaultColor,
+            Configure::SeatColor,
             innerRadius, outerRadius,
             height,
             slices));
@@ -162,7 +162,7 @@ IZ_BOOL Seat::SeatPart::SetVtx(
             0.0f,
             longitude);
 
-        vtx->clr = IZ_COLOR_RGBA(50, 50, 50, 255);
+        //vtx->clr = IZ_COLOR_RGBA(50, 50, 50, 255);
 
         vtx++;
     }
@@ -179,7 +179,7 @@ IZ_BOOL Seat::SeatPart::SetVtx(
             height,
             longitude);
 
-        vtx->clr = IZ_COLOR_RGBA(128, 128, 128, 255);
+        //vtx->clr = IZ_COLOR_RGBA(128, 128, 128, 255);
 
         vtx++;
     }
@@ -197,7 +197,7 @@ IZ_BOOL Seat::SeatPart::SetVtx(
             longitude,
             IZ_TRUE);
 
-        vtx->clr = IZ_COLOR_RGBA(228, 228, 228, 255);
+        //vtx->clr = IZ_COLOR_RGBA(228, 228, 228, 255);
 
         vtx++;
     }
@@ -215,7 +215,7 @@ IZ_BOOL Seat::SeatPart::SetVtx(
             longitude,
             IZ_TRUE);
 
-        vtx->clr = IZ_COLOR_RGBA(228, 228, 228, 255);
+        //vtx->clr = IZ_COLOR_RGBA(228, 228, 228, 255);
 
         vtx++;
     }
@@ -375,8 +375,8 @@ IZ_BOOL Seat::Init(
         allocator,
         device,
         Configure::MeshFlags,
-        Configure::DefaultColor,
-        1, 1,
+        Configure::SeatColor,
+        10, 10,
         Configure::InnerRadius * 2.0f,
         Configure::InnerRadius * 2.0f);
     VRETURN(m_Floor != IZ_NULL);

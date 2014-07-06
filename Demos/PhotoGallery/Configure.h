@@ -16,6 +16,7 @@ public:
     static const IZ_UINT Slices = 20;
 
     static const IZ_COLOR DefaultColor = IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0xff);
+    static const IZ_COLOR SeatColor = IZ_COLOR_RGBA(0x20, 0x20, 0x20, 0xff);
 
     // Raduis.
     static const IZ_FLOAT RadiusDiff;

@@ -1,10 +1,7 @@
 #include "StateChangeView.h"
 #include "Configure.h"
 #include "StateManager.h"
-
-const IZ_FLOAT StateChangeView::ViewRotAngle[StateChangeView::ViewState_Num] = {
-
-};
+#include "PhotoItemManager.h"
 
 StateChangeView::StateChangeView(izanagi::CVectorCamera& camera)
     : StateBase(camera)
@@ -115,6 +112,8 @@ IZ_BOOL StateChangeView::Update(
     IZ_FLOAT time,
     izanagi::graph::CGraphicsDevice* device)
 {
+    PhotoItemManager::Instance().Update(time);
+
     if (!m_IsAnimating
         && m_NextState != m_State)
     {

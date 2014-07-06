@@ -6,6 +6,7 @@
 #include "Configure.h"
 #include "GestureListener.h"
 #include "Utility.h"
+#include "Environment.h"
 #include "data/PhotoFiles.h"
 
 PhotoGalleryApp::PhotoGalleryApp()
@@ -31,7 +32,7 @@ IZ_BOOL PhotoGalleryApp::InitInternal(
 
     {
         izanagi::CFileInputStream input;
-        VRETURN(input.Open("data/BasicShader.shd"));
+        VRETURN(input.Open("data/SeatShader.shd"));
 
         m_Shader = izanagi::shader::CShaderBasic::CreateShader<izanagi::shader::CShaderBasic>(
             allocator,
@@ -86,12 +87,12 @@ __EXIT__:
 // 解放.
 void PhotoGalleryApp::ReleaseInternal()
 {
+    TextureLoader::Instance().Terminate();
+    izanagi::threadmodel::CJobQueue::TerminateJobQueue();
+
     SAFE_RELEASE(m_Seat);
 
     SAFE_RELEASE(m_Shader);
-
-    TextureLoader::Instance().Terminate();
-    izanagi::threadmodel::CJobQueue::TerminateJobQueue();
 
     PhotoItemManager::Instance().Terminate();
 }
@@ -118,7 +119,7 @@ void PhotoGalleryApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
         izanagi::math::SMatrix mtx;
         izanagi::math::SMatrix::SetUnit(mtx);
 
-        m_Shader->Begin(device, 1, IZ_FALSE);
+        m_Shader->Begin(device, 0, IZ_FALSE);
         {
             if (m_Shader->BeginPass(0)) {
                 Utility::SetShaderParam(
@@ -132,6 +133,8 @@ void PhotoGalleryApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
                     "g_mL2W",
                     (void*)&mtx,
                     sizeof(mtx));
+
+                Environment::Instance().SetPointLightParam(m_Shader);
 
                 m_Shader->CommitChanges(device);
 

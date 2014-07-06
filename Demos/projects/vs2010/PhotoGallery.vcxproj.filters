@@ -30,6 +30,9 @@
     <None Include="..\..\PhotoGallery\shader\PhotoItemShader.fx">
       <Filter>shader</Filter>
     </None>
+    <None Include="..\..\PhotoGallery\shader\SeatShader.fx">
+      <Filter>shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\PhotoGallery\main.cpp">
@@ -79,6 +82,9 @@
     </ClCompile>
     <ClCompile Include="..\..\PhotoGallery\StateMoveToItem.cpp">
       <Filter>src\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PhotoGallery\Environment.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -130,12 +136,18 @@
     <ClInclude Include="..\..\PhotoGallery\data\PhotoFiles.h">
       <Filter>include\data</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\PhotoGallery\Environment.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\PhotoGallery\shader\BasicShader.xml">
       <Filter>shader</Filter>
     </CustomBuild>
     <CustomBuild Include="..\..\PhotoGallery\shader\PhototItemShader.xml">
+      <Filter>shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\PhotoGallery\shader\SeatShader.xml">
       <Filter>shader</Filter>
     </CustomBuild>
   </ItemGroup>

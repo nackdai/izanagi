@@ -47,9 +47,16 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(RootDir)%(Directory)%(Filename).fx;%(AdditionalInputs)</AdditionalInputs>
     </CustomBuild>
+    <None Include="..\..\PhotoGallery\shader\SeatShader.fx" />
+    <CustomBuild Include="..\..\PhotoGallery\shader\SeatShader.xml">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(RootDir)%(Directory)%(Filename).fx;%(AdditionalInputs)</AdditionalInputs>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\PhotoGallery\Configure.cpp" />
+    <ClCompile Include="..\..\PhotoGallery\Environment.cpp" />
     <ClCompile Include="..\..\PhotoGallery\GestureListener.cpp" />
     <ClCompile Include="..\..\PhotoGallery\LoadTextureJob.cpp" />
     <ClCompile Include="..\..\PhotoGallery\main.cpp" />
@@ -69,6 +76,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\PhotoGallery\Configure.h" />
     <ClInclude Include="..\..\PhotoGallery\data\PhotoFiles.h" />
+    <ClInclude Include="..\..\PhotoGallery\Environment.h" />
     <ClInclude Include="..\..\PhotoGallery\GestureListener.h" />
     <ClInclude Include="..\..\PhotoGallery\LoadTextureJob.h" />
     <ClInclude Include="..\..\PhotoGallery\PhotoGalleryApp.h" />
