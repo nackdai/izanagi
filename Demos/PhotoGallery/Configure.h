@@ -48,6 +48,8 @@ public:
     static const IZ_UINT MaxTextureSize = 1280;
 
     static const IZ_FLOAT FadeInHeight;
+
+    static const IZ_FLOAT PhotoItemShownRange;
 };
 
 #endif    // #if !defined(__CONFIGURE_H__)

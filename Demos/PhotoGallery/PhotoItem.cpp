@@ -2,6 +2,7 @@
 #include "PhotoItemMesh.h"
 #include "Configure.h"
 #include "Utility.h"
+#include "LoadTextureJob.h"
 
 // TODO
 static const IZ_FLOAT Width = 10.0f;
@@ -34,8 +35,12 @@ PhotoItem* PhotoItem::Create(
     return instance;
 }
 
+static IZ_UINT s_ID = 0;
+
 PhotoItem::PhotoItem()
 {
+    m_ID = s_ID++;
+
     m_Allocator = IZ_NULL;
 
     m_Texture = IZ_NULL;
@@ -114,9 +119,48 @@ void PhotoItem::RenderTopAndSide(izanagi::graph::CGraphicsDevice* device)
 
 void PhotoItem::Update(
     IZ_FLOAT time,
+    izanagi::graph::CGraphicsDevice* device,
     const izanagi::math::SMatrix& mtxRot,
     const izanagi::CCamera& camera)
 {
+    // NOTE
+    // カメラは固定なので、カメラの後ろにいるかどうかで判定する
+    // カメラはマイナスZ方向を向いているので、プラスZ方向がカメラの後ろになる
+
+    izanagi::math::SVector pos;
+    GetCenterPosition(pos);
+    izanagi::math::SMatrix::ApplyXYZ(pos, pos, mtxRot);
+
+    IZ_BOOL isShown = m_IsShown;
+#if 0
+    m_IsShown = (pos.z <= camera.GetParam().pos.z);
+#else
+    m_IsShown = (pos.z <= camera.GetParam().pos.z + Configure::PhotoItemShownRange);
+#endif
+
+    if (isShown != m_IsShown) {
+        // State changed.
+        if (isShown) {
+            // Shown -> Hidden
+
+            // Release texture.
+            ResetFadeInParams();
+            SAFE_RELEASE(m_Texture);
+        }
+        else {
+            // Hidden -> Shown
+            if (m_Texture == IZ_NULL
+                && m_Path != IZ_NULL)
+            {
+                // Request loading texture again.
+                TextureLoader::Instance().EnqueueLoadingRequest(
+                    device,
+                    m_Path,
+                    this);
+            }
+        }
+    }
+
     if (!HasTexture()) {
         return;
     }
@@ -136,16 +180,6 @@ void PhotoItem::Update(
             m_IsFading = IZ_FALSE;
         }
     }
-
-    // NOTE
-    // カメラは固定なので、カメラの後ろにいるかどうかで判定する
-    // カメラはマイナスZ方向を向いているので、プラスZ方向がカメラの後ろになる
-
-    izanagi::math::SVector pos;
-    GetCenterPosition(pos);
-    izanagi::math::SMatrix::ApplyXYZ(pos, pos, mtxRot);
-
-    m_IsShown = (pos.z <= camera.GetParam().pos.z);
 }
 
 izanagi::CStdList<PhotoItem>::Item* PhotoItem::GetListItem()

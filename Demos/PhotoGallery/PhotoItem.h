@@ -42,6 +42,7 @@ public:
 
     void Update(
         IZ_FLOAT time,
+        izanagi::graph::CGraphicsDevice* device,
         const izanagi::math::SMatrix& mtxRot,
         const izanagi::CCamera& camera);
 
@@ -90,6 +91,8 @@ private:
     void ResetFadeInParams();
 
 private:
+    IZ_UINT m_ID;
+
     izanagi::IMemoryAllocator* m_Allocator;
 
     izanagi::CStdList<PhotoItem>::Item m_ListItem;

@@ -104,6 +104,10 @@ IZ_BOOL LoadTextureJob::Init(
 
 IZ_BOOL LoadTextureJob::OnRun()
 {
+    if (!m_TargetItem->IsShown()) {
+        return IZ_FALSE;
+    }
+
     // Open file.
     izanagi::CFileInputStream input;
     VRETURN(input.Open(m_Path));
@@ -186,6 +190,7 @@ void LoadTextureJob::OnFinish(IZ_BOOL runResult)
     if (IsCanceled() || !runResult) {
         // Free memory.
         FREE(m_InternalAllocator, m_PixelData);
+        m_TargetItem->SetTexture(IZ_NULL, m_Path);
         return;
     }
     

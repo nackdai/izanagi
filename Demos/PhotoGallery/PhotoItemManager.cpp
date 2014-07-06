@@ -251,6 +251,7 @@ IZ_BOOL PhotoItemManager::EnqueueLoadingRequest(
 
 void PhotoItemManager::Update(
     IZ_FLOAT time,
+    izanagi::graph::CGraphicsDevice* device,
     const izanagi::CCamera& camera)
 {
     if (m_AngleImmediately != 0.0f) {
@@ -278,7 +279,11 @@ void PhotoItemManager::Update(
 
         while (item != IZ_NULL) {
             PhotoItem* photoItem = item->GetData();
-            photoItem->Update(time, m_mtxRot, camera);
+            photoItem->Update(
+                time,
+                device,
+                m_mtxRot,
+                camera);
             item = item->GetNext();
         }
     }

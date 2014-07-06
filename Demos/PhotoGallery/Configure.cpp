@@ -24,3 +24,5 @@ const IZ_FLOAT Configure::FadeInDuration = 500.0f;      // [ms]
 const IZ_FLOAT Configure::CameraDistanceFromItem = 10.0f;
 
 const IZ_FLOAT Configure::FadeInHeight = 1.5f;
+
+const IZ_FLOAT Configure::PhotoItemShownRange = 30.0f;
