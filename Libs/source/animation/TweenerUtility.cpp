@@ -5,19 +5,19 @@
 namespace izanagi {
 namespace animation {
 
-    static math::CTweenerBack       s_TweenerBack;
-    static math::CTweenerBounce     s_TweenerBounce;
-    static math::CTweenerCirc       s_TweenerCirc;
-    static math::CTweenerCubic      s_TweenerCubic;
-    static math::CTweenerElastic    s_TweenerElastic;
-    static math::CTweenerExpo       s_TweenerExpo;
-    static math::CTweenerQuad       s_TweenerQuad;
-    static math::CTweenerQuart      s_TweenerQuart;
-    static math::CTweenerQuint      s_TweenerQuint;
-    static math::CTweenerSine       s_TweenerSine;
-    static math::CTweenerLinear     s_TweenerLinear;
+    static animation::CTweenerBack       s_TweenerBack;
+    static animation::CTweenerBounce     s_TweenerBounce;
+    static animation::CTweenerCirc       s_TweenerCirc;
+    static animation::CTweenerCubic      s_TweenerCubic;
+    static animation::CTweenerElastic    s_TweenerElastic;
+    static animation::CTweenerExpo       s_TweenerExpo;
+    static animation::CTweenerQuad       s_TweenerQuad;
+    static animation::CTweenerQuart      s_TweenerQuart;
+    static animation::CTweenerQuint      s_TweenerQuint;
+    static animation::CTweenerSine       s_TweenerSine;
+    static animation::CTweenerLinear     s_TweenerLinear;
 
-    static math::ITweenerEasing* TweenEasingTbl[] = {
+    static animation::ITweenerEasing* TweenEasingTbl[] = {
         &s_TweenerBack,
         &s_TweenerBounce,
         &s_TweenerCirc,
@@ -46,7 +46,7 @@ namespace animation {
 
     IZ_FLOAT CTweener::GetValue(IZ_FLOAT time, IZ_FLOAT duration)
     {
-        math::ITweenerEasing* easing = TweenEasingTbl[m_Transition];
+        animation::ITweenerEasing* easing = TweenEasingTbl[m_Transition];
 
         IZ_FLOAT ret = 0.0f;
 

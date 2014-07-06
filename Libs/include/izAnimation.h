@@ -1,6 +1,8 @@
 #if !defined(__IZANAGI_ANIMATION_H__)
 #define __IZANAGI_ANIMATION_H__
 
+#include "animation/Tweener.h"
+
 #include "animation/Timeline.h"
 #include "animation/TweenerUtility.h"
 

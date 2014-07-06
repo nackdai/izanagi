@@ -2,7 +2,7 @@
 #include "math/MathDefs.h"
 
 namespace izanagi {
-namespace math {
+namespace animation {
 
     /////////////////////////////////////////////////////////////////////////
     // Linear

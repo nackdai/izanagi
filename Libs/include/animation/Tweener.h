@@ -21,7 +21,7 @@
 #include "izDefs.h"
 
 namespace izanagi {
-namespace math {
+namespace animation {
 
     class ITweenerEasing {
     public:
@@ -112,7 +112,7 @@ namespace math {
         virtual IZ_FLOAT EaseInOut(IZ_FLOAT t, IZ_FLOAT d);
     };
 
-}   // namespace math
+}   // namespace animation
 }   // namespace izanagi;
 
 #endif  // #if !defined(__IZANAGI_ANIMATION_TWEENER_H__)
