@@ -36,15 +36,12 @@ void TextureLoader::Init(izanagi::IMemoryAllocator* allocator)
 
         m_JobQueue.Init(m_Allocator, 1);
         m_JobQueue.Start();
-
-        m_Mutex.Open();
     }
 }
 
 void TextureLoader::Terminate()
 {
     m_JobQueue.Terminate();
-    m_Mutex.Close();
 }
 
 izanagi::threadmodel::CJob* TextureLoader::EnqueueLoadingRequest(
@@ -67,11 +64,6 @@ izanagi::threadmodel::CJob* TextureLoader::EnqueueLoadingRequest(
     m_JobQueue.Enqueue(job, IZ_TRUE);
 
     return job;
-}
-
-izanagi::sys::CMutex& TextureLoader::GetMutex()
-{
-    return m_Mutex;
 }
 
 ////////////////////////////////////////
@@ -159,13 +151,6 @@ IZ_BOOL LoadTextureJob::OnRun()
 
         jpeg_read_scanlines(&cinfo, buffer, 1);
 
-        // If this job is canceld...
-        if (IsCanceled()) {
-            FREE(m_InternalAllocator, m_PixelData);
-            ret = IZ_FALSE;
-            break;
-        }
-
         // Convert to rgba.
         for (IZ_UINT i = 0; i < cinfo.output_width; i++) {
             dst[i * 4 + 0] = lineData[i * 3 + 2];
@@ -181,26 +166,6 @@ IZ_BOOL LoadTextureJob::OnRun()
     m_TexWidth = cinfo.output_width;
     m_TexHeight = cinfo.output_height;
 
-#if 0
-    TextureLoader::Instance().GetMutex().Lock();
-    {
-        // Create texture from pixel data.
-        izanagi::graph::CTexture* texture = m_Device->CreateTexture(
-            m_TexWidth, m_TexHeight,
-            izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA8,
-            m_PixelData);
-
-        // Set texture to target.
-        IZ_ASSERT(m_TargetItem != IZ_NULL);
-        m_TargetItem->SetTexture(texture);
-        SAFE_RELEASE(texture);
-
-        // Free memory.
-        
-    }
-    TextureLoader::Instance().GetMutex().Unlock();
-#endif
-
 __EXIT__:
     jpeg_finish_decompress(&cinfo);
     jpeg_destroy_decompress(&cinfo);
@@ -208,16 +173,16 @@ __EXIT__:
     FREE(m_InternalAllocator, buf);
     FREE(m_InternalAllocator, lineData);
 
-#if 0
-    FREE(m_InternalAllocator, m_PixelData);
-#endif
+    // If this job is canceld...
+    if (IsCanceled()) {
+        ret = IZ_FALSE;
+    }
 
     return ret;
 }
 
 void LoadTextureJob::OnFinish(IZ_BOOL runResult)
 {
-#if 1
     if (IsCanceled() || !runResult) {
         // Free memory.
         FREE(m_InternalAllocator, m_PixelData);
@@ -237,7 +202,6 @@ void LoadTextureJob::OnFinish(IZ_BOOL runResult)
 
     // Free memory.
     FREE(m_InternalAllocator, m_PixelData);
-#endif
 }
 
 void LoadTextureJob::OnCancel()
