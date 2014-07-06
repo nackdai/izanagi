@@ -82,6 +82,7 @@ namespace izanagi {
         /** 更新.
          */
         IZ_BOOL Update(
+            IZ_FLOAT time,
             IMemoryAllocator* allocator,
             graph::CGraphicsDevice* device = IZ_NULL,
             void* args = IZ_NULL)
@@ -110,7 +111,7 @@ namespace izanagi {
                 m_nNextState = (STATE)STATE_NUM;        
             }
             
-            IZ_BOOL bRet = GetState(GetCurrentState())->Update(device);
+            IZ_BOOL bRet = GetState(GetCurrentState())->Update(time, device);
             
             return bRet;
         }

@@ -13,7 +13,9 @@ IZ_BOOL CSceneStateBase::Render(graph::CGraphicsDevice* device)
     return IZ_TRUE;
 }
 
-IZ_BOOL CSceneStateBase::Update(graph::CGraphicsDevice* device)
+IZ_BOOL CSceneStateBase::Update(
+    IZ_FLOAT time,
+    graph::CGraphicsDevice* device)
 {
     return IZ_TRUE;
 }

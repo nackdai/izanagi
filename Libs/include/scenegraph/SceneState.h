@@ -29,7 +29,9 @@ namespace izanagi {
 
         /** 更新.
          */
-        virtual IZ_BOOL Update(graph::CGraphicsDevice* device);
+        virtual IZ_BOOL Update(
+            IZ_FLOAT time,
+            graph::CGraphicsDevice* device);
 
         /** 終了.
          */
