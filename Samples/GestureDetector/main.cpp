@@ -30,6 +30,11 @@ public:
         IZ_PRINTF("OnDrag\n");
     }
 
+    virtual void OnDragEnd(const izanagi::sys::CTouchEvent& ev)
+    {
+        IZ_PRINTF("OnDragEnd\n");
+    }
+
     virtual void OnFling(
         const izanagi::sys::CTouchEvent& ev,
         IZ_FLOAT velocityX, IZ_FLOAT velocityY)
