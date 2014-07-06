@@ -4,6 +4,7 @@
 #include "StateRotateByFling.h"
 #include "StateChangeView.h"
 #include "StateMoveToItem.h"
+#include "StateRotateByDrag.h"
 
 StateManager StateManager::s_Instance;
 
@@ -26,4 +27,5 @@ void StateManager::Create(izanagi::CVectorCamera& camera)
     _STATE(State_RotateByFling, StateRotateByFling, camera);
     _STATE(State_ChangeView, StateChangeView, camera);
     _STATE(State_MoveToItem, StateMoveToItem, camera);
+    _STATE(State_RotateByDrag, StateRotateByDrag, camera);
 }

@@ -8,6 +8,7 @@ enum State {
     State_RotateByFling,
     State_ChangeView,
     State_MoveToItem,
+    State_RotateByDrag,
 
     StateNum,
 };

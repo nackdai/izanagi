@@ -86,6 +86,9 @@
     <ClCompile Include="..\..\PhotoGallery\Environment.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\PhotoGallery\StateRotateByDrag.cpp">
+      <Filter>src\state</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\PhotoGallery\PhotoGalleryApp.h">
@@ -138,6 +141,9 @@
     </ClInclude>
     <ClInclude Include="..\..\PhotoGallery\Environment.h">
       <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PhotoGallery\StateRotateByDrag.h">
+      <Filter>include\state</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

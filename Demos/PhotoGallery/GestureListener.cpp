@@ -78,6 +78,13 @@ void CGestureListener::OnDrag(
     IZ_FLOAT angle = IZ_MATH_PI1_2 * moveX / (IZ_FLOAT)Configure::SCREEN_WIDTH;
 
     PhotoItemManager::Instance().SetAngleForImmediateRot(-angle);
+
+    StateManager::Instance().ChangeState(State_RotateByDrag);
+}
+
+void CGestureListener::OnDragEnd(const izanagi::sys::CTouchEvent& ev)
+{
+    StateManager::Instance().ChangeState(State_Default);
 }
 
 void CGestureListener::Init(

@@ -156,6 +156,7 @@ void PhotoGalleryApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
         "RotateByFling",
         "ChnageView",
         "MoveToItem",
+        "RotateByDrag",
     };
 
     izanagi::CDebugFont* font = GetDebugFont();
