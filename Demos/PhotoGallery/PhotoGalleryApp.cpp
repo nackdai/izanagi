@@ -171,34 +171,52 @@ void PhotoGalleryApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
             0xffffffff,
             name[state]);
 
+        const izanagi::math::SVector& dir = Environment::Instance().GetDir();
+
+        font->DBPrint(
+            device,
+            0,
+            120,
+            0xffffffff,
+            "[%f][%f][%f]",
+            dir.x, dir.y, dir.z);
+
         font->End();
 
         device->End2D();
     }
 }
 
-#include "Environment.h"
-
 IZ_BOOL PhotoGalleryApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
 {
+    izanagi::math::SVector& dir = Environment::Instance().GetDir();
+
     switch (key) {
     case izanagi::sys::E_KEYBOARD_BUTTON_X:
-        Environment::Instance().GetDir().x += 0.1f;
+        dir.x += 0.01f;
         break;
     case izanagi::sys::E_KEYBOARD_BUTTON_Y:
-        Environment::Instance().GetDir().y += 0.1f;
+        dir.y += 0.01f;
         break;
     case izanagi::sys::E_KEYBOARD_BUTTON_Z:
-        Environment::Instance().GetDir().z += 0.1f;
+        dir.z += 0.01f;
         break;
     case izanagi::sys::E_KEYBOARD_BUTTON_0:
-        Environment::Instance().GetDir().x -= 0.1f;
+        dir.x -= 0.01f;
         break;
     case izanagi::sys::E_KEYBOARD_BUTTON_1:
-        Environment::Instance().GetDir().y -= 0.1f;
+        dir.y -= 0.01f;
         break;
     case izanagi::sys::E_KEYBOARD_BUTTON_2:
-        Environment::Instance().GetDir().z -= 0.1f;
+        dir.z -= 0.01f;
+        break;
+    case izanagi::sys::E_KEYBOARD_BUTTON_N:
+        izanagi::math::SVector::Normalize(dir, dir);
+        break;
+    case izanagi::sys::E_KEYBOARD_BUTTON_D:
+        dir.x = -0.679090f;
+        dir.y = -0.701356f;
+        dir.z = -0.216650f;
         break;
     }
 
