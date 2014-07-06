@@ -2,7 +2,9 @@
 #include "StateManager.h"
 
 // çXêV.
-IZ_BOOL CStateB::Update()
+IZ_BOOL CStateB::Update(
+    IZ_FLOAT time,
+    izanagi::graph::CGraphicsDevice* device)
 {
     if (m_IsBack) {
         m_IsBack = IZ_FALSE;

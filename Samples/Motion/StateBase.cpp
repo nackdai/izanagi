@@ -16,17 +16,19 @@ IZ_BOOL CStateBase::Init()
 }
 
 // 更新
-IZ_BOOL CStateBase::Update(izanagi::graph::CGraphicsDevice* device)
+IZ_BOOL CStateBase::Update(
+    IZ_FLOAT time,
+    izanagi::graph::CGraphicsDevice* device)
 {
     // 時間更新
     IZ_FLOAT fElapsed = GetElapesedTime();
 
     m_Timeline.Advance(fElapsed);
     //m_Timeline.Advance(0.5f);
-    IZ_FLOAT time = m_Timeline.GetTime();
+    IZ_FLOAT t = m_Timeline.GetTime();
 
     // アニメーション適用
-    m_Mdl->ApplyAnimation(time, m_Anm);
+    m_Mdl->ApplyAnimation(t, m_Anm);
 
     m_Mdl->Update();
 

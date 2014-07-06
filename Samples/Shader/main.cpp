@@ -97,7 +97,9 @@ void CShaderApp::ReleaseInternal()
 // çXêV.
 void CShaderApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
-    CStateManager::GetInstance().Update(m_Allocator, m_Device);
+    CStateManager::GetInstance().Update(
+        0.0f,   // Not used.
+        m_Allocator, m_Device);
 }
 
 // ï`âÊ.

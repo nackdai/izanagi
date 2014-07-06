@@ -16,7 +16,9 @@ IZ_BOOL CStateBase::Init()
 }
 
 // 更新
-IZ_BOOL CStateBase::Update(izanagi::graph::CGraphicsDevice* device)
+IZ_BOOL CStateBase::Update(
+    IZ_FLOAT time,
+    izanagi::graph::CGraphicsDevice* device)
 {
     m_Mdl->Update();
 

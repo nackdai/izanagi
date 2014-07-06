@@ -16,10 +16,9 @@ CStateXFile::~CStateXFile()
 // 開始
 IZ_BOOL CStateXFile::Enter(
     izanagi::IMemoryAllocator* allocator,
+    izanagi::graph::CGraphicsDevice* device,
     izanagi::CValue& arg)
 {
-    izanagi::graph::CGraphicsDevice* device = reinterpret_cast<izanagi::graph::CGraphicsDevice*>(arg.GetValueAsPtr());
-
     IZ_BOOL result = InitObject(
         allocator,
         device,

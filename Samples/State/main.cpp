@@ -69,7 +69,9 @@ void CSStateApp::ReleaseInternal()
 // 更新.
 void CSStateApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
-    CStateManager::GetInstance().Update(m_Allocator, m_Device);
+    CStateManager::GetInstance().Update(
+        0.0f,   // Not used.
+        m_Allocator, m_Device);
 }
 
 // 描画.

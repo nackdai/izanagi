@@ -10,7 +10,9 @@ public:
 
 public:
     // çXêV.
-    virtual IZ_BOOL Update();
+    virtual IZ_BOOL Update(
+        IZ_FLOAT time,
+        izanagi::graph::CGraphicsDevice* device);
 
     virtual IZ_UINT GetIndex();
 

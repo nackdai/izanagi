@@ -72,7 +72,9 @@ void CPostEffectApp::ReleaseInternal()
 // çXêV.
 void CPostEffectApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
-    CStateManager::GetInstance().Update(m_Allocator, device);
+    CStateManager::GetInstance().Update(
+        0.0f,   // Not used.
+        m_Allocator, device);
 }
 
 // ï`âÊ.

@@ -38,7 +38,9 @@ void CModelApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
     GetCamera().Update();
 
-    CStateManager::GetInstance().Update(m_Allocator, m_Device);
+    CStateManager::GetInstance().Update(
+        0.0f,   // Not used.
+        m_Allocator, m_Device);
 }
 
 // 描画.

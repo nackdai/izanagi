@@ -22,7 +22,9 @@ public:
     virtual IZ_BOOL Init();
 
     // çXêV.
-    virtual IZ_BOOL Update(izanagi::graph::CGraphicsDevice* device);
+    virtual IZ_BOOL Update(
+        IZ_FLOAT time,
+        izanagi::graph::CGraphicsDevice* device);
 
     // èIóπ.
     virtual IZ_BOOL Destroy();

@@ -18,7 +18,9 @@ IZ_BOOL CStateBase::Init()
 }
 
 // çXêV
-IZ_BOOL CStateBase::Update(izanagi::graph::CGraphicsDevice* device)
+IZ_BOOL CStateBase::Update(
+    IZ_FLOAT time,
+    izanagi::graph::CGraphicsDevice* device)
 {
     return IZ_TRUE;
 }
