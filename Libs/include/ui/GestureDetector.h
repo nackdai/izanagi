@@ -29,6 +29,8 @@ namespace ui
         virtual void OnDrag(
             const sys::CTouchEvent& ev,
             IZ_INT moveX, IZ_INT moveY) {}
+
+        virtual void OnDragEnd(const sys::CTouchEvent& ev) {}
         
         virtual void OnFling(
             const sys::CTouchEvent& ev,

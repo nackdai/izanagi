@@ -57,6 +57,8 @@ namespace sys
             const CTouchEvent& ev,
             IZ_INT moveX, IZ_INT moveY) = 0;
 
+        virtual void OnDragEnd(const CTouchEvent& ev) = 0;
+
         virtual void OnFling(
             const CTouchEvent& ev,
             IZ_FLOAT velocityX, IZ_FLOAT velocityY) = 0;

@@ -116,6 +116,9 @@ namespace ui
                         m_Listener->OnFling(m_DownEvent, velX, velY);
                         m_VelocityTracker.Clear();
                     }
+                    else {
+                        m_Listener->OnDragEnd(m_DownEvent);
+                    }
                 }
                 else {
                     m_Listener->OnTapUp(ev);
