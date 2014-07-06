@@ -140,22 +140,26 @@ namespace math
     // ÉåÉCÇ∆åç∑Ç∑ÇÈì_ÇéÊìæ
     IZ_BOOL CRectangle::GetIntersectPoint(
         const SRay& ray,
-        SVector& refPtr) const
+        SVector& refPtr,
+        IZ_FLOAT* retRayCoefficient/*= IZ_NULL*/) const
     {
         IZ_BOOL isIntersect = GetIntersectPoint(
             CPlane::GetIntersectPoint,
             ray,
-            refPtr);
+            refPtr,
+            retRayCoefficient);
 
         return isIntersect;
     }
 
     // ÉåÉCÇ∆åç∑Ç∑ÇÈÇ©Ç«Ç§Ç©
-    IZ_BOOL CRectangle::IsIntersect(const SRay& ray)
+    IZ_BOOL CRectangle::IsIntersect(
+        const SRay& ray,
+        IZ_FLOAT* retRayCoefficient/*= IZ_NULL*/)
     {
         CVector ptr;
 
-        IZ_BOOL isIntersect = GetIntersectPoint(ray, ptr);
+        IZ_BOOL isIntersect = GetIntersectPoint(ray, ptr, retRayCoefficient);
 
         return isIntersect;
     }
@@ -176,13 +180,15 @@ namespace math
     IZ_BOOL CRectangle::GetIntersectPoint(
         CRectangle::GetCrossPointFunc func,
         const SRay& ray,
-        SVector& refPtr) const
+        SVector& refPtr,
+        IZ_FLOAT* retRayCoefficient) const
     {
         CVector ptr;
 
         IZ_BOOL isIntersect = (*func)(
             CPlane(nml, pt),
-            ray, ptr);
+            ray, ptr,
+            retRayCoefficient);
 
         if (isIntersect) {
             isIntersect = IsOnRectangle(ptr);

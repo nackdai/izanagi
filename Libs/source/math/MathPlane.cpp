@@ -10,9 +10,10 @@ namespace math
     IZ_BOOL CPlane::GetIntersectPoint(
         const CPlane& plane,
         const SRay& ray,
-        SVector& refPtr)
+        SVector& refPtr,
+        IZ_FLOAT* retRayCoefficient/*= IZ_NULL*/)
     {
-        return plane.GetIntersectPoint(ray, refPtr);
+        return plane.GetIntersectPoint(ray, refPtr, retRayCoefficient);
     }
 
     CPlane::CPlane()
@@ -107,7 +108,8 @@ namespace math
     // レイと交差する点を取得
     IZ_BOOL CPlane::GetIntersectPoint(
         const SRay& ray,
-        SVector& refPtr) const
+        SVector& refPtr,
+        IZ_FLOAT* retRayCoefficient/*= IZ_NULL*/) const
     {
         // NOTE
         // Plane : L = <N, D>
@@ -140,6 +142,10 @@ namespace math
         // t = -L・Q / L・V 
         t = -t / d;
 
+        if (retRayCoefficient != IZ_NULL) {
+            *retRayCoefficient = t;
+        }
+
         refPtr.x = ray.p.x + t * ray.v.x;
         refPtr.y = ray.p.y + t * ray.v.y;
         refPtr.z = ray.p.z + t * ray.v.z;
@@ -152,7 +158,8 @@ namespace math
     IZ_BOOL CPlane::GetIntersectPoint(
         const SVector& from,
         const SVector& to,
-        SVector& refPtr) const
+        SVector& refPtr,
+        IZ_FLOAT* retRayCoefficient/*= IZ_NULL*/) const
     {
         if ((IsPositive(from) && !IsPositive(to))
             || (!IsPositive(from) && IsPositive(to)))
@@ -162,7 +169,7 @@ namespace math
                 from,
                 CVector(to, from, CVector::INIT_SUB));
 
-            IZ_BOOL ret = GetIntersectPoint(ray, refPtr);
+            IZ_BOOL ret = GetIntersectPoint(ray, refPtr, retRayCoefficient);
             return ret;
         }
 

@@ -73,24 +73,28 @@ namespace math
          */
         IZ_BOOL GetIntersectPoint(
             const SRay& ray,
-            SVector& refPtr) const;
+            SVector& refPtr,
+            IZ_FLOAT* retRayCoefficient = IZ_NULL) const;
 
         /** ƒŒƒC‚ÆŒğ·‚·‚é‚©‚Ç‚¤‚©.
          */
-        IZ_BOOL IsIntersect(const SRay& ray);
+        IZ_BOOL IsIntersect(
+            const SRay& ray,
+            IZ_FLOAT* retRayCoefficient = IZ_NULL);
 
         /** •½–Ê‚ğæ“¾.
          */
         void GetPlane(SPlane& plane) const;
 
     private:
-        typedef IZ_BOOL (*GetCrossPointFunc)(const CPlane& plane, const SRay& ray, SVector& refPtr);
+        typedef IZ_BOOL (*GetCrossPointFunc)(const CPlane& plane, const SRay& ray, SVector& refPtr, IZ_FLOAT* retRayCoefficient);
 
         // ƒŒƒC‚ÆŒğ·‚·‚é“_‚ğæ“¾
         IZ_BOOL GetIntersectPoint(
             GetCrossPointFunc func,
             const SRay& ray,
-            SVector& refPtr) const;
+            SVector& refPtr,
+            IZ_FLOAT* retRayCoefficient) const;
     };
 }   // namespace math
 }   // namespace izanagi

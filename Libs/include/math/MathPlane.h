@@ -38,7 +38,8 @@ namespace math
         static IZ_BOOL GetIntersectPoint(
             const CPlane& plane,
             const SRay& ray,
-            SVector& refPtr);
+            SVector& refPtr,
+            IZ_FLOAT* retRayCoefficient/*= IZ_NULL*/);
 
     public:
         CPlane();
@@ -83,14 +84,16 @@ namespace math
          */
         IZ_BOOL GetIntersectPoint(
             const SRay& ray,
-            SVector& refPtr) const;
+            SVector& refPtr,
+            IZ_FLOAT* retRayCoefficient = IZ_NULL) const;
 
         /** 線分と交差する点を取得.
          */
         IZ_BOOL GetIntersectPoint(
             const SVector& from,
             const SVector& to,
-            SVector& refPtr) const;
+            SVector& refPtr,
+            IZ_FLOAT* retRayCoefficient = IZ_NULL) const;
 
         /** レイと交差するかどうか.
          */
