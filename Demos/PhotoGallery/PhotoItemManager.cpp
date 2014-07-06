@@ -27,7 +27,9 @@ void PhotoItemList::RenderWithTexture(
     while (item != IZ_NULL) {
         PhotoItem* photoItem = item->GetData();
 
-        if (photoItem->HasTexture()) {
+        if (photoItem->IsShown()
+            && photoItem->HasTexture())
+        {
             izanagi::math::SMatrix mtx;
             const izanagi::math::SMatrix& mtxL2W = photoItem->GetL2W();
 
@@ -67,33 +69,35 @@ void PhotoItemList::RenderWithoutTexture(
     while (item != IZ_NULL) {
         PhotoItem* photoItem = item->GetData();
 
-        izanagi::math::SMatrix mtx;
-        const izanagi::math::SMatrix& mtxL2W = photoItem->GetL2W();
+        if (photoItem->IsShown()) {
+            izanagi::math::SMatrix mtx;
+            const izanagi::math::SMatrix& mtxL2W = photoItem->GetL2W();
 
-        izanagi::math::SMatrix::Mul(mtx, mtxL2W, mtxRot);
+            izanagi::math::SMatrix::Mul(mtx, mtxL2W, mtxRot);
 
-        Utility::SetShaderParam(
-            shader,
-            "g_mL2W",
-            (void*)&mtx,
-            sizeof(mtx));
+            Utility::SetShaderParam(
+                shader,
+                "g_mL2W",
+                (void*)&mtx,
+                sizeof(mtx));
 
-        Environment::Instance().SetParallelLightParam(
-            camera,
-            mtx,
-            shader);
+            Environment::Instance().SetParallelLightParam(
+                camera,
+                mtx,
+                shader);
 
-        Environment::Instance().SetAmbientLightParam(shader);
+            Environment::Instance().SetAmbientLightParam(shader);
 
-        photoItem->SetShaderParam(shader);
+            photoItem->SetShaderParam(shader);
 
-        shader->CommitChanges(device);
+            shader->CommitChanges(device);
 
-        if (!photoItem->HasTexture()) {
-            photoItem->RenderFront(device);
+            if (!photoItem->HasTexture()) {
+                photoItem->RenderFront(device);
+            }
+
+            photoItem->RenderTopAndSide(device);
         }
-
-        photoItem->RenderTopAndSide(device);
 
         item = item->GetNext();
     }
@@ -245,7 +249,9 @@ IZ_BOOL PhotoItemManager::EnqueueLoadingRequest(
 
 }
 
-void PhotoItemManager::Update(IZ_FLOAT time)
+void PhotoItemManager::Update(
+    IZ_FLOAT time,
+    const izanagi::CCamera& camera)
 {
     if (m_AngleImmediately != 0.0f) {
         izanagi::math::SMatrix::RotByY(
@@ -272,7 +278,7 @@ void PhotoItemManager::Update(IZ_FLOAT time)
 
         while (item != IZ_NULL) {
             PhotoItem* photoItem = item->GetData();
-            photoItem->Update(time);
+            photoItem->Update(time, m_mtxRot, camera);
             item = item->GetNext();
         }
     }

@@ -103,7 +103,9 @@ void PhotoGalleryApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
     IZ_FLOAT time = m_Timer.End();
     m_Timer.Begin();
 
-    PhotoItemManager::Instance().Update(time);
+    izanagi::CCamera& camera = GetCamera();
+
+    PhotoItemManager::Instance().Update(time, camera);
 
     StateManager::Instance().Update(time, IZ_NULL);
 

@@ -49,6 +49,8 @@ PhotoItem::PhotoItem()
 
     m_IsRequestedLoadTexture = IZ_FALSE;
 
+    m_IsShown = IZ_FALSE;
+
     ResetFadeInParams();
 }
 
@@ -110,7 +112,10 @@ void PhotoItem::RenderTopAndSide(izanagi::graph::CGraphicsDevice* device)
     m_Mesh->RenderTopAndSide(device);
 }
 
-void PhotoItem::Update(IZ_FLOAT time)
+void PhotoItem::Update(
+    IZ_FLOAT time,
+    const izanagi::math::SMatrix& mtxRot,
+    const izanagi::CCamera& camera)
 {
     if (!HasTexture()) {
         return;
@@ -131,6 +136,16 @@ void PhotoItem::Update(IZ_FLOAT time)
             m_IsFading = IZ_FALSE;
         }
     }
+
+    // NOTE
+    // カメラは固定なので、カメラの後ろにいるかどうかで判定する
+    // カメラはマイナスZ方向を向いているので、プラスZ方向がカメラの後ろになる
+
+    izanagi::math::SVector pos;
+    GetCenterPosition(pos);
+    izanagi::math::SMatrix::ApplyXYZ(pos, pos, mtxRot);
+
+    m_IsShown = (pos.z <= camera.GetParam().pos.z);
 }
 
 izanagi::CStdList<PhotoItem>::Item* PhotoItem::GetListItem()
@@ -260,6 +275,11 @@ void PhotoItem::SetShaderParam(izanagi::shader::CShaderBasic* shader)
         sizeof(params));
 
     m_Mesh->SetMaterialToShader(shader);
+}
+
+IZ_BOOL PhotoItem::IsShown() const
+{
+    return m_IsShown;
 }
 
 void PhotoItem::ResetFadeInParams()

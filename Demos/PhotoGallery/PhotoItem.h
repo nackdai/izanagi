@@ -40,7 +40,10 @@ public:
      */
     void RenderTopAndSide(izanagi::graph::CGraphicsDevice* device);
 
-    void Update(IZ_FLOAT time);
+    void Update(
+        IZ_FLOAT time,
+        const izanagi::math::SMatrix& mtxRot,
+        const izanagi::CCamera& camera);
 
     izanagi::CStdList<PhotoItem>::Item* GetListItem();
 
@@ -81,6 +84,8 @@ public:
 
     void SetShaderParam(izanagi::shader::CShaderBasic* shader);
 
+    IZ_BOOL IsShown() const;
+
 private:
     void ResetFadeInParams();
 
@@ -104,6 +109,8 @@ private:
     izanagi::animation::CTimeline m_Timeline;
     IZ_FLOAT m_FadeInAlpha;
     IZ_FLOAT m_FadeInHeight;
+
+    IZ_BOOL m_IsShown;
 };
 
 #endif    // #if !defined(__PHOTO_ITEM_H__)

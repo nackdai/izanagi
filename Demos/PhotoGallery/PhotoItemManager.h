@@ -53,7 +53,9 @@ public:
         izanagi::graph::CGraphicsDevice* device,
         const char* path);
 
-    void Update(IZ_FLOAT time);
+    void Update(
+        IZ_FLOAT time,
+        const izanagi::CCamera& camera);
 
     void Render(
         izanagi::graph::CGraphicsDevice* device,
