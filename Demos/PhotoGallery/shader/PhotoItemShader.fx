@@ -96,7 +96,7 @@ SVSOutput mainVS(SVSInput In)
 float4 mainPS(SPSInput In) : COLOR
 {
     float4 vOut = tex2D(sTex, In.vUV);
-    vOut.rgb = 0.0f;
+    //vOut.rgb = 0.0f;
 
     float3 vN = normalize(In.vNormal);
     float3 vH = normalize(In.vHalf);
