@@ -4,6 +4,7 @@
 #include "LoadTextureJob.h"
 #include "Utility.h"
 #include "Configure.h"
+#include "Environment.h"
 
 //////////////////////////////
 
@@ -17,6 +18,7 @@ PhotoItemList::~PhotoItemList()
 
 void PhotoItemList::RenderWithTexture(
     izanagi::graph::CGraphicsDevice* device,
+    const izanagi::CCamera& camera,
     const izanagi::math::SMatrix& mtxRot,
     izanagi::shader::CShaderBasic* shader)
 {
@@ -37,6 +39,13 @@ void PhotoItemList::RenderWithTexture(
                 (void*)&mtx,
                 sizeof(mtx));
 
+            Environment::Instance().SetParallelLightParam(
+                camera,
+                mtx,
+                shader);
+
+            Environment::Instance().SetAmbientLightParam(shader);
+
             photoItem->SetShaderParam(shader);
 
             shader->CommitChanges(device);
@@ -49,6 +58,7 @@ void PhotoItemList::RenderWithTexture(
 
 void PhotoItemList::RenderWithoutTexture(
     izanagi::graph::CGraphicsDevice* device,
+    const izanagi::CCamera& camera,
     const izanagi::math::SMatrix& mtxRot,
     izanagi::shader::CShaderBasic* shader)
 {
@@ -67,6 +77,13 @@ void PhotoItemList::RenderWithoutTexture(
             "g_mL2W",
             (void*)&mtx,
             sizeof(mtx));
+
+        Environment::Instance().SetParallelLightParam(
+            camera,
+            mtx,
+            shader);
+
+        Environment::Instance().SetAmbientLightParam(shader);
 
         photoItem->SetShaderParam(shader);
 
@@ -94,6 +111,7 @@ PhotoItemManager& PhotoItemManager::Instance()
 PhotoItemManager::PhotoItemManager()
 {
     m_AngleRate = 0.0f;
+    m_AngleImmediately = 0.0f;
     m_Shader = IZ_NULL;
 }
 
@@ -229,7 +247,14 @@ IZ_BOOL PhotoItemManager::EnqueueLoadingRequest(
 
 void PhotoItemManager::Update(IZ_FLOAT time)
 {
-    if (m_AngleRate != 0.0f) {
+    if (m_AngleImmediately != 0.0f) {
+        izanagi::math::SMatrix::RotByY(
+            m_mtxRot,
+            m_mtxRot,
+            m_AngleImmediately);
+        m_AngleImmediately = 0.0f;
+    }
+    else if (m_AngleRate != 0.0f) {
         izanagi::math::SMatrix::RotByY(
             m_mtxRot,
             m_mtxRot,
@@ -273,6 +298,7 @@ void PhotoItemManager::Render(
             for (IZ_INT i = COUNTOF(m_PhotoItemList) - 1; i >= 0 ; i--) {
                 m_PhotoItemList[i].RenderWithTexture(
                     device,
+                    camera,
                     m_mtxRot,
                     m_Shader);
             }
@@ -296,6 +322,7 @@ void PhotoItemManager::Render(
             for (IZ_INT i = COUNTOF(m_PhotoItemList) - 1; i >= 0 ; i--) {
                 m_PhotoItemList[i].RenderWithoutTexture(
                     device,
+                    camera,
                     m_mtxRot,
                     m_Shader);
             }
@@ -328,6 +355,11 @@ PhotoItem* PhotoItemManager::FindNotRequestedLoadTexture()
 void PhotoItemManager::SetAngleRate(IZ_FLOAT angle)
 {
     m_AngleRate = angle;
+}
+
+void PhotoItemManager::SetAngleForImmediateRot(IZ_FLOAT angle)
+{
+    m_AngleImmediately = angle;
 }
 
 IZ_BOOL PhotoItemManager::IsRotateAnimating()

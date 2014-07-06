@@ -17,11 +17,13 @@ public:
 public:
     void RenderWithTexture(
         izanagi::graph::CGraphicsDevice* device,
+        const izanagi::CCamera& camera,
         const izanagi::math::SMatrix& mtxRot,
         izanagi::shader::CShaderBasic* shader);
 
     void RenderWithoutTexture(
         izanagi::graph::CGraphicsDevice* device,
+        const izanagi::CCamera& camera,
         const izanagi::math::SMatrix& mtxRot,
         izanagi::shader::CShaderBasic* shader);
 };
@@ -59,6 +61,8 @@ public:
 
     void SetAngleRate(IZ_FLOAT angle);
 
+    void SetAngleForImmediateRot(IZ_FLOAT angle);
+
     IZ_BOOL IsRotateAnimating();
 
     PhotoItem* HitTest(const izanagi::math::CRay& ray);
@@ -73,6 +77,8 @@ private:
 
     IZ_FLOAT m_AngleRate;
     izanagi::math::SMatrix m_mtxRot;
+
+    IZ_FLOAT m_AngleImmediately;
 
     izanagi::shader::CShaderBasic* m_Shader;
 };

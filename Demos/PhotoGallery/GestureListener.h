@@ -33,11 +33,9 @@ public:
 
     virtual void OnDrag(
         const izanagi::sys::CTouchEvent& ev,
-        IZ_INT moveX, IZ_INT moveY)
-    {
-        IZ_PRINTF("OnDrag\n");
-    }
+        IZ_INT moveX, IZ_INT moveY);
 
+    virtual void OnDragEnd(const izanagi::sys::CTouchEvent& ev);
 
 public:
     void Init(

@@ -73,8 +73,6 @@ IZ_BOOL StateMoveToItem::Update(
     IZ_FLOAT time,
     izanagi::graph::CGraphicsDevice* device)
 {
-    PhotoItemManager::Instance().Update(time);
-
     if (m_State == State_Move) {
         m_Timeline.Advance(time);
 

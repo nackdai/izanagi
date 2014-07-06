@@ -112,8 +112,6 @@ IZ_BOOL StateChangeView::Update(
     IZ_FLOAT time,
     izanagi::graph::CGraphicsDevice* device)
 {
-    PhotoItemManager::Instance().Update(time);
-
     if (!m_IsAnimating
         && m_NextState != m_State)
     {

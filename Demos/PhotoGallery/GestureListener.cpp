@@ -64,6 +64,22 @@ void CGestureListener::OnFling(
     StateManager::Instance().ChangeState(State_RotateByFling);
 }
 
+void CGestureListener::OnDrag(
+    const izanagi::sys::CTouchEvent& ev,
+    IZ_INT moveX, IZ_INT moveY)
+{
+    if (izanagi::math::CMath::Absf(moveY) > izanagi::math::CMath::Absf(moveX)) {
+        // Ignore drag.
+        return;
+    }
+
+    // NOTE
+    // 画面からの端から端のドラッグで90度回転させる
+    IZ_FLOAT angle = IZ_MATH_PI1_2 * moveX / (IZ_FLOAT)Configure::SCREEN_WIDTH;
+
+    PhotoItemManager::Instance().SetAngleForImmediateRot(-angle);
+}
+
 void CGestureListener::Init(
     PhotoGalleryApp* app,
     const izanagi::graph::SViewport& vp)

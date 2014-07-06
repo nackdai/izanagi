@@ -6,6 +6,8 @@
 /** Mesh for photo item.
  */
 class PhotoItemMesh : public izanagi::CDebugMesh {
+    friend class PhotoItem;
+
 public:
     // Create an instance.
     static PhotoItemMesh* Create(
@@ -49,17 +51,14 @@ public:
      */
     void RenderTopAndSide(izanagi::graph::CGraphicsDevice* device);
 
-    /** Set texture for rendering.
-     */
-    void SetTexture(izanagi::graph::CTexture* texture);
-
-    /** Get texture which is set for rendering.
-     */
-    izanagi::graph::CTexture* GetTexture();
+private:
+    void SetMaterialToShader(izanagi::shader::CShaderBasic* shader);
 
 private:
     FrontFace* m_FrontFace;             //< front face which is mapped texture.
     TopAndSideFaces* m_TopAndSideFaces; //< top and side faces which are not mapped texture.
+
+    izanagi::SMaterialParam m_Mtrl;
 };
 
 #endif    // #if !defined(__PHOTO_ITEM_MESH_H__)

@@ -5,6 +5,9 @@
 
 class Configure {
 public:
+    static const IZ_UINT SCREEN_WIDTH = 1280;
+    static const IZ_UINT SCREEN_HEIGHT = 720;
+
     static const IZ_UINT PHOTOS = 90;
 
     // Flags for vertex semantics.

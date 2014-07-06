@@ -181,6 +181,7 @@ IZ_BOOL LoadTextureJob::OnRun()
     m_TexWidth = cinfo.output_width;
     m_TexHeight = cinfo.output_height;
 
+#if 0
     TextureLoader::Instance().GetMutex().Lock();
     {
         // Create texture from pixel data.
@@ -198,6 +199,7 @@ IZ_BOOL LoadTextureJob::OnRun()
         
     }
     TextureLoader::Instance().GetMutex().Unlock();
+#endif
 
 __EXIT__:
     jpeg_finish_decompress(&cinfo);
@@ -205,14 +207,17 @@ __EXIT__:
 
     FREE(m_InternalAllocator, buf);
     FREE(m_InternalAllocator, lineData);
+
+#if 0
     FREE(m_InternalAllocator, m_PixelData);
+#endif
 
     return ret;
 }
 
 void LoadTextureJob::OnFinish(IZ_BOOL runResult)
 {
-#if 0
+#if 1
     if (IsCanceled() || !runResult) {
         // Free memory.
         FREE(m_InternalAllocator, m_PixelData);

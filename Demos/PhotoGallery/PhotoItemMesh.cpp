@@ -1,5 +1,6 @@
 #include "PhotoItemMesh.h"
 #include "Configure.h"
+#include "Utility.h"
 
 ////////////////////////////////////////
 
@@ -544,6 +545,7 @@ IZ_BOOL PhotoItemMesh::Init(
     IZ_FLOAT height,
     IZ_FLOAT depth)
 {
+    // Create front face.
     m_FrontFace = CreateFace<FrontFace>(
         allocator,
         device,
@@ -551,12 +553,18 @@ IZ_BOOL PhotoItemMesh::Init(
         width, height, depth);
     VRETURN(m_FrontFace != IZ_NULL);
 
+    // Create top and side faces.
     m_TopAndSideFaces = CreateFace<TopAndSideFaces>(
         allocator,
         device,
         Configure::MeshFlags,
         width, height, depth);
     VRETURN(m_TopAndSideFaces != IZ_NULL);
+
+    // Set material parameter.
+    m_Mtrl.vDiffuse.Set(1.0f, 1.0f, 1.0f, 1.0f);
+    m_Mtrl.vAmbient.Set(1.0f, 1.0f, 1.0f, 1.0f);
+    m_Mtrl.vSpecular.Set(1.0f, 1.0f, 1.0f, 20.0f);
 
     return IZ_TRUE;
 }
@@ -575,4 +583,13 @@ void PhotoItemMesh::RenderTopAndSide(izanagi::graph::CGraphicsDevice* device)
 
     IZ_ASSERT(m_TopAndSideFaces != IZ_NULL);
     m_TopAndSideFaces->Draw(device);
+}
+
+void PhotoItemMesh::SetMaterialToShader(izanagi::shader::CShaderBasic* shader)
+{
+    IZ_ASSERT(shader != IZ_NULL);
+
+    Utility::SetShaderParam(shader, "g_vMtrlDiffuse", &m_Mtrl.vDiffuse, sizeof(m_Mtrl.vDiffuse));
+    Utility::SetShaderParam(shader, "g_vMtrlAmbient", &m_Mtrl.vAmbient, sizeof(m_Mtrl.vAmbient));
+    Utility::SetShaderParam(shader, "g_vMtrlSpecular", &m_Mtrl.vSpecular, sizeof(m_Mtrl.vSpecular));
 }

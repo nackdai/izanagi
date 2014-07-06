@@ -17,7 +17,6 @@ IZ_BOOL StateDefault::Update(
     IZ_FLOAT time,
     izanagi::graph::CGraphicsDevice* device)
 {
-    PhotoItemManager::Instance().Update(time);
     GestureDetector::Instance().Update();
     return IZ_TRUE;
 }

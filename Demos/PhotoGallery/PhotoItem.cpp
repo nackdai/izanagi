@@ -247,6 +247,8 @@ void PhotoItem::SetShaderParam(izanagi::shader::CShaderBasic* shader)
         "g_Params",
         (void*)&params,
         sizeof(params));
+
+    m_Mesh->SetMaterialToShader(shader);
 }
 
 void PhotoItem::ResetFadeInParams()

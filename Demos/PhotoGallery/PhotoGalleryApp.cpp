@@ -103,6 +103,8 @@ void PhotoGalleryApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
     IZ_FLOAT time = m_Timer.End();
     m_Timer.Begin();
 
+    PhotoItemManager::Instance().Update(time);
+
     StateManager::Instance().Update(time, IZ_NULL);
 
     GetCamera().Update();
@@ -174,8 +176,31 @@ void PhotoGalleryApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     }
 }
 
+#include "Environment.h"
+
 IZ_BOOL PhotoGalleryApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
 {
+    switch (key) {
+    case izanagi::sys::E_KEYBOARD_BUTTON_X:
+        Environment::Instance().GetDir().x += 0.1f;
+        break;
+    case izanagi::sys::E_KEYBOARD_BUTTON_Y:
+        Environment::Instance().GetDir().y += 0.1f;
+        break;
+    case izanagi::sys::E_KEYBOARD_BUTTON_Z:
+        Environment::Instance().GetDir().z += 0.1f;
+        break;
+    case izanagi::sys::E_KEYBOARD_BUTTON_0:
+        Environment::Instance().GetDir().x -= 0.1f;
+        break;
+    case izanagi::sys::E_KEYBOARD_BUTTON_1:
+        Environment::Instance().GetDir().y -= 0.1f;
+        break;
+    case izanagi::sys::E_KEYBOARD_BUTTON_2:
+        Environment::Instance().GetDir().z -= 0.1f;
+        break;
+    }
+
     return StateManager::Instance().OnKeyDown(key);
 }
 
