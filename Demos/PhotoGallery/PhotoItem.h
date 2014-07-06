@@ -46,7 +46,9 @@ public:
 
     /** Set texture for rendering.
      */
-    void SetTexture(izanagi::graph::CTexture* texture);
+    void SetTexture(
+        izanagi::graph::CTexture* texture,
+        const char* path);
 
     /** Get if photo item has texture.
      */
@@ -88,6 +90,8 @@ private:
     izanagi::CStdList<PhotoItem>::Item m_ListItem;
 
     izanagi::graph::CTexture* m_Texture;
+    const char* m_Path;
+
     PhotoItemMesh* m_Mesh;
 
     izanagi::math::SMatrix m_L2W;

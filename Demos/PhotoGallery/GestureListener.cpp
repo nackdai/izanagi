@@ -15,8 +15,6 @@ CGestureListener::~CGestureListener()
 
 void CGestureListener::OnTapUp(const izanagi::sys::CTouchEvent& ev)
 {
-    IZ_PRINTF("OnTapUp\n");
-
     if (PhotoItemManager::Instance().IsRotateAnimating()) {
         StateManager::Instance().ChangeState(State_Default);
         return;
@@ -40,7 +38,6 @@ void CGestureListener::OnTapUp(const izanagi::sys::CTouchEvent& ev)
     PhotoItem* hitItem = PhotoItemManager::Instance().HitTest(ray);
 
     if (hitItem != IZ_NULL) {
-        IZ_PRINTF("    HitItem\n");
         StateManager::Instance().ChangeState(State_MoveToItem, izanagi::CValue(hitItem));
     }
 }
@@ -49,8 +46,6 @@ void CGestureListener::OnFling(
     const izanagi::sys::CTouchEvent& ev,
     IZ_FLOAT velocityX, IZ_FLOAT velocityY)
 {
-    IZ_PRINTF("OnFling [%f] [%f]\n", velocityX, velocityY);
-
     if (izanagi::math::CMath::Absf(velocityY) > izanagi::math::CMath::Absf(velocityX)) {
         // Ignore fling.
         return;

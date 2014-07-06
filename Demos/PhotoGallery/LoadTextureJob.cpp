@@ -197,7 +197,7 @@ void LoadTextureJob::OnFinish(IZ_BOOL runResult)
 
     // Set texture to target.
     IZ_ASSERT(m_TargetItem != IZ_NULL);
-    m_TargetItem->SetTexture(texture);
+    m_TargetItem->SetTexture(texture, m_Path);
     SAFE_RELEASE(texture);
 
     // Free memory.

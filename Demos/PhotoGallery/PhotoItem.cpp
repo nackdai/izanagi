@@ -39,6 +39,8 @@ PhotoItem::PhotoItem()
     m_Allocator = IZ_NULL;
 
     m_Texture = IZ_NULL;
+    m_Path = IZ_NULL;
+
     m_Mesh = IZ_NULL;
 
     izanagi::math::SMatrix::SetUnit(m_L2W);
@@ -136,9 +138,13 @@ izanagi::CStdList<PhotoItem>::Item* PhotoItem::GetListItem()
     return &m_ListItem;
 }
 
-void PhotoItem::SetTexture(izanagi::graph::CTexture* texture)
+void PhotoItem::SetTexture(
+    izanagi::graph::CTexture* texture,
+    const char* path)
 {
     SAFE_REPLACE(m_Texture, texture);
+    m_Path = path;
+
     m_IsFading = IZ_TRUE;
 }
 
@@ -191,7 +197,12 @@ IZ_BOOL PhotoItem::HitTest(
     izanagi::math::CRectangle rc;
     m_Rectangle.Transform(rc, mtx);
 
-    IZ_BOOL ret = rc.IsIntersect(ray);
+    IZ_FLOAT t = 0.0f;
+    IZ_BOOL ret = rc.IsIntersect(ray, &t);
+
+    // NOTE
+    // マイナス方向でのヒットはヒットしたことにしない
+    ret = (t >= 0.0f ? ret : IZ_FALSE);
 
     return ret;
 }
