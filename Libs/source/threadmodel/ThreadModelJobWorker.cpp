@@ -25,6 +25,7 @@ namespace threadmodel
         m_Job = IZ_NULL;
 
         m_State = State_Waiting;
+        m_StateMutex.Open();
     }
 
     CJobWorker::~CJobWorker()
@@ -34,6 +35,7 @@ namespace threadmodel
 
         m_Sema.Close();
         m_Mutex.Close();
+        m_StateMutex.Close();
     }
 
     void CJobWorker::Register(CJob* job)
@@ -46,7 +48,7 @@ namespace threadmodel
             if (m_State == State_Waiting)
             {
                 m_Job = job;
-                m_State = State_Registered;
+                SetState(State_Registered);
             }
         }
 
@@ -67,12 +69,12 @@ namespace threadmodel
 
                     IZ_ASSERT(m_Job != IZ_NULL);
 
-                    m_State = State_Running;
+                    SetState(State_Running);
 
                     m_Job->Run();
                     m_Job = IZ_NULL;
 
-                    m_State = State_Waiting;
+                    SetState(State_Waiting);
                 }
             }
         }
@@ -87,7 +89,7 @@ namespace threadmodel
                 return;
             }
 
-            m_State = State_WillJoin;
+            SetState(State_WillJoin);
         }
 
         // Ž~‚Ü‚Á‚Ä‚¢‚é‚©‚à‚µ‚ê‚È‚¢‚Ì‚Å‹N‚±‚·
@@ -98,18 +100,20 @@ namespace threadmodel
 
     CJobWorker::State CJobWorker::GetState()
     {
-        sys::CGuarder guard(m_Mutex);
-        {
-            return m_State;
-        }
+        sys::CGuarder guard(m_StateMutex);
+        return m_State;
     }
 
     IZ_BOOL CJobWorker::IsWaiting()
     {
-        sys::CGuarder guard(m_Mutex);
-        {
-            return m_State == State_Waiting;
-        }
+        sys::CGuarder guard(m_StateMutex);
+        return m_State == State_Waiting;
+    }
+
+    void CJobWorker::SetState(State state)
+    {
+        sys::CGuarder guard(m_StateMutex);
+        m_State = state;
     }
 }   // namespace threadmodel
 }   // namespace izanagi

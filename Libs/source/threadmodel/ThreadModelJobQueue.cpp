@@ -147,7 +147,18 @@ namespace threadmodel
             return;
         }
 
-        CancelAllJobs();
+        //CancelAllJobs();
+        {
+            sys::CGuarder guard(m_JobListGuarder);
+
+            CStdList<CJob>::Item* item = m_JobList.GetTop();
+
+            while (item != IZ_NULL) {
+                CJob* job = item->GetData();
+                job->Cancel();
+                item = item->GetNext();
+            }
+        }
 
         // リストが空になるまで処理する
         while (IZ_TRUE) {
@@ -175,11 +186,29 @@ namespace threadmodel
         FREE(m_Allocator, m_Workers);
         m_WorkerNum = 0;
 
+        {
+            sys::CGuarder guard(m_JobListGuarder);
+            CStdList<CJob>::Item* item = m_JobList.GetTop();
+
+            while (item != IZ_NULL) {
+                CJob* job = item->GetData();
+
+                CStdList<CJob>::Item* next = item->GetNext();
+                item->Leave();
+
+                item = next;
+
+                if (job->EnableDeleteWhenFinish()) {
+                    CJob::DeleteJob(job);
+                }
+            }
+        }
+
         m_JobListGuarder.Close();
 
         // JobQueueリストから抜く
-        sys::CGuarder guard(s_QueueListGuarder);
         {
+            sys::CGuarder guard(s_QueueListGuarder);
             m_ListItem.Leave();
         }
 
@@ -207,12 +236,18 @@ namespace threadmodel
 
                 IZ_BOOL isFinish = IZ_FALSE;
 
-                if (job->GetState() == CJob::State_Waiting) {
-                    worker->Register(job);
-                }
-                else if (job->GetState() == CJob::State_WillFinish) {
+                if (job->IsCanceled()) {
                     job->Finish();
                     isFinish = IZ_TRUE;
+                }
+                else {
+                    if (job->GetState() == CJob::State_Waiting) {
+                        worker->Register(job);
+                    }
+                    else if (job->GetState() == CJob::State_WillFinish) {
+                        job->Finish();
+                        isFinish = IZ_TRUE;
+                    }
                 }
 
                 CStdList<CJob>::Item* next = item->GetNext();

@@ -47,6 +47,8 @@ namespace threadmodel
 
         IZ_BOOL IsWaiting();
 
+        inline void SetState(State state);
+
     private:
         sys::CSemaphore m_Sema;
         sys::CMutex m_Mutex;
@@ -54,6 +56,7 @@ namespace threadmodel
         CJob* m_Job;
 
         State m_State;
+        sys::CMutex m_StateMutex;
     };
 }   // namespace threadmodel
 }   // namespace izanagi
