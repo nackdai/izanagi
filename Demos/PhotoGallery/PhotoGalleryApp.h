@@ -4,7 +4,7 @@
 #include "izSampleKit.h"
 
 class Seat;
-class PhotoItem;
+class BG;
 
 class PhotoGalleryApp : public izanagi::sample::CSampleApp {
 public:
@@ -35,6 +35,7 @@ protected:
 
 private:
     Seat* m_Seat;
+    BG* m_BG;
 
     izanagi::shader::CShaderBasic* m_Shader;
 

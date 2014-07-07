@@ -1,5 +1,6 @@
 #include "PhotoGalleryApp.h"
 #include "Seat.h"
+#include "BG.h"
 #include "PhotoItemManager.h"
 #include "LoadTextureJob.h"
 #include "StateManager.h"
@@ -12,6 +13,7 @@
 PhotoGalleryApp::PhotoGalleryApp()
 {
     m_Seat = IZ_NULL;
+    m_BG = IZ_NULL;
     m_Shader = IZ_NULL;
 }
 
@@ -29,6 +31,9 @@ IZ_BOOL PhotoGalleryApp::InitInternal(
 
     m_Seat = Seat::Create(allocator, device);
     VGOTO(result = (m_Seat != IZ_NULL), __EXIT__);
+
+    m_BG = BG::Create(allocator, device);
+    VGOTO(result = (m_BG != IZ_NULL), __EXIT__);
 
     {
         izanagi::CFileInputStream input;
@@ -91,6 +96,7 @@ void PhotoGalleryApp::ReleaseInternal()
     izanagi::threadmodel::CJobQueue::TerminateJobQueue();
 
     SAFE_RELEASE(m_Seat);
+    SAFE_RELEASE(m_BG);
 
     SAFE_RELEASE(m_Shader);
 
@@ -143,6 +149,10 @@ void PhotoGalleryApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
                 m_Shader->CommitChanges(device);
 
                 m_Seat->Render(device);
+
+                m_BG->SetShaderParam(m_Shader);
+                m_Shader->CommitChanges(device);
+                m_BG->Render(device);
             }
             m_Shader->EndPass();
         }

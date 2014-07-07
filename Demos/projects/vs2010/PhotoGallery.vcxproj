@@ -55,6 +55,7 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\PhotoGallery\BG.cpp" />
     <ClCompile Include="..\..\PhotoGallery\Configure.cpp" />
     <ClCompile Include="..\..\PhotoGallery\Environment.cpp" />
     <ClCompile Include="..\..\PhotoGallery\GestureListener.cpp" />
@@ -75,6 +76,7 @@
     <ClCompile Include="..\..\PhotoGallery\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\PhotoGallery\BG.h" />
     <ClInclude Include="..\..\PhotoGallery\Configure.h" />
     <ClInclude Include="..\..\PhotoGallery\data\PhotoFiles.h" />
     <ClInclude Include="..\..\PhotoGallery\Environment.h" />

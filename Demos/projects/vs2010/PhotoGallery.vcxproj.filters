@@ -7,9 +7,6 @@
     <Filter Include="include">
       <UniqueIdentifier>{14a9ee0d-0f49-4963-8227-5dc961299a27}</UniqueIdentifier>
     </Filter>
-    <Filter Include="data">
-      <UniqueIdentifier>{de4f6e89-d8a4-4188-a50b-9745eb288d98}</UniqueIdentifier>
-    </Filter>
     <Filter Include="shader">
       <UniqueIdentifier>{0b9a5094-76e5-44a9-b64c-8053276ed220}</UniqueIdentifier>
     </Filter>
@@ -89,6 +86,9 @@
     <ClCompile Include="..\..\PhotoGallery\StateRotateByDrag.cpp">
       <Filter>src\state</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\PhotoGallery\BG.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\PhotoGallery\PhotoGalleryApp.h">
@@ -144,6 +144,9 @@
     </ClInclude>
     <ClInclude Include="..\..\PhotoGallery\StateRotateByDrag.h">
       <Filter>include\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PhotoGallery\BG.h">
+      <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
