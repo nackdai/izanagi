@@ -184,6 +184,7 @@
     <ClCompile Include="..\..\Shader\StatePhongShader.cpp" />
     <ClCompile Include="..\..\Shader\StatePointLight.cpp" />
     <ClCompile Include="..\..\Shader\StateSpotLight.cpp" />
+    <ClCompile Include="..\..\Shader\StateSSAO.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\Shader\asset.xml">
@@ -310,6 +311,24 @@
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">%(RootDir)%(Directory)%(Filename).fx;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">%(RootDir)%(Directory)%(Filename).fx;%(AdditionalInputs)</AdditionalInputs>
     </CustomBuild>
+    <None Include="..\..\Shader\shader\SSAOShader.fx" />
+    <CustomBuild Include="..\..\Shader\shader\SSAOShader.xml">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(RootDir)%(Directory)%(Filename).fx;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">%(RootDir)%(Directory)%(Filename).fx;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">%(RootDir)%(Directory)%(Filename).fx;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">%(RootDir)%(Directory)%(Filename).fx;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">%(RootDir)%(Directory)%(Filename).fx;%(AdditionalInputs)</AdditionalInputs>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Shader\StateBase.h" />
@@ -319,6 +338,7 @@
     <ClInclude Include="..\..\Shader\StatePhongShader.h" />
     <ClInclude Include="..\..\Shader\StatePointLight.h" />
     <ClInclude Include="..\..\Shader\StateSpotLight.h" />
+    <ClInclude Include="..\..\Shader\StateSSAO.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="SampleKit.vcxproj">
