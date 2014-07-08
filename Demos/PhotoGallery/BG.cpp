@@ -27,12 +27,12 @@ BG* BG::Create(
 
 BG::BG()
 {
-    m_BG = IZ_NULL;
+    m_EnvBox = IZ_NULL;
 }
 
 BG::~BG()
 {
-    SAFE_RELEASE(m_BG);
+    SAFE_RELEASE(m_EnvBox);
 }
 
 IZ_BOOL BG::Init(
@@ -41,18 +41,10 @@ IZ_BOOL BG::Init(
 {
     IZ_ASSERT(device != IZ_NULL);
 
-    m_BG = izanagi::CDebugMeshRectangle::CreateDebugMeshRectangle(
-        allocator,
-        device,
-        Configure::MeshFlags,
-        Configure::BGColor,
-        20, 20,
-        400.0f,
-        200.0f);
-    VRETURN(m_BG != IZ_NULL);
-
-    izanagi::math::SMatrix::GetRotByX(m_L2W, IZ_DEG2RAD(90.0f));
-    izanagi::math::SMatrix::Trans(m_L2W, m_L2W, 0.0f, 50.0f, -200.0f);
+    m_EnvBox = izanagi::sample::CSampleEnvBox::CreateSampleEnvBox(
+            allocator,
+            device);
+    VRETURN(m_EnvBox != IZ_NULL);
 
     return IZ_TRUE;
 }
@@ -61,12 +53,22 @@ void BG::Render(izanagi::graph::CGraphicsDevice* device)
 {
     IZ_ASSERT(device != IZ_NULL);
 
-    IZ_ASSERT(m_BG != IZ_NULL);
-    m_BG->Draw(device);
+    IZ_ASSERT(m_EnvBox != IZ_NULL);
+    m_EnvBox->Render(device);
 }
 
-void BG::SetShaderParam(izanagi::shader::CShaderBasic* shader)
+void BG::SetShaderParam(
+    izanagi::shader::CShaderBasic* shader,
+    const izanagi::CCamera& camera)
 {
+    izanagi::math::SMatrix::SetScale(m_L2W, 300.0f, 300.0f, 300.0f);
+
+    // ƒJƒƒ‰‚ÌˆÊ’u‚É‚ ‚í‚¹‚ÄˆÚ“®‚·‚é
+    izanagi::math::SMatrix::Trans(
+        m_L2W,
+        m_L2W,
+        camera.GetParam().pos);
+
     Utility::SetShaderParam(
         shader,
         "g_mL2W",

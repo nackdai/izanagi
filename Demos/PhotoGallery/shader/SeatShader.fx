@@ -52,7 +52,7 @@ float4 mainPS(SPSInput In) : COLOR
     float attn = 1.0f / (g_PointLight.x + g_PointLight.y * d + g_PointLight.z * d * d);
 
     float4 vOut = In.vColor + attn * g_PointLightColor;
-    vOut.a = In.vColor.a;
+    vOut.a = 1.0f;//In.vColor.a;
     
     return vOut;
 }
@@ -73,7 +73,8 @@ SVSOutput mainVS_NoLight(SVSInput In)
 
 float4 mainPS_NoLight(SPSInput In) : COLOR
 {
-    float4 vOut = In.vColor;
+    //float4 vOut = In.vColor;
+    float4 vOut = (float4)(1.0f);
     
     return vOut;
 }
@@ -87,7 +88,10 @@ technique PointLight
         VertexShader = compile vs_3_0 mainVS();
         PixelShader = compile ps_3_0 mainPS();
     }
+}
 
+technique NoLight
+{
     pass P1
     {
         VertexShader = compile vs_3_0 mainVS_NoLight();

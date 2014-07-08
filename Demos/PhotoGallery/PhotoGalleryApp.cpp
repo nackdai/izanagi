@@ -149,9 +149,24 @@ void PhotoGalleryApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
                 m_Shader->CommitChanges(device);
 
                 m_Seat->Render(device);
+            }
+            m_Shader->EndPass();
+        }
+        m_Shader->End(device);
 
-                m_BG->SetShaderParam(m_Shader);
+        m_Shader->Begin(device, 1, IZ_FALSE);
+        {
+            if (m_Shader->BeginPass(0)) {
+                Utility::SetShaderParam(
+                    m_Shader,
+                    "g_mW2C",
+                    (void*)&camera.GetParam().mtxW2C,
+                    sizeof(camera.GetParam().mtxW2C));
+
+                m_BG->SetShaderParam(m_Shader, camera);
+
                 m_Shader->CommitChanges(device);
+
                 m_BG->Render(device);
             }
             m_Shader->EndPass();

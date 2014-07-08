@@ -31,12 +31,14 @@ public:
      */
     void Render(izanagi::graph::CGraphicsDevice* device);
 
-    void SetShaderParam(izanagi::shader::CShaderBasic* shader);
+    void SetShaderParam(
+        izanagi::shader::CShaderBasic* shader,
+        const izanagi::CCamera& camera);
 
 private:
     izanagi::IMemoryAllocator* m_Allocator;
 
-    izanagi::CDebugMeshRectangle* m_BG;
+    izanagi::sample::CSampleEnvBox* m_EnvBox;
     izanagi::math::SMatrix m_L2W;
 };
 

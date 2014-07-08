@@ -23,10 +23,16 @@ Environment::Environment()
 
     // Parallel Light Direction
     m_ParallelLight.vDir.Set(
+#if 0
         -0.679090f,
         -0.701356f,
         -0.216650f);
     izanagi::math::SVector::Normalize(m_ParallelLight.vDir, m_ParallelLight.vDir);
+#else
+         0.370910f,
+        -0.151356f,
+         0.303350f);
+#endif
 }
 
 Environment::~Environment()
