@@ -33,7 +33,7 @@ SVSOutput mainVS(SVSInput In)
     Out.vPos = mul(Out.vPos, g_mW2C);
 
     // NOTE
-    // -1.0f - 1.0f �̃{�b�N�X�ł��邱�ƁI�I
+    // -1.0f - 1.0f に正規化されていること
     Out.vUV = In.vPos.xyz;
     
     return Out;
