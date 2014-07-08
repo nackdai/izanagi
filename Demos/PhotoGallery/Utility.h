@@ -5,6 +5,8 @@
 
 class Utility {
 public:
+    /** Set specified parameter to shader.
+     */
     static void SetShaderParam(
         izanagi::shader::CShaderBasic* shader,
         const char* name,

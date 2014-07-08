@@ -3,6 +3,8 @@
 
 #include "izSampleKit.h"
 
+/** Manage environment parameters.
+ */
 class Environment {
 private:
     static Environment s_Instance;
@@ -15,15 +17,23 @@ private:
     ~Environment();
 
 public:
+    /** Set point light parameter to shader.
+     */
     void SetPointLightParam(izanagi::shader::CShaderBasic* shader);
     
+    /** Set parallel light parameter to shader.
+     */
     void SetParallelLightParam(
         const izanagi::CCamera& camera,
         const izanagi::math::SMatrix& mtxL2W,
         izanagi::shader::CShaderBasic* shader);
 
+    /** Set ambient light parameter to shader.
+     */
     void SetAmbientLightParam(izanagi::shader::CShaderBasic* shader);
 
+    /** Get parallel light direction.
+     */
     izanagi::math::SVector& GetDir()
     {
         return m_ParallelLight.vDir;

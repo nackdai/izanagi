@@ -138,8 +138,8 @@ IZ_BOOL PhotoItemManager::Init(
 
     IZ_FLOAT radius[] = {
         Configure::InnerRadius - Configure::Depth * 2.0f,
-        Configure::OuterRadius - (Configure::OuterRadius - Configure::InnerRadius) * 0.5f,
-        Configure::MostOuterRadius - (Configure::MostOuterRadius - Configure::OuterRadius) * 0.5f,
+        Configure::MidRadius - (Configure::MidRadius - Configure::InnerRadius) * 0.5f,
+        Configure::OuterRadius - (Configure::OuterRadius - Configure::MidRadius) * 0.5f,
     };
 
     const izanagi::math::CVector baseNml(0.0f, 0.0f, 1.0f, 0.0f);

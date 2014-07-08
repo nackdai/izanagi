@@ -76,15 +76,28 @@ public:
         const izanagi::math::CRay& ray,
         const izanagi::math::SMatrix& mtxRot);
 
+    /** Set flag if loading request is requested for photo item.
+     */
     void SetIsRequestedLoadTexture(IZ_BOOL flag);
+
+    /** Get if loading request is requested for photo item.
+     */
     IZ_BOOL IsRequestedLoadTexture() const;
 
+    /** Get normal vector of photo item.
+     */
     void GetNormal(izanagi::math::SVector& nml);
 
+    /** Get center positon of photo item.
+     */
     void GetCenterPosition(izanagi::math::SVector& pos);
 
+    /** Set parameter for shader.
+     */
     void SetShaderParam(izanagi::shader::CShaderBasic* shader);
 
+    /** Get if photo item is shown.
+     */
     IZ_BOOL IsShown() const;
 
 private:

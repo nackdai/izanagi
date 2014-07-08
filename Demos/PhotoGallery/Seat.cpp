@@ -385,7 +385,7 @@ IZ_BOOL Seat::Init(
         allocator,
         device,
         Configure::InnerRadius, 
-        Configure::OuterRadius,
+        Configure::MidRadius,
         Configure::HeightPerFloor,
         Configure::Slices);
     VRETURN(m_FlontSeat != IZ_NULL);
@@ -393,8 +393,8 @@ IZ_BOOL Seat::Init(
     m_RearSeat = SeatPart::Create(
         allocator,
         device,
-        Configure::OuterRadius, 
-        Configure::MostOuterRadius,
+        Configure::MidRadius, 
+        Configure::OuterRadius,
         Configure::HeightPerFloor * 2.0f,
         Configure::Slices);
     VRETURN(m_RearSeat != IZ_NULL);

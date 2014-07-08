@@ -3,7 +3,7 @@
 
 #include "izSampleKit.h"
 
-/** Photos's seat.
+/** Photos's background.
  */
 class BG : public izanagi::CObject {
 public:
@@ -27,10 +27,12 @@ private:
         izanagi::graph::CGraphicsDevice* device);
 
 public:
-    /** Render seat.
+    /** Render background.
      */
     void Render(izanagi::graph::CGraphicsDevice* device);
 
+    /** Set background specified parameter for shader.
+     */
     void SetShaderParam(
         izanagi::shader::CShaderBasic* shader,
         const izanagi::CCamera& camera);

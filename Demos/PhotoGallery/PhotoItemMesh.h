@@ -52,6 +52,8 @@ public:
     void RenderTopAndSide(izanagi::graph::CGraphicsDevice* device);
 
 private:
+    /** Set material parametr to shader.
+     */
     void SetMaterialToShader(izanagi::shader::CShaderBasic* shader);
 
 private:
