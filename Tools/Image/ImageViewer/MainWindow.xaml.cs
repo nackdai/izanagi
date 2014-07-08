@@ -40,6 +40,7 @@ namespace ImageViewer
                 ImgMaster imgMaster = ImgMaster.CreateImgMaster(dlg.FileName);
                 if (imgMaster != null)
                 {
+                    // 
                     ImgObjectManager.Instance.Register(imgMaster);
                     TreeViewRoot.Instance.Register(imgMaster);
                 }
@@ -84,20 +85,30 @@ namespace ImageViewer
             Close();
         }
 
+        /// <summary>
+        /// ツリービューで選択アイテムが変更されたときに呼ばれる
+        /// </summary>
+        /// <param name="selectedObj">選択アイテム</param>
         private void OnSelectedItemChanged(IImgObject selectedObj)
         {
+            // プロパティペイン内の要素を一度すべて見えないようにする
             for (int i = 0; i< PropertyPane.Children.Count; i++)
             {
                 PropertyPane.Children[i].Visibility = Visibility.Collapsed;
             }
 
+            // 選択されたアイテムがイメージマスタ（イメージデータのルート）のとき
             if (selectedObj is ImgMaster)
             {
+                // イメージマスタのプロパティビューにイメージマスタ教える
                 ImgMasterPropertyView.SetImageMaster(selectedObj as ImgMaster);
+
+                // イメージマスタのプロパティビューを表示する
                 ImgMasterPropertyView.Visibility = Visibility.Visible;
             }
             else
             {
+                // ダミー用の塗りつぶし矩形を表示する
                 DummyRect.Visibility = Visibility.Visible;
             }
         }

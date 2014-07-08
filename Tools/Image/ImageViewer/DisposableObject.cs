@@ -5,6 +5,9 @@ using System.Text;
 
 namespace ImageViewer
 {
+    /// <summary>
+    /// Disposeパターン用
+    /// </summary>
     public abstract class DisposableObject : IDisposable
     {
         ~DisposableObject()

@@ -27,8 +27,14 @@ namespace ImageViewer
             treeView1.ItemsSource = TreeViewRoot.Instance;
         }
 
+        /// <summary>
+        /// ツリービューで選択されているアイテムが変更されたときに呼ばれる
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
+            // ツリービューで選択されているアイテムが変更されたときのコマンドを発火
             if (TreeViewSelectedItemChangedCommand.Command.CanExecute(e))
             {
                 TreeViewSelectedItemChangedCommand.Command.Execute(e);

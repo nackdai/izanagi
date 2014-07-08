@@ -10,9 +10,13 @@ namespace ImageViewer
     /// </summary>
     public class ImgTexture : DisposableObject, IImgObject
     {
+        // 親のイメージルートデータ
         private ImgMaster parent = null;
+
+        // ネイティブで生成された本体
         private IntPtr texBody = IntPtr.Zero;
 
+        // テクスチャデータが持っているイメージデータ（ミップマップ、キューブイメージ）
         private List<List<ImgImage>> imageList = new List<List<ImgImage>>();
 
         /// <summary>
@@ -89,6 +93,9 @@ namespace ImageViewer
             }
         }
 
+        /// <summary>
+        /// テクスチャタイプ
+        /// </summary>
         public enum TextureType
         {
             Plane,
@@ -96,6 +103,9 @@ namespace ImageViewer
             Volume,
         }
 
+        /// <summary>
+        /// テクスチャタイプ
+        /// </summary>
         public TextureType Type
         {
             get
@@ -114,7 +124,7 @@ namespace ImageViewer
         /// コンストラクタ
         /// </summary>
         /// <param name="master">親のマスタデータ</param>
-        /// <param name="body">テクスチャデータ</param>
+        /// <param name="body">ネイティブで生成された本体</param>
         internal ImgTexture(ImgMaster master, IntPtr body)
         {
             this.parent = master;

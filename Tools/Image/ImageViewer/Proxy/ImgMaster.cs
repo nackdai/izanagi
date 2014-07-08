@@ -15,6 +15,7 @@ namespace ImageViewer
         /// </summary>
         static internal int ImgObjID = 0;
 
+        // ネイティブで生成された本体
         private IntPtr masterBody = IntPtr.Zero;
 
         /// <summary>
@@ -45,7 +46,10 @@ namespace ImageViewer
             private set;
         }
 
+        // ファイルパスが更新されたかどうか
         private bool pathUpdated = false;
+
+        // ファイルパス
         public string _path = null;
 
         /// <summary>
@@ -67,6 +71,9 @@ namespace ImageViewer
             }
         }
 
+        /// <summary>
+        /// 保持しているファイルパスの拡張子
+        /// </summary>
         public string Ext
         {
             get
@@ -127,6 +134,12 @@ namespace ImageViewer
         {
         }
 
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="name">名前</param>
+        /// <param name="path">ファイルパス</param>
+        /// <param name="body">ネイティブで生成された本体</param>
         private ImgMaster(
             string name,
             string path,
@@ -143,6 +156,7 @@ namespace ImageViewer
 
                 pathUpdated = true;
 
+                // 本体内に存在するテクスチャデータ数を取得
                 var num = ImageLibDllProxy.GetTexNumInMaster(masterBody);
 
                 for (uint i = 0; i < num; i++)

@@ -5,6 +5,9 @@ using System.Text;
 
 namespace ImageViewer
 {
+    /// <summary>
+    /// 作成されたイメージデータを管理しておく
+    /// </summary>
     class ImgObjectManager : Dictionary<int, IImgObject>
     {
         static private ImgObjectManager instance = new ImgObjectManager();
@@ -21,6 +24,10 @@ namespace ImageViewer
         {
         }
 
+        /// <summary>
+        /// 作成されたイメージデータを保存する
+        /// </summary>
+        /// <param name="imgMaster">保存したいイメージマスタ</param>
         public void Register(ImgMaster imgMaster)
         {
             this.Add(imgMaster.ID, imgMaster);

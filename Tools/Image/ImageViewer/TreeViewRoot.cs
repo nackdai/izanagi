@@ -25,6 +25,10 @@ namespace ImageViewer
         {
         }
 
+        /// <summary>
+        /// ツリービューに表示するイメージマスタを登録する
+        /// </summary>
+        /// <param name="imgMaster">登録したいイメージマスタ</param>
         public void Register(ImgMaster imgMaster)
         {
             ImageTreeViewNode node = new ImageTreeViewNode(imgMaster, imgMaster.Name);

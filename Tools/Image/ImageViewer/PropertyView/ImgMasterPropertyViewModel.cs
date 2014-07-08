@@ -6,6 +6,9 @@ using System.ComponentModel;
 
 namespace ImageViewer
 {
+    /// <summary>
+    /// イメージマスタのプロパティビューのビューモデル
+    /// </summary>
     class ImgMasterPropertyViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
@@ -20,6 +23,9 @@ namespace ImageViewer
 
         private ImgMaster imgMaster;
 
+        /// <summary>
+        /// プロパティ表示対象のイメージマスタ
+        /// </summary>
         public ImgMaster ImgMaster
         {
             private get
@@ -32,17 +38,22 @@ namespace ImageViewer
                 {
                     this.imgMaster = value;
 
+                    // 画像タイプを更新する
                     NotifyPropertyChanged("ImageType");
                 }
             }
         }
 
+        /// <summary>
+        /// イメージマスタの画像タイプ
+        /// </summary>
         public string ImageType
         {
             get
             {
                 if (this.ImgMaster != null)
                 {
+                    // 拡張子を返す
                     return this.ImgMaster.Ext;
                 }
                 else

@@ -93,6 +93,7 @@ namespace ImageViewer
 
         protected override void Disposing()
         {
+            // 親の管理から自分を抜く
             this.parent.RemoveImage(this);
         }
 
@@ -129,6 +130,12 @@ namespace ImageViewer
             return null;
         }
 
+        /// <summary>
+        /// 指定された座標のRGBA値を返す
+        /// </summary>
+        /// <param name="x">X座標</param>
+        /// <param name="y">Y座標</param>
+        /// <returns>指定された座標のRGBA値を返す。ピクセルデータが存在しない場合はnullを返す</returns>
         public IntRGBA? GetRGBAFromPosition(int x, int y)
         {
             if (this.pixelData != IntPtr.Zero)

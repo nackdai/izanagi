@@ -7,12 +7,18 @@ using System.Windows.Media.Imaging;
 
 namespace ImageViewer
 {
+    /// <summary>
+    /// ツリービューのノードの状態
+    /// </summary>
     public enum NodeState : int
     {
         Normal,
         Selected,
     }
 
+    /// <summary>
+    /// ツリービューのノードのタイプ
+    /// </summary>
     public enum NodeType : int
     {
         Master,
@@ -23,7 +29,6 @@ namespace ImageViewer
 
     /// <summary>
     /// TreeViewのノード
-    /// 
     /// TreeViewに対するViewModelとなる
     /// </summary>
     class ImageTreeViewNode : TreeViewNode
@@ -31,12 +36,18 @@ namespace ImageViewer
         private ImageSource[] imgSource = new ImageSource[2];
         private NodeState state = NodeState.Normal;
 
+        /// <summary>
+        /// ツリービューに表示するノードの名前
+        /// </summary>
         public string Name
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// ツリービューに表示する画像のソース
+        /// </summary>
         public ImageSource ImgSrc
         {
             get
@@ -45,6 +56,9 @@ namespace ImageViewer
             }
         }
 
+        /// <summary>
+        /// ノードの状態
+        /// </summary>
         public NodeState State
         {
             get
@@ -64,12 +78,18 @@ namespace ImageViewer
             }
         }
 
+        /// <summary>
+        /// ノードのタイプ
+        /// </summary>
         public NodeType Type
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// ノードが持つモデル
+        /// </summary>
         public IImgObject Model
         {
             get;
@@ -105,11 +125,16 @@ namespace ImageViewer
             ReadImage();
         }
 
+        /// <summary>
+        /// ツリービューに表示するアイコン画像を読み込む
+        /// </summary>
         private void ReadImage()
         {
+            // 通常状態用
             imgSource[(int)NodeState.Normal] = EmbeddedResourceProxy.CreateBitmapImageFromResource(
                 "ImageViewer.Resource.ImgMaster_Normal.png");
 
+            // 選択状態用
             imgSource[(int)NodeState.Selected] = EmbeddedResourceProxy.CreateBitmapImageFromResource(
                 "ImageViewer.Resource.ImgMaster_Selected.png");
         }
