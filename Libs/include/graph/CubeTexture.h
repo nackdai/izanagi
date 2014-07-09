@@ -31,10 +31,10 @@ namespace graph
 
         /** Lock a range of data and obtains a pointer to the buffer memory.
          *
-         * @param [in] nFace face of cube texture.
-         * @param [in] level mipmap level.
+         * @param [in] nFace Face of cube texture.
+         * @param [in] level Mipmap level.
          * @param [out] data VOID* pointer to a memory buffer containing the returned data.
-         * @param [in] isReadOnly read only the data to lock.
+         * @param [in] isReadOnly Read only the data to lock.
          * @param [in] isDiscard 
          * @return If the method succeeds, the return value is true. If the method fails, the return value is false.
          */
@@ -48,8 +48,8 @@ namespace graph
 
         /** Unlock data.
          *
-         * @param [in] nFace locked face of cube texture.
-         * @param [in] level locked mipmap level.
+         * @param [in] nFace Locked face of cube texture.
+         * @param [in] level Locked mipmap level.
          * @return If the method succeeds, the return value is true. If the method fails, the return value is false.
          */
         PURE_VIRTUAL(
