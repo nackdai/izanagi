@@ -6,9 +6,18 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <DockPanel>
+        <DockPanel DockPanel.Dock="Bottom">
+            <TextBlock DockPanel.Dock="Right" x:Name="Scale" Text="{Binding ScaleText}"/>
+            <Slider DockPanel.Dock="Left" x:Name="Scaler" Orientation="Horizontal" Minimum="25" Maximum="400" Value="{Binding Scale, Mode=TwoWay}"/>
+        </DockPanel>
         <StatusBar DockPanel.Dock="Bottom">
-            <TextBox x:Name="Position" Text="{Binding Position, Mode=OneWay}"/>
+            <TextBox x:Name="Position" IsReadOnly="True"  Text="{Binding Position, Mode=OneWay}"/>
+            <TextBox x:Name="Pixel" IsReadOnly="True" Text="{Binding Pixel, Mode=OneWay}"/>
         </StatusBar>
-        <ScrollViewer Name="Scroller" Background="Gray" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" MouseMove="Scroller_MouseMove"/>
+        <ScrollViewer Name="Scroller" Background="Gray" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" MouseMove="Scroller_MouseMove">
+            <ScrollViewer.RenderTransform>
+                <ScaleTransform ScaleX="{Binding ScaleX}" ScaleY="{Binding ScaleY}"/>
+            </ScrollViewer.RenderTransform>
+        </ScrollViewer>
     </DockPanel>
 </UserControl>

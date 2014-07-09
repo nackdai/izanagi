@@ -53,6 +53,8 @@ namespace ImageViewer
         {
             var vm = this.DataContext as ImageDetailViewModel;
             var position = e.GetPosition(this.Scroller);
+
+            // マウスカーソルの位置を教える
             vm.SetPosition(position.X, position.Y);
         }
     }

@@ -5,15 +5,16 @@ using System.Text;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows;
+using System.Runtime.InteropServices;
 
 namespace ImageViewer
 {
     public struct IntRGBA
     {
-        int r;
-        int g;
-        int b;
-        int a;
+        public int r;
+        public int g;
+        public int b;
+        public int a;
     }
 
     /// <summary>
@@ -112,8 +113,8 @@ namespace ImageViewer
 
             if (this.pixelData != IntPtr.Zero)
             {
-                int stride = Width * PixelFormats.Bgra32.BitsPerPixel / 8;
-                int size = stride * Width;
+                int stride = this.Width * PixelFormats.Bgra32.BitsPerPixel / 8;
+                int size = stride * this.Width;
 
                 var ret = BitmapSource.Create(
                     this.Width, this.Height,
@@ -136,10 +137,35 @@ namespace ImageViewer
         /// <param name="x">X座標</param>
         /// <param name="y">Y座標</param>
         /// <returns>指定された座標のRGBA値を返す。ピクセルデータが存在しない場合はnullを返す</returns>
-        public IntRGBA? GetRGBAFromPosition(int x, int y)
+        unsafe public IntRGBA? GetRGBAFromPosition(int x, int y)
         {
+            if (x >= this.Width || y >= this.Height)
+            {
+                return null;
+            }
+
             if (this.pixelData != IntPtr.Zero)
             {
+                int stride = this.Width * PixelFormats.Bgra32.BitsPerPixel / 8;
+
+                var ptr = izanagi.tool.ImageLibProxy.GetBGRA8ByPosition(
+                    this.pixelData,
+                    x, y,
+                    stride);
+
+                byte[] dst = new byte[4];
+
+                Marshal.Copy((IntPtr)ptr, (byte[])dst, 0, 4);
+
+                var ret = new IntRGBA()
+                {
+                    r = dst[2],
+                    g = dst[1],
+                    b = dst[0],
+                    a = dst[3],
+                };
+
+                return ret;
             }
 
             return null;

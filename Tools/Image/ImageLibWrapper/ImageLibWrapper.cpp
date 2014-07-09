@@ -195,6 +195,24 @@ void izReleasePixelData(void* p)
     img->ClearTemporaryBuffer();
 }
 
+/** 指定座標のピクセルデータを取得.
+ *
+ * @param [in] x X座標
+ * @param [in] y Y座標
+ * @param [in] stride ストライド（byte）
+ * @return 指定座標のピクセルデータ（RGBA）
+ */
+void* izGetBGRA8ByPosition(void* ptr, int x, int y, int stride)
+{
+    VRETURN_NULL(ptr != IZ_NULL);
+
+    IZ_UINT8* data = (IZ_UINT8*)ptr;
+    data += stride * y;
+    data += 4 * x;
+
+    return data;
+}
+
 static const char* format[] = {
     "RGBA8",
     "BGRA8",

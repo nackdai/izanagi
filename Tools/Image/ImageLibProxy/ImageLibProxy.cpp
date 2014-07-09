@@ -90,5 +90,10 @@ namespace tool {
         izReleasePixelData((void*)p);
     }
 
+    void* ImageLibProxy::GetBGRA8ByPosition(IntPtr ptr, int x, int y, int stride)
+    {
+        return izGetBGRA8ByPosition((void*)ptr, x, y, stride);
+    }
+
 }   // namespace tool
 }   // namespace izanagi

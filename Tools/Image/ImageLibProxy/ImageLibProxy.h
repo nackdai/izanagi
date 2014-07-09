@@ -42,6 +42,8 @@ namespace tool {
         static IntPtr GetPixelDataAsBGRA8(IntPtr p);
 
         static void ReleasePixelData(IntPtr p);
+
+        static void* GetBGRA8ByPosition(IntPtr ptr, int x, int y, int stride);
     };
 
 }   // namespace tool
