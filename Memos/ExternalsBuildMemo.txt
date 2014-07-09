@@ -22,3 +22,6 @@
 - freeglut
 * sh ./configure
 * make
+
+- libjpeg
+http://d.hatena.ne.jp/gust_notch/20110309/p1
