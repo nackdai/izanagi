@@ -42,7 +42,7 @@ CStateSSAO::CStateSSAO(
 #else
     srand((IZ_UINT)app->GetTimer(0).GetCurTime());
 
-    const float SAMPLERADIUS = 0.5f;
+    const float SAMPLERADIUS = 0.75f;
 
     for (int i = 0; i < COUNTOF(samples); ++i) {
         float r = SAMPLERADIUS * (float)rand() / (float)RAND_MAX;
@@ -102,67 +102,16 @@ IZ_BOOL CStateSSAO::Render(izanagi::graph::CGraphicsDevice* device)
             {
                 // Ambient Light Color
                 izanagi::SAmbientLightParam ambient;
-                ambient.color.Set(1.0f, 1.0f, 1.0f);
-
-                // Parallel Light Color
-                m_ParallelLight.color.Set(1.0f, 1.0f, 1.0f);
-
-                // Parallel Light Direction
-                m_ParallelLight.vDir.Set(-1.0f, -1.0f, -1.0f);
-                izanagi::math::SVector::Normalize(m_ParallelLight.vDir, m_ParallelLight.vDir);
+                ambient.color.Set(0.75f, 0.75f, 0.75f);
 
                 // マテリアル
                 izanagi::SMaterialParam mtrl;
                 {
-                    mtrl.vDiffuse.Set(1.0f, 1.0f, 1.0f, 1.0f);
                     mtrl.vAmbient.Set(1.0f, 1.0f, 1.0f, 1.0f);
-                    mtrl.vSpecular.Set(1.0f, 1.0f, 1.0f, 20.0f);
                 }
 
-                SetShaderParam(m_Shader, "g_vLitParallelColor", &m_ParallelLight.color, sizeof(m_ParallelLight.color));
                 SetShaderParam(m_Shader, "g_vLitAmbientColor", &ambient.color, sizeof(ambient.color));
-
-                SetShaderParam(m_Shader, "g_vMtrlDiffuse", &mtrl.vDiffuse, sizeof(mtrl.vDiffuse));
                 SetShaderParam(m_Shader, "g_vMtrlAmbient", &mtrl.vAmbient, sizeof(mtrl.vAmbient));
-                SetShaderParam(m_Shader, "g_vMtrlSpecular", &mtrl.vSpecular, sizeof(mtrl.vSpecular));
-            }
-
-            {
-                // ライトの方向をローカル座標に変換する
-
-                // ライトの方向はワールド座標なので World -> Localマトリクスを計算する
-                izanagi::math::SMatrix mtxW2L;
-                izanagi::math::SMatrix::Inverse(mtxW2L, m_L2W);
-
-                // World -> Local
-                izanagi::math::SVector parallelLightLocalDir;
-                izanagi::math::SMatrix::ApplyXYZ(
-                    parallelLightLocalDir,
-                    m_ParallelLight.vDir,
-                    mtxW2L);
-
-                SetShaderParam(
-                    m_Shader,
-                    "g_vLitParallelDir",
-                    (void*)&parallelLightLocalDir,
-                    sizeof(parallelLightLocalDir));
-
-                // L2V = L2W * W2V の逆行列を計算する
-                izanagi::math::SMatrix mtxV2L;
-                izanagi::math::SMatrix::Mul(mtxV2L, m_L2W, m_Camera.mtxW2V);
-                izanagi::math::SMatrix::Inverse(mtxV2L, mtxV2L);
-
-                // ビュー座標系における視点は常に原点
-                izanagi::math::CVector eyePos(0.0f, 0.0f, 0.0f, 1.0f);
-
-                // 視点のローカル座標を計算する
-                izanagi::math::SMatrix::Apply(eyePos, eyePos, mtxV2L);
-
-                SetShaderParam(
-                    m_Shader,
-                    "g_vEye",
-                    (void*)&eyePos,
-                    sizeof(eyePos));
             }
 
             // 地面
@@ -228,8 +177,10 @@ IZ_BOOL CStateSSAO::Render(izanagi::graph::CGraphicsDevice* device)
     izanagi::graph::CShaderProgram* program = m_Shader->GetShaderProgram(1, 0);
     device->SetShaderProgram(program);
 
-    device->SetTexture(0, m_RT[2]);
-    device->SetTexture(1, m_RT[3]);
+    device->SetTexture(0, m_RT[0]);
+    device->SetTexture(1, m_RT[1]);
+    device->SetTexture(2, m_RT[2]);
+    device->SetTexture(3, m_RT[3]);
 
     SHADER_PARAM_HANDLE h0 = program->GetHandleByName("g_mW2V");
     SHADER_PARAM_HANDLE h1 = program->GetHandleByName("g_mV2C");

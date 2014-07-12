@@ -11,16 +11,15 @@ struct SVSInput {
 struct SPSInput {
     float4 vPos         : POSITION;
     float3 vNormal      : TEXCOORD0;    // 法線
-    float3 vHalf        : TEXCOORD1;    // ハーフベクトル
     float4 ambient      : COLOR0;
-    float4 position     : TEXCOORD2;
+    float4 position     : TEXCOORD1;
 };
 
 #define SVSOutput        SPSInput
 
 struct SPSOutput {
     float4 ambient  : COLOR0;
-    float4 diffspec : COLOR1;
+    float4 normal   : COLOR1;
     float4 depth    : COLOR2;
     float4 position : COLOR3;
 };
@@ -47,24 +46,15 @@ float4 g_vLitAmbientColor;
 SVSOutput mainVS(SVSInput In)
 {
     SVSOutput Out = (SVSOutput)0;
-
-    // 視点への方向ベクトル（ローカル座標）
-    float3 vV = normalize(g_vEye - In.vPos).xyz;
     
     Out.vPos = mul(In.vPos, g_mL2W);
     Out.vPos = mul(Out.vPos, g_mW2V);
     Out.vPos = mul(Out.vPos, g_mV2C);
     
-    Out.vNormal = normalize(In.vNormal);
+    Out.vNormal = normalize(mul(In.vNormal, (float3x3)g_mL2W));
 
     // Ambient
     Out.ambient = g_vMtrlAmbient * g_vLitAmbientColor;
-
-    // NOTE
-    // ローカル座標での計算なので
-    // ライトの方向ベクトルはCPU側でローカル座標に変換されていること
-
-    Out.vHalf = normalize(-g_vLitParallelDir.xyz + vV);
 
     Out.position = mul(In.vPos, g_mL2W);
     
@@ -73,38 +63,21 @@ SVSOutput mainVS(SVSInput In)
 
 SPSOutput mainPS(SPSInput In)
 {
-    // 頂点シェーダでAmbientについては計算済み
     SPSOutput vOut = (SPSOutput)0;
 
     vOut.ambient = In.ambient;
     vOut.ambient.a = 1.0f;
     
-    // いるのか・・・
-    float3 vN = normalize(In.vNormal);
-    float3 vH = normalize(In.vHalf);
-    float3 vL = -g_vLitParallelDir.xyz;
+    vOut.normal.xyz = normalize(In.vNormal);
+    vOut.normal.xyz = 0.5f * vOut.normal.xyz + 0.5f;
+    vOut.normal.a = 1.0f;
     
-    // Diffuse = Md * ∑(C * max(N・L, 0))
-    vOut.diffspec.rgb += g_vMtrlDiffuse.rgb * g_vLitParallelColor.rgb * max(0.0f, dot(vN, vL));
-    
-    // Specular = Ms * ∑(C * pow(max(N・H, 0), m))
-    vOut.diffspec.rgb += g_vMtrlSpecular.rgb * g_vLitParallelColor.rgb * pow(max(0.0f, dot(vN, vH)), max(g_vMtrlSpecular.w, 0.00001f));
-
-    vOut.diffspec.a = 1.0f;
-
     float4 view = mul(In.position, g_mW2V);
     float4 projected = mul(view, g_mV2C);
     float d = projected.z / projected.w;
     vOut.depth = float4(d, d, d, 1.0f);
 
-#if 0
-    float t = length(view.xyz);
-    view.xyz = normalize(view.xyz);
-    vOut.position.xyz = view.xyz * 0.5f + 0.5f;
-    vOut.position.a = t;
-#else
     vOut.position = In.position;
-#endif
     
     return vOut;
 }
@@ -122,7 +95,7 @@ struct SPSInput2 {
 };
 
 texture texAmbient;
-texture texDifSpec;
+texture texNormal;
 texture texPosition;
 texture texDepth;
 
@@ -131,9 +104,9 @@ sampler sTexAmbient = sampler_state
     Texture = texAmbient;
 };
 
-sampler sTexDifSpec = sampler_state
+sampler sTexNormal = sampler_state
 {
-    Texture = texDifSpec;
+    Texture = texNormal;
 };
 
 sampler sTexDepth = sampler_state
@@ -168,17 +141,30 @@ SPSInput2 mainVS2(SVSInput2 sIn)
     return sOut;
 }
 
+#define USER_NORMAL
+
 float4 mainPS2(SPSInput2 sIn) : COLOR0
 {
-    //float4 ambient = tex2D(sTexAmbient, sIn.vUV);
-    //float4 difspec = tex2D(sTexDifSpec, sIn.vUV);
+    float4 ambient = tex2D(sTexAmbient, sIn.vUV);
+
+#ifdef USER_NORMAL
+    float3 normal = tex2D(sTexNormal, sIn.vUV).rgb;
+    normal.xyz = 2.0f * normal.xyz - 1.0f;
+#endif
 
     float4 position = tex2D(sTexPosition, sIn.vUV);
 
     int count = 0;
 
     for (int i = 0; i < SAMPLE_NUM; i++) {
+#ifdef USER_NORMAL
+        float4 ray = samples[i];
+        ray.xyz *= sign(dot(ray.xyz, normal));
+
+        float4 pos = mul(position + ray, g_mW2V);
+#else
         float4 pos = mul(position + samples[i], g_mW2V);
+#endif
         pos = mul(pos, g_mV2C);
 
         float z = pos.z / pos.w;
@@ -195,8 +181,7 @@ float4 mainPS2(SPSInput2 sIn) : COLOR0
 
     float a = clamp(count * 2.0f / (float)SAMPLE_NUM, 0.0f, 1.0f);
 
-    //float4 Out = float4(a, a, a, 1.0f);
-    float4 Out = (float4)a;
+    float4 Out = ambient * (float4)a;
     Out.a = 1.0f;
 
     return Out;
