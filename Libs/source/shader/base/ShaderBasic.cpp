@@ -489,16 +489,12 @@ namespace shader
         const CShaderPass::SParamInfo* pParamInfo = cPass.GetParamInfo(idx);
 
         // TODO
-        S_SHD_PARAMETER* pParamDesc = const_cast<S_SHD_PARAMETER*>(m_ParamTbl.GetDesc(idx));
+        S_SHD_PARAMETER* pParamDesc = const_cast<S_SHD_PARAMETER*>(m_ParamTbl.GetDesc(pParamInfo->idx));
 
         // For Debug.
-    #if 0
+ #if 1
         IZ_PCSTR name = m_StringBuffer.GetString(pParamDesc->posName);
-
-        SHADER_PARAM_HANDLE handle = pShd->
-            GetHandleByName(name);
-        IZ_ASSERT(handle == (bIsVS ? pParamInfo->handleVS : pParamInfo->handlePS));
-    #endif
+ #endif
 
         // パラメータに変化があったときだけ
         IZ_BOOL bIsDirty = pParamDesc->isDirty;
@@ -721,6 +717,16 @@ namespace shader
         }
 
         return ret;
+    }
+
+    // Get shader program.
+    graph::CShaderProgram* CShaderBasic::GetShaderProgram(
+        IZ_UINT techIdx,
+        IZ_UINT passIdx)
+    {
+        IZ_UINT realPassIdx = m_TechTbl.GetPassIdx(techIdx, passIdx);
+        CShaderPass& pass = m_pPass[realPassIdx];
+        return pass.GetShaderProgram();
     }
 }   // namespace shader
 }   // namespace izanagi

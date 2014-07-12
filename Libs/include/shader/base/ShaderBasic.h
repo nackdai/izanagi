@@ -142,6 +142,16 @@ namespace shader
             IZ_PCSTR name,
             graph::CBaseTexture* tex);
 
+        /** Get shader program.
+         *
+         * @param [in] techIdx Index of techniques in CShaderBasic.
+         * @param [in] techIdx Index of passes in the technique.
+         * @return If this method succeeds, the return value is the pointer to graph::CShaderProgram. If this method fails, the return value is null.
+         */
+        graph::CShaderProgram* GetShaderProgram(
+            IZ_UINT techIdx,
+            IZ_UINT passIdx);
+
     private:
         IZ_BOOL SetParamValue(
             graph::CGraphicsDevice* device,
