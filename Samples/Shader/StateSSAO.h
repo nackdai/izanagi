@@ -25,6 +25,8 @@ public:
     // ステートから抜ける（終了）.
     virtual IZ_BOOL Leave();
 
+    virtual IZ_BOOL OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key);
+
 private:
     void RenderScene(
         izanagi::graph::CGraphicsDevice* device,
@@ -45,6 +47,15 @@ protected:
     izanagi::graph::CVertexDeclaration* m_VD;
 
     izanagi::graph::CRenderTarget* m_RT[4];
+
+    enum RenderMode {
+        SSAO,
+        Textures,
+        Ambient,
+
+        RenderModeNum,
+    };
+    RenderMode m_Mode;
 };
 
 #endif    // #if !defined(__STATE_SSAO_H__)

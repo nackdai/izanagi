@@ -15,6 +15,8 @@ CStateSSAO::CStateSSAO(
     m_Cube = IZ_NULL;
     m_Plane = IZ_NULL;
 
+    m_Mode = SSAO;
+
 #if 0
     izanagi::math::CMathRand::Init((IZ_UINT)app->GetTimer(0).GetCurTime());
 
@@ -67,11 +69,13 @@ CStateSSAO::~CStateSSAO()
 // 描画.
 IZ_BOOL CStateSSAO::Render(izanagi::graph::CGraphicsDevice* device)
 {
-    device->BeginScene(
-        m_RT,
-        COUNTOF(m_RT),
-        izanagi::graph::E_GRAPH_CLEAR_FLAG_ALL,
-        IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0));
+    if (m_Mode != Ambient) {
+        device->BeginScene(
+            m_RT,
+            COUNTOF(m_RT),
+            izanagi::graph::E_GRAPH_CLEAR_FLAG_ALL,
+            IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0));
+    }
 
     izanagi::math::SMatrix mtxL2W;
     izanagi::math::SMatrix::SetUnit(mtxL2W);
@@ -145,59 +149,74 @@ IZ_BOOL CStateSSAO::Render(izanagi::graph::CGraphicsDevice* device)
 
     device->EndScene();
 
-#if 0
-    device->Begin2D();
-    {
-        device->SetTexture(0, m_RT[0]);
-        device->Draw2DSprite(
-            izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),
-            izanagi::CIntRect(0, 0, 640, 360));
+    if (m_Mode == Textures) {
+        device->Begin2D();
+        {
+            device->SetTexture(0, m_RT[0]);
+            device->Draw2DSprite(
+                izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),
+                izanagi::CIntRect(0, 0, 640, 360));
 
-        device->SetTexture(0, m_RT[1]);
-        device->Draw2DSprite(
-            izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),
-            izanagi::CIntRect(0, 360, 640, 360));
+            device->SetTexture(0, m_RT[1]);
+            device->Draw2DSprite(
+                izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),
+                izanagi::CIntRect(0, 360, 640, 360));
 
-        device->Set2DRenderOp(izanagi::graph::E_GRAPH_2D_RENDER_OP_NO_TEX_ALPHA);
+            device->Set2DRenderOp(izanagi::graph::E_GRAPH_2D_RENDER_OP_NO_TEX_ALPHA);
 
-        device->SetTexture(0, m_RT[2]);
-        device->Draw2DSprite(
-            izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),
-            izanagi::CIntRect(640, 360, 640, 360));
+            device->SetTexture(0, m_RT[2]);
+            device->Draw2DSprite(
+                izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),
+                izanagi::CIntRect(640, 360, 640, 360));
 
-        device->Set2DRenderOp(izanagi::graph::E_GRAPH_2D_RENDER_OP_NO_TEX_ALPHA);
+            device->Set2DRenderOp(izanagi::graph::E_GRAPH_2D_RENDER_OP_NO_TEX_ALPHA);
 
-        device->SetTexture(0, m_RT[3]);
-        device->Draw2DSprite(
-            izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),
-            izanagi::CIntRect(640, 0, 640, 360));
+            device->SetTexture(0, m_RT[3]);
+            device->Draw2DSprite(
+                izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),
+                izanagi::CIntRect(640, 0, 640, 360));
+        }
+        device->End2D();
     }
-    device->End2D();
-#else
-    izanagi::graph::CShaderProgram* program = m_Shader->GetShaderProgram(1, 0);
-    device->SetShaderProgram(program);
+    else if (m_Mode == SSAO) {
+        izanagi::graph::CShaderProgram* program = m_Shader->GetShaderProgram(1, 0);
+        device->SetShaderProgram(program);
 
-    device->SetTexture(0, m_RT[0]);
-    device->SetTexture(1, m_RT[1]);
-    device->SetTexture(2, m_RT[2]);
-    device->SetTexture(3, m_RT[3]);
+        device->SetTexture(0, m_RT[0]);
+        device->SetTexture(1, m_RT[1]);
+        device->SetTexture(2, m_RT[2]);
+        device->SetTexture(3, m_RT[3]);
 
-    SHADER_PARAM_HANDLE h0 = program->GetHandleByName("g_mW2V");
-    SHADER_PARAM_HANDLE h1 = program->GetHandleByName("g_mV2C");
-    SHADER_PARAM_HANDLE h2 = program->GetHandleByName("samples");
+        SHADER_PARAM_HANDLE h0 = program->GetHandleByName("g_mW2V");
+        SHADER_PARAM_HANDLE h1 = program->GetHandleByName("g_mV2C");
+        SHADER_PARAM_HANDLE h2 = program->GetHandleByName("samples");
 
-    program->SetMatrix(device, h0, m_Camera.mtxW2V);
-    program->SetMatrix(device, h1, m_Camera.mtxV2C);
-    program->SetValue(device, h2, samples, sizeof(samples));
+        program->SetMatrix(device, h0, m_Camera.mtxW2V);
+        program->SetMatrix(device, h1, m_Camera.mtxV2C);
+        program->SetValue(device, h2, samples, sizeof(samples));
 
-    device->SetVertexBuffer(0, 0, m_VB->GetStride(), m_VB);
-    device->SetVertexDeclaration(m_VD);
+        device->SetVertexBuffer(0, 0, m_VB->GetStride(), m_VB);
+        device->SetVertexDeclaration(m_VD);
 
-    device->DrawPrimitive(
-        izanagi::graph::E_GRAPH_PRIM_TYPE_TRIANGLESTRIP,
-        0,
-        2);
-#endif
+        device->DrawPrimitive(
+            izanagi::graph::E_GRAPH_PRIM_TYPE_TRIANGLESTRIP,
+            0,
+            2);
+    }
+    else {
+        izanagi::graph::CShaderProgram* program = m_Shader->GetShaderProgram(2, 0);
+        device->SetShaderProgram(program);
+
+        device->SetTexture(0, m_RT[0]);
+
+        device->SetVertexBuffer(0, 0, m_VB->GetStride(), m_VB);
+        device->SetVertexDeclaration(m_VD);
+
+        device->DrawPrimitive(
+            izanagi::graph::E_GRAPH_PRIM_TYPE_TRIANGLESTRIP,
+            0,
+            2);
+    }
 
     RenderName(device, "SSAO");
 
@@ -366,6 +385,26 @@ IZ_BOOL CStateSSAO::Leave()
 
     SAFE_RELEASE(m_VB);
     SAFE_RELEASE(m_VD);
+
+    return IZ_TRUE;
+}
+
+IZ_BOOL CStateSSAO::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
+{
+    switch (key) {
+    case izanagi::sys::E_KEYBOARD_BUTTON_LEFT:
+        {
+            IZ_INT mode = m_Mode - 1;
+            m_Mode = (RenderMode)(mode < 0 ? RenderModeNum - 1 : mode);
+        }
+        break;
+    case izanagi::sys::E_KEYBOARD_BUTTON_RIGHT:
+        {
+            IZ_INT mode = m_Mode + 1;
+            m_Mode = (RenderMode)(mode % RenderModeNum);
+        }
+        break;
+    }
 
     return IZ_TRUE;
 }
