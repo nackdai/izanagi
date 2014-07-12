@@ -84,12 +84,12 @@ SPSOutput mainPS(SPSInput In)
 
 /////////////////////////////////////////////////////////////
 
-struct SVSInput2 {
+struct SVSInputSSAO {
     float4 vPos     : POSITION;
     float2 vUV      : TEXCOORD0;
 };
 
-struct SPSInput2 {
+struct SPSInputSSAO {
     float4 vPos     : POSITION;
     float2 vUV      : TEXCOORD0;
 };
@@ -122,9 +122,9 @@ sampler sTexPosition = sampler_state
 #define SAMPLE_NUM  (32)
 float4 samples[SAMPLE_NUM];
 
-SPSInput2 mainVS2(SVSInput2 sIn)
+SPSInputSSAO mainVS_SSAO(SVSInputSSAO sIn)
 {
-    SPSInput2 sOut;
+    SPSInputSSAO sOut;
 
     // ’¸“_ˆÊ’u
     sOut.vPos = sIn.vPos;
@@ -141,23 +141,22 @@ SPSInput2 mainVS2(SVSInput2 sIn)
     return sOut;
 }
 
-#define USER_NORMAL
-
-float4 mainPS2(SPSInput2 sIn) : COLOR0
+float4 mainPS_SSAO(SPSInputSSAO sIn) : COLOR0
 {
+    float falloff = 0.000002;
+
     float4 ambient = tex2D(sTexAmbient, sIn.vUV);
 
-#ifdef USER_NORMAL
     float3 normal = tex2D(sTexNormal, sIn.vUV).rgb;
-    normal.xyz = 2.0f * normal.xyz - 1.0f;
-#endif
+    normal = normalize(2.0f * normal - 1.0f);
+
+    float z = tex2D(sTexDepth, sIn.vUV).r;
 
     float4 position = tex2D(sTexPosition, sIn.vUV);
 
-    int count = 0;
+    float bl = 0;
 
     for (int i = 0; i < SAMPLE_NUM; i++) {
-#ifdef USER_NORMAL
         float4 ray = samples[i];
 
         // NOTE
@@ -165,29 +164,35 @@ float4 mainPS2(SPSInput2 sIn) : COLOR0
         ray.xyz *= sign(dot(ray.xyz, normal));
 
         float4 pos = mul(position + ray, g_mW2V);
-#else
-        float4 pos = mul(position + samples[i], g_mW2V);
-#endif
         pos = mul(pos, g_mV2C);
-
-        float z = pos.z / pos.w;
 
         float2 uv = float2(
             0.5f * (pos.x / pos.w) + 0.5f,
             -0.5f * (pos.y / pos.w) + 0.5f);
 
-        //float depth = tex2D(sTexDepth, sIn.vUV).r;
-        float depth = tex2D(sTexDepth, uv).r;
+        float3 ocNml = tex2D(sTexNormal, uv).xyz;
+        ocNml = normalize(ocNml * 2.0f - 1.0f);
+        float nmlDiff = 1.0 - dot(ocNml, normal);
 
-        count += step(z, depth);
+        float depth = tex2D(sTexDepth, uv).r;
+        float depthDiff = z - depth;
+
+        bl += step(falloff, depthDiff) * nmlDiff;
     }
 
-    float a = clamp(count * 2.0f / (float)SAMPLE_NUM, 0.0f, 1.0f);
+    float a = 1.0f - bl * 1.0f / (float)SAMPLE_NUM;
 
     float4 Out = ambient * (float4)a;
     Out.a = 1.0f;
 
     return Out;
+}
+
+float4 mainPS_Ambient(SPSInputSSAO sIn) : COLOR0
+{
+    float4 ambient = tex2D(sTexAmbient, sIn.vUV);
+    ambient.a = 1.0f;
+    return ambient;
 }
 
 /////////////////////////////////////////////////////////////
@@ -202,11 +207,20 @@ technique RenderToMRT
     }
 }
 
-technique Render
+technique RenderSSAO
 {
     pass P0
     {
-        VertexShader = compile vs_3_0 mainVS2();
-        PixelShader = compile ps_3_0 mainPS2();
+        VertexShader = compile vs_3_0 mainVS_SSAO();
+        PixelShader = compile ps_3_0 mainPS_SSAO();
+    }
+}
+
+technique RenderNoSSAO
+{
+    pass P0
+    {
+        VertexShader = compile vs_3_0 mainVS_SSAO();
+        PixelShader = compile ps_3_0 mainPS_Ambient();
     }
 }
