@@ -345,9 +345,7 @@ IZ_BOOL CStateSSAO::Enter(
         m_RT[2] = device->CreateRenderTarget(
             device->GetBackBufferWidth(),
             device->GetBackBufferHeight(),
-            //izanagi::graph::E_GRAPH_PIXEL_FMT_R32F);
-            izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA32F);
-            //izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA8);
+            izanagi::graph::E_GRAPH_PIXEL_FMT_R32F);
         m_RT[3] = device->CreateRenderTarget(
             device->GetBackBufferWidth(),
             device->GetBackBufferHeight(),
