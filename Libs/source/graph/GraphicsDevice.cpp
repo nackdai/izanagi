@@ -297,11 +297,7 @@ namespace graph
     IZ_BOOL CGraphicsDevice::PushRenderTarget(CRenderTarget** rt, IZ_UINT num)
     {
         IZ_ASSERT(rt != IZ_NULL);
-
-        // TODO
-        // MRTは許さない
-        IZ_ASSERT(num == 1);
-        IZ_ASSERT(num < MAX_MRT_NUM);
+        IZ_ASSERT(num <= MAX_MRT_NUM);
 
         IZ_BOOL ret = IZ_FALSE;
 

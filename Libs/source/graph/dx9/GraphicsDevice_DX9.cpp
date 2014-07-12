@@ -468,11 +468,8 @@ namespace graph
         IZ_FLOAT fClearZ/*= 1.0f*/,
         IZ_DWORD nClearStencil/*= 0*/)
     {
-        IZ_ASSERT(m_Device != NULL);
-
-        // TODO
-        // MRTは無しで・・・
-        IZ_ASSERT(nCount <= 1);
+        IZ_ASSERT(m_Device != NULL)
+        IZ_ASSERT(nCount <= MAX_MRT_NUM);
 
         IZ_BOOL ret = IZ_TRUE;
 
@@ -1034,11 +1031,17 @@ __EXIT__:
         // レンダーターゲットを入れ替える
         for (IZ_UINT i = 0; i < num; ++i) {
             if (m_RenderState.curRT[i] != rt[i]) {
-                CRenderTargetDX9* dx9RT = reinterpret_cast<CRenderTargetDX9*>(rt[i]);
-                IZ_ASSERT(dx9RT->GetSurface() != IZ_NULL);
+                if (rt[i] != IZ_NULL) {
+                    CRenderTargetDX9* dx9RT = reinterpret_cast<CRenderTargetDX9*>(rt[i]);
+                    IZ_ASSERT(dx9RT->GetSurface() != IZ_NULL);
 
-                m_Device->SetRenderTarget(i, dx9RT->GetSurface()->GetRawInterface());
-                SAFE_REPLACE(m_RenderState.curRT[i], rt[i]);
+                    m_Device->SetRenderTarget(i, dx9RT->GetSurface()->GetRawInterface());
+                    SAFE_REPLACE(m_RenderState.curRT[i], rt[i]);
+                }
+                else {
+                    m_Device->SetRenderTarget(i, IZ_NULL);
+                    SAFE_RELEASE(m_RenderState.curRT[i]);
+                }
             }
         }
     }

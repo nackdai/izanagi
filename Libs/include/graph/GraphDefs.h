@@ -25,7 +25,7 @@ namespace graph
 {
     enum {
         TEX_STAGE_NUM = 8,
-        MAX_MRT_NUM = 2,
+        MAX_MRT_NUM = 4,
     };
 
     /** レンダーステート
