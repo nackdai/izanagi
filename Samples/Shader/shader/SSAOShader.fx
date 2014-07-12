@@ -159,6 +159,9 @@ float4 mainPS2(SPSInput2 sIn) : COLOR0
     for (int i = 0; i < SAMPLE_NUM; i++) {
 #ifdef USER_NORMAL
         float4 ray = samples[i];
+
+        // NOTE
+        // –@ü‚Æ‹t•ûŒü‚ðŒü‚¢‚Ä‚¢‚é‚Æ‚«‚Í”½“]‚·‚é‚±‚Æ‚Å–@ü•ûŒü‚Ì”¼‰~“à‚É‚¨‚³‚Ü‚é‚æ‚¤‚É‚·‚é
         ray.xyz *= sign(dot(ray.xyz, normal));
 
         float4 pos = mul(position + ray, g_mW2V);
