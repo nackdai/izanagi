@@ -1,14 +1,9 @@
 #if !defined(__STATE_BASE_H__)
 #define __STATE_BASE_H__
 
+#include "izSampleKit.h"
 #include "izSceneGraph.h"
 #include "izDebugUtil.h"
-
-namespace izanagi {
-    namespace sample {
-        class CSampleApp;
-    }
-}
 
 class CStateBase : public izanagi::CSceneStateBase {
 public:

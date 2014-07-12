@@ -40,6 +40,11 @@ protected:
 
     izanagi::math::SMatrix m_L2W;
     izanagi::SParallelLightParam m_ParallelLight;
+
+    izanagi::graph::CVertexBuffer* m_VB;
+    izanagi::graph::CVertexDeclaration* m_VD;
+
+    izanagi::graph::CRenderTarget* m_RT[4];
 };
 
 #endif    // #if !defined(__STATE_SSAO_H__)
