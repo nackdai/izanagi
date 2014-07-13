@@ -33,6 +33,10 @@ public:
      */
     static const IZ_COLOR DefaultColor = IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0xff);
 
+    /** Side and top face color of photo item.
+     */
+    static const IZ_COLOR PhotoItemSideAndTopFaceColor = IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0xff);
+
     /** Seat color.
      */
     static const IZ_COLOR SeatColor = IZ_COLOR_RGBA(0x20, 0x20, 0x20, 0xff);

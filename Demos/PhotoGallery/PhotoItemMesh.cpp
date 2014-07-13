@@ -297,7 +297,7 @@ IZ_BOOL PhotoItemMesh::TopAndSideFaces::Init(
     VRETURN(
         SetVtx(
             flag,
-            Configure::DefaultColor,
+            Configure::PhotoItemSideAndTopFaceColor,
             width, height, depth));
 
     VRETURN(SetIdx());
