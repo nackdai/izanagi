@@ -56,6 +56,40 @@ struct FuncD : public izanagi::math::CNumericalAnalysis::Func
     }
 };
 
+IZ_FLOAT _ComputeNewtonMethod(
+    Func& func,
+    FuncD& funcd,
+    IZ_FLOAT time,
+    IZ_FLOAT threshold,
+    IZ_UINT loopCnt)
+{
+    IZ_FLOAT x = time;
+    IZ_FLOAT newX = 0.0f;
+
+    for (IZ_UINT i = 0; i < loopCnt; i++) {
+        IZ_FLOAT v = func(x) - time;
+
+        if (izanagi::math::CMath::Absf(v) < threshold) {
+            return x;
+        }
+
+        IZ_FLOAT dx = funcd(x);
+
+        if (izanagi::math::CMath::IsNearyEqualZero(dx)) {
+            return x;
+        }
+
+        newX = x - v /dx;
+        x = newX;
+
+        if (izanagi::math::CMath::Absf(x) < threshold) {
+            return x;
+        }
+    }
+
+    return x;
+}
+
 IZ_FLOAT CCustomInterp::InterpScalar(
     IZ_FLOAT time,
     IZ_UINT keyNum,
@@ -101,7 +135,11 @@ IZ_FLOAT CCustomInterp::InterpScalar(
         funcd.x3 = func.x3;
     }
 
+#if 0
     IZ_FLOAT t = izanagi::math::CNumericalAnalysis::ComputeNewtonMethod(
+#else
+    IZ_FLOAT t = _ComputeNewtonMethod(
+#endif
         func, funcd,
         normTime,
         0.0001f,
@@ -119,7 +157,7 @@ IZ_FLOAT CCustomInterp::InterpScalar(
 
     IZ_FLOAT interpParam = valueFunc(t);
 
-    // 線形補間
+    // 邱壼ｽ｢陬憺俣
     IZ_FLOAT p0 = keys[prev]->params[pos];
     IZ_FLOAT p1 = keys[next]->params[pos];
     IZ_FLOAT ret = p0 * (1.0f - interpParam) + p1 * interpParam;
@@ -184,7 +222,11 @@ void CCustomInterp::InterpVector(
         funcd.x3 = func.x3;
     }
 
+#if 0
     IZ_FLOAT t = izanagi::math::CNumericalAnalysis::ComputeNewtonMethod(
+#else
+    IZ_FLOAT t = _ComputeNewtonMethod(
+#endif
         func, funcd,
         normTime,
         0.0001f,
