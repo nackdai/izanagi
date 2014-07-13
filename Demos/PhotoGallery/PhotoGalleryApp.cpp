@@ -120,6 +120,7 @@ void PhotoGalleryApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     }
     PostEffect::Instance().Apply(device);
 
+#ifdef __IZ_DEBUG__
     State state = StateManager::Instance().GetCurrentState();
 
     const char* name[] = {
@@ -156,6 +157,7 @@ void PhotoGalleryApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
         device->End2D();
     }
+#endif  // #ifdef __IZ_DEBUG__
 }
 
 IZ_BOOL PhotoGalleryApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)

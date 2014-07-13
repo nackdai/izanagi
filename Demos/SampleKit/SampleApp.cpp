@@ -207,6 +207,7 @@ void CSampleApp::Render()
 
         // 時間表示
         if (m_Device->Begin2D()) {
+#ifdef __IZ_DEBUG__
             m_DebugFont->Begin(m_Device);
 
             {
@@ -229,7 +230,7 @@ void CSampleApp::Render()
             }
 
             m_DebugFont->End();
-
+#endif  // #ifdef __IZ_DEBUG__
             m_Device->End2D();
         }
     }

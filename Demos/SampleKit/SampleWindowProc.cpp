@@ -84,6 +84,7 @@ void CSampleWndProc::OnMouseMove(const izanagi::CIntPoint& point)
 {
     IZ_ASSERT(m_App != IZ_NULL);
 
+#ifdef __IZ_DEBUG__
     //if (m_Flags.onLBtn) {
     if (m_Flags.onRBtn) {
         m_App->GetCamera().Rotate(
@@ -104,6 +105,7 @@ void CSampleWndProc::OnMouseMove(const izanagi::CIntPoint& point)
 
         m_App->GetCamera().Move(fOffsetX, fOffsetY);
     }
+#endif  // #ifdef __IZ_DEBUG__
 
     m_PrevPoint = point;
 
@@ -112,7 +114,9 @@ void CSampleWndProc::OnMouseMove(const izanagi::CIntPoint& point)
 
 void CSampleWndProc::OnMouseWheel(IZ_INT delta)
 {
+#ifdef __IZ_DEBUG__
     m_App->GetCamera().Dolly(delta * 0.1f);
+#endif
 }
 
 void CSampleWndProc::OnPaint()
