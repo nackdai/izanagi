@@ -9,41 +9,39 @@ class Configure {
 public:
     /** Screen width.
      */
-    static const IZ_UINT SCREEN_WIDTH = 1280;
+    static const IZ_UINT SCREEN_WIDTH;
 
     /** Screen height.
      */
-    static const IZ_UINT SCREEN_HEIGHT = 720;
+    static const IZ_UINT SCREEN_HEIGHT;
 
     /** Number of photos.
      */
-    static const IZ_UINT PHOTOS = 90;
+    static const IZ_UINT PHOTOS;
 
     /** Flags for vertex semantics.
      */
-    static const IZ_UINT MeshFlags = izanagi::E_DEBUG_MESH_VTX_FORM_POS
-        | izanagi::E_DEBUG_MESH_VTX_FORM_COLOR
-        | izanagi::E_DEBUG_MESH_VTX_FORM_NORMAL;
+    static const IZ_UINT MeshFlags;
 
     /** Slices of seat.
      */
-    static const IZ_UINT Slices = 20;
+    static const IZ_UINT Slices;
 
     /** Default color.
      */
-    static const IZ_COLOR DefaultColor = IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0xff);
+    static const IZ_COLOR DefaultColor;
 
     /** Side and top face color of photo item.
      */
-    static const IZ_COLOR PhotoItemSideAndTopFaceColor = IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0xff);
+    static const IZ_COLOR PhotoItemSideAndTopFaceColor;
 
     /** Seat color.
      */
-    static const IZ_COLOR SeatColor = IZ_COLOR_RGBA(0x20, 0x20, 0x20, 0xff);
+    static const IZ_COLOR SeatColor;
 
     /** Background color.
      */
-    static const IZ_COLOR BGColor = IZ_COLOR_RGBA(0x20, 0x20, 0x20, 0xff);
+    static const IZ_COLOR BGColor;
 
     /** Different of each radius..
      */
@@ -99,7 +97,7 @@ public:
 
     /** Max texture size.
      */
-    static const IZ_UINT MaxTextureSize = 1280;
+    static const IZ_UINT MaxTextureSize;
 
     /** Starting height position when fading in animation start.
      */
