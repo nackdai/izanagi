@@ -9,12 +9,10 @@
 #include "Utility.h"
 #include "Environment.h"
 #include "data/PhotoFiles.h"
+#include "BGRenderer.h"
 
 PhotoGalleryApp::PhotoGalleryApp()
 {
-    m_Seat = IZ_NULL;
-    m_BG = IZ_NULL;
-    m_Shader = IZ_NULL;
 }
 
 PhotoGalleryApp::~PhotoGalleryApp()
@@ -29,22 +27,8 @@ IZ_BOOL PhotoGalleryApp::InitInternal(
 {
     IZ_BOOL result = IZ_TRUE;
 
-    m_Seat = Seat::Create(allocator, device);
-    VGOTO(result = (m_Seat != IZ_NULL), __EXIT__);
-
-    m_BG = BG::Create(allocator, device);
-    VGOTO(result = (m_BG != IZ_NULL), __EXIT__);
-
-    {
-        izanagi::CFileInputStream input;
-        VRETURN(input.Open("data/SeatShader.shd"));
-
-        m_Shader = izanagi::shader::CShaderBasic::CreateShader<izanagi::shader::CShaderBasic>(
-            allocator,
-            device,
-            &input);
-        VRETURN(m_Shader != IZ_NULL);
-    }
+    //izanagi::math::CMathRand::Init((IZ_UINT)app->GetTimer(0).GetCurTime());
+    srand((IZ_UINT)GetTimer(0).GetCurTime());
 
     PhotoItemManager::Instance().Init(
         allocator,
@@ -79,9 +63,10 @@ IZ_BOOL PhotoGalleryApp::InitInternal(
             files[i]);
     }
 
+    BGRenderer::Instance().Init(allocator, device);
+
     m_Timer.Begin();
 
-__EXIT__:
     if (!result) {
         ReleaseInternal();
     }
@@ -95,12 +80,9 @@ void PhotoGalleryApp::ReleaseInternal()
     TextureLoader::Instance().Terminate();
     izanagi::threadmodel::CJobQueue::TerminateJobQueue();
 
-    SAFE_RELEASE(m_Seat);
-    SAFE_RELEASE(m_BG);
-
-    SAFE_RELEASE(m_Shader);
-
     PhotoItemManager::Instance().Terminate();
+
+    BGRenderer::Instance().Terminate();
 }
 
 // 更新.
@@ -123,56 +105,9 @@ void PhotoGalleryApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 // 描画.
 void PhotoGalleryApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
-    {
-        const izanagi::CCamera& camera = GetCamera();
+    const izanagi::CCamera& camera = GetCamera();
 
-        izanagi::math::SMatrix mtx;
-        izanagi::math::SMatrix::SetUnit(mtx);
-
-        m_Shader->Begin(device, 0, IZ_FALSE);
-        {
-            if (m_Shader->BeginPass(0)) {
-                Utility::SetShaderParam(
-                    m_Shader,
-                    "g_mW2C",
-                    (void*)&camera.GetParam().mtxW2C,
-                    sizeof(camera.GetParam().mtxW2C));
-
-                Utility::SetShaderParam(
-                    m_Shader,
-                    "g_mL2W",
-                    (void*)&mtx,
-                    sizeof(mtx));
-
-                Environment::Instance().SetPointLightParam(m_Shader);
-
-                m_Shader->CommitChanges(device);
-
-                m_Seat->Render(device);
-            }
-            m_Shader->EndPass();
-        }
-        m_Shader->End(device);
-
-        m_Shader->Begin(device, 1, IZ_FALSE);
-        {
-            if (m_Shader->BeginPass(0)) {
-                Utility::SetShaderParam(
-                    m_Shader,
-                    "g_mW2C",
-                    (void*)&camera.GetParam().mtxW2C,
-                    sizeof(camera.GetParam().mtxW2C));
-
-                m_BG->SetShaderParam(m_Shader, camera);
-
-                m_Shader->CommitChanges(device);
-
-                m_BG->Render(device);
-            }
-            m_Shader->EndPass();
-        }
-        m_Shader->End(device);
-    }
+    BGRenderer::Instance().Render(device, camera);
 
     StateManager::Instance().Render(device);
 

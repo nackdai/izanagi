@@ -16,7 +16,7 @@ Environment::Environment()
     m_PointLight.attn.Set(0.0f, 0.0f, 0.0005f, 0.0f);
 
     // Ambient Light Color
-    m_Ambient.color.Set(0.1f, 0.1f, 0.1f);
+    m_Ambient.color.Set(0.75f, 0.75f, 0.75f);
 
     // Parallel Light Color
     m_ParallelLight.color.Set(0.8f, 0.8f, 0.8f);

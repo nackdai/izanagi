@@ -61,7 +61,7 @@ void BG::SetShaderParam(
     izanagi::shader::CShaderBasic* shader,
     const izanagi::CCamera& camera)
 {
-    izanagi::math::SMatrix::SetScale(m_L2W, 300.0f, 300.0f, 300.0f);
+    izanagi::math::SMatrix::SetScale(m_L2W, 150.0f, 150.0f, 150.0f);
 
     // ƒJƒƒ‰‚ÌˆÊ’u‚É‚ ‚í‚¹‚ÄˆÚ“®‚·‚é
     izanagi::math::SMatrix::Trans(

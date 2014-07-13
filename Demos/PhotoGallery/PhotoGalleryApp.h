@@ -34,11 +34,6 @@ protected:
     virtual void OnMouseMove(const izanagi::CIntPoint& point);
 
 private:
-    Seat* m_Seat;
-    BG* m_BG;
-
-    izanagi::shader::CShaderBasic* m_Shader;
-
     izanagi::sys::CTimer m_Timer;
 };
 

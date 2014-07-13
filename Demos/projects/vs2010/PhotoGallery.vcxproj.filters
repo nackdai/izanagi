@@ -30,6 +30,9 @@
     <None Include="..\..\PhotoGallery\shader\SeatShader.fx">
       <Filter>shader</Filter>
     </None>
+    <None Include="..\..\PhotoGallery\shader\SSAOShader.fx">
+      <Filter>shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\PhotoGallery\main.cpp">
@@ -87,6 +90,9 @@
       <Filter>src\state</Filter>
     </ClCompile>
     <ClCompile Include="..\..\PhotoGallery\BG.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PhotoGallery\BGRenderer.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -148,6 +154,9 @@
     <ClInclude Include="..\..\PhotoGallery\BG.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\PhotoGallery\BGRenderer.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\PhotoGallery\shader\BasicShader.xml">
@@ -157,6 +166,9 @@
       <Filter>shader</Filter>
     </CustomBuild>
     <CustomBuild Include="..\..\PhotoGallery\shader\SeatShader.xml">
+      <Filter>shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\PhotoGallery\shader\SSAOShader.xml">
       <Filter>shader</Filter>
     </CustomBuild>
   </ItemGroup>

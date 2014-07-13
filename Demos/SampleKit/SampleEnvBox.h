@@ -35,12 +35,13 @@ public:
 
 private:
     enum {
-        VTX_NUM = 8,
-        IDX_NUM = 10 + 1 + 5 + 5,
+        VTX_NUM = 16,
+        IDX_NUM = 3 * 2 * 4,
     };
 
     struct SVertex {
-        IZ_FLOAT pos[3];
+        IZ_FLOAT pos[4];
+        IZ_FLOAT nml[3];
     };
 
     static const SVertex sVtxList[VTX_NUM];

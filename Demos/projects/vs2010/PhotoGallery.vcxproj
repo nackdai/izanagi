@@ -53,9 +53,16 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(RootDir)%(Directory)%(Filename).fx;%(AdditionalInputs)</AdditionalInputs>
     </CustomBuild>
+    <None Include="..\..\PhotoGallery\shader\SSAOShader.fx" />
+    <CustomBuild Include="..\..\PhotoGallery\shader\SSAOShader.xml">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(RootDir)%(Directory)%(Filename).fx;%(AdditionalInputs)</AdditionalInputs>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\PhotoGallery\BG.cpp" />
+    <ClCompile Include="..\..\PhotoGallery\BGRenderer.cpp" />
     <ClCompile Include="..\..\PhotoGallery\Configure.cpp" />
     <ClCompile Include="..\..\PhotoGallery\Environment.cpp" />
     <ClCompile Include="..\..\PhotoGallery\GestureListener.cpp" />
@@ -77,6 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\PhotoGallery\BG.h" />
+    <ClInclude Include="..\..\PhotoGallery\BGRenderer.h" />
     <ClInclude Include="..\..\PhotoGallery\Configure.h" />
     <ClInclude Include="..\..\PhotoGallery\data\PhotoFiles.h" />
     <ClInclude Include="..\..\PhotoGallery\Environment.h" />
