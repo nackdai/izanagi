@@ -17,11 +17,13 @@ CStateSSAO::CStateSSAO(
 
     m_Mode = SSAO;
 
+    const float SAMPLERADIUS = 0.75f;
+
 #if 0
     izanagi::math::CMathRand::Init((IZ_UINT)app->GetTimer(0).GetCurTime());
 
     for (IZ_UINT i = 0; i < COUNTOF(samples); i++) {
-        float r = 0.1f * izanagi::math::CMathRand::GetRandFloat();
+        float r = SAMPLERADIUS * izanagi::math::CMathRand::GetRandFloat();
 
         // u : [0, 1)
         float u = izanagi::math::CMathRand::GetRandBetween<IZ_FLOAT>(0.0f, 0.9999999f);
@@ -43,8 +45,6 @@ CStateSSAO::CStateSSAO(
     }
 #else
     srand((IZ_UINT)app->GetTimer(0).GetCurTime());
-
-    const float SAMPLERADIUS = 0.75f;
 
     for (int i = 0; i < COUNTOF(samples); ++i) {
         float r = SAMPLERADIUS * (float)rand() / (float)RAND_MAX;
