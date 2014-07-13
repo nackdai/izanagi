@@ -404,6 +404,9 @@ IZ_BOOL CStateSSAO::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
             m_Mode = (RenderMode)(mode % RenderModeNum);
         }
         break;
+    default:
+        return CStateBase::OnKeyDown(key);
+        break;
     }
 
     return IZ_TRUE;

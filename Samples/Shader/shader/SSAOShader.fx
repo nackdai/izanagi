@@ -29,16 +29,11 @@ struct SPSOutput {
 float4x4 g_mL2W;
 float4x4 g_mW2V;
 float4x4 g_mV2C;
-float4 g_vEye;
 
 // マテリアル
-float4 g_vMtrlDiffuse;
 float4 g_vMtrlAmbient;
-float4 g_vMtrlSpecular;
 
 // ライト
-float4 g_vLitParallelDir;
-float4 g_vLitParallelColor;
 float4 g_vLitAmbientColor;
 
 /////////////////////////////////////////////////////////////
