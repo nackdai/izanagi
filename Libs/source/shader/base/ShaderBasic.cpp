@@ -31,12 +31,12 @@ namespace shader
         }
 
         size_t dataBufSize = 0;
-        {
-            dataBufSize += CShaderTextureTable::ComputeBufferSize(m_Header.numTexture);
-            dataBufSize += CShaderParameterTable::ComputeBufferSize(m_Header.numParam);
-            dataBufSize += CShaderAttrTable::ComputeBufferSize(m_Header.numAttr);
-            dataBufSize += CShaderPassTable::ComputeBufferSize(m_Header.numAttr);
-        }
+        size_t texSize = CShaderTextureTable::ComputeBufferSize(m_Header.numTexture);
+        size_t paramSize = CShaderParameterTable::ComputeBufferSize(m_Header.numParam);
+        size_t attrSize = CShaderAttrTable::ComputeBufferSize(m_Header.numAttr);
+        size_t passSize = CShaderPassTable::ComputeBufferSize(m_Header.numPass);
+
+        dataBufSize += texSize + paramSize + attrSize + passSize;
 
         // Allocate buffer.
         IZ_UINT8* pBuffer = reinterpret_cast<IZ_UINT8*>(ALLOC_ZERO(m_Allocator, readBufSize + dataBufSize));
@@ -45,6 +45,8 @@ namespace shader
         // Keep top of allocated buffer.
         m_pBuffer = pBuffer;
         IZ_UINT8* dataBuffer = pBuffer + readBufSize;
+
+        IZ_UINT8* prev = dataBuffer;
 
         // Read data from input stream.
         IZ_INPUT_READ_ASSERT(pIn, pBuffer, 0, nReadSize);
@@ -67,11 +69,15 @@ namespace shader
                 // Parameters.
                 pBuffer = m_ParamTbl.Init(pBuffer);
                 dataBuffer = m_ParamTbl.SetInternalBuffer(dataBuffer);
+
+                IZ_ASSERT(CStdUtil::GetPtrDistance(prev, dataBuffer) <= paramSize);
             }
             else if (sChunkHeader.magicChunk ==  SHD_CHUNK_MAGIC_NUMBER_TEX) {
                 // Textures.
                 pBuffer = m_TexTbl.Init(pBuffer);
                 dataBuffer = m_TexTbl.SetInternalBuffer(dataBuffer);
+
+                IZ_ASSERT(CStdUtil::GetPtrDistance(prev, dataBuffer) == texSize);
             }
             else if (sChunkHeader.magicChunk ==  SHD_CHUNK_MAGIC_NUMBER_SMPL) {
                 // Samplers
@@ -81,6 +87,8 @@ namespace shader
                 // Passes
                 pBuffer = m_PassTbl.Init(pBuffer);
                 dataBuffer = m_PassTbl.SetInternalBuffer(dataBuffer);
+
+                IZ_ASSERT(CStdUtil::GetPtrDistance(prev, dataBuffer) == passSize);
             }
             else if (sChunkHeader.magicChunk ==  SHD_CHUNK_MAGIC_NUMBER_TECH) {
                 // Techniques.
@@ -100,7 +108,11 @@ namespace shader
                 // Attributes.
                 pBuffer = m_AttrTbl.Init(pBuffer);
                 dataBuffer = m_AttrTbl.SetInternalBuffer(dataBuffer);
+
+                IZ_ASSERT(CStdUtil::GetPtrDistance(prev, dataBuffer) == attrSize);
             }
+
+            prev = dataBuffer;
         }
 
         VRETURN(CStdUtil::GetPtrDistance(m_pBuffer, pBuffer) == readBufSize);
