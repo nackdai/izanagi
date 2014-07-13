@@ -19,6 +19,9 @@
     <Filter Include="include\data">
       <UniqueIdentifier>{9e917459-585f-4c6b-b373-348fb4d4762c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="posteffect">
+      <UniqueIdentifier>{99772a96-9cec-4bb9-9d80-36cb699a57b7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\PhotoGallery\shader\BasicShader.fx">
@@ -32,6 +35,9 @@
     </None>
     <None Include="..\..\PhotoGallery\shader\SSAOShader.fx">
       <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\PhotoGallery\posteffect\PostEffectBloomStar.fx">
+      <Filter>posteffect</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -93,6 +99,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\PhotoGallery\BGRenderer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PhotoGallery\PostEffect.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -157,6 +166,9 @@
     <ClInclude Include="..\..\PhotoGallery\BGRenderer.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\PhotoGallery\PostEffect.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\PhotoGallery\shader\BasicShader.xml">
@@ -170,6 +182,9 @@
     </CustomBuild>
     <CustomBuild Include="..\..\PhotoGallery\shader\SSAOShader.xml">
       <Filter>shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\PhotoGallery\posteffect\BloomStar.peh">
+      <Filter>posteffect</Filter>
     </CustomBuild>
   </ItemGroup>
 </Project>

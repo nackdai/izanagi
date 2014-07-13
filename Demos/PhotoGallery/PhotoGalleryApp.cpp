@@ -1,6 +1,4 @@
 #include "PhotoGalleryApp.h"
-#include "Seat.h"
-#include "BG.h"
 #include "PhotoItemManager.h"
 #include "LoadTextureJob.h"
 #include "StateManager.h"
@@ -10,6 +8,7 @@
 #include "Environment.h"
 #include "data/PhotoFiles.h"
 #include "BGRenderer.h"
+#include "PostEffect.h"
 
 PhotoGalleryApp::PhotoGalleryApp()
 {
@@ -65,6 +64,9 @@ IZ_BOOL PhotoGalleryApp::InitInternal(
 
     BGRenderer::Instance().Init(allocator, device);
 
+    PostEffect::Instance().Init(allocator, device);
+    PostEffect::Instance().Read("data/BloomStar.pes", device);
+
     m_Timer.Begin();
 
     if (!result) {
@@ -83,6 +85,8 @@ void PhotoGalleryApp::ReleaseInternal()
     PhotoItemManager::Instance().Terminate();
 
     BGRenderer::Instance().Terminate();
+
+    PostEffect::Instance().Terminate();
 }
 
 // 更新.
@@ -107,9 +111,14 @@ void PhotoGalleryApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
     const izanagi::CCamera& camera = GetCamera();
 
-    BGRenderer::Instance().Render(device, camera);
+    BGRenderer::Instance().PrepareToRender(device, camera);
 
-    StateManager::Instance().Render(device);
+    PostEffect::Instance().BeginScene(device);
+    {
+        BGRenderer::Instance().Render(device, camera);
+        StateManager::Instance().Render(device);
+    }
+    PostEffect::Instance().Apply(device);
 
     State state = StateManager::Instance().GetCurrentState();
 

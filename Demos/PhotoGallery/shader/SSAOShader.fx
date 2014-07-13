@@ -13,12 +13,13 @@ struct SPSInput {
     float3 vNormal      : TEXCOORD0;
     float4 ambient      : COLOR0;
     float4 position     : TEXCOORD1;
+    float distance      : TEXCOORD2;
 };
 
 #define SVSOutput        SPSInput
 
 struct SPSOutput {
-    float4 ambient  : COLOR0;
+    float4 light    : COLOR0;
     float4 normal   : COLOR1;
     float4 depth    : COLOR2;
     float4 position : COLOR3;
@@ -30,62 +31,8 @@ float4x4 g_mL2W;
 float4x4 g_mW2V;
 float4x4 g_mV2C;
 
-// マテリアル
 float4 g_vMtrlAmbient;
-
-// ライト
 float4 g_vLitAmbientColor;
-
-SVSOutput mainVS(SVSInput In)
-{
-    SVSOutput Out = (SVSOutput)0;
-    
-    Out.vPos = mul(In.vPos, g_mL2W);
-    Out.vPos = mul(Out.vPos, g_mW2V);
-    Out.vPos = mul(Out.vPos, g_mV2C);
-    
-    Out.vNormal = normalize(mul(In.vNormal, (float3x3)g_mL2W));
-
-    // Ambient
-    //Out.ambient = g_vMtrlAmbient * g_vLitAmbientColor;
-    Out.ambient = g_vLitAmbientColor;
-
-    Out.position = mul(In.vPos, g_mL2W);
-    
-    return Out;
-}
-
-SPSOutput mainPS(SPSInput In)
-{
-    SPSOutput vOut = (SPSOutput)0;
-
-    vOut.ambient = In.ambient;
-    vOut.ambient.a = 1.0f;
-    
-    vOut.normal.xyz = normalize(In.vNormal);
-    vOut.normal.xyz = 0.5f * vOut.normal.xyz + 0.5f;
-    vOut.normal.a = 1.0f;
-    
-    float4 view = mul(In.position, g_mW2V);
-    float4 projected = mul(view, g_mV2C);
-    float d = projected.z / projected.w;
-    vOut.depth = float4(d, d, d, 1.0f);
-
-    vOut.position = In.position;
-    
-    return vOut;
-}
-
-/////////////////////////////////////////////////////////////
-
-// For point light
-
-struct SPSInput_PointLight {
-    float4 vPos     : POSITION;
-    float distance  : TEXCOORD0;
-};
-
-#define SVSOutput_PointLight SPSInput_PointLight
 
 // 位置
 float4 g_PointLightPos;
@@ -95,10 +42,11 @@ float4 g_PointLight;
 
 // 色
 float4 g_PointLightColor;
+float4 g_PointLightMeterial;
 
-SVSOutput_PointLight mainVS_PointLight(SVSInput In)
+SVSOutput mainVS(SVSInput In)
 {
-    SVSOutput_PointLight Out = (SVSOutput_PointLight)0;
+    SVSOutput Out = (SVSOutput)0;
     
     Out.vPos = mul(In.vPos, g_mL2W);
 
@@ -108,17 +56,39 @@ SVSOutput_PointLight mainVS_PointLight(SVSInput In)
     Out.vPos = mul(Out.vPos, g_mW2V);
     Out.vPos = mul(Out.vPos, g_mV2C);
     
+    Out.vNormal = normalize(mul(In.vNormal, (float3x3)g_mL2W));
+
+    // Ambient
+    Out.ambient = g_vMtrlAmbient * g_vLitAmbientColor;
+
+    Out.position = mul(In.vPos, g_mL2W);
+    
     return Out;
 }
 
-float4 mainPS_PointLight(SPSInput_PointLight In) : COLOR
+SPSOutput mainPS(SPSInput In)
 {
+    SPSOutput vOut = (SPSOutput)0;
+    
+    vOut.normal.xyz = normalize(In.vNormal);
+    vOut.normal.xyz = 0.5f * vOut.normal.xyz + 0.5f;
+    vOut.normal.a = 1.0f;
+    
+    float4 view = mul(In.position, g_mW2V);
+    float4 projected = mul(view, g_mV2C);
+    float depth = projected.z / projected.w;
+    vOut.depth = float4(depth, depth, depth, 1.0f);
+
+    vOut.position = In.position;
+
+    vOut.light = In.ambient;
+
     // ポイントライトの減衰
     float d = In.distance;
     float attn = 1.0f / (g_PointLight.x + g_PointLight.y * d + g_PointLight.z * d * d);
 
-    float4 vOut = attn * g_PointLightColor;
-    vOut.a = 1.0f;
+    vOut.light += g_PointLightMeterial * attn * g_PointLightColor;
+    vOut.light.a = 1.0f;
     
     return vOut;
 }
@@ -135,15 +105,14 @@ struct SPSInputSSAO {
     float2 vUV      : TEXCOORD0;
 };
 
-texture texAmbient;
 texture texNormal;
 texture texPosition;
 texture texDepth;
 texture texLight;
 
-sampler sTexAmbient = sampler_state
+sampler sTexLight = sampler_state
 {
-    Texture = texAmbient;
+    Texture = texLight;
 };
 
 sampler sTexNormal = sampler_state
@@ -159,11 +128,6 @@ sampler sTexDepth = sampler_state
 sampler sTexPosition = sampler_state
 {
     Texture = texPosition;
-};
-
-sampler sTexLight = sampler_state
-{
-    Texture = texLight;
 };
 
 #define SAMPLE_NUM  (32)
@@ -191,8 +155,6 @@ SPSInputSSAO mainVS_SSAO(SVSInputSSAO sIn)
 float4 mainPS_SSAO(SPSInputSSAO sIn) : COLOR0
 {
     float falloff = 0.000002;
-
-    float4 ambient = tex2D(sTexAmbient, sIn.vUV);
 
     float3 normal = tex2D(sTexNormal, sIn.vUV).rgb;
     normal = normalize(2.0f * normal - 1.0f);
@@ -256,17 +218,8 @@ technique RenderSSAO
     {
         AlphaBlendEnable = false;
         ZWriteEnable = false;
+        ZEnable = false;
         VertexShader = compile vs_3_0 mainVS_SSAO();
         PixelShader = compile ps_3_0 mainPS_SSAO();
-    }
-}
-
-technique RenderPointLight
-{
-    pass P0
-    {
-        AlphaBlendEnable = false;
-        VertexShader = compile vs_3_0 mainVS_PointLight();
-        PixelShader = compile ps_3_0 mainPS_PointLight();
     }
 }

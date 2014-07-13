@@ -24,16 +24,16 @@ public:
 
     void Terminate();
 
+    void PrepareToRender(
+        izanagi::graph::CGraphicsDevice* device,
+        const izanagi::CCamera& camera);
+
     void Render(
         izanagi::graph::CGraphicsDevice* device,
         const izanagi::CCamera& camera);
 
 private:
     void RenderToMRT(
-        izanagi::graph::CGraphicsDevice* device,
-        const izanagi::CCamera& camera);
-
-    void RenderPointLight(
         izanagi::graph::CGraphicsDevice* device,
         const izanagi::CCamera& camera);
 
@@ -45,7 +45,6 @@ private:
     void RenderDebugPointLight(izanagi::graph::CGraphicsDevice* device);
 
 private:
-    izanagi::graph::CRenderTarget* m_Ambient;
     izanagi::graph::CRenderTarget* m_Light;
     izanagi::graph::CRenderTarget* m_Depth;
     izanagi::graph::CRenderTarget* m_Position;

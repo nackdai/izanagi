@@ -15,7 +15,6 @@ static izanagi::math::SVector samples[32];
 
 BGRenderer::BGRenderer()
 {
-    m_Ambient = IZ_NULL;
     m_Light = IZ_NULL;
     m_Depth = IZ_NULL;
     m_Position = IZ_NULL;
@@ -89,10 +88,6 @@ IZ_BOOL BGRenderer::Init(
     }
 
     {
-        m_Ambient = device->CreateRenderTarget(
-            device->GetBackBufferWidth(),
-            device->GetBackBufferHeight(),
-            izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA8);
         m_Light = device->CreateRenderTarget(
             device->GetBackBufferWidth(),
             device->GetBackBufferHeight(),
@@ -110,7 +105,7 @@ IZ_BOOL BGRenderer::Init(
             device->GetBackBufferHeight(),
             izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA8);
 
-        m_RT[0] = m_Ambient;
+        m_RT[0] = m_Light;
         m_RT[1] = m_Normal;
         m_RT[2] = m_Depth;
         m_RT[3] = m_Position;
@@ -171,7 +166,6 @@ __EXIT__:
 
 void BGRenderer::Terminate()
 {
-    SAFE_RELEASE(m_Ambient);
     SAFE_RELEASE(m_Light);
     SAFE_RELEASE(m_Depth);
     SAFE_RELEASE(m_Position);
@@ -188,13 +182,17 @@ void BGRenderer::Terminate()
     SAFE_RELEASE(m_BG);
 }
 
-void BGRenderer::Render(
+void BGRenderer::PrepareToRender(
     izanagi::graph::CGraphicsDevice* device,
     const izanagi::CCamera& camera)
 {
     RenderToMRT(device, camera);
-    RenderPointLight(device, camera);
+}
 
+void BGRenderer::Render(
+    izanagi::graph::CGraphicsDevice* device,
+    const izanagi::CCamera& camera)
+{
     //RenderDebug(device);
     //RenderDebugPointLight(device);
 
@@ -210,6 +208,15 @@ void BGRenderer::RenderToMRT(
         COUNTOF(m_RT),
         izanagi::graph::E_GRAPH_CLEAR_FLAG_ALL,
         IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0));
+
+    static const izanagi::math::SVector mtrlPointLight[] = {
+        { 1.0f, 1.0f, 1.0f, 1.0f },
+        { 0.0f, 0.0f, 0.0f, 0.0f },
+    };
+    static const izanagi::math::SVector mtrlAmbientLight[] = {
+        { 0.0f, 0.0f, 0.0f, 0.0f },
+        { 1.0f, 1.0f, 1.0f, 1.0f },
+    };
 
     izanagi::math::SMatrix mtx;
     izanagi::math::SMatrix::SetUnit(mtx);
@@ -235,17 +242,44 @@ void BGRenderer::RenderToMRT(
                 (void*)&mtx,
                 sizeof(mtx));
 
+            Environment::Instance().SetPointLightParam(m_Shader);
             Environment::Instance().SetAmbientLightParam(m_Shader);
 
-            m_Shader->CommitChanges(device);
+            {
+                Utility::SetShaderParam(
+                    m_Shader,
+                    "g_PointLightMeterial",
+                    (void*)&mtrlPointLight[0],
+                    sizeof(mtrlPointLight[0]));
+                Utility::SetShaderParam(
+                    m_Shader,
+                    "g_vMtrlAmbient",
+                    (void*)&mtrlAmbientLight[0],
+                    sizeof(mtrlAmbientLight[0]));
 
-            m_Seat->Render(device);
+                m_Shader->CommitChanges(device);
 
-            m_BG->SetShaderParam(m_Shader, camera);
+                m_Seat->Render(device);
+            }
 
-            m_Shader->CommitChanges(device);
+            {
+                Utility::SetShaderParam(
+                    m_Shader,
+                    "g_PointLightMeterial",
+                    (void*)&mtrlPointLight[1],
+                    sizeof(mtrlPointLight[1]));
+                Utility::SetShaderParam(
+                    m_Shader,
+                    "g_vMtrlAmbient",
+                    (void*)&mtrlAmbientLight[1],
+                    sizeof(mtrlAmbientLight[1]));
 
-            m_BG->Render(device);
+                m_BG->SetShaderParam(m_Shader, camera);
+
+                m_Shader->CommitChanges(device);
+
+                m_BG->Render(device);
+            }
         }
         m_Shader->EndPass();
     }
@@ -254,21 +288,16 @@ void BGRenderer::RenderToMRT(
     device->EndScene();
 }
 
-void BGRenderer::RenderPointLight(
+void BGRenderer::RenderSSAO(
     izanagi::graph::CGraphicsDevice* device,
     const izanagi::CCamera& camera)
 {
-    device->BeginScene(
-        &m_Light,
-        1,
-        izanagi::graph::E_GRAPH_CLEAR_FLAG_ALL,
-        IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0));
+    device->SetTexture(0, m_RT[0]);
+    device->SetTexture(1, m_RT[1]);
+    device->SetTexture(2, m_RT[2]);
+    device->SetTexture(3, m_RT[3]);
 
-    izanagi::math::SMatrix mtx;
-    izanagi::math::SMatrix::SetUnit(mtx);
-
-    // Render to MRT.
-    m_Shader->Begin(device, 2, IZ_FALSE);
+    m_Shader->Begin(device, 1, IZ_TRUE);
     {
         if (m_Shader->BeginPass(0)) {
             Utility::SetShaderParam(
@@ -284,72 +313,24 @@ void BGRenderer::RenderPointLight(
 
             Utility::SetShaderParam(
                 m_Shader,
-                "g_mL2W",
-                (void*)&mtx,
-                sizeof(mtx));
-
-            Environment::Instance().SetPointLightParam(m_Shader);
+                "samples",
+                (void*)samples,
+                sizeof(samples));
 
             m_Shader->CommitChanges(device);
 
-            m_Seat->Render(device);
+            device->SetVertexBuffer(0, 0, m_VB->GetStride(), m_VB);
+            device->SetVertexDeclaration(m_VD);
+
+            device->DrawPrimitive(
+                izanagi::graph::E_GRAPH_PRIM_TYPE_TRIANGLESTRIP,
+                0,
+                2);
+
+            m_Shader->EndPass();
         }
-        m_Shader->EndPass();
     }
     m_Shader->End(device);
-
-    device->EndScene();
-}
-
-void BGRenderer::RenderSSAO(
-    izanagi::graph::CGraphicsDevice* device,
-    const izanagi::CCamera& camera)
-{
-    device->SetRenderState(
-        izanagi::graph::E_GRAPH_RS_ZWRITEENABLE,
-        IZ_FALSE);
-    device->SetRenderState(
-        izanagi::graph::E_GRAPH_RS_ZENABLE,
-        IZ_FALSE);
-
-    izanagi::graph::CShaderProgram* program = m_Shader->GetShaderProgram(1, 0);
-    device->SetShaderProgram(program);
-
-#if 0
-    device->SetTexture(0, m_RT[0]);
-    device->SetTexture(1, m_RT[1]);
-    device->SetTexture(2, m_RT[2]);
-    device->SetTexture(3, m_RT[3]);
-    device->SetTexture(4, m_Light);
-#else
-    device->SetTexture(0, m_RT[1]);
-    device->SetTexture(1, m_RT[2]);
-    device->SetTexture(2, m_RT[3]);
-    device->SetTexture(3, m_Light);
-#endif
-
-    SHADER_PARAM_HANDLE h0 = program->GetHandleByName("g_mW2V");
-    SHADER_PARAM_HANDLE h1 = program->GetHandleByName("g_mV2C");
-    SHADER_PARAM_HANDLE h2 = program->GetHandleByName("samples");
-
-    program->SetMatrix(device, h0, camera.GetParam().mtxW2V);
-    program->SetMatrix(device, h1, camera.GetParam().mtxV2C);
-    program->SetValue(device, h2, samples, sizeof(samples));
-
-    device->SetVertexBuffer(0, 0, m_VB->GetStride(), m_VB);
-    device->SetVertexDeclaration(m_VD);
-
-    device->DrawPrimitive(
-        izanagi::graph::E_GRAPH_PRIM_TYPE_TRIANGLESTRIP,
-        0,
-        2);
-
-    device->SetRenderState(
-        izanagi::graph::E_GRAPH_RS_ZWRITEENABLE,
-        IZ_TRUE);
-    device->SetRenderState(
-        izanagi::graph::E_GRAPH_RS_ZENABLE,
-        IZ_TRUE);
 }
 
 void BGRenderer::RenderDebug(izanagi::graph::CGraphicsDevice* device)

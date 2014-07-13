@@ -23,6 +23,20 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <CustomBuild Include="..\..\PhotoGallery\posteffect\BloomStar.peh">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
+    </CustomBuild>
+    <None Include="..\..\PhotoGallery\posteffect\PostEffectBloomStar.fx" />
     <None Include="..\..\PhotoGallery\shader\BasicShader.fx" />
     <CustomBuild Include="..\..\PhotoGallery\shader\BasicShader.xml">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
@@ -72,6 +86,7 @@
     <ClCompile Include="..\..\PhotoGallery\PhotoItem.cpp" />
     <ClCompile Include="..\..\PhotoGallery\PhotoItemManager.cpp" />
     <ClCompile Include="..\..\PhotoGallery\PhotoItemMesh.cpp" />
+    <ClCompile Include="..\..\PhotoGallery\PostEffect.cpp" />
     <ClCompile Include="..\..\PhotoGallery\Seat.cpp" />
     <ClCompile Include="..\..\PhotoGallery\StateBase.cpp" />
     <ClCompile Include="..\..\PhotoGallery\StateChangeView.cpp" />
@@ -94,6 +109,7 @@
     <ClInclude Include="..\..\PhotoGallery\PhotoItem.h" />
     <ClInclude Include="..\..\PhotoGallery\PhotoItemManager.h" />
     <ClInclude Include="..\..\PhotoGallery\PhotoItemMesh.h" />
+    <ClInclude Include="..\..\PhotoGallery\PostEffect.h" />
     <ClInclude Include="..\..\PhotoGallery\Seat.h" />
     <ClInclude Include="..\..\PhotoGallery\StateBase.h" />
     <ClInclude Include="..\..\PhotoGallery\StateChangeView.h" />
@@ -181,7 +197,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalDependencies>Shader.lib;ThreadModel.lib;UI.lib;Animation.lib;libjpeg.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Shader.lib;ThreadModel.lib;UI.lib;Animation.lib;PostEffect.lib;libjpeg.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\..\External\libjpeg\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
