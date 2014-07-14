@@ -44,6 +44,7 @@ inline void _OutputDebugString(const char* format, ...)
 
 typedef IZ_INT64 IZ_TIME;
 
+#if 0
 #define IzMain(screenWidth, screenHeight) \
     static const IZ_UINT _izScreenWidth = screenWidth;\
     static const IZ_UINT _izScreenHeight = screenHeight;\
@@ -53,6 +54,18 @@ typedef IZ_INT64 IZ_TIME;
         return main(0, NULL, hInstance);\
     }\
     int main(int argc, char* argv[], HINSTANCE hInstance)
+#else
+#define IzMain(screenWidth, screenHeight) \
+    static const IZ_UINT _izScreenWidth = screenWidth;\
+    static const IZ_UINT _izScreenHeight = screenHeight;\
+    int _iz_main(int argc, char* argv[], HINSTANCE hInstance);\
+    int main(int argc, char* argv[])\
+    {\
+        HINSTANCE hInstance = GetModuleHandle(NULL);\
+        return _iz_main(0, NULL, hInstance);\
+    }\
+    int _iz_main(int argc, char* argv[], HINSTANCE hInstance)
+#endif
 
 #define IzGetSystemDataForMainFunc()  hInstance
 #define IzGetScreenWidth() _izScreenWidth

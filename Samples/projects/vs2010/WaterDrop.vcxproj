@@ -124,7 +124,7 @@ fxc /T ps_2_0 /E mainPS /Fo %(RootDir)%(Directory)data/%(Filename)PS.o /nologo %
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
@@ -142,7 +142,7 @@ fxc /T ps_2_0 /E mainPS /Fo %(RootDir)%(Directory)data/%(Filename)PS.o /nologo %
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
@@ -160,7 +160,7 @@ fxc /T ps_2_0 /E mainPS /Fo %(RootDir)%(Directory)data/%(Filename)PS.o /nologo %
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
@@ -175,7 +175,7 @@ fxc /T ps_2_0 /E mainPS /Fo %(RootDir)%(Directory)data/%(Filename)PS.o /nologo %
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
@@ -192,7 +192,7 @@ fxc /T ps_2_0 /E mainPS /Fo %(RootDir)%(Directory)data/%(Filename)PS.o /nologo %
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
