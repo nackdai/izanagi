@@ -86,19 +86,23 @@ int main(int argc, char* argv[])
     }
     else {
         // Mesh
-        VRETURN_VAL(
-            CMshExporter::GetInstance().Export(
-                option.maxJointMtxNum,
-                option.outMsh.c_str(),
-                importer),
-            INVALID_RET_VAL);
+        if (!option.outMsh.empty()) {
+            VRETURN_VAL(
+                CMshExporter::GetInstance().Export(
+                    option.maxJointMtxNum,
+                    option.outMsh.c_str(),
+                    importer),
+                INVALID_RET_VAL);
+        }
 
         // Skeleton
-        VRETURN_VAL(
-            CSklExporter::GetInstance().Export(
-                option.outSkl.c_str(),
-                importer),
-            INVALID_RET_VAL);
+        if (!option.outSkl.empty()) {
+            VRETURN_VAL(
+                CSklExporter::GetInstance().Export(
+                    option.outSkl.c_str(),
+                    importer),
+                INVALID_RET_VAL);
+        }
     }
 #endif
 

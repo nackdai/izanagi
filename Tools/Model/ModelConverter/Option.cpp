@@ -85,11 +85,21 @@ IZ_BOOL COption::AnalysisInternal()
     {
         // 出力ファイルが空なので、入力ファイルから作成する
 
-        // 拡張子を除いた入力ファイル名を取得
-        IZ_BOOL result = izanagi::tool::CFileUtility::RemoveExtension(
-                            BUF,
-                            sizeof(BUF),
-                            in.c_str());
+        IZ_BOOL result = IZ_FALSE;
+
+        if (out.empty()) {
+            // 拡張子を除いた入力ファイル名を取得
+            result = izanagi::tool::CFileUtility::RemoveExtension(
+                BUF,
+                sizeof(BUF),
+                in.c_str());
+        }
+        else {
+            result = izanagi::tool::CFileUtility::RemoveExtension(
+                BUF,
+                sizeof(BUF),
+                out.c_str());
+        }
         VRETURN(result);
 
         // 出力タイプに応じて拡張子を付加する
