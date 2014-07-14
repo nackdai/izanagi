@@ -90,6 +90,13 @@ IZ_BOOL CSampleRunner::InitInternal(
     return IZ_TRUE;
 }
 
+//#ifdef __IZ_DEBUG__
+#if 1
+    #define BASE_DIR    "..\\"
+#else
+    #define BASE_DIR    ".\\"
+#endif
+
 void CSampleRunner::SearchDir(
     const char* filename,
     const char* tag/*= IZ_NULL*/)
@@ -115,7 +122,7 @@ void CSampleRunner::SearchDir(
                 continue;
             }
 
-            std::string path("..\\");
+            std::string path(BASE_DIR);
             path.append(file.c_str());
             path.append("\\*.exe");
 
@@ -125,7 +132,7 @@ void CSampleRunner::SearchDir(
             ExeInfo info;
             info.tag = tag;
 
-            info.path.append("..\\");
+            info.path.append(BASE_DIR);
             info.path.append(tag);
             info.path.append("\\");
             info.path.append(file.c_str());
@@ -310,13 +317,13 @@ static const IZ_UINT SCREEN_HEIGHT = 720;
 
 CSampleRunner app;
 
-IzMain(SCREEN_WIDTH, SCREEN_HEIGHT)
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
     int ret = SampleMain(
-        IzGetSystemDataForMainFunc(),
+        hInstance,
         &app,
         "SampleRunner",
-        IzGetScreenWidth(), IzGetScreenHeight(),
+        SCREEN_WIDTH, SCREEN_HEIGHT,
         BUF, BUF_SIZE,
         GFX_BUF, GFX_BUF_SIZE);
 
