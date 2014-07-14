@@ -322,7 +322,8 @@ namespace graph
          *
          * @param [in] rcSrc Rectangle in the texture to render the sprite.
          * @param [in] rcDst Rectangle in the screen.
-         * @param [in] color Vertex color of the sprite.
+         * @param [in] color Color of the sprite.
+         * @return If this method succeeds, the return value is true. If the method fails, the return value is false.
          */
         IZ_BOOL Draw2DSpriteEx(
             const CIntRect& rcSrc,
@@ -333,20 +334,36 @@ namespace graph
          *
          * @attention You can call this method between CGraphicsDevice::Begin2D and CGraphicsDevice::End2D.
          *
-         * @param 
+         * @param [in] rcDst Rectangle in the screen.
+         * @param [in] color Color of the sprite.
+         * @return If this method succeeds, the return value is true. If the method fails, the return value is false.
          */
         IZ_BOOL Draw2DRect(
             const CIntRect& rcDst,
             const IZ_COLOR color);
 
-        // 2Dライン描画
+        /** Render a line.
+         *
+         * @attention You can call this method between CGraphicsDevice::Begin2D and CGraphicsDevice::End2D.
+         *
+         * @param [in] ptStart Start point of the line.
+         * @param [in] ptEnd End point of the line.
+         * @param [in] color Color of the line.
+         * @return If this method succeeds, the return value is true. If the method fails, the return value is false.
+         */
         IZ_BOOL Draw2DLine(
             const CIntPoint& ptStart,
             const CIntPoint& ptGoal,
             const IZ_COLOR color);
 
-        // 2D描画モード
+        /** Set how to render 2D graphics.
+         *
+         * @param [in] nOp See E_GRAPH_2D_RENDER_OP.
+         */
         void Set2DRenderOp(E_GRAPH_2D_RENDER_OP nOp);
+
+        /**
+         */
         E_GRAPH_2D_RENDER_OP Get2DRenderOp() const;
 
         /** ユーザー定義のシェーダをセット
