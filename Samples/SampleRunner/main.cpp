@@ -1,4 +1,5 @@
 #include "izSampleKit.h"
+#include <string>
 
 class CSampleRunner : public izanagi::sample::CSampleApp {
 public:
@@ -39,6 +40,37 @@ IZ_BOOL CSampleRunner::InitInternal(
     izanagi::sample::CSampleCamera& camera)
 {
     m_Allocator = allocator;
+
+    HANDLE hFind;
+	WIN32_FIND_DATA win32fd;
+
+	hFind = FindFirstFile(".\\*", &win32fd);
+
+	if (hFind == INVALID_HANDLE_VALUE) {
+		return IZ_FALSE;
+	}
+
+    do {
+		if (win32fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+            std::string filename(win32fd.cFileName);
+
+            if (filename.compare(".") == 0 || filename.compare("..") == 0) {
+                continue;
+            }
+
+            filename.append("\\*");
+
+            WIN32_FIND_DATA sub;
+            HANDLE h = FindFirstFile(filename.c_str(), &sub);
+			//printf("%s\n", win32fd.cFileName);
+
+            do {
+                printf("%s\n", sub.cFileName);
+            } while (FindNextFile(h, &win32fd));
+		}
+        else {
+        }
+	} while (FindNextFile(hFind, &win32fd));
 
     return IZ_TRUE;
 }
