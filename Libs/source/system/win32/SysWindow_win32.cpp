@@ -197,6 +197,19 @@ namespace sys
         return DefWindowProc(hWnd, uMsg, wParam, lParam);
     }
 
+    // コンソールイベントを処理
+    BOOL WINAPI HandlerRoutine(DWORD dwCtrlType)
+    {
+        switch (dwCtrlType) {
+        case CTRL_C_EVENT:
+            // コンソールのみを閉じる
+            FreeConsole();
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
     static const char* registerName = "izanagi";
 
     static inline void _Destroy(
@@ -354,6 +367,16 @@ namespace sys
                 param.handler->OnInit(window);
             }
         }
+
+        // コンソールウインドウの閉じるを無効にする
+        HWND hConsoleWnd = ::GetConsoleWindow();
+        if (hConsoleWnd != NULL) {
+            HMENU hMenu = ::GetSystemMenu(hConsoleWnd, FALSE);
+		    ::RemoveMenu(hMenu, SC_CLOSE, MF_BYCOMMAND);
+        }
+
+        // コンソールウインドウ用のハンドラを設定
+        ::SetConsoleCtrlHandler(HandlerRoutine, TRUE);
 
 __EXIT__:
         if (!result) {

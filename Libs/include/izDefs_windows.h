@@ -40,7 +40,11 @@ inline void _OutputDebugString(const char* format, ...)
     ::OutputDebugString(buf);
 }
 
-#define IZ_PRINTF   _OutputDebugString
+#ifdef __IZ_DEBUG__
+    #define IZ_PRINTF   _OutputDebugString
+#else
+    #define IZ_PRINTF   printf
+#endif
 
 typedef IZ_INT64 IZ_TIME;
 
