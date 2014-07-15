@@ -362,28 +362,55 @@ namespace graph
          */
         void Set2DRenderOp(E_GRAPH_2D_RENDER_OP nOp);
 
-        /**
+        /** Get how to render 2D graphics.
+         * 
+         * @return See E_GRAPH_2D_RENDER_OP.
          */
         E_GRAPH_2D_RENDER_OP Get2DRenderOp() const;
 
-        /** ユーザー定義のシェーダをセット
+        /** Set an user difinition shader for 2D rendering.
+         *
+         * If set IZ_NULL to vs or ps, this method does nothing to vertex shader or pixel shader.
+         *
+         * @param [in] vs User definition vertex shader.
+         * @param [in] ps User definition pixel shader.
          */
         void SetUserDefs2DShader(
             CVertexShader* vs,
             CPixelShader* ps);
 
-        /** 描画モードがユーザー定義の時のみ2D用のシェーダープログラムを取得
+        /** Get an user definition shader.
+         *
+         * If user definition shader is set, you can get user definition shader.
+         *
+         * @return User definition shader program.
          */
         CShaderProgram* Get2DShaderProgramIfRenderOpIsUserDefs();
 
     public:
-        // テクスチャセット
+        /** Assigns a texture to a stage.
+         *
+         * @param [in] nStage Zero based sampler number. 
+         * @param [in] pTex Pointer to a CBaseTexture.
+         * @return If this method succeeds, the return value is true. If the method fails, the return value is false.
+         */
         IZ_BOOL SetTexture(IZ_UINT nStage, CBaseTexture* pTex);
 
-        // テクスチャ取得
+        /** Get a texture assigned to a stage.
+         *
+         * @param [in] nStage Zero based sampler number.
+         * @return If there is a texture assigned to the specified stage, the return value is a pointer to a CBaseTexture. If not, the return value is IZ_NULL.
+         */
         CBaseTexture* GetTexture(IZ_UINT nStage);
 
-        // 頂点バッファセット
+        /** Binds a vertex buffer.
+         *
+         * @param [in] nStreamIdx Specifies the data stream, in the range from 0 to the maximum number of streams -1.
+         * @param [in] nOffsetByte Offset from the beginning of the stream to the beginning of the vertex data, in bytes. 
+         * @param [in] stride Stride of the component, in bytes.
+         * @param [in] pVB Pointer to a CVertexBuffer.
+         * @return If this method succeeds, the return value is true. If the method fails, the return value is false.
+         */
         PURE_VIRTUAL(
             IZ_BOOL SetVertexBuffer(
                 IZ_UINT nStreamIdx,
@@ -391,24 +418,48 @@ namespace graph
                 IZ_UINT stride,
                 CVertexBuffer* pVB));
 
-       virtual IZ_BOOL SetVertexBufferInstanced(
+
+        virtual IZ_BOOL SetVertexBufferInstanced(
             IZ_UINT streamIdx,
             E_GRAPH_VB_USAGE usage,
             IZ_UINT divisor);
 
-        // インデックスバッファセット
+        /** Set a index buffer.
+         *
+         * @param [in] pIB Pointer to a CIndexBuffer.
+         * @return If this method succeeds, the return value is true. If the method fails, the return value is false.
+         */
         PURE_VIRTUAL(IZ_BOOL SetIndexBuffer(CIndexBuffer* pIB));
 
-        // 頂点宣言セット
+        /** Set a vertex declaration.
+         *
+         * @param [in] pVD Pointer to a CVertexDeclaration.
+         * @return If this method succeeds, the return value is true. If the method fails, the return value is false.
+         */
         PURE_VIRTUAL(IZ_BOOL SetVertexDeclaration(CVertexDeclaration* pVD));
 
-        // シェーダプログラムセット
+        /** Set a shader program.
+         *
+         * @param [in] program Pointer to a CShaderProgram.
+         * @return If this method succeeds, the return value is true. If the method fails, the return value is false.
+         */
         PURE_VIRTUAL(IZ_BOOL SetShaderProgram(CShaderProgram* program));
 
-        // シェーダプログラム取得
+        /** Get a set shader program 
+         *
+         * @return If there is a shader program set to this device, the return value is a pointer to a CShaderProgram. If not, the return value is IZ_NULL.
+         */
         CShaderProgram* GetShaderProgram();
 
-        // インデックスバッファ描画
+        /** Renders the specified geometric primitive into an array of vertices with indices.
+         *
+         * @param [in] prim_type Describing the type of primitive to render. See E_GRAPH_PRIM_TYPE.
+         * @param [in] vtxOffset Offset from the start of the vertex buffer to the first vertex. 
+         * @param [in] vtxNum Number of vertices to render.
+         * @param [in] idxOffset Index of the first index to use when accesssing the vertex buffer.
+         * @param [in] nPrimCnt Number of primitives to render.
+         * @return If this method succeeds, the return value is true. If the method fails, the return value is false.
+         */
         PURE_VIRTUAL(
             IZ_BOOL DrawIndexedPrimitive(
                 E_GRAPH_PRIM_TYPE prim_type,
@@ -417,7 +468,13 @@ namespace graph
                 IZ_UINT idxOffset,
                 IZ_UINT nPrimCnt));
 
-        // インデックスバッファなし描画
+        /** Renders the specified geometric primitive into an array of vertices without indices.
+         *
+         * @param [in] prim_type Describing the type of primitive to render. See E_GRAPH_PRIM_TYPE.
+         * @param [in] idxOffset Offset from the start of the vertex buffer to the first vertex. 
+         * @param [in] nPrimCnt Number of primitives to render.
+         * @return If this method succeeds, the return value is true. If the method fails, the return value is false.
+         */
         PURE_VIRTUAL(
             IZ_BOOL DrawPrimitive(
                 E_GRAPH_PRIM_TYPE prim_type,
@@ -425,49 +482,77 @@ namespace graph
                 IZ_UINT nPrimCnt));
 
     public:
-        // ビューポートセット
+        /** Sets the viewport parameters.
+         *
+         * @param [in] vp Reference to SViewport, specifying the viewport parameters to set.
+         * @return If this method succeeds, the return value is true. If the method fails, the return value is false.
+         */
         PURE_VIRTUAL(IZ_BOOL SetViewport(const SViewport& vp));
 
-        // デフォルトのレンダーステートを設定
+        /** Revert the render state to default values.
+         */
         PURE_VIRTUAL(void SetDefaultRenderState());
 
-        // レンダーステート取得
+        /** Get the render state parameters.
+         *
+         * @return Reference to S_RENDER_STATE.
+         */
         virtual const S_RENDER_STATE& GetRenderState() const
         {
             return m_RenderState;
         }
 
-        // レンダーステート保存
+        /** Save the current render state parameters.
+         *
+         * @return If this method succeeds, the return value is true. If the method fails, the return value is false.
+         */
         IZ_BOOL SaveRenderState()
         {
             return m_RenderState.Save();
         }
 
-        // レンダーステート復帰
+        /** Load the saved render state parameters.
+         *
+         * @return If this method succeeds, the return value is true. If the method fails, the return value is false.
+         */
         IZ_BOOL LoadRenderState()
         {
             return m_RenderState.Load(this);
         }
 
     public:
-        // ビューポート取得
+        /** Get the viewport parameters.
+         *
+         * @return Reference to the viewport parameters structure.
+         */
         const SViewport& GetViewport() const
         {
             return m_RenderState.vp;
         }
 
-        // シザー矩形
+        /** Set the rect parameters for scissor test.
+         *
+         * @param [in] Reference to SIntRect, specifying the rect parameters to set.
+         */
         void SetScissorTestRect(const SIntRect& rc)
         {
             m_RenderState.SetScissorRect(this, rc);
         }
 
-        // レンダーステート設定
+        /** Sets a render state parameter.
+         *
+         * @param [in] nState State variable that is being modified. See E_GRAPH_RENDER_STATE.
+         * @param [in] val New value for the render state to be set. 
+         */
         void SetRenderState(E_GRAPH_RENDER_STATE nState, IZ_DWORD val)
         {
             m_RenderState.SetRenderState(this, nState, val);
         }
 
+        /** Sets the render state parameters.
+         *
+         * @param [in] sRS Referecnet to the render state parameters.
+         */
         PURE_VIRTUAL(void SetRenderState(const S_RENDER_STATE& sRS));
 
     public:

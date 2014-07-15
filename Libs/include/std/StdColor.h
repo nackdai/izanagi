@@ -9,10 +9,10 @@ namespace izanagi {
     struct SColor {
         union {
             struct {
-                IZ_UINT8 a;
-                IZ_UINT8 r;
-                IZ_UINT8 g;
                 IZ_UINT8 b;
+                IZ_UINT8 g;
+                IZ_UINT8 r;
+                IZ_UINT8 a;
             };
             IZ_UINT v;
         };
