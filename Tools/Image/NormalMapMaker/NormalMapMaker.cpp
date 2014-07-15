@@ -140,14 +140,18 @@ int main(int argc, char* argv[])
             izanagi::math::CVector vecV(0.0f, lengthPerPixel, heightV - h);
 
             // 外積を計算
+#if 0
             if ((isRight && isBottom)
                 || (!isRight && !isBottom))
             {
-                izanagi::math::SVector::Cross(nml, vecV, vecH);
-            }
-            else {
                 izanagi::math::SVector::Cross(nml, vecH, vecV);
             }
+            else {
+                izanagi::math::SVector::Cross(nml, vecV, vecH);
+            }
+#else
+            izanagi::math::SVector::Cross(nml, vecH, vecV);
+#endif
 #else
             // 右ピクセルの高さ
             IZ_UINT pos = y * srcPitch + ((x + 1) % width) * srcBPP;
