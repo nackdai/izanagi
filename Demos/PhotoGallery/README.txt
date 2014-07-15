@@ -27,7 +27,7 @@
 - ライティング（PhongShader）
 画像を表示している3Dオブジェクトにライティング
 
-- SSAO（ScreenSpaceAmbientOculusion）
+- SSAO（ScreenSpaceAmbientOcclusion）
 背景（最奥の壁、台座）に対してSSAOを適用
 背景はDifferedRendering
 
