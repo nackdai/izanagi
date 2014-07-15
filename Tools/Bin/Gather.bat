@@ -25,6 +25,7 @@ xcopy /y %MediaDir%\FontSample* %Data%
 xcopy /y %MediaDir%\mikachan.ttf %Data%
 
 xcopy /y %MediaDir%\EnvMap.xml %Data%
+xcopy /y %MediaDir%\mirrormap.png %Data%
 xcopy /y %MediaDir%\*_uffizi_probe.* %Data%
 xcopy /y %MediaDir%\*_uffizi_cross.* %Data%
 

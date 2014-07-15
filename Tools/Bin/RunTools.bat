@@ -32,3 +32,5 @@ NormalMapMaker.exe -i ".\data\HeightMap.png" -o "%OutDir%\NormalMap.png"
 
 ShaderCompiler.exe -e mainVS -p vs_2_0 -i ".\data\PointLightShader.fx" -o "%OutDir%\PointLightShader.vs"
 ShaderCompiler.exe -e mainPS -p ps_2_0 -i ".\data\PointLightShader.fx" -o "%OutDir%\PointLightShader.ps"
+
+ImageBuilder.exe -i ".\data\EnvMap.xml" -o "%OutDir%\EnvMap.img"
