@@ -120,6 +120,9 @@ namespace ImageViewer
                 var width = this.TargetImage.Width;
                 var height = this.TargetImage.Height;
 
+                this.posX = (int)(((double)this.posX) / this.ScaleX);
+                this.posY = (int)(((double)this.posY) / this.ScaleY);
+
                 if (this.posX < width && this.posY < height)
                 {
                     this.posX = (posX >= width ? width - 1 : posX);

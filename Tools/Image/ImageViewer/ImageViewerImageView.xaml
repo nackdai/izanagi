@@ -14,10 +14,19 @@
             <TextBox x:Name="Position" IsReadOnly="True"  Text="{Binding Position, Mode=OneWay}"/>
             <TextBox x:Name="Pixel" IsReadOnly="True" Text="{Binding Pixel, Mode=OneWay}"/>
         </StatusBar>
-        <ScrollViewer Name="Scroller" Background="Gray" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" MouseMove="Scroller_MouseMove">
-            <ScrollViewer.RenderTransform>
-                <ScaleTransform ScaleX="{Binding ScaleX}" ScaleY="{Binding ScaleY}"/>
-            </ScrollViewer.RenderTransform>
+        <ScrollViewer
+            Name="Scroller" 
+            Background="Gray" 
+            HorizontalScrollBarVisibility="Auto" 
+            VerticalScrollBarVisibility="Auto" 
+            MouseMove="Scroller_MouseMove">
+            <Canvas Canvas.Left="0" Canvas.Top="0" Name="ImgCanvas" Background="Gray" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Canvas.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform x:Name="ScaleFactor" ScaleX="{Binding ScaleX, Mode=OneWay}" ScaleY="{Binding ScaleY, Mode=OneWay}"/>
+                    </TransformGroup>
+                </Canvas.RenderTransform>
+            </Canvas>
         </ScrollViewer>
     </DockPanel>
 </UserControl>

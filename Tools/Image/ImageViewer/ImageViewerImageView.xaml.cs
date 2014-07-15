@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.ComponentModel;
 
 namespace ImageViewer
 {
@@ -19,13 +20,32 @@ namespace ImageViewer
     /// </summary>
     public partial class ImageViewerImageView : UserControl
     {
+        double orgImgWidth;
+        double orgImgHeight;
+
         public ImageViewerImageView()
         {
             InitializeComponent();
 
             this.DataContext = new ImageDetailViewModel();
 
+            ((ImageDetailViewModel)this.DataContext).PropertyChanged += OnPropertyChanged;
+
             TreeViewSelectedItemChangedCommand.Command.OnSelectedItemChanged += OnSelectedItemChanged;
+        }
+
+        private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            var vm = this.DataContext as ImageDetailViewModel;
+
+            if (e.PropertyName.Equals("ScaleX"))
+            {
+                ImgCanvas.Width = orgImgWidth * vm.ScaleX;
+            }
+            else if (e.PropertyName.Equals("ScaleY"))
+            {
+                ImgCanvas.Height = orgImgHeight * vm.ScaleY;
+            }
         }
 
         private void OnSelectedItemChanged(IImgObject selectedObj)
@@ -43,7 +63,15 @@ namespace ImageViewer
                 }
                 imgCtrl.EndInit();
 
-                this.Scroller.Content = imgCtrl;
+                ImgCanvas.Children.Clear();
+
+                ImgCanvas.Children.Add(imgCtrl);
+
+                ImgCanvas.Width = img.Width;
+                this.orgImgWidth = img.Width;
+
+                ImgCanvas.Height = img.Height;
+                this.orgImgHeight = img.Height;
 
                 (this.DataContext as ImageDetailViewModel).TargetImage = img;
             }
