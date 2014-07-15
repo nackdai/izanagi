@@ -15,6 +15,7 @@ if not exist %Data% (
 
 set MediaDir=..\..\Media
 set SampleDir=..\..\Samples
+set LibDir=..\..\Libs
 
 xcopy /y %MediaDir%\Seymour.dae %Data%
 xcopy /y %SampleDir%\Archive\*.xml %Data%
@@ -28,3 +29,5 @@ xcopy /y %MediaDir%\*_uffizi_probe.* %Data%
 xcopy /y %MediaDir%\*_uffizi_cross.* %Data%
 
 xcopy /y %MediaDir%\HeightMap.png %Data%
+
+xcopy /y %Lib

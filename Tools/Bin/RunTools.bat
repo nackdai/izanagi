@@ -28,4 +28,7 @@ EnvMapConverter.exe -i ".\data\uffizi_probe.png" -o "%OutDir%\LatiLong.png" -ie 
 EnvMapConverter.exe -i ".\data\uffizi_probe.png" -o "%OutDir%\Angular.png" -ie c -oe a
 EnvMapConverter.exe -i ".\data\uffizi_probe.png" -o "%OutDir%\Cross.png" -ie c -oe cr
 
-:NormalMapMaker.exe -i ".\data\HeightMap.png" -o "%OutDir%\NormalMap.png"
+NormalMapMaker.exe -i ".\data\HeightMap.png" -o "%OutDir%\NormalMap.png"
+
+ShaderCompiler.exe -e mainVS -p vs_2_0 -i ".\data\PointLightShader.fx" -o "%OutDir%\PointLightShader.vs"
+ShaderCompiler.exe -e mainPS -p ps_2_0 -i ".\data\PointLightShader.fx" -o "%OutDir%\PointLightShader.ps"
