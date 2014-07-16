@@ -224,6 +224,18 @@ PhotoItemMesh* PhotoItem::GetMesh()
     return m_Mesh;
 }
 
+inline void _ComputeScale(
+    izanagi::graph::CTexture* tex,
+    IZ_FLOAT& scaleX,
+    IZ_FLOAT& scaleY)
+{
+    scaleX = izanagi::math::CMath::Clamp(tex->GetWidth() / (IZ_FLOAT)Configure::MaxTextureSize, 0.0f, 1.0f);
+    //IZ_FLOAT scaleY = izanagi::math::CMath::Clamp(m_Texture->GetHeight() / (IZ_FLOAT)Configure::MaxTextureSize, 0.0f, 1.0f);
+        
+    IZ_FLOAT aspect = tex->GetHeight() / (IZ_FLOAT)tex->GetWidth();
+    scaleY = scaleX * aspect;
+}
+
 IZ_BOOL PhotoItem::HitTest(
     const izanagi::math::CRay& ray,
     const izanagi::math::SMatrix& mtxRot)
@@ -235,16 +247,27 @@ IZ_BOOL PhotoItem::HitTest(
     izanagi::math::SMatrix mtx;
     izanagi::math::SMatrix::Mul(mtx, m_L2W, mtxRot);
 
-    if (HasTexture()) {
-        IZ_FLOAT scaleX = izanagi::math::CMath::Clamp(m_Texture->GetWidth() / (IZ_FLOAT)Configure::MaxTextureSize, 0.0f, 1.0f);
-        IZ_FLOAT scaleY = izanagi::math::CMath::Clamp(m_Texture->GetHeight() / (IZ_FLOAT)Configure::MaxTextureSize, 0.0f, 1.0f);
-
-        m_Rectangle.v[0].x = Width * scaleX;
-        m_Rectangle.v[1].y = Height * scaleY;
-    }
-
     izanagi::math::CRectangle rc;
-    m_Rectangle.Transform(rc, mtx);
+
+    if (HasTexture()) {
+        IZ_FLOAT scaleX = 1.0f;
+        IZ_FLOAT scaleY = 1.0f;
+
+        _ComputeScale(m_Texture, scaleX, scaleY);
+
+        IZ_FLOAT w = Width * scaleX;
+        IZ_FLOAT h = Height * scaleY;
+
+        rc.Set(
+            izanagi::math::CVector(-w * 0.5f, 0.0f, 0.0f),  // Right-Bottom point.
+            izanagi::math::CVector(w, 0.0f, 0.0f),          // Left direction.
+            izanagi::math::CVector(0.0f, h, 0.0f));        // Up direction.
+
+        rc.Transform(mtx);
+    }
+    else {
+        m_Rectangle.Transform(rc, mtx);
+    }
 
     IZ_FLOAT t = 0.0f;
     IZ_BOOL ret = rc.IsIntersect(ray, &t);
@@ -279,8 +302,17 @@ void PhotoItem::GetCenterPosition(izanagi::math::SVector& pos)
     IZ_FLOAT height = Height;
 
     if (HasTexture()) {
+#if 0
         IZ_FLOAT scaleY = izanagi::math::CMath::Clamp(m_Texture->GetHeight() / (IZ_FLOAT)Configure::MaxTextureSize, 0.0f, 1.0f);
         height *= scaleY;
+#else
+        IZ_FLOAT scaleX = 1.0f;
+        IZ_FLOAT scaleY = 1.0f;
+
+        _ComputeScale(m_Texture, scaleX, scaleY);
+
+        height *= scaleY;
+#endif
     }
 
     izanagi::math::SVector::Set(
@@ -298,8 +330,13 @@ void PhotoItem::SetShaderParam(izanagi::shader::CShaderBasic* shader)
     izanagi::math::CVector params(1.0f, 1.0f, m_FadeInHeight, m_FadeInAlpha);
 
     if (HasTexture()) {
-        params.x = izanagi::math::CMath::Clamp(m_Texture->GetWidth() / (IZ_FLOAT)Configure::MaxTextureSize, 0.0f, 1.0f);
-        params.y = izanagi::math::CMath::Clamp(m_Texture->GetHeight() / (IZ_FLOAT)Configure::MaxTextureSize, 0.0f, 1.0f);
+        IZ_FLOAT scaleX = 1.0f;
+        IZ_FLOAT scaleY = 1.0f;
+
+        _ComputeScale(m_Texture, scaleX, scaleY);
+
+        params.x = scaleX;
+        params.y = scaleY;
     }
 
     Utility::SetShaderParam(
