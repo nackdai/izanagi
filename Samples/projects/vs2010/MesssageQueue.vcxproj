@@ -29,6 +29,7 @@
     <ProjectGuid>{E7AF8D48-A4EF-4761-9B1F-8567D245BB15}</ProjectGuid>
     <RootNamespace>MessageQueue</RootNamespace>
     <Keyword>Win32Proj</Keyword>
+    <ProjectName>MessageQueue</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'" Label="Configuration">

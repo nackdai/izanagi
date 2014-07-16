@@ -113,7 +113,9 @@ void CSampleRunner::SearchDir(
     do {
         std::string file(fd.cFileName);
 
-        if (file.compare("SampleRunner") == 0) {
+        if (file.compare("SampleRunner") == 0
+            || file.compare("Bin") == 0)
+        {
             continue;
         }
 
