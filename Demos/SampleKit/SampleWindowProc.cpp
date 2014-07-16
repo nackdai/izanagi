@@ -10,6 +10,7 @@ CSampleWndProc::CSampleWndProc()
 
     m_Flags.onLBtn = IZ_FALSE;
     m_Flags.onRBtn = IZ_FALSE;
+    m_Flags.onCtrlKey = IZ_FALSE;
 
     funcInit = IZ_NULL;
     funcDestroy = IZ_NULL;
@@ -26,11 +27,19 @@ void CSampleWndProc::SetApp(CSampleApp* app)
 
 void CSampleWndProc::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
 {
+    if (key == izanagi::sys::E_KEYBOARD_BUTTON_CONTROL) {
+        m_Flags.onCtrlKey = IZ_TRUE;
+    }
+
     m_App->OnKeyDown(key);
 }
 
 void CSampleWndProc::OnKeyUp(izanagi::sys::E_KEYBOARD_BUTTON key)
 {
+    if (key == izanagi::sys::E_KEYBOARD_BUTTON_CONTROL) {
+        m_Flags.onCtrlKey = IZ_FALSE;
+    }
+
     m_App->OnKeyUp(key);
 }
 
@@ -84,39 +93,39 @@ void CSampleWndProc::OnMouseMove(const izanagi::CIntPoint& point)
 {
     IZ_ASSERT(m_App != IZ_NULL);
 
-#ifdef __IZ_DEBUG__
-    //if (m_Flags.onLBtn) {
-    if (m_Flags.onRBtn) {
-        m_App->GetCamera().Rotate(
-            izanagi::CFloatPoint(
-                _NormalizeHorizontal(m_App, m_PrevPoint.x),
-                _NormalizeVertical(m_App, m_PrevPoint.y)),
-            izanagi::CFloatPoint(
-                _NormalizeHorizontal(m_App, point.x),
-                _NormalizeVertical(m_App, point.y))
-        );
-    }
-    else if (m_Flags.onRBtn) {
-        float fOffsetX = (float)(m_PrevPoint.x - point.x);
-        fOffsetX *= 0.5f;
+    if (m_Flags.onCtrlKey) {
+        if (m_Flags.onLBtn) {
+            m_App->GetCamera().Rotate(
+                izanagi::CFloatPoint(
+                    _NormalizeHorizontal(m_App, m_PrevPoint.x),
+                    _NormalizeVertical(m_App, m_PrevPoint.y)),
+                izanagi::CFloatPoint(
+                    _NormalizeHorizontal(m_App, point.x),
+                    _NormalizeVertical(m_App, point.y))
+            );
+        }
+        else if (m_Flags.onRBtn) {
+            float fOffsetX = (float)(m_PrevPoint.x - point.x);
+            fOffsetX *= 0.5f;
 
-        float fOffsetY = (float)(m_PrevPoint.y - point.y);
-        fOffsetY *= 0.5f;
+            float fOffsetY = (float)(m_PrevPoint.y - point.y);
+            fOffsetY *= 0.5f;
 
-        m_App->GetCamera().Move(fOffsetX, fOffsetY);
+            m_App->GetCamera().Move(fOffsetX, fOffsetY);
+        }
     }
-#endif  // #ifdef __IZ_DEBUG__
+    else {
+        m_App->OnMouseMove(point);
+    }
 
     m_PrevPoint = point;
-
-    m_App->OnMouseMove(point);
 }
 
 void CSampleWndProc::OnMouseWheel(IZ_INT delta)
 {
-#ifdef __IZ_DEBUG__
-    m_App->GetCamera().Dolly(delta * 0.1f);
-#endif
+    if (m_Flags.onCtrlKey) {
+        m_App->GetCamera().Dolly(delta * 0.1f);
+    }
 }
 
 void CSampleWndProc::OnPaint()

@@ -48,8 +48,9 @@ namespace sample {
         izanagi::CIntPoint m_PrevPoint;
 
         struct {
-            IZ_UINT onLBtn    : 1;
-            IZ_UINT onRBtn    : 1;
+            IZ_UINT onLBtn      : 1;
+            IZ_UINT onRBtn      : 1;
+            IZ_UINT onCtrlKey   : 1;
         } m_Flags;
     };
 }
