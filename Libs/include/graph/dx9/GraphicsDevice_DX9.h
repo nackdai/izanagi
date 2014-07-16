@@ -281,6 +281,8 @@ namespace graph
         D3DPRESENT_PARAMETERS m_PresentParameters;
         HWND m_hFocusWindow;
 
+        D3DCAPS9 m_Caps;
+
         // リセット対策用
         CTextureDX9* m_ResetTexture;
         CVertexBufferDX9* m_ResetVB;

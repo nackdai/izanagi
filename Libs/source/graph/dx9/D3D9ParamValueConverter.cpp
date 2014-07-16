@@ -132,7 +132,8 @@ namespace graph
 
     namespace {
         D3DTEXTUREFILTERTYPE TexFilterTbl[] = {
-            D3DTEXF_NONE,
+            //D3DTEXF_NONE,
+            D3DTEXF_POINT,
             D3DTEXF_POINT,
             D3DTEXF_LINEAR,
             D3DTEXF_ANISOTROPIC,

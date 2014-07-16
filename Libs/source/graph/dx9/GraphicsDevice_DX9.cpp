@@ -297,6 +297,15 @@ namespace graph
             ret = IZ_FALSE;
         }
 
+        if (ret) {
+            HRESULT hr = m_D3D->GetDeviceCaps(
+                sParams.Adapter,
+                sParams.DeviceType,
+                &m_Caps);
+
+            ret = SUCCEEDED(hr);
+        }
+
         return ret;
     }
 
