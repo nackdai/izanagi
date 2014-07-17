@@ -32,6 +32,7 @@ namespace math
 
     const CRectangle& CRectangle::operator=(const CRectangle& rhs)
     {
+#if 0
         SVector::Copy(pt, rhs.pt);
 
         SVector::Copy(v[0], rhs.v[0]);
@@ -40,6 +41,12 @@ namespace math
         SVector::Copy(nml, rhs.nml);
 
         d = rhs.d;
+#else
+        Set(
+            rhs.pt,
+            rhs.v[0],
+            rhs.v[1]);
+#endif
 
         return *this;
     }
