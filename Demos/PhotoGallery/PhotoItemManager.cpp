@@ -148,7 +148,6 @@ IZ_BOOL PhotoItemManager::Init(
 
     // Create photo items.
     for (IZ_UINT i = 0; i < COUNTOF(m_PhotoItemList); i++) {
-        // TODO
         IZ_FLOAT step = -IZ_MATH_PI2 / itemNumPerList;
 
         IZ_FLOAT angle = 0.0f;
@@ -157,6 +156,7 @@ IZ_BOOL PhotoItemManager::Init(
             PhotoItem* item = IZ_NULL;
             
             if (prevItem != IZ_NULL) {
+                // Reuse photo item mesh.
                 item = PhotoItem::Create(
                     allocator, device,
                     prevItem->GetMesh());
@@ -233,6 +233,7 @@ IZ_BOOL PhotoItemManager::EnqueueLoadingRequest(
     izanagi::graph::CGraphicsDevice* device,
     const char* path)
 {
+    // Find a photo item which does not request to load a texture.
     PhotoItem* photoItem = FindNotRequestedLoadTexture();
     if (photoItem == IZ_NULL) {
         return IZ_FALSE;
@@ -254,6 +255,7 @@ void PhotoItemManager::Update(
     izanagi::graph::CGraphicsDevice* device,
     const izanagi::CCamera& camera)
 {
+    // Update rotation of photo items.
     if (m_AngleImmediately != 0.0f) {
         izanagi::math::SMatrix::RotByY(
             m_mtxRot,
@@ -274,6 +276,7 @@ void PhotoItemManager::Update(
         }
     }
 
+    // Update photo items.
     for (IZ_UINT i = 0; i < COUNTOF(m_PhotoItemList); i++) {
         izanagi::CStdList<PhotoItem>::Item* item = m_PhotoItemList[i].GetTop();
 

@@ -24,6 +24,7 @@ void CGestureListener::OnTapUp(const izanagi::sys::CTouchEvent& ev)
 
     izanagi::math::SVector dir;
 
+    // Compute a ray from camera point to tap point.
     izanagi::CSceneGraphUtil::Point2Ray(
         dir,
         m_App->GetCamera().GetParam(),
@@ -35,6 +36,7 @@ void CGestureListener::OnTapUp(const izanagi::sys::CTouchEvent& ev)
         m_App->GetCamera().GetParam().pos,
         dir);
 
+    // Find a hit item by the ray.
     PhotoItem* hitItem = PhotoItemManager::Instance().HitTest(ray);
 
     if (hitItem != IZ_NULL) {
@@ -79,6 +81,7 @@ void CGestureListener::OnDrag(
 
 void CGestureListener::OnDragEnd(const izanagi::sys::CTouchEvent& ev)
 {
+    // If drag is end, state return to default.
     StateManager::Instance().ChangeState(State_Default);
 }
 

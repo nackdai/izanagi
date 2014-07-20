@@ -27,42 +27,19 @@ BGRenderer::BGRenderer()
 
     const float SAMPLERADIUS = 2.75f;
 
-#if 0
-    for (IZ_UINT i = 0; i < COUNTOF(samples); i++) {
-        float r = SAMPLERADIUS * izanagi::math::CMathRand::GetRandFloat();
-
-        // u : [0, 1)
-        float u = izanagi::math::CMathRand::GetRandBetween<IZ_FLOAT>(0.0f, 0.9999999f);
-
-        float t = IZ_MATH_PI2 * u;
-
-        // v : [-1, 1]
-        float v = izanagi::math::CMathRand::GetRandBetween<IZ_FLOAT>(-1.0f, 1.0f);
-
-        float p = ::sqrtf(1.0f - v * v);
-
-        float sin = izanagi::math::CMath::SinF(t);
-        float cos = izanagi::math::CMath::CosF(t);
-
-        samples[i].x = r * p * cos;
-        samples[i].y = r * p * sin;
-        samples[i].z = r * v;
-        samples[i].w = 0.0f;
-    }
-#else
     for (int i = 0; i < COUNTOF(samples); ++i) {
-        float r = SAMPLERADIUS * (float)rand() / (float)RAND_MAX;
-        float t = 6.2831853f * (float)rand() / ((float)RAND_MAX + 1.0f);
-        float cp = 2.0f * (float)rand() / (float)RAND_MAX - 1.0f;
-        float sp = sqrt(1.0f - cp * cp);
-        float ct = cos(t), st = sin(t);
+        IZ_FLOAT r = SAMPLERADIUS * (IZ_FLOAT)rand() / (IZ_FLOAT)RAND_MAX;
+        IZ_FLOAT t = IZ_MATH_PI2 * (IZ_FLOAT)rand() / ((IZ_FLOAT)RAND_MAX + 1.0f);
+        IZ_FLOAT cp = 2.0f * (IZ_FLOAT)rand() / (IZ_FLOAT)RAND_MAX - 1.0f;
+        IZ_FLOAT sp = sqrt(1.0f - cp * cp);
+        IZ_FLOAT ct = cos(t);
+        IZ_FLOAT st = sin(t);
 
         samples[i].x = r * sp * ct;
         samples[i].y = r * sp * st;
         samples[i].z = r * cp;
         samples[i].w = 0.0f;
     }
-#endif
 }
 
 BGRenderer::~BGRenderer()
@@ -75,7 +52,7 @@ IZ_BOOL BGRenderer::Init(
 {
     IZ_BOOL result = IZ_TRUE;
 
-    // シェーダ
+    // Shader.
     {
         izanagi::CFileInputStream in;
         VRETURN(in.Open("data/SSAOShader.shd"));
@@ -87,6 +64,7 @@ IZ_BOOL BGRenderer::Init(
         VGOTO(result = (m_Shader != IZ_NULL), __EXIT__);
     }
 
+    // RenderTarget for SSAO.
     {
         m_Light = device->CreateRenderTarget(
             device->GetBackBufferWidth(),
@@ -209,10 +187,13 @@ void BGRenderer::RenderToMRT(
         izanagi::graph::E_GRAPH_CLEAR_FLAG_ALL,
         IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0));
 
+    // Material for point light.
     static const izanagi::math::SVector mtrlPointLight[] = {
         { 1.0f, 1.0f, 1.0f, 1.0f },
         { 0.0f, 0.0f, 0.0f, 0.0f },
     };
+
+    // Material for ambient light.
     static const izanagi::math::SVector mtrlAmbientLight[] = {
         { 0.0f, 0.0f, 0.0f, 0.0f },
         { 1.0f, 1.0f, 1.0f, 1.0f },
@@ -292,10 +273,10 @@ void BGRenderer::RenderSSAO(
     izanagi::graph::CGraphicsDevice* device,
     const izanagi::CCamera& camera)
 {
-    device->SetTexture(0, m_RT[0]);
-    device->SetTexture(1, m_RT[1]);
-    device->SetTexture(2, m_RT[2]);
-    device->SetTexture(3, m_RT[3]);
+    device->SetTexture(0, m_RT[0]); // Light
+    device->SetTexture(1, m_RT[1]); // Normal
+    device->SetTexture(2, m_RT[2]); // Depth
+    device->SetTexture(3, m_RT[3]); // Position
 
     m_Shader->Begin(device, 1, IZ_TRUE);
     {
@@ -337,11 +318,13 @@ void BGRenderer::RenderDebug(izanagi::graph::CGraphicsDevice* device)
 {
     device->Begin2D();
     {
+        // Light
         device->SetTexture(0, m_RT[0]);
         device->Draw2DSprite(
             izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),
             izanagi::CIntRect(0, 0, 640, 360));
 
+        // Notmal
         device->SetTexture(0, m_RT[1]);
         device->Draw2DSprite(
             izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),
@@ -349,6 +332,7 @@ void BGRenderer::RenderDebug(izanagi::graph::CGraphicsDevice* device)
 
         device->Set2DRenderOp(izanagi::graph::E_GRAPH_2D_RENDER_OP_NO_TEX_ALPHA);
 
+        // Depth
         device->SetTexture(0, m_RT[2]);
         device->Draw2DSprite(
             izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),
@@ -356,6 +340,7 @@ void BGRenderer::RenderDebug(izanagi::graph::CGraphicsDevice* device)
 
         device->Set2DRenderOp(izanagi::graph::E_GRAPH_2D_RENDER_OP_NO_TEX_ALPHA);
 
+        // Position
         device->SetTexture(0, m_RT[3]);
         device->Draw2DSprite(
             izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),

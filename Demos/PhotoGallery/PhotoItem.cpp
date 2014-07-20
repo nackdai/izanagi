@@ -166,7 +166,8 @@ void PhotoItem::Update(
     }
 
     if (m_IsFading) {
-        m_Timeline.Advance(16.67f);
+        // Update fade-in animation.
+        m_Timeline.Advance(time);
 
         izanagi::animation::CTweenerCubic tweener;
         IZ_FLOAT value = tweener.EaseInOut(
@@ -250,6 +251,7 @@ IZ_BOOL PhotoItem::HitTest(
     izanagi::math::CRectangle rc;
 
     if (HasTexture()) {
+        // Fit size to aspect of texture size.
         IZ_FLOAT scaleX = 1.0f;
         IZ_FLOAT scaleY = 1.0f;
 
@@ -258,10 +260,11 @@ IZ_BOOL PhotoItem::HitTest(
         IZ_FLOAT w = Width * scaleX;
         IZ_FLOAT h = Height * scaleY;
 
+        // Set rectangle parameters.
         rc.Set(
             izanagi::math::CVector(-w * 0.5f, 0.0f, 0.0f),  // Right-Bottom point.
             izanagi::math::CVector(w, 0.0f, 0.0f),          // Left direction.
-            izanagi::math::CVector(0.0f, h, 0.0f));        // Up direction.
+            izanagi::math::CVector(0.0f, h, 0.0f));         // Up direction.
 
         rc.Transform(mtx);
     }
@@ -302,17 +305,13 @@ void PhotoItem::GetCenterPosition(izanagi::math::SVector& pos)
     IZ_FLOAT height = Height;
 
     if (HasTexture()) {
-#if 0
-        IZ_FLOAT scaleY = izanagi::math::CMath::Clamp(m_Texture->GetHeight() / (IZ_FLOAT)Configure::MaxTextureSize, 0.0f, 1.0f);
-        height *= scaleY;
-#else
+        // Fit size to aspect of texture size.
         IZ_FLOAT scaleX = 1.0f;
         IZ_FLOAT scaleY = 1.0f;
 
         _ComputeScale(m_Texture, scaleX, scaleY);
 
         height *= scaleY;
-#endif
     }
 
     izanagi::math::SVector::Set(
@@ -330,6 +329,7 @@ void PhotoItem::SetShaderParam(izanagi::shader::CShaderBasic* shader)
     izanagi::math::CVector params(1.0f, 1.0f, m_FadeInHeight, m_FadeInAlpha);
 
     if (HasTexture()) {
+        // Fit size to aspect of texture size.
         IZ_FLOAT scaleX = 1.0f;
         IZ_FLOAT scaleY = 1.0f;
 

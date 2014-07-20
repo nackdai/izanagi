@@ -162,6 +162,7 @@ void PhotoGalleryApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
 IZ_BOOL PhotoGalleryApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
 {
+#ifdef __IZ_DEBUG__
     izanagi::math::SVector& dir = Environment::Instance().GetDir();
 
     switch (key) {
@@ -192,6 +193,7 @@ IZ_BOOL PhotoGalleryApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
         dir.z = -0.216650f;
         break;
     }
+#endif  // #ifdef __IZ_DEBUG__
 
     return StateManager::Instance().OnKeyDown(key);
 }
