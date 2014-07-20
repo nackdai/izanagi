@@ -1,18 +1,22 @@
 @echo off
 
-if exist ..\Release (
-	rmdir /s/q ..\Release
-)
+set CURDIR = %CD%
 
-if not exist ..\Release (
-	mkdir ..\Release
-)
+cd ..\
 
-xcopy /E/Y/D/I ..\Build ..\Release\Build
-xcopy /E/Y/D/I ..\External ..\Release\External
-xcopy /E/Y/D/I ..\Libs ..\Release\Libs
-xcopy /E/Y/D/I ..\Media ..\Release\Media
-xcopy /E/Y/D/I ..\Tools ..\Release\Tools
+rmdir /s/q External\emscripten
+rmdir /s/q Tools\External\collada-dom
 
-rmdir /s/q ..\Release\External\emscripten
-rmdir /s/q ..\Release\Tools\External\collada-dom
+cd Build
+
+call BuildAll_Release_DX9.bat
+
+cd ..\Samples\Bin
+
+call Gather.bat
+
+cd ..\Tools\Bin
+
+call Gather.bat
+
+cd /d %CURDIR%
