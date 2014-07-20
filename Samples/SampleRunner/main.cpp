@@ -74,6 +74,12 @@ CSampleRunner::~CSampleRunner()
 {
 }
 
+#ifdef __IZ_DEBUG__
+    #define BASE_DIR    "..\\"
+#else
+    #define BASE_DIR    ".\\"
+#endif
+
 // 初期化.
 IZ_BOOL CSampleRunner::InitInternal(
     izanagi::IMemoryAllocator* allocator,
@@ -82,20 +88,13 @@ IZ_BOOL CSampleRunner::InitInternal(
 {
     m_Allocator = allocator;
 
-    SearchDir("..\\*");
+    SearchDir(BASE_DIR"*");
 
     m_ColumnIdx = 0;
     m_RowIdx = 0;
 
     return IZ_TRUE;
 }
-
-//#ifdef __IZ_DEBUG__
-#if 1
-    #define BASE_DIR    "..\\"
-#else
-    #define BASE_DIR    ".\\"
-#endif
 
 void CSampleRunner::SearchDir(
     const char* filename,
@@ -114,6 +113,7 @@ void CSampleRunner::SearchDir(
         std::string file(fd.cFileName);
 
         if (file.compare("SampleRunner") == 0
+            || file.compare("SampleRunner.exe") == 0
             || file.compare("Bin") == 0)
         {
             continue;
