@@ -6,6 +6,8 @@
 #include "graph/GraphDefs.h"
 #include "graph/2d/2DShader.h"
 
+//#define __IZ_TRISTRIP_RECT__
+
 namespace izanagi
 {
 namespace graph
@@ -153,12 +155,18 @@ namespace graph
             // x4 は１矩形 = ４頂点 なので
             MAX_VERTEX_NUM = MAX_RECT_NUM * 4,
 
+#ifdef __IZ_TRISTRIP_RECT__
             // NOTE
             // １矩形 = ４頂点
             // 矩形と矩形の間をつなぐ見えない三角形用のインデックス数が２
             // ex) ２矩形 -> 0123 34 4567 -> 4 * 2 + 2
             //               012-123-[233-334-344-445]-456-567
             MAX_INDEX_NUM = MAX_RECT_NUM * 4 + (MAX_RECT_NUM - 1) * 2,
+#else
+            // NOTE
+            // １矩形 = ２三角形 = ６頂点
+            MAX_INDEX_NUM = MAX_RECT_NUM * 6,
+#endif
 
             // １頂点のサイズ
             VTX_STRIDE = sizeof(CUSTOM_VERTEX),

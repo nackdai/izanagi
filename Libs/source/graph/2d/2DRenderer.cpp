@@ -179,12 +179,18 @@ namespace graph
         IZ_UINT ComputeRectRealPrimNum(IZ_UINT nRectNum)
         {
             // プリミティブ数
+#ifdef __IZ_TRISTRIP_RECT__
             // NOTE
             // １矩形 = ２三角形(プリミティブ)
             // 矩形と矩形の間をつなぐ見えない三角形は４つ存在する
             // ex) ２矩形 -> 0123 34 4567
             //               012-123-[233-334-344-445]-456-567 -> 2 * 2 + 4
             IZ_UINT nPrimNum = nRectNum * 2 + (nRectNum - 1) * 4;
+#else
+            // NOTE
+            // １矩形 = ２三角形(プリミティブ)
+            IZ_UINT nPrimNum = nRectNum * 2;
+#endif
 
             return nPrimNum;
         }
@@ -197,7 +203,7 @@ namespace graph
             // 最小インデックス値
             // NOTE
             // ある矩形のインデックスについて考える
-            // n, n+1, n+2, n+3 となり、m_ushNowSetIndex = n+3 となっている
+            // n, n+1, n+2, n+1, n+3, n+2, となり、m_nCurIdx = n+3 となっている
             // よって、-3することで矩形の先頭のインデックスになる。
             // さらに、矩形の先頭のインデックスは４の倍数になる。
             // よって、(描画する矩形数 - 1) x 4 だけマイナスすると最小インデックス値になる
@@ -250,8 +256,13 @@ namespace graph
         };
 
         E_GRAPH_PRIM_TYPE PrimType[] = {
+#ifdef __IZ_TRISTRIP_RECT__
             E_GRAPH_PRIM_TYPE_TRIANGLESTRIP,
             E_GRAPH_PRIM_TYPE_TRIANGLESTRIP,
+#else
+            E_GRAPH_PRIM_TYPE_TRIANGLELIST,
+            E_GRAPH_PRIM_TYPE_TRIANGLELIST,
+#endif
             E_GRAPH_PRIM_TYPE_LINESTRIP,
         };
     }   // namespace
@@ -615,7 +626,11 @@ namespace graph
             switch (nPrimType) {
             case PRIM_TYPE_SPRITE:
             case PRIM_TYPE_RECT:
+#ifdef __IZ_TRISTRIP_RECT__
                 nIdxNumPerPrim = (m_nCurIdx == 0 ? 4 : 6);
+#else
+                nIdxNumPerPrim = 6;
+#endif
                 break;
             case PRIM_TYPE_LINE:
                 nIdxNumPerPrim = 2;
@@ -726,19 +741,19 @@ namespace graph
             v[0].x = fLeft;
             v[0].y = fTop;
 
-    #ifdef IZ_COORD_LEFT_HAND
+#ifdef IZ_COORD_LEFT_HAND
             v[1].x = fRight;
             v[1].y = fTop;
 
             v[2].x = fLeft;
             v[2].y = fBottom;
-    #else
+#else
             v[1].x = fLeft;
             v[1].y = fBottom;
 
             v[2].x = fRight;
             v[2].y = fTop;
-    #endif
+#endif
 
             v[3].x = fRight;
             v[3].y = fBottom;
@@ -750,19 +765,19 @@ namespace graph
         v[0].u = rcSrc.left;
         v[0].v = rcSrc.top;
 
-    #ifdef IZ_COORD_LEFT_HAND
+#ifdef IZ_COORD_LEFT_HAND
         v[1].u = rcSrc.right;
         v[1].v = rcSrc.top;
 
         v[2].u = rcSrc.left;
         v[2].v = rcSrc.bottom;
-    #else
+#else
         v[1].u = rcSrc.left;
         v[1].v = rcSrc.bottom;
 
         v[2].u = rcSrc.right;
         v[2].v = rcSrc.top;
-    #endif
+#endif
 
         v[3].u = rcSrc.right;
         v[3].v = rcSrc.bottom;
@@ -775,6 +790,7 @@ namespace graph
     // インデックスデータセット
     void C2DRenderer::SetIdx()
     {
+#ifdef __IZ_TRISTRIP_RECT__
         // NOTE
         // 0123 34 4567・・・
         // 012-123-[233-334-344-445]-456-567-・・・
@@ -810,6 +826,24 @@ namespace graph
             m_sIBInfo.buf_ptr = pIdx;
             m_sIBInfo.num += 6;
         }
+#else
+        IZ_ASSERT(m_pIB->GetFormat() == E_GRAPH_INDEX_BUFFER_FMT_INDEX16);
+
+        IZ_UINT16* pIdx = (IZ_UINT16*)m_sIBInfo.buf_ptr;
+
+        *pIdx++ = m_nCurIdx + 0;
+        *pIdx++ = m_nCurIdx + 1;
+        *pIdx++ = m_nCurIdx + 2;
+
+        *pIdx++ = m_nCurIdx + 1;
+        *pIdx++ = m_nCurIdx + 3;
+        *pIdx++ = m_nCurIdx + 2;
+
+        m_nCurIdx += 4;
+
+        m_sIBInfo.buf_ptr = pIdx;
+        m_sIBInfo.num += 6;
+#endif
     }
 
     // リソースリセット
