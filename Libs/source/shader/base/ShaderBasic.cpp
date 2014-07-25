@@ -384,7 +384,7 @@ namespace shader
             S_SHD_PARAMETER* pParamDesc = const_cast<S_SHD_PARAMETER*>(m_ParamTbl.GetDesc(pParamInfo->idx));
 
             // For Debug.
-#if 1
+#ifdef __IZ_DEBUG__
             IZ_PCSTR name = m_StringBuffer.GetString(pParamDesc->posName);
 #endif
 
@@ -410,6 +410,35 @@ namespace shader
                     VRETURN(result);
 
                     pParamDesc->isDirty = IZ_FALSE;
+                }
+            }
+        }
+
+        // Set textures.
+        for (IZ_UINT i = 0; i < pDesc->numSampler; i++) {
+            // Find information of specified sampler from samplers in the pass.
+            const CShaderPass::SSamplerInfo* smplInfo = cPass.GetSamplerInfo(i);
+
+            // Find description of specified sampler from all samplers.
+            const S_SHD_SAMPLER* smplDesc = m_SmplTbl.GetDesc(smplInfo->idx);
+
+            // For Debug.
+#ifdef __IZ_DEBUG__
+            IZ_PCSTR name = m_StringBuffer.GetString(smplDesc->posName);
+#endif
+
+            if (smplDesc->BindTexIdx >= 0) {
+                // Find the texture.
+                graph::CBaseTexture* texture = m_TexTbl.GetTexture(smplDesc->BindTexIdx);
+
+                if (texture != IZ_NULL) {
+                    texture->SetAddress(smplDesc->state.addressU, smplDesc->state.addressV);
+                    texture->SetFilter(
+                        smplDesc->state.minFilter,
+                        smplDesc->state.magFilter,
+                        smplDesc->state.mipFilter);
+
+                    device->SetTexture(smplInfo->resource_id, texture);
                 }
             }
         }
