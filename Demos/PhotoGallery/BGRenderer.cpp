@@ -273,14 +273,14 @@ void BGRenderer::RenderSSAO(
     izanagi::graph::CGraphicsDevice* device,
     const izanagi::CCamera& camera)
 {
-    device->SetTexture(0, m_RT[0]); // Light
-    device->SetTexture(1, m_RT[1]); // Normal
-    device->SetTexture(2, m_RT[2]); // Depth
-    device->SetTexture(3, m_RT[3]); // Position
-
     m_Shader->Begin(device, 1, IZ_TRUE);
     {
         if (m_Shader->BeginPass(0)) {
+            m_Shader->SetTexture("texNormal", m_Normal);
+            m_Shader->SetTexture("texPosition", m_Position);
+            m_Shader->SetTexture("texDepth", m_Depth);
+            m_Shader->SetTexture("texLight", m_Light);
+
             Utility::SetShaderParam(
                 m_Shader,
                 "g_mW2V",
