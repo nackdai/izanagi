@@ -152,13 +152,6 @@ namespace shader
             IZ_UINT techIdx,
             IZ_UINT passIdx);
 
-    private:
-        IZ_BOOL SetParamValue(
-            graph::CGraphicsDevice* device,
-            IZ_UINT idx,
-            CShaderPass& cPass,
-            graph::CShaderProgram* pShd);
-
     protected:
         IZ_UINT8* m_pBuffer;
 

@@ -378,7 +378,40 @@ namespace shader
 
         // Set parameters.
         for (IZ_UINT i = 0; i < pDesc->numConst; i++) {
-            VRETURN(SetParamValue(device, i, cPass, shader));
+            const CShaderPass::SParamInfo* pParamInfo = cPass.GetParamInfo(i);
+
+            // TODO
+            S_SHD_PARAMETER* pParamDesc = const_cast<S_SHD_PARAMETER*>(m_ParamTbl.GetDesc(pParamInfo->idx));
+
+            // For Debug.
+#if 1
+            IZ_PCSTR name = m_StringBuffer.GetString(pParamDesc->posName);
+#endif
+
+            // パラメータに変化があったときだけ
+            IZ_BOOL isDirty = pParamDesc->isDirty;
+    
+            if (isDirty) {
+                const SHADER_PARAM_HANDLE& handle = pParamInfo->handle;
+
+                if (graph::CShaderProgram::IsValidHandle(handle)) {
+                    // 有効なハンドル
+                    IZ_UINT bytes = 0;
+
+                    const void* pParam = m_ParamTbl.GetParam(pParamInfo->idx, &bytes);
+                    IZ_ASSERT(pParam != IZ_NULL);
+
+                    IZ_BOOL result = CShaderUtil::SetValue(
+                        device,
+                        shader,
+                        handle,
+                        pParam,
+                        *pParamDesc);
+                    VRETURN(result);
+
+                    pParamDesc->isDirty = IZ_FALSE;
+                }
+            }
         }
 
         return IZ_TRUE;
@@ -490,59 +523,6 @@ namespace shader
 
         _T nAttrVal = *(_T*)(pAttr->param);
         return (nAttrVal == val);
-    }
-
-    IZ_BOOL CShaderBasic::SetParamValue(
-        graph::CGraphicsDevice* device,
-        IZ_UINT idx,
-        CShaderPass& cPass,
-        graph::CShaderProgram* pShd)
-    {
-        const CShaderPass::SParamInfo* pParamInfo = cPass.GetParamInfo(idx);
-
-        // TODO
-        S_SHD_PARAMETER* pParamDesc = const_cast<S_SHD_PARAMETER*>(m_ParamTbl.GetDesc(pParamInfo->idx));
-
-        // For Debug.
- #if 1
-        IZ_PCSTR name = m_StringBuffer.GetString(pParamDesc->posName);
- #endif
-
-        // パラメータに変化があったときだけ
-        IZ_BOOL bIsDirty = pParamDesc->isDirty;
-    
-        if (bIsDirty) {
-            const SHADER_PARAM_HANDLE& handle = pParamInfo->handle;
-
-            if (graph::CShaderProgram::IsValidHandle(handle)) {
-                // 有効なハンドル
-                IZ_UINT nBytes = 0;
-
-                const void* pParam = m_ParamTbl.GetParam(pParamInfo->idx, &nBytes);
-                IZ_ASSERT(pParam != IZ_NULL);
-
-    #if 0
-                VRETURN(
-                    pShd->SetValue(
-                        device,
-                        handle,
-                        pParam,
-                        nBytes));
-    #else
-                IZ_BOOL result = CShaderUtil::SetValue(
-                    device,
-                    pShd,
-                    handle,
-                    pParam,
-                    *pParamDesc);
-                VRETURN(result);
-    #endif
-
-                 pParamDesc->isDirty = IZ_FALSE;
-            }
-        }
-
-        return IZ_TRUE;
     }
 
     IZ_SHADER_HANDLE CShaderBasic::GetParameterByName(IZ_PCSTR pszName)
