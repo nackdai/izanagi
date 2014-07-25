@@ -38,7 +38,8 @@ const IZ_FLOAT Configure::FadeInDuration = 500.0f;      // [ms]
 
 const IZ_FLOAT Configure::CameraDistanceFromItem = 10.0f;
 
-const IZ_UINT Configure::MaxTextureSize = 1280;
+//const IZ_UINT Configure::MaxTextureSize = 1280;
+const IZ_UINT Configure::MaxTextureSize = 640;
 
 const IZ_FLOAT Configure::FadeInHeight = 1.5f;
 
