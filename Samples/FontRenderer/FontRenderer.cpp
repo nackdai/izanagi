@@ -97,6 +97,8 @@ void CFontRendererApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     if (device->Begin2D()) {
         // フォント描画
 
+        device->Set2DRenderOp(izanagi::graph::E_GRAPH_2D_RENDER_OP_MODULATE_ALPHA);
+
         izanagi::text::CUtf8String str(fontUTF8);
 
         izanagi::CIntPoint ptr(100, 100);

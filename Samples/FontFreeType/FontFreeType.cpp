@@ -97,6 +97,8 @@ void CFontFreeTypeApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     if (device->Begin2D()) {
         // フォント描画
 
+        device->Set2DRenderOp(izanagi::graph::E_GRAPH_2D_RENDER_OP_MODULATE_ALPHA);
+
         izanagi::text::CUtf8String str(fontUTF8);
 
         m_Cache->Prepare(device);
@@ -128,6 +130,10 @@ void CFontFreeTypeApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
                 IZ_UINT h = item->rect.height;
 
                 IZ_UINT x = posX + item->leftOffset;
+
+                // TODO
+                // code = 0x20 （スペース）のときの対応
+
                 IZ_UINT y = posY + baseline - item->metrics.bearingY;
 
                 device->Draw2DSprite(

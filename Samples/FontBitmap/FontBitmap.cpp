@@ -125,8 +125,15 @@ void CFontBitmapApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 // 描画.
 void CFontBitmapApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
+    static const IZ_COLOR colors[] = {
+        IZ_COLOR_RGBA(0xff, 0x00, 0x00, 0xff),
+        IZ_COLOR_RGBA(0x00, 0xff, 0x00, 0xff),
+    };
+
     if (device->Begin2D()) {
         // フォント描画
+
+        device->Set2DRenderOp(izanagi::graph::E_GRAPH_2D_RENDER_OP_MODULATE_ALPHA);
 
         for (IZ_UINT i = 0; i < 2; i++)
         {
@@ -174,7 +181,8 @@ void CFontBitmapApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
                     device->Draw2DSprite(
                         izanagi::CFloatRect(left, top, right, bottom),
-                        izanagi::CIntRect(x, y, w, h));
+                        izanagi::CIntRect(x, y, w, h),
+                        colors[i]);
 
                     posX += item->metrics.advance;
                 }
