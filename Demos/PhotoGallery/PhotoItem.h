@@ -61,7 +61,7 @@ public:
     /** Set position and rotation.
      */
     void SetPositionAndRotation(
-        const izanagi::math::CVector& pos,
+        const izanagi::math::CVector4& pos,
         IZ_FLOAT rot);
 
     /** Get local to world matrix.
@@ -86,11 +86,11 @@ public:
 
     /** Get normal vector of photo item.
      */
-    void GetNormal(izanagi::math::SVector& nml);
+    void GetNormal(izanagi::math::SVector4& nml);
 
     /** Get center positon of photo item.
      */
-    void GetCenterPosition(izanagi::math::SVector& pos);
+    void GetCenterPosition(izanagi::math::SVector4& pos);
 
     /** Set parameter for shader.
      */

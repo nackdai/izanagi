@@ -4,7 +4,7 @@
 #include <math.h>
 #include "izDefs.h"
 #include "math/MathDefs.h"
-#include "math/MathVector.h"
+#include "math/MathVector4.h"
 
 namespace izanagi
 {
@@ -48,9 +48,9 @@ namespace math
 
     // ベクトルとマトリクスを乗算する
     // dst = vec x mtx
-    void SMatrix::Apply(SVector& dst, const SVector& vec, const SMatrix& mtx)
+    void SMatrix::Apply(SVector4& dst, const SVector4& vec, const SMatrix& mtx)
     {
-        SVector v;
+        SVector4 v;
         for (int i = 0; i < 4; ++i) {
             v.v[i] = 0.0f;
             for (int j = 0; j < 4; ++j) {
@@ -58,14 +58,14 @@ namespace math
             }
         }
 
-        SVector::Copy(dst, v);
+        SVector4::Copy(dst, v);
     }
 
     // ベクトルとマトリクスのＸＹＺ成分のみを乗算する
     // ベクトルのＷ成分、およびマトリクスの第４行は無視される
-    void SMatrix::ApplyXYZ(SVector& dst, const SVector& vec, const SMatrix& mtx)
+    void SMatrix::ApplyXYZ(SVector4& dst, const SVector4& vec, const SMatrix& mtx)
     {
-        SVector v;
+        SVector4 v;
         for (int i = 0; i < 3; ++i) {
             v.v[i] = 0.0f;
             for (int j = 0; j < 3; ++j) {
@@ -119,11 +119,11 @@ namespace math
     // スケーリングマトリクスを得る
     void SMatrix::SetScale(SMatrix& dst, IZ_FLOAT fScaleX, IZ_FLOAT fScaleY, IZ_FLOAT fScaleZ)
     {
-        SVector::Set(dst.v[0], fScaleX, 0.0f, 0.0f, 0.0f);
-        SVector::Set(dst.v[1], 0.0f, fScaleY, 0.0f, 0.0f);
-        SVector::Set(dst.v[2], 0.0f, 0.0f, fScaleZ, 0.0f);
+        SVector4::Set(dst.v[0], fScaleX, 0.0f, 0.0f, 0.0f);
+        SVector4::Set(dst.v[1], 0.0f, fScaleY, 0.0f, 0.0f);
+        SVector4::Set(dst.v[2], 0.0f, 0.0f, fScaleZ, 0.0f);
 
-        SVector::Set(dst.v[3], 0.0f, 0.0f, 0.0f, 1.0f);
+        SVector4::Set(dst.v[3], 0.0f, 0.0f, 0.0f, 1.0f);
     }
 
     // 任意軸を回転軸にして回転するマトリクスを取得
@@ -188,27 +188,27 @@ namespace math
             for (int j = i + 1; j < 4; ++j) {
                 if (f < CMath::Absf(mtx.m[j][i])) {
                     f = CMath::Absf(mtx.m[j][i]);
-                    SVector::Swap(mtx.v[i], mtx.v[j]);
-                    SVector::Swap(dst.v[i], dst.v[j]);
+                    SVector4::Swap(mtx.v[i], mtx.v[j]);
+                    SVector4::Swap(dst.v[i], dst.v[j]);
                 }
             }
 
             // 対象となる行の対角値を 1 にする
             f = 1.0f / mtx.m[i][i];
-            SVector::Scale(mtx.v[i], mtx.v[i], f);
-            SVector::Scale(dst.v[i], dst.v[i], f);
+            SVector4::Scale(mtx.v[i], mtx.v[i], f);
+            SVector4::Scale(dst.v[i], dst.v[i], f);
 
             // 対象とならない列の値を 0 にする
             for (int j = 0; j < 4; ++j) {
                 if (j != i) {
                     IZ_FLOAT fTemp = mtx.m[j][i];
 
-                    SVector v1, v2;
-                    SVector::Scale(v1, mtx.v[i], fTemp);
-                    SVector::Scale(v2, dst.v[i], fTemp);
+                    SVector4 v1, v2;
+                    SVector4::Scale(v1, mtx.v[i], fTemp);
+                    SVector4::Scale(v2, dst.v[i], fTemp);
 
-                    SVector::Sub(mtx.v[j], mtx.v[j], v1);
-                    SVector::Sub(dst.v[j], dst.v[j], v2);
+                    SVector4::Sub(mtx.v[j], mtx.v[j], v1);
+                    SVector4::Sub(dst.v[j], dst.v[j], v2);
                 }
             }
         }

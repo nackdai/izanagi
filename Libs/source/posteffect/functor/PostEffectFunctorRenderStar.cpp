@@ -57,9 +57,9 @@ IZ_BOOL CPostEffectFunctorRenderStar::Apply(
     UNUSED_ALWAYS(pDevice);
 
     // 光芒の色の計算用
-    static const math::SVector vColWhite = {0.63f, 0.63f, 0.63f, 0.0f};
+    static const math::SVector4 vColWhite = {0.63f, 0.63f, 0.63f, 0.0f};
 
-    static const math::SVector vChromaticAberrationTable[SAMPLE_NUM] = {
+    static const math::SVector4 vChromaticAberrationTable[SAMPLE_NUM] = {
         {0.5f, 0.5f, 0.5f, 0.0f},   // 白
         {0.8f, 0.3f, 0.3f, 0.0f},   // 赤
         {1.0f, 0.2f, 0.2f, 0.0f},   // 赤
@@ -85,7 +85,7 @@ IZ_BOOL CPostEffectFunctorRenderStar::Apply(
     IZ_ASSERT(MAX_PASS >= sStarData.nPasses);
 
     // 光芒の色
-    math::SVector vColor[MAX_PASS][SAMPLE_NUM];
+    math::SVector4 vColor[MAX_PASS][SAMPLE_NUM];
 
     // 中心からの距離に応じて光芒の色をつける
     for (IZ_INT nPass = 0; nPass < MAX_PASS; ++nPass) {
@@ -93,14 +93,14 @@ IZ_BOOL CPostEffectFunctorRenderStar::Apply(
 
         // そろぞれのサンプリングで適当に色をつける
         for (IZ_INT i = 0; i < SAMPLE_NUM; ++i) {
-            math::SVector::Lerp(
+            math::SVector4::Lerp(
                 vColor[nPass][i],
                 vChromaticAberrationTable[i],
                 vColWhite,
                 fRatio);
             
             // 全体的な色の変化を調整する
-            math::SVector::Lerp(
+            math::SVector4::Lerp(
                 vColor[nPass][i],
                 vColWhite,
                 vColor[nPass][i],
@@ -141,8 +141,8 @@ IZ_BOOL CPostEffectFunctorRenderStar::Apply(
     IZ_FLOAT fScreenWidthQuarter = 1280 / 4;
     IZ_FLOAT fScreenHeightQuarter = 720 / 4;
 
-    math::SVector vOffsets[SAMPLE_NUM];
-    math::SVector vWeights[SAMPLE_NUM];
+    math::SVector4 vOffsets[SAMPLE_NUM];
+    math::SVector4 vWeights[SAMPLE_NUM];
 
     static char tmp[64];
 
@@ -155,7 +155,7 @@ IZ_BOOL CPostEffectFunctorRenderStar::Apply(
         IZ_FLOAT fSin, fCos;
         math::CMath::GetSinCosF(fRad, fSin, fCos);
 
-        math::SVector vStepUV;
+        math::SVector4 vStepUV;
         vStepUV.x = 0.3f * fSin / nSrcWidth * sStarData.fSampleLength;
         vStepUV.y = 0.3f * fCos / nSrcHeight * sStarData.fSampleLength;
 
@@ -189,7 +189,7 @@ IZ_BOOL CPostEffectFunctorRenderStar::Apply(
                 IZ_FLOAT fLum = powf(sStarData.fAttenuation, fAttnPowScale * nSample);
                 
                 // 色を変化させるための重み
-                math::SVector::Scale(
+                math::SVector4::Scale(
                     vWeights[nSample],
                     vColor[sStarData.nPasses - 1 - nPass][nSample],
                     fLum * (nPass + 1.0f) * 0.5f);
@@ -205,7 +205,7 @@ IZ_BOOL CPostEffectFunctorRenderStar::Apply(
                     vOffsets[nSample].v[pos] = 0.0f;
                     vOffsets[nSample].v[pos + 1] = 0.0f;
 
-                    math::SVector::SetZero(vWeights[nSample]);
+                    math::SVector4::SetZero(vWeights[nSample]);
                 }
             }   // end of for
 
@@ -283,7 +283,7 @@ IZ_BOOL CPostEffectFunctorRenderStar::Apply(
 
             // 次への準備
             {
-                math::SVector::Scale(
+                math::SVector4::Scale(
                     vStepUV,
                     vStepUV,
                     (IZ_FLOAT)SAMPLE_NUM);

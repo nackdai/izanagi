@@ -45,8 +45,8 @@ namespace izanagi {
 
         IZ_BOOL SetVtx(
             IZ_UINT type,
-            const math::SVector& start,
-            const math::SVector& end);
+            const math::SVector4& start,
+            const math::SVector4& end);
 
     private:
         IZ_UINT8* m_pVtxDst;

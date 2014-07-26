@@ -130,9 +130,9 @@ namespace graph
         }
 
         // 4D ベクトルを設定
-        virtual IZ_BOOL SetVector(CGraphicsDevice* device, SHADER_PARAM_HANDLE_DX9 handle, const math::SVector& v)
+        virtual IZ_BOOL SetVector(CGraphicsDevice* device, SHADER_PARAM_HANDLE_DX9 handle, const math::SVector4& v)
         {
-            IZ_C_ASSERT(sizeof(D3DXVECTOR4) == sizeof(math::SVector));
+            IZ_C_ASSERT(sizeof(D3DXVECTOR4) == sizeof(math::SVector4));
 
             HRESULT hr = m_ConstTable->SetVector(
                             GetDeviceRawInterface(device),
@@ -143,9 +143,9 @@ namespace graph
         }
 
         // 4D ベクトルを設定
-        virtual IZ_BOOL SetVectorArray(CGraphicsDevice* device, SHADER_PARAM_HANDLE_DX9 handle, const math::SVector* pV, IZ_UINT num)
+        virtual IZ_BOOL SetVectorArray(CGraphicsDevice* device, SHADER_PARAM_HANDLE_DX9 handle, const math::SVector4* pV, IZ_UINT num)
         {
-            IZ_C_ASSERT(sizeof(D3DXVECTOR4) == sizeof(math::SVector));
+            IZ_C_ASSERT(sizeof(D3DXVECTOR4) == sizeof(math::SVector4));
 
             HRESULT hr = m_ConstTable->SetVectorArray(
                             GetDeviceRawInterface(device),

@@ -35,7 +35,7 @@ namespace izanagi {
 
     // クリップ座標取得
     void CSceneGraphUtil::Screen2Clip(
-        math::SVector& vClip,
+        math::SVector4& vClip,
         const graph::SViewport& vp,
         IZ_INT nX, IZ_INT nY,
         IZ_FLOAT fZ)
@@ -54,7 +54,7 @@ namespace izanagi {
 
     // 光線を取得
     void CSceneGraphUtil::Point2Ray(
-        math::SVector& ray,
+        math::SVector4& ray,
         const SCameraParam& camera,
         const graph::SViewport& vp,
         IZ_INT nX,
@@ -68,12 +68,12 @@ namespace izanagi {
             vp.minZ, vp.maxZ);
         math::SMatrix::Inverse(mtxS2C, mtxS2C);
 
-        math::SVector clip;
+        math::SVector4 clip;
 
         // Screen -> Clip
         math::SMatrix::Apply(
             clip,
-            math::CVector((IZ_FLOAT)nX, (IZ_FLOAT)nY, 1.0f, 1.0f),
+            math::CVector4((IZ_FLOAT)nX, (IZ_FLOAT)nY, 1.0f, 1.0f),
             mtxS2C);
 
         math::SMatrix mtxC2V;
@@ -82,7 +82,7 @@ namespace izanagi {
         math::SMatrix mtxV2W;
         math::SMatrix::Inverse(mtxV2W, camera.mtxW2V);
 
-        math::SVector rayFar;
+        math::SVector4 rayFar;
         {
             // Clip -> View
             izanagi::math::SMatrix::Apply(rayFar, clip, mtxC2V);
@@ -90,12 +90,12 @@ namespace izanagi {
             // View -> World
             izanagi::math::SMatrix::Apply(rayFar, rayFar, mtxV2W);
 
-            izanagi::math::SVector::Div(rayFar, rayFar, rayFar.w);
+            izanagi::math::SVector4::Div(rayFar, rayFar, rayFar.w);
         }
 
-        izanagi::math::SVector::Sub(ray, rayFar, camera.pos);
+        izanagi::math::SVector4::Sub(ray, rayFar, camera.pos);
 #elif 0
-        math::SVector clip;
+        math::SVector4 clip;
 
         // Screen -> Clip
         Screen2Clip(
@@ -111,7 +111,7 @@ namespace izanagi {
         math::SMatrix mtxV2W;
         math::SMatrix::Inverse(mtxV2W, camera.mtxW2V);
 
-        math::SVector rayFar;
+        math::SVector4 rayFar;
         {
             // Clip -> View
             izanagi::math::SMatrix::Apply(rayFar, clip, mtxC2V);
@@ -119,10 +119,10 @@ namespace izanagi {
             // View -> World
             izanagi::math::SMatrix::Apply(rayFar, rayFar, mtxV2W);
 
-            izanagi::math::SVector::Div(rayFar, rayFar, rayFar.w);
+            izanagi::math::SVector4::Div(rayFar, rayFar, rayFar.w);
         }
 
-        izanagi::math::SVector::Sub(ray, rayFar, camera.pos);
+        izanagi::math::SVector4::Sub(ray, rayFar, camera.pos);
 #else
         // NOTE
         //
@@ -183,12 +183,12 @@ namespace izanagi {
         math::SMatrix mtx;
         math::SMatrix::Inverse(mtx, camera.mtxW2V);
 
-        math::CVector rayFar(x, y, 1.0f, w);
+        math::CVector4 rayFar(x, y, 1.0f, w);
 
         math::SMatrix::Apply(rayFar, rayFar, mtx);
-        math::SVector::Div(rayFar, rayFar, rayFar.w);
+        math::SVector4::Div(rayFar, rayFar, rayFar.w);
 
-        math::SVector::Sub(ray, rayFar, camera.pos);
+        math::SVector4::Sub(ray, rayFar, camera.pos);
 #endif
     }
 
@@ -197,8 +197,8 @@ namespace izanagi {
         const math::STriangle& tri,
         IZ_UINT pos0, IZ_UINT pos1)
     {
-        math::SVector dir;
-        math::SVector::SubXYZ(
+        math::SVector4 dir;
+        math::SVector4::SubXYZ(
             dir,
             tri.pt[pos1],
             tri.pt[pos0]);
@@ -306,14 +306,14 @@ namespace izanagi {
     // @param[in] pos1 三角形の頂点インデックス
     // @return 辺と面が交わるかどうか
     inline IZ_BOOL _GetCrossPoint(
-        math::SVector& ret,
+        math::SVector4& ret,
         const math::CPlane& scissorPlane,
         const math::STriangle& tri,
         IZ_UINT pos0, IZ_UINT pos1)
     {
 #if 0
-        math::SVector dir;
-        math::SVector::SubXYZ(
+        math::SVector4 dir;
+        math::SVector4::SubXYZ(
             dir,
             tri.pt[pos1],
             tri.pt[pos0]);
@@ -335,7 +335,7 @@ namespace izanagi {
     struct FuncScissor
     {
         void operator()(
-            const math::SVector point[],
+            const math::SVector4 point[],
             const IZ_UINT idxTbl[][3],
             IZ_UINT triNum,
             math::CTriangle* newTriArray)
@@ -359,7 +359,7 @@ namespace izanagi {
     struct FuncScissorSTL
     {
         void operator()(
-            const math::SVector point[],
+            const math::SVector4 point[],
             const IZ_UINT idxTbl[][3],
             IZ_UINT triNum,
             std::vector<math::CTriangle, STLMemoryAllocator<math::CTriangle> >& triList)
@@ -426,7 +426,7 @@ namespace izanagi {
         };
 
         // 最大で４頂点まで
-        math::SVector tmp[4];
+        math::SVector4 tmp[4];
 
         IZ_UINT vtxNum = 0;
 

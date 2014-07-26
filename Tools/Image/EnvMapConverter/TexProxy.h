@@ -103,14 +103,14 @@ public:
     /** 反射ベクトルからUVを取得.
      */
     virtual void getUVFromRef(
-        const izanagi::math::SVector& ref,
+        const izanagi::math::SVector4& ref,
         IZ_FLOAT& u, IZ_FLOAT& v) = 0;
 
     /** XYから反射ベクトルを取得.
      */
     virtual void getRef(
         IZ_UINT x, IZ_UINT y,
-        izanagi::math::SVector& ref,
+        izanagi::math::SVector4& ref,
         izanagi::graph::E_GRAPH_CUBE_TEX_FACE face = izanagi::graph::E_GRAPH_CUBE_TEX_FACE_NUM) = 0;
 
     /** UVから色を取得.

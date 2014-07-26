@@ -26,8 +26,8 @@ namespace scenegraph {
         template <typename _DECAL>
         static CDecal* Create(
             izanagi::IMemoryAllocator* allocator,
-            const izanagi::math::SVector& point,
-            const izanagi::math::SVector& normal,
+            const izanagi::math::SVector4& point,
+            const izanagi::math::SVector4& normal,
             IZ_FLOAT rectangleLengthX,
             IZ_FLOAT rectangleLengthZ)
         {
@@ -67,8 +67,8 @@ namespace scenegraph {
          * @param[in] rectangleLengthZ デカール矩形のZ軸方向長さ
          */
         void SetRectangle(
-            const izanagi::math::SVector& point,
-            const izanagi::math::SVector& normal,
+            const izanagi::math::SVector4& point,
+            const izanagi::math::SVector4& normal,
             IZ_FLOAT rectangleLengthX,
             IZ_FLOAT rectangleLengthZ);
 
@@ -97,7 +97,7 @@ namespace scenegraph {
          *
          * @return デカール中心
          */
-        const izanagi::math::SVector& GetCenter() const;
+        const izanagi::math::SVector4& GetCenter() const;
 
     protected:
         izanagi::IMemoryAllocator* m_Allocator;
@@ -125,7 +125,7 @@ namespace scenegraph {
         izanagi::math::CTriangle* m_Triangles;
 
         struct SVtx {
-            izanagi::math::SVector point;
+            izanagi::math::SVector4 point;
             IZ_COLOR color;
             IZ_FLOAT uv[2];
         };
@@ -145,8 +145,8 @@ namespace scenegraph {
     public:
         static CDecal* Create(
             izanagi::IMemoryAllocator* allocator,
-            const izanagi::math::SVector& point,
-            const izanagi::math::SVector& normal,
+            const izanagi::math::SVector4& point,
+            const izanagi::math::SVector4& normal,
             IZ_FLOAT rectangleLengthX,
             IZ_FLOAT rectangleLengthZ)
         {
@@ -186,8 +186,8 @@ namespace scenegraph {
     public:
         static CDecal* Create(
             izanagi::IMemoryAllocator* allocator,
-            const izanagi::math::SVector& point,
-            const izanagi::math::SVector& normal,
+            const izanagi::math::SVector4& point,
+            const izanagi::math::SVector4& normal,
             IZ_FLOAT rectangleLengthX,
             IZ_FLOAT rectangleLengthZ)
         {

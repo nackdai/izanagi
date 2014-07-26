@@ -384,7 +384,7 @@ IZ_BOOL CXFileParser::ParseMesh(SXFileMesh* pMesh)
 
     // Read positions.
     for (IZ_UINT i = 0; i < nPosNum; i++) {
-        izanagi::math::SVector& pos = pMesh->positions[i];
+        izanagi::math::SVector4& pos = pMesh->positions[i];
         ReadVectorXYZ(pos);
         pos.w = 1.0f;
     }
@@ -460,7 +460,7 @@ IZ_BOOL CXFileParser::ParseMeshNormal(SXFileMesh* pMesh)
 
     // Read normals.
     for (IZ_UINT i = 0; i < nNmlNum; i++) {
-        izanagi::math::SVector& nml = pMesh->normals[i];
+        izanagi::math::SVector4& nml = pMesh->normals[i];
         ReadVectorXYZ(nml);
     }
 
@@ -1296,7 +1296,7 @@ IZ_INT CXFileParser::ReadInt()
     return ret;
 }
 
-void CXFileParser::ReadVector(izanagi::math::SVector& vec)
+void CXFileParser::ReadVector(izanagi::math::SVector4& vec)
 {
     vec.x = ReadFloat();
     vec.y = ReadFloat();
@@ -1305,7 +1305,7 @@ void CXFileParser::ReadVector(izanagi::math::SVector& vec)
     VRETURN_VAL(IsSeparator(),);
 }
 
-void CXFileParser::ReadVectorXYZ(izanagi::math::SVector& vec)
+void CXFileParser::ReadVectorXYZ(izanagi::math::SVector4& vec)
 {
     vec.x = ReadFloat();
     vec.y = ReadFloat();
@@ -1313,7 +1313,7 @@ void CXFileParser::ReadVectorXYZ(izanagi::math::SVector& vec)
     VRETURN_VAL(IsSeparator(),);
 }
 
-void CXFileParser::ReadVectorXY(izanagi::math::SVector& vec)
+void CXFileParser::ReadVectorXY(izanagi::math::SVector4& vec)
 {
     ReadFloat2(vec.x, vec.y);
 }
@@ -1325,12 +1325,12 @@ void CXFileParser::ReadFloat2(IZ_FLOAT& f0, IZ_FLOAT& f1)
     VRETURN_VAL(IsSeparator(),);
 }
 
-void CXFileParser::ReadRGBA(izanagi::math::SVector& vec)
+void CXFileParser::ReadRGBA(izanagi::math::SVector4& vec)
 {
     ReadVector(vec);
 }
 
-void CXFileParser::ReadRGB(izanagi::math::SVector& vec)
+void CXFileParser::ReadRGB(izanagi::math::SVector4& vec)
 {
     ReadVectorXYZ(vec);
 }

@@ -522,7 +522,7 @@ IZ_BOOL CPostEffectShader::SetTexture(
 * 直接頂点シェーダにテクスチャオフセットパラメータをセットする
 */
 IZ_BOOL CPostEffectShader::SetTextureOffsetParameter(
-    const math::SVector* pVector,
+    const math::SVector4* pVector,
     IZ_UINT num)
 {
     VRETURN(m_RenderParam.IsValid());
@@ -560,7 +560,7 @@ IZ_BOOL CPostEffectShader::SetTextureOffsetParameter(const graph::CTexture* pTex
     const S_PES_PASS* pPassDesc = pPass->GetDesc();
 
     IZ_UINT nOffsetVectorNum = 0;   // オフセット数
-    math::SVector vecOffset[16];            // オフセット
+    math::SVector4 vecOffset[16];            // オフセット
 
     if (pPassDesc->ann.TexOffsetParamIdx >= 0) {
         // パラメータ記述取得

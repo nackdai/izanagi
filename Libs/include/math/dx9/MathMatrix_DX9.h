@@ -4,7 +4,7 @@
 #include <math.h>
 #include "izDefs.h"
 #include "math/MathDefs.h"
-#include "math/MathVector.h"
+#include "math/MathVector4.h"
 
 namespace izanagi
 {
@@ -36,7 +36,7 @@ namespace math
 
     // ベクトルとマトリクスを乗算する
     // dst = vec x mtx
-    void SMatrix::Apply(SVector& dst, const SVector& vec, const SMatrix& mtx)
+    void SMatrix::Apply(SVector4& dst, const SVector4& vec, const SMatrix& mtx)
     {
         D3DXVec4Transform(
             reinterpret_cast<D3DXVECTOR4*>(&dst),
@@ -46,10 +46,10 @@ namespace math
 
     // ベクトルとマトリクスのＸＹＺ成分のみを乗算する
     // ベクトルのＷ成分、およびマトリクスの第４行は無視される
-    void SMatrix::ApplyXYZ(SVector& dst, const SVector& vec, const SMatrix& mtx)
+    void SMatrix::ApplyXYZ(SVector4& dst, const SVector4& vec, const SMatrix& mtx)
     {
-        SVector v;
-        SVector::Copy(v, vec);
+        SVector4 v;
+        SVector4::Copy(v, vec);
         v.w = 0.0f;
 
         D3DXVec4Transform(

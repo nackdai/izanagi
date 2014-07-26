@@ -19,8 +19,8 @@ namespace izanagi {
         /** 初期化.
          */
         void Init(
-            const math::SVector& pos,
-            const math::SVector& at,
+            const math::SVector4& pos,
+            const math::SVector4& at,
             IZ_FLOAT fNear, IZ_FLOAT fFar,
             IZ_FLOAT fov,
             IZ_FLOAT aspect);
@@ -31,7 +31,7 @@ namespace izanagi {
 
         /** 移動.
          */
-        void Translate(const math::SVector& trans);
+        void Translate(const math::SVector4& trans);
 
         /** X軸回転.
          */
@@ -48,31 +48,31 @@ namespace izanagi {
         /** 任意軸回転.
          */
         void Rotate(
-            const math::SVector& axis,
+            const math::SVector4& axis,
             IZ_FLOAT rad);
 
         /** 位置指定.
          */
-        void SetPos(const math::SVector& pos);
+        void SetPos(const math::SVector4& pos);
 
         void SetTransform(const math::SMatrix& mtx);
 
     public:
         /** カメラのX軸取得
          */
-        const math::SVector& GetX() const { return m_X; }
+        const math::SVector4& GetX() const { return m_X; }
 
         /** カメラのY軸取得
          */
-        const math::SVector& GetY() const { return m_Y; }
+        const math::SVector4& GetY() const { return m_Y; }
 
         /** カメラのZ軸取得
          */
-        const math::SVector& GetZ() const { return m_Z; }
+        const math::SVector4& GetZ() const { return m_Z; }
 
         /** カメラの位置取得
          */
-        const math::SVector& GetPos() const { return m_Pos; }
+        const math::SVector4& GetPos() const { return m_Pos; }
 
         /**
          */
@@ -82,9 +82,9 @@ namespace izanagi {
         // 使わせない
 
         void Init(
-            const math::SVector& vecPos,
-            const math::SVector& vecRef,
-            const math::SVector& vecUp,
+            const math::SVector4& vecPos,
+            const math::SVector4& vecRef,
+            const math::SVector4& vecUp,
             IZ_FLOAT fNear, IZ_FLOAT fFar,
             IZ_FLOAT fFov,
             IZ_FLOAT fAspect)
@@ -93,22 +93,22 @@ namespace izanagi {
 
         void Init(const SCameraParam& sParam) {}
 
-        void SetAt(const math::SVector& vecAt) {}
+        void SetAt(const math::SVector4& vecAt) {}
 
-        void SetUp(const math::SVector& vecUp) {}
+        void SetUp(const math::SVector4& vecUp) {}
 
     private:
-        math::SVector m_X;
+        math::SVector4 m_X;
         
         // NOTE
         // m_Param.up の参照とすることで m_Param.up と同期するようにする
-        math::SVector& m_Y;
+        math::SVector4& m_Y;
 
-        math::SVector m_Z;
+        math::SVector4 m_Z;
 
         // NOTE
         // m_Param.pos の参照とすることで m_Param.pos と同期するようにする
-        math::SVector& m_Pos;
+        math::SVector4& m_Pos;
 
         // カメラの変換マトリクス
         math::SMatrix m_Transform;

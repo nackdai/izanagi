@@ -169,7 +169,7 @@ IZ_UINT CPmdImporter::GetVtxFmt()
 
 IZ_BOOL CPmdImporter::GetVertex(
     IZ_UINT nIdx,
-    izanagi::math::SVector& vec,
+    izanagi::math::SVector4& vec,
     izanagi::E_MSH_VTX_FMT_TYPE type)
 {
     // NOTE

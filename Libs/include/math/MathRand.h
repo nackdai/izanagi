@@ -53,7 +53,7 @@ namespace math
 
         /** 乱数生成
          */
-        static void GetRandVector(SVector& v)
+        static void GetRandVector(SVector4& v)
         {
             v.x = GetRandFloat();
             v.y = GetRandFloat();
@@ -63,7 +63,7 @@ namespace math
 
         /** 乱数生成
          */
-        static void GetRandVectorXYZ(SVector& v)
+        static void GetRandVectorXYZ(SVector4& v)
         {
             v.x = GetRandFloat();
             v.y = GetRandFloat();

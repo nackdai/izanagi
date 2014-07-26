@@ -15,10 +15,10 @@ namespace izanagi {
         // aspect = width / height
         IZ_FLOAT aspect;
 
-        math::SVector pos;      // 視点
-        math::SVector ref;      // 注視点
+        math::SVector4 pos;      // 視点
+        math::SVector4 ref;      // 注視点
 
-        math::SVector up;
+        math::SVector4 up;
 
         math::SMatrix mtxW2V;   // World - View
         math::SMatrix mtxV2C;   // View - Clip
@@ -39,9 +39,9 @@ namespace izanagi {
     public:
         // 初期化
         void Init(
-            const math::SVector& vecPos,
-            const math::SVector& vecRef,
-            const math::SVector& vecUp,
+            const math::SVector4& vecPos,
+            const math::SVector4& vecRef,
+            const math::SVector4& vecUp,
             IZ_FLOAT fNear, IZ_FLOAT fFar,
             IZ_FLOAT fFov,
             IZ_FLOAT fAspect);
@@ -55,7 +55,7 @@ namespace izanagi {
          */
         void GetOffsetV2C(
             math::SMatrix& mtxV2C,
-            const math::SVector& pos,
+            const math::SVector4& pos,
             IZ_FLOAT delta);
 
         /** カメラ座標系でのオフセットを考慮にいれたV2Cマトリクスを取得.
@@ -69,21 +69,21 @@ namespace izanagi {
 
         const SCameraParam& GetParam() const { return m_Param; }
 
-        void SetPos(const math::SVector& vecPos)
+        void SetPos(const math::SVector4& vecPos)
         {
-            math::SVector::Copy(m_Param.pos, vecPos);
+            math::SVector4::Copy(m_Param.pos, vecPos);
             m_IsDirtyW2V = IZ_TRUE;
         }
 
-        void SetAt(const math::SVector& vecAt)
+        void SetAt(const math::SVector4& vecAt)
         {
-            math::SVector::Copy(m_Param.ref, vecAt);
+            math::SVector4::Copy(m_Param.ref, vecAt);
             m_IsDirtyW2V = IZ_TRUE;
         }
 
-        void SetUp(const math::SVector& vecUp)
+        void SetUp(const math::SVector4& vecUp)
         {
-            math::SVector::Copy(m_Param.up, vecUp);
+            math::SVector4::Copy(m_Param.up, vecUp);
             m_IsDirtyW2V = IZ_TRUE;
         }
 
@@ -111,7 +111,7 @@ namespace izanagi {
             m_IsDirtyV2C = IZ_TRUE;
         }
 
-        math::SVector GetDir();
+        math::SVector4 GetDir();
 
     protected:
         // World - View

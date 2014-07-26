@@ -1,7 +1,7 @@
 #if !defined(__IZANAGI_SHADER_LIGHT_DEFS_FXH__)
 #define __IZANAGI_SHADER_LIGHT_DEFS_FXH__
 
-#define SVector float4
+#define SVector4 float4
 
 ////////////////////////////////////////////////////////////
 
@@ -9,43 +9,43 @@
 * 平行光源
 */
 struct SParallelLightParam {
-    SVector vDir;
-    SVector color;
+    SVector4 vDir;
+    SVector4 color;
 };
 
 /**
 * 環境光
 */
 struct SAmbientLightParam {
-    SVector color;
+    SVector4 color;
 };
 
 /**
 * 点光源
 */
 struct SPointLightParam {
-    SVector vPos;
-    SVector color;
-    SVector attn;   // 0 - 2 : attn
+    SVector4 vPos;
+    SVector4 color;
+    SVector4 attn;   // 0 - 2 : attn
 };
 
 /**
 * スポットライト
 */
 struct SSpotLightParam {
-    SVector vPos;
-    SVector vDir;
-    SVector color;
-    SVector param;  // 0 : power / 1 - 3 : attn
+    SVector4 vPos;
+    SVector4 vDir;
+    SVector4 color;
+    SVector4 param;  // 0 : power / 1 - 3 : attn
 };
 
 /**
 * 半球ライト
 */
 struct SHemisphereLightParam {
-    SVector vAxis;
-    SVector upColor;
-    SVector downColor;
+    SVector4 vAxis;
+    SVector4 upColor;
+    SVector4 downColor;
 };
 
 ////////////////////////////////////////////////////////////

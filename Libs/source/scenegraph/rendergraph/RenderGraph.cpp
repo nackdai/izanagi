@@ -67,11 +67,11 @@ CRenderGraph::~CRenderGraph()
 namespace {
     IZ_FLOAT _ComputeZLevel(
         const CCamera& camera,
-        const math::SVector& pos)
+        const math::SVector4& pos)
     {
         const SCameraParam& cameraParam = camera.GetParam();
 
-        math::SVector v;
+        math::SVector4 v;
         math::SMatrix::Apply(v, pos, cameraParam.mtxW2C);
 
         IZ_FLOAT w = v.w;
@@ -95,7 +95,7 @@ namespace {
 // 登録.
 IZ_BOOL CRenderGraph::Register(
     const CCamera& camera,
-    const math::SVector& pos,
+    const math::SVector4& pos,
     IRenderElement* element)
 {
     IZ_FLOAT normalizedZ = _ComputeZLevel(camera, pos);
@@ -117,7 +117,7 @@ IZ_BOOL CRenderGraph::Register(
 // モデル登録
 IZ_BOOL CRenderGraph::Register(
     const CCamera& camera,
-    const math::SVector& pos,
+    const math::SVector4& pos,
     IModel* model)
 {
     IZ_UINT num = model->GetMeshSetNum();

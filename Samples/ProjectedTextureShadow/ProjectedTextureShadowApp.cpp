@@ -96,9 +96,9 @@ IZ_BOOL CProjectedTextureShadowApp::InitInternal(
 
     // カメラ
     camera.Init(
-        izanagi::math::CVector(0.0f, 0.0f, 30.0f, 1.0f),
-        izanagi::math::CVector(0.0f, 0.0f, 0.0f, 1.0f),
-        izanagi::math::CVector(0.0f, 1.0f, 0.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 0.0f, 30.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 0.0f, 0.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 1.0f, 0.0f, 1.0f),
         1.0f,
         500.0f,
         izanagi::math::CMath::Deg2Rad(60.0f),
@@ -248,7 +248,7 @@ void CProjectedTextureShadowApp::RenderInternal(izanagi::graph::CGraphicsDevice*
             {
                 izanagi::math::SMatrix::GetTrans(
                     mtxL2W,
-                    izanagi::math::CVector(0.0f, 5.0f, 0.0f));
+                    izanagi::math::CVector4(0.0f, 5.0f, 0.0f));
 
                 _SetShaderParam(
                     m_Shader,
@@ -274,8 +274,8 @@ void CProjectedTextureShadowApp::RenderForShadow(izanagi::graph::CGraphicsDevice
 
     m_Shadow->BeginShadowRender(
         device,
-        izanagi::math::CVector(10.0f, 10.0f, 10.0f),    // ライトの位置
-        izanagi::math::CVector(-1.0f, -1.0f, -1.0f));    // ライトの向き
+        izanagi::math::CVector4(10.0f, 10.0f, 10.0f),    // ライトの位置
+        izanagi::math::CVector4(-1.0f, -1.0f, -1.0f));    // ライトの向き
 
     // 影用
     m_Shader->Begin(device, 2, IZ_FALSE);
@@ -292,7 +292,7 @@ void CProjectedTextureShadowApp::RenderForShadow(izanagi::graph::CGraphicsDevice
             {
                 izanagi::math::SMatrix::GetTrans(
                     mtxL2W,
-                    izanagi::math::CVector(0.0f, 5.0f, 0.0f));
+                    izanagi::math::CVector4(0.0f, 5.0f, 0.0f));
 
                 _SetShaderParam(
                     m_Shader,

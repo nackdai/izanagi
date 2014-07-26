@@ -97,7 +97,7 @@ IZ_BOOL CCube::CreateTriangles(
     VRETURN(m_Triangles != IZ_NULL);
 
     // 位置
-    izanagi::math::SVector POS[] = {
+    izanagi::math::SVector4 POS[] = {
         {-0.5f,  0.5f, -0.5f},
         {-0.5f, -0.5f, -0.5f},
         { 0.5f, -0.5f, -0.5f},
@@ -111,7 +111,7 @@ IZ_BOOL CCube::CreateTriangles(
 
     for (IZ_UINT i = 0; i < COUNTOF(POS); i++)
     {
-        izanagi::math::SVector::ScaleXYZ(POS[i], POS[i], size);
+        izanagi::math::SVector4::ScaleXYZ(POS[i], POS[i], size);
     }
 
     // 面
@@ -149,8 +149,8 @@ IZ_BOOL CCube::Draw(izanagi::graph::CGraphicsDevice* device)
 
 IZ_BOOL CCube::GetCrossPoint(
     const izanagi::math::CRay& ray,
-    izanagi::math::SVector& refPtr,
-    izanagi::math::SVector* normal)
+    izanagi::math::SVector4& refPtr,
+    izanagi::math::SVector4* normal)
 {
 #if 0
     for (IZ_UINT i = 0; i < m_TriNum; i++)
@@ -160,7 +160,7 @@ IZ_BOOL CCube::GetCrossPoint(
             if (normal != IZ_NULL)
             {
                 // 法線を取得
-                izanagi::math::SVector::CopyXYZ(*normal, m_Triangles[i].nml);
+                izanagi::math::SVector4::CopyXYZ(*normal, m_Triangles[i].nml);
             }
 
             return IZ_TRUE;
@@ -171,7 +171,7 @@ IZ_BOOL CCube::GetCrossPoint(
 #else
     IZ_FLOAT minLen = IZ_FLOAT_MAX;
 
-    izanagi::math::CVector tmpPtr;
+    izanagi::math::CVector4 tmpPtr;
     IZ_BOOL isCross = IZ_FALSE;
     IZ_UINT crossTriPos = 0;
 
@@ -181,7 +181,7 @@ IZ_BOOL CCube::GetCrossPoint(
         {
             isCross = IZ_TRUE;
 
-            IZ_FLOAT len = izanagi::math::SVector::Length2(ray.p, tmpPtr);
+            IZ_FLOAT len = izanagi::math::SVector4::Length2(ray.p, tmpPtr);
             if (len < minLen)
             {
                 minLen = len;
@@ -197,7 +197,7 @@ IZ_BOOL CCube::GetCrossPoint(
         if (normal != IZ_NULL)
         {
             // 法線を取得
-            izanagi::math::SVector::CopyXYZ(
+            izanagi::math::SVector4::CopyXYZ(
                 *normal,
                 m_Triangles[crossTriPos].nml);
         }

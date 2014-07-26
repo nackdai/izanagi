@@ -110,7 +110,7 @@ int main(int argc, char* argv[])
         for (IZ_UINT x = 0; x < width; x++) {
 #if 1
             // 法線
-            izanagi::math::SVector nml;
+            izanagi::math::SVector4 nml;
 
             // 高さ
             IZ_FLOAT h = src[y * srcPitch + x * srcBPP] * div * option.scale;
@@ -125,7 +125,7 @@ int main(int argc, char* argv[])
             IZ_FLOAT heightH = src[pos] * div * option.scale;
 
             // 水平方向のベクトル
-            izanagi::math::CVector vecH(lengthPerPixel, 0.0f, heightH - h);
+            izanagi::math::CVector4 vecH(lengthPerPixel, 0.0f, heightH - h);
 
             // 垂直方向の高さの参照の向き
             IZ_BOOL isBottom = (y + 1 < height);
@@ -137,20 +137,20 @@ int main(int argc, char* argv[])
             IZ_FLOAT heightV = src[pos] * div * option.scale;
 
             // 垂直方向のベクトル
-            izanagi::math::CVector vecV(0.0f, lengthPerPixel, heightV - h);
+            izanagi::math::CVector4 vecV(0.0f, lengthPerPixel, heightV - h);
 
             // 外積を計算
 #if 0
             if ((isRight && isBottom)
                 || (!isRight && !isBottom))
             {
-                izanagi::math::SVector::Cross(nml, vecH, vecV);
+                izanagi::math::SVector4::Cross(nml, vecH, vecV);
             }
             else {
-                izanagi::math::SVector::Cross(nml, vecV, vecH);
+                izanagi::math::SVector4::Cross(nml, vecV, vecH);
             }
 #else
-            izanagi::math::SVector::Cross(nml, vecH, vecV);
+            izanagi::math::SVector4::Cross(nml, vecH, vecV);
 #endif
 #else
             // 右ピクセルの高さ
@@ -164,18 +164,18 @@ int main(int argc, char* argv[])
             // 高さ
             IZ_FLOAT h = src[y * srcPitch + x * srcBPP] * div * option.scale;
 
-            izanagi::math::SVector nml;
+            izanagi::math::SVector4 nml;
 
-            izanagi::math::CVector right(lengthPerPixel, 0.0f, rightHeight - h);
+            izanagi::math::CVector4 right(lengthPerPixel, 0.0f, rightHeight - h);
 
-            izanagi::math::CVector bottom(0.0f, lengthPerPixel, bottomHeight - h);
+            izanagi::math::CVector4 bottom(0.0f, lengthPerPixel, bottomHeight - h);
 
             // 外積を計算
-            izanagi::math::SVector::Cross(nml, bottom, right);
+            izanagi::math::SVector4::Cross(nml, bottom, right);
 #endif
 
             // 正規化
-            izanagi::math::SVector::Normalize(nml, nml);
+            izanagi::math::SVector4::Normalize(nml, nml);
 
             // -1.0 - 1.0 のレンジを 0.0 - 1.0 のレンジに変換
             nml.x = nml.x * 0.5f + 0.5f;

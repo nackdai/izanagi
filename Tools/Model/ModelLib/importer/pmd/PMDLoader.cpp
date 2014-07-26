@@ -116,7 +116,7 @@ void CPmdLoader::ComputeJointPose()
         izanagi::math::SMatrix mtx;
         izanagi::math::SMatrix::GetTrans(
             mtx,
-            izanagi::math::CVector(pose.trans[0], pose.trans[1], pose.trans[2]));
+            izanagi::math::CVector4(pose.trans[0], pose.trans[1], pose.trans[2]));
 
         m_MtxList.push_back(mtx);
     }

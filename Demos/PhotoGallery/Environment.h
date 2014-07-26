@@ -34,7 +34,7 @@ public:
 
     /** Get parallel light direction.
      */
-    izanagi::math::SVector& GetDir()
+    izanagi::math::SVector4& GetDir()
     {
         return m_ParallelLight.vDir;
     }

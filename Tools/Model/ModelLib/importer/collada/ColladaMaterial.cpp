@@ -280,9 +280,9 @@ IZ_BOOL CColladaMaterial::ReadEffect(SMaterial& sMtrl, domEffect* effect)
 }
 
 namespace {
-    izanagi::math::SVector _ReadColorOrTextureType(domCommon_color_or_texture_type_complexType* color_or_texture)
+    izanagi::math::SVector4 _ReadColorOrTextureType(domCommon_color_or_texture_type_complexType* color_or_texture)
     {
-        izanagi::math::SVector ret;
+        izanagi::math::SVector4 ret;
 
         if (color_or_texture->getColor()) {
             const domFx_color_common& color = color_or_texture->getColor()->getValue();
@@ -343,7 +343,7 @@ namespace {
     do {\
         domCommon_color_or_texture_type_complexType* type = p->func();\
         if (type != IZ_NULL) {\
-            izanagi::math::SVector color = _ReadColorOrTextureType(type);\
+            izanagi::math::SVector4 color = _ReadColorOrTextureType(type);\
             sEffect.params.push_back(SEffectParam(#name, color.v, COUNTOF(color.v)));\
         }\
     } while(0)

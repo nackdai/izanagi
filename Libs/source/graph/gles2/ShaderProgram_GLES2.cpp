@@ -303,7 +303,7 @@ namespace graph
         return IZ_TRUE;
     }
     
-    IZ_BOOL CShaderProgramGLES2::SetVector(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const math::SVector& v)
+    IZ_BOOL CShaderProgramGLES2::SetVector(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const math::SVector4& v)
     {
         IZ_ASSERT(IsValid());
         IZ_ASSERT(IsLinked());
@@ -316,7 +316,7 @@ namespace graph
         return IZ_TRUE;
     }
 
-    IZ_BOOL CShaderProgramGLES2::SetVectorArray(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const math::SVector* v, IZ_UINT num)
+    IZ_BOOL CShaderProgramGLES2::SetVectorArray(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const math::SVector4* v, IZ_UINT num)
     {
         IZ_ASSERT(IsValid());
         IZ_ASSERT(IsLinked());
@@ -353,7 +353,7 @@ namespace graph
             math::SMatrix::Transpose(tmp[i], mtx);
         }
 
-        math::SVector* buf = reinterpret_cast<math::SVector*>(tmp);
+        math::SVector4* buf = reinterpret_cast<math::SVector4*>(tmp);
 
         return SetVectorArray(device, handle, buf, num);
     }

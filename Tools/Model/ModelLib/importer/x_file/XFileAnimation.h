@@ -11,7 +11,7 @@ class CXFileAnimation {
 private:
     struct SAnmKey {
         IZ_UINT time;
-        izanagi::math::SVector param;
+        izanagi::math::SVector4 param;
     };
 
     struct SAnmChannel {

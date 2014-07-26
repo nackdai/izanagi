@@ -34,7 +34,7 @@ namespace math {
      */
     IZ_FLOAT CMathCurve::ComputeBezier(
         IZ_FLOAT t,
-        const SVector& p)
+        const SVector4& p)
     {
         return ComputeBezier(t, p.x, p.y, p.z, p.w);
     }
@@ -48,16 +48,16 @@ namespace math {
         IZ_FLOAT v0,
         IZ_FLOAT v1)
     {
-        return ComputeHermite(t, CVector(x0, x1, v0, v1));
+        return ComputeHermite(t, CVector4(x0, x1, v0, v1));
     }
 
     /** Hermite曲線.
      */
     IZ_FLOAT CMathCurve::ComputeHermite(
         IZ_FLOAT t,
-        const SVector& p)
+        const SVector4& p)
     {
-        CVector tv(t * t * t, t * t, t, 1.0f);
+        CVector4 tv(t * t * t, t * t, t, 1.0f);
 
         static const SMatrix mtxHermite = {
              2.0f, -2.0f,  1.0f,  1.0f,
@@ -73,7 +73,7 @@ namespace math {
         //                         | 1  0  0  0 | |v1|
 
         SMatrix::Apply(tv, tv, mtxHermite);
-        IZ_FLOAT ret = SVector::Dot(tv, p);
+        IZ_FLOAT ret = SVector4::Dot(tv, p);
 
         return ret;
     }
@@ -97,7 +97,7 @@ namespace math {
      */
     IZ_FLOAT CMathCurve::ComputeCatmullRom(
         IZ_FLOAT t,
-        const SVector& p)
+        const SVector4& p)
     {
         return ComputeCatmullRom(t, p.x, p.y, p.z, p.w);
     }

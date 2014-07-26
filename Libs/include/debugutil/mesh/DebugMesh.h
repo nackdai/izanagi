@@ -65,10 +65,10 @@ namespace izanagi {
         struct SMeshFace;
 
         struct SMeshVtx {
-            math::SVector pos;
-            math::SVector nml;
-            math::SVector tangent;
-            math::SVector binml;
+            math::SVector4 pos;
+            math::SVector4 nml;
+            math::SVector4 tangent;
+            math::SVector4 binml;
             IZ_COLOR clr;
             IZ_FLOAT uv[2];
 

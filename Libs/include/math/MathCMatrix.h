@@ -24,15 +24,15 @@ namespace math
         }
 
         CMatrix(
-            const SVector& v0,
-            const SVector& v1,
-            const SVector& v2,
-            const SVector& v3)
+            const SVector4& v0,
+            const SVector4& v1,
+            const SVector4& v2,
+            const SVector4& v3)
         {
-            SVector::Copy(v[0], v0);
-            SVector::Copy(v[1], v1);
-            SVector::Copy(v[2], v2);
-            SVector::Copy(v[3], v3);
+            SVector4::Copy(v[0], v0);
+            SVector4::Copy(v[1], v1);
+            SVector4::Copy(v[2], v2);
+            SVector4::Copy(v[3], v3);
         }
 
         CMatrix(
@@ -168,7 +168,7 @@ namespace math
 
         void SetTrans(IZ_FLOAT x, IZ_FLOAT y, IZ_FLOAT z)
         {
-            SVector trans;
+            SVector4 trans;
             trans.Set(x, y, z);
 
             SMatrix::GetTrans(*this, trans);

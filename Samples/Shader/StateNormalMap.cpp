@@ -86,7 +86,7 @@ IZ_BOOL CStateNormalMap::Render(izanagi::graph::CGraphicsDevice* device)
                 izanagi::math::SMatrix::Inverse(mtxW2L, m_L2W);
 
                 // World -> Local
-                izanagi::math::SVector parallelLightLocalDir;
+                izanagi::math::SVector4 parallelLightLocalDir;
                 izanagi::math::SMatrix::ApplyXYZ(
                     parallelLightLocalDir,
                     m_ParallelLight.vDir,
@@ -104,7 +104,7 @@ IZ_BOOL CStateNormalMap::Render(izanagi::graph::CGraphicsDevice* device)
                 izanagi::math::SMatrix::Inverse(mtxV2L, mtxV2L);
 
                 // ビュー座標系における視点は常に原点
-                izanagi::math::CVector eyePos(0.0f, 0.0f, 0.0f, 1.0f);
+                izanagi::math::CVector4 eyePos(0.0f, 0.0f, 0.0f, 1.0f);
 
                 // 視点のローカル座標を計算する
                 izanagi::math::SMatrix::Apply(eyePos, eyePos, mtxV2L);
@@ -194,7 +194,7 @@ IZ_BOOL CStateNormalMap::Enter(
 
         // Parallel Light Direction
         m_ParallelLight.vDir.Set(0.0f, 0.0f, -1.0f);
-        izanagi::math::SVector::Normalize(m_ParallelLight.vDir, m_ParallelLight.vDir);
+        izanagi::math::SVector4::Normalize(m_ParallelLight.vDir, m_ParallelLight.vDir);
 
         // マテリアル
         m_Mtrl.vDiffuse.Set(1.0f, 1.0f, 1.0f, 1.0f);

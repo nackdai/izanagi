@@ -230,7 +230,7 @@ void CDebugMeshSphere::ComputeVtx(
     IZ_FLOAT fSinLong = math::CMath::SinF(fLongitude);
     IZ_FLOAT fCosLong = math::CMath::CosF(fLongitude);
 
-    math::SVector vNml;
+    math::SVector4 vNml;
 #ifdef IZ_COORD_LEFT_HAND
     vNml.x = fSinLat * fCosLong;
     vNml.y = fCosLat;
@@ -244,8 +244,8 @@ void CDebugMeshSphere::ComputeVtx(
 
     // 位置
     if (IsPos(flag)) {
-        math::SVector vPos;
-        math::SVector::Scale(vPos, vNml, fRadius);
+        math::SVector4 vPos;
+        math::SVector4::Scale(vPos, vNml, fRadius);
 
         pVtx->pos.v[0] = vPos.x;
         pVtx->pos.v[1] = vPos.y;

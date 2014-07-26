@@ -91,9 +91,6 @@
     <ClInclude Include="..\..\include\math\MathCQuaternion.h">
       <Filter>include\basic</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\math\MathCVector.h">
-      <Filter>include\basic</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\math\MathHalfFloat.h">
       <Filter>include\basic</Filter>
     </ClInclude>
@@ -107,9 +104,6 @@
       <Filter>include\basic</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\math\MathUtil.h">
-      <Filter>include\basic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\math\MathVector.h">
       <Filter>include\basic</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\math\SFMT\SFMT-alti.h">
@@ -161,12 +155,6 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\izMath.h" />
-    <ClInclude Include="..\..\include\math\dx9\MathVector_DX9.h">
-      <Filter>include\basic\dx9</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\math\noplatform\MathVector_NoPlatform.h">
-      <Filter>include\basic\noplatform</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\math\noplatform\MathMatrix_NoPlatform.h">
       <Filter>include\basic\noplatform</Filter>
     </ClInclude>
@@ -181,6 +169,18 @@
     </ClInclude>
     <ClInclude Include="..\..\include\math\MathCurve.h">
       <Filter>include\curve</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\MathCVector4.h">
+      <Filter>include\basic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\MathVector4.h">
+      <Filter>include\basic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\noplatform\MathVector4_NoPlatform.h">
+      <Filter>include\basic\noplatform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\dx9\MathVector4_DX9.h">
+      <Filter>include\basic\dx9</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

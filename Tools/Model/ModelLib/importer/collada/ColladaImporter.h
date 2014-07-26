@@ -52,7 +52,7 @@ public:
     // 指定された頂点における指定フォーマットのデータを取得.
     IZ_BOOL GetVertex(
         IZ_UINT nIdx,
-        izanagi::math::SVector& vec,
+        izanagi::math::SVector4& vec,
         izanagi::E_MSH_VTX_FMT_TYPE type);
 
     void GetMaterialForMesh(

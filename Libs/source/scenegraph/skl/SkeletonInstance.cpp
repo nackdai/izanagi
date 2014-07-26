@@ -299,7 +299,7 @@ void CSkeletonInstance::UpdatePose(
     IZ_UINT idx,
     IZ_UINT transformType,
     IZ_UINT paramType,
-    const math::SVector& param)
+    const math::SVector4& param)
 {
     IZ_ASSERT(m_IsUpdatingPose);
 

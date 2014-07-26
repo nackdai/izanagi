@@ -1,7 +1,7 @@
 #if !defined(__IZANAGI_MATH_RECTANGLE_H__)
 #define __IZANAGI_MATH_RECTANGLE_H__
 
-#include "MathVector.h"
+#include "MathVector4.h"
 #include "MathMatrix.h"
 
 namespace izanagi
@@ -15,11 +15,11 @@ namespace math
     /** 矩形パラメータ構造体
      */
     struct SRectangle {
-        SVector pt;     ///< 左上原点
-        SVector v[2];   ///< 原点から伸びる矩形を形成する２ベクトル
+        SVector4 pt;     ///< 左上原点
+        SVector4 v[2];   ///< 原点から伸びる矩形を形成する２ベクトル
 
         union {
-            SVector nml;    ///< 法線
+            SVector4 nml;    ///< 法線
             struct {
                 IZ_FLOAT a;
                 IZ_FLOAT b;
@@ -36,9 +36,9 @@ namespace math
     public:
         CRectangle();
         CRectangle(
-            const SVector& point,
-            const SVector& v0,
-            const SVector& v1);
+            const SVector4& point,
+            const SVector4& v0,
+            const SVector4& v1);
         CRectangle(const CRectangle& rhs);
 
         ~CRectangle() {}
@@ -49,9 +49,9 @@ namespace math
         /** 矩形を設定.
          */
         void Set(
-            const SVector& point,
-            const SVector& v0,
-            const SVector& v1);
+            const SVector4& point,
+            const SVector4& v0,
+            const SVector4& v1);
 
         /** 原点からの距離を取得.
          */
@@ -59,7 +59,7 @@ namespace math
 
         /** 矩形上に存在する点かどうか.
          */
-        IZ_BOOL IsOnRectangle(const SVector& ptr) const;
+        IZ_BOOL IsOnRectangle(const SVector4& ptr) const;
 
         /** 4x4行列による変換.
          */
@@ -73,7 +73,7 @@ namespace math
          */
         IZ_BOOL GetIntersectPoint(
             const SRay& ray,
-            SVector& refPtr,
+            SVector4& refPtr,
             IZ_FLOAT* retRayCoefficient = IZ_NULL) const;
 
         /** レイと交差するかどうか.
@@ -87,13 +87,13 @@ namespace math
         void GetPlane(SPlane& plane) const;
 
     private:
-        typedef IZ_BOOL (*GetCrossPointFunc)(const CPlane& plane, const SRay& ray, SVector& refPtr, IZ_FLOAT* retRayCoefficient);
+        typedef IZ_BOOL (*GetCrossPointFunc)(const CPlane& plane, const SRay& ray, SVector4& refPtr, IZ_FLOAT* retRayCoefficient);
 
         // レイと交差する点を取得
         IZ_BOOL GetIntersectPoint(
             GetCrossPointFunc func,
             const SRay& ray,
-            SVector& refPtr,
+            SVector4& refPtr,
             IZ_FLOAT* retRayCoefficient) const;
     };
 }   // namespace math

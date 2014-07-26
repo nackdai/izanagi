@@ -58,7 +58,7 @@ namespace izanagi {
         };
 
         struct CUSTOM_FVF{
-            math::SVector vecPos;
+            math::SVector4 vecPos;
             IZ_FLOAT uv[2];
         };
 

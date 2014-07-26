@@ -1,7 +1,7 @@
 #if !defined(__IZANAGI_MATH_RAY_H__)
 #define __IZANAGI_MATH_RAY_H__
 
-#include "MathVector.h"
+#include "MathVector4.h"
 
 namespace izanagi
 {
@@ -10,8 +10,8 @@ namespace math
     /**
      */
     struct SRay {
-        SVector p;
-        SVector v;
+        SVector4 p;
+        SVector4 v;
         IZ_FLOAT t;
     };
 
@@ -20,8 +20,8 @@ namespace math
     class CRay : public SRay {
     public:
         CRay();
-        CRay(const SVector& ptr, const SVector& dir);
-        CRay(const SVector& ptr, const SVector& dir, IZ_FLOAT _t);
+        CRay(const SVector4& ptr, const SVector4& dir);
+        CRay(const SVector4& ptr, const SVector4& dir, IZ_FLOAT _t);
         CRay(const SRay& rhs);
 
         ~CRay() {}
@@ -34,8 +34,8 @@ namespace math
         /** 直線を設定する.
          */
         void Set(
-            const SVector& ptr,
-            const SVector& dir,
+            const SVector4& ptr,
+            const SVector4& dir,
             IZ_FLOAT _t);
 
         /** 平行かどうか.
@@ -48,11 +48,11 @@ namespace math
 
         /** 係数を掛けた方向ベクトルを取得.
          */
-        void GetMulAttnDir(SVector& dir);
+        void GetMulAttnDir(SVector4& dir);
 
         /** 直線上にあるかどうか.
          */
-        IZ_BOOL IsOnRay(const SVector& ptr);
+        IZ_BOOL IsOnRay(const SVector4& ptr);
 
         /** 方向ベクトルを正規化.
          */

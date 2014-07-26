@@ -1,6 +1,6 @@
 #include "math/MathPlane.h"
 #include "math/MathRay.h"
-#include "math/MathCVector.h"
+#include "math/MathCVector4.h"
 
 namespace izanagi
 {
@@ -10,7 +10,7 @@ namespace math
     IZ_BOOL CPlane::GetIntersectPoint(
         const CPlane& plane,
         const SRay& ray,
-        SVector& refPtr,
+        SVector4& refPtr,
         IZ_FLOAT* retRayCoefficient/*= IZ_NULL*/)
     {
         return plane.GetIntersectPoint(ray, refPtr, retRayCoefficient);
@@ -21,7 +21,7 @@ namespace math
         a = b = c = d = padding = 0.0f;
     }
 
-    CPlane::CPlane(const SVector& normal, const SVector& ptr)
+    CPlane::CPlane(const SVector4& normal, const SVector4& ptr)
     {
         Set(normal, ptr);
     }
@@ -46,12 +46,12 @@ namespace math
     }
 
     // 平面を設定.
-    void CPlane::Set(const SVector& normal, const SVector& ptr)
+    void CPlane::Set(const SVector4& normal, const SVector4& ptr)
     {
-        SVector::Copy(nml, normal);
+        SVector4::Copy(nml, normal);
 
         nml.w = 0.0f;
-        SVector::Normalize(nml, nml);
+        SVector4::Normalize(nml, nml);
 
         d = -(a * ptr.x + b * ptr.y + c * ptr.z);
 
@@ -59,19 +59,19 @@ namespace math
     }
 
     // 平面を設定.
-    void CPlane::Set(const SVector& normal, IZ_FLOAT _d)
+    void CPlane::Set(const SVector4& normal, IZ_FLOAT _d)
     {
-        SVector::Copy(nml, normal);
+        SVector4::Copy(nml, normal);
 
         nml.w = 0.0f;
-        SVector::Normalize(nml, nml);
+        SVector4::Normalize(nml, nml);
 
         d = _d;
 
         // 平面の基準位置を計算する
         // => 原点からの法線方向へのレイとの交点を計算する
         CRay ray(
-            CVector(0.0f, 0.0f, 0.0f),
+            CVector4(0.0f, 0.0f, 0.0f),
             nml);
         GetIntersectPoint(ray, this->pt);
     }
@@ -83,7 +83,7 @@ namespace math
     }
 
     // 平面上に存在する点かどうか.
-    IZ_BOOL CPlane::IsOnPlane(const SVector& ptr)
+    IZ_BOOL CPlane::IsOnPlane(const SVector4& ptr)
     {
         IZ_FLOAT tmp = a * ptr.x + b * ptr.y + c * ptr.z;
         return CMath::IsNearyEqualZero(tmp + d);
@@ -100,7 +100,7 @@ namespace math
     }
 
     // 平面をあらわすベクトルを取得
-    void CPlane::GetPlaneVector(SVector& plane)
+    void CPlane::GetPlaneVector(SVector4& plane)
     {
         plane.Set(a, b, c, d);
     }
@@ -108,7 +108,7 @@ namespace math
     // レイと交差する点を取得
     IZ_BOOL CPlane::GetIntersectPoint(
         const SRay& ray,
-        SVector& refPtr,
+        SVector4& refPtr,
         IZ_FLOAT* retRayCoefficient/*= IZ_NULL*/) const
     {
         // NOTE
@@ -127,17 +127,17 @@ namespace math
         // N・Q + D = Nx * Qx + Ny * Qy + Nz * Qz + D * 1 = L・Q
         // N・V + 0 = Nx * Vx + Ny * Vy + Nz * Vz + D * 0 = L・V
 
-        CVector plane(a, b, c, d);
+        CVector4 plane(a, b, c, d);
 
         // L・V
-        IZ_FLOAT d = SVector::Dot(plane, ray.v);
+        IZ_FLOAT d = SVector4::Dot(plane, ray.v);
         if (CMath::IsNearyEqualZero(d))
         {
             return IZ_FALSE;
         }
 
         // L・Q
-        IZ_FLOAT t = SVector::Dot(plane, ray.p);
+        IZ_FLOAT t = SVector4::Dot(plane, ray.p);
 
         // t = -L・Q / L・V 
         t = -t / d;
@@ -156,9 +156,9 @@ namespace math
 
     // 線分と交差する点を取得.
     IZ_BOOL CPlane::GetIntersectPoint(
-        const SVector& from,
-        const SVector& to,
-        SVector& refPtr,
+        const SVector4& from,
+        const SVector4& to,
+        SVector4& refPtr,
         IZ_FLOAT* retRayCoefficient/*= IZ_NULL*/) const
     {
         if ((IsPositive(from) && !IsPositive(to))
@@ -167,7 +167,7 @@ namespace math
             // 二つの点は面の正負のそれぞれにないといけない
             CRay ray(
                 from,
-                CVector(to, from, CVector::INIT_SUB));
+                CVector4(to, from, CVector4::INIT_SUB));
 
             IZ_BOOL ret = GetIntersectPoint(ray, refPtr, retRayCoefficient);
             return ret;
@@ -179,9 +179,9 @@ namespace math
     // レイと交差するかどうか
     IZ_BOOL CPlane::IsIntersect(const SRay& ray) const
     {
-        CVector plane(a, b, c, d);
+        CVector4 plane(a, b, c, d);
 
-        IZ_FLOAT d = SVector::Dot(plane, ray.v);
+        IZ_FLOAT d = SVector4::Dot(plane, ray.v);
 
         if (CMath::IsNearyEqualZero(d))
         {
@@ -192,11 +192,11 @@ namespace math
     }
 
     // 面の正側（法線の向き側）に点があるかどうか.
-    IZ_BOOL CPlane::IsPositive(const SVector& ptr) const
+    IZ_BOOL CPlane::IsPositive(const SVector4& ptr) const
     {
 #if 0
         // 原点からの距離
-        IZ_FLOAT len = SVector::Length(ptr);
+        IZ_FLOAT len = SVector4::Length(ptr);
 
         // 平面まで届いていない
         if (len <= ::fabs(d))
@@ -205,7 +205,7 @@ namespace math
         }
 
         // 原点からの方向ベクトル
-        CVector dir(ptr.x, ptr.y, ptr.z, 0.0f);
+        CVector4 dir(ptr.x, ptr.y, ptr.z, 0.0f);
 
         // NOTE
         //   | /       |
@@ -217,12 +217,12 @@ namespace math
         // 面の法線となす角が90度より小さければ面の正の側
         // => 内積の値がプラスであれば法線の向き側に点がある
 
-        IZ_FLOAT dot = SVector::Dot(nml, dir);
+        IZ_FLOAT dot = SVector4::Dot(nml, dir);
 
         return (dot >= 0.0f);
 #else
-        CVector n(a, b, c, d);
-        IZ_FLOAT dot = SVector::Dot(n, ptr);
+        CVector4 n(a, b, c, d);
+        IZ_FLOAT dot = SVector4::Dot(n, ptr);
         dot = (CMath::IsNearyEqualZero(dot) ? 0.0f : dot);
         return (dot >= 0.0f);
 #endif

@@ -12,17 +12,17 @@ namespace math
         t = 0.0f;
     }
 
-    CRay::CRay(const SVector& ptr, const SVector& dir)
+    CRay::CRay(const SVector4& ptr, const SVector4& dir)
     {
-        IZ_FLOAT t = SVector::Length(dir);
+        IZ_FLOAT t = SVector4::Length(dir);
 
-        SVector v;
-        SVector::Normalize(v, dir);
+        SVector4 v;
+        SVector4::Normalize(v, dir);
 
         Set(ptr, v, t);
     }
 
-    CRay::CRay(const SVector& ptr, const SVector& dir, IZ_FLOAT _t)
+    CRay::CRay(const SVector4& ptr, const SVector4& dir, IZ_FLOAT _t)
     {
         Set(ptr, dir, _t);
     }
@@ -41,12 +41,12 @@ namespace math
 
     // 直線を設定する.
     void CRay::Set(
-        const SVector& ptr,
-        const SVector& dir,
+        const SVector4& ptr,
+        const SVector4& dir,
         IZ_FLOAT _t)
     {
-        SVector::Copy(p, ptr);
-        SVector::CopyXYZ(v, dir);
+        SVector4::Copy(p, ptr);
+        SVector4::CopyXYZ(v, dir);
         t = _t;
 
         Normalize();
@@ -71,13 +71,13 @@ namespace math
     }
 
     // 係数を掛けた方向ベクトルを取得.
-    void CRay::GetMulAttnDir(SVector& dir)
+    void CRay::GetMulAttnDir(SVector4& dir)
     {
-        SVector::ScaleXYZ(dir, v, t);
+        SVector4::ScaleXYZ(dir, v, t);
     }
 
     // 直線上にあるかどうか.
-    IZ_BOOL CRay::IsOnRay(const SVector& ptr)
+    IZ_BOOL CRay::IsOnRay(const SVector4& ptr)
     {
         // TODO
         return IZ_TRUE;
@@ -86,7 +86,7 @@ namespace math
     // 方向ベクトルを正規化.
     void CRay::Normalize()
     {
-        SVector::Normalize(v, v);
+        SVector4::Normalize(v, v);
     }
 }   // namespace math
 }   // namespace izanagi

@@ -163,7 +163,7 @@ IZ_UINT CAnimation::ApplyAnimation(
     const S_ANM_NODE& sAnmNode = *anmNode;
     const IZ_UINT nJointIdx = sAnmNode.targetIdx;
 
-    math::SVector param;
+    math::SVector4 param;
 
     // 姿勢情報更新開始
     VRETURN_VAL(poseUpdater.BeginUpdate(nJointIdx), 0);

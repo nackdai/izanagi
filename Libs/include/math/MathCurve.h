@@ -2,7 +2,7 @@
 #define __IZANAGI_MATH_INTERPOLATER_H__
 
 #include "izDefs.h"
-#include "MathCVector.h"
+#include "MathCVector4.h"
 
 namespace izanagi {
 namespace math {
@@ -28,7 +28,7 @@ namespace math {
          */
         static IZ_FLOAT ComputeBezier(
             IZ_FLOAT t,
-            const SVector& p);
+            const SVector4& p);
 
         /** Hermite曲線.
          */
@@ -43,7 +43,7 @@ namespace math {
          */
         static IZ_FLOAT ComputeHermite(
             IZ_FLOAT t,
-            const SVector& p);
+            const SVector4& p);
 
         /** Catmull-Rom曲線.
          */
@@ -58,7 +58,7 @@ namespace math {
          */
         static IZ_FLOAT ComputeCatmullRom(
             IZ_FLOAT t,
-            const SVector& p);
+            const SVector4& p);
     };
 }   // namespace math {
 }   // namespace izanagi

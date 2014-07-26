@@ -52,7 +52,7 @@ namespace izanagi {
 
         // パラメータセット
         virtual void RegisterParameter(
-            const math::SVector* pVector,
+            const math::SVector4* pVector,
             IZ_UINT num);
 
         // 頂点シェーダ本体を取得
@@ -102,8 +102,8 @@ namespace izanagi {
         // 共通シェーダ定数ハンドル
         SHADER_PARAM_HANDLE m_hCommonHandle[COMMON_HANDLE_NUM];
 
-        math::SVector m_vecPosOffset;
-        math::SVector m_vecTexParam;
+        math::SVector4 m_vecPosOffset;
+        math::SVector4 m_vecTexParam;
     };
 
     // inline ****************************

@@ -130,9 +130,9 @@ IZ_BOOL CDebugMeshApp::InitInternal(
 
     // カメラ
     camera.Init(
-        izanagi::math::CVector(0.0f, 10.0f, 30.0f, 1.0f),
-        izanagi::math::CVector(0.0f, 0.0f, 0.0f, 1.0f),
-        izanagi::math::CVector(0.0f, 1.0f, 0.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 10.0f, 30.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 0.0f, 0.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 1.0f, 0.0f, 1.0f),
         1.0f,
         500.0f,
         izanagi::math::CMath::Deg2Rad(60.0f),
@@ -253,7 +253,7 @@ void CDebugMeshApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
             {
                 izanagi::math::SMatrix::GetTrans(
                     mtxL2W,
-                    izanagi::math::CVector(-15.0f, 0.0f, -15.0f));
+                    izanagi::math::CVector4(-15.0f, 0.0f, -15.0f));
 
                 _SetShaderParam(
                     m_Shader,
@@ -270,7 +270,7 @@ void CDebugMeshApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
             {
                 izanagi::math::SMatrix::GetTrans(
                     mtxL2W,
-                    izanagi::math::CVector(15.0f, 0.0f, -15.0f));
+                    izanagi::math::CVector4(15.0f, 0.0f, -15.0f));
 
                 _SetShaderParam(
                     m_Shader,
@@ -288,7 +288,7 @@ void CDebugMeshApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
             {
                 izanagi::math::SMatrix::GetTrans(
                     mtxL2W,
-                    izanagi::math::CVector(15.0f, 0.0f, 15.0f));
+                    izanagi::math::CVector4(15.0f, 0.0f, 15.0f));
 
                 _SetShaderParam(
                     m_Shader,
@@ -305,7 +305,7 @@ void CDebugMeshApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
             {
                 izanagi::math::SMatrix::GetTrans(
                     mtxL2W,
-                    izanagi::math::CVector(-15.0f, 0.0f, 15.0f));
+                    izanagi::math::CVector4(-15.0f, 0.0f, 15.0f));
 
                 _SetShaderParam(
                     m_Shader,

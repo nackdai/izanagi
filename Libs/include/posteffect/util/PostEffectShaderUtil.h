@@ -89,7 +89,7 @@ namespace izanagi {
                 pShader->SetVectorArray(
                     device,
                     handle,
-                    (const math::SVector*)pValue,
+                    (const math::SVector4*)pValue,
                     nRow * nElements);
             }
         }

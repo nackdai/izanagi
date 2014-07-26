@@ -153,7 +153,7 @@ void CSceneRenderer::Render(
 
         // Parallel Light Direction
         m_ParallelLight.vDir.Set(-1.0f, -1.0f, -1.0f);
-        izanagi::math::SVector::Normalize(m_ParallelLight.vDir, m_ParallelLight.vDir);
+        izanagi::math::SVector4::Normalize(m_ParallelLight.vDir, m_ParallelLight.vDir);
 
         // ƒ}ƒeƒŠƒAƒ‹
         izanagi::SMaterialParam mtrl;
@@ -210,7 +210,7 @@ void CSceneRenderer::RenderTorus(
                 izanagi::math::SMatrix::Inverse(mtxW2L, m_L2W);
 
                 // World -> Local
-                izanagi::math::SVector parallelLightLocalDir;
+                izanagi::math::SVector4 parallelLightLocalDir;
                 izanagi::math::SMatrix::ApplyXYZ(
                     parallelLightLocalDir,
                     m_ParallelLight.vDir,

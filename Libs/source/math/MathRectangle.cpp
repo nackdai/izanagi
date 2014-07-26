@@ -1,7 +1,7 @@
 #include "math/MathRectangle.h"
 #include "math/MathRay.h"
 #include "math/MathPlane.h"
-#include "math/MathCVector.h"
+#include "math/MathCVector4.h"
 #include "math/MathTriangle.h"
 
 namespace izanagi
@@ -18,9 +18,9 @@ namespace math
     }
 
     CRectangle::CRectangle(
-        const SVector& point,
-        const SVector& v0,
-        const SVector& v1)
+        const SVector4& point,
+        const SVector4& v0,
+        const SVector4& v1)
     {
         Set(point, v0, v1);
     }
@@ -33,12 +33,12 @@ namespace math
     const CRectangle& CRectangle::operator=(const CRectangle& rhs)
     {
 #if 0
-        SVector::Copy(pt, rhs.pt);
+        SVector4::Copy(pt, rhs.pt);
 
-        SVector::Copy(v[0], rhs.v[0]);
-        SVector::Copy(v[1], rhs.v[1]);
+        SVector4::Copy(v[0], rhs.v[0]);
+        SVector4::Copy(v[1], rhs.v[1]);
 
-        SVector::Copy(nml, rhs.nml);
+        SVector4::Copy(nml, rhs.nml);
 
         d = rhs.d;
 #else
@@ -53,17 +53,17 @@ namespace math
 
     // 矩形を設定.
     void CRectangle::Set(
-        const SVector& point,
-        const SVector& v0,
-        const SVector& v1)
+        const SVector4& point,
+        const SVector4& v0,
+        const SVector4& v1)
     {
-        SVector::Copy(pt, point);
+        SVector4::Copy(pt, point);
 
-        SVector::Copy(v[0], v0);
-        SVector::Copy(v[1], v1);
+        SVector4::Copy(v[0], v0);
+        SVector4::Copy(v[1], v1);
 
-        SVector::Cross(nml, v[0], v[1]);
-        SVector::Normalize(nml, nml);
+        SVector4::Cross(nml, v[0], v[1]);
+        SVector4::Normalize(nml, nml);
 
         d = -(a * pt.x + b * pt.y + c * pt.z);
     }
@@ -75,17 +75,17 @@ namespace math
     }
 
     // 矩形上に存在する点かどうか.
-    IZ_BOOL CRectangle::IsOnRectangle(const SVector& ptr) const
+    IZ_BOOL CRectangle::IsOnRectangle(const SVector4& ptr) const
     {
 #if 0
-        SVector p;
-        SVector::Sub(p, ptr, pt);
+        SVector4 p;
+        SVector4::Sub(p, ptr, pt);
 
-        IZ_FLOAT dot1 = SVector::Dot(p, v[0]);
-        IZ_FLOAT dot2 = SVector::Dot(p, v[1]);
+        IZ_FLOAT dot1 = SVector4::Dot(p, v[0]);
+        IZ_FLOAT dot2 = SVector4::Dot(p, v[1]);
 
-        IZ_FLOAT length1 = SVector::Length(v[0]);
-        IZ_FLOAT length2 = SVector::Length(v[1]);
+        IZ_FLOAT length1 = SVector4::Length(v[0]);
+        IZ_FLOAT length2 = SVector4::Length(v[1]);
 
 #if 0
         return IS_IN_BOUND(dot1 / length1, 0.0f, 1.0f) && IS_IN_BOUND(dot2 / length2, 0.0f, 1.0f);
@@ -98,9 +98,9 @@ namespace math
 #else
         // 矩形を二つの三角形に分割して、それぞれの三角形で判定を行う
 
-        CVector p0 = CVector(pt.x, pt.y, pt.z) + CVector(v[0].x, v[0].y, v[0].z);
-        CVector p1 = CVector(pt.x, pt.y, pt.z) + CVector(v[1].x, v[1].y, v[1].z);
-        CVector p2 = p0 + CVector(v[1].x, v[1].y, v[1].z);
+        CVector4 p0 = CVector4(pt.x, pt.y, pt.z) + CVector4(v[0].x, v[0].y, v[0].z);
+        CVector4 p1 = CVector4(pt.x, pt.y, pt.z) + CVector4(v[1].x, v[1].y, v[1].z);
+        CVector4 p2 = p0 + CVector4(v[1].x, v[1].y, v[1].z);
 
         CTriangle tri0(pt, p0, p1);
 
@@ -124,14 +124,14 @@ namespace math
         SMatrix::ApplyXYZ(v[0], v[0], mtx);
         SMatrix::ApplyXYZ(v[1], v[1], mtx);
 
-        SVector::Cross(nml, v[0], v[1]);
-        SVector::Normalize(nml, nml);
+        SVector4::Cross(nml, v[0], v[1]);
+        SVector4::Normalize(nml, nml);
 
         // 計算誤算を丸める
         nml.x = CMath::IsNearyEqualZero(nml.x) ? 0.0f : nml.x;
         nml.y = CMath::IsNearyEqualZero(nml.y) ? 0.0f : nml.y;
         nml.z = CMath::IsNearyEqualZero(nml.z) ? 0.0f : nml.z;
-        SVector::Normalize(nml, nml);
+        SVector4::Normalize(nml, nml);
 
         d = -(a * pt.x + b * pt.y + c * pt.z);
     }
@@ -147,7 +147,7 @@ namespace math
     // レイと交差する点を取得
     IZ_BOOL CRectangle::GetIntersectPoint(
         const SRay& ray,
-        SVector& refPtr,
+        SVector4& refPtr,
         IZ_FLOAT* retRayCoefficient/*= IZ_NULL*/) const
     {
         IZ_BOOL isIntersect = GetIntersectPoint(
@@ -164,7 +164,7 @@ namespace math
         const SRay& ray,
         IZ_FLOAT* retRayCoefficient/*= IZ_NULL*/)
     {
-        CVector ptr;
+        CVector4 ptr;
 
         IZ_BOOL isIntersect = GetIntersectPoint(ray, ptr, retRayCoefficient);
 
@@ -187,10 +187,10 @@ namespace math
     IZ_BOOL CRectangle::GetIntersectPoint(
         CRectangle::GetCrossPointFunc func,
         const SRay& ray,
-        SVector& refPtr,
+        SVector4& refPtr,
         IZ_FLOAT* retRayCoefficient) const
     {
-        CVector ptr;
+        CVector4 ptr;
 
         IZ_BOOL isIntersect = (*func)(
             CPlane(nml, pt),
@@ -200,7 +200,7 @@ namespace math
         if (isIntersect) {
             isIntersect = IsOnRectangle(ptr);
             if (isIntersect) {
-                SVector::Copy(refPtr, ptr);
+                SVector4::Copy(refPtr, ptr);
             }
         }
 

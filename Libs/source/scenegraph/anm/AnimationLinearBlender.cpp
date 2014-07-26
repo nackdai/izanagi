@@ -128,13 +128,13 @@ void CAnmLinearBlender::UpdatePose(
     IZ_UINT updateFlag,
     CPoseUpdater& poseUpdater)
 {
-    math::SVector param;
+    math::SVector4 param;
 
     CBit32Flag bitFlag(updateFlag);
 
     // 姿勢更新
     if (bitFlag.IsOn(E_SKL_JOINT_PARAM_SCALE)) {
-        math::SVector::SetXYZ(
+        math::SVector4::SetXYZ(
             param,
             pose.scale[0], pose.scale[1], pose.scale[2]);
 
@@ -145,7 +145,7 @@ void CAnmLinearBlender::UpdatePose(
             param);
     }
     if (bitFlag.IsOn(E_SKL_JOINT_PARAM_TRANSLATE)) {
-        math::SVector::SetXYZ(
+        math::SVector4::SetXYZ(
             param,
             pose.trans[0], pose.trans[1], pose.trans[2]);
 

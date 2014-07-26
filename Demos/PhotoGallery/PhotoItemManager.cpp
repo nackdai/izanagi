@@ -142,7 +142,7 @@ IZ_BOOL PhotoItemManager::Init(
         Configure::OuterRadius - (Configure::OuterRadius - Configure::MidRadius) * 0.5f,
     };
 
-    const izanagi::math::CVector baseNml(0.0f, 0.0f, 1.0f, 0.0f);
+    const izanagi::math::CVector4 baseNml(0.0f, 0.0f, 1.0f, 0.0f);
 
     PhotoItem* prevItem = IZ_NULL;
 
@@ -171,14 +171,14 @@ IZ_BOOL PhotoItemManager::Init(
             IZ_FLOAT c = izanagi::math::CMath::CosF(angle);
             
             // Positon.
-            izanagi::math::CVector pos(
+            izanagi::math::CVector4 pos(
                 c * radius[i],
                 Configure::HeightPerFloor * i,
                 s * radius[i]);
 
             // Rotate.
-            izanagi::math::CVector nml(-c, 0.0f, -s, 0.0f);
-            IZ_FLOAT dot = izanagi::math::SVector::Dot(nml, baseNml);
+            izanagi::math::CVector4 nml(-c, 0.0f, -s, 0.0f);
+            IZ_FLOAT dot = izanagi::math::SVector4::Dot(nml, baseNml);
             IZ_FLOAT theta = ::acosf(dot);
             theta = (nml.x < 0.0f ? -theta : theta);
 

@@ -4,7 +4,7 @@
 #include <math.h>
 #include "izDefs.h"
 #include "MathDefs.h"
-#include "MathVector.h"
+#include "MathVector4.h"
 
 namespace izanagi
 {
@@ -31,7 +31,7 @@ namespace math
         union {
             IZ_FLOAT a[16];
             IZ_FLOAT m[4][4];
-            SVector v[4];
+            SVector4 v[4];
             struct {
                 IZ_FLOAT _00, _01, _02, _03;
                 IZ_FLOAT _10, _11, _12, _13;
@@ -120,11 +120,11 @@ namespace math
 
         // ベクトルとマトリクスを乗算する
         // dst = vec x mtx
-        static inline void Apply(SVector& dst, const SVector& vec, const SMatrix& mtx);
+        static inline void Apply(SVector4& dst, const SVector4& vec, const SMatrix& mtx);
 
         // ベクトルとマトリクスのＸＹＺ成分のみを乗算する
         // ベクトルのＷ成分、およびマトリクスの第４行は無視される
-        static inline void ApplyXYZ(SVector& dst, const SVector& vec, const SMatrix& mtx);
+        static inline void ApplyXYZ(SVector4& dst, const SVector4& vec, const SMatrix& mtx);
 
         // X軸を回転軸にして回転するマトリクスを取得
         static inline void GetRotByX(SMatrix& dst, IZ_FLOAT fTheta);
@@ -136,7 +136,7 @@ namespace math
         static inline void GetRotByZ(SMatrix& dst, IZ_FLOAT fTheta);
 
         // XYZ軸を回転軸にしてX->Y->Zの順番で回転するマトリクスを取得
-        static void GetRotByXYZ(SMatrix& dst, const SVector& angle)
+        static void GetRotByXYZ(SMatrix& dst, const SVector4& angle)
         {
             GetRotByX(dst, angle.x);
             RotByY(dst, dst, angle.y);
@@ -146,7 +146,7 @@ namespace math
         // 任意軸を回転軸にして回転するマトリクスを取得
         static void GetRot(
             SMatrix& dst, IZ_FLOAT fTheta,
-            const SVector& axis)
+            const SVector4& axis)
         {
             GetRot(dst, fTheta, axis.x, axis.y, axis.z);
         }
@@ -181,7 +181,7 @@ namespace math
         }
 
         // X->Y->Z軸の順の回転を行なう
-        static void RotByXYZ(SMatrix& dst, const SMatrix& src, const SVector& angle)
+        static void RotByXYZ(SMatrix& dst, const SMatrix& src, const SVector4& angle)
         {
             SMatrix m;
             RotByX(m, src, angle.x);
@@ -201,7 +201,7 @@ namespace math
         }
 
         // オフセットを指定したマトリクスを取得
-        static void GetTrans(SMatrix& dst, const SVector& tv)
+        static void GetTrans(SMatrix& dst, const SVector4& tv)
         {
             GetTrans(dst, tv.x, tv.y, tv.z);
         }
@@ -210,7 +210,7 @@ namespace math
         static inline void GetTrans(SMatrix& dst, IZ_FLOAT x, IZ_FLOAT y, IZ_FLOAT z);
 
         // 平行移動する
-        static void Trans(SMatrix& dst, const SMatrix& src, const SVector& tv)
+        static void Trans(SMatrix& dst, const SMatrix& src, const SVector4& tv)
         {
             SMatrix m;
             GetTrans(m, tv);
@@ -223,13 +223,13 @@ namespace math
             const SMatrix& src,
             IZ_FLOAT x, IZ_FLOAT y, IZ_FLOAT z)
         {
-            SVector v;
+            SVector4 v;
             v.Set(x, y, z);
             Trans(dst, src, v);
         }
 
         // Ｘ→Ｙ→Ｚ軸の順で回転を行う
-        static void RotXYZ(SMatrix& dst, const SMatrix& src, const SVector& angle)
+        static void RotXYZ(SMatrix& dst, const SMatrix& src, const SVector4& angle)
         {
             RotByX(dst, src, angle.v[0]);
             RotByY(dst, dst, angle.v[1]);
@@ -240,7 +240,7 @@ namespace math
         static inline void SetScale(SMatrix& dst, IZ_FLOAT fScaleX, IZ_FLOAT fScaleY, IZ_FLOAT fScaleZ);
 
         // スケーリングマトリクスを得る
-        static void SetScale(SMatrix& dst, const SVector& scale)
+        static void SetScale(SMatrix& dst, const SVector4& scale)
         {
             SetScale(
                 dst,
@@ -248,15 +248,15 @@ namespace math
         }
 
         // スケーリングする
-        static void Scale(SMatrix& dst, const SMatrix& src, const SVector& scale)
+        static void Scale(SMatrix& dst, const SMatrix& src, const SVector4& scale)
         {
-            SVector s;
-            SVector::Set(s, scale.v[0], scale.v[1], scale.v[2], 1.0f);
+            SVector4 s;
+            SVector4::Set(s, scale.v[0], scale.v[1], scale.v[2], 1.0f);
 
-            SVector::Mul(dst.v[0], src.v[0], s);
-            SVector::Mul(dst.v[1], src.v[1], s);
-            SVector::Mul(dst.v[2], src.v[2], s);
-            SVector::Mul(dst.v[3], src.v[3], s);
+            SVector4::Mul(dst.v[0], src.v[0], s);
+            SVector4::Mul(dst.v[1], src.v[1], s);
+            SVector4::Mul(dst.v[2], src.v[2], s);
+            SVector4::Mul(dst.v[3], src.v[3], s);
         }
 
         // スケーリングする
@@ -265,7 +265,7 @@ namespace math
             const SMatrix& src,
             IZ_FLOAT x, IZ_FLOAT y, IZ_FLOAT z)
         {
-            SVector scale;
+            SVector4 scale;
             scale.Set(x, y, z);
 
             Scale(dst, src, scale);
@@ -278,19 +278,19 @@ namespace math
         static inline void Inverse(SMatrix& dst, const SMatrix& src);
 
         // ベクトルから回転マトリクスを求める
-        static void GetRotMatrixFromVector(SMatrix& mtx, const SVector& vec)
+        static void GetRotMatrixFromVector(SMatrix& mtx, const SVector4& vec)
         {
-            SVector up;
+            SVector4 up;
             up.Set(0.0f, 1.0f, 0.0f, 0.0f);
 
             GetRotMatrixFromVector(mtx, vec, up);
         }
 
         // ベクトルから回転マトリクスを求める
-        static void GetRotMatrixFromVector(SMatrix& mtx, const SVector& vec, const SVector& up);
+        static void GetRotMatrixFromVector(SMatrix& mtx, const SVector4& vec, const SVector4& up);
 
         // マトリクスからオイラー角を取得する
-        static void GetEulerFromMatrix(SVector& angle, const SMatrix& mtx, E_MATH_ROTATION_ORDER order);
+        static void GetEulerFromMatrix(SVector4& angle, const SMatrix& mtx, E_MATH_ROTATION_ORDER order);
 
         // マトリクス間を補間する
         static void Lerp(SMatrix& dst, const SMatrix& from, const SMatrix& to, IZ_FLOAT t);

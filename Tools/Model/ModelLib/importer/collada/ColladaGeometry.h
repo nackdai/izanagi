@@ -91,7 +91,7 @@ public:
     IZ_BOOL GetVertex(
         domMesh* pMesh,
         IZ_UINT nIdx,
-        izanagi::math::SVector& vec,
+        izanagi::math::SVector4& vec,
         izanagi::E_MSH_VTX_FMT_TYPE type);
 
     // メッシュにバインドされるマテリアル情報を取得

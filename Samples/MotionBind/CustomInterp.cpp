@@ -167,7 +167,7 @@ IZ_FLOAT CCustomInterp::InterpScalar(
 }
 
 void CCustomInterp::InterpVector(
-    izanagi::math::SVector& ret,
+    izanagi::math::SVector4& ret,
     IZ_FLOAT time,
     IZ_UINT keyNum,
     IZ_UINT paramPos,

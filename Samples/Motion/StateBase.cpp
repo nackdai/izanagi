@@ -239,9 +239,9 @@ IZ_BOOL CStateBase::InitObject(
 
     // カメラ
     m_App->GetCamera().Init(
-        izanagi::math::CVector(0.0f, 5.0f, cameraZ, 1.0f),
-        izanagi::math::CVector(0.0f, 5.0f, 0.0f, 1.0f),
-        izanagi::math::CVector(0.0f, 1.0f, 0.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 5.0f, cameraZ, 1.0f),
+        izanagi::math::CVector4(0.0f, 5.0f, 0.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 1.0f, 0.0f, 1.0f),
         1.0f,
         1000.0f,
         izanagi::math::CMath::Deg2Rad(60.0f),

@@ -117,7 +117,7 @@ IZ_BOOL CMaterialApp::InitInternal(
 
         // Parallel Light Direction
         m_ParallelLight.vDir.Set(-1.0f, -1.0f, -1.0f);
-        izanagi::math::SVector::Normalize(m_ParallelLight.vDir, m_ParallelLight.vDir);
+        izanagi::math::SVector4::Normalize(m_ParallelLight.vDir, m_ParallelLight.vDir);
 
         // マテリアル
         izanagi::SMaterialParam mtrl;
@@ -185,9 +185,9 @@ IZ_BOOL CMaterialApp::InitInternal(
 
     // カメラ
     camera.Init(
-        izanagi::math::CVector(0.0f, 5.0f, CAMERA_Z, 1.0f),
-        izanagi::math::CVector(0.0f, 5.0f, 0.0f, 1.0f),
-        izanagi::math::CVector(0.0f, 1.0f, 0.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 5.0f, CAMERA_Z, 1.0f),
+        izanagi::math::CVector4(0.0f, 5.0f, 0.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 1.0f, 0.0f, 1.0f),
         1.0f,
         500.0f,
         izanagi::math::CMath::Deg2Rad(60.0f),
@@ -236,7 +236,7 @@ void CMaterialApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
         // 位置は原点なので
         m_RenderGraph->Register(
             GetCamera(),
-            izanagi::math::CVector(),
+            izanagi::math::CVector4(),
             m_Mdl);
     }
     m_RenderGraph->EndRegister();
@@ -260,7 +260,7 @@ void CMaterialApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
             izanagi::math::SMatrix::Inverse(mtxW2L, m_L2W);
 
             // World -> Local
-            izanagi::math::SVector parallelLightLocalDir;
+            izanagi::math::SVector4 parallelLightLocalDir;
             izanagi::math::SMatrix::ApplyXYZ(
                 parallelLightLocalDir,
                 m_ParallelLight.vDir,
@@ -278,7 +278,7 @@ void CMaterialApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
             izanagi::math::SMatrix::Inverse(mtxV2L, mtxV2L);
 
             // ビュー座標系における視点は常に原点
-            izanagi::math::CVector eyePos(0.0f, 0.0f, 0.0f, 1.0f);
+            izanagi::math::CVector4 eyePos(0.0f, 0.0f, 0.0f, 1.0f);
 
             // 視点のローカル座標を計算する
             izanagi::math::SMatrix::Apply(eyePos, eyePos, mtxV2L);

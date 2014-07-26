@@ -53,14 +53,14 @@ namespace izanagi {
          */
         IZ_BOOL Register(
             const CCamera& camera,
-            const math::SVector& pos,
+            const math::SVector4& pos,
             IRenderElement* element);
 
         /** 登録.
          */
         IZ_BOOL Register(
             const CCamera& camera,
-            const math::SVector& pos,
+            const math::SVector4& pos,
             IModel* model);
 
         /** 描画.

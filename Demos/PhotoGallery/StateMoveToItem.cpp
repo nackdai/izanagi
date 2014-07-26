@@ -33,20 +33,20 @@ IZ_BOOL StateMoveToItem::Enter(
 
     // Compute target matrix.
     {
-        izanagi::math::SVector pos;
+        izanagi::math::SVector4 pos;
         hitItem->GetCenterPosition(pos);
         izanagi::math::SMatrix::Apply(pos, pos, globalRotMtx);
 
-        izanagi::math::SVector nml;
+        izanagi::math::SVector4 nml;
         hitItem->GetNormal(nml);
         izanagi::math::SMatrix::ApplyXYZ(nml, nml, globalRotMtx);
 
-        izanagi::math::CVector targetPos(
+        izanagi::math::CVector4 targetPos(
             pos.x + nml.x * Configure::CameraDistanceFromItem,
             pos.y + nml.y * Configure::CameraDistanceFromItem,
             pos.z + nml.z * Configure::CameraDistanceFromItem);
     
-        izanagi::math::CVector targetAt(pos);
+        izanagi::math::CVector4 targetAt(pos);
 
         izanagi::CVectorCamera tmpCam;
         tmpCam.Init(

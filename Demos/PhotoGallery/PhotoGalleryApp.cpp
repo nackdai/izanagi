@@ -36,9 +36,9 @@ IZ_BOOL PhotoGalleryApp::InitInternal(
 
     // カメラ
     camera.Init(
-        izanagi::math::CVector(0.0f, 5.0f, -Configure::InnerRadius + Configure::CameraDistance, 1.0f),
-        izanagi::math::CVector(0.0f, 5.0f, -Configure::InnerRadius, 1.0f),
-        izanagi::math::CVector(0.0f, 1.0f, 0.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 5.0f, -Configure::InnerRadius + Configure::CameraDistance, 1.0f),
+        izanagi::math::CVector4(0.0f, 5.0f, -Configure::InnerRadius, 1.0f),
+        izanagi::math::CVector4(0.0f, 1.0f, 0.0f, 1.0f),
         1.0f,
         500.0f,
         izanagi::math::CMath::Deg2Rad(60.0f),
@@ -143,7 +143,7 @@ void PhotoGalleryApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
             0xffffffff,
             name[state]);
 
-        const izanagi::math::SVector& dir = Environment::Instance().GetDir();
+        const izanagi::math::SVector4& dir = Environment::Instance().GetDir();
 
         font->DBPrint(
             device,
@@ -163,7 +163,7 @@ void PhotoGalleryApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 IZ_BOOL PhotoGalleryApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
 {
 #ifdef __IZ_DEBUG__
-    izanagi::math::SVector& dir = Environment::Instance().GetDir();
+    izanagi::math::SVector4& dir = Environment::Instance().GetDir();
 
     switch (key) {
     case izanagi::sys::E_KEYBOARD_BUTTON_X:
@@ -185,7 +185,7 @@ IZ_BOOL PhotoGalleryApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
         dir.z -= 0.01f;
         break;
     case izanagi::sys::E_KEYBOARD_BUTTON_N:
-        izanagi::math::SVector::Normalize(dir, dir);
+        izanagi::math::SVector4::Normalize(dir, dir);
         break;
     case izanagi::sys::E_KEYBOARD_BUTTON_D:
         dir.x = -0.679090f;

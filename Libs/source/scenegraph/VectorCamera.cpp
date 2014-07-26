@@ -15,15 +15,15 @@ CVectorCamera::~CVectorCamera()
 
 // 初期化
 void CVectorCamera::Init(
-    const math::SVector& pos,
-    const math::SVector& at,
+    const math::SVector4& pos,
+    const math::SVector4& at,
     IZ_FLOAT fNear, IZ_FLOAT fFar,
     IZ_FLOAT fov,
     IZ_FLOAT aspect)
 {
     CCamera::Init(
         pos, at,
-        math::CVector(0.0f, 1.0f, 0.0f, 0.0f),
+        math::CVector4(0.0f, 1.0f, 0.0f, 0.0f),
         fNear, fFar,
         fov,
         aspect);
@@ -40,68 +40,68 @@ void CVectorCamera::Update()
 #if 0
         math::SMatrix::SetUnit(m_Param.mtxW2V);
 
-        math::SVector::Copy(m_Param.mtxW2V.v[0], m_X);
-        math::SVector::Copy(m_Param.mtxW2V.v[1], m_Y);
-        math::SVector::Copy(m_Param.mtxW2V.v[2], m_Z);
+        math::SVector4::Copy(m_Param.mtxW2V.v[0], m_X);
+        math::SVector4::Copy(m_Param.mtxW2V.v[1], m_Y);
+        math::SVector4::Copy(m_Param.mtxW2V.v[2], m_Z);
 
         math::SMatrix::Transpose(m_Param.mtxW2V, m_Param.mtxW2V);
 
-        m_Param.mtxW2V.m[3][0] = -1.0f * math::SVector::Dot(m_X, m_Pos);
-        m_Param.mtxW2V.m[3][1] = -1.0f * math::SVector::Dot(m_Y, m_Pos);
-        m_Param.mtxW2V.m[3][2] = -1.0f * math::SVector::Dot(m_Z, m_Pos);
+        m_Param.mtxW2V.m[3][0] = -1.0f * math::SVector4::Dot(m_X, m_Pos);
+        m_Param.mtxW2V.m[3][1] = -1.0f * math::SVector4::Dot(m_Y, m_Pos);
+        m_Param.mtxW2V.m[3][2] = -1.0f * math::SVector4::Dot(m_Z, m_Pos);
         m_Param.mtxW2V.m[3][3] = 1.0f;
 
         // 一応、注視点を更新
 #ifdef IZ_COORD_LEFT_HAND
         // 右手系なので、マイナスする
-        izanagi::math::SVector::SubXYZ(m_Param.ref, m_Z, m_Pos);
+        izanagi::math::SVector4::SubXYZ(m_Param.ref, m_Z, m_Pos);
 #else
         // 右手系なので、マイナスする
-        izanagi::math::SVector::SubXYZ(m_Param.ref, m_Pos, m_Z);
+        izanagi::math::SVector4::SubXYZ(m_Param.ref, m_Pos, m_Z);
 #endif
         {
-            math::SVector::Copy(m_Transform.v[0], m_X);
-            math::SVector::Copy(m_Transform.v[1], m_Y);
-            math::SVector::Copy(m_Transform.v[2], m_Z);
-            math::SVector::Copy(m_Transform.v[3], m_Pos);
+            math::SVector4::Copy(m_Transform.v[0], m_X);
+            math::SVector4::Copy(m_Transform.v[1], m_Y);
+            math::SVector4::Copy(m_Transform.v[2], m_Z);
+            math::SVector4::Copy(m_Transform.v[3], m_Pos);
         }
 #else
         if (m_NeedUpdateByTransform) {
             math::SMatrix::SetUnit(m_Param.mtxW2V);
 
-            math::SVector::Copy(m_Param.mtxW2V.v[0], m_X);
-            math::SVector::Copy(m_Param.mtxW2V.v[1], m_Y);
-            math::SVector::Copy(m_Param.mtxW2V.v[2], m_Z);
+            math::SVector4::Copy(m_Param.mtxW2V.v[0], m_X);
+            math::SVector4::Copy(m_Param.mtxW2V.v[1], m_Y);
+            math::SVector4::Copy(m_Param.mtxW2V.v[2], m_Z);
 
             math::SMatrix::Transpose(m_Param.mtxW2V, m_Param.mtxW2V);
 
-            m_Param.mtxW2V.m[3][0] = -1.0f * math::SVector::Dot(m_X, m_Pos);
-            m_Param.mtxW2V.m[3][1] = -1.0f * math::SVector::Dot(m_Y, m_Pos);
-            m_Param.mtxW2V.m[3][2] = -1.0f * math::SVector::Dot(m_Z, m_Pos);
+            m_Param.mtxW2V.m[3][0] = -1.0f * math::SVector4::Dot(m_X, m_Pos);
+            m_Param.mtxW2V.m[3][1] = -1.0f * math::SVector4::Dot(m_Y, m_Pos);
+            m_Param.mtxW2V.m[3][2] = -1.0f * math::SVector4::Dot(m_Z, m_Pos);
             m_Param.mtxW2V.m[3][3] = 1.0f;
 
             // 一応、注視点を更新
             // 右手系なので、マイナスする
-            izanagi::math::SVector::SubXYZ(m_Param.ref, m_Z, m_Pos);
+            izanagi::math::SVector4::SubXYZ(m_Param.ref, m_Z, m_Pos);
 
             {
-                math::SVector::Copy(m_Transform.v[0], m_X);
-                math::SVector::Copy(m_Transform.v[1], m_Y);
-                math::SVector::Copy(m_Transform.v[2], m_Z);
-                math::SVector::Copy(m_Transform.v[3], m_Pos);
+                math::SVector4::Copy(m_Transform.v[0], m_X);
+                math::SVector4::Copy(m_Transform.v[1], m_Y);
+                math::SVector4::Copy(m_Transform.v[2], m_Z);
+                math::SVector4::Copy(m_Transform.v[3], m_Pos);
             }
         }
         else {
             ComputeW2V();
 
             math::SMatrix::Copy(m_Transform, m_Param.mtxW2V);
-            math::SVector::Set(m_Transform.v[3], 0.0f, 0.0f, 0.0f, 1.0f);
+            math::SVector4::Set(m_Transform.v[3], 0.0f, 0.0f, 0.0f, 1.0f);
             math::SMatrix::Transpose(m_Transform, m_Transform);
-            math::SVector::Copy(m_Transform.v[3], m_Pos);
+            math::SVector4::Copy(m_Transform.v[3], m_Pos);
 
-            math::SVector::Copy(m_X, m_Transform.v[0]);
-            math::SVector::Copy(m_Y, m_Transform.v[1]);
-            math::SVector::Copy(m_Z, m_Transform.v[2]);
+            math::SVector4::Copy(m_X, m_Transform.v[0]);
+            math::SVector4::Copy(m_Y, m_Transform.v[1]);
+            math::SVector4::Copy(m_Z, m_Transform.v[2]);
         }
 
         m_NeedUpdateByTransform = IZ_FALSE;
@@ -121,9 +121,9 @@ void CVectorCamera::Update()
 }
 
 // 移動.
-void CVectorCamera::Translate(const math::SVector& trans)
+void CVectorCamera::Translate(const math::SVector4& trans)
 {
-    math::SVector::AddXYZ(m_Pos, m_Pos, trans);
+    math::SVector4::AddXYZ(m_Pos, m_Pos, trans);
     m_IsDirtyW2V = IZ_TRUE;
 }
 
@@ -147,7 +147,7 @@ void CVectorCamera::RotateByZ(IZ_FLOAT rad)
 
 // 任意軸回転.
 void CVectorCamera::Rotate(
-    const math::SVector& axis,
+    const math::SVector4& axis,
     IZ_FLOAT rad)
 {
     math::SQuat quat;
@@ -166,7 +166,7 @@ void CVectorCamera::Rotate(
 }
 
 // 位置指定.
-void CVectorCamera::SetPos(const math::SVector& pos)
+void CVectorCamera::SetPos(const math::SVector4& pos)
 {
     m_Pos.Set(pos.x, pos.y, pos.z);
     m_IsDirtyW2V = IZ_TRUE;
@@ -174,10 +174,10 @@ void CVectorCamera::SetPos(const math::SVector& pos)
 
 void CVectorCamera::SetTransform(const math::SMatrix& mtx)
 {
-    math::SVector::Copy(m_X, mtx.v[0]);
-    math::SVector::Copy(m_Y, mtx.v[1]);
-    math::SVector::Copy(m_Z, mtx.v[2]);
-    math::SVector::Copy(m_Pos, mtx.v[3]);
+    math::SVector4::Copy(m_X, mtx.v[0]);
+    math::SVector4::Copy(m_Y, mtx.v[1]);
+    math::SVector4::Copy(m_Z, mtx.v[2]);
+    math::SVector4::Copy(m_Pos, mtx.v[3]);
 
     m_IsDirtyW2V = IZ_TRUE;
     m_NeedUpdateByTransform = IZ_TRUE;

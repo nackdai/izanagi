@@ -74,7 +74,7 @@ IZ_FLOAT CAnimationUtil::ComputeInterp(
 }
 
 void CAnimationUtil::ComputeInterp(
-    math::SVector& vRef,
+    math::SVector4& vRef,
     E_ANM_INTERP_TYPE nInterp,
     IZ_FLOAT fTime,
     IZ_UINT nKeyNum,
@@ -238,14 +238,14 @@ IZ_FLOAT CAnimationUtil::ComputeHermite(
 
         IZ_FLOAT fNormTime_2 = fNormTime * fNormTime;
 
-        math::SVector vecS = {
+        math::SVector4 vecS = {
             fNormTime_2 * fNormTime,
             fNormTime_2,
             fNormTime,
             1.0f,
         };
 
-        math::SVector vecC = {
+        math::SVector4 vecC = {
             pKeys[nPrev]->params[KEY_PARAM_VALUE],
             pKeys[nNext]->params[KEY_PARAM_VALUE],
             pKeys[nPrev]->params[KEY_PARAM_OUT_TANGENT],
@@ -253,14 +253,14 @@ IZ_FLOAT CAnimationUtil::ComputeHermite(
         };
 
         math::SMatrix::Apply(vecS, vecS, mtxBezier);
-        ret = math::SVector::Dot(vecS, vecC);
+        ret = math::SVector4::Dot(vecS, vecC);
     }
 
     return ret;
 }
 
 void CAnimationUtil::ComputeSlerp(
-    math::SVector& vRef,
+    math::SVector4& vRef,
     IZ_FLOAT fTime,
     IZ_UINT nKeyNum,
     IZ_UINT nPos,

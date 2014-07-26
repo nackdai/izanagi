@@ -600,7 +600,7 @@ IZ_BOOL CGeometryChunk::ComputeVtxNormal(
     IImporter* pImporter,
     const STri& sTri)
 {
-    izanagi::math::SVector vecPos[3];
+    izanagi::math::SVector4 vecPos[3];
 
     for (IZ_UINT i = 0; i < 3; i++) {
         IZ_UINT nVtxIdx = sTri.vtx[i];
@@ -626,14 +626,14 @@ IZ_BOOL CGeometryChunk::ComputeVtxNormal(
         IZ_UINT nIdx_1 = (i + 1) % 3;
         IZ_UINT nIdx_2 = (i + 2) % 3;
 
-        izanagi::math::SVector vP;
-        izanagi::math::SVector::SubXYZ(vP, vecPos[nIdx_1], vecPos[nIdx_0]);
+        izanagi::math::SVector4 vP;
+        izanagi::math::SVector4::SubXYZ(vP, vecPos[nIdx_1], vecPos[nIdx_0]);
 
-        izanagi::math::SVector vQ;
-        izanagi::math::SVector::SubXYZ(vQ, vecPos[nIdx_2], vecPos[nIdx_0]);
+        izanagi::math::SVector4 vQ;
+        izanagi::math::SVector4::SubXYZ(vQ, vecPos[nIdx_2], vecPos[nIdx_0]);
 
-        izanagi::math::SVector nml;
-        izanagi::math::SVector::Cross(nml, vP, vQ);
+        izanagi::math::SVector4 nml;
+        izanagi::math::SVector4::Cross(nml, vP, vQ);
 
         SVtxAdditional& sVtx = m_VtxList[nVtxIdx];
         sVtx.nml.push_back(nml);
@@ -650,9 +650,9 @@ IZ_BOOL CGeometryChunk::ComputeVtxTangent(
     IImporter* pImporter,
     const STri& sTri)
 {
-    izanagi::math::SVector vecPos[3];
-    izanagi::math::SVector vecUV[3];
-    izanagi::math::SVector vecNml[3];
+    izanagi::math::SVector4 vecPos[3];
+    izanagi::math::SVector4 vecUV[3];
+    izanagi::math::SVector4 vecNml[3];
 
     for (IZ_UINT i = 0; i < 3; i++) {
         IZ_UINT nVtxIdx = sTri.vtx[i];
@@ -701,11 +701,11 @@ IZ_BOOL CGeometryChunk::ComputeVtxTangent(
         IZ_UINT nIdx_1 = (i + 1) % 3;
         IZ_UINT nIdx_2 = (i + 2) % 3;
 
-        izanagi::math::SVector vP;
-        izanagi::math::SVector::SubXYZ(vP, vecPos[nIdx_1], vecPos[nIdx_0]);
+        izanagi::math::SVector4 vP;
+        izanagi::math::SVector4::SubXYZ(vP, vecPos[nIdx_1], vecPos[nIdx_0]);
 
-        izanagi::math::SVector vQ;
-        izanagi::math::SVector::SubXYZ(vQ, vecPos[nIdx_2], vecPos[nIdx_0]);
+        izanagi::math::SVector4 vQ;
+        izanagi::math::SVector4::SubXYZ(vQ, vecPos[nIdx_2], vecPos[nIdx_0]);
 
         fCoeff[0] = vecUV[nIdx_2].v[1] - vecUV[nIdx_0].v[1];
         fCoeff[1] = -(vecUV[nIdx_1].v[1] - vecUV[nIdx_0].v[1]);
@@ -715,19 +715,19 @@ IZ_BOOL CGeometryChunk::ComputeVtxTangent(
         IZ_FLOAT fInvDeterminant = 1.0f / (fCoeff[3] * fCoeff[0] - fCoeff[2] * fCoeff[1]);
 
         // BiNormal
-        izanagi::math::SVector vB;
+        izanagi::math::SVector4 vB;
         {
-            izanagi::math::SVector::Scale(vP, vP, fInvDeterminant * fCoeff[2]);
-            izanagi::math::SVector::Scale(vQ, vQ, fInvDeterminant * fCoeff[3]);
-            izanagi::math::SVector::Add(vB, vP, vQ);
-            izanagi::math::SVector::Normalize(vB, vB);
+            izanagi::math::SVector4::Scale(vP, vP, fInvDeterminant * fCoeff[2]);
+            izanagi::math::SVector4::Scale(vQ, vQ, fInvDeterminant * fCoeff[3]);
+            izanagi::math::SVector4::Add(vB, vP, vQ);
+            izanagi::math::SVector4::Normalize(vB, vB);
         }
 
         // Tangent
-        izanagi::math::SVector vT;
+        izanagi::math::SVector4 vT;
         {
             // X(T) = Y(B) x Z(N)
-            izanagi::math::SVector::Cross(vT, vB, vecNml[nIdx_0]);
+            izanagi::math::SVector4::Cross(vT, vB, vecNml[nIdx_0]);
         }
 
         SVtxAdditional& sVtx = m_VtxList[nVtxIdx];
@@ -955,7 +955,7 @@ IZ_BOOL CGeometryChunk::ExportVertices(
             m_ExportedVtx.push_back(nVtxIdx);
 
             for (IZ_UINT nVtxFmt = 0; nVtxFmt < izanagi::E_MSH_VTX_FMT_TYPE_NUM; nVtxFmt++) {
-                izanagi::math::SVector vec;
+                izanagi::math::SVector4 vec;
 
                 // 指定された頂点における指定フォーマットのデータを取得.
                 IZ_BOOL bIsExist = pImporter->GetVertex(
@@ -1002,10 +1002,10 @@ IZ_BOOL CGeometryChunk::ExportVertices(
                 IZ_UINT nSkinIdx = pImporter->GetSkinIdxAffectToVtx(nVtxIdx);
                 const SSkin& sSkin = m_SkinList[nSkinIdx];
 
-                izanagi::math::SVector vecJoint;
+                izanagi::math::SVector4 vecJoint;
                 vecJoint.Set(0.0f, 0.0f, 0.0f, 0.0f);
 
-                izanagi::math::SVector vecWeight;
+                izanagi::math::SVector4 vecWeight;
                 vecWeight.Set(0.0f, 0.0f, 0.0f, 0.0f);
                 
                 for (size_t n = 0; n < sSkin.joint.size(); n++) {
@@ -1054,8 +1054,8 @@ IZ_BOOL CGeometryChunk::ExportMesh(
 
         pImporter->BeginMesh((IZ_UINT)i);
 
-        izanagi::math::SVector vMin;
-        izanagi::math::SVector vMax;
+        izanagi::math::SVector4 vMin;
+        izanagi::math::SVector4 vMax;
 
         vMin.Set(IZ_FLOAT_MAX, IZ_FLOAT_MAX, IZ_FLOAT_MAX);
         vMax.Set(IZ_FLOAT_MIN, IZ_FLOAT_MIN, IZ_FLOAT_MIN);
@@ -1102,8 +1102,8 @@ IZ_BOOL CGeometryChunk::ExportMesh(
 
 void CGeometryChunk::GetMinMaxPos(
     IImporter* pImporter,
-    izanagi::math::SVector& vMin,
-    izanagi::math::SVector& vMax,
+    izanagi::math::SVector4& vMin,
+    izanagi::math::SVector4& vMax,
     const SPrimSet& sPrimSet)
 {
     for (size_t i = 0; i < sPrimSet.tri.size(); i++) {
@@ -1111,7 +1111,7 @@ void CGeometryChunk::GetMinMaxPos(
         const STri& sTri = m_TriList[nTriIdx];
 
         for (IZ_UINT n = 0; n < 3; ++n) {
-            izanagi::math::SVector vec;
+            izanagi::math::SVector4 vec;
 
             // Get vertex's position.
             IZ_BOOL bIsExist = pImporter->GetVertex(

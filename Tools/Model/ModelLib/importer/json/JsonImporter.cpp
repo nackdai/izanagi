@@ -90,7 +90,7 @@ IZ_UINT CJsonImporter::GetVtxFmt()
 
 IZ_BOOL CJsonImporter::GetVertex(
     IZ_UINT nIdx,
-    izanagi::math::SVector& vec,
+    izanagi::math::SVector4& vec,
     izanagi::E_MSH_VTX_FMT_TYPE type)
 {
     IZ_BOOL ret = m_Geometry.GetVertex(nIdx, vec, type);

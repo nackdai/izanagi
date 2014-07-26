@@ -12,7 +12,7 @@ namespace math
 {
     // ベクトルを加算する
     // dst = src1 + src2
-    void SVector::Add(SVector& dst, const SVector& src1, const SVector& src2)
+    void SVector4::Add(SVector4& dst, const SVector4& src1, const SVector4& src2)
     {
         D3DXVec4Add(
             reinterpret_cast<D3DXVECTOR4*>(&dst),
@@ -21,7 +21,7 @@ namespace math
     }
 
     // ベクトルを加算する(XYZ成分のみ)
-    void SVector::AddXYZ(SVector& dst, const SVector& src1, const SVector& src2)
+    void SVector4::AddXYZ(SVector4& dst, const SVector4& src1, const SVector4& src2)
     {
         D3DXVec3Add(
             reinterpret_cast<D3DXVECTOR3*>(&dst),
@@ -32,7 +32,7 @@ namespace math
 
     // ベクトルを減算する
     // dst = src1 - src2
-    void SVector::Sub(SVector& dst, const SVector& src1, const SVector& src2)
+    void SVector4::Sub(SVector4& dst, const SVector4& src1, const SVector4& src2)
     {
         D3DXVec4Subtract(
             reinterpret_cast<D3DXVECTOR4*>(&dst),
@@ -41,7 +41,7 @@ namespace math
     }
 
     // ベクトルを減算する(XYZ成分のみ)
-    void SVector::SubXYZ(SVector& dst, const SVector& src1, const SVector& src2)
+    void SVector4::SubXYZ(SVector4& dst, const SVector4& src1, const SVector4& src2)
     {
         D3DXVec3Subtract(
             reinterpret_cast<D3DXVECTOR3*>(&dst),
@@ -52,7 +52,7 @@ namespace math
 
     // ベクトルをスケーリングする
     // dst = fQ * src
-    void SVector::Scale(SVector& dst, const SVector& src, IZ_FLOAT fQ)
+    void SVector4::Scale(SVector4& dst, const SVector4& src, IZ_FLOAT fQ)
     {
         D3DXVec4Scale(
             reinterpret_cast<D3DXVECTOR4*>(&dst),
@@ -63,7 +63,7 @@ namespace math
     // ベクトルのＸＹＺ成分のみをスケーリングする
     // Ｗ成分はそのまま
     // dst = (src.x x fQ, src.y x fQ, src.z x fQ, src.w)
-    void SVector::ScaleXYZ(SVector& dst, const SVector& src, IZ_FLOAT fQ)
+    void SVector4::ScaleXYZ(SVector4& dst, const SVector4& src, IZ_FLOAT fQ)
     {
         D3DXVec3Scale(
             reinterpret_cast<D3DXVECTOR3*>(&dst),
@@ -74,7 +74,7 @@ namespace math
 
     // ベクトルをスケーリング（除算）する
     // dst = (src.x / fQ, src.y / fQ, src.z / fQ, src.w / fQ)
-    void SVector::Div(SVector& dst, const SVector& src, IZ_FLOAT fQ)
+    void SVector4::Div(SVector4& dst, const SVector4& src, IZ_FLOAT fQ)
     {
         D3DXVec4Scale(
             reinterpret_cast<D3DXVECTOR4*>(&dst),
@@ -85,7 +85,7 @@ namespace math
     // ベクトルのＸＹＺ成分のみをスケーリング(除算)する
     // Ｗ成分はそのまま
     // dst = (src.x / fQ, src.y / fQ, src.z / fQ, src.w)
-    void SVector::DivXYZ(SVector& dst, const SVector& src, IZ_FLOAT fQ)
+    void SVector4::DivXYZ(SVector4& dst, const SVector4& src, IZ_FLOAT fQ)
     {
         D3DXVec3Scale(
             reinterpret_cast<D3DXVECTOR3*>(&dst),
@@ -95,7 +95,7 @@ namespace math
     }
 
     // ベクトルの内積を計算する
-    IZ_FLOAT SVector::Dot(const SVector& vec1, const SVector& vec2)
+    IZ_FLOAT SVector4::Dot(const SVector4& vec1, const SVector4& vec2)
     {
         IZ_FLOAT ret = D3DXVec4Dot(
                         reinterpret_cast<const D3DXVECTOR4*>(&vec1),
@@ -104,7 +104,7 @@ namespace math
     }
 
     // ベクトルの外積を計算する
-    void SVector::Cross(SVector& dst, const SVector& src1, const SVector& src2)
+    void SVector4::Cross(SVector4& dst, const SVector4& src1, const SVector4& src2)
     {
         D3DXVec3Cross(
             reinterpret_cast<D3DXVECTOR3*>(&dst),
@@ -114,14 +114,14 @@ namespace math
 
 
     // ベクトルの大きさ(絶対値)を計算する
-    IZ_FLOAT SVector::Length(const SVector& vec)
+    IZ_FLOAT SVector4::Length(const SVector4& vec)
     {
         IZ_FLOAT ret = D3DXVec3Length(reinterpret_cast<const D3DXVECTOR3*>(&vec));
         return ret;
     }
 
     // ベクトルを正規化する
-    void SVector::Normalize(SVector& dst, const SVector& src)
+    void SVector4::Normalize(SVector4& dst, const SVector4& src)
     {
         D3DXVec3Normalize(
             reinterpret_cast<D3DXVECTOR3*>(&dst),
@@ -130,7 +130,7 @@ namespace math
     }
 
     // ベクトルの線形補間
-    void SVector::Lerp(SVector& dst, const SVector& src0, const SVector& src1, IZ_FLOAT f)
+    void SVector4::Lerp(SVector4& dst, const SVector4& src0, const SVector4& src1, IZ_FLOAT f)
     {
         D3DXVec4Lerp(
             reinterpret_cast<D3DXVECTOR4*>(&dst),

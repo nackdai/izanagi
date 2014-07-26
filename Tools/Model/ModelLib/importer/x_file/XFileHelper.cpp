@@ -5,10 +5,10 @@
 namespace {
     inline IZ_BOOL _HasScale(IZ_FLOAT x, IZ_FLOAT y, IZ_FLOAT z)
     {
-        izanagi::math::SVector vec;
+        izanagi::math::SVector4 vec;
         vec.Set(x, y, z);
 
-        IZ_FLOAT len = izanagi::math::SVector::Length(vec);
+        IZ_FLOAT len = izanagi::math::SVector4::Length(vec);
 #if 0
         IZ_BOOL bHasScale = !izanagi::math::CMath::IsNearyEqual(len, 1.0f);
 #else

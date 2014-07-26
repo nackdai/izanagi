@@ -77,9 +77,9 @@ IZ_BOOL CMouseHit::InitInternal(
             Length, Length);
 
         m_Rectangles[i].rc.Set(
-            izanagi::math::CVector(-Length * 0.5f, 0.0f, Length * 0.5f),    // Right-Bottom point
-            izanagi::math::CVector(        Length, 0.0f,          0.0f),    // Left direction vector
-            izanagi::math::CVector(          0.0f, 0.0f,       -Length));   // Up direction vector
+            izanagi::math::CVector4(-Length * 0.5f, 0.0f, Length * 0.5f),    // Right-Bottom point
+            izanagi::math::CVector4(        Length, 0.0f,          0.0f),    // Left direction vector
+            izanagi::math::CVector4(          0.0f, 0.0f,       -Length));   // Up direction vector
 
         m_Rectangles[i].rc.Transform(m_Rectangles[i].mtx);
     }
@@ -98,9 +98,9 @@ IZ_BOOL CMouseHit::InitInternal(
 
     // カメラ
     camera.Init(
-        izanagi::math::CVector(0.0f, 5.0f, -30.0, 1.0f),
-        izanagi::math::CVector(0.0f, 5.0f, 0.0f, 1.0f),
-        izanagi::math::CVector(0.0f, 1.0f, 0.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 5.0f, -30.0, 1.0f),
+        izanagi::math::CVector4(0.0f, 5.0f, 0.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 1.0f, 0.0f, 1.0f),
         1.0f,
         500.0f,
         izanagi::math::CMath::Deg2Rad(60.0f),
@@ -132,7 +132,7 @@ void CMouseHit::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
     GetCamera().Update();
 
     m_CrossRectIdx = -1;
-    izanagi::math::SVector dir;
+    izanagi::math::SVector4 dir;
 
     //if (m_IsPressKey)
     {
@@ -189,7 +189,7 @@ void CMouseHit::RenderInternal(izanagi::graph::CGraphicsDevice* device)
         izanagi::graph::E_GRAPH_RS_CULLMODE,
         izanagi::graph::E_GRAPH_CULL_NONE);
 
-    static const izanagi::math::SVector color[2] = {
+    static const izanagi::math::SVector4 color[2] = {
         { 1.0f, 1.0f, 1.0f, 1.0f },
         { 1.0f, 1.0f, 1.0f, 0.5f },
     };
@@ -212,7 +212,7 @@ void CMouseHit::RenderInternal(izanagi::graph::CGraphicsDevice* device)
                 (void*)&camera.GetParam().mtxW2C,
                 sizeof(camera.GetParam().mtxW2C));
 
-            const izanagi::math::SVector& clr = (m_CrossRectIdx == i ? color[1] : color[0]);
+            const izanagi::math::SVector4& clr = (m_CrossRectIdx == i ? color[1] : color[0]);
 
             _SetShaderParam(
                 m_Shader,

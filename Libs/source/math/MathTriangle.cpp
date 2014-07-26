@@ -1,7 +1,7 @@
 #include "math/MathTriangle.h"
 #include "math/MathRectangle.h"
 #include "math/MathPlane.h"
-#include "math/MathCVector.h"
+#include "math/MathCVector4.h"
 
 namespace izanagi
 {
@@ -16,15 +16,15 @@ namespace math
         pt[2].Set(0.0f, 0.0f, 0.0f);
     }
 
-    CTriangle::CTriangle(const SVector point[3])
+    CTriangle::CTriangle(const SVector4 point[3])
     {
         Set(point);
     }
 
     CTriangle::CTriangle(
-        const SVector& pt0,
-        const SVector& pt1,
-        const SVector& pt2)
+        const SVector4& pt0,
+        const SVector4& pt1,
+        const SVector4& pt2)
     {
         Set(pt0, pt1, pt2);
     }
@@ -37,31 +37,31 @@ namespace math
     const CTriangle& CTriangle::operator=(const CTriangle& rhs)
     {
         memcpy(pt, rhs.pt, sizeof(pt));
-        SVector::Copy(nml, rhs.nml);
+        SVector4::Copy(nml, rhs.nml);
         d = rhs.d;
 
         return *this;
     }
 
-    void CTriangle::Set(const SVector point[3])
+    void CTriangle::Set(const SVector4 point[3])
     {
         Set(point[0], point[1], point[2]);
     }
 
     void CTriangle::Set(
-        const SVector& point0,
-        const SVector& point1,
-        const SVector& point2)
+        const SVector4& point0,
+        const SVector4& point1,
+        const SVector4& point2)
     {
         pt[0].Set(point0.x, point0.y, point0.z);
         pt[1].Set(point1.x, point1.y, point1.z);
         pt[2].Set(point2.x, point2.y, point2.z);
 
-        CVector dir0(pt[1], pt[0], CVector::INIT_SUB);
-        CVector dir1(pt[2], pt[0], CVector::INIT_SUB);
+        CVector4 dir0(pt[1], pt[0], CVector4::INIT_SUB);
+        CVector4 dir1(pt[2], pt[0], CVector4::INIT_SUB);
 
-        SVector::Cross(nml, dir0, dir1);
-        SVector::Normalize(nml, nml);
+        SVector4::Cross(nml, dir0, dir1);
+        SVector4::Normalize(nml, nml);
 
         d = -(a * pt[0].x + b * pt[0].y + c * pt[0].z);
     }
@@ -69,7 +69,7 @@ namespace math
     // 4x4行列による変換.
     void CTriangle::Transform(const SMatrix& mtx)
     {
-        SVector tmp[COUNTOF(pt)];
+        SVector4 tmp[COUNTOF(pt)];
 
         for (IZ_UINT i = 0; i < COUNTOF(pt); i++)
         {
@@ -80,41 +80,41 @@ namespace math
     }
 
     // 三角形上に存在する点かどうか.
-    IZ_BOOL CTriangle::IsOnTriangle(const SVector& ptr) const
+    IZ_BOOL CTriangle::IsOnTriangle(const SVector4& ptr) const
     {
         for (IZ_UINT i = 0; i < 3; i++)
         {
             IZ_UINT idx = (i + 1) % 3;
-            CVector e(
+            CVector4 e(
                 pt[idx].x - pt[i].x,
                 pt[idx].y - pt[i].y,
                 pt[idx].z - pt[i].z,
                 0.0f);
 
             idx = (i + 2) % 3;
-            CVector f(
+            CVector4 f(
                 pt[idx].x - pt[i].x,
                 pt[idx].y - pt[i].y,
                 pt[idx].z - pt[i].z,
                 0.0f);
 
-            CVector g(
+            CVector4 g(
                 ptr.x - pt[i].x,
                 ptr.y - pt[i].y,
                 ptr.z - pt[i].z,
                 0.0f);
 
-            SVector normalOfE;
+            SVector4 normalOfE;
             {
                 // ベクトルeに垂直なベクトルを計算する
-                SVector cross;
+                SVector4 cross;
                 
-                SVector::Cross(cross, e, f);
-                SVector::Cross(normalOfE, cross, e);
+                SVector4::Cross(cross, e, f);
+                SVector4::Cross(normalOfE, cross, e);
 
                 // 三角形の内側にあるか計算する
-                IZ_FLOAT dot0 = SVector::Dot(f, normalOfE);
-                IZ_FLOAT dot1 = SVector::Dot(g, normalOfE);
+                IZ_FLOAT dot0 = SVector4::Dot(f, normalOfE);
+                IZ_FLOAT dot1 = SVector4::Dot(g, normalOfE);
                 if (dot0 * dot1 < 0.0f)
                 {
                     return IZ_FALSE;
@@ -122,11 +122,11 @@ namespace math
 
 #if 0
                 // 逆向きで計算してみる
-                SVector::Cross(normalOfE, e, cross);
+                SVector4::Cross(normalOfE, e, cross);
 
                 // 三角形の内側にあるか計算する
-                dot0 = SVector::Dot(f, normalOfE);
-                dot1 = SVector::Dot(g, normalOfE);
+                dot0 = SVector4::Dot(f, normalOfE);
+                dot1 = SVector4::Dot(g, normalOfE);
                 if (dot0 * dot1 >= 0.0f)
                 {
                     return IZ_TRUE;
@@ -141,7 +141,7 @@ namespace math
     // レイと交差する点を取得
     IZ_BOOL CTriangle::GetIntersectPoint(
         const SRay& ray,
-        SVector& refPtr) const
+        SVector4& refPtr) const
     {
         CPlane plane(nml, pt[0]);
 
@@ -158,7 +158,7 @@ namespace math
     // レイと交差するかどうか
     IZ_BOOL CTriangle::IsIntersect(const SRay& ray)
     {
-        SVector tmp;
+        SVector4 tmp;
 
         IZ_BOOL isIntersect = GetIntersectPoint(ray, tmp);
         return isIntersect;

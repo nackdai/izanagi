@@ -22,7 +22,7 @@ namespace izanagi {
             IZ_UINT idx,
             IZ_UINT transformType,
             IZ_UINT paramType,
-            const math::SVector& param);
+            const math::SVector4& param);
 
     private:
         S_SKL_JOINT_POSE* m_Pose;
@@ -40,7 +40,7 @@ namespace izanagi {
             IZ_UINT idx,
             IZ_UINT transformType,
             IZ_UINT paramType,
-            const math::SVector& param);
+            const math::SVector4& param);
 
     private:
         CSkeletonInstance* m_Skl;

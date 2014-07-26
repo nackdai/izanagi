@@ -4,7 +4,7 @@
 #include <math.h>
 #include <memory.h>
 #include "izDefs.h"
-#include "math/MathVector.h"
+#include "math/MathVector4.h"
 
 namespace izanagi
 {
@@ -75,11 +75,11 @@ namespace math
         IZ_ASSERT(IZ_FALSE);
     }
 
-    void SQuat::SetQuatFromRadAxis(SQuat& quat, IZ_FLOAT rad, const SVector& vAxis)
+    void SQuat::SetQuatFromRadAxis(SQuat& quat, IZ_FLOAT rad, const SVector4& vAxis)
     {
         // 念のため
-        SVector v;
-        SVector::Normalize(v, vAxis);
+        SVector4 v;
+        SVector4::Normalize(v, vAxis);
 
         IZ_FLOAT c = cosf(rad * 0.5f);
         IZ_FLOAT s = sinf(rad * 0.5f);

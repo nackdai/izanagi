@@ -437,7 +437,7 @@ namespace {
                                     pContent,
                                     sTransform);
 
-        izanagi::math::SVector vec;
+        izanagi::math::SVector4 vec;
         for (IZ_UINT i = 0; i < 4; i++) {
             vec.v[i] = (IZ_FLOAT)pTransform->getValue().get(i);
         }

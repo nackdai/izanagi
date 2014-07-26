@@ -35,8 +35,8 @@ public:
 
     IZ_BOOL GetCrossPoint(
         const izanagi::math::CRay& ray,
-        izanagi::math::SVector& refPtr,
-        izanagi::math::SVector* normal);
+        izanagi::math::SVector4& refPtr,
+        izanagi::math::SVector4* normal);
 
     IZ_UINT GetTriNum() const { return m_TriNum; }
     const izanagi::math::CTriangle* GetTriangles() const { return m_Triangles; }

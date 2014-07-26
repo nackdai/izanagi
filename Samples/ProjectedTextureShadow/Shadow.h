@@ -20,8 +20,8 @@ public:
 public:
     IZ_BOOL BeginShadowRender(
         izanagi::graph::CGraphicsDevice* device,
-        const izanagi::math::SVector& lightPos,
-        const izanagi::math::SVector& lightDir);
+        const izanagi::math::SVector4& lightPos,
+        const izanagi::math::SVector4& lightDir);
 
     void EndShadowRender(izanagi::graph::CGraphicsDevice* device);
 

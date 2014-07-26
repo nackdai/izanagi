@@ -22,7 +22,7 @@ void CGestureListener::OnTapUp(const izanagi::sys::CTouchEvent& ev)
 
     IZ_ASSERT(m_App != IZ_NULL);
 
-    izanagi::math::SVector dir;
+    izanagi::math::SVector4 dir;
 
     // Compute a ray from camera point to tap point.
     izanagi::CSceneGraphUtil::Point2Ray(

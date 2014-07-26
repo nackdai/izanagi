@@ -45,7 +45,7 @@ namespace izanagi {
 
         CPrimitiveSet* GetPrimSet(IZ_UINT idx);
 
-        inline void GetCenter(math::SVector& vPos);
+        inline void GetCenter(math::SVector4& vPos);
 
         /** マテリアル情報の取得.
          */
@@ -69,7 +69,7 @@ namespace izanagi {
 
     // inline *************************************
 
-    void CMeshSet::GetCenter(math::SVector& vPos)
+    void CMeshSet::GetCenter(math::SVector4& vPos)
     {
         vPos.x = m_Info.center[0];
         vPos.y = m_Info.center[1];

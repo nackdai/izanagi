@@ -26,13 +26,13 @@ namespace izanagi {
     public:
         // パラメータセット
         virtual void RegisterParameter(
-            const math::SVector* pVector,
+            const math::SVector4* pVector,
             IZ_UINT num)
         {
             IZ_ASSERT(num <= _VECTOR_NUM);
 
             for (IZ_UINT i = 0; i < num; ++i) {
-                math::SVector::Copy(m_vOffset[i], pVector[i]);
+                math::SVector4::Copy(m_vOffset[i], pVector[i]);
             }
         }
 
@@ -77,7 +77,7 @@ namespace izanagi {
 
     protected:
         SHADER_PARAM_HANDLE m_hOffset;
-        math::SVector m_vOffset[_VECTOR_NUM];
+        math::SVector4 m_vOffset[_VECTOR_NUM];
     };
 
     ////////////////////////////////

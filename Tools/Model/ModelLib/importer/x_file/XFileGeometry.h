@@ -54,7 +54,7 @@ public:
     IZ_BOOL GetVertex(
         IZ_UINT nFaceIdx,
         IZ_UINT nVtxIdx,
-        izanagi::math::SVector& vec,
+        izanagi::math::SVector4& vec,
         izanagi::E_MSH_VTX_FMT_TYPE type);
 
     void GetSkinList(

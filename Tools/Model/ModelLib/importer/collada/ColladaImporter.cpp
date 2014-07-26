@@ -201,7 +201,7 @@ IZ_UINT CColladaImporter::GetVtxFmt()
 
 IZ_BOOL CColladaImporter::GetVertex(
     IZ_UINT nIdx,
-    izanagi::math::SVector& vec,
+    izanagi::math::SVector4& vec,
     izanagi::E_MSH_VTX_FMT_TYPE type)
 {
     domMesh* pMesh = GetMesh();

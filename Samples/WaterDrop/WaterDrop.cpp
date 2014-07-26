@@ -146,7 +146,7 @@ void WaterDropApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
         device->Get2DShaderProgramIfRenderOpIsUserDefs()->SetVector(
             device,
             m_ParamHandle,
-            izanagi::math::CVector(1.0f / SCREEN_WIDTH, 1.0f / SCREEN_HEIGHT, 0.0f, 0.0f));
+            izanagi::math::CVector4(1.0f / SCREEN_WIDTH, 1.0f / SCREEN_HEIGHT, 0.0f, 0.0f));
 
         for (IZ_UINT i = 0; i < COUNTOF(points); i++) {
             device->Draw2DSprite(

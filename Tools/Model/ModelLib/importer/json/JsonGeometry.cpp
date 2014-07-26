@@ -312,7 +312,7 @@ IZ_BOOL CJsonGeometry::Read(rapidjson::Document& document)
         normal.y /= count;
         normal.z /= count;
 
-        izanagi::math::CVector result(normal.x, normal.y, normal.z, 0.0f);
+        izanagi::math::CVector4 result(normal.x, normal.y, normal.z, 0.0f);
         result.Normalize();
 
         normal.x = result.x;
@@ -419,7 +419,7 @@ IZ_UINT CJsonGeometry::GetVtxFmt() const
 
 IZ_BOOL CJsonGeometry::GetVertex(
     IZ_UINT idx,
-    izanagi::math::SVector& vec,
+    izanagi::math::SVector4& vec,
     izanagi::E_MSH_VTX_FMT_TYPE type)
 {
     switch (type) {

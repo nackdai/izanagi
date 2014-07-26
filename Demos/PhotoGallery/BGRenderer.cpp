@@ -11,7 +11,7 @@ BGRenderer& BGRenderer::Instance()
     return instance;
 }
 
-static izanagi::math::SVector samples[32];
+static izanagi::math::SVector4 samples[32];
 
 BGRenderer::BGRenderer()
 {
@@ -188,13 +188,13 @@ void BGRenderer::RenderToMRT(
         IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0));
 
     // Material for point light.
-    static const izanagi::math::SVector mtrlPointLight[] = {
+    static const izanagi::math::SVector4 mtrlPointLight[] = {
         { 1.0f, 1.0f, 1.0f, 1.0f },
         { 0.0f, 0.0f, 0.0f, 0.0f },
     };
 
     // Material for ambient light.
-    static const izanagi::math::SVector mtrlAmbientLight[] = {
+    static const izanagi::math::SVector4 mtrlAmbientLight[] = {
         { 0.0f, 0.0f, 0.0f, 0.0f },
         { 1.0f, 1.0f, 1.0f, 1.0f },
     };

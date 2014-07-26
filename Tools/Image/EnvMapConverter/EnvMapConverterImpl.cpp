@@ -16,7 +16,7 @@ void Convert(
     IZ_UINT outWidth = outTex[0]->GetWidth();
     IZ_UINT outHeight = outTex[0]->GetHeight();
 
-    izanagi::math::SVector vecRef;
+    izanagi::math::SVector4 vecRef;
     SFloatColor color;
 
     for (size_t i = 0; i < outTex.size(); i++) {

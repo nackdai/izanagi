@@ -1,7 +1,7 @@
 #if !defined(__IZANAGI_MATH_PLANE_H__)
 #define __IZANAGI_MATH_PLANE_H__
 
-#include "MathVector.h"
+#include "MathVector4.h"
 #include "MathMatrix.h"
 
 namespace izanagi
@@ -14,7 +14,7 @@ namespace math
      */
     struct SPlane {
         union {
-            SVector nml;
+            SVector4 nml;
             struct {
                 IZ_FLOAT a;
                 IZ_FLOAT b;
@@ -24,7 +24,7 @@ namespace math
         };
         IZ_FLOAT d;
 
-        SVector pt;
+        SVector4 pt;
     };
 
     /**
@@ -38,12 +38,12 @@ namespace math
         static IZ_BOOL GetIntersectPoint(
             const CPlane& plane,
             const SRay& ray,
-            SVector& refPtr,
+            SVector4& refPtr,
             IZ_FLOAT* retRayCoefficient/*= IZ_NULL*/);
 
     public:
         CPlane();
-        CPlane(const SVector& normal, const SVector& ptr);
+        CPlane(const SVector4& normal, const SVector4& ptr);
         CPlane(const SPlane& rhs);
 
         ~CPlane() {}
@@ -58,11 +58,11 @@ namespace math
 
         /** 平面を設定.
          */
-        void Set(const SVector& normal, const SVector& ptr);
+        void Set(const SVector4& normal, const SVector4& ptr);
 
         /** 平面を設定.
          */
-        void Set(const SVector& normal, IZ_FLOAT _d);
+        void Set(const SVector4& normal, IZ_FLOAT _d);
 
         /** 原点からの距離を取得.
          */
@@ -70,7 +70,7 @@ namespace math
 
         /** 平面上に存在する点かどうか.
          */
-        IZ_BOOL IsOnPlane(const SVector& ptr);
+        IZ_BOOL IsOnPlane(const SVector4& ptr);
 
         /** 4x4行列による変換.
          */
@@ -78,21 +78,21 @@ namespace math
 
         /** 平面をあらわすベクトルを取得.
          */
-        void GetPlaneVector(SVector& plane);
+        void GetPlaneVector(SVector4& plane);
 
         /** レイと交差する点を取得.
          */
         IZ_BOOL GetIntersectPoint(
             const SRay& ray,
-            SVector& refPtr,
+            SVector4& refPtr,
             IZ_FLOAT* retRayCoefficient = IZ_NULL) const;
 
         /** 線分と交差する点を取得.
          */
         IZ_BOOL GetIntersectPoint(
-            const SVector& from,
-            const SVector& to,
-            SVector& refPtr,
+            const SVector4& from,
+            const SVector4& to,
+            SVector4& refPtr,
             IZ_FLOAT* retRayCoefficient = IZ_NULL) const;
 
         /** レイと交差するかどうか.
@@ -101,7 +101,7 @@ namespace math
 
         /** 面の正側（法線の向き側）に点があるかどうか.
          */
-        IZ_BOOL IsPositive(const SVector& ptr) const;
+        IZ_BOOL IsPositive(const SVector4& ptr) const;
     };
 }   // namespace math
 }   // namespace izanagi

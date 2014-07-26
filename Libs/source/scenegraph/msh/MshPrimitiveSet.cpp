@@ -164,7 +164,7 @@ IZ_BOOL CPrimitiveSet::DebugRender(
     IZ_ASSERT(m_VB != IZ_NULL);
 
     struct SVtx {
-        math::SVector pos;
+        math::SVector4 pos;
         float nml[3];
         float uv[2];
         float idx[4];
@@ -193,7 +193,7 @@ IZ_BOOL CPrimitiveSet::DebugRender(
         for (IZ_UINT i = 0; i < nVtxNum; ++i) {
             SVtx& sVtx = pVtx[i];
 
-            math::SVector vPosTmp;
+            math::SVector4 vPosTmp;
             vPosTmp.Set(0.0f, 0.0f, 0.0f, 0.0f);
 
             float fTotalW = 0.0f;
@@ -205,7 +205,7 @@ IZ_BOOL CPrimitiveSet::DebugRender(
                 if ((idx >= 0) && (tblJointMtx[idx] != IZ_NULL)) {
                     const math::SMatrix& mtx = *tblJointMtx[idx];
 
-                    math::SVector vec;
+                    math::SVector4 vec;
                     math::SMatrix::Apply(vec, sVtx.pos, mtx);
 
                     vPosTmp.x += vec.x * weight;

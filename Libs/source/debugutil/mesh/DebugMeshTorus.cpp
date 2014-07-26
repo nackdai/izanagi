@@ -205,7 +205,7 @@ void CDebugMeshTorus::ComputeVtx(
     IZ_FLOAT fCosLong = math::CMath::CosF(fLongitude);
 
     // 中心位置
-    math::SVector vCenter;
+    math::SVector4 vCenter;
 #ifdef IZ_COORD_LEFT_HAND
     vCenter.Set(
         fCenterRadius * fCosLong,
@@ -219,7 +219,7 @@ void CDebugMeshTorus::ComputeVtx(
 #endif
 
     // 位置
-    math::SVector vPos;
+    math::SVector4 vPos;
     {
         vPos.Set(
             fRingRadius * fCosLat,
@@ -252,13 +252,13 @@ void CDebugMeshTorus::ComputeVtx(
 
     // 法線
     if (IsNormal(flag)) {
-        math::SVector vNml;
+        math::SVector4 vNml;
         vNml.Set(
             vPos.x - vCenter.x,
             vPos.y - vCenter.y,
             vPos.z - vCenter.z);
 
-        math::SVector::Normalize(vNml, vNml);
+        math::SVector4::Normalize(vNml, vNml);
 
         pVtx->nml.v[0] = vNml.x;
         pVtx->nml.v[1] = vNml.y;

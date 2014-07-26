@@ -24,10 +24,10 @@ struct SXFileTexture {
 
 struct SXFileMaterial {
     std::string name;
-    izanagi::math::SVector diffuse;
+    izanagi::math::SVector4 diffuse;
     IZ_FLOAT specularExp;
-    izanagi::math::SVector specular;
-    izanagi::math::SVector emisssion;
+    izanagi::math::SVector4 specular;
+    izanagi::math::SVector4 emisssion;
 
     std::vector<SXFileTexture> textures;
 };
@@ -58,8 +58,8 @@ struct SXFileMesh {
 
     std::string name;
 
-    std::vector<izanagi::math::SVector> positions;
-    std::vector<izanagi::math::SVector> normals;
+    std::vector<izanagi::math::SVector4> positions;
+    std::vector<izanagi::math::SVector4> normals;
     std::vector<SXFileUV> texcoords;
     std::vector<IZ_COLOR> colors;
 

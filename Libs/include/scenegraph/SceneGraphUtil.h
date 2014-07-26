@@ -36,7 +36,7 @@ namespace izanagi {
         /** クリップ座標取得.
          */
         static void Screen2Clip(
-            math::SVector& vClip,
+            math::SVector4& vClip,
             const graph::SViewport& vp,
             IZ_INT nX, IZ_INT nY,
             IZ_FLOAT fZ);
@@ -44,7 +44,7 @@ namespace izanagi {
         /** 光線を取得.
          */
         static void Point2Ray(
-            math::SVector& vRay,
+            math::SVector4& vRay,
             const SCameraParam& sCamera,
             const graph::SViewport& vp,
             IZ_INT nX,

@@ -55,8 +55,8 @@ CShadow::~CShadow()
 
 IZ_BOOL CShadow::BeginShadowRender(
     izanagi::graph::CGraphicsDevice* device,
-    const izanagi::math::SVector& lightPos,
-    const izanagi::math::SVector& lightDir)
+    const izanagi::math::SVector4& lightPos,
+    const izanagi::math::SVector4& lightDir)
 {
     IZ_BOOL ret = device->BeginScene(
                     &m_RT, 1,
@@ -68,8 +68,8 @@ IZ_BOOL CShadow::BeginShadowRender(
         IZ_FLOAT aspect = m_RT->GetHeight() / (IZ_FLOAT)m_RT->GetWidth();
         m_Light.Init(
             lightPos,
-            izanagi::math::CVector(lightPos.x + lightDir.x, lightPos.y + lightDir.y, lightPos.z + lightDir.z),
-            izanagi::math::CVector(0.0f, 1.0f, 0.0f),
+            izanagi::math::CVector4(lightPos.x + lightDir.x, lightPos.y + lightDir.y, lightPos.z + lightDir.z),
+            izanagi::math::CVector4(0.0f, 1.0f, 0.0f),
             0.1f, 100.0f,
             IZ_MATH_PI / 2.5f,
             aspect);

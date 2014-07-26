@@ -25,7 +25,7 @@ CAngularMapProxy::~CAngularMapProxy()
 
 // 反射ベクトルからUVを取得.
 void CAngularMapProxy::getUVFromRef(
-    const izanagi::math::SVector& ref,
+    const izanagi::math::SVector4& ref,
     IZ_FLOAT& u, IZ_FLOAT& v)
 {
     if (izanagi::math::CMath::IsNearyEqual(ref.z, 1.0f)) {
@@ -61,7 +61,7 @@ void CAngularMapProxy::getUVFromRef(
 // XYから反射ベクトルを取得.
 void CAngularMapProxy::getRef(
     IZ_UINT x, IZ_UINT y,
-    izanagi::math::SVector& ref,
+    izanagi::math::SVector4& ref,
     izanagi::graph::E_GRAPH_CUBE_TEX_FACE face/*= izanagi::graph::E_GRAPH_CUBE_TEX_FACE_NUM*/)
 {
     // [-1:1]に変換

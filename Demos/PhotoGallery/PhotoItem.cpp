@@ -92,9 +92,9 @@ IZ_BOOL PhotoItem::Init(
     // +x <-+---0---+
 
     m_Rectangle.Set(
-        izanagi::math::CVector(-Width * 0.5f, 0.0f, 0.0f),  // Right-Bottom point.
-        izanagi::math::CVector(Width, 0.0f, 0.0f),          // Left direction.
-        izanagi::math::CVector(0.0f, Height, 0.0f));        // Up direction.
+        izanagi::math::CVector4(-Width * 0.5f, 0.0f, 0.0f),  // Right-Bottom point.
+        izanagi::math::CVector4(Width, 0.0f, 0.0f),          // Left direction.
+        izanagi::math::CVector4(0.0f, Height, 0.0f));        // Up direction.
 
     return IZ_TRUE;
 }
@@ -127,7 +127,7 @@ void PhotoItem::Update(
     // カメラは固定なので、カメラの後ろにいるかどうかで判定する
     // カメラはマイナスZ方向を向いているので、プラスZ方向がカメラの後ろになる
 
-    izanagi::math::SVector pos;
+    izanagi::math::SVector4 pos;
     GetCenterPosition(pos);
     izanagi::math::SMatrix::ApplyXYZ(pos, pos, mtxRot);
 
@@ -204,7 +204,7 @@ IZ_BOOL PhotoItem::HasTexture()
 }
 
 void PhotoItem::SetPositionAndRotation(
-    const izanagi::math::CVector& pos,
+    const izanagi::math::CVector4& pos,
     IZ_FLOAT rot)
 {
     izanagi::math::SMatrix::GetRotByY(m_L2W, rot);
@@ -262,9 +262,9 @@ IZ_BOOL PhotoItem::HitTest(
 
         // Set rectangle parameters.
         rc.Set(
-            izanagi::math::CVector(-w * 0.5f, 0.0f, 0.0f),  // Right-Bottom point.
-            izanagi::math::CVector(w, 0.0f, 0.0f),          // Left direction.
-            izanagi::math::CVector(0.0f, h, 0.0f));         // Up direction.
+            izanagi::math::CVector4(-w * 0.5f, 0.0f, 0.0f),  // Right-Bottom point.
+            izanagi::math::CVector4(w, 0.0f, 0.0f),          // Left direction.
+            izanagi::math::CVector4(0.0f, h, 0.0f));         // Up direction.
 
         rc.Transform(mtx);
     }
@@ -292,15 +292,15 @@ IZ_BOOL PhotoItem::IsRequestedLoadTexture() const
     return m_IsRequestedLoadTexture;
 }
 
-void PhotoItem::GetNormal(izanagi::math::SVector& nml)
+void PhotoItem::GetNormal(izanagi::math::SVector4& nml)
 {
     izanagi::math::SMatrix::ApplyXYZ(nml, m_Rectangle.nml, m_L2W);
     nml.w = 0.0f;
 
-    izanagi::math::SVector::Normalize(nml, nml);
+    izanagi::math::SVector4::Normalize(nml, nml);
 }
 
-void PhotoItem::GetCenterPosition(izanagi::math::SVector& pos)
+void PhotoItem::GetCenterPosition(izanagi::math::SVector4& pos)
 {
     IZ_FLOAT height = Height;
 
@@ -314,7 +314,7 @@ void PhotoItem::GetCenterPosition(izanagi::math::SVector& pos)
         height *= scaleY;
     }
 
-    izanagi::math::SVector::Set(
+    izanagi::math::SVector4::Set(
         pos,
         0.0f,
         height * 0.5f,
@@ -326,7 +326,7 @@ void PhotoItem::GetCenterPosition(izanagi::math::SVector& pos)
 
 void PhotoItem::SetShaderParam(izanagi::shader::CShaderBasic* shader)
 {
-    izanagi::math::CVector params(1.0f, 1.0f, m_FadeInHeight, m_FadeInAlpha);
+    izanagi::math::CVector4 params(1.0f, 1.0f, m_FadeInHeight, m_FadeInAlpha);
 
     if (HasTexture()) {
         // Fit size to aspect of texture size.

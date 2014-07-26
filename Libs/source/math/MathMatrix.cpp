@@ -5,15 +5,15 @@ namespace izanagi
 {
 namespace math
 {
-    void SMatrix::GetRotMatrixFromVector(SMatrix& mtx, const SVector& vec, const SVector& up)
+    void SMatrix::GetRotMatrixFromVector(SMatrix& mtx, const SVector4& vec, const SVector4& up)
     {
-        SVector& vX = mtx.v[0];
-        SVector& vY = mtx.v[1];
-        SVector& vZ = mtx.v[2];
+        SVector4& vX = mtx.v[0];
+        SVector4& vY = mtx.v[1];
+        SVector4& vZ = mtx.v[2];
 
-        SVector::Normalize(vZ, vec);
+        SVector4::Normalize(vZ, vec);
 
-        SVector vUp;
+        SVector4 vUp;
         if (CMath::IsNearyEqualZero(vZ.x) && CMath::IsNearyEqualZero(vZ.z)) {
             // UPベクトルとの外積を計算できないので、
             // 新しいUPベクトルをでっちあげる・・・
@@ -25,19 +25,19 @@ namespace math
             }
         }
         else {
-            SVector::Copy(vUp, up);
+            SVector4::Copy(vUp, up);
         }
 
-        SVector::Cross(vX, vUp, vZ);
-        SVector::Normalize(vX, vX);
+        SVector4::Cross(vX, vUp, vZ);
+        SVector4::Normalize(vX, vX);
 
-        SVector::Cross(vY, vZ, vX);
+        SVector4::Cross(vY, vZ, vX);
 
         vX.w = vY.w = vZ.w = 0.0f;
     }
 
     // マトリクスからオイラー角を取得する
-    void _GetEulerFromMatrixXYZ(SVector& angle, const SMatrix& mtx)
+    void _GetEulerFromMatrixXYZ(SVector4& angle, const SMatrix& mtx)
     {
         // NOTE
         // X軸、Y軸、Z軸回転の行列を掛け合わせると以下のようになる
@@ -111,7 +111,7 @@ namespace math
         }
     }
 
-    void _GetEulerFromMatrixZXY(SVector& angle, const SMatrix& mtx)
+    void _GetEulerFromMatrixZXY(SVector4& angle, const SMatrix& mtx)
     {
         // NOTE
         // m[0][0] = CzCy + SzSxSy  m[0][1] = SzCx m[0][2] = -CzSy + SzSxCy m[0][3] = 0
@@ -156,9 +156,9 @@ namespace math
     }
 
     // マトリクスからオイラー角を取得する
-    void SMatrix::GetEulerFromMatrix(SVector& angle, const SMatrix& mtx, E_MATH_ROTATION_ORDER order)
+    void SMatrix::GetEulerFromMatrix(SVector4& angle, const SMatrix& mtx, E_MATH_ROTATION_ORDER order)
     {
-        typedef void (*Func)(SVector&, const SMatrix&);
+        typedef void (*Func)(SVector4&, const SMatrix&);
         Func funcs[] =
         {
             _GetEulerFromMatrixXYZ,
@@ -187,17 +187,17 @@ namespace math
         SQuat quatLerp;
         SQuat::Slerp(quatLerp, quatFrom, quatTo, t);
 
-        SVector posFrom;
-        SVector::Copy(posFrom, from.v[3]);
+        SVector4 posFrom;
+        SVector4::Copy(posFrom, from.v[3]);
 
-        SVector posTo;
-        SVector::Copy(posTo, to.v[3]);
+        SVector4 posTo;
+        SVector4::Copy(posTo, to.v[3]);
 
-        SVector posLerp;
-        SVector::Lerp(posLerp, posFrom, posTo, t);
+        SVector4 posLerp;
+        SVector4::Lerp(posLerp, posFrom, posTo, t);
 
         SQuat::MatrixFromQuat(dst, quatLerp);
-        SVector::Copy(dst.v[3], posLerp);
+        SVector4::Copy(dst.v[3], posLerp);
     }
 }   // namespace math
 }   // namespace izanagi

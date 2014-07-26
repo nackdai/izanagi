@@ -129,7 +129,7 @@ namespace graph
 
         // スクリーンサイズの逆数
         {
-            math::SVector vTmp;
+            math::SVector4 vTmp;
             vTmp.x = 1.0f / device->GetViewport().width;
             vTmp.y = 1.0f / device->GetViewport().height;
 

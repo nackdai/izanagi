@@ -4,7 +4,7 @@
 #include <math.h>
 #include <memory.h>
 #include "izDefs.h"
-#include "math/MathVector.h"
+#include "math/MathVector4.h"
 
 namespace izanagi
 {
@@ -69,7 +69,7 @@ namespace math
             t);
     }
 
-    void SQuat::SetQuatFromRadAxis(SQuat& quat, IZ_FLOAT rad, const SVector& vAxis)
+    void SQuat::SetQuatFromRadAxis(SQuat& quat, IZ_FLOAT rad, const SVector4& vAxis)
     {
         D3DXQuaternionRotationAxis(
             reinterpret_cast<D3DXQUATERNION*>(&quat),

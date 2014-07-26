@@ -58,9 +58,9 @@ IZ_BOOL CCubeMapApp::InitInternal(
 
     // カメラ
     camera.Init(
-        izanagi::math::CVector(0.0f, 0.0f,  0.0f, 1.0f),
-        izanagi::math::CVector(0.0f, 0.0f, -1.0f, 1.0f),
-        izanagi::math::CVector(0.0f, 1.0f,  0.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 0.0f,  0.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 0.0f, -1.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 1.0f,  0.0f, 1.0f),
         1.0f,
         500.0f,
         izanagi::math::CMath::Deg2Rad(60.0f),

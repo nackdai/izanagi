@@ -222,9 +222,9 @@ IZ_BOOL CMotionBindApp::InitInternal(
 
     // カメラ
     camera.Init(
-        izanagi::math::CVector(0.0f, 5.0f, CAMERA_Z, 1.0f),
-        izanagi::math::CVector(0.0f, 5.0f, 0.0f, 1.0f),
-        izanagi::math::CVector(0.0f, 1.0f, 0.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 5.0f, CAMERA_Z, 1.0f),
+        izanagi::math::CVector4(0.0f, 5.0f, 0.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 1.0f, 0.0f, 1.0f),
         1.0f,
         500.0f,
         izanagi::math::CMath::Deg2Rad(60.0f),
@@ -289,7 +289,7 @@ void CMotionBindApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
         // 位置は原点なので
         m_RenderGraph->Register(
             GetCamera(),
-            izanagi::math::CVector(0.0f, 0.0f, 0.0f),
+            izanagi::math::CVector4(0.0f, 0.0f, 0.0f),
             m_Mdl);
     }
     m_RenderGraph->EndRegister();

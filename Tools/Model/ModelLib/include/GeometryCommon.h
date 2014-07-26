@@ -120,8 +120,8 @@ struct SMesh {
 ///////////////////////////////////////
 
 struct SVtxAdditional {
-    std::vector<izanagi::math::SVector> nml;
-    std::vector<izanagi::math::SVector> tangent;
+    std::vector<izanagi::math::SVector4> nml;
+    std::vector<izanagi::math::SVector4> tangent;
 
     IZ_BOOL HasNormal() const
     {
@@ -139,8 +139,8 @@ struct SVtxAdditional {
             return;
         }
 
-        izanagi::math::SVector v;
-        izanagi::math::SVector::SetZero(v);
+        izanagi::math::SVector4 v;
+        izanagi::math::SVector4::SetZero(v);
 
         for (size_t i = 0; i < nml.size(); i++) {
             v.x += nml[i].x;
@@ -157,12 +157,12 @@ struct SVtxAdditional {
         nml.push_back(v);
     }
 
-    void GetNormal(izanagi::math::SVector& v) const
+    void GetNormal(izanagi::math::SVector4& v) const
     {
         // NOTE
         // Need to call "FixNormal" before call this function...
         IZ_ASSERT(nml.size() == 1);
-        izanagi::math::SVector::Copy(v, nml[0]);
+        izanagi::math::SVector4::Copy(v, nml[0]);
     }
 
     void FixTangent()
@@ -171,8 +171,8 @@ struct SVtxAdditional {
             return;
         }
 
-        izanagi::math::SVector v;
-        izanagi::math::SVector::SetZero(v);
+        izanagi::math::SVector4 v;
+        izanagi::math::SVector4::SetZero(v);
 
         for (size_t i = 0; i < tangent.size(); i++) {
             v.x += tangent[i].x;
@@ -186,12 +186,12 @@ struct SVtxAdditional {
         v.z *= div;
     }
 
-    void GetTangent(izanagi::math::SVector& v) const
+    void GetTangent(izanagi::math::SVector4& v) const
     {
         // NOTE
         // Need to call "FixTangent" before call this function...
         IZ_ASSERT(tangent.size() == 1);
-        izanagi::math::SVector::Copy(v, tangent[0]);
+        izanagi::math::SVector4::Copy(v, tangent[0]);
     }
 };
 

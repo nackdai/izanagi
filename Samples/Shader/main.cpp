@@ -71,9 +71,9 @@ IZ_BOOL CShaderApp::InitInternal(
 
     // ÉJÉÅÉâ
     camera.Init(
-        izanagi::math::CVector(0.0f, 10.0f, 30.0f, 1.0f),
-        izanagi::math::CVector(0.0f, 0.0f, 0.0f, 1.0f),
-        izanagi::math::CVector(0.0f, 1.0f, 0.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 10.0f, 30.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 0.0f, 0.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 1.0f, 0.0f, 1.0f),
         1.0f,
         500.0f,
         izanagi::math::CMath::Deg2Rad(60.0f),

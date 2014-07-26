@@ -4,7 +4,7 @@
 #include <math.h>
 #include <memory.h>
 #include "izDefs.h"
-#include "MathVector.h"
+#include "MathVector4.h"
 #include "MathMatrix.h"
 
 namespace izanagi
@@ -13,13 +13,13 @@ namespace math
 {
     struct SMatrix;
 
-    struct SQuat : public SVector {
+    struct SQuat : public SVector4 {
         void Set(IZ_FLOAT _x, IZ_FLOAT _y, IZ_FLOAT _z, IZ_FLOAT _w = 1.0f)
         {
             x = _x; y = _y; z = _z; w = _w;
         }
 
-        void Set(const SVector& rhs)
+        void Set(const SVector4& rhs)
         {
             x = rhs.x; y = rhs.y; z = rhs.z; w = rhs.w;
         }
@@ -53,7 +53,7 @@ namespace math
             dst.w = src.w;
         }
 
-        static void Copy(SVector& dst, const SQuat& src)
+        static void Copy(SVector4& dst, const SQuat& src)
         {
             dst.x = src.x;
             dst.y = src.y;
@@ -133,7 +133,7 @@ namespace math
         // 球面線形補間
         static inline void Slerp(SQuat& dst, const SQuat& quat1, const SQuat& quat2, IZ_FLOAT t);
 
-        static void Slerp(SVector& dst, const SQuat& quat1, const SQuat& quat2, IZ_FLOAT t)
+        static void Slerp(SVector4& dst, const SQuat& quat1, const SQuat& quat2, IZ_FLOAT t)
         {
             Slerp(
                 *(reinterpret_cast<SQuat*>(&dst)),
@@ -144,14 +144,14 @@ namespace math
         // 角度と軸からクオータニオンを設定する
         static void SetQuatFromRadAxis(SQuat& quat, IZ_FLOAT rad, IZ_FLOAT fAxisX, IZ_FLOAT fAxisY, IZ_FLOAT fAxisZ)
         {
-            SVector vAxis;
+            SVector4 vAxis;
             vAxis.Set(fAxisX, fAxisY, fAxisZ, 0.0f);
 
             SetQuatFromRadAxis(quat, rad, vAxis);
         }
 
         // 角度と軸からクオータニオンを設定する
-        static inline void SetQuatFromRadAxis(SQuat& quat, IZ_FLOAT rad, const SVector& vAxis);
+        static inline void SetQuatFromRadAxis(SQuat& quat, IZ_FLOAT rad, const SVector4& vAxis);
 
         // クオータニオンから行列を計算する
         static inline void MatrixFromQuat(SMatrix& mtx, const SQuat& quat);
@@ -164,17 +164,17 @@ namespace math
 
         // 二つのベクトルv0,v1が与えられたときに
         // q  * v0 == v1 となるクオータニオンqを計算する
-        static void RotationArc(SQuat& quat, const SVector& from, const SVector& to)
+        static void RotationArc(SQuat& quat, const SVector4& from, const SVector4& to)
         {
             // 念のため
-            SVector v0, v1;
-            SVector::Normalize(v0, from);
-            SVector::Normalize(v1, to);
+            SVector4 v0, v1;
+            SVector4::Normalize(v0, from);
+            SVector4::Normalize(v1, to);
 
-            SVector c;
-            SVector::Cross(c, v0, v1);
+            SVector4 c;
+            SVector4::Cross(c, v0, v1);
 
-            IZ_FLOAT d = SVector::Dot(v0, v1);
+            IZ_FLOAT d = SVector4::Dot(v0, v1);
             IZ_FLOAT s = sqrtf(2.0f * (1.0f + d));
 
             quat.x = c.x / s;
@@ -185,7 +185,7 @@ namespace math
         }
 
         // クオータニオンからオイラー角を計算する
-        static void GetEuler(SVector& angle, const SQuat& quat)
+        static void GetEuler(SVector4& angle, const SQuat& quat)
         {
             SMatrix mtx;
             MatrixFromQuat(mtx, quat);
@@ -196,7 +196,7 @@ namespace math
         }
 
         // オイラー角からクオータニオンを計算する
-        static void QuatFromEuler(SQuat& quat, const SVector& angle)
+        static void QuatFromEuler(SQuat& quat, const SVector4& angle)
         {
             QuatFromEuler(
                 quat,

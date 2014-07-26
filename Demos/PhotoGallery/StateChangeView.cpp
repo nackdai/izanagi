@@ -12,8 +12,8 @@ StateChangeView::StateChangeView(izanagi::CVectorCamera& camera)
     {
 #if 0
         tmpCam.Init(
-            izanagi::math::CVector(0.0f, 5.0f, -Configure::InnerRadius + Configure::CameraDistance, 1.0f),
-            izanagi::math::CVector(0.0f, 5.0f, -Configure::InnerRadius, 1.0f),
+            izanagi::math::CVector4(0.0f, 5.0f, -Configure::InnerRadius + Configure::CameraDistance, 1.0f),
+            izanagi::math::CVector4(0.0f, 5.0f, -Configure::InnerRadius, 1.0f),
             1.0f,
             500.0f,
             izanagi::math::CMath::Deg2Rad(60.0f),
@@ -28,14 +28,14 @@ StateChangeView::StateChangeView(izanagi::CVectorCamera& camera)
 
     // Mid
     {
-        izanagi::math::CVector v(0.0f, 0.0f, Configure::CameraDistance, 0.0f);
+        izanagi::math::CVector4 v(0.0f, 0.0f, Configure::CameraDistance, 0.0f);
         izanagi::math::SMatrix mtx;
         izanagi::math::SMatrix::GetRotByX(mtx, IZ_DEG2RAD(-30.0f));
         izanagi::math::SMatrix::Apply(v, v, mtx);
 
         tmpCam.Init(
-            izanagi::math::CVector(0.0f, v.y, -Configure::InnerRadius + v.z, 1.0f),
-            izanagi::math::CVector(0.0f, 15.0f, -Configure::InnerRadius + Configure::RadiusDiff + Configure::RadiusDiff * 0.5f, 1.0f),
+            izanagi::math::CVector4(0.0f, v.y, -Configure::InnerRadius + v.z, 1.0f),
+            izanagi::math::CVector4(0.0f, 15.0f, -Configure::InnerRadius + Configure::RadiusDiff + Configure::RadiusDiff * 0.5f, 1.0f),
             1.0f,
             500.0f,
             izanagi::math::CMath::Deg2Rad(60.0f),
@@ -47,14 +47,14 @@ StateChangeView::StateChangeView(izanagi::CVectorCamera& camera)
 
     // High
     {
-        izanagi::math::CVector v(0.0f, 0.0f, Configure::CameraDistance, 0.0f);
+        izanagi::math::CVector4 v(0.0f, 0.0f, Configure::CameraDistance, 0.0f);
         izanagi::math::SMatrix mtx;
         izanagi::math::SMatrix::GetRotByX(mtx, IZ_DEG2RAD(-55.0f));
         izanagi::math::SMatrix::Apply(v, v, mtx);
 
         tmpCam.Init(
-            izanagi::math::CVector(0.0f, v.y, -Configure::InnerRadius + v.z, 1.0f),
-            izanagi::math::CVector(0.0f, 25.0f, -Configure::InnerRadius + Configure::RadiusDiff * 0.5f, 1.0f),
+            izanagi::math::CVector4(0.0f, v.y, -Configure::InnerRadius + v.z, 1.0f),
+            izanagi::math::CVector4(0.0f, 25.0f, -Configure::InnerRadius + Configure::RadiusDiff * 0.5f, 1.0f),
             1.0f,
             500.0f,
             izanagi::math::CMath::Deg2Rad(60.0f),

@@ -58,7 +58,7 @@ namespace izanagi {
             IZ_UINT idx,
             IZ_UINT transformType,
             IZ_UINT paramType,
-            const math::SVector& param);
+            const math::SVector4& param);
 
         // ジョイントキーからジョイントインデックスを逆引きする
         IZ_INT GetJointIdxByKey(IZ_UINT key);

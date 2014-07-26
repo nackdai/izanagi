@@ -25,13 +25,13 @@ namespace scenegraph {
     }
 
     void CDecal::SetRectangle(
-        const izanagi::math::SVector& point,
-        const izanagi::math::SVector& normal,
+        const izanagi::math::SVector4& point,
+        const izanagi::math::SVector4& normal,
         IZ_FLOAT rectangleLengthX,
         IZ_FLOAT rectangleLengthZ)
     {
-        const math::CVector vecX(rectangleLengthX, 0.0f, 0.0f, 0.0f);
-        const math::CVector vecZ(0.0f, 0.0f, rectangleLengthZ, 0.0f);
+        const math::CVector4 vecX(rectangleLengthX, 0.0f, 0.0f, 0.0f);
+        const math::CVector4 vecZ(0.0f, 0.0f, rectangleLengthZ, 0.0f);
 
         m_Rectangle.Set(point, vecX, vecZ);
 
@@ -50,17 +50,17 @@ namespace scenegraph {
         IZ_FLOAT width = rectangleLengthX * 0.5f;
         IZ_FLOAT height = rectangleLengthZ * 0.5f;
 
-        const izanagi::math::SVector& t = m_Rectangle.v[0];
-        const izanagi::math::SVector& b = m_Rectangle.v[1];
-        const izanagi::math::SVector& n = m_Rectangle.nml;
+        const izanagi::math::SVector4& t = m_Rectangle.v[0];
+        const izanagi::math::SVector4& b = m_Rectangle.v[1];
+        const izanagi::math::SVector4& n = m_Rectangle.nml;
 
-        izanagi::math::CVector minusT(-t.x, -t.y, -t.z, 0.0f);
-        izanagi::math::CVector minusB(-b.x, -b.y, -b.z, 0.0f);
-        izanagi::math::CVector minusN(-n.x, -n.y, -n.z, 0.0f);
+        izanagi::math::CVector4 minusT(-t.x, -t.y, -t.z, 0.0f);
+        izanagi::math::CVector4 minusB(-b.x, -b.y, -b.z, 0.0f);
+        izanagi::math::CVector4 minusN(-n.x, -n.y, -n.z, 0.0f);
 
-        IZ_FLOAT dotTP = izanagi::math::SVector::Dot(t, point);
-        IZ_FLOAT dotBP = izanagi::math::SVector::Dot(b, point);
-        IZ_FLOAT dotNP = izanagi::math::SVector::Dot(n, point);
+        IZ_FLOAT dotTP = izanagi::math::SVector4::Dot(t, point);
+        IZ_FLOAT dotBP = izanagi::math::SVector4::Dot(b, point);
+        IZ_FLOAT dotNP = izanagi::math::SVector4::Dot(n, point);
 
         // NOTE
         // +-----> T
@@ -188,7 +188,7 @@ namespace scenegraph {
     }
 
     // デカール中心を取得
-    const izanagi::math::SVector& CDecal::GetCenter() const
+    const izanagi::math::SVector4& CDecal::GetCenter() const
     {
         return m_Rectangle.pt;
     }
@@ -294,7 +294,7 @@ namespace scenegraph {
 
         for (IZ_UINT i = 0; i < triNum; i++)
         {
-            IZ_FLOAT dot = izanagi::math::SVector::Dot(
+            IZ_FLOAT dot = izanagi::math::SVector4::Dot(
                 m_Rectangle.nml,
                 tri[i].nml);
 

@@ -1,5 +1,5 @@
 #include "debugutil/mesh/DebugMeshAxis.h"
-#include "math/MathVector.h"
+#include "math/MathVector4.h"
 
 using namespace izanagi;
 
@@ -73,16 +73,16 @@ CDebugMeshAxis* CDebugMeshAxis::CreateDebugMeshAxisDefault(
     {
         pInstance->SetVtx(
             izanagi::E_DEBUG_MESH_AXIS_X,
-            math::CVector(0.0f, 0.0f, 0.0f),
-            math::CVector(10.0f, 0.0f, 0.0f));
+            math::CVector4(0.0f, 0.0f, 0.0f),
+            math::CVector4(10.0f, 0.0f, 0.0f));
         pInstance->SetVtx(
             izanagi::E_DEBUG_MESH_AXIS_Y,
-            math::CVector(0.0f, 0.0f, 0.0f),
-            math::CVector(0.0f, 10.0f, 0.0f));
+            math::CVector4(0.0f, 0.0f, 0.0f),
+            math::CVector4(0.0f, 10.0f, 0.0f));
         pInstance->SetVtx(
             izanagi::E_DEBUG_MESH_AXIS_Z,
-            math::CVector(0.0f, 0.0f, 0.0f),
-            math::CVector(0.0f, 0.0f, 10.0f));
+            math::CVector4(0.0f, 0.0f, 0.0f),
+            math::CVector4(0.0f, 0.0f, 10.0f));
     }
     pInstance->EndRegister();
 
@@ -144,8 +144,8 @@ IZ_BOOL CDebugMeshAxis::EndRegister()
 
 IZ_BOOL CDebugMeshAxis::SetVtx(
     IZ_UINT type,
-    const math::SVector& start,
-    const math::SVector& end)
+    const math::SVector4& start,
+    const math::SVector4& end)
 {
     VRETURN(m_pVtxDst != IZ_NULL);
 
