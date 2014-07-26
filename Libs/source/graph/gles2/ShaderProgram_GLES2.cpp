@@ -273,7 +273,7 @@ namespace graph
         return IZ_TRUE;
     }
     
-    IZ_BOOL CShaderProgramGLES2::SetMatrix(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const math::SMatrix& m)
+    IZ_BOOL CShaderProgramGLES2::SetMatrix(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const math::SMatrix44& m)
     {
         IZ_ASSERT(IsValid());
         IZ_ASSERT(IsLinked());
@@ -288,7 +288,7 @@ namespace graph
         return IZ_TRUE;
     }
 
-    IZ_BOOL CShaderProgramGLES2::SetMatrixArray(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const math::SMatrix* m, IZ_UINT num)
+    IZ_BOOL CShaderProgramGLES2::SetMatrixArray(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const math::SMatrix44* m, IZ_UINT num)
     {
         IZ_ASSERT(IsValid());
         IZ_ASSERT(IsLinked());
@@ -335,12 +335,12 @@ namespace graph
         return IZ_TRUE;
     }
 
-    IZ_BOOL CShaderProgramGLES2::SetMatrixArrayAsVectorArray(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const math::SMatrix* m, IZ_UINT num)
+    IZ_BOOL CShaderProgramGLES2::SetMatrixArrayAsVectorArray(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const math::SMatrix44* m, IZ_UINT num)
     {
         // TODO
         // transposeêÊÇÃÉÅÉÇÉäÇÇ«Ç§Ç∑ÇÈÇ©
 
-        math::SMatrix* tmp = const_cast<math::SMatrix*>(m);
+        math::SMatrix44* tmp = const_cast<math::SMatrix44*>(m);
 
         // NOTE
         // å≥Ç™ Matrix(float4x4) ÇÃÇ∆Ç±ÇÎÇ Vector(float4) Ç∆ÇµÇƒàµÇ§
@@ -349,8 +349,8 @@ namespace graph
         // 1/4 ÇµÇΩêîÇå¬êîÇ∆ÇµÇƒÇ›Ç»Ç¢Ç∆Ç¢ÇØÇ»Ç¢
 
         for (IZ_UINT i = 0; i < (num >> 2); i++) {
-            const math::SMatrix& mtx = m[i];
-            math::SMatrix::Transpose(tmp[i], mtx);
+            const math::SMatrix44& mtx = m[i];
+            math::SMatrix44::Transpose(tmp[i], mtx);
         }
 
         math::SVector4* buf = reinterpret_cast<math::SVector4*>(tmp);

@@ -34,8 +34,8 @@ private:
 private:
     State m_State;
 
-    izanagi::math::SMatrix m_CamMtx;
-    izanagi::math::SMatrix m_TargetMtx;
+    izanagi::math::SMatrix44 m_CamMtx;
+    izanagi::math::SMatrix44 m_TargetMtx;
 
     izanagi::animation::CTimeline m_Timeline;
 };

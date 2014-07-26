@@ -124,37 +124,37 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\math\MathCurve.cpp" />
+    <ClCompile Include="..\..\source\math\MathMatrix44.cpp" />
     <ClCompile Include="..\..\source\math\MathPlane.cpp" />
     <ClCompile Include="..\..\source\math\MathRay.cpp" />
     <ClCompile Include="..\..\source\math\MathRectangle.cpp" />
     <ClCompile Include="..\..\source\math\MathTriangle.cpp" />
-    <ClCompile Include="..\..\source\math\MathMatrix.cpp" />
     <ClCompile Include="..\..\source\math\SFMT\SFMT.cpp" />
     <ClCompile Include="..\..\source\math\MathNumericalAnlysis.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\math\dx9\MathMatrix_DX9.h" />
+    <ClInclude Include="..\..\include\math\dx9\MathMatrix44_DX9.h" />
     <ClInclude Include="..\..\include\math\dx9\MathQuaternion_DX9.h" />
     <ClInclude Include="..\..\include\math\dx9\MathVector3_DX9.h" />
     <ClInclude Include="..\..\include\math\dx9\MathVector4_DX9.h" />
+    <ClInclude Include="..\..\include\math\MathCMatrix44.h" />
     <ClInclude Include="..\..\include\math\MathCurve.h" />
     <ClInclude Include="..\..\include\math\MathCVector3.h" />
     <ClInclude Include="..\..\include\math\MathCVector4.h" />
+    <ClInclude Include="..\..\include\math\MathMatrix44.h" />
     <ClInclude Include="..\..\include\math\MathPlane.h" />
     <ClInclude Include="..\..\include\math\MathRay.h" />
     <ClInclude Include="..\..\include\math\MathRectangle.h" />
     <ClInclude Include="..\..\include\math\MathTriangle.h" />
-    <ClInclude Include="..\..\include\math\MathCMatrix.h" />
     <ClInclude Include="..\..\include\math\MathCQuaternion.h" />
     <ClInclude Include="..\..\include\math\MathDefs.h" />
     <ClInclude Include="..\..\include\math\MathHalfFloat.h" />
-    <ClInclude Include="..\..\include\math\MathMatrix.h" />
     <ClInclude Include="..\..\include\math\MathQuaternion.h" />
     <ClInclude Include="..\..\include\math\MathRand.h" />
     <ClInclude Include="..\..\include\math\MathUtil.h" />
     <ClInclude Include="..\..\include\math\MathVector3.h" />
     <ClInclude Include="..\..\include\math\MathVector4.h" />
-    <ClInclude Include="..\..\include\math\noplatform\MathMatrix_NoPlatform.h" />
+    <ClInclude Include="..\..\include\math\noplatform\MathMatrix44_NoPlatform.h" />
     <ClInclude Include="..\..\include\math\noplatform\MathQuaternion_NoPlatform.h" />
     <ClInclude Include="..\..\include\math\noplatform\MathVector3_NoPlatform.h" />
     <ClInclude Include="..\..\include\math\noplatform\MathVector4_NoPlatform.h" />

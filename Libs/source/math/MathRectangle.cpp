@@ -117,12 +117,12 @@ namespace math
     }
 
     // 4x4çsóÒÇ…ÇÊÇÈïœä∑.
-    void CRectangle::Transform(const SMatrix& mtx)
+    void CRectangle::Transform(const SMatrix44& mtx)
     {
-        SMatrix::Apply(pt, pt, mtx);
+        SMatrix44::Apply(pt, pt, mtx);
 
-        SMatrix::ApplyXYZ(v[0], v[0], mtx);
-        SMatrix::ApplyXYZ(v[1], v[1], mtx);
+        SMatrix44::ApplyXYZ(v[0], v[0], mtx);
+        SMatrix44::ApplyXYZ(v[1], v[1], mtx);
 
         SVector4::Cross(nml, v[0], v[1]);
         SVector4::Normalize(nml, nml);
@@ -138,7 +138,7 @@ namespace math
 
     void CRectangle::Transform(
         CRectangle& dst,
-        const SMatrix& mtx)
+        const SMatrix44& mtx)
     {
         dst = *this;    // Copy
         dst.Transform(mtx);

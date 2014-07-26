@@ -1,29 +1,29 @@
-#if !defined(__IZANAGI_MATH_CMATRIX_H__)
-#define __IZANAGI_MATH_CMATRIX_H__
+#if !defined(__IZANAGI_MATH_CMATRIX44_H__)
+#define __IZANAGI_MATH_CMATRIX44_H__
 
-#include "MathMatrix.h"
+#include "MathMatrix44.h"
 
 namespace izanagi
 {
 namespace math
 {
     // うーん・・・
-    class CMatrix : public SMatrix {
+    class CMatrix44 : public SMatrix44 {
     public:
-        CMatrix();
-        ~CMatrix();
+        CMatrix44();
+        ~CMatrix44();
 
-        CMatrix(const SMatrix& rhs)
+        CMatrix44(const SMatrix44& rhs)
         {
-            SMatrix::Copy(*this, rhs);
+            SMatrix44::Copy(*this, rhs);
         }
 
-        CMatrix(IZ_FLOAT* rhs)
+        CMatrix44(IZ_FLOAT* rhs)
         {
-            memcpy(a, rhs, sizeof(SMatrix));
+            memcpy(a, rhs, sizeof(SMatrix44));
         }
 
-        CMatrix(
+        CMatrix44(
             const SVector4& v0,
             const SVector4& v1,
             const SVector4& v2,
@@ -35,7 +35,7 @@ namespace math
             SVector4::Copy(v[3], v3);
         }
 
-        CMatrix(
+        CMatrix44(
             IZ_FLOAT _00, IZ_FLOAT _01, IZ_FLOAT _02, IZ_FLOAT _03,
             IZ_FLOAT _10, IZ_FLOAT _11, IZ_FLOAT _12, IZ_FLOAT _23,
             IZ_FLOAT _20, IZ_FLOAT _21, IZ_FLOAT _22, IZ_FLOAT _33,
@@ -57,42 +57,42 @@ namespace math
             return a;
         }
 
-        SMatrix& operator *=(const SMatrix& rhs)
+        SMatrix44& operator *=(const SMatrix44& rhs)
         {
-            SMatrix::Mul(*this, *this, rhs);
+            SMatrix44::Mul(*this, *this, rhs);
             return *this;
         }
 
-        SMatrix& operator +=(const SMatrix& rhs)
+        SMatrix44& operator +=(const SMatrix44& rhs)
         {
-            SMatrix::Add(*this, *this, rhs);
+            SMatrix44::Add(*this, *this, rhs);
             return *this;
         }
 
-        SMatrix& operator -=(const SMatrix& rhs)
+        SMatrix44& operator -=(const SMatrix44& rhs)
         {
-            SMatrix::Sub(*this, *this, rhs);
+            SMatrix44::Sub(*this, *this, rhs);
             return *this;
         }
 
-        SMatrix& operator *=(IZ_FLOAT rhs)
+        SMatrix44& operator *=(IZ_FLOAT rhs)
         {
-            SMatrix::MulScalar(*this, *this, rhs);
+            SMatrix44::MulScalar(*this, *this, rhs);
         }
 
-        SMatrix& operator /=(IZ_FLOAT rhs)
+        SMatrix44& operator /=(IZ_FLOAT rhs)
         {
-            SMatrix::MulScalar(*this, *this, 1.0f / rhs);
+            SMatrix44::MulScalar(*this, *this, 1.0f / rhs);
         }
 
-        SMatrix operator +() const
+        SMatrix44 operator +() const
         {
             return *this;
         }
 
-        SMatrix operator - () const
+        SMatrix44 operator - () const
         {
-            SMatrix ret;
+            SMatrix44 ret;
 
             ret._00 = -_00; ret._01 = -_01; ret._02 = -_02; ret._03 = -_03;
             ret._10 = -_10; ret._11 = -_11; ret._12 = -_12; ret._13 = -_13;
@@ -102,67 +102,67 @@ namespace math
             return ret;
         }
 
-        SMatrix operator *(const SMatrix& rhs) const
+        SMatrix44 operator *(const SMatrix44& rhs) const
         {
-            SMatrix ret;
-            SMatrix::Mul(ret, *this, rhs);
+            SMatrix44 ret;
+            SMatrix44::Mul(ret, *this, rhs);
             return ret;
         }
 
-        SMatrix operator +(const SMatrix& rhs) const
+        SMatrix44 operator +(const SMatrix44& rhs) const
         {
-            SMatrix ret;
-            SMatrix::Add(ret, *this, rhs);
+            SMatrix44 ret;
+            SMatrix44::Add(ret, *this, rhs);
             return ret;
         }
 
-        SMatrix operator -(const SMatrix& rhs) const
+        SMatrix44 operator -(const SMatrix44& rhs) const
         {
-            SMatrix ret;
-            SMatrix::Sub(ret, *this, rhs);
+            SMatrix44 ret;
+            SMatrix44::Sub(ret, *this, rhs);
             return ret;
         }
 
-        SMatrix operator *(IZ_FLOAT rhs) const
+        SMatrix44 operator *(IZ_FLOAT rhs) const
         {
-            SMatrix ret;
-            SMatrix::MulScalar(ret, *this, rhs);
+            SMatrix44 ret;
+            SMatrix44::MulScalar(ret, *this, rhs);
             return ret;
         }
 
-        SMatrix operator /(IZ_FLOAT rhs) const
+        SMatrix44 operator /(IZ_FLOAT rhs) const
         {
-            SMatrix ret;
-            SMatrix::MulScalar(ret, *this, 1.0f / rhs);
+            SMatrix44 ret;
+            SMatrix44::MulScalar(ret, *this, 1.0f / rhs);
             return ret;
         }
 
-        friend SMatrix operator *(IZ_FLOAT f, const SMatrix& mtx)
+        friend SMatrix44 operator *(IZ_FLOAT f, const SMatrix44& mtx)
         {
-            SMatrix ret;
-            SMatrix::MulScalar(ret, mtx, f);
+            SMatrix44 ret;
+            SMatrix44::MulScalar(ret, mtx, f);
             return ret;
         }
 
     public:
         void SetUnit()
         {
-            SMatrix::SetUnit(*this);
+            SMatrix44::SetUnit(*this);
         }
 
         void Transpose()
         {
-            SMatrix::Transpose(*this, *this);
+            SMatrix44::Transpose(*this, *this);
         }
 
         void Inverse()
         {
-            SMatrix::Inverse(*this, *this);
+            SMatrix44::Inverse(*this, *this);
         }
 
         IZ_FLOAT Determinant()
         {
-            IZ_FLOAT ret = SMatrix::Determinant(*this);
+            IZ_FLOAT ret = SMatrix44::Determinant(*this);
             return ret;
         }
 
@@ -171,51 +171,51 @@ namespace math
             SVector4 trans;
             trans.Set(x, y, z);
 
-            SMatrix::GetTrans(*this, trans);
+            SMatrix44::GetTrans(*this, trans);
         }
 
         void Trans(IZ_FLOAT x, IZ_FLOAT y, IZ_FLOAT z)
         {
-            SMatrix::Trans(
+            SMatrix44::Trans(
                 *this, *this,
                 x, y, z);
         }
 
         void SetRotByX(IZ_FLOAT angle)
         {
-            SMatrix::GetRotByX(*this, angle);
+            SMatrix44::GetRotByX(*this, angle);
         }
 
         void RotByX(IZ_FLOAT angle)
         {
-            SMatrix::RotByX(*this, *this, angle);
+            SMatrix44::RotByX(*this, *this, angle);
         }
 
         void SetRotByY(IZ_FLOAT angle)
         {
-            SMatrix::GetRotByY(*this, angle);
+            SMatrix44::GetRotByY(*this, angle);
         }
 
         void RotByY(IZ_FLOAT angle)
         {
-            SMatrix::RotByY(*this, *this, angle);
+            SMatrix44::RotByY(*this, *this, angle);
         }
 
         void SetRotByZ(IZ_FLOAT angle)
         {
-            SMatrix::GetRotByZ(*this, angle);
+            SMatrix44::GetRotByZ(*this, angle);
         }
 
         void RotByZ(IZ_FLOAT angle)
         {
-            SMatrix::RotByZ(*this, *this, angle);
+            SMatrix44::RotByZ(*this, *this, angle);
         }
 
         void SetRot(
             IZ_FLOAT angle,
             IZ_FLOAT axisX, IZ_FLOAT axisY, IZ_FLOAT axisZ)
         {
-            SMatrix::GetRot(
+            SMatrix44::GetRot(
                 *this,
                 angle,
                 axisX, axisY, axisZ);
@@ -225,7 +225,7 @@ namespace math
             IZ_FLOAT angle,
             IZ_FLOAT axisX, IZ_FLOAT axisY, IZ_FLOAT axisZ)
         {
-            SMatrix::Rot(
+            SMatrix44::Rot(
                 *this, *this,
                 angle,
                 axisX, axisY, axisZ);
@@ -233,25 +233,25 @@ namespace math
 
         void SetScale(IZ_FLOAT scaleX, IZ_FLOAT scaleY, IZ_FLOAT scaleZ)
         {
-            SMatrix::SetScale(
+            SMatrix44::SetScale(
                 *this,
                 scaleX, scaleY, scaleZ);
         }
 
         void Scale(IZ_FLOAT scaleX, IZ_FLOAT scaleY, IZ_FLOAT scaleZ)
         {
-            SMatrix::Scale(
+            SMatrix44::Scale(
                 *this, *this,
                 scaleX, scaleY, scaleZ);
         }
 
         void Dump()
         {
-            SMatrix::Dump(*this);
+            SMatrix44::Dump(*this);
         }
     };
 }   // namespace math
 }   // namespace izanagi
 
-#endif  // #if !defined(__IZANAGI__MATH_CMATRIX_H__)
+#endif  // #if !defined(__IZANAGI_MATH_CMATRIX44_H__)
 

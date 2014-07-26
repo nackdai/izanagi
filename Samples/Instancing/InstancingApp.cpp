@@ -62,11 +62,11 @@ IZ_BOOL CInstancingApp::InitInternal(
 
     {
         m_InstancingVB = device->CreateVertexBuffer(
-            sizeof(izanagi::math::SMatrix),
+            sizeof(izanagi::math::SMatrix44),
             MeshNum,
             izanagi::graph::E_GRAPH_RSC_USAGE_STATIC);
         
-        izanagi::math::SMatrix* mtx;
+        izanagi::math::SMatrix44* mtx;
 
         m_InstancingVB->Lock(0, 0, (void**)&mtx, IZ_FALSE);
 
@@ -74,14 +74,14 @@ IZ_BOOL CInstancingApp::InitInternal(
 
         for (IZ_UINT i = 0; i < MeshNum; i++)
         {
-            izanagi::math::SMatrix::SetUnit(mtx[i]);
-            izanagi::math::SMatrix::GetTrans(
+            izanagi::math::SMatrix44::SetUnit(mtx[i]);
+            izanagi::math::SMatrix44::GetTrans(
                 mtx[i],
                 x + 10.0f * (i % 10),
                 0.0f,
                 -10.0f * (i / 10));
 
-            izanagi::math::SMatrix::Transpose(mtx[i], mtx[i]);
+            izanagi::math::SMatrix44::Transpose(mtx[i], mtx[i]);
         }
 
         m_InstancingVB->Unlock();
@@ -184,7 +184,7 @@ void CInstancingApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
                 m_Shader,
                 "g_mW2C",
                 (void*)&camera.GetParam().mtxW2C,
-                sizeof(izanagi::math::SMatrix));
+                sizeof(izanagi::math::SMatrix44));
 
             m_Shader->CommitChanges(device);
 

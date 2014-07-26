@@ -280,7 +280,7 @@ IZ_INT CColladaImporter::GetJointParent(
 
 void CColladaImporter::GetJointInvMtx(
     IZ_UINT nIdx,
-    izanagi::math::SMatrix& mtx)
+    izanagi::math::SMatrix44& mtx)
 {
     CColladaJoint::GetInstance().GetJointInvMtx(
         nIdx,

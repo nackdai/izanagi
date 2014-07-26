@@ -1,11 +1,11 @@
-#include "math/MathMatrix.h"
+#include "math/MathMatrix44.h"
 #include "math/MathQuaternion.h"
 
 namespace izanagi
 {
 namespace math
 {
-    void SMatrix::GetRotMatrixFromVector(SMatrix& mtx, const SVector4& vec, const SVector4& up)
+    void SMatrix44::GetRotMatrixFromVector(SMatrix44& mtx, const SVector4& vec, const SVector4& up)
     {
         SVector4& vX = mtx.v[0];
         SVector4& vY = mtx.v[1];
@@ -37,7 +37,7 @@ namespace math
     }
 
     // マトリクスからオイラー角を取得する
-    void _GetEulerFromMatrixXYZ(SVector4& angle, const SMatrix& mtx)
+    void _GetEulerFromMatrixXYZ(SVector4& angle, const SMatrix44& mtx)
     {
         // NOTE
         // X軸、Y軸、Z軸回転の行列を掛け合わせると以下のようになる
@@ -111,7 +111,7 @@ namespace math
         }
     }
 
-    void _GetEulerFromMatrixZXY(SVector4& angle, const SMatrix& mtx)
+    void _GetEulerFromMatrixZXY(SVector4& angle, const SMatrix44& mtx)
     {
         // NOTE
         // m[0][0] = CzCy + SzSxSy  m[0][1] = SzCx m[0][2] = -CzSy + SzSxCy m[0][3] = 0
@@ -156,9 +156,9 @@ namespace math
     }
 
     // マトリクスからオイラー角を取得する
-    void SMatrix::GetEulerFromMatrix(SVector4& angle, const SMatrix& mtx, E_MATH_ROTATION_ORDER order)
+    void SMatrix44::GetEulerFromMatrix(SVector4& angle, const SMatrix44& mtx, E_MATH_ROTATION_ORDER order)
     {
-        typedef void (*Func)(SVector4&, const SMatrix&);
+        typedef void (*Func)(SVector4&, const SMatrix44&);
         Func funcs[] =
         {
             _GetEulerFromMatrixXYZ,
@@ -176,7 +176,7 @@ namespace math
     }
 
     // マトリクス間を補間する
-    void SMatrix::Lerp(SMatrix& dst, const SMatrix& from, const SMatrix& to, IZ_FLOAT t)
+    void SMatrix44::Lerp(SMatrix44& dst, const SMatrix44& from, const SMatrix44& to, IZ_FLOAT t)
     {
         SQuat quatFrom;
         SQuat::QuatFromMatrix(quatFrom, from);

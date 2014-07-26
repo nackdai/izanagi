@@ -43,7 +43,7 @@ public:
     void Update(
         IZ_FLOAT time,
         izanagi::graph::CGraphicsDevice* device,
-        const izanagi::math::SMatrix& mtxRot,
+        const izanagi::math::SMatrix44& mtxRot,
         const izanagi::CCamera& camera);
 
     izanagi::CStdList<PhotoItem>::Item* GetListItem();
@@ -66,7 +66,7 @@ public:
 
     /** Get local to world matrix.
      */
-    const izanagi::math::SMatrix& GetL2W() const;
+    const izanagi::math::SMatrix44& GetL2W() const;
 
     PhotoItemMesh* GetMesh();
 
@@ -74,7 +74,7 @@ public:
      */
     IZ_BOOL HitTest(
         const izanagi::math::CRay& ray,
-        const izanagi::math::SMatrix& mtxRot);
+        const izanagi::math::SMatrix44& mtxRot);
 
     /** Set flag if loading request is requested for photo item.
      */
@@ -115,7 +115,7 @@ private:
 
     PhotoItemMesh* m_Mesh;
 
-    izanagi::math::SMatrix m_L2W;
+    izanagi::math::SMatrix44 m_L2W;
 
     izanagi::math::CRectangle m_Rectangle;
 

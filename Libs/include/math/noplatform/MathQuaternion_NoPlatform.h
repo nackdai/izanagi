@@ -91,7 +91,7 @@ namespace math
     }
 
     // クオータニオンから行列を計算する
-    void SQuat::MatrixFromQuat(SMatrix& mtx, const SQuat& quat)
+    void SQuat::MatrixFromQuat(SMatrix44& mtx, const SQuat& quat)
     {
         const IZ_FLOAT& x = quat.x;
         const IZ_FLOAT& y = quat.y;
@@ -126,7 +126,7 @@ namespace math
         mtx.m[2][3] = 0.0f;
 #else
         // マトリクスの乗算に直すとこうなる
-        SMatrix m1, m2;
+        SMatrix44 m1, m2;
         
         m1.m[0][0] =  w; m1.m[0][1] =  x; m1.m[0][2] = -y; m1.m[0][3] =  z;
         m1.m[1][0] = -z; m1.m[1][1] =  y; m1.m[1][2] =  x; m1.m[1][3] =  w;
@@ -138,13 +138,13 @@ namespace math
         m2.m[2][0] =  y; m2.m[2][1] = -x; m2.m[2][2] =  w; m2.m[2][3] = 0.0f;
         m2.m[3][0] = -z; m2.m[3][1] =  w; m2.m[3][2] =  x; m2.m[3][3] = 0.0f;
 
-        SMatrix::Mul(mtx, m1, m2);
+        SMatrix44::Mul(mtx, m1, m2);
         mtx.m[3][3] = 1.0f;
 #endif
     }
 
     // 行列からクオータニオンを計算する
-    void SQuat::QuatFromMatrix(SQuat& quat, const SMatrix& mtx)
+    void SQuat::QuatFromMatrix(SQuat& quat, const SMatrix44& mtx)
     {
         // 最大値を探す
         IZ_FLOAT value[4] = {

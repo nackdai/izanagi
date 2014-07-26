@@ -104,9 +104,9 @@ namespace graph
         }
 
         // 行列を設定
-        virtual IZ_BOOL SetMatrix(CGraphicsDevice* device, SHADER_PARAM_HANDLE_DX9 handle, const math::SMatrix& m)
+        virtual IZ_BOOL SetMatrix(CGraphicsDevice* device, SHADER_PARAM_HANDLE_DX9 handle, const math::SMatrix44& m)
         {
-            IZ_C_ASSERT(sizeof(D3DXMATRIX) == sizeof(math::SMatrix));
+            IZ_C_ASSERT(sizeof(D3DXMATRIX) == sizeof(math::SMatrix44));
 
             HRESULT hr = m_ConstTable->SetMatrix(
                             GetDeviceRawInterface(device),
@@ -117,9 +117,9 @@ namespace graph
         }
 
         // 行列を設定
-        virtual IZ_BOOL SetMatrixArray(CGraphicsDevice* device, SHADER_PARAM_HANDLE_DX9 handle, const math::SMatrix* pM, IZ_UINT num)
+        virtual IZ_BOOL SetMatrixArray(CGraphicsDevice* device, SHADER_PARAM_HANDLE_DX9 handle, const math::SMatrix44* pM, IZ_UINT num)
         {
-            IZ_C_ASSERT(sizeof(D3DXMATRIX) == sizeof(math::SMatrix));
+            IZ_C_ASSERT(sizeof(D3DXMATRIX) == sizeof(math::SMatrix44));
 
             HRESULT hr = m_ConstTable->SetMatrixArray(
                             GetDeviceRawInterface(device),

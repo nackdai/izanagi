@@ -31,7 +31,7 @@ protected:
     izanagi::CDebugMeshAxis* m_Axis;
     izanagi::CDebugMeshSphere* m_Sphere;
 
-    izanagi::math::SMatrix m_L2W;
+    izanagi::math::SMatrix44 m_L2W;
     izanagi::SParallelLightParam m_ParallelLight;
 };
 

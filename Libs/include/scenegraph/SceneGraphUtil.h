@@ -21,7 +21,7 @@ namespace izanagi {
         /** Clip - Screen 座標変換マトリクス計算.
          */
         static void ComputeC2S(
-            math::SMatrix& mtxC2S,
+            math::SMatrix44& mtxC2S,
             IZ_INT screenWidth,
             IZ_INT screenHeight,
             IZ_FLOAT minZ,

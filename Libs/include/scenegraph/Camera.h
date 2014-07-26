@@ -20,9 +20,9 @@ namespace izanagi {
 
         math::SVector4 up;
 
-        math::SMatrix mtxW2V;   // World - View
-        math::SMatrix mtxV2C;   // View - Clip
-        math::SMatrix mtxW2C;   // World - Clip
+        math::SMatrix44 mtxW2V;   // World - View
+        math::SMatrix44 mtxV2C;   // View - Clip
+        math::SMatrix44 mtxW2C;   // World - Clip
     };
 
     class CCamera {
@@ -54,14 +54,14 @@ namespace izanagi {
         /** カメラ座標系でのオフセットを考慮にいれたV2Cマトリクスを取得.
          */
         void GetOffsetV2C(
-            math::SMatrix& mtxV2C,
+            math::SMatrix44& mtxV2C,
             const math::SVector4& pos,
             IZ_FLOAT delta);
 
         /** カメラ座標系でのオフセットを考慮にいれたV2Cマトリクスを取得.
          */
         void GetOffsetV2C(
-            math::SMatrix& mtxV2C,
+            math::SMatrix44& mtxV2C,
             IZ_FLOAT viewZ,
             IZ_FLOAT delta);
 

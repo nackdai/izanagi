@@ -28,7 +28,7 @@ void CVectorCamera::Init(
         fov,
         aspect);
 
-    math::SMatrix::SetUnit(m_Transform);
+    math::SMatrix44::SetUnit(m_Transform);
 
     m_NeedUpdateByTransform = IZ_FALSE;
 }
@@ -38,13 +38,13 @@ void CVectorCamera::Update()
 {
     if (m_IsDirtyW2V) {
 #if 0
-        math::SMatrix::SetUnit(m_Param.mtxW2V);
+        math::SMatrix44::SetUnit(m_Param.mtxW2V);
 
         math::SVector4::Copy(m_Param.mtxW2V.v[0], m_X);
         math::SVector4::Copy(m_Param.mtxW2V.v[1], m_Y);
         math::SVector4::Copy(m_Param.mtxW2V.v[2], m_Z);
 
-        math::SMatrix::Transpose(m_Param.mtxW2V, m_Param.mtxW2V);
+        math::SMatrix44::Transpose(m_Param.mtxW2V, m_Param.mtxW2V);
 
         m_Param.mtxW2V.m[3][0] = -1.0f * math::SVector4::Dot(m_X, m_Pos);
         m_Param.mtxW2V.m[3][1] = -1.0f * math::SVector4::Dot(m_Y, m_Pos);
@@ -67,13 +67,13 @@ void CVectorCamera::Update()
         }
 #else
         if (m_NeedUpdateByTransform) {
-            math::SMatrix::SetUnit(m_Param.mtxW2V);
+            math::SMatrix44::SetUnit(m_Param.mtxW2V);
 
             math::SVector4::Copy(m_Param.mtxW2V.v[0], m_X);
             math::SVector4::Copy(m_Param.mtxW2V.v[1], m_Y);
             math::SVector4::Copy(m_Param.mtxW2V.v[2], m_Z);
 
-            math::SMatrix::Transpose(m_Param.mtxW2V, m_Param.mtxW2V);
+            math::SMatrix44::Transpose(m_Param.mtxW2V, m_Param.mtxW2V);
 
             m_Param.mtxW2V.m[3][0] = -1.0f * math::SVector4::Dot(m_X, m_Pos);
             m_Param.mtxW2V.m[3][1] = -1.0f * math::SVector4::Dot(m_Y, m_Pos);
@@ -94,9 +94,9 @@ void CVectorCamera::Update()
         else {
             ComputeW2V();
 
-            math::SMatrix::Copy(m_Transform, m_Param.mtxW2V);
+            math::SMatrix44::Copy(m_Transform, m_Param.mtxW2V);
             math::SVector4::Set(m_Transform.v[3], 0.0f, 0.0f, 0.0f, 1.0f);
-            math::SMatrix::Transpose(m_Transform, m_Transform);
+            math::SMatrix44::Transpose(m_Transform, m_Transform);
             math::SVector4::Copy(m_Transform.v[3], m_Pos);
 
             math::SVector4::Copy(m_X, m_Transform.v[0]);
@@ -113,7 +113,7 @@ void CVectorCamera::Update()
     }
 
     if (m_IsDirtyW2V || m_IsDirtyV2C) {
-        math::SMatrix::Mul(m_Param.mtxW2C, m_Param.mtxW2V, m_Param.mtxV2C);
+        math::SMatrix44::Mul(m_Param.mtxW2C, m_Param.mtxW2V, m_Param.mtxV2C);
 
         m_IsDirtyW2V = IZ_FALSE;
         m_IsDirtyV2C = IZ_FALSE;
@@ -153,13 +153,13 @@ void CVectorCamera::Rotate(
     math::SQuat quat;
     math::SQuat::SetQuatFromRadAxis(quat, rad, axis);
 
-    math::SMatrix mtx;
+    math::SMatrix44 mtx;
     math::SQuat::MatrixFromQuat(mtx, quat);
 
-    math::SMatrix::Apply(m_X, m_X, mtx);
-    math::SMatrix::Apply(m_Y, m_Y, mtx);
-    math::SMatrix::Apply(m_Z, m_Z, mtx);
-    math::SMatrix::Apply(m_Pos, m_Pos, mtx);
+    math::SMatrix44::Apply(m_X, m_X, mtx);
+    math::SMatrix44::Apply(m_Y, m_Y, mtx);
+    math::SMatrix44::Apply(m_Z, m_Z, mtx);
+    math::SMatrix44::Apply(m_Pos, m_Pos, mtx);
 
     m_IsDirtyW2V = IZ_TRUE;
     m_NeedUpdateByTransform = IZ_TRUE;
@@ -172,7 +172,7 @@ void CVectorCamera::SetPos(const math::SVector4& pos)
     m_IsDirtyW2V = IZ_TRUE;
 }
 
-void CVectorCamera::SetTransform(const math::SMatrix& mtx)
+void CVectorCamera::SetTransform(const math::SMatrix44& mtx)
 {
     math::SVector4::Copy(m_X, mtx.v[0]);
     math::SVector4::Copy(m_Y, mtx.v[1]);

@@ -158,8 +158,8 @@ void CProjectedTextureShadowApp::RenderInternal(izanagi::graph::CGraphicsDevice*
 
     izanagi::sample::CSampleCamera& camera = GetCamera();
 
-    izanagi::math::SMatrix mtxL2W;
-    izanagi::math::SMatrix::SetUnit(mtxL2W);
+    izanagi::math::SMatrix44 mtxL2W;
+    izanagi::math::SMatrix44::SetUnit(mtxL2W);
 
     // テクスチャなし
     m_Shader->Begin(device, 1, IZ_FALSE);
@@ -200,10 +200,10 @@ void CProjectedTextureShadowApp::RenderInternal(izanagi::graph::CGraphicsDevice*
                 m_Shader,
                 "g_mW2C",
                 (void*)&camera.GetParam().mtxW2C,
-                sizeof(izanagi::math::SMatrix));
+                sizeof(izanagi::math::SMatrix44));
 
-            izanagi::math::SMatrix mtxShadowTex;
-            izanagi::math::SMatrix::Mul(
+            izanagi::math::SMatrix44 mtxShadowTex;
+            izanagi::math::SMatrix44::Mul(
                 mtxShadowTex,
                 m_Shadow->GetLightViewProjMtx(),
                 m_Shadow->GetShadowTexMtx());
@@ -212,14 +212,14 @@ void CProjectedTextureShadowApp::RenderInternal(izanagi::graph::CGraphicsDevice*
                 m_Shader,
                 "g_mShadowTex",
                 (void*)&mtxShadowTex,
-                sizeof(izanagi::math::SMatrix));
+                sizeof(izanagi::math::SMatrix44));
 
             {
                 _SetShaderParam(
                     m_Shader,
                     "g_mL2W",
                     (void*)&mtxL2W,
-                    sizeof(izanagi::math::SMatrix));
+                    sizeof(izanagi::math::SMatrix44));
 
                 m_Shader->CommitChanges(device);
 
@@ -242,11 +242,11 @@ void CProjectedTextureShadowApp::RenderInternal(izanagi::graph::CGraphicsDevice*
                 m_Shader,
                 "g_mW2C",
                 (void*)&camera.GetParam().mtxW2C,
-                sizeof(izanagi::math::SMatrix));
+                sizeof(izanagi::math::SMatrix44));
 
             // Torus
             {
-                izanagi::math::SMatrix::GetTrans(
+                izanagi::math::SMatrix44::GetTrans(
                     mtxL2W,
                     izanagi::math::CVector4(0.0f, 5.0f, 0.0f));
 
@@ -254,7 +254,7 @@ void CProjectedTextureShadowApp::RenderInternal(izanagi::graph::CGraphicsDevice*
                     m_Shader,
                     "g_mL2W",
                     (void*)&mtxL2W,
-                    sizeof(izanagi::math::SMatrix));
+                    sizeof(izanagi::math::SMatrix44));
 
                 m_Shader->CommitChanges(device);
 
@@ -269,8 +269,8 @@ void CProjectedTextureShadowApp::RenderInternal(izanagi::graph::CGraphicsDevice*
 
 void CProjectedTextureShadowApp::RenderForShadow(izanagi::graph::CGraphicsDevice* device)
 {
-    izanagi::math::SMatrix mtxL2W;
-    izanagi::math::SMatrix::SetUnit(mtxL2W);
+    izanagi::math::SMatrix44 mtxL2W;
+    izanagi::math::SMatrix44::SetUnit(mtxL2W);
 
     m_Shadow->BeginShadowRender(
         device,
@@ -286,11 +286,11 @@ void CProjectedTextureShadowApp::RenderForShadow(izanagi::graph::CGraphicsDevice
                 m_Shader,
                 "g_mW2C",
                 (void*)&m_Shadow->GetLightViewProjMtx(),
-                sizeof(izanagi::math::SMatrix));
+                sizeof(izanagi::math::SMatrix44));
 
             // Torus
             {
-                izanagi::math::SMatrix::GetTrans(
+                izanagi::math::SMatrix44::GetTrans(
                     mtxL2W,
                     izanagi::math::CVector4(0.0f, 5.0f, 0.0f));
 
@@ -298,7 +298,7 @@ void CProjectedTextureShadowApp::RenderForShadow(izanagi::graph::CGraphicsDevice
                     m_Shader,
                     "g_mL2W",
                     (void*)&mtxL2W,
-                    sizeof(izanagi::math::SMatrix));
+                    sizeof(izanagi::math::SMatrix44));
 
                 m_Shader->CommitChanges(device);
 

@@ -117,7 +117,7 @@ public:
     PURE_VIRTUAL(
         void GetJointInvMtx(
             IZ_UINT nIdx,
-            izanagi::math::SMatrix& mtx));
+            izanagi::math::SMatrix44& mtx));
         
     /** ŠÖß‚Ìp¨‚ğæ“¾.
      */

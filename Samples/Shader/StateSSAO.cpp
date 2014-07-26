@@ -77,8 +77,8 @@ IZ_BOOL CStateSSAO::Render(izanagi::graph::CGraphicsDevice* device)
             IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0));
     }
 
-    izanagi::math::SMatrix mtxL2W;
-    izanagi::math::SMatrix::SetUnit(mtxL2W);
+    izanagi::math::SMatrix44 mtxL2W;
+    izanagi::math::SMatrix44::SetUnit(mtxL2W);
 
     m_Shader->Begin(device, 0, IZ_FALSE);
     {
@@ -228,8 +228,8 @@ void CStateSSAO::RenderScene(
     izanagi::CDebugMesh* mesh,
     const izanagi::math::SVector4& position)
 {
-    izanagi::math::SMatrix mtxL2W;
-    izanagi::math::SMatrix::GetTrans(mtxL2W, position);
+    izanagi::math::SMatrix44 mtxL2W;
+    izanagi::math::SMatrix44::GetTrans(mtxL2W, position);
 
     SetShaderParam(
         m_Shader,
@@ -361,7 +361,7 @@ IZ_BOOL CStateSSAO::Enter(
         m_VD = device->CreateVertexDeclaration(elem, COUNTOF(elem));
     }
 
-    izanagi::math::SMatrix::SetUnit(m_L2W);
+    izanagi::math::SMatrix44::SetUnit(m_L2W);
 
 __EXIT__:
     if (!result) {

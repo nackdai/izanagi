@@ -1,5 +1,5 @@
 #include "math/MathCurve.h"
-#include "math/MathMatrix.h"
+#include "math/MathMatrix44.h"
 
 namespace izanagi {
 namespace math {
@@ -59,7 +59,7 @@ namespace math {
     {
         CVector4 tv(t * t * t, t * t, t, 1.0f);
 
-        static const SMatrix mtxHermite = {
+        static const SMatrix44 mtxHermite = {
              2.0f, -2.0f,  1.0f,  1.0f,
             -3.0f,  3.0f, -2.0f, -1.0f,
              0.0f,  0.0f,  1.0f,  0.0f,
@@ -72,7 +72,7 @@ namespace math {
         // P(t) = [t^3, t^2, t, 1] | 0  0  1  0 | |v0|
         //                         | 1  0  0  0 | |v1|
 
-        SMatrix::Apply(tv, tv, mtxHermite);
+        SMatrix44::Apply(tv, tv, mtxHermite);
         IZ_FLOAT ret = SVector4::Dot(tv, p);
 
         return ret;

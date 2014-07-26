@@ -4,13 +4,13 @@ namespace izanagi {
 
     // Clip - Screen 座標変換マトリクス計算
     void CSceneGraphUtil::ComputeC2S(
-        math::SMatrix& mtxC2S,
+        math::SMatrix44& mtxC2S,
         IZ_INT screenWidth,
         IZ_INT screenHeight,
         IZ_FLOAT minZ,
         IZ_FLOAT maxZ)
     {
-        math::SMatrix::SetUnit(mtxC2S);
+        math::SMatrix44::SetUnit(mtxC2S);
 
         mtxC2S.m[0][0] = screenWidth * 0.5f;;
         mtxC2S.m[1][1] = -screenHeight * 0.5f;;
@@ -61,34 +61,34 @@ namespace izanagi {
         IZ_INT nY)
     {
 #if 0
-        math::SMatrix mtxS2C;
+        math::SMatrix44 mtxS2C;
         ComputeC2S(
             mtxS2C,
             vp.width, vp.height,
             vp.minZ, vp.maxZ);
-        math::SMatrix::Inverse(mtxS2C, mtxS2C);
+        math::SMatrix44::Inverse(mtxS2C, mtxS2C);
 
         math::SVector4 clip;
 
         // Screen -> Clip
-        math::SMatrix::Apply(
+        math::SMatrix44::Apply(
             clip,
             math::CVector4((IZ_FLOAT)nX, (IZ_FLOAT)nY, 1.0f, 1.0f),
             mtxS2C);
 
-        math::SMatrix mtxC2V;
-        math::SMatrix::Inverse(mtxC2V, camera.mtxV2C);
+        math::SMatrix44 mtxC2V;
+        math::SMatrix44::Inverse(mtxC2V, camera.mtxV2C);
 
-        math::SMatrix mtxV2W;
-        math::SMatrix::Inverse(mtxV2W, camera.mtxW2V);
+        math::SMatrix44 mtxV2W;
+        math::SMatrix44::Inverse(mtxV2W, camera.mtxW2V);
 
         math::SVector4 rayFar;
         {
             // Clip -> View
-            izanagi::math::SMatrix::Apply(rayFar, clip, mtxC2V);
+            izanagi::math::SMatrix44::Apply(rayFar, clip, mtxC2V);
 
             // View -> World
-            izanagi::math::SMatrix::Apply(rayFar, rayFar, mtxV2W);
+            izanagi::math::SMatrix44::Apply(rayFar, rayFar, mtxV2W);
 
             izanagi::math::SVector4::Div(rayFar, rayFar, rayFar.w);
         }
@@ -105,19 +105,19 @@ namespace izanagi {
             nX, nY,
             1.0f);
 
-        math::SMatrix mtxC2V;
-        math::SMatrix::Inverse(mtxC2V, camera.mtxV2C);
+        math::SMatrix44 mtxC2V;
+        math::SMatrix44::Inverse(mtxC2V, camera.mtxV2C);
 
-        math::SMatrix mtxV2W;
-        math::SMatrix::Inverse(mtxV2W, camera.mtxW2V);
+        math::SMatrix44 mtxV2W;
+        math::SMatrix44::Inverse(mtxV2W, camera.mtxW2V);
 
         math::SVector4 rayFar;
         {
             // Clip -> View
-            izanagi::math::SMatrix::Apply(rayFar, clip, mtxC2V);
+            izanagi::math::SMatrix44::Apply(rayFar, clip, mtxC2V);
 
             // View -> World
-            izanagi::math::SMatrix::Apply(rayFar, rayFar, mtxV2W);
+            izanagi::math::SMatrix44::Apply(rayFar, rayFar, mtxV2W);
 
             izanagi::math::SVector4::Div(rayFar, rayFar, rayFar.w);
         }
@@ -180,12 +180,12 @@ namespace izanagi {
         IZ_FLOAT z = (1.0f - vp.minZ) / (vp.maxZ - vp.minZ);
         IZ_FLOAT w = (-z * (F - N) + F) / (F * N);
 
-        math::SMatrix mtx;
-        math::SMatrix::Inverse(mtx, camera.mtxW2V);
+        math::SMatrix44 mtx;
+        math::SMatrix44::Inverse(mtx, camera.mtxW2V);
 
         math::CVector4 rayFar(x, y, 1.0f, w);
 
-        math::SMatrix::Apply(rayFar, rayFar, mtx);
+        math::SMatrix44::Apply(rayFar, rayFar, mtx);
         math::SVector4::Div(rayFar, rayFar, rayFar.w);
 
         math::SVector4::Sub(ray, rayFar, camera.pos);

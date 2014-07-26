@@ -38,7 +38,7 @@ namespace izanagi {
         PURE_VIRTUAL(
             void SetJointMatrix(
                 IZ_UINT nIdx,
-                const math::SMatrix& mtx));
+                const math::SMatrix44& mtx));
 
         PURE_VIRTUAL(void CommitChanges(graph::CGraphicsDevice* device));
 

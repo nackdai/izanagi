@@ -20,18 +20,18 @@ StateChangeView::StateChangeView(izanagi::CVectorCamera& camera)
             1.0f);
         tmpCam.Update();
 
-        izanagi::math::SMatrix::Copy(m_ViewMtx[ViewState_Low], tmpCam.GetTransform());
+        izanagi::math::SMatrix44::Copy(m_ViewMtx[ViewState_Low], tmpCam.GetTransform());
 #else
-        izanagi::math::SMatrix::Copy(m_ViewMtx[ViewState_Low], camera.GetTransform());
+        izanagi::math::SMatrix44::Copy(m_ViewMtx[ViewState_Low], camera.GetTransform());
 #endif
     }
 
     // Mid
     {
         izanagi::math::CVector4 v(0.0f, 0.0f, Configure::CameraDistance, 0.0f);
-        izanagi::math::SMatrix mtx;
-        izanagi::math::SMatrix::GetRotByX(mtx, IZ_DEG2RAD(-30.0f));
-        izanagi::math::SMatrix::Apply(v, v, mtx);
+        izanagi::math::SMatrix44 mtx;
+        izanagi::math::SMatrix44::GetRotByX(mtx, IZ_DEG2RAD(-30.0f));
+        izanagi::math::SMatrix44::Apply(v, v, mtx);
 
         tmpCam.Init(
             izanagi::math::CVector4(0.0f, v.y, -Configure::InnerRadius + v.z, 1.0f),
@@ -42,15 +42,15 @@ StateChangeView::StateChangeView(izanagi::CVectorCamera& camera)
             1.0f);
         tmpCam.Update();
 
-        izanagi::math::SMatrix::Copy(m_ViewMtx[ViewState_Mid], tmpCam.GetTransform());
+        izanagi::math::SMatrix44::Copy(m_ViewMtx[ViewState_Mid], tmpCam.GetTransform());
     }
 
     // High
     {
         izanagi::math::CVector4 v(0.0f, 0.0f, Configure::CameraDistance, 0.0f);
-        izanagi::math::SMatrix mtx;
-        izanagi::math::SMatrix::GetRotByX(mtx, IZ_DEG2RAD(-55.0f));
-        izanagi::math::SMatrix::Apply(v, v, mtx);
+        izanagi::math::SMatrix44 mtx;
+        izanagi::math::SMatrix44::GetRotByX(mtx, IZ_DEG2RAD(-55.0f));
+        izanagi::math::SMatrix44::Apply(v, v, mtx);
 
         tmpCam.Init(
             izanagi::math::CVector4(0.0f, v.y, -Configure::InnerRadius + v.z, 1.0f),
@@ -61,7 +61,7 @@ StateChangeView::StateChangeView(izanagi::CVectorCamera& camera)
             1.0f);
         tmpCam.Update();
 
-        izanagi::math::SMatrix::Copy(m_ViewMtx[ViewState_High], tmpCam.GetTransform());
+        izanagi::math::SMatrix44::Copy(m_ViewMtx[ViewState_High], tmpCam.GetTransform());
     }
 
     m_State = ViewState_Low;
@@ -125,11 +125,11 @@ IZ_BOOL StateChangeView::Update(
 
         IZ_FLOAT t = m_Timeline.GetNormalized();
 
-        const izanagi::math::SMatrix& from = m_ViewMtx[m_State];
-        const izanagi::math::SMatrix& to = m_ViewMtx[m_NextState];
+        const izanagi::math::SMatrix44& from = m_ViewMtx[m_State];
+        const izanagi::math::SMatrix44& to = m_ViewMtx[m_NextState];
 
-        izanagi::math::SMatrix mtx;
-        izanagi::math::SMatrix::Lerp(mtx, from, to, t);
+        izanagi::math::SMatrix44 mtx;
+        izanagi::math::SMatrix44::Lerp(mtx, from, to, t);
 
         GetCamera().SetTransform(mtx);
 

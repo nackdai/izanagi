@@ -34,7 +34,7 @@ struct SXFileMaterial {
 
 struct SXFileBone {
     std::string name;
-    izanagi::math::SMatrix mtx;
+    izanagi::math::SMatrix44 mtx;
 };
 
 struct SXFileSkin {
@@ -77,7 +77,7 @@ struct SXFileMesh {
 struct SXFileNode {
     std::string name;
     SXFileNode* parent;
-    izanagi::math::SMatrix mtxTransform;
+    izanagi::math::SMatrix44 mtxTransform;
 
     std::vector<SXFileMesh*> meshes;
 
@@ -111,7 +111,7 @@ struct SXFileAnmKey {
 
     union {
         izanagi::S_SKL_JOINT_POSE pose;
-        izanagi::math::SMatrix mtx;
+        izanagi::math::SMatrix44 mtx;
     } data;
 
     SXFileAnmKey()
@@ -145,10 +145,10 @@ struct SXFileAnmSet {
 class CXFileMathUtil {
 public:
     static IZ_BOOL BreakDownMatrix(
-        const izanagi::math::SMatrix& mtx,
+        const izanagi::math::SMatrix44& mtx,
         izanagi::S_SKL_JOINT_POSE& sPose);
 
-    static IZ_BOOL HasScale(const izanagi::math::SMatrix& mtx);
+    static IZ_BOOL HasScale(const izanagi::math::SMatrix44& mtx);
 };
 
 #endif  // #if !defined(__MODEL_LIB_XFILE_HELPER_H__)

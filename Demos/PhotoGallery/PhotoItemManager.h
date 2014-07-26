@@ -20,7 +20,7 @@ public:
     void RenderWithTexture(
         izanagi::graph::CGraphicsDevice* device,
         const izanagi::CCamera& camera,
-        const izanagi::math::SMatrix& mtxRot,
+        const izanagi::math::SMatrix44& mtxRot,
         izanagi::shader::CShaderBasic* shader);
 
     /** Render photo item without texture.
@@ -28,7 +28,7 @@ public:
     void RenderWithoutTexture(
         izanagi::graph::CGraphicsDevice* device,
         const izanagi::CCamera& camera,
-        const izanagi::math::SMatrix& mtxRot,
+        const izanagi::math::SMatrix44& mtxRot,
         izanagi::shader::CShaderBasic* shader);
 };
 
@@ -90,7 +90,7 @@ public:
 
     /** Get rotation matrix.
      */
-    const izanagi::math::SMatrix& GetRotationMtx() const;
+    const izanagi::math::SMatrix44& GetRotationMtx() const;
 
 private:
     PhotoItem* FindNotRequestedLoadTexture();
@@ -99,7 +99,7 @@ private:
     PhotoItemList m_PhotoItemList[3];
 
     IZ_FLOAT m_AngleRate;
-    izanagi::math::SMatrix m_mtxRot;
+    izanagi::math::SMatrix44 m_mtxRot;
 
     IZ_FLOAT m_AngleImmediately;
 

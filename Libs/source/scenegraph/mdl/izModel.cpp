@@ -170,7 +170,7 @@ IZ_BOOL CModel::Render(graph::CGraphicsDevice* device)
 }
 
 // 適用されたモーションに基づき更新
-void CModel::Update(const math::SMatrix* mtxL2W/*= IZ_NULL*/)
+void CModel::Update(const math::SMatrix44* mtxL2W/*= IZ_NULL*/)
 {
     if (m_pSkeleton != IZ_NULL) {
         m_pSkeleton->BuildMatrix(mtxL2W);

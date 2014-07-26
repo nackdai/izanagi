@@ -19,7 +19,7 @@ namespace math
     public:
         CVector3()
         {
-            x = y = z = w = 0.0f;
+            x = y = z = 0.0f;
         }
 
         ~CVector3() {}

@@ -446,7 +446,7 @@ namespace {
         case E_MTRL_PARAM_TYPE_VECTOR:
             return sizeof(math::SVector4);
         case E_MTRL_PARAM_TYPE_MATRIX:
-            return sizeof(math::SMatrix);
+            return sizeof(math::SMatrix44);
         case E_MTRL_PARAM_TYPE_UINT:
             return sizeof(IZ_UINT);
         case E_MTRL_PARAM_TYPE_BOOL:

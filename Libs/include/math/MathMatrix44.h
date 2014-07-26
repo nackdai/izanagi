@@ -1,5 +1,5 @@
-#if !defined(__IZANAGI__MATH_MATRIX_H__)
-#define __IZANAGI__MATH_MATRIX_H__
+#if !defined(__IZANAGI__MATH_MATRIX44_H__)
+#define __IZANAGI__MATH_MATRIX44_H__
 
 #include <math.h>
 #include "izDefs.h"
@@ -27,7 +27,7 @@ namespace math
 
     /**
      */
-    struct SMatrix {
+    struct SMatrix44 {
         union {
             IZ_FLOAT a[16];
             IZ_FLOAT m[4][4];
@@ -41,15 +41,15 @@ namespace math
         };
 
         // マトリクスをコピーする
-        static void Copy(SMatrix& dst, const SMatrix& src)
+        static void Copy(SMatrix44& dst, const SMatrix44& src)
         {
-            memcpy(&dst, &src, sizeof(SMatrix));
+            memcpy(&dst, &src, sizeof(SMatrix44));
         }
 
         // 単位マトリクスを参照する
-        static const SMatrix& GetUnit()
+        static const SMatrix44& GetUnit()
         {
-            static SMatrix mtxUnit = {
+            static SMatrix44 mtxUnit = {
                 1.0f, 0.0f, 0.0f, 0.0f, 
                 0.0f, 1.0f, 0.0f, 0.0f,
                 0.0f, 0.0f, 1.0f, 0.0f,
@@ -60,11 +60,11 @@ namespace math
         }
 
         // 単位マトリクスを設定する
-        static inline void SetUnit(SMatrix& mtx);
+        static inline void SetUnit(SMatrix44& mtx);
 
-        static IZ_BOOL IsUnit(const SMatrix& mtx)
+        static IZ_BOOL IsUnit(const SMatrix44& mtx)
         {
-            const SMatrix& mtxUnit = GetUnit();
+            const SMatrix44& mtxUnit = GetUnit();
             for (IZ_UINT m = 0; m < COUNTOF(mtxUnit.a); ++m) {
                 if (mtx.a[m] != mtxUnit.a[m]) {
                     return IZ_FALSE;
@@ -74,17 +74,17 @@ namespace math
         }
 
         // マトリクスをゼロクリアする
-        static void SetZero(SMatrix& mtx)
+        static void SetZero(SMatrix44& mtx)
         {
             FILL_ZERO(&mtx, sizeof(mtx));
         }
 
         // マトリクスを転置する
-        static inline void Transpose(SMatrix& dst, const SMatrix& src);
+        static inline void Transpose(SMatrix44& dst, const SMatrix44& src);
 
         // マトリクスを加算する
         // dst = src1 + src2
-        static void Add(SMatrix& dst, const SMatrix& src1, const SMatrix& src2)
+        static void Add(SMatrix44& dst, const SMatrix44& src1, const SMatrix44& src2)
         {
             for (IZ_UINT i = 0; i < 4; i++) {
                 for (IZ_UINT n = 0; n < 4; n++) {
@@ -95,7 +95,7 @@ namespace math
 
         // マトリクスを減算する
         // dst = src1 - src2
-        static void Sub(SMatrix& dst, const SMatrix& src1, const SMatrix& src2)
+        static void Sub(SMatrix44& dst, const SMatrix44& src1, const SMatrix44& src2)
         {
             for (IZ_UINT i = 0; i < 4; i++) {
                 for (IZ_UINT n = 0; n < 4; n++) {
@@ -106,10 +106,10 @@ namespace math
 
         // マトリクスを乗算する
         // dst = src1 x src2
-        static inline void Mul(SMatrix& dst, const SMatrix& src1, const SMatrix& src2);
+        static inline void Mul(SMatrix44& dst, const SMatrix44& src1, const SMatrix44& src2);
 
         // マトリクスとスカラーを乗算する
-        static void MulScalar(SMatrix& dst, const SMatrix& src, IZ_FLOAT fScalar)
+        static void MulScalar(SMatrix44& dst, const SMatrix44& src, IZ_FLOAT fScalar)
         {
             for (int i = 0; i < 4; ++i) {
                 for (int j = 0; j < 4; ++j) {
@@ -120,23 +120,23 @@ namespace math
 
         // ベクトルとマトリクスを乗算する
         // dst = vec x mtx
-        static inline void Apply(SVector4& dst, const SVector4& vec, const SMatrix& mtx);
+        static inline void Apply(SVector4& dst, const SVector4& vec, const SMatrix44& mtx);
 
         // ベクトルとマトリクスのＸＹＺ成分のみを乗算する
         // ベクトルのＷ成分、およびマトリクスの第４行は無視される
-        static inline void ApplyXYZ(SVector4& dst, const SVector4& vec, const SMatrix& mtx);
+        static inline void ApplyXYZ(SVector4& dst, const SVector4& vec, const SMatrix44& mtx);
 
         // X軸を回転軸にして回転するマトリクスを取得
-        static inline void GetRotByX(SMatrix& dst, IZ_FLOAT fTheta);
+        static inline void GetRotByX(SMatrix44& dst, IZ_FLOAT fTheta);
 
         // Y軸を回転軸にして回転するマトリクスを取得
-        static inline void GetRotByY(SMatrix& dst, IZ_FLOAT fTheta);
+        static inline void GetRotByY(SMatrix44& dst, IZ_FLOAT fTheta);
 
         // Z軸を回転軸にして回転するマトリクスを取得
-        static inline void GetRotByZ(SMatrix& dst, IZ_FLOAT fTheta);
+        static inline void GetRotByZ(SMatrix44& dst, IZ_FLOAT fTheta);
 
         // XYZ軸を回転軸にしてX->Y->Zの順番で回転するマトリクスを取得
-        static void GetRotByXYZ(SMatrix& dst, const SVector4& angle)
+        static void GetRotByXYZ(SMatrix44& dst, const SVector4& angle)
         {
             GetRotByX(dst, angle.x);
             RotByY(dst, dst, angle.y);
@@ -145,7 +145,7 @@ namespace math
 
         // 任意軸を回転軸にして回転するマトリクスを取得
         static void GetRot(
-            SMatrix& dst, IZ_FLOAT fTheta,
+            SMatrix44& dst, IZ_FLOAT fTheta,
             const SVector4& axis)
         {
             GetRot(dst, fTheta, axis.x, axis.y, axis.z);
@@ -153,37 +153,37 @@ namespace math
 
         // 任意軸を回転軸にして回転するマトリクスを取得
         static inline void GetRot(
-            SMatrix& dst, IZ_FLOAT fTheta,
+            SMatrix44& dst, IZ_FLOAT fTheta,
             IZ_FLOAT x, IZ_FLOAT y, IZ_FLOAT z);
 
         // X軸に対する回転を行なう
-        static void RotByX(SMatrix& dst, const SMatrix& src, IZ_FLOAT fTheta)
+        static void RotByX(SMatrix44& dst, const SMatrix44& src, IZ_FLOAT fTheta)
         {
-            SMatrix m;
+            SMatrix44 m;
             GetRotByX(m, fTheta);
             Mul(dst, src, m);
         }
 
         // Y軸に対する回転を行なう
-        static void RotByY(SMatrix& dst, const SMatrix& src, IZ_FLOAT fTheta)
+        static void RotByY(SMatrix44& dst, const SMatrix44& src, IZ_FLOAT fTheta)
         {
-            SMatrix m;
+            SMatrix44 m;
             GetRotByY(m, fTheta);
             Mul(dst, src, m);
         }
 
         // Z軸に対する回転を行なう
-        static void RotByZ(SMatrix& dst, const SMatrix& src, IZ_FLOAT fTheta)
+        static void RotByZ(SMatrix44& dst, const SMatrix44& src, IZ_FLOAT fTheta)
         {
-            SMatrix m;
+            SMatrix44 m;
             GetRotByZ(m, fTheta);
             Mul(dst, src, m);
         }
 
         // X->Y->Z軸の順の回転を行なう
-        static void RotByXYZ(SMatrix& dst, const SMatrix& src, const SVector4& angle)
+        static void RotByXYZ(SMatrix44& dst, const SMatrix44& src, const SVector4& angle)
         {
-            SMatrix m;
+            SMatrix44 m;
             RotByX(m, src, angle.x);
             RotByY(m, m, angle.y);
             RotByZ(dst, m, angle.z);
@@ -191,36 +191,36 @@ namespace math
 
         // 任意軸に対する回転を行なう
         static void Rot(
-            SMatrix& dst, const SMatrix& src,
+            SMatrix44& dst, const SMatrix44& src,
             IZ_FLOAT fTheta,
             IZ_FLOAT x, IZ_FLOAT y, IZ_FLOAT z)
         {
-            SMatrix m;
+            SMatrix44 m;
             GetRot(m, fTheta, x, y, z);
             Mul(dst, src, m);
         }
 
         // オフセットを指定したマトリクスを取得
-        static void GetTrans(SMatrix& dst, const SVector4& tv)
+        static void GetTrans(SMatrix44& dst, const SVector4& tv)
         {
             GetTrans(dst, tv.x, tv.y, tv.z);
         }
 
         // オフセットを指定したマトリクスを取得
-        static inline void GetTrans(SMatrix& dst, IZ_FLOAT x, IZ_FLOAT y, IZ_FLOAT z);
+        static inline void GetTrans(SMatrix44& dst, IZ_FLOAT x, IZ_FLOAT y, IZ_FLOAT z);
 
         // 平行移動する
-        static void Trans(SMatrix& dst, const SMatrix& src, const SVector4& tv)
+        static void Trans(SMatrix44& dst, const SMatrix44& src, const SVector4& tv)
         {
-            SMatrix m;
+            SMatrix44 m;
             GetTrans(m, tv);
             Mul(dst, src, m);
         }
 
         // 平行移動する
         static void Trans(
-            SMatrix& dst,
-            const SMatrix& src,
+            SMatrix44& dst,
+            const SMatrix44& src,
             IZ_FLOAT x, IZ_FLOAT y, IZ_FLOAT z)
         {
             SVector4 v;
@@ -229,7 +229,7 @@ namespace math
         }
 
         // Ｘ→Ｙ→Ｚ軸の順で回転を行う
-        static void RotXYZ(SMatrix& dst, const SMatrix& src, const SVector4& angle)
+        static void RotXYZ(SMatrix44& dst, const SMatrix44& src, const SVector4& angle)
         {
             RotByX(dst, src, angle.v[0]);
             RotByY(dst, dst, angle.v[1]);
@@ -237,10 +237,10 @@ namespace math
         }
 
         // スケーリングマトリクスを得る
-        static inline void SetScale(SMatrix& dst, IZ_FLOAT fScaleX, IZ_FLOAT fScaleY, IZ_FLOAT fScaleZ);
+        static inline void SetScale(SMatrix44& dst, IZ_FLOAT fScaleX, IZ_FLOAT fScaleY, IZ_FLOAT fScaleZ);
 
         // スケーリングマトリクスを得る
-        static void SetScale(SMatrix& dst, const SVector4& scale)
+        static void SetScale(SMatrix44& dst, const SVector4& scale)
         {
             SetScale(
                 dst,
@@ -248,7 +248,7 @@ namespace math
         }
 
         // スケーリングする
-        static void Scale(SMatrix& dst, const SMatrix& src, const SVector4& scale)
+        static void Scale(SMatrix44& dst, const SMatrix44& src, const SVector4& scale)
         {
             SVector4 s;
             SVector4::Set(s, scale.v[0], scale.v[1], scale.v[2], 1.0f);
@@ -261,8 +261,8 @@ namespace math
 
         // スケーリングする
         static void Scale(
-            SMatrix& dst, 
-            const SMatrix& src,
+            SMatrix44& dst, 
+            const SMatrix44& src,
             IZ_FLOAT x, IZ_FLOAT y, IZ_FLOAT z)
         {
             SVector4 scale;
@@ -272,13 +272,13 @@ namespace math
         }
 
         // 行列式を計算する
-        static inline IZ_FLOAT Determinant(const SMatrix& mtx);
+        static inline IZ_FLOAT Determinant(const SMatrix44& mtx);
 
         // 一般マトリクスの逆マトリクスを求める
-        static inline void Inverse(SMatrix& dst, const SMatrix& src);
+        static inline void Inverse(SMatrix44& dst, const SMatrix44& src);
 
         // ベクトルから回転マトリクスを求める
-        static void GetRotMatrixFromVector(SMatrix& mtx, const SVector4& vec)
+        static void GetRotMatrixFromVector(SMatrix44& mtx, const SVector4& vec)
         {
             SVector4 up;
             up.Set(0.0f, 1.0f, 0.0f, 0.0f);
@@ -287,16 +287,16 @@ namespace math
         }
 
         // ベクトルから回転マトリクスを求める
-        static void GetRotMatrixFromVector(SMatrix& mtx, const SVector4& vec, const SVector4& up);
+        static void GetRotMatrixFromVector(SMatrix44& mtx, const SVector4& vec, const SVector4& up);
 
         // マトリクスからオイラー角を取得する
-        static void GetEulerFromMatrix(SVector4& angle, const SMatrix& mtx, E_MATH_ROTATION_ORDER order);
+        static void GetEulerFromMatrix(SVector4& angle, const SMatrix44& mtx, E_MATH_ROTATION_ORDER order);
 
         // マトリクス間を補間する
-        static void Lerp(SMatrix& dst, const SMatrix& from, const SMatrix& to, IZ_FLOAT t);
+        static void Lerp(SMatrix44& dst, const SMatrix44& from, const SMatrix44& to, IZ_FLOAT t);
 
         // マトリクスの中身をダンプする
-        static void Dump(const SMatrix& mtx)
+        static void Dump(const SMatrix44& mtx)
         {
             for (IZ_UINT i = 0; i < 4; i++) {
                 IZ_PRINTF("%f, %f, %f, %f\n", mtx.m[i][0], mtx.m[i][1], mtx.m[i][2], mtx.m[i][3]);
@@ -307,9 +307,9 @@ namespace math
 }   // namespace izanagi
 
 #ifdef __USE_D3D_MATH__
-    #include "math/dx9/MathMatrix_DX9.h"
+    #include "math/dx9/MathMatrix44_DX9.h"
 #else   // #ifdef __USE_D3D_MATH__
-    #include "math/noplatform/MathMatrix_NoPlatform.h"
+    #include "math/noplatform/MathMatrix44_NoPlatform.h"
 #endif
 
-#endif  // #if !defined(__IZANAGI__MATH_MATRIX_H__)
+#endif  // #if !defined(__IZANAGI__MATH_MATRIX44_H__)

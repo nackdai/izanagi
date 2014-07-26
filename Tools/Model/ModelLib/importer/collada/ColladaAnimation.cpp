@@ -661,17 +661,17 @@ namespace {
     };
 
     inline void _RotateAxis(
-        izanagi::math::SMatrix& dst,
-        const izanagi::math::SMatrix& src,
+        izanagi::math::SMatrix44& dst,
+        const izanagi::math::SMatrix44& src,
         IZ_FLOAT x, IZ_FLOAT y, IZ_FLOAT z, IZ_FLOAT angle)
     {
         izanagi::math::SQuat quat;
         izanagi::math::SQuat::SetQuatFromRadAxis(quat, angle, x, y, z);
 
-        izanagi::math::SMatrix mtx;
+        izanagi::math::SMatrix44 mtx;
         izanagi::math::SQuat::MatrixFromQuat(mtx, quat);
 
-        izanagi::math::SMatrix::Mul(dst, src, mtx);
+        izanagi::math::SMatrix44::Mul(dst, src, mtx);
     }
 }   // namespace
 
@@ -801,7 +801,7 @@ IZ_BOOL CColladaAnimation::CreateSlerp(IZ_UINT nNodeIdx)
         // Compute new quartanion.
         IZ_FLOAT fPrevTime = IZ_FLOAT_MAX;
 
-        izanagi::math::SMatrix mtx;
+        izanagi::math::SMatrix44 mtx;
 
         for (size_t i = 0; i < tvQuatList.size(); i++) {
             const SQuatParam& sQuatParam = tvQuatList[i];
@@ -827,7 +827,7 @@ IZ_BOOL CColladaAnimation::CreateSlerp(IZ_UINT nNodeIdx)
                     sAnmInput.params.push_back(quat.w);
                 }
 
-                izanagi::math::SMatrix::SetUnit(mtx);
+                izanagi::math::SMatrix44::SetUnit(mtx);
                 _RotateAxis(
                     mtx, mtx,
                     x, y, z, angle);

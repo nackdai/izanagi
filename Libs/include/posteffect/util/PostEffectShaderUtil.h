@@ -72,7 +72,7 @@ namespace izanagi {
             pShader->SetMatrixArray(
                 device,
                 handle,
-                (const math::SMatrix*)pValue,
+                (const math::SMatrix44*)pValue,
                 nElements);
         }
         else if (CPostEffectParamUtil::IsFloatType(type)) {

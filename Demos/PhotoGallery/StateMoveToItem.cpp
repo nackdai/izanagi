@@ -27,19 +27,19 @@ IZ_BOOL StateMoveToItem::Enter(
     IZ_ASSERT(hitItem != IZ_NULL);
 
     // Keep camera matrix.
-    izanagi::math::SMatrix::Copy(m_CamMtx, GetCamera().GetTransform());
+    izanagi::math::SMatrix44::Copy(m_CamMtx, GetCamera().GetTransform());
 
-    const izanagi::math::SMatrix& globalRotMtx = PhotoItemManager::Instance().GetRotationMtx();
+    const izanagi::math::SMatrix44& globalRotMtx = PhotoItemManager::Instance().GetRotationMtx();
 
     // Compute target matrix.
     {
         izanagi::math::SVector4 pos;
         hitItem->GetCenterPosition(pos);
-        izanagi::math::SMatrix::Apply(pos, pos, globalRotMtx);
+        izanagi::math::SMatrix44::Apply(pos, pos, globalRotMtx);
 
         izanagi::math::SVector4 nml;
         hitItem->GetNormal(nml);
-        izanagi::math::SMatrix::ApplyXYZ(nml, nml, globalRotMtx);
+        izanagi::math::SMatrix44::ApplyXYZ(nml, nml, globalRotMtx);
 
         izanagi::math::CVector4 targetPos(
             pos.x + nml.x * Configure::CameraDistanceFromItem,
@@ -58,7 +58,7 @@ IZ_BOOL StateMoveToItem::Enter(
             1.0f);
         tmpCam.Update();
 
-        izanagi::math::SMatrix::Copy(m_TargetMtx, tmpCam.GetTransform());
+        izanagi::math::SMatrix44::Copy(m_TargetMtx, tmpCam.GetTransform());
     }
 
     m_State = State_Move;
@@ -78,10 +78,10 @@ IZ_BOOL StateMoveToItem::Update(
 
         IZ_FLOAT t = m_Timeline.GetNormalized();
 
-        const izanagi::math::SMatrix& from = GetCamera().GetTransform();
+        const izanagi::math::SMatrix44& from = GetCamera().GetTransform();
 
-        izanagi::math::SMatrix mtx;
-        izanagi::math::SMatrix::Lerp(mtx, from, m_TargetMtx, t);
+        izanagi::math::SMatrix44 mtx;
+        izanagi::math::SMatrix44::Lerp(mtx, from, m_TargetMtx, t);
 
         GetCamera().SetTransform(mtx);
 
@@ -95,8 +95,8 @@ IZ_BOOL StateMoveToItem::Update(
 
         IZ_FLOAT t = m_Timeline.GetNormalized();
 
-        izanagi::math::SMatrix mtx;
-        izanagi::math::SMatrix::Lerp(mtx, m_TargetMtx, m_CamMtx, t);
+        izanagi::math::SMatrix44 mtx;
+        izanagi::math::SMatrix44::Lerp(mtx, m_TargetMtx, m_CamMtx, t);
 
         GetCamera().SetTransform(mtx);
 

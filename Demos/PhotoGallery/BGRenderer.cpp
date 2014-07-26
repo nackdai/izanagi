@@ -199,8 +199,8 @@ void BGRenderer::RenderToMRT(
         { 1.0f, 1.0f, 1.0f, 1.0f },
     };
 
-    izanagi::math::SMatrix mtx;
-    izanagi::math::SMatrix::SetUnit(mtx);
+    izanagi::math::SMatrix44 mtx;
+    izanagi::math::SMatrix44::SetUnit(mtx);
 
     // Render to MRT.
     m_Shader->Begin(device, 0, IZ_FALSE);

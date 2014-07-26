@@ -32,7 +32,7 @@ namespace sample {
 
         virtual void SetJointMatrix(
             IZ_UINT nIdx,
-            const izanagi::math::SMatrix& mtx);
+            const izanagi::math::SMatrix44& mtx);
 
         virtual void CommitChanges(izanagi::graph::CGraphicsDevice* device);
 
@@ -48,7 +48,7 @@ namespace sample {
         izanagi::shader::IShader* m_pShader;
 
         IZ_UINT m_nCnt;
-        izanagi::math::SMatrix m_Mtx[48];
+        izanagi::math::SMatrix44 m_Mtx[48];
 
         izanagi::shader::IZ_SHADER_HANDLE m_Handle;
     };

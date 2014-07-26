@@ -72,7 +72,7 @@ namespace {
         const SCameraParam& cameraParam = camera.GetParam();
 
         math::SVector4 v;
-        math::SMatrix::Apply(v, pos, cameraParam.mtxW2C);
+        math::SMatrix44::Apply(v, pos, cameraParam.mtxW2C);
 
         IZ_FLOAT w = v.w;
         IZ_FLOAT normalizedZ = v.z;

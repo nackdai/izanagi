@@ -24,7 +24,7 @@ namespace {
 
 // Break down matrix to trans, quartanion.
 IZ_BOOL CXFileMathUtil::BreakDownMatrix(
-    const izanagi::math::SMatrix& mtx,
+    const izanagi::math::SMatrix44& mtx,
     izanagi::S_SKL_JOINT_POSE& sPose)
 {
 #if _CHECK_SCALE
@@ -49,7 +49,7 @@ IZ_BOOL CXFileMathUtil::BreakDownMatrix(
     return IZ_FALSE;
 }
 
-IZ_BOOL CXFileMathUtil::HasScale(const izanagi::math::SMatrix& mtx)
+IZ_BOOL CXFileMathUtil::HasScale(const izanagi::math::SMatrix44& mtx)
 {
     //IZ_PRINTF("scale:");
     IZ_BOOL b0 = _HasScale(mtx._00, mtx._10, mtx._20);

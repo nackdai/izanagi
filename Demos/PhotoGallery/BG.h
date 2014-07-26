@@ -41,7 +41,7 @@ private:
     izanagi::IMemoryAllocator* m_Allocator;
 
     izanagi::sample::CSampleEnvBox* m_EnvBox;
-    izanagi::math::SMatrix m_L2W;
+    izanagi::math::SMatrix44 m_L2W;
 };
 
 #endif    // #if !defined(__BG_H__)

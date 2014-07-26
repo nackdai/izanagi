@@ -16,7 +16,7 @@ private:
         izanagi::S_SKL_JOINT_POSE pose;
 
         IZ_BOOL isMtxInvFromSkin;
-        izanagi::math::SMatrix mtxInv;
+        izanagi::math::SMatrix44 mtxInv;
 
         IZ_INT parent;
 
@@ -53,7 +53,7 @@ public:
 
     void GetJointInvMtx(
         IZ_UINT nIdx,
-        izanagi::math::SMatrix& mtx);
+        izanagi::math::SMatrix44& mtx);
 
     void GetJointTransform(
         IZ_UINT nIdx,

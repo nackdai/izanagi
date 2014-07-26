@@ -85,7 +85,7 @@ public:
     // 指定された関節の逆マトリクスを取得.  
     void GetJointInvMtx(
         IZ_UINT nIdx,
-        izanagi::math::SMatrix& mtx);
+        izanagi::math::SMatrix44& mtx);
         
     // 関節の姿勢を取得.
     void GetJointTransform(

@@ -80,7 +80,7 @@ namespace izanagi {
         IZ_INT16 parent;        ///< 親ジョイントのインデックス.
         IZ_UINT16 idx;          ///< 自分自身のインデックス
 
-        math::SMatrix mtxInvBind;
+        math::SMatrix44 mtxInvBind;
 
         IZ_UINT8 validParam;    ///< 有効なパラメータフラグ。ポーズパラメータの全てが有効とは限らない.
         IZ_UINT8 validAnmParam; ///< アニメ計算時の有効なパラメータフラグ。ポーズパラメータの全てが有効とは限らない.

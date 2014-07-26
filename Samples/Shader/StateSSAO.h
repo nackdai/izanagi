@@ -40,7 +40,7 @@ protected:
     izanagi::CDebugMesh* m_Cube;
     izanagi::CDebugMesh* m_Plane;
 
-    izanagi::math::SMatrix m_L2W;
+    izanagi::math::SMatrix44 m_L2W;
     izanagi::SParallelLightParam m_ParallelLight;
 
     izanagi::graph::CVertexBuffer* m_VB;

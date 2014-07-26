@@ -59,9 +59,6 @@
     <ClCompile Include="..\..\source\math\MathTriangle.cpp">
       <Filter>source\shape</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\math\MathMatrix.cpp">
-      <Filter>source\basic</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\math\SFMT\SFMT.cpp">
       <Filter>source\basic\SFMT</Filter>
     </ClCompile>
@@ -70,6 +67,9 @@
     </ClCompile>
     <ClCompile Include="..\..\source\math\MathCurve.cpp">
       <Filter>source\curve</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\math\MathMatrix44.cpp">
+      <Filter>source\basic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -85,16 +85,10 @@
     <ClInclude Include="..\..\include\math\MathTriangle.h">
       <Filter>include\shape</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\math\MathCMatrix.h">
-      <Filter>include\basic</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\math\MathCQuaternion.h">
       <Filter>include\basic</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\math\MathHalfFloat.h">
-      <Filter>include\basic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\math\MathMatrix.h">
       <Filter>include\basic</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\math\MathQuaternion.h">
@@ -155,12 +149,6 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\izMath.h" />
-    <ClInclude Include="..\..\include\math\noplatform\MathMatrix_NoPlatform.h">
-      <Filter>include\basic\noplatform</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\math\dx9\MathMatrix_DX9.h">
-      <Filter>include\basic\dx9</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\math\noplatform\MathQuaternion_NoPlatform.h">
       <Filter>include\basic\noplatform</Filter>
     </ClInclude>
@@ -192,6 +180,18 @@
       <Filter>include\basic\noplatform</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\math\MathCVector3.h">
+      <Filter>include\basic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\MathMatrix44.h">
+      <Filter>include\basic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\noplatform\MathMatrix44_NoPlatform.h">
+      <Filter>include\basic\noplatform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\dx9\MathMatrix44_DX9.h">
+      <Filter>include\basic\dx9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\MathCMatrix44.h">
       <Filter>include\basic</Filter>
     </ClInclude>
   </ItemGroup>

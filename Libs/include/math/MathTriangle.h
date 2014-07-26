@@ -2,7 +2,7 @@
 #define __IZANAGI_MATH_TRIANGLE_H__
 
 #include "MathVector4.h"
-#include "MathMatrix.h"
+#include "MathMatrix44.h"
 
 namespace izanagi
 {
@@ -51,7 +51,7 @@ namespace math
 
         /** 4x4行列による変換.
          */
-        void Transform(const SMatrix& mtx);
+        void Transform(const SMatrix44& mtx);
 
         /** 三角形上に存在する点かどうか.
          */

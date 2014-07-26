@@ -5,13 +5,13 @@
 #include <memory.h>
 #include "izDefs.h"
 #include "MathVector4.h"
-#include "MathMatrix.h"
+#include "MathMatrix44.h"
 
 namespace izanagi
 {
 namespace math
 {
-    struct SMatrix;
+    struct SMatrix44;
 
     struct SQuat : public SVector4 {
         void Set(IZ_FLOAT _x, IZ_FLOAT _y, IZ_FLOAT _z, IZ_FLOAT _w = 1.0f)
@@ -154,10 +154,10 @@ namespace math
         static inline void SetQuatFromRadAxis(SQuat& quat, IZ_FLOAT rad, const SVector4& vAxis);
 
         // クオータニオンから行列を計算する
-        static inline void MatrixFromQuat(SMatrix& mtx, const SQuat& quat);
+        static inline void MatrixFromQuat(SMatrix44& mtx, const SQuat& quat);
 
         // 行列からクオータニオンを計算する
-        static inline void QuatFromMatrix(SQuat& quat, const SMatrix& mtx);
+        static inline void QuatFromMatrix(SQuat& quat, const SMatrix44& mtx);
 
         // オイラー角からクオータニオンを計算する
         static inline void QuatFromEuler(SQuat& quat, IZ_FLOAT x, IZ_FLOAT y, IZ_FLOAT z);
@@ -187,12 +187,12 @@ namespace math
         // クオータニオンからオイラー角を計算する
         static void GetEuler(SVector4& angle, const SQuat& quat)
         {
-            SMatrix mtx;
+            SMatrix44 mtx;
             MatrixFromQuat(mtx, quat);
 
             // TODO
             // MatrixFromQuatの結果はZXYの回転順番であることを常に保障する？
-            SMatrix::GetEulerFromMatrix(angle, mtx, E_MATH_ROTATION_ORDER_ZXY);
+            SMatrix44::GetEulerFromMatrix(angle, mtx, E_MATH_ROTATION_ORDER_ZXY);
         }
 
         // オイラー角からクオータニオンを計算する

@@ -48,7 +48,7 @@ private:
 
     IZ_BOOL m_IsAnimating;
 
-    izanagi::math::SMatrix m_ViewMtx[ViewState_Num];
+    izanagi::math::SMatrix44 m_ViewMtx[ViewState_Num];
 
     izanagi::animation::CTimeline m_Timeline;
 };

@@ -30,9 +30,9 @@ namespace izanagi {
         IZ_DEFINE_INTERNAL_RELEASE();
 
     public:
-        void BuildMatrix(const math::SMatrix* mtxL2W);
+        void BuildMatrix(const math::SMatrix44* mtxL2W);
 
-        const math::SMatrix* GetJointMtx(IZ_INT idx) const;
+        const math::SMatrix44* GetJointMtx(IZ_INT idx) const;
 
         IZ_UINT GetJointNum() { return m_nJointNum; }
 
@@ -87,7 +87,7 @@ namespace izanagi {
         S_SKL_JOINT_POSE* m_pJointPose;
 
         // 最終的な行列
-        math::SMatrix* m_pGlobalPose;
+        math::SMatrix44* m_pGlobalPose;
 
         // アニメーションパラメータの中で更新が必要なパラメータフラグ
         IZ_UINT8* m_ValidAnmParam;

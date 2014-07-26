@@ -138,7 +138,7 @@ IZ_INT CJsonImporter::GetJointParent(
 
 void CJsonImporter::GetJointInvMtx(
     IZ_UINT nIdx,
-    izanagi::math::SMatrix& mtx)
+    izanagi::math::SMatrix44& mtx)
 {
 }
 

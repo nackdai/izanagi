@@ -358,7 +358,7 @@ IZ_BOOL CXFileParser::ParseFrame(SXFileNode* pParent)
     return IZ_TRUE;
 }
 
-IZ_BOOL CXFileParser::ParseFrameTransformMatrix(izanagi::math::SMatrix& mtx)
+IZ_BOOL CXFileParser::ParseFrameTransformMatrix(izanagi::math::SMatrix44& mtx)
 {
     std::string name = GetHeader();
     IZ_ASSERT(name == "{");

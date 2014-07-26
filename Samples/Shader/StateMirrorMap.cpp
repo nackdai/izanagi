@@ -21,8 +21,8 @@ CStateMirrorMap::~CStateMirrorMap()
 // 描画.
 IZ_BOOL CStateMirrorMap::Render(izanagi::graph::CGraphicsDevice* device)
 {
-    izanagi::math::SMatrix mtxL2W;
-    izanagi::math::SMatrix::SetUnit(mtxL2W);
+    izanagi::math::SMatrix44 mtxL2W;
+    izanagi::math::SMatrix44::SetUnit(mtxL2W);
 
     device->SetTexture(0, m_Img->GetTexture(0));
 

@@ -19,7 +19,7 @@ PhotoItemList::~PhotoItemList()
 void PhotoItemList::RenderWithTexture(
     izanagi::graph::CGraphicsDevice* device,
     const izanagi::CCamera& camera,
-    const izanagi::math::SMatrix& mtxRot,
+    const izanagi::math::SMatrix44& mtxRot,
     izanagi::shader::CShaderBasic* shader)
 {
     izanagi::CStdList<PhotoItem>::Item* item = this->GetTop();
@@ -30,10 +30,10 @@ void PhotoItemList::RenderWithTexture(
         if (photoItem->IsShown()
             && photoItem->HasTexture())
         {
-            izanagi::math::SMatrix mtx;
-            const izanagi::math::SMatrix& mtxL2W = photoItem->GetL2W();
+            izanagi::math::SMatrix44 mtx;
+            const izanagi::math::SMatrix44& mtxL2W = photoItem->GetL2W();
 
-            izanagi::math::SMatrix::Mul(mtx, mtxL2W, mtxRot);
+            izanagi::math::SMatrix44::Mul(mtx, mtxL2W, mtxRot);
 
             Utility::SetShaderParam(
                 shader,
@@ -61,7 +61,7 @@ void PhotoItemList::RenderWithTexture(
 void PhotoItemList::RenderWithoutTexture(
     izanagi::graph::CGraphicsDevice* device,
     const izanagi::CCamera& camera,
-    const izanagi::math::SMatrix& mtxRot,
+    const izanagi::math::SMatrix44& mtxRot,
     izanagi::shader::CShaderBasic* shader)
 {
     izanagi::CStdList<PhotoItem>::Item* item = this->GetTop();
@@ -70,10 +70,10 @@ void PhotoItemList::RenderWithoutTexture(
         PhotoItem* photoItem = item->GetData();
 
         if (photoItem->IsShown()) {
-            izanagi::math::SMatrix mtx;
-            const izanagi::math::SMatrix& mtxL2W = photoItem->GetL2W();
+            izanagi::math::SMatrix44 mtx;
+            const izanagi::math::SMatrix44& mtxL2W = photoItem->GetL2W();
 
-            izanagi::math::SMatrix::Mul(mtx, mtxL2W, mtxRot);
+            izanagi::math::SMatrix44::Mul(mtx, mtxL2W, mtxRot);
 
             Utility::SetShaderParam(
                 shader,
@@ -130,7 +130,7 @@ IZ_BOOL PhotoItemManager::Init(
     IZ_UINT itemNum)
 {
     // Init rotation matrix.
-    izanagi::math::SMatrix::SetUnit(m_mtxRot);
+    izanagi::math::SMatrix44::SetUnit(m_mtxRot);
 
     // Compute item count per list.
     IZ_UINT itemNumPerList = itemNum / COUNTOF(m_PhotoItemList);
@@ -257,14 +257,14 @@ void PhotoItemManager::Update(
 {
     // Update rotation of photo items.
     if (m_AngleImmediately != 0.0f) {
-        izanagi::math::SMatrix::RotByY(
+        izanagi::math::SMatrix44::RotByY(
             m_mtxRot,
             m_mtxRot,
             m_AngleImmediately);
         m_AngleImmediately = 0.0f;
     }
     else if (m_AngleRate != 0.0f) {
-        izanagi::math::SMatrix::RotByY(
+        izanagi::math::SMatrix44::RotByY(
             m_mtxRot,
             m_mtxRot,
             m_AngleRate);
@@ -400,7 +400,7 @@ PhotoItem* PhotoItemManager::HitTest(const izanagi::math::CRay& ray)
     return IZ_NULL;
 }
 
-const izanagi::math::SMatrix& PhotoItemManager::GetRotationMtx() const
+const izanagi::math::SMatrix44& PhotoItemManager::GetRotationMtx() const
 {
     return m_mtxRot;
 }

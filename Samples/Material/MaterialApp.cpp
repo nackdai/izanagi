@@ -195,7 +195,7 @@ IZ_BOOL CMaterialApp::InitInternal(
     camera.Update();
 
     // L2W
-    izanagi::math::SMatrix::SetUnit(m_L2W);
+    izanagi::math::SMatrix44::SetUnit(m_L2W);
 
 __EXIT__:
     if (!result) {
@@ -249,19 +249,19 @@ void CMaterialApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
     // シェーダパラメータセット
     {
-        const izanagi::math::SMatrix& mtxW2C = camera.GetParam().mtxW2C;
+        const izanagi::math::SMatrix44& mtxW2C = camera.GetParam().mtxW2C;
         _SetShaderParam(m_Shd, "g_mW2C", &mtxW2C, sizeof(mtxW2C));
 
         {
             // ライトの方向をローカル座標に変換する
 
             // ライトの方向はワールド座標なので World -> Localマトリクスを計算する
-            izanagi::math::SMatrix mtxW2L;
-            izanagi::math::SMatrix::Inverse(mtxW2L, m_L2W);
+            izanagi::math::SMatrix44 mtxW2L;
+            izanagi::math::SMatrix44::Inverse(mtxW2L, m_L2W);
 
             // World -> Local
             izanagi::math::SVector4 parallelLightLocalDir;
-            izanagi::math::SMatrix::ApplyXYZ(
+            izanagi::math::SMatrix44::ApplyXYZ(
                 parallelLightLocalDir,
                 m_ParallelLight.vDir,
                 m_L2W);
@@ -273,15 +273,15 @@ void CMaterialApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
                 sizeof(parallelLightLocalDir));
 
             // L2V = L2W * W2V の逆行列を計算する
-            izanagi::math::SMatrix mtxV2L;
-            izanagi::math::SMatrix::Mul(mtxV2L, m_L2W, camera.GetParam().mtxW2V);
-            izanagi::math::SMatrix::Inverse(mtxV2L, mtxV2L);
+            izanagi::math::SMatrix44 mtxV2L;
+            izanagi::math::SMatrix44::Mul(mtxV2L, m_L2W, camera.GetParam().mtxW2V);
+            izanagi::math::SMatrix44::Inverse(mtxV2L, mtxV2L);
 
             // ビュー座標系における視点は常に原点
             izanagi::math::CVector4 eyePos(0.0f, 0.0f, 0.0f, 1.0f);
 
             // 視点のローカル座標を計算する
-            izanagi::math::SMatrix::Apply(eyePos, eyePos, mtxV2L);
+            izanagi::math::SMatrix44::Apply(eyePos, eyePos, mtxV2L);
 
             _SetShaderParam(
                 m_Shd,

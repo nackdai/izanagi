@@ -85,14 +85,14 @@ void CShadow::EndShadowRender(izanagi::graph::CGraphicsDevice* device)
     device->EndScene(izanagi::graph::E_GRAPH_END_SCENE_FLAG_RT_0 | izanagi::graph::E_GRAPH_END_SCENE_FLAG_DEPTH_STENCIL);
 }
 
-const izanagi::math::SMatrix& CShadow::GetLightViewProjMtx() const
+const izanagi::math::SMatrix44& CShadow::GetLightViewProjMtx() const
 {
     return m_Light.GetParam().mtxW2C;
 }
 
-const izanagi::math::SMatrix& CShadow::GetShadowTexMtx() const
+const izanagi::math::SMatrix44& CShadow::GetShadowTexMtx() const
 {
-    static izanagi::math::SMatrix mtx = {
+    static izanagi::math::SMatrix44 mtx = {
         0.5f,  0.0f, 0.0f, 0.0f,
         0.0f, -0.5f, 0.0f, 0.0f,
         0.0f,  0.0f, 1.0f, 0.0f,

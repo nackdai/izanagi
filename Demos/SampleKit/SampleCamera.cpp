@@ -113,7 +113,7 @@ void CSampleCamera::Rotate(
     izanagi::math::SVector4::Normalize(axis, axis);
 
     // カメラの回転状態に合わせて軸も回転
-    izanagi::math::SMatrix::Apply(axis, axis, GetTransform());
+    izanagi::math::SMatrix44::Apply(axis, axis, GetTransform());
 
     // 回転の角度
     // NOTE
@@ -140,11 +140,11 @@ void CSampleCamera::Move(float fOffsetX, float fOffsetY)
     izanagi::math::SVector4::Normalize(vDir, vDir);
     vDir.y = 0.0f;
 
-    izanagi::math::SMatrix mRot;
-    izanagi::math::SMatrix::SetUnit(mRot);
-    izanagi::math::SMatrix::GetRotMatrixFromVector(mRot, vDir);
+    izanagi::math::SMatrix44 mRot;
+    izanagi::math::SMatrix44::SetUnit(mRot);
+    izanagi::math::SMatrix44::GetRotMatrixFromVector(mRot, vDir);
 
-    izanagi::math::SMatrix::Apply(vOffset, vOffset, mRot);
+    izanagi::math::SMatrix44::Apply(vOffset, vOffset, mRot);
 
     izanagi::math::SVector4 pos = param.pos;
     izanagi::math::SVector4::Add(pos, param.pos, vOffset);

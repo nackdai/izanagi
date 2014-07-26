@@ -113,8 +113,8 @@ void CPmdLoader::ComputeJointPose()
         m_PoseList.push_back(pose);
 
         // 行列
-        izanagi::math::SMatrix mtx;
-        izanagi::math::SMatrix::GetTrans(
+        izanagi::math::SMatrix44 mtx;
+        izanagi::math::SMatrix44::GetTrans(
             mtx,
             izanagi::math::CVector4(pose.trans[0], pose.trans[1], pose.trans[2]));
 
@@ -128,10 +128,10 @@ void CPmdLoader::ComputeJointPose()
 
         if (bone.parentIdx != 0xffff)
         {
-            const izanagi::math::SMatrix& mtxParent = m_MtxList[bone.parentIdx];
-            izanagi::math::SMatrix& mtx = m_MtxList[i];
+            const izanagi::math::SMatrix44& mtxParent = m_MtxList[bone.parentIdx];
+            izanagi::math::SMatrix44& mtx = m_MtxList[i];
 
-            izanagi::math::SMatrix::Mul(mtx, mtx, mtxParent);
+            izanagi::math::SMatrix44::Mul(mtx, mtx, mtxParent);
         }
     }
 }
@@ -144,7 +144,7 @@ const izanagi::S_SKL_JOINT_POSE& CPmdLoader::GetPose(IZ_UINT idx)
 }
 
 // 関節のマトリクスを取得.
-const izanagi::math::SMatrix& CPmdLoader::GetMatrix(IZ_UINT idx)
+const izanagi::math::SMatrix44& CPmdLoader::GetMatrix(IZ_UINT idx)
 {
     IZ_ASSERT(idx < m_MtxList.size());
     return m_MtxList[idx];

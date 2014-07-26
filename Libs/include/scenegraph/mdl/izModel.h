@@ -72,7 +72,7 @@ namespace izanagi {
 
         /** 適用されたモーションに基づき更新.
          */
-        void Update(const math::SMatrix* mtxL2W = IZ_NULL);
+        void Update(const math::SMatrix44* mtxL2W = IZ_NULL);
 
         /** スケルトン全体にモーション適用.
          */

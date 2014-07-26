@@ -67,13 +67,13 @@ namespace math
     }
 
     // 4x4çsóÒÇ…ÇÊÇÈïœä∑.
-    void CTriangle::Transform(const SMatrix& mtx)
+    void CTriangle::Transform(const SMatrix44& mtx)
     {
         SVector4 tmp[COUNTOF(pt)];
 
         for (IZ_UINT i = 0; i < COUNTOF(pt); i++)
         {
-            SMatrix::Apply(tmp[i], pt[i], mtx);
+            SMatrix44::Apply(tmp[i], pt[i], mtx);
         }
 
         Set(tmp);

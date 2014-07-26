@@ -157,7 +157,7 @@ IZ_INT CXFileImporter::GetJointParent(
 
 void CXFileImporter::GetJointInvMtx(
     IZ_UINT nIdx,
-    izanagi::math::SMatrix& mtx)
+    izanagi::math::SMatrix44& mtx)
 {
     CXFileJoint::GetInstance().GetJointInvMtx(nIdx, mtx);
 }

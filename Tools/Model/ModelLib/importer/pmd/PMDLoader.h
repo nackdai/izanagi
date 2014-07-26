@@ -46,7 +46,7 @@ public:
     const izanagi::S_SKL_JOINT_POSE& GetPose(IZ_UINT idx);
 
     // 関節のマトリクスを取得.
-    const izanagi::math::SMatrix& GetMatrix(IZ_UINT idx);
+    const izanagi::math::SMatrix44& GetMatrix(IZ_UINT idx);
 
     // ボーン名からインデックスを取得.
     IZ_INT GetIdxFromBoneName(const char* name) const;
@@ -115,7 +115,7 @@ private:
 
     // 関節の姿勢
     std::vector<izanagi::S_SKL_JOINT_POSE> m_PoseList;
-    std::vector<izanagi::math::SMatrix> m_MtxList;
+    std::vector<izanagi::math::SMatrix44> m_MtxList;
 
     // IK
     SPmdIkChunkHeader m_IkChunkHeader;

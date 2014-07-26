@@ -264,10 +264,10 @@ IZ_INT CPmdImporter::GetJointParent(
 
 void CPmdImporter::GetJointInvMtx(
     IZ_UINT nIdx,
-    izanagi::math::SMatrix& mtx)
+    izanagi::math::SMatrix44& mtx)
 {
-    const izanagi::math::SMatrix& mtxJoint = m_PmdLoader.GetMatrix(nIdx);
-    izanagi::math::SMatrix::Inverse(mtx, mtxJoint);
+    const izanagi::math::SMatrix44& mtxJoint = m_PmdLoader.GetMatrix(nIdx);
+    izanagi::math::SMatrix44::Inverse(mtx, mtxJoint);
 }
 
 void CPmdImporter::GetJointTransform(

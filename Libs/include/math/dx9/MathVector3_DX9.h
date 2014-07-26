@@ -62,7 +62,7 @@ namespace math
 
     // ベクトルのＸＹ成分のみをスケーリングする
     // Z成分はそのまま
-    void SVector3::ScaleXYZ(SVector3& dst, const SVector3& src, IZ_FLOAT fQ)
+    void SVector3::ScaleXY(SVector3& dst, const SVector3& src, IZ_FLOAT fQ)
     {
         D3DXVec2Scale(
             reinterpret_cast<D3DXVECTOR2*>(&dst),
@@ -103,10 +103,10 @@ namespace math
     // ベクトルの外積を計算する
     void SVector3::Cross(SVector3& dst, const SVector3& src1, const SVector3& src2)
     {
-        D3DXVec2Cross(
-            reinterpret_cast<D3DXVECTOR2*>(&dst),
-            reinterpret_cast<const D3DXVECTOR2*>(&src1),
-            reinterpret_cast<const D3DXVECTOR2*>(&src2));
+        D3DXVec3Cross(
+            reinterpret_cast<D3DXVECTOR3*>(&dst),
+            reinterpret_cast<const D3DXVECTOR3*>(&src1),
+            reinterpret_cast<const D3DXVECTOR3*>(&src2));
     }
 
     // ベクトルの大きさ(絶対値)を計算する

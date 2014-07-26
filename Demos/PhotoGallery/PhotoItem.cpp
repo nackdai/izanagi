@@ -48,7 +48,7 @@ PhotoItem::PhotoItem()
 
     m_Mesh = IZ_NULL;
 
-    izanagi::math::SMatrix::SetUnit(m_L2W);
+    izanagi::math::SMatrix44::SetUnit(m_L2W);
 
     m_ListItem.Init(this);
 
@@ -120,7 +120,7 @@ void PhotoItem::RenderTopAndSide(izanagi::graph::CGraphicsDevice* device)
 void PhotoItem::Update(
     IZ_FLOAT time,
     izanagi::graph::CGraphicsDevice* device,
-    const izanagi::math::SMatrix& mtxRot,
+    const izanagi::math::SMatrix44& mtxRot,
     const izanagi::CCamera& camera)
 {
     // NOTE
@@ -129,7 +129,7 @@ void PhotoItem::Update(
 
     izanagi::math::SVector4 pos;
     GetCenterPosition(pos);
-    izanagi::math::SMatrix::ApplyXYZ(pos, pos, mtxRot);
+    izanagi::math::SMatrix44::ApplyXYZ(pos, pos, mtxRot);
 
     IZ_BOOL isShown = m_IsShown;
 #if 0
@@ -207,15 +207,15 @@ void PhotoItem::SetPositionAndRotation(
     const izanagi::math::CVector4& pos,
     IZ_FLOAT rot)
 {
-    izanagi::math::SMatrix::GetRotByY(m_L2W, rot);
+    izanagi::math::SMatrix44::GetRotByY(m_L2W, rot);
 
-    izanagi::math::SMatrix::Trans(
+    izanagi::math::SMatrix44::Trans(
         m_L2W,
         m_L2W,
         pos);
 }
 
-const izanagi::math::SMatrix& PhotoItem::GetL2W() const
+const izanagi::math::SMatrix44& PhotoItem::GetL2W() const
 {
     return m_L2W;
 }
@@ -239,14 +239,14 @@ inline void _ComputeScale(
 
 IZ_BOOL PhotoItem::HitTest(
     const izanagi::math::CRay& ray,
-    const izanagi::math::SMatrix& mtxRot)
+    const izanagi::math::SMatrix44& mtxRot)
 {
     if (!HasTexture() || m_IsFading) {
         return IZ_FALSE;
     }
 
-    izanagi::math::SMatrix mtx;
-    izanagi::math::SMatrix::Mul(mtx, m_L2W, mtxRot);
+    izanagi::math::SMatrix44 mtx;
+    izanagi::math::SMatrix44::Mul(mtx, m_L2W, mtxRot);
 
     izanagi::math::CRectangle rc;
 
@@ -294,7 +294,7 @@ IZ_BOOL PhotoItem::IsRequestedLoadTexture() const
 
 void PhotoItem::GetNormal(izanagi::math::SVector4& nml)
 {
-    izanagi::math::SMatrix::ApplyXYZ(nml, m_Rectangle.nml, m_L2W);
+    izanagi::math::SMatrix44::ApplyXYZ(nml, m_Rectangle.nml, m_L2W);
     nml.w = 0.0f;
 
     izanagi::math::SVector4::Normalize(nml, nml);
@@ -321,7 +321,7 @@ void PhotoItem::GetCenterPosition(izanagi::math::SVector4& pos)
         0.0f,
         1.0f);
 
-    izanagi::math::SMatrix::Apply(pos, pos, m_L2W);
+    izanagi::math::SMatrix44::Apply(pos, pos, m_L2W);
 }
 
 void PhotoItem::SetShaderParam(izanagi::shader::CShaderBasic* shader)

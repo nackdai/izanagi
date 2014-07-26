@@ -25,34 +25,34 @@ IZ_BOOL CMouseHit::InitInternal(
 {
     IZ_BOOL result = IZ_TRUE;
 
-    izanagi::math::SMatrix::GetRotByX(
+    izanagi::math::SMatrix44::GetRotByX(
         m_Rectangles[0].mtx,
         IZ_MATH_PI1_2);
-    izanagi::math::SMatrix::Trans(
+    izanagi::math::SMatrix44::Trans(
         m_Rectangles[0].mtx,
         m_Rectangles[0].mtx,
         -10.0f, 0.0f, -10.0f);
 
-    izanagi::math::SMatrix::GetRotByX(
+    izanagi::math::SMatrix44::GetRotByX(
         m_Rectangles[1].mtx,
         IZ_MATH_PI1_2);
-    izanagi::math::SMatrix::Trans(
+    izanagi::math::SMatrix44::Trans(
         m_Rectangles[1].mtx,
         m_Rectangles[1].mtx,
         -10.0f, 0.0f, 10.0f);
 
-    izanagi::math::SMatrix::GetRotByX(
+    izanagi::math::SMatrix44::GetRotByX(
         m_Rectangles[2].mtx,
         IZ_MATH_PI1_2);
-    izanagi::math::SMatrix::Trans(
+    izanagi::math::SMatrix44::Trans(
         m_Rectangles[2].mtx,
         m_Rectangles[2].mtx,
         10.0f, 0.0f, -10.0f);
 
-    izanagi::math::SMatrix::GetRotByX(
+    izanagi::math::SMatrix44::GetRotByX(
         m_Rectangles[3].mtx,
         IZ_MATH_PI1_2);
-    izanagi::math::SMatrix::Trans(
+    izanagi::math::SMatrix44::Trans(
         m_Rectangles[3].mtx,
         m_Rectangles[3].mtx,
         10.0f, 0.0f, 10.0f);

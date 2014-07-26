@@ -43,7 +43,7 @@ namespace scenegraph {
             normal);
 
         // 矩形の法線が指定された法線に一致するように回転
-        izanagi::math::SMatrix rotMtx;
+        izanagi::math::SMatrix44 rotMtx;
         izanagi::math::SQuat::MatrixFromQuat(rotMtx, rotQuat);
         m_Rectangle.Transform(rotMtx);
 

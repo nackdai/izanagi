@@ -151,7 +151,7 @@ namespace graph
         _EXEC_ARRAY_FUNC(SetIntArray, device, n, num);
     }
     
-    IZ_BOOL CShaderProgramDX9::SetMatrix(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const math::SMatrix& m)
+    IZ_BOOL CShaderProgramDX9::SetMatrix(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const math::SMatrix44& m)
     {
         IZ_ASSERT(IsValid());
         IZ_ASSERT(device->GetShaderProgram() == this);
@@ -159,7 +159,7 @@ namespace graph
         _EXEC_FUNC(SetMatrix, device, m);
     }
 
-    IZ_BOOL CShaderProgramDX9::SetMatrixArray(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const math::SMatrix* m, IZ_UINT num)
+    IZ_BOOL CShaderProgramDX9::SetMatrixArray(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const math::SMatrix44* m, IZ_UINT num)
     {
         IZ_ASSERT(IsValid());
         IZ_ASSERT(device->GetShaderProgram() == this);
@@ -191,7 +191,7 @@ namespace graph
         _EXEC_ARRAY_FUNC(SetValue, device, p, size);
     }
 
-    IZ_BOOL CShaderProgramDX9::SetMatrixArrayAsVectorArray(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const math::SMatrix* m, IZ_UINT num)
+    IZ_BOOL CShaderProgramDX9::SetMatrixArrayAsVectorArray(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const math::SMatrix44* m, IZ_UINT num)
     {
         // TODO
         IZ_ASSERT(IZ_FALSE);

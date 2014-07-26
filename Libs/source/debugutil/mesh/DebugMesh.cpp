@@ -495,13 +495,13 @@ void CDebugMesh::ComputeTangent(
 #endif
     }
 
-    math::SMatrix mtx;
+    math::SMatrix44 mtx;
     mtx.v[0].Set(vT.x, vB.x, vtx0->nml.x, 0.0f);
     mtx.v[1].Set(vT.y, vB.y, vtx0->nml.y, 0.0f);
     mtx.v[2].Set(vT.z, vB.z, vtx0->nml.z, 0.0f);
     mtx.v[3].Set(0.0f, 0.0f,        0.0f, 1.0f);
 
-    IZ_FLOAT determinant = math::SMatrix::Determinant(mtx);
+    IZ_FLOAT determinant = math::SMatrix44::Determinant(mtx);
 
     vT.w = determinant;
 

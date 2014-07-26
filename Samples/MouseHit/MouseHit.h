@@ -35,7 +35,7 @@ private:
     struct {
         izanagi::math::CRectangle rc;
         izanagi::CDebugMeshRectangle* mesh;
-        izanagi::math::SMatrix mtx;
+        izanagi::math::SMatrix44 mtx;
     } m_Rectangles[4];
 
     izanagi::shader::CShaderBasic* m_Shader;

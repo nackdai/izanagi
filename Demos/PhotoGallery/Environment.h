@@ -25,7 +25,7 @@ public:
      */
     void SetParallelLightParam(
         const izanagi::CCamera& camera,
-        const izanagi::math::SMatrix& mtxL2W,
+        const izanagi::math::SMatrix44& mtxL2W,
         izanagi::shader::CShaderBasic* shader);
 
     /** Set ambient light parameter to shader.

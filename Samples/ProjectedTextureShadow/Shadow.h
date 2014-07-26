@@ -28,8 +28,8 @@ public:
     izanagi::graph::CRenderTarget* GetRT() { return m_RT; }
     izanagi::graph::CRenderTarget* GetDepthRT() { return m_DepthRT; }
 
-    const izanagi::math::SMatrix& GetLightViewProjMtx() const;
-    const izanagi::math::SMatrix& GetShadowTexMtx() const;
+    const izanagi::math::SMatrix44& GetLightViewProjMtx() const;
+    const izanagi::math::SMatrix44& GetShadowTexMtx() const;
 
 private:
     izanagi::IMemoryAllocator* m_Allocator;

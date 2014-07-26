@@ -90,13 +90,13 @@ namespace math
     }
 
     // 4x4行列による変換.
-    void CPlane::Transform(const SMatrix& mtx)
+    void CPlane::Transform(const SMatrix44& mtx)
     {
         // TODO
         // Matrixにスケールが含まれていた場合
         // 一度Normalizeする？
 
-        SMatrix::ApplyXYZ(nml, nml, mtx);
+        SMatrix44::ApplyXYZ(nml, nml, mtx);
     }
 
     // 平面をあらわすベクトルを取得

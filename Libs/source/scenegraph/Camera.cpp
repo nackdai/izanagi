@@ -53,7 +53,7 @@ void CCamera::Update()
     }
 
     if (m_IsDirtyW2V || m_IsDirtyV2C) {
-        math::SMatrix::Mul(m_Param.mtxW2C, m_Param.mtxW2V, m_Param.mtxV2C);
+        math::SMatrix44::Mul(m_Param.mtxW2C, m_Param.mtxW2V, m_Param.mtxV2C);
 
         m_IsDirtyW2V = IZ_FALSE;
         m_IsDirtyV2C = IZ_FALSE;
@@ -62,7 +62,7 @@ void CCamera::Update()
 
 // カメラ座標系でのオフセットを考慮にいれたV2Cマトリクスを取得.
 void CCamera::GetOffsetV2C(
-    math::SMatrix& mtxV2C,
+    math::SMatrix44& mtxV2C,
     const math::SVector4& pos,
     IZ_FLOAT delta)
 {
@@ -71,7 +71,7 @@ void CCamera::GetOffsetV2C(
 
     // カメラ座標系の位置を計算
     math::SVector4 viewPos;
-    math::SMatrix::Apply(
+    math::SMatrix44::Apply(
         viewPos,
         pos,
         m_Param.mtxW2V);
@@ -83,7 +83,7 @@ void CCamera::GetOffsetV2C(
 }
 
 void CCamera::GetOffsetV2C(
-    math::SMatrix& mtxV2C,
+    math::SMatrix44& mtxV2C,
     IZ_FLOAT viewZ,
     IZ_FLOAT delta)
 {
@@ -96,7 +96,7 @@ void CCamera::GetOffsetV2C(
     IZ_FLOAT epsilon = -2.0f * f * n * delta;
     epsilon /= ((f + n) * viewZ * (viewZ + delta));
 
-    math::SMatrix::Copy(mtxV2C, m_Param.mtxV2C);
+    math::SMatrix44::Copy(mtxV2C, m_Param.mtxV2C);
 
     mtxV2C.m[2][2] *= (1.0f + epsilon);
 }
@@ -111,7 +111,7 @@ math::SVector4 CCamera::GetDir()
 // World - View
 void CCamera::ComputeW2V()
 {
-    math::SMatrix::SetUnit(m_Param.mtxW2V);
+    math::SMatrix44::SetUnit(m_Param.mtxW2V);
 
     math::SVector4 vecX;
     math::SVector4 vecY;
@@ -147,7 +147,7 @@ void CCamera::ComputeW2V()
     math::SVector4::Copy(m_Param.mtxW2V.v[1], vecY);
     math::SVector4::Copy(m_Param.mtxW2V.v[2], vecZ);
 
-    math::SMatrix::Transpose(m_Param.mtxW2V, m_Param.mtxW2V);
+    math::SMatrix44::Transpose(m_Param.mtxW2V, m_Param.mtxW2V);
 
     m_Param.mtxW2V.m[3][0] = -1.0f * math::SVector4::Dot(vecX, m_Param.pos);
     m_Param.mtxW2V.m[3][1] = -1.0f * math::SVector4::Dot(vecY, m_Param.pos);
@@ -158,7 +158,7 @@ void CCamera::ComputeW2V()
 // View - Clip
 void CCamera::ComputeV2C()
 {
-    math::SMatrix::SetUnit(m_Param.mtxV2C);
+    math::SMatrix44::SetUnit(m_Param.mtxV2C);
 
     // Use Vertical FOV
     const IZ_FLOAT fH = 1 / tanf(m_Param.fov * 0.5f);

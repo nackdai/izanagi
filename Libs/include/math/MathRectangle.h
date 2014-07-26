@@ -2,7 +2,7 @@
 #define __IZANAGI_MATH_RECTANGLE_H__
 
 #include "MathVector4.h"
-#include "MathMatrix.h"
+#include "MathMatrix44.h"
 
 namespace izanagi
 {
@@ -63,11 +63,11 @@ namespace math
 
         /** 4x4s—ñ‚É‚æ‚é•ÏŠ·.
          */
-        void Transform(const SMatrix& mtx);
+        void Transform(const SMatrix44& mtx);
 
         void Transform(
             CRectangle& dst,
-            const SMatrix& mtx);
+            const SMatrix44& mtx);
 
         /** ƒŒƒC‚ÆŒğ·‚·‚é“_‚ğæ“¾.
          */

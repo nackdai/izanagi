@@ -156,15 +156,15 @@ void CDecalApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
         izanagi::graph::E_GRAPH_RS_CULLMODE,
         izanagi::graph::E_GRAPH_CULL_NONE);
 
-    izanagi::math::SMatrix mtx;
-    izanagi::math::SMatrix::SetUnit(mtx);
+    izanagi::math::SMatrix44 mtx;
+    izanagi::math::SMatrix44::SetUnit(mtx);
 
-    izanagi::math::SMatrix mtxDecalW2C;
+    izanagi::math::SMatrix44 mtxDecalW2C;
     camera.GetOffsetV2C(
         mtxDecalW2C,
         m_Decal->GetCenter(),
         1e-3f);
-    izanagi::math::SMatrix::Mul(
+    izanagi::math::SMatrix44::Mul(
         mtxDecalW2C,
         camera.GetParam().mtxW2V,
         mtxDecalW2C);

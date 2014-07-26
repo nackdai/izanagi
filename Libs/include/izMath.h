@@ -3,12 +3,14 @@
 
 // basic
 #include "math/MathDefs.h"
+#include "math/MathVector3.h"
 #include "math/MathVector4.h"
-#include "math/MathMatrix.h"
+#include "math/MathMatrix44.h"
 #include "math/MathQuaternion.h"
 
+#include "math/MathCVector3.h"
 #include "math/MathCVector4.h"
-#include "math/MathCMatrix.h"
+#include "math/MathCMatrix44.h"
 #include "math/MathCQuaternion.h"
 
 #include "math/MathRand.h"

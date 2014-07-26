@@ -78,7 +78,7 @@ namespace math
     }
 
     // クオータニオンから行列を計算する
-    void SQuat::MatrixFromQuat(SMatrix& mtx, const SQuat& quat)
+    void SQuat::MatrixFromQuat(SMatrix44& mtx, const SQuat& quat)
     {
         D3DXMatrixRotationQuaternion(
             reinterpret_cast<D3DXMATRIX*>(&mtx),
@@ -86,7 +86,7 @@ namespace math
     }
 
     // 行列からクオータニオンを計算する
-    void SQuat::QuatFromMatrix(SQuat& quat, const SMatrix& mtx)
+    void SQuat::QuatFromMatrix(SQuat& quat, const SMatrix44& mtx)
     {
         D3DXQuaternionRotationMatrix(
             reinterpret_cast<D3DXQUATERNION*>(&quat),

@@ -33,7 +33,7 @@ protected:
 
     izanagi::CImage* m_Image;
 
-    izanagi::math::SMatrix m_L2W;
+    izanagi::math::SMatrix44 m_L2W;
 
     izanagi::SParallelLightParam m_ParallelLight;
     izanagi::SAmbientLightParam m_Ambient;

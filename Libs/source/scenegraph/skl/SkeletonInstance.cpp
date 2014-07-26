@@ -46,7 +46,7 @@ IZ_UINT CSkeletonInstance::ComputeBufferSize(const CSkeleton* pSkl)
         IZ_UINT jointNum = pSkl->GetJointNum();
 
         size += sizeof(S_SKL_JOINT_POSE) * jointNum;
-        size += sizeof(math::SMatrix) * jointNum;
+        size += sizeof(math::SMatrix44) * jointNum;
         size += sizeof(IZ_UINT8) * jointNum;
     }
 
@@ -72,7 +72,7 @@ CSkeletonInstance::~CSkeletonInstance()
     SAFE_RELEASE(m_pBody);
 }
 
-void CSkeletonInstance::BuildMatrix(const math::SMatrix* mtxL2W)
+void CSkeletonInstance::BuildMatrix(const math::SMatrix44* mtxL2W)
 {
     for (IZ_UINT i = 0; i < m_nJointNum; ++i) {
         BuildLocalMatrix(i);
@@ -88,9 +88,9 @@ void CSkeletonInstance::BuildMatrix(const math::SMatrix* mtxL2W)
         }
         else if (mtxL2W != IZ_NULL) {
             // ルートに対しては、L2Wマトリクスを計算する
-            math::SMatrix& mtxJoint = m_pGlobalPose[0];
+            math::SMatrix44& mtxJoint = m_pGlobalPose[0];
 
-            math::SMatrix::Mul(
+            math::SMatrix44::Mul(
                 mtxJoint,
                 mtxJoint,
                 *mtxL2W);
@@ -102,7 +102,7 @@ void CSkeletonInstance::BuildMatrix(const math::SMatrix* mtxL2W)
     }
 }
 
-const math::SMatrix* CSkeletonInstance::GetJointMtx(IZ_INT idx) const
+const math::SMatrix44* CSkeletonInstance::GetJointMtx(IZ_INT idx) const
 {
     if (idx < 0) {
         return IZ_NULL;
@@ -118,8 +118,8 @@ IZ_UINT8* CSkeletonInstance::SetJointData(IZ_UINT8* pBuf)
     pBuf += sizeof(S_SKL_JOINT_POSE) * m_nJointNum;
 
     // 最終的な行列
-    m_pGlobalPose = reinterpret_cast<math::SMatrix*>(pBuf);
-    pBuf += sizeof(math::SMatrix) * m_nJointNum;
+    m_pGlobalPose = reinterpret_cast<math::SMatrix44*>(pBuf);
+    pBuf += sizeof(math::SMatrix44) * m_nJointNum;
 
     // アニメーションパラメータの中で更新が必要なパラメータフラグ
     m_ValidAnmParam = reinterpret_cast<IZ_UINT8*>(pBuf);
@@ -145,31 +145,31 @@ IZ_UINT8* CSkeletonInstance::SetJointData(IZ_UINT8* pBuf)
 namespace {
 #if 0
     void _RotateAxis(
-        math::SMatrix& dst,
-        const math::SMatrix& src,
+        math::SMatrix44& dst,
+        const math::SMatrix44& src,
         IZ_FLOAT x, IZ_FLOAT y, IZ_FLOAT z, IZ_FLOAT angle)
     {
         math::SQuat quat;
         SetQuatFromRadAxis(quat, angle, x, y, z);
 
-        math::SMatrix mtx;
+        math::SMatrix44 mtx;
         MatrixFromQuat(mtx, quat);
 
-        math::SMatrix::Mul(dst, src, mtx);
+        math::SMatrix44::Mul(dst, src, mtx);
     }
 #else
     void _RotateAxis(
-        math::SMatrix& dst,
-        const math::SMatrix& src,
+        math::SMatrix44& dst,
+        const math::SMatrix44& src,
         IZ_FLOAT x, IZ_FLOAT y, IZ_FLOAT z, IZ_FLOAT w)
     {
         math::SQuat quat;
         math::SQuat::Set(quat, x, y, z, w);
 
-        math::SMatrix mtx;
+        math::SMatrix44 mtx;
         math::SQuat::MatrixFromQuat(mtx, quat);
 
-        math::SMatrix::Mul(dst, src, mtx);
+        math::SMatrix44::Mul(dst, src, mtx);
     }
 #endif
 }   // namespace
@@ -191,12 +191,12 @@ void CSkeletonInstance::BuildLocalMatrix(IZ_UINT nIdx)
     m_ValidAnmParam[nIdx] = 0;
 
     const S_SKL_JOINT_POSE& pose = m_pJointPose[nIdx];
-    math::SMatrix& mtxJoint = m_pGlobalPose[nIdx];
+    math::SMatrix44& mtxJoint = m_pGlobalPose[nIdx];
 
-    math::SMatrix::SetUnit(mtxJoint);
+    math::SMatrix44::SetUnit(mtxJoint);
 
     if (flag.IsOn(E_SKL_JOINT_PARAM_SCALE)) {
-        math::SMatrix::Scale(
+        math::SMatrix44::Scale(
             mtxJoint,
             mtxJoint, 
             pose.scale[0],
@@ -215,7 +215,7 @@ void CSkeletonInstance::BuildLocalMatrix(IZ_UINT nIdx)
     }
 
     if (flag.IsOn(E_SKL_JOINT_PARAM_TRANSLATE)) {
-        math::SMatrix::Trans(
+        math::SMatrix44::Trans(
             mtxJoint,
             mtxJoint, 
             pose.trans[0],
@@ -224,7 +224,7 @@ void CSkeletonInstance::BuildLocalMatrix(IZ_UINT nIdx)
     }
 
     //IZ_PRINTF("[%d]-----\n", nIdx);
-    //math::SMatrix::Dump(mtxJoint);
+    //math::SMatrix44::Dump(mtxJoint);
 }
 
 void CSkeletonInstance::ApplyInvBindMatrix(IZ_UINT nIdx)
@@ -232,9 +232,9 @@ void CSkeletonInstance::ApplyInvBindMatrix(IZ_UINT nIdx)
     IZ_ASSERT(m_pBody != IZ_NULL);
     const S_SKL_JOINT* pJoint = m_pBody->GetJoint(nIdx);
 
-    math::SMatrix& mtxJoint = m_pGlobalPose[nIdx];
+    math::SMatrix44& mtxJoint = m_pGlobalPose[nIdx];
 
-    math::SMatrix::Mul(
+    math::SMatrix44::Mul(
         mtxJoint,
         pJoint->mtxInvBind,
         mtxJoint);
@@ -244,10 +244,10 @@ void CSkeletonInstance::ApplyParentMatrix(
     IZ_UINT nIdx,
     IZ_UINT nParentIdx)
 {
-    math::SMatrix& mtxJoint = m_pGlobalPose[nIdx];
-    const math::SMatrix& mtxParent = m_pGlobalPose[nParentIdx];
+    math::SMatrix44& mtxJoint = m_pGlobalPose[nIdx];
+    const math::SMatrix44& mtxParent = m_pGlobalPose[nParentIdx];
 
-    math::SMatrix::Mul(
+    math::SMatrix44::Mul(
         mtxJoint,
         mtxJoint,
         mtxParent);

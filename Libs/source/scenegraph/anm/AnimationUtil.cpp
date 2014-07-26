@@ -213,7 +213,7 @@ IZ_FLOAT CAnimationUtil::ComputeHermite(
     // b : Bezier matrix
     // P = S * b * c
 
-    static const math::SMatrix mtxBezier = {
+    static const math::SMatrix44 mtxBezier = {
          2.0f, -2.0f,  1.0f,  1.0f,
         -3.0f,  3.0f, -2.0f, -1.0f,
          0.0f,  0.0f,  1.0f,  0.0f,
@@ -252,7 +252,7 @@ IZ_FLOAT CAnimationUtil::ComputeHermite(
             pKeys[nNext]->params[KEY_PARAM_IN_TANGENT],
         };
 
-        math::SMatrix::Apply(vecS, vecS, mtxBezier);
+        math::SMatrix44::Apply(vecS, vecS, mtxBezier);
         ret = math::SVector4::Dot(vecS, vecC);
     }
 

@@ -43,7 +43,7 @@ namespace shader
 			pShader->SetMatrixArray(
                 device,
 				handle,
-				(const math::SMatrix*)pValue,
+				(const math::SMatrix44*)pValue,
 				nElements);
 		}
 		else if (CShaderParamUtil::IsFloatType(type)) {
@@ -62,7 +62,7 @@ namespace shader
                         pShader->SetMatrixArrayAsVectorArray(
                             device,
                             handle, 
-                            (const math::SMatrix*)pValue,
+                            (const math::SMatrix44*)pValue,
                             nElements);
                     }
                     else {

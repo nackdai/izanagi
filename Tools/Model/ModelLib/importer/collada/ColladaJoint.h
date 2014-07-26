@@ -47,7 +47,7 @@ public:
 
     void GetJointInvMtx(
         IZ_UINT nIdx,
-        izanagi::math::SMatrix& mtx);
+        izanagi::math::SMatrix44& mtx);
 
 #if 0
     IZ_UINT GetJointTransformNum(IZ_PCSTR pszNmae);

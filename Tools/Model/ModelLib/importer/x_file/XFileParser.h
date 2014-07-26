@@ -32,7 +32,7 @@ private:
     IZ_BOOL ParseTemplate();
 
     IZ_BOOL ParseFrame(SXFileNode* pParent);
-    IZ_BOOL ParseFrameTransformMatrix(izanagi::math::SMatrix& mtx);
+    IZ_BOOL ParseFrameTransformMatrix(izanagi::math::SMatrix44& mtx);
 
     IZ_BOOL ParseMesh(SXFileMesh* pMesh);
     IZ_BOOL ParseMeshNormal(SXFileMesh* pMesh);
