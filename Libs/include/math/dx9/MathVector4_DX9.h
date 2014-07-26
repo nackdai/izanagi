@@ -1,5 +1,5 @@
-#if !defined(__IZANAGI__MATH_VECTOR_DX9_H__)
-#define __IZANAGI__MATH_VECTOR_DX9_H__
+#if !defined(__IZANAGI__MATH_VECTOR4_DX9_H__)
+#define __IZANAGI__MATH_VECTOR4_DX9_H__
 
 #include <math.h>
 #include <memory.h>
@@ -141,4 +141,4 @@ namespace math
 }   // namespace math
 }   // namespace izanagi
 
-#endif  // #if !defined(__IZANAGI__MATH_VECTOR_DX9_H__)
+#endif  // #if !defined(__IZANAGI__MATH_VECTOR4_DX9_H__)

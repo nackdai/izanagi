@@ -182,6 +182,18 @@
     <ClInclude Include="..\..\include\math\dx9\MathVector4_DX9.h">
       <Filter>include\basic\dx9</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\math\MathVector3.h">
+      <Filter>include\basic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\dx9\MathVector3_DX9.h">
+      <Filter>include\basic\dx9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\noplatform\MathVector3_NoPlatform.h">
+      <Filter>include\basic\noplatform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\MathCVector3.h">
+      <Filter>include\basic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\include\math\SFMT\LICENSE.txt" />
