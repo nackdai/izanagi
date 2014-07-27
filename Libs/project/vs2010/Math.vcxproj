@@ -124,6 +124,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\math\MathCurve.cpp" />
+    <ClCompile Include="..\..\source\math\MathMatrix33.cpp" />
     <ClCompile Include="..\..\source\math\MathMatrix44.cpp" />
     <ClCompile Include="..\..\source\math\MathPlane.cpp" />
     <ClCompile Include="..\..\source\math\MathRay.cpp" />
@@ -141,6 +142,7 @@
     <ClInclude Include="..\..\include\math\MathCurve.h" />
     <ClInclude Include="..\..\include\math\MathCVector3.h" />
     <ClInclude Include="..\..\include\math\MathCVector4.h" />
+    <ClInclude Include="..\..\include\math\MathMatrix33.h" />
     <ClInclude Include="..\..\include\math\MathMatrix44.h" />
     <ClInclude Include="..\..\include\math\MathPlane.h" />
     <ClInclude Include="..\..\include\math\MathRay.h" />
@@ -154,6 +156,7 @@
     <ClInclude Include="..\..\include\math\MathUtil.h" />
     <ClInclude Include="..\..\include\math\MathVector3.h" />
     <ClInclude Include="..\..\include\math\MathVector4.h" />
+    <ClInclude Include="..\..\include\math\noplatform\MathMatrix33_NoPlatform.h" />
     <ClInclude Include="..\..\include\math\noplatform\MathMatrix44_NoPlatform.h" />
     <ClInclude Include="..\..\include\math\noplatform\MathQuaternion_NoPlatform.h" />
     <ClInclude Include="..\..\include\math\noplatform\MathVector3_NoPlatform.h" />

@@ -71,6 +71,9 @@
     <ClCompile Include="..\..\source\math\MathMatrix44.cpp">
       <Filter>source\basic</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\math\MathMatrix33.cpp">
+      <Filter>source\basic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\math\MathPlane.h">
@@ -193,6 +196,12 @@
     </ClInclude>
     <ClInclude Include="..\..\include\math\MathCMatrix44.h">
       <Filter>include\basic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\MathMatrix33.h">
+      <Filter>include\basic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\math\noplatform\MathMatrix33_NoPlatform.h">
+      <Filter>include\basic\noplatform</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
