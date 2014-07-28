@@ -3,43 +3,6 @@
 
 using namespace izanagi;
 
-struct CStandardMemoryAllocator::SHeapHeader
-    : public IZ_DEBUG_HEAP_HEADER_BASE
-{
-    IZ_UINT8* buf;
-    IZ_UINT size;
-    SHeapHeader* prev;
-    SHeapHeader* next;
-
-    void Init()
-    {
-        buf = IZ_NULL;
-        size = 0;
-        prev = IZ_NULL;
-        next = IZ_NULL;
-
-        ClearDebugInfo();
-    }
-
-    IZ_UINT8* GetTopAddr() const
-    {
-        return (IZ_UINT8*)this;
-    }
-
-    IZ_UINT8* GetTailAddr() const
-    {
-        return buf + size;
-    }
-
-    IZ_UINT GetAllSize() const
-    {
-        IZ_ASSERT(buf > reinterpret_cast<IZ_UINT8*>(const_cast<SHeapHeader*>(this)));
-        IZ_UINT sub = (IZ_UINT)(buf - reinterpret_cast<IZ_UINT8*>(const_cast<SHeapHeader*>(this)));
-        return size + sub;
-    }
-};
-
-
 CStandardMemoryAllocator::CStandardMemoryAllocator()
 {
     m_nBufSize = 0;
