@@ -21,12 +21,12 @@ namespace izanagi {
         IZ_BOOL Init(IZ_UINT nBufSize, void* pBuf, IZ_UINT nChunkSize);
 
         // メモリ確保
-        void* Alloc(size_t size, const IZ_CHAR* file = IZ_NULL, IZ_UINT line = 0);
-        void* AllocZero(size_t size, const IZ_CHAR* file = IZ_NULL, IZ_UINT line = 0);
+        virtual void* Alloc(size_t size, const IZ_CHAR* file = IZ_NULL, IZ_UINT line = 0);
+        virtual void* AllocZero(size_t size, const IZ_CHAR* file = IZ_NULL, IZ_UINT line = 0);
 
-        void* Realloc(void* ptr, size_t size, const IZ_CHAR* file = IZ_NULL, IZ_UINT line = 0);
+        virtual void* Realloc(void* ptr, size_t size, const IZ_CHAR* file = IZ_NULL, IZ_UINT line = 0);
 
-    protected:
+    private:
         IZ_UINT m_nChunkSize;
     };
 }   // namespace izanagi
