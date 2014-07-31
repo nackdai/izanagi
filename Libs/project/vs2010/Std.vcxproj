@@ -123,6 +123,7 @@
     <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\source\std\allocator\BlockMemoryAllocator.cpp" />
     <ClCompile Include="..\..\source\std\binding\Binding.cpp" />
     <ClCompile Include="..\..\source\std\binding\BindingExpression.cpp" />
     <ClCompile Include="..\..\source\std\binding\BindingOperations.cpp" />
@@ -141,6 +142,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\include\std\2DPoint.h" />
     <ClInclude Include="..\..\include\std\2DRect.h" />
+    <ClInclude Include="..\..\include\std\allocator\BlockMemoryAllocator.h" />
     <ClInclude Include="..\..\include\std\binding\Binding.h" />
     <ClInclude Include="..\..\include\std\binding\BindingExpression.h" />
     <ClInclude Include="..\..\include\std\binding\BindingOperations.h" />

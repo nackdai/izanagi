@@ -68,6 +68,9 @@
     <ClCompile Include="..\..\source\std\binding\BindingOperations.cpp">
       <Filter>source\binding</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\std\allocator\BlockMemoryAllocator.cpp">
+      <Filter>source\allocator</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\std\2DPoint.h">
@@ -172,6 +175,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\std\collection\StdHashBase.h">
       <Filter>include\collection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\allocator\BlockMemoryAllocator.h">
+      <Filter>include\allocator</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
