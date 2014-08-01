@@ -52,7 +52,7 @@ namespace izanagi {
         nBufSize -= size;
 
         for (IZ_UINT i = 1; i < BlockNum; i++) {
-            VRETURN(m_Allocators[i].Init(size * i, buf, Align));
+            VRETURN(m_Allocators[i].Init(size, buf, Align));
             buf += size;
             nBufSize -= size;
         }
@@ -179,6 +179,7 @@ namespace izanagi {
         IZ_PRINTF("CBlockMemoryAllocator Dump =====\n");
 
         for (IZ_UINT i = 0; i < BlockNum; i++) {
+            IZ_PRINTF("Idx(%d) %d[bytes] - ", i, BlockSizes[i]);
             m_Allocators[i].Dump();
         }
 
