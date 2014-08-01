@@ -526,10 +526,17 @@ namespace izanagi {
     {
         SHeapHeader* ret = IZ_NULL;
 
+#if 0
         if (buf + sizeof(SHeapHeader) < m_pBuf + m_nBufSize) {
             ret = reinterpret_cast<SHeapHeader*>(buf);
             ret->Init();
         }
+#else
+        if (CStdUtil::GetPtrDistance(buf + sizeof(SHeapHeader), m_pBuf) <= m_nBufSize) {
+            ret = reinterpret_cast<SHeapHeader*>(buf);
+            ret->Init();
+        }
+#endif
 
         return ret;
     }

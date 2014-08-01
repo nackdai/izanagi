@@ -29,6 +29,7 @@
 #include "std/allocator/MemoryAllocator.h"
 #include "std/allocator/StandardMemoryAllocator.h"
 #include "std/allocator/ChunkedMemoryAllocator.h"
+#include "std/allocator/BlockMemoryAllocator.h"
 #include "std/allocator/SimpleMemoryAllocator.h"
 #include "std/allocator/STLMemoryAllocator.h"
 
