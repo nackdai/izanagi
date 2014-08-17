@@ -16,7 +16,7 @@ namespace resource
     public:
         /** インスタンス作成
          */
-        static CArchive* CreateArchive(
+        static IArchive* CreateArchive(
             IMemoryAllocator* allocator,
             IInputStream* input);
 

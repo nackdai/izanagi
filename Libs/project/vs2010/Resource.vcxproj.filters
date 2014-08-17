@@ -26,6 +26,9 @@
     <ClCompile Include="..\..\source\resource\archive\Archive.cpp">
       <Filter>source\archive</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\resource\archive\ArchiveTarball.cpp">
+      <Filter>source\archive</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\resource\Resource.h">
@@ -42,6 +45,9 @@
       <Filter>include\archive</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\resource\archive\ARCFormat.h">
+      <Filter>include\archive</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\resource\archive\ArchiveTarball.h">
       <Filter>include\archive</Filter>
     </ClInclude>
   </ItemGroup>

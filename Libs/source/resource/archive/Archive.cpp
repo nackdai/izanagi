@@ -6,7 +6,7 @@ namespace izanagi
 namespace resource
 {
     // インスタンス作成
-    CArchive* CArchive::CreateArchive(
+    IArchive* CArchive::CreateArchive(
         IMemoryAllocator* allocator,
         IInputStream* input)
     {

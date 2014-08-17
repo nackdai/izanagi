@@ -5,6 +5,7 @@
 
 #include "resource/archive/ARCFormat.h"
 #include "resource/archive/Archive.h"
+#include "resource/archive/ArchiveTarball.h"
 
 #if 0
 #include "resource/archive/ArchiveImpl.h"
