@@ -1,5 +1,5 @@
-#if !defined(__MODEL_APP_H__)
-#define __MODEL_APP_H__
+#if !defined(__ARCHIVE_APP_H__)
+#define __ARCHIVE_APP_H__
 
 #include "izSampleKit.h"
 #include "izResource.h"
@@ -39,4 +39,4 @@ private:
     izanagi::CFileInputStream m_Input;
 };
 
-#endif    // #if !defined(__MODEL_APP_H__)
+#endif    // #if !defined(__ARCHIVE_APP_H__)
