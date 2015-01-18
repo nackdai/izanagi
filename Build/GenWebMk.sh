@@ -11,7 +11,7 @@ cd $dir
 
 chmod +x GenPlarformMk.pl
 
-./GenPlarformMk.pl Debug_GLUT ../Libs/project/makefile ../Libs/project/web web
-./GenPlarformMk.pl Debug_GLUT ../Samples/projects/makefile ../Samples/projects/web web
+./GenPlatformMk.pl Debug_GLUT ../Libs/project/makefile ../Libs/project/web web
+./GenPlatformMk.pl Debug_GLUT ../Samples/projects/makefile ../Samples/projects/web web
 
 cd $cur_dir
