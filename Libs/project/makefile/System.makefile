@@ -26,8 +26,8 @@ build_all_configurations: Debug_GLUT
 
 # Builds the Debug_GLUT configuration...
 .PHONY: Debug_GLUT
-Debug_GLUT: create_folders gccDebug_GLUT/source/system/SysWindow_glut.o gccDebug_GLUT/source/system/TouchInput.o gccDebug_GLUT/source/system/linux/FileStream_linux.o gccDebug_GLUT/source/system/linux/SysEnvironment_linux.o gccDebug_GLUT/source/system/linux/SysTimer_linux.o gccDebug_GLUT/source/system/linux/SysUtil_linux.o gccDebug_GLUT/source/system/linux/device/Pad_linux.o gccDebug_GLUT/source/system/linux/thread/SysEvent_pthread.o gccDebug_GLUT/source/system/linux/thread/SysMutex_pthread.o gccDebug_GLUT/source/system/linux/thread/SysSemaphore_pthread.o gccDebug_GLUT/source/system/linux/thread/SysThread_pthread.o 
-	ar rcs ../lib/gccDebug_GLUT/libSystem.a gccDebug_GLUT/source/system/SysWindow_glut.o gccDebug_GLUT/source/system/TouchInput.o gccDebug_GLUT/source/system/linux/FileStream_linux.o gccDebug_GLUT/source/system/linux/SysEnvironment_linux.o gccDebug_GLUT/source/system/linux/SysTimer_linux.o gccDebug_GLUT/source/system/linux/SysUtil_linux.o gccDebug_GLUT/source/system/linux/device/Pad_linux.o gccDebug_GLUT/source/system/linux/thread/SysEvent_pthread.o gccDebug_GLUT/source/system/linux/thread/SysMutex_pthread.o gccDebug_GLUT/source/system/linux/thread/SysSemaphore_pthread.o gccDebug_GLUT/source/system/linux/thread/SysThread_pthread.o  $(Debug_GLUT_Implicitly_Linked_Objects)
+Debug_GLUT: create_folders gccDebug_GLUT/source/system/SysWindow_glut.o gccDebug_GLUT/source/system/TouchInput.o gccDebug_GLUT/source/system/linux/FileStream_linux.o gccDebug_GLUT/source/system/linux/SysEnvironment_linux.o gccDebug_GLUT/source/system/linux/SysTimer_linux.o gccDebug_GLUT/source/system/linux/SysUtil_linux.o gccDebug_GLUT/source/system/linux/device/Pad_linux.o gccDebug_GLUT/source/system/linux/thread/SysEvent_pthread.o gccDebug_GLUT/source/system/linux/thread/SysMutex_pthread.o gccDebug_GLUT/source/system/linux/thread/SysSemaphore_pthread.o gccDebug_GLUT/source/system/linux/thread/SysThread_pthread.o gccDebug_GLUT/source/system/web/SysUtil_web.o gccDebug_GLUT/source/system/web/SysWindow_web.o 
+	ar rcs ../lib/gccDebug_GLUT/libSystem.a gccDebug_GLUT/source/system/SysWindow_glut.o gccDebug_GLUT/source/system/TouchInput.o gccDebug_GLUT/source/system/linux/FileStream_linux.o gccDebug_GLUT/source/system/linux/SysEnvironment_linux.o gccDebug_GLUT/source/system/linux/SysTimer_linux.o gccDebug_GLUT/source/system/linux/SysUtil_linux.o gccDebug_GLUT/source/system/linux/device/Pad_linux.o gccDebug_GLUT/source/system/linux/thread/SysEvent_pthread.o gccDebug_GLUT/source/system/linux/thread/SysMutex_pthread.o gccDebug_GLUT/source/system/linux/thread/SysSemaphore_pthread.o gccDebug_GLUT/source/system/linux/thread/SysThread_pthread.o gccDebug_GLUT/source/system/web/SysUtil_web.o gccDebug_GLUT/source/system/web/SysWindow_web.o  $(Debug_GLUT_Implicitly_Linked_Objects)
 
 # Compiles file ../../source/system/SysWindow_glut.cpp for the Debug_GLUT configuration...
 -include gccDebug_GLUT/source/system/SysWindow_glut.d
@@ -95,6 +95,18 @@ gccDebug_GLUT/source/system/linux/thread/SysThread_pthread.o: ../../source/syste
 	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -c ../../source/system/linux/thread/SysThread_pthread.cpp $(Debug_GLUT_Include_Path) -o gccDebug_GLUT/source/system/linux/thread/SysThread_pthread.o
 	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -MM ../../source/system/linux/thread/SysThread_pthread.cpp $(Debug_GLUT_Include_Path) > gccDebug_GLUT/source/system/linux/thread/SysThread_pthread.d
 
+# Compiles file ../../source/system/web/SysUtil_web.cpp for the Debug_GLUT configuration...
+-include gccDebug_GLUT/source/system/web/SysUtil_web.d
+gccDebug_GLUT/source/system/web/SysUtil_web.o: ../../source/system/web/SysUtil_web.cpp
+	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -c ../../source/system/web/SysUtil_web.cpp $(Debug_GLUT_Include_Path) -o gccDebug_GLUT/source/system/web/SysUtil_web.o
+	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -MM ../../source/system/web/SysUtil_web.cpp $(Debug_GLUT_Include_Path) > gccDebug_GLUT/source/system/web/SysUtil_web.d
+
+# Compiles file ../../source/system/web/SysWindow_web.cpp for the Debug_GLUT configuration...
+-include gccDebug_GLUT/source/system/web/SysWindow_web.d
+gccDebug_GLUT/source/system/web/SysWindow_web.o: ../../source/system/web/SysWindow_web.cpp
+	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -c ../../source/system/web/SysWindow_web.cpp $(Debug_GLUT_Include_Path) -o gccDebug_GLUT/source/system/web/SysWindow_web.o
+	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -MM ../../source/system/web/SysWindow_web.cpp $(Debug_GLUT_Include_Path) > gccDebug_GLUT/source/system/web/SysWindow_web.d
+
 # Creates the intermediate and output folders for each configuration...
 .PHONY: create_folders
 create_folders:
@@ -102,6 +114,7 @@ create_folders:
 	mkdir -p gccDebug_GLUT/source/system/linux
 	mkdir -p gccDebug_GLUT/source/system/linux/device
 	mkdir -p gccDebug_GLUT/source/system/linux/thread
+	mkdir -p gccDebug_GLUT/source/system/web
 	mkdir -p ../lib/gccDebug_GLUT
 
 # Cleans intermediate and output files (objects, libraries, executables)...
@@ -115,5 +128,7 @@ clean:
 	rm -f gccDebug_GLUT/source/system/linux/device/*.d
 	rm -f gccDebug_GLUT/source/system/linux/thread/*.o
 	rm -f gccDebug_GLUT/source/system/linux/thread/*.d
+	rm -f gccDebug_GLUT/source/system/web/*.o
+	rm -f gccDebug_GLUT/source/system/web/*.d
 	rm -f ../lib/gccDebug_GLUT/libSystem.a
 

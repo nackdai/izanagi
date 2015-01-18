@@ -26,8 +26,8 @@ build_all_configurations: Debug_GLUT
 
 # Builds the Debug_GLUT configuration...
 .PHONY: Debug_GLUT
-Debug_GLUT: create_folders gccDebug_GLUT/source/math/MathPlane.o gccDebug_GLUT/source/math/MathRay.o gccDebug_GLUT/source/math/MathRectangle.o gccDebug_GLUT/source/math/MathTriangle.o gccDebug_GLUT/source/math/MathMatrix.o gccDebug_GLUT/source/math/SFMT/SFMT.o gccDebug_GLUT/source/math/MathNumericalAnlysis.o gccDebug_GLUT/source/math/MathCurve.o 
-	ar rcs ../lib/gccDebug_GLUT/libMath.a gccDebug_GLUT/source/math/MathPlane.o gccDebug_GLUT/source/math/MathRay.o gccDebug_GLUT/source/math/MathRectangle.o gccDebug_GLUT/source/math/MathTriangle.o gccDebug_GLUT/source/math/MathMatrix.o gccDebug_GLUT/source/math/SFMT/SFMT.o gccDebug_GLUT/source/math/MathNumericalAnlysis.o gccDebug_GLUT/source/math/MathCurve.o  $(Debug_GLUT_Implicitly_Linked_Objects)
+Debug_GLUT: create_folders gccDebug_GLUT/source/math/MathPlane.o gccDebug_GLUT/source/math/MathRay.o gccDebug_GLUT/source/math/MathRectangle.o gccDebug_GLUT/source/math/MathTriangle.o gccDebug_GLUT/source/math/MathMatrix33.o gccDebug_GLUT/source/math/MathMatrix44.o gccDebug_GLUT/source/math/SFMT/SFMT.o gccDebug_GLUT/source/math/MathNumericalAnlysis.o gccDebug_GLUT/source/math/MathCurve.o 
+	ar rcs ../lib/gccDebug_GLUT/libMath.a gccDebug_GLUT/source/math/MathPlane.o gccDebug_GLUT/source/math/MathRay.o gccDebug_GLUT/source/math/MathRectangle.o gccDebug_GLUT/source/math/MathTriangle.o gccDebug_GLUT/source/math/MathMatrix33.o gccDebug_GLUT/source/math/MathMatrix44.o gccDebug_GLUT/source/math/SFMT/SFMT.o gccDebug_GLUT/source/math/MathNumericalAnlysis.o gccDebug_GLUT/source/math/MathCurve.o  $(Debug_GLUT_Implicitly_Linked_Objects)
 
 # Compiles file ../../source/math/MathPlane.cpp for the Debug_GLUT configuration...
 -include gccDebug_GLUT/source/math/MathPlane.d
@@ -53,11 +53,17 @@ gccDebug_GLUT/source/math/MathTriangle.o: ../../source/math/MathTriangle.cpp
 	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -c ../../source/math/MathTriangle.cpp $(Debug_GLUT_Include_Path) -o gccDebug_GLUT/source/math/MathTriangle.o
 	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -MM ../../source/math/MathTriangle.cpp $(Debug_GLUT_Include_Path) > gccDebug_GLUT/source/math/MathTriangle.d
 
-# Compiles file ../../source/math/MathMatrix.cpp for the Debug_GLUT configuration...
--include gccDebug_GLUT/source/math/MathMatrix.d
-gccDebug_GLUT/source/math/MathMatrix.o: ../../source/math/MathMatrix.cpp
-	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -c ../../source/math/MathMatrix.cpp $(Debug_GLUT_Include_Path) -o gccDebug_GLUT/source/math/MathMatrix.o
-	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -MM ../../source/math/MathMatrix.cpp $(Debug_GLUT_Include_Path) > gccDebug_GLUT/source/math/MathMatrix.d
+# Compiles file ../../source/math/MathMatrix33.cpp for the Debug_GLUT configuration...
+-include gccDebug_GLUT/source/math/MathMatrix33.d
+gccDebug_GLUT/source/math/MathMatrix33.o: ../../source/math/MathMatrix33.cpp
+	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -c ../../source/math/MathMatrix33.cpp $(Debug_GLUT_Include_Path) -o gccDebug_GLUT/source/math/MathMatrix33.o
+	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -MM ../../source/math/MathMatrix33.cpp $(Debug_GLUT_Include_Path) > gccDebug_GLUT/source/math/MathMatrix33.d
+
+# Compiles file ../../source/math/MathMatrix44.cpp for the Debug_GLUT configuration...
+-include gccDebug_GLUT/source/math/MathMatrix44.d
+gccDebug_GLUT/source/math/MathMatrix44.o: ../../source/math/MathMatrix44.cpp
+	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -c ../../source/math/MathMatrix44.cpp $(Debug_GLUT_Include_Path) -o gccDebug_GLUT/source/math/MathMatrix44.o
+	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -MM ../../source/math/MathMatrix44.cpp $(Debug_GLUT_Include_Path) > gccDebug_GLUT/source/math/MathMatrix44.d
 
 # Compiles file ../../source/math/SFMT/SFMT.cpp for the Debug_GLUT configuration...
 -include gccDebug_GLUT/source/math/SFMT/SFMT.d

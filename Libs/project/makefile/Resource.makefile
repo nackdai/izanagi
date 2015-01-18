@@ -26,8 +26,8 @@ build_all_configurations: Debug_GLUT
 
 # Builds the Debug_GLUT configuration...
 .PHONY: Debug_GLUT
-Debug_GLUT: create_folders gccDebug_GLUT/source/resource/Resource.o gccDebug_GLUT/source/resource/ResourceManager.o gccDebug_GLUT/source/resource/archive/Archive.o 
-	ar rcs ../lib/gccDebug_GLUT/libResource.a gccDebug_GLUT/source/resource/Resource.o gccDebug_GLUT/source/resource/ResourceManager.o gccDebug_GLUT/source/resource/archive/Archive.o  $(Debug_GLUT_Implicitly_Linked_Objects)
+Debug_GLUT: create_folders gccDebug_GLUT/source/resource/Resource.o gccDebug_GLUT/source/resource/ResourceManager.o gccDebug_GLUT/source/resource/archive/Archive.o gccDebug_GLUT/source/resource/archive/ArchiveTarball.o 
+	ar rcs ../lib/gccDebug_GLUT/libResource.a gccDebug_GLUT/source/resource/Resource.o gccDebug_GLUT/source/resource/ResourceManager.o gccDebug_GLUT/source/resource/archive/Archive.o gccDebug_GLUT/source/resource/archive/ArchiveTarball.o  $(Debug_GLUT_Implicitly_Linked_Objects)
 
 # Compiles file ../../source/resource/Resource.cpp for the Debug_GLUT configuration...
 -include gccDebug_GLUT/source/resource/Resource.d
@@ -46,6 +46,12 @@ gccDebug_GLUT/source/resource/ResourceManager.o: ../../source/resource/ResourceM
 gccDebug_GLUT/source/resource/archive/Archive.o: ../../source/resource/archive/Archive.cpp
 	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -c ../../source/resource/archive/Archive.cpp $(Debug_GLUT_Include_Path) -o gccDebug_GLUT/source/resource/archive/Archive.o
 	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -MM ../../source/resource/archive/Archive.cpp $(Debug_GLUT_Include_Path) > gccDebug_GLUT/source/resource/archive/Archive.d
+
+# Compiles file ../../source/resource/archive/ArchiveTarball.cpp for the Debug_GLUT configuration...
+-include gccDebug_GLUT/source/resource/archive/ArchiveTarball.d
+gccDebug_GLUT/source/resource/archive/ArchiveTarball.o: ../../source/resource/archive/ArchiveTarball.cpp
+	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -c ../../source/resource/archive/ArchiveTarball.cpp $(Debug_GLUT_Include_Path) -o gccDebug_GLUT/source/resource/archive/ArchiveTarball.o
+	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -MM ../../source/resource/archive/ArchiveTarball.cpp $(Debug_GLUT_Include_Path) > gccDebug_GLUT/source/resource/archive/ArchiveTarball.d
 
 # Creates the intermediate and output folders for each configuration...
 .PHONY: create_folders

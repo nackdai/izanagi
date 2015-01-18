@@ -26,8 +26,8 @@ build_all_configurations: Debug_GLUT
 
 # Builds the Debug_GLUT configuration...
 .PHONY: Debug_GLUT
-Debug_GLUT: create_folders gccDebug_GLUT/source/std/StdColor.o gccDebug_GLUT/source/std/StdKey.o gccDebug_GLUT/source/std/StdLog.o gccDebug_GLUT/source/std/StdProfiler.o gccDebug_GLUT/source/std/StdUtf.o gccDebug_GLUT/source/std/allocator/ChunkedMemoryAllocator.o gccDebug_GLUT/source/std/allocator/SimpleMemoryAllocator.o gccDebug_GLUT/source/std/allocator/StandardMemoryAllocator.o gccDebug_GLUT/source/std/allocator/STLMemoryAllocator.o gccDebug_GLUT/source/std/binding/Binding.o gccDebug_GLUT/source/std/binding/BindingExpression.o gccDebug_GLUT/source/std/binding/BindingOperations.o gccDebug_GLUT/source/std/binding/DependencyObject.o gccDebug_GLUT/source/std/binding/DependencyPropertyChangedEventArgs.o 
-	ar rcs ../lib/gccDebug_GLUT/libStd.a gccDebug_GLUT/source/std/StdColor.o gccDebug_GLUT/source/std/StdKey.o gccDebug_GLUT/source/std/StdLog.o gccDebug_GLUT/source/std/StdProfiler.o gccDebug_GLUT/source/std/StdUtf.o gccDebug_GLUT/source/std/allocator/ChunkedMemoryAllocator.o gccDebug_GLUT/source/std/allocator/SimpleMemoryAllocator.o gccDebug_GLUT/source/std/allocator/StandardMemoryAllocator.o gccDebug_GLUT/source/std/allocator/STLMemoryAllocator.o gccDebug_GLUT/source/std/binding/Binding.o gccDebug_GLUT/source/std/binding/BindingExpression.o gccDebug_GLUT/source/std/binding/BindingOperations.o gccDebug_GLUT/source/std/binding/DependencyObject.o gccDebug_GLUT/source/std/binding/DependencyPropertyChangedEventArgs.o  $(Debug_GLUT_Implicitly_Linked_Objects)
+Debug_GLUT: create_folders gccDebug_GLUT/source/std/StdColor.o gccDebug_GLUT/source/std/StdKey.o gccDebug_GLUT/source/std/StdLog.o gccDebug_GLUT/source/std/StdProfiler.o gccDebug_GLUT/source/std/StdUtf.o gccDebug_GLUT/source/std/allocator/BlockMemoryAllocator.o gccDebug_GLUT/source/std/allocator/ChunkedMemoryAllocator.o gccDebug_GLUT/source/std/allocator/SimpleMemoryAllocator.o gccDebug_GLUT/source/std/allocator/StandardMemoryAllocator.o gccDebug_GLUT/source/std/allocator/STLMemoryAllocator.o gccDebug_GLUT/source/std/binding/Binding.o gccDebug_GLUT/source/std/binding/BindingExpression.o gccDebug_GLUT/source/std/binding/BindingOperations.o gccDebug_GLUT/source/std/binding/DependencyObject.o gccDebug_GLUT/source/std/binding/DependencyPropertyChangedEventArgs.o 
+	ar rcs ../lib/gccDebug_GLUT/libStd.a gccDebug_GLUT/source/std/StdColor.o gccDebug_GLUT/source/std/StdKey.o gccDebug_GLUT/source/std/StdLog.o gccDebug_GLUT/source/std/StdProfiler.o gccDebug_GLUT/source/std/StdUtf.o gccDebug_GLUT/source/std/allocator/BlockMemoryAllocator.o gccDebug_GLUT/source/std/allocator/ChunkedMemoryAllocator.o gccDebug_GLUT/source/std/allocator/SimpleMemoryAllocator.o gccDebug_GLUT/source/std/allocator/StandardMemoryAllocator.o gccDebug_GLUT/source/std/allocator/STLMemoryAllocator.o gccDebug_GLUT/source/std/binding/Binding.o gccDebug_GLUT/source/std/binding/BindingExpression.o gccDebug_GLUT/source/std/binding/BindingOperations.o gccDebug_GLUT/source/std/binding/DependencyObject.o gccDebug_GLUT/source/std/binding/DependencyPropertyChangedEventArgs.o  $(Debug_GLUT_Implicitly_Linked_Objects)
 
 # Compiles file ../../source/std/StdColor.cpp for the Debug_GLUT configuration...
 -include gccDebug_GLUT/source/std/StdColor.d
@@ -58,6 +58,12 @@ gccDebug_GLUT/source/std/StdProfiler.o: ../../source/std/StdProfiler.cpp
 gccDebug_GLUT/source/std/StdUtf.o: ../../source/std/StdUtf.cpp
 	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -c ../../source/std/StdUtf.cpp $(Debug_GLUT_Include_Path) -o gccDebug_GLUT/source/std/StdUtf.o
 	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -MM ../../source/std/StdUtf.cpp $(Debug_GLUT_Include_Path) > gccDebug_GLUT/source/std/StdUtf.d
+
+# Compiles file ../../source/std/allocator/BlockMemoryAllocator.cpp for the Debug_GLUT configuration...
+-include gccDebug_GLUT/source/std/allocator/BlockMemoryAllocator.d
+gccDebug_GLUT/source/std/allocator/BlockMemoryAllocator.o: ../../source/std/allocator/BlockMemoryAllocator.cpp
+	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -c ../../source/std/allocator/BlockMemoryAllocator.cpp $(Debug_GLUT_Include_Path) -o gccDebug_GLUT/source/std/allocator/BlockMemoryAllocator.o
+	$(CPP_COMPILER) $(Debug_GLUT_Preprocessor_Definitions) $(Debug_GLUT_Compiler_Flags) -MM ../../source/std/allocator/BlockMemoryAllocator.cpp $(Debug_GLUT_Include_Path) > gccDebug_GLUT/source/std/allocator/BlockMemoryAllocator.d
 
 # Compiles file ../../source/std/allocator/ChunkedMemoryAllocator.cpp for the Debug_GLUT configuration...
 -include gccDebug_GLUT/source/std/allocator/ChunkedMemoryAllocator.d
