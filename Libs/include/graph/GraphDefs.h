@@ -367,6 +367,34 @@ namespace graph
         E_GRAPH_VTX_DECL_TYPE_FORCE_INT32 = 0x7fffffff,
     };
 
+    inline IZ_UINT GetSizeByVtxDeclType(E_GRAPH_VTX_DECL_TYPE type)
+    {
+        static IZ_UINT size[E_GRAPH_VTX_DECL_TYPE_NUM] = {
+            sizeof(IZ_FLOAT) * 1,
+            sizeof(IZ_FLOAT) * 2,
+            sizeof(IZ_FLOAT) * 3,
+            sizeof(IZ_FLOAT) * 4,
+            4,
+            4,
+            sizeof(IZ_USHORT) * 2,
+            sizeof(IZ_USHORT) * 4,
+            4,
+            sizeof(IZ_SHORT) * 2,
+            sizeof(IZ_SHORT) * 4,
+            sizeof(IZ_USHORT) * 2,
+            sizeof(IZ_USHORT) * 4,
+            0,
+            0,
+            0,
+            0,
+            0,
+        };
+
+        IZ_ASSERT(size[type] > 0);
+
+        return size[type];
+    }
+
     /** 頂点データの使い方
      */
     enum E_GRAPH_VTX_DECL_USAGE {

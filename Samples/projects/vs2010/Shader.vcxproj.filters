@@ -51,6 +51,12 @@
     <ClCompile Include="..\..\Shader\StateSSAO.cpp">
       <Filter>state\source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Shader\BevelShaderMesh.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Shader\StateBevelShader.cpp">
+      <Filter>state\source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Shader\shader\MirrorMapShader.fx">
@@ -95,6 +101,12 @@
       <Filter>state\include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Shader\StateSSAO.h">
+      <Filter>state\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Shader\BevelShaderMesh.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Shader\StateBevelShader.h">
       <Filter>state\include</Filter>
     </ClInclude>
   </ItemGroup>

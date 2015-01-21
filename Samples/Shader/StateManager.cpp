@@ -6,6 +6,7 @@
 #include "StateSpotLight.h"
 #include "StateNormalMap.h"
 #include "StateSSAO.h"
+#include "StateBevelShader.h"
 
 CStateManager CStateManager::s_Instance;
 
@@ -27,4 +28,5 @@ void CStateManager::Create(
     _STATE(SpotLight, app, camera);
     _STATE(NormalMap, app, camera);
     _STATE(SSAO, app, camera);
+    _STATE(BevelShader, app, camera);
 }

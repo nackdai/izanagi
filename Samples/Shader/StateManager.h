@@ -16,6 +16,7 @@ enum State {
     State_SpotLight,
     State_NormalMap,
     State_SSAO,
+    State_BevelShader,
 
     StateNum,
 };

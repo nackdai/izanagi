@@ -176,8 +176,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Shader\BevelShaderMesh.cpp" />
     <ClCompile Include="..\..\Shader\main.cpp" />
     <ClCompile Include="..\..\Shader\StateBase.cpp" />
+    <ClCompile Include="..\..\Shader\StateBevelShader.cpp" />
     <ClCompile Include="..\..\Shader\StateManager.cpp" />
     <ClCompile Include="..\..\Shader\StateMirrorMap.cpp" />
     <ClCompile Include="..\..\Shader\StateNormalMap.cpp" />
@@ -331,7 +333,9 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Shader\BevelShaderMesh.h" />
     <ClInclude Include="..\..\Shader\StateBase.h" />
+    <ClInclude Include="..\..\Shader\StateBevelShader.h" />
     <ClInclude Include="..\..\Shader\StateManager.h" />
     <ClInclude Include="..\..\Shader\StateMirrorMap.h" />
     <ClInclude Include="..\..\Shader\StateNormalMap.h" />

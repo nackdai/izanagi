@@ -337,12 +337,7 @@ namespace izanagi {
             IZ_UINT flag,
             IZ_UINT nVtxNum)
         {
-            IZ_C_ASSERT(COUNTOF(CDebugMeshUtil::GetElemSizeFuncTbl) == E_DEBUG_MESH_VTX_FORM_NUM);
-
-            IZ_UINT nStride = 0;
-            for (IZ_UINT i = 0; i < COUNTOF(CDebugMeshUtil::GetElemSizeFuncTbl); ++i) {
-                nStride += (*CDebugMeshUtil::GetElemSizeFuncTbl[i])(flag);
-            }
+            IZ_UINT nStride = ComputeVtxStride(flag);
 
             m_pVB = device->CreateVertexBuffer(
                         nStride,
@@ -350,6 +345,18 @@ namespace izanagi {
                         graph::E_GRAPH_RSC_USAGE_STATIC);
 
             return (m_pVB != IZ_NULL);
+        }
+
+        IZ_UINT ComputeVtxStride(IZ_UINT flag)
+        {
+            IZ_C_ASSERT(COUNTOF(CDebugMeshUtil::GetElemSizeFuncTbl) == E_DEBUG_MESH_VTX_FORM_NUM);
+
+            IZ_UINT nStride = 0;
+            for (IZ_UINT i = 0; i < COUNTOF(CDebugMeshUtil::GetElemSizeFuncTbl); ++i) {
+                nStride += (*CDebugMeshUtil::GetElemSizeFuncTbl[i])(flag);
+            }
+
+            return nStride;
         }
 
         // インデックスバッファ作成
@@ -372,24 +379,32 @@ namespace izanagi {
             graph::CGraphicsDevice* device,
             IZ_UINT flag)
         {
-            IZ_C_ASSERT(COUNTOF(CDebugMeshUtil::SetElemFuncTbl) == E_DEBUG_MESH_VTX_FORM_NUM);
-
             // +1はENDの分
             graph::SVertexElement VtxElement[E_DEBUG_MESH_VTX_FORM_NUM + 1];
             FILL_ZERO(VtxElement, sizeof(VtxElement));
 
-            IZ_WORD nOffset = 0;
-            IZ_UINT pos = 0;
-
-            for (IZ_UINT i = 0; i < COUNTOF(CDebugMeshUtil::SetElemFuncTbl); ++i) {
-                pos = (*CDebugMeshUtil::SetElemFuncTbl[i])(flag, VtxElement, pos, &nOffset);
-            }
+            IZ_UINT pos = SetVtxElement(VtxElement, flag);
 
             m_pVD = device->CreateVertexDeclaration(VtxElement, pos);
 
             return (m_pVD != IZ_NULL);
         }
 
+        IZ_UINT SetVtxElement(
+            graph::SVertexElement* elements,
+            IZ_UINT flag)
+        {
+            IZ_C_ASSERT(COUNTOF(CDebugMeshUtil::SetElemFuncTbl) == E_DEBUG_MESH_VTX_FORM_NUM);
+
+            IZ_WORD nOffset = 0;
+            IZ_UINT pos = 0;
+
+            for (IZ_UINT i = 0; i < COUNTOF(CDebugMeshUtil::SetElemFuncTbl); ++i) {
+                pos = (*CDebugMeshUtil::SetElemFuncTbl[i])(flag, elements, pos, &nOffset);
+            }
+
+            return pos;
+        }
 
         // データバッファ作成
         IZ_BOOL CreateDataBuffer(
@@ -547,12 +562,21 @@ namespace izanagi {
             return pData;
         }
 
+        virtual IZ_UINT8* SetExtraVtxData(
+            const void* vtx,
+            IZ_UINT flag,
+            IZ_UINT8* data)
+        {
+            return data;
+        }
+
         IZ_UINT8* SetVtxData(
             const _VTX& sVtx,
             IZ_UINT flag,
             IZ_UINT8* pData)
         {
             pData = CDebugMeshUtil::SetVtx(flag, sVtx, pData);
+            pData = SetExtraVtxData(&sVtx, flag, pData);
 
             if (m_pDebugAxis != IZ_NULL) {
                 if (CDebugMeshUtil::IsNormal(flag)) {
