@@ -98,9 +98,6 @@ namespace izanagi {
         typedef IZ_UINT (*SetElemFunc)(IZ_UINT, graph::SVertexElement*, IZ_UINT, IZ_WORD*);
         static SetElemFunc SetElemFuncTbl[E_DEBUG_MESH_VTX_FORM_NUM];
 
-        typedef IZ_UINT8* (*SetVtxFunc)(IZ_UINT, const SMeshVtx&, IZ_UINT8*);
-        static SetVtxFunc SetVtxFuncTbl[E_DEBUG_MESH_VTX_FORM_NUM];
-
         typedef IZ_UINT (*GetElemSizeFunc)(IZ_UINT);
         static GetElemSizeFunc GetElemSizeFuncTbl[E_DEBUG_MESH_VTX_FORM_NUM];
 
@@ -110,11 +107,83 @@ namespace izanagi {
         static IZ_UINT SetVtxElementUV(IZ_UINT flag, graph::SVertexElement* pElem, IZ_UINT nPos, IZ_WORD* pOffset);
         static IZ_UINT SetVtxElementTangent(IZ_UINT flag, graph::SVertexElement* pElem, IZ_UINT nPos, IZ_WORD* pOffset);
 
-        static IZ_UINT8* SetVtxPos(IZ_UINT flag, const SMeshVtx& sVtx, IZ_UINT8* pVtx);
-        static IZ_UINT8* SetVtxNormal(IZ_UINT flag, const SMeshVtx& sVtx, IZ_UINT8* pVtx);
-        static IZ_UINT8* SetVtxColor(IZ_UINT flag, const SMeshVtx& sVtx, IZ_UINT8* pVtx);
-        static IZ_UINT8* SetVtxUV(IZ_UINT flag, const SMeshVtx& sVtx, IZ_UINT8* pVtx);
-        static IZ_UINT8* SetVtxTangent(IZ_UINT flag, const SMeshVtx& sVtx, IZ_UINT8* pVtx);
+        template <class _VTX>
+        static IZ_UINT8* SetVtx(IZ_UINT flag, const _VTX& sVtx, IZ_UINT8* pVtx)
+        {
+            pVtx = SetVtxPos(flag, sVtx, pVtx);
+            pVtx = SetVtxNormal(flag, sVtx, pVtx);
+            pVtx = SetVtxColor(flag, sVtx, pVtx);
+            pVtx = SetVtxUV(flag, sVtx, pVtx);
+            pVtx = SetVtxTangent(flag, sVtx, pVtx);
+            return pVtx;
+        }
+
+        template <class _VTX>
+        static IZ_UINT8* SetVtxPos(IZ_UINT flag, const _VTX& sVtx, IZ_UINT8* pVtx)
+        {
+            if (IsPos(flag)) {
+                IZ_FLOAT* pos = (IZ_FLOAT*)pVtx;
+                pos[0] = sVtx.pos.v[0];
+                pos[1] = sVtx.pos.v[1];
+                pos[2] = sVtx.pos.v[2];
+                pos[3] = 1.0f;
+
+                pVtx += GetPosSize(flag);
+            }
+            return pVtx;
+        }
+
+        template <class _VTX>
+        static IZ_UINT8* SetVtxNormal(IZ_UINT flag, const _VTX& sVtx, IZ_UINT8* pVtx)
+        {
+            if (IsNormal(flag)) {
+                IZ_FLOAT* nml = (IZ_FLOAT*)pVtx;
+                nml[0] = sVtx.nml.v[0];
+                nml[1] = sVtx.nml.v[1];
+                nml[2] = sVtx.nml.v[2];
+
+                pVtx += GetNormalSize(flag);
+            }
+            return pVtx;
+        }
+
+        template <class _VTX>
+        static IZ_UINT8* SetVtxColor(IZ_UINT flag, const _VTX& sVtx, IZ_UINT8* pVtx)
+        {
+            if (IsColor(flag)) {
+                *(IZ_COLOR*)pVtx = sVtx.clr;
+                pVtx += GetColorSize(flag);
+            }
+            return pVtx;
+        }
+
+        template <class _VTX>
+        static IZ_UINT8* SetVtxUV(IZ_UINT flag, const _VTX& sVtx, IZ_UINT8* pVtx)
+        {
+            if (IsUV(flag)) {
+                IZ_FLOAT* uv = (IZ_FLOAT*)pVtx;
+                uv[0] = sVtx.uv[0];
+                uv[1] = sVtx.uv[1];
+
+                pVtx += GetUVSize(flag);
+            }
+            return pVtx;
+        }
+
+        template <class _VTX>
+        static IZ_UINT8* SetVtxTangent(IZ_UINT flag, const _VTX& sVtx, IZ_UINT8* pVtx)
+        {
+            if (IsTangent(flag)) {
+                IZ_FLOAT* tangent = (IZ_FLOAT*)pVtx;
+                tangent[0] = sVtx.tangent.v[0];
+                tangent[1] = sVtx.tangent.v[1];
+                tangent[2] = sVtx.tangent.v[2];
+                tangent[3] = sVtx.tangent.v[3];
+
+                pVtx += GetTangentSize(flag);
+            }
+            return pVtx;
+        }
 
         static IZ_BOOL IsPos(IZ_UINT flag)     { return (flag & E_DEBUG_MESH_VTX_FORM_POS) > 0; }
         static IZ_BOOL IsColor(IZ_UINT flag)   { return (flag & E_DEBUG_MESH_VTX_FORM_COLOR) > 0; }
@@ -483,11 +552,7 @@ namespace izanagi {
             IZ_UINT flag,
             IZ_UINT8* pData)
         {
-            IZ_C_ASSERT(COUNTOF(CDebugMeshUtil::SetVtxFuncTbl) == E_DEBUG_MESH_VTX_FORM_NUM);
-
-            for (IZ_UINT i = 0; i < COUNTOF(CDebugMeshUtil::SetVtxFuncTbl); ++i) {
-                pData = (*CDebugMeshUtil::SetVtxFuncTbl[i])(flag, sVtx, pData);
-            }
+            pData = CDebugMeshUtil::SetVtx(flag, sVtx, pData);
 
             if (m_pDebugAxis != IZ_NULL) {
                 if (CDebugMeshUtil::IsNormal(flag)) {
@@ -536,13 +601,13 @@ namespace izanagi {
         {
             if (CDebugMeshUtil::IsTangent(flag)) {
 #ifdef IZ_COORD_LEFT_HAND
-                SMeshVtx* vtx0 = GetVtx(pFace->idx[0]);
-                SMeshVtx* vtx1 = GetVtx(pFace->idx[2]);
-                SMeshVtx* vtx2 = GetVtx(pFace->idx[1]);
+                _VTX* vtx0 = GetVtx(pFace->idx[0]);
+                _VTX* vtx1 = GetVtx(pFace->idx[2]);
+                _VTX* vtx2 = GetVtx(pFace->idx[1]);
 #else
-                SMeshVtx* vtx0 = GetVtx(pFace->idx[0]);
-                SMeshVtx* vtx1 = GetVtx(pFace->idx[1]);
-                SMeshVtx* vtx2 = GetVtx(pFace->idx[2]);
+                _VTX* vtx0 = GetVtx(pFace->idx[0]);
+                _VTX* vtx1 = GetVtx(pFace->idx[1]);
+                _VTX* vtx2 = GetVtx(pFace->idx[2]);
 #endif
 
                 // Tangent
@@ -554,9 +619,9 @@ namespace izanagi {
 
 
         void ComputeTangent(
-            SMeshVtx* vtx0,
-            const SMeshVtx& vtx1,
-            const SMeshVtx& vtx2)
+            _VTX* vtx0,
+            const _VTX& vtx1,
+            const _VTX& vtx2)
         {
             // NOTE
             // DirectXのuv座標系で考えると
@@ -641,8 +706,8 @@ namespace izanagi {
             IZ_UINT idx_0,
             IZ_UINT idx_1)
         {
-            SMeshVtx* pVtx_0 = GetVtx(idx_0);
-            SMeshVtx* pVtx_1 = GetVtx(idx_1);
+            _VTX* pVtx_0 = GetVtx(idx_0);
+            _VTX* pVtx_1 = GetVtx(idx_1);
 
             pVtx_0->SetOverlapIdx(idx_1);
             pVtx_1->SetOverlapIdx(idx_0);
@@ -655,7 +720,7 @@ namespace izanagi {
 #if 0
             if (pVtx->HasOverlapIdx()) {
                 IZ_UINT idx = pVtx->GetOverlapIdx();
-                SMeshVtx* pOverlap = GetVtx(idx);
+                _VTX* pOverlap = GetVtx(idx);
 
                 if (IsTangent(flag)) {
                     // Tangent
