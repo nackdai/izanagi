@@ -1,3 +1,4 @@
+#include "debugutil/mesh/DebugMeshAxis.h"
 #include "debugutil/mesh/DebugMeshGrid.h"
 
 using namespace izanagi;
@@ -95,11 +96,11 @@ IZ_BOOL CDebugMeshGrid::SetVtx(
             pos[2] = fTop + y * fGridSize;
             pos[3] = 1.0f;
 
-            pVtx += GetPosSize(flag);
+            pVtx += CDebugMeshUtil::GetPosSize(flag);
 
             IZ_COLOR* color = (IZ_COLOR*)pVtx;
             *color = nColor;
-            pVtx += GetColorSize(flag);
+            pVtx += CDebugMeshUtil::GetColorSize(flag);
         }
 
         {
@@ -110,11 +111,11 @@ IZ_BOOL CDebugMeshGrid::SetVtx(
             pos[2] = fTop + y * fGridSize;
             pos[3] = 1.0f;
 
-            pVtx += GetPosSize(flag);
+            pVtx += CDebugMeshUtil::GetPosSize(flag);
 
             IZ_COLOR* color = (IZ_COLOR*)pVtx;
             *color = nColor;
-            pVtx += GetColorSize(flag);
+            pVtx += CDebugMeshUtil::GetColorSize(flag);
         }
     }
 
@@ -128,11 +129,11 @@ IZ_BOOL CDebugMeshGrid::SetVtx(
             pos[2] = fTop;
             pos[3] = 1.0f;
 
-            pVtx += GetPosSize(flag);
+            pVtx += CDebugMeshUtil::GetPosSize(flag);
 
             IZ_COLOR* color = (IZ_COLOR*)pVtx;
             *color = nColor;
-            pVtx += GetColorSize(flag);
+            pVtx += CDebugMeshUtil::GetColorSize(flag);
         }
 
         {
@@ -143,11 +144,11 @@ IZ_BOOL CDebugMeshGrid::SetVtx(
             pos[2] = fTop + fHeight;
             pos[3] = 1.0f;
 
-            pVtx += GetPosSize(flag);
+            pVtx += CDebugMeshUtil::GetPosSize(flag);
 
             IZ_COLOR* color = (IZ_COLOR*)pVtx;
             *color = nColor;
-            pVtx += GetColorSize(flag);
+            pVtx += CDebugMeshUtil::GetColorSize(flag);
         }
     }
 

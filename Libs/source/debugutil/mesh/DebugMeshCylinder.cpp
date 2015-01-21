@@ -1,3 +1,4 @@
+#include "debugutil/mesh/DebugMeshAxis.h"
 #include "debugutil/mesh/DebugMeshCylinder.h"
 
 using namespace izanagi;
@@ -159,7 +160,7 @@ IZ_BOOL CDebugMeshCylinder::SetVtx(
             0.5f * fHeight,
             IZ_MATH_PI2 * i / (nSlices -1));
 
-        if (IsNormal(flag)) {
+        if (CDebugMeshUtil::IsNormal(flag)) {
             pVtx->nml.Set(0.0f, 1.0f, 0.0f, 0.0f);
         }
 
@@ -202,7 +203,7 @@ IZ_BOOL CDebugMeshCylinder::SetVtx(
                 fLongitude);
 
             // ここでUV座標をセットする
-            if (IsUV(flag)) {
+            if (CDebugMeshUtil::IsUV(flag)) {
                 pVtx->uv[0] = 1.0f;
                 pVtx->uv[1] = (fHeight - (fY + fHeight * 0.5f)) / fHeight;
             }
@@ -223,7 +224,7 @@ IZ_BOOL CDebugMeshCylinder::SetVtx(
             -0.5f * fHeight,
             IZ_MATH_PI2 * i / (nSlices -1));
 
-        if (IsNormal(flag)) {
+        if (CDebugMeshUtil::IsNormal(flag)) {
             pVtx->nml.Set(0.0f, -1.0f, 0.0f, 0.0f);
         }
 
@@ -249,7 +250,7 @@ void CDebugMeshCylinder::ComputeVtx(
     IZ_FLOAT fCosLong = math::CMath::CosF(fLongitude);
 
     // 位置
-    if (IsPos(flag)) {
+    if (CDebugMeshUtil::IsPos(flag)) {
 #ifdef IZ_COORD_LEFT_HAND
         pVtx->pos.v[0] = fRadius * fCosLong;
         pVtx->pos.v[1] = fY;
@@ -264,7 +265,7 @@ void CDebugMeshCylinder::ComputeVtx(
     }
 
     // 法線
-    if (IsNormal(flag)) {
+    if (CDebugMeshUtil::IsNormal(flag)) {
 #ifdef IZ_COORD_LEFT_HAND
         pVtx->nml.v[0] = fCosLong;
         pVtx->nml.v[1] = 0.0f;
@@ -279,12 +280,12 @@ void CDebugMeshCylinder::ComputeVtx(
     }
 
     // 頂点カラー
-    if (IsColor(flag)) {
+    if (CDebugMeshUtil::IsColor(flag)) {
         pVtx->clr = nColor;
     }
 
     // UV座標
-    if (IsUV(flag)) {
+    if (CDebugMeshUtil::IsUV(flag)) {
         pVtx->uv[0] = fLongitude / IZ_MATH_PI2;
 
         // NOTE

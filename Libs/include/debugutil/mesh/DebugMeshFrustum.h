@@ -7,8 +7,8 @@
 namespace izanagi {
     /**
     */
-    class CDebugMeshFrustum : public CDebugMesh {
-        friend class CDebugMesh;
+    class CDebugMeshFrustum : public CDebugMeshTmpl<SMeshVtx> {
+        friend class CDebugMeshTmpl<SMeshVtx>;
 
     public:
         static CDebugMeshFrustum* CreateDebugMeshFrustum(

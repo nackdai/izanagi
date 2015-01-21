@@ -1,3 +1,4 @@
+#include "debugutil/mesh/DebugMeshAxis.h"
 #include "debugutil/mesh/DebugMeshSphere.h"
 
 using namespace izanagi;
@@ -189,7 +190,7 @@ IZ_BOOL CDebugMeshSphere::SetVtx(
                 fLatitude);
 
             // ここでUV座標をセットする
-            if (IsUV(flag)) {
+            if (CDebugMeshUtil::IsUV(flag)) {
                 pVtx->uv[0] = 1.0f;
                 pVtx->uv[1] = fLatitude / IZ_MATH_PI;
             }
@@ -243,7 +244,7 @@ void CDebugMeshSphere::ComputeVtx(
     vNml.w = 1.0f;
 
     // 位置
-    if (IsPos(flag)) {
+    if (CDebugMeshUtil::IsPos(flag)) {
         math::SVector4 vPos;
         math::SVector4::Scale(vPos, vNml, fRadius);
 
@@ -254,7 +255,7 @@ void CDebugMeshSphere::ComputeVtx(
     }
 
     // 法線
-    if (IsNormal(flag)) {
+    if (CDebugMeshUtil::IsNormal(flag)) {
         pVtx->nml.v[0] = vNml.x;
         pVtx->nml.v[1] = vNml.y;
         pVtx->nml.v[2] = vNml.z;
@@ -262,12 +263,12 @@ void CDebugMeshSphere::ComputeVtx(
     }
 
     // 頂点カラー
-    if (IsColor(flag)) {
+    if (CDebugMeshUtil::IsColor(flag)) {
         pVtx->clr = nColor;
     }
 
     // UV座標
-    if (IsUV(flag)) {
+    if (CDebugMeshUtil::IsUV(flag)) {
         pVtx->uv[0] = fLongitude / IZ_MATH_PI2;
         pVtx->uv[1] = fLatitude / IZ_MATH_PI;
     }

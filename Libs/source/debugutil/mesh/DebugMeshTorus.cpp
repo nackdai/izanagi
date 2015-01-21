@@ -1,3 +1,4 @@
+#include "debugutil/mesh/DebugMeshAxis.h"
 #include "debugutil/mesh/DebugMeshTorus.h"
 
 using namespace izanagi;
@@ -243,7 +244,7 @@ void CDebugMeshTorus::ComputeVtx(
     }
 
     // 位置
-    if (IsPos(flag)) {
+    if (CDebugMeshUtil::IsPos(flag)) {
         pVtx->pos.v[0] = vPos.x;
         pVtx->pos.v[1] = vPos.y;
         pVtx->pos.v[2] = vPos.z;
@@ -251,7 +252,7 @@ void CDebugMeshTorus::ComputeVtx(
     }
 
     // 法線
-    if (IsNormal(flag)) {
+    if (CDebugMeshUtil::IsNormal(flag)) {
         math::SVector4 vNml;
         vNml.Set(
             vPos.x - vCenter.x,
@@ -267,12 +268,12 @@ void CDebugMeshTorus::ComputeVtx(
     }
 
     // 頂点カラー
-    if (IsColor(flag)) {
+    if (CDebugMeshUtil::IsColor(flag)) {
         pVtx->clr = nColor;
     }
 
     // UV座標
-    if (IsUV(flag)) {
+    if (CDebugMeshUtil::IsUV(flag)) {
         // NOTE
         // MATH_PI2 で割ることで 0.0f - 1.0f に正規化
 #if 0
