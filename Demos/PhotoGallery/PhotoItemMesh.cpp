@@ -27,7 +27,7 @@ public:
 
     // Compute vertices.
     void ComputeVtx(
-        SMeshVtx* vtx,
+        izanagi::SMeshVtx* vtx,
         IZ_UINT flag,
         IZ_COLOR color,
         const izanagi::CFloatPoint& pt);
@@ -100,7 +100,7 @@ IZ_BOOL PhotoItemMesh::FrontFace::SetVtx(
     IZ_FLOAT width,
     IZ_FLOAT height)
 {
-    SMeshVtx* vtx = GetVtx();
+    izanagi::SMeshVtx* vtx = GetVtx();
 
     // NOTE
     // 1------2
@@ -127,7 +127,7 @@ IZ_BOOL PhotoItemMesh::FrontFace::SetVtx(
             pt[i]);
 
         // UV
-        if (IsUV(flag)) {
+        if (izanagi::CDebugMeshUtil::IsUV(flag)) {
             switch (i) {
             case 0:
                 vtx->uv[0] = 0.0f;
@@ -157,19 +157,19 @@ IZ_BOOL PhotoItemMesh::FrontFace::SetVtx(
 }
 
 void PhotoItemMesh::FrontFace::ComputeVtx(
-    izanagi::CDebugMesh::SMeshVtx* vtx,
+    izanagi::SMeshVtx* vtx,
     IZ_UINT flag,
     IZ_COLOR color,
     const izanagi::CFloatPoint& pt)
 {
-    if (IsPos(flag)) {
+    if (izanagi::CDebugMeshUtil::IsPos(flag)) {
         vtx->pos.v[0] = pt.x;
         vtx->pos.v[1] = pt.y;
         vtx->pos.v[2] = 0.0f;
         vtx->pos.v[3] = 1.0f;
     }
 
-    if (IsNormal(flag)) {
+    if (izanagi::CDebugMeshUtil::IsNormal(flag)) {
         vtx->nml.v[0] = 0.0f;
         vtx->nml.v[1] = 0.0f;
         vtx->nml.v[2] = 1.0f;
@@ -177,12 +177,12 @@ void PhotoItemMesh::FrontFace::ComputeVtx(
     }
 
     // 頂点カラー
-    if (IsColor(flag)) {
+    if (izanagi::CDebugMeshUtil::IsColor(flag)) {
         vtx->clr = color;
     }
 
     // UV座標
-    if (IsUV(flag)) {
+    if (izanagi::CDebugMeshUtil::IsUV(flag)) {
     }
 }
 
@@ -190,7 +190,7 @@ IZ_BOOL PhotoItemMesh::FrontFace::SetIdx()
 {
     const IZ_UINT vtxNum = GetVtxNum();
 
-    SMeshFace* face = GetFace();
+    izanagi::SMeshFace* face = GetFace();
     VRETURN(face != IZ_NULL);
 
     face->idx[0] = 0;
@@ -234,7 +234,7 @@ public:
 
     // Compute vertices.
     void ComputeVtx(
-        SMeshVtx* vtx,
+        izanagi::SMeshVtx* vtx,
         IZ_UINT flag,
         IZ_COLOR color,
         const izanagi::math::CVector4& pt);
@@ -315,7 +315,7 @@ IZ_BOOL PhotoItemMesh::TopAndSideFaces::SetVtx(
     IZ_FLOAT height,
     IZ_FLOAT depth)
 {
-    SMeshVtx* vtx = GetVtx();
+    izanagi::SMeshVtx* vtx = GetVtx();
 
     // NOTE
     // 1------2
@@ -340,7 +340,7 @@ IZ_BOOL PhotoItemMesh::TopAndSideFaces::SetVtx(
         for (IZ_UINT i = 0; i < 4; i++) {
             ComputeVtx(vtx, flag, color, pt[i]);
 
-            if (IsNormal(flag)) {
+            if (izanagi::CDebugMeshUtil::IsNormal(flag)) {
                 vtx->nml.v[0] = 0.0f;
                 vtx->nml.v[1] = 1.0f;
                 vtx->nml.v[2] = 0.0f;
@@ -362,7 +362,7 @@ IZ_BOOL PhotoItemMesh::TopAndSideFaces::SetVtx(
         for (IZ_UINT i = 0; i < 4; i++) {
             ComputeVtx(vtx, flag, color, pt[i]);
 
-            if (IsNormal(flag)) {
+            if (izanagi::CDebugMeshUtil::IsNormal(flag)) {
                 vtx->nml.v[0] = -1.0f;
                 vtx->nml.v[1] = 0.00f;
                 vtx->nml.v[2] = 0.0f;
@@ -384,7 +384,7 @@ IZ_BOOL PhotoItemMesh::TopAndSideFaces::SetVtx(
         for (IZ_UINT i = 0; i < 4; i++) {
             ComputeVtx(vtx, flag, color, pt[i]);
 
-            if (IsNormal(flag)) {
+            if (izanagi::CDebugMeshUtil::IsNormal(flag)) {
                 vtx->nml.v[0] = 1.0f;
                 vtx->nml.v[1] = 0.00f;
                 vtx->nml.v[2] = 0.0f;
@@ -400,12 +400,12 @@ IZ_BOOL PhotoItemMesh::TopAndSideFaces::SetVtx(
 }
 
 void PhotoItemMesh::TopAndSideFaces::ComputeVtx(
-    izanagi::CDebugMesh::SMeshVtx* vtx,
+    izanagi::SMeshVtx* vtx,
     IZ_UINT flag,
     IZ_COLOR color,
     const izanagi::math::CVector4& pt)
 {
-    if (IsPos(flag)) {
+    if (izanagi::CDebugMeshUtil::IsPos(flag)) {
         vtx->pos.v[0] = pt.x;
         vtx->pos.v[1] = pt.y;
         vtx->pos.v[2] = pt.z;
@@ -413,7 +413,7 @@ void PhotoItemMesh::TopAndSideFaces::ComputeVtx(
     }
 
     // 頂点カラー
-    if (IsColor(flag)) {
+    if (izanagi::CDebugMeshUtil::IsColor(flag)) {
         vtx->clr = color;
     }
 }
@@ -422,7 +422,7 @@ IZ_BOOL PhotoItemMesh::TopAndSideFaces::SetIdx()
 {
     const IZ_UINT vtxNum = GetVtxNum();
 
-    SMeshFace* face = GetFace();
+    izanagi::SMeshFace* face = GetFace();
     VRETURN(face != IZ_NULL);
 
     for (IZ_UINT i = 0; i < FACE_NUM; i++) {

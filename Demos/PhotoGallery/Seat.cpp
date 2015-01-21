@@ -34,7 +34,7 @@ private:
 
     // Compute vertices.
     void ComputeVtx(
-        SMeshVtx* vtx,
+        izanagi::SMeshVtx* vtx,
         IZ_UINT flag,
         IZ_COLOR color,
         IZ_FLOAT radius,
@@ -145,7 +145,7 @@ IZ_BOOL Seat::SeatPart::SetVtx(
     IZ_FLOAT height,
     IZ_UINT slices)
 {
-    SMeshVtx* vtx = GetVtx();
+    izanagi::SMeshVtx* vtx = GetVtx();
 
     //IZ_FLOAT longitudeStep = IZ_MATH_PI2 / slices;
     IZ_FLOAT longitudeStep = -IZ_MATH_PI / slices;
@@ -226,7 +226,7 @@ IZ_BOOL Seat::SeatPart::SetVtx(
 }
 
 void Seat::SeatPart::ComputeVtx(
-    izanagi::CDebugMesh::SMeshVtx* vtx,
+    izanagi::SMeshVtx* vtx,
     IZ_UINT flag,
     IZ_COLOR color,
     IZ_FLOAT radius,
@@ -237,14 +237,14 @@ void Seat::SeatPart::ComputeVtx(
     IZ_FLOAT sinLong = izanagi::math::CMath::SinF(longitude);
     IZ_FLOAT cosLong = izanagi::math::CMath::CosF(longitude);
 
-    if (IsPos(flag)) {
+    if (izanagi::CDebugMeshUtil::IsPos(flag)) {
         vtx->pos.v[0] = radius * cosLong;
         vtx->pos.v[1] = y;
         vtx->pos.v[2] = radius * sinLong;
         vtx->pos.v[3] = 1.0f;
     }
 
-    if (IsNormal(flag)) {
+    if (izanagi::CDebugMeshUtil::IsNormal(flag)) {
         if (isTopFace) {
             vtx->nml.v[0] = 0.0f;
             vtx->nml.v[1] = 1.0f;
@@ -260,12 +260,12 @@ void Seat::SeatPart::ComputeVtx(
     }
 
     // 頂点カラー
-    if (IsColor(flag)) {
+    if (izanagi::CDebugMeshUtil::IsColor(flag)) {
         vtx->clr = color;
     }
 
     // UV座標
-    if (IsUV(flag)) {
+    if (izanagi::CDebugMeshUtil::IsUV(flag)) {
         // TODO
     }
 }
@@ -274,7 +274,7 @@ IZ_BOOL Seat::SeatPart::SetIdx(IZ_UINT slices)
 {
     const IZ_UINT vtxNum = GetVtxNum();
 
-    SMeshFace* face = GetFace();
+    izanagi::SMeshFace* face = GetFace();
     VRETURN(face != IZ_NULL);
 
     // Inner faces.
