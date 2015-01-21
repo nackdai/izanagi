@@ -1,3 +1,4 @@
+#include "debugutil/mesh/DebugMeshAxis.h"
 #include "debugutil/mesh/DebugMeshRectangle.h"
 
 using namespace izanagi;
@@ -125,7 +126,7 @@ IZ_BOOL CDebugMeshRectangle::SetVtx(
         
         for (IZ_UINT x = 0; x <= nDivideX; ++x) {
             // 位置
-            if (IsPos(flag)) {
+            if (CDebugMeshUtil::IsPos(flag)) {
                 pVtx->pos.v[0] = fX;
                 pVtx->pos.v[1] = 0.0f;
                 pVtx->pos.v[2] = fZ;
@@ -133,7 +134,7 @@ IZ_BOOL CDebugMeshRectangle::SetVtx(
             }
 
             // 法線
-            if (IsNormal(flag)) {
+            if (CDebugMeshUtil::IsNormal(flag)) {
                 pVtx->nml.v[0] = 0.0f;
                 pVtx->nml.v[1] = 1.0f;
                 pVtx->nml.v[2] = 0.0f;
@@ -141,12 +142,12 @@ IZ_BOOL CDebugMeshRectangle::SetVtx(
             }
 
             // 頂点カラー
-            if (IsColor(flag)) {
+            if (CDebugMeshUtil::IsColor(flag)) {
                 pVtx->clr = nColor;
             }
 
             // UV座標
-            if (IsUV(flag)) {
+            if (CDebugMeshUtil::IsUV(flag)) {
                 pVtx->uv[0] = fTexUPerVtx * x;
                 pVtx->uv[1] = fTexVPerVtx * y;
             }

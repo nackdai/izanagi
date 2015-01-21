@@ -1,3 +1,4 @@
+#include "debugutil/mesh/DebugMeshAxis.h"
 #include "debugutil/mesh/DebugMeshBox.h"
 
 using namespace izanagi;
@@ -187,7 +188,7 @@ IZ_BOOL CDebugMeshBox::SetData(
     for (IZ_UINT i = 0; i < PRIM_NUM; ++i) {
         for (IZ_UINT n = 0; n < VTX_NUM_PER_FACE; ++n) {
             // 位置
-            if (IsPos(flag)) {
+            if (CDebugMeshUtil::IsPos(flag)) {
                 IZ_UINT idx = PRIM[i][n];
 
                 pVtx->pos.v[0] = fWidth * POS[idx][0];
@@ -197,7 +198,7 @@ IZ_BOOL CDebugMeshBox::SetData(
             }
 
             // 法線
-            if (IsNormal(flag)) {
+            if (CDebugMeshUtil::IsNormal(flag)) {
                 pVtx->nml.v[0] = NML[i][0];
                 pVtx->nml.v[1] = NML[i][1];
                 pVtx->nml.v[2] = NML[i][2];
@@ -205,12 +206,12 @@ IZ_BOOL CDebugMeshBox::SetData(
             }
 
             // カラー
-            if (IsColor(flag)) {
+            if (CDebugMeshUtil::IsColor(flag)) {
                 pVtx->clr = nColor;
             }
             
             // UV
-            if (IsUV(flag)) {
+            if (CDebugMeshUtil::IsUV(flag)) {
                 pVtx->uv[0] = UV[n][0];
                 pVtx->uv[1] = UV[n][1];
             }

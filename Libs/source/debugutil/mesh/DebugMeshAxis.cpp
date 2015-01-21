@@ -11,7 +11,10 @@ CDebugMeshAxis* CDebugMeshAxis::CreateDebugMeshAxis(
     IZ_UINT nPointNum/*= 0*/)
 {
     // 必ず１つはあるようにする・・・
-    if (!(IsAxisX(flag) || IsAxisY(flag) || IsAxisZ(flag))) {
+    if (!(CDebugMeshUtil::IsAxisX(flag)
+        || CDebugMeshUtil::IsAxisY(flag)
+        || CDebugMeshUtil::IsAxisZ(flag)))
+    {
         flag |= E_DEBUG_MESH_AXIS_X;
     }
 
@@ -28,13 +31,13 @@ CDebugMeshAxis* CDebugMeshAxis::CreateDebugMeshAxis(
     {
         pInstance->m_PrimType = graph::E_GRAPH_PRIM_TYPE_LINELIST;
 
-        if (IsAxisX(flag)) {
+        if (CDebugMeshUtil::IsAxisX(flag)) {
             ++(pInstance->m_nPrimCnt);
         }
-        if (IsAxisY(flag)) {
+        if (CDebugMeshUtil::IsAxisY(flag)) {
             ++(pInstance->m_nPrimCnt);
         }
-        if (IsAxisZ(flag)) {
+        if (CDebugMeshUtil::IsAxisZ(flag)) {
             ++(pInstance->m_nPrimCnt);
         }
 
@@ -119,7 +122,7 @@ IZ_BOOL CDebugMeshAxis::Draw(graph::CGraphicsDevice* device)
     IZ_BOOL ret = (m_nSetPrimCnt == 0);
 
     if (!ret && (m_nSetPrimCnt == m_nPrimCnt)) {
-        ret = CDebugMesh::Draw(device);
+        ret = CDebugMeshTmpl::Draw(device);
     }
 
     IZ_ASSERT(ret);
