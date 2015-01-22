@@ -90,15 +90,12 @@ namespace {
 BevelShaderMesh* BevelShaderMesh::Create(
     izanagi::IMemoryAllocator* allocator,
     izanagi::graph::CGraphicsDevice* device,
+    IZ_UINT flag,
     IZ_COLOR color,
     IZ_FLOAT width,
     IZ_FLOAT height,
     IZ_FLOAT depth)
 {
-    IZ_UINT flag = izanagi::E_DEBUG_MESH_VTX_FORM_POS
-        | izanagi::E_DEBUG_MESH_VTX_FORM_COLOR
-        | izanagi::E_DEBUG_MESH_VTX_FORM_NORMAL;
-
     void* pBuf = ALLOC_ZERO(allocator, sizeof(BevelShaderMesh));
     VRETURN_VAL(pBuf != IZ_NULL, IZ_NULL);
 
@@ -230,6 +227,7 @@ IZ_UINT8* BevelShaderMesh::SetExtraVtxData(
     extra[1] = meshVtx->nextNml[1];
     extra[2] = meshVtx->nextNml[2];
     extra[3] = meshVtx->radius;
+    extra += 4;
 
     data = (IZ_UINT8*)extra;
 

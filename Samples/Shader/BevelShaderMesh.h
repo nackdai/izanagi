@@ -16,6 +16,7 @@ public:
     static BevelShaderMesh* Create(
         izanagi::IMemoryAllocator* allocator,
         izanagi::graph::CGraphicsDevice* device,
+        IZ_UINT flag,
         IZ_COLOR color,
         IZ_FLOAT width,
         IZ_FLOAT height,

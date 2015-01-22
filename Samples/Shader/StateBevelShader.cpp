@@ -101,6 +101,7 @@ IZ_BOOL CStateBevelShader::Enter(
                         allocator,
                         device,
                         flag,
+                        IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0xff),
                         5.0f, 5.0f, 5.0f);
         VGOTO(result = (m_Mesh != IZ_NULL), __EXIT__);
     }
