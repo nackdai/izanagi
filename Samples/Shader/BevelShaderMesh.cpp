@@ -384,11 +384,9 @@ IZ_BOOL BevelShaderMesh::SetData(
 
             pVtx->radius = 0.1f;
 
-            // TODO
-            // —×‚Ì•Ó‚Ü‚Å‚Ì‹——£‚à“ü‚ê‚é
-            pVtx->dir[0] = DIR[i][n / 2][0] * 2.5f;
-            pVtx->dir[1] = DIR[i][n / 2][1] * 2.5f;
-            pVtx->dir[2] = DIR[i][n / 2][2] * 2.5f;
+            pVtx->dir[0] = DIR[i][n / 2][0];
+            pVtx->dir[1] = DIR[i][n / 2][1];
+            pVtx->dir[2] = DIR[i][n / 2][2];
 
             ++pVtx;
         }
