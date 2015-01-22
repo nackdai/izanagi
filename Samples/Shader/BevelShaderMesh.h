@@ -4,8 +4,9 @@
 #include "izSampleKit.h"
 
 struct SMeshVtx : public izanagi:: SMeshVtx {
-    IZ_FLOAT nextNml[4];
+    IZ_FLOAT nextNml[3];
     IZ_FLOAT radius;
+    IZ_FLOAT dir[3];
 };
 
 class BevelShaderMesh : public izanagi::CDebugMeshTmpl<SMeshVtx> {
