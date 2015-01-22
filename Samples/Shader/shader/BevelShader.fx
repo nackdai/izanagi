@@ -12,6 +12,8 @@ struct SPSInput {
     float3 vNormal  : TEXCOORD0;
     float4 vNextNml : TEXCOORD1;
     float3 vDir     : TEXCOORD2;
+    float3 vHalf    : TEXCOORD3;
+    float4 vColor   : COLOR;
 };
 
 #define SVSOutput        SPSInput
@@ -32,7 +34,7 @@ float4 g_vLitParallelDir;
 float4 g_vLitParallelColor;
 float4 g_vLitAmbientColor;
 
-#define R   0.2f
+#define R   0.05f
 
 /////////////////////////////////////////////////////////////
 
@@ -51,25 +53,37 @@ SVSOutput mainVS(SVSInput In)
     Out.vNextNml.a = In.vNextNml.a;
 
     Out.vDir = mul(In.vDir, (float3x3)g_mL2W);
+
+    // 視点への方向ベクトル（ローカル座標）
+    float3 vV = normalize(g_vEye - In.vPos).xyz;
+
+    Out.vHalf = normalize(-g_vLitParallelDir.xyz + vV);
+
+    // Ambient
+    Out.vColor = g_vMtrlAmbient * g_vLitAmbientColor;
     
     return Out;
 }
 
 float4 mainPS(SPSInput In) : COLOR
 {
-    //float4 vOut = float4(In.vNextNml.x, In.vNextNml.y, In.vNextNml.z, 1.0f);
-    //float4 vOut = float4(In.vDir.x, In.vDir.y, In.vDir.z, 1.0f);
-    //vOut.rgb = vOut.rgb * 0.5f + 0.5f;
-
-    //float4 vOut = In.vTarget;
-    //vOut.xyz *= normalize(In.vDir);
-
-    //float4 vOut = float4(In.vDir.x, In.vDir.y, In.vDir.z, 1.0f);
-    //vOut.rgb = (1.0f - (1.0f - length(vOut.xyz)) / R) * step(1.0f - length(vOut.xyz), R);
-
     float f = (1.0f - (1.0f - length(In.vDir.xyz)) / R) * step(1.0f - length(In.vDir.xyz), R);
-    float4 vOut = float4(In.vNormal.x, In.vNormal.y, In.vNormal.z, 0.0f);
-    vOut.xyz = lerp(vOut.xyz, In.vNextNml, f);
+    float3 vN = In.vNormal.xyz;
+    vN = lerp(vN, In.vNextNml.xyz, f);
+    vN = normalize(vN);
+
+    float3 vH = normalize(In.vHalf);
+    float3 vL = -g_vLitParallelDir.xyz;
+
+    // 頂点シェーダでAmbientについては計算済み
+    float4 vOut = In.vColor;
+
+    // Diffuse = Md * ∑(C * max(N・L, 0))
+    vOut.rgb += g_vMtrlDiffuse.rgb * g_vLitParallelColor.rgb * max(0.0f, dot(vN, vL));
+    
+    // Specular = Ms * ∑(C * pow(max(N・H, 0), m))
+    vOut.rgb += g_vMtrlSpecular.rgb * g_vLitParallelColor.rgb * pow(max(0.0f, dot(vN, vH)), max(g_vMtrlSpecular.w, 0.00001f));
+
     vOut.a = 1.0f;
         
     return vOut;
