@@ -69,7 +69,11 @@ float4 mainPS(SPSInput In) : COLOR
 {
     float f = (1.0f - (1.0f - length(In.vDir.xyz)) / R) * step(1.0f - length(In.vDir.xyz), R);
     float3 vN = In.vNormal.xyz;
-    vN = lerp(vN, In.vNextNml.xyz, f);
+
+    // NOTE
+    // Šp‚Å‚ÍŽ©•ª‚Ì–Ê‚Æ—×‚Ì–Ê‚ÌŠÔ‚ðŽæ‚è‚½‚¢‚Ì‚Å•âŠÔ’l‚ð”¼•ª‚Ü‚Å‚É‚·‚é
+    vN = lerp(vN, In.vNextNml.xyz, f * 0.5f);
+
     vN = normalize(vN);
 
     float3 vH = normalize(In.vHalf);
