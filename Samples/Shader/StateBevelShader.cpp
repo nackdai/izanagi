@@ -8,7 +8,6 @@ CStateBevelShader::CStateBevelShader(
     izanagi::SCameraParam& camera)
 : CStateBase(app, camera)
 {
-    m_Img = IZ_NULL;
     m_Shader = IZ_NULL;
     m_Mesh = IZ_NULL;
 }
@@ -23,8 +22,6 @@ IZ_BOOL CStateBevelShader::Render(izanagi::graph::CGraphicsDevice* device)
 {
     izanagi::math::SMatrix44 mtxL2W;
     izanagi::math::SMatrix44::SetUnit(mtxL2W);
-
-    device->SetTexture(0, m_Img->GetTexture(0));
 
     m_Shader->Begin(device, 0, IZ_FALSE);
     {
@@ -42,12 +39,6 @@ IZ_BOOL CStateBevelShader::Render(izanagi::graph::CGraphicsDevice* device)
                 (void*)&m_Camera.mtxW2C,
                 sizeof(m_Camera.mtxW2C));
 
-            SetShaderParam(
-                m_Shader,
-                "g_mW2V",
-                (void*)&m_Camera.mtxW2V,
-                sizeof(m_Camera.mtxW2V));
-
             m_Shader->CommitChanges(device);
 
             m_Mesh->Draw(device);
@@ -55,7 +46,7 @@ IZ_BOOL CStateBevelShader::Render(izanagi::graph::CGraphicsDevice* device)
     }
     m_Shader->End(device);
 
-    RenderName(device, "MirrorMap");
+    RenderName(device, "BevelShader");
 
     return IZ_TRUE;
 }
@@ -68,22 +59,10 @@ IZ_BOOL CStateBevelShader::Enter(
 {
     IZ_BOOL result = IZ_TRUE;
 
-    // テクスチャ
-    {
-        izanagi::CFileInputStream in;
-        VRETURN(in.Open("data/EnvMap.img"));
-
-        m_Img = izanagi::CImage::CreateImage(
-                    allocator,
-                    device,
-                    &in);
-        VGOTO(result = (m_Img != IZ_NULL), __EXIT__);
-    }
-
     // シェーダ
     {
         izanagi::CFileInputStream in;
-        VRETURN(in.Open("data/MirrorMapShader.shd"));
+        VRETURN(in.Open("data/BevelShader.shd"));
 
         m_Shader = izanagi::shader::CShaderBasic::CreateShader<izanagi::shader::CShaderBasic>(
                     allocator,
@@ -92,7 +71,7 @@ IZ_BOOL CStateBevelShader::Enter(
         VGOTO(result = (m_Shader != IZ_NULL), __EXIT__);
     }
 
-    // 球
+    // メッシュ
     {
         IZ_UINT flag = izanagi::E_DEBUG_MESH_VTX_FORM_POS
                         | izanagi::E_DEBUG_MESH_VTX_FORM_NORMAL;
@@ -117,7 +96,6 @@ __EXIT__:
 // ステートから抜ける（終了）.
 IZ_BOOL CStateBevelShader::Leave()
 {
-    SAFE_RELEASE(m_Img);
     SAFE_RELEASE(m_Shader);
     SAFE_RELEASE(m_Mesh);
 

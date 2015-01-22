@@ -27,7 +27,6 @@ public:
     virtual IZ_BOOL Leave();
 
 protected:
-    izanagi::CImage* m_Img;
     izanagi::shader::CShaderBasic* m_Shader;
     BevelShaderMesh* m_Mesh;
 };
