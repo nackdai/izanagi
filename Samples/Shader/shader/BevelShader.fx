@@ -1,19 +1,23 @@
 // Bevel Shader
 
 struct SVSInput {
-    float4 vPos     : POSITION;
-    float3 vNormal  : NORMAL;
-    float4 vNextNml : TEXCOORD1;
-    float3 vDir     : TEXCOORD2;
+    float4 vPos         : POSITION;
+    float3 vNormal      : NORMAL;
+    float4 vNextNml     : TEXCOORD1;
+    float3 vDir         : TEXCOORD2;
+    float4 vNextNml2    : TEXCOORD3;
+    float3 vDir2        : TEXCOORD4;
 };
 
 struct SPSInput {
-    float4 vPos     : POSITION;
-    float3 vNormal  : TEXCOORD0;
-    float4 vNextNml : TEXCOORD1;
-    float3 vDir     : TEXCOORD2;
-    float3 vHalf    : TEXCOORD3;
-    float4 vColor   : COLOR;
+    float4 vPos         : POSITION;
+    float3 vNormal      : TEXCOORD0;
+    float4 vNextNml     : TEXCOORD1;
+    float3 vDir         : TEXCOORD2;
+    float3 vHalf        : TEXCOORD3;
+    float4 vColor       : COLOR;
+    float4 vNextNml2    : TEXCOORD4;
+    float3 vDir2        : TEXCOORD5;
 };
 
 #define SVSOutput        SPSInput
@@ -61,19 +65,30 @@ SVSOutput mainVS(SVSInput In)
 
     // Ambient
     Out.vColor = g_vMtrlAmbient * g_vLitAmbientColor;
+
+    Out.vNextNml2.xyz = mul(In.vNextNml2.xyz, (float3x3)g_mL2W);
+    Out.vNextNml2.xyz = normalize(Out.vNextNml2.xyz);
+    Out.vDir2 = mul(In.vDir2, (float3x3)g_mL2W);
     
     return Out;
 }
 
 float4 mainPS(SPSInput In) : COLOR
 {
-    float f = (1.0f - (1.0f - length(In.vDir.xyz)) / R) * step(1.0f - length(In.vDir.xyz), R);
+    float3 dir = In.vDir;
+    float f = (1.0f - (1.0f - length(dir)) / R) * step(1.0f - length(dir), R);
     float3 vN = In.vNormal.xyz;
 
     // NOTE
     // Šp‚Å‚ÍŽ©•ª‚Ì–Ê‚Æ—×‚Ì–Ê‚ÌŠÔ‚ðŽæ‚è‚½‚¢‚Ì‚Å•âŠÔ’l‚ð”¼•ª‚Ü‚Å‚É‚·‚é
-    vN = lerp(vN, In.vNextNml.xyz, f * 0.5f);
+    float3 nml1 = lerp(vN, In.vNextNml.xyz, f * 0.5f);
 
+    dir = In.vDir2;
+    f = (1.0f - (1.0f - length(dir)) / R) * step(1.0f - length(dir), R);
+    float3 nml2 = In.vNextNml2;
+    nml2 = lerp(vN, nml2, f * 0.5f);
+
+    vN = lerp(nml1, nml2, 0.5f);
     vN = normalize(vN);
 
     float3 vH = normalize(In.vHalf);

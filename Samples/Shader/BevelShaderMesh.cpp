@@ -68,69 +68,105 @@ namespace {
         {-1.0f,  0.0f,  0.0f},  // 左
     };
 
-    const IZ_FLOAT NEXT_NML[][2][3] = {
+    const IZ_FLOAT NEXT_NML[][4][3] = {
         // 前
         {
-            { -1.0f,  0.0f,  0.0f},
-            {  1.0f,  0.0f,  0.0f},
+            { -1.0f,  0.0f,  0.0f}, // 左
+            {  1.0f,  0.0f,  0.0f}, // 右
+
+            {  0.0f,  1.0f,  0.0f}, // 上
+            {  0.0f, -1.0f,  0.0f}, // 下
         },
         // 後
         {
             {  1.0f,  0.0f,  0.0f},
             { -1.0f,  0.0f,  0.0f},
+
+            {  0.0f,  1.0f,  0.0f}, // 上
+            {  0.0f, -1.0f,  0.0f}, // 下
         },
         // 上
         {
             { -1.0f,  0.0f,  0.0f},
             {  1.0f,  0.0f,  0.0f},
+
+            {  0.0f,  0.0f,  1.0f}, // 奥
+            {  0.0f,  0.0f, -1.0f}, // 手前
         },
         // 下
         {
             { -1.0f,  0.0f,  0.0f},
             {  1.0f,  0.0f,  0.0f},
+
+            {  0.0f,  0.0f, -1.0f}, // 手前
+            {  0.0f,  0.0f,  1.0f}, // 奥
         },
         // 右
         {
             {  0.0f,  0.0f, -1.0f},
             {  0.0f,  0.0f,  1.0f},
+
+            {  0.0f,  1.0f,  0.0f}, // 上
+            {  0.0f, -1.0f,  0.0f}, // 下
         },
         // 左
         {
             {  0.0f,  0.0f,  1.0f},
             {  0.0f,  0.0f, -1.0f},
+
+            {  0.0f,  1.0f,  0.0f}, // 上
+            {  0.0f, -1.0f,  0.0f}, // 下
         },
     };
 
-    const IZ_FLOAT DIR[][2][3] = {
+    const IZ_FLOAT DIR[][4][3] = {
         // 前
         {
-            {  1.0f, 0.0f, 0.0f},
-            { -1.0f, 0.0f, 0.0f},
+            {  1.0f,  0.0f,  0.0f},
+            { -1.0f,  0.0f,  0.0f},
+
+            {  0.0f, -1.0f,  0.0f},
+            {  0.0f,  1.0f,  0.0f}, 
         },
         // 後
         {
             { -1.0f, 0.0f, 0.0f},
             {  1.0f, 0.0f, 0.0f},
+
+            {  0.0f, -1.0f,  0.0f}, // 上
+            {  0.0f,  1.0f,  0.0f}, // 下
         },
         // 上
         {
-            {  1.0f, 0.0f, 0.0f},
-            { -1.0f, 0.0f, 0.0f},
+            {  1.0f,  0.0f,  0.0f},
+            { -1.0f,  0.0f,  0.0f},
+
+            {  0.0f,  0.0f, -1.0f},
+            {  0.0f,  0.0f,  1.0f},
         },
         // 下
         {
             {  1.0f, 0.0f, 0.0f},
             { -1.0f, 0.0f, 0.0f},
+
+            {  0.0f,  0.0f,  1.0f}, // 手前
+            {  0.0f,  0.0f, -1.0f}, // 奥
         },
         // 右
         {
             {  0.0f, 0.0f,  1.0f},
             {  0.0f, 0.0f, -1.0f},
+
+            {  0.0f, -1.0f,  0.0f}, // 上
+            {  0.0f,  1.0f,  0.0f}, // 下
         },
         // 左
         {
             {  0.0f, 0.0f, -1.0f},
             {  0.0f, 0.0f,  1.0f},
+
+            {  0.0f, -1.0f,  0.0f}, // 上
+            {  0.0f,  1.0f,  0.0f}, // 下
         },
     };
 
@@ -264,6 +300,8 @@ IZ_BOOL BevelShaderMesh::CreateVB(
 
     stride += sizeof(IZ_FLOAT) * 4;
     stride += sizeof(IZ_FLOAT) * 3;
+    stride += sizeof(IZ_FLOAT) * 3;
+    stride += sizeof(IZ_FLOAT) * 3;
 
     m_pVB = device->CreateVertexBuffer(
                 stride,
@@ -303,6 +341,26 @@ IZ_BOOL BevelShaderMesh::CreateVD(
     }
     cnt++;
 
+    {
+        elements[cnt].Stream = 0;
+        elements[cnt].Offset = elements[cnt - 1].Offset
+            + izanagi::graph::GetSizeByVtxDeclType(elements[cnt - 1].Type);
+        elements[cnt].Type = izanagi::graph::E_GRAPH_VTX_DECL_TYPE_FLOAT3;
+        elements[cnt].Usage = izanagi::graph::E_GRAPH_VTX_DECL_USAGE_TEXCOORD;
+        elements[cnt].UsageIndex = 3;
+    }
+    cnt++;
+
+    {
+        elements[cnt].Stream = 0;
+        elements[cnt].Offset = elements[cnt - 1].Offset
+            + izanagi::graph::GetSizeByVtxDeclType(elements[cnt - 1].Type);
+        elements[cnt].Type = izanagi::graph::E_GRAPH_VTX_DECL_TYPE_FLOAT3;
+        elements[cnt].Usage = izanagi::graph::E_GRAPH_VTX_DECL_USAGE_TEXCOORD;
+        elements[cnt].UsageIndex = 4;
+    }
+    cnt++;
+
     m_pVD = device->CreateVertexDeclaration(elements, cnt);
 
     return (m_pVD != IZ_NULL);
@@ -326,6 +384,16 @@ IZ_UINT8* BevelShaderMesh::SetExtraVtxData(
     extra[0] = meshVtx->dir[0];
     extra[1] = meshVtx->dir[1];
     extra[2] = meshVtx->dir[2];
+    extra += 3;
+
+    extra[0] = meshVtx->nextNml2[0];
+    extra[1] = meshVtx->nextNml2[1];
+    extra[2] = meshVtx->nextNml2[2];
+    extra += 3;
+
+    extra[0] = meshVtx->dir2[0];
+    extra[1] = meshVtx->dir2[1];
+    extra[2] = meshVtx->dir2[2];
     extra += 3;
 
     data = (IZ_UINT8*)extra;
@@ -381,9 +449,33 @@ IZ_BOOL BevelShaderMesh::SetData(
 
             pVtx->radius = 0.1f;
 
-            pVtx->dir[0] = DIR[i][n / 2][0];
-            pVtx->dir[1] = DIR[i][n / 2][1];
-            pVtx->dir[2] = DIR[i][n / 2][2];
+            pVtx->dir[0] = DIR[i][n/2][0];
+            pVtx->dir[1] = DIR[i][n/2][1];
+            pVtx->dir[2] = DIR[i][n/2][2];
+
+            switch (n) {
+            case 0:
+            case 3:
+                pVtx->nextNml2[0] = NEXT_NML[i][2][0];
+                pVtx->nextNml2[1] = NEXT_NML[i][2][1];
+                pVtx->nextNml2[2] = NEXT_NML[i][2][2];
+                pVtx->dir2[0] = DIR[i][2][0];
+                pVtx->dir2[1] = DIR[i][2][1];
+                pVtx->dir2[2] = DIR[i][2][2];
+                break;
+            case 1:
+            case 2:
+                pVtx->nextNml2[0] = NEXT_NML[i][3][0];
+                pVtx->nextNml2[1] = NEXT_NML[i][3][1];
+                pVtx->nextNml2[2] = NEXT_NML[i][3][2];
+                pVtx->dir2[0] = DIR[i][3][0];
+                pVtx->dir2[1] = DIR[i][3][1];
+                pVtx->dir2[2] = DIR[i][3][2];
+                break;
+            default:
+                IZ_ASSERT(IZ_FALSE);
+                break;
+            }
 
             ++pVtx;
         }
