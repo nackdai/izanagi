@@ -15,6 +15,15 @@ public:
      */
     static const IZ_UINT SCREEN_HEIGHT;
 
+    static const IZ_UINT RING_SLICES;
+
+    static const IZ_FLOAT INNER_RADIUS;
+    static const IZ_FLOAT OUTER_RADIUS;
+
+    static const IZ_FLOAT RING_HEIGHT;
+
+    static const IZ_COLOR RING_COLOR;
+
     /** Number of photos.
      */
     static const IZ_UINT PHOTOS;

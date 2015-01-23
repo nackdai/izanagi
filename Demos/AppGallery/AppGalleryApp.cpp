@@ -2,6 +2,7 @@
 #include "LoadTextureJob.h"
 #include "StateManager.h"
 #include "GestureListener.h"
+#include "Scene.h"
 
 AppGalleryApp::AppGalleryApp()
 {
@@ -43,6 +44,10 @@ IZ_BOOL AppGalleryApp::InitInternal(
     StateManager::Instance().Create(camera);
     StateManager::Instance().Init();
 
+    Scene::Instance().Init(
+        allocator,
+        device);
+
     m_Timer.Begin();
 
     if (!result) {
@@ -57,6 +62,8 @@ void AppGalleryApp::ReleaseInternal()
 {
     TextureLoader::Instance().Terminate();
     izanagi::threadmodel::CJobQueue::TerminateJobQueue();
+
+    Scene::Instance().Terminate();
 }
 
 // 更新.
@@ -78,6 +85,10 @@ void AppGalleryApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 void AppGalleryApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
     const izanagi::CCamera& camera = GetCamera();
+
+    Scene::Instance().Render(
+        camera,
+        device);
 }
 
 IZ_BOOL AppGalleryApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)

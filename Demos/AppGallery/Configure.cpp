@@ -3,6 +3,15 @@
 const IZ_UINT Configure::SCREEN_WIDTH = 1280;
 const IZ_UINT Configure::SCREEN_HEIGHT = 720;
 
+const IZ_UINT Configure::RING_SLICES = 10;;
+
+const IZ_FLOAT Configure::INNER_RADIUS = 10.0f;
+const IZ_FLOAT Configure::OUTER_RADIUS = 15.0f;
+
+const IZ_FLOAT Configure::RING_HEIGHT = 5.0f;
+
+const IZ_COLOR Configure::RING_COLOR = IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0xff);
+
 const IZ_UINT Configure::PHOTOS = 90;
 
 const IZ_UINT Configure::MeshFlags = izanagi::E_DEBUG_MESH_VTX_FORM_POS
