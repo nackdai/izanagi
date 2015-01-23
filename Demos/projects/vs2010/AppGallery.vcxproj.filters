@@ -33,6 +33,15 @@
     <ClInclude Include="..\..\AppGallery\GestureListener.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\AppGallery\Ring.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\AppGallery\Scene.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\AppGallery\Utility.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\AppGallery\Configure.cpp">
@@ -59,5 +68,24 @@
     <ClCompile Include="..\..\AppGallery\GestureListener.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\AppGallery\Ring.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\AppGallery\Scene.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\AppGallery\Utility.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\AppGallery\shader\BevelShader.fx">
+      <Filter>shader</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\AppGallery\shader\BevelShader.xml">
+      <Filter>shader</Filter>
+    </CustomBuild>
   </ItemGroup>
 </Project>
