@@ -42,6 +42,18 @@
     <ClInclude Include="..\..\AppGallery\Utility.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\AppGallery\Board.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\AppGallery\MeshVtx.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\AppGallery\Item.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\AppGallery\ItemManager.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\AppGallery\Configure.cpp">
@@ -75,6 +87,15 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\AppGallery\Utility.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\AppGallery\Board.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\AppGallery\ItemManager.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\AppGallery\Item.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

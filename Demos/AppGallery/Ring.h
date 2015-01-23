@@ -2,18 +2,8 @@
 #define __RING_H__
 
 #include "izSampleKit.h"
+#include "MeshVtx.h"
 
-struct SMeshVtx : public izanagi:: SMeshVtx {
-    IZ_FLOAT nextNml[3];
-    IZ_FLOAT radius;
-    IZ_FLOAT dir[3];
-
-    IZ_FLOAT nextNml2[3];
-    IZ_FLOAT dir2[3];
-};
-
-/** Photos's seat.
- */
 class Ring : public izanagi::CDebugMeshTmpl<SMeshVtx> {
     friend class izanagi::CDebugMeshTmpl<SMeshVtx>;
 

@@ -24,17 +24,15 @@ public:
 
     static const IZ_COLOR RING_COLOR;
 
-    /** Number of photos.
+    static const IZ_FLOAT Radius;
+
+    /** Number of itemss.
      */
-    static const IZ_UINT PHOTOS;
+    static const IZ_UINT ItemNum;
 
     /** Flags for vertex semantics.
      */
     static const IZ_UINT MeshFlags;
-
-    /** Slices of seat.
-     */
-    static const IZ_UINT Slices;
 
     /** Default color.
      */

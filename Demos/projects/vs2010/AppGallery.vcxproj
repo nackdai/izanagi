@@ -24,9 +24,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\AppGallery\AppGalleryApp.h" />
+    <ClInclude Include="..\..\AppGallery\Board.h" />
     <ClInclude Include="..\..\AppGallery\Configure.h" />
     <ClInclude Include="..\..\AppGallery\GestureListener.h" />
+    <ClInclude Include="..\..\AppGallery\Item.h" />
+    <ClInclude Include="..\..\AppGallery\ItemManager.h" />
     <ClInclude Include="..\..\AppGallery\LoadTextureJob.h" />
+    <ClInclude Include="..\..\AppGallery\MeshVtx.h" />
     <ClInclude Include="..\..\AppGallery\Ring.h" />
     <ClInclude Include="..\..\AppGallery\Scene.h" />
     <ClInclude Include="..\..\AppGallery\StateBase.h" />
@@ -36,8 +40,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\AppGallery\AppGalleryApp.cpp" />
+    <ClCompile Include="..\..\AppGallery\Board.cpp" />
     <ClCompile Include="..\..\AppGallery\Configure.cpp" />
     <ClCompile Include="..\..\AppGallery\GestureListener.cpp" />
+    <ClCompile Include="..\..\AppGallery\Item.cpp" />
+    <ClCompile Include="..\..\AppGallery\ItemManager.cpp" />
     <ClCompile Include="..\..\AppGallery\LoadTextureJob.cpp" />
     <ClCompile Include="..\..\AppGallery\main.cpp" />
     <ClCompile Include="..\..\AppGallery\Ring.cpp" />

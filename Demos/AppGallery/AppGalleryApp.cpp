@@ -3,6 +3,7 @@
 #include "StateManager.h"
 #include "GestureListener.h"
 #include "Scene.h"
+#include "ItemManager.h"
 
 AppGalleryApp::AppGalleryApp()
 {
@@ -44,6 +45,10 @@ IZ_BOOL AppGalleryApp::InitInternal(
     StateManager::Instance().Create(camera);
     StateManager::Instance().Init();
 
+    ItemManager::Instance().Init(
+        allocator,
+        device);
+
     Scene::Instance().Init(
         allocator,
         device);
@@ -63,6 +68,7 @@ void AppGalleryApp::ReleaseInternal()
     TextureLoader::Instance().Terminate();
     izanagi::threadmodel::CJobQueue::TerminateJobQueue();
 
+    ItemManager::Instance().Terminate();
     Scene::Instance().Terminate();
 }
 

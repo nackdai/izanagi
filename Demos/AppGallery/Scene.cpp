@@ -1,6 +1,7 @@
 #include "Scene.h"
 #include "Ring.h"
 #include "Utility.h"
+#include "ItemManager.h"
 
 Scene Scene::instance;
 
@@ -142,9 +143,13 @@ void Scene::Render(
                     sizeof(eyePos));
             }
 
+#if 0
             m_BevelShader->CommitChanges(device);
 
             m_Ring->Draw(device);
+#else
+            ItemManager::Instance().Render(device, m_BevelShader);
+#endif
         }
     }
     m_BevelShader->End(device);
