@@ -69,7 +69,7 @@ private:
         IZ_FLOAT outerR,
         IZ_FLOAT height);
 
-    SMeshVtx* SetDataDownFace(
+    SMeshVtx* SetDataOuterFace(
         SMeshVtx* vtx,
         IZ_UINT flag,
         IZ_UINT slices,
@@ -82,7 +82,13 @@ private:
 
     izanagi::SMeshFace* SetIdxUpFace(
         IZ_UINT slices,
-        izanagi::SMeshFace* face);
+        izanagi::SMeshFace* face,
+        IZ_UINT& idx);
+
+    izanagi::SMeshFace* SetIdxOuterFace(
+        IZ_UINT slices,
+        izanagi::SMeshFace* face,
+        IZ_UINT& idx);
 };
 
 #endif    // #if !defined(__RING_H__)

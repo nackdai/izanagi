@@ -84,7 +84,8 @@ void Scene::Render(
                 parallelLight.color.Set(1.0f, 1.0f, 1.0f);
 
                 // Parallel Light Direction
-                parallelLight.vDir.Set(-1.0f, -1.0f, -1.0f);
+                //parallelLight.vDir.Set(-1.0f, -1.0f, -1.0f);
+                parallelLight.vDir.Set(-1.0f, 0.0f, -1.0f);
                 izanagi::math::SVector4::Normalize(parallelLight.vDir, parallelLight.vDir);
 
                 // ƒ}ƒeƒŠƒAƒ‹
