@@ -23,7 +23,7 @@ namespace {
         cnt += slices * 2 * 2;
 #else
         IZ_UINT cnt = slices * 2;
-        cnt += slices * 2;
+        cnt += slices * 2 * 2;
 #endif
         return cnt;
     }
@@ -38,7 +38,7 @@ namespace {
         cnt += slices * 4 * 2;
 #else
         IZ_UINT cnt = slices * 4;
-        cnt += slices * 4;
+        cnt += slices * 4 * 2;
 #endif
         return cnt;
     }
@@ -274,6 +274,13 @@ IZ_BOOL Ring::SetData(
         color,
         innerR, outerR, height);
 
+    pVtx = SetDataInnerFace(
+        pVtx,
+        flag,
+        slices,
+        color,
+        innerR, outerR, height);
+
     IZ_ASSERT(izanagi::CStdUtil::GetPtrAdvanced(GetVtx(), pVtx) == GetVtxNum());
 
     return IZ_TRUE;
@@ -474,6 +481,110 @@ SMeshVtx* Ring::SetDataOuterFace(
 
 }
 
+SMeshVtx* Ring::SetDataInnerFace(
+    SMeshVtx* vtx,
+    IZ_UINT flag,
+    IZ_UINT slices,
+    IZ_COLOR color,
+    IZ_FLOAT innerR,
+    IZ_FLOAT outerR,
+    IZ_FLOAT height)
+{
+    IZ_FLOAT d = IZ_MATH_PI2 / slices;
+
+    IZ_FLOAT theta = 0.0f;
+
+    for (IZ_UINT i = 0; i < slices; i++) {
+        IZ_FLOAT c = ::cosf(theta);
+        IZ_FLOAT s = ::sinf(theta);
+
+        {
+            vtx[0].pos.x = innerR * s;
+            vtx[0].pos.y = height * 0.5f;
+            vtx[0].pos.z = innerR * c;
+
+            vtx[0].nml.x = -s;
+            vtx[0].nml.y = 0.0f;
+            vtx[0].nml.z = -c;
+
+            // 上向き
+            vtx[0].nextNml[0] = 0.0f;
+            vtx[0].nextNml[1] = 1.0f;
+            vtx[0].nextNml[2] = 0.0f;
+            vtx[0].dir[0] = 0.0f;
+            vtx[0].dir[1] = -1.0f;
+            vtx[0].dir[2] = 0.0f;
+        }
+        {
+            vtx[2].pos.x = innerR * s;
+            vtx[2].pos.y = height * -0.5f;
+            vtx[2].pos.z = innerR * c;
+
+            vtx[2].nml.x = -s;
+            vtx[2].nml.y = 0.0f;
+            vtx[2].nml.z = -c;
+
+            // 下向き
+            vtx[2].nextNml[0] = 0.0f;
+            vtx[2].nextNml[1] = -1.0f;
+            vtx[2].nextNml[2] = 0.0f;
+            vtx[2].dir[0] = 0.0f;
+            vtx[2].dir[1] = 1.0f;
+            vtx[2].dir[2] = 0.0f;
+        }
+
+        theta -= d;
+        c = ::cosf(theta);
+        s = ::sinf(theta);
+
+        {
+            vtx[1].pos.x = innerR * s;
+            vtx[1].pos.y = height * 0.5f;
+            vtx[1].pos.z = innerR * c;
+
+            vtx[1].nml.x = -s;
+            vtx[1].nml.y = 0.0f;
+            vtx[1].nml.z = -c;
+
+            // 上向き
+            vtx[1].nextNml[0] = 0.0f;
+            vtx[1].nextNml[1] = 1.0f;
+            vtx[1].nextNml[2] = 0.0f;
+            vtx[1].dir[0] = 0.0f;
+            vtx[1].dir[1] = -1.0f;
+            vtx[1].dir[2] = 0.0f;
+        }
+        {
+            vtx[3].pos.x = innerR * s;
+            vtx[3].pos.y = height * -0.5f;
+            vtx[3].pos.z = innerR * c;
+
+            vtx[3].nml.x = -s;
+            vtx[3].nml.y = 0.0f;
+            vtx[3].nml.z = -c;
+
+            // 下向き
+            vtx[3].nextNml[0] = 0.0f;
+            vtx[3].nextNml[1] = -1.0f;
+            vtx[3].nextNml[2] = 0.0f;
+            vtx[3].dir[0] = 0.0f;
+            vtx[3].dir[1] = 1.0f;
+            vtx[3].dir[2] = 0.0f;
+        }
+
+        for (IZ_UINT i = 0; i < 4; i++) {
+            vtx[i].nextNml2[0] = vtx[i].nml.x;
+            vtx[i].nextNml2[1] = vtx[i].nml.y;
+            vtx[i].nextNml2[2] = vtx[i].nml.z;
+        }
+
+        vtx += 4;
+    }
+
+    return vtx;
+
+}
+
 // インデックスデータセット
 IZ_BOOL Ring::SetIdx(IZ_UINT slices)
 {
@@ -483,6 +594,7 @@ IZ_BOOL Ring::SetIdx(IZ_UINT slices)
 
     face = SetIdxUpFace(slices, face, nCurIdx);
     face = SetIdxOuterFace(slices, face, nCurIdx);
+    face = SetIdxInnerFace(slices, face, nCurIdx);
 
     IZ_ASSERT(izanagi::CStdUtil::GetPtrAdvanced(GetFace(), face) == m_nPrimCnt);
 
@@ -519,6 +631,14 @@ izanagi::SMeshFace* Ring::SetIdxUpFace(
 }
 
 izanagi::SMeshFace* Ring::SetIdxOuterFace(
+    IZ_UINT slices,
+    izanagi::SMeshFace* face,
+    IZ_UINT& idx)
+{
+    return SetIdxUpFace(slices, face, idx);
+}
+
+izanagi::SMeshFace* Ring::SetIdxInnerFace(
     IZ_UINT slices,
     izanagi::SMeshFace* face,
     IZ_UINT& idx)
