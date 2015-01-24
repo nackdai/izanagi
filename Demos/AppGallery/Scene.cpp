@@ -2,6 +2,8 @@
 #include "Ring.h"
 #include "Utility.h"
 #include "ItemManager.h"
+#include "Configure.h"
+#include "Environment.h"
 
 Scene Scene::instance;
 
@@ -73,9 +75,6 @@ void Scene::RenderByBevelShader(
     const izanagi::CCamera& camera,
     izanagi::graph::CGraphicsDevice* device)
 {
-    izanagi::math::SMatrix44 mtxL2W;
-    izanagi::math::SMatrix44::SetUnit(mtxL2W);
-
     const izanagi::SCameraParam& param = camera.GetParam();
 
     m_BevelShader->Begin(device, 0, IZ_FALSE);
@@ -84,95 +83,79 @@ void Scene::RenderByBevelShader(
             // パラメータ設定
             Utility::SetShaderParam(
                 m_BevelShader,
-                "g_mL2W",
-                (void*)&mtxL2W,
-                sizeof(mtxL2W));
-
-            Utility::SetShaderParam(
-                m_BevelShader,
                 "g_mW2C",
                 (void*)&param.mtxW2C,
                 sizeof(param.mtxW2C));
 
-            izanagi::SParallelLightParam parallelLight;
-
-            // ライトパラメータ
-            {
-                // Ambient Light Color
-                izanagi::SAmbientLightParam ambient;
-                ambient.color.Set(0.2f, 0.2f, 0.2f);
-
-                // Parallel Light Color
-                parallelLight.color.Set(1.0f, 1.0f, 1.0f);
-
-                // Parallel Light Direction
-                parallelLight.vDir.Set(-1.0f, -1.0f, -1.0f);
-                izanagi::math::SVector4::Normalize(parallelLight.vDir, parallelLight.vDir);
-
-                // マテリアル
-                izanagi::SMaterialParam mtrl;
-                {
-                    mtrl.vDiffuse.Set(1.0f, 1.0f, 1.0f, 1.0f);
-                    mtrl.vAmbient.Set(1.0f, 1.0f, 1.0f, 1.0f);
-                    mtrl.vSpecular.Set(1.0f, 1.0f, 1.0f, 20.0f);
-                }
-
-                Utility::SetShaderParam(m_BevelShader, "g_vLitParallelColor", &parallelLight.color, sizeof(parallelLight.color));
-                Utility::SetShaderParam(m_BevelShader, "g_vLitAmbientColor", &ambient.color, sizeof(ambient.color));
-
-                Utility::SetShaderParam(m_BevelShader, "g_vMtrlDiffuse", &mtrl.vDiffuse, sizeof(mtrl.vDiffuse));
-                Utility::SetShaderParam(m_BevelShader, "g_vMtrlAmbient", &mtrl.vAmbient, sizeof(mtrl.vAmbient));
-                Utility::SetShaderParam(m_BevelShader, "g_vMtrlSpecular", &mtrl.vSpecular, sizeof(mtrl.vSpecular));
-            }
-
-            {
-                // ライトの方向をローカル座標に変換する
-
-                // ライトの方向はワールド座標なので World -> Localマトリクスを計算する
-                izanagi::math::SMatrix44 mtxW2L;
-                izanagi::math::SMatrix44::Inverse(mtxW2L, mtxL2W);
-
-                // World -> Local
-                izanagi::math::SVector4 parallelLightLocalDir;
-                izanagi::math::SMatrix44::ApplyXYZ(
-                    parallelLightLocalDir,
-                    parallelLight.vDir,
-                    mtxW2L);
-
-                Utility::SetShaderParam(
-                    m_BevelShader,
-                    "g_vLitParallelDir",
-                    (void*)&parallelLightLocalDir,
-                    sizeof(parallelLightLocalDir));
-
-                // L2V = L2W * W2V の逆行列を計算する
-                izanagi::math::SMatrix44 mtxV2L;
-                izanagi::math::SMatrix44::Mul(mtxV2L, mtxL2W, param.mtxW2V);
-                izanagi::math::SMatrix44::Inverse(mtxV2L, mtxV2L);
-
-                // ビュー座標系における視点は常に原点
-                izanagi::math::CVector4 eyePos(0.0f, 0.0f, 0.0f, 1.0f);
-
-                // 視点のローカル座標を計算する
-                izanagi::math::SMatrix44::Apply(eyePos, eyePos, mtxV2L);
-
-                Utility::SetShaderParam(
-                    m_BevelShader,
-                    "g_vEye",
-                    (void*)&eyePos,
-                    sizeof(eyePos));
-            }
+            Environment::Instance().SetGlobalLightParam(
+                camera,
+                m_BevelShader);
 
 #if 0
             m_BevelShader->CommitChanges(device);
 
             m_Ring->Draw(device);
 #else
-            ItemManager::Instance().RenderBox(device, m_BevelShader);
+            ItemManager::Instance().RenderBox(device, m_BevelShader, camera);
+            RenderRing(camera, device);
 #endif
         }
     }
     m_BevelShader->End(device);
+}
+
+void Scene::RenderRing(
+    const izanagi::CCamera& camera,
+    izanagi::graph::CGraphicsDevice* device)
+{
+    izanagi::math::SMatrix44 mtxL2W;
+    izanagi::math::SMatrix44::SetUnit(mtxL2W);
+
+    IZ_FLOAT ringCenter = Configure::ItemHeight * 0.5f + Configure::RING_HEIGHT * 0.5f;
+    
+    {
+        izanagi::math::SMatrix44::GetTrans(
+            mtxL2W,
+            0.0f,
+            ringCenter + 0.5f,
+            0.0f);
+
+        Utility::SetShaderParam(
+            m_BevelShader,
+            "g_mL2W",
+            (void*)&mtxL2W,
+            sizeof(mtxL2W));
+
+        Environment::Instance().SetLocalLightParam(
+            camera,
+            mtxL2W,
+            m_BevelShader);
+
+        m_BevelShader->CommitChanges(device);
+        m_Ring->Draw(device);
+    }
+
+    {
+        izanagi::math::SMatrix44::GetTrans(
+            mtxL2W,
+            0.0f,
+            -(ringCenter + 0.5f),
+            0.0f);
+
+        Utility::SetShaderParam(
+            m_BevelShader,
+            "g_mL2W",
+            (void*)&mtxL2W,
+            sizeof(mtxL2W));
+
+        Environment::Instance().SetLocalLightParam(
+            camera,
+            mtxL2W,
+            m_BevelShader);
+
+        m_BevelShader->CommitChanges(device);
+        m_Ring->Draw(device);
+    }
 }
 
 void Scene::RenderByBasicShader(

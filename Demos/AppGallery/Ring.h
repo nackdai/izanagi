@@ -59,6 +59,15 @@ private:
         IZ_FLOAT outerR,
         IZ_FLOAT height);
 
+     SMeshVtx* SetDataDownFace(
+        SMeshVtx* vtx,
+        IZ_UINT flag,
+        IZ_UINT slices,
+        IZ_COLOR color,
+        IZ_FLOAT innerR,
+        IZ_FLOAT outerR,
+        IZ_FLOAT height);
+
     SMeshVtx* SetDataOuterFace(
         SMeshVtx* vtx,
         IZ_UINT flag,
@@ -80,6 +89,11 @@ private:
     IZ_BOOL SetIdx(IZ_UINT slices);
 
     izanagi::SMeshFace* SetIdxUpFace(
+        IZ_UINT slices,
+        izanagi::SMeshFace* face,
+        IZ_UINT& idx);
+
+    izanagi::SMeshFace* SetIdxDownFace(
         IZ_UINT slices,
         izanagi::SMeshFace* face,
         IZ_UINT& idx);

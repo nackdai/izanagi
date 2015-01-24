@@ -26,6 +26,7 @@
     <ClInclude Include="..\..\AppGallery\AppGalleryApp.h" />
     <ClInclude Include="..\..\AppGallery\Configure.h" />
     <ClInclude Include="..\..\AppGallery\data\ImageFiles.h" />
+    <ClInclude Include="..\..\AppGallery\Environment.h" />
     <ClInclude Include="..\..\AppGallery\GestureListener.h" />
     <ClInclude Include="..\..\AppGallery\Item.h" />
     <ClInclude Include="..\..\AppGallery\ItemBoard.h" />
@@ -43,6 +44,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\AppGallery\AppGalleryApp.cpp" />
     <ClCompile Include="..\..\AppGallery\Configure.cpp" />
+    <ClCompile Include="..\..\AppGallery\Environment.cpp" />
     <ClCompile Include="..\..\AppGallery\GestureListener.cpp" />
     <ClCompile Include="..\..\AppGallery\Item.cpp" />
     <ClCompile Include="..\..\AppGallery\ItemBoard.cpp" />

@@ -24,7 +24,8 @@ public:
 
     void Render(
         izanagi::graph::CGraphicsDevice* device,
-        izanagi::shader::CShaderBasic* shader);
+        izanagi::shader::CShaderBasic* shader,
+        const izanagi::CCamera& camera);
 
     void RenderBoard(
         izanagi::graph::CGraphicsDevice* device,

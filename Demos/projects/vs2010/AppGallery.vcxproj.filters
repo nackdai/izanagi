@@ -60,6 +60,9 @@
     <ClInclude Include="..\..\AppGallery\data\ImageFiles.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\AppGallery\Environment.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\AppGallery\Configure.cpp">
@@ -105,6 +108,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\AppGallery\ItemBoard.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\AppGallery\Environment.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

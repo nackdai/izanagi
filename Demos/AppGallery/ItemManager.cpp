@@ -103,13 +103,14 @@ IZ_BOOL ItemManager::EnqueueLoadingRequest(
 
 void ItemManager::RenderBox(
     izanagi::graph::CGraphicsDevice* device,
-    izanagi::shader::CShaderBasic* shader)
+    izanagi::shader::CShaderBasic* shader,
+    const izanagi::CCamera& camera)
 {
     izanagi::CStdList<Item>::Item* listItem = m_Items.GetTop();
     while (listItem != IZ_NULL) {
         Item* item = listItem->GetData();
 
-        item->Render(device, shader);
+        item->Render(device, shader, camera);
 
         listItem = listItem->GetNext();
     }

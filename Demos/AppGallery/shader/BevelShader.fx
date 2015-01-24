@@ -49,11 +49,9 @@ SVSOutput mainVS(SVSInput In)
     Out.vPos = mul(In.vPos, g_mL2W);
     Out.vPos = mul(Out.vPos, g_mW2C);
     
-    Out.vNormal = mul(In.vNormal, (float3x3)g_mL2W);
-    Out.vNormal = normalize(Out.vNormal);
+    Out.vNormal = In.vNormal;
 
-    Out.vNextNml.xyz = mul(In.vNextNml.xyz, (float3x3)g_mL2W);
-    Out.vNextNml.xyz = normalize(Out.vNextNml.xyz);
+    Out.vNextNml.xyz = In.vNextNml.xyz;
     Out.vNextNml.a = In.vNextNml.a;
 
     Out.vDir = mul(In.vDir, (float3x3)g_mL2W);
@@ -66,8 +64,7 @@ SVSOutput mainVS(SVSInput In)
     // Ambient
     Out.vColor = g_vMtrlAmbient * g_vLitAmbientColor;
 
-    Out.vNextNml2.xyz = mul(In.vNextNml2.xyz, (float3x3)g_mL2W);
-    Out.vNextNml2.xyz = normalize(Out.vNextNml2.xyz);
+    Out.vNextNml2.xyz = In.vNextNml2.xyz;
     Out.vDir2 = mul(In.vDir2, (float3x3)g_mL2W);
     
     return Out;

@@ -22,7 +22,7 @@ namespace {
         // 内外面
         cnt += slices * 2 * 2;
 #else
-        IZ_UINT cnt = slices * 2;
+        IZ_UINT cnt = slices * 2 * 2;
         cnt += slices * 2 * 2;
 #endif
         return cnt;
@@ -37,7 +37,7 @@ namespace {
         // 内外面
         cnt += slices * 4 * 2;
 #else
-        IZ_UINT cnt = slices * 4;
+        IZ_UINT cnt = slices * 4 * 2;
         cnt += slices * 4 * 2;
 #endif
         return cnt;
@@ -267,6 +267,13 @@ IZ_BOOL Ring::SetData(
         color,
         innerR, outerR, height);
 
+    pVtx = SetDataDownFace(
+        pVtx,
+        flag,
+        slices,
+        color,
+        innerR, outerR, height);
+
     pVtx = SetDataOuterFace(
         pVtx,
         flag,
@@ -368,6 +375,97 @@ SMeshVtx* Ring::SetDataUpFace(
 
             vtx[i].nextNml2[0] = 0.0f;
             vtx[i].nextNml2[1] = 1.0f;
+            vtx[i].nextNml2[2] = 0.0f;
+        }
+
+        vtx += 4;
+    }
+
+    return vtx;
+}
+
+SMeshVtx* Ring::SetDataDownFace(
+    SMeshVtx* vtx,
+    IZ_UINT flag,
+    IZ_UINT slices,
+    IZ_COLOR color,
+    IZ_FLOAT innerR,
+    IZ_FLOAT outerR,
+    IZ_FLOAT height)
+{
+    IZ_FLOAT d = IZ_MATH_PI2 / slices;
+
+    IZ_FLOAT theta = 0.0f;
+
+    for (IZ_UINT i = 0; i < slices; i++) {
+        IZ_FLOAT c = ::cosf(theta);
+        IZ_FLOAT s = ::sinf(theta);
+
+        {
+            vtx[0].pos.x = innerR * s;
+            vtx[0].pos.y = -height * 0.5f;
+            vtx[0].pos.z = innerR * c;
+
+            // 内向き
+            vtx[0].nextNml[0] = -s;
+            vtx[0].nextNml[1] = 0.0f;
+            vtx[0].nextNml[2] = -c;
+            vtx[0].dir[0] = s;
+            vtx[0].dir[1] = 0.0f;
+            vtx[0].dir[2] = c;
+        }
+        {
+            vtx[2].pos.x = outerR * s;
+            vtx[2].pos.y = -height * 0.5f;
+            vtx[2].pos.z = outerR * c;
+
+            // 外向き
+            vtx[2].nextNml[0] = s;
+            vtx[2].nextNml[1] = 0.0f;
+            vtx[2].nextNml[2] = c;
+            vtx[2].dir[0] = -s;
+            vtx[2].dir[1] = 0.0f;
+            vtx[2].dir[2] = -c;
+        }
+
+        theta -= d;
+        c = ::cosf(theta);
+        s = ::sinf(theta);
+
+        {
+            vtx[1].pos.x = innerR * s;
+            vtx[1].pos.y = -height * 0.5f;
+            vtx[1].pos.z = innerR * c;
+
+            // 内向き
+            vtx[1].nextNml[0] = -s;
+            vtx[1].nextNml[1] = 0.0f;
+            vtx[1].nextNml[2] = -c;
+            vtx[1].dir[0] = s;
+            vtx[1].dir[1] = 0.0f;
+            vtx[1].dir[2] = c;
+        }
+        {
+            vtx[3].pos.x = outerR * s;
+            vtx[3].pos.y = -height * 0.5f;
+            vtx[3].pos.z = outerR * c;
+
+            // 外向き
+            vtx[3].nextNml[0] = s;
+            vtx[3].nextNml[1] = 0.0f;
+            vtx[3].nextNml[2] = c;
+            vtx[3].dir[0] = -s;
+            vtx[3].dir[1] = 0.0f;
+            vtx[3].dir[2] = -c;
+        }
+
+        for (IZ_UINT i = 0; i < 4; i++) {
+            vtx[i].nml.x = 0.0f;
+            vtx[i].nml.y = -1.0f;
+            vtx[i].nml.z = 0.0f;
+
+            vtx[i].nextNml2[0] = 0.0f;
+            vtx[i].nextNml2[1] = -1.0f;
             vtx[i].nextNml2[2] = 0.0f;
         }
 
@@ -593,6 +691,7 @@ IZ_BOOL Ring::SetIdx(IZ_UINT slices)
     IZ_UINT32 nCurIdx = 0;
 
     face = SetIdxUpFace(slices, face, nCurIdx);
+    face = SetIdxDownFace(slices, face, nCurIdx);
     face = SetIdxOuterFace(slices, face, nCurIdx);
     face = SetIdxInnerFace(slices, face, nCurIdx);
 
@@ -629,6 +728,15 @@ izanagi::SMeshFace* Ring::SetIdxUpFace(
 
     return face;
 }
+
+izanagi::SMeshFace* Ring::SetIdxDownFace(
+    IZ_UINT slices,
+    izanagi::SMeshFace* face,
+    IZ_UINT& idx)
+{
+    return SetIdxUpFace(slices, face, idx);
+}
+
 
 izanagi::SMeshFace* Ring::SetIdxOuterFace(
     IZ_UINT slices,

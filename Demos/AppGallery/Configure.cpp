@@ -8,7 +8,7 @@ const IZ_UINT Configure::RING_SLICES = 100;;
 const IZ_FLOAT Configure::INNER_RADIUS = 28.0f;
 const IZ_FLOAT Configure::OUTER_RADIUS = 30.0f;
 
-const IZ_FLOAT Configure::RING_HEIGHT = 2.0f;
+const IZ_FLOAT Configure::RING_HEIGHT = 1.0f;
 
 const IZ_COLOR Configure::RING_COLOR = IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0xff);
 
@@ -16,7 +16,7 @@ const IZ_FLOAT Configure::Radius = (Configure::OUTER_RADIUS + Configure::INNER_R
 
 const IZ_UINT Configure::ItemNum = 30;
 
-const IZ_FLOAT Configure::ItemWidth = 5.0;
+const IZ_FLOAT Configure::ItemWidth = 5.5f;
 const IZ_FLOAT Configure::ItemHeight = ItemWidth * 2.0f;
 const IZ_FLOAT Configure::ItemDepth = (Configure::OUTER_RADIUS - Configure::INNER_RADIUS) * 0.5f;
 

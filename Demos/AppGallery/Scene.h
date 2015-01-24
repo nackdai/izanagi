@@ -32,6 +32,10 @@ private:
         const izanagi::CCamera& camera,
         izanagi::graph::CGraphicsDevice* device);
 
+    void RenderRing(
+        const izanagi::CCamera& camera,
+        izanagi::graph::CGraphicsDevice* device);
+
     void RenderByBasicShader(
         const izanagi::CCamera& camera,
         izanagi::graph::CGraphicsDevice* device);

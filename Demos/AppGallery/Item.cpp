@@ -3,6 +3,7 @@
 #include "Utility.h"
 #include "ItemBoard.h"
 #include "Configure.h"
+#include "Environment.h"
 
 Item* Item::Create(
     izanagi::IMemoryAllocator* allocator,
@@ -76,13 +77,19 @@ void Item::SetPosAndRotate(IZ_FLOAT theta)
 
 void Item::Render(
     izanagi::graph::CGraphicsDevice* device,
-    izanagi::shader::CShaderBasic* shader)
+    izanagi::shader::CShaderBasic* shader,
+    const izanagi::CCamera& camera)
 {
     Utility::SetShaderParam(
         shader,
         "g_mL2W",
         (void*)&m_BoxL2W,
         sizeof(m_BoxL2W));
+
+    Environment::Instance().SetLocalLightParam(
+        camera,
+        m_BoxL2W,
+        shader);
 
     shader->CommitChanges(device);
 
