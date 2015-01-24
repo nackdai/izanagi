@@ -1,10 +1,13 @@
 #include "Item.h"
-#include "Board.h"
+#include "ItemBox.h"
 #include "Utility.h"
+#include "ItemBoard.h"
+#include "Configure.h"
 
 Item* Item::Create(
     izanagi::IMemoryAllocator* allocator,
-    Board* board)
+    ItemBox* box,
+    ItemBoard* board)
 {
     void* buf = ALLOC_ZERO(allocator, sizeof(Item));
     VRETURN_NULL(buf != IZ_NULL);
@@ -14,6 +17,7 @@ Item* Item::Create(
         instance->AddRef();
 
         instance->m_Allocator = allocator;
+        SAFE_REPLACE(instance->m_Box, box);
         SAFE_REPLACE(instance->m_Board, board);
     }
 
@@ -23,24 +27,51 @@ Item* Item::Create(
 Item::Item()
 {
     m_Allocator = IZ_NULL;
-    m_Board = IZ_NULL;
+    m_Box = IZ_NULL;
 
     m_ListItem.Init(this);
+
+    m_Board = IZ_NULL;
+    m_Tex = IZ_NULL;
+
+    m_IsRequestedLoadTexture = IZ_FALSE;
 }
 
 Item::~Item()
 {
+    SAFE_RELEASE(m_Box);
     SAFE_RELEASE(m_Board);
+    SAFE_RELEASE(m_Tex);
 
     FREE(m_Allocator, this);
 }
 
-void Item::SetPosAndRotate(
-    izanagi::math::SVector4& pos,
-    IZ_FLOAT angle)
+void Item::SetPosAndRotate(IZ_FLOAT theta)
 {
-    izanagi::math::SMatrix44::GetRotByY(m_L2W, angle);
-    izanagi::math::SMatrix44::Trans(m_L2W, m_L2W, pos);
+    IZ_FLOAT angle = IZ_DEG2RAD(theta);
+    IZ_FLOAT r = Configure::Radius;
+
+    IZ_FLOAT s = r * ::sinf(angle);
+    IZ_FLOAT c = r * ::cosf(angle);
+
+    izanagi::math::SMatrix44::GetRotByY(
+        m_BoxL2W,
+        IZ_DEG2RAD(theta - 180.0f));
+    izanagi::math::SMatrix44::Trans(m_BoxL2W, m_BoxL2W, s, 0.0f, c);
+
+    r += Configure::ItemDepth * 0.5f;
+
+    // TODO
+    // 深度バイアスをもっとまじめにやる必要がある
+    r += 0.001f;
+
+    s = r * ::sinf(angle);
+    c = r * ::cosf(angle);
+
+    izanagi::math::SMatrix44::GetRotByY(
+        m_BoardL2W,
+        IZ_DEG2RAD(theta - 180.0f));
+    izanagi::math::SMatrix44::Trans(m_BoardL2W, m_BoardL2W, s, 0.0f, c);
 }
 
 void Item::Render(
@@ -50,12 +81,33 @@ void Item::Render(
     Utility::SetShaderParam(
         shader,
         "g_mL2W",
-        (void*)&m_L2W,
-        sizeof(m_L2W));
+        (void*)&m_BoxL2W,
+        sizeof(m_BoxL2W));
 
     shader->CommitChanges(device);
 
-    m_Board->Draw(device);
+    m_Box->Draw(device);
+}
+
+void Item::RenderBoard(
+    izanagi::graph::CGraphicsDevice* device,
+    izanagi::shader::CShaderBasic* shader)
+{
+    static const IZ_FLOAT delta = 0.01f;
+
+    if (m_Tex != IZ_NULL) {
+        device->SetTexture(0, m_Tex);
+
+        Utility::SetShaderParam(
+            shader,
+            "g_mL2W",
+            (void*)&m_BoardL2W,
+            sizeof(m_BoardL2W));
+
+        shader->CommitChanges(device);
+
+        m_Board->Draw(device);
+    }
 }
 
 izanagi::CStdList<Item>::Item* Item::GetListItem()
@@ -65,5 +117,20 @@ izanagi::CStdList<Item>::Item* Item::GetListItem()
 
  const izanagi::math::SMatrix44& Item::GetL2W()
  {
-     return m_L2W;
+     return m_BoxL2W;
  }
+
+ void Item::SetTexture(izanagi::graph::CTexture* texture)
+ {
+     SAFE_REPLACE(m_Tex, texture);
+ }
+
+void Item::SetIsRequestedLoadTexture(IZ_BOOL flag)
+{
+    m_IsRequestedLoadTexture = flag;
+}
+
+IZ_BOOL Item::IsRequestedLoadTexture() const
+{
+    return m_IsRequestedLoadTexture;
+}

@@ -14,6 +14,7 @@ Scene::Scene()
 {
     m_Ring = IZ_NULL;
     m_BevelShader = IZ_NULL;
+    m_BasicShader = IZ_NULL;
 }
 
 Scene::~Scene()
@@ -39,6 +40,17 @@ IZ_BOOL Scene::Init(
         VRETURN(m_BevelShader != IZ_NULL);
     }
 
+    {
+        izanagi::CFileInputStream in;
+        VRETURN(in.Open("data/BasicShader.shd"));
+
+        m_BasicShader = izanagi::shader::CShaderBasic::CreateShader<izanagi::shader::CShaderBasic>(
+                    allocator,
+                    device,
+                    &in);
+        VRETURN(m_BasicShader != IZ_NULL);
+    }
+
     return IZ_TRUE;
 }
 
@@ -46,9 +58,18 @@ void Scene::Terminate()
 {
     SAFE_RELEASE(m_Ring);
     SAFE_RELEASE(m_BevelShader);
+    SAFE_RELEASE(m_BasicShader);
 }
 
 void Scene::Render(
+    const izanagi::CCamera& camera,
+    izanagi::graph::CGraphicsDevice* device)
+{
+    RenderByBasicShader(camera, device);
+    RenderByBevelShader(camera, device);
+}
+
+void Scene::RenderByBevelShader(
     const izanagi::CCamera& camera,
     izanagi::graph::CGraphicsDevice* device)
 {
@@ -79,14 +100,13 @@ void Scene::Render(
             {
                 // Ambient Light Color
                 izanagi::SAmbientLightParam ambient;
-                ambient.color.Set(0.0f, 0.0f, 0.0f);
+                ambient.color.Set(0.2f, 0.2f, 0.2f);
 
                 // Parallel Light Color
                 parallelLight.color.Set(1.0f, 1.0f, 1.0f);
 
                 // Parallel Light Direction
-                //parallelLight.vDir.Set(-1.0f, -1.0f, -1.0f);
-                parallelLight.vDir.Set(-1.0f, 0.0f, -1.0f);
+                parallelLight.vDir.Set(-1.0f, -1.0f, -1.0f);
                 izanagi::math::SVector4::Normalize(parallelLight.vDir, parallelLight.vDir);
 
                 // ƒ}ƒeƒŠƒAƒ‹
@@ -148,9 +168,30 @@ void Scene::Render(
 
             m_Ring->Draw(device);
 #else
-            ItemManager::Instance().Render(device, m_BevelShader);
+            ItemManager::Instance().RenderBox(device, m_BevelShader);
 #endif
         }
     }
     m_BevelShader->End(device);
+}
+
+void Scene::RenderByBasicShader(
+    const izanagi::CCamera& camera,
+    izanagi::graph::CGraphicsDevice* device)
+{
+    const izanagi::SCameraParam& param = camera.GetParam();
+
+    m_BasicShader->Begin(device, 0, IZ_FALSE);
+    {
+        if (m_BasicShader->BeginPass(0)) {
+            Utility::SetShaderParam(
+                m_BasicShader,
+                "g_mW2C",
+                (void*)&param.mtxW2C,
+                sizeof(param.mtxW2C));
+
+            ItemManager::Instance().RenderBoard(device, m_BasicShader);
+        }
+    }
+    m_BasicShader->End(device);
 }

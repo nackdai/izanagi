@@ -4,6 +4,9 @@
 #include "GestureListener.h"
 #include "Scene.h"
 #include "ItemManager.h"
+#include "Configure.h"
+#include "LoadTextureJob.h"
+#include "data/ImageFiles.h"
 
 AppGalleryApp::AppGalleryApp()
 {
@@ -48,6 +51,13 @@ IZ_BOOL AppGalleryApp::InitInternal(
     ItemManager::Instance().Init(
         allocator,
         device);
+
+    IZ_UINT imageNum = (Configure::ItemNum > COUNTOF(files) ? COUNTOF(files) : Configure::ItemNum);
+    for (IZ_UINT i = 0; i < imageNum; i++) {
+        ItemManager::Instance().EnqueueLoadingRequest(
+            device,
+            files[i]);
+    }
 
     Scene::Instance().Init(
         allocator,

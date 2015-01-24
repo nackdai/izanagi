@@ -1,4 +1,4 @@
-#include "Board.h"
+#include "ItemBox.h"
 
 namespace {
 
@@ -205,7 +205,7 @@ namespace {
 }   // namespace
 
 // インスタンス作成
-Board* Board::Create(
+ItemBox* ItemBox::Create(
     izanagi::IMemoryAllocator* allocator,
     izanagi::graph::CGraphicsDevice* device,
     IZ_UINT flag,
@@ -214,14 +214,14 @@ Board* Board::Create(
     IZ_FLOAT height,
     IZ_FLOAT depth)
 {
-    void* pBuf = ALLOC_ZERO(allocator, sizeof(Board));
+    void* pBuf = ALLOC_ZERO(allocator, sizeof(ItemBox));
     VRETURN_VAL(pBuf != IZ_NULL, IZ_NULL);
 
-    Board* instance = IZ_NULL;
+    ItemBox* instance = IZ_NULL;
     IZ_BOOL result = IZ_FALSE;
 
     // インスタンス作成
-    instance = CreateMesh<Board>(pBuf, allocator, device, flag);
+    instance = CreateMesh<ItemBox>(pBuf, allocator, device, flag);
     VGOTO(result != (instance != IZ_NULL), __EXIT__);
 
     {
@@ -258,7 +258,7 @@ __EXIT__:
 }
 
 // 初期化
-IZ_BOOL Board::Init(
+IZ_BOOL ItemBox::Init(
     izanagi::IMemoryAllocator* allocator,
     izanagi::graph::CGraphicsDevice* device,
     IZ_UINT flag)
@@ -291,7 +291,7 @@ IZ_BOOL Board::Init(
     return IZ_TRUE;
 }
 
-IZ_BOOL Board::CreateVB(
+IZ_BOOL ItemBox::CreateVB(
     izanagi::graph::CGraphicsDevice* device,
     IZ_UINT flag,
     IZ_UINT vtxNum)
@@ -311,7 +311,7 @@ IZ_BOOL Board::CreateVB(
     return (m_pVB != IZ_NULL);
 }
 
-IZ_BOOL Board::CreateVD(
+IZ_BOOL ItemBox::CreateVD(
     izanagi::graph::CGraphicsDevice* device,
     IZ_UINT flag)
 {
@@ -366,7 +366,7 @@ IZ_BOOL Board::CreateVD(
     return (m_pVD != IZ_NULL);
 }
 
-IZ_UINT8* Board::SetExtraVtxData(
+IZ_UINT8* ItemBox::SetExtraVtxData(
     const void* vtx,
     IZ_UINT flag,
     IZ_UINT8* data)
@@ -402,7 +402,7 @@ IZ_UINT8* Board::SetExtraVtxData(
 }
 
 // データセット
-IZ_BOOL Board::SetData(
+IZ_BOOL ItemBox::SetData(
     izanagi::graph::CGraphicsDevice* pDevice,
     IZ_UINT flag,
     IZ_COLOR color,
@@ -487,7 +487,7 @@ IZ_BOOL Board::SetData(
 }
 
 // インデックスデータセット
-IZ_BOOL Board::SetIdx()
+IZ_BOOL ItemBox::SetIdx()
 {
     izanagi::SMeshFace* pFace = GetFace();
 

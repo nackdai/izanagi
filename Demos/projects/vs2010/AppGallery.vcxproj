@@ -24,10 +24,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\AppGallery\AppGalleryApp.h" />
-    <ClInclude Include="..\..\AppGallery\Board.h" />
     <ClInclude Include="..\..\AppGallery\Configure.h" />
+    <ClInclude Include="..\..\AppGallery\data\ImageFiles.h" />
     <ClInclude Include="..\..\AppGallery\GestureListener.h" />
     <ClInclude Include="..\..\AppGallery\Item.h" />
+    <ClInclude Include="..\..\AppGallery\ItemBoard.h" />
+    <ClInclude Include="..\..\AppGallery\ItemBox.h" />
     <ClInclude Include="..\..\AppGallery\ItemManager.h" />
     <ClInclude Include="..\..\AppGallery\LoadTextureJob.h" />
     <ClInclude Include="..\..\AppGallery\MeshVtx.h" />
@@ -40,10 +42,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\AppGallery\AppGalleryApp.cpp" />
-    <ClCompile Include="..\..\AppGallery\Board.cpp" />
     <ClCompile Include="..\..\AppGallery\Configure.cpp" />
     <ClCompile Include="..\..\AppGallery\GestureListener.cpp" />
     <ClCompile Include="..\..\AppGallery\Item.cpp" />
+    <ClCompile Include="..\..\AppGallery\ItemBoard.cpp" />
+    <ClCompile Include="..\..\AppGallery\ItemBox.cpp" />
     <ClCompile Include="..\..\AppGallery\ItemManager.cpp" />
     <ClCompile Include="..\..\AppGallery\LoadTextureJob.cpp" />
     <ClCompile Include="..\..\AppGallery\main.cpp" />
@@ -55,6 +58,24 @@
     <ClCompile Include="..\..\AppGallery\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\AppGallery\shader\BasicShader.fx" />
+    <CustomBuild Include="..\..\AppGallery\shader\BasicShader.xml">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(RootDir)%(Directory)%(Filename).fx;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">%(RootDir)%(Directory)%(Filename).fx;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">%(RootDir)%(Directory)%(Filename).fx;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">%(RootDir)%(Directory)%(Filename).fx;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">%(RootDir)%(Directory)%(Filename).fx;%(AdditionalInputs)</AdditionalInputs>
+    </CustomBuild>
     <None Include="..\..\AppGallery\shader\BevelShader.fx" />
     <CustomBuild Include="..\..\AppGallery\shader\BevelShader.xml">
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>

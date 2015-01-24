@@ -1,7 +1,9 @@
 #include "ItemManager.h"
-#include "Board.h"
+#include "ItemBox.h"
 #include "Configure.h"
 #include "Item.h"
+#include "ItemBoard.h"
+#include "LoadTextureJob.h"
 
 ItemManager ItemManager::instance;
 
@@ -12,6 +14,7 @@ ItemManager& ItemManager::Instance()
 
 ItemManager::ItemManager()
 {
+    m_BoxMesh = IZ_NULL;
     m_BoardMesh = IZ_NULL;
 }
 
@@ -23,30 +26,34 @@ IZ_BOOL ItemManager::Init(
     izanagi::IMemoryAllocator* allocator,
     izanagi::graph::CGraphicsDevice* device)
 {
-    m_BoardMesh = Board::Create(
+    m_BoxMesh = ItemBox::Create(
         allocator,
         device,
-        Configure::MeshFlags,
+        Configure::BoxMeshFlags,
         IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0xff),
-        5.0f,
-        10.0f,
-        2.0f);
+        Configure::ItemWidth,
+        Configure::ItemHeight,
+        Configure::ItemDepth);
 
-    IZ_FLOAT d = IZ_MATH_PI2 / Configure::ItemNum;
+    m_BoardMesh = ItemBoard::Create(
+        allocator,
+        device,
+        Configure::BoardMeshFlags,
+        IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0xff),
+        Configure::ItemWidth - Configure::ItemBoardMargin,
+        Configure::ItemHeight - Configure::ItemBoardMargin);
+
+    IZ_FLOAT d = 360.0f / Configure::ItemNum;
 
     IZ_FLOAT theta = 0.0f;
 
     for (IZ_UINT i = 0; i< Configure::ItemNum; i++) {
         Item* item = Item::Create(
             allocator,
+            m_BoxMesh,
             m_BoardMesh);
 
-        IZ_FLOAT s = Configure::Radius * ::sinf(theta);
-        IZ_FLOAT c = Configure::Radius * ::cosf(theta);
-
-        item->SetPosAndRotate(
-            izanagi::math::CVector4(s, 0.0f, c),
-            theta);
+        item->SetPosAndRotate(theta);
 
         theta += d;
 
@@ -69,10 +76,32 @@ void ItemManager::Terminate()
         listItem = next;
     }
 
+    SAFE_RELEASE(m_BoxMesh);
     SAFE_RELEASE(m_BoardMesh);
 }
 
-void ItemManager::Render(
+IZ_BOOL ItemManager::EnqueueLoadingRequest(
+    izanagi::graph::CGraphicsDevice* device,
+    const char* path)
+{
+    // Find a photo item which does not request to load a texture.
+    Item* item = FindNotRequestedLoadTexture();
+    if (item == IZ_NULL) {
+        return IZ_FALSE;
+    }
+
+    TextureLoader::Instance().EnqueueLoadingRequest(
+        device,
+        path,
+        item);
+
+    item->SetIsRequestedLoadTexture(IZ_TRUE);
+
+    return IZ_TRUE;
+
+}
+
+void ItemManager::RenderBox(
     izanagi::graph::CGraphicsDevice* device,
     izanagi::shader::CShaderBasic* shader)
 {
@@ -84,4 +113,35 @@ void ItemManager::Render(
 
         listItem = listItem->GetNext();
     }
+}
+
+void ItemManager::RenderBoard(
+    izanagi::graph::CGraphicsDevice* device,
+    izanagi::shader::CShaderBasic* shader)
+{
+    izanagi::CStdList<Item>::Item* listItem = m_Items.GetTop();
+    while (listItem != IZ_NULL) {
+        Item* item = listItem->GetData();
+
+        item->RenderBoard(device, shader);
+
+        listItem = listItem->GetNext();
+    }
+}
+
+Item* ItemManager::FindNotRequestedLoadTexture()
+{
+    izanagi::CStdList<Item>::Item* listItem = m_Items.GetTop();
+
+    while (listItem != IZ_NULL) {
+        Item* item = listItem->GetData();
+
+        if (!item->IsRequestedLoadTexture()) {
+            return item;
+        }
+
+        listItem = listItem->GetNext();
+    }
+
+    return IZ_NULL;
 }

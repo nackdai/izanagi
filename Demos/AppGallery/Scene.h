@@ -28,9 +28,19 @@ public:
         izanagi::graph::CGraphicsDevice* device);
 
 private:
+    void RenderByBevelShader(
+        const izanagi::CCamera& camera,
+        izanagi::graph::CGraphicsDevice* device);
+
+    void RenderByBasicShader(
+        const izanagi::CCamera& camera,
+        izanagi::graph::CGraphicsDevice* device);
+
+private:
     Ring* m_Ring;
 
     izanagi::shader::CShaderBasic* m_BevelShader;
+    izanagi::shader::CShaderBasic* m_BasicShader;
 };
 
 #endif    // #if !defined(__SCENE_H__)

@@ -42,9 +42,6 @@
     <ClInclude Include="..\..\AppGallery\Utility.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\AppGallery\Board.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\AppGallery\MeshVtx.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -52,6 +49,15 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\AppGallery\ItemManager.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\AppGallery\ItemBox.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\AppGallery\ItemBoard.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\AppGallery\data\ImageFiles.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
@@ -89,13 +95,16 @@
     <ClCompile Include="..\..\AppGallery\Utility.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\AppGallery\Board.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\AppGallery\ItemManager.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\AppGallery\Item.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\AppGallery\ItemBox.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\AppGallery\ItemBoard.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -103,9 +112,15 @@
     <None Include="..\..\AppGallery\shader\BevelShader.fx">
       <Filter>shader</Filter>
     </None>
+    <None Include="..\..\AppGallery\shader\BasicShader.fx">
+      <Filter>shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\AppGallery\shader\BevelShader.xml">
+      <Filter>shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\AppGallery\shader\BasicShader.xml">
       <Filter>shader</Filter>
     </CustomBuild>
   </ItemGroup>

@@ -4,6 +4,8 @@
 #include "izSampleKit.h"
 #include "izThreadModel.h"
 
+class Item;
+
 /** Manage loading texture jobs.
  */
 class TextureLoader {
@@ -32,7 +34,8 @@ public:
      */
     izanagi::threadmodel::CJob* EnqueueLoadingRequest(
         izanagi::graph::CGraphicsDevice* device,
-        const char* path);
+        const char* path,
+        Item* target);
 
 private:
     izanagi::IMemoryAllocator* m_Allocator;
@@ -57,7 +60,8 @@ private:
     IZ_BOOL Init(
         izanagi::IMemoryAllocator* allocator,
         izanagi::graph::CGraphicsDevice* device,
-        const char* path);
+        const char* path,
+        Item* target);
 
     /** Run job on worker thread.
      */
@@ -80,6 +84,8 @@ private:
     IZ_UINT m_TexHeight;    //< image height.
 
     const char* m_Path;         //< image file path.
+
+    Item* m_TargetItem;
 };
 
 #endif    // #if !defined(__LOAD_TEXTURE_JOB_H__)

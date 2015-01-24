@@ -3,7 +3,8 @@
 
 #include "izSampleKit.h"
 
-class Board;
+class ItemBox;
+class ItemBoard;
 class Item;
 
 class ItemManager {
@@ -24,12 +25,24 @@ public:
 
     void Terminate();
 
-    void Render(
+    IZ_BOOL EnqueueLoadingRequest(
+        izanagi::graph::CGraphicsDevice* device,
+        const char* path);
+
+    void RenderBox(
+        izanagi::graph::CGraphicsDevice* device,
+        izanagi::shader::CShaderBasic* shader);
+
+    void RenderBoard(
         izanagi::graph::CGraphicsDevice* device,
         izanagi::shader::CShaderBasic* shader);
 
 private:
-    Board* m_BoardMesh;
+    Item* FindNotRequestedLoadTexture();
+
+private:
+    ItemBox* m_BoxMesh;
+    ItemBoard* m_BoardMesh;
 
     izanagi::CStdList<Item> m_Items;
 };

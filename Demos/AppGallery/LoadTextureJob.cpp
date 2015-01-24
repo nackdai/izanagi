@@ -1,4 +1,5 @@
 #include "LoadTextureJob.h"
+#include "Item.h"
 
 #include "jinclude.h"
 #include "jpeglib.h"
@@ -45,7 +46,8 @@ void TextureLoader::Terminate()
 
 izanagi::threadmodel::CJob* TextureLoader::EnqueueLoadingRequest(
     izanagi::graph::CGraphicsDevice* device,
-    const char* path)
+    const char* path,
+    Item* target)
 {
     IZ_ASSERT(m_Allocator != IZ_NULL);
 
@@ -56,7 +58,8 @@ izanagi::threadmodel::CJob* TextureLoader::EnqueueLoadingRequest(
     job->Init(
         &m_JobSafeAllocator,
         device,
-        path);
+        path,
+        target);
 
     m_JobQueue.Enqueue(job, IZ_TRUE);
 
@@ -73,6 +76,8 @@ LoadTextureJob::LoadTextureJob()
     m_PixelData = IZ_NULL;
 
     m_Path = IZ_NULL;
+
+    m_TargetItem = IZ_NULL;
 }
 
 LoadTextureJob::~LoadTextureJob()
@@ -85,13 +90,15 @@ LoadTextureJob::~LoadTextureJob()
 IZ_BOOL LoadTextureJob::Init(
     izanagi::IMemoryAllocator* allocator,
     izanagi::graph::CGraphicsDevice* device,
-    const char* path)
+    const char* path,
+    Item* target)
 {
     m_InternalAllocator = allocator;
 
     SAFE_REPLACE(m_Device, device);
 
     m_Path = path;
+    m_TargetItem = target;
 
     return IZ_TRUE;
 }
@@ -198,12 +205,11 @@ void LoadTextureJob::OnFinish(IZ_BOOL runResult)
         izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA8,
         m_PixelData);
 
-#if 0
     // Set texture to target.
     IZ_ASSERT(m_TargetItem != IZ_NULL);
-    m_TargetItem->SetTexture(texture, m_Path);
+    //m_TargetItem->SetTexture(texture, m_Path);
+    m_TargetItem->SetTexture(texture);
     SAFE_RELEASE(texture);
-#endif
 
     // Free memory.
     FREE(m_InternalAllocator, m_PixelData);

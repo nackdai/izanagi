@@ -1,15 +1,15 @@
-#if !defined(__BOARD_H__)
-#define __BOARD_H__
+#if !defined(__ITEM_BOX_H__)
+#define __ITEM_BOX_H__
 
 #include "izSampleKit.h"
 #include "MeshVtx.h"
 
-class Board : public izanagi::CDebugMeshTmpl<SMeshVtx> {
+class ItemBox : public izanagi::CDebugMeshTmpl<SMeshVtx> {
     friend class izanagi::CDebugMeshTmpl<SMeshVtx>;
 
 public:
     // Create an instance.
-    static Board* Create(
+    static ItemBox* Create(
         izanagi::IMemoryAllocator* allocator,
         izanagi::graph::CGraphicsDevice* device,
         IZ_UINT flag,
@@ -19,8 +19,8 @@ public:
         IZ_FLOAT depth);
 
 private:
-    Board() {}
-    virtual ~Board() {}
+    ItemBox() {}
+    virtual ~ItemBox() {}
 
 private:
     IZ_BOOL Init(
@@ -53,4 +53,4 @@ private:
     IZ_BOOL SetIdx();
 };
 
-#endif    // #if !defined(__BOARD_H__)
+#endif    // #if !defined(__ITEM_BOX_H__)

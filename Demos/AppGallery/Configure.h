@@ -30,9 +30,16 @@ public:
      */
     static const IZ_UINT ItemNum;
 
+    static const IZ_FLOAT ItemWidth;
+    static const IZ_FLOAT ItemHeight;
+    static const IZ_FLOAT ItemDepth;
+
+    static const IZ_FLOAT ItemBoardMargin;
+
     /** Flags for vertex semantics.
      */
-    static const IZ_UINT MeshFlags;
+    static const IZ_UINT BoxMeshFlags;
+    static const IZ_UINT BoardMeshFlags;
 
     /** Default color.
      */

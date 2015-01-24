@@ -3,13 +3,15 @@
 
 #include "izSampleKit.h"
 
-class Board;
+class ItemBox;
+class ItemBoard;
 
 class Item : public izanagi::CObject {
 public:
     static Item* Create(
         izanagi::IMemoryAllocator* allocator,
-        Board* board);
+        ItemBox* box,
+        ItemBoard* board);
 
 private:
     Item();
@@ -18,11 +20,13 @@ private:
     IZ_DEFINE_INTERNAL_RELEASE();
 
 public:
-    void SetPosAndRotate(
-        izanagi::math::SVector4& pos,
-        IZ_FLOAT angle);
+    void SetPosAndRotate(IZ_FLOAT theta);
 
     void Render(
+        izanagi::graph::CGraphicsDevice* device,
+        izanagi::shader::CShaderBasic* shader);
+
+    void RenderBoard(
         izanagi::graph::CGraphicsDevice* device,
         izanagi::shader::CShaderBasic* shader);
 
@@ -30,14 +34,26 @@ public:
 
     const izanagi::math::SMatrix44& GetL2W();
 
+    void SetTexture(izanagi::graph::CTexture* texture);
+
+    void SetIsRequestedLoadTexture(IZ_BOOL flag);
+
+    IZ_BOOL IsRequestedLoadTexture() const;
+
 private:
     izanagi::IMemoryAllocator* m_Allocator;
 
-    Board* m_Board;
+    ItemBox* m_Box;
 
-    izanagi::math::SMatrix44 m_L2W;
+    izanagi::math::SMatrix44 m_BoxL2W;
+    izanagi::math::SMatrix44 m_BoardL2W;
 
     izanagi::CStdList<Item>::Item m_ListItem;
+
+    ItemBoard* m_Board;
+    izanagi::graph::CTexture* m_Tex;
+
+    IZ_BOOL m_IsRequestedLoadTexture;
 };
 
 #endif    // #if !defined(__ITEM_H__)
