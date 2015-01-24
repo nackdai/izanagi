@@ -28,7 +28,7 @@
 
 #define IZ_MATH_EPSILON     IZ_FLOAT_EPSILON
 
-#define IZ_DEG2RAD(d)   (IZ_MATH_PI * d / 180.0f)
-#define IZ_RAD2DEG(r)   (r * 180.0f / IZ_MATH_PI)
+#define IZ_DEG2RAD(d)   (IZ_MATH_PI * (d) / 180.0f)
+#define IZ_RAD2DEG(r)   ((r) * 180.0f / IZ_MATH_PI)
 
 #endif  // #if !defined(__IZANAGI__MATH_DEFS_H__)
