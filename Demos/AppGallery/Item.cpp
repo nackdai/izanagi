@@ -78,13 +78,17 @@ void Item::SetPosAndRotate(IZ_FLOAT theta)
 void Item::Render(
     izanagi::graph::CGraphicsDevice* device,
     izanagi::shader::CShaderBasic* shader,
-    const izanagi::CCamera& camera)
+    const izanagi::CCamera& camera,
+    const izanagi::math::SMatrix44& mtxRot)
 {
+    izanagi::math::SMatrix44 mtx;
+    izanagi::math::SMatrix44::Mul(mtx, m_BoxL2W, mtxRot);
+
     Utility::SetShaderParam(
         shader,
         "g_mL2W",
-        (void*)&m_BoxL2W,
-        sizeof(m_BoxL2W));
+        (void*)&mtx,
+        sizeof(mtx));
 
     Environment::Instance().SetLocalLightParam(
         camera,
@@ -98,9 +102,13 @@ void Item::Render(
 
 void Item::RenderBoard(
     izanagi::graph::CGraphicsDevice* device,
-    izanagi::shader::CShaderBasic* shader)
+    izanagi::shader::CShaderBasic* shader,
+    const izanagi::math::SMatrix44& mtxRot)
 {
     static const IZ_FLOAT delta = 0.01f;
+
+    izanagi::math::SMatrix44 mtx;
+    izanagi::math::SMatrix44::Mul(mtx, m_BoardL2W, mtxRot);
 
     if (m_Tex != IZ_NULL) {
         device->SetTexture(0, m_Tex);
@@ -108,8 +116,8 @@ void Item::RenderBoard(
         Utility::SetShaderParam(
             shader,
             "g_mL2W",
-            (void*)&m_BoardL2W,
-            sizeof(m_BoardL2W));
+            (void*)&mtx,
+            sizeof(mtx));
 
         shader->CommitChanges(device);
 

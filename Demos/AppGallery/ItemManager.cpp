@@ -16,6 +16,11 @@ ItemManager::ItemManager()
 {
     m_BoxMesh = IZ_NULL;
     m_BoardMesh = IZ_NULL;
+
+    m_AngleRate = 0.0f;
+    m_AngleImmediately = 0.0f;
+
+    izanagi::math::SMatrix44::SetUnit(m_mtxRot);
 }
 
 ItemManager::~ItemManager()
@@ -101,6 +106,33 @@ IZ_BOOL ItemManager::EnqueueLoadingRequest(
 
 }
 
+void ItemManager::Update(
+    IZ_FLOAT time,
+    izanagi::graph::CGraphicsDevice* device,
+    const izanagi::CCamera& camera)
+{
+    // Update rotation of photo items.
+    if (m_AngleImmediately != 0.0f) {
+        izanagi::math::SMatrix44::RotByY(
+            m_mtxRot,
+            m_mtxRot,
+            m_AngleImmediately);
+        m_AngleImmediately = 0.0f;
+    }
+    else if (m_AngleRate != 0.0f) {
+        izanagi::math::SMatrix44::RotByY(
+            m_mtxRot,
+            m_mtxRot,
+            m_AngleRate);
+
+        m_AngleRate *= 0.95f;
+
+        if (izanagi::math::CMath::Absf(m_AngleRate) < IZ_MATH_PI2 / 10000.0f) {
+            m_AngleRate = 0.0f;
+        }
+    }
+}
+
 void ItemManager::RenderBox(
     izanagi::graph::CGraphicsDevice* device,
     izanagi::shader::CShaderBasic* shader,
@@ -110,7 +142,7 @@ void ItemManager::RenderBox(
     while (listItem != IZ_NULL) {
         Item* item = listItem->GetData();
 
-        item->Render(device, shader, camera);
+        item->Render(device, shader, camera, m_mtxRot);
 
         listItem = listItem->GetNext();
     }
@@ -124,10 +156,25 @@ void ItemManager::RenderBoard(
     while (listItem != IZ_NULL) {
         Item* item = listItem->GetData();
 
-        item->RenderBoard(device, shader);
+        item->RenderBoard(device, shader, m_mtxRot);
 
         listItem = listItem->GetNext();
     }
+}
+
+void ItemManager::SetAngleRate(IZ_FLOAT angle)
+{
+    m_AngleRate = angle;
+}
+
+void ItemManager::SetAngleForImmediateRot(IZ_FLOAT angle)
+{
+    m_AngleImmediately = angle;
+}
+
+IZ_BOOL ItemManager::IsRotateAnimating()
+{
+    return (m_AngleRate != 0.0f);
 }
 
 Item* ItemManager::FindNotRequestedLoadTexture()

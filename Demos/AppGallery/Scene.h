@@ -23,6 +23,11 @@ public:
 
     void Terminate();
 
+    void Update(
+        IZ_FLOAT time,
+        izanagi::graph::CGraphicsDevice* device,
+        const izanagi::CCamera& camera);
+
     void Render(
         const izanagi::CCamera& camera,
         izanagi::graph::CGraphicsDevice* device);

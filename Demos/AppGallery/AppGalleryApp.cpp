@@ -29,7 +29,7 @@ IZ_BOOL AppGalleryApp::InitInternal(
 
     // カメラ
     camera.Init(
-        izanagi::math::CVector4(0.0f, 5.0f, -20.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 0.0f, -45.0f, 1.0f),
         izanagi::math::CVector4(0.0f, 0.0f, 0.0f, 1.0f),
         izanagi::math::CVector4(0.0f, 1.0f, 0.0f, 1.0f),
         1.0f,
@@ -93,6 +93,8 @@ void AppGalleryApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
     StateManager::Instance().Update(time, IZ_NULL);
 
     GetCamera().Update();
+
+    Scene::Instance().Update(time, device, camera);
 
     izanagi::threadmodel::CJobQueue::UpdateQueues();
 }

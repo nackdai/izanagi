@@ -63,6 +63,17 @@ void Scene::Terminate()
     SAFE_RELEASE(m_BasicShader);
 }
 
+void Scene::Update(
+    IZ_FLOAT time,
+    izanagi::graph::CGraphicsDevice* device,
+    const izanagi::CCamera& camera)
+{
+    ItemManager::Instance().Update(
+        time,
+        device,
+        camera);
+}
+
 void Scene::Render(
     const izanagi::CCamera& camera,
     izanagi::graph::CGraphicsDevice* device)

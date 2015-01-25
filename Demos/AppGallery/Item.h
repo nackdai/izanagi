@@ -25,11 +25,13 @@ public:
     void Render(
         izanagi::graph::CGraphicsDevice* device,
         izanagi::shader::CShaderBasic* shader,
-        const izanagi::CCamera& camera);
+        const izanagi::CCamera& camera,
+        const izanagi::math::SMatrix44& mtxRot);
 
     void RenderBoard(
         izanagi::graph::CGraphicsDevice* device,
-        izanagi::shader::CShaderBasic* shader);
+        izanagi::shader::CShaderBasic* shader,
+        const izanagi::math::SMatrix44& mtxRot);
 
     izanagi::CStdList<Item>::Item* GetListItem();
 
