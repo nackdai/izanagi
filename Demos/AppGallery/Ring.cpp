@@ -143,7 +143,7 @@ IZ_BOOL Ring::CreateVB(
 
     stride += sizeof(IZ_FLOAT) * 4;
     stride += sizeof(IZ_FLOAT) * 3;
-    stride += sizeof(IZ_FLOAT) * 3;
+    stride += sizeof(IZ_FLOAT) * 4;
     stride += sizeof(IZ_FLOAT) * 3;
 
     m_pVB = device->CreateVertexBuffer(
@@ -191,7 +191,7 @@ IZ_BOOL Ring::CreateVD(
         elements[cnt].Stream = 0;
         elements[cnt].Offset = elements[cnt - 1].Offset
             + izanagi::graph::GetSizeByVtxDeclType(elements[cnt - 1].Type);
-        elements[cnt].Type = izanagi::graph::E_GRAPH_VTX_DECL_TYPE_FLOAT3;
+        elements[cnt].Type = izanagi::graph::E_GRAPH_VTX_DECL_TYPE_FLOAT4;
         elements[cnt].Usage = izanagi::graph::E_GRAPH_VTX_DECL_USAGE_TEXCOORD;
         elements[cnt].UsageIndex = 3;
     }
@@ -225,7 +225,7 @@ IZ_UINT8* Ring::SetExtraVtxData(
     extra[0] = meshVtx->nextNml[0];
     extra[1] = meshVtx->nextNml[1];
     extra[2] = meshVtx->nextNml[2];
-    extra[3] = meshVtx->radius;
+    extra[3] = meshVtx->nextNml[3];
     extra += 4;
 
     extra[0] = meshVtx->dir[0];
@@ -236,7 +236,8 @@ IZ_UINT8* Ring::SetExtraVtxData(
     extra[0] = meshVtx->nextNml2[0];
     extra[1] = meshVtx->nextNml2[1];
     extra[2] = meshVtx->nextNml2[2];
-    extra += 3;
+    extra[3] = meshVtx->nextNml2[3];
+    extra += 4;
 
     extra[0] = meshVtx->dir2[0];
     extra[1] = meshVtx->dir2[1];
@@ -376,6 +377,10 @@ SMeshVtx* Ring::SetDataUpFace(
             vtx[i].nextNml2[0] = 0.0f;
             vtx[i].nextNml2[1] = 1.0f;
             vtx[i].nextNml2[2] = 0.0f;
+
+            // R
+            vtx[i].nextNml[3] = Configure::DefaultBevelR;
+            vtx[i].nextNml2[3] = Configure::DefaultBevelR;
         }
 
         vtx += 4;
@@ -467,6 +472,10 @@ SMeshVtx* Ring::SetDataDownFace(
             vtx[i].nextNml2[0] = 0.0f;
             vtx[i].nextNml2[1] = -1.0f;
             vtx[i].nextNml2[2] = 0.0f;
+
+            // R
+            vtx[i].nextNml[3] = Configure::DefaultBevelR;
+            vtx[i].nextNml2[3] = Configure::DefaultBevelR;
         }
 
         vtx += 4;
@@ -570,6 +579,10 @@ SMeshVtx* Ring::SetDataOuterFace(
             vtx[i].nextNml2[0] = vtx[i].nml.x;
             vtx[i].nextNml2[1] = vtx[i].nml.y;
             vtx[i].nextNml2[2] = vtx[i].nml.z;
+
+            // R
+            vtx[i].nextNml[3] = Configure::DefaultBevelR;
+            vtx[i].nextNml2[3] = Configure::DefaultBevelR;
         }
 
         vtx += 4;
@@ -674,6 +687,10 @@ SMeshVtx* Ring::SetDataInnerFace(
             vtx[i].nextNml2[0] = vtx[i].nml.x;
             vtx[i].nextNml2[1] = vtx[i].nml.y;
             vtx[i].nextNml2[2] = vtx[i].nml.z;
+
+            // R
+            vtx[i].nextNml[3] = Configure::DefaultBevelR;
+            vtx[i].nextNml2[3] = Configure::DefaultBevelR;
         }
 
         vtx += 4;

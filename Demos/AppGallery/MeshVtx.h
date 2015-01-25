@@ -4,11 +4,10 @@
 #include "izSampleKit.h"
 
 struct SMeshVtx : public izanagi:: SMeshVtx {
-    IZ_FLOAT nextNml[3];
-    IZ_FLOAT radius;
+    IZ_FLOAT nextNml[4];
     IZ_FLOAT dir[3];
 
-    IZ_FLOAT nextNml2[3];
+    IZ_FLOAT nextNml2[4];
     IZ_FLOAT dir2[3];
 };
 

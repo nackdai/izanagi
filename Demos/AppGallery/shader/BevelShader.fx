@@ -38,8 +38,6 @@ float4 g_vLitParallelDir;
 float4 g_vLitParallelColor;
 float4 g_vLitAmbientColor;
 
-#define R   0.05f
-
 /////////////////////////////////////////////////////////////
 
 SVSOutput mainVS(SVSInput In)
@@ -65,6 +63,7 @@ SVSOutput mainVS(SVSInput In)
     Out.vColor = g_vMtrlAmbient * g_vLitAmbientColor;
 
     Out.vNextNml2.xyz = In.vNextNml2.xyz;
+    Out.vNextNml2.a = In.vNextNml2.a;
     Out.vDir2 = mul(In.vDir2, (float3x3)g_mL2W);
     
     return Out;
@@ -73,18 +72,22 @@ SVSOutput mainVS(SVSInput In)
 float4 mainPS(SPSInput In) : COLOR
 {
     float3 dir = In.vDir;
+    float3 nml1 = In.vNextNml.xyz;
+    float R = In.vNextNml.a;
+
     float f = (1.0f - (1.0f - length(dir)) / R) * step(1.0f - length(dir), R);
     float3 vN = In.vNormal.xyz;
 
-    float3 nml1 = In.vNextNml.xyz;
 
     // NOTE
     // Šp‚Å‚ÍŽ©•ª‚Ì–Ê‚Æ—×‚Ì–Ê‚ÌŠÔ‚ðŽæ‚è‚½‚¢‚Ì‚Å•âŠÔ’l‚ð”¼•ª‚Ü‚Å‚É‚·‚é
     nml1 = lerp(vN, nml1, f * 0.5f);
 
     dir = In.vDir2;
+    float3 nml2 = In.vNextNml2.xyz;
+    R = In.vNextNml2.a;
+
     f = (1.0f - (1.0f - length(dir)) / R) * step(1.0f - length(dir), R);
-    float3 nml2 = In.vNextNml2;
     nml2 = lerp(vN, nml2, f * 0.5f);
 
     vN = lerp(nml1, nml2, 0.5f);

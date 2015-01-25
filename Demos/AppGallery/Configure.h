@@ -36,6 +36,8 @@ public:
 
     static const IZ_FLOAT ItemBoardMargin;
 
+    static const IZ_FLOAT DefaultBevelR;
+
     /** Flags for vertex semantics.
      */
     static const IZ_UINT BoxMeshFlags;

@@ -22,6 +22,8 @@ const IZ_FLOAT Configure::ItemDepth = (Configure::OUTER_RADIUS - Configure::INNE
 
 const IZ_FLOAT Configure::ItemBoardMargin = 2.0f;
 
+const IZ_FLOAT Configure::DefaultBevelR = 0.05f;
+
 const IZ_UINT Configure::BoxMeshFlags = izanagi::E_DEBUG_MESH_VTX_FORM_POS
         | izanagi::E_DEBUG_MESH_VTX_FORM_COLOR
         | izanagi::E_DEBUG_MESH_VTX_FORM_NORMAL;

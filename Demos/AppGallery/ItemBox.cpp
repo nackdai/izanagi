@@ -1,4 +1,5 @@
 #include "ItemBox.h"
+#include "Configure.h"
 
 namespace {
 
@@ -300,7 +301,7 @@ IZ_BOOL ItemBox::CreateVB(
 
     stride += sizeof(IZ_FLOAT) * 4;
     stride += sizeof(IZ_FLOAT) * 3;
-    stride += sizeof(IZ_FLOAT) * 3;
+    stride += sizeof(IZ_FLOAT) * 4;
     stride += sizeof(IZ_FLOAT) * 3;
 
     m_pVB = device->CreateVertexBuffer(
@@ -345,7 +346,7 @@ IZ_BOOL ItemBox::CreateVD(
         elements[cnt].Stream = 0;
         elements[cnt].Offset = elements[cnt - 1].Offset
             + izanagi::graph::GetSizeByVtxDeclType(elements[cnt - 1].Type);
-        elements[cnt].Type = izanagi::graph::E_GRAPH_VTX_DECL_TYPE_FLOAT3;
+        elements[cnt].Type = izanagi::graph::E_GRAPH_VTX_DECL_TYPE_FLOAT4;
         elements[cnt].Usage = izanagi::graph::E_GRAPH_VTX_DECL_USAGE_TEXCOORD;
         elements[cnt].UsageIndex = 3;
     }
@@ -378,7 +379,7 @@ IZ_UINT8* ItemBox::SetExtraVtxData(
     extra[0] = meshVtx->nextNml[0];
     extra[1] = meshVtx->nextNml[1];
     extra[2] = meshVtx->nextNml[2];
-    extra[3] = meshVtx->radius;
+    extra[3] = meshVtx->nextNml[3];
     extra += 4;
 
     extra[0] = meshVtx->dir[0];
@@ -389,7 +390,8 @@ IZ_UINT8* ItemBox::SetExtraVtxData(
     extra[0] = meshVtx->nextNml2[0];
     extra[1] = meshVtx->nextNml2[1];
     extra[2] = meshVtx->nextNml2[2];
-    extra += 3;
+    extra[3] = meshVtx->nextNml2[3];
+    extra += 4;
 
     extra[0] = meshVtx->dir2[0];
     extra[1] = meshVtx->dir2[1];
@@ -446,12 +448,13 @@ IZ_BOOL ItemBox::SetData(
             pVtx->nextNml[0] = NEXT_NML[i][n/2][0];
             pVtx->nextNml[1] = NEXT_NML[i][n/2][1];
             pVtx->nextNml[2] = NEXT_NML[i][n/2][2];
-
-            pVtx->radius = 0.1f;
+            pVtx->nextNml[3] = Configure::DefaultBevelR;
 
             pVtx->dir[0] = DIR[i][n/2][0];
             pVtx->dir[1] = DIR[i][n/2][1];
             pVtx->dir[2] = DIR[i][n/2][2];
+
+            static const IZ_FLOAT BevelScale = 0.25f;
 
             switch (n) {
             case 0:
@@ -459,6 +462,7 @@ IZ_BOOL ItemBox::SetData(
                 pVtx->nextNml2[0] = NEXT_NML[i][2][0];
                 pVtx->nextNml2[1] = NEXT_NML[i][2][1];
                 pVtx->nextNml2[2] = NEXT_NML[i][2][2];
+                pVtx->nextNml2[3] = Configure::DefaultBevelR * BevelScale;
                 pVtx->dir2[0] = DIR[i][2][0];
                 pVtx->dir2[1] = DIR[i][2][1];
                 pVtx->dir2[2] = DIR[i][2][2];
@@ -468,6 +472,7 @@ IZ_BOOL ItemBox::SetData(
                 pVtx->nextNml2[0] = NEXT_NML[i][3][0];
                 pVtx->nextNml2[1] = NEXT_NML[i][3][1];
                 pVtx->nextNml2[2] = NEXT_NML[i][3][2];
+                pVtx->nextNml2[3] = Configure::DefaultBevelR * BevelScale;
                 pVtx->dir2[0] = DIR[i][3][0];
                 pVtx->dir2[1] = DIR[i][3][1];
                 pVtx->dir2[2] = DIR[i][3][2];
