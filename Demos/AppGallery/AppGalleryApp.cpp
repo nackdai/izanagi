@@ -128,3 +128,8 @@ void AppGalleryApp::OnMouseMove(const izanagi::CIntPoint& point)
 {
     StateManager::Instance().OnMouseMove(point);
 }
+
+IZ_COLOR AppGalleryApp::GetBgColor() const
+{
+    return IZ_COLOR_RGBA(0x00, 0x00, 0x00, 0xff);
+}

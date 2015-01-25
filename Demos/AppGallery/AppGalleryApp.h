@@ -30,6 +30,8 @@ protected:
     virtual IZ_BOOL OnMouseLBtnUp(const izanagi::CIntPoint& point);
     virtual void OnMouseMove(const izanagi::CIntPoint& point);
 
+    virtual IZ_COLOR GetBgColor() const;
+
 private:
     izanagi::sys::CTimer m_Timer;
 };
