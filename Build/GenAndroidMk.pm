@@ -174,8 +174,12 @@ sub MakeAndroidMk_StaticLib
 		my $srcfiles_cnt = @$srcfiles_array_ref - 1;
 
 		foreach my $src (@$srcfiles_array_ref) {
+			if ($src =~ /(web)/) {
+				$pos++;
+				next;
+			}
 			# ファイル名に 'glut' or 'OGL' or 'linux' が含まれている場合は 'android' に置換する
-			if ($src =~ /(glut)/ || $src =~ /(OGL)/ || $src =~ /linux/) {
+			elsif ($src =~ /(glut)/ || $src =~ /(OGL)/ || $src =~ /linux/) {
 				# 元のパスを残しておく
 				my $org = $src;
 
@@ -220,15 +224,17 @@ sub MakeAndroidMk_StaticLib
 				}
 			}
 
-			print OUT "$src";
-			if ($pos != $srcfiles_cnt) {
+			if ($pos > 0) {
 				print OUT " \\";
+				print OUT "\n";
 			}
-			print OUT "\n";
+
+			print OUT "$src";
 
 			$pos++;
 		}
 
+		print OUT "\n";
 		print OUT "\n";
 	}
 
