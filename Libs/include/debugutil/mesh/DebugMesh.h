@@ -243,8 +243,6 @@ namespace izanagi {
             m_pFace = IZ_NULL;
 
             m_nVtxFormFlag = 0;
-
-            m_pDebugAxis = IZ_NULL;
         }
 
         virtual ~CDebugMeshTmpl()
@@ -254,8 +252,6 @@ namespace izanagi {
             SAFE_RELEASE(m_pVD);
 
             ClearDataBuffer();
-
-            SAFE_RELEASE(m_pDebugAxis);
         }
 
         NO_COPIABLE(CDebugMeshTmpl);
@@ -313,9 +309,7 @@ namespace izanagi {
             }
 
             if (bEnableDrawDebugAxis) {
-                if (m_pDebugAxis != IZ_NULL) {
-                    m_pDebugAxis->Draw(device);
-                }
+                DrawDebugAxis(device);
             }
 
             return IZ_TRUE;
@@ -331,6 +325,8 @@ namespace izanagi {
         graph::E_GRAPH_PRIM_TYPE GetPrimitiveType() { return m_PrimType; }
 
     protected:
+        virtual void DrawDebugAxis(graph::CGraphicsDevice* device) {}
+
         // 頂点バッファ作成
         IZ_BOOL CreateVB(
             graph::CGraphicsDevice* device,
@@ -423,25 +419,12 @@ namespace izanagi {
         }
 
         // デバッグ用軸メッシュ作成
-        IZ_BOOL CreateDebugAxis(
+        virtual IZ_BOOL CreateDebugAxis(
             graph::CGraphicsDevice* device,
             IZ_UINT nVtxNum,
             IZ_UINT flag)
         {
-            IZ_ASSERT(nVtxNum > 0);
-
-            IZ_UINT nAxisFlag = 0;
-            nAxisFlag |= (CDebugMeshUtil::IsNormal(flag) ? E_DEBUG_MESH_AXIS_Z : 0);
-            nAxisFlag |= (CDebugMeshUtil::IsTangent(flag) ? E_DEBUG_MESH_AXIS_X | E_DEBUG_MESH_AXIS_Y : 0);
-
-            m_pDebugAxis = CDebugMeshAxis::CreateDebugMeshAxis(
-                            m_Allocator,
-                            device,
-                            nAxisFlag,
-                            nVtxNum);
-            IZ_ASSERT(m_pDebugAxis != IZ_NULL);
-
-            return (m_pDebugAxis != IZ_NULL);
+            return IZ_TRUE;
         }
 
         // データバッファクリア
@@ -512,10 +495,7 @@ namespace izanagi {
             IZ_ASSERT(p != IZ_NULL);
 
             VRETURN(m_pVB->Lock(0, 0, p, IZ_FALSE));
-
-            if (m_pDebugAxis != IZ_NULL) {
-                VRETURN(m_pDebugAxis->BeginRegister());
-            }
+            VRETURN(BeginDebugAxisRegister());
 
             return IZ_TRUE;
         }
@@ -523,13 +503,13 @@ namespace izanagi {
         IZ_BOOL UnlockVB()
         {
             VRETURN(m_pVB->Unlock());
-    
-            if (m_pDebugAxis != IZ_NULL) {
-                VRETURN(m_pDebugAxis->EndRegister());
-            }
-
+            VRETURN(EndDebugAxisRegister());
+            
             return IZ_TRUE;
         }
+
+        virtual IZ_BOOL BeginDebugAxisRegister() { return IZ_TRUE; }
+        virtual IZ_BOOL EndDebugAxisRegister() { return IZ_TRUE; }
 
         IZ_BOOL LockIB(void** p)
         {
@@ -578,30 +558,15 @@ namespace izanagi {
             pData = CDebugMeshUtil::SetVtx(flag, sVtx, pData);
             pData = SetExtraVtxData(&sVtx, flag, pData);
 
-            if (m_pDebugAxis != IZ_NULL) {
-                if (CDebugMeshUtil::IsNormal(flag)) {
-                    m_pDebugAxis->SetVtx(
-                        E_DEBUG_MESH_AXIS_Z,
-                        sVtx.pos,
-                        sVtx.nml);
-                }
-
-                if (CDebugMeshUtil::IsTangent(flag)) {
-                    // Tangent
-                    m_pDebugAxis->SetVtx(
-                        E_DEBUG_MESH_AXIS_X,
-                        sVtx.pos,
-                        sVtx.tangent);
-
-                    // BiNormal
-                    m_pDebugAxis->SetVtx(
-                        E_DEBUG_MESH_AXIS_Y,
-                        sVtx.pos,
-                        sVtx.binml);
-                }
-            }
+            SetDebugAxisVtxData(&sVtx, flag);
     
             return pData;
+        }
+
+        virtual void SetDebugAxisVtxData(
+            const void* vtx,
+            IZ_UINT flag)
+        {
         }
 
         // 頂点と面を関連付ける
@@ -820,12 +785,33 @@ namespace izanagi {
         SMeshFace* m_pFace;
 
         IZ_UINT m_nVtxFormFlag;
+    };
 
+    class CDebugMesh : public CDebugMeshTmpl<SMeshVtx> {
+    public:
+        CDebugMesh();
+        virtual ~CDebugMesh();
+
+    protected:
+        // デバッグ用軸メッシュ作成
+        virtual IZ_BOOL CreateDebugAxis(
+            graph::CGraphicsDevice* device,
+            IZ_UINT nVtxNum,
+            IZ_UINT flag);
+
+        virtual void DrawDebugAxis(graph::CGraphicsDevice* device);
+
+        virtual IZ_BOOL BeginDebugAxisRegister();
+        virtual IZ_BOOL EndDebugAxisRegister();
+
+        virtual void SetDebugAxisVtxData(
+            const void* vtx,
+            IZ_UINT flag);
+
+    private:
         // For Debug
         CDebugMeshAxis* m_pDebugAxis;
     };
-
-    typedef CDebugMeshTmpl<SMeshVtx>    CDebugMesh;
 }   // namespace izanagi
 
 #endif  // #if !defined(__IZANAGI_DEBUG_UTIL_MESH_H__)

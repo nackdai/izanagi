@@ -7,7 +7,7 @@ namespace izanagi {
     /**
     * 軸
     */
-    class CDebugMeshAxis : public CDebugMeshTmpl<SMeshVtx> {
+    class CDebugMeshAxis : public CDebugMesh {
         friend class CDebugMeshTmpl<SMeshVtx>;
 
     public:

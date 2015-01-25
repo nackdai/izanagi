@@ -7,7 +7,7 @@ namespace izanagi {
     /**
     * Torus
     */
-    class CDebugMeshTorus : public CDebugMeshTmpl<SMeshVtx> {
+    class CDebugMeshTorus : public CDebugMesh {
         friend class CDebugMeshTmpl<SMeshVtx>;
 
     public:

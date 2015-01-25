@@ -7,7 +7,7 @@ namespace izanagi {
     /**
     * 円柱
     */
-    class CDebugMeshCylinder : public CDebugMeshTmpl<SMeshVtx> {
+    class CDebugMeshCylinder : public CDebugMesh {
         friend class CDebugMeshTmpl<SMeshVtx>;
 
     public:

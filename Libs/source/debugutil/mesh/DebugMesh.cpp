@@ -1,5 +1,6 @@
 #include "debugutil/mesh/DebugMesh.h"
 #include "math/MathVector4.h"
+#include "debugutil/mesh/DebugMeshAxis.h"
 
 using namespace izanagi;
 
@@ -82,4 +83,90 @@ IZ_UINT CDebugMeshUtil::SetVtxElementTangent(IZ_UINT flag, graph::SVertexElement
         return nPos + 1;
     }
     return nPos;
+}
+
+//////////////////////////////////////////////////////////////////
+
+CDebugMesh::CDebugMesh()
+{
+    m_pDebugAxis = IZ_NULL;
+}
+
+CDebugMesh::~CDebugMesh()
+{
+    SAFE_RELEASE(m_pDebugAxis);
+}
+
+IZ_BOOL CDebugMesh::CreateDebugAxis(
+    graph::CGraphicsDevice* device,
+    IZ_UINT nVtxNum,
+    IZ_UINT flag)
+{
+    IZ_ASSERT(nVtxNum > 0);
+
+    IZ_UINT nAxisFlag = 0;
+    nAxisFlag |= (CDebugMeshUtil::IsNormal(flag) ? E_DEBUG_MESH_AXIS_Z : 0);
+    nAxisFlag |= (CDebugMeshUtil::IsTangent(flag) ? E_DEBUG_MESH_AXIS_X | E_DEBUG_MESH_AXIS_Y : 0);
+
+    m_pDebugAxis = CDebugMeshAxis::CreateDebugMeshAxis(
+                    m_Allocator,
+                    device,
+                    nAxisFlag,
+                    nVtxNum);
+    IZ_ASSERT(m_pDebugAxis != IZ_NULL);
+
+    return (m_pDebugAxis != IZ_NULL);
+}
+
+void CDebugMesh::DrawDebugAxis(graph::CGraphicsDevice* device)
+{
+    if (m_pDebugAxis != IZ_NULL) {
+        m_pDebugAxis->Draw(device);
+    }
+}
+
+IZ_BOOL CDebugMesh::BeginDebugAxisRegister()
+{
+    if (m_pDebugAxis != IZ_NULL) {
+        VRETURN(m_pDebugAxis->BeginRegister());
+    }
+    return IZ_TRUE;
+}
+
+IZ_BOOL CDebugMesh::EndDebugAxisRegister()
+{
+    if (m_pDebugAxis != IZ_NULL) {
+        VRETURN(m_pDebugAxis->EndRegister());
+    }
+    return IZ_TRUE;
+}
+
+void CDebugMesh::SetDebugAxisVtxData(
+    const void* vtx,
+    IZ_UINT flag)
+{
+    const SMeshVtx& sVtx = *(const SMeshVtx*)(vtx);
+
+    if (m_pDebugAxis != IZ_NULL) {
+        if (CDebugMeshUtil::IsNormal(flag)) {
+            m_pDebugAxis->SetVtx(
+                E_DEBUG_MESH_AXIS_Z,
+                sVtx.pos,
+                sVtx.nml);
+        }
+
+        if (CDebugMeshUtil::IsTangent(flag)) {
+            // Tangent
+            m_pDebugAxis->SetVtx(
+                E_DEBUG_MESH_AXIS_X,
+                sVtx.pos,
+                sVtx.tangent);
+
+            // BiNormal
+            m_pDebugAxis->SetVtx(
+                E_DEBUG_MESH_AXIS_Y,
+                sVtx.pos,
+                sVtx.binml);
+        }
+    }
 }
