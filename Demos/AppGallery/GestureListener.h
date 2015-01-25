@@ -37,6 +37,8 @@ public:
 
     virtual void OnDragEnd(const izanagi::sys::CTouchEvent& ev);
 
+    virtual IZ_BOOL OnDown();
+
 public:
     void Init(
         AppGalleryApp* app,

@@ -10,6 +10,12 @@
     <Filter Include="shader">
       <UniqueIdentifier>{4da7ed9e-375b-4f23-8901-cc0499448e04}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\state">
+      <UniqueIdentifier>{fb4ad5f4-87f8-4401-b946-de15af4db489}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\state">
+      <UniqueIdentifier>{a1c72542-85c1-4674-8e73-c2e44f247d69}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\AppGallery\AppGalleryApp.h">
@@ -19,15 +25,6 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\AppGallery\LoadTextureJob.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\AppGallery\StateBase.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\AppGallery\StateManager.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\AppGallery\StateDefault.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\AppGallery\GestureListener.h">
@@ -63,6 +60,21 @@
     <ClInclude Include="..\..\AppGallery\Environment.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\AppGallery\StateDefault.h">
+      <Filter>include\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\AppGallery\StateRotateByFling.h">
+      <Filter>include\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\AppGallery\StateManager.h">
+      <Filter>include\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\AppGallery\StateRotateByDrag.h">
+      <Filter>include\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\AppGallery\StateBase.h">
+      <Filter>include\state</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\AppGallery\Configure.cpp">
@@ -75,15 +87,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\AppGallery\LoadTextureJob.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\AppGallery\StateBase.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\AppGallery\StateManager.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\AppGallery\StateDefault.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\AppGallery\GestureListener.cpp">
@@ -112,6 +115,21 @@
     </ClCompile>
     <ClCompile Include="..\..\AppGallery\Environment.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\AppGallery\StateBase.cpp">
+      <Filter>src\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\AppGallery\StateRotateByFling.cpp">
+      <Filter>src\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\AppGallery\StateDefault.cpp">
+      <Filter>src\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\AppGallery\StateManager.cpp">
+      <Filter>src\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\AppGallery\StateRotateByDrag.cpp">
+      <Filter>src\state</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

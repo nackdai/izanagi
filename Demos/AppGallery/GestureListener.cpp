@@ -2,6 +2,7 @@
 #include "Configure.h"
 #include "StateManager.h"
 #include "AppGalleryApp.h"
+#include "ItemManager.h"
 
 CGestureListener::CGestureListener()
 {
@@ -24,6 +25,13 @@ void CGestureListener::OnFling(
         // Ignore fling.
         return;
     }
+
+    // Compute angle rate.
+    IZ_FLOAT angle = Configure::MaxAngleRate * velocityX;
+
+    ItemManager::Instance().SetAngleRate(-angle);
+
+    StateManager::Instance().ChangeState(State_RotateByFling);
 }
 
 void CGestureListener::OnDrag(
@@ -38,12 +46,25 @@ void CGestureListener::OnDrag(
     // NOTE
     // 画面からの端から端のドラッグで90度回転させる
     IZ_FLOAT angle = IZ_MATH_PI1_2 * moveX / (IZ_FLOAT)Configure::SCREEN_WIDTH;
+
+    ItemManager::Instance().SetAngleForImmediateRot(angle);
+
+    StateManager::Instance().ChangeState(State_RotateByDrag);
 }
 
 void CGestureListener::OnDragEnd(const izanagi::sys::CTouchEvent& ev)
 {
     // If drag is end, state return to default.
     StateManager::Instance().ChangeState(State_Default);
+}
+
+IZ_BOOL CGestureListener::OnDown()
+{
+    ItemManager::Instance().SetAngleRate(0.0f);
+
+    StateManager::Instance().ChangeState(State_Default);
+
+    return IZ_TRUE;
 }
 
 void CGestureListener::Init(

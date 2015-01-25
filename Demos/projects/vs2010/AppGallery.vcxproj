@@ -39,6 +39,8 @@
     <ClInclude Include="..\..\AppGallery\StateBase.h" />
     <ClInclude Include="..\..\AppGallery\StateDefault.h" />
     <ClInclude Include="..\..\AppGallery\StateManager.h" />
+    <ClInclude Include="..\..\AppGallery\StateRotateByDrag.h" />
+    <ClInclude Include="..\..\AppGallery\StateRotateByFling.h" />
     <ClInclude Include="..\..\AppGallery\Utility.h" />
   </ItemGroup>
   <ItemGroup>
@@ -57,6 +59,8 @@
     <ClCompile Include="..\..\AppGallery\StateBase.cpp" />
     <ClCompile Include="..\..\AppGallery\StateDefault.cpp" />
     <ClCompile Include="..\..\AppGallery\StateManager.cpp" />
+    <ClCompile Include="..\..\AppGallery\StateRotateByDrag.cpp" />
+    <ClCompile Include="..\..\AppGallery\StateRotateByFling.cpp" />
     <ClCompile Include="..\..\AppGallery\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>

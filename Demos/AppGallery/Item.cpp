@@ -92,7 +92,7 @@ void Item::Render(
 
     Environment::Instance().SetLocalLightParam(
         camera,
-        m_BoxL2W,
+        mtx,
         shader);
 
     shader->CommitChanges(device);

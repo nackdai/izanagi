@@ -5,6 +5,8 @@
 
 enum State {
     State_Default,
+    State_RotateByFling,
+    State_RotateByDrag,
 
     StateNum,
 };
