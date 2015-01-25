@@ -10,6 +10,7 @@ LOCAL_SRC_FILES  := ../../source/std/StdColor.cpp \
 ../../source/std/StdLog.cpp \
 ../../source/std/StdProfiler.cpp \
 ../../source/std/StdUtf.cpp \
+../../source/std/allocator/BlockMemoryAllocator.cpp \
 ../../source/std/allocator/ChunkedMemoryAllocator.cpp \
 ../../source/std/allocator/SimpleMemoryAllocator.cpp \
 ../../source/std/allocator/StandardMemoryAllocator.cpp \
