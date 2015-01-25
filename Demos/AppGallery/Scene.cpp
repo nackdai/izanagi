@@ -130,6 +130,7 @@ void Scene::RenderRing(
             0.0f,
             ringCenter + 0.5f,
             0.0f);
+        izanagi::math::SMatrix44::RotByZ(mtxL2W, mtxL2W, Configure::Gradient);
 
         Utility::SetShaderParam(
             m_BevelShader,
@@ -152,6 +153,7 @@ void Scene::RenderRing(
             0.0f,
             -(ringCenter + 0.5f),
             0.0f);
+        izanagi::math::SMatrix44::RotByZ(mtxL2W, mtxL2W, Configure::Gradient);
 
         Utility::SetShaderParam(
             m_BevelShader,

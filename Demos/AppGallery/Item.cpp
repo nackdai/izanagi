@@ -84,6 +84,10 @@ void Item::Render(
     izanagi::math::SMatrix44 mtx;
     izanagi::math::SMatrix44::Mul(mtx, m_BoxL2W, mtxRot);
 
+    izanagi::math::SMatrix44::RotByZ(
+        mtx, mtx,
+        Configure::Gradient);
+
     Utility::SetShaderParam(
         shader,
         "g_mL2W",
@@ -109,6 +113,10 @@ void Item::RenderBoard(
 
     izanagi::math::SMatrix44 mtx;
     izanagi::math::SMatrix44::Mul(mtx, m_BoardL2W, mtxRot);
+
+    izanagi::math::SMatrix44::RotByZ(
+        mtx, mtx,
+        Configure::Gradient);
 
     if (m_Tex != IZ_NULL) {
         device->SetTexture(0, m_Tex);
