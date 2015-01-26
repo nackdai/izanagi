@@ -32,6 +32,8 @@ public:
         izanagi::graph::CGraphicsDevice* device,
         const izanagi::CCamera& camera);
 
+    void ToggleSSAO();
+
 private:
     /** Render scene to MRT for SSAO.
      */
@@ -42,6 +44,10 @@ private:
     /** Render SSAO scene.
      */
     void RenderSSAO(
+        izanagi::graph::CGraphicsDevice* device,
+        const izanagi::CCamera& camera);
+
+    void RenderNoSSAO(
         izanagi::graph::CGraphicsDevice* device,
         const izanagi::CCamera& camera);
 
@@ -66,6 +72,8 @@ private:
 
     Seat* m_Seat;
     BG* m_BG;
+
+    IZ_BOOL m_EnableSSAO;
 };
 
 #endif    // #if !defined(__BG_RENDERER_H__)

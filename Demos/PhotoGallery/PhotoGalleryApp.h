@@ -35,6 +35,7 @@ protected:
 
 private:
     izanagi::sys::CTimer m_Timer;
+    IZ_BOOL m_EnableSSAO;
 };
 
 #endif    // #if !defined(__PHOTO_GALLERY_APP_H__)

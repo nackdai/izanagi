@@ -93,6 +93,18 @@ SPSOutput mainPS(SPSInput In)
     return vOut;
 }
 
+float4 mainPS_NoSSAO(SPSInput In) : COLOR
+{
+    // ポイントライトの減衰
+    float d = In.distance;
+    float attn = 1.0f / (g_PointLight.x + g_PointLight.y * d + g_PointLight.z * d * d);
+
+    float4 vOut = In.ambient + g_PointLightMeterial * attn * g_PointLightColor;
+    vOut.a = 1.0f;
+    
+    return vOut;
+}
+
 /////////////////////////////////////////////////////////////
 
 struct SVSInputSSAO {
@@ -221,5 +233,14 @@ technique RenderSSAO
         ZEnable = false;
         VertexShader = compile vs_3_0 mainVS_SSAO();
         PixelShader = compile ps_3_0 mainPS_SSAO();
+    }
+}
+
+technique RenderNoSSAO
+{
+    pass p0
+    {
+        VertexShader = compile vs_3_0 mainVS();
+        PixelShader = compile ps_3_0 mainPS_NoSSAO();
     }
 }

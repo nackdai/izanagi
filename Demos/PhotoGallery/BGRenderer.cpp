@@ -40,6 +40,8 @@ BGRenderer::BGRenderer()
         samples[i].z = r * cp;
         samples[i].w = 0.0f;
     }
+
+    m_EnableSSAO = IZ_TRUE;
 }
 
 BGRenderer::~BGRenderer()
@@ -164,7 +166,9 @@ void BGRenderer::PrepareToRender(
     izanagi::graph::CGraphicsDevice* device,
     const izanagi::CCamera& camera)
 {
-    RenderToMRT(device, camera);
+    if (m_EnableSSAO) {
+        RenderToMRT(device, camera);
+    }
 }
 
 void BGRenderer::Render(
@@ -174,8 +178,30 @@ void BGRenderer::Render(
     //RenderDebug(device);
     //RenderDebugPointLight(device);
 
-    RenderSSAO(device, camera);
+    if (m_EnableSSAO) {
+        RenderSSAO(device, camera);
+    }
+    else {
+        RenderNoSSAO(device, camera);
+    }
 }
+
+void BGRenderer::ToggleSSAO()
+{
+    m_EnableSSAO = !m_EnableSSAO;
+}
+
+// Material for point light.
+static const izanagi::math::SVector4 mtrlPointLight[] = {
+    { 1.0f, 1.0f, 1.0f, 1.0f },
+    { 0.0f, 0.0f, 0.0f, 0.0f },
+};
+
+// Material for ambient light.
+static const izanagi::math::SVector4 mtrlAmbientLight[] = {
+    { 0.0f, 0.0f, 0.0f, 0.0f },
+    { 1.0f, 1.0f, 1.0f, 1.0f },
+};
 
 void BGRenderer::RenderToMRT(
     izanagi::graph::CGraphicsDevice* device,
@@ -186,18 +212,6 @@ void BGRenderer::RenderToMRT(
         COUNTOF(m_RT),
         izanagi::graph::E_GRAPH_CLEAR_FLAG_ALL,
         IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0));
-
-    // Material for point light.
-    static const izanagi::math::SVector4 mtrlPointLight[] = {
-        { 1.0f, 1.0f, 1.0f, 1.0f },
-        { 0.0f, 0.0f, 0.0f, 0.0f },
-    };
-
-    // Material for ambient light.
-    static const izanagi::math::SVector4 mtrlAmbientLight[] = {
-        { 0.0f, 0.0f, 0.0f, 0.0f },
-        { 1.0f, 1.0f, 1.0f, 1.0f },
-    };
 
     izanagi::math::SMatrix44 mtx;
     izanagi::math::SMatrix44::SetUnit(mtx);
@@ -310,6 +324,77 @@ void BGRenderer::RenderSSAO(
 
             m_Shader->EndPass();
         }
+    }
+    m_Shader->End(device);
+}
+
+void BGRenderer::RenderNoSSAO(
+    izanagi::graph::CGraphicsDevice* device,
+    const izanagi::CCamera& camera)
+{
+    izanagi::math::SMatrix44 mtx;
+    izanagi::math::SMatrix44::SetUnit(mtx);
+
+    m_Shader->Begin(device, 2, IZ_FALSE);
+    {
+        if (m_Shader->BeginPass(0)) {
+            Utility::SetShaderParam(
+                m_Shader,
+                "g_mW2V",
+                (void*)&camera.GetParam().mtxW2V,
+                sizeof(camera.GetParam().mtxW2V));
+            Utility::SetShaderParam(
+                m_Shader,
+                "g_mV2C",
+                (void*)&camera.GetParam().mtxV2C,
+                sizeof(camera.GetParam().mtxV2C));
+
+            Utility::SetShaderParam(
+                m_Shader,
+                "g_mL2W",
+                (void*)&mtx,
+                sizeof(mtx));
+
+            Environment::Instance().SetPointLightParam(m_Shader);
+            Environment::Instance().SetAmbientLightParam(m_Shader);
+
+            {
+                Utility::SetShaderParam(
+                    m_Shader,
+                    "g_PointLightMeterial",
+                    (void*)&mtrlPointLight[0],
+                    sizeof(mtrlPointLight[0]));
+                Utility::SetShaderParam(
+                    m_Shader,
+                    "g_vMtrlAmbient",
+                    (void*)&mtrlAmbientLight[0],
+                    sizeof(mtrlAmbientLight[0]));
+
+                m_Shader->CommitChanges(device);
+
+                m_Seat->Render(device);
+            }
+
+            {
+                Utility::SetShaderParam(
+                    m_Shader,
+                    "g_PointLightMeterial",
+                    (void*)&mtrlPointLight[1],
+                    sizeof(mtrlPointLight[1]));
+                Utility::SetShaderParam(
+                    m_Shader,
+                    "g_vMtrlAmbient",
+                    (void*)&mtrlAmbientLight[1],
+                    sizeof(mtrlAmbientLight[1]));
+
+                m_BG->SetShaderParam(m_Shader, camera);
+
+                m_Shader->CommitChanges(device);
+
+                m_BG->Render(device);
+            }
+        }
+        m_Shader->EndPass();
     }
     m_Shader->End(device);
 }

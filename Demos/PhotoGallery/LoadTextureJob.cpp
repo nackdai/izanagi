@@ -110,7 +110,9 @@ IZ_BOOL LoadTextureJob::OnRun()
 
     // Open file.
     izanagi::CFileInputStream input;
-    VRETURN(input.Open(m_Path));
+    if (!input.Open(m_Path)) {
+        return IZ_FALSE;
+    }
 
     // Read to memory.
     IZ_UINT8* buf = (IZ_UINT8*)ALLOC(m_InternalAllocator, input.GetSize());

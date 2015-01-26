@@ -12,6 +12,7 @@
 
 PhotoGalleryApp::PhotoGalleryApp()
 {
+    m_EnableSSAO = IZ_TRUE;
 }
 
 PhotoGalleryApp::~PhotoGalleryApp()
@@ -162,6 +163,10 @@ void PhotoGalleryApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
 IZ_BOOL PhotoGalleryApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
 {
+    if (key == izanagi::sys::E_KEYBOARD_BUTTON_SPACE) {
+        BGRenderer::Instance().ToggleSSAO();
+    }
+
 #ifdef __IZ_DEBUG__
     izanagi::math::SVector4& dir = Environment::Instance().GetDir();
 
