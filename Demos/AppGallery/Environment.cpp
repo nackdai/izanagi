@@ -15,13 +15,14 @@ void Environment::SetGlobalLightParam(
 {
     // Ambient Light Color
     izanagi::SAmbientLightParam ambient;
-    ambient.color.Set(0.2f, 0.2f, 0.2f);
+    ambient.color.Set(0.4f, 0.4f, 0.4f);
 
     // Parallel Light Color
-    m_ParallelLight.color.Set(1.0f, 1.0f, 1.0f);
+    m_ParallelLight.color.Set(0.8f, 0.8f, 0.8f);
 
     // Parallel Light Direction
-    m_ParallelLight.vDir.Set(1.0f, -1.0f, 1.0f);
+    //m_ParallelLight.vDir.Set(1.0f, -1.0f, 1.0f);
+    m_ParallelLight.vDir.Set(6.0f, -5.0f, 1.0f);
     izanagi::math::SVector4::Normalize(m_ParallelLight.vDir, m_ParallelLight.vDir);
 
     // ƒ}ƒeƒŠƒAƒ‹
