@@ -16,6 +16,9 @@
     <Filter Include="include\state">
       <UniqueIdentifier>{a1c72542-85c1-4674-8e73-c2e44f247d69}</UniqueIdentifier>
     </Filter>
+    <Filter Include="asset">
+      <UniqueIdentifier>{7c2b4023-2a68-407b-b7bf-be4b655c3977}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\AppGallery\AppGalleryApp.h">
@@ -75,6 +78,9 @@
     <ClInclude Include="..\..\AppGallery\StateBase.h">
       <Filter>include\state</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\AppGallery\2D.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\AppGallery\Configure.cpp">
@@ -131,6 +137,9 @@
     <ClCompile Include="..\..\AppGallery\StateRotateByDrag.cpp">
       <Filter>src\state</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\AppGallery\2D.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\AppGallery\shader\BevelShader.fx">
@@ -146,6 +155,9 @@
     </CustomBuild>
     <CustomBuild Include="..\..\AppGallery\shader\BasicShader.xml">
       <Filter>shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\AppGallery\data\images.xml">
+      <Filter>asset</Filter>
     </CustomBuild>
   </ItemGroup>
 </Project>

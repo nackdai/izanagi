@@ -7,6 +7,7 @@
 #include "Configure.h"
 #include "LoadTextureJob.h"
 #include "data/ImageFiles.h"
+#include "2D.h"
 
 AppGalleryApp::AppGalleryApp()
 {
@@ -48,6 +49,8 @@ IZ_BOOL AppGalleryApp::InitInternal(
     StateManager::Instance().Create(camera);
     StateManager::Instance().Init();
 
+    C2D::Instance().Init(allocator, device);
+
     ItemManager::Instance().Init(
         allocator,
         device);
@@ -78,6 +81,8 @@ void AppGalleryApp::ReleaseInternal()
     TextureLoader::Instance().Terminate();
     izanagi::threadmodel::CJobQueue::TerminateJobQueue();
 
+    C2D::Instance().Terminate();
+
     ItemManager::Instance().Terminate();
     Scene::Instance().Terminate();
 }
@@ -96,6 +101,8 @@ void AppGalleryApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 
     Scene::Instance().Update(time, device, camera);
 
+    C2D::Instance().Update(time);
+
     izanagi::threadmodel::CJobQueue::UpdateQueues();
 }
 
@@ -107,6 +114,8 @@ void AppGalleryApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     Scene::Instance().Render(
         camera,
         device);
+
+    C2D::Instance().Render(device);
 }
 
 IZ_BOOL AppGalleryApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)

@@ -113,7 +113,10 @@ IZ_BOOL LoadTextureJob::OnRun()
 
     // Open file.
     izanagi::CFileInputStream input;
-    VRETURN(input.Open(m_Path));
+    //VRETURN(input.Open(m_Path));
+    if (!input.Open(m_Path)) {
+        return IZ_FALSE;
+    }
 
     // Read to memory.
     IZ_UINT8* buf = (IZ_UINT8*)ALLOC(m_InternalAllocator, input.GetSize());
@@ -190,11 +193,11 @@ __EXIT__:
 
 void LoadTextureJob::OnFinish(IZ_BOOL runResult)
 {
-#if 0
+#if 1
     if (IsCanceled() || !runResult) {
         // Free memory.
         FREE(m_InternalAllocator, m_PixelData);
-        m_TargetItem->SetTexture(IZ_NULL, m_Path);
+        m_TargetItem->SetTexture(IZ_NULL);
         return;
     }
 #endif
