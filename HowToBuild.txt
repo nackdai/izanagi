@@ -3,6 +3,8 @@
 You have to install VisualStudio2010 SP1.
 You have to install DirectX SDK.(including DirectX 9.0c)
 You have to install .NET Framework 4.
+You hvae to install Windows8 SDK.(If Windows7)
+ - https://msdn.microsoft.com/ja-jp/library/hh852363.aspx
 
 1. Open "Build" folder.
 2. Run "BuildAll_<Configure>.bat".
