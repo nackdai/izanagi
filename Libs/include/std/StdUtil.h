@@ -49,7 +49,10 @@ namespace izanagi {
         template <typename _T>
         static _T ConvPtrToInt(void* p)
         {
+// TODO
+#ifndef _WIN64
             IZ_C_ASSERT(sizeof(_T) >= sizeof(void*));
+#endif
 
             union {
                 _T val;
@@ -77,7 +80,10 @@ namespace izanagi {
         template <typename _T, typename _U>
         static _T* ConvIntToPtr(const _U& n)
         {
+// TODO
+#ifndef _WIN64
             IZ_C_ASSERT(sizeof(_U) >= sizeof(void*));
+#endif
 
             union {
                 _U val;

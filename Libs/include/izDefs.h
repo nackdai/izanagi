@@ -254,7 +254,10 @@ IZ_C_ASSERT(sizeof(IZ_ULONG)  == 8)
 IZ_C_ASSERT(sizeof(IZ_INT64)  == 8)
 IZ_C_ASSERT(sizeof(IZ_UINT64) == 8)
 
+// TODO
+#ifndef _WIN64
 IZ_C_ASSERT(sizeof(size_t) == sizeof(IZ_UINT))
+#endif
 
 /////////////////////////////////////////////////////////////
 
