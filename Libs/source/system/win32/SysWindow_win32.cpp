@@ -259,7 +259,8 @@ namespace sys
     {
         IZ_ASSERT(allocator != IZ_NULL);
 
-        HINSTANCE hInst = (HINSTANCE)param.platformParam;
+        //HINSTANCE hInst = (HINSTANCE)param.platformParam;
+        HINSTANCE hInst = GetModuleHandleA(NULL);
         IZ_ASSERT(hInst != IZ_NULL);
 
         HDC hDC = NULL;
