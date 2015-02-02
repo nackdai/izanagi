@@ -63,7 +63,9 @@ namespace sample {
 
         /** V同期.
          */
-        void Present();
+        virtual void Present();
+
+        void Idle();
 
         /** スクリーン幅取得
          */

@@ -36,7 +36,8 @@ namespace izanagi
                 Close();
             }
 
-            OnOpen(&m_File, path, "rb");
+            //OnOpen(&m_File, path, "rb");
+            errno_t err = fopen_s(&m_File, path, "rb");
             ret = (m_File != IZ_NULL);
 
             if (ret) {

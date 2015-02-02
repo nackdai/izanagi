@@ -243,6 +243,21 @@ void CSampleApp::Present()
     m_Device->Present();
 }
 
+void CSampleApp::Idle()
+{
+    GetTimer(0).Begin();
+    GetTimer(1).Begin();
+
+    Update();
+    Render();
+
+    GetTimer(1).End();
+
+    Present();
+
+    GetTimer(0).End();
+}
+
 // スクリーン幅取得
 IZ_UINT CSampleApp::GetScreenWidth() const
 {
