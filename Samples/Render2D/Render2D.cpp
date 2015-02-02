@@ -63,6 +63,11 @@ IZ_BOOL CRender2DApp::InitInternal(
 
     return (m_Img != IZ_NULL);
 #else
+    char path[256];
+    izanagi::sys::CSysUtil::GetExecuteFilePath(path, sizeof(path));
+
+    printf("%s\n", path);
+
     return IZ_TRUE;
 #endif
 }
@@ -111,12 +116,25 @@ void CRender2DApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     }
 }
 
+IZ_UINT count = 0;
+char name[512];
+
+char root[256];
+
+void SetRootPath(const char* path)
+{
+    sprintf(root, "%s\0", path);
+    printf("%s\n", root);
+}
+
 void CRender2DApp::Present()
 {
     CSampleApp::Present();
 
     if (m_Dev != IZ_NULL) {
-        m_Dev->SaveScreenShot("screenshot.png", izanagi::graph::E_GRAPH_IMAGE_FILE_FMT_PNG);
+        sprintf(name, "%s\\screenshot_%d.png\0", root, count);
+        count++;
+        m_Dev->SaveScreenShot(name, izanagi::graph::E_GRAPH_IMAGE_FILE_FMT_PNG);
 
         if (g_Callback != IZ_NULL) {
             (*g_Callback)();

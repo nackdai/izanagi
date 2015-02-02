@@ -6,6 +6,8 @@ extern "C" {
 
     int Loop();
 
+    void SetRootPath(const char* path);
+
     typedef void (*Callback)();
     void SetCallback(Callback func);
 }

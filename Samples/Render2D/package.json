@@ -1,0 +1,13 @@
+{
+  "name": "Render2DJS",
+  "version": "0.1.2",
+  "description": "A sample Node.js app using Express 4",
+  "main": "Render2D.js",
+  "scripts": {
+    "start": "node Render2D.js"
+  },
+  "dependencies": {
+    "express": "~4.9.x",
+    "socket.io":"1.3.2"
+  }
+}

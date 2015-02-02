@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html>
+<head> 
+    <meta charset="utf-8"> 
+    <title>heroku test</title> 
+    <script src="socket.io.js"></script>
+</head> 
+<body> 
+<canvas id='mycanvas'></canvas>
+
+</body> 
+<script type="text/javascript">
+    var canvas = document.getElementById('mycanvas');
+    var context = canvas.getContext('2d');
+
+    var socket = io.connect('localhost:5000');
+
+    var draw = function (id) {
+        var file = 'screenshot_' + id + '.png';
+        var img = new Image();
+        img.src = file;
+
+        img.onload = function () {
+            context.save();
+
+            context.drawImage(img, 0, 0, 640, 360);
+
+            context.restore();
+        }
+    };
+
+    socket.on('updated', function (data) {
+        //var elm = document.getElementById('count');
+        //elm.innerHTML = data.cnt;
+        draw(data.cnt);
+    });
+</script>
+</html> 
