@@ -1,5 +1,5 @@
 #include "izSampleKit.h"
-#include "Render2D.h"
+#include "NodeJsBinding.h"
 
 Callback g_Callback = IZ_NULL;
 
@@ -160,7 +160,7 @@ int Hoge()
         //IzGetSystemDataForMainFunc(),
         IZ_NULL,
         &app,
-        "Render2D",
+        "NodeJsBinding",
         //IzGetScreenWidth(), IzGetScreenHeight(),
         SCREEN_WIDTH, SCREEN_HEIGHT,
         BUF, BUF_SIZE,

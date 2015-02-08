@@ -11,9 +11,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{C10AF92D-47EE-4868-9AB6-435C962B62DD}</ProjectGuid>
+    <ProjectGuid>{F002CBBC-548D-B7BB-B35A-628F3761217A}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>Render2D</RootNamespace>
+    <RootNamespace>NodeJsBinding</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Label="Configuration">

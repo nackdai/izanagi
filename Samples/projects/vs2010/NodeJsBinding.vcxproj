@@ -43,13 +43,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\NodeJsBinding\Render2D.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\NodeJsBinding\Render2D.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="..\..\..\Media\earth.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\NodeJsBinding\NodeJsBinding.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\NodeJsBinding\NodeJsBinding.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6EC83FBE-196D-4445-BB8C-2193CE7047CD}</ProjectGuid>

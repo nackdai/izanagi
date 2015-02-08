@@ -1,7 +1,7 @@
 #include <node.h>
 #include <v8.h>
 
-#include "Render2D.h"
+#include "NodeJsBinding.h"
 
 v8::Handle<v8::Value> Method(const v8::Arguments& args)
 {

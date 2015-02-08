@@ -1,5 +1,5 @@
-#ifndef __RENDER2D_H__
-#define __RENDER2D_H__
+#ifndef __NODE_JS_BINDING_H__
+#define __NODE_JS_BINDING_H__
 
 extern "C" {
     int Hoge();
