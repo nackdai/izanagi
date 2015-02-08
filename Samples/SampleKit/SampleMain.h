@@ -15,6 +15,7 @@ IZ_INT SampleMain(
     const char* title,
     IZ_UINT screenWidth, IZ_UINT screenHeight,
     void* allocatorBuf, IZ_UINT bufSize,
-    void* graphBuf, IZ_UINT graphBufSize);
+    void* graphBuf, IZ_UINT graphBufSize,
+    IZ_BOOL canInternalLoop = IZ_TRUE);
 
 #endif    // #if !defined(__IZ_SAMPLE_SAMPLE_MAIN_H__)

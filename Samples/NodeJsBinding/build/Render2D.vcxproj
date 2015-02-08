@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{D07C9D96-3CEB-52B1-21F0-6E3A10D37865}</ProjectGuid>
+    <ProjectGuid>{C10AF92D-47EE-4868-9AB6-435C962B62DD}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Render2D</RootNamespace>
   </PropertyGroup>
@@ -41,7 +41,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\0000131731\.node-gyp\0.10.26\src;C:\Users\0000131731\.node-gyp\0.10.26\deps\uv\include;C:\Users\0000131731\.node-gyp\0.10.26\deps\v8\include;..\..\..\Libs\include;..\..\SampleKit;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\nakata\.node-gyp\0.10.20\src;C:\Users\nakata\.node-gyp\0.10.20\deps\uv\include;C:\Users\nakata\.node-gyp\0.10.20\deps\v8\include;..\..\..\Libs\include;..\..\SampleKit;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <BufferSecurityCheck>true</BufferSecurityCheck>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -58,7 +58,7 @@
       <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;DelayImp.lib;"C:\Users\0000131731\.node-gyp\0.10.26\$(Configuration)\node.lib";..\..\SampleKit\Release_DX9\SampleKit.lib;..\Render2D_Node.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;DelayImp.lib;"C:\Users\nakata\.node-gyp\0.10.20\$(Configuration)\node.lib";..\..\SampleKit\Release_DX9\SampleKit.lib;..\NodeJsBinding_Node.lib</AdditionalDependencies>
       <AllowIsolation>true</AllowIsolation>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -69,13 +69,13 @@
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>C:\Users\0000131731\.node-gyp\0.10.26\src;C:\Users\0000131731\.node-gyp\0.10.26\deps\uv\include;C:\Users\0000131731\.node-gyp\0.10.26\deps\v8\include;..\..\..\Libs\include;..\..\SampleKit;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\nakata\.node-gyp\0.10.20\src;C:\Users\nakata\.node-gyp\0.10.20\deps\uv\include;C:\Users\nakata\.node-gyp\0.10.20\deps\v8\include;..\..\..\Libs\include;..\..\SampleKit;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;BUILDING_V8_SHARED=1;BUILDING_UV_SHARED=1;BUILDING_NODE_EXTENSION;DEBUG;_DEBUG;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\0000131731\.node-gyp\0.10.26\src;C:\Users\0000131731\.node-gyp\0.10.26\deps\uv\include;C:\Users\0000131731\.node-gyp\0.10.26\deps\v8\include;..\..\..\Libs\include;..\..\SampleKit;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\nakata\.node-gyp\0.10.20\src;C:\Users\nakata\.node-gyp\0.10.20\deps\uv\include;C:\Users\nakata\.node-gyp\0.10.20\deps\v8\include;..\..\..\Libs\include;..\..\SampleKit;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
       <BufferSecurityCheck>true</BufferSecurityCheck>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -100,7 +100,7 @@
       <AdditionalOptions>/LTCG %(AdditionalOptions)</AdditionalOptions>
     </Lib>
     <Link>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;DelayImp.lib;"C:\Users\0000131731\.node-gyp\0.10.26\$(Configuration)\node.lib";..\..\SampleKit\Release_DX9\SampleKit.lib;..\Render2D_Node.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;DelayImp.lib;"C:\Users\nakata\.node-gyp\0.10.20\$(Configuration)\node.lib";..\..\SampleKit\Release_DX9\SampleKit.lib;..\NodeJsBinding_Node.lib</AdditionalDependencies>
       <AllowIsolation>true</AllowIsolation>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -112,10 +112,10 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetExt>.node</TargetExt>
       <TargetMachine>MachineX64</TargetMachine>
-      <IgnoreSpecificDefaultLibraries>LIBCMT.lib</IgnoreSpecificDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>msvcrt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>C:\Users\0000131731\.node-gyp\0.10.26\src;C:\Users\0000131731\.node-gyp\0.10.26\deps\uv\include;C:\Users\0000131731\.node-gyp\0.10.26\deps\v8\include;..\..\..\Libs\include;..\..\SampleKit;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\nakata\.node-gyp\0.10.20\src;C:\Users\nakata\.node-gyp\0.10.20\deps\uv\include;C:\Users\nakata\.node-gyp\0.10.20\deps\v8\include;..\..\..\Libs\include;..\..\SampleKit;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;BUILDING_V8_SHARED=1;BUILDING_UV_SHARED=1;BUILDING_NODE_EXTENSION;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemDefinitionGroup>
