@@ -1,0 +1,30 @@
+1. node-gyp のインストール
+
+$ npm install -g node-gyp
+
+2. binding.gyp の作成
+
+3. ビルドファイルの生成
+
+$ node-gyp configure
+
+* この時点で build フォルダが生成される
+* フォルダの中にはWindowsの場合はVSのプロジェクトファイルができる
+
+4. ビルド
+
+$ node-gyp build
+
+* 失敗したときは、build\binding.sln を開いてVSでビルドしてみる
+* 現状だと msvcrt.lib がコンフリクトするエラーが出るはず
+* VSで直接 msvcrt.lib をリンクから除外して、node-gypでビルドし直す
+
+* x64向けのプロジェクトが作られるはず
+* これは多分64bitのnodejsを使っているからだと思われる
+
+5. その他
+
+* プロジェクトファイルは環境に合わせて生成し直すこと
+* node-gypのインストール先が環境によって異なるため
+  node関連のパスが固定されないため
+* プロジェクトファイルをgitでアップしてはいけない
