@@ -414,7 +414,6 @@ __EXIT__:
 
         CMessageHandler* msgHandler = sMsgHandlerMgr.FindData((IZ_UINT64)hWnd);
 
-        /*
         while (ProcMsg()) {
             if (msgHandler) {
                 msgHandler->OnIdle();
@@ -429,7 +428,7 @@ __EXIT__:
 
         if (msgHandler) {
             msgHandler->OnDestroy();
-        }*/
+        }
     }
 
     void* CSysWindow::GetNativeWindowHandle(const WindowHandle& handle)
