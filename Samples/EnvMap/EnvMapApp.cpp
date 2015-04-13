@@ -1,20 +1,22 @@
 #include "EnvMapApp.h"
 
-CCubeMapApp::CCubeMapApp()
+CEnvMapApp::CEnvMapApp()
 {
     m_Cube = IZ_NULL;
     m_Img = IZ_NULL;
     m_Shader = IZ_NULL;
 
     izanagi::math::SMatrix44::SetUnit(m_L2W);
+
+    m_Idx = 0;
 }
 
-CCubeMapApp::~CCubeMapApp()
+CEnvMapApp::~CEnvMapApp()
 {
 }
 
 // 初期化.
-IZ_BOOL CCubeMapApp::InitInternal(
+IZ_BOOL CEnvMapApp::InitInternal(
     izanagi::IMemoryAllocator* allocator,
     izanagi::graph::CGraphicsDevice* device,
     izanagi::sample::CSampleCamera& camera)
@@ -76,7 +78,7 @@ __EXIT__:
 }
 
 // 解放.
-void CCubeMapApp::ReleaseInternal()
+void CEnvMapApp::ReleaseInternal()
 {
     SAFE_RELEASE(m_Cube);
     SAFE_RELEASE(m_Img);
@@ -84,7 +86,7 @@ void CCubeMapApp::ReleaseInternal()
 }
 
 // 更新.
-void CCubeMapApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
+void CEnvMapApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
     GetCamera().Update();
 
@@ -115,14 +117,26 @@ namespace {
 }
 
 // 描画.
-void CCubeMapApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
+void CEnvMapApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
     izanagi::sample::CSampleCamera& camera = GetCamera();
 
-    device->SetTexture(0, m_Img->GetTexture(4));
+    static IZ_INT texIdx[] = {
+        1,
+        3,
+        4,
+    };
+
+    static IZ_CHAR* name[] = {
+        "Cube",
+        "Latitude-Longitude",
+        "Angular",
+    };
+
+    device->SetTexture(0, m_Img->GetTexture(texIdx[m_Idx]));
 
     // テクスチャあり
-    m_Shader->Begin(device, 2, IZ_FALSE);
+    m_Shader->Begin(device, m_Idx, IZ_FALSE);
     {
         if (m_Shader->BeginPass(0)) {
             // パラメータ設定
@@ -152,4 +166,37 @@ void CCubeMapApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
         }
     }
     m_Shader->End(device);
+
+    if (device->Begin2D()) {
+        izanagi::CDebugFont* debugFont = GetDebugFont();
+
+        debugFont->Begin(device, 0, izanagi::CDebugFont::FONT_SIZE * 2);
+
+        debugFont->DBPrint(
+            device, 
+            "%s\n",
+            name[m_Idx]);
+
+        debugFont->End();
+
+        device->End2D();
+    }
+}
+
+IZ_BOOL CEnvMapApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
+{
+    if (m_Shader != IZ_NULL) {
+        if (key == izanagi::sys::E_KEYBOARD_BUTTON_UP) {
+            m_Idx--;
+        }
+        else if (key == izanagi::sys::E_KEYBOARD_BUTTON_DOWN) {
+            m_Idx++;
+        }
+
+        IZ_INT techNum = m_Shader->GetTechNum();
+        m_Idx = (m_Idx >= techNum ? 0 : m_Idx);
+        m_Idx = (m_Idx < 0 ? techNum - 1 : m_Idx);
+    }
+
+    return IZ_TRUE;
 }

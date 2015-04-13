@@ -1,15 +1,15 @@
-#if !defined(__CUBE_MAP_APP_H__)
-#define __CUBE_MAP_APP_H__
+#if !defined(__ENV_MAP_APP_H__)
+#define __ENV_MAP_APP_H__
 
 #include "izSampleKit.h"
 
 static const IZ_UINT SCREEN_WIDTH = 1280;
 static const IZ_UINT SCREEN_HEIGHT = 720;
 
-class CCubeMapApp: public izanagi::sample::CSampleApp {
+class CEnvMapApp: public izanagi::sample::CSampleApp {
 public:
-    CCubeMapApp();
-    virtual ~CCubeMapApp();
+    CEnvMapApp();
+    virtual ~CEnvMapApp();
 
 protected:
     // 初期化.
@@ -27,6 +27,8 @@ protected:
     // 描画.
     virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device);
 
+    virtual IZ_BOOL OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key);
+
 private:
     izanagi::sample::CSampleEnvBox* m_Cube;
 
@@ -34,6 +36,8 @@ private:
     izanagi::shader::CShaderBasic* m_Shader;
 
     izanagi::math::SMatrix44 m_L2W;
+
+    IZ_INT m_Idx;
 };
 
-#endif    // #if !defined(__CUBE_MAP_APP_H__)
+#endif    // #if !defined(__ENV_MAP_APP_H__)
