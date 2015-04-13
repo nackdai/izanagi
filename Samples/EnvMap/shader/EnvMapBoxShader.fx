@@ -37,7 +37,7 @@ sampler sTex = sampler_state
 
 /////////////////////////////////////////////////////////////
 
-SVSOutput mainVS_CrossMap(SVSInput In)
+SVSOutput mainVS_Cube(SVSInput In)
 {
     SVSOutput Out = (SVSOutput)0;
 
@@ -51,7 +51,7 @@ SVSOutput mainVS_CrossMap(SVSInput In)
     return Out;
 }
 
-float4 mainPS_CrossMap(SPSInput In) : COLOR
+float4 mainPS_Cube(SPSInput In) : COLOR
 {
     float4 vOut = texCUBE(sTexCube, In.vUV);
 
@@ -192,12 +192,12 @@ float4 mainPS_Angular(SPSInput In) : COLOR
 
 /////////////////////////////////////////////////////////////
 
-technique CrossMap
+technique Cube
 {
     pass P0
     {
-        VertexShader = compile vs_2_0 mainVS_CrossMap();
-        PixelShader = compile ps_2_0 mainPS_CrossMap();
+        VertexShader = compile vs_2_0 mainVS_Cube();
+        PixelShader = compile ps_2_0 mainPS_Cube();
     }
 }
 
