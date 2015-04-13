@@ -20,5 +20,8 @@
     <element path="./ZP_uffizi_cross.hdr" face="zp"/>
     <element path="./ZN_uffizi_cross.hdr" face="zn"/>
   </cube>
+  <plane
+    path="./latlong.png"
+    fmt="dxt5"/>
 </textures>
 

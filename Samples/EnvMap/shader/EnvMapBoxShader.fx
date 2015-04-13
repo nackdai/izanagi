@@ -77,7 +77,7 @@ SVSOutput mainVS_LatLong(SVSInput In)
 
 float4 mainPS_LatLong(SPSInput In) : COLOR
 {
-    float3 ref = In.vUV;
+    float3 ref = normalize(In.vUV);
 
     // 反射ベクトルからUVを計算
 
@@ -90,7 +90,7 @@ float4 mainPS_LatLong(SPSInput In) : COLOR
 
     // z = cos(θ)cos(φ) -> cos(φ) = z / cos(θ) -> φ = acos(z / cos(θ))
     float cosLong = ref.z / (cosLat + 0.00001f);
-    cosLong = saturate(cosLong);
+    cosLong = clamp(cosLong, -1.0f, 1.0f);
 
     float longitude = acos(cosLong);
     
@@ -104,7 +104,9 @@ float4 mainPS_LatLong(SPSInput In) : COLOR
     u = (u + 1.0f) * 0.5f;
     v = (v + 1.0f) * 0.5f;
 
-    float4 vOut = tex2D(texLatLong, float2(u, v));
+    // TODO
+    // Why minus?
+    float4 vOut = tex2D(texLatLong, float2(u, -v));
 
     return vOut;
 }
