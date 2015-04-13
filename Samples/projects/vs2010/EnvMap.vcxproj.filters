@@ -4,7 +4,7 @@
     <CustomBuild Include="..\..\EnvMap\shader\EnvMapBoxShader.xml">
       <Filter>shader</Filter>
     </CustomBuild>
-    <CustomBuild Include="..\..\EnvMap\Image.xml">
+    <CustomBuild Include="..\..\..\Media\EnvMap.xml">
       <Filter>asset</Filter>
     </CustomBuild>
   </ItemGroup>

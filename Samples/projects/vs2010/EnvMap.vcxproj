@@ -332,7 +332,7 @@
     <ClCompile Include="..\..\EnvMap\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\..\EnvMap\Image.xml">
+    <CustomBuild Include="..\..\..\Media\EnvMap.xml">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(TOOL_DIR)Release\ImageBuilder.exe -i "%(FullPath)" -o "$(PROJECT_MAIN_DIR)data\%(Filename).img"
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|x64'">$(TOOL_DIR)Release\ImageBuilder.exe -i "%(FullPath)" -o "$(PROJECT_MAIN_DIR)data\%(Filename).img"
@@ -396,6 +396,7 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|x64'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
+      <SubType>Designer</SubType>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

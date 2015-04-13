@@ -1,4 +1,4 @@
-#include "CubeMapApp.h"
+#include "EnvMapApp.h"
 
 CCubeMapApp::CCubeMapApp()
 {
@@ -47,7 +47,7 @@ IZ_BOOL CCubeMapApp::InitInternal(
     // シェーダ
     {
         izanagi::CFileInputStream in;
-        VGOTO(result = in.Open("data/CubeMapBoxShader.shd"), __EXIT__);
+        VGOTO(result = in.Open("data/EnvMapBoxShader.shd"), __EXIT__);
 
         m_Shader = izanagi::shader::CShaderBasic::CreateShader<izanagi::shader::CShaderBasic>(
                     allocator,

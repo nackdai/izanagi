@@ -6,6 +6,6 @@
 #else
     compiler="%DXSDK_DIR%Utilities\Bin\x86\fxc"
 #endif
-    src="CubeMapBoxShader.fx"
+    src="EnvMapBoxShader.fx"
     option="/nologo /Od /Zi"
     is_asm="false"/>

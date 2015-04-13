@@ -12,13 +12,5 @@
     <element path="./ZP_uffizi_probe.png" face="zp"/>
     <element path="./ZN_uffizi_probe.png" face="zn"/>
   </cube>
-  <cube fmt="rgba32f">
-    <element path="./XP_uffizi_cross.hdr" face="xp"/>
-    <element path="./XN_uffizi_cross.hdr" face="xn"/>
-    <element path="./YP_uffizi_cross.hdr" face="yp"/>
-    <element path="./YN_uffizi_cross.hdr" face="xn"/>
-    <element path="./ZP_uffizi_cross.hdr" face="zp"/>
-    <element path="./ZN_uffizi_cross.hdr" face="zn"/>
-  </cube>
 </textures>
 
