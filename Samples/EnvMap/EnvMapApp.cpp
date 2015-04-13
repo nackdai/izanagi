@@ -119,10 +119,10 @@ void CCubeMapApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
     izanagi::sample::CSampleCamera& camera = GetCamera();
 
-    device->SetTexture(0, m_Img->GetTexture(3));
+    device->SetTexture(0, m_Img->GetTexture(4));
 
     // テクスチャあり
-    m_Shader->Begin(device, 1, IZ_FALSE);
+    m_Shader->Begin(device, 2, IZ_FALSE);
     {
         if (m_Shader->BeginPass(0)) {
             // パラメータ設定
