@@ -247,7 +247,8 @@ namespace {
         VRETURN(ret);
 
         if (ret) {
-            sState.ZFunc = static_cast<izanagi::graph::E_GRAPH_CMP_FUNC>(*p);
+            int idx = *p - 1;
+            sState.ZFunc = static_cast<izanagi::graph::E_GRAPH_CMP_FUNC>(idx);
         }
         return ret;
     }

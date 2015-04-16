@@ -244,6 +244,13 @@ BOOL CParamUtil::GetInitValue(
                         param,
                         nElements,
                         (float*)&tvBuf[0]);
+
+#if 0
+        for (int i = 0; i < nValueNum; i++) {
+            float xx = *(float*)&tvBuf[i * 4];
+            printf("%f\n", xx);
+        }
+#endif
     }
     else {
         VRETURN(IZ_FALSE);
