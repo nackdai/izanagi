@@ -58,6 +58,11 @@ namespace shader
             m_pParamBuffer = p;
             m_nParamBufSize = m_Header.sizeValueBuffer;
             p += m_Header.sizeValueBuffer;
+
+            // 初期値が初回に必ずセットされるようにする
+            for (IZ_UINT i = 0; i < m_Header.numParameter; i++) {
+                m_pDesc[i].isDirty = IZ_TRUE;
+            }
         }
 
         return p;
