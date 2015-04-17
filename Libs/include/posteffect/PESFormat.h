@@ -236,10 +236,11 @@ namespace izanagi {
 
         // 本来はアノテーションだが、こっちにないと困るので・・・
         struct {
-            IZ_UINT32 Public        : 1;    // ユーザに公開するパラメータか
-            IZ_UINT32 DoNotStrip    : 1;    // エフェクト内では使用しないけど削除しない
-            IZ_UINT32 hasAnn        : 1;    // アノテーションを持つか
-            IZ_UINT32 isDirty       : 1;
+            IZ_UINT32 Public            : 1;    // ユーザに公開するパラメータか
+            IZ_UINT32 DoNotStrip        : 1;    // エフェクト内では使用しないけど削除しない
+            IZ_UINT32 hasAnn            : 1;    // アノテーションを持つか
+            IZ_UINT32 hasDefaultValue   : 1;    // 初期値を持つかどうか
+            IZ_UINT32 isDirty           : 1;
         };
 
         IZ_UINT16 AnnotationIdx;    // アノテーションインデックス

@@ -109,6 +109,13 @@ namespace izanagi {
         if (m_nParamNum > 0) {
             m_pDesc = (S_PES_PARAMETER*)p;
             p += sizeof(S_PES_PARAMETER) * m_nParamNum;
+
+            // 初期値が存在する場合には初回に必ずセットされるようにする
+            for (IZ_UINT i = 0; i < m_nParamNum; i++) {
+                if (m_pDesc[i].hasDefaultValue) {
+                    m_pDesc[i].isDirty = IZ_TRUE;
+                }
+            }
         }
 
         // パラメータアノテーション

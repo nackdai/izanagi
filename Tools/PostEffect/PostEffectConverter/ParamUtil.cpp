@@ -248,6 +248,7 @@ BOOL CParamUtil::GetInitValue(
     VRETURN(ret);
 
     if (ret) {
+        sDesc.hasDefaultValue = IZ_TRUE;
         sDesc.Pos = CDataBuffer::GetInstance().Register(
                         &tvBuf[0],
                         tvBuf.size());

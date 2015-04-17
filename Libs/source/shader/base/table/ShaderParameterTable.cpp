@@ -45,6 +45,13 @@ namespace shader
         if (m_Header.numParameter > 0) {
             m_pDesc = (S_SHD_PARAMETER*)p;
             p += sizeof(S_SHD_PARAMETER) * m_Header.numParameter;
+
+            // 初期値が存在する場合には初回に必ずセットされるようにする
+            for (IZ_UINT i = 0; i < m_Header.numParameter; i++) {
+                if (m_pDesc[i].hasDefaultValue) {
+                    m_pDesc[i].isDirty = IZ_TRUE;
+                }
+            }
         }
 
         // パラメータアノテーション
@@ -58,11 +65,6 @@ namespace shader
             m_pParamBuffer = p;
             m_nParamBufSize = m_Header.sizeValueBuffer;
             p += m_Header.sizeValueBuffer;
-
-            // 初期値が初回に必ずセットされるようにする
-            for (IZ_UINT i = 0; i < m_Header.numParameter; i++) {
-                m_pDesc[i].isDirty = IZ_TRUE;
-            }
         }
 
         return p;
