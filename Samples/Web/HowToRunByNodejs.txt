@@ -1,0 +1,7 @@
+1. Install Node.js
+
+2. Install node modules.
+ $ npm install
+
+3. Run server.
+ $ npm start
