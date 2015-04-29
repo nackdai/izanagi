@@ -1,4 +1,5 @@
 ﻿#include "std/StdBase64.h"
+#include "std/StdUtil.h"
 
 namespace izanagi {
     const IZ_CHAR CBase64::table[] = {
@@ -141,6 +142,111 @@ namespace izanagi {
             dst.swap(cdst);
 
             return IZ_TRUE;
+        }
+    }
+
+    IZ_UINT CBase64::Encode(
+        const IZ_BYTE* src,
+        IZ_UINT srcLength,
+        IZ_CHAR* dst)
+    {
+        IZ_CHAR* cdst = dst;
+
+        for (IZ_UINT i = 0; i < srcLength; ++i) {
+            switch (i % 3) {
+            case 0:
+                *cdst++ = table[(src[i] & 0xFC) >> 2];
+                if (i + 1 == srcLength) {
+                    *cdst++ = table[(src[i] & 0x03) << 4];
+                    *cdst++ = '=';
+                    *cdst++ = '=';
+                }
+
+                break;
+            case 1:
+                *cdst++ = table[((src[i - 1] & 0x03) << 4) | ((src[i + 0] & 0xF0) >> 4)];
+                if (i + 1 == srcLength) {
+                    *cdst++ = table[(src[i] & 0x0F) << 2];
+                    *cdst++ = '=';
+                }
+
+                break;
+            case 2:
+                *cdst++ = table[((src[i - 1] & 0x0F) << 2) | ((src[i + 0] & 0xC0) >> 6)];
+                *cdst++ = table[src[i] & 0x3F];
+
+                break;
+            }
+        }
+
+        IZ_UINT ret = CStdUtil::GetPtrDistance(cdst, dst);
+
+        return ret;
+    }
+
+    IZ_UINT CBase64::Decode(
+        const IZ_CHAR* src,
+        IZ_UINT srcLength,
+        IZ_BYTE* dst)
+    {
+        if (srcLength & 0x00000003) {
+            return 0;
+        }
+        else {
+            IZ_BYTE* cdst = dst;
+
+            for (IZ_UINT i = 0; i < srcLength; i += 4) {
+                if (src[i + 0] == '=') {
+                    return 0;
+                }
+                else if (src[i + 1] == '=') {
+                    return 0;
+                }
+                else if (src[i + 2] == '=') {
+                    IZ_INT s1 = FindTable(src[i + 0]);
+                    IZ_INT s2 = FindTable(src[i + 1]);
+
+                    if (s1 < 0 || s2 < 0) {
+                        return 0;
+                    }
+
+                    *cdst++ = static_cast<IZ_BYTE>(((s1 & 0x3F) << 2) | ((s2 & 0x30) >> 4));
+
+                    break;
+                }
+                else if (src[i + 3] == '=') {
+                    IZ_INT s1 = FindTable(src[i + 0]);
+                    IZ_INT s2 = FindTable(src[i + 1]);
+                    IZ_INT s3 = FindTable(src[i + 2]);
+
+                    if (s1 < 0 || s2 < 0 || s3 < 0) {
+                        return 0;
+                    }
+
+                    *cdst++ = static_cast<IZ_BYTE>(((s1 & 0x3F) << 2) | ((s2 & 0x30) >> 4));
+                    *cdst++ = static_cast<IZ_BYTE>(((s2 & 0x0F) << 4) | ((s3 & 0x3C) >> 2));
+
+                    break;
+                }
+                else {
+                    const std::string::size_type s1 = FindTable(src[i + 0]);
+                    const std::string::size_type s2 = FindTable(src[i + 1]);
+                    const std::string::size_type s3 = FindTable(src[i + 2]);
+                    const std::string::size_type s4 = FindTable(src[i + 3]);
+
+                    if (s1 < 0 || s2 < 0 || s3 < 0 || s4 < 0) {
+                        return 0;
+                    }
+
+                    *cdst++ = static_cast<IZ_BYTE>(((s1 & 0x3F) << 2) | ((s2 & 0x30) >> 4));
+                    *cdst++ = static_cast<IZ_BYTE>(((s2 & 0x0F) << 4) | ((s3 & 0x3C) >> 2));
+                    *cdst++ = static_cast<IZ_BYTE>(((s3 & 0x03) << 6) | ((s4 & 0x3F) >> 0));
+                }
+            }
+
+            IZ_UINT ret = CStdUtil::GetPtrDistance(cdst, dst);
+
+            return ret;
         }
     }
 }   // namespace izanagi

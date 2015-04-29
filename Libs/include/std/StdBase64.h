@@ -34,6 +34,16 @@ namespace izanagi {
         static IZ_BOOL Decode(
             const std::vector<IZ_CHAR>& src,
             std::vector<IZ_BYTE>& dst);
+
+        static IZ_UINT Encode(
+            const IZ_BYTE* src,
+            IZ_UINT srcLength,
+            IZ_CHAR* dst);
+
+        static IZ_UINT Decode(
+            const IZ_CHAR* src,
+            IZ_UINT srcLength,
+            IZ_BYTE* dst);
     };
 }   // namespace izanagi
 
