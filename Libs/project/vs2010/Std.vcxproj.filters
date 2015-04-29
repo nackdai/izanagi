@@ -71,6 +71,9 @@
     <ClCompile Include="..\..\source\std\allocator\BlockMemoryAllocator.cpp">
       <Filter>source\allocator</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\std\StdBase64.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\std\2DPoint.h">
@@ -178,6 +181,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\std\allocator\BlockMemoryAllocator.h">
       <Filter>include\allocator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\StdBase64.h">
+      <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

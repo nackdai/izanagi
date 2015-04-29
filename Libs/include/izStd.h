@@ -20,6 +20,8 @@
 
 #include "std/StdEvent.h"
 
+#include "std/StdBase64.h"
+
 #include "std/collection/StdList.h"
 #include "std/collection/StdHash.h"
 #include "std/collection/StdQueue.h"
