@@ -142,11 +142,14 @@ float4 mainPS_SSAO(SPSInputSSAO sIn) : COLOR0
 
     float4 ambient = tex2D(sTexAmbient, sIn.vUV);
 
+    // 実際の位置での法線
     float3 normal = tex2D(sTexNormal, sIn.vUV).rgb;
     normal = normalize(2.0f * normal - 1.0f);
 
+    // 実際の位置での深度
     float z = tex2D(sTexDepth, sIn.vUV).r;
 
+    // 頂点位置
     float4 position = tex2D(sTexPosition, sIn.vUV);
 
     float bl = 0;
@@ -158,24 +161,43 @@ float4 mainPS_SSAO(SPSInputSSAO sIn) : COLOR0
         // 法線と逆方向を向いているときは反転することで法線方向の半円内におさまるようにする
         ray.xyz *= sign(dot(ray.xyz, normal));
 
+        // サンプリング点の位置ずらした位置の計算
         float4 pos = mul(position + ray, g_mW2V);
         pos = mul(pos, g_mV2C);
 
+        // サンプリング点の位置ずらした位置を2D上のUVに変換
         float2 uv = float2(
             0.5f * (pos.x / pos.w) + 0.5f,
             -0.5f * (pos.y / pos.w) + 0.5f);
 
+        // 遮蔽するピクセルの法線
         float3 ocNml = tex2D(sTexNormal, uv).xyz;
         ocNml = normalize(ocNml * 2.0f - 1.0f);
+
+        // 遮蔽するピクセルと現在のピクセルでの法線の角度の差を計算
+		// 同方向なら1.0、反対なら0.0
+		// 同方向を向いていたら遮蔽されていない、角度が大きいほど遮蔽されている、とみなす
+        //  -> 同方向を向いている = 同じ面上にある -> 遮蔽していない
+        //  -> 角度が大きい = 同じ面上にない -> 遮蔽している
         float nmlDiff = 1.0 - dot(ocNml, normal);
 
+        // 遮蔽するピクセルの深度
         float depth = tex2D(sTexDepth, uv).r;
+
+        // 正：遮蔽するピクセルが現在のピクセルより前 -> 現在のピクセルは遮蔽される
+        // 負：遮蔽するピクセルが現在のピクセルより奥 -> 現在のピクセルは遮蔽されない
         float depthDiff = z - depth;
 
+        // step(falloff, depthDiff) -> falloff より小さければ 0.0、大きければ 1.0
+        //  -> ある程度以上深度が離れていない場合は遮蔽されていることとする
         bl += step(falloff, depthDiff) * nmlDiff;
     }
 
-    float a = 1.0f - bl * 1.0f / (float)SAMPLE_NUM;
+    // サンプリング点の合計なので平均を計算する
+    bl /= (float)SAMPLE_NUM;
+
+    // blが1.0に近いほど遮蔽されるので
+    float a = 1.0f - bl;
 
     float4 Out = ambient * (float4)a;
     Out.a = 1.0f;
