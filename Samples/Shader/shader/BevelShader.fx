@@ -1,12 +1,23 @@
 // Bevel Shader
 
+// NOTE
+// +----------
+// |
+// |
+// |->
+// |
+// |　　↑
+// *----------
+//
+// １頂点につき２方向の情報が必要となる
+
 struct SVSInput {
     float4 vPos         : POSITION;
     float3 vNormal      : NORMAL;
-    float4 vNextNml     : TEXCOORD1;
-    float3 vDir         : TEXCOORD2;
-    float4 vNextNml2    : TEXCOORD3;
-    float3 vDir2        : TEXCOORD4;
+    float4 vNextNml     : TEXCOORD1;    // 隣接面（辺の向こう側の面）の法線 
+    float3 vDir         : TEXCOORD2;    // 反対側の辺への向き
+    float4 vNextNml2    : TEXCOORD3;    // 隣接面（辺の向こう側の面）の法線
+    float3 vDir2        : TEXCOORD4;    // 反対側の辺への向き
 };
 
 struct SPSInput {
@@ -38,6 +49,7 @@ float4 g_vLitParallelDir;
 float4 g_vLitParallelColor;
 float4 g_vLitAmbientColor;
 
+// 角丸の範囲
 #define R   0.05f
 
 /////////////////////////////////////////////////////////////
@@ -75,7 +87,23 @@ SVSOutput mainVS(SVSInput In)
 
 float4 mainPS(SPSInput In) : COLOR
 {
+    // 反対側の辺への向き
+    // 中央に向かって０になるように線形補間される
     float3 dir = In.vDir;
+
+    // NOTE
+    // 0   R         1
+    //  +------------+
+    //  |
+    //  |
+
+    // 法線の補間値
+    // 辺に近いほど１、辺から遠いほど０になるようにしたい
+    //  length(dir) => dirは中央に向かって０になるように線形補間されるので、length(dir)は辺に近いほど１に近い
+    //  1.0f - length(dir) => 辺への近さ、０に近いほど辺に近い
+    //  step(1.0f - length(dir), R) => 角丸の範囲内にいるかどうか。範囲内なら１、範囲外なら０
+    //  (1.0f - length(dir)) / R => 角丸の範囲の端への近さ。０に近いほど辺に近く、１に近いほど角丸の範囲の端に近い
+    //  1.0f - (1.0f - length(dir)) / R => 角丸の中心となる辺への近さ。１に近いほど辺に近い
     float f = (1.0f - (1.0f - length(dir)) / R) * step(1.0f - length(dir), R);
     float3 vN = In.vNormal.xyz;
 
@@ -83,10 +111,13 @@ float4 mainPS(SPSInput In) : COLOR
     // 角では自分の面と隣の面の間を取りたいので補間値を半分までにする
     float3 nml1 = lerp(vN, In.vNextNml.xyz, f * 0.5f);
 
-    dir = In.vDir2;
-    f = (1.0f - (1.0f - length(dir)) / R) * step(1.0f - length(dir), R);
-    float3 nml2 = In.vNextNml2;
-    nml2 = lerp(vN, nml2, f * 0.5f);
+    // 上と同じことをもう一つの法線と向きで行う
+    {
+        dir = In.vDir2;
+        f = (1.0f - (1.0f - length(dir)) / R) * step(1.0f - length(dir), R);
+        float3 nml2 = In.vNextNml2;
+        nml2 = lerp(vN, nml2, f * 0.5f);
+    }
 
     vN = lerp(nml1, nml2, 0.5f);
     vN = normalize(vN);
