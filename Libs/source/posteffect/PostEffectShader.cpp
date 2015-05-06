@@ -691,7 +691,7 @@ IZ_BOOL CPostEffectShader::CommitChanges(graph::CGraphicsDevice* device)
         }
     }
 
-    m_cTexTableTmp.Clean();
+    //m_cTexTableTmp.Clean();
 
     return ret;
 }
