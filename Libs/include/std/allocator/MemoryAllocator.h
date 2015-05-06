@@ -13,6 +13,32 @@
 #endif
 
 namespace izanagi {
+    /** グローバルに利用できるメモリアロケータ
+     */
+    class CMemoryAllocator {
+    private:
+        CMemoryAllocator();
+        ~CMemoryAllocator();
+
+    public:
+        typedef void* (*FuncAlloc)(size_t);
+        typedef void* (*FuncRealloc)(void*, size_t);
+        typedef void* (*FuncFree)(void*);
+
+        static void* Alloc(size_t size);
+        static void* Realloc(void* ptr, size_t size);
+        static void Free(void* ptr);
+
+        static void SetAlloc(FuncAlloc func);
+        static void SetRealloc(FuncRealloc func);
+        static void SetFree(FuncFree func);
+
+    private:
+        FuncAlloc s_Alloc;
+        FuncRealloc s_Realloc;
+        FuncFree s_Free;
+    };
+
     /** メモリアロケータインターフェース.
      */
     class IMemoryAllocator {
