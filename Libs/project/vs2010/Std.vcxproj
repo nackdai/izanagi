@@ -232,12 +232,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\std\allocator\BlockMemoryAllocator.cpp" />
+    <ClCompile Include="..\..\source\std\allocator\MemoryAllocator.cpp" />
     <ClCompile Include="..\..\source\std\binding\Binding.cpp" />
     <ClCompile Include="..\..\source\std\binding\BindingExpression.cpp" />
     <ClCompile Include="..\..\source\std\binding\BindingOperations.cpp" />
     <ClCompile Include="..\..\source\std\binding\DependencyObject.cpp" />
     <ClCompile Include="..\..\source\std\binding\DependencyPropertyChangedEventArgs.cpp" />
     <ClCompile Include="..\..\source\std\StdBase64.cpp" />
+    <ClCompile Include="..\..\source\std\StdBit.cpp" />
     <ClCompile Include="..\..\source\std\StdColor.cpp" />
     <ClCompile Include="..\..\source\std\StdKey.cpp" />
     <ClCompile Include="..\..\source\std\StdLog.cpp" />

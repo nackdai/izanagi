@@ -34,9 +34,9 @@ namespace izanagi {
         static void SetFree(FuncFree func);
 
     private:
-        FuncAlloc s_Alloc;
-        FuncRealloc s_Realloc;
-        FuncFree s_Free;
+        static FuncAlloc s_Alloc;
+        static FuncRealloc s_Realloc;
+        static FuncFree s_Free;
     };
 
     /** メモリアロケータインターフェース.

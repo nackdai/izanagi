@@ -74,6 +74,12 @@
     <ClCompile Include="..\..\source\std\StdBase64.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\std\allocator\MemoryAllocator.cpp">
+      <Filter>source\allocator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\std\StdBit.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\std\2DPoint.h">
