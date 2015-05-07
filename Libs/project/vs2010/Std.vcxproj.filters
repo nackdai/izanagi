@@ -77,7 +77,7 @@
     <ClCompile Include="..\..\source\std\allocator\MemoryAllocator.cpp">
       <Filter>source\allocator</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\std\StdBit.cpp">
+    <ClCompile Include="..\..\source\std\StdBitStream.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -86,9 +86,6 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\std\2DRect.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\std\StdBit.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\std\StdBitFlag.h">
@@ -189,6 +186,9 @@
       <Filter>include\allocator</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\std\StdBase64.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\StdBitStream.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
