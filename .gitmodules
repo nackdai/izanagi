@@ -7,3 +7,6 @@
 [submodule "External/ANGLE"]
 	path = External/ANGLE
 	url = https://chromium.googlesource.com/angle/angle
+[submodule "External/googletest"]
+	path = External/googletest
+	url = https://github.com/nakdai/googletest.git
