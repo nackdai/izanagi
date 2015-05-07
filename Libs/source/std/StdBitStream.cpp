@@ -1,4 +1,4 @@
-#include "std/StdBit.h"
+#include "std/StdBitStream.h"
 #include "std/allocator/MemoryAllocator.h"
 
 namespace izanagi {

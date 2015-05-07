@@ -13,7 +13,7 @@
 #include "std/StdString.h"
 #include "std/StdLog.h"
 #include "std/StdUtil.h"
-#include "std/StdBit.h"
+#include "std/StdBitStream.h"
 #include "std/StdUtf.h"
 #include "std/StdBitFlag.h"
 #include "std/StdProfiler.h"
