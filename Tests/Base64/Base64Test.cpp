@@ -53,12 +53,15 @@ TEST(Base64, EncDecStringFromMemory)
         strlen(string),
         &dst[0]);
 
+    ASSERT_GT(length, 0);
+
     std::vector<IZ_BYTE> dst2(256);
 
-    izanagi::CBase64::Decode(
-        &dst[0],
-        length,
-        &dst2[0]);
+    ASSERT_TRUE(
+        izanagi::CBase64::Decode(
+            &dst[0],
+            length,
+            &dst2[0]));
 
     ASSERT_TRUE(memcmp(&dst2[0], string, strlen(string)) == 0);
 }
@@ -72,20 +75,38 @@ TEST(Base64, EncDecNumberFromMemory)
         sizeof(numbers),
         &dst[0]);
 
+    ASSERT_GT(length, 0);
+
     std::vector<IZ_BYTE> dst2(256);
 
-    izanagi::CBase64::Decode(
-        &dst[0],
-        length,
-        &dst2[0]);
+    ASSERT_TRUE(
+        izanagi::CBase64::Decode(
+            &dst[0],
+            length,
+            &dst2[0]));
 
     ASSERT_TRUE(memcmp(&dst2[0], numbers, sizeof(numbers)) == 0);
 }
 
-TEST(Base64, FailDecode)
+TEST(Base64, FailDecodeBySizeError)
 {
     std::vector<IZ_CHAR> src(1);
     std::vector<IZ_BYTE> dst;
-
     ASSERT_FALSE(izanagi::CBase64::Decode(src, dst));
+
+    IZ_CHAR src2[4];
+    IZ_BYTE dst2[4];
+    ASSERT_EQ(izanagi::CBase64::Decode(src2, 1, dst2), 0);
+}
+
+TEST(Base64, FailDecodeBySrcError)
+{
+    std::vector<IZ_CHAR> src;
+    src.push_back(-1);
+    std::vector<IZ_BYTE> dst;
+    ASSERT_FALSE(izanagi::CBase64::Decode(src, dst));
+
+    IZ_CHAR src2[4] = {-1, -1, -1, -1};
+    IZ_BYTE dst2[4];
+    ASSERT_EQ(izanagi::CBase64::Decode(src2, 1, dst2), 0);
 }
