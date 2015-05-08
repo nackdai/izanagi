@@ -1,4 +1,9 @@
 @echo off
+
+set CURDIR=%CD%
+
+cd /d %~dp0
+
 for /f "tokens=*" %%a in ('dir /b ..\tools\Release') do (
 	if %%~xa==.exe (
 		xcopy /y ..\tools\Release\%%a .\
@@ -32,3 +37,5 @@ xcopy /y %MediaDir%\*_uffizi_cross.* %Data%
 xcopy /y %MediaDir%\HeightMap.png %Data%
 
 xcopy /y %Lib
+
+cd /d %CURDIR%

@@ -1,4 +1,9 @@
 @echo off
+
+set CURDIR=%CD%
+
+cd /d %~dp0
+
 for /f "tokens=*" %%a in ('dir /b ..\*') do (
 	if not %%a==Bin (
 		if not exist .\%%a (
@@ -35,3 +40,5 @@ if exist .\SampleRunner\SampleRunner.exe (
 	xcopy /y .\SampleRunner\SampleRunner.exe .\
 	rd /s/q .\SampleRunner
 )
+
+cd /d %CURDIR%

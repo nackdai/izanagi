@@ -1,7 +1,7 @@
 set CONFIG=%1
 set GFX=%2
 
-set CURDIR = %CD%
+set CURDIR=%CD%
 
 cd /d %~dp0
 

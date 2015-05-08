@@ -1,3 +1,9 @@
+@echo off
+
+set CURDIR=%CD%
+
+cd /d %~dp0
+
 set MSBUILD="C:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"
 set TARGET=Rebuild
 set CONFIG=%1
@@ -14,10 +20,11 @@ cd ..
 
 %MSBUILD% ..\External\freetype\builds\win32\vc2010\freetype.sln /t:%TARGET% /p:Configuration=%CONFIG% || goto error
 
-@echo off
+cd /d %CURDIR%
+
 exit /b 1
 
 :error
-@echo off
+cd /d %CURDIR%
 echo "Error====="
 pause

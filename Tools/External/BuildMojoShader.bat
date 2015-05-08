@@ -1,4 +1,8 @@
-echo off
+@echo off
+
+set CURDIR=%CD%
+
+cd /d %~dp0
 
 if not defined MSBUILD (
     set MSBUILD="C:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"
@@ -29,10 +33,11 @@ if not exist %SOLUTION% (
 
 %MSBUILD% %SOLUTION% /t:%TARGET% /p:Configuration=%MojoShaderConfig% || goto error
 
-@echo off
+cd /d %CURDIR%
+
 exit /b 1
 
 :error
-@echo off
+cd /d %CURDIR%
 echo "Error====="
 pause

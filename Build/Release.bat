@@ -1,6 +1,8 @@
 @echo off
 
-set CURDIR = %CD%
+set CURDIR=%CD%
+
+cd /d %~dp0
 
 cd ..\
 

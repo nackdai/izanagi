@@ -1,9 +1,11 @@
-set MSBUILD="C:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"
-set MAKEITSO="..\External\makeitso\output\MakeItSo.exe"
+@echo off
 
-set CURDIR = %CD%
+set CURDIR=%CD%
 
 cd /d %~dp0
+
+set MSBUILD="C:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"
+set MAKEITSO="..\External\makeitso\output\MakeItSo.exe"
 
 if not exist %MAKEITSO% (
     %MSBUILD% ..\External\makeitso\MakeItSo.sln /t:Build /p:Configuration=Release || goto error
@@ -16,10 +18,9 @@ copy /Y ..\Libs\project\vs2010\Makefile ..\Libs\project\makefile\
 
 cd /d %CURDIR%
 
-@echo off
 exit /b 1
 
 :error
-@echo off
+cd /d %CURDIR%
 echo "Error====="
 pause

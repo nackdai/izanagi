@@ -1,3 +1,9 @@
+@echo off
+
+set CURDIR=%CD%
+
+cd /d %~dp0
+
 set MSBUILD="C:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"
 set TARGET=Build
 set CONFIG=%1
@@ -36,10 +42,11 @@ if %GFX%==OGL (
 
 %MSBUILD% project\vs2010\izanagi.sln /t:%TARGET% /p:Configuration=%CONFIG%_%GFX% || goto error
 
-@echo off
+set CURDIR=%CD%
+
 exit /b 1
 
 :error
-@echo off
+set CURDIR=%CD%
 echo "Error====="
 pause
