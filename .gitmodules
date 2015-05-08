@@ -1,9 +1,11 @@
 [submodule "External/makeitso"]
 	path = External/makeitso
 	url = https://github.com/nakdai/makeitso.git
+	ignore = dirty
 [submodule "Tools/External/mojoshader"]
 	path = Tools/External/mojoshader
 	url = https://github.com/nakdai/mojoshader.git
+	ignore = dirty
 [submodule "External/ANGLE"]
 	path = External/ANGLE
 	url = https://chromium.googlesource.com/angle/angle
