@@ -1,5 +1,5 @@
 #include "std/StdUtf.h"
-#include "std/StdBit.h"
+#include "std/StdBitStream.h"
 #include "std/StdUtil.h"
 
 using namespace izanagi;

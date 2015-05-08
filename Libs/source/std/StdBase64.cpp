@@ -85,7 +85,7 @@ namespace izanagi {
         std::vector<IZ_BYTE>& dst)
     {
         if (src.size() & 0x00000003) {
-            return false;
+            return IZ_FALSE;
         }
         else {
             std::vector<IZ_BYTE> cdst;
