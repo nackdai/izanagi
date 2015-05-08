@@ -2,18 +2,27 @@
 #include "std/StdUtil.h"
 
 namespace izanagi {
-    const IZ_CHAR CBase64::table[] = {
-            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
-            'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
-            'U', 'V', 'W', 'X', 'Y', 'Z',
+    // Character table.
+    const IZ_CHAR CBase64::table[] =
+    {
+        // Large alphabet.
+        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
+        'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
+        'U', 'V', 'W', 'X', 'Y', 'Z',
 
-            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
-            'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
-            'u', 'v', 'w', 'x', 'y', 'z', 
+        // Small alphabet.
+        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
+        'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
+        'u', 'v', 'w', 'x', 'y', 'z', 
 
-            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 
+        // Numbers.
+        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 
 
-            '+', '/',
+        // Plus.
+        '+',
+
+        // Slush.
+        '/',
     };
 
     // base64 エンコード
@@ -55,6 +64,7 @@ namespace izanagi {
         return IZ_TRUE;
     }
 
+    // Convert from code to a character in the character table.
     IZ_INT CBase64::FindTable(IZ_CHAR code)
     {
         IZ_INT ret = -1;
@@ -139,10 +149,13 @@ namespace izanagi {
                 }
             }
 
-            dst.swap(cdst);
-
-            return IZ_TRUE;
+            if (cdst.size() > 0) {
+                dst.swap(cdst);
+                return IZ_TRUE;
+            }
         }
+
+        return IZ_FALSE;
     }
 
     IZ_UINT CBase64::Encode(
@@ -189,7 +202,8 @@ namespace izanagi {
         IZ_UINT srcLength,
         IZ_BYTE* dst)
     {
-        if (srcLength & 0x00000003) {
+        if (srcLength & 0x00000003 || src == IZ_NULL) {
+            IZ_ASSERT(IZ_FALSE);
             return 0;
         }
         else {
