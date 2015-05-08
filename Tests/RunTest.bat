@@ -5,7 +5,7 @@ if not defined CONFIG (
 )
 
 if not defined CURDIR (
-	set CURDIR = %CD%
+	set CURDIR=%CD%
 )
 
 cd /d %~dp0
