@@ -9,6 +9,7 @@ namespace izanagi {
     class CStdBitInput {
     public:
         CStdBitInput(void* src, size_t size);
+        CStdBitInput();
         ~CStdBitInput() {}
 
         NO_COPIABLE(CStdBitInput);
@@ -25,6 +26,9 @@ namespace izanagi {
         /** Return whether this is valid.
          */
         IZ_BOOL IsValid() const;
+
+        void Reset(void* src, size_t size);
+        void Reset();
 
     private:
         // Source data.
@@ -56,6 +60,9 @@ namespace izanagi {
 
         NO_COPIABLE(CStdBitOutput);
 
+    private:
+        CStdBitOutput() {}
+
     public:
         /** Write bits.
          */
@@ -76,6 +83,10 @@ namespace izanagi {
         /** Return whether this is valid.
          */
         IZ_BOOL IsValid() const;
+
+        IZ_BOOL Reset(void* dst, size_t size);
+        IZ_BOOL Reset(size_t size);
+        IZ_BOOL Reset();
 
     private:
         // Destination buffer.

@@ -16,6 +16,10 @@ namespace izanagi {
             ret = malloc(size);
         }
 
+        if (ret != IZ_NULL) {
+            FILL_ZERO(ret, size);
+        }
+
         return ret;
     }
 
