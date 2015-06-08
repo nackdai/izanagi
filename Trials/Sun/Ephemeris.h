@@ -22,31 +22,31 @@ public:
      */
     static void ConvertPolarToRectangular(
         const SPolarCoord& polar,
-        izanagi::math::SVector& ortho);
+        izanagi::math::SVector4& ortho);
 
     /** 直行座標から極座標に変換. 
      */
     static void ConvertRectangularToPolar(
-        const izanagi::math::SVector& ortho,
+        const izanagi::math::SVector4& ortho,
         SPolarCoord& polar);
 
     /** 極座標から回転行列に変換.
      */
     static void ConvertPolarToMatrix(
         const SPolarCoord& polar,
-        izanagi::math::SMatrix& mtx);
+        izanagi::math::SMatrix44& mtx);
 
     /** 黄道座標から赤道座標に変換.
      */
     static void ConvertElipticToEquatorial(
         const SPolarCoord& eliptic, 
-        izanagi::math::SVector& equatorial);
+        izanagi::math::SVector4& equatorial);
 
     /** 黄道座標から赤道座標に変換.
      */
     static void ConvertElipticToEquatorial(
-        const izanagi::math::SVector& eliptic, 
-        izanagi::math::SVector& equatorial);
+        const izanagi::math::SVector4& eliptic, 
+        izanagi::math::SVector4& equatorial);
 
     /** 赤道座標から地平座標に変換.
      */
@@ -54,15 +54,15 @@ public:
         const SPolarCoord& equatorial, 
         IZ_FLOAT latitude,
         IZ_FLOAT hourAngle,
-        izanagi::math::SVector& horizontal);
+        izanagi::math::SVector4& horizontal);
 
     /** 赤道座標から地平座標に変換.
      */
     static void ConvertEquatorialToHorizontal(
-        const izanagi::math::SVector& equatorial,
+        const izanagi::math::SVector4& equatorial,
         IZ_FLOAT latitude,
         IZ_FLOAT hourAngle,
-        izanagi::math::SVector& horizontal);
+        izanagi::math::SVector4& horizontal);
 
     /** 黄道座標から地平座標に変換.
      */
@@ -70,15 +70,15 @@ public:
         const SPolarCoord& eliptic, 
         IZ_FLOAT latitude,
         IZ_FLOAT hourAngle,
-        izanagi::math::SVector& horizontal);
+        izanagi::math::SVector4& horizontal);
 
     /** 黄道座標から地平座標に変換.
      */
     static void ConvertElipticToHorizontal(
-        const izanagi::math::SVector& eliptic,
+        const izanagi::math::SVector4& eliptic,
         IZ_FLOAT latitude,
         IZ_FLOAT hourAngle,
-        izanagi::math::SVector& horizontal);
+        izanagi::math::SVector4& horizontal);
 
 public:
     /** 時角を取得.
@@ -101,7 +101,7 @@ public:
         const SPolarCoord& eliptic,
         const SUniversalTime& ut,
         const SPolarCoord& polar,
-        izanagi::math::SVector& horizontal);
+        izanagi::math::SVector4& horizontal);
 };
 
 #endif    // #if !defined(__EPHEMERIS_H__)

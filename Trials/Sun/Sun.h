@@ -41,7 +41,7 @@ public:
     /** 世界時から黄道座標を取得.
      */
     static void GetElipticByUniversalTime(
-        izanagi::math::SVector& eliptic,
+        izanagi::math::SVector4& eliptic,
         const SUniversalTime& day,
         const SUniversalTime& veDay);
 
@@ -60,7 +60,7 @@ public:
     /** その年における春分点からの経過日数から黄道座標を取得.
      */
     static void GetElipticByElapsedDay(
-        izanagi::math::SVector& eliptic,
+        izanagi::math::SVector4& eliptic,
         const SLongTime& day);
 };
 

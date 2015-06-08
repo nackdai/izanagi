@@ -35,12 +35,12 @@ private:
     struct SRectangle {
         izanagi::math::CRectangle rc;
         izanagi::CDebugMeshRectangle* mesh;
-        izanagi::math::SMatrix mtx;
+        izanagi::math::SMatrix44 mtx;
     } m_Rectangle;
 
     struct STriangle {
         izanagi::math::CTriangle tri;
-        izanagi::math::SMatrix mtx;
+        izanagi::math::SMatrix44 mtx;
         izanagi::graph::CVertexBuffer* defaultVB;
         izanagi::graph::CVertexBuffer* vb[2];
         izanagi::graph::CVertexDeclaration* vd;
@@ -49,7 +49,7 @@ private:
     IZ_UINT m_TriNum;
     izanagi::math::CTriangle m_NewTri[2];
 
-    izanagi::CShaderBasic* m_Shader;
+    izanagi::shader::CShaderBasic* m_Shader;
 
     IZ_BOOL m_EnableScissoring;
     IZ_BOOL m_CopiedVtx;

@@ -40,11 +40,11 @@ IZ_BOOL CScissoring::InitInternal(
             Length, Length);
 
         m_Rectangle.rc.Set(
-            izanagi::math::CVector(0.0f, 0.0f, 0.0f),
+            izanagi::math::CVector4(0.0f, 0.0f, 0.0f),
             Length,
             Length);
 
-        izanagi::math::SMatrix::GetRotByZ(
+        izanagi::math::SMatrix44::GetRotByZ(
             m_Rectangle.mtx,
             IZ_DEG2RAD(90.0f));
 
@@ -94,7 +94,7 @@ IZ_BOOL CScissoring::InitInternal(
             VGOTO(m_Triangles.vb[i] != IZ_NULL, __EXIT__);
         }
 
-        izanagi::math::SMatrix::SetUnit(m_Triangles.mtx);
+        izanagi::math::SMatrix44::SetUnit(m_Triangles.mtx);
 
         m_Triangles.tri.Transform(m_Triangles.mtx);
     }
@@ -113,9 +113,9 @@ IZ_BOOL CScissoring::InitInternal(
 
     // カメラ
     camera.Init(
-        izanagi::math::CVector(-50.0f, 20.0f, -200.0, 1.0f),
-        izanagi::math::CVector(0.0f, 0.0f, 0.0f, 1.0f),
-        izanagi::math::CVector(0.0f, 1.0f, 0.0f, 1.0f),
+        izanagi::math::CVector4(-50.0f, 20.0f, -200.0, 1.0f),
+        izanagi::math::CVector4(0.0f, 0.0f, 0.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 1.0f, 0.0f, 1.0f),
         1.0f,
         500.0f,
         izanagi::math::CMath::Deg2Rad(60.0f),
@@ -173,7 +173,7 @@ void CScissoring::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 
 namespace {
     inline void _SetShaderParam(
-        izanagi::CShaderBasic* shader,
+        izanagi::shader::CShaderBasic* shader,
         const char* name,
         const void* value,
         IZ_UINT bytes)

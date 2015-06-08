@@ -26,7 +26,7 @@ IZ_BOOL CSunApp::InitInternal(
         izanagi::CFileInputStream in;
         VGOTO(result = in.Open("data/BasicShader.shd"), __EXIT__);
 
-        m_Shader = izanagi::CShaderBasic::CreateShader<izanagi::CShaderBasic>(
+        m_Shader = izanagi::shader::CShaderBasic::CreateShader<izanagi::shader::CShaderBasic>(
                     allocator,
                     device,
                     &in);
@@ -59,9 +59,9 @@ IZ_BOOL CSunApp::InitInternal(
 
     // カメラ
     camera.Init(
-        izanagi::math::CVector(0.0f, 10.0f, 0.0f, 1.0f),
-        izanagi::math::CVector(10.0f, 10.0f, 0.0f, 1.0f),
-        izanagi::math::CVector(0.0f, 1.0f, 0.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 10.0f, 0.0f, 1.0f),
+        izanagi::math::CVector4(10.0f, 10.0f, 0.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 1.0f, 0.0f, 1.0f),
         1.0f,
         500.0f,
         izanagi::math::CMath::Deg2Rad(60.0f),
@@ -93,17 +93,17 @@ IZ_BOOL CSunApp::InitInternal(
         //p.longitude = IZ_DEG2RAD(45.0f);
     }
 
-    izanagi::math::SMatrix mtx;
+    izanagi::math::SMatrix44 mtx;
     CEphemeris::ConvertPolarToMatrix(p, mtx);
 
-    izanagi::math::SVector v0;
+    izanagi::math::SVector4 v0;
     v0.x = 1.0f;
     v0.y = 0.0f;
     v0.z = 0.0f;
     v0.w = 1.0f;
-    izanagi::math::SMatrix::ApplyXYZ(v0, v0, mtx);
+    izanagi::math::SMatrix44::ApplyXYZ(v0, v0, mtx);
 
-    izanagi::math::SVector v;
+    izanagi::math::SVector4 v;
     CEphemeris::ConvertPolarToRectangular(p, v);
     CEphemeris::ConvertRectangularToPolar(v, p);
 
@@ -120,7 +120,7 @@ IZ_BOOL CSunApp::InitInternal(
         //eliptic.longitude = IZ_DEG2RAD(0.0f);
     }
 
-    izanagi::math::SVector equatorial;
+    izanagi::math::SVector4 equatorial;
     CEphemeris::ConvertElipticToEquatorial(eliptic, equatorial);
 
     SPolarCoord polar;
@@ -171,8 +171,8 @@ void CSunApp::ReleaseInternal()
 IZ_FLOAT angle = 0.0f;
 IZ_FLOAT radius = 100.0f;
 
-izanagi::math::SMatrix g_Eliptic;
-izanagi::math::SMatrix g_Horizon;
+izanagi::math::SMatrix44 g_Eliptic;
+izanagi::math::SMatrix44 g_Horizon;
 
 // 更新.
 void CSunApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
@@ -192,8 +192,8 @@ void CSunApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
         day.second = 0;
     }
 
-    izanagi::math::SMatrix trans;
-    izanagi::math::SMatrix::GetTrans(
+    izanagi::math::SMatrix44 trans;
+    izanagi::math::SMatrix44::GetTrans(
         trans,
         radius, 0.0f, 0.0f);
 
@@ -216,21 +216,21 @@ void CSunApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
             polarEliptic.longitude = longitude;
         }
 
-        izanagi::math::SVector eq;
+        izanagi::math::SVector4 eq;
         CEphemeris::ConvertElipticToEquatorial(polarEliptic, eq);
 
         SPolarCoord polar;
         CEphemeris::ConvertRectangularToPolar(eq, polar);
 
-        izanagi::math::SVector v;
+        izanagi::math::SVector4 v;
         CEphemeris::ConvertPolarToRectangular(polar, v);
 
         //IZ_PRINTF("%f\n", v.y);
 
-        izanagi::math::SMatrix rot;
+        izanagi::math::SMatrix44 rot;
         CEphemeris::ConvertPolarToMatrix(polar, rot);
 
-        izanagi::math::SMatrix::Mul(g_Eliptic, trans, rot);
+        izanagi::math::SMatrix44::Mul(g_Eliptic, trans, rot);
     }
 
     // Horizon
@@ -241,7 +241,7 @@ void CSunApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
             polar.latitude = IZ_DEG2RAD(35);
         }
 
-        izanagi::math::SVector horizontal;
+        izanagi::math::SVector4 horizontal;
 
         CEphemeris::ConvertElipticToHorizontal(
             polarEliptic,
@@ -251,21 +251,21 @@ void CSunApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 
         CEphemeris::ConvertRectangularToPolar(horizontal, polar);
 
-        izanagi::math::SMatrix rot;
+        izanagi::math::SMatrix44 rot;
         CEphemeris::ConvertPolarToMatrix(polar, rot);
 
-        izanagi::math::SMatrix::Mul(g_Horizon, trans, rot);
+        izanagi::math::SMatrix44::Mul(g_Horizon, trans, rot);
     }
 }
 
 namespace {
     inline void _SetShaderParam(
-        izanagi::CShaderBasic* shader,
+        izanagi::shader::CShaderBasic* shader,
         const char* name,
         const void* value,
         IZ_UINT bytes)
     {
-        izanagi::IZ_SHADER_HANDLE handle = shader->GetParameterByName(name);
+        izanagi::shader::IZ_SHADER_HANDLE handle = shader->GetParameterByName(name);
         IZ_ASSERT(handle != 0);
 
         shader->SetParamValue(
@@ -305,8 +305,8 @@ void CSunApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
         _SetShaderParam(
             m_Shader,
             "g_mL2W",
-            (void*)&izanagi::math::SMatrix::GetUnit(),
-            sizeof(izanagi::math::SMatrix));
+            (void*)&izanagi::math::SMatrix44::GetUnit(),
+            sizeof(izanagi::math::SMatrix44));
 
         m_Shader->CommitChanges();
 
@@ -315,8 +315,8 @@ void CSunApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
         _SetShaderParam(
             m_Shader,
             "g_mL2W",
-            (void*)&izanagi::math::SMatrix::GetUnit(),
-            sizeof(izanagi::math::SMatrix));
+            (void*)&izanagi::math::SMatrix44::GetUnit(),
+            sizeof(izanagi::math::SMatrix44));
 
         m_Shader->CommitChanges();
 

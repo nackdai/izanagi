@@ -79,7 +79,7 @@ void CSun::GetElipticByUniversalTime(
 
 // 世界時から黄道座標を取得.
 void CSun::GetElipticByUniversalTime(
-    izanagi::math::SVector& eliptic,
+    izanagi::math::SVector4& eliptic,
     const SUniversalTime& day,
     const SUniversalTime& veDay)
 {
@@ -114,7 +114,7 @@ void CSun::GetElipticByElapsedDay(
 
 // その年における春分点からの経過日数から黄道座標を取得.
 void CSun::GetElipticByElapsedDay(
-    izanagi::math::SVector& eliptic,
+    izanagi::math::SVector4& eliptic,
     const SLongTime& day)
 {
     SPolarCoord polar;

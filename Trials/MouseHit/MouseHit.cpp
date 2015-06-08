@@ -21,7 +21,7 @@ CMouseHit::~CMouseHit()
 }
 
 struct SVertex {
-    izanagi::math::SVector pos;
+    izanagi::math::SVector4 pos;
     IZ_COLOR color;
 };
 
@@ -33,7 +33,7 @@ IZ_BOOL CMouseHit::InitInternal(
 {
     IZ_BOOL result = IZ_TRUE;
 
-    static const izanagi::math::SVector triPoint[3] =
+    static const izanagi::math::SVector4 triPoint[3] =
     {
         { -10.0f, 0.0f,  0.0f, 1.0f },
         { -10.0f, 0.0f, 20.0f, 1.0f },
@@ -47,7 +47,7 @@ IZ_BOOL CMouseHit::InitInternal(
     };
 
     {
-        izanagi::math::SMatrix::SetUnit(m_Triangles.mtx);
+        izanagi::math::SMatrix44::SetUnit(m_Triangles.mtx);
         m_Triangles.tri.Set(triPoint);
 
         m_Triangles.vb = device->CreateVertexBuffer(
@@ -60,7 +60,7 @@ IZ_BOOL CMouseHit::InitInternal(
         {
             for (IZ_UINT i = 0; i < 3; i++)
             {
-                izanagi::math::SVector::Copy(data[i].pos, triPoint[i]);
+                izanagi::math::SVector4::Copy(data[i].pos, triPoint[i]);
                 data[i].color = 0xffffffff;
             }
         }
@@ -83,9 +83,9 @@ IZ_BOOL CMouseHit::InitInternal(
 
     // カメラ
     camera.Init(
-        izanagi::math::CVector(0.0f, 5.0f, -30.0f, 1.0f),
-        izanagi::math::CVector(0.0f, 5.0f, 0.0f, 1.0f),
-        izanagi::math::CVector(0.0f, 1.0f, 0.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 5.0f, -30.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 5.0f, 0.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 1.0f, 0.0f, 1.0f),
         1.0f,
         500.0f,
         izanagi::math::CMath::Deg2Rad(60.0f),
@@ -115,7 +115,7 @@ void CMouseHit::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
     camera.Update();
 
     m_IsCross = IZ_FALSE;
-    izanagi::math::SVector dir;
+    izanagi::math::SVector4 dir;
 
     // 2D -> 3D
     if (m_MousePoint.x >= 0
@@ -162,7 +162,7 @@ void CMouseHit::RenderInternal(izanagi::graph::CGraphicsDevice* device)
         izanagi::graph::E_GRAPH_RS_CULLMODE,
         izanagi::graph::E_GRAPH_CULL_NONE);
 
-    static const izanagi::math::SVector color[2] = {
+    static const izanagi::math::SVector4 color[2] = {
         { 1.0f, 1.0f, 1.0f, 1.0f },
         { 1.0f, 1.0f, 1.0f, 0.5f },
     };
@@ -182,7 +182,7 @@ void CMouseHit::RenderInternal(izanagi::graph::CGraphicsDevice* device)
             (void*)&camera.GetParam().mtxW2C,
             sizeof(camera.GetParam().mtxW2C));
 
-        const izanagi::math::SVector& clr = (m_IsCross ? color[1] : color[0]);
+        const izanagi::math::SVector4& clr = (m_IsCross ? color[1] : color[0]);
 
         _SetShaderParam(
             m_Shader,

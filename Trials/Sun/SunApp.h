@@ -29,7 +29,7 @@ protected:
     virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device);
 
 private:
-    izanagi::CShaderBasic* m_Shader;
+    izanagi::shader::CShaderBasic* m_Shader;
     izanagi::CDebugMeshSphere* m_Sphere;
     izanagi::CDebugMeshAxis* m_Axis;
     izanagi::CDebugMeshRectangle* m_Plane;

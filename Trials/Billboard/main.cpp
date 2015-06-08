@@ -86,17 +86,17 @@ IZ_BOOL CBillboardYAxis::Render(
     izanagi::graph::CGraphicsDevice* device,
     izanagi::sample::CSampleCamera& camera)
 {
-    izanagi::math::SMatrix mtx;
-    izanagi::math::SMatrix::SetUnit(mtx);
-    izanagi::math::SMatrix::RotByX(mtx, mtx, IZ_DEG2RAD(-90.0f));
+    izanagi::math::SMatrix44 mtx;
+    izanagi::math::SMatrix44::SetUnit(mtx);
+    izanagi::math::SMatrix44::RotByX(mtx, mtx, IZ_DEG2RAD(-90.0f));
 
-    izanagi::math::SVector dir = camera.GetDir();
+    izanagi::math::SVector4 dir = camera.GetDir();
 
     if (dir.x == 0.0f) {
     }
     else {
         IZ_FLOAT deg = IZ_RAD2DEG(::atan2(dir.z, dir.x));
-        izanagi::math::SMatrix::RotByY(mtx, mtx, -1.0f * IZ_DEG2RAD(deg) + IZ_MATH_PI1_2);
+        izanagi::math::SMatrix44::RotByY(mtx, mtx, -1.0f * IZ_DEG2RAD(deg) + IZ_MATH_PI1_2);
     }
 
     m_Shader->Begin(device, 0, IZ_FALSE);
@@ -201,21 +201,21 @@ IZ_BOOL CBillboardZAxis::Render(
 {
     device->SetRenderState(izanagi::graph::E_GRAPH_RS_CULLMODE, izanagi::graph::E_GRAPH_CULL_NONE);
 
-    izanagi::math::SMatrix mtx;
-    izanagi::math::SMatrix::SetUnit(mtx);
-    izanagi::math::SMatrix::RotByZ(mtx, mtx, IZ_DEG2RAD(-90.0f));
+    izanagi::math::SMatrix44 mtx;
+    izanagi::math::SMatrix44::SetUnit(mtx);
+    izanagi::math::SMatrix44::RotByZ(mtx, mtx, IZ_DEG2RAD(-90.0f));
 
-    izanagi::math::SMatrix mtx2;
-    izanagi::math::SMatrix::SetUnit(mtx2);
+    izanagi::math::SMatrix44 mtx2;
+    izanagi::math::SMatrix44::SetUnit(mtx2);
 
-    izanagi::math::SVector dir = camera.GetDir();
+    izanagi::math::SVector4 dir = camera.GetDir();
 
     if (dir.x == 0.0f) {
     }
     else {
         IZ_FLOAT deg = IZ_RAD2DEG(::atan2(dir.y, dir.x));
-        izanagi::math::SMatrix::RotByZ(mtx, mtx, -1.0f * IZ_DEG2RAD(deg) + IZ_MATH_PI1_2);
-        izanagi::math::SMatrix::RotByZ(mtx2, mtx2, -1.0f * IZ_DEG2RAD(deg) + IZ_MATH_PI1_2);
+        izanagi::math::SMatrix44::RotByZ(mtx, mtx, -1.0f * IZ_DEG2RAD(deg) + IZ_MATH_PI1_2);
+        izanagi::math::SMatrix44::RotByZ(mtx2, mtx2, -1.0f * IZ_DEG2RAD(deg) + IZ_MATH_PI1_2);
     }
 
     m_Shader->Begin(device, 0, IZ_FALSE);
@@ -328,25 +328,25 @@ IZ_BOOL CBillboard::Render(
     izanagi::graph::CGraphicsDevice* device,
     izanagi::sample::CSampleCamera& camera)
 {
-    izanagi::math::SMatrix mtx;
-    izanagi::math::SMatrix::SetUnit(mtx);
+    izanagi::math::SMatrix44 mtx;
+    izanagi::math::SMatrix44::SetUnit(mtx);
 
     // 軸と並行になる向きにする
-    izanagi::math::SMatrix::GetRotByX(mtx, IZ_DEG2RAD(-90.0f));
+    izanagi::math::SMatrix44::GetRotByX(mtx, IZ_DEG2RAD(-90.0f));
 
     // カメラに正対するようにする
-    izanagi::math::SMatrix inv;
+    izanagi::math::SMatrix44 inv;
     {
-        izanagi::math::SMatrix::Copy(inv, camera.GetParam().mtxW2V);
+        izanagi::math::SMatrix44::Copy(inv, camera.GetParam().mtxW2V);
 
         // 移動成分は消す
         inv.m[3][0] = inv.m[3][1] = inv.m[3][2] = 0.0f;
 
         // 逆行列にすることで、カメラのW2Vマトリクスと打ち消しあうようにする
-        izanagi::math::SMatrix::Inverse(inv, inv);
+        izanagi::math::SMatrix44::Inverse(inv, inv);
     }
 
-    izanagi::math::SMatrix::Mul(mtx, mtx, inv);
+    izanagi::math::SMatrix44::Mul(mtx, mtx, inv);
 
     m_Shader->Begin(device, 0, IZ_FALSE);
     {
@@ -431,9 +431,9 @@ IZ_BOOL CBillboardApp::InitInternal(
 
     // カメラ
     camera.Init(
-        izanagi::math::CVector(0.0f, 30.0f, -200.0f, 1.0f),
-        izanagi::math::CVector(0.0f, 0.0f, 0.0f, 1.0f),
-        izanagi::math::CVector(0.0f, 1.0f, 0.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 30.0f, -200.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 0.0f, 0.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 1.0f, 0.0f, 1.0f),
         1.0f,
         5000.0f,
         izanagi::math::CMath::Deg2Rad(60.0f),
