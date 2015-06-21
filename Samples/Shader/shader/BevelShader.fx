@@ -112,12 +112,10 @@ float4 mainPS(SPSInput In) : COLOR
     float3 nml1 = lerp(vN, In.vNextNml.xyz, f * 0.5f);
 
     // ã‚Æ“¯‚¶‚±‚Æ‚ğ‚à‚¤ˆê‚Â‚Ì–@ü‚ÆŒü‚«‚Ås‚¤
-    {
-        dir = In.vDir2;
-        f = (1.0f - (1.0f - length(dir)) / R) * step(1.0f - length(dir), R);
-        float3 nml2 = In.vNextNml2;
-        nml2 = lerp(vN, nml2, f * 0.5f);
-    }
+    dir = In.vDir2;
+    f = (1.0f - (1.0f - length(dir)) / R) * step(1.0f - length(dir), R);
+    float3 nml2 = In.vNextNml2;
+    nml2 = lerp(vN, nml2, f * 0.5f);
 
     vN = lerp(nml1, nml2, 0.5f);
     vN = normalize(vN);
