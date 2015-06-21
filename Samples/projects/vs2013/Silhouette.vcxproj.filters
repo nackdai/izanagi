@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="..\..\..\Media\earth.xml">
+      <Filter>asset</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\Silhouette\shader\SilhouetteShader.xml">
+      <Filter>shader</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{20b81a1c-6e75-4df0-b3a6-cee3f33d477d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{d664ce8b-bf7d-4255-96f5-b24dc6cfb669}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="asset">
+      <UniqueIdentifier>{6cd0dc14-9114-4b9a-9562-37b9fc3b7280}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shader">
+      <UniqueIdentifier>{d7785416-6580-488b-966d-9e6a9787f281}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Silhouette\SilhouetteApp.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Silhouette\main.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Silhouette\SilhouetteApp.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Silhouette\shader\SilhouetteShader.fx">
+      <Filter>shader</Filter>
+    </None>
+  </ItemGroup>
+</Project>

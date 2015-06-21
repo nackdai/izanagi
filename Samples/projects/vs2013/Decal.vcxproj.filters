@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="shader">
+      <UniqueIdentifier>{6d31b727-32ea-49a0-a4ff-b87dd8e56ec8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{19e08104-9e47-4e5c-8e51-9461da81c20a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{e4881498-833d-4954-b681-4602ac6541d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="asset">
+      <UniqueIdentifier>{68966fa4-93c7-48bd-b941-368540740fad}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Decal\shader\BasicShader.fx">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\Decal\ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Decal\Cube.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Decal\DecalApp.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Decal\Sphere.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Decal\Cube.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Decal\DecalApp.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Decal\main.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Decal\Sphere.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\Decal\shader\BasicShader.xml">
+      <Filter>shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\Decal\asset.xml">
+      <Filter>asset</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>

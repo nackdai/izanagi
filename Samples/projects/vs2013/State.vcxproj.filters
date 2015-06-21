@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{31e8d96d-e9dd-4a4a-bfff-439eb47ceb6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{deba8449-6b3f-4f6e-8794-eba1f0dfc3de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="state">
+      <UniqueIdentifier>{ec786677-c7df-49f5-8329-680bb393f3d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="state\include">
+      <UniqueIdentifier>{56cf92c5-51c0-45fe-b7af-34c00b117a33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="state\source">
+      <UniqueIdentifier>{bfc01e77-d787-4a7c-a8be-47ae3d444bf2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="asset">
+      <UniqueIdentifier>{10496567-e013-4829-8912-7e340d81f7db}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\State\main.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\State\StateA.cpp">
+      <Filter>state\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\State\StateB.cpp">
+      <Filter>state\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\State\StateBase.cpp">
+      <Filter>state\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\State\StateC.cpp">
+      <Filter>state\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\State\StateManager.cpp">
+      <Filter>state\source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\State\StateA.h">
+      <Filter>state\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\State\StateB.h">
+      <Filter>state\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\State\StateBase.h">
+      <Filter>state\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\State\StateC.h">
+      <Filter>state\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\State\StateManager.h">
+      <Filter>state\include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\..\Media\StateImage.xml">
+      <Filter>asset</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>

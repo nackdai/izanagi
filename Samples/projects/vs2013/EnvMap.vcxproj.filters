@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="..\..\EnvMap\shader\EnvMapBoxShader.xml">
+      <Filter>shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\EnvMap.xml">
+      <Filter>asset</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{38e7a7ac-67aa-431a-b904-2eb61f70709b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{539870db-f1f7-4e78-b5dd-95f0cec047d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shader">
+      <UniqueIdentifier>{f0724405-c378-4743-849c-27b492467b81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="asset">
+      <UniqueIdentifier>{e55ca890-ff47-444b-9875-aaf898c01fc0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\EnvMap\main.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\EnvMap\EnvMapApp.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\EnvMap\shader\EnvMapBoxShader.fx">
+      <Filter>shader</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\EnvMap\EnvMapApp.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

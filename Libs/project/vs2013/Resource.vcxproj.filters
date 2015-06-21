@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="include\archive">
+      <UniqueIdentifier>{bb970577-015e-4ab4-b43b-dbe018cdb2d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\archive">
+      <UniqueIdentifier>{44554177-d6fd-43fd-bd9b-069fe081ae42}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\source\resource\Resource.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\resource\ResourceManager.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\resource\archive\Archive.cpp">
+      <Filter>source\archive</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\resource\archive\ArchiveTarball.cpp">
+      <Filter>source\archive</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\resource\Resource.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\resource\ResourceManager.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\izResource.h" />
+    <ClInclude Include="..\..\include\resource\archive\Archive.h">
+      <Filter>include\archive</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\resource\archive\ArchiveInterface.h">
+      <Filter>include\archive</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\resource\archive\ARCFormat.h">
+      <Filter>include\archive</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\resource\archive\ArchiveTarball.h">
+      <Filter>include\archive</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

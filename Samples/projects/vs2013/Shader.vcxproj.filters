@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{771e7cc4-66b6-41c0-b618-d9d2da948c3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{ffb0256a-b005-469c-a6fa-8b51e7158831}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shader">
+      <UniqueIdentifier>{a65686e9-02da-4bec-b447-73d470b43c6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="state">
+      <UniqueIdentifier>{6da15820-bea8-4d0c-b605-3b170ab7da56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="state\include">
+      <UniqueIdentifier>{addf8a88-4f83-4fe4-ba86-59c762dde0f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="state\source">
+      <UniqueIdentifier>{acbd435b-f660-4d11-969f-da2d753f704f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="asset">
+      <UniqueIdentifier>{9c960765-ea95-4ac9-b47f-d794b18c8d66}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Shader\main.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Shader\StateBase.cpp">
+      <Filter>state\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Shader\StateManager.cpp">
+      <Filter>state\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Shader\StateMirrorMap.cpp">
+      <Filter>state\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Shader\StatePhongShader.cpp">
+      <Filter>state\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Shader\StatePointLight.cpp">
+      <Filter>state\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Shader\StateSpotLight.cpp">
+      <Filter>state\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Shader\StateNormalMap.cpp">
+      <Filter>state\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Shader\StateSSAO.cpp">
+      <Filter>state\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Shader\BevelShaderMesh.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Shader\StateBevelShader.cpp">
+      <Filter>state\source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Shader\shader\MirrorMapShader.fx">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\Shader\shader\PhongShader.fx">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\Shader\shader\PointLightShader.fx">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\Shader\shader\SpotLightShader.fx">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\Shader\shader\NormalMapShader.fx">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\Shader\shader\SSAOShader.fx">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\Shader\shader\BevelShader.fx">
+      <Filter>shader</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Shader\StateBase.h">
+      <Filter>state\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Shader\StateManager.h">
+      <Filter>state\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Shader\StateMirrorMap.h">
+      <Filter>state\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Shader\StatePhongShader.h">
+      <Filter>state\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Shader\StatePointLight.h">
+      <Filter>state\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Shader\StateSpotLight.h">
+      <Filter>state\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Shader\StateNormalMap.h">
+      <Filter>state\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Shader\StateSSAO.h">
+      <Filter>state\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Shader\BevelShaderMesh.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Shader\StateBevelShader.h">
+      <Filter>state\include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\Shader\shader\MirrorMapShader.xml">
+      <Filter>shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\Shader\shader\PhongShader.xml">
+      <Filter>shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\EnvMap.xml">
+      <Filter>asset</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\Shader\shader\PointLightShader.xml">
+      <Filter>shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\Shader\shader\SpotLightShader.xml">
+      <Filter>shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\Shader\asset.xml">
+      <Filter>asset</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\Shader\shader\NormalMapShader.xml">
+      <Filter>shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\Shader\shader\SSAOShader.xml">
+      <Filter>shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\Shader\shader\BevelShader.xml">
+      <Filter>shader</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>

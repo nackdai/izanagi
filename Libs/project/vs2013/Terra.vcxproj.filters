@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="source\terrain">
+      <UniqueIdentifier>{065cfe0e-5ada-45b4-b96c-01b66de56687}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\sky">
+      <UniqueIdentifier>{531d19dd-2d60-494d-80b2-bb11d37b2ffe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="include\sky">
+      <UniqueIdentifier>{50bb6cb2-d087-497b-abf0-997f26b26ec1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\terrain">
+      <UniqueIdentifier>{a014cc97-2f43-4aea-88e1-f8ef1e7b2b2e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

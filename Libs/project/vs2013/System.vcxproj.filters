@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="include\thread">
+      <UniqueIdentifier>{84238eb8-ac30-4d95-bf43-3ed8a20814a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\device">
+      <UniqueIdentifier>{b318c7f6-ab45-4978-b1c2-c433683590c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\win32">
+      <UniqueIdentifier>{ebd42e43-6dd1-45af-a825-8cf1a9d6822d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\win32\thread">
+      <UniqueIdentifier>{cb3803d3-3beb-4880-a957-0714568330ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\win32\device">
+      <UniqueIdentifier>{7b14f92d-b41b-4349-8bf8-4864087dc02a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\linux">
+      <UniqueIdentifier>{df8c4a29-1e55-4f9c-b9d4-a2758973aabd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\linux\device">
+      <UniqueIdentifier>{fc3c5e1b-2b52-4178-9787-c6a17f906f79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\linux\thread">
+      <UniqueIdentifier>{c0554654-3340-4887-be3d-396d88093299}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\io">
+      <UniqueIdentifier>{04d3daf1-a2b3-4dab-b338-5190d58445a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\android">
+      <UniqueIdentifier>{5a0a9090-5f0c-4735-80c0-fe99975a392e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\web">
+      <UniqueIdentifier>{3c88c542-595d-4086-aefa-857c5ff9d475}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\system\SysTimer.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\SysUtil.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\SysWindow.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\SysEvent.h">
+      <Filter>include\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\SysMutex.h">
+      <Filter>include\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\SysSemaphore.h">
+      <Filter>include\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\SysThread.h">
+      <Filter>include\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\SysThreadDefs.h">
+      <Filter>include\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\SysThreadUtil.h">
+      <Filter>include\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\izSystem.h" />
+    <ClInclude Include="..\..\include\system\SysInterlocked.h">
+      <Filter>include\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\Pad.h">
+      <Filter>include\device</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\Pad_DInput.h">
+      <Filter>include\device</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\Pad_XInput.h">
+      <Filter>include\device</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\InputDeviceDefs.h">
+      <Filter>include\device</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\izDInput.h">
+      <Filter>include\device</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\SysEnvironment.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\SysKeyDefs.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\io\HeapInputStream.h">
+      <Filter>include\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\io\InputStream.h">
+      <Filter>include\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\io\IODefs.h">
+      <Filter>include\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\io\MemoryInputStream.h">
+      <Filter>include\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\io\MemoryOutputStream.h">
+      <Filter>include\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\io\OutputStream.h">
+      <Filter>include\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\io\BufferInputStream.h">
+      <Filter>include\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\io\FileInputStream.h">
+      <Filter>include\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\io\FileOutputStream.h">
+      <Filter>include\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\io\FileStream.h">
+      <Filter>include\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\TouchInput.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\source\system\win32\thread\SysMutex_win32.cpp">
+      <Filter>source\win32\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\win32\thread\SysSemaphore_win32.cpp">
+      <Filter>source\win32\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\win32\thread\SysThread_win32.cpp">
+      <Filter>source\win32\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\win32\thread\SysEvent_win32.cpp">
+      <Filter>source\win32\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\win32\SysTimer_win32.cpp">
+      <Filter>source\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\win32\SysUtil_win32.cpp">
+      <Filter>source\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\win32\SysWindow_win32.cpp">
+      <Filter>source\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\win32\device\Pad_DInput.cpp">
+      <Filter>source\win32\device</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\win32\device\Pad_XInput.cpp">
+      <Filter>source\win32\device</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\Pad.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\win32\device\DeviceUtil.cpp">
+      <Filter>source\win32\device</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\win32\SysEnvironment_win32 .cpp">
+      <Filter>source\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\linux\SysTimer_linux.cpp">
+      <Filter>source\linux</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\linux\SysUtil_linux.cpp">
+      <Filter>source\linux</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\linux\device\Pad_linux.cpp">
+      <Filter>source\linux\device</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\linux\thread\SysMutex_pthread.cpp">
+      <Filter>source\linux\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\linux\thread\SysSemaphore_pthread.cpp">
+      <Filter>source\linux\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\linux\thread\SysThread_pthread.cpp">
+      <Filter>source\linux\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\linux\thread\SysEvent_pthread.cpp">
+      <Filter>source\linux\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\linux\SysEnvironment_linux.cpp">
+      <Filter>source\linux</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\SysWindow_glut.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\win32\FileStream_win32.cpp">
+      <Filter>source\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\linux\FileStream_linux.cpp">
+      <Filter>source\linux</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\android\FileStream_android.cpp">
+      <Filter>source\android</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\android\SysWindow_android.cpp">
+      <Filter>source\android</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\TouchInput.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\web\SysWindow_web.cpp">
+      <Filter>source\web</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\web\SysUtil_web.cpp">
+      <Filter>source\web</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

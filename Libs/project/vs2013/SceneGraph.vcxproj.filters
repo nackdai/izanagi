@@ -1,0 +1,270 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="source\img">
+      <UniqueIdentifier>{b1c39a44-2314-421a-9f9b-07e4564b5467}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\mdl">
+      <UniqueIdentifier>{2bf8961f-b55b-44da-bd80-a3f5fcd5c994}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\anm">
+      <UniqueIdentifier>{a5201bdd-bd3c-42cd-99d8-edc0958f2b3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\anm\blend">
+      <UniqueIdentifier>{90031d06-9ca5-45f2-aafc-483216758728}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\mtrl">
+      <UniqueIdentifier>{a11bfd3b-affe-4e42-9d37-636024e9a3b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\msh">
+      <UniqueIdentifier>{4ea459a9-a48a-418e-aff1-0e3c61e062d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\skl">
+      <UniqueIdentifier>{d943a877-db39-4f99-941f-d767677c102b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\rendergraph">
+      <UniqueIdentifier>{b6f10b03-e611-488c-ada9-a23b0e99b163}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="include\img">
+      <UniqueIdentifier>{97777ebf-30c2-444d-9ff0-04d39b853110}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mdl">
+      <UniqueIdentifier>{62310137-ad8a-409c-ae82-93bea1a4628b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mtrl">
+      <UniqueIdentifier>{698435cc-7a85-4204-bebd-63d7ad05c0ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\anm">
+      <UniqueIdentifier>{ee7ef34e-70cd-47af-af8d-85fe09dbef77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\anm\blend">
+      <UniqueIdentifier>{bebfee56-6832-43ae-9b3a-86f8872c303c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\msh">
+      <UniqueIdentifier>{04c69173-950f-43f3-9d67-14b1ff5e9a20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\skl">
+      <UniqueIdentifier>{8c59b99a-941e-4893-a2de-21aa5148083d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\rendergraph">
+      <UniqueIdentifier>{538f0d53-1f0c-4a86-b3fd-7b4fde0d1d4c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\source\scenegraph\Camera.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\scenegraph\SceneGraphUtil.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\scenegraph\SceneParam.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\scenegraph\SceneState.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\scenegraph\VectorCamera.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\scenegraph\img\izImage.cpp">
+      <Filter>source\img</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\scenegraph\mdl\izModel.cpp">
+      <Filter>source\mdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\scenegraph\anm\AnimationBinder.cpp">
+      <Filter>source\anm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\scenegraph\anm\AnimationInterface.cpp">
+      <Filter>source\anm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\scenegraph\anm\AnimationInterp.cpp">
+      <Filter>source\anm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\scenegraph\anm\AnimationUtil.cpp">
+      <Filter>source\anm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\scenegraph\anm\izAnimation.cpp">
+      <Filter>source\anm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\scenegraph\anm\PoseUpdater.cpp">
+      <Filter>source\anm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\scenegraph\anm\AnimationLinearBlender.cpp">
+      <Filter>source\anm\blend</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\scenegraph\mtrl\izMaterial.cpp">
+      <Filter>source\mtrl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\scenegraph\msh\izMesh.cpp">
+      <Filter>source\msh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\scenegraph\msh\MeshInstance.cpp">
+      <Filter>source\msh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\scenegraph\msh\MeshSetInstance.cpp">
+      <Filter>source\msh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\scenegraph\msh\MshMeshGroup.cpp">
+      <Filter>source\msh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\scenegraph\msh\MshMeshSet.cpp">
+      <Filter>source\msh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\scenegraph\msh\MshPrimitiveSet.cpp">
+      <Filter>source\msh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\scenegraph\skl\izSkeleton.cpp">
+      <Filter>source\skl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\scenegraph\skl\SkeletonInstance.cpp">
+      <Filter>source\skl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\scenegraph\skl\SkeletonUtil.cpp">
+      <Filter>source\skl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\scenegraph\rendergraph\RenderGraph.cpp">
+      <Filter>source\rendergraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\scenegraph\rendergraph\SceneRenderer.cpp">
+      <Filter>source\rendergraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\scenegraph\Decal.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\scenegraph\Camera.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\FixedSceneStateManager.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\LightParam.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\SceneDefs.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\SceneGraphUtil.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\SceneParam.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\SceneState.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\VectorCamera.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\img\IMGFormat.h">
+      <Filter>include\img</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\img\izImage.h">
+      <Filter>include\img</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\mdl\izModel.h">
+      <Filter>include\mdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\mdl\MDLFormat.h">
+      <Filter>include\mdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\mtrl\izMaterial.h">
+      <Filter>include\mtrl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\mtrl\MTRLFormat.h">
+      <Filter>include\mtrl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\anm\AnimationBinder.h">
+      <Filter>include\anm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\anm\AnimationInterface.h">
+      <Filter>include\anm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\anm\AnimationInterp.h">
+      <Filter>include\anm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\anm\AnimationUtil.h">
+      <Filter>include\anm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\anm\ANMFormat.h">
+      <Filter>include\anm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\anm\izAnimation.h">
+      <Filter>include\anm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\anm\PoseUpdater.h">
+      <Filter>include\anm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\anm\AnimationBlender.h">
+      <Filter>include\anm\blend</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\anm\AnimationLinearBlender.h">
+      <Filter>include\anm\blend</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\msh\izMesh.h">
+      <Filter>include\msh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\msh\MeshInstance.h">
+      <Filter>include\msh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\msh\MeshSetInstance.h">
+      <Filter>include\msh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\msh\MeshSetInterface.h">
+      <Filter>include\msh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\msh\MSHFormat.h">
+      <Filter>include\msh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\msh\MshMeshGroup.h">
+      <Filter>include\msh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\msh\MshMeshSet.h">
+      <Filter>include\msh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\msh\MshPrimitiveSet.h">
+      <Filter>include\msh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\msh\MshRenderHandler.h">
+      <Filter>include\msh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\skl\izSkeleton.h">
+      <Filter>include\skl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\skl\SkeletonInstance.h">
+      <Filter>include\skl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\skl\SkeletonUtil.h">
+      <Filter>include\skl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\skl\SKLFormat.h">
+      <Filter>include\skl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\rendergraph\RenderElement.h">
+      <Filter>include\rendergraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\rendergraph\RenderGraph.h">
+      <Filter>include\rendergraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\rendergraph\SceneRenderer.h">
+      <Filter>include\rendergraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\rendergraph\SceneRendererInterface.h">
+      <Filter>include\rendergraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\izSceneGraph.h" />
+    <ClInclude Include="..\..\include\scenegraph\Decal.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
