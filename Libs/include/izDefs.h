@@ -82,11 +82,7 @@ typedef const wchar_t*  IZ_PCWSTR;
 #endif  // #ifndef IZ_VERIFY
 
 #ifndef IZ_C_ASSERT
-    #ifdef __IZ_DEBUG__
-        #define IZ_C_ASSERT(b)  typedef IZ_BYTE __xxxxx__[(b) ? 1 : -1];
-    #else
-        #define IZ_C_ASSERT(b)
-    #endif
+	#define IZ_C_ASSERT(b)  static_assert(b, "")
 #endif  // #ifndef IZ_C_ASSERT
 
 #ifndef IZ_MAX
@@ -228,35 +224,35 @@ typedef const wchar_t*  IZ_PCWSTR;
 /////////////////////////////////////////////////////////////
 // サイズチェック
 
-IZ_C_ASSERT(sizeof(IZ_CHAR)  == 1)
-IZ_C_ASSERT(sizeof(IZ_BYTE)  == 1)
-IZ_C_ASSERT(sizeof(IZ_INT8)  == 1)
-IZ_C_ASSERT(sizeof(IZ_UINT8) == 1)
+IZ_C_ASSERT(sizeof(IZ_CHAR) == 1);
+IZ_C_ASSERT(sizeof(IZ_BYTE) == 1);
+IZ_C_ASSERT(sizeof(IZ_INT8) == 1);
+IZ_C_ASSERT(sizeof(IZ_UINT8) == 1);
 
-IZ_C_ASSERT(sizeof(IZ_SHORT)  == 2)
-IZ_C_ASSERT(sizeof(IZ_USHORT) == 2)
-IZ_C_ASSERT(sizeof(IZ_INT16)  == 2)
-IZ_C_ASSERT(sizeof(IZ_UINT16) == 2)
+IZ_C_ASSERT(sizeof(IZ_SHORT) == 2);
+IZ_C_ASSERT(sizeof(IZ_USHORT) == 2);
+IZ_C_ASSERT(sizeof(IZ_INT16) == 2);
+IZ_C_ASSERT(sizeof(IZ_UINT16) == 2);
 
-IZ_C_ASSERT(sizeof(IZ_INT)    == 4)
-IZ_C_ASSERT(sizeof(IZ_UINT)   == 4)
-IZ_C_ASSERT(sizeof(IZ_INT32)  == 4)
-IZ_C_ASSERT(sizeof(IZ_UINT32) == 4)
-IZ_C_ASSERT(sizeof(IZ_BOOL)   == 4)
-IZ_C_ASSERT(sizeof(IZ_DWORD)  == 4)
+IZ_C_ASSERT(sizeof(IZ_INT) == 4);
+IZ_C_ASSERT(sizeof(IZ_UINT) == 4);
+IZ_C_ASSERT(sizeof(IZ_INT32) == 4);
+IZ_C_ASSERT(sizeof(IZ_UINT32) == 4);
+IZ_C_ASSERT(sizeof(IZ_BOOL) == 4);
+IZ_C_ASSERT(sizeof(IZ_DWORD) == 4);
 
-IZ_C_ASSERT(sizeof(IZ_FLOAT)  == 4)
-IZ_C_ASSERT(sizeof(IZ_DOUBLE) == 8)
+IZ_C_ASSERT(sizeof(IZ_FLOAT) == 4);
+IZ_C_ASSERT(sizeof(IZ_DOUBLE) == 8);
 
-IZ_C_ASSERT(sizeof(IZ_LONG)  == 8)
-IZ_C_ASSERT(sizeof(IZ_ULONG)  == 8)
+IZ_C_ASSERT(sizeof(IZ_LONG) == 8);
+IZ_C_ASSERT(sizeof(IZ_ULONG) == 8);
 
-IZ_C_ASSERT(sizeof(IZ_INT64)  == 8)
-IZ_C_ASSERT(sizeof(IZ_UINT64) == 8)
+IZ_C_ASSERT(sizeof(IZ_INT64) == 8);
+IZ_C_ASSERT(sizeof(IZ_UINT64) == 8);
 
 // TODO
 #ifndef _WIN64
-IZ_C_ASSERT(sizeof(size_t) == sizeof(IZ_UINT))
+	IZ_C_ASSERT(sizeof(size_t) == sizeof(IZ_UINT));
 #endif
 
 /////////////////////////////////////////////////////////////

@@ -1,3 +1,5 @@
+#include <thread>
+
 #include "threadmodel/ThreadModelMessageQueue.h"
 #include "threadmodel/ThreadModelMessage.h"
 
@@ -7,46 +9,45 @@ namespace threadmodel
 {
     CMessageQueue::CMessageQueue()
     {
-        m_Event.Open();
-        m_Mutex.Open();
+		m_isRunning.store(IZ_TRUE);
     }
 
     CMessageQueue::~CMessageQueue()
     {
-        m_Mutex.Lock();
-        {
-            IZ_ASSERT(m_MessageList.GetItemNum() == 0);
-        }
-        m_Mutex.Unlock();
-
-        m_Event.Close();
-        m_Mutex.Close();
     }
 
+	// 登録メッセージを取得かつキューから削除する.
     CMessage* CMessageQueue::Peek()
     {
-        sys::CGuarder guard(m_Mutex);
+		CStdList<CMessage>::Item* item = IZ_NULL;
 
-        CStdList<CMessage>::Item* item = m_MessageList.GetTop();
+		std::unique_lock<std::mutex> lock(m_Mutex);
+
+		item = m_MessageList.GetTop();
 
         CMessage* ret = IZ_NULL;
 
         if (item != IZ_NULL) {
             ret = item->GetData();
+			ret->reset();
             item->Leave();
-        }
-        else {
-            m_Event.Reset();
         }
             
         return ret;
     }
 
+	// 登録メッセージを取得かつキューから削除する.ただし、メッセージが無い場合は待つ.
     CMessage* CMessageQueue::PeekWithWaitingIfNoMessage()
     {
-        sys::CGuarder guard(m_Mutex);
+		std::unique_lock<std::mutex> lock(m_Mutex);
 
-        m_Event.Wait();
+		if (IsRunning()) {
+			m_condVar.wait(
+				lock,
+				[this] {
+				return m_MessageList.GetItemNum() > 0;
+			});
+		}
 
         CStdList<CMessage>::Item* item = m_MessageList.GetTop();
 
@@ -54,38 +55,44 @@ namespace threadmodel
 
         if (item != IZ_NULL) {
             ret = item->GetData();
+			ret->reset();
             item->Leave();
         }
-        else {
-            m_Event.Reset();
-        }
             
         return ret;
     }
 
+	// 登録メッセージを取得するが、キューからは削除しない.
     CMessage* CMessageQueue::Get()
     {
-        sys::CGuarder guard(m_Mutex);
+		CStdList<CMessage>::Item* item = IZ_NULL;
 
-        CStdList<CMessage>::Item* item = m_MessageList.GetTop();
+		{
+			std::unique_lock<std::mutex> lock(m_Mutex);
+			item = m_MessageList.GetTop();
+		}
 
         CMessage* ret = IZ_NULL;
 
         if (item != IZ_NULL) {
             ret = item->GetData();
         }
-        else {
-            m_Event.Reset();
-        }
             
         return ret;
     }
 
+	// 登録メッセージを取得するが、キューからは削除しない.ただし、メッセージが無い場合は待つ
     CMessage* CMessageQueue::GetWithWaitingIfNoMessage()
     {
-        sys::CGuarder guard(m_Mutex);
+		std::unique_lock<std::mutex> lock(m_Mutex);
 
-        m_Event.Wait();
+		if (IsRunning()) {
+			m_condVar.wait(
+				lock,
+				[this] {
+				return m_MessageList.GetItemNum() > 0;
+			});
+		}
 
         CStdList<CMessage>::Item* item = m_MessageList.GetTop();
 
@@ -94,47 +101,66 @@ namespace threadmodel
         if (item != IZ_NULL) {
             ret = item->GetData();
         }
-        else {
-            m_Event.Reset();
-        }
             
         return ret;
     }
 
-    void CMessageQueue::Post(CMessage* msg)
+	// メッセージを登録する.
+    IZ_BOOL CMessageQueue::Post(CMessage* msg)
     {
+		if (!IsRunning()) {
+			return IZ_FALSE;
+		}
+
         IZ_ASSERT(msg != IZ_NULL);
 
-        sys::CGuarder guard(m_Mutex);
+		std::unique_lock<std::mutex> lock(m_Mutex);
+
+		if (msg->isRegistered()) {
+			return IZ_FALSE;
+		}
 
         m_MessageList.AddTail(msg->GetItem());
 
-        m_Event.Set();
+		m_condVar.notify_one();
+
+		return IZ_TRUE;
     }
 
+	// 登録されているメッセージ数を取得.
     IZ_UINT CMessageQueue::GetPostedMessageNum()
     {
-        sys::CGuarder guard(m_Mutex);
-        {
-            IZ_UINT ret = m_MessageList.GetItemNum();
-            return ret;
-        }
+		std::unique_lock<std::mutex> lock(m_Mutex);
+        IZ_UINT ret = m_MessageList.GetItemNum();
+        return ret;
     }
 
-    void CMessageQueue::WaitEmpty(IZ_BOOL deleteMsg)
-    {
-        for (;;) {
-            CMessage* msg = Peek();
+	// 実行中かどうか.
+	IZ_BOOL CMessageQueue::IsRunning()
+	{
+		return m_isRunning.load();
+	}
 
-            if (msg == IZ_NULL) {
-                break;
-            }
-            else if (deleteMsg) {
-                CMessage::DeleteMessage(msg);
-            }
+	// 空になるまで待って終了.
+	void CMessageQueue::Terminate(IZ_BOOL deleteMsg)
+	{
+		m_isRunning.store(IZ_FALSE);
 
-            sys::CThread::YieldThread();
-        }
-    }
+		// TODO
+
+		while (IZ_TRUE) {
+			CMessage* msg = Peek();
+
+			if (msg == IZ_NULL) {
+				break;
+			}
+
+			if (deleteMsg) {
+				CMessage::DeleteMessage(msg);
+			}
+
+			std::this_thread::yield();
+		}
+	}
 }   // namespace threadmodel
 }   // namespace izanagi

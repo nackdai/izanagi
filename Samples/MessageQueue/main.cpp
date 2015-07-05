@@ -28,7 +28,7 @@ public:
     IZ_BOOL IsTerminated();
 
 private:
-    izanagi::sys::CThread m_Thread;
+	izanagi::sys::CThread m_Thread;
     IZ_BOOL m_IsTerminated;
 
     izanagi::threadmodel::CMessageQueue m_MsgQueue;
@@ -36,28 +36,20 @@ private:
     izanagi::IMemoryAllocator* m_Allocator;
 };
 
-class CRunnable : public izanagi::sys::IRunnable {
-public:
-    CRunnable() {}
-    virtual ~CRunnable() {}
+void Run(void* data)
+{
+	CMessageQueueApp* app = (CMessageQueueApp*)data;
 
-    virtual void Run(void* userData)
-    {
-        CMessageQueueApp* app = (CMessageQueueApp*)userData;
+    for (;;) {
+        app->AddMessage();
 
-        for (;;) {
-            app->AddMessage();
-
-            if (app->IsTerminated()) {
-                break;
-            }
-
-            izanagi::sys::CThread::Sleep(10);
+        if (app->IsTerminated()) {
+            break;
         }
-    }
-};
 
-static CRunnable runnable;
+		std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    }
+}
 
 class CMessageSample : public izanagi::threadmodel::CMessage {
 public:
@@ -67,7 +59,6 @@ public:
 
 CMessageQueueApp::CMessageQueueApp()
 {
-    m_Thread.Init(&runnable, this);
     m_IsTerminated = IZ_FALSE;
 }
 
@@ -101,7 +92,8 @@ IZ_BOOL CMessageQueueApp::InitInternal(
 {
     m_Allocator = allocator;
 
-    m_Thread.Start();
+	m_Thread.Init(Run, this);
+	m_Thread.Start(m_Allocator);
 
     return IZ_TRUE;
 }
@@ -110,9 +102,9 @@ IZ_BOOL CMessageQueueApp::InitInternal(
 void CMessageQueueApp::ReleaseInternal()
 {
     TerminateMessage();
-    m_Thread.Join();
+	m_Thread.Join();
 
-    m_MsgQueue.WaitEmpty(IZ_TRUE);
+    m_MsgQueue.Terminate(IZ_TRUE);
 }
 
 // 更新.

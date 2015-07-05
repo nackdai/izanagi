@@ -4,88 +4,41 @@
 #include "izStd.h"
 #include "izSystem.h"
 
+#include "threadmodel/ThreadPool.h"
+
 namespace izanagi
 {
 namespace threadmodel
 {
     class CTask;
 
-    /**
+    /** Parallel like C#.
      */
     class CParallel
     {
-        class CParallelFor;
-        class CParallelForEach;
-
     private:
         CParallel();
         ~CParallel();
 
     public:
-        class CFuncFor {
-        public:
-            CFuncFor() {}
-            virtual ~CFuncFor() {}
+		/** 指定した範囲で処理を実行する.
+		 */
+		static void For(
+			CThreadPool& threadPool,
+			IMemoryAllocator* allocator,
+			IZ_INT fromInclusive, IZ_INT toExclusive,
+			std::function<void(IZ_INT)> func);
 
-            virtual void operator()(IZ_INT) = 0;
-        };
-
-        class CFuncForEach {
-        public:
-            CFuncForEach() {}
-            virtual ~CFuncForEach() {}
-
-            virtual void operator()(void*) = 0;
-        };
-
-    public:
-        static void For(
-            IMemoryAllocator* allocator,
-            IZ_INT fromInclusive, IZ_INT toExclusive, 
-            ActionDelegate<IZ_INT>& action);
-
-        static void For(
-            IMemoryAllocator* allocator,
-            IZ_INT fromInclusive, IZ_INT toExclusive, 
-            void (*func)(IZ_INT));
-
-        static void For(
-            IMemoryAllocator* allocator,
-            IZ_INT fromInclusive, IZ_INT toExclusive, 
-            CFuncFor& func);
-
-        static void ForEach(
-            IMemoryAllocator* allocator,
-            void* data, size_t stride,
-            IZ_UINT count,
-            ActionDelegate<void*>& action);
-
-        static void ForEach(
-            IMemoryAllocator* allocator,
-            void* data, size_t stride,
-            IZ_UINT count,
-            void (*func)(void*));
-
-        static void ForEach(
-            IMemoryAllocator* allocator,
-            void* data, size_t stride,
-            IZ_UINT count,
-            CFuncForEach& func);
+		/** 指定された回数だけ処理を実行する.
+		 */
+		static void ForEach(
+			CThreadPool& threadPool,
+			IMemoryAllocator* allocator,
+			void* data, size_t stride,
+			IZ_UINT count,
+			std::function<void(void*)> func);
 
     private:
-        template <typename _T, typename _CALLBACK>
-        static void For(
-            IMemoryAllocator* allocator,
-            IZ_INT fromInclusive, IZ_INT toExclusive, 
-            _CALLBACK callback);
-
-        template <typename _T, typename _CALLBACK>
-        static void ForEach(
-            IMemoryAllocator* allocator,
-            void* data, size_t stride,
-            IZ_UINT count,
-            _CALLBACK callback);
-
         static void SetAllocator(CTask* task, IMemoryAllocator* allocator);
     };
 }   // namespace threadmodel

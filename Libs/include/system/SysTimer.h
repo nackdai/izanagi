@@ -44,7 +44,7 @@ namespace sys
         static IZ_TIME Sub(IZ_TIME time1, IZ_TIME time2);
         static IZ_TIME Sub(IZ_TIME time1, IZ_FLOAT time2);
 
-        static IZ_BOOL Compare(IZ_TIME time1, IZ_TIME time2);
+        static IZ_BOOL GreaterThan(IZ_TIME time1, IZ_TIME time2);
 
     protected:
         IZ_TIME m_Begin;

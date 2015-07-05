@@ -15,7 +15,7 @@ namespace threadmodel
      */
     class CJobQueue
     {
-        static sys::CMutex s_QueueListGuarder;
+        static std::mutex s_QueueListGuarder;
 
         // JobQueue登録リスト
         static CStdList<CJobQueue> s_JobQueueList;
@@ -79,7 +79,7 @@ namespace threadmodel
         IZ_UINT m_WorkerNum;
         CJobWorker** m_Workers;
 
-        sys::CMutex m_JobListGuarder;
+        std::mutex m_JobListGuarder;
 
         // Job登録リスト
         CStdList<CJob> m_JobList;

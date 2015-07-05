@@ -10,13 +10,15 @@ namespace threadmodel
 {
     /**
      */
-    class CTask : public CPlacementNew, public sys::IRunnable
+    class CTask : public CPlacementNew
     {
         friend class CThreadPool;
         friend class CParallel;
         friend class CTimerTaskExecuter;
 
     public:
+		/** タスク生成.
+		 */
         template <typename _T>
         static _T* CreateTask(IMemoryAllocator* allocator)
         {
@@ -31,6 +33,8 @@ namespace threadmodel
             return ret;
         }
 
+		/** タスク破棄.
+		 */
         static void DeleteTask(CTask* task);
 
     protected:
@@ -38,62 +42,80 @@ namespace threadmodel
         virtual ~CTask();
 
     public:
-        /**
+        /** タスクが処理するまで待つ.
          */
         void Wait();
 
-        /**
+        /** タスクをキャンセル.
          */
         IZ_BOOL Cancel();
 
-        /**
+        /** タスクがキャンセル予定かどうかを返す.
          */
         IZ_BOOL WillCancel();
 
-        /**
+        /** タスクがキャンセルされたかどうかを返す.
          */
         IZ_BOOL IsCanceled();
 
-        /**
+        /** タスクが終了したかどうかを返す.
          */
         IZ_BOOL IsFinished();
 
+		/** タスクが登録可能かどうかを返す.
+		 */
+		IZ_BOOL CanRegister();
+
     protected:
-        /**
+        /** タスク実行.
          */
         virtual void OnRun() = 0;
 
     private:
-        virtual void Run(void* userData);
+        void Run(void* userData);
 
-        void ResetState();
-
-        CStdList<CTask>::Item* GetListItem();
+		template <typename _T>
+		IZ_BOOL RegisterTo(CStdList<_T>& list)
+		{
+			std::unique_lock<std::mutex> lock(m_mutex);
+			list.AddTail(reinterpret_cast<CStdList<_T>::Item*>(&m_ListItem));
+			m_State = State_Registered;
+			return IZ_TRUE;
+		}
 
         void SetAllocator(IMemoryAllocator* allocator);
 
+		// タスク終了時にdeleteするかどうかを設定する.
         void SetIsDeleteSelf(IZ_BOOL isDeleteSelf);
+
+		// タスク終了時にdeleteするかどうかを返す.
         IZ_BOOL IsDeleteSelf();
+
+		CStdList<CTask>::Item* GetListItem()
+		{
+			return &m_ListItem;
+		}
 
     private:
         IMemoryAllocator* m_Allocator;
 
+		std::mutex m_mutex;
+		std::condition_variable m_condVar;
+
         CStdList<CTask>::Item m_ListItem;
 
-        sys::CEvent m_Event;
-
+		// タスク終了時にdeleteするかどうか
         IZ_BOOL m_IsDeleteSelf;
 
         enum State {
-            State_Init = 0,
-            State_Registered,
-            State_Running,
-            State_Finished,
-            State_WillCancel,
-            State_Canceled,
+			State_Init = 0,		// 初期状態.
+			State_Registered,	// 登録済み.
+			State_Running,		// 実行中.
+			State_Finished,		// 終了.
+			State_WillCancel,	// キャンセル予定.
+			State_Canceled,		// キャンセルされた.
         };
 
-        sys::CMutex m_StateLocker;
         State m_State;
     };
 }   // namespace threadmodel

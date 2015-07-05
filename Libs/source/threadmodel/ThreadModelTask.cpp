@@ -13,30 +13,31 @@ namespace threadmodel
     CTask::CTask()
     {
         m_Allocator = IZ_NULL;
-        m_Event.Open();
 
         m_ListItem.Init(this);
 
         m_IsDeleteSelf = IZ_FALSE;
 
-        m_StateLocker.Open();
         m_State = State_Init;
     }
 
     CTask::~CTask()
     {
-        m_Event.Close();
-        m_StateLocker.Close();
     }
 
     void CTask::Wait()
     {
-        m_Event.Wait();
+		std::unique_lock<std::mutex> lock(m_mutex);
+		m_condVar.wait(
+			lock,
+			[this]{
+			return (m_State = State_Canceled) || (m_State == State_Finished);
+		});
     }
 
     IZ_BOOL CTask::Cancel()
     {
-        sys::CGuarder guard(m_StateLocker);
+		std::unique_lock<std::mutex> lock(m_mutex);
         
         if (m_State != State_Canceled
             && m_State != State_Running
@@ -51,25 +52,32 @@ namespace threadmodel
 
     IZ_BOOL CTask::WillCancel()
     {
-        sys::CGuarder guard(m_StateLocker);
+		std::unique_lock<std::mutex> lock(m_mutex);
         return (m_State == State_WillCancel);
     }
 
     IZ_BOOL CTask::IsCanceled()
     {
-        sys::CGuarder guard(m_StateLocker);
+		std::unique_lock<std::mutex> lock(m_mutex);
         return (m_State == State_Canceled);
     }
 
     IZ_BOOL CTask::IsFinished()
     {
-        sys::CGuarder guard(m_StateLocker);
+		std::unique_lock<std::mutex> lock(m_mutex);
         return (m_State == State_Finished);
     }
 
+	// ƒ^ƒXƒN‚ª“o˜^‰Â”\‚©‚Ç‚¤‚©‚ð•Ô‚·.
+	IZ_BOOL CTask::CanRegister()
+	{
+		std::unique_lock<std::mutex> lock(m_mutex);
+		return (m_State == State_Finished) || (m_State == State_Init);
+	}
+
     void CTask::Run(void* userData)
     {
-        sys::CGuarder guard(m_StateLocker);
+		std::unique_lock<std::mutex> lock(m_mutex);
 
         if (m_State == State_WillCancel) {
             m_State = State_Canceled;
@@ -80,18 +88,7 @@ namespace threadmodel
             m_State = State_Finished;
         }
 
-        m_Event.Set();
-    }
-
-    void CTask::ResetState()
-    {
-        sys::CGuarder guard(m_StateLocker);
-        m_State = State_Init;
-    }
-
-    CStdList<CTask>::Item* CTask::GetListItem()
-    {
-        return &m_ListItem;
+		m_condVar.notify_one();
     }
 
     void CTask::SetAllocator(IMemoryAllocator* allocator)

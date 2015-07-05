@@ -119,7 +119,6 @@ namespace ui
         sys::IGestureListener* m_Listener;
 
         threadmodel::CTimerTaskExecuter m_TaskExecuter;
-        sys::CMutex m_Mutex;
 
         sys::CTouchEvent m_DownEvent;
 

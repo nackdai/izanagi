@@ -1,28 +1,15 @@
 #if !defined(__IZANAGI_SYSTEM_SYS_THREAD_H__)
 #define __IZANAGI_SYSTEM_SYS_THREAD_H__
 
+#include <thread>
+#include <atomic>
+
 #include "izStd.h"
-#include "SysThreadDefs.h"
 
 namespace izanagi
 {
 namespace sys
 {
-    class CThreadOp;
-
-    /**
-     */
-    class IRunnable {
-    protected:
-        IRunnable() {}
-        virtual ~IRunnable() {}
-
-        NO_COPIABLE(IRunnable);
-
-    public:
-        virtual void Run(void* userData) = 0;
-    };
-
     /** スレッドの名前の型
      */
     typedef CStdString<char, 7> ThreadName;
@@ -31,16 +18,6 @@ namespace sys
      */
     class CThread {
     public:
-        /** Get current thread id.
-         */
-        static ThreadId GetCurrentThreadId();
-
-        /** Return whethrer two threadid are equal.
-         */
-        static IZ_BOOL IsEqualThreadId(
-            const ThreadId& t1,
-            const ThreadId& t2);
-
         /** 実行中のスレッドを、指定されたミリ秒数の間、スリープ.
          */
         static void Sleep(IZ_UINT millisec);
@@ -57,13 +34,6 @@ namespace sys
     public:
         CThread();
         CThread(const ThreadName& name);
-        CThread(IRunnable* runnable, void* userData);
-        CThread(const ThreadName& name, IRunnable* runnable, void* userData);
-
-        CThread(IZ_UINT cpu);
-        CThread(IZ_UINT cpu, const ThreadName& name);
-        CThread(IZ_UINT cpu, IRunnable* runnable, void* userData);
-        CThread(IZ_UINT cpu, const ThreadName& name, IRunnable* runnable, void* userData);
 
         virtual ~CThread();
 
@@ -72,70 +42,45 @@ namespace sys
         NO_COPIABLE(CThread);
 
     public:
-        void Init(
-            IZ_UINT cpu,
-            const ThreadName* name,
-            IRunnable* runnable,
-            void* userData);
+		void Init(
+			const ThreadName& name,
+			std::function<void(void*)> func,
+			void* userData);
 
-        void Init(
-            const ThreadName* name,
-            IRunnable* runnable,
-            void* userData);
-
-        void Init(
-            IRunnable* runnable,
-            void* userData);
+		void Init(
+			std::function<void(void*)> func,
+			void* userData);
 
     public:
         /** このスレッドの実行を開始.
          */
-        IZ_BOOL Start();
+        IZ_BOOL Start(IMemoryAllocator* allocator);
 
         /** スレッド実行中かどうかを取得.
          */
         IZ_BOOL IsRunning();
 
+		virtual void Run();
+
         /** このスレッドが終了するのを待機.
          */
-        virtual void Join();
-
-        /** 処理実行.
-         */
-        virtual void Run();
-
-        /** スレッドID取得.
-         */
-        const ThreadId& GetId() const;
+		virtual void Join();
 
         /** 名前取得.
          */
         const ThreadName& GetName() const;
 
-        /** 名前取得.
-         */
-        const char* GetNameString() const;
-
-        /** 名前設定.
-         */
-        void SetName(ThreadName name);
-
-        /** ユーザーデータを取得.
-         */
-        void* GetUserData();
-
     protected:
         IZ_INT m_ThreadResult;
 
-        ThreadHandle m_Handle;
+		IMemoryAllocator* m_allocator;
 
-        ThreadId m_Id;
+		std::thread* m_thread;
+
         ThreadName m_Name;
 
-        IZ_UINT m_Cpu;
-        
-        void* m_UserData;
-        IRunnable* m_Runnable;
+		std::function<void(void*)> m_func;
+		void* m_userData;
     };
 }   // namespace sys
 }   // namespace izanagi

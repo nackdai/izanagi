@@ -10,94 +10,116 @@ namespace izanagi
 {
 namespace threadmodel
 {
-    /**
-     */
-    class CTimerTask : public CTask
-    {
-        friend class CTimerThread;
-        friend class CTimerTaskExecuter;
+	/**
+	*/
+	class CTimerTask : public CTask
+	{
+		friend class CTimerThread;
+		friend class CTimerTaskExecuter;
 
-    protected:
-        CTimerTask();
-        virtual ~CTimerTask() {}
+	protected:
+		CTimerTask();
+		virtual ~CTimerTask() {}
 
-    public:
-        enum TYPE {
-            TYPE_DELAY = 0,
-            TYPE_INTERVAL,
-        };
+	public:
+		/** タスク処理タイプ.
+		*/
+		enum TYPE {
+			TYPE_DELAY = 0,	///< 時間経過.
+			TYPE_INTERVAL,	///< 一定間隔.
+		};
 
-    private:
-        inline void SetType(TYPE type);
-        inline TYPE GetType();
+	private:
+		// タスク実行タイプを設定.
+		inline void SetType(TYPE type);
 
-        inline void SetTime(IZ_TIME time);
-        inline IZ_TIME GetTime();
+		// タスク実行タイプを取得.
+		inline TYPE GetType();
 
-        inline void SetPrev(IZ_TIME time);
-        inline IZ_TIME GetPrev();
+		// タスクが処理される時間を設定.
+		inline void SetTimeTaskWillExectute(IZ_TIME time);
 
-        inline void SetInterval(IZ_FLOAT ms);
-        inline IZ_FLOAT GetInterval();
+		// タスクが処理される時間を取得.
+		inline IZ_TIME GetTimeTaskWillExectute();
 
-        inline void SetElapsed(IZ_FLOAT ms);
-        inline IZ_FLOAT GetElapsed();
+		// 以前の時間を設定.
+		inline void SetPrev(IZ_TIME time);
 
-        inline void SetTimeForRun(IZ_FLOAT time);
+		// 以前の時間を取得.
+		inline IZ_TIME GetPrev();
 
-        virtual void OnRun();
+		// 処理間隔を設定.
+		inline void SetInterval(IZ_FLOAT ms);
 
-    protected:
-        virtual void OnRun(IZ_FLOAT time) = 0;
+		// 処理感覚を取得.
+		inline IZ_FLOAT GetInterval();
 
-    private:
-        TYPE m_Type;
-        IZ_TIME m_Time;
-        IZ_TIME m_Prev;
-        IZ_FLOAT m_Interval;
-        IZ_FLOAT m_Elapsed;
+		// 経過時間を設定.
+		inline void SetElapsed(IZ_FLOAT ms);
 
-        IZ_FLOAT m_TempTime;
-    };
+		// 経過時間を取得.
+		inline IZ_FLOAT GetElapsed();
 
-    /**
-     */
-    class CTimerTaskExecuter {
-    public:
-        CTimerTaskExecuter();
-        ~CTimerTaskExecuter();
+		// OnRunに渡す時間を設定.
+		inline void SetTimeForRun(IZ_FLOAT time);
 
-        NO_COPIABLE(CTimerTaskExecuter);
+		virtual void OnRun();
 
-    public:
-        IZ_BOOL PostTask(
-            CTimerTask* task, 
-            CTimerTask::TYPE type,
-            IZ_TIME current,
-            IZ_FLOAT time, 
-            IZ_BOOL willDelete = IZ_FALSE);
+	protected:
+		virtual void OnRun(IZ_FLOAT time) = 0;
 
-        IZ_BOOL PostTask(
-            CTimerTask* task, 
-            CTimerTask::TYPE type,
-            IZ_FLOAT time, 
-            IZ_BOOL willDelete = IZ_FALSE);
+	private:
+		TYPE m_Type;
+		IZ_TIME m_Time;
+		IZ_TIME m_Prev;
+		IZ_FLOAT m_Interval;
+		IZ_FLOAT m_Elapsed;
 
-        void Update();
+		IZ_FLOAT m_TempTime;
+	};
 
-        void Clear();
+	/** 時間に応じてタスク実行.
+	*/
+	class CTimerTaskExecuter {
+	public:
+		CTimerTaskExecuter();
+		~CTimerTaskExecuter();
 
-        IZ_UINT GetRegisteredTaskNum();
+		NO_COPIABLE(CTimerTaskExecuter);
 
-        void Cancel(
-            IZ_BOOL (*funcIsCancel)(CTimerTask* task, void* userData),
-            void* userData);
+	public:
+		/** 現在の時間から指定時間だけ経過したら実行するようにタスクを登録.
+		*/
+		IZ_BOOL PostTask(
+			CTimerTask* task,
+			CTimerTask::TYPE type,
+			IZ_TIME current,
+			IZ_FLOAT time,
+			IZ_BOOL willDelete = IZ_FALSE);
 
-    private:
-        CStdList<CTimerTask> m_TaskList;
+		/** 現在の時間から指定時間だけ経過したら実行するようにタスクを登録.
+		*/
+		IZ_BOOL PostTask(
+			CTimerTask* task,
+			CTimerTask::TYPE type,
+			IZ_FLOAT time,
+			IZ_BOOL willDelete = IZ_FALSE);
 
-        typedef CStdList<CTimerTask>::Item ListItem;
-    };
+		void Update();
+
+		void Clear();
+
+		IZ_UINT GetRegisteredTaskNum();
+
+		void Cancel(
+			std::function<IZ_BOOL(CTimerTask*, void*)> funcIsCancel,
+			void* userData);
+
+	private:
+		CStdList<CTimerTask> m_TaskList;
+
+		typedef CStdList<CTimerTask>::Item ListItem;
+	};
 
     /**
      */
@@ -107,24 +129,29 @@ namespace threadmodel
         CTimerThread();
         ~CTimerThread();
 
+		NO_COPIABLE(CTimerThread);
+
     private:
-        virtual void Run();
+        virtual void Run() final;
 
     public:
         IZ_BOOL PostDelayedTask(
+			IMemoryAllocator* allocator,
             CTimerTask* task, 
             IZ_FLOAT delay, 
             IZ_BOOL willDelete = IZ_FALSE);
 
         IZ_BOOL PostIntervalTask(
+			IMemoryAllocator* allocator,
             CTimerTask* task, 
             IZ_FLOAT interval, 
             IZ_BOOL willDelete = IZ_FALSE);
 
-        virtual void Join();
+        virtual void Join() final;
 
     private:
         IZ_BOOL PostTaskInternal(
+			IMemoryAllocator* allocator,
             CTimerTask* task, 
             CTimerTask::TYPE type,
             IZ_FLOAT time, 
@@ -140,7 +167,7 @@ namespace threadmodel
         STATE m_State;
 
         sys::CTimer m_Timer;
-        sys::CMutex m_Mutex;
+        std::mutex m_Mutex;
         sys::CEvent m_Event;
         
         CTimerTaskExecuter m_TaskExecuter;

@@ -1,6 +1,9 @@
 #if !defined(__IZANAGI_SYSTEM_SYS_EVENT_H__)
 #define __IZANAGI_SYSTEM_SYS_EVENT_H__
 
+#include <mutex>
+#include <condition_variable>
+
 #include "izDefs.h"
 #include "SysThreadDefs.h"
 
@@ -12,40 +15,35 @@ namespace sys
      */
     class CEvent {
     public:
-        CEvent();
+		CEvent();
         ~CEvent();
 
         NO_COPIABLE(CEvent);
 
     public:
-        /** 初期化.
-         */
-        IZ_BOOL Open();
-
-        /** 終了.
-         */
-        void Close();
-
         /** シグナル状態にする.
          *
          * スレッドの動作を開始する。
          */
-        void Set();
+		void Set(std::function<void(void)> func = nullptr);
 
         /** シグナル状態になるのを待つ.
          *
          * スレッドの動作が開始されるのを待つ。
          */
-        IZ_BOOL Wait();
+		void Wait(std::function<IZ_BOOL(void)> func = nullptr);
 
         /** 非シグナル状態にする.
          *
          * スレッドの動作を一時停止させる。
          */
-        void Reset();
+		void Reset(std::function<void(void)> func = nullptr);
 
     private:
-        EventHandle m_Handle;
+		std::mutex m_mutex;
+		std::condition_variable m_condVar;
+
+		IZ_BOOL m_isSignal;
     };
 }   // namespace sys
 }   // namespace izanagi

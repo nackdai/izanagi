@@ -98,7 +98,7 @@ namespace threadmodel
         // 登録されているジョブキュー
         CJobQueue* m_JobQueue;
 
-        sys::CMutex m_Mutex;
+        std::mutex m_Mutex;
 
         State m_State;
         IZ_BOOL m_RunResult;

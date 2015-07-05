@@ -1,6 +1,9 @@
 #if !defined(__IZANAGI_SYSTEM_SYS_SEMAPHORE_H__)
 #define __IZANAGI_SYSTEM_SYS_SEMAPHORE_H__
 
+#include <mutex>
+#include <condition_variable>
+
 #include "izDefs.h"
 #include "SysThreadDefs.h"
 
@@ -11,8 +14,6 @@ namespace sys
     /** セマフォ.
      */
     class CSemaphore {
-        friend class CCondVar;
-
     public:
         CSemaphore();
         ~CSemaphore();
@@ -20,24 +21,19 @@ namespace sys
         NO_COPIABLE(CSemaphore);
 
     public:
-        /** 初期化.
-         */
-        IZ_BOOL Init(IZ_UINT16 initialCount);
-
-        /** 終了.
-         */
-        void Close();
-
         /** 待機.
          */
-        IZ_BOOL Wait(IZ_INT timeout = -1);
+        void wait();
 
         /** セマフォカウントを解放.
          */
-        void Release();
+        void notify();
 
     private:
-        SemaHandle m_Handle;
+		std::mutex m_mutex;
+		std::condition_variable m_condVar;
+
+		IZ_UINT16 m_count;
     };
 }   // namespace sys
 }   // namespace izanagi

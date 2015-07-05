@@ -6,7 +6,7 @@ namespace izanagi
 {
 namespace threadmodel
 {
-    sys::CMutex CJobQueue::s_QueueListGuarder;
+    std::mutex CJobQueue::s_QueueListGuarder;
     CStdList<CJobQueue> CJobQueue::s_JobQueueList;
 
     CJobQueue::CJobQueue()
@@ -55,12 +55,8 @@ namespace threadmodel
         m_WorkerNum = threadNum;
         m_Allocator = allocator;
 
-        m_JobListGuarder.Open();
-
-        VRETURN(s_QueueListGuarder.Open());
-
-        sys::CGuarder guard(s_QueueListGuarder);
         {
+			std::unique_lock<std::mutex> lock(s_QueueListGuarder);
             s_JobQueueList.AddTail(&m_ListItem);
         }
 
@@ -72,7 +68,7 @@ namespace threadmodel
         VRETURN(m_Workers != IZ_NULL);
 
         for (IZ_UINT i = 0; i < m_WorkerNum; i++) {
-            m_Workers[i]->Start();
+            m_Workers[i]->Start(m_Allocator);
         }
 
         return IZ_TRUE;
@@ -84,7 +80,7 @@ namespace threadmodel
 
         VRETURN(m_Workers != IZ_NULL);
 
-        sys::CGuarder guard(m_JobListGuarder);
+		std::unique_lock<std::mutex> lock(m_JobListGuarder);
         {
             // Jobを待機状態にセット
             job->SetState(CJob::State_Waiting);
@@ -106,7 +102,7 @@ namespace threadmodel
             IZ_UINT jobNum = 0;
 
             {
-                sys::CGuarder guard(m_JobListGuarder);
+				std::unique_lock<std::mutex> lock(m_JobListGuarder);
 
                 jobNum = m_JobList.GetItemNum();
             }
@@ -121,7 +117,7 @@ namespace threadmodel
 
     void CJobQueue::CancelAllJobs()
     {
-        sys::CGuarder guard(m_JobListGuarder);
+		std::unique_lock<std::mutex> lock(m_JobListGuarder);
         {
             CStdList<CJob>::Item* item = m_JobList.GetTop();
 
@@ -149,7 +145,7 @@ namespace threadmodel
 
         //CancelAllJobs();
         {
-            sys::CGuarder guard(m_JobListGuarder);
+			std::unique_lock<std::mutex> lock(m_JobListGuarder);
 
             CStdList<CJob>::Item* item = m_JobList.GetTop();
 
@@ -165,7 +161,7 @@ namespace threadmodel
             IZ_UINT jobNum = 0;
 
             {
-                sys::CGuarder guard(m_JobListGuarder);
+				std::unique_lock<std::mutex> lock(m_JobListGuarder);
 
                 jobNum = m_JobList.GetItemNum();
             }
@@ -187,7 +183,7 @@ namespace threadmodel
         m_WorkerNum = 0;
 
         {
-            sys::CGuarder guard(m_JobListGuarder);
+			std::unique_lock<std::mutex> lock(m_JobListGuarder);
             CStdList<CJob>::Item* item = m_JobList.GetTop();
 
             while (item != IZ_NULL) {
@@ -204,11 +200,9 @@ namespace threadmodel
             }
         }
 
-        m_JobListGuarder.Close();
-
         // JobQueueリストから抜く
         {
-            sys::CGuarder guard(s_QueueListGuarder);
+			std::unique_lock<std::mutex> lock(s_QueueListGuarder);
             m_ListItem.Leave();
         }
 
@@ -219,7 +213,7 @@ namespace threadmodel
     {
         IZ_ASSERT(m_Workers != IZ_NULL);
 
-        sys::CGuarder guard(m_JobListGuarder);
+		std::unique_lock<std::mutex> lock(m_JobListGuarder);
         {
             CStdList<CJob>::Item* item = m_JobList.GetTop();
 
@@ -279,7 +273,7 @@ namespace threadmodel
 
     void CJobQueue::UpdateQueues()
     {
-        sys::CGuarder guard(s_QueueListGuarder);
+		std::unique_lock<std::mutex> lock(s_QueueListGuarder);
         {
             CStdList<CJobQueue>::Item* item = s_JobQueueList.GetTop();
 
@@ -295,7 +289,7 @@ namespace threadmodel
     void CJobQueue::TerminateJobQueue()
     {
         {
-            sys::CGuarder guard(s_QueueListGuarder);
+			std::unique_lock<std::mutex> lock(s_QueueListGuarder);
 
             CStdList<CJobQueue>::Item* item = s_JobQueueList.GetTop();
 
@@ -308,8 +302,6 @@ namespace threadmodel
 
             s_JobQueueList.Clear();
         }
-
-        s_QueueListGuarder.Close();
     }
 }   // namespace threadmodel
 }   // namespace izanagi

@@ -8,9 +8,6 @@ namespace threadmodel
 {
     CJobWorker::CJobWorker()
     {
-        m_Sema.Init(0);
-        m_Mutex.Open();
-
         m_Job = IZ_NULL;
 
         m_State = State_Waiting;
@@ -19,29 +16,21 @@ namespace threadmodel
     CJobWorker::CJobWorker(const sys::ThreadName& name)
         : sys::CThread(name)
     {
-        m_Sema.Init(0);
-        m_Mutex.Open();
-
         m_Job = IZ_NULL;
 
         m_State = State_Waiting;
-        m_StateMutex.Open();
     }
 
     CJobWorker::~CJobWorker()
     {
         // ”O‚Ì‚½‚ß
         Join();
-
-        m_Sema.Close();
-        m_Mutex.Close();
-        m_StateMutex.Close();
     }
 
     void CJobWorker::Register(CJob* job)
     {
         {
-            sys::CGuarder guard(m_Mutex);
+            std::unique_lock<std::mutex> lock(m_Mutex);
 
             IZ_ASSERT(m_Job == IZ_NULL);
 
@@ -52,15 +41,16 @@ namespace threadmodel
             }
         }
 
-        m_Sema.Release();
+        m_Sema.notify();
     }
 
     void CJobWorker::Run()
     {
         while (IZ_TRUE)
         {
-            if (m_Sema.Wait()) {
-                sys::CGuarder guard(m_Mutex);
+			m_Sema.wait();
+			{
+				std::unique_lock<std::mutex> lock(m_Mutex);
                 {
                     if (m_State == State_WillJoin) {
                         m_State = State_Joined;
@@ -83,7 +73,7 @@ namespace threadmodel
     void CJobWorker::Join()
     {
         {
-            sys::CGuarder guard(m_Mutex);
+			std::unique_lock<std::mutex> lock(m_Mutex);
 
             if (m_State == State_Joined) {
                 return;
@@ -93,26 +83,26 @@ namespace threadmodel
         }
 
         // Ž~‚Ü‚Á‚Ä‚¢‚é‚©‚à‚µ‚ê‚È‚¢‚Ì‚Å‹N‚±‚·
-        m_Sema.Release();
+        m_Sema.notify();
 
         sys::CThread::Join();
     }
 
     CJobWorker::State CJobWorker::GetState()
     {
-        sys::CGuarder guard(m_StateMutex);
+		std::unique_lock<std::mutex> lock(m_StateMutex);
         return m_State;
     }
 
     IZ_BOOL CJobWorker::IsWaiting()
     {
-        sys::CGuarder guard(m_StateMutex);
+		std::unique_lock<std::mutex> lock(m_StateMutex);
         return m_State == State_Waiting;
     }
 
     void CJobWorker::SetState(State state)
     {
-        sys::CGuarder guard(m_StateMutex);
+		std::unique_lock<std::mutex> lock(m_StateMutex);
         m_State = state;
     }
 }   // namespace threadmodel

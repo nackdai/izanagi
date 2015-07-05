@@ -5,23 +5,9 @@ namespace izanagi
 {
 namespace threadmodel
 {
-    IMemoryAllocator* CThreadPool::s_Allocator = IZ_NULL;
-
-    sys::CMutex CThreadPool::s_TaskListLocker;
-    sys::CEvent CThreadPool::s_TaskWaiter;
-    CStdList<CTask> CThreadPool::s_TaskList;
-
-    sys::CEvent CThreadPool::s_TaskEmptyWaiter;
-
-    IZ_UINT CThreadPool::s_MaxThreadNum = 0;
-    CStdList<CThreadPool::CThread> CThreadPool::s_ThreadList;
-
-    CThreadPool::State CThreadPool::s_State;
-
-    CThreadPool::CThread::CThread()
+	CThreadPool::CThread::CThread(CThreadPool* pool)
     {
-        m_Mutex.Open();
-
+		m_Pool = pool;
         m_State = State_Waiting;
 
         m_ListItem.Init(this);
@@ -29,15 +15,14 @@ namespace threadmodel
 
     CThreadPool::CThread::~CThread()
     {
-        m_Mutex.Close();
     }
 
     void CThreadPool::CThread::Run()
     {
         while (IZ_TRUE) {
-            CTask* task = CThreadPool::DequeueTask();
+			CTask* task = m_Pool->DequeueTask();
 
-            sys::CGuarder guarder(m_Mutex);
+            std::unique_lock<std::mutex> lock(m_Mutex);
 
             if (m_State == State_WillFinish) {
                 m_State = State_Finished;
@@ -59,7 +44,7 @@ namespace threadmodel
 
     void CThreadPool::CThread::Terminate()
     {
-        sys::CGuarder guard(m_Mutex);
+        std::unique_lock<std::mutex> lock(m_Mutex);
 
         if (m_State == State_Finished) {
             return;
@@ -70,10 +55,25 @@ namespace threadmodel
 
     IZ_BOOL CThreadPool::CThread::IsWaiting()
     {
-        sys::CGuarder guard(m_Mutex);
+        std::unique_lock<std::mutex> lock(m_Mutex);
 
         return (m_State == State_Waiting);
     }
+
+	//////////////////////////////////////////////////////
+
+	CThreadPool::CThreadPool()
+	{
+		m_Allocator = IZ_NULL;
+
+		m_MaxThreadNum = 0;
+
+		m_State = State_None;
+	}
+
+	CThreadPool::~CThreadPool()
+	{
+	}
 
     void CThreadPool::Init(IMemoryAllocator* allocator)
     {
@@ -86,80 +86,75 @@ namespace threadmodel
         IMemoryAllocator* allocator,
         IZ_UINT threadNum)
     {
-        if (s_Allocator != IZ_NULL) {
+        if (m_Allocator != IZ_NULL) {
             return;
         }
 
-        s_State = State_Running;
+        m_State = State_Running;
 
-        s_TaskListLocker.Open();
-        s_TaskWaiter.Open();
-        s_TaskEmptyWaiter.Open();
+        m_Allocator = allocator;
 
-        s_Allocator = allocator;
-
-        s_MaxThreadNum = threadNum;
+        m_MaxThreadNum = threadNum;
 
         for (IZ_UINT i = 0; i < threadNum; i++) {
             CThread* thread = CreateThread();
 
-            s_ThreadList.AddTail(thread->GetListItem());
+            m_ThreadList.AddTail(thread->GetListItem());
         }
     }
 
     void CThreadPool::EneueueTask(CTask* task)
     {
         {
-            sys::CGuarder guarder(s_TaskListLocker);
+            std::unique_lock<std::mutex> lock(m_TaskListLocker);
 
-            if (s_State == State_WillTerminate
-                || s_State == State_Terminated)
+            if (m_State == State_WillTerminate
+                || m_State == State_Terminated)
             {
                 return;
             }
 
-            s_TaskList.AddTail(task->GetListItem());
+            m_TaskList.AddTail(task->GetListItem());
         }
 
         // Notify a task is queued.
-        s_TaskWaiter.Set();
+        m_TaskWaiter.Set();
     }
 
     void CThreadPool::WaitEmpty()
     {
-        sys::CGuarder guarder(s_TaskListLocker);
+        std::unique_lock<std::mutex> lock(m_TaskListLocker);
 
-        if (s_TaskList.HasItem()) {
-            s_TaskEmptyWaiter.Wait();
+        if (m_TaskList.HasItem()) {
+            m_TaskEmptyWaiter.Wait();
 
-            // If WaitEmpty is called again, s_TaskEmptyWaiter will wait.
-            s_TaskEmptyWaiter.Reset();
+            // If WaitEmpty is called again, m_TaskEmptyWaiter will wait.
+            m_TaskEmptyWaiter.Reset();
         }
     }
 
     CThreadPool::CThread* CThreadPool::CreateThread()
     {
-        void* buf = ALLOC(s_Allocator, sizeof(CThread));
+        void* buf = ALLOC(m_Allocator, sizeof(CThread));
         VRETURN_NULL(buf);
 
-        CThread* ret = new(buf) CThread();
-        ret->Start();
+        CThread* ret = new(buf) CThread(this);
+		ret->Start(m_Allocator);
 
         return ret;
     }
 
     void CThreadPool::Terminate()
     {
-        s_TaskListLocker.Lock();
         {
-            s_State = State_WillTerminate;
+			std::unique_lock<std::mutex> lock(m_TaskListLocker);
+            m_State = State_WillTerminate;
         }
-        s_TaskListLocker.Unlock();
 
         // Wait queued tasks are empty.
         WaitEmpty();
 
-        CStdList<CThread>::Item* item = s_ThreadList.GetTop();
+        CStdList<CThread>::Item* item = m_ThreadList.GetTop();
 
         // Notify thread will terminate.
         while (item != IZ_NULL) {
@@ -168,7 +163,7 @@ namespace threadmodel
             item = item->GetNext();
         }
 
-        item = s_ThreadList.GetTop();
+        item = m_ThreadList.GetTop();
 
         // Joint threads.
         while (item != IZ_NULL) {
@@ -176,39 +171,35 @@ namespace threadmodel
 
             CStdList<CThread>::Item* next = item->GetNext();
 
-            s_TaskWaiter.Set();
+            m_TaskWaiter.Set();
 
             thread->Join();
             delete thread;
 
-            FREE(s_Allocator, thread);
+            FREE(m_Allocator, thread);
 
             item = next;
         }
 
-        IZ_ASSERT(s_ThreadList.GetItemNum() == 0);
-
-        s_TaskListLocker.Close();
-        s_TaskWaiter.Close();
-        s_TaskEmptyWaiter.Close();
+        IZ_ASSERT(m_ThreadList.GetItemNum() == 0);
     }
 
     IZ_UINT CThreadPool::GetMaxThreadNum()
     {
-        return s_MaxThreadNum;
+        return m_MaxThreadNum;
     }
 
     CTask* CThreadPool::DequeueTask()
     {
-        s_TaskWaiter.Wait();
+        m_TaskWaiter.Wait();
 
-        sys::CGuarder guarder(s_TaskListLocker);
+        std::unique_lock<std::mutex> lock(m_TaskListLocker);
 
-        CStdList<CTask>::Item* item = s_TaskList.GetTop();
+        CStdList<CTask>::Item* item = m_TaskList.GetTop();
 
         if (item == IZ_NULL) {
-            s_TaskWaiter.Reset();
-            s_TaskEmptyWaiter.Set();
+            m_TaskWaiter.Reset();
+            m_TaskEmptyWaiter.Set();
 
             return IZ_NULL;
         }

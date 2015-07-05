@@ -18,9 +18,6 @@
     <Filter Include="source\win32">
       <UniqueIdentifier>{ebd42e43-6dd1-45af-a825-8cf1a9d6822d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source\win32\thread">
-      <UniqueIdentifier>{cb3803d3-3beb-4880-a957-0714568330ce}</UniqueIdentifier>
-    </Filter>
     <Filter Include="source\win32\device">
       <UniqueIdentifier>{7b14f92d-b41b-4349-8bf8-4864087dc02a}</UniqueIdentifier>
     </Filter>
@@ -29,9 +26,6 @@
     </Filter>
     <Filter Include="source\linux\device">
       <UniqueIdentifier>{fc3c5e1b-2b52-4178-9787-c6a17f906f79}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\linux\thread">
-      <UniqueIdentifier>{c0554654-3340-4887-be3d-396d88093299}</UniqueIdentifier>
     </Filter>
     <Filter Include="include\io">
       <UniqueIdentifier>{04d3daf1-a2b3-4dab-b338-5190d58445a0}</UniqueIdentifier>
@@ -53,22 +47,7 @@
     <ClInclude Include="..\..\include\system\SysWindow.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\system\SysEvent.h">
-      <Filter>include\thread</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\system\SysMutex.h">
-      <Filter>include\thread</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\system\SysSemaphore.h">
-      <Filter>include\thread</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\system\SysThread.h">
-      <Filter>include\thread</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\system\SysThreadDefs.h">
-      <Filter>include\thread</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\system\SysThreadUtil.h">
       <Filter>include\thread</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\izSystem.h" />
@@ -129,20 +108,20 @@
     <ClInclude Include="..\..\include\system\TouchInput.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\system\SysEvent.h">
+      <Filter>include\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\SysThread.h">
+      <Filter>include\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\SysThreadDefs.h">
+      <Filter>include\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\SysSpinLock.h">
+      <Filter>include\thread</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\source\system\win32\thread\SysMutex_win32.cpp">
-      <Filter>source\win32\thread</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\system\win32\thread\SysSemaphore_win32.cpp">
-      <Filter>source\win32\thread</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\system\win32\thread\SysThread_win32.cpp">
-      <Filter>source\win32\thread</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\system\win32\thread\SysEvent_win32.cpp">
-      <Filter>source\win32\thread</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\system\win32\SysTimer_win32.cpp">
       <Filter>source\win32</Filter>
     </ClCompile>
@@ -176,18 +155,6 @@
     <ClCompile Include="..\..\source\system\linux\device\Pad_linux.cpp">
       <Filter>source\linux\device</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\system\linux\thread\SysMutex_pthread.cpp">
-      <Filter>source\linux\thread</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\system\linux\thread\SysSemaphore_pthread.cpp">
-      <Filter>source\linux\thread</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\system\linux\thread\SysThread_pthread.cpp">
-      <Filter>source\linux\thread</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\system\linux\thread\SysEvent_pthread.cpp">
-      <Filter>source\linux\thread</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\system\linux\SysEnvironment_linux.cpp">
       <Filter>source\linux</Filter>
     </ClCompile>
@@ -214,6 +181,15 @@
     </ClCompile>
     <ClCompile Include="..\..\source\system\web\SysUtil_web.cpp">
       <Filter>source\web</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\SysSemaphore.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\SysEvent.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\SysThread.cpp">
+      <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

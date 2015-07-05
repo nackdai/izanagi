@@ -36,11 +36,11 @@ namespace threadmodel
         IZ_DECL_PLACEMENT_NEW();
 
     private:
-        virtual void Run();
+        virtual void Run() final;
 
         void Register(CJob* job);
 
-        void Join();
+		virtual void Join() final;
 
         // 状態を取得
         State GetState();
@@ -51,12 +51,12 @@ namespace threadmodel
 
     private:
         sys::CSemaphore m_Sema;
-        sys::CMutex m_Mutex;
+        std::mutex m_Mutex;
 
         CJob* m_Job;
 
         State m_State;
-        sys::CMutex m_StateMutex;
+		std::mutex m_StateMutex;
     };
 }   // namespace threadmodel
 }   // namespace izanagi

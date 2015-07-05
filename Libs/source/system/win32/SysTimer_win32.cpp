@@ -113,7 +113,7 @@ namespace sys
         return Sub(time1, time);
     }
 
-    IZ_BOOL CTimer::Compare(IZ_TIME time1, IZ_TIME time2)
+	IZ_BOOL CTimer::GreaterThan(IZ_TIME time1, IZ_TIME time2)
     {
         return time1 >= time2;
     }

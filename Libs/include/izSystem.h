@@ -6,11 +6,9 @@
 #include "system/SysUtil.h"
 
 // Thread
-#include "system/SysThread.h"
-#include "system/SysMutex.h"
-#include "system/SysEvent.h"
 #include "system/SysSemaphore.h"
-#include "system/SysInterlocked.h"
+#include "system/SysEvent.h"
+#include "system/SysThread.h"
 
 // Device
 #include "system/Pad.h"

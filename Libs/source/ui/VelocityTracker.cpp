@@ -54,7 +54,7 @@ namespace ui
 
     void CVelocityTracker::Update(const CMotionEvent& event)
     {
-        if (sys::CTimer::Compare(
+		if (sys::CTimer::GreaterThan(
                 sys::CTimer::Add(m_PrevTime, RECOG_THRESHOLD_MS),
                 event.time))
         {

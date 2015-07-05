@@ -4,244 +4,265 @@ namespace izanagi
 {
 namespace threadmodel
 {
-    CTimerTask::CTimerTask()
-    {
-        m_Type = TYPE_DELAY;
-        sys::CTimer::SetTimeZero(m_Time);
-        sys::CTimer::SetTimeZero(m_Prev);
-        m_Interval = 0;
-        m_Elapsed = 0;
-    }
+	CTimerTask::CTimerTask()
+	{
+		m_Type = TYPE_DELAY;
+		sys::CTimer::SetTimeZero(m_Time);
+		sys::CTimer::SetTimeZero(m_Prev);
+		m_Interval = 0;
+		m_Elapsed = 0;
+	}
 
-    void CTimerTask::SetType(CTimerTask::TYPE type)
-    {
-        m_Type = type;
-    }
+	void CTimerTask::SetType(CTimerTask::TYPE type)
+	{
+		m_Type = type;
+	}
 
-    CTimerTask::TYPE CTimerTask::GetType()
-    {
-        return m_Type;
-    }
+	CTimerTask::TYPE CTimerTask::GetType()
+	{
+		return m_Type;
+	}
 
-    void CTimerTask::SetTime(IZ_TIME ms)
-    {
-        m_Time = ms;
-    }
+	void CTimerTask::SetTimeTaskWillExectute(IZ_TIME ms)
+	{
+		m_Time = ms;
+	}
 
-    IZ_TIME CTimerTask::GetTime()
-    {
-        return m_Time;
-    }
+	IZ_TIME CTimerTask::GetTimeTaskWillExectute()
+	{
+		return m_Time;
+	}
 
-    void CTimerTask::SetPrev(IZ_TIME ms)
-    {
-        m_Prev = ms;
-    }
+	void CTimerTask::SetPrev(IZ_TIME ms)
+	{
+		m_Prev = ms;
+	}
 
-    IZ_TIME CTimerTask::GetPrev()
-    {
-        return m_Prev;
-    }
+	IZ_TIME CTimerTask::GetPrev()
+	{
+		return m_Prev;
+	}
 
-    void CTimerTask::SetInterval(IZ_FLOAT ms)
-    {
-        m_Interval = ms;
-    }
+	void CTimerTask::SetInterval(IZ_FLOAT ms)
+	{
+		m_Interval = ms;
+	}
 
-    IZ_FLOAT CTimerTask::GetInterval()
-    {
-        return m_Interval;
-    }
+	IZ_FLOAT CTimerTask::GetInterval()
+	{
+		return m_Interval;
+	}
 
-    void CTimerTask::SetElapsed(IZ_FLOAT ms)
-    {
-        m_Elapsed = ms;
-    }
+	void CTimerTask::SetElapsed(IZ_FLOAT ms)
+	{
+		m_Elapsed = ms;
+	}
 
-    IZ_FLOAT CTimerTask::GetElapsed()
-    {
-        return m_Elapsed;
-    }
+	IZ_FLOAT CTimerTask::GetElapsed()
+	{
+		return m_Elapsed;
+	}
 
-    void CTimerTask::SetTimeForRun(IZ_FLOAT time)
-    {
-        m_TempTime = time;
-    }
+	void CTimerTask::SetTimeForRun(IZ_FLOAT time)
+	{
+		m_TempTime = time;
+	}
 
-    void CTimerTask::OnRun()
-    {
-        OnRun(m_TempTime);
-    }
+	void CTimerTask::OnRun()
+	{
+		OnRun(m_TempTime);
+	}
 
-    ///////////////////////////////////////////////////
+	///////////////////////////////////////////////////
 
-    CTimerTaskExecuter::CTimerTaskExecuter()
-    {
-    }
+	CTimerTaskExecuter::CTimerTaskExecuter()
+	{
+	}
 
-    CTimerTaskExecuter::~CTimerTaskExecuter()
-    {
-        Clear();
-    }
+	CTimerTaskExecuter::~CTimerTaskExecuter()
+	{
+		Clear();
+	}
 
-    IZ_BOOL CTimerTaskExecuter::PostTask(
-        CTimerTask* task, 
-        CTimerTask::TYPE type,
-        IZ_TIME current,
-        IZ_FLOAT time, 
-        IZ_BOOL willDelete/*= IZ_FALSE*/)
-    {
-        task->SetType(type);
+	// 現在の時間から指定時間だけ経過したら実行するようにタスクを登録.
+	IZ_BOOL CTimerTaskExecuter::PostTask(
+		CTimerTask* task,
+		CTimerTask::TYPE type,
+		IZ_TIME current,
+		IZ_FLOAT time,
+		IZ_BOOL willDelete/*= IZ_FALSE*/)
+	{
+		if (!task->CanRegister()) {
+			return IZ_FALSE;
+		}
 
-        if (type == CTimerTask::TYPE_INTERVAL) {
-            task->SetInterval(time);
-        }
+		task->SetType(type);
 
-        task->SetIsDeleteSelf(willDelete);
+		if (type == CTimerTask::TYPE_INTERVAL) {
+			task->SetInterval(time);
+		}
 
-        task->SetTime(sys::CTimer::Add(current, time));
-        task->SetPrev(current);
+		task->SetIsDeleteSelf(willDelete);
 
-        return m_TaskList.AddTail(reinterpret_cast<CStdList<CTimerTask>::Item*>(task->GetListItem()));
-    }
+		task->SetTimeTaskWillExectute(sys::CTimer::Add(current, time));
+		task->SetPrev(current);
 
-    IZ_BOOL CTimerTaskExecuter::PostTask(
-        CTimerTask* task, 
-        CTimerTask::TYPE type,
-        IZ_FLOAT time, 
-        IZ_BOOL willDelete/*= IZ_FALSE*/)
-    {
-        IZ_TIME cur = sys::CTimer::GetCurTime();
+		auto ret = task->RegisterTo(m_TaskList);
+		return ret;
+	}
 
-        return PostTask(
-            task,
-            type,
-            cur,
-            time,
-            willDelete);
-    }
+	// 現在の時間から指定時間だけ経過したら実行するようにタスクを登録.
+	IZ_BOOL CTimerTaskExecuter::PostTask(
+		CTimerTask* task,
+		CTimerTask::TYPE type,
+		IZ_FLOAT time,
+		IZ_BOOL willDelete/*= IZ_FALSE*/)
+	{
+		// 現在の時間を取得
+		IZ_TIME cur = sys::CTimer::GetCurTime();
 
-    void CTimerTaskExecuter::Update()
-    {
-        ListItem* item = m_TaskList.GetTop();
-        while (item != IZ_NULL) {
-            CTimerTask* task = item->GetData();
-            ListItem* next = item->GetNext();
+		return PostTask(
+			task,
+			type,
+			cur,
+			time,
+			willDelete);
+	}
 
-            CTimerTask::TYPE type = task->GetType();
-            IZ_TIME time = task->GetTime();
+	void CTimerTaskExecuter::Update()
+	{
+		ListItem* item = m_TaskList.GetTop();
+		while (item != IZ_NULL) {
+			CTimerTask* task = item->GetData();
+			ListItem* next = item->GetNext();
 
-            IZ_TIME cur = sys::CTimer::GetCurTime();
-            IZ_TIME base = cur;
+			// タスク処理タイプ.
+			CTimerTask::TYPE type = task->GetType();
 
-            IZ_FLOAT taskElapsed = task->GetElapsed();
-            if (taskElapsed > 0) {
-                base = sys::CTimer::Sub(cur, taskElapsed);
-            }
+			// 実行されるタイミング.
+			IZ_TIME timeWillExecute = task->GetTimeTaskWillExectute();
 
-            if (task->WillCancel()
-                || sys::CTimer::Compare(base, time))
-            {
-                IZ_FLOAT elapsed = sys::CTimer::ComputeTime(
-                    task->GetPrev(),
-                    cur);
+			IZ_TIME cur = sys::CTimer::GetCurTime();
+			IZ_TIME base = cur;
 
-                if (type == CTimerTask::TYPE_DELAY) {
-                    item->Leave();
-                    task->SetTimeForRun(elapsed);
-                    task->Run(IZ_NULL);
+			IZ_FLOAT taskElapsed = task->GetElapsed();
 
-                    if (task->IsDeleteSelf()) {
-                        CTask::DeleteTask(task);
-                        task = IZ_NULL;
-                    }
-                }
-                else {
-                    task->SetTimeForRun(elapsed);
-                    task->Run(IZ_NULL);
+			if (taskElapsed > 0) {
+				base = sys::CTimer::Sub(cur, taskElapsed);
+			}
 
-                    if (task->IsCanceled()) {
-                        item->Leave();
+			if (task->WillCancel()
+				|| sys::CTimer::GreaterThan(base, timeWillExecute))
+			{
+				// タスクがキャンセルされた or 時間を過ぎた
 
-                        if (task->IsDeleteSelf()) {
-                            CTask::DeleteTask(task);
-                            task = IZ_NULL;
-                        }
-                    }
-                    else {
-                        task->ResetState();
+				// 経過時間を計算
+				IZ_FLOAT elapsed = sys::CTimer::ComputeTime(
+					task->GetPrev(),
+					cur);
 
-                        IZ_FLOAT interval = task->GetInterval();
+				if (type == CTimerTask::TYPE_DELAY) {
+					// 時間経過で処理.
 
-                        task->SetTime(sys::CTimer::Add(cur, interval));
-                        task->SetPrev(cur);
+					// １回のみの処理なのでリストから抜く.
+					item->Leave();
 
-                        task->SetElapsed(elapsed - interval);
-                    }
-                }
-            }
+					task->SetTimeForRun(elapsed);
+					task->Run(IZ_NULL);
 
-            item = next;
-        }
-    }
+					if (task->IsDeleteSelf()) {
+						CTask::DeleteTask(task);
+						task = IZ_NULL;
+					}
+				}
+				else {
+					// 一定間隔で処理.
+					task->SetTimeForRun(elapsed);
+					task->Run(IZ_NULL);
 
-    void CTimerTaskExecuter::Clear()
-    {
-        // 後始末
-        ListItem* item = m_TaskList.GetTop();
-        while (item != IZ_NULL) {
-            CTimerTask* task = item->GetData();
-            item = item->GetNext();
+					if (task->IsCanceled()) {
+						// キャンセルされているときはリストから抜く.
+						item->Leave();
 
-            task->Cancel();
-            task->Run(IZ_NULL);
+						if (task->IsDeleteSelf()) {
+							CTask::DeleteTask(task);
+							task = IZ_NULL;
+						}
+					}
+					else {
+						// 次に備える.
+						IZ_FLOAT interval = task->GetInterval();
 
-            if (task->IsDeleteSelf()) {
-                CTask::DeleteTask(task);
-            }
-        }
+						// 次の処理タイミングを設定.
+						task->SetTimeTaskWillExectute(sys::CTimer::Add(cur, interval));
+						task->SetPrev(cur);
 
-        m_TaskList.Clear();
-    }
+						task->SetElapsed(elapsed - interval);
+					}
+				}
+			}
 
-    IZ_UINT CTimerTaskExecuter::GetRegisteredTaskNum()
-    {
-        return m_TaskList.GetItemNum();
-    }
+			item = next;
+		}
+	}
 
-    void CTimerTaskExecuter::Cancel(
-        IZ_BOOL (*funcIsCancel)(CTimerTask* task, void* userData),
-        void* userData)
-    {
-        IZ_ASSERT(funcIsCancel);
+	void CTimerTaskExecuter::Clear()
+	{
+		// 後始末
+		ListItem* item = m_TaskList.GetTop();
 
-        ListItem* item = m_TaskList.GetTop();
-        while (item != IZ_NULL) {
-            ListItem* next = item->GetNext();
-            CTimerTask* task = item->GetData();
+		while (item != IZ_NULL) {
+			CTimerTask* task = item->GetData();
+			item = item->GetNext();
 
-            if ((*funcIsCancel)(task, userData)) {
-                item->Leave();
+			task->Cancel();
+			task->Run(IZ_NULL);
 
-                task->Cancel();
-                task->Run(IZ_NULL);
+			if (task->IsDeleteSelf()) {
+				CTask::DeleteTask(task);
+			}
+		}
 
-                if (task->IsDeleteSelf()) {
-                    CTask::DeleteTask(task);
-                }
-            }
+		m_TaskList.Clear();
+	}
 
-            item = next;
-        }
-    }
+	IZ_UINT CTimerTaskExecuter::GetRegisteredTaskNum()
+	{
+		return m_TaskList.GetItemNum();
+	}
+
+	void CTimerTaskExecuter::Cancel(
+		std::function<IZ_BOOL(CTimerTask*, void*)> funcIsCancel,
+		void* userData)
+	{
+		IZ_ASSERT(funcIsCancel);
+
+		ListItem* item = m_TaskList.GetTop();
+
+		while (item != IZ_NULL) {
+			ListItem* next = item->GetNext();
+			CTimerTask* task = item->GetData();
+
+			if (funcIsCancel(task, userData)) {
+				item->Leave();
+
+				task->Cancel();
+				task->Run(IZ_NULL);
+
+				if (task->IsDeleteSelf()) {
+					CTask::DeleteTask(task);
+				}
+			}
+
+			item = next;
+		}
+	}
 
     ///////////////////////////////////////////////////
 
     CTimerThread::CTimerThread()
     {
         m_WillTerminate = IZ_FALSE;
-        m_Mutex.Open();
-        m_Event.Open();
 
         m_State = CTimerThread::STATE_NONE;
     }
@@ -258,7 +279,7 @@ namespace threadmodel
             m_Event.Wait();
 
             {
-                sys::CGuarder guard(m_Mutex);
+                std::unique_lock<std::mutex> lock(m_Mutex);
 
                 if (m_WillTerminate) {
                     break;
@@ -272,9 +293,6 @@ namespace threadmodel
                 }
             }
         }
-
-        m_Mutex.Close();
-        m_Event.Close();
     }
 
     void CTimerThread::Join()
@@ -297,11 +315,13 @@ namespace threadmodel
     }
 
     IZ_BOOL CTimerThread::PostDelayedTask(
+		IMemoryAllocator* allocator,
         CTimerTask* task, 
         IZ_FLOAT delay, 
         IZ_BOOL willDelete/*= IZ_FALSE*/)
     {
         return PostTaskInternal(
+			allocator,
             task,
             CTimerTask::TYPE_DELAY,
             delay, 
@@ -309,11 +329,13 @@ namespace threadmodel
     }
 
     IZ_BOOL CTimerThread::PostIntervalTask(
+		IMemoryAllocator* allocator,
         CTimerTask* task, 
         IZ_FLOAT interval, 
         IZ_BOOL willDelete/*= IZ_FALSE*/)
     {
         return PostTaskInternal(
+			allocator,
             task, 
             CTimerTask::TYPE_INTERVAL,
             interval,
@@ -321,6 +343,7 @@ namespace threadmodel
     }
 
     IZ_BOOL CTimerThread::PostTaskInternal(
+		IMemoryAllocator* allocator,
         CTimerTask* task, 
         CTimerTask::TYPE type,
         IZ_FLOAT time, 
@@ -335,15 +358,14 @@ namespace threadmodel
         }
 
         if (m_State == STATE_NONE) {
-            VRETURN(Start());
+			VRETURN(Start(allocator));
             m_State = STATE_INITIALIZED;
         }
 
-        m_Mutex.Lock();
         {
+			std::unique_lock<std::mutex> lock(m_Mutex);
             m_TaskExecuter.PostTask(task, type, time, willDelete);
         }
-        m_Mutex.Unlock();
 
         m_Event.Set();
 

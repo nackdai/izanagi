@@ -15,9 +15,11 @@ namespace threadmodel
         friend class CJobWorker;
         friend class CParallel;
 
-    private:
+    public:
         CThreadPool();
-        ~CThreadPool();
+		~CThreadPool();
+
+		NO_COPIABLE(CThreadPool);
 
     private:
         class CThread : public sys::CThread
@@ -31,7 +33,7 @@ namespace threadmodel
             };
 
         public:
-            CThread();
+			CThread(CThreadPool* pool);
             virtual ~CThread();
 
             IZ_DECL_PLACEMENT_NEW();
@@ -39,14 +41,16 @@ namespace threadmodel
         public:
             CStdList<CThread>::Item* GetListItem() { return &m_ListItem; }
 
-            virtual void Run();
+            virtual void Run() final;
 
             void Terminate();
 
             IZ_BOOL IsWaiting();
 
         private:
-            sys::CMutex m_Mutex;
+			CThreadPool* m_Pool;
+
+            std::mutex m_Mutex;
             
             State m_State;
 
@@ -54,44 +58,45 @@ namespace threadmodel
         };
 
     public:
-        static void Init(IMemoryAllocator* allocator);
+        void Init(IMemoryAllocator* allocator);
 
-        static void Init(
+        void Init(
             IMemoryAllocator* allocator,
             IZ_UINT threadNum);
 
-        static void EneueueTask(CTask* task);
+        void EneueueTask(CTask* task);
 
-        static void WaitEmpty();
+        void WaitEmpty();
 
-        static void Terminate();
+        void Terminate();
 
-        static IZ_UINT GetMaxThreadNum();
-
-    private:
-        static CThread* CreateThread();
-
-        static CTask* DequeueTask();
+        IZ_UINT GetMaxThreadNum();
 
     private:
-        static IMemoryAllocator* s_Allocator;
+        CThread* CreateThread();
 
-        static sys::CMutex s_TaskListLocker;
-        static sys::CEvent s_TaskWaiter;
-        static CStdList<CTask> s_TaskList;
+        CTask* DequeueTask();
 
-        static sys::CEvent s_TaskEmptyWaiter;
+    private:
+        IMemoryAllocator* m_Allocator;
 
-        static IZ_UINT s_MaxThreadNum;
-        static CStdList<CThread> s_ThreadList;
+        std::mutex m_TaskListLocker;
+        sys::CEvent m_TaskWaiter;
+        CStdList<CTask> m_TaskList;
+
+        sys::CEvent m_TaskEmptyWaiter;
+
+        IZ_UINT m_MaxThreadNum;
+        CStdList<CThread> m_ThreadList;
 
         enum State {
-            State_Running = 0,
+			State_None = 0,
+            State_Running,
             State_WillTerminate,
             State_Terminated,
         };
 
-        static State s_State;
+        State m_State;
     };
 }   // namespace threadmodel
 }   // namespace izanagi
