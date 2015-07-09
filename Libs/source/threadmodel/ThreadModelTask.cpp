@@ -6,7 +6,7 @@ namespace threadmodel
 {
     void CTask::DeleteTask(CTask* task)
     {
-        delete task;
+		task->~CTask();
         FREE(task->m_Allocator, task);
     }
 
@@ -31,7 +31,7 @@ namespace threadmodel
 		m_condVar.wait(
 			lock,
 			[this]{
-			return (m_State = State_Canceled) || (m_State == State_Finished);
+			return (m_State == State_Canceled) || (m_State == State_Finished);
 		});
     }
 

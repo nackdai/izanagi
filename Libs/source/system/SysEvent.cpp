@@ -26,7 +26,7 @@ namespace sys
 		}
 		m_isSignal = IZ_TRUE;
 
-		m_condVar.notify_one();
+		m_condVar.notify_all();
     }
 
     // シグナル状態になるのを待つ.
