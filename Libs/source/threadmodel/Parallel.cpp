@@ -140,6 +140,7 @@ namespace threadmodel
 				break;
 			}
 			tasks[i]->Wait();
+			CTask::DeleteTask(tasks[i]);
 		}
     }
 
@@ -287,6 +288,7 @@ namespace threadmodel
             }
 
             tasks[i]->Wait();
+			CTask::DeleteTask(tasks[i]);
         }
     }
 }   // namespace threadmodel
