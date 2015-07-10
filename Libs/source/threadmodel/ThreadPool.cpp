@@ -198,7 +198,10 @@ namespace threadmodel
         CStdList<CTask>::Item* item = m_TaskList.GetTop();
 
         if (item == IZ_NULL) {
-            m_TaskWaiter.Reset();
+			if (m_State != State_WillTerminate) {
+				// 終了するので、常にシグナル状態にしておいて、Waitで止まらないようにする
+				m_TaskWaiter.Reset();
+			}
             m_TaskEmptyWaiter.Set();
 
             return IZ_NULL;
