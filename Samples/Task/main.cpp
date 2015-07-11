@@ -44,18 +44,21 @@ IzMain(0, 0)
     tasks[2].SetRange(50,  75);
     tasks[3].SetRange(75, 100);
 
-#if 0
+#if 1
     // Sample 1
     // Simple Sample
     {
-        izanagi::threadmodel::CThreadPool::Init(&allocator, 4);
+		IZ_PRINTF("Sample 1 *****\n");
+
+		izanagi::threadmodel::CThreadPool threadPool;
+		threadPool.Init(&allocator, 4);
 
         for (IZ_UINT i = 0; i < COUNTOF(Data); i++) {
             Data[i] = i;
         }
 
         for (IZ_UINT i = 0; i < COUNTOF(tasks); i++) {
-            izanagi::threadmodel::CThreadPool::EneueueTask(&tasks[i]);
+			threadPool.EneueueTask(&tasks[i]);
         }
 
         for (IZ_UINT i = 0; i < COUNTOF(tasks); i++) {
@@ -68,19 +71,25 @@ IzMain(0, 0)
                 IZ_ASSERT(IZ_FALSE);
             }
         }
+
+		threadPool.Terminate();
     }
-#elif 0
+#endif
+
     // Sample 2
     // Only one thread.
     {
-        izanagi::threadmodel::CThreadPool::Init(&allocator, 1);
+		IZ_PRINTF("Sample 2 *****\n");
+
+		izanagi::threadmodel::CThreadPool threadPool;
+		threadPool.Init(&allocator, 1);
 
         for (IZ_UINT i = 0; i < COUNTOF(Data); i++) {
             Data[i] = i;
         }
 
         for (IZ_UINT i = 0; i < COUNTOF(tasks); i++) {
-            izanagi::threadmodel::CThreadPool::EneueueTask(&tasks[i]);
+			threadPool.EneueueTask(&tasks[i]);
         }
 
         for (IZ_UINT i = 0; i < COUNTOF(tasks); i++) {
@@ -93,22 +102,25 @@ IzMain(0, 0)
                 IZ_ASSERT(IZ_FALSE);
             }
         }
+
+		threadPool.Terminate();
     }
-#elif 1
+
     // Sample 3
     // Cancel task.
     {
-        izanagi::threadmodel::CThreadPool::Init(&allocator, 4);
+		izanagi::threadmodel::CThreadPool threadPool;
+		threadPool.Init(&allocator, 4);
 
         for (IZ_UINT i = 0; i < COUNTOF(Data); i++) {
             Data[i] = i;
         }
 
         for (IZ_UINT i = 0; i < COUNTOF(tasks); i++) {
-            izanagi::threadmodel::CThreadPool::EneueueTask(&tasks[i]);
+			threadPool.EneueueTask(&tasks[i]);
         }
 
-        tasks[COUNTOF(tasks) - 1].Cancel();
+		tasks[COUNTOF(tasks) - 1].Cancel();
 
         for (IZ_UINT i = 0; i < COUNTOF(tasks); i++) {
             tasks[i].Wait();
@@ -126,10 +138,9 @@ IzMain(0, 0)
                 IZ_ASSERT(IZ_FALSE);
             }
         }
-    }
-#endif
 
-    izanagi::threadmodel::CThreadPool::Terminate();
+		threadPool.Terminate();
+    }
 
     allocator.Dump();
 
