@@ -103,15 +103,17 @@ namespace threadmodel
         }
     }
 
-    void CThreadPool::EneueueTask(CTask* task)
+	IZ_BOOL CThreadPool::EneueueTask(CTask* task)
     {
+		VRETURN(task->Reset());
+
         {
             std::unique_lock<std::mutex> lock(m_TaskListLocker);
 
             if (m_State == State_WillTerminate
                 || m_State == State_Terminated)
             {
-                return;
+                return FALSE;
             }
 
             m_TaskList.AddTail(task->GetListItem());
@@ -119,6 +121,8 @@ namespace threadmodel
 
         // Notify a task is queued.
         m_TaskWaiter.Set();
+
+		return IZ_TRUE;
     }
 
     void CThreadPool::WaitEmpty()

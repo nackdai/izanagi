@@ -64,7 +64,7 @@ namespace threadmodel
             IMemoryAllocator* allocator,
             IZ_UINT threadNum);
 
-        void EneueueTask(CTask* task);
+        IZ_BOOL EneueueTask(CTask* task);
 
         void WaitEmpty();
 

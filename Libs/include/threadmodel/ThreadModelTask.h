@@ -66,6 +66,9 @@ namespace threadmodel
 		 */
 		IZ_BOOL CanRegister();
 
+	private:
+		IZ_BOOL Reset();
+
     protected:
         /** タスク実行.
          */

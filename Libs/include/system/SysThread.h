@@ -42,19 +42,19 @@ namespace sys
         NO_COPIABLE(CThread);
 
     public:
-		void Init(
+		virtual void Init(
 			const ThreadName& name,
 			std::function<void(void*)> func,
 			void* userData);
 
-		void Init(
+		virtual void Init(
 			std::function<void(void*)> func,
 			void* userData);
 
     public:
         /** このスレッドの実行を開始.
          */
-        IZ_BOOL Start(IMemoryAllocator* allocator);
+        virtual IZ_BOOL Start(IMemoryAllocator* allocator);
 
         /** スレッド実行中かどうかを取得.
          */

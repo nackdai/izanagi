@@ -75,6 +75,21 @@ namespace threadmodel
 		return (m_State == State_Finished) || (m_State == State_Init);
 	}
 
+	IZ_BOOL CTask::Reset()
+	{
+		std::unique_lock<std::mutex> lock(m_mutex);
+
+		if ((m_State == State_Finished) || (m_State == State_Init)) {
+			m_State = State_Init;
+			return IZ_TRUE;
+		}
+		else if (m_State == State_WillCancel) {
+			return IZ_TRUE;
+		}
+
+		return IZ_FALSE;
+	}
+
     void CTask::Run(void* userData)
     {
 		std::unique_lock<std::mutex> lock(m_mutex);
