@@ -1,11 +1,10 @@
 #if !defined(__IZANAGI_SCENEGRAPH_UTIL_H__)
 #define __IZANAGI_SCENEGRAPH_UTIL_H__
 
+#include <vector>
 #include "izMath.h"
 #include "graph/GraphDefs.h"
 #include "Camera.h"
-
-#include <vector>
 
 namespace izanagi {
     /**
