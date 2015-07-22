@@ -143,9 +143,6 @@
       <Filter>include\allocator</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\izStd.h" />
-    <ClInclude Include="..\..\include\std\collection\StdRecycleArray.h">
-      <Filter>include\collection</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\std\collection\StdSet.h">
       <Filter>include\collection</Filter>
     </ClInclude>
@@ -190,6 +187,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\std\StdBitStream.h">
       <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\std\collection\StdArray.h">
+      <Filter>include\collection</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

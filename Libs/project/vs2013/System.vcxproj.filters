@@ -51,9 +51,6 @@
       <Filter>include\thread</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\izSystem.h" />
-    <ClInclude Include="..\..\include\system\SysInterlocked.h">
-      <Filter>include\thread</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\system\Pad.h">
       <Filter>include\device</Filter>
     </ClInclude>
@@ -112,9 +109,6 @@
       <Filter>include\thread</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\system\SysThread.h">
-      <Filter>include\thread</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\system\SysThreadDefs.h">
       <Filter>include\thread</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\system\SysSpinLock.h">

@@ -43,10 +43,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\include\network\IPv4Endpoint.h" />
     <ClInclude Include="..\..\include\network\Network.h" />
+    <ClInclude Include="..\..\include\network\NetworkDefs.h" />
+    <ClInclude Include="..\..\include\network\NetworkPacket.h" />
     <ClInclude Include="..\..\include\network\NetworkTCP.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\source\network\IPv4Endpoint.cpp" />
     <ClCompile Include="..\..\source\network\Network.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</ExcludedFromBuild>

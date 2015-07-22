@@ -12,8 +12,11 @@ namespace sys
 	class CSpinLock {
 	public:
 		CSpinLock()
-			: m_lock(ATOMIC_FLAG_INIT)
-		{}
+			//: m_lock(ATOMIC_FLAG_INIT)
+		{
+			// TODO
+			m_lock.clear();
+		}
 
 		~CSpinLock() {}
 
@@ -34,6 +37,17 @@ namespace sys
 
 	private:
 		std::atomic_flag m_lock;
+	};
+
+	class Lock {
+	public:
+		Lock(CSpinLock& lock) : m_lock(lock) { m_lock.lock();  }
+		~Lock() { m_lock.unlock(); }
+
+		NO_COPIABLE(Lock);
+
+	private:
+		CSpinLock& m_lock;
 	};
 }   // namespace sys
 }   // namespace izanagi

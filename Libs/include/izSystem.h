@@ -8,6 +8,7 @@
 // Thread
 #include "system/SysSemaphore.h"
 #include "system/SysEvent.h"
+#include "system/SysSpinLock.h"
 #include "system/SysThread.h"
 
 // Device

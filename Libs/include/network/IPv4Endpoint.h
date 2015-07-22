@@ -1,23 +1,10 @@
-#if !defined(_IZANAGI_NETWORK_NETWORK_H__)
-#define _IZANAGI_NETWORK_NETWORK_H__
+#if !defined(_IZANAGI_NETWORK_IP_V4_ENDPOINT_H__)
+#define _IZANAGI_NETWORK_IP_V4_ENDPOINT_H__
 
 #include "izDefs.h"
 
 namespace izanagi {
 namespace net {
-	class Network {
-	private:
-		Network();
-		~Network();
-
-	public:
-		static void begin();
-		static void end();
-
-	private:
-		static IZ_UINT32 s_refCnt;
-	};
-
 	/**
 	 */
 	class IPv4Address {
@@ -34,20 +21,21 @@ namespace net {
 		const IPv4Address& operator=(const IPv4Address& rhs);
 
 	public:
+		void set(IZ_UINT8 a, IZ_UINT8 b, IZ_UINT8 c, IZ_UINT8 d);
+		void set(IZ_UINT32 ip);
+		void set(const IZ_CHAR* ip);
+
 		IZ_UINT32 getValue() const;
 
-		const IZ_CHAR* toString() const;
+		void toString(IZ_CHAR* ret, IZ_UINT size) const;
 
 		IZ_BOOL operator==(const IPv4Address& rhs);
 
+		IZ_BOOL isAny() const;
+
 	private:
 		union {
-			struct {
-				IZ_UINT8 a;
-				IZ_UINT8 b;
-				IZ_UINT8 c;
-				IZ_UINT8 d;
-			};
+			IZ_UINT8 p[4];
 			IZ_UINT32 value;
 		} m_ip;
 	};
@@ -58,7 +46,7 @@ namespace net {
 	public:
 		IPv4Endpoint();
 		IPv4Endpoint(
-			const IPv4Address& ip,
+			const IPv4Address& address,
 			IZ_UINT port);
 
 		~IPv4Endpoint();
@@ -69,10 +57,12 @@ namespace net {
 
 	public:
 		void set(
-			const IPv4Address& ip,
+			const IPv4Address& address,
 			IZ_UINT port);
 
-		const IPv4Endpoint& getAddress();
+		void set(const sockaddr_in& addr);
+
+		const IPv4Address& getAddress() const;
 
 		IZ_UINT getPort() const;
 
@@ -85,4 +75,4 @@ namespace net {
 }	// namespace net
 }	// namespace izanagi
 
-#endif	// #if !defined(_IZANAGI_NETWORK_NETWORK_H__)
+#endif	// #if !defined(_IZANAGI_NETWORK_IP_V4_ENDPOINT_H__)

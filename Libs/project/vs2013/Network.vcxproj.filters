@@ -18,6 +18,15 @@
     <ClInclude Include="..\..\include\network\Network.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\network\IPv4Endpoint.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\network\NetworkDefs.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\network\NetworkPacket.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\network\Network.cpp">
@@ -27,6 +36,9 @@
       <Filter>source\windows</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\network\NetworkTCP.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\network\IPv4Endpoint.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
