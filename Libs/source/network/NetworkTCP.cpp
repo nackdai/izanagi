@@ -4,10 +4,8 @@
 // NOTE
 // http://www.jenkinssoftware.com/raknet/manual/systemoverview.html
 
-
 namespace izanagi {
 namespace net {
-
 	TcpClient* TcpClient::create(IMemoryAllocator* allocator)
 	{
 		void* buf = ALLOC(allocator, sizeof(TcpClient));
@@ -45,24 +43,24 @@ namespace net {
 		return (m_socket != IZ_INVALID_SOCKET);
 	}
 
-	IZ_INT TcpClient::send(const void* data, IZ_UINT size)
+	IZ_INT TcpClient::sendData(const void* data, IZ_UINT size)
 	{
 		VRETURN_VAL(isValidSocket(m_socket), 0);
-		IZ_INT ret = ::send(m_socket, (const char*)data, size, 0);
+		IZ_INT ret = send(m_socket, (const char*)data, size, 0);
 		return ret;
 	}
 
-	IZ_INT TcpClient::recieve(void* data, IZ_UINT size)
+	IZ_INT TcpClient::recieveData(void* data, IZ_UINT size)
 	{
 		VRETURN_VAL(isValidSocket(m_socket), 0);
-		IZ_INT ret = ::recv(m_socket, (char*)data, size, 0);
+		IZ_INT ret = recv(m_socket, (char*)data, size, 0);
 		return ret;
 	}
 
 	void TcpClient::close()
 	{
 		if (isValidSocket(m_socket)) {
-			::closesocket(m_socket);
+			closesocket(m_socket);
 			m_socket = IZ_INVALID_SOCKET;
 		}
 	}
@@ -110,7 +108,7 @@ namespace net {
 		IZ_BOOL result = IZ_FALSE;
 
 		// ソケットの生成
-		m_socket = ::socket(
+		m_socket = socket(
 			AF_INET,        // アドレスファミリ
 			SOCK_STREAM,    // ソケットタイプ
 			0);             // プロトコル
@@ -138,11 +136,11 @@ namespace net {
 		}
 
 		// ソケットにアドレスを結びつける
-		result = (::bind(m_socket, (const sockaddr*)&inAddr, sizeof(inAddr)) > 0);
+		result = (bind(m_socket, (const sockaddr*)&inAddr, sizeof(inAddr)) > 0);
 		VGOTO(result, __EXIT__);
 
 		// コネクト要求をいくつまで待つかを設定
-		result = ::listen(m_socket, maxConnections);
+		result = listen(m_socket, maxConnections);
 		VGOTO(result, __EXIT__);
 
 		result = m_clients.init(m_allocator, maxConnections);
@@ -164,7 +162,7 @@ namespace net {
 			IZ_ASSERT(IZ_FALSE);
 
 			if (isValidSocket(m_socket)) {
-				::closesocket(m_socket);
+				closesocket(m_socket);
 			}
 
 			m_clients.clear();
@@ -179,8 +177,8 @@ namespace net {
 		m_thread.Join();
 
 		if (isValidSocket(m_socket)) {
-			::shutdown(m_socket, SD_BOTH);
-			::closesocket(m_socket);
+			shutdown(m_socket, SD_BOTH);
+			closesocket(m_socket);
 			m_socket = IZ_INVALID_SOCKET;
 		}
 
@@ -237,7 +235,7 @@ namespace net {
 				}
 			}
 
-			auto resSelect = ::select(
+			auto resSelect = select(
 				FD_SETSIZE,
 				&readFD,
 				&writeFD,
@@ -254,7 +252,7 @@ namespace net {
 				IZ_INT len = sizeof(addr);
 
 				// クライアントからの接続待ち
-				auto socket = ::accept(m_socket, paddr, &len);
+				auto socket = accept(m_socket, paddr, &len);
 
 				if (!isValidSocket(socket)) {
 					continue;
@@ -288,13 +286,13 @@ namespace net {
 					if (FD_ISSET(c.m_socket, &readFD)) {
 						sys::Lock lock(c);
 
-						auto len = c.recieve(recvBuf, size);
+						auto len = c.recieveData(recvBuf, size);
 
 						if (len > 0) {
 							auto packet = Packet::create(m_allocator);
 							packet->endpoint.set(c.m_address);
 							packet->size = len;
-							packet->data = ALLOC(m_allocator, len + 1);
+							packet->data = (IZ_CHAR*)ALLOC(m_allocator, len + 1);
 							memcpy(packet->data, recvBuf, len);
 							packet->data[len] = 0;
 						}

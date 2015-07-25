@@ -3,7 +3,7 @@
 
 #include "izDefs.h"
 #include "izSystem.h"
-#include "NetworkDefs.h"
+#include "network/NetworkDefs.h"
 #include "network/NetworkPacket.h"
 
 namespace izanagi {
@@ -13,6 +13,7 @@ namespace net {
 	// 
 	class TcpClient : public CPlacementNew, sys::CSpinLock {
 		friend class Tcp;
+		friend class CArray < TcpClient >;
 
 	private:
 		static TcpClient* create(IMemoryAllocator* allocator);
@@ -32,9 +33,9 @@ namespace net {
 
 		IZ_BOOL isActive();
 
-		IZ_INT send(const void* data, IZ_UINT size);
+		IZ_INT sendData(const void* data, IZ_UINT size);
 
-		IZ_INT recieve(void* data, IZ_UINT size);
+		IZ_INT recieveData(void* data, IZ_UINT size);
 
 		void close();
 

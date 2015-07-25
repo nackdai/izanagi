@@ -2,6 +2,7 @@
 #define _IZANAGI_NETWORK_IP_V4_ENDPOINT_H__
 
 #include "izDefs.h"
+#include "network/NetworkDefs.h"
 
 namespace izanagi {
 namespace net {

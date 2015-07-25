@@ -48,7 +48,7 @@ namespace izanagi {
 			m_data = (_T**)buf;
 			buf += num * sizeof(_T*);
 
-			for (auto i = 0; i < num; i++) {
+			for (IZ_UINT i = 0; i < num; i++) {
 				_T* p = new(buf)_T;
 				m_data[i] = p;
 
@@ -63,7 +63,7 @@ namespace izanagi {
 
         void clear()
         {
-			for (auto i = 0; i < m_num; i++) {
+			for (IZ_UINT i = 0; i < m_num; i++) {
 				delete m_data[i];
 			}
 
@@ -92,7 +92,7 @@ namespace izanagi {
 
 		void traverse(std::function<void(_T&)> func)
 		{
-			for (auto i = 0; i < m_num; i++) {
+			for (IZ_UINT i = 0; i < m_num; i++) {
 				func(*m_data[i]);
 			}
 		}

@@ -2,6 +2,7 @@
 #define __IZANAGI_DEFS_H__
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdarg.h>
 #include <memory.h>
 #include <assert.h>

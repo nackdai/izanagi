@@ -13,7 +13,7 @@ namespace net {
 		IPv4Endpoint endpoint;
 
 		IZ_UINT size;
-		void* data;
+		IZ_CHAR* data;
 	};
 }	// namespace net
 }	// namespace izanagi

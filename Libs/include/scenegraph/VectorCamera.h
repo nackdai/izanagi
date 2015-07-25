@@ -51,6 +51,8 @@ namespace izanagi {
             const math::SVector4& axis,
             IZ_FLOAT rad);
 
+		void Rotate(const math::SQuat& quat);
+
         /** 位置指定.
          */
         void SetPos(const math::SVector4& pos);

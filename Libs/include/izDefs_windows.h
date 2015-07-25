@@ -8,6 +8,11 @@
 #endif  // #ifndef WINDOWS
 
 #ifdef WINDOWS
+	// NOTE
+	// redefinition errors in WinSock2.h
+	// http://stackoverflow.com/questions/5971332/redefinition-errors-in-winsock2-h
+
+	#define WIN32_LEAN_AND_MEAN
     #include <windows.h>
 
     #ifdef _WINDLL

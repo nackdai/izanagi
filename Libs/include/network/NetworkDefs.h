@@ -3,14 +3,12 @@
 
 #include "izDefs.h"
 
-#ifdef WINDOWS
-	#include <WinSock2.h>
-#endif
-
 namespace izanagi {
 namespace net {
 
 #ifdef WINDOWS
+	#include <WinSock2.h>
+
 	typedef SOCKET IZ_SOCKET;
 
 	#define IZ_INVALID_SOCKET	INVALID_SOCKET

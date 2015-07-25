@@ -12,9 +12,7 @@ namespace sys
 	class CSpinLock {
 	public:
 		CSpinLock()
-			//: m_lock(ATOMIC_FLAG_INIT)
 		{
-			// TODO
 			m_lock.clear();
 		}
 
