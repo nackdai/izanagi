@@ -9,6 +9,8 @@ namespace net {
 	/**
 	 */
 	class IPv4Address {
+		friend class IPv4Endpoint;
+
 	public:
 		IPv4Address();
 		IPv4Address(IZ_UINT8 a, IZ_UINT8 b, IZ_UINT8 c, IZ_UINT8 d);

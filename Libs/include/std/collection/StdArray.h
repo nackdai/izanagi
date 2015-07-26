@@ -82,7 +82,9 @@ namespace izanagi {
 		{
 			IZ_ASSERT(idx < m_num);
 
-			return *m_data[m_num];
+			_T* ret = m_data[idx];
+
+			return *ret;
 		}
 
 		IZ_UINT getNum() const

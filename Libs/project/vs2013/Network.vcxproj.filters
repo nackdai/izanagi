@@ -27,6 +27,7 @@
     <ClInclude Include="..\..\include\network\NetworkPacket.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\izNetwork.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\network\Network.cpp">

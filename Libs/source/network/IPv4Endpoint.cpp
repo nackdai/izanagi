@@ -135,8 +135,16 @@ namespace net {
 
 	void IPv4Endpoint::set(const sockaddr_in& addr)
 	{
-		// TODO
-		IZ_ASSERT(IZ_FALSE);
+		m_port = ntohs(addr.sin_port);
+		
+		auto ip = addr.sin_addr.S_un.S_addr;
+		IZ_ASSERT(sizeof(ip) == 4 * sizeof(IZ_CHAR));
+
+		IZ_CHAR* iptbl = (IZ_CHAR*)&ip;
+
+		for (IZ_INT i = 3; i >= 0; i--) {
+			m_address.m_ip.p[3 - i] = iptbl[i];
+		}
 	}
 
 	const IPv4Address& IPv4Endpoint::getAddress() const

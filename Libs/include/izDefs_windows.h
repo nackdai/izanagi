@@ -43,6 +43,7 @@ inline void _OutputDebugString(const char* format, ...)
     va_end(argp);
 
     ::OutputDebugString(buf);
+	printf("%s", buf);
 }
 
 #ifdef __IZ_DEBUG__

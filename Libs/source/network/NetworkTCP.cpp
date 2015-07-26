@@ -67,6 +67,37 @@ namespace net {
 
 	///////////////////////////////////////////////////////////
 
+	Tcp::Packet* Tcp::Packet::create(IMemoryAllocator* allocator, IZ_UINT len)
+	{
+		// 最後に０を入れるため１多くする
+		auto alignedLen = len + 1;
+
+		// TODO
+		// ４バイトアラインしておく
+		auto rest = alignedLen & 0x03;
+		if (rest > 0) {
+			rest = 4 - rest;
+			alignedLen += rest;
+		}
+
+		size_t size = sizeof(Packet) + alignedLen;
+
+		IZ_CHAR* buf = (IZ_CHAR*)ALLOC(allocator, size);
+		IZ_ASSERT(buf != nullptr);
+
+		Packet* p = new(buf)Packet;
+		buf += sizeof(Packet);
+
+		p->data = buf;
+
+		p->size = len;
+		p->data[len] = 0;
+
+		return p;
+	}
+
+	///////////////////////////////////////////////////////////
+
 	Tcp::Tcp()
 	{
 		m_allocator = nullptr;
@@ -83,7 +114,7 @@ namespace net {
 
 	IZ_BOOL Tcp::start(
 		IMemoryAllocator* allocator,
-		IPv4Endpoint endpoint,
+		const IPv4Endpoint& endpoint,
 		IZ_UINT maxConnections)
 	{
 		if (m_isRunnning.load()) {
@@ -102,7 +133,7 @@ namespace net {
 	}
 
 	IZ_BOOL Tcp::startAsServer(
-		IPv4Endpoint endpoint,
+		const IPv4Endpoint& endpoint,
 		IZ_UINT maxConnections)
 	{
 		IZ_BOOL result = IZ_FALSE;
@@ -125,7 +156,7 @@ namespace net {
 			auto address = endpoint.getAddress();
 
 			if (address.isAny()) {
-				inAddr.sin_addr.S_un.S_addr = INADDR_ANY;
+				inAddr.sin_addr.S_un.S_addr = htonl(INADDR_ANY);
 			}
 			else {
 				IZ_CHAR ip[64];
@@ -136,11 +167,11 @@ namespace net {
 		}
 
 		// ソケットにアドレスを結びつける
-		result = (bind(m_socket, (const sockaddr*)&inAddr, sizeof(inAddr)) > 0);
+		result = (bind(m_socket, (const sockaddr*)&inAddr, sizeof(inAddr)) >= 0);
 		VGOTO(result, __EXIT__);
 
 		// コネクト要求をいくつまで待つかを設定
-		result = listen(m_socket, maxConnections);
+		result = (listen(m_socket, maxConnections) >= 0);
 		VGOTO(result, __EXIT__);
 
 		result = m_clients.init(m_allocator, maxConnections);
@@ -148,14 +179,14 @@ namespace net {
 
 		m_isRunnning.store(IZ_TRUE);
 
-		result = m_thread.Start(m_allocator);
-		VGOTO(result, __EXIT__);
-
 		m_thread.Init(
 			[this](void* data) {
 			loop();
 		},
 			nullptr);
+
+		result = m_thread.Start(m_allocator);
+		VGOTO(result, __EXIT__);
 
 	__EXIT__:
 		if (!result) {
@@ -186,6 +217,31 @@ namespace net {
 			[this] (TcpClient& client) {
 			client.close();
 		});
+
+		m_clients.clear();
+	}
+
+	IZ_BOOL Tcp::recieve(std::function<void(const net::Packet&)> func)
+	{
+		Packet* src = nullptr;
+
+		{
+			std::unique_lock<std::mutex> lock(m_recvDataLocker);
+
+			auto item = m_recvData.GetTop();
+			if (item == IZ_NULL) {
+				return IZ_FALSE;
+			}
+
+			item->Leave();
+			src = item->GetData();
+		}
+
+		func(*src);
+
+		FREE(m_allocator, src);
+
+		return IZ_TRUE;
 	}
 
 	// NOTE
@@ -204,6 +260,9 @@ namespace net {
 			IZ_ASSERT(IZ_FALSE);
 			return;
 		}
+
+		// TODO
+		timeval t_val = { 0, 1000 };
 
 		fd_set readFD;
 		fd_set exceptionFD;
@@ -226,7 +285,7 @@ namespace net {
 
 				sys::Lock lock(c);
 
-				if (!c.isActive()) {
+				if (c.isActive()) {
 					FD_SET(c.m_socket, &readFD);
 					FD_SET(c.m_socket, &exceptionFD);
 
@@ -235,12 +294,14 @@ namespace net {
 				}
 			}
 
+			// ファイルディスクリプタ（ソケット）の状態遷移待ち
 			auto resSelect = select(
-				FD_SETSIZE,
+				//FD_SETSIZE,
+				0,
 				&readFD,
-				&writeFD,
+				NULL,
 				&exceptionFD,
-				nullptr);
+				&t_val);
 
 			if (resSelect <= 0) {
 				continue;
@@ -257,6 +318,8 @@ namespace net {
 				if (!isValidSocket(socket)) {
 					continue;
 				}
+
+				IZ_PRINTF("accept\n");
 
 				for (IZ_UINT i = 0; i < m_clients.getNum(); i++) {
 					TcpClient& c = m_clients.at(i);
@@ -289,12 +352,12 @@ namespace net {
 						auto len = c.recieveData(recvBuf, size);
 
 						if (len > 0) {
-							auto packet = Packet::create(m_allocator);
+							auto packet = Packet::create(m_allocator, len);
 							packet->endpoint.set(c.m_address);
-							packet->size = len;
-							packet->data = (IZ_CHAR*)ALLOC(m_allocator, len + 1);
 							memcpy(packet->data, recvBuf, len);
-							packet->data[len] = 0;
+
+							std::unique_lock<std::mutex> lock(m_recvDataLocker);
+							m_recvData.AddTail(&packet->listItem);
 						}
 						else {
 							// 切断された

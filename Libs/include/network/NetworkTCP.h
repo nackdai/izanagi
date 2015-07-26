@@ -8,8 +8,6 @@
 
 namespace izanagi {
 namespace net {
-	class IPv4Endpoint;
-
 	// 
 	class TcpClient : public CPlacementNew, sys::CSpinLock {
 		friend class Tcp;
@@ -56,14 +54,16 @@ namespace net {
 	public:
 		IZ_BOOL start(
 			IMemoryAllocator* allocator,
-			IPv4Endpoint endpoint,
+			const IPv4Endpoint& endpoint,
 			IZ_UINT maxConnections);
 
 		void stop();
 
+		IZ_BOOL recieve(std::function<void(const net::Packet&)> func);
+
 	private:
 		IZ_BOOL startAsServer(
-			IPv4Endpoint endpoint,
+			const IPv4Endpoint& endpoint,
 			IZ_UINT maxConnections);
 
 		void loop();
@@ -71,13 +71,7 @@ namespace net {
 	private:
 		class Packet : public net::Packet, CPlacementNew {
 		public:
-			static Packet* create(IMemoryAllocator* allocator)
-			{
-				void* buf = ALLOC(allocator, sizeof(Packet));
-				IZ_ASSERT(buf != nullptr);
-				Packet* p = new(buf)Packet;
-				return p;
-			}
+			static Packet* create(IMemoryAllocator* allocator, IZ_UINT len);
 
 			Packet()
 			{
@@ -95,6 +89,7 @@ namespace net {
 
 		CArray<TcpClient> m_clients;
 
+		std::mutex m_recvDataLocker;
 		CStdList<Packet> m_recvData;
 
 		std::atomic<IZ_BOOL> m_isRunnning;

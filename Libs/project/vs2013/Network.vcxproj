@@ -43,6 +43,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\include\izNetwork.h" />
     <ClInclude Include="..\..\include\network\IPv4Endpoint.h" />
     <ClInclude Include="..\..\include\network\Network.h" />
     <ClInclude Include="..\..\include\network\NetworkDefs.h" />
@@ -177,6 +178,9 @@
       </PrecompiledHeader>
     </ClCompile>
     <PostBuildEvent />
+    <Lib>
+      <AdditionalDependencies>WS2_32.lib</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|x64'">
     <ClCompile>
@@ -187,6 +191,9 @@
       </PrecompiledHeader>
     </ClCompile>
     <PostBuildEvent />
+    <Lib>
+      <AdditionalDependencies>WS2_32.lib</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">
     <ClCompile>
@@ -197,6 +204,9 @@
       </PrecompiledHeader>
     </ClCompile>
     <PostBuildEvent />
+    <Lib>
+      <AdditionalDependencies>WS2_32.lib</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|x64'">
     <ClCompile>
@@ -207,6 +217,9 @@
       </PrecompiledHeader>
     </ClCompile>
     <PostBuildEvent />
+    <Lib>
+      <AdditionalDependencies>WS2_32.lib</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">
     <ClCompile>
@@ -217,6 +230,9 @@
       </PrecompiledHeader>
     </ClCompile>
     <PostBuildEvent />
+    <Lib>
+      <AdditionalDependencies>WS2_32.lib</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'">
     <ClCompile>
@@ -227,6 +243,9 @@
       </PrecompiledHeader>
     </ClCompile>
     <PostBuildEvent />
+    <Lib>
+      <AdditionalDependencies>WS2_32.lib</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">
     <ClCompile>
@@ -237,6 +256,9 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <PostBuildEvent />
+    <Lib>
+      <AdditionalDependencies>WS2_32.lib</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">
     <ClCompile>
@@ -247,6 +269,9 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <PostBuildEvent />
+    <Lib>
+      <AdditionalDependencies>WS2_32.lib</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">
     <ClCompile>
@@ -257,6 +282,9 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <PostBuildEvent />
+    <Lib>
+      <AdditionalDependencies>WS2_32.lib</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|x64'">
     <ClCompile>
@@ -267,6 +295,9 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <PostBuildEvent />
+    <Lib>
+      <AdditionalDependencies>WS2_32.lib</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
