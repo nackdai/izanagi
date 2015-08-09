@@ -27,7 +27,7 @@ namespace izanagi {
 
         /** カメラ更新.
          */
-        virtual void Update();
+        virtual void Update() override;
 
         /** 移動.
          */

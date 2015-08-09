@@ -101,6 +101,67 @@ void CCamera::GetOffsetV2C(
     mtxV2C.m[2][2] *= (1.0f + epsilon);
 }
 
+// 更新済みかどうか.
+IZ_BOOL CCamera::IsUpdated() const
+{
+    return (!m_IsDirtyW2V && !m_IsDirtyV2C);
+}
+
+// カメラパラメータを取得.
+const SCameraParam& CCamera::GetParam() const
+{
+    return m_Param;
+}
+
+// 視点をセット.
+void CCamera::SetPos(const math::SVector4& vecPos)
+{
+    math::SVector4::Copy(m_Param.pos, vecPos);
+    m_IsDirtyW2V = IZ_TRUE;
+}
+
+// 注視点をセット.
+void CCamera::SetAt(const math::SVector4& vecAt)
+{
+    math::SVector4::Copy(m_Param.ref, vecAt);
+    m_IsDirtyW2V = IZ_TRUE;
+}
+
+// 上方向ベクトルをセット.
+void CCamera::SetUp(const math::SVector4& vecUp)
+{
+    math::SVector4::Copy(m_Param.up, vecUp);
+    m_IsDirtyW2V = IZ_TRUE;
+}
+
+// カメラのnear値をセット.
+void CCamera::SetNear(IZ_FLOAT fNear)
+{
+    m_Param.cameraNear = fNear;
+    m_IsDirtyV2C = IZ_TRUE;
+}
+
+// カメラのfar値をセット.
+void CCamera::SetFar(IZ_FLOAT fFar)
+{
+    m_Param.cameraFar = fFar;
+    m_IsDirtyV2C = IZ_TRUE;
+}
+
+// カメラの画角をセット.
+void CCamera::SetFOV(IZ_FLOAT fFOV)
+{
+    m_Param.fov = fFOV;
+    m_IsDirtyV2C = IZ_TRUE;
+}
+
+// カメラのアスペクト比をセット.
+void CCamera::SetAspect(IZ_FLOAT fAspect)
+{
+    m_Param.aspect = fAspect;
+    m_IsDirtyV2C = IZ_TRUE;
+}
+
 math::SVector4 CCamera::GetDir()
 {
     math::SVector4 ret;

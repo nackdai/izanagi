@@ -153,16 +153,21 @@ void CVectorCamera::Rotate(
     math::SQuat quat;
     math::SQuat::SetQuatFromRadAxis(quat, rad, axis);
 
-    math::SMatrix44 mtx;
-    math::SQuat::MatrixFromQuat(mtx, quat);
+	Rotate(quat);
+}
 
-    math::SMatrix44::Apply(m_X, m_X, mtx);
-    math::SMatrix44::Apply(m_Y, m_Y, mtx);
-    math::SMatrix44::Apply(m_Z, m_Z, mtx);
-    math::SMatrix44::Apply(m_Pos, m_Pos, mtx);
+void CVectorCamera::Rotate(const math::SQuat& quat)
+{
+	math::SMatrix44 mtx;
+	math::SQuat::MatrixFromQuat(mtx, quat);
 
-    m_IsDirtyW2V = IZ_TRUE;
-    m_NeedUpdateByTransform = IZ_TRUE;
+	math::SMatrix44::Apply(m_X, m_X, mtx);
+	math::SMatrix44::Apply(m_Y, m_Y, mtx);
+	math::SMatrix44::Apply(m_Z, m_Z, mtx);
+	math::SMatrix44::Apply(m_Pos, m_Pos, mtx);
+
+	m_IsDirtyW2V = IZ_TRUE;
+	m_NeedUpdateByTransform = IZ_TRUE;
 }
 
 // 位置指定.

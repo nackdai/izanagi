@@ -57,11 +57,14 @@
     <Filter Include="include\rendergraph">
       <UniqueIdentifier>{538f0d53-1f0c-4a86-b3fd-7b4fde0d1d4c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\camera">
+      <UniqueIdentifier>{b4584fe9-422e-4406-b710-691c63f5908f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\camera">
+      <UniqueIdentifier>{e484cd54-2899-410e-ace8-ed00e2c8c6a5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\source\scenegraph\Camera.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\scenegraph\SceneGraphUtil.cpp">
       <Filter>source</Filter>
     </ClCompile>
@@ -69,9 +72,6 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\scenegraph\SceneState.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\scenegraph\VectorCamera.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\scenegraph\img\izImage.cpp">
@@ -140,11 +140,14 @@
     <ClCompile Include="..\..\source\scenegraph\Decal.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\scenegraph\Camera.cpp">
+      <Filter>source\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\scenegraph\VectorCamera.cpp">
+      <Filter>source\camera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\scenegraph\Camera.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\scenegraph\FixedSceneStateManager.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -161,9 +164,6 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\scenegraph\SceneState.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\scenegraph\VectorCamera.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\scenegraph\img\IMGFormat.h">
@@ -265,6 +265,12 @@
     <ClInclude Include="..\..\include\izSceneGraph.h" />
     <ClInclude Include="..\..\include\scenegraph\Decal.h">
       <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\Camera.h">
+      <Filter>include\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\VectorCamera.h">
+      <Filter>include\camera</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -5,24 +5,24 @@
 #include "izMath.h"
 
 namespace izanagi {
+	/** カメラパラメータ.
+	 */
     struct SCameraParam {
-        IZ_FLOAT cameraNear;
-        IZ_FLOAT cameraFar;
+        IZ_FLOAT cameraNear;    ///< near
+        IZ_FLOAT cameraFar;     ///< far
 
-        // Vertical FOV
-        IZ_FLOAT fov;
+        IZ_FLOAT fov;           ///< 縦画角(Vertical FOV)
 
-        // aspect = width / height
-        IZ_FLOAT aspect;
+        IZ_FLOAT aspect;        ///< アスペクト比(aspect = width / height)
 
-        math::SVector4 pos;      // 視点
-        math::SVector4 ref;      // 注視点
+        math::SVector4 pos;     ///< 視点
+        math::SVector4 ref;     ///< 注視点
 
-        math::SVector4 up;
+        math::SVector4 up;      ///< 上方向ベクトル
 
-        math::SMatrix44 mtxW2V;   // World - View
-        math::SMatrix44 mtxV2C;   // View - Clip
-        math::SMatrix44 mtxW2C;   // World - Clip
+        math::SMatrix44 mtxW2V; ///< World - View
+        math::SMatrix44 mtxV2C; ///< View - Clip
+        math::SMatrix44 mtxW2C; ///< World - Clip
     };
 
     class CCamera {
@@ -37,7 +37,8 @@ namespace izanagi {
         NO_COPIABLE(CCamera);
 
     public:
-        // 初期化
+        /** 初期化.
+		 */
         void Init(
             const math::SVector4& vecPos,
             const math::SVector4& vecRef,
@@ -46,9 +47,12 @@ namespace izanagi {
             IZ_FLOAT fFov,
             IZ_FLOAT fAspect);
 
+		/** 初期化.
+		 */
         void Init(const SCameraParam& sParam);
 
-        // カメラ更新
+        /** カメラ更新.
+		 */
         virtual void Update();
 
         /** カメラ座標系でのオフセットを考慮にいれたV2Cマトリクスを取得.
@@ -65,52 +69,44 @@ namespace izanagi {
             IZ_FLOAT viewZ,
             IZ_FLOAT delta);
 
-        IZ_BOOL IsUpdated() const { return (!m_IsDirtyW2V && !m_IsDirtyV2C); }
+		/** 更新済みかどうか.
+		 */
+        IZ_BOOL IsUpdated() const;
 
-        const SCameraParam& GetParam() const { return m_Param; }
+		/** カメラパラメータを取得.
+		 */
+        const SCameraParam& GetParam() const;
 
-        void SetPos(const math::SVector4& vecPos)
-        {
-            math::SVector4::Copy(m_Param.pos, vecPos);
-            m_IsDirtyW2V = IZ_TRUE;
-        }
+		/** 視点をセット.
+		 */
+        virtual void SetPos(const math::SVector4& vecPos);
 
-        void SetAt(const math::SVector4& vecAt)
-        {
-            math::SVector4::Copy(m_Param.ref, vecAt);
-            m_IsDirtyW2V = IZ_TRUE;
-        }
+		/** 注視点をセット.
+		 */
+        virtual void SetAt(const math::SVector4& vecAt);
 
-        void SetUp(const math::SVector4& vecUp)
-        {
-            math::SVector4::Copy(m_Param.up, vecUp);
-            m_IsDirtyW2V = IZ_TRUE;
-        }
+		/** 上方向ベクトルをセット.
+		 */
+        void SetUp(const math::SVector4& vecUp);
 
-        void SetNear(IZ_FLOAT fNear)
-        {
-            m_Param.cameraNear = fNear;
-            m_IsDirtyV2C = IZ_TRUE;
-        }
+		/** カメラのnear値をセット.
+		 */
+        void SetNear(IZ_FLOAT fNear);
 
-        void SetFar(IZ_FLOAT fFar)
-        {
-            m_Param.cameraFar = fFar;
-            m_IsDirtyV2C = IZ_TRUE;
-        }
+		/** カメラのfar値をセット.
+		 */
+        void SetFar(IZ_FLOAT fFar);
 
-        void SetFOV(IZ_FLOAT fFOV)
-        {
-            m_Param.fov = fFOV;
-            m_IsDirtyV2C = IZ_TRUE;
-        }
+		/** カメラの画角をセット.
+		 */
+        void SetFOV(IZ_FLOAT fFOV);
 
-        void SetAspect(IZ_FLOAT fAspect)
-        {
-            m_Param.aspect = fAspect;
-            m_IsDirtyV2C = IZ_TRUE;
-        }
+		/** カメラのアスペクト比をセット.
+		 */
+        void SetAspect(IZ_FLOAT fAspect);
 
+		/** 視点から注視点への方向ベクトルを取得.
+		 */
         math::SVector4 GetDir();
 
     protected:
