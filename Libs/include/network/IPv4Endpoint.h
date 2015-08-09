@@ -28,6 +28,8 @@ namespace net {
 		void set(IZ_UINT32 ip);
 		void set(const IZ_CHAR* ip);
 
+		IZ_BOOL setHost(const IZ_CHAR* host);
+
 		IZ_UINT32 getValue() const;
 
 		void toString(IZ_CHAR* ret, IZ_UINT size) const;
@@ -46,6 +48,8 @@ namespace net {
 	/**
 	 */
 	class IPv4Endpoint {
+		friend class Tcp;
+
 	public:
 		IPv4Endpoint();
 		IPv4Endpoint(
@@ -63,13 +67,14 @@ namespace net {
 			const IPv4Address& address,
 			IZ_UINT port);
 
-		void set(const sockaddr_in& addr);
-
 		const IPv4Address& getAddress() const;
 
 		IZ_UINT getPort() const;
 
 		IZ_BOOL operator==(const IPv4Endpoint& rhs);
+
+	private:
+		void set(const sockaddr_in& addr);
 
 	private:
 		IPv4Address m_address;

@@ -87,6 +87,15 @@ namespace izanagi {
 			return *ret;
 		}
 
+		const _T& at(IZ_UINT idx) const
+		{
+			IZ_ASSERT(idx < m_num);
+
+			_T* ret = m_data[idx];
+
+			return *ret;
+		}
+
 		IZ_UINT getNum() const
 		{
 			return m_num;

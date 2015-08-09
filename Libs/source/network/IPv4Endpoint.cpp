@@ -69,6 +69,33 @@ namespace net {
 		}
 	}
 
+	IZ_BOOL IPv4Address::setHost(const IZ_CHAR* host)
+	{
+		// NOTE
+		// Use getaddrinfo?
+		// http://d.hatena.ne.jp/takehikom/20071009/1191880360
+
+		auto server = gethostbyname(host);
+		VRETURN(server != IZ_NULL);
+
+		// TODO
+		VRETURN(server->h_length == 4);
+
+		IZ_CHAR* iptbl = (IZ_CHAR*)server->h_addr;
+
+#if 0
+		for (IZ_INT i = 3; i >= 0; i--) {
+			m_ip.p[3 - i] = iptbl[i];
+		}
+#else
+		for (IZ_INT i = 0; i < server->h_length; i++) {
+			m_ip.p[i] = iptbl[i];
+		}
+#endif
+
+		return IZ_TRUE;
+	}
+
 	IZ_UINT32 IPv4Address::getValue() const
 	{
 		return m_ip.value;
@@ -78,7 +105,7 @@ namespace net {
 	{
 		IZ_SPRINTF(
 			ret, size,
-			"%d:%d:%d:%d\0",
+			"%d.%d.%d.%d\0",
 			m_ip.p[0],
 			m_ip.p[1],
 			m_ip.p[2],

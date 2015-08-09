@@ -3,6 +3,9 @@
 
 #include "izDefs.h"
 
+// NOTE
+// http://www.geekpage.jp/programming/winsock/select.php
+
 namespace izanagi {
 namespace net {
 	class Network {
