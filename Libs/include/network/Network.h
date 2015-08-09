@@ -8,19 +8,19 @@
 
 namespace izanagi {
 namespace net {
-	class Network {
-	private:
-		Network();
-		~Network();
+    class Network {
+    private:
+        Network();
+        ~Network();
 
-	public:
-		static void begin();
-		static void end();
+    public:
+        static void begin();
+        static void end();
 
-	private:
-		static IZ_UINT32 s_refCnt;
-	};
-}	// namespace net
-}	// namespace izanagi
+    private:
+        static IZ_UINT32 s_refCnt;
+    };
+}    // namespace net
+}    // namespace izanagi
 
-#endif	// #if !defined(_IZANAGI_NETWORK_NETWORK_H__)
+#endif    // #if !defined(_IZANAGI_NETWORK_NETWORK_H__)

@@ -2,16 +2,16 @@
 
 namespace izanagi {
 namespace net {
-	IZ_UINT32 Network::s_refCnt = 0;
+    IZ_UINT32 Network::s_refCnt = 0;
 
-	void Network::begin()
-	{
-		// Nothing...
-	}
+    void Network::begin()
+    {
+        // Nothing...
+    }
 
-	void Network::end()
-	{
-		// Nothing...
-	}
-}	// namespace net
-}	// namespace izanagi
+    void Network::end()
+    {
+        // Nothing...
+    }
+}    // namespace net
+}    // namespace izanagi
