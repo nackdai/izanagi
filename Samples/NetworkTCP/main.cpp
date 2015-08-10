@@ -10,8 +10,8 @@ void runAsServer(izanagi::IMemoryAllocator* allocator)
 
 	izanagi::net::IPv4Endpoint ep(addr, 30000);
 
-	izanagi::net::Tcp tcp;
-	tcp.startAsServer(allocator, ep, 1);
+	izanagi::net::TcpServer tcp;
+	tcp.start(allocator, ep, 1);
 
 	IZ_BOOL willQuit = IZ_FALSE;
 
@@ -29,6 +29,8 @@ void runAsServer(izanagi::IMemoryAllocator* allocator)
 		tcp.recieve([](const izanagi::net::Packet& packet) {
 			IZ_PRINTF("%s\n", packet.data);
 		});
+
+        izanagi::sys::CThread::Sleep(33);
 	}
 
 	tcp.stop();
@@ -43,8 +45,8 @@ void runAsClient(izanagi::IMemoryAllocator* allocator)
 
 	izanagi::net::IPv4Endpoint ep(addr, 30000);
 
-	izanagi::net::Tcp tcp;
-	tcp.startAsClient(allocator, ep, IZ_FALSE);
+	izanagi::net::TcpClient tcp;
+	tcp.start(allocator, ep, IZ_FALSE);
 
 	static const IZ_CHAR* str = "test";
 
@@ -59,7 +61,7 @@ void runAsClient(izanagi::IMemoryAllocator* allocator)
 
 IzMain(0, 0)
 {
-	IZ_BOOL isServer = IZ_FALSE;
+    IZ_BOOL isServer = IZ_TRUE;
 
 	if (argc > 0 && strcmp(argv[1], "s" ) == 0) {
 		isServer = IZ_TRUE;
