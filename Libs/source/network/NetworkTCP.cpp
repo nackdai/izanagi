@@ -6,6 +6,61 @@
 
 namespace izanagi {
 namespace net {
+    // クライアント.
+    class TcpClient : public CPlacementNew, sys::CSpinLock {
+        friend class Tcp;
+        friend class CArray < TcpClient >;
+
+    private:
+        static TcpClient* create(IMemoryAllocator* allocator);
+
+        static void deteteClient(
+            IMemoryAllocator* allocator,
+            TcpClient* client);
+
+    private:
+        TcpClient();
+        ~TcpClient();
+
+    private:
+        // クライアントと接続しているソケットを割り当てる.
+        void setSocket(IZ_SOCKET socket);
+
+        // クライアントと接続しているソケットを取得.
+        IZ_SOCKET getSocekt();
+
+        // ソケットが有効かどうかを取得.
+        IZ_BOOL isActive() const;
+
+        // データを送信.
+        IZ_INT sendData(const void* data, IZ_UINT size);
+
+        // 登録されているデータを送信.
+        IZ_INT sendData();
+
+        // データを受信.
+        IZ_INT recieveData(void* data, IZ_UINT size);
+
+        // 送信データを登録.
+        IZ_BOOL registerData(
+            IMemoryAllocator* allocator,
+            IZ_UINT num,
+            const void** data, IZ_UINT* size);
+
+        void close();
+
+        void reset();
+
+    private:
+        IZ_SOCKET m_socket;
+        IPv4Endpoint m_endpoint;
+
+        IMemoryAllocator* m_allocator;
+        Packet m_sendPacket;
+
+        IZ_BOOL m_isRegistered;
+    };
+
     TcpClient* TcpClient::create(IMemoryAllocator* allocator)
     {
         void* buf = ALLOC(allocator, sizeof(TcpClient));
@@ -265,15 +320,6 @@ namespace net {
 
         m_isRunnning.store(IZ_TRUE);
 
-        m_thread.Init(
-            [this](void* data) {
-            loop();
-        },
-            nullptr);
-
-        result = m_thread.Start(m_allocator);
-        VGOTO(result, __EXIT__);
-
     __EXIT__:
         if (!result) {
             IZ_ASSERT(IZ_FALSE);
@@ -295,8 +341,7 @@ namespace net {
     // クライアントとして起動.
     IZ_BOOL Tcp::startAsClient(
         IMemoryAllocator* allocator,
-        const IPv4Endpoint& endpoint,
-        IZ_BOOL isBlock)
+        const IPv4Endpoint& endpoint)
     {
         if (m_isRunnning.load()) {
             return IZ_TRUE;
@@ -325,32 +370,6 @@ namespace net {
 
         m_isRunnning.store(IZ_TRUE);
 
-        if (isBlock) {
-            // つながるまで待つ
-            result = connectServer();
-        }
-        else {
-            // ノンブロッキングなのでスレッドで通信を行う
-            m_thread.Init(
-                [this](void* data) {
-                connectServer();
-            },
-                nullptr);
-
-            result = m_thread.Start(m_allocator);
-            VGOTO(result, __EXIT__);
-
-            // データ送受信のためのスレッド
-            m_threadSub.Init(
-                [this](void* data) {
-                loop();
-            },
-                nullptr);
-
-            result = m_threadSub.Start(m_allocator);
-            VGOTO(result, __EXIT__);
-        }
-
     __EXIT__:
         if (!result) {
             IZ_ASSERT(IZ_FALSE);
@@ -373,8 +392,7 @@ namespace net {
     {
         m_isRunnning.store(IZ_FALSE);
 
-        m_thread.Join();
-        m_threadSub.Join();
+        onStop();
 
         if (isValidSocket(m_socket)) {
             shutdown(m_socket, SD_BOTH);
@@ -529,6 +547,120 @@ namespace net {
     //  http://mattn.kaoriya.net/software/lang/c/20090114140035.htm
     // libevent
     //  http://www.ninxit.com/blog-data/src/libevent/main.cpp.html
+
+    IZ_BOOL Tcp::run(IZ_CHAR* recvBuf, IZ_UINT size)
+    {
+        // TODO
+        timeval t_val = { 0, 1000 };
+
+        fd_set readFD;
+        fd_set exceptionFD;
+        fd_set writeFD;
+
+        FD_ZERO(&readFD);
+        FD_ZERO(&exceptionFD);
+        FD_ZERO(&writeFD);
+
+        FD_SET(m_socket, &readFD);
+        FD_SET(m_socket, &exceptionFD);
+
+        for (IZ_UINT i = 0; i < m_clients.getNum(); i++) {
+            TcpClient& c = m_clients.at(i);
+
+            sys::Lock lock(c);
+
+            if (c.isActive()) {
+                FD_SET(c.m_socket, &readFD);
+                FD_SET(c.m_socket, &writeFD);
+                FD_SET(c.m_socket, &exceptionFD);
+            }
+        }
+
+        // ファイルディスクリプタ（ソケット）の状態遷移待ち
+        auto resSelect = select(
+            //FD_SETSIZE,
+            0,
+            &readFD,
+            &writeFD,
+            &exceptionFD,
+            &t_val);
+
+        if (resSelect <= 0) {
+            return IZ_FALSE;
+        }
+
+        if (FD_ISSET(m_socket, &readFD)) {
+            sockaddr_in addr;
+            sockaddr* paddr = (sockaddr*)&addr;
+            IZ_INT len = sizeof(addr);
+
+            // クライアントからの接続待ち
+            auto socket = accept(m_socket, paddr, &len);
+
+            if (!isValidSocket(socket)) {
+                return IZ_FALSE;
+            }
+
+            for (IZ_UINT i = 0; i < m_clients.getNum(); i++) {
+                TcpClient& c = m_clients.at(i);
+
+                sys::Lock lock(c);
+
+                // 空いているものを探す
+                if (!c.isActive()) {
+                    c.setSocket(socket);
+                    c.m_endpoint.set(addr);
+                    break;
+                }
+            }
+        }
+        else if (FD_ISSET(m_socket, &exceptionFD)) {
+            // TODO
+        }
+
+        for (IZ_UINT i = 0; i < m_clients.getNum(); i++) {
+            TcpClient& c = m_clients.at(i);
+
+            if (FD_ISSET(c.m_socket, &exceptionFD)) {
+                // TODO
+            }
+            else {
+                // 受信
+                if (FD_ISSET(c.m_socket, &readFD)) {
+                    sys::Lock lock(c);
+
+                    auto len = c.recieveData(recvBuf, size);
+
+                    if (len > 0) {
+                        auto packet = Packet::create(m_allocator, len);
+                        packet->endpoint = c.m_endpoint;
+                        memcpy(packet->data, recvBuf, len);
+
+                        std::unique_lock<std::mutex> lock(m_recvDataLocker);
+                        m_recvData.AddTail(&packet->listItem);
+                    }
+                    else {
+                        // 切断された
+                        c.reset();
+                    }
+                }
+
+                // 送信
+                if (FD_ISSET(c.m_socket, &writeFD)) {
+                    sys::Lock lock(c);
+
+                    auto len = c.sendData();
+
+                    if (len < 0) {
+                        // 切断された
+                        c.reset();
+                    }
+                }
+            }
+        }
+
+        return IZ_TRUE;
+    }
     
     void Tcp::loop()
     {
@@ -541,119 +673,12 @@ namespace net {
             return;
         }
 
-        // TODO
-        timeval t_val = { 0, 1000 };
-
-        fd_set readFD;
-        fd_set exceptionFD;
-        fd_set writeFD;
-
         for (;;) {
             if (!m_isRunnning.load()) {
                 break;
             }
 
-            FD_ZERO(&readFD);
-            FD_ZERO(&exceptionFD);
-            FD_ZERO(&writeFD);
-
-            FD_SET(m_socket, &readFD);
-            FD_SET(m_socket, &exceptionFD);
-
-            for (IZ_UINT i = 0; i < m_clients.getNum(); i++) {
-                TcpClient& c = m_clients.at(i);
-
-                sys::Lock lock(c);
-
-                if (c.isActive()) {
-                    FD_SET(c.m_socket, &readFD);
-                    FD_SET(c.m_socket, &writeFD);
-                    FD_SET(c.m_socket, &exceptionFD);
-                }
-            }
-
-            // ファイルディスクリプタ（ソケット）の状態遷移待ち
-            auto resSelect = select(
-                //FD_SETSIZE,
-                0,
-                &readFD,
-                &writeFD,
-                &exceptionFD,
-                &t_val);
-
-            if (resSelect <= 0) {
-                continue;
-            }
-
-            if (FD_ISSET(m_socket, &readFD)) {
-                sockaddr_in addr;
-                sockaddr* paddr = (sockaddr*)&addr;
-                IZ_INT len = sizeof(addr);
-
-                // クライアントからの接続待ち
-                auto socket = accept(m_socket, paddr, &len);
-
-                if (!isValidSocket(socket)) {
-                    continue;
-                }
-
-                for (IZ_UINT i = 0; i < m_clients.getNum(); i++) {
-                    TcpClient& c = m_clients.at(i);
-
-                    sys::Lock lock(c);
-
-                    // 空いているものを探す
-                    if (!c.isActive()) {
-                        c.setSocket(socket);
-                        c.m_endpoint.set(addr);
-                        break;
-                    }
-                }
-            }
-            else if (FD_ISSET(m_socket, &exceptionFD)) {
-                // TODO
-            }
-
-            for (IZ_UINT i = 0; i < m_clients.getNum(); i++) {
-                TcpClient& c = m_clients.at(i);
-
-                if (FD_ISSET(c.m_socket, &exceptionFD)) {
-                    // TODO
-                }
-                else {
-                    // 受信
-                    if (FD_ISSET(c.m_socket, &readFD)) {
-                        sys::Lock lock(c);
-
-                        auto len = c.recieveData(recvBuf, size);
-
-                        if (len > 0) {
-                            auto packet = Packet::create(m_allocator, len);
-                            packet->endpoint = c.m_endpoint;
-                            memcpy(packet->data, recvBuf, len);
-
-                            std::unique_lock<std::mutex> lock(m_recvDataLocker);
-                            m_recvData.AddTail(&packet->listItem);
-                        }
-                        else {
-                            // 切断された
-                            c.reset();
-                        }
-                    }
-
-                    // 送信
-                    if (FD_ISSET(c.m_socket, &writeFD)) {
-                        sys::Lock lock(c);
-
-                        auto len = c.sendData();
-
-                        if (len < 0) {
-                            // 切断された
-                            c.reset();
-                        }
-                    }
-                }
-            }
+            run(recvBuf, size);
         }
 
         FREE(m_allocator, recvBuf);

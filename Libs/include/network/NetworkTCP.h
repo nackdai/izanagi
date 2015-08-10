@@ -8,69 +8,16 @@
 
 namespace izanagi {
 namespace net {
-    // クライアント.
-    class TcpClient : public CPlacementNew, sys::CSpinLock {
-        friend class Tcp;
-        friend class CArray < TcpClient >;
-
-    private:
-        static TcpClient* create(IMemoryAllocator* allocator);
-
-        static void deteteClient(
-            IMemoryAllocator* allocator,
-            TcpClient* client);
-
-    private:
-        TcpClient();
-        ~TcpClient();
-
-    private:
-        // クライアントと接続しているソケットを割り当てる.
-        void setSocket(IZ_SOCKET socket);
-
-        // クライアントと接続しているソケットを取得.
-        IZ_SOCKET getSocekt();
-
-        // ソケットが有効かどうかを取得.
-        IZ_BOOL isActive() const;
-
-        // データを送信.
-        IZ_INT sendData(const void* data, IZ_UINT size);
-
-        // 登録されているデータを送信.
-        IZ_INT sendData();
-
-        // データを受信.
-        IZ_INT recieveData(void* data, IZ_UINT size);
-
-        // 送信データを登録.
-        IZ_BOOL registerData(
-            IMemoryAllocator* allocator,
-            IZ_UINT num,
-            const void** data, IZ_UINT* size);
-
-        void close();
-
-        void reset();
-
-    private:
-        IZ_SOCKET m_socket;
-        IPv4Endpoint m_endpoint;
-
-        IMemoryAllocator* m_allocator;
-        Packet m_sendPacket;
-
-        IZ_BOOL m_isRegistered;
-    };
-
-    ////////////////////////////////////////////////////////
+    class TcpClient;
 
     /**
      */
     class Tcp {
     public:
         Tcp();
-        ~Tcp();
+        virtual ~Tcp();
+
+        NO_COPIABLE(Tcp);
 
     public:
         /** サーバーとして起動.
@@ -84,8 +31,7 @@ namespace net {
          */
         IZ_BOOL startAsClient(
             IMemoryAllocator* allocator,
-            const IPv4Endpoint& endpoint,
-            IZ_BOOL isBlock);
+            const IPv4Endpoint& endpoint);
 
         /** 停止.
          */
@@ -99,7 +45,7 @@ namespace net {
          */
         const IPv4Endpoint* getRemote(IZ_UINT idx) const;
 
-        /** クライアントから受信したデータを取得.
+        /** 受信したデータを取得.
          */
         IZ_BOOL recieve(std::function<void(const net::Packet&)> func);
 
@@ -111,10 +57,14 @@ namespace net {
 
         IZ_UINT sendDataToAllRemote(const void* data, IZ_UINT size);
 
-    private:
         IZ_BOOL connectServer();
 
+        IZ_BOOL run(IZ_CHAR* recvBuf, IZ_UINT size);
+
+    protected:
         void loop();
+
+        virtual void onStop() {}
 
     private:
         class Packet : public net::Packet, CPlacementNew {
@@ -141,8 +91,6 @@ namespace net {
         CStdList<Packet> m_recvData;
 
         std::atomic<IZ_BOOL> m_isRunnning;
-        sys::CThread m_thread;
-        sys::CThread m_threadSub;
     };
 }    // namespace net
 }    // namespace izanagi

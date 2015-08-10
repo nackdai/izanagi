@@ -49,6 +49,7 @@
     <ClInclude Include="..\..\include\network\NetworkDefs.h" />
     <ClInclude Include="..\..\include\network\NetworkPacket.h" />
     <ClInclude Include="..\..\include\network\NetworkTCP.h" />
+    <ClInclude Include="..\..\include\network\NetworkTCPUtility.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\network\IPv4Endpoint.cpp" />
@@ -65,6 +66,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\source\network\NetworkTCP.cpp" />
+    <ClCompile Include="..\..\source\network\NetworkTCPUtility.cpp" />
     <ClCompile Include="..\..\source\network\windows\Network_win.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

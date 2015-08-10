@@ -28,6 +28,9 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\izNetwork.h" />
+    <ClInclude Include="..\..\include\network\NetworkTCPUtility.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\network\Network.cpp">
@@ -40,6 +43,9 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\network\IPv4Endpoint.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\network\NetworkTCPUtility.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
