@@ -85,7 +85,7 @@ namespace net {
 
         IZ_SOCKET m_socket;
 
-        CArray<Remote> m_clients;
+        CArray<Remote> m_remotes;
 
         std::mutex m_recvDataLocker;
         CStdList<Packet> m_recvData;

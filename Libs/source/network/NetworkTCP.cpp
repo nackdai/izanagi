@@ -104,7 +104,7 @@ namespace net {
         result = (listen(m_socket, maxConnections) >= 0);
         VGOTO(result, __EXIT__);
 
-        result = m_clients.init(m_allocator, maxConnections);
+        result = m_remotes.init(m_allocator, maxConnections);
         VGOTO(result, __EXIT__);
 
         m_isRunnning.store(IZ_TRUE);
@@ -118,7 +118,7 @@ namespace net {
                 closesocket(m_socket);
             }
 
-            m_clients.clear();
+            m_remotes.clear();
 #else
             stop();
 #endif
@@ -152,10 +152,10 @@ namespace net {
         VRETURN(isValidSocket(m_socket));
 
         // サーバー１つのみ
-        result = m_clients.init(m_allocator, 1);
+        result = m_remotes.init(m_allocator, 1);
         VGOTO(result, __EXIT__);
 
-        m_clients.at(0).m_endpoint = endpoint;
+        m_remotes.at(0).m_endpoint = endpoint;
 
         m_isRunnning.store(IZ_TRUE);
 
@@ -168,7 +168,7 @@ namespace net {
                 closesocket(m_socket);
             }
 
-            m_clients.clear();
+            m_remotes.clear();
 #else
             stop();
 #endif
@@ -189,29 +189,29 @@ namespace net {
             m_socket = IZ_INVALID_SOCKET;
         }
 
-        m_clients.traverse(
-            [this] (Remote& client) {
-            client.close();
+        m_remotes.traverse(
+            [this] (Remote& remote) {
+            remote.close();
         });
 
-        m_clients.clear();
+        m_remotes.clear();
     }
 
     IZ_UINT Tcp::getRemoteNum() const
     {
-        IZ_UINT ret = m_clients.getNum();
+        IZ_UINT ret = m_remotes.getNum();
         return ret;
     }
 
     const IPv4Endpoint* Tcp::getRemote(IZ_UINT idx) const
     {
-        const Remote& c = m_clients.at(idx);
+        const Remote& remote = m_remotes.at(idx);
         
-        if (!c.isActive()) {
+        if (!remote.isActive()) {
             return IZ_NULL;
         }
 
-        return &c.m_endpoint;
+        return &remote.m_endpoint;
     }
 
     IZ_BOOL Tcp::recieve(std::function<void(const net::Packet&)> func)
@@ -239,8 +239,8 @@ namespace net {
 
     IZ_BOOL Tcp::sendData(const void* data, IZ_UINT size)
     {
-        Remote& c = m_clients.at(0);
-        return c.registerData(m_allocator, 1, &data, &size);
+        Remote& remote = m_remotes.at(0);
+        return remote.registerData(m_allocator, 1, &data, &size);
     }
 
     IZ_BOOL Tcp::sendData(
@@ -250,11 +250,11 @@ namespace net {
         Remote* remote = nullptr;
 
         // 対象となるリモート情報を探す
-        for (IZ_UINT i = 0; i < m_clients.getNum(); i++) {
-            Remote& c = m_clients.at(i);
+        for (IZ_UINT i = 0; i < m_remotes.getNum(); i++) {
+            Remote& r = m_remotes.at(i);
 
-            if (c.isActive() && c.m_endpoint == endpoint) {
-                remote = &c;
+            if (r.isActive() && r.m_endpoint == endpoint) {
+                remote = &r;
                 break;
             }
         }
@@ -275,12 +275,12 @@ namespace net {
     {
         IZ_UINT succeededNum = 0;;
 
-        for (IZ_UINT i = 0; i < m_clients.getNum(); i++) {
-            Remote& c = m_clients.at(i);
+        for (IZ_UINT i = 0; i < m_remotes.getNum(); i++) {
+            Remote& remote = m_remotes.at(i);
 
-            if (c.isActive()) {
+            if (remote.isActive()) {
                 // TODO
-                IZ_BOOL result = c.registerData(
+                IZ_BOOL result = remote.registerData(
                     m_allocator,
                     1,
                     &data, &size);
@@ -296,7 +296,7 @@ namespace net {
     {
         VRETURN(m_isRunnning.load());
 
-        const IPv4Endpoint& endpoint = m_clients.at(0).m_endpoint;
+        const IPv4Endpoint& endpoint = m_remotes.at(0).m_endpoint;
 
         // 通信ポート・アドレスの設定
         sockaddr_in serverAddr;
@@ -320,10 +320,10 @@ namespace net {
             sizeof(serverAddr)) >= 0);
 
         if (result) {
-            Remote& c = m_clients.at(0);
+            Remote& remote = m_remotes.at(0);
 
-            sys::Lock lock(c);
-            c.setSocket(m_socket);
+            sys::Lock lock(remote);
+            remote.setSocket(m_socket);
         }
         else {
             // TODO
@@ -357,15 +357,15 @@ namespace net {
         FD_SET(m_socket, &readFD);
         FD_SET(m_socket, &exceptionFD);
 
-        for (IZ_UINT i = 0; i < m_clients.getNum(); i++) {
-            Remote& c = m_clients.at(i);
+        for (IZ_UINT i = 0; i < m_remotes.getNum(); i++) {
+            Remote& remote = m_remotes.at(i);
 
-            sys::Lock lock(c);
+            sys::Lock lock(remote);
 
-            if (c.isActive()) {
-                FD_SET(c.m_socket, &readFD);
-                FD_SET(c.m_socket, &writeFD);
-                FD_SET(c.m_socket, &exceptionFD);
+            if (remote.isActive()) {
+                FD_SET(remote.m_socket, &readFD);
+                FD_SET(remote.m_socket, &writeFD);
+                FD_SET(remote.m_socket, &exceptionFD);
             }
         }
 
@@ -394,15 +394,15 @@ namespace net {
                 return IZ_FALSE;
             }
 
-            for (IZ_UINT i = 0; i < m_clients.getNum(); i++) {
-                Remote& c = m_clients.at(i);
+            for (IZ_UINT i = 0; i < m_remotes.getNum(); i++) {
+                Remote& remote = m_remotes.at(i);
 
-                sys::Lock lock(c);
+                sys::Lock lock(remote);
 
                 // 空いているものを探す
-                if (!c.isActive()) {
-                    c.setSocket(socket);
-                    c.m_endpoint.set(addr);
+                if (!remote.isActive()) {
+                    remote.setSocket(socket);
+                    remote.m_endpoint.set(addr);
                     break;
                 }
             }
@@ -411,22 +411,22 @@ namespace net {
             // TODO
         }
 
-        for (IZ_UINT i = 0; i < m_clients.getNum(); i++) {
-            Remote& c = m_clients.at(i);
+        for (IZ_UINT i = 0; i < m_remotes.getNum(); i++) {
+            Remote& remote = m_remotes.at(i);
 
-            if (FD_ISSET(c.m_socket, &exceptionFD)) {
+            if (FD_ISSET(remote.m_socket, &exceptionFD)) {
                 // TODO
             }
             else {
                 // 受信
-                if (FD_ISSET(c.m_socket, &readFD)) {
-                    sys::Lock lock(c);
+                if (FD_ISSET(remote.m_socket, &readFD)) {
+                    sys::Lock lock(remote);
 
-                    auto len = c.recieveData(recvBuf, size);
+                    auto len = remote.recieveData(recvBuf, size);
 
                     if (len > 0) {
                         auto packet = Packet::create(m_allocator, len);
-                        packet->endpoint = c.m_endpoint;
+                        packet->endpoint = remote.m_endpoint;
                         memcpy(packet->data, recvBuf, len);
 
                         std::unique_lock<std::mutex> lock(m_recvDataLocker);
@@ -434,19 +434,19 @@ namespace net {
                     }
                     else {
                         // 切断された
-                        c.reset();
+                        remote.reset();
                     }
                 }
 
                 // 送信
-                if (FD_ISSET(c.m_socket, &writeFD)) {
-                    sys::Lock lock(c);
+                if (FD_ISSET(remote.m_socket, &writeFD)) {
+                    sys::Lock lock(remote);
 
-                    auto len = c.sendData();
+                    auto len = remote.sendData();
 
                     if (len < 0) {
                         // 切断された
-                        c.reset();
+                        remote.reset();
                     }
                 }
             }

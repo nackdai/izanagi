@@ -133,6 +133,7 @@ namespace net {
     void Remote::close()
     {
         if (isValidSocket(m_socket)) {
+            shutdown(m_socket, SD_BOTH);
             closesocket(m_socket);
             m_socket = IZ_INVALID_SOCKET;
         }
