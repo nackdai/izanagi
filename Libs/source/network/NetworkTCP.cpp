@@ -205,7 +205,7 @@ namespace net {
 
     const IPv4Endpoint* Tcp::getRemote(IZ_UINT idx) const
     {
-        const Remote& remote = m_remotes.at(idx);
+        const TcpRemote& remote = m_remotes.at(idx);
         
         if (!remote.isActive()) {
             return IZ_NULL;
@@ -251,7 +251,7 @@ namespace net {
 
         // ëŒè€Ç∆Ç»ÇÈÉäÉÇÅ[ÉgèÓïÒÇíTÇ∑
         for (IZ_UINT i = 0; i < m_remotes.getNum(); i++) {
-            Remote& r = m_remotes.at(i);
+            TcpRemote& r = m_remotes.at(i);
 
             if (r.isActive() && r.m_endpoint == endpoint) {
                 remote = &r;
@@ -276,7 +276,7 @@ namespace net {
         IZ_UINT succeededNum = 0;;
 
         for (IZ_UINT i = 0; i < m_remotes.getNum(); i++) {
-            Remote& remote = m_remotes.at(i);
+            TcpRemote& remote = m_remotes.at(i);
 
             if (remote.isActive()) {
                 // TODO
@@ -320,7 +320,7 @@ namespace net {
             sizeof(serverAddr)) >= 0);
 
         if (result) {
-            Remote& remote = m_remotes.at(0);
+            TcpRemote& remote = m_remotes.at(0);
 
             sys::Lock lock(remote);
             remote.setSocket(m_socket);
@@ -358,7 +358,7 @@ namespace net {
         FD_SET(m_socket, &exceptionFD);
 
         for (IZ_UINT i = 0; i < m_remotes.getNum(); i++) {
-            Remote& remote = m_remotes.at(i);
+            TcpRemote& remote = m_remotes.at(i);
 
             sys::Lock lock(remote);
 
@@ -395,7 +395,7 @@ namespace net {
             }
 
             for (IZ_UINT i = 0; i < m_remotes.getNum(); i++) {
-                Remote& remote = m_remotes.at(i);
+                TcpRemote& remote = m_remotes.at(i);
 
                 sys::Lock lock(remote);
 
@@ -412,7 +412,7 @@ namespace net {
         }
 
         for (IZ_UINT i = 0; i < m_remotes.getNum(); i++) {
-            Remote& remote = m_remotes.at(i);
+            TcpRemote& remote = m_remotes.at(i);
 
             if (FD_ISSET(remote.m_socket, &exceptionFD)) {
                 // TODO

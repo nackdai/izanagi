@@ -9,22 +9,25 @@
 
 namespace izanagi {
 namespace net {
-    class Remote : public CPlacementNew, sys::CSpinLock {
-        friend class Tcp;
-        friend class CArray < Remote >;
-
-    private:
-        static Remote* create(IMemoryAllocator* allocator);
+    class Remote : public CPlacementNew {
+    protected:
+        template <typename _T>
+        static Remote* create(IMemoryAllocator* allocator)
+        {
+            void* buf = ALLOC(allocator, sizeof(_T));
+            _T* remote = new(buf)_T;
+            return remote;
+        }
 
         static void deteteRemote(
             IMemoryAllocator* allocator,
-            Remote* client);
+            Remote* remote);
 
-    private:
+    protected:
         Remote();
-        ~Remote();
+        virtual ~Remote();
 
-    private:
+    public:
         // クライアントと接続しているソケットを割り当てる.
         void setSocket(IZ_SOCKET socket);
 
@@ -53,7 +56,11 @@ namespace net {
 
         void reset();
 
-    private:
+    protected:
+        PURE_VIRTUAL(IZ_INT onSendData(const void* data, IZ_UINT size));
+        PURE_VIRTUAL(IZ_INT onRecieveData(const void* data, IZ_UINT size));
+
+    protected:
         IZ_SOCKET m_socket;
         IPv4Endpoint m_endpoint;
 
@@ -61,6 +68,28 @@ namespace net {
         Packet m_sendPacket;
 
         IZ_BOOL m_isRegistered;
+    };
+
+    // TCPリモート
+    class TcpRemote : public Remote, sys::CSpinLock {
+        friend class Remote;
+        friend class Tcp;
+        friend class CArray < TcpRemote >;
+
+    private:
+        static Remote* create(IMemoryAllocator* allocator);
+
+        static void deteteRemote(
+            IMemoryAllocator* allocator,
+            Remote* client);
+
+    private:
+        TcpRemote() {}
+        virtual ~TcpRemote() {}
+
+    private:
+        virtual IZ_INT onSendData(const void* data, IZ_UINT size) final;
+        virtual IZ_INT onRecieveData(const void* data, IZ_UINT size) final;
     };
 }    // namespace net
 }    // namespace izanagi

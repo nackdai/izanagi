@@ -2,18 +2,11 @@
 
 namespace izanagi {
 namespace net {
-    Remote* Remote::create(IMemoryAllocator* allocator)
-    {
-        void* buf = ALLOC(allocator, sizeof(Remote));
-        Remote* client = new(buf) Remote;
-        return client;
-    }
-
     void Remote::deteteRemote(
         IMemoryAllocator* allocator,
-        Remote* client)
+        Remote* remote)
     {
-        FREE(allocator, client);
+        FREE(allocator, remote);
     }
 
     Remote::Remote()
@@ -52,7 +45,7 @@ namespace net {
     IZ_INT Remote::sendData(const void* data, IZ_UINT size)
     {
         VRETURN_VAL(isValidSocket(m_socket), 0);
-        IZ_INT ret = send(m_socket, (const char*)data, size, 0);
+        IZ_INT ret = onSendData(data, size);
         return ret;
     }
 
@@ -80,7 +73,7 @@ namespace net {
     IZ_INT Remote::recieveData(void* data, IZ_UINT size)
     {
         VRETURN_VAL(isValidSocket(m_socket), 0);
-        IZ_INT ret = recv(m_socket, (char*)data, size, 0);
+        IZ_INT ret = onRecieveData(data, size);
         return ret;
     }
 
@@ -156,6 +149,32 @@ namespace net {
         }
 
         m_isRegistered = IZ_FALSE;
+    }
+
+    //////////////////////////////////////////////////
+
+    Remote* TcpRemote::create(IMemoryAllocator* allocator)
+    {
+        return Remote::create<TcpRemote>(allocator);
+    }
+
+    void TcpRemote::deteteRemote(
+        IMemoryAllocator* allocator,
+        Remote* remote)
+    {
+        Remote::deteteRemote(allocator, remote);
+    }
+
+    IZ_INT TcpRemote::onSendData(const void* data, IZ_UINT size)
+    {
+        IZ_INT ret = send(m_socket, (const char*)data, size, 0);
+        return ret;
+    }
+
+    IZ_INT TcpRemote::onRecieveData(const void* data, IZ_UINT size)
+    {
+        IZ_INT ret = recv(m_socket, (char*)data, size, 0);
+        return ret;
     }
 }    // namespace net
 }    // namespace izanagi
