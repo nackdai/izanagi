@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 2013 for Windows Desktop
+# Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{A9E5AE3D-D713-440A-B763-1F16A92BB9CC}"
@@ -175,6 +175,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "network", "network", "{CB1C45ED-6A88-439C-A183-124DAC28FF17}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NetworkTCP", "NetworkTCP.vcxproj", "{03C9E37D-2DD4-4992-B3D7-897CE5C90066}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DD5D28B8-93F1-4F26-8AD1-DD224CCB9A4F} = {DD5D28B8-93F1-4F26-8AD1-DD224CCB9A4F}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

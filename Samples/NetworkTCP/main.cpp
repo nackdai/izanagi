@@ -3,12 +3,11 @@
 
 IZ_UINT8 buffer[2 * 1024 * 1024];
 
+static const IZ_UINT Port = 30000;
+
 void runAsServer(izanagi::IMemoryAllocator* allocator)
 {
-	izanagi::net::IPv4Address addr;
-	addr.setHost("localhost");
-
-	izanagi::net::IPv4Endpoint ep(addr, 30000);
+    izanagi::net::IPv4Endpoint ep(Port);
 
 	izanagi::net::TcpServer tcp;
 	tcp.start(allocator, ep, 1);
@@ -41,9 +40,9 @@ void runAsServer(izanagi::IMemoryAllocator* allocator)
 void runAsClient(izanagi::IMemoryAllocator* allocator)
 {
 	izanagi::net::IPv4Address addr;
-	addr.setHost("localhost");
+    addr.setByHostName("localhost");
 
-	izanagi::net::IPv4Endpoint ep(addr, 30000);
+    izanagi::net::IPv4Endpoint ep(addr, Port);
 
 	izanagi::net::TcpClient tcp;
 	tcp.start(allocator, ep, IZ_FALSE);
@@ -61,7 +60,7 @@ void runAsClient(izanagi::IMemoryAllocator* allocator)
 
 IzMain(0, 0)
 {
-    IZ_BOOL isServer = IZ_TRUE;
+    IZ_BOOL isServer = IZ_FALSE;
 
 	if (argc > 0 && strcmp(argv[1], "s" ) == 0) {
 		isServer = IZ_TRUE;
