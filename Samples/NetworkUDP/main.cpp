@@ -39,12 +39,26 @@ void runAsServer(izanagi::IMemoryAllocator* allocator)
 
 void runAsClient(izanagi::IMemoryAllocator* allocator)
 {
-	// TODO
+    izanagi::net::IPv4Address addr;
+    addr.setByHostName("localhost");
+
+    izanagi::net::IPv4Endpoint ep(addr, Port);
+
+    izanagi::net::Udp udp;
+    udp.startAsClient(allocator, ep);
+
+    static const IZ_CHAR* str = "test";
+
+    // TODO
+    // ‘—M‚³‚ê‚é‚Ü‚Å‘Ò‚Â....
+    izanagi::sys::CThread::Sleep(1000);
+
+    udp.stop();
 }
 
 IzMain(0, 0)
 {
-    IZ_BOOL isServer = IZ_TRUE;
+    IZ_BOOL isServer = IZ_FALSE;
 
 	if (argc > 0 && strcmp(argv[1], "s" ) == 0) {
 		isServer = IZ_TRUE;

@@ -6,6 +6,7 @@ namespace net {
         IMemoryAllocator* allocator,
         Remote* remote)
     {
+        delete remote;
         FREE(allocator, remote);
     }
 
@@ -19,7 +20,9 @@ namespace net {
     }
 
     Remote::~Remote()
-    {}
+    {
+        clear();
+    }
 
     // 送信データを登録.
     IZ_BOOL Remote::registerData(
@@ -65,6 +68,20 @@ namespace net {
         m_isRegistered = IZ_TRUE;
 
         return IZ_TRUE;
+    }
+
+    void Remote::clear()
+    {
+        if (m_allocator != nullptr) {
+            FREE(m_allocator, m_sendPacket.data);
+
+            m_sendPacket.size = 0;
+            m_sendPacket.data = nullptr;
+
+            m_allocator = nullptr;
+        }
+
+        m_isRegistered = IZ_FALSE;
     }
 
     //////////////////////////////////////////////////
@@ -148,14 +165,7 @@ namespace net {
             m_socket = IZ_INVALID_SOCKET;
         }
 
-        if (m_allocator != nullptr) {
-            FREE(m_allocator, m_sendPacket.data);
-
-            m_sendPacket.size = 0;
-            m_sendPacket.data = nullptr;
-
-            m_allocator = nullptr;
-        }
+        clear();
     }
 
     void TcpRemote::reset()
@@ -185,6 +195,55 @@ namespace net {
     UdpRemote::UdpRemote()
     {
         m_listItem.Init(this);
+    }
+
+    // データを送信.
+    IZ_INT UdpRemote::sendData(
+        IZ_SOCKET socket,
+        const void* data, IZ_UINT size)
+    {
+        VRETURN_VAL(isValidSocket(socket), 0);
+        VRETURN_VAL(!m_endpoint.getAddress().isAny(), 0);
+
+        sockaddr_in addr;
+        FILL_ZERO(&addr, sizeof(addr));
+
+        m_endpoint.get(addr);
+
+        IZ_INT ret = sendto(
+            socket,
+            (const char*)data, size,
+            0,
+            (const sockaddr*)&addr,
+            sizeof(addr));
+
+        // TODO
+        IZ_ASSERT(ret == size);
+
+        return ret;
+    }
+
+    // 登録されているデータを送信.
+    IZ_INT UdpRemote::sendData(IZ_SOCKET socket)
+    {
+        if (m_sendPacket.data == nullptr
+            || !m_isRegistered)
+        {
+            return 0;
+        }
+
+        VRETURN_VAL(isValidSocket(socket), 0);
+        VRETURN_VAL(!m_endpoint.getAddress().isAny(), 0);
+
+        IZ_INT ret = sendData(
+            socket,
+            m_sendPacket.data, m_sendPacket.size);
+
+        if (ret > 0) {
+            m_isRegistered = IZ_FALSE;
+        }
+
+        return ret;
     }
 
     CStdList<UdpRemote>::Item* UdpRemote::getListItem()

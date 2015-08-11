@@ -26,6 +26,12 @@ namespace net {
             IMemoryAllocator* allocator,
             const IPv4Endpoint& endpoint);
 
+        /** クライアントとして起動.
+         */
+        IZ_BOOL startAsClient(
+            IMemoryAllocator* allocator,
+            const IPv4Endpoint& endpoint);
+
         /** 停止.
          */
         void stop();
@@ -36,11 +42,29 @@ namespace net {
         UdpRemote* findRemote(const sockaddr_in& addr);
 
     private:
+        class Packet : public net::Packet, CPlacementNew {
+        public:
+            static Packet* create(IMemoryAllocator* allocator, IZ_UINT len);
+
+            Packet()
+            {
+                listItem.Init(this);
+            }
+            ~Packet() {}
+
+            CStdList<Packet>::Item listItem;
+        };
+
+    private:
         IMemoryAllocator* m_allocator;
 
         IZ_SOCKET m_socket;
 
+        std::mutex m_remotesLocker;
         CStdList<UdpRemote> m_remotes;
+
+        std::mutex m_recvDataLocker;
+        CStdList<Packet> m_recvData;
 
         std::atomic<IZ_BOOL> m_isRunnning;
     };

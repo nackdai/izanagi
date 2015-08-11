@@ -195,6 +195,20 @@ namespace net {
         });
 
         m_remotes.clear();
+
+        auto item = m_recvData.GetTop();
+
+        while (item != IZ_NULL) {
+            auto packet = item->GetData();
+            auto next = item->GetNext();
+
+            item->Leave();
+            FREE(m_allocator, packet);
+
+            item = next;
+        }
+
+        m_recvData.Clear();
     }
 
     IZ_UINT Tcp::getRemoteNum() const

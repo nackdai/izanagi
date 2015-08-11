@@ -7,6 +7,37 @@
 
 namespace izanagi {
 namespace net {
+    Udp::Packet* Udp::Packet::create(IMemoryAllocator* allocator, IZ_UINT len)
+    {
+        // 最後に０を入れるため１多くする
+        auto alignedLen = len + 1;
+
+        // TODO
+        // ４バイトアラインしておく
+        auto rest = alignedLen & 0x03;
+        if (rest > 0) {
+            rest = 4 - rest;
+            alignedLen += rest;
+        }
+
+        size_t size = sizeof(Packet) + alignedLen;
+
+        IZ_CHAR* buf = (IZ_CHAR*)ALLOC(allocator, size);
+        IZ_ASSERT(buf != nullptr);
+
+        Packet* p = new(buf)Packet;
+        buf += sizeof(Packet);
+
+        p->data = buf;
+
+        p->size = len;
+        p->data[len] = 0;
+
+        return p;
+    }
+
+    ///////////////////////////////////////////////////////////
+
     Udp::Udp()
     {
         m_allocator = nullptr;
@@ -36,9 +67,9 @@ namespace net {
 
         // ソケットの生成
         m_socket = socket(
-            AF_INET,        // アドレスファミリ
-            SOCK_DGRAM,     // ソケットタイプ
-            IPPROTO_UDP);   // プロトコル
+            AF_INET,    // アドレスファミリ
+            SOCK_DGRAM, // ソケットタイプ
+            0);         // プロトコル
         VRETURN(isValidSocket(m_socket));
 
         // 通信ポート・アドレスの設定
@@ -78,6 +109,47 @@ namespace net {
         return result;
     }
 
+    // クライアントとして起動.
+    IZ_BOOL Udp::startAsClient(
+        IMemoryAllocator* allocator,
+        const IPv4Endpoint& endpoint)
+    {
+        if (m_isRunnning.load()) {
+            return IZ_TRUE;
+        }
+
+        auto address = endpoint.getAddress();
+
+        VRETURN(!address.isAny());
+
+        m_allocator = allocator;
+
+        IZ_BOOL result = IZ_FALSE;
+
+        // ソケットの生成
+        m_socket = socket(
+            AF_INET,        // アドレスファミリ
+            SOCK_DGRAM,    // ソケットタイプ
+            0);             // プロトコル
+        VRETURN(isValidSocket(m_socket));
+
+        // TODO
+        // サーバー１つのみ
+        auto remote = UdpRemote::create(m_allocator);
+        remote->m_endpoint = endpoint;
+        m_remotes.AddTail(remote->getListItem());
+
+        m_isRunnning.store(IZ_TRUE);
+
+        if (!result) {
+            IZ_ASSERT(IZ_FALSE);
+
+            stop();
+        }
+
+        return result;
+    }
+
     // 停止.
     void Udp::stop()
     {
@@ -90,24 +162,41 @@ namespace net {
             m_socket = IZ_INVALID_SOCKET;
         }
 
-        auto item = m_remotes.GetTop();
+        {
+            auto item = m_remotes.GetTop();
 
-        while (item != IZ_NULL) {
-            auto data = item->GetData();
-            item = item->GetNext();
-            
-            //data->close();
+            while (item != IZ_NULL) {
+                auto data = item->GetData();
+                item = item->GetNext();
 
-            UdpRemote::deteteRemote(
-                data->m_allocator,
-                data);
+                UdpRemote::deteteRemote(
+                    data->m_allocator,
+                    data);
+            }
+
+            m_remotes.Clear();
         }
 
-        m_remotes.Clear();
+        {
+            auto item = m_recvData.GetTop();
+
+            while (item != IZ_NULL) {
+                auto packet = item->GetData();
+                auto next = item->GetNext();
+
+                FREE(m_allocator, packet);
+
+                item = next;
+            }
+
+            m_recvData.Clear();
+        }
     }
 
     UdpRemote* Udp::findRemote(const sockaddr_in& addr)
     {
+        std::unique_lock<std::mutex> lock(m_remotesLocker);
+
         auto item = m_remotes.GetTop();
 
         while (item != IZ_NULL) {
@@ -187,18 +276,29 @@ namespace net {
                 // リモートを追加
                 remote = UdpRemote::create(m_allocator);
                 remote->m_endpoint.set(addr);
+
+                std::unique_lock<std::mutex> lock(m_remotesLocker);
                 m_remotes.AddTail(remote->getListItem());
             }
         }
 
         // 送信.
         if (FD_ISSET(m_socket, &writeFD)) {
+            std::unique_lock<std::mutex> lock(m_remotesLocker);
+
             auto item = m_remotes.GetTop();
 
             while (item != IZ_NULL) {
                 auto remote = item->GetData();
 
+                sys::Lock lock(*remote);
 
+                IZ_INT ret = remote->sendData(m_socket);
+
+                if (ret <= 0) {
+                    // TODO
+                    // 切断された
+                }
 
                 item = item->GetNext();
             }

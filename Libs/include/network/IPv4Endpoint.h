@@ -73,6 +73,8 @@ namespace net {
 
         void set(const sockaddr_in& addr);
 
+        void get(sockaddr_in& addr);
+
         const IPv4Address& getAddress() const;
 
         IZ_UINT getPort() const;

@@ -35,6 +35,8 @@ namespace net {
             IZ_UINT num,
             const void** data, IZ_UINT* size);
 
+        void clear();
+
     protected:
         IPv4Endpoint m_endpoint;
 
@@ -105,6 +107,14 @@ namespace net {
         virtual ~UdpRemote() {}
 
     private:
+        // データを送信.
+        IZ_INT sendData(
+            IZ_SOCKET socket,
+            const void* data, IZ_UINT size);
+
+        // 登録されているデータを送信.
+        IZ_INT sendData(IZ_SOCKET socket);
+
         CStdList<UdpRemote>::Item* getListItem();
 
     private:

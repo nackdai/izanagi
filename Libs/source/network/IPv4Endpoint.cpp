@@ -199,6 +199,22 @@ namespace net {
         }
     }
 
+    void IPv4Endpoint::get(sockaddr_in& addr)
+    {
+        addr.sin_family = AF_INET;
+        addr.sin_port = htons(m_port);
+
+        if (m_address.isAny()) {
+            addr.sin_addr.S_un.S_addr = htonl(INADDR_ANY);
+        }
+        else {
+            IZ_CHAR ip[64];
+            m_address.toString(ip, COUNTOF(ip));
+
+            addr.sin_addr.S_un.S_addr = inet_addr(ip);
+        }
+    }
+
     const IPv4Address& IPv4Endpoint::getAddress() const
     {
         return m_address;
