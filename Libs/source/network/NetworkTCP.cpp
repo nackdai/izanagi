@@ -190,7 +190,7 @@ namespace net {
         }
 
         m_remotes.traverse(
-            [this] (Remote& remote) {
+            [this] (TcpRemote& remote) {
             remote.close();
         });
 
@@ -233,6 +233,31 @@ namespace net {
         func(*src);
 
         FREE(m_allocator, src);
+
+        return IZ_TRUE;
+    }
+
+    IZ_BOOL Tcp::recieveAll(std::function<void(const net::Packet&)> func)
+    {
+        std::unique_lock<std::mutex> lock(m_recvDataLocker);
+
+        auto item = m_recvData.GetTop();
+        if (item == IZ_NULL) {
+            return IZ_FALSE;
+        }
+
+        while (item != IZ_NULL) {
+            auto next = item->GetNext();
+
+            auto src = item->GetData();
+            item->Leave();
+
+            func(*src);
+
+            FREE(m_allocator, src);
+
+            item = next;
+        }
 
         return IZ_TRUE;
     }

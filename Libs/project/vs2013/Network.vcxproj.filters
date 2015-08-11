@@ -34,6 +34,9 @@
     <ClInclude Include="..\..\include\network\NetworkRemote.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\network\NetworkUDP.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\network\Network.cpp">
@@ -52,6 +55,9 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\network\NetworkRemote.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\network\NetworkUDP.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>

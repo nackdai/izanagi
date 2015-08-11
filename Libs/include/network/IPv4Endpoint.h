@@ -51,8 +51,6 @@ namespace net {
     /**
      */
     class IPv4Endpoint {
-        friend class Tcp;
-
     public:
         IPv4Endpoint();
         IPv4Endpoint(
@@ -70,16 +68,17 @@ namespace net {
         void set(
             const IPv4Address& address,
             IZ_UINT port);
+
         void set(IZ_UINT port);
+
+        void set(const sockaddr_in& addr);
 
         const IPv4Address& getAddress() const;
 
         IZ_UINT getPort() const;
 
         IZ_BOOL operator==(const IPv4Endpoint& rhs);
-
-    private:
-        void set(const sockaddr_in& addr);
+        IZ_BOOL operator==(const sockaddr_in& addr);
 
     private:
         IPv4Address m_address;

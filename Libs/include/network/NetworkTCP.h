@@ -49,6 +49,8 @@ namespace net {
          */
         IZ_BOOL recieve(std::function<void(const net::Packet&)> func);
 
+        IZ_BOOL recieveAll(std::function<void(const net::Packet&)> func);
+
         IZ_BOOL sendData(const void* data, IZ_UINT size);
 
         IZ_BOOL sendData(

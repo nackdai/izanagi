@@ -213,5 +213,13 @@ namespace net {
     {
         return (m_address == rhs.m_address && m_port == rhs.m_port);
     }
+
+    IZ_BOOL IPv4Endpoint::operator == (const sockaddr_in& addr)
+    {
+        IPv4Endpoint ep;
+        ep.set(addr);
+
+        return *this == ep;
+    }
 }
 }

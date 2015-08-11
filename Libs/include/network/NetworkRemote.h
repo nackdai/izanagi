@@ -9,10 +9,11 @@
 
 namespace izanagi {
 namespace net {
+    // リモート
     class Remote : public CPlacementNew {
     protected:
         template <typename _T>
-        static Remote* create(IMemoryAllocator* allocator)
+        static _T* create(IMemoryAllocator* allocator)
         {
             void* buf = ALLOC(allocator, sizeof(_T));
             _T* remote = new(buf)_T;
@@ -28,6 +29,39 @@ namespace net {
         virtual ~Remote();
 
     public:
+        // 送信データを登録.
+        IZ_BOOL registerData(
+            IMemoryAllocator* allocator,
+            IZ_UINT num,
+            const void** data, IZ_UINT* size);
+
+    protected:
+        IPv4Endpoint m_endpoint;
+
+        IMemoryAllocator* m_allocator;
+        Packet m_sendPacket;
+
+        IZ_BOOL m_isRegistered;
+    };
+
+    // TCPリモート
+    class TcpRemote : public Remote, sys::CSpinLock {
+        friend class Remote;
+        friend class Tcp;
+        friend class CArray < TcpRemote >;
+
+    private:
+        static TcpRemote* create(IMemoryAllocator* allocator);
+
+        static void deteteRemote(
+            IMemoryAllocator* allocator,
+            Remote* client);
+
+    private:
+        TcpRemote();
+        virtual ~TcpRemote() {}
+
+    private:
         // クライアントと接続しているソケットを割り当てる.
         void setSocket(IZ_SOCKET socket);
 
@@ -46,50 +80,35 @@ namespace net {
         // データを受信.
         IZ_INT recieveData(void* data, IZ_UINT size);
 
-        // 送信データを登録.
-        IZ_BOOL registerData(
-            IMemoryAllocator* allocator,
-            IZ_UINT num,
-            const void** data, IZ_UINT* size);
-
         void close();
 
         void reset();
 
-    protected:
-        PURE_VIRTUAL(IZ_INT onSendData(const void* data, IZ_UINT size));
-        PURE_VIRTUAL(IZ_INT onRecieveData(const void* data, IZ_UINT size));
-
-    protected:
+    private:
         IZ_SOCKET m_socket;
-        IPv4Endpoint m_endpoint;
-
-        IMemoryAllocator* m_allocator;
-        Packet m_sendPacket;
-
-        IZ_BOOL m_isRegistered;
     };
 
-    // TCPリモート
-    class TcpRemote : public Remote, sys::CSpinLock {
+    // UDPリモート
+    class UdpRemote : public Remote, sys::CSpinLock {
         friend class Remote;
-        friend class Tcp;
-        friend class CArray < TcpRemote >;
+        friend class Udp;
 
     private:
-        static Remote* create(IMemoryAllocator* allocator);
+        static UdpRemote* create(IMemoryAllocator* allocator);
 
         static void deteteRemote(
             IMemoryAllocator* allocator,
             Remote* client);
 
     private:
-        TcpRemote() {}
-        virtual ~TcpRemote() {}
+        UdpRemote();
+        virtual ~UdpRemote() {}
 
     private:
-        virtual IZ_INT onSendData(const void* data, IZ_UINT size) final;
-        virtual IZ_INT onRecieveData(const void* data, IZ_UINT size) final;
+        CStdList<UdpRemote>::Item* getListItem();
+
+    private:
+        CStdList<UdpRemote>::Item m_listItem;
     };
 }    // namespace net
 }    // namespace izanagi

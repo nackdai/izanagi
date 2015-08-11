@@ -11,8 +11,6 @@ namespace net {
 
     Remote::Remote()
     {
-        m_socket = IZ_INVALID_SOCKET;
-        
         m_allocator = nullptr;
         m_sendPacket.size = 0;
         m_sendPacket.data = nullptr;
@@ -22,60 +20,6 @@ namespace net {
 
     Remote::~Remote()
     {}
-
-    // クライアントと接続しているソケットを割り当てる.
-    void Remote::setSocket(IZ_SOCKET socket)
-    {
-        m_socket = socket;
-    }
-
-    // クライアントと接続しているソケットを取得.
-    IZ_SOCKET Remote::getSocekt()
-    {
-        return m_socket;
-    }
-
-    // ソケットが有効かどうかを取得.
-    IZ_BOOL Remote::isActive() const
-    {
-        return (m_socket != IZ_INVALID_SOCKET);
-    }
-
-    // データを送信.
-    IZ_INT Remote::sendData(const void* data, IZ_UINT size)
-    {
-        VRETURN_VAL(isValidSocket(m_socket), 0);
-        IZ_INT ret = onSendData(data, size);
-        return ret;
-    }
-
-    // 登録されているデータを送信.
-    IZ_INT Remote::sendData()
-    {
-        if (m_sendPacket.data == nullptr
-            || !m_isRegistered)
-        {
-            return 0;
-        }
-
-        VRETURN_VAL(isValidSocket(m_socket), 0);
-
-        IZ_INT ret = sendData(m_sendPacket.data, m_sendPacket.size);
-
-        if (ret > 0) {
-            m_isRegistered = IZ_FALSE;
-        }
-
-        return ret;
-    }
-
-    // データを受信.
-    IZ_INT Remote::recieveData(void* data, IZ_UINT size)
-    {
-        VRETURN_VAL(isValidSocket(m_socket), 0);
-        IZ_INT ret = onRecieveData(data, size);
-        return ret;
-    }
 
     // 送信データを登録.
     IZ_BOOL Remote::registerData(
@@ -123,7 +67,80 @@ namespace net {
         return IZ_TRUE;
     }
 
-    void Remote::close()
+    //////////////////////////////////////////////////
+
+    TcpRemote* TcpRemote::create(IMemoryAllocator* allocator)
+    {
+        return Remote::create<TcpRemote>(allocator);
+    }
+
+    void TcpRemote::deteteRemote(
+        IMemoryAllocator* allocator,
+        Remote* remote)
+    {
+        Remote::deteteRemote(allocator, remote);
+    }
+
+    TcpRemote::TcpRemote()
+    {
+        m_socket = IZ_INVALID_SOCKET;
+    }
+
+    // クライアントと接続しているソケットを割り当てる.
+    void TcpRemote::setSocket(IZ_SOCKET socket)
+    {
+        m_socket = socket;
+    }
+
+    // クライアントと接続しているソケットを取得.
+    IZ_SOCKET TcpRemote::getSocekt()
+    {
+        return m_socket;
+    }
+
+    // ソケットが有効かどうかを取得.
+    IZ_BOOL TcpRemote::isActive() const
+    {
+        return (m_socket != IZ_INVALID_SOCKET);
+    }
+
+    // データを送信.
+    IZ_INT TcpRemote::sendData(const void* data, IZ_UINT size)
+    {
+        VRETURN_VAL(isValidSocket(m_socket), 0);
+        IZ_INT ret = send(m_socket, (const char*)data, size, 0);
+        return ret;
+    }
+
+    // 登録されているデータを送信.
+    IZ_INT TcpRemote::sendData()
+    {
+        if (m_sendPacket.data == nullptr
+            || !m_isRegistered)
+        {
+            return 0;
+        }
+
+        VRETURN_VAL(isValidSocket(m_socket), 0);
+
+        IZ_INT ret = sendData(m_sendPacket.data, m_sendPacket.size);
+
+        if (ret > 0) {
+            m_isRegistered = IZ_FALSE;
+        }
+
+        return ret;
+    }
+
+    // データを受信.
+    IZ_INT TcpRemote::recieveData(void* data, IZ_UINT size)
+    {
+        VRETURN_VAL(isValidSocket(m_socket), 0);
+        IZ_INT ret = recv(m_socket, (char*)data, size, 0);
+        return ret;
+    }
+
+    void TcpRemote::close()
     {
         if (isValidSocket(m_socket)) {
             shutdown(m_socket, SD_BOTH);
@@ -141,7 +158,7 @@ namespace net {
         }
     }
 
-    void Remote::reset()
+    void TcpRemote::reset()
     {
         if (isValidSocket(m_socket)) {
             closesocket(m_socket);
@@ -153,28 +170,26 @@ namespace net {
 
     //////////////////////////////////////////////////
 
-    Remote* TcpRemote::create(IMemoryAllocator* allocator)
+    UdpRemote* UdpRemote::create(IMemoryAllocator* allocator)
     {
-        return Remote::create<TcpRemote>(allocator);
+        return Remote::create<UdpRemote>(allocator);
     }
 
-    void TcpRemote::deteteRemote(
+    void UdpRemote::deteteRemote(
         IMemoryAllocator* allocator,
         Remote* remote)
     {
         Remote::deteteRemote(allocator, remote);
     }
 
-    IZ_INT TcpRemote::onSendData(const void* data, IZ_UINT size)
+    UdpRemote::UdpRemote()
     {
-        IZ_INT ret = send(m_socket, (const char*)data, size, 0);
-        return ret;
+        m_listItem.Init(this);
     }
 
-    IZ_INT TcpRemote::onRecieveData(const void* data, IZ_UINT size)
+    CStdList<UdpRemote>::Item* UdpRemote::getListItem()
     {
-        IZ_INT ret = recv(m_socket, (char*)data, size, 0);
-        return ret;
+        return &m_listItem;
     }
 }    // namespace net
 }    // namespace izanagi

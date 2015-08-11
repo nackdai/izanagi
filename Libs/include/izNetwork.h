@@ -7,5 +7,6 @@
 #include "network/NetworkPacket.h"
 #include "network/NetworkTCP.h"
 #include "network/NetworkTCPUtility.h"
+#include "network/NetworkUDP.h"
 
 #endif  // #if !defined(__IZANAGI_NETWORK_H__)
