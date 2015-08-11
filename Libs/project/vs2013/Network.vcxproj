@@ -48,6 +48,7 @@
     <ClInclude Include="..\..\include\network\Network.h" />
     <ClInclude Include="..\..\include\network\NetworkDefs.h" />
     <ClInclude Include="..\..\include\network\NetworkPacket.h" />
+    <ClInclude Include="..\..\include\network\NetworkRemote.h" />
     <ClInclude Include="..\..\include\network\NetworkTCP.h" />
     <ClInclude Include="..\..\include\network\NetworkTCPUtility.h" />
   </ItemGroup>
@@ -65,6 +66,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\..\source\network\NetworkRemote.cpp" />
     <ClCompile Include="..\..\source\network\NetworkTCP.cpp" />
     <ClCompile Include="..\..\source\network\NetworkTCPUtility.cpp" />
     <ClCompile Include="..\..\source\network\windows\Network_win.cpp" />

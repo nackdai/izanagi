@@ -8,7 +8,7 @@
 
 namespace izanagi {
 namespace net {
-    class TcpClient;
+    class Remote;
 
     /**
      */
@@ -85,7 +85,7 @@ namespace net {
 
         IZ_SOCKET m_socket;
 
-        CArray<TcpClient> m_clients;
+        CArray<Remote> m_clients;
 
         std::mutex m_recvDataLocker;
         CStdList<Packet> m_recvData;
