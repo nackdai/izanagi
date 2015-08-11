@@ -505,6 +505,8 @@ namespace net {
 
     IZ_BOOL Tcp::connectServer()
     {
+        VRETURN(m_isRunnning.load());
+
         const IPv4Endpoint& endpoint = m_clients.at(0).m_endpoint;
 
         // 通信ポート・アドレスの設定
@@ -550,6 +552,8 @@ namespace net {
 
     IZ_BOOL Tcp::run(IZ_CHAR* recvBuf, IZ_UINT size)
     {
+        VRETURN(m_isRunnning.load());
+
         // TODO
         timeval t_val = { 0, 1000 };
 

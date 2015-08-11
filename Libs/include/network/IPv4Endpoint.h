@@ -28,13 +28,16 @@ namespace net {
         void set(IZ_UINT32 ip);
         void set(const IZ_CHAR* ip);
 
-        IZ_BOOL setHost(const IZ_CHAR* host);
+        IZ_BOOL setByHostName(const IZ_CHAR* host);
+        IZ_BOOL setByHostName();
 
         IZ_UINT32 getValue() const;
 
         void toString(IZ_CHAR* ret, IZ_UINT size) const;
 
         IZ_BOOL operator==(const IPv4Address& rhs);
+
+        void setAny();
 
         IZ_BOOL isAny() const;
 
@@ -55,6 +58,7 @@ namespace net {
         IPv4Endpoint(
             const IPv4Address& address,
             IZ_UINT port);
+        IPv4Endpoint(IZ_UINT port);
 
         ~IPv4Endpoint();
 
@@ -66,6 +70,7 @@ namespace net {
         void set(
             const IPv4Address& address,
             IZ_UINT port);
+        void set(IZ_UINT port);
 
         const IPv4Address& getAddress() const;
 

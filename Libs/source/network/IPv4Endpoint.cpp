@@ -57,7 +57,7 @@ namespace net {
         IZ_UINT pos = 0;
 
         for (IZ_UINT i = 0; i < len; i++) {
-            if (ip[i] == ':') {
+            if (ip[i] == '.') {
                 pos++;
                 continue;
             }
@@ -69,7 +69,7 @@ namespace net {
         }
     }
 
-    IZ_BOOL IPv4Address::setHost(const IZ_CHAR* host)
+    IZ_BOOL IPv4Address::setByHostName(const IZ_CHAR* host)
     {
         // NOTE
         // Use getaddrinfo?
@@ -96,6 +96,16 @@ namespace net {
         return IZ_TRUE;
     }
 
+    IZ_BOOL IPv4Address::setByHostName()
+    {
+        IZ_CHAR host[128];
+
+        IZ_INT err = gethostname(host, sizeof(host));
+        VRETURN(err >= 0);
+
+        return setByHostName(host);
+    }
+
     IZ_UINT32 IPv4Address::getValue() const
     {
         return m_ip.value;
@@ -117,6 +127,11 @@ namespace net {
         return (m_ip.value == rhs.m_ip.value);
     }
 
+    void IPv4Address::setAny()
+    {
+        m_ip.value = 0;
+    }
+
     IZ_BOOL IPv4Address::isAny() const
     {
         return (m_ip.value == 0);
@@ -126,7 +141,6 @@ namespace net {
 
     IPv4Endpoint::IPv4Endpoint()
     {
-
     }
 
     IPv4Endpoint::IPv4Endpoint(
@@ -134,6 +148,11 @@ namespace net {
         IZ_UINT port)
     {
         set(address, port);
+    }
+
+    IPv4Endpoint::IPv4Endpoint(IZ_UINT port)
+    {
+        set(port);
     }
 
     IPv4Endpoint::~IPv4Endpoint()
@@ -157,6 +176,12 @@ namespace net {
         IZ_UINT port)
     {
         m_address = address;
+        m_port = port;
+    }
+
+    void IPv4Endpoint::set(IZ_UINT port)
+    {
+        m_address.setAny();
         m_port = port;
     }
 
