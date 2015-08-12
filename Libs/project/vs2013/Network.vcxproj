@@ -52,6 +52,7 @@
     <ClInclude Include="..\..\include\network\NetworkTCP.h" />
     <ClInclude Include="..\..\include\network\NetworkTCPUtility.h" />
     <ClInclude Include="..\..\include\network\NetworkUDP.h" />
+    <ClInclude Include="..\..\include\network\NetworkUDPUtility.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\network\IPv4Endpoint.cpp" />
@@ -71,6 +72,7 @@
     <ClCompile Include="..\..\source\network\NetworkTCP.cpp" />
     <ClCompile Include="..\..\source\network\NetworkTCPUtility.cpp" />
     <ClCompile Include="..\..\source\network\NetworkUDP.cpp" />
+    <ClCompile Include="..\..\source\network\NetworkUDPUtility.cpp" />
     <ClCompile Include="..\..\source\network\windows\Network_win.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
