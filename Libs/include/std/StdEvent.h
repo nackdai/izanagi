@@ -125,7 +125,7 @@ namespace izanagi {
         virtual void Execute() = 0;
     };
 
-    /** C#のActionに相当
+    /** C#のAction（返り値なし）に相当
      *
      * @tparam ARG 引数の型
      */
@@ -138,7 +138,7 @@ namespace izanagi {
         virtual ~ActionDelegate() {}
     };
 
-    /** C#のActionに相当
+    /** C#のAction（返り値なし）に相当
      * 内部では指定されたオブジェクトのメソッドを呼び出す
      *
      * @tparam O オブジェクトの型
@@ -174,7 +174,7 @@ namespace izanagi {
         Func m_Func;
     };
 
-    /** C#のActionに相当
+    /** C#のAction（返り値なし）に相当
      * 内部ではstaticな関数を呼び出す
      *
      * @tparam ARG 引数の型 
@@ -205,7 +205,7 @@ namespace izanagi {
         Func m_Func;
     };
 
-    /** C#のFuncに相当
+    /** C#のFunc（返り値あり）に相当
      *
      * @tparam RETURN 返り値の型
      * @tparam ARG 引数の型
@@ -219,7 +219,7 @@ namespace izanagi {
         virtual ~FuncDelegate() {}
     };
 
-    /** C#のFuncに相当
+    /** C#のFunc（返り値あり）に相当
      * 内部では指定されたオブジェクトのメソッドを呼び出す
      *
      * @tparam O オブジェクトの型
@@ -257,7 +257,7 @@ namespace izanagi {
         FUNC m_Func;
     };
 
-    /** C#のFuncに相当
+    /** C#のFunc（返り値あり）に相当
      * 内部ではstaticな関数を呼び出す
      *
      * @tparam RETURN 返り値の型

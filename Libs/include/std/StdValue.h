@@ -4,9 +4,8 @@
 #include "izDefs.h"
 
 namespace izanagi {
-    /**
-    * 多態性を持った値クラス
-    */
+    /** 多態性を持った値クラス
+     */
     class CValue {
     public:
         enum TYPE {
@@ -44,10 +43,18 @@ namespace izanagi {
         {
             *this = rhs;
         }
+
         const CValue& operator=(const CValue& rhs)
         {
             m_Type = rhs.m_Type;
             m_ValInt64 = rhs.m_ValInt64;
+            return *this;
+        }
+
+        template <typename _T>
+        const CValue& operator=(const _T& rhs)
+        {
+            this->SetValue(rhs);
             return *this;
         }
 
@@ -63,6 +70,39 @@ namespace izanagi {
         _T GetValue() const
         {
             return *(reinterpret_cast<_T*>(m_ValPtr));
+        }
+
+        operator IZ_INT8()
+        {
+            return GetValueAsInt32();
+        }
+        operator IZ_UINT8()
+        {
+            return GetValueAsUInt32();
+        }
+        operator IZ_INT16()
+        {
+            return GetValueAsInt32();
+        }
+        operator IZ_UINT16()
+        {
+            return GetValueAsUInt32();
+        }
+        operator IZ_INT32()
+        {
+            return GetValueAsInt32();
+        }
+        operator IZ_UINT32()
+        {
+            return GetValueAsUInt32();
+        }
+        operator IZ_FLOAT()
+        {
+            return GetValueAsFloat();
+        }
+        operator void*()
+        {
+            return GetValueAsPtr();
         }
 
         // 値取得
