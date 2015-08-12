@@ -331,6 +331,10 @@ namespace net {
         }
     }
 
+    // NOTE
+    // UDP‚Å‚Íselect‚Í•s—v
+    // http://stackoverflow.com/questions/19758152/select-for-udp-connection
+
 #if 0
     IZ_BOOL Udp::run(IZ_CHAR* recvBuf, IZ_UINT size)
     {
