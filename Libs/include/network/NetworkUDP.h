@@ -36,10 +36,36 @@ namespace net {
          */
         void stop();
 
+        /** 受信したデータを取得.
+        */
+        IZ_BOOL recieve(std::function<void(const net::Packet&)> func);
+
+        /** 受信した全データを取得.
+        */
+        IZ_BOOL recieveAll(std::function<void(const net::Packet&)> func);
+
+        /** データを送信.
+        */
+        IZ_BOOL sendData(const void* data, IZ_UINT size);
+
+        /** 指定した接続先にデータを送信.
+        */
+        IZ_BOOL sendData(
+            const IPv4Endpoint& endpoint,
+            const void* data, IZ_UINT size);
+
         IZ_BOOL run(IZ_CHAR* recvBuf, IZ_UINT size);
 
     private:
+        UdpRemote* findRemote(const IPv4Endpoint& ep);
         UdpRemote* findRemote(const sockaddr_in& addr);
+
+        void traverseRemotes(std::function<IZ_BOOL(UdpRemote*)> func);
+
+    protected:
+        void loop();
+
+        virtual void onStop() {}
 
     private:
         class Packet : public net::Packet, CPlacementNew {
