@@ -9,8 +9,8 @@ void runAsServer(izanagi::IMemoryAllocator* allocator)
 {
     izanagi::net::IPv4Endpoint ep(Port);
 
-	izanagi::net::Udp udp;
-    udp.startAsServer(allocator, ep);
+	izanagi::net::UdpServer udp;
+    udp.start(allocator, ep);
 
 	IZ_BOOL willQuit = IZ_FALSE;
 
@@ -20,14 +20,14 @@ void runAsServer(izanagi::IMemoryAllocator* allocator)
 		}
 	});
 
-    IZ_CHAR buf[1024];
-
 	for (;;) {
 		if (willQuit) {
 			break;
 		}
 
-        udp.run(buf, sizeof(buf));
+        udp.recieve([](const izanagi::net::Packet& packet) {
+            IZ_PRINTF("%s\n", packet.data);
+        });
 
         izanagi::sys::CThread::Sleep(33);
 	}
@@ -44,10 +44,12 @@ void runAsClient(izanagi::IMemoryAllocator* allocator)
 
     izanagi::net::IPv4Endpoint ep(addr, Port);
 
-    izanagi::net::Udp udp;
-    udp.startAsClient(allocator, ep);
+    izanagi::net::UdpClient udp;
+    udp.start(allocator, ep);
 
     static const IZ_CHAR* str = "test";
+
+    udp.sendData(str, strlen(str));
 
     // TODO
     // ëóêMÇ≥ÇÍÇÈÇ‹Ç≈ë“Ç¬....
