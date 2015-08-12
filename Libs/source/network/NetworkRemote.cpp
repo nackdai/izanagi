@@ -70,6 +70,11 @@ namespace net {
         return IZ_TRUE;
     }
 
+    IZ_BOOL Remote::isRegistered()
+    {
+        return m_isRegistered;
+    }
+
     void Remote::clear()
     {
         if (m_allocator != nullptr) {
@@ -244,6 +249,12 @@ namespace net {
         }
 
         return ret;
+    }
+
+    // —LŒø‚©‚Ç‚¤‚©.
+    IZ_BOOL UdpRemote::isActive() const
+    {
+        return !m_endpoint.getAddress().isAny();
     }
 
     CStdList<UdpRemote>::Item* UdpRemote::getListItem()

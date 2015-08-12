@@ -35,6 +35,8 @@ namespace net {
             IZ_UINT num,
             const void** data, IZ_UINT* size);
 
+        IZ_BOOL isRegistered();
+
         void clear();
 
     protected:
@@ -43,7 +45,7 @@ namespace net {
         IMemoryAllocator* m_allocator;
         Packet m_sendPacket;
 
-        IZ_BOOL m_isRegistered;
+        std::atomic<IZ_BOOL> m_isRegistered;
     };
 
     // TCPリモート
@@ -114,6 +116,9 @@ namespace net {
 
         // 登録されているデータを送信.
         IZ_INT sendData(IZ_SOCKET socket);
+
+        // 有効かどうか.
+        IZ_BOOL isActive() const;
 
         CStdList<UdpRemote>::Item* getListItem();
 

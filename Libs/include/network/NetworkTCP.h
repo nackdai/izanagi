@@ -10,7 +10,7 @@ namespace izanagi {
 namespace net {
     class TcpRemote;
 
-    /**
+    /** TCP.
      */
     class Tcp {
     public:
@@ -49,18 +49,38 @@ namespace net {
          */
         IZ_BOOL recieve(std::function<void(const net::Packet&)> func);
 
+        /** 受信した全データを取得.
+         */
         IZ_BOOL recieveAll(std::function<void(const net::Packet&)> func);
 
+        /** データを送信.
+         */
         IZ_BOOL sendData(const void* data, IZ_UINT size);
 
+        /** 指定した接続先にデータを送信.
+         */
         IZ_BOOL sendData(
             const IPv4Endpoint& endpoint,
             const void* data, IZ_UINT size);
 
+        /** 全ての接続先にデータを送信.
+         */
         IZ_UINT sendDataToAllRemote(const void* data, IZ_UINT size);
 
+        /** サーバーと接続.
+         */
         IZ_BOOL connectServer();
 
+        /** サーバーと接続されているかどうか.
+         */
+        IZ_BOOL isConnected();
+
+        /** サーバーかどうか.
+         */
+        IZ_BOOL isServer() const;
+
+        /** 処理実行.
+         */
         IZ_BOOL run(IZ_CHAR* recvBuf, IZ_UINT size);
 
     protected:
@@ -87,12 +107,19 @@ namespace net {
 
         IZ_SOCKET m_socket;
 
+        // 接続元リスト.
         CArray<TcpRemote> m_remotes;
 
+        // 受信データリスト.
         std::mutex m_recvDataLocker;
         CStdList<Packet> m_recvData;
 
         std::atomic<IZ_BOOL> m_isRunnning;
+        std::atomic<IZ_BOOL> m_isConnected;
+
+        struct {
+            IZ_UINT isServer : 1;
+        } m_flags;
     };
 }    // namespace net
 }    // namespace izanagi

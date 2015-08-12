@@ -45,6 +45,9 @@ namespace net {
         m_socket = IZ_INVALID_SOCKET;
 
         m_isRunnning.store(IZ_FALSE);
+        m_isConnected.store(IZ_FALSE);
+
+        m_flags.isServer = IZ_FALSE;
     }
 
     Tcp::~Tcp()
@@ -109,6 +112,8 @@ namespace net {
 
         m_isRunnning.store(IZ_TRUE);
 
+        m_flags.isServer = IZ_TRUE;
+
     __EXIT__:
         if (!result) {
             IZ_ASSERT(IZ_FALSE);
@@ -159,6 +164,8 @@ namespace net {
 
         m_isRunnning.store(IZ_TRUE);
 
+        m_flags.isServer = IZ_FALSE;
+
     __EXIT__:
         if (!result) {
             IZ_ASSERT(IZ_FALSE);
@@ -180,6 +187,7 @@ namespace net {
     void Tcp::stop()
     {
         m_isRunnning.store(IZ_FALSE);
+        m_isConnected.store(IZ_FALSE);
 
         onStop();
 
@@ -228,6 +236,7 @@ namespace net {
         return &remote.m_endpoint;
     }
 
+    // 受信したデータを取得.
     IZ_BOOL Tcp::recieve(std::function<void(const net::Packet&)> func)
     {
         Packet* src = nullptr;
@@ -251,6 +260,7 @@ namespace net {
         return IZ_TRUE;
     }
 
+    // 受信した全データを取得.
     IZ_BOOL Tcp::recieveAll(std::function<void(const net::Packet&)> func)
     {
         std::unique_lock<std::mutex> lock(m_recvDataLocker);
@@ -276,12 +286,19 @@ namespace net {
         return IZ_TRUE;
     }
 
+    // データを送信.
     IZ_BOOL Tcp::sendData(const void* data, IZ_UINT size)
     {
-        Remote& remote = m_remotes.at(0);
+        TcpRemote& remote = m_remotes.at(0);
+
+        if (!remote.isActive()) {
+            return IZ_FALSE;
+        }
+
         return remote.registerData(m_allocator, 1, &data, &size);
     }
 
+    // 指定した接続先にデータを送信.
     IZ_BOOL Tcp::sendData(
         const IPv4Endpoint& endpoint,
         const void* data, IZ_UINT size)
@@ -310,6 +327,7 @@ namespace net {
         return result;
     }
 
+    // 全ての接続先にデータを送信.
     IZ_UINT Tcp::sendDataToAllRemote(const void* data, IZ_UINT size)
     {
         IZ_UINT succeededNum = 0;;
@@ -331,6 +349,7 @@ namespace net {
         return succeededNum;
     }
 
+    // サーバーと接続.
     IZ_BOOL Tcp::connectServer()
     {
         VRETURN(m_isRunnning.load());
@@ -363,6 +382,8 @@ namespace net {
 
             sys::Lock lock(remote);
             remote.setSocket(m_socket);
+
+            m_isConnected.store(IZ_TRUE);
         }
         else {
             // TODO
@@ -370,6 +391,18 @@ namespace net {
         }
 
         return result;
+    }
+
+    // サーバーと接続されているかどうか.
+    IZ_BOOL Tcp::isConnected()
+    {
+        return m_isConnected.load();
+    }
+
+    // サーバーかどうか.
+    IZ_BOOL Tcp::isServer() const
+    {
+        return m_flags.isServer;
     }
 
     // NOTE
@@ -403,8 +436,12 @@ namespace net {
 
             if (remote.isActive()) {
                 FD_SET(remote.m_socket, &readFD);
-                FD_SET(remote.m_socket, &writeFD);
                 FD_SET(remote.m_socket, &exceptionFD);
+
+                // 送信するデータがあるときだけ
+                if (remote.isRegistered()) {
+                    FD_SET(remote.m_socket, &writeFD);
+                }
             }
         }
 
