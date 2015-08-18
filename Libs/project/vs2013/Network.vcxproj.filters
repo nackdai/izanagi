@@ -40,13 +40,13 @@
     <ClInclude Include="..\..\include\network\NetworkUDPUtility.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\network\ReplicatiedProperty.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\network\ReplicatedPropertyManager.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\network\ReplicatedPropertyObject.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\network\ReplicatedProperty.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
@@ -75,13 +75,13 @@
     <ClCompile Include="..\..\source\network\NetworkUDPUtility.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\network\ReplicatiedProperty.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\network\ReplicatedPropertyManager.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\network\ReplicatedPropertyObject.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\network\ReplicatedProperty.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>

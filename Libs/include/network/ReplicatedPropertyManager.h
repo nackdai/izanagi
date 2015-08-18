@@ -2,7 +2,7 @@
 #define _IZANAGI_NETWORK_REPLICATED_PROPERTY_MANGER_H__
 
 #include <atomic>
-#include "ReplicatiedProperty.h"
+#include "ReplicatedProperty.h"
 
 namespace izanagi {
 namespace net {
