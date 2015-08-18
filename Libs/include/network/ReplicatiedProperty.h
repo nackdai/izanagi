@@ -3,6 +3,7 @@
 
 #include "izDefs.h"
 #include "izStd.h"
+#include "network/ReplicatedPropertyObject.h"
 
 namespace izanagi {
 namespace net {
@@ -12,92 +13,98 @@ namespace net {
         Rep,
         RepNotify,
         None,
+    };
 
-        NUM,
+    /**
+     */
+    class ReplicatedPropertyBase {
+        friend class ReplicatedObjectBase;
+
+    protected:
+        ReplicatedPropertyBase() {}
+        virtual ~ReplicatedPropertyBase() {}
+
+    private:
+        CStdList<ReplicatedPropertyBase>::Item* getListItem();
+
+    private:
+        CStdList<ReplicatedPropertyBase>::Item m_listItem;
     };
 
     /**
      */
     template <typename _T>
-    class ReplicatedProperty {
+    class ReplicatedProperty : public ReplicatedPropertyBase {
+        friend class ReplicatedPropertyManager;
+
     public:
+        typedef std::function<IZ_BOOL(_T)> DelegateValidation;
+        typedef std::function<void(void)> DelegateNotify;
+
+        // NOTE
+        // http://qiita.com/tkyaji/items/1aa7bb01658e848d3ef4
+
         template <class _O>
-        class Delegate : public FuncDelegate<IZ_BOOL, _T>
+        static DelegateValidation validation(IZ_BOOL(_O::*f)(_T), _O* obj)
         {
-            typedef IZ_BOOL(_O::* FUNC)(_T);
+            return std::bind(f, obj, std::placeholders::_1);
+        }
 
-        public:
-            Delegate(_O* object, IZ_BOOL(_O::*func)(_T)) : FuncDelegate<IZ_BOOL, _T>(object, IZ_NULL), m_Func(func) {}
-            virtual ~Delegate() {}
+        static DelegateValidation validation(IZ_BOOL(*f)(_T))
+        {
+            return std::bind(f, std::placeholders::_1);
+        }
 
-        private:
-            Delegate() : FuncDelegate<IZ_BOOL, _T>(IZ_NULL, IZ_NULL), m_Func(IZ_NULL) {}
-            Delegate(const Delegate& rhs) {}
+        template <class _O>
+        static DelegateNotify notify(void(_O::* f)(void), _O* obj)
+        {
+            return std::bind(f, obj);
+        }
 
-        private:
-            virtual IZ_BOOL Execute(_T arg1)
-            {
-                _O* object = (_O*)izanagi::Delegate::GetObject();
-                IZ_ASSERT(object != IZ_NULL);
-
-                IZ_ASSERT(m_Func != IZ_NULL);
-
-                IZ_BOOL tmp = (object->*m_Func)(arg1);
-                return tmp;
-            }
-
-        protected:
-            const Delegate& operator = (const Delegate& rhs)
-            {
-                m_Object = rhs.m_Object;
-                m_Func = rhs.m_Func;
-            }
-
-        private:
-            FUNC m_Func;
-        };
+        static DelegateNotify notify(void(*f)(void))
+        {
+            return std::bind(f);
+        }
 
     public:
         ReplicatedProperty(
+            ReplicatedObjectBase* obj,
             E_REPLICATED_TYPE type = E_REPLICATED_TYPE::None,
-            IZ_BOOL isReliable = IZ_FALSE)
+            IZ_BOOL isReliable = IZ_FALSE,
+            DelegateNotify funcNotify = nullptr,
+            DelegateValidation funcValidation = nullptr)
         {
+            obj->addReplicatedProperty(*this);
+
+            m_type = type;
+            m_funcNotify = funcNotify;
+            m_funcValidation = funcValidation;
+            m_isReliable = isReliable;
+
             // NOTE
             // 通常の変数と同様に明示的に初期化されない場合のm_valueの値は不定.
-
-            m_type = type;
-            m_flags.isReliable = isReliable;
-        }
-
-        virtual ~ReplicatedProperty()
-        {
-        }
-
-        ReplicatedProperty(
-            const ReplicatedProperty& rhs,
-            E_REPLICATED_TYPE type = E_REPLICATED_TYPE::None,
-            IZ_BOOL isReliable = IZ_FALSE)
-        {
-            m_type = type;
-            m_flags.isReliable = isReliable;
-
-            set(rhs.m_value);
         }
 
         ReplicatedProperty(
             const _T& rhs,
+            ReplicatedObjectBase* obj,
             E_REPLICATED_TYPE type = E_REPLICATED_TYPE::None,
-            IZ_BOOL isReliable = IZ_FALSE)
+            IZ_BOOL isReliable = IZ_FALSE,
+            DelegateNotify funcNotify = nullptr,
+            DelegateValidation funcValidation = nullptr)
         {
+            obj->addReplicatedProperty(*this);
+
             m_type = type;
-            m_flags.isReliable = isReliable;
+            m_funcNotify = funcNotify;
+            m_funcValidation = funcValidation;
+            m_isReliable = isReliable;
 
             set(rhs);
         }
 
-        const ReplicatedProperty& operator=(const ReplicatedProperty& rhs)
+        virtual ~ReplicatedProperty()
         {
-            return *this = rhs.m_value;
         }
 
         const ReplicatedProperty& operator=(const _T& rhs)
@@ -105,6 +112,8 @@ namespace net {
             set(rhs);
             return *this;
         }
+
+        NO_COPIABLE(ReplicatedProperty);
 
     public:
         operator _T()
@@ -117,24 +126,18 @@ namespace net {
             return isReliable;
         }
 
-        template <class _O>
-        void setFuncValidation(Delegate<_T, _O, _F>& func) const
-        {
-            m_funcValidation = func;
-        }
-
     protected:
         void set(const _T& rhs);
 
     protected:
         E_REPLICATED_TYPE m_type;
+
         _T m_value;
 
-        Delegate<_T, _O, _F> m_funcValidation;
+        DelegateNotify m_funcNotify;
+        DelegateValidation m_funcValidation;
 
-        struct {
-            IZ_UINT isReliable      : 1;
-        } m_flags;
+        IZ_BOOL m_isReliable;
     };
 }    // namespace net
 }    // namespace izanagi

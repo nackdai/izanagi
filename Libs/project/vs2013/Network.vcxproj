@@ -53,6 +53,8 @@
     <ClInclude Include="..\..\include\network\NetworkTCPUtility.h" />
     <ClInclude Include="..\..\include\network\NetworkUDP.h" />
     <ClInclude Include="..\..\include\network\NetworkUDPUtility.h" />
+    <ClInclude Include="..\..\include\network\ReplicatedPropertyManager.h" />
+    <ClInclude Include="..\..\include\network\ReplicatedPropertyObject.h" />
     <ClInclude Include="..\..\include\network\ReplicatiedProperty.h" />
   </ItemGroup>
   <ItemGroup>
@@ -74,6 +76,8 @@
     <ClCompile Include="..\..\source\network\NetworkTCPUtility.cpp" />
     <ClCompile Include="..\..\source\network\NetworkUDP.cpp" />
     <ClCompile Include="..\..\source\network\NetworkUDPUtility.cpp" />
+    <ClCompile Include="..\..\source\network\ReplicatedPropertyManager.cpp" />
+    <ClCompile Include="..\..\source\network\ReplicatedPropertyObject.cpp" />
     <ClCompile Include="..\..\source\network\ReplicatiedProperty.cpp" />
     <ClCompile Include="..\..\source\network\windows\Network_win.cpp" />
   </ItemGroup>

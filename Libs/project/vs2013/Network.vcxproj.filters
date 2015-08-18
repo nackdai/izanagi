@@ -43,6 +43,12 @@
     <ClInclude Include="..\..\include\network\ReplicatiedProperty.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\network\ReplicatedPropertyManager.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\network\ReplicatedPropertyObject.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\network\Network.cpp">
@@ -70,6 +76,12 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\network\ReplicatiedProperty.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\network\ReplicatedPropertyManager.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\network\ReplicatedPropertyObject.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
