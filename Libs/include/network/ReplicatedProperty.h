@@ -19,15 +19,26 @@ namespace net {
      */
     class ReplicatedPropertyBase {
         friend class ReplicatedObjectBase;
+        friend class ReplicatedPropertyServer;
+        friend class ReplicatedPropertyClient;
 
     protected:
-        ReplicatedPropertyBase() {}
+        ReplicatedPropertyBase();
         virtual ~ReplicatedPropertyBase() {}
 
-    private:
-        CStdList<ReplicatedPropertyBase>::Item* getListItem();
+    protected:
+        inline IZ_BOOL isDirty() const;
+
+        inline void dirty();
+        inline void unDirty();
+
+        inline CStdList<ReplicatedPropertyBase>::Item* getListItem();
+
+        PURE_VIRTUAL(IZ_CHAR* sync(IZ_CHAR* ptr));
 
     private:
+        IZ_BOOL m_isDirty;
+
         CStdList<ReplicatedPropertyBase>::Item m_listItem;
     };
 
@@ -35,8 +46,6 @@ namespace net {
      */
     template <typename _T>
     class ReplicatedProperty : public ReplicatedPropertyBase {
-        friend class ReplicatedPropertyManager;
-
     public:
         typedef std::function<IZ_BOOL(_T)> DelegateValidation;
         typedef std::function<void(void)> DelegateNotify;
@@ -74,6 +83,7 @@ namespace net {
             DelegateNotify funcNotify = nullptr,
             DelegateValidation funcValidation = nullptr)
         {
+            m_owner = obj;
             obj->addReplicatedProperty(*this);
 
             m_type = type;
@@ -93,6 +103,7 @@ namespace net {
             DelegateNotify funcNotify = nullptr,
             DelegateValidation funcValidation = nullptr)
         {
+            m_owner = obj;
             obj->addReplicatedProperty(*this);
 
             m_type = type;
@@ -127,9 +138,17 @@ namespace net {
         }
 
     protected:
+        inline IZ_BOOL isServer();
+
         void set(const _T& rhs);
 
+        void setForcibly(const _T& rhs);
+
+        virtual IZ_CHAR* sync(IZ_CHAR* ptr) override;
+
     protected:
+        ReplicatedObjectBase* m_owner;
+
         E_REPLICATED_TYPE m_type;
 
         _T m_value;

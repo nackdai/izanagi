@@ -2,63 +2,79 @@
 #define _IZANAGI_NETWORK_REPLICATED_PROPERTY_MANGER_H__
 
 #include <atomic>
-#include "ReplicatedProperty.h"
+#include "izStd.h"
 
 namespace izanagi {
 namespace net {
-    class ReplicatedPropertyBase;
-    template <typename _T> class ReplicatedProperty;
+    class ReplicatedObjectBase;
 
+    /**
+     */
     class ReplicatedPropertyManager {
-        template <typename _T> friend class ReplicatedProperty;
+        friend class ReplicatedObjectBase;
+        template <IZ_BOOL IS_SERVER> friend class ReplicatedPropertyManagerFactory;
 
-        static IZ_UINT64 s_ID;
-        static ReplicatedPropertyManager s_instance;
+        static IMemoryAllocator* s_Allocator;
+        static std::atomic<IZ_UINT64> s_ID;
 
-        static ReplicatedPropertyManager& getInstance();
+        static IZ_UINT64 genID();
+
+        static ReplicatedPropertyManager* create(IZ_BOOL isServer);
+        static void finish();
+        static ReplicatedPropertyManager* get();
+
+        static void updateManager();
+
+        static void setAllocator(IMemoryAllocator* allocator);
 
     private:
-        ReplicatedPropertyManager();
-        ~ReplicatedPropertyManager();
+        ReplicatedPropertyManager() {}
+        virtual ~ReplicatedPropertyManager() {}
 
     public:
-        IZ_BOOL start(
-            IZ_BOOL isServer,
-            IMemoryAllocator* allocator);
+        typedef CStdHash<IZ_UINT64, ReplicatedObjectBase, 4> ObjectHash;
+        typedef ObjectHash::Item HashItem;
+
+        PURE_VIRTUAL(void update());
+
+    protected:
+        PURE_VIRTUAL(IZ_BOOL isServer());
+
+        void add(ReplicatedObjectBase* obj);
+
+    protected:
+        ObjectHash m_hash;
+    };
+
+    /**
+     */
+    template <IZ_BOOL IS_SERVER>
+    class ReplicatedPropertySystem {
+    public:
+        static void begin(IMemoryAllocator* allocator)
+        {
+            ReplicatedPropertyManager::setAllocator(allocator);
+            ReplicatedPropertyManager::create(IS_SERVER);
+        }
+
+        static ReplicatedPropertySystem* get()
+        {
+            return ReplicatedPropertyManager::get();
+        }
+
+        static void end()
+        {
+            ReplicatedPropertyManager::finish();
+        }
+
+        static void update()
+        {
+            ReplicatedPropertyManager::updateManager();
+        }
 
     private:
-        inline IZ_UINT64 genID();
-
-        template <typename _T>
-        void init(ReplicatedProperty<_T>& prop);
-
-        void send(IZ_UINT64 id, IZ_BOOL isReliable);
-
-        IZ_BOOL isServer();
-
-    private:
-        struct SProperty;
-
-        typedef CStdHash<IZ_UINT, SProperty, 4> Hash;
-        typedef CStdList<SProperty> List;
-
-        struct SProperty {
-            IZ_UINT64 id;
-
-            ReplicatedPropertyBase* ptr;
-
-            Hash::Item hashItem;
-            List::Item listItem;
-        };
-
-        IMemoryAllocator* m_allocator;
-
-        Hash m_hash;
-
-        List m_sendList;
-
-        std::atomic<IZ_BOOL> m_isRunning;
-        IZ_BOOL m_isServer;
+        ReplicatedPropertySystem();
+        ~ReplicatedPropertySystem();
     };
 }    // namespace net
 }    // namespace izanagi

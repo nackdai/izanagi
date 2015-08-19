@@ -12,43 +12,53 @@ namespace net {
     /**
      */
     class ReplicatedObjectBase {
+        friend class ReplicatedPropertyManager;
+        friend class ReplicatedPropertyServer;
+        friend class ReplicatedPropertyClient;
+        template <typename _T> friend class ReplicatedProperty;
+
     protected:
         ReplicatedObjectBase();
         virtual ~ReplicatedObjectBase() {}
 
     private:
         void addReplicatedProperty(ReplicatedPropertyBase& prop);
-        CStdList<ReplicatedObjectBase>::Item* getReplicatedObjectBaseListItem();
 
-    protected:
+        ReplicatedPropertyManager::HashItem* getReplicatedObjectHashItem();
+
+    public:
+        IZ_BOOL isServer() const
+        {
+            return m_isServer;
+        }
+
+    private:
+        inline IZ_UINT64 getReplicatedObjectID() const;
+
+        inline IZ_BOOL isDirtyReplicatedProperty() const;
+
+        inline void dirtyReplicatedProperty();
+        inline void undirtyReplicatedProperty();
+
+        inline CStdList<ReplicatedPropertyBase>::Item* getReplicatedPropertyListTopItem();
+
+    private:
+        IZ_UINT64 m_ReplicatedObjectID;
+        IZ_BOOL m_isServer;
+
+        IZ_BOOL m_isReplicatedPropertyDirty;
+
         CStdList<ReplicatedPropertyBase> m_ReplicatedPropertyList;
-        CStdList<ReplicatedObjectBase>::Item m_ReplicatedObjectBaseListItem;
+        ReplicatedPropertyManager::HashItem m_ReplicatedObjectHashItem;
     };
 
     /**
      */
     template <class BASE = NullClass>
     class ReplicatedObject : public ReplicatedObjectBase, BASE {
-        template <typename _T> friend class ReplicatedProperty;
-
     protected:
-        ReplicatedObject()
-        {
-            // TODO
-            // m_ReplicatedObjectID
-            // m_isServer
-        }
+        ReplicatedObject() {}
         virtual ~ReplicatedObject() {}
-
-    public:
-        IZ_BOOL isServer() const
-        {
-            return m_isServer;
-        }        
-
-    protected:
-        IZ_UINT64 m_ReplicatedObjectID;
-        IZ_BOOL m_isServer;
     };
 
 }    // namespace net
