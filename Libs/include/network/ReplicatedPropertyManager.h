@@ -19,13 +19,14 @@ namespace net {
 
         static IZ_UINT64 genID();
 
-        static ReplicatedPropertyManager* create(IZ_BOOL isServer);
-        static void finish();
+    public:
+        static void begin(
+            IZ_BOOL isServer,
+            IMemoryAllocator* allocator);
+
         static ReplicatedPropertyManager* get();
 
-        static void updateManager();
-
-        static void setAllocator(IMemoryAllocator* allocator);
+        static void end();
 
     private:
         ReplicatedPropertyManager() {}
@@ -44,37 +45,6 @@ namespace net {
 
     protected:
         ObjectHash m_hash;
-    };
-
-    /**
-     */
-    template <IZ_BOOL IS_SERVER>
-    class ReplicatedPropertySystem {
-    public:
-        static void begin(IMemoryAllocator* allocator)
-        {
-            ReplicatedPropertyManager::setAllocator(allocator);
-            ReplicatedPropertyManager::create(IS_SERVER);
-        }
-
-        static ReplicatedPropertySystem* get()
-        {
-            return ReplicatedPropertyManager::get();
-        }
-
-        static void end()
-        {
-            ReplicatedPropertyManager::finish();
-        }
-
-        static void update()
-        {
-            ReplicatedPropertyManager::updateManager();
-        }
-
-    private:
-        ReplicatedPropertySystem();
-        ~ReplicatedPropertySystem();
     };
 }    // namespace net
 }    // namespace izanagi

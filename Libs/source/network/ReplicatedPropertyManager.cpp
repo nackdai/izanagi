@@ -14,11 +14,6 @@ namespace net {
         return s_ID;
     }
 
-    void ReplicatedPropertyManager::setAllocator(IMemoryAllocator* allocator)
-    {
-        s_Allocator = allocator;
-    }
-
     void ReplicatedPropertyManager::add(ReplicatedObjectBase* obj)
     {
         m_hash.Add(obj->getReplicatedObjectHashItem());
@@ -131,22 +126,25 @@ namespace net {
     ReplicatedPropertyServer* g_Server = IZ_NULL;
     ReplicatedPropertyClient* g_Client = IZ_NULL;
 
-    ReplicatedPropertyManager* ReplicatedPropertyManager::create(IZ_BOOL isServer)
+    void ReplicatedPropertyManager::begin(
+        IZ_BOOL isServer,
+        IMemoryAllocator* allocator)
     {
-        IZ_ASSERT(s_Allocator);
+        s_Allocator = allocator;
+
         IZ_ASSERT(g_Server == IZ_NULL && g_Client == IZ_NULL);
 
         if (isServer) {
             // TODO
-            return g_Server;
+            
         }
         else {
             // TODO
-            return g_Client;
+            
         }
     }
 
-    void ReplicatedPropertyManager::finish()
+    void ReplicatedPropertyManager::end()
     {
         IZ_ASSERT(s_Allocator);
 
@@ -167,21 +165,6 @@ namespace net {
 
         IZ_ASSERT(IZ_FALSE);
         return IZ_NULL;
-    }
-
-    void ReplicatedPropertyManager::updateManager()
-    {
-        if (g_Server != IZ_NULL) {
-            IZ_ASSERT(g_Client == IZ_NULL);
-            g_Server->update();
-        }
-        else if (g_Client != IZ_NULL) {
-            IZ_ASSERT(g_Server == IZ_NULL);
-            g_Client->update();
-        }
-        else {
-            IZ_ASSERT(IZ_FALSE);
-        }
     }
 }    // namespace net
 }    // namespace izanagi
