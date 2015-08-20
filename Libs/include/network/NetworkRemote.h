@@ -28,24 +28,8 @@ namespace net {
         Remote();
         virtual ~Remote();
 
-    public:
-        // 送信データを登録.
-        IZ_BOOL registerData(
-            IMemoryAllocator* allocator,
-            IZ_UINT num,
-            const void** data, IZ_UINT* size);
-
-        IZ_BOOL isRegistered();
-
-        void clear();
-
     protected:
         IPv4Endpoint m_endpoint;
-
-        IMemoryAllocator* m_allocator;
-        Packet m_sendPacket;
-
-        std::atomic<IZ_BOOL> m_isRegistered;
     };
 
     // TCPリモート
@@ -63,9 +47,19 @@ namespace net {
 
     private:
         TcpRemote();
-        virtual ~TcpRemote() {}
+        virtual ~TcpRemote();
 
     private:
+        // 送信データを登録.
+        IZ_BOOL registerData(
+            IMemoryAllocator* allocator,
+            IZ_UINT num,
+            const void** data, IZ_UINT* size);
+
+        IZ_BOOL isRegistered();
+
+        void clear();
+
         // クライアントと接続しているソケットを割り当てる.
         void setSocket(IZ_SOCKET socket);
 
@@ -90,6 +84,11 @@ namespace net {
 
     private:
         IZ_SOCKET m_socket;
+
+        IMemoryAllocator* m_allocator;
+        Packet m_sendPacket;
+
+        std::atomic<IZ_BOOL> m_isRegistered;
     };
 
     // UDPリモート
@@ -109,14 +108,6 @@ namespace net {
         virtual ~UdpRemote() {}
 
     private:
-        // データを送信.
-        IZ_INT sendData(
-            IZ_SOCKET socket,
-            const void* data, IZ_UINT size);
-
-        // 登録されているデータを送信.
-        IZ_INT sendData(IZ_SOCKET socket);
-
         // 有効かどうか.
         IZ_BOOL isActive() const;
 

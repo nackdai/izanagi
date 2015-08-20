@@ -7,7 +7,31 @@ namespace izanagi {
 namespace net {
     /**
      */
-    class UdpServer : public Udp {
+    class UdpProxy : public Udp {
+    protected:
+        UdpProxy();
+        virtual ~UdpProxy();
+
+    public:
+        void setFuncRecv(std::function<void(net::Packet&)> func);
+
+    protected:
+        IZ_BOOL start(IMemoryAllocator* allocator);
+
+        void loop();
+
+    private:
+        virtual void onStop() final;
+
+    private:
+        sys::CSpinLock m_locker;
+        std::function<void(net::Packet&)> m_funcRecv;
+        sys::CThread m_thread;
+    };
+
+    /**
+     */
+    class UdpServer : public UdpProxy {
     public:
         UdpServer() {}
         virtual ~UdpServer() {}
@@ -20,17 +44,11 @@ namespace net {
         IZ_BOOL start(
             IMemoryAllocator* allocator,
             const IPv4Endpoint& endpoint);
-
-    private:
-        virtual void onStop() final;
-
-    private:
-        sys::CThread m_thread;
     };
 
     /**
      */
-    class UdpClient : public Udp {
+    class UdpClient : public UdpProxy {
     public:
         UdpClient() {}
         virtual ~UdpClient() {}
@@ -43,12 +61,6 @@ namespace net {
         IZ_BOOL start(
             IMemoryAllocator* allocator,
             const IPv4Endpoint& endpoint);
-
-    private:
-        virtual void onStop() final;
-
-    private:
-        sys::CThread m_thread;
     };
 }    // namespace net
 }    // namespace izanagi

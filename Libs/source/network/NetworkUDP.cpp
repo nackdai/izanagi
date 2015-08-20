@@ -44,7 +44,10 @@ namespace net {
 
         m_socket = IZ_INVALID_SOCKET;
 
-        m_isRunnning.store(IZ_FALSE);
+        m_isRunning.store(IZ_FALSE);
+
+        m_recvBuf = IZ_NULL;
+        m_bufSize = 0;
     }
 
     Udp::~Udp()
@@ -57,7 +60,7 @@ namespace net {
         IMemoryAllocator* allocator,
         const IPv4Endpoint& endpoint)
     {
-        if (m_isRunnning.load()) {
+        if (m_isRunning.load()) {
             return IZ_TRUE;
         }
 
@@ -97,7 +100,11 @@ namespace net {
         result = (bind(m_socket, (const sockaddr*)&inAddr, sizeof(inAddr)) >= 0);
         VGOTO(result, __EXIT__);
 
-        m_isRunnning.store(IZ_TRUE);
+        // TODO
+        m_bufSize = 1 * 1024 * 1024;
+        m_recvBuf = (IZ_CHAR*)ALLOC_ZERO(m_allocator, m_bufSize);
+
+        m_isRunning.store(IZ_TRUE);
 
     __EXIT__:
         if (!result) {
@@ -114,7 +121,7 @@ namespace net {
         IMemoryAllocator* allocator,
         const IPv4Endpoint& endpoint)
     {
-        if (m_isRunnning.load()) {
+        if (m_isRunning.load()) {
             return IZ_TRUE;
         }
 
@@ -139,7 +146,11 @@ namespace net {
         remote->m_endpoint = endpoint;
         m_remotes.AddTail(remote->getListItem());
 
-        m_isRunnning.store(IZ_TRUE);
+        // TODO
+        m_bufSize = 1 * 1024 * 1024;
+        m_recvBuf = (IZ_CHAR*)ALLOC_ZERO(m_allocator, m_bufSize);
+
+        m_isRunning.store(IZ_TRUE);
 
         // TODO
         result = IZ_TRUE;
@@ -156,7 +167,7 @@ namespace net {
     // 停止.
     void Udp::stop()
     {
-        m_isRunnning.store(IZ_FALSE);
+        m_isRunning.store(IZ_FALSE);
 
         onStop();
 
@@ -180,74 +191,71 @@ namespace net {
             m_remotes.Clear();
         }
 
-        {
-            auto item = m_recvData.GetTop();
-
-            while (item != IZ_NULL) {
-                auto packet = item->GetData();
-                auto next = item->GetNext();
-
-                FREE(m_allocator, packet);
-
-                item = next;
-            }
-
-            m_recvData.Clear();
-        }
+        FREE(m_allocator, m_recvBuf);
     }
 
     // 受信したデータを取得.
     IZ_BOOL Udp::recieve(std::function<void(const net::Packet&)> func)
     {
-        Packet* src = nullptr;
+        Packet* packet = nullptr;
 
-        {
-            std::unique_lock<std::mutex> lock(m_recvDataLocker);
+        IZ_BOOL result = onRecieve(packet);
 
-            auto item = m_recvData.GetTop();
-            if (item == IZ_NULL) {
-                return IZ_FALSE;
-            }
+        if (result) {
+            func(*packet);
 
-            item->Leave();
-            src = item->GetData();
+            FREE(m_allocator, packet);
         }
 
-        func(*src);
-
-        FREE(m_allocator, src);
-
-        return IZ_TRUE;
+        return result;
     }
 
-    // 受信した全データを取得.
-    IZ_BOOL Udp::recieveAll(std::function<void(const net::Packet&)> func)
+    IZ_BOOL Udp::onRecieve(Udp::Packet*& packet)
     {
-        std::unique_lock<std::mutex> lock(m_recvDataLocker);
+        sockaddr_in addr;
+        sockaddr* paddr = (sockaddr*)&addr;
+        IZ_INT len = sizeof(addr);
 
-        auto item = m_recvData.GetTop();
-        if (item == IZ_NULL) {
-            return IZ_FALSE;
+        IZ_INT ret = recvfrom(
+            m_socket,
+            m_recvBuf,
+            m_bufSize,
+            0,
+            paddr,
+            &len);
+
+        auto remote = findRemote(addr);
+
+        if (ret > 0) {
+            if (!remote) {
+                // リモートを追加
+                remote = UdpRemote::create(m_allocator);
+                remote->m_endpoint.set(addr);
+
+                std::unique_lock<std::mutex> lock(m_remotesLocker);
+                m_remotes.AddTail(remote->getListItem());
+            }
+
+            packet = Packet::create(m_allocator, len);
+            packet->endpoint = remote->m_endpoint;
+            memcpy(packet->data, m_recvBuf, len);
         }
+        else {
+            // TODO
+            // 切断された
 
-        while (item != IZ_NULL) {
-            auto next = item->GetNext();
+            if (remote) {
+                // TODO
+            }
 
-            auto src = item->GetData();
-            item->Leave();
-
-            func(*src);
-
-            FREE(m_allocator, src);
-
-            item = next;
+            return IZ_FALSE;
         }
 
         return IZ_TRUE;
     }
 
     // データを送信.
-    IZ_BOOL Udp::sendData(const void* data, IZ_UINT size)
+    IZ_BOOL Udp::send(const void* data, IZ_UINT size)
     {
         IZ_BOOL result = IZ_FALSE;
 
@@ -257,7 +265,23 @@ namespace net {
             auto remote = item->GetData();
 
             if (remote->isActive()) {
-                result = remote->registerData(m_allocator, 1, &data, &size);
+                sockaddr_in addr;
+                remote->m_endpoint.get(addr);
+
+                IZ_INT len = sendto(
+                    m_socket,
+                    (const char*)data,
+                    size,
+                    0,
+                    (sockaddr*)&addr,
+                    sizeof(addr));
+
+                result = (len >= 0);
+
+                if (!result) {
+                    // TODO
+                    // 切断された
+                }
             }
         }
 
@@ -265,23 +289,33 @@ namespace net {
     }
 
     // 指定した接続先にデータを送信.
-    IZ_BOOL Udp::sendData(
-        const IPv4Endpoint& endpoint,
+    IZ_BOOL Udp::sendTo(
+        IPv4Endpoint& endpoint,
         const void* data, IZ_UINT size)
     {
         IZ_BOOL result = IZ_FALSE;
+        
+        sockaddr_in addr;
+        endpoint.get(addr);
 
-        // 対象となるリモート情報を探す
-        UdpRemote* remote = findRemote(endpoint);
-        VRETURN(remote != nullptr);
+        IZ_INT len = sendto(
+            m_socket,
+            (const char*)data,
+            size,
+            0,
+            (sockaddr*)&addr,
+            sizeof(addr));
 
-        if (remote && remote->isActive()) {
+        result = (len >= 0);
+
+        if (!result) {
             // TODO
-            result = remote->registerData(
-                m_allocator,
-                1,
-                &data, &size);
-            IZ_ASSERT(result);
+            // 切断された
+
+            auto remote = findRemote(endpoint);
+            if (remote) {
+                // TODO
+            }
         }
 
         return result;
@@ -316,143 +350,28 @@ namespace net {
         return ret;
     }
 
-    void Udp::traverseRemotes(std::function<IZ_BOOL(UdpRemote*)> func)
+    Udp::Packet* Udp::createPacket(IZ_UINT len)
     {
-        auto item = m_remotes.GetTop();
+        return Packet::create(m_allocator, len);
+    }
 
-        while (item != IZ_NULL) {
-            auto remote = item->GetData();
+    void Udp::deletePacket(Udp::Packet* packet)
+    {
+        FREE(m_allocator, packet);
+    }
 
-            if (func(remote)) {
-                break;
-            }
-
-            item = item->GetNext();
-        }
+    IZ_BOOL Udp::isRunning()
+    {
+        return m_isRunning;
     }
 
     // NOTE
     // UDPではselectは不要
     // http://stackoverflow.com/questions/19758152/select-for-udp-connection
 
-#if 0
-    IZ_BOOL Udp::run(IZ_CHAR* recvBuf, IZ_UINT size)
+    IZ_INT Udp::waitForRecieving()
     {
-        VRETURN(m_isRunnning.load());
-
-        // TODO
-        timeval t_val = { 0, 1000 };
-
-        fd_set readFD;
-        fd_set exceptionFD;
-        fd_set writeFD;
-
-        FD_ZERO(&readFD);
-        FD_ZERO(&exceptionFD);
-        FD_ZERO(&writeFD);
-
-        FD_SET(m_socket, &readFD);
-        FD_SET(m_socket, &exceptionFD);
-
-        traverseRemotes(
-            [&](UdpRemote* remote)->IZ_BOOL {
-                sys::Lock lock(*remote);
-
-                if (remote->isRegistered()) {
-                    FD_SET(m_socket, &writeFD);
-                    return IZ_TRUE;
-                }
-
-                return IZ_FALSE;
-        });
-
-        // ファイルディスクリプタ（ソケット）の状態遷移待ち
-        auto resSelect = select(
-            //FD_SETSIZE,
-            0,
-            &readFD,
-            &writeFD,
-            &exceptionFD,
-            &t_val);
-
-        if (resSelect <= 0) {
-            return IZ_FALSE;
-        }
-
-        // 受信.
-        if (FD_ISSET(m_socket, &readFD)) {
-            sockaddr_in addr;
-            sockaddr* paddr = (sockaddr*)&addr;
-            IZ_INT len = sizeof(addr);
-
-            IZ_INT ret = recvfrom(
-                m_socket,
-                recvBuf,
-                size,
-                0,
-                paddr,
-                &len);
-
-            auto remote = findRemote(addr);
-
-            if (ret > 0) {
-                if (!remote) {
-                    // リモートを追加
-                    remote = UdpRemote::create(m_allocator);
-                    remote->m_endpoint.set(addr);
-
-                    std::unique_lock<std::mutex> lock(m_remotesLocker);
-                    m_remotes.AddTail(remote->getListItem());
-                }
-
-                auto packet = Packet::create(m_allocator, len);
-                packet->endpoint = remote->m_endpoint;
-                memcpy(packet->data, recvBuf, len);
-
-                std::unique_lock<std::mutex> lock(m_recvDataLocker);
-                m_recvData.AddTail(&packet->listItem);
-            }
-            else {
-                // TODO
-                // 切断された
-            }
-
-            if (len <= 0) {
-                // TODO
-                // 切断された
-            }
-        }
-
-        // 送信.
-        if (FD_ISSET(m_socket, &writeFD)) {
-            std::unique_lock<std::mutex> lock(m_remotesLocker);
-
-            traverseRemotes(
-                [this](UdpRemote* remote)->IZ_BOOL {
-                    sys::Lock lock(*remote);
-
-                    IZ_INT ret = remote->sendData(m_socket);
-
-                    if (ret <= 0) {
-                        // TODO
-                        // 切断された
-                    }
-
-                    return IZ_FALSE;
-            });
-        }
-
-        if (FD_ISSET(m_socket, &exceptionFD)) {
-            // TODO
-            IZ_ASSERT(IZ_FALSE);
-        }
-
-        return IZ_TRUE;
-    }
-#else
-    IZ_BOOL Udp::run(IZ_CHAR* recvBuf, IZ_UINT size)
-    {
-        VRETURN(m_isRunnning.load());
+        IZ_ASSERT(m_isRunning.load());
 
         // TODO
         timeval t_val = { 0, 1000 };
@@ -465,27 +384,6 @@ namespace net {
 
         FD_SET(m_socket, &readFD);
         FD_SET(m_socket, &exceptionFD);
-
-        // 送信.
-        {
-            std::unique_lock<std::mutex> lock(m_remotesLocker);
-
-            traverseRemotes(
-                [this](UdpRemote* remote)->IZ_BOOL {
-                    sys::Lock lock(*remote);
-
-                    if (remote->isRegistered()) {
-                        IZ_INT ret = remote->sendData(m_socket);
-
-                        if (ret <= 0) {
-                            // TODO
-                            // 切断された
-                        }
-                    }
-
-                    return IZ_FALSE;
-            });
-        }
 
         // ファイルディスクリプタ（ソケット）の状態遷移待ち
         auto resSelect = select(
@@ -497,82 +395,22 @@ namespace net {
             &t_val);
 
         if (resSelect <= 0) {
-            return IZ_FALSE;
+            return 0;
         }
 
         // 受信.
         if (FD_ISSET(m_socket, &readFD)) {
-            sockaddr_in addr;
-            sockaddr* paddr = (sockaddr*)&addr;
-            IZ_INT len = sizeof(addr);
-
-            IZ_INT ret = recvfrom(
-                m_socket,
-                recvBuf,
-                size,
-                0,
-                paddr,
-                &len);
-
-            auto remote = findRemote(addr);
-
-            if (ret > 0) {
-                if (!remote) {
-                    // リモートを追加
-                    remote = UdpRemote::create(m_allocator);
-                    remote->m_endpoint.set(addr);
-
-                    std::unique_lock<std::mutex> lock(m_remotesLocker);
-                    m_remotes.AddTail(remote->getListItem());
-                }
-
-                auto packet = Packet::create(m_allocator, len);
-                packet->endpoint = remote->m_endpoint;
-                memcpy(packet->data, recvBuf, len);
-
-                std::unique_lock<std::mutex> lock(m_recvDataLocker);
-                m_recvData.AddTail(&packet->listItem);
-            }
-            else {
-                // TODO
-                // 切断された
-            }
-
-            if (len <= 0) {
-                // TODO
-                // 切断された
-            }
+            return 1;
         }
 
         if (FD_ISSET(m_socket, &exceptionFD)) {
             // TODO
             IZ_ASSERT(IZ_FALSE);
+            return -1;
         }
 
-        return IZ_TRUE;
-    }
-#endif
+        return 0;
 
-    void Udp::loop()
-    {
-        // TODO
-        IZ_UINT size = 1 * 1024 * 1024;
-        IZ_CHAR* recvBuf = (IZ_CHAR*)ALLOC_ZERO(m_allocator, size);
-
-        if (recvBuf == nullptr) {
-            IZ_ASSERT(IZ_FALSE);
-            return;
-        }
-
-        for (;;) {
-            if (!m_isRunnning.load()) {
-                break;
-            }
-
-            run(recvBuf, size);
-        }
-
-        FREE(m_allocator, recvBuf);
     }
 }    // namespace net
 }    // namespace izanagi

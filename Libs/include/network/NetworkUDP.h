@@ -37,37 +37,38 @@ namespace net {
         void stop();
 
         /** 受信したデータを取得.
-        */
+         */
         IZ_BOOL recieve(std::function<void(const net::Packet&)> func);
 
-        /** 受信した全データを取得.
-        */
-        IZ_BOOL recieveAll(std::function<void(const net::Packet&)> func);
-
         /** データを送信.
-        */
-        IZ_BOOL sendData(const void* data, IZ_UINT size);
+         */
+        IZ_BOOL send(const void* data, IZ_UINT size);
 
         /** 指定した接続先にデータを送信.
-        */
-        IZ_BOOL sendData(
-            const IPv4Endpoint& endpoint,
+         */
+        IZ_BOOL sendTo(
+            IPv4Endpoint& endpoint,
             const void* data, IZ_UINT size);
-
-        IZ_BOOL run(IZ_CHAR* recvBuf, IZ_UINT size);
 
     private:
         UdpRemote* findRemote(const IPv4Endpoint& ep);
         UdpRemote* findRemote(const sockaddr_in& addr);
 
-        void traverseRemotes(std::function<IZ_BOOL(UdpRemote*)> func);
-
     protected:
-        void loop();
-
         virtual void onStop() {}
 
-    private:
+        class Packet;
+
+        Packet* createPacket(IZ_UINT len);
+        void deletePacket(Packet* packet);
+
+        IZ_BOOL isRunning();
+
+        IZ_BOOL onRecieve(Udp::Packet*& packet);
+
+        IZ_INT waitForRecieving();
+
+    protected:
         class Packet : public net::Packet, CPlacementNew {
         public:
             static Packet* create(IMemoryAllocator* allocator, IZ_UINT len);
@@ -89,10 +90,10 @@ namespace net {
         std::mutex m_remotesLocker;
         CStdList<UdpRemote> m_remotes;
 
-        std::mutex m_recvDataLocker;
-        CStdList<Packet> m_recvData;
+        IZ_UINT m_bufSize;
+        IZ_CHAR* m_recvBuf;
 
-        std::atomic<IZ_BOOL> m_isRunnning;
+        std::atomic<IZ_BOOL> m_isRunning;
     };
 }    // namespace net
 }    // namespace izanagi

@@ -303,7 +303,7 @@ namespace net {
         const IPv4Endpoint& endpoint,
         const void* data, IZ_UINT size)
     {
-        Remote* remote = nullptr;
+        TcpRemote* remote = nullptr;
 
         // ‘ÎÛ‚Æ‚È‚éƒŠƒ‚[ƒgî•ñ‚ğ’T‚·
         for (IZ_UINT i = 0; i < m_remotes.getNum(); i++) {
