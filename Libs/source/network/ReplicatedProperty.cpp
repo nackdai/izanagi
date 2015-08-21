@@ -43,37 +43,27 @@ namespace net {
     void ReplicatedProperty<_T>::setForcibly(const _T& rhs)
     {
         if (m_value != rhs) {
-            IZ_BOOL isValid = IZ_TRUE;
-
-            if (m_funcValidation
-                && m_type != E_REPLICATED_TYPE::None)
+            // NOTE
+            // dirtyにならない限り、通信対象にならない
+            if (m_type != E_REPLICATED_TYPE::None
+                && isServer())
             {
-                isValid = m_funcValidation(rhs);
+                // TODO
+                // サーバーで呼ばれたときだけdirtyにする？
+
+                this->dirty();
+                m_owner->dirtyReplicatedProperty();
             }
 
-            if (isValid) {
-                // NOTE
-                // dirtyにならない限り、通信対象にならない
-                if (m_type != E_REPLICATED_TYPE::None
-                    && isServer())
-                {
-                    // TODO
-                    // サーバーで呼ばれたときだけdirtyにする？
+            m_value = rhs;
 
-                    this->dirty();
-                    m_owner->dirtyReplicatedProperty();
-                }
-
-                m_value = rhs;
-
-                // 通知
-                if (m_funcNotify
-                    && m_type == E_REPLICATED_TYPE::RepNotify
-                    && !isServer())
-                {
-                    // クライアントで呼ばれたときは通知する
-                    m_funcNotify();
-                }
+            // 通知
+            if (m_funcNotify
+                && m_type == E_REPLICATED_TYPE::RepNotify
+                && !isServer())
+            {
+                // クライアントで呼ばれたときは通知する
+                m_funcNotify();
             }
         }
     }
@@ -93,15 +83,12 @@ namespace net {
     //////////////////////////////////////////////
 
     class Hoge : public ReplicatedObject<> {
+        IZ_DEFS_REPLICATED_OBJ(Hoge);
+
     public:
         Hoge()
-            : v0(
-            10, 
-            this, 
-            E_REPLICATED_TYPE::Rep,
-            IZ_TRUE,
-            ReplicatedProperty<IZ_UINT32>::notify(&Hoge::Func, this))
         {
+            IZ_DECL_REPLICATED_PROPERTY(Hoge, v0);
         }
         ~Hoge() {}
 
@@ -109,8 +96,10 @@ namespace net {
         {
         }
 
-        ReplicatedProperty<IZ_UINT32> v0;
+        IZ_REPLICATED_PROPERTY(IZ_UINT32, v0, E_REPLICATED_TYPE::Rep, E_REPLICATED_RELIABLE::Reliable);
     };
+
+    IZ_REFLECT_REPLICATED_OBJ(Hoge);
 
     void Test()
     {

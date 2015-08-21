@@ -14,12 +14,35 @@ namespace net {
         return s_ID;
     }
 
-    void ReplicatedPropertyManager::add(ReplicatedObjectBase* obj)
+    IZ_UINT ReplicatedPropertyManager::getObjectNum()
     {
-        m_hash.Add(obj->getReplicatedObjectHashItem());
+        IZ_UINT ret = m_hash.GetDataNum();
+        return ret;
+    }
 
-        // TODO
-        // ここで通信チャンネルを作る？
+    ReplicatedObjectBase* ReplicatedPropertyManager::getObject(IZ_UINT idx)
+    {
+        IZ_ASSERT(idx < getObjectNum());
+
+        auto item = m_hash.GetOrderAtHashItem(idx);
+        auto ret = item->GetData();
+
+        return ret;
+    }
+
+    ReplicatedObjectBase* ReplicatedPropertyManager::popObject()
+    {
+        auto item = m_hash.GetOrderTopHashItem();
+
+        if (item != IZ_NULL) {
+            auto data = item->GetData();
+
+            item->Leave();
+
+            return data;
+        }
+
+        return nullptr;
     }
 
     /////////////////////////////////////////////////////////
@@ -37,6 +60,8 @@ namespace net {
         }
 
         void send(ReplicatedObjectBase* obj);
+
+        virtual void add(ReplicatedObjectBase* obj) override;
     };
 
     void ReplicatedPropertyServer::update()
@@ -74,6 +99,19 @@ namespace net {
         }
     }
 
+    void ReplicatedPropertyServer::add(ReplicatedObjectBase* obj)
+    {
+        IZ_BOOL isFound = (m_hash.Find(obj->getReplicatedObjectID()) != IZ_NULL);
+
+        if (!isFound) {
+            // TODO
+            // ここで通信チャンネルを作る？
+
+            // TODO
+            // オブジェクトが作られたことを通知
+        }
+    }
+
     /////////////////////////////////////////////////////////
 
     class ReplicatedPropertyClient : public ReplicatedPropertyManager {
@@ -89,6 +127,21 @@ namespace net {
         }
 
         void recv(ReplicatedObjectBase* obj);
+
+        virtual IZ_BOOL registerCreator(const CClass& clazz, ReplicatedObjectCreator func) override;
+
+    private:
+        struct CreatorHolder;
+        using CreatorHash = CStdHash < CKey, CreatorHolder, 4 >;
+        using CreatorHashItem = CreatorHash::Item;
+
+        struct CreatorHolder {
+            ReplicatedObjectCreator func;
+            CClass clazz;
+            CreatorHashItem hashItem;
+        };
+
+        CreatorHash m_hashCreator;
     };
 
     void ReplicatedPropertyClient::update()
@@ -119,6 +172,28 @@ namespace net {
 
             item = item->GetNext();
         }
+    }
+
+    IZ_BOOL ReplicatedPropertyClient::registerCreator(const CClass& clazz, ReplicatedObjectCreator func)
+    {
+        auto item = m_hashCreator.Find(clazz);
+        IZ_BOOL ret = (item == IZ_NULL);
+
+        if (ret) {
+            CreatorHolder* p = (CreatorHolder*)ALLOC(
+                ReplicatedPropertyManager::s_Allocator, 
+                sizeof(CreatorHolder));
+
+            IZ_ASSERT(p != IZ_NULL);
+
+            p->hashItem.Init(clazz, p);
+            p->clazz = clazz;
+            p->func = func;
+
+            m_hashCreator.Add(&p->hashItem);
+        }
+
+        return ret;
     }
 
     /////////////////////////////////////////////////////////

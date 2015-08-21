@@ -7,6 +7,7 @@
 namespace izanagi {
 namespace net {
     class ReplicatedObjectBase;
+    class CClass;
 
     /**
      */
@@ -14,6 +15,7 @@ namespace net {
         friend class ReplicatedObjectBase;
         template <IZ_BOOL IS_SERVER> friend class ReplicatedPropertyManagerFactory;
 
+    protected:
         static IMemoryAllocator* s_Allocator;
         static std::atomic<IZ_UINT64> s_ID;
 
@@ -33,15 +35,25 @@ namespace net {
         virtual ~ReplicatedPropertyManager() {}
 
     public:
-        typedef CStdHash<IZ_UINT64, ReplicatedObjectBase, 4> ObjectHash;
-        typedef ObjectHash::Item HashItem;
+        using ObjectHash = CStdHash<IZ_UINT64, ReplicatedObjectBase, 4>;
+        using HashItem = ObjectHash::Item;
 
         PURE_VIRTUAL(void update());
+
+        using ReplicatedObjectCreator = std::function < ReplicatedObjectBase*(IMemoryAllocator*) >;
+
+        virtual IZ_BOOL registerCreator(const CClass& clazz, ReplicatedObjectCreator func) { return IZ_FALSE; }
+
+        IZ_UINT getObjectNum();
+
+        ReplicatedObjectBase* getObject(IZ_UINT idx);
+
+        ReplicatedObjectBase* popObject();
 
     protected:
         PURE_VIRTUAL(IZ_BOOL isServer());
 
-        void add(ReplicatedObjectBase* obj);
+        virtual void add(ReplicatedObjectBase* obj) {}
 
     protected:
         ObjectHash m_hash;
