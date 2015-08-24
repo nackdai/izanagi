@@ -3,6 +3,7 @@
 
 #include <atomic>
 #include "izStd.h"
+#include "izSystem.h"
 
 namespace izanagi {
 namespace net {
@@ -21,6 +22,8 @@ namespace net {
 
         static IZ_UINT64 genID();
 
+        static IZ_BOOL isInitialized();
+
     public:
         static void begin(
             IZ_BOOL isServer,
@@ -30,7 +33,7 @@ namespace net {
 
         static void end();
 
-    private:
+    protected:
         ReplicatedPropertyManager() {}
         virtual ~ReplicatedPropertyManager() {}
 
@@ -50,13 +53,22 @@ namespace net {
 
         ReplicatedObjectBase* popObject();
 
+        using OnCreateObject = std::function < void(const CClass& clazz, ReplicatedObjectBase*) > ;
+
+        void setOnCreateObject(OnCreateObject func);
+
     protected:
         PURE_VIRTUAL(IZ_BOOL isServer());
 
-        virtual void add(ReplicatedObjectBase* obj) {}
+        virtual void add(ReplicatedObjectBase& obj) {}
+        virtual void remove(ReplicatedObjectBase& obj) {}
 
     protected:
         ObjectHash m_hash;
+
+        sys::CSpinLock m_locker;
+
+        OnCreateObject m_onCreateObject{ nullptr };
     };
 }    // namespace net
 }    // namespace izanagi

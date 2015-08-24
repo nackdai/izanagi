@@ -6,16 +6,25 @@ namespace izanagi {
 namespace net {
 
     IMemoryAllocator* ReplicatedPropertyManager::s_Allocator = nullptr;
-    std::atomic<IZ_UINT64> ReplicatedPropertyManager::s_ID(0);
+    std::atomic<IZ_UINT64> ReplicatedPropertyManager::s_ID{ 0 };
 
     IZ_UINT64 ReplicatedPropertyManager::genID()
     {
+        IZ_ASSERT(isInitialized());
+
         s_ID.store(s_ID + 1);
         return s_ID;
     }
 
+    IZ_BOOL ReplicatedPropertyManager::isInitialized()
+    {
+        return (s_Allocator != nullptr);
+    }
+
     IZ_UINT ReplicatedPropertyManager::getObjectNum()
     {
+        sys::Lock lock(m_locker);
+
         IZ_UINT ret = m_hash.GetDataNum();
         return ret;
     }
@@ -23,6 +32,8 @@ namespace net {
     ReplicatedObjectBase* ReplicatedPropertyManager::getObject(IZ_UINT idx)
     {
         IZ_ASSERT(idx < getObjectNum());
+
+        sys::Lock lock(m_locker);
 
         auto item = m_hash.GetOrderAtHashItem(idx);
         auto ret = item->GetData();
@@ -32,6 +43,8 @@ namespace net {
 
     ReplicatedObjectBase* ReplicatedPropertyManager::popObject()
     {
+        sys::Lock lock(m_locker);
+
         auto item = m_hash.GetOrderTopHashItem();
 
         if (item != IZ_NULL) {
@@ -45,12 +58,19 @@ namespace net {
         return nullptr;
     }
 
+    void ReplicatedPropertyManager::setOnCreateObject(OnCreateObject func)
+    {
+        if (!m_onCreateObject) {
+            m_onCreateObject = func;
+        }
+    }
+
     /////////////////////////////////////////////////////////
 
     class ReplicatedPropertyServer : public ReplicatedPropertyManager {
     public:
-        ReplicatedPropertyServer();
-        virtual ~ReplicatedPropertyServer();
+        ReplicatedPropertyServer() {}
+        virtual ~ReplicatedPropertyServer() {}
 
         virtual void update() override;
 
@@ -61,11 +81,15 @@ namespace net {
 
         void send(ReplicatedObjectBase* obj);
 
-        virtual void add(ReplicatedObjectBase* obj) override;
+        virtual void add(ReplicatedObjectBase& obj) override;
+
+        virtual void remove(ReplicatedObjectBase& obj) override;
     };
 
     void ReplicatedPropertyServer::update()
     {
+        sys::Lock lock(m_locker);
+
         auto item = m_hash.GetOrderTop();
 
         while (item != IZ_NULL) {
@@ -99,11 +123,15 @@ namespace net {
         }
     }
 
-    void ReplicatedPropertyServer::add(ReplicatedObjectBase* obj)
+    void ReplicatedPropertyServer::add(ReplicatedObjectBase& obj)
     {
-        IZ_BOOL isFound = (m_hash.Find(obj->getReplicatedObjectID()) != IZ_NULL);
+        sys::Lock lock(m_locker);
+
+        IZ_BOOL isFound = (m_hash.Find(obj.getReplicatedObjectID()) != IZ_NULL);
 
         if (!isFound) {
+            m_hash.Add(obj.getReplicatedObjectHashItem());
+
             // TODO
             // ここで通信チャンネルを作る？
 
@@ -112,11 +140,29 @@ namespace net {
         }
     }
 
+    void ReplicatedPropertyServer::remove(ReplicatedObjectBase& obj)
+    {
+        sys::Lock lock(m_locker);
+
+        IZ_BOOL isFound = (m_hash.Find(obj.getReplicatedObjectID()) != IZ_NULL);
+
+        if (isFound) {
+            obj.getReplicatedObjectHashItem()->Leave();
+
+            // TODO
+            // オブジェクトが消されたことを通知
+
+            // TODO
+            // 消されたことが届いたことが確認できたら通信チャンネルを切る？
+            // 強制的に切る？
+        }
+    }
+
     /////////////////////////////////////////////////////////
 
     class ReplicatedPropertyClient : public ReplicatedPropertyManager {
     public:
-        ReplicatedPropertyClient();
+        ReplicatedPropertyClient() {}
         virtual ~ReplicatedPropertyClient();
 
         virtual void update() override;
@@ -141,11 +187,26 @@ namespace net {
             CreatorHashItem hashItem;
         };
 
+        sys::CSpinLock m_lockerHashCreator;
         CreatorHash m_hashCreator;
     };
 
+    ReplicatedPropertyClient::~ReplicatedPropertyClient()
+    {
+        auto item = m_hashCreator.GetOrderTop();
+
+        while (item != IZ_NULL) {
+            auto p = item->GetData()->GetData();
+            item = item->GetNext();
+
+            FREE(s_Allocator, p);
+        }
+    }
+
     void ReplicatedPropertyClient::update()
     {
+        sys::Lock lock(m_locker);
+
         auto item = m_hash.GetOrderTop();
 
         while (item != IZ_NULL) {
@@ -176,6 +237,8 @@ namespace net {
 
     IZ_BOOL ReplicatedPropertyClient::registerCreator(const CClass& clazz, ReplicatedObjectCreator func)
     {
+        sys::Lock lock(m_lockerHashCreator);
+
         auto item = m_hashCreator.Find(clazz);
         IZ_BOOL ret = (item == IZ_NULL);
 

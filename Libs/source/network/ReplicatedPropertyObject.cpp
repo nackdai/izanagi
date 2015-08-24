@@ -39,6 +39,11 @@ namespace net {
         return !(*this == rhs);
     }
 
+    IZ_BOOL CClass::is(const CClass& clazz)
+    {
+        return (*this == clazz);
+    }
+
     CClass::operator const CKey&() const
     {
         return m_key;
@@ -56,7 +61,12 @@ namespace net {
 
         m_ReplicatedObjectHashItem.Init(m_ReplicatedObjectID, this);
 
-        ReplicatedPropertyManager::get()->add(this);
+        ReplicatedPropertyManager::get()->add(*this);
+    }
+
+    ReplicatedObjectBase::~ReplicatedObjectBase()
+    {
+        ReplicatedPropertyManager::get()->remove(*this);
     }
 
     void ReplicatedObjectBase::addReplicatedProperty(ReplicatedPropertyBase& prop)

@@ -75,7 +75,10 @@ namespace net {
             E_REPLICATED_RELIABLE reliable = E_REPLICATED_RELIABLE::UnReliable)
         {
             m_owner = obj;
-            obj->addReplicatedProperty(*this);
+
+            if (type != E_REPLICATED_TYPE::None) {
+                obj->addReplicatedProperty(*this);
+            }
 
             m_type = type;
             m_realiable = reliable;

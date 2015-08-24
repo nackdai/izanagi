@@ -22,13 +22,15 @@ namespace net {
         CClass(const IZ_CHAR* tag);
         ~CClass() {}
 
-        CClass(const CClass& rhs) = delete;
+        CClass(const CClass& rhs);
         const CClass& operator=(const CClass& rhs);
 
     public:
         IZ_BOOL operator==(const CClass& rhs) const;
 
         IZ_BOOL operator!=(const CClass& rhs) const;
+
+        IZ_BOOL is(const CClass& clazz);
 
         operator const CKey&() const;
 
@@ -47,7 +49,7 @@ namespace net {
 
     protected:
         ReplicatedObjectBase();
-        virtual ~ReplicatedObjectBase() {}
+        virtual ~ReplicatedObjectBase();
 
     private:
         void addReplicatedProperty(ReplicatedPropertyBase& prop);
@@ -96,20 +98,20 @@ namespace net {
 #define IZ_DEFS_REPLICATED_OBJ(clazz) \
     public:\
         static const izanagi::net::CClass& Class##clazz() {\
-                static izanagi::net::CClass _class(#clazz);\
-                return _class;\
-            }\
+            static izanagi::net::CClass _class(#clazz);\
+            return _class;\
+        }\
         virtual const izanagi::net::CClass& getClass() override { return clazz::Class##clazz(); }\
         static izanagi::net::ReplicatedObjectBase* createForReplicatedProp##clazz(izanagi::IMemoryAllocator* allocator)\
-            {\
-                void* p = ALLOC(allocator, sizeof(clazz));\
-                clazz* ret = new(p)clazz;\
-                return ret;\
-            }\
+        {\
+            void* p = ALLOC(allocator, sizeof(clazz));\
+            clazz* ret = new(p)clazz;\
+            return ret;\
+        }\
         struct CInternalForReplicatedProp##clazz { \
-                CInternalForReplicatedProp##clazz() { izanagi::net::ReplicatedPropertyManager::get()->registerCreator(Class##clazz(), createForReplicatedProp##clazz); }\
-                ~CInternalForReplicatedProp##clazz() {}\
-            };\
+            CInternalForReplicatedProp##clazz() { izanagi::net::ReplicatedPropertyManager::get()->registerCreator(Class##clazz(), createForReplicatedProp##clazz); }\
+            ~CInternalForReplicatedProp##clazz() {}\
+        };\
         static CInternalForReplicatedProp##clazz s_internalForReplicatedProp##clazz
 
 #define IZ_REFLECT_REPLICATED_OBJ(clazz) \
