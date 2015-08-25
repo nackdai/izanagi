@@ -19,16 +19,12 @@ namespace sys
     CThread::CThread()
     {
 		m_ThreadResult = 0;
-		m_allocator = nullptr;
-		m_thread = nullptr;
     }
 
     CThread::CThread(const ThreadName& name)
+        : CThread()
     {
-		m_ThreadResult = 0;
 		m_Name = name;
-		m_allocator = nullptr;
-		m_thread = nullptr;
     }
 
     CThread::~CThread()
@@ -36,44 +32,32 @@ namespace sys
         Join();
     }
 
-	void CThread::Init(
-		const ThreadName& name,
-		std::function<void(void*)> func,
-		void* userData)
-	{
-		m_Name = name;
-		Init(func, userData);
-	}
-
-	void CThread::Init(
-		std::function<void(void*)> func,
-		void* userData)
-	{
-		m_func = func;
-		m_userData = userData;
-	}
-
     // このスレッドの実行を開始.
-	IZ_BOOL CThread::Start(IMemoryAllocator* allocator)
+	IZ_BOOL CThread::Start(
+        std::function<void(void*)> func,
+        void* userData)
     {
-		if (m_thread == nullptr) {
-			m_allocator = allocator;
-			IZ_ASSERT(m_allocator != nullptr);
-
-			void* buf = ALLOC(m_allocator, sizeof(std::thread));
-			VRETURN(buf != IZ_NULL);
-
-			m_thread = new(buf) std::thread([this] { Run(); });
-		}
+        m_isRunning = IZ_TRUE;
+        m_func = func;
+        m_userData = userData;
+        m_thread = std::thread([this] { Run(); });
 
 		return IZ_TRUE;
+    }
+
+    // このスレッドの実行を開始.
+    IZ_BOOL CThread::Start()
+    {
+        m_isRunning = IZ_TRUE;
+        m_thread = std::thread([this] { Run(); });
+
+        return IZ_TRUE;
     }
 
     // スレッド実行中かどうかを取得.
     IZ_BOOL CThread::IsRunning()
     {
-		IZ_BOOL ret = (m_thread != nullptr);
-		return ret;
+        return m_isRunning;
     }
 
 	void CThread::Run()
@@ -86,12 +70,11 @@ namespace sys
     // このスレッドが終了するのを待機.
     void CThread::Join()
     {
-		if (m_thread != nullptr) {
-			m_thread->join();
-
-			FREE(m_allocator, m_thread);
-			m_thread = nullptr;
-		}
+        if (m_isRunning) {
+            m_thread.join();
+            m_isRunning = IZ_FALSE;
+            m_userData = nullptr;
+        }
     }
 
     // 名前取得.

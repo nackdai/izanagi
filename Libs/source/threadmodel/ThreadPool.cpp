@@ -143,7 +143,7 @@ namespace threadmodel
         VRETURN_NULL(buf);
 
         CThread* ret = new(buf) CThread(this);
-		ret->Start(m_Allocator);
+		ret->Start();
 
         return ret;
     }

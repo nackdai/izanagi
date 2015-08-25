@@ -157,22 +157,15 @@ namespace threadmodel
             IZ_FLOAT time, 
             IZ_BOOL willDelete = IZ_FALSE);
 
-		virtual void Init(
-			const sys::ThreadName& name,
-			std::function<void(void*)> func,
-			void* userData) final
-		{
-			IZ_ASSERT(IZ_FALSE);
-		}
+        virtual IZ_BOOL Start(
+            std::function<void(void*)> func,
+            void* userData) final
+        {
+            IZ_ASSERT(IZ_FALSE);
+            return IZ_FALSE;
+        }
 
-		virtual void Init(
-			std::function<void(void*)> func,
-			void* userData) final
-		{
-			IZ_ASSERT(IZ_FALSE);
-		}
-
-		virtual IZ_BOOL Start(IMemoryAllocator* allocator) final
+		virtual IZ_BOOL Start() final
 		{
 			IZ_ASSERT(IZ_FALSE);
 			return IZ_FALSE;

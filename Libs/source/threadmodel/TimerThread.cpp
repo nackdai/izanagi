@@ -358,7 +358,7 @@ namespace threadmodel
         }
 
         if (m_State == STATE_NONE) {
-			VRETURN(sys::CThread::Start(allocator));
+			VRETURN(sys::CThread::Start());
             m_State = STATE_INITIALIZED;
         }
 
