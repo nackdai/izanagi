@@ -8,16 +8,19 @@ namespace net {
     }
 
     IPv4Address::IPv4Address(IZ_UINT8 a, IZ_UINT8 b, IZ_UINT8 c, IZ_UINT8 d)
+        : IPv4Address()
     {
         set(a, b, c, d);
     }
 
     IPv4Address::IPv4Address(IZ_UINT32 ip)
+        : IPv4Address()
     {
         set(ip);
     }
 
     IPv4Address::IPv4Address(const IZ_CHAR* ip)
+        : IPv4Address()
     {
         set(ip);
     }
