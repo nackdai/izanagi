@@ -92,8 +92,7 @@ IZ_BOOL CMessageQueueApp::InitInternal(
 {
     m_Allocator = allocator;
 
-	m_Thread.Init(Run, this);
-	m_Thread.Start(m_Allocator);
+    m_Thread.Start(Run, this);
 
     return IZ_TRUE;
 }
