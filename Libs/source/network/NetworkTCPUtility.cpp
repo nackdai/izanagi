@@ -12,12 +12,11 @@ namespace net {
         IZ_ASSERT(result);
 
         if (result) {
-            m_thread.Init(
+            result = m_thread.Start(
                 [this] (void* data) {
                     loop();
                 }, nullptr);
 
-            result = m_thread.Start(allocator);
             IZ_ASSERT(result);
         }
 
@@ -46,21 +45,16 @@ namespace net {
                 result = connectServer();
             }
             else {
-                m_thread.Init(
+                result = m_thread.Start(
                     [this] (void* data) {
                         connectServer();
                     }, nullptr);
-
-                result = m_thread.Start(allocator);
                 VGOTO(result, __EXIT__);
 
-                m_threadSub.Init(
+                result = m_threadSub.Start(
                     [this] (void* data) {
                         loop();
                     }, nullptr);
-
-                result = m_threadSub.Start(allocator);
-                VGOTO(result, __EXIT__);
             }
         }
 

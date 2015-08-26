@@ -19,12 +19,11 @@ namespace net {
 
     IZ_BOOL UdpProxy::start(IMemoryAllocator* allocator)
     {
-        m_thread.Init(
+        IZ_BOOL result = m_thread.Start(
             [this](void* data) {
             loop();
         }, nullptr);
 
-        IZ_BOOL result = m_thread.Start(allocator);
         IZ_ASSERT(result);
 
         return result;

@@ -42,19 +42,15 @@ namespace sys
         NO_COPIABLE(CThread);
 
     public:
-		virtual void Init(
-			const ThreadName& name,
-			std::function<void(void*)> func,
-			void* userData);
-
-		virtual void Init(
-			std::function<void(void*)> func,
-			void* userData);
-
-    public:
         /** このスレッドの実行を開始.
          */
-        virtual IZ_BOOL Start(IMemoryAllocator* allocator);
+        virtual IZ_BOOL Start(
+            std::function<void(void*)> func,
+            void* userData);
+
+        /** このスレッドの実行を開始.
+         */
+        virtual IZ_BOOL Start();
 
         /** スレッド実行中かどうかを取得.
          */
@@ -73,14 +69,14 @@ namespace sys
     protected:
         IZ_INT m_ThreadResult;
 
-		IMemoryAllocator* m_allocator;
-
-		std::thread* m_thread;
+		std::thread m_thread;
 
         ThreadName m_Name;
 
-		std::function<void(void*)> m_func;
-		void* m_userData;
+        IZ_BOOL m_isRunning{ IZ_FALSE };
+
+        std::function<void(void*)> m_func{ nullptr };
+        void* m_userData{ nullptr };
     };
 }   // namespace sys
 }   // namespace izanagi

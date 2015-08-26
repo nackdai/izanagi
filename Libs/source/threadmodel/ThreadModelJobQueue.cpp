@@ -68,7 +68,7 @@ namespace threadmodel
         VRETURN(m_Workers != IZ_NULL);
 
         for (IZ_UINT i = 0; i < m_WorkerNum; i++) {
-            m_Workers[i]->Start(m_Allocator);
+            m_Workers[i]->Start();
         }
 
         return IZ_TRUE;
