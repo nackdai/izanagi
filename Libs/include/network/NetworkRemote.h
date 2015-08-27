@@ -36,6 +36,7 @@ namespace net {
     class TcpRemote : public Remote, sys::CSpinLock {
         friend class Remote;
         friend class Tcp;
+        friend class TcpProxy;
         friend class CArray < TcpRemote >;
 
     private:
@@ -89,32 +90,6 @@ namespace net {
         Packet m_sendPacket;
 
         std::atomic<IZ_BOOL> m_isRegistered;
-    };
-
-    // UDPÉäÉÇÅ[Ég
-    class UdpRemote : public Remote, sys::CSpinLock {
-        friend class Remote;
-        friend class Udp;
-
-    private:
-        static UdpRemote* create(IMemoryAllocator* allocator);
-
-        static void deteteRemote(
-            IMemoryAllocator* allocator,
-            Remote* client);
-
-    private:
-        UdpRemote();
-        virtual ~UdpRemote() {}
-
-    private:
-        // óLå¯Ç©Ç«Ç§Ç©.
-        IZ_BOOL isActive() const;
-
-        CStdList<UdpRemote>::Item* getListItem();
-
-    private:
-        CStdList<UdpRemote>::Item m_listItem;
     };
 }    // namespace net
 }    // namespace izanagi

@@ -8,8 +8,6 @@
 
 namespace izanagi {
 namespace net {
-    class UdpRemote;
-
     /**
      */
     class Udp {
@@ -32,7 +30,7 @@ namespace net {
             IMemoryAllocator* allocator,
             const IPv4Endpoint& hostEp);
 
-        IZ_BOOL startAsClientToServer(
+        IZ_BOOL startAsClientAndConnectToServer(
             IMemoryAllocator* allocator,
             const IPv4Endpoint& remoteEp);
 
@@ -40,7 +38,9 @@ namespace net {
          */
         void stop();
 
-        IZ_INT wait();
+        IZ_INT wait(
+            IZ_UINT sec = 0,
+            IZ_UINT usec = 0);
 
         /** 受信したデータを取得.
          */
@@ -63,14 +63,16 @@ namespace net {
             IPv4Endpoint& endpoint,
             const void* data, IZ_UINT size);
 
-    private:
-        UdpRemote* findRemote(const IPv4Endpoint& ep);
-        UdpRemote* findRemote(const sockaddr_in& addr);
-
     protected:
         virtual void onStop() {}
 
         IZ_BOOL isRunning();
+
+    private:
+        class UdpRemote;
+
+        UdpRemote* findRemote(const IPv4Endpoint& ep);
+        UdpRemote* findRemote(const sockaddr_in& addr);
 
     protected:
         IMemoryAllocator* m_allocator;

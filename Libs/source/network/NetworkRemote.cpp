@@ -187,35 +187,5 @@ namespace net {
 
         m_isRegistered = IZ_FALSE;
     }
-
-    //////////////////////////////////////////////////
-
-    UdpRemote* UdpRemote::create(IMemoryAllocator* allocator)
-    {
-        return Remote::create<UdpRemote>(allocator);
-    }
-
-    void UdpRemote::deteteRemote(
-        IMemoryAllocator* allocator,
-        Remote* remote)
-    {
-        Remote::deteteRemote(allocator, remote);
-    }
-
-    UdpRemote::UdpRemote()
-    {
-        m_listItem.Init(this);
-    }
-
-    // —LŒø‚©‚Ç‚¤‚©.
-    IZ_BOOL UdpRemote::isActive() const
-    {
-        return !m_endpoint.getAddress().isAny();
-    }
-
-    CStdList<UdpRemote>::Item* UdpRemote::getListItem()
-    {
-        return &m_listItem;
-    }
 }    // namespace net
 }    // namespace izanagi

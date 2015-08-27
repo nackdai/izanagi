@@ -31,6 +31,8 @@ namespace net {
     void UdpProxy::onStop()
     {
         m_thread.Join();
+
+        FREE(m_allocator, m_recvBuf);
     }
 
     void UdpProxy::loop(std::function<void(const Packet&)> onRecv)
@@ -48,17 +50,13 @@ namespace net {
 
                 if (len > 0) {
                     if (onRecv) {
-                        void* p = ALLOC(m_allocator, sizeof(Packet));
-                        Packet* packet = new(p)Packet;
+                        Packet packet;
 
-                        packet->endpoint = remoteEp;
-                        packet->data = (IZ_UINT8*)m_recvBuf;
-                        packet->size = len;
+                        packet.endpoint = remoteEp;
+                        packet.data = (IZ_UINT8*)m_recvBuf;
+                        packet.size = len;
 
-                        onRecv(*packet);
-
-                        packet->~Packet();
-                        FREE(m_allocator, p);
+                        onRecv(packet);
                     }
                 }
             }

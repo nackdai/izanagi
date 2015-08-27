@@ -7,6 +7,60 @@
 
 namespace izanagi {
 namespace net {
+    // UDPリモート
+    class Udp::UdpRemote : public Remote, sys::CSpinLock {
+        friend class Udp;
+
+    public:
+        static UdpRemote* create(IMemoryAllocator* allocator);
+
+        static void deteteRemote(
+            IMemoryAllocator* allocator,
+            Remote* client);
+
+    public:
+        UdpRemote();
+        virtual ~UdpRemote() {}
+
+        // 有効かどうか.
+        IZ_BOOL isActive() const;
+
+        CStdList<UdpRemote>::Item* getListItem();
+
+    private:
+        CStdList<UdpRemote>::Item m_listItem;
+    };
+
+    Udp::UdpRemote* Udp::UdpRemote::create(IMemoryAllocator* allocator)
+    {
+        return Remote::create<UdpRemote>(allocator);
+    }
+
+    void Udp::UdpRemote::deteteRemote(
+        IMemoryAllocator* allocator,
+        Remote* remote)
+    {
+        Remote::deteteRemote(allocator, remote);
+    }
+
+    Udp::UdpRemote::UdpRemote()
+    {
+        m_listItem.Init(this);
+    }
+
+    // 有効かどうか.
+    IZ_BOOL Udp::UdpRemote::isActive() const
+    {
+        return !m_endpoint.getAddress().isAny();
+    }
+
+    CStdList<Udp::UdpRemote>::Item* Udp::UdpRemote::getListItem()
+    {
+        return &m_listItem;
+    }
+
+    ////////////////////////////////////////////////////////
+
     Udp::Udp()
     {
         m_allocator = nullptr;
@@ -136,7 +190,7 @@ namespace net {
         return result;
     }
 
-    IZ_BOOL Udp::startAsClientToServer(
+    IZ_BOOL Udp::startAsClientAndConnectToServer(
         IMemoryAllocator* allocator,
         const IPv4Endpoint& remoteEp)
     {
@@ -347,7 +401,7 @@ namespace net {
         return ret;
     }
 
-    UdpRemote* Udp::findRemote(const IPv4Endpoint& ep)
+    Udp::UdpRemote* Udp::findRemote(const IPv4Endpoint& ep)
     {
         std::unique_lock<std::mutex> lock(m_remotesLocker);
 
@@ -366,7 +420,7 @@ namespace net {
         return nullptr;
     }
 
-    UdpRemote* Udp::findRemote(const sockaddr_in& addr)
+    Udp::UdpRemote* Udp::findRemote(const sockaddr_in& addr)
     {
         IPv4Endpoint ep;
         ep.set(addr);
@@ -385,12 +439,19 @@ namespace net {
     // UDPではselectは不要
     // http://stackoverflow.com/questions/19758152/select-for-udp-connection
 
-    IZ_INT Udp::wait()
+    IZ_INT Udp::wait(
+        IZ_UINT sec/*= 0*/,
+        IZ_UINT usec/*= 0*/)
     {
         IZ_ASSERT(m_isRunning.load());
 
-        // TODO
-        timeval t_val = { 0, 1000 };
+        timeval t_val = { sec, usec };
+
+        timeval* pTval = nullptr;
+
+        if (sec > 0 || usec > 0) {
+            pTval = &t_val;
+        }
 
         fd_set readFD;
         fd_set exceptionFD;
@@ -408,7 +469,7 @@ namespace net {
             &readFD,
             NULL,
             &exceptionFD,
-            &t_val);
+            pTval);
 
         if (resSelect <= 0) {
             return 0;
