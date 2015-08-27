@@ -7,37 +7,6 @@
 
 namespace izanagi {
 namespace net {
-    Udp::Packet* Udp::Packet::create(IMemoryAllocator* allocator, IZ_UINT len)
-    {
-        // 最後に０を入れるため１多くする
-        auto alignedLen = len + 1;
-
-        // TODO
-        // ４バイトアラインしておく
-        auto rest = alignedLen & 0x03;
-        if (rest > 0) {
-            rest = 4 - rest;
-            alignedLen += rest;
-        }
-
-        size_t size = sizeof(Packet) + alignedLen;
-
-        IZ_CHAR* buf = (IZ_CHAR*)ALLOC_ZERO(allocator, size);
-        IZ_ASSERT(buf != nullptr);
-
-        Packet* p = new(buf)Packet;
-        buf += sizeof(Packet);
-
-        p->data = buf;
-
-        p->size = len;
-        p->data[len] = 0;
-
-        return p;
-    }
-
-    ///////////////////////////////////////////////////////////
-
     Udp::Udp()
     {
         m_allocator = nullptr;
@@ -45,9 +14,6 @@ namespace net {
         m_socket = IZ_INVALID_SOCKET;
 
         m_isRunning.store(IZ_FALSE);
-
-        m_recvBuf = IZ_NULL;
-        m_bufSize = 0;
     }
 
     Udp::~Udp()
@@ -58,7 +24,7 @@ namespace net {
     // サーバーとして起動.
     IZ_BOOL Udp::startAsServer(
         IMemoryAllocator* allocator,
-        const IPv4Endpoint& endpoint)
+        const IPv4Endpoint& hostEp)
     {
         if (m_isRunning.load()) {
             return IZ_TRUE;
@@ -81,9 +47,9 @@ namespace net {
             FILL_ZERO(&inAddr, sizeof(inAddr));
 
             inAddr.sin_family = AF_INET;
-            inAddr.sin_port = htons(endpoint.getPort());
+            inAddr.sin_port = htons(hostEp.getPort());
 
-            auto address = endpoint.getAddress();
+            auto address = hostEp.getAddress();
 
             if (address.isAny()) {
                 inAddr.sin_addr.S_un.S_addr = htonl(INADDR_ANY);
@@ -100,9 +66,7 @@ namespace net {
         result = (bind(m_socket, (const sockaddr*)&inAddr, sizeof(inAddr)) >= 0);
         VGOTO(result, __EXIT__);
 
-        // TODO
-        m_bufSize = 1 * 1024 * 1024;
-        m_recvBuf = (IZ_CHAR*)ALLOC_ZERO(m_allocator, m_bufSize);
+        m_host = hostEp;
 
         m_isRunning.store(IZ_TRUE);
 
@@ -119,15 +83,11 @@ namespace net {
     // クライアントとして起動.
     IZ_BOOL Udp::startAsClient(
         IMemoryAllocator* allocator,
-        const IPv4Endpoint& endpoint)
+        const IPv4Endpoint& hostEp)
     {
         if (m_isRunning.load()) {
             return IZ_TRUE;
         }
-
-        auto address = endpoint.getAddress();
-
-        VRETURN(!address.isAny());
 
         m_allocator = allocator;
 
@@ -140,21 +100,97 @@ namespace net {
             0);             // プロトコル
         VRETURN(isValidSocket(m_socket));
 
-        // TODO
-        // サーバー１つのみ
-        auto remote = UdpRemote::create(m_allocator);
-        remote->m_endpoint = endpoint;
-        m_remotes.AddTail(remote->getListItem());
+        sockaddr_in inAddr;
+        {
+            FILL_ZERO(&inAddr, sizeof(inAddr));
 
-        // TODO
-        m_bufSize = 1 * 1024 * 1024;
-        m_recvBuf = (IZ_CHAR*)ALLOC_ZERO(m_allocator, m_bufSize);
+            inAddr.sin_family = AF_INET;
+            inAddr.sin_port = htons(hostEp.getPort());
+
+            auto address = hostEp.getAddress();
+            result = address.isAny();
+
+            VGOTO(result, __EXIT__);
+
+            IZ_CHAR ip[64];
+            address.toString(ip, COUNTOF(ip));
+
+            inAddr.sin_addr.S_un.S_addr = inet_addr(ip);
+        }
+
+        // ソケットにアドレスを結びつける
+        result = (bind(m_socket, (const sockaddr*)&inAddr, sizeof(inAddr)) >= 0);
+        VGOTO(result, __EXIT__);
+
+        m_host = hostEp;
 
         m_isRunning.store(IZ_TRUE);
 
-        // TODO
-        result = IZ_TRUE;
+    __EXIT__:
+        if (!result) {
+            IZ_ASSERT(IZ_FALSE);
 
+            stop();
+        }
+
+        return result;
+    }
+
+    IZ_BOOL Udp::startAsClientToServer(
+        IMemoryAllocator* allocator,
+        const IPv4Endpoint& remoteEp)
+    {
+        if (m_isRunning.load()) {
+            return IZ_TRUE;
+        }
+
+        m_allocator = allocator;
+
+        IZ_BOOL result = IZ_FALSE;
+
+        // ソケットの生成
+        m_socket = socket(
+            AF_INET,        // アドレスファミリ
+            SOCK_DGRAM,     // ソケットタイプ
+            IPPROTO_UDP);   // プロトコル
+        VRETURN(isValidSocket(m_socket));
+
+        // 通信ポート・アドレスの設定
+        sockaddr_in destAddr;
+        {
+            memset(&destAddr, 0, sizeof(destAddr));
+
+            destAddr.sin_family = AF_INET;
+            destAddr.sin_port = htons(remoteEp.getPort());
+
+            auto address = remoteEp.getAddress();
+            VGOTO(!address.isAny(), __EXIT__);
+
+            char ip[64];
+            address.toString(ip, COUNTOF(ip));
+
+            destAddr.sin_addr.S_un.S_addr = inet_addr(ip);
+        }
+
+        // 接続
+        result = (connect(m_socket, (const sockaddr*)&destAddr, sizeof(destAddr)) >= 0);
+        VGOTO(result, __EXIT__);
+
+        // ホスト名取得
+        sockaddr_in inAddr;
+        int32_t inAddrSize = sizeof(inAddr);
+        result = (getsockname(m_socket, (sockaddr*)&inAddr, &inAddrSize) >= 0);
+        VGOTO(result, __EXIT__);
+
+        m_host.set(inAddr);
+
+        auto remote = UdpRemote::create(allocator);
+        remote->m_endpoint = remoteEp;
+        m_remotes.AddTail(remote->getListItem());
+
+        m_isRunning.store(IZ_TRUE);
+
+    __EXIT__:
         if (!result) {
             IZ_ASSERT(IZ_FALSE);
 
@@ -190,27 +226,25 @@ namespace net {
 
             m_remotes.Clear();
         }
-
-        FREE(m_allocator, m_recvBuf);
     }
 
     // 受信したデータを取得.
-    IZ_BOOL Udp::recieve(std::function<void(const net::Packet&)> func)
+    IZ_BOOL Udp::recieve(
+        void* buf,
+        IZ_UINT size)
     {
-        Packet* packet = nullptr;
+        IPv4Endpoint ep;
 
-        IZ_BOOL result = onRecieve(packet);
+        IZ_INT ret = recieveFrom(buf, size, ep);
 
-        if (result) {
-            func(*packet);
-
-            FREE(m_allocator, packet);
-        }
-
-        return result;
+        return ret;
     }
 
-    IZ_BOOL Udp::onRecieve(Udp::Packet*& packet)
+    // 受信したデータを取得.
+    IZ_INT Udp::recieveFrom(
+        void* buf,
+        IZ_UINT size,
+        IPv4Endpoint& remoteEp)
     {
         sockaddr_in addr;
         sockaddr* paddr = (sockaddr*)&addr;
@@ -218,8 +252,8 @@ namespace net {
 
         IZ_INT ret = recvfrom(
             m_socket,
-            m_recvBuf,
-            m_bufSize,
+            (char*)buf,
+            size,
             0,
             paddr,
             &len);
@@ -236,9 +270,9 @@ namespace net {
                 m_remotes.AddTail(remote->getListItem());
             }
 
-            packet = Packet::create(m_allocator, len);
-            packet->endpoint = remote->m_endpoint;
-            memcpy(packet->data, m_recvBuf, len);
+            sys::Lock lock(*remote);
+
+            remoteEp = remote->m_endpoint;
         }
         else {
             // TODO
@@ -247,17 +281,15 @@ namespace net {
             if (remote) {
                 // TODO
             }
-
-            return IZ_FALSE;
         }
 
-        return IZ_TRUE;
+        return ret;
     }
 
     // データを送信.
-    IZ_BOOL Udp::send(const void* data, IZ_UINT size)
+    IZ_INT Udp::send(const void* data, IZ_UINT size)
     {
-        IZ_BOOL result = IZ_FALSE;
+        IZ_INT ret = 0;
 
         auto item = m_remotes.GetAt(0);
 
@@ -268,7 +300,7 @@ namespace net {
                 sockaddr_in addr;
                 remote->m_endpoint.get(addr);
 
-                IZ_INT len = sendto(
+                ret = sendto(
                     m_socket,
                     (const char*)data,
                     size,
@@ -276,29 +308,25 @@ namespace net {
                     (sockaddr*)&addr,
                     sizeof(addr));
 
-                result = (len >= 0);
-
-                if (!result) {
+                if (ret < 0) {
                     // TODO
                     // 切断された
                 }
             }
         }
 
-        return result;
+        return ret;
     }
 
     // 指定した接続先にデータを送信.
-    IZ_BOOL Udp::sendTo(
+    IZ_INT Udp::sendTo(
         IPv4Endpoint& endpoint,
         const void* data, IZ_UINT size)
-    {
-        IZ_BOOL result = IZ_FALSE;
-        
+    {        
         sockaddr_in addr;
         endpoint.get(addr);
 
-        IZ_INT len = sendto(
+        IZ_INT ret = sendto(
             m_socket,
             (const char*)data,
             size,
@@ -306,9 +334,7 @@ namespace net {
             (sockaddr*)&addr,
             sizeof(addr));
 
-        result = (len >= 0);
-
-        if (!result) {
+        if (ret < 0) {
             // TODO
             // 切断された
 
@@ -318,7 +344,7 @@ namespace net {
             }
         }
 
-        return result;
+        return ret;
     }
 
     UdpRemote* Udp::findRemote(const IPv4Endpoint& ep)
@@ -350,16 +376,6 @@ namespace net {
         return ret;
     }
 
-    Udp::Packet* Udp::createPacket(IZ_UINT len)
-    {
-        return Packet::create(m_allocator, len);
-    }
-
-    void Udp::deletePacket(Udp::Packet* packet)
-    {
-        FREE(m_allocator, packet);
-    }
-
     IZ_BOOL Udp::isRunning()
     {
         return m_isRunning;
@@ -369,7 +385,7 @@ namespace net {
     // UDPではselectは不要
     // http://stackoverflow.com/questions/19758152/select-for-udp-connection
 
-    IZ_INT Udp::waitForRecieving()
+    IZ_INT Udp::wait()
     {
         IZ_ASSERT(m_isRunning.load());
 

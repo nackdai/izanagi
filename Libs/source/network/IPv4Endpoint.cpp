@@ -2,6 +2,8 @@
 
 namespace izanagi {
 namespace net {
+    IPv4Address IPv4Address::Any;
+
     IPv4Address::IPv4Address()
     {
         m_ip.value = 0;
@@ -19,10 +21,10 @@ namespace net {
         set(ip);
     }
 
-    IPv4Address::IPv4Address(const IZ_CHAR* ip)
+    IPv4Address::IPv4Address(const IZ_CHAR* host)
         : IPv4Address()
     {
-        set(ip);
+        setByHostName(host);
     }
 
     IPv4Address::IPv4Address(const IPv4Address& rhs)
@@ -42,10 +44,10 @@ namespace net {
 
     void IPv4Address::set(IZ_UINT8 a, IZ_UINT8 b, IZ_UINT8 c, IZ_UINT8 d)
     {
-        m_ip.p[0] = a;
-        m_ip.p[1] = b;
-        m_ip.p[2] = c;
-        m_ip.p[3] = d;
+        m_ip.p[3] = a;
+        m_ip.p[2] = b;
+        m_ip.p[1] = c;
+        m_ip.p[0] = d;
     }
 
     void IPv4Address::set(IZ_UINT32 ip)
@@ -57,11 +59,12 @@ namespace net {
     {
         auto len = strlen(ip);
 
-        IZ_UINT pos = 0;
+        IZ_UINT pos = COUNTOF(m_ip.p) - 1;
 
         for (IZ_UINT i = 0; i < len; i++) {
             if (ip[i] == '.') {
-                pos++;
+                pos--;
+                IZ_ASSERT(pos >= 0);
                 continue;
             }
             else if ('0' <= ip[i] && ip[i] <= '9') {
@@ -84,17 +87,11 @@ namespace net {
         // TODO
         VRETURN(server->h_length == 4);
 
-        IZ_CHAR* iptbl = (IZ_CHAR*)server->h_addr;
+        IZ_UINT8* iptbl = (IZ_UINT8*)server->h_addr;
 
-#if 0
-        for (IZ_INT i = 3; i >= 0; i--) {
-            m_ip.p[3 - i] = iptbl[i];
-        }
-#else
         for (IZ_INT i = 0; i < server->h_length; i++) {
             m_ip.p[i] = iptbl[i];
         }
-#endif
 
         return IZ_TRUE;
     }
@@ -130,11 +127,6 @@ namespace net {
         return (m_ip.value == rhs.m_ip.value);
     }
 
-    void IPv4Address::setAny()
-    {
-        m_ip.value = 0;
-    }
-
     IZ_BOOL IPv4Address::isAny() const
     {
         return (m_ip.value == 0);
@@ -151,11 +143,6 @@ namespace net {
         IZ_UINT port)
     {
         set(address, port);
-    }
-
-    IPv4Endpoint::IPv4Endpoint(IZ_UINT port)
-    {
-        set(port);
     }
 
     IPv4Endpoint::~IPv4Endpoint()
@@ -182,12 +169,6 @@ namespace net {
         m_port = port;
     }
 
-    void IPv4Endpoint::set(IZ_UINT port)
-    {
-        m_address.setAny();
-        m_port = port;
-    }
-
     void IPv4Endpoint::set(const sockaddr_in& addr)
     {
         m_port = ntohs(addr.sin_port);
@@ -197,8 +178,8 @@ namespace net {
 
         IZ_CHAR* iptbl = (IZ_CHAR*)&ip;
 
-        for (IZ_INT i = 3; i >= 0; i--) {
-            m_address.m_ip.p[3 - i] = iptbl[i];
+        for (IZ_INT i = 0; i < COUNTOF(m_address.m_ip.p); i++) {
+            m_address.m_ip.p[i] = iptbl[i];
         }
     }
 

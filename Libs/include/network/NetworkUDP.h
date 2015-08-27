@@ -24,29 +24,42 @@ namespace net {
          */
         IZ_BOOL startAsServer(
             IMemoryAllocator* allocator,
-            const IPv4Endpoint& endpoint);
+            const IPv4Endpoint& hostEp);
 
         /** クライアントとして起動.
          */
         IZ_BOOL startAsClient(
             IMemoryAllocator* allocator,
-            const IPv4Endpoint& endpoint);
+            const IPv4Endpoint& hostEp);
+
+        IZ_BOOL startAsClientToServer(
+            IMemoryAllocator* allocator,
+            const IPv4Endpoint& remoteEp);
 
         /** 停止.
          */
         void stop();
 
+        IZ_INT wait();
+
         /** 受信したデータを取得.
          */
-        IZ_BOOL recieve(std::function<void(const net::Packet&)> func);
+        IZ_INT recieve(
+            void* buf,
+            IZ_UINT size);
+
+        IZ_INT recieveFrom(
+            void* buf,
+            IZ_UINT size,
+            IPv4Endpoint& remoteEp);
 
         /** データを送信.
          */
-        IZ_BOOL send(const void* data, IZ_UINT size);
+        IZ_INT send(const void* data, IZ_UINT size);
 
         /** 指定した接続先にデータを送信.
          */
-        IZ_BOOL sendTo(
+        IZ_INT sendTo(
             IPv4Endpoint& endpoint,
             const void* data, IZ_UINT size);
 
@@ -57,41 +70,17 @@ namespace net {
     protected:
         virtual void onStop() {}
 
-        class Packet;
-
-        Packet* createPacket(IZ_UINT len);
-        void deletePacket(Packet* packet);
-
         IZ_BOOL isRunning();
 
-        IZ_BOOL onRecieve(Udp::Packet*& packet);
-
-        IZ_INT waitForRecieving();
-
     protected:
-        class Packet : public net::Packet, CPlacementNew {
-        public:
-            static Packet* create(IMemoryAllocator* allocator, IZ_UINT len);
-
-            Packet()
-            {
-                listItem.Init(this);
-            }
-            ~Packet() {}
-
-            CStdList<Packet>::Item listItem;
-        };
-
-    private:
         IMemoryAllocator* m_allocator;
 
         IZ_SOCKET m_socket;
 
+        IPv4Endpoint m_host;
+
         std::mutex m_remotesLocker;
         CStdList<UdpRemote> m_remotes;
-
-        IZ_UINT m_bufSize;
-        IZ_CHAR* m_recvBuf;
 
         std::atomic<IZ_BOOL> m_isRunning;
     };

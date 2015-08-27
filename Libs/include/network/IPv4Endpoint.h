@@ -12,10 +12,12 @@ namespace net {
         friend class IPv4Endpoint;
 
     public:
+        static IPv4Address Any;
+
         IPv4Address();
         IPv4Address(IZ_UINT8 a, IZ_UINT8 b, IZ_UINT8 c, IZ_UINT8 d);
         IPv4Address(IZ_UINT32 ip);
-        IPv4Address(const IZ_CHAR* ip);
+        IPv4Address(const IZ_CHAR* host);
 
         ~IPv4Address();
 
@@ -37,8 +39,6 @@ namespace net {
 
         IZ_BOOL operator==(const IPv4Address& rhs);
 
-        void setAny();
-
         IZ_BOOL isAny() const;
 
     private:
@@ -56,7 +56,6 @@ namespace net {
         IPv4Endpoint(
             const IPv4Address& address,
             IZ_UINT port);
-        IPv4Endpoint(IZ_UINT port);
 
         ~IPv4Endpoint();
 
@@ -68,8 +67,6 @@ namespace net {
         void set(
             const IPv4Address& address,
             IZ_UINT port);
-
-        void set(IZ_UINT port);
 
         void set(const sockaddr_in& addr);
 

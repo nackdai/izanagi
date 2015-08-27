@@ -4,24 +4,23 @@ namespace izanagi {
 namespace net {
     UdpProxy::UdpProxy()
     {
-        m_funcRecv = nullptr;
     }
 
     UdpProxy::~UdpProxy()
     {
     }
 
-    void UdpProxy::setFuncRecv(std::function<void(net::Packet&)> func)
+    IZ_BOOL UdpProxy::start(
+        IMemoryAllocator* allocator,
+        std::function<void(const Packet&)> onRecv)
     {
-        sys::Lock lock(m_locker);
-        m_funcRecv = func;
-    }
+        // TODO
+        m_sizeRecvBuf = 1024;
+        m_recvBuf = ALLOC(allocator, m_sizeRecvBuf);
 
-    IZ_BOOL UdpProxy::start(IMemoryAllocator* allocator)
-    {
         IZ_BOOL result = m_thread.Start(
-            [this](void* data) {
-            loop();
+            [&](void* data) {
+            loop(onRecv);
         }, nullptr);
 
         IZ_ASSERT(result);
@@ -34,29 +33,28 @@ namespace net {
         m_thread.Join();
     }
 
-    void UdpProxy::loop()
+    void UdpProxy::loop(std::function<void(const Packet&)> onRecv)
     {
         for (;;) {
             if (!isRunning()) {
                 break;
             }
 
-            IZ_INT result = waitForRecieving();
+            IZ_INT result = wait();
 
             if (result > 0) {
-                Udp::Packet* packet = nullptr;
+                IZ_INT len = recieve(m_recvBuf, m_sizeRecvBuf);
 
-                IZ_BOOL resRecv = onRecieve(packet);
+                if (len > 0) {
+                    if (onRecv) {
+                        void* p = ALLOC(m_allocator, sizeof(Packet));
+                        Packet* packet = new(p)Packet;
 
-                if (resRecv) {
-                    {
-                        sys::Lock lock(m_locker);
-                        if (m_funcRecv) {
-                            m_funcRecv(*packet);
-                        }
+                        onRecv(*packet);
+
+                        packet->~Packet();
+                        FREE(m_allocator, p);
                     }
-
-                    Udp::deletePacket(packet);
                 }
             }
             else if (result < 0) {
@@ -71,37 +69,43 @@ namespace net {
     // サーバーとして起動.
     IZ_BOOL UdpServer::start(
         IMemoryAllocator* allocator,
-        const IPv4Endpoint& endpoint)
+        const IPv4Endpoint& hostEp,
+        std::function<void(const Packet&)> onRecv/*= nullptr*/)
     {
-        IZ_BOOL result = Udp::startAsServer(allocator, endpoint);
+        IZ_BOOL result = Udp::startAsServer(allocator, hostEp);
         IZ_ASSERT(result);
 
         if (result) {
-            result = UdpProxy::start(allocator);
-        }
-
-        if (!result) {
-            stop();
+            result = UdpProxy::start(allocator, onRecv);
         }
 
         return result;
     }
 
-    
-
     // クライアントとして起動.
     IZ_BOOL UdpClient::start(
         IMemoryAllocator* allocator,
-        const IPv4Endpoint& endpoint)
+        const IPv4Endpoint& hostEp,
+        std::function<void(const Packet&)> onRecv/*= nullptr*/)
     {
-        IZ_BOOL result = Udp::startAsClient(allocator, endpoint);
+        IZ_BOOL result = Udp::startAsClient(allocator, hostEp);
 
         if (result) {
-            result = UdpProxy::start(allocator);
+            result = UdpProxy::start(allocator, onRecv);
         }
 
-        if (!result) {
-            stop();
+        return result;
+    }
+
+    IZ_BOOL UdpClient::connect(
+        IMemoryAllocator* allocator,
+        const IPv4Endpoint& remoteEp,
+        std::function<void(const Packet&)> onRecv/*= nullptr*/)
+    {
+        IZ_BOOL result = Udp::startAsClient(allocator, remoteEp);
+
+        if (result) {
+            result = UdpProxy::start(allocator, onRecv);
         }
 
         return result;

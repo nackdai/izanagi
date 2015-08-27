@@ -12,21 +12,21 @@ namespace net {
         UdpProxy();
         virtual ~UdpProxy();
 
-    public:
-        void setFuncRecv(std::function<void(net::Packet&)> func);
-
     protected:
-        IZ_BOOL start(IMemoryAllocator* allocator);
+        IZ_BOOL start(
+            IMemoryAllocator* allocator,
+            std::function<void(const Packet&)> onRecv);
 
-        void loop();
+        void loop(std::function<void(const Packet&)> onRecv);
 
     private:
         virtual void onStop() final;
 
-    private:
-        sys::CSpinLock m_locker;
-        std::function<void(net::Packet&)> m_funcRecv;
+    private:        
         sys::CThread m_thread;
+
+        void* m_recvBuf{ nullptr };
+        IZ_UINT m_sizeRecvBuf{ 0 };
     };
 
     /**
@@ -43,7 +43,8 @@ namespace net {
         */
         IZ_BOOL start(
             IMemoryAllocator* allocator,
-            const IPv4Endpoint& endpoint);
+            const IPv4Endpoint& hostEp,
+            std::function<void(const Packet&)> onRecv = nullptr);
     };
 
     /**
@@ -60,7 +61,13 @@ namespace net {
         */
         IZ_BOOL start(
             IMemoryAllocator* allocator,
-            const IPv4Endpoint& endpoint);
+            const IPv4Endpoint& hostEp,
+            std::function<void(const Packet&)> onRecv = nullptr);
+
+        IZ_BOOL connect(
+            IMemoryAllocator* allocator,
+            const IPv4Endpoint& remoteEp,
+            std::function<void(const Packet&)> onRecv = nullptr);
     };
 }    // namespace net
 }    // namespace izanagi
