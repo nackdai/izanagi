@@ -43,12 +43,17 @@ namespace net {
             IZ_INT result = wait();
 
             if (result > 0) {
-                IZ_INT len = recieve(m_recvBuf, m_sizeRecvBuf);
+                IPv4Endpoint remoteEp;
+                IZ_INT len = recieveFrom(m_recvBuf, m_sizeRecvBuf, remoteEp);
 
                 if (len > 0) {
                     if (onRecv) {
                         void* p = ALLOC(m_allocator, sizeof(Packet));
                         Packet* packet = new(p)Packet;
+
+                        packet->endpoint = remoteEp;
+                        packet->data = (IZ_UINT8*)m_recvBuf;
+                        packet->size = len;
 
                         onRecv(*packet);
 
