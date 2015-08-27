@@ -24,14 +24,18 @@ namespace net {
          */
         IZ_BOOL startAsServer(
             IMemoryAllocator* allocator,
-            const IPv4Endpoint& endpoint,
+            const IPv4Endpoint& hostEp,
             IZ_UINT maxConnections);
 
         /** クライアントとして起動.
          */
         IZ_BOOL startAsClient(
             IMemoryAllocator* allocator,
-            const IPv4Endpoint& endpoint);
+            const IPv4Endpoint& hostEp);
+
+        /** サーバーと接続.
+         */
+        IZ_BOOL connectToServer(const IPv4Endpoint& remoteEp);
 
         /** 停止.
          */
@@ -39,87 +43,62 @@ namespace net {
 
         /** サーバーとして起動しているときに接続されているリモートの数を取得.
          */
-        IZ_UINT getRemoteNum() const;
+        IZ_UINT getRemoteNum();
 
         /** サーバーとして起動しているときに指定された接続されているリモートの情報を取得.
          */
-        const IPv4Endpoint* getRemote(IZ_UINT idx) const;
+        const IPv4Endpoint* getRemote(IZ_UINT idx);
 
-        /** 受信したデータを取得.
-         */
-        IZ_BOOL recieve(std::function<void(const net::Packet&)> func);
+        const IPv4Endpoint* acceptRemote();
 
-        /** 受信した全データを取得.
-         */
-        IZ_BOOL recieveAll(std::function<void(const net::Packet&)> func);
+        IZ_BOOL isEnabledRemote(const IPv4Endpoint& remoteEp);
+
+        IZ_INT wait(
+            IZ_UINT sec = 0,
+            IZ_UINT usec = 0);
+
+        IZ_INT recieveFrom(
+            IZ_UINT8* buf,
+            IZ_UINT size,
+            const IPv4Endpoint& remoteEp);
 
         /** データを送信.
          */
-        IZ_BOOL sendData(const void* data, IZ_UINT size);
+        IZ_INT sendData(
+            const void* data, 
+            IZ_UINT size);
 
         /** 指定した接続先にデータを送信.
          */
-        IZ_BOOL sendData(
-            const IPv4Endpoint& endpoint,
-            const void* data, IZ_UINT size);
+        IZ_INT sendData(
+            const void* data,
+            IZ_UINT size,
+            const IPv4Endpoint& remoteEp);
 
         /** 全ての接続先にデータを送信.
          */
         IZ_UINT sendDataToAllRemote(const void* data, IZ_UINT size);
 
-        /** サーバーと接続.
-         */
-        IZ_BOOL connectServer();
-
         /** サーバーと接続されているかどうか.
          */
         IZ_BOOL isConnected();
 
-        /** サーバーかどうか.
-         */
-        IZ_BOOL isServer() const;
-
-        /** 処理実行.
-         */
-        IZ_BOOL run(IZ_CHAR* recvBuf, IZ_UINT size);
-
     protected:
-        void loop();
+        TcpRemote* findRemote(const IPv4Endpoint ep);
 
         virtual void onStop() {}
 
-    private:
-        class Packet : public net::Packet, CPlacementNew {
-        public:
-            static Packet* create(IMemoryAllocator* allocator, IZ_UINT len);
-
-            Packet()
-            {
-                listItem.Init(this);
-            }
-            ~Packet() {}
-
-            CStdList<Packet>::Item listItem;
-        };
-
-    private:
+    protected:
         IMemoryAllocator* m_allocator;
 
         IZ_SOCKET m_socket;
 
         // 接続元リスト.
+        std::mutex m_remotesLocker;
         CArray<TcpRemote> m_remotes;
-
-        // 受信データリスト.
-        std::mutex m_recvDataLocker;
-        CStdList<Packet> m_recvData;
 
         std::atomic<IZ_BOOL> m_isRunnning;
         std::atomic<IZ_BOOL> m_isConnected;
-
-        struct {
-            IZ_UINT isServer : 1;
-        } m_flags;
     };
 }    // namespace net
 }    // namespace izanagi

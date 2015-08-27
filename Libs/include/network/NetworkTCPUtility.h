@@ -5,6 +5,24 @@
 
 namespace izanagi {
 namespace net {
+    class TcpProxy : public Tcp {
+    protected:
+        TcpProxy() {}
+        virtual ~TcpProxy() {}
+
+    protected:
+        void run(
+            std::function<void(const Packet&)> onRecv,
+            IZ_UINT sec = 0,
+            IZ_UINT usec = 0);
+
+        void loop(std::function<void(const Packet&)> onRecv);
+
+    protected:
+        IZ_UINT8* m_recvBuf{ nullptr };
+        IZ_UINT m_recvBufSize{ 0 };
+    };
+
     /**
      */
     class TcpServer : public Tcp {
@@ -19,8 +37,9 @@ namespace net {
         */
         IZ_BOOL start(
             IMemoryAllocator* allocator,
-            const IPv4Endpoint& endpoint,
-            IZ_UINT maxConnections);
+            const IPv4Endpoint& hostEp,
+            IZ_UINT maxConnections,
+            std::function<void(const Packet&)> onRecv);
 
     private:
         virtual void onStop() final;
