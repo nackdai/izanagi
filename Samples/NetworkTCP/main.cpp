@@ -8,6 +8,8 @@ static const IZ_CHAR* serverIp = "127.0.0.1";
 static const IZ_UINT ServerPort = 30000;
 static const IZ_UINT ClientPort = 31000;
 
+static IZ_BOOL isAsync = IZ_FALSE;
+
 void runAsServer(izanagi::IMemoryAllocator* allocator)
 {
     izanagi::net::IPv4Endpoint host(
@@ -17,15 +19,51 @@ void runAsServer(izanagi::IMemoryAllocator* allocator)
 	izanagi::net::TcpListener listener;
     listener.start(allocator, host, 1);
 
-    auto client = listener.acceptRemote();
-
     static const IZ_UINT size = 1024;
     IZ_UINT8 buf[size] = { 0 };
 
-    auto len = client->recieve(buf, size);
+    if (isAsync) {
+        izanagi::net::TcpClient* client = nullptr;
 
-    if (len > 0) {
-        IZ_PRINTF("%s\n", buf);
+        listener.beginAccept(
+            [&](izanagi::net::TcpClient* c) {
+            client = c;
+        });
+
+        while (client == nullptr) {
+        }
+
+        listener.endAccept();
+
+        IZ_BOOL running = IZ_TRUE;
+
+        client->beginRecieve(
+            [&](const izanagi::net::Packet* packet){
+            if (packet) {
+                IZ_CHAR ip[size];
+                packet->endpoint.getAddress().toString(ip, size);
+
+                auto port = packet->endpoint.getPort();
+
+                IZ_PRINTF("%s:%d (%s)\n", ip, port, packet->data);
+            }
+            running = IZ_FALSE;
+        }, buf, size);
+
+        while (running) {
+            izanagi::sys::CThread::Sleep(33);
+        }
+
+        client->endRecieve();
+    }
+    else {
+        auto client = listener.acceptRemote();
+
+        auto len = client->recieve(buf, size);
+
+        if (len > 0) {
+            IZ_PRINTF("%s\n", buf);
+        }
     }
 
     listener.stop();
@@ -59,6 +97,10 @@ IzMain(0, 0)
 	if (argc > 1 && strcmp(argv[1], "s" ) == 0) {
 		isServer = IZ_TRUE;
 	}
+
+    if (argc > 2 && strcmp(argv[2], "a") == 0) {
+        isAsync = IZ_TRUE;
+    }
 
 	izanagi::CStandardMemoryAllocator allocator;
 	allocator.Init(sizeof(buffer), buffer);

@@ -1,5 +1,4 @@
 #include "network/NetworkTCP.h"
-#include "network/NetworkRemote.h"
 #include "network/IPv4Endpoint.h"
 
 // NOTE
@@ -145,6 +144,12 @@ namespace net {
         return result;
     }
 
+    void TcpClient::stop()
+    {
+        endRecieve();
+        Tcp::stop();
+    }
+
     IZ_INT TcpClient::recieve(
         void* buf,
         IZ_UINT size)
@@ -163,6 +168,97 @@ namespace net {
 
         auto ret = send(m_socket, (const char*)data, size, 0);
         return ret;
+    }
+
+    IZ_INT TcpClient::wait(
+        IZ_UINT sec/*= 0*/,
+        IZ_UINT usec/*= 0*/)
+    {
+        IZ_ASSERT(isValidSocket(m_socket));
+
+        timeval t_val = { sec, usec };
+
+        timeval* pTval = nullptr;
+
+        if (sec > 0 || usec > 0) {
+            pTval = &t_val;
+        }
+
+        fd_set readFD;
+        fd_set exceptionFD;
+
+        FD_ZERO(&readFD);
+        FD_ZERO(&exceptionFD);
+
+        FD_SET(m_socket, &readFD);
+        FD_SET(m_socket, &exceptionFD);
+
+        // ファイルディスクリプタ（ソケット）の状態遷移待ち
+        auto resSelect = select(
+            //FD_SETSIZE,
+            0,
+            &readFD,
+            NULL,
+            &exceptionFD,
+            pTval);
+
+        if (resSelect <= 0) {
+            return 0;
+        }
+
+        // 受信.
+        if (FD_ISSET(m_socket, &readFD)) {
+            return 1;
+        }
+
+        if (FD_ISSET(m_socket, &exceptionFD)) {
+            // TODO
+            IZ_ASSERT(IZ_FALSE);
+            return -1;
+        }
+
+        return 0;
+    }
+
+    void TcpClient::beginRecieve(
+        std::function<void(const Packet*)> onRecieve,
+        void* buf,
+        IZ_UINT size)
+    {
+        IZ_ASSERT(onRecieve && buf);
+        IZ_ASSERT(!m_isRunning);
+
+        m_isRunning = IZ_TRUE;
+
+        m_recvThread = std::thread(
+            [this, buf, size, onRecieve]{
+            while (m_isRunning) {
+                if (wait(0, 1000) > 0) {
+                    Packet packet;
+                    IZ_INT len = recieve(buf, size);
+
+                    if (len > 0) {
+                        packet.endpoint = m_remote;
+                        packet.data = (IZ_UINT8*)buf;
+                        packet.size = len;
+                        onRecieve(&packet);
+                    }
+                    else {
+                        onRecieve(nullptr);
+                    }
+                }
+                sys::CThread::YieldThread();
+            }
+        });
+    }
+
+    void TcpClient::endRecieve()
+    {
+        m_isRunning = IZ_FALSE;
+
+        if (m_recvThread.joinable()) {
+            m_recvThread.join();
+        }
     }
 
     IZ_BOOL TcpClient::isActive()
@@ -199,6 +295,9 @@ namespace net {
 
     void TcpListener::stop()
     {
+        endAccept();
+        endRecieve();
+
         Tcp::stop();
 
         for (IZ_UINT i = 0; i < m_remotes.getNum(); i++) {
@@ -211,6 +310,12 @@ namespace net {
 
     TcpClient* TcpListener::acceptRemote()
     {
+        auto remote = acceptRemoteAsTcpRemote();
+        return remote;
+    }
+
+    TcpListener::TcpRemote* TcpListener::acceptRemoteAsTcpRemote()
+    {
         sockaddr_in addr;
         IZ_INT addrlen = sizeof(addr);
 
@@ -221,8 +326,12 @@ namespace net {
         for (IZ_UINT i = 0; i < m_maxConnections; i++) {
             auto& remote = m_remotes.at(i);
 
+            sys::Lock lock(remote);
+
             if (!remote.isActive()) {
+                remote.m_server = this;
                 remote.m_socket = socket;
+                remote.m_remote.set(addr);
                 return &remote;
             }
         }
@@ -237,6 +346,9 @@ namespace net {
         const IPv4Endpoint& remoteEp)
     {
         auto remote = find(remoteEp);
+        VRETURN_VAL(remote, 0);
+
+        sys::Lock lock(*remote);
 
         IZ_INT ret = 0;
 
@@ -251,21 +363,6 @@ namespace net {
         return ret;
     }
 
-    TcpClient* TcpListener::find(const IPv4Endpoint& remoteEp)
-    {
-        std::unique_lock<std::mutex> lock(m_remotesLocker);
-
-        for (IZ_UINT i = 0; i < m_remotes.getNum(); i++) {
-            auto& remote = m_remotes.at(i);
-
-            if (remote.m_host == remoteEp) {
-                return &remote;
-            }
-        }
-
-        return nullptr;
-    }
-
     // データを送信.
     IZ_BOOL TcpListener::sendTo(
         const void* data, 
@@ -273,6 +370,9 @@ namespace net {
         const IPv4Endpoint& remoteEp)
     {
         auto remote = find(remoteEp);
+        VRETURN(remote);
+
+        sys::Lock lock(*remote);
 
         IZ_INT ret = 0;
 
@@ -299,6 +399,8 @@ namespace net {
         for (IZ_UINT i = 0; i < m_remotes.getNum(); i++) {
             auto& remote = m_remotes.at(i);
 
+            sys::Lock lock(remote);
+
             if (remote.isActive()) {
                 // TODO
                 IZ_INT len = send(remote.m_socket, (const char*)data, size, 0);
@@ -315,9 +417,237 @@ namespace net {
         return succeededNum;
     }
 
+    TcpListener::TcpRemote* TcpListener::find(const IPv4Endpoint& remoteEp)
+    {
+        std::unique_lock<std::mutex> lock(m_remotesLocker);
+
+        for (IZ_UINT i = 0; i < m_remotes.getNum(); i++) {
+            auto& remote = m_remotes.at(i);
+
+            sys::Lock lock(remote);
+
+            if (remote.m_host == remoteEp) {
+                return &remote;
+            }
+        }
+
+        return nullptr;
+    }
+
+    void TcpListener::beginAccept(std::function<void(TcpClient*)> onAccept)
+    {
+        IZ_ASSERT(onAccept);
+        IZ_ASSERT(!m_isAccepting);
+
+        m_isAccepting = IZ_TRUE;
+
+        m_acceptThread = std::thread(
+            [this, onAccept]{
+            // TODO
+            auto remote = onAcceptRemote(0, 1000);
+            if (m_isAccepting) {
+                if (remote) {
+                    sys::Lock lock(*remote);
+                    onAccept(remote);
+                }
+                else {
+                    onAccept(nullptr);
+                }
+            }
+        });
+    }
+
+    void TcpListener::endAccept()
+    {
+        m_isAccepting = IZ_FALSE;
+
+        if (m_acceptThread.joinable()) {
+            m_acceptThread.join();
+        }
+    }
+
+    void TcpListener::beginRecieve(
+        std::function<void(const Packet*)> onRecieve,
+        void* buf,
+        IZ_UINT size)
+    {
+        IZ_ASSERT(onRecieve && buf);
+        IZ_ASSERT(!m_isRecieving);
+
+        m_isRecieving = IZ_TRUE;
+
+        m_recvThread = std::thread(
+            [this, onRecieve, buf, size]{
+            // TODO
+            onRecvFrom(0, 1000, onRecieve, buf, size);
+        });
+    }
+
+    void TcpListener::endRecieve()
+    {
+        m_isRecieving = IZ_FALSE;
+
+        if (m_recvThread.joinable()) {
+            m_recvThread.join();
+        }
+    }
+
+    // NOTE
+    // select(2)の第一引数にディスクリプタの最大値を渡すのは間違い？
+    //  http://mattn.kaoriya.net/software/lang/c/20090114140035.htm
+    // libevent
+    //  http://www.ninxit.com/blog-data/src/libevent/main.cpp.html
+
+    TcpListener::TcpRemote* TcpListener::onAcceptRemote(
+        IZ_UINT sec,
+        IZ_UINT usec)
+    {
+        timeval t_val = { sec, usec };
+
+        timeval* pTval = nullptr;
+
+        if (sec > 0 || usec > 0) {
+            pTval = &t_val;
+        }
+
+        fd_set readFD;
+        fd_set exceptionFD;
+
+        while (m_isAccepting) {
+            FD_ZERO(&readFD);
+            FD_ZERO(&exceptionFD);
+
+            FD_SET(m_socket, &readFD);
+            FD_SET(m_socket, &exceptionFD);
+
+            // ファイルディスクリプタ（ソケット）の状態遷移待ち
+            auto resSelect = select(
+                //FD_SETSIZE,
+                0,
+                &readFD,
+                NULL,
+                &exceptionFD,
+                &t_val);
+
+            if (resSelect <= 0) {
+                continue;
+            }
+
+            if (FD_ISSET(m_socket, &exceptionFD)) {
+                return nullptr;
+            }
+
+            if (FD_ISSET(m_socket, &readFD)) {
+                auto remote = acceptRemoteAsTcpRemote();
+                return remote;
+            }
+        }
+
+        return nullptr;
+    }
+
+    void TcpListener::onRecvFrom(
+        IZ_UINT sec,
+        IZ_UINT usec,
+        std::function<void(const Packet*)> onRecieve,
+        void* buf,
+        IZ_UINT size,
+        IZ_SOCKET target/* = IZ_INVALID_SOCKET*/)
+    {
+        timeval t_val = { sec, usec };
+
+        timeval* pTval = nullptr;
+
+        if (sec > 0 || usec > 0) {
+            pTval = &t_val;
+        }
+
+        fd_set readFD;
+        fd_set exceptionFD;
+
+        while (m_isRecieving) {
+            FD_ZERO(&readFD);
+            FD_ZERO(&exceptionFD);
+
+            FD_SET(m_socket, &readFD);
+            FD_SET(m_socket, &exceptionFD);
+
+            {
+                std::unique_lock<std::mutex> lock(m_remotesLocker);
+
+                for (IZ_UINT i = 0; i < m_remotes.getNum(); i++) {
+                    auto& remote = m_remotes.at(i);
+
+                    sys::Lock lock(remote);
+
+                    if (remote.isActive()) {
+                        FD_SET(remote.m_socket, &readFD);
+                        FD_SET(remote.m_socket, &exceptionFD);
+                    }
+                }
+            }
+
+            // ファイルディスクリプタ（ソケット）の状態遷移待ち
+            auto resSelect = select(
+                //FD_SETSIZE,
+                0,
+                &readFD,
+                NULL,
+                &exceptionFD,
+                &t_val);
+
+            if (resSelect <= 0) {
+                continue;
+            }
+
+            if (FD_ISSET(m_socket, &exceptionFD)) {
+                // TODO
+                return;
+            }
+
+
+            {
+                std::unique_lock<std::mutex> lock(m_remotesLocker);
+
+                for (IZ_UINT i = 0; i < m_remotes.getNum(); i++) {
+                    auto& remote = m_remotes.at(i);
+
+                    sys::Lock locker(remote);
+
+                    if (target) {
+                        if (remote.m_socket != target) {
+                            continue;
+                        }
+                    }
+
+                    if (FD_ISSET(remote.m_socket, &exceptionFD)) {
+                        // TODO
+                        return;
+                    }
+
+                    if (FD_ISSET(remote.m_socket, &readFD)) {
+                        Packet packet;
+
+                        auto len = recieveFrom(buf, size, remote.m_remote);
+
+                        if (len > 0) {
+                            packet.endpoint = remote.m_remote;
+                            packet.data = (IZ_UINT8*)buf;
+                            packet.size = size;
+                            onRecieve(&packet);
+                        }
+                        else {
+                            onRecieve(nullptr);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 #if 0
     // NOTE
-    // select(2)の第一引数にディスクリプタの最大値を渡すのは間違い？Add Star
+    // select(2)の第一引数にディスクリプタの最大値を渡すのは間違い？
     //  http://mattn.kaoriya.net/software/lang/c/20090114140035.htm
     // libevent
     //  http://www.ninxit.com/blog-data/src/libevent/main.cpp.html
