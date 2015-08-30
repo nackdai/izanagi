@@ -5,14 +5,11 @@ using namespace izanagi;
 namespace {
     IZ_UINT s_EnableLogType = 0xffffffff;
 
-    inline IZ_BOOL _OutputString(IZ_PCSTR pszFormat, ...)
+    inline IZ_BOOL _OutputString(IZ_PCSTR pszFormat, va_list& argp)
     {
         static IZ_CHAR pszBuf[1024];
 
-        va_list argp;
-        va_start(argp, pszFormat);
         IZ_VSPRINTF(pszBuf, sizeof(pszBuf), pszFormat, argp);
-        va_end(argp);
         IZ_PRINTF("%s", pszBuf);
 
         IZ_BOOL ret = (pszBuf[strlen(pszBuf)] != '\n');
@@ -20,85 +17,85 @@ namespace {
     }
 }   // namespace
 
-void CLog::SetEnableFlag(IZ_UINT flag)
+void CLog::enableFlag(LogType type)
 {
-    s_EnableLogType = flag;
+    s_EnableLogType |= type;
 }
 
-IZ_BOOL CLog::IsLoggable(LOG_TYPE type)
+void CLog::disableFlag(LogType type)
+{
+    s_EnableLogType &= ~(type);
+}
+
+IZ_BOOL CLog::isLoggable(LogType type)
 {
     return (s_EnableLogType & type);
 }
 
-#define OUT_STRING(type, str)\
-    do {\
-        if (s_EnableLogType & type) {\
-            _OutputString(str);\
-            va_list argp;\
-            va_start(argp, format);\
-            if (_OutputString(format, argp)) { IZ_PRINTF("\n"); }\
-            va_end(argp);\
-        }\
-    } while (0)
+#define IZ_DISP_LOG(type, str)\
+    if (s_EnableLogType & type) {\
+        IZ_PRINTF(str);\
+        va_list argp;\
+        va_start(argp, format);\
+        if (_OutputString(format, argp)) { IZ_PRINTF("\n"); }\
+        va_end(argp);\
+    }
 
-void CLog::Debug(IZ_PCSTR format, ...)
-{
-    OUT_STRING(LOG_TYPE_DEBUG, "Debug   :"); 
-}
-
-void CLog::Error(IZ_PCSTR format, ...)
-{
-    OUT_STRING(LOG_TYPE_ERROR, "Error   :"); 
-}
-
-void CLog::Info(IZ_PCSTR format, ...)
-{
-    OUT_STRING(LOG_TYPE_INFO, "Info    :"); 
-}
-
-void CLog::Verbose(IZ_PCSTR format, ...)
-{
-    OUT_STRING(LOG_TYPE_VERBOSE, "Verbose :"); 
-}
-
-void CLog::Warn(IZ_PCSTR format, ...)
-{
-    OUT_STRING(LOG_TYPE_WARN, "Warn    :"); 
-}
-
-#undef OUT_STRING
-#define OUT_STRING(type, str, tag)\
-    do {\
-        if (s_EnableLogType & type) {\
-            _OutputString(str, tag);\
-            va_list argp;\
-            va_start(argp, format);\
-            if (_OutputString(format, argp)) { _OutputString("\n"); }\
-            va_end(argp);\
-        }\
-    } while(IZ_FALSE)
+#define IZ_DISP_LOG_WITH_TAG(type, str, tag)\
+    if (s_EnableLogType & type) {\
+        IZ_PRINTF(str, tag);\
+        va_list argp;\
+        va_start(argp, format);\
+        if (_OutputString(format, argp)) { IZ_PRINTF("\n"); }\
+        va_end(argp);\
+    }
 
 void CLog::Debug(IZ_PCSTR tag, IZ_PCSTR format, ...)
 {
-    OUT_STRING(LOG_TYPE_DEBUG, "Debug [%s] : ", tag);
+    if (tag) {
+        IZ_DISP_LOG_WITH_TAG(LogType::Debug, "Debug   [%s] : ", tag);
+    }
+    else {
+        IZ_DISP_LOG(LogType::Debug, "Debug   : ");
+    }
 }
 
 void CLog::Error(IZ_PCSTR tag, IZ_PCSTR format, ...)
 {
-    OUT_STRING(LOG_TYPE_ERROR, "Error [%s] : ", tag);
+    if (tag) {
+        IZ_DISP_LOG_WITH_TAG(LogType::Error, "Error   [%s] : ", tag);
+    }
+    else {
+        IZ_DISP_LOG(LogType::Error, "Error   : ");
+    }
 }
 
 void CLog::Info(IZ_PCSTR tag, IZ_PCSTR format, ...)
 {
-    OUT_STRING(LOG_TYPE_INFO, "Info [%s] : ", tag);
+    if (tag) {
+        IZ_DISP_LOG_WITH_TAG(LogType::Info, "Info    [%s] : ", tag);
+    }
+    else {
+        IZ_DISP_LOG(LogType::Info, "Info    : ");
+    }
 }
 
 void CLog::Verbose(IZ_PCSTR tag, IZ_PCSTR format, ...)
 {
-    OUT_STRING(LOG_TYPE_VERBOSE, "Verbose [%s] : ", tag);
+    if (tag) {
+        IZ_DISP_LOG_WITH_TAG(LogType::Verbose, "Verbose [%s] : ", tag);
+    }
+    else {
+        IZ_DISP_LOG(LogType::Verbose, "Verbose : ");
+    }
 }
 
 void CLog::Warn(IZ_PCSTR tag, IZ_PCSTR format, ...)
 {
-    OUT_STRING(LOG_TYPE_WARN, "Warn [%s] : ", tag);
+    if (tag) {
+        IZ_DISP_LOG_WITH_TAG(LogType::Warn, "Warn    [%s] : ", tag);
+    }
+    else {
+        IZ_DISP_LOG(LogType::Warn, "Warn    : ");
+    }
 }

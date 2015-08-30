@@ -4,19 +4,18 @@
 #include "izDefs.h"
 
 namespace izanagi {
+    enum LogType : IZ_UINT {
+        Debug = 1,
+        Error = 1 << 1,
+        Info = 1 << 2,
+        Verbose = 1 << 3,
+        Warn = 1 << 4,
+    };
+
     /**
     * ログ
     */
     class CLog {
-    public:
-        enum LOG_TYPE {
-            LOG_TYPE_DEBUG   = 1,
-            LOG_TYPE_ERROR   = 1 << 1,
-            LOG_TYPE_INFO    = 1 << 2,
-            LOG_TYPE_VERBOSE = 1 << 3,
-            LOG_TYPE_WARN    = 1 << 4,
-        };
-
     private:
         CLog();
         ~CLog();
@@ -24,14 +23,10 @@ namespace izanagi {
         NO_COPIABLE(CLog);
 
     public:
-        static void SetEnableFlag(IZ_UINT flag);
-        static IZ_BOOL IsLoggable(LOG_TYPE type);
+        static void enableFlag(LogType type);
+        static void disableFlag(LogType type);
 
-        static void Debug(IZ_PCSTR format, ...);
-        static void Error(IZ_PCSTR format, ...);
-        static void Info(IZ_PCSTR format, ...);
-        static void Verbose(IZ_PCSTR format, ...);
-        static void Warn(IZ_PCSTR format, ...);
+        static IZ_BOOL isLoggable(LogType type);
 
         static void Debug(IZ_PCSTR tag, IZ_PCSTR format, ...);
         static void Error(IZ_PCSTR tag, IZ_PCSTR format, ...);
@@ -41,11 +36,17 @@ namespace izanagi {
     };
 }   // namespace izanagi
 
-#define IZ_LOGD(t, f, ...)      izanagi::CLog::Debug(t, f, __VA_ARGS__)
-#define IZ_LOGE(t, f, ...)      izanagi::CLog::Error(t, f, __VA_ARGS__)
-#define IZ_LOGI(t, f, ...)      izanagi::CLog::Info(t, f, __VA_ARGS__)
-#define IZ_LOGV(t, f, ...)      izanagi::CLog::Verbose(t, f, __VA_ARGS__)
-#define IZ_LOGW(t, f, ...)      izanagi::CLog::Warn(t, f, __VA_ARGS__)
+#define IZ_LOGD(f, ...)      izanagi::CLog::Debug(nullptr, f, __VA_ARGS__)
+#define IZ_LOGE(f, ...)      izanagi::CLog::Error(nullptr, f, __VA_ARGS__)
+#define IZ_LOGI(f, ...)      izanagi::CLog::Info(nullptr, f, __VA_ARGS__)
+#define IZ_LOGV(f, ...)      izanagi::CLog::Verbose(nullptr, f, __VA_ARGS__)
+#define IZ_LOGW(f, ...)      izanagi::CLog::Warn(nullptr, f, __VA_ARGS__)
+
+#define IZ_LOGD_WITH_TAG(t, f, ...)      izanagi::CLog::Debug(t, f, __VA_ARGS__)
+#define IZ_LOGE_WITH_TAG(t, f, ...)      izanagi::CLog::Error(t, f, __VA_ARGS__)
+#define IZ_LOGI_WITH_TAG(t, f, ...)      izanagi::CLog::Info(t, f, __VA_ARGS__)
+#define IZ_LOGV_WITH_TAG(t, f, ...)      izanagi::CLog::Verbose(t, f, __VA_ARGS__)
+#define IZ_LOGW_WITH_TAG(t, f, ...)      izanagi::CLog::Warn(t, f, __VA_ARGS__)
 
 #define IZ_LOG_ASSERT(b, t, f, ...)         if (!b) { IZ_LOGE(t, f, __VA_ARGS__); IZ_ASSERT(IZ_FALSE); }
 #define IZ_LOG_VRETURN(b, t, f, ...)        if (!b) { IZ_LOGE(t, f, __VA_ARGS__); VRETURN(IZ_FALSE); }
