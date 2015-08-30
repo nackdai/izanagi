@@ -9,12 +9,6 @@ namespace izanagi {
 namespace net {
     Tcp::Tcp()
     {
-        m_allocator = nullptr;
-
-        m_socket = IZ_INVALID_SOCKET;
-
-        m_isRunnning.store(IZ_FALSE);
-        m_isConnected.store(IZ_FALSE);
     }
 
     Tcp::~Tcp()
@@ -23,18 +17,13 @@ namespace net {
     }
 
     // サーバーとして起動.
-    IZ_BOOL Tcp::startAsServer(
-        IMemoryAllocator* allocator,
+    IZ_BOOL Tcp::start(
         const IPv4Endpoint& hostEp,
-        IZ_UINT maxConnections)
+        IZ_UINT maxConnections/*= 0*/)
     {
-        VRETURN(maxConnections > 0);
-
-        if (m_isRunnning) {
+        if (isValidSocket(m_socket)) {
             return IZ_TRUE;
         }
-
-        m_allocator = allocator;
 
         IZ_BOOL result = IZ_FALSE;
 
@@ -42,7 +31,7 @@ namespace net {
         m_socket = socket(
             AF_INET,        // アドレスファミリ
             SOCK_STREAM,    // ソケットタイプ
-            0);             // プロトコル
+            IPPROTO_TCP);   // プロトコル
         VRETURN(isValidSocket(m_socket));
 
         // 通信ポート・アドレスの設定
@@ -71,68 +60,10 @@ namespace net {
         VGOTO(result, __EXIT__);
 
         // コネクト要求をいくつまで待つかを設定
-        result = (listen(m_socket, maxConnections) >= 0);
-        VGOTO(result, __EXIT__);
-
-        result = m_remotes.init(m_allocator, maxConnections);
-        VGOTO(result, __EXIT__);
-
-        m_isRunnning.store(IZ_TRUE);
-
-    __EXIT__:
-        if (!result) {
-            IZ_ASSERT(IZ_FALSE);
-
-            stop();
-        }
-
-        return result;
-    }
-
-    // クライアントとして起動.
-    IZ_BOOL Tcp::startAsClient(
-        IMemoryAllocator* allocator,
-        const IPv4Endpoint& hostEp)
-    {
-        if (m_isRunnning.load()) {
-            return IZ_TRUE;
-        }
-
-        m_allocator = allocator;
-
-        IZ_BOOL result = IZ_FALSE;
-
-        // ソケットの生成
-        m_socket = socket(
-            AF_INET,        // アドレスファミリ
-            SOCK_STREAM,    // ソケットタイプ
-            0);             // プロトコル
-        VRETURN(isValidSocket(m_socket));
-
-        // 通信ポート・アドレスの設定
-        sockaddr_in inAddr;
-        {
-            FILL_ZERO(&inAddr, sizeof(inAddr));
-
-            inAddr.sin_family = AF_INET;
-            inAddr.sin_port = htons(hostEp.getPort());
-
-            auto address = hostEp.getAddress();
-            result = !address.isAny();
-
+        if (maxConnections > 0) {
+            result = (listen(m_socket, maxConnections) >= 0);
             VGOTO(result, __EXIT__);
-
-            IZ_CHAR ip[64];
-            address.toString(ip, COUNTOF(ip));
-
-            inAddr.sin_addr.S_un.S_addr = inet_addr(ip);
         }
-
-        // ソケットにアドレスを結びつける
-        result = (bind(m_socket, (const sockaddr*)&inAddr, sizeof(inAddr)) >= 0);
-        VGOTO(result, __EXIT__);
-
-        m_isRunnning.store(IZ_TRUE);
 
     __EXIT__:
         if (!result) {
@@ -140,13 +71,40 @@ namespace net {
 
             stop();
         }
+
         return result;
     }
 
-    // サーバーと接続.
-    IZ_BOOL Tcp::connectToServer(const IPv4Endpoint& remoteEp)
+    // 停止.
+    void Tcp::stop()
     {
-        VRETURN(m_isRunnning);
+        if (isValidSocket(m_socket)) {
+            shutdown(m_socket, SD_BOTH);
+            closesocket(m_socket);
+            m_socket = IZ_INVALID_SOCKET;
+        }
+    }
+
+    ////////////////////////////////////////////////
+
+    TcpClient::TcpClient()
+    {
+    }
+
+    TcpClient::~TcpClient()
+    {
+    }
+
+    // 起動.
+    IZ_BOOL TcpClient::start(const IPv4Endpoint& hostEp)
+    {
+        auto ret = Tcp::start(hostEp);
+        return ret;
+    }
+
+    IZ_BOOL TcpClient::connectTo(const IPv4Endpoint& remoteEp)
+    {
+        VRETURN(isValidSocket(m_socket));
 
         IZ_BOOL result = IZ_TRUE;
 
@@ -175,113 +133,114 @@ namespace net {
             sizeof(serverAddr)) >= 0);
 
         if (result) {
-            TcpRemote& remote = m_remotes.at(0);
-
-            sys::Lock lock(remote);
-            remote.setSocket(m_socket);
-
-            m_isConnected.store(IZ_TRUE);
-        }
-        else {
-            // TODO
-            IZ_ASSERT(IZ_FALSE);
+            m_remote = remoteEp;
         }
 
     __EXIT__:
+        if (!result) {
+            IZ_ASSERT(IZ_FALSE);
+            stop();
+        }
+
         return result;
     }
 
-    // 停止.
-    void Tcp::stop()
+    IZ_INT TcpClient::recieve(
+        void* buf,
+        IZ_UINT size)
     {
-        m_isRunnning.store(IZ_FALSE);
-        m_isConnected.store(IZ_FALSE);
+        //IZ_ASSERT(!m_remote.getAddress().isAny());
 
-        onStop();
+        auto ret = recv(m_socket, (char*)buf, size, 0);
+        return ret;
+    }
 
-        if (isValidSocket(m_socket)) {
-            shutdown(m_socket, SD_BOTH);
-            closesocket(m_socket);
-            m_socket = IZ_INVALID_SOCKET;
+    IZ_INT TcpClient::sendData(
+        const void* data,
+        IZ_UINT size)
+    {
+        //IZ_ASSERT(!m_remote.getAddress().isAny());
+
+        auto ret = send(m_socket, (const char*)data, size, 0);
+        return ret;
+    }
+
+    IZ_BOOL TcpClient::isActive()
+    {
+        return isValidSocket(m_socket);
+    }
+
+    ////////////////////////////////////////////////
+
+    TcpListener::TcpListener()
+    {
+    }
+
+    TcpListener::~TcpListener()
+    {
+    }
+
+    IZ_BOOL TcpListener::start(
+        IMemoryAllocator* allocator,
+        const IPv4Endpoint& hostEp,
+        IZ_UINT maxConnections)
+    {
+        IZ_ASSERT(maxConnections > 0);
+        auto ret = Tcp::start(hostEp, maxConnections);
+
+        if (ret) {
+            m_maxConnections = maxConnections;
+
+            m_remotes.init(allocator, maxConnections);
         }
 
-        m_remotes.traverse(
-            [this] (TcpRemote& remote) {
-            remote.close();
-        });
+        return ret;
+    }
+
+    void TcpListener::stop()
+    {
+        Tcp::stop();
+
+        for (IZ_UINT i = 0; i < m_remotes.getNum(); i++) {
+            TcpClient& remote = m_remotes.at(i);
+            remote.stop();
+        }
 
         m_remotes.clear();
     }
 
-    IZ_UINT Tcp::getRemoteNum()
-    {
-        std::unique_lock<std::mutex> lock(m_remotesLocker);
-
-        IZ_UINT ret = m_remotes.getNum();
-        return ret;
-    }
-
-    const IPv4Endpoint* Tcp::getRemote(IZ_UINT idx)
-    {
-        std::unique_lock<std::mutex> lock(m_remotesLocker);
-
-        const TcpRemote& remote = m_remotes.at(idx);
-        
-        if (!remote.isActive()) {
-            return IZ_NULL;
-        }
-
-        return &remote.m_endpoint;
-    }
-
-    const IPv4Endpoint* Tcp::acceptRemote()
+    TcpClient* TcpListener::acceptRemote()
     {
         sockaddr_in addr;
-        sockaddr* paddr = (sockaddr*)&addr;
-        IZ_INT len = sizeof(addr);
+        IZ_INT addrlen = sizeof(addr);
 
-        // クライアントからの接続待ち
-        auto socket = accept(m_socket, paddr, &len);
+        IZ_SOCKET socket = accept(m_socket, (sockaddr*)&addr, &addrlen);
 
-        if (!isValidSocket(socket)) {
-            return nullptr;
-        }
+        std::unique_lock<std::mutex> lock(m_remotesLocker);
 
-        for (IZ_UINT i = 0; i < m_remotes.getNum(); i++) {
-            TcpRemote& remote = m_remotes.at(i);
+        for (IZ_UINT i = 0; i < m_maxConnections; i++) {
+            auto& remote = m_remotes.at(i);
 
-            sys::Lock lock(remote);
-
-            // 空いているものを探す
             if (!remote.isActive()) {
-                remote.setSocket(socket);
-                remote.m_endpoint.set(addr);
-
-                return &remote.m_endpoint;
+                remote.m_socket = socket;
+                return &remote;
             }
         }
 
+        IZ_ASSERT(IZ_FALSE);
         return nullptr;
     }
 
-    IZ_BOOL Tcp::isEnabledRemote(const IPv4Endpoint& remoteEp)
-    {
-        auto remote = findRemote(remoteEp);
-        return (remote != nullptr);
-    }
-
-    IZ_INT Tcp::recieveFrom(
-        IZ_UINT8* buf,
+    IZ_INT TcpListener::recieveFrom(
+        void* buf,
         IZ_UINT size,
         const IPv4Endpoint& remoteEp)
     {
-        auto remote = findRemote(remoteEp);
+        auto remote = find(remoteEp);
 
         IZ_INT ret = 0;
 
         if (remote && remote->isActive()) {
-            sys::Lock lock(*remote);
-
             ret = recv(remote->m_socket, (char*)buf, size, 0);
 
             if (ret < 0) {
@@ -292,14 +251,14 @@ namespace net {
         return ret;
     }
 
-    TcpRemote* Tcp::findRemote(const IPv4Endpoint ep)
+    TcpClient* TcpListener::find(const IPv4Endpoint& remoteEp)
     {
         std::unique_lock<std::mutex> lock(m_remotesLocker);
 
         for (IZ_UINT i = 0; i < m_remotes.getNum(); i++) {
             auto& remote = m_remotes.at(i);
 
-            if (remote.m_endpoint == ep) {
+            if (remote.m_host == remoteEp) {
                 return &remote;
             }
         }
@@ -308,40 +267,16 @@ namespace net {
     }
 
     // データを送信.
-    IZ_BOOL Tcp::sendData(
+    IZ_BOOL TcpListener::sendTo(
         const void* data, 
-        IZ_UINT size)
-    {
-        TcpRemote& remote = m_remotes.at(0);
-
-        IZ_INT ret = 0;
-
-        if (remote.isActive()) {
-            sys::Lock locker(remote);
-
-            ret = send(remote.m_socket, (const char*)data, size, 0);
-
-            if (ret < 0) {
-                // TODO
-            }
-        }
-
-        return ret;
-    }
-
-    // 指定した接続先にデータを送信.
-    IZ_INT Tcp::sendData(
-        const void* data,
         IZ_UINT size,
         const IPv4Endpoint& remoteEp)
     {
-        TcpRemote* remote = findRemote(remoteEp);
+        auto remote = find(remoteEp);
 
         IZ_INT ret = 0;
 
         if (remote && remote->isActive()) {
-            sys::Lock locker(*remote);
-
             ret = send(remote->m_socket, (const char*)data, size, 0);
 
             if (ret < 0) {
@@ -353,32 +288,34 @@ namespace net {
     }
 
     // 全ての接続先にデータを送信.
-    IZ_UINT Tcp::sendDataToAllRemote(const void* data, IZ_UINT size)
+    IZ_INT TcpListener::sendToAll(
+        const void* data, 
+        IZ_UINT size)
     {
-        IZ_UINT succeededNum = 0;;
+        IZ_UINT succeededNum = 0;
+
+        std::unique_lock<std::mutex> lock(m_remotesLocker);
 
         for (IZ_UINT i = 0; i < m_remotes.getNum(); i++) {
-            TcpRemote& remote = m_remotes.at(i);
+            auto& remote = m_remotes.at(i);
 
             if (remote.isActive()) {
-                sys::Lock locker(remote);
-
                 // TODO
-                IZ_BOOL result = send(remote.m_socket, (const char*)data, size, 0);
+                IZ_INT len = send(remote.m_socket, (const char*)data, size, 0);
 
-                succeededNum = (result ? succeededNum + 1 : succeededNum);
+                if (len > 0) {
+                    succeededNum++;
+                }
+                else {
+                    // TODO
+                }
             }
         }
 
         return succeededNum;
     }
 
-    // サーバーと接続されているかどうか.
-    IZ_BOOL Tcp::isConnected()
-    {
-        return m_isConnected.load();
-    }
-
+#if 0
     // NOTE
     // select(2)の第一引数にディスクリプタの最大値を渡すのは間違い？Add Star
     //  http://mattn.kaoriya.net/software/lang/c/20090114140035.htm
@@ -463,6 +400,7 @@ namespace net {
         }
 
         return 1;
-    }    
+    }
+#endif
 }    // namespace net
 }    // namespace izanagi

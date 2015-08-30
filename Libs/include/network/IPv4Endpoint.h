@@ -68,15 +68,15 @@ namespace net {
             const IPv4Address& address,
             IZ_UINT port);
 
-        void set(const sockaddr_in& addr);
-
-        void get(sockaddr_in& addr);
-
         const IPv4Address& getAddress() const;
 
         IZ_UINT getPort() const;
 
         IZ_BOOL operator==(const IPv4Endpoint& rhs);
+        IZ_BOOL operator!=(const IPv4Endpoint& rhs);
+
+        void set(const sockaddr_in& addr);
+        void get(sockaddr_in& addr);
         IZ_BOOL operator==(const sockaddr_in& addr);
 
     private:

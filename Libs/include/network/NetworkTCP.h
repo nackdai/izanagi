@@ -8,97 +8,110 @@
 
 namespace izanagi {
 namespace net {
-    class TcpRemote;
-
     /** TCP.
      */
     class Tcp {
-    public:
+    protected:
         Tcp();
         virtual ~Tcp();
 
         NO_COPIABLE(Tcp);
 
-    public:
-        /** サーバーとして起動.
-         */
-        IZ_BOOL startAsServer(
-            IMemoryAllocator* allocator,
+    protected:
+        // 起動.
+        IZ_BOOL start(
             const IPv4Endpoint& hostEp,
-            IZ_UINT maxConnections);
+            IZ_UINT maxConnections = 0);
 
-        /** クライアントとして起動.
-         */
-        IZ_BOOL startAsClient(
-            IMemoryAllocator* allocator,
-            const IPv4Endpoint& hostEp);
-
-        /** サーバーと接続.
-         */
-        IZ_BOOL connectToServer(const IPv4Endpoint& remoteEp);
-
+    public:
         /** 停止.
          */
-        void stop();
+        virtual void stop();
 
-        /** サーバーとして起動しているときに接続されているリモートの数を取得.
+    protected:
+        IZ_SOCKET m_socket{ IZ_INVALID_SOCKET };
+
+        IPv4Endpoint m_host;
+    };
+
+    /**
+    */
+    class TcpClient : public Tcp {
+        friend class TcpListener;
+
+    public:
+        TcpClient();
+        virtual ~TcpClient();
+
+    public:
+        /** 起動.
          */
-        IZ_UINT getRemoteNum();
+        IZ_BOOL start(const IPv4Endpoint& hostEp);
 
-        /** サーバーとして起動しているときに指定された接続されているリモートの情報を取得.
+        /** 接続.
          */
-        const IPv4Endpoint* getRemote(IZ_UINT idx);
+        IZ_BOOL connectTo(const IPv4Endpoint& remoteEp);
 
-        const IPv4Endpoint* acceptRemote();
-
-        IZ_BOOL isEnabledRemote(const IPv4Endpoint& remoteEp);
-
-        IZ_INT wait(
-            IZ_UINT sec = 0,
-            IZ_UINT usec = 0);
-
-        IZ_INT recieveFrom(
-            IZ_UINT8* buf,
-            IZ_UINT size,
-            const IPv4Endpoint& remoteEp);
+        IZ_INT recieve(
+            void* buf,
+            IZ_UINT size);
 
         /** データを送信.
          */
         IZ_INT sendData(
-            const void* data, 
+            const void* data,
             IZ_UINT size);
+
+    private:
+        IZ_BOOL isActive();
+
+    private:
+        IPv4Endpoint m_remote;
+    };
+
+    /**
+     */
+    class TcpListener : public Tcp {
+    public:
+        TcpListener();
+        virtual ~TcpListener();
+
+    public:
+        /** 起動.
+         */
+        IZ_BOOL start(
+            IMemoryAllocator* allocator,
+            const IPv4Endpoint& hostEp,
+            IZ_UINT maxConnections);
+
+        virtual void stop() override;
+
+        TcpClient* acceptRemote();
+
+        IZ_INT recieveFrom(
+            void* buf,
+            IZ_UINT size,
+            const IPv4Endpoint& remoteEp);
 
         /** 指定した接続先にデータを送信.
          */
-        IZ_INT sendData(
+        IZ_INT sendTo(
             const void* data,
             IZ_UINT size,
             const IPv4Endpoint& remoteEp);
 
-        /** 全ての接続先にデータを送信.
-         */
-        IZ_UINT sendDataToAllRemote(const void* data, IZ_UINT size);
+        IZ_INT sendToAll(
+            const void* data,
+            IZ_UINT size);
 
-        /** サーバーと接続されているかどうか.
-         */
-        IZ_BOOL isConnected();
+    private:
+        TcpClient* find(const IPv4Endpoint& remoteEp);
 
-    protected:
-        TcpRemote* findRemote(const IPv4Endpoint ep);
+    private:
+        IZ_UINT m_maxConnections{ 0 };
 
-        virtual void onStop() {}
-
-    protected:
-        IMemoryAllocator* m_allocator;
-
-        IZ_SOCKET m_socket;
-
-        // 接続元リスト.
         std::mutex m_remotesLocker;
-        CArray<TcpRemote> m_remotes;
-
-        std::atomic<IZ_BOOL> m_isRunnning;
-        std::atomic<IZ_BOOL> m_isConnected;
+        CArray<TcpClient> m_remotes;
     };
 }    // namespace net
 }    // namespace izanagi

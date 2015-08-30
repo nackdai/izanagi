@@ -63,16 +63,10 @@
     <ClCompile Include="..\..\source\network\IPv4Endpoint.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\network\NetworkTCPUtility.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\network\NetworkRemote.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\network\NetworkUDP.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\network\NetworkUDPUtility.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\network\ReplicatedPropertyManager.cpp">

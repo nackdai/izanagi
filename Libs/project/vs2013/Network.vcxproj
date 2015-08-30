@@ -73,9 +73,7 @@
     </ClCompile>
     <ClCompile Include="..\..\source\network\NetworkRemote.cpp" />
     <ClCompile Include="..\..\source\network\NetworkTCP.cpp" />
-    <ClCompile Include="..\..\source\network\NetworkTCPUtility.cpp" />
     <ClCompile Include="..\..\source\network\NetworkUDP.cpp" />
-    <ClCompile Include="..\..\source\network\NetworkUDPUtility.cpp" />
     <ClCompile Include="..\..\source\network\ReplicatedProperty.cpp" />
     <ClCompile Include="..\..\source\network\ReplicatedPropertyManager.cpp" />
     <ClCompile Include="..\..\source\network\ReplicatedPropertyObject.cpp" />

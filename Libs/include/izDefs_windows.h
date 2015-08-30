@@ -72,7 +72,7 @@ typedef IZ_INT64 IZ_TIME;
     int main(int argc, char* argv[])\
     {\
         HINSTANCE hInstance = GetModuleHandle(NULL);\
-        return _iz_main(0, NULL, hInstance);\
+        return _iz_main(argc, argv, hInstance);\
     }\
     int _iz_main(int argc, char* argv[], HINSTANCE hInstance)
 #endif

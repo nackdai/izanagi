@@ -64,7 +64,7 @@ namespace izanagi {
         void clear()
         {
 			for (IZ_UINT i = 0; i < m_num; i++) {
-				delete m_data[i];
+                m_data[i]->~_T();
 			}
 
 			FREE(m_allocator, m_data);

@@ -169,10 +169,38 @@ namespace net {
         m_port = port;
     }
 
+    const IPv4Address& IPv4Endpoint::getAddress() const
+    {
+        return m_address;
+    }
+
+    IZ_UINT IPv4Endpoint::getPort() const
+    {
+        return m_port;
+    }
+
+    IZ_BOOL IPv4Endpoint::operator==(const IPv4Endpoint& rhs)
+    {
+        return (m_address == rhs.m_address && m_port == rhs.m_port);
+    }
+
+    IZ_BOOL IPv4Endpoint::operator!=(const IPv4Endpoint& rhs)
+    {
+        return !(*this == rhs);
+    }
+
+    IZ_BOOL IPv4Endpoint::operator==(const sockaddr_in& addr)
+    {
+        IPv4Endpoint ep;
+        ep.set(addr);
+
+        return *this == ep;
+    }
+
     void IPv4Endpoint::set(const sockaddr_in& addr)
     {
         m_port = ntohs(addr.sin_port);
-        
+
         auto ip = addr.sin_addr.S_un.S_addr;
         IZ_ASSERT(sizeof(ip) == 4 * sizeof(IZ_CHAR));
 
@@ -197,29 +225,6 @@ namespace net {
 
             addr.sin_addr.S_un.S_addr = inet_addr(ip);
         }
-    }
-
-    const IPv4Address& IPv4Endpoint::getAddress() const
-    {
-        return m_address;
-    }
-
-    IZ_UINT IPv4Endpoint::getPort() const
-    {
-        return m_port;
-    }
-
-    IZ_BOOL IPv4Endpoint::operator==(const IPv4Endpoint& rhs)
-    {
-        return (m_address == rhs.m_address && m_port == rhs.m_port);
-    }
-
-    IZ_BOOL IPv4Endpoint::operator == (const sockaddr_in& addr)
-    {
-        IPv4Endpoint ep;
-        ep.set(addr);
-
-        return *this == ep;
     }
 }
 }

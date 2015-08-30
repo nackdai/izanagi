@@ -7,67 +7,8 @@
 
 namespace izanagi {
 namespace net {
-    // UDPリモート
-    class Udp::UdpRemote : public Remote, sys::CSpinLock {
-        friend class Udp;
-
-    public:
-        static UdpRemote* create(IMemoryAllocator* allocator);
-
-        static void deteteRemote(
-            IMemoryAllocator* allocator,
-            Remote* client);
-
-    public:
-        UdpRemote();
-        virtual ~UdpRemote() {}
-
-        // 有効かどうか.
-        IZ_BOOL isActive() const;
-
-        CStdList<UdpRemote>::Item* getListItem();
-
-    private:
-        CStdList<UdpRemote>::Item m_listItem;
-    };
-
-    Udp::UdpRemote* Udp::UdpRemote::create(IMemoryAllocator* allocator)
-    {
-        return Remote::create<UdpRemote>(allocator);
-    }
-
-    void Udp::UdpRemote::deteteRemote(
-        IMemoryAllocator* allocator,
-        Remote* remote)
-    {
-        Remote::deteteRemote(allocator, remote);
-    }
-
-    Udp::UdpRemote::UdpRemote()
-    {
-        m_listItem.Init(this);
-    }
-
-    // 有効かどうか.
-    IZ_BOOL Udp::UdpRemote::isActive() const
-    {
-        return !m_endpoint.getAddress().isAny();
-    }
-
-    CStdList<Udp::UdpRemote>::Item* Udp::UdpRemote::getListItem()
-    {
-        return &m_listItem;
-    }
-
-    ////////////////////////////////////////////////////////
-
     Udp::Udp()
     {
-        m_allocator = nullptr;
-
-        m_socket = IZ_INVALID_SOCKET;
-
-        m_isRunning.store(IZ_FALSE);
     }
 
     Udp::~Udp()
@@ -75,24 +16,20 @@ namespace net {
         stop();
     }
 
-    // サーバーとして起動.
-    IZ_BOOL Udp::startAsServer(
-        IMemoryAllocator* allocator,
-        const IPv4Endpoint& hostEp)
+    // 起動.
+    IZ_BOOL Udp::start(const IPv4Endpoint& hostEp)
     {
-        if (m_isRunning.load()) {
+        if (isValidSocket(m_socket)) {
             return IZ_TRUE;
         }
-
-        m_allocator = allocator;
 
         IZ_BOOL result = IZ_FALSE;
 
         // ソケットの生成
         m_socket = socket(
-            AF_INET,    // アドレスファミリ
-            SOCK_DGRAM, // ソケットタイプ
-            0);         // プロトコル
+            AF_INET,        // アドレスファミリ
+            SOCK_DGRAM,     // ソケットタイプ
+            IPPROTO_UDP);   // プロトコル
         VRETURN(isValidSocket(m_socket));
 
         // 通信ポート・アドレスの設定
@@ -118,87 +55,25 @@ namespace net {
 
         // ソケットにアドレスを結びつける
         result = (bind(m_socket, (const sockaddr*)&inAddr, sizeof(inAddr)) >= 0);
-        VGOTO(result, __EXIT__);
-
-        m_host = hostEp;
-
-        m_isRunning.store(IZ_TRUE);
-
-    __EXIT__:
-        if (!result) {
+        
+        if (result) {
+            m_isBindAddr = IZ_TRUE;
+            m_host = hostEp;
+        }
+        else {
             IZ_ASSERT(IZ_FALSE);
-
             stop();
         }
 
         return result;
     }
 
-    // クライアントとして起動.
-    IZ_BOOL Udp::startAsClient(
-        IMemoryAllocator* allocator,
-        const IPv4Endpoint& hostEp)
+    // 起動.
+    IZ_BOOL Udp::start()
     {
-        if (m_isRunning.load()) {
+        if (isValidSocket(m_socket)) {
             return IZ_TRUE;
         }
-
-        m_allocator = allocator;
-
-        IZ_BOOL result = IZ_FALSE;
-
-        // ソケットの生成
-        m_socket = socket(
-            AF_INET,        // アドレスファミリ
-            SOCK_DGRAM,    // ソケットタイプ
-            0);             // プロトコル
-        VRETURN(isValidSocket(m_socket));
-
-        sockaddr_in inAddr;
-        {
-            FILL_ZERO(&inAddr, sizeof(inAddr));
-
-            inAddr.sin_family = AF_INET;
-            inAddr.sin_port = htons(hostEp.getPort());
-
-            auto address = hostEp.getAddress();
-            result = address.isAny();
-
-            VGOTO(result, __EXIT__);
-
-            IZ_CHAR ip[64];
-            address.toString(ip, COUNTOF(ip));
-
-            inAddr.sin_addr.S_un.S_addr = inet_addr(ip);
-        }
-
-        // ソケットにアドレスを結びつける
-        result = (bind(m_socket, (const sockaddr*)&inAddr, sizeof(inAddr)) >= 0);
-        VGOTO(result, __EXIT__);
-
-        m_host = hostEp;
-
-        m_isRunning.store(IZ_TRUE);
-
-    __EXIT__:
-        if (!result) {
-            IZ_ASSERT(IZ_FALSE);
-
-            stop();
-        }
-
-        return result;
-    }
-
-    IZ_BOOL Udp::startAsClientAndConnectToServer(
-        IMemoryAllocator* allocator,
-        const IPv4Endpoint& remoteEp)
-    {
-        if (m_isRunning.load()) {
-            return IZ_TRUE;
-        }
-
-        m_allocator = allocator;
 
         IZ_BOOL result = IZ_FALSE;
 
@@ -207,7 +82,23 @@ namespace net {
             AF_INET,        // アドレスファミリ
             SOCK_DGRAM,     // ソケットタイプ
             IPPROTO_UDP);   // プロトコル
+
+        result = isValidSocket(m_socket);
+
+        if (!result) {
+            IZ_ASSERT(IZ_FALSE);
+
+            stop();
+        }
+
+        return result;
+    }
+
+    IZ_BOOL Udp::connectTo(const IPv4Endpoint& remoteEp)
+    {
         VRETURN(isValidSocket(m_socket));
+
+        IZ_BOOL result = IZ_FALSE;
 
         // 通信ポート・アドレスの設定
         sockaddr_in destAddr;
@@ -218,7 +109,9 @@ namespace net {
             destAddr.sin_port = htons(remoteEp.getPort());
 
             auto address = remoteEp.getAddress();
-            VGOTO(!address.isAny(), __EXIT__);
+            
+            result = !address.isAny();
+            VGOTO(result, __EXIT__);
 
             char ip[64];
             address.toString(ip, COUNTOF(ip));
@@ -228,21 +121,19 @@ namespace net {
 
         // 接続
         result = (connect(m_socket, (const sockaddr*)&destAddr, sizeof(destAddr)) >= 0);
-        VGOTO(result, __EXIT__);
+        
+        if (result) {
+            if (!m_isBindAddr) {
+                // ホスト名取得
+                sockaddr_in inAddr;
+                int32_t inAddrSize = sizeof(inAddr);
+                result = (getsockname(m_socket, (sockaddr*)&inAddr, &inAddrSize) >= 0);
+                VGOTO(result, __EXIT__);
 
-        // ホスト名取得
-        sockaddr_in inAddr;
-        int32_t inAddrSize = sizeof(inAddr);
-        result = (getsockname(m_socket, (sockaddr*)&inAddr, &inAddrSize) >= 0);
-        VGOTO(result, __EXIT__);
-
-        m_host.set(inAddr);
-
-        auto remote = UdpRemote::create(allocator);
-        remote->m_endpoint = remoteEp;
-        m_remotes.AddTail(remote->getListItem());
-
-        m_isRunning.store(IZ_TRUE);
+                m_isBindAddr = IZ_TRUE;
+                m_host.set(inAddr);
+            }
+        }
 
     __EXIT__:
         if (!result) {
@@ -257,28 +148,9 @@ namespace net {
     // 停止.
     void Udp::stop()
     {
-        m_isRunning.store(IZ_FALSE);
-
-        onStop();
-
         if (isValidSocket(m_socket)) {
             closesocket(m_socket);
             m_socket = IZ_INVALID_SOCKET;
-        }
-
-        {
-            auto item = m_remotes.GetTop();
-
-            while (item != IZ_NULL) {
-                auto data = item->GetData();
-                item = item->GetNext();
-
-                UdpRemote::deteteRemote(
-                    m_allocator,
-                    data);
-            }
-
-            m_remotes.Clear();
         }
     }
 
@@ -287,10 +159,8 @@ namespace net {
         void* buf,
         IZ_UINT size)
     {
-        IPv4Endpoint ep;
-
-        IZ_INT ret = recieveFrom(buf, size, ep);
-
+        IZ_ASSERT(isValidSocket(m_socket));
+        IZ_INT ret = recv(m_socket, (char*)buf, size, 0);
         return ret;
     }
 
@@ -300,6 +170,8 @@ namespace net {
         IZ_UINT size,
         IPv4Endpoint& remoteEp)
     {
+        IZ_ASSERT(isValidSocket(m_socket));
+
         sockaddr_in addr;
         sockaddr* paddr = (sockaddr*)&addr;
         IZ_INT len = sizeof(addr);
@@ -312,73 +184,31 @@ namespace net {
             paddr,
             &len);
 
-        auto remote = findRemote(addr);
-
         if (ret > 0) {
-            if (!remote) {
-                // リモートを追加
-                remote = UdpRemote::create(m_allocator);
-                remote->m_endpoint.set(addr);
-
-                std::unique_lock<std::mutex> lock(m_remotesLocker);
-                m_remotes.AddTail(remote->getListItem());
-            }
-
-            sys::Lock lock(*remote);
-
-            remoteEp = remote->m_endpoint;
-        }
-        else {
-            // TODO
-            // 切断された
-
-            if (remote) {
-                // TODO
-            }
+            remoteEp.set(addr);
         }
 
         return ret;
     }
 
     // データを送信.
-    IZ_INT Udp::send(const void* data, IZ_UINT size)
+    IZ_INT Udp::sendData(const void* data, IZ_UINT size)
     {
-        IZ_INT ret = 0;
-
-        auto item = m_remotes.GetAt(0);
-
-        if (item != IZ_NULL) {
-            auto remote = item->GetData();
-
-            if (remote->isActive()) {
-                sockaddr_in addr;
-                remote->m_endpoint.get(addr);
-
-                ret = sendto(
-                    m_socket,
-                    (const char*)data,
-                    size,
-                    0,
-                    (sockaddr*)&addr,
-                    sizeof(addr));
-
-                if (ret < 0) {
-                    // TODO
-                    // 切断された
-                }
-            }
-        }
-
+        IZ_INT ret = send(m_socket, (const char*)data, size, 0);
         return ret;
     }
 
     // 指定した接続先にデータを送信.
     IZ_INT Udp::sendTo(
-        IPv4Endpoint& endpoint,
-        const void* data, IZ_UINT size)
-    {        
+        const void* data,
+        IZ_UINT size,
+        IPv4Endpoint& remoteEp)
+    {
+        IZ_ASSERT(isValidSocket(m_socket));
+        VRETURN_VAL(remoteEp != m_host, 0);
+
         sockaddr_in addr;
-        endpoint.get(addr);
+        remoteEp.get(addr);
 
         IZ_INT ret = sendto(
             m_socket,
@@ -388,51 +218,7 @@ namespace net {
             (sockaddr*)&addr,
             sizeof(addr));
 
-        if (ret < 0) {
-            // TODO
-            // 切断された
-
-            auto remote = findRemote(endpoint);
-            if (remote) {
-                // TODO
-            }
-        }
-
         return ret;
-    }
-
-    Udp::UdpRemote* Udp::findRemote(const IPv4Endpoint& ep)
-    {
-        std::unique_lock<std::mutex> lock(m_remotesLocker);
-
-        auto item = m_remotes.GetTop();
-
-        while (item != IZ_NULL) {
-            auto remote = item->GetData();
-
-            if (remote->m_endpoint == ep) {
-                return remote;
-            }
-
-            item = item->GetNext();
-        }
-
-        return nullptr;
-    }
-
-    Udp::UdpRemote* Udp::findRemote(const sockaddr_in& addr)
-    {
-        IPv4Endpoint ep;
-        ep.set(addr);
-
-        UdpRemote* ret = findRemote(ep);
-
-        return ret;
-    }
-
-    IZ_BOOL Udp::isRunning()
-    {
-        return m_isRunning;
     }
 
     // NOTE
@@ -443,7 +229,7 @@ namespace net {
         IZ_UINT sec/*= 0*/,
         IZ_UINT usec/*= 0*/)
     {
-        IZ_ASSERT(m_isRunning.load());
+        IZ_ASSERT(isValidSocket(m_socket));
 
         timeval t_val = { sec, usec };
 

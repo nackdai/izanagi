@@ -18,6 +18,7 @@ namespace net {
     {
     }
 
+#if 0
     //////////////////////////////////////////////////
 
     TcpRemote* TcpRemote::create(IMemoryAllocator* allocator)
@@ -187,5 +188,6 @@ namespace net {
 
         m_isRegistered = IZ_FALSE;
     }
+#endif
 }    // namespace net
 }    // namespace izanagi
