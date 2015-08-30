@@ -17,6 +17,12 @@ namespace net {
     {
         return (socket != INVALID_SOCKET);
     }
+
+    inline IZ_INT getLastError()
+    {
+        auto ret = WSAGetLastError();
+        return ret;
+    }
 #else
     typedef IZ_INT IZ_SOCKET;
 

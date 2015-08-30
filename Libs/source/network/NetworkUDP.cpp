@@ -148,6 +148,8 @@ namespace net {
     // ’âŽ~.
     void Udp::stop()
     {
+        endRecieve();
+
         if (isValidSocket(m_socket)) {
             closesocket(m_socket);
             m_socket = IZ_INVALID_SOCKET;
@@ -186,6 +188,10 @@ namespace net {
 
         if (ret > 0) {
             remoteEp.set(addr);
+        }
+        else {
+            auto err = getLastError();
+            IZ_PRINTF("Udp Recv Err(%d)\n", err);
         }
 
         return ret;
@@ -273,7 +279,46 @@ namespace net {
         }
 
         return 0;
+    }
 
+    void Udp::beginRecieve(
+        std::function<void(const Packet*)> onRecieve,
+        void* buf,
+        IZ_UINT size)
+    {
+        IZ_ASSERT(onRecieve && buf);
+
+        m_isRunning = IZ_TRUE;
+
+        m_recvThread = std::thread(
+            [this, buf, size, onRecieve]{
+            while (m_isRunning) {
+                // TODO
+                if (wait(0, 1000) > 0) {
+                    Packet packet;
+                    IZ_INT len = recieveFrom(buf, size, packet.endpoint);
+
+                    if (len > 0) {
+                        packet.data = (IZ_UINT8*)buf;
+                        packet.size = len;
+                        onRecieve(&packet);
+                    }
+                    else {
+                        onRecieve(nullptr);
+                    }
+                }
+                sys::CThread::YieldThread();
+            }
+        });
+    }
+
+    void Udp::endRecieve()
+    {
+        m_isRunning = IZ_FALSE;
+
+        if (m_recvThread.joinable()) {
+            m_recvThread.join();
+        }
     }
 }    // namespace net
 }    // namespace izanagi

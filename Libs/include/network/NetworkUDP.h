@@ -60,11 +60,21 @@ namespace net {
             IZ_UINT sec = 0,
             IZ_UINT usec = 0);
 
+        void beginRecieve(
+            std::function<void(const Packet*)> onRecieve,
+            void* buf,
+            IZ_UINT size);
+
+        void endRecieve();
+
     protected:
         IZ_SOCKET m_socket{ IZ_INVALID_SOCKET };
 
         IZ_BOOL m_isBindAddr{ IZ_FALSE };
         IPv4Endpoint m_host;
+
+        std::atomic<IZ_BOOL> m_isRunning{ IZ_FALSE };
+        std::thread m_recvThread;
     };
 }    // namespace net
 }    // namespace izanagi

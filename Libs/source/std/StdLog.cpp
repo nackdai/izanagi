@@ -7,7 +7,7 @@ namespace {
 
     inline IZ_BOOL _OutputString(IZ_PCSTR pszFormat, va_list& argp)
     {
-        static IZ_CHAR pszBuf[1024];
+        IZ_CHAR pszBuf[1024];
 
         IZ_VSPRINTF(pszBuf, sizeof(pszBuf), pszFormat, argp);
         IZ_PRINTF("%s", pszBuf);
