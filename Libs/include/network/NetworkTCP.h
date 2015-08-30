@@ -18,13 +18,13 @@ namespace net {
         NO_COPIABLE(Tcp);
 
     protected:
-        // ‹N“®.
+        // èµ·å‹•.
         IZ_BOOL start(
             const IPv4Endpoint& hostEp,
             IZ_UINT maxConnections = 0);
 
     public:
-        /** ’â~.
+        /** åœæ­¢.
          */
         virtual void stop();
 
@@ -46,11 +46,11 @@ namespace net {
         virtual ~TcpClient();
 
     public:
-        /** ‹N“®.
+        /** èµ·å‹•.
          */
         IZ_BOOL start(const IPv4Endpoint& hostEp);
 
-        /** Ú‘±.
+        /** æ¥ç¶š.
          */
         IZ_BOOL connectTo(const IPv4Endpoint& remoteEp);
 
@@ -60,7 +60,7 @@ namespace net {
             void* buf,
             IZ_UINT size);
 
-        /** ƒf[ƒ^‚ğ‘—M.
+        /** ãƒ‡ãƒ¼ã‚¿ã‚’é€ä¿¡.
          */
         IZ_INT sendData(
             const void* data,
@@ -99,7 +99,7 @@ namespace net {
         virtual ~TcpListener();
 
     public:
-        /** ‹N“®.
+        /** èµ·å‹•.
          */
         IZ_BOOL start(
             IMemoryAllocator* allocator,
@@ -115,7 +115,7 @@ namespace net {
             IZ_UINT size,
             const IPv4Endpoint& remoteEp);
 
-        /** w’è‚µ‚½Ú‘±æ‚Éƒf[ƒ^‚ğ‘—M.
+        /** æŒ‡å®šã—ãŸæ¥ç¶šå…ˆã«ãƒ‡ãƒ¼ã‚¿ã‚’é€ä¿¡.
          */
         IZ_INT sendTo(
             const void* data,

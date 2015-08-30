@@ -85,7 +85,7 @@ namespace net {
             m_funcNotify = nullptr;
 
             // NOTE
-            // �ʏ�̕ϐ��Ɠ��l�ɖ����I�ɏ���������Ȃ��ꍇ��m_value�̒l�͕s��.
+            // 通常の変数と同様に明示的に初期化されない場合のm_valueの値は不定.
         }
 
         virtual ~ReplicatedProperty()

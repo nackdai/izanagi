@@ -18,23 +18,23 @@ namespace net {
         NO_COPIABLE(Udp);
 
     public:
-        /** ‹N“®.
+        /** èµ·å‹•.
          */
         IZ_BOOL start(const IPv4Endpoint& hostEp);
 
-        /** ‹N“®.
+        /** èµ·å‹•.
          */
         IZ_BOOL start();
 
-        /** Ú‘±.
+        /** æ¥ç¶š.
          */
         IZ_BOOL connectTo(const IPv4Endpoint& remoteEp);
 
-        /** ’â~.
+        /** åœæ­¢.
          */
         void stop();
 
-        /** óM‚µ‚½ƒf[ƒ^‚ğæ“¾.
+        /** å—ä¿¡ã—ãŸãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—.
          */
         IZ_INT recieve(
             void* buf,
@@ -45,11 +45,11 @@ namespace net {
             IZ_UINT size,
             IPv4Endpoint& remoteEp);
 
-        /** ƒf[ƒ^‚ğ‘—M.
+        /** ãƒ‡ãƒ¼ã‚¿ã‚’é€ä¿¡.
          */
         IZ_INT sendData(const void* data, IZ_UINT size);
 
-        /** w’è‚µ‚½Ú‘±æ‚Éƒf[ƒ^‚ğ‘—M.
+        /** æŒ‡å®šã—ãŸæ¥ç¶šå…ˆã«ãƒ‡ãƒ¼ã‚¿ã‚’é€ä¿¡.
          */
         IZ_INT sendTo(
             const void* data,
