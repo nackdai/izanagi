@@ -31,7 +31,7 @@ namespace net {
     void ReplicatedProperty<_T>::set(const _T& rhs)
     {
         // TODO
-        // ƒNƒ‰ƒCƒAƒ“ƒg‘¤‚Å‚Í’l‚Ì•ÏX‚ğ‹–‚³‚È‚¢H
+        // ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆå´ã§ã¯å€¤ã®å¤‰æ›´ã‚’è¨±ã•ãªã„ï¼Ÿ
         if (!isServer()) {
             return;
         }
@@ -44,12 +44,12 @@ namespace net {
     {
         if (m_value != rhs) {
             // NOTE
-            // dirty‚É‚È‚ç‚È‚¢ŒÀ‚èA’ÊM‘ÎÛ‚É‚È‚ç‚È‚¢
+            // dirtyã«ãªã‚‰ãªã„é™ã‚Šã€é€šä¿¡å¯¾è±¡ã«ãªã‚‰ãªã„
             if (m_type != E_REPLICATED_TYPE::None
                 && isServer())
             {
                 // TODO
-                // ƒT[ƒo[‚ÅŒÄ‚Î‚ê‚½‚Æ‚«‚¾‚¯dirty‚É‚·‚éH
+                // ã‚µãƒ¼ãƒãƒ¼ã§å‘¼ã°ã‚ŒãŸã¨ãã ã‘dirtyã«ã™ã‚‹ï¼Ÿ
 
                 this->dirty();
                 m_owner->dirtyReplicatedProperty();
@@ -57,12 +57,12 @@ namespace net {
 
             m_value = rhs;
 
-            // ’Ê’m
+            // é€šçŸ¥
             if (m_funcNotify
                 && m_type == E_REPLICATED_TYPE::RepNotify
                 && !isServer())
             {
-                // ƒNƒ‰ƒCƒAƒ“ƒg‚ÅŒÄ‚Î‚ê‚½‚Æ‚«‚Í’Ê’m‚·‚é
+                // ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã§å‘¼ã°ã‚ŒãŸã¨ãã¯é€šçŸ¥ã™ã‚‹
                 m_funcNotify();
             }
         }

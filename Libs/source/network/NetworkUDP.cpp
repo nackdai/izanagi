@@ -15,7 +15,7 @@ namespace net {
         stop();
     }
 
-    // ‹N“®.
+    // èµ·å‹•.
     IZ_BOOL Udp::start(const IPv4Endpoint& hostEp)
     {
         if (isValidSocket(m_socket)) {
@@ -24,14 +24,14 @@ namespace net {
 
         IZ_BOOL result = IZ_FALSE;
 
-        // ƒ\ƒPƒbƒg‚Ì¶¬
+        // ã‚½ã‚±ãƒƒãƒˆã®ç”Ÿæˆ
         m_socket = socket(
-            AF_INET,        // ƒAƒhƒŒƒXƒtƒ@ƒ~ƒŠ
-            SOCK_DGRAM,     // ƒ\ƒPƒbƒgƒ^ƒCƒv
-            IPPROTO_UDP);   // ƒvƒƒgƒRƒ‹
+            AF_INET,        // ã‚¢ãƒ‰ãƒ¬ã‚¹ãƒ•ã‚¡ãƒŸãƒª
+            SOCK_DGRAM,     // ã‚½ã‚±ãƒƒãƒˆã‚¿ã‚¤ãƒ—
+            IPPROTO_UDP);   // ãƒ—ãƒ­ãƒˆã‚³ãƒ«
         VRETURN(isValidSocket(m_socket));
 
-        // ’ÊMƒ|[ƒgEƒAƒhƒŒƒX‚Ìİ’è
+        // é€šä¿¡ãƒãƒ¼ãƒˆãƒ»ã‚¢ãƒ‰ãƒ¬ã‚¹ã®è¨­å®š
         sockaddr_in inAddr;
         {
             FILL_ZERO(&inAddr, sizeof(inAddr));
@@ -52,7 +52,7 @@ namespace net {
             }
         }
 
-        // ƒ\ƒPƒbƒg‚ÉƒAƒhƒŒƒX‚ğŒ‹‚Ñ‚Â‚¯‚é
+        // ã‚½ã‚±ãƒƒãƒˆã«ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’çµã³ã¤ã‘ã‚‹
         result = (bind(m_socket, (const sockaddr*)&inAddr, sizeof(inAddr)) >= 0);
         
         if (result) {
@@ -67,7 +67,7 @@ namespace net {
         return result;
     }
 
-    // ‹N“®.
+    // èµ·å‹•.
     IZ_BOOL Udp::start()
     {
         if (isValidSocket(m_socket)) {
@@ -76,11 +76,11 @@ namespace net {
 
         IZ_BOOL result = IZ_FALSE;
 
-        // ƒ\ƒPƒbƒg‚Ì¶¬
+        // ã‚½ã‚±ãƒƒãƒˆã®ç”Ÿæˆ
         m_socket = socket(
-            AF_INET,        // ƒAƒhƒŒƒXƒtƒ@ƒ~ƒŠ
-            SOCK_DGRAM,     // ƒ\ƒPƒbƒgƒ^ƒCƒv
-            IPPROTO_UDP);   // ƒvƒƒgƒRƒ‹
+            AF_INET,        // ã‚¢ãƒ‰ãƒ¬ã‚¹ãƒ•ã‚¡ãƒŸãƒª
+            SOCK_DGRAM,     // ã‚½ã‚±ãƒƒãƒˆã‚¿ã‚¤ãƒ—
+            IPPROTO_UDP);   // ãƒ—ãƒ­ãƒˆã‚³ãƒ«
 
         result = isValidSocket(m_socket);
 
@@ -99,7 +99,7 @@ namespace net {
 
         IZ_BOOL result = IZ_FALSE;
 
-        // ’ÊMƒ|[ƒgEƒAƒhƒŒƒX‚Ìİ’è
+        // é€šä¿¡ãƒãƒ¼ãƒˆãƒ»ã‚¢ãƒ‰ãƒ¬ã‚¹ã®è¨­å®š
         sockaddr_in destAddr;
         {
             memset(&destAddr, 0, sizeof(destAddr));
@@ -118,12 +118,12 @@ namespace net {
             destAddr.sin_addr.S_un.S_addr = inet_addr(ip);
         }
 
-        // Ú‘±
+        // æ¥ç¶š
         result = (connect(m_socket, (const sockaddr*)&destAddr, sizeof(destAddr)) >= 0);
         
         if (result) {
             if (!m_isBindAddr) {
-                // ƒzƒXƒg–¼æ“¾
+                // ãƒ›ã‚¹ãƒˆåå–å¾—
                 sockaddr_in inAddr;
                 int32_t inAddrSize = sizeof(inAddr);
                 result = (getsockname(m_socket, (sockaddr*)&inAddr, &inAddrSize) >= 0);
@@ -144,7 +144,7 @@ namespace net {
         return result;
     }
 
-    // ’â~.
+    // åœæ­¢.
     void Udp::stop()
     {
         endRecieve();
@@ -155,7 +155,7 @@ namespace net {
         }
     }
 
-    // óM‚µ‚½ƒf[ƒ^‚ğæ“¾.
+    // å—ä¿¡ã—ãŸãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—.
     IZ_BOOL Udp::recieve(
         void* buf,
         IZ_UINT size)
@@ -165,7 +165,7 @@ namespace net {
         return ret;
     }
 
-    // óM‚µ‚½ƒf[ƒ^‚ğæ“¾.
+    // å—ä¿¡ã—ãŸãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—.
     IZ_INT Udp::recieveFrom(
         void* buf,
         IZ_UINT size,
@@ -196,14 +196,14 @@ namespace net {
         return ret;
     }
 
-    // ƒf[ƒ^‚ğ‘—M.
+    // ãƒ‡ãƒ¼ã‚¿ã‚’é€ä¿¡.
     IZ_INT Udp::sendData(const void* data, IZ_UINT size)
     {
         IZ_INT ret = send(m_socket, (const char*)data, size, 0);
         return ret;
     }
 
-    // w’è‚µ‚½Ú‘±æ‚Éƒf[ƒ^‚ğ‘—M.
+    // æŒ‡å®šã—ãŸæ¥ç¶šå…ˆã«ãƒ‡ãƒ¼ã‚¿ã‚’é€ä¿¡.
     IZ_INT Udp::sendTo(
         const void* data,
         IZ_UINT size,
@@ -227,7 +227,7 @@ namespace net {
     }
 
     // NOTE
-    // UDP‚Å‚Íselect‚Í•s—v
+    // UDPã§ã¯selectã¯ä¸è¦
     // http://stackoverflow.com/questions/19758152/select-for-udp-connection
 
     IZ_INT Udp::wait(
@@ -253,7 +253,7 @@ namespace net {
         FD_SET(m_socket, &readFD);
         FD_SET(m_socket, &exceptionFD);
 
-        // ƒtƒ@ƒCƒ‹ƒfƒBƒXƒNƒŠƒvƒ^iƒ\ƒPƒbƒgj‚Ìó‘Ô‘JˆÚ‘Ò‚¿
+        // ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‡ã‚£ã‚¹ã‚¯ãƒªãƒ—ã‚¿ï¼ˆã‚½ã‚±ãƒƒãƒˆï¼‰ã®çŠ¶æ…‹é·ç§»å¾…ã¡
         auto resSelect = select(
             //FD_SETSIZE,
             0,
@@ -266,7 +266,7 @@ namespace net {
             return 0;
         }
 
-        // óM.
+        // å—ä¿¡.
         if (FD_ISSET(m_socket, &readFD)) {
             return 1;
         }

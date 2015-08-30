@@ -15,7 +15,7 @@ namespace net {
         stop();
     }
 
-    // ƒT[ƒo[‚Æ‚µ‚Ä‹N“®.
+    // ã‚µãƒ¼ãƒãƒ¼ã¨ã—ã¦èµ·å‹•.
     IZ_BOOL Tcp::start(
         const IPv4Endpoint& hostEp,
         IZ_UINT maxConnections/*= 0*/)
@@ -26,14 +26,14 @@ namespace net {
 
         IZ_BOOL result = IZ_FALSE;
 
-        // ƒ\ƒPƒbƒg‚Ì¶¬
+        // ã‚½ã‚±ãƒƒãƒˆã®ç”Ÿæˆ
         m_socket = socket(
-            AF_INET,        // ƒAƒhƒŒƒXƒtƒ@ƒ~ƒŠ
-            SOCK_STREAM,    // ƒ\ƒPƒbƒgƒ^ƒCƒv
-            IPPROTO_TCP);   // ƒvƒƒgƒRƒ‹
+            AF_INET,        // ã‚¢ãƒ‰ãƒ¬ã‚¹ãƒ•ã‚¡ãƒŸãƒª
+            SOCK_STREAM,    // ã‚½ã‚±ãƒƒãƒˆã‚¿ã‚¤ãƒ—
+            IPPROTO_TCP);   // ãƒ—ãƒ­ãƒˆã‚³ãƒ«
         VRETURN(isValidSocket(m_socket));
 
-        // ’ÊMƒ|[ƒgEƒAƒhƒŒƒX‚Ìİ’è
+        // é€šä¿¡ãƒãƒ¼ãƒˆãƒ»ã‚¢ãƒ‰ãƒ¬ã‚¹ã®è¨­å®š
         sockaddr_in inAddr;
         {
             FILL_ZERO(&inAddr, sizeof(inAddr));
@@ -54,11 +54,11 @@ namespace net {
             }
         }
 
-        // ƒ\ƒPƒbƒg‚ÉƒAƒhƒŒƒX‚ğŒ‹‚Ñ‚Â‚¯‚é
+        // ã‚½ã‚±ãƒƒãƒˆã«ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’çµã³ã¤ã‘ã‚‹
         result = (bind(m_socket, (const sockaddr*)&inAddr, sizeof(inAddr)) >= 0);
         VGOTO(result, __EXIT__);
 
-        // ƒRƒlƒNƒg—v‹‚ğ‚¢‚­‚Â‚Ü‚Å‘Ò‚Â‚©‚ğİ’è
+        // ã‚³ãƒã‚¯ãƒˆè¦æ±‚ã‚’ã„ãã¤ã¾ã§å¾…ã¤ã‹ã‚’è¨­å®š
         if (maxConnections > 0) {
             result = (listen(m_socket, maxConnections) >= 0);
             VGOTO(result, __EXIT__);
@@ -74,7 +74,7 @@ namespace net {
         return result;
     }
 
-    // ’â~.
+    // åœæ­¢.
     void Tcp::stop()
     {
         if (isValidSocket(m_socket)) {
@@ -94,7 +94,7 @@ namespace net {
     {
     }
 
-    // ‹N“®.
+    // èµ·å‹•.
     IZ_BOOL TcpClient::start(const IPv4Endpoint& hostEp)
     {
         auto ret = Tcp::start(hostEp);
@@ -107,7 +107,7 @@ namespace net {
 
         IZ_BOOL result = IZ_TRUE;
 
-        // ’ÊMƒ|[ƒgEƒAƒhƒŒƒX‚Ìİ’è
+        // é€šä¿¡ãƒãƒ¼ãƒˆãƒ»ã‚¢ãƒ‰ãƒ¬ã‚¹ã®è¨­å®š
         sockaddr_in serverAddr;
         {
             FILL_ZERO(&serverAddr, sizeof(serverAddr));
@@ -193,7 +193,7 @@ namespace net {
         FD_SET(m_socket, &readFD);
         FD_SET(m_socket, &exceptionFD);
 
-        // ƒtƒ@ƒCƒ‹ƒfƒBƒXƒNƒŠƒvƒ^iƒ\ƒPƒbƒgj‚Ìó‘Ô‘JˆÚ‘Ò‚¿
+        // ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‡ã‚£ã‚¹ã‚¯ãƒªãƒ—ã‚¿ï¼ˆã‚½ã‚±ãƒƒãƒˆï¼‰ã®çŠ¶æ…‹é·ç§»å¾…ã¡
         auto resSelect = select(
             //FD_SETSIZE,
             0,
@@ -206,7 +206,7 @@ namespace net {
             return 0;
         }
 
-        // óM.
+        // å—ä¿¡.
         if (FD_ISSET(m_socket, &readFD)) {
             return 1;
         }
@@ -363,7 +363,7 @@ namespace net {
         return ret;
     }
 
-    // ƒf[ƒ^‚ğ‘—M.
+    // ãƒ‡ãƒ¼ã‚¿ã‚’é€ä¿¡.
     IZ_BOOL TcpListener::sendTo(
         const void* data, 
         IZ_UINT size,
@@ -387,7 +387,7 @@ namespace net {
         return ret;
     }
 
-    // ‘S‚Ä‚ÌÚ‘±æ‚Éƒf[ƒ^‚ğ‘—M.
+    // å…¨ã¦ã®æ¥ç¶šå…ˆã«ãƒ‡ãƒ¼ã‚¿ã‚’é€ä¿¡.
     IZ_INT TcpListener::sendToAll(
         const void* data, 
         IZ_UINT size)
@@ -493,7 +493,7 @@ namespace net {
     }
 
     // NOTE
-    // select(2)‚Ì‘æˆêˆø”‚ÉƒfƒBƒXƒNƒŠƒvƒ^‚ÌÅ‘å’l‚ğ“n‚·‚Ì‚ÍŠÔˆá‚¢H
+    // select(2)ã®ç¬¬ä¸€å¼•æ•°ã«ãƒ‡ã‚£ã‚¹ã‚¯ãƒªãƒ—ã‚¿ã®æœ€å¤§å€¤ã‚’æ¸¡ã™ã®ã¯é–“é•ã„ï¼Ÿ
     //  http://mattn.kaoriya.net/software/lang/c/20090114140035.htm
     // libevent
     //  http://www.ninxit.com/blog-data/src/libevent/main.cpp.html
@@ -520,7 +520,7 @@ namespace net {
             FD_SET(m_socket, &readFD);
             FD_SET(m_socket, &exceptionFD);
 
-            // ƒtƒ@ƒCƒ‹ƒfƒBƒXƒNƒŠƒvƒ^iƒ\ƒPƒbƒgj‚Ìó‘Ô‘JˆÚ‘Ò‚¿
+            // ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‡ã‚£ã‚¹ã‚¯ãƒªãƒ—ã‚¿ï¼ˆã‚½ã‚±ãƒƒãƒˆï¼‰ã®çŠ¶æ…‹é·ç§»å¾…ã¡
             auto resSelect = select(
                 //FD_SETSIZE,
                 0,
@@ -587,7 +587,7 @@ namespace net {
                 }
             }
 
-            // ƒtƒ@ƒCƒ‹ƒfƒBƒXƒNƒŠƒvƒ^iƒ\ƒPƒbƒgj‚Ìó‘Ô‘JˆÚ‘Ò‚¿
+            // ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‡ã‚£ã‚¹ã‚¯ãƒªãƒ—ã‚¿ï¼ˆã‚½ã‚±ãƒƒãƒˆï¼‰ã®çŠ¶æ…‹é·ç§»å¾…ã¡
             auto resSelect = select(
                 //FD_SETSIZE,
                 0,
@@ -647,7 +647,7 @@ namespace net {
 
 #if 0
     // NOTE
-    // select(2)‚Ì‘æˆêˆø”‚ÉƒfƒBƒXƒNƒŠƒvƒ^‚ÌÅ‘å’l‚ğ“n‚·‚Ì‚ÍŠÔˆá‚¢H
+    // select(2)ã®ç¬¬ä¸€å¼•æ•°ã«ãƒ‡ã‚£ã‚¹ã‚¯ãƒªãƒ—ã‚¿ã®æœ€å¤§å€¤ã‚’æ¸¡ã™ã®ã¯é–“é•ã„ï¼Ÿ
     //  http://mattn.kaoriya.net/software/lang/c/20090114140035.htm
     // libevent
     //  http://www.ninxit.com/blog-data/src/libevent/main.cpp.html
@@ -689,7 +689,7 @@ namespace net {
                     FD_SET(remote.m_socket, &readFD);
                     FD_SET(remote.m_socket, &exceptionFD);
 
-                    // ‘—M‚·‚éƒf[ƒ^‚ª‚ ‚é‚Æ‚«‚¾‚¯
+                    // é€ä¿¡ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ãŒã‚ã‚‹ã¨ãã ã‘
                     if (remote.isRegistered()) {
                         FD_SET(remote.m_socket, &writeFD);
                     }
@@ -697,7 +697,7 @@ namespace net {
             }
         }
 
-        // ƒtƒ@ƒCƒ‹ƒfƒBƒXƒNƒŠƒvƒ^iƒ\ƒPƒbƒgj‚Ìó‘Ô‘JˆÚ‘Ò‚¿
+        // ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‡ã‚£ã‚¹ã‚¯ãƒªãƒ—ã‚¿ï¼ˆã‚½ã‚±ãƒƒãƒˆï¼‰ã®çŠ¶æ…‹é·ç§»å¾…ã¡
         auto resSelect = select(
             //FD_SETSIZE,
             0,
