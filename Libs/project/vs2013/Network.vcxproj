@@ -48,11 +48,8 @@
     <ClInclude Include="..\..\include\network\Network.h" />
     <ClInclude Include="..\..\include\network\NetworkDefs.h" />
     <ClInclude Include="..\..\include\network\NetworkPacket.h" />
-    <ClInclude Include="..\..\include\network\NetworkRemote.h" />
     <ClInclude Include="..\..\include\network\NetworkTCP.h" />
-    <ClInclude Include="..\..\include\network\NetworkTCPUtility.h" />
     <ClInclude Include="..\..\include\network\NetworkUDP.h" />
-    <ClInclude Include="..\..\include\network\NetworkUDPUtility.h" />
     <ClInclude Include="..\..\include\network\ReplicatedProperty.h" />
     <ClInclude Include="..\..\include\network\ReplicatedPropertyManager.h" />
     <ClInclude Include="..\..\include\network\ReplicatedPropertyObject.h" />
@@ -71,7 +68,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\..\source\network\NetworkRemote.cpp" />
     <ClCompile Include="..\..\source\network\NetworkTCP.cpp" />
     <ClCompile Include="..\..\source\network\NetworkUDP.cpp" />
     <ClCompile Include="..\..\source\network\ReplicatedProperty.cpp" />

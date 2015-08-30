@@ -28,16 +28,7 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\izNetwork.h" />
-    <ClInclude Include="..\..\include\network\NetworkTCPUtility.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\network\NetworkRemote.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\network\NetworkUDP.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\network\NetworkUDPUtility.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\network\ReplicatedPropertyManager.h">
@@ -61,9 +52,6 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\network\IPv4Endpoint.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\network\NetworkRemote.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\network\NetworkUDP.cpp">
