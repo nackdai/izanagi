@@ -3,54 +3,51 @@
 
 IZ_UINT8 buffer[2 * 1024 * 1024];
 
-static const IZ_UINT Port = 30000;
+static const IZ_CHAR* serverIp = "127.0.0.1";
+
+static const IZ_UINT ServerPort = 30000;
 
 void runAsServer(izanagi::IMemoryAllocator* allocator)
 {
-    izanagi::net::IPv4Endpoint ep(Port);
+    izanagi::net::IPv4Endpoint host(
+        izanagi::net::IPv4Address::Any,
+        ServerPort);
 
-	izanagi::net::UdpServer udp;
+	izanagi::net::Udp udp;
+    udp.start(host);
 
-    udp.setFuncRecv([](const izanagi::net::Packet& packet) {
-        IZ_PRINTF("%s\n", packet.data);
-    });
+    static const IZ_UINT size = 1024;
+    IZ_CHAR buf[size] = { 0 };
 
-    udp.start(allocator, ep);
+    izanagi::net::IPv4Endpoint remote;
 
-	IZ_BOOL willQuit = IZ_FALSE;
+    auto len = udp.recieveFrom(buf, size, remote);
 
-	std::thread th([&] {
-		if (::getchar() == 'q') {
-			willQuit = IZ_TRUE;
-		}
-	});
+    if (len > 0) {
+        IZ_CHAR ip[size];
+        remote.getAddress().toString(ip, size);
 
-	for (;;) {
-		if (willQuit) {
-			break;
-		}
+        auto port = remote.getPort();
 
-        izanagi::sys::CThread::Sleep(33);
-	}
+        IZ_PRINTF("%s:%d (%s)\n", ip, port, buf);
+    }
 
     udp.stop();
-
-	th.join();
 }
 
 void runAsClient(izanagi::IMemoryAllocator* allocator)
 {
-    izanagi::net::IPv4Address addr;
-    addr.setByHostName("localhost");
+    izanagi::net::IPv4Endpoint remote(
+        izanagi::net::IPv4Address(serverIp),
+        ServerPort);
 
-    izanagi::net::IPv4Endpoint ep(addr, Port);
-
-    izanagi::net::UdpClient udp;
-    udp.start(allocator, ep);
+    izanagi::net::Udp udp;
+    udp.start();
+    udp.connectTo(remote);
 
     static const IZ_CHAR* str = "test";
 
-    udp.send(str, strlen(str));
+    udp.sendData(str, strlen(str));
 
     udp.stop();
 }
@@ -59,7 +56,7 @@ IzMain(0, 0)
 {
     IZ_BOOL isServer = IZ_FALSE;
 
-	if (argc > 0 && strcmp(argv[1], "s" ) == 0) {
+	if (argc > 1 && strcmp(argv[1], "s" ) == 0) {
 		isServer = IZ_TRUE;
 	}
 

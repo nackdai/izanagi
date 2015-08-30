@@ -3,66 +3,60 @@
 
 IZ_UINT8 buffer[2 * 1024 * 1024];
 
-static const IZ_UINT Port = 30000;
+static const IZ_CHAR* serverIp = "127.0.0.1";
+
+static const IZ_UINT ServerPort = 30000;
+static const IZ_UINT ClientPort = 31000;
 
 void runAsServer(izanagi::IMemoryAllocator* allocator)
 {
-    izanagi::net::IPv4Endpoint ep(Port);
+    izanagi::net::IPv4Endpoint host(
+        izanagi::net::IPv4Address::Any,
+        ServerPort);
 
-	izanagi::net::TcpServer tcp;
-	tcp.start(allocator, ep, 1);
+	izanagi::net::TcpListener listener;
+    listener.start(allocator, host, 1);
 
-	IZ_BOOL willQuit = IZ_FALSE;
+    auto client = listener.acceptRemote();
 
-	std::thread th([&] {
-		if (::getchar() == 'q') {
-			willQuit = IZ_TRUE;
-		}
-	});
+    static const IZ_UINT size = 1024;
+    IZ_UINT8 buf[size] = { 0 };
 
-	for (;;) {
-		if (willQuit) {
-			break;
-		}
+    auto len = client->recieve(buf, size);
 
-		tcp.recieve([](const izanagi::net::Packet& packet) {
-			IZ_PRINTF("%s\n", packet.data);
-		});
+    if (len > 0) {
+        IZ_PRINTF("%s\n", buf);
+    }
 
-        izanagi::sys::CThread::Sleep(33);
-	}
-
-	tcp.stop();
-
-	th.join();
+    listener.stop();
 }
 
 void runAsClient(izanagi::IMemoryAllocator* allocator)
 {
-	izanagi::net::IPv4Address addr;
-    addr.setByHostName("localhost");
+    izanagi::net::IPv4Endpoint host(
+        izanagi::net::IPv4Address("localhost"),
+        ClientPort);
 
-    izanagi::net::IPv4Endpoint ep(addr, Port);
+    izanagi::net::IPv4Endpoint remote(
+        izanagi::net::IPv4Address(serverIp),
+        ServerPort);
 
-	izanagi::net::TcpClient tcp;
-	tcp.start(allocator, ep, IZ_FALSE);
+	izanagi::net::TcpClient client;
+    client.start(host);
+    client.connectTo(remote);
 
 	static const IZ_CHAR* str = "test";
 
-	tcp.sendData(str, strlen(str));
+    client.sendData(str, strlen(str));
 
-	// TODO
-	// ‘—M‚³‚ê‚é‚Ü‚Å‘Ò‚Â....
-	izanagi::sys::CThread::Sleep(1000);
-
-	tcp.stop();
+    client.stop();
 }
 
 IzMain(0, 0)
 {
     IZ_BOOL isServer = IZ_FALSE;
 
-	if (argc > 0 && strcmp(argv[1], "s" ) == 0) {
+	if (argc > 1 && strcmp(argv[1], "s" ) == 0) {
 		isServer = IZ_TRUE;
 	}
 
