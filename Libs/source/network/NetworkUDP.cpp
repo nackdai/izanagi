@@ -1,5 +1,4 @@
 #include "network/NetworkUDP.h"
-#include "network/NetworkRemote.h"
 #include "network/IPv4Endpoint.h"
 
 // NOTE
@@ -287,6 +286,7 @@ namespace net {
         IZ_UINT size)
     {
         IZ_ASSERT(onRecieve && buf);
+        IZ_ASSERT(!m_isRunning);
 
         m_isRunning = IZ_TRUE;
 
