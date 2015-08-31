@@ -42,6 +42,7 @@ namespace net {
         return *this;
     }
 
+    // IPv4を [a.b.c.d] と分解して設定.
     void IPv4Address::set(IZ_UINT8 a, IZ_UINT8 b, IZ_UINT8 c, IZ_UINT8 d)
     {
         m_ip.p[3] = a;
@@ -50,11 +51,13 @@ namespace net {
         m_ip.p[0] = d;
     }
 
+    // IPv4アドレスを32bit整数値で設定.
     void IPv4Address::set(IZ_UINT32 ip)
     {
         m_ip.value = ip;
     }
 
+    // IPv4アドレスを文字列（"WW.XX.YY.ZZ"）で設定.
     void IPv4Address::set(const IZ_CHAR* ip)
     {
         auto len = strlen(ip);
@@ -75,6 +78,7 @@ namespace net {
         }
     }
 
+    // 指定されたホスト名からIPv4アドレスを自動で取得.
     IZ_BOOL IPv4Address::setByHostName(const IZ_CHAR* host)
     {
         // NOTE
@@ -106,11 +110,13 @@ namespace net {
         return setByHostName(host);
     }
 
+    // IPv4アドレスを32bit整数値として取得.
     IZ_UINT32 IPv4Address::getValue() const
     {
         return m_ip.value;
     }
 
+    // IPv4アドレスを文字列として取得.
     void IPv4Address::toString(IZ_CHAR* ret, IZ_UINT size) const
     {
         IZ_SPRINTF(
@@ -127,6 +133,12 @@ namespace net {
         return (m_ip.value == rhs.m_ip.value);
     }
 
+    IZ_BOOL IPv4Address::operator!=(const IPv4Address& rhs)
+    {
+        return !(*this == rhs);
+    }
+
+    // すべてのネットワークインターフェイスでクライアントによるネットワーク利用を待機する必要があることを示すアドレスかどうかを取得.
     IZ_BOOL IPv4Address::isAny() const
     {
         return (m_ip.value == 0);
@@ -161,6 +173,7 @@ namespace net {
         return *this;
     }
 
+    // IPv4アドレスとポート番号を設定.
     void IPv4Endpoint::set(
         const IPv4Address& address,
         IZ_UINT port)
@@ -169,11 +182,13 @@ namespace net {
         m_port = port;
     }
 
+    // 設定されているIPv4アドレスを取得.
     const IPv4Address& IPv4Endpoint::getAddress() const
     {
         return m_address;
     }
 
+    // 設定されているポート番号を取得.
     IZ_UINT IPv4Endpoint::getPort() const
     {
         return m_port;
