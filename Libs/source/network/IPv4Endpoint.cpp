@@ -201,7 +201,7 @@ namespace net {
     {
         m_port = ntohs(addr.sin_port);
 
-        auto ip = addr.sin_addr.S_un.S_addr;
+        auto ip = getIp(addr);
         IZ_ASSERT(sizeof(ip) == 4 * sizeof(IZ_CHAR));
 
         IZ_CHAR* iptbl = (IZ_CHAR*)&ip;
@@ -217,13 +217,13 @@ namespace net {
         addr.sin_port = htons(m_port);
 
         if (m_address.isAny()) {
-            addr.sin_addr.S_un.S_addr = htonl(INADDR_ANY);
+            setIp(addr, htonl(INADDR_ANY));
         }
         else {
             IZ_CHAR ip[64];
             m_address.toString(ip, COUNTOF(ip));
 
-            addr.sin_addr.S_un.S_addr = inet_addr(ip);
+            setIp(addr, inet_addr(ip));
         }
     }
 }

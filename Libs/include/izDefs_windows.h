@@ -15,6 +15,9 @@
 	#define WIN32_LEAN_AND_MEAN
     #include <windows.h>
 
+    #include <WinSock2.h>
+    #include <WS2tcpip.h>
+
     #ifdef _WINDLL
         #define IZ_API  __declspec(dllexport)
     #else
@@ -34,25 +37,27 @@
     #define DEBUG_BREAK()       __debugbreak()
 #endif  // #ifndef DEBUG_BREAK
 
-inline void _OutputDebugString(const char* format, ...)
-{
-    va_list argp;
-    char buf[256];
-    va_start(argp, format);
-    IZ_VSPRINTF(buf, sizeof(buf), format, argp);
-    va_end(argp);
+namespace izanagi {
+    inline void _OutputDebugString(const char* format, ...)
+    {
+        va_list argp;
+        char buf[256];
+        va_start(argp, format);
+        IZ_VSPRINTF(buf, sizeof(buf), format, argp);
+        va_end(argp);
 
-    ::OutputDebugString(buf);
-	printf("%s", buf);
-}
+        ::OutputDebugString(buf);
+        printf("%s", buf);
+    }
+
+    using IZ_TIME = IZ_INT64;
+}   // namespace izanagi
 
 #ifdef __IZ_DEBUG__
-    #define IZ_PRINTF   _OutputDebugString
+    #define IZ_PRINTF   izanagi::_OutputDebugString
 #else
     #define IZ_PRINTF   printf
 #endif
-
-typedef IZ_INT64 IZ_TIME;
 
 #if 0
 #define IzMain(screenWidth, screenHeight) \

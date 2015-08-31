@@ -42,13 +42,13 @@ namespace net {
             auto address = hostEp.getAddress();
 
             if (address.isAny()) {
-                inAddr.sin_addr.S_un.S_addr = htonl(INADDR_ANY);
+                setIp(inAddr, htonl(INADDR_ANY));
             }
             else {
                 IZ_CHAR ip[64];
                 address.toString(ip, COUNTOF(ip));
 
-                inAddr.sin_addr.S_un.S_addr = inet_addr(ip);
+                setIp(inAddr, inet_addr(ip));
             }
         }
 
@@ -115,7 +115,7 @@ namespace net {
             char ip[64];
             address.toString(ip, COUNTOF(ip));
 
-            destAddr.sin_addr.S_un.S_addr = inet_addr(ip);
+            setIp(destAddr, inet_addr(ip));
         }
 
         // 接続
@@ -150,7 +150,7 @@ namespace net {
         endRecieve();
 
         if (isValidSocket(m_socket)) {
-            closesocket(m_socket);
+            izanagi::net::closeSocket(m_socket);
             m_socket = IZ_INVALID_SOCKET;
         }
     }

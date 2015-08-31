@@ -44,13 +44,13 @@ namespace net {
             auto address = hostEp.getAddress();
 
             if (address.isAny()) {
-                inAddr.sin_addr.S_un.S_addr = htonl(INADDR_ANY);
+                setIp(inAddr, htonl(INADDR_ANY));
             }
             else {
                 IZ_CHAR ip[64];
                 address.toString(ip, COUNTOF(ip));
 
-                inAddr.sin_addr.S_un.S_addr = inet_addr(ip);
+                setIp(inAddr, inet_addr(ip));
             }
         }
 
@@ -79,7 +79,7 @@ namespace net {
     {
         if (isValidSocket(m_socket)) {
             shutdown(m_socket, SD_BOTH);
-            closesocket(m_socket);
+            izanagi::net::closeSocket(m_socket);
             m_socket = IZ_INVALID_SOCKET;
         }
     }
@@ -123,7 +123,7 @@ namespace net {
             IZ_CHAR ip[64];
             address.toString(ip, COUNTOF(ip));
 
-            serverAddr.sin_addr.S_un.S_addr = inet_addr(ip);
+            setIp(serverAddr, inet_addr(ip));
         }
 
         result = (connect(

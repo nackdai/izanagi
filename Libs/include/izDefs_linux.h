@@ -2,6 +2,13 @@
 #define __IZANAGI_DEFS_LINUX_H__
 
 #include <sys/time.h>
+#include <netinet/ip.h>
+#include <unistd.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <thread>
+#include <iostream>
 
 #ifndef _UNICODE
     #define IZ_VSPRINTF     vsnprintf
@@ -18,7 +25,9 @@
 
 #define IZ_PRINTF   printf
 
-typedef timeval IZ_TIME;
+namespace izanagi {
+    using IZ_TIME = timeval;
+}   // namespace izanagi
 
 #define IzMain(screenWidth, screenHeight)\
     int _main(int argc, char* argv[], IZ_UINT __width, IZ_UINT __height);\

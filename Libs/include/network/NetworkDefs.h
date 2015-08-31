@@ -5,13 +5,10 @@
 
 namespace izanagi {
 namespace net {
-
 #ifdef WINDOWS
-    #include <WinSock2.h>
+    using IZ_SOCKET = SOCKET;
 
-    typedef SOCKET IZ_SOCKET;
-
-    #define IZ_INVALID_SOCKET    INVALID_SOCKET
+    static const IZ_SOCKET IZ_INVALID_SOCKET = INVALID_SOCKET;
 
     inline IZ_BOOL isValidSocket(IZ_SOCKET socket)
     {
@@ -23,14 +20,67 @@ namespace net {
         auto ret = WSAGetLastError();
         return ret;
     }
-#else
-    typedef IZ_INT IZ_SOCKET;
 
-    #define IZ_INVALID_SOCKET    -1
+    /** @internal
+     * ソケットを閉じる.
+     */
+    inline void closeSocket(IZ_SOCKET sock)
+    {
+        closesocket(sock);
+    }
+
+    /** @internal
+     * sockaddr_in 内の in_addr にアクセスする用.
+     */
+    inline IZ_UINT getIp(const sockaddr_in& addr)
+    {
+        return addr.sin_addr.S_un.S_addr;
+}
+
+    /** @internal
+     * sockaddr_in 内の in_addr にアクセスする用.
+     */
+    inline void setIp(sockaddr_in& addr, IZ_UINT ip)
+    {
+        addr.sin_addr.S_un.S_addr = ip;
+    }
+#else
+    using IZ_SOCKET = IZ_INT;
+
+    static const IZ_SOCKET IZ_INVALID_SOCKET = -1;
 
     inline IZ_BOOL isValidSocket(IZ_SOCKET socket)
     {
         return (socket >= 0);
+    }
+
+    inline IZ_INT getLastError()
+    {
+        return errno;
+    }
+
+    /** @internal
+     * ソケットを閉じる.
+     */
+    inline void closeSocket(IZ_SOCKET sock)
+    {
+        close(sock);
+    }
+
+    /** @internal
+     * sockaddr_in 内の in_addr にアクセスする用.
+     */
+    inline IZ_UINT getIp(const sockaddr_in& addr)
+    {
+        return addr.sin_addr.s_addr;
+    }
+
+    /** @internal
+     * sockaddr_in 内の in_addr にアクセスする用.
+     */
+    inline void setIp(sockaddr_in& addr, IZ_UINT ip)
+    {
+        addr.sin_addr.s_addr = ip;
     }
 #endif
 
