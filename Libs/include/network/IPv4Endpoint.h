@@ -6,30 +6,30 @@
 
 namespace izanagi {
 namespace net {
-    /** IPv4ƒAƒhƒŒƒX.
+    /** IPv4ã‚¢ãƒ‰ãƒ¬ã‚¹.
      */
     class IPv4Address {
         friend class IPv4Endpoint;
 
     public:
-        /** ƒT[ƒo[‚ª‚·‚×‚Ä‚Ìƒlƒbƒgƒ[ƒNƒCƒ“ƒ^[ƒtƒFƒCƒX‚ÅƒNƒ‰ƒCƒAƒ“ƒg‚É‚æ‚éƒlƒbƒgƒ[ƒN—˜—p‚ğ‘Ò‹@‚·‚é•K—v‚ª‚ ‚é‚±‚Æ‚ğ¦‚·ƒAƒhƒŒƒX.
+        /** ã‚µãƒ¼ãƒãƒ¼ãŒã™ã¹ã¦ã®ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ã‚¤ã‚¹ã§ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã«ã‚ˆã‚‹ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯åˆ©ç”¨ã‚’å¾…æ©Ÿã™ã‚‹å¿…è¦ãŒã‚ã‚‹ã“ã¨ã‚’ç¤ºã™ã‚¢ãƒ‰ãƒ¬ã‚¹.
          */
         static IPv4Address Any;
 
         IPv4Address();
 
-        /** ƒRƒ“ƒXƒgƒ‰ƒNƒ^.
-         * IPv4ƒAƒhƒŒƒX‚ğ [a.b.c.d] ‚Æ•ª‰ğ‚µ‚Äİ’è.
+        /** ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿.
+         * IPv4ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’ [a.b.c.d] ã¨åˆ†è§£ã—ã¦è¨­å®š.
          */
         IPv4Address(IZ_UINT8 a, IZ_UINT8 b, IZ_UINT8 c, IZ_UINT8 d);
 
-        /** ƒRƒ“ƒXƒgƒ‰ƒNƒ^.
-         * IPv4ƒAƒhƒŒƒX‚ğ32bit®”’l‚Åİ’è.
+        /** ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿.
+         * IPv4ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’32bitæ•´æ•°å€¤ã§è¨­å®š.
          */
         IPv4Address(IZ_UINT32 ip);
 
-        /** ƒRƒ“ƒXƒgƒ‰ƒNƒ^.
-         * ƒzƒXƒg–¼‚©‚çIPv4ƒAƒhƒŒƒX‚ğ©“®‚Åİ’è.
+        /** ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿.
+         * ãƒ›ã‚¹ãƒˆåã‹ã‚‰IPv4ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’è‡ªå‹•ã§è¨­å®š.
          */
         IPv4Address(const IZ_CHAR* host);
 
@@ -40,47 +40,47 @@ namespace net {
         const IPv4Address& operator=(const IPv4Address& rhs);
 
     public:
-        /** IPv4‚ğ [a.b.c.d] ‚Æ•ª‰ğ‚µ‚Äİ’è.
+        /** IPv4ã‚’ [a.b.c.d] ã¨åˆ†è§£ã—ã¦è¨­å®š.
          */
         void set(IZ_UINT8 a, IZ_UINT8 b, IZ_UINT8 c, IZ_UINT8 d);
 
-        /** IPv4ƒAƒhƒŒƒX‚ğ32bit®”’l‚Åİ’è.
+        /** IPv4ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’32bitæ•´æ•°å€¤ã§è¨­å®š.
          */
         void set(IZ_UINT32 ip);
 
-        /** IPv4ƒAƒhƒŒƒX‚ğ•¶š—ñi"WW.XX.YY.ZZ"j‚Åİ’è.
+        /** IPv4ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’æ–‡å­—åˆ—ï¼ˆ"WW.XX.YY.ZZ"ï¼‰ã§è¨­å®š.
          */
         void set(const IZ_CHAR* ip);
 
-        /** w’è‚³‚ê‚½ƒzƒXƒg–¼‚©‚çIPv4ƒAƒhƒŒƒX‚ğ©“®‚Åæ“¾.
+        /** æŒ‡å®šã•ã‚ŒãŸãƒ›ã‚¹ãƒˆåã‹ã‚‰IPv4ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’è‡ªå‹•ã§å–å¾—.
          */
         IZ_BOOL setByHostName(const IZ_CHAR* host);
 
-        /** IPv4ƒAƒhƒŒƒX‚ğ32bit®”’l‚Æ‚µ‚Äæ“¾.
-         * @return IPv4ƒAƒhƒŒƒX‚ğ32bit®”’l‚Å‚ ‚ç‚í‚µ‚½‚à‚Ì‚ğ•Ô‚·.
+        /** IPv4ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’32bitæ•´æ•°å€¤ã¨ã—ã¦å–å¾—.
+         * @return IPv4ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’32bitæ•´æ•°å€¤ã§ã‚ã‚‰ã‚ã—ãŸã‚‚ã®ã‚’è¿”ã™.
          */
         IZ_UINT32 getValue() const;
 
-        /** IPv4ƒAƒhƒŒƒX‚ğ•¶š—ñ‚Æ‚µ‚Äæ“¾.
-         * @param [out] ret •¶š—ñŠi”[æ‚Ìƒoƒbƒtƒ@‚ğ¦‚·ƒ|ƒCƒ“ƒ^.
-         * @param [in] size •¶š—ñŠi”[æ‚Ìƒoƒbƒtƒ@‚ÌƒTƒCƒYibytesj.
+        /** IPv4ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’æ–‡å­—åˆ—ã¨ã—ã¦å–å¾—.
+         * @param [out] ret æ–‡å­—åˆ—æ ¼ç´å…ˆã®ãƒãƒƒãƒ•ã‚¡ã‚’ç¤ºã™ãƒã‚¤ãƒ³ã‚¿.
+         * @param [in] size æ–‡å­—åˆ—æ ¼ç´å…ˆã®ãƒãƒƒãƒ•ã‚¡ã®ã‚µã‚¤ã‚ºï¼ˆbytesï¼‰.
          */
         void toString(IZ_CHAR* ret, IZ_UINT size) const;
 
-        /** w’è‚³‚ê‚½ IPv4Address ‚Æ”äŠr.
-         * @param [in] rhs ”äŠr‚µ‚½‚¢ IPv4Address.
-         * @return ˆê’v‚·‚éê‡‚Í trueAˆê’v‚µ‚È‚¢ê‡‚Í false ‚ğ•Ô‚·.
+        /** æŒ‡å®šã•ã‚ŒãŸ IPv4Address ã¨æ¯”è¼ƒ.
+         * @param [in] rhs æ¯”è¼ƒã—ãŸã„ IPv4Address.
+         * @return ä¸€è‡´ã™ã‚‹å ´åˆã¯ trueã€ä¸€è‡´ã—ãªã„å ´åˆã¯ false ã‚’è¿”ã™.
          */
         IZ_BOOL operator==(const IPv4Address& rhs);
 
-        /** w’è‚³‚ê‚½ IPv4Address ‚Æ”äŠr.
-         * @param [in] rhs ”äŠr‚µ‚½‚¢ IPv4Address.
-         * @return ˆê’v‚µ‚È‚¢ê‡‚Í trueAˆê’v‚·‚éê‡‚Í false ‚ğ•Ô‚·.
+        /** æŒ‡å®šã•ã‚ŒãŸ IPv4Address ã¨æ¯”è¼ƒ.
+         * @param [in] rhs æ¯”è¼ƒã—ãŸã„ IPv4Address.
+         * @return ä¸€è‡´ã—ãªã„å ´åˆã¯ trueã€ä¸€è‡´ã™ã‚‹å ´åˆã¯ false ã‚’è¿”ã™.
          */
         IZ_BOOL operator!=(const IPv4Address& rhs);
 
-        /** ‚·‚×‚Ä‚Ìƒlƒbƒgƒ[ƒNƒCƒ“ƒ^[ƒtƒFƒCƒX‚ÅƒNƒ‰ƒCƒAƒ“ƒg‚É‚æ‚éƒlƒbƒgƒ[ƒN—˜—p‚ğ‘Ò‹@‚·‚é•K—v‚ª‚ ‚é‚±‚Æ‚ğ¦‚·ƒAƒhƒŒƒX‚©‚Ç‚¤‚©‚ğæ“¾.
-         * @return ‘Ò‹@‚·‚é•K—v‚ª‚ ‚éƒAƒhƒŒƒX‚È‚ç trueA‚»‚¤‚Å‚È‚©‚ê‚Î false ‚ğ•Ô‚·.
+        /** ã™ã¹ã¦ã®ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ã‚¤ã‚¹ã§ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã«ã‚ˆã‚‹ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯åˆ©ç”¨ã‚’å¾…æ©Ÿã™ã‚‹å¿…è¦ãŒã‚ã‚‹ã“ã¨ã‚’ç¤ºã™ã‚¢ãƒ‰ãƒ¬ã‚¹ã‹ã©ã†ã‹ã‚’å–å¾—.
+         * @return å¾…æ©Ÿã™ã‚‹å¿…è¦ãŒã‚ã‚‹ã‚¢ãƒ‰ãƒ¬ã‚¹ãªã‚‰ trueã€ãã†ã§ãªã‹ã‚Œã° false ã‚’è¿”ã™.
          */
         IZ_BOOL isAny() const;
 
@@ -94,17 +94,17 @@ namespace net {
         } m_ip;
     };
 
-    /** IPv4ƒAƒhƒŒƒX‚Æƒ|[ƒg”Ô†‚Åƒlƒbƒgƒ[ƒNƒGƒ“ƒhƒ|ƒCƒ“ƒg‚ğ•\‚·.
+    /** IPv4ã‚¢ãƒ‰ãƒ¬ã‚¹ã¨ãƒãƒ¼ãƒˆç•ªå·ã§ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚¨ãƒ³ãƒ‰ãƒã‚¤ãƒ³ãƒˆã‚’è¡¨ã™.
      */
     class IPv4Endpoint {
     public:
-        /** ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-         * IPv4ƒAƒhƒŒƒX‚ğAnyAƒ|[ƒg”Ô†‚ğ0‚Å‰Šú‰».
+        /** ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+         * IPv4ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’Anyã€ãƒãƒ¼ãƒˆç•ªå·ã‚’0ã§åˆæœŸåŒ–.
          */
         IPv4Endpoint();
 
-        /** ƒRƒ“ƒXƒgƒ‰ƒNƒ^.
-         * w’è‚³‚ê‚½IPv4ƒAƒhƒŒƒX‚Æƒ|[ƒg”Ô†‚Å‰Šú‰».
+        /** ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿.
+         * æŒ‡å®šã•ã‚ŒãŸIPv4ã‚¢ãƒ‰ãƒ¬ã‚¹ã¨ãƒãƒ¼ãƒˆç•ªå·ã§åˆæœŸåŒ–.
          */
         IPv4Endpoint(
             const IPv4Address& address,
@@ -117,33 +117,33 @@ namespace net {
         const IPv4Endpoint& operator=(const IPv4Endpoint& rhs);
 
     public:
-        /** IPv4ƒAƒhƒŒƒX‚Æƒ|[ƒg”Ô†‚ğİ’è.
-         * @param [in] address IPv4ƒAƒhƒŒƒX.
-         * @paran [in] port ƒ|[ƒg”Ô†.
+        /** IPv4ã‚¢ãƒ‰ãƒ¬ã‚¹ã¨ãƒãƒ¼ãƒˆç•ªå·ã‚’è¨­å®š.
+         * @param [in] address IPv4ã‚¢ãƒ‰ãƒ¬ã‚¹.
+         * @paran [in] port ãƒãƒ¼ãƒˆç•ªå·.
          */
         void set(
             const IPv4Address& address,
             IZ_UINT port);
 
-        /** İ’è‚³‚ê‚Ä‚¢‚éIPv4ƒAƒhƒŒƒX‚ğæ“¾.
-         * @return İ’è‚³‚ê‚Ä‚¢‚éIPv4ƒAƒhƒŒƒX‚ğ•Ô‚·.
+        /** è¨­å®šã•ã‚Œã¦ã„ã‚‹IPv4ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å–å¾—.
+         * @return è¨­å®šã•ã‚Œã¦ã„ã‚‹IPv4ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’è¿”ã™.
          */
         const IPv4Address& getAddress() const;
 
-        /** İ’è‚³‚ê‚Ä‚¢‚éƒ|[ƒg”Ô†‚ğæ“¾.
-         * @return İ’è‚³‚ê‚Ä‚¢‚éƒ|[ƒg”Ô†‚ğ•Ô‚·.
+        /** è¨­å®šã•ã‚Œã¦ã„ã‚‹ãƒãƒ¼ãƒˆç•ªå·ã‚’å–å¾—.
+         * @return è¨­å®šã•ã‚Œã¦ã„ã‚‹ãƒãƒ¼ãƒˆç•ªå·ã‚’è¿”ã™.
          */
         IZ_UINT getPort() const;
 
-        /** w’è‚³‚ê‚½ IPv4Endpoint ‚Æ”äŠr.
-         * @param [in] rhs ”äŠr‚µ‚½‚¢ IPv4Endpoint.
-         * @return ˆê’v‚·‚éê‡‚Í trueAˆê’v‚µ‚È‚¢ê‡‚Í false ‚ğ•Ô‚·.
+        /** æŒ‡å®šã•ã‚ŒãŸ IPv4Endpoint ã¨æ¯”è¼ƒ.
+         * @param [in] rhs æ¯”è¼ƒã—ãŸã„ IPv4Endpoint.
+         * @return ä¸€è‡´ã™ã‚‹å ´åˆã¯ trueã€ä¸€è‡´ã—ãªã„å ´åˆã¯ false ã‚’è¿”ã™.
          */
         IZ_BOOL operator==(const IPv4Endpoint& rhs);
 
-        /** w’è‚³‚ê‚½ IPv4Endpoint ‚Æ”äŠr.
-         * @param [in] rhs ”äŠr‚µ‚½‚¢ IPv4Address.
-         * @return ˆê’v‚µ‚È‚¢ê‡‚Í trueAˆê’v‚·‚éê‡‚Í false ‚ğ•Ô‚·.
+        /** æŒ‡å®šã•ã‚ŒãŸ IPv4Endpoint ã¨æ¯”è¼ƒ.
+         * @param [in] rhs æ¯”è¼ƒã—ãŸã„ IPv4Address.
+         * @return ä¸€è‡´ã—ãªã„å ´åˆã¯ trueã€ä¸€è‡´ã™ã‚‹å ´åˆã¯ false ã‚’è¿”ã™.
          */
         IZ_BOOL operator!=(const IPv4Endpoint& rhs);
 

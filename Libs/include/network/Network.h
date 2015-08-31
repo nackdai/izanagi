@@ -14,13 +14,13 @@ namespace net {
         ~Network();
 
     public:
-        /** ƒlƒbƒgƒ[ƒNˆ—ŠJŽn
-         * ‘S‚Ä‚Ìƒlƒbƒgƒ[ƒNˆ—‚ðŠJŽn‚·‚é‘O‚É•K‚¸ŒÄ‚Ô‚±‚Æ.
+        /** ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯å‡¦ç†é–‹å§‹
+         * å…¨ã¦ã®ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯å‡¦ç†ã‚’é–‹å§‹ã™ã‚‹å‰ã«å¿…ãšå‘¼ã¶ã“ã¨.
          */
         static void begin();
 
-        /** ƒlƒbƒgƒ[ƒNˆ—I—¹
-         * ‘S‚Ä‚Ìƒlƒbƒgƒ[ƒNˆ—‚ðI—¹‚µ‚½Œã‚É•K‚¸ŒÄ‚Ô‚±‚Æ.
+        /** ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯å‡¦ç†çµ‚äº†
+         * å…¨ã¦ã®ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯å‡¦ç†ã‚’çµ‚äº†ã—ãŸå¾Œã«å¿…ãšå‘¼ã¶ã“ã¨.
          */
         static void end();
 

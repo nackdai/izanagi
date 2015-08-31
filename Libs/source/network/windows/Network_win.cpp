@@ -6,7 +6,7 @@ namespace izanagi {
 namespace net {
     IZ_UINT32 Network::s_refCnt = 0;
 
-    // ƒlƒbƒgƒ[ƒNˆ—ŠJŽn.
+    // ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯å‡¦ç†é–‹å§‹.
     void Network::begin()
     {
         if (s_refCnt == 0) {
@@ -20,7 +20,7 @@ namespace net {
         }
     }
 
-    // ƒlƒbƒgƒ[ƒNˆ—I—¹.
+    // ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯å‡¦ç†çµ‚äº†.
     void Network::end()
     {
         if (s_refCnt > 0) {

@@ -42,7 +42,7 @@ namespace net {
         return *this;
     }
 
-    // IPv4‚ğ [a.b.c.d] ‚Æ•ª‰ğ‚µ‚Äİ’è.
+    // IPv4ã‚’ [a.b.c.d] ã¨åˆ†è§£ã—ã¦è¨­å®š.
     void IPv4Address::set(IZ_UINT8 a, IZ_UINT8 b, IZ_UINT8 c, IZ_UINT8 d)
     {
         m_ip.p[3] = a;
@@ -51,13 +51,13 @@ namespace net {
         m_ip.p[0] = d;
     }
 
-    // IPv4ƒAƒhƒŒƒX‚ğ32bit®”’l‚Åİ’è.
+    // IPv4ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’32bitæ•´æ•°å€¤ã§è¨­å®š.
     void IPv4Address::set(IZ_UINT32 ip)
     {
         m_ip.value = ip;
     }
 
-    // IPv4ƒAƒhƒŒƒX‚ğ•¶š—ñi"WW.XX.YY.ZZ"j‚Åİ’è.
+    // IPv4ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’æ–‡å­—åˆ—ï¼ˆ"WW.XX.YY.ZZ"ï¼‰ã§è¨­å®š.
     void IPv4Address::set(const IZ_CHAR* ip)
     {
         auto len = strlen(ip);
@@ -78,7 +78,7 @@ namespace net {
         }
     }
 
-    // w’è‚³‚ê‚½ƒzƒXƒg–¼‚©‚çIPv4ƒAƒhƒŒƒX‚ğ©“®‚Åæ“¾.
+    // æŒ‡å®šã•ã‚ŒãŸãƒ›ã‚¹ãƒˆåã‹ã‚‰IPv4ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’è‡ªå‹•ã§å–å¾—.
     IZ_BOOL IPv4Address::setByHostName(const IZ_CHAR* host)
     {
         // NOTE
@@ -110,13 +110,13 @@ namespace net {
         return setByHostName(host);
     }
 
-    // IPv4ƒAƒhƒŒƒX‚ğ32bit®”’l‚Æ‚µ‚Äæ“¾.
+    // IPv4ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’32bitæ•´æ•°å€¤ã¨ã—ã¦å–å¾—.
     IZ_UINT32 IPv4Address::getValue() const
     {
         return m_ip.value;
     }
 
-    // IPv4ƒAƒhƒŒƒX‚ğ•¶š—ñ‚Æ‚µ‚Äæ“¾.
+    // IPv4ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’æ–‡å­—åˆ—ã¨ã—ã¦å–å¾—.
     void IPv4Address::toString(IZ_CHAR* ret, IZ_UINT size) const
     {
         IZ_SPRINTF(
@@ -138,7 +138,7 @@ namespace net {
         return !(*this == rhs);
     }
 
-    // ‚·‚×‚Ä‚Ìƒlƒbƒgƒ[ƒNƒCƒ“ƒ^[ƒtƒFƒCƒX‚ÅƒNƒ‰ƒCƒAƒ“ƒg‚É‚æ‚éƒlƒbƒgƒ[ƒN—˜—p‚ğ‘Ò‹@‚·‚é•K—v‚ª‚ ‚é‚±‚Æ‚ğ¦‚·ƒAƒhƒŒƒX‚©‚Ç‚¤‚©‚ğæ“¾.
+    // ã™ã¹ã¦ã®ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ã‚¤ã‚¹ã§ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã«ã‚ˆã‚‹ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯åˆ©ç”¨ã‚’å¾…æ©Ÿã™ã‚‹å¿…è¦ãŒã‚ã‚‹ã“ã¨ã‚’ç¤ºã™ã‚¢ãƒ‰ãƒ¬ã‚¹ã‹ã©ã†ã‹ã‚’å–å¾—.
     IZ_BOOL IPv4Address::isAny() const
     {
         return (m_ip.value == 0);
@@ -173,7 +173,7 @@ namespace net {
         return *this;
     }
 
-    // IPv4ƒAƒhƒŒƒX‚Æƒ|[ƒg”Ô†‚ğİ’è.
+    // IPv4ã‚¢ãƒ‰ãƒ¬ã‚¹ã¨ãƒãƒ¼ãƒˆç•ªå·ã‚’è¨­å®š.
     void IPv4Endpoint::set(
         const IPv4Address& address,
         IZ_UINT port)
@@ -182,13 +182,13 @@ namespace net {
         m_port = port;
     }
 
-    // İ’è‚³‚ê‚Ä‚¢‚éIPv4ƒAƒhƒŒƒX‚ğæ“¾.
+    // è¨­å®šã•ã‚Œã¦ã„ã‚‹IPv4ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å–å¾—.
     const IPv4Address& IPv4Endpoint::getAddress() const
     {
         return m_address;
     }
 
-    // İ’è‚³‚ê‚Ä‚¢‚éƒ|[ƒg”Ô†‚ğæ“¾.
+    // è¨­å®šã•ã‚Œã¦ã„ã‚‹ãƒãƒ¼ãƒˆç•ªå·ã‚’å–å¾—.
     IZ_UINT IPv4Endpoint::getPort() const
     {
         return m_port;
