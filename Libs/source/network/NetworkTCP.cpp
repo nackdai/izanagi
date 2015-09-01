@@ -364,7 +364,7 @@ namespace net {
     }
 
     // データを送信.
-    IZ_BOOL TcpListener::sendTo(
+    IZ_INT TcpListener::sendTo(
         const void* data, 
         IZ_UINT size,
         const IPv4Endpoint& remoteEp)
@@ -611,6 +611,10 @@ namespace net {
 
                 for (IZ_UINT i = 0; i < m_remotes.getNum(); i++) {
                     auto& remote = m_remotes.at(i);
+
+                    if (!remote.isActive()) {
+                        continue;
+                    }
 
                     sys::Lock locker(remote);
 
