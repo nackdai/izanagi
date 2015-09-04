@@ -15,12 +15,6 @@
     <Filter Include="include\device">
       <UniqueIdentifier>{b318c7f6-ab45-4978-b1c2-c433683590c7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source\win32">
-      <UniqueIdentifier>{ebd42e43-6dd1-45af-a825-8cf1a9d6822d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\win32\device">
-      <UniqueIdentifier>{7b14f92d-b41b-4349-8bf8-4864087dc02a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="source\linux">
       <UniqueIdentifier>{df8c4a29-1e55-4f9c-b9d4-a2758973aabd}</UniqueIdentifier>
     </Filter>
@@ -35,6 +29,12 @@
     </Filter>
     <Filter Include="source\web">
       <UniqueIdentifier>{3c88c542-595d-4086-aefa-857c5ff9d475}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\windows">
+      <UniqueIdentifier>{ebd42e43-6dd1-45af-a825-8cf1a9d6822d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\windows\device">
+      <UniqueIdentifier>{7b14f92d-b41b-4349-8bf8-4864087dc02a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -117,28 +117,28 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\system\win32\SysTimer_win32.cpp">
-      <Filter>source\win32</Filter>
+      <Filter>source\windows</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\system\win32\SysUtil_win32.cpp">
-      <Filter>source\win32</Filter>
+      <Filter>source\windows</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\system\win32\SysWindow_win32.cpp">
-      <Filter>source\win32</Filter>
+      <Filter>source\windows</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\system\win32\device\Pad_DInput.cpp">
-      <Filter>source\win32\device</Filter>
+      <Filter>source\windows\device</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\system\win32\device\Pad_XInput.cpp">
-      <Filter>source\win32\device</Filter>
+      <Filter>source\windows\device</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\system\Pad.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\system\win32\device\DeviceUtil.cpp">
-      <Filter>source\win32\device</Filter>
+      <Filter>source\windows\device</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\system\win32\SysEnvironment_win32 .cpp">
-      <Filter>source\win32</Filter>
+      <Filter>source\windows</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\system\linux\SysTimer_linux.cpp">
       <Filter>source\linux</Filter>
@@ -156,7 +156,7 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\system\win32\FileStream_win32.cpp">
-      <Filter>source\win32</Filter>
+      <Filter>source\windows</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\system\linux\FileStream_linux.cpp">
       <Filter>source\linux</Filter>
