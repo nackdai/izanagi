@@ -1,6 +1,5 @@
-#include <windows.h>
-#include <zmouse.h>
 #include "system/SysWindow.h"
+#include <zmouse.h>
 
 namespace izanagi
 {

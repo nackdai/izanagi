@@ -1,5 +1,3 @@
-#include <windows.h>
-#include <winbase.h>
 #include "system/SysEnvironment.h"
 
 namespace izanagi

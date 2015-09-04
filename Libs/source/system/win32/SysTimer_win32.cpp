@@ -1,6 +1,5 @@
-#include <windows.h>
-#include <mmsystem.h>
 #include "system/SysTimer.h"
+#include <mmsystem.h>
 
 namespace izanagi
 {

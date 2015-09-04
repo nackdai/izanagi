@@ -1,5 +1,6 @@
-#include "system/izDInput.h"
+#include "izDefs.h"
 #include "izStd.h"
+#include "system/izDInput.h"
 #include "system/InputDeviceDefs.h"
 
 IZ_BOOL InitDirectInput(

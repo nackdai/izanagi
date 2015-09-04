@@ -2,6 +2,8 @@
 #if !defined(__IZANAGI_DX9_DEFS_H__)
 #define __IZANAGI_DX9_DEFS_H__
 
+#include "izDefs.h"
+
 #include <d3d9.h>
 #include <d3dx9.h>
 //#include <dxerr9.h>

@@ -1,6 +1,5 @@
-#include <windows.h>
-#include <shlwapi.h>
 #include "system/SysUtil.h"
+#include <shlwapi.h>
 
 #pragma comment(lib, "shlwapi.lib")
 

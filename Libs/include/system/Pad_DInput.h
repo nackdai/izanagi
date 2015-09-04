@@ -1,6 +1,7 @@
 #if !defined(__IZANAGI_SYSTEM_PAD_DINPUT_H__)
 #define __IZANAGI_SYSTEM_PAD_DINPUT_H__
 
+#include "izDefs.h"
 #include "izDInput.h"
 #include "Pad.h"
 
