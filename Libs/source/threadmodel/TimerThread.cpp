@@ -279,7 +279,7 @@ namespace threadmodel
             m_Event.Wait();
 
             {
-                std::unique_lock<std::mutex> lock(m_Mutex);
+                std::lock_guard<std::mutex> lock(m_Mutex);
 
                 if (m_WillTerminate) {
                     break;
@@ -363,7 +363,7 @@ namespace threadmodel
         }
 
         {
-			std::unique_lock<std::mutex> lock(m_Mutex);
+			std::lock_guard<std::mutex> lock(m_Mutex);
             m_TaskExecuter.PostTask(task, type, time, willDelete);
         }
 

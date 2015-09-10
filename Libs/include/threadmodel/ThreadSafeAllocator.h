@@ -41,7 +41,7 @@ namespace threadmodel
          */
         void* Alloc(size_t size, const IZ_CHAR* file = IZ_NULL, IZ_UINT line = 0)
         {
-			std::unique_lock<std::mutex> lock(m_Mutex);
+			std::lock_guard<std::mutex> lock(m_Mutex);
             return m_Allocator.Alloc(size, file, line);
         }
 
@@ -49,7 +49,7 @@ namespace threadmodel
          */
         void* AllocZero(size_t size, const IZ_CHAR* file = IZ_NULL, IZ_UINT line = 0)
         {
-			std::unique_lock<std::mutex> lock(m_Mutex);
+			std::lock_guard<std::mutex> lock(m_Mutex);
             return m_Allocator.AllocZero(size, file, line);
         }
 
@@ -57,7 +57,7 @@ namespace threadmodel
          */
         void* Realloc(void* ptr, size_t size, const IZ_CHAR* file = IZ_NULL, IZ_UINT line = 0)
         {
-			std::unique_lock<std::mutex> lock(m_Mutex);
+			std::lock_guard<std::mutex> lock(m_Mutex);
             return m_Allocator.Realloc(ptr, size, file, line);
         }
 
@@ -65,7 +65,7 @@ namespace threadmodel
          */
         IZ_BOOL Free(void* data)
         {
-			std::unique_lock<std::mutex> lock(m_Mutex);
+			std::lock_guard<std::mutex> lock(m_Mutex);
             return m_Allocator.Free(data);
         }
 
@@ -73,7 +73,7 @@ namespace threadmodel
          */
         IZ_UINT GetSize()
         {
-			std::unique_lock<std::mutex> lock(m_Mutex);
+			std::lock_guard<std::mutex> lock(m_Mutex);
             return m_Allocator.GetSize();
         }
 
@@ -81,7 +81,7 @@ namespace threadmodel
          */
         IZ_UINT GetAllocatedSize()
         {
-			std::unique_lock<std::mutex> lock(m_Mutex);
+			std::lock_guard<std::mutex> lock(m_Mutex);
             return m_Allocator.GetAllocatedSize();
         }
 
@@ -89,7 +89,7 @@ namespace threadmodel
          */
         IZ_UINT GetFreedSize()
         {
-			std::unique_lock<std::mutex> lock(m_Mutex);
+			std::lock_guard<std::mutex> lock(m_Mutex);
             return m_Allocator.GetFreedSize();
         }
 
@@ -97,7 +97,7 @@ namespace threadmodel
          */
         IZ_BOOL Dump()
         {
-            std::unique_lock<std::mutex> lock(m_Mutex);
+            std::lock_guard<std::mutex> lock(m_Mutex);
             return m_Allocator.Dump();
         }
 
@@ -105,7 +105,7 @@ namespace threadmodel
          */
         void SetAllocAssert(IZ_UINT64 idx)
         {
-			std::unique_lock<std::mutex> lock(m_Mutex);
+			std::lock_guard<std::mutex> lock(m_Mutex);
             m_Allocator.SetAllocAssert(idx);
         }
 

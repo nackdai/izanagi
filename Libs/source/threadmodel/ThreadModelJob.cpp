@@ -37,7 +37,7 @@ namespace threadmodel
         m_RunResult = IZ_FALSE;
 
         {
-            std::unique_lock<std::mutex> lock(m_Mutex);
+            std::lock_guard<std::mutex> lock(m_Mutex);
             {
                 if (m_IsCanceled) {
                     return;
@@ -49,7 +49,7 @@ namespace threadmodel
         m_RunResult = OnRun();
 
         {
-			std::unique_lock<std::mutex> lock(m_Mutex);
+			std::lock_guard<std::mutex> lock(m_Mutex);
             {
                 m_State = State_WillFinish;
             }
@@ -65,7 +65,7 @@ namespace threadmodel
     // ÉLÉÉÉìÉZÉã.
     void CJob::Cancel()
     {
-		std::unique_lock<std::mutex> lock(m_Mutex);
+		std::lock_guard<std::mutex> lock(m_Mutex);
         {
             OnCancel();
             m_IsCanceled = IZ_TRUE;
@@ -75,7 +75,7 @@ namespace threadmodel
     // èÛë‘ÇéÊìæ
     CJob::State CJob::GetState()
     {
-		std::unique_lock<std::mutex> lock(m_Mutex);
+		std::lock_guard<std::mutex> lock(m_Mutex);
         {
             return m_State;
         }
@@ -83,7 +83,7 @@ namespace threadmodel
 
     IZ_BOOL CJob::IsCanceled()
     {
-		std::unique_lock<std::mutex> lock(m_Mutex);
+		std::lock_guard<std::mutex> lock(m_Mutex);
         {
             return m_IsCanceled;
         }
@@ -91,7 +91,7 @@ namespace threadmodel
 
     void CJob::SetState(CJob::State state)
     {
-		std::unique_lock<std::mutex> lock(m_Mutex);
+		std::lock_guard<std::mutex> lock(m_Mutex);
         {
             m_State = state;
         }

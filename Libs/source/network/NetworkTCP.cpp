@@ -321,7 +321,7 @@ namespace net {
 
         IZ_SOCKET socket = accept(m_socket, (sockaddr*)&addr, &addrlen);
 
-        std::unique_lock<std::mutex> lock(m_remotesLocker);
+        std::lock_guard<std::mutex> lock(m_remotesLocker);
 
         for (IZ_UINT i = 0; i < m_maxConnections; i++) {
             auto& remote = m_remotes.at(i);
@@ -394,7 +394,7 @@ namespace net {
     {
         IZ_UINT succeededNum = 0;
 
-        std::unique_lock<std::mutex> lock(m_remotesLocker);
+        std::lock_guard<std::mutex> lock(m_remotesLocker);
 
         for (IZ_UINT i = 0; i < m_remotes.getNum(); i++) {
             auto& remote = m_remotes.at(i);
@@ -419,7 +419,7 @@ namespace net {
 
     TcpListener::TcpRemote* TcpListener::find(const IPv4Endpoint& remoteEp)
     {
-        std::unique_lock<std::mutex> lock(m_remotesLocker);
+        std::lock_guard<std::mutex> lock(m_remotesLocker);
 
         for (IZ_UINT i = 0; i < m_remotes.getNum(); i++) {
             auto& remote = m_remotes.at(i);
@@ -573,7 +573,7 @@ namespace net {
             FD_SET(m_socket, &exceptionFD);
 
             {
-                std::unique_lock<std::mutex> lock(m_remotesLocker);
+                std::lock_guard<std::mutex> lock(m_remotesLocker);
 
                 for (IZ_UINT i = 0; i < m_remotes.getNum(); i++) {
                     auto& remote = m_remotes.at(i);
@@ -607,7 +607,7 @@ namespace net {
 
 
             {
-                std::unique_lock<std::mutex> lock(m_remotesLocker);
+                std::lock_guard<std::mutex> lock(m_remotesLocker);
 
                 for (IZ_UINT i = 0; i < m_remotes.getNum(); i++) {
                     auto& remote = m_remotes.at(i);
@@ -682,7 +682,7 @@ namespace net {
         FD_SET(m_socket, &exceptionFD);
 
         {
-            std::unique_lock<std::mutex> lock(m_remotesLocker);
+            std::lock_guard<std::mutex> lock(m_remotesLocker);
 
             for (IZ_UINT i = 0; i < m_remotes.getNum(); i++) {
                 TcpRemote& remote = m_remotes.at(i);
@@ -720,7 +720,7 @@ namespace net {
 
 
         {
-            std::unique_lock<std::mutex> lock(m_remotesLocker);
+            std::lock_guard<std::mutex> lock(m_remotesLocker);
 
             for (IZ_UINT i = 0; i < m_remotes.getNum(); i++) {
                 TcpRemote& remote = m_remotes.at(i);

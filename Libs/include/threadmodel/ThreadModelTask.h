@@ -80,7 +80,7 @@ namespace threadmodel
 		template <typename _T>
 		IZ_BOOL RegisterTo(CStdList<_T>& list)
 		{
-			std::unique_lock<std::mutex> lock(m_mutex);
+			std::lock_guard<std::mutex> lock(m_mutex);
 			list.AddTail(reinterpret_cast<CStdList<_T>::Item*>(&m_ListItem));
 			m_State = State_Registered;
 			return IZ_TRUE;

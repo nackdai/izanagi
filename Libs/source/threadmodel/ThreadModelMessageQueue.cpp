@@ -21,7 +21,7 @@ namespace threadmodel
     {
 		CStdList<CMessage>::Item* item = IZ_NULL;
 
-		std::unique_lock<std::mutex> lock(m_Mutex);
+		std::lock_guard<std::mutex> lock(m_Mutex);
 
 		item = m_MessageList.GetTop();
 
@@ -68,7 +68,7 @@ namespace threadmodel
 		CStdList<CMessage>::Item* item = IZ_NULL;
 
 		{
-			std::unique_lock<std::mutex> lock(m_Mutex);
+			std::lock_guard<std::mutex> lock(m_Mutex);
 			item = m_MessageList.GetTop();
 		}
 
@@ -84,7 +84,7 @@ namespace threadmodel
 	// 登録メッセージを取得するが、キューからは削除しない.ただし、メッセージが無い場合は待つ
     CMessage* CMessageQueue::GetWithWaitingIfNoMessage()
     {
-		std::unique_lock<std::mutex> lock(m_Mutex);
+        std::unique_lock<std::mutex> lock(m_Mutex);
 
 		if (IsRunning()) {
 			m_condVar.wait(
@@ -114,7 +114,7 @@ namespace threadmodel
 
         IZ_ASSERT(msg != IZ_NULL);
 
-		std::unique_lock<std::mutex> lock(m_Mutex);
+		std::lock_guard<std::mutex> lock(m_Mutex);
 
 		if (msg->isRegistered()) {
 			return IZ_FALSE;
@@ -130,7 +130,7 @@ namespace threadmodel
 	// 登録されているメッセージ数を取得.
     IZ_UINT CMessageQueue::GetPostedMessageNum()
     {
-		std::unique_lock<std::mutex> lock(m_Mutex);
+		std::lock_guard<std::mutex> lock(m_Mutex);
         IZ_UINT ret = m_MessageList.GetItemNum();
         return ret;
     }

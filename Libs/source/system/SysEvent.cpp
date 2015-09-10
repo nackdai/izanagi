@@ -19,7 +19,7 @@ namespace sys
     // シグナル状態にする.
 	void CEvent::Set(std::function<void(void)> func/*= nullptr*/)
     {
-		std::unique_lock<std::mutex> lock(m_mutex);
+		std::lock_guard<std::mutex> lock(m_mutex);
 
 		if (func) {
 			func();
@@ -32,7 +32,7 @@ namespace sys
     // シグナル状態になるのを待つ.
 	void CEvent::Wait(std::function<IZ_BOOL(void)> func/*= nullptr*/)
     {
-		std::unique_lock<std::mutex> lock(m_mutex);
+        std::unique_lock<std::mutex> lock(m_mutex);
 		m_condVar.wait(
 			lock,
 			[this, func] {
@@ -51,7 +51,7 @@ namespace sys
     // 非シグナル状態にする.
 	void CEvent::Reset(std::function<void(void)> func/*= nullptr*/)
     {
-		std::unique_lock<std::mutex> lock(m_mutex);
+        std::unique_lock<std::mutex> lock(m_mutex);
 
 		if (func) {
 			func();

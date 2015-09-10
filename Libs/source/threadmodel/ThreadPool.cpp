@@ -22,7 +22,7 @@ namespace threadmodel
         while (IZ_TRUE) {
 			CTask* task = m_Pool->DequeueTask();
 
-            std::unique_lock<std::mutex> lock(m_Mutex);
+            std::lock_guard<std::mutex> lock(m_Mutex);
 
             if (m_State == State_WillFinish) {
                 m_State = State_Finished;
@@ -44,7 +44,7 @@ namespace threadmodel
 
     void CThreadPool::CThread::Terminate()
     {
-        std::unique_lock<std::mutex> lock(m_Mutex);
+        std::lock_guard<std::mutex> lock(m_Mutex);
 
         if (m_State == State_Finished) {
             return;
@@ -55,7 +55,7 @@ namespace threadmodel
 
     IZ_BOOL CThreadPool::CThread::IsWaiting()
     {
-        std::unique_lock<std::mutex> lock(m_Mutex);
+        std::lock_guard<std::mutex> lock(m_Mutex);
 
         return (m_State == State_Waiting);
     }
@@ -108,7 +108,7 @@ namespace threadmodel
 		VRETURN(task->Reset());
 
         {
-            std::unique_lock<std::mutex> lock(m_TaskListLocker);
+            std::lock_guard<std::mutex> lock(m_TaskListLocker);
 
             if (m_State == State_WillTerminate
                 || m_State == State_Terminated)
@@ -127,7 +127,7 @@ namespace threadmodel
 
     void CThreadPool::WaitEmpty()
     {
-        std::unique_lock<std::mutex> lock(m_TaskListLocker);
+        std::lock_guard<std::mutex> lock(m_TaskListLocker);
 
         if (m_TaskList.HasItem()) {
             m_TaskEmptyWaiter.Wait();
@@ -151,7 +151,7 @@ namespace threadmodel
     void CThreadPool::Terminate()
     {
         {
-			std::unique_lock<std::mutex> lock(m_TaskListLocker);
+			std::lock_guard<std::mutex> lock(m_TaskListLocker);
             m_State = State_WillTerminate;
         }
 
@@ -197,7 +197,7 @@ namespace threadmodel
     {
         m_TaskWaiter.Wait();
 
-        std::unique_lock<std::mutex> lock(m_TaskListLocker);
+        std::lock_guard<std::mutex> lock(m_TaskListLocker);
 
         CStdList<CTask>::Item* item = m_TaskList.GetTop();
 

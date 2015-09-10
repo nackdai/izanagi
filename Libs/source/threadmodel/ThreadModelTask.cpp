@@ -27,7 +27,7 @@ namespace threadmodel
 
     void CTask::Wait()
     {
-		std::unique_lock<std::mutex> lock(m_mutex);
+        std::unique_lock<std::mutex> lock(m_mutex);
 		m_condVar.wait(
 			lock,
 			[this]{
@@ -37,7 +37,7 @@ namespace threadmodel
 
     IZ_BOOL CTask::Cancel()
     {
-		std::unique_lock<std::mutex> lock(m_mutex);
+		std::lock_guard<std::mutex> lock(m_mutex);
         
         if (m_State != State_Canceled
             && m_State != State_Running
@@ -52,32 +52,32 @@ namespace threadmodel
 
     IZ_BOOL CTask::WillCancel()
     {
-		std::unique_lock<std::mutex> lock(m_mutex);
+		std::lock_guard<std::mutex> lock(m_mutex);
         return (m_State == State_WillCancel);
     }
 
     IZ_BOOL CTask::IsCanceled()
     {
-		std::unique_lock<std::mutex> lock(m_mutex);
+		std::lock_guard<std::mutex> lock(m_mutex);
         return (m_State == State_Canceled);
     }
 
     IZ_BOOL CTask::IsFinished()
     {
-		std::unique_lock<std::mutex> lock(m_mutex);
+		std::lock_guard<std::mutex> lock(m_mutex);
         return (m_State == State_Finished);
     }
 
 	// ƒ^ƒXƒN‚ª“o˜^‰Â”\‚©‚Ç‚¤‚©‚ð•Ô‚·.
 	IZ_BOOL CTask::CanRegister()
 	{
-		std::unique_lock<std::mutex> lock(m_mutex);
+		std::lock_guard<std::mutex> lock(m_mutex);
 		return (m_State == State_Finished) || (m_State == State_Init);
 	}
 
 	IZ_BOOL CTask::Reset()
 	{
-		std::unique_lock<std::mutex> lock(m_mutex);
+		std::lock_guard<std::mutex> lock(m_mutex);
 
 		if ((m_State == State_Finished) || (m_State == State_Init)) {
 			m_State = State_Init;
@@ -92,7 +92,7 @@ namespace threadmodel
 
     void CTask::Run(void* userData)
     {
-		std::unique_lock<std::mutex> lock(m_mutex);
+		std::lock_guard<std::mutex> lock(m_mutex);
 
         if (m_State == State_WillCancel) {
             m_State = State_Canceled;
