@@ -2,10 +2,10 @@
 //
 
 #include <vector>
-#include "shlwapi.h"
 #include "Option.h"
 #include "PostEffectConverterImpl.h"
 #include "Preproc.h"
+#include <shlwapi.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

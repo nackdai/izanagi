@@ -1,10 +1,10 @@
 #if !defined(__SHADER_CONVERTER_POSTEFFECT_CONVERTER_UTIL_H__)
 #define __SHADER_CONVERTER_POSTEFFECT_CONVERTER_UTIL_H__
 
-#include "Cg/cg.h"
-#include "Cg/cgD3D9.h"
-
 #include "izShader.h"
+
+#include <Cg/cg.h>
+#include <Cg/cgD3D9.h>
 
 class CShaderConvUtil {
 public:

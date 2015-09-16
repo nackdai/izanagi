@@ -1,6 +1,6 @@
 #include <algorithm>
-#include "SamplerUtil.h"
 #include "izToolKit.h"
+#include "SamplerUtil.h"
 
 namespace {
     izanagi::graph::E_GRAPH_TEX_ADDRESS TexAddrTable[] = {

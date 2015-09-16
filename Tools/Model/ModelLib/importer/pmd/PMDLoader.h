@@ -2,8 +2,8 @@
 #define __MODEL_LIB_PMD_LOADER_H__
 
 #include "izDefs.h"
-#include "PMDFormat.h"
 #include "izToolKit.h"
+#include "PMDFormat.h"
 #include "izSceneGraph.h"
 #include <vector>
 

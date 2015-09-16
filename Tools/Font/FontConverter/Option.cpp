@@ -1,6 +1,6 @@
+#include "Option.h"
 #include <shlwapi.h>
 #include <direct.h>
-#include "Option.h"
 
 namespace {
     // オプションで共有するバッファ

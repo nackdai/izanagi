@@ -1,7 +1,7 @@
-#include "shlwapi.h"
 #include "Option.h"
 #include "Preproc.h"
 #include "izToolKit.h"
+#include <shlwapi.h>
 
 namespace {
     // オプションで共有するバッファ

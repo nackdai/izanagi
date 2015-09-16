@@ -1,9 +1,5 @@
-#if !defined(__IZANAGI_TOOL_KIT_GRAPH_GRAPHICS_DEVICE_LIGHT_H__)
-#define __IZANAGI_TOOL_KIT_GRAPH_GRAPHICS_DEVICE_LIGHT_H__
-
-#include <d3d9.h>
-#include <d3dx9.h>
-//#include <dxerr9.h>
+#if !defined(__IZANAGI_TOOL_KIT_GRAPH_GRAPHICS_DEVICE_LITE_H__)
+#define __IZANAGI_TOOL_KIT_GRAPH_GRAPHICS_DEVICE_LITE_H__
 
 #include <vector>
 
@@ -12,6 +8,10 @@
 #include "izGraph.h"
 #include "std/SimpleMemoryAllocator.h"
 #include "graph/ToolkitGraphDefs.h"
+
+#include <d3d9.h>
+#include <d3dx9.h>
+//#include <dxerr9.h>
 
 namespace izanagi {
 namespace tool {
@@ -85,4 +85,4 @@ namespace tool {
 }   // namespace tool
 }   // namespace izanagi
 
-#endif  // #if !defined(__IZANAGI_TOOL_KIT_GRAPH_GRAPHICS_DEVICE_LIGHT_H__)
+#endif  // #if !defined(__IZANAGI_TOOL_KIT_GRAPH_GRAPHICS_DEVICE_LITE_H__)

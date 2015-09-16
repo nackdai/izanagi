@@ -1,7 +1,7 @@
 #include <vector>
-#include "shlwapi.h"
-#include "CompileCmdCreator.h"
 #include "izToolKit.h"
+#include "CompileCmdCreator.h"
+#include <shlwapi.h>
 
 CCompileCmdCreator CCompileCmdCreator::s_cInstance;
 

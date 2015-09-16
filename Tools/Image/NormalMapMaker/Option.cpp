@@ -1,5 +1,5 @@
-#include <shlwapi.h>
 #include "Option.h"
+#include <shlwapi.h>
 
 namespace {
     // オプションで共有するバッファ

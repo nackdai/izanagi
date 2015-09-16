@@ -2,9 +2,9 @@
 #define __SHADER_CONVERTER_SHADER_CONFIG_H__
 
 #include <vector>
+#include "izToolKit.h"
 #include <xercesc/sax2/Attributes.hpp>
 #include <xercesc/sax2/DefaultHandler.hpp>
-#include "izToolKit.h"
 
 struct SShaderConfig {
     izanagi::tool::CString compiler;        // コンパイルコマンド

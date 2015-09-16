@@ -1,9 +1,8 @@
+#include "izToolKit.h"
 #include "ParamUtil.h"
 #include "ShaderConverterUtil.h"
 #include "DataBuffer.h"
-#include "ShaderConverterUtil.h"
 #include "ShaderConfig.h"
-#include "izToolKit.h"
 
 namespace {
 #if 0

@@ -1,7 +1,7 @@
 #include <vector>
-#include "shlwapi.h"
 #include "CompileCmdCreator.h"
 #include "izToolKit.h"
+#include <shlwapi.h>
 
 // 拡張子
 static const char* COMPILED_PS_EXT = ".pso";

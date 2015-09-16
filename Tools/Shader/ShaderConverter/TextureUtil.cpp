@@ -1,5 +1,5 @@
-#include "TextureUtil.h"
 #include "izToolKit.h"
+#include "TextureUtil.h"
 
 #if 0
 namespace {

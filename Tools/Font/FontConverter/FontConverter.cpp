@@ -1,12 +1,12 @@
 // FontCoverter.cpp : コンソール アプリケーションのエントリ ポイントを定義します。
 //
 
-#include <windows.h>
-
 #include "CharList.h"
 #include "Option.h"
 #include "FontConverterFT.h"
 #include "izToolKit.h"
+
+#include <windows.h>
 
 using namespace std;
 

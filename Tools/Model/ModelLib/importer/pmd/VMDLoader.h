@@ -2,8 +2,8 @@
 #define __MODEL_LIB_VMD_LOADER_H__
 
 #include "izDefs.h"
-#include "VMDFormat.h"
 #include "izToolKit.h"
+#include "VMDFormat.h"
 #include "izSceneGraph.h"
 #include <vector>
 #include <set>

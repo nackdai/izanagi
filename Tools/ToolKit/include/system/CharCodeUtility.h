@@ -1,9 +1,6 @@
 #if !defined(__IZANAGI_TOOL_KIT_CHAR_CODE_UTILITY_H__)
 #define __IZANAGI_TOOL_KIT_CHAR_CODE_UTILITY_H__
 
-#include <windows.h>
-#include <shlwapi.h>
-#include <stdio.h>
 #include "izDefs.h"
 
 namespace izanagi {
