@@ -21,3 +21,6 @@
 [submodule "Tools/External/assimp"]
 	path = Tools/External/assimp
 	url = https://github.com/assimp/assimp.git
+[submodule "External/libuv"]
+	path = External/libuv
+	url = https://github.com/libuv/libuv.git
