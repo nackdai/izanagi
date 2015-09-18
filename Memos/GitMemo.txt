@@ -15,3 +15,6 @@ http://akio0911.net/archives/3421
 http://qiita.com/sotarok/items/0d525e568a6088f6f6bb
 
 http://stackoverflow.com/questions/3796927/how-to-git-clone-including-submodules
+
+他のリポジトリからのブランチの取得
+http://www8.atwiki.jp/_pub/git_jp/git-manual-jp/Documentation/chunked/ch01s09.html
