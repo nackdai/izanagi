@@ -2,6 +2,8 @@
 #define _IZANAGI_NETWORK_NETWORK_DEFS_H__
 
 #include "izDefs.h"
+#include <functional>
+#include <uv.h>
 
 namespace izanagi {
 namespace net {

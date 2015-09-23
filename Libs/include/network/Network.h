@@ -1,6 +1,7 @@
 #if !defined(_IZANAGI_NETWORK_NETWORK_H__)
 #define _IZANAGI_NETWORK_NETWORK_H__
 
+#include <atomic>
 #include "izDefs.h"
 
 // NOTE
@@ -9,6 +10,9 @@
 namespace izanagi {
 namespace net {
     class Network {
+        friend class TcpListener;
+        friend class TcpClient;
+
     private:
         Network();
         ~Network();
@@ -25,7 +29,10 @@ namespace net {
         static void end();
 
     private:
-        static IZ_UINT32 s_refCnt;
+        static void start();
+
+    private:
+        static std::atomic<IZ_UINT32> s_refCnt;
     };
 }    // namespace net
 }    // namespace izanagi

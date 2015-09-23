@@ -26,7 +26,7 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    int port = 8000;
+    int port = 30000;
     const char* ip = "127.0.0.1";
 
     sockaddr_in serverAddr;
@@ -38,7 +38,7 @@ int main(int argc, char** argv)
     }
 
 	// 相手に接続
-    connect(
+    int ret = connect(
         sock,   // 受け入れるソケット
         (sockaddr*)&serverAddr,
         sizeof(serverAddr));

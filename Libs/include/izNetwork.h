@@ -5,7 +5,8 @@
 #include "network/Network.h"
 #include "network/IPv4Endpoint.h"
 #include "network/NetworkPacket.h"
-#include "network/NetworkTCP.h"
+//#include "network/NetworkTCP.h"
+#include "network/NetworkTCP_libuv.h"
 #include "network/NetworkUDP.h"
 
 #endif  // #if !defined(__IZANAGI_NETWORK_H__)
