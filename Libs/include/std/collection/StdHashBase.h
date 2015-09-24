@@ -14,7 +14,7 @@ namespace izanagi {
             friend class CStdHashBase<_KEY, _T, _SELF>;
 
         public:
-            Item() : m_Key((IZ_UINT)0)
+            Item()
             {
                 //m_HashItem.Init(this);
                 //m_OrderItem.Init(this);

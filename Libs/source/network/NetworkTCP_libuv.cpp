@@ -1,6 +1,6 @@
 #include "network/NetworkTCP_libuv.h"
 #include "network/IPv4Endpoint.h"
-#include "network\/Network.h"
+#include "network/Network.h"
 
 // NOTE
 // http://www.jenkinssoftware.com/raknet/manual/systemoverview.html
@@ -27,62 +27,18 @@ namespace net {
     }
 
     // 起動.
-    IZ_BOOL TcpClient::start(
-        IMemoryAllocator* allocator,
-        const IPv4Endpoint& hostEp)
+    IZ_BOOL TcpClient::start(IMemoryAllocator* allocator)
     {
         IZ_BOOL result = IZ_FALSE;
 
         m_allocator = allocator;
 
         IZ_LIBUV_EXEC(result, uv_tcp_init(uv_default_loop(), &m_client));
-        VRETURN(result);
 
-        // 通信ポート・アドレスの設定.
-        sockaddr_in inAddr;
-        {
-#if 0
-            FILL_ZERO(&inAddr, sizeof(inAddr));
-
-            inAddr.sin_family = AF_INET;
-            inAddr.sin_port = htons(hostEp.getPort());
-
-            auto address = hostEp.getAddress();
-
-            if (address.isAny()) {
-                setIp(inAddr, htonl(INADDR_ANY));
-            }
-            else {
-                IZ_CHAR ip[64];
-                address.toString(ip, COUNTOF(ip));
-
-                setIp(inAddr, inet_addr(ip));
-            }
-#else
-            auto address = hostEp.getAddress();
-            auto port = hostEp.getPort();
-
-            if (address.isAny()) {
-                uv_ip4_addr("0,0,0,0", port, &inAddr);
-            }
-            else {
-                IZ_CHAR ip[64];
-                address.toString(ip, COUNTOF(ip));
-
-                uv_ip4_addr(ip, port, &inAddr);
-            }
-#endif
-        }
-
-        // ソケットにアドレスを結びつける.
-        IZ_LIBUV_EXEC(result, uv_tcp_bind(&m_client, (const sockaddr*)&inAddr, 0));
-        VGOTO(result, __EXIT__);
-
-    __EXIT__:
         if (!result) {
             IZ_ASSERT(IZ_FALSE);
 
-            stop(nullptr);
+            stop();
         }
 
         return result;
@@ -107,29 +63,34 @@ namespace net {
         // 通信ポート・アドレスの設定.
         sockaddr_in serverAddr;
         {
-            FILL_ZERO(&serverAddr, sizeof(serverAddr));
-
-            serverAddr.sin_family = AF_INET;
-            serverAddr.sin_port = htons(remoteEp.getPort());
-
             auto address = remoteEp.getAddress();
             result = !address.isAny();
 
             VGOTO(result, __EXIT__);
 
+            auto port = remoteEp.getPort();
+
             IZ_CHAR ip[64];
             address.toString(ip, COUNTOF(ip));
 
-            setIp(serverAddr, inet_addr(ip));
+            uv_ip4_addr(ip, port, &serverAddr);
         }
 
         m_isConnecting = IZ_TRUE;
 
         m_onConnected = onConnected;
 
+        m_cbConnected.Set(
+            CallbackRegister::Key(CallbackRegister::Type::Connect, &m_reqConnect),
+            onConnect);
+
+        CallbackRegister::Regist(m_cbConnected);
+
         IZ_LIBUV_EXEC(
             result,
-            uv_tcp_connect(&m_reqConnect, &m_client, (const sockaddr*)&serverAddr, onConnect));
+            uv_tcp_connect(&m_reqConnect, &m_client, (const sockaddr*)&serverAddr, [](uv_connect_t *req, int status){
+            CallbackRegister::Invoke<CallbackConnected>(CallbackRegister::Key(CallbackRegister::Type::Connect, req), req, status);
+        }));
 
         if (result) {
             m_remote = remoteEp;
@@ -140,7 +101,7 @@ namespace net {
     __EXIT__:
         if (!result) {
             IZ_ASSERT(IZ_FALSE);
-            stop(nullptr);
+            stop();
         }
 
         return result;
@@ -150,7 +111,7 @@ namespace net {
     {
         m_isConnecting = IZ_FALSE;
 
-        if (status == -1) {
+        if (status < 0) {
             // TODO
             if (m_onConnected) {
                 m_onConnected(IZ_FALSE);
@@ -167,8 +128,12 @@ namespace net {
         }
     }
 
-    void TcpClient::stop(std::function<void(void)> onClosed)
+    void TcpClient::stop()
     {
+        if (!IsConnected()) {
+            return;
+        }
+
         if (m_isConnecting) {
             uv_cancel((uv_req_t*)&m_reqConnect);
             m_isConnecting = IZ_FALSE;
@@ -182,32 +147,72 @@ namespace net {
         if (m_isReading) {
             uv_read_stop(m_handle);
             m_isReading = IZ_FALSE;
+
+            std::lock_guard<std::mutex> lock(m_listRecvDataLocker);
+
+            CStdList<RecvData>::Item* item = m_listRecvData.GetTop();
+            while (item) {
+                auto data = item->GetData();
+                item = item->GetNext();
+
+                delete data;
+                FREE(m_allocator, data);
+            }
+
+            CallbackRegister::Remove(m_cbAllocated);
+            CallbackRegister::Remove(m_cbReadEnd);
         }
 
-        FREE(m_allocator, m_recvBuf);
-        m_recvBuf = nullptr;
+        // NOTE
+        // どうも内部でコールバックを呼ばないぽい・・・
 
         uv_close(
             (uv_handle_t*)m_handle,
-            [&](uv_handle_t* handle) {
-            if (onClosed) {
-                onClosed();
-            }
-            m_isConnected = IZ_FALSE;
-        });
+            IZ_NULL);
+
+        m_isConnected = IZ_FALSE;
     }
 
-    IZ_BOOL TcpClient::recieve(
-        std::function<void(void*, IZ_UINT)> onRecieved)
+    IZ_INT TcpClient::recieve(
+        void* buf,
+        IZ_UINT size)
     {
-        // 接続チェック.
-        if (IsConnected()) {
-            return IZ_FALSE;
+        CStdList<RecvData>::Item* item = nullptr;
+
+        {
+            std::lock_guard<std::mutex> lock(m_listRecvDataLocker);
+            item = m_listRecvData.GetTop();
         }
 
-        if (IsActing()) {
-            return IZ_FALSE;
+        if (item == nullptr) {
+            return -1;
         }
+
+        auto data = item->GetData();
+
+        if (data->length < 0) {
+            return -1;
+        }
+
+        if (size < data->length) {
+            IZ_ASSERT(IZ_FALSE);
+            return -1;
+        }
+
+        memcpy(buf, data->buf->base, data->length);
+
+        IZ_INT ret = data->length;
+
+        delete data;
+        FREE(m_allocator, data);
+
+        return ret;
+    }
+
+    void TcpClient::startRecieve()
+    {
+        // 接続チェック.
+        IZ_ASSERT(IsConnected());
 
         m_isReading = IZ_TRUE;
 
@@ -227,38 +232,75 @@ namespace net {
 
         IZ_BOOL result = IZ_FALSE;
 
+        m_cbAllocated.Set(
+            CallbackRegister::Key(CallbackRegister::Type::Alloc, m_handle),
+            onAlloc);
+
+        m_cbReadEnd.Set(
+            CallbackRegister::Key(CallbackRegister::Type::Read, m_handle),
+            onReadEnd);
+
+        CallbackRegister::RegistPermanently(m_cbAllocated);
+        CallbackRegister::RegistPermanently(m_cbReadEnd);
+
         IZ_LIBUV_EXEC(
             result,
-            uv_read_start(m_handle, onAlloc, onReadEnd));
+            uv_read_start(
+            m_handle, 
+            [](uv_handle_t* handle, size_t suggested_size, uv_buf_t* buf) {
+            CallbackRegister::Invoke<CallbackOnAlloc>(CallbackRegister::Key(CallbackRegister::Type::Alloc, handle), handle, suggested_size, buf);
+        }, 
+            [](uv_stream_t* stream, ssize_t nread, const uv_buf_t* buf){
+            CallbackRegister::Invoke<CallbackOnReadEnd>(CallbackRegister::Key(CallbackRegister::Type::Read, stream), stream, nread, buf);
+        }));
         IZ_ASSERT(result);
-
-        return result;
     }
 
     void TcpClient::OnAlloc(uv_handle_t* handle, size_t suggested_size, uv_buf_t* buf)
     {
-        m_recvBuf = ALLOC(m_allocator, suggested_size);
+        IZ_UINT8* tmp = (IZ_UINT8*)ALLOC(m_allocator, suggested_size + sizeof(RecvData));
 
-        auto uv_buf = uv_buf_init((char*)m_recvBuf, suggested_size);
+        RecvData* data = new(tmp)RecvData;
+        tmp += sizeof(RecvData);
 
-        memcpy(buf, &uv_buf, sizeof(uv_buf));
+        data->buf = (uv_buf_t*)tmp;
+        tmp += sizeof(uv_buf_t);
+
+        {
+            std::lock_guard<std::mutex> lock(m_listRecvDataLocker);
+            m_listRecvData.AddTail(&data->listItem);
+        }
+
+        *(data->buf) = uv_buf_init((char*)tmp, suggested_size);
+
+        *buf = *(data->buf);
     }
 
     void TcpClient::OnReadEnd(uv_stream_t* stream, ssize_t nread, const uv_buf_t* buf)
     {
-        m_isReading = IZ_FALSE;
+        if (nread == UV_EOF) {
+            return;
+        }
+        
+        std::lock_guard<std::mutex> lock(m_listRecvDataLocker);
 
-        if (nread == -1) {
+        auto found = m_listRecvData.Find([&](RecvData* data) {
+            return (data->buf->base == buf->base);
+        });
+
+        if (found) {
+            found->length = nread;
+        }
+
+        if (nread < 0) {
             // TODO
             IZ_ASSERT(IZ_FALSE);
-        }
 
-        if (m_onRecieved) {
-            m_onRecieved(buf->base, nread);
+            if (found) {
+                delete found;
+                FREE(m_allocator, found);
+            }
         }
-
-        FREE(m_allocator, m_recvBuf);
-        m_recvBuf = nullptr;
     }
 
     IZ_BOOL TcpClient::sendData(
@@ -267,32 +309,56 @@ namespace net {
         std::function<void(IZ_BOOL)> onSent)
     {
         // 接続チェック.
-        if (IsConnected()) {
+        if (!IsConnected()) {
             return IZ_FALSE;
         }
 
-        if (IsActing()) {
+        if (IsSending()) {
             return IZ_FALSE;
         }
 
-        uv_buf_t tmp[1];
+        uv_buf_t buf = uv_buf_init((char*)data, size);
 
-        uv_buf_t buf = uv_buf_init((char*)tmp, sizeof(tmp));
+        buf.len = size;
+        buf.base = (char*)data;
 
         m_isWriting = IZ_TRUE;
 
         IZ_BOOL result = IZ_FALSE;
 
-        auto onWirteEnd = std::bind(&TcpClient::OnWriteEnd, this, std::placeholders::_1, std::placeholders::_2);
+#if 0
+        auto onWriteEnd = std::bind(&TcpClient::OnWriteEnd, this, std::placeholders::_1, std::placeholders::_2);
+
+        m_cbWriteEnd.Set(
+            CallbackRegister::Key(CallbackRegister::Type::Write, &m_reqWrite),
+            onWriteEnd);
+
+        CallbackRegister::Regist(m_cbWriteEnd);
 
         // 書き込み
         IZ_LIBUV_EXEC(
             result,
-            uv_write(&m_reqWrite, m_handle, &buf, 1, onWirteEnd));
+            uv_write(&m_reqWrite, m_handle, &buf, 1, [](uv_write_t *req, int status){
+            CallbackRegister::Invoke<CallbackOnWriteEnd>(CallbackRegister::Key(CallbackRegister::Type::Write, req), req, status);
+        }));
 
         if (result) {
             m_onSent = onSent;
         }
+#else
+        // NOTE
+        // どうも内部でコールバックを呼ばないぽい・・・
+
+        IZ_LIBUV_EXEC(
+            result,
+            uv_write(&m_reqWrite, m_handle, &buf, 1, IZ_NULL));
+
+        m_isWriting = IZ_FALSE;
+
+        if (onSent) {
+            onSent(result);
+        }
+#endif
 
         return result;
     }
@@ -301,7 +367,7 @@ namespace net {
     {
         m_isWriting = IZ_FALSE;
 
-        if (status == -1) {
+        if (status < 0) {
             // TODO
             if (m_onSent) {
                 m_onSent(IZ_FALSE);
@@ -348,24 +414,6 @@ namespace net {
         // 通信ポート・アドレスの設定.
         sockaddr_in inAddr;
         {
-#if 0
-            FILL_ZERO(&inAddr, sizeof(inAddr));
-
-            inAddr.sin_family = AF_INET;
-            inAddr.sin_port = htons(hostEp.getPort());
-
-            auto address = hostEp.getAddress();
-
-            if (address.isAny()) {
-                setIp(inAddr, htonl(INADDR_ANY));
-            }
-            else {
-                IZ_CHAR ip[64];
-                address.toString(ip, COUNTOF(ip));
-
-                setIp(inAddr, inet_addr(ip));
-            }
-#else
             auto address = hostEp.getAddress();
             auto port = hostEp.getPort();
 
@@ -378,7 +426,6 @@ namespace net {
 
                 uv_ip4_addr(ip, port, &inAddr);
             }
-#endif
         }
 
         // ソケットにアドレスを結びつける.
@@ -388,9 +435,18 @@ namespace net {
         // コネクト要求をいくつまで待つかを設定.
         if (maxConnections > 0) {
             auto onConnection = std::bind(&TcpListener::OnConnection, this, std::placeholders::_1, std::placeholders::_2);
+
+            m_cbConnection.Set(
+                CallbackRegister::Key(CallbackRegister::Type::Listen, &m_server),
+                onConnection);
+
+            CallbackRegister::Regist(m_cbConnection);
+
             IZ_LIBUV_EXEC(
                 result,
-                uv_listen((uv_stream_t*)&m_server, maxConnections, onConnection));
+                uv_listen((uv_stream_t*)&m_server, maxConnections, [](uv_stream_t* server, int status){
+                CallbackRegister::Invoke<CallbackOnConnection>(CallbackRegister::Key(CallbackRegister::Type::Listen, server), server, status);
+            }));
         }
 
         if (result) {
@@ -405,7 +461,7 @@ namespace net {
         if (!result) {
             IZ_ASSERT(IZ_FALSE);
 
-            stop(nullptr);
+            stop();
         }
 
         return result;
@@ -445,8 +501,11 @@ namespace net {
                     uv_accept(server, (uv_stream_t*)&remote->m_client));
 
                 if (result) {
+                    remote->m_allocator = m_allocator;
                     remote->m_handle = (uv_stream_t*)&remote->m_client;
                     remote->m_isConnected = IZ_TRUE;
+
+                    remote->startRecieve();
 
                     std::lock_guard<std::mutex> lock(m_remotesLocker);
                     m_acceptedList.AddTail(remote->getListItem());
@@ -455,25 +514,25 @@ namespace net {
         }
     }
 
-    void TcpListener::stop(std::function<void(void)> onClosed)
+    void TcpListener::stop()
     {
         for (IZ_UINT i = 0; i < m_remotes.getNum(); i++) {
             TcpClient& remote = m_remotes.at(i);
-            remote.stop(nullptr);
+            remote.stop();
         }
 
         m_remotes.clear();
 
         m_acceptedList.Clear();
 
+        m_isListening = IZ_FALSE;
+
+        // NOTE
+        // どうも内部でコールバックを呼ばないぽい・・・
+
         uv_close(
             (uv_handle_t*)&m_server,
-            [&](uv_handle_t* handle) {
-            if (onClosed) {
-                onClosed();
-            }
-            m_isListening = IZ_FALSE;
-        });
+            IZ_NULL);
     }
 
     TcpClient* TcpListener::acceptRemote()

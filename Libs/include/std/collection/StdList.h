@@ -1,6 +1,7 @@
 #if !defined(__IZANAGI_STD_LIST_H__)
 #define __IZANAGI_STD_LIST_H__
 
+#include <functional>
 #include "izDefs.h"
 #include "std/StdPlacementNew.h"
 #include "std/allocator/MemoryAllocator.h"
@@ -227,16 +228,14 @@ namespace izanagi {
             }
         }
 
-        typedef IZ_BOOL(*FuncMatch)(_T* data);
-
-        _T* Find(FuncMatch* funcMatch)
+        _T* Find(std::function<IZ_BOOL(_T*)> funcMatch)
         {
             IZ_ASSERT(funcMatch != IZ_NULL);
 
             CStdList<_T>::Item* item = GetTop();
             while (item != IZ_NULL)
             {
-                if ((*funcMatch)(item->GetData()))
+                if (funcMatch(item->GetData()))
                 {
                     return item->GetData();
                 }

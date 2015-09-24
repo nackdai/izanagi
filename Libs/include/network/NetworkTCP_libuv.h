@@ -6,6 +6,7 @@
 #include "izSystem.h"
 #include "network/NetworkDefs.h"
 #include "network/NetworkPacket.h"
+#include "network/CallbackRegister.h"
 
 namespace izanagi {
 namespace net {
@@ -48,9 +49,7 @@ namespace net {
     public:
         /** 起動.
          */
-        IZ_BOOL start(
-            IMemoryAllocator* allocator,
-            const IPv4Endpoint& hostEp);
+        IZ_BOOL start(IMemoryAllocator* allocator);
 
         /** 接続.
          */
@@ -58,10 +57,11 @@ namespace net {
             const IPv4Endpoint& remoteEp,
             std::function<void(IZ_BOOL)> onConnected);
 
-        virtual void stop(std::function<void(void)> onClosed);
+        virtual void stop();
 
         IZ_INT recieve(
-            std::function<void(void*, IZ_UINT)> onRecieved);
+            void* buf,
+            IZ_UINT size);
 
         /** データを送信.
          */
@@ -80,21 +80,13 @@ namespace net {
             return m_isConnecting;
         }
 
-        inline IZ_BOOL IsRecieving() const
-        {
-            return m_isReading;
-        }
-
         inline IZ_BOOL IsSending() const
         {
             return m_isWriting;
         }
 
     private:
-        inline IZ_BOOL IsActing() const
-        {
-            return m_isConnecting || m_isReading || m_isWriting;
-        }
+        void startRecieve();
 
         void OnConnect(uv_connect_t *req, int status);
         void OnWriteEnd(uv_write_t *req, int status);
@@ -118,13 +110,40 @@ namespace net {
         std::atomic<IZ_BOOL> m_isWriting{ IZ_FALSE };
         std::atomic<IZ_BOOL> m_isReading{ IZ_FALSE };
 
+        using CallbackConnected = std::function < void(uv_connect_t *req, int status) >;
+        Callback<CallbackConnected> m_cbConnected;
+
+        using CallbackOnWriteEnd = std::function < void(uv_write_t *req, int status) >;
+        Callback<CallbackOnWriteEnd> m_cbWriteEnd;
+
+        using CallbackOnAlloc = std::function < void(uv_handle_t* handle, size_t suggested_size, uv_buf_t* buf) > ;
+        Callback<CallbackOnAlloc> m_cbAllocated;
+
+        using CallbackOnReadEnd = std::function < void(uv_stream_t* stream, ssize_t nread, const uv_buf_t* buf) > ;
+        Callback<CallbackOnReadEnd> m_cbReadEnd;
+            
         std::function<void(IZ_BOOL)> m_onConnected{ nullptr };
         std::function<void(IZ_BOOL)> m_onSent{ nullptr };
-        std::function<void(void*, IZ_UINT)> m_onRecieved{ nullptr };
-
-        void* m_recvBuf{ nullptr };
 
         IPv4Endpoint m_remote;
+
+        struct RecvData {
+            CStdList<RecvData>::Item listItem;
+            uv_buf_t* buf;
+
+            IZ_INT length{ -1 };
+
+            RecvData()
+            {
+                listItem.Init(this);
+            }
+            ~RecvData() {}
+
+            IZ_DECL_PLACEMENT_NEW();
+        };
+
+        std::mutex m_listRecvDataLocker;
+        CStdList<RecvData> m_listRecvData;
     };
 
     /**
@@ -144,7 +163,7 @@ namespace net {
             const IPv4Endpoint& hostEp,
             IZ_UINT maxConnections);
 
-        void stop(std::function<void(void)> onClosed);
+        void stop();
 
         TcpClient* acceptRemote();
 
@@ -172,9 +191,9 @@ namespace net {
                 return &m_listItem;
             }
 
-            virtual void stop(std::function<void(void)> onClosed) override
+            virtual void stop() override
             {
-                TcpClient::stop(onClosed);
+                TcpClient::stop();
                 m_listItem.Leave();
             }
 
@@ -193,6 +212,9 @@ namespace net {
         CArray<TcpRemote> m_remotes;
 
         CStdList<TcpRemote> m_acceptedList;
+
+        using CallbackOnConnection = std::function < void(uv_stream_t* server, int status) > ;
+        Callback<CallbackOnConnection> m_cbConnection;
 
         std::atomic<IZ_BOOL> m_isListening{ IZ_FALSE };
     };

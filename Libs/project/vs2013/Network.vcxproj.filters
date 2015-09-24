@@ -43,6 +43,9 @@
     <ClInclude Include="..\..\include\network\NetworkTCP_libuv.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\network\CallbackRegister.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\network\Network.cpp">
@@ -73,6 +76,9 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\network\Network _libuv.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\network\CallbackRegister.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>

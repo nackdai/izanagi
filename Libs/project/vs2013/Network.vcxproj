@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\izNetwork.h" />
+    <ClInclude Include="..\..\include\network\CallbackRegister.h" />
     <ClInclude Include="..\..\include\network\IPv4Endpoint.h" />
     <ClInclude Include="..\..\include\network\Network.h" />
     <ClInclude Include="..\..\include\network\NetworkDefs.h" />
@@ -56,6 +57,7 @@
     <ClInclude Include="..\..\include\network\ReplicatedPropertyObject.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\source\network\CallbackRegister.cpp" />
     <ClCompile Include="..\..\source\network\IPv4Endpoint.cpp" />
     <ClCompile Include="..\..\source\network\Network _libuv.cpp" />
     <ClCompile Include="..\..\source\network\Network.cpp">
