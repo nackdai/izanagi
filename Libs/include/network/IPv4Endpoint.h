@@ -148,7 +148,7 @@ namespace net {
         IZ_BOOL operator!=(const IPv4Endpoint& rhs);
 
         void set(const sockaddr_in& addr);
-        void get(sockaddr_in& addr);
+        void get(sockaddr_in& addr) const;
         IZ_BOOL operator==(const sockaddr_in& addr);
 
     private:

@@ -16,47 +16,18 @@ void runAsServer(izanagi::IMemoryAllocator* allocator)
         ServerPort);
 
 	izanagi::net::Udp udp;
-    udp.start(host);
+    udp.start(allocator, host);
 
     static const IZ_UINT size = 1024;
     IZ_CHAR buf[size] = { 0 };
 
     izanagi::net::IPv4Endpoint remote;
 
-    if (isAsync) {
-        IZ_BOOL running = IZ_TRUE;
-
-        udp.beginRecieve(
-            [&](const izanagi::net::Packet* packet){
-                if (packet) {
-                    IZ_CHAR ip[size];
-                    packet->endpoint.getAddress().toString(ip, size);
-
-                    auto port = packet->endpoint.getPort();
-
-                    IZ_PRINTF("%s:%d (%s)\n", ip, port, packet->data);
-                }
-                running = IZ_FALSE;
-        }, buf, size);
-
-        while (running) {
-            izanagi::sys::CThread::Sleep(33);
-        }
-
-        udp.endRecieve();
+    while (udp.recieveFrom(buf, size, remote) < 0) {
     }
-    else {
-        auto len = udp.recieveFrom(buf, size, remote);
 
-        if (len > 0) {
-            IZ_CHAR ip[size];
-            remote.getAddress().toString(ip, size);
 
-            auto port = remote.getPort();
-
-            IZ_PRINTF("%s:%d (%s)\n", ip, port, buf);
-        }
-    }
+    IZ_PRINTF("%s\n", buf);
 
     udp.stop();
 }
@@ -68,7 +39,7 @@ void runAsClient(izanagi::IMemoryAllocator* allocator)
         ServerPort);
 
     izanagi::net::Udp udp;
-    udp.start();
+    udp.start(allocator);
     udp.connectTo(remote);
 
     static const IZ_CHAR* str = "test";
@@ -85,10 +56,6 @@ IzMain(0, 0)
 	if (argc > 1 && strcmp(argv[1], "s" ) == 0) {
 		isServer = IZ_TRUE;
 	}
-
-    if (argc > 2 && strcmp(argv[2], "a") == 0) {
-        isAsync = IZ_TRUE;
-    }
 
 	izanagi::CStandardMemoryAllocator allocator;
 	allocator.Init(sizeof(buffer), buffer);

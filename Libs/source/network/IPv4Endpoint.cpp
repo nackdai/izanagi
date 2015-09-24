@@ -226,8 +226,9 @@ namespace net {
         }
     }
 
-    void IPv4Endpoint::get(sockaddr_in& addr)
+    void IPv4Endpoint::get(sockaddr_in& addr) const
     {
+#if 0
         addr.sin_family = AF_INET;
         addr.sin_port = htons(m_port);
 
@@ -240,6 +241,17 @@ namespace net {
 
             setIp(addr, inet_addr(ip));
         }
+#else
+        if (m_address.isAny()) {
+            uv_ip4_addr("0.0.0.0", m_port, &addr);
+        }
+        else {
+            IZ_CHAR ip[64];
+            m_address.toString(ip, COUNTOF(ip));
+
+            uv_ip4_addr(ip, m_port, &addr);
+        }
+#endif
     }
 }
 }

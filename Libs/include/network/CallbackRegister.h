@@ -24,6 +24,7 @@ namespace net {
             Read,
             Write,
             Close,
+            Recieve,
         };
 
         class Key {

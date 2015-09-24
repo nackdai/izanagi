@@ -12,6 +12,7 @@ namespace net {
     class Network {
         friend class TcpListener;
         friend class TcpClient;
+        friend class Udp;
 
     private:
         Network();

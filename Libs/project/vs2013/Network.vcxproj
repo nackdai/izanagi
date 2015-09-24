@@ -52,6 +52,7 @@
     <ClInclude Include="..\..\include\network\NetworkTCP.h" />
     <ClInclude Include="..\..\include\network\NetworkTCP_libuv.h" />
     <ClInclude Include="..\..\include\network\NetworkUDP.h" />
+    <ClInclude Include="..\..\include\network\NetworkUDP_libuv.h" />
     <ClInclude Include="..\..\include\network\ReplicatedProperty.h" />
     <ClInclude Include="..\..\include\network\ReplicatedPropertyManager.h" />
     <ClInclude Include="..\..\include\network\ReplicatedPropertyObject.h" />
@@ -85,7 +86,19 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\source\network\NetworkTCP_libuv.cpp" />
-    <ClCompile Include="..\..\source\network\NetworkUDP.cpp" />
+    <ClCompile Include="..\..\source\network\NetworkUDP.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\source\network\NetworkUDP_libuv.cpp" />
     <ClCompile Include="..\..\source\network\ReplicatedProperty.cpp" />
     <ClCompile Include="..\..\source\network\ReplicatedPropertyManager.cpp" />
     <ClCompile Include="..\..\source\network\ReplicatedPropertyObject.cpp" />

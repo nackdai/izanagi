@@ -35,6 +35,9 @@ namespace net {
 
         IZ_LIBUV_EXEC(result, uv_tcp_init(uv_default_loop(), &m_client));
 
+        // NOTE
+        // libuvでは、クライアント側は bind すると、connect で失敗する.
+
         if (!result) {
             IZ_ASSERT(IZ_FALSE);
 
