@@ -1,33 +1,35 @@
 - freetype
-* sudo apt-get install automake
-* sudo apt-get install autoconf
-* sudo apt-get install libtool
-* chmod +x autogen.sh
-* ./autogen.sh
-* sh ./configure
-* make
-* make install
+$ sudo apt-get install automake
+$ sudo apt-get install autoconf
+$ sudo apt-get install libtool
+$ chmod +x autogen.sh
+$ ./autogen.sh
+$ sh ./configure
+$ make
+$ make install
 
 - gl
-* sudo apt-get install libgl-dev (or libgl1-mesa-dev)
-* sudo apt-get install libglu1-mesa-dev
+$ sudo apt-get install libgl-dev (or libgl1-mesa-dev)
+$ sudo apt-get install libglu1-mesa-dev
 
 - glew
 - http://glew.sourceforge.net/build.html
-* export SYSTEM=linux
-* export GLEW_DEST=<anywhere>
-* make all
-* make install
+$ export SYSTEM=linux
+$ export GLEW_DEST=<anywhere>
+$ make all
+$ make install
 
 - freeglut
-* sh ./configure
-* make
+$ sh ./configure
+$ make
 
 - libjpeg
 http://d.hatena.ne.jp/gust_notch/20110309/p1
 
 - libuv
 -- For Windows
-* cd External/libuv
-* git clone https://chromium.googlesource.com/external/gyp build/gyp
-* Run vcbuild.bat
+$ cd External/libuv
+$ git clone https://chromium.googlesource.com/external/gyp build/gyp
+$ set PYTHON={Your Python path to python.exe}
+ex) set PYTHON=C:\Python27\python.exe
+$ Run vcbuild.bat
