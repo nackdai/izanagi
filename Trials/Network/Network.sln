@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocketListener", "SocketListener\SocketListener.csproj", "{48EA7DEE-2730-436C-8624-1FCA4170803A}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SocketSender", "SocketSender\SocketSender.vcxproj", "{5CB228BC-4D9D-4BB6-BD44-BBFE5E72AF9C}"
