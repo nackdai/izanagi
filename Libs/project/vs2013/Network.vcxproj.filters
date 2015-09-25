@@ -10,6 +10,18 @@
     <Filter Include="source\windows">
       <UniqueIdentifier>{fb4636d2-ab7f-4fcd-933b-c0006c911391}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\rudp">
+      <UniqueIdentifier>{29e93ad7-b46b-4511-a266-276f147f303d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\rudp\segment">
+      <UniqueIdentifier>{352bf091-fcad-456c-a5b3-441c0471ba90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\rudp">
+      <UniqueIdentifier>{c572d9c5-145b-4e34-bae2-d6b641b6dddb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\rudp\segment">
+      <UniqueIdentifier>{c01f08ca-f562-4414-9bef-514e888587d1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\network\NetworkTCP.h">
@@ -49,6 +61,39 @@
     <ClInclude Include="..\..\include\network\NetworkUDP_libuv.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\network\rudp\segment\NullSegment.h">
+      <Filter>include\rudp\segment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\network\rudp\segment\ResetSegment.h">
+      <Filter>include\rudp\segment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\network\rudp\segment\Segment.h">
+      <Filter>include\rudp\segment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\network\rudp\segment\SynchronousSegment.h">
+      <Filter>include\rudp\segment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\network\rudp\segment\AcknowledgementSegment.h">
+      <Filter>include\rudp\segment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\network\rudp\segment\DataSegment.h">
+      <Filter>include\rudp\segment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\network\rudp\segment\ExtendAckSegment.h">
+      <Filter>include\rudp\segment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\network\rudp\segment\FinishSegment.h">
+      <Filter>include\rudp\segment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\network\rudp\RUDPParameter.h">
+      <Filter>include\rudp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\network\rudp\RUDPCounter.h">
+      <Filter>include\rudp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\network\rudp\ReliableUDP.h">
+      <Filter>include\rudp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\network\Network.cpp">
@@ -86,6 +131,18 @@
     </ClCompile>
     <ClCompile Include="..\..\source\network\NetworkUDP_libuv.cpp">
       <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\network\rudp\segment\Segment.cpp">
+      <Filter>source\rudp\segment</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\network\rudp\segment\DataSegment.cpp">
+      <Filter>source\rudp\segment</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\network\rudp\segment\ExtendAckSegment.cpp">
+      <Filter>source\rudp\segment</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\network\rudp\segment\SynchronousSegment.cpp">
+      <Filter>source\rudp\segment</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

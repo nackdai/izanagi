@@ -22,6 +22,11 @@ namespace izanagi {
         // 出力
         virtual IZ_UINT Write(const void* buf, IZ_UINT offset, size_t size) = 0;
 
+        IZ_UINT Write(IZ_UINT8 n)
+        {
+            return Write(&n, 0, 1);
+        }
+
         // サイズ取得
         virtual IZ_UINT GetSize() = 0;
 
