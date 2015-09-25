@@ -58,17 +58,7 @@ void runAsClient(izanagi::IMemoryAllocator* allocator)
 
 	static const IZ_CHAR* str = "test";
 
-    IZ_BOOL isSent = IZ_FALSE;
-
-    client.sendData(
-        str, strlen(str),
-        [&](IZ_BOOL result) {
-        IZ_PRINTF("%s\n", result ? "Send success" : "Send fail");
-        isSent = IZ_TRUE;
-    });
-
-    while (!isSent) {
-    }
+    client.sendData(str, strlen(str));
 
     client.stop();
 }
@@ -99,4 +89,3 @@ IzMain(0, 0)
 
 	return 0;
 }
-#endif

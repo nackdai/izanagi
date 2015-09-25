@@ -10,33 +10,6 @@
 
 namespace izanagi {
 namespace net {
-    template <typename Type>
-    class NetworkTask {
-    private:
-        NetworkTask();
-        ~NetworkTask();
-
-    public:
-        void Wait()
-        {
-            while (IZ_TRUE)
-        }
-
-        IZ_BOOL IsFinished() const
-        {
-            return m_hasResult;
-        }
-
-        const Type GetResult()
-        {
-            return m_Result;
-        }
-
-    private:
-        std::atomic<IZ_BOOL> m_hasResult{ IZ_FALSE };
-        Type m_Result;
-    };
-
     /**
      */
     class TcpClient {
@@ -67,8 +40,7 @@ namespace net {
          */
         IZ_BOOL sendData(
             const void* data,
-            IZ_UINT size,
-            std::function<void(IZ_BOOL)> onSent);
+            IZ_UINT size);
 
         inline IZ_BOOL IsConnected() const
         {
@@ -89,7 +61,6 @@ namespace net {
         void startRecieve();
 
         void OnConnect(uv_connect_t *req, int status);
-        void OnWriteEnd(uv_write_t *req, int status);
         void OnAlloc(uv_handle_t* handle, size_t suggested_size, uv_buf_t* buf);
         void OnReadEnd(uv_stream_t* stream, ssize_t nread, const uv_buf_t* buf);
 
@@ -113,9 +84,6 @@ namespace net {
         using CallbackConnected = std::function < void(uv_connect_t *req, int status) >;
         Callback<CallbackConnected> m_cbConnected;
 
-        using CallbackOnWriteEnd = std::function < void(uv_write_t *req, int status) >;
-        Callback<CallbackOnWriteEnd> m_cbWriteEnd;
-
         using CallbackOnAlloc = std::function < void(uv_handle_t* handle, size_t suggested_size, uv_buf_t* buf) > ;
         Callback<CallbackOnAlloc> m_cbAllocated;
 
@@ -123,7 +91,6 @@ namespace net {
         Callback<CallbackOnReadEnd> m_cbReadEnd;
             
         std::function<void(IZ_BOOL)> m_onConnected{ nullptr };
-        std::function<void(IZ_BOOL)> m_onSent{ nullptr };
 
         IPv4Endpoint m_remote;
 

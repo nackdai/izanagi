@@ -308,8 +308,7 @@ namespace net {
 
     IZ_BOOL TcpClient::sendData(
         const void* data,
-        IZ_UINT size,
-        std::function<void(IZ_BOOL)> onSent)
+        IZ_UINT size)
     {
         // 接続チェック.
         if (!IsConnected()) {
@@ -329,26 +328,6 @@ namespace net {
 
         IZ_BOOL result = IZ_FALSE;
 
-#if 0
-        auto onWriteEnd = std::bind(&TcpClient::OnWriteEnd, this, std::placeholders::_1, std::placeholders::_2);
-
-        m_cbWriteEnd.Set(
-            CallbackRegister::Key(CallbackRegister::Type::Write, &m_reqWrite),
-            onWriteEnd);
-
-        CallbackRegister::Regist(m_cbWriteEnd);
-
-        // 書き込み
-        IZ_LIBUV_EXEC(
-            result,
-            uv_write(&m_reqWrite, m_handle, &buf, 1, [](uv_write_t *req, int status){
-            CallbackRegister::Invoke<CallbackOnWriteEnd>(CallbackRegister::Key(CallbackRegister::Type::Write, req), req, status);
-        }));
-
-        if (result) {
-            m_onSent = onSent;
-        }
-#else
         // NOTE
         // どうも内部でコールバックを呼ばないぽい・・・
 
@@ -358,30 +337,7 @@ namespace net {
 
         m_isWriting = IZ_FALSE;
 
-        if (onSent) {
-            onSent(result);
-        }
-#endif
-
         return result;
-    }
-
-    void TcpClient::OnWriteEnd(uv_write_t *req, int status)
-    {
-        m_isWriting = IZ_FALSE;
-
-        if (status < 0) {
-            // TODO
-            if (m_onSent) {
-                m_onSent(IZ_FALSE);
-            }
-            IZ_ASSERT(IZ_FALSE);
-            return;
-        }
-
-        if (m_onSent) {
-            m_onSent(IZ_TRUE);
-        }
     }
 
     ////////////////////////////////////////////////
