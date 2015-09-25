@@ -113,6 +113,7 @@
     <ClCompile Include="..\..\source\network\ReplicatedProperty.cpp" />
     <ClCompile Include="..\..\source\network\ReplicatedPropertyManager.cpp" />
     <ClCompile Include="..\..\source\network\ReplicatedPropertyObject.cpp" />
+    <ClCompile Include="..\..\source\network\rudp\ReliableUDP.cpp" />
     <ClCompile Include="..\..\source\network\rudp\segment\DataSegment.cpp" />
     <ClCompile Include="..\..\source\network\rudp\segment\ExtendAckSegment.cpp" />
     <ClCompile Include="..\..\source\network\rudp\segment\Segment.cpp" />

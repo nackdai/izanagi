@@ -17,13 +17,13 @@
  *
  */
 namespace izanagi {
-namespace network {
+namespace net {
     class NullSegment : public Segment
     {
         friend class Segment;
 
     public:
-        virtual Type GetType() override
+        virtual Type GetType() const override
         {
             return Type::NUL;
         }
@@ -63,7 +63,7 @@ namespace network {
             IZ_ASSERT(CheckFlag(Type::NUL));
         }
     };
-}   // namespace network
+}   // namespace net
 }   // namespace izanagi
 
 #endif  // _IZANAGI_NETWORK_NULL_SEGMENT_H__

@@ -129,7 +129,15 @@ namespace izanagi {
                 }
             }
 
-        private:
+            IZ_BOOL operator>(Item& rhs)
+            {
+                IZ_ASSERT(m_pData != IZ_NULL);
+                IZ_ASSERT(rhs.m_pData != IZ_NULL);
+
+                return *m_pData > *(rhs.m_pData);
+            }
+
+        protected:
             _T* m_pData;
             CStdList<_T>* m_pList;  // 所属先リスト
             Item* m_pPrev;
@@ -264,7 +272,7 @@ namespace izanagi {
             return -1;
         }
 
-    private:
+    protected:
         IZ_UINT32 m_nNum;
 
         Item m_Top;

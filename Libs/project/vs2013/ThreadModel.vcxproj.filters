@@ -52,6 +52,12 @@
     <ClInclude Include="..\..\include\threadmodel\ThreadSafeAllocator.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\threadmodel\ThreadSafeOrderedList.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\threadmodel\ThreadSafeList.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\threadmodel\ThreadModelJobQueue.cpp">

@@ -278,6 +278,7 @@
     <ClInclude Include="..\..\include\std\collection\StdHash.h" />
     <ClInclude Include="..\..\include\std\collection\StdHashBase.h" />
     <ClInclude Include="..\..\include\std\collection\StdList.h" />
+    <ClInclude Include="..\..\include\std\collection\StdOrderedList.h" />
     <ClInclude Include="..\..\include\std\collection\StdQueue.h" />
     <ClInclude Include="..\..\include\std\collection\StdSet.h" />
     <ClInclude Include="..\..\include\std\collection\StdSimpleList.h" />

@@ -17,7 +17,7 @@
 *
 */
 namespace izanagi {
-namespace network {
+namespace net {
     class AcknowledgementSegment : public Segment
     {
         friend class Segment;
@@ -35,7 +35,7 @@ namespace network {
         }
 
     public:
-        virtual Type GetType() override
+        virtual Type GetType() const override
         {
             return Type::ACK;
         }
@@ -63,7 +63,7 @@ namespace network {
             IZ_ASSERT(CheckFlag(Type::ACK));
         }
     };
-}   // namespace network
+}   // namespace net
 }   // namespace izanagi 
 
 #endif  // #if !defined(_IZANAGI_NETWORK_ACKNOWLEDGEMENT_SEGMENT_H__)

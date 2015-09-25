@@ -23,13 +23,13 @@
 *
 */
 namespace izanagi {
-namespace network {
+namespace net {
     class ExtendAckSegment : Segment
     {
         friend class Segment;
 
     public:
-        virtual Type GetType() override
+        virtual Type GetType() const override
         {
             return Type::EAK;
         }
@@ -60,7 +60,7 @@ namespace network {
     private:
         CArray<IZ_INT> m_AckNumbers;
     };
-}   // namespace network
+}   // namespace net
 }   // namespace izanagi
 
 #endif  // #if !defined(_IZANAGI_NETWORK_EXTEND_ACK_SEGMENT_H__)

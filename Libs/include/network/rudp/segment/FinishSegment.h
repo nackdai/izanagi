@@ -19,13 +19,13 @@
 *
 */
 namespace izanagi {
-namespace network {
+namespace net {
     class FinishSegment : Segment
     {
         friend class Segment;
 
     public:
-        virtual Type GetType() override
+        virtual Type GetType() const override
         {
             return Type::FIN;
         }
@@ -65,7 +65,7 @@ namespace network {
             IZ_ASSERT(CheckFlag(Type::FIN));
         }
     };
-}   // namespace network
+}   // namespace net
 }   // namespace izanagi
 
 #endif  // _IZANAGI_NETWORK_FINISH_SEGMENT_H__

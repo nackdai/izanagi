@@ -16,7 +16,7 @@
 *
 */
 namespace izanagi {
-namespace network {
+namespace net {
     DataSegment::DataSegment(
         IMemoryAllocator* allocator,
         IZ_INT sequenceNumber,
@@ -76,5 +76,5 @@ namespace network {
             bytes + offset + RUDP_HEADER_LEN,
             dataLength);
     }
-}   // namespace network
+}   // namespace net
 }   // namespace izanagi

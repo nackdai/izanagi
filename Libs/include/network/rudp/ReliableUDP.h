@@ -6,12 +6,15 @@
 #include "izDefs.h"
 #include "izStd.h"
 #include "izSystem.h"
+#include "izThreadModel.h"
 #include "network/rudp/RUDPParameter.h"
 #include "network/rudp/RUDPCounter.h"
 
 namespace izanagi {
-namespace network {
+namespace net {
     class Udp;
+    class IPv4Endpoint;
+    class Segment;
 
     class ReliableUDP
     {
@@ -24,136 +27,25 @@ namespace network {
             SYN_RECV,       // 接続要求受信済み.
             ESTABLISHED,    // 通信確立.
             WILL_CLOSE,     // 終了処理中.
-        }
+        };
 
     public:
-
-        protected ReliableUDP()
+        ReliableUDP()
         {
         }
 
-        /// <summary>
-        /// コンストラクタ.
-        /// </summary>
-        /// <param name="udp"></param>
-        /// <param name="parameter"></param>
-        public ReliableUDP(
-            UdpClient udp,
-            Parameter parameter)
-        {
-            this.Udp = udp;
-            this.Parameter = parameter;
+        void Init(
+            IMemoryAllocator* allocator,
+            Udp* udp,
+            const RUDPParameter& parameter);
 
-            // セグメントの受信は別スレッドで受け取る.
-            this.RecieveThread = new Thread(ProcRecieve);
-            this.RecieveThread.Start();
+        // 接続.
+        void Connect(const IPv4Endpoint& ep);
 
-            //this.RetransWorker = new TimerWorker(ProcRetransmit);
-        }
+        // データ受信.
+        IZ_INT Recieve(void* bytes, IZ_UINT size);
 
-        /// <summary>
-        /// 接続.
-        /// </summary>
-        /// <param name="ep"></param>
-        public void Connect(IPEndPoint ep)
-        {
-            this.Udp.Connect(ep);
-
-            this.CurState.Store(State.SYN_SENT);
-
-            var rand = new Random(Environment.TickCount);
-            var segment = new SynchronousSegment(
-                this.Counter.SetSequenceNumber(rand.Next(MAX_SEQUENCE_NUMBER)),
-                this.Parameter);
-
-            // 同期要求を送る.
-            SendAndQueueSegment(segment);
-
-            // 接続が確立されるまで待つ
-            this.ConnectEvent.WaitOne();
-
-            if (this.CurState != State.ESTABLISHED)
-            {
-                // TODO
-                // ここから下は失敗したときの処理
-            }
-        }
-
-        /// <summary>
-        /// データ受信.
-        /// </summary>
-        /// <param name="bytes"></param>
-        /// <returns></returns>
-        public int Recieve(ref byte[] bytes)
-        {
-            if (this.IsClosed)
-            {
-                return 0;
-            }
-
-            if (this.InSequenceSegmentList.Count == 0)
-            {
-                InSequenceSegWait.WaitOne();
-            }
-
-            int totalSize = 0;
-
-            lock (this.InSequenceSegmentList.Locker)
-            {
-                List<Segment> willRemoveList = new List<Segment>();
-
-                for (int i = 0; i < this.InSequenceSegmentList.Count; i++)
-                {
-                    Segment segment = this.InSequenceSegmentList[i];
-
-                    if (segment is ResetSegment)
-                    {
-                        willRemoveList.Add(segment);
-                        break;
-                    }
-                    else if (segment is FinishSegment)
-                    {
-                        if (totalSize <= 0)
-                        {
-                            willRemoveList.Add(segment);
-                            totalSize = -1;
-                        }
-                        break;
-                    }
-                    else if (segment is DataSegment)
-                    {
-                        var s = segment as DataSegment;
-                        
-                        if (s.Data.Length + totalSize > bytes.Length)
-                        {
-                            if (totalSize <= 0)
-                            {
-                                throw new ApplicationException();
-                            }
-                            break;
-                        }
-
-                        System.Array.Copy(
-                            s.Data,
-                            0,
-                            bytes,
-                            totalSize,
-                            s.Data.Length);
-
-                        totalSize += s.Data.Length;
-                        willRemoveList.Add(segment);
-                    }
-                }
-
-                for (int i = 0; i < willRemoveList.Count; i++)
-                {
-                    this.InSequenceSegmentList.Remove(willRemoveList[i]);
-                }
-            }
-
-            return totalSize;
-        }
-
+#if 0
         /// <summary>
         /// データ送信.
         /// </summary>
@@ -215,12 +107,12 @@ namespace network {
 
             switch ((State)this.CurState)
             {
-                case State.SYN_SENT:
+                case State::SYN_SENT:
                     // 接続待ちを起こす.
                     this.ConnectEvent.Set();
                     break;
-                case State.SYN_RECV:
-                case State.ESTABLISHED:
+                case State::SYN_RECV:
+                case State::ESTABLISHED:
                     // NOTE
                     // AcknowledgementSegment は受信したあとにハンドリングしないので
                     // AcknowledgementSegment からのシーケンス番号は更新されない.
@@ -239,7 +131,7 @@ namespace network {
                     break;
             }
 
-            this.CurState.Store(State.CLOSED);
+            this.CurState::Store(State::CLOSED);
 
             this.VacantUnAckedSentSegListWait.Set();
             this.NotEmptyUnAckedSentSegListWait.Set();
@@ -386,12 +278,12 @@ namespace network {
                 return;
             }
 
-            if (this.CurState == State.SYN_RECV)
+            if (this.CurState == State::SYN_RECV)
             {
                 OpenConnection();
 
                 // 接続要求を受信した返事に対する返事なので、接続を開く.
-                this.CurState.Store(State.ESTABLISHED);
+                this.CurState::Store(State::ESTABLISHED);
             }
 
             this.UnAckedSentSegmentList.ForeachWithRemoving(
@@ -409,15 +301,15 @@ namespace network {
         /// <param name="segment"></param>
         private void HandleSYNSegment(SynchronousSegment segment)
         {
-            switch (this.CurState.Load())
+            switch (this.CurState::Load())
             {
-                case State.NONE:  // 未接続.
+                case State::NONE:  // 未接続.
                     this.Counter.SetLastInSequenceNumber(segment.SequenceNumber);
 
-                    this.CurState.Store(State.SYN_RECV);
+                    this.CurState::Store(State::SYN_RECV);
 
                     // NOTE
-                    // State.NONE 状態で SynchronousSegment を受信するのは Listener なので
+                    // State::NONE 状態で SynchronousSegment を受信するのは Listener なので
                     // SynchronousSegment を送信し返すタイミングでシーケンス番号を新規設定する？
                     // でも、もらった番号をそのまま使えばいい気もするが・・・
 
@@ -433,7 +325,7 @@ namespace network {
                     this.UnAckedRecievedSegmentList.Remove(segment);
 
                     break;
-                case State.SYN_SENT:    // 接続要求送信済み.
+                case State::SYN_SENT:    // 接続要求送信済み.
                     this.Counter.SetLastInSequenceNumber(segment.SequenceNumber);
 
                     // 返事を返す.
@@ -516,15 +408,15 @@ namespace network {
             {
                 switch((State)this.CurState)
                 {
-                    case State.SYN_SENT:
+                    case State::SYN_SENT:
                         // 同期セグメント送信状態の場合は、返事待ちしているところ（connect）を解除して先に進むようにする.
                         this.ConnectEvent.Set();
                         break;
-                    case State.CLOSED:
+                    case State::CLOSED:
                         // すでに終了しているので何もしない.
                         break;
                     default:
-                        this.CurState.Store(State.WILL_CLOSE);
+                        this.CurState::Store(State::WILL_CLOSE);
                         break;
                 }
             }
@@ -877,14 +769,14 @@ namespace network {
         /// </summary>
         private void OpenConnection()
         {
-            if (this.CurState == State.ESTABLISHED)
+            if (this.CurState == State::ESTABLISHED)
             {
                 // TODO
                 // すでに接続確立されている場合.
             }
             else
             {
-                this.CurState.Store(State.ESTABLISHED);
+                this.CurState::Store(State::ESTABLISHED);
 
                 this.ConnectEvent.Set();
 
@@ -1065,11 +957,30 @@ namespace network {
         {
             // 継承先で実装.
         }
+#endif
+
+    public:
+        IZ_BOOL IsClosed() const
+        {
+            return m_CurState == State::CLOSED;
+        }
+
+        IZ_BOOL WillClose() const
+        {
+            return m_CurState == State::CLOSED || m_CurState == State::WILL_CLOSE;
+        }
+
+        IZ_BOOL IsConnected() const
+        {
+            return m_CurState == State::ESTABLISHED;
+        }
 
     private:
         // 最大シーケンス番号.
         // セグメントヘッダ内のシーケンス番号は 1byte(=8bit) なので、最大は 255(= 2^8 - 1) になる.
         static const IZ_INT MAX_SEQUENCE_NUMBER = 255;
+
+        IMemoryAllocator* m_allocator{ nullptr };
 
         // Maximum number of sent segments.
         IZ_UINT m_SendQueueSize{ 32 };
@@ -1112,51 +1023,26 @@ namespace network {
         /// <summary>
         /// 送信したが応答が来ていないセグメントのリスト.
         /// </summary>
-        SafeList<Segment> UnAckedSentSegmentList = new SafeList<Segment>();
+        CStdList<Segment> UnAckedSentSegmentList;
 
-        Object RecieveQueueLocker = new Object();
+        std::mutex m_RecieveQueueLocker;
 
         /// <summary>
         /// シーケンス内のセグメントのリスト.
         /// </summary>
-        SafeList<Segment> InSequenceSegmentList = new SafeList<Segment>();
+        threadmodel::ThreadSafeList<Segment> m_InSequenceSegmentList;
 
         /// <summary>
         /// シーケンス外のセグメントのリスト.
         /// </summary>
-        SortedList<int, Segment> OutSequenceSegmentList = new SortedList<int, Segment>();
+        threadmodel::ThreadSafeOrderedList<Segment> m_OutSequenceSegmentList;
 
         /// <summary>
         /// 受信したが確認応答を送っていないセグメントのリスト.
         /// </summary>
-        SafeList<Segment> UnAckedRecievedSegmentList = new SafeList<Segment>();
-
-        public bool IsClosed
-        {
-            get
-            {
-                //return this.CurState.Equals(State.CLOSED);
-                return this.CurState == State.CLOSED;
-            }
-        }
-
-        protected bool WillClose
-            {
-                get
-                {
-                    return this.CurState == State.CLOSED || this.CurState == State.WILL_CLOSE;
-                }
-            }
-
-            public bool IsConnected
-                {
-                    get
-                    {
-                        return this.CurState == State.ESTABLISHED;
-                    }
-                }
+        threadmodel::ThreadSafeList<Segment> m_UnAckedRecievedSegmentList;
     };
-}   // namespace network
+}   // namespace net
 }   // namespace izanagi
 
 #endif  // #if !defined(_IZANAGI_NETWORK_RUDP_H__)

@@ -34,6 +34,14 @@ namespace sys
 
         // Get display's refresh rate.
         static IZ_UINT GetRefreshRate(void* nativeWndHandle);
+
+        static IZ_UINT GetYear();
+        static IZ_UINT GetMonth();
+        static IZ_UINT GetDay();
+        static IZ_UINT GetHour();
+        static IZ_UINT GetMinute();
+        static IZ_UINT GetSecond();
+        static IZ_UINT GetMilliseconds();
     };
 }   // namespace sys
 }   // namespace izanagi

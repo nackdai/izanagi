@@ -27,6 +27,7 @@
 #include "std/collection/StdQueue.h"
 #include "std/collection/StdSet.h"
 #include "std/collection/StdArray.h"
+#include "std/collection/StdOrderedList.h"
 
 #include "std/allocator/MemoryAllocator.h"
 #include "std/allocator/StandardMemoryAllocator.h"

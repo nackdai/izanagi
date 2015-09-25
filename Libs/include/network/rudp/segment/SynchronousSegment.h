@@ -37,13 +37,14 @@
  *
  */
 namespace izanagi {
-namespace network {
+namespace net {
     class SynchronousSegment : public Segment
     {
         friend class Segment;
+        friend class ReliableUDP;
 
     public:
-        virtual Type GetType() override
+        virtual Type GetType() const override
         {
             return Type::SYN;
         }
@@ -55,6 +56,10 @@ namespace network {
 
     protected:
         static const IZ_UINT SYN_HEADER_LEN = RUDP_HEADER_LEN + 16;
+
+        static Segment* Create(
+            IMemoryAllocator* allocator,
+            IZ_INT sequenceNumber, const RUDPParameter& parameter);
 
     public:
         inline IZ_UINT Version() const { return m_Version; }
@@ -141,7 +146,7 @@ namespace network {
 
         IZ_UINT m_MaxAutoReset;
     };
-}   // namespace network
+}   // namespace net
 }   // namespace izanagi
 
 #endif  // _IZANAGI_NETWORK_SYN_SEGMENT_H__

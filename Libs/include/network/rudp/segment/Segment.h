@@ -4,6 +4,7 @@
 #include "izDefs.h"
 #include "izStd.h"
 #include "izSystem.h"
+#include "izThreadModel.h"
 
 /*
 *  RUDP Header
@@ -21,8 +22,10 @@
 *
 */
 namespace izanagi {
-namespace network {
+namespace net {
     class Segment : public CPlacementNew {
+        friend class ReliableUDP;
+
     public:
         static const IZ_UINT RUDP_VERSION = 1;
         static const IZ_UINT RUDP_HEADER_LEN = 6;
@@ -41,7 +44,10 @@ namespace network {
         };
 
     protected:
-        Segment() {}
+        Segment()
+        {
+            m_listItem.Init(this);
+        }
 
         Segment(
             Type type,
@@ -50,8 +56,14 @@ namespace network {
 
         virtual ~Segment();
 
+    public:
+        IZ_BOOL operator>(const Segment& rhs)
+        {
+            return m_SequenceNumber > rhs.m_SequenceNumber;
+        }
+
     protected:
-        virtual Type GetType() = 0;
+        virtual Type GetType() const = 0;
 
         virtual const char* GetSegmentType() = 0;
 
@@ -77,12 +89,32 @@ namespace network {
 
         void ToString(IZ_CHAR* buf, IZ_UINT length);
 
+        IZ_BOOL IsResetSegment() const
+        {
+            return GetType() == Type::RST;
+        }
+
+        IZ_BOOL IsFinishSegment() const
+        {
+            return GetType() == Type::FIN;
+        }
+
+        IZ_BOOL IsDataSegment() const
+        {
+            return GetType() == Type::DAT;
+        }
+
     protected:
         // フラグチェック.
         static IZ_BOOL CheckFlag(IZ_UINT flag, Type type);
 
         // フラグチェック.
         IZ_BOOL CheckFlag(Type type);
+
+        threadmodel::ThreadSafeList<Segment>::Item* GetListItem()
+        {
+            return &m_listItem;
+        }
 
     protected:
         IMemoryAllocator* m_allocator;
@@ -96,8 +128,10 @@ namespace network {
         IZ_INT m_AckNumber{ -1 };
 
         IZ_UINT m_RetryCount{ 0 };
+
+        threadmodel::ThreadSafeList<Segment>::Item m_listItem;
     };
-}   // namespace network
+}   // namespace net
 }   // namespace izanagi
 
 #endif  // _IZANAGI_NETWORK_SEGMENT_H__

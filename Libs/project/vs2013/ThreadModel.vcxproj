@@ -255,6 +255,8 @@
     <ClInclude Include="..\..\include\threadmodel\ThreadModelTask.h" />
     <ClInclude Include="..\..\include\threadmodel\ThreadPool.h" />
     <ClInclude Include="..\..\include\threadmodel\ThreadSafeAllocator.h" />
+    <ClInclude Include="..\..\include\threadmodel\ThreadSafeList.h" />
+    <ClInclude Include="..\..\include\threadmodel\ThreadSafeOrderedList.h" />
     <ClInclude Include="..\..\include\threadmodel\TimerThread.h" />
   </ItemGroup>
   <ItemGroup>

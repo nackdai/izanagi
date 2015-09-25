@@ -35,6 +35,12 @@ namespace math
             return ret;
         }
 
+        static IZ_UINT32 GetNext(IZ_UINT32 maxValue)
+        {
+            IZ_UINT32 ret = GenRandUInt32();
+            return ret % maxValue;
+        }
+
         /** 乱数生成
          * arrayのアドレスは１６バイトアラインされていること！！
          */

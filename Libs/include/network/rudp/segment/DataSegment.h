@@ -19,13 +19,14 @@
 *
 */
 namespace izanagi {
-namespace network {
+namespace net {
     class DataSegment : public Segment
     {
         friend class Segment;
+        friend class ReliableUDP;
 
     public:
-        virtual Type GetType() override
+        virtual Type GetType() const override
         {
             return Type::DAT;
         }
@@ -54,11 +55,21 @@ namespace network {
             IMemoryAllocator* allocator,
             IZ_UINT8* bytes, IZ_UINT offset, IZ_UINT length) override;
 
+        IZ_UINT Size() const
+        {
+            return m_Size;
+        }
+
+        const void* Data() const
+        {
+            return m_Data;
+        }
+
     private:
         void* m_Data{ nullptr };
         IZ_UINT m_Size{ 0 };
     };
-}   // namespace network
+}   // namespace net
 }   // namespace izanagi
 
 #endif  // _IZANAGI_NETWORK_DATA_SEGMENT_H__

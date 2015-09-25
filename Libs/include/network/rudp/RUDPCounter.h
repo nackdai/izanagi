@@ -5,7 +5,7 @@
 #include "izDefs.h"
 
 namespace izanagi {
-namespace network {
+namespace net {
     class RUDPCounter
     {
     public:
@@ -59,7 +59,7 @@ namespace network {
         // 現在のシーケンス番号.
         std::atomic<IZ_INT> m_LastInSequenceNumber{ -1 };
     };
-}   // namespace network
+}   // namespace net
 }   // namespace izanagi
 
 #endif  // #if !defined(_IZANAGI_NETWORK_RUDP_COUNTER_H__)

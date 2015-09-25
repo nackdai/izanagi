@@ -19,13 +19,13 @@
 *
 */
 namespace izanagi {
-namespace network {
+namespace net {
     class ResetSegment : Segment
     {
         friend class Segment;
 
     public:
-        virtual Type GetType() override
+        virtual Type GetType() const override
         {
             return Type::RST;
         }
@@ -65,7 +65,7 @@ namespace network {
             IZ_ASSERT(CheckFlag(Type::RST));
         }
     };
-}   // namespace network
+}   // namespace net
 }   // namespace izanagi
 
 #endif  // _IZANAGI_NETWORK_RESET_SEGMENT_H__

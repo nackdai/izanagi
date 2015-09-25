@@ -89,5 +89,61 @@ namespace sys
         IZ_UINT ret = ::GetDeviceCaps(hdc, VREFRESH);
         return ret;
     }
+
+    IZ_UINT CEnvironment::GetYear()
+    {
+        SYSTEMTIME st;
+        GetSystemTime(&st);
+
+        return st.wYear;
+    }
+
+    IZ_UINT CEnvironment::GetMonth()
+    {
+        SYSTEMTIME st;
+        GetSystemTime(&st);
+
+        return st.wMonth;
+    }
+
+    IZ_UINT CEnvironment::GetDay()
+    {
+        SYSTEMTIME st;
+        GetSystemTime(&st);
+
+        return st.wDay;
+    }
+
+    IZ_UINT CEnvironment::GetHour()
+    {
+        SYSTEMTIME st;
+        GetSystemTime(&st);
+
+        return st.wHour;
+    }
+
+    IZ_UINT CEnvironment::GetMinute()
+    {
+        SYSTEMTIME st;
+        GetSystemTime(&st);
+
+        return st.wMinute;
+    }
+
+    IZ_UINT CEnvironment::GetSecond()
+    {
+        SYSTEMTIME st;
+        GetSystemTime(&st);
+
+        return st.wSecond;
+    }
+
+    IZ_UINT CEnvironment::GetMilliseconds()
+    {
+        SYSTEMTIME st;
+        GetSystemTime(&st);
+
+        return st.wMilliseconds;
+    }
 }   // namespace sys
 }   // namespace izanagi

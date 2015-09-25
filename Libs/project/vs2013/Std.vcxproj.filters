@@ -191,5 +191,8 @@
     <ClInclude Include="..\..\include\std\collection\StdArray.h">
       <Filter>include\collection</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\std\collection\StdOrderedList.h">
+      <Filter>include\collection</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

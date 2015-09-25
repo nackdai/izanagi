@@ -4,7 +4,7 @@
 #include "izDefs.h"
 
 namespace izanagi {
-namespace network {
+namespace net {
     class RUDPParameter
     {
     public:
@@ -123,7 +123,7 @@ namespace network {
 
         IZ_UINT m_MaxAutoReset{ MAX_AUTO_RESET };
     };
-}   // namespace network
+}   // namespace net
 }   // namespace izanagi
 
 #endif  // #if !defined(_IZANAGI_NETWORK_RUDP_PARAMETER_H__)

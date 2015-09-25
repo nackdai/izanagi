@@ -20,7 +20,7 @@
 *
 */
 namespace izanagi {
-namespace network {
+namespace net {
     ExtendAckSegment::ExtendAckSegment(
         IMemoryAllocator* allocator,
         IZ_INT sequenceNumber,
@@ -69,5 +69,5 @@ namespace network {
             m_AckNumbers.at(i) = bytes[offset + RUDP_HEADER_LEN + i];
         }
     }
-}   // namespace network
+}   // namespace net
 }   // namespace izanagi

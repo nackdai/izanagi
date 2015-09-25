@@ -23,11 +23,12 @@
 *
 */
 namespace izanagi {
-namespace network {
+namespace net {
     Segment::Segment(
         Segment::Type type,
         IZ_INT sequenceNumber,
         IZ_UINT hederSize)
+        : Segment()
     {
         m_Flags = (int)type;
         m_SequenceNumber = sequenceNumber;
@@ -160,5 +161,5 @@ namespace network {
             m_SequenceNumber,
             (GetAcknowledgedNumber() >= 0 ? "" + GetAcknowledgedNumber() : "N/A"));
     }
-}   // namespace network
+}   // namespace net
 }   // namespace izanagi

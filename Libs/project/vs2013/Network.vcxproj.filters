@@ -144,5 +144,8 @@
     <ClCompile Include="..\..\source\network\rudp\segment\SynchronousSegment.cpp">
       <Filter>source\rudp\segment</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\network\rudp\ReliableUDP.cpp">
+      <Filter>source\rudp</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
