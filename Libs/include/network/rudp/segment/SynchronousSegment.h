@@ -57,10 +57,6 @@ namespace net {
     protected:
         static const IZ_UINT SYN_HEADER_LEN = RUDP_HEADER_LEN + 16;
 
-        static Segment* Create(
-            IMemoryAllocator* allocator,
-            IZ_INT sequenceNumber, const RUDPParameter& parameter);
-
     public:
         inline IZ_UINT Version() const { return m_Version; }
 

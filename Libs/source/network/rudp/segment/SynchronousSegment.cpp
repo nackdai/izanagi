@@ -34,19 +34,6 @@
 */
 namespace izanagi {
 namespace net {
-    Segment* SynchronousSegment::Create(
-        IMemoryAllocator* allocator,
-        IZ_INT sequenceNumber, const RUDPParameter& parameter)
-    {
-        void* p = ALLOC(allocator, sizeof(SynchronousSegment));
-        IZ_ASSERT(p);
-
-        auto ret = new(p)SynchronousSegment(sequenceNumber, parameter);
-        ret->m_allocator = allocator;
-
-        return ret;
-    }
-
     SynchronousSegment::SynchronousSegment(
         IZ_INT sequenceNumber,
         IZ_UINT maxNumberOfOutStandingSegs,

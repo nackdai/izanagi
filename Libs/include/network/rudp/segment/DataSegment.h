@@ -37,6 +37,14 @@ namespace net {
         }
 
     private:
+        static Segment* Create(
+            IMemoryAllocator* allocator,
+            IZ_INT sequenceNumber,
+            IZ_INT acknowledgedNumber,
+            IZ_UINT8* bytes,
+            IZ_UINT offset,
+            IZ_UINT length);
+
         DataSegment() {}
 
         DataSegment(

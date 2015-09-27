@@ -17,6 +17,27 @@
 */
 namespace izanagi {
 namespace net {
+    Segment* DataSegment::Create(
+        IMemoryAllocator* allocator,
+        IZ_INT sequenceNumber,
+        IZ_INT acknowledgedNumber,
+        IZ_UINT8* bytes,
+        IZ_UINT offset,
+        IZ_UINT length)
+    {
+        void* p = ALLOC(allocator, sizeof(DataSegment));
+        IZ_ASSERT(p);
+
+        auto ret = new(p)DataSegment(
+            allocator,
+            sequenceNumber,
+            acknowledgedNumber,
+            bytes,
+            offset, length);
+
+        return ret;
+    }
+
     DataSegment::DataSegment(
         IMemoryAllocator* allocator,
         IZ_INT sequenceNumber,

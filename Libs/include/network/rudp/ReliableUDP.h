@@ -45,298 +45,30 @@ namespace net {
         // データ受信.
         IZ_INT Recieve(void* bytes, IZ_UINT size);
 
+        // データ送信.
+        IZ_BOOL Send(void* bytes, IZ_UINT offset, IZ_UINT length);
+
+        // 終了.
+        void Close();
+
+    private:
+        // セグメントの送信と返事待ちセグメントキューへの登録.
+        void SendAndQueueSegment(Segment* segment);
+
+        // セグメント送信.
+        void SendSegment(Segment* segment);
+
+        // セグメント受信.
+        Segment* RecieveSegment();
+
+        // セグメントを受信して、セグメントのタイプに応じて処理を振り分ける.
+        void ProcRecieve();
+
+        void CheckAndGetAck(Segment* segment);
+
+        // 受信した接続要求(SYNchronous)セグメントを処理する.
+        void HandleSYNSegment(SynchronousSegment* segment);
 #if 0
-        /// <summary>
-        /// データ送信.
-        /// </summary>
-        /// <param name="bytes"></param>
-        /// <param name="offset"></param>
-        /// <param name="length"></param>
-        /// <returns></returns>
-        public int Send(byte[] bytes, int offset, int length)
-        {
-            if (this.IsClosed)
-            {
-                return 0;
-            }
-
-            int totalBytes = 0;
-
-            while (totalBytes < length)
-            {
-                int sendBytes = Math.Min(
-                    this.Parameter.MaxSegmentSize - Segment.RUDP_HEADER_LEN,
-                    length - totalBytes);
-
-                if (sendBytes <= 0)
-                {
-                    throw new ArgumentOutOfRangeException();
-                }
-
-                // NOTE
-                // AcknowledgementSegment は受信したあとにハンドリングしないので
-                // AcknowledgementSegment からのシーケンス番号は更新されない.
-                // そのため、Listner - Client でシーケンス番号に齟齬が生じる.
-                // そこで、DataSegment や FinishSegment などを送るときにシーケンス番号をリセットするように
-                // LastInSequenceNumber ではなく、独自に管理しているシーケンス番号を使うようにする.
-
-                var segment = new DataSegment(
-                    this.Counter.NextSequenceNumber(),
-                    this.Counter.GetLastInSequenceNumber(),
-                    bytes,
-                    offset,
-                    length);
-
-                SendAndQueueSegment(segment);
-
-                totalBytes += length;
-            }
-
-            return totalBytes;
-        }
-
-        /// <summary>
-        /// 終了.
-        /// </summary>
-        public void Close()
-        {
-            if (this.IsClosed)
-            {
-                return;
-            }
-
-            switch ((State)this.CurState)
-            {
-                case State::SYN_SENT:
-                    // 接続待ちを起こす.
-                    this.ConnectEvent.Set();
-                    break;
-                case State::SYN_RECV:
-                case State::ESTABLISHED:
-                    // NOTE
-                    // AcknowledgementSegment は受信したあとにハンドリングしないので
-                    // AcknowledgementSegment からのシーケンス番号は更新されない.
-                    // そのため、Listner - Client でシーケンス番号に齟齬が生じる.
-                    // そこで、DataSegment や FinishSegment などを送るときにシーケンス番号をリセットするように
-                    // LastInSequenceNumber ではなく、独自に管理しているシーケンス番号を使うようにする.
-
-                    var segment = new FinishSegment(this.Counter.NextSequenceNumber());
-                    SendSegment(segment);
-
-                    // TODO
-                    // スレッドなどを止める.
-                    // 現状は recv がブロッキングされるので、スレッドを止められない.
-                    break;
-                default:
-                    break;
-            }
-
-            this.CurState::Store(State::CLOSED);
-
-            this.VacantUnAckedSentSegListWait.Set();
-            this.NotEmptyUnAckedSentSegListWait.Set();
-            this.InSequenceSegWait.Set();
-        }
-
-        /// <summary>
-        /// セグメントの送信と返事待ちセグメントキューへの登録.
-        /// </summary>
-        /// <param name="segment"></param>
-        private void SendAndQueueSegment(Segment segment)
-        {
-            while (this.UnAckedSentSegmentList.Count >= SendQueueSize
-                || this.Counter.GetOutStandingSegmentCount() >= this.Parameter.MaxNumberOfOutStandingSegs)
-            {
-                this.VacantUnAckedSentSegListWait.WaitOne();
-            }
-
-            // TODO
-            // UnAckedSentSegmentListの数で代用できないか？
-            // 返事待ちセグメントの数を増やす.
-            this.Counter.IncrementOutStandingSegmentCount();
-
-            // 返事のない送信済み（返事待ち）セグメントリストに登録.
-            this.UnAckedSentSegmentList.Add(segment);
-
-            // UnAckedSentSegmentListが空でなくなったので待機イベントに通知.
-            this.NotEmptyUnAckedSentSegListWait.Set();
-
-            // TODO
-            // 返事のない送信済み（返事待ち）セグメントについて再送するためのスレッドを起こす.
-
-            // セグメント送信.
-            SendSegment(segment);
-
-            // データセグメントの場合はリスナーにパケットを送信したことを通知する.
-            if (segment is DataSegment)
-            {
-                OnSentPacket();
-            }
-        }
-
-        /// <summary>
-        /// セグメント送信.
-        /// </summary>
-        /// <param name="segment"></param>
-        private void SendSegment(Segment segment)
-        {
-            // ACK(返事)の抱き合わせ設定
-            if (segment is DataSegment
-                || segment is ResetSegment
-                || segment is FinishSegment
-                || segment is NullSegment)
-            {
-                // 受信したけど返事をしていないセグメントの有無を確認.
-                if (this.UnAckedRecievedSegmentList.Count > 0)
-                {
-                    // 返事待ちセグメントが存在すれば、ACK（返事）フラグをセグメントに設定する.
-                    // どの番号に対応するACK（返事）なのかをセット.
-                    segment.SetAcknowledgedNumber(this.Counter.GetLastInSequenceNumber());
-                }
-            }
-
-            if (segment is DataSegment
-                || segment is ResetSegment
-                || segment is FinishSegment)
-            {
-                // TODO
-                // Reset null segment timer
-            }
-
-            // 送信.
-            OnSendSegment(segment);
-        }
-
-        /// <summary>
-        /// セグメント受信.
-        /// </summary>
-        /// <returns></returns>
-        private Segment RecieveSegment()
-        {
-            Segment segment;
-
-            if ((segment = OnRecieveSegment()) != null)
-            {
-                if (segment is DataSegment
-                    || segment is NullSegment
-                    || segment is ResetSegment
-                    || segment is FinishSegment
-                    || segment is SynchronousSegment)
-                {
-                    // 確認応答を送っていないセグメントリストに登録.
-                    this.UnAckedRecievedSegmentList.Add(segment);
-                }
-
-                // TODO
-                // 受信したということは接続がまだ生きているので殺されないようにリセットする.
-            }
-
-            return segment;
-        }
-
-        /// <summary>
-        /// セグメントを受信して、セグメントのタイプに応じて処理を振り分ける.
-        /// </summary>
-        private void ProcRecieve()
-        {
-            while (!this.WillClose)
-            {
-                var segment = RecieveSegment();
-
-                if (segment != null)
-                {
-                    if (segment is SynchronousSegment)
-                    {
-                        HandleSYNSegment(segment as SynchronousSegment);
-                    }
-                    else if (segment is ExtendAckSegment)
-                    {
-                        HandleEAKSegment(segment as ExtendAckSegment);
-                    }
-                    else if (segment is AcknowledgementSegment)
-                    {
-                        // なにもしない.
-                    }
-                    else
-                    {
-                        HandleSegment(segment);
-                    }
-
-                    CheckAndGetAck(segment);
-                }
-
-                Thread.Yield();
-            }
-        }
-
-        private void CheckAndGetAck(Segment segment)
-        {
-            int ackNumber = segment.GetAcknowledgedNumber();
-
-            if (ackNumber < 0)
-            {
-                return;
-            }
-
-            if (this.CurState == State::SYN_RECV)
-            {
-                OpenConnection();
-
-                // 接続要求を受信した返事に対する返事なので、接続を開く.
-                this.CurState::Store(State::ESTABLISHED);
-            }
-
-            this.UnAckedSentSegmentList.ForeachWithRemoving(
-                (Segment s) =>
-                {
-                    return (CompareSequenceNumbers(s.SequenceNumber, ackNumber) <= 0);
-                });
-
-            this.VacantUnAckedSentSegListWait.Set();
-        }
-
-        /// <summary>
-        /// 受信した接続要求(SYNchronous)セグメントを処理する.
-        /// </summary>
-        /// <param name="segment"></param>
-        private void HandleSYNSegment(SynchronousSegment segment)
-        {
-            switch (this.CurState::Load())
-            {
-                case State::NONE:  // 未接続.
-                    this.Counter.SetLastInSequenceNumber(segment.SequenceNumber);
-
-                    this.CurState::Store(State::SYN_RECV);
-
-                    // NOTE
-                    // State::NONE 状態で SynchronousSegment を受信するのは Listener なので
-                    // SynchronousSegment を送信し返すタイミングでシーケンス番号を新規設定する？
-                    // でも、もらった番号をそのまま使えばいい気もするが・・・
-
-                    var rand = new Random(Environment.TickCount);
-                    var syncSegment = new SynchronousSegment(
-                        this.Counter.SetSequenceNumber(rand.Next(MAX_SEQUENCE_NUMBER)),
-                        this.Parameter == null ? new Parameter() : this.Parameter);
-
-                    syncSegment.SetAcknowledgedNumber(segment.SequenceNumber);
-
-                    SendAndQueueSegment(syncSegment);
-
-                    this.UnAckedRecievedSegmentList.Remove(segment);
-
-                    break;
-                case State::SYN_SENT:    // 接続要求送信済み.
-                    this.Counter.SetLastInSequenceNumber(segment.SequenceNumber);
-
-                    // 返事を返す.
-                    SendAcknowledgement(segment);
-
-                    // 接続確立.
-                    OpenConnection();
-
-                    break;
-            }
-        }
 
         private void HandleEAKSegment(ExtendAckSegment segment)
         {
@@ -1010,36 +742,24 @@ namespace net {
         // UnAckedSentSegmentListに余裕ができるのを待つ.
         sys::CEvent m_VacantUnAckedSentSegListWait;
 
-        /// <summary>
-        /// InSequenceSegmentListにAddされるのを待つ.
-        /// </summary>
+        // InSequenceSegmentListにAddされるのを待つ.
         sys::CEvent m_InSequenceSegWait;
 
-        /// <summary>
-        /// UnAckedSentSegmentListが空でなくなるのを待つ.
-        /// </summary>
+        // UnAckedSentSegmentListが空でなくなるのを待つ.
         sys::CEvent m_NotEmptyUnAckedSentSegListWait;
 
-        /// <summary>
-        /// 送信したが応答が来ていないセグメントのリスト.
-        /// </summary>
-        CStdList<Segment> UnAckedSentSegmentList;
+        // 送信したが応答が来ていないセグメントのリスト.
+        threadmodel::ThreadSafeList<Segment> m_UnAckedSentSegmentList;
 
         std::mutex m_RecieveQueueLocker;
 
-        /// <summary>
-        /// シーケンス内のセグメントのリスト.
-        /// </summary>
+        // シーケンス内のセグメントのリスト.
         threadmodel::ThreadSafeList<Segment> m_InSequenceSegmentList;
 
-        /// <summary>
-        /// シーケンス外のセグメントのリスト.
-        /// </summary>
+        // シーケンス外のセグメントのリスト.
         threadmodel::ThreadSafeOrderedList<Segment> m_OutSequenceSegmentList;
 
-        /// <summary>
-        /// 受信したが確認応答を送っていないセグメントのリスト.
-        /// </summary>
+        // 受信したが確認応答を送っていないセグメントのリスト.
         threadmodel::ThreadSafeList<Segment> m_UnAckedRecievedSegmentList;
     };
 }   // namespace net

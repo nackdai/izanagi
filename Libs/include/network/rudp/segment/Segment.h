@@ -44,6 +44,22 @@ namespace net {
         };
 
     protected:
+        template <typename TYPE, typename ...ARGS>
+        static Segment* Create(
+            IMemoryAllocator* allocator,
+            ARGS&& ... args)
+        {
+            void* p = ALLOC(allocator, sizeof(TYPE));
+            IZ_ASSERT(p);
+
+            auto ret = new(p)TYPE(std::forward<ARGS>(args)...);
+            ret->m_allocator = allocator;
+
+            return ret;
+        }
+
+        static void Delete(Segment* segment);
+
         Segment()
         {
             m_listItem.Init(this);
@@ -102,6 +118,31 @@ namespace net {
         IZ_BOOL IsDataSegment() const
         {
             return GetType() == Type::DAT;
+        }
+
+        IZ_BOOL IsNullSegment() const
+        {
+            return GetType() == Type::NUL;
+        }
+
+        IZ_BOOL IsSynchronousSegment() const
+        {
+            return GetType() == Type::SYN;
+        }
+
+        IZ_BOOL IsExtendAckSegment() const
+        {
+            return GetType() == Type::EAK;
+        }
+        
+        IZ_BOOL IsAcknowledgementSegment() const
+        {
+            return GetType() == Type::ACK;
+        }
+
+        IZ_INT SequenceNumber() const
+        {
+            return m_SequenceNumber;
         }
 
     protected:

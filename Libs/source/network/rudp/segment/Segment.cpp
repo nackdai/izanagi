@@ -24,6 +24,14 @@
 */
 namespace izanagi {
 namespace net {
+    void Segment::Delete(Segment* segment)
+    {
+        auto allocator = segment->m_allocator;
+
+        delete segment;
+        FREE(allocator, segment);
+    }
+
     Segment::Segment(
         Segment::Type type,
         IZ_INT sequenceNumber,
@@ -39,7 +47,6 @@ namespace net {
 
     Segment::~Segment()
     {
-        FREE(m_allocator, this);
     }
 
     // 応答番号をセット.

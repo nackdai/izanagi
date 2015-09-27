@@ -1,6 +1,8 @@
 ﻿#include "network/rudp/ReliableUDP.h"
 #include "network/rudp/segment/SynchronousSegment.h"
 #include "network/rudp/segment/DataSegment.h"
+#include "network/rudp/segment/FinishSegment.h"
+#include "network/rudp/segment/ExtendAckSegment.h"
 #include "network/NetworkUDP_libuv.h"
 #include "network/IPv4Endpoint.h"
 
@@ -34,7 +36,7 @@ namespace net {
         m_CurState = State::SYN_SENT;
 
         math::CMathRand::Init(sys::CEnvironment::GetMilliseconds());
-        auto segment = SynchronousSegment::Create(
+        auto segment = Segment::Create<SynchronousSegment>(
             m_allocator,
             math::CMathRand::GetNext(MAX_SEQUENCE_NUMBER),
             m_Parameter);
@@ -122,33 +124,23 @@ namespace net {
         return totalSize;
     }
 
-#if 0
-    /// <summary>
-    /// データ送信.
-    /// </summary>
-    /// <param name="bytes"></param>
-    /// <param name="offset"></param>
-    /// <param name="length"></param>
-    /// <returns></returns>
-    public int Send(byte[] bytes, int offset, int length)
+    // データ送信.
+    IZ_BOOL ReliableUDP::Send(void* bytes, IZ_UINT offset, IZ_UINT length)
     {
-        if (m_IsClosed)
+        if (IsClosed())
         {
-            return 0;
+            return IZ_FALSE;
         }
 
-        int totalBytes = 0;
+        IZ_INT totalBytes = 0;
 
         while (totalBytes < length)
         {
-            int sendBytes = Math.Min(
-                m_Parameter.MaxSegmentSize - Segment.RUDP_HEADER_LEN,
+            IZ_INT sendBytes = IZ_MIN(
+                m_Parameter.MaxSegmentSize() - Segment::RUDP_HEADER_LEN,
                 length - totalBytes);
 
-            if (sendBytes <= 0)
-            {
-                throw new ArgumentOutOfRangeException();
-            }
+            IZ_ASSERT(sendBytes > 0);
 
             // NOTE
             // AcknowledgementSegment は受信したあとにハンドリングしないので
@@ -157,10 +149,11 @@ namespace net {
             // そこで、DataSegment や FinishSegment などを送るときにシーケンス番号をリセットするように
             // LastInSequenceNumber ではなく、独自に管理しているシーケンス番号を使うようにする.
 
-            var segment = new DataSegment(
+            auto segment = DataSegment::Create(
+                m_allocator,
                 m_Counter.NextSequenceNumber(),
                 m_Counter.GetLastInSequenceNumber(),
-                bytes,
+                (IZ_UINT8*)bytes,
                 offset,
                 length);
 
@@ -169,20 +162,18 @@ namespace net {
             totalBytes += length;
         }
 
-        return totalBytes;
+        return IZ_TRUE;
     }
 
-    /// <summary>
-    /// 終了.
-    /// </summary>
-    public void Close()
+    // 終了.
+    void ReliableUDP::Close()
     {
-        if (m_IsClosed)
+        if (IsClosed())
         {
             return;
         }
 
-        switch ((State)m_CurState)
+        switch (m_CurState)
         {
             case State::SYN_SENT:
                 // 接続待ちを起こす.
@@ -196,10 +187,13 @@ namespace net {
                 // そのため、Listner - Client でシーケンス番号に齟齬が生じる.
                 // そこで、DataSegment や FinishSegment などを送るときにシーケンス番号をリセットするように
                 // LastInSequenceNumber ではなく、独自に管理しているシーケンス番号を使うようにする.
+            {
+                auto segment = Segment::Create<FinishSegment>(
+                    m_allocator,
+                    m_Counter.NextSequenceNumber());
 
-                var segment = new FinishSegment(m_Counter.NextSequenceNumber());
                 SendSegment(segment);
-
+            }
                 // TODO
                 // スレッドなどを止める.
                 // 現状は recv がブロッキングされるので、スレッドを止められない.
@@ -208,23 +202,20 @@ namespace net {
                 break;
         }
 
-        m_CurState::Store(State::CLOSED);
+        m_CurState = State::CLOSED;
 
         m_VacantUnAckedSentSegListWait.Set();
         m_NotEmptyUnAckedSentSegListWait.Set();
         m_InSequenceSegWait.Set();
     }
 
-    /// <summary>
-    /// セグメントの送信と返事待ちセグメントキューへの登録.
-    /// </summary>
-    /// <param name="segment"></param>
-    private void SendAndQueueSegment(Segment segment)
+    // セグメントの送信と返事待ちセグメントキューへの登録.
+    void ReliableUDP::SendAndQueueSegment(Segment* segment)
     {
-        while (m_UnAckedSentSegmentList.Count >= SendQueueSize
+        while (m_UnAckedSentSegmentList.GetItemNum() >= SendQueueSize
             || m_Counter.GetOutStandingSegmentCount() >= m_Parameter.MaxNumberOfOutStandingSegs)
         {
-            m_VacantUnAckedSentSegListWait.WaitOne();
+            m_VacantUnAckedSentSegListWait.Wait();
         }
 
         // TODO
@@ -245,36 +236,33 @@ namespace net {
         SendSegment(segment);
 
         // データセグメントの場合はリスナーにパケットを送信したことを通知する.
-        if (segment is DataSegment)
+        if (segment->IsDataSegment())
         {
             OnSentPacket();
         }
     }
 
-    /// <summary>
-    /// セグメント送信.
-    /// </summary>
-    /// <param name="segment"></param>
-    private void SendSegment(Segment segment)
+    // セグメント送信.
+    void ReliableUDP::SendSegment(Segment* segment)
     {
         // ACK(返事)の抱き合わせ設定
-        if (segment is DataSegment
-            || segment is ResetSegment
-            || segment is FinishSegment
-            || segment is NullSegment)
+        if (segment->IsDataSegment()
+            || segment->IsResetSegment()
+            || segment->IsFinishSegment()
+            || segment->IsNullSegment())
         {
             // 受信したけど返事をしていないセグメントの有無を確認.
-            if (m_UnAckedRecievedSegmentList.Count > 0)
+            if (m_UnAckedRecievedSegmentList.GetItemNum() > 0)
             {
                 // 返事待ちセグメントが存在すれば、ACK（返事）フラグをセグメントに設定する.
                 // どの番号に対応するACK（返事）なのかをセット.
-                segment.SetAcknowledgedNumber(m_Counter.GetLastInSequenceNumber());
+                segment->SetAcknowledgedNumber(m_Counter.GetLastInSequenceNumber());
             }
         }
 
-        if (segment is DataSegment
-            || segment is ResetSegment
-            || segment is FinishSegment)
+        if (segment->IsDataSegment()
+            || segment->IsResetSegment()
+            || segment->IsFinishSegment())
         {
             // TODO
             // Reset null segment timer
@@ -284,24 +272,21 @@ namespace net {
         OnSendSegment(segment);
     }
 
-    /// <summary>
-    /// セグメント受信.
-    /// </summary>
-    /// <returns></returns>
-    private Segment RecieveSegment()
+    // セグメント受信.
+    Segment* ReliableUDP::RecieveSegment()
     {
-        Segment segment;
+        Segment* segment = nullptr;
 
-        if ((segment = OnRecieveSegment()) != null)
+        if ((segment = OnRecieveSegment()) != nullptr)
         {
-            if (segment is DataSegment
-                || segment is NullSegment
-                || segment is ResetSegment
-                || segment is FinishSegment
-                || segment is SynchronousSegment)
+            if (segment->IsDataSegment()
+                || segment->IsNullSegment()
+                || segment->IsResetSegment()
+                || segment->IsFinishSegment()
+                || segment->IsSynchronousSegment())
             {
                 // 確認応答を送っていないセグメントリストに登録.
-                m_UnAckedRecievedSegmentList.Add(segment);
+                m_UnAckedRecievedSegmentList.AddTail(segment->GetListItem());
             }
 
             // TODO
@@ -311,26 +296,24 @@ namespace net {
         return segment;
     }
 
-    /// <summary>
-    /// セグメントを受信して、セグメントのタイプに応じて処理を振り分ける.
-    /// </summary>
-    private void ProcRecieve()
+    // セグメントを受信して、セグメントのタイプに応じて処理を振り分ける.
+    void ReliableUDP::ProcRecieve()
     {
-        while (!m_WillClose)
+        while (!WillClose())
         {
-            var segment = RecieveSegment();
+            auto segment = RecieveSegment();
 
-            if (segment != null)
+            if (segment)
             {
-                if (segment is SynchronousSegment)
+                if (segment->IsSynchronousSegment())
                 {
-                    HandleSYNSegment(segment as SynchronousSegment);
+                    HandleSYNSegment((SynchronousSegment*)segment);
                 }
-                else if (segment is ExtendAckSegment)
+                else if (segment->IsExtendAckSegment())
                 {
-                    HandleEAKSegment(segment as ExtendAckSegment);
+                    HandleEAKSegment((ExtendAckSegment*)segment);
                 }
-                else if (segment is AcknowledgementSegment)
+                else if (segment->IsAcknowledgementSegment())
                 {
                     // なにもしない.
                 }
@@ -342,13 +325,13 @@ namespace net {
                 CheckAndGetAck(segment);
             }
 
-            Thread.Yield();
+            sys::CThread::YieldThread();
         }
     }
 
-    private void CheckAndGetAck(Segment segment)
+    void ReliableUDP::CheckAndGetAck(Segment* segment)
     {
-        int ackNumber = segment.GetAcknowledgedNumber();
+        auto ackNumber = segment->GetAcknowledgedNumber();
 
         if (ackNumber < 0)
         {
@@ -360,7 +343,7 @@ namespace net {
             OpenConnection();
 
             // 接続要求を受信した返事に対する返事なので、接続を開く.
-            m_CurState::Store(State::ESTABLISHED);
+            m_CurState = State::ESTABLISHED;
         }
 
         m_UnAckedSentSegmentList.ForeachWithRemoving(
@@ -372,30 +355,28 @@ namespace net {
         m_VacantUnAckedSentSegListWait.Set();
     }
 
-    /// <summary>
-    /// 受信した接続要求(SYNchronous)セグメントを処理する.
-    /// </summary>
-    /// <param name="segment"></param>
-    private void HandleSYNSegment(SynchronousSegment segment)
+    // 受信した接続要求(SYNchronous)セグメントを処理する.
+    void ReliableUDP::HandleSYNSegment(SynchronousSegment* segment)
     {
-        switch (m_CurState::Load())
+        switch (m_CurState)
         {
             case State::NONE:  // 未接続.
-                m_Counter.SetLastInSequenceNumber(segment.SequenceNumber);
+                m_Counter.SetLastInSequenceNumber(segment->SequenceNumber());
 
-                m_CurState::Store(State::SYN_RECV);
+                m_CurState = State::SYN_RECV;
 
                 // NOTE
                 // State::NONE 状態で SynchronousSegment を受信するのは Listener なので
                 // SynchronousSegment を送信し返すタイミングでシーケンス番号を新規設定する？
                 // でも、もらった番号をそのまま使えばいい気もするが・・・
 
-                var rand = new Random(Environment.TickCount);
-                var syncSegment = new SynchronousSegment(
-                    m_Counter.SetSequenceNumber(rand.Next(MAX_SEQUENCE_NUMBER)),
-                    m_Parameter == null ? new Parameter() : m_Parameter);
+                math::CMathRand::Init(sys::CEnvironment::GetMilliseconds());
+                auto syncSegment = Segment::Create<SynchronousSegment>(
+                    m_allocator,
+                    m_Counter.SetSequenceNumber(math::CMathRand::GetNext(MAX_SEQUENCE_NUMBER)),
+                    m_Parameter);
 
-                syncSegment.SetAcknowledgedNumber(segment.SequenceNumber);
+                syncSegment->SetAcknowledgedNumber(segment->SequenceNumber());
 
                 SendAndQueueSegment(syncSegment);
 
@@ -403,7 +384,7 @@ namespace net {
 
                 break;
             case State::SYN_SENT:    // 接続要求送信済み.
-                m_Counter.SetLastInSequenceNumber(segment.SequenceNumber);
+                m_Counter.SetLastInSequenceNumber(segment->SequenceNumber());
 
                 // 返事を返す.
                 SendAcknowledgement(segment);
@@ -414,6 +395,7 @@ namespace net {
                 break;
         }
     }
+#if 0
 
     private void HandleEAKSegment(ExtendAckSegment segment)
     {
