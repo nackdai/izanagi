@@ -99,15 +99,15 @@ namespace net {
 
         SynchronousSegment(IZ_INT sequenceNumber, const RUDPParameter& parameter)
             : SynchronousSegment(sequenceNumber,
-            parameter.MaxNumberOfOutStandingSegs(),
-            parameter.MaxSegmentSize(),
-            parameter.RetransmissionTimeout(),
-            parameter.CumulativeAckTimeout(),
-            parameter.NullSegmentTimeout(),
-            parameter.MaxRetransmission(),
-            parameter.MaxCumulativeAck(),
-            parameter.MaxOutOfSequence(),
-            parameter.MaxAutoReset())
+            parameter.MaxNumberOfOutStandingSegs,
+            parameter.MaxSegmentSize,
+            parameter.RetransmissionTimeout,
+            parameter.CumulativeAckTimeout,
+            parameter.NullSegmentTimeout,
+            parameter.MaxRetransmission,
+            parameter.MaxCumulativeAck,
+            parameter.MaxOutOfSequence,
+            parameter.MaxAutoReset)
         {
         }
 

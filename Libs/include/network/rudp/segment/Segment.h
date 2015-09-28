@@ -4,7 +4,6 @@
 #include "izDefs.h"
 #include "izStd.h"
 #include "izSystem.h"
-#include "izThreadModel.h"
 
 /*
 *  RUDP Header
@@ -145,6 +144,17 @@ namespace net {
             return m_SequenceNumber;
         }
 
+        IZ_UINT RetryCount() const
+        {
+            return m_RetryCount;
+        }
+
+        IZ_UINT IncrementRetryCount()
+        {
+            m_RetryCount++;
+            return m_RetryCount;
+        }
+
     protected:
         // フラグチェック.
         static IZ_BOOL CheckFlag(IZ_UINT flag, Type type);
@@ -152,7 +162,7 @@ namespace net {
         // フラグチェック.
         IZ_BOOL CheckFlag(Type type);
 
-        threadmodel::ThreadSafeList<Segment>::Item* GetListItem()
+        CStdOrderedList<Segment>::Item* GetListItem()
         {
             return &m_listItem;
         }
@@ -164,13 +174,13 @@ namespace net {
 
         IZ_UINT m_HeaderLength{ 0 };
 
-        IZ_INT m_SequenceNumber{ -1 };
+        std::atomic<IZ_INT> m_SequenceNumber{ -1 };
 
-        IZ_INT m_AckNumber{ -1 };
+        std::atomic<IZ_INT> m_AckNumber{ -1 };
 
-        IZ_UINT m_RetryCount{ 0 };
+        std::atomic<IZ_UINT> m_RetryCount{ 0 };
 
-        threadmodel::ThreadSafeList<Segment>::Item m_listItem;
+        CStdOrderedList<Segment>::Item m_listItem;
     };
 }   // namespace net
 }   // namespace izanagi

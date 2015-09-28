@@ -3,6 +3,7 @@
 #include "network/rudp/segment/DataSegment.h"
 #include "network/rudp/segment/FinishSegment.h"
 #include "network/rudp/segment/ExtendAckSegment.h"
+#include "network/rudp/segment/AcknowledgementSegment.h"
 #include "network/NetworkUDP_libuv.h"
 #include "network/IPv4Endpoint.h"
 
@@ -20,6 +21,8 @@ namespace net {
 
         m_Udp = udp;
         m_Parameter = parameter;
+
+        IZ_ASSERT(m_Parameter.MaxSegmentSize > Segment::RUDP_HEADER_LEN);
 
         // セグメントの受信は別スレッドで受け取る.
         m_RecieveThread = std::thread(std::bind(&ReliableUDP::ProcRecieve, this));
@@ -44,6 +47,7 @@ namespace net {
         // 同期要求を送る.
         SendAndQueueSegment(segment);
 
+        // TODO
         // 接続が確立されるまで待つ
         m_ConnectEvent.Wait();
 
@@ -62,18 +66,16 @@ namespace net {
             return -1;
         }
 
-        if (m_InSequenceSegmentList.GetItemNum() == 0)
-        {
-            return 0;
-        }
-
         IZ_INT totalSize = 0;
 
-        sys::Lock locker(m_InSequenceSegmentList.GetLocker());
+        std::lock_guard<std::mutex> locker(m_RecieveQueueLocker);
         {
-            CStdList<Segment>* list = &m_InSequenceSegmentList;
+            if (m_InSequenceSegmentList.GetItemNum() == 0)
+            {
+                return 0;
+            }
 
-            auto item = list->GetTop();
+            auto item = m_InSequenceSegmentList.GetTop();
 
             while (item != IZ_NULL)
             {
@@ -137,7 +139,7 @@ namespace net {
         while (totalBytes < length)
         {
             IZ_INT sendBytes = IZ_MIN(
-                m_Parameter.MaxSegmentSize() - Segment::RUDP_HEADER_LEN,
+                m_Parameter.MaxSegmentSize - Segment::RUDP_HEADER_LEN,
                 length - totalBytes);
 
             IZ_ASSERT(sendBytes > 0);
@@ -212,7 +214,14 @@ namespace net {
     // セグメントの送信と返事待ちセグメントキューへの登録.
     void ReliableUDP::SendAndQueueSegment(Segment* segment)
     {
-        while (m_UnAckedSentSegmentList.GetItemNum() >= SendQueueSize
+        auto numUnAckedSentSegment = 0;
+
+        {
+            std::lock_guard<std::mutex> locker(m_UnAckedSentSegmentListLocker);
+            m_UnAckedSentSegmentList.GetItemNum();
+        }
+
+        while (numUnAckedSentSegment >= SendQueueSize
             || m_Counter.GetOutStandingSegmentCount() >= m_Parameter.MaxNumberOfOutStandingSegs)
         {
             m_VacantUnAckedSentSegListWait.Wait();
@@ -224,7 +233,10 @@ namespace net {
         m_Counter.IncrementOutStandingSegmentCount();
 
         // 返事のない送信済み（返事待ち）セグメントリストに登録.
-        m_UnAckedSentSegmentList.Add(segment);
+        {
+            std::lock_guard<std::mutex> locker(m_UnAckedSentSegmentListLocker);
+            m_UnAckedSentSegmentList.AddTail(segment->GetListItem());
+        }
 
         // UnAckedSentSegmentListが空でなくなったので待機イベントに通知.
         m_NotEmptyUnAckedSentSegListWait.Set();
@@ -251,8 +263,15 @@ namespace net {
             || segment->IsFinishSegment()
             || segment->IsNullSegment())
         {
+            auto numUnAckedRecievedSegment = 0;
+
+            {
+                std::lock_guard<std::mutex> locker(m_UnAckedRecievedSegmentListLocker);
+                numUnAckedRecievedSegment = m_UnAckedRecievedSegmentList.GetItemNum();
+            }
+
             // 受信したけど返事をしていないセグメントの有無を確認.
-            if (m_UnAckedRecievedSegmentList.GetItemNum() > 0)
+            if (numUnAckedRecievedSegment > 0)
             {
                 // 返事待ちセグメントが存在すれば、ACK（返事）フラグをセグメントに設定する.
                 // どの番号に対応するACK（返事）なのかをセット.
@@ -286,6 +305,7 @@ namespace net {
                 || segment->IsSynchronousSegment())
             {
                 // 確認応答を送っていないセグメントリストに登録.
+                std::lock_guard<std::mutex> locker(m_UnAckedRecievedSegmentListLocker);
                 m_UnAckedRecievedSegmentList.AddTail(segment->GetListItem());
             }
 
@@ -346,11 +366,22 @@ namespace net {
             m_CurState = State::ESTABLISHED;
         }
 
-        m_UnAckedSentSegmentList.ForeachWithRemoving(
-            (Segment s) =>
-            {
-                return (CompareSequenceNumbers(s.SequenceNumber, ackNumber) <= 0);
-            });
+        std::lock_guard<std::mutex> locker(m_UnAckedSentSegmentListLocker);
+        {
+            auto item = m_UnAckedSentSegmentList.GetTop();
+
+            while (item != IZ_NULL) {
+                auto s = item->GetData();
+                auto next = item->GetNext();
+
+                if ((CompareSequenceNumbers(s->SequenceNumber(), ackNumber) <= 0))
+                {
+                    item->Leave();
+                }
+
+                item = next;
+            }
+        }
 
         m_VacantUnAckedSentSegListWait.Set();
     }
@@ -361,6 +392,7 @@ namespace net {
         switch (m_CurState)
         {
             case State::NONE:  // 未接続.
+            {
                 m_Counter.SetLastInSequenceNumber(segment->SequenceNumber());
 
                 m_CurState = State::SYN_RECV;
@@ -381,67 +413,89 @@ namespace net {
                 SendAndQueueSegment(syncSegment);
 
                 m_UnAckedRecievedSegmentList.Remove(segment);
-
+            }
                 break;
             case State::SYN_SENT:    // 接続要求送信済み.
+            {
                 m_Counter.SetLastInSequenceNumber(segment->SequenceNumber());
+
+                m_Parameter.MaxSegmentSize = segment->MaxSegmentSize();
+                m_Parameter.MaxNumberOfOutStandingSegs = segment->MaxNumberOfOutStandingSegs();
+                m_Parameter.MaxRetransmission = segment->MaxRetransmission();
+                m_Parameter.MaxCumulativeAck = segment->MaxCumulativeAck();
+                m_Parameter.MaxOutOfSequence = segment->MaxOutOfSequence();
+                m_Parameter.MaxAutoReset = segment->MaxAutoReset();
+                m_Parameter.NullSegmentTimeout = segment->NullSegmentTimeout();
+                m_Parameter.RetransmissionTimeout = segment->RetransmissionTimeout();
+                m_Parameter.CumulativeAckTimeout = segment->CumulativeAckTimeout();
+
+                IZ_ASSERT(m_Parameter.MaxSegmentSize > Segment::RUDP_HEADER_LEN);
 
                 // 返事を返す.
                 SendAcknowledgement(segment);
 
                 // 接続確立.
                 OpenConnection();
-
+            }
                 break;
         }
+
+        if (!m_isAllocated) {
+            if (m_recvData == nullptr) {
+                m_recvData = ALLOC(m_allocator, m_Parameter.MaxSegmentSize);
+            }
+            if (m_sendData == nullptr) {
+                m_sendData = ALLOC(m_allocator, m_Parameter.MaxSegmentSize);
+            }
+            m_isAllocated = IZ_TRUE;
+        }
     }
-#if 0
 
-    private void HandleEAKSegment(ExtendAckSegment segment)
+    void ReliableUDP::HandleEAKSegment(ExtendAckSegment* segment)
     {
-        var ackNumbers = segment.AckNumbers;
+        auto& ackNumbers = segment->AckNumbers();
 
-        int lastInSequence = segment.GetAcknowledgedNumber();
-        int lastOutSequence = ackNumbers[ackNumbers.Length - 1];
+        int lastInSequence = segment->GetAcknowledgedNumber();
+        int lastOutSequence = ackNumbers.at(ackNumbers.getNum() - 1);
 
         // 送信したけど応答がないセグメントリストに対象となるものがないか調べる.
-        lock (m_UnAckedSentSegmentList)
+        std::lock_guard<std::mutex> locker(m_UnAckedSentSegmentListLocker);
         {
-            List<Segment> willRemoveList = new List<Segment>();
+            auto item = m_UnAckedSentSegmentList.GetTop();
 
-            for (int i = 0; i < m_UnAckedSentSegmentList.Count; i++)
+            while (item != IZ_NULL)
             {
-                var s = m_UnAckedSentSegmentList[i];
+                auto s = item->GetData();
+                auto next = item->GetNext();
 
-                if (CompareSequenceNumbers(s.SequenceNumber, lastInSequence) <= 0)
+                if (CompareSequenceNumbers(s->SequenceNumber(), lastInSequence) <= 0)
                 {
                     // シーケンス内に入っているので、どこかで応答を受けたはず.
-                    willRemoveList.Add(s);
+                    item->Leave();
+                    item = next;
                     continue;
                 }
 
-                for (int n = 0; n < ackNumbers.Length; n++)
+                for (int n = 0; n < ackNumbers.getNum(); n++)
                 {
-                    if (CompareSequenceNumbers(s.SequenceNumber, ackNumbers[n]) == 0)
+                    auto ack = ackNumbers.at(n);
+
+                    if (CompareSequenceNumbers(s->SequenceNumber(), ack) == 0)
                     {
-                        willRemoveList.Add(s);
+                        item->Leave();
+                        item = next;
                         break;
                     }
                 }
             }
 
-            foreach (var s in willRemoveList)
-            {
-                m_UnAckedSentSegmentList.Remove(s);
-            }
-
             // 残ったのものは再送する.
-            for (int i = 0; i < m_UnAckedSentSegmentList.Count; i++)
+            for (IZ_INT i = 0; i < m_UnAckedSentSegmentList.GetItemNum(); i++)
             {
-                var s = m_UnAckedSentSegmentList[i];
+                auto s = m_UnAckedSentSegmentList.GetAt(i)->GetData();
 
-                if (CompareSequenceNumbers(lastInSequence, s.SequenceNumber) < 0
-                    && CompareSequenceNumbers(lastOutSequence, s.SequenceNumber) > 0)
+                if (CompareSequenceNumbers(lastInSequence, s->SequenceNumber()) < 0
+                    && CompareSequenceNumbers(lastOutSequence, s->SequenceNumber()) > 0)
                 {
                     // 再送.
                     RetransmitSegment(s);
@@ -450,22 +504,19 @@ namespace net {
         }
     }
 
-    /// <summary>
-    /// 受信したセグメントを処理.
-    /// </summary>
-    /// <param name="segment"></param>
-    private void HandleSegment(Segment segment)
+    // 受信したセグメントを処理.
+    void ReliableUDP::HandleSegment(Segment* segment)
     {
         // リセットセグメントがきたので通信をリセットする.
-        if (segment is ResetSegment)
+        if (segment->IsResetSegment())
         {
             // TODO
         }
 
         // これ以上なにも送られてこないことが通知されてきた.
-        if (segment is FinishSegment)
+        if (segment->IsFinishSegment())
         {
-            switch((State)m_CurState)
+            switch(m_CurState)
             {
                 case State::SYN_SENT:
                     // 同期セグメント送信状態の場合は、返事待ちしているところ（connect）を解除して先に進むようにする.
@@ -475,47 +526,47 @@ namespace net {
                     // すでに終了しているので何もしない.
                     break;
                 default:
-                    m_CurState::Store(State::WILL_CLOSE);
+                    m_CurState = State::WILL_CLOSE;
                     break;
             }
         }
 
         // シーケンス番号が正しいかどうか.
-        bool isInSequence = false;
+        IZ_BOOL isInSequence = IZ_FALSE;
 
-        lock (m_RecieveQueueLocker)
+        std::lock_guard<std::mutex> locker(m_RecieveQueueLocker);
         {
             // 期待するシーケンス番号.
-            var nextSeqNumber = NextSequenceNumber(Counter.GetLastInSequenceNumber());
+            auto nextSeqNumber = NextSequenceNumber(m_Counter.GetLastInSequenceNumber());
 
-            if (CompareSequenceNumbers(segment.SequenceNumber, Counter.GetLastInSequenceNumber()) >= 0)
+            if (CompareSequenceNumbers(segment->SequenceNumber(), m_Counter.GetLastInSequenceNumber()) >= 0)
             {
                 // 送信したものと同じもの or 番号が小さいものがきた(すでに届いているものがきた)ので無視する.
             }
-            else if (CompareSequenceNumbers(segment.SequenceNumber, nextSeqNumber) == 0)
+            else if (CompareSequenceNumbers(segment->SequenceNumber(), nextSeqNumber) == 0)
             {
                 // 期待する番号がきた.
-                isInSequence = true;
+                isInSequence = IZ_TRUE;
 
-                if (m_InSequenceSegmentList.Count + m_OutSequenceSegmentList.Count < MaxRecvListSize)
+                if (m_InSequenceSegmentList.GetItemNum() + m_OutSequenceSegmentList.GetItemNum() < MaxRecvListSize)
                 {
                     // キューに余裕がある.
 
                     // シーケンス番号を更新.
-                    m_Counter.SetLastInSequenceNumber(segment.SequenceNumber);
+                    m_Counter.SetLastInSequenceNumber(segment->SequenceNumber());
 
-                    if (segment is DataSegment
-                        || segment is ResetSegment
-                        || segment is FinishSegment)
+                    if (segment->IsDataSegment()
+                        || segment->IsResetSegment()
+                        || segment->IsFinishSegment())
                     {
                         // read で読み込むセグメントはリストに登録.
-                        m_InSequenceSegmentList.Add(segment);
-                        InSequenceSegWait.Set();
+                        m_InSequenceSegmentList.AddTail(segment->GetListItem());
+                        m_InSequenceSegWait.Set();
                     }
 
-#if false
+#if 0
                     // 順番通りにデータが来たことを通知.
-                    if (segment is DataSegment)
+                    if (segment->IsDataSegment)
                     {
                         OnRecivedPacketInOrder(segment as DataSegment);
                     }
@@ -533,18 +584,18 @@ namespace net {
             {
                 // シーケンス番号が順番がずれた（パケット順序がおかしくなった）ので、out-of-sequenceリストに登録する.
 
-                if (m_InSequenceSegmentList.Count + m_OutSequenceSegmentList.Count < MaxRecvListSize)
+                if (m_InSequenceSegmentList.GetItemNum() + m_OutSequenceSegmentList.GetItemNum() < MaxRecvListSize)
                 {
-                    bool added = false;
+                    IZ_BOOL added = IZ_FALSE;
 
-                    for (int i = 0; i < m_OutSequenceSegmentList.Count; i++)
+                    for (IZ_INT i = 0; i < m_OutSequenceSegmentList.GetItemNum(); i++)
                     {
-                        var s = m_OutSequenceSegmentList.Values[i];
+                        auto s = m_OutSequenceSegmentList.GetAt(i)->GetData();
 
-                        if (CompareSequenceNumbers(segment.SequenceNumber, s.SequenceNumber) == 0)
+                        if (CompareSequenceNumbers(segment->SequenceNumber(), s->SequenceNumber()) == 0)
                         {
                             // 登録済み.
-                            added = true;
+                            added = IZ_TRUE;
                             break;
                         }
                     }
@@ -552,12 +603,12 @@ namespace net {
                     if (!added)
                     {
                         // 未登録なので、登録する.
-                        m_OutSequenceSegmentList.Add(segment.SequenceNumber, segment);
+                        m_OutSequenceSegmentList.Add(segment->GetListItem());
                     }
 
-#if false
+#if 0
                     // 順序がずれたパケットを受けたことを通知する.
-                    if (segment is DataSegment)
+                    if (segment->IsDataSegment)
                     {
                         OnRecivedPacketOutOfOrder(segment as DataSegment);
                     }
@@ -565,21 +616,20 @@ namespace net {
                 }
             }
                 
-            if (isInSequence && (segment is DataSegment
-                                || segment is NullSegment
-                                || segment is FinishSegment)
-                )
+            if (isInSequence && (segment->IsDataSegment()
+                || segment->IsNullSegment()
+                || segment->IsFinishSegment()))
             {
                 // 受信した応答を返す.
                 SendAcknowledgement(segment);
             }
-            else if (m_OutSequenceSegmentList.Count > m_Parameter.MaxOutOfSequence)
+            else if (m_OutSequenceSegmentList.GetItemNum() > m_Parameter.MaxOutOfSequence)
             //else if (m_OutSequenceSegmentList.Count > 0)
             {
                 // out-of-sequenceセグメントの数が許容最大値を超えた.
                 SendExtendAcknowledgement();
             }
-            else if (m_UnAckedRecievedSegmentList.Count > m_Parameter.MaxCumulativeAck)
+            else if (m_UnAckedRecievedSegmentList.GetItemNum() > m_Parameter.MaxCumulativeAck)
             {
                 // 受信したけど確認応答を送っていないセグメントの数が許容最大値を超えた.
                 SendSingleAcknowledgement(segment);
@@ -592,64 +642,54 @@ namespace net {
         }
     }
 
-    /// <summary>
-    /// シーケンス番号をチェックして、out-of-sequenceリストから正しい順序のものを InSequenceSegmentQueue に移す.
-    /// </summary>
-    private void UpdateOutSequeceQueue()
+    // シーケンス番号をチェックして、out-of-sequenceリストから正しい順序のものを InSequenceSegmentQueue に移す.
+    void ReliableUDP::UpdateOutSequeceQueue()
     {
-        lock(m_RecieveQueueLocker)
+        // NOTE
+        // m_RecieveQueueLockerがロックされている内部でよばないといけない
+
+        auto item = m_OutSequenceSegmentList.GetTop();
+
+        while (item != IZ_NULL)
         {
-            // 削除リスト.
-            List<int> willRemoveList = new List<int>();
+            auto segment = item->GetData();
+            auto next = item->GetNext();
 
-            for (int i = 0; i < m_OutSequenceSegmentList.Count; i++)
+            // 期待するシーケンス番号.
+            auto nextSequenceNumber = NextSequenceNumber(m_Counter.GetLastInSequenceNumber());
+
+            // シーケンス番号が更新されたことで、正しい番号になる可能性があるものを探す.
+            if (CompareSequenceNumbers(segment->SequenceNumber(), nextSequenceNumber) == 0)
             {
-                var segment = m_OutSequenceSegmentList.Values[i];
+                // シーケンス番号を更新
+                m_Counter.SetLastInSequenceNumber(segment->SequenceNumber());
 
-                // 期待するシーケンス番号.
-                var nextSequenceNumber = NextSequenceNumber(m_Counter.GetLastInSequenceNumber());
-
-                // シーケンス番号が更新されたことで、正しい番号になる可能性があるものを探す.
-                if (CompareSequenceNumbers(segment.SequenceNumber, nextSequenceNumber) == 0)
+                if (segment->IsDataSegment()
+                    || segment->IsResetSegment()
+                    || segment->IsFinishSegment())
                 {
-                    // シーケンス番号を更新
-                    m_Counter.SetLastInSequenceNumber(segment.SequenceNumber);
+                    // シーケンス処理内セグメントリストに登録.
+                    m_InSequenceSegmentList.AddTail(segment->GetListItem());
 
-                    if (segment is DataSegment
-                        || segment is ResetSegment
-                        || segment is FinishSegment)
-                    {
-                        // シーケンス処理内セグメントリストに登録.
-                        m_InSequenceSegmentList.Add(segment);
+                    m_InSequenceSegWait.Set();
+                }
 
-                        m_InSequenceSegWait.Set();
-                    }
+                // out-of-sequenceリストから移動したものを削除.
+                {
+                    // 返事をする
+                    SendSingleAcknowledgement(segment);
 
-                    // 削除リストに登録.
-                    willRemoveList.Add(m_OutSequenceSegmentList.Keys[i]);
+                    item->Leave();
                 }
             }
 
-            // out-of-sequenceリストから移動したものを削除.
-            foreach(var key in willRemoveList)
-            {
-                var segment = m_OutSequenceSegmentList[key];
-
-                // 返事をする
-                SendSingleAcknowledgement(segment);
-
-                m_OutSequenceSegmentList.Remove(key);
-            }
+            item = next;
         }
     }
 
-    /// <summary>
-    /// シーケンス番号を比較.
-    /// </summary>
-    /// <param name="s1"></param>
-    /// <param name="s2"></param>
-    /// <returns>等しければ 0, s1<s2 なら 1, それ以外は -1 を返す. </returns>
-    private static int CompareSequenceNumbers(int s1, int s2)
+    // シーケンス番号を比較.
+    // 等しければ 0, s1<s2 なら 1, それ以外は -1 を返す.
+    IZ_INT ReliableUDP::CompareSequenceNumbers(IZ_INT s1, IZ_INT s2)
     {
         // NOTE
         // RFC1982
@@ -714,21 +754,18 @@ namespace net {
     /// </summary>
     /// <param name="sequenceNumber"></param>
     /// <returns></returns>
-    private static int NextSequenceNumber(int sequenceNumber)
+    IZ_INT ReliableUDP::NextSequenceNumber(IZ_INT sequenceNumber)
     {
         return (sequenceNumber + 1) % MAX_SEQUENCE_NUMBER;
     }
 
-    /// <summary>
-    /// 受信した返事を返す.
-    /// </summary>
-    /// <param name="segment">返事をする対象のセグメント</param>
-    private void SendAcknowledgement(Segment segment)
+    // 受信した返事を返す.
+    void ReliableUDP::SendAcknowledgement(Segment* segment)
     {
-        lock(m_RecieveQueueLocker)
+        std::lock_guard<std::mutex> locker(m_RecieveQueueLocker);
         {
             // 受信したけど out-of-sequence 状態のセグメントがある場合.
-            if (m_OutSequenceSegmentList.Count > 0)
+            if (m_OutSequenceSegmentList.GetItemNum() > 0)
             {
                 SendExtendAcknowledgement();
                 return;
@@ -738,82 +775,82 @@ namespace net {
         }
     }
 
-    /// <summary>
-    /// out-of-sequenceセグメントがあったことについて返事をする.
-    /// </summary>
-    private void SendExtendAcknowledgement()
+    // out-of-sequenceセグメントがあったことについて返事をする.
+    void ReliableUDP::SendExtendAcknowledgement()
     {
-        lock (m_RecieveQueueLocker)
+        std::lock_guard<std::mutex> locker(m_RecieveQueueLocker);
         {
             // 受信したけど out-of-sequence 状態のセグメントが無いのに呼ばれた.
-            if (m_OutSequenceSegmentList.Count == 0)
+            if (m_OutSequenceSegmentList.GetItemNum() == 0)
             {
                 return;
             }
 
             // out-of-sequenceセグメントのシーケンス番号を集める.
-            int[] ackNumbers = new int[m_OutSequenceSegmentList.Count];
+            IZ_INT ackNumbers[32];
+            IZ_ASSERT(COUNTOF(ackNumbers) >= m_OutSequenceSegmentList.GetItemNum());
 
-            for (int i = 0; i < ackNumbers.Length; i++)
+            IZ_UINT cntAckNumbers = 0;
+
+            for (IZ_UINT i = 0; i < m_OutSequenceSegmentList.GetItemNum(); i++)
             {
-                var seqNumber = m_OutSequenceSegmentList.Keys[i];
-                var segment = m_OutSequenceSegmentList.Values[i];
+                auto segment = m_OutSequenceSegmentList.GetAt(i)->GetData();
 
-                // シーケンス番号チェック
-                if (segment.SequenceNumber != seqNumber)
-                {
-                    throw new ApplicationException();
-                }
-
-                ackNumbers[i] = segment.SequenceNumber;
+                ackNumbers[i] = segment->SequenceNumber();
 
                 // 受信したけど返信していないセグメントをリストから削除.
                 m_UnAckedRecievedSegmentList.Remove(segment);
+
+                cntAckNumbers++;
             }
 
             // out-of-sequenceセグメントリストをリセット.
             m_OutSequenceSegmentList.Clear();
 
-            int lastInSequenceNumber = m_Counter.GetLastInSequenceNumber();
+            auto lastInSequenceNumber = m_Counter.GetLastInSequenceNumber();
 
-            var sendSegment = new ExtendAckSegment(
+            auto sendSegment = Segment::Create<ExtendAckSegment>(
+                m_allocator,
                 NextSequenceNumber(lastInSequenceNumber),
                 lastInSequenceNumber,
-                ackNumbers);
+                ackNumbers,
+                cntAckNumbers);
 
             // 送信.
             SendSegment(sendSegment);
         }
     }
 
-    /// <summary>
-    /// 受信した返事を返す.
-    /// </summary>
-    /// <param name="segment">返事をする対象のセグメント</param>
-    private void SendSingleAcknowledgement(Segment segment)
+    // 受信した返事を返す.
+    void ReliableUDP::SendSingleAcknowledgement(Segment* segment)
     {
-        // 受信したけど返信していないセグメントの数が 0 のときは何もしない.
-        if (m_UnAckedRecievedSegmentList.Count == 0)
         {
-            return;
+            std::lock_guard<std::mutex> locker(m_UnAckedRecievedSegmentListLocker);
+
+            // 受信したけど返信していないセグメントの数が 0 のときは何もしない.
+            if (m_UnAckedRecievedSegmentList.GetItemNum() == 0)
+            {
+                return;
+            }
         }
 
-#if false
-        var lastInSequence = m_Counter.GetLastInSequenceNumber();
+#if 0
+        auto lastInSequence = m_Counter.GetLastInSequenceNumber();
 
-        var sendSegment = new AcknowledgementSegment(
+        auto sendSegment = new AcknowledgementSegment(
             NextSequenceNumber(lastInSequence),
             lastInSequence);
 #else
-        var sendSegment = new AcknowledgementSegment(
-            NextSequenceNumber(segment.SequenceNumber),
-            segment.SequenceNumber);
+        auto sendSegment = Segment::Create<AcknowledgementSegment>(
+            m_allocator,
+            NextSequenceNumber(segment->SequenceNumber()),
+            segment->SequenceNumber());
 #endif
 
         // 送信.
         SendSegment(sendSegment);
 
-        if (segment != null)
+        if (segment != nullptr)
         {
             // NOTE
             // 順番が入れ替わった場合もあるのでここでシーケンス番号チェックはできない
@@ -823,10 +860,8 @@ namespace net {
         }
     }
 
-    /// <summary>
-    /// 接続確立.
-    /// </summary>
-    private void OpenConnection()
+    // 接続確立.
+    void ReliableUDP::OpenConnection()
     {
         if (m_CurState == State::ESTABLISHED)
         {
@@ -835,7 +870,7 @@ namespace net {
         }
         else
         {
-            m_CurState::Store(State::ESTABLISHED);
+            m_CurState = State::ESTABLISHED;
 
             m_ConnectEvent.Set();
 
@@ -843,179 +878,110 @@ namespace net {
         }
     }
 
-    /// <summary>
-    /// セグメントを再送.
-    /// </summary>
-    /// <param name="segment"></param>
-    private void RetransmitSegment(Segment segment)
+    // セグメントを再送.
+    void ReliableUDP::RetransmitSegment(Segment* segment)
     {
         // 再送回数を増やす.
-        segment.RetryCount++;
+        segment->IncrementRetryCount();
 
         if (m_Parameter.MaxRetransmission != 0
-            && segment.RetryCount > m_Parameter.MaxRetransmission)
+            && segment->RetryCount() > m_Parameter.MaxRetransmission)
         {
             // TODO
             // 最大再送回数を超えた場合は接続が失敗していることにする.
             return;
         }
 
-        Console.Write("RetransmitSegment --- ");
+        IZ_PRINTF("RetransmitSegment --- ");
         SendSegment(segment);
     }
 
-    private void ProcRetransmit()
+    void ReliableUDP::ProcRetransmit()
     {
-        if (m_UnAckedRecievedSegmentList.IsEmpty())
+        auto itemNum = 0;
+
         {
-            m_NotEmptyUnAckedSentSegListWait.WaitOne();
+            std::lock_guard<std::mutex> locker(m_UnAckedRecievedSegmentListLocker);
+            itemNum = m_UnAckedRecievedSegmentList.GetItemNum();
+        }
+
+        if (itemNum == 0)
+        {
+            m_NotEmptyUnAckedSentSegListWait.Wait();
             m_NotEmptyUnAckedSentSegListWait.Reset();
         }
             
         // 返事を受けていないセグメントを再送.
-        m_UnAckedSentSegmentList.Foreach(m_RetransmitSegment);
+
+        std::lock_guard<std::mutex> locker(m_UnAckedRecievedSegmentListLocker);
+        {
+            auto item = m_UnAckedSentSegmentList.GetTop();
+
+            while (item != IZ_NULL) {
+                auto segment = item->GetData();
+
+                RetransmitSegment(segment);
+
+                item = item->GetNext();
+            }
+        }
     }
 
-    /// <summary>
-    /// セグメント受信実装.
-    /// </summary>
-    /// <returns></returns>
-    protected virtual Segment OnRecieveSegment()
+    // セグメント受信実装.
+    Segment* ReliableUDP::OnRecieveSegment()
     {
-        IPEndPoint remoteEp = new IPEndPoint(IPAddress.Any, 0);
+        IZ_UINT8 tmp[64];
 
-        var ret = OnRecieveSegment(ref remoteEp);
-        return ret;
-    }
+        void* data = tmp;
+        IZ_UINT length = sizeof(tmp);
 
-    /// <summary>
-    /// セグメント受信実装.
-    /// </summary>
-    /// <param name="remote"></param>
-    /// <returns></returns>
-    protected virtual Segment OnRecieveSegment(ref IPEndPoint remote)
-    {
-        var data = m_Udp.Receive(ref remote);
-        var segment = Segment.Parse(data, 0, data.Length);
+        if (m_isAllocated) {
+            data = m_recvData;
+            length = m_Parameter.MaxSegmentSize;
+        }
 
-        Console.WriteLine("Recieve Segment [{0}]", segment.ToString());
+        IZ_INT result = m_Udp->recieve(data, length);
+
+        if (result <= 0) {
+            return nullptr;
+        }
+
+        auto segment = Segment::Parse(
+            m_allocator,
+            (IZ_UINT8*)data, 0, result);
+
+        IZ_CHAR str[64];
+        segment->ToString(str, sizeof(str));
+
+        IZ_PRINTF("Recieve Segment [%s]\n", str);
 
         return segment;
     }
 
-#if false
-    static bool isValid = false;
-
-    /// <summary>
-    /// セグメント送信実装.
-    /// </summary>
-    /// <param name="segment"></param>
-    protected virtual void OnSendSegment(Segment segment)
+    // セグメント送信実装.
+    void ReliableUDP::OnSendSegment(Segment* segment)
     {
-        // 疑似パケットロス発生
+        IZ_CHAR str[64];
+        segment->ToString(str, sizeof(str));
 
-        if (isValid)
-        {
-            using (var ws = new MemoryStream())
-            {
-                segment.WriteBytes(ws);
-                var bytes = ws.GetBuffer();
-                var length = ws.Position;
-                m_Udp.Send(bytes, (int)length);
-            }
+        IZ_PRINTF("Send Segment [%s]\n", str);
+
+        IZ_UINT8 tmp[64];
+
+        void* data = tmp;
+        IZ_UINT length = sizeof(tmp);
+
+        if (m_isAllocated) {
+            data = m_sendData;
+            length = m_Parameter.MaxSegmentSize;
         }
-        else
-        {
-            // TODO
-            isValid = true;
-        }
+
+        CMemoryOutputStream ws(data, length);
+
+        segment->WriteBytes(&ws);
+        auto bytes = ws.GetBuffer();
+        auto size = ws.GetCurPos();
+        m_Udp->sendData(bytes, size);
     }
-#elif false
-    Queue<Segment> TempQueue = new Queue<Segment>();
-    static bool isValid = false;
-
-    /// <summary>
-    /// セグメント送信実装.
-    /// </summary>
-    /// <param name="segment"></param>
-    protected virtual void OnSendSegment(Segment segment)
-    {
-        // 疑似パケット順番入れ替え
-
-        if (!m_IsConnected || segment is AcknowledgementSegment)
-        {
-            using (var ws = new MemoryStream())
-            {
-                Console.WriteLine("Send Segment [{0}]", segment.ToString());
-                segment.WriteBytes(ws);
-                var bytes = ws.GetBuffer();
-                var length = ws.Position;
-                m_Udp.Send(bytes, (int)length);
-            }
-        }
-        else
-        {
-            if (isValid)
-            {
-                using (var ws = new MemoryStream())
-                {
-                    {
-                        Console.WriteLine("Send Segment [{0}]", segment.ToString());
-                        segment.WriteBytes(ws);
-                        var bytes = ws.GetBuffer();
-                        var length = ws.Position;
-                        m_Udp.Send(bytes, (int)length);
-                    }
-                }
-
-                using (var ws = new MemoryStream())
-                {
-                    if (TempQueue.Count > 0)
-                    {
-                        var s = TempQueue.Dequeue();
-                        Console.WriteLine("Send Segment [{0}]", s.ToString());
-                        s.WriteBytes(ws);
-                        var bytes = ws.GetBuffer();
-                        var length = ws.Position;
-                        m_Udp.Send(bytes, (int)length);
-                    }
-                }
-            }
-            else
-            {
-                isValid = true;
-                TempQueue.Enqueue(segment);
-            }
-        }
-    }
-#else
-    /// <summary>
-    /// セグメント送信実装.
-    /// </summary>
-    /// <param name="segment"></param>
-    protected virtual void OnSendSegment(Segment segment)
-    {
-        Console.WriteLine("Send Segment [{0}]", segment.ToString());
-
-        using (var ws = new MemoryStream())
-        {
-            segment.WriteBytes(ws);
-            var bytes = ws.GetBuffer();
-            var length = ws.Position;
-            m_Udp.Send(bytes, (int)length);
-        }
-    }
-#endif
-
-    protected virtual void OnOpenConnection()
-    {
-        // 継承先で実装.
-    }
-
-    protected virtual void OnSentPacket()
-    {
-        // 継承先で実装.
-    }
-#endif
 }   // namespace net
 }   // namespace izanagi

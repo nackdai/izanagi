@@ -27,6 +27,7 @@ namespace net {
     class ExtendAckSegment : Segment
     {
         friend class Segment;
+        friend class ReliableUDP;
 
     public:
         virtual Type GetType() const override
@@ -56,6 +57,11 @@ namespace net {
         virtual void ReadBytes(
             IMemoryAllocator* allocator,
             IZ_UINT8* bytes, IZ_UINT offset, IZ_UINT length) override;
+
+        const CArray<IZ_INT>& AckNumbers() const
+        {
+            return m_AckNumbers;
+        }
 
     private:
         CArray<IZ_INT> m_AckNumbers;

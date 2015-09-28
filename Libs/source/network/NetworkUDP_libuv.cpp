@@ -275,12 +275,9 @@ namespace net {
         IZ_UINT size,
         IPv4Endpoint& remoteEp)
     {
-        CStdList<RecvData>::Item* item = nullptr;
+        std::lock_guard<std::mutex> lock(m_listRecvDataLocker);
 
-        {
-            std::lock_guard<std::mutex> lock(m_listRecvDataLocker);
-            item = m_listRecvData.GetTop();
-        }
+        auto item = m_listRecvData.GetTop();
 
         if (item == nullptr) {
             return -1;

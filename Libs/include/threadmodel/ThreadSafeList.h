@@ -142,6 +142,11 @@ namespace threadmodel {
             return m_locker;
         }
 
+        CStdList<_T>& AsStdList()
+        {
+            return *this;
+        }
+
     private:
         sys::CSpinLock m_locker;
     };
