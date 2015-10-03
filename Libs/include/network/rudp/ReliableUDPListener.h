@@ -70,6 +70,9 @@ namespace net {
 
             virtual Segment* OnRecieveSegment() override;
 
+            // セグメント送信実装.
+            virtual void OnSendSegment(Segment* segment) override;
+
         private:
             IPv4Endpoint m_RemoteEp;
 

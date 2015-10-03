@@ -72,12 +72,14 @@ namespace net {
     // 応答番号を取得.
     IZ_INT Segment::GetAcknowledgedNumber()
     {
+        IZ_INT ret = -1;
+
         if (CheckFlag(Type::ACK))
         {
-            return m_AckNumber;
+            ret = m_AckNumber;
         }
 
-        return -1;
+        return ret;
     }
 
 #define NEW_SEGMENT(ret, a, type) \
@@ -160,13 +162,23 @@ namespace net {
 
     void Segment::ToString(IZ_CHAR* buf, IZ_UINT length)
     {
-        IZ_SPRINTF(
-            buf,
-            length,
-            "%d SEQ:%d ACK:%d",
-            GetSegmentType(),
-            m_SequenceNumber,
-            (GetAcknowledgedNumber() >= 0 ? "" + GetAcknowledgedNumber() : "N/A"));
+        if (GetAcknowledgedNumber() >= 0) {
+            IZ_SPRINTF(
+                buf,
+                length,
+                "%s SEQ:%d ACK:%d",
+                GetSegmentType(),
+                m_SequenceNumber,
+                GetAcknowledgedNumber());
+        }
+        else {
+            IZ_SPRINTF(
+                buf,
+                length,
+                "%s SEQ:%d ACK:N/A",
+                GetSegmentType(),
+                m_SequenceNumber);
+        }
     }
 }   // namespace net
 }   // namespace izanagi

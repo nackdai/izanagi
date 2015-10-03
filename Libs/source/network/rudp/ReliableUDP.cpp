@@ -41,7 +41,7 @@ namespace net {
         math::CMathRand::Init(sys::CEnvironment::GetMilliseconds());
         auto segment = Segment::Create<SynchronousSegment>(
             m_allocator,
-            math::CMathRand::GetNext(MAX_SEQUENCE_NUMBER),
+            m_Counter.SetSequenceNumber(math::CMathRand::GetNext(MAX_SEQUENCE_NUMBER)),
             m_Parameter);
 
         // 同期要求を送る.
@@ -432,7 +432,10 @@ namespace net {
                 IZ_ASSERT(m_Parameter.MaxSegmentSize > Segment::RUDP_HEADER_LEN);
 
                 // 返事を返す.
-                SendAcknowledgement(segment);
+                {
+                    std::lock_guard<std::mutex> locker(m_RecieveQueueLocker);
+                    SendAcknowledgement(segment);
+                }
 
                 // 接続確立.
                 OpenConnection();
@@ -762,7 +765,7 @@ namespace net {
     // 受信した返事を返す.
     void ReliableUDP::SendAcknowledgement(Segment* segment)
     {
-        std::lock_guard<std::mutex> locker(m_RecieveQueueLocker);
+        //std::lock_guard<std::mutex> locker(m_RecieveQueueLocker);
         {
             // 受信したけど out-of-sequence 状態のセグメントがある場合.
             if (m_OutSequenceSegmentList.GetItemNum() > 0)
@@ -778,7 +781,7 @@ namespace net {
     // out-of-sequenceセグメントがあったことについて返事をする.
     void ReliableUDP::SendExtendAcknowledgement()
     {
-        std::lock_guard<std::mutex> locker(m_RecieveQueueLocker);
+        //std::lock_guard<std::mutex> locker(m_RecieveQueueLocker);
         {
             // 受信したけど out-of-sequence 状態のセグメントが無いのに呼ばれた.
             if (m_OutSequenceSegmentList.GetItemNum() == 0)

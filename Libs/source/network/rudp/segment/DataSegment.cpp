@@ -96,6 +96,8 @@ namespace net {
             m_Data,
             bytes + offset + RUDP_HEADER_LEN,
             dataLength);
+
+        m_Size = dataLength;
     }
 }   // namespace net
 }   // namespace izanagi

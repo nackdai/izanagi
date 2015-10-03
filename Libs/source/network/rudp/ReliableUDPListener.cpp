@@ -159,5 +159,30 @@ namespace net {
 
         return nullptr;
     }
+
+    void ReliableUDPListener::ReliableUDPClient::OnSendSegment(Segment* segment)
+    {
+        IZ_CHAR str[64];
+        segment->ToString(str, sizeof(str));
+
+        IZ_PRINTF("Send Segment [%s]\n", str);
+
+        IZ_UINT8 tmp[64];
+
+        void* data = tmp;
+        IZ_UINT length = sizeof(tmp);
+
+        if (m_isAllocated) {
+            data = m_sendData;
+            length = m_Parameter.MaxSegmentSize;
+        }
+
+        CMemoryOutputStream ws(data, length);
+
+        segment->WriteBytes(&ws);
+        auto bytes = ws.GetBuffer();
+        auto size = ws.GetCurPos();
+        m_Udp->sendTo(bytes, size, m_RemoteEp);
+    }
 }   // namespace net
 }   // namespace izanagi
