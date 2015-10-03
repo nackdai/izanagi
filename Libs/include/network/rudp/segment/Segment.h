@@ -24,6 +24,7 @@ namespace izanagi {
 namespace net {
     class Segment : public CPlacementNew {
         friend class ReliableUDP;
+        friend class ReliableUDPListener;
 
     public:
         static const IZ_UINT RUDP_VERSION = 1;

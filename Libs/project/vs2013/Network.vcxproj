@@ -57,6 +57,7 @@
     <ClInclude Include="..\..\include\network\ReplicatedPropertyManager.h" />
     <ClInclude Include="..\..\include\network\ReplicatedPropertyObject.h" />
     <ClInclude Include="..\..\include\network\rudp\ReliableUDP.h" />
+    <ClInclude Include="..\..\include\network\rudp\ReliableUDPListener.h" />
     <ClInclude Include="..\..\include\network\rudp\RUDPCounter.h" />
     <ClInclude Include="..\..\include\network\rudp\RUDPParameter.h" />
     <ClInclude Include="..\..\include\network\rudp\segment\AcknowledgementSegment.h" />
@@ -114,6 +115,7 @@
     <ClCompile Include="..\..\source\network\ReplicatedPropertyManager.cpp" />
     <ClCompile Include="..\..\source\network\ReplicatedPropertyObject.cpp" />
     <ClCompile Include="..\..\source\network\rudp\ReliableUDP.cpp" />
+    <ClCompile Include="..\..\source\network\rudp\ReliableUDPListener.cpp" />
     <ClCompile Include="..\..\source\network\rudp\segment\DataSegment.cpp" />
     <ClCompile Include="..\..\source\network\rudp\segment\ExtendAckSegment.cpp" />
     <ClCompile Include="..\..\source\network\rudp\segment\Segment.cpp" />

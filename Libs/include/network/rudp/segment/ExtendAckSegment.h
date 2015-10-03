@@ -24,7 +24,7 @@
 */
 namespace izanagi {
 namespace net {
-    class ExtendAckSegment : Segment
+    class ExtendAckSegment : public Segment
     {
         friend class Segment;
         friend class ReliableUDP;
@@ -40,7 +40,14 @@ namespace net {
             return "EAK";
         }
 
-    protected:
+    private:
+        static Segment* Create(
+            IMemoryAllocator* allocator,
+            IZ_INT sequenceNumber,
+            IZ_INT acknowledgedNumber,
+            IZ_INT* ackNumbers,
+            IZ_UINT ackNumbersNum);
+
         ExtendAckSegment() {}
 
         ExtendAckSegment(

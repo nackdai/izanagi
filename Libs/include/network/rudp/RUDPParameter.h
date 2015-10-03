@@ -72,6 +72,8 @@ namespace net {
             NullSegmentTimeout = rhs.NullSegmentTimeout;
             RetransmissionTimeout = rhs.RetransmissionTimeout;
             CumulativeAckTimeout = rhs.CumulativeAckTimeout;
+
+            return *this;
         }
 
     public:

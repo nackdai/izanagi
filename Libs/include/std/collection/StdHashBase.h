@@ -110,6 +110,12 @@ namespace izanagi {
             return ret;
         }
 
+        IZ_BOOL ContainsKey(const _KEY& key)
+        {
+            Item* item = Find(key);
+            return (item != IZ_NULL);
+        }
+
         Item* Find(const _KEY& tKey)
         {
             // 該当するハッシュリスト

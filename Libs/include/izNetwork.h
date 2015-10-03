@@ -10,4 +10,8 @@
 //#include "network/NetworkUDP.h"
 #include "network/NetworkUDP_libuv.h"
 
+// RUDP
+#include "network/rudp//ReliableUDP.h"
+#include "network/rudp//ReliableUDPListener.h"
+
 #endif  // #if !defined(__IZANAGI_NETWORK_H__)

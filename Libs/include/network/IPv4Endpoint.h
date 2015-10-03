@@ -151,6 +151,8 @@ namespace net {
         void get(sockaddr_in& addr) const;
         IZ_BOOL operator==(const sockaddr_in& addr);
 
+        operator IZ_UINT() const;
+
     private:
         IPv4Address m_address;
         IZ_UINT m_port;

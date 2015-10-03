@@ -106,6 +106,8 @@ namespace net {
         // セグメント受信実装.
         virtual Segment* OnRecieveSegment();
 
+        Segment* OnRecieveSegment(IPv4Endpoint& remote);
+
         // セグメント送信実装.
         virtual void OnSendSegment(Segment* segment);
 
@@ -135,7 +137,7 @@ namespace net {
             return m_CurState == State::ESTABLISHED;
         }
 
-    private:
+    protected:
         // 最大シーケンス番号.
         // セグメントヘッダ内のシーケンス番号は 1byte(=8bit) なので、最大は 255(= 2^8 - 1) になる.
         static const IZ_INT MAX_SEQUENCE_NUMBER = 255;
