@@ -70,13 +70,22 @@ namespace net {
 
         void OnAlloc(uv_handle_t* handle, size_t suggested_size, uv_buf_t* buf);
         void OnRecieved(uv_udp_t* handle, ssize_t nread, const uv_buf_t* buf, const struct sockaddr* addr, unsigned flags);
+        void OnSent(uv_udp_send_t* req, int status);
 
     protected:
         IMemoryAllocator* m_allocator{ nullptr };
 
         uv_udp_t m_udp;
 
-        uv_udp_send_t m_reqSend;
+        using CalbackOnSent = std::function < void(uv_udp_send_t* req, int status) > ;
+
+        struct SendHandle {
+            uv_udp_send_t req;
+            Callback<CalbackOnSent> cbSent;
+        };
+
+        std::atomic<IZ_UINT> m_reqSendPos{ 0 };
+        SendHandle m_reqSend[3];
 
         IZ_BOOL m_isBindAddr{ IZ_FALSE };
         IPv4Endpoint m_host;

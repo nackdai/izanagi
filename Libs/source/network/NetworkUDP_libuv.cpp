@@ -196,10 +196,14 @@ namespace net {
             uv_udp_recv_start(
                 &m_udp,
                 [](uv_handle_t* handle, size_t suggested_size, uv_buf_t* buf){
-                CallbackRegister::Invoke<CallbackOnAlloc>(CallbackRegister::Key(CallbackRegister::Type::Alloc, handle), handle, suggested_size, buf);
+                CallbackRegister::Invoke<CallbackOnAlloc>(
+                    CallbackRegister::Key(CallbackRegister::Type::Alloc, handle), 
+                    handle, suggested_size, buf);
             },
                 [](uv_udp_t* handle, ssize_t nread, const uv_buf_t* buf, const struct sockaddr* addr, unsigned flags){
-                CallbackRegister::Invoke<CallbackOnRecieved>(CallbackRegister::Key(CallbackRegister::Type::Recieve, handle), handle, nread, buf, addr, flags);
+                CallbackRegister::Invoke<CallbackOnRecieved>(
+                    CallbackRegister::Key(CallbackRegister::Type::Recieve, handle), 
+                    handle, nread, buf, addr, flags);
             }));
 
         IZ_ASSERT(result);
@@ -324,14 +328,42 @@ namespace net {
 
         uv_buf_t buf = uv_buf_init((char*)data, size);
 
-        // NOTE
-        // uv_udp_send 内部でコールバックが呼ばれていないぽい.
+        auto onSent = std::bind(
+            &Udp::OnSent,
+            this,
+            std::placeholders::_1,
+            std::placeholders::_2);
+
+        IZ_ASSERT(m_reqSendPos < COUNTOF(m_reqSend));
+
+        auto& handle = m_reqSend[m_reqSendPos];
+        m_reqSendPos++;
+
+        handle.cbSent.Set(
+            CallbackRegister::Key(CallbackRegister::Type::Send, &handle.req),
+            onSent);
+
+        CallbackRegister::RegistPermanently(handle.cbSent);
 
         IZ_LIBUV_EXEC(
             result,
-            uv_udp_send(&m_reqSend, &m_udp, &buf, 1, (const sockaddr*)&addr, IZ_NULL));
+            uv_udp_send(
+            &handle.req, &m_udp, &buf, 1, (const sockaddr*)&addr,
+            [](uv_udp_send_t* req, int status) {
+            CallbackRegister::Invoke<CalbackOnSent>(
+                CallbackRegister::Key(CallbackRegister::Type::Send, req),
+                req, status);
+        }));
 
         return result;
+    }
+
+    void Udp::OnSent(uv_udp_send_t* req, int status)
+    {
+        m_reqSendPos--;
+
+        SendHandle* handle = reinterpret_cast<SendHandle*>(req);
+        CallbackRegister::Remove(handle->cbSent);
     }
 }    // namespace net
 }    // namespace izanagi
