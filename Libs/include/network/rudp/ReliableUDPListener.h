@@ -11,7 +11,16 @@ namespace net {
     class ReliableUDPListener : public ReliableUDP
     {
     public:
-        ReliableUDPListener(Udp* udp);
+        ReliableUDPListener() {}
+
+        virtual ~ReliableUDPListener() {}
+
+        NO_COPIABLE(ReliableUDPListener);
+
+    public:
+        void Init(
+            IMemoryAllocator* allocator,
+            Udp* udp);
 
         ReliableUDP* Accept();
 

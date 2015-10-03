@@ -127,7 +127,7 @@ namespace net {
     }
 
     // データ送信.
-    IZ_BOOL ReliableUDP::Send(void* bytes, IZ_UINT offset, IZ_UINT length)
+    IZ_BOOL ReliableUDP::Send(const void* bytes, IZ_UINT offset, IZ_UINT length)
     {
         if (IsClosed())
         {

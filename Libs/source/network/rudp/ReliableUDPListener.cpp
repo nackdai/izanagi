@@ -5,11 +5,16 @@
 
 namespace izanagi {
 namespace net {
-    ReliableUDPListener::ReliableUDPListener(Udp* udp)
+    void ReliableUDPListener::Init(
+        IMemoryAllocator* allocator,
+        Udp* udp)
     {
-        m_Udp = udp;
+        if (m_Udp == nullptr) {
+            m_allocator = allocator;
+            m_Udp = udp;
 
-        m_RecieveThread = std::thread(std::bind(&ReliableUDPListener::ProcRecieve, this));
+            m_RecieveThread = std::thread(std::bind(&ReliableUDPListener::ProcRecieve, this));
+        }
     }
 
     ReliableUDP* ReliableUDPListener::Accept()

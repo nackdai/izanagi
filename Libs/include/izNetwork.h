@@ -13,5 +13,6 @@
 // RUDP
 #include "network/rudp//ReliableUDP.h"
 #include "network/rudp//ReliableUDPListener.h"
+#include "network/rudp//RUDPParameter.h"
 
 #endif  // #if !defined(__IZANAGI_NETWORK_H__)

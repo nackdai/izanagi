@@ -19,7 +19,7 @@ namespace net {
 
     class ReliableUDP
     {
-    public:
+    private:
         enum State : IZ_UINT
         {
             NONE,           // 未接続.
@@ -31,10 +31,13 @@ namespace net {
         };
 
     public:
-        ReliableUDP()
-        {
-        }
+        ReliableUDP() {}
 
+        virtual ~ReliableUDP() {}
+
+        NO_COPIABLE(ReliableUDP);
+
+    public:
         void Init(
             IMemoryAllocator* allocator,
             Udp* udp,
@@ -47,7 +50,7 @@ namespace net {
         IZ_INT Recieve(void* bytes, IZ_UINT size);
 
         // データ送信.
-        IZ_BOOL Send(void* bytes, IZ_UINT offset, IZ_UINT length);
+        IZ_BOOL Send(const void* bytes, IZ_UINT offset, IZ_UINT length);
 
         // 終了.
         void Close();
