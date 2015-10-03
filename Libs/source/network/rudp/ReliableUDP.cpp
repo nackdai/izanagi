@@ -412,7 +412,7 @@ namespace net {
 
                 SendAndQueueSegment(syncSegment);
 
-                m_UnAckedRecievedSegmentList.Remove(segment);
+                m_UnAckedRecievedSegmentList.Remove(segment->GetListItem());
             }
                 break;
             case State::SYN_SENT:    // 接続要求送信済み.
@@ -799,7 +799,7 @@ namespace net {
                 ackNumbers[i] = segment->SequenceNumber();
 
                 // 受信したけど返信していないセグメントをリストから削除.
-                m_UnAckedRecievedSegmentList.Remove(segment);
+                m_UnAckedRecievedSegmentList.Remove(segment->GetListItem());
 
                 cntAckNumbers++;
             }
@@ -856,7 +856,7 @@ namespace net {
             // 順番が入れ替わった場合もあるのでここでシーケンス番号チェックはできない
 
             // 受信したが確認応答を送っていないセグメントのリストから削除.
-            m_UnAckedRecievedSegmentList.Remove(segment);
+            m_UnAckedRecievedSegmentList.Remove(segment->GetListItem());
         }
     }
 

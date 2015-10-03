@@ -272,6 +272,20 @@ namespace izanagi {
             return -1;
         }
 
+        IZ_BOOL Has(Item* item)
+        {
+            return (item->GetList() == this);
+        }
+
+        IZ_BOOL Remove(Item* item)
+        {
+            if (Has(item)) {
+                item->Leave();
+                return IZ_TRUE;
+            }
+            return IZ_FALSE;
+        }
+
     protected:
         IZ_UINT32 m_nNum;
 

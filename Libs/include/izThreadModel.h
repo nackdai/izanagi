@@ -20,7 +20,4 @@
 
 #include "threadmodel/ThreadSafeAllocator.h"
 
-#include "threadmodel/ThreadSafeList.h"
-#include "threadmodel/ThreadSafeOrderedList.h"
-
 #endif  // #if !defined(__IZANAGI_THREAD_MODEL_H__)
