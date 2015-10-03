@@ -253,5 +253,10 @@ namespace net {
         }
 #endif
     }
+
+    IPv4Endpoint::operator IZ_UINT() const
+    {
+        return m_address.getValue();
+    }
 }
 }

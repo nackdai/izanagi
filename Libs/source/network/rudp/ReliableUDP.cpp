@@ -97,7 +97,7 @@ namespace net {
                     }
                     break;
                 }
-                else if (segment->IsDataSegment());
+                else if (segment->IsDataSegment())
                 {
                     auto s = (DataSegment*)segment;
 
@@ -134,7 +134,7 @@ namespace net {
             return IZ_FALSE;
         }
 
-        IZ_INT totalBytes = 0;
+        IZ_UINT totalBytes = 0;
 
         while (totalBytes < length)
         {
@@ -214,11 +214,11 @@ namespace net {
     // セグメントの送信と返事待ちセグメントキューへの登録.
     void ReliableUDP::SendAndQueueSegment(Segment* segment)
     {
-        auto numUnAckedSentSegment = 0;
+        IZ_UINT numUnAckedSentSegment = 0;
 
         {
             std::lock_guard<std::mutex> locker(m_UnAckedSentSegmentListLocker);
-            m_UnAckedSentSegmentList.GetItemNum();
+            numUnAckedSentSegment = m_UnAckedSentSegmentList.GetItemNum();
         }
 
         while (numUnAckedSentSegment >= SendQueueSize
@@ -476,7 +476,7 @@ namespace net {
                     continue;
                 }
 
-                for (int n = 0; n < ackNumbers.getNum(); n++)
+                for (IZ_UINT n = 0; n < ackNumbers.getNum(); n++)
                 {
                     auto ack = ackNumbers.at(n);
 
@@ -490,7 +490,7 @@ namespace net {
             }
 
             // 残ったのものは再送する.
-            for (IZ_INT i = 0; i < m_UnAckedSentSegmentList.GetItemNum(); i++)
+            for (IZ_UINT i = 0; i < m_UnAckedSentSegmentList.GetItemNum(); i++)
             {
                 auto s = m_UnAckedSentSegmentList.GetAt(i)->GetData();
 
@@ -588,7 +588,7 @@ namespace net {
                 {
                     IZ_BOOL added = IZ_FALSE;
 
-                    for (IZ_INT i = 0; i < m_OutSequenceSegmentList.GetItemNum(); i++)
+                    for (IZ_UINT i = 0; i < m_OutSequenceSegmentList.GetItemNum(); i++)
                     {
                         auto s = m_OutSequenceSegmentList.GetAt(i)->GetData();
 
@@ -809,7 +809,7 @@ namespace net {
 
             auto lastInSequenceNumber = m_Counter.GetLastInSequenceNumber();
 
-            auto sendSegment = Segment::Create<ExtendAckSegment>(
+            auto sendSegment = ExtendAckSegment::Create(
                 m_allocator,
                 NextSequenceNumber(lastInSequenceNumber),
                 lastInSequenceNumber,
@@ -930,6 +930,13 @@ namespace net {
     // セグメント受信実装.
     Segment* ReliableUDP::OnRecieveSegment()
     {
+        IPv4Endpoint remote;
+        auto ret = OnRecieveSegment(remote);
+        return ret;
+    }
+
+    Segment* ReliableUDP::OnRecieveSegment(IPv4Endpoint& remote)
+    {
         IZ_UINT8 tmp[64];
 
         void* data = tmp;
@@ -940,7 +947,7 @@ namespace net {
             length = m_Parameter.MaxSegmentSize;
         }
 
-        IZ_INT result = m_Udp->recieve(data, length);
+        IZ_INT result = m_Udp->recieveFrom(data, length, remote);
 
         if (result <= 0) {
             return nullptr;

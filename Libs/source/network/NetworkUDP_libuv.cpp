@@ -247,8 +247,7 @@ namespace net {
         if (found) {
             found->length = nread;
 
-            // TODO
-            //found->remote.set();
+            found->remote.set(*(const sockaddr_in*)addr);
         }
 
         if (nread < 0 || addr == IZ_NULL) {
@@ -298,8 +297,7 @@ namespace net {
 
         IZ_INT ret = data->length;
 
-        // TODO
-        // remoteEp
+        remoteEp = data->remote;
 
         delete data;
         FREE(m_allocator, data);

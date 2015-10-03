@@ -21,6 +21,26 @@
 */
 namespace izanagi {
 namespace net {
+    Segment* ExtendAckSegment::Create(
+        IMemoryAllocator* allocator,
+        IZ_INT sequenceNumber,
+        IZ_INT acknowledgedNumber,
+        IZ_INT* ackNumbers,
+        IZ_UINT ackNumbersNum)
+    {
+        void* p = ALLOC(allocator, sizeof(ExtendAckSegment));
+        IZ_ASSERT(p);
+
+        auto ret = new(p) ExtendAckSegment(
+            allocator,
+            sequenceNumber,
+            acknowledgedNumber,
+            ackNumbers,
+            ackNumbersNum);
+
+        return ret;
+    }
+
     ExtendAckSegment::ExtendAckSegment(
         IMemoryAllocator* allocator,
         IZ_INT sequenceNumber,
