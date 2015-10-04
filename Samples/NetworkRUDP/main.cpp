@@ -30,14 +30,16 @@ void runAsServer(izanagi::IMemoryAllocator* allocator)
     static const IZ_UINT size = 1024;
     IZ_CHAR buf[size] = { 0 };
 
-    izanagi::net::IPv4Endpoint remote;
-
     IZ_INT length = 0;
 
-    while ((length = rudp->Recieve(buf, size)) > 0) {
+    while ((length = rudp->Recieve(buf, size)) <= 0) {
     }
 
     IZ_PRINTF("%s\n", buf);
+
+    static const IZ_CHAR* str = "Send from server.";
+
+    rudp->Send(str, 0, strlen(str));
 
     // TODO
     //udp.stop();
@@ -60,9 +62,19 @@ void runAsClient(izanagi::IMemoryAllocator* allocator)
 
     IZ_PRINTF("Connected\n");
 
-    static const IZ_CHAR* str = "test";
+    static const IZ_CHAR* str = "Send from client.";
 
     rudp.Send(str, 0, strlen(str));
+
+    static const IZ_UINT size = 1024;
+    IZ_CHAR buf[size] = { 0 };
+
+    IZ_INT length = 0;
+
+    while ((length = rudp.Recieve(buf, size)) <= 0) {
+    }
+
+    IZ_PRINTF("%s\n", buf);
 
     // TODO
     //udp.stop();

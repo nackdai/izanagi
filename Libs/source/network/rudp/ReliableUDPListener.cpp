@@ -118,7 +118,7 @@ namespace net {
         if (!IsClosed())
         {
             sys::Lock locker(*this);
-            m_RecievedSegmentQueue.AddTail(segment->GetListItem());
+            m_RecievedSegmentQueue.AddTail(segment->GetListItem(0));
         }
     }
 

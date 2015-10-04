@@ -195,10 +195,12 @@ namespace net {
                     m_Counter.NextSequenceNumber());
 
                 SendSegment(segment);
+
+                m_CurState = State::WILL_CLOSE;
+                if (m_RecieveThread.joinable()) {
+                    m_RecieveThread.join();
+                }
             }
-                // TODO
-                // スレッドなどを止める.
-                // 現状は recv がブロッキングされるので、スレッドを止められない.
                 break;
             default:
                 break;
@@ -235,7 +237,7 @@ namespace net {
         // 返事のない送信済み（返事待ち）セグメントリストに登録.
         {
             std::lock_guard<std::mutex> locker(m_UnAckedSentSegmentListLocker);
-            m_UnAckedSentSegmentList.AddTail(segment->GetListItem());
+            m_UnAckedSentSegmentList.AddTail(segment->GetListItem(ListItemType::UnAcked));
         }
 
         // UnAckedSentSegmentListが空でなくなったので待機イベントに通知.
@@ -306,7 +308,7 @@ namespace net {
             {
                 // 確認応答を送っていないセグメントリストに登録.
                 std::lock_guard<std::mutex> locker(m_UnAckedRecievedSegmentListLocker);
-                m_UnAckedRecievedSegmentList.AddTail(segment->GetListItem());
+                m_UnAckedRecievedSegmentList.AddTail(segment->GetListItem(ListItemType::UnAcked));
             }
 
             // TODO
@@ -412,7 +414,7 @@ namespace net {
 
                 SendAndQueueSegment(syncSegment);
 
-                m_UnAckedRecievedSegmentList.Remove(segment->GetListItem());
+                m_UnAckedRecievedSegmentList.Remove(segment->GetListItem(ListItemType::UnAcked));
             }
                 break;
             case State::SYN_SENT:    // 接続要求送信済み.
@@ -563,7 +565,7 @@ namespace net {
                         || segment->IsFinishSegment())
                     {
                         // read で読み込むセグメントはリストに登録.
-                        m_InSequenceSegmentList.AddTail(segment->GetListItem());
+                        m_InSequenceSegmentList.AddTail(segment->GetListItem(ListItemType::Sequence));
                         m_InSequenceSegWait.Set();
                     }
 
@@ -606,7 +608,7 @@ namespace net {
                     if (!added)
                     {
                         // 未登録なので、登録する.
-                        m_OutSequenceSegmentList.Add(segment->GetListItem());
+                        m_OutSequenceSegmentList.Add(segment->GetListItem(ListItemType::Sequence));
                     }
 
 #if 0
@@ -672,7 +674,7 @@ namespace net {
                     || segment->IsFinishSegment())
                 {
                     // シーケンス処理内セグメントリストに登録.
-                    m_InSequenceSegmentList.AddTail(segment->GetListItem());
+                    m_InSequenceSegmentList.AddTail(segment->GetListItem(ListItemType::Sequence));
 
                     m_InSequenceSegWait.Set();
                 }
@@ -802,7 +804,7 @@ namespace net {
                 ackNumbers[i] = segment->SequenceNumber();
 
                 // 受信したけど返信していないセグメントをリストから削除.
-                m_UnAckedRecievedSegmentList.Remove(segment->GetListItem());
+                m_UnAckedRecievedSegmentList.Remove(segment->GetListItem(ListItemType::UnAcked));
 
                 cntAckNumbers++;
             }
@@ -859,7 +861,7 @@ namespace net {
             // 順番が入れ替わった場合もあるのでここでシーケンス番号チェックはできない
 
             // 受信したが確認応答を送っていないセグメントのリストから削除.
-            m_UnAckedRecievedSegmentList.Remove(segment->GetListItem());
+            m_UnAckedRecievedSegmentList.Remove(segment->GetListItem(ListItemType::UnAcked));
         }
     }
 

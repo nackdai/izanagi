@@ -153,6 +153,12 @@ namespace net {
         // Maximum number of received segments
         static const IZ_UINT MaxRecvListSize = 32;
 
+        enum ListItemType
+        {
+            UnAcked = 0,
+            Sequence,
+        };
+
         IMemoryAllocator* m_allocator{ nullptr };
 
         // Maximum number of sent segments.

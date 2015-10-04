@@ -62,7 +62,8 @@ namespace net {
 
         Segment()
         {
-            m_listItem.Init(this);
+            m_listItem[0].Init(this);
+            m_listItem[1].Init(this);
         }
 
         Segment(
@@ -163,9 +164,10 @@ namespace net {
         // フラグチェック.
         IZ_BOOL CheckFlag(Type type);
 
-        CStdOrderedList<Segment>::Item* GetListItem()
+        CStdOrderedList<Segment>::Item* GetListItem(IZ_UINT idx)
         {
-            return &m_listItem;
+            IZ_ASSERT(idx < COUNTOF(m_listItem));
+            return &m_listItem[idx];
         }
 
     protected:
@@ -181,7 +183,7 @@ namespace net {
 
         std::atomic<IZ_UINT> m_RetryCount{ 0 };
 
-        CStdOrderedList<Segment>::Item m_listItem;
+        CStdOrderedList<Segment>::Item m_listItem[2];
     };
 }   // namespace net
 }   // namespace izanagi
