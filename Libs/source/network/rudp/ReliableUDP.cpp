@@ -151,7 +151,8 @@ namespace net {
             // そこで、DataSegment や FinishSegment などを送るときにシーケンス番号をリセットするように
             // LastInSequenceNumber ではなく、独自に管理しているシーケンス番号を使うようにする.
 
-            auto segment = DataSegment::Create(
+            auto segment = Segment::Create<DataSegment>(
+                m_allocator,
                 m_allocator,
                 m_Counter.NextSequenceNumber(),
                 m_Counter.GetLastInSequenceNumber(),
@@ -814,7 +815,8 @@ namespace net {
 
             auto lastInSequenceNumber = m_Counter.GetLastInSequenceNumber();
 
-            auto sendSegment = ExtendAckSegment::Create(
+            auto sendSegment = Segment::Create<ExtendAckSegment>(
+                m_allocator,
                 m_allocator,
                 NextSequenceNumber(lastInSequenceNumber),
                 lastInSequenceNumber,

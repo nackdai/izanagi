@@ -41,13 +41,6 @@ namespace net {
         }
 
     private:
-        static Segment* Create(
-            IMemoryAllocator* allocator,
-            IZ_INT sequenceNumber,
-            IZ_INT acknowledgedNumber,
-            IZ_INT* ackNumbers,
-            IZ_UINT ackNumbersNum);
-
         ExtendAckSegment() {}
 
         ExtendAckSegment(
