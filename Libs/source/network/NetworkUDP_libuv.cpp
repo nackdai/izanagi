@@ -238,7 +238,7 @@ namespace net {
         const struct sockaddr* addr,
         unsigned flags)
     {
-        if (nread == UV_EOF) {
+		if (nread == UV_EOF || nread <= 0 || addr == IZ_NULL) {
             return;
         }
 
@@ -252,12 +252,6 @@ namespace net {
             found->length = nread;
 
             found->remote.set(*(const sockaddr_in*)addr);
-        }
-
-        if (nread < 0 || addr == IZ_NULL) {
-            // TODO
-            IZ_ASSERT(IZ_FALSE);
-            return;
         }
     }
 

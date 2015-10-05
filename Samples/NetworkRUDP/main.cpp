@@ -41,9 +41,8 @@ void runAsServer(izanagi::IMemoryAllocator* allocator)
 
     rudp->Send(str, 0, strlen(str));
 
-    // TODO
-    //udp.stop();
-    for (;;) {}
+	listener.Close();
+	udp.stop();
 }
 
 void runAsClient(izanagi::IMemoryAllocator* allocator)
@@ -76,9 +75,7 @@ void runAsClient(izanagi::IMemoryAllocator* allocator)
 
     IZ_PRINTF("%s\n", buf);
 
-    // TODO
-    //udp.stop();
-    for (;;) {}
+	rudp.WaitForFinish();
 }
 
 IzMain(0, 0)

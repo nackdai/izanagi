@@ -207,12 +207,31 @@ namespace net {
                 break;
         }
 
+		m_CurState = State::WILL_CLOSE;
+		if (m_RecieveThread.joinable()) {
+			m_RecieveThread.join();
+		}
+
         m_CurState = State::CLOSED;
 
         m_VacantUnAckedSentSegListWait.Set();
         m_NotEmptyUnAckedSentSegListWait.Set();
         m_InSequenceSegWait.Set();
     }
+
+	// 終了されるまで待つ.
+	IZ_BOOL ReliableUDP::WaitForFinish()
+	{
+		if (m_CurState == State::CLOSED) {
+			return IZ_TRUE;
+		}
+
+		if (m_RecieveThread.joinable()) {
+			m_RecieveThread.join();
+		}
+
+		m_CurState = State::CLOSED;
+	}
 
     // セグメントの送信と返事待ちセグメントキューへの登録.
     void ReliableUDP::SendAndQueueSegment(Segment* segment)
@@ -350,6 +369,8 @@ namespace net {
 
             sys::CThread::YieldThread();
         }
+
+		// 後始末
     }
 
     void ReliableUDP::CheckAndGetAck(Segment* segment)

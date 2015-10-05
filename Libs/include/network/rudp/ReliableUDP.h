@@ -19,7 +19,7 @@ namespace net {
 
     class ReliableUDP
     {
-    private:
+    protected:
         enum State : IZ_UINT
         {
             NONE,           // 未接続.
@@ -53,7 +53,10 @@ namespace net {
         IZ_BOOL Send(const void* bytes, IZ_UINT offset, IZ_UINT length);
 
         // 終了.
-        void Close();
+        virtual void Close();
+
+		// 終了されるまで待つ.
+		IZ_BOOL WaitForFinish();
 
     private:
         // セグメントの送信と返事待ちセグメントキューへの登録.

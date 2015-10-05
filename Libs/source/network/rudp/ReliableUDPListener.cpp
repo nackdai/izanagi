@@ -40,6 +40,38 @@ namespace net {
         return ret;
     }
 
+	// 終了.
+	void ReliableUDPListener::Close()
+	{
+		if (IsClosed()) {
+			return;
+		}
+
+		m_CurState = State::WILL_CLOSE;
+
+		if (m_RecieveThread.joinable()) {
+			m_RecieveThread.join();
+		}
+
+		m_CurState = State::CLOSED;
+
+		auto item = m_RecievedClientMap.GetOrderTop();
+
+		while (item != IZ_NULL) {
+			auto hashItem = item->GetData();
+			auto next = item->GetNext();
+			auto client = hashItem->GetData();
+
+			client->Close();
+
+			ReliableUDPClient::Delete(
+				m_allocator,
+				client);
+
+			item = next;
+		}
+	}
+
     void ReliableUDPListener::ProcRecieve()
     {
         while (!WillClose())
@@ -101,6 +133,14 @@ namespace net {
 
         return ret;
     }
+
+	void ReliableUDPListener::ReliableUDPClient::Delete(
+		IMemoryAllocator* allocator,
+		ReliableUDPClient* client)
+	{
+		client->~ReliableUDPClient();
+		FREE(allocator, client);
+	}
 
     ReliableUDPListener::ReliableUDPClient::ReliableUDPClient(
         ReliableUDPListener* server,

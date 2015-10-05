@@ -24,6 +24,9 @@ namespace net {
 
         ReliableUDP* Accept();
 
+		// 終了.
+		virtual void Close() override;
+
     private:
         void ProcRecieve();
 
@@ -47,6 +50,10 @@ namespace net {
                 ReliableUDPListener* server,
                 const IPv4Endpoint& ep);
 
+			static void Delete(
+				IMemoryAllocator* allocator,
+				ReliableUDPClient* client);
+
         private:
             ReliableUDPClient(
                 ReliableUDPListener* server, 
@@ -54,6 +61,9 @@ namespace net {
 
         public:
             void EnqueueSegment(Segment* segment);
+
+			// 終了.
+			//virtual void Close() override;
 
             AcceptedClientList::Item* GetListItem()
             {
