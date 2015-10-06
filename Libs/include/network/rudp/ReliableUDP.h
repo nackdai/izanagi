@@ -6,6 +6,7 @@
 #include "izDefs.h"
 #include "izStd.h"
 #include "izSystem.h"
+#include "izThreadModel.h"
 #include "network/rudp/RUDPParameter.h"
 #include "network/rudp/RUDPCounter.h"
 
@@ -147,6 +148,19 @@ namespace net {
             return m_CurState == State::ESTABLISHED;
         }
 
+    private:
+        class RetransTask : public threadmodel::CTimerTask {
+            friend class threadmodel::CTimerTask;
+
+        public:
+            RetransTask() : CTimerTask() {}
+            virtual ~RetransTask() {}
+
+            virtual void OnRun(IZ_FLOAT time) override;
+
+            ReliableUDP* m_RUDP{ nullptr };
+        };
+
     protected:
         // 最大シーケンス番号.
         // セグメントヘッダ内のシーケンス番号は 1byte(=8bit) なので、最大は 255(= 2^8 - 1) になる.
@@ -203,7 +217,7 @@ namespace net {
         sys::CEvent m_NotEmptyUnAckedSentSegListWait;
 
         // 送信したが応答が来ていないセグメントのリスト.
-        std::mutex m_UnAckedSentSegmentListLocker;
+        sys::CMutex m_UnAckedSentSegmentListLocker;
         CStdList<Segment> m_UnAckedSentSegmentList;
 
         std::mutex m_RecieveQueueLocker;
@@ -221,6 +235,9 @@ namespace net {
         std::atomic<IZ_BOOL> m_isAllocated{ IZ_FALSE };
         void* m_recvData{ nullptr };
         void* m_sendData{ nullptr };
+
+        // For retransmition.
+        threadmodel::CTimerThread m_RetransWorker;
     };
 }   // namespace net
 }   // namespace izanagi

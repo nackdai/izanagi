@@ -10,6 +10,7 @@
 #include "system/SysEvent.h"
 #include "system/SysSpinLock.h"
 #include "system/SysThread.h"
+#include "system/SysMutex.h"
 
 // Device
 #include "system/Pad.h"

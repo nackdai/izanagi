@@ -11,6 +11,14 @@
 
 namespace izanagi {
 namespace net {
+    void ReliableUDP::RetransTask::OnRun(IZ_FLOAT time)
+    {
+        IZ_ASSERT(m_RUDP);
+        m_RUDP->ProcRetransmit();
+    }
+
+    ////////////////////////////////////////////////////////
+
     // コンストラクタ.
     void ReliableUDP::Init(
         IMemoryAllocator* allocator,
@@ -27,8 +35,20 @@ namespace net {
         // セグメントの受信は別スレッドで受け取る.
         m_RecieveThread = std::thread(std::bind(&ReliableUDP::ProcRecieve, this));
 
+#if 0
+        // Fot retransmition.
+        auto task = threadmodel::CTimerTask::CreateTask<RetransTask>(allocator);
+        IZ_ASSERT(task);
+
+        task->m_RUDP = this;
+
         // TODO
-        //m_RetransWorker = new TimerWorker(ProcRetransmit);
+        m_RetransWorker.PostIntervalTask(
+            allocator,
+            task,
+            100.0f,     // interval.
+            IZ_TRUE);   // will delete.
+#endif
     }
 
     // 接続.
@@ -226,6 +246,8 @@ namespace net {
 
         m_CurState = State::CLOSED;
 
+        m_RetransWorker.Join();
+
 		Clear();
     }
 
@@ -241,6 +263,8 @@ namespace net {
 		}
 
 		m_CurState = State::CLOSED;
+
+        m_RetransWorker.Join();
 
 		Clear();
 
@@ -278,8 +302,10 @@ namespace net {
         IZ_UINT numUnAckedSentSegment = 0;
 
         {
-            std::lock_guard<std::mutex> locker(m_UnAckedSentSegmentListLocker);
-            numUnAckedSentSegment = m_UnAckedSentSegmentList.GetItemNum();
+            //std::lock_guard<std::mutex> locker(m_UnAckedSentSegmentListLocker);
+            m_UnAckedSentSegmentListLocker.safeExec([&](){
+                numUnAckedSentSegment = m_UnAckedSentSegmentList.GetItemNum();
+            });
         }
 
         while (numUnAckedSentSegment >= SendQueueSize
@@ -295,8 +321,10 @@ namespace net {
 
         // 返事のない送信済み（返事待ち）セグメントリストに登録.
         {
-            std::lock_guard<std::mutex> locker(m_UnAckedSentSegmentListLocker);
-            m_UnAckedSentSegmentList.AddTail(segment->GetListItem(ListItemType::UnAcked));
+            //std::lock_guard<std::mutex> locker(m_UnAckedSentSegmentListLocker);
+            m_UnAckedSentSegmentListLocker.safeExec([&]() {
+                m_UnAckedSentSegmentList.AddTail(segment->GetListItem(ListItemType::UnAcked));
+            });
         }
 
         // UnAckedSentSegmentListが空でなくなったので待機イベントに通知.
@@ -435,7 +463,8 @@ namespace net {
             m_CurState = State::ESTABLISHED;
         }
 
-        std::lock_guard<std::mutex> locker(m_UnAckedSentSegmentListLocker);
+        //std::lock_guard<std::mutex> locker(m_UnAckedSentSegmentListLocker);
+        m_UnAckedSentSegmentListLocker.lock();
         {
             auto item = m_UnAckedSentSegmentList.GetTop();
 
@@ -452,6 +481,7 @@ namespace net {
                 item = next;
             }
         }
+        m_UnAckedSentSegmentListLocker.unlock();
 
         m_VacantUnAckedSentSegListWait.Set();
     }
@@ -532,7 +562,8 @@ namespace net {
         int lastOutSequence = ackNumbers.at(ackNumbers.getNum() - 1);
 
         // 送信したけど応答がないセグメントリストに対象となるものがないか調べる.
-        std::lock_guard<std::mutex> locker(m_UnAckedSentSegmentListLocker);
+        //std::lock_guard<std::mutex> locker(m_UnAckedSentSegmentListLocker);
+        m_UnAckedSentSegmentListLocker.lock();
         {
             auto item = m_UnAckedSentSegmentList.GetTop();
 
@@ -575,6 +606,7 @@ namespace net {
                 }
             }
         }
+        m_UnAckedSentSegmentListLocker.unlock();
     }
 
     // 受信したセグメントを処理.
@@ -984,19 +1016,27 @@ namespace net {
         auto itemNum = 0;
 
         {
-            std::lock_guard<std::mutex> locker(m_UnAckedRecievedSegmentListLocker);
+#if 0
+            std::lock_guard<std::mutex> locker(m_UnAckedSentSegmentListLocker);
             itemNum = m_UnAckedRecievedSegmentList.GetItemNum();
+#else
+            m_UnAckedSentSegmentListLocker.safeExec([&]() {
+                itemNum = m_UnAckedSentSegmentList.GetItemNum();
+            });
+#endif
         }
 
         if (itemNum == 0)
         {
-            m_NotEmptyUnAckedSentSegListWait.Wait();
-            m_NotEmptyUnAckedSentSegListWait.Reset();
+            //m_NotEmptyUnAckedSentSegListWait.Wait();
+            //m_NotEmptyUnAckedSentSegListWait.Reset();
+            return;
         }
             
         // 返事を受けていないセグメントを再送.
 
-        std::lock_guard<std::mutex> locker(m_UnAckedRecievedSegmentListLocker);
+#if 0
+        std::lock_guard<std::mutex> locker(m_UnAckedSentSegmentListLocker);
         {
             auto item = m_UnAckedSentSegmentList.GetTop();
 
@@ -1008,6 +1048,21 @@ namespace net {
                 item = item->GetNext();
             }
         }
+#else
+        m_UnAckedSentSegmentListLocker.lock();
+        {
+            auto item = m_UnAckedSentSegmentList.GetTop();
+
+            while (item != IZ_NULL) {
+                auto segment = item->GetData();
+
+                RetransmitSegment(segment);
+
+                item = item->GetNext();
+            }
+        }
+        m_UnAckedSentSegmentListLocker.unlock();
+#endif
     }
 
     // セグメント受信実装.
@@ -1048,6 +1103,7 @@ namespace net {
         return segment;
     }
 
+#if 1
     // セグメント送信実装.
     void ReliableUDP::OnSendSegment(Segment* segment)
     {
@@ -1073,5 +1129,40 @@ namespace net {
         auto size = ws.GetCurPos();
         m_Udp->sendData(bytes, size);
     }
+#else
+    static IZ_BOOL isValid = IZ_FALSE;
+
+    void ReliableUDP::OnSendSegment(Segment* segment)
+    {
+        // 疑似パケットロス.
+
+        if (!IsConnected() || isValid) {
+            IZ_CHAR str[64];
+            segment->ToString(str, sizeof(str));
+
+            IZ_PRINTF("Send Segment [%s]\n", str);
+
+            IZ_UINT8 tmp[64];
+
+            void* data = tmp;
+            IZ_UINT length = sizeof(tmp);
+
+            if (m_isAllocated) {
+                data = m_sendData;
+                length = m_Parameter.MaxSegmentSize;
+            }
+
+            CMemoryOutputStream ws(data, length);
+
+            segment->WriteBytes(&ws);
+            auto bytes = ws.GetBuffer();
+            auto size = ws.GetCurPos();
+            m_Udp->sendData(bytes, size);
+        }
+        else {
+            isValid = IZ_TRUE;
+        }
+    }
+#endif
 }   // namespace net
 }   // namespace izanagi

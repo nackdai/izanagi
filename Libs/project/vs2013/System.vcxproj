@@ -311,6 +311,7 @@
     <ClInclude Include="..\..\include\system\SysEnvironment.h" />
     <ClInclude Include="..\..\include\system\SysEvent.h" />
     <ClInclude Include="..\..\include\system\SysKeyDefs.h" />
+    <ClInclude Include="..\..\include\system\SysMutex.h" />
     <ClInclude Include="..\..\include\system\SysSpinLock.h" />
     <ClInclude Include="..\..\include\system\SysThread.h" />
     <ClInclude Include="..\..\include\system\SysTimer.h" />

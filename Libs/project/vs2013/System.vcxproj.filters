@@ -114,6 +114,9 @@
     <ClInclude Include="..\..\include\system\SysSpinLock.h">
       <Filter>include\thread</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\system\SysMutex.h">
+      <Filter>include\thread</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\system\win32\SysTimer_win32.cpp">

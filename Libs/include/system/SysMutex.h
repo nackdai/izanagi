@@ -1,13 +1,19 @@
 #if !defined(__IZANAGI_SYSTEM_SYS_MUTEX_H__)
 #define __IZANAGI_SYSTEM_SYS_MUTEX_H__
 
+#if 0
 #include "izDefs.h"
 #include "SysThreadDefs.h"
+#else
+#include <mutex>
+#include "izDefs.h"
+#endif
 
 namespace izanagi
 {
 namespace sys
 {
+#if 0
     /**
      */
     class CMutex {
@@ -66,6 +72,47 @@ namespace sys
     private:
         CMutex& m_Mutex;
     };
+#else
+    class CMutex {
+    public:
+        CMutex() {}
+        ~CMutex()
+        {
+            IZ_ASSERT(m_refCnt == 0);
+        }
+
+        NO_COPIABLE(CMutex);
+
+    public:
+        void lock()
+        {
+            if (m_refCnt == 0) {
+                m_mutex.lock();
+            }
+            m_refCnt++;
+        }
+
+        void unlock()
+        {
+            if (m_refCnt == 1) {
+                m_mutex.unlock();
+            }
+            m_refCnt--;
+            IZ_ASSERT(m_refCnt >= 0);
+        }
+
+        void safeExec(std::function<void()> func)
+        {
+            lock();
+            func();
+            unlock();
+        }
+
+    private:
+        IZ_INT m_refCnt{ 0 };
+        std::mutex m_mutex;
+    };
+#endif
 }   // namespace sys
 }   // namespace izanagi
 

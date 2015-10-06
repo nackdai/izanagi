@@ -26,7 +26,7 @@ namespace net {
 			uv_idle_stop(&idler);
 
             // TODO
-            while (uv_loop_close(uv_default_loop()) != UV_EBUSY) {
+            while (uv_loop_close(uv_default_loop()) == UV_EBUSY) {
             }
             s_Th.join();
             s_refCnt = 0;
