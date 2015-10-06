@@ -36,11 +36,17 @@ namespace net {
             void* buf,
             IZ_UINT size);
 
+#if 0
         /** データを送信.
          */
         IZ_BOOL sendData(
             const void* data,
             IZ_UINT size);
+#else
+		IZ_INT sendData(
+			const void* data,
+			IZ_UINT size);
+#endif
 
         inline IZ_BOOL IsConnected() const
         {
@@ -63,6 +69,7 @@ namespace net {
         void OnConnect(uv_connect_t *req, int status);
         void OnAlloc(uv_handle_t* handle, size_t suggested_size, uv_buf_t* buf);
         void OnReadEnd(uv_stream_t* stream, ssize_t nread, const uv_buf_t* buf);
+		void OnWriteEnd(uv_write_t* req, int status);
 
     private:
         IMemoryAllocator* m_allocator{ nullptr };
@@ -89,6 +96,9 @@ namespace net {
 
         using CallbackOnReadEnd = std::function < void(uv_stream_t* stream, ssize_t nread, const uv_buf_t* buf) > ;
         Callback<CallbackOnReadEnd> m_cbReadEnd;
+
+		using CallbackOnWriteEnd = std::function < void(uv_write_t* req, int status) >;
+		Callback<CallbackOnWriteEnd> m_cbWriteEnd;
             
         std::function<void(IZ_BOOL)> m_onConnected{ nullptr };
 
