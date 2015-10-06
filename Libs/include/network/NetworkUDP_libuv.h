@@ -30,13 +30,15 @@ namespace net {
          */
         IZ_BOOL start(IMemoryAllocator* allocator);
 
+		IZ_BOOL isRunning() const;
+
         /** 接続.
          */
         IZ_BOOL connectTo(const IPv4Endpoint& remoteEp);
 
         /** 停止.
          */
-        void stop();
+		IZ_BOOL stop();
 
         /** 受信したデータを取得.
          */
@@ -49,6 +51,7 @@ namespace net {
             IZ_UINT size,
             IPv4Endpoint& remoteEp);
 
+#if 0
         /** データを送信.
          */
         IZ_BOOL sendData(const void* data, IZ_UINT size);
@@ -59,18 +62,29 @@ namespace net {
             const void* data,
             IZ_UINT size,
             const IPv4Endpoint& remoteEp);
+#else
+		/** データを送信.
+		*/
+		IZ_INT sendData(const void* data, IZ_UINT size);
 
-        inline IZ_BOOL IsStarted() const
-        {
-            return m_isStarted;
-        }
+		/** 指定した接続先にデータを送信.
+		*/
+		IZ_INT sendTo(
+			const void* data,
+			IZ_UINT size,
+			const IPv4Endpoint& remoteEp);
+#endif
 
     private:
+		IZ_BOOL canStop() const;
+
         void startRecieve();
 
         void OnAlloc(uv_handle_t* handle, size_t suggested_size, uv_buf_t* buf);
         void OnRecieved(uv_udp_t* handle, ssize_t nread, const uv_buf_t* buf, const struct sockaddr* addr, unsigned flags);
         void OnSent(uv_udp_send_t* req, int status);
+
+		IZ_BOOL willClose() const;
 
     protected:
         IMemoryAllocator* m_allocator{ nullptr };
@@ -79,13 +93,13 @@ namespace net {
 
         using CalbackOnSent = std::function < void(uv_udp_send_t* req, int status) > ;
 
-        struct SendHandle {
+        struct SendRequest {
             uv_udp_send_t req;
             Callback<CalbackOnSent> cbSent;
         };
 
         std::atomic<IZ_UINT> m_reqSendPos{ 0 };
-        SendHandle m_reqSend[3];
+		SendRequest m_reqSend[3];
 
         IZ_BOOL m_isBindAddr{ IZ_FALSE };
         IPv4Endpoint m_host;
@@ -99,7 +113,13 @@ namespace net {
         using CallbackOnRecieved = std::function < void(uv_udp_t* handle, ssize_t nread, const uv_buf_t* buf, const struct sockaddr* addr, unsigned flags) > ;
         Callback<CallbackOnRecieved> m_cbRecieved;
 
-        std::atomic<IZ_BOOL> m_isStarted{ IZ_FALSE };
+		enum State : IZ_UINT {
+			Running,
+			WillClose,
+			Closed,
+		};
+
+		std::atomic<State> m_State{ State::Closed };
         std::atomic<IZ_BOOL> m_isRecieving{ IZ_FALSE };
 
         struct RecvData {

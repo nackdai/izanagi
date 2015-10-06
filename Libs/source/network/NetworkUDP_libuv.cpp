@@ -25,7 +25,7 @@ namespace net {
         IMemoryAllocator* allocator,
         const IPv4Endpoint& hostEp)
     {
-        if (IsStarted()) {
+		if (isRunning()) {
             return IZ_FALSE;
         }
 
@@ -63,7 +63,7 @@ namespace net {
             m_isBindAddr = IZ_TRUE;
             m_host = hostEp;
 
-            m_isStarted = IZ_TRUE;
+			m_State = State::Running;
 
             startRecieve();
         }
@@ -78,7 +78,7 @@ namespace net {
     // 起動.
     IZ_BOOL Udp::start(IMemoryAllocator* allocator)
     {
-        if (IsStarted()) {
+		if (isRunning()) {
             return IZ_FALSE;
         }
 
@@ -91,7 +91,7 @@ namespace net {
         if (result) {
             m_allocator = allocator;
 
-            m_isStarted = IZ_TRUE;
+			m_State = State::Running;
 
             startRecieve();
         }
@@ -104,8 +104,17 @@ namespace net {
         return result;
     }
 
+	IZ_BOOL Udp::isRunning() const
+	{
+		return (m_State == State::Running);
+	}
+
     IZ_BOOL Udp::connectTo(const IPv4Endpoint& remoteEp)
     {
+		if (!isRunning()) {
+			return IZ_FALSE;
+		}
+
         if (m_specifiedRemote) {
             return IZ_FALSE;
         }
@@ -117,11 +126,17 @@ namespace net {
     }
 
     // 停止.
-    void Udp::stop()
+	IZ_BOOL Udp::stop()
     {
-        if (!IsStarted()) {
-            return;
+		if (!isRunning()) {
+            return IZ_TRUE;
         }
+
+		if (!canStop()) {
+			return IZ_FALSE;
+		}
+
+		m_State = State::WillClose;
 
         if (m_isRecieving) {
             IZ_BOOL result = IZ_FALSE;
@@ -148,15 +163,29 @@ namespace net {
             CallbackRegister::Remove(m_cbRecieved);
         }
 
-        // NOTE
-        // uv_close 内部でコールバックが呼ばれていないぽい.
-
+		// TODO
+		// 現状ではコールバックは呼ばない.
         uv_close(
             (uv_handle_t*)&m_udp,
-            IZ_NULL);
+			NULL);
 
-        m_isStarted = IZ_FALSE;
+		m_State = State::Closed;
+
+		return IZ_TRUE;
     }
+
+	IZ_BOOL Udp::canStop() const
+	{
+		if (!isRunning()) {
+			return IZ_FALSE;
+		}
+
+		if (m_reqSendPos > 0) {
+			return IZ_FALSE;
+		}
+
+		return IZ_TRUE;
+	}
 
     void Udp::startRecieve()
     {
@@ -260,6 +289,10 @@ namespace net {
         void* buf,
         IZ_UINT size)
     {
+		if (!isRunning()) {
+			return -1;
+		}
+
         IPv4Endpoint remoteEp;
 
         IZ_INT ret = recieveFrom(buf, size, remoteEp);
@@ -272,6 +305,10 @@ namespace net {
         IZ_UINT size,
         IPv4Endpoint& remoteEp)
     {
+		if (!isRunning()) {
+			return -1;
+		}
+
         std::lock_guard<std::mutex> lock(m_listRecvDataLocker);
 
         auto item = m_listRecvData.GetTop();
@@ -303,6 +340,7 @@ namespace net {
         return ret;
     }
 
+#if 1
     IZ_BOOL Udp::sendData(const void* data, IZ_UINT size)
     {
         IZ_ASSERT(m_specifiedRemote);
@@ -315,6 +353,10 @@ namespace net {
         IZ_UINT size,
         const IPv4Endpoint& remoteEp)
     {
+		if (!isRunning()) {
+			return IZ_FALSE;
+		}
+
         sockaddr_in addr;
         remoteEp.get(addr);
 
@@ -330,19 +372,19 @@ namespace net {
 
         IZ_ASSERT(m_reqSendPos < COUNTOF(m_reqSend));
 
-        auto& handle = m_reqSend[m_reqSendPos];
+        auto& request = m_reqSend[m_reqSendPos];
         m_reqSendPos++;
 
-        handle.cbSent.Set(
-            CallbackRegister::Key(CallbackRegister::Type::Send, &handle.req),
+		request.cbSent.Set(
+			CallbackRegister::Key(CallbackRegister::Type::Send, &request.req),
             onSent);
 
-        CallbackRegister::RegistPermanently(handle.cbSent);
+		CallbackRegister::RegistPermanently(request.cbSent);
 
         IZ_LIBUV_EXEC(
             result,
             uv_udp_send(
-            &handle.req, &m_udp, &buf, 1, (const sockaddr*)&addr,
+			&request.req, &m_udp, &buf, 1, (const sockaddr*)&addr,
             [](uv_udp_send_t* req, int status) {
             CallbackRegister::Invoke<CalbackOnSent>(
                 CallbackRegister::Key(CallbackRegister::Type::Send, req),
@@ -352,12 +394,48 @@ namespace net {
         return result;
     }
 
-    void Udp::OnSent(uv_udp_send_t* req, int status)
-    {
-        m_reqSendPos--;
+	void Udp::OnSent(uv_udp_send_t* req, int status)
+	{
+		m_reqSendPos--;
 
-        SendHandle* handle = reinterpret_cast<SendHandle*>(req);
-        CallbackRegister::Remove(handle->cbSent);
-    }
+		SendRequest* handle = reinterpret_cast<SendRequest*>(req);
+		CallbackRegister::Remove(handle->cbSent);
+	}
+#else
+	IZ_INT Udp::sendData(const void* data, IZ_UINT size)
+	{
+		IZ_ASSERT(m_specifiedRemote);
+		return sendTo(data, size, m_remote);
+	}
+
+	// 指定した接続先にデータを送信.
+	IZ_INT Udp::sendTo(
+		const void* data,
+		IZ_UINT size,
+		const IPv4Endpoint& remoteEp)
+	{
+		if (!isRunning()) {
+			return IZ_FALSE;
+		}
+
+		sockaddr_in addr;
+		remoteEp.get(addr);
+
+		IZ_INT result = 0;
+
+		uv_buf_t buf = uv_buf_init((char*)data, size);
+
+		IZ_ASSERT(m_reqSendPos < COUNTOF(m_reqSend));
+
+		// NOTE
+		// uv_udp_try_send is not supported...
+
+		IZ_LIBUV_EXEC(
+			result,
+			uv_udp_try_send(&m_udp, &buf, 1, (const sockaddr*)&addr));
+
+		return result;
+	}
+#endif
 }    // namespace net
 }    // namespace izanagi
