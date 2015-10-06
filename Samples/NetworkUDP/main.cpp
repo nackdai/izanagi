@@ -26,10 +26,10 @@ void runAsServer(izanagi::IMemoryAllocator* allocator)
     while (udp.recieveFrom(buf, size, remote) < 0) {
     }
 
-
     IZ_PRINTF("%s\n", buf);
 
-    udp.stop();
+	while (!udp.stop()) {
+	}
 }
 
 void runAsClient(izanagi::IMemoryAllocator* allocator)
@@ -46,7 +46,8 @@ void runAsClient(izanagi::IMemoryAllocator* allocator)
 
     udp.sendData(str, strlen(str));
 
-    udp.stop();
+	while (!udp.stop()) {
+	}
 }
 
 IzMain(0, 0)
