@@ -23,6 +23,7 @@ namespace net {
     class FinishSegment : Segment
     {
         friend class Segment;
+		friend class ReliableUDP;
 
     public:
         virtual Type GetType() const override
@@ -46,6 +47,19 @@ namespace net {
         }
 
         virtual ~FinishSegment() {}
+
+		void Init(
+			IMemoryAllocator* allocator,
+			IZ_INT sequenceNumber)
+		{
+			m_allocator = allocator;
+
+			m_Flags = (int)Type::FIN;
+			m_SequenceNumber = sequenceNumber;
+			m_HeaderLength = RUDP_HEADER_LEN;
+
+			m_AckNumber = -1;
+		}
 
         virtual void WriteBytes(IOutputStream* wr) override
         {

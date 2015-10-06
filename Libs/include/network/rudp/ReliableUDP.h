@@ -59,6 +59,8 @@ namespace net {
 		IZ_BOOL WaitForFinish();
 
     private:
+		void Clear();
+
         // セグメントの送信と返事待ちセグメントキューへの登録.
         void SendAndQueueSegment(Segment* segment);
 
@@ -109,6 +111,8 @@ namespace net {
         void ProcRetransmit();
 
     protected:
+		static void DeleteSegment(Segment* s);
+
         // セグメント受信実装.
         virtual Segment* OnRecieveSegment();
 

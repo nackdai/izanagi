@@ -76,6 +76,7 @@ void runAsClient(izanagi::IMemoryAllocator* allocator)
     IZ_PRINTF("%s\n", buf);
 
 	rudp.WaitForFinish();
+	udp.stop();
 }
 
 IzMain(0, 0)

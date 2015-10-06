@@ -26,6 +26,9 @@ namespace izanagi {
 namespace net {
     void Segment::Delete(Segment* segment)
     {
+		// どこにも所属していないことを確認する.
+		IZ_ASSERT(!segment->isBelonged());
+
         auto allocator = segment->m_allocator;
 
         delete segment;
@@ -180,5 +183,10 @@ namespace net {
                 m_SequenceNumber);
         }
     }
+
+	IZ_BOOL Segment::isBelonged() const
+	{
+		return m_listItem[0].HasList() || m_listItem[1].HasList();
+	}
 }   // namespace net
 }   // namespace izanagi

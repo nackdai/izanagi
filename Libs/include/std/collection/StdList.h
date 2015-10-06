@@ -286,6 +286,21 @@ namespace izanagi {
             return IZ_FALSE;
         }
 
+		void ForeachRemove(std::function<void(_T*)> func)
+		{
+			auto item = GetTop();
+
+			while (item != IZ_NULL) {
+				auto next = item->GetNext();
+				auto data = item->GetData();
+
+				item->Leave();
+				func(data);
+
+				item = next;
+			}
+		}
+
     protected:
         IZ_UINT32 m_nNum;
 

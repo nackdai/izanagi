@@ -25,6 +25,7 @@ namespace net {
     class Segment : public CPlacementNew {
         friend class ReliableUDP;
         friend class ReliableUDPListener;
+		friend class CStdList<Segment>;
 
     public:
         static const IZ_UINT RUDP_VERSION = 1;
@@ -72,6 +73,8 @@ namespace net {
             IZ_UINT hederSize);
 
         virtual ~Segment();
+
+		IZ_BOOL isBelonged() const;
 
     public:
         IZ_BOOL operator>(const Segment& rhs)

@@ -86,6 +86,7 @@ namespace net {
                 if (segment->IsResetSegment())
                 {
                     item->Leave();
+					Segment::Delete(segment);
                     break;
                 }
                 else if (segment->IsFinishSegment())
@@ -93,6 +94,7 @@ namespace net {
                     if (totalSize <= 0)
                     {
                         item->Leave();
+						Segment::Delete(segment);
                         totalSize = -1;
                     }
                     break;
@@ -117,6 +119,7 @@ namespace net {
                     totalSize += s->Size();
 
                     item->Leave();
+					Segment::Delete(segment);
                 }
 
                 item = next;
@@ -191,11 +194,20 @@ namespace net {
                 // そこで、DataSegment や FinishSegment などを送るときにシーケンス番号をリセットするように
                 // LastInSequenceNumber ではなく、独自に管理しているシーケンス番号を使うようにする.
             {
+#if 0
                 auto segment = Segment::Create<FinishSegment>(
                     m_allocator,
                     m_Counter.NextSequenceNumber());
 
                 SendSegment(segment);
+#else
+				FinishSegment segment;
+				segment.Init(
+					m_allocator,
+					m_Counter.NextSequenceNumber());
+
+				SendSegment(&segment);
+#endif
 
                 m_CurState = State::WILL_CLOSE;
                 if (m_RecieveThread.joinable()) {
@@ -214,9 +226,7 @@ namespace net {
 
         m_CurState = State::CLOSED;
 
-        m_VacantUnAckedSentSegListWait.Set();
-        m_NotEmptyUnAckedSentSegListWait.Set();
-        m_InSequenceSegWait.Set();
+		Clear();
     }
 
 	// 終了されるまで待つ.
@@ -231,6 +241,35 @@ namespace net {
 		}
 
 		m_CurState = State::CLOSED;
+
+		Clear();
+
+		return IZ_TRUE;
+	}
+
+	void ReliableUDP::Clear()
+	{
+		if (m_isAllocated) {
+			FREE(m_allocator, m_recvData);
+			FREE(m_allocator, m_sendData);
+			m_isAllocated = IZ_FALSE;
+		}
+
+		auto func = [](Segment* s) {
+			if (!s->isBelonged()) {
+				Segment::Delete(s);
+			}
+		};
+
+		// リストに残っているものを処分する.
+		m_UnAckedSentSegmentList.ForeachRemove(func);
+		m_InSequenceSegmentList.ForeachRemove(func);
+		m_OutSequenceSegmentList.ForeachRemove(func);
+		m_UnAckedRecievedSegmentList.ForeachRemove(func);
+
+		m_VacantUnAckedSentSegListWait.Set();
+		m_NotEmptyUnAckedSentSegListWait.Set();
+		m_InSequenceSegWait.Set();
 	}
 
     // セグメントの送信と返事待ちセグメントキューへの登録.
@@ -365,6 +404,12 @@ namespace net {
                 }
 
                 CheckAndGetAck(segment);
+
+				if (segment->IsSynchronousSegment()
+					|| segment->IsAcknowledgementSegment())
+				{
+					Segment::Delete(segment);
+				}
             }
 
             sys::CThread::YieldThread();
@@ -400,7 +445,8 @@ namespace net {
 
                 if ((CompareSequenceNumbers(s->SequenceNumber(), ackNumber) <= 0))
                 {
-                    item->Leave();
+					item->Leave();
+					Segment::Delete(s);
                 }
 
                 item = next;
@@ -868,15 +914,24 @@ namespace net {
         auto sendSegment = new AcknowledgementSegment(
             NextSequenceNumber(lastInSequence),
             lastInSequence);
-#else
+#elif 0
         auto sendSegment = Segment::Create<AcknowledgementSegment>(
             m_allocator,
             NextSequenceNumber(segment->SequenceNumber()),
             segment->SequenceNumber());
-#endif
 
-        // 送信.
-        SendSegment(sendSegment);
+		// 送信.
+		SendSegment(sendSegment);
+#else
+		AcknowledgementSegment sendSegment;
+		sendSegment.Init(
+			m_allocator,
+			NextSequenceNumber(segment->SequenceNumber()),
+			segment->SequenceNumber());
+
+		// 送信.
+		SendSegment(&sendSegment);
+#endif
 
         if (segment != nullptr)
         {

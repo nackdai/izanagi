@@ -21,6 +21,7 @@ namespace net {
     class AcknowledgementSegment : public Segment
     {
         friend class Segment;
+		friend class ReliableUDP;
 
     protected:
         AcknowledgementSegment() {}
@@ -33,6 +34,20 @@ namespace net {
         {
             SetAcknowledgedNumber(acknowledgedNumber);
         }
+
+		void Init(
+			IMemoryAllocator* allocator,
+			IZ_INT sequenceNumber,
+			IZ_INT acknowledgedNumber)
+		{
+			m_allocator = allocator;
+
+			m_Flags = (int)Type::ACK;
+			m_SequenceNumber = sequenceNumber;
+			m_HeaderLength = RUDP_HEADER_LEN;
+
+			SetAcknowledgedNumber(acknowledgedNumber);
+		}
 
     public:
         virtual Type GetType() const override
