@@ -17,7 +17,7 @@ namespace net {
 
     Udp::~Udp()
     {
-        stop();
+		while (!stop()) {}
     }
 
     // 起動.
@@ -109,6 +109,11 @@ namespace net {
 		return (m_State == State::Running);
 	}
 
+	IZ_BOOL Udp::isClosing() const
+	{
+		return (m_State == State::WillClose);
+	}
+
     IZ_BOOL Udp::connectTo(const IPv4Endpoint& remoteEp)
     {
 		if (!isRunning()) {
@@ -125,9 +130,18 @@ namespace net {
         return IZ_TRUE;
     }
 
+	void Udp::OnClosed(uv_handle_t* handle)
+	{
+		m_State = State::Closed;
+	}
+
     // 停止.
 	IZ_BOOL Udp::stop()
     {
+		if (isClosing()) {
+			return IZ_FALSE;
+		}
+
 		if (!isRunning()) {
             return IZ_TRUE;
         }
@@ -163,15 +177,27 @@ namespace net {
             CallbackRegister::Remove(m_cbRecieved);
         }
 
-		// TODO
-		// 現状ではコールバックは呼ばない.
+		auto onClosed = std::bind(
+			&Udp::OnClosed,
+			this,
+			std::placeholders::_1);
+
+		m_cbClosed.Set(
+			CallbackRegister::Key(CallbackRegister::Type::Close, &m_udp),
+			onClosed);
+
+		CallbackRegister::Regist(m_cbClosed);
+
         uv_close(
             (uv_handle_t*)&m_udp,
-			NULL);
-
-		m_State = State::Closed;
-
-		return IZ_TRUE;
+			[](uv_handle_t* handle){
+			CallbackRegister::Invoke<CallbackOnClosed>(
+				CallbackRegister::Key(CallbackRegister::Type::Close, handle),
+				handle);
+		});
+		
+		// まだ終了していないので、false を返す.
+		return IZ_FALSE;
     }
 
 	IZ_BOOL Udp::canStop() const

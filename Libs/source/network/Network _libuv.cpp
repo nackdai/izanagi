@@ -23,15 +23,17 @@ namespace net {
     void Network::end()
     {
         if (s_refCnt > 0) {
-			// stop libuv loop.
-			uv_stop(uv_default_loop());
+			uv_close((uv_handle_t*)&idler, NULL);
+
 			s_Th.join();
+
+			// NOTE
+			// Maybe, call closing handle functions forcibly.
+			uv_run(uv_default_loop(), UV_RUN_DEFAULT);
 
 			// close libuv internal parameters.
             while (uv_loop_close(uv_default_loop()) == UV_EBUSY) {
             }
-
-			//uv_idle_stop(&idler);
 
             s_refCnt = 0;
         }
