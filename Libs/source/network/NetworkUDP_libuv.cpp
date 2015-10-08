@@ -78,7 +78,7 @@ namespace net {
     // 起動.
     IZ_BOOL Udp::start(IMemoryAllocator* allocator)
     {
-		if (isRunning()) {
+		if (isRunning() || isClosing()) {
             return IZ_FALSE;
         }
 

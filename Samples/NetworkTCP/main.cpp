@@ -26,14 +26,13 @@ void runAsServer(izanagi::IMemoryAllocator* allocator)
     IZ_UINT8 buf[28] = { 0 };
     
     while (client->recieve(buf, sizeof(buf)) < 0) {
-
     }
 
     IZ_PRINTF("%s\n", buf);
 
-    client->stop();
+	while (!client->stop()) {}
        
-    listener.stop();
+	while (!listener.stop()) {}
 }
 
 void runAsClient(izanagi::IMemoryAllocator* allocator)
@@ -60,7 +59,8 @@ void runAsClient(izanagi::IMemoryAllocator* allocator)
 
     client.sendData(str, strlen(str));
 
-    client.stop();
+	while (!client.stop()) {
+	}
 }
 
 IzMain(0, 0)

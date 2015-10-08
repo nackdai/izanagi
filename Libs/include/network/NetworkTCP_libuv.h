@@ -30,7 +30,7 @@ namespace net {
             const IPv4Endpoint& remoteEp,
             std::function<void(IZ_BOOL)> onConnected);
 
-        virtual void stop();
+        virtual IZ_BOOL stop();
 
         IZ_INT recieve(
             void* buf,
@@ -48,20 +48,13 @@ namespace net {
 			IZ_UINT size);
 #endif
 
-        inline IZ_BOOL IsConnected() const
-        {
-            return m_isConnected;
-        }
+		IZ_BOOL isConnected() const;
 
-        inline IZ_BOOL IsConnecting() const
-        {
-            return m_isConnecting;
-        }
+		IZ_BOOL isConnecting() const;
 
-        inline IZ_BOOL IsSending() const
-        {
-            return m_isWriting;
-        }
+		IZ_BOOL isClosing() const;
+
+		IZ_BOOL isRunning() const;
 
     private:
         void startRecieve();
@@ -70,6 +63,10 @@ namespace net {
         void OnAlloc(uv_handle_t* handle, size_t suggested_size, uv_buf_t* buf);
         void OnReadEnd(uv_stream_t* stream, ssize_t nread, const uv_buf_t* buf);
 		void OnWriteEnd(uv_write_t* req, int status);
+		void OnClosed(uv_handle_t* handle);
+
+		inline void SetConnected();
+		inline void SetConnecting();
 
     private:
         IMemoryAllocator* m_allocator{ nullptr };
@@ -83,9 +80,18 @@ namespace net {
         // 書き込みリクエスト.
         uv_write_t m_reqWrite;
 
-        std::atomic<IZ_BOOL> m_isConnected{ IZ_FALSE };
-        std::atomic<IZ_BOOL> m_isConnecting{ IZ_FALSE };
-        std::atomic<IZ_BOOL> m_isWriting{ IZ_FALSE };
+		enum State : IZ_UINT
+		{
+			Closed = 1 << 0,
+			WillClose = 1 << 1,
+
+			Connecting = 1 << 2,
+			Connected = 1 << 3,
+
+			Running = 1 << 16,
+		};
+
+		std::atomic<State> m_State{ State::Closed };
         std::atomic<IZ_BOOL> m_isReading{ IZ_FALSE };
 
         using CallbackConnected = std::function < void(uv_connect_t *req, int status) >;
@@ -99,6 +105,9 @@ namespace net {
 
 		using CallbackOnWriteEnd = std::function < void(uv_write_t* req, int status) >;
 		Callback<CallbackOnWriteEnd> m_cbWriteEnd;
+
+		using CallbackOnClosed = std::function < void(uv_handle_t* handle) >;
+		Callback<CallbackOnClosed> m_cbClosed;
             
         std::function<void(IZ_BOOL)> m_onConnected{ nullptr };
 
@@ -140,17 +149,17 @@ namespace net {
             const IPv4Endpoint& hostEp,
             IZ_UINT maxConnections);
 
-        void stop();
+		IZ_BOOL stop();
 
         TcpClient* acceptRemote();
 
-        inline IZ_BOOL IsListening() const
-        {
-            return m_isListening;
-        }
+		IZ_BOOL isRunning() const;
+        
+		IZ_BOOL isClosing() const;
 
     private:
         void OnConnection(uv_stream_t* server, int status);
+		void OnClosed(uv_handle_t* handle);
 
     private:
         class TcpRemote : public TcpClient {
@@ -168,10 +177,11 @@ namespace net {
                 return &m_listItem;
             }
 
-            virtual void stop() override
+            virtual IZ_BOOL stop() override
             {
-                TcpClient::stop();
+                IZ_BOOL ret = TcpClient::stop();
                 m_listItem.Leave();
+				return ret;
             }
 
         private:
@@ -193,7 +203,17 @@ namespace net {
         using CallbackOnConnection = std::function < void(uv_stream_t* server, int status) > ;
         Callback<CallbackOnConnection> m_cbConnection;
 
-        std::atomic<IZ_BOOL> m_isListening{ IZ_FALSE };
+		using CallbackOnClosed = std::function < void(uv_handle_t* handle) >;
+		Callback<CallbackOnClosed> m_cbClosed;
+
+		enum State : IZ_UINT
+		{
+			Closed,
+			Listening,
+			WillClose,
+		};
+
+		std::atomic<State> m_State{ State::Closed };
     };
 }    // namespace net
 }    // namespace izanagi

@@ -23,12 +23,20 @@ namespace net {
 
     TcpClient::~TcpClient()
     {
-        IZ_ASSERT(!m_isConnected);
+		while (!stop()) {}
     }
 
     // 起動.
     IZ_BOOL TcpClient::start(IMemoryAllocator* allocator)
     {
+		if (isClosing()) {
+			return IZ_FALSE;
+		}
+
+		if (isRunning()) {
+			return IZ_TRUE;
+		}
+
         IZ_BOOL result = IZ_FALSE;
 
         m_allocator = allocator;
@@ -44,6 +52,8 @@ namespace net {
             stop();
         }
 
+		m_State = State::Running;
+
         return result;
     }
 
@@ -51,11 +61,11 @@ namespace net {
         const IPv4Endpoint& remoteEp,
         std::function<void(IZ_BOOL)> onConnected)
     {
-        if (IsConnected()) {
-            return IZ_FALSE;
-        }
+		if (!isRunning()) {
+			return IZ_FALSE;
+		}
 
-        if (IsConnecting()) {
+		if (isConnected() || isConnecting()) {
             return IZ_FALSE;
         }
 
@@ -79,7 +89,7 @@ namespace net {
             uv_ip4_addr(ip, port, &serverAddr);
         }
 
-        m_isConnecting = IZ_TRUE;
+		SetConnecting();
 
         m_onConnected = onConnected;
 
@@ -112,8 +122,6 @@ namespace net {
 
     void TcpClient::OnConnect(uv_connect_t *req, int status)
     {
-        m_isConnecting = IZ_FALSE;
-
         if (status < 0) {
             // TODO
             if (m_onConnected) {
@@ -124,28 +132,26 @@ namespace net {
         }
 
         m_handle = req->handle;
-        m_isConnected = IZ_TRUE;
+        
+		SetConnected();
 
         if (m_onConnected) {
             m_onConnected(IZ_TRUE);
         }
     }
 
-    void TcpClient::stop()
+	IZ_BOOL TcpClient::stop()
     {
-        if (!IsConnected()) {
-            return;
+		if (isClosing()) {
+			return IZ_FALSE;
+		}
+
+		if (!isRunning()) {
+            return IZ_TRUE;
         }
 
-        if (m_isConnecting) {
-            uv_cancel((uv_req_t*)&m_reqConnect);
-            m_isConnecting = IZ_FALSE;
-        }
-
-        if (m_isWriting) {
-            uv_cancel((uv_req_t*)&m_reqWrite);
-            m_isWriting = IZ_FALSE;
-        }
+        uv_cancel((uv_req_t*)&m_reqConnect);
+        uv_cancel((uv_req_t*)&m_reqWrite);
 
         if (m_isReading) {
             uv_read_stop(m_handle);
@@ -166,15 +172,35 @@ namespace net {
             CallbackRegister::Remove(m_cbReadEnd);
         }
 
-        // NOTE
-        // どうも内部でコールバックを呼ばないぽい・・・
+		m_State = State::WillClose;
+
+		auto onClosed = std::bind(
+			&TcpClient::OnClosed,
+			this,
+			std::placeholders::_1);
+
+		m_cbClosed.Set(
+			CallbackRegister::Key(CallbackRegister::Type::Close, m_handle),
+			onClosed);
+
+		CallbackRegister::Regist(m_cbClosed);
 
         uv_close(
             (uv_handle_t*)m_handle,
-            IZ_NULL);
+			[](uv_handle_t* handle){
+			CallbackRegister::Invoke<CallbackOnClosed>(
+				CallbackRegister::Key(CallbackRegister::Type::Close, handle),
+				handle);
+		});
 
-        m_isConnected = IZ_FALSE;
+		// まだ終了していないので、false を返す.
+		return IZ_FALSE;
     }
+
+	void TcpClient::OnClosed(uv_handle_t* handle)
+	{
+		m_State = State::Closed;
+	}
 
     IZ_INT TcpClient::recieve(
         void* buf,
@@ -215,7 +241,7 @@ namespace net {
     void TcpClient::startRecieve()
     {
         // 接続チェック.
-        IZ_ASSERT(IsConnected());
+        IZ_ASSERT(isConnected());
 
         m_isReading = IZ_TRUE;
 
@@ -364,11 +390,7 @@ namespace net {
 		IZ_UINT size)
 	{
 		// 接続チェック.
-		if (!IsConnected()) {
-			return IZ_FALSE;
-		}
-
-		if (IsSending()) {
+		if (!isConnected()) {
 			return IZ_FALSE;
 		}
 
@@ -377,19 +399,48 @@ namespace net {
 		buf.len = size;
 		buf.base = (char*)data;
 
-		m_isWriting = IZ_TRUE;
-
 		IZ_INT result = 0;
 
+		// send immediately.
 		IZ_LIBUV_EXEC(
 			result,
 			uv_try_write(m_handle, &buf, 1));
 
-		m_isWriting = IZ_FALSE;
-
 		return result;
 	}
 #endif
+
+	IZ_BOOL TcpClient::isConnected() const
+	{
+		return (m_State & State::Connected) > 0;
+	}
+
+	IZ_BOOL TcpClient::isConnecting() const
+	{
+		return (m_State & State::Connecting) > 0;
+	}
+
+	IZ_BOOL TcpClient::isClosing() const
+	{
+		return (m_State == State::WillClose);
+	}
+
+	IZ_BOOL TcpClient::isRunning() const
+	{
+		return (m_State & State::Running) > 0;
+	}
+
+	void TcpClient::SetConnected()
+	{
+		IZ_ASSERT(isRunning());
+		m_State = (State)(State::Running | State::Connected);
+	}
+
+	void TcpClient::SetConnecting()
+	{
+		IZ_ASSERT(isRunning());
+		m_State = (State)(State::Running | State::Connecting);
+	}
 
     ////////////////////////////////////////////////
 
@@ -399,7 +450,7 @@ namespace net {
 
     TcpListener::~TcpListener()
     {
-        IZ_ASSERT(!m_isListening);
+		while (!stop()) {}
     }
 
     IZ_BOOL TcpListener::start(
@@ -407,8 +458,12 @@ namespace net {
         const IPv4Endpoint& hostEp,
         IZ_UINT maxConnections)
     {
+		if (isClosing()) {
+			return IZ_FALSE;
+		}
+
         // 接続済みチェック.
-        if (IsListening()) {
+		if (isRunning()) {
             return IZ_TRUE;
         }
 
@@ -460,7 +515,8 @@ namespace net {
         }
 
         if (result) {
-            m_isListening = IZ_TRUE;
+			m_State = State::Listening;
+
             m_maxConnections = maxConnections;
             m_remotes.init(allocator, maxConnections);
 
@@ -492,7 +548,7 @@ namespace net {
             for (IZ_UINT i = 0; i < m_maxConnections; i++) {
                 auto& r = m_remotes.at(i);
 
-                if (!r.IsConnected()) {
+                if (!r.isConnected()) {
                     remote = &r;
                     break;
                 }
@@ -513,7 +569,9 @@ namespace net {
                 if (result) {
                     remote->m_allocator = m_allocator;
                     remote->m_handle = (uv_stream_t*)&remote->m_client;
-                    remote->m_isConnected = IZ_TRUE;
+
+					remote->m_State = TcpClient::State::Running;
+					remote->SetConnected();
 
                     remote->startRecieve();
 
@@ -524,8 +582,18 @@ namespace net {
         }
     }
 
-    void TcpListener::stop()
+    IZ_BOOL TcpListener::stop()
     {
+		if (isClosing()) {
+			return IZ_FALSE;
+		}
+
+		if (!isRunning()) {
+			return IZ_TRUE;
+		}
+
+		m_State = State::WillClose;
+
         for (IZ_UINT i = 0; i < m_remotes.getNum(); i++) {
             TcpClient& remote = m_remotes.at(i);
             remote.stop();
@@ -535,15 +603,33 @@ namespace net {
 
         m_acceptedList.Clear();
 
-        m_isListening = IZ_FALSE;
+		auto onClosed = std::bind(
+			&TcpListener::OnClosed,
+			this,
+			std::placeholders::_1);
 
-        // NOTE
-        // どうも内部でコールバックを呼ばないぽい・・・
+		m_cbClosed.Set(
+			CallbackRegister::Key(CallbackRegister::Type::Close, &m_server),
+			onClosed);
+
+		CallbackRegister::Regist(m_cbClosed);
 
         uv_close(
             (uv_handle_t*)&m_server,
-            IZ_NULL);
+			[](uv_handle_t* handle){
+			CallbackRegister::Invoke<CallbackOnClosed>(
+				CallbackRegister::Key(CallbackRegister::Type::Close, handle),
+				handle);
+		});
+
+		// まだ終了していないので、false を返す.
+		return IZ_FALSE;
     }
+
+	void TcpListener::OnClosed(uv_handle_t* handle)
+	{
+		m_State = State::Closed;
+	}
 
     TcpClient* TcpListener::acceptRemote()
     {
@@ -558,5 +644,15 @@ namespace net {
 
         return nullptr;
     }
+
+	IZ_BOOL TcpListener::isRunning() const
+	{
+		return (m_State == State::Listening);
+	}
+
+	IZ_BOOL TcpListener::isClosing() const
+	{
+		return (m_State == State::WillClose);
+	}
 }    // namespace net
 }    // namespace izanagi
