@@ -32,6 +32,8 @@ namespace net {
 
 		IZ_BOOL isRunning() const;
 
+		IZ_BOOL isClosing() const;
+
         /** 接続.
          */
         IZ_BOOL connectTo(const IPv4Endpoint& remoteEp);
@@ -83,8 +85,7 @@ namespace net {
         void OnAlloc(uv_handle_t* handle, size_t suggested_size, uv_buf_t* buf);
         void OnRecieved(uv_udp_t* handle, ssize_t nread, const uv_buf_t* buf, const struct sockaddr* addr, unsigned flags);
         void OnSent(uv_udp_send_t* req, int status);
-
-		IZ_BOOL willClose() const;
+		void OnClosed(uv_handle_t* handle);
 
     protected:
         IMemoryAllocator* m_allocator{ nullptr };
@@ -112,6 +113,9 @@ namespace net {
 
         using CallbackOnRecieved = std::function < void(uv_udp_t* handle, ssize_t nread, const uv_buf_t* buf, const struct sockaddr* addr, unsigned flags) > ;
         Callback<CallbackOnRecieved> m_cbRecieved;
+
+		using CallbackOnClosed = std::function < void(uv_handle_t* handle) >;
+		Callback<CallbackOnClosed> m_cbClosed;
 
 		enum State : IZ_UINT {
 			Running,
