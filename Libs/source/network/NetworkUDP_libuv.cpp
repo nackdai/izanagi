@@ -146,12 +146,16 @@ namespace net {
             return IZ_TRUE;
         }
 
-		if (!canStop()) {
-			return IZ_FALSE;
-		}
-
 		m_State = State::WillClose;
 
+		// cancel to send
+		for (IZ_UINT i = 0; i < COUNTOF(m_reqSend); i++) {
+			auto& req = m_reqSend[i];
+			uv_cancel((uv_req_t*)&req.req);
+		}
+		m_reqSendPos = 0;
+
+		// stop to recieve.
         if (m_isRecieving) {
             IZ_BOOL result = IZ_FALSE;
 
