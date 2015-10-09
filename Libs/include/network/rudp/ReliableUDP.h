@@ -112,7 +112,7 @@ namespace net {
         void ProcRetransmit();
 
     protected:
-		static void DeleteSegment(Segment* s);
+		void DeleteSegment(Segment* s);
 
         // セグメント受信実装.
         virtual Segment* OnRecieveSegment();
@@ -231,6 +231,10 @@ namespace net {
         // 受信したが確認応答を送っていないセグメントのリスト.
         std::mutex m_UnAckedRecievedSegmentListLocker;
         CStdList<Segment> m_UnAckedRecievedSegmentList;
+
+		// 削除予定リスト
+		std::mutex m_WillRemoveListLocker;
+		CStdList<Segment> m_WillDeleteList;
 
         std::atomic<IZ_BOOL> m_isAllocated{ IZ_FALSE };
         void* m_recvData{ nullptr };

@@ -106,7 +106,7 @@ namespace net {
                 if (segment->IsResetSegment())
                 {
                     item->Leave();
-					Segment::Delete(segment);
+					DeleteSegment(segment);
                     break;
                 }
                 else if (segment->IsFinishSegment())
@@ -114,7 +114,7 @@ namespace net {
                     if (totalSize <= 0)
                     {
                         item->Leave();
-						Segment::Delete(segment);
+						DeleteSegment(segment);
                         totalSize = -1;
                     }
                     break;
@@ -139,7 +139,7 @@ namespace net {
                     totalSize += s->Size();
 
                     item->Leave();
-					Segment::Delete(segment);
+					DeleteSegment(segment);
                 }
 
                 item = next;
@@ -286,6 +286,7 @@ namespace net {
 		};
 
 		// リストに残っているものを処分する.
+		m_WillDeleteList.ForeachRemove(func);
 		m_UnAckedSentSegmentList.ForeachRemove(func);
 		m_InSequenceSegmentList.ForeachRemove(func);
 		m_OutSequenceSegmentList.ForeachRemove(func);
@@ -410,6 +411,10 @@ namespace net {
     {
         while (!WillClose())
         {
+			m_WillDeleteList.ForeachRemove([](Segment* s){
+				Segment::Delete(s);
+			});
+
             auto segment = RecieveSegment();
 
             if (segment)
@@ -1064,6 +1069,13 @@ namespace net {
         m_UnAckedSentSegmentListLocker.unlock();
 #endif
     }
+
+	void ReliableUDP::DeleteSegment(Segment* s)
+	{
+		IZ_ASSERT(!s->isBelonged());
+
+		m_WillDeleteList.AddTail(s->GetListItem(ListItemType::Sequence));
+	}
 
     // セグメント受信実装.
     Segment* ReliableUDP::OnRecieveSegment()
