@@ -22,6 +22,12 @@
     <Filter Include="source\rudp\segment">
       <UniqueIdentifier>{c01f08ca-f562-4414-9bef-514e888587d1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\ReplicatedProperty">
+      <UniqueIdentifier>{fe2ab4c6-b47e-444f-9311-0bad584702ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\ReplicatedProperty">
+      <UniqueIdentifier>{4af35e2b-86db-4732-8315-163711677f99}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\network\NetworkTCP.h">
@@ -41,15 +47,6 @@
     </ClInclude>
     <ClInclude Include="..\..\include\izNetwork.h" />
     <ClInclude Include="..\..\include\network\NetworkUDP.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\network\ReplicatedPropertyManager.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\network\ReplicatedPropertyObject.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\network\ReplicatedProperty.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\network\NetworkTCP_libuv.h">
@@ -97,6 +94,15 @@
     <ClInclude Include="..\..\include\network\rudp\ReliableUDPListener.h">
       <Filter>include\rudp</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\network\ReplicatedProperty.h">
+      <Filter>include\ReplicatedProperty</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\network\ReplicatedPropertyManager.h">
+      <Filter>include\ReplicatedProperty</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\network\ReplicatedPropertyObject.h">
+      <Filter>include\ReplicatedProperty</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\network\Network.cpp">
@@ -112,15 +118,6 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\network\NetworkUDP.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\network\ReplicatedPropertyManager.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\network\ReplicatedPropertyObject.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\network\ReplicatedProperty.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\network\NetworkTCP_libuv.cpp">
@@ -152,6 +149,15 @@
     </ClCompile>
     <ClCompile Include="..\..\source\network\rudp\ReliableUDPListener.cpp">
       <Filter>source\rudp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\network\ReplicatedProperty.cpp">
+      <Filter>source\ReplicatedProperty</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\network\ReplicatedPropertyManager.cpp">
+      <Filter>source\ReplicatedProperty</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\network\ReplicatedPropertyObject.cpp">
+      <Filter>source\ReplicatedProperty</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

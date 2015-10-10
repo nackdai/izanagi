@@ -41,44 +41,24 @@ namespace net {
         return ret;
     }
 
-    ReplicatedObjectBase* ReplicatedPropertyManager::popObject()
-    {
-        sys::Lock lock(m_locker);
-
-        auto item = m_hash.GetOrderTopHashItem();
-
-        if (item != IZ_NULL) {
-            auto data = item->GetData();
-
-            item->Leave();
-
-            return data;
-        }
-
-        return nullptr;
-    }
-
-    void ReplicatedPropertyManager::setOnCreateObject(OnCreateObject func)
-    {
-        if (!m_onCreateObject) {
-            m_onCreateObject = func;
-        }
-    }
-
     /////////////////////////////////////////////////////////
 
+    // ReplicatedPropertyManager on the server.
     class ReplicatedPropertyServer : public ReplicatedPropertyManager {
     public:
         ReplicatedPropertyServer() {}
         virtual ~ReplicatedPropertyServer() {}
 
+        // Update replicated property system.
         virtual void update() override;
 
+        // Get if this is on server.
         virtual IZ_BOOL isServer() override
         {
             return IZ_TRUE;
         }
 
+        // Send dirty replicated properties.
         void send(ReplicatedObjectBase* obj);
 
         virtual void add(ReplicatedObjectBase& obj) override;
@@ -86,6 +66,7 @@ namespace net {
         virtual void remove(ReplicatedObjectBase& obj) override;
     };
 
+    // Update replicated property system.
     void ReplicatedPropertyServer::update()
     {
         sys::Lock lock(m_locker);
@@ -95,9 +76,10 @@ namespace net {
         while (item != IZ_NULL) {
             auto obj = item->GetData()->GetData();
 
-            if (obj->isDirtyReplicatedProperty()) {
+            if (obj->hasDirtyReplicatedProperty()) {
                 send(obj);
 
+                // Send all dirty replicated property, so make object un-dirty.
                 obj->undirtyReplicatedProperty();
             }
 
@@ -105,6 +87,7 @@ namespace net {
         }
     }
 
+    // Send dirty replicated properties.
     void ReplicatedPropertyServer::send(ReplicatedObjectBase* obj)
     {
         auto item = obj->getReplicatedPropertyListTopItem();
@@ -116,6 +99,7 @@ namespace net {
                 // TODO
                 // 通信
 
+                // Send dirty property, so make it un-dirty.
                 prop->unDirty();
             }
 
@@ -160,13 +144,16 @@ namespace net {
 
     /////////////////////////////////////////////////////////
 
+    // ReplicatedPropertyManager on the client.
     class ReplicatedPropertyClient : public ReplicatedPropertyManager {
     public:
         ReplicatedPropertyClient() {}
         virtual ~ReplicatedPropertyClient();
 
+        // Update replicated property system.
         virtual void update() override;
 
+        // Get if this is on the server.
         virtual IZ_BOOL isServer() override
         {
             return IZ_FALSE;
@@ -203,6 +190,7 @@ namespace net {
         }
     }
 
+    // Update replicated property system.
     void ReplicatedPropertyClient::update()
     {
         sys::Lock lock(m_locker);
@@ -214,7 +202,7 @@ namespace net {
 
             // TODO
             // クライアント側では値の変更を許さない？
-            IZ_ASSERT(!obj->isDirtyReplicatedProperty());
+            IZ_ASSERT(!obj->hasDirtyReplicatedProperty());
 
             recv(obj);
 
@@ -261,16 +249,16 @@ namespace net {
 
     /////////////////////////////////////////////////////////
 
-    ReplicatedPropertyServer* g_Server = IZ_NULL;
-    ReplicatedPropertyClient* g_Client = IZ_NULL;
+    ReplicatedPropertyServer* g_Server = nullptr;
+    ReplicatedPropertyClient* g_Client = nullptr;
 
-    void ReplicatedPropertyManager::begin(
+    ReplicatedPropertyManager* ReplicatedPropertyManager::begin(
         IZ_BOOL isServer,
         IMemoryAllocator* allocator)
     {
         s_Allocator = allocator;
 
-        IZ_ASSERT(g_Server == IZ_NULL && g_Client == IZ_NULL);
+        IZ_ASSERT(g_Server == nullptr && g_Client == nullptr);
 
         if (isServer) {
             // TODO
@@ -292,12 +280,12 @@ namespace net {
 
     ReplicatedPropertyManager* ReplicatedPropertyManager::get()
     {
-        if (g_Server != IZ_NULL) {
-            IZ_ASSERT(g_Client == IZ_NULL);
+        if (g_Server) {
+            IZ_ASSERT(g_Client == nullptr);
             return g_Server;
         }
-        else if (g_Client != IZ_NULL) {
-            IZ_ASSERT(g_Server == IZ_NULL);
+        else if (g_Client) {
+            IZ_ASSERT(g_Server == nullptr);
             return g_Client;
         }
 

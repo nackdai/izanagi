@@ -15,12 +15,14 @@ namespace net {
         None,
     };
 
+    /** Connection type.
+     */
     enum class E_REPLICATED_RELIABLE : IZ_UINT32 {
         Reliable,
         UnReliable,
     };
 
-    /**
+    /** Base class for replicated property.
      */
     class ReplicatedPropertyBase {
         friend class ReplicatedObjectBase;
@@ -32,9 +34,13 @@ namespace net {
         virtual ~ReplicatedPropertyBase() {}
 
     protected:
+        // Get if this is dirty.
         inline IZ_BOOL isDirty() const;
 
+        // Set dirty forcibly.
         inline void dirty();
+
+        // Set un-dirty forcibly.
         inline void unDirty();
 
         inline CStdList<ReplicatedPropertyBase>::Item* getListItem();
@@ -47,30 +53,17 @@ namespace net {
         CStdList<ReplicatedPropertyBase>::Item m_listItem;
     };
 
-    /**
+    /** Replicated property.
      */
     template <typename _T>
     class ReplicatedProperty : public ReplicatedPropertyBase {
     public:
         using DelegateNotify = std::function<void(void)>;
 
-        // NOTE
-        // http://qiita.com/tkyaji/items/1aa7bb01658e848d3ef4
-
-        template <class _O>
-        static DelegateNotify notify(void(_O::* f)(void), _O* obj)
-        {
-            return std::bind(f, obj);
-        }
-
-        static DelegateNotify notify(void(*f)(void))
-        {
-            return std::bind(f);
-        }
-
     public:
         ReplicatedProperty(
             ReplicatedObjectBase* obj,
+            DelegateNotify notify,
             E_REPLICATED_TYPE type = E_REPLICATED_TYPE::None,
             E_REPLICATED_RELIABLE reliable = E_REPLICATED_RELIABLE::UnReliable)
         {
@@ -82,7 +75,7 @@ namespace net {
 
             m_type = type;
             m_realiable = reliable;
-            m_funcNotify = nullptr;
+            m_funcNotify = notify;
 
             // NOTE
             // 通常の変数と同様に明示的に初期化されない場合のm_valueの値は不定.
@@ -101,14 +94,6 @@ namespace net {
         NO_COPIABLE(ReplicatedProperty);
 
     public:
-        template <class _O>
-        void init(void(_O::* f)(void), _O* obj)
-        {
-            if (!m_funcNotify) {
-                m_funcNotify = notify(f, obj);
-            }
-        }
-
         operator _T()
         {
             return (_T)m_value;
@@ -120,10 +105,13 @@ namespace net {
         }
 
     protected:
+        // Get if this is on server.
         inline IZ_BOOL isServer();
 
+        // Set value if this is on server.
         void set(const _T& rhs);
 
+        // Set value forcibly.
         void setForcibly(const _T& rhs);
 
         virtual IZ_CHAR* sync(IZ_CHAR* ptr) override;
@@ -141,10 +129,8 @@ namespace net {
 }    // namespace net
 }    // namespace izanagi
 
-#define IZ_REPLICATED_PROPERTY(type, prop, replicatedType, reliable) \
+#define IZ_REPLICATED_PROPERTY(clazz, type, prop, replicatedType, reliable) \
     void prop##_Notify(); \
-    izanagi::net::ReplicatedProperty<type> prop{this, replicatedType, reliable}
-
-#define IZ_DECL_REPLICATED_PROPERTY(clazz, prop) prop.init(& clazz::prop##_Notify, this);
+    izanagi::net::ReplicatedProperty<type> prop{this, std::bind(&clazz::prop##_Notify, this), replicatedType, reliable}
 
 #endif    // #if !defined(_IZANAGI_NETWORK_REPLICATED_PROPERTY_H__)

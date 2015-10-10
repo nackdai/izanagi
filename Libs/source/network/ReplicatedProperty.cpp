@@ -88,7 +88,6 @@ namespace net {
     public:
         Hoge()
         {
-            IZ_DECL_REPLICATED_PROPERTY(Hoge, v0);
         }
         ~Hoge() {}
 
@@ -96,10 +95,8 @@ namespace net {
         {
         }
 
-        IZ_REPLICATED_PROPERTY(IZ_UINT32, v0, E_REPLICATED_TYPE::Rep, E_REPLICATED_RELIABLE::Reliable);
+        IZ_REPLICATED_PROPERTY(Hoge, IZ_UINT32, v0, E_REPLICATED_TYPE::Rep, E_REPLICATED_RELIABLE::Reliable);
     };
-
-    IZ_REFLECT_REPLICATED_OBJ(Hoge);
 
     void Test()
     {

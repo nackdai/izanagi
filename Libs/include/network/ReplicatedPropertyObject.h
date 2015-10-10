@@ -1,6 +1,7 @@
 #if !defined(_IZANAGI_NETWORK_REPLICATED_PROPERTY_OBJECT_H__)
 #define _IZANAGI_NETWORK_REPLICATED_PROPERTY_OBJECT_H__
 
+#include <functional>
 #include "izDefs.h"
 #include "izStd.h"
 #include "network/ReplicatedPropertyManager.h"
@@ -39,7 +40,20 @@ namespace net {
         IZ_CHAR* m_name;
     };
 
-    /**
+    /** Porxy for ReplicatedPropertyManager.
+     */
+    class ReplicatedObjectProxy {
+    public:
+        ReplicatedObjectProxy(const CClass& clazz, ReplicatedPropertyManager::ReplicatedObjectCreator func)
+        {
+            izanagi::net::ReplicatedPropertyManager::get()->registerCreator(clazz, func);
+        }
+        ~ReplicatedObjectProxy() {}
+
+        NO_COPIABLE(ReplicatedObjectProxy);
+    };
+
+    /** Base class for an object which has replicated properties.
      */
     class ReplicatedObjectBase {
         friend class ReplicatedPropertyManager;
@@ -52,11 +66,13 @@ namespace net {
         virtual ~ReplicatedObjectBase();
 
     private:
+        // Add replicated property to the object.
         void addReplicatedProperty(ReplicatedPropertyBase& prop);
 
         ReplicatedPropertyManager::HashItem* getReplicatedObjectHashItem();
 
     public:
+        // Get if this is on server.
         IZ_BOOL isServer() const
         {
             return m_isServer;
@@ -65,9 +81,11 @@ namespace net {
         virtual const CClass& getClass() = 0;
 
     private:
+        // Get id.
         inline IZ_UINT64 getReplicatedObjectID() const;
 
-        inline IZ_BOOL isDirtyReplicatedProperty() const;
+        // Get if this has dirty replicated property.
+        inline IZ_BOOL hasDirtyReplicatedProperty() const;
 
         inline void dirtyReplicatedProperty();
         inline void undirtyReplicatedProperty();
@@ -78,13 +96,13 @@ namespace net {
         IZ_UINT64 m_ReplicatedObjectID;
         IZ_BOOL m_isServer;
 
-        IZ_BOOL m_isReplicatedPropertyDirty;
+        IZ_BOOL m_hasReplicatedPropertyDirty;
 
         CStdList<ReplicatedPropertyBase> m_ReplicatedPropertyList;
         ReplicatedPropertyManager::HashItem m_ReplicatedObjectHashItem;
     };
 
-    /**
+    /** Replicated Object.
      */
     template <class BASE = NullClass>
     class ReplicatedObject : public ReplicatedObjectBase, BASE {
@@ -108,14 +126,7 @@ namespace net {
             clazz* ret = new(p)clazz;\
             return ret;\
         }\
-        struct CInternalForReplicatedProp##clazz { \
-            CInternalForReplicatedProp##clazz() { izanagi::net::ReplicatedPropertyManager::get()->registerCreator(Class##clazz(), createForReplicatedProp##clazz); }\
-            ~CInternalForReplicatedProp##clazz() {}\
-        };\
-        static CInternalForReplicatedProp##clazz s_internalForReplicatedProp##clazz
-
-#define IZ_REFLECT_REPLICATED_OBJ(clazz) \
-    clazz::CInternalForReplicatedProp##clazz clazz::s_internalForReplicatedProp##clazz;
+        izanagi::net::ReplicatedObjectProxy __pfoxy{ Class##clazz(), createForReplicatedProp##clazz };
 
 #define IZ_GET_REPLICATED_OBJ_CLASS(clazz) clazz::Class##clazz()
 

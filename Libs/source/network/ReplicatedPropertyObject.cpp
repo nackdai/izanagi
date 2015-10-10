@@ -57,7 +57,7 @@ namespace net {
 
         m_isServer = ReplicatedPropertyManager::get()->isServer();
 
-        m_isReplicatedPropertyDirty = IZ_FALSE;
+        m_hasReplicatedPropertyDirty = IZ_FALSE;
 
         m_ReplicatedObjectHashItem.Init(m_ReplicatedObjectID, this);
 
@@ -84,19 +84,19 @@ namespace net {
         return m_ReplicatedObjectID;
     }
 
-    IZ_BOOL ReplicatedObjectBase::isDirtyReplicatedProperty() const
+    IZ_BOOL ReplicatedObjectBase::hasDirtyReplicatedProperty() const
     {
-        return m_isReplicatedPropertyDirty;
+        return m_hasReplicatedPropertyDirty;
     }
 
     void ReplicatedObjectBase::dirtyReplicatedProperty()
     {
-        m_isReplicatedPropertyDirty = IZ_TRUE;;
+        m_hasReplicatedPropertyDirty = IZ_TRUE;;
     }
 
     void ReplicatedObjectBase::undirtyReplicatedProperty()
     {
-        m_isReplicatedPropertyDirty = IZ_FALSE;
+        m_hasReplicatedPropertyDirty = IZ_FALSE;
     }
 
     CStdList<ReplicatedPropertyBase>::Item* ReplicatedObjectBase::getReplicatedPropertyListTopItem()
