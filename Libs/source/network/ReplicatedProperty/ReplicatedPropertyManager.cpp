@@ -1,6 +1,6 @@
-#include "network/ReplicatedPropertyManager.h"
-#include "network/ReplicatedPropertyObject.h"
-#include "network/ReplicatedProperty.h"
+#include "network/ReplicatedProperty/ReplicatedPropertyManager.h"
+#include "network/ReplicatedProperty/ReplicatedPropertyObject.h"
+#include "network/ReplicatedProperty/ReplicatedProperty.h"
 
 namespace izanagi {
 namespace net {
@@ -262,11 +262,11 @@ namespace net {
 
         if (isServer) {
             // TODO
-            
+            return g_Server;
         }
         else {
             // TODO
-            
+            return g_Client;
         }
     }
 

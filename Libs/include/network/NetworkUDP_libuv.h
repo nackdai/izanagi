@@ -6,7 +6,7 @@
 #include "izSystem.h"
 #include "network/NetworkDefs.h"
 #include "network/NetworkPacket.h"
-#include "network/CallbackRegister.h"
+#include "network/rudp/CallbackRegister.h"
 
 namespace izanagi {
 namespace net {

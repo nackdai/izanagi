@@ -3,7 +3,7 @@
 
 #include "izDefs.h"
 #include "izStd.h"
-#include "network/ReplicatedPropertyObject.h"
+#include "network/ReplicatedProperty/ReplicatedPropertyObject.h"
 
 namespace izanagi {
 namespace net {

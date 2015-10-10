@@ -1,5 +1,5 @@
-#include "network/ReplicatedProperty.h"
-#include "network/ReplicatedPropertyObject.h"
+#include "network/ReplicatedProperty/ReplicatedProperty.h"
+#include "network/ReplicatedProperty/ReplicatedPropertyObject.h"
 
 namespace izanagi {
 namespace net {

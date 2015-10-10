@@ -4,7 +4,7 @@
 #include <functional>
 #include "izDefs.h"
 #include "izStd.h"
-#include "network/ReplicatedPropertyManager.h"
+#include "network/ReplicatedProperty/ReplicatedPropertyManager.h"
 
 namespace izanagi {
 namespace net {
