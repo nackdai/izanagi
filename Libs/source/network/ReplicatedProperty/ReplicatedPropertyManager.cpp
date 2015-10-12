@@ -2,6 +2,9 @@
 #include "network/ReplicatedProperty/ReplicatedPropertyObject.h"
 #include "network/ReplicatedProperty/ReplicatedProperty.h"
 
+#include "network/NetworkUDP_libuv.h"
+#include "network/rudp/ReliableUDPListener.h"
+
 namespace izanagi {
 namespace net {
 
@@ -25,21 +28,36 @@ namespace net {
     {
         sys::Lock lock(m_locker);
 
-        IZ_UINT ret = m_hash.GetDataNum();
+        IZ_UINT ret = m_list.GetItemNum();
         return ret;
     }
 
-    ReplicatedObjectBase* ReplicatedPropertyManager::getObject(IZ_UINT idx)
+    void ReplicatedPropertyManager::deleteObject(ReplicatedObjectBase* obj)
     {
-        IZ_ASSERT(idx < getObjectNum());
+        delete obj;
+        FREE(s_Allocator, obj);
+    }
 
-        sys::Lock lock(m_locker);
-
-        auto item = m_hash.GetOrderAtHashItem(idx);
-        auto ret = item->GetData();
-
+    std::tuple<const ReplicatedObjectClass&, ReplicatedObjectBase*> ReplicatedPropertyManager::pop()
+    {
+        auto ret = std::tuple<const ReplicatedObjectClass&, ReplicatedObjectBase*>(ReplicatedObjectClass::Invalid, nullptr);
         return ret;
     }
+
+    /////////////////////////////////////////////////////////
+
+    enum ReplicatedPropertyProtocol : IZ_UINT {
+        Create,
+    };
+
+    struct SReplicatedPropertyHeader {
+        ReplicatedPropertyProtocol type;
+    };
+
+    struct SCreateObject {
+        SReplicatedPropertyHeader header;
+        IZ_UINT key;
+    };
 
     /////////////////////////////////////////////////////////
 
@@ -48,6 +66,8 @@ namespace net {
     public:
         ReplicatedPropertyServer() {}
         virtual ~ReplicatedPropertyServer() {}
+
+        virtual IZ_BOOL init(const IPv4Endpoint& ep) override;
 
         // Update replicated property system.
         virtual void update() override;
@@ -61,20 +81,36 @@ namespace net {
         // Send dirty replicated properties.
         void send(ReplicatedObjectBase* obj);
 
-        virtual void add(ReplicatedObjectBase& obj) override;
+        virtual void registerCreator(const ReplicatedObjectClass& clazz, ObjectCreatorBase* creator) override;
 
-        virtual void remove(ReplicatedObjectBase& obj) override;
+        virtual ReplicatedObjectBase* create(const ReplicatedObjectClass& clazz) override;
+
+    private:
+        std::mutex m_hashCreatorLocker;
+        CreatorHash m_hashCreator;
+
+        Udp m_udp;
+        ReliableUDPListener m_listener;
     };
+
+    IZ_BOOL ReplicatedPropertyServer::init(const IPv4Endpoint& ep)
+    {
+        VRETURN(m_udp.start(s_Allocator, ep));
+
+        m_listener.Init(s_Allocator, &m_udp);
+
+        return IZ_TRUE;
+    }
 
     // Update replicated property system.
     void ReplicatedPropertyServer::update()
     {
         sys::Lock lock(m_locker);
 
-        auto item = m_hash.GetOrderTop();
+        auto item = m_list.GetTop();
 
         while (item != IZ_NULL) {
-            auto obj = item->GetData()->GetData();
+            auto obj = item->GetData();
 
             if (obj->hasDirtyReplicatedProperty()) {
                 send(obj);
@@ -107,39 +143,42 @@ namespace net {
         }
     }
 
-    void ReplicatedPropertyServer::add(ReplicatedObjectBase& obj)
+    void ReplicatedPropertyServer::registerCreator(const ReplicatedObjectClass& clazz, ObjectCreatorBase* creator)
     {
-        sys::Lock lock(m_locker);
+        std::lock_guard<std::mutex> locker(m_hashCreatorLocker);
 
-        IZ_BOOL isFound = (m_hash.Find(obj.getReplicatedObjectID()) != IZ_NULL);
+        auto item = m_hashCreator.Find(clazz);
 
-        if (!isFound) {
-            m_hash.Add(obj.getReplicatedObjectHashItem());
+        if (item == IZ_NULL) {
+            creator->m_item.Init(clazz, creator);
 
-            // TODO
-            // ここで通信チャンネルを作る？
-
-            // TODO
-            // オブジェクトが作られたことを通知
+            m_hashCreator.Add(&creator->m_item);
         }
     }
 
-    void ReplicatedPropertyServer::remove(ReplicatedObjectBase& obj)
+    ReplicatedObjectBase* ReplicatedPropertyServer::create(const ReplicatedObjectClass& clazz)
     {
-        sys::Lock lock(m_locker);
+        ReplicatedObjectBase* ret = nullptr;
 
-        IZ_BOOL isFound = (m_hash.Find(obj.getReplicatedObjectID()) != IZ_NULL);
+        auto item = m_hashCreator.Find(clazz);
 
-        if (isFound) {
-            obj.getReplicatedObjectHashItem()->Leave();
+        if (item) {
+            auto creator = item->GetData();
 
-            // TODO
-            // オブジェクトが消されたことを通知
+            ret = creator->create(s_Allocator);
 
-            // TODO
-            // 消されたことが届いたことが確認できたら通信チャンネルを切る？
-            // 強制的に切る？
+            m_list.AddTail(ret->getListItem());
+
+            SCreateObject protocol;
+            protocol.key = ret->getClass();
+
+            // 作成したことを通知.
+            m_listener.sendToAll(
+                &protocol,
+                sizeof(protocol));
         }
+
+        return ret;
     }
 
     /////////////////////////////////////////////////////////
@@ -147,8 +186,10 @@ namespace net {
     // ReplicatedPropertyManager on the client.
     class ReplicatedPropertyClient : public ReplicatedPropertyManager {
     public:
-        ReplicatedPropertyClient() {}
+        ReplicatedPropertyClient();
         virtual ~ReplicatedPropertyClient();
+
+        virtual IZ_BOOL init(const IPv4Endpoint& ep) override;
 
         // Update replicated property system.
         virtual void update() override;
@@ -161,33 +202,46 @@ namespace net {
 
         void recv(ReplicatedObjectBase* obj);
 
-        virtual IZ_BOOL registerCreator(const CClass& clazz, ReplicatedObjectCreator func) override;
+        virtual std::tuple<const ReplicatedObjectClass&, ReplicatedObjectBase*> pop() override;
 
     private:
-        struct CreatorHolder;
-        using CreatorHash = CStdHash < CKey, CreatorHolder, 4 >;
-        using CreatorHashItem = CreatorHash::Item;
+        void OnProc();
 
-        struct CreatorHolder {
-            ReplicatedObjectCreator func;
-            CClass clazz;
-            CreatorHashItem hashItem;
-        };
+    private:
+        std::thread m_recvThread;
+        IZ_BOOL m_isRunning{ IZ_FALSE };
 
-        sys::CSpinLock m_lockerHashCreator;
-        CreatorHash m_hashCreator;
+        std::mutex m_objectListLocker;
+        CStdList<ReplicatedObjectBase> m_objectList;
+
+        Udp m_udp;
+        ReliableUDP m_rudp;
     };
+
+    ReplicatedPropertyClient::ReplicatedPropertyClient()
+    {
+    }
 
     ReplicatedPropertyClient::~ReplicatedPropertyClient()
     {
-        auto item = m_hashCreator.GetOrderTop();
+    }
 
-        while (item != IZ_NULL) {
-            auto p = item->GetData()->GetData();
-            item = item->GetNext();
+    IZ_BOOL ReplicatedPropertyClient::init(const IPv4Endpoint& ep)
+    {
+        VRETURN(m_udp.start(s_Allocator));
 
-            FREE(s_Allocator, p);
-        }
+        m_rudp.Init(
+            s_Allocator,
+            &m_udp,
+            RUDPParameter());
+        m_rudp.Connect(ep);
+
+        // TODO
+        // RUDPがコネクトしたタイミングでスレッドを起こしたい.
+        m_isRunning = IZ_TRUE;
+        m_recvThread = std::thread(std::bind(&ReplicatedPropertyClient::OnProc, this));
+
+        return IZ_TRUE;
     }
 
     // Update replicated property system.
@@ -195,10 +249,10 @@ namespace net {
     {
         sys::Lock lock(m_locker);
 
-        auto item = m_hash.GetOrderTop();
+        auto item = m_list.GetTop();
 
         while (item != IZ_NULL) {
-            auto obj = item->GetData()->GetData();
+            auto obj = item->GetData();
 
             // TODO
             // クライアント側では値の変更を許さない？
@@ -223,28 +277,51 @@ namespace net {
         }
     }
 
-    IZ_BOOL ReplicatedPropertyClient::registerCreator(const CClass& clazz, ReplicatedObjectCreator func)
+    std::tuple<const ReplicatedObjectClass&, ReplicatedObjectBase*> ReplicatedPropertyClient::pop()
     {
-        sys::Lock lock(m_lockerHashCreator);
+        std::lock_guard<std::mutex> lock(m_objectListLocker);
 
-        auto item = m_hashCreator.Find(clazz);
-        IZ_BOOL ret = (item == IZ_NULL);
+        auto item = m_objectList.GetTop();
 
-        if (ret) {
-            CreatorHolder* p = (CreatorHolder*)ALLOC(
-                ReplicatedPropertyManager::s_Allocator, 
-                sizeof(CreatorHolder));
-
-            IZ_ASSERT(p != IZ_NULL);
-
-            p->hashItem.Init(clazz, p);
-            p->clazz = clazz;
-            p->func = func;
-
-            m_hashCreator.Add(&p->hashItem);
+        if (item == IZ_NULL) {
+            return ReplicatedPropertyManager::pop();
         }
 
+        auto obj = item->GetData();
+        item->Leave();
+
+        auto ret = std::tuple<const ReplicatedObjectClass&, ReplicatedObjectBase*>(
+            obj->getClass(),
+            obj);
+
         return ret;
+    }
+
+    void ReplicatedPropertyClient::OnProc()
+    {
+        IZ_UINT8 bytes[1024];
+
+        while (m_isRunning) {
+            auto size = m_rudp.Recieve(bytes, sizeof(bytes));
+
+            if (size > 0) {
+                SReplicatedPropertyHeader* header = (SReplicatedPropertyHeader*)bytes;
+
+                switch (header->type)
+                {
+                case ReplicatedPropertyProtocol::Create:
+                {
+                    SCreateObject* protocol = (SCreateObject*)header;
+
+                    // TODO
+                    // オブジェクト作成
+                }
+                    break;
+                default:
+                    break;
+                }
+            }
+        }
     }
 
     /////////////////////////////////////////////////////////

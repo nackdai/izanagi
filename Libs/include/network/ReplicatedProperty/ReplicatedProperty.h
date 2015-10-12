@@ -3,6 +3,7 @@
 
 #include "izDefs.h"
 #include "izStd.h"
+#include "izSystem.h"
 #include "network/ReplicatedProperty/ReplicatedPropertyObject.h"
 
 namespace izanagi {
@@ -40,7 +41,7 @@ namespace net {
         // Set dirty forcibly.
         inline void dirty();
 
-        // Set un-dirty forcibly.
+        // Reset dirty forcibly.
         inline void unDirty();
 
         inline CStdList<ReplicatedPropertyBase>::Item* getListItem();
@@ -48,7 +49,7 @@ namespace net {
         PURE_VIRTUAL(IZ_CHAR* sync(IZ_CHAR* ptr));
 
     private:
-        IZ_BOOL m_isDirty;
+        std::atomic<IZ_BOOL> m_isDirty{ IZ_FALSE };
 
         CStdList<ReplicatedPropertyBase>::Item m_listItem;
     };
@@ -122,6 +123,7 @@ namespace net {
         E_REPLICATED_TYPE m_type;
         E_REPLICATED_RELIABLE m_realiable;
 
+        sys::CSpinLock m_locker;
         _T m_value;
 
         DelegateNotify m_funcNotify;

@@ -43,11 +43,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\NetworkRUDP\main.cpp" />
+    <ClCompile Include="..\..\ReplicatedProperty\main.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{D6881DBF-D2AF-45A1-8F4B-5CD6069C8E6A}</ProjectGuid>
-    <RootNamespace>NetworkRUDP</RootNamespace>
+    <ProjectGuid>{AA13AADC-3546-4439-B854-8715D13EBBE0}</ProjectGuid>
+    <RootNamespace>ReplicatedProperty</RootNamespace>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />

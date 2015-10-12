@@ -15,4 +15,9 @@
 #include "network/rudp//ReliableUDPListener.h"
 #include "network/rudp//RUDPParameter.h"
 
+// ReplicatedProperty
+#include "network/ReplicatedProperty/ReplicatedProperty.h"
+#include "network/ReplicatedProperty/ReplicatedPropertyObject.h"
+#include "network/ReplicatedProperty/ReplicatedPropertyManager.h"
+
 #endif  // #if !defined(__IZANAGI_NETWORK_H__)

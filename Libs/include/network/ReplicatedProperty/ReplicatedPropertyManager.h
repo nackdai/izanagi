@@ -4,17 +4,18 @@
 #include <atomic>
 #include "izStd.h"
 #include "izSystem.h"
+#include "network/ReplicatedProperty/ReplicatedPropertyObjectClass.h"
 
 namespace izanagi {
 namespace net {
     class ReplicatedObjectBase;
-    class CClass;
+    class IPv4Endpoint;
 
     /** Manager for replicated properties.
      */
     class ReplicatedPropertyManager {
         friend class ReplicatedObjectBase;
-        friend class ReplicatedObjectProxy;
+        template <typename TYPE> friend class ReplicatedObjectProxy;
         template <IZ_BOOL IS_SERVER> friend class ReplicatedPropertyManagerFactory;
 
     protected:
@@ -45,8 +46,12 @@ namespace net {
         virtual ~ReplicatedPropertyManager() {}
 
     public:
-        using ObjectHash = CStdHash<IZ_UINT64, ReplicatedObjectBase, 4>;
-        using HashItem = ObjectHash::Item;
+        virtual IZ_BOOL init(const IPv4Endpoint& ep) = 0;
+
+        virtual ReplicatedObjectBase* create(const ReplicatedObjectClass& clazz) { return nullptr; }
+        virtual void deleteObject(ReplicatedObjectBase* obj);
+
+        virtual std::tuple<const ReplicatedObjectClass&, ReplicatedObjectBase*> pop();
 
         /** Update replicated property system.
          */
@@ -56,10 +61,6 @@ namespace net {
          */
         IZ_UINT getObjectNum();
 
-        /** Get pointer to a replicated object by index.
-         */
-        ReplicatedObjectBase* getObject(IZ_UINT idx);
-
         /** Get if this is on server.
          */
         PURE_VIRTUAL(IZ_BOOL isServer());
@@ -67,17 +68,49 @@ namespace net {
     protected:
         using ReplicatedObjectCreator = std::function < ReplicatedObjectBase*(IMemoryAllocator*) >;
 
-        virtual IZ_BOOL registerCreator(const CClass& clazz, ReplicatedObjectCreator func) { return IZ_FALSE; }
+        class ObjectCreatorBase;
+        using CreatorHash = CStdHash < ReplicatedObjectClass, ObjectCreatorBase, 4 >;
+        using CreatorHashItem = CreatorHash::Item;
 
-        virtual void add(ReplicatedObjectBase& obj) {}
-        virtual void remove(ReplicatedObjectBase& obj) {}
+        class ObjectCreatorBase {
+        public:
+            ObjectCreatorBase() {}
+            virtual ~ObjectCreatorBase() {}
+
+            virtual ReplicatedObjectBase* create(IMemoryAllocator* allocator) = 0;
+            virtual void deleteObject(IMemoryAllocator* allocator, ReplicatedObjectBase* obj) = 0;
+
+            CreatorHashItem m_item;
+        };
+
+        template <typename _T>
+        class ObjectCreator : public ObjectCreatorBase {
+        public:
+            ObjectCreator() {}
+            virtual ~ObjectCreator() {}
+
+            virtual ReplicatedObjectBase* create(IMemoryAllocator* allocator) override
+            {
+                void* p = ALLOC(allocator, sizeof(_T));
+                _T* ret = new(p)_T();
+                return ret;
+            }
+            virtual void deleteObject(IMemoryAllocator* allocator, ReplicatedObjectBase* obj) override
+            {
+                FREE(allocator, obj);
+            }
+        };
+
+        virtual void registerCreator(const ReplicatedObjectClass& clazz, ObjectCreatorBase* creator) {}
 
     protected:
-        ObjectHash m_hash;
+        CStdList<ReplicatedObjectBase> m_list;
 
         sys::CSpinLock m_locker;
     };
 }    // namespace net
 }    // namespace izanagi
+
+#define IZ_CREATE_REPLIACTED_OBJECT(mgr, clazz) (clazz *)mgr->create(clazz::Class##clazz())
 
 #endif    // #if !defined(_IZANAGI_NETWORK_REPLICATED_PROPERTY_MANGER_H__)

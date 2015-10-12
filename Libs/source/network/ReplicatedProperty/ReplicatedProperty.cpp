@@ -55,7 +55,10 @@ namespace net {
                 m_owner->dirtyReplicatedProperty();
             }
 
-            m_value = rhs;
+            {
+                sys::Lock lock(m_locker);
+                m_value = rhs;
+            }
 
             // 通知
             if (m_funcNotify
@@ -78,31 +81,6 @@ namespace net {
         ptr += sizeof(_T);
 
         return ptr;
-    }
-
-    //////////////////////////////////////////////
-
-    class Hoge : public ReplicatedObject<> {
-        IZ_DEFS_REPLICATED_OBJ(Hoge);
-
-    public:
-        Hoge()
-        {
-        }
-        ~Hoge() {}
-
-        void Func()
-        {
-        }
-
-        IZ_REPLICATED_PROPERTY(Hoge, IZ_UINT32, v0, E_REPLICATED_TYPE::Rep, E_REPLICATED_RELIABLE::Reliable);
-    };
-
-    void Test()
-    {
-        Hoge hoge;
-        hoge.v0 = 1.0f;
-        IZ_FLOAT x = hoge.v0;
     }
 }    // namespace net
 }    // namespace izanagi

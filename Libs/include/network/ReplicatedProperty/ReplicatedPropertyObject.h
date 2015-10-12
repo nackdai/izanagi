@@ -10,52 +10,27 @@ namespace izanagi {
 namespace net {
     class ReplicatedPropertyBase;
 
-    /**
-     */
-    class CClass {
-    public:
-        static CClass Invalid;
-
-        static IZ_BOOL isValid(const CClass& clazz);
-
-    public:
-        CClass() : m_name(nullptr) {}
-        CClass(const IZ_CHAR* tag);
-        ~CClass() {}
-
-        CClass(const CClass& rhs);
-        const CClass& operator=(const CClass& rhs);
-
-    public:
-        IZ_BOOL operator==(const CClass& rhs) const;
-
-        IZ_BOOL operator!=(const CClass& rhs) const;
-
-        IZ_BOOL is(const CClass& clazz);
-
-        operator const CKey&() const;
-
-    private:
-        CKey m_key;
-        IZ_CHAR* m_name;
-    };
-
     /** Porxy for ReplicatedPropertyManager.
      */
+    template <typename TYPE>
     class ReplicatedObjectProxy {
     public:
-        ReplicatedObjectProxy(const CClass& clazz, ReplicatedPropertyManager::ReplicatedObjectCreator func)
+        ReplicatedObjectProxy(const ReplicatedObjectClass& clazz)
         {
-            izanagi::net::ReplicatedPropertyManager::get()->registerCreator(clazz, func);
+            // Regist creator which creates specified object.
+            izanagi::net::ReplicatedPropertyManager::get()->registerCreator(clazz, &m_creator);
         }
         ~ReplicatedObjectProxy() {}
 
         NO_COPIABLE(ReplicatedObjectProxy);
+
+    private:
+        ReplicatedPropertyManager::ObjectCreator<TYPE> m_creator;
     };
 
     /** Base class for an object which has replicated properties.
      */
-    class ReplicatedObjectBase {
+    class ReplicatedObjectBase : public CPlacementNew {
         friend class ReplicatedPropertyManager;
         friend class ReplicatedPropertyServer;
         friend class ReplicatedPropertyClient;
@@ -65,12 +40,6 @@ namespace net {
         ReplicatedObjectBase();
         virtual ~ReplicatedObjectBase();
 
-    private:
-        // Add replicated property to the object.
-        void addReplicatedProperty(ReplicatedPropertyBase& prop);
-
-        ReplicatedPropertyManager::HashItem* getReplicatedObjectHashItem();
-
     public:
         // Get if this is on server.
         IZ_BOOL isServer() const
@@ -78,28 +47,39 @@ namespace net {
             return m_isServer;
         }
 
-        virtual const CClass& getClass() = 0;
+        virtual const ReplicatedObjectClass& getClass() = 0;
 
     private:
+        // Add replicated property to the object.
+        inline void addReplicatedProperty(ReplicatedPropertyBase& prop);
+
         // Get id.
         inline IZ_UINT64 getReplicatedObjectID() const;
 
         // Get if this has dirty replicated property.
         inline IZ_BOOL hasDirtyReplicatedProperty() const;
 
+        // Set this has dirty replicated properties.
         inline void dirtyReplicatedProperty();
+
+        // Reset this has dirty replicated properties.
         inline void undirtyReplicatedProperty();
 
         inline CStdList<ReplicatedPropertyBase>::Item* getReplicatedPropertyListTopItem();
+
+        inline CStdList<ReplicatedObjectBase>::Item* getListItem();
 
     private:
         IZ_UINT64 m_ReplicatedObjectID;
         IZ_BOOL m_isServer;
 
-        IZ_BOOL m_hasReplicatedPropertyDirty;
+        // flag if this has dirty replicated property.
+        std::atomic<IZ_BOOL> m_hasDirtyReplicatedProperty;
 
+        // replicated property list.
         CStdList<ReplicatedPropertyBase> m_ReplicatedPropertyList;
-        ReplicatedPropertyManager::HashItem m_ReplicatedObjectHashItem;
+
+        CStdList<ReplicatedObjectBase>::Item m_listItem;
     };
 
     /** Replicated Object.
@@ -115,18 +95,16 @@ namespace net {
 
 #define IZ_DEFS_REPLICATED_OBJ(clazz) \
     public:\
-        static const izanagi::net::CClass& Class##clazz() {\
-            static izanagi::net::CClass _class(#clazz);\
+        static const izanagi::net::ReplicatedObjectClass& Class##clazz() {\
+            static izanagi::net::ReplicatedObjectClass _class(#clazz);\
             return _class;\
         }\
-        virtual const izanagi::net::CClass& getClass() override { return clazz::Class##clazz(); }\
-        static izanagi::net::ReplicatedObjectBase* createForReplicatedProp##clazz(izanagi::IMemoryAllocator* allocator)\
-        {\
-            void* p = ALLOC(allocator, sizeof(clazz));\
-            clazz* ret = new(p)clazz;\
-            return ret;\
-        }\
-        izanagi::net::ReplicatedObjectProxy __pfoxy{ Class##clazz(), createForReplicatedProp##clazz };
+        virtual const izanagi::net::ReplicatedObjectClass& getClass() override { return clazz::Class##clazz(); }\
+    private:\
+        static izanagi::net::ReplicatedObjectProxy<clazz> pfoxy##clazz;
+
+#define IZ_DECL_REPLICATED_OBJ(clazz) \
+        izanagi::net::ReplicatedObjectProxy<clazz> clazz::pfoxy##clazz{ clazz::Class##clazz() }
 
 #define IZ_GET_REPLICATED_OBJ_CLASS(clazz) clazz::Class##clazz()
 

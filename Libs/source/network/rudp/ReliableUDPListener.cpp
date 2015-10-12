@@ -72,6 +72,25 @@ namespace net {
 		}
 	}
 
+    void ReliableUDPListener::sendToAll(void* data, IZ_UINT size)
+    {
+        if (IsClosed()) {
+            return;
+        }
+
+        auto item = m_RecievedClientMap.GetOrderTop();
+
+        while (item != IZ_NULL) {
+            auto hashItem = item->GetData();
+            auto next = item->GetNext();
+            auto client = hashItem->GetData();
+
+            client->Send(data, 0, size);
+
+            item = next;
+        }
+    }
+
     void ReliableUDPListener::ProcRecieve()
     {
         while (!WillClose())

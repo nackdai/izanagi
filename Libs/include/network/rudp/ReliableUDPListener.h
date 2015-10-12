@@ -27,6 +27,8 @@ namespace net {
 		// 終了.
 		virtual void Close() override;
 
+        void sendToAll(void* data, IZ_UINT size);
+
     private:
         void ProcRecieve();
 

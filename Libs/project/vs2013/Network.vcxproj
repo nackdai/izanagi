@@ -55,6 +55,7 @@
     <ClInclude Include="..\..\include\network\ReplicatedProperty\ReplicatedProperty.h" />
     <ClInclude Include="..\..\include\network\ReplicatedProperty\ReplicatedPropertyManager.h" />
     <ClInclude Include="..\..\include\network\ReplicatedProperty\ReplicatedPropertyObject.h" />
+    <ClInclude Include="..\..\include\network\ReplicatedProperty\ReplicatedPropertyObjectClass.h" />
     <ClInclude Include="..\..\include\network\rudp\CallbackRegister.h" />
     <ClInclude Include="..\..\include\network\rudp\ReliableUDP.h" />
     <ClInclude Include="..\..\include\network\rudp\ReliableUDPListener.h" />
@@ -113,6 +114,7 @@
     <ClCompile Include="..\..\source\network\ReplicatedProperty\ReplicatedProperty.cpp" />
     <ClCompile Include="..\..\source\network\ReplicatedProperty\ReplicatedPropertyManager.cpp" />
     <ClCompile Include="..\..\source\network\ReplicatedProperty\ReplicatedPropertyObject.cpp" />
+    <ClCompile Include="..\..\source\network\ReplicatedProperty\ReplicatedPropertyObjectClass.cpp" />
     <ClCompile Include="..\..\source\network\rudp\CallbackRegister.cpp" />
     <ClCompile Include="..\..\source\network\rudp\ReliableUDP.cpp" />
     <ClCompile Include="..\..\source\network\rudp\ReliableUDPListener.cpp" />
