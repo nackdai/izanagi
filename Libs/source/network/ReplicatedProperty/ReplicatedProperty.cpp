@@ -9,6 +9,11 @@ namespace net {
         m_listItem.Init(this);
     }
 
+    IZ_BOOL ReplicatedPropertyBase::isDirty() const
+    {
+        return m_isDirty;
+    }
+
     void ReplicatedPropertyBase::dirty()
     {
         m_isDirty = IZ_TRUE;
@@ -19,13 +24,12 @@ namespace net {
         m_isDirty = IZ_FALSE;
     }
 
-    //////////////////////////////////////////////
-
-    template <typename _T>
-    IZ_BOOL ReplicatedProperty<_T>::isServer()
+    CStdList<ReplicatedPropertyBase>::Item* ReplicatedPropertyBase::getListItem()
     {
-        return m_owner->isServer();
+        return &m_listItem;
     }
+
+    //////////////////////////////////////////////
 
     template <typename _T>
     void ReplicatedProperty<_T>::set(const _T& rhs)
@@ -37,50 +41,6 @@ namespace net {
         }
 
         setForcibly(rhs);
-    }
-
-    template <typename _T>
-    void ReplicatedProperty<_T>::setForcibly(const _T& rhs)
-    {
-        if (m_value != rhs) {
-            // NOTE
-            // dirtyにならない限り、通信対象にならない
-            if (m_type != E_REPLICATED_TYPE::None
-                && isServer())
-            {
-                // TODO
-                // サーバーで呼ばれたときだけdirtyにする？
-
-                this->dirty();
-                m_owner->dirtyReplicatedProperty();
-            }
-
-            {
-                sys::Lock lock(m_locker);
-                m_value = rhs;
-            }
-
-            // 通知
-            if (m_funcNotify
-                && m_type == E_REPLICATED_TYPE::RepNotify
-                && !isServer())
-            {
-                // クライアントで呼ばれたときは通知する
-                m_funcNotify();
-            }
-        }
-    }
-
-    template <typename _T>
-    IZ_CHAR* ReplicatedProperty<_T>::sync(IZ_CHAR* ptr)
-    {
-        _T value = (_T)*ptr;
-
-        setForcibly(value);
-
-        ptr += sizeof(_T);
-
-        return ptr;
     }
 }    // namespace net
 }    // namespace izanagi

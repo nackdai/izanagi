@@ -27,7 +27,9 @@ namespace net {
 		// 終了.
 		virtual void Close() override;
 
-        void sendToAll(void* data, IZ_UINT size);
+        IZ_UINT acceptedNum();
+
+        IZ_UINT sendToAll(void* data, IZ_UINT size);
 
     private:
         void ProcRecieve();
@@ -103,6 +105,8 @@ namespace net {
 
         // コネクションされたクライアントのリスト.
         AcceptedClientList m_AcceptedClientList;
+
+        std::mutex m_RecievedClientMapLocker;
 
         // 受信したクライアントのリスト.
         RecievedClientMap m_RecievedClientMap;

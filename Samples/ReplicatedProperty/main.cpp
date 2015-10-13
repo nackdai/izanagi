@@ -17,26 +17,42 @@ public:
     IZ_REPLICATED_PROPERTY(TestObject, IZ_UINT32, v0, izanagi::net::E_REPLICATED_TYPE::Rep, izanagi::net::E_REPLICATED_RELIABLE::Reliable);
 };
 
-IZ_DECL_REPLICATED_OBJ(TestObject);
-
 void runAsServer(izanagi::IMemoryAllocator* allocator)
 {
-    auto manager = izanagi::net::ReplicatedPropertyManager::get();
+    izanagi::net::IPv4Endpoint host(
+        izanagi::net::IPv4Address::Any,
+        ServerPort);
+
+    auto manager = izanagi::net::ReplicatedPropertyManager::getListener();
+
+    manager->init(host);
+
+    manager->accept(1, -1.0f);
 
     TestObject* obj = IZ_CREATE_REPLIACTED_OBJECT(manager, TestObject);
 
-    obj->v0 = 10;
+    for (;;) {}
 }
 
 void runAsClient(izanagi::IMemoryAllocator* allocator)
 {
+    izanagi::net::IPv4Endpoint remote(
+        izanagi::net::IPv4Address(serverIp),
+        ServerPort);
+
     auto manager = izanagi::net::ReplicatedPropertyManager::get();
 
-    auto r = manager->pop();
+    manager->init(remote);
 
-    auto obj = std::get<1>(r);
+    izanagi::net::ReplicatedPropertyManager::CreatedReplicatedObjectHandler handler;
 
+    do {
+        handler = manager->pop();
+    } while (std::get<1>(handler) == nullptr);
 
+    auto obj = std::get<1>(handler);
+
+    int x = 0;
 }
 
 IzMain(0, 0)
@@ -55,6 +71,8 @@ IzMain(0, 0)
     izanagi::net::ReplicatedPropertyManager::begin(
         isServer,
         &allocator);
+
+    IZ_REGIST_REPLICATED_OBJ(TestObject);
 
 	if (isServer) {
 		runAsServer(&allocator);

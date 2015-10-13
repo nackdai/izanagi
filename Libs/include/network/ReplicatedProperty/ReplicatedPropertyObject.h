@@ -10,24 +10,6 @@ namespace izanagi {
 namespace net {
     class ReplicatedPropertyBase;
 
-    /** Porxy for ReplicatedPropertyManager.
-     */
-    template <typename TYPE>
-    class ReplicatedObjectProxy {
-    public:
-        ReplicatedObjectProxy(const ReplicatedObjectClass& clazz)
-        {
-            // Regist creator which creates specified object.
-            izanagi::net::ReplicatedPropertyManager::get()->registerCreator(clazz, &m_creator);
-        }
-        ~ReplicatedObjectProxy() {}
-
-        NO_COPIABLE(ReplicatedObjectProxy);
-
-    private:
-        ReplicatedPropertyManager::ObjectCreator<TYPE> m_creator;
-    };
-
     /** Base class for an object which has replicated properties.
      */
     class ReplicatedObjectBase : public CPlacementNew {
@@ -49,25 +31,25 @@ namespace net {
 
         virtual const ReplicatedObjectClass& getClass() = 0;
 
-    private:
+    protected:
         // Add replicated property to the object.
-        inline void addReplicatedProperty(ReplicatedPropertyBase& prop);
+        void addReplicatedProperty(ReplicatedPropertyBase& prop);
 
         // Get id.
-        inline IZ_UINT64 getReplicatedObjectID() const;
+        IZ_UINT64 getReplicatedObjectID() const;
 
         // Get if this has dirty replicated property.
-        inline IZ_BOOL hasDirtyReplicatedProperty() const;
+        IZ_BOOL hasDirtyReplicatedProperty() const;
 
         // Set this has dirty replicated properties.
-        inline void dirtyReplicatedProperty();
+        void dirtyReplicatedProperty();
 
         // Reset this has dirty replicated properties.
-        inline void undirtyReplicatedProperty();
+        void undirtyReplicatedProperty();
 
-        inline CStdList<ReplicatedPropertyBase>::Item* getReplicatedPropertyListTopItem();
+        CStdList<ReplicatedPropertyBase>::Item* getReplicatedPropertyListTopItem();
 
-        inline CStdList<ReplicatedObjectBase>::Item* getListItem();
+        CStdList<ReplicatedObjectBase>::Item* getListItem();
 
     private:
         IZ_UINT64 m_ReplicatedObjectID;
@@ -100,12 +82,14 @@ namespace net {
             return _class;\
         }\
         virtual const izanagi::net::ReplicatedObjectClass& getClass() override { return clazz::Class##clazz(); }\
-    private:\
-        static izanagi::net::ReplicatedObjectProxy<clazz> pfoxy##clazz;
-
-#define IZ_DECL_REPLICATED_OBJ(clazz) \
-        izanagi::net::ReplicatedObjectProxy<clazz> clazz::pfoxy##clazz{ clazz::Class##clazz() }
+        static izanagi::net::ReplicatedPropertyManager::ObjectCreatorBase* getCreator_##clazz() {\
+            static izanagi::net::ReplicatedPropertyManager::ObjectCreator<clazz> __creator; \
+            return &__creator;\
+        }
 
 #define IZ_GET_REPLICATED_OBJ_CLASS(clazz) clazz::Class##clazz()
+
+#define IZ_REGIST_REPLICATED_OBJ(clazz)\
+    izanagi::net::ReplicatedPropertyManager::get()->registerCreator(clazz::Class##clazz(), clazz::getCreator_##clazz())
 
 #endif    // #if !defined(_IZANAGI_NETWORK_REPLICATED_PROPERTY_OBJECT_H__)

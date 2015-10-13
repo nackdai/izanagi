@@ -36,15 +36,15 @@ namespace net {
 
     protected:
         // Get if this is dirty.
-        inline IZ_BOOL isDirty() const;
+        IZ_BOOL isDirty() const;
 
         // Set dirty forcibly.
-        inline void dirty();
+        void dirty();
 
         // Reset dirty forcibly.
-        inline void unDirty();
+        void unDirty();
 
-        inline CStdList<ReplicatedPropertyBase>::Item* getListItem();
+        CStdList<ReplicatedPropertyBase>::Item* getListItem();
 
         PURE_VIRTUAL(IZ_CHAR* sync(IZ_CHAR* ptr));
 
@@ -107,15 +107,53 @@ namespace net {
 
     protected:
         // Get if this is on server.
-        inline IZ_BOOL isServer();
+        IZ_BOOL isServer()
+        {
+            return m_owner->isServer();
+        }
 
         // Set value if this is on server.
         void set(const _T& rhs);
 
         // Set value forcibly.
-        void setForcibly(const _T& rhs);
+        void setForcibly(const _T& rhs)
+        {
+            if (m_value != rhs) {
+                // NOTE
+                // dirtyにならない限り、通信対象にならない
+                if (m_type != E_REPLICATED_TYPE::None
+                    && isServer())
+                {
+                    // TODO
+                    // サーバーで呼ばれたときだけdirtyにする？
 
-        virtual IZ_CHAR* sync(IZ_CHAR* ptr) override;
+                    this->dirty();
+                    m_owner->dirtyReplicatedProperty();
+                }
+
+                {
+                    sys::Lock lock(m_locker);
+                    m_value = rhs;
+                }
+
+                // 通知
+                if (m_funcNotify
+                    && m_type == E_REPLICATED_TYPE::RepNotify
+                    && !isServer())
+                {
+                    // クライアントで呼ばれたときは通知する
+                    m_funcNotify();
+                }
+            }
+        }
+
+        virtual IZ_CHAR* sync(IZ_CHAR* ptr) override
+        {
+            _T* value = (_T*)ptr;
+            setForcibly(*value);
+            ptr += sizeof(_T);
+            return ptr;
+        }
 
     protected:
         ReplicatedObjectBase* m_owner;
@@ -132,7 +170,7 @@ namespace net {
 }    // namespace izanagi
 
 #define IZ_REPLICATED_PROPERTY(clazz, type, prop, replicatedType, reliable) \
-    void prop##_Notify(); \
+    void prop##_Notify() {} \
     izanagi::net::ReplicatedProperty<type> prop{this, std::bind(&clazz::prop##_Notify, this), replicatedType, reliable}
 
 #endif    // #if !defined(_IZANAGI_NETWORK_REPLICATED_PROPERTY_H__)

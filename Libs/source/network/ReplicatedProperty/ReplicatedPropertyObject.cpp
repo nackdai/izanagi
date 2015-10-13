@@ -11,8 +11,6 @@ namespace net {
 
         m_hasDirtyReplicatedProperty = IZ_FALSE;
 
-        ReplicatedPropertyManager::get()->add(*this);
-
         m_listItem.Init(this);
     }
 

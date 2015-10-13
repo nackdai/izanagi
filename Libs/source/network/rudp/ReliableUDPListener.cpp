@@ -72,11 +72,11 @@ namespace net {
 		}
 	}
 
-    void ReliableUDPListener::sendToAll(void* data, IZ_UINT size)
+    IZ_UINT ReliableUDPListener::acceptedNum()
     {
-        if (IsClosed()) {
-            return;
-        }
+        std::lock_guard<std::mutex> lock(m_RecievedClientMapLocker);
+
+        IZ_UINT ret = 0;
 
         auto item = m_RecievedClientMap.GetOrderTop();
 
@@ -85,10 +85,41 @@ namespace net {
             auto next = item->GetNext();
             auto client = hashItem->GetData();
 
-            client->Send(data, 0, size);
+            if (client->IsConnected()) {
+                ret++;
+            }
 
             item = next;
         }
+
+        return ret;
+    }
+
+    IZ_UINT ReliableUDPListener::sendToAll(void* data, IZ_UINT size)
+    {
+        if (IsClosed()) {
+            return 0;
+        }
+
+        IZ_UINT ret = 0;
+
+        std::lock_guard<std::mutex> lock(m_RecievedClientMapLocker);
+
+        auto item = m_RecievedClientMap.GetOrderTop();
+
+        while (item != IZ_NULL) {
+            auto hashItem = item->GetData();
+            auto next = item->GetNext();
+            auto client = hashItem->GetData();
+
+            if (client->Send(data, 0, size)) {
+                ret++;
+            }
+
+            item = next;
+        }
+
+        return ret;
     }
 
     void ReliableUDPListener::ProcRecieve()
@@ -100,6 +131,8 @@ namespace net {
 
             if (segment)
             {
+                std::lock_guard<std::mutex> lock(m_RecievedClientMapLocker);
+
                 ReliableUDPClient* client = nullptr;
 
                 if (!IsClosed())

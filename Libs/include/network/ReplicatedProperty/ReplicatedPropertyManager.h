@@ -11,12 +11,21 @@ namespace net {
     class ReplicatedObjectBase;
     class IPv4Endpoint;
 
+    class ReplicatedPropertyManagerListener;
+
     /** Manager for replicated properties.
      */
     class ReplicatedPropertyManager {
         friend class ReplicatedObjectBase;
         template <typename TYPE> friend class ReplicatedObjectProxy;
         template <IZ_BOOL IS_SERVER> friend class ReplicatedPropertyManagerFactory;
+
+    public:
+        class ObjectCreatorBase;
+
+    private:
+        using CreatorHash = CStdHash < ReplicatedObjectClass, ObjectCreatorBase, 4 >;
+        using CreatorHashItem = CreatorHash::Item;
 
     protected:
         static IMemoryAllocator* s_Allocator;
@@ -37,6 +46,10 @@ namespace net {
          */
         static ReplicatedPropertyManager* get();
 
+        /** Get ReplicatedPropertyManagerListener.
+         */
+        static ReplicatedPropertyManagerListener* getListener();
+
         /** End replicated property system.
          */
         static void end();
@@ -46,12 +59,23 @@ namespace net {
         virtual ~ReplicatedPropertyManager() {}
 
     public:
+        /** Initialize replicated property system.
+         */
         virtual IZ_BOOL init(const IPv4Endpoint& ep) = 0;
 
-        virtual ReplicatedObjectBase* create(const ReplicatedObjectClass& clazz) { return nullptr; }
+        /** Create an object which has replicated properties.
+         */
+        ReplicatedObjectBase* create(const ReplicatedObjectClass& clazz);
+
+        /** Delete an object which has replicated properties.
+         */
         virtual void deleteObject(ReplicatedObjectBase* obj);
 
-        virtual std::tuple<const ReplicatedObjectClass&, ReplicatedObjectBase*> pop();
+        using CreatedReplicatedObjectHandler = std::tuple<ReplicatedObjectClass, ReplicatedObjectBase*>;
+
+        virtual CreatedReplicatedObjectHandler pop();
+
+        void remove(ReplicatedObjectBase& obj);
 
         /** Update replicated property system.
          */
@@ -65,14 +89,13 @@ namespace net {
          */
         PURE_VIRTUAL(IZ_BOOL isServer());
 
-    protected:
+    public:
         using ReplicatedObjectCreator = std::function < ReplicatedObjectBase*(IMemoryAllocator*) >;
 
-        class ObjectCreatorBase;
-        using CreatorHash = CStdHash < ReplicatedObjectClass, ObjectCreatorBase, 4 >;
-        using CreatorHashItem = CreatorHash::Item;
-
+        // Class to create/delete an object.
         class ObjectCreatorBase {
+            friend class ReplicatedPropertyManager;
+
         public:
             ObjectCreatorBase() {}
             virtual ~ObjectCreatorBase() {}
@@ -80,9 +103,11 @@ namespace net {
             virtual ReplicatedObjectBase* create(IMemoryAllocator* allocator) = 0;
             virtual void deleteObject(IMemoryAllocator* allocator, ReplicatedObjectBase* obj) = 0;
 
+        private:
             CreatorHashItem m_item;
         };
 
+        // Class to create/delete a specified object.
         template <typename _T>
         class ObjectCreator : public ObjectCreatorBase {
         public:
@@ -101,12 +126,28 @@ namespace net {
             }
         };
 
-        virtual void registerCreator(const ReplicatedObjectClass& clazz, ObjectCreatorBase* creator) {}
+        // Regist creator to create/delete an object which have replicated properties.
+        void registerCreator(const ReplicatedObjectClass& clazz, ObjectCreatorBase* creator);
 
     protected:
+        virtual void OnCreate(ReplicatedObjectBase* cretatedObj) {}
+
+    protected:
+        sys::CSpinLock m_locker;
         CStdList<ReplicatedObjectBase> m_list;
 
-        sys::CSpinLock m_locker;
+        std::mutex m_hashCreatorLocker;
+        CreatorHash m_hashCreator;
+    };
+
+    class ReplicatedPropertyManagerListener : public ReplicatedPropertyManager
+    {
+    protected:
+        ReplicatedPropertyManagerListener() {}
+        virtual ~ReplicatedPropertyManagerListener() {}
+        
+    public:
+        virtual void accept(IZ_UINT acceptedNum, IZ_FLOAT timeout) = 0;
     };
 }    // namespace net
 }    // namespace izanagi

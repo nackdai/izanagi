@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 2013 for Windows Desktop
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{A9E5AE3D-D713-440A-B763-1F16A92BB9CC}"
 EndProject
@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NetworkRUDPListener", "Netw
 	ProjectSection(ProjectDependencies) = postProject
 		{DD5D28B8-93F1-4F26-8AD1-DD224CCB9A4F} = {DD5D28B8-93F1-4F26-8AD1-DD224CCB9A4F}
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ReplicatedPropertyListener", "ReplicatedPropertyListener.vcxproj", "{ED420572-6E26-48E7-82B6-7526B4CB94F7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -66,11 +68,32 @@ Global
 		{D6881DBF-D2AF-45A1-8F4B-5CD6069C8E6A}.Release_GLES2|Win32.Build.0 = Release_GLES2|Win32
 		{D6881DBF-D2AF-45A1-8F4B-5CD6069C8E6A}.Release_GLES2|x64.ActiveCfg = Release_GLES2|x64
 		{D6881DBF-D2AF-45A1-8F4B-5CD6069C8E6A}.Release_GLES2|x64.Build.0 = Release_GLES2|x64
+		{ED420572-6E26-48E7-82B6-7526B4CB94F7}.Debug_DX9|Win32.ActiveCfg = Debug_DX9|Win32
+		{ED420572-6E26-48E7-82B6-7526B4CB94F7}.Debug_DX9|Win32.Build.0 = Debug_DX9|Win32
+		{ED420572-6E26-48E7-82B6-7526B4CB94F7}.Debug_DX9|x64.ActiveCfg = Debug_DX9|x64
+		{ED420572-6E26-48E7-82B6-7526B4CB94F7}.Debug_DX9|x64.Build.0 = Debug_DX9|x64
+		{ED420572-6E26-48E7-82B6-7526B4CB94F7}.Debug_GLES2|Win32.ActiveCfg = Debug_GLES2|Win32
+		{ED420572-6E26-48E7-82B6-7526B4CB94F7}.Debug_GLES2|Win32.Build.0 = Debug_GLES2|Win32
+		{ED420572-6E26-48E7-82B6-7526B4CB94F7}.Debug_GLES2|x64.ActiveCfg = Debug_GLES2|x64
+		{ED420572-6E26-48E7-82B6-7526B4CB94F7}.Debug_GLES2|x64.Build.0 = Debug_GLES2|x64
+		{ED420572-6E26-48E7-82B6-7526B4CB94F7}.Debug_GLUT|Win32.ActiveCfg = Debug_GLUT|Win32
+		{ED420572-6E26-48E7-82B6-7526B4CB94F7}.Debug_GLUT|Win32.Build.0 = Debug_GLUT|Win32
+		{ED420572-6E26-48E7-82B6-7526B4CB94F7}.Debug_GLUT|x64.ActiveCfg = Debug_GLUT|x64
+		{ED420572-6E26-48E7-82B6-7526B4CB94F7}.Debug_GLUT|x64.Build.0 = Debug_GLUT|x64
+		{ED420572-6E26-48E7-82B6-7526B4CB94F7}.Release_DX9|Win32.ActiveCfg = Release_DX9|Win32
+		{ED420572-6E26-48E7-82B6-7526B4CB94F7}.Release_DX9|Win32.Build.0 = Release_DX9|Win32
+		{ED420572-6E26-48E7-82B6-7526B4CB94F7}.Release_DX9|x64.ActiveCfg = Release_DX9|x64
+		{ED420572-6E26-48E7-82B6-7526B4CB94F7}.Release_DX9|x64.Build.0 = Release_DX9|x64
+		{ED420572-6E26-48E7-82B6-7526B4CB94F7}.Release_GLES2|Win32.ActiveCfg = Release_GLES2|Win32
+		{ED420572-6E26-48E7-82B6-7526B4CB94F7}.Release_GLES2|Win32.Build.0 = Release_GLES2|Win32
+		{ED420572-6E26-48E7-82B6-7526B4CB94F7}.Release_GLES2|x64.ActiveCfg = Release_GLES2|x64
+		{ED420572-6E26-48E7-82B6-7526B4CB94F7}.Release_GLES2|x64.Build.0 = Release_GLES2|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{D6881DBF-D2AF-45A1-8F4B-5CD6069C8E6A} = {A9E5AE3D-D713-440A-B763-1F16A92BB9CC}
+		{ED420572-6E26-48E7-82B6-7526B4CB94F7} = {A9E5AE3D-D713-440A-B763-1F16A92BB9CC}
 	EndGlobalSection
 EndGlobal
