@@ -38,6 +38,9 @@ namespace net {
         // Get id.
         IZ_UINT64 getReplicatedObjectID() const;
 
+        // Set id.
+        void setReplicatedObjectID(IZ_UINT64 id);
+
         // Get if this has dirty replicated property.
         IZ_BOOL hasDirtyReplicatedProperty() const;
 
@@ -51,6 +54,8 @@ namespace net {
 
         CStdList<ReplicatedObjectBase>::Item* getListItem();
 
+        CStdList<ReplicatedObjectBase>::Item* getListItemEx();
+
     private:
         IZ_UINT64 m_ReplicatedObjectID;
         IZ_BOOL m_isServer;
@@ -62,6 +67,8 @@ namespace net {
         CStdList<ReplicatedPropertyBase> m_ReplicatedPropertyList;
 
         CStdList<ReplicatedObjectBase>::Item m_listItem;
+
+        CStdList<ReplicatedObjectBase>::Item m_listItemEx;
     };
 
     /** Replicated Object.

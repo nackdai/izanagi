@@ -46,9 +46,18 @@ namespace net {
 
         CStdList<ReplicatedPropertyBase>::Item* getListItem();
 
-        PURE_VIRTUAL(IZ_CHAR* sync(IZ_CHAR* ptr));
+        PURE_VIRTUAL(void* getValue());
+
+        PURE_VIRTUAL(IZ_UINT getTypeSize());
+
+        PURE_VIRTUAL(IZ_UINT8* sync(const IZ_UINT8* ptr, IZ_UINT size));
+
+        IZ_UINT getID() const;
+        void setID(IZ_UINT id);
 
     private:
+        IZ_UINT m_id{ 0 };
+
         std::atomic<IZ_BOOL> m_isDirty{ IZ_FALSE };
 
         CStdList<ReplicatedPropertyBase>::Item m_listItem;
@@ -113,7 +122,16 @@ namespace net {
         }
 
         // Set value if this is on server.
-        void set(const _T& rhs);
+        void set(const _T& rhs)
+        {
+            // TODO
+            // クライアント側では値の変更を許さない？
+            if (!isServer()) {
+                return;
+            }
+
+            setForcibly(rhs);
+        }
 
         // Set value forcibly.
         void setForcibly(const _T& rhs)
@@ -147,12 +165,24 @@ namespace net {
             }
         }
 
-        virtual IZ_CHAR* sync(IZ_CHAR* ptr) override
+        virtual void* getValue() override
         {
+            return &m_value;
+        }
+
+        virtual IZ_UINT getTypeSize() override
+        {
+            return sizeof(_T);
+        }
+
+        virtual IZ_UINT8* sync(const IZ_UINT8* ptr, IZ_UINT size) override
+        {
+            IZ_ASSERT(size == sizeof(_T));
+
             _T* value = (_T*)ptr;
             setForcibly(*value);
-            ptr += sizeof(_T);
-            return ptr;
+            IZ_UINT8* ret = const_cast<IZ_UINT8*>(ptr) + sizeof(_T);
+            return ret;
         }
 
     protected:

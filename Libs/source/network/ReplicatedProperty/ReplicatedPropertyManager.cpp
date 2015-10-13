@@ -15,7 +15,7 @@ namespace net {
     {
         IZ_ASSERT(isInitialized());
 
-        s_ID.store(s_ID + 1);
+        s_ID++;
         return s_ID;
     }
 
@@ -89,6 +89,7 @@ namespace net {
 
     enum ReplicatedPropertyProtocol : IZ_UINT {
         Create,
+        Sync,
     };
 
     struct SReplicatedPropertyHeader {
@@ -98,11 +99,35 @@ namespace net {
     struct SCreateObject {
         SReplicatedPropertyHeader header;
         IZ_UINT key;
+        IZ_UINT64 id;
 
         SCreateObject()
         {
             header.type = ReplicatedPropertyProtocol::Create;
+            key = 0;
+            id = 0;
         }
+    };
+
+    struct SSyncProperty {
+        SReplicatedPropertyHeader header;
+        IZ_UINT num;
+        IZ_UINT64 id;
+
+        SSyncProperty()
+        {
+            header.type = ReplicatedPropertyProtocol::Sync;
+            num = 0;
+            id = 0;
+        }
+    };
+
+    struct SReplicatedProp {
+        IZ_UINT16 idx;
+        IZ_UINT16 length;
+
+        // TODO
+        IZ_UINT8 buf[16];
     };
 
     /////////////////////////////////////////////////////////
@@ -129,9 +154,16 @@ namespace net {
         // Send dirty replicated properties.
         void send(ReplicatedObjectBase* obj);
 
+        void send(
+            const SSyncProperty& protocol,
+            const SReplicatedProp* props);
+
         virtual void OnCreate(ReplicatedObjectBase* cretatedObj) override;
 
         IZ_DECL_PLACEMENT_NEW();
+
+    private:
+        void OnProc();
 
     private:
         Udp m_udp;
@@ -171,41 +203,92 @@ namespace net {
     // Update replicated property system.
     void ReplicatedPropertyServer::update()
     {
-        // TODO
+        sys::Lock lock(m_locker);
+        
+        auto item = m_list.GetTop();
 
-        for (;;) {
-            auto client = m_listener.Accept();
+        while (item) {
+            auto obj = item->GetData();
 
-            if (client == nullptr) {
-                break;
-            }
-        }
-    }
-
-    // Send dirty replicated properties.
-    void ReplicatedPropertyServer::send(ReplicatedObjectBase* obj)
-    {
-        auto item = obj->getReplicatedPropertyListTopItem();
-
-        while (item != IZ_NULL) {
-            auto prop = item->GetData();
-
-            if (prop->isDirty()) {
-                // TODO
-                // 通信
-
-                // Send dirty property, so make it un-dirty.
-                prop->unDirty();
+            if (obj->hasDirtyReplicatedProperty()) {
+                send(obj);
+                obj->undirtyReplicatedProperty();
             }
 
             item = item->GetNext();
         }
     }
 
+    // Send dirty replicated properties.
+    void ReplicatedPropertyServer::send(ReplicatedObjectBase* obj)
+    {
+        SSyncProperty protocol;
+        protocol.id = obj->getReplicatedObjectID();
+
+        SReplicatedProp props[10];
+
+        IZ_UINT cnt = 0;
+
+        auto item = obj->getReplicatedPropertyListTopItem();
+
+        while (item != IZ_NULL) {
+            auto prop = item->GetData();
+
+            if (prop->isDirty()) {
+                if (protocol.num >= COUNTOF(props)) {
+                    send(protocol, props);
+
+                    protocol.num = 0;
+                }
+
+                SReplicatedProp& sendProp = props[protocol.num];
+                protocol.num++;
+
+                sendProp.idx = cnt;
+                sendProp.length = prop->getTypeSize();
+
+                IZ_ASSERT(sendProp.length <= sizeof(sendProp.buf));
+
+                memcpy(sendProp.buf, prop->getValue(), sendProp.length);
+
+                // Send dirty property, so make it un-dirty.
+                prop->unDirty();
+            }
+
+            item = item->GetNext();
+            cnt++;
+        }
+
+        if (protocol.num > 0) {
+            send(protocol, props);
+        }
+    }
+
+    void ReplicatedPropertyServer::send(
+        const SSyncProperty& protocol,
+        const SReplicatedProp* props)
+    {
+        // TODO
+        IZ_UINT8 buf[1024];
+
+        IZ_ASSERT(sizeof(buf) >= sizeof(protocol)+sizeof(SReplicatedProp)* protocol.num);
+
+        IZ_UINT size = 0;
+
+        memcpy(buf, &protocol, sizeof(protocol));
+        size += sizeof(protocol);
+
+        memcpy(buf + size, props, sizeof(SReplicatedProp)* protocol.num);
+        size += sizeof(SReplicatedProp)* protocol.num;
+
+        m_listener.sendToAll(buf, size);
+    }
+
     void ReplicatedPropertyServer::OnCreate(ReplicatedObjectBase* cretatedObj)
     {
         SCreateObject protocol;
         protocol.key = cretatedObj->getClass();
+        protocol.id = cretatedObj->getReplicatedObjectID();
 
         // 作成したことを通知.
         m_listener.sendToAll(
@@ -232,7 +315,9 @@ namespace net {
             return IZ_FALSE;
         }
 
-        void recv(ReplicatedObjectBase* obj);
+        void recv(
+            const SSyncProperty& protocol,
+            const SReplicatedProp* props);
 
         virtual CreatedReplicatedObjectHandler pop() override;
 
@@ -241,12 +326,17 @@ namespace net {
     private:
         void OnProc();
 
+        virtual void OnCreate(ReplicatedObjectBase* cretatedObj) override;
+
     private:
         std::thread m_recvThread;
         IZ_BOOL m_isRunning{ IZ_FALSE };
 
         Udp m_udp;
         ReliableUDP m_rudp;
+
+        std::mutex m_managedListLocker;
+        CStdList<ReplicatedObjectBase> m_managedList;
     };
 
     ReplicatedPropertyClient::ReplicatedPropertyClient()
@@ -289,20 +379,42 @@ namespace net {
             // クライアント側では値の変更を許さない？
             IZ_ASSERT(!obj->hasDirtyReplicatedProperty());
 
-            recv(obj);
-
             item = item->GetNext();
         }
     }
 
-    void ReplicatedPropertyClient::recv(ReplicatedObjectBase* obj)
+    void ReplicatedPropertyClient::recv(
+        const SSyncProperty& protocol,
+        const SReplicatedProp* props)
     {
-        auto item = obj->getReplicatedPropertyListTopItem();
+        // TODO
 
-        while (item != IZ_NULL) {
-            auto prop = item->GetData();
+        std::lock_guard<std::mutex> lock(m_managedListLocker);
 
-            // TODO
+        auto item = m_managedList.GetTop();
+
+        while (item) {
+            auto obj = item->GetData();
+
+            if (obj->getReplicatedObjectID() == protocol.id) {
+                auto propItem = obj->getReplicatedPropertyListTopItem();
+
+                while (propItem) {
+                    auto prop = propItem->GetData();
+
+                    for (IZ_UINT i = 0; i < protocol.num; i++) {
+                        auto& p = props[i];
+
+                        if (p.idx == prop->getID()) {
+                            prop->sync(p.buf, p.length);
+
+                            break;
+                        }
+                    }
+
+                    propItem = propItem->GetNext();
+                }
+            }
 
             item = item->GetNext();
         }
@@ -349,7 +461,16 @@ namespace net {
                     SCreateObject* protocol = (SCreateObject*)header;
 
                     // オブジェクト作成
-                    create(ReplicatedObjectClass(protocol->key));
+                    auto obj = create(ReplicatedObjectClass(protocol->key));
+                    obj->setReplicatedObjectID(protocol->id);
+                }
+                    break;
+                case ReplicatedPropertyProtocol::Sync:
+                {
+                    SSyncProperty* protocol = (SSyncProperty*)header;
+                    SReplicatedProp* props = (SReplicatedProp*)(bytes + sizeof(SSyncProperty));
+
+                    recv(*protocol, props);
                 }
                     break;
                 default:
@@ -357,6 +478,12 @@ namespace net {
                 }
             }
         }
+    }
+
+    void ReplicatedPropertyClient::OnCreate(ReplicatedObjectBase* cretatedObj)
+    {
+        std::lock_guard<std::mutex> lock(m_managedListLocker);
+        m_managedList.AddTail(cretatedObj->getListItemEx());
     }
 
     /////////////////////////////////////////////////////////

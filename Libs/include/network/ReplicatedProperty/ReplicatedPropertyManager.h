@@ -130,7 +130,7 @@ namespace net {
         void registerCreator(const ReplicatedObjectClass& clazz, ObjectCreatorBase* creator);
 
     protected:
-        virtual void OnCreate(ReplicatedObjectBase* cretatedObj) {}
+        virtual void OnCreate(ReplicatedObjectBase* cretatedObj) = 0;
 
     protected:
         sys::CSpinLock m_locker;

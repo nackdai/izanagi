@@ -12,6 +12,7 @@ namespace net {
         m_hasDirtyReplicatedProperty = IZ_FALSE;
 
         m_listItem.Init(this);
+        m_listItemEx.Init(this);
     }
 
     ReplicatedObjectBase::~ReplicatedObjectBase()
@@ -21,12 +22,22 @@ namespace net {
 
     void ReplicatedObjectBase::addReplicatedProperty(ReplicatedPropertyBase& prop)
     {
+        IZ_UINT idx = m_ReplicatedPropertyList.GetItemNum();
+        prop.setID(idx);
+
         m_ReplicatedPropertyList.AddTail(prop.getListItem());
     }
 
+    // Get id.
     IZ_UINT64 ReplicatedObjectBase::getReplicatedObjectID() const
     {
         return m_ReplicatedObjectID;
+    }
+
+    // Set id.
+    void ReplicatedObjectBase::setReplicatedObjectID(IZ_UINT64 id)
+    {
+        m_ReplicatedObjectID = id;
     }
 
     IZ_BOOL ReplicatedObjectBase::hasDirtyReplicatedProperty() const
@@ -53,6 +64,11 @@ namespace net {
     CStdList<ReplicatedObjectBase>::Item* ReplicatedObjectBase::getListItem()
     {
         return &m_listItem;
+    }
+
+    CStdList<ReplicatedObjectBase>::Item* ReplicatedObjectBase::getListItemEx()
+    {
+        return &m_listItemEx;
     }
 }    // namespace net
 }    // namespace izanagi

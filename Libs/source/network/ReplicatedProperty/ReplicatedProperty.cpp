@@ -29,18 +29,14 @@ namespace net {
         return &m_listItem;
     }
 
-    //////////////////////////////////////////////
-
-    template <typename _T>
-    void ReplicatedProperty<_T>::set(const _T& rhs)
+    IZ_UINT ReplicatedPropertyBase::getID() const
     {
-        // TODO
-        // クライアント側では値の変更を許さない？
-        if (!isServer()) {
-            return;
-        }
+        return m_id;
+    }
 
-        setForcibly(rhs);
+    void ReplicatedPropertyBase::setID(IZ_UINT id)
+    {
+        m_id = id;
     }
 }    // namespace net
 }    // namespace izanagi

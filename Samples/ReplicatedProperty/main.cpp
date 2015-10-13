@@ -31,6 +31,10 @@ void runAsServer(izanagi::IMemoryAllocator* allocator)
 
     TestObject* obj = IZ_CREATE_REPLIACTED_OBJECT(manager, TestObject);
 
+    obj->v0 = 100;
+
+    manager->update();
+
     for (;;) {}
 }
 
@@ -50,9 +54,14 @@ void runAsClient(izanagi::IMemoryAllocator* allocator)
         handler = manager->pop();
     } while (std::get<1>(handler) == nullptr);
 
-    auto obj = std::get<1>(handler);
+    auto obj = (TestObject*)std::get<1>(handler);
 
-    int x = 0;
+    for (;;) {
+        if (obj->v0 == 100) {
+            IZ_PRINTF("Sync!!\n");
+            break;
+        }
+    }
 }
 
 IzMain(0, 0)
