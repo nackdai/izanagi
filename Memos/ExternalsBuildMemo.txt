@@ -33,3 +33,5 @@ $ git clone https://chromium.googlesource.com/external/gyp build/gyp
 $ set PYTHON={Your Python path to python.exe}
 ex) set PYTHON=C:\Python27\python.exe
 $ Run vcbuild.bat
+
+# Maybe, python version is specified, version 2.7
