@@ -6,9 +6,9 @@ CFLAGS.EXTRA = -arch x86_64 -dynamic -fno-common
 LDFLAGS.EXTRA = -arch x86_64
 ifneq (undefined, $(origin GLEW_APPLE_GLX))
 CFLAGS.EXTRA += -I/usr/X11R6/include -D'GLEW_APPLE_GLX'
-LDFLAGS.GL = -L/usr/X11R6/lib -lXmu -lXi -lGL -lXext -lX11
+LDFLAGS.GL = -L/usr/X11R6/lib -lGL -lX11
 else
-LDFLAGS.GL = -framework AGL -framework OpenGL
+LDFLAGS.GL = -framework OpenGL
 endif
 LDFLAGS.STATIC =
 LDFLAGS.DYNAMIC =

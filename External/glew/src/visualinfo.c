@@ -4,6 +4,7 @@
 ** Copyright (C) Nate Robins, 1997
 **               Michael Wimmer, 1999
 **               Milan Ikits, 2002-2008
+**               Nigel Stewart, 2008-2013
 **
 ** visualinfo is a small utility that displays all available visuals,
 ** aka. pixelformats, in an OpenGL system along with renderer version
@@ -36,8 +37,9 @@
 #if defined(_WIN32)
 #include <GL/wglew.h>
 #elif defined(__APPLE__) && !defined(GLEW_APPLE_GLX)
-#include <AGL/agl.h>
-#else
+#include <OpenGL/OpenGL.h>
+#include <OpenGL/CGLTypes.h>
+#elif !defined(__HAIKU__)
 #include <GL/glxew.h>
 #endif
 
@@ -47,7 +49,7 @@ GLEWContext _glewctx;
 #  ifdef _WIN32
 WGLEWContext _wglewctx;
 #    define wglewGetContext() (&_wglewctx)
-#  elif !defined(__APPLE__) || defined(GLEW_APPLE_GLX)
+#  elif !defined(__APPLE__) && !defined(__HAIKU__) || defined(GLEW_APPLE_GLX)
 GLXEWContext _glxewctx;
 #    define glxewGetContext() (&_glxewctx)
 #  endif
@@ -60,8 +62,8 @@ typedef struct GLContextStruct
   HDC dc;
   HGLRC rc;
 #elif defined(__APPLE__) && !defined(GLEW_APPLE_GLX)
-  AGLContext ctx, octx;
-#else
+  CGLContextObj ctx, octx;
+#elif !defined(__HAIKU__)
   Display* dpy;
   XVisualInfo* vi;
   GLXContext ctx;
@@ -129,7 +131,7 @@ main (int argc, char** argv)
   err = glewContextInit(glewGetContext());
 #  ifdef _WIN32
   err = err || wglewContextInit(wglewGetContext());
-#  elif !defined(__APPLE__) || defined(GLEW_APPLE_GLX)
+#  elif !defined(__APPLE__) && !defined(__HAIKU__) || defined(GLEW_APPLE_GLX)
   err = err || glxewContextInit(glxewGetContext());
 #  endif
 #else
@@ -145,8 +147,15 @@ main (int argc, char** argv)
   /* ---------------------------------------------------------------------- */
   /* open file */
 #if defined(_WIN32)
-  if (!displaystdout) 
+  if (!displaystdout)
+  {
+#if defined(_MSC_VER) && (_MSC_VER >= 1400)
+    if (fopen_s(&file, "visualinfo.txt", "w") != 0)
+      file = stdout;
+#else
     file = fopen("visualinfo.txt", "w");
+#endif
+  }
   if (file == NULL)
     file = stdout;
 #else
@@ -160,13 +169,13 @@ main (int argc, char** argv)
   fprintf(file, "OpenGL renderer string: %s\n", glGetString(GL_RENDERER));
   fprintf(file, "OpenGL version string: %s\n", glGetString(GL_VERSION));
   fprintf(file, "OpenGL extensions (GL_): \n");
-  PrintExtensions((char*)glGetString(GL_EXTENSIONS));
+  PrintExtensions((const char*)glGetString(GL_EXTENSIONS));
 
 #ifndef GLEW_NO_GLU
   /* GLU extensions */
   fprintf(file, "GLU version string: %s\n", gluGetString(GLU_VERSION));
   fprintf(file, "GLU extensions (GLU_): \n");
-  PrintExtensions((char*)gluGetString(GLU_EXTENSIONS));
+  PrintExtensions((const char*)gluGetString(GLU_EXTENSIONS));
 #endif
 
   /* ---------------------------------------------------------------------- */
@@ -177,11 +186,15 @@ main (int argc, char** argv)
   {
     fprintf(file, "WGL extensions (WGL_): \n");
     PrintExtensions(wglGetExtensionsStringARB ? 
-                    (char*)wglGetExtensionsStringARB(ctx.dc) :
-		    (char*)wglGetExtensionsStringEXT());
+                    (const char*)wglGetExtensionsStringARB(ctx.dc) :
+		    (const char*)wglGetExtensionsStringEXT());
   }
 #elif defined(__APPLE__) && !defined(GLEW_APPLE_GLX)
   
+#elif defined(__HAIKU__)
+
+  /* TODO */
+
 #else
   /* GLX extensions */
   fprintf(file, "GLX extensions (GLX_): \n");
@@ -231,7 +244,11 @@ void PrintExtensions (const char* s)
       fprintf(file, "    %s\n", t);
       p++;
       i = (int)strlen(p);
+#if defined(_MSC_VER) && (_MSC_VER >= 1400)
+      strcpy_s(t, sizeof(t), p);
+#else
       strcpy(t, p);
+#endif
     }
     s++;
   }
@@ -582,7 +599,7 @@ VisualInfo (GLContext* ctx)
 #elif defined(__APPLE__) && !defined(GLEW_APPLE_GLX)
 
 void
-VisualInfo (GLContext* ctx)
+VisualInfo (GLContext* __attribute__((__unused__)) ctx)
 {
 /*
   int attrib[] = { AGL_RGBA, AGL_NONE };
@@ -596,6 +613,16 @@ VisualInfo (GLContext* ctx)
     pf = aglNextPixelFormat(pf);
   }
 */
+}
+
+/* ---------------------------------------------------------------------- */
+
+#elif defined(__HAIKU__)
+
+void
+VisualInfo (GLContext* ctx)
+{
+  /* TODO */
 }
 
 #else /* GLX */
@@ -1046,30 +1073,51 @@ void InitContext (GLContext* ctx)
 
 GLboolean CreateContext (GLContext* ctx)
 {
-  int attrib[] = { AGL_RGBA, AGL_NONE };
-  AGLPixelFormat pf;
+  CGLPixelFormatAttribute attrib[] = { kCGLPFAAccelerated, 0 };
+  CGLPixelFormatObj pf;
+  GLint npix;
+  CGLError error;
   /* check input */
   if (NULL == ctx) return GL_TRUE;
-  /*int major, minor;
-  SetPortWindowPort(wnd);
-  aglGetVersion(&major, &minor);
-  fprintf(stderr, "GL %d.%d\n", major, minor);*/
-  pf = aglChoosePixelFormat(NULL, 0, attrib);
-  if (NULL == pf) return GL_TRUE;
-  ctx->ctx = aglCreateContext(pf, NULL);
-  if (NULL == ctx->ctx || AGL_NO_ERROR != aglGetError()) return GL_TRUE;
-  aglDestroyPixelFormat(pf);
-  /*aglSetDrawable(ctx, GetWindowPort(wnd));*/
-  ctx->octx = aglGetCurrentContext();
-  if (GL_FALSE == aglSetCurrentContext(ctx->ctx)) return GL_TRUE;
+  error = CGLChoosePixelFormat(attrib, &pf, &npix);
+  if (error) return GL_TRUE;
+  error = CGLCreateContext(pf, NULL, &ctx->ctx);
+  if (error) return GL_TRUE;
+  CGLReleasePixelFormat(pf);
+  ctx->octx = CGLGetCurrentContext();
+  error = CGLSetCurrentContext(ctx->ctx);
+  if (error) return GL_TRUE;
   return GL_FALSE;
 }
 
 void DestroyContext (GLContext* ctx)
 {
   if (NULL == ctx) return;
-  aglSetCurrentContext(ctx->octx);
-  if (NULL != ctx->ctx) aglDestroyContext(ctx->ctx);
+  CGLSetCurrentContext(ctx->octx);
+  if (NULL != ctx->ctx) CGLReleaseContext(ctx->ctx);
+}
+
+/* ------------------------------------------------------------------------ */
+
+#elif defined(__HAIKU__)
+
+void
+InitContext (GLContext* ctx)
+{
+  /* TODO */
+}
+
+GLboolean
+CreateContext (GLContext* ctx)
+{
+  /* TODO */
+  return GL_FALSE;
+}
+
+void
+DestroyContext (GLContext* ctx)
+{
+  /* TODO */
 }
 
 /* ------------------------------------------------------------------------ */
