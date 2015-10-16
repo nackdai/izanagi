@@ -24,3 +24,6 @@
 [submodule "External/libuv"]
 	path = External/libuv
 	url = https://github.com/libuv/libuv.git
+[submodule "External/freeglut"]
+	path = External/freeglut
+	url = https://github.com/dcnieho/FreeGLUT.git
