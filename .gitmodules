@@ -23,3 +23,6 @@
 [submodule "External/freeglut"]
 	path = External/freeglut
 	url = https://github.com/dcnieho/FreeGLUT.git
+[submodule "External/freetype"]
+	path = External/freetype
+	url = http://git.sv.nongnu.org/r/freetype/freetype2.git
