@@ -14,10 +14,6 @@
 	path = External/googletest
 	url = https://github.com/nakdai/googletest.git
     ignore = dirty
-[submodule "External/libevent"]
-	path = External/libevent
-	url = https://github.com/libevent/libevent.git
-	ignore = dirty
 [submodule "Tools/External/assimp"]
 	path = Tools/External/assimp
 	url = https://github.com/assimp/assimp.git
