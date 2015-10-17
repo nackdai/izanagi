@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{7c997ef2-ea14-4991-bb92-f36fb6433936}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Image\ImageBuilder\ImageBuilder.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Image\ImageBuilder\ImageBuilderImpl.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Image\ImageBuilder\ImageReaderImpl.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Image\ImageBuilder\Option.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Image\ImageBuilder\ImageReaderImpl.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Image\ImageBuilder\Option.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Image\ImageBuilder\ImageBuilderDefs.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Image\ImageBuilder\ImageBuilderImpl.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

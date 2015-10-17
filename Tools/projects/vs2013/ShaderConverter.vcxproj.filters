@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{d94016b3-56bc-4c12-98cc-0a94c3d18042}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Shader\ShaderConverter\ShaderConverter.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Shader\ShaderConverter\Preproc.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Shader\ShaderConverter\SamplerUtil.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Shader\ShaderConverter\ShaderConfig.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Shader\ShaderConverter\ShaderConverterImpl.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Shader\ShaderConverter\ShaderConverterUtil.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Shader\ShaderConverter\StringChunk.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Shader\ShaderConverter\TextureUtil.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Shader\ShaderConverter\CompileCmdCreator.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Shader\ShaderConverter\DataBuffer.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Shader\ShaderConverter\Option.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Shader\ShaderConverter\ParamUtil.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Shader\ShaderConverter\PassUtil.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Shader\ShaderConverter\ShaderConverterUtil.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Shader\ShaderConverter\StringChunk.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Shader\ShaderConverter\TextureUtil.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Shader\ShaderConverter\CompileCmdCreator.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Shader\ShaderConverter\DataBuffer.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Shader\ShaderConverter\Option.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Shader\ShaderConverter\ParamUtil.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Shader\ShaderConverter\PassUtil.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Shader\ShaderConverter\Preproc.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Shader\ShaderConverter\SamplerUtil.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Shader\ShaderConverter\ShaderConfig.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Shader\ShaderConverter\ShaderConverterImpl.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

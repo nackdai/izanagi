@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{38e630e2-82d3-452d-aa44-7856dedca548}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AppCore">
+      <UniqueIdentifier>{cb50c0d7-9884-4db0-85e8-dd9aa2833c8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AppCore\include">
+      <UniqueIdentifier>{4f41427b-eda2-4a51-8cc5-47a646332908}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AppCore\source">
+      <UniqueIdentifier>{e0173304-4954-4ff1-9e7a-2668a970c587}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Archive\ArchiveBuilder\ArchiveBuilder.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Archive\AppCore\ArchiveBuilderImpl.cpp">
+      <Filter>AppCore\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Archive\AppCore\FileIdCreator.cpp">
+      <Filter>AppCore\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Archive\AppCore\FileTree.cpp">
+      <Filter>AppCore\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Archive\AppCore\Option.cpp">
+      <Filter>AppCore\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Archive\AppCore\Utility.cpp">
+      <Filter>AppCore\source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Archive\AppCore\AppError.h">
+      <Filter>AppCore\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Archive\AppCore\ArchiveBuilderImpl.h">
+      <Filter>AppCore\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Archive\AppCore\FileDefs.h">
+      <Filter>AppCore\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Archive\AppCore\FileIdCreator.h">
+      <Filter>AppCore\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Archive\AppCore\FileTree.h">
+      <Filter>AppCore\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Archive\AppCore\Option.h">
+      <Filter>AppCore\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Archive\AppCore\Utility.h">
+      <Filter>AppCore\include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+</Project>

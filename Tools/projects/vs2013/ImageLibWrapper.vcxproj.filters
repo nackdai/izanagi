@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="external">
+      <UniqueIdentifier>{0e5842e7-9d0a-411e-9815-ef8384c556a8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Image\ImageLibWrapper\ImageGraphicsDevice.cpp" />
+    <ClCompile Include="..\..\Image\ImageLibWrapper\ImageLibWrapper.cpp" />
+    <ClCompile Include="..\..\Image\ImageBuilder\ImageReaderImpl.cpp">
+      <Filter>external</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Image\ImageLibWrapper\ImageGraphicsDevice.h" />
+    <ClInclude Include="..\..\Image\ImageLibWrapper\ImageLibWrapper.h" />
+    <ClInclude Include="..\..\Image\ImageBuilder\ImageReaderImpl.h">
+      <Filter>external</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

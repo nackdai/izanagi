@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="UserMacros">
+    <EXTERNAL_DIR>$(SolutionDir)../../External</EXTERNAL_DIR>
+    <XERCES_LIB_DIR>$(EXTERNAL_DIR)/xerces/Build/Win32/VC10/$(Configuration)/</XERCES_LIB_DIR>
+  </PropertyGroup>
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <OutDir>$(ProjectDir)../../tools/$(Configuration)\</OutDir>
+    <IntDir>$(ProjectName)\$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+    <ExecutablePath>$(DXSDK_DIR)Utilities\bin\x64;$(ExecutablePath)</ExecutablePath>
+    <IncludePath>$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)Lib\x86;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir)../../../Libs/include;$(ProjectDir)../../ToolKit/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>__IZ_DEBUG__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <DisableSpecificWarnings>4819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>ToolKit.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(ProjectName).exe</OutputFile>
+      <AdditionalLibraryDirectories>$(OutDir);$(ProjectDir)../../../Libs/project/lib/$(Configuration)_DX9;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>xcopy /R /Y /D "$(SolutionDir)..\..\External\xerces\Build\Win32\VC10\$(Configuration)\xerces-c_3_1D.dll" "$(SolutionDir)..\..\tools\$(ConfigurationName)"
+xcopy /R /Y /D "$(SolutionDir)..\..\External\Cg\dll\cg.dll" "$(SolutionDir)..\..\tools\$(ConfigurationName)"
+xcopy /R /Y /D "$(SolutionDir)..\..\External\Cg\dll\cgD3D9.dll" "$(SolutionDir)..\..\tools\$(ConfigurationName)"</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <BuildMacro Include="EXTERNAL_DIR">
+      <Value>$(EXTERNAL_DIR)</Value>
+    </BuildMacro>
+    <BuildMacro Include="XERCES_LIB_DIR">
+      <Value>$(XERCES_LIB_DIR)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>
