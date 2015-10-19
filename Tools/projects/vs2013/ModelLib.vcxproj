@@ -45,7 +45,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(EXTERNAL_DIR)\collada-dom-2.4.0\dom\include;$(EXTERNAL_DIR)\collada-dom-2.4.0\dom\include\1.4;$(EXTERNAL_DIR)\collada-dom-2.4.0\dom\external-libs\boost;$(EXTERNAL_DIR)\NvTriStrip\include;$(EXTERNAL_DIR)\zlib;$(EXTERNAL_DIR)\rapidjson\include;$(ProjectDir)../../Model/ModelLib/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(EXTERNAL_DIR)\assimp\include;$(EXTERNAL_DIR)\NvTriStrip\include;$(EXTERNAL_DIR)\zlib;$(EXTERNAL_DIR)\rapidjson\include;$(ProjectDir)../../Model/ModelLib/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;BOOST_ALL_NO_LIB;PCRE_STATIC;DOM_INCLUDE_LIBXML;__IZANAGI_NO_USE_D3D__;COLLADA_DOM_SUPPORT141;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -55,13 +55,13 @@
       <DisableSpecificWarnings>4819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Lib>
-      <AdditionalDependencies>NvTriStrip.lib;$(EXTERNAL_DIR)\collada-dom-2.4.0\dom\build\vc10-1.4-d\libcollada14dom22-sd.lib;libxml2_a.lib;zlib.lib;pcred.lib;pcrecppd.lib;minizip-d.lib;libboost_filesystem-d.lib;libboost_system-d.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(EXTERNAL_DIR)/NvTriStrip\lib/$(Configuration);$(EXTERNAL_DIR)\collada-dom-2.4.0\dom\external-libs\libxml2\win32\lib;$(EXTERNAL_DIR)\collada-dom-2.4.0\dom\external-libs\pcre\lib\vc10;$(EXTERNAL_DIR)\collada-dom-2.4.0\dom\external-libs\minizip\win32\lib;$(EXTERNAL_DIR)\collada-dom-2.4.0\dom\external-libs\boost\lib\vc10;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>NvTriStrip.lib;assimp-vc120-mtd.lib;zlibstaticd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(EXTERNAL_DIR)/NvTriStrip\lib/$(Configuration);$(EXTERNAL_DIR)\assimp\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(EXTERNAL_DIR)\collada-dom-2.4.0\dom\include;$(EXTERNAL_DIR)\collada-dom-2.4.0\dom\include\1.4;$(EXTERNAL_DIR)\collada-dom-2.4.0\dom\external-libs\boost;$(EXTERNAL_DIR)\NvTriStrip\include;$(EXTERNAL_DIR)\zlib;$(EXTERNAL_DIR)\rapidjson\include;$(ProjectDir)../../Model/ModelLib/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(EXTERNAL_DIR)\assimp\include;$(EXTERNAL_DIR)\NvTriStrip\include;$(EXTERNAL_DIR)\zlib;$(EXTERNAL_DIR)\rapidjson\include;$(ProjectDir)../../Model/ModelLib/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;BOOST_ALL_NO_LIB;PCRE_STATIC;DOM_INCLUDE_LIBXML;__IZANAGI_NO_USE_D3D__;COLLADA_DOM_SUPPORT141;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>
@@ -73,11 +73,12 @@
       <WholeProgramOptimization>true</WholeProgramOptimization>
     </ClCompile>
     <Lib>
-      <AdditionalDependencies>NvTriStrip.lib;$(EXTERNAL_DIR)\collada-dom-2.4.0\dom\build\vc10-1.4\libcollada14dom22-s.lib;libxml2_a.lib;zlib.lib;pcre.lib;pcrecpp.lib;minizip.lib;libboost_filesystem.lib;libboost_system.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(EXTERNAL_DIR)/NvTriStrip\lib/$(Configuration);$(EXTERNAL_DIR)\collada-dom-2.4.0\dom\external-libs\libxml2\win32\lib;$(EXTERNAL_DIR)\collada-dom-2.4.0\dom\external-libs\pcre\lib\vc10;$(EXTERNAL_DIR)\collada-dom-2.4.0\dom\external-libs\minizip\win32\lib;$(EXTERNAL_DIR)\collada-dom-2.4.0\dom\external-libs\boost\lib\vc10;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>NvTriStrip.lib;assimp-vc120-mt.lib;zlibstatic.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(EXTERNAL_DIR)/NvTriStrip\lib/$(Configuration);$(EXTERNAL_DIR)\assimp\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Model\ModelLib\importer\assimp\AssimpImporter.h" />
     <ClInclude Include="..\..\Model\ModelLib\importer\json\JsonGeometry.h" />
     <ClInclude Include="..\..\Model\ModelLib\importer\json\JsonImporter.h" />
     <ClInclude Include="..\..\Model\ModelLib\include\Importer.h" />
@@ -91,11 +92,6 @@
     <ClInclude Include="..\..\Model\ModelLib\include\MdlExporter.h" />
     <ClInclude Include="..\..\Model\ModelLib\include\MshExporter.h" />
     <ClInclude Include="..\..\Model\ModelLib\include\SklExporter.h" />
-    <ClInclude Include="..\..\Model\ModelLib\importer\collada\ColladaImporter.h" />
-    <ClInclude Include="..\..\Model\ModelLib\importer\collada\ColladaGeometry.h" />
-    <ClInclude Include="..\..\Model\ModelLib\importer\collada\ColladaJoint.h" />
-    <ClInclude Include="..\..\Model\ModelLib\importer\collada\ColladaAnimation.h" />
-    <ClInclude Include="..\..\Model\ModelLib\importer\collada\ColladaMaterial.h" />
     <ClInclude Include="..\..\Model\ModelLib\importer\x_file\XFileImporter.h" />
     <ClInclude Include="..\..\Model\ModelLib\importer\x_file\XFileHelper.h" />
     <ClInclude Include="..\..\Model\ModelLib\importer\x_file\XFileParser.h" />
@@ -111,6 +107,7 @@
     <ClInclude Include="..\..\Model\ModelLib\importer\pmd\VMDLoader.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Model\ModelLib\importer\assimp\AssimpImporter.cpp" />
     <ClCompile Include="..\..\Model\ModelLib\importer\json\JsonGeometry.cpp" />
     <ClCompile Include="..\..\Model\ModelLib\importer\json\JsonImporter.cpp" />
     <ClCompile Include="..\..\Model\ModelLib\source\Importer.cpp" />
@@ -122,11 +119,6 @@
     <ClCompile Include="..\..\Model\ModelLib\source\SklExporter.cpp" />
     <ClCompile Include="..\..\Model\ModelLib\source\AnmExporter.cpp" />
     <ClCompile Include="..\..\Model\ModelLib\source\MtrlExporter.cpp" />
-    <ClCompile Include="..\..\Model\ModelLib\importer\collada\ColladaImporter.cpp" />
-    <ClCompile Include="..\..\Model\ModelLib\importer\collada\ColladaGeometry.cpp" />
-    <ClCompile Include="..\..\Model\ModelLib\importer\collada\ColladaJoint.cpp" />
-    <ClCompile Include="..\..\Model\ModelLib\importer\collada\ColladaAnimation.cpp" />
-    <ClCompile Include="..\..\Model\ModelLib\importer\collada\ColladaMaterial.cpp" />
     <ClCompile Include="..\..\Model\ModelLib\importer\x_file\XFileImporter.cpp" />
     <ClCompile Include="..\..\Model\ModelLib\importer\x_file\XFileHelper.cpp" />
     <ClCompile Include="..\..\Model\ModelLib\importer\x_file\XFileParser.cpp" />

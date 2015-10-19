@@ -28,18 +28,6 @@
     <Filter Include="importer">
       <UniqueIdentifier>{0322a08d-34ad-41b6-ab5f-de85e2d37a90}</UniqueIdentifier>
     </Filter>
-    <Filter Include="importer\collada">
-      <UniqueIdentifier>{9d601d31-8a79-4e28-8534-17d67552693d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="importer\collada\mdl">
-      <UniqueIdentifier>{d98eb815-1e74-4366-9b53-9b214c73506a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="importer\collada\anm">
-      <UniqueIdentifier>{c96ff0f4-ee89-415b-a9ae-1efad0abea25}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="importer\collada\mtrl">
-      <UniqueIdentifier>{c2984bba-e444-4ef9-b110-70b3cab7967e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="importer\x_file">
       <UniqueIdentifier>{6da32937-1dfb-4f44-95d9-ad20e65842ad}</UniqueIdentifier>
     </Filter>
@@ -60,6 +48,9 @@
     </Filter>
     <Filter Include="importer\json">
       <UniqueIdentifier>{74ebcead-4336-41fe-b3fc-d81054f5df0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="importer\assimp">
+      <UniqueIdentifier>{12e9811d-df17-4604-994f-738d1ff64186}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -95,21 +86,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Model\ModelLib\include\SklExporter.h">
       <Filter>include\mdl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Model\ModelLib\importer\collada\ColladaImporter.h">
-      <Filter>importer\collada</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Model\ModelLib\importer\collada\ColladaGeometry.h">
-      <Filter>importer\collada\mdl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Model\ModelLib\importer\collada\ColladaJoint.h">
-      <Filter>importer\collada\mdl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Model\ModelLib\importer\collada\ColladaAnimation.h">
-      <Filter>importer\collada\anm</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Model\ModelLib\importer\collada\ColladaMaterial.h">
-      <Filter>importer\collada\mtrl</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Model\ModelLib\importer\x_file\XFileImporter.h">
       <Filter>importer\x_file</Filter>
@@ -156,6 +132,9 @@
     <ClInclude Include="..\..\Model\ModelLib\importer\json\JsonGeometry.h">
       <Filter>importer\json</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Model\ModelLib\importer\assimp\AssimpImporter.h">
+      <Filter>importer\assimp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Model\ModelLib\source\Importer.cpp">
@@ -184,21 +163,6 @@
     </ClCompile>
     <ClCompile Include="..\..\Model\ModelLib\source\MtrlExporter.cpp">
       <Filter>source\mtrl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Model\ModelLib\importer\collada\ColladaImporter.cpp">
-      <Filter>importer\collada</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Model\ModelLib\importer\collada\ColladaGeometry.cpp">
-      <Filter>importer\collada\mdl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Model\ModelLib\importer\collada\ColladaJoint.cpp">
-      <Filter>importer\collada\mdl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Model\ModelLib\importer\collada\ColladaAnimation.cpp">
-      <Filter>importer\collada\anm</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Model\ModelLib\importer\collada\ColladaMaterial.cpp">
-      <Filter>importer\collada\mtrl</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Model\ModelLib\importer\x_file\XFileImporter.cpp">
       <Filter>importer\x_file</Filter>
@@ -235,6 +199,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Model\ModelLib\importer\json\JsonGeometry.cpp">
       <Filter>importer\json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Model\ModelLib\importer\assimp\AssimpImporter.cpp">
+      <Filter>importer\assimp</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

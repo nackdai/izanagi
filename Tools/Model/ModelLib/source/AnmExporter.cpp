@@ -1,8 +1,6 @@
 #include "AnmExporter.h"
 #include "izToolKit.h"
 
-#include "../importer/collada/ColladaImporter.h"
-
 // NOTE
 // フォーマット
 // +----------------+

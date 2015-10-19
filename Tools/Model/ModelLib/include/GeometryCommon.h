@@ -50,6 +50,7 @@ struct STri {
  * １頂点ごとに存在する
  */
 struct SSkin {
+    IZ_UINT vtxId;
     std::vector<IZ_UINT> joint;     ///< 影響を与える関節のインデックス
     std::vector<IZ_FLOAT> weight;   ///< ウエイト値
 

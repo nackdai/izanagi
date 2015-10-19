@@ -35,6 +35,8 @@ public:
     //////////////////////////////////
     // For geometry chunk.
 
+    /** ジオメトリチャンクのエクスポートが完了したことを通知.
+     */
     PURE_VIRTUAL(void ExportGeometryCompleted());
     
     PURE_VIRTUAL(IZ_UINT GetMeshNum());
