@@ -6,6 +6,9 @@
 
 #include "Importer.h"
 
+struct aiScene;
+struct aiNode;
+
 class AssimpImporter : public IImporter {
     friend class IImporter;
 
@@ -172,6 +175,14 @@ public:
         IZ_UINT nParamIdx,
         std::vector<IZ_FLOAT>& tvValue);
 
+private:
+    struct Node {
+        aiNode* node;
+        IZ_INT parent;
+    };
+
+    void getNode(aiNode* node, IZ_INT id);
+
 protected:
     Assimp::Importer m_importer;
 
@@ -179,6 +190,10 @@ protected:
 
     IZ_INT m_curMeshIdx{ -1 };
     IZ_UINT m_curMeshVtxNum{ 0 };
+
+    std::map<IZ_UINT, IZ_UINT> m_mapVtxToSkin;
+
+    std::map<IZ_INT, Node> m_nodes;
 };
 
 #endif  // #if !defined(__MODEL_LIB_ASSIMP_IMPORTER_H__)

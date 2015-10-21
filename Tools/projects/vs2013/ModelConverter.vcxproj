@@ -64,6 +64,10 @@
       <SubSystem>Console</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
+    <PreBuildEvent />
+    <PreLinkEvent>
+      <Command>xcopy /R /Y /D "$(SolutionDir)..\..\External\assimp\bin\$(Configuration)\*.dll" "$(SolutionDir)..\..\tools\$(ConfigurationName)"</Command>
+    </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -88,6 +92,10 @@
       <TargetMachine>MachineX86</TargetMachine>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
+    <PreBuildEvent />
+    <PreLinkEvent>
+      <Command>xcopy /R /Y /D "$(SolutionDir)..\..\External\assimp\bin\$(Configuration)\*.dll" "$(SolutionDir)..\..\tools\$(ConfigurationName)"</Command>
+    </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Model\ModelConverter\ModelConverter.cpp" />

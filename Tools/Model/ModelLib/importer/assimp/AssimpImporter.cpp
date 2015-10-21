@@ -40,6 +40,7 @@ void AssimpImporter::BeginMesh(IZ_UINT nIdx)
 
     IZ_ASSERT(m_curMeshIdx < m_scene->mNumMeshes);
 
+#if 0
     auto mesh = m_scene->mMeshes[m_curMeshIdx];
 
     std::vector<IZ_UINT> vtx;
@@ -62,6 +63,10 @@ void AssimpImporter::BeginMesh(IZ_UINT nIdx)
         vtx.end());
 
     m_curMeshVtxNum = vtx.size();
+#else
+    auto mesh = m_scene->mMeshes[m_curMeshIdx];
+    m_curMeshVtxNum = mesh->mNumVertices;
+#endif
 }
 
 void AssimpImporter::EndMesh()
@@ -107,6 +112,8 @@ void AssimpImporter::GetSkinList(std::vector<SSkin>& tvSkinList)
         }
 
         if (skin.joint.size() > 0) {
+            m_mapVtxToSkin.insert(std::make_pair(vtxId, tvSkinList.size()));
+
             tvSkinList.push_back(skin);
         }
     }
@@ -151,6 +158,7 @@ IZ_UINT AssimpImporter::GetSkinIdxAffectToVtx(IZ_UINT nVtxIdx)
 
     IZ_UINT skinPos = 0;
 
+#if 0
     for (IZ_UINT vtxId = 0; vtxId < m_curMeshVtxNum; vtxId++) {
         IZ_BOOL hasSkin = IZ_FALSE;
 
@@ -176,6 +184,13 @@ IZ_UINT AssimpImporter::GetSkinIdxAffectToVtx(IZ_UINT nVtxIdx)
             skinPos++;
         }
     }
+#else
+    auto it = m_mapVtxToSkin.find(nVtxIdx);
+    if (it != m_mapVtxToSkin.end()) {
+        auto ret = it->second;
+        return ret;
+    }
+#endif
 
     // TODO
     return 0;
@@ -252,40 +267,53 @@ IZ_BOOL AssimpImporter::GetVertex(
 
     auto mesh = m_scene->mMeshes[m_curMeshIdx];
 
-    IZ_BOOL ret = IZ_TRUE;
+    IZ_BOOL ret = IZ_FALSE;;
 
     if (type == izanagi::E_MSH_VTX_FMT_TYPE::E_MSH_VTX_FMT_TYPE_POS) {
-        vec.Set(
-            mesh->mVertices[nIdx].x,
-            mesh->mVertices[nIdx].y,
-            mesh->mVertices[nIdx].z);
+        if (mesh->HasPositions()) {
+            ret = IZ_TRUE;
+            vec.Set(
+                mesh->mVertices[nIdx].x,
+                mesh->mVertices[nIdx].y,
+                mesh->mVertices[nIdx].z);
+        }
     }
     else if (type == izanagi::E_MSH_VTX_FMT_TYPE::E_MSH_VTX_FMT_TYPE_NORMAL) {
-        vec.Set(
-            mesh->mNormals[nIdx].x,
-            mesh->mNormals[nIdx].y,
-            mesh->mNormals[nIdx].z);
+        if (mesh->HasNormals()) {
+            ret = IZ_TRUE;
+            vec.Set(
+                mesh->mNormals[nIdx].x,
+                mesh->mNormals[nIdx].y,
+                mesh->mNormals[nIdx].z);
+        }
     }
     else if (type == izanagi::E_MSH_VTX_FMT_TYPE::E_MSH_VTX_FMT_TYPE_UV) {
-        // TODO
-        // multi textures.
-        vec.Set(
-            mesh->mTextureCoords[0][nIdx].x,
-            mesh->mTextureCoords[0][nIdx].y,
-            mesh->mTextureCoords[0][nIdx].z);
+        if (mesh->HasTextureCoords(0)) {
+            ret = IZ_TRUE;
+
+            // TODO
+            // multi textures.
+            vec.Set(
+                mesh->mTextureCoords[0][nIdx].x,
+                mesh->mTextureCoords[0][nIdx].y,
+                mesh->mTextureCoords[0][nIdx].z);
+        }
     }
     else if (type == izanagi::E_MSH_VTX_FMT_TYPE::E_MSH_VTX_FMT_TYPE_COLOR) {
-        // TODO
-        // muiti channel colors.
-        vec.Set(
-            mesh->mColors[0][nIdx].r,
-            mesh->mColors[0][nIdx].g,
-            mesh->mColors[0][nIdx].b,
-            mesh->mColors[0][nIdx].a);
+        if (mesh->HasVertexColors(0)) {
+            ret = IZ_TRUE;
+
+            // TODO
+            // muiti channel colors.
+            vec.Set(
+                mesh->mColors[0][nIdx].r,
+                mesh->mColors[0][nIdx].g,
+                mesh->mColors[0][nIdx].b,
+                mesh->mColors[0][nIdx].a);
+        }
     }
     else {
-        IZ_ASSERT(IZ_FALSE);
-        ret = IZ_FALSE;
+        //IZ_ASSERT(IZ_FALSE);
     }
 
     return ret;
@@ -297,25 +325,17 @@ void AssimpImporter::GetMaterialForMesh(
 {
     IZ_ASSERT(nMeshIdx < m_scene->mNumMeshes);
 
-#if 0
-    izanagi::tool::CString str;
-    str.format("material_%d\0", nMeshIdx);
-
-    sMtrl.name.SetString(str.c_str());
-    sMtrl.nameKey = sMtrl.name.GetKeyValue();
-#else
     const auto mesh = m_scene->mMeshes[nMeshIdx];
 
-    // TODO
-    // プロパティの中身を確認する.
     const auto mtrl = m_scene->mMaterials[mesh->mMaterialIndex];
 
-    for (IZ_UINT i = 0; i < mtrl->mNumProperties; i++) {
-        const auto prop = mtrl->mProperties[i];
+    aiString str;
+    auto result = mtrl->Get("?mat.name", 0, 0, str);
 
-        // TODO
-    }
-#endif
+    IZ_ASSERT(result == aiReturn::aiReturn_SUCCESS);
+
+    sMtrl.name.SetString(str.C_Str());
+    sMtrl.nameKey = sMtrl.name.GetKeyValue();
 }
 
 //////////////////////////////////
@@ -323,10 +343,36 @@ void AssimpImporter::GetMaterialForMesh(
 
 void AssimpImporter::ExportJointCompleted()
 {
+    m_nodes.clear();
+}
+
+void AssimpImporter::getNode(aiNode* node, IZ_INT id)
+{
+    for (IZ_UINT i = 0; i < node->mNumChildren; i++) {
+        auto child = node->mChildren[i];
+
+        Node nodeInfo;
+        nodeInfo.node = child;
+        nodeInfo.parent = id;
+
+        IZ_INT nodeId = m_nodes.size() - 1;
+
+        m_nodes.insert(std::make_pair(nodeId, nodeInfo));
+
+        getNode(child, nodeId);
+    }
 }
 
 IZ_BOOL AssimpImporter::BeginJoint()
 {
+    Node nodeInfo;
+    nodeInfo.node = m_scene->mRootNode;
+    nodeInfo.parent = -1;
+
+    m_nodes.insert(std::make_pair(0, nodeInfo));
+
+    getNode(m_scene->mRootNode, 0);
+
     return IZ_TRUE;
 }
 
@@ -336,19 +382,50 @@ void AssimpImporter::EndJoint()
 
 IZ_UINT AssimpImporter::GetJointNum()
 {
-    return 0;
+    return m_nodes.size();
 }
 
 IZ_PCSTR AssimpImporter::GetJointName(IZ_UINT nIdx)
 {
-    return NULL;
+    auto it = m_nodes.find(nIdx);
+
+    IZ_PCSTR ret = IZ_NULL;
+
+    if (it != m_nodes.end()) {
+        auto node = it->second;
+        ret = node.node->mName.C_Str();
+    }
+
+    return ret;
 }
 
 IZ_INT AssimpImporter::GetJointParent(
     IZ_UINT nIdx,
     const std::vector<izanagi::S_SKL_JOINT>& tvJoint)
 {
-    return 0;
+    auto it = m_nodes.find(nIdx);
+
+    IZ_INT ret = -1;
+
+    if (it != m_nodes.end()) {
+        auto node = it->second;
+
+        auto parentId = node.parent;
+
+        auto itParent = m_nodes.find(parentId);
+        IZ_ASSERT(itParent != m_nodes.end());
+
+        auto parentNode = itParent->second;
+
+        if (parentNode.node == node.node->mParent) {
+            ret = parentId;
+        }
+        else {
+            IZ_ASSERT(IZ_FALSE);
+        }
+    }
+
+    return ret;
 }
 
 void AssimpImporter::GetJointInvMtx(
