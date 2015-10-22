@@ -218,10 +218,9 @@ IZ_UINT AssimpImporter::GetVtxSize()
     if (mesh->HasNormals()) {
         ret += izanagi::E_MSH_VTX_SIZE::E_MSH_VTX_SIZE_NORMAL;
     }
-    if (mesh->HasBones()) {
-        ret += izanagi::E_MSH_VTX_SIZE::E_MSH_VTX_SIZE_BLENDINDICES;
-        ret += izanagi::E_MSH_VTX_SIZE::E_MSH_VTX_SIZE_BLENDWEIGHT;
-    }
+
+    // NOTE
+    // skinのサイズは外でやるのでここではやらない
 
     return ret;
 }
@@ -246,10 +245,9 @@ IZ_UINT AssimpImporter::GetVtxFmt()
     if (mesh->HasNormals()) {
         ret |= 1 << izanagi::E_MSH_VTX_FMT_TYPE::E_MSH_VTX_FMT_TYPE_NORMAL;
     }
-    if (mesh->HasBones()) {
-        ret |= 1 << izanagi::E_MSH_VTX_FMT_TYPE::E_MSH_VTX_FMT_TYPE_BLENDINDICES;
-        ret |= 1 << izanagi::E_MSH_VTX_FMT_TYPE::E_MSH_VTX_FMT_TYPE_BLENDWEIGHT;
-    }
+    
+    // NOTE
+    // skinのフォーマットは外でやるのでここではやらない
 
     return ret;
 }
@@ -343,7 +341,7 @@ void AssimpImporter::GetMaterialForMesh(
 
 void AssimpImporter::ExportJointCompleted()
 {
-    m_nodes.clear();
+    // Nothing to do.
 }
 
 void AssimpImporter::getNode(aiNode* node, IZ_INT id)
@@ -355,7 +353,7 @@ void AssimpImporter::getNode(aiNode* node, IZ_INT id)
         nodeInfo.node = child;
         nodeInfo.parent = id;
 
-        IZ_INT nodeId = m_nodes.size() - 1;
+        IZ_INT nodeId = m_nodes.size();
 
         m_nodes.insert(std::make_pair(nodeId, nodeInfo));
 
@@ -373,11 +371,40 @@ IZ_BOOL AssimpImporter::BeginJoint()
 
     getNode(m_scene->mRootNode, 0);
 
+    // マトリクスを格納.
+    for each (auto it in m_nodes)
+    {
+        auto& node = it.second;
+
+        // NOTE
+        // Assimpeは左掛け、izanagiは右掛けなので転置する.
+        for (IZ_UINT i = 0; i < 4; i++) {
+            for (IZ_UINT n = 0; n < 4; n++) {
+                node.mtx.m[i][n] = node.node->mTransformation[n][i];
+            }
+        }
+
+        m_mtx.push_back(node.mtx);
+    }
+
+    // 親子関係を解決したマトリクスを構築.
+    for each (auto it in m_nodes)
+    {
+        auto id = it.first;
+        const auto& node = it.second;
+
+        if (node.parent >= 0) {
+            const auto& mtxParent = m_mtx[node.parent];
+            izanagi::math::SMatrix44::Mul(m_mtx[id], m_mtx[id], mtxParent);
+        }
+    }
+
     return IZ_TRUE;
 }
 
 void AssimpImporter::EndJoint()
 {
+    m_nodes.clear();
 }
 
 IZ_UINT AssimpImporter::GetJointNum()
@@ -412,16 +439,18 @@ IZ_INT AssimpImporter::GetJointParent(
 
         auto parentId = node.parent;
 
-        auto itParent = m_nodes.find(parentId);
-        IZ_ASSERT(itParent != m_nodes.end());
+        if (parentId >= 0) {
+            auto itParent = m_nodes.find(parentId);
+            IZ_ASSERT(itParent != m_nodes.end());
 
-        auto parentNode = itParent->second;
+            auto parentNode = itParent->second;
 
-        if (parentNode.node == node.node->mParent) {
-            ret = parentId;
-        }
-        else {
-            IZ_ASSERT(IZ_FALSE);
+            if (parentNode.node == node.node->mParent) {
+                ret = parentId;
+            }
+            else {
+                IZ_ASSERT(IZ_FALSE);
+            }
         }
     }
 
@@ -432,6 +461,32 @@ void AssimpImporter::GetJointInvMtx(
     IZ_UINT nIdx,
     izanagi::math::SMatrix44& mtx)
 {
+    IZ_ASSERT(nIdx < m_mtx.size());
+
+    const auto& orgMtx = m_mtx[nIdx];
+
+    izanagi::math::SMatrix44::Inverse(mtx, orgMtx);
+}
+
+namespace {
+    // Break down matrix to trans, quartanion.
+    void BreakDownMatrix(
+        const izanagi::math::SMatrix44& mtx,
+        izanagi::S_SKL_JOINT_POSE& pose)
+    {
+        // TODO
+        pose.scale[0] = 1.0f;
+        pose.scale[1] = 1.0f;
+        pose.scale[2] = 1.0f;
+
+        pose.trans[0] = mtx.v[3].x;
+        pose.trans[1] = mtx.v[3].y;
+        pose.trans[2] = mtx.v[3].z;
+
+        izanagi::math::SQuat::QuatFromMatrix(
+            pose.quat,
+            mtx);
+    }
 }
 
 void AssimpImporter::GetJointTransform(
@@ -439,6 +494,50 @@ void AssimpImporter::GetJointTransform(
     const std::vector<izanagi::S_SKL_JOINT>& tvJoint,
     std::vector<SJointTransform>& tvTransform)
 {
+    IZ_ASSERT(nIdx < GetJointNum());
+
+    auto it = m_nodes.find(nIdx);
+    IZ_ASSERT(it != m_nodes.end());
+
+    const auto& node = it->second;
+
+    izanagi::S_SKL_JOINT_POSE pose;
+    BreakDownMatrix(node.mtx, pose);
+
+    // For quat.
+    if (pose.quat.x != 0.0f
+        || pose.quat.y != 0.0f
+        || pose.quat.z != 0.0f
+        || pose.quat.w != 1.0f)
+    {
+        tvTransform.push_back(SJointTransform());
+        SJointTransform& sTransform = tvTransform.back();
+
+        sTransform.type = E_MDL_JOINT_TRANSFORM_QUATERNION;
+
+        sTransform.param.push_back(pose.quat.x);
+        sTransform.param.push_back(pose.quat.y);
+        sTransform.param.push_back(pose.quat.z);
+        sTransform.param.push_back(pose.quat.w);
+    }
+
+    // For trans.
+    if (pose.trans[0] != 0.0f
+        || pose.trans[1] != 0.0f
+        || pose.trans[2] != 0.0f)
+    {
+        tvTransform.push_back(SJointTransform());
+        SJointTransform& sTransform = tvTransform.back();
+
+        sTransform.type = E_MDL_JOINT_TRANSFORM_TRANSLATE;
+
+        sTransform.param.push_back(pose.trans[0]);
+        sTransform.param.push_back(pose.trans[1]);
+        sTransform.param.push_back(pose.trans[2]);
+    }
+
+    // TODO
+    // scale
 }
 
 //////////////////////////////////
@@ -504,12 +603,12 @@ IZ_BOOL AssimpImporter::GetAnmKey(
 
 IZ_BOOL AssimpImporter::BeginMaterial()
 {
-    return IZ_FALSE;
+    return IZ_TRUE;
 }
 
 IZ_BOOL AssimpImporter::EndMaterial()
 {
-    return IZ_FALSE;
+    return IZ_TRUE;
 }
 
 IZ_UINT AssimpImporter::GetMaterialNum()
@@ -522,7 +621,61 @@ IZ_BOOL AssimpImporter::GetMaterial(
     IZ_UINT nMtrlIdx,
     izanagi::S_MTRL_MATERIAL& sMtrl)
 {
-    return IZ_FALSE;
+    IZ_ASSERT(nMtrlIdx < m_scene->mNumMaterials);
+
+    const auto mtrl = m_scene->mMaterials[nMtrlIdx];
+
+    // name
+    {
+        aiString str;
+        auto result = mtrl->Get("?mat.name", 0, 0, str);
+
+        IZ_ASSERT(result == aiReturn::aiReturn_SUCCESS);
+
+        sMtrl.name.SetString(str.C_Str());
+        sMtrl.keyMaterial = sMtrl.name.GetKeyValue();
+    }
+
+    sMtrl.numTex = 0;
+    for (IZ_UINT i = 0; i < AI_TEXTURE_TYPE_MAX; i++) {
+        sMtrl.numTex += mtrl->GetTextureCount((aiTextureType)i);
+    }
+
+    sMtrl.paramBytes = 0;
+
+    IZ_CHAR buf[32] = { 0 };
+
+    for (IZ_UINT i = 0; i < mtrl->mNumProperties; i++) {
+        auto prop = mtrl->mProperties[i];
+
+        if (prop->mType != aiPropertyTypeInfo::aiPTI_String) {
+            ::sprintf_s(buf, "%s\0", prop->mKey.C_Str());
+
+            const char* name = nullptr;
+
+            for (IZ_UINT n = 0; n < strlen(buf); n++) {
+                if (buf[n] == '.') {
+                    name = &buf[n + 1];
+                    break;
+                }
+            }
+
+            IZ_ASSERT(name);
+
+            // TODO
+            if (strcmp(name, "diffuse") == 0) {
+                sMtrl.paramBytes += prop->mDataLength;
+            }
+            else if (strcmp(name, "specular") == 0) {
+                sMtrl.paramBytes += prop->mDataLength;
+            }
+            else if (strcmp(name, "ambient") == 0) {
+                sMtrl.paramBytes += prop->mDataLength;
+            }
+        }
+    }
+
+    return IZ_TRUE;
 }
 
 void AssimpImporter::GetMaterialTexture(
@@ -530,6 +683,58 @@ void AssimpImporter::GetMaterialTexture(
     IZ_UINT nTexIdx,
     izanagi::S_MTRL_TEXTURE& sTex)
 {
+    IZ_ASSERT(nMtrlIdx < m_scene->mNumMaterials);
+
+    const auto mtrl = m_scene->mMaterials[nMtrlIdx];
+
+    sTex.type.flags = 0;
+
+    IZ_UINT texPos = 0;
+
+    for (IZ_UINT i = 0; i < AI_TEXTURE_TYPE_MAX; i++) {
+        aiTextureType type = (aiTextureType)i;
+
+        auto cnt = mtrl->GetTextureCount(type);
+
+        if (texPos <= nTexIdx && nTexIdx < texPos + cnt) {
+            aiString path;
+
+            auto idx = nTexIdx - texPos;
+
+            mtrl->GetTexture(
+                type,
+                idx,
+                &path);
+
+            char name[64] = { 0 };
+            izanagi::tool::CFileUtility::GetFileNameFromPathWithoutExt(name, sizeof(name), path.C_Str());
+
+            sTex.name.SetString(name);
+            sTex.key = sTex.name.GetKeyValue();
+
+            switch (type) {
+            case aiTextureType::aiTextureType_NORMALS:
+                sTex.type.isNormal = IZ_TRUE;
+                break;
+            case aiTextureType::aiTextureType_SPECULAR:
+                sTex.type.isSpecular = IZ_TRUE;
+                break;
+            case aiTextureType::aiTextureType_OPACITY:
+                sTex.type.isTranslucent = IZ_TRUE;
+                break;
+            case aiTextureType::aiTextureType_REFLECTION:
+                sTex.type.isEnvironment = IZ_TRUE;
+                break;
+            default:
+                IZ_ASSERT(IZ_FALSE);
+                break;
+            }
+
+            break;
+        }
+        
+        texPos += cnt;
+    }
 }
 
 void AssimpImporter::GetMaterialShader(
@@ -537,6 +742,11 @@ void AssimpImporter::GetMaterialShader(
     IZ_UINT nShaderIdx,
     izanagi::S_MTRL_SHADER& sShader)
 {
+    // NOTE
+    // Maybe, assimp doesn't have shader name.
+
+    sShader.name.SetString("DefaultShader");
+    sShader.key = sShader.name.GetKeyValue();
 }
 
 void AssimpImporter::GetMaterialParam(

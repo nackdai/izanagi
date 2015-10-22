@@ -179,6 +179,7 @@ private:
     struct Node {
         aiNode* node;
         IZ_INT parent;
+        izanagi::math::SMatrix44 mtx;
     };
 
     void getNode(aiNode* node, IZ_INT id);
@@ -191,9 +192,16 @@ protected:
     IZ_INT m_curMeshIdx{ -1 };
     IZ_UINT m_curMeshVtxNum{ 0 };
 
+    // 頂点ID -> スキンID変換マップ.
     std::map<IZ_UINT, IZ_UINT> m_mapVtxToSkin;
 
+    // ノード.
     std::map<IZ_INT, Node> m_nodes;
+
+    // 親子関係を解決したマトリクス.
+    std::vector<izanagi::math::SMatrix44> m_mtx;
+
+    std::vector<aiMaterialProperty*> m_props;
 };
 
 #endif  // #if !defined(__MODEL_LIB_ASSIMP_IMPORTER_H__)
