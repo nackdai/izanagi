@@ -641,9 +641,12 @@ IZ_BOOL AssimpImporter::GetMaterial(
         sMtrl.numTex += mtrl->GetTextureCount((aiTextureType)i);
     }
 
+    sMtrl.numParam = 0;
     sMtrl.paramBytes = 0;
 
     IZ_CHAR buf[32] = { 0 };
+
+    std::vector<aiMaterialProperty*> props;
 
     for (IZ_UINT i = 0; i < mtrl->mNumProperties; i++) {
         auto prop = mtrl->mProperties[i];
@@ -665,14 +668,22 @@ IZ_BOOL AssimpImporter::GetMaterial(
             // TODO
             if (strcmp(name, "diffuse") == 0) {
                 sMtrl.paramBytes += prop->mDataLength;
+                props.push_back(prop);
             }
             else if (strcmp(name, "specular") == 0) {
                 sMtrl.paramBytes += prop->mDataLength;
+                props.push_back(prop);
             }
             else if (strcmp(name, "ambient") == 0) {
                 sMtrl.paramBytes += prop->mDataLength;
+                props.push_back(prop);
             }
         }
+    }
+
+    if (props.size() > 0) {
+        sMtrl.numParam = props.size();
+        m_props.insert(std::make_pair(nMtrlIdx, props));
     }
 
     return IZ_TRUE;
@@ -754,6 +765,61 @@ void AssimpImporter::GetMaterialParam(
     IZ_UINT nParamIdx,
     izanagi::S_MTRL_PARAM& sParam)
 {
+    auto it = m_props.find(nMtrlIdx);
+
+    if (it != m_props.end()) {
+        auto& props = it->second;
+        IZ_ASSERT(nParamIdx < props.size());
+
+        IZ_CHAR buf[32] = { 0 };
+
+        auto prop = props[nParamIdx];
+
+        ::sprintf_s(buf, "%s\0", prop->mKey.C_Str());
+
+        const char* name = nullptr;
+
+        for (IZ_UINT n = 0; n < strlen(buf); n++) {
+            if (buf[n] == '.') {
+                name = &buf[n + 1];
+                break;
+            }
+        }
+
+        IZ_ASSERT(name);
+
+        sParam.name.SetString(name);
+        sParam.key = sParam.name.GetKeyValue();
+
+        if (prop->mType == aiPropertyTypeInfo::aiPTI_Float) {
+            // TODO
+            if (prop->mDataLength == 16
+                || prop->mDataLength == 32
+                || prop->mDataLength == 48)
+            {
+                sParam.elements = prop->mDataLength / sizeof(izanagi::math::SVector4);
+                sParam.type = izanagi::E_MTRL_PARAM_TYPE::E_MTRL_PARAM_TYPE_VECTOR;
+            }
+            else if (prop->mDataLength == 64) {
+                sParam.elements = 1;
+                sParam.type = izanagi::E_MTRL_PARAM_TYPE::E_MTRL_PARAM_TYPE_MATRIX;
+            }
+            else {
+                sParam.elements = prop->mDataLength / sizeof(IZ_FLOAT);
+                sParam.type = izanagi::E_MTRL_PARAM_TYPE::E_MTRL_PARAM_TYPE_FLOAT;
+            }
+
+            sParam.bytes = prop->mDataLength;
+        }
+        else if (prop->mType == aiPropertyTypeInfo::aiPTI_Integer) {
+            sParam.elements = prop->mDataLength / sizeof(IZ_UINT);
+            sParam.type = izanagi::E_MTRL_PARAM_TYPE::E_MTRL_PARAM_TYPE_UINT;
+            sParam.bytes = prop->mDataLength;
+        }
+        else {
+            IZ_ASSERT(IZ_FALSE);
+        }
+    }
 }
 
 void AssimpImporter::GetMaterialParamValue(
@@ -761,4 +827,22 @@ void AssimpImporter::GetMaterialParamValue(
     IZ_UINT nParamIdx,
     std::vector<IZ_FLOAT>& tvValue)
 {
+    auto it = m_props.find(nMtrlIdx);
+
+    if (it != m_props.end()) {
+        auto& props = it->second;
+        IZ_ASSERT(nParamIdx < props.size());
+
+        auto prop = props[nParamIdx];
+        IZ_ASSERT(prop->mType == aiPropertyTypeInfo::aiPTI_Float);
+
+        IZ_UINT elements = prop->mDataLength / sizeof(IZ_FLOAT);
+
+        IZ_FLOAT* data = (IZ_FLOAT*)prop->mDataLength;
+
+        for (IZ_UINT i = 0; i < elements; i++) {
+            IZ_FLOAT value = data[i];
+            tvValue.push_back(value);
+        }
+    }
 }

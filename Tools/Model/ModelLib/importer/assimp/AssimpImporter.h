@@ -8,6 +8,7 @@
 
 struct aiScene;
 struct aiNode;
+struct aiMaterialProperty;
 
 class AssimpImporter : public IImporter {
     friend class IImporter;
@@ -201,7 +202,7 @@ protected:
     // 親子関係を解決したマトリクス.
     std::vector<izanagi::math::SMatrix44> m_mtx;
 
-    std::vector<aiMaterialProperty*> m_props;
+    std::map<IZ_UINT, std::vector<aiMaterialProperty*>> m_props;
 };
 
 #endif  // #if !defined(__MODEL_LIB_ASSIMP_IMPORTER_H__)
