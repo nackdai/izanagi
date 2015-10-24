@@ -372,9 +372,11 @@ IZ_BOOL AssimpImporter::BeginJoint()
     getNode(m_scene->mRootNode, 0);
 
     // マトリクスを格納.
-    for each (auto it in m_nodes)
+    auto it = m_nodes.begin();
+
+    for (; it != m_nodes.end(); it++)
     {
-        auto& node = it.second;
+        Node& node = it->second;
 
         // NOTE
         // Assimpeは左掛け、izanagiは右掛けなので転置する.
@@ -384,14 +386,24 @@ IZ_BOOL AssimpImporter::BeginJoint()
             }
         }
 
+        // TODO
+        if (node.parent == -1) {
+            node.mtx.m[0][0] = 1.0f;
+            node.mtx.m[1][1] = 1.0f;
+            node.mtx.m[2][2] = 1.0f;
+            node.mtx.m[3][3] = 1.0f;
+        }
+
         m_mtx.push_back(node.mtx);
     }
 
     // 親子関係を解決したマトリクスを構築.
-    for each (auto it in m_nodes)
+    it = m_nodes.begin();
+
+    for (; it != m_nodes.end(); it++)
     {
-        auto id = it.first;
-        const auto& node = it.second;
+        auto id = it->first;
+        const Node& node = it->second;
 
         if (node.parent >= 0) {
             const auto& mtxParent = m_mtx[node.parent];
@@ -419,7 +431,7 @@ IZ_PCSTR AssimpImporter::GetJointName(IZ_UINT nIdx)
     IZ_PCSTR ret = IZ_NULL;
 
     if (it != m_nodes.end()) {
-        auto node = it->second;
+        const Node& node = it->second;
         ret = node.node->mName.C_Str();
     }
 
@@ -435,7 +447,7 @@ IZ_INT AssimpImporter::GetJointParent(
     IZ_INT ret = -1;
 
     if (it != m_nodes.end()) {
-        auto node = it->second;
+        const Node& node = it->second;
 
         auto parentId = node.parent;
 
@@ -443,7 +455,7 @@ IZ_INT AssimpImporter::GetJointParent(
             auto itParent = m_nodes.find(parentId);
             IZ_ASSERT(itParent != m_nodes.end());
 
-            auto parentNode = itParent->second;
+            const Node& parentNode = itParent->second;
 
             if (parentNode.node == node.node->mParent) {
                 ret = parentId;
@@ -499,7 +511,7 @@ void AssimpImporter::GetJointTransform(
     auto it = m_nodes.find(nIdx);
     IZ_ASSERT(it != m_nodes.end());
 
-    const auto& node = it->second;
+    const Node& node = it->second;
 
     izanagi::S_SKL_JOINT_POSE pose;
     BreakDownMatrix(node.mtx, pose);
@@ -717,13 +729,13 @@ void AssimpImporter::GetMaterialTexture(
                 idx,
                 &path);
 
-            char name[64] = { 0 };
-            izanagi::tool::CFileUtility::GetFileNameFromPathWithoutExt(name, sizeof(name), path.C_Str());
-
-            sTex.name.SetString(name);
+            sTex.name.SetString(path.C_Str());
             sTex.key = sTex.name.GetKeyValue();
 
             switch (type) {
+            case aiTextureType::aiTextureType_DIFFUSE:
+                // Nothing to do.
+                break;
             case aiTextureType::aiTextureType_NORMALS:
                 sTex.type.isNormal = IZ_TRUE;
                 break;
@@ -838,7 +850,7 @@ void AssimpImporter::GetMaterialParamValue(
 
         IZ_UINT elements = prop->mDataLength / sizeof(IZ_FLOAT);
 
-        IZ_FLOAT* data = (IZ_FLOAT*)prop->mDataLength;
+        IZ_FLOAT* data = (IZ_FLOAT*)prop->mData;
 
         for (IZ_UINT i = 0; i < elements; i++) {
             IZ_FLOAT value = data[i];
