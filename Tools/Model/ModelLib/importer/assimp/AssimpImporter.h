@@ -187,6 +187,7 @@ private:
 
 protected:
     Assimp::Importer m_importer;
+    Assimp::Importer m_importerForBase;
 
     const aiScene* m_scene{ nullptr };
 
@@ -203,6 +204,8 @@ protected:
     std::vector<izanagi::math::SMatrix44> m_mtx;
 
     std::map<IZ_UINT, std::vector<aiMaterialProperty*>> m_props;
+
+    IZ_UINT m_curAnmIdx{ 0 };
 };
 
 #endif  // #if !defined(__MODEL_LIB_ASSIMP_IMPORTER_H__)

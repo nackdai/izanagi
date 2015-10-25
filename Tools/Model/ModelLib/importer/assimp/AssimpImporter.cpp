@@ -13,7 +13,8 @@ IZ_BOOL AssimpImporter::Open(IZ_PCSTR pszName)
         std::string(pszName),
         aiPostProcessSteps::aiProcess_Triangulate
         | aiPostProcessSteps::aiProcess_SortByPType
-        | aiPostProcessSteps::aiProcess_JoinIdenticalVertices);
+        | aiPostProcessSteps::aiProcess_JoinIdenticalVertices
+        | aiPostProcessSteps::aiProcess_RemoveRedundantMaterials);
 
     return (m_scene != nullptr);
 }
@@ -557,39 +558,116 @@ void AssimpImporter::GetJointTransform(
 
 IZ_BOOL AssimpImporter::ReadBaseModel(IZ_PCSTR pszName)
 {
-    return IZ_FALSE;
+    auto scene = m_importerForBase.ReadFile(
+        std::string(pszName),
+        aiPostProcessSteps::aiProcess_Triangulate
+        | aiPostProcessSteps::aiProcess_SortByPType
+        | aiPostProcessSteps::aiProcess_JoinIdenticalVertices
+        | aiPostProcessSteps::aiProcess_RemoveRedundantMaterials);
+
+    return (scene != nullptr);
 }
 
 IZ_UINT AssimpImporter::GetAnmSetNum()
 {
-    return 0;
+    IZ_UINT ret = m_scene->mNumAnimations;
+
+    return ret;
 }
 
 IZ_BOOL AssimpImporter::BeginAnm(IZ_UINT nSetIdx)
 {
-    return IZ_FALSE;
+    m_curAnmIdx = nSetIdx;
+
+    auto scene = m_importerForBase.GetScene();
+    if (!scene) {
+        scene = m_scene;
+    }
+
+    Node nodeInfo;
+    nodeInfo.node = scene->mRootNode;
+    nodeInfo.parent = -1;
+
+    m_nodes.insert(std::make_pair(0, nodeInfo));
+
+    getNode(scene->mRootNode, 0);
+
+    return IZ_TRUE;
 }
 
 IZ_BOOL AssimpImporter::EndAnm()
 {
-    return IZ_FALSE;
+    return IZ_TRUE;
 }
 
 IZ_UINT AssimpImporter::GetAnmNodeNum()
 {
-    return 0;
+    IZ_ASSERT(m_curAnmIdx < m_scene->mNumAnimations);
+
+    auto anm = m_scene->mAnimations[m_curAnmIdx];
+
+    IZ_UINT ret = anm->mNumChannels;
+
+    return ret;
 }
 
 IZ_UINT AssimpImporter::GetAnmChannelNum(IZ_UINT nNodeIdx)
 {
-    return 0;
+    IZ_ASSERT(m_curAnmIdx < m_scene->mNumAnimations);
+
+    auto anm = m_scene->mAnimations[m_curAnmIdx];
+    IZ_ASSERT(nNodeIdx < anm->mNumChannels);
+
+    auto channel = anm->mChannels[nNodeIdx];
+
+    IZ_UINT ret = 0;
+
+    if (channel->mNumPositionKeys > 0) {
+        ret++;
+    }
+    if (channel->mNumRotationKeys > 0) {
+        ret++;
+    }
+    if (channel->mNumScalingKeys > 0) {
+        ret++;
+    }
+
+    return ret;
 }
 
 IZ_BOOL AssimpImporter::GetAnmNode(
     IZ_UINT nNodeIdx,
     izanagi::S_ANM_NODE& sNode)
 {
-    return IZ_FALSE;
+    auto scene = m_importer.GetScene();
+    IZ_ASSERT(m_curAnmIdx < scene->mNumAnimations);
+
+    auto anm = scene->mAnimations[m_curAnmIdx];
+    IZ_ASSERT(nNodeIdx < anm->mNumChannels);
+
+    auto channel = anm->mChannels[nNodeIdx];
+
+    sNode.target.SetString(channel->mNodeName.C_Str());
+    sNode.targetKey = sNode.target.GetKeyValue();
+
+    IZ_BOOL ret = IZ_FALSE;
+
+    auto it = m_nodes.begin();
+    for (; it != m_nodes.end(); it++) {
+        const Node& node = it->second;
+
+        izanagi::S_ANM_NODE tmp;
+        tmp.target.SetString(node.node->mName.C_Str());
+
+        if (sNode.target == tmp.target) {
+            sNode.targetIdx = it->first;
+
+            ret = IZ_TRUE;
+            break;
+        }
+    }
+
+    return ret;
 }
 
 IZ_BOOL AssimpImporter::GetAnmChannel(
@@ -597,6 +675,56 @@ IZ_BOOL AssimpImporter::GetAnmChannel(
     IZ_UINT nChannelIdx,
     izanagi::S_ANM_CHANNEL& sChannel)
 {
+    auto scene = m_importer.GetScene();
+    IZ_ASSERT(m_curAnmIdx < scene->mNumAnimations);
+
+    auto anm = scene->mAnimations[m_curAnmIdx];
+    IZ_ASSERT(nNodeIdx < anm->mNumChannels);
+
+    auto channel = anm->mChannels[nNodeIdx];
+
+    // NOTE
+    // Translate -> Rotation -> Scale
+
+    // Translate
+    if (nChannelIdx == 0) {
+        sChannel.numKeys = channel->mNumPositionKeys;
+        sChannel.interp = izanagi::E_ANM_INTERP_TYPE::E_ANM_INTERP_TYPE_BEZIER;
+        sChannel.type = izanagi::E_ANM_TRANSFORM_TYPE::E_ANM_TRANSFORM_TYPE_TRANSLATE_XYZ;
+
+        // TODO
+        // Not used.
+        //sChannel.stride
+
+        return IZ_TRUE;
+    }
+
+    // Rotation
+    if (nChannelIdx == 1) {
+        sChannel.numKeys = channel->mNumRotationKeys;
+        sChannel.interp = izanagi::E_ANM_INTERP_TYPE::E_ANM_INTERP_TYPE_SLERP;
+        sChannel.type = izanagi::E_ANM_TRANSFORM_TYPE::E_ANM_TRANSFORM_TYPE_QUATERNION_XYZW;
+
+        // TODO
+        // Not used.
+        //sChannel.stride
+
+        return IZ_TRUE;
+    }
+
+    // Scale
+    if (nChannelIdx == 2) {
+        sChannel.numKeys = channel->mNumScalingKeys;
+        sChannel.interp = izanagi::E_ANM_INTERP_TYPE::E_ANM_INTERP_TYPE_LINEAR;
+        sChannel.type = izanagi::E_ANM_TRANSFORM_TYPE::E_ANM_TRANSFORM_TYPE_SCALE_XYZ;
+
+        // TODO
+        // Not used.
+        //sChannel.stride
+
+        return IZ_TRUE;
+    }
+
     return IZ_FALSE;
 }
 
@@ -607,6 +735,65 @@ IZ_BOOL AssimpImporter::GetAnmKey(
     izanagi::S_ANM_KEY& sKey,
     std::vector<IZ_FLOAT>& tvValue)
 {
+    auto scene = m_importer.GetScene();
+    IZ_ASSERT(m_curAnmIdx < scene->mNumAnimations);
+
+    auto anm = scene->mAnimations[m_curAnmIdx];
+    IZ_ASSERT(nNodeIdx < anm->mNumChannels);
+
+    auto channel = anm->mChannels[nNodeIdx];
+
+    // NOTE
+    // Translate -> Rotation -> Scale
+
+    // Translate
+    if (nChannelIdx == 0) {
+        IZ_ASSERT(nKeyIdx < channel->mNumPositionKeys);
+        const auto& pos = channel->mPositionKeys[nKeyIdx];
+
+        sKey.keyTime = pos.mTime;
+        sKey.numParams = 3;
+
+        tvValue.push_back(pos.mValue.x);
+        tvValue.push_back(pos.mValue.y);
+        tvValue.push_back(pos.mValue.z);
+
+        return IZ_TRUE;
+    }
+
+    // Rotation
+    if (nChannelIdx == 1) {
+        IZ_ASSERT(nKeyIdx < channel->mNumRotationKeys);
+        const auto& quat = channel->mRotationKeys[nKeyIdx];
+
+        sKey.keyTime = quat.mTime;
+        sKey.numParams = 4;
+
+        tvValue.push_back(quat.mValue.x);
+        tvValue.push_back(quat.mValue.y);
+        tvValue.push_back(quat.mValue.z);
+        tvValue.push_back(quat.mValue.w);
+
+        return IZ_TRUE;
+    }
+
+    // Scale
+    if (nChannelIdx == 1) {
+        IZ_ASSERT(nKeyIdx < channel->mNumScalingKeys);
+
+        const auto& scale = channel->mScalingKeys[nKeyIdx];
+
+        sKey.keyTime = scale.mTime;
+        sKey.numParams = 3;
+
+        tvValue.push_back(scale.mValue.x);
+        tvValue.push_back(scale.mValue.y);
+        tvValue.push_back(scale.mValue.z);
+
+        return IZ_TRUE;
+    }
+
+
     return IZ_FALSE;
 }
 
