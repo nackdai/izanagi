@@ -138,13 +138,13 @@ namespace izanagi {
      * ジョイントのパラメータ（ex. 位置、回転など）ごとのアニメーション情報
      */
     struct S_ANM_CHANNEL {
-        IZ_UINT8 interp;    ///< 補間計算のタイプ.
+        IZ_UINT8 interp;    ///< 補間計算のタイプ(E_ANM_INTERP_TYPE).
         IZ_UINT8 stride;
         IZ_UINT16 numKeys;  ///< キーフレーム情報数.
 
-        IZ_UINT keyIdx;
+        IZ_UINT keyIdx;     ///< チャンネルが参照するキーの最初の位置.
 
-        IZ_UINT type;       ///< アニメーションを行うパラメータのタイプ.
+        IZ_UINT type;       ///< アニメーションを行うパラメータのタイプ(E_ANM_TRANSFORM_TYPE).
     };
 
     /** アニメーションノード.
@@ -158,7 +158,7 @@ namespace izanagi {
         IZ_UINT16 targetIdx;    ///< 適用対象のジョイントのインデックス.
         IZ_UINT16 numChannels;  ///< チャンネル数.
 
-        IZ_UINT channelIdx;
+        IZ_UINT channelIdx;     ///< ノードが参照するチャンネルの最初の位置.
     };
 
     /** スカラー値の補間処理.
