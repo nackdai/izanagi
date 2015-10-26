@@ -64,6 +64,9 @@
       <SubSystem>Console</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
+    <PreLinkEvent>
+      <Command>xcopy /R /Y /D "$(SolutionDir)..\..\External\assimp\bin\$(Configuration)\*.dll" "$(SolutionDir)..\..\tools\$(ConfigurationName)"</Command>
+    </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -85,6 +88,9 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
+    <PreLinkEvent>
+      <Command>xcopy /R /Y /D "$(SolutionDir)..\..\External\assimp\bin\$(Configuration)\*.dll" "$(SolutionDir)..\..\tools\$(ConfigurationName)"</Command>
+    </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Model\AnmConverter\AnimationConverter.cpp" />

@@ -667,6 +667,10 @@ IZ_BOOL AssimpImporter::GetAnmNode(
         }
     }
 
+    IZ_ASSERT(ret);
+
+    sNode.numChannels = GetAnmChannelNum(nNodeIdx);
+
     return ret;
 }
 
@@ -684,23 +688,10 @@ IZ_BOOL AssimpImporter::GetAnmChannel(
     auto channel = anm->mChannels[nNodeIdx];
 
     // NOTE
-    // Translate -> Rotation -> Scale
-
-    // Translate
-    if (nChannelIdx == 0) {
-        sChannel.numKeys = channel->mNumPositionKeys;
-        sChannel.interp = izanagi::E_ANM_INTERP_TYPE::E_ANM_INTERP_TYPE_BEZIER;
-        sChannel.type = izanagi::E_ANM_TRANSFORM_TYPE::E_ANM_TRANSFORM_TYPE_TRANSLATE_XYZ;
-
-        // TODO
-        // Not used.
-        //sChannel.stride
-
-        return IZ_TRUE;
-    }
+    // Rotation -> Translate -> Scale
 
     // Rotation
-    if (nChannelIdx == 1) {
+    if (nChannelIdx == 0) {
         sChannel.numKeys = channel->mNumRotationKeys;
         sChannel.interp = izanagi::E_ANM_INTERP_TYPE::E_ANM_INTERP_TYPE_SLERP;
         sChannel.type = izanagi::E_ANM_TRANSFORM_TYPE::E_ANM_TRANSFORM_TYPE_QUATERNION_XYZW;
@@ -713,10 +704,23 @@ IZ_BOOL AssimpImporter::GetAnmChannel(
     }
 
     // Scale
-    if (nChannelIdx == 2) {
+    if (nChannelIdx == 1) {
         sChannel.numKeys = channel->mNumScalingKeys;
         sChannel.interp = izanagi::E_ANM_INTERP_TYPE::E_ANM_INTERP_TYPE_LINEAR;
         sChannel.type = izanagi::E_ANM_TRANSFORM_TYPE::E_ANM_TRANSFORM_TYPE_SCALE_XYZ;
+
+        // TODO
+        // Not used.
+        //sChannel.stride
+
+        return IZ_TRUE;
+    }
+
+    // Translate
+    if (nChannelIdx == 2) {
+        sChannel.numKeys = channel->mNumPositionKeys;
+        sChannel.interp = izanagi::E_ANM_INTERP_TYPE::E_ANM_INTERP_TYPE_LINEAR;
+        sChannel.type = izanagi::E_ANM_TRANSFORM_TYPE::E_ANM_TRANSFORM_TYPE_TRANSLATE_XYZ;
 
         // TODO
         // Not used.
@@ -744,25 +748,12 @@ IZ_BOOL AssimpImporter::GetAnmKey(
     auto channel = anm->mChannels[nNodeIdx];
 
     // NOTE
-    // Translate -> Rotation -> Scale
+    // Rotation -> Translate -> Scale
 
-    // Translate
-    if (nChannelIdx == 0) {
-        IZ_ASSERT(nKeyIdx < channel->mNumPositionKeys);
-        const auto& pos = channel->mPositionKeys[nKeyIdx];
-
-        sKey.keyTime = pos.mTime;
-        sKey.numParams = 3;
-
-        tvValue.push_back(pos.mValue.x);
-        tvValue.push_back(pos.mValue.y);
-        tvValue.push_back(pos.mValue.z);
-
-        return IZ_TRUE;
-    }
+    IZ_PRINTF("[%d]-[%d]-[%d]******\n", nNodeIdx, nChannelIdx, nKeyIdx);
 
     // Rotation
-    if (nChannelIdx == 1) {
+    if (nChannelIdx == 0) {
         IZ_ASSERT(nKeyIdx < channel->mNumRotationKeys);
         const auto& quat = channel->mRotationKeys[nKeyIdx];
 
@@ -773,6 +764,9 @@ IZ_BOOL AssimpImporter::GetAnmKey(
         tvValue.push_back(quat.mValue.y);
         tvValue.push_back(quat.mValue.z);
         tvValue.push_back(quat.mValue.w);
+
+        IZ_PRINTF(" Rotation\n");
+        IZ_PRINTF(" %f, %f, %f, %f\n", quat.mValue.x, quat.mValue.y, quat.mValue.z, quat.mValue.w);
 
         return IZ_TRUE;
     }
@@ -790,9 +784,29 @@ IZ_BOOL AssimpImporter::GetAnmKey(
         tvValue.push_back(scale.mValue.y);
         tvValue.push_back(scale.mValue.z);
 
+        IZ_PRINTF(" Scale\n");
+        IZ_PRINTF(" %f, %f, %f\n", scale.mValue.x, scale.mValue.y, scale.mValue.z);
+
         return IZ_TRUE;
     }
 
+    // Translate
+    if (nChannelIdx == 2) {
+        IZ_ASSERT(nKeyIdx < channel->mNumPositionKeys);
+        const auto& pos = channel->mPositionKeys[nKeyIdx];
+
+        sKey.keyTime = pos.mTime;
+        sKey.numParams = 3;
+
+        tvValue.push_back(pos.mValue.x);
+        tvValue.push_back(pos.mValue.y);
+        tvValue.push_back(pos.mValue.z);
+
+        IZ_PRINTF(" Translate\n");
+        IZ_PRINTF(" %f, %f, %f\n", pos.mValue.x, pos.mValue.y, pos.mValue.z);
+
+        return IZ_TRUE;
+    }
 
     return IZ_FALSE;
 }
