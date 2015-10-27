@@ -206,6 +206,17 @@ protected:
     std::map<IZ_UINT, std::vector<aiMaterialProperty*>> m_props;
 
     IZ_UINT m_curAnmIdx{ 0 };
+
+    struct AnmChannel {
+        izanagi::E_ANM_TRANSFORM_TYPE type[3];
+
+        AnmChannel() {
+            // Set invalid value.
+            type[0] = type[1] = type[2] = izanagi::E_ANM_TRANSFORM_TYPE::E_ANM_TRANSFORM_TYPE_PARAM_SHIFT;
+        }
+    };
+
+    std::vector<AnmChannel> m_channels;
 };
 
 #endif  // #if !defined(__MODEL_LIB_ASSIMP_IMPORTER_H__)
