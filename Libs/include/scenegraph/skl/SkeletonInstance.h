@@ -63,6 +63,9 @@ namespace izanagi {
         // ジョイントキーからジョイントインデックスを逆引きする
         IZ_INT GetJointIdxByKey(IZ_UINT key);
 
+        void DumpJoint();
+        void DumpGlobalMtx();
+
     private:
         IZ_UINT8* SetJointData(IZ_UINT8* pBuf);
 

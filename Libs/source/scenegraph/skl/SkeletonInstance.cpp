@@ -329,3 +329,31 @@ IZ_INT CSkeletonInstance::GetJointIdxByKey(IZ_UINT key)
     IZ_ASSERT(IZ_FALSE);
     return -1;
 }
+
+void CSkeletonInstance::DumpJoint()
+{
+    IZ_UINT jointNum = m_pBody->GetJointNum();
+
+    for (IZ_UINT i = 0; i < jointNum; i++) {
+        const S_SKL_JOINT* joint = m_pBody->GetJoint(i);
+
+        IZ_PRINTF("%s[%d]\n", joint->name.GetString(), i);
+        IZ_PRINTF(" translate : %f %f %f\n", joint->pose.trans[0], joint->pose.trans[1], joint->pose.trans[2]);
+        IZ_PRINTF(" rotate    : %f %f %f %f\n", joint->pose.quat.x, joint->pose.quat.y, joint->pose.quat.z, joint->pose.quat.w);
+        IZ_PRINTF(" scale     : %f %f %f\n", joint->pose.scale[0], joint->pose.scale[1], joint->pose.scale[2]);
+    }
+}
+
+void CSkeletonInstance::DumpGlobalMtx()
+{
+    IZ_UINT jointNum = m_pBody->GetJointNum();
+
+    for (IZ_UINT i = 0; i < jointNum; i++) {
+        const S_SKL_JOINT* joint = m_pBody->GetJoint(i);
+
+        IZ_PRINTF("%s[%d]\n", joint->name.GetString(), i);
+
+        const math::SMatrix44& mtx = m_pGlobalPose[i];
+        math::SMatrix44::Dump(mtx);
+    }
+}
