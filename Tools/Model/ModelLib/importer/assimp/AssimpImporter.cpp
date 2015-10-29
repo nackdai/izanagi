@@ -398,6 +398,7 @@ IZ_BOOL AssimpImporter::BeginJoint()
         m_mtx.push_back(node.mtx);
     }
 
+#if 0
     // 親子関係を解決したマトリクスを構築.
     it = m_nodes.begin();
 
@@ -411,7 +412,7 @@ IZ_BOOL AssimpImporter::BeginJoint()
             izanagi::math::SMatrix44::Mul(m_mtx[id], m_mtx[id], mtxParent);
         }
     }
-
+#else
     for (IZ_UINT i = 0; i < m_scene->mNumMeshes; i++) {
         const aiMesh* mesh = m_scene->mMeshes[i];
 
@@ -421,6 +422,7 @@ IZ_BOOL AssimpImporter::BeginJoint()
             m_bones.insert(std::make_pair(bone->mName.C_Str(), bone));
         }
     }
+#endif
 
     return IZ_TRUE;
 }
@@ -484,13 +486,13 @@ void AssimpImporter::GetJointInvMtx(
     IZ_UINT nIdx,
     izanagi::math::SMatrix44& mtx)
 {
+#if 0
     IZ_ASSERT(nIdx < m_mtx.size());
 
     const auto& orgMtx = m_mtx[nIdx];
 
-    izanagi::math::SMatrix44 tmp;
-    izanagi::math::SMatrix44::Inverse(tmp, orgMtx);
-
+    izanagi::math::SMatrix44::Inverse(mtx, orgMtx);
+#else
     auto it = m_nodes.find(nIdx);
 
     if (it != m_nodes.end()) {
@@ -515,7 +517,7 @@ void AssimpImporter::GetJointInvMtx(
     else {
         izanagi::math::SMatrix44::SetUnit(mtx);
     }
-    izanagi::math::SMatrix44::SetUnit(mtx);
+#endif
 }
 
 namespace {
