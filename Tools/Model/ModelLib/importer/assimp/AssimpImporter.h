@@ -9,6 +9,7 @@
 struct aiScene;
 struct aiNode;
 struct aiMaterialProperty;
+struct aiBone;
 
 class AssimpImporter : public IImporter {
     friend class IImporter;
@@ -199,6 +200,7 @@ protected:
 
     // ノード.
     std::map<IZ_INT, Node> m_nodes;
+    std::map<std::string, aiBone*> m_bones;
 
     // 親子関係を解決したマトリクス.
     std::vector<izanagi::math::SMatrix44> m_mtx;

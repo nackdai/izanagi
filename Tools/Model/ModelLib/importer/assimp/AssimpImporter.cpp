@@ -380,7 +380,7 @@ IZ_BOOL AssimpImporter::BeginJoint()
         Node& node = it->second;
 
         // NOTE
-        // Assimpeは左掛け、izanagiは右掛けなので転置する.
+        // Assimpは左掛け、izanagiは右掛けなので転置する.
         for (IZ_UINT i = 0; i < 4; i++) {
             for (IZ_UINT n = 0; n < 4; n++) {
                 node.mtx.m[i][n] = node.node->mTransformation[n][i];
@@ -409,6 +409,16 @@ IZ_BOOL AssimpImporter::BeginJoint()
         if (node.parent >= 0) {
             const auto& mtxParent = m_mtx[node.parent];
             izanagi::math::SMatrix44::Mul(m_mtx[id], m_mtx[id], mtxParent);
+        }
+    }
+
+    for (IZ_UINT i = 0; i < m_scene->mNumMeshes; i++) {
+        const aiMesh* mesh = m_scene->mMeshes[i];
+
+        for (IZ_UINT n = 0; n < mesh->mNumBones; n++) {
+            aiBone* bone = mesh->mBones[n];
+
+            m_bones.insert(std::make_pair(bone->mName.C_Str(), bone));
         }
     }
 
@@ -478,7 +488,34 @@ void AssimpImporter::GetJointInvMtx(
 
     const auto& orgMtx = m_mtx[nIdx];
 
-    izanagi::math::SMatrix44::Inverse(mtx, orgMtx);
+    izanagi::math::SMatrix44 tmp;
+    izanagi::math::SMatrix44::Inverse(tmp, orgMtx);
+
+    auto it = m_nodes.find(nIdx);
+
+    if (it != m_nodes.end()) {
+        const Node& node = it->second;
+
+        auto itBone = m_bones.find(node.node->mName.C_Str());
+        if (itBone != m_bones.end()) {
+            const aiBone* bone = itBone->second;
+
+            // NOTE
+            // Assimpは左掛け、izanagiは右掛けなので転置する.
+            for (IZ_UINT i = 0; i < 4; i++) {
+                for (IZ_UINT n = 0; n < 4; n++) {
+                    mtx.m[i][n] = bone->mOffsetMatrix[n][i];
+                }
+            }
+        }
+        else {
+            izanagi::math::SMatrix44::SetUnit(mtx);
+        }
+    }
+    else {
+        izanagi::math::SMatrix44::SetUnit(mtx);
+    }
+    izanagi::math::SMatrix44::SetUnit(mtx);
 }
 
 namespace {
