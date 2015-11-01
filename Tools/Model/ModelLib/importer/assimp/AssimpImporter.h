@@ -186,6 +186,8 @@ private:
 
     void getNode(aiNode* node, IZ_INT id);
 
+    IZ_INT findNodeIdxByNmae(const char* name);
+
 protected:
     Assimp::Importer m_importer;
     Assimp::Importer m_importerForBase;

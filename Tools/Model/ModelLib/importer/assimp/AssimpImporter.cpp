@@ -32,7 +32,7 @@ IZ_BOOL AssimpImporter::Close()
 // ジオメトリチャンクのエクスポートが完了したことを通知.
 void AssimpImporter::ExportGeometryCompleted()
 {
-    // Nothing to do.
+    m_nodes.clear();
 }
 
 void AssimpImporter::BeginMesh(IZ_UINT nIdx)
@@ -67,6 +67,16 @@ void AssimpImporter::BeginMesh(IZ_UINT nIdx)
 #else
     auto mesh = m_scene->mMeshes[m_curMeshIdx];
     m_curMeshVtxNum = mesh->mNumVertices;
+
+    if (m_nodes.size() == 0) {
+        Node nodeInfo;
+        nodeInfo.node = m_scene->mRootNode;
+        nodeInfo.parent = -1;
+
+        m_nodes.insert(std::make_pair(0, nodeInfo));
+
+        getNode(m_scene->mRootNode, 0);
+    }
 #endif
 }
 
@@ -80,6 +90,30 @@ IZ_UINT AssimpImporter::GetMeshNum()
 {
     IZ_UINT ret = m_scene->mNumMeshes;
     return ret;
+}
+
+IZ_INT AssimpImporter::findNodeIdxByNmae(const char* name)
+{
+    auto it = m_nodes.begin();
+
+    std::string tmp(name);
+
+    IZ_INT ret = 0;
+
+    while (it != m_nodes.end())
+    {
+        const Node& node = it->second;
+
+        if (tmp.compare(node.node->mName.C_Str()) == 0) {
+            return ret;
+        }
+
+        ret++;
+        it++;
+    }
+
+    IZ_ASSERT(IZ_FALSE);
+    return -1;
 }
 
 // 指定されているメッシュに関連するスキニング情報を取得.
@@ -99,7 +133,6 @@ void AssimpImporter::GetSkinList(std::vector<SSkin>& tvSkinList)
         SSkin skin;
         skin.vtxId = vtxId;
 
-        // TODO
         for (IZ_UINT i = 0; i < mesh->mNumBones; i++) {
             const auto& bone = mesh->mBones[i];
 
@@ -107,7 +140,8 @@ void AssimpImporter::GetSkinList(std::vector<SSkin>& tvSkinList)
                 const auto& weight = bone->mWeights[n];
 
                 if (weight.mVertexId == vtxId) {
-                    skin.Add(i, weight.mWeight);
+                    IZ_INT idxJoint = findNodeIdxByNmae(bone->mName.C_Str());
+                    skin.Add(idxJoint, weight.mWeight);
                 }
             }
         }
@@ -398,7 +432,6 @@ IZ_BOOL AssimpImporter::BeginJoint()
         m_mtx.push_back(node.mtx);
     }
 
-#if 0
     // 親子関係を解決したマトリクスを構築.
     it = m_nodes.begin();
 
@@ -412,7 +445,8 @@ IZ_BOOL AssimpImporter::BeginJoint()
             izanagi::math::SMatrix44::Mul(m_mtx[id], m_mtx[id], mtxParent);
         }
     }
-#else
+
+    // ボーン情報を集める.
     for (IZ_UINT i = 0; i < m_scene->mNumMeshes; i++) {
         const aiMesh* mesh = m_scene->mMeshes[i];
 
@@ -422,7 +456,6 @@ IZ_BOOL AssimpImporter::BeginJoint()
             m_bones.insert(std::make_pair(bone->mName.C_Str(), bone));
         }
     }
-#endif
 
     return IZ_TRUE;
 }
@@ -430,6 +463,8 @@ IZ_BOOL AssimpImporter::BeginJoint()
 void AssimpImporter::EndJoint()
 {
     m_nodes.clear();
+    m_bones.clear();
+    m_mtx.clear();
 }
 
 IZ_UINT AssimpImporter::GetJointNum()
@@ -511,7 +546,7 @@ void AssimpImporter::GetJointInvMtx(
             }
         }
         else {
-            izanagi::math::SMatrix44::SetUnit(mtx);
+            izanagi::math::SMatrix44::Inverse(mtx, m_mtx[nIdx]);
         }
     }
     else {
