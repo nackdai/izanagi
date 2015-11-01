@@ -49,7 +49,7 @@ public:
      */
     PURE_VIRTUAL(void EndMesh());
 
-    /** BeginMeshで指定されたメッシュに含まれスキニング情報を取得.
+    /** メッシュ全体のスキニング情報を取得.
      */
     PURE_VIRTUAL(void GetSkinList(std::vector<SSkin>& tvSkinList));
 

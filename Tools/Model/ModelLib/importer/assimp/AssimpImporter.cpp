@@ -33,6 +33,8 @@ IZ_BOOL AssimpImporter::Close()
 void AssimpImporter::ExportGeometryCompleted()
 {
     m_nodes.clear();
+
+    m_VtxPos = 0;
 }
 
 void AssimpImporter::BeginMesh(IZ_UINT nIdx)
@@ -116,18 +118,18 @@ IZ_INT AssimpImporter::findNodeIdxByNmae(const char* name)
     return -1;
 }
 
-// 指定されているメッシュに関連するスキニング情報を取得.
+// メッシュ全体のスキニング情報を取得.
 void AssimpImporter::GetSkinList(std::vector<SSkin>& tvSkinList)
 {
     // NOTE
     // １頂点ごとに存在するスキニング情報を取得.
-
+#if 0
     IZ_ASSERT(m_curMeshIdx < m_scene->mNumMeshes);
 
     auto mesh = m_scene->mMeshes[m_curMeshIdx];
     IZ_ASSERT(mesh->HasBones());
 
-    tvSkinList.reserve(m_curMeshVtxNum);
+    //tvSkinList.reserve(m_curMeshVtxNum);
 
     for (IZ_UINT vtxId = 0; vtxId < m_curMeshVtxNum; vtxId++) {
         SSkin skin;
@@ -152,6 +154,43 @@ void AssimpImporter::GetSkinList(std::vector<SSkin>& tvSkinList)
             tvSkinList.push_back(skin);
         }
     }
+#else
+    // 全メッシュを通じたスキン情報を取得する.
+
+    if (tvSkinList.empty()) {
+        IZ_UINT pos = 0;
+
+        for (IZ_UINT m = 0; m < m_scene->mNumMeshes; m++) {
+            const aiMesh* mesh = m_scene->mMeshes[m];
+
+            for (IZ_UINT vtxId = 0; vtxId < mesh->mNumVertices; vtxId++) {
+                SSkin skin;
+                skin.vtxId = vtxId + pos;
+
+                for (IZ_UINT b = 0; b < mesh->mNumBones; b++) {
+                    const aiBone* bone = mesh->mBones[b];
+
+                    for (IZ_UINT w = 0; w < bone->mNumWeights; w++) {
+                        const auto& weight = bone->mWeights[w];
+
+                        if (weight.mVertexId == vtxId) {
+                            IZ_INT idxJoint = findNodeIdxByNmae(bone->mName.C_Str());
+                            skin.Add(idxJoint, weight.mWeight);
+                        }
+                    }
+                }
+
+                if (skin.joint.size() > 0) {
+                    m_mapVtxToSkin.insert(std::make_pair(skin.vtxId, tvSkinList.size()));
+
+                    tvSkinList.push_back(skin);
+                }
+            }
+
+            pos += mesh->mNumVertices;
+        }
+    }
+#endif
 }
 
 // 指定されているメッシュに含まれる三角形を取得.
@@ -170,13 +209,18 @@ IZ_UINT AssimpImporter::GetTriangles(std::vector<STri>& tvTriList)
         // Check if this is a triangle.
         IZ_ASSERT(face.mNumIndices == 3);
 
+        // NOTE
+        // 全頂点を通じた一意のインデックスを指定する.
+
         STri tri;
-        tri.vtx[0] = face.mIndices[0];
-        tri.vtx[1] = face.mIndices[1];
-        tri.vtx[2] = face.mIndices[2];
+        tri.vtx[0] = face.mIndices[0] + m_VtxPos;
+        tri.vtx[1] = face.mIndices[1] + m_VtxPos;
+        tri.vtx[2] = face.mIndices[2] + m_VtxPos;
 
         tvTriList.push_back(tri);
     }
+
+    m_VtxPos += mesh->mNumVertices;
 
     IZ_UINT ret = mesh->mNumFaces;
     
@@ -186,7 +230,7 @@ IZ_UINT AssimpImporter::GetTriangles(std::vector<STri>& tvTriList)
 IZ_UINT AssimpImporter::GetSkinIdxAffectToVtx(IZ_UINT nVtxIdx)
 {
     IZ_ASSERT(m_curMeshIdx < m_scene->mNumMeshes);
-    IZ_ASSERT(nVtxIdx < m_curMeshVtxNum);
+    //IZ_ASSERT(nVtxIdx < m_curMeshVtxNum);
 
     auto mesh = m_scene->mMeshes[m_curMeshIdx];
     IZ_ASSERT(mesh->HasBones());
@@ -225,6 +269,7 @@ IZ_UINT AssimpImporter::GetSkinIdxAffectToVtx(IZ_UINT nVtxIdx)
         auto ret = it->second;
         return ret;
     }
+    IZ_ASSERT(IZ_FALSE);
 #endif
 
     // TODO
@@ -296,9 +341,24 @@ IZ_BOOL AssimpImporter::GetVertex(
     // スキンウエイト関係のパラメータは別処理される.
 
     IZ_ASSERT(m_curMeshIdx < m_scene->mNumMeshes);
-    IZ_ASSERT(nIdx < m_curMeshVtxNum);
 
-    auto mesh = m_scene->mMeshes[m_curMeshIdx];
+    IZ_UINT idx = nIdx;
+    IZ_UINT pos = 0;
+
+    // 所属メッシュに応じたインデックスに変換する.
+    for (IZ_UINT i = 0; i < m_scene->mNumMeshes; i++) {
+        const aiMesh* mesh = m_scene->mMeshes[i];
+
+        if (pos <= idx && idx < pos + mesh->mNumVertices) {
+            idx = idx - pos;
+            break;
+        }
+
+        pos += mesh->mNumVertices;
+    }
+
+    const aiMesh* mesh = m_scene->mMeshes[m_curMeshIdx];
+    IZ_ASSERT(idx < mesh->mNumVertices);
 
     IZ_BOOL ret = IZ_FALSE;;
 
@@ -306,18 +366,18 @@ IZ_BOOL AssimpImporter::GetVertex(
         if (mesh->HasPositions()) {
             ret = IZ_TRUE;
             vec.Set(
-                mesh->mVertices[nIdx].x,
-                mesh->mVertices[nIdx].y,
-                mesh->mVertices[nIdx].z);
+                mesh->mVertices[idx].x,
+                mesh->mVertices[idx].y,
+                mesh->mVertices[idx].z);
         }
     }
     else if (type == izanagi::E_MSH_VTX_FMT_TYPE::E_MSH_VTX_FMT_TYPE_NORMAL) {
         if (mesh->HasNormals()) {
             ret = IZ_TRUE;
             vec.Set(
-                mesh->mNormals[nIdx].x,
-                mesh->mNormals[nIdx].y,
-                mesh->mNormals[nIdx].z);
+                mesh->mNormals[idx].x,
+                mesh->mNormals[idx].y,
+                mesh->mNormals[idx].z);
         }
     }
     else if (type == izanagi::E_MSH_VTX_FMT_TYPE::E_MSH_VTX_FMT_TYPE_UV) {
@@ -327,9 +387,9 @@ IZ_BOOL AssimpImporter::GetVertex(
             // TODO
             // multi textures.
             vec.Set(
-                mesh->mTextureCoords[0][nIdx].x,
-                mesh->mTextureCoords[0][nIdx].y,
-                mesh->mTextureCoords[0][nIdx].z);
+                mesh->mTextureCoords[0][idx].x,
+                mesh->mTextureCoords[0][idx].y,
+                mesh->mTextureCoords[0][idx].z);
         }
     }
     else if (type == izanagi::E_MSH_VTX_FMT_TYPE::E_MSH_VTX_FMT_TYPE_COLOR) {
@@ -339,10 +399,10 @@ IZ_BOOL AssimpImporter::GetVertex(
             // TODO
             // muiti channel colors.
             vec.Set(
-                mesh->mColors[0][nIdx].r,
-                mesh->mColors[0][nIdx].g,
-                mesh->mColors[0][nIdx].b,
-                mesh->mColors[0][nIdx].a);
+                mesh->mColors[0][idx].r,
+                mesh->mColors[0][idx].g,
+                mesh->mColors[0][idx].b,
+                mesh->mColors[0][idx].a);
         }
     }
     else {
@@ -922,9 +982,6 @@ IZ_BOOL AssimpImporter::GetAnmKey(
         tvValue.push_back(quat.mValue.y);
         tvValue.push_back(quat.mValue.z);
         tvValue.push_back(quat.mValue.w);
-
-        IZ_PRINTF("[%d]-[%d]-[%d]\n", nNodeIdx, nChannelIdx, nKeyIdx);
-        IZ_PRINTF(" %f %f %f %f\n", quat.mValue.x, quat.mValue.y, quat.mValue.z, quat.mValue.w);
 
         return IZ_TRUE;
     }

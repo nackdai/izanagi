@@ -38,7 +38,7 @@ public:
     // メッシュに関する処理を終了.
     virtual void EndMesh();
 
-    // BeginMeshで指定されたメッシュに含まれスキニング情報を取得.
+    // メッシュ全体のスキニング情報を取得.
     virtual void GetSkinList(std::vector<SSkin>& tvSkinList);
 
     // BeginMeshで指定されたメッシュに含まれる三角形を取得.
@@ -196,6 +196,8 @@ protected:
 
     IZ_INT m_curMeshIdx{ -1 };
     IZ_UINT m_curMeshVtxNum{ 0 };
+
+    IZ_UINT m_VtxPos{ 0 };
 
     // 頂点ID -> スキンID変換マップ.
     std::map<IZ_UINT, IZ_UINT> m_mapVtxToSkin;

@@ -32,7 +32,7 @@ public:
     // メッシュに関する処理を終了.
     void EndMesh();
 
-    // BeginMeshで指定されたメッシュに含まれスキニング情報を取得.
+    // メッシュ全体のスキニング情報を取得.
     void GetSkinList(std::vector<SSkin>& tvSkinList);
 
     // BeginMeshで指定されたメッシュに含まれる三角形を取得.
