@@ -4,7 +4,7 @@ set CURDIR=%CD%
 
 cd /d %~dp0
 
-set MSBUILD="C:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"
+set MSBUILD="C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe"
 set TARGET=Build
 set CONFIG=%1
 set GFX=%2
@@ -16,31 +16,32 @@ if %GFX%==GLES2 (
     cd External
     call BuildMojoShader.bat Release
     cd ..
-    %MSBUILD% External\Preproc\Preproc_VC10.sln /t:%TARGET% /p:Configuration=Release || goto error
-    %MSBUILD% projects\vs2010\ShaderCompiler.sln /t:%TARGET% /p:Configuration=Release || goto error
+    %MSBUILD% External\Preproc\Preproc.sln /t:%TARGET% /p:Configuration=Release || goto error
+    %MSBUILD% projects\vs2013\ShaderCompiler.sln /t:%TARGET% /p:Configuration=Release || goto error
 
     cd ..\Libs
 )
 
 if %GFX%==OGL (
-    %MSBUILD% ..\External\glew\build\vc10\glew.sln /t:%TARGET% /p:Configuration=%CONFIG% /p:Platform=Win32 || goto error
-    %MSBUILD% ..\External\freeglut\VisualStudio\2010\freeglut.sln /t:%TARGET% /p:Configuration=%CONFIG% /p:Platform=Win32 || goto error
+    %MSBUILD% ..\External\glew\glew.sln /t:%TARGET% /p:Configuration=%CONFIG% /p:Platform=Win32 || goto error
+    %MSBUILD% ..\External\freeglut\freeglut\freeglut\freeglut.sln /t:%TARGET% /p:Configuration=%CONFIG% /p:Platform=Win32 || goto error
 
     cd ..\Tools
     cd External
     call BuildMojoShader.bat Release
     cd ..
-    %MSBUILD% External\Preproc\Preproc_VC10.sln /t:%TARGET% /p:Configuration=Release || goto error
-    %MSBUILD% projects\vs2010\ShaderCompiler.sln /t:%TARGET% /p:Configuration=Release || goto error
+    %MSBUILD% External\Preproc\Preproc.sln /t:%TARGET% /p:Configuration=Release || goto error
+    %MSBUILD% projects\vs2013\ShaderCompiler.sln /t:%TARGET% /p:Configuration=Release || goto error
 
     cd ..\Libs
 
     set GFX=GLUT
 )
 
-%MSBUILD% ..\External\freetype\builds\win32\vc2010\freetype.sln /t:%TARGET% /p:Configuration="%CONFIG% Multithreaded" || goto error
+%MSBUILD% ..\External\freetype\builds\freetype.sln /t:%TARGET% /p:Configuration=%CONFIG% /p:Platform=Win32 || goto error
+%MSBUILD% ..\External\libuv\uv.sln /t:%TARGET% /p:Configuration=%CONFIG% /p:Platform=Win32 || goto error
 
-%MSBUILD% project\vs2010\izanagi.sln /t:%TARGET% /p:Configuration=%CONFIG%_%GFX% || goto error
+%MSBUILD% project\vs2013\izanagi.sln /t:%TARGET% /p:Configuration=%CONFIG%_%GFX% /p:Platform=Win32 || goto error
 
 set CURDIR=%CD%
 
