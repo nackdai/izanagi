@@ -1,5 +1,3 @@
-#include <windows.h>
-
 #include "izStd.h"
 
 static void OnEvent(IZ_UINT x)

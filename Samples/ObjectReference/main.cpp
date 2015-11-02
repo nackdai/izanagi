@@ -1,5 +1,3 @@
-#include <windows.h>
-
 #include "izStd.h"
 
 class SampleObject : public izanagi::CObject

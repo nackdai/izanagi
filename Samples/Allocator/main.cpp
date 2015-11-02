@@ -1,5 +1,3 @@
-#include <windows.h>
-
 #include "izStd.h"
 
 IZ_UINT8 buffer[4 * 1024 * 1024];
