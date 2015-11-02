@@ -102,7 +102,7 @@
     <ResourceCompile Include="app.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\projects\vs2010\ImageLibWrapper.vcxproj">
+    <ProjectReference Include="..\..\projects\vs2013\ImageLibWrapper.vcxproj">
       <Project>{9deaf8ca-4e10-4d35-85ce-4ebedb4dd9f5}</Project>
     </ProjectReference>
   </ItemGroup>

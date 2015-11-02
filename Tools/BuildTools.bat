@@ -4,12 +4,12 @@ set CURDIR=%CD%
 
 cd /d %~dp0
 
-set MSBUILD="C:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"
+set MSBUILD="C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe"
 set TARGET=Build
 set CONFIG=%1
 
-%MSBUILD% ..\Libs\project\vs2010\Math.vcxproj /t:%TARGET% /p:Configuration=%CONFIG%_DX9 || goto error
-%MSBUILD% projects\vs2010\Tools.sln /t:%TARGET% /p:Configuration=%CONFIG% || goto error
+rem %MSBUILD% ..\Libs\project\vs2013\Math.vcxproj /t:%TARGET% /p:Configuration=%CONFIG%_DX9 || goto error
+%MSBUILD% projects\vs2013\Tools.sln /t:%TARGET% /p:Configuration=%CONFIG% || goto error
 
 cd /d %CURDIR%
 
