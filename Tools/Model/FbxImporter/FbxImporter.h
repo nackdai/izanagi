@@ -6,117 +6,117 @@
 class CFbxImporter : public IImporter {
     friend class IImporter;
 
-protected:
+public:
     CFbxImporter();
     ~CFbxImporter() { Close(); }
 
     NO_COPIABLE(CFbxImporter);
 
 public:
-    virtual IZ_BOOL Open(IZ_PCSTR pszName);
-    virtual IZ_BOOL Close();
+    virtual IZ_BOOL Open(IZ_PCSTR pszName) override;
+    virtual IZ_BOOL Close() override;
 
     //////////////////////////////////
     // For geometry chunk.
 
-    virtual void ExportGeometryCompleted();
+    virtual void ExportGeometryCompleted() override;
 
-    virtual IZ_UINT GetMeshNum();
+    virtual IZ_UINT GetMeshNum() override;
 
     // メッシュに関する処理を開始.
-    virtual void BeginMesh(IZ_UINT nIdx);
+    virtual void BeginMesh(IZ_UINT nIdx) override;
 
     // メッシュに関する処理を終了.
-    virtual void EndMesh();
+    virtual void EndMesh() override;
 
     // BeginMeshで指定されたメッシュに含まれスキニング情報を取得.
-    virtual void GetSkinList(std::vector<SSkin>& tvSkinList);
+    virtual void GetSkinList(std::vector<SSkin>& tvSkinList) override;
 
     // BeginMeshで指定されたメッシュに含まれる三角形を取得.
-    virtual IZ_UINT GetTriangles(std::vector<STri>& tvTriList);
+    virtual IZ_UINT GetTriangles(std::vector<STri>& tvTriList) override;
 
     // 指定された頂点に影響を与えるスキニング情報へのインデックスを取得.
-    virtual IZ_UINT GetSkinIdxAffectToVtx(IZ_UINT nVtxIdx);
+    virtual IZ_UINT GetSkinIdxAffectToVtx(IZ_UINT nVtxIdx) override;
 
     // １頂点あたりのサイズを取得.
     // ただし、スキニングに関するサイズは含まない
-    virtual IZ_UINT GetVtxSize();
+    virtual IZ_UINT GetVtxSize() override;
 
     // 頂点フォーマットを取得.
     // ただし、スキニングに関するフォーマットは含まない
-    virtual IZ_UINT GetVtxFmt();
+    virtual IZ_UINT GetVtxFmt() override;
 
     // 指定された頂点における指定フォーマットのデータを取得.
     virtual IZ_BOOL GetVertex(
         IZ_UINT nIdx,
         izanagi::math::SVector4& vec,
-        izanagi::E_MSH_VTX_FMT_TYPE type);
+        izanagi::E_MSH_VTX_FMT_TYPE type) override;
 
     virtual void GetMaterialForMesh(
         IZ_UINT nIdx,
-        izanagi::S_MSH_MTRL& sMtrl);
+        izanagi::S_MSH_MTRL& sMtrl) override;
 
     //////////////////////////////////
     // For joint chunk.
 
     // 関節データの出力完了を通知.
-    virtual void ExportJointCompleted();
+    virtual void ExportJointCompleted() override;
 
     // 関節に関する処理を開始.
-    virtual IZ_BOOL BeginJoint();
+    virtual IZ_BOOL BeginJoint() override;
 
     // 関節に関する処理を終了.
-    virtual void EndJoint();
+    virtual void EndJoint() override;
 
     // 関節数を取得.
-    virtual IZ_UINT GetJointNum();
+    virtual IZ_UINT GetJointNum() override;
 
     // 指定された関節の名前を取得.
-    virtual IZ_PCSTR GetJointName(IZ_UINT nIdx);
+    virtual IZ_PCSTR GetJointName(IZ_UINT nIdx) override;
 
     // 親関節へのインデックスを取得.    
     virtual IZ_INT GetJointParent(
         IZ_UINT nIdx,
-        const std::vector<izanagi::S_SKL_JOINT>& tvJoint);
+        const std::vector<izanagi::S_SKL_JOINT>& tvJoint) override;
 
     // 指定された関節の逆マトリクスを取得.  
     virtual void GetJointInvMtx(
         IZ_UINT nIdx,
-        izanagi::math::SMatrix44& mtx);
+        izanagi::math::SMatrix44& mtx) override;
         
     // 関節の姿勢を取得.
     virtual void GetJointTransform(
         IZ_UINT nIdx,
         const std::vector<izanagi::S_SKL_JOINT>& tvJoint,
-        std::vector<SJointTransform>& tvTransform);
+        std::vector<SJointTransform>& tvTransform) override;
 
     //////////////////////////////////
     // For animation.
 
     // モーションの対象となるモデルデータを指定.
-    virtual IZ_BOOL ReadBaseModel(IZ_PCSTR pszName);
+    virtual IZ_BOOL ReadBaseModel(IZ_PCSTR pszName) override;
 
     // ファイルに含まれるモーションの数を取得.
-    virtual IZ_UINT GetAnmSetNum();
+    virtual IZ_UINT GetAnmSetNum() override;
 
     // モーションに関する処理を開始.
-    virtual IZ_BOOL BeginAnm(IZ_UINT nSetIdx);
+    virtual IZ_BOOL BeginAnm(IZ_UINT nSetIdx) override;
 
     // モーションに関する処理を終了.
-    virtual IZ_BOOL EndAnm();
+    virtual IZ_BOOL EndAnm() override;
 
     // モーションノード（適用ジョイント）の数を取得.
-    virtual IZ_UINT GetAnmNodeNum();
+    virtual IZ_UINT GetAnmNodeNum() override;
 
     // アニメーションチャンネルの数を取得.
     // アニメーションチャンネルとは
     // ジョイントのパラメータ（ex. 位置、回転など）ごとのアニメーション情報のこと
-    virtual IZ_UINT GetAnmChannelNum(IZ_UINT nNodeIdx);
+    virtual IZ_UINT GetAnmChannelNum(IZ_UINT nNodeIdx) override;
 
     // モーションノード（適用ジョイント）の情報を取得.
     virtual IZ_BOOL GetAnmNode(
         IZ_UINT nNodeIdx,
-        izanagi::S_ANM_NODE& sNode);
+        izanagi::S_ANM_NODE& sNode) override;
 
     // アニメーションチャンネルの情報を取得.
     // アニメーションチャンネルとは
@@ -124,7 +124,7 @@ public:
     virtual IZ_BOOL GetAnmChannel(
         IZ_UINT nNodeIdx,
         IZ_UINT nChannelIdx,
-        izanagi::S_ANM_CHANNEL& sChannel);
+        izanagi::S_ANM_CHANNEL& sChannel) override;
 
     // キーフレーム情報を取得.
     // キーフレームあたりのジョイントのパラメータに適用するパラメータを取得.
@@ -133,40 +133,46 @@ public:
         IZ_UINT nChannelIdx,
         IZ_UINT nKeyIdx,
         izanagi::S_ANM_KEY& sKey,
-        std::vector<IZ_FLOAT>& tvValue);
+        std::vector<IZ_FLOAT>& tvValue) override;
 
     //////////////////////////////////
     // For material.
 
-    virtual IZ_BOOL BeginMaterial();
+    virtual IZ_BOOL BeginMaterial() override;
 
-    virtual IZ_BOOL EndMaterial();
+    virtual IZ_BOOL EndMaterial() override;
 
-    virtual IZ_UINT GetMaterialNum();
+    virtual IZ_UINT GetMaterialNum() override;
 
     virtual IZ_BOOL GetMaterial(
         IZ_UINT nMtrlIdx,
-        izanagi::S_MTRL_MATERIAL& sMtrl);
+        izanagi::S_MTRL_MATERIAL& sMtrl) override;
 
     virtual void GetMaterialTexture(
         IZ_UINT nMtrlIdx,
         IZ_UINT nTexIdx,
-        izanagi::S_MTRL_TEXTURE& sTex);
+        izanagi::S_MTRL_TEXTURE& sTex) override;
 
     virtual void GetMaterialShader(
         IZ_UINT nMtrlIdx,
         IZ_UINT nShaderIdx,
-        izanagi::S_MTRL_SHADER& sShader);
+        izanagi::S_MTRL_SHADER& sShader) override;
 
     virtual void GetMaterialParam(
         IZ_UINT nMtrlIdx,
         IZ_UINT nParamIdx,
-        izanagi::S_MTRL_PARAM& sParam);
+        izanagi::S_MTRL_PARAM& sParam) override;
 
     virtual void GetMaterialParamValue(
         IZ_UINT nMtrlIdx,
         IZ_UINT nParamIdx,
-        std::vector<IZ_FLOAT>& tvValue);
+        std::vector<IZ_FLOAT>& tvValue) override;
+
+private:
+    class FbxSdk;
+    FbxSdk* m_fbx;
+
+    IZ_UINT m_curMeshIdx{ 0 };
 };
 
 #endif  // #if !defined(__MODEL_LIB_JSON_IMPORTER_H__)

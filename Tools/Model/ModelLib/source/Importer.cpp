@@ -10,7 +10,6 @@ IImporter* IImporter::CreateImporter(ModelType type)
 
     switch (type)
     {
-    case ModelTypeFBX:
     case ModelTypeCollada:
         ret = new AssimpImporter();
         break;
@@ -22,6 +21,8 @@ IImporter* IImporter::CreateImporter(ModelType type)
         break;
     case ModelTypeJSON:
         ret = new CJsonImporter();
+        break;
+    case ModelTypeFBX:
         break;
     default:
         IZ_ASSERT(IZ_FALSE);

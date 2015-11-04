@@ -1,23 +1,190 @@
 #include "fbxsdk.h"
 #include "FbxImporter.h"
 
+#include <map>
+
+class CFbxImporter::FbxSdk {
+public:
+    FbxSdk(){}
+    ~FbxSdk(){}
+
+    void getNodes(FbxNode* node);
+
+    void getMeshes();
+
+    IZ_INT getNodeIndex(FbxNode* node);
+
+public:
+    FbxManager* manager{ nullptr };
+    FbxScene* scene{ nullptr };
+
+    std::vector<FbxNode*> nodes;
+    std::map<std::string, FbxSurfaceMaterial*> mtrls;
+
+    struct MeshSubset {
+        IZ_UINT idxIB{ 0 };
+        IZ_UINT triNum{ 0 };
+
+        MeshSubset() {}
+        ~MeshSubset() {}
+    };
+
+    std::map<std::string, MeshSubset> meshes;
+};
+
+void CFbxImporter::FbxSdk::getNodes(FbxNode* node)
+{
+    nodes.push_back(node);
+
+    // Gather materials.
+    const int mtrlCount = node->GetMaterialCount();
+    for (int i = 0; i < mtrlCount; i++)
+    {
+        FbxSurfaceMaterial* material = node->GetMaterial(i);
+        if (material) {
+            mtrls.insert(std::make_pair(material->GetName(), material));
+        }
+    }
+
+    for (IZ_UINT i = 0; i < node->GetChildCount(); i++) {
+        FbxNode* child = node->GetChild(i);
+
+        getNodes(child);
+    }
+}
+
+void CFbxImporter::FbxSdk::getMeshes()
+{
+    for each (auto node in nodes)
+    {
+        FbxNodeAttribute* attr = node->GetNodeAttribute();
+        if (attr) {
+            // Bake mesh as VBO(vertex buffer object) into GPU.
+            if (attr->GetAttributeType() == FbxNodeAttribute::eMesh) {
+                FbxMesh* mesh = node->GetMesh();
+
+                const int polygonCount = mesh->GetPolygonCount();
+
+                if (mesh->GetElementMaterial()) {
+                    auto& materialIndices = mesh->GetElementMaterial()->GetIndexArray();
+
+                    if (materialIndices.GetCount() == polygonCount) {
+                        for (int i = 0; i < polygonCount; i++) {
+                            const int materialIdx = materialIndices.GetAt(i);
+
+                            auto material = node->GetMaterial(materialIdx);
+                            std::string name(material->GetName());
+
+                            if (meshes.find(name) != meshes.end()) {
+                                meshes.insert(std::make_pair(name, MeshSubset()));
+                            }
+
+                            meshes[name].triNum += 1;
+                        }
+                    }
+                    else {
+                        IZ_ASSERT(IZ_FALSE);
+                    }
+
+                    IZ_UINT offset = 0;
+                    for (auto it = meshes.begin(); it != meshes.end(); it++) {
+                        MeshSubset& subset = it->second;
+
+                        subset.idxIB = offset;
+                        offset += subset.triNum * 3;
+
+                        // Reset to zero to re-use.
+                        subset.triNum = 0;
+                    }
+                }
+            }
+        }
+    }
+}
+
+IZ_INT CFbxImporter::FbxSdk::getNodeIndex(FbxNode* node)
+{
+    for (IZ_INT i = 0; i < nodes.size(); i++) {
+        if (nodes[i] == node) {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
 CFbxImporter::CFbxImporter()
 {
+    m_fbx = new FbxSdk();
 }
 
 IZ_BOOL CFbxImporter::Open(IZ_PCSTR pszName)
 {
-    FbxManager* pManager = FbxManager::Create();
-    FbxIOSettings* ios = FbxIOSettings::Create(pManager, IOSROOT);
-    pManager->SetIOSettings(ios);
+    m_fbx->manager = FbxManager::Create();
 
-    FbxScene* pScene = FbxScene::Create(pManager, "My Scene");
+    FbxIOSettings* ios = FbxIOSettings::Create(m_fbx->manager, IOSROOT);
+    m_fbx->manager->SetIOSettings(ios);
 
+    m_fbx->scene = FbxScene::Create(m_fbx->manager, "");
+
+    auto importer = FbxImporter::Create(m_fbx->manager, "");
+
+    int fileFormat = -1;
+
+    if (m_fbx->manager->GetIOPluginRegistry()->DetectReaderFileFormat(pszName, fileFormat)) {
+        if (importer->Initialize(pszName, fileFormat)) {
+            if (importer->Import(m_fbx->scene)) {
+                importer->Destroy(true);
+
+                // Convert Axis System to what is used in this example, if needed
+                FbxAxisSystem SceneAxisSystem = m_fbx->scene->GetGlobalSettings().GetAxisSystem();
+                FbxAxisSystem axisSystem(
+                    FbxAxisSystem::eYAxis,
+                    FbxAxisSystem::eParityOdd,
+                    FbxAxisSystem::eLeftHanded);
+
+                if (SceneAxisSystem != axisSystem)
+                {
+                    axisSystem.ConvertScene(m_fbx->scene);
+                }
+
+                // Convert Unit System to what is used in this example, if needed
+                FbxSystemUnit SceneSystemUnit = m_fbx->scene->GetGlobalSettings().GetSystemUnit();
+                if (SceneSystemUnit.GetScaleFactor() != 1.0)
+                {
+                    //The unit in this tool is centimeter.
+                    FbxSystemUnit::cm.ConvertScene(m_fbx->scene);
+                }
+
+                // Convert mesh, NURBS and patch into triangle mesh
+                FbxGeometryConverter geomConverter(m_fbx->manager);
+                geomConverter.Triangulate(m_fbx->scene, true);
+
+                m_fbx->getNodes(m_fbx->scene->GetRootNode());
+                m_fbx->getMeshes();
+
+                return IZ_TRUE;
+            }
+        }
+    }
+
+    IZ_ASSERT(IZ_FALSE);
     return IZ_FALSE;
 }
 
 IZ_BOOL CFbxImporter::Close()
 {
+    if (m_fbx->scene) {
+        m_fbx->scene->Destroy(true);
+    }
+
+    if (m_fbx->manager) {
+        // Delete the FBX SDK manager. All the objects that have been allocated 
+        // using the FBX SDK manager and that haven't been explicitly destroyed 
+        // are automatically destroyed at the same time.
+        m_fbx->manager->Destroy();
+    }
+
     return IZ_TRUE;
 }
 
@@ -30,6 +197,7 @@ void CFbxImporter::ExportGeometryCompleted()
 
 void CFbxImporter::BeginMesh(IZ_UINT nIdx)
 {
+    m_curMeshIdx = nIdx;
 }
 
 void CFbxImporter::EndMesh()
@@ -38,13 +206,46 @@ void CFbxImporter::EndMesh()
 
 IZ_UINT CFbxImporter::GetMeshNum()
 {
-    return 0;
+    IZ_UINT ret = m_fbx->meshes.size();
+    return ret;
 }
 
-// 指定されているメッシュに関連するスキニング情報を取得.
+// スキニング情報を取得.
 void CFbxImporter::GetSkinList(std::vector<SSkin>& tvSkinList)
 {
+    for (IZ_UINT i = 0; i < m_fbx->nodes.size(); i++) {
+        FbxNode* node = m_fbx->nodes[i];
 
+        FbxNodeAttribute* attr = node->GetNodeAttribute();
+        if (attr) {
+            if (attr->GetAttributeType() != FbxNodeAttribute::eMesh) {
+                continue;
+            }
+        }
+
+        FbxMesh* mesh = node->GetMesh();
+
+        int skinCount = mesh->GetDeformerCount(FbxDeformer::EDeformerType::eSkin);
+
+        for (int n = 0; n < skinCount; n++) {
+            FbxDeformer* deformer = mesh->GetDeformer(n, FbxDeformer::EDeformerType::eSkin);
+
+            FbxSkin* skin = (FbxSkin*)deformer;
+
+            int boneCount = skin->GetClusterCount();
+
+            for (int b = 0; b < boneCount; b++) {
+                FbxCluster* cluster = skin->GetCluster(b);
+
+                // TODO
+                IZ_ASSERT(cluster->GetLinkMode() == FbxCluster::ELinkMode::eTotalOne);
+
+                FbxNode* targetNode = cluster->GetLink();
+
+                IZ_INT nodeIdx = m_fbx->getNodeIndex(targetNode);
+            }
+        }
+    }
 }
 
 // 指定されているメッシュに含まれる三角形を取得.
