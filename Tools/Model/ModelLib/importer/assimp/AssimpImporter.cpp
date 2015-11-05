@@ -220,9 +220,12 @@ IZ_UINT AssimpImporter::GetTriangles(std::vector<STri>& tvTriList)
         tvTriList.push_back(tri);
     }
 
+    // NOTE
+    // 三角形を構成する頂点に影響を与える（スキニングする）関節インデックスについては外部で処理するので、ここでは何もしない.
+
     m_VtxPos += mesh->mNumVertices;
 
-    IZ_UINT ret = mesh->mNumFaces;
+    IZ_UINT ret = mesh->mNumVertices;
     
     return ret;
 }
