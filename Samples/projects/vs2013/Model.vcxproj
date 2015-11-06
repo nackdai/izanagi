@@ -353,6 +353,34 @@
     <ClCompile Include="..\..\Model\StateXFile.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <CustomBuild Include="..\..\..\Media\Seymour.fbx">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">$(TOOL_DIR)Release\ModelConverter.exe -i "%(FullPath)" -mtx 48
+move "$(DATA_DIR)%(Filename).msh" "$(PROJECT_MAIN_DIR)data"
+move "$(DATA_DIR)%(Filename).skl" "$(PROJECT_MAIN_DIR)data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(TOOL_DIR)Release\ModelConverter.exe -i "%(FullPath)" -mtx 48
+move "$(DATA_DIR)%(Filename).msh" "$(PROJECT_MAIN_DIR)data"
+move "$(DATA_DIR)%(Filename).skl" "$(PROJECT_MAIN_DIR)data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(TOOL_DIR)Release\ModelConverter.exe -i "%(FullPath)" -mtx 48
+move "$(DATA_DIR)%(Filename).msh" "$(PROJECT_MAIN_DIR)data"
+move "$(DATA_DIR)%(Filename).skl" "$(PROJECT_MAIN_DIR)data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(TOOL_DIR)Release\ModelConverter.exe -i "%(FullPath)" -mtx 48
+move "$(DATA_DIR)%(Filename).msh" "$(PROJECT_MAIN_DIR)data"
+move "$(DATA_DIR)%(Filename).skl" "$(PROJECT_MAIN_DIR)data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(TOOL_DIR)Release\ModelConverter.exe -i "%(FullPath)" -mtx 48
+move "$(DATA_DIR)%(Filename).msh" "$(PROJECT_MAIN_DIR)data"
+move "$(DATA_DIR)%(Filename).skl" "$(PROJECT_MAIN_DIR)data"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">$(DATA_DIR)%(Filename).msh;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(DATA_DIR)%(Filename).msh;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(DATA_DIR)%(Filename).msh;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(DATA_DIR)%(Filename).msh;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(DATA_DIR)%(Filename).msh;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">%(FullPath);%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">%(FullPath);%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">%(FullPath);%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(FullPath);%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">%(FullPath);%(AdditionalInputs)</AdditionalInputs>
+    </CustomBuild>
     <None Include="..\..\Model\shader\SkinShader.fx" />
     <CustomBuild Include="..\..\Model\shader\SkinShader.xml">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"

@@ -69,5 +69,8 @@
     <CustomBuild Include="..\..\..\Media\tiny.x">
       <Filter>asset</Filter>
     </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\Seymour.fbx">
+      <Filter>asset</Filter>
+    </CustomBuild>
   </ItemGroup>
 </Project>

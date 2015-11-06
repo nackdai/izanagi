@@ -66,6 +66,8 @@ namespace izanagi {
         void DumpJoint();
         void DumpGlobalMtx();
 
+        const CSkeleton* GetBody() const;
+
     private:
         IZ_UINT8* SetJointData(IZ_UINT8* pBuf);
 

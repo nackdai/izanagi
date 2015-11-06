@@ -377,6 +377,7 @@ IZ_BOOL CFbxImporter::Open(IZ_PCSTR pszName)
             if (importer->Import(m_fbx->scene)) {
                 importer->Destroy(true);
 
+#if 0
                 // Convert Axis System to what is used in this example, if needed
                 FbxAxisSystem SceneAxisSystem = m_fbx->scene->GetGlobalSettings().GetAxisSystem();
                 FbxAxisSystem axisSystem(
@@ -388,6 +389,7 @@ IZ_BOOL CFbxImporter::Open(IZ_PCSTR pszName)
                 {
                     axisSystem.ConvertScene(m_fbx->scene);
                 }
+#endif
 
                 // Convert Unit System to what is used in this example, if needed
                 FbxSystemUnit SceneSystemUnit = m_fbx->scene->GetGlobalSettings().GetSystemUnit();
@@ -895,14 +897,23 @@ void CFbxImporter::GetJointInvMtx(
             }
         }
 #else
-        FbxAMatrix& mtxGlobal = node->EvaluateGlobalTransform();
-        mtxGlobal = mtxGlobal.Inverse();
+        //FbxAMatrix& mtxGlobal = node->EvaluateGlobalTransform(FBXSDK_TIME_ZERO);
+        //mtxGlobal = mtxGlobal.Inverse();
 
-        for (IZ_UINT i = 0; i < 4; i++) {
-            for (IZ_UINT n = 0; n < 4; n++) {
-                //mtx.m[i][n] = static_cast<IZ_FLOAT>(globalBindposeInverseMatrix.Get(n, i));
-                mtx.m[i][n] = static_cast<IZ_FLOAT>(mtxGlobal.Get(i, n));
+        FbxNode* parent = node->GetParent();
+        if (parent != NULL) {
+            FbxAMatrix& mtxGlobal = parent->EvaluateGlobalTransform(FBXSDK_TIME_ZERO);
+            mtxGlobal = mtxGlobal.Inverse();
+
+            for (IZ_UINT i = 0; i < 4; i++) {
+                for (IZ_UINT n = 0; n < 4; n++) {
+                    //mtx.m[i][n] = static_cast<IZ_FLOAT>(globalBindposeInverseMatrix.Get(n, i));
+                    mtx.m[i][n] = static_cast<IZ_FLOAT>(mtxGlobal.Get(i, n));
+                }
             }
+        }
+        else {
+            izanagi::math::SMatrix44::SetUnit(mtx);
         }
 #endif
     }
@@ -919,11 +930,15 @@ void CFbxImporter::GetJointTransform(
     FbxNode* node = m_fbx->nodes[nIdx];
 
 #if 0
-    const FbxVector4 trans = node->GetGeometricTranslation(FbxNode::eSourcePivot);
-    const FbxVector4 rotate = node->GetGeometricRotation(FbxNode::eSourcePivot);
+    const FbxVector4 trans = node->LclTranslation.Get();
+    const FbxVector4 rotate = node->
     const FbxVector4 scale = node->GetGeometricScaling(FbxNode::eSourcePivot);
+
+    FbxAMatrix tmp;
+    tmp.SetR(rotate);
+    const FbxQuaternion quat = tmp.GetQ();
 #else
-    FbxAMatrix& mtxLocal = node->EvaluateLocalTransform();
+    FbxAMatrix& mtxLocal = node->EvaluateLocalTransform(FBXSDK_TIME_ZERO);
 
     const FbxVector4 trans = mtxLocal.GetT();
     const FbxQuaternion quat = mtxLocal.GetQ();

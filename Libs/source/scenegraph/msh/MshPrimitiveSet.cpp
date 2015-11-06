@@ -4,6 +4,7 @@
 #include "izSystem.h"
 
 #include "scenegraph/skl/SkeletonInstance.h"
+#include "scenegraph/skl/izSkeleton.h"
 
 using namespace izanagi;
 
@@ -115,6 +116,10 @@ IZ_BOOL CPrimitiveSet::Render(
                 if (m_Joints[i] >= 0) {
                     IZ_UINT16 idx = m_Joints[i];
                     const math::SMatrix44* pMtx = pSkeleton->GetJointMtx(idx);
+
+                    auto joint = pSkeleton->GetBody()->GetJoint(idx);
+                    IZ_PRINTF("[%s]\n", joint->name.GetString());
+                    math::SMatrix44::Dump(*pMtx);
 
                     pRenderHandler->SetJointMatrix(
                         i,
