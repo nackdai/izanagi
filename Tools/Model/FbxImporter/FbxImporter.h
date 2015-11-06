@@ -53,7 +53,7 @@ public:
         izanagi::E_MSH_VTX_FMT_TYPE type) override;
 
     virtual void GetMaterialForMesh(
-        IZ_UINT nIdx,
+        IZ_UINT nMeshIdx,
         izanagi::S_MSH_MTRL& sMtrl) override;
 
     //////////////////////////////////
