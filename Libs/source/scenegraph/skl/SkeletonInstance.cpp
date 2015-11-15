@@ -78,9 +78,6 @@ void CSkeletonInstance::BuildMatrix(const math::SMatrix44* mtxL2W)
         BuildLocalMatrix(i);
     }
 
-    //IZ_PRINTF("Local\n");
-    //DumpGlobalMtx();
-
     // Apply parent' matrix.
     for (IZ_UINT i = 0; i < m_nJointNum; ++i) {
         IZ_INT nParentIdx = m_pBody->GetJoint(i)->parent;
@@ -100,16 +97,9 @@ void CSkeletonInstance::BuildMatrix(const math::SMatrix44* mtxL2W)
         }
     }
 
-    //IZ_PRINTF("ApplyParent\n");
-    //DumpGlobalMtx();
-
     for (IZ_UINT i = 0; i < m_nJointNum; ++i) {
         ApplyInvBindMatrix(i);
     }
-
-    IZ_PRINTF("========================\n");
-    IZ_PRINTF("ApplyInverse\n");
-    DumpGlobalMtx();
 }
 
 const math::SMatrix44* CSkeletonInstance::GetJointMtx(IZ_INT idx) const
