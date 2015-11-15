@@ -3,6 +3,9 @@
 
 #include <map>
 
+// NOTE
+// http://www.gamedev.net/page/resources/_/technical/graphics-programming-and-theory/how-to-work-with-fbx-sdk-r3582
+
 class CFbxImporter::FbxSdk {
 public:
     struct Face {
@@ -873,30 +876,6 @@ void CFbxImporter::GetJointInvMtx(
     FbxCluster* cluster = m_fbx->getClusterByNode(node);
 
     if (cluster) {
-#if 0
-        FbxAMatrix transformMatrix;
-        FbxAMatrix transformLinkMatrix;
-
-        cluster->GetTransformMatrix(transformMatrix);
-        cluster->GetTransformLinkMatrix(transformLinkMatrix);
-
-        const FbxVector4 trans = node->GetGeometricTranslation(FbxNode::eSourcePivot);
-        const FbxVector4 rotate = node->GetGeometricRotation(FbxNode::eSourcePivot);
-        const FbxVector4 scale = node->GetGeometricScaling(FbxNode::eSourcePivot);
-
-        FbxAMatrix geometryTransform(trans, rotate, scale);
-
-        FbxAMatrix globalBindposeInverseMatrix = transformLinkMatrix.Inverse() * transformMatrix * geometryTransform;
-
-        // NOTE
-        // Assimpは左掛け、izanagiは右掛けなので転置する.
-        for (IZ_UINT i = 0; i < 4; i++) {
-            for (IZ_UINT n = 0; n < 4; n++) {
-                //mtx.m[i][n] = static_cast<IZ_FLOAT>(globalBindposeInverseMatrix.Get(n, i));
-                mtx.m[i][n] = static_cast<IZ_FLOAT>(globalBindposeInverseMatrix.Get(i, n));
-            }
-        }
-#else
         FbxAMatrix& mtxGlobal = node->EvaluateGlobalTransform();
         FbxAMatrix& mtxLocal = node->EvaluateLocalTransform();
 
@@ -912,16 +891,13 @@ void CFbxImporter::GetJointInvMtx(
         FbxAMatrix mtxTransform;
         cluster->GetTransformMatrix(mtxTransform);
 
-        //FbxAMatrix globalBindposeInverseMatrix = mtxTransformLink.Inverse() * mtxTransform * mtxGlobal;
         FbxAMatrix globalBindposeInverseMatrix = mtxTransformLink.Inverse();
-        //FbxAMatrix globalBindposeInverseMatrix = mtxTransformLink.Inverse() * mtxTransform;
 
         for (IZ_UINT i = 0; i < 4; i++) {
             for (IZ_UINT n = 0; n < 4; n++) {
                 mtx.m[i][n] = static_cast<IZ_FLOAT>(globalBindposeInverseMatrix.Get(i, n));
             }
         }
-#endif
     }
     else {
         izanagi::math::SMatrix44::SetUnit(mtx);
@@ -935,22 +911,11 @@ void CFbxImporter::GetJointTransform(
 {
     FbxNode* node = m_fbx->nodes[nIdx];
 
-#if 0
-    const FbxVector4 trans = node->LclTranslation.Get();
-    const FbxVector4 rotate = node->
-    const FbxVector4 scale = node->GetGeometricScaling(FbxNode::eSourcePivot);
-
-    FbxAMatrix tmp;
-    tmp.SetR(rotate);
-    const FbxQuaternion quat = tmp.GetQ();
-#else
     FbxAMatrix& mtxLocal = node->EvaluateLocalTransform();
-    //FbxAMatrix& mtxLocal = node->EvaluateGlobalTransform();
 
     const FbxVector4 trans = mtxLocal.GetT();
     const FbxQuaternion quat = mtxLocal.GetQ();
     const FbxVector4 scale = mtxLocal.GetS();
-#endif
 
     // For quat.
     if (quat.mData[0] != 0.0f
