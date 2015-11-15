@@ -900,6 +900,12 @@ void CFbxImporter::GetJointInvMtx(
         FbxAMatrix& mtxGlobal = node->EvaluateGlobalTransform();
         FbxAMatrix& mtxLocal = node->EvaluateLocalTransform();
 
+        FbxVector4 trans = node->LclTranslation;
+        FbxVector4 rot = node->LclRotation;
+        FbxVector4 scale = node->LclScaling;
+
+        FbxAMatrix tmp(trans, rot, scale);
+
         FbxAMatrix mtxTransformLink;
         cluster->GetTransformLinkMatrix(mtxTransformLink);
 
@@ -908,6 +914,7 @@ void CFbxImporter::GetJointInvMtx(
 
         //FbxAMatrix globalBindposeInverseMatrix = mtxTransformLink.Inverse() * mtxTransform * mtxGlobal;
         FbxAMatrix globalBindposeInverseMatrix = mtxTransformLink.Inverse();
+        //FbxAMatrix globalBindposeInverseMatrix = mtxTransformLink.Inverse() * mtxTransform;
 
         for (IZ_UINT i = 0; i < 4; i++) {
             for (IZ_UINT n = 0; n < 4; n++) {
@@ -937,8 +944,8 @@ void CFbxImporter::GetJointTransform(
     tmp.SetR(rotate);
     const FbxQuaternion quat = tmp.GetQ();
 #else
-    //FbxAMatrix& mtxLocal = node->EvaluateLocalTransform();
-    FbxAMatrix& mtxLocal = node->EvaluateGlobalTransform();
+    FbxAMatrix& mtxLocal = node->EvaluateLocalTransform();
+    //FbxAMatrix& mtxLocal = node->EvaluateGlobalTransform();
 
     const FbxVector4 trans = mtxLocal.GetT();
     const FbxQuaternion quat = mtxLocal.GetQ();
