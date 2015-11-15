@@ -897,23 +897,22 @@ void CFbxImporter::GetJointInvMtx(
             }
         }
 #else
-        //FbxAMatrix& mtxGlobal = node->EvaluateGlobalTransform(FBXSDK_TIME_ZERO);
-        //mtxGlobal = mtxGlobal.Inverse();
+        FbxAMatrix& mtxGlobal = node->EvaluateGlobalTransform();
+        FbxAMatrix& mtxLocal = node->EvaluateLocalTransform();
 
-        FbxNode* parent = node->GetParent();
-        if (parent != NULL) {
-            FbxAMatrix& mtxGlobal = parent->EvaluateGlobalTransform(FBXSDK_TIME_ZERO);
-            mtxGlobal = mtxGlobal.Inverse();
+        FbxAMatrix mtxTransformLink;
+        cluster->GetTransformLinkMatrix(mtxTransformLink);
 
-            for (IZ_UINT i = 0; i < 4; i++) {
-                for (IZ_UINT n = 0; n < 4; n++) {
-                    //mtx.m[i][n] = static_cast<IZ_FLOAT>(globalBindposeInverseMatrix.Get(n, i));
-                    mtx.m[i][n] = static_cast<IZ_FLOAT>(mtxGlobal.Get(i, n));
-                }
+        FbxAMatrix mtxTransform;
+        cluster->GetTransformMatrix(mtxTransform);
+
+        //FbxAMatrix globalBindposeInverseMatrix = mtxTransformLink.Inverse() * mtxTransform * mtxGlobal;
+        FbxAMatrix globalBindposeInverseMatrix = mtxTransformLink.Inverse();
+
+        for (IZ_UINT i = 0; i < 4; i++) {
+            for (IZ_UINT n = 0; n < 4; n++) {
+                mtx.m[i][n] = static_cast<IZ_FLOAT>(globalBindposeInverseMatrix.Get(i, n));
             }
-        }
-        else {
-            izanagi::math::SMatrix44::SetUnit(mtx);
         }
 #endif
     }
@@ -938,7 +937,8 @@ void CFbxImporter::GetJointTransform(
     tmp.SetR(rotate);
     const FbxQuaternion quat = tmp.GetQ();
 #else
-    FbxAMatrix& mtxLocal = node->EvaluateLocalTransform(FBXSDK_TIME_ZERO);
+    //FbxAMatrix& mtxLocal = node->EvaluateLocalTransform();
+    FbxAMatrix& mtxLocal = node->EvaluateGlobalTransform();
 
     const FbxVector4 trans = mtxLocal.GetT();
     const FbxQuaternion quat = mtxLocal.GetQ();
