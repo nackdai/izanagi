@@ -2,6 +2,7 @@
 
 #include "StateCollada.h"
 #include "StateXFile.h"
+#include "StateFbx.h"
 
 CStateManager CStateManager::s_Instance;
 
@@ -17,4 +18,5 @@ void CStateManager::Create(izanagi::sample::CSampleApp* app)
 {
     _STATE(Collada, app);
     _STATE(XFile, app);
+    _STATE(Fbx, app);
 }

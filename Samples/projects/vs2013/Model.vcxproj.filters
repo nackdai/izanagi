@@ -30,6 +30,9 @@
     <ClInclude Include="..\..\Model\StateXFile.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Model\StateFbx.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Model\main.cpp">
@@ -50,10 +53,16 @@
     <ClCompile Include="..\..\Model\StateXFile.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Model\StateFbx.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Model\shader\SkinShader.fx">
       <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\..\Media\SeymourFbx.fbx">
+      <Filter>asset</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -67,9 +76,6 @@
       <Filter>asset</Filter>
     </CustomBuild>
     <CustomBuild Include="..\..\..\Media\tiny.x">
-      <Filter>asset</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\Media\Seymour.fbx">
       <Filter>asset</Filter>
     </CustomBuild>
   </ItemGroup>

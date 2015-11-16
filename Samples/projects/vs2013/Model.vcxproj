@@ -341,6 +341,7 @@
     <ClInclude Include="..\..\Model\ModelApp.h" />
     <ClInclude Include="..\..\Model\StateBase.h" />
     <ClInclude Include="..\..\Model\StateCollada.h" />
+    <ClInclude Include="..\..\Model\StateFbx.h" />
     <ClInclude Include="..\..\Model\StateManager.h" />
     <ClInclude Include="..\..\Model\StateXFile.h" />
   </ItemGroup>
@@ -349,11 +350,12 @@
     <ClCompile Include="..\..\Model\ModelApp.cpp" />
     <ClCompile Include="..\..\Model\StateBase.cpp" />
     <ClCompile Include="..\..\Model\StateCollada.cpp" />
+    <ClCompile Include="..\..\Model\StateFbx.cpp" />
     <ClCompile Include="..\..\Model\StateManager.cpp" />
     <ClCompile Include="..\..\Model\StateXFile.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\..\..\Media\Seymour.fbx">
+    <CustomBuild Include="..\..\..\Media\SeymourFbx.fbx">
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">$(TOOL_DIR)Release\ModelConverter.exe -i "%(FullPath)" -mtx 48
 move "$(DATA_DIR)%(Filename).msh" "$(PROJECT_MAIN_DIR)data"

@@ -37,3 +37,12 @@ IZ_BOOL CStateXFile::Leave()
     ReleaseObject();
     return IZ_TRUE;
 }
+
+IZ_BOOL CStateXFile::Render(izanagi::graph::CGraphicsDevice* device)
+{
+    IZ_BOOL ret = CStateBase::Render(device);
+
+    RenderName(device, "XFile");
+
+    return ret;
+}
