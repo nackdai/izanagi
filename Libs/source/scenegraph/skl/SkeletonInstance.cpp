@@ -222,9 +222,6 @@ void CSkeletonInstance::BuildLocalMatrix(IZ_UINT nIdx)
             pose.trans[1],
             pose.trans[2]);
     }
-
-    //IZ_PRINTF("[%d]-----\n", nIdx);
-    //math::SMatrix44::Dump(mtxJoint);
 }
 
 void CSkeletonInstance::ApplyInvBindMatrix(IZ_UINT nIdx)
@@ -233,9 +230,6 @@ void CSkeletonInstance::ApplyInvBindMatrix(IZ_UINT nIdx)
     const S_SKL_JOINT* pJoint = m_pBody->GetJoint(nIdx);
 
     math::SMatrix44& mtxJoint = m_pGlobalPose[nIdx];
-
-    IZ_PRINTF("%s[%d]\n", pJoint->name.GetString(), nIdx);
-    math::SMatrix44::Dump(pJoint->mtxInvBind);
 
     math::SMatrix44::Mul(
         mtxJoint,
