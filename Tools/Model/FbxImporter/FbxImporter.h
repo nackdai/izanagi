@@ -169,9 +169,6 @@ public:
         std::vector<IZ_FLOAT>& tvValue) override;
 
 private:
-    class FbxSdk;
-    FbxSdk* m_fbx;
-
     IZ_UINT m_curMeshIdx{ 0 };
 };
 

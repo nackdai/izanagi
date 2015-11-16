@@ -89,9 +89,11 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\FbxDataManager.cpp" />
     <ClCompile Include="..\..\FbxImporter.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\FbxDataManager.h" />
     <ClInclude Include="..\..\FbxImporter.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

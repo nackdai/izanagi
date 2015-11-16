@@ -14,9 +14,15 @@
     <ClCompile Include="..\..\FbxImporter.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\FbxDataManager.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\FbxImporter.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FbxDataManager.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
