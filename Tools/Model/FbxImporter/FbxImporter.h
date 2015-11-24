@@ -170,6 +170,7 @@ public:
 
 private:
     IZ_UINT m_curMeshIdx{ 0 };
+    IZ_UINT m_posVtx{ 0 };
 };
 
 #endif  // #if !defined(__MODEL_LIB_JSON_IMPORTER_H__)

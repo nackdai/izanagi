@@ -38,7 +38,7 @@ SVSOutput mainVS(SVSInput In)
 {
     SVSOutput Out = (SVSOutput)0;
 
-#if 1
+#if 0
     for (int i = 0; i < 4; i++) {
         float idx = In.vIndices[i];
         float weight = In.vWeight[i];

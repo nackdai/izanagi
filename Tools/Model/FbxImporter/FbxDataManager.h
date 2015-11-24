@@ -5,19 +5,55 @@
 #include "fbxsdk.h"
 
 #include <map>
+#include <set>
+
+struct Vertex {
+    // メッシュ内のインデックス.
+    IZ_UINT idxInFbxMesh;
+
+    // 全体を通じてのインデックス.
+    IZ_UINT allIdx;
+
+    // 所属メッシュ.
+    FbxMesh* mesh;
+
+    Vertex() {}
+
+    Vertex(FbxMesh* _mesh, IZ_UINT idx)
+        : mesh(_mesh), idxInFbxMesh(idx)
+    {}
+
+    bool operator==(const Vertex& rhs)
+    {
+        return (idxInFbxMesh == rhs.idxInFbxMesh && mesh == rhs.mesh);
+    }
+};
 
 struct Face {
-    IZ_UINT idx[3];
+    Vertex vtx[3];
+
+    Face() {}
 };
 
 struct Mesh {
-    FbxMesh* mesh;
-    std::map <std::string, std::vector<Face>> subsets;
+    std::vector<Face> faces;
+    FbxSurfaceMaterial* mtrl = nullptr;
+
+    IZ_UINT vtxNum = 0;
+
+    Mesh() {}
+
+    Mesh(FbxSurfaceMaterial* _mtrl)
+        : mtrl(_mtrl)
+    {}
+
+    bool operator==(const Mesh& rhs)
+    {
+        return (mtrl == rhs.mtrl);
+    }
 };
 
-struct Vertex {
-    IZ_FLOAT pos[3];
-    IZ_FLOAT nml[3];
+struct VectorData {
     IZ_FLOAT uv[2];
 };
 
@@ -40,38 +76,56 @@ public:
 
     void Close();
 
-    IZ_UINT GetMeshSetsNum() const;
+    IZ_UINT GetFbxMeshNum() const;
 
-    IZ_UINT GetVertexNum() const;
+    FbxMesh* GetFbxMesh(IZ_UINT idx);
 
-    IZ_UINT CovertMeshVtxIdxToEntireVtxIdx(
-        FbxMesh* mesh,
-        IZ_UINT idx) const;
+    IZ_UINT GetMeshNum() const;
 
-    std::vector<FbxMesh*>& GetMeshes();
+    Mesh& GetMesh(IZ_UINT idx);
+    const Mesh& GetMesh(IZ_UINT idx) const;
 
-    IZ_UINT GetNodeIndex(FbxNode* node) const;
+    IZ_UINT GetVtxNum() const;
 
-    std::vector<Face>& GetFaces(IZ_UINT idx);
+    const Vertex& GetVertex(IZ_UINT idx) const;
+
+    IZ_UINT GetNodeNum() const;
+
+    FbxNode* GetNode(IZ_UINT idx);
+
+    IZ_UINT GetNodeIndex(const FbxNode* node) const;
+
+    FbxCluster* GetClusterByNode(const FbxNode* node);
+
+    IZ_UINT ConvertToEntireVtxIdx(FbxMesh* mesh, IZ_UINT vtxIdxInMesh);
 
 private:
     // ノードを集める.
     void GatherNodes(FbxNode* node);
 
-    // メッシュを集める
     void GatherMeshes();
 
+    void GatherClusters();
+
     void GatherFaces();
+
+    void GatherVertices();
 
 private:
     FbxManager* m_manager{ nullptr };
     FbxScene* m_scene{ nullptr };
 
     std::vector<FbxNode*> m_nodes;
-    std::vector<Mesh> m_meshes;
-    std::map<std::string, FbxSurfaceMaterial*> m_mtrls;
+    std::vector<FbxMesh*> m_fbxMeshes;
 
-    std::vector<Vertex> m_vtx;
+    std::vector<FbxCluster*> m_clusters;
+
+    std::vector<Vertex*> m_vertices;
+
+    std::vector<Mesh> m_meshes;
+
+public:
+    std::map<FbxMesh*, std::vector<VectorData>> m_vtxDatas;
 };
 
 #endif  // #if !defined(__MODEL_LIB_FBX_DATA_MANAGER_H__)

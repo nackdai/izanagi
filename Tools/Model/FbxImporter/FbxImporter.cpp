@@ -29,6 +29,7 @@ IZ_BOOL CFbxImporter::Close()
 
 void CFbxImporter::ExportGeometryCompleted()
 {
+    m_posVtx = 0;
 }
 
 void CFbxImporter::BeginMesh(IZ_UINT nIdx)
@@ -42,18 +43,88 @@ void CFbxImporter::EndMesh()
 
 IZ_UINT CFbxImporter::GetMeshNum()
 {
-    return 0;
+    IZ_UINT ret = FbxDataManager::Instance().GetMeshNum();
+    return ret;
 }
 
 // スキニング情報を取得.
 void CFbxImporter::GetSkinList(std::vector<SSkin>& tvSkinList)
 {
+    if (tvSkinList.size() > 0) {
+        return;
+    }
+
+    IZ_UINT vtxNum = FbxDataManager::Instance().GetVtxNum();
+
+    tvSkinList.resize(vtxNum);
+
+    IZ_UINT cntMesh = FbxDataManager::Instance().GetFbxMeshNum();
+
+    for (IZ_UINT i = 0; i < cntMesh; i++)
+    {
+        FbxMesh* mesh = FbxDataManager::Instance().GetFbxMesh(i);
+
+        // メッシュに含まれるスキニング情報数.
+        int skinCount = mesh->GetDeformerCount(FbxDeformer::EDeformerType::eSkin);
+
+        for (int n = 0; n < skinCount; n++) {
+            // スキニング情報を取得.
+            FbxDeformer* deformer = mesh->GetDeformer(n, FbxDeformer::EDeformerType::eSkin);
+
+            FbxSkin* skin = (FbxSkin*)deformer;
+
+            // スキニングに影響を与えるボーンの数.
+            int boneCount = skin->GetClusterCount();
+
+            for (int b = 0; b < boneCount; b++) {
+                FbxCluster* cluster = skin->GetCluster(b);
+
+                // TODO
+                //IZ_ASSERT(cluster->GetLinkMode() == FbxCluster::ELinkMode::eTotalOne);
+
+                // ボーンと関連づいているノード.
+                FbxNode* targetNode = cluster->GetLink();
+
+                // ノードのインデックス.
+                IZ_INT nodeIdx = FbxDataManager::Instance().GetNodeIndex(targetNode);
+
+                // ボーンが影響を与える頂点数.
+                int influencedVtxNum = cluster->GetControlPointIndicesCount();
+
+                for (int v = 0; v < influencedVtxNum; v++) {
+                    int vtxIdxInMesh = cluster->GetControlPointIndices()[v];
+
+                    // 全体での頂点インデックスに変換.
+                    IZ_UINT vtxIdx = FbxDataManager::Instance().ConvertToEntireVtxIdx(mesh, vtxIdxInMesh);
+
+                    float weight = (float)cluster->GetControlPointWeights()[v];
+
+                    tvSkinList[vtxIdx].Add(nodeIdx, weight);
+                }
+            }
+        }
+    }
 }
 
 // 指定されているメッシュに含まれる三角形を取得.
 IZ_UINT CFbxImporter::GetTriangles(std::vector<STri>& tvTriList)
 {
-    return 0;
+    const Mesh& mesh = FbxDataManager::Instance().GetMesh(m_curMeshIdx);
+
+    for each (const Face& face in mesh.faces)
+    {
+        STri tri;
+
+        tri.vtx[0] = face.vtx[0].allIdx;
+        tri.vtx[1] = face.vtx[1].allIdx;
+        tri.vtx[2] = face.vtx[2].allIdx;
+
+        tvTriList.push_back(tri);
+    }
+
+    IZ_UINT vtxNum = mesh.vtxNum;
+
+    return vtxNum;
 }
 
 IZ_UINT CFbxImporter::GetSkinIdxAffectToVtx(IZ_UINT nVtxIdx)
@@ -65,12 +136,129 @@ IZ_UINT CFbxImporter::GetSkinIdxAffectToVtx(IZ_UINT nVtxIdx)
 
 IZ_UINT CFbxImporter::GetVtxSize()
 {
-    return 0;
+    // NOTE
+    // skinのサイズは外でやるのでここではやらない
+
+    auto& meshSet = FbxDataManager::Instance().GetMesh(m_curMeshIdx);
+
+    IZ_UINT ret = 0;
+
+    // TODO
+    // １つのメッシュを見るだけで大丈夫か.
+
+    FbxMesh* mesh = meshSet.faces[0].vtx[0].mesh;
+
+    // ポジションが存在しないことはないはず.
+    ret += izanagi::E_MSH_VTX_SIZE::E_MSH_VTX_SIZE_POS;
+
+    if (mesh->GetElementNormalCount() > 0) {
+        ret += izanagi::E_MSH_VTX_SIZE::E_MSH_VTX_SIZE_NORMAL;
+    }
+
+    if (mesh->GetElementUVCount() > 0) {
+        ret += izanagi::E_MSH_VTX_SIZE::E_MSH_VTX_SIZE_UV;
+    }
+
+    if (mesh->GetElementVertexColorCount() > 0) {
+        ret += izanagi::E_MSH_VTX_SIZE::E_MSH_VTX_SIZE_COLOR;
+    }
+
+    return ret;
 }
 
 IZ_UINT CFbxImporter::GetVtxFmt()
 {
-    return 0;
+    auto& meshSet = FbxDataManager::Instance().GetMesh(m_curMeshIdx);
+
+    IZ_UINT ret = 0;
+
+    // TODO
+    // １つのメッシュを見るだけで大丈夫か.
+
+    FbxMesh* mesh = meshSet.faces[0].vtx[0].mesh;
+
+    // ポジションが存在しないことはないはず.
+    ret |= 1 << izanagi::E_MSH_VTX_FMT_TYPE::E_MSH_VTX_FMT_TYPE_POS;
+
+    if (mesh->GetElementNormalCount() > 0) {
+        ret |= 1 << izanagi::E_MSH_VTX_FMT_TYPE::E_MSH_VTX_FMT_TYPE_NORMAL;
+    }
+
+    if (mesh->GetElementUVCount() > 0) {
+        ret |= 1 << izanagi::E_MSH_VTX_FMT_TYPE::E_MSH_VTX_FMT_TYPE_UV;
+    }
+
+    if (mesh->GetElementVertexColorCount() > 0) {
+        ret |= 1 << izanagi::E_MSH_VTX_FMT_TYPE::E_MSH_VTX_FMT_TYPE_COLOR;
+    }
+
+    // NOTE
+    // skinのフォーマットは外でやるのでここではやらない
+
+    return ret;
+}
+
+namespace {
+    IZ_BOOL GetVertexData(
+        fbxsdk::FbxLayerElement::EMappingMode mappingMode,
+        fbxsdk::FbxLayerElement::EReferenceMode referenceMode,
+        IZ_UINT vtxIdx, IZ_UINT vtxCounter,
+        std::function<void(IZ_UINT)> funcDirect,
+        std::function<void(IZ_UINT)> funcIndex)
+    {
+        IZ_BOOL ret = IZ_FALSE;
+
+        switch (mappingMode)
+        {
+        case FbxGeometryElement::eByControlPoint:
+            switch (referenceMode)
+            {
+            case FbxGeometryElement::eDirect:
+            {
+                funcDirect(vtxIdx);
+                ret = IZ_TRUE;
+            }
+            break;
+
+            case FbxGeometryElement::eIndexToDirect:
+            {
+                funcIndex(vtxIdx);
+                ret = IZ_TRUE;
+            }
+            break;
+
+            default:
+                throw std::exception("Invalid Reference");
+            }
+            break;
+
+        case FbxGeometryElement::eByPolygonVertex:
+            // NOTE
+            // 頂点の順番でアクセスする場合.
+            switch (referenceMode)
+            {
+            case FbxGeometryElement::eDirect:
+            {
+                funcDirect(vtxCounter);
+                ret = IZ_TRUE;
+            }
+            break;
+
+            case FbxGeometryElement::eIndexToDirect:
+            {
+                funcIndex(vtxCounter);
+                ret = IZ_TRUE;
+            }
+            break;
+
+            default:
+                throw std::exception("Invalid Reference");
+            }
+            break;
+        }
+
+        return ret;
+    }
 }
 
 IZ_BOOL CFbxImporter::GetVertex(
@@ -78,6 +266,169 @@ IZ_BOOL CFbxImporter::GetVertex(
     izanagi::math::SVector4& vec,
     izanagi::E_MSH_VTX_FMT_TYPE type)
 {
+    const Vertex& vtx = FbxDataManager::Instance().GetVertex(nIdx);
+
+    IZ_UINT idxInFbxMesh = vtx.idxInFbxMesh;
+    FbxMesh* mesh = vtx.mesh;
+
+    if (type == izanagi::E_MSH_VTX_FMT_TYPE::E_MSH_VTX_FMT_TYPE_POS) {
+        const FbxVector4& pos = mesh->GetControlPointAt(idxInFbxMesh);
+
+        vec.x = static_cast<float>(pos.mData[0]);
+        vec.y = static_cast<float>(pos.mData[1]);
+        vec.z = static_cast<float>(pos.mData[2]);
+        vec.w = 1.0f;
+
+        return IZ_TRUE;
+    }
+
+    if (type == izanagi::E_MSH_VTX_FMT_TYPE::E_MSH_VTX_FMT_TYPE_NORMAL) {
+        if (mesh->GetElementNormalCount() > 0) {
+            // TODO
+#if 0
+            const FbxGeometryElementNormal* vtxNormal = mesh->GetElementNormal();
+
+            IZ_UINT numDirect = vtxNormal->GetDirectArray().GetCount();
+            IZ_UINT numIndex = vtxNormal->GetIndexArray().GetCount();
+
+            auto mappingMode = vtxNormal->GetMappingMode();
+            auto referenceMode = vtxNormal->GetReferenceMode();
+
+            GetVertexData(
+                mappingMode, referenceMode,
+                realVtxIdx, countInFbxMesh,
+                [&](IZ_UINT idx) {
+                const FbxVector4& nml = vtxNormal->GetDirectArray().GetAt(idx);
+                vec.x = static_cast<float>(nml.mData[0]);
+                vec.y = static_cast<float>(nml.mData[1]);
+                vec.z = static_cast<float>(nml.mData[2]);
+            },
+                [&](IZ_UINT idx) {
+                int index = vtxNormal->GetIndexArray().GetAt(idx);
+                const FbxVector4& nml = vtxNormal->GetDirectArray().GetAt(index);
+                vec.x = static_cast<float>(nml.mData[0]);
+                vec.y = static_cast<float>(nml.mData[1]);
+                vec.z = static_cast<float>(nml.mData[2]);
+            });
+#else
+            vec.x = 1.0f;
+            vec.y = 0.0f;
+            vec.z = 0.0f;
+#endif
+
+            return IZ_TRUE;
+        }
+    }
+
+    if (type == izanagi::E_MSH_VTX_FMT_TYPE::E_MSH_VTX_FMT_TYPE_UV) {
+        if (mesh->GetElementUVCount() > 0) {
+#if 0
+            const FbxGeometryElementUV* vtxUV = mesh->GetElementUV(0, FbxLayerElement::EType::eTextureDiffuse);
+            IZ_ASSERT(vtxUV != NULL);
+
+            IZ_UINT numDirect = vtxUV->GetDirectArray().GetCount();
+            IZ_UINT numIndex = vtxUV->GetIndexArray().GetCount();
+
+            auto mappingMode = vtxUV->GetMappingMode();
+            auto referenceMode = vtxUV->GetReferenceMode();
+
+            GetVertexData(
+                mappingMode, referenceMode,
+                realVtxIdx, countInFbxMesh,
+                [&](IZ_UINT idx) {
+                const FbxVector2& uv = vtxUV->GetDirectArray().GetAt(idx);
+                vec.x = static_cast<float>(uv.mData[0]);
+                vec.y = static_cast<float>(uv.mData[1]);
+            },
+                [&](IZ_UINT idx) {
+                int index = vtxUV->GetIndexArray().GetAt(idx);
+                const FbxVector2& uv = vtxUV->GetDirectArray().GetAt(index);
+                vec.x = static_cast<float>(uv.mData[0]);
+                vec.y = static_cast<float>(uv.mData[1]);
+            });
+#elif 0
+            IZ_UINT UVIndex = 0;
+            FbxLayerElementUV* leUV = mesh->GetLayer(0)->GetUVs();
+
+            int lPolygonsCount = mesh->GetPolygonCount();
+
+            // ポリゴンごとのループ
+            for (int j = 0; j<lPolygonsCount; j++)
+            {
+                // ポリゴン数を取得
+                int lPolygonSize = mesh->GetPolygonSize(j);
+
+                // １ポリゴン内の頂点ごとのループ
+                for (int k = 0; k<lPolygonSize; k++)
+                {
+                    // インデックスが同じなので処理対象
+                    if (idxInFbxMesh == mesh->GetPolygonVertex(j, k))
+                    {
+                        // インデックスバッファからインデックスを取得する
+                        int lUVIndex = leUV->GetIndexArray().GetAt(UVIndex);
+
+                        // 取得したインデックスから UV を取得する
+                        FbxVector2 lVec2 = leUV->GetDirectArray().GetAt(lUVIndex);
+
+                        vec.x = lVec2.mData[0];
+                        vec.y = lVec2.mData[1];
+                    }
+                    UVIndex++;
+                }
+            }
+#else
+            auto it = FbxDataManager::Instance().m_vtxDatas.find(mesh);
+            auto& list = it->second;
+            const auto& vtxData = list[idxInFbxMesh];
+            vec.x = vtxData.uv[0];
+            vec.y = vtxData.uv[1];
+#endif
+
+            return IZ_TRUE;
+        }
+    }
+
+    if (type == izanagi::E_MSH_VTX_FMT_TYPE::E_MSH_VTX_FMT_TYPE_COLOR) {
+        if (mesh->GetElementVertexColorCount() > 0) {
+#if 0
+            const FbxGeometryElementVertexColor* vtxClr = mesh->GetElementVertexColor();
+
+            IZ_UINT numDirect = vtxClr->GetDirectArray().GetCount();
+            IZ_UINT numIndex = vtxClr->GetIndexArray().GetCount();
+
+            auto mappingMode = vtxClr->GetMappingMode();
+            auto referenceMode = vtxClr->GetReferenceMode();
+
+            GetVertexData(
+                mappingMode, referenceMode,
+                realVtxIdx, countInFbxMesh,
+                [&](IZ_UINT idx) {
+                const FbxColor& clr = vtxClr->GetDirectArray().GetAt(idx);
+                vec.x = static_cast<float>(clr.mRed);
+                vec.y = static_cast<float>(clr.mGreen);
+                vec.z = static_cast<float>(clr.mBlue);
+                vec.w = static_cast<float>(clr.mAlpha);
+            },
+                [&](IZ_UINT idx) {
+                int index = vtxClr->GetIndexArray().GetAt(idx);
+                const FbxColor& clr = vtxClr->GetDirectArray().GetAt(index);
+                vec.x = static_cast<float>(clr.mRed);
+                vec.y = static_cast<float>(clr.mGreen);
+                vec.z = static_cast<float>(clr.mBlue);
+                vec.w = static_cast<float>(clr.mAlpha);
+            });
+#else
+            vec.x = 1.0f;
+            vec.y = 1.0f;
+            vec.z = 1.0f;
+            vec.w = 1.0f;
+#endif
+
+            return IZ_TRUE;
+        }
+    }
+
+
     return IZ_FALSE;
 }
 
@@ -105,25 +456,66 @@ void CFbxImporter::EndJoint()
 
 IZ_UINT CFbxImporter::GetJointNum()
 {
-    return 0;
+    IZ_UINT ret = FbxDataManager::Instance().GetNodeNum();
+    return ret;
 }
 
 IZ_PCSTR CFbxImporter::GetJointName(IZ_UINT nIdx)
 {
-    return nullptr;
+    FbxNode* node = FbxDataManager::Instance().GetNode(nIdx);
+    return node->GetName();
 }
 
 IZ_INT CFbxImporter::GetJointParent(
     IZ_UINT nIdx,
     const std::vector<izanagi::S_SKL_JOINT>& tvJoint)
 {
-    return 0;
+    FbxNode* node = FbxDataManager::Instance().GetNode(nIdx);
+
+    const FbxNode* parent = node->GetParent();
+    if (parent == NULL) {
+        return -1;
+    }
+
+    IZ_INT ret = FbxDataManager::Instance().GetNodeIndex(parent);
+
+    return ret;
 }
 
 void CFbxImporter::GetJointInvMtx(
     IZ_UINT nIdx,
     izanagi::math::SMatrix44& mtx)
 {
+    FbxNode* node = FbxDataManager::Instance().GetNode(nIdx);
+    FbxCluster* cluster = FbxDataManager::Instance().GetClusterByNode(node);
+
+    if (cluster) {
+        FbxAMatrix& mtxGlobal = node->EvaluateGlobalTransform();
+        FbxAMatrix& mtxLocal = node->EvaluateLocalTransform();
+
+        FbxVector4 trans = node->LclTranslation;
+        FbxVector4 rot = node->LclRotation;
+        FbxVector4 scale = node->LclScaling;
+
+        FbxAMatrix tmp(trans, rot, scale);
+
+        FbxAMatrix mtxTransformLink;
+        cluster->GetTransformLinkMatrix(mtxTransformLink);
+
+        FbxAMatrix mtxTransform;
+        cluster->GetTransformMatrix(mtxTransform);
+
+        FbxAMatrix globalBindposeInverseMatrix = mtxTransformLink.Inverse();
+
+        for (IZ_UINT i = 0; i < 4; i++) {
+            for (IZ_UINT n = 0; n < 4; n++) {
+                mtx.m[i][n] = static_cast<IZ_FLOAT>(globalBindposeInverseMatrix.Get(i, n));
+            }
+        }
+    }
+    else {
+        izanagi::math::SMatrix44::SetUnit(mtx);
+    }
 }
 
 void CFbxImporter::GetJointTransform(
@@ -131,6 +523,48 @@ void CFbxImporter::GetJointTransform(
     const std::vector<izanagi::S_SKL_JOINT>& tvJoint,
     std::vector<SJointTransform>& tvTransform)
 {
+    FbxNode* node = FbxDataManager::Instance().GetNode(nIdx);
+
+    FbxAMatrix& mtxLocal = node->EvaluateLocalTransform();
+
+    const FbxVector4 trans = mtxLocal.GetT();
+    const FbxQuaternion quat = mtxLocal.GetQ();
+    const FbxVector4 scale = mtxLocal.GetS();
+
+    // For quat.
+    if (quat.mData[0] != 0.0f
+        || quat.mData[1] != 0.0f
+        || quat.mData[2] != 0.0f
+        || quat.mData[3] != 1.0f)
+    {
+        tvTransform.push_back(SJointTransform());
+        SJointTransform& sTransform = tvTransform.back();
+
+        sTransform.type = E_MDL_JOINT_TRANSFORM_QUATERNION;
+
+        sTransform.param.push_back(quat.mData[0]);
+        sTransform.param.push_back(quat.mData[1]);
+        sTransform.param.push_back(quat.mData[2]);
+        sTransform.param.push_back(quat.mData[3]);
+    }
+
+    // For trans.
+    if (trans.mData[0] != 0.0f
+        || trans.mData[1] != 0.0f
+        || trans.mData[2] != 0.0f)
+    {
+        tvTransform.push_back(SJointTransform());
+        SJointTransform& sTransform = tvTransform.back();
+
+        sTransform.type = E_MDL_JOINT_TRANSFORM_TRANSLATE;
+
+        sTransform.param.push_back(trans.mData[0]);
+        sTransform.param.push_back(trans.mData[1]);
+        sTransform.param.push_back(trans.mData[2]);
+    }
+
+    // TODO
+    // scale
 }
 
 //////////////////////////////////
