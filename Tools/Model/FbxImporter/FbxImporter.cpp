@@ -109,20 +109,20 @@ void CFbxImporter::GetSkinList(std::vector<SSkin>& tvSkinList)
 // 指定されているメッシュに含まれる三角形を取得.
 IZ_UINT CFbxImporter::GetTriangles(std::vector<STri>& tvTriList)
 {
-    const Mesh& mesh = FbxDataManager::Instance().GetMesh(m_curMeshIdx);
+    const MeshSubset& mesh = FbxDataManager::Instance().GetMesh(m_curMeshIdx);
 
     for each (const Face& face in mesh.faces)
     {
         STri tri;
 
-        tri.vtx[0] = face.vtx[0].allIdx;
-        tri.vtx[1] = face.vtx[1].allIdx;
-        tri.vtx[2] = face.vtx[2].allIdx;
+        tri.vtx[0] = face.vtx[0];
+        tri.vtx[1] = face.vtx[1];
+        tri.vtx[2] = face.vtx[2];
 
         tvTriList.push_back(tri);
     }
 
-    IZ_UINT vtxNum = mesh.vtxNum;
+    IZ_UINT vtxNum = mesh.vertices.size();;
 
     return vtxNum;
 }
@@ -143,10 +143,7 @@ IZ_UINT CFbxImporter::GetVtxSize()
 
     IZ_UINT ret = 0;
 
-    // TODO
-    // １つのメッシュを見るだけで大丈夫か.
-
-    FbxMesh* mesh = meshSet.faces[0].vtx[0].mesh;
+    FbxMesh* mesh = meshSet.fbxMesh;
 
     // ポジションが存在しないことはないはず.
     ret += izanagi::E_MSH_VTX_SIZE::E_MSH_VTX_SIZE_POS;
@@ -172,10 +169,7 @@ IZ_UINT CFbxImporter::GetVtxFmt()
 
     IZ_UINT ret = 0;
 
-    // TODO
-    // １つのメッシュを見るだけで大丈夫か.
-
-    FbxMesh* mesh = meshSet.faces[0].vtx[0].mesh;
+    FbxMesh* mesh = meshSet.fbxMesh;
 
     // ポジションが存在しないことはないはず.
     ret |= 1 << izanagi::E_MSH_VTX_FMT_TYPE::E_MSH_VTX_FMT_TYPE_POS;
@@ -266,6 +260,7 @@ IZ_BOOL CFbxImporter::GetVertex(
     izanagi::math::SVector4& vec,
     izanagi::E_MSH_VTX_FMT_TYPE type)
 {
+#if 0
     const Vertex& vtx = FbxDataManager::Instance().GetVertex(nIdx);
 
     IZ_UINT idxInFbxMesh = vtx.idxInFbxMesh;
@@ -377,11 +372,9 @@ IZ_BOOL CFbxImporter::GetVertex(
                 }
             }
 #else
-            auto it = FbxDataManager::Instance().m_vtxDatas.find(mesh);
-            auto& list = it->second;
-            const auto& vtxData = list[idxInFbxMesh];
-            vec.x = vtxData.uv[0];
-            vec.y = vtxData.uv[1];
+            const VertexData& data = FbxDataManager::Instance().m_vtxDatas[vtx.allIdx];
+            vec.x = data.uv[0];
+            vec.y = data.uv[1];
 #endif
 
             return IZ_TRUE;
@@ -427,7 +420,7 @@ IZ_BOOL CFbxImporter::GetVertex(
             return IZ_TRUE;
         }
     }
-
+#endif
 
     return IZ_FALSE;
 }

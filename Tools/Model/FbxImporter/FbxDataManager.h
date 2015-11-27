@@ -7,54 +7,50 @@
 #include <map>
 #include <set>
 
-struct Vertex {
-    // メッシュ内のインデックス.
-    IZ_UINT idxInFbxMesh;
+struct Face {
+    IZ_UINT vtx[3];
+};
 
-    // 全体を通じてのインデックス.
-    IZ_UINT allIdx;
+struct UVData {
+    IZ_UINT idxInMesh;
+    FbxVector2 uv;
+};
 
-    // 所属メッシュ.
-    FbxMesh* mesh;
+struct PosData {
+    IZ_UINT idxInMesh;
+    FbxVector4 pos;
+};
 
-    Vertex() {}
+struct VertexData {
+    IZ_UINT idxInMesh;
+    FbxVector2 uv;
+    FbxVector4 pos;
 
-    Vertex(FbxMesh* _mesh, IZ_UINT idx)
-        : mesh(_mesh), idxInFbxMesh(idx)
-    {}
-
-    bool operator==(const Vertex& rhs)
+    bool operator==(const VertexData& rhs)
     {
-        return (idxInFbxMesh == rhs.idxInFbxMesh && mesh == rhs.mesh);
+        return (memcmp(this, &rhs, sizeof(rhs)) == 0);
     }
 };
 
-struct Face {
-    Vertex vtx[3];
-
-    Face() {}
-};
-
-struct Mesh {
+struct MeshSubset {
     std::vector<Face> faces;
+
+    FbxMesh* fbxMesh = nullptr;
     FbxSurfaceMaterial* mtrl = nullptr;
 
-    IZ_UINT vtxNum = 0;
+    std::vector<IZ_UINT> indices;
+    std::vector<VertexData> vertices;
 
-    Mesh() {}
+    MeshSubset() {}
 
-    Mesh(FbxSurfaceMaterial* _mtrl)
-        : mtrl(_mtrl)
+    MeshSubset(FbxMesh* _mesh, FbxSurfaceMaterial* _mtrl)
+        : fbxMesh(_mesh), mtrl(_mtrl)
     {}
 
-    bool operator==(const Mesh& rhs)
+    bool operator==(const MeshSubset& rhs)
     {
-        return (mtrl == rhs.mtrl);
+        return (fbxMesh == rhs.fbxMesh && mtrl == rhs.mtrl);
     }
-};
-
-struct VectorData {
-    IZ_FLOAT uv[2];
 };
 
 class FbxDataManager {
@@ -82,12 +78,12 @@ public:
 
     IZ_UINT GetMeshNum() const;
 
-    Mesh& GetMesh(IZ_UINT idx);
-    const Mesh& GetMesh(IZ_UINT idx) const;
+    MeshSubset& GetMesh(IZ_UINT idx);
+    const MeshSubset& GetMesh(IZ_UINT idx) const;
 
     IZ_UINT GetVtxNum() const;
 
-    const Vertex& GetVertex(IZ_UINT idx) const;
+    const VertexData& GetVertex(IZ_UINT idx) const;
 
     IZ_UINT GetNodeNum() const;
 
@@ -111,6 +107,9 @@ private:
 
     void GatherVertices();
 
+    void GatherPos(std::map<FbxMesh*, std::vector<PosData>>& posList);
+    void GatherUV(std::map<FbxMesh*, std::vector<UVData>>& uvList);
+
 private:
     FbxManager* m_manager{ nullptr };
     FbxScene* m_scene{ nullptr };
@@ -120,12 +119,7 @@ private:
 
     std::vector<FbxCluster*> m_clusters;
 
-    std::vector<Vertex*> m_vertices;
-
-    std::vector<Mesh> m_meshes;
-
-public:
-    std::map<FbxMesh*, std::vector<VectorData>> m_vtxDatas;
+    std::vector<MeshSubset> m_meshes;
 };
 
 #endif  // #if !defined(__MODEL_LIB_FBX_DATA_MANAGER_H__)
