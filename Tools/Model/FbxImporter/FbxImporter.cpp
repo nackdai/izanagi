@@ -122,7 +122,7 @@ IZ_UINT CFbxImporter::GetTriangles(std::vector<STri>& tvTriList)
         tvTriList.push_back(tri);
     }
 
-    IZ_UINT vtxNum = mesh.vertices.size();;
+    IZ_UINT vtxNum = mesh.vtxNum;
 
     return vtxNum;
 }

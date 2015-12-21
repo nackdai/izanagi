@@ -112,35 +112,13 @@ const MeshSubset& FbxDataManager::GetMesh(IZ_UINT idx) const
 
 IZ_UINT FbxDataManager::GetVtxNum() const
 {
-    IZ_UINT ret = 0;
-
-    for each (auto& mesh in m_meshes)
-    {
-        ret += mesh.vertices.size();
-    }
-
+    IZ_UINT ret = m_vertices.size();
     return ret;
 }
 
 const VertexData& FbxDataManager::GetVertex(IZ_UINT idx) const
 {
-#if 0
-    IZ_UINT pos = 0;
-
-    for each (auto& mesh in m_meshes)
-    {
-        if (pos <= idx && idx < pos + mesh.vertices.size())
-        {
-            IZ_UINT i = idx - pos;
-            return mesh.vertices[i];
-        }
-    }
-
-    IZ_ASSERT(IZ_FALSE);
-    return VertexData();
-#else
-    return m_meshes[0].vertices[idx];
-#endif
+    return m_vertices[idx];
 }
 
 IZ_UINT FbxDataManager::GetNodeNum() const
@@ -182,11 +160,11 @@ FbxCluster* FbxDataManager::GetClusterByNode(const FbxNode* node)
 
 IZ_UINT FbxDataManager::ConvertToEntireVtxIdx(FbxMesh* mesh, IZ_UINT vtxIdxInMesh)
 {
-    auto& meshSubset = m_meshes[0];
-
-    for (IZ_UINT i = 0; i < meshSubset.vertices.size(); i++)
+    for (IZ_UINT i = 0; i < m_vertices.size(); i++)
     {
-        if (meshSubset.vertices[i].idxInMesh == vtxIdxInMesh)
+        const auto& vtx = m_vertices[i];
+
+        if (vtx.fbxMesh == mesh && vtx.idxInMesh == vtxIdxInMesh)
         {
             return i;
         }
@@ -268,7 +246,6 @@ void FbxDataManager::GatherFaces()
         // メッシュに含まれるポリゴン（三角形）の数.
         const int polygonCount = fbxMesh->GetPolygonCount();
 
-#if 0
         auto& materialIndices = fbxMesh->GetElementMaterial()->GetIndexArray();
 
         if (materialIndices.GetCount() == polygonCount)
@@ -283,46 +260,22 @@ void FbxDataManager::GatherFaces()
                 auto material = m_scene->GetMaterial(materialIdx);
 
                 // 登録済みメッシュを探す.
-                MeshSubset* mesh = nullptr;
-                {
-                    auto it = std::find(m_meshes.begin(), m_meshes.end(), MeshSubset(fbxMesh, material));
+                auto it = std::find(m_meshes.begin(), m_meshes.end(), MeshSubset(fbxMesh, material));
 
-                    // 未登録だった.
-                    if (it == m_meshes.end())
-                    {
-                        m_meshes.push_back(MeshSubset(fbxMesh, material));
-                        mesh = &(m_meshes.back());
-                    }
-                    else
-                    {
-                        mesh = &(*it);
-                    }
+                // 未登録だった.
+                if (it == m_meshes.end())
+                {
+                    m_meshes.push_back(MeshSubset(fbxMesh, material));
                 }
 
-                // 三角形なので３点.
-                mesh->indices.push_back(fbxMesh->GetPolygonVertex(i, 0));
-                mesh->indices.push_back(fbxMesh->GetPolygonVertex(i, 1));
-                mesh->indices.push_back(fbxMesh->GetPolygonVertex(i, 2));
+                m_indices.push_back(IndexData(fbxMesh->GetPolygonVertex(i, 0), fbxMesh, material));
+                m_indices.push_back(IndexData(fbxMesh->GetPolygonVertex(i, 1), fbxMesh, material));
+                m_indices.push_back(IndexData(fbxMesh->GetPolygonVertex(i, 2), fbxMesh, material));
             }
         }
         else {
             IZ_ASSERT(IZ_FALSE);
         }
-#else
-        if (m_meshes.size() == 0)
-        {
-            m_meshes.push_back(MeshSubset(fbxMesh, nullptr));
-        }
-
-        MeshSubset& mesh = m_meshes[0];
-
-        for (int i = 0; i < polygonCount; i++)
-        {
-            mesh.indices.push_back(fbxMesh->GetPolygonVertex(i, 0));
-            mesh.indices.push_back(fbxMesh->GetPolygonVertex(i, 1));
-            mesh.indices.push_back(fbxMesh->GetPolygonVertex(i, 2));
-        }
-#endif
     }
 }
 
@@ -336,51 +289,87 @@ void FbxDataManager::GatherVertices()
 
     IZ_ASSERT(posList.size() == uvList.size());
 
-    MeshSubset& mesh = m_meshes[0];
-    IZ_ASSERT(posList[mesh.fbxMesh].size() == uvList[mesh.fbxMesh].size());
-    IZ_ASSERT(mesh.indices.size() == uvList[mesh.fbxMesh].size());
+    std::vector<IndexData> indices;
 
-    std::vector<IZ_UINT> indices;
-
-    for (IZ_UINT i = 0; i < mesh.indices.size(); i++)
+    for (IZ_UINT i = 0; i < m_indices.size(); i++)
     {
+        auto index = m_indices[i];
+
+        auto itMesh = std::find(m_meshes.begin(), m_meshes.end(), MeshSubset(index.fbxMesh, index.mtrl));
+        IZ_ASSERT(itMesh != m_meshes.end());
+
+        MeshSubset& mesh = *itMesh;
+
         auto& pos = posList[mesh.fbxMesh];
         auto& uv = uvList[mesh.fbxMesh];
 
-        auto index = mesh.indices[i];
         const auto& posData = pos[i];
         const auto& uvData = uv[i];
 
-        IZ_ASSERT(posData.idxInMesh == index);
-        IZ_ASSERT(uvData.idxInMesh == index);
+        IZ_ASSERT(posData.idxInMesh == index.idxInMesh);
+        IZ_ASSERT(uvData.idxInMesh == index.idxInMesh);
+
+        IZ_ASSERT(posData.fbxMesh == index.fbxMesh);
+        IZ_ASSERT(uvData.fbxMesh == index.fbxMesh);
+
+        IZ_ASSERT(posData.mtrl == uvData.mtrl);
 
         VertexData vtx;
-        vtx.idxInMesh = index;
+        vtx.idxInMesh = index.idxInMesh;
         vtx.pos = posData.pos;
         vtx.uv = uvData.uv;
+        vtx.fbxMesh = index.fbxMesh;
+        vtx.mtrl = posData.mtrl;
 
-        auto it = std::find(mesh.vertices.begin(), mesh.vertices.end(), vtx);
-        if (it == mesh.vertices.end())
+        auto it = std::find(m_vertices.begin(), m_vertices.end(), vtx);
+        if (it == m_vertices.end())
         {
-            indices.push_back(mesh.vertices.size());
-            mesh.vertices.push_back(vtx);
+            IndexData newIdx(
+                m_vertices.size(),
+                mesh.fbxMesh,
+                mesh.mtrl);
+
+            indices.push_back(newIdx);
+            m_vertices.push_back(vtx);
+
+            mesh.vtxNum++;
         }
         else
         {
-            auto idx = std::distance(mesh.vertices.begin(), it);
-            indices.push_back(idx);
+            IndexData newIdx(
+                std::distance(m_vertices.begin(), it),
+                mesh.fbxMesh,
+                mesh.mtrl);
+
+            indices.push_back(newIdx);
         }
     }
 
     for (IZ_UINT i = 0; i < indices.size(); i += 3)
     {
+        auto index = indices[i];
+
+        IZ_ASSERT(indices[i + 0].fbxMesh == indices[i + 1].fbxMesh);
+        IZ_ASSERT(indices[i + 0].fbxMesh == indices[i + 2].fbxMesh);
+
+        IZ_ASSERT(indices[i + 0].mtrl == indices[i + 1].mtrl);
+        IZ_ASSERT(indices[i + 0].mtrl == indices[i + 2].mtrl);
+
+        auto itMesh = std::find(m_meshes.begin(), m_meshes.end(), MeshSubset(index.fbxMesh, index.mtrl));
+        IZ_ASSERT(itMesh != m_meshes.end());
+
+        MeshSubset& mesh = *itMesh;
+
         Face face;
-        face.vtx[0] = indices[i + 0];
-        face.vtx[1] = indices[i + 1];
-        face.vtx[2] = indices[i + 2];
+        face.vtx[0] = indices[i + 0].idxInMesh;
+        face.vtx[1] = indices[i + 1].idxInMesh;
+        face.vtx[2] = indices[i + 2].idxInMesh;
 
         mesh.faces.push_back(face);
     }
+
+    // もういらない
+    m_indices.clear();
 }
 
 void FbxDataManager::GatherPos(std::map<FbxMesh*, std::vector<PosData>>& posList)
@@ -396,10 +385,18 @@ void FbxDataManager::GatherPos(std::map<FbxMesh*, std::vector<PosData>>& posList
         
         auto polygonCnt = fbxMesh->GetPolygonCount();
 
+        auto& materialIndices = fbxMesh->GetElementMaterial()->GetIndexArray();
+
         for (IZ_UINT p = 0; p < polygonCnt; p++)
         {
             for (IZ_UINT i = 0; i < 3; i++)
             {
+                // メッシュに含まれるポリゴン（三角形）が所属しているマテリアルへのインデックス.
+                const int materialIdx = materialIndices.GetAt(i);
+
+                // マテリアル本体を取得.
+                auto material = m_scene->GetMaterial(materialIdx);
+
                 IZ_UINT idx = fbxMesh->GetPolygonVertex(p, i);
 
                 auto position = fbxMesh->GetControlPointAt(idx);
@@ -408,6 +405,9 @@ void FbxDataManager::GatherPos(std::map<FbxMesh*, std::vector<PosData>>& posList
                 {
                     pos.idxInMesh = idx;
                     pos.pos = position;
+
+                    pos.fbxMesh = fbxMesh;
+                    pos.mtrl = material;
                 }
 
                 list.push_back(pos);
@@ -421,6 +421,8 @@ void FbxDataManager::GatherUV(std::map<FbxMesh*, std::vector<UVData>>& uvList)
     for (IZ_UINT m = 0; m < m_fbxMeshes.size(); m++)
     {
         FbxMesh* fbxMesh = m_fbxMeshes[m];
+
+        auto& materialIndices = fbxMesh->GetElementMaterial()->GetIndexArray();
 
         uvList.insert(std::make_pair(fbxMesh, std::vector<UVData>()));
         auto it = uvList.find(fbxMesh);
@@ -437,6 +439,12 @@ void FbxDataManager::GatherUV(std::map<FbxMesh*, std::vector<UVData>>& uvList)
         {
             for (IZ_UINT n = 0; n < 3; n++)
             {
+                // メッシュに含まれるポリゴン（三角形）が所属しているマテリアルへのインデックス.
+                const int materialIdx = materialIndices.GetAt(n);
+
+                // マテリアル本体を取得.
+                auto material = m_scene->GetMaterial(materialIdx);
+
                 int lUVIndex = layerUV->GetIndexArray().GetAt(UVIndex);
 
                 // 取得したインデックスから UV を取得する
@@ -448,6 +456,9 @@ void FbxDataManager::GatherUV(std::map<FbxMesh*, std::vector<UVData>>& uvList)
                 {
                     uv.idxInMesh = idxInMesh;
                     uv.uv = lVec2;
+
+                    uv.fbxMesh = fbxMesh;
+                    uv.mtrl = material;
                 }
 
                 list.push_back(uv);

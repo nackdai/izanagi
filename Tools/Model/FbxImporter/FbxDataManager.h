@@ -14,11 +14,17 @@ struct Face {
 struct UVData {
     IZ_UINT idxInMesh;
     FbxVector2 uv;
+
+    FbxMesh* fbxMesh = nullptr;
+    FbxSurfaceMaterial* mtrl = nullptr;
 };
 
 struct PosData {
     IZ_UINT idxInMesh;
     FbxVector4 pos;
+
+    FbxMesh* fbxMesh = nullptr;
+    FbxSurfaceMaterial* mtrl = nullptr;
 };
 
 struct VertexData {
@@ -26,18 +32,36 @@ struct VertexData {
     FbxVector2 uv;
     FbxVector4 pos;
 
+    FbxMesh* fbxMesh = nullptr;
+    FbxSurfaceMaterial* mtrl = nullptr;
+
     bool operator==(const VertexData& rhs)
     {
-        IZ_BOOL p0 = (this->pos.mData[0] == rhs.pos.mData[0]);
-        IZ_BOOL p1 = (this->pos.mData[1] == rhs.pos.mData[1]);
-        IZ_BOOL p2 = (this->pos.mData[2] == rhs.pos.mData[2]);
+        IZ_BOOL isPos = (this->pos.mData[0] == rhs.pos.mData[0])
+                        && (this->pos.mData[1] == rhs.pos.mData[1])
+                        && (this->pos.mData[2] == rhs.pos.mData[2]);
 
-        IZ_BOOL u0 = (this->uv.mData[0] == rhs.uv.mData[0]);
-        IZ_BOOL u1 = (this->uv.mData[1] == rhs.uv.mData[1]);
-        IZ_BOOL u2 = (this->uv.mData[2] == rhs.uv.mData[2]);
+        IZ_BOOL isUV = (this->uv.mData[0] == rhs.uv.mData[0])
+                        && (this->uv.mData[1] == rhs.uv.mData[1])
+                        && (this->uv.mData[2] == rhs.uv.mData[2]);
 
-        return (p0 && p1 && p2 && u0 && u1 && u2);
+        IZ_BOOL isMesh = (this->fbxMesh == rhs.fbxMesh);
+        IZ_BOOL isMtrl = (this->mtrl == rhs.mtrl);
+
+        return (isPos && isUV && isMesh && isMtrl);
     }
+};
+
+struct IndexData
+{
+    IZ_UINT idxInMesh;
+
+    FbxMesh* fbxMesh = nullptr;
+    FbxSurfaceMaterial* mtrl = nullptr;
+
+    IndexData(IZ_UINT idx, FbxMesh* mesh, FbxSurfaceMaterial* _mtrl)
+        : idxInMesh(idx), fbxMesh(mesh), mtrl(_mtrl)
+    {}
 };
 
 struct MeshSubset {
@@ -46,8 +70,7 @@ struct MeshSubset {
     FbxMesh* fbxMesh = nullptr;
     FbxSurfaceMaterial* mtrl = nullptr;
 
-    std::vector<IZ_UINT> indices;
-    std::vector<VertexData> vertices;
+    IZ_UINT vtxNum = 0;
 
     MeshSubset() {}
 
@@ -128,6 +151,9 @@ private:
     std::vector<FbxCluster*> m_clusters;
 
     std::vector<MeshSubset> m_meshes;
+
+    std::vector<IndexData> m_indices;
+    std::vector<VertexData> m_vertices;
 };
 
 #endif  // #if !defined(__MODEL_LIB_FBX_DATA_MANAGER_H__)
