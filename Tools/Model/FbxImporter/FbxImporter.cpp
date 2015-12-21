@@ -260,18 +260,14 @@ IZ_BOOL CFbxImporter::GetVertex(
     izanagi::math::SVector4& vec,
     izanagi::E_MSH_VTX_FMT_TYPE type)
 {
-#if 0
-    const Vertex& vtx = FbxDataManager::Instance().GetVertex(nIdx);
+    const VertexData& vtx = FbxDataManager::Instance().GetVertex(nIdx);
 
-    IZ_UINT idxInFbxMesh = vtx.idxInFbxMesh;
-    FbxMesh* mesh = vtx.mesh;
+    auto mesh = FbxDataManager::Instance().GetMesh(0).fbxMesh;
 
     if (type == izanagi::E_MSH_VTX_FMT_TYPE::E_MSH_VTX_FMT_TYPE_POS) {
-        const FbxVector4& pos = mesh->GetControlPointAt(idxInFbxMesh);
-
-        vec.x = static_cast<float>(pos.mData[0]);
-        vec.y = static_cast<float>(pos.mData[1]);
-        vec.z = static_cast<float>(pos.mData[2]);
+        vec.x = static_cast<float>(vtx.pos.mData[0]);
+        vec.y = static_cast<float>(vtx.pos.mData[1]);
+        vec.z = static_cast<float>(vtx.pos.mData[2]);
         vec.w = 1.0f;
 
         return IZ_TRUE;
@@ -279,8 +275,8 @@ IZ_BOOL CFbxImporter::GetVertex(
 
     if (type == izanagi::E_MSH_VTX_FMT_TYPE::E_MSH_VTX_FMT_TYPE_NORMAL) {
         if (mesh->GetElementNormalCount() > 0) {
-            // TODO
 #if 0
+            // TODO
             const FbxGeometryElementNormal* vtxNormal = mesh->GetElementNormal();
 
             IZ_UINT numDirect = vtxNormal->GetDirectArray().GetCount();
@@ -310,7 +306,6 @@ IZ_BOOL CFbxImporter::GetVertex(
             vec.y = 0.0f;
             vec.z = 0.0f;
 #endif
-
             return IZ_TRUE;
         }
     }
@@ -372,11 +367,9 @@ IZ_BOOL CFbxImporter::GetVertex(
                 }
             }
 #else
-            const VertexData& data = FbxDataManager::Instance().m_vtxDatas[vtx.allIdx];
-            vec.x = data.uv[0];
-            vec.y = data.uv[1];
+            vec.x = static_cast<float>(vtx.uv.mData[0]);
+            vec.y = static_cast<float>(vtx.uv.mData[1]);
 #endif
-
             return IZ_TRUE;
         }
     }
@@ -415,12 +408,10 @@ IZ_BOOL CFbxImporter::GetVertex(
             vec.y = 1.0f;
             vec.z = 1.0f;
             vec.w = 1.0f;
-#endif
-
+#endif       
             return IZ_TRUE;
         }
     }
-#endif
 
     return IZ_FALSE;
 }
@@ -429,6 +420,9 @@ void CFbxImporter::GetMaterialForMesh(
     IZ_UINT nMeshIdx,
     izanagi::S_MSH_MTRL& sMtrl)
 {
+    // TODO
+    sMtrl.name.SetString("Mtrl");
+    sMtrl.nameKey = sMtrl.name.GetKeyValue();
 }
 
 //////////////////////////////////

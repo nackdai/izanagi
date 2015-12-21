@@ -28,7 +28,15 @@ struct VertexData {
 
     bool operator==(const VertexData& rhs)
     {
-        return (memcmp(this, &rhs, sizeof(rhs)) == 0);
+        IZ_BOOL p0 = (this->pos.mData[0] == rhs.pos.mData[0]);
+        IZ_BOOL p1 = (this->pos.mData[1] == rhs.pos.mData[1]);
+        IZ_BOOL p2 = (this->pos.mData[2] == rhs.pos.mData[2]);
+
+        IZ_BOOL u0 = (this->uv.mData[0] == rhs.uv.mData[0]);
+        IZ_BOOL u1 = (this->uv.mData[1] == rhs.uv.mData[1]);
+        IZ_BOOL u2 = (this->uv.mData[2] == rhs.uv.mData[2]);
+
+        return (p0 && p1 && p2 && u0 && u1 && u2);
     }
 };
 
