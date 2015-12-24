@@ -531,24 +531,140 @@ IZ_BOOL CFbxImporter::GetAnmKey(
 
 IZ_BOOL CFbxImporter::BeginMaterial()
 {
-    return IZ_FALSE;
+    return IZ_TRUE;
 }
 
 IZ_BOOL CFbxImporter::EndMaterial()
 {
-    return IZ_FALSE;
+    return IZ_TRUE;
 }
 
 IZ_UINT CFbxImporter::GetMaterialNum()
 {
-    return IZ_FALSE;
+    IZ_UINT ret = FbxDataManager::Instance().GetMaterialNum();
+    return ret;
 }
+
+static const char* FbxMtrlParamNames[] = {
+    fbxsdk::FbxSurfaceMaterial::sEmissive,
+    fbxsdk::FbxSurfaceMaterial::sEmissiveFactor,
+
+    fbxsdk::FbxSurfaceMaterial::sAmbient,
+    fbxsdk::FbxSurfaceMaterial::sAmbientFactor,
+
+    fbxsdk::FbxSurfaceMaterial::sDiffuse,
+    fbxsdk::FbxSurfaceMaterial::sDiffuseFactor,
+
+    fbxsdk::FbxSurfaceMaterial::sSpecular,
+    fbxsdk::FbxSurfaceMaterial::sSpecularFactor,
+    fbxsdk::FbxSurfaceMaterial::sShininess,
+
+    fbxsdk::FbxSurfaceMaterial::sBump,
+    fbxsdk::FbxSurfaceMaterial::sNormalMap,
+    fbxsdk::FbxSurfaceMaterial::sBumpFactor,
+
+    fbxsdk::FbxSurfaceMaterial::sTransparentColor,
+    fbxsdk::FbxSurfaceMaterial::sTransparencyFactor,
+
+    fbxsdk::FbxSurfaceMaterial::sReflection,
+    fbxsdk::FbxSurfaceMaterial::sReflectionFactor,
+
+    fbxsdk::FbxSurfaceMaterial::sDisplacementColor,
+    fbxsdk::FbxSurfaceMaterial::sDisplacementFactor,
+
+    fbxsdk::FbxSurfaceMaterial::sVectorDisplacementColor,
+    fbxsdk::FbxSurfaceMaterial::sVectorDisplacementFactor,
+};
 
 IZ_BOOL CFbxImporter::GetMaterial(
     IZ_UINT nMtrlIdx,
     izanagi::S_MTRL_MATERIAL& sMtrl)
 {
-    return IZ_FALSE;
+    auto* fbxMtrl = FbxDataManager::Instance().GetMaterial(nMtrlIdx);
+
+    sMtrl.name.SetString(fbxMtrl->GetName());
+    sMtrl.keyMaterial = sMtrl.name.GetKeyValue();
+
+    sMtrl.numTex = 0;
+
+    sMtrl.numParam = 0;
+    sMtrl.paramBytes = 0;
+
+    for (IZ_UINT i = 0; i < COUNTOF(FbxMtrlParamNames); i++)
+    {
+        std::string name(FbxMtrlParamNames[i]);
+
+        fbxsdk::FbxProperty prop = fbxMtrl->FindProperty(name.c_str());
+        if (!prop.IsValid()) {
+            continue;
+        }
+
+        // NOTE
+        // http://stackoverflow.com/questions/19634369/read-texture-filename-from-fbx-with-fbx-sdk-c
+        // http://marupeke296.com/FBX_No7_TextureMaterial.html
+
+        // プロパティが持っているレイヤードテクスチャの枚数をチェック.
+        int layerNum = prop.GetSrcObjectCount<fbxsdk::FbxLayeredTexture>();
+
+        // for tex.
+        if (layerNum > 0) {
+            // TODO
+        }
+        else {
+            int textureCount = prop.GetSrcObjectCount<fbxsdk::FbxTexture>();
+
+            std::vector<MaterialTex> list;
+
+            for (int n = 0; n < textureCount; n++)
+            {
+                fbxsdk::FbxTexture* texture = FbxCast<fbxsdk::FbxTexture>(prop.GetSrcObject<fbxsdk::FbxTexture>(n));
+
+                MaterialTex tex;
+                {
+                    tex.fbxMtrl = fbxMtrl;
+                    tex.paramName = name.c_str();
+                    tex.texture = texture;
+                    tex.type.flags = 0;
+                }
+
+                if (name == fbxsdk::FbxSurfaceMaterial::sSpecular) {
+                    tex.type.isSpecular = IZ_TRUE;
+                }
+                else if (name == fbxsdk::FbxSurfaceMaterial::sNormalMap) {
+                    tex.type.isNormal = IZ_TRUE;
+                }
+                else if (name == fbxsdk::FbxSurfaceMaterial::sTransparentColor) {
+                    tex.type.isTranslucent = IZ_TRUE;
+                }
+
+                // TODO
+                // 他の場合...
+
+                list.push_back(tex);
+            }
+
+            if (list.size() > 0) {
+                m_mtrlTex.insert(std::make_pair(nMtrlIdx, list));
+            }
+        }
+
+        // LambertかPhongか.
+        if (fbxMtrl->GetClassId().Is(FbxSurfaceLambert::ClassId)) {
+            // Lambertにダウンキャスト.
+            FbxSurfaceLambert* lambert = (FbxSurfaceLambert*)fbxMtrl;
+        }
+        else if (fbxMtrl->GetClassId().Is(FbxSurfacePhong::ClassId)) {
+            // Phongにダウンキャスト.
+            FbxSurfacePhong* phong = (FbxSurfacePhong*)fbxMtrl;
+        }
+        else {
+            IZ_ASSERT(IZ_FALSE);
+        }
+    }
+
+    sMtrl.numTex = m_mtrlTex[nMtrlIdx].size();
+    
+    return IZ_TRUE;
 }
 
 void CFbxImporter::GetMaterialTexture(
@@ -556,6 +672,14 @@ void CFbxImporter::GetMaterialTexture(
     IZ_UINT nTexIdx,
     izanagi::S_MTRL_TEXTURE& sTex)
 {
+    const auto& tex = m_mtrlTex[nMtrlIdx][nTexIdx];
+
+    fbxsdk::FbxFileTexture* fbxTex = (fbxsdk::FbxFileTexture*)tex.texture;
+
+    sTex.name.SetString(fbxTex->GetRelativeFileName());
+    sTex.key = sTex.name.GetKeyValue();
+
+    sTex.type = tex.type;
 }
 
 void CFbxImporter::GetMaterialShader(
@@ -563,6 +687,16 @@ void CFbxImporter::GetMaterialShader(
     IZ_UINT nShaderIdx,
     izanagi::S_MTRL_SHADER& sShader)
 {
+    // NOTE
+    // マテリアルごとに１つのみぽい.
+    IZ_ASSERT(nShaderIdx == 0);
+
+    auto* fbxMtrl = FbxDataManager::Instance().GetMaterial(nMtrlIdx);
+
+    FbxString shading = fbxMtrl->ShadingModel.Get();
+
+    sShader.name.SetString((const char*)shading);
+    sShader.key = sShader.name.GetKeyValue();
 }
 
 void CFbxImporter::GetMaterialParam(

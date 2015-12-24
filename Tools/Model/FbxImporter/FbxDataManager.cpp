@@ -169,6 +169,17 @@ void FbxDataManager::GetSkinData(
     std::copy(vtx.joint.begin(), vtx.joint.end(), std::back_inserter(joint));
 }
 
+IZ_UINT FbxDataManager::GetMaterialNum() const
+{
+    return m_materials.size();
+}
+
+FbxSurfaceMaterial* FbxDataManager::GetMaterial(IZ_UINT idx)
+{
+    IZ_ASSERT(idx < m_materials.size());
+    return m_materials[idx];
+}
+
 // ノードを集める.
 void FbxDataManager::GatherNodes(FbxNode* node)
 {
@@ -253,6 +264,12 @@ void FbxDataManager::GatherFaces()
 
                 // マテリアル本体を取得.
                 auto material = m_scene->GetMaterial(materialIdx);
+
+                auto itMtrl = std::find(m_materials.begin(), m_materials.end(), material);
+                if (itMtrl == m_materials.end())
+                {
+                    m_materials.push_back(material);
+                }
 
                 // 登録済みメッシュを探す.
                 auto it = std::find(m_meshes.begin(), m_meshes.end(), MeshSubset(fbxMesh, material));

@@ -1,6 +1,7 @@
 #if !defined(__MODEL_LIB_FBX_IMPORTER_H__)
 #define __MODEL_LIB_FBX_IMPORTER_H__
 
+#include <map>
 #include "Importer.h"
 
 class CFbxImporter : public IImporter {
@@ -171,6 +172,21 @@ public:
 private:
     IZ_UINT m_curMeshIdx{ 0 };
     IZ_UINT m_posVtx{ 0 };
+
+    struct MaterialTex {
+        void* fbxMtrl = nullptr;
+        std::string paramName;
+        void* texture = nullptr;
+
+        izanagi::S_MTRL_TEXTURE_TYPE type;
+    };
+    std::map<IZ_UINT, std::vector<MaterialTex>> m_mtrlTex;
+
+    struct MaterialShading {
+        void* fbxMtrl = nullptr;
+        std::string name;
+    };
+    std::map<IZ_UINT, std::vector<MaterialShading>> m_mtrlShd;
 };
 
 #endif  // #if !defined(__MODEL_LIB_JSON_IMPORTER_H__)

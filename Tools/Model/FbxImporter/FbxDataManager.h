@@ -181,6 +181,9 @@ public:
         std::vector<IZ_FLOAT>& weight,
         std::vector<IZ_UINT>& joint) const;
 
+    IZ_UINT GetMaterialNum() const;
+    FbxSurfaceMaterial* GetMaterial(IZ_UINT idx);
+
 private:
     // ÉmÅ[ÉhÇèWÇﬂÇÈ.
     void GatherNodes(FbxNode* node);
@@ -214,6 +217,8 @@ private:
 
     std::vector<IndexData> m_indices;
     std::vector<VertexData> m_vertices;
+
+    std::vector<fbxsdk::FbxSurfaceMaterial*> m_materials;
 };
 
 #endif  // #if !defined(__MODEL_LIB_FBX_DATA_MANAGER_H__)
