@@ -5,6 +5,17 @@
 #include "izToolKit.h"
 #include "Option.h"
 
+#define ENABLE_FBX_IMPORT
+
+#ifdef ENABLE_FBX_IMPORT
+#include "..\FbxImporter\FbxImporter.h"
+#ifdef _DEBUG
+#pragma comment(lib, "..\\..\\Model\\FbxImporter\\lib\\Debug\\FbxImporter.lib")
+#else
+#pragma comment(lib, "..\\..\\Model\\FbxImporter\\lib\\Release\\FbxImporter.lib")
+#endif
+#endif
+
 #define INVALID_RET_VAL     (1)
 
 namespace {
@@ -26,6 +37,7 @@ namespace {
             "   dae : Colladaファイル入力\n"
             "   x   : XFileファイル入力\n"
             "   pmd : PMDファイル入力\n"
+            "   fbx : FBXファイル入力\n"
             "\n"
             "******\n"
             "マテリアルが複数存在する場合は\n"
@@ -52,6 +64,12 @@ int main(int argc, char* argv[])
 
     // インポーター作成
     IImporter* importer = IImporter::CreateImporter(option.modelType);
+
+#ifdef ENABLE_FBX_IMPORT
+    if (importer == IZ_NULL && option.modelType == ModelType::ModelTypeFBX) {
+        importer = new CFbxImporter();
+    }
+#endif
 
     // 入力ファイルを開く
     VRETURN_VAL(
