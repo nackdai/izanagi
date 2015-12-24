@@ -284,11 +284,20 @@ void FbxDataManager::GatherVertices()
     std::map<FbxMesh*, std::vector<UVData>> uvList;
     GatherUV(uvList);
 
+    // 法線.
+    std::map<FbxMesh*, std::vector<NormalData>> nmlList;
+    GatherNormal(nmlList);
+
+    // 頂点カラー.
+    std::map<FbxMesh*, std::vector<ColorData>> clrList;
+    GatherColor(clrList);
+
     // スキン.
     std::vector<SkinData> skinList;
     GatherSkin(skinList);
 
     IZ_ASSERT(posList.size() == uvList.size());
+    IZ_ASSERT(uvList.size() == nmlList.size());
 
     std::vector<IndexData> indices;
 
@@ -305,17 +314,22 @@ void FbxDataManager::GatherVertices()
 
         auto& pos = posList[mesh.fbxMesh];
         auto& uv = uvList[mesh.fbxMesh];
+        auto& nml = nmlList[mesh.fbxMesh];
 
         const auto& posData = pos[i];
         const auto& uvData = uv[i];
+        const auto& nmlData = nml[i];
 
         IZ_ASSERT(posData.idxInMesh == index.idxInMesh);
         IZ_ASSERT(uvData.idxInMesh == index.idxInMesh);
+        IZ_ASSERT(nmlData.idxInMesh == index.idxInMesh);
 
         IZ_ASSERT(posData.fbxMesh == index.fbxMesh);
         IZ_ASSERT(uvData.fbxMesh == index.fbxMesh);
+        IZ_ASSERT(nmlData.fbxMesh == index.fbxMesh);
 
         IZ_ASSERT(posData.mtrl == uvData.mtrl);
+        IZ_ASSERT(uvData.mtrl == nmlData.mtrl);
 
         auto itSkin = std::find(skinList.begin(), skinList.end(), SkinData(index.idxInMesh, mesh.fbxMesh));
         IZ_ASSERT(itSkin != skinList.end());
@@ -326,8 +340,23 @@ void FbxDataManager::GatherVertices()
         vtx.idxInMesh = index.idxInMesh;
         vtx.pos = posData.pos;
         vtx.uv = uvData.uv;
+        vtx.nml = nmlData.nml;
         vtx.fbxMesh = index.fbxMesh;
         vtx.mtrl = posData.mtrl;
+
+        if (clrList.size() > 0) {
+            auto& clr = clrList[mesh.fbxMesh];
+            const auto& clrData = clr[i];
+
+            IZ_ASSERT(clrData.idxInMesh == index.idxInMesh);
+            IZ_ASSERT(clrData.fbxMesh == index.fbxMesh);
+            IZ_ASSERT(clrData.mtrl == posData.mtrl);
+
+            vtx.clr = clrData.clr;
+        }
+        else {
+            vtx.clr.Set(1.0, 1.0, 1.0);
+        }
 
         // スキン.
         std::copy(skin.weight.begin(), skin.weight.end(), std::back_inserter(vtx.weight));
@@ -440,6 +469,13 @@ void FbxDataManager::GatherUV(std::map<FbxMesh*, std::vector<UVData>>& uvList)
     {
         FbxMesh* fbxMesh = m_fbxMeshes[m];
 
+        auto elemUV = fbxMesh->GetElementUV();
+        auto mappingMode = elemUV->GetMappingMode();
+        auto referenceMode = elemUV->GetReferenceMode();
+
+        IZ_ASSERT(mappingMode == FbxGeometryElement::eByPolygonVertex);
+        IZ_ASSERT(referenceMode == FbxGeometryElement::eIndexToDirect);
+
         auto& materialIndices = fbxMesh->GetElementMaterial()->GetIndexArray();
 
         uvList.insert(std::make_pair(fbxMesh, std::vector<UVData>()));
@@ -482,6 +518,130 @@ void FbxDataManager::GatherUV(std::map<FbxMesh*, std::vector<UVData>>& uvList)
                 list.push_back(uv);
 
                 UVIndex++;
+            }
+        }
+    }
+}
+
+void FbxDataManager::GatherNormal(std::map<FbxMesh*, std::vector<NormalData>>& nmlList)
+{
+    for (IZ_UINT m = 0; m < m_fbxMeshes.size(); m++)
+    {
+        FbxMesh* fbxMesh = m_fbxMeshes[m];
+
+        auto elemNml = fbxMesh->GetElementNormal();
+        auto mappingMode = elemNml->GetMappingMode();
+        auto referenceMode = elemNml->GetReferenceMode();
+
+        IZ_ASSERT(mappingMode == FbxGeometryElement::eByPolygonVertex);
+        IZ_ASSERT(referenceMode == FbxGeometryElement::eIndexToDirect);
+
+        auto& materialIndices = fbxMesh->GetElementMaterial()->GetIndexArray();
+
+        nmlList.insert(std::make_pair(fbxMesh, std::vector<NormalData>()));
+        auto it = nmlList.find(fbxMesh);
+
+        auto& list = it->second;
+
+        IZ_UINT polygonCnt = fbxMesh->GetPolygonCount();
+        IZ_UINT vtxNum = fbxMesh->GetControlPointsCount();
+
+        FbxLayerElementNormal* layerNml = fbxMesh->GetLayer(0)->GetNormals();
+        IZ_UINT idxNml = 0;
+
+        for (IZ_UINT p = 0; p < polygonCnt; p++)
+        {
+            for (IZ_UINT n = 0; n < 3; n++)
+            {
+                // メッシュに含まれるポリゴン（三角形）が所属しているマテリアルへのインデックス.
+                const int materialIdx = materialIndices.GetAt(n);
+
+                // マテリアル本体を取得.
+                auto material = m_scene->GetMaterial(materialIdx);
+
+                int lNmlIndex = layerNml->GetIndexArray().GetAt(idxNml);
+
+                // 取得したインデックスから法線を取得する
+                FbxVector4 lVec4 = layerNml->GetDirectArray().GetAt(lNmlIndex);
+
+                IZ_UINT idxInMesh = fbxMesh->GetPolygonVertex(p, n);
+
+                NormalData nml;
+                {
+                    nml.idxInMesh = idxInMesh;
+                    nml.nml = lVec4;
+
+                    nml.fbxMesh = fbxMesh;
+                    nml.mtrl = material;
+                }
+
+                list.push_back(nml);
+
+                idxNml++;
+            }
+        }
+    }
+}
+
+void FbxDataManager::GatherColor(std::map<FbxMesh*, std::vector<ColorData>>& clrList)
+{
+    for (IZ_UINT m = 0; m < m_fbxMeshes.size(); m++)
+    {
+        FbxMesh* fbxMesh = m_fbxMeshes[m];
+
+        if (fbxMesh->GetElementVertexColorCount() == 0) {
+            continue;
+        }
+
+        auto elemClr = fbxMesh->GetElementVertexColor();
+        auto mappingMode = elemClr->GetMappingMode();
+        auto referenceMode = elemClr->GetReferenceMode();
+
+        IZ_ASSERT(mappingMode == FbxGeometryElement::eByPolygonVertex);
+        IZ_ASSERT(referenceMode == FbxGeometryElement::eIndexToDirect);
+
+        auto& materialIndices = fbxMesh->GetElementMaterial()->GetIndexArray();
+
+        clrList.insert(std::make_pair(fbxMesh, std::vector<ColorData>()));
+        auto it = clrList.find(fbxMesh);
+
+        auto& list = it->second;
+
+        IZ_UINT polygonCnt = fbxMesh->GetPolygonCount();
+        IZ_UINT vtxNum = fbxMesh->GetControlPointsCount();
+
+        FbxLayerElementVertexColor* layerClr = fbxMesh->GetLayer(0)->GetVertexColors();
+        IZ_UINT idxClr = 0;
+
+        for (IZ_UINT p = 0; p < polygonCnt; p++)
+        {
+            for (IZ_UINT n = 0; n < 3; n++)
+            {
+                // メッシュに含まれるポリゴン（三角形）が所属しているマテリアルへのインデックス.
+                const int materialIdx = materialIndices.GetAt(n);
+
+                // マテリアル本体を取得.
+                auto material = m_scene->GetMaterial(materialIdx);
+
+                int lNmlIndex = layerClr->GetIndexArray().GetAt(idxClr);
+
+                // 取得したインデックスから法線を取得する
+                FbxColor color = layerClr->GetDirectArray().GetAt(lNmlIndex);
+
+                IZ_UINT idxInMesh = fbxMesh->GetPolygonVertex(p, n);
+
+                ColorData clr;
+                {
+                    clr.idxInMesh = idxInMesh;
+                    clr.clr = color;
+
+                    clr.fbxMesh = fbxMesh;
+                    clr.mtrl = material;
+                }
+
+                list.push_back(clr);
+
+                idxClr++;
             }
         }
     }

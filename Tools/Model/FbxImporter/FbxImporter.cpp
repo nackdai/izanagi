@@ -177,17 +177,17 @@ namespace {
             {
             case FbxGeometryElement::eDirect:
             {
-                funcDirect(vtxIdx);
-                ret = IZ_TRUE;
+                                                funcDirect(vtxIdx);
+                                                ret = IZ_TRUE;
             }
-            break;
+                break;
 
             case FbxGeometryElement::eIndexToDirect:
             {
-                funcIndex(vtxIdx);
-                ret = IZ_TRUE;
+                                                       funcIndex(vtxIdx);
+                                                       ret = IZ_TRUE;
             }
-            break;
+                break;
 
             default:
                 throw std::exception("Invalid Reference");
@@ -201,17 +201,17 @@ namespace {
             {
             case FbxGeometryElement::eDirect:
             {
-                funcDirect(vtxCounter);
-                ret = IZ_TRUE;
+                                                funcDirect(vtxCounter);
+                                                ret = IZ_TRUE;
             }
-            break;
+                break;
 
             case FbxGeometryElement::eIndexToDirect:
             {
-                funcIndex(vtxCounter);
-                ret = IZ_TRUE;
+                                                       funcIndex(vtxCounter);
+                                                       ret = IZ_TRUE;
             }
-            break;
+                break;
 
             default:
                 throw std::exception("Invalid Reference");
@@ -233,9 +233,9 @@ IZ_BOOL CFbxImporter::GetVertex(
     auto mesh = FbxDataManager::Instance().GetMesh(0).fbxMesh;
 
     if (type == izanagi::E_MSH_VTX_FMT_TYPE::E_MSH_VTX_FMT_TYPE_POS) {
-        vec.x = static_cast<float>(vtx.pos.mData[0]);
-        vec.y = static_cast<float>(vtx.pos.mData[1]);
-        vec.z = static_cast<float>(vtx.pos.mData[2]);
+        vec.x = static_cast<IZ_FLOAT>(vtx.pos.mData[0]);
+        vec.y = static_cast<IZ_FLOAT>(vtx.pos.mData[1]);
+        vec.z = static_cast<IZ_FLOAT>(vtx.pos.mData[2]);
         vec.w = 1.0f;
 
         return IZ_TRUE;
@@ -270,9 +270,9 @@ IZ_BOOL CFbxImporter::GetVertex(
                 vec.z = static_cast<float>(nml.mData[2]);
             });
 #else
-            vec.x = 1.0f;
-            vec.y = 0.0f;
-            vec.z = 0.0f;
+            vec.x = static_cast<IZ_FLOAT>(vtx.nml.mData[0]);
+            vec.y = static_cast<IZ_FLOAT>(vtx.nml.mData[1]);
+            vec.z = static_cast<IZ_FLOAT>(vtx.nml.mData[2]);
 #endif
             return IZ_TRUE;
         }
@@ -280,64 +280,9 @@ IZ_BOOL CFbxImporter::GetVertex(
 
     if (type == izanagi::E_MSH_VTX_FMT_TYPE::E_MSH_VTX_FMT_TYPE_UV) {
         if (mesh->GetElementUVCount() > 0) {
-#if 0
-            const FbxGeometryElementUV* vtxUV = mesh->GetElementUV(0, FbxLayerElement::EType::eTextureDiffuse);
-            IZ_ASSERT(vtxUV != NULL);
+            vec.x = static_cast<IZ_FLOAT>(vtx.uv.mData[0]);
+            vec.y = static_cast<IZ_FLOAT>(vtx.uv.mData[1]);
 
-            IZ_UINT numDirect = vtxUV->GetDirectArray().GetCount();
-            IZ_UINT numIndex = vtxUV->GetIndexArray().GetCount();
-
-            auto mappingMode = vtxUV->GetMappingMode();
-            auto referenceMode = vtxUV->GetReferenceMode();
-
-            GetVertexData(
-                mappingMode, referenceMode,
-                realVtxIdx, countInFbxMesh,
-                [&](IZ_UINT idx) {
-                const FbxVector2& uv = vtxUV->GetDirectArray().GetAt(idx);
-                vec.x = static_cast<float>(uv.mData[0]);
-                vec.y = static_cast<float>(uv.mData[1]);
-            },
-                [&](IZ_UINT idx) {
-                int index = vtxUV->GetIndexArray().GetAt(idx);
-                const FbxVector2& uv = vtxUV->GetDirectArray().GetAt(index);
-                vec.x = static_cast<float>(uv.mData[0]);
-                vec.y = static_cast<float>(uv.mData[1]);
-            });
-#elif 0
-            IZ_UINT UVIndex = 0;
-            FbxLayerElementUV* leUV = mesh->GetLayer(0)->GetUVs();
-
-            int lPolygonsCount = mesh->GetPolygonCount();
-
-            // ポリゴンごとのループ
-            for (int j = 0; j<lPolygonsCount; j++)
-            {
-                // ポリゴン数を取得
-                int lPolygonSize = mesh->GetPolygonSize(j);
-
-                // １ポリゴン内の頂点ごとのループ
-                for (int k = 0; k<lPolygonSize; k++)
-                {
-                    // インデックスが同じなので処理対象
-                    if (idxInFbxMesh == mesh->GetPolygonVertex(j, k))
-                    {
-                        // インデックスバッファからインデックスを取得する
-                        int lUVIndex = leUV->GetIndexArray().GetAt(UVIndex);
-
-                        // 取得したインデックスから UV を取得する
-                        FbxVector2 lVec2 = leUV->GetDirectArray().GetAt(lUVIndex);
-
-                        vec.x = lVec2.mData[0];
-                        vec.y = lVec2.mData[1];
-                    }
-                    UVIndex++;
-                }
-            }
-#else
-            vec.x = static_cast<float>(vtx.uv.mData[0]);
-            vec.y = static_cast<float>(vtx.uv.mData[1]);
-#endif
             return IZ_TRUE;
         }
     }
@@ -372,10 +317,10 @@ IZ_BOOL CFbxImporter::GetVertex(
                 vec.w = static_cast<float>(clr.mAlpha);
             });
 #else
-            vec.x = 1.0f;
-            vec.y = 1.0f;
-            vec.z = 1.0f;
-            vec.w = 1.0f;
+            vec.x = static_cast<IZ_FLOAT>(vtx.clr.mRed);
+            vec.y = static_cast<IZ_FLOAT>(vtx.clr.mGreen);
+            vec.z = static_cast<IZ_FLOAT>(vtx.clr.mBlue);
+            vec.w = static_cast<IZ_FLOAT>(vtx.clr.mAlpha);
 #endif       
             return IZ_TRUE;
         }

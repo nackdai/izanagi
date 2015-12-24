@@ -25,12 +25,31 @@ struct PosData {
 
     FbxMesh* fbxMesh = nullptr;
     FbxSurfaceMaterial* mtrl = nullptr;
+};    
+
+struct NormalData {
+    IZ_UINT idxInMesh;
+    FbxVector4 nml;
+
+    FbxMesh* fbxMesh = nullptr;
+    FbxSurfaceMaterial* mtrl = nullptr;
+};
+
+struct ColorData {
+    IZ_UINT idxInMesh;
+    FbxColor clr;
+
+    FbxMesh* fbxMesh = nullptr;
+    FbxSurfaceMaterial* mtrl = nullptr;
 };
 
 struct VertexData {
     IZ_UINT idxInMesh;
-    FbxVector2 uv;
-    FbxVector4 pos;
+
+    FbxVector2 uv;      // UV.
+    FbxVector4 pos;     // 位置.
+    FbxVector4 nml;     // 法線.
+    FbxColor clr;       // 頂点カラー.
 
     std::vector<IZ_FLOAT> weight;
     std::vector<IZ_UINT> joint;
@@ -45,13 +64,16 @@ struct VertexData {
                         && (this->pos.mData[2] == rhs.pos.mData[2]);
 
         IZ_BOOL isUV = (this->uv.mData[0] == rhs.uv.mData[0])
-                        && (this->uv.mData[1] == rhs.uv.mData[1])
-                        && (this->uv.mData[2] == rhs.uv.mData[2]);
+                        && (this->uv.mData[1] == rhs.uv.mData[1]);
+
+        IZ_BOOL isNml = (this->nml.mData[0] == rhs.uv.mData[0])
+                        && (this->nml.mData[1] == rhs.nml.mData[1])
+                        && (this->nml.mData[2] == rhs.nml.mData[2]);
 
         IZ_BOOL isMesh = (this->fbxMesh == rhs.fbxMesh);
         IZ_BOOL isMtrl = (this->mtrl == rhs.mtrl);
 
-        return (isPos && isUV && isMesh && isMtrl);
+        return (isPos && isUV && isNml && isMesh && isMtrl);
     }
 };
 
@@ -173,6 +195,9 @@ private:
 
     void GatherPos(std::map<FbxMesh*, std::vector<PosData>>& posList);
     void GatherUV(std::map<FbxMesh*, std::vector<UVData>>& uvList);
+
+    void GatherNormal(std::map<FbxMesh*, std::vector<NormalData>>& nmlList);
+    void GatherColor(std::map<FbxMesh*, std::vector<ColorData>>& clrList);
 
     void GatherSkin(std::vector<SkinData>& skinList);
 
