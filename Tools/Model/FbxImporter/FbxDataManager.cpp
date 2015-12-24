@@ -53,7 +53,7 @@ IZ_BOOL FbxDataManager::Open(const char* path)
                 GatherFaces();
 
                 GatherVertices();
-
+                
                 return IZ_TRUE;
             }
         }
@@ -158,20 +158,15 @@ FbxCluster* FbxDataManager::GetClusterByNode(const FbxNode* node)
     return nullptr;
 }
 
-IZ_UINT FbxDataManager::ConvertToEntireVtxIdx(FbxMesh* mesh, IZ_UINT vtxIdxInMesh)
+void FbxDataManager::GetSkinData(
+    IZ_UINT idx,
+    std::vector<IZ_FLOAT>& weight,
+    std::vector<IZ_UINT>& joint) const
 {
-    for (IZ_UINT i = 0; i < m_vertices.size(); i++)
-    {
-        const auto& vtx = m_vertices[i];
+    const auto& vtx = m_vertices[idx];
 
-        if (vtx.fbxMesh == mesh && vtx.idxInMesh == vtxIdxInMesh)
-        {
-            return i;
-        }
-    }
-
-    IZ_ASSERT(IZ_FALSE);
-    return 0;
+    std::copy(vtx.weight.begin(), vtx.weight.end(), std::back_inserter(weight));
+    std::copy(vtx.joint.begin(), vtx.joint.end(), std::back_inserter(joint));
 }
 
 // ノードを集める.
@@ -281,15 +276,23 @@ void FbxDataManager::GatherFaces()
 
 void FbxDataManager::GatherVertices()
 {
+    // 位置.
     std::map<FbxMesh*, std::vector<PosData>> posList;
     GatherPos(posList);
 
+    // UV.
     std::map<FbxMesh*, std::vector<UVData>> uvList;
     GatherUV(uvList);
+
+    // スキン.
+    std::vector<SkinData> skinList;
+    GatherSkin(skinList);
 
     IZ_ASSERT(posList.size() == uvList.size());
 
     std::vector<IndexData> indices;
+
+    // 頂点データを統合して整理する.
 
     for (IZ_UINT i = 0; i < m_indices.size(); i++)
     {
@@ -314,6 +317,11 @@ void FbxDataManager::GatherVertices()
 
         IZ_ASSERT(posData.mtrl == uvData.mtrl);
 
+        auto itSkin = std::find(skinList.begin(), skinList.end(), SkinData(index.idxInMesh, mesh.fbxMesh));
+        IZ_ASSERT(itSkin != skinList.end());
+
+        auto& skin = *itSkin;
+
         VertexData vtx;
         vtx.idxInMesh = index.idxInMesh;
         vtx.pos = posData.pos;
@@ -321,9 +329,17 @@ void FbxDataManager::GatherVertices()
         vtx.fbxMesh = index.fbxMesh;
         vtx.mtrl = posData.mtrl;
 
+        // スキン.
+        std::copy(skin.weight.begin(), skin.weight.end(), std::back_inserter(vtx.weight));
+        std::copy(skin.joint.begin(), skin.joint.end(), std::back_inserter(vtx.joint));
+
+        // 同じデータの頂点の有無を確認.
         auto it = std::find(m_vertices.begin(), m_vertices.end(), vtx);
+
         if (it == m_vertices.end())
         {
+            // 未登録.
+
             IndexData newIdx(
                 m_vertices.size(),
                 mesh.fbxMesh,
@@ -336,6 +352,7 @@ void FbxDataManager::GatherVertices()
         }
         else
         {
+            // すでにあったので、どの頂点インデックスか取得.
             IndexData newIdx(
                 std::distance(m_vertices.begin(), it),
                 mesh.fbxMesh,
@@ -345,6 +362,7 @@ void FbxDataManager::GatherVertices()
         }
     }
 
+    // 新しく作られたインデックスリストから面リストを生成.
     for (IZ_UINT i = 0; i < indices.size(); i += 3)
     {
         auto index = indices[i];
@@ -464,6 +482,62 @@ void FbxDataManager::GatherUV(std::map<FbxMesh*, std::vector<UVData>>& uvList)
                 list.push_back(uv);
 
                 UVIndex++;
+            }
+        }
+    }
+}
+
+void FbxDataManager::GatherSkin(std::vector<SkinData>& skinList)
+{
+    for (IZ_UINT m = 0; m < m_fbxMeshes.size(); m++)
+    {
+        FbxMesh* fbxMesh = m_fbxMeshes[m];
+
+        // メッシュに含まれるスキニング情報数.
+        int skinCount = fbxMesh->GetDeformerCount(FbxDeformer::EDeformerType::eSkin);
+
+        for (int n = 0; n < skinCount; n++) {
+            // スキニング情報を取得.
+            FbxDeformer* deformer = fbxMesh->GetDeformer(n, FbxDeformer::EDeformerType::eSkin);
+
+            FbxSkin* skin = (FbxSkin*)deformer;
+
+            // スキニングに影響を与えるボーンの数.
+            int boneCount = skin->GetClusterCount();
+
+            for (int b = 0; b < boneCount; b++) {
+                FbxCluster* cluster = skin->GetCluster(b);
+
+                // ボーンが影響を与える頂点数.
+                int influencedVtxNum = cluster->GetControlPointIndicesCount();
+
+                // ボーンと関連づいているノード.
+                FbxNode* targetNode = cluster->GetLink();
+
+                // ノードのインデックス.
+                IZ_INT nodeIdx = GetNodeIndex(targetNode);
+                IZ_ASSERT(nodeIdx >= 0);
+
+                for (int v = 0; v < influencedVtxNum; v++) {
+                    int vtxIdxInMesh = cluster->GetControlPointIndices()[v];
+                    float weight = (float)cluster->GetControlPointWeights()[v];
+
+                    auto it = std::find(skinList.begin(), skinList.end(), SkinData(vtxIdxInMesh, fbxMesh));
+
+                    if (it == skinList.end()) {
+                        SkinData skin(vtxIdxInMesh, fbxMesh);
+                        skin.weight.push_back(weight);
+                        skin.joint.push_back(nodeIdx);
+
+                        skinList.push_back(skin);
+                    }
+                    else {
+                        SkinData& skin = *it;
+
+                        skin.weight.push_back(weight);
+                        skin.joint.push_back(nodeIdx);
+                    }
+                }
             }
         }
     }

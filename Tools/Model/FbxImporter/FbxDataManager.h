@@ -32,6 +32,9 @@ struct VertexData {
     FbxVector2 uv;
     FbxVector4 pos;
 
+    std::vector<IZ_FLOAT> weight;
+    std::vector<IZ_UINT> joint;
+
     FbxMesh* fbxMesh = nullptr;
     FbxSurfaceMaterial* mtrl = nullptr;
 
@@ -62,6 +65,33 @@ struct IndexData
     IndexData(IZ_UINT idx, FbxMesh* mesh, FbxSurfaceMaterial* _mtrl)
         : idxInMesh(idx), fbxMesh(mesh), mtrl(_mtrl)
     {}
+};
+
+struct SkinData
+{
+    IZ_UINT idxInMesh;
+
+    FbxMesh* fbxMesh = nullptr;
+
+    std::vector<IZ_FLOAT> weight;
+    std::vector<IZ_UINT> joint;
+
+    SkinData() {}
+
+    SkinData(IZ_UINT idx, FbxMesh* mesh)
+        : idxInMesh(idx), fbxMesh(mesh)
+    {}
+
+    IZ_BOOL isEmpty() const
+    {
+        return (fbxMesh == nullptr);
+    }
+
+    bool operator==(const SkinData& rhs)
+    {
+        return (idxInMesh == rhs.idxInMesh
+            && fbxMesh == rhs.fbxMesh);
+    }
 };
 
 struct MeshSubset {
@@ -124,7 +154,10 @@ public:
 
     FbxCluster* GetClusterByNode(const FbxNode* node);
 
-    IZ_UINT ConvertToEntireVtxIdx(FbxMesh* mesh, IZ_UINT vtxIdxInMesh);
+    void GetSkinData(
+        IZ_UINT idx,
+        std::vector<IZ_FLOAT>& weight,
+        std::vector<IZ_UINT>& joint) const;
 
 private:
     // ÉmÅ[ÉhÇèWÇﬂÇÈ.
@@ -140,6 +173,8 @@ private:
 
     void GatherPos(std::map<FbxMesh*, std::vector<PosData>>& posList);
     void GatherUV(std::map<FbxMesh*, std::vector<UVData>>& uvList);
+
+    void GatherSkin(std::vector<SkinData>& skinList);
 
 private:
     FbxManager* m_manager{ nullptr };

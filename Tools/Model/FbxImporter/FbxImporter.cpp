@@ -58,50 +58,18 @@ void CFbxImporter::GetSkinList(std::vector<SSkin>& tvSkinList)
 
     tvSkinList.resize(vtxNum);
 
-    IZ_UINT cntMesh = FbxDataManager::Instance().GetFbxMeshNum();
-
-    for (IZ_UINT i = 0; i < cntMesh; i++)
+    for (IZ_UINT i = 0; i < vtxNum; i++)
     {
-        FbxMesh* mesh = FbxDataManager::Instance().GetFbxMesh(i);
+        std::vector<IZ_FLOAT> weight;
+        std::vector<IZ_UINT> joint;
 
-        // メッシュに含まれるスキニング情報数.
-        int skinCount = mesh->GetDeformerCount(FbxDeformer::EDeformerType::eSkin);
+        FbxDataManager::Instance().GetSkinData(i, weight, joint);
 
-        for (int n = 0; n < skinCount; n++) {
-            // スキニング情報を取得.
-            FbxDeformer* deformer = mesh->GetDeformer(n, FbxDeformer::EDeformerType::eSkin);
+        IZ_ASSERT(weight.size() == joint.size());
 
-            FbxSkin* skin = (FbxSkin*)deformer;
-
-            // スキニングに影響を与えるボーンの数.
-            int boneCount = skin->GetClusterCount();
-
-            for (int b = 0; b < boneCount; b++) {
-                FbxCluster* cluster = skin->GetCluster(b);
-
-                // TODO
-                //IZ_ASSERT(cluster->GetLinkMode() == FbxCluster::ELinkMode::eTotalOne);
-
-                // ボーンと関連づいているノード.
-                FbxNode* targetNode = cluster->GetLink();
-
-                // ノードのインデックス.
-                IZ_INT nodeIdx = FbxDataManager::Instance().GetNodeIndex(targetNode);
-
-                // ボーンが影響を与える頂点数.
-                int influencedVtxNum = cluster->GetControlPointIndicesCount();
-
-                for (int v = 0; v < influencedVtxNum; v++) {
-                    int vtxIdxInMesh = cluster->GetControlPointIndices()[v];
-
-                    // 全体での頂点インデックスに変換.
-                    IZ_UINT vtxIdx = FbxDataManager::Instance().ConvertToEntireVtxIdx(mesh, vtxIdxInMesh);
-
-                    float weight = (float)cluster->GetControlPointWeights()[v];
-
-                    tvSkinList[vtxIdx].Add(nodeIdx, weight);
-                }
-            }
+        for (IZ_UINT n = 0; n < weight.size(); n++)
+        {
+            tvSkinList[i].Add(joint[n], weight[n]);
         }
     }
 }
@@ -420,8 +388,9 @@ void CFbxImporter::GetMaterialForMesh(
     IZ_UINT nMeshIdx,
     izanagi::S_MSH_MTRL& sMtrl)
 {
-    // TODO
-    sMtrl.name.SetString("Mtrl");
+    const MeshSubset& mesh = FbxDataManager::Instance().GetMesh(nMeshIdx);
+
+    sMtrl.name.SetString(mesh.mtrl->GetName());
     sMtrl.nameKey = sMtrl.name.GetKeyValue();
 }
 
@@ -529,10 +498,10 @@ void CFbxImporter::GetJointTransform(
 
         sTransform.type = E_MDL_JOINT_TRANSFORM_QUATERNION;
 
-        sTransform.param.push_back(quat.mData[0]);
-        sTransform.param.push_back(quat.mData[1]);
-        sTransform.param.push_back(quat.mData[2]);
-        sTransform.param.push_back(quat.mData[3]);
+        sTransform.param.push_back(static_cast<IZ_FLOAT>(quat.mData[0]));
+        sTransform.param.push_back(static_cast<IZ_FLOAT>(quat.mData[1]));
+        sTransform.param.push_back(static_cast<IZ_FLOAT>(quat.mData[2]));
+        sTransform.param.push_back(static_cast<IZ_FLOAT>(quat.mData[3]));
     }
 
     // For trans.
@@ -545,9 +514,9 @@ void CFbxImporter::GetJointTransform(
 
         sTransform.type = E_MDL_JOINT_TRANSFORM_TRANSLATE;
 
-        sTransform.param.push_back(trans.mData[0]);
-        sTransform.param.push_back(trans.mData[1]);
-        sTransform.param.push_back(trans.mData[2]);
+        sTransform.param.push_back(static_cast<IZ_FLOAT>(trans.mData[0]));
+        sTransform.param.push_back(static_cast<IZ_FLOAT>(trans.mData[1]));
+        sTransform.param.push_back(static_cast<IZ_FLOAT>(trans.mData[2]));
     }
 
     // TODO
