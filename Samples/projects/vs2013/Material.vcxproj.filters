@@ -18,12 +18,36 @@
     <ClInclude Include="..\..\Material\MaterialApp.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Material\StateBase.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Material\StateCollada.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Material\StateFbx.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Material\StateManager.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Material\main.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Material\MaterialApp.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Material\StateBase.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Material\StateFbx.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Material\StateManager.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Material\StateCollada.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -40,5 +64,10 @@
     <CustomBuild Include="..\..\..\Media\Seymour.dae">
       <Filter>asset</Filter>
     </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Media\SeymourFbx.fbx">
+      <Filter>asset</Filter>
+    </None>
   </ItemGroup>
 </Project>
