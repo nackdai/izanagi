@@ -38,3 +38,12 @@ IZ_BOOL CStateCollada::Leave()
     ReleaseObject();
     return IZ_TRUE;
 }
+
+IZ_BOOL CStateCollada::Render(izanagi::graph::CGraphicsDevice* device)
+{
+    IZ_BOOL ret = CStateBase::Render(device);
+
+    RenderName(device, "Collada");
+
+    return ret;
+}

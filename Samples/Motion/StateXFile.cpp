@@ -43,3 +43,12 @@ IZ_FLOAT CStateXFile::GetElapesedTime()
 {
     return 33.333f;
 }
+
+IZ_BOOL CStateXFile::Render(izanagi::graph::CGraphicsDevice* device)
+{
+    IZ_BOOL ret = CStateBase::Render(device);
+
+    RenderName(device, "XFile");
+
+    return ret;
+}

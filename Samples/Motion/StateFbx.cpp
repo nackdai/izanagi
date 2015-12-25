@@ -38,3 +38,12 @@ IZ_BOOL CStateFbx::Leave()
     ReleaseObject();
     return IZ_TRUE;
 }
+
+IZ_BOOL CStateFbx::Render(izanagi::graph::CGraphicsDevice* device)
+{
+    IZ_BOOL ret = CStateBase::Render(device);
+
+    RenderName(device, "Fbx");
+
+    return ret;
+}

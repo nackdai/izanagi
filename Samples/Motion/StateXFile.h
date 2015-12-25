@@ -24,6 +24,8 @@ public:
     virtual IZ_UINT GetShaderPassIdx() const { return 1; }
 
     virtual IZ_FLOAT GetElapesedTime();
+
+    virtual IZ_BOOL Render(izanagi::graph::CGraphicsDevice* device) override;
 };
 
 #endif    // #if !defined(__STATE_XFILE_H__)
