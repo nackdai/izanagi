@@ -13,13 +13,20 @@ CFbxImporter::CFbxImporter()
 
 IZ_BOOL CFbxImporter::Open(IZ_PCSTR pszName)
 {
-    IZ_BOOL ret = FbxDataManager::Instance().Open(pszName);
+    m_dataMgr = new FbxDataManager();
+    IZ_BOOL ret = m_dataMgr->Open(pszName);
     return ret;
 }
 
 IZ_BOOL CFbxImporter::Close()
 {
-    FbxDataManager::Instance().Close();
+    m_dataMgr->Close();
+    delete m_dataMgr;
+
+    if (m_dataMgrBase) {
+        m_dataMgrBase->Close();
+        delete m_dataMgrBase;
+    }
 
     return IZ_TRUE;
 }
@@ -43,7 +50,8 @@ void CFbxImporter::EndMesh()
 
 IZ_UINT CFbxImporter::GetMeshNum()
 {
-    IZ_UINT ret = FbxDataManager::Instance().GetMeshNum();
+    m_dataMgr->LoadMesh();
+    IZ_UINT ret = m_dataMgr->GetMeshNum();
     return ret;
 }
 
@@ -54,7 +62,7 @@ void CFbxImporter::GetSkinList(std::vector<SSkin>& tvSkinList)
         return;
     }
 
-    IZ_UINT vtxNum = FbxDataManager::Instance().GetVtxNum();
+    IZ_UINT vtxNum = m_dataMgr->GetVtxNum();
 
     tvSkinList.resize(vtxNum);
 
@@ -63,7 +71,7 @@ void CFbxImporter::GetSkinList(std::vector<SSkin>& tvSkinList)
         std::vector<IZ_FLOAT> weight;
         std::vector<IZ_UINT> joint;
 
-        FbxDataManager::Instance().GetSkinData(i, weight, joint);
+        m_dataMgr->GetSkinData(i, weight, joint);
 
         IZ_ASSERT(weight.size() == joint.size());
 
@@ -77,7 +85,7 @@ void CFbxImporter::GetSkinList(std::vector<SSkin>& tvSkinList)
 // 指定されているメッシュに含まれる三角形を取得.
 IZ_UINT CFbxImporter::GetTriangles(std::vector<STri>& tvTriList)
 {
-    const MeshSubset& mesh = FbxDataManager::Instance().GetMesh(m_curMeshIdx);
+    const MeshSubset& mesh = m_dataMgr->GetMesh(m_curMeshIdx);
 
     for each (const Face& face in mesh.faces)
     {
@@ -107,7 +115,7 @@ IZ_UINT CFbxImporter::GetVtxSize()
     // NOTE
     // skinのサイズは外でやるのでここではやらない
 
-    auto& meshSet = FbxDataManager::Instance().GetMesh(m_curMeshIdx);
+    auto& meshSet = m_dataMgr->GetMesh(m_curMeshIdx);
 
     IZ_UINT ret = 0;
 
@@ -133,7 +141,7 @@ IZ_UINT CFbxImporter::GetVtxSize()
 
 IZ_UINT CFbxImporter::GetVtxFmt()
 {
-    auto& meshSet = FbxDataManager::Instance().GetMesh(m_curMeshIdx);
+    auto& meshSet = m_dataMgr->GetMesh(m_curMeshIdx);
 
     IZ_UINT ret = 0;
 
@@ -177,15 +185,15 @@ namespace {
             {
             case FbxGeometryElement::eDirect:
             {
-                                                funcDirect(vtxIdx);
-                                                ret = IZ_TRUE;
+                funcDirect(vtxIdx);
+                ret = IZ_TRUE;
             }
                 break;
 
             case FbxGeometryElement::eIndexToDirect:
             {
-                                                       funcIndex(vtxIdx);
-                                                       ret = IZ_TRUE;
+                funcIndex(vtxIdx);
+                ret = IZ_TRUE;
             }
                 break;
 
@@ -201,15 +209,15 @@ namespace {
             {
             case FbxGeometryElement::eDirect:
             {
-                                                funcDirect(vtxCounter);
-                                                ret = IZ_TRUE;
+                funcDirect(vtxCounter);
+                ret = IZ_TRUE;
             }
                 break;
 
             case FbxGeometryElement::eIndexToDirect:
             {
-                                                       funcIndex(vtxCounter);
-                                                       ret = IZ_TRUE;
+                funcIndex(vtxCounter);
+                ret = IZ_TRUE;
             }
                 break;
 
@@ -228,9 +236,9 @@ IZ_BOOL CFbxImporter::GetVertex(
     izanagi::math::SVector4& vec,
     izanagi::E_MSH_VTX_FMT_TYPE type)
 {
-    const VertexData& vtx = FbxDataManager::Instance().GetVertex(nIdx);
+    const VertexData& vtx = m_dataMgr->GetVertex(nIdx);
 
-    auto mesh = FbxDataManager::Instance().GetMesh(0).fbxMesh;
+    auto mesh = m_dataMgr->GetMesh(0).fbxMesh;
 
     if (type == izanagi::E_MSH_VTX_FMT_TYPE::E_MSH_VTX_FMT_TYPE_POS) {
         vec.x = static_cast<IZ_FLOAT>(vtx.pos.mData[0]);
@@ -333,7 +341,7 @@ void CFbxImporter::GetMaterialForMesh(
     IZ_UINT nMeshIdx,
     izanagi::S_MSH_MTRL& sMtrl)
 {
-    const MeshSubset& mesh = FbxDataManager::Instance().GetMesh(nMeshIdx);
+    const MeshSubset& mesh = m_dataMgr->GetMesh(nMeshIdx);
 
     sMtrl.name.SetString(mesh.mtrl->GetName());
     sMtrl.nameKey = sMtrl.name.GetKeyValue();
@@ -357,13 +365,13 @@ void CFbxImporter::EndJoint()
 
 IZ_UINT CFbxImporter::GetJointNum()
 {
-    IZ_UINT ret = FbxDataManager::Instance().GetNodeNum();
+    IZ_UINT ret = m_dataMgr->GetNodeNum();
     return ret;
 }
 
 IZ_PCSTR CFbxImporter::GetJointName(IZ_UINT nIdx)
 {
-    FbxNode* node = FbxDataManager::Instance().GetNode(nIdx);
+    FbxNode* node = m_dataMgr->GetNode(nIdx);
     return node->GetName();
 }
 
@@ -371,14 +379,14 @@ IZ_INT CFbxImporter::GetJointParent(
     IZ_UINT nIdx,
     const std::vector<izanagi::S_SKL_JOINT>& tvJoint)
 {
-    FbxNode* node = FbxDataManager::Instance().GetNode(nIdx);
+    FbxNode* node = m_dataMgr->GetNode(nIdx);
 
     const FbxNode* parent = node->GetParent();
     if (parent == NULL) {
         return -1;
     }
 
-    IZ_INT ret = FbxDataManager::Instance().GetNodeIndex(parent);
+    IZ_INT ret = m_dataMgr->GetNodeIndex(parent);
 
     return ret;
 }
@@ -387,8 +395,8 @@ void CFbxImporter::GetJointInvMtx(
     IZ_UINT nIdx,
     izanagi::math::SMatrix44& mtx)
 {
-    FbxNode* node = FbxDataManager::Instance().GetNode(nIdx);
-    FbxCluster* cluster = FbxDataManager::Instance().GetClusterByNode(node);
+    FbxNode* node = m_dataMgr->GetNode(nIdx);
+    FbxCluster* cluster = m_dataMgr->GetClusterByNode(node);
 
     if (cluster) {
         FbxAMatrix& mtxGlobal = node->EvaluateGlobalTransform();
@@ -424,7 +432,7 @@ void CFbxImporter::GetJointTransform(
     const std::vector<izanagi::S_SKL_JOINT>& tvJoint,
     std::vector<SJointTransform>& tvTransform)
 {
-    FbxNode* node = FbxDataManager::Instance().GetNode(nIdx);
+    FbxNode* node = m_dataMgr->GetNode(nIdx);
 
     FbxAMatrix& mtxLocal = node->EvaluateLocalTransform();
 
@@ -473,7 +481,10 @@ void CFbxImporter::GetJointTransform(
 
 IZ_BOOL CFbxImporter::ReadBaseModel(IZ_PCSTR pszName)
 {
-    return IZ_FALSE;
+    m_dataMgrBase = new FbxDataManager();
+    IZ_BOOL ret = m_dataMgrBase->Open(pszName);
+
+    return ret;
 }
 
 IZ_UINT CFbxImporter::GetAnmSetNum()
@@ -483,6 +494,7 @@ IZ_UINT CFbxImporter::GetAnmSetNum()
 
 IZ_BOOL CFbxImporter::BeginAnm(IZ_UINT nSetIdx)
 {
+    IZ_UINT m_curAnmIdx = nSetIdx;
     return IZ_FALSE;
 }
 
@@ -541,7 +553,8 @@ IZ_BOOL CFbxImporter::EndMaterial()
 
 IZ_UINT CFbxImporter::GetMaterialNum()
 {
-    IZ_UINT ret = FbxDataManager::Instance().GetMaterialNum();
+    m_dataMgr->LoadMaterial();
+    IZ_UINT ret = m_dataMgr->GetMaterialNum();
     return ret;
 }
 
@@ -648,7 +661,7 @@ IZ_BOOL CFbxImporter::GetMaterial(
     IZ_UINT nMtrlIdx,
     izanagi::S_MTRL_MATERIAL& sMtrl)
 {
-    auto* fbxMtrl = FbxDataManager::Instance().GetMaterial(nMtrlIdx);
+    auto* fbxMtrl = m_dataMgr->GetMaterial(nMtrlIdx);
 
     sMtrl.name.SetString(fbxMtrl->GetName());
     sMtrl.keyMaterial = sMtrl.name.GetKeyValue();
@@ -770,7 +783,7 @@ void CFbxImporter::GetMaterialShader(
     // マテリアルごとに１つのみぽい.
     IZ_ASSERT(nShaderIdx == 0);
 
-    auto* fbxMtrl = FbxDataManager::Instance().GetMaterial(nMtrlIdx);
+    auto* fbxMtrl = m_dataMgr->GetMaterial(nMtrlIdx);
 
     FbxString shading = fbxMtrl->ShadingModel.Get();
 

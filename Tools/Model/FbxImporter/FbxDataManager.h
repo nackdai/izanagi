@@ -15,32 +15,32 @@ struct UVData {
     IZ_UINT idxInMesh;
     FbxVector2 uv;
 
-    FbxMesh* fbxMesh = nullptr;
-    FbxSurfaceMaterial* mtrl = nullptr;
+    FbxMesh* fbxMesh{ nullptr };
+    FbxSurfaceMaterial* mtrl{ nullptr };
 };
 
 struct PosData {
     IZ_UINT idxInMesh;
     FbxVector4 pos;
 
-    FbxMesh* fbxMesh = nullptr;
-    FbxSurfaceMaterial* mtrl = nullptr;
+    FbxMesh* fbxMesh{ nullptr };
+    FbxSurfaceMaterial* mtrl{ nullptr };
 };    
 
 struct NormalData {
     IZ_UINT idxInMesh;
     FbxVector4 nml;
 
-    FbxMesh* fbxMesh = nullptr;
-    FbxSurfaceMaterial* mtrl = nullptr;
+    FbxMesh* fbxMesh{ nullptr };
+    FbxSurfaceMaterial* mtrl{ nullptr };
 };
 
 struct ColorData {
     IZ_UINT idxInMesh;
     FbxColor clr;
 
-    FbxMesh* fbxMesh = nullptr;
-    FbxSurfaceMaterial* mtrl = nullptr;
+    FbxMesh* fbxMesh{ nullptr };
+    FbxSurfaceMaterial* mtrl{ nullptr };
 };
 
 struct VertexData {
@@ -54,8 +54,8 @@ struct VertexData {
     std::vector<IZ_FLOAT> weight;
     std::vector<IZ_UINT> joint;
 
-    FbxMesh* fbxMesh = nullptr;
-    FbxSurfaceMaterial* mtrl = nullptr;
+    FbxMesh* fbxMesh{ nullptr };
+    FbxSurfaceMaterial* mtrl{ nullptr };
 
     bool operator==(const VertexData& rhs)
     {
@@ -81,8 +81,8 @@ struct IndexData
 {
     IZ_UINT idxInMesh;
 
-    FbxMesh* fbxMesh = nullptr;
-    FbxSurfaceMaterial* mtrl = nullptr;
+    FbxMesh* fbxMesh{ nullptr };
+    FbxSurfaceMaterial* mtrl{ nullptr };
 
     IndexData(IZ_UINT idx, FbxMesh* mesh, FbxSurfaceMaterial* _mtrl)
         : idxInMesh(idx), fbxMesh(mesh), mtrl(_mtrl)
@@ -93,7 +93,7 @@ struct SkinData
 {
     IZ_UINT idxInMesh;
 
-    FbxMesh* fbxMesh = nullptr;
+    FbxMesh* fbxMesh{ nullptr };
 
     std::vector<IZ_FLOAT> weight;
     std::vector<IZ_UINT> joint;
@@ -119,8 +119,8 @@ struct SkinData
 struct MeshSubset {
     std::vector<Face> faces;
 
-    FbxMesh* fbxMesh = nullptr;
-    FbxSurfaceMaterial* mtrl = nullptr;
+    FbxMesh* fbxMesh{ nullptr };
+    FbxSurfaceMaterial* mtrl{ nullptr };
 
     IZ_UINT vtxNum = 0;
 
@@ -137,23 +137,20 @@ struct MeshSubset {
 };
 
 class FbxDataManager {
-private:
-    static FbxDataManager s_Instance;
-
 public:
-    static FbxDataManager& Instance()
-    {
-        return s_Instance;
-    }
-
-private:
     FbxDataManager() {}
     ~FbxDataManager() {}
 
 public:
+    IZ_BOOL IsValid() const;
+
     IZ_BOOL Open(const char* path);
 
     void Close();
+
+    void LoadMesh();
+    void LoadMaterial();
+    void LoadAnimation();
 
     IZ_UINT GetFbxMeshNum() const;
 

@@ -4,6 +4,8 @@
 #include <map>
 #include "Importer.h"
 
+class FbxDataManager;
+
 class CFbxImporter : public IImporter {
     friend class IImporter;
 
@@ -170,25 +172,30 @@ public:
         std::vector<IZ_FLOAT>& tvValue) override;
 
 private:
+    FbxDataManager* m_dataMgr{ nullptr };
+    FbxDataManager* m_dataMgrBase{ nullptr };
+
     IZ_UINT m_curMeshIdx{ 0 };
     IZ_UINT m_posVtx{ 0 };
 
+    IZ_UINT m_curAnmIdx{ 0 };
+
     struct MaterialTex {
-        void* fbxMtrl = nullptr;
+        void* fbxMtrl{ nullptr };
         std::string paramName;
-        void* texture = nullptr;
+        void* texture{ nullptr };
         izanagi::S_MTRL_TEXTURE_TYPE type;
     };
     std::map<IZ_UINT, std::vector<MaterialTex>> m_mtrlTex;
 
     struct MaterialShading {
-        void* fbxMtrl = nullptr;
+        void* fbxMtrl{ nullptr };
         std::string name;
     };
     std::map<IZ_UINT, std::vector<MaterialShading>> m_mtrlShd;
 
     struct MaterialParam {
-        void* fbxMtrl = nullptr;
+        void* fbxMtrl{ nullptr };
         std::string name;
         std::vector<IZ_FLOAT> values;
     };

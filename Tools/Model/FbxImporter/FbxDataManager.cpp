@@ -1,6 +1,9 @@
 #include "FbxDataManager.h"
 
-FbxDataManager FbxDataManager::s_Instance;
+IZ_BOOL FbxDataManager::IsValid() const
+{
+    return (m_manager != nullptr && m_scene != nullptr);
+}
 
 IZ_BOOL FbxDataManager::Open(const char* path)
 {
@@ -49,10 +52,6 @@ IZ_BOOL FbxDataManager::Open(const char* path)
                 GatherNodes(m_scene->GetRootNode());
                 GatherMeshes();
                 GatherClusters();
-
-                GatherFaces();
-
-                GatherVertices();
                 
                 return IZ_TRUE;
             }
@@ -75,6 +74,63 @@ void FbxDataManager::Close()
         // are automatically destroyed at the same time.
         m_manager->Destroy();
     }
+}
+
+void FbxDataManager::LoadMesh()
+{
+    if (IsValid() && m_vertices.size() == 0) {
+        GatherFaces();
+
+        GatherVertices();
+    }
+}
+
+void FbxDataManager::LoadMaterial()
+{
+    if (IsValid() && m_materials.size() == 0) {
+        // シーンに含まれるメッシュの解析
+        auto meshCount = m_scene->GetMemberCount<FbxMesh>();
+
+        for (int i = 0; i < meshCount; ++i)
+        {
+            FbxMesh* fbxMesh = m_scene->GetMember<FbxMesh>(i);
+
+            if (fbxMesh->GetElementMaterial() == NULL) {
+                continue;
+            }
+
+            // メッシュに含まれるポリゴン（三角形）の数.
+            const int polygonCount = fbxMesh->GetPolygonCount();
+
+            auto& materialIndices = fbxMesh->GetElementMaterial()->GetIndexArray();
+
+            if (materialIndices.GetCount() == polygonCount)
+            {
+                for (int i = 0; i < polygonCount; i++)
+                {
+                    // メッシュに含まれるポリゴン（三角形）が所属しているマテリアルへのインデックス.
+                    const int materialIdx = materialIndices.GetAt(i);
+
+                    // マテリアル本体を取得.
+                    auto material = m_scene->GetMaterial(materialIdx);
+
+                    auto itMtrl = std::find(m_materials.begin(), m_materials.end(), material);
+                    if (itMtrl == m_materials.end())
+                    {
+                        m_materials.push_back(material);
+                    }
+                }
+            }
+            else {
+                IZ_ASSERT(IZ_FALSE);
+            }
+        }
+    }
+}
+
+void FbxDataManager::LoadAnimation()
+{
+
 }
 
 IZ_UINT FbxDataManager::GetFbxMeshNum() const
