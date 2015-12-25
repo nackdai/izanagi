@@ -11,6 +11,9 @@
 //
 // ‚P’¸“_‚É‚Â‚«‚Q•ûŒü‚Ìî•ñ‚ª•K—v‚Æ‚È‚é
 
+// NOTE
+// http://www.heloli.com/ps/PrismaticSolid.pdf
+
 struct SVSInput {
     float4 vPos         : POSITION;
     float3 vNormal      : NORMAL;
