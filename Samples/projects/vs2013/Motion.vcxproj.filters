@@ -33,6 +33,9 @@
     <ClCompile Include="..\..\Motion\StateCollada.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Motion\StateFbx.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\..\Media\ModelImage.xml">
@@ -55,9 +58,6 @@
     <ClInclude Include="..\..\Motion\MotionApp.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Motion\StateManager.h">
-      <Filter>source</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Motion\StateBase.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -67,5 +67,16 @@
     <ClInclude Include="..\..\Motion\StateXFile.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Motion\StateFbx.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Motion\StateManager.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Media\SeymourFbx.fbx">
+      <Filter>asset</Filter>
+    </None>
   </ItemGroup>
 </Project>

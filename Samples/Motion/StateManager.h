@@ -12,6 +12,7 @@ namespace izanagi {
 enum State {
     State_Collada = 0,
     State_XFile,
+    State_Fbx,
 
     StateNum,
 };

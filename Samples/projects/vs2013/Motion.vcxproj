@@ -341,6 +341,7 @@
     <ClInclude Include="..\..\Motion\MotionApp.h" />
     <ClInclude Include="..\..\Motion\StateBase.h" />
     <ClInclude Include="..\..\Motion\StateCollada.h" />
+    <ClInclude Include="..\..\Motion\StateFbx.h" />
     <ClInclude Include="..\..\Motion\StateManager.h" />
     <ClInclude Include="..\..\Motion\StateXFile.h" />
   </ItemGroup>
@@ -349,6 +350,7 @@
     <ClCompile Include="..\..\Motion\main.cpp" />
     <ClCompile Include="..\..\Motion\StateBase.cpp" />
     <ClCompile Include="..\..\Motion\StateCollada.cpp" />
+    <ClCompile Include="..\..\Motion\StateFbx.cpp" />
     <ClCompile Include="..\..\Motion\StateManager.cpp" />
     <ClCompile Include="..\..\Motion\StateXFile.cpp" />
   </ItemGroup>
@@ -622,6 +624,51 @@ move "$(DATA_DIR)%(Filename).anm" "$(PROJECT_MAIN_DIR)data"</Command>
       <Project>{dd5d28b8-93f1-4f26-8ad1-dd224ccb9a4f}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\..\Media\SeymourFbx.fbx">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">$(TOOL_DIR)Release\ModelConverter.exe -i "%(FullPath)" -mtx 48
+move "$(DATA_DIR)%(Filename).msh" "$(PROJECT_MAIN_DIR)data"
+move "$(DATA_DIR)%(Filename).skl" "$(PROJECT_MAIN_DIR)data"
+
+$(TOOL_DIR)Release\AnimationConverter.exe -i "%(FullPath)"
+move "$(DATA_DIR)%(Filename).anm" "$(PROJECT_MAIN_DIR)data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(TOOL_DIR)Release\ModelConverter.exe -i "%(FullPath)" -mtx 48
+move "$(DATA_DIR)%(Filename).msh" "$(PROJECT_MAIN_DIR)data"
+move "$(DATA_DIR)%(Filename).skl" "$(PROJECT_MAIN_DIR)data"
+
+$(TOOL_DIR)Release\AnimationConverter.exe -i "%(FullPath)"
+move "$(DATA_DIR)%(Filename).anm" "$(PROJECT_MAIN_DIR)data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(TOOL_DIR)Release\ModelConverter.exe -i "%(FullPath)" -mtx 48
+move "$(DATA_DIR)%(Filename).msh" "$(PROJECT_MAIN_DIR)data"
+move "$(DATA_DIR)%(Filename).skl" "$(PROJECT_MAIN_DIR)data"
+
+$(TOOL_DIR)Release\AnimationConverter.exe -i "%(FullPath)"
+move "$(DATA_DIR)%(Filename).anm" "$(PROJECT_MAIN_DIR)data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(TOOL_DIR)Release\ModelConverter.exe -i "%(FullPath)" -mtx 48
+move "$(DATA_DIR)%(Filename).msh" "$(PROJECT_MAIN_DIR)data"
+move "$(DATA_DIR)%(Filename).skl" "$(PROJECT_MAIN_DIR)data"
+
+$(TOOL_DIR)Release\AnimationConverter.exe -i "%(FullPath)"
+move "$(DATA_DIR)%(Filename).anm" "$(PROJECT_MAIN_DIR)data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(TOOL_DIR)Release\ModelConverter.exe -i "%(FullPath)" -mtx 48
+move "$(DATA_DIR)%(Filename).msh" "$(PROJECT_MAIN_DIR)data"
+move "$(DATA_DIR)%(Filename).skl" "$(PROJECT_MAIN_DIR)data"
+
+$(TOOL_DIR)Release\AnimationConverter.exe -i "%(FullPath)"
+move "$(DATA_DIR)%(Filename).anm" "$(PROJECT_MAIN_DIR)data"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">$(DATA_DIR)%(Filename).msh;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(DATA_DIR)%(Filename).msh;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(DATA_DIR)%(Filename).msh;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(DATA_DIR)%(Filename).msh;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(DATA_DIR)%(Filename).msh;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">%(FullPath);%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">%(FullPath);%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">%(FullPath);%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(FullPath);%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">%(FullPath);%(AdditionalInputs)</AdditionalInputs>
+    </CustomBuild>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
