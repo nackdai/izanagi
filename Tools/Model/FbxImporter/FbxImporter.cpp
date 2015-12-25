@@ -576,6 +576,74 @@ static const char* FbxMtrlParamNames[] = {
     fbxsdk::FbxSurfaceMaterial::sVectorDisplacementFactor,
 };
 
+void CFbxImporter::getLambertParams(
+    void* mtrl, 
+    std::vector<CFbxImporter::MaterialParam>& list)
+{
+    fbxsdk::FbxSurfaceLambert* lambert = (fbxsdk::FbxSurfaceLambert*)mtrl;
+
+    if (lambert->Diffuse.IsValid()) {
+        MaterialParam diffuse;
+        diffuse.fbxMtrl = mtrl;
+        diffuse.name = "diffuse";
+        diffuse.values.push_back(lambert->Diffuse.Get().mData[0]);
+        diffuse.values.push_back(lambert->Diffuse.Get().mData[1]);
+        diffuse.values.push_back(lambert->Diffuse.Get().mData[2]);
+        diffuse.values.push_back(1.0f);
+        list.push_back(diffuse);
+    }
+
+    if (lambert->Ambient.IsValid()) {
+        MaterialParam ambient;
+        ambient.fbxMtrl = mtrl;
+        ambient.name = "ambient";
+        ambient.values.push_back(lambert->Ambient.Get().mData[0]);
+        ambient.values.push_back(lambert->Ambient.Get().mData[1]);
+        ambient.values.push_back(lambert->Ambient.Get().mData[2]);
+        ambient.values.push_back(1.0f);
+        list.push_back(ambient);
+    }
+
+    if (lambert->Emissive.IsValid()) {
+        MaterialParam emmisive;
+        emmisive.fbxMtrl = mtrl;
+        emmisive.name = "emmisive";
+        emmisive.values.push_back(lambert->Emissive.Get().mData[0]);
+        emmisive.values.push_back(lambert->Emissive.Get().mData[1]);
+        emmisive.values.push_back(lambert->Emissive.Get().mData[2]);
+        emmisive.values.push_back(1.0f);
+        list.push_back(emmisive);
+    }
+}
+
+void CFbxImporter::getPhongParams(
+    void* mtrl, 
+    std::vector<CFbxImporter::MaterialParam>& list)
+{
+    getLambertParams(mtrl, list);
+
+    fbxsdk::FbxSurfacePhong* phong = (fbxsdk::FbxSurfacePhong*)mtrl;
+
+    if (phong->Specular.IsValid()) {
+        MaterialParam specular;
+        specular.fbxMtrl = mtrl;
+        specular.name = "specular";
+        specular.values.push_back(phong->Specular.Get().mData[0]);
+        specular.values.push_back(phong->Specular.Get().mData[1]);
+        specular.values.push_back(phong->Specular.Get().mData[2]);
+        specular.values.push_back(1.0f);
+        list.push_back(specular);
+    }
+
+    if (phong->Shininess.IsValid()) {
+        MaterialParam shiness;
+        shiness.fbxMtrl = mtrl;
+        shiness.name = "shiness";
+        shiness.values.push_back(phong->Shininess.Get());
+        list.push_back(shiness);
+    }
+}
+
 IZ_BOOL CFbxImporter::GetMaterial(
     IZ_UINT nMtrlIdx,
     izanagi::S_MTRL_MATERIAL& sMtrl)
@@ -590,6 +658,7 @@ IZ_BOOL CFbxImporter::GetMaterial(
     sMtrl.numParam = 0;
     sMtrl.paramBytes = 0;
 
+    // for tex.
     for (IZ_UINT i = 0; i < COUNTOF(FbxMtrlParamNames); i++)
     {
         std::string name(FbxMtrlParamNames[i]);
@@ -606,7 +675,6 @@ IZ_BOOL CFbxImporter::GetMaterial(
         // プロパティが持っているレイヤードテクスチャの枚数をチェック.
         int layerNum = prop.GetSrcObjectCount<fbxsdk::FbxLayeredTexture>();
 
-        // for tex.
         if (layerNum > 0) {
             // TODO
         }
@@ -645,24 +713,35 @@ IZ_BOOL CFbxImporter::GetMaterial(
 
             if (list.size() > 0) {
                 m_mtrlTex.insert(std::make_pair(nMtrlIdx, list));
+                sMtrl.numTex += list.size();
             }
-        }
-
-        // LambertかPhongか.
-        if (fbxMtrl->GetClassId().Is(FbxSurfaceLambert::ClassId)) {
-            // Lambertにダウンキャスト.
-            FbxSurfaceLambert* lambert = (FbxSurfaceLambert*)fbxMtrl;
-        }
-        else if (fbxMtrl->GetClassId().Is(FbxSurfacePhong::ClassId)) {
-            // Phongにダウンキャスト.
-            FbxSurfacePhong* phong = (FbxSurfacePhong*)fbxMtrl;
-        }
-        else {
-            IZ_ASSERT(IZ_FALSE);
         }
     }
 
-    sMtrl.numTex = m_mtrlTex[nMtrlIdx].size();
+    std::vector<MaterialParam> paramList;
+
+    // for param.
+    if (fbxMtrl->GetClassId().Is(fbxsdk::FbxSurfacePhong::ClassId)) {
+        getPhongParams(fbxMtrl, paramList);
+    }
+    else if (fbxMtrl->GetClassId().Is(fbxsdk::FbxSurfaceLambert::ClassId)) {
+        getLambertParams(fbxMtrl, paramList);
+    }
+    else {
+        IZ_ASSERT(IZ_FALSE);
+    }
+
+    if (paramList.size()) {
+        m_mtrlParam.insert(std::make_pair(nMtrlIdx, paramList));
+
+        for (IZ_UINT i = 0; i < paramList.size(); i++)
+        {
+            const MaterialParam& param = paramList[i];
+
+            sMtrl.paramBytes += sizeof(IZ_FLOAT) * param.values.size();
+            sMtrl.numParam++;
+        }
+    }
     
     return IZ_TRUE;
 }
@@ -704,6 +783,26 @@ void CFbxImporter::GetMaterialParam(
     IZ_UINT nParamIdx,
     izanagi::S_MTRL_PARAM& sParam)
 {
+    const auto& param = m_mtrlParam[nMtrlIdx][nParamIdx];
+
+    sParam.name.SetString(param.name.c_str());
+    sParam.key = sParam.name.GetKeyValue();
+
+    if (param.values.size() == 4)
+    {
+        sParam.elements = param.values.size();
+        sParam.type = izanagi::E_MTRL_PARAM_TYPE::E_MTRL_PARAM_TYPE_VECTOR;
+    }
+    else if (param.values.size() == 16) {
+        sParam.elements = param.values.size();
+        sParam.type = izanagi::E_MTRL_PARAM_TYPE::E_MTRL_PARAM_TYPE_MATRIX;
+    }
+    else {
+        sParam.elements = param.values.size();
+        sParam.type = izanagi::E_MTRL_PARAM_TYPE::E_MTRL_PARAM_TYPE_FLOAT;
+    }
+
+    sParam.bytes = sizeof(IZ_FLOAT) * sParam.elements;
 }
 
 void CFbxImporter::GetMaterialParamValue(
@@ -711,4 +810,10 @@ void CFbxImporter::GetMaterialParamValue(
     IZ_UINT nParamIdx,
     std::vector<IZ_FLOAT>& tvValue)
 {
+    const auto& param = m_mtrlParam[nMtrlIdx][nParamIdx];
+
+    std::copy(
+        param.values.begin(),
+        param.values.end(),
+        std::back_inserter(tvValue));
 }

@@ -177,7 +177,6 @@ private:
         void* fbxMtrl = nullptr;
         std::string paramName;
         void* texture = nullptr;
-
         izanagi::S_MTRL_TEXTURE_TYPE type;
     };
     std::map<IZ_UINT, std::vector<MaterialTex>> m_mtrlTex;
@@ -187,6 +186,16 @@ private:
         std::string name;
     };
     std::map<IZ_UINT, std::vector<MaterialShading>> m_mtrlShd;
+
+    struct MaterialParam {
+        void* fbxMtrl = nullptr;
+        std::string name;
+        std::vector<IZ_FLOAT> values;
+    };
+    std::map<IZ_UINT, std::vector<MaterialParam>> m_mtrlParam;
+
+    void getLambertParams(void* mtrl, std::vector<MaterialParam>& list);
+    void getPhongParams(void* mtrl, std::vector<MaterialParam>& list);
 };
 
 #endif  // #if !defined(__MODEL_LIB_JSON_IMPORTER_H__)
