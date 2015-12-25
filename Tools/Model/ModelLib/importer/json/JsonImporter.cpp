@@ -6,7 +6,7 @@ CJsonImporter::CJsonImporter()
     m_FileStream = NULL;
 }
 
-IZ_BOOL CJsonImporter::Open(IZ_PCSTR pszName)
+IZ_BOOL CJsonImporter::Open(IZ_PCSTR pszName, IZ_BOOL isOpenForAnm)
 {
     VRETURN(m_FileStream == NULL);
     VRETURN(m_FP == NULL);

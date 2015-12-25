@@ -29,7 +29,7 @@ protected:
     virtual ~IImporter() {}
 
 public:
-    PURE_VIRTUAL(IZ_BOOL Open(IZ_PCSTR pszName));
+    PURE_VIRTUAL(IZ_BOOL Open(IZ_PCSTR pszName, IZ_BOOL isOpenForAnm = IZ_FALSE));
     PURE_VIRTUAL(IZ_BOOL Close());
 
     //////////////////////////////////

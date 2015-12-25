@@ -16,7 +16,7 @@ protected:
     NO_COPIABLE(CPmdImporter);
 
 public:
-    IZ_BOOL Open(IZ_PCSTR pszName);
+    IZ_BOOL Open(IZ_PCSTR pszName, IZ_BOOL isOpenForAnm = IZ_FALSE);
     IZ_BOOL Close();
 
     //////////////////////////////////

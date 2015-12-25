@@ -11,10 +11,18 @@ CFbxImporter::CFbxImporter()
 {
 }
 
-IZ_BOOL CFbxImporter::Open(IZ_PCSTR pszName)
+IZ_BOOL CFbxImporter::Open(IZ_PCSTR pszName, IZ_BOOL isOpenForAnm)
 {
+    IZ_BOOL ret = IZ_FALSE;
     m_dataMgr = new FbxDataManager();
-    IZ_BOOL ret = m_dataMgr->Open(pszName);
+    
+    if (isOpenForAnm) {
+        ret = m_dataMgr->OpenForAnm(pszName);
+    }
+    else {
+        ret = m_dataMgr->Open(pszName);
+    }
+
     return ret;
 }
 
@@ -481,43 +489,120 @@ void CFbxImporter::GetJointTransform(
 
 IZ_BOOL CFbxImporter::ReadBaseModel(IZ_PCSTR pszName)
 {
+#if 0
     m_dataMgrBase = new FbxDataManager();
     IZ_BOOL ret = m_dataMgrBase->Open(pszName);
 
     return ret;
+#else
+    return IZ_TRUE;
+#endif
 }
 
 IZ_UINT CFbxImporter::GetAnmSetNum()
 {
-    return 0;
+    // NOTE
+    // １しか許さない.
+    return 1;
 }
 
 IZ_BOOL CFbxImporter::BeginAnm(IZ_UINT nSetIdx)
 {
     IZ_UINT m_curAnmIdx = nSetIdx;
-    return IZ_FALSE;
+    return IZ_TRUE;
 }
 
 IZ_BOOL CFbxImporter::EndAnm()
 {
-    return IZ_FALSE;
+    return IZ_TRUE;
 }
 
 IZ_UINT CFbxImporter::GetAnmNodeNum()
 {
-    return 0;
+    IZ_UINT ret = m_dataMgr->GetNodeNum();
+    return ret;
 }
 
 IZ_UINT CFbxImporter::GetAnmChannelNum(IZ_UINT nNodeIdx)
 {
-    return 0;
+    static const fbxsdk::FbxVector4 vOne(1.0f, 1.0f, 1.0f, 0.0f);
+    static const fbxsdk::FbxQuaternion qZero(0.0f, 0.0f, 0.0f, 1.0f);
+
+    IZ_UINT num = 0;
+
+    auto node = m_dataMgr->GetNode(nNodeIdx);
+
+    auto start = m_dataMgr->GetAnmStartFrame();
+    auto stop = m_dataMgr->GetAnmStopFrame();
+
+    fbxsdk::FbxAMatrix prevMtx;
+    prevMtx.SetIdentity();
+
+    AnmChannel channel;
+    channel.nodeIdx = nNodeIdx;
+
+    for (IZ_UINT f = start; f < stop; f++) {
+        FbxTime time;
+        time.Set(FbxTime::GetOneFrameValue(FbxTime::eFrames60) * f);
+
+        auto mtx = node->EvaluateGlobalTransform(time);
+
+        if (mtx != prevMtx) {
+            auto t = mtx.GetT();    // translate.
+            auto s = mtx.GetS();    // scale.
+            auto q = mtx.GetQ();    // quaternion.
+            auto r = mtx.GetR();    // rotation.
+
+            IZ_UINT pos = 0;
+
+            // NOTE
+            // Rotation -> Scale -> Translate
+
+            // Rotate.
+            if (!(q == qZero)) {
+                num++;
+                channel.type[pos++] = ParamType::Rotate;
+            }
+            
+            // Scale.
+            if (!(s == vOne)) {
+                num++;
+                channel.type[pos++] = ParamType::Scale;
+            }
+
+            // Trans.
+            if (!t.IsZero(3)) {
+                num++;
+                channel.type[pos++] = ParamType::Tranlate;
+            }
+
+            break;
+        }
+
+        prevMtx = mtx;
+    }
+
+    m_channels.push_back(channel);
+
+    return num;
 }
 
 IZ_BOOL CFbxImporter::GetAnmNode(
     IZ_UINT nNodeIdx,
     izanagi::S_ANM_NODE& sNode)
 {
-    return IZ_FALSE;
+    auto node = m_dataMgr->GetNode(nNodeIdx);
+
+    sNode.targetIdx = nNodeIdx;
+    sNode.target.SetString(node->GetName());
+    sNode.targetKey = sNode.target.GetKeyValue();
+
+    sNode.numChannels = GetAnmChannelNum(nNodeIdx);
+
+    // NOTE
+    // channelIdx は外部で設定される.
+
+    return IZ_TRUE;
 }
 
 IZ_BOOL CFbxImporter::GetAnmChannel(
@@ -525,6 +610,121 @@ IZ_BOOL CFbxImporter::GetAnmChannel(
     IZ_UINT nChannelIdx,
     izanagi::S_ANM_CHANNEL& sChannel)
 {
+    IZ_ASSERT(nNodeIdx < m_channels.size());
+
+    auto node = m_dataMgr->GetNode(nNodeIdx);
+
+    auto& channel = m_channels[nNodeIdx];
+    IZ_ASSERT(channel.nodeIdx == nNodeIdx);
+
+    // TODO
+    // Not used.
+    //sChannel.stride
+
+    // NOTE
+    // keyIdx は外部で設定される.
+
+    auto start = m_dataMgr->GetAnmStartFrame();
+    auto stop = m_dataMgr->GetAnmStopFrame();
+
+    fbxsdk::FbxVector4 prevT;
+    fbxsdk::FbxVector4 prevS(1.0f, 1.0f, 1.0f, 0.0f);
+    fbxsdk::FbxQuaternion prevQ;
+
+    for (IZ_UINT f = start; f < stop; f++) {
+        FbxTime time;
+        time.Set(FbxTime::GetOneFrameValue(FbxTime::eFrames60) * f);
+
+        auto mtx = node->EvaluateGlobalTransform(time);
+
+        auto t = mtx.GetT();    // translate.
+        auto s = mtx.GetS();    // scale.
+        auto q = mtx.GetQ();    // quaternion.
+        auto r = mtx.GetR();    // rotation.
+
+        // NOTE
+        // Rotation -> Scale -> Translate
+
+        // Rotate.
+        if (!(q == prevQ)) {
+            AnmKey key;
+            key.key = f - start;
+
+            key.value[0] = q.mData[0];
+            key.value[1] = q.mData[1];
+            key.value[2] = q.mData[2];
+            key.value[3] = q.mData[3];
+
+            channel.keys[ParamType::Rotate].push_back(key);
+        }
+        prevQ = q;
+
+        // Scale.
+        if (!(s == prevS)) {
+            AnmKey key;
+            key.key = f - start;
+
+            key.value[0] = s.mData[0];
+            key.value[1] = s.mData[1];
+            key.value[2] = s.mData[2];
+            key.value[3] = s.mData[3];
+
+            channel.keys[ParamType::Scale].push_back(key);
+        }
+        prevS = s;
+
+        // Trans.
+        if (!(t == prevT)) {
+            AnmKey key;
+            key.key = f - start;
+
+            key.value[0] = t.mData[0];
+            key.value[1] = t.mData[1];
+            key.value[2] = t.mData[2];
+            key.value[3] = t.mData[3];
+
+            channel.keys[ParamType::Tranlate].push_back(key);
+        }
+        prevT = t;
+    }
+
+    for (IZ_UINT i = 0; i < ParamType::Num; i++) {
+        if (channel.keys[i].size() == 1) {
+            auto key = channel.keys[i][0];
+            key.key = stop - 1;
+            channel.keys[i].push_back(key);
+        }
+    }
+
+    auto type = channel.type[nChannelIdx];
+    
+    // NOTE
+    // Rotation -> Scale -> Translate
+
+    // Rotation
+    if (type == ParamType::Rotate) {
+        sChannel.numKeys = channel.keys[type].size();
+        sChannel.interp = izanagi::E_ANM_INTERP_TYPE::E_ANM_INTERP_TYPE_SLERP;
+        sChannel.type = izanagi::E_ANM_TRANSFORM_TYPE::E_ANM_TRANSFORM_TYPE_QUATERNION_XYZW;
+        return IZ_TRUE;
+    }
+
+    // Scale
+    if (type == ParamType::Scale) {
+        sChannel.numKeys = channel.keys[type].size();
+        sChannel.interp = izanagi::E_ANM_INTERP_TYPE::E_ANM_INTERP_TYPE_LINEAR;
+        sChannel.type = izanagi::E_ANM_TRANSFORM_TYPE::E_ANM_TRANSFORM_TYPE_SCALE_XYZ;
+        return IZ_TRUE;
+    }
+
+    // Translate
+    if (type == ParamType::Tranlate) {
+        sChannel.numKeys = channel.keys[type].size();
+        sChannel.interp = izanagi::E_ANM_INTERP_TYPE::E_ANM_INTERP_TYPE_LINEAR;
+        sChannel.type = izanagi::E_ANM_TRANSFORM_TYPE::E_ANM_TRANSFORM_TYPE_TRANSLATE_XYZ;
+        return IZ_TRUE;
+    }
+
     return IZ_FALSE;
 }
 
@@ -535,6 +735,71 @@ IZ_BOOL CFbxImporter::GetAnmKey(
     izanagi::S_ANM_KEY& sKey,
     std::vector<IZ_FLOAT>& tvValue)
 {
+    IZ_ASSERT(nNodeIdx < m_channels.size());
+
+    auto node = m_dataMgr->GetNode(nNodeIdx);
+
+    auto& channel = m_channels[nNodeIdx];
+    IZ_ASSERT(channel.nodeIdx == nNodeIdx);
+
+    auto type = channel.type[nChannelIdx];
+
+    // TODO
+    // 60FPS固定.
+    static const IZ_FLOAT frame = 1.0f / 60.0f;
+
+    // NOTE
+    // Rotation -> Scale -> Translate
+
+    // Rotation
+    if (type == ParamType::Rotate) {
+        IZ_ASSERT(nKeyIdx < channel.keys[type].size());
+
+        const auto& key = channel.keys[type][nKeyIdx];
+
+        sKey.keyTime = key.key * frame;
+        sKey.numParams = 4;
+
+        tvValue.push_back(key.value[0]);
+        tvValue.push_back(key.value[1]);
+        tvValue.push_back(key.value[2]);
+        tvValue.push_back(key.value[3]);
+
+        return IZ_TRUE;
+    }
+
+    // Scale
+    if (type == ParamType::Scale) {
+        IZ_ASSERT(nKeyIdx < channel.keys[type].size());
+
+        const auto& key = channel.keys[type][nKeyIdx];
+
+        sKey.keyTime = key.key * frame;
+        sKey.numParams = 3;
+
+        tvValue.push_back(key.value[0]);
+        tvValue.push_back(key.value[1]);
+        tvValue.push_back(key.value[2]);
+
+        return IZ_TRUE;
+    }
+
+    // Translate
+    if (type == ParamType::Tranlate) {
+        IZ_ASSERT(nKeyIdx < channel.keys[type].size());
+
+        const auto& key = channel.keys[type][nKeyIdx];
+
+        sKey.keyTime = key.key * frame;
+        sKey.numParams = 3;
+
+        tvValue.push_back(key.value[0]);
+        tvValue.push_back(key.value[1]);
+        tvValue.push_back(key.value[2]);
+
+        return IZ_TRUE;
+    }
+
     return IZ_FALSE;
 }
 

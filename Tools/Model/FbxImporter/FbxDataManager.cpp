@@ -62,6 +62,57 @@ IZ_BOOL FbxDataManager::Open(const char* path)
     return IZ_FALSE;
 }
 
+IZ_BOOL FbxDataManager::OpenForAnm(const char* path)
+{
+    m_manager = FbxManager::Create();
+
+    FbxIOSettings* ios = FbxIOSettings::Create(m_manager, IOSROOT);
+    m_manager->SetIOSettings(ios);
+
+    m_scene = FbxScene::Create(m_manager, "animationScene");
+
+    FbxImporter* importer = FbxImporter::Create(m_manager, "");
+
+    int fileFormat = -1;
+
+    if (m_manager->GetIOPluginRegistry()->DetectReaderFileFormat(path, fileFormat)) {
+        if (importer->Initialize(path, fileFormat)) {
+            if (importer->Import(m_scene)) {
+#if 0
+                // Convert Axis System to what is used in this example, if needed
+                FbxAxisSystem SceneAxisSystem = m_scene->GetGlobalSettings().GetAxisSystem();
+                FbxAxisSystem axisSystem(
+                    FbxAxisSystem::eYAxis,
+                    FbxAxisSystem::eParityOdd,
+                    FbxAxisSystem::eLeftHanded);
+
+                if (SceneAxisSystem != axisSystem)
+                {
+                    axisSystem.ConvertScene(m_scene);
+                }
+#endif
+
+                // Convert Unit System to what is used in this example, if needed
+                FbxSystemUnit SceneSystemUnit = m_scene->GetGlobalSettings().GetSystemUnit();
+                if (SceneSystemUnit.GetScaleFactor() != 1.0)
+                {
+                    //The unit in this tool is centimeter.
+                    FbxSystemUnit::cm.ConvertScene(m_scene);
+                }
+
+                LoadAnimation(importer);
+
+                importer->Destroy();
+
+                return IZ_TRUE;
+            }
+        }
+    }
+
+    IZ_ASSERT(IZ_FALSE);
+    return IZ_FALSE;
+}
+
 void FbxDataManager::Close()
 {
     if (m_scene) {
@@ -128,9 +179,29 @@ void FbxDataManager::LoadMaterial()
     }
 }
 
-void FbxDataManager::LoadAnimation()
+void FbxDataManager::LoadAnimation(FbxImporter* importer)
 {
+    // 含まれるアニメーション数.
+    // １つしか許さない.
+    auto animStackCount = importer->GetAnimStackCount();
+    IZ_ASSERT(animStackCount == 1);
 
+    auto takeInfo = importer->GetTakeInfo(0);
+
+    auto importOffset = takeInfo->mImportOffset;
+    auto startTime = takeInfo->mLocalTimeSpan.GetStart();
+    auto stopTime = takeInfo->mLocalTimeSpan.GetStop();
+
+    // TODO
+    auto oneFrame = fbxsdk::FbxTime::GetOneFrameValue(fbxsdk::FbxTime::eFrames60);
+
+    // フレーム数計算.
+    m_AnmStartFrame = (importOffset.Get() + startTime.Get()) / oneFrame;
+    m_AnmStopFrame = (importOffset.Get() + stopTime.Get()) / oneFrame;
+    IZ_ASSERT(m_AnmStartFrame < m_AnmStopFrame);
+
+    // ノードを集める.
+    GatherNodes(nullptr);
 }
 
 IZ_UINT FbxDataManager::GetFbxMeshNum() const
@@ -239,6 +310,7 @@ FbxSurfaceMaterial* FbxDataManager::GetMaterial(IZ_UINT idx)
 // ノードを集める.
 void FbxDataManager::GatherNodes(FbxNode* node)
 {
+#if 0
     // NOTE
     // RootNodeは除外する.
     if (node != m_scene->GetRootNode()) {
@@ -249,6 +321,15 @@ void FbxDataManager::GatherNodes(FbxNode* node)
         FbxNode* child = node->GetChild(i);
         GatherNodes(child);
     }
+#else
+    // ノードを集める.
+    auto nodeCount = m_scene->GetNodeCount();
+    for (IZ_UINT i = 0; i < nodeCount; ++i)
+    {
+        auto fbxNode = m_scene->GetNode(i);
+        m_nodes.push_back(fbxNode);
+    }
+#endif
 }
 
 // メッシュを集める

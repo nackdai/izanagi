@@ -16,7 +16,7 @@ protected:
 public:
     static IZ_BOOL IsTxtFormat(IZ_PCSTR pszName);
 
-    IZ_BOOL Open(IZ_PCSTR pszName);
+    IZ_BOOL Open(IZ_PCSTR pszName, IZ_BOOL isOpenForAnm = IZ_FALSE);
     IZ_BOOL Close();
 
     //////////////////////////////////

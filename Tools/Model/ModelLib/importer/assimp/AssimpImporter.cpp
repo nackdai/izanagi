@@ -7,7 +7,7 @@ AssimpImporter::AssimpImporter()
 {
 }
 
-IZ_BOOL AssimpImporter::Open(IZ_PCSTR pszName)
+IZ_BOOL AssimpImporter::Open(IZ_PCSTR pszName, IZ_BOOL isOpenForAnm)
 {
     m_scene = m_importer.ReadFile(
         std::string(pszName),
@@ -890,6 +890,9 @@ IZ_BOOL AssimpImporter::GetAnmNode(
 
     sNode.numChannels = GetAnmChannelNum(nNodeIdx);
 
+    // NOTE
+    // channelIdx は外部で設定される.
+
     return ret;
 }
 
@@ -898,6 +901,9 @@ IZ_BOOL AssimpImporter::GetAnmChannel(
     IZ_UINT nChannelIdx,
     izanagi::S_ANM_CHANNEL& sChannel)
 {
+    // NOTE
+    // keyIdx は外部で設定される.
+
     auto scene = m_importer.GetScene();
     IZ_ASSERT(m_curAnmIdx < scene->mNumAnimations);
 
@@ -909,7 +915,7 @@ IZ_BOOL AssimpImporter::GetAnmChannel(
     const AnmChannel& ch = m_channels[nNodeIdx];
 
     // NOTE
-    // Rotation -> Translate -> Scale
+    // Rotation -> Scale -> Translate
 
     // Rotation
     if (ch.type[nChannelIdx] == izanagi::E_ANM_TRANSFORM_TYPE::E_ANM_TRANSFORM_TYPE_ROTATE) {
@@ -971,7 +977,7 @@ IZ_BOOL AssimpImporter::GetAnmKey(
     const AnmChannel& ch = m_channels[nNodeIdx];
 
     // NOTE
-    // Rotation -> Translate -> Scale
+    // Rotation -> Scale -> Translate
 
     // Rotation
     if (ch.type[nChannelIdx] == izanagi::E_ANM_TRANSFORM_TYPE::E_ANM_TRANSFORM_TYPE_ROTATE) {

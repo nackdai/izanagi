@@ -6,7 +6,7 @@ CPmdImporter::CPmdImporter()
     m_CurMeshIdx = -1;
 }
 
-IZ_BOOL CPmdImporter::Open(IZ_PCSTR pszName)
+IZ_BOOL CPmdImporter::Open(IZ_PCSTR pszName, IZ_BOOL isOpenForAnm)
 {
     izanagi::CFileInputStream stream;
     VRETURN(stream.Open(pszName));

@@ -16,7 +16,7 @@ public:
     NO_COPIABLE(CFbxImporter);
 
 public:
-    virtual IZ_BOOL Open(IZ_PCSTR pszName) override;
+    virtual IZ_BOOL Open(IZ_PCSTR pszName, IZ_BOOL isOpenForAnm = IZ_FALSE) override;
     virtual IZ_BOOL Close() override;
 
     //////////////////////////////////
@@ -203,6 +203,36 @@ private:
 
     void getLambertParams(void* mtrl, std::vector<MaterialParam>& list);
     void getPhongParams(void* mtrl, std::vector<MaterialParam>& list);
+
+    enum ParamType {
+        Tranlate,
+        Scale,
+        Rotate,
+
+        Num,
+    };
+
+    struct AnmKey {
+        IZ_UINT key;
+        IZ_FLOAT value[4];
+
+        AnmKey() {}
+    };
+
+    struct AnmChannel {
+        IZ_UINT nodeIdx;
+        ParamType type[ParamType::Num];
+
+        std::vector<AnmKey> keys[ParamType::Num];
+
+        AnmChannel()
+        {
+            for (IZ_UINT i = 0; i < ParamType::Num; i++) {
+                type[i] = ParamType::Num;
+            }
+        }
+    };
+    std::vector<AnmChannel> m_channels;
 };
 
 #endif  // #if !defined(__MODEL_LIB_JSON_IMPORTER_H__)

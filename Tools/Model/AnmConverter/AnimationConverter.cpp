@@ -5,6 +5,17 @@
 #include "izToolKit.h"
 #include "Option.h"
 
+#define ENABLE_FBX_IMPORT
+
+#ifdef ENABLE_FBX_IMPORT
+#include "..\FbxImporter\FbxImporter.h"
+#ifdef _DEBUG
+#pragma comment(lib, "..\\..\\Model\\FbxImporter\\lib\\Debug\\FbxImporter.lib")
+#else
+#pragma comment(lib, "..\\..\\Model\\FbxImporter\\lib\\Release\\FbxImporter.lib")
+#endif
+#endif
+
 #define INVALID_RET_VAL     (1)
 
 namespace {
@@ -96,6 +107,12 @@ int main(int argc, char* argv[])
     // インポーター作成
     IImporter* importer = IImporter::CreateImporter(option.modelType);
 
+#ifdef ENABLE_FBX_IMPORT
+    if (importer == IZ_NULL && option.modelType == ModelType::ModelTypeFBX) {
+        importer = new CFbxImporter();
+    }
+#endif
+
     // VMDの場合はIK -> FK 変換を行う
 #ifdef ENABLE_CONV_IK_FK
     if (option.modelType == ModelTypePMD)
@@ -111,7 +128,7 @@ int main(int argc, char* argv[])
 
     // 入力ファイルを開く
     VRETURN_VAL(
-        importer->Open(option.in.c_str()),
+        importer->Open(option.in.c_str(), IZ_TRUE),
         INVALID_RET_VAL);
 
     // ベースモデルファイルを開く

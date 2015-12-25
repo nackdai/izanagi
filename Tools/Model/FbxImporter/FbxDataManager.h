@@ -145,12 +145,12 @@ public:
     IZ_BOOL IsValid() const;
 
     IZ_BOOL Open(const char* path);
+    IZ_BOOL OpenForAnm(const char* path);
 
     void Close();
 
     void LoadMesh();
     void LoadMaterial();
-    void LoadAnimation();
 
     IZ_UINT GetFbxMeshNum() const;
 
@@ -181,7 +181,12 @@ public:
     IZ_UINT GetMaterialNum() const;
     FbxSurfaceMaterial* GetMaterial(IZ_UINT idx);
 
+    IZ_UINT GetAnmStartFrame() const { return m_AnmStartFrame; }
+    IZ_UINT GetAnmStopFrame() const { return m_AnmStopFrame; }
+
 private:
+    void LoadAnimation(FbxImporter* importer);
+
     // ÉmÅ[ÉhÇèWÇﬂÇÈ.
     void GatherNodes(FbxNode* node);
 
@@ -216,6 +221,9 @@ private:
     std::vector<VertexData> m_vertices;
 
     std::vector<fbxsdk::FbxSurfaceMaterial*> m_materials;
+
+    IZ_UINT m_AnmStartFrame;
+    IZ_UINT m_AnmStopFrame;
 };
 
 #endif  // #if !defined(__MODEL_LIB_FBX_DATA_MANAGER_H__)

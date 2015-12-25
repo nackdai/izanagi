@@ -16,7 +16,7 @@ protected:
     NO_COPIABLE(CJsonImporter);
 
 public:
-    virtual IZ_BOOL Open(IZ_PCSTR pszName);
+    virtual IZ_BOOL Open(IZ_PCSTR pszName, IZ_BOOL isOpenForAnm = IZ_FALSE);
     virtual IZ_BOOL Close();
 
     //////////////////////////////////

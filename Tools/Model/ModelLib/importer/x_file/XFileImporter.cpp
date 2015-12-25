@@ -14,7 +14,7 @@ IZ_BOOL CXFileImporter::IsTxtFormat(IZ_PCSTR pszName)
     return CXFileParser::IsTxtFormat(pszName);
 }
 
-IZ_BOOL CXFileImporter::Open(IZ_PCSTR pszName)
+IZ_BOOL CXFileImporter::Open(IZ_PCSTR pszName, IZ_BOOL isOpenForAnm)
 {
     IZ_BOOL ret = m_Parser.Parse(pszName);
     if (ret) {
