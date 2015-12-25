@@ -545,7 +545,7 @@ IZ_UINT CFbxImporter::GetAnmChannelNum(IZ_UINT nNodeIdx)
         FbxTime time;
         time.Set(FbxTime::GetOneFrameValue(FbxTime::eFrames60) * f);
 
-        auto mtx = node->EvaluateGlobalTransform(time);
+        auto mtx = node->EvaluateLocalTransform(time);
 
         if (mtx != prevMtx) {
             auto t = mtx.GetT();    // translate.
@@ -635,7 +635,7 @@ IZ_BOOL CFbxImporter::GetAnmChannel(
         FbxTime time;
         time.Set(FbxTime::GetOneFrameValue(FbxTime::eFrames60) * f);
 
-        auto mtx = node->EvaluateGlobalTransform(time);
+        auto mtx = node->EvaluateLocalTransform(time);
 
         auto t = mtx.GetT();    // translate.
         auto s = mtx.GetS();    // scale.
@@ -688,6 +688,8 @@ IZ_BOOL CFbxImporter::GetAnmChannel(
         prevT = t;
     }
 
+    // NOTE
+    // キーデータが１つだと補間できないので、あえて増やす.
     for (IZ_UINT i = 0; i < ParamType::Num; i++) {
         if (channel.keys[i].size() == 1) {
             auto key = channel.keys[i][0];
