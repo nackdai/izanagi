@@ -64,10 +64,8 @@
     <CustomBuild Include="..\..\..\Media\Seymour.dae">
       <Filter>asset</Filter>
     </CustomBuild>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\Media\SeymourFbx.fbx">
+    <CustomBuild Include="..\..\..\Media\SeymourFbx.fbx">
       <Filter>asset</Filter>
-    </None>
+    </CustomBuild>
   </ItemGroup>
 </Project>

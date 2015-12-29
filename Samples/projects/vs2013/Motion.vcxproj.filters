@@ -53,6 +53,9 @@
     <CustomBuild Include="..\..\Motion\shader\SkinShader.xml">
       <Filter>shader</Filter>
     </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\SeymourFbx.fbx">
+      <Filter>asset</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Motion\MotionApp.h">
@@ -73,10 +76,5 @@
     <ClInclude Include="..\..\Motion\StateManager.h">
       <Filter>include</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\Media\SeymourFbx.fbx">
-      <Filter>asset</Filter>
-    </None>
   </ItemGroup>
 </Project>
