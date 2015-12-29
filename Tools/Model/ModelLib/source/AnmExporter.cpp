@@ -54,6 +54,8 @@ IZ_BOOL CAnmExporter::Export(
 
     IZ_UINT nNodeNum = pImporter->GetAnmNodeNum();
 
+    std::vector<IZ_UINT> channelNum;
+
     // Export nodes.
     {
         IZ_UINT channelIdx = 0;
@@ -63,6 +65,8 @@ IZ_BOOL CAnmExporter::Export(
             FILL_ZERO(&sNode, sizeof(sNode));
 
             VRETURN(pImporter->GetAnmNode(i, sNode));
+
+            channelNum.push_back(sNode.numChannels);
 
             sNode.channelIdx = channelIdx;
             channelIdx += sNode.numChannels;
@@ -78,7 +82,8 @@ IZ_BOOL CAnmExporter::Export(
 
     // Export channels,
     for (IZ_UINT nNodeIdx = 0; nNodeIdx < nNodeNum; nNodeIdx++) {
-        IZ_UINT nChannelCnt = pImporter->GetAnmChannelNum(nNodeIdx);
+        //IZ_UINT nChannelCnt = pImporter->GetAnmChannelNum(nNodeIdx);
+        IZ_UINT nChannelCnt = channelNum[nNodeIdx];
 
         for (IZ_UINT nChannelIdx = 0; nChannelIdx < nChannelCnt; nChannelIdx++) {
             izanagi::S_ANM_CHANNEL sChannel;
@@ -108,7 +113,8 @@ IZ_BOOL CAnmExporter::Export(
 
     // Export keys.
     for (IZ_UINT nNodeIdx = 0; nNodeIdx < nNodeNum; nNodeIdx++) {
-        IZ_UINT nChannelCnt = pImporter->GetAnmChannelNum(nNodeIdx);
+        //IZ_UINT nChannelCnt = pImporter->GetAnmChannelNum(nNodeIdx);
+        IZ_UINT nChannelCnt = channelNum[nNodeIdx];
 
         for (IZ_UINT nChannelIdx = 0; nChannelIdx < nChannelCnt; nChannelIdx++) {
             IZ_UINT nKeyCnt = tvKeyNum[nKeyPos++];
