@@ -1,6 +1,5 @@
 #include "StateBase.h"
 #include "izSampleKit.h"
-#include "StateManager.h"
 
 CStateBase::CStateBase(izanagi::sample::CSampleApp* app)
 : m_App(app)
@@ -30,7 +29,8 @@ IZ_BOOL CStateBase::Update(
     izanagi::graph::CGraphicsDevice* device)
 {
     m_App->GetCamera().Update();
-    m_Mdl->Update();
+    
+    OnUpdate(time, device);
 
     // レンダーグラフに登録
     m_RenderGraph->BeginRegister();
@@ -50,20 +50,6 @@ IZ_BOOL CStateBase::Update(
 IZ_BOOL CStateBase::Destroy()
 {
     return Leave();
-}
-
-IZ_BOOL CStateBase::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
-{
-    State cur = CStateManager::GetInstance().GetCurrentState();
-
-    if (key == izanagi::sys::E_KEYBOARD_BUTTON_UP) {
-        CStateManager::GetInstance().ChangeState(cur + 1);
-    }
-    else if (key == izanagi::sys::E_KEYBOARD_BUTTON_DOWN) {
-        CStateManager::GetInstance().ChangeState(cur - 1);
-    }
-
-    return IZ_TRUE;
 }
 
 namespace {
