@@ -81,11 +81,13 @@ struct IndexData
 {
     IZ_UINT idxInMesh;
 
+    IZ_UINT polygonIdxInMesh;
+
     FbxMesh* fbxMesh{ nullptr };
     FbxSurfaceMaterial* mtrl{ nullptr };
 
-    IndexData(IZ_UINT idx, FbxMesh* mesh, FbxSurfaceMaterial* _mtrl)
-        : idxInMesh(idx), fbxMesh(mesh), mtrl(_mtrl)
+    IndexData(IZ_UINT idx, IZ_UINT polyIdx, FbxMesh* mesh, FbxSurfaceMaterial* _mtrl)
+        : idxInMesh(idx), polygonIdxInMesh(polyIdx), fbxMesh(mesh), mtrl(_mtrl)
     {}
 };
 
@@ -206,6 +208,8 @@ private:
 
     void GatherSkin(std::vector<SkinData>& skinList);
 
+    fbxsdk::FbxSurfaceMaterial* GetMaterial(FbxMesh* fbxMesh, IZ_UINT index);
+
 private:
     FbxManager* m_manager{ nullptr };
     FbxScene* m_scene{ nullptr };
@@ -217,7 +221,7 @@ private:
 
     std::vector<MeshSubset> m_meshes;
 
-    std::vector<IndexData> m_indices;
+    std::map<FbxMesh*, std::vector<IndexData>> m_indices;
     std::vector<VertexData> m_vertices;
 
     std::vector<fbxsdk::FbxSurfaceMaterial*> m_materials;

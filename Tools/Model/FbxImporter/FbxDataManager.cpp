@@ -373,6 +373,32 @@ void FbxDataManager::GatherClusters()
     }
 }
 
+fbxsdk::FbxSurfaceMaterial* FbxDataManager::GetMaterial(FbxMesh* fbxMesh, IZ_UINT index)
+{
+    // メッシュに含まれるポリゴン（三角形）の数.
+    const int polygonCount = fbxMesh->GetPolygonCount();
+
+    auto& materialIndices = fbxMesh->GetElementMaterial()->GetIndexArray();
+
+    const auto cntMtrl = materialIndices.GetCount();
+
+    int materialIdx = -1;
+
+    // メッシュに含まれるポリゴン（三角形）が所属しているマテリアルへのインデックス.
+    if (cntMtrl == polygonCount) {
+        materialIdx = materialIndices.GetAt(index);
+    }
+    else {
+        IZ_ASSERT(cntMtrl == 1);
+        materialIdx = materialIndices.GetAt(0);
+    }
+
+    // マテリアル本体を取得.
+    auto material = m_scene->GetMaterial(materialIdx);
+
+    return material;
+}
+
 void FbxDataManager::GatherFaces()
 {
     // シーンに含まれるメッシュの解析
@@ -386,44 +412,55 @@ void FbxDataManager::GatherFaces()
             continue;
         }
 
+        m_indices.insert(std::make_pair(fbxMesh, std::vector<IndexData>()));
+        auto& indices = m_indices[fbxMesh];
+
         // メッシュに含まれるポリゴン（三角形）の数.
         const int polygonCount = fbxMesh->GetPolygonCount();
 
         auto& materialIndices = fbxMesh->GetElementMaterial()->GetIndexArray();
 
-        if (materialIndices.GetCount() == polygonCount)
+        const auto cntMtrl = materialIndices.GetCount();
+
+        // メッシュに含まれるポリゴン（三角形）ごとにどのマテリアルに所属しているのかを調べる.
+        for (int i = 0; i < polygonCount; i++)
         {
-            // メッシュに含まれるポリゴン（三角形）ごとにどのマテリアルに所属しているのかを調べる.
-            for (int i = 0; i < polygonCount; i++)
-            {
-                // メッシュに含まれるポリゴン（三角形）が所属しているマテリアルへのインデックス.
-                const int materialIdx = materialIndices.GetAt(i);
+#if 0
+            int materialIdx = -1;
 
-                // マテリアル本体を取得.
-                auto material = m_scene->GetMaterial(materialIdx);
-
-                auto itMtrl = std::find(m_materials.begin(), m_materials.end(), material);
-                if (itMtrl == m_materials.end())
-                {
-                    m_materials.push_back(material);
-                }
-
-                // 登録済みメッシュを探す.
-                auto it = std::find(m_meshes.begin(), m_meshes.end(), MeshSubset(fbxMesh, material));
-
-                // 未登録だった.
-                if (it == m_meshes.end())
-                {
-                    m_meshes.push_back(MeshSubset(fbxMesh, material));
-                }
-
-                m_indices.push_back(IndexData(fbxMesh->GetPolygonVertex(i, 0), fbxMesh, material));
-                m_indices.push_back(IndexData(fbxMesh->GetPolygonVertex(i, 1), fbxMesh, material));
-                m_indices.push_back(IndexData(fbxMesh->GetPolygonVertex(i, 2), fbxMesh, material));
+            // メッシュに含まれるポリゴン（三角形）が所属しているマテリアルへのインデックス.
+            if (cntMtrl == polygonCount) {
+                materialIdx = materialIndices.GetAt(i);
             }
-        }
-        else {
-            IZ_ASSERT(IZ_FALSE);
+            else {
+                IZ_ASSERT(cntMtrl == 1);
+                materialIdx = materialIndices.GetAt(0);
+            }
+
+            // マテリアル本体を取得.
+            auto material = m_scene->GetMaterial(materialIdx);
+#else
+            auto material = GetMaterial(fbxMesh, i);
+#endif
+
+            auto itMtrl = std::find(m_materials.begin(), m_materials.end(), material);
+            if (itMtrl == m_materials.end())
+            {
+                m_materials.push_back(material);
+            }
+
+            // 登録済みメッシュを探す.
+            auto it = std::find(m_meshes.begin(), m_meshes.end(), MeshSubset(fbxMesh, material));
+
+            // 未登録だった.
+            if (it == m_meshes.end())
+            {
+                m_meshes.push_back(MeshSubset(fbxMesh, material));
+            }
+
+            indices.push_back(IndexData(fbxMesh->GetPolygonVertex(i, 0), i, fbxMesh, material));
+            indices.push_back(IndexData(fbxMesh->GetPolygonVertex(i, 1), i, fbxMesh, material));
+            indices.push_back(IndexData(fbxMesh->GetPolygonVertex(i, 2), i, fbxMesh, material));
         }
     }
 }
@@ -457,91 +494,104 @@ void FbxDataManager::GatherVertices()
 
     // 頂点データを統合して整理する.
 
-    for (IZ_UINT i = 0; i < m_indices.size(); i++)
+    for (auto& m : m_meshes)
     {
-        auto index = m_indices[i];
+        auto& idxList = m_indices[m.fbxMesh];
 
-        auto itMesh = std::find(m_meshes.begin(), m_meshes.end(), MeshSubset(index.fbxMesh, index.mtrl));
-        IZ_ASSERT(itMesh != m_meshes.end());
-
-        MeshSubset& mesh = *itMesh;
-
-        auto& pos = posList[mesh.fbxMesh];
-        auto& uv = uvList[mesh.fbxMesh];
-        auto& nml = nmlList[mesh.fbxMesh];
-
-        const auto& posData = pos[i];
-        const auto& uvData = uv[i];
-        const auto& nmlData = nml[i];
-
-        IZ_ASSERT(posData.idxInMesh == index.idxInMesh);
-        IZ_ASSERT(uvData.idxInMesh == index.idxInMesh);
-        IZ_ASSERT(nmlData.idxInMesh == index.idxInMesh);
-
-        IZ_ASSERT(posData.fbxMesh == index.fbxMesh);
-        IZ_ASSERT(uvData.fbxMesh == index.fbxMesh);
-        IZ_ASSERT(nmlData.fbxMesh == index.fbxMesh);
-
-        IZ_ASSERT(posData.mtrl == uvData.mtrl);
-        IZ_ASSERT(uvData.mtrl == nmlData.mtrl);
-
-        auto itSkin = std::find(skinList.begin(), skinList.end(), SkinData(index.idxInMesh, mesh.fbxMesh));
-        IZ_ASSERT(itSkin != skinList.end());
-
-        auto& skin = *itSkin;
-
-        VertexData vtx;
-        vtx.idxInMesh = index.idxInMesh;
-        vtx.pos = posData.pos;
-        vtx.uv = uvData.uv;
-        vtx.nml = nmlData.nml;
-        vtx.fbxMesh = index.fbxMesh;
-        vtx.mtrl = posData.mtrl;
-
-        if (clrList.size() > 0) {
-            auto& clr = clrList[mesh.fbxMesh];
-            const auto& clrData = clr[i];
-
-            IZ_ASSERT(clrData.idxInMesh == index.idxInMesh);
-            IZ_ASSERT(clrData.fbxMesh == index.fbxMesh);
-            IZ_ASSERT(clrData.mtrl == posData.mtrl);
-
-            vtx.clr = clrData.clr;
-        }
-        else {
-            vtx.clr.Set(1.0, 1.0, 1.0);
-        }
-
-        // スキン.
-        std::copy(skin.weight.begin(), skin.weight.end(), std::back_inserter(vtx.weight));
-        std::copy(skin.joint.begin(), skin.joint.end(), std::back_inserter(vtx.joint));
-
-        // 同じデータの頂点の有無を確認.
-        auto it = std::find(m_vertices.begin(), m_vertices.end(), vtx);
-
-        if (it == m_vertices.end())
+        for (IZ_UINT i = 0; i < idxList.size(); i++)
         {
-            // 未登録.
+            auto index = idxList[i];
 
-            IndexData newIdx(
-                m_vertices.size(),
-                mesh.fbxMesh,
-                mesh.mtrl);
+            auto itMesh = std::find(m_meshes.begin(), m_meshes.end(), MeshSubset(index.fbxMesh, index.mtrl));
+            IZ_ASSERT(itMesh != m_meshes.end());
 
-            indices.push_back(newIdx);
-            m_vertices.push_back(vtx);
+            MeshSubset& mesh = *itMesh;
+            IZ_ASSERT(mesh.fbxMesh == m.fbxMesh);
 
-            mesh.vtxNum++;
-        }
-        else
-        {
-            // すでにあったので、どの頂点インデックスか取得.
-            IndexData newIdx(
-                std::distance(m_vertices.begin(), it),
-                mesh.fbxMesh,
-                mesh.mtrl);
+            auto& pos = posList[mesh.fbxMesh];
+            auto& uv = uvList[mesh.fbxMesh];
+            auto& nml = nmlList[mesh.fbxMesh];
 
-            indices.push_back(newIdx);
+            const auto& posData = pos[i];
+            const auto& uvData = uv[i];
+            const auto& nmlData = nml[i];
+
+            IZ_ASSERT(posData.idxInMesh == index.idxInMesh);
+            IZ_ASSERT(uvData.idxInMesh == index.idxInMesh);
+            IZ_ASSERT(nmlData.idxInMesh == index.idxInMesh);
+
+            IZ_ASSERT(posData.fbxMesh == index.fbxMesh);
+            IZ_ASSERT(uvData.fbxMesh == index.fbxMesh);
+            IZ_ASSERT(nmlData.fbxMesh == index.fbxMesh);
+
+            IZ_ASSERT(posData.mtrl == uvData.mtrl);
+            IZ_ASSERT(uvData.mtrl == nmlData.mtrl);
+
+            VertexData vtx;
+            vtx.idxInMesh = index.idxInMesh;
+            vtx.pos = posData.pos;
+            vtx.uv = uvData.uv;
+            vtx.nml = nmlData.nml;
+            vtx.fbxMesh = index.fbxMesh;
+            vtx.mtrl = posData.mtrl;
+
+            if (clrList.size() > 0) {
+                auto& clr = clrList[mesh.fbxMesh];
+                const auto& clrData = clr[i];
+
+                IZ_ASSERT(clrData.idxInMesh == index.idxInMesh);
+                IZ_ASSERT(clrData.fbxMesh == index.fbxMesh);
+                IZ_ASSERT(clrData.mtrl == posData.mtrl);
+
+                vtx.clr = clrData.clr;
+            }
+            else {
+                vtx.clr.Set(1.0, 1.0, 1.0);
+            }
+
+            // スキン.
+            auto itSkin = std::find(skinList.begin(), skinList.end(), SkinData(index.idxInMesh, mesh.fbxMesh));
+            if (itSkin != skinList.end())
+            {
+                auto& skin = *itSkin;
+                std::copy(skin.weight.begin(), skin.weight.end(), std::back_inserter(vtx.weight));
+                std::copy(skin.joint.begin(), skin.joint.end(), std::back_inserter(vtx.joint));
+            }
+            else {
+                // TODO
+                vtx.joint.push_back(0);
+                vtx.weight.push_back(1.0f);
+            }
+
+            // 同じデータの頂点の有無を確認.
+            auto it = std::find(m_vertices.begin(), m_vertices.end(), vtx);
+
+            if (it == m_vertices.end())
+            {
+                // 未登録.
+
+                IndexData newIdx(
+                    m_vertices.size(),
+                    0,  // もう使わない.
+                    mesh.fbxMesh,
+                    mesh.mtrl);
+
+                indices.push_back(newIdx);
+                m_vertices.push_back(vtx);
+
+                mesh.vtxNum++;
+            }
+            else
+            {
+                // すでにあったので、どの頂点インデックスか取得.
+                IndexData newIdx(
+                    std::distance(m_vertices.begin(), it),
+                    0,  // もう使わない.
+                    mesh.fbxMesh,
+                    mesh.mtrl);
+
+                indices.push_back(newIdx);
+            }
         }
     }
 
@@ -586,17 +636,27 @@ void FbxDataManager::GatherPos(std::map<FbxMesh*, std::vector<PosData>>& posList
         
         auto polygonCnt = fbxMesh->GetPolygonCount();
 
-        auto& materialIndices = fbxMesh->GetElementMaterial()->GetIndexArray();
-
         for (IZ_UINT p = 0; p < polygonCnt; p++)
         {
             for (IZ_UINT i = 0; i < 3; i++)
             {
+#if 0
+                int materialIdx = -1;
+
                 // メッシュに含まれるポリゴン（三角形）が所属しているマテリアルへのインデックス.
-                const int materialIdx = materialIndices.GetAt(i);
+                if (cntMtrl == polygonCnt) {
+                    materialIdx = materialIndices.GetAt(p);
+                }
+                else {
+                    IZ_ASSERT(cntMtrl == 1);
+                    materialIdx = materialIndices.GetAt(0);
+                }
 
                 // マテリアル本体を取得.
                 auto material = m_scene->GetMaterial(materialIdx);
+#else
+                auto material = GetMaterial(fbxMesh, p);
+#endif
 
                 IZ_UINT idx = fbxMesh->GetPolygonVertex(p, i);
 
@@ -630,8 +690,6 @@ void FbxDataManager::GatherUV(std::map<FbxMesh*, std::vector<UVData>>& uvList)
         IZ_ASSERT(mappingMode == FbxGeometryElement::eByPolygonVertex);
         IZ_ASSERT(referenceMode == FbxGeometryElement::eIndexToDirect);
 
-        auto& materialIndices = fbxMesh->GetElementMaterial()->GetIndexArray();
-
         uvList.insert(std::make_pair(fbxMesh, std::vector<UVData>()));
         auto it = uvList.find(fbxMesh);
 
@@ -647,11 +705,23 @@ void FbxDataManager::GatherUV(std::map<FbxMesh*, std::vector<UVData>>& uvList)
         {
             for (IZ_UINT n = 0; n < 3; n++)
             {
+#if 0
+                int materialIdx = -1;
+
                 // メッシュに含まれるポリゴン（三角形）が所属しているマテリアルへのインデックス.
-                const int materialIdx = materialIndices.GetAt(n);
+                if (cntMtrl == polygonCnt) {
+                    materialIdx = materialIndices.GetAt(p);
+                }
+                else {
+                    IZ_ASSERT(cntMtrl == 1);
+                    materialIdx = materialIndices.GetAt(0);
+                }
 
                 // マテリアル本体を取得.
                 auto material = m_scene->GetMaterial(materialIdx);
+#else
+                auto material = GetMaterial(fbxMesh, p);
+#endif
 
                 int lUVIndex = layerUV->GetIndexArray().GetAt(UVIndex);
 
@@ -687,11 +757,6 @@ void FbxDataManager::GatherNormal(std::map<FbxMesh*, std::vector<NormalData>>& n
         auto mappingMode = elemNml->GetMappingMode();
         auto referenceMode = elemNml->GetReferenceMode();
 
-        IZ_ASSERT(mappingMode == FbxGeometryElement::eByPolygonVertex);
-        IZ_ASSERT(referenceMode == FbxGeometryElement::eIndexToDirect);
-
-        auto& materialIndices = fbxMesh->GetElementMaterial()->GetIndexArray();
-
         nmlList.insert(std::make_pair(fbxMesh, std::vector<NormalData>()));
         auto it = nmlList.find(fbxMesh);
 
@@ -703,26 +768,71 @@ void FbxDataManager::GatherNormal(std::map<FbxMesh*, std::vector<NormalData>>& n
         FbxLayerElementNormal* layerNml = fbxMesh->GetLayer(0)->GetNormals();
         IZ_UINT idxNml = 0;
 
-        for (IZ_UINT p = 0; p < polygonCnt; p++)
+        if (mappingMode == FbxGeometryElement::eByPolygonVertex)
         {
-            for (IZ_UINT n = 0; n < 3; n++)
+            for (IZ_UINT p = 0; p < polygonCnt; p++)
             {
-                // メッシュに含まれるポリゴン（三角形）が所属しているマテリアルへのインデックス.
-                const int materialIdx = materialIndices.GetAt(n);
+                for (IZ_UINT n = 0; n < 3; n++)
+                {
+#if 0
+                    int materialIdx = -1;
 
-                // マテリアル本体を取得.
-                auto material = m_scene->GetMaterial(materialIdx);
+                    // メッシュに含まれるポリゴン（三角形）が所属しているマテリアルへのインデックス.
+                    if (cntMtrl == polygonCnt) {
+                        materialIdx = materialIndices.GetAt(p);
+                    }
+                    else {
+                        IZ_ASSERT(cntMtrl == 1);
+                        materialIdx = materialIndices.GetAt(0);
+                    }
 
-                int lNmlIndex = layerNml->GetIndexArray().GetAt(idxNml);
+                    // マテリアル本体を取得.
+                    auto material = m_scene->GetMaterial(materialIdx);
+#else
+                    auto material = GetMaterial(fbxMesh, p);
+#endif
+
+                    int lNmlIndex = (referenceMode == FbxGeometryElement::eIndexToDirect
+                        ? layerNml->GetIndexArray().GetAt(idxNml)
+                        : idxNml);
+
+                    // 取得したインデックスから法線を取得する
+                    FbxVector4 lVec4 = layerNml->GetDirectArray().GetAt(lNmlIndex);
+
+                    IZ_UINT idxInMesh = fbxMesh->GetPolygonVertex(p, n);
+
+                    NormalData nml;
+                    {
+                        nml.idxInMesh = idxInMesh;
+                        nml.nml = lVec4;
+
+                        nml.fbxMesh = fbxMesh;
+                        nml.mtrl = material;
+                    }
+
+                    list.push_back(nml);
+
+                    idxNml++;
+                }
+            }
+        }
+        else {
+            auto& indices = m_indices[fbxMesh];
+
+            for (const auto& idx : indices)
+            {
+                auto material = GetMaterial(fbxMesh, idx.polygonIdxInMesh);
+
+                int lNmlIndex = (referenceMode == FbxGeometryElement::eIndexToDirect
+                    ? layerNml->GetIndexArray().GetAt(idx.idxInMesh)
+                    : idx.idxInMesh);
 
                 // 取得したインデックスから法線を取得する
                 FbxVector4 lVec4 = layerNml->GetDirectArray().GetAt(lNmlIndex);
 
-                IZ_UINT idxInMesh = fbxMesh->GetPolygonVertex(p, n);
-
                 NormalData nml;
                 {
-                    nml.idxInMesh = idxInMesh;
+                    nml.idxInMesh = idx.idxInMesh;
                     nml.nml = lVec4;
 
                     nml.fbxMesh = fbxMesh;
@@ -730,8 +840,6 @@ void FbxDataManager::GatherNormal(std::map<FbxMesh*, std::vector<NormalData>>& n
                 }
 
                 list.push_back(nml);
-
-                idxNml++;
             }
         }
     }
@@ -756,6 +864,8 @@ void FbxDataManager::GatherColor(std::map<FbxMesh*, std::vector<ColorData>>& clr
 
         auto& materialIndices = fbxMesh->GetElementMaterial()->GetIndexArray();
 
+        const auto cntMtrl = materialIndices.GetCount();
+
         clrList.insert(std::make_pair(fbxMesh, std::vector<ColorData>()));
         auto it = clrList.find(fbxMesh);
 
@@ -771,8 +881,16 @@ void FbxDataManager::GatherColor(std::map<FbxMesh*, std::vector<ColorData>>& clr
         {
             for (IZ_UINT n = 0; n < 3; n++)
             {
+                int materialIdx = -1;
+
                 // メッシュに含まれるポリゴン（三角形）が所属しているマテリアルへのインデックス.
-                const int materialIdx = materialIndices.GetAt(n);
+                if (cntMtrl == polygonCnt) {
+                    materialIdx = materialIndices.GetAt(p);
+                }
+                else {
+                    IZ_ASSERT(cntMtrl == 1);
+                    materialIdx = materialIndices.GetAt(0);
+                }
 
                 // マテリアル本体を取得.
                 auto material = m_scene->GetMaterial(materialIdx);
