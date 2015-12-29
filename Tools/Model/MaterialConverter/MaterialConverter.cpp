@@ -38,6 +38,8 @@ namespace {
             "   x   : XFileファイル入力\n"
             "   pmd : PMDファイル入力\n"
             "   fbx : FBXファイル入力\n"
+            " -shd [name] : シェーダ名の強制上書き\n"
+            " -tex [idx]  : 複数テクスチャが存在するときに利用するテクスチャインデックス\n"
             "\n"
             "******\n"
             "マテリアルが複数存在する場合は\n"
@@ -61,6 +63,9 @@ int main(int argc, char* argv[])
         _DispUsage();
         return INVALID_RET_VAL;
     }
+
+    IImporter::SetEnableTexIdx(option.idxEnableTex);
+    IImporter::SetShaderName(option.nameShader.c_str());
 
     // インポーター作成
     IImporter* importer = IImporter::CreateImporter(option.modelType);

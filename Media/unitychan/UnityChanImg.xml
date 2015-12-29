@@ -2,10 +2,10 @@
 
 <textures>
   <plane
-      path="./texture/body_01.tga"
+      path="./texture/face_00.tga"
       fmt="dxt5"/>
   <plane
-      path="./texture/cheek_00.tga"
+      path="./texture/eyeline_00.tga"
       fmt="dxt5"/>
   <plane
       path="./texture/eye_iris_L_00.tga"
@@ -14,15 +14,18 @@
       path="./texture/eye_iris_R_00.tga"
       fmt="dxt5"/>
   <plane
-      path="./texture/eyeline_00.tga"
+      path="./texture/body_01.tga"
       fmt="dxt5"/>
   <plane
-      path="./texture/face_00.tga"
+      path="./texture/eyeline_00.tga"
       fmt="dxt5"/>
   <plane
       path="./texture/hair_01.tga"
       fmt="dxt5"/>
   <plane
       path="./texture/skin_01.tga"
+      fmt="dxt5"/>
+  <plane
+      path="./texture/cheek_00.tga"
       fmt="dxt5"/>
 </textures>

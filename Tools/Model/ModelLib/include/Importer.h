@@ -24,9 +24,18 @@ class IImporter {
 public:
     static IImporter* CreateImporter(ModelType type);
 
+    static void SetEnableTexIdx(IZ_INT idx);
+    static void SetShaderName(const char* name);
+
 protected:
     IImporter() {}
     virtual ~IImporter() {}
+
+    struct EnviromentParam {
+        IZ_INT idxEnableTex{ -1 };
+        std::string nameShader;
+    };
+    static EnviromentParam s_EnvParam;
 
 public:
     PURE_VIRTUAL(IZ_BOOL Open(IZ_PCSTR pszName, IZ_BOOL isOpenForAnm = IZ_FALSE));

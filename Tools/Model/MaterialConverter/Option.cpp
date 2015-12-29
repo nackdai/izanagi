@@ -29,6 +29,13 @@ IZ_BOOL COption::Analysis(int argc, char* argv[])
 
                 result = AnalysisModelType(subOpt);
             }
+            else if (result = (opt == "-shd")) {
+                nameShader = argv[++i];
+            }
+            else if (result = (opt == "-tex")) {
+                auto idx = argv[++i];
+                idxEnableTex = ::atoi(idx);
+            }
         }
 
         if (!result) {

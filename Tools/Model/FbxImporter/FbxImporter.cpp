@@ -930,6 +930,14 @@ IZ_BOOL CFbxImporter::GetMaterial(
 {
     auto* fbxMtrl = m_dataMgr->GetMaterial(nMtrlIdx);
 
+    sMtrl.name.SetString(fbxMtrl->GetName());
+    sMtrl.keyMaterial = sMtrl.name.GetKeyValue();
+
+    sMtrl.numTex = 0;
+
+    sMtrl.numParam = 0;
+    sMtrl.paramBytes = 0;
+
     IZ_BOOL ret = IZ_FALSE;
 
     // TODO
@@ -952,15 +960,7 @@ IZ_BOOL CFbxImporter::GetFbxMatrial(
 {
     auto* fbxMtrl = m_dataMgr->GetMaterial(nMtrlIdx);
 
-    sMtrl.name.SetString(fbxMtrl->GetName());
-    sMtrl.keyMaterial = sMtrl.name.GetKeyValue();
-
-    sMtrl.numTex = 0;
-
-    sMtrl.numParam = 0;
-    sMtrl.paramBytes = 0;
-
-    std::vector<MaterialTex> list;
+    std::vector<MaterialTex> texList;
 
     // for tex.
     for (IZ_UINT i = 0; i < COUNTOF(FbxMtrlParamNames); i++)
@@ -1010,14 +1010,26 @@ IZ_BOOL CFbxImporter::GetFbxMatrial(
                 // TODO
                 // 他の場合...
 
-                list.push_back(tex);
+                texList.push_back(tex);
             }
         }
     }
 
-    if (list.size() > 0) {
-        m_mtrlTex.insert(std::make_pair(nMtrlIdx, list));
-        sMtrl.numTex += list.size();
+    if (texList.size() > 0) {
+        if (s_EnvParam.idxEnableTex >= 0
+            && s_EnvParam.idxEnableTex < texList.size())
+        {
+            // 指定されたテクスチャ以外は無視する.
+            IZ_UINT pos = 0;
+            for (auto it = texList.begin(); it != texList.end(); it++, pos++) {
+                if (s_EnvParam.idxEnableTex != pos) {
+                    it = texList.erase(it);
+                }
+            }
+        }
+
+        m_mtrlTex.insert(std::make_pair(nMtrlIdx, texList));
+        sMtrl.numTex += texList.size();
     }
 
     std::vector<MaterialParam> paramList;
@@ -1191,6 +1203,18 @@ IZ_BOOL CFbxImporter::GetFbxMatrialByImplmentation(
     }
 
     if (texList.size() > 0) {
+        if (s_EnvParam.idxEnableTex >= 0
+            && s_EnvParam.idxEnableTex < texList.size())
+        {
+            // 指定されたテクスチャ以外は無視する.
+            IZ_UINT pos = 0;
+            for (auto it = texList.begin(); it != texList.end(); it++, pos++) {
+                if (s_EnvParam.idxEnableTex != pos) {
+                    it = texList.erase(it);
+                }
+            }
+        }
+
         m_mtrlTex.insert(std::make_pair(nMtrlIdx, texList));
         sMtrl.numTex += texList.size();
     }
@@ -1243,6 +1267,11 @@ void CFbxImporter::GetMaterialShader(
         FbxString shading = fbxMtrl->ShadingModel.Get();
 
         sShader.name.SetString((const char*)shading);
+    }
+
+    if (!s_EnvParam.nameShader.empty()) {
+        // 指定されたシェーダ名で強制上書き
+        sShader.name.SetString(s_EnvParam.nameShader.c_str());
     }
 
     sShader.key = sShader.name.GetKeyValue();

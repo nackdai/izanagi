@@ -892,6 +892,7 @@ void FbxDataManager::GatherColor(std::map<FbxMesh*, std::vector<ColorData>>& clr
         {
             for (IZ_UINT n = 0; n < 3; n++)
             {
+#if 0
                 int materialIdx = -1;
 
                 // メッシュに含まれるポリゴン（三角形）が所属しているマテリアルへのインデックス.
@@ -905,6 +906,9 @@ void FbxDataManager::GatherColor(std::map<FbxMesh*, std::vector<ColorData>>& clr
 
                 // マテリアル本体を取得.
                 auto material = m_scene->GetMaterial(materialIdx);
+#else
+                auto material = GetMaterial(fbxMesh, p);
+#endif
 
                 int lNmlIndex = layerClr->GetIndexArray().GetAt(idxClr);
 

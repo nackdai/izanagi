@@ -9,6 +9,9 @@
 struct SOption {
     izanagi::tool::CString in;  // 入力ファイル
     izanagi::tool::CString out; // 出力ファイル
+
+    IZ_INT idxEnableTex{ -1 };
+    izanagi::tool::CString nameShader;
 };
 
 class COption : public CToolOption<SOption> {

@@ -4,6 +4,8 @@
 #include "../importer/pmd/PMDImporter.h"
 #include "../importer/json/JSONImporter.h"
 
+IImporter::EnviromentParam IImporter::s_EnvParam;
+
 IImporter* IImporter::CreateImporter(ModelType type)
 {
     IImporter* ret = IZ_NULL;
@@ -30,4 +32,14 @@ IImporter* IImporter::CreateImporter(ModelType type)
     }
 
     return ret;
+}
+
+void IImporter::SetEnableTexIdx(IZ_INT idx)
+{
+    s_EnvParam.idxEnableTex = idx;
+}
+
+void IImporter::SetShaderName(const char* name)
+{
+    s_EnvParam.nameShader = name;
 }
