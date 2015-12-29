@@ -541,7 +541,7 @@ IZ_UINT CFbxImporter::GetAnmChannelNum(IZ_UINT nNodeIdx)
     AnmChannel channel;
     channel.nodeIdx = nNodeIdx;
 
-    for (IZ_UINT f = start; f < stop; f++) {
+    for (IZ_INT f = start; f < stop; f++) {
         FbxTime time;
         time.Set(FbxTime::GetOneFrameValue(FbxTime::eFrames60) * f);
 
@@ -624,79 +624,85 @@ IZ_BOOL CFbxImporter::GetAnmChannel(
     // NOTE
     // keyIdx は外部で設定される.
 
-    auto start = m_dataMgr->GetAnmStartFrame();
-    auto stop = m_dataMgr->GetAnmStopFrame();
 
-    fbxsdk::FbxVector4 prevT;
-    fbxsdk::FbxVector4 prevS(1.0f, 1.0f, 1.0f, 0.0f);
-    fbxsdk::FbxQuaternion prevQ;
+    if (!channel.isChecked)
+    {
+        auto start = m_dataMgr->GetAnmStartFrame();
+        auto stop = m_dataMgr->GetAnmStopFrame();
 
-    for (IZ_UINT f = start; f < stop; f++) {
-        FbxTime time;
-        time.Set(FbxTime::GetOneFrameValue(FbxTime::eFrames60) * f);
+        fbxsdk::FbxVector4 prevT;
+        fbxsdk::FbxVector4 prevS(1.0f, 1.0f, 1.0f, 0.0f);
+        fbxsdk::FbxQuaternion prevQ;
 
-        auto mtx = node->EvaluateLocalTransform(time);
+        for (IZ_INT f = start; f < stop; f++) {
+            FbxTime time;
+            time.Set(FbxTime::GetOneFrameValue(FbxTime::eFrames60) * f);
 
-        auto t = mtx.GetT();    // translate.
-        auto s = mtx.GetS();    // scale.
-        auto q = mtx.GetQ();    // quaternion.
-        auto r = mtx.GetR();    // rotation.
+            auto mtx = node->EvaluateLocalTransform(time);
+
+            auto t = mtx.GetT();    // translate.
+            auto s = mtx.GetS();    // scale.
+            auto q = mtx.GetQ();    // quaternion.
+            auto r = mtx.GetR();    // rotation.
+
+            // NOTE
+            // Rotation -> Scale -> Translate
+
+            // Rotate.
+            if (!(q == prevQ)) {
+                AnmKey key;
+                key.key = f - start;
+
+                key.value[0] = q.mData[0];
+                key.value[1] = q.mData[1];
+                key.value[2] = q.mData[2];
+                key.value[3] = q.mData[3];
+
+                channel.keys[ParamType::Rotate].push_back(key);
+            }
+            prevQ = q;
+
+            // Scale.
+            if (!(s == prevS)) {
+                AnmKey key;
+                key.key = f - start;
+
+                key.value[0] = s.mData[0];
+                key.value[1] = s.mData[1];
+                key.value[2] = s.mData[2];
+                key.value[3] = s.mData[3];
+
+                channel.keys[ParamType::Scale].push_back(key);
+            }
+            prevS = s;
+
+            // Trans.
+            if (!(t == prevT)) {
+                AnmKey key;
+                key.key = f - start;
+
+                key.value[0] = t.mData[0];
+                key.value[1] = t.mData[1];
+                key.value[2] = t.mData[2];
+                key.value[3] = t.mData[3];
+
+                channel.keys[ParamType::Tranlate].push_back(key);
+            }
+            prevT = t;
+        }
 
         // NOTE
-        // Rotation -> Scale -> Translate
-
-        // Rotate.
-        if (!(q == prevQ)) {
-            AnmKey key;
-            key.key = f - start;
-
-            key.value[0] = q.mData[0];
-            key.value[1] = q.mData[1];
-            key.value[2] = q.mData[2];
-            key.value[3] = q.mData[3];
-
-            channel.keys[ParamType::Rotate].push_back(key);
-        }
-        prevQ = q;
-
-        // Scale.
-        if (!(s == prevS)) {
-            AnmKey key;
-            key.key = f - start;
-
-            key.value[0] = s.mData[0];
-            key.value[1] = s.mData[1];
-            key.value[2] = s.mData[2];
-            key.value[3] = s.mData[3];
-
-            channel.keys[ParamType::Scale].push_back(key);
-        }
-        prevS = s;
-
-        // Trans.
-        if (!(t == prevT)) {
-            AnmKey key;
-            key.key = f - start;
-
-            key.value[0] = t.mData[0];
-            key.value[1] = t.mData[1];
-            key.value[2] = t.mData[2];
-            key.value[3] = t.mData[3];
-
-            channel.keys[ParamType::Tranlate].push_back(key);
-        }
-        prevT = t;
-    }
-
-    // NOTE
-    // キーデータが１つだと補間できないので、あえて増やす.
-    for (IZ_UINT i = 0; i < ParamType::Num; i++) {
-        if (channel.keys[i].size() == 1) {
-            auto key = channel.keys[i][0];
-            key.key = stop - 1;
-            channel.keys[i].push_back(key);
+        // キーデータが１つだと補間できないので、あえて増やす.
+        for (IZ_UINT i = 0; i < ParamType::Num; i++) {
+            if (channel.keys[i].size() == 1) {
+                auto key = channel.keys[i][0];
+                key.key = stop - 1;
+                channel.keys[i].push_back(key);
+            }
         }
     }
+
+    channel.isChecked = IZ_TRUE;
 
     auto type = channel.type[nChannelIdx];
     
@@ -750,16 +756,20 @@ IZ_BOOL CFbxImporter::GetAnmKey(
     // 60FPS固定.
     static const IZ_FLOAT frame = 1.0f / 60.0f;
 
+    IZ_ASSERT(nKeyIdx < channel.keys[type].size());
+    const auto& key = channel.keys[type][nKeyIdx];
+
+    if (nKeyIdx > 0) {
+        IZ_ASSERT(key.key > channel.keys[type][nKeyIdx - 1].key);
+    }
+
+    sKey.keyTime = key.key * frame;
+
     // NOTE
     // Rotation -> Scale -> Translate
 
     // Rotation
     if (type == ParamType::Rotate) {
-        IZ_ASSERT(nKeyIdx < channel.keys[type].size());
-
-        const auto& key = channel.keys[type][nKeyIdx];
-
-        sKey.keyTime = key.key * frame;
         sKey.numParams = 4;
 
         tvValue.push_back(key.value[0]);
@@ -772,11 +782,6 @@ IZ_BOOL CFbxImporter::GetAnmKey(
 
     // Scale
     if (type == ParamType::Scale) {
-        IZ_ASSERT(nKeyIdx < channel.keys[type].size());
-
-        const auto& key = channel.keys[type][nKeyIdx];
-
-        sKey.keyTime = key.key * frame;
         sKey.numParams = 3;
 
         tvValue.push_back(key.value[0]);
@@ -788,11 +793,6 @@ IZ_BOOL CFbxImporter::GetAnmKey(
 
     // Translate
     if (type == ParamType::Tranlate) {
-        IZ_ASSERT(nKeyIdx < channel.keys[type].size());
-
-        const auto& key = channel.keys[type][nKeyIdx];
-
-        sKey.keyTime = key.key * frame;
         sKey.numParams = 3;
 
         tvValue.push_back(key.value[0]);

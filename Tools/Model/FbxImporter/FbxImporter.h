@@ -234,6 +234,8 @@ private:
 
         std::vector<AnmKey> keys[ParamType::Num];
 
+        IZ_BOOL isChecked{ IZ_FALSE };
+
         AnmChannel()
         {
             for (IZ_UINT i = 0; i < ParamType::Num; i++) {

@@ -183,8 +183,8 @@ public:
     IZ_UINT GetMaterialNum() const;
     FbxSurfaceMaterial* GetMaterial(IZ_UINT idx);
 
-    IZ_UINT GetAnmStartFrame() const { return m_AnmStartFrame; }
-    IZ_UINT GetAnmStopFrame() const { return m_AnmStopFrame; }
+    IZ_INT GetAnmStartFrame() const { return m_AnmStartFrame; }
+    IZ_INT GetAnmStopFrame() const { return m_AnmStopFrame; }
 
 private:
     void LoadAnimation(FbxImporter* importer);
@@ -226,8 +226,8 @@ private:
 
     std::vector<fbxsdk::FbxSurfaceMaterial*> m_materials;
 
-    IZ_UINT m_AnmStartFrame;
-    IZ_UINT m_AnmStopFrame;
+    IZ_INT m_AnmStartFrame;
+    IZ_INT m_AnmStopFrame;
 };
 
 #endif  // #if !defined(__MODEL_LIB_FBX_DATA_MANAGER_H__)
