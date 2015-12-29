@@ -94,7 +94,7 @@ int main(int argc, char* argv[])
                 importer,
                 0),
             INVALID_RET_VAL);
-}
+    }
     else {
         // 出力ファイル名から拡張子を取り除く
         VRETURN_VAL(

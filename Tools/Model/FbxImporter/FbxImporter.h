@@ -172,6 +172,15 @@ public:
         std::vector<IZ_FLOAT>& tvValue) override;
 
 private:
+    IZ_BOOL GetFbxMatrial(
+        IZ_UINT nMtrlIdx,
+        izanagi::S_MTRL_MATERIAL& sMtrl);
+
+    IZ_BOOL GetFbxMatrialByImplmentation(
+        IZ_UINT nMtrlIdx,
+        izanagi::S_MTRL_MATERIAL& sMtrl);
+
+private:
     FbxDataManager* m_dataMgr{ nullptr };
     FbxDataManager* m_dataMgrBase{ nullptr };
 
@@ -183,7 +192,7 @@ private:
     struct MaterialTex {
         void* fbxMtrl{ nullptr };
         std::string paramName;
-        void* texture{ nullptr };
+        std::string texName;
         izanagi::S_MTRL_TEXTURE_TYPE type;
     };
     std::map<IZ_UINT, std::vector<MaterialTex>> m_mtrlTex;

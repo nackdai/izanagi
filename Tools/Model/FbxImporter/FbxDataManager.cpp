@@ -155,7 +155,9 @@ void FbxDataManager::LoadMaterial()
 
             auto& materialIndices = fbxMesh->GetElementMaterial()->GetIndexArray();
 
-            if (materialIndices.GetCount() == polygonCount)
+            auto mtrlCnt = materialIndices.GetCount();
+
+            if (mtrlCnt == polygonCount)
             {
                 for (int i = 0; i < polygonCount; i++)
                 {
@@ -173,7 +175,15 @@ void FbxDataManager::LoadMaterial()
                 }
             }
             else {
-                IZ_ASSERT(IZ_FALSE);
+                IZ_ASSERT(mtrlCnt == 1);
+
+                auto material = fbxMesh->GetNode()->GetMaterial(0);
+
+                auto itMtrl = std::find(m_materials.begin(), m_materials.end(), material);
+                if (itMtrl == m_materials.end())
+                {
+                    m_materials.push_back(material);
+                }
             }
         }
     }
@@ -375,6 +385,8 @@ void FbxDataManager::GatherClusters()
 
 fbxsdk::FbxSurfaceMaterial* FbxDataManager::GetMaterial(FbxMesh* fbxMesh, IZ_UINT index)
 {
+    fbxsdk::FbxSurfaceMaterial* material = nullptr;
+
     // メッシュに含まれるポリゴン（三角形）の数.
     const int polygonCount = fbxMesh->GetPolygonCount();
 
@@ -382,19 +394,18 @@ fbxsdk::FbxSurfaceMaterial* FbxDataManager::GetMaterial(FbxMesh* fbxMesh, IZ_UIN
 
     const auto cntMtrl = materialIndices.GetCount();
 
-    int materialIdx = -1;
-
     // メッシュに含まれるポリゴン（三角形）が所属しているマテリアルへのインデックス.
     if (cntMtrl == polygonCount) {
-        materialIdx = materialIndices.GetAt(index);
+        auto materialIdx = materialIndices.GetAt(index);
+
+        // マテリアル本体を取得.
+        material = m_scene->GetMaterial(materialIdx);
     }
     else {
         IZ_ASSERT(cntMtrl == 1);
-        materialIdx = materialIndices.GetAt(0);
-    }
 
-    // マテリアル本体を取得.
-    auto material = m_scene->GetMaterial(materialIdx);
+        material = fbxMesh->GetNode()->GetMaterial(0);
+    }
 
     return material;
 }

@@ -930,6 +930,28 @@ IZ_BOOL CFbxImporter::GetMaterial(
 {
     auto* fbxMtrl = m_dataMgr->GetMaterial(nMtrlIdx);
 
+    IZ_BOOL ret = IZ_FALSE;
+
+    // TODO
+    // cgfx.
+    auto implementation = GetImplementation(fbxMtrl, FBXSDK_IMPLEMENTATION_CGFX);
+
+    if (implementation != nullptr) {
+        ret = GetFbxMatrialByImplmentation(nMtrlIdx, sMtrl);
+    }
+    else {
+        ret = GetFbxMatrial(nMtrlIdx, sMtrl);
+    }
+
+    return ret;
+}
+
+IZ_BOOL CFbxImporter::GetFbxMatrial(
+    IZ_UINT nMtrlIdx,
+    izanagi::S_MTRL_MATERIAL& sMtrl)
+{
+    auto* fbxMtrl = m_dataMgr->GetMaterial(nMtrlIdx);
+
     sMtrl.name.SetString(fbxMtrl->GetName());
     sMtrl.keyMaterial = sMtrl.name.GetKeyValue();
 
@@ -937,6 +959,8 @@ IZ_BOOL CFbxImporter::GetMaterial(
 
     sMtrl.numParam = 0;
     sMtrl.paramBytes = 0;
+
+    std::vector<MaterialTex> list;
 
     // for tex.
     for (IZ_UINT i = 0; i < COUNTOF(FbxMtrlParamNames); i++)
@@ -961,8 +985,6 @@ IZ_BOOL CFbxImporter::GetMaterial(
         else {
             int textureCount = prop.GetSrcObjectCount<fbxsdk::FbxTexture>();
 
-            std::vector<MaterialTex> list;
-
             for (int n = 0; n < textureCount; n++)
             {
                 fbxsdk::FbxTexture* texture = FbxCast<fbxsdk::FbxTexture>(prop.GetSrcObject<fbxsdk::FbxTexture>(n));
@@ -971,7 +993,7 @@ IZ_BOOL CFbxImporter::GetMaterial(
                 {
                     tex.fbxMtrl = fbxMtrl;
                     tex.paramName = name.c_str();
-                    tex.texture = texture;
+                    tex.texName = ((fbxsdk::FbxFileTexture*)texture)->GetRelativeFileName();
                     tex.type.flags = 0;
                 }
 
@@ -990,12 +1012,12 @@ IZ_BOOL CFbxImporter::GetMaterial(
 
                 list.push_back(tex);
             }
-
-            if (list.size() > 0) {
-                m_mtrlTex.insert(std::make_pair(nMtrlIdx, list));
-                sMtrl.numTex += list.size();
-            }
         }
+    }
+
+    if (list.size() > 0) {
+        m_mtrlTex.insert(std::make_pair(nMtrlIdx, list));
+        sMtrl.numTex += list.size();
     }
 
     std::vector<MaterialParam> paramList;
@@ -1026,6 +1048,168 @@ IZ_BOOL CFbxImporter::GetMaterial(
     return IZ_TRUE;
 }
 
+IZ_BOOL CFbxImporter::GetFbxMatrialByImplmentation(
+    IZ_UINT nMtrlIdx,
+    izanagi::S_MTRL_MATERIAL& sMtrl)
+{
+    // NOTE
+    // http://www.programmershare.com/3142984/
+
+    auto* fbxMtrl = m_dataMgr->GetMaterial(nMtrlIdx);
+
+    // TODO
+    // cgfx.
+    auto implementation = GetImplementation(fbxMtrl, FBXSDK_IMPLEMENTATION_CGFX);
+    VRETURN(implementation != nullptr);
+
+    auto rootTable = implementation->GetRootTable();
+    auto entryCount = rootTable->GetEntryCount();
+
+    std::vector<MaterialTex> texList;
+    std::vector<MaterialParam> paramList;
+
+    for (int i = 0; i < entryCount; ++i)
+    {
+        auto entry = rootTable->GetEntry(i);
+
+        auto fbxProperty = fbxMtrl->FindPropertyHierarchical(entry.GetSource());
+        if (!fbxProperty.IsValid()) {
+            fbxProperty = fbxMtrl->RootProperty.FindHierarchical(entry.GetSource());
+        }
+
+        auto propName = fbxProperty.GetNameAsCStr();
+
+        auto textureCount = fbxProperty.GetSrcObjectCount<FbxTexture>();
+
+        if (textureCount > 0)
+        {
+            // for tex.
+
+            std::string src = entry.GetSource();
+
+            auto num = fbxProperty.GetSrcObjectCount<FbxFileTexture>();
+
+            for (int n = 0; n < num; n++)
+            {
+                auto texFile = fbxProperty.GetSrcObject<FbxFileTexture>(n);
+                std::string texName = texFile->GetFileName();
+                texName = texName.substr(texName.find_last_of('/') + 1);
+
+                auto texture = fbxProperty.GetSrcObject<FbxTexture>(n);
+
+                MaterialTex tex;
+                {
+                    tex.fbxMtrl = fbxMtrl;
+                    tex.paramName = propName;
+                    tex.texName = texName;
+                    tex.type.flags = 0;
+                }
+
+                if (src == "Maya|DiffuseTexture") {
+                    // Nothing.
+                }
+                else if (src == "Maya|NormalTexture") {
+                    tex.type.isNormal = IZ_TRUE;
+                }
+                else if (src == "Maya|SpecularTexture") {
+                    tex.type.isSpecular = IZ_TRUE;
+                }
+                else if (src == "Maya|FalloffTexture") {
+                    // TODO
+                }
+                else if (src == "Maya|ReflectionMapTexture") {
+                    // TODO
+                }
+
+                texList.push_back(tex);
+            }
+        }
+        else {
+            // for param.
+
+            auto dataType = fbxProperty.GetPropertyDataType().GetType();
+
+            MaterialParam param;
+            param.fbxMtrl = fbxMtrl;
+            param.name = propName;
+
+            if (dataType == fbxsdk::eFbxBool) {
+                bool v = fbxProperty.Get<bool>();
+                param.values.push_back(v);
+            }
+            else if (dataType == fbxsdk::eFbxInt || dataType == fbxsdk::eFbxEnum) {
+                int v = fbxProperty.Get<int>();
+                param.values.push_back(v);
+            }
+            else if (dataType == fbxsdk::eFbxUInt) {
+                unsigned int v = fbxProperty.Get<unsigned int>();
+                param.values.push_back(v);
+            }
+            else if (dataType == fbxsdk::eFbxFloat) {
+                float v = fbxProperty.Get<float>();
+                param.values.push_back(v);
+            }
+            else if (dataType == fbxsdk::eFbxDouble) {
+                float v = fbxProperty.Get<double>();
+                param.values.push_back(v);
+            }
+            else if (dataType == fbxsdk::eFbxDouble2) {
+                FbxDouble2 v = fbxProperty.Get<FbxDouble2>();
+                param.values.push_back(v.mData[0]);
+                param.values.push_back(v.mData[1]);
+            }
+            else if (dataType == fbxsdk::eFbxDouble3) {
+                FbxDouble3 v = fbxProperty.Get<FbxDouble3>();
+                param.values.push_back(v.mData[0]);
+                param.values.push_back(v.mData[1]);
+                param.values.push_back(v.mData[2]);
+            }
+            else if (dataType == fbxsdk::eFbxDouble4) {
+                FbxDouble4 v = fbxProperty.Get<FbxDouble4>();
+                param.values.push_back(v.mData[0]);
+                param.values.push_back(v.mData[1]);
+                param.values.push_back(v.mData[2]);
+                param.values.push_back(v.mData[3]);
+            }
+            else if (dataType == fbxsdk::eFbxDouble4x4) {
+                FbxDouble4x4 v = fbxProperty.Get<FbxDouble4x4>();
+
+                for (int i = 0; i < 4; i++) {
+                    for (int n = 0; n < 4; n++) {
+                        param.values.push_back(v.mData[i].mData[n]);
+                    }
+                }
+            }
+            else {
+                IZ_ASSERT(IZ_FALSE);
+            }
+
+            if (param.values.size() > 0) {
+                paramList.push_back(param);
+            }
+        }
+    }
+
+    if (texList.size() > 0) {
+        m_mtrlTex.insert(std::make_pair(nMtrlIdx, texList));
+        sMtrl.numTex += texList.size();
+    }
+
+    if (paramList.size() > 0) {
+        m_mtrlParam.insert(std::make_pair(nMtrlIdx, paramList));
+
+        for (IZ_UINT i = 0; i < paramList.size(); i++)
+        {
+            const MaterialParam& param = paramList[i];
+
+            sMtrl.paramBytes += sizeof(IZ_FLOAT)* param.values.size();
+            sMtrl.numParam++;
+        }
+    }
+
+    return IZ_TRUE;
+}
+
 void CFbxImporter::GetMaterialTexture(
     IZ_UINT nMtrlIdx,
     IZ_UINT nTexIdx,
@@ -1033,9 +1217,7 @@ void CFbxImporter::GetMaterialTexture(
 {
     const auto& tex = m_mtrlTex[nMtrlIdx][nTexIdx];
 
-    fbxsdk::FbxFileTexture* fbxTex = (fbxsdk::FbxFileTexture*)tex.texture;
-
-    sTex.name.SetString(fbxTex->GetRelativeFileName());
+    sTex.name.SetString(tex.texName.c_str());
     sTex.key = sTex.name.GetKeyValue();
 
     sTex.type = tex.type;
@@ -1052,9 +1234,17 @@ void CFbxImporter::GetMaterialShader(
 
     auto* fbxMtrl = m_dataMgr->GetMaterial(nMtrlIdx);
 
-    FbxString shading = fbxMtrl->ShadingModel.Get();
+    auto implementation = GetImplementation(fbxMtrl, FBXSDK_IMPLEMENTATION_CGFX);
 
-    sShader.name.SetString((const char*)shading);
+    if (implementation != nullptr) {
+        sShader.name.SetString(implementation->GetName());
+    }
+    else {
+        FbxString shading = fbxMtrl->ShadingModel.Get();
+
+        sShader.name.SetString((const char*)shading);
+    }
+
     sShader.key = sShader.name.GetKeyValue();
 }
 
