@@ -624,7 +624,6 @@ IZ_BOOL CFbxImporter::GetAnmChannel(
     // NOTE
     // keyIdx は外部で設定される.
 
-
     if (!channel.isChecked)
     {
         auto start = m_dataMgr->GetAnmStartFrame();
@@ -696,7 +695,7 @@ IZ_BOOL CFbxImporter::GetAnmChannel(
         for (IZ_UINT i = 0; i < ParamType::Num; i++) {
             if (channel.keys[i].size() == 1) {
                 auto key = channel.keys[i][0];
-                key.key = stop - 1;
+                key.key = (stop - start) - 1;
                 channel.keys[i].push_back(key);
             }
         }
