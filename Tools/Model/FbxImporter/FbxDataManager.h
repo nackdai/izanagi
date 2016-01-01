@@ -138,6 +138,21 @@ struct MeshSubset {
     }
 };
 
+struct Node {
+    fbxsdk::FbxNode* fbxNode{ nullptr };
+    IZ_INT targetIdx{ -1 };
+
+    Node() {}
+
+    Node(fbxsdk::FbxNode* node)
+        : fbxNode(node)
+    {}
+
+    Node(fbxsdk::FbxNode* node, IZ_INT idx)
+        : fbxNode(node), targetIdx(idx)
+    {}
+};
+
 class FbxDataManager {
 public:
     FbxDataManager() {}
@@ -147,7 +162,7 @@ public:
     IZ_BOOL IsValid() const;
 
     IZ_BOOL Open(const char* path);
-    IZ_BOOL OpenForAnm(const char* path);
+    IZ_BOOL OpenForAnm(const char* path, IZ_BOOL nodeOnly = IZ_FALSE);
 
     void Close();
 
@@ -169,7 +184,8 @@ public:
 
     IZ_UINT GetNodeNum() const;
 
-    FbxNode* GetNode(IZ_UINT idx);
+    FbxNode* GetFbxNode(IZ_UINT idx);
+    const Node& GetNode(IZ_UINT idx);
 
     IZ_UINT GetNodeIndex(const FbxNode* node) const;
 
@@ -185,6 +201,9 @@ public:
 
     IZ_INT GetAnmStartFrame() const { return m_AnmStartFrame; }
     IZ_INT GetAnmStopFrame() const { return m_AnmStopFrame; }
+
+    // ベースモデルデータに基づいてノードの再調整.
+    IZ_UINT RearrangeNodeByTargetBaseModel(FbxDataManager* target);
 
 private:
     void LoadAnimation(FbxImporter* importer);
@@ -214,7 +233,7 @@ private:
     FbxManager* m_manager{ nullptr };
     FbxScene* m_scene{ nullptr };
 
-    std::vector<FbxNode*> m_nodes;
+    std::vector<Node> m_nodes;
     std::vector<FbxMesh*> m_fbxMeshes;
 
     std::vector<FbxCluster*> m_clusters;

@@ -379,7 +379,7 @@ IZ_UINT CFbxImporter::GetJointNum()
 
 IZ_PCSTR CFbxImporter::GetJointName(IZ_UINT nIdx)
 {
-    FbxNode* node = m_dataMgr->GetNode(nIdx);
+    FbxNode* node = m_dataMgr->GetFbxNode(nIdx);
     return node->GetName();
 }
 
@@ -387,7 +387,7 @@ IZ_INT CFbxImporter::GetJointParent(
     IZ_UINT nIdx,
     const std::vector<izanagi::S_SKL_JOINT>& tvJoint)
 {
-    FbxNode* node = m_dataMgr->GetNode(nIdx);
+    FbxNode* node = m_dataMgr->GetFbxNode(nIdx);
 
     const FbxNode* parent = node->GetParent();
     if (parent == NULL) {
@@ -403,7 +403,7 @@ void CFbxImporter::GetJointInvMtx(
     IZ_UINT nIdx,
     izanagi::math::SMatrix44& mtx)
 {
-    FbxNode* node = m_dataMgr->GetNode(nIdx);
+    FbxNode* node = m_dataMgr->GetFbxNode(nIdx);
     FbxCluster* cluster = m_dataMgr->GetClusterByNode(node);
 
     if (cluster) {
@@ -440,7 +440,7 @@ void CFbxImporter::GetJointTransform(
     const std::vector<izanagi::S_SKL_JOINT>& tvJoint,
     std::vector<SJointTransform>& tvTransform)
 {
-    FbxNode* node = m_dataMgr->GetNode(nIdx);
+    FbxNode* node = m_dataMgr->GetFbxNode(nIdx);
 
     FbxAMatrix& mtxLocal = node->EvaluateLocalTransform();
 
@@ -489,9 +489,9 @@ void CFbxImporter::GetJointTransform(
 
 IZ_BOOL CFbxImporter::ReadBaseModel(IZ_PCSTR pszName)
 {
-#if 0
+#if 1
     m_dataMgrBase = new FbxDataManager();
-    IZ_BOOL ret = m_dataMgrBase->Open(pszName);
+    IZ_BOOL ret = m_dataMgrBase->OpenForAnm(pszName, IZ_TRUE);
 
     return ret;
 #else
@@ -520,6 +520,11 @@ IZ_BOOL CFbxImporter::EndAnm()
 IZ_UINT CFbxImporter::GetAnmNodeNum()
 {
     IZ_UINT ret = m_dataMgr->GetNodeNum();
+
+    if (m_dataMgrBase) {
+        ret = m_dataMgr->RearrangeNodeByTargetBaseModel(m_dataMgrBase);
+    }
+
     return ret;
 }
 
@@ -530,7 +535,7 @@ IZ_UINT CFbxImporter::GetAnmChannelNum(IZ_UINT nNodeIdx)
 
     IZ_UINT num = 0;
 
-    auto node = m_dataMgr->GetNode(nNodeIdx);
+    auto node = m_dataMgr->GetFbxNode(nNodeIdx);
 
     auto start = m_dataMgr->GetAnmStartFrame();
     auto stop = m_dataMgr->GetAnmStopFrame();
@@ -591,10 +596,13 @@ IZ_BOOL CFbxImporter::GetAnmNode(
     IZ_UINT nNodeIdx,
     izanagi::S_ANM_NODE& sNode)
 {
-    auto node = m_dataMgr->GetNode(nNodeIdx);
+    auto& node = m_dataMgr->GetNode(nNodeIdx);
+    auto fbxNode = node.fbxNode;
 
-    sNode.targetIdx = nNodeIdx;
-    sNode.target.SetString(node->GetName());
+    IZ_ASSERT(node.targetIdx >= 0);
+
+    sNode.targetIdx = (node.targetIdx >= 0 ? node.targetIdx : nNodeIdx);
+    sNode.target.SetString(fbxNode->GetName());
     sNode.targetKey = sNode.target.GetKeyValue();
 
     sNode.numChannels = GetAnmChannelNum(nNodeIdx);
@@ -612,7 +620,7 @@ IZ_BOOL CFbxImporter::GetAnmChannel(
 {
     IZ_ASSERT(nNodeIdx < m_channels.size());
 
-    auto node = m_dataMgr->GetNode(nNodeIdx);
+    auto node = m_dataMgr->GetFbxNode(nNodeIdx);
 
     auto& channel = m_channels[nNodeIdx];
     IZ_ASSERT(channel.nodeIdx == nNodeIdx);
@@ -744,7 +752,7 @@ IZ_BOOL CFbxImporter::GetAnmKey(
 {
     IZ_ASSERT(nNodeIdx < m_channels.size());
 
-    auto node = m_dataMgr->GetNode(nNodeIdx);
+    auto node = m_dataMgr->GetFbxNode(nNodeIdx);
 
     auto& channel = m_channels[nNodeIdx];
     IZ_ASSERT(channel.nodeIdx == nNodeIdx);

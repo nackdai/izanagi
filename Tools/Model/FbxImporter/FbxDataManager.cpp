@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "FbxDataManager.h"
 
 IZ_BOOL FbxDataManager::IsValid() const
@@ -62,7 +63,7 @@ IZ_BOOL FbxDataManager::Open(const char* path)
     return IZ_FALSE;
 }
 
-IZ_BOOL FbxDataManager::OpenForAnm(const char* path)
+IZ_BOOL FbxDataManager::OpenForAnm(const char* path, IZ_BOOL nodeOnly/*= IZ_FALSE*/)
 {
     m_manager = FbxManager::Create();
 
@@ -100,7 +101,12 @@ IZ_BOOL FbxDataManager::OpenForAnm(const char* path)
                     FbxSystemUnit::cm.ConvertScene(m_scene);
                 }
 
-                LoadAnimation(importer);
+                // ノードを集める.
+                GatherNodes(nullptr);
+
+                if (!nodeOnly) {
+                    LoadAnimation(importer);
+                }
 
                 importer->Destroy();
 
@@ -209,9 +215,45 @@ void FbxDataManager::LoadAnimation(FbxImporter* importer)
     m_AnmStartFrame = (importOffset.Get() + startTime.Get()) / oneFrame;
     m_AnmStopFrame = (importOffset.Get() + stopTime.Get()) / oneFrame;
     IZ_ASSERT(m_AnmStartFrame < m_AnmStopFrame);
+}
 
-    // ノードを集める.
-    GatherNodes(nullptr);
+// ベースモデルデータに基づいてノードの再調整.
+IZ_UINT FbxDataManager::RearrangeNodeByTargetBaseModel(FbxDataManager* target)
+{
+    IZ_ASSERT(target);
+
+    std::vector<Node> nodes;
+
+    IZ_UINT nodeNum = target->GetNodeNum();
+
+    for (IZ_UINT i = 0; i < nodeNum; i++)
+    {
+        auto targetNode = target->GetFbxNode(i);
+
+        // ターゲットに相当するノードがあるか探す.
+        auto found = std::find_if(
+            m_nodes.begin(),
+            m_nodes.end(),
+            [&](const Node& n) {
+            std::string name(n.fbxNode->GetName());
+            std::string targetName(targetNode->GetName());
+            return name == targetName;
+        });
+
+        // あったので登録.
+        if (found != m_nodes.end()) {
+            nodes.push_back(Node(found->fbxNode, (IZ_INT)i));
+        }
+    }
+
+    if (nodes.size() != m_nodes.size()) {
+        m_nodes.clear();
+
+        std::copy(nodes.begin(), nodes.end(), std::back_inserter(m_nodes));
+    }
+
+    IZ_UINT ret = m_nodes.size();
+    return ret;
 }
 
 IZ_UINT FbxDataManager::GetFbxMeshNum() const
@@ -263,14 +305,24 @@ IZ_UINT FbxDataManager::GetNodeNum() const
     return m_nodes.size();
 }
 
-FbxNode* FbxDataManager::GetNode(IZ_UINT idx)
+FbxNode* FbxDataManager::GetFbxNode(IZ_UINT idx)
+{
+    return m_nodes[idx].fbxNode;
+}
+
+const Node& FbxDataManager::GetNode(IZ_UINT idx)
 {
     return m_nodes[idx];
 }
 
 IZ_UINT FbxDataManager::GetNodeIndex(const FbxNode* node) const
 {
-    auto it = std::find(m_nodes.begin(), m_nodes.end(), node);
+    auto it = std::find_if(
+        m_nodes.begin(), 
+        m_nodes.end(),
+        [&](const Node& n) {
+        return n.fbxNode == node;
+    });
 
     if (it == m_nodes.end()) {
         return -1;
@@ -337,7 +389,7 @@ void FbxDataManager::GatherNodes(FbxNode* node)
     for (IZ_UINT i = 0; i < nodeCount; ++i)
     {
         auto fbxNode = m_scene->GetNode(i);
-        m_nodes.push_back(fbxNode);
+        m_nodes.push_back(Node(fbxNode));
     }
 #endif
 }

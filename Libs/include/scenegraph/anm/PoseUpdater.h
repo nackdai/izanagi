@@ -42,6 +42,8 @@ namespace izanagi {
             IZ_UINT paramType,
             const math::SVector4& param);
 
+        CSkeletonInstance* GetSkeletonInstance() { return m_Skl; }
+
     private:
         CSkeletonInstance* m_Skl;
     };

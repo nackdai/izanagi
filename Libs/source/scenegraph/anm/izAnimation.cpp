@@ -3,6 +3,7 @@
 #include "scenegraph/anm/AnimationUtil.h"
 #include "scenegraph/skl/SkeletonUtil.h"
 #include "scenegraph/anm/PoseUpdater.h"
+#include "scenegraph/skl/izSkeleton.h"
 #include "izSystem.h"
 
 using namespace izanagi;
@@ -162,6 +163,14 @@ IZ_UINT CAnimation::ApplyAnimation(
 
     const S_ANM_NODE& sAnmNode = *anmNode;
     const IZ_UINT nJointIdx = sAnmNode.targetIdx;
+
+#ifdef __IZ_DEBUG__
+    auto skl = ((CSklPoseUpdater*)&poseUpdater)->GetSkeletonInstance();
+    auto jnt = skl->GetBody()->GetJoint(nJointIdx);
+
+    IZ_ASSERT(sAnmNode.targetKey == jnt->nameKey);
+#endif  // #ifdef __IZ_DEBUG__
+
 
     math::SVector4 param;
 
