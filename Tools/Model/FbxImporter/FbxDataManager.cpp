@@ -621,8 +621,9 @@ void FbxDataManager::GatherVertices()
                 std::copy(skin.joint.begin(), skin.joint.end(), std::back_inserter(vtx.joint));
             }
             else {
-                // TODO
-                vtx.joint.push_back(0);
+                auto node = mesh.fbxMesh->GetNode();
+                auto nodeIdx = this->GetNodeIndex(node);
+                vtx.joint.push_back(nodeIdx);
                 vtx.weight.push_back(1.0f);
             }
 
