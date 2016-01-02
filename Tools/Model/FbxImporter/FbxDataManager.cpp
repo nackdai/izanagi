@@ -621,6 +621,7 @@ void FbxDataManager::GatherVertices()
                 std::copy(skin.joint.begin(), skin.joint.end(), std::back_inserter(vtx.joint));
             }
             else {
+                // スキン情報が無い場合もあるので、そのときは所属ノードに100%.
                 auto node = mesh.fbxMesh->GetNode();
                 auto nodeIdx = this->GetNodeIndex(node);
                 vtx.joint.push_back(nodeIdx);
