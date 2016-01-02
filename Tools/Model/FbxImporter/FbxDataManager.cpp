@@ -213,6 +213,11 @@ void FbxDataManager::LoadAnimation(FbxImporter* importer)
 
     // ƒtƒŒ[ƒ€”ŒvZ.
     m_AnmStartFrame = (importOffset.Get() + startTime.Get()) / oneFrame;
+
+    if (m_AnmStartFrame < 0) {
+        m_AnmStartFrame = 0;
+    }
+
     m_AnmStopFrame = (importOffset.Get() + stopTime.Get()) / oneFrame;
     IZ_ASSERT(m_AnmStartFrame < m_AnmStopFrame);
 }
