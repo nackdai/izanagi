@@ -42,6 +42,9 @@ private:
     izanagi::CAnimation* m_Anm{ nullptr };
 
     izanagi::animation::CTimeline m_Timeline;
+
+    IZ_BOOL m_enableStepAnm{ IZ_FALSE };
+    IZ_BOOL m_step{ IZ_FALSE };
 };
 
 #endif    // #if !defined(__STATE_FBX_H__)

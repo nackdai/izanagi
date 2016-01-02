@@ -102,11 +102,19 @@ void CStateFbx::OnUpdate(
     IZ_FLOAT time,
     izanagi::graph::CGraphicsDevice* device)
 {
-    // 時間更新
-    IZ_FLOAT fElapsed = m_App->GetTimer(0).GetTime();
-    fElapsed /= 1000.0f;
+    if (m_enableStepAnm) {
+        if (m_step) {
+            m_Timeline.Advance(16.67f / 1000.0f);
+        }
+        m_step = IZ_FALSE;
+    }
+    else {
+        // 時間更新
+        IZ_FLOAT fElapsed = m_App->GetTimer(0).GetTime();
+        fElapsed /= 1000.0f;
+        m_Timeline.Advance(fElapsed);
+    }
 
-    m_Timeline.Advance(fElapsed);
     //m_Timeline.Advance(0.5f);
     IZ_FLOAT t = m_Timeline.GetTime();
 
@@ -120,7 +128,12 @@ IZ_BOOL CStateFbx::Render(izanagi::graph::CGraphicsDevice* device)
 {
     IZ_BOOL ret = CStateBase::Render(device);
 
-    RenderName(device, anmFileName[posAnm]);
+    static char tmp[128];
+
+    IZ_FLOAT t = m_Timeline.GetTime();
+    IZ_SPRINTF(tmp, sizeof(tmp), "(%s) [%.3f]", anmFileName[posAnm], t);
+
+    RenderName(device, tmp);
 
     return ret;
 }
@@ -185,6 +198,8 @@ IZ_BOOL CStateFbx::CreateMaterial(izanagi::IMemoryAllocator* allocator)
 
 IZ_BOOL CStateFbx::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
 {
+    auto prevPosAnm = posAnm;
+
     if (key == izanagi::sys::E_KEYBOARD_BUTTON_UP) {
         posAnm++;
     }
@@ -194,26 +209,38 @@ IZ_BOOL CStateFbx::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
 
     posAnm = izanagi::math::CMath::Clamp<IZ_INT>(posAnm, 0, COUNTOF(anmFileName) - 1);
 
-    SAFE_RELEASE(m_Anm);
+    if (prevPosAnm != posAnm) {
+        SAFE_RELEASE(m_Anm);
 
-    izanagi::CFileInputStream in;
-    VRETURN(in.Open(anmFileName[posAnm]));
+        izanagi::CFileInputStream in;
+        VRETURN(in.Open(anmFileName[posAnm]));
 
-    m_Anm = izanagi::CAnimation::CreateAnimation(
-        m_Allocator,
-        &in);
+        m_Anm = izanagi::CAnimation::CreateAnimation(
+            m_Allocator,
+            &in);
 
-    IZ_ASSERT(m_Anm != IZ_NULL);
+        IZ_ASSERT(m_Anm != IZ_NULL);
 
-    // Reset Timeline
-    {
-        m_Timeline.Init(
-            m_Anm->GetAnimationTime(),
-            0.0f);
-        m_Timeline.EnableLoop(IZ_TRUE);
-        m_Timeline.AutoReverse(IZ_FALSE);
-        m_Timeline.Start();
-        m_Timeline.Reset();
+        // Reset Timeline
+        {
+            m_Timeline.Init(
+                m_Anm->GetAnimationTime(),
+                0.0f);
+            m_Timeline.EnableLoop(IZ_TRUE);
+            m_Timeline.AutoReverse(IZ_FALSE);
+            m_Timeline.Start();
+            m_Timeline.Reset();
+        }
+    }
+
+    if (key == izanagi::sys::E_KEYBOARD_BUTTON_SPACE) {
+        m_enableStepAnm = !m_enableStepAnm;
+    }
+
+    if (m_enableStepAnm) {
+        if (key == izanagi::sys::E_KEYBOARD_BUTTON_RETURN) {
+            m_step = IZ_TRUE;
+        }
     }
 
     return IZ_TRUE;
