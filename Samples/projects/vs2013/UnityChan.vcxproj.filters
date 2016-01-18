@@ -108,6 +108,9 @@
     <Filter Include="asset\motion">
       <UniqueIdentifier>{d4f5a490-554e-4252-b8ba-f44d09e81ee3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="asset\texture">
+      <UniqueIdentifier>{fd4f434e-4612-4e5f-84df-f96a806ac5f0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\UnityChan\main.cpp">
@@ -141,13 +144,29 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\..\Media\unitychan\Texture\body_01.tga" />
-    <Image Include="..\..\..\Media\unitychan\Texture\cheek_00.tga" />
-    <Image Include="..\..\..\Media\unitychan\Texture\eyeline_00.tga" />
-    <Image Include="..\..\..\Media\unitychan\Texture\eye_iris_L_00.tga" />
-    <Image Include="..\..\..\Media\unitychan\Texture\eye_iris_R_00.tga" />
-    <Image Include="..\..\..\Media\unitychan\Texture\face_00.tga" />
-    <Image Include="..\..\..\Media\unitychan\Texture\hair_01.tga" />
-    <Image Include="..\..\..\Media\unitychan\Texture\skin_01.tga" />
+    <Image Include="..\..\..\Media\unitychan\Texture\body_01.tga">
+      <Filter>asset\texture</Filter>
+    </Image>
+    <Image Include="..\..\..\Media\unitychan\Texture\cheek_00.tga">
+      <Filter>asset\texture</Filter>
+    </Image>
+    <Image Include="..\..\..\Media\unitychan\Texture\eye_iris_L_00.tga">
+      <Filter>asset\texture</Filter>
+    </Image>
+    <Image Include="..\..\..\Media\unitychan\Texture\eye_iris_R_00.tga">
+      <Filter>asset\texture</Filter>
+    </Image>
+    <Image Include="..\..\..\Media\unitychan\Texture\eyeline_00.tga">
+      <Filter>asset\texture</Filter>
+    </Image>
+    <Image Include="..\..\..\Media\unitychan\Texture\face_00.tga">
+      <Filter>asset\texture</Filter>
+    </Image>
+    <Image Include="..\..\..\Media\unitychan\Texture\hair_01.tga">
+      <Filter>asset\texture</Filter>
+    </Image>
+    <Image Include="..\..\..\Media\unitychan\Texture\skin_01.tga">
+      <Filter>asset\texture</Filter>
+    </Image>
   </ItemGroup>
 </Project>
