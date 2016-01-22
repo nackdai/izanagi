@@ -20,6 +20,7 @@ struct SPSInput {
 
 /////////////////////////////////////////////////////////////
 
+float4x4 g_mL2W;
 float4x4 g_mW2C;
 
 texture tex;
@@ -48,6 +49,20 @@ SVSOutput mainVS(SVSInput In)
     return Out;
 }
 
+SVSOutput mainVS_Basic(SVSInput In)
+{
+    SVSOutput Out = (SVSOutput)0;
+
+    Out.vPos = mul(In.vPos, g_mL2W);
+    Out.vPos = mul(Out.vPos, g_mW2C);
+
+    Out.vUV = In.vUV;
+    Out.vColor = In.vColor;
+
+    return Out;
+}
+
+
 float4 mainPS(SPSInput In) : COLOR
 {
     float4 vOut = tex2D(sTex, In.vUV);
@@ -58,11 +73,20 @@ float4 mainPS(SPSInput In) : COLOR
     return vOut;
 }
 
-technique BasicShader
+technique InstancingShader
 {
     pass P0
     {
         VertexShader = compile vs_2_0 mainVS();
+        PixelShader = compile ps_2_0 mainPS();
+    }
+}
+
+technique BasicShader
+{
+    pass P0
+    {
+        VertexShader = compile vs_2_0 mainVS_Basic();
         PixelShader = compile ps_2_0 mainPS();
     }
 }
