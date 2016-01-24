@@ -10,42 +10,34 @@ namespace sys
 {
     /** マウス
      */
-    class CMouse : public CObject {
-    public:
-        // インスタンス作成
-        static CMouse* CreateMouse(
-            IMemoryAllocator* allocator,
-            SInputDeviceInitParam* initParam);
+    class CMouse
+    {
+        friend class CSysWindow;
+        friend class InputManager;
 
-    protected:
-        CMouse();
-        virtual ~CMouse();
+    public:
+        CMouse() {}
+        ~CMouse() {}
 
         NO_COPIABLE(CMouse);
 
-        IZ_DEFINE_INTERNAL_RELEASE();
-
     public:
         // 更新
-        PURE_VIRTUAL(IZ_BOOL Update());
+        IZ_BOOL Update();
 
-        PURE_VIRTUAL(IZ_BOOL IsClick(IZ_UINT idx) const);
-
-        PURE_VIRTUAL(IZ_BOOL IsClickL() const); // 右
-        PURE_VIRTUAL(IZ_BOOL IsClickR() const); // 左
-        PURE_VIRTUAL(IZ_BOOL IsClickM() const); // 中
+        IZ_BOOL IsClickL() const; // 右
+        IZ_BOOL IsClickR() const; // 左
+        IZ_BOOL IsClickM() const; // 中
         
-        PURE_VIRTUAL(IZ_DWORD GetX() const);
-        PURE_VIRTUAL(IZ_DWORD GetY() const);
-        PURE_VIRTUAL(IZ_DWORD GetZ() const);
+        IZ_DWORD GetX() const;
+        IZ_DWORD GetY() const;
+        IZ_DWORD GetZ() const;
 
-        PURE_VIRTUAL(const void* GetRawState() const);
+    private:
+        CStdHash<IZ_UINT64, CMouse, 4>::Item* GetHashItem() { return &m_item; }
 
     protected:
-        IMemoryAllocator* m_Allocator;
-
-        // 更新に成功したかどうか
-        IZ_BOOL m_bSucceedUpdate;
+        CStdHash<IZ_UINT64, CMouse, 4>::Item m_item;
     };
 }   // namespace sys
 }   // namespace izanagi

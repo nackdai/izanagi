@@ -36,6 +36,87 @@ namespace sys
 
     //////////////////////////////////////////
 
+    class InputManager {
+    public:
+        InputManager();
+        ~InputManager();
+
+    public:
+        IZ_BOOL Register(
+            HWND hWnd,
+            CKeyboard* keyboard);
+
+        IZ_BOOL Register(
+            HWND hWnd,
+            CMouse* mouse);
+
+        void Remove(IZ_UINT64 hWnd);
+
+        CKeyboard* FindKeyboard(IZ_UINT64 hWnd);
+        CMouse* FindMouse(IZ_UINT64 hWnd);
+
+    private:
+        CStdHash<IZ_UINT64, CKeyboard, 4> m_hashKeyboard;
+        CStdHash<IZ_UINT64, CMouse, 4> m_hashMouse;
+    };
+
+    IZ_BOOL InputManager::Register(
+        HWND hWnd,
+        CKeyboard* keyboard)
+    {
+        IZ_ASSERT(keyboard != IZ_NULL);
+        IZ_ASSERT(hWnd != IZ_NULL);
+
+        IZ_UINT64 id = (IZ_UINT64)hWnd;
+
+        IZ_BOOL ret = m_hashKeyboard.Add(keyboard->GetHashItem());
+
+        return ret;
+    }
+
+    IZ_BOOL InputManager::Register(
+        HWND hWnd,
+        CMouse* mouse)
+    {
+        IZ_ASSERT(mouse != IZ_NULL);
+        IZ_ASSERT(hWnd != IZ_NULL);
+
+        IZ_UINT64 id = (IZ_UINT64)hWnd;
+
+        IZ_BOOL ret = m_hashMouse.Add(mouse->GetHashItem());
+
+        return ret;
+    }
+
+    void InputManager::Remove(IZ_UINT64 hWnd)
+    {
+        auto keyboard = m_hashKeyboard.FindData(hWnd);
+        if (keyboard) {
+            keyboard->GetHashItem()->Leave();
+        }
+
+        auto mouse = m_hashMouse.FindData(hWnd);
+        if (mouse) {
+            mouse->GetHashItem()->Leave();
+        }
+    }
+
+    CKeyboard* InputManager::FindKeyboard(IZ_UINT64 hWnd)
+    {
+        auto keyboard = m_hashKeyboard.FindData(hWnd);
+        return keyboard;
+    }
+
+    CMouse* InputManager::FindMouse(IZ_UINT64 hWnd)
+    {
+        auto mouse = m_hashMouse.FindData(hWnd);
+        return mouse;
+    }
+
+    static InputManager sInputMgr;
+
+    //////////////////////////////////////////
+
     // ウインドのもろもろを保持しておく用
     class CWindow : public CPlacementNew {
     public:
@@ -64,11 +145,24 @@ namespace sys
         HWND GetHWND() { return m_hWnd; }
         HDC GetHDC() { return m_hDC; }
 
+        CKeyboard* GetKeyboard()
+        {
+            return &m_keyboard;
+        }
+
+        CMouse* GetMouse()
+        {
+            return &m_mouse;
+        }
+
     protected:
         IMemoryAllocator* m_Allocator;
         HINSTANCE m_hInst;
         HWND m_hWnd;
         HDC m_hDC;
+
+        CKeyboard m_keyboard;
+        CMouse m_mouse;
     };
 
     // インスタンス作成
@@ -102,6 +196,9 @@ namespace sys
     {
         CMessageHandler* msgHandler = sMsgHandlerMgr.FindData((IZ_UINT64)hWnd);
 
+        auto keyboard = sInputMgr.FindKeyboard((IZ_UINT64)hWnd);
+        auto mouse = sInputMgr.FindMouse((IZ_UINT64)hWnd);
+
         switch (uMsg) {
         case WM_DESTROY:
         case WM_CLOSE:
@@ -123,17 +220,27 @@ namespace sys
             break;
 
         case WM_KEYDOWN:
+        {
+            E_KEYBOARD_BUTTON key = CSysWindow::GetKeyMap((IZ_UINT)wParam);
             if (msgHandler) {
-                E_KEYBOARD_BUTTON key = CSysWindow::GetKeyMap((IZ_UINT)wParam);
                 msgHandler->OnKeyDown(key);
             }
+            if (keyboard) {
+                keyboard->PressKey(key);
+            }
+        }
             break;
 
         case WM_KEYUP:
+        {
+            E_KEYBOARD_BUTTON key = CSysWindow::GetKeyMap((IZ_UINT)wParam);
             if (msgHandler) {
-                E_KEYBOARD_BUTTON key = CSysWindow::GetKeyMap((IZ_UINT)wParam);
                 msgHandler->OnKeyUp(key);
             }
+            if (keyboard) {
+                keyboard->ReleaseKey(key);
+            }
+        }
             break;
 
         case WM_LBUTTONDOWN:
@@ -244,6 +351,8 @@ namespace sys
             hDC = window->GetHDC();
             hWnd = window->GetHWND();
             hInst = window->GetHINSTANCE();
+
+            sInputMgr.Remove((IZ_INT64)hWnd);
         }
 
         _Destroy(hDC, hWnd, hInst);
@@ -379,7 +488,11 @@ namespace sys
         ::SetConsoleCtrlHandler(HandlerRoutine, TRUE);
 
 __EXIT__:
-        if (!result) {
+        if (result) {
+            sInputMgr.Register(hWnd, window->GetKeyboard());
+            sInputMgr.Register(hWnd, window->GetMouse());
+        }
+        else {
             _Destroy(hDC, hWnd, hInst);
         }
 
@@ -483,6 +596,20 @@ __EXIT__:
 
         //IZ_ASSERT(IZ_FALSE);
         return E_KEYBOARD_BUTTON_UNDEFINED;
+    }
+
+    CKeyboard* CSysWindow::GetKeyboard(const WindowHandle& handle)
+    {
+        CWindow* window = (CWindow*)handle;
+        auto hWnd = window->GetHWND();
+        return sInputMgr.FindKeyboard((IZ_INT64)hWnd);
+    }
+
+    CMouse* CSysWindow::GetMouse(const WindowHandle& handle)
+    {
+        CWindow* window = (CWindow*)handle;
+        auto hWnd = window->GetHWND();
+        return sInputMgr.FindMouse((IZ_INT64)hWnd);
     }
 }   // namespace sys
 }   // namespace izanagi

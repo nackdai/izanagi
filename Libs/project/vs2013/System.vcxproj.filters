@@ -117,6 +117,12 @@
     <ClInclude Include="..\..\include\system\SysMutex.h">
       <Filter>include\thread</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\system\Keyboard.h">
+      <Filter>include\device</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\system\Mouse.h">
+      <Filter>include\device</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\system\win32\SysTimer_win32.cpp">

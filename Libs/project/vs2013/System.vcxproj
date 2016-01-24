@@ -305,6 +305,8 @@
     <ClInclude Include="..\..\include\system\io\MemoryOutputStream.h" />
     <ClInclude Include="..\..\include\system\io\OutputStream.h" />
     <ClInclude Include="..\..\include\system\izDInput.h" />
+    <ClInclude Include="..\..\include\system\Keyboard.h" />
+    <ClInclude Include="..\..\include\system\Mouse.h" />
     <ClInclude Include="..\..\include\system\Pad.h" />
     <ClInclude Include="..\..\include\system\Pad_DInput.h" />
     <ClInclude Include="..\..\include\system\Pad_XInput.h" />
