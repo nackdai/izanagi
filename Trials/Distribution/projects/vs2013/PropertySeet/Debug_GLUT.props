@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="UserMacros">
+    <PROJECT_MAIN_DIR>$(ProjectDir)..\..\$(ProjectName)\</PROJECT_MAIN_DIR>
+    <TOOL_DIR>$(ProjectDir)..\..\..\..\Tools\tools\</TOOL_DIR>
+    <DATA_DIR>$(ProjectDir)..\..\..\..\Media\</DATA_DIR>
+  </PropertyGroup>
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <OutDir>$(SolutionDir)..\..\$(ProjectName)\</OutDir>
+    <IntDir>$(ProjectName)\$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+    <ExecutablePath>$(DXSDK_DIR)Utilities\bin\x64;$(ExecutablePath)</ExecutablePath>
+    <IncludePath>$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)Lib\x86;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <BuildMacro Include="PROJECT_MAIN_DIR">
+      <Value>$(PROJECT_MAIN_DIR)</Value>
+    </BuildMacro>
+    <BuildMacro Include="TOOL_DIR">
+      <Value>$(TOOL_DIR)</Value>
+    </BuildMacro>
+    <BuildMacro Include="DATA_DIR">
+      <Value>$(DATA_DIR)</Value>
+    </BuildMacro>
+  </ItemGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\..\External\glew\include;..\..\..\..\Libs\include;..\..\SampleKit;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>__IZ_DEBUG__;__IZ_OGL__;__IZ_GLUT__;_XKEYCHECK_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <ProgramDataBaseFileName>$(IntDir)$(ProjectName).pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <DisableSpecificWarnings>4819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>d3d9.lib;d3dx9d.lib;dxguid.lib;dinput8.lib;dxerr.lib;winmm.lib;SampleKit\$(Configuration)\SampleKit.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(ProjectName).exe</OutputFile>
+      <AdditionalLibraryDirectories>..\..\..\..\Libs\project\lib\$(Configuration);..\..\..\..\External\freeglut\lib\x86\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <PreBuildEvent>
+      <Command>copy /B /Y ..\..\..\External\freeglut\lib\x86\Debug\*.dll ..\..\$(ProjectName)
+copy /B /Y ..\..\..\External\glew\bin\Debug\Win32\glew32*.dll ..\..\$(ProjectName)
+</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+</Project>
