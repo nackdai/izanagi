@@ -38,8 +38,8 @@ namespace sys
 
     class InputManager {
     public:
-        InputManager();
-        ~InputManager();
+        InputManager() {}
+        ~InputManager() {}
 
     public:
         IZ_BOOL Register(
@@ -68,6 +68,7 @@ namespace sys
         IZ_ASSERT(hWnd != IZ_NULL);
 
         IZ_UINT64 id = (IZ_UINT64)hWnd;
+        keyboard->GetHashItem()->Init(id, keyboard);
 
         IZ_BOOL ret = m_hashKeyboard.Add(keyboard->GetHashItem());
 
@@ -82,6 +83,7 @@ namespace sys
         IZ_ASSERT(hWnd != IZ_NULL);
 
         IZ_UINT64 id = (IZ_UINT64)hWnd;
+        mouse->GetHashItem()->Init(id, mouse);
 
         IZ_BOOL ret = m_hashMouse.Add(mouse->GetHashItem());
 
