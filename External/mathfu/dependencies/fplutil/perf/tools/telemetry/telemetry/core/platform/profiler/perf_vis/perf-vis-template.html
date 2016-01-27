@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>fplutil perf</title>
+    <style type="text/css">
+      html {
+        width: 100%;
+        height: 100%;
+      }
+      body {
+        font-family: 'Open Sans', sans-serif;
+        font-size: 12px;
+        font-weight: 400;
+        background-color: #fff;
+        width: 100%;
+        height: 100%;
+        margin-top: 10px;
+      }
+
+      #main {
+        float: left;
+        width: 100%;
+        height: 85%;
+      }
+
+      #sidebar {
+        float: left;
+        width: 7em;
+      }
+
+      #sequence {
+        float: left;
+        width: 50%;
+        height: 100%;
+      }
+
+      #legend {
+        padding: 10px 0 0 3px;
+      }
+
+      #sequence text, #legend text {
+        font-weight: 600;
+        fill: #fff;
+      }
+
+      #chart {
+        float: left;
+        position: relative;
+        display: block;
+        width: 40%;
+        height: 80%;
+      }
+
+      #chart path {
+        stroke: #fff;
+      }
+
+      #explanation {
+        float: left;
+        text-align: center;
+        vertical-align:middle;
+        color: #666;
+        z-index: -1;
+      }
+
+      #percentage {
+        font-size: 1.5em;
+      }
+      #summary {
+        float: left;
+        position: relative;
+        z-index: 1;
+        padding-top: 2em;
+        width: 100%;
+        font-size: 1.0em;
+        font-family: "Courier New";
+      }
+    </style>
+    <link rel="stylesheet" type="text/css"
+      href="https://fonts.googleapis.com/css?family=Open+Sans:400,600">
+  </head>
+  <body>
+    <div id="main">
+      <div id="sidebar">
+        <div id="legend"></div>
+      </div>
+      <div id="chart">
+        <div id="explanation" style="visibility: hidden;">
+          <span id="percentage"></span><br/>
+        </div>
+      </div>
+      <div id="sequence"></div>
+    </div>
+    <div id="summary">Summary here</div>
+    <script type="text/javascript">
+      <jquery-1.11.0.min.js>
+      <sammy-latest.min.js>
+      <d3.v3.min.js>
+      var json = <data_json>;
+      <sequences.js>
+    </script>
+    <script type="text/javascript">
+      // Hack to make this example display correctly in an iframe on bl.ocks.org
+      d3.select(self.frameElement).style("height", "700px");
+    </script> 
+  </body>
+</html>
