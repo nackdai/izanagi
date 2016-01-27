@@ -610,7 +610,7 @@ namespace graph
             size += nVtxNumPerPrim * m_pVB->GetStride();
 
             if (size > m_pVB->GetSize()) {
-                IZ_ASSERT(IZ_FALSE);    // 一応
+                //IZ_ASSERT(IZ_FALSE);    // 一応
 
                 Flush(device);
                 m_sVBInfo.Clear();
@@ -644,7 +644,7 @@ namespace graph
             size += nIdxNumPerPrim * m_pIB->GetStride();
 
             if (size > m_pIB->GetSize()) {
-                IZ_ASSERT(IZ_FALSE);    // 一応
+                //IZ_ASSERT(IZ_FALSE);    // 一応
 
                 Flush(device);
                 m_sIBInfo.Clear();
