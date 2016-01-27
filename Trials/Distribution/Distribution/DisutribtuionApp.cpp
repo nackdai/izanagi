@@ -1,8 +1,10 @@
 #include "DistributionApp.h"
 
-static const IZ_FLOAT POS_X = -50.0f;
-static const IZ_FLOAT DISTANCE = 10.0f;
+static const IZ_FLOAT POS_X = 0.0f;
+static const IZ_FLOAT RADIUS = 5.0f;
+static const IZ_FLOAT DISTANCE = RADIUS * 2.0f;
 static const IZ_UINT ORDER = 20;
+static const IZ_UINT THREAD_NUM = 6;
 
 CDistributionApp::CDistributionApp()
 {
@@ -34,7 +36,7 @@ IZ_BOOL CDistributionApp::InitInternal(
         device,
         flag,
         IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0xff),
-        5.0f,
+        RADIUS,
         10, 10);
     VGOTO(result = (m_Mesh != IZ_NULL), __EXIT__);
 
@@ -62,9 +64,40 @@ IZ_BOOL CDistributionApp::InitInternal(
         VGOTO(result = (m_Shader != IZ_NULL), __EXIT__);
     }
 
+    for (IZ_UINT i = 0; i < MAX_MESH_NUM; i++) {
+        izanagi::math::SMatrix44::GetTrans(
+            m_objects[i].mtxL2W,
+            POS_X + DISTANCE * (i % ORDER),
+            0.0f,
+            -DISTANCE * (i / ORDER));
+
+        m_objects[i].points[0].Set( RADIUS,  RADIUS,  RADIUS);
+        m_objects[i].points[1].Set(-RADIUS,  RADIUS,  RADIUS);
+        m_objects[i].points[2].Set(-RADIUS,  RADIUS, -RADIUS);
+        m_objects[i].points[3].Set( RADIUS,  RADIUS, -RADIUS);
+
+        m_objects[i].points[4].Set( RADIUS, -RADIUS,  RADIUS);
+        m_objects[i].points[5].Set(-RADIUS, -RADIUS,  RADIUS);
+        m_objects[i].points[6].Set(-RADIUS, -RADIUS, -RADIUS);
+        m_objects[i].points[7].Set( RADIUS, -RADIUS, -RADIUS);
+
+        for (IZ_UINT n = 0; n < COUNTOF(m_objects[i].points); n++) {
+            izanagi::math::SMatrix44::Apply(
+                m_objects[i].points[n],
+                m_objects[i].points[n],
+                m_objects[i].mtxL2W);
+        }
+
+        m_objects[i].point2D[0][0] = SCREEN_WIDTH;
+        m_objects[i].point2D[0][1] = SCREEN_HEIGHT;
+
+        m_objects[i].point2D[1][0] = 0.0f;
+        m_objects[i].point2D[1][1] = 0.0f;
+    }
+
     // カメラ
     camera.Init(
-        izanagi::math::CVector4(0.0f, 10.0f, 30.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 0.0f, 30.0f, 1.0f),
         izanagi::math::CVector4(0.0f, 0.0f, 0.0f, 1.0f),
         izanagi::math::CVector4(0.0f, 1.0f, 0.0f, 1.0f),
         1.0f,
@@ -72,6 +105,17 @@ IZ_BOOL CDistributionApp::InitInternal(
         izanagi::math::CMath::Deg2Rad(60.0f),
         (IZ_FLOAT)device->GetBackBufferWidth() / device->GetBackBufferHeight());
     camera.Update();
+
+    // Compute Clip -> Screen matrix.
+    izanagi::CSceneGraphUtil::ComputeC2S(
+        m_mtxC2S,
+        SCREEN_WIDTH, SCREEN_HEIGHT,
+        camera.GetParam().cameraNear,
+        camera.GetParam().cameraFar);
+
+    // Allocate threads.
+    m_theadPool.Init(allocator, THREAD_NUM);
+    m_allocator = allocator;    // TODO
 
 __EXIT__:
     if (!result) {
@@ -94,7 +138,81 @@ void CDistributionApp::ReleaseInternal()
 // 更新.
 void CDistributionApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
-    GetCamera().Update();
+    auto& camera = GetCamera();
+    
+    camera.Update();
+
+    const auto& mtxW2C = camera.GetParam().mtxW2C;
+
+#if 0
+    for (IZ_UINT i = 0; i < MAX_MESH_NUM; i++) {
+        m_objects[i].point2D[0][0] = SCREEN_WIDTH;
+        m_objects[i].point2D[0][1] = SCREEN_HEIGHT;
+
+        m_objects[i].point2D[1][0] = 0.0f;
+        m_objects[i].point2D[1][1] = 0.0f;
+
+        izanagi::math::SVector4 vec2D;
+
+        for (IZ_UINT n = 0; n < COUNTOF(m_objects[i].points); n++) {
+            // World -> Clip
+            izanagi::math::SMatrix44::Apply(
+                vec2D,
+                m_objects[i].points[n],
+                mtxW2C);
+
+            izanagi::math::SVector4::Div(vec2D, vec2D, vec2D.w);
+
+            // Clip -> Screen
+            izanagi::math::SMatrix44::Apply(
+                vec2D,
+                vec2D,
+                m_mtxC2S);
+
+            m_objects[i].point2D[0][0] = IZ_MIN(m_objects[i].point2D[0][0], vec2D.x);
+            m_objects[i].point2D[0][1] = IZ_MIN(m_objects[i].point2D[0][1], vec2D.y);
+
+            m_objects[i].point2D[1][0] = IZ_MAX(m_objects[i].point2D[1][0], vec2D.x);
+            m_objects[i].point2D[1][1] = IZ_MAX(m_objects[i].point2D[1][1], vec2D.y);
+        }
+    }
+#else
+    izanagi::threadmodel::CParallel::For(
+        m_theadPool,
+        m_allocator,
+        0, MAX_MESH_NUM,
+        [&](IZ_UINT i) {
+            m_objects[i].point2D[0][0] = SCREEN_WIDTH;
+            m_objects[i].point2D[0][1] = SCREEN_HEIGHT;
+
+            m_objects[i].point2D[1][0] = 0.0f;
+            m_objects[i].point2D[1][1] = 0.0f;
+
+            izanagi::math::SVector4 vec2D;
+
+            for (IZ_UINT n = 0; n < COUNTOF(m_objects[i].points); n++) {
+                // World -> Clip
+                izanagi::math::SMatrix44::Apply(
+                    vec2D,
+                    m_objects[i].points[n],
+                    mtxW2C);
+
+                izanagi::math::SVector4::Div(vec2D, vec2D, vec2D.w);
+
+                // Clip -> Screen
+                izanagi::math::SMatrix44::Apply(
+                    vec2D,
+                    vec2D,
+                    m_mtxC2S);
+
+                m_objects[i].point2D[0][0] = IZ_MIN(m_objects[i].point2D[0][0], vec2D.x);
+                m_objects[i].point2D[0][1] = IZ_MIN(m_objects[i].point2D[0][1], vec2D.y);
+
+                m_objects[i].point2D[1][0] = IZ_MAX(m_objects[i].point2D[1][0], vec2D.x);
+                m_objects[i].point2D[1][1] = IZ_MAX(m_objects[i].point2D[1][1], vec2D.y);
+            }
+    });
+#endif
 }
 
 namespace {
@@ -136,18 +254,13 @@ void CDistributionApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
                 sizeof(izanagi::math::SMatrix44));
 
             izanagi::math::SMatrix44 mtxL2W;
+            izanagi::math::SMatrix44::SetUnit(mtxL2W);
 
-            for (IZ_UINT i = 0; i < m_curNum; i++) {
-                izanagi::math::SMatrix44::GetTrans(
-                    mtxL2W,
-                    POS_X + DISTANCE * (i % ORDER),
-                    0.0f,
-                    -DISTANCE * (i / ORDER));
-
+            for (IZ_UINT i = 0; i < MAX_MESH_NUM; i++) {
                 _SetShaderParam(
                     m_Shader,
                     "g_mL2W",
-                    (void*)&mtxL2W,
+                    (void*)&m_objects[i].mtxL2W,
                     sizeof(izanagi::math::SMatrix44));
 
                 m_Shader->CommitChanges(device);
@@ -159,6 +272,28 @@ void CDistributionApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
         }
     }
     m_Shader->End(device);
+
+    if (m_enabled2DRender) {
+        if (device->Begin2D()) {
+            static const IZ_COLOR colors[] = {
+                IZ_COLOR_RGBA(0xff, 0x00, 0x00, 0xff),
+                IZ_COLOR_RGBA(0x00, 0xff, 0x00, 0xff),
+                IZ_COLOR_RGBA(0x00, 0x00, 0xff, 0xff),
+            };
+
+            for (IZ_UINT i = 0; i < MAX_MESH_NUM; i++) {
+                izanagi::CIntRect rc(
+                    m_objects[i].point2D[0][0],
+                    m_objects[i].point2D[0][1],
+                    m_objects[i].point2D[1][0] - m_objects[i].point2D[0][0],
+                    m_objects[i].point2D[1][1] - m_objects[i].point2D[0][1]);
+
+                device->Draw2DRect(rc, colors[i % COUNTOF(colors)]);
+            }
+
+            device->End2D();
+        }
+    }
 
     izanagi::CDebugFont* debugFont = GetDebugFont();
 
@@ -178,6 +313,7 @@ void CDistributionApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
 IZ_BOOL CDistributionApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
 {
+#if 0
     static const IZ_UINT MESH_NUM_ORDER = 100;
 
     if (key == izanagi::sys::E_KEYBOARD_BUTTON_UP) {
@@ -187,6 +323,11 @@ IZ_BOOL CDistributionApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
         if (m_curNum > MESH_NUM_ORDER) {
             m_curNum -= MESH_NUM_ORDER;
         }
+    }
+#endif
+
+    if (key == izanagi::sys::E_KEYBOARD_BUTTON_SPACE) {
+        m_enabled2DRender = !m_enabled2DRender;
     }
 
     return IZ_TRUE;
