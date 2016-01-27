@@ -30,7 +30,7 @@ protected:
     virtual IZ_BOOL OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key) override;
 
 private:
-    static const IZ_UINT MeshNum = 10000;
+    static const IZ_UINT MeshNum = 20000;
 
     izanagi::CDebugMesh* m_Mesh;
 

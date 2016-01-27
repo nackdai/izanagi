@@ -1,5 +1,9 @@
 #include "InstancingApp.h"
 
+static const IZ_FLOAT POS_X = -50.0f;
+static const IZ_FLOAT DISTANCE = 10.0f;
+static const IZ_UINT ORDER = 20;
+
 CInstancingApp::CInstancingApp()
 {
     m_Mesh = IZ_NULL;
@@ -70,16 +74,14 @@ IZ_BOOL CInstancingApp::InitInternal(
 
         m_InstancingVB->Lock(0, 0, (void**)&mtx, IZ_FALSE);
 
-        IZ_FLOAT x = -50.0f;
-
         for (IZ_UINT i = 0; i < MeshNum; i++)
         {
             izanagi::math::SMatrix44::SetUnit(mtx[i]);
             izanagi::math::SMatrix44::GetTrans(
                 mtx[i],
-                x + 10.0f * (i % 10),
+                POS_X + DISTANCE * (i % ORDER),
                 0.0f,
-                -10.0f * (i / 10));
+                -DISTANCE * (i / ORDER));
 
             izanagi::math::SMatrix44::Transpose(mtx[i], mtx[i]);
         }
@@ -222,14 +224,12 @@ void CInstancingApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
             else {
                 izanagi::math::SMatrix44 mtxL2W;
 
-                IZ_FLOAT x = -50.0f;                        
-
                 for (IZ_UINT i = 0; i < MeshNum; i++) {
                     izanagi::math::SMatrix44::GetTrans(
                         mtxL2W,
-                        x + 10.0f * (i % 10),
+                        POS_X + DISTANCE * (i % ORDER),
                         0.0f,
-                        -10.0f * (i / 10));
+                        -DISTANCE * (i / ORDER));
 
                     _SetShaderParam(
                         m_Shader,
