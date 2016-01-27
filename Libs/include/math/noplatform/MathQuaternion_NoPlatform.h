@@ -124,6 +124,11 @@ namespace math
         mtx.m[2][1] = yz2 - wx2;
         mtx.m[2][2] = 1.0f - xx2 - yy2;
         mtx.m[2][3] = 0.0f;
+
+        mtx.m[3][0] = 0.0f;
+        mtx.m[3][1] = 0.0f;
+        mtx.m[3][2] = 0.0f;
+        mtx.m[3][3] = 1.0f;
 #else
         // マトリクスの乗算に直すとこうなる
         SMatrix44 m1, m2;

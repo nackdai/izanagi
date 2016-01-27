@@ -222,7 +222,7 @@
     </ClCompile>
     <PostBuildEvent />
     <Lib>
-      <AdditionalLibraryDirectories>..\..\..\External\freeglut\freeglut\freeglut\lib\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\External\freeglut\lib\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>freeglutd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
