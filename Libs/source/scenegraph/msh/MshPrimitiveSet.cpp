@@ -119,7 +119,7 @@ IZ_BOOL CPrimitiveSet::Render(
 
 #if 0
                     auto joint = pSkeleton->GetBody()->GetJoint(idx);
-                    IZ_PRINTF("[%s]\n", joint->name.GetString());
+                    IZ_PRINTF("(%d)[%s]\n", idx, joint->name.GetString());
                     math::SMatrix44::Dump(*pMtx);
 #endif
 
