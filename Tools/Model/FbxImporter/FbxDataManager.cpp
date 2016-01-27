@@ -995,9 +995,64 @@ void FbxDataManager::GatherColor(std::map<FbxMesh*, std::vector<ColorData>>& clr
 
 void FbxDataManager::GatherSkin(std::vector<SkinData>& skinList)
 {
+#if 0
+    // NOTE
+    // http://qiita.com/makanai/items/b9a4d82d245475a3e143
+    // SD Unityちゃんの問題
+    // 顔のモデルである_faceノードがCharacter1_Headの子になっていますが、スキニングされていないため、原点位置に表示されます.
+    // -> スキニングされてない場合、親ノードへ強制的にスキニングする.
+
     for (IZ_UINT m = 0; m < m_fbxMeshes.size(); m++)
     {
-        FbxMesh* fbxMesh = m_fbxMeshes[m];
+        fbxsdk::FbxMesh* fbxMesh = m_fbxMeshes[m];
+
+        // メッシュに含まれるスキニング情報数.
+        int skinCount = fbxMesh->GetDeformerCount(FbxDeformer::EDeformerType::eSkin);
+
+        // スキニングされてない場合、親ノードへ強制的にスキニングする.
+        if (skinCount == 0) {
+            std::function<fbxsdk::FbxNode*(fbxsdk::FbxNode* node, fbxsdk::FbxMesh* mesh)> findNodeByMesh = [&](fbxsdk::FbxNode* node, fbxsdk::FbxMesh* mesh)->fbxsdk::FbxNode*
+            {
+                if (node->GetMesh() == mesh) {
+                    return node;
+                }
+                for (int i = 0; i < node->GetChildCount(); i++) {
+                    auto n = findNodeByMesh(node->GetChild(i), mesh);
+                    if (n) {
+                        return n;
+                    }
+                }
+                return nullptr;
+            };
+
+            auto child = findNodeByMesh(m_scene->GetRootNode(), fbxMesh);
+            auto parent = child->GetParent();
+            parent->RemoveChild(child);
+            m_scene->GetRootNode()->AddChild(child);
+
+            FbxAnimEvaluator* sceneEvaluator = m_scene->GetAnimationEvaluator();
+            auto mtxBase = sceneEvaluator->GetNodeGlobalTransform(parent);
+            auto mtxInv = mtxBase.Inverse();
+
+            FbxCluster *clusterToRoot = FbxCluster::Create(m_scene, "");
+            clusterToRoot->SetLink(parent);
+            clusterToRoot->SetTransformLinkMatrix(mtxBase);
+            clusterToRoot->SetLinkMode(FbxCluster::eTotalOne);
+
+            for (int p = 0; p < fbxMesh->GetControlPointsCount(); p++) {
+                clusterToRoot->AddControlPointIndex(p, 1.0f);
+            }
+
+            FbxSkin* skin = FbxSkin::Create(m_scene, "");
+            skin->AddCluster(clusterToRoot);
+            fbxMesh->AddDeformer(skin);
+        }
+    }
+#endif
+
+    for (IZ_UINT m = 0; m < m_fbxMeshes.size(); m++)
+    {
+        fbxsdk::FbxMesh* fbxMesh = m_fbxMeshes[m];
 
         // メッシュに含まれるスキニング情報数.
         int skinCount = fbxMesh->GetDeformerCount(FbxDeformer::EDeformerType::eSkin);
