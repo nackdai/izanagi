@@ -99,12 +99,14 @@ void CSampleCamera::Rotate(
 
     izanagi::math::CVector4 v1(
         pt1.x, pt1.y,
-        _ProjectionToSphere(radius, pt1.x, pt1.y));
+        _ProjectionToSphere(radius, pt1.x, pt1.y),
+        0.0f);
     izanagi::math::SVector4::Normalize(v1, v1);
 
     izanagi::math::CVector4 v2(
         pt2.x, pt2.y,
-        _ProjectionToSphere(radius, pt2.x, pt2.y));
+        _ProjectionToSphere(radius, pt2.x, pt2.y),
+        0.0f);
     izanagi::math::SVector4::Normalize(v2, v2);
 
     // 回転軸
