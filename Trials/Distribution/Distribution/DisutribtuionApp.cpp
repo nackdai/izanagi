@@ -1,5 +1,10 @@
 #include "DistributionApp.h"
 
+// NOTE
+// DirectX3D 9 でスクリーンショットを撮る方法
+//  - IDirect3DDevice9::GetRenderTargetData メソッドを使う
+// http://katze.hatenablog.jp/entry/2013/06/17/184457
+
 static const IZ_FLOAT POS_X = 0.0f;
 static const IZ_FLOAT RADIUS = 5.0f;
 static const IZ_FLOAT DISTANCE = RADIUS * 2.0f;
@@ -37,7 +42,7 @@ IZ_BOOL CDistributionApp::InitInternal(
         flag,
         IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0xff),
         RADIUS,
-        10, 10);
+        100, 100);
     VGOTO(result = (m_Mesh != IZ_NULL), __EXIT__);
 
     // テクスチャ
@@ -58,9 +63,9 @@ IZ_BOOL CDistributionApp::InitInternal(
         VGOTO(result = in.Open("data/Shader.shd"), __EXIT__);
 
         m_Shader = izanagi::shader::CShaderBasic::CreateShader<izanagi::shader::CShaderBasic>(
-                    allocator,
-                    device,
-                    &in);
+            allocator,
+            device,
+            &in);
         VGOTO(result = (m_Shader != IZ_NULL), __EXIT__);
     }
 
@@ -133,6 +138,8 @@ void CDistributionApp::ReleaseInternal()
     SAFE_RELEASE(m_Img);
 
     SAFE_RELEASE(m_Shader);
+
+    m_theadPool.Terminate();
 }
 
 // 更新.
@@ -142,46 +149,11 @@ void CDistributionApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
     
     camera.Update();
 
-    const auto& mtxW2C = camera.GetParam().mtxW2C;
+    if (m_enabled2DRender) {
+        const auto& mtxW2C = camera.GetParam().mtxW2C;
 
 #if 0
-    for (IZ_UINT i = 0; i < MAX_MESH_NUM; i++) {
-        m_objects[i].point2D[0][0] = SCREEN_WIDTH;
-        m_objects[i].point2D[0][1] = SCREEN_HEIGHT;
-
-        m_objects[i].point2D[1][0] = 0.0f;
-        m_objects[i].point2D[1][1] = 0.0f;
-
-        izanagi::math::SVector4 vec2D;
-
-        for (IZ_UINT n = 0; n < COUNTOF(m_objects[i].points); n++) {
-            // World -> Clip
-            izanagi::math::SMatrix44::Apply(
-                vec2D,
-                m_objects[i].points[n],
-                mtxW2C);
-
-            izanagi::math::SVector4::Div(vec2D, vec2D, vec2D.w);
-
-            // Clip -> Screen
-            izanagi::math::SMatrix44::Apply(
-                vec2D,
-                vec2D,
-                m_mtxC2S);
-
-            m_objects[i].point2D[0][0] = IZ_MIN(m_objects[i].point2D[0][0], vec2D.x);
-            m_objects[i].point2D[0][1] = IZ_MIN(m_objects[i].point2D[0][1], vec2D.y);
-
-            m_objects[i].point2D[1][0] = IZ_MAX(m_objects[i].point2D[1][0], vec2D.x);
-            m_objects[i].point2D[1][1] = IZ_MAX(m_objects[i].point2D[1][1], vec2D.y);
-        }
-    }
-#else
-    izanagi::threadmodel::CParallel::For(
-        m_theadPool,
-        m_allocator,
-        0, MAX_MESH_NUM,
-        [&](IZ_UINT i) {
+        for (IZ_UINT i = 0; i < MAX_MESH_NUM; i++) {
             m_objects[i].point2D[0][0] = SCREEN_WIDTH;
             m_objects[i].point2D[0][1] = SCREEN_HEIGHT;
 
@@ -211,8 +183,61 @@ void CDistributionApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
                 m_objects[i].point2D[1][0] = IZ_MAX(m_objects[i].point2D[1][0], vec2D.x);
                 m_objects[i].point2D[1][1] = IZ_MAX(m_objects[i].point2D[1][1], vec2D.y);
             }
-    });
+        }
+#else
+        izanagi::math::SMatrix44 mtxW2S;
+
+        izanagi::math::SMatrix44::Mul(
+            mtxW2S,
+            mtxW2C,
+            m_mtxC2S);
+
+        izanagi::threadmodel::CParallel::For(
+            m_theadPool,
+            m_allocator,
+            0, MAX_MESH_NUM,
+            [&](IZ_UINT i) {
+            m_objects[i].point2D[0][0] = SCREEN_WIDTH;
+            m_objects[i].point2D[0][1] = SCREEN_HEIGHT;
+
+            m_objects[i].point2D[1][0] = 0.0f;
+            m_objects[i].point2D[1][1] = 0.0f;
+
+            izanagi::math::SVector4 vec2D;
+
+            for (IZ_UINT n = 0; n < COUNTOF(m_objects[i].points); n++) {
+#if 0
+                // World -> Clip
+                izanagi::math::SMatrix44::Apply(
+                    vec2D,
+                    m_objects[i].points[n],
+                    mtxW2C);
+
+                izanagi::math::SVector4::Div(vec2D, vec2D, vec2D.w);
+
+                // Clip -> Screen
+                izanagi::math::SMatrix44::Apply(
+                    vec2D,
+                    vec2D,
+                    m_mtxC2S);
+#else
+                izanagi::math::SMatrix44::Apply(
+                    vec2D,
+                    m_objects[i].points[n],
+                    mtxW2S);
+
+                izanagi::math::SVector4::Div(vec2D, vec2D, vec2D.w);
 #endif
+
+                m_objects[i].point2D[0][0] = IZ_MIN(m_objects[i].point2D[0][0], vec2D.x);
+                m_objects[i].point2D[0][1] = IZ_MIN(m_objects[i].point2D[0][1], vec2D.y);
+
+                m_objects[i].point2D[1][0] = IZ_MAX(m_objects[i].point2D[1][0], vec2D.x);
+                m_objects[i].point2D[1][1] = IZ_MAX(m_objects[i].point2D[1][1], vec2D.y);
+            }
+        });
+#endif
+    }
 }
 
 namespace {
@@ -272,6 +297,46 @@ void CDistributionApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
         }
     }
     m_Shader->End(device);
+
+#if 0
+    izanagi::sys::CTimer timer;
+    timer.Begin();
+    {
+        auto d3d9device = (D3D_DEVICE*)device->GetPlatformInterface();
+
+        // ロック可能なサーフェイスを作成.
+        D3D_SURFACE* surface;
+        auto hr = d3d9device->CreateOffscreenPlainSurface(
+            SCREEN_WIDTH,
+            SCREEN_HEIGHT,
+            D3DFMT_X8R8G8B8,
+            //1920, 1080,
+            //D3DFMT_A8R8G8B8,
+            D3DPOOL_SYSTEMMEM,
+            &surface,
+            NULL);
+        IZ_ASSERT(SUCCEEDED(hr));
+
+#if 1
+        // バックバッファの取得.
+        D3D_SURFACE* backBufffer;
+        hr = d3d9device->GetRenderTarget(0, &backBufffer);
+        IZ_ASSERT(SUCCEEDED(hr));
+
+        // バックバッファデータ転送.
+        hr = d3d9device->GetRenderTargetData(backBufffer, surface);
+        IZ_ASSERT(SUCCEEDED(hr));
+
+        backBufffer->Release();
+#else
+        hr = d3d9device->GetFrontBufferData(0, surface);
+        IZ_ASSERT(SUCCEEDED(hr));
+#endif
+        surface->Release();
+    }
+    auto time = timer.End();
+    IZ_PRINTF("%f\n", time);
+#endif
 
     if (m_enabled2DRender) {
         if (device->Begin2D()) {
