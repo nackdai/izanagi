@@ -27,8 +27,10 @@ protected:
     // 描画.
     virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device);
 
+    virtual IZ_BOOL OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key) override;
+
 private:
-    static const IZ_UINT MeshNum = 1000;
+    static const IZ_UINT MeshNum = 10000;
 
     izanagi::CDebugMesh* m_Mesh;
 
@@ -38,6 +40,8 @@ private:
     izanagi::CImage* m_Img;
 
     izanagi::shader::CShaderBasic* m_Shader;
+
+    IZ_BOOL m_enableInstaning{ IZ_TRUE };
 };
 
 #endif    // #if !defined(__INSTANCING_APP_H__)

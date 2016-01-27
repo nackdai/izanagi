@@ -3,7 +3,8 @@
 
 #include "izDefs.h"
 #include "izStd.h"
-#include "SysKeyDefs.h"
+#include "system/Keyboard.h"
+#include "system/Mouse.h"
 
 namespace izanagi
 {
@@ -99,6 +100,9 @@ namespace sys
         static void* GetNativeDisplayHandle(const WindowHandle& handle);
 
         static E_KEYBOARD_BUTTON GetKeyMap(IZ_UINT key);
+
+        static CKeyboard* GetKeyboard(const WindowHandle& handle);
+        static CMouse* GetMouse(const WindowHandle& handle);
     };
 }   // namespace sys
 }   // namespace izanagi

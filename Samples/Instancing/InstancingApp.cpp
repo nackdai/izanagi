@@ -175,8 +175,9 @@ void CInstancingApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
     device->SetTexture(0, m_Img->GetTexture(0));
 
-    // テクスチャあり
-    m_Shader->Begin(device, 0, IZ_FALSE);
+    IZ_UINT techIdx = (m_enableInstaning ? 0 : 1);
+
+    m_Shader->Begin(device, techIdx, IZ_FALSE);
     {
         if (m_Shader->BeginPass(0)) {
             // パラメータ設定
@@ -186,39 +187,88 @@ void CInstancingApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
                 (void*)&camera.GetParam().mtxW2C,
                 sizeof(izanagi::math::SMatrix44));
 
-            m_Shader->CommitChanges(device);
+            if (m_enableInstaning) {
+                m_Shader->CommitChanges(device);
 
-            device->SetIndexBuffer(m_Mesh->GetIB());
+                device->SetIndexBuffer(m_Mesh->GetIB());
 
-            device->SetVertexDeclaration(m_InstancingVD);
+                device->SetVertexDeclaration(m_InstancingVD);
 
-            device->SetVertexBuffer(
-                0, 0, 
-                m_Mesh->GetVB()->GetStride(),
-                m_Mesh->GetVB());
-            device->SetVertexBufferInstanced(
-                0,
-                izanagi::graph::E_GRAPH_VB_USAGE_INDEXEDDATA,
-                MeshNum);
+                device->SetVertexBuffer(
+                    0, 0,
+                    m_Mesh->GetVB()->GetStride(),
+                    m_Mesh->GetVB());
+                device->SetVertexBufferInstanced(
+                    0,
+                    izanagi::graph::E_GRAPH_VB_USAGE_INDEXEDDATA,
+                    MeshNum);
 
-            device->SetVertexBuffer(
-                1, 0, 
-                m_InstancingVB->GetStride(),
-                m_InstancingVB);
-            device->SetVertexBufferInstanced(
-                1,
-                izanagi::graph::E_GRAPH_VB_USAGE_INSTANCEDATA,
-                1);
+                device->SetVertexBuffer(
+                    1, 0,
+                    m_InstancingVB->GetStride(),
+                    m_InstancingVB);
+                device->SetVertexBufferInstanced(
+                    1,
+                    izanagi::graph::E_GRAPH_VB_USAGE_INSTANCEDATA,
+                    1);
 
-            device->DrawIndexedPrimitive(
-                m_Mesh->GetPrimitiveType(),
-                0,
-                m_Mesh->GetVB()->GetVtxNum(),
-                0,
-                m_Mesh->GetPrimitiveCount());
+                device->DrawIndexedPrimitive(
+                    m_Mesh->GetPrimitiveType(),
+                    0,
+                    m_Mesh->GetVB()->GetVtxNum(),
+                    0,
+                    m_Mesh->GetPrimitiveCount());
+            }
+            else {
+                izanagi::math::SMatrix44 mtxL2W;
+
+                IZ_FLOAT x = -50.0f;                        
+
+                for (IZ_UINT i = 0; i < MeshNum; i++) {
+                    izanagi::math::SMatrix44::GetTrans(
+                        mtxL2W,
+                        x + 10.0f * (i % 10),
+                        0.0f,
+                        -10.0f * (i / 10));
+
+                    _SetShaderParam(
+                        m_Shader,
+                        "g_mL2W",
+                        (void*)&mtxL2W,
+                        sizeof(izanagi::math::SMatrix44));
+
+                    m_Shader->CommitChanges(device);
+
+                    m_Mesh->Draw(device);
+                }
+            }
 
             m_Shader->EndPass();
         }
     }
     m_Shader->End(device);
+
+    izanagi::CDebugFont* debugFont = GetDebugFont();
+
+    if (device->Begin2D()) {
+        debugFont->Begin(device, 0, izanagi::CDebugFont::FONT_SIZE * 2);
+
+        debugFont->DBPrint(
+            device,
+            "%s\n",
+            m_enableInstaning ? "Instacing" : "No Instacing");
+
+        debugFont->End();
+
+        device->End2D();
+    }
+}
+
+IZ_BOOL CInstancingApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
+{
+    if (key == izanagi::sys::E_KEYBOARD_BUTTON_SPACE) {
+        m_enableInstaning = !m_enableInstaning;
+    }
+
+    return IZ_TRUE;
 }

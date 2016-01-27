@@ -14,6 +14,8 @@
 
 // Device
 #include "system/Pad.h"
+#include "system/Keyboard.h"
+#include "system/Mouse.h"
 
 #include "system/SysKeyDefs.h"
 #include "system/SysWindow.h"
