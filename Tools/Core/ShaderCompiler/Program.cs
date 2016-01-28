@@ -510,6 +510,7 @@ namespace ShaderCompiler
                     {
                         this.Options += " " + arg;
                     }
+                    isOptions = false;
                 }
                 else if (isIncludes)
                 {
@@ -521,6 +522,7 @@ namespace ShaderCompiler
                     {
                         this.Includes += " " + arg;
                     }
+                    isIncludes = false;
                 }
                 else if (isDefines)
                 {
@@ -532,6 +534,7 @@ namespace ShaderCompiler
                     {
                         this.Defines += " " + arg;
                     }
+                    isDefines = false;
                 }
             }
 
