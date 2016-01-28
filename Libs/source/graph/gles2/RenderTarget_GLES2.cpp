@@ -18,10 +18,10 @@ namespace graph
     {
         if (m_Texture > 0) {
             if (GetPixelFormat() == E_GRAPH_PIXEL_FMT_D24S8) {
-                CALL_GLES2_API(::glDeleteRenderbuffers(1, &m_Texture));
+                CALL_GL_API(::glDeleteRenderbuffers(1, &m_Texture));
             }
             else {
-                CALL_GLES2_API(::glDeleteTextures(1, &m_Texture));
+                CALL_GL_API(::glDeleteTextures(1, &m_Texture));
             }
         }
 
@@ -171,7 +171,7 @@ namespace graph
         IZ_UINT height,
         E_GRAPH_PIXEL_FMT fmt)
     {
-        CALL_GLES2_API(::glGenTextures(1, &m_Texture));
+        CALL_GL_API(::glGenTextures(1, &m_Texture));
         VRETURN(m_Texture > 0);
 
         CTextureOperator texOp(m_Device, m_Texture);
@@ -183,7 +183,7 @@ namespace graph
             glFormat,
             glType);
 
-        CALL_GLES2_API(
+        CALL_GL_API(
             ::glTexImage2D(
                 GL_TEXTURE_2D,
                 0,
@@ -206,19 +206,19 @@ namespace graph
         // TODO
         // Stencil
 
-        CALL_GLES2_API(::glGenRenderbuffers(1, &m_Texture));
+        CALL_GL_API(::glGenRenderbuffers(1, &m_Texture));
         VRETURN(m_Texture > 0);
 
-        CALL_GLES2_API(::glBindRenderbuffer(GL_RENDERBUFFER, m_Texture));
+        CALL_GL_API(::glBindRenderbuffer(GL_RENDERBUFFER, m_Texture));
 
-        CALL_GLES2_API(
+        CALL_GL_API(
             ::glRenderbufferStorage(
                 GL_RENDERBUFFER,
                 GL_DEPTH_COMPONENT16,
                 width, height));
 
         // 戻す
-        CALL_GLES2_API(::glBindRenderbuffer(GL_RENDERBUFFER, 0));
+        CALL_GL_API(::glBindRenderbuffer(GL_RENDERBUFFER, 0));
 
         SetTextureInfo(width, height, E_GRAPH_PIXEL_FMT_D24S8);
 

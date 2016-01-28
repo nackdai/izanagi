@@ -184,7 +184,7 @@ namespace graph
                 // そのため、バイトオフセットに変換する
                 IZ_UINT offset = vtxOffset * vtxStride;
 
-                CALL_GLES2_API(
+                CALL_GL_API(
                     ::glVertexAttribPointer(
                         attribIndex,
                         num,
@@ -193,14 +193,14 @@ namespace graph
                         vtxStride,
                         (void*)(offset + element.Offset)));
 
-                CALL_GLES2_API(::glEnableVertexAttribArray(attribIndex));
+                CALL_GL_API(::glEnableVertexAttribArray(attribIndex));
                 s_EnabledAttribIndex[attribIndex] = Enabled;
             }
         }
 
         for (IZ_UINT i = 0; i < COUNTOF(s_EnabledAttribIndex); i++) {
             if (s_EnabledAttribIndex[i] == Disabled) {
-                CALL_GLES2_API(::glDisableVertexAttribArray(i));
+                CALL_GL_API(::glDisableVertexAttribArray(i));
                 s_EnabledAttribIndex[i] = None;
             }
         }

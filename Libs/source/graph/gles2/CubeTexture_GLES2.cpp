@@ -113,7 +113,7 @@ namespace graph
         SAFE_RELEASE(m_Device);
 
         if (m_Texture > 0) {
-            CALL_GLES2_API(::glDeleteTextures(1, &m_Texture));
+            CALL_GL_API(::glDeleteTextures(1, &m_Texture));
         }
 
         FREE(m_Allocator, m_TemporaryData);
@@ -131,7 +131,7 @@ namespace graph
         IZ_ASSERT(device != IZ_NULL);
         IZ_ASSERT(width == height);
 
-        CALL_GLES2_API(::glGenTextures(1, &m_Texture));
+        CALL_GL_API(::glGenTextures(1, &m_Texture));
 
         VRETURN(m_Texture > 0);
 
@@ -177,7 +177,7 @@ namespace graph
                     GLuint w = width >> level;
                     GLuint h = height >> level;
 
-                    CALL_GLES2_API(
+                    CALL_GL_API(
                         ::glTexImage2D(
                             GL_TEXTURE_CUBE_MAP_POSITIVE_X + face,
                             level,
@@ -254,7 +254,7 @@ namespace graph
             GLenum glFace = IZ_GET_TARGET_CUBE_FACE(face);
 
             if (curTex != this) {
-                CALL_GLES2_API(::glBindTexture(GL_TEXTURE_CUBE_MAP, m_Texture));
+                CALL_GL_API(::glBindTexture(GL_TEXTURE_CUBE_MAP, m_Texture));
                 
                 Initialize();
             }
@@ -262,7 +262,7 @@ namespace graph
             IZ_UINT width = GetWidth(level);
             IZ_UINT height = GetHeight(level);
 
-            CALL_GLES2_API(
+            CALL_GL_API(
                 ::glTexSubImage2D(
                     glFace,
                     level,
@@ -275,10 +275,10 @@ namespace graph
             // 元に戻す
             if (curTex != this) {
                 if (curTex == IZ_NULL) {
-                    CALL_GLES2_API(::glBindTexture(GL_TEXTURE_CUBE_MAP, 0));
+                    CALL_GL_API(::glBindTexture(GL_TEXTURE_CUBE_MAP, 0));
                 }
                 else {
-                    CALL_GLES2_API(
+                    CALL_GL_API(
                         ::glBindTexture(
                             curTex->GetTexType() == E_GRAPH_TEX_TYPE_PLANE ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP,
                             ((CCubeTextureGLES2*)curTex)->m_Texture));

@@ -78,7 +78,7 @@ namespace graph
     {
         SAFE_RELEASE(m_Device);
 
-        CALL_GLES2_API(::glDeleteBuffers(1, &m_IB));
+        CALL_GL_API(::glDeleteBuffers(1, &m_IB));
         
         FREE(m_Allocator, m_TemporaryData);
     }
@@ -89,12 +89,12 @@ namespace graph
         E_GRAPH_INDEX_BUFFER_FMT fmt,
         E_GRAPH_RSC_USAGE usage)
     {
-        CALL_GLES2_API(::glGenBuffers(1, &m_IB));
+        CALL_GL_API(::glGenBuffers(1, &m_IB));
         VRETURN(m_IB > 0);
 
         IZ_BOOL ret = (m_IB > 0);
 
-        CALL_GLES2_API(
+        CALL_GL_API(
             ::glBindBuffer(
                 GL_ELEMENT_ARRAY_BUFFER,
                 m_IB));
@@ -118,7 +118,7 @@ namespace graph
                 ? GL_STATIC_DRAW
                 : GL_DYNAMIC_DRAW);
 
-            CALL_GLES2_API(
+            CALL_GL_API(
                 ::glBufferData(
                     GL_ELEMENT_ARRAY_BUFFER,
                     m_Size,
@@ -187,7 +187,7 @@ namespace graph
             CIndexBuffer* curIB = m_Device->GetRenderState().curIB;
 
             if (curIB != this) {
-                CALL_GLES2_API(::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IB));
+                CALL_GL_API(::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IB));
 
                 // もしかしたら
                 Initialize();
@@ -196,7 +196,7 @@ namespace graph
             IZ_UINT8* tmp = reinterpret_cast<IZ_UINT8*>(m_TemporaryData);
             tmp += m_LockOffset;
 
-            CALL_GLES2_API(
+            CALL_GL_API(
                 ::glBufferSubData(
                     GL_ELEMENT_ARRAY_BUFFER,
                     m_LockOffset,
@@ -206,10 +206,10 @@ namespace graph
             // 元に戻す
             if (curIB != this) {
                 if (curIB == IZ_NULL) {
-                    CALL_GLES2_API(::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+                    CALL_GL_API(::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
                 }
                 else {
-                    CALL_GLES2_API(
+                    CALL_GL_API(
                         ::glBindBuffer(
                             GL_ELEMENT_ARRAY_BUFFER,
                             ((CIndexBufferGLES2*)curIB)->m_IB));
@@ -236,7 +236,7 @@ namespace graph
 
     IZ_BOOL CIndexBufferGLES2::Disable()
     {
-        CALL_GLES2_API(::glDeleteBuffers(1, &m_IB));
+        CALL_GL_API(::glDeleteBuffers(1, &m_IB));
         return IZ_TRUE;
     }
 

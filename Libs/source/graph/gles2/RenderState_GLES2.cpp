@@ -49,7 +49,7 @@ namespace graph
     void CRenderState::EnableZWrite(CGraphicsDevice* device, IZ_DWORD flag)
     {
         if (isZWriteEnable != flag) {
-            CALL_GLES2_API(::glDepthMask(flag));
+            CALL_GL_API(::glDepthMask(flag));
             isZWriteEnable = flag;
         }
     }
@@ -59,10 +59,10 @@ namespace graph
     {
         if (isZTestEnable != flag) {
             if (flag) {
-                CALL_GLES2_API(::glEnable(GL_DEPTH_TEST));
+                CALL_GL_API(::glEnable(GL_DEPTH_TEST));
             }
             else {
-                CALL_GLES2_API(::glDisable(GL_DEPTH_TEST));
+                CALL_GL_API(::glDisable(GL_DEPTH_TEST));
             }
             isZTestEnable = flag;
         }
@@ -104,11 +104,12 @@ namespace graph
     {
         if (isAlphaBlendEnable != flag) {
             if (flag) {
-                CALL_GLES2_API(::glEnable(GL_BLEND));
+                CALL_GL_API(::glEnable(GL_BLEND));
             }
             else {
-                CALL_GLES2_API(::glDisable(GL_BLEND));
+                CALL_GL_API(::glDisable(GL_BLEND));
             }
+            isAlphaBlendEnable = flag;
         }
     }
 
@@ -128,7 +129,7 @@ namespace graph
         if (newOp != curOp) {
             GLenum glOp = CTargetParamValueConverter::ConvAbstractToTarget_BlendOp((E_GRAPH_BLEND_OP)newOp);
 
-            CALL_GLES2_API(::glBlendEquation(glOp));
+            CALL_GL_API(::glBlendEquation(glOp));
         }
 
         if (newSrc != curSrc
@@ -137,7 +138,7 @@ namespace graph
             GLenum glSrc = CTargetParamValueConverter::ConvAbstractToTarget_Blend((E_GRAPH_BLEND)newSrc);
             GLenum glDst = CTargetParamValueConverter::ConvAbstractToTarget_Blend((E_GRAPH_BLEND)newDst);
 
-            CALL_GLES2_API(::glBlendFunc(glSrc, glDst));
+            CALL_GL_API(::glBlendFunc(glSrc, glDst));
         }
 
         // 更新
@@ -155,16 +156,16 @@ namespace graph
     void CRenderState::SetCullMode(CGraphicsDevice* device, IZ_DWORD cull)
     {
         if (cull == E_GRAPH_CULL_NONE) {
-            CALL_GLES2_API(::glDisable(GL_CULL_FACE));
+            CALL_GL_API(::glDisable(GL_CULL_FACE));
         }
         else {
-            CALL_GLES2_API(::glEnable(GL_CULL_FACE));
+            CALL_GL_API(::glEnable(GL_CULL_FACE));
         }
 
         if (cullMode != cull) {
             GLenum raelCull = IZ_GET_TARGET_CULL((E_GRAPH_CULL)cull);
 
-            CALL_GLES2_API(::glCullFace(raelCull));
+            CALL_GL_API(::glCullFace(raelCull));
             cullMode = cull;
         }
     }
@@ -173,7 +174,7 @@ namespace graph
     void CRenderState::EnableRenderColorRGB(CGraphicsDevice* device, IZ_DWORD enableRGB)
     {
         if (isEnableRenderRGB != enableRGB) {
-            CALL_GLES2_API(
+            CALL_GL_API(
                 ::glColorMask(
                     enableRGB,
                     enableRGB,
@@ -187,7 +188,7 @@ namespace graph
     void CRenderState::EnableRenderColorA(CGraphicsDevice* device, IZ_DWORD enableA)
     {
         if (isEnableRenderA != enableA) {
-            CALL_GLES2_API(
+            CALL_GL_API(
                 ::glColorMask(
                     isEnableRenderRGB,
                     isEnableRenderRGB,
@@ -203,10 +204,10 @@ namespace graph
     {
         if (isScissorEnable != flag) {
             if (flag) {
-                CALL_GLES2_API(::glEnable(GL_SCISSOR_TEST));
+                CALL_GL_API(::glEnable(GL_SCISSOR_TEST));
             }
             else {
-                CALL_GLES2_API(::glDisable(GL_SCISSOR_TEST));
+                CALL_GL_API(::glDisable(GL_SCISSOR_TEST));
             }
             isScissorEnable = flag;
         }
@@ -215,7 +216,7 @@ namespace graph
     void CRenderState::SetScissorRect(CGraphicsDevice* device, const SIntRect& rc)
     {
         if (rcScissor != rc) {
-            CALL_GLES2_API(
+            CALL_GL_API(
                 ::glScissor(
                     rc.left,
                     rc.top,

@@ -44,7 +44,7 @@ namespace graph
     {
         SAFE_RELEASE(m_Device);
 
-        CALL_GLES2_API(::glDeleteTextures(1, &m_Texture));
+        CALL_GL_API(::glDeleteTextures(1, &m_Texture));
 
         FREE(m_Allocator, m_TemporaryData);
     }
@@ -136,7 +136,7 @@ namespace graph
         E_GRAPH_PIXEL_FMT fmt,
         E_GRAPH_RSC_USAGE rscType)
     {
-        CALL_GLES2_API(::glGenTextures(1, &m_Texture));
+        CALL_GL_API(::glGenTextures(1, &m_Texture));
         VRETURN(m_Texture > 0);
 
         SetTextureInfo(
@@ -192,7 +192,7 @@ namespace graph
                 GLuint w = width >> i;
                 GLuint h = height >> i;
 
-                CALL_GLES2_API(
+                CALL_GL_API(
                     ::glTexImage2D(
                         GL_TEXTURE_2D,
                         i,
@@ -268,7 +268,7 @@ namespace graph
             IZ_UINT width = GetWidth(level);
             IZ_UINT height = GetHeight(level);
 
-            CALL_GLES2_API(
+            CALL_GL_API(
                 ::glTexSubImage2D(
                     GL_TEXTURE_2D,
                     level,
@@ -301,7 +301,7 @@ namespace graph
     // 本体解放
     IZ_BOOL CTextureGLES2::Disable()
     {
-        CALL_GLES2_API(::glDeleteTextures(1, &m_Texture));
+        CALL_GL_API(::glDeleteTextures(1, &m_Texture));
         m_Texture = 0;
 
         return IZ_TRUE;
@@ -325,17 +325,17 @@ namespace graph
         if (m_CurTex == IZ_NULL
             || m_CurTex->GetTexHandle() != targetTexHandle)
         {
-            CALL_GLES2_API(::glBindTexture(GL_TEXTURE_2D, targetTexHandle));
+            CALL_GL_API(::glBindTexture(GL_TEXTURE_2D, targetTexHandle));
         }
     }
 
     CTextureOperator::~CTextureOperator()
     {
         if (m_CurTex == IZ_NULL) {
-            CALL_GLES2_API(::glBindTexture(GL_TEXTURE_2D, 0));
+            CALL_GL_API(::glBindTexture(GL_TEXTURE_2D, 0));
         }
         else {
-            CALL_GLES2_API(
+            CALL_GL_API(
                 ::glBindTexture(
                     m_CurTex->GetTexType() == E_GRAPH_TEX_TYPE_PLANE ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP,
                     m_CurTex->GetTexHandle()));

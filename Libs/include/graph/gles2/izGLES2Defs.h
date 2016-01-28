@@ -16,14 +16,14 @@ namespace izanagi {
 #define IS_VALID_SHADER_PARAM_HANDLE(handle)    ((handle) != 0)
 
 #ifdef __IZ_DEBUG__
-    #define CALL_GLES2_API(func)\
+    #define CALL_GL_API(func)\
         func;\
         {\
             GLenum __gl_err__ = ::glGetError();\
-            if (__gl_err__ != GL_NO_ERROR) { IZ_PRINTF("GLES2 ERROR [0x%x]\n", __gl_err__); IZ_ASSERT(IZ_FALSE); }\
+            if (__gl_err__ != GL_NO_ERROR) { IZ_PRINTF("GL ERROR [0x%x]\n", __gl_err__); IZ_ASSERT(IZ_FALSE); }\
         }
 #else
-    #define CALL_GLES2_API(func) func
+    #define CALL_GL_API(func) func
 #endif
 
 namespace izanagi

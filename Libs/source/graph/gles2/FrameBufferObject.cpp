@@ -44,7 +44,7 @@ namespace graph
     CFrameBufferObject::~CFrameBufferObject()
     {
         if (m_FBO > 0) {
-            CALL_GLES2_API(::glDeleteFramebuffers(1, &m_FBO));
+            CALL_GL_API(::glDeleteFramebuffers(1, &m_FBO));
         }
 
         SAFE_RELEASE(m_Color);
@@ -53,7 +53,7 @@ namespace graph
 
     IZ_BOOL CFrameBufferObject::CreateInternal()
     {
-        CALL_GLES2_API(::glGenFramebuffers(1, &m_FBO));
+        CALL_GL_API(::glGenFramebuffers(1, &m_FBO));
 
         return (m_FBO > 0);
     }
@@ -84,7 +84,7 @@ namespace graph
         {
             m_IsOnOffScreen = IZ_TRUE;
 
-            CALL_GLES2_API(
+            CALL_GL_API(
                 ::glBindFramebuffer(
                     GL_FRAMEBUFFER,
                     m_FBO));
@@ -93,7 +93,7 @@ namespace graph
                 ? m_Color->GetTexHandle()
                 : 0);
 
-            CALL_GLES2_API(
+            CALL_GL_API(
                 ::glFramebufferTexture2D(
                     GL_FRAMEBUFFER,
                     GL_COLOR_ATTACHMENT0,
@@ -105,7 +105,7 @@ namespace graph
                 ? m_Depth->GetTexHandle()
                 : 0);
 
-            CALL_GLES2_API(
+            CALL_GL_API(
                 ::glFramebufferRenderbuffer(
                     GL_FRAMEBUFFER,
                     GL_DEPTH_ATTACHMENT,
@@ -119,7 +119,7 @@ namespace graph
     IZ_BOOL CFrameBufferObject::EndOffScreen()
     {
         if (m_IsOnOffScreen) {
-            CALL_GLES2_API(::glBindFramebuffer(GL_FRAMEBUFFER, 0));
+            CALL_GL_API(::glBindFramebuffer(GL_FRAMEBUFFER, 0));
 
             m_IsOnOffScreen = IZ_FALSE;
         }
