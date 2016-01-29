@@ -46,6 +46,16 @@ namespace graph
             return IZ_FALSE;
         }
 
+        virtual IZ_BOOL Write(
+            IZ_UINT level,
+            void* data,
+            IZ_UINT x, IZ_UINT y,
+            IZ_UINT width, IZ_UINT height)
+        {
+            IZ_ASSERT(IZ_FALSE);
+            return IZ_FALSE;
+        }
+
         virtual CRenderTarget* AsRenderTarget()
         {
             return IZ_NULL;

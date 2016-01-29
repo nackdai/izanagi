@@ -13,26 +13,26 @@ namespace izanagi {
 }
 
 #ifndef EGL_NO_DISPLAY
-    #define EGL_NO_DISPLAY NULL
+#define EGL_NO_DISPLAY NULL
 #endif
 
 #ifndef EGL_NO_SURFACE
-    #define EGL_NO_SURFACE NULL
+#define EGL_NO_SURFACE NULL
 #endif
 
 #ifndef EGL_NO_CONTEXT
-    #define EGL_NO_CONTEXT NULL
+#define EGL_NO_CONTEXT NULL
 #endif
 
 #define IS_VALID_SHADER_PARAM_HANDLE(handle)    ((handle) != 0)
 
 #ifdef __IZ_DEBUG__
-    #define CALL_GL_API(func)\
-        func;\
-        {\
-            GLenum __gl_err__ = ::glGetError();\
-            if (__gl_err__ != GL_NO_ERROR) { IZ_PRINTF("GL ERROR [0x%x]\n", __gl_err__); IZ_ASSERT(IZ_FALSE); }\
-        }
+#define CALL_GL_API(func)\
+    func; \
+    {\
+        GLenum __gl_err__ = ::glGetError();\
+        if (__gl_err__ != GL_NO_ERROR) { IZ_PRINTF("GL ERROR [0x%x]\n", __gl_err__); IZ_ASSERT(IZ_FALSE); }\
+    }
 #else
     #define CALL_GL_API(func) func
 #endif

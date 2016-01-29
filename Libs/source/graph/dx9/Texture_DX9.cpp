@@ -1,6 +1,7 @@
 #include "graph/dx9/Texture_DX9.h"
 #include "graph/ParamValueConverter.h"
 #include "graph/dx9/GraphicsDevice_DX9.h"
+#include "graph/GraphUtil.h"
 
 namespace izanagi
 {
@@ -434,6 +435,45 @@ namespace graph
         HRESULT hr = m_Texture->UnlockRect(level);
         IZ_BOOL ret = SUCCEEDED(hr);
         IZ_ASSERT(ret);
+
+        return ret;
+    }
+
+    IZ_BOOL CTextureDX9::Write(
+        IZ_UINT level,
+        void* data,
+        IZ_UINT x, IZ_UINT y,
+        IZ_UINT width, IZ_UINT height)
+    {
+        IZ_ASSERT(x < width);
+        IZ_ASSERT(y < height);
+
+        void* locked = nullptr;
+        auto pitch = Lock(level, &locked, IZ_FALSE, IZ_TRUE);
+        VRETURN(pitch > 0);
+
+        auto fmt = GetPixelFormat();
+        auto bpp = CGraphUtil::GetBPP(fmt);
+
+        auto w = GetWidth();
+        auto h = GetHeight();
+
+        VRETURN(width <= w);
+        VRETURN(height <= h);
+
+        IZ_UINT8* dst = (IZ_UINT8*)locked;
+        dst += bpp * x;
+
+        auto cpySize = width * bpp;
+
+        for (IZ_UINT i = y; y < height; y++) {
+            auto src = ((IZ_UINT8*)data) + y * pitch;
+            dst += y * pitch;
+
+            memcpy(dst, src, cpySize);
+        }
+
+        auto ret = Unlock(level);
 
         return ret;
     }

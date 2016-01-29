@@ -80,6 +80,12 @@ namespace graph
         // アンロック
         virtual IZ_BOOL Unlock(IZ_UINT level);
 
+        virtual IZ_BOOL Write(
+            IZ_UINT level,
+            void* data,
+            IZ_UINT x, IZ_UINT y,
+            IZ_UINT width, IZ_UINT height) override;
+
     public:
         virtual IZ_BOOL IsPrepared() const;
 

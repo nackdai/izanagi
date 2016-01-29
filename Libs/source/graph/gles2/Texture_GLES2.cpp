@@ -293,6 +293,45 @@ namespace graph
         return IZ_TRUE;
     }
 
+    IZ_BOOL CTextureGLES2::Write(
+        IZ_UINT level,
+        void* data,
+        IZ_UINT x, IZ_UINT y,
+        IZ_UINT width, IZ_UINT height)
+    {
+        IZ_ASSERT(m_Texture != 0);
+
+        // Check not locked.
+        IZ_ASSERT(m_LockedSize == 0);
+
+        IZ_ASSERT(x < width);
+        IZ_ASSERT(y < height);
+
+        CTextureOperator texOp(m_Device, m_Texture);
+
+        if (texOp != this) {
+            Initialize();
+        }
+
+        IZ_UINT w = GetWidth(level);
+        IZ_UINT h = GetHeight(level);
+
+        VRETURN(width <= w);
+        VRETURN(height <= h);
+
+        CALL_GL_API(
+            ::glTexSubImage2D(
+                GL_TEXTURE_2D,
+                level,
+                x, y,
+                width, height,
+                m_GLFormat,
+                m_GLType,
+                data));
+
+        return IZ_TRUE;
+    }
+
     IZ_BOOL CTextureGLES2::IsPrepared() const
     {
         return (m_Texture > 0);
