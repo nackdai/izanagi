@@ -3,6 +3,7 @@
 
 #include "graph/GraphDefs.h"
 #include "graph/RenderTarget.h"
+#include "graph/gles2/TextureProxy.h"
 
 namespace izanagi
 {
@@ -10,7 +11,7 @@ namespace graph
 {
     class CGraphicsDeviceGLES2;
 
-    class CRenderTargetGLES2 : public CRenderTarget
+    class CRenderTargetGLES2 : public CTextureProxy<CRenderTarget>
     {
         friend class CGraphicsDeviceGLES2;
 
