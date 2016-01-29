@@ -62,7 +62,26 @@ SVSOutput mainVS_Basic(SVSInput In)
     return Out;
 }
 
+#if 0
+struct SPSOutput {
+    float4 color    : COLOR0;
+    float4 depth    : COLOR1;
+};
 
+SPSOutput mainPS(SPSInput In)
+{
+    SPSOutput outClr;
+
+    outClr.depth = 0.0f;
+
+    outClr.color = tex2D(sTex, In.vUV);
+
+    outClr.color.rgb *= In.vColor.rgb;
+    outClr.color.rgb *= In.vColor.a;
+
+    return outClr;
+}
+#else
 float4 mainPS(SPSInput In) : COLOR
 {
     float4 vOut = tex2D(sTex, In.vUV);
@@ -72,6 +91,8 @@ float4 mainPS(SPSInput In) : COLOR
 
     return vOut;
 }
+
+#endif
 
 technique InstancingShader
 {

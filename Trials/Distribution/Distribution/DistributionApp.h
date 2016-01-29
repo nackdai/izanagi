@@ -65,7 +65,7 @@ private:
 
     IZ_BOOL m_enabled2DRender{ IZ_FALSE };
 
-    izanagi::graph::CRenderTarget* m_RT{ nullptr };
+    izanagi::graph::CRenderTarget* m_RT[2];
     izanagi::graph::CRenderTarget* m_depthRT{ nullptr };
 
 #ifdef __IZ_OGL__
