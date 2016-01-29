@@ -142,6 +142,13 @@ namespace graph
             IZ_FLOAT fClearZ = 1.0f,
             IZ_DWORD nClearStencil = 0);
 
+        virtual IZ_BOOL CheckRenderTargetCount(IZ_UINT cnt)
+        {
+            // MRTはなし.
+            VRETURN(cnt == 1);
+            return IZ_TRUE;
+        }
+
         // シーン描画終了
         virtual void EndScene(IZ_UINT flag = 0xffffffff);
 

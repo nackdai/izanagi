@@ -35,7 +35,7 @@ namespace graph
         m_Allocator = IZ_NULL;
         m_FBO = 0;
 
-        m_Color = IZ_NULL;
+        memset(m_Color, 0, sizeof(m_Color));
         m_Depth = IZ_NULL;
 
         m_IsOnOffScreen = IZ_FALSE;
@@ -47,8 +47,7 @@ namespace graph
             CALL_GL_API(::glDeleteFramebuffers(1, &m_FBO));
         }
 
-        SAFE_RELEASE(m_Color);
-        SAFE_RELEASE(m_Depth);
+        ClearForcibly();
     }
 
     IZ_BOOL CFrameBufferObject::CreateInternal()
@@ -58,10 +57,14 @@ namespace graph
         return (m_FBO > 0);
     }
 
-    IZ_BOOL CFrameBufferObject::SetRenderTarget(CRenderTarget* rt, IZ_BOOL isDepth)
+    IZ_BOOL CFrameBufferObject::SetRenderTarget(
+        IZ_UINT idx,
+        CRenderTarget* rt,
+        IZ_BOOL isDepth)
     {
         IZ_ASSERT(!m_IsOnOffScreen);
         IZ_ASSERT(m_FBO > 0);
+        IZ_ASSERT(idx < ClrBufNum);
 
         if (isDepth) {
             // Depth
@@ -69,15 +72,35 @@ namespace graph
         }
         else {
             // Color
-            SAFE_REPLACE(m_Color, rt);
+            SAFE_REPLACE(m_Color[idx], rt);
         }
 
         return IZ_TRUE;
     }
 
+    void CFrameBufferObject::ClearForcibly()
+    {
+        for (IZ_UINT i = 0; i < ClrBufNum; i++) {
+            SAFE_RELEASE(m_Color[i]);
+        }
+        SAFE_RELEASE(m_Depth);
+    }
+
     IZ_BOOL CFrameBufferObject::StartOffScreen()
     {
         IZ_ASSERT(!m_IsOnOffScreen);
+
+        static const GLenum ClrAttachment[] = {
+            GL_COLOR_ATTACHMENT0,
+            GL_COLOR_ATTACHMENT1,
+            GL_COLOR_ATTACHMENT2,
+            GL_COLOR_ATTACHMENT3,
+            GL_COLOR_ATTACHMENT4,
+            GL_COLOR_ATTACHMENT5,
+            GL_COLOR_ATTACHMENT6,
+            GL_COLOR_ATTACHMENT7,
+        };
+        IZ_C_ASSERT(ClrBufNum == COUNTOF(ClrAttachment));
 
         if (m_Color != IZ_NULL
             || m_Depth != IZ_NULL)
@@ -89,17 +112,19 @@ namespace graph
                     GL_FRAMEBUFFER,
                     m_FBO));
 
-            GLuint colorTexHandle = (m_Color != IZ_NULL
-                ? m_Color->GetTexHandle()
-                : 0);
+            for (IZ_UINT i = 0; i < ClrBufNum; i++) {
+                GLuint colorTexHandle = (m_Color[i] != IZ_NULL
+                    ? m_Color[i]->GetTexHandle()
+                    : 0);
 
-            CALL_GL_API(
-                ::glFramebufferTexture2D(
+                CALL_GL_API(
+                    ::glFramebufferTexture2D(
                     GL_FRAMEBUFFER,
-                    GL_COLOR_ATTACHMENT0,
+                    ClrAttachment[i],
                     GL_TEXTURE_2D,
                     colorTexHandle,
                     0));
+            }
 
             GLuint depthHandle = (m_Depth != IZ_NULL
                 ? m_Depth->GetTexHandle()

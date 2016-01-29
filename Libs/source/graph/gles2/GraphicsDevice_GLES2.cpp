@@ -70,8 +70,7 @@ namespace graph
                 SetTexture(i, IZ_NULL);
             }
 
-            m_FBO->SetRenderTarget(IZ_NULL, IZ_TRUE);
-            m_FBO->SetRenderTarget(IZ_NULL, IZ_FALSE);
+            m_FBO->ClearForcibly();
 
             SAFE_RELEASE(m_FBO);
 
@@ -248,9 +247,7 @@ namespace graph
         IZ_FLOAT fClearZ/*= 1.0f*/,
         IZ_DWORD nClearStencil/*= 0*/)
     {
-        // TODO
-        // MRTは無しで・・・
-        IZ_ASSERT(nCount <= 1);
+        VRETURN(CheckRenderTargetCount(nCount));
 
         IZ_BOOL ret = IZ_TRUE;
 
@@ -332,7 +329,9 @@ namespace graph
 
         if (m_RenderState.curDepth != pSurface) {
             // レンダーターゲットを入れ替える
-            m_FBO->SetRenderTarget(pSurface, IZ_TRUE);
+
+            // Any index is OK, if depth will be set.
+            m_FBO->SetRenderTarget(0, pSurface, IZ_TRUE);
             SAFE_REPLACE(m_RenderState.curDepth, pSurface);
         }
     }
@@ -905,14 +904,14 @@ namespace graph
     {
         // TODO
         // MRTは無しで・・・
-        IZ_ASSERT(num == 1);
+        CheckRenderTargetCount(num);
 
         IZ_ASSERT(m_FBO != IZ_NULL);
 
         // レンダーターゲットを入れ替える
         for (IZ_UINT i = 0; i < num; ++i) {
             if (m_RenderState.curRT[i] != rt[i]) {
-                m_FBO->SetRenderTarget(rt[i], IZ_FALSE);
+                m_FBO->SetRenderTarget(i, rt[i], IZ_FALSE);
 
                 SAFE_REPLACE(m_RenderState.curRT[i], rt[i]);
             }

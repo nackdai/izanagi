@@ -33,7 +33,12 @@ namespace graph
     private:
         IZ_BOOL CreateInternal();
 
-        IZ_BOOL SetRenderTarget(CRenderTarget* rt, IZ_BOOL isDepth);
+        IZ_BOOL SetRenderTarget(
+            IZ_UINT idx,
+            CRenderTarget* rt,
+            IZ_BOOL isDepth);
+
+        void ClearForcibly();
 
         IZ_BOOL StartOffScreen();
         IZ_BOOL EndOffScreen();
@@ -45,7 +50,9 @@ namespace graph
 
         GLuint m_FBO;
 
-        CRenderTarget* m_Color;
+        static const IZ_UINT ClrBufNum = 8;
+
+        CRenderTarget* m_Color[ClrBufNum];
         CRenderTarget* m_Depth;
 
         IZ_BOOL m_IsOnOffScreen;

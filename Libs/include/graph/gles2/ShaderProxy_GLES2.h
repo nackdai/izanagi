@@ -39,6 +39,8 @@ namespace graph
             ::glCompileShader(m_Shader);
 
 #ifdef __IZ_DEBUG__
+            m_strProgram = (const char*)program;
+
             // Error Check
             GLint isCompiled = 0;
             ::glGetShaderiv(m_Shader, GL_COMPILE_STATUS, &isCompiled);
@@ -65,6 +67,10 @@ namespace graph
 
     protected:
         GLuint m_Shader;
+
+#if __IZ_DEBUG__
+        std::string m_strProgram;
+#endif
     };
 }   // namespace graph
 }   // namespace izanagi

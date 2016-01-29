@@ -12,6 +12,13 @@ namespace graph {
 
     public:
         virtual IZ_BOOL Reset(const void* initialParam);
+
+        virtual IZ_BOOL CheckRenderTargetCount(IZ_UINT cnt) override
+        {
+            // MRT‚Í‚È‚µ.
+            VRETURN(0 < cnt);
+            return IZ_TRUE;
+        }
     };
 }   // namespace graph
 }   // namespace izanagi
