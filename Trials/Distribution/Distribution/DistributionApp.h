@@ -30,8 +30,14 @@ protected:
 
     virtual IZ_BOOL OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key) override;
 
+#ifdef __IZ_OGL__
+    void initScreenCapture();
+    void procScreenCapture();
+    void captureScreen();
+#endif  // #ifdef __IZ_OGL__
+
 private:
-    static const IZ_UINT MAX_MESH_NUM = 1000;
+    static const IZ_UINT MAX_MESH_NUM = 2000;
 
     izanagi::CDebugMesh* m_Mesh;
 
@@ -58,6 +64,20 @@ private:
     izanagi::IMemoryAllocator* m_allocator{ nullptr };
 
     IZ_BOOL m_enabled2DRender{ IZ_FALSE };
+
+#ifdef __IZ_OGL__
+    struct ScreeData {
+        GLuint buffer;
+        GLuint tmpBuffer;
+        GLsync fence;
+    } m_SD[4];
+
+    IZ_UINT m_RBHead{ 0 };
+    IZ_UINT m_RBTail{ 0 };
+
+    GLuint m_PBO[2];
+    GLsync m_fence[3];
+#endif
 };
 
 #endif    // #if !defined(__INSTANCING_APP_H__)
