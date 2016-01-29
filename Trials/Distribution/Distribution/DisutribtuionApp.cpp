@@ -100,6 +100,18 @@ IZ_BOOL CDistributionApp::InitInternal(
         m_objects[i].point2D[1][1] = 0.0f;
     }
 
+    m_RT = device->CreateRenderTarget(
+        SCREEN_WIDTH,
+        SCREEN_HEIGHT,
+        izanagi::graph::E_GRAPH_PIXEL_FMT::E_GRAPH_PIXEL_FMT_RGBA8);
+    IZ_ASSERT(m_RT);
+
+    m_depthRT = device->CreateRenderTarget(
+        SCREEN_WIDTH,
+        SCREEN_HEIGHT,
+        izanagi::graph::E_GRAPH_PIXEL_FMT::E_GRAPH_PIXEL_FMT_D24S8);
+    IZ_ASSERT(m_depthRT);
+
     // カメラ
     camera.Init(
         izanagi::math::CVector4(0.0f, 0.0f, 30.0f, 1.0f),
@@ -163,6 +175,9 @@ void CDistributionApp::ReleaseInternal()
     SAFE_RELEASE(m_Img);
 
     SAFE_RELEASE(m_Shader);
+
+    SAFE_RELEASE(m_RT);
+    SAFE_RELEASE(m_depthRT);
 
     m_theadPool.Terminate();
 
@@ -511,7 +526,7 @@ void CDistributionApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     IZ_PRINTF("%f\n", time);
 #endif
 
-    procScreenCapture();
+    //procScreenCapture();
 
     static const IZ_BOOL isDrawTangentSpaceAxis = IZ_FALSE;
 
@@ -521,6 +536,17 @@ void CDistributionApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
     IZ_UINT techIdx = 1;
 
+    IZ_COLOR bgColor = GetBgColor();        
+
+#if 1
+    device->BeginScene(
+        &m_RT, 1,
+        m_depthRT,
+        izanagi::graph::E_GRAPH_CLEAR_FLAG_ALL,
+        bgColor, 1.0f, 0);
+#endif
+
+#if 1
     m_Shader->Begin(device, techIdx, IZ_FALSE);
     {
         if (m_Shader->BeginPass(0)) {
@@ -550,9 +576,11 @@ void CDistributionApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
         }
     }
     m_Shader->End(device);
+#endif
 
-    captureScreen();
+    device->EndScene();
 
+    //captureScreen();
     if (m_enabled2DRender) {
         if (device->Begin2D()) {
             static const IZ_COLOR colors[] = {
@@ -578,6 +606,19 @@ void CDistributionApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     izanagi::CDebugFont* debugFont = GetDebugFont();
 
     if (device->Begin2D()) {
+#if 1
+        if (m_RT) {
+            device->SetTexture(0, m_RT);
+            device->Set2DRenderOp(izanagi::graph::E_GRAPH_2D_RENDER_OP_MODULATE);
+
+            device->Draw2DSprite(
+                //izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),
+                izanagi::CFloatRect(0.0f, 1.0f, 1.0f, 0.0f),
+                izanagi::CIntRect(300, 100, 256, 128));
+        }
+#endif
+
+#if 0
         if (m_tmpTex) {
             device->SetTexture(0, m_tmpTex);
             device->Set2DRenderOp(izanagi::graph::E_GRAPH_2D_RENDER_OP_MODULATE);
@@ -595,6 +636,7 @@ void CDistributionApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
             m_curNum);
 
         debugFont->End();
+#endif
 
         device->End2D();
     }
