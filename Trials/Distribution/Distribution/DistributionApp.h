@@ -77,6 +77,8 @@ private:
 
     GLuint m_PBO[2];
     GLsync m_fence[3];
+
+    izanagi::graph::CTexture* m_tmpTex{ nullptr };
 #endif
 };
 

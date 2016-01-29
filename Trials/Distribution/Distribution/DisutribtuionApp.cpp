@@ -137,6 +137,13 @@ IZ_BOOL CDistributionApp::InitInternal(
     CALL_GL_API(::glBindBuffer(GL_PIXEL_PACK_BUFFER, 0));
 #else
     initScreenCapture();
+
+    m_tmpTex = device->CreateTexture(
+        SCREEN_WIDTH, SCREEN_HEIGHT,
+        1,
+        izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA8,
+        izanagi::graph::E_GRAPH_RSC_USAGE_DYNAMIC);
+    IZ_ASSERT(m_tmpTex);
 #endif
 #endif  // #ifdef __IZ_OGL__
 
@@ -161,6 +168,7 @@ void CDistributionApp::ReleaseInternal()
 
 #if __IZ_OGL__
     CALL_GL_API(::glDeleteBuffers(COUNTOF(m_PBO), m_PBO));
+    SAFE_RELEASE(m_tmpTex);
 #endif
 }
 
@@ -324,8 +332,31 @@ void CDistributionApp::procScreenCapture()
                 GL_MAP_READ_BIT);
 
             // TODO
+            if (m_tmpTex) {
+#if 0
+                m_tmpTex->Write(
+                    0,
+                    src,
+                    0, 0,
+                    SCREEN_WIDTH, SCREEN_HEIGHT);
+#else
+                IZ_UINT8* dst = nullptr;
+                auto pitch = m_tmpTex->Lock(0, (void**)&dst, IZ_FALSE, IZ_TRUE);
 
-            glUnmapBuffer(GL_COPY_READ_BUFFER);
+                // NOTE
+                // GLは2Dのy軸が逆転する
+
+                for (IZ_UINT y = 0; y < SCREEN_HEIGHT; y++) {
+                    auto tmpSrc = src + (SCREEN_HEIGHT - 1 - y) * pitch;
+                    auto tmpDst = dst + y * pitch;
+                    memcpy(tmpDst, tmpSrc, pitch);
+                }
+
+                m_tmpTex->Unlock(0);
+#endif
+
+                glUnmapBuffer(GL_COPY_READ_BUFFER);
+            }
 
             glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
 
@@ -547,6 +578,15 @@ void CDistributionApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     izanagi::CDebugFont* debugFont = GetDebugFont();
 
     if (device->Begin2D()) {
+        if (m_tmpTex) {
+            device->SetTexture(0, m_tmpTex);
+            device->Set2DRenderOp(izanagi::graph::E_GRAPH_2D_RENDER_OP_MODULATE);
+
+            device->Draw2DSprite(
+                izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),
+                izanagi::CIntRect(300, 100, 256, 128));
+        }
+
         debugFont->Begin(device, 0, izanagi::CDebugFont::FONT_SIZE * 2);
 
         debugFont->DBPrint(
