@@ -14,6 +14,7 @@ struct SPSInput {
     float4 vPos     : POSITION;
     float4 vColor   : COLOR;
     float2 vUV      : TEXCOORD0;
+    float4 vDepth   : TEXCOORD1;
 };
 
 #define SVSOutput        SPSInput
@@ -59,10 +60,12 @@ SVSOutput mainVS_Basic(SVSInput In)
     Out.vUV = In.vUV;
     Out.vColor = In.vColor;
 
+    Out.vDepth = Out.vPos.z / Out.vPos.w;
+
     return Out;
 }
 
-#if 0
+#if 1
 struct SPSOutput {
     float4 color    : COLOR0;
     float4 depth    : COLOR1;
@@ -72,7 +75,8 @@ SPSOutput mainPS(SPSInput In)
 {
     SPSOutput outClr;
 
-    outClr.depth = 0.0f;
+    outClr.depth = In.vDepth;
+    outClr.depth.a = 1.0f;
 
     outClr.color = tex2D(sTex, In.vUV);
 

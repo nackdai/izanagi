@@ -5,6 +5,10 @@
 //  - IDirect3DDevice9::GetRenderTargetData メソッドを使う
 // http://katze.hatenablog.jp/entry/2013/06/17/184457
 
+// NOTE
+// Readback from FBO
+// http://stackoverflow.com/questions/765434/glreadpixels-from-fbo-fails-with-multisampling
+
 static const IZ_FLOAT POS_X = 0.0f;
 static const IZ_FLOAT RADIUS = 5.0f;
 static const IZ_FLOAT DISTANCE = RADIUS * 2.0f;
