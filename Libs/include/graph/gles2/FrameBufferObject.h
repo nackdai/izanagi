@@ -50,9 +50,7 @@ namespace graph
 
         GLuint m_FBO;
 
-        static const IZ_UINT ClrBufNum = 8;
-
-        CRenderTarget* m_Color[ClrBufNum];
+        CRenderTarget* m_Color[MAX_MRT_NUM];
         CRenderTarget* m_Depth;
 
         IZ_BOOL m_IsOnOffScreen;

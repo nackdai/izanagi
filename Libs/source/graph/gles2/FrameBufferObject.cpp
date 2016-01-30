@@ -64,7 +64,7 @@ namespace graph
     {
         IZ_ASSERT(!m_IsOnOffScreen);
         IZ_ASSERT(m_FBO > 0);
-        IZ_ASSERT(idx < ClrBufNum);
+        IZ_ASSERT(idx < MAX_MRT_NUM);
 
         if (isDepth) {
             // Depth
@@ -80,7 +80,7 @@ namespace graph
 
     void CFrameBufferObject::ClearForcibly()
     {
-        for (IZ_UINT i = 0; i < ClrBufNum; i++) {
+        for (IZ_UINT i = 0; i < MAX_MRT_NUM; i++) {
             SAFE_RELEASE(m_Color[i]);
         }
         SAFE_RELEASE(m_Depth);
@@ -90,17 +90,7 @@ namespace graph
     {
         IZ_ASSERT(!m_IsOnOffScreen);
 
-        static const GLenum ClrAttachment[] = {
-            GL_COLOR_ATTACHMENT0,
-            GL_COLOR_ATTACHMENT1,
-            GL_COLOR_ATTACHMENT2,
-            GL_COLOR_ATTACHMENT3,
-            GL_COLOR_ATTACHMENT4,
-            GL_COLOR_ATTACHMENT5,
-            GL_COLOR_ATTACHMENT6,
-            GL_COLOR_ATTACHMENT7,
-        };
-        IZ_C_ASSERT(ClrBufNum == COUNTOF(ClrAttachment));
+        GLenum attachedColor[MAX_MRT_NUM] = { 0 };
 
         if (m_Color != IZ_NULL
             || m_Depth != IZ_NULL)
@@ -112,7 +102,9 @@ namespace graph
                     GL_FRAMEBUFFER,
                     m_FBO));
 
-            for (IZ_UINT i = 0; i < ClrBufNum; i++) {
+            IZ_UINT attachedCnt = 0;
+
+            for (IZ_UINT i = 0; i < MAX_MRT_NUM; i++) {
                 GLuint colorTexHandle = (m_Color[i] != IZ_NULL
                     ? m_Color[i]->GetTexHandle()
                     : 0);
@@ -120,10 +112,19 @@ namespace graph
                 CALL_GL_API(
                     ::glFramebufferTexture2D(
                     GL_FRAMEBUFFER,
-                    ClrAttachment[i],
+                    GL_COLOR_ATTACHMENT0 + i,
                     GL_TEXTURE_2D,
                     colorTexHandle,
                     0));
+
+                if (colorTexHandle > 0) {
+                    attachedColor[attachedCnt] = GL_COLOR_ATTACHMENT0 + i;
+                    attachedCnt++;
+                }
+            }
+
+            if (attachedCnt > 0) {
+                CALL_GL_API(::glDrawBuffers(attachedCnt, attachedColor));
             }
 
             GLuint depthHandle = (m_Depth != IZ_NULL
