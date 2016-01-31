@@ -10,7 +10,7 @@
   <ItemDefinitionGroup>
     <ClCompile>
       <AdditionalIncludeDirectories>../../include;..\..\..\External\ANGLE\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>__IZ_OGL__;__IZ_GLES2__;_XKEYCHECK_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>__IZ_OGL__;__IZ_GLES2__;GL_GLEXT_PROTOTYPES;EGL_EGLEXT_PROTOTYPES;_XKEYCHECK_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
       <ProgramDataBaseFileName>$(OutDir)$(TargetName).pdb</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
