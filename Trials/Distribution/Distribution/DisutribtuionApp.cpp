@@ -5,10 +5,6 @@
 //  - IDirect3DDevice9::GetRenderTargetData メソッドを使う
 // http://katze.hatenablog.jp/entry/2013/06/17/184457
 
-// NOTE
-// Readback from FBO
-// http://stackoverflow.com/questions/765434/glreadpixels-from-fbo-fails-with-multisampling
-
 static const IZ_FLOAT POS_X = 0.0f;
 static const IZ_FLOAT RADIUS = 5.0f;
 static const IZ_FLOAT DISTANCE = RADIUS * 2.0f;
@@ -255,6 +251,8 @@ void CDistributionApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
         });
 #endif
     }
+
+    //m_fboManager.readback(device);
 }
 
 namespace {
@@ -327,7 +325,7 @@ void CDistributionApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
     IZ_COLOR bgColor = GetBgColor();        
 
-#if 0
+#if 1
     m_frameCapture.procScreenCapture();
 #else
     m_fboManager.begin(
@@ -367,7 +365,7 @@ void CDistributionApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     m_Shader->End(device);
 #endif
 
-#if 0
+#if 1
     m_frameCapture.captureScreen();
 #else
     m_fboManager.end(device);
@@ -398,7 +396,7 @@ void CDistributionApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     izanagi::CDebugFont* debugFont = GetDebugFont();
 
     if (device->Begin2D()) {
-#if 0
+#if 1
         m_frameCapture.drawDebug(device);
 #else
         m_fboManager.drawDebug(device);

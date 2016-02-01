@@ -19,6 +19,7 @@ void FrameCapture::initScreenCapture(
     m_screenHeight = height;
     m_screenBufferSize = width * height * 4;
 
+#ifdef __IZ_OGL__
     for (IZ_UINT i = 0; i < COUNTOF(m_SD); i++) {
         auto& sd = m_SD[i];
 
@@ -39,6 +40,7 @@ void FrameCapture::initScreenCapture(
         izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA8,
         izanagi::graph::E_GRAPH_RSC_USAGE_DYNAMIC);
     IZ_ASSERT(m_tmpTex);
+#endif  // #ifdef __IZ_OGL__
 }
 
 void FrameCapture::procScreenCapture()
@@ -47,6 +49,7 @@ void FrameCapture::procScreenCapture()
     IZ_ASSERT(m_screenWidth > 0);
     IZ_ASSERT(m_screenHeight > 0);
 
+#ifdef __IZ_OGL__
     while (m_RBTail != m_RBHead) {
         auto tmpTail = (m_RBTail + 1) % COUNTOF(m_SD);
 
@@ -97,6 +100,7 @@ void FrameCapture::procScreenCapture()
             break;
         }
     }
+#endif  // #ifdef __IZ_OGL__
 }
 
 void FrameCapture::captureScreen()
@@ -105,6 +109,7 @@ void FrameCapture::captureScreen()
     IZ_ASSERT(m_screenWidth > 0);
     IZ_ASSERT(m_screenHeight > 0);
 
+#ifdef __IZ_OGL__
     auto tmpHead = (m_RBHead + 1) % COUNTOF(m_SD);
 
     if (tmpHead == m_RBTail) {
@@ -118,6 +123,8 @@ void FrameCapture::captureScreen()
         glBindBuffer(
             GL_PIXEL_PACK_BUFFER,
             sd.tmpBuffer);
+
+#if 0
         glReadPixels(
             0,
             0,
@@ -126,6 +133,17 @@ void FrameCapture::captureScreen()
             GL_RGBA,
             GL_UNSIGNED_BYTE,
             0);
+#else
+        glReadPixels(
+            0,
+            0,
+            m_screenWidth,
+            m_screenHeight,
+            GL_DEPTH_COMPONENT,
+            GL_FLOAT,
+            0);
+#endif
+
         glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
 
         glBindBuffer(GL_COPY_READ_BUFFER, sd.tmpBuffer);
@@ -141,10 +159,12 @@ void FrameCapture::captureScreen()
 
         m_RBHead = tmpHead;
     }
+#endif  // #ifdef __IZ_OGL__
 }
 
 void FrameCapture::terminate()
 {
+#ifdef __IZ_OGL__
     for (IZ_UINT i = 0; i < COUNTOF(m_SD); i++) {
         auto& sd = m_SD[i];
 
@@ -153,10 +173,12 @@ void FrameCapture::terminate()
     }
 
     SAFE_RELEASE(m_tmpTex);
+#endif  // #ifdef __IZ_OGL__
 }
 
 void FrameCapture::drawDebug(izanagi::graph::CGraphicsDevice* device)
 {
+#ifdef __IZ_OGL__
     if (m_tmpTex) {
         device->SetTexture(0, m_tmpTex);
         device->Set2DRenderOp(izanagi::graph::E_GRAPH_2D_RENDER_OP_MODULATE);
@@ -165,4 +187,5 @@ void FrameCapture::drawDebug(izanagi::graph::CGraphicsDevice* device)
             izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),
             izanagi::CIntRect(300, 100, 256, 128));
     }
+#endif  // #ifdef __IZ_OGL__
 }

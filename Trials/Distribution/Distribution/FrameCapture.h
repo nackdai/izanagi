@@ -35,9 +35,9 @@ private:
 
     IZ_UINT m_RBHead{ 0 };
     IZ_UINT m_RBTail{ 0 };
-#endif  // #ifdef __IZ_OGL__
 
     izanagi::graph::CTexture* m_tmpTex{ nullptr };
+#endif  // #ifdef __IZ_OGL__
 };
 
 #endif    // #if !defined(__FRAME_CAPTURE_H__)
