@@ -237,6 +237,8 @@ namespace graph
         // TODO
         virtual void* GetPlatformInterface() { return IZ_NULL; }
 
+        CFrameBufferObject* getFBO();
+
     private:
         virtual IZ_BOOL SetTextureInternal(IZ_UINT nStage, CBaseTexture* pTex);
         virtual void SetRenderTargetInternal(CRenderTarget** rt, IZ_UINT num);

@@ -43,6 +43,7 @@ namespace graph
         IZ_BOOL StartOffScreen();
         IZ_BOOL EndOffScreen();
 
+    public:
         GLuint GetRawInterface() { return m_FBO; }
 
     private:

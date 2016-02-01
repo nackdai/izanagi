@@ -307,6 +307,11 @@ namespace graph
         return ret;
     }
 
+    void* CRenderTargetDX9::GetPlatformInterface()
+    {
+        return GetSurface()->GetPlatformInterface();
+    }
+
     // サーフェス取得
     CSurfaceDX9* CRenderTargetDX9::GetSurface()
     {
