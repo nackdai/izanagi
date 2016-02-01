@@ -25,6 +25,11 @@ namespace graph
         {
             return this;
         }
+
+        virtual void* GetPlatformInterface()
+        {
+            return nullptr;
+        }
     };
 }   // namespace graph
 }   // namespace izanagi

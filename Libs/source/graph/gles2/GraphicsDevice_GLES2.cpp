@@ -974,5 +974,10 @@ namespace graph
             allocator,
             width, height);
     }
+
+    CFrameBufferObject* CGraphicsDeviceGLES2::getFBO()
+    {
+        return m_FBO;
+    }
 }   // namespace graph
 }   // namespace izanagi

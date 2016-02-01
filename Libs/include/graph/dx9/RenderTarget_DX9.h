@@ -62,6 +62,8 @@ namespace graph
 
         virtual IZ_BOOL Restore();
 
+        virtual void* GetPlatformInterface() override;
+
     private:
         CSurfaceDX9* GetSurface();
 

@@ -413,10 +413,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Distribution\DisutribtuionApp.cpp" />
+    <ClCompile Include="..\..\Distribution\FBOManager.cpp" />
+    <ClCompile Include="..\..\Distribution\FrameCapture.cpp" />
     <ClCompile Include="..\..\Distribution\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Distribution\DistributionApp.h" />
+    <ClInclude Include="..\..\Distribution\FBOManager.h" />
+    <ClInclude Include="..\..\Distribution\FrameCapture.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
