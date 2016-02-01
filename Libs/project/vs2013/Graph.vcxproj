@@ -41,6 +41,14 @@
       <Configuration>Release_GLES2</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Release_GLUT|Win32">
+      <Configuration>Release_GLUT</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release_GLUT|x64">
+      <Configuration>Release_GLUT</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B3B78D13-7032-4460-AC62-8AA68C03C96C}</ProjectGuid>
@@ -63,7 +71,17 @@
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v120</PlatformToolset>
@@ -113,9 +131,17 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="PropertySeet\Release_GLES2.props" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="PropertySeet\Release_GLUT.props" />
+  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="PropertySeet\Release_GLES2.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="PropertySeet\Release_GLUT.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -255,6 +281,20 @@
       <AdditionalLibraryDirectories>..\..\..\External\ANGLE\projects\src\Release_Win32\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <PostBuildEvent />
+    <Lib>
+      <AdditionalDependencies>glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\..\External\glew\lib\Release\$(PlatformName);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -267,6 +307,20 @@
     <Lib>
       <AdditionalDependencies>libEGL.lib;libGLESv2.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\..\External\ANGLE\projects\src\Release_Win32\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <PostBuildEvent />
+    <Lib>
+      <AdditionalDependencies>glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\..\External\glew\lib\Release\$(PlatformName);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -303,7 +357,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\source\graph\BufferBase.cpp" />
     <ClCompile Include="..\..\source\graph\dx9\2DShader_DX9.cpp">
@@ -312,7 +368,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\source\graph\dx9\CubeTexture_DX9.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">true</ExcludedFromBuild>
@@ -320,7 +378,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\source\graph\dx9\D3D9ParamValueConverter.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">true</ExcludedFromBuild>
@@ -328,7 +388,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\source\graph\dx9\GraphicsDeviceResourceFuncs.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">true</ExcludedFromBuild>
@@ -336,7 +398,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\source\graph\dx9\GraphicsDevice_DX9.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">true</ExcludedFromBuild>
@@ -344,7 +408,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\source\graph\dx9\GraphPerf_DX9.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">true</ExcludedFromBuild>
@@ -352,7 +418,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\source\graph\dx9\IndexBuffer_DX9.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">true</ExcludedFromBuild>
@@ -360,7 +428,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\source\graph\dx9\PixelShader_DX9.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">true</ExcludedFromBuild>
@@ -368,7 +438,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\source\graph\dx9\RenderState_DX9.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">true</ExcludedFromBuild>
@@ -376,7 +448,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\source\graph\dx9\RenderTarget_DX9.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">true</ExcludedFromBuild>
@@ -384,7 +458,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\source\graph\dx9\ShaderProgram_DX9.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">true</ExcludedFromBuild>
@@ -392,7 +468,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\source\graph\dx9\Surface_DX9.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">true</ExcludedFromBuild>
@@ -400,7 +478,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\source\graph\dx9\Texture_DX9.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">true</ExcludedFromBuild>
@@ -408,7 +488,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\source\graph\dx9\VertexBuffer_DX9.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">true</ExcludedFromBuild>
@@ -416,7 +498,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\source\graph\dx9\VertexDeclaration_DX9.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">true</ExcludedFromBuild>
@@ -424,7 +508,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\source\graph\dx9\VertexShader_DX9.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">true</ExcludedFromBuild>
@@ -432,7 +518,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\source\graph\gles2\2DShader_GLES2.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</ExcludedFromBuild>
@@ -465,6 +553,8 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\source\graph\gles2\GraphicsDevice_GLES2.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</ExcludedFromBuild>
@@ -548,7 +638,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\source\graph\RenderState.cpp" />
     <ClCompile Include="..\..\source\graph\ShaderProgram.cpp" />
@@ -562,7 +654,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|x64'">true</ExcludedFromBuild>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -646,7 +740,23 @@ $(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpModulate
 $(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpAdd -p ps_2_0 -I %(RootDir)%(Directory) -i %(FullPath) -o %(RootDir)%(Directory)../../gles2/%(FileName)_OpAdd.ps --string-table
 $(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpModulateAlpha -p ps_2_0 -I %(RootDir)%(Directory) -i %(FullPath) -o %(RootDir)%(Directory)../../gles2/%(FileName)_OpModulateAlpha.ps --string-table
 $(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpNoTexAlpha -p ps_2_0 -I %(RootDir)%(Directory) -i %(FullPath) -o %(RootDir)%(Directory)../../gles2/%(FileName)_OpNoTexAlpha.ps --string-table</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|Win32'">$(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpVtx -p ps_2_0 -I %(RootDir)%(Directory) -i %(FullPath) -o %(RootDir)%(Directory)../../gles2/%(FileName)_OpVtx.ps --string-table
+$(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpTex -p ps_2_0 -I %(RootDir)%(Directory) -i %(FullPath) -o %(RootDir)%(Directory)../../gles2/%(FileName)_OpTex.ps --string-table
+$(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpModulate -p ps_2_0 -I %(RootDir)%(Directory) -i %(FullPath) -o %(RootDir)%(Directory)../../gles2/%(FileName)_OpModulate.ps --string-table
+$(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpModulate2x -p ps_2_0 -I %(RootDir)%(Directory) -i %(FullPath) -o %(RootDir)%(Directory)../../gles2/%(FileName)_OpModulate2x.ps --string-table
+$(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpModulate4x -p ps_2_0 -I %(RootDir)%(Directory) -i %(FullPath) -o %(RootDir)%(Directory)../../gles2/%(FileName)_OpModulate4x.ps --string-table
+$(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpAdd -p ps_2_0 -I %(RootDir)%(Directory) -i %(FullPath) -o %(RootDir)%(Directory)../../gles2/%(FileName)_OpAdd.ps --string-table
+$(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpModulateAlpha -p ps_2_0 -I %(RootDir)%(Directory) -i %(FullPath) -o %(RootDir)%(Directory)../../gles2/%(FileName)_OpModulateAlpha.ps --string-table
+$(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpNoTexAlpha -p ps_2_0 -I %(RootDir)%(Directory) -i %(FullPath) -o %(RootDir)%(Directory)../../gles2/%(FileName)_OpNoTexAlpha.ps --string-table</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|x64'">$(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpVtx -p ps_2_0 -I %(RootDir)%(Directory) -i %(FullPath) -o %(RootDir)%(Directory)../../gles2/%(FileName)_OpVtx.ps --string-table
+$(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpTex -p ps_2_0 -I %(RootDir)%(Directory) -i %(FullPath) -o %(RootDir)%(Directory)../../gles2/%(FileName)_OpTex.ps --string-table
+$(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpModulate -p ps_2_0 -I %(RootDir)%(Directory) -i %(FullPath) -o %(RootDir)%(Directory)../../gles2/%(FileName)_OpModulate.ps --string-table
+$(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpModulate2x -p ps_2_0 -I %(RootDir)%(Directory) -i %(FullPath) -o %(RootDir)%(Directory)../../gles2/%(FileName)_OpModulate2x.ps --string-table
+$(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpModulate4x -p ps_2_0 -I %(RootDir)%(Directory) -i %(FullPath) -o %(RootDir)%(Directory)../../gles2/%(FileName)_OpModulate4x.ps --string-table
+$(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpAdd -p ps_2_0 -I %(RootDir)%(Directory) -i %(FullPath) -o %(RootDir)%(Directory)../../gles2/%(FileName)_OpAdd.ps --string-table
+$(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpModulateAlpha -p ps_2_0 -I %(RootDir)%(Directory) -i %(FullPath) -o %(RootDir)%(Directory)../../gles2/%(FileName)_OpModulateAlpha.ps --string-table
+$(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpNoTexAlpha -p ps_2_0 -I %(RootDir)%(Directory) -i %(FullPath) -o %(RootDir)%(Directory)../../gles2/%(FileName)_OpNoTexAlpha.ps --string-table</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|x64'">$(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpVtx -p ps_2_0 -I %(RootDir)%(Directory) -i %(FullPath) -o %(RootDir)%(Directory)../../gles2/%(FileName)_OpVtx.ps --string-table
 $(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpTex -p ps_2_0 -I %(RootDir)%(Directory) -i %(FullPath) -o %(RootDir)%(Directory)../../gles2/%(FileName)_OpTex.ps --string-table
 $(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpModulate -p ps_2_0 -I %(RootDir)%(Directory) -i %(FullPath) -o %(RootDir)%(Directory)../../gles2/%(FileName)_OpModulate.ps --string-table
 $(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpModulate2x -p ps_2_0 -I %(RootDir)%(Directory) -i %(FullPath) -o %(RootDir)%(Directory)../../gles2/%(FileName)_OpModulate2x.ps --string-table
@@ -657,7 +767,9 @@ $(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpNoTexAlp
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">%(RootDir)%(Directory)/../../dx9/%(Filename)_OpVtx.h;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">%(RootDir)%(Directory)/../../dx9/%(Filename)_OpVtx.h;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">%(RootDir)%(Directory)../../gles2/%(FileName)_OpVtx.ps;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|Win32'">%(RootDir)%(Directory)../../gles2/%(FileName)_OpVtx.ps;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|x64'">%(RootDir)%(Directory)../../gles2/%(FileName)_OpVtx.ps;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|x64'">%(RootDir)%(Directory)../../gles2/%(FileName)_OpVtx.ps;%(Outputs)</Outputs>
     </CustomBuild>
     <None Include="..\..\source\graph\2d\shader\2DShader.hlsl" />
     <CustomBuild Include="..\..\source\graph\2d\shader\2DVS.hlsl">
@@ -686,12 +798,18 @@ $(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpNoTexAlp
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e mainVS -p vs_2_0 -I %(RootDir)%(Directory) -i %(FullPath) -o %(RootDir)%(Directory)../../gles2/%(FileName).vs --string-table
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|Win32'">$(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e mainVS -p vs_2_0 -I %(RootDir)%(Directory) -i %(FullPath) -o %(RootDir)%(Directory)../../gles2/%(FileName).vs --string-table
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|x64'">$(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e mainVS -p vs_2_0 -I %(RootDir)%(Directory) -i %(FullPath) -o %(RootDir)%(Directory)../../gles2/%(FileName).vs --string-table
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|x64'">$(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e mainVS -p vs_2_0 -I %(RootDir)%(Directory) -i %(FullPath) -o %(RootDir)%(Directory)../../gles2/%(FileName).vs --string-table
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">%(RootDir)%(Directory)/../../dx9/%(Filename).h;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">%(RootDir)%(Directory)/../../dx9/%(Filename).h;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">%(RootDir)%(Directory)../../gles2/%(FileName).vs;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|Win32'">%(RootDir)%(Directory)../../gles2/%(FileName).vs;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|x64'">%(RootDir)%(Directory)../../gles2/%(FileName).vs;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|x64'">%(RootDir)%(Directory)../../gles2/%(FileName).vs;%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
