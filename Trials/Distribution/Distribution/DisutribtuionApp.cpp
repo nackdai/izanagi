@@ -160,14 +160,10 @@ IZ_BOOL CDistributionApp::InitInternal(
 
     CALL_GL_API(::glBindBuffer(GL_PIXEL_PACK_BUFFER, 0));
 #else
-    initScreenCapture();
-
-    m_tmpTex = device->CreateTexture(
-        SCREEN_WIDTH, SCREEN_HEIGHT,
-        1,
-        izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA8,
-        izanagi::graph::E_GRAPH_RSC_USAGE_DYNAMIC);
-    IZ_ASSERT(m_tmpTex);
+    m_frameCapture.initScreenCapture(
+        allocator,
+        device,
+        SCREEN_WIDTH, SCREEN_HEIGHT);
 #endif
 #endif  // #ifdef __IZ_OGL__
 
@@ -197,7 +193,8 @@ void CDistributionApp::ReleaseInternal()
 
 #if __IZ_OGL__
     CALL_GL_API(::glDeleteBuffers(COUNTOF(m_PBO), m_PBO));
-    SAFE_RELEASE(m_tmpTex);
+
+    m_frameCapture.terminate();
 #endif
 }
 
@@ -316,130 +313,6 @@ namespace {
     }
 }
 
-#ifdef __IZ_OGL__
-// NOTE
-// https://www.seas.upenn.edu/~pcozzi/OpenGLInsights/OpenGLInsights-AsynchronousBufferTransfers.pdf
-// 28.4 Download
-// 28.5 Copy
-
-void CDistributionApp::initScreenCapture()
-{
-    const IZ_UINT screenSize = SCREEN_WIDTH * SCREEN_HEIGHT * 4;
-
-    for (IZ_UINT i = 0; i < COUNTOF(m_SD); i++) {
-        auto& sd = m_SD[i];
-
-        glGenBuffers(1, &sd.buffer);
-        glBindBuffer(GL_PIXEL_PACK_BUFFER, sd.buffer);
-        glBufferData(GL_PIXEL_PACK_BUFFER, screenSize, 0, GL_STREAM_READ);
-
-        glGenBuffers(1, &sd.tmpBuffer);
-        glBindBuffer(GL_PIXEL_PACK_BUFFER, sd.tmpBuffer);
-        glBufferData(GL_PIXEL_PACK_BUFFER, screenSize, 0, GL_STREAM_COPY);
-
-        glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
-    }
-}
-
-void CDistributionApp::procScreenCapture()
-{
-    const IZ_UINT screenSize = SCREEN_WIDTH * SCREEN_HEIGHT * 4;
-
-    while (m_RBTail != m_RBHead) {
-        auto tmpTail = (m_RBTail + 1) % COUNTOF(m_SD);
-
-        auto& sd = m_SD[tmpTail];
-
-        GLenum res = glClientWaitSync(sd.fence, 0, 0);
-        if (res == GL_ALREADY_SIGNALED || res == GL_CONDITION_SATISFIED) {
-            glBindBuffer(GL_COPY_READ_BUFFER, sd.buffer);
-
-            IZ_BYTE* src = (IZ_BYTE*)glMapBufferRange(
-                GL_COPY_READ_BUFFER,
-                0,
-                screenSize,
-                GL_MAP_READ_BIT);
-
-            // TODO
-            if (m_tmpTex) {
-#if 0
-                m_tmpTex->Write(
-                    0,
-                    src,
-                    0, 0,
-                    SCREEN_WIDTH, SCREEN_HEIGHT);
-#else
-                IZ_UINT8* dst = nullptr;
-                auto pitch = m_tmpTex->Lock(0, (void**)&dst, IZ_FALSE, IZ_TRUE);
-
-                // NOTE
-                // GLは2Dのy軸が逆転する
-
-                for (IZ_UINT y = 0; y < SCREEN_HEIGHT; y++) {
-                    auto tmpSrc = src + (SCREEN_HEIGHT - 1 - y) * pitch;
-                    auto tmpDst = dst + y * pitch;
-                    memcpy(tmpDst, tmpSrc, pitch);
-                }
-
-                m_tmpTex->Unlock(0);
-#endif
-
-                glUnmapBuffer(GL_COPY_READ_BUFFER);
-            }
-
-            glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
-
-            m_RBTail = tmpTail;
-        }
-        else {
-            break;
-        }
-    }
-}
-
-void CDistributionApp::captureScreen()
-{
-    const IZ_UINT screenSize = SCREEN_WIDTH * SCREEN_HEIGHT * 4;
-
-    auto tmpHead = (m_RBHead + 1) % COUNTOF(m_SD);
-
-    if (tmpHead == m_RBTail) {
-        IZ_PRINTF("Too fast\n");
-    }
-    else {
-        auto& sd = m_SD[tmpHead];
-
-        glReadBuffer(GL_BACK);
-
-        glBindBuffer(
-            GL_PIXEL_PACK_BUFFER,
-            sd.tmpBuffer);
-        glReadPixels(
-            0,
-            0,
-            SCREEN_WIDTH,
-            SCREEN_HEIGHT,
-            GL_RGBA,
-            GL_UNSIGNED_BYTE,
-            0);
-        glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
-
-        glBindBuffer(GL_COPY_READ_BUFFER, sd.tmpBuffer);
-        glBindBuffer(GL_COPY_WRITE_BUFFER, sd.buffer);
-        glCopyBufferSubData(
-            GL_COPY_READ_BUFFER,
-            GL_COPY_WRITE_BUFFER,
-            0,
-            0,
-            screenSize);
-
-        sd.fence = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
-
-        m_RBHead = tmpHead;
-    }
-}
-#endif
-
 // 描画.
 void CDistributionApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
@@ -540,7 +413,7 @@ void CDistributionApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     IZ_PRINTF("%f\n", time);
 #endif
 
-    //procScreenCapture();
+    m_frameCapture.procScreenCapture();
 
     static const IZ_BOOL isDrawTangentSpaceAxis = IZ_FALSE;
 
@@ -552,7 +425,7 @@ void CDistributionApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
     IZ_COLOR bgColor = GetBgColor();        
 
-#if 1
+#if 0
     device->BeginScene(
         m_RT, COUNTOF(m_RT),
         m_depthRT,
@@ -592,9 +465,10 @@ void CDistributionApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     m_Shader->End(device);
 #endif
 
-    device->EndScene();
+    //device->EndScene();
 
-    //captureScreen();
+    m_frameCapture.captureScreen();
+
     if (m_enabled2DRender) {
         if (device->Begin2D()) {
             static const IZ_COLOR colors[] = {
@@ -620,7 +494,7 @@ void CDistributionApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     izanagi::CDebugFont* debugFont = GetDebugFont();
 
     if (device->Begin2D()) {
-#if 1
+#if 0
         if (m_RT[0]) {
             device->SetTexture(0, m_RT[0]);
             device->Set2DRenderOp(izanagi::graph::E_GRAPH_2D_RENDER_OP_MODULATE);
@@ -641,9 +515,9 @@ void CDistributionApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
         }
 #endif
 
-#if 0
-        if (m_tmpTex) {
-            device->SetTexture(0, m_tmpTex);
+        auto tmpTex = m_frameCapture.getTexture();
+        if (tmpTex) {
+            device->SetTexture(0, tmpTex);
             device->Set2DRenderOp(izanagi::graph::E_GRAPH_2D_RENDER_OP_MODULATE);
 
             device->Draw2DSprite(
@@ -659,7 +533,6 @@ void CDistributionApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
             m_curNum);
 
         debugFont->End();
-#endif
 
         device->End2D();
     }

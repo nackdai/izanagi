@@ -4,6 +4,8 @@
 #include "izSampleKit.h"
 #include "izThreadModel.h"
 
+#include "FrameCapture.h"
+
 static const IZ_UINT SCREEN_WIDTH = 1280;
 static const IZ_UINT SCREEN_HEIGHT = 720;
 
@@ -29,12 +31,6 @@ protected:
     virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device);
 
     virtual IZ_BOOL OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key) override;
-
-#ifdef __IZ_OGL__
-    void initScreenCapture();
-    void procScreenCapture();
-    void captureScreen();
-#endif  // #ifdef __IZ_OGL__
 
 private:
     static const IZ_UINT MAX_MESH_NUM = 2000;
@@ -68,20 +64,11 @@ private:
     izanagi::graph::CRenderTarget* m_RT[2];
     izanagi::graph::CRenderTarget* m_depthRT{ nullptr };
 
+    FrameCapture m_frameCapture;
+
 #ifdef __IZ_OGL__
-    struct ScreeData {
-        GLuint buffer;
-        GLuint tmpBuffer;
-        GLsync fence;
-    } m_SD[4];
-
-    IZ_UINT m_RBHead{ 0 };
-    IZ_UINT m_RBTail{ 0 };
-
     GLuint m_PBO[2];
     GLsync m_fence[3];
-
-    izanagi::graph::CTexture* m_tmpTex{ nullptr };
 #endif
 };
 
