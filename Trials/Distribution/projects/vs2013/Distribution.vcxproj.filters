@@ -34,9 +34,21 @@
     <ClCompile Include="..\..\Distribution\main.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Distribution\FrameCapture.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Distribution\FBOManager.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Distribution\DistributionApp.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Distribution\FrameCapture.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Distribution\FBOManager.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

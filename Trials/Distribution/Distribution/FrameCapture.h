@@ -19,10 +19,7 @@ public:
 
     void terminate();
 
-    izanagi::graph::CTexture* getTexture()
-    {
-        return m_tmpTex;
-    }
+    void drawDebug(izanagi::graph::CGraphicsDevice* device);
 
 private:
     IZ_UINT m_screenBufferSize{ 0 };

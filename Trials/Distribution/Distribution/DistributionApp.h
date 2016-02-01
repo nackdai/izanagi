@@ -5,6 +5,7 @@
 #include "izThreadModel.h"
 
 #include "FrameCapture.h"
+#include "FBOManager.h"
 
 static const IZ_UINT SCREEN_WIDTH = 1280;
 static const IZ_UINT SCREEN_HEIGHT = 720;
@@ -61,15 +62,8 @@ private:
 
     IZ_BOOL m_enabled2DRender{ IZ_FALSE };
 
-    izanagi::graph::CRenderTarget* m_RT[2];
-    izanagi::graph::CRenderTarget* m_depthRT{ nullptr };
-
     FrameCapture m_frameCapture;
-
-#ifdef __IZ_OGL__
-    GLuint m_PBO[2];
-    GLsync m_fence[3];
-#endif
+    FBOManager m_fboManager;
 };
 
 #endif    // #if !defined(__INSTANCING_APP_H__)

@@ -154,3 +154,15 @@ void FrameCapture::terminate()
 
     SAFE_RELEASE(m_tmpTex);
 }
+
+void FrameCapture::drawDebug(izanagi::graph::CGraphicsDevice* device)
+{
+    if (m_tmpTex) {
+        device->SetTexture(0, m_tmpTex);
+        device->Set2DRenderOp(izanagi::graph::E_GRAPH_2D_RENDER_OP_MODULATE);
+
+        device->Draw2DSprite(
+            izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),
+            izanagi::CIntRect(300, 100, 256, 128));
+    }
+}
