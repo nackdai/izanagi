@@ -59,6 +59,9 @@ void FrameCapture::procScreenCapture()
         if (res == GL_ALREADY_SIGNALED || res == GL_CONDITION_SATISFIED) {
             glBindBuffer(GL_COPY_READ_BUFFER, sd.buffer);
 
+            izanagi::sys::CTimer timer;
+            timer.Begin();
+
             IZ_BYTE* src = (IZ_BYTE*)glMapBufferRange(
                 GL_COPY_READ_BUFFER,
                 0,
@@ -72,7 +75,7 @@ void FrameCapture::procScreenCapture()
                     0,
                     src,
                     0, 0,
-                    SCREEN_WIDTH, SCREEN_HEIGHT);
+                    m_screenWidth, m_screenHeight);
 #else
                 IZ_UINT8* dst = nullptr;
                 auto pitch = m_tmpTex->Lock(0, (void**)&dst, IZ_FALSE, IZ_TRUE);
@@ -81,7 +84,8 @@ void FrameCapture::procScreenCapture()
                 // GLは2Dのy軸が逆転する
 
                 for (IZ_UINT y = 0; y < m_screenHeight; y++) {
-                    auto tmpSrc = src + (m_screenHeight - 1 - y) * pitch;
+                    //auto tmpSrc = src + (m_screenHeight - 1 - y) * pitch;
+                    auto tmpSrc = src + y * pitch;
                     auto tmpDst = dst + y * pitch;
                     memcpy(tmpDst, tmpSrc, pitch);
                 }
@@ -91,6 +95,9 @@ void FrameCapture::procScreenCapture()
 
                 glUnmapBuffer(GL_COPY_READ_BUFFER);
             }
+
+            auto time = timer.End();
+            IZ_PRINTF("Readback %f[ms]\n", time);
 
             glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
 
@@ -118,13 +125,16 @@ void FrameCapture::captureScreen()
     else {
         auto& sd = m_SD[tmpHead];
 
+        izanagi::sys::CTimer timer;
+        timer.Begin();
+
         glReadBuffer(GL_BACK);
 
         glBindBuffer(
             GL_PIXEL_PACK_BUFFER,
             sd.tmpBuffer);
 
-#if 0
+#if 1
         glReadPixels(
             0,
             0,
@@ -140,7 +150,9 @@ void FrameCapture::captureScreen()
             m_screenWidth,
             m_screenHeight,
             GL_DEPTH_COMPONENT,
-            GL_FLOAT,
+            //GL_DEPTH_STENCIL,
+            GL_UNSIGNED_INT,
+            //GL_UNSIGNED_INT_24_8,
             0);
 #endif
 
@@ -156,6 +168,9 @@ void FrameCapture::captureScreen()
             m_screenBufferSize);
 
         sd.fence = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+
+        auto time = timer.End();
+        IZ_PRINTF("Capture %f[ms]\n", time);
 
         m_RBHead = tmpHead;
     }

@@ -109,8 +109,7 @@ namespace graph
                     ? m_Color[i]->GetTexHandle()
                     : 0);
 
-                CALL_GL_API(
-                    ::glFramebufferTexture2D(
+                CALL_GL_API(::glFramebufferTexture2D(
                     GL_FRAMEBUFFER,
                     GL_COLOR_ATTACHMENT0 + i,
                     GL_TEXTURE_2D,
@@ -131,12 +130,26 @@ namespace graph
                 ? m_Depth->GetTexHandle()
                 : 0);
 
+#if 0
             CALL_GL_API(
                 ::glFramebufferRenderbuffer(
                     GL_FRAMEBUFFER,
                     GL_DEPTH_ATTACHMENT,
                     GL_RENDERBUFFER,
                     depthHandle));
+#else
+            // NOTE
+            // http://gamedev.stackexchange.com/questions/3082/getting-a-texture-from-a-renderbuffer-in-opengl
+            // 一番下の回答
+            // Higher than OpenGL3.2
+
+            CALL_GL_API(::glFramebufferTexture2D(
+                GL_FRAMEBUFFER,
+                GL_DEPTH_ATTACHMENT,
+                GL_TEXTURE_2D,
+                depthHandle,
+                0));
+#endif
         }
 
         return IZ_TRUE;

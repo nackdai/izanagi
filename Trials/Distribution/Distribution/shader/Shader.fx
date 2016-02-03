@@ -65,7 +65,7 @@ SVSOutput mainVS_Basic(SVSInput In)
     return Out;
 }
 
-#if 1
+#if 0
 struct SPSOutput {
     float4 color    : COLOR0;
     float4 depth    : COLOR1;
