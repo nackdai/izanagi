@@ -60,8 +60,8 @@ namespace graph
 
         // 本体作成
         result = instance->CreateBody_RenderTarget(
-                    width, height,
-                    fmt);
+            width, height,
+            fmt);
         VGOTO(result, __EXIT__);
 
     __EXIT__:
@@ -174,6 +174,7 @@ namespace graph
         CALL_GL_API(::glGenTextures(1, &m_Texture));
         VRETURN(m_Texture > 0);
 
+        // コンストラクタで現在のテクスチャを保持しつつ設定したいテクスチャにバインド、デストラクタで元に戻す.
         CTextureOperator texOp(m_Device, m_Texture);
 
         GLenum glFormat, glType;
@@ -203,6 +204,7 @@ namespace graph
         IZ_UINT width,
         IZ_UINT height)
     {
+#if 0
         // TODO
         // Stencil
 
@@ -221,6 +223,31 @@ namespace graph
         CALL_GL_API(::glBindRenderbuffer(GL_RENDERBUFFER, 0));
 
         SetTextureInfo(width, height, E_GRAPH_PIXEL_FMT_D24S8);
+#else
+        // NOTE
+        // http://gamedev.stackexchange.com/questions/3082/getting-a-texture-from-a-renderbuffer-in-opengl
+        // 一番下の回答
+        // Higher than OpenGL3.2
+
+        CALL_GL_API(::glGenTextures(1, &m_Texture));
+        VRETURN(m_Texture > 0);
+
+        // コンストラクタで現在のテクスチャを保持しつつ設定したいテクスチャにバインド、デストラクタで元に戻す.
+        CTextureOperator texOp(m_Device, m_Texture);
+
+        CALL_GL_API(::glTexImage2D(
+            GL_TEXTURE_2D,
+            0,
+            GL_DEPTH_COMPONENT,
+            width, height,
+            0,
+            GL_DEPTH_COMPONENT,
+            GL_UNSIGNED_INT,
+            IZ_NULL));
+
+        // TODO
+        SetTextureInfo(width, height, E_GRAPH_PIXEL_FMT_RGBA8);
+#endif
 
         return IZ_TRUE;
     }
