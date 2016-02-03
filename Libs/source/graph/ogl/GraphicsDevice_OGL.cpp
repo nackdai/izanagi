@@ -144,6 +144,9 @@ namespace graph
         GLenum result = glewInit();
         VRETURN(result == GLEW_OK);
 
+        auto version = ::glGetString(GL_VERSION);
+        IZ_PRINTF("GL Version(%s)\n", version);
+
         m_ScreenWidth = sParams.screenWidth;
         m_ScreenHeight = sParams.screenHeight;
 
