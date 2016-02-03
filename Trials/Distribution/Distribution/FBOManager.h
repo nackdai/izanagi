@@ -42,6 +42,9 @@ private:
 
     IZ_UINT m_screenWidth;
     IZ_UINT m_screenHeight;
+
+    izanagi::graph::CTexture* m_clr{ nullptr };
+    izanagi::graph::CTexture* m_depth{ nullptr };
 };
 
 #endif    // #if !defined(__FBO_MANAGER_H__)
