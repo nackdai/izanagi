@@ -54,7 +54,7 @@ namespace ShaderCompiler
             Console.WriteLine(" -t <type> : gles2, gl");
             Console.WriteLine(" -I <includes>");
             Console.WriteLine(" -D <defines>");
-            Console.WriteLine(" --string-table");
+            Console.WriteLine(" --string-table : export char array to .h file");
             Console.WriteLine(" -opt <options> : options for native compiler (fxc.exe)");
             Console.WriteLine(" --analyze <file> <name> : If this option is set, other options are ignored.");
         }
@@ -88,12 +88,12 @@ namespace ShaderCompiler
 
             if (!string.IsNullOrEmpty(option.Includes))
             {
-                args += "-I" + " " + option.Includes;
+                args += " -I" + " " + option.Includes;
             }
 
             if (!string.IsNullOrEmpty(option.Defines))
             {
-                args += "-D" + " " + option.Defines;
+                args += " -D" + " " + option.Defines;
             }
 
             if (!enableLineDirectives)
