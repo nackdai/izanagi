@@ -38,9 +38,9 @@
       <DisableSpecificWarnings>4819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>winmm.lib;SampleKit\$(Configuration)\SampleKit.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib;freeglutd.lib;SampleKit\$(Configuration)\SampleKit.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName).exe</OutputFile>
-      <AdditionalLibraryDirectories>..\..\..\..\Libs\project\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\..\Libs\project\lib\$(Configuration);..\..\..\..\External\freeglut\lib\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PreBuildEvent>
@@ -48,5 +48,11 @@
 copy /B /Y ..\..\..\..\External\glew\bin\Debug\$(PlatformName)\glew32*.dll ..\..\$(ProjectName)
 </Command>
     </PreBuildEvent>
+    <Lib>
+      <AdditionalDependencies>freeglutd.lib</AdditionalDependencies>
+    </Lib>
+    <Lib>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\..\..\..\External\freeglut\lib\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
 </Project>
