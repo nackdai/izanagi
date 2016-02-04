@@ -145,6 +145,10 @@ namespace graph
             mipLevel,
             fmt, rscType);
 
+        CTextureOperator texOp(m_Device, m_Texture);
+
+        Initialize();
+
         return IZ_TRUE;
     }
 

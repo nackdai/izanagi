@@ -68,7 +68,7 @@ namespace graph
                 0,  // E_GRAPH_PIXEL_FMT_DXT5,
 
                 4,  // E_GRAPH_PIXEL_FMT_RGBX8,
-                0,  // E_GRAPH_PIXEL_FMT_D24S8,
+                4,  // E_GRAPH_PIXEL_FMT_D24S8,
             };
             IZ_C_ASSERT(COUNTOF(bpp) == E_GRAPH_PIXEL_FMT_NUM);
 

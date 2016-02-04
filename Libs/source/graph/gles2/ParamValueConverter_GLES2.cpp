@@ -171,15 +171,21 @@ namespace graph
             glFormat = GL_RGB;
             glType = GL_UNSIGNED_BYTE;
             break;
+        case E_GRAPH_PIXEL_FMT_D24S8:
+            glFormat = GL_DEPTH_COMPONENT;
+            glType = GL_UNSIGNED_INT;
+            break;
+        case E_GRAPH_PIXEL_FMT_RGBA32F:
+            glFormat = GL_RGBA;
+            glType = GL_FLOAT;
+            break;
         case E_GRAPH_PIXEL_FMT_BGRA8:
         case E_GRAPH_PIXEL_FMT_RGB10A2:
         case E_GRAPH_PIXEL_FMT_R32F:
         case E_GRAPH_PIXEL_FMT_RGBA16F:
-        case E_GRAPH_PIXEL_FMT_RGBA32F:
         case E_GRAPH_PIXEL_FMT_DXT1:
         case E_GRAPH_PIXEL_FMT_DXT3:
         case E_GRAPH_PIXEL_FMT_DXT5:
-        case E_GRAPH_PIXEL_FMT_D24S8:
         default:
             // Not Supported
             IZ_ASSERT(IZ_FALSE);
