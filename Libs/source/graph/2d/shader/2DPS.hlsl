@@ -73,3 +73,10 @@ float4 main_OpNoTexAlpha(SPSInput sIn) : COLOR
     vColor.rgb *= tex2D(sTex, sIn.vUV).rgb;
     return COLOR_RGBA(saturate(vColor));
 }
+
+float4 main_OpTexAsDepth(SPSInput sIn) : COLOR
+{
+    float4 vColor = tex2D(sTex, sIn.vUV);
+    float depth = vColor.r + vColor.g / 256.0f + vColor.b / 256.0f;
+    return float4(depth, depth, depth, 1.0f);
+}

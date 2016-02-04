@@ -13,6 +13,7 @@
 #include "2DPS_OpNoTexAlpha.ps"
 #include "2DPS_OpTex.ps"
 #include "2DPS_OpVtx.ps"
+#include "2DPS_OpTexAsDepth.ps"
 
 static const char* PS_Programs[] = {
     main_OpVtx,
@@ -23,6 +24,7 @@ static const char* PS_Programs[] = {
     main_OpAdd,
     main_OpModulateAlpha,
     main_OpNoTexAlpha,
+    main_OpTexAsDepth,
     IZ_NULL,
 };
 
