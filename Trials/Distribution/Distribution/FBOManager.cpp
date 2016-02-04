@@ -65,7 +65,7 @@ void FBOManager::readback(izanagi::graph::CGraphicsDevice* device)
 
 #ifdef __IZ_OGL__
         izanagi::sys::CTimer timer;
-#if 0
+#if 1
         timer.Begin();
 
         auto texHandle = m_frames[tmpTail].rt[0]->GetTexHandle();
@@ -89,7 +89,7 @@ void FBOManager::readback(izanagi::graph::CGraphicsDevice* device)
 #if 1
         timer.Begin();
 
-        auto texHandle = m_frames[tmpTail].rt[1]->GetTexHandle();
+        texHandle = m_frames[tmpTail].rt[1]->GetTexHandle();
 
         CALL_GL_API(glBindTexture(GL_TEXTURE_2D, texHandle));
 
@@ -234,7 +234,7 @@ void FBOManager::drawDebug(izanagi::graph::CGraphicsDevice* device)
     }
     if (m_depth) {
         device->SetTexture(0, m_depth);
-        device->Set2DRenderOp(izanagi::graph::E_GRAPH_2D_RENDER_OP_NO_TEX_ALPHA);
+        device->Set2DRenderOp(izanagi::graph::E_GRAPH_2D_RENDER_OP_TEX_AS_DETPH);
 
         device->Draw2DSprite(
             izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),
