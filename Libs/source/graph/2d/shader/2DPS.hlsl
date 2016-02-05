@@ -77,6 +77,6 @@ float4 main_OpNoTexAlpha(SPSInput sIn) : COLOR
 float4 main_OpTexAsDepth(SPSInput sIn) : COLOR
 {
     float4 vColor = tex2D(sTex, sIn.vUV);
-    float depth = vColor.r + vColor.g / 256.0f + vColor.b / 256.0f;
+    float depth = vColor.r + vColor.g / 256.0f + vColor.b / (256.0f * 256.0f);
     return float4(depth, depth, depth, 1.0f);
 }
