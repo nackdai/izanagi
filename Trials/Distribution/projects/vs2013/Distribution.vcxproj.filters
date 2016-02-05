@@ -26,6 +26,12 @@
     <None Include="..\..\Distribution\shader\Shader.fx">
       <Filter>shader</Filter>
     </None>
+    <None Include="..\..\Distribution\shader\dxt.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\Distribution\shader\2DVS.glsl">
+      <Filter>shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Distribution\DisutribtuionApp.cpp">
@@ -46,6 +52,12 @@
     <ClCompile Include="..\..\Distribution\CaptureManager.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Distribution\DxtEncoder.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Distribution\CaptureManager2.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Distribution\DistributionApp.h">
@@ -61,6 +73,12 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Distribution\CaptureManager.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Distribution\DxtEncoder.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Distribution\CaptureManager2.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

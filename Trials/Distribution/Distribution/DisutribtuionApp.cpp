@@ -134,6 +134,14 @@ IZ_BOOL CDistributionApp::InitInternal(
         device,
         SCREEN_WIDTH, SCREEN_HEIGHT);
 
+    m_dxtEncoder.init(
+        allocator,
+        device,
+        SCREEN_WIDTH, SCREEN_HEIGHT,
+        "shader/2DVS.glsl",
+        "shader/dxt.glsl",
+        nullptr);
+
 __EXIT__:
     if (!result) {
         ReleaseInternal();

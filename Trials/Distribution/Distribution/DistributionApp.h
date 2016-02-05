@@ -8,6 +8,9 @@
 #include "FBOManager.h"
 #include "FBOManager2.h"
 #include "CaptureManager.h"
+#include "CaptureManager2.h"
+
+#include "DxtEncoder.h"
 
 static const IZ_UINT SCREEN_WIDTH = 1280;
 static const IZ_UINT SCREEN_HEIGHT = 720;
@@ -65,7 +68,9 @@ private:
     IZ_BOOL m_enabled2DRender{ IZ_FALSE };
 
     FrameCapture m_frameCapture;
-    CaptureManager m_fboManager;
+    CaptureManager2 m_fboManager;
+
+    DxtEncoder m_dxtEncoder;
 };
 
 #endif    // #if !defined(__INSTANCING_APP_H__)

@@ -429,6 +429,8 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|x64'">$(PROJECT_MAIN_DIR)data\%(Filename).img;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLUT|x64'">$(PROJECT_MAIN_DIR)data\%(Filename).img;%(Outputs)</Outputs>
     </CustomBuild>
+    <None Include="..\..\Distribution\shader\2DVS.glsl" />
+    <None Include="..\..\Distribution\shader\dxt.glsl" />
     <None Include="..\..\Distribution\shader\Shader.fx" />
     <CustomBuild Include="..\..\Distribution\shader\Shader.xml">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(TOOL_DIR)Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"
@@ -490,7 +492,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Distribution\CaptureManager.cpp" />
+    <ClCompile Include="..\..\Distribution\CaptureManager2.cpp" />
     <ClCompile Include="..\..\Distribution\DisutribtuionApp.cpp" />
+    <ClCompile Include="..\..\Distribution\DxtEncoder.cpp" />
     <ClCompile Include="..\..\Distribution\FBOManager.cpp" />
     <ClCompile Include="..\..\Distribution\FBOManager2.cpp" />
     <ClCompile Include="..\..\Distribution\FrameCapture.cpp" />
@@ -498,7 +502,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Distribution\CaptureManager.h" />
+    <ClInclude Include="..\..\Distribution\CaptureManager2.h" />
     <ClInclude Include="..\..\Distribution\DistributionApp.h" />
+    <ClInclude Include="..\..\Distribution\DxtEncoder.h" />
     <ClInclude Include="..\..\Distribution\FBOManager.h" />
     <ClInclude Include="..\..\Distribution\FBOManager2.h" />
     <ClInclude Include="..\..\Distribution\FrameCapture.h" />
