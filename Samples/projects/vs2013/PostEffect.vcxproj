@@ -17,12 +17,12 @@
       <Configuration>Debug_GLES2</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Debug_GLUT|Win32">
-      <Configuration>Debug_GLUT</Configuration>
+    <ProjectConfiguration Include="Debug_OGL|Win32">
+      <Configuration>Debug_OGL</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Debug_GLUT|x64">
-      <Configuration>Debug_GLUT</Configuration>
+    <ProjectConfiguration Include="Debug_OGL|x64">
+      <Configuration>Debug_OGL</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release_DX9|Win32">
@@ -92,12 +92,12 @@
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v120</PlatformToolset>
@@ -137,13 +137,13 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="PropertySeet\Debug_GLES2.props" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'" Label="PropertySheets">
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="PropertySeet\Debug_GLUT.props" />
+    <Import Project="PropertySeet\Debug_OGL.props" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'" Label="PropertySheets">
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="PropertySeet\Debug_GLUT.props" />
+    <Import Project="PropertySeet\Debug_OGL.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
@@ -152,8 +152,8 @@
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|x64'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|x64'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|x64'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">false</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">false</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">false</LinkIncremental>
@@ -231,7 +231,7 @@
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -250,7 +250,7 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -349,8 +349,8 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|x64'">$(TOOL_DIR)Release\ImageBuilder.exe -i "%(FullPath)" -o "$(PROJECT_MAIN_DIR)data\%(Filename).img"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(TOOL_DIR)Release\ImageBuilder.exe -i "%(FullPath)" -o "$(PROJECT_MAIN_DIR)data\%(Filename).img"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|x64'">$(TOOL_DIR)Release\ImageBuilder.exe -i "%(FullPath)" -o "$(PROJECT_MAIN_DIR)data\%(Filename).img"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">$(TOOL_DIR)Release\ImageBuilder.exe -i "%(FullPath)" -o "$(PROJECT_MAIN_DIR)data\%(Filename).img"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'">$(TOOL_DIR)Release\ImageBuilder.exe -i "%(FullPath)" -o "$(PROJECT_MAIN_DIR)data\%(Filename).img"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(TOOL_DIR)Release\ImageBuilder.exe -i "%(FullPath)" -o "$(PROJECT_MAIN_DIR)data\%(Filename).img"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|x64'">$(TOOL_DIR)Release\ImageBuilder.exe -i "%(FullPath)" -o "$(PROJECT_MAIN_DIR)data\%(Filename).img"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(TOOL_DIR)Release\ImageBuilder.exe -i "%(FullPath)" -o "$(PROJECT_MAIN_DIR)data\%(Filename).img"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">$(TOOL_DIR)Release\ImageBuilder.exe -i "%(FullPath)" -o "$(PROJECT_MAIN_DIR)data\%(Filename).img"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(TOOL_DIR)Release\ImageBuilder.exe -i "%(FullPath)" -o "$(PROJECT_MAIN_DIR)data\%(Filename).img"</Command>
@@ -359,8 +359,8 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|x64'">$(PROJECT_MAIN_DIR)data\%(Filename).img;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(PROJECT_MAIN_DIR)data\%(Filename).img;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|x64'">$(PROJECT_MAIN_DIR)data\%(Filename).img;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">$(PROJECT_MAIN_DIR)data\%(Filename).img;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'">$(PROJECT_MAIN_DIR)data\%(Filename).img;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(PROJECT_MAIN_DIR)data\%(Filename).img;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|x64'">$(PROJECT_MAIN_DIR)data\%(Filename).img;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(PROJECT_MAIN_DIR)data\%(Filename).img;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">$(PROJECT_MAIN_DIR)data\%(Filename).img;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(PROJECT_MAIN_DIR)data\%(Filename).img;%(Outputs)</Outputs>
@@ -372,8 +372,8 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
@@ -382,8 +382,8 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|x64'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|x64'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|x64'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
@@ -395,8 +395,8 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
@@ -405,8 +405,8 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|x64'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|x64'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|x64'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
@@ -418,8 +418,8 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|x64'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|x64'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|x64'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
@@ -428,8 +428,8 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
@@ -441,8 +441,8 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
@@ -451,8 +451,8 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|x64'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|x64'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|x64'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
@@ -464,8 +464,8 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
@@ -474,8 +474,8 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|x64'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|x64'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|x64'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
@@ -487,8 +487,8 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
@@ -497,8 +497,8 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|x64'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|x64'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|x64'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
@@ -510,8 +510,8 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|x64'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|x64'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|x64'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes;%(Outputs)</Outputs>
@@ -520,8 +520,8 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\PostEffectConverter.exe -l "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\posteffect_obj" -asm -o "$(ProjectDir)..\..\$(ProjectName)\data/%(Filename).pes"</Command>
@@ -540,8 +540,8 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
@@ -550,8 +550,8 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|x64'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|x64'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|x64'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
@@ -563,8 +563,8 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
@@ -573,8 +573,8 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|x64'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|x64'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLUT|x64'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|x64'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
