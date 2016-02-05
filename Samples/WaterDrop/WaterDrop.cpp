@@ -30,7 +30,7 @@ private:
     izanagi::graph::CVertexShader* m_VS;
     izanagi::graph::CPixelShader* m_PS;
 
-    SHADER_PARAM_HANDLE m_ParamHandle;
+    izanagi::SHADER_PARAM_HANDLE m_ParamHandle;
 };
 
 WaterDropApp::WaterDropApp()

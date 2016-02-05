@@ -187,9 +187,9 @@ IZ_BOOL CStateSSAO::Render(izanagi::graph::CGraphicsDevice* device)
         device->SetTexture(2, m_RT[2]);
         device->SetTexture(3, m_RT[3]);
 
-        SHADER_PARAM_HANDLE h0 = program->GetHandleByName("g_mW2V");
-        SHADER_PARAM_HANDLE h1 = program->GetHandleByName("g_mV2C");
-        SHADER_PARAM_HANDLE h2 = program->GetHandleByName("samples");
+        izanagi::SHADER_PARAM_HANDLE h0 = program->GetHandleByName("g_mW2V");
+        izanagi::SHADER_PARAM_HANDLE h1 = program->GetHandleByName("g_mV2C");
+        izanagi::SHADER_PARAM_HANDLE h2 = program->GetHandleByName("samples");
 
         program->SetMatrix(device, h0, m_Camera.mtxW2V);
         program->SetMatrix(device, h1, m_Camera.mtxV2C);
