@@ -9,3 +9,6 @@ http://on-demand.gputechconf.com/gtc/2012/presentations/S0356-GTC2012-Texture-Tr
 
 wglGetCurrentContext
 http://stackoverflow.com/questions/8684479/opengl-context-from-glut
+
+Real-Time YCoCg-DXT Compression
+http://www.nvidia.com/object/real-time-ycocg-dxt-compression.html
