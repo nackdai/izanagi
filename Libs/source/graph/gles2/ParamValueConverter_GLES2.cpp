@@ -179,13 +179,16 @@ namespace graph
             glFormat = GL_RGBA;
             glType = GL_FLOAT;
             break;
+        case E_GRAPH_PIXEL_FMT_DXT5:
+            glFormat = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
+            glType = GL_UNSIGNED_BYTE;  // Not use, so dummy.
+            break;
         case E_GRAPH_PIXEL_FMT_BGRA8:
         case E_GRAPH_PIXEL_FMT_RGB10A2:
         case E_GRAPH_PIXEL_FMT_R32F:
         case E_GRAPH_PIXEL_FMT_RGBA16F:
         case E_GRAPH_PIXEL_FMT_DXT1:
         case E_GRAPH_PIXEL_FMT_DXT3:
-        case E_GRAPH_PIXEL_FMT_DXT5:
         default:
             // Not Supported
             IZ_ASSERT(IZ_FALSE);

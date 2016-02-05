@@ -453,6 +453,14 @@ namespace graph
         // Min/max of clip Volume
         IZ_FLOAT minZ;
         IZ_FLOAT maxZ;
+
+        SViewport() {}
+        SViewport(
+            IZ_UINT _x, IZ_UINT _y,
+            IZ_UINT _w, IZ_UINT _h,
+            IZ_FLOAT _minZ = 0.0f, IZ_FLOAT _maxZ = 1.0f)
+            : x(_x), y(_y), width(_w), height(_h), minZ(_minZ), maxZ(_maxZ)
+        {}
     };
 
     /** サンプラステート

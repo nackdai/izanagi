@@ -163,10 +163,14 @@ namespace graph
     {
         IZ_ASSERT(m_Texture != 0);
 
+        auto isCompressed = CGraphUtil::IsCompressedPixelFormat(fmt);
+
         m_TexInfo.width = width;
         m_TexInfo.height = height;
     
-        m_TexInfo.level = mipLevel;
+        // TODO
+        m_TexInfo.level = isCompressed ? 1 : mipLevel;
+
         m_TexInfo.fmt = fmt;
 
         m_TexInfo.usage = usage;
@@ -176,9 +180,22 @@ namespace graph
         m_TexInfo.is_on_sysmem = IZ_FALSE;
         m_TexInfo.is_on_vram = isRT;
 
-        IZ_UINT bpp = CGraphUtil::GetBPP(fmt);
 
-        m_Size = width * height * bpp;
+        if (isCompressed) {
+            if (fmt == E_GRAPH_PIXEL_FMT_DXT1) {
+                // RGBA 1/8
+                m_Size = (width * height) >> 1;
+            }
+            else {
+                // RGBA 1/4
+                m_Size = width * height;
+            }
+        }
+        else {
+            IZ_UINT bpp = CGraphUtil::GetBPP(fmt);
+
+            m_Size = width * height * bpp;
+        }
 
         CTargetParamValueConverter::ConvAbstractToTarget_PixelFormat(
             fmt,
@@ -192,12 +209,25 @@ namespace graph
             GLuint width = GetWidth();
             GLuint height = GetHeight();
 
-            for (IZ_UINT i = 0; i < m_TexInfo.level; i++) {
-                GLuint w = width >> i;
-                GLuint h = height >> i;
+            auto isCompressed = CGraphUtil::IsCompressedPixelFormat(m_TexInfo.fmt);
 
-                CALL_GL_API(
-                    ::glTexImage2D(
+            if (isCompressed) {
+                CALL_GL_API(::glCompressedTexImage2D(
+                    GL_TEXTURE_2D,
+                    0,
+                    m_GLFormat,
+                    width,
+                    height,
+                    0,
+                    m_Size,
+                    IZ_NULL));
+            }
+            else {
+                for (IZ_UINT i = 0; i < m_TexInfo.level; i++) {
+                    GLuint w = width >> i;
+                    GLuint h = height >> i;
+
+                    CALL_GL_API(::glTexImage2D(
                         GL_TEXTURE_2D,
                         i,
                         m_GLFormat,
@@ -206,6 +236,7 @@ namespace graph
                         m_GLFormat,
                         m_GLType,
                         IZ_NULL));
+                }
             }
 
             m_IsInitialized = IZ_TRUE;
