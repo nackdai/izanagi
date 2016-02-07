@@ -62,18 +62,18 @@ IZ_BOOL DxtEncoder::init(
 
     {
         m_tex = device->CreateTexture(
-            width, height,
+            width/4, height/4,
             1,
-            izanagi::graph::E_GRAPH_PIXEL_FMT_DXT5,
-            izanagi::graph::E_GRAPH_RSC_USAGE_DYNAMIC);
+            izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA8,
+            izanagi::graph::E_GRAPH_RSC_USAGE_STATIC);
         VRETURN(m_tex);
 
         CALL_GL_API(glGenFramebuffers(1, &m_fbo));
 
         glGenBuffers(1, &m_pbo);
-        glBindBuffer(GL_PIXEL_PACK_BUFFER, m_pbo);
-        glBufferData(GL_PIXEL_PACK_BUFFER, width * height, 0, GL_STREAM_COPY);
-        glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+        glBindBuffer(GL_ARRAY_BUFFER, m_pbo);
+        glBufferData(GL_ARRAY_BUFFER, width * height, 0, GL_STREAM_COPY);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
     return IZ_TRUE;
@@ -92,7 +92,7 @@ void DxtEncoder::encode(
         izanagi::graph::E_GRAPH_RS_CULLMODE,
         izanagi::graph::E_GRAPH_CULL_NONE);
 
-    auto texHandle = texture->GetTexHandle();
+    auto texHandle = m_tex->GetTexHandle();
 
     // Set FBO.
     CALL_GL_API(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
@@ -103,34 +103,42 @@ void DxtEncoder::encode(
         texHandle,
         0));
 
-    glDisable(GL_FRAMEBUFFER_SRGB);
+    GLenum attachedColor[] = {
+        GL_COLOR_ATTACHMENT0,
+    };
+
+    CALL_GL_API(::glDrawBuffers(1, attachedColor));
+
+    CALL_GL_API(glDisable(GL_FRAMEBUFFER_SRGB));
 
     device->SetShaderProgram(m_shd);
 
     device->SetTexture(0, texture);
 
-    glUniform1i(m_hImage, 0);
-    glUniform1i(m_hMode, 0);
+    CALL_GL_API(glUniform1i(m_hImage, 0));
+    CALL_GL_API(glUniform1i(m_hMode, 0));
 
     // TODO
     // Why 1/4 ?
     device->SetViewport(
-        izanagi::graph::SViewport(0, 0, m_width >> 2, m_height >> 2));
+        izanagi::graph::SViewport(0, 0, m_width/4, m_height/4));
 
     // NOTE
     // 頂点バッファを使わず全画面に描画する頂点シェーダ.
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    CALL_GL_API(glDrawArrays(GL_TRIANGLE_STRIP, 0, 4));
 
     // Readback.
-    glReadBuffer(GL_COLOR_ATTACHMENT0);
-    glBindBuffer(GL_PIXEL_PACK_BUFFER, m_pbo);
-    glReadPixels(
+    CALL_GL_API(glReadBuffer(GL_COLOR_ATTACHMENT0));
+    CALL_GL_API(glBindBuffer(GL_PIXEL_PACK_BUFFER, m_pbo));
+    CALL_GL_API(glReadPixels(
         0, 0,
-        m_width >> 2, m_height >> 2,
+        m_width/4, m_height/4,
         GL_RGBA_INTEGER,
         GL_UNSIGNED_INT,
-        0);
-    glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+        0));
+    CALL_GL_API(glBindBuffer(GL_PIXEL_PACK_BUFFER, 0));
+
+    CALL_GL_API(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 
     device->LoadRenderState();
 }

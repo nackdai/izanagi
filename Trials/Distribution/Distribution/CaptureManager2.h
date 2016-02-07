@@ -27,6 +27,11 @@ public:
 
     void drawDebug(izanagi::graph::CGraphicsDevice* device);
 
+    izanagi::graph::CTexture* getColor()
+    {
+        return m_color;
+    }
+
 private:
     void blitFrameBuffer();
 

@@ -383,6 +383,10 @@ void CDistributionApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     m_fboManager.end(device);
 #endif
 
+    m_dxtEncoder.encode(
+        device,
+        m_fboManager.getColor());
+
     if (m_enabled2DRender) {
         if (device->Begin2D()) {
             static const IZ_COLOR colors[] = {
