@@ -183,6 +183,10 @@ namespace graph
             D3DFMT_DXT5,
             D3DFMT_X8R8G8B8,
             D3DFMT_D24S8,
+
+            // Only for OpenGL...
+            D3DFMT_UNKNOWN, // E_GRAPH_PIXEL_FMT_RGBA32UI
+            D3DFMT_UNKNOWN, // E_GRAPH_PIXEL_FMT_RGB32UI
         };
         IZ_C_ASSERT(COUNTOF(PixelFormatTbl) == E_GRAPH_PIXEL_FMT_NUM);
     }   // namespace

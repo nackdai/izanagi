@@ -55,6 +55,7 @@ namespace graph
         // ピクセルフォーマット
         static void ConvAbstractToTarget_PixelFormat(
             E_GRAPH_PIXEL_FMT fmt,
+            GLenum& glInternal,
             GLenum& glFormat,
             GLenum& glType);
 

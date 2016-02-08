@@ -150,38 +150,56 @@ namespace graph
 
     void CParamValueConverterGLES2::ConvAbstractToTarget_PixelFormat(
         E_GRAPH_PIXEL_FMT fmt,
+        GLenum& glInternal,
         GLenum& glFormat,
         GLenum& glType)
     {
         switch (fmt)
         {
         case E_GRAPH_PIXEL_FMT_RGBA8:
+            glInternal = GL_RGBA;
             glFormat = GL_RGBA;
             glType = GL_UNSIGNED_BYTE;
             break;
         case E_GRAPH_PIXEL_FMT_RGBA4:
+            glInternal = GL_RGBA;
             glFormat = GL_RGBA;
             glType = GL_UNSIGNED_SHORT_4_4_4_4;
             break;
         case E_GRAPH_PIXEL_FMT_A8:
+            glInternal = GL_ALPHA;
             glFormat = GL_ALPHA;
             glType = GL_UNSIGNED_BYTE;
             break;
         case E_GRAPH_PIXEL_FMT_RGBX8:
+            glInternal = GL_RGB;
             glFormat = GL_RGB;
             glType = GL_UNSIGNED_BYTE;
             break;
         case E_GRAPH_PIXEL_FMT_D24S8:
+            glInternal = GL_DEPTH_COMPONENT;
             glFormat = GL_DEPTH_COMPONENT;
             glType = GL_UNSIGNED_INT;
             break;
         case E_GRAPH_PIXEL_FMT_RGBA32F:
+            glInternal = GL_RGBA;
             glFormat = GL_RGBA;
             glType = GL_FLOAT;
             break;
         case E_GRAPH_PIXEL_FMT_DXT5:
+            glInternal = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
             glFormat = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
             glType = GL_UNSIGNED_BYTE;  // Not use, so dummy.
+            break;
+        case E_GRAPH_PIXEL_FMT_RGBA32UI:
+            glInternal = GL_RGBA32UI;
+            glFormat = GL_RGBA_INTEGER;
+            glType = GL_UNSIGNED_INT;
+            break;
+        case E_GRAPH_PIXEL_FMT_RGB32UI:
+            glInternal = GL_RGB32UI;
+            glFormat = GL_RGBA_INTEGER;
+            glType = GL_UNSIGNED_INT;
             break;
         case E_GRAPH_PIXEL_FMT_BGRA8:
         case E_GRAPH_PIXEL_FMT_RGB10A2:

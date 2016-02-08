@@ -177,18 +177,18 @@ namespace graph
         // コンストラクタで現在のテクスチャを保持しつつ設定したいテクスチャにバインド、デストラクタで元に戻す.
         CTextureOperator texOp(m_Device, m_Texture);
 
-        GLenum glFormat, glType;
+        GLenum glInternal, glFormat, glType;
 
         CTargetParamValueConverter::ConvAbstractToTarget_PixelFormat(
             fmt,
+            glInternal,
             glFormat,
             glType);
 
-        CALL_GL_API(
-            ::glTexImage2D(
+        CALL_GL_API(::glTexImage2D(
                 GL_TEXTURE_2D,
                 0,
-                glFormat,
+                glInternal,
                 width, height,
                 0,
                 glFormat,

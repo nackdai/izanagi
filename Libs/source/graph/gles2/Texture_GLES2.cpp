@@ -199,6 +199,7 @@ namespace graph
 
         CTargetParamValueConverter::ConvAbstractToTarget_PixelFormat(
             fmt,
+            m_GLInternal,
             m_GLFormat,
             m_GLType);
     }
@@ -230,7 +231,7 @@ namespace graph
                     CALL_GL_API(::glTexImage2D(
                         GL_TEXTURE_2D,
                         i,
-                        m_GLFormat,
+                        m_GLInternal,
                         w, h,
                         0,
                         m_GLFormat,

@@ -100,6 +100,7 @@ namespace graph
 
         IZ_UINT m_Size;
 
+        GLenum m_GLInternal;
         GLenum m_GLFormat;
         GLenum m_GLType;
 

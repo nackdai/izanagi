@@ -254,6 +254,10 @@ namespace graph
         E_GRAPH_PIXEL_FMT_RGBX8,
         E_GRAPH_PIXEL_FMT_D24S8,
 
+        // Only for OpenGL...
+        E_GRAPH_PIXEL_FMT_RGBA32UI,
+        E_GRAPH_PIXEL_FMT_RGB32UI,
+
         E_GRAPH_PIXEL_FMT_NUM,
         E_GRAPH_PIXEL_FMT_FORCE_INT32 = 0x7fffffff,
     };
