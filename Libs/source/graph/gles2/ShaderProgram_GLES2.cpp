@@ -321,8 +321,6 @@ namespace graph
         IZ_ASSERT(IsValid());
         IZ_ASSERT(IsLinked());
 
-        num = num / 4;
-
         CALL_GL_API(::glUniform4fv(handle, num, (const GLfloat*)v));
         return IZ_TRUE;
     }
