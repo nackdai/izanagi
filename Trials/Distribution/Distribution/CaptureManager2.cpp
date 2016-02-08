@@ -63,7 +63,7 @@ void CaptureManager2::readback(izanagi::graph::CGraphicsDevice* device)
     {
         timer.Begin();
         
-        auto color = m_depth->GetTexHandle();
+        auto color = m_color->GetTexHandle();
 
         CALL_GL_API(glBindTexture(GL_TEXTURE_2D, color));
 
@@ -130,6 +130,9 @@ void CaptureManager2::end(izanagi::graph::CGraphicsDevice* device)
 
 void CaptureManager2::blitFrameBuffer()
 {
+    izanagi::sys::CTimer timer;
+    timer.Begin();
+
     // NOTE
     // If read frame buffer is 0, we can blit from defaul frame buffer.
 
@@ -141,6 +144,9 @@ void CaptureManager2::blitFrameBuffer()
         m_screenWidth, m_screenHeight,
         GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT,
         GL_NEAREST));
+
+    auto time = timer.End();
+    IZ_PRINTF("Blit [%f]\n", time);
 }
 
 void CaptureManager2::terminate()
@@ -177,7 +183,7 @@ void CaptureManager2::drawDebug(izanagi::graph::CGraphicsDevice* device)
             izanagi::CFloatRect(0.0f, 1.0f, 1.0f, 0.0f),
             izanagi::CIntRect(300, 300, 256, 128));
     }
-#else
+#elif 1
     if (m_color) {
         device->SetTexture(0, m_color);
         device->Set2DRenderOp(izanagi::graph::E_GRAPH_2D_RENDER_OP_MODULATE);

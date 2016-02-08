@@ -172,6 +172,7 @@ void CDistributionApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
     
     camera.Update();
 
+#if 0
     if (m_enabled2DRender) {
         const auto& mtxW2C = camera.GetParam().mtxW2C;
 
@@ -261,6 +262,7 @@ void CDistributionApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
         });
 #endif
     }
+#endif
 
 #ifndef ENABLE_SCREEN_CAPTURE
     m_fboManager.readback(device);
@@ -383,9 +385,11 @@ void CDistributionApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     m_fboManager.end(device);
 #endif
 
+#if 1
     m_dxtEncoder.encode(
         device,
         m_fboManager.getColor());
+#endif
 
     if (m_enabled2DRender) {
         if (device->Begin2D()) {
@@ -417,6 +421,8 @@ void CDistributionApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 #else
         m_fboManager.drawDebug(device);
 #endif
+
+        m_dxtEncoder.drawDebug(device);
 
         debugFont->Begin(device, 0, izanagi::CDebugFont::FONT_SIZE * 2);
 

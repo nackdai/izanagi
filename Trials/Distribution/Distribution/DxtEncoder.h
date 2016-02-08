@@ -24,6 +24,8 @@ public:
 
     void terminate();
 
+    void drawDebug(izanagi::graph::CGraphicsDevice* device);
+
 private:
     izanagi::graph::CVertexShader* m_vs{ nullptr };
     izanagi::graph::CPixelShader* m_dxt{ nullptr };
@@ -38,6 +40,8 @@ private:
 
     GLuint m_fbo;
     izanagi::graph::CTexture* m_tex{ nullptr };
+
+    izanagi::graph::CTexture* m_texDxt{ nullptr };
 
     GLuint m_pbo;
 };

@@ -61,19 +61,30 @@ IZ_BOOL DxtEncoder::init(
     }
 
     {
+        // NOTE
+        // DXTは 4x4 ブロックで、128bit/block.
+        // GL_RGBA32UI は 128bit/texel.
+        // すると、1texel が DXTのブロックのサイズと同じになるので、fragment shaderの1pixel出力がそのままDXTの1ブロックになる.
         m_tex = device->CreateTexture(
-            width/4, height/4,
+            width / 4, height / 4,
             1,
-            izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA8,
+            izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA32UI,
             izanagi::graph::E_GRAPH_RSC_USAGE_STATIC);
         VRETURN(m_tex);
 
         CALL_GL_API(glGenFramebuffers(1, &m_fbo));
 
         glGenBuffers(1, &m_pbo);
-        glBindBuffer(GL_ARRAY_BUFFER, m_pbo);
-        glBufferData(GL_ARRAY_BUFFER, width * height, 0, GL_STREAM_COPY);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_PIXEL_PACK_BUFFER, m_pbo);
+        glBufferData(GL_PIXEL_PACK_BUFFER, width * height, 0, GL_STREAM_COPY);
+        glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+
+        m_texDxt = device->CreateTexture(
+            width, height,
+            1,
+            izanagi::graph::E_GRAPH_PIXEL_FMT_DXT5,
+            izanagi::graph::E_GRAPH_RSC_USAGE_STATIC);
+        VRETURN(m_tex);
     }
 
     return IZ_TRUE;
@@ -83,6 +94,8 @@ void DxtEncoder::encode(
     izanagi::graph::CGraphicsDevice* device,
     izanagi::graph::CTexture* texture)
 {
+    izanagi::sys::CTimer timer;
+
     device->SaveRenderState();
 
     device->SetRenderState(
@@ -116,10 +129,8 @@ void DxtEncoder::encode(
     device->SetTexture(0, texture);
 
     CALL_GL_API(glUniform1i(m_hImage, 0));
-    CALL_GL_API(glUniform1i(m_hMode, 0));
+    CALL_GL_API(glUniform1i(m_hMode, 3));
 
-    // TODO
-    // Why 1/4 ?
     device->SetViewport(
         izanagi::graph::SViewport(0, 0, m_width/4, m_height/4));
 
@@ -127,18 +138,58 @@ void DxtEncoder::encode(
     // 頂点バッファを使わず全画面に描画する頂点シェーダ.
     CALL_GL_API(glDrawArrays(GL_TRIANGLE_STRIP, 0, 4));
 
-    // Readback.
-    CALL_GL_API(glReadBuffer(GL_COLOR_ATTACHMENT0));
-    CALL_GL_API(glBindBuffer(GL_PIXEL_PACK_BUFFER, m_pbo));
-    CALL_GL_API(glReadPixels(
-        0, 0,
-        m_width/4, m_height/4,
-        GL_RGBA_INTEGER,
-        GL_UNSIGNED_INT,
-        0));
-    CALL_GL_API(glBindBuffer(GL_PIXEL_PACK_BUFFER, 0));
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
-    CALL_GL_API(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+#if 1
+    // Readback.
+    {
+        timer.Begin();
+
+        CALL_GL_API(glReadBuffer(GL_COLOR_ATTACHMENT0));
+        CALL_GL_API(glBindBuffer(GL_PIXEL_PACK_BUFFER, m_pbo));
+        CALL_GL_API(glReadPixels(
+            0, 0,
+            m_width / 4, m_height / 4,
+            GL_RGBA_INTEGER,
+            GL_UNSIGNED_INT,
+            0));
+        CALL_GL_API(glBindBuffer(GL_PIXEL_PACK_BUFFER, 0));
+
+        CALL_GL_API(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+
+        auto time = timer.End();
+        IZ_PRINTF("ReadToPBO [%f]\n", time);
+    }
+
+    // Copy to dxt texture.
+    {
+        timer.Begin();
+
+        auto texdxt = m_texDxt->GetTexHandle();
+
+        CALL_GL_API(glBindTexture(GL_TEXTURE_2D, texdxt));
+        CALL_GL_API(glBindBuffer(GL_PIXEL_UNPACK_BUFFER, m_pbo));
+
+        CALL_GL_API(glCompressedTexSubImage2D(
+            GL_TEXTURE_2D,
+            0,
+            0, 0,
+            m_width, m_height,
+            GL_COMPRESSED_RGBA_S3TC_DXT5_EXT,
+            m_width * m_height,
+            0));
+
+        CALL_GL_API(glBindTexture(GL_TEXTURE_2D, 0));
+        CALL_GL_API(glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0));
+
+        auto time = timer.End();
+        IZ_PRINTF("CopyToDXT [%f]\n", time);
+    }
+#endif
+
+    // 元に戻す.
+    device->SetViewport(
+        izanagi::graph::SViewport(0, 0, m_width, m_height));
 
     device->LoadRenderState();
 }
@@ -150,4 +201,14 @@ void DxtEncoder::terminate()
     SAFE_RELEASE(m_shd);
 
     SAFE_RELEASE(m_tex);
+}
+
+void DxtEncoder::drawDebug(izanagi::graph::CGraphicsDevice* device)
+{
+    device->SetTexture(0, m_texDxt);
+    device->Set2DRenderOp(izanagi::graph::E_GRAPH_2D_RENDER_OP_MODULATE);
+
+    device->Draw2DSprite(
+        izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),
+        izanagi::CIntRect(300, 500, 256, 128));
 }
