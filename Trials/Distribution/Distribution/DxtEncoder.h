@@ -44,6 +44,9 @@ private:
     izanagi::graph::CTexture* m_texDxt{ nullptr };
 
     GLuint m_pbo;
+
+    izanagi::IMemoryAllocator* m_allocator{ nullptr };
+    void* m_pixels{ nullptr };
 };
 
 #endif    // #if !defined(__DXT_ENCODER_H__)

@@ -87,6 +87,16 @@ IZ_BOOL DxtEncoder::init(
         VRETURN(m_tex);
     }
 
+    {
+        m_allocator = allocator;
+
+        // NOTE
+        // RGBA : w * h * 4;
+        // DXT5 : RGBA / 4 = (w * h * 4) / 4 = w * h
+        auto size = width * height;
+        m_pixels = ALLOC_ZERO(m_allocator, size);
+    }
+
     return IZ_TRUE;
 }
 
@@ -141,27 +151,33 @@ void DxtEncoder::encode(
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
 #if 1
-    // Readback.
+    // Copy to PBO.
     {
         timer.Begin();
 
+        // NOTE
+        // PBO ‚Í STREAM_COPY ‚Åì¬‚³‚ê‚Ä‚¢‚é.
+
         CALL_GL_API(glReadBuffer(GL_COLOR_ATTACHMENT0));
         CALL_GL_API(glBindBuffer(GL_PIXEL_PACK_BUFFER, m_pbo));
+
+        // Copy from GL_COLOR_ATTACHMENT0 to PBO.
         CALL_GL_API(glReadPixels(
             0, 0,
             m_width / 4, m_height / 4,
             GL_RGBA_INTEGER,
             GL_UNSIGNED_INT,
             0));
-        CALL_GL_API(glBindBuffer(GL_PIXEL_PACK_BUFFER, 0));
 
-        CALL_GL_API(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+        CALL_GL_API(glBindBuffer(GL_PIXEL_PACK_BUFFER, 0));
 
         auto time = timer.End();
         IZ_PRINTF("ReadToPBO [%f]\n", time);
     }
 
-    // Copy to dxt texture.
+    CALL_GL_API(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+
+    // Copy to texture memory.
     {
         timer.Begin();
 
@@ -170,6 +186,7 @@ void DxtEncoder::encode(
         CALL_GL_API(glBindTexture(GL_TEXTURE_2D, texdxt));
         CALL_GL_API(glBindBuffer(GL_PIXEL_UNPACK_BUFFER, m_pbo));
 
+        // Copy from PBO to texture(DXT5) memory.
         CALL_GL_API(glCompressedTexSubImage2D(
             GL_TEXTURE_2D,
             0,
@@ -184,6 +201,25 @@ void DxtEncoder::encode(
 
         auto time = timer.End();
         IZ_PRINTF("CopyToDXT [%f]\n", time);
+    }
+
+    // Readback to memory.
+    {
+        timer.Begin();
+
+        auto texdxt = m_texDxt->GetTexHandle();
+
+        CALL_GL_API(glBindTexture(GL_TEXTURE_2D, texdxt));
+
+        CALL_GL_API(glGetCompressedTexImage(
+            GL_TEXTURE_2D,
+            0,
+            m_pixels));
+
+        CALL_GL_API(glBindTexture(GL_TEXTURE_2D, 0));
+
+        auto time = timer.End();
+        IZ_PRINTF("ReadToMem [%f]\n", time);
     }
 #endif
 
@@ -201,6 +237,8 @@ void DxtEncoder::terminate()
     SAFE_RELEASE(m_shd);
 
     SAFE_RELEASE(m_tex);
+
+    FREE(m_allocator, m_pixels);
 }
 
 void DxtEncoder::drawDebug(izanagi::graph::CGraphicsDevice* device)
