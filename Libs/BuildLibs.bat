@@ -35,7 +35,7 @@ if %GFX%==OGL (
 
     cd ..\Libs
 
-    set GFX=GLUT
+    set GFX=OGL
 )
 
 %MSBUILD% ..\External\freetype\builds\freetype.sln /t:%TARGET% /p:Configuration=%CONFIG% /p:Platform=Win32 || goto error
