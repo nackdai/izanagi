@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug_DX9|Win32">
@@ -669,7 +669,8 @@ fxc /T ps_2_0 /E main_OpModulate2x /Fh %(RootDir)%(Directory)/../../dx9/%(Filena
 fxc /T ps_2_0 /E main_OpModulate4x /Fh %(RootDir)%(Directory)/../../dx9/%(Filename)_OpModulate4x.h /nologo %(FullPath)
 fxc /T ps_2_0 /E main_OpAdd /Fh %(RootDir)%(Directory)/../../dx9/%(Filename)_Add.h /nologo %(FullPath)
 fxc /T ps_2_0 /E main_OpModulateAlpha /Fh %(RootDir)%(Directory)/../../dx9/%(Filename)_OpModulateAlpha.h /nologo %(FullPath)
-fxc /T ps_2_0 /E main_OpNoTexAlpha /Fh %(RootDir)%(Directory)/../../dx9/%(Filename)_OpNoTexAlpha.h /nologo %(FullPath)</Command>
+fxc /T ps_2_0 /E main_OpNoTexAlpha /Fh %(RootDir)%(Directory)/../../dx9/%(Filename)_OpNoTexAlpha.h /nologo %(FullPath)
+fxc /T ps_2_0 /E main_OpTexAsDepth /Fh %(RootDir)%(Directory)/../../dx9/%(Filename)_OpTexAsDepth.h /nologo %(FullPath)</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|x64'">fxc /T ps_2_0 /E main_OpVtx /Fh %(RootDir)%(Directory)/../../dx9/%(Filename)_OpVtx.h /nologo %(FullPath)
 fxc /T ps_2_0 /E main_OpTex /Fh %(RootDir)%(Directory)/../../dx9/%(Filename)_OpTex.h /nologo %(FullPath)
 fxc /T ps_2_0 /E main_OpModulate /Fh %(RootDir)%(Directory)/../../dx9/%(Filename)_OpModulate.h /nologo %(FullPath)
@@ -724,7 +725,8 @@ fxc /T ps_2_0 /E main_OpModulate2x /Fh %(RootDir)%(Directory)/../../dx9/%(Filena
 fxc /T ps_2_0 /E main_OpModulate4x /Fh %(RootDir)%(Directory)/../../dx9/%(Filename)_OpModulate4x.h /nologo %(FullPath)
 fxc /T ps_2_0 /E main_OpAdd /Fh %(RootDir)%(Directory)/../../dx9/%(Filename)_Add.h /nologo %(FullPath)
 fxc /T ps_2_0 /E main_OpModulateAlpha /Fh %(RootDir)%(Directory)/../../dx9/%(Filename)_OpModulateAlpha.h /nologo %(FullPath)
-fxc /T ps_2_0 /E main_OpNoTexAlpha /Fh %(RootDir)%(Directory)/../../dx9/%(Filename)_OpNoTexAlpha.h /nologo %(FullPath)</Command>
+fxc /T ps_2_0 /E main_OpNoTexAlpha /Fh %(RootDir)%(Directory)/../../dx9/%(Filename)_OpNoTexAlpha.h /nologo %(FullPath)
+fxc /T ps_2_0 /E main_OpTexAsDepth /Fh %(RootDir)%(Directory)/../../dx9/%(Filename)_OpTexAsDepth.h /nologo %(FullPath)</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">fxc /T ps_2_0 /E main_OpVtx /Fh %(RootDir)%(Directory)/../../dx9/%(Filename)_OpVtx.h /nologo %(FullPath)
 fxc /T ps_2_0 /E main_OpTex /Fh %(RootDir)%(Directory)/../../dx9/%(Filename)_OpTex.h /nologo %(FullPath)
 fxc /T ps_2_0 /E main_OpModulate /Fh %(RootDir)%(Directory)/../../dx9/%(Filename)_OpModulate.h /nologo %(FullPath)

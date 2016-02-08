@@ -12,6 +12,7 @@
 #include "2DPS_Add.h"
 #include "2DPS_OpModulateAlpha.h"
 #include "2DPS_OpNoTexAlpha.h"
+#include "2DPS_OpTexAsDepth.h"
 
 static const IZ_BYTE* PS_Programs[] = {
     (const IZ_BYTE*)g_ps20_main_OpVtx,
@@ -22,6 +23,7 @@ static const IZ_BYTE* PS_Programs[] = {
     (const IZ_BYTE*)g_ps20_main_OpAdd,
     (const IZ_BYTE*)g_ps20_main_OpModulateAlpha,
     (const IZ_BYTE*)g_ps20_main_OpNoTexAlpha,
+    (const IZ_BYTE*)g_ps20_main_OpTexAsDepth,
     IZ_NULL,
 };
 
