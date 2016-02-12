@@ -12,3 +12,26 @@ http://stackoverflow.com/questions/8684479/opengl-context-from-glut
 
 Real-Time YCoCg-DXT Compression
 http://www.nvidia.com/object/real-time-ycocg-dxt-compression.html
+
+Using multiview rendering
+http://malideveloper.arm.com/resources/sample-code/using-multiview-rendering/
+
+Eigen - C++で使える線形代数ライブラリ
+http://blog.livedoor.jp/tek_nishi/archives/8623876.html
+
+4分木空間分割を最適化する！（理屈編）
+http://marupeke296.com/COL_2D_No8_QuadTree.html
+
+8分木空間分割を最適化する！
+http://marupeke296.com/COL_3D_No15_Octree.html
+
+http://www.flipcode.com/archives/Octree_Implementation.shtml
+https://github.com/hxa7241/octree-cpp
+
+【シリーズ】「PCLを触ってみよう!」 第17回：Octreeの基本
+http://derivecv.tumblr.com/post/65215352792
+
+http://www.riken.jp/fsi/tawara/papers/CFDSympo2006_tawara.pdf
+
+シェーダで Point Sprite
+http://marina.sys.wakayama-u.ac.jp/~tokoi/?date=20110324
