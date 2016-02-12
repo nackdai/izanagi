@@ -35,3 +35,6 @@ http://www.riken.jp/fsi/tawara/papers/CFDSympo2006_tawara.pdf
 
 シェーダで Point Sprite
 http://marina.sys.wakayama-u.ac.jp/~tokoi/?date=20110324
+
+Particle Rendering: Point Sprites vs Geometry Shaders Sprites
+http://www.geeks3d.com/20140828/test-particle-rendering-point-sprites-vs-geometry-shaders-sprites/
