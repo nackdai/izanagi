@@ -30,7 +30,7 @@ protected:
     virtual IZ_BOOL OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key) override;
 
 private:
-    static const IZ_UINT POINT_NUM = 100;
+    static const IZ_UINT POINT_NUM = 1;
 
     struct Vertex {
         IZ_FLOAT pos[4];

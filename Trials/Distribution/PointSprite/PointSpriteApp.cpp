@@ -60,8 +60,10 @@ IZ_BOOL PointSpriteApp::InitInternal(
             izanagi::CFileInputStream in;
             in.Open("shader/vs.glsl");
 
-            std::vector<IZ_BYTE> buf(in.GetSize());
+            std::vector<IZ_BYTE> buf(in.GetSize() + 1);
             in.Read(&buf[0], 0, buf.size());
+
+            buf[buf.size() - 1] = 0;
 
             m_vs = device->CreateVertexShader(&buf[0]);
         }
@@ -70,8 +72,10 @@ IZ_BOOL PointSpriteApp::InitInternal(
             izanagi::CFileInputStream in;
             in.Open("shader/ps.glsl");
 
-            std::vector<IZ_BYTE> buf(in.GetSize());
+            std::vector<IZ_BYTE> buf(in.GetSize() + 1);
             in.Read(&buf[0], 0, buf.size());
+
+            buf[buf.size() - 1] = 0;
 
             m_ps = device->CreatePixelShader(&buf[0]);
         }
@@ -142,16 +146,17 @@ void PointSpriteApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     CALL_GL_API(::glEnable(GL_VERTEX_PROGRAM_POINT_SIZE));
     CALL_GL_API(::glEnable(GL_POINT_SPRITE));
 
+    device->SetShaderProgram(m_shd);
+
     auto& camera = GetCamera();
+    const auto& mtxW2C = camera.GetParam().mtxW2C;
 
-    auto hMtxW2C = m_shd->GetHandleByName("mtxW2C");
-    m_shd->SetMatrix(device, hMtxW2C, camera.GetParam().mtxW2C);
-
-    IZ_FLOAT pointSize = 5.0f;
+    IZ_FLOAT pointSize = 50.0f;
     auto hSize = m_shd->GetHandleByName("size");
     m_shd->SetFloat(device, hSize, pointSize);
 
-    device->SetShaderProgram(m_shd);
+    auto hMtxW2C = m_shd->GetHandleByName("mtxW2C");
+    m_shd->SetMatrixArrayAsVectorArray(device, hMtxW2C, &mtxW2C, 4);
 
     device->SetVertexBuffer(0, 0, sizeof(Vertex), m_vb);
     device->SetVertexDeclaration(m_vd);

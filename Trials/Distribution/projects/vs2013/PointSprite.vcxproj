@@ -416,7 +416,6 @@
     <ClInclude Include="..\..\PointSprite\PointSpriteApp.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\PointSprite\shader\2DVS.glsl" />
     <None Include="..\..\PointSprite\shader\ps.glsl" />
     <None Include="..\..\PointSprite\shader\vs.glsl" />
   </ItemGroup>
