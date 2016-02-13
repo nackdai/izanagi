@@ -337,6 +337,7 @@ namespace graph
 
     IZ_BOOL CShaderProgramGLES2::SetMatrixArrayAsVectorArray(CGraphicsDevice* device, const SHADER_PARAM_HANDLE& handle, const math::SMatrix44* m, IZ_UINT num)
     {
+#if 0
         // TODO
         // transpose先のメモリをどうするか
 
@@ -356,6 +357,19 @@ namespace graph
         math::SVector4* buf = reinterpret_cast<math::SVector4*>(tmp);
 
         return SetVectorArray(device, handle, buf, num);
+#else
+        // TODO
+        // マトリクス１つ分まで...
+        IZ_ASSERT(num == 4);
+
+        math::SMatrix44 tmp;
+
+        math::SMatrix44::Transpose(tmp, *m);
+
+        math::SVector4* buf = reinterpret_cast<math::SVector4*>(&tmp);
+
+        return SetVectorArray(device, handle, buf, num);
+#endif
     }
 }   // namespace graph
 }   // namespace izanagi
