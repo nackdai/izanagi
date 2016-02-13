@@ -49,7 +49,7 @@ IZ_BOOL PointSpriteApp::InitInternal(
     {
         izanagi::graph::SVertexElement elems[] = {
             { 0, 0, izanagi::graph::E_GRAPH_VTX_DECL_TYPE_FLOAT4, izanagi::graph::E_GRAPH_VTX_DECL_USAGE_POSITION, 0 },
-            { 0, 0, izanagi::graph::E_GRAPH_VTX_DECL_TYPE_COLOR, izanagi::graph::E_GRAPH_VTX_DECL_USAGE_COLOR, 0 },
+            { 0, 16, izanagi::graph::E_GRAPH_VTX_DECL_TYPE_COLOR, izanagi::graph::E_GRAPH_VTX_DECL_USAGE_COLOR, 0 },
         };
 
         m_vd = device->CreateVertexDeclaration(elems, COUNTOF(elems));
@@ -149,9 +149,11 @@ void PointSpriteApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     device->SetShaderProgram(m_shd);
 
     auto& camera = GetCamera();
-    const auto& mtxW2C = camera.GetParam().mtxW2C;
 
-    IZ_FLOAT pointSize = 50.0f;
+    izanagi::math::SMatrix44 mtxW2C;
+    izanagi::math::SMatrix44::Copy(mtxW2C, camera.GetParam().mtxW2C);
+
+    IZ_FLOAT pointSize = 100.0f;
     auto hSize = m_shd->GetHandleByName("size");
     m_shd->SetFloat(device, hSize, pointSize);
 

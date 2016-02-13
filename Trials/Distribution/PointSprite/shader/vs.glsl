@@ -19,5 +19,5 @@ void main()
     
     var_Color = color_0;
  
-    gl_PointSize = size;
+    gl_PointSize = size / gl_Position.w;
 }
