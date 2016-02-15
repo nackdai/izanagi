@@ -349,9 +349,9 @@ IZ_BOOL CStateSSAO::Enter(
         };
 
         m_VB = device->CreateVertexBuffer(sizeof(SVtx), COUNTOF(vtx), izanagi::graph::E_GRAPH_RSC_USAGE_STATIC);
-        m_VB->LockBuffer(0, 0, IZ_FALSE);
-        m_VB->WriteBuffer(vtx, sizeof(vtx));
-        m_VB->UnlockBuffer();
+        m_VB->LockBuffer(device, 0, 0, IZ_FALSE);
+        m_VB->WriteBuffer(device, vtx, sizeof(vtx));
+        m_VB->UnlockBuffer(device);
 
         izanagi::graph::SVertexElement elem[] = {
             {0, 0, izanagi::graph::E_GRAPH_VTX_DECL_TYPE_FLOAT4, izanagi::graph::E_GRAPH_VTX_DECL_USAGE_POSITION, 0},

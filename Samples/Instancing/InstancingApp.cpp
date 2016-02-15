@@ -72,7 +72,7 @@ IZ_BOOL CInstancingApp::InitInternal(
         
         izanagi::math::SMatrix44* mtx;
 
-        m_InstancingVB->Lock(0, 0, (void**)&mtx, IZ_FALSE);
+        m_InstancingVB->Lock(device, 0, 0, (void**)&mtx, IZ_FALSE);
 
         for (IZ_UINT i = 0; i < MeshNum; i++)
         {
@@ -86,7 +86,7 @@ IZ_BOOL CInstancingApp::InitInternal(
             izanagi::math::SMatrix44::Transpose(mtx[i], mtx[i]);
         }
 
-        m_InstancingVB->Unlock();
+        m_InstancingVB->Unlock(device);
     }
 
     // テクスチャ
@@ -214,7 +214,7 @@ void CInstancingApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
                     izanagi::graph::E_GRAPH_VB_USAGE_INSTANCEDATA,
                     1);
 
-                device->DrawIndexedPrimitive(
+                device->DrawIndexedInstancedPrimitive(
                     m_Mesh->GetPrimitiveType(),
                     0,
                     m_Mesh->GetVB()->GetVtxNum(),
