@@ -483,6 +483,17 @@ namespace izanagi {
             }
             VGOTO(ret = UnlockVB(device), __EXIT__);
 
+#if 1
+            VGOTO(ret = BeginDebugAxisRegister(device), __EXIT__);
+            {
+                IZ_UINT nVtxNum = GetVtxNum();
+
+                for (IZ_UINT i = 0; i < nVtxNum; ++i) {
+                    SetDebugAxisVtxData(&m_pVtx[i], flag);
+                }
+            }
+            VGOTO(ret = EndDebugAxisRegister(device), __EXIT__);
+#endif
         __EXIT__:
             // もういらない
             ClearDataBuffer();
@@ -495,7 +506,7 @@ namespace izanagi {
             IZ_ASSERT(p != IZ_NULL);
 
             VRETURN(m_pVB->Lock(device, 0, 0, p, IZ_FALSE));
-            VRETURN(BeginDebugAxisRegister(device));
+            //VRETURN(BeginDebugAxisRegister(device));
 
             return IZ_TRUE;
         }
@@ -503,7 +514,7 @@ namespace izanagi {
         IZ_BOOL UnlockVB(graph::CGraphicsDevice* device)
         {
             VRETURN(m_pVB->Unlock(device));
-            VRETURN(EndDebugAxisRegister(device));
+            //VRETURN(EndDebugAxisRegister(device));
             
             return IZ_TRUE;
         }
@@ -558,7 +569,7 @@ namespace izanagi {
             pData = CDebugMeshUtil::SetVtx(flag, sVtx, pData);
             pData = SetExtraVtxData(&sVtx, flag, pData);
 
-            SetDebugAxisVtxData(&sVtx, flag);
+            //SetDebugAxisVtxData(&sVtx, flag);
     
             return pData;
         }
