@@ -5,6 +5,26 @@ namespace izanagi
 {
 namespace graph
 {
+    class VtxBufferOperator
+    {
+    public:
+        VtxBufferOperator(CGraphicsDevice* device, GLuint targetVB)
+        {
+            auto vb = (CVertexBufferGLES2*)device->GetRenderState().curVB[0];
+
+            m_prevVB = (vb != IZ_NULL ? vb->m_VB : 0);
+
+            CALL_GL_API(::glBindBuffer(GL_ARRAY_BUFFER, targetVB));
+        }
+        ~VtxBufferOperator()
+        {
+            CALL_GL_API(::glBindBuffer(GL_ARRAY_BUFFER, m_prevVB));
+        }
+
+    private:
+        GLuint m_prevVB{ 0 };
+    };
+
     // インスタンス作成
     CVertexBufferGLES2* CVertexBufferGLES2::CreateVertexBuffer(
         CGraphicsDeviceGLES2* device,
@@ -34,6 +54,7 @@ namespace graph
 
         // 本体作成
         result = instance->CreateBody(
+            device,
             stride,
             vtxNum,
             usage);
@@ -84,6 +105,7 @@ namespace graph
 
     // 本体作成
     IZ_BOOL CVertexBufferGLES2::CreateBody(
+        CGraphicsDevice* device,
         IZ_UINT stride,
         IZ_UINT vtxNum,
         E_GRAPH_RSC_USAGE usage)
@@ -92,11 +114,6 @@ namespace graph
         VRETURN(m_VB > 0);
 
         IZ_BOOL ret = (m_VB > 0);
-
-        CALL_GL_API(
-            ::glBindBuffer(
-                GL_ARRAY_BUFFER,
-                m_VB));
 
         GLsizeiptr size = vtxNum * stride;
 
@@ -107,12 +124,16 @@ namespace graph
     
         m_CreateType = usage;
 
+        Initialize(device);
+
         return ret;
     }
 
-    void CVertexBufferGLES2::Initialize()
+    void CVertexBufferGLES2::Initialize(CGraphicsDevice* device)
     {
         if (!m_IsInitialized) {
+            VtxBufferOperator vbOp(device, m_VB);
+
             GLenum glUsage = (m_CreateType == E_GRAPH_RSC_USAGE_STATIC
                 ? GL_STATIC_DRAW
                 : GL_DYNAMIC_DRAW);
@@ -187,10 +208,8 @@ namespace graph
             CVertexBuffer* curVB = m_Device->GetRenderState().curVB[0];
 
             if (curVB != this) {
-                CALL_GL_API(::glBindBuffer(GL_ARRAY_BUFFER, m_VB));
-
                 // もしかしたら
-                Initialize();
+                Initialize(device);
             }
 
             IZ_UINT8* tmp = reinterpret_cast<IZ_UINT8*>(m_TemporaryData);

@@ -9,11 +9,14 @@ namespace izanagi
 namespace graph
 {
     class CGraphicsDeviceGLES2;
+    class VtxBufferOperator;
 
     // 頂点バッファ
     class CVertexBufferGLES2 : public CVertexBuffer
     {
+        friend class VtxBufferOperator;
         friend class CGraphicsDeviceGLES2;
+        friend class CGraphicsDeviceOGL;
 
     private:
         // インスタンス作成
@@ -31,11 +34,12 @@ namespace graph
     protected:
         // 本体作成
         IZ_BOOL CreateBody(
+            CGraphicsDevice* device,
             IZ_UINT stride,
             IZ_UINT vtxNum,
             E_GRAPH_RSC_USAGE usage);
 
-        void Initialize();
+        void Initialize(CGraphicsDevice* device);
 
     public:
         // ロック
