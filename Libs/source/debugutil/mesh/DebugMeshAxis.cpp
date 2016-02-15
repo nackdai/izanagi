@@ -72,7 +72,7 @@ CDebugMeshAxis* CDebugMeshAxis::CreateDebugMeshAxisDefault(
                                     izanagi::E_DEBUG_MESH_AXIS_X | izanagi::E_DEBUG_MESH_AXIS_Y | izanagi::E_DEBUG_MESH_AXIS_Z);
     VRETURN(pInstance != IZ_NULL);
 
-    pInstance->BeginRegister();
+    pInstance->BeginRegister(device);
     {
         pInstance->SetVtx(
             izanagi::E_DEBUG_MESH_AXIS_X,
@@ -87,17 +87,21 @@ CDebugMeshAxis* CDebugMeshAxis::CreateDebugMeshAxisDefault(
             math::CVector4(0.0f, 0.0f, 0.0f),
             math::CVector4(0.0f, 0.0f, 10.0f));
     }
-    pInstance->EndRegister();
+    pInstance->EndRegister(device);
 
     return pInstance;
 }
 
 CDebugMeshAxis::~CDebugMeshAxis()
 {
+#if 0
     if (m_pVtxDst != IZ_NULL) {
         IZ_ASSERT(IZ_FALSE);
         EndRegister();
     }
+#else
+    IZ_ASSERT(m_pVtxDst == IZ_NULL)
+#endif
 }
 
 // 初期化
@@ -129,18 +133,18 @@ IZ_BOOL CDebugMeshAxis::Draw(graph::CGraphicsDevice* device)
     return ret;
 }
 
-IZ_BOOL CDebugMeshAxis::BeginRegister()
+IZ_BOOL CDebugMeshAxis::BeginRegister(graph::CGraphicsDevice* device)
 {
     VRETURN(m_pVtxDst == IZ_NULL);
-    VRETURN(m_pVB->Lock(0, 0, (void**)&m_pVtxDst, IZ_FALSE));
+    VRETURN(m_pVB->Lock(device, 0, 0, (void**)&m_pVtxDst, IZ_FALSE));
     m_nSetPrimCnt = 0;
     return IZ_TRUE;
 }
 
-IZ_BOOL CDebugMeshAxis::EndRegister()
+IZ_BOOL CDebugMeshAxis::EndRegister(graph::CGraphicsDevice* device)
 {
     VRETURN(m_pVtxDst != IZ_NULL);
-    VRETURN(m_pVB->Unlock());
+    VRETURN(m_pVB->Unlock(device));
     m_pVtxDst = IZ_NULL;
     return IZ_TRUE;
 }

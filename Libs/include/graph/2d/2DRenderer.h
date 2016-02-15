@@ -115,10 +115,10 @@ namespace graph
             PRIM_TYPE nPrimType);
 
         // ロック
-        IZ_BOOL Lock();
+        IZ_BOOL Lock(CGraphicsDevice* device);
 
         // アンロック
-        void Unlock();
+        void Unlock(CGraphicsDevice* device);
 
         // 頂点データセット
         void SetVtx(

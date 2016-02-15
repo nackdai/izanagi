@@ -115,7 +115,7 @@ namespace scenegraph {
         SVtx* data = IZ_NULL;
 
         // Write vertices
-        m_VB->Lock(0, 0, (void**)&data, IZ_FALSE);
+        m_VB->Lock(device, 0, 0, (void**)&data, IZ_FALSE);
         {
             IZ_UINT vtxPos = 0;
 
@@ -140,7 +140,7 @@ namespace scenegraph {
                 vtxPos += 3;
             }
         }
-        m_VB->Unlock();
+        m_VB->Unlock(device);
 
         // Vertex Declaration
 

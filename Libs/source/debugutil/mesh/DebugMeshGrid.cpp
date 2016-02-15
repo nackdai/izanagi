@@ -35,11 +35,12 @@ CDebugMeshGrid* CDebugMeshGrid::CreateDebugMeshGrid(
 
     // 頂点データセット
     result = pInstance->SetVtx(
-                flag,
-                nColor,
-                nGridNumX,
-                nGridNumY,
-                fGridSize);
+        pDevice,
+        flag,
+        nColor,
+        nGridNumX,
+        nGridNumY,
+        fGridSize);
     VGOTO(result, __EXIT__);
 
 __EXIT__:
@@ -69,6 +70,7 @@ IZ_BOOL CDebugMeshGrid::Init(
 
 // 頂点データセット
 IZ_BOOL CDebugMeshGrid::SetVtx(
+    graph::CGraphicsDevice* device,
     IZ_UINT flag,
     IZ_COLOR nColor,
     IZ_UINT nGridNumX,
@@ -78,7 +80,7 @@ IZ_BOOL CDebugMeshGrid::SetVtx(
     IZ_ASSERT(flag == (E_DEBUG_MESH_VTX_FORM_POS | E_DEBUG_MESH_VTX_FORM_COLOR));
 
     IZ_UINT8* pVtx = IZ_NULL;
-    m_pVB->Lock(0, 0, (void**)&pVtx, IZ_FALSE);
+    m_pVB->Lock(device, 0, 0, (void**)&pVtx, IZ_FALSE);
 
     IZ_FLOAT fLeft = -0.5f * fGridSize * nGridNumX;
     IZ_FLOAT fTop = -0.5f * fGridSize * nGridNumY;
@@ -152,7 +154,7 @@ IZ_BOOL CDebugMeshGrid::SetVtx(
         }
     }
 
-    m_pVB->Unlock();
+    m_pVB->Unlock(device);
 
     return IZ_TRUE;
 }

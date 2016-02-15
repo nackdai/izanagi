@@ -5,6 +5,7 @@ namespace izanagi
 namespace graph
 {
     IZ_BOOL CBufferBase::LockBuffer(
+        CGraphicsDevice* device,
         IZ_UINT offset,
         IZ_UINT size,
         IZ_BOOL isReadOnly,
@@ -13,6 +14,7 @@ namespace graph
         IZ_ASSERT(m_LockedBuffer == IZ_NULL);
 
         IZ_BOOL ret = Lock(
+            device,
             offset,
             size,
             (void**)&m_LockedBuffer,
@@ -22,19 +24,23 @@ namespace graph
         return ret;
     }
 
-    IZ_BOOL CBufferBase::UnlockBuffer()
+    IZ_BOOL CBufferBase::UnlockBuffer(CGraphicsDevice* device)
     {
-        return Unlock();
+        return Unlock(device);
     }
 
-    IZ_BOOL CBufferBase::WriteBuffer(const void* data, size_t size)
+    IZ_BOOL CBufferBase::WriteBuffer(
+        CGraphicsDevice* device,
+        const void* data, size_t size)
     {
         IZ_ASSERT(m_LockedBuffer != IZ_NULL);
         memcpy(m_LockedBuffer, data, size);
         return IZ_TRUE;
     }
 
-    IZ_BOOL CBufferBase::ReadBuffer(void** data, size_t size)
+    IZ_BOOL CBufferBase::ReadBuffer(
+        CGraphicsDevice* device,
+        void** data, size_t size)
     {
         IZ_ASSERT(m_LockedBuffer != IZ_NULL);
         memcpy(*data, m_LockedBuffer, size);

@@ -125,18 +125,18 @@ void CDebugMesh::DrawDebugAxis(graph::CGraphicsDevice* device)
     }
 }
 
-IZ_BOOL CDebugMesh::BeginDebugAxisRegister()
+IZ_BOOL CDebugMesh::BeginDebugAxisRegister(graph::CGraphicsDevice* device)
 {
     if (m_pDebugAxis != IZ_NULL) {
-        VRETURN(m_pDebugAxis->BeginRegister());
+        VRETURN(m_pDebugAxis->BeginRegister(device));
     }
     return IZ_TRUE;
 }
 
-IZ_BOOL CDebugMesh::EndDebugAxisRegister()
+IZ_BOOL CDebugMesh::EndDebugAxisRegister(graph::CGraphicsDevice* device)
 {
     if (m_pDebugAxis != IZ_NULL) {
-        VRETURN(m_pDebugAxis->EndRegister());
+        VRETURN(m_pDebugAxis->EndRegister(device));
     }
     return IZ_TRUE;
 }

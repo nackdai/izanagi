@@ -40,6 +40,7 @@ namespace graph
     public:
         // ロック
         virtual IZ_BOOL Lock(
+            CGraphicsDevice* device,
             IZ_UINT offset,
             IZ_UINT size,
             void** data,
@@ -47,7 +48,7 @@ namespace graph
             IZ_BOOL isDiscard = IZ_FALSE);
 
         // アンロック
-        virtual IZ_BOOL Unlock();
+        virtual IZ_BOOL Unlock(CGraphicsDevice* device);
 
     public:
         virtual IZ_BOOL IsPrepared() const;

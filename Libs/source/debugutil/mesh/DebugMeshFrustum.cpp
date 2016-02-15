@@ -30,10 +30,11 @@ CDebugMeshFrustum* CDebugMeshFrustum::CreateDebugMeshFrustum(
 
     // Set vertex data.
     result = pInstance->SetVtx(
-                nColor,
-                fAspect,
-                fFov,
-                fNear, fFar);
+        pDevice,
+        nColor,
+        fAspect,
+        fFov,
+        fNear, fFar);
     VGOTO(result, __EXIT__);
 
 __EXIT__:
@@ -60,6 +61,7 @@ IZ_BOOL CDebugMeshFrustum::Init(graph::CGraphicsDevice* device)
 }
 
 IZ_BOOL CDebugMeshFrustum::SetVtx(
+    graph::CGraphicsDevice* device,
     IZ_COLOR nColor,
     IZ_FLOAT fAspect,
     IZ_FLOAT fFov,
@@ -153,7 +155,7 @@ IZ_BOOL CDebugMeshFrustum::SetVtx(
 
     // Lock vertex buffer.
     IZ_UINT8* pData = IZ_NULL;
-    VRETURN(LockVB(reinterpret_cast<void**>(&pData)));
+    VRETURN(LockVB(device, reinterpret_cast<void**>(&pData)));
 
     SMeshVtx sVtx;
 
@@ -174,7 +176,7 @@ IZ_BOOL CDebugMeshFrustum::SetVtx(
     }
 
     // Unlock vertex buffer.
-    VRETURN(UnlockVB());
+    VRETURN(UnlockVB(device));
 
     return IZ_TRUE;
 }

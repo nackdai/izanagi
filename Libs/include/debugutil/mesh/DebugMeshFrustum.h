@@ -36,6 +36,7 @@ namespace izanagi {
         IZ_BOOL Init(graph::CGraphicsDevice* device);
 
         IZ_BOOL SetVtx(
+            graph::CGraphicsDevice* device,
             IZ_COLOR nColor,
             IZ_FLOAT fAspect,
             IZ_FLOAT fFov,

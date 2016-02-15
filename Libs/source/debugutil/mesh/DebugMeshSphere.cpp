@@ -52,7 +52,7 @@ CDebugMeshSphere* CDebugMeshSphere::CreateDebugMeshSphere(
     VGOTO(result, __EXIT__);
 
     // データをVB、IBにコピーする
-    result = pInstance->CopyDataToBuffer(flag);
+    result = pInstance->CopyDataToBuffer(pDevice, flag);
     VGOTO(result, __EXIT__);
 
 __EXIT__:

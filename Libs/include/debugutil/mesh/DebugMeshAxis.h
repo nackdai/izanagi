@@ -40,8 +40,8 @@ namespace izanagi {
         // 描画
         IZ_BOOL Draw(graph::CGraphicsDevice* device);
 
-        IZ_BOOL BeginRegister();
-        IZ_BOOL EndRegister();
+        IZ_BOOL BeginRegister(graph::CGraphicsDevice* device);
+        IZ_BOOL EndRegister(graph::CGraphicsDevice* device);
 
         IZ_BOOL SetVtx(
             IZ_UINT type,

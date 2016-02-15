@@ -115,14 +115,14 @@ namespace {
         IZ_BOOL ret = (pVB != IZ_NULL);
         VGOTO(ret, __EXIT__);
 
-        ret = pVB->Lock(0, 0, &buf, IZ_FALSE);
+        ret = pVB->Lock(pDevice, 0, 0, &buf, IZ_FALSE);
         VGOTO(ret, __EXIT__);
 
         nSize = sVtxInfo.sizeVtx * sVtxInfo.numVtx;
 
         ret = IZ_INPUT_READ(pIn, buf, 0, nSize);
 
-        pVB->Unlock();
+        pVB->Unlock(pDevice);
 
 __EXIT__:
         if (!ret) {

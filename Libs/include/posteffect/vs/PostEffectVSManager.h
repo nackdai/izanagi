@@ -45,7 +45,7 @@ namespace izanagi {
         IZ_BOOL InitRenderer(graph::CGraphicsDevice* pDevice);
 
         // 頂点バッファにデータセット
-        IZ_BOOL SetVertexBuffer();
+        IZ_BOOL SetVertexBuffer(graph::CGraphicsDevice* device);
 
     private:
         // 頂点シェーダ取得

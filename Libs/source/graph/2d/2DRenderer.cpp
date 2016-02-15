@@ -276,7 +276,7 @@ namespace graph
         IZ_C_ASSERT(COUNTOF(PrimType) == PRIM_TYPE_NUM);
 
         // アンロック
-        Unlock();
+        Unlock(device);
 
         if (m_nCurPrimNum == 0) {
             // 何も登録していない
@@ -347,7 +347,7 @@ namespace graph
                     PRIM_TYPE_SPRITE));
 
         // ロック
-        VRETURN(Lock());
+        VRETURN(Lock(device));
 
         // UV座標矩形
         CFloatRect rcUV(rcSrc);
@@ -389,7 +389,7 @@ namespace graph
                     PRIM_TYPE_SPRITE));
 
         // ロック
-        VRETURN(Lock());
+        VRETURN(Lock(device));
 
         // UV座標矩形
         CFloatRect rcUV;
@@ -450,7 +450,7 @@ namespace graph
                     PRIM_TYPE_RECT));
 
         // ロック
-        VRETURN(Lock());
+        VRETURN(Lock(device));
     
         // 頂点データセット
         SetVtx(
@@ -492,7 +492,7 @@ namespace graph
                     PRIM_TYPE_LINE));
 
         // ロック
-        VRETURN(Lock());
+        VRETURN(Lock(device));
     
         // 頂点データセット
         {
@@ -657,7 +657,7 @@ namespace graph
     }
 
     // ロック
-    IZ_BOOL C2DRenderer::Lock()
+    IZ_BOOL C2DRenderer::Lock(CGraphicsDevice* device)
     {
         if (!IsLock()) {
             // ロックフラグ切り替え
@@ -673,11 +673,12 @@ namespace graph
                                         : m_pVB->GetSize() - m_sVBInfo.offset); // 残りロック可能サイズ
 
                 IZ_BOOL result = m_pVB->Lock(
-                                    m_sVBInfo.offset,
-                                    nLockSize,
-                                    (void**)&m_sVBInfo.buf_ptr,
-                                    IZ_FALSE,
-                                    m_sVBInfo.next_lock_discard);
+                    device,
+                    m_sVBInfo.offset,
+                    nLockSize,
+                    (void**)&m_sVBInfo.buf_ptr,
+                    IZ_FALSE,
+                    m_sVBInfo.next_lock_discard);
                 m_sVBInfo.next_lock_discard = IZ_FALSE;
                 VRETURN(result);
             }
@@ -692,11 +693,12 @@ namespace graph
                                         : m_pIB->GetSize() - m_sIBInfo.offset); // 残りロック可能サイズ
 
                 IZ_BOOL result = m_pIB->Lock(
-                                    m_sIBInfo.offset,
-                                    nLockSize,
-                                    (void**)&m_sIBInfo.buf_ptr,
-                                    IZ_FALSE,
-                                    m_sIBInfo.next_lock_discard);
+                    device,
+                    m_sIBInfo.offset,
+                    nLockSize,
+                    (void**)&m_sIBInfo.buf_ptr,
+                    IZ_FALSE,
+                    m_sIBInfo.next_lock_discard);
                 m_sIBInfo.next_lock_discard = IZ_FALSE;
                 VRETURN(result);
             }
@@ -706,14 +708,14 @@ namespace graph
     }
 
     // アンロック
-    void C2DRenderer::Unlock()
+    void C2DRenderer::Unlock(CGraphicsDevice* device)
     {
         if (IsLock()) {
             // ロックされている
             ToggleIsLock();
 
-            m_pVB->Unlock();
-            m_pIB->Unlock();
+            m_pVB->Unlock(device);
+            m_pIB->Unlock(device);
 
             m_sVBInfo.buf_ptr = IZ_NULL;
             m_sIBInfo.buf_ptr = IZ_NULL;

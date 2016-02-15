@@ -435,7 +435,7 @@ namespace izanagi {
         }
 
         // データをVB、IBにコピーする
-        IZ_BOOL CopyDataToBuffer(IZ_UINT flag)
+        IZ_BOOL CopyDataToBuffer(graph::CGraphicsDevice* device, IZ_UINT flag)
         {
             IZ_ASSERT(m_pVtx != IZ_NULL);
             IZ_ASSERT(m_pFace != IZ_NULL);
@@ -446,7 +446,7 @@ namespace izanagi {
             IZ_UINT32* pIdxData = IZ_NULL;
 
             // インデックス
-            VGOTO(ret = LockIB((void**)&pIdxData), __EXIT__);
+            VGOTO(ret = LockIB(device, (void**)&pIdxData), __EXIT__);
             {
                 for (IZ_UINT i = 0; i < m_nPrimCnt; ++i) {
 #ifdef IZ_COORD_LEFT_HAND
@@ -463,10 +463,10 @@ namespace izanagi {
                     ComputeFace(&m_pFace[i], flag);
                 }
             }
-            VGOTO(ret = UnlockIB(), __EXIT__);
+            VGOTO(ret = UnlockIB(device), __EXIT__);
 
             // 頂点
-            VGOTO(ret = LockVB((void**)&pVtxData), __EXIT__);
+            VGOTO(ret = LockVB(device, (void**)&pVtxData), __EXIT__);
             {
                 IZ_UINT nVtxNum = GetVtxNum();
 
@@ -481,7 +481,7 @@ namespace izanagi {
                                 pVtxData);
                 }
             }
-            VGOTO(ret = UnlockVB(), __EXIT__);
+            VGOTO(ret = UnlockVB(device), __EXIT__);
 
         __EXIT__:
             // もういらない
@@ -490,38 +490,38 @@ namespace izanagi {
             return ret;
         }
 
-        IZ_BOOL LockVB(void** p)
+        IZ_BOOL LockVB(graph::CGraphicsDevice* device, void** p)
         {
             IZ_ASSERT(p != IZ_NULL);
 
-            VRETURN(m_pVB->Lock(0, 0, p, IZ_FALSE));
-            VRETURN(BeginDebugAxisRegister());
+            VRETURN(m_pVB->Lock(device, 0, 0, p, IZ_FALSE));
+            VRETURN(BeginDebugAxisRegister(device));
 
             return IZ_TRUE;
         }
 
-        IZ_BOOL UnlockVB()
+        IZ_BOOL UnlockVB(graph::CGraphicsDevice* device)
         {
-            VRETURN(m_pVB->Unlock());
-            VRETURN(EndDebugAxisRegister());
+            VRETURN(m_pVB->Unlock(device));
+            VRETURN(EndDebugAxisRegister(device));
             
             return IZ_TRUE;
         }
 
-        virtual IZ_BOOL BeginDebugAxisRegister() { return IZ_TRUE; }
-        virtual IZ_BOOL EndDebugAxisRegister() { return IZ_TRUE; }
+        virtual IZ_BOOL BeginDebugAxisRegister(graph::CGraphicsDevice* device) { return IZ_TRUE; }
+        virtual IZ_BOOL EndDebugAxisRegister(graph::CGraphicsDevice* device) { return IZ_TRUE; }
 
-        IZ_BOOL LockIB(void** p)
+        IZ_BOOL LockIB(graph::CGraphicsDevice* device, void** p)
         {
             IZ_ASSERT(p != IZ_NULL);
 
-            VRETURN(m_pIB->Lock(0, 0, p, IZ_FALSE));
+            VRETURN(m_pIB->Lock(device, 0, 0, p, IZ_FALSE));
             return IZ_TRUE;
         }
 
-        IZ_BOOL UnlockIB()
+        IZ_BOOL UnlockIB(graph::CGraphicsDevice* device)
         {
-            return m_pIB->Unlock();
+            return m_pIB->Unlock(device);
         }
 
         // 頂点データセット
@@ -801,8 +801,8 @@ namespace izanagi {
 
         virtual void DrawDebugAxis(graph::CGraphicsDevice* device);
 
-        virtual IZ_BOOL BeginDebugAxisRegister();
-        virtual IZ_BOOL EndDebugAxisRegister();
+        virtual IZ_BOOL BeginDebugAxisRegister(graph::CGraphicsDevice* device);
+        virtual IZ_BOOL EndDebugAxisRegister(graph::CGraphicsDevice* device);
 
         virtual void SetDebugAxisVtxData(
             const void* vtx,

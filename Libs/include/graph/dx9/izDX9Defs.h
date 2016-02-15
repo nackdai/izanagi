@@ -34,40 +34,42 @@ typedef IDirect3DBaseTexture9* TEX_HANDLE_DX9;
 // シェーダ定数ハンドル
 typedef D3DXHANDLE  SHADER_PARAM_HANDLE_DX9;
 
-struct SHADER_PARAM_HANDLE
-{
-    SHADER_PARAM_HANDLE()
+namespace izanagi {
+    struct SHADER_PARAM_HANDLE
     {
-        vsParam = (SHADER_PARAM_HANDLE_DX9)0;
-        psParam = (SHADER_PARAM_HANDLE_DX9)0;
-    }
+        SHADER_PARAM_HANDLE()
+        {
+            vsParam = (SHADER_PARAM_HANDLE_DX9)0;
+            psParam = (SHADER_PARAM_HANDLE_DX9)0;
+        }
 
-    SHADER_PARAM_HANDLE(unsigned int value)
-    {
-        vsParam = (SHADER_PARAM_HANDLE_DX9)value;
-        psParam = (SHADER_PARAM_HANDLE_DX9)value;
-    }
+        SHADER_PARAM_HANDLE(unsigned int value)
+        {
+            vsParam = (SHADER_PARAM_HANDLE_DX9)value;
+            psParam = (SHADER_PARAM_HANDLE_DX9)value;
+        }
 
-    SHADER_PARAM_HANDLE_DX9 vsParam;
-    SHADER_PARAM_HANDLE_DX9 psParam;
+        SHADER_PARAM_HANDLE_DX9 vsParam;
+        SHADER_PARAM_HANDLE_DX9 psParam;
 
-    const SHADER_PARAM_HANDLE& operator =(const SHADER_PARAM_HANDLE& rhs)
-    {
-        vsParam = rhs.vsParam;
-        psParam = rhs.psParam;
-        return *this;
-    }
+        const SHADER_PARAM_HANDLE& operator =(const SHADER_PARAM_HANDLE& rhs)
+        {
+            vsParam = rhs.vsParam;
+            psParam = rhs.psParam;
+            return *this;
+        }
 
-    bool operator ==(const SHADER_PARAM_HANDLE& rhs) const
-    {
-        return (vsParam == rhs.vsParam && psParam == rhs.psParam);
-    }
+        bool operator ==(const SHADER_PARAM_HANDLE& rhs) const
+        {
+            return (vsParam == rhs.vsParam && psParam == rhs.psParam);
+        }
 
-    bool operator !=(const SHADER_PARAM_HANDLE& rhs) const
-    {
-        return !(*this == rhs);
-    }
-};
+        bool operator !=(const SHADER_PARAM_HANDLE& rhs) const
+        {
+            return !(*this == rhs);
+        }
+    };
+}
 
 #define IS_VALID_SHADER_PARAM_HANDLE(handle)    (((handle).vsParam != 0) || ((handle).psParam != 0))
 

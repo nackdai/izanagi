@@ -125,7 +125,7 @@ IZ_BOOL CPostEffectVSManager::InitRenderer(graph::CGraphicsDevice* pDevice)
     }
 
     // 頂点バッファにデータセット
-    if (!SetVertexBuffer()) {
+    if (!SetVertexBuffer(pDevice)) {
         return IZ_FALSE;
     }
 
@@ -142,7 +142,7 @@ IZ_BOOL CPostEffectVSManager::InitRenderer(graph::CGraphicsDevice* pDevice)
 }
 
 // 頂点バッファにデータセット
-IZ_BOOL CPostEffectVSManager::SetVertexBuffer()
+IZ_BOOL CPostEffectVSManager::SetVertexBuffer(graph::CGraphicsDevice* device)
 {
     IZ_ASSERT(m_pVertexBuffer != IZ_NULL);
 
@@ -175,6 +175,7 @@ IZ_BOOL CPostEffectVSManager::SetVertexBuffer()
 
     void* pvoid = IZ_NULL;
     m_pVertexBuffer->Lock(
+        device,
         0, 0,
         &pvoid,
         IZ_FALSE);
@@ -186,7 +187,7 @@ IZ_BOOL CPostEffectVSManager::SetVertexBuffer()
     // データセット
     memcpy(pVertexBuf, &sFVF, sizeof(sFVF));
 
-    m_pVertexBuffer->Unlock();
+    m_pVertexBuffer->Unlock(device);
 
     return IZ_TRUE;
 }

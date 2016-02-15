@@ -4,6 +4,7 @@
 #include "izDefs.h"
 #include "izStd.h"
 #include "graph/GraphResource.h"
+#include "graph/GraphicsDevice.h"
 
 namespace izanagi
 {
@@ -34,6 +35,7 @@ namespace graph
          */
         PURE_VIRTUAL(
             IZ_BOOL Lock(
+                CGraphicsDevice* device,
                 IZ_UINT offset,
                 IZ_UINT size,
                 void** data,
@@ -44,7 +46,7 @@ namespace graph
          *
          * @return If the method succeeds, the return value is true. If the method fails, the return value is false.
          */
-        PURE_VIRTUAL(IZ_BOOL Unlock());
+        PURE_VIRTUAL(IZ_BOOL Unlock(CGraphicsDevice* device));
 
     public:
         /** Lock a range of data and obtains a pointer to the buffer memory internally.
@@ -59,6 +61,7 @@ namespace graph
          * @return If the method succeeds, the return value is true. If the method fails, the return value is false.
          */
         IZ_BOOL LockBuffer(
+            CGraphicsDevice* device,
             IZ_UINT offset,
             IZ_UINT size,
             IZ_BOOL isReadOnly,
@@ -70,7 +73,7 @@ namespace graph
          *
          * @return If the method succeeds, the return value is true. If the method fails, the return value is false.
          */
-        IZ_BOOL UnlockBuffer();
+        IZ_BOOL UnlockBuffer(CGraphicsDevice* device);
 
         /** Write data to an internal pointer to the buffer memory.
          *
@@ -78,7 +81,9 @@ namespace graph
          * @param [in] size Size of the data to write.
          * @return If the method succeeds, the return value is true. If the method fails, the return value is false.
          */
-        IZ_BOOL WriteBuffer(const void* data, size_t size);
+        IZ_BOOL WriteBuffer(
+            CGraphicsDevice* device,
+            const void* data, size_t size);
 
         /** Reads data from an internal pointer to the buffer memory.
          *
@@ -86,7 +91,9 @@ namespace graph
          * @param [in] size Size of the data to read.
          * @return If the method succeeds, the return value is true. If the method fails, the return value is false.
          */
-        IZ_BOOL ReadBuffer(void** data, size_t size);
+        IZ_BOOL ReadBuffer(
+            CGraphicsDevice* device,
+            void** data, size_t size);
 
     protected:
         IZ_UINT8* m_LockedBuffer;

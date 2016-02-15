@@ -114,6 +114,7 @@ namespace graph
 
     // ロック
     IZ_BOOL CVertexBufferDX9::Lock(
+        CGraphicsDevice* device,
         IZ_UINT offset,
         IZ_UINT size,
         void** data,
@@ -157,7 +158,7 @@ namespace graph
     /**
     * アンロック
     */
-    IZ_BOOL CVertexBufferDX9::Unlock()
+    IZ_BOOL CVertexBufferDX9::Unlock(CGraphicsDevice* device)
     {
         IZ_ASSERT(m_VB != IZ_NULL);
     

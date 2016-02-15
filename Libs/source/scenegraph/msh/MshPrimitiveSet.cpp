@@ -44,7 +44,7 @@ namespace {
         IZ_BOOL ret = (pIB != IZ_NULL);
         VGOTO(ret, __EXIT__);
 
-        ret = pIB->Lock(0, 0, &buf, IZ_FALSE);
+        ret = pIB->Lock(pDevice, 0, 0, &buf, IZ_FALSE);
         VGOTO(ret, __EXIT__);
 
         nSize *= (sMeshSubset.fmtIdx == graph::E_GRAPH_INDEX_BUFFER_FMT_INDEX32
@@ -53,7 +53,7 @@ namespace {
 
         IZ_INPUT_READ_ASSERT(pIn, buf, 0, nSize);
 
-        pIB->Unlock();
+        pIB->Unlock(pDevice);
 
 __EXIT__:
         if (!ret) {
@@ -193,7 +193,7 @@ IZ_BOOL CPrimitiveSet::DebugRender(
         m_IsTransform = IZ_TRUE;
 
         SVtx* pVtx = IZ_NULL;
-        VRETURN(m_VB->Lock(0, 0, (void**)&pVtx, IZ_FALSE, IZ_TRUE));
+        VRETURN(m_VB->Lock(pDevice, 0, 0, (void**)&pVtx, IZ_FALSE, IZ_TRUE));
 
         IZ_UINT nVtxNum = m_VB->GetVtxNum();
         
@@ -225,7 +225,7 @@ IZ_BOOL CPrimitiveSet::DebugRender(
             sVtx.pos.y = vPosTmp.y;
             sVtx.pos.z = vPosTmp.z;
         }
-        m_VB->Unlock();
+        m_VB->Unlock(pDevice);
     }
 
     IZ_UINT nStride = m_VB->GetStride();

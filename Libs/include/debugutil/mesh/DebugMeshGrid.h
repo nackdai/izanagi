@@ -36,6 +36,7 @@ namespace izanagi {
 
         // 頂点データセット
         IZ_BOOL SetVtx(
+            graph::CGraphicsDevice* device,
             IZ_UINT flag,
             IZ_COLOR nColor,
             IZ_UINT nGridNumX,
