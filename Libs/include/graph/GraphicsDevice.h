@@ -488,6 +488,18 @@ namespace graph
                 IZ_UINT idxOffset,
                 IZ_UINT nPrimCnt));
 
+        virtual IZ_BOOL DrawIndexedInstancedPrimitive(
+            E_GRAPH_PRIM_TYPE prim_type,
+            IZ_UINT vtxOffset,
+            IZ_UINT vtxNum,
+            IZ_UINT idxOffset,
+            IZ_UINT nPrimCnt);
+
+        virtual IZ_BOOL DrawInstancedPrimitive(
+            E_GRAPH_PRIM_TYPE prim_type,
+            IZ_UINT idxOffset,
+            IZ_UINT nPrimCnt);
+
     public:
         /** Sets the viewport parameters.
          *

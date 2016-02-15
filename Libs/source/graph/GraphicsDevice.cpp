@@ -358,5 +358,22 @@ namespace graph
         return ret;
     }
 
+    IZ_BOOL CGraphicsDevice::DrawIndexedInstancedPrimitive(
+        E_GRAPH_PRIM_TYPE prim_type,
+        IZ_UINT vtxOffset,
+        IZ_UINT vtxNum,
+        IZ_UINT idxOffset,
+        IZ_UINT nPrimCnt)
+    {
+        return DrawIndexedPrimitive(prim_type, vtxOffset, vtxNum, idxOffset, nPrimCnt);
+    }
+
+    IZ_BOOL CGraphicsDevice::DrawInstancedPrimitive(
+        E_GRAPH_PRIM_TYPE prim_type,
+        IZ_UINT idxOffset,
+        IZ_UINT nPrimCnt)
+    {
+        return DrawPrimitive(prim_type, idxOffset, nPrimCnt);
+    }
 }   // namespace graph
 }   // namespace izanagi
