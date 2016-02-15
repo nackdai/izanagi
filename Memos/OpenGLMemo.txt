@@ -1,3 +1,15 @@
+http://media.steampowered.com/apps/valve/2015/Alex_Vlachos_Advanced_VR_Rendering_GDC2015.pdf
+
+High performance stereo Rendering for VR
+http://masafumi.cocolog-nifty.com/masafumis_diary/2015/01/vr-1d45.html
+https://docs.google.com/presentation/d/19x9XDjUvkW_9gsfsMQzt3hZbRNziVsoCEHOn4AercAc/mobilepresent?slide=id.g5791d9ed1_015
+
+Geometry Shaders
+http://www.informit.com/articles/article.aspx?p=2120983&seqNum=2
+
+Approaching zero driver overhead
+http://www.slideshare.net/CassEveritt/approaching-zero-driver-overhead
+
 Reading the OpenGL backbuffer to system memory
 http://lektiondestages.blogspot.jp/2013/01/reading-opengl-backbuffer-to-system.html
 
