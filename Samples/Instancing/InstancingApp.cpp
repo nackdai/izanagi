@@ -195,24 +195,22 @@ void CInstancingApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
                 device->SetIndexBuffer(m_Mesh->GetIB());
 
                 device->SetVertexDeclaration(m_InstancingVD);
-
-                device->SetVertexBuffer(
-                    0, 0,
-                    m_Mesh->GetVB()->GetStride(),
-                    m_Mesh->GetVB());
+                    
                 device->SetVertexBufferInstanced(
                     0,
+                    0,
+                    m_Mesh->GetVB()->GetStride(),
                     izanagi::graph::E_GRAPH_VB_USAGE_INDEXEDDATA,
-                    MeshNum);
+                    MeshNum,
+                    m_Mesh->GetVB());
 
-                device->SetVertexBuffer(
-                    1, 0,
-                    m_InstancingVB->GetStride(),
-                    m_InstancingVB);
                 device->SetVertexBufferInstanced(
                     1,
+                    0,
+                    m_InstancingVB->GetStride(),
                     izanagi::graph::E_GRAPH_VB_USAGE_INSTANCEDATA,
-                    1);
+                    1,
+                    m_InstancingVB);
 
                 device->DrawIndexedInstancedPrimitive(
                     m_Mesh->GetPrimitiveType(),
