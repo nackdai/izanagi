@@ -272,8 +272,11 @@ namespace graph
 
     IZ_BOOL CGraphicsDevice::SetVertexBufferInstanced(
         IZ_UINT streamIdx,
+        IZ_UINT offsetByte,
+        IZ_UINT stride,
         E_GRAPH_VB_USAGE usage,
-        IZ_UINT divisor)
+        IZ_UINT divisor,
+        CVertexBuffer* vb)
     {
         // Not supported...
         IZ_ASSERT(IZ_FALSE);

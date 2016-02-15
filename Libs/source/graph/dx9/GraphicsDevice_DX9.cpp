@@ -634,9 +634,14 @@ namespace graph
 
     IZ_BOOL CGraphicsDeviceDX9::SetVertexBufferInstanced(
         IZ_UINT streamIdx,
+        IZ_UINT offsetByte,
+        IZ_UINT stride,
         E_GRAPH_VB_USAGE usage,
-        IZ_UINT divisor)
+        IZ_UINT divisor,
+        CVertexBuffer* vb)
     {
+        VRETURN(SetVertexBuffer(streamIdx, offsetByte, stride, vb));
+
         VRETURN(m_RenderState.curVB[streamIdx] != IZ_NULL);
         VRETURN(usage < E_GRAPH_VB_USAGE_NUM);
 
