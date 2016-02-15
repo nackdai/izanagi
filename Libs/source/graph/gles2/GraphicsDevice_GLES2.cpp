@@ -359,7 +359,7 @@ namespace graph
 
         if (gles2VB != IZ_NULL) {
             CALL_GL_API(::glBindBuffer(GL_ARRAY_BUFFER, gles2VB->GetRawInterface()));
-            gles2VB->Initialize();
+            gles2VB->Initialize(this);
         }
         else {
             CALL_GL_API(::glBindBuffer(GL_ARRAY_BUFFER, 0));

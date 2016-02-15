@@ -1,13 +1,14 @@
 #include "graph/ogl/GraphicsDevice_OGL.h"
 #include "graph/gles2/Texture_GLES2.h"
 #include "graph/gles2/CubeTexture_GLES2.h"
-#include "graph/gles2/VertexBuffer_GLES2.h"
 #include "graph/gles2/IndexBuffer_GLES2.h"
 #include "graph/gles2/ShaderProgram_GLES2.h"
-#include "graph/gles2/VertexDeclaration_GLES2.h"
 #include "graph/gles2/FrameBufferObject.h"
 #include "graph/gles2/RenderTarget_GLES2.h"
 #include "graph/2d/2DRenderer.h"
+
+#include "graph/ogl/VertexBuffer_OGL.h"
+#include "graph/ogl/VertexDeclaration_OGL.h"
 
 #include <GL/glut.h>
 
@@ -64,6 +65,7 @@ namespace graph
     // コンストラクタ
     CGraphicsDeviceOGL::CGraphicsDeviceOGL()
     {
+        FILL_ZERO(m_divisor, sizeof(m_divisor));
     }
 
     // デストラクタ
@@ -162,6 +164,307 @@ namespace graph
     IZ_BOOL CGraphicsDeviceGLES2::Present()
     {
         glutSwapBuffers();
+        return IZ_TRUE;
+    }
+
+    // 頂点バッファ作成
+    CVertexBuffer* CGraphicsDeviceOGL::CreateVertexBuffer(
+        IZ_UINT stride,
+        IZ_UINT vtxNum,
+        E_GRAPH_RSC_USAGE usage)
+    {
+        CVertexBufferOGL* pVB = CVertexBufferOGL::CreateVertexBuffer(
+            this,
+            m_Allocator,
+            stride,
+            vtxNum,
+            usage);
+
+        return pVB;
+    }
+
+    // 頂点宣言作成
+    CVertexDeclaration* CGraphicsDeviceOGL::CreateVertexDeclaration(const SVertexElement* pElem, IZ_UINT nNum)
+    {
+        CVertexDeclaration* ret = CVertexDeclarationOGL::CreateVertexDeclaration(
+            m_Allocator,
+            pElem,
+            nNum);
+        return ret;
+    }
+
+    // 頂点バッファセット
+    IZ_BOOL CGraphicsDeviceOGL::SetVertexBuffer(
+        IZ_UINT nStreamIdx,
+        IZ_UINT nOffsetByte,
+        IZ_UINT nStride,
+        CVertexBuffer* pVB)
+    {
+        if (m_RenderState.curVB[nStreamIdx] == pVB) {
+            // すでに設定されている
+            return IZ_TRUE;
+        }
+
+        CVertexBufferOGL* oglVB = reinterpret_cast<CVertexBufferOGL*>(pVB);
+
+        if (oglVB != IZ_NULL) {
+            CALL_GL_API(::glBindBuffer(GL_ARRAY_BUFFER, oglVB->GetRawInterface()));
+            oglVB->Initialize(this);
+        }
+        else {
+            CALL_GL_API(::glBindBuffer(GL_ARRAY_BUFFER, 0));
+        }
+
+        // 現在設定されているものとして保持
+        SAFE_REPLACE(m_RenderState.curVB[nStreamIdx], pVB);
+
+        return IZ_TRUE;
+    }
+
+    IZ_BOOL CGraphicsDeviceOGL::SetVertexBufferInstanced(
+        IZ_UINT streamIdx,
+        IZ_UINT offsetByte,
+        IZ_UINT stride,
+        E_GRAPH_VB_USAGE usage,
+        IZ_UINT divisor,
+        CVertexBuffer* vb)
+    {
+        if (m_RenderState.curVB[streamIdx] == vb) {
+            // すでに設定されている
+            return IZ_TRUE;
+        }
+
+        IZ_ASSERT(streamIdx < COUNTOF(m_divisor));
+
+        if (usage == E_GRAPH_VB_USAGE::E_GRAPH_VB_USAGE_INDEXEDDATA) {
+            m_numInstancingPrim = divisor;
+        }
+        else {
+            m_divisor[streamIdx] = divisor;
+        }
+
+        // 現在設定されているものとして保持
+        SAFE_REPLACE(m_RenderState.curVB[streamIdx], vb);
+
+        return IZ_TRUE;
+    }
+
+    IZ_BOOL CGraphicsDeviceOGL::DrawIndexedInstancedPrimitive(
+        E_GRAPH_PRIM_TYPE prim_type,
+        IZ_UINT vtxOffset,
+        IZ_UINT vtxNum,
+        IZ_UINT idxOffset,
+        IZ_UINT nPrimCnt)
+    {
+        CShaderProgramGLES2* gles2Program = reinterpret_cast<CShaderProgramGLES2*>(m_RenderState.curShader);
+        CVertexDeclarationOGL* vd = reinterpret_cast<CVertexDeclarationOGL*>(m_RenderState.curVD);
+
+        // NOTE
+        // ShaderProgramがセットされないとシェーダユニフォームの取得、設定ができないので
+        // 頂点宣言の反映、テクスチャのセットなどをこのタイミングでやる
+
+        IZ_ASSERT(m_RenderState.curVD != IZ_NULL);
+        IZ_ASSERT(m_RenderState.curVB != IZ_NULL);
+
+        vd->ApplyForInstancing(
+            gles2Program,
+            vtxOffset,
+            m_RenderState.curVB[0]->GetStride(),
+            m_divisor);
+
+
+        // NOTE
+        // ShaderCompilerによってsamplerレジスタに応じたユニフォーム名が設定されている
+        static const char* samplerName[TEX_STAGE_NUM] =
+        {
+            "s0", "s1", "s2", "s3", "s4", "s5", "s6", "s7",
+        };
+
+        for (IZ_UINT i = 0; i < TEX_STAGE_NUM; i++) {
+            if (m_IsDirtyTex[i]
+                && m_Texture[i] != IZ_NULL)
+            {
+                if (m_IsDirtyShaderProgram) {
+                    m_SamplerHandle[i] = gles2Program->GetHandleByName(samplerName[i]);
+                    IZ_ASSERT(m_SamplerHandle[i] >= 0);
+                }
+
+                CALL_GL_API(::glActiveTexture(GL_TEXTURE0 + i));
+
+                GLenum type = (m_Texture[i]->GetTexType() == E_GRAPH_TEX_TYPE_PLANE
+                    ? GL_TEXTURE_2D
+                    : GL_TEXTURE_CUBE_MAP);
+
+                GLuint handle = m_Texture[i]->GetTexHandle();
+
+                CALL_GL_API(::glBindTexture(type, handle));
+
+                gles2Program->SetInt(this, m_SamplerHandle[i], i);
+            }
+
+            m_IsDirtyTex[i] = IZ_FALSE;
+        }
+
+        IZ_UINT idxNum = 0;
+
+        // プリミティブタイプからインデックス数を計算
+        switch (prim_type)
+        {
+        case E_GRAPH_PRIM_TYPE_POINTLIST:
+            idxNum = nPrimCnt;
+            break;
+        case E_GRAPH_PRIM_TYPE_LINELIST:
+            idxNum = nPrimCnt * 2;
+            break;
+        case E_GRAPH_PRIM_TYPE_LINESTRIP:
+            idxNum = nPrimCnt + 1;
+            break;
+        case E_GRAPH_PRIM_TYPE_TRIANGLELIST:
+            idxNum = nPrimCnt * 3;
+            break;
+        case E_GRAPH_PRIM_TYPE_TRIANGLESTRIP:
+            idxNum = nPrimCnt + 2;
+            break;
+        case E_GRAPH_PRIM_TYPE_TRIANGLEFAN:
+            idxNum = nPrimCnt + 2;
+            break;
+        default:
+            IZ_ASSERT(IZ_FALSE);
+            break;
+        }
+
+        GLenum mode = CParamValueConverterGLES2::ConvAbstractToTarget_PrimType(prim_type);
+
+        IZ_ASSERT(m_RenderState.curIB != IZ_NULL);
+
+#if 1
+        E_GRAPH_INDEX_BUFFER_FMT idxFmt = m_RenderState.curIB->GetFormat();
+        GLenum type = CTargetParamValueConverter::ConvAbstractToTarget_IdxBufFmt(idxFmt);
+
+        IZ_UINT offset = idxFmt == E_GRAPH_INDEX_BUFFER_FMT_INDEX16
+            ? idxOffset * sizeof(IZ_UINT16)
+            : idxOffset * sizeof(IZ_UINT32);
+#else
+        GLenum type = GL_UNSIGNED_SHORT;
+
+        // TODO
+        IZ_ASSERT(m_RenderState.curIB->GetIdxNum() <= IZ_UINT16_MAX);
+
+        // NOTE
+        // glDrawElements に渡すオフセットはバイト数
+        // しかし、ここにわたってくるオフセットはインデックス位置のオフセット
+        // そのため、バイトオフセットに変換する
+        IZ_UINT offset = idxOffset * sizeof(IZ_USHORT);
+#endif
+
+        IZ_ASSERT(m_numInstancingPrim > 0);
+
+        CALL_GL_API(::glDrawElementsInstanced(
+            mode,
+            idxNum,
+            type,
+            (const GLvoid*)offset,
+            m_numInstancingPrim));
+
+        m_IsDirtyShaderProgram = IZ_FALSE;
+
+        return IZ_TRUE;
+    }
+
+    IZ_BOOL CGraphicsDeviceOGL::DrawInstancedPrimitive(
+        E_GRAPH_PRIM_TYPE prim_type,
+        IZ_UINT idxOffset,
+        IZ_UINT nPrimCnt)
+    {
+        CShaderProgramGLES2* gles2Program = reinterpret_cast<CShaderProgramGLES2*>(m_RenderState.curShader);
+        CVertexDeclarationOGL* vd = reinterpret_cast<CVertexDeclarationOGL*>(m_RenderState.curVD);
+
+        // NOTE
+        // ShaderProgramがセットされないとシェーダユニフォームの取得、設定ができないので
+        // 頂点宣言の反映、テクスチャのセットなどをこのタイミングでやる
+
+        IZ_ASSERT(m_RenderState.curVD != IZ_NULL);
+        IZ_ASSERT(m_RenderState.curVB != IZ_NULL);
+
+        vd->ApplyForInstancing(
+            gles2Program,
+            0,
+            m_RenderState.curVB[0]->GetStride(),
+            m_divisor);
+
+        // NOTE
+        // ShaderCompilerによってsamplerレジスタに応じたユニフォーム名が設定されている
+        static const char* samplerName[TEX_STAGE_NUM] =
+        {
+            "s0", "s1", "s2", "s3", "s4", "s5", "s6", "s7",
+        };
+
+        for (IZ_UINT i = 0; i < TEX_STAGE_NUM; i++) {
+            if (m_IsDirtyTex[i]
+                && m_Texture[i] != IZ_NULL)
+            {
+                if (m_IsDirtyShaderProgram) {
+                    m_SamplerHandle[i] = gles2Program->GetHandleByName(samplerName[i]);
+                }
+
+                if (m_SamplerHandle[i] >= 0) {
+                    CALL_GL_API(::glActiveTexture(GL_TEXTURE0 + i));
+
+                    GLenum type = (m_Texture[i]->GetTexType() == E_GRAPH_TEX_TYPE_PLANE
+                        ? GL_TEXTURE_2D
+                        : GL_TEXTURE_CUBE_MAP);
+
+                    GLuint handle = m_Texture[i]->GetTexHandle();
+
+                    CALL_GL_API(::glBindTexture(type, handle));
+
+                    gles2Program->SetInt(this, m_SamplerHandle[i], i);
+                }
+            }
+
+            m_IsDirtyTex[i] = IZ_FALSE;
+        }
+
+        IZ_UINT vtxNum = 0;
+
+        // プリミティブタイプからインデックス数を計算
+        switch (prim_type)
+        {
+        case E_GRAPH_PRIM_TYPE_POINTLIST:
+            vtxNum = nPrimCnt;
+            break;
+        case E_GRAPH_PRIM_TYPE_LINELIST:
+            vtxNum = nPrimCnt * 2;
+            break;
+        case E_GRAPH_PRIM_TYPE_LINESTRIP:
+            vtxNum = nPrimCnt + 1;
+            break;
+        case E_GRAPH_PRIM_TYPE_TRIANGLELIST:
+            vtxNum = nPrimCnt * 3;
+            break;
+        case E_GRAPH_PRIM_TYPE_TRIANGLESTRIP:
+            vtxNum = nPrimCnt + 2;
+            break;
+        case E_GRAPH_PRIM_TYPE_TRIANGLEFAN:
+            vtxNum = nPrimCnt + 2;
+            break;
+        default:
+            IZ_ASSERT(IZ_FALSE);
+            break;
+        }
+
+        GLenum mode = CParamValueConverterGLES2::ConvAbstractToTarget_PrimType(prim_type);
+
+        IZ_ASSERT(m_numInstancingPrim > 0);
+
+        CALL_GL_API(::glDrawArraysInstanced(
+            mode,
+            idxOffset,
+            vtxNum,
+            m_numInstancingPrim));
+
+        m_IsDirtyShaderProgram = IZ_FALSE;
+
         return IZ_TRUE;
     }
 }   // namespace graph

@@ -11,7 +11,44 @@ namespace graph {
         virtual ~CGraphicsDeviceOGL();
 
     public:
-        virtual IZ_BOOL Reset(const void* initialParam);
+        // 頂点バッファ作成
+        virtual CVertexBuffer* CreateVertexBuffer(
+            IZ_UINT nStride,
+            IZ_UINT nVtxNum,
+            E_GRAPH_RSC_USAGE nCreateType) override;
+
+        // 頂点宣言作成
+        virtual CVertexDeclaration* CreateVertexDeclaration(const SVertexElement* pElem, IZ_UINT nNum) override;
+
+    public:
+        virtual IZ_BOOL Reset(const void* initialParam) override;
+
+        // 頂点バッファセット
+        virtual IZ_BOOL SetVertexBuffer(
+            IZ_UINT nStreamIdx,
+            IZ_UINT nOffsetByte,
+            IZ_UINT nStride,
+            CVertexBuffer* pVB) override;
+
+        virtual IZ_BOOL SetVertexBufferInstanced(
+            IZ_UINT streamIdx,
+            IZ_UINT offsetByte,
+            IZ_UINT stride,
+            E_GRAPH_VB_USAGE usage,
+            IZ_UINT divisor,
+            CVertexBuffer* vb) override;
+
+        virtual IZ_BOOL DrawIndexedInstancedPrimitive(
+            E_GRAPH_PRIM_TYPE prim_type,
+            IZ_UINT vtxOffset,
+            IZ_UINT vtxNum,
+            IZ_UINT idxOffset,
+            IZ_UINT nPrimCnt) override;
+
+        virtual IZ_BOOL DrawInstancedPrimitive(
+            E_GRAPH_PRIM_TYPE prim_type,
+            IZ_UINT idxOffset,
+            IZ_UINT nPrimCnt) override;
 
         virtual IZ_BOOL CheckRenderTargetCount(IZ_UINT cnt) override
         {
@@ -19,6 +56,13 @@ namespace graph {
             VRETURN(0 < cnt);
             return IZ_TRUE;
         }
+
+    private:
+        // TODO
+        // Number of this array is not tentative.
+        IZ_UINT m_divisor[8];   // For instancing.
+
+        IZ_UINT m_numInstancingPrim{ 0 };
     };
 }   // namespace graph
 }   // namespace izanagi

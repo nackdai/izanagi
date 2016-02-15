@@ -176,6 +176,12 @@
     <ClCompile Include="..\..\source\graph\web\GraphicsDevice_web.cpp">
       <Filter>source\web</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\graph\ogl\VertexDeclaration_OGL.cpp">
+      <Filter>source\ogl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\graph\ogl\VertexBuffer_OGL.cpp">
+      <Filter>source\ogl</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\source\graph\2d\shader\2DShader.hlsl">
@@ -350,6 +356,12 @@
     </ClInclude>
     <ClInclude Include="..\..\include\graph\web\izWebGLDefs.h">
       <Filter>include\web</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\ogl\VertexDeclaration_OGL.h">
+      <Filter>include\ogl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\ogl\VertexBuffer_OGL.h">
+      <Filter>include\ogl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

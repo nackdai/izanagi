@@ -15,6 +15,7 @@ namespace graph
     {
         friend class CGraphicsDeviceGLES2;
 
+    protected:
         enum State {
             None,
             Enabled,
@@ -30,11 +31,11 @@ namespace graph
             const SVertexElement* pElem,
             IZ_UINT nElemNum);
 
-    private:
+    protected:
         inline CVertexDeclarationGLES2();
         virtual inline ~CVertexDeclarationGLES2();
 
-    private:
+    protected:
         IZ_UINT GetElemNum() const;
 
         const SVertexElement* GetElements() const;

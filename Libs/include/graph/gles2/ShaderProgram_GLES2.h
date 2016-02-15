@@ -17,6 +17,7 @@ namespace graph
     {
         friend class CGraphicsDeviceGLES2;
         friend class CVertexDeclarationGLES2;
+        friend class CVertexDeclarationOGL;
 
         static CShaderProgram* CreateShaderProgram(IMemoryAllocator* allocator);
 

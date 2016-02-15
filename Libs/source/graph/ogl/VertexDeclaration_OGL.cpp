@@ -1,28 +1,26 @@
-#include "graph/gles2/VertexDeclaration_GLES2.h"
+#include "graph/ogl/VertexDeclaration_OGL.h"
 #include "graph/gles2/ShaderProgram_GLES2.h"
-#include "graph/gles2/GraphicsDevice_GLES2.h"
-#include "graph/ParamValueConverter.h"
-#include "graph/VertexBuffer.h"
+
+// NOTE
+// http://blog.techlab-xe.net/archives/2870
 
 namespace izanagi
 {
 namespace graph
 {
-    CVertexDeclarationGLES2::State CVertexDeclarationGLES2::s_EnabledAttribIndex[16] = { CVertexDeclarationGLES2::None };
-
     // インスタンス作成
-    CVertexDeclaration* CVertexDeclarationGLES2::CreateVertexDeclaration(
+    CVertexDeclaration* CVertexDeclarationOGL::CreateVertexDeclaration(
         IMemoryAllocator* allocator,
         const SVertexElement* elem,
         IZ_UINT elemNum)
     {
-        size_t size = sizeof(CVertexDeclarationGLES2);
+        size_t size = sizeof(CVertexDeclarationOGL);
         size += sizeof(SVertexElement) * elemNum;
 
         IZ_UINT8* buf = (IZ_UINT8*)ALLOC(allocator, size);
         VRETURN_NULL(buf != IZ_NULL);
 
-        CVertexDeclarationGLES2* instance = new (buf) CVertexDeclarationGLES2;
+        CVertexDeclarationOGL* instance = new (buf)CVertexDeclarationOGL;
         {
             instance->AddRef();
 
@@ -42,35 +40,11 @@ namespace graph
         return instance;
     }
 
-    // コンストラクタ
-    CVertexDeclarationGLES2::CVertexDeclarationGLES2()
-    {
-        m_Allocator = IZ_NULL;
-        m_ElemNum = 0;
-        m_Elements = IZ_NULL;
-    }
-
-    // デストラクタ
-    CVertexDeclarationGLES2::~CVertexDeclarationGLES2()
-    {
-        m_ElemNum = 0;
-        FREE(m_Allocator, m_Elements);
-    }
-
-    IZ_UINT CVertexDeclarationGLES2::GetElemNum() const
-    {
-        return m_ElemNum;
-    }
-
-    const SVertexElement* CVertexDeclarationGLES2::GetElements() const
-    {
-        return m_Elements;
-    }
-
-    IZ_BOOL CVertexDeclarationGLES2::Apply(
+    IZ_BOOL CVertexDeclarationOGL::ApplyForInstancing(
         CShaderProgramGLES2* program,
         IZ_UINT vtxOffset,
-        IZ_UINT vtxStride)
+        IZ_UINT vtxStride,
+        IZ_UINT* divisors)
     {
         for (IZ_UINT i = 0; i < COUNTOF(s_EnabledAttribIndex); i++) {
             s_EnabledAttribIndex[i] = (s_EnabledAttribIndex[i] == Enabled ? Disabled : s_EnabledAttribIndex[i]);
@@ -82,10 +56,6 @@ namespace graph
 
             if (attribIndex >= 0) {
                 const SVertexElement& element = m_Elements[i];
-
-                // NOTE
-                // VBOを使う場合は常に１ストリームのみ
-                IZ_ASSERT(element.Stream == 0);
 
                 // NOTE
                 // Semanticによる頂点データの位置は無視するm_Elementsの並び順通りに設定する
@@ -184,8 +154,7 @@ namespace graph
                 // そのため、バイトオフセットに変換する
                 IZ_UINT offset = vtxOffset * vtxStride;
 
-                CALL_GL_API(
-                    ::glVertexAttribPointer(
+                CALL_GL_API(::glVertexAttribPointer(
                         attribIndex,
                         num,
                         type,
@@ -194,93 +163,25 @@ namespace graph
                         (void*)(offset + element.Offset)));
 
                 CALL_GL_API(::glEnableVertexAttribArray(attribIndex));
+
+                // For instancing.
+                auto divisor = divisors[element.Stream];
+                CALL_GL_API(::glVertexAttribDivisor(attribIndex, divisor));
+
                 s_EnabledAttribIndex[attribIndex] = Enabled;
             }
         }
 
         for (IZ_UINT i = 0; i < COUNTOF(s_EnabledAttribIndex); i++) {
             if (s_EnabledAttribIndex[i] == Disabled) {
+                CALL_GL_API(::glVertexAttribDivisor(i, 0));
                 CALL_GL_API(::glDisableVertexAttribArray(i));
+
                 s_EnabledAttribIndex[i] = None;
             }
         }
 
         return IZ_TRUE;
-    }
-
-    const char* CVertexDeclarationGLES2::GetAttribName(IZ_UINT elementIdx)
-    {
-        IZ_ASSERT(elementIdx < m_ElemNum);
-
-        // NOTE
-        // glBindAttribLocation は必ず glLinkProgram よりも前に呼ばれなければいけない
-
-        const SVertexElement& element = m_Elements[elementIdx];
-
-        // NOTE
-        // VBOを使う場合は常に１ストリームのみ
-        //IZ_ASSERT(element.Stream == 0);
-
-        static const char* names[] = 
-        {
-            "position",
-            "texcoord_0",
-            "texcoord_1",
-            "texcoord_2",
-            "texcoord_3",
-            "texcoord_4",
-            "texcoord_5",
-            "texcoord_6",
-            "texcoord_7",
-            "color_0",
-            "color_1",
-            "color_2",
-            "color_3",
-            "normal",
-            "tangent",
-            "blendweight",
-            "blendindices",
-        };
-
-        static const IZ_UINT positionNameIdx = 0;
-        static const IZ_UINT texcoordNameIdx = 1;
-        static const IZ_UINT colorNameIdx = 9;
-        static const IZ_UINT normalNameIdx = 13;
-        static const IZ_UINT tangentNameIdx = 14;
-        static const IZ_UINT blendWeightNameIdx = 15;
-        static const IZ_UINT blendIndicesNameIdx = 16;
-
-        const char* name;
-
-        switch (element.Usage)
-        {
-        case E_GRAPH_VTX_DECL_USAGE_POSITION:
-            name = names[positionNameIdx];
-            break;
-        case E_GRAPH_VTX_DECL_USAGE_NORMAL:
-            name = names[normalNameIdx];
-            break;
-        case E_GRAPH_VTX_DECL_USAGE_TEXCOORD:
-            name = names[texcoordNameIdx + element.UsageIndex];
-            break;
-        case E_GRAPH_VTX_DECL_USAGE_TANGENT:
-            name = names[tangentNameIdx];
-            break;
-        case E_GRAPH_VTX_DECL_USAGE_COLOR:
-            name = names[colorNameIdx + element.UsageIndex];
-            break;
-        case E_GRAPH_VTX_DECL_USAGE_BLENDWEIGHT:
-            name = names[blendWeightNameIdx];
-            break;
-        case E_GRAPH_VTX_DECL_USAGE_BLENDINDICES:
-            name = names[blendIndicesNameIdx];
-            break;
-        default:
-            IZ_ASSERT(IZ_FALSE);
-            break;
-        }
-
-        return name;
     }
 }   // namespace graph
 }   // namespace izanagi
