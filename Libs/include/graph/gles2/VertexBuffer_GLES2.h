@@ -24,11 +24,11 @@ namespace graph
             IZ_UINT vtxNum,
             E_GRAPH_RSC_USAGE usage);
 
-    private:
+    protected:
         inline CVertexBufferGLES2();
         virtual inline ~CVertexBufferGLES2();
 
-    private:
+    protected:
         // 本体作成
         IZ_BOOL CreateBody(
             IZ_UINT stride,
@@ -40,6 +40,7 @@ namespace graph
     public:
         // ロック
         virtual IZ_BOOL Lock(
+            CGraphicsDevice* device,
             IZ_UINT offset,
             IZ_UINT size,
             void** data,
@@ -47,7 +48,7 @@ namespace graph
             IZ_BOOL isDiscard = IZ_FALSE);
 
         // アンロック
-        virtual IZ_BOOL Unlock();
+        virtual IZ_BOOL Unlock(CGraphicsDevice* device);
 
     public:
         virtual IZ_BOOL IsPrepared() const;
@@ -59,7 +60,7 @@ namespace graph
     private:
         GLuint GetRawInterface() { return m_VB; }
 
-    private:
+    protected:
         CGraphicsDeviceGLES2* m_Device;
 
         // 本体

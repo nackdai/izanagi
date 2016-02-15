@@ -131,6 +131,7 @@ namespace graph
 
     // ロック
     IZ_BOOL CIndexBufferGLES2::Lock(
+        CGraphicsDevice* device,
         IZ_UINT offset,
         IZ_UINT size,
         void** data,
@@ -177,7 +178,7 @@ namespace graph
     /**
     * アンロック
     */
-    IZ_BOOL CIndexBufferGLES2::Unlock()
+    IZ_BOOL CIndexBufferGLES2::Unlock(CGraphicsDevice* device)
     {
         IZ_ASSERT(m_IB > 0);
     
