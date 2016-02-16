@@ -102,7 +102,7 @@ namespace sys
 
         E_KEYBOARD_BUTTON mappedKey = CSysWindow::GetKeyMap(key);
 
-        CWindowGLUT::s_Instance->GetHandler()->OnKeyUp(mappedKey);
+        CWindowGLUT::s_Instance->GetHandler()->OnKeyDown(mappedKey);
     }
 
     static void KeyUp(unsigned char key, int x, int y)
