@@ -1,5 +1,8 @@
 http://media.steampowered.com/apps/valve/2015/Alex_Vlachos_Advanced_VR_Rendering_GDC2015.pdf
 
+gl_ClipDistance
+https://www.opengl.org/sdk/docs/man/html/gl_ClipDistance.xhtml
+
 High performance stereo Rendering for VR
 http://masafumi.cocolog-nifty.com/masafumis_diary/2015/01/vr-1d45.html
 https://docs.google.com/presentation/d/19x9XDjUvkW_9gsfsMQzt3hZbRNziVsoCEHOn4AercAc/mobilepresent?slide=id.g5791d9ed1_015
