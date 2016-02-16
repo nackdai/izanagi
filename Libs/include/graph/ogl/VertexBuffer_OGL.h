@@ -40,6 +40,11 @@ namespace graph
         // アンロック
         virtual IZ_BOOL Unlock(CGraphicsDevice* device) override;
 
+        GLuint GetRawInterface()
+        {
+            return m_VB;
+        }
+
     private:
         GLuint m_prevVB{ 0 };
         IZ_BOOL m_isLocked{ IZ_FALSE };

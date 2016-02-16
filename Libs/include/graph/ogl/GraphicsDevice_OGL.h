@@ -2,6 +2,7 @@
 #define __IZANAGI_GRPAH_GRAPHICS_DEVICE_OGL_H__
 
 #include "graph/gles2/GraphicsDevice_GLES2.h"
+#include "graph/ogl/VertexDeclaration_OGL.h"
 
 namespace izanagi {
 namespace graph {
@@ -58,10 +59,7 @@ namespace graph {
         }
 
     private:
-        // TODO
-        // Number of this array is not tentative.
-        IZ_UINT m_divisor[8];   // For instancing.
-
+        InstancingParam m_instancingParams[MAX_STREAM_NUM];
         IZ_UINT m_numInstancingPrim{ 0 };
     };
 }   // namespace graph

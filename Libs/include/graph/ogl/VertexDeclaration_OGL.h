@@ -9,6 +9,14 @@ namespace graph
 {
     class CGraphicsDeviceGLES2;
     class CShaderProgramGLES2;
+    class CVertexBuffer;
+
+    struct InstancingParam
+    {
+        IZ_UINT divisor{ 0 };
+        IZ_UINT offset{ 0 };
+        IZ_UINT stride{ 0 };
+    };
 
     // 頂点宣言
     class CVertexDeclarationOGL : public CVertexDeclarationGLES2
@@ -29,9 +37,8 @@ namespace graph
     private:
         IZ_BOOL ApplyForInstancing(
             CShaderProgramGLES2* program,
-            IZ_UINT vtxOffset,
-            IZ_UINT vtxStride,
-            IZ_UINT* divisors);
+            InstancingParam* params,
+            CVertexBuffer** vbs);
     };
 }   // namespace graph
 }   // namespace izanagi

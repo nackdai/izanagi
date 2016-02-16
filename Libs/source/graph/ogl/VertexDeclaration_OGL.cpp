@@ -1,4 +1,5 @@
 #include "graph/ogl/VertexDeclaration_OGL.h"
+#include "graph/ogl/VertexBuffer_OGL.h"
 #include "graph/gles2/ShaderProgram_GLES2.h"
 
 // NOTE
@@ -42,13 +43,14 @@ namespace graph
 
     IZ_BOOL CVertexDeclarationOGL::ApplyForInstancing(
         CShaderProgramGLES2* program,
-        IZ_UINT vtxOffset,
-        IZ_UINT vtxStride,
-        IZ_UINT* divisors)
+        InstancingParam* params,
+        CVertexBuffer** vbs)
     {
         for (IZ_UINT i = 0; i < COUNTOF(s_EnabledAttribIndex); i++) {
             s_EnabledAttribIndex[i] = (s_EnabledAttribIndex[i] == Enabled ? Disabled : s_EnabledAttribIndex[i]);
         }
+
+        IZ_UINT curStream = IZ_UINT32_MAX;
 
         for (IZ_UINT i = 0; i < m_ElemNum; i++) {
             const char* attribName = GetAttribName(i);
@@ -56,6 +58,18 @@ namespace graph
 
             if (attribIndex >= 0) {
                 const SVertexElement& element = m_Elements[i];
+
+                auto stream = element.Stream;
+
+                auto& param = params[stream];
+
+                auto handleVB = ((CVertexBufferOGL*)vbs[stream])->GetRawInterface();
+
+                if (curStream != stream) {
+                    CALL_GL_API(::glBindBuffer(GL_ARRAY_BUFFER, handleVB));
+                }
+
+                curStream = stream;
 
                 // NOTE
                 // Semanticによる頂点データの位置は無視するm_Elementsの並び順通りに設定する
@@ -152,20 +166,20 @@ namespace graph
                 // glVertexAttribPointer に渡すオフセットはバイト数
                 // しかし、ここにわたってくるオフセットは頂点位置のオフセット
                 // そのため、バイトオフセットに変換する
-                IZ_UINT offset = vtxOffset * vtxStride;
+                IZ_UINT offset = param.offset * param.stride;
 
                 CALL_GL_API(::glVertexAttribPointer(
                         attribIndex,
                         num,
                         type,
                         needNormalized ? GL_TRUE : GL_FALSE,
-                        vtxStride,
+                        param.stride,
                         (void*)(offset + element.Offset)));
 
                 CALL_GL_API(::glEnableVertexAttribArray(attribIndex));
 
                 // For instancing.
-                auto divisor = divisors[element.Stream];
+                auto divisor = param.divisor;
                 CALL_GL_API(::glVertexAttribDivisor(attribIndex, divisor));
 
                 s_EnabledAttribIndex[attribIndex] = Enabled;

@@ -65,7 +65,6 @@ namespace graph
     // コンストラクタ
     CGraphicsDeviceOGL::CGraphicsDeviceOGL()
     {
-        FILL_ZERO(m_divisor, sizeof(m_divisor));
     }
 
     // デストラクタ
@@ -234,14 +233,18 @@ namespace graph
             return IZ_TRUE;
         }
 
-        IZ_ASSERT(streamIdx < COUNTOF(m_divisor));
+        IZ_ASSERT(streamIdx < COUNTOF(m_instancingParams));
 
         if (usage == E_GRAPH_VB_USAGE::E_GRAPH_VB_USAGE_INDEXEDDATA) {
             m_numInstancingPrim = divisor;
+            m_instancingParams[streamIdx].divisor = 0;
         }
         else {
-            m_divisor[streamIdx] = divisor;
+            m_instancingParams[streamIdx].divisor = divisor;
         }
+
+        m_instancingParams[streamIdx].offset = offsetByte;
+        m_instancingParams[streamIdx].stride = stride;
 
         // 現在設定されているものとして保持
         SAFE_REPLACE(m_RenderState.curVB[streamIdx], vb);
@@ -266,12 +269,12 @@ namespace graph
         IZ_ASSERT(m_RenderState.curVD != IZ_NULL);
         IZ_ASSERT(m_RenderState.curVB != IZ_NULL);
 
+        m_instancingParams[0].offset += vtxOffset * m_instancingParams[0].stride;
+
         vd->ApplyForInstancing(
             gles2Program,
-            vtxOffset,
-            m_RenderState.curVB[0]->GetStride(),
-            m_divisor);
-
+            m_instancingParams,
+            m_RenderState.curVB);
 
         // NOTE
         // ShaderCompilerによってsamplerレジスタに応じたユニフォーム名が設定されている
@@ -388,9 +391,8 @@ namespace graph
 
         vd->ApplyForInstancing(
             gles2Program,
-            0,
-            m_RenderState.curVB[0]->GetStride(),
-            m_divisor);
+            m_instancingParams,
+            m_RenderState.curVB);
 
         // NOTE
         // ShaderCompilerによってsamplerレジスタに応じたユニフォーム名が設定されている
