@@ -84,9 +84,9 @@ IZ_BOOL CSampleEnvBox::Init(izanagi::graph::CGraphicsDevice* device)
         VRETURN(m_VB != IZ_NULL);
 
         SVertex* data;
-        m_VB->Lock(0, 0, (void**)&data, IZ_FALSE);
+        m_VB->Lock(device, 0, 0, (void**)&data, IZ_FALSE);
         memcpy(data, sVtxList, sizeof(sVtxList));
-        m_VB->Unlock();
+        m_VB->Unlock(device);
     }
 
     // インデックスバッファ
@@ -98,9 +98,9 @@ IZ_BOOL CSampleEnvBox::Init(izanagi::graph::CGraphicsDevice* device)
         VRETURN(m_IB != IZ_NULL);
 
         IZ_UINT16* data;
-        m_IB->Lock(0, 0, (void**)&data, IZ_FALSE);
+        m_IB->Lock(device, 0, 0, (void**)&data, IZ_FALSE);
         memcpy(data, sIdxList, sizeof(sIdxList));
-        m_IB->Unlock();
+        m_IB->Unlock(device);
     }
 
     // 頂点宣言
