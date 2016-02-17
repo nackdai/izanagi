@@ -11,7 +11,7 @@ varying vec2 var_TexCoord_0;
 
 uniform mat4 mtxW2C;
 
-vec2 EyeClipEdge = vec2(-1.0, 1.0);
+vec2 EyeClipEdge = vec2(1.0, -1.0);
 vec2 EyeOffsetScale = vec2(0.5, -0.5);
 
 // NOTE
@@ -21,12 +21,7 @@ void main()
 {
     gl_Position = mtxW2C * position;
 
-    // TODO
-    // なぜか、EyeClipEdge[gl_InstanceID]が取得できない...
-    // NSIGHTのシェーダーデバッグで見ないとわからない...
-
-    gl_ClipDistance[0] = dot(gl_Position, vec4(-1, 0, 0, 1));
-    //gl_ClipDistance[0] = dot(gl_Position, vec4(EyeClipEdge[gl_InstanceID], 0.0, 0.0, 1.0));
+    gl_ClipDistance[0] = dot(gl_Position, vec4(EyeClipEdge[gl_InstanceID], 0.0, 0.0, 1.0));
     gl_CullDistance[0] = gl_ClipDistance[0];
 
     gl_Position.x *= 0.5;
