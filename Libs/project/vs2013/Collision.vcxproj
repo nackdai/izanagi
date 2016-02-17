@@ -291,12 +291,16 @@
     <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\include\collision\ColAABB.h" />
+    <ClInclude Include="..\..\include\collision\ColFrustum.h" />
     <ClInclude Include="..\..\include\collision\ColPlane.h" />
     <ClInclude Include="..\..\include\collision\ColRay.h" />
     <ClInclude Include="..\..\include\collision\ColRectangle.h" />
     <ClInclude Include="..\..\include\collision\ColTriangle.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\source\collision\ColAABB.cpp" />
+    <ClCompile Include="..\..\source\collision\ColFrustum.cpp" />
     <ClCompile Include="..\..\source\collision\ColPlane.cpp" />
     <ClCompile Include="..\..\source\collision\ColRay.cpp" />
     <ClCompile Include="..\..\source\collision\ColRectangle.cpp" />
