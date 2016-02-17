@@ -30,6 +30,14 @@ protected:
     virtual IZ_BOOL OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key) override;
 
 private:
+    izanagi::CDebugMesh* m_Mesh;
+
+    izanagi::CImage* m_Img;
+
+    izanagi::graph::CVertexShader* m_vs{ nullptr };
+    izanagi::graph::CPixelShader* m_ps{ nullptr };
+
+    izanagi::graph::CShaderProgram* m_shd{ nullptr };
 };
 
 #endif    // #if !defined(__MULTI_VIEW_APP_H__)

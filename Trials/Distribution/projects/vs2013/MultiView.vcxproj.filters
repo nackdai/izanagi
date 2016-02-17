@@ -15,10 +15,29 @@
     <Filter Include="source">
       <UniqueIdentifier>{6ccbed9d-f62b-4081-a713-bc1b80e943da}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shader">
+      <UniqueIdentifier>{5788f857-b2a4-447c-a34b-ed97e80d99aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="asset">
+      <UniqueIdentifier>{a32e85d9-cdd8-4c66-948a-30acbcfa21d2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\MultiView\MultiViewApp.h">
       <Filter>include</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\MultiView\shader\ps.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\MultiView\shader\vs.glsl">
+      <Filter>shader</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\..\..\Media\earth.xml">
+      <Filter>asset</Filter>
+    </CustomBuild>
   </ItemGroup>
 </Project>
