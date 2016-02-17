@@ -23,7 +23,7 @@ IZ_BOOL PointSpriteApp::InitInternal(
             izanagi::graph::E_GRAPH_RSC_USAGE_STATIC);
 
         Vertex* vtx;
-        auto pitch = m_vb->Lock(0, 0, (void**)&vtx, IZ_FALSE);
+        auto pitch = m_vb->Lock(device, 0, 0, (void**)&vtx, IZ_FALSE);
 
         static const IZ_COLOR colors[] = {
             IZ_COLOR_RGBA(0xff, 0, 0, 0xff),
@@ -43,7 +43,7 @@ IZ_BOOL PointSpriteApp::InitInternal(
             vtx[i].color = colors[i % COUNTOF(colors)];
         }
 
-        m_vb->Unlock();
+        m_vb->Unlock(device);
     }
 
     {
