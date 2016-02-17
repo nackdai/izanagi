@@ -1,4 +1,4 @@
-#include "DistributionApp.h"
+#include "CaptureApp.h"
 
 // NOTE
 // DirectX3D 9 でスクリーンショットを撮る方法
@@ -13,7 +13,7 @@ static const IZ_FLOAT DISTANCE = RADIUS * 2.0f;
 static const IZ_UINT ORDER = 20;
 static const IZ_UINT THREAD_NUM = 6;
 
-CDistributionApp::CDistributionApp()
+CaptureApp::CaptureApp()
 {
     m_Mesh = IZ_NULL;
 
@@ -22,12 +22,12 @@ CDistributionApp::CDistributionApp()
     m_Shader = IZ_NULL;
 }
 
-CDistributionApp::~CDistributionApp()
+CaptureApp::~CaptureApp()
 {
 }
 
 // 初期化.
-IZ_BOOL CDistributionApp::InitInternal(
+IZ_BOOL CaptureApp::InitInternal(
     izanagi::IMemoryAllocator* allocator,
     izanagi::graph::CGraphicsDevice* device,
     izanagi::sample::CSampleCamera& camera)
@@ -151,7 +151,7 @@ __EXIT__:
 }
 
 // 解放.
-void CDistributionApp::ReleaseInternal()
+void CaptureApp::ReleaseInternal()
 {
     SAFE_RELEASE(m_Mesh);
 
@@ -166,7 +166,7 @@ void CDistributionApp::ReleaseInternal()
 }
 
 // 更新.
-void CDistributionApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
+void CaptureApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
     auto& camera = GetCamera();
     
@@ -287,7 +287,7 @@ namespace {
 }
 
 // 描画.
-void CDistributionApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
+void CaptureApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
 #if 0
     izanagi::sys::CTimer timer;
@@ -437,7 +437,7 @@ void CDistributionApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     }
 }
 
-IZ_BOOL CDistributionApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
+IZ_BOOL CaptureApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
 {
 #if 0
     static const IZ_UINT MESH_NUM_ORDER = 100;

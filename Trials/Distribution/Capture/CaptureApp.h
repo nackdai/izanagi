@@ -1,5 +1,5 @@
-#if !defined(__DISTRIBUTION_APP_H__)
-#define __DISTRIBUTION_APP_H__
+#if !defined(__CAPTURE_APP_H__)
+#define __CAPTURE_APP_H__
 
 #include "izSampleKit.h"
 #include "izThreadModel.h"
@@ -15,10 +15,10 @@
 static const IZ_UINT SCREEN_WIDTH = 1280;
 static const IZ_UINT SCREEN_HEIGHT = 720;
 
-class CDistributionApp : public izanagi::sample::CSampleApp {
+class CaptureApp : public izanagi::sample::CSampleApp {
 public:
-    CDistributionApp();
-    virtual ~CDistributionApp();
+    CaptureApp();
+    virtual ~CaptureApp();
 
 protected:
     // 初期化.
@@ -73,4 +73,4 @@ private:
     DxtEncoder m_dxtEncoder;
 };
 
-#endif    // #if !defined(__INSTANCING_APP_H__)
+#endif    // #if !defined(__CAPTURE_APP_H__)

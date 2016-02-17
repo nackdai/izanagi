@@ -49,13 +49,13 @@
     <ClCompile Include="..\..\Capture\DxtEncoder.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Capture\DisutribtuionApp.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Capture\CaptureManager2.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Capture\CaptureManager.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Capture\CaptureApp.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>

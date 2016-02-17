@@ -491,9 +491,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Capture\CaptureApp.cpp" />
     <ClCompile Include="..\..\Capture\CaptureManager.cpp" />
     <ClCompile Include="..\..\Capture\CaptureManager2.cpp" />
-    <ClCompile Include="..\..\Capture\DisutribtuionApp.cpp" />
     <ClCompile Include="..\..\Capture\DxtEncoder.cpp" />
     <ClCompile Include="..\..\Capture\FBOManager.cpp" />
     <ClCompile Include="..\..\Capture\FBOManager2.cpp" />
