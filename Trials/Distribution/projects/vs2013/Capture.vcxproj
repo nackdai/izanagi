@@ -52,7 +52,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C439FE0E-4B0C-4600-AC2C-36A2FC57F01D}</ProjectGuid>
-    <RootNamespace>Distribution</RootNamespace>
+    <RootNamespace>Capture</RootNamespace>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -429,10 +429,10 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|x64'">$(PROJECT_MAIN_DIR)data\%(Filename).img;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_OGL|x64'">$(PROJECT_MAIN_DIR)data\%(Filename).img;%(Outputs)</Outputs>
     </CustomBuild>
-    <None Include="..\..\Distribution\shader\2DVS.glsl" />
-    <None Include="..\..\Distribution\shader\dxt.glsl" />
-    <None Include="..\..\Distribution\shader\Shader.fx" />
-    <CustomBuild Include="..\..\Distribution\shader\Shader.xml">
+    <None Include="..\..\Capture\shader\2DVS.glsl" />
+    <None Include="..\..\Capture\shader\dxt.glsl" />
+    <None Include="..\..\Capture\shader\Shader.fx" />
+    <CustomBuild Include="..\..\Capture\shader\Shader.xml">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(TOOL_DIR)Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"
@@ -491,23 +491,23 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Distribution\CaptureManager.cpp" />
-    <ClCompile Include="..\..\Distribution\CaptureManager2.cpp" />
-    <ClCompile Include="..\..\Distribution\DisutribtuionApp.cpp" />
-    <ClCompile Include="..\..\Distribution\DxtEncoder.cpp" />
-    <ClCompile Include="..\..\Distribution\FBOManager.cpp" />
-    <ClCompile Include="..\..\Distribution\FBOManager2.cpp" />
-    <ClCompile Include="..\..\Distribution\FrameCapture.cpp" />
-    <ClCompile Include="..\..\Distribution\main.cpp" />
+    <ClCompile Include="..\..\Capture\CaptureManager.cpp" />
+    <ClCompile Include="..\..\Capture\CaptureManager2.cpp" />
+    <ClCompile Include="..\..\Capture\DisutribtuionApp.cpp" />
+    <ClCompile Include="..\..\Capture\DxtEncoder.cpp" />
+    <ClCompile Include="..\..\Capture\FBOManager.cpp" />
+    <ClCompile Include="..\..\Capture\FBOManager2.cpp" />
+    <ClCompile Include="..\..\Capture\FrameCapture.cpp" />
+    <ClCompile Include="..\..\Capture\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Distribution\CaptureManager.h" />
-    <ClInclude Include="..\..\Distribution\CaptureManager2.h" />
-    <ClInclude Include="..\..\Distribution\DistributionApp.h" />
-    <ClInclude Include="..\..\Distribution\DxtEncoder.h" />
-    <ClInclude Include="..\..\Distribution\FBOManager.h" />
-    <ClInclude Include="..\..\Distribution\FBOManager2.h" />
-    <ClInclude Include="..\..\Distribution\FrameCapture.h" />
+    <ClInclude Include="..\..\Capture\CaptureManager.h" />
+    <ClInclude Include="..\..\Capture\CaptureManager2.h" />
+    <ClInclude Include="..\..\Capture\CaptureApp.h" />
+    <ClInclude Include="..\..\Capture\DxtEncoder.h" />
+    <ClInclude Include="..\..\Capture\FBOManager.h" />
+    <ClInclude Include="..\..\Capture\FBOManager2.h" />
+    <ClInclude Include="..\..\Capture\FrameCapture.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
