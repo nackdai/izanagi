@@ -70,11 +70,12 @@ namespace shader
                     }
                 }
                 else {
-				    pShader->SetVectorArray(
+                    pShader->SetVectorArray(
                         device,
-				        handle,
-				        (const math::SVector4*)pValue,
-				        nRow * nElements);
+                        handle,
+                        (const math::SVector4*)pValue,
+                        //nRow * nElements);
+                        nRow);
                 }
                     
 			}
