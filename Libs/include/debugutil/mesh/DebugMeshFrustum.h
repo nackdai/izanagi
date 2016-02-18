@@ -16,7 +16,7 @@ namespace izanagi {
             graph::CGraphicsDevice* pDevice,
             IZ_COLOR nColor,
             IZ_FLOAT fAspect,
-            IZ_FLOAT fFov,
+            IZ_FLOAT horizontalFOV,
             IZ_FLOAT fNear, IZ_FLOAT fFar);
 
     protected:
@@ -39,7 +39,7 @@ namespace izanagi {
             graph::CGraphicsDevice* device,
             IZ_COLOR nColor,
             IZ_FLOAT fAspect,
-            IZ_FLOAT fFov,
+            IZ_FLOAT horizontalFOV,
             IZ_FLOAT fNear, IZ_FLOAT fFar);
 
     public:

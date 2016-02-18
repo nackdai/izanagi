@@ -8,7 +8,7 @@ CDebugMeshFrustum* CDebugMeshFrustum::CreateDebugMeshFrustum(
     graph::CGraphicsDevice* pDevice,
     IZ_COLOR nColor,
     IZ_FLOAT fAspect,
-    IZ_FLOAT fFov,
+    IZ_FLOAT horizontalFOV,
     IZ_FLOAT fNear, IZ_FLOAT fFar)
 {
     IZ_ASSERT(pAllocator != IZ_NULL);
@@ -33,7 +33,7 @@ CDebugMeshFrustum* CDebugMeshFrustum::CreateDebugMeshFrustum(
         pDevice,
         nColor,
         fAspect,
-        fFov,
+        horizontalFOV,
         fNear, fFar);
     VGOTO(result, __EXIT__);
 
@@ -64,13 +64,16 @@ IZ_BOOL CDebugMeshFrustum::SetVtx(
     graph::CGraphicsDevice* device,
     IZ_COLOR nColor,
     IZ_FLOAT fAspect,
-    IZ_FLOAT fFov,
+    IZ_FLOAT horizontalFOV,
     IZ_FLOAT fNear, IZ_FLOAT fFar)
 {
-    IZ_FLOAT fTangent = math::CMath::TanF(fFov * 0.5f);
+    // NOTE
+    // fAspect = width / height
 
-    IZ_FLOAT fWidth = 2.0f * fTangent * fFar;
-    IZ_FLOAT fHeight = fWidth / fAspect;
+    IZ_FLOAT fTangent = math::CMath::TanF(horizontalFOV * 0.5f);
+
+    IZ_FLOAT fHeight = 2.0f * fTangent * fFar;
+    IZ_FLOAT fWidth = fHeight * fAspect;
 
     IZ_FLOAT fW = fWidth * 0.5f;
     IZ_FLOAT fH = fHeight * 0.5f;
