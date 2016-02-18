@@ -22,7 +22,7 @@ namespace izanagi {
             const math::SVector4& pos,
             const math::SVector4& at,
             IZ_FLOAT fNear, IZ_FLOAT fFar,
-            IZ_FLOAT fov,
+            IZ_FLOAT horizontalFOV,
             IZ_FLOAT aspect);
 
         /** カメラ更新.

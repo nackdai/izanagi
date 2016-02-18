@@ -18,14 +18,14 @@ void CVectorCamera::Init(
     const math::SVector4& pos,
     const math::SVector4& at,
     IZ_FLOAT fNear, IZ_FLOAT fFar,
-    IZ_FLOAT fov,
+    IZ_FLOAT horizontalFOV,
     IZ_FLOAT aspect)
 {
     CCamera::Init(
         pos, at,
         math::CVector4(0.0f, 1.0f, 0.0f, 0.0f),
         fNear, fFar,
-        fov,
+        horizontalFOV,
         aspect);
 
     math::SMatrix44::SetUnit(m_Transform);

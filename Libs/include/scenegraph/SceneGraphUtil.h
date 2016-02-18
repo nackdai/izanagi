@@ -30,7 +30,7 @@ namespace izanagi {
          */
         static IZ_FLOAT ComputeScreenDistance(
             IZ_FLOAT screenHeight,
-            IZ_FLOAT fov);
+            IZ_FLOAT horizontalFOV);
 
         /** クリップ座標取得.
          */

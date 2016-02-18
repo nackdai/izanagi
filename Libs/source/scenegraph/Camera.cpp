@@ -18,7 +18,7 @@ void CCamera::Init(
 {
     m_Param.cameraNear = fNear;
     m_Param.cameraFar = fFar;
-    m_Param.fov = fFov;
+    m_Param.horizontalFOV = fFov;
 
     m_Param.aspect = fAspect;
 
@@ -38,7 +38,7 @@ void CCamera::Init(const SCameraParam& sParam)
         sParam.up,
         sParam.cameraNear,
         sParam.cameraFar,
-        sParam.fov,
+        sParam.horizontalFOV,
         sParam.aspect);
 }
 
@@ -149,9 +149,9 @@ void CCamera::SetFar(IZ_FLOAT fFar)
 }
 
 // カメラの画角をセット.
-void CCamera::SetFOV(IZ_FLOAT fFOV)
+void CCamera::SetHorizontalFOV(IZ_FLOAT _horizontalFOV)
 {
-    m_Param.fov = fFOV;
+    m_Param.horizontalFOV = _horizontalFOV;
     m_IsDirtyV2C = IZ_TRUE;
 }
 
@@ -222,7 +222,7 @@ void CCamera::ComputeV2C()
     math::SMatrix44::SetUnit(m_Param.mtxV2C);
 
     // Use Vertical FOV
-    const IZ_FLOAT fH = 1 / tanf(m_Param.fov * 0.5f);
+    const IZ_FLOAT fH = 1 / tanf(m_Param.horizontalFOV * 0.5f);
     const IZ_FLOAT fW = fH / m_Param.aspect;
 
     const IZ_FLOAT fQ = -m_Param.cameraFar / (m_Param.cameraFar - m_Param.cameraNear);

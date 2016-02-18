@@ -25,11 +25,11 @@ namespace izanagi {
     // スクリーン距離計算
     IZ_FLOAT CSceneGraphUtil::ComputeScreenDistance(
         IZ_FLOAT screenHeight,
-        IZ_FLOAT fov)
+        IZ_FLOAT horizontalFOV)
     {
         // NOTE
         // (H/2)/S = tan(θ/2) <=> S = (H/2)/tan(θ/2)
-        IZ_FLOAT ret = screenHeight * 0.5f / tanf(fov * 0.5f);
+        IZ_FLOAT ret = screenHeight * 0.5f / tanf(horizontalFOV * 0.5f);
         return ret;
     }
 
@@ -168,7 +168,7 @@ namespace izanagi {
         const IZ_INT nCx = nW >> 1;
         const IZ_INT nCy = nH >> 1;
 
-        const IZ_FLOAT fTan = tanf(camera.fov * 0.5f);
+        const IZ_FLOAT fTan = tanf(camera.horizontalFOV * 0.5f);
         const IZ_FLOAT fAspect = camera.aspect;
 
         // Scree -> Clip
