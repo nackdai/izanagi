@@ -212,6 +212,8 @@ namespace graph
                 Initialize(device);
             }
 
+            VtxBufferOperator vbOp(device, m_VB);
+
             IZ_UINT8* tmp = reinterpret_cast<IZ_UINT8*>(m_TemporaryData);
             tmp += m_LockOffset;
 
