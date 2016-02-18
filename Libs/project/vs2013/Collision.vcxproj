@@ -292,11 +292,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\collision\ColAABB.h" />
+    <ClInclude Include="..\..\include\collision\ColBoundingBox.h" />
     <ClInclude Include="..\..\include\collision\ColFrustum.h" />
     <ClInclude Include="..\..\include\collision\ColPlane.h" />
     <ClInclude Include="..\..\include\collision\ColRay.h" />
     <ClInclude Include="..\..\include\collision\ColRectangle.h" />
     <ClInclude Include="..\..\include\collision\ColTriangle.h" />
+    <ClInclude Include="..\..\include\izCollision.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\collision\ColAABB.cpp" />
