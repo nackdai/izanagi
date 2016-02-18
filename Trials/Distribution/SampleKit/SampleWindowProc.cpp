@@ -126,17 +126,7 @@ void CSampleWndProc::OnIdle()
 {
     IZ_ASSERT(m_App != IZ_NULL);
 
-    m_App->GetTimer(0).Begin();
-    m_App->GetTimer(1).Begin();
-
-    m_App->Update();
-    m_App->Render();
-
-    m_App->GetTimer(1).End();
-
-    m_App->Present();
-
-    m_App->GetTimer(0).End();
+    m_App->Idle();
 }
 
 void CSampleWndProc::OnInit(const izanagi::sys::WindowHandle& handle)
