@@ -22,7 +22,7 @@ namespace col
         void initialize(
             IZ_FLOAT fNear,
             IZ_FLOAT fFar,
-            IZ_FLOAT horizontalFOV,
+            IZ_FLOAT verticalFOV,
             IZ_FLOAT aspect);
 
         void initialize(const math::SMatrix44& mtxW2C);

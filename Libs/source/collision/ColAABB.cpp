@@ -75,13 +75,13 @@ namespace col
     {
         // ボックスを構成する3軸を計算.
         math::CVector4 x;
-        x.x += m_length.x * 0.5f;
+        x.x = m_length.x;
 
         math::CVector4 y;
-        y.y += m_length.y * 0.5f;
+        y.y = m_length.y;
 
         math::CVector4 z;
-        z.z += m_length.z * 0.5f;
+        z.z = m_length.z;
 
         // 実効半径を計算.
         IZ_FLOAT radius = math::CMath::Absf(math::SVector4::Dot(x, normal));
@@ -98,13 +98,13 @@ namespace col
     {
         // ボックスを構成する3軸を計算.
         math::CVector4 x;
-        x.x += m_length.x * 0.5f;
+        x.x = m_length.x;
 
         math::CVector4 y;
-        y.y += m_length.y * 0.5f;
+        y.y = m_length.y;
 
         math::CVector4 z;
-        z.z += m_length.z * 0.5f;
+        z.z = m_length.z;
 
         math::SMatrix44::ApplyXYZ(x, x, mtxW2V);
         math::SMatrix44::ApplyXYZ(y, y, mtxW2V);

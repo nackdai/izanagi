@@ -19,29 +19,35 @@ namespace col
     void Frustum::initialize(
         IZ_FLOAT fNear,
         IZ_FLOAT fFar,
-        IZ_FLOAT horizontalFOV,
+        IZ_FLOAT verticalFOV,
         IZ_FLOAT aspect)
     {
         // NOTE
         // http://ramblingsofagamedevstudent.blogspot.jp/2013/01/graphics-programming-frustum-culling.html
         // OpenGLベース（右手座標系）なので、Zの向きを反対にする必要がある.
 
-        IZ_FLOAT e = 1.0f / ::tanf(horizontalFOV * 0.5f);
+        // NOTE
+        // 画角が水平ではなく、垂直なので、アスペクト比は w/h となっている.
+        // そのため、3Dグラフィックス数学とは縦、横の面の式が入れ替わる.
 
-        aspect = 1.0f / aspect;
+        IZ_FLOAT e = 1.0f / ::tanf(verticalFOV * 0.5f);
 
         m_planes[Plane::Near].Set(0.0f, 0.0f, 1.0f, fNear);
         m_planes[Plane::Far].Set(0.0f, 0.0f, -1.0f, fFar);
 
-        IZ_FLOAT normalizedFactor = 1.0f / sqrtf(e * e + 1);
+        //IZ_FLOAT normalizedFactor = 1.0f / sqrtf(e * e + 1);
+        IZ_FLOAT normalizedFactor = 1.0f / sqrtf(e * e + aspect * aspect);
 
-        m_planes[Plane::Left].Set(e * normalizedFactor, 0.0f, normalizedFactor, 0.0f);
-        m_planes[Plane::Right].Set(-e * normalizedFactor, 0.0f, normalizedFactor, 0.0f);
+        m_planes[Plane::Left].Set(e * normalizedFactor, 0.0f, aspect * normalizedFactor, 0.0f);
+        m_planes[Plane::Right].Set(-e * normalizedFactor, 0.0f, aspect * normalizedFactor, 0.0f);
 
-        normalizedFactor = 1.0f / sqrtf(e * e + aspect * aspect);
+        //normalizedFactor = 1.0f / sqrtf(e * e + aspect * aspect);
+        normalizedFactor = 1.0f / sqrtf(e * e + 1);
 
-        m_planes[Plane::Top].Set(0.0f, -e * normalizedFactor, aspect * normalizedFactor, 0.0f);
-        m_planes[Plane::Bottom].Set(0.0f, e * normalizedFactor, aspect * normalizedFactor, 0.0f);
+        //m_planes[Plane::Top].Set(0.0f, -e * normalizedFactor, aspect * normalizedFactor, 0.0f);
+        //m_planes[Plane::Bottom].Set(0.0f, e * normalizedFactor, aspect * normalizedFactor, 0.0f);
+        m_planes[Plane::Top].Set(0.0f, -e * normalizedFactor, normalizedFactor, 0.0f);
+        m_planes[Plane::Bottom].Set(0.0f, e * normalizedFactor, normalizedFactor, 0.0f);
 
         math::SVector4::Normalize(m_planes[Plane::Left], m_planes[Plane::Left]);
         math::SVector4::Normalize(m_planes[Plane::Right], m_planes[Plane::Right]);
@@ -69,7 +75,6 @@ namespace col
         for (IZ_UINT i = 0; i < Plane::Num; i++) {
             math::SMatrix44::Apply(m_planes[i], m_planes[i], mtxTransposeW2C);
 
-            
             auto length = math::SVector3::Length((const math::SVector3&)m_planes[i]);
             math::SVector4::Div(m_planes[i], m_planes[i], length);
         }
@@ -93,7 +98,7 @@ namespace col
                 m_planes[i].z,
                 0.0f);
 
-#if 0
+#if 1
             // 実効半径を計算.
             auto radius = box->computeRadius(mtxW2V, nml);
 
