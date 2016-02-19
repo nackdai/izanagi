@@ -1,5 +1,7 @@
 #include "FrustumCullingApp.h"
 
+#define FRUSTUM_INTERSECT_EX
+
 FrustumCullingApp::FrustumCullingApp()
 {
     m_Shader = IZ_NULL;
@@ -16,6 +18,11 @@ IZ_BOOL FrustumCullingApp::InitInternal(
     izanagi::sample::CSampleCamera& camera)
 {
     IZ_BOOL result = IZ_TRUE;
+
+    IZ_FLOAT fNear = 1.0f;
+    IZ_FLOAT fFar = 500.0f;
+    IZ_FLOAT verticalFOV = izanagi::math::CMath::Deg2Rad(60.0f);
+    IZ_FLOAT aspect = (IZ_FLOAT)device->GetBackBufferWidth() / device->GetBackBufferHeight();
 
     // Axis
     m_Axis = izanagi::CDebugMeshAxis::CreateDebugMeshAxisDefault(
@@ -37,10 +44,10 @@ IZ_BOOL FrustumCullingApp::InitInternal(
         allocator,
         device,
         IZ_COLOR_RGBA(0xff, 0, 0, 0x80),
-        (IZ_FLOAT)device->GetBackBufferWidth() / device->GetBackBufferHeight(),
-        izanagi::math::CMath::Deg2Rad(60.0f),
-        1.0f,
-        500.0f);
+        aspect,
+        verticalFOV,
+        fNear,
+        fFar);
 
     IZ_UINT flag = izanagi::E_DEBUG_MESH_VTX_FORM_POS
                     | izanagi::E_DEBUG_MESH_VTX_FORM_COLOR;
@@ -83,24 +90,25 @@ IZ_BOOL FrustumCullingApp::InitInternal(
         izanagi::math::CVector4(0.0f, 00.0f, 30.0f, 1.0f),
         izanagi::math::CVector4(0.0f, 0.0f, 0.0f, 1.0f),
         izanagi::math::CVector4(0.0f, 1.0f, 0.0f, 1.0f),
-        1.0f,
-        500.0f,
-        izanagi::math::CMath::Deg2Rad(60.0f),
-        (IZ_FLOAT)device->GetBackBufferWidth() / device->GetBackBufferHeight());
+        fNear,
+        fFar,
+        verticalFOV,
+        aspect);
     camera.Update();
 
     const auto& mtxW2V = camera.GetParam().mtxW2V;
     izanagi::math::SMatrix44::Copy(m_mtxW2V, mtxW2V);
     izanagi::math::SMatrix44::Inverse(m_mtxL2W_Frustum, mtxW2V);
 
-#if 0
+    const auto& mtxW2C = camera.GetParam().mtxW2C;
+    izanagi::math::SMatrix44::Copy(m_mtxW2C, mtxW2C);
+
+#ifndef FRUSTUM_INTERSECT_EX
     m_frustum.initialize(
-        1.0f,
-        500.0f,
-        izanagi::math::CMath::Deg2Rad(60.0f),
-        (IZ_FLOAT)device->GetBackBufferWidth() / device->GetBackBufferHeight());
-#else
-    m_frustum.initialize(camera.GetParam().mtxW2C);
+        fNear,
+        fFar,
+        verticalFOV,
+        aspect));
 #endif
 
 __EXIT__:
@@ -212,6 +220,10 @@ void FrustumCullingApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
                 (void*)&camera.GetParam().mtxW2C,
                 sizeof(camera.GetParam().mtxW2C));
 
+#ifdef FRUSTUM_INTERSECT_EX
+            m_frustum.computePlane(m_mtxW2C);
+#endif
+
             for (IZ_UINT i = 0; i < CUBE_NUM; i++)
             {
                 _SetShaderParam(
@@ -220,9 +232,13 @@ void FrustumCullingApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
                     (void*)&m_cubes[i].mtxL2W,
                     sizeof(izanagi::math::SMatrix44));
 
+#ifdef FRUSTUM_INTERSECT_EX
+                auto isIntersect = m_frustum.isIntersect(&m_cubes[i].aabb);
+#else
                 auto isIntersect = m_frustum.isIntersect(
                     &m_cubes[i].aabb,
                     m_mtxW2V);
+#endif
 
                 izanagi::math::SVector4 color;
                 if (isIntersect) {

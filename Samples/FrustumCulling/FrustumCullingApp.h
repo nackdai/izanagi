@@ -46,6 +46,7 @@ private:
     izanagi::col::Frustum m_frustum;
 
     izanagi::math::SMatrix44 m_mtxW2V;
+    izanagi::math::SMatrix44 m_mtxW2C;
     izanagi::math::SMatrix44 m_mtxL2W_Frustum;
 };
 
