@@ -19,6 +19,12 @@
     <ClCompile Include="..\..\source\collision\ColTriangle.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\collision\octree\OctreeElement.cpp">
+      <Filter>source\octree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\collision\octree\OctreeNode.cpp">
+      <Filter>source\octree</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\collision\ColAABB.h">
@@ -43,6 +49,15 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\izCollision.h" />
+    <ClInclude Include="..\..\include\collision\octree\Octree.h">
+      <Filter>include\octree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\collision\octree\OctreeNode.h">
+      <Filter>include\octree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\collision\octree\OctreeElement.h">
+      <Filter>include\octree</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="include">
@@ -50,6 +65,12 @@
     </Filter>
     <Filter Include="source">
       <UniqueIdentifier>{177ea879-8306-4140-9f21-6d84c72775d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\octree">
+      <UniqueIdentifier>{5e91b6c2-b77a-4630-8381-380567f8c2aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\octree">
+      <UniqueIdentifier>{52a4ac5c-503d-4cd7-b3fd-ffe81c92f1d2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -298,6 +298,9 @@
     <ClInclude Include="..\..\include\collision\ColRay.h" />
     <ClInclude Include="..\..\include\collision\ColRectangle.h" />
     <ClInclude Include="..\..\include\collision\ColTriangle.h" />
+    <ClInclude Include="..\..\include\collision\octree\Octree.h" />
+    <ClInclude Include="..\..\include\collision\octree\OctreeElement.h" />
+    <ClInclude Include="..\..\include\collision\octree\OctreeNode.h" />
     <ClInclude Include="..\..\include\izCollision.h" />
   </ItemGroup>
   <ItemGroup>
@@ -307,6 +310,8 @@
     <ClCompile Include="..\..\source\collision\ColRay.cpp" />
     <ClCompile Include="..\..\source\collision\ColRectangle.cpp" />
     <ClCompile Include="..\..\source\collision\ColTriangle.cpp" />
+    <ClCompile Include="..\..\source\collision\octree\OctreeElement.cpp" />
+    <ClCompile Include="..\..\source\collision\octree\OctreeNode.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
