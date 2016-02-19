@@ -11,7 +11,7 @@ namespace izanagi {
         IZ_FLOAT cameraNear;    ///< near
         IZ_FLOAT cameraFar;     ///< far
 
-        IZ_FLOAT horizontalFOV; ///< 縦画角(Horizontal Field Of View)
+        IZ_FLOAT verticalFOV; ///< 縦画角(Vertical Field Of View)
 
         IZ_FLOAT aspect;        ///< アスペクト比(aspect = width / height)
 
@@ -99,7 +99,7 @@ namespace izanagi {
 
 		/** カメラの画角をセット.
 		 */
-        void SetHorizontalFOV(IZ_FLOAT _horizontalFOV);
+        void SetVerticalFOV(IZ_FLOAT _verticalFOV);
 
 		/** カメラのアスペクト比をセット.
 		 */
