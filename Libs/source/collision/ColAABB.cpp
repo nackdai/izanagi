@@ -28,7 +28,7 @@ namespace col
     const AABB& AABB::operator = (const AABB& rhs)
     {
         m_min.Set(rhs.m_min);
-        m_length.Set(rhs.m_length);
+        m_size.Set(rhs.m_size);
         return *this;
     }
 
@@ -38,9 +38,9 @@ namespace col
     {
         m_min.Set(minPtr);
 
-        m_length.x = maxPtr.x - minPtr.x;
-        m_length.y = maxPtr.y - minPtr.y;
-        m_length.z = maxPtr.z - minPtr.z;
+        m_size.x = maxPtr.x - minPtr.x;
+        m_size.y = maxPtr.y - minPtr.y;
+        m_size.z = maxPtr.z - minPtr.z;
     }
 
     void AABB::initialize(
@@ -55,9 +55,9 @@ namespace col
         m_min.y -= lengthY * 0.5f;
         m_min.z -= lengthZ * 0.5f;
 
-        m_length.x = lengthX;
-        m_length.y = lengthY;
-        m_length.z = lengthZ;
+        m_size.x = lengthX;
+        m_size.y = lengthY;
+        m_size.z = lengthZ;
     }
 
     void AABB::apply(const math::SMatrix44& mtx)
@@ -75,13 +75,13 @@ namespace col
     {
         // ボックスを構成する3軸を計算.
         math::CVector4 x;
-        x.x = m_length.x;
+        x.x = m_size.x;
 
         math::CVector4 y;
-        y.y = m_length.y;
+        y.y = m_size.y;
 
         math::CVector4 z;
-        z.z = m_length.z;
+        z.z = m_size.z;
 
         // 実効半径を計算.
         IZ_FLOAT radius = math::CMath::Absf(math::SVector4::Dot(x, normal));
@@ -98,13 +98,13 @@ namespace col
     {
         // ボックスを構成する3軸を計算.
         math::CVector4 x;
-        x.x = m_length.x;
+        x.x = m_size.x;
 
         math::CVector4 y;
-        y.y = m_length.y;
+        y.y = m_size.y;
 
         math::CVector4 z;
-        z.z = m_length.z;
+        z.z = m_size.z;
 
         // View座標系に変換.
         math::SMatrix44::ApplyXYZ(x, x, mtxW2V);
@@ -126,11 +126,43 @@ namespace col
 
         center.Set(m_min);
 
-        center.x += m_length.x * 0.5f;
-        center.y += m_length.y * 0.5f;
-        center.z += m_length.z * 0.5f;
+        center.x += m_size.x * 0.5f;
+        center.y += m_size.y * 0.5f;
+        center.z += m_size.z * 0.5f;
 
         return center;
+    }
+
+    // 最小座標を取得.
+    const math::SVector4 AABB::getMin() const
+    {
+        return m_min;
+    }
+
+    // 最大座標を取得.
+    const math::SVector4 AABB::getMax() const
+    {
+        math::SVector4 ret;
+
+        ret.Set(m_min);
+
+        ret.x += m_size.x;
+        ret.y += m_size.y;
+        ret.z += m_size.z;
+
+        return ret;
+    }
+
+    void AABB::makeCubic()
+    {
+        // 最大のサイズを取得.
+        IZ_FLOAT maxSize = IZ_MAX(m_size.x, m_size.y);
+        maxSize = IZ_MAX(maxSize, m_size.z);
+
+        // 全部同じサイズにする.
+        m_size.x = maxSize;
+        m_size.y = maxSize;
+        m_size.z = maxSize;
     }
 }   // namespace math
 }   // namespace izanagi

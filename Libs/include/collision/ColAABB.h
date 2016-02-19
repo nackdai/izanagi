@@ -57,9 +57,21 @@ namespace col
          */
         virtual const math::SVector4 getCenter() const override;
 
+        /** Å¬À•W‚ğæ“¾.
+         */
+        const math::SVector4 getMin() const;
+
+        /** Å‘åÀ•W‚ğæ“¾.
+         */
+        const math::SVector4 getMax() const;
+
+        /** —§•û‘Ì‚É‚·‚é.
+         */
+        void makeCubic();
+
     protected:
         math::SVector4 m_min;
-        math::SVector3 m_length;
+        math::SVector3 m_size;
     };
 }   // namespace math
 }   // namespace izanagi
