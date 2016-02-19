@@ -106,6 +106,7 @@ namespace col
         math::CVector4 z;
         z.z = m_length.z;
 
+        // Viewç¿ïWånÇ…ïœä∑.
         math::SMatrix44::ApplyXYZ(x, x, mtxW2V);
         math::SMatrix44::ApplyXYZ(y, y, mtxW2V);
         math::SMatrix44::ApplyXYZ(z, z, mtxW2V);

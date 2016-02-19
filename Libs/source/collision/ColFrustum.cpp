@@ -32,7 +32,7 @@ namespace col
 
         IZ_FLOAT e = 1.0f / ::tanf(verticalFOV * 0.5f);
 
-        m_planes[Plane::Near].Set(0.0f, 0.0f, 1.0f, fNear);
+        m_planes[Plane::Near].Set(0.0f, 0.0f, 1.0f, -fNear);
         m_planes[Plane::Far].Set(0.0f, 0.0f, -1.0f, fFar);
 
         //IZ_FLOAT normalizedFactor = 1.0f / sqrtf(e * e + 1);
@@ -55,31 +55,6 @@ namespace col
         math::SVector4::Normalize(m_planes[Plane::Bottom], m_planes[Plane::Bottom]);
     }
 
-    void Frustum::initialize(const math::SMatrix44& mtxW2C)
-    {
-        // NOTE
-        // http://ruh.li/CameraViewFrustum.html
-
-        m_planes[Plane::Left].Set(1.0f, 0.0f, 0.0f, 1.0f);
-        m_planes[Plane::Right].Set(-1.0f, 0.0f, 0.0f, 1.0f);
-
-        m_planes[Plane::Top].Set(0.0f, -1.0f, 0.0f, 1.0f);
-        m_planes[Plane::Bottom].Set(0.0f, 1.0f, 0.0f, 1.0f);
-
-        m_planes[Plane::Near].Set(0.0f, 0.0f, 1.0f, 1.0f);
-        m_planes[Plane::Far].Set(0.0f, 0.0f, -1.0f, 1.0f);
-
-        math::SMatrix44 mtxTransposeW2C;
-        math::SMatrix44::Transpose(mtxTransposeW2C, mtxW2C);
-
-        for (IZ_UINT i = 0; i < Plane::Num; i++) {
-            math::SMatrix44::Apply(m_planes[i], m_planes[i], mtxTransposeW2C);
-
-            auto length = math::SVector3::Length((const math::SVector3&)m_planes[i]);
-            math::SVector4::Div(m_planes[i], m_planes[i], length);
-        }
-    }
-
     // バウンディングボックスとの交差判定.
     IZ_BOOL Frustum::isIntersect(
         const BoundingBox* const box,
@@ -98,7 +73,6 @@ namespace col
                 m_planes[i].z,
                 0.0f);
 
-#if 1
             // 実効半径を計算.
             auto radius = box->computeRadius(mtxW2V, nml);
 
@@ -107,16 +81,63 @@ namespace col
             if (dot <= -radius) {
                 return IZ_FALSE;
             }
-#else
+        }
+
+        return IZ_TRUE;
+    }
+
+    void Frustum::computePlane(const math::SMatrix44& mtxW2C)
+    {
+        // NOTE
+        // http://ruh.li/CameraViewFrustum.html
+
+        // Clip座標系でのViewFrustumの面.
+
+        m_planes[Plane::Left].Set(1.0f, 0.0f, 0.0f, 1.0f);
+        m_planes[Plane::Right].Set(-1.0f, 0.0f, 0.0f, 1.0f);
+
+        m_planes[Plane::Top].Set(0.0f, -1.0f, 0.0f, 1.0f);
+        m_planes[Plane::Bottom].Set(0.0f, 1.0f, 0.0f, 1.0f);
+
+        m_planes[Plane::Near].Set(0.0f, 0.0f, 1.0f, 0.0f);
+        m_planes[Plane::Far].Set(0.0f, 0.0f, -1.0f, 1.0f);
+
+        // Clip座標系の面をWorld座標系に変換する.
+
+        math::SMatrix44 mtxTransposeW2C;
+        math::SMatrix44::Transpose(mtxTransposeW2C, mtxW2C);
+
+        for (IZ_UINT i = 0; i < Plane::Num; i++) {
+            math::SMatrix44::Apply(m_planes[i], m_planes[i], mtxTransposeW2C);
+
+            auto length = math::SVector3::Length((const math::SVector3&)m_planes[i]);
+            math::SVector4::Div(m_planes[i], m_planes[i], length);
+        }
+    }
+
+    // バウンディングボックスとの交差判定.
+    IZ_BOOL Frustum::isIntersect(const BoundingBox* const box)
+    {
+        // ボックスの中心を取得.
+        auto center = box->getCenter();
+
+        // World座標系で判定処理を行う.
+
+        for (IZ_UINT i = 0; i < COUNTOF(m_planes); i++) {
+            math::CVector4 nml(
+                m_planes[i].x,
+                m_planes[i].y,
+                m_planes[i].z,
+                0.0f);
+
             // 実効半径を計算.
             auto radius = box->computeRadius(nml);
 
             auto dot = math::SVector4::Dot(m_planes[i], center);
 
-            if (dot < radius) {
+            if (dot <= -radius) {
                 return IZ_FALSE;
             }
-#endif
         }
 
         return IZ_TRUE;

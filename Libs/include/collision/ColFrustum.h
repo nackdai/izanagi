@@ -25,13 +25,17 @@ namespace col
             IZ_FLOAT verticalFOV,
             IZ_FLOAT aspect);
 
-        void initialize(const math::SMatrix44& mtxW2C);
-
         /** バウンディングボックスとの交差判定.
          */
         IZ_BOOL isIntersect(
             const BoundingBox* const box,
             const math::SMatrix44& mtxW2V);
+
+        void computePlane(const math::SMatrix44& mtxW2C);
+
+        /** バウンディングボックスとの交差判定.
+         */
+        IZ_BOOL isIntersect(const BoundingBox* const box);
 
     private:
         enum Plane {
