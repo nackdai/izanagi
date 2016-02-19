@@ -14,6 +14,9 @@ CSampleApp::CSampleApp()
 
     m_ScreenWidth = 1;
     m_ScreenHeight = 1;
+
+    m_Flags.onLBtn = IZ_FALSE;
+    m_Flags.onLBtn = IZ_FALSE;
 }
 
 CSampleApp::~CSampleApp()
@@ -256,6 +259,55 @@ void CSampleApp::Idle()
     Present();
 
     GetTimer(0).End();
+}
+
+namespace {
+    inline IZ_FLOAT _NormalizeHorizontal(
+        CSampleApp* app,
+        IZ_UINT x)
+    {
+        IZ_UINT width = app->GetScreenWidth();
+        IZ_FLOAT ret = (2.0f * x - width) / (IZ_FLOAT)width;
+        return ret;
+    }
+
+    inline IZ_FLOAT _NormalizeVertical(
+        CSampleApp* app,
+        IZ_UINT y)
+    {
+        IZ_UINT height = app->GetScreenHeight();
+        IZ_FLOAT ret = (height - 2.0f * y) / (IZ_FLOAT)height;
+        return ret;
+    }
+}
+
+void CSampleApp::OnMouseMove(const izanagi::CIntPoint& point)
+{
+    if (m_isEnableCamera) {
+        if (m_Flags.onLBtn) {
+            GetCamera().Rotate(
+                izanagi::CFloatPoint(
+                _NormalizeHorizontal(this, m_PrevPoint.x),
+                _NormalizeVertical(this, m_PrevPoint.y)),
+                izanagi::CFloatPoint(
+                _NormalizeHorizontal(this, point.x),
+                _NormalizeVertical(this, point.y))
+                );
+        }
+        else if (m_Flags.onRBtn) {
+            float fOffsetX = (float)(m_PrevPoint.x - point.x);
+            fOffsetX *= 0.5f;
+
+            float fOffsetY = (float)(m_PrevPoint.y - point.y);
+            fOffsetY *= 0.5f;
+
+            GetCamera().Move(fOffsetX, fOffsetY);
+        }
+    }
+
+    OnMouseMoveInternal(point);
+
+    m_PrevPoint = point;
 }
 
 // スクリーン幅取得

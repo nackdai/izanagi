@@ -17,16 +17,21 @@ protected:
     virtual IZ_BOOL InitInternal(
         izanagi::IMemoryAllocator* allocator,
         izanagi::graph::CGraphicsDevice* device,
-        izanagi::sample::CSampleCamera& camera);
+        izanagi::sample::CSampleCamera& camera) override;
 
     // 解放.
-    virtual void ReleaseInternal();
+    virtual void ReleaseInternal() override;
 
     // 更新.
-    virtual void UpdateInternal(izanagi::graph::CGraphicsDevice* device);
+    virtual void UpdateInternal(izanagi::graph::CGraphicsDevice* device) override;
 
     // 描画.
-    virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device);
+    virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device) override;
+
+    virtual IZ_BOOL OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key) override;
+    virtual void OnKeyUp(izanagi::sys::E_KEYBOARD_BUTTON key) override;
+
+    virtual void OnMouseMoveInternal(const izanagi::CIntPoint& point) override;
 
 private:
     static const IZ_UINT CUBE_NUM = 5;
@@ -45,9 +50,8 @@ private:
 
     izanagi::col::Frustum m_frustum;
 
-    izanagi::math::SMatrix44 m_mtxW2V;
-    izanagi::math::SMatrix44 m_mtxW2C;
-    izanagi::math::SMatrix44 m_mtxL2W_Frustum;
+    IZ_BOOL m_isEnableInternalCamera;
+    izanagi::sample::CSampleCamera m_internalCamera;
 };
 
 #endif    // #if !defined(__FRUSTUM_CULLING_APP_H__)

@@ -67,11 +67,11 @@ namespace sample {
 
         void Idle();
 
-        /** スクリーン幅取得
+        /** スクリーン幅取得.
          */
         IZ_UINT GetScreenWidth() const;
 
-        /** スクリーン高さ取得
+        /** スクリーン高さ取得.
          */
         IZ_UINT GetScreenHeight() const;
 
@@ -83,27 +83,59 @@ namespace sample {
          */
         CSampleCamera& GetCamera();
 
-        /** デバッグフォント取得
+        /** デバッグフォント取得.
          */
         izanagi::CDebugFont* GetDebugFont() { return m_DebugFont; }
 
-        /** キーボード押下
+        /** キーボード押下.
          */
         virtual IZ_BOOL OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key) { return IZ_TRUE; }
 
-        /** キーボードアップ
+        /** キーボードアップ.
          */
         virtual void OnKeyUp(izanagi::sys::E_KEYBOARD_BUTTON key) {}
 
-        /** マウス左ボタン押下
+        /** マウス左ボタン押下.
          */
-        virtual IZ_BOOL OnMouseLBtnDown(const CIntPoint& point) { return IZ_TRUE; }
+        virtual IZ_BOOL OnMouseLBtnDown(const CIntPoint& point)
+        {
+            m_Flags.onLBtn = IZ_TRUE;
+            m_PrevPoint = point;
+            return IZ_TRUE;
+        }
 
-        /** マウス左ボタン押下
+        /** マウス左ボタン離す.
          */
-        virtual IZ_BOOL OnMouseLBtnUp(const CIntPoint& point) { return IZ_TRUE; }
+        virtual IZ_BOOL OnMouseLBtnUp(const CIntPoint& point)
+        {
+            m_Flags.onLBtn = IZ_FALSE;
+            return IZ_TRUE;
+        }
 
-        virtual void OnMouseMove(const izanagi::CIntPoint& point) {}
+        /** マウス右ボタン押下.
+         */
+        virtual IZ_BOOL OnMouseRBtnDown(const CIntPoint& point)
+        {
+            m_Flags.onRBtn = IZ_TRUE;
+            m_PrevPoint = point;
+            return IZ_TRUE;
+        }
+
+        /** マウス右ボタン離す.
+         */
+        virtual IZ_BOOL OnMouseRBtnUp(const CIntPoint& point)
+        {
+            m_Flags.onRBtn = IZ_FALSE;
+            return IZ_TRUE;
+        }
+        
+        void OnMouseMove(const izanagi::CIntPoint& point);
+
+        IZ_BOOL isOnMouseLBtn() const { return m_Flags.onLBtn; }
+        IZ_BOOL isOnMouseRBtn() const { return m_Flags.onRBtn; }
+
+        void setEnableCamera(IZ_BOOL isEnable) { m_isEnableCamera = isEnable; }
+        IZ_BOOL isEnableCamera() const { return m_isEnableCamera; }
 
     protected:
         /** 背景色取得.
@@ -129,6 +161,8 @@ namespace sample {
          */
         virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device) = 0;
 
+        virtual void OnMouseMoveInternal(const izanagi::CIntPoint& point) {}
+
         izanagi::sys::CPad* GetPad()
         {
             return m_Pad;
@@ -147,7 +181,15 @@ namespace sample {
 
         izanagi::sys::CTimer m_Timer[SAMPLE_TIMER_NUM];
 
+        IZ_BOOL m_isEnableCamera{ IZ_TRUE };
         CSampleCamera m_Camera;
+
+        izanagi::CIntPoint m_PrevPoint;
+
+        struct {
+            IZ_UINT onLBtn : 1;
+            IZ_UINT onRBtn : 1;
+        } m_Flags;
     };
 }
 }

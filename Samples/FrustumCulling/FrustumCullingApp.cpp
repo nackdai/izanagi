@@ -87,7 +87,7 @@ IZ_BOOL FrustumCullingApp::InitInternal(
 
     // カメラ
     camera.Init(
-        izanagi::math::CVector4(0.0f, 00.0f, 30.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 0.0f, 30.0f, 1.0f),
         izanagi::math::CVector4(0.0f, 0.0f, 0.0f, 1.0f),
         izanagi::math::CVector4(0.0f, 1.0f, 0.0f, 1.0f),
         fNear,
@@ -96,19 +96,22 @@ IZ_BOOL FrustumCullingApp::InitInternal(
         aspect);
     camera.Update();
 
-    const auto& mtxW2V = camera.GetParam().mtxW2V;
-    izanagi::math::SMatrix44::Copy(m_mtxW2V, mtxW2V);
-    izanagi::math::SMatrix44::Inverse(m_mtxL2W_Frustum, mtxW2V);
-
-    const auto& mtxW2C = camera.GetParam().mtxW2C;
-    izanagi::math::SMatrix44::Copy(m_mtxW2C, mtxW2C);
+    m_internalCamera.Init(
+        izanagi::math::CVector4(0.0f, 0.0f, 30.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 0.0f, 0.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 1.0f, 0.0f, 1.0f),
+        fNear,
+        fFar,
+        verticalFOV,
+        aspect);
+    m_internalCamera.Update();
 
 #ifndef FRUSTUM_INTERSECT_EX
     m_frustum.initialize(
         fNear,
         fFar,
         verticalFOV,
-        aspect));
+        aspect);
 #endif
 
 __EXIT__:
@@ -138,6 +141,7 @@ void FrustumCullingApp::ReleaseInternal()
 void FrustumCullingApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
     GetCamera().Update();
+    m_internalCamera.Update();
 }
 
 namespace {
@@ -164,52 +168,12 @@ void FrustumCullingApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
     izanagi::sample::CSampleCamera& camera = GetCamera();
 
-    const auto& mtxW2V = camera.GetParam().mtxW2V;
-
     izanagi::math::SMatrix44 mtxL2W;
     izanagi::math::SMatrix44::SetUnit(mtxL2W);
 
     device->SetRenderState(
         izanagi::graph::E_GRAPH_RS_CULLMODE,
         izanagi::graph::E_GRAPH_CULL_NONE);
-
-    m_Shader->Begin(device, 1, IZ_FALSE);
-    {
-        if (m_Shader->BeginPass(0)) {
-            _SetShaderParam(
-                m_Shader,
-                "g_mW2C",
-                (void*)&camera.GetParam().mtxW2C,
-                sizeof(camera.GetParam().mtxW2C));
-            {
-                _SetShaderParam(
-                    m_Shader,
-                    "g_mL2W",
-                    (void*)&mtxL2W,
-                    sizeof(mtxL2W));
-
-                // シェーダ設定
-                m_Shader->CommitChanges(device);
-
-                m_Grid->Draw(device);
-                m_Axis->Draw(device);
-
-                _SetShaderParam(
-                    m_Shader,
-                    "g_mL2W",
-                    (void*)&m_mtxL2W_Frustum,
-                    sizeof(m_mtxL2W_Frustum));
-
-                // シェーダ設定
-                m_Shader->CommitChanges(device);
-
-                m_FrustumMesh->Draw(device);
-            }
-
-            m_Shader->EndPass();
-        }
-    }
-    m_Shader->End(device);
 
     m_Shader->Begin(device, 0, IZ_FALSE);
     {
@@ -221,7 +185,8 @@ void FrustumCullingApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
                 sizeof(camera.GetParam().mtxW2C));
 
 #ifdef FRUSTUM_INTERSECT_EX
-            m_frustum.computePlane(m_mtxW2C);
+            izanagi::math::SMatrix44 mtxW2C = m_internalCamera.GetParam().mtxW2C;
+            m_frustum.computePlane(mtxW2C);
 #endif
 
             for (IZ_UINT i = 0; i < CUBE_NUM; i++)
@@ -235,9 +200,10 @@ void FrustumCullingApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 #ifdef FRUSTUM_INTERSECT_EX
                 auto isIntersect = m_frustum.isIntersect(&m_cubes[i].aabb);
 #else
+                const izanagi::math::SMatrix44& mtxW2V = m_internalCamera.GetParam().mtxW2V;
                 auto isIntersect = m_frustum.isIntersect(
                     &m_cubes[i].aabb,
-                    m_mtxW2V);
+                    mtxW2V);
 #endif
 
                 izanagi::math::SVector4 color;
@@ -262,4 +228,108 @@ void FrustumCullingApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
         }
     }
     m_Shader->End(device);
+
+    m_Shader->Begin(device, 1, IZ_FALSE);
+    {
+        if (m_Shader->BeginPass(0)) {
+            _SetShaderParam(
+                m_Shader,
+                "g_mW2C",
+                (void*)&camera.GetParam().mtxW2C,
+                sizeof(camera.GetParam().mtxW2C));
+            {
+                _SetShaderParam(
+                    m_Shader,
+                    "g_mL2W",
+                    (void*)&mtxL2W,
+                    sizeof(mtxL2W));
+
+                // シェーダ設定
+                m_Shader->CommitChanges(device);
+
+                m_Grid->Draw(device);
+                m_Axis->Draw(device);
+
+                izanagi::math::SMatrix44 mtxL2W_Frustum = m_internalCamera.GetParam().mtxW2V;
+                izanagi::math::SMatrix44::Inverse(mtxL2W_Frustum, mtxL2W_Frustum);
+
+                _SetShaderParam(
+                    m_Shader,
+                    "g_mL2W",
+                    (void*)&mtxL2W_Frustum,
+                    sizeof(mtxL2W_Frustum));
+
+                // シェーダ設定
+                m_Shader->CommitChanges(device);
+
+                m_FrustumMesh->Draw(device);
+            }
+
+            m_Shader->EndPass();
+        }
+    }
+    m_Shader->End(device);
+}
+
+IZ_BOOL FrustumCullingApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
+{
+    if (key == izanagi::sys::E_KEYBOARD_BUTTON::E_KEYBOARD_BUTTON_CONTROL) {
+        setEnableCamera(IZ_FALSE);
+        m_isEnableInternalCamera = IZ_TRUE;
+    }
+
+    return IZ_TRUE;
+}
+
+void FrustumCullingApp::OnKeyUp(izanagi::sys::E_KEYBOARD_BUTTON key)
+{
+    if (key == izanagi::sys::E_KEYBOARD_BUTTON::E_KEYBOARD_BUTTON_CONTROL) {
+        setEnableCamera(IZ_TRUE);
+        m_isEnableInternalCamera = IZ_FALSE;
+    }
+}
+
+namespace {
+    inline IZ_FLOAT _NormalizeHorizontal(
+        izanagi::sample::CSampleApp* app,
+        IZ_UINT x)
+    {
+        IZ_UINT width = app->GetScreenWidth();
+        IZ_FLOAT ret = (2.0f * x - width) / (IZ_FLOAT)width;
+        return ret;
+    }
+
+    inline IZ_FLOAT _NormalizeVertical(
+        izanagi::sample::CSampleApp* app,
+        IZ_UINT y)
+    {
+        IZ_UINT height = app->GetScreenHeight();
+        IZ_FLOAT ret = (height - 2.0f * y) / (IZ_FLOAT)height;
+        return ret;
+    }
+}
+
+void FrustumCullingApp::OnMouseMoveInternal(const izanagi::CIntPoint& point)
+{
+    if (m_isEnableInternalCamera) {
+        if (isOnMouseLBtn()) {
+            m_internalCamera.Rotate(
+                izanagi::CFloatPoint(
+                    _NormalizeHorizontal(this, m_PrevPoint.x),
+                    _NormalizeVertical(this, m_PrevPoint.y)),
+                izanagi::CFloatPoint(
+                    _NormalizeHorizontal(this, point.x),
+                    _NormalizeVertical(this, point.y))
+                );
+        }
+        else if (isOnMouseRBtn()) {
+            float fOffsetX = (float)(m_PrevPoint.x - point.x);
+            fOffsetX *= 0.5f;
+
+            float fOffsetY = (float)(m_PrevPoint.y - point.y);
+            fOffsetY *= 0.5f;
+
+            m_internalCamera.Move(fOffsetX, fOffsetY);
+        }
+    }
 }
