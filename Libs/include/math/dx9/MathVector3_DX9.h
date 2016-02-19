@@ -112,16 +112,16 @@ namespace math
     // ベクトルの大きさ(絶対値)を計算する
     IZ_FLOAT SVector3::Length(const SVector3& vec)
     {
-        IZ_FLOAT ret = D3DXVec2Length(reinterpret_cast<const D3DXVECTOR2*>(&vec));
+        IZ_FLOAT ret = D3DXVec3Length(reinterpret_cast<const D3DXVECTOR3*>(&vec));
         return ret;
     }
 
     // ベクトルを正規化する
     void SVector3::Normalize(SVector3& dst, const SVector3& src)
     {
-        D3DXVec2Normalize(
-            reinterpret_cast<D3DXVECTOR2*>(&dst),
-            reinterpret_cast<const D3DXVECTOR2*>(&src));
+        D3DXVec3Normalize(
+            reinterpret_cast<D3DXVECTOR3*>(&dst),
+            reinterpret_cast<const D3DXVECTOR3*>(&src));
         dst.z = 0.0f;
     }
 
