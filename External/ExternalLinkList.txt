@@ -1,0 +1,29 @@
+- LZ4
+https://github.com/Cyan4973/lz4
+
+- libuv
+https://github.com/libuv/libuv
+
+- freeglut
+http://freeglut.sourceforge.net/
+
+- glew
+http://glew.sourceforge.net/
+
+- eigen
+http://eigen.tuxfamily.org/index.php?title=Main_Page
+
+- enet
+http://enet.bespin.org/
+
+- feetype
+http://www.freetype.org/
+
+- mathfu
+https://github.com/google/mathfu
+
+- libjpeg
+http://libjpeg.sourceforge.net/
+
+- glfw
+http://www.glfw.org/
