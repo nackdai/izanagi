@@ -27,7 +27,7 @@ set SOLUTION=".\mojoshader\MojoShader.sln"
 
 if not exist %SOLUTION% (
     cd mojoshader
-    ..\..\..\External\cmake\bin\cmake.exe -G "Visual Studio 10"
+    ..\..\..\External\cmake\bin\cmake.exe -G "Visual Studio 12 2013"
     cd ..
 )
 
