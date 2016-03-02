@@ -148,7 +148,7 @@ namespace ShaderCompiler
             var dxDir = System.Environment.GetEnvironmentVariable("DXSDK_DIR");
             if (string.IsNullOrEmpty(dxDir))
             {
-                return null;
+                throw new Exception("No DXSDK.");
             }
 
             ProcessStartInfo info = new ProcessStartInfo();
