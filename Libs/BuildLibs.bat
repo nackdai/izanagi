@@ -27,10 +27,10 @@ if %GFX%==GLES2 (
 )
 
 if %GFX%==OGL (
-    call ..\External\BuildExternalOGL.bat
+    call ..\External\BuildExternalOGL.bat %CONFIG%
 )
 
-call ..\External\BuildExternal.bat
+call ..\External\BuildExternal.bat %CONFIG%
 
 %MSBUILD% project\vs2013\izanagi.sln /t:%TARGET% /p:Configuration=%CONFIG%_%GFX% /p:Platform=Win32 || goto error
 
