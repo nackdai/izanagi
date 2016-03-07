@@ -5,6 +5,23 @@ namespace izanagi
 {
 namespace col
 {
+    Frustum::Frustum()
+    {
+        // NOTE
+        // http://ruh.li/CameraViewFrustum.html
+
+        // Clip座標系でのViewFrustumの面.
+
+        m_planesInClipCoord[Plane::Left].Set(1.0f, 0.0f, 0.0f, 1.0f);
+        m_planesInClipCoord[Plane::Right].Set(-1.0f, 0.0f, 0.0f, 1.0f);
+
+        m_planesInClipCoord[Plane::Top].Set(0.0f, -1.0f, 0.0f, 1.0f);
+        m_planesInClipCoord[Plane::Bottom].Set(0.0f, 1.0f, 0.0f, 1.0f);
+
+        m_planesInClipCoord[Plane::Near].Set(0.0f, 0.0f, 1.0f, 0.0f);
+        m_planesInClipCoord[Plane::Far].Set(0.0f, 0.0f, -1.0f, 1.0f);
+    }
+
     Frustum::Frustum(const Frustum& rhs)
     {
         *this = rhs;
@@ -55,6 +72,22 @@ namespace col
         math::SVector4::Normalize(m_planes[Plane::Bottom], m_planes[Plane::Bottom]);
     }
 
+    void Frustum::initialize(
+        Plane idx,
+        const math::SVector4& plane)
+    {
+        IZ_ASSERT(idx < Plane::Num);
+
+        m_planesInClipCoord[idx].Set(plane);
+    }
+
+    void Frustum::initialize(const math::SVector4 plane[Plane::Num])
+    {
+        for (IZ_UINT i = 0; i < Plane::Num; i++) {
+            initialize((Plane)i, plane[i]);
+        }
+    }
+
     // バウンディングボックスとの交差判定.
     IZ_BOOL Frustum::isIntersect(
         const BoundingBox* const box,
@@ -88,27 +121,13 @@ namespace col
 
     void Frustum::computePlane(const math::SMatrix44& mtxW2C)
     {
-        // NOTE
-        // http://ruh.li/CameraViewFrustum.html
-
-        // Clip座標系でのViewFrustumの面.
-
-        m_planes[Plane::Left].Set(1.0f, 0.0f, 0.0f, 1.0f);
-        m_planes[Plane::Right].Set(-1.0f, 0.0f, 0.0f, 1.0f);
-
-        m_planes[Plane::Top].Set(0.0f, -1.0f, 0.0f, 1.0f);
-        m_planes[Plane::Bottom].Set(0.0f, 1.0f, 0.0f, 1.0f);
-
-        m_planes[Plane::Near].Set(0.0f, 0.0f, 1.0f, 0.0f);
-        m_planes[Plane::Far].Set(0.0f, 0.0f, -1.0f, 1.0f);
-
         // Clip座標系の面をWorld座標系に変換する.
 
         math::SMatrix44 mtxTransposeW2C;
         math::SMatrix44::Transpose(mtxTransposeW2C, mtxW2C);
 
         for (IZ_UINT i = 0; i < Plane::Num; i++) {
-            math::SMatrix44::Apply(m_planes[i], m_planes[i], mtxTransposeW2C);
+            math::SMatrix44::Apply(m_planes[i], m_planesInClipCoord[i], mtxTransposeW2C);
 
             auto length = math::SVector3::Length((const math::SVector3&)m_planes[i]);
             math::SVector4::Div(m_planes[i], m_planes[i], length);

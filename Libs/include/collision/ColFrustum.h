@@ -11,7 +11,19 @@ namespace col
 
     class Frustum {
     public:
-        Frustum() {}
+        enum Plane {
+            Left,
+            Right,
+            Top,
+            Bottom,
+            Near,
+            Far,
+
+            Num,
+        };
+
+    public:
+        Frustum();
         ~Frustum() {}
 
         Frustum(const Frustum& rhs);
@@ -24,6 +36,12 @@ namespace col
             IZ_FLOAT fFar,
             IZ_FLOAT verticalFOV,
             IZ_FLOAT aspect);
+
+        void initialize(
+            Plane idx,
+            const math::SVector4& plane);
+
+        void initialize(const math::SVector4 plane[Plane::Num]);
 
         /** バウンディングボックスとの交差判定.
          */
@@ -38,18 +56,8 @@ namespace col
         IZ_BOOL isIntersect(const BoundingBox* const box);
 
     private:
-        enum Plane {
-            Left,
-            Right,
-            Top,
-            Bottom,
-            Near,
-            Far,
-
-            Num,
-        };
-
         math::SVector4 m_planes[Plane::Num];
+        math::SVector4 m_planesInClipCoord[Plane::Num];
     };
 }   // namespace math
 }   // namespace izanagi
