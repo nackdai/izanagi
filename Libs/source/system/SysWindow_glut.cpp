@@ -125,6 +125,12 @@ namespace sys
             return E_KEYBOARD_BUTTON_DOWN;
         case GLUT_KEY_RIGHT:
             return E_KEYBOARD_BUTTON_RIGHT;
+        case GLUT_KEY_CTRL_L:
+        case GLUT_KEY_CTRL_R:
+            return E_KEYBOARD_BUTTON_CONTROL;
+        case GLUT_KEY_SHIFT_L:
+        case GLUT_KEY_SHIFT_R:
+            return E_KEYBOARD_BUTTON_SHIFT;
         }
 
         return E_KEYBOARD_BUTTON_UNDEFINED;
