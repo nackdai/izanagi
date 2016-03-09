@@ -4,7 +4,19 @@
 namespace izanagi
 {
 namespace col
-{
+{    
+    void OctreeNode::getAABB(AABB& aabb)
+    {
+        aabb = m_aabb;
+    }
+
+    void OctreeNode::setAABB(
+        const math::SVector4& minPtr,
+        const math::SVector4& maxPtr)
+    {
+        m_aabb.initialize(minPtr, maxPtr);
+    }
+
     IZ_BOOL OctreeNode::add(OctreeElement& element)
     {
         element.remove();
@@ -21,11 +33,6 @@ namespace col
     {
         auto ret = m_list.GetItemNum();
         return ret;
-    }
-
-    IZ_UINT OctreeNode::getMortonNumber() const
-    {
-        return m_mortonNumber;
     }
 }   // namespace math
 }   // namespace izanagi

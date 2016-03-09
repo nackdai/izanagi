@@ -17,6 +17,8 @@ namespace col
     // http://marupeke296.com/COL_2D_No8_QuadTree.html
     // http://marupeke296.com/COL_3D_No15_Octree.html
 
+    /** Octree.
+     */
     template <typename NODE>
     class Octree {
     public:
@@ -24,11 +26,16 @@ namespace col
 
     public:
         Octree() {}
-        ~Octree() {}
+        ~Octree()
+        {
+            clear();
+        }
 
         NO_COPIABLE(Octree);
 
     public:
+        /** Compute morton number.
+         */
         IZ_UINT getMortonNumber(const math::SVector4& point)
         {
             math::SVector4 tmp;
@@ -46,6 +53,8 @@ namespace col
             return ret;
         }
 
+        /** Initialize octree.
+         */
         IZ_BOOL initialize(
             IMemoryAllocator* allocator,
             const math::SVector4& vMin,
@@ -54,6 +63,7 @@ namespace col
         {
             // レベルを決める.
             m_level = IZ_MIN(MAX_LEVEL, level);
+            m_level = (m_level == 0 ? MAX_LEVEL : m_level);
 
             // 各レベルでのノード数とノード総数を計算.
             m_nodeCount = 1;
@@ -74,7 +84,7 @@ namespace col
 
             // 最小単位サイズを計算.
             IZ_UINT div = (1 << m_level);
-            math::SVector4::Div(m_unit, m_size, div);
+            math::SVector4::Div(m_unit, m_size, (IZ_FLOAT)div);
             m_unit.w = 0.0f;
 
             m_min = vMin;
@@ -83,7 +93,27 @@ namespace col
             return IZ_TRUE;
         }
 
-        NODE* getNode(IZ_UINT mortonNumber)
+        /** Clear octree.
+         */
+        void clear()
+        {
+            for (IZ_UINT i = 0; i < m_nodeCount; i++) {
+                if (m_nodes[i]) {
+                    deleteNode(m_allocator, m_nodes[i]);
+                }
+            }
+
+            FREE(m_allocator, m_nodes);
+
+            m_level = 0;
+            m_nodeCount = 0;
+        }
+
+        /** Get node by morton number.
+         */
+        NODE* getNode(
+            IZ_UINT mortonNumber,
+            IZ_BOOL isCreateNodeIfNoExist = IZ_TRUE)
         {
             VRETURN_NULL(mortonNumber < m_nodeCount);
             
@@ -91,54 +121,56 @@ namespace col
 
             NODE* ret = m_nodes[mortonNumber];
 
-            if (!ret) {
-                m_nodes[mortonNumber] = createNode();
+            if (!ret && isCreateNodeIfNoExist) {
+                // If there is no node, create a new node.
+                m_nodes[mortonNumber] = createNode(m_allocator);
                 ret = m_nodes[mortonNumber];
                 ret->initialize(mortonNumber);
+
+                // TODO
+                // Set AABB.
             }
 
             return ret;
         }
 
-        void getViewNode(
+        /** Get visible nodes by view furstum.
+         */
+        void getVisibleNodes(
             Frustum& frustum,
-            std::vector<NODE*> nodes)
+            std::vector<NODE*> nodes,
+            IZ_BOOL isCreateNodeIfNoExist = IZ_TRUE)
         {
-#if 1
-            getViewNode(0, frustum, nodes);
-#else
-            for (IZ_UINT i = 0; i < m_nodeCount; i++) {
-                NODE* node = m_nodes[i];
+            getVisibleNodes(0, frustum, nodes, isCreateNodeIfNoExist);
+        }
 
-                if (node) {
-                    // Check if node is intersected by frustum.
-                    AABB aabb;
-                    node->getAABB(aabb);
+        IZ_UINT getNodeCount() const
+        {
+            return m_nodeCount;
+        }
 
-                    auto isIntersect = frustum.isIntersect(aabb);
-
-                    if (isIntersect) {
-                        nodes.push_back(node);
-                    }
-                }
-            }
-#endif
+        NODE** getNodes()
+        {
+            return m_nodes;
         }
 
     private:
-        void getViewNode(
+        /** Get visible nodes by view furstum.
+         */
+        void getVisibleNodes(
             IZ_UINT mortonNumber,
             Frustum& frustum,
-            std::vector<NODE*> nodes)
+            std::vector<NODE*> nodes,
+            IZ_BOOL isCreateNodeIfNoExist)
         {
-            NODE* node = m_nodes[mortonNumber];
+            NODE* node = getNode(mortonNumber);
 
             if (node) {
                 // Check if node is intersected by frustum.
                 AABB aabb;
                 node->getAABB(aabb);
 
-                auto isIntersect = frustum.isIntersect(aabb);
+                auto isIntersect = frustum.isIntersect(&aabb);
 
                 if (isIntersect) {
                     nodes.push_back(node);
@@ -149,25 +181,31 @@ namespace col
             for (IZ_UINT i = 0; i < 7; i++) {
                 IZ_UINT id = mortonNumber * 8 + 1 + i;
 
-                getViewNode(id, frustum, nodes);
+                getVisibleNodes(id, frustum, nodes, isCreateNodeIfNoExist);
             }
         }
 
+    protected:
+        virtual NODE* createNode(IMemoryAllocator* allocator)
+        {
+            void* buf = ALLOC(allocator, sizeof(NODE));
+            NODE* node = new(buf)NODE;
+            return node;
+        }
+
+        virtual void deleteNode(IMemoryAllocator* allocator, NODE* node)
+        {
+            FREE(m_allocator, node);
+        }
+
     private:
-        inline IZ_UINT separeteBit(IZ_BYTE n)
+        static inline IZ_UINT separeteBit(IZ_BYTE n)
         {
             IZ_UINT s = n;
             s = (s | s << 8) & 0x0000f00f;
             s = (s | s << 4) & 0x000c30c3;
             s = (s | s << 2) & 0x00249249;
             return s;
-        }
-
-        inline NODE* createNode()
-        {
-            void* buf = ALLOC(m_allocator, sizeof(NODE));
-            NODE* node = new(buf)NODE;
-            return node;
         }
 
     private:

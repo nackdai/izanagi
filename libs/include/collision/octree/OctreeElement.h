@@ -12,12 +12,14 @@ namespace col
 {
     class OctreeNode;
 
+    /** Ocrtee's node.
+     */
     class OctreeElement {
         friend class OctreeNode;
 
     public:
-        OctreeElement() {}
-        ~OctreeElement() {}
+        OctreeElement();
+        ~OctreeElement();
 
         NO_COPIABLE(OctreeElement);
 

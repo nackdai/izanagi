@@ -5,6 +5,16 @@ namespace izanagi
 {
 namespace col
 {
+    OctreeElement::OctreeElement()
+    {
+        m_listItem.Init(this);
+    }
+
+    OctreeElement::~OctreeElement()
+    {
+        remove();
+    }
+
     void OctreeElement::setData(void* data)
     {
         m_data = data;
