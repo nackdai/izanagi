@@ -146,6 +146,11 @@ namespace math
         {
             SVector4::Cross(*this, *this, rhs);
         }
+
+        void Add(IZ_FLOAT _x, IZ_FLOAT _y, IZ_FLOAT _z)
+        {
+            x += _x; y += _y; z += _z;
+        }
     };
 }   // namespace math
 }   // namespace izanagi

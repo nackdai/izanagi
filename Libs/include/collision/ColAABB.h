@@ -69,9 +69,24 @@ namespace col
          */
         void makeCubic();
 
+        IZ_BOOL canDisplay(const math::SMatrix44& mtxW2C);
+
+        IZ_BOOL canDisplay() const;
+
     protected:
         math::SVector4 m_min;
         math::SVector3 m_size;
+
+        enum Clip {
+            PositiveX,
+            NegativeX,
+            PositiveY,
+            NegativeY,
+            PositiveZ,
+            NegativeZ,
+        };
+
+        IZ_UINT m_displayFlag{ 0 };
     };
 }   // namespace math
 }   // namespace izanagi

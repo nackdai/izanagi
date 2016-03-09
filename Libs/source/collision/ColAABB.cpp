@@ -164,5 +164,71 @@ namespace col
         m_size.y = maxSize;
         m_size.z = maxSize;
     }
+
+    IZ_BOOL AABB::canDisplay(const math::SMatrix44& mtxW2C)
+    {
+        // 8点.
+        math::CVector4 ptr[8];
+        {
+            ptr[0].Set(m_min.x, m_min.y, m_min.z);
+
+            ptr[1].Set(ptr[0]);
+            ptr[1].Add(m_size.x, 0.0f, 0.0f);
+
+            ptr[2].Set(ptr[0]);
+            ptr[2].Add(0.0f, m_size.y, 0.0f);
+
+            ptr[3].Set(ptr[1]);
+            ptr[3].Add(0.0f, m_size.y, 0.0f);
+
+            ptr[4].Set(ptr[0]);
+            ptr[4].Add(0.0f, 0.0f, m_size.z);
+
+            ptr[5].Set(ptr[4]);
+            ptr[5].Add(m_size.x, 0.0f, 0.0f);
+
+            ptr[6].Set(ptr[4]);
+            ptr[6].Add(0.0f, m_size.y, 0.0f);
+
+            ptr[7].Set(ptr[5]);
+            ptr[7].Add(0.0f, m_size.y, 0.0f);
+        }
+
+        m_displayFlag = 0;
+
+        for (IZ_UINT i = 0; i < COUNTOF(ptr); i++) {
+            math::SVector4 tmp;
+            math::SMatrix44::Apply(tmp, ptr[i], mtxW2C);
+
+            math::SVector4::Div(tmp, tmp, tmp.w);
+
+            // はみ出しチェック
+            if (tmp.x <= 1.0f) {
+                m_displayFlag |= (1 << Clip::PositiveX);
+            }
+            if (tmp.x >= -1.0f) {
+                m_displayFlag |= (1 << Clip::NegativeX);
+            }
+            if (tmp.y <= 1.0f) {
+                m_displayFlag |= (1 << Clip::PositiveY);
+            }
+            if (tmp.y >= -1.0f) {
+                m_displayFlag |= (1 << Clip::NegativeY);
+            }
+            if (tmp.z <= 1.0f) {
+                m_displayFlag |= (1 << Clip::PositiveZ);
+            }
+            if (tmp.z >= -1.0f) {
+                m_displayFlag |= (1 << Clip::NegativeZ);
+            }
+        }
+
+        return (m_displayFlag > 0);
+    }
+
+    IZ_BOOL AABB::canDisplay() const
+    {
+        return (m_displayFlag > 0);
+    }
 }   // namespace math
 }   // namespace izanagi
