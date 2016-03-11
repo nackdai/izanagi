@@ -53,6 +53,35 @@ namespace col
             return ret;
         }
 
+        /** Compute morton number which the region belongs to.
+         */
+        IZ_UINT getMortonNumber(
+            const math::SVector4& vMin,
+            const math::SVector4& vMax)
+        {
+            auto minNumber = getMortonNumber(vMin);
+            auto maxNumber = getMortonNumber(vMax);
+            
+            auto def = maxNumber ^ minNumber;
+
+            IZ_UINT topLevel = 1;
+
+            for (IZ_UINT i = 0; i < m_level; i++) {
+                auto check = (def >> (i * 3)) & 0x7;
+                if (check != 0) {
+                    topLevel = i + 1;
+                }
+                else {
+                    break;
+                }
+            }
+
+            IZ_UINT ret = maxNumber >> (topLevel * 3);
+            IZ_ASSERT(ret <= m_nodeCount);
+
+            return ret;
+        }
+
         /** Initialize octree.
          */
         IZ_BOOL initialize(
@@ -127,8 +156,28 @@ namespace col
                 ret = m_nodes[mortonNumber];
                 ret->initialize(mortonNumber);
 
-                // TODO
                 // Set AABB.
+                {
+                    // Compute level.
+                    IZ_UINT level = 0;
+                    for (IZ_UINT i = 1; i < m_level; i++) {
+                        auto check = mortonNumber >> (i * 3);
+                        if (check == 0) {
+                            break;
+                        }
+                        level++;
+                    }
+
+                    // Compute size.
+                    izanagi::math::SVector4 size;
+                    izanagi::math::SVector4::DivXYZ(size, m_size, (2 << level));
+
+                    // Compute min pos.
+                    izanagi::math::CVector4 minPos(m_min);
+                    for (IZ_UINT i = 1; i < level; i++) {
+
+                    }
+                }
             }
 
             return ret;
@@ -144,11 +193,15 @@ namespace col
             getVisibleNodes(0, frustum, nodes, isCreateNodeIfNoExist);
         }
 
+        /** Get count of nodes which the octree has.
+         */
         IZ_UINT getNodeCount() const
         {
             return m_nodeCount;
         }
 
+        /** Get list of nodes which the octree has.
+         */
         NODE** getNodes()
         {
             return m_nodes;
@@ -186,6 +239,7 @@ namespace col
         }
 
     protected:
+        // ƒm[ƒhì¬.
         virtual NODE* createNode(IMemoryAllocator* allocator)
         {
             void* buf = ALLOC(allocator, sizeof(NODE));
@@ -193,6 +247,7 @@ namespace col
             return node;
         }
 
+        // ƒm[ƒh”jŠü.
         virtual void deleteNode(IMemoryAllocator* allocator, NODE* node)
         {
             FREE(m_allocator, node);
