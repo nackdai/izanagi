@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<shd
+#ifdef GLES2
+    compiler="..\..\Tools\tools\Release\ShaderCompiler.exe"
+#else
+    compiler="%DXSDK_DIR%Utilities\Bin\x86\fxc"
+#endif
+    src="GBuffer.fx"
+    option="/nologo /Od /Zi"
+    is_asm="false"/>
