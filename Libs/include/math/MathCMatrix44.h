@@ -10,8 +10,11 @@ namespace math
     // うーん・・・
     class CMatrix44 : public SMatrix44 {
     public:
-        CMatrix44();
-        ~CMatrix44();
+        CMatrix44()
+        {
+            SetUnit();
+        }
+        ~CMatrix44() {}
 
         CMatrix44(const SMatrix44& rhs)
         {
