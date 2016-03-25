@@ -26,7 +26,16 @@ namespace izanagi {
     struct SPointLightParam {
         math::SVector4 vPos;
         math::SVector4 color;
-        math::SVector4 attn; // 0 - 2 : attn
+
+        union {
+            math::SVector4 attn; // 0 - 2 : attn
+            struct {
+                IZ_FLOAT constant;
+                IZ_FLOAT linear;
+                IZ_FLOAT exp;
+                IZ_FLOAT padding;
+            };
+        };
     };
 
     /**
