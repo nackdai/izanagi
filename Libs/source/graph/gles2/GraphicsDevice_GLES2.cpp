@@ -308,9 +308,8 @@ namespace graph
         }
 
         if (nRTNum > 0) {
-            // TODO
-            // MRT‚Í‚P–‡‚Ü‚Å‚É§ŒÀ‚³‚ê‚Ä‚¢‚é
-            SetRenderTarget(pRTList, 1);
+            CheckRenderTargetCount(nRTNum);
+            SetRenderTarget(pRTList, nRTNum);
         }
 
         if ((flag & E_GRAPH_END_SCENE_FLAG_DEPTH_STENCIL) > 0) {
@@ -802,15 +801,17 @@ namespace graph
                     isPlane ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP,
                     pTex->GetTexHandle()));
 
-            if (pTex->GetTexType() == E_GRAPH_TEX_TYPE_PLANE) {
-                ((CTextureGLES2*)pTex)->Initialize();
-            }
-            else if (pTex->GetTexType() == E_GRAPH_TEX_TYPE_CUBE) {
-                ((CCubeTextureGLES2*)pTex)->Initialize();
-            }
-            else {
-                // TODO
-                IZ_ASSERT(IZ_FALSE);
+            if (!pTex->IsRenderTarget()) {
+                if (pTex->GetTexType() == E_GRAPH_TEX_TYPE_PLANE) {
+                    ((CTextureGLES2*)pTex)->Initialize();
+                }
+                else if (pTex->GetTexType() == E_GRAPH_TEX_TYPE_CUBE) {
+                    ((CCubeTextureGLES2*)pTex)->Initialize();
+                }
+                else {
+                    // TODO
+                    IZ_ASSERT(IZ_FALSE);
+                }
             }
 
             IZ_BOOL orgValue = m_Flags.is_force_set_state;

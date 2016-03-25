@@ -24,6 +24,18 @@ namespace graph {
     public:
         virtual IZ_BOOL Reset(const void* initialParam) override;
 
+        virtual IZ_BOOL BeginScene(
+            CRenderTarget** pRT,
+            IZ_UINT nCount,
+            CRenderTarget* pDepth,
+            IZ_DWORD nClearFlags,
+            IZ_COLOR nClearColor = 0,
+            IZ_FLOAT fClearZ = 1.0f,
+            IZ_DWORD nClearStencil = 0) override;
+
+        // シーン描画終了
+        virtual void EndScene(IZ_UINT flag = 0xffffffff) override;
+
         // 頂点バッファセット
         virtual IZ_BOOL SetVertexBuffer(
             IZ_UINT nStreamIdx,
@@ -53,14 +65,19 @@ namespace graph {
 
         virtual IZ_BOOL CheckRenderTargetCount(IZ_UINT cnt) override
         {
-            // MRTはなし.
             VRETURN(0 < cnt);
             return IZ_TRUE;
         }
 
+    protected:
+        virtual void OnTerminate() override;
+
     private:
         InstancingParam m_instancingParams[MAX_STREAM_NUM];
         IZ_UINT m_numInstancingPrim{ 0 };
+
+        CRenderTarget* m_rtInternalDepth{ nullptr };
+        IZ_BOOL m_isUseInternalDepth{ IZ_FALSE };
     };
 }   // namespace graph
 }   // namespace izanagi

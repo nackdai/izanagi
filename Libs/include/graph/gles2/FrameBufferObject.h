@@ -15,6 +15,7 @@ namespace graph
     class CFrameBufferObject : public CObject
     {
         friend class CGraphicsDeviceGLES2;
+        friend class CGraphicsDeviceOGL;
 
     private:
         // インスタンス作成

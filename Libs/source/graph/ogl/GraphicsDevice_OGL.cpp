@@ -138,6 +138,117 @@ namespace graph
         return ret;
     }
 
+    IZ_BOOL CGraphicsDeviceOGL::BeginScene(
+        CRenderTarget** pRT,
+        IZ_UINT nCount,
+        CRenderTarget* pDepth,
+        IZ_DWORD nClearFlags,
+        IZ_COLOR nClearColor/*= 0*/,
+        IZ_FLOAT fClearZ/*= 1.0f*/,
+        IZ_DWORD nClearStencil/*= 0*/)
+    {
+        VRETURN(CheckRenderTargetCount(nCount));
+
+        IZ_BOOL ret = IZ_TRUE;
+
+        if ((nCount > 0) && (pRT != IZ_NULL)) {
+            // レンダーターゲットセット
+            PushRenderTarget(pRT, nCount);
+        }
+        if (pDepth != IZ_NULL) {
+            // 深度・ステンシルセット
+            PushDepthStencil(pDepth);
+        }
+        else {
+            if (!m_rtInternalDepth) {
+                m_rtInternalDepth = CreateRenderTarget(
+                    GetBackBufferWidth(),
+                    GetBackBufferHeight(),
+                    E_GRAPH_PIXEL_FMT_D24S8);
+                IZ_ASSERT(m_rtInternalDepth);
+            }
+            PushDepthStencil(m_rtInternalDepth);
+            m_isUseInternalDepth = IZ_TRUE;
+        }
+
+        // オフスクリーン開始（設定されていれば）
+        IZ_ASSERT(m_FBO != IZ_NULL);
+        m_FBO->StartOffScreen();
+
+        // クリア
+        Clear(
+            nClearFlags,
+            nClearColor,
+            fClearZ,
+            nClearStencil);
+
+        return ret;
+    }
+
+    void CGraphicsDeviceOGL::EndScene(IZ_UINT flag/* = 0xffffffff*/)
+    {
+        if (m_isUseInternalDepth) {
+            auto fbo = m_FBO->GetRawInterface();
+
+            auto width = GetBackBufferWidth();
+            auto height = GetBackBufferHeight();
+
+            CALL_GL_API(::glBlitNamedFramebuffer(
+                fbo, 0,
+                0, 0,
+                width, height,
+                0, 0,
+                width, height,
+                GL_DEPTH_BUFFER_BIT,
+                GL_NEAREST));
+        }
+
+        // オフスクリーン終了
+        IZ_ASSERT(m_FBO != IZ_NULL);
+        m_FBO->EndOffScreen();
+
+        CRenderTarget* pRTList[MAX_MRT_NUM];
+
+        IZ_UINT nRTNum = 0;
+
+        // レンダーターゲット
+        for (IZ_UINT i = 0; i < MAX_MRT_NUM; ++i) {
+            CRenderTarget* rt = m_RTMgr[i].GetCurrent();
+
+            if ((flag & (1 << i)) > 0) {
+                CRenderTarget* tmp = m_RTMgr[i].Pop();
+                if (tmp != IZ_NULL) {
+                    rt = tmp;
+                }
+            }
+
+            pRTList[i] = rt;
+            nRTNum++;
+        }
+
+        if (pRTList[0] == IZ_NULL) {
+            pRTList[0] = m_RT;
+            //nRTNum += 1;
+        }
+
+        if (nRTNum > 0) {
+            CheckRenderTargetCount(nRTNum);
+            SetRenderTarget(pRTList, nRTNum);
+        }
+
+        if ((flag & E_GRAPH_END_SCENE_FLAG_DEPTH_STENCIL) > 0
+            || m_isUseInternalDepth)
+        {
+            // 深度・ステンシル
+            CRenderTarget* pDepth = m_DepthMgr.Pop();
+            if (pDepth != IZ_NULL) {
+                SetDepthStencil(pDepth);
+            }
+
+            m_isUseInternalDepth = IZ_FALSE;
+        }
+    }
+
     // 本体作成
     IZ_BOOL CGraphicsDeviceGLES2::CreateBody(const SGraphicsDeviceInitParams& sParams)
     {
@@ -154,9 +265,9 @@ namespace graph
         return IZ_TRUE;
     }
 
-    void CGraphicsDeviceGLES2::OnTerminate()
+    void CGraphicsDeviceOGL::OnTerminate()
     {
-        // Nothing is done...
+        SAFE_RELEASE(m_rtInternalDepth);
     }
 
     // 同期

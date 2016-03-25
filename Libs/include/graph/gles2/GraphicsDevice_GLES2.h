@@ -108,7 +108,12 @@ namespace graph
         // 本体作成
         IZ_BOOL CreateBody(const SGraphicsDeviceInitParams& sParams);
 
-        void OnTerminate();
+        // TODO
+#ifdef __IZ_OGL__
+        virtual void OnTerminate() {}
+#else
+        virtual void OnTerminate();
+#endif
 
     public:
         // リセット
@@ -217,7 +222,6 @@ namespace graph
             // Nothing...
         }
 
-
         // デバイスロスト用コールバックセット
         virtual void SetLostDeviceCallBack(GraphicsDeviceLostDeviceCallBack pCallBack)
         {
@@ -239,7 +243,7 @@ namespace graph
 
         CFrameBufferObject* getFBO();
 
-    private:
+    protected:
         virtual IZ_BOOL SetTextureInternal(IZ_UINT nStage, CBaseTexture* pTex);
         virtual void SetRenderTargetInternal(CRenderTarget** rt, IZ_UINT num);
 
