@@ -17,9 +17,11 @@ public:
     // 解放.
     void release();
 
-    IZ_BOOL begin(izanagi::graph::CGraphicsDevice* device);
+    IZ_BOOL beginGeometryPass(izanagi::graph::CGraphicsDevice* device);
+    IZ_BOOL endGeometryPass(izanagi::graph::CGraphicsDevice* device);
 
-    IZ_BOOL end(izanagi::graph::CGraphicsDevice* device);
+    IZ_BOOL beginLightPass(izanagi::graph::CGraphicsDevice* device);
+    IZ_BOOL endLightPass(izanagi::graph::CGraphicsDevice* device);
 
     void drawBuffers(izanagi::graph::CGraphicsDevice* device);
 
@@ -33,8 +35,16 @@ public:
         Num,
     };
 
+    izanagi::graph::CRenderTarget* getBuffer(Type type)
+    {
+        IZ_ASSERT(type < Type::Num);
+        return m_buffers[type];
+    }
+
 private:
     izanagi::graph::CRenderTarget* m_buffers[Type::Num];
+
+    izanagi::graph::CRenderTarget* m_lightBuffer{ nullptr };
 };
 
 #endif    // #if !defined(__GBUFFER_H__)

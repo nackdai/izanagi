@@ -1,14 +1,14 @@
 // PointLight Shader
 
 struct SVSInput {
-    float4 vPos        : POSITION;
-    float4 vColor    : COLOR;
+    float4 vPos     : POSITION;
+    float4 vColor   : COLOR;
 };
 
 struct SPSInput {
-    float4 vPos        : POSITION;
-    float4 vColor    : COLOR;
-    float distance    : TEXCOORD0;
+    float4 vPos         : POSITION;
+    float4 vColor       : COLOR;
+    float4 vWorldPos    : TEXCOORD0;
 };
 
 #define SVSOutput        SPSInput
@@ -35,8 +35,7 @@ SVSOutput mainVS(SVSInput In)
     
     Out.vPos = mul(In.vPos, g_mL2W);
 
-    // ライトとの距離
-    Out.distance = length(g_PointLightPos - Out.vPos);
+    Out.vWorldPos = Out.vPos;
 
     Out.vPos = mul(Out.vPos, g_mW2C);
         
@@ -48,7 +47,8 @@ SVSOutput mainVS(SVSInput In)
 float4 mainPS(SPSInput In) : COLOR
 {
     // ポイントライトの減衰
-    float d = In.distance;
+    float d = length(g_PointLightPos - In.vWorldPos);
+
     float attn = 1.0f / (g_PointLight.x + g_PointLight.y * d + g_PointLight.z * d * d);
 
     float4 vOut = In.vColor + attn * g_PointLightColor;
