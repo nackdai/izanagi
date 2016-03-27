@@ -569,6 +569,10 @@ __EXIT__:
             key = key - 'A';
             return (E_KEYBOARD_BUTTON)(E_KEYBOARD_BUTTON_A + key);
         }
+        else if (VK_F1 <= key && key <= VK_F12) {
+            key = key - VK_F1;
+            return (E_KEYBOARD_BUTTON)(E_KEYBOARD_BUTTON_F1 + key);
+        }
         else {
             switch (key) {
             case VK_UP:
