@@ -318,12 +318,16 @@ void DeferredLightingApp::renderLightPass(izanagi::graph::CGraphicsDevice* devic
 {
     izanagi::sample::CSampleCamera& camera = GetCamera();
 
+    izanagi::math::SMatrix44 mtxInvW2C;
+    izanagi::math::SMatrix44::Inverse(mtxInvW2C, camera.GetParam().mtxW2C);
+
     m_gbuffer.beginLightPass(device);
 
     m_Shader->Begin(device, 0, IZ_FALSE);
     {
         if (m_Shader->BeginPass(2)) {
-            m_Shader->SetTexture("texWorldPos", m_gbuffer.getBuffer(GBuffer::Type::Position));
+            m_Shader->SetTexture("texDepth", m_gbuffer.getBuffer(GBuffer::Type::Depth));
+            m_Shader->SetTexture("texAlbedo", m_gbuffer.getBuffer(GBuffer::Type::Albedo));
 
             _SetShaderParam(
                 m_Shader,
@@ -374,6 +378,12 @@ void DeferredLightingApp::renderLightPass(izanagi::graph::CGraphicsDevice* devic
                     "g_PointLightColor",
                     (void*)&m_pointLights[i].color,
                     sizeof(m_pointLights[i].color));
+
+                _SetShaderParam(
+                    m_Shader,
+                    "g_mtxInvW2C",
+                    (void*)&mtxInvW2C,
+                    sizeof(mtxInvW2C));
 
                 m_Shader->CommitChanges(device);
 

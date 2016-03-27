@@ -30,7 +30,8 @@ IZ_BOOL GBuffer::initialize(
     // Depth.
     m_buffers[Type::Depth] = device->CreateRenderTarget(
         width, height,
-        izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA32F);
+        //izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA32F);
+        izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA8);
 
     // Position.
     m_buffers[Type::Position] = device->CreateRenderTarget(

@@ -62,7 +62,10 @@ SPSOutput mainPSGeometryPass(SPSInput In)
 
     float4 clipPos = mul(In.vWorldPos, g_mW2C);
     float depth = clipPos.z / clipPos.w;
-    Out.depth.rgb = depth;
+    Out.depth.r = depth;
+    Out.depth.g = depth * 256.0f;
+    Out.depth.b = depth * 256.0f * 256.0f;
+    Out.depth = frac(Out.depth);
     Out.depth.a = 1.0f;
 
     Out.position = clipPos / clipPos.w;
@@ -84,14 +87,21 @@ SVSOutput mainVSLightPass(SVSInput In)
     Out.vTexCoord = Out.vPos.xy / Out.vPos.w;
     Out.vTexCoord = (Out.vTexCoord + 1.0f) * 0.5f;
 
+    Out.vTexCoord.y = 1.0f - Out.vTexCoord.y;
+
     return Out;
 }
 
-texture texWorldPos;
+texture texDepth;
+texture texAlbedo;
 
-sampler smplWorldPos = sampler_state
+sampler smplDepth = sampler_state
 {
-    Texture = texWorldPos;
+    Texture = texDepth;
+};
+sampler smplAlbedo = sampler_state
+{
+    Texture = texAlbedo;
 };
 
 // 位置
@@ -103,17 +113,29 @@ float4 g_PointLightAttn;
 // 色
 float4 g_PointLightColor;
 
+float4x4 g_mtxInvW2C;
+
 float4 mainPSLightPass(SPSInput In) : COLOR0
 {
-    float4 worldPos = tex2D(smplWorldPos, In.vTexCoord);
+    float4 vDepth = tex2D(smplDepth, In.vTexCoord);
+    float depth = vDepth.r + vDepth.g / 256.0f + vDepth.b / (256.0f * 256.0f);
+
+    float4 pos = float4(In.vTexCoord.x, In.vTexCoord.y, depth, 1.0f);
+    pos.xy = pos.xy * 2.0f - 1.0f;  // [0,1] -> [-1, 1]
+
+    pos = mul(pos, g_mtxInvW2C);
+    pos /= pos.w;
 
     // ポイントライトの減衰
-    float d = length(g_PointLightPos - worldPos);
+    float d = length(g_PointLightPos - pos);
 
     float attn = 1.0f / (g_PointLightAttn.x + g_PointLightAttn.y * d + g_PointLightAttn.z * d * d);
 
     float4 Out = attn * g_PointLightColor;
     Out.a = 1.0f;
+
+    float4 color = tex2D(smplAlbedo, In.vTexCoord);
+    Out.rgb += color.rgb;
 
     return Out;
 }
