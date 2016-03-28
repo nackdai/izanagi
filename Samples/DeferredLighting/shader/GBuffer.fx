@@ -8,7 +8,7 @@ struct SPSInput {
     float4 vPos         : POSITION;
     float3 vNormal      : NORMAL;
     float2 vTexCoord    : TEXCOORD0;
-    float4 vWorldPos    : TEXCOORD1;
+    float4 viewSpaceDepth   : TEXCOORD1;
 };
 
 #define SVSOutput        SPSInput
@@ -17,13 +17,15 @@ struct SPSOutput {
     float4 albedo   : COLOR0;
     float4 normal   : COLOR1;
     float4 depth    : COLOR2;
-    float4 position : COLOR3;
 };
 
 /////////////////////////////////////////////////////////////
 
 float4x4 g_mL2W;
+float4x4 g_mW2V;
 float4x4 g_mW2C;
+
+float g_farClip;
 
 texture tex;
 
@@ -38,9 +40,12 @@ SVSOutput mainVSGeometryPass(SVSInput In)
 {
     SVSOutput Out = (SVSOutput)0;
 
-    Out.vWorldPos = mul(In.vPos, g_mL2W);
+    Out.vPos = mul(In.vPos, g_mL2W);
 
-    Out.vPos = mul(Out.vWorldPos, g_mW2C);
+    Out.viewSpaceDepth = mul(In.vPos, g_mW2V).z;
+    Out.viewSpaceDepth /= g_farClip;
+
+    Out.vPos = mul(Out.vPos, g_mW2C);
 
     Out.vNormal = mul(In.vNormal, (float3x3)g_mL2W);
     Out.vNormal = normalize(Out.vNormal);
@@ -60,17 +65,8 @@ SPSOutput mainPSGeometryPass(SPSInput In)
     Out.normal.rgb = In.vNormal * 0.5f + 0.5f;  // normalize [-1, 1] ->[0, 1]
     Out.normal.a = 1.0f;
 
-    float4 clipPos = mul(In.vWorldPos, g_mW2C);
-    float depth = clipPos.z / clipPos.w;
-    Out.depth.r = depth;
-    Out.depth.g = depth * 256.0f;
-    Out.depth.b = depth * 256.0f * 256.0f;
-    Out.depth = frac(Out.depth);
+    Out.depth = In.viewSpaceDepth;
     Out.depth.a = 1.0f;
-
-    Out.position = clipPos / clipPos.w;
-    Out.position = (Out.position + 1.0f) * 0.5f;
-    Out.position.a = 1.0f;
 
     return Out;
 }
@@ -113,18 +109,44 @@ float4 g_PointLightAttn;
 // 色
 float4 g_PointLightColor;
 
-float4x4 g_mtxInvW2C;
+float4x4 g_mtxC2V;
+float4x4 g_mtxV2W;
 
 float4 mainPSLightPass(SPSInput In) : COLOR0
 {
-    float4 vDepth = tex2D(smplDepth, In.vTexCoord);
-    float depth = vDepth.r + vDepth.g / 256.0f + vDepth.b / (256.0f * 256.0f);
+    // Depth format is R32F.
+    float depth = tex2D(smplDepth, In.vTexCoord).r;
 
-    float4 pos = float4(In.vTexCoord.x, In.vTexCoord.y, depth, 1.0f);
-    pos.xy = pos.xy * 2.0f - 1.0f;  // [0,1] -> [-1, 1]
+    // Convert depth [0, 1] -> [0, far] in view-space.
+    depth *= g_farClip;
 
-    pos = mul(pos, g_mtxInvW2C);
-    pos /= pos.w;
+    float4 pos = float4(In.vTexCoord.x, In.vTexCoord.y, 0.0f, 1.0f);
+
+    // Convert from texcoord to clip-space.
+    pos.y = 1.0f - pos.y;
+    pos.xy = pos.xy * 2.0f - 1.0f;  // [0, 1] -> [-1, 1]
+
+    // NOTE
+    // P = (X, Y, Z, 1)
+    // mtxV2C = W 0 0 0
+    //          0 H 0 0
+    //          0 0 A 1
+    //          0 0 B 0
+    // Pview * mtxV2C = (Xclip, Yclip, Zclip, Wclip) = (Xclip, Yclip, Zclip, Zview)
+    //  Wclip = Zview = depth
+    // X' = Xclip / Wclip = Xclip / Zview = Xclip / depth
+    // Y' = Yclip / Wclip = Yclip / Zview = Yclip / depth
+    //
+    // X' * depth = Xclip
+    // Xview = Xclip * mtxC2V
+
+    pos.xy *= depth;
+    pos = mul(pos, g_mtxC2V);
+
+    pos.xy /= pos.z;
+    pos.z = depth;
+
+    pos = mul(pos, g_mtxV2W);
 
     // ポイントライトの減衰
     float d = length(g_PointLightPos - pos);
@@ -133,9 +155,6 @@ float4 mainPSLightPass(SPSInput In) : COLOR0
 
     float4 Out = attn * g_PointLightColor;
     Out.a = 1.0f;
-
-    float4 color = tex2D(smplAlbedo, In.vTexCoord);
-    Out.rgb += color.rgb;
 
     return Out;
 }
@@ -146,9 +165,8 @@ SVSOutput mainVS(SVSInput In)
 {
     SVSOutput Out = (SVSOutput)0;
 
-    Out.vWorldPos = mul(In.vPos, g_mL2W);
-
-    Out.vPos = mul(Out.vWorldPos, g_mW2C);
+    Out.vPos = mul(In.vPos, g_mL2W);
+    Out.vPos = mul(Out.vPos, g_mW2C);
 
     Out.vNormal = mul(In.vNormal, (float3x3)g_mL2W);
     Out.vNormal = normalize(Out.vNormal);

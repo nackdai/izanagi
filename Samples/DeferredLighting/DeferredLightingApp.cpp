@@ -275,6 +275,16 @@ void DeferredLightingApp::renderGeometryPass(izanagi::graph::CGraphicsDevice* de
                 "g_mW2C",
                 (void*)&camera.GetParam().mtxW2C,
                 sizeof(camera.GetParam().mtxW2C));
+            _SetShaderParam(
+                m_Shader,
+                "g_mW2V",
+                (void*)&camera.GetParam().mtxW2V,
+                sizeof(camera.GetParam().mtxW2V));
+            _SetShaderParam(
+                m_Shader,
+                "g_farClip",
+                (void*)&camera.GetParam().cameraFar,
+                sizeof(camera.GetParam().cameraFar));
 
             for (IZ_UINT i = 0; i < MESH_NUM; i++)
             {
@@ -318,8 +328,11 @@ void DeferredLightingApp::renderLightPass(izanagi::graph::CGraphicsDevice* devic
 {
     izanagi::sample::CSampleCamera& camera = GetCamera();
 
-    izanagi::math::SMatrix44 mtxInvW2C;
-    izanagi::math::SMatrix44::Inverse(mtxInvW2C, camera.GetParam().mtxW2C);
+    izanagi::math::SMatrix44 mtxC2V;
+    izanagi::math::SMatrix44::Inverse(mtxC2V, camera.GetParam().mtxV2C);
+
+    izanagi::math::SMatrix44 mtxV2W;
+    izanagi::math::SMatrix44::Inverse(mtxV2W, camera.GetParam().mtxW2V);
 
     m_gbuffer.beginLightPass(device);
 
@@ -327,13 +340,29 @@ void DeferredLightingApp::renderLightPass(izanagi::graph::CGraphicsDevice* devic
     {
         if (m_Shader->BeginPass(2)) {
             m_Shader->SetTexture("texDepth", m_gbuffer.getBuffer(GBuffer::Type::Depth));
-            m_Shader->SetTexture("texAlbedo", m_gbuffer.getBuffer(GBuffer::Type::Albedo));
+            //m_Shader->SetTexture("texAlbedo", m_gbuffer.getBuffer(GBuffer::Type::Albedo));
 
             _SetShaderParam(
                 m_Shader,
                 "g_mW2C",
                 (void*)&camera.GetParam().mtxW2C,
                 sizeof(camera.GetParam().mtxW2C));
+            _SetShaderParam(
+                m_Shader,
+                "g_farClip",
+                (void*)&camera.GetParam().cameraFar,
+                sizeof(camera.GetParam().cameraFar));
+
+            _SetShaderParam(
+                m_Shader,
+                "g_mtxC2V",
+                (void*)&mtxC2V,
+                sizeof(mtxC2V));
+            _SetShaderParam(
+                m_Shader,
+                "g_mtxV2W",
+                (void*)&mtxV2W,
+                sizeof(mtxV2W));
 
             for (IZ_UINT i = 0; i < POINT_LIGHT_NUM; i++) {
                 auto s = _ComputePointLightScale(m_pointLights[i]);
@@ -378,12 +407,6 @@ void DeferredLightingApp::renderLightPass(izanagi::graph::CGraphicsDevice* devic
                     "g_PointLightColor",
                     (void*)&m_pointLights[i].color,
                     sizeof(m_pointLights[i].color));
-
-                _SetShaderParam(
-                    m_Shader,
-                    "g_mtxInvW2C",
-                    (void*)&mtxInvW2C,
-                    sizeof(mtxInvW2C));
 
                 m_Shader->CommitChanges(device);
 

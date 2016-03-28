@@ -30,13 +30,7 @@ IZ_BOOL GBuffer::initialize(
     // Depth.
     m_buffers[Type::Depth] = device->CreateRenderTarget(
         width, height,
-        //izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA32F);
-        izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA8);
-
-    // Position.
-    m_buffers[Type::Position] = device->CreateRenderTarget(
-        width, height,
-        izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA32F);
+        izanagi::graph::E_GRAPH_PIXEL_FMT_R32F);
 
     // Light.
     m_lightBuffer = device->CreateRenderTarget(
@@ -61,7 +55,8 @@ IZ_BOOL GBuffer::beginGeometryPass(izanagi::graph::CGraphicsDevice* device)
     auto ret = device->BeginScene(
         m_buffers,
         COUNTOF(m_buffers),
-        izanagi::graph::E_GRAPH_CLEAR_FLAG_ALL);
+        izanagi::graph::E_GRAPH_CLEAR_FLAG_ALL,
+        IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0x00));
 
     return ret;
 }
@@ -126,6 +121,11 @@ void GBuffer::drawBuffers(izanagi::graph::CGraphicsDevice* device)
                 izanagi::CIntRect(x, y, 320, 180));
 
             y += 180;
+        }
+
+        if (y + 180 > height) {
+            y = 100;
+            x += 320;
         }
 
         device->SetTexture(0, m_lightBuffer);
