@@ -573,6 +573,7 @@ BOOL CShaderConverter::ExportParameter(const SShaderConfig& config)
 
                 if (config.type == izanagi::E_PLATFORM_GLES2) {
                     // For GLES2
+#if 0
                     if (izanagi::shader::E_SHADER_PARAMETER_TYPE_FLOAT1x1 <= sParam.Type
                         && sParam.Type <= izanagi::shader::E_SHADER_PARAMETER_TYPE_FLOAT4x4)
                     {
@@ -580,6 +581,40 @@ BOOL CShaderConverter::ExportParameter(const SShaderConfig& config)
                         sParam.Type = izanagi::shader::E_SHADER_PARAMETER_TYPE_FLOAT4;
                         sParam.Elements = (sParam.Elements > 0 ? sParam.Elements * 4 : 4);
                     }
+#else
+                    switch (sParam.Type) {
+                    case izanagi::shader::E_SHADER_PARAMETER_TYPE_FLOAT1x1:
+                    case izanagi::shader::E_SHADER_PARAMETER_TYPE_FLOAT1x2:
+                    case izanagi::shader::E_SHADER_PARAMETER_TYPE_FLOAT1x3:
+                    case izanagi::shader::E_SHADER_PARAMETER_TYPE_FLOAT1x4:
+                        sParam.Type = izanagi::shader::E_SHADER_PARAMETER_TYPE_FLOAT;
+                        //sParam.Elements = (sParam.Elements > 0 ? sParam.Elements * 1 : 1);
+                        break;
+                    case izanagi::shader::E_SHADER_PARAMETER_TYPE_FLOAT2x1:
+                    case izanagi::shader::E_SHADER_PARAMETER_TYPE_FLOAT2x2:
+                    case izanagi::shader::E_SHADER_PARAMETER_TYPE_FLOAT2x3:
+                    case izanagi::shader::E_SHADER_PARAMETER_TYPE_FLOAT2x4:
+                        sParam.Type = izanagi::shader::E_SHADER_PARAMETER_TYPE_FLOAT2;
+                        //sParam.Elements = (sParam.Elements > 0 ? sParam.Elements * 2 : 2);
+                        break;
+                    case izanagi::shader::E_SHADER_PARAMETER_TYPE_FLOAT3x1:
+                    case izanagi::shader::E_SHADER_PARAMETER_TYPE_FLOAT3x2:
+                    case izanagi::shader::E_SHADER_PARAMETER_TYPE_FLOAT3x3:
+                    case izanagi::shader::E_SHADER_PARAMETER_TYPE_FLOAT3x4:
+                        sParam.Type = izanagi::shader::E_SHADER_PARAMETER_TYPE_FLOAT3;
+                        //sParam.Elements = (sParam.Elements > 0 ? sParam.Elements * 3 : 3);
+                        break;
+                    case izanagi::shader::E_SHADER_PARAMETER_TYPE_FLOAT4x1:
+                    case izanagi::shader::E_SHADER_PARAMETER_TYPE_FLOAT4x2:
+                    case izanagi::shader::E_SHADER_PARAMETER_TYPE_FLOAT4x3:
+                    case izanagi::shader::E_SHADER_PARAMETER_TYPE_FLOAT4x4:
+                        sParam.Type = izanagi::shader::E_SHADER_PARAMETER_TYPE_FLOAT4;
+                        //sParam.Elements = (sParam.Elements > 0 ? sParam.Elements * 4 : 4);
+                        break;
+                    }
+
+                    //printf("    Rows(%d) Columns(%d) Elements(%d)\n", sParam.Rows, sParam.Columns, sParam.Elements);
+#endif
                 }
 
                 m_ParamList.push_back(param);

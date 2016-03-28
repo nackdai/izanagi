@@ -198,6 +198,38 @@ BOOL CParamUtil::SetDescValue(
     // Dimensionは０固定
     sDesc.Elements = ::cgGetArraySize(param, 0);
 
+#if 0
+    // For debug...
+    auto name = ::cgGetParameterName(param);
+    printf("Parameter[%s]\n", name);
+
+#define _SHD_PARAM_TYPE(type)   {izanagi::shader::E_SHADER_PARAMETER_TYPE_##type, #type}
+
+    struct {
+        izanagi::shader::E_SHADER_PARAMETER_TYPE type;
+        const char* name;
+    } types[] = {
+        _SHD_PARAM_TYPE(FLOAT),
+        _SHD_PARAM_TYPE(FLOAT1),
+        _SHD_PARAM_TYPE(FLOAT4),
+        _SHD_PARAM_TYPE(FLOAT4x4),
+    };
+
+    IZ_BOOL isMatch = IZ_FALSE;
+    for (IZ_UINT i = 0; i < COUNTOF(types); i++) {
+        if (types[i].type == sDesc.Type) {
+            printf("    Type(%s)\n", types[i].name);
+            isMatch = IZ_TRUE;
+            break;
+        }
+    }
+    if (isMatch) {
+        printf("    Type(Unknown)\n");
+    }
+
+    printf("    Rows(%d) Columns(%d) Elements(%d)\n", sDesc.Rows, sDesc.Columns, sDesc.Elements);
+#endif
+
     // TODO
     // 構造体は禁止なので計算しない
     sDesc.StructMembers = 0;
