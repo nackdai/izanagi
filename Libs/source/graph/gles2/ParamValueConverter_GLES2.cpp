@@ -201,9 +201,13 @@ namespace graph
             glFormat = GL_RGBA_INTEGER;
             glType = GL_UNSIGNED_INT;
             break;
+        case E_GRAPH_PIXEL_FMT_R32F:
+            glInternal = GL_R32F;
+            glFormat = GL_RED;
+            glType = GL_FLOAT;
+            break;
         case E_GRAPH_PIXEL_FMT_BGRA8:
         case E_GRAPH_PIXEL_FMT_RGB10A2:
-        case E_GRAPH_PIXEL_FMT_R32F:
         case E_GRAPH_PIXEL_FMT_RGBA16F:
         case E_GRAPH_PIXEL_FMT_DXT1:
         case E_GRAPH_PIXEL_FMT_DXT3:
