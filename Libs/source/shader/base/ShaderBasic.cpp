@@ -137,6 +137,10 @@ namespace shader
 
         m_nCurTech = -1;
         m_nCurPass = -1;
+
+        for (IZ_UINT i = 0; i < COUNTOF(m_isEnableShaderRenderState); i++) {
+            m_isEnableShaderRenderState[i] = IZ_TRUE;
+        }
     }
 
     CShaderBasic::~CShaderBasic()
@@ -357,8 +361,11 @@ namespace shader
         CShaderPass& cPass = m_pPass[passIdx + m_nCurPass];
         const S_SHD_PASS* pDesc = cPass.GetDesc();
 
+#define _SET_RENDER_STATE_COMMIT_CHANGES(type1, type2)  if (m_isEnableShaderRenderState[graph::E_GRAPH_RS_##type1]) device->SetRenderState(graph::E_GRAPH_RS_##type1, pDesc->state.##type2)
+
         // Set RenderStates.
         {
+#if 0
             device->SetRenderState(graph::E_GRAPH_RS_ALPHABLENDENABLE, pDesc->state.AlphaBlendEnable);
             device->SetRenderState(graph::E_GRAPH_RS_BLENDMETHOD,      pDesc->state.AlphaBlendMethod);
             device->SetRenderState(graph::E_GRAPH_RS_ALPHATESTENABLE,  pDesc->state.AlphaTestEnable);
@@ -368,6 +375,17 @@ namespace shader
             device->SetRenderState(graph::E_GRAPH_RS_ZENABLE,          pDesc->state.ZEnable);
             device->SetRenderState(graph::E_GRAPH_RS_ZWRITEENABLE,     pDesc->state.ZWriteEnable);
             device->SetRenderState(graph::E_GRAPH_RS_ZFUNC,            pDesc->state.ZFunc);
+#else
+            _SET_RENDER_STATE_COMMIT_CHANGES(ALPHABLENDENABLE, AlphaBlendEnable);
+            _SET_RENDER_STATE_COMMIT_CHANGES(BLENDMETHOD, AlphaBlendMethod);
+            _SET_RENDER_STATE_COMMIT_CHANGES(ALPHATESTENABLE, AlphaTestEnable);
+            _SET_RENDER_STATE_COMMIT_CHANGES(ALPHAREF, AlphaTestRef);
+            _SET_RENDER_STATE_COMMIT_CHANGES(ALPHAFUNC, AlphaTestFunc);
+
+            _SET_RENDER_STATE_COMMIT_CHANGES(ZENABLE, ZEnable);
+            _SET_RENDER_STATE_COMMIT_CHANGES(ZWRITEENABLE, ZWriteEnable);
+            _SET_RENDER_STATE_COMMIT_CHANGES(ZFUNC, ZFunc);
+#endif
         }
 
         // Set Shader.
@@ -748,6 +766,18 @@ namespace shader
         IZ_UINT realPassIdx = m_TechTbl.GetPassIdx(techIdx, passIdx);
         CShaderPass& pass = m_pPass[realPassIdx];
         return pass.GetShaderProgram();
+    }
+
+    void CShaderBasic::EnableToUpdateRenderState(
+        graph::E_GRAPH_RENDER_STATE state,
+        IZ_BOOL b)
+    {
+        m_isEnableShaderRenderState[state] = b;
+    }
+
+    IZ_BOOL CShaderBasic::CanUpdateRenderState(graph::E_GRAPH_RENDER_STATE state) const
+    {
+        return m_isEnableShaderRenderState[state];
     }
 }   // namespace shader
 }   // namespace izanagi

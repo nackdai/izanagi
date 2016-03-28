@@ -152,6 +152,12 @@ namespace shader
             IZ_UINT techIdx,
             IZ_UINT passIdx);
 
+        void EnableToUpdateRenderState(
+            graph::E_GRAPH_RENDER_STATE state,
+            IZ_BOOL b);
+
+        IZ_BOOL CanUpdateRenderState(graph::E_GRAPH_RENDER_STATE state) const;
+
     protected:
         IZ_UINT8* m_pBuffer;
 
@@ -170,6 +176,8 @@ namespace shader
         IZ_BOOL m_bIsSavedRS;
         IZ_INT16 m_nCurTech;
         IZ_INT16 m_nCurPass;
+
+        IZ_BOOL m_isEnableShaderRenderState[graph::E_GRAPH_RS_NUM];
     };
 }   // namespace shader
 }   // namespace izanagi
