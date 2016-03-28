@@ -58,6 +58,20 @@ namespace shader
                         idx, 
                         nSmplIdx, 
                         name);
+
+        if (!ret) {
+            // TODO
+            // OpenGLの場合は、ShaderCompile でサンプラ名が強制的に sN にリネームされている.
+
+            const S_SHD_SAMPLER* samplerDesc = samplerTbl.GetDesc(nSmplIdx);
+
+            static const char* smplNames[] = {
+                "s0", "s1", "s2", "s3", "s4", "s5", "s6", "s7",
+            };
+            IZ_ASSERT(samplerDesc->resource_id < COUNTOF(smplNames));
+
+            ret = InitInfo<SSamplerInfo>(m_Samplers, idx, nSmplIdx, smplNames[samplerDesc->resource_id]);
+        }
         
         if (ret) {
 #if 0
