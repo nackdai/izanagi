@@ -19,8 +19,13 @@ namespace shader
         IZ_UINT nElements = desc.Elements;
         nElements = (nElements == 0 ? 1 : nElements);
 
+#if 0
 		IZ_UINT nRow = CShaderParamUtil::GetParamRowFromParamType(type);
 		IZ_UINT nColumn = CShaderParamUtil::GetParamColumnFromParamType(type);
+#else
+        IZ_UINT nRow = desc.Rows;
+        IZ_UINT nColumn = desc.Columns;
+#endif
 
 		if (CShaderParamUtil::IsBoolType(type)) {
 			// BOOL
@@ -61,9 +66,17 @@ namespace shader
                     if (CShaderParamUtil::IsMatrixType(desc.originalType)) {
                         pShader->SetMatrixArrayAsVectorArray(
                             device,
-                            handle, 
+                            handle,
                             (const math::SMatrix44*)pValue,
-                            nElements);
+                            //nElements);
+                            nColumn);
+                    }
+                    else if (nRow == 1) {
+                        pShader->SetVectorArray(
+                            device,
+                            handle,
+                            (const math::SVector4*)pValue,
+                            nRow);
                     }
                     else {
                         IZ_ASSERT(IZ_FALSE);
