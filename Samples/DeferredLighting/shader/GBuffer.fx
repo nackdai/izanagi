@@ -42,7 +42,7 @@ SVSOutput mainVSGeometryPass(SVSInput In)
 
     Out.vPos = mul(In.vPos, g_mL2W);
 
-    Out.viewSpaceDepth = mul(In.vPos, g_mW2V).z;
+    Out.viewSpaceDepth = mul(Out.vPos, g_mW2V).z;
     Out.viewSpaceDepth /= g_farClip;
 
     Out.vPos = mul(Out.vPos, g_mW2C);
