@@ -38,6 +38,7 @@ private:
 
     void renderGeometryPass(izanagi::graph::CGraphicsDevice* device);
     void renderLightPass(izanagi::graph::CGraphicsDevice* device);
+    void renderFinalPass(izanagi::graph::CGraphicsDevice* device);
 
 private:
     static const IZ_UINT MESH_NUM = 5;
@@ -56,6 +57,8 @@ private:
 
     izanagi::SPointLightParam m_pointLights[POINT_LIGHT_NUM];
     izanagi::CDebugMesh* m_pointLitSphere{ nullptr };
+
+    izanagi::CDebugMesh* m_screenFillPlane{ nullptr };
 };
 
 #endif    // #if !defined(__DEFERRED_LIGHTING_APP_H__)

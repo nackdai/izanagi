@@ -89,15 +89,10 @@ SVSOutput mainVSLightPass(SVSInput In)
 }
 
 texture texDepth;
-texture texAlbedo;
 
 sampler smplDepth = sampler_state
 {
     Texture = texDepth;
-};
-sampler smplAlbedo = sampler_state
-{
-    Texture = texAlbedo;
 };
 
 // 位置
@@ -161,6 +156,66 @@ float4 mainPSLightPass(SPSInput In) : COLOR0
 
 /////////////////////////////////////////////////////////////
 
+texture texAlbedo;
+texture texLight;
+
+sampler smplAlbedo = sampler_state
+{
+    Texture = texAlbedo;
+};
+sampler smplLight = sampler_state
+{
+    Texture = texLight;
+};
+
+struct SVSInputFinalPass {
+    float4 vPos     : POSITION;
+    float4 vColor   : COLOR;
+    float2 vUV      : TEXCOORD0;
+};
+
+struct SPSInputFinalPass {
+    float4 vPos     : POSITION;
+    float2 vUV      : TEXCOORD0;
+};
+
+#define SVSOutputFinalPass SPSInputFinalPass
+
+// スクリーンサイズの逆数
+float4 g_vInvScreen = (float4)1.0f;
+
+SVSOutputFinalPass mainVSFinalPass(SVSInputFinalPass In)
+{
+    SVSOutputFinalPass sOut;
+
+    // 頂点位置
+    sOut.vPos = In.vPos;
+    sOut.vPos.xy *= g_vInvScreen.xy;
+
+    // [0, 1] -> [-1, -1]
+    sOut.vPos.xy = sOut.vPos.xy * 2.0f - 1.0f;
+
+    // さらにY座標は反転させる
+    sOut.vPos.y *= -1.0f;
+
+    // UV座標
+    sOut.vUV = In.vUV;
+
+    return sOut;
+}
+
+float4 mainPSFinalPass(SPSInputFinalPass In) : COLOR
+{
+    float4 albedo = tex2D(smplAlbedo, In.vUV);
+    float4 light = tex2D(smplLight, In.vUV);
+
+    albedo += light;
+
+    return albedo;
+}
+
+/////////////////////////////////////////////////////////////
+
 SVSOutput mainVS(SVSInput In)
 {
     SVSOutput Out = (SVSOutput)0;
@@ -208,5 +263,11 @@ technique GBuffer
 
         ZWriteEnable = false;
         ZEnable = false;
+    }
+
+    pass finalPass
+    {
+        VertexShader = compile vs_3_0 mainVSFinalPass();
+        PixelShader = compile ps_3_0 mainPSFinalPass();
     }
 }

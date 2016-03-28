@@ -44,6 +44,11 @@ public:
         return m_buffers[type];
     }
 
+    izanagi::graph::CRenderTarget* getLightBuffer()
+    {
+        return m_lightBuffer;
+    }
+
 private:
     izanagi::graph::CRenderTarget* m_buffers[Type::Num];
 

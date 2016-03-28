@@ -162,6 +162,15 @@ IZ_BOOL DeferredLightingApp::initMeshes(
         VRETURN(m_pointLitSphere != IZ_NULL);
     }
 
+    // For FinalPass.
+    {
+        m_screenFillPlane = izanagi::CDebugMeshScreenFillPlane::create(
+            allocator,
+            device,
+            IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0xff));
+        VRETURN(m_screenFillPlane != IZ_NULL);
+    }
+
     return IZ_TRUE;
 }
 
@@ -190,6 +199,7 @@ void DeferredLightingApp::ReleaseInternal()
     SAFE_RELEASE(m_Img);
 
     SAFE_RELEASE(m_pointLitSphere);
+    SAFE_RELEASE(m_screenFillPlane);
 
     m_gbuffer.release();
 }
@@ -224,6 +234,8 @@ void DeferredLightingApp::RenderInternal(izanagi::graph::CGraphicsDevice* device
 {
     renderGeometryPass(device);
     renderLightPass(device);
+
+    renderFinalPass(device);
 
     device->SetTexture(0, IZ_NULL);
 
@@ -428,4 +440,33 @@ void DeferredLightingApp::renderLightPass(izanagi::graph::CGraphicsDevice* devic
         izanagi::graph::E_GRAPH_CULL_DEFAULT);
 
     m_gbuffer.endLightPass(device, m_Shader);
+}
+
+void DeferredLightingApp::renderFinalPass(izanagi::graph::CGraphicsDevice* device)
+{
+    izanagi::math::CVector4 invScreenSize(
+        1.0f / device->GetBackBufferWidth(),
+        1.0f / device->GetBackBufferHeight(),
+        0.0f);
+
+    m_Shader->Begin(device, 0, IZ_FALSE);
+    {
+        m_Shader->SetTexture("texAlbedo", m_gbuffer.getBuffer(GBuffer::Type::Albedo));
+        m_Shader->SetTexture("texLight", m_gbuffer.getLightBuffer());
+
+        if (m_Shader->BeginPass(3)) {
+            _SetShaderParam(
+                m_Shader,
+                "g_vInvScreen",
+                (void*)&invScreenSize,
+                sizeof(invScreenSize));
+
+            m_Shader->CommitChanges(device);
+
+            m_screenFillPlane->Draw(device);
+
+            m_Shader->EndPass();
+        }
+    }
+    m_Shader->End(device);
 }
