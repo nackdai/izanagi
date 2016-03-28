@@ -171,6 +171,10 @@ IZ_BOOL DeferredLightingApp::initLights()
     m_pointLights[0].color.Set(1.0f, 0.0f, 0.0f, 1.0f);
     m_pointLights[0].attn.Set(0.0f, 0.0f, 0.01f, 0.0f);
 
+    m_pointLights[1].vPos.Set(10.0f, 5.0f, 0.0f);
+    m_pointLights[1].color.Set(0.0f, 1.0f, 0.0f, 1.0f);
+    m_pointLights[1].attn.Set(0.0f, 0.0f, 0.05f, 0.0f);
+
     return IZ_TRUE;
 }
 
@@ -334,7 +338,7 @@ void DeferredLightingApp::renderLightPass(izanagi::graph::CGraphicsDevice* devic
     izanagi::math::SMatrix44 mtxV2W;
     izanagi::math::SMatrix44::Inverse(mtxV2W, camera.GetParam().mtxW2V);
 
-    m_gbuffer.beginLightPass(device);
+    m_gbuffer.beginLightPass(device, m_Shader);
 
     m_Shader->Begin(device, 0, IZ_FALSE);
     {
@@ -423,5 +427,5 @@ void DeferredLightingApp::renderLightPass(izanagi::graph::CGraphicsDevice* devic
         izanagi::graph::E_GRAPH_RS_CULLMODE,
         izanagi::graph::E_GRAPH_CULL_DEFAULT);
 
-    m_gbuffer.endLightPass(device);
+    m_gbuffer.endLightPass(device, m_Shader);
 }

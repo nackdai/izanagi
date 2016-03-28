@@ -41,7 +41,7 @@ private:
 
 private:
     static const IZ_UINT MESH_NUM = 5;
-    static const IZ_UINT POINT_LIGHT_NUM = 1;
+    static const IZ_UINT POINT_LIGHT_NUM = 2;
 
     struct Cube {
         izanagi::CDebugMesh* mesh{ nullptr };

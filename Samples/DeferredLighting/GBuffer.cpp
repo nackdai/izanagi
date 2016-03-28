@@ -67,14 +67,38 @@ IZ_BOOL GBuffer::endGeometryPass(izanagi::graph::CGraphicsDevice* device)
     return IZ_TRUE;
 }
 
-IZ_BOOL GBuffer::beginLightPass(izanagi::graph::CGraphicsDevice* device)
+IZ_BOOL GBuffer::beginLightPass(
+    izanagi::graph::CGraphicsDevice* device,
+    izanagi::shader::CShaderBasic* shader)
 {
+    shader->EnableToUpdateRenderState(
+        izanagi::graph::E_GRAPH_RS_ZWRITEENABLE,
+        IZ_FALSE);
+    shader->EnableToUpdateRenderState(
+        izanagi::graph::E_GRAPH_RS_ZENABLE,
+        IZ_FALSE);
+    shader->EnableToUpdateRenderState(
+        izanagi::graph::E_GRAPH_RS_ALPHABLENDENABLE,
+        IZ_FALSE);
+    shader->EnableToUpdateRenderState(
+        izanagi::graph::E_GRAPH_RS_BLENDMETHOD,
+        IZ_FALSE);
+
+    device->SaveRenderState();
+
     device->SetRenderState(
         izanagi::graph::E_GRAPH_RS_ZWRITEENABLE,
         IZ_FALSE);
     device->SetRenderState(
         izanagi::graph::E_GRAPH_RS_ZENABLE,
         IZ_FALSE);
+
+    device->SetRenderState(
+        izanagi::graph::E_GRAPH_RS_ALPHABLENDENABLE,
+        IZ_TRUE);
+    device->SetRenderState(
+        izanagi::graph::E_GRAPH_RS_BLENDMETHOD,
+        izanagi::graph::E_GRAPH_ALPHA_BLEND_Cs_Cd);
 
     auto ret = device->BeginScene(
         &m_lightBuffer,
@@ -85,16 +109,13 @@ IZ_BOOL GBuffer::beginLightPass(izanagi::graph::CGraphicsDevice* device)
     return ret;
 }
 
-IZ_BOOL GBuffer::endLightPass(izanagi::graph::CGraphicsDevice* device)
+IZ_BOOL GBuffer::endLightPass(
+    izanagi::graph::CGraphicsDevice* device,
+    izanagi::shader::CShaderBasic* shader)
 {
     device->EndScene();
 
-    device->SetRenderState(
-        izanagi::graph::E_GRAPH_RS_ZWRITEENABLE,
-        IZ_TRUE);
-    device->SetRenderState(
-        izanagi::graph::E_GRAPH_RS_ZENABLE,
-        IZ_TRUE);
+    device->LoadRenderState();
 
     return IZ_TRUE;
 }

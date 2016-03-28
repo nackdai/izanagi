@@ -20,8 +20,12 @@ public:
     IZ_BOOL beginGeometryPass(izanagi::graph::CGraphicsDevice* device);
     IZ_BOOL endGeometryPass(izanagi::graph::CGraphicsDevice* device);
 
-    IZ_BOOL beginLightPass(izanagi::graph::CGraphicsDevice* device);
-    IZ_BOOL endLightPass(izanagi::graph::CGraphicsDevice* device);
+    IZ_BOOL beginLightPass(
+        izanagi::graph::CGraphicsDevice* device,
+        izanagi::shader::CShaderBasic* shader);
+    IZ_BOOL endLightPass(
+        izanagi::graph::CGraphicsDevice* device,
+        izanagi::shader::CShaderBasic* shader);
 
     void drawBuffers(izanagi::graph::CGraphicsDevice* device);
 
