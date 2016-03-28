@@ -47,6 +47,9 @@
     <ClCompile Include="..\..\source\debugutil\mesh\DebugMeshTorus.cpp">
       <Filter>source\mesh</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\debugutil\mesh\DebugMeshScreenFillPlane.cpp">
+      <Filter>source\mesh</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\source\debugutil\font.dat">
@@ -85,5 +88,8 @@
       <Filter>include\mesh</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\izDebugUtil.h" />
+    <ClInclude Include="..\..\include\debugutil\mesh\DebugMeshScreenFillPlane.h">
+      <Filter>include\mesh</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

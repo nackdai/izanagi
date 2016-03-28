@@ -13,5 +13,6 @@
 #include "debugutil/mesh/DebugMeshAxis.h"
 #include "debugutil/mesh/DebugMeshRectangle.h"
 #include "debugutil/mesh/DebugMeshFrustum.h"
+#include "debugutil/mesh/DebugMeshScreenFillPlane.h"
 
 #endif  // #if !defined(__IZANAGI_DEBUG_UTIL_H__)
