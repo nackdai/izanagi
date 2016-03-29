@@ -1,5 +1,5 @@
-#if !defined(__DEFERRED_LIGHTING_APP_H__)
-#define __DEFERRED_LIGHTING_APP_H__
+#if !defined(__DEFERRED_SHADING_APP_H__)
+#define __DEFERRED_SHADING_APP_H__
 
 #include "izSampleKit.h"
 #include "izShader.h"
@@ -8,10 +8,10 @@
 static const IZ_UINT SCREEN_WIDTH = 1280;
 static const IZ_UINT SCREEN_HEIGHT = 720;
 
-class DeferredLightingApp : public izanagi::sample::CSampleApp {
+class DeferredShadingApp : public izanagi::sample::CSampleApp {
 public:
-    DeferredLightingApp();
-    virtual ~DeferredLightingApp();
+    DeferredShadingApp();
+    virtual ~DeferredShadingApp();
 
 protected:
     // 初期化.
@@ -61,4 +61,4 @@ private:
     izanagi::CDebugMesh* m_screenFillPlane{ nullptr };
 };
 
-#endif    // #if !defined(__DEFERRED_LIGHTING_APP_H__)
+#endif    // #if !defined(__DEFERRED_SHADING_APP_H__)

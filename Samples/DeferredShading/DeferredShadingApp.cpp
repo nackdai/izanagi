@@ -1,4 +1,4 @@
-#include "DeferredLightingApp.h"
+#include "DeferredShadingApp.h"
 
 // NOTE
 // http://learnopengl.com/#!Advanced-Lighting/Deferred-Shading
@@ -7,16 +7,16 @@
 // http://ogldev.atspace.co.uk/www/tutorial36/tutorial36.html
 // http://ogldev.atspace.co.uk/www/tutorial37/tutorial37.html
 
-DeferredLightingApp::DeferredLightingApp()
+DeferredShadingApp::DeferredShadingApp()
 {
 }
 
-DeferredLightingApp::~DeferredLightingApp()
+DeferredShadingApp::~DeferredShadingApp()
 {
 }
 
 // 初期化.
-IZ_BOOL DeferredLightingApp::InitInternal(
+IZ_BOOL DeferredShadingApp::InitInternal(
     izanagi::IMemoryAllocator* allocator,
     izanagi::graph::CGraphicsDevice* device,
     izanagi::sample::CSampleCamera& camera)
@@ -32,7 +32,7 @@ IZ_BOOL DeferredLightingApp::InitInternal(
     // シェーダ
     {
         izanagi::CFileInputStream in;
-        VGOTO(result = in.Open("data/GBuffer.shd"), __EXIT__);
+        VGOTO(result = in.Open("data/DeferredShader.shd"), __EXIT__);
 
         m_Shader = izanagi::shader::CShaderBasic::CreateShader<izanagi::shader::CShaderBasic>(
                     allocator,
@@ -77,7 +77,7 @@ __EXIT__:
     return IZ_TRUE;
 }
 
-IZ_BOOL DeferredLightingApp::initMeshes(
+IZ_BOOL DeferredShadingApp::initMeshes(
     izanagi::IMemoryAllocator* allocator,
     izanagi::graph::CGraphicsDevice* device)
 {
@@ -174,7 +174,7 @@ IZ_BOOL DeferredLightingApp::initMeshes(
     return IZ_TRUE;
 }
 
-IZ_BOOL DeferredLightingApp::initLights()
+IZ_BOOL DeferredShadingApp::initLights()
 {
     m_pointLights[0].vPos.Set(0.0f, 5.0f, 0.0f);
     m_pointLights[0].color.Set(1.0f, 0.0f, 0.0f, 1.0f);
@@ -188,7 +188,7 @@ IZ_BOOL DeferredLightingApp::initLights()
 }
 
 // 解放.
-void DeferredLightingApp::ReleaseInternal()
+void DeferredShadingApp::ReleaseInternal()
 {
     for (IZ_UINT i = 0; i < MESH_NUM; i++)
     {
@@ -205,7 +205,7 @@ void DeferredLightingApp::ReleaseInternal()
 }
 
 // 更新.
-void DeferredLightingApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
+void DeferredShadingApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
     GetCamera().Update();
 }
@@ -230,7 +230,7 @@ namespace {
 }
 
 // 描画.
-void DeferredLightingApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
+void DeferredShadingApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
     renderGeometryPass(device);
     renderLightPass(device);
@@ -275,7 +275,7 @@ void DeferredLightingApp::RenderInternal(izanagi::graph::CGraphicsDevice* device
     m_gbuffer.drawBuffers(device);
 }
 
-void DeferredLightingApp::renderGeometryPass(izanagi::graph::CGraphicsDevice* device)
+void DeferredShadingApp::renderGeometryPass(izanagi::graph::CGraphicsDevice* device)
 {
     izanagi::sample::CSampleCamera& camera = GetCamera();
 
@@ -340,7 +340,7 @@ namespace {
     }
 }
 
-void DeferredLightingApp::renderLightPass(izanagi::graph::CGraphicsDevice* device)
+void DeferredShadingApp::renderLightPass(izanagi::graph::CGraphicsDevice* device)
 {
     izanagi::sample::CSampleCamera& camera = GetCamera();
 
@@ -441,7 +441,7 @@ void DeferredLightingApp::renderLightPass(izanagi::graph::CGraphicsDevice* devic
     m_gbuffer.endLightPass(device, m_Shader);
 }
 
-void DeferredLightingApp::renderFinalPass(izanagi::graph::CGraphicsDevice* device)
+void DeferredShadingApp::renderFinalPass(izanagi::graph::CGraphicsDevice* device)
 {
     izanagi::math::CVector4 invScreenSize(
         1.0f / device->GetBackBufferWidth(),

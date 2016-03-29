@@ -338,17 +338,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\DeferredShading\DeferredLightingApp.h" />
+    <ClInclude Include="..\..\DeferredShading\DeferredShadingApp.h" />
     <ClInclude Include="..\..\DeferredShading\GBuffer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\DeferredShading\DeferredLightingApp.cpp" />
+    <ClCompile Include="..\..\DeferredShading\DeferredShadingApp.cpp" />
     <ClCompile Include="..\..\DeferredShading\GBuffer.cpp" />
     <ClCompile Include="..\..\DeferredShading\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\DeferredShading\shader\GBuffer.fx" />
-    <CustomBuild Include="..\..\DeferredShading\shader\GBuffer.xml">
+    <None Include="..\..\DeferredShading\shader\DeferredShader.fx" />
+    <CustomBuild Include="..\..\DeferredShading\shader\DeferredShader.xml">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"

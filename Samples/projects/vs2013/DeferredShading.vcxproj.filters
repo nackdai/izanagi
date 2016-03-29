@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\..\DeferredShading\DeferredLightingApp.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\DeferredShading\main.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\DeferredShading\GBuffer.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\DeferredShading\DeferredShadingApp.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -15,7 +15,7 @@
     <CustomBuild Include="..\..\..\Media\earth.xml">
       <Filter>asset</Filter>
     </CustomBuild>
-    <CustomBuild Include="..\..\DeferredShading\shader\GBuffer.xml">
+    <CustomBuild Include="..\..\DeferredShading\shader\DeferredShader.xml">
       <Filter>shader</Filter>
     </CustomBuild>
   </ItemGroup>
@@ -34,15 +34,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\DeferredShading\DeferredLightingApp.h">
+    <ClInclude Include="..\..\DeferredShading\GBuffer.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\DeferredShading\GBuffer.h">
+    <ClInclude Include="..\..\DeferredShading\DeferredShadingApp.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\DeferredShading\shader\GBuffer.fx">
+    <None Include="..\..\DeferredShading\shader\DeferredShader.fx">
       <Filter>shader</Filter>
     </None>
   </ItemGroup>
