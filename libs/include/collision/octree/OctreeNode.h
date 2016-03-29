@@ -14,7 +14,7 @@ namespace col
 {
     class OctreeElement;
 
-    /** Base of octree' node.
+    /** Base of octree's node.
      */
     class IOctreeNode {
     public:
@@ -22,11 +22,15 @@ namespace col
         virtual ~IOctreeNode() {}
 
     public:
+        PURE_VIRTUAL(void setAABB(const AABB& aabb));
         PURE_VIRTUAL(void getAABB(AABB& aabb));
 
-        virtual void initialize(IZ_UINT mortonNumber)
+        virtual void initialize(
+            IZ_UINT mortonNumber,
+            IZ_UINT8 level)
         {
             m_mortonNumber = mortonNumber;
+            m_level = level;
         }
 
         IZ_UINT getMortonNumber() const
@@ -34,8 +38,14 @@ namespace col
             return m_mortonNumber;
         }
 
+        IZ_UINT8 getLevel() const
+        {
+            return m_level;
+        }
+
     private:
         IZ_UINT m_mortonNumber{ 0 };
+        IZ_UINT8 m_level{ 0 };
     };
 
     /** Implementation of octree's node.
@@ -52,6 +62,7 @@ namespace col
         IZ_DECL_PLACEMENT_NEW();
 
     public:
+        virtual void setAABB(const AABB& aabb) override;
         virtual void getAABB(AABB& aabb) override;
 
         void setAABB(

@@ -1,8 +1,8 @@
 #include "OctreeFrustumCullingApp.h"
 
 // TODO
-static const izanagi::math::CVector4 sceneMin;
-static const izanagi::math::CVector4 sceneMax;
+static const izanagi::math::CVector4 sceneMin(0.0f, 0.0f, 0.0f);
+static const izanagi::math::CVector4 sceneMax(100.0f, 100.0f, 100.0f);
 
 OctreeFrustumCullingApp::OctreeFrustumCullingApp()
 {
@@ -61,26 +61,39 @@ IZ_BOOL OctreeFrustumCullingApp::InitInternal(
     IZ_UINT flag = izanagi::E_DEBUG_MESH_VTX_FORM_POS
                     | izanagi::E_DEBUG_MESH_VTX_FORM_COLOR;
 
+    static const IZ_COLOR colors[] = {
+        IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0x40),
+        IZ_COLOR_RGBA(0xff, 0x00, 0x00, 0x40),
+        IZ_COLOR_RGBA(0x00, 0xff, 0x00, 0x40),
+        IZ_COLOR_RGBA(0x00, 0x00, 0xff, 0x40),
+        IZ_COLOR_RGBA(0xff, 0xff, 0x00, 0x40),
+        IZ_COLOR_RGBA(0xff, 0x00, 0xff, 0x40),
+        IZ_COLOR_RGBA(0x00, 0xff, 0xff, 0x40),
+    };
+
     // Cube
     for (IZ_UINT i = 0; i < m_octree.getNodeCount(); i++)
     {
-        auto cubes = m_octree.getNodes();
+        auto cube = m_octree.getNode(i);
 
-        cubes[i]->mesh = izanagi::CDebugMeshBox::CreateDebugMeshBox(
+        auto level = cube->getLevel();
+        IZ_ASSERT(level < COUNTOF(colors));
+
+        cube->mesh = izanagi::CDebugMeshBox::CreateDebugMeshBox(
             allocator,
             device,
             flag,
-            IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0xff),
+            colors[level],
             10.0f, 10.0f, 10.0f);
-        VGOTO(result = (cubes[i]->mesh != IZ_NULL), __EXIT__);
+        VGOTO(result = (cube->mesh != IZ_NULL), __EXIT__);
 
         izanagi::col::AABB aabb;
-        cubes[i]->getAABB(aabb);
+        cube->getAABB(aabb);
 
         auto pos = aabb.getMin();
 
         izanagi::math::SMatrix44::GetTrans(
-            cubes[i]->mtxL2W,
+            cube->mtxL2W,
             pos);
     }
 

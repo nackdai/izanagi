@@ -33,7 +33,50 @@ namespace col
 
         NO_COPIABLE(Octree);
 
+    private:
+        static inline IZ_UINT getBit(IZ_UINT n)
+        {
+            auto ret = n & 0x01;
+            ret |= (n >> 2) & 0x02;
+            ret |= (n >> 4) & 0x04;
+            ret |= (n >> 6) & 0x08;
+            ret |= (n >> 8) & 0x10;
+            ret |= (n >> 10) & 0x20;
+            ret |= (n >> 12) & 0x40;
+            ret |= (n >> 16) & 0x80;
+            return ret;
+        }
+
     public:
+        static void getPosFromMortonNumber(
+            IZ_UINT mortonNumber,
+            IZ_UINT& outX, IZ_UINT& outY, IZ_UINT& outZ)
+        {
+            outX = mortonNumber & 0x00249249;
+            outX = getBit(outX);
+
+            outY = mortonNumber & 0x00492492;
+            outY >>= 1;
+            outY = getBit(outY);
+
+            outZ = mortonNumber & 0x00924924;
+            outZ >>= 2;
+            outZ = getBit(outZ);
+        }
+
+        static inline IZ_UINT getLevelFromMortonNumber(IZ_UINT mortonNumber)
+        {
+            IZ_UINT level = 0;
+            for (IZ_UINT i = 0; ; i++) {
+                auto check = mortonNumber >> (i * 3);
+                if (check == 0) {
+                    break;
+                }
+                level++;
+            }
+            return level;
+        }
+
         /** Compute morton number.
          */
         IZ_UINT getMortonNumber(const math::SVector4& point)
@@ -154,29 +197,32 @@ namespace col
                 // If there is no node, create a new node.
                 m_nodes[mortonNumber] = createNode(m_allocator);
                 ret = m_nodes[mortonNumber];
-                ret->initialize(mortonNumber);
+
+                // Compute level.
+                auto level = getLevelFromMortonNumber(mortonNumber);
+
+                ret->initialize(mortonNumber, level);
 
                 // Set AABB.
                 {
-                    // Compute level.
-                    IZ_UINT level = 0;
-                    for (IZ_UINT i = 1; i < m_level; i++) {
-                        auto check = mortonNumber >> (i * 3);
-                        if (check == 0) {
-                            break;
-                        }
-                        level++;
-                    }
+                    IZ_UINT posX, posY, posZ;
+                    getPosFromMortonNumber(
+                        mortonNumber,
+                        posX, posY, posZ);
 
                     // Compute size.
-                    izanagi::math::SVector4 size;
-                    izanagi::math::SVector4::DivXYZ(size, m_size, (2 << level));
-
-                    // Compute min pos.
+                    izanagi::math::CVector4 size(m_size);
+                    izanagi::math::SVector4::DivXYZ(size, size, (1 << level));
+                    
+                    // Compute min position.
                     izanagi::math::CVector4 minPos(m_min);
-                    for (IZ_UINT i = 1; i < level; i++) {
+                    minPos.x += size.x * posX;
+                    minPos.y += size.y * posY;
+                    minPos.z += size.z * posZ;
 
-                    }
+                    AABB aabb;
+                    aabb.initialize(minPos, size.x, size.y, size.z);
+                    ret->setAABB(aabb);
                 }
             }
 
@@ -190,7 +236,7 @@ namespace col
             std::vector<NODE*> nodes,
             IZ_BOOL isCreateNodeIfNoExist = IZ_TRUE)
         {
-            getVisibleNodes(0, frustum, nodes, isCreateNodeIfNoExist);
+            getVisibleNodes(0, 0, frustum, nodes, isCreateNodeIfNoExist);
         }
 
         /** Get count of nodes which the octree has.
@@ -212,10 +258,15 @@ namespace col
          */
         void getVisibleNodes(
             IZ_UINT mortonNumber,
+            IZ_UINT level,
             Frustum& frustum,
             std::vector<NODE*> nodes,
             IZ_BOOL isCreateNodeIfNoExist)
         {
+            if (level >= m_level) {
+                return;
+            }
+
             NODE* node = getNode(mortonNumber);
 
             if (node) {
@@ -231,10 +282,10 @@ namespace col
             }
 
             // éqãüÇèàóù.
-            for (IZ_UINT i = 0; i < 7; i++) {
-                IZ_UINT id = mortonNumber * 8 + 1 + i;
+            for (IZ_UINT i = 0; i < 8; i++) {
+                IZ_UINT id = mortonNumber * 8 + i + 1;
 
-                getVisibleNodes(id, frustum, nodes, isCreateNodeIfNoExist);
+                getVisibleNodes(id, level + 1, frustum, nodes, isCreateNodeIfNoExist);
             }
         }
 
@@ -250,6 +301,7 @@ namespace col
         // ÉmÅ[Éhîjä¸.
         virtual void deleteNode(IMemoryAllocator* allocator, NODE* node)
         {
+            delete node;
             FREE(m_allocator, node);
         }
 

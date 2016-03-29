@@ -5,6 +5,11 @@ namespace izanagi
 {
 namespace col
 {    
+    void OctreeNode::setAABB(const AABB& aabb)
+    {
+        m_aabb = aabb;
+    }
+
     void OctreeNode::getAABB(AABB& aabb)
     {
         aabb = m_aabb;
