@@ -476,7 +476,11 @@ namespace graph
             {
                 if (m_IsDirtyShaderProgram) {
                     m_SamplerHandle[i] = gles2Program->GetHandleByName(samplerName[i]);
-                    IZ_ASSERT(m_SamplerHandle[i] >= 0);
+                    //IZ_ASSERT(m_SamplerHandle[i] >= 0);
+                    if (m_SamplerHandle[i] < 0) {
+                        m_IsDirtyTex[i] = IZ_FALSE;
+                        continue;
+                    }
                 }
 
                 CALL_GL_API(::glActiveTexture(GL_TEXTURE0 + i));
