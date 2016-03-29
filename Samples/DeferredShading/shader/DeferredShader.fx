@@ -115,6 +115,8 @@ float4 mainPSLightPass(SPSInput In) : COLOR0
 {
     // NOTE
     // どうも nVidia のドライバのバグか何かで頂点シェーダで計算したUV座標がおかしくなるのでピクセルシェーダで計算する.
+    // https://www.opengl.org/discussion_boards/showthread.php/176928-Computing-Fragment-Coordinate-in-vertex-shader
+    // バグではなく、最適化のせいぽい・・・.
     float4 clipSpace = mul(In.viewSpace, g_mW2C);
     float2 uv = clipSpace.xy / clipSpace.w;
     uv = (uv + 1.0f) * 0.5f;
