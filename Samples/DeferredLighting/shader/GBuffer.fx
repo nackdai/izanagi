@@ -8,7 +8,7 @@ struct SPSInput {
     float4 vPos         : POSITION;
     float3 vNormal      : NORMAL;
     float2 vTexCoord    : TEXCOORD0;
-    float4 viewSpaceDepth   : TEXCOORD1;
+    float4 viewSpace    : TEXCOORD1;
 };
 
 #define SVSOutput        SPSInput
@@ -42,8 +42,8 @@ SVSOutput mainVSGeometryPass(SVSInput In)
 
     Out.vPos = mul(In.vPos, g_mL2W);
 
-    Out.viewSpaceDepth = mul(Out.vPos, g_mW2V).z;
-    Out.viewSpaceDepth /= g_farClip;
+    Out.viewSpace = mul(Out.vPos, g_mW2V).z;
+    Out.viewSpace /= g_farClip;
 
     Out.vPos = mul(Out.vPos, g_mW2C);
 
@@ -65,7 +65,7 @@ SPSOutput mainPSGeometryPass(SPSInput In)
     Out.normal.rgb = In.vNormal * 0.5f + 0.5f;  // normalize [-1, 1] ->[0, 1]
     Out.normal.a = 1.0f;
 
-    Out.depth = In.viewSpaceDepth;
+    Out.depth = In.viewSpace;
     Out.depth.a = 1.0f;
 
     return Out;
@@ -78,12 +78,16 @@ SVSOutput mainVSLightPass(SVSInput In)
     SVSOutput Out = (SVSOutput)0;
 
     Out.vPos = mul(In.vPos, g_mL2W);
+
+    Out.viewSpace = Out.vPos;
+
     Out.vPos = mul(Out.vPos, g_mW2C);
 
     Out.vTexCoord = Out.vPos.xy / Out.vPos.w;
     Out.vTexCoord = (Out.vTexCoord + 1.0f) * 0.5f;
 
     Out.vTexCoord.y = 1.0f - Out.vTexCoord.y;
+    Out.vTexCoord = saturate(Out.vTexCoord);
 
     return Out;
 }
@@ -109,13 +113,20 @@ float4x4 g_mtxV2W;
 
 float4 mainPSLightPass(SPSInput In) : COLOR0
 {
+    // NOTE
+    // どうも nVidia のドライバのバグか何かで頂点シェーダで計算したUV座標がおかしくなるのでピクセルシェーダで計算する.
+    float4 clipSpace = mul(In.viewSpace, g_mW2C);
+    float2 uv = clipSpace.xy / clipSpace.w;
+    uv = (uv + 1.0f) * 0.5f;
+    uv.y = 1.0f - uv.y;
+
     // Depth format is R32F.
-    float depth = tex2D(smplDepth, In.vTexCoord).r;
+    float depth = tex2D(smplDepth, uv).r;
 
     // Convert depth [0, 1] -> [0, far] in view-space.
     depth *= g_farClip;
 
-    float4 pos = float4(In.vTexCoord.x, In.vTexCoord.y, 0.0f, 1.0f);
+    float4 pos = float4(uv.x, uv.y, 0.0f, 1.0f);
 
     // Convert from texcoord to clip-space.
     pos.y = 1.0f - pos.y;
