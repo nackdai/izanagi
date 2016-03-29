@@ -209,7 +209,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FrustumCulling", "FrustumCu
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OctreeFrustumCulling", "OctreeFrustumCulling.vcxproj", "{393C485D-9279-4600-BE49-BE16EF05678D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DeferredLighting", "DeferredLighting.vcxproj", "{377413F6-6072-41C6-B5D7-B086E7B77DB5}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DeferredShading", "DeferredShading.vcxproj", "{377413F6-6072-41C6-B5D7-B086E7B77DB5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

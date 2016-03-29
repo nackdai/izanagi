@@ -44,7 +44,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{377413F6-6072-41C6-B5D7-B086E7B77DB5}</ProjectGuid>
-    <RootNamespace>DeferredLighting</RootNamespace>
+    <RootNamespace>DeferredShading</RootNamespace>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -338,17 +338,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\DeferredLighting\DeferredLightingApp.h" />
-    <ClInclude Include="..\..\DeferredLighting\GBuffer.h" />
+    <ClInclude Include="..\..\DeferredShading\DeferredLightingApp.h" />
+    <ClInclude Include="..\..\DeferredShading\GBuffer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\DeferredLighting\DeferredLightingApp.cpp" />
-    <ClCompile Include="..\..\DeferredLighting\GBuffer.cpp" />
-    <ClCompile Include="..\..\DeferredLighting\main.cpp" />
+    <ClCompile Include="..\..\DeferredShading\DeferredLightingApp.cpp" />
+    <ClCompile Include="..\..\DeferredShading\GBuffer.cpp" />
+    <ClCompile Include="..\..\DeferredShading\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\DeferredLighting\shader\GBuffer.fx" />
-    <CustomBuild Include="..\..\DeferredLighting\shader\GBuffer.xml">
+    <None Include="..\..\DeferredShading\shader\GBuffer.fx" />
+    <CustomBuild Include="..\..\DeferredShading\shader\GBuffer.xml">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"
