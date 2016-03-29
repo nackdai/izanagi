@@ -95,7 +95,7 @@ namespace graph
         if (m_Color != IZ_NULL
             || m_Depth != IZ_NULL)
         {
-#if 0
+#if 1
             // TODO
             // How to do about "glClipControl" for GLES2...
 
@@ -182,7 +182,7 @@ namespace graph
 
             m_IsOnOffScreen = IZ_FALSE;
 
-#if 0
+#if 1
             // TODO
             // How to do about "glClipControl" for GLES2...
 
