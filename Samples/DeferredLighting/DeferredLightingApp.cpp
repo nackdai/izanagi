@@ -356,7 +356,6 @@ void DeferredLightingApp::renderLightPass(izanagi::graph::CGraphicsDevice* devic
     {
         if (m_Shader->BeginPass(2)) {
             m_Shader->SetTexture("texDepth", m_gbuffer.getBuffer(GBuffer::Type::Depth));
-            //m_Shader->SetTexture("texAlbedo", m_gbuffer.getBuffer(GBuffer::Type::Albedo));
 
             _SetShaderParam(
                 m_Shader,
