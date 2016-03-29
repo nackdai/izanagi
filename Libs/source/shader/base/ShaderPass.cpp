@@ -65,12 +65,14 @@ namespace shader
 
             const S_SHD_SAMPLER* samplerDesc = samplerTbl.GetDesc(nSmplIdx);
 
-            static const char* smplNames[] = {
-                "s0", "s1", "s2", "s3", "s4", "s5", "s6", "s7",
-            };
-            IZ_ASSERT(samplerDesc->resource_id < COUNTOF(smplNames));
+            if (samplerDesc->resource_id >= 0) {
+                static const char* smplNames[] = {
+                    "s0", "s1", "s2", "s3", "s4", "s5", "s6", "s7",
+                };
+                IZ_ASSERT(samplerDesc->resource_id < COUNTOF(smplNames));
 
-            ret = InitInfo<SSamplerInfo>(m_Samplers, idx, nSmplIdx, smplNames[samplerDesc->resource_id]);
+                ret = InitInfo<SSamplerInfo>(m_Samplers, idx, nSmplIdx, smplNames[samplerDesc->resource_id]);
+            }
         }
         
         if (ret) {
@@ -83,10 +85,12 @@ namespace shader
 
             m_Samplers.list[idx].resource_id = samplerDesc->resource_id;
 
+#if 0
             // NOTE
             // サンプラレジスタ 0 - 7 の８個まで
             ret = (m_Samplers.list[idx].resource_id < 8);
             IZ_ASSERT(ret);
+#endif
         }
 
         return ret;
