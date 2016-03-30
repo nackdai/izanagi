@@ -3,6 +3,7 @@
 
 #include "izMath.h"
 #include "collision/ColBoundingVolume.h"
+#include "collision/ColSphere.h"
 
 namespace izanagi
 {
@@ -72,6 +73,10 @@ namespace col
         /** 立方体にする.
          */
         void makeCubic();
+
+        /** AABBを内包するバウンディングスフィアを取得.
+         */
+        col::Sphere getBoudingSphere() const;
 
         IZ_BOOL canDisplay(const math::SMatrix44& mtxW2C);
 

@@ -171,6 +171,20 @@ namespace col
         m_size.z = maxSize;
     }
 
+    // AABBを内包するバウンディングスフィアを取得.
+    col::Sphere AABB::getBoudingSphere() const
+    {
+        // TODO
+        // 毎回計算するのはコスト的に問題ありそうなので、何かのタイミングのときだけ更新したい.
+        
+        auto center = getCenter();
+        auto radius = math::SVector4::Length2(center, m_min);
+
+        col::Sphere sphere(radius, center);
+
+        return std::move(sphere);
+    }
+
     IZ_BOOL AABB::canDisplay(const math::SMatrix44& mtxW2C)
     {
         // 8点.
