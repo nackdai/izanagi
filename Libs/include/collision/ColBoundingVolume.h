@@ -1,5 +1,5 @@
-#if !defined(__IZANAGI_COLLISION_BOUNDING_BOX_H__)
-#define __IZANAGI_COLLISION_BOUNDING_BOX_H__
+#if !defined(__IZANAGI_COLLISION_BOUNDING_VOLUME_H__)
+#define __IZANAGI_COLLISION_BOUNDING_VOLUME_H__
 
 #include "izMath.h"
 
@@ -9,10 +9,10 @@ namespace col
 {
     /**
      */
-    class BoundingBox {
+    class BoundingVolume {
     public:
-        BoundingBox() {}
-        virtual ~BoundingBox() {}
+        BoundingVolume() {}
+        virtual ~BoundingVolume() {}
 
     public:
         /** マトリクスを適用.
@@ -36,4 +36,4 @@ namespace col
 }   // namespace math
 }   // namespace izanagi
 
-#endif  // #if !defined(__IZANAGI_COLLISION_BOUNDING_BOX_H__)
+#endif  // #if !defined(__IZANAGI_COLLISION_BOUNDING_VOLUME_H__)

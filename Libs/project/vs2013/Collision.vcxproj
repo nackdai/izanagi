@@ -292,7 +292,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\collision\ColAABB.h" />
-    <ClInclude Include="..\..\include\collision\ColBoundingBox.h" />
+    <ClInclude Include="..\..\include\collision\ColBoundingVolume.h" />
     <ClInclude Include="..\..\include\collision\ColFrustum.h" />
     <ClInclude Include="..\..\include\collision\ColPlane.h" />
     <ClInclude Include="..\..\include\collision\ColRay.h" />

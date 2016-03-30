@@ -7,7 +7,7 @@ namespace izanagi
 {
 namespace col
 {
-    class BoundingBox;
+    class BoundingVolume;
 
     class Frustum {
     public:
@@ -46,14 +46,14 @@ namespace col
         /** バウンディングボックスとの交差判定.
          */
         IZ_BOOL isIntersect(
-            const BoundingBox* const box,
+            const BoundingVolume* const volume,
             const math::SMatrix44& mtxW2V);
 
         void computePlane(const math::SMatrix44& mtxW2C);
 
         /** バウンディングボックスとの交差判定.
          */
-        IZ_BOOL isIntersect(const BoundingBox* const box);
+        IZ_BOOL isIntersect(const BoundingVolume* const volume);
 
     private:
         math::SVector4 m_planes[Plane::Num];

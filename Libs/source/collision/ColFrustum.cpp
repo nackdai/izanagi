@@ -1,5 +1,5 @@
 #include "collision/ColFrustum.h"
-#include "collision/ColBoundingBox.h"
+#include "collision/ColBoundingVolume.h"
 
 namespace izanagi
 {
@@ -90,11 +90,11 @@ namespace col
 
     // バウンディングボックスとの交差判定.
     IZ_BOOL Frustum::isIntersect(
-        const BoundingBox* const box,
+        const BoundingVolume* const volume,
         const math::SMatrix44& mtxW2V)
     {
         // ボックスの中心を取得.
-        auto center = box->getCenter();
+        auto center = volume->getCenter();
 
         // カメラ座標系に変換.
         math::SMatrix44::Apply(center, center, mtxW2V);
@@ -107,7 +107,7 @@ namespace col
                 0.0f);
 
             // 実効半径を計算.
-            auto radius = box->computeRadius(mtxW2V, nml);
+            auto radius = volume->computeRadius(mtxW2V, nml);
 
             auto dot = math::SVector4::Dot(m_planes[i], center);
 
@@ -135,10 +135,10 @@ namespace col
     }
 
     // バウンディングボックスとの交差判定.
-    IZ_BOOL Frustum::isIntersect(const BoundingBox* const box)
+    IZ_BOOL Frustum::isIntersect(const BoundingVolume* const volume)
     {
         // ボックスの中心を取得.
-        auto center = box->getCenter();
+        auto center = volume->getCenter();
 
         // World座標系で判定処理を行う.
 
@@ -150,7 +150,7 @@ namespace col
                 0.0f);
 
             // 実効半径を計算.
-            auto radius = box->computeRadius(nml);
+            auto radius = volume->computeRadius(nml);
 
             auto dot = math::SVector4::Dot(m_planes[i], center);
 

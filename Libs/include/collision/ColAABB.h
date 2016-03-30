@@ -2,7 +2,7 @@
 #define __IZANAGI_COLLISION_AABB_H__
 
 #include "izMath.h"
-#include "collision/ColBoundingBox.h"
+#include "collision/ColBoundingVolume.h"
 
 namespace izanagi
 {
@@ -10,7 +10,7 @@ namespace col
 {
     /**
      */
-    class AABB : public BoundingBox {
+    class AABB : public BoundingVolume {
     public:
         AABB(){}
         AABB(

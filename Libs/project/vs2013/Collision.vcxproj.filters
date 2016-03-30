@@ -45,9 +45,6 @@
     <ClInclude Include="..\..\include\collision\ColTriangle.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\collision\ColBoundingBox.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\izCollision.h" />
     <ClInclude Include="..\..\include\collision\octree\Octree.h">
       <Filter>include\octree</Filter>
@@ -57,6 +54,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\collision\octree\OctreeElement.h">
       <Filter>include\octree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\collision\ColBoundingVolume.h">
+      <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
