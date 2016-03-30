@@ -24,6 +24,11 @@ namespace col
     public:
         static const IZ_UINT MAX_LEVEL = 7;
 
+        struct MortonNumber {
+            IZ_UINT number;
+            IZ_UINT level;
+        };
+
     public:
         Octree() {}
         ~Octree()
@@ -49,37 +54,72 @@ namespace col
 
     public:
         static void getPosFromMortonNumber(
-            IZ_UINT mortonNumber,
+            const MortonNumber& mortonNumber,
             IZ_UINT& outX, IZ_UINT& outY, IZ_UINT& outZ)
         {
-            outX = mortonNumber & 0x00249249;
+            auto n = mortonNumber.number;
+
+            outX = n & 0x00249249;
             outX = getBit(outX);
 
-            outY = mortonNumber & 0x00492492;
+            outY = n & 0x00492492;
             outY >>= 1;
             outY = getBit(outY);
 
-            outZ = mortonNumber & 0x00924924;
+            outZ = n & 0x00924924;
             outZ >>= 2;
             outZ = getBit(outZ);
         }
 
-        static inline IZ_UINT getLevelFromMortonNumber(IZ_UINT mortonNumber)
+        inline IZ_UINT getIndex(const MortonNumber& mortonNumber)
         {
-            IZ_UINT level = 0;
-            for (IZ_UINT i = 0; ; i++) {
-                auto check = mortonNumber >> (i * 3);
-                if (check == 0) {
-                    break;
+            // 指定レベルまでの要素数.
+            IZ_UINT count = (m_nodesNum[mortonNumber.level] - 1) / 7;
+
+            // 全体を通じたインデックスに変換.
+            IZ_UINT idx = mortonNumber.number + count;
+
+            return idx;
+        }
+
+        MortonNumber getMortonNumber(IZ_UINT idx)
+        {
+            MortonNumber mortonNumber;
+
+            if (idx > 0) {
+                auto tmp = idx - 1;
+                auto level = 1;
+
+                for (;;) {
+                    tmp >>= 3;
+                    if (tmp == 0) {
+                        break;
+                    }
+
+                    IZ_ASSERT(tmp >= 1);
+                    tmp -= 1;
+
+                    level++;
                 }
-                level++;
+
+                IZ_UINT count = (m_nodesNum[level] - 1) / 7;
+                IZ_UINT number = idx - count;
+
+                mortonNumber.number = number;
+                mortonNumber.level = level;
             }
-            return level;
+            else {
+                mortonNumber.number = 0;
+                mortonNumber.level = 0;
+            }
+
+            return std::move(mortonNumber);
         }
 
         /** Compute morton number.
+         * This method returns a morton number which belongs to max level.
          */
-        IZ_UINT getMortonNumber(const math::SVector4& point)
+        MortonNumber getMortonNumber(const math::SVector4& point)
         {
             math::SVector4 tmp;
             math::SVector4::SubXYZ(tmp, point, m_min);
@@ -92,13 +132,28 @@ namespace col
             auto y = separeteBit((IZ_BYTE)tmp.y);
             auto z = separeteBit((IZ_BYTE)tmp.z);
 
-            IZ_UINT ret = (x | (y << 1) | (z << 2));
-            return ret;
+            IZ_UINT number = (x | (y << 1) | (z << 2));
+
+            MortonNumber ret;
+            ret.number = number;
+            ret.level = m_level;
+
+            return std::move(ret);
+        }
+
+        IZ_UINT getIndex(const math::SVector4& point)
+        {
+            // 所属レベルでのインデックス値.
+            auto mortonNumber = getMortonNumber(point);
+
+            auto idx = getIndex(mortonNumber);
+
+            return idx;
         }
 
         /** Compute morton number which the region belongs to.
          */
-        IZ_UINT getMortonNumber(
+        MortonNumber getMortonNumber(
             const math::SVector4& vMin,
             const math::SVector4& vMax)
         {
@@ -119,10 +174,13 @@ namespace col
                 }
             }
 
-            IZ_UINT ret = maxNumber >> (topLevel * 3);
-            IZ_ASSERT(ret <= m_nodeCount);
+            IZ_UINT number = maxNumber >> (topLevel * 3);
 
-            return ret;
+            MortonNumber ret;
+            ret.number = number;
+            ret.level = topLevel - 1;
+
+            return std::move(ret);
         }
 
         /** Initialize octree.
@@ -184,24 +242,35 @@ namespace col
         /** Get node by morton number.
          */
         NODE* getNode(
-            IZ_UINT mortonNumber,
+            const MortonNumber& mortonNumber,
             IZ_BOOL isCreateNodeIfNoExist = IZ_TRUE)
         {
-            VRETURN_NULL(mortonNumber < m_nodeCount);
+            auto idx = getIndex(mortonNumber);
+            return getNode(idx, isCreateNodeIfNoExist);
+        }
+
+        /** Get node by index.
+         */
+        NODE* getNode(
+            IZ_UINT idx,
+            IZ_BOOL isCreateNodeIfNoExist = IZ_TRUE)
+        {
+            VRETURN_NULL(idx < m_nodeCount);
             
             IZ_ASSERT(m_nodes != nullptr);
 
-            NODE* ret = m_nodes[mortonNumber];
+            NODE* ret = m_nodes[idx];
 
             if (!ret && isCreateNodeIfNoExist) {
                 // If there is no node, create a new node.
-                m_nodes[mortonNumber] = createNode(m_allocator);
-                ret = m_nodes[mortonNumber];
+                m_nodes[idx] = createNode(m_allocator);
+                ret = m_nodes[idx];
 
-                // Compute level.
-                auto level = getLevelFromMortonNumber(mortonNumber);
+                auto mortonNumber = getMortonNumber(idx);
 
-                ret->initialize(mortonNumber, level);
+                auto level = mortonNumber.level;
+
+                ret->initialize(mortonNumber.number, level);
 
                 // Set AABB.
                 {
@@ -211,8 +280,8 @@ namespace col
                         posX, posY, posZ);
 
                     // Compute size.
-                    izanagi::math::CVector4 size(m_size);
-                    izanagi::math::SVector4::DivXYZ(size, size, (1 << level));
+                    izanagi::math::CVector4 size(m_unit);
+                    izanagi::math::SVector4::ScaleXYZ(size, size, (IZ_FLOAT)(1 << level));
                     
                     // Compute min position.
                     izanagi::math::CVector4 minPos(m_min);
@@ -220,8 +289,13 @@ namespace col
                     minPos.y += size.y * posY;
                     minPos.z += size.z * posZ;
 
+                    izanagi::math::CVector4 maxPos(minPos);
+                    maxPos.x += size.x;
+                    maxPos.y += size.y;
+                    maxPos.z += size.z;
+
                     AABB aabb;
-                    aabb.initialize(minPos, size.x, size.y, size.z);
+                    aabb.initialize(minPos, maxPos);
                     ret->setAABB(aabb);
                 }
             }
@@ -233,7 +307,7 @@ namespace col
          */
         void getVisibleNodes(
             Frustum& frustum,
-            std::vector<NODE*> nodes,
+            std::vector<NODE*>& nodes,
             IZ_BOOL isCreateNodeIfNoExist = IZ_TRUE)
         {
             getVisibleNodes(0, 0, frustum, nodes, isCreateNodeIfNoExist);
@@ -257,17 +331,17 @@ namespace col
         /** Get visible nodes by view furstum.
          */
         void getVisibleNodes(
-            IZ_UINT mortonNumber,
+            IZ_UINT idx,
             IZ_UINT level,
             Frustum& frustum,
-            std::vector<NODE*> nodes,
+            std::vector<NODE*>& nodes,
             IZ_BOOL isCreateNodeIfNoExist)
         {
             if (level >= m_level) {
                 return;
             }
 
-            NODE* node = getNode(mortonNumber);
+            NODE* node = getNode(idx);
 
             if (node) {
                 // Check if node is intersected by frustum.
@@ -283,7 +357,7 @@ namespace col
 
             // 子供を処理.
             for (IZ_UINT i = 0; i < 8; i++) {
-                IZ_UINT id = mortonNumber * 8 + i + 1;
+                IZ_UINT id = idx * 8 + i + 1;
 
                 getVisibleNodes(id, level + 1, frustum, nodes, isCreateNodeIfNoExist);
             }

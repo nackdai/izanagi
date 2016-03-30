@@ -130,11 +130,11 @@ namespace col
         center.y += m_size.y * 0.5f;
         center.z += m_size.z * 0.5f;
 
-        return center;
+        return std::move(center);
     }
 
     // 最小座標を取得.
-    const math::SVector4 AABB::getMin() const
+    const math::SVector4& AABB::getMin() const
     {
         return m_min;
     }
@@ -150,7 +150,13 @@ namespace col
         ret.y += m_size.y;
         ret.z += m_size.z;
 
-        return ret;
+        return std::move(ret);
+    }
+
+    // サイズを取得.
+    const math::SVector3& AABB::getSize() const
+    {
+        return m_size;
     }
 
     void AABB::makeCubic()

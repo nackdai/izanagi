@@ -59,11 +59,15 @@ namespace col
 
         /** 最小座標を取得.
          */
-        const math::SVector4 getMin() const;
+        const math::SVector4& getMin() const;
 
         /** 最大座標を取得.
          */
         const math::SVector4 getMax() const;
+
+        /** サイズを取得.
+         */
+        const math::SVector3& getSize() const;
 
         /** 立方体にする.
          */

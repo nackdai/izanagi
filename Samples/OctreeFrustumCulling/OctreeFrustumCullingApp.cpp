@@ -76,25 +76,27 @@ IZ_BOOL OctreeFrustumCullingApp::InitInternal(
     {
         auto cube = m_octree.getNode(i);
 
+        izanagi::col::AABB aabb;
+        cube->getAABB(aabb);
+
         auto level = cube->getLevel();
         IZ_ASSERT(level < COUNTOF(colors));
+
+        auto size = aabb.getSize();
 
         cube->mesh = izanagi::CDebugMeshBox::CreateDebugMeshBox(
             allocator,
             device,
             flag,
             colors[level],
-            10.0f, 10.0f, 10.0f);
+            size.x, size.y, size.y);
         VGOTO(result = (cube->mesh != IZ_NULL), __EXIT__);
 
-        izanagi::col::AABB aabb;
-        cube->getAABB(aabb);
-
-        auto pos = aabb.getMin();
+        auto center = aabb.getCenter();
 
         izanagi::math::SMatrix44::GetTrans(
             cube->mtxL2W,
-            pos);
+            center);
     }
 
     // シェーダ
@@ -111,7 +113,7 @@ IZ_BOOL OctreeFrustumCullingApp::InitInternal(
 
     // カメラ
     camera.Init(
-        izanagi::math::CVector4(0.0f, 0.0f, 30.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 0.0f, -30.0f, 1.0f),
         izanagi::math::CVector4(0.0f, 0.0f, 0.0f, 1.0f),
         izanagi::math::CVector4(0.0f, 1.0f, 0.0f, 1.0f),
         fNear,
@@ -121,7 +123,7 @@ IZ_BOOL OctreeFrustumCullingApp::InitInternal(
     camera.Update();
 
     m_internalCamera.Init(
-        izanagi::math::CVector4(0.0f, 0.0f, 30.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 0.0f, -30.0f, 1.0f),
         izanagi::math::CVector4(0.0f, 0.0f, 0.0f, 1.0f),
         izanagi::math::CVector4(0.0f, 1.0f, 0.0f, 1.0f),
         fNear,
@@ -194,9 +196,14 @@ void OctreeFrustumCullingApp::RenderInternal(izanagi::graph::CGraphicsDevice* de
     izanagi::math::SMatrix44 mtxL2W;
     izanagi::math::SMatrix44::SetUnit(mtxL2W);
 
+    /*
     device->SetRenderState(
         izanagi::graph::E_GRAPH_RS_CULLMODE,
-        izanagi::graph::E_GRAPH_CULL_NONE);
+        izanagi::graph::E_GRAPH_CULL_NONE);*/
+
+    m_Shader->EnableToUpdateRenderState(
+        izanagi::graph::E_GRAPH_RS_ZENABLE,
+        IZ_FALSE);
 
     m_Shader->Begin(device, 0, IZ_FALSE);
     {
@@ -207,9 +214,17 @@ void OctreeFrustumCullingApp::RenderInternal(izanagi::graph::CGraphicsDevice* de
                 (void*)&camera.GetParam().mtxW2C,
                 sizeof(camera.GetParam().mtxW2C));
 
+#if 0
             for (IZ_UINT i = 0; i < visibles.size(); i++)
             {
                 auto cube = visibles[i];
+#else
+            auto nodes = m_octree.getNodes();
+            auto cnt = m_octree.getNodeCount();
+            for (IZ_INT i = cnt - 1; i >= 0; i--)
+            {
+                auto cube = nodes[i];
+#endif
 
                 _SetShaderParam(
                     m_Shader,
@@ -235,6 +250,7 @@ void OctreeFrustumCullingApp::RenderInternal(izanagi::graph::CGraphicsDevice* de
     }
     m_Shader->End(device);
 
+#if 0
     m_Shader->Begin(device, 1, IZ_FALSE);
     {
         if (m_Shader->BeginPass(0)) {
@@ -275,6 +291,7 @@ void OctreeFrustumCullingApp::RenderInternal(izanagi::graph::CGraphicsDevice* de
         }
     }
     m_Shader->End(device);
+#endif
 }
 
 IZ_BOOL OctreeFrustumCullingApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
