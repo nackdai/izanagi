@@ -28,8 +28,12 @@ IZ_BOOL OctreeFrustumCullingApp::InitInternal(
         sceneMax,
         3);
 
+    izanagi::math::CVector4 camPos(0.0f, 0.0f, -30.0f, 1.0f);
+    izanagi::math::CVector4 lookAt(0.0f, 0.0f, 0.0f, 1.0f);
+    izanagi::math::CVector4 camUp(0.0f, 1.0f, 0.0f, 1.0f);
+
     IZ_FLOAT fNear = 1.0f;
-    IZ_FLOAT fFar = 500.0f;
+    IZ_FLOAT fFar = 1000.0f;
     IZ_FLOAT verticalFOV = izanagi::math::CMath::Deg2Rad(60.0f);
     IZ_FLOAT aspect = (IZ_FLOAT)device->GetBackBufferWidth() / device->GetBackBufferHeight();
 
@@ -113,9 +117,7 @@ IZ_BOOL OctreeFrustumCullingApp::InitInternal(
 
     // カメラ
     camera.Init(
-        izanagi::math::CVector4(0.0f, 0.0f, -30.0f, 1.0f),
-        izanagi::math::CVector4(0.0f, 0.0f, 0.0f, 1.0f),
-        izanagi::math::CVector4(0.0f, 1.0f, 0.0f, 1.0f),
+        camPos, lookAt, camUp,
         fNear,
         fFar,
         verticalFOV,
@@ -123,9 +125,7 @@ IZ_BOOL OctreeFrustumCullingApp::InitInternal(
     camera.Update();
 
     m_internalCamera.Init(
-        izanagi::math::CVector4(0.0f, 0.0f, -30.0f, 1.0f),
-        izanagi::math::CVector4(0.0f, 0.0f, 0.0f, 1.0f),
-        izanagi::math::CVector4(0.0f, 1.0f, 0.0f, 1.0f),
+        camPos, lookAt, camUp,
         fNear,
         fFar,
         verticalFOV,
@@ -204,6 +204,9 @@ void OctreeFrustumCullingApp::RenderInternal(izanagi::graph::CGraphicsDevice* de
     m_Shader->EnableToUpdateRenderState(
         izanagi::graph::E_GRAPH_RS_ZENABLE,
         IZ_FALSE);
+    device->SetRenderState(
+        izanagi::graph::E_GRAPH_RS_ZENABLE,
+        IZ_FALSE);
 
     m_Shader->Begin(device, 0, IZ_FALSE);
     {
@@ -214,7 +217,7 @@ void OctreeFrustumCullingApp::RenderInternal(izanagi::graph::CGraphicsDevice* de
                 (void*)&camera.GetParam().mtxW2C,
                 sizeof(camera.GetParam().mtxW2C));
 
-#if 0
+#if 1
             for (IZ_UINT i = 0; i < visibles.size(); i++)
             {
                 auto cube = visibles[i];
@@ -250,7 +253,7 @@ void OctreeFrustumCullingApp::RenderInternal(izanagi::graph::CGraphicsDevice* de
     }
     m_Shader->End(device);
 
-#if 0
+#if 1
     m_Shader->Begin(device, 1, IZ_FALSE);
     {
         if (m_Shader->BeginPass(0)) {
