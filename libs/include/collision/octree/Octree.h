@@ -281,7 +281,7 @@ namespace col
 
                     // Compute size.
                     izanagi::math::CVector4 size(m_unit);
-                    izanagi::math::SVector4::ScaleXYZ(size, size, (IZ_FLOAT)(1 << level));
+                    izanagi::math::SVector4::ScaleXYZ(size, size, (IZ_FLOAT)(1 << (m_level - level)));
                     
                     // Compute min position.
                     izanagi::math::CVector4 minPos(m_min);
@@ -320,11 +320,29 @@ namespace col
             return m_nodeCount;
         }
 
+        IZ_UINT getNodeCount(IZ_UINT level) const
+        {
+            IZ_ASSERT(level < m_level);
+            return m_nodesNum[level];
+        }
+
         /** Get list of nodes which the octree has.
          */
         NODE** getNodes()
         {
             return m_nodes;
+        }
+
+        NODE** getNodes(IZ_UINT level)
+        {
+            if (level == 0) {
+                return m_nodes;
+            }
+
+            IZ_ASSERT(level < m_level);
+            IZ_UINT pos = (m_nodesNum[level] - 1) / 7;
+
+            return &m_nodes[pos];
         }
 
     private:
