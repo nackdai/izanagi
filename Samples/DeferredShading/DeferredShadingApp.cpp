@@ -345,6 +345,8 @@ void DeferredShadingApp::renderLightPass(izanagi::graph::CGraphicsDevice* device
     // TODO
     // ポイントライトの球の表面にピッタリ？にカメラが位置するときに、球が描画されずにライトが消えた状態になってしまう？.
     // どうやって回避する....
+    // 1. ある程度のバッファを持たせた半径で計算する.
+    // 2. ある程度のバッファを持たせた半径で計算し、ある程度の大きさとのときは全画面板で描画する.
 
     izanagi::sample::CSampleCamera& camera = GetCamera();
 
@@ -397,7 +399,9 @@ void DeferredShadingApp::renderLightPass(izanagi::graph::CGraphicsDevice* device
                     camera.GetPos(),
                     m_pointLights[i].vPos);
 
-                if (dist < s) {
+                // ある程度の余裕を持たせた半径で計算してみる.
+
+                if (dist < s * 1.1f) {
                     // カメラがライトの中に入ったとき.
                     device->SetRenderState(
                         izanagi::graph::E_GRAPH_RS_CULLMODE,
