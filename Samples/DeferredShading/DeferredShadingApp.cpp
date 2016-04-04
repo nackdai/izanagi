@@ -342,6 +342,10 @@ namespace {
 
 void DeferredShadingApp::renderLightPass(izanagi::graph::CGraphicsDevice* device)
 {
+    // TODO
+    // ポイントライトの球の表面にピッタリ？にカメラが位置するときに、球が描画されずにライトが消えた状態になってしまう？.
+    // どうやって回避する....
+
     izanagi::sample::CSampleCamera& camera = GetCamera();
 
     izanagi::math::SMatrix44 mtxC2V;
