@@ -384,6 +384,10 @@ void DeferredShadingApp::renderLightPass(izanagi::graph::CGraphicsDevice* device
 
                 izanagi::math::CMatrix44 mtxL2W;
                 mtxL2W.SetScale(s, s, s);
+                mtxL2W.Trans(
+                    m_pointLights[i].vPos.x,
+                    m_pointLights[i].vPos.y,
+                    m_pointLights[i].vPos.z);
 
                 auto dist = izanagi::math::SVector4::Length2(
                     camera.GetPos(),
