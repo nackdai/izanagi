@@ -303,7 +303,15 @@ namespace col
             return ret;
         }
 
-        using FuncTraverse = std::function < IZ_BOOL(NODE*) > ;
+        /** Return value from function to traverse nodes.
+         * First value means if node is accepted.
+         * Secont value means if children will be traversed.
+         */
+        using RetvalTraverse = std::tuple < IZ_BOOL, IZ_BOOL > ;
+
+        /** Function to traverse nodes.
+         */
+        using FuncTraverse = std::function < RetvalTraverse(NODE*) >;
 
         /** Traverse nodes.
          */
@@ -328,7 +336,11 @@ namespace col
                 node->getAABB(aabb);
 
                 auto isVisible = frustum.isIntersect(&aabb);
-                return isVisible;
+
+                // 親が見えていないときは子供も見えないので、子供の探索をさせない.
+                IZ_BOOL willTraverseChildren = isVisible;
+
+                return RetvalTraverse(isVisible, willTraverseChildren);
             }, nodes, isCreateNodeIfNoExist);
         }
 
@@ -379,19 +391,27 @@ namespace col
 
             NODE* node = getNode(idx);
 
+            RetvalTraverse ret(IZ_FALSE, IZ_FALSE);
+
             if (node) {
-                auto isAccepted = func(node);
+                ret = func(node);
+
+                auto isAccepted = std::get<0>(ret);
 
                 if (isAccepted) {
                     nodes.push_back(node);
                 }
             }
 
-            // 子供を処理.
-            for (IZ_UINT i = 0; i < 8; i++) {
-                IZ_UINT id = idx * 8 + i + 1;
+            auto willTraverseChildren = std::get<1>(ret);
 
-                traverse(id, level + 1, func, nodes, isCreateNodeIfNoExist);
+            if (willTraverseChildren) {
+                // 子供を処理.
+                for (IZ_UINT i = 0; i < 8; i++) {
+                    IZ_UINT id = idx * 8 + i + 1;
+
+                    traverse(id, level + 1, func, nodes, isCreateNodeIfNoExist);
+                }
             }
         }
 
