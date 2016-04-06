@@ -1,86 +1,79 @@
-// Phong Shader
-
-#define USE_REFLECTION
-
 struct SVSInput {
-    float4 vPos     : POSITION;
-    float3 vNormal  : NORMAL;
-    float4 vColor   : COLOR;
+    float4 vPos         : POSITION;
+    float3 vNormal      : NORMAL;
+    float2 vTexCoord    : TEXCOORD0;
 };
 
 struct SPSInput {
     float4 vPos         : POSITION;
-    float3 vNormal      : TEXCOORD0;    // 法線
-    float4 ambient      : COLOR0;
-    float4 position     : TEXCOORD1;
+    float3 vNormal      : NORMAL;
+    float2 vTexCoord    : TEXCOORD0;
+    float4 viewSpace    : TEXCOORD1;
 };
 
 #define SVSOutput        SPSInput
 
 struct SPSOutput {
-    float4 ambient  : COLOR0;
+    float4 albedo   : COLOR0;
     float4 normal   : COLOR1;
     float4 depth    : COLOR2;
-    float4 position : COLOR3;
 };
 
 /////////////////////////////////////////////////////////////
 
 float4x4 g_mL2W;
 float4x4 g_mW2V;
-float4x4 g_mV2C;
+float4x4 g_mW2C;
 
-// マテリアル
-float4 g_vMtrlAmbient;
+float g_farClip;
 
-// ライト
-float4 g_vLitAmbientColor;
+texture tex;
 
-/////////////////////////////////////////////////////////////
+sampler smplTex = sampler_state
+{
+    Texture = tex;
+};
 
-SVSOutput mainVS(SVSInput In)
+SVSOutput mainVSGeometryPass(SVSInput In)
 {
     SVSOutput Out = (SVSOutput)0;
-    
+
     Out.vPos = mul(In.vPos, g_mL2W);
-    Out.vPos = mul(Out.vPos, g_mW2V);
-    Out.vPos = mul(Out.vPos, g_mV2C);
-    
-    Out.vNormal = normalize(mul(In.vNormal, (float3x3)g_mL2W));
 
-    // Ambient
-    Out.ambient = g_vMtrlAmbient * g_vLitAmbientColor;
+    Out.viewSpace = mul(Out.vPos, g_mW2V).z;
+    Out.viewSpace /= g_farClip;
 
-    Out.position = mul(In.vPos, g_mL2W);
-    
+    Out.vPos = mul(Out.vPos, g_mW2C);
+
+    Out.vNormal = mul(In.vNormal, (float3x3)g_mL2W);
+    Out.vNormal = normalize(Out.vNormal);
+
+    Out.vTexCoord = In.vTexCoord;
+
     return Out;
 }
 
-SPSOutput mainPS(SPSInput In)
+SPSOutput mainPSGeometryPass(SPSInput In)
 {
-    SPSOutput vOut = (SPSOutput)0;
+    SPSOutput Out = (SPSOutput)0;
 
-    vOut.ambient = In.ambient;
-    vOut.ambient.a = 1.0f;
-    
-    vOut.normal.xyz = normalize(In.vNormal);
-    vOut.normal.xyz = 0.5f * vOut.normal.xyz + 0.5f;
-    vOut.normal.a = 1.0f;
-    
-    float4 view = mul(In.position, g_mW2V);
-    float4 projected = mul(view, g_mV2C);
-    float d = projected.z / projected.w;
-    vOut.depth = float4(d, d, d, 1.0f);
+    Out.albedo = tex2D(smplTex, In.vTexCoord);
+    Out.albedo.a = 1.0f;
 
-    vOut.position = In.position;
-    
-    return vOut;
+    Out.normal.rgb = In.vNormal * 0.5f + 0.5f;  // normalize [-1, 1] ->[0, 1]
+    Out.normal.a = 1.0f;
+
+    Out.depth = In.viewSpace;
+    Out.depth.a = 1.0f;
+
+    return Out;
 }
 
 /////////////////////////////////////////////////////////////
 
 struct SVSInputSSAO {
     float4 vPos     : POSITION;
+    float4 vColor   : COLOR;
     float2 vUV      : TEXCOORD0;
 };
 
@@ -89,42 +82,39 @@ struct SPSInputSSAO {
     float2 vUV      : TEXCOORD0;
 };
 
-texture texAmbient;
+#define SVSOutputSSAO   SPSInputSSAO
+
 texture texNormal;
-texture texPosition;
 texture texDepth;
 
-sampler sTexAmbient = sampler_state
-{
-    Texture = texAmbient;
-};
-
-sampler sTexNormal = sampler_state
+sampler smplNormal = sampler_state
 {
     Texture = texNormal;
 };
 
-sampler sTexDepth = sampler_state
+sampler smplDepth = sampler_state
 {
     Texture = texDepth;
 };
 
-sampler sTexPosition = sampler_state
-{
-    Texture = texPosition;
-};
+float4x4 g_mtxC2V;
+float4x4 g_mtxV2W;
+
+// スクリーンサイズの逆数
+float4 g_vInvScreen = (float4)1.0f;
 
 #define SAMPLE_NUM  (32)
 float4 samples[SAMPLE_NUM];
 
 SPSInputSSAO mainVS_SSAO(SVSInputSSAO sIn)
 {
-    SPSInputSSAO sOut;
+    SVSOutputSSAO sOut;
 
     // 頂点位置
     sOut.vPos = sIn.vPos;
+    sOut.vPos.xy *= g_vInvScreen.xy;
 
-    // [0.0f, 0.0f] - [1.0f, 1.0f] -> [-1.0f, -1.0f] - [1.0f, 1.0f]
+    // [0, 1] -> [-1, -1]
     sOut.vPos.xy = sOut.vPos.xy * 2.0f - 1.0f;
 
     // さらにY座標は反転させる
@@ -140,17 +130,43 @@ float4 mainPS_SSAO(SPSInputSSAO sIn) : COLOR0
 {
     float falloff = 0.000002;
 
-    float4 ambient = tex2D(sTexAmbient, sIn.vUV);
+    // 実際の位置での深度
+    float depth = tex2D(smplDepth, sIn.vUV).r;
+
+    // Convert depth [0, 1] -> [0, far] in view-space.
+    depth *= g_farClip;
+
+    float4 position = float4(sIn.vUV.x, sIn.vUV.y, 0.0f, 1.0f);
+
+    // Convert from texcoord to clip-space.
+    //position.y = 1.0f - position.y;
+    position.xy = position.xy * 2.0f - 1.0f;  // [0, 1] -> [-1, 1]
+
+    // NOTE
+    // P = (X, Y, Z, 1)
+    // mtxV2C = W 0 0 0
+    //          0 H 0 0
+    //          0 0 A 1
+    //          0 0 B 0
+    // Pview * mtxV2C = (Xclip, Yclip, Zclip, Wclip) = (Xclip, Yclip, Zclip, Zview)
+    //  Wclip = Zview = depth
+    // X' = Xclip / Wclip = Xclip / Zview = Xclip / depth
+    // Y' = Yclip / Wclip = Yclip / Zview = Yclip / depth
+    //
+    // X' * depth = Xclip
+    // Xview = Xclip * mtxC2V
+
+    position.xy *= depth;
+    position = mul(position, g_mtxC2V);
+
+    position.xy /= position.z;
+    position.z = depth;
+
+    position = mul(position, g_mtxV2W);
 
     // 実際の位置での法線
-    float3 normal = tex2D(sTexNormal, sIn.vUV).rgb;
+    float3 normal = tex2D(smplNormal, sIn.vUV).rgb;
     normal = normalize(2.0f * normal - 1.0f);
-
-    // 実際の位置での深度
-    float z = tex2D(sTexDepth, sIn.vUV).r;
-
-    // 頂点位置
-    float4 position = tex2D(sTexPosition, sIn.vUV);
 
     float bl = 0;
 
@@ -162,8 +178,7 @@ float4 mainPS_SSAO(SPSInputSSAO sIn) : COLOR0
         ray.xyz *= sign(dot(ray.xyz, normal));
 
         // サンプリング点の位置ずらした位置の計算
-        float4 pos = mul(position + ray, g_mW2V);
-        pos = mul(pos, g_mV2C);
+        float4 pos = mul(position + ray, g_mW2C);
 
         // サンプリング点の位置ずらした位置を2D上のUVに変換
         float2 uv = float2(
@@ -171,7 +186,7 @@ float4 mainPS_SSAO(SPSInputSSAO sIn) : COLOR0
             -0.5f * (pos.y / pos.w) + 0.5f);
 
         // 遮蔽するピクセルの法線
-        float3 ocNml = tex2D(sTexNormal, uv).xyz;
+        float3 ocNml = tex2D(smplNormal, uv).xyz;
         ocNml = normalize(ocNml * 2.0f - 1.0f);
 
         // 遮蔽するピクセルと現在のピクセルでの法線の角度の差を計算
@@ -182,11 +197,11 @@ float4 mainPS_SSAO(SPSInputSSAO sIn) : COLOR0
         float nmlDiff = 1.0 - dot(ocNml, normal);
 
         // 遮蔽するピクセルの深度
-        float depth = tex2D(sTexDepth, uv).r;
+        float z = tex2D(smplDepth, uv).r;
 
         // 正：遮蔽するピクセルが現在のピクセルより前 -> 現在のピクセルは遮蔽される
         // 負：遮蔽するピクセルが現在のピクセルより奥 -> 現在のピクセルは遮蔽されない
-        float depthDiff = z - depth;
+        float depthDiff = depth - z;
 
         // step(falloff, depthDiff) -> falloff より小さければ 0.0、大きければ 1.0
         //  -> ある程度以上深度が離れていない場合は遮蔽されていることとする
@@ -199,45 +214,91 @@ float4 mainPS_SSAO(SPSInputSSAO sIn) : COLOR0
     // blが1.0に近いほど遮蔽されるので
     float a = 1.0f - bl;
 
-    float4 Out = ambient * (float4)a;
+    float4 Out = a;
     Out.a = 1.0f;
 
     return Out;
 }
 
-float4 mainPS_Ambient(SPSInputSSAO sIn) : COLOR0
+/////////////////////////////////////////////////////////////
+
+texture texAlbedo;
+texture texSSAO;
+
+sampler smplAlbedo = sampler_state
 {
-    float4 ambient = tex2D(sTexAmbient, sIn.vUV);
-    ambient.a = 1.0f;
-    return ambient;
+    Texture = texAlbedo;
+};
+sampler smplSSAO = sampler_state
+{
+    Texture = texSSAO;
+};
+
+struct SVSInputFinalPass {
+    float4 vPos     : POSITION;
+    float4 vColor   : COLOR;
+    float2 vUV      : TEXCOORD0;
+};
+
+struct SPSInputFinalPass {
+    float4 vPos     : POSITION;
+    float2 vUV      : TEXCOORD0;
+};
+
+#define SVSOutputFinalPass SPSInputFinalPass
+
+SVSOutputFinalPass mainVSFinalPass(SVSInputFinalPass In)
+{
+    SVSOutputFinalPass sOut;
+
+    // 頂点位置
+    sOut.vPos = In.vPos;
+    sOut.vPos.xy *= g_vInvScreen.xy;
+
+    // [0, 1] -> [-1, -1]
+    sOut.vPos.xy = sOut.vPos.xy * 2.0f - 1.0f;
+
+    // さらにY座標は反転させる
+    sOut.vPos.y *= -1.0f;
+
+    // UV座標
+    sOut.vUV = In.vUV;
+
+    return sOut;
+}
+
+float4 mainPSFinalPass(SPSInputFinalPass In) : COLOR
+{
+    float4 albedo = tex2D(smplAlbedo, In.vUV);
+    float4 ssao = tex2D(smplSSAO, In.vUV);
+
+    albedo.rgb *= ssao.r;
+
+    return albedo;
 }
 
 /////////////////////////////////////////////////////////////
 
-technique RenderToMRT
+technique SSAO
 {
-    pass P0
+    pass geometryPass
     {
-        AlphaBlendEnable = false;
-        VertexShader = compile vs_3_0 mainVS();
-        PixelShader = compile ps_3_0 mainPS();
+        VertexShader = compile vs_3_0 mainVSGeometryPass();
+        PixelShader = compile ps_3_0 mainPSGeometryPass();
     }
-}
 
-technique RenderSSAO
-{
-    pass P0
+    pass ssaoPass
     {
         VertexShader = compile vs_3_0 mainVS_SSAO();
         PixelShader = compile ps_3_0 mainPS_SSAO();
-    }
-}
 
-technique RenderNoSSAO
-{
-    pass P0
+        ZWriteEnable = false;
+        ZEnable = false;
+    }
+
+    pass finalPass
     {
-        VertexShader = compile vs_3_0 mainVS_SSAO();
-        PixelShader = compile ps_3_0 mainPS_Ambient();
+        VertexShader = compile vs_3_0 mainVSFinalPass();
+        PixelShader = compile ps_3_0 mainPSFinalPass();
     }
 }

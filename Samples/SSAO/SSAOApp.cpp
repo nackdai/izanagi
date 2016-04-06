@@ -6,13 +6,6 @@ static izanagi::math::SVector4 samples[32];
 
 SSAOApp::SSAOApp()
 {
-    m_Shader = IZ_NULL;
-    m_Sphere = IZ_NULL;
-    m_Cube = IZ_NULL;
-    m_Plane = IZ_NULL;
-
-    m_Mode = SSAO;
-
     const float SAMPLERADIUS = 0.75f;
 
 #if 0
@@ -69,6 +62,9 @@ IZ_BOOL SSAOApp::InitInternal(
 {
     IZ_BOOL result = IZ_TRUE;
 
+    result = initMeshes(allocator, device);
+    VGOTO(result, __EXIT__);
+
     // シェーダ
     {
         izanagi::CFileInputStream in;
@@ -82,115 +78,32 @@ IZ_BOOL SSAOApp::InitInternal(
         VGOTO(result = (m_Shader != IZ_NULL), __EXIT__);
     }
 
-    IZ_UINT flag = izanagi::E_DEBUG_MESH_VTX_FORM_POS
-        | izanagi::E_DEBUG_MESH_VTX_FORM_NORMAL
-        | izanagi::E_DEBUG_MESH_VTX_FORM_COLOR;
-    IZ_COLOR color = IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0xff);
-
-    // 球
     {
-        m_Sphere = izanagi::CDebugMeshSphere::CreateDebugMeshSphere(
-            allocator,
-            device,
-            flag,
-            color,
-            5.0f,
-            20, 20);
-        VGOTO(result = (m_Sphere != IZ_NULL), __EXIT__);
+        izanagi::CFileInputStream in;
+        VGOTO(result = in.Open("data/earth.img"), __EXIT__);
+
+        m_Img = izanagi::CImage::CreateImage(allocator, device, &in);
+        VGOTO(result = (m_Img != IZ_NULL), __EXIT__);
     }
 
-    // キューブ
-    {
-        m_Cube = izanagi::CDebugMeshBox::CreateDebugMeshBox(
-            allocator,
-            device,
-            flag,
-            color,
-            10.0f, 10.0f, 10.0f);
-        VGOTO(result = (m_Cube != IZ_NULL), __EXIT__);
-    }
+    // GBuffer.
+    result = m_gbuffer.initialize(allocator, device);
+    VGOTO(result, __EXIT__);
 
-    // 地面
-    {
-        m_Plane = izanagi::CDebugMeshRectangle::CreateDebugMeshRectangle(
-            allocator,
-            device,
-            flag,
-            color,
-            10, 10,
-            50.0f, 50.0f);
-        VGOTO(result = (m_Plane != IZ_NULL), __EXIT__);
-    }
-
-    {
-        m_RT[0] = device->CreateRenderTarget(
-            device->GetBackBufferWidth(),
-            device->GetBackBufferHeight(),
-            izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA8);
-        m_RT[1] = device->CreateRenderTarget(
-            device->GetBackBufferWidth(),
-            device->GetBackBufferHeight(),
-            izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA8);
-        m_RT[2] = device->CreateRenderTarget(
-            device->GetBackBufferWidth(),
-            device->GetBackBufferHeight(),
-            izanagi::graph::E_GRAPH_PIXEL_FMT_R32F);
-        m_RT[3] = device->CreateRenderTarget(
-            device->GetBackBufferWidth(),
-            device->GetBackBufferHeight(),
-            izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA32F);
-    }
-
-    {
-        IZ_FLOAT u = 0.5f / 1280.0f;
-        IZ_FLOAT v = 0.5f / 720.0f;
-
-        struct SVtx {
-            IZ_FLOAT pos[4];
-            IZ_FLOAT uv[2];
-        } vtx[] = {
-            {
-                { 0.0f, 0.0f, 0.0f, 1.0f },
-                { 0.0f + u, 0.0f + v },
-            },
-            {
-                { 1.0f, 0.0f, 0.0f, 1.0f },
-                { 1.0f + u, 0.0f + v },
-            },
-            {
-                { 0.0f, 1.0f, 0.0f, 1.0f },
-                { 0.0f + u, 1.0f + v },
-            },
-            {
-                { 1.0f, 1.0f, 0.0f, 1.0f },
-                { 1.0f + u, 1.0f + v },
-            },
-        };
-
-        m_VB = device->CreateVertexBuffer(sizeof(SVtx), COUNTOF(vtx), izanagi::graph::E_GRAPH_RSC_USAGE_STATIC);
-        m_VB->LockBuffer(device, 0, 0, IZ_FALSE);
-        m_VB->WriteBuffer(device, vtx, sizeof(vtx));
-        m_VB->UnlockBuffer(device);
-
-        izanagi::graph::SVertexElement elem[] = {
-            { 0, 0, izanagi::graph::E_GRAPH_VTX_DECL_TYPE_FLOAT4, izanagi::graph::E_GRAPH_VTX_DECL_USAGE_POSITION, 0 },
-            { 0, 16, izanagi::graph::E_GRAPH_VTX_DECL_TYPE_FLOAT2, izanagi::graph::E_GRAPH_VTX_DECL_USAGE_TEXCOORD, 0 },
-        };
-
-        m_VD = device->CreateVertexDeclaration(elem, COUNTOF(elem));
-    }
-
-    izanagi::math::SMatrix44::SetUnit(m_L2W);
+    IZ_FLOAT fNear = 1.0f;
+    IZ_FLOAT fFar = 500.0f;
+    IZ_FLOAT verticalFOV = izanagi::math::CMath::Deg2Rad(60.0f);
+    IZ_FLOAT aspect = (IZ_FLOAT)device->GetBackBufferWidth() / device->GetBackBufferHeight();
 
     // カメラ
     camera.Init(
-        izanagi::math::CVector4(0.0f, 10.0f, 30.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 0.0f, 30.0f, 1.0f),
         izanagi::math::CVector4(0.0f, 0.0f, 0.0f, 1.0f),
         izanagi::math::CVector4(0.0f, 1.0f, 0.0f, 1.0f),
-        1.0f,
-        500.0f,
-        izanagi::math::CMath::Deg2Rad(60.0f),
-        (IZ_FLOAT)device->GetBackBufferWidth() / device->GetBackBufferHeight());
+        fNear,
+        fFar,
+        verticalFOV,
+        aspect);
     camera.Update();
 
 __EXIT__:
@@ -199,6 +112,89 @@ __EXIT__:
     }
 
     return result;
+}
+
+IZ_BOOL SSAOApp::initMeshes(
+    izanagi::IMemoryAllocator* allocator,
+    izanagi::graph::CGraphicsDevice* device)
+{
+    IZ_UINT flag = izanagi::E_DEBUG_MESH_VTX_FORM_POS
+        | izanagi::E_DEBUG_MESH_VTX_FORM_COLOR
+        | izanagi::E_DEBUG_MESH_VTX_FORM_NORMAL
+        | izanagi::E_DEBUG_MESH_VTX_FORM_UV;
+
+    // 球
+    {
+        m_meshes[0].mesh = izanagi::CDebugMeshSphere::CreateDebugMeshSphere(
+            allocator,
+            device,
+            flag,
+            IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0xff),
+            5.0f,
+            20, 20);
+        VRETURN(m_meshes[0].mesh != IZ_NULL);
+
+        m_meshes[0].mtxL2W.SetTrans(10.0f, 5.0f, 10.0f);
+    }
+    {
+        m_meshes[1].mesh = izanagi::CDebugMeshSphere::CreateDebugMeshSphere(
+            allocator,
+            device,
+            flag,
+            IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0xff),
+            5.0f,
+            20, 20);
+        VRETURN(m_meshes[1].mesh != IZ_NULL);
+
+        m_meshes[1].mtxL2W.SetTrans(10.0f, 5.0f, -10.0f);
+    }
+
+    // キューブ
+    {
+        m_meshes[2].mesh = izanagi::CDebugMeshBox::CreateDebugMeshBox(
+            allocator,
+            device,
+            flag,
+            IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0xff),
+            10.0f, 10.0f, 10.0f);
+        VRETURN(m_meshes[2].mesh != IZ_NULL);
+
+        m_meshes[2].mtxL2W.SetTrans(-10.0f, 5.0f, -10.0f);
+    }
+    {
+        m_meshes[3].mesh = izanagi::CDebugMeshBox::CreateDebugMeshBox(
+            allocator,
+            device,
+            flag,
+            IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0xff),
+            10.0f, 10.0f, 10.0f);
+        VRETURN(m_meshes[3].mesh != IZ_NULL);
+
+        m_meshes[3].mtxL2W.SetTrans(-10.0f, 5.0f, 10.0f);
+    }
+
+    // 地面
+    {
+        m_meshes[4].mesh = izanagi::CDebugMeshRectangle::CreateDebugMeshRectangle(
+            allocator,
+            device,
+            flag,
+            IZ_COLOR_RGBA(0x00, 0x00, 0x00, 0xff),
+            10, 10,
+            50.0f, 50.0f);
+        VRETURN(m_meshes[4].mesh != IZ_NULL);
+    }
+
+    // For SSAOPass, FinalPass.
+    {
+        m_screenFillPlane = izanagi::CDebugMeshScreenFillPlane::create(
+            allocator,
+            device,
+            IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0xff));
+        VRETURN(m_screenFillPlane != IZ_NULL);
+    }
+
+    return IZ_TRUE;
 }
 
 // 更新.
@@ -229,213 +225,138 @@ namespace {
 // 描画.
 void SSAOApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
-    auto& camera = GetCamera();
+    renderGeometryPass(device);
+    renderSSAOPass(device);
 
-    const auto& mtxW2V = camera.GetParam().mtxW2V;
-    const auto& mtxV2C = camera.GetParam().mtxV2C;
+    //renderFinalPass(device);
 
-    if (m_Mode != Ambient) {
-        device->BeginScene(
-            m_RT,
-            COUNTOF(m_RT),
-            izanagi::graph::E_GRAPH_CLEAR_FLAG_ALL,
-            IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0));
-    }
+    device->SetTexture(0, IZ_NULL);
 
-    izanagi::math::SMatrix44 mtxL2W;
-    izanagi::math::SMatrix44::SetUnit(mtxL2W);
+    m_gbuffer.drawBuffers(device);
+}
+
+void SSAOApp::renderGeometryPass(izanagi::graph::CGraphicsDevice* device)
+{
+    izanagi::sample::CSampleCamera& camera = GetCamera();
+
+    m_gbuffer.beginGeometryPass(device);
 
     m_Shader->Begin(device, 0, IZ_FALSE);
     {
         if (m_Shader->BeginPass(0)) {
-            // パラメータ設定
+            m_Shader->SetTexture("tex", m_Img->GetTexture(0));
+
             _SetShaderParam(
                 m_Shader,
-                "g_mL2W",
-                (void*)&mtxL2W,
-                sizeof(mtxL2W));
-
+                "g_mW2C",
+                (void*)&camera.GetParam().mtxW2C,
+                sizeof(camera.GetParam().mtxW2C));
             _SetShaderParam(
                 m_Shader,
                 "g_mW2V",
-                (void*)&mtxW2V,
-                sizeof(mtxW2V));
-
+                (void*)&camera.GetParam().mtxW2V,
+                sizeof(camera.GetParam().mtxW2V));
             _SetShaderParam(
                 m_Shader,
-                "g_mV2C",
-                (void*)&mtxV2C,
-                sizeof(mtxV2C));
+                "g_farClip",
+                (void*)&camera.GetParam().cameraFar,
+                sizeof(camera.GetParam().cameraFar));
 
-            // ライトパラメータ
+            for (IZ_UINT i = 0; i < MESH_NUM; i++)
             {
-                // Ambient Light Color
-                izanagi::SAmbientLightParam ambient;
-                ambient.color.Set(0.75f, 0.75f, 0.75f);
+                _SetShaderParam(
+                    m_Shader,
+                    "g_mL2W",
+                    (void*)&m_meshes[i].mtxL2W,
+                    sizeof(izanagi::math::SMatrix44));
 
-                // マテリアル
-                izanagi::SMaterialParam mtrl;
-                {
-                    mtrl.vAmbient.Set(1.0f, 1.0f, 1.0f, 1.0f);
-                }
+                m_Shader->CommitChanges(device);
 
-                _SetShaderParam(m_Shader, "g_vLitAmbientColor", &ambient.color, sizeof(ambient.color));
-                _SetShaderParam(m_Shader, "g_vMtrlAmbient", &mtrl.vAmbient, sizeof(mtrl.vAmbient));
+                m_meshes[i].mesh->Draw(device);
             }
 
-            // 地面
-            RenderScene(
-                device, 
-                m_Plane,
-                izanagi::math::CVector4(0.0f, 0.0f, 0.0f));
-
-            // 球
-            RenderScene(
-                device, 
-                m_Sphere,
-                izanagi::math::CVector4(10.0f, 5.0f, 10.0f));
-            RenderScene(
-                device, 
-                m_Sphere,
-                izanagi::math::CVector4(10.0f, 5.0f, -10.0f));
-
-            // キューブ
-            RenderScene(
-                device, 
-                m_Cube,
-                izanagi::math::CVector4(-10.0f, 5.0f, -10.0f));
-            RenderScene(
-                device, 
-                m_Cube,
-                izanagi::math::CVector4(-10.0f, 5.0f, 10.0f));
+            m_Shader->EndPass();
         }
     }
     m_Shader->End(device);
 
-    device->EndScene();
-
-    if (m_Mode == Textures) {
-        device->Begin2D();
-        {
-            device->SetTexture(0, m_RT[0]);
-            device->Draw2DSprite(
-                izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),
-                izanagi::CIntRect(0, 0, 640, 360));
-
-            device->SetTexture(0, m_RT[1]);
-            device->Draw2DSprite(
-                izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),
-                izanagi::CIntRect(0, 360, 640, 360));
-
-            device->Set2DRenderOp(izanagi::graph::E_GRAPH_2D_RENDER_OP_NO_TEX_ALPHA);
-
-            device->SetTexture(0, m_RT[2]);
-            device->Draw2DSprite(
-                izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),
-                izanagi::CIntRect(640, 360, 640, 360));
-
-            device->Set2DRenderOp(izanagi::graph::E_GRAPH_2D_RENDER_OP_NO_TEX_ALPHA);
-
-            device->SetTexture(0, m_RT[3]);
-            device->Draw2DSprite(
-                izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),
-                izanagi::CIntRect(640, 0, 640, 360));
-        }
-        device->End2D();
-    }
-    else if (m_Mode == SSAO) {
-        izanagi::graph::CShaderProgram* program = m_Shader->GetShaderProgram(1, 0);
-        device->SetShaderProgram(program);
-
-        device->SetTexture(0, m_RT[0]);
-        device->SetTexture(1, m_RT[1]);
-        device->SetTexture(2, m_RT[2]);
-        device->SetTexture(3, m_RT[3]);
-
-        izanagi::SHADER_PARAM_HANDLE h0 = program->GetHandleByName("g_mW2V");
-        izanagi::SHADER_PARAM_HANDLE h1 = program->GetHandleByName("g_mV2C");
-        izanagi::SHADER_PARAM_HANDLE h2 = program->GetHandleByName("samples");
-
-        program->SetMatrix(device, h0, mtxW2V);
-        program->SetMatrix(device, h1, mtxV2C);
-        program->SetValue(device, h2, samples, sizeof(samples));
-
-        device->SetVertexBuffer(0, 0, m_VB->GetStride(), m_VB);
-        device->SetVertexDeclaration(m_VD);
-
-        device->DrawPrimitive(
-            izanagi::graph::E_GRAPH_PRIM_TYPE_TRIANGLESTRIP,
-            0,
-            2);
-    }
-    else {
-        izanagi::graph::CShaderProgram* program = m_Shader->GetShaderProgram(2, 0);
-        device->SetShaderProgram(program);
-
-        device->SetTexture(0, m_RT[0]);
-
-        device->SetVertexBuffer(0, 0, m_VB->GetStride(), m_VB);
-        device->SetVertexDeclaration(m_VD);
-
-        device->DrawPrimitive(
-            izanagi::graph::E_GRAPH_PRIM_TYPE_TRIANGLESTRIP,
-            0,
-            2);
-    }
+    m_gbuffer.endGeometryPass(device);
 }
 
-void SSAOApp::RenderScene(
-    izanagi::graph::CGraphicsDevice* device,
-    izanagi::CDebugMesh* mesh,
-    const izanagi::math::SVector4& position)
+void SSAOApp::renderSSAOPass(izanagi::graph::CGraphicsDevice* device)
 {
-    izanagi::math::SMatrix44 mtxL2W;
-    izanagi::math::SMatrix44::GetTrans(mtxL2W, position);
+    izanagi::sample::CSampleCamera& camera = GetCamera();
 
-    _SetShaderParam(
-        m_Shader,
-        "g_mL2W",
-        (void*)&mtxL2W,
-        sizeof(mtxL2W));
+    izanagi::math::SMatrix44 mtxC2V;
+    izanagi::math::SMatrix44::Inverse(mtxC2V, camera.GetParam().mtxV2C);
 
-    m_Shader->CommitChanges(device);
+    izanagi::math::SMatrix44 mtxV2W;
+    izanagi::math::SMatrix44::Inverse(mtxV2W, camera.GetParam().mtxW2V);
 
-    mesh->Draw(device);
+    izanagi::math::CVector4 invScreenSize(
+        1.0f / device->GetBackBufferWidth(),
+        1.0f / device->GetBackBufferHeight(),
+        0.0f);
+
+    m_gbuffer.beginSSAOPass(device, m_Shader);
+
+    m_Shader->Begin(device, 0, IZ_FALSE);
+    {
+        m_Shader->SetTexture("texAlbedo", m_gbuffer.getBuffer(GBuffer::Type::Albedo));
+        m_Shader->SetTexture("texDepth", m_gbuffer.getBuffer(GBuffer::Type::Depth));
+
+        if (m_Shader->BeginPass(1)) {
+            _SetShaderParam(
+                m_Shader,
+                "g_vInvScreen",
+                (void*)&invScreenSize,
+                sizeof(invScreenSize));
+            
+            _SetShaderParam(
+                m_Shader,
+                "g_mW2C",
+                (void*)&camera.GetParam().mtxW2C,
+                sizeof(camera.GetParam().mtxW2C));
+            _SetShaderParam(
+                m_Shader,
+                "g_farClip",
+                (void*)&camera.GetParam().cameraFar,
+                sizeof(camera.GetParam().cameraFar));
+
+            _SetShaderParam(
+                m_Shader,
+                "g_mtxC2V",
+                (void*)&mtxC2V,
+                sizeof(mtxC2V));
+            _SetShaderParam(
+                m_Shader,
+                "g_mtxV2W",
+                (void*)&mtxV2W,
+                sizeof(mtxV2W));
+
+            _SetShaderParam(
+                m_Shader,
+                "samples",
+                (void*)&samples,
+                sizeof(samples));
+
+            m_Shader->CommitChanges(device);
+
+            m_screenFillPlane->Draw(device);
+
+            m_Shader->EndPass();
+        }
+    }
+    m_Shader->End(device);
+
+    m_gbuffer.endSSAOPass(device, m_Shader);
 }
 
 void SSAOApp::ReleaseInternal()
 {
-    SAFE_RELEASE(m_Shader);
-    SAFE_RELEASE(m_Sphere);
-    SAFE_RELEASE(m_Cube);
-    SAFE_RELEASE(m_Plane);
-
-    for (IZ_UINT i = 0; i < COUNTOF(m_RT); i++) {
-        SAFE_RELEASE(m_RT[i]);
-    }
-
-    SAFE_RELEASE(m_VB);
-    SAFE_RELEASE(m_VD);
 }
 
 IZ_BOOL SSAOApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
 {
-    switch (key) {
-    case izanagi::sys::E_KEYBOARD_BUTTON_LEFT:
-        {
-            IZ_INT mode = m_Mode - 1;
-            m_Mode = (RenderMode)(mode < 0 ? RenderModeNum - 1 : mode);
-        }
-        break;
-    case izanagi::sys::E_KEYBOARD_BUTTON_RIGHT:
-        {
-            IZ_INT mode = m_Mode + 1;
-            m_Mode = (RenderMode)(mode % RenderModeNum);
-        }
-        break;
-    default:
-        break;
-    }
-
     return IZ_TRUE;
 }
