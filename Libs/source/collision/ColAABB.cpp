@@ -171,14 +171,41 @@ namespace col
         m_size.z = maxSize;
     }
 
-    // AABBを内包するバウンディングスフィアを取得.
-    col::Sphere AABB::getBoudingSphere() const
+    // AABBに外接するバウンディングスフィアを取得.
+    col::Sphere AABB::getCircumscribedSphere() const
     {
         // TODO
         // 毎回計算するのはコスト的に問題ありそうなので、何かのタイミングのときだけ更新したい.
         
         auto center = getCenter();
         auto radius = math::SVector4::Length2(center, m_min);
+
+        col::Sphere sphere(radius, center);
+
+        return std::move(sphere);
+    }
+
+    // AABBに内接するバウンディングスフィアを取得.
+    col::Sphere AABB::getInscribedSphere() const
+    {
+        // TODO
+        // 毎回計算するのはコスト的に問題ありそうなので、何かのタイミングのときだけ更新したい.
+
+#if 0
+        // 立方体でないといけない.
+        makeCubic();
+
+        // 立方体なので、全方向のサイズは同じ.
+        auto radius = m_size.x * 0.5f;
+#else
+        // もっとも小さい辺の長さを取得.
+        IZ_FLOAT minSize = IZ_MIN(m_size.x, m_size.y);
+        minSize = IZ_MIN(minSize, m_size.z);
+
+        auto radius = minSize * 0.5f;
+#endif
+
+        auto center = getCenter();
 
         col::Sphere sphere(radius, center);
 

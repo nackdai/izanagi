@@ -74,9 +74,13 @@ namespace col
          */
         void makeCubic();
 
-        /** AABBを内包するバウンディングスフィアを取得.
+        /** AABBに外接するバウンディングスフィアを取得.
          */
-        col::Sphere getBoudingSphere() const;
+        col::Sphere getCircumscribedSphere() const;
+
+        /** AABBに内接するバウンディングスフィアを取得.
+         */
+        col::Sphere getInscribedSphere() const;
 
         IZ_BOOL canDisplay(const math::SMatrix44& mtxW2C);
 
