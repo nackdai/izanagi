@@ -237,7 +237,11 @@ namespace ShaderCompiler
 
             DebugWriteLine("{0}", result ? "Succeeded" : "Failed");
 
-            if (result)
+            if (!result)
+            {
+                throw new Exception("Failed parsing shader by MojoShader!!");
+            }
+            else 
             {
                 DebugWriteLine("Export to [{0}]", option.Output);
 
