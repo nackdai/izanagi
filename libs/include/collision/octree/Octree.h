@@ -303,6 +303,18 @@ namespace col
             return ret;
         }
 
+        using FuncTraverse = std::function < IZ_BOOL(NODE*) > ;
+
+        /** Traverse nodes.
+         */
+        void traverse(
+            FuncTraverse func,
+            std::vector<NODE*>& nodes,
+            IZ_BOOL isCreateNodeIfNoExist = IZ_TRUE)
+        {
+            traverse(0, 0, func, nodes, isCreateNodeIfNoExist);
+        }
+
         /** Get visible nodes by view furstum.
          */
         void getVisibleNodes(
@@ -310,7 +322,14 @@ namespace col
             std::vector<NODE*>& nodes,
             IZ_BOOL isCreateNodeIfNoExist = IZ_TRUE)
         {
-            getVisibleNodes(0, 0, frustum, nodes, isCreateNodeIfNoExist);
+            traverse(
+                [&](NODE* node) {
+                AABB aabb;
+                node->getAABB(aabb);
+
+                auto isVisible = frustum.isIntersect(&aabb);
+                return isVisible;
+            }, nodes, isCreateNodeIfNoExist);
         }
 
         /** Get count of nodes which the octree has.
@@ -346,12 +365,11 @@ namespace col
         }
 
     private:
-        /** Get visible nodes by view furstum.
-         */
-        void getVisibleNodes(
+        // Traverse nodes.
+        void traverse(
             IZ_UINT idx,
             IZ_UINT level,
-            Frustum& frustum,
+            FuncTraverse func,
             std::vector<NODE*>& nodes,
             IZ_BOOL isCreateNodeIfNoExist)
         {
@@ -362,13 +380,9 @@ namespace col
             NODE* node = getNode(idx);
 
             if (node) {
-                // Check if node is intersected by frustum.
-                AABB aabb;
-                node->getAABB(aabb);
+                auto isAccepted = func(node);
 
-                auto isIntersect = frustum.isIntersect(&aabb);
-
-                if (isIntersect) {
+                if (isAccepted) {
                     nodes.push_back(node);
                 }
             }
@@ -377,7 +391,7 @@ namespace col
             for (IZ_UINT i = 0; i < 8; i++) {
                 IZ_UINT id = idx * 8 + i + 1;
 
-                getVisibleNodes(id, level + 1, frustum, nodes, isCreateNodeIfNoExist);
+                traverse(id, level + 1, func, nodes, isCreateNodeIfNoExist);
             }
         }
 
