@@ -10,6 +10,11 @@
 // Vertex Array Object
 // http://googledevjp.blogspot.jp/2015/11/blog-post.html
 
+// NOTE
+// glDrawElements() は glBindBuffer( GL_ARRAY_BUFFER ) を参照しないしVAO も glBindBuffer(GL_ARRAY_BUFFER) に影響を与えません.
+// ですが、glDrawElements() は glBindBuffer(GL_ELEMENT_ARRAY_BUFFER) を参照し、VAO は glBindBuffer(GL_ELEMENT_ARRAY_BUFFER) を置き換えます.
+// http://wlog.flatlib.jp/item/1629
+
 namespace izanagi
 {
 namespace graph
