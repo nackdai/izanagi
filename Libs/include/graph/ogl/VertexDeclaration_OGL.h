@@ -10,6 +10,8 @@ namespace graph
     class CGraphicsDeviceGLES2;
     class CShaderProgramGLES2;
     class CVertexBuffer;
+    class CVertexBufferOGL;
+    class CGraphicsDevice;
 
     struct InstancingParam
     {
@@ -35,10 +37,24 @@ namespace graph
         virtual ~CVertexDeclarationOGL() {}
 
     private:
-        IZ_BOOL ApplyForInstancing(
+        IZ_BOOL begin(
+            CGraphicsDevice* device,
+            CShaderProgramGLES2* program,
+            IZ_UINT vtxOffset,
+            CVertexBufferOGL* vb,
+            IZ_UINT vtxStride);
+
+        IZ_BOOL beginInstancing(
             CShaderProgramGLES2* program,
             InstancingParam* params,
             CVertexBuffer** vbs);
+
+        void end();
+
+    private:
+        GLuint m_vao;
+
+        IZ_BOOL m_isApplied{ IZ_FALSE };
     };
 }   // namespace graph
 }   // namespace izanagi

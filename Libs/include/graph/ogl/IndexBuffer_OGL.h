@@ -1,8 +1,7 @@
-#if !defined(__IZANAGI_GRAPH_VERTEX_BUFFER_OGL_H__)
-#define __IZANAGI_GRAPH_VERTEX_BUFFER_OGL_H__
+#if !defined(__IZANAGI_GRAPH_INDEX_BUFFER_OGL_H__)
+#define __IZANAGI_GRAPH_INDEX_BUFFER_OGL_H__
 
-#include <atomic>
-#include "graph/gles2/VertexBuffer_GLES2.h"
+#include "graph/gles2/IndexBuffer_GLES2.h"
 
 namespace izanagi
 {
@@ -11,31 +10,27 @@ namespace graph
     class CGraphicsDeviceGLES2;
 
     // 頂点バッファ
-    class CVertexBufferOGL : public CVertexBufferGLES2
+    class CIndexBufferOGL : public CIndexBufferGLES2
     {
         friend class CGraphicsDeviceOGL;
-        friend class CIndexBufferOGL;
-
-        // glMapBufferRange - glUnmapBuffer の間は他の glMapBufferRange - glUnmapBuffer を呼べないので、そのチェック用.
-        static std::atomic<IZ_BOOL> s_isLocked;
 
     private:
         // インスタンス作成
-        static CVertexBufferOGL* CreateVertexBuffer(
+        static CIndexBufferOGL* CreateIndexBuffer(
             CGraphicsDeviceGLES2* device,
             IMemoryAllocator* allocator,
-            IZ_UINT stride,
-            IZ_UINT vtxNum,
+            IZ_UINT idxNum,
+            E_GRAPH_INDEX_BUFFER_FMT fmt,
             E_GRAPH_RSC_USAGE usage);
 
     private:
-        CVertexBufferOGL() {}
-        virtual ~CVertexBufferOGL() {}
+        CIndexBufferOGL() {}
+        virtual ~CIndexBufferOGL() {}
 
     public:
         void Initialize(CGraphicsDevice* device)
         {
-            CVertexBufferGLES2::Initialize(device);
+            CIndexBufferGLES2::Initialize(device);
         }
 
         // ロック
@@ -52,16 +47,14 @@ namespace graph
 
         GLuint GetRawInterface()
         {
-            return m_VB;
+            return m_IB;
         }
 
-        virtual void overrideNativeResource(void* rsc) override;
-
     private:
-        GLuint m_prevVB{ 0 };
+        GLuint m_prevIB{ 0 };
         IZ_BOOL m_isLocked{ IZ_FALSE };
     };
 }   // namespace graph
 }   // namespace izanagi
 
-#endif  // #if !defined(__IZANAGI_GRAPH_VERTEX_BUFFER_OGL_H__)
+#endif  // #if !defined(__IZANAGI_GRAPH_INDEX_BUFFER_OGL_H__)

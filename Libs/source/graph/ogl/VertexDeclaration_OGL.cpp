@@ -3,7 +3,12 @@
 #include "graph/gles2/ShaderProgram_GLES2.h"
 
 // NOTE
+// OpenGL で インスタンシング描画.
 // http://blog.techlab-xe.net/archives/2870
+
+// NOTE
+// Vertex Array Object
+// http://googledevjp.blogspot.jp/2015/11/blog-post.html
 
 namespace izanagi
 {
@@ -27,7 +32,7 @@ namespace graph
 
             instance->m_Allocator = allocator;
 
-            buf += sizeof(CVertexDeclarationGLES2);
+            buf += sizeof(CVertexDeclarationOGL);
 
             instance->m_Elements = reinterpret_cast<SVertexElement*>(buf);
             memcpy(
@@ -36,19 +41,162 @@ namespace graph
                 sizeof(SVertexElement) * elemNum);
 
             instance->m_ElemNum = elemNum;
+
+            CALL_GL_API(::glGenVertexArrays(1, &instance->m_vao));
         }
 
         return instance;
     }
 
-    IZ_BOOL CVertexDeclarationOGL::ApplyForInstancing(
+    IZ_BOOL CVertexDeclarationOGL::begin(
+        CGraphicsDevice* device,
+        CShaderProgramGLES2* program,
+        IZ_UINT vtxOffset,
+        CVertexBufferOGL* vb,
+        IZ_UINT vtxStride)
+    {
+        IZ_ASSERT(m_vao > 0);
+        CALL_GL_API(::glBindVertexArray(m_vao));
+
+        if (vb) {
+            CALL_GL_API(::glBindBuffer(GL_ARRAY_BUFFER, vb->GetRawInterface()));
+            vb->Initialize(device);
+        }
+
+        if (!m_isApplied) {
+            for (IZ_UINT i = 0; i < m_ElemNum; i++) {
+                const char* attribName = GetAttribName(i);
+                IZ_INT attribIndex = program->GetAttribIndex(attribName);
+
+                if (attribIndex >= 0) {
+                    const SVertexElement& element = m_Elements[i];
+
+                    // NOTE
+                    // VBOを使う場合は常に１ストリームのみ
+                    IZ_ASSERT(element.Stream == 0);
+
+                    // NOTE
+                    // Semanticによる頂点データの位置は無視するm_Elementsの並び順通りに設定する
+
+                    IZ_BOOL needNormalized = IZ_FALSE;
+                    IZ_UINT num = 4;
+                    GLenum type = GL_BYTE;
+                    size_t size = 4;
+
+                    E_GRAPH_VTX_DECL_TYPE elemType = element.Type;
+                    if (element.Usage == E_GRAPH_VTX_DECL_USAGE_POSITION) {
+                        elemType = E_GRAPH_VTX_DECL_TYPE_FLOAT3;
+                    }
+
+                    switch (elemType)
+                    {
+                    case E_GRAPH_VTX_DECL_TYPE_FLOAT1:
+                        size = sizeof(GLfloat);
+                        type = GL_FLOAT;
+                        num = 1;
+                        break;
+                    case E_GRAPH_VTX_DECL_TYPE_FLOAT2:
+                        size = sizeof(GLfloat);
+                        type = GL_FLOAT;
+                        num = 2;
+                        break;
+                    case E_GRAPH_VTX_DECL_TYPE_FLOAT3:
+                        size = sizeof(GLfloat);
+                        type = GL_FLOAT;
+                        num = 3;
+                        break;
+                    case E_GRAPH_VTX_DECL_TYPE_FLOAT4:
+                        size = sizeof(GLfloat);
+                        type = GL_FLOAT;
+                        num = 4;
+                        break;
+                    case E_GRAPH_VTX_DECL_TYPE_COLOR:
+                        size = sizeof(GLbyte);
+                        type = GL_UNSIGNED_BYTE;
+                        num = 4;
+                        needNormalized = IZ_TRUE;
+                        break;
+                    case E_GRAPH_VTX_DECL_TYPE_UBYTE4:
+                        size = sizeof(GLbyte);
+                        type = GL_UNSIGNED_BYTE;
+                        num = 4;
+                        break;
+                    case E_GRAPH_VTX_DECL_TYPE_SHORT2:
+                        size = sizeof(GLshort);
+                        type = GL_SHORT;
+                        num = 2;
+                        break;
+                    case E_GRAPH_VTX_DECL_TYPE_SHORT4:
+                        size = sizeof(GLshort);
+                        type = GL_SHORT;
+                        num = 2;
+                        break;
+                    case E_GRAPH_VTX_DECL_TYPE_UBYTE4N:
+                        size = sizeof(GLbyte);
+                        type = GL_UNSIGNED_BYTE;
+                        num = 4;
+                        needNormalized = IZ_TRUE;
+                        break;
+                    case E_GRAPH_VTX_DECL_TYPE_SHORT2N:
+                        size = sizeof(GLshort);
+                        type = GL_SHORT;
+                        num = 2;
+                        needNormalized = IZ_TRUE;
+                        break;
+                    case E_GRAPH_VTX_DECL_TYPE_SHORT4N:
+                        size = sizeof(GLshort);
+                        type = GL_SHORT;
+                        num = 4;
+                        needNormalized = IZ_TRUE;
+                        break;
+                    case E_GRAPH_VTX_DECL_TYPE_USHORT2N:
+                        size = sizeof(GLshort);
+                        type = GL_UNSIGNED_SHORT;
+                        num = 2;
+                        needNormalized = IZ_TRUE;
+                        break;
+                    case E_GRAPH_VTX_DECL_TYPE_USHORT4N:
+                        size = sizeof(GLshort);
+                        type = GL_UNSIGNED_SHORT;
+                        num = 4;
+                        needNormalized = IZ_TRUE;
+                        break;
+                    default:
+                        IZ_ASSERT(IZ_FALSE);
+                        continue;
+                    }
+
+                    // NOTE
+                    // glVertexAttribPointer に渡すオフセットはバイト数
+                    // しかし、ここにわたってくるオフセットは頂点位置のオフセット
+                    // そのため、バイトオフセットに変換する
+                    IZ_UINT offset = vtxOffset * vtxStride;
+
+                    CALL_GL_API(::glEnableVertexAttribArray(attribIndex));
+
+                    CALL_GL_API(::glVertexAttribPointer(
+                        attribIndex,
+                        num,
+                        type,
+                        needNormalized ? GL_TRUE : GL_FALSE,
+                        vtxStride,
+                        (void*)(offset + element.Offset)));
+                }
+            }
+
+            m_isApplied = IZ_TRUE;
+        }
+
+        return IZ_TRUE;
+    }
+
+    IZ_BOOL CVertexDeclarationOGL::beginInstancing(
         CShaderProgramGLES2* program,
         InstancingParam* params,
         CVertexBuffer** vbs)
     {
-        for (IZ_UINT i = 0; i < COUNTOF(s_EnabledAttribIndex); i++) {
-            s_EnabledAttribIndex[i] = (s_EnabledAttribIndex[i] == Enabled ? Disabled : s_EnabledAttribIndex[i]);
-        }
+        IZ_ASSERT(m_vao > 0);
+        CALL_GL_API(::glBindVertexArray(m_vao));
 
         IZ_UINT curStream = IZ_UINT32_MAX;
 
@@ -63,112 +211,115 @@ namespace graph
 
                 auto& param = params[stream];
 
-                auto handleVB = ((CVertexBufferOGL*)vbs[stream])->GetRawInterface();
+                if (vbs[stream]) {
+                    auto handleVB = ((CVertexBufferOGL*)vbs[stream])->GetRawInterface();
 
-                if (curStream != stream) {
-                    CALL_GL_API(::glBindBuffer(GL_ARRAY_BUFFER, handleVB));
+                    if (curStream != stream) {
+                        CALL_GL_API(::glBindBuffer(GL_ARRAY_BUFFER, handleVB));
+                    }
                 }
 
                 curStream = stream;
 
-                // NOTE
-                // Semanticによる頂点データの位置は無視するm_Elementsの並び順通りに設定する
+                if (!m_isApplied && vbs[stream]) {
+                    // NOTE
+                    // Semanticによる頂点データの位置は無視するm_Elementsの並び順通りに設定する
 
-                IZ_BOOL needNormalized = IZ_FALSE;
-                IZ_UINT num = 4;
-                GLenum type = GL_BYTE;
-                size_t size = 4;
+                    IZ_BOOL needNormalized = IZ_FALSE;
+                    IZ_UINT num = 4;
+                    GLenum type = GL_BYTE;
+                    size_t size = 4;
 
-                E_GRAPH_VTX_DECL_TYPE elemType = element.Type;
-                if (element.Usage == E_GRAPH_VTX_DECL_USAGE_POSITION) {
-                    elemType = E_GRAPH_VTX_DECL_TYPE_FLOAT3;
-                }
+                    E_GRAPH_VTX_DECL_TYPE elemType = element.Type;
+                    if (element.Usage == E_GRAPH_VTX_DECL_USAGE_POSITION) {
+                        elemType = E_GRAPH_VTX_DECL_TYPE_FLOAT3;
+                    }
 
-                switch (elemType)
-                {
-                case E_GRAPH_VTX_DECL_TYPE_FLOAT1:
-                    size = sizeof(GLfloat);
-                    type = GL_FLOAT;
-                    num = 1;
-                    break;
-                case E_GRAPH_VTX_DECL_TYPE_FLOAT2:
-                    size = sizeof(GLfloat);
-                    type = GL_FLOAT;
-                    num = 2;
-                    break;
-                case E_GRAPH_VTX_DECL_TYPE_FLOAT3:
-                    size = sizeof(GLfloat);
-                    type = GL_FLOAT;
-                    num = 3;
-                    break;
-                case E_GRAPH_VTX_DECL_TYPE_FLOAT4:
-                    size = sizeof(GLfloat);
-                    type = GL_FLOAT;
-                    num = 4;
-                    break;
-                case E_GRAPH_VTX_DECL_TYPE_COLOR:
-                    size = sizeof(GLbyte);
-                    type = GL_UNSIGNED_BYTE;
-                    num = 4;
-                    needNormalized = IZ_TRUE;
-                    break;
-                case E_GRAPH_VTX_DECL_TYPE_UBYTE4:
-                    size = sizeof(GLbyte);
-                    type = GL_UNSIGNED_BYTE;
-                    num = 4;
-                    break;
-                case E_GRAPH_VTX_DECL_TYPE_SHORT2:
-                    size = sizeof(GLshort);
-                    type = GL_SHORT;
-                    num = 2;
-                    break;
-                case E_GRAPH_VTX_DECL_TYPE_SHORT4:
-                    size = sizeof(GLshort);
-                    type = GL_SHORT;
-                    num = 2;
-                    break;
-                case E_GRAPH_VTX_DECL_TYPE_UBYTE4N:
-                    size = sizeof(GLbyte);
-                    type = GL_UNSIGNED_BYTE;
-                    num = 4;
-                    needNormalized = IZ_TRUE;
-                    break;
-                case E_GRAPH_VTX_DECL_TYPE_SHORT2N:
-                    size = sizeof(GLshort);
-                    type = GL_SHORT;
-                    num = 2;
-                    needNormalized = IZ_TRUE;
-                    break;
-                case E_GRAPH_VTX_DECL_TYPE_SHORT4N:
-                    size = sizeof(GLshort);
-                    type = GL_SHORT;
-                    num = 4;
-                    needNormalized = IZ_TRUE;
-                    break;
-                case E_GRAPH_VTX_DECL_TYPE_USHORT2N:
-                    size = sizeof(GLshort);
-                    type = GL_UNSIGNED_SHORT;
-                    num = 2;
-                    needNormalized = IZ_TRUE;
-                    break;
-                case E_GRAPH_VTX_DECL_TYPE_USHORT4N:
-                    size = sizeof(GLshort);
-                    type = GL_UNSIGNED_SHORT;
-                    num = 4;
-                    needNormalized = IZ_TRUE;
-                    break;
-                default:
-                    IZ_ASSERT(IZ_FALSE);
-                    continue;
-                }
+                    switch (elemType)
+                    {
+                    case E_GRAPH_VTX_DECL_TYPE_FLOAT1:
+                        size = sizeof(GLfloat);
+                        type = GL_FLOAT;
+                        num = 1;
+                        break;
+                    case E_GRAPH_VTX_DECL_TYPE_FLOAT2:
+                        size = sizeof(GLfloat);
+                        type = GL_FLOAT;
+                        num = 2;
+                        break;
+                    case E_GRAPH_VTX_DECL_TYPE_FLOAT3:
+                        size = sizeof(GLfloat);
+                        type = GL_FLOAT;
+                        num = 3;
+                        break;
+                    case E_GRAPH_VTX_DECL_TYPE_FLOAT4:
+                        size = sizeof(GLfloat);
+                        type = GL_FLOAT;
+                        num = 4;
+                        break;
+                    case E_GRAPH_VTX_DECL_TYPE_COLOR:
+                        size = sizeof(GLbyte);
+                        type = GL_UNSIGNED_BYTE;
+                        num = 4;
+                        needNormalized = IZ_TRUE;
+                        break;
+                    case E_GRAPH_VTX_DECL_TYPE_UBYTE4:
+                        size = sizeof(GLbyte);
+                        type = GL_UNSIGNED_BYTE;
+                        num = 4;
+                        break;
+                    case E_GRAPH_VTX_DECL_TYPE_SHORT2:
+                        size = sizeof(GLshort);
+                        type = GL_SHORT;
+                        num = 2;
+                        break;
+                    case E_GRAPH_VTX_DECL_TYPE_SHORT4:
+                        size = sizeof(GLshort);
+                        type = GL_SHORT;
+                        num = 2;
+                        break;
+                    case E_GRAPH_VTX_DECL_TYPE_UBYTE4N:
+                        size = sizeof(GLbyte);
+                        type = GL_UNSIGNED_BYTE;
+                        num = 4;
+                        needNormalized = IZ_TRUE;
+                        break;
+                    case E_GRAPH_VTX_DECL_TYPE_SHORT2N:
+                        size = sizeof(GLshort);
+                        type = GL_SHORT;
+                        num = 2;
+                        needNormalized = IZ_TRUE;
+                        break;
+                    case E_GRAPH_VTX_DECL_TYPE_SHORT4N:
+                        size = sizeof(GLshort);
+                        type = GL_SHORT;
+                        num = 4;
+                        needNormalized = IZ_TRUE;
+                        break;
+                    case E_GRAPH_VTX_DECL_TYPE_USHORT2N:
+                        size = sizeof(GLshort);
+                        type = GL_UNSIGNED_SHORT;
+                        num = 2;
+                        needNormalized = IZ_TRUE;
+                        break;
+                    case E_GRAPH_VTX_DECL_TYPE_USHORT4N:
+                        size = sizeof(GLshort);
+                        type = GL_UNSIGNED_SHORT;
+                        num = 4;
+                        needNormalized = IZ_TRUE;
+                        break;
+                    default:
+                        IZ_ASSERT(IZ_FALSE);
+                        continue;
+                    }
 
-                // NOTE
-                // glVertexAttribPointer に渡すオフセットはバイト数
-                // しかし、ここにわたってくるオフセットは頂点位置のオフセット
-                // そのため、バイトオフセットに変換する
-                IZ_UINT offset = param.offset * param.stride;
+                    // NOTE
+                    // glVertexAttribPointer に渡すオフセットはバイト数
+                    // しかし、ここにわたってくるオフセットは頂点位置のオフセット
+                    // そのため、バイトオフセットに変換する
+                    IZ_UINT offset = param.offset * param.stride;
 
-                CALL_GL_API(::glVertexAttribPointer(
+                    CALL_GL_API(::glVertexAttribPointer(
                         attribIndex,
                         num,
                         type,
@@ -176,26 +327,23 @@ namespace graph
                         param.stride,
                         (void*)(offset + element.Offset)));
 
-                CALL_GL_API(::glEnableVertexAttribArray(attribIndex));
+                    CALL_GL_API(::glEnableVertexAttribArray(attribIndex));
 
-                // For instancing.
-                auto divisor = param.divisor;
-                CALL_GL_API(::glVertexAttribDivisor(attribIndex, divisor));
-
-                s_EnabledAttribIndex[attribIndex] = Enabled;
+                    // For instancing.
+                    auto divisor = param.divisor;
+                    CALL_GL_API(::glVertexAttribDivisor(attribIndex, divisor));
+                }
             }
         }
 
-        for (IZ_UINT i = 0; i < COUNTOF(s_EnabledAttribIndex); i++) {
-            if (s_EnabledAttribIndex[i] == Disabled) {
-                CALL_GL_API(::glVertexAttribDivisor(i, 0));
-                CALL_GL_API(::glDisableVertexAttribArray(i));
-
-                s_EnabledAttribIndex[i] = None;
-            }
-        }
+        m_isApplied = IZ_TRUE;
 
         return IZ_TRUE;
+    }
+
+    void CVertexDeclarationOGL::end()
+    {
+        CALL_GL_API(::glBindVertexArray(0));
     }
 }   // namespace graph
 }   // namespace izanagi

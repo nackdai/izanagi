@@ -384,7 +384,7 @@ namespace graph
 
         if (gles2IB != IZ_NULL) {
             CALL_GL_API(::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gles2IB->GetRawInterface()));
-            gles2IB->Initialize();
+            gles2IB->Initialize(this);
         }
         else {
             CALL_GL_API(::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));

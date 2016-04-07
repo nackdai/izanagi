@@ -642,6 +642,12 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_OGL|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\..\source\graph\ogl\IndexBuffer_OGL.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\..\source\graph\ogl\VertexBuffer_OGL.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</ExcludedFromBuild>
@@ -872,6 +878,7 @@ $(SolutionDir)..\..\..\Tools\tools\Release\ShaderCompiler.exe -e main_OpNoTexAlp
     <ClInclude Include="..\..\include\graph\2d\2DShader.h" />
     <ClInclude Include="..\..\include\graph\IndexBuffer.h" />
     <ClInclude Include="..\..\include\graph\ogl\GraphicsDevice_OGL.h" />
+    <ClInclude Include="..\..\include\graph\ogl\IndexBuffer_OGL.h" />
     <ClInclude Include="..\..\include\graph\ogl\izOGLDefs.h" />
     <ClInclude Include="..\..\include\graph\ogl\VertexBuffer_OGL.h" />
     <ClInclude Include="..\..\include\graph\ogl\VertexDeclaration_OGL.h" />

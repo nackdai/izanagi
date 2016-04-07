@@ -6,6 +6,26 @@ namespace izanagi
 {
 namespace graph
 {
+    class IdxBufferOperator
+    {
+    public:
+        IdxBufferOperator(CGraphicsDevice* device, GLuint targetIB)
+        {
+            auto ib = (CIndexBufferGLES2*)device->GetRenderState().curIB;
+
+            m_prevIB = (ib != IZ_NULL ? ib->m_IB : 0);
+
+            CALL_GL_API(::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, targetIB));
+        }
+        ~IdxBufferOperator()
+        {
+            CALL_GL_API(::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_prevIB));
+        }
+
+    private:
+        GLuint m_prevIB{ 0 };
+    };
+
     // インスタンス作成
     CIndexBufferGLES2* CIndexBufferGLES2::CreateIndexBuffer(
         CGraphicsDeviceGLES2* device,
@@ -94,11 +114,6 @@ namespace graph
 
         IZ_BOOL ret = (m_IB > 0);
 
-        CALL_GL_API(
-            ::glBindBuffer(
-                GL_ELEMENT_ARRAY_BUFFER,
-                m_IB));
-
         GLsizeiptr size = idxNum;
         size *= (fmt == E_GRAPH_INDEX_BUFFER_FMT_INDEX16 ? sizeof(GLushort) : sizeof(GLuint));
 
@@ -108,12 +123,16 @@ namespace graph
     
         m_CreateType = usage;
 
+        Initialize(m_Device);
+
         return ret;
     }
 
-    void CIndexBufferGLES2::Initialize()
+    void CIndexBufferGLES2::Initialize(CGraphicsDevice* device)
     {
         if (!m_IsInitialized) {
+            IdxBufferOperator idxOp(device, m_IB);
+
             GLenum glUsage = (m_CreateType == E_GRAPH_RSC_USAGE_STATIC
                 ? GL_STATIC_DRAW
                 : GL_DYNAMIC_DRAW);
@@ -191,7 +210,7 @@ namespace graph
                 CALL_GL_API(::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IB));
 
                 // もしかしたら
-                Initialize();
+                Initialize(device);
             }
 
             IZ_UINT8* tmp = reinterpret_cast<IZ_UINT8*>(m_TemporaryData);

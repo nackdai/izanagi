@@ -13,6 +13,7 @@ namespace graph
     // インデックスバッファ
     class CIndexBufferGLES2 : public CIndexBuffer
     {
+        friend class IdxBufferOperator;
         friend class CGraphicsDeviceGLES2;
 
     private:
@@ -24,20 +25,20 @@ namespace graph
             E_GRAPH_INDEX_BUFFER_FMT fmt,
             E_GRAPH_RSC_USAGE usage);
 
-    private:
+    protected:
         inline CIndexBufferGLES2();
         virtual inline ~CIndexBufferGLES2();
 
-    private:
+    protected:
         // 本体作成
         IZ_BOOL CreateBody(
             IZ_UINT idxNum,
             E_GRAPH_INDEX_BUFFER_FMT fmt,
             E_GRAPH_RSC_USAGE usage);
 
-        void Initialize();
-
     public:
+        void Initialize(CGraphicsDevice* device);
+
         // ロック
         virtual IZ_BOOL Lock(
             CGraphicsDevice* device,
@@ -60,7 +61,7 @@ namespace graph
     public:
         GLuint GetRawInterface() { return m_IB; }
 
-    private:
+    protected:
         CGraphicsDeviceGLES2* m_Device;
 
         // 本体

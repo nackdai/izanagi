@@ -18,6 +18,12 @@ namespace graph {
             IZ_UINT nVtxNum,
             E_GRAPH_RSC_USAGE nCreateType) override;
 
+        // インデックスバッファ作成
+        virtual CIndexBuffer* CreateIndexBuffer(
+            IZ_UINT nIdxNum,
+            E_GRAPH_INDEX_BUFFER_FMT fmt,
+            E_GRAPH_RSC_USAGE nCreateType) override;
+
         // 頂点宣言作成
         virtual CVertexDeclaration* CreateVertexDeclaration(const SVertexElement* pElem, IZ_UINT nNum) override;
 
@@ -51,6 +57,21 @@ namespace graph {
             IZ_UINT divisor,
             CVertexBuffer* vb) override;
 
+        virtual IZ_BOOL SetIndexBuffer(CIndexBuffer* pIB) override;
+
+        virtual IZ_BOOL DrawIndexedPrimitive(
+            E_GRAPH_PRIM_TYPE prim_type,
+            IZ_UINT vtxOffset,
+            IZ_UINT nVtxNum,
+            IZ_UINT idxOffset,
+            IZ_UINT nPrimCnt) override;
+
+        // インデックスバッファなし描画
+        virtual IZ_BOOL DrawPrimitive(
+            E_GRAPH_PRIM_TYPE prim_type,
+            IZ_UINT idxOffset,
+            IZ_UINT nPrimCnt) override;
+
         virtual IZ_BOOL DrawIndexedInstancedPrimitive(
             E_GRAPH_PRIM_TYPE prim_type,
             IZ_UINT vtxOffset,
@@ -70,6 +91,23 @@ namespace graph {
         }
 
     protected:
+        void setTexToSampler();
+
+        // 0: num, 1: mode, 2: type, 3: offet
+        using IndexexDrawParam = std::tuple < IZ_UINT, GLenum, GLenum, IZ_UINT > ;
+        IndexexDrawParam getIndexParam(
+            E_GRAPH_PRIM_TYPE prim_type,
+            IZ_UINT idxOffset,
+            IZ_UINT nPrimCnt);
+
+        // 0: num, 1: mode
+        using DrawParam = std::tuple < IZ_UINT, GLenum > ;
+        DrawParam getDrawParam(
+            E_GRAPH_PRIM_TYPE prim_type,
+            IZ_UINT nPrimCnt);
+
+        void setIndexBuffer();
+
         virtual void OnTerminate() override;
 
     private:
@@ -78,6 +116,11 @@ namespace graph {
 
         CRenderTarget* m_rtInternalDepth{ nullptr };
         IZ_BOOL m_isUseInternalDepth{ IZ_FALSE };
+
+        struct Dirty {
+            IZ_BOOL isDirtyIB;
+            IZ_BOOL isDirtyVB[MAX_STREAM_NUM];
+        } m_dirty;
     };
 }   // namespace graph
 }   // namespace izanagi

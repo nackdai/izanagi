@@ -206,6 +206,8 @@ namespace graph
         CIndexBuffer* m_pIB;        // インデックスバッファ
         CVertexDeclaration* m_pVD;  // 頂点宣言
 
+        void* m_bufferIB{ nullptr };
+
         // バッファ状態管理
         SBufferInfo m_sVBInfo;  // 頂点バッファ用
         SBufferInfo m_sIBInfo;  // インデックスバッファ用

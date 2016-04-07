@@ -1,3 +1,5 @@
+#include <atomic>
+#include "graph/ogl/IndexBuffer_OGL.h"
 #include "graph/ogl/VertexBuffer_OGL.h"
 #include "graph/gles2/GraphicsDevice_GLES2.h"
 
@@ -5,29 +7,27 @@ namespace izanagi
 {
 namespace graph
 {
-    std::atomic<IZ_BOOL> CVertexBufferOGL::s_isLocked(IZ_FALSE);
-
     // インスタンス作成
-    CVertexBufferOGL* CVertexBufferOGL::CreateVertexBuffer(
+    CIndexBufferOGL* CIndexBufferOGL::CreateIndexBuffer(
         CGraphicsDeviceGLES2* device,
         IMemoryAllocator* allocator,
-        IZ_UINT stride,
-        IZ_UINT vtxNum,
+        IZ_UINT idxNum,
+        E_GRAPH_INDEX_BUFFER_FMT fmt,
         E_GRAPH_RSC_USAGE usage)
     {
         IZ_BOOL result = IZ_TRUE;
         IZ_UINT8* buf = IZ_NULL;
-        CVertexBufferOGL* instance = IZ_NULL;
+        CIndexBufferOGL* instance = IZ_NULL;
 
         // メモリ確保
-        buf = (IZ_UINT8*)ALLOC_ZERO(allocator, sizeof(CVertexBufferOGL));
+        buf = (IZ_UINT8*)ALLOC_ZERO(allocator, sizeof(CIndexBufferOGL));
         if (!(result = (buf != IZ_NULL))) {
             IZ_ASSERT(IZ_FALSE);
             goto __EXIT__;
         }
 
         // インスタンス作成
-        instance = new (buf)CVertexBufferOGL;
+        instance = new (buf)CIndexBufferOGL;
         {
             instance->AddRef();
             instance->m_Allocator = allocator;
@@ -36,9 +36,8 @@ namespace graph
 
         // 本体作成
         result = instance->CreateBody(
-            device,
-            stride,
-            vtxNum,
+            idxNum,
+            fmt,
             usage);
         if (!result) {
             goto __EXIT__;
@@ -58,7 +57,7 @@ namespace graph
     }
 
     // ロック
-    IZ_BOOL CVertexBufferOGL::Lock(
+    IZ_BOOL CIndexBufferOGL::Lock(
         CGraphicsDevice* device,
         IZ_UINT offset,
         IZ_UINT size,
@@ -66,7 +65,7 @@ namespace graph
         IZ_BOOL isReadOnly,
         IZ_BOOL isDiscard/*= IZ_FALSE*/)
     {
-        IZ_ASSERT(!s_isLocked);
+        IZ_ASSERT(!CVertexBufferOGL::s_isLocked);
 
         // NOTE
         // Just only read or write, can't both read and write.
@@ -75,7 +74,7 @@ namespace graph
 
         CALL_GL_API(::glBindBuffer(
             GL_COPY_WRITE_BUFFER,
-            m_VB));
+            m_IB));
 
         IZ_UINT lockSize = (size > 0
             ? size
@@ -95,7 +94,7 @@ namespace graph
 
         m_isLocked = IZ_TRUE;
 
-        s_isLocked = IZ_TRUE;
+        CVertexBufferOGL::s_isLocked = IZ_TRUE;
 
         return IZ_TRUE;
     }
@@ -103,41 +102,29 @@ namespace graph
     /**
     * アンロック
     */
-    IZ_BOOL CVertexBufferOGL::Unlock(CGraphicsDevice* device)
+    IZ_BOOL CIndexBufferOGL::Unlock(CGraphicsDevice* device)
     {
-        IZ_ASSERT(s_isLocked);
+        IZ_ASSERT(CVertexBufferOGL::s_isLocked);
 
-        IZ_ASSERT(m_VB > 0);
+        IZ_ASSERT(m_IB > 0);
 
         IZ_BOOL isLocked = m_isLocked;
     
         if (isLocked) {
-            CALL_GL_API(glUnmapBuffer(GL_COPY_WRITE_BUFFER));
+            GLboolean result = GL_FALSE;
+            CALL_GL_API(result = glUnmapBuffer(GL_COPY_WRITE_BUFFER));
 
             CALL_GL_API(glBindBuffer(
                 GL_COPY_WRITE_BUFFER,
                 0));
 
-            m_prevVB = 0;
+            m_prevIB = 0;
             m_isLocked = IZ_FALSE;
         }
 
-        s_isLocked = IZ_FALSE;
+        CVertexBufferOGL::s_isLocked = IZ_FALSE;
 
         return isLocked;
-    }
-
-    void CVertexBufferOGL::overrideNativeResource(void* rsc)
-    {
-        GLuint vb = (rsc ? *(GLuint*)rsc : 0);
-
-        if (vb > 0) {
-            if (m_VB > 0) {
-                CALL_GL_API(::glDeleteBuffers(1, &m_VB));
-            }
-        }
-
-        m_VB = vb;
     }
 }   // namespace graph
 }   // namespace izanagi

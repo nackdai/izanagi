@@ -8,6 +8,7 @@
 #include "graph/2d/2DRenderer.h"
 
 #include "graph/ogl/VertexBuffer_OGL.h"
+#include "graph/ogl/IndexBuffer_OGL.h"
 #include "graph/ogl/VertexDeclaration_OGL.h"
 
 #include <GL/glut.h>
@@ -65,6 +66,7 @@ namespace graph
     // コンストラクタ
     CGraphicsDeviceOGL::CGraphicsDeviceOGL()
     {
+        FILL_ZERO(&m_dirty, sizeof(m_dirty));
     }
 
     // デストラクタ
@@ -293,6 +295,22 @@ namespace graph
         return pVB;
     }
 
+    // インデックスバッファ作成
+    CIndexBuffer* CGraphicsDeviceOGL::CreateIndexBuffer(
+        IZ_UINT nIdxNum,
+        E_GRAPH_INDEX_BUFFER_FMT fmt,
+        E_GRAPH_RSC_USAGE usage)
+    {
+        CIndexBufferOGL* pIB = CIndexBufferOGL::CreateIndexBuffer(
+            this,
+            m_Allocator,
+            nIdxNum,
+            fmt,
+            usage);
+
+        return pIB;
+    }
+
     // 頂点宣言作成
     CVertexDeclaration* CGraphicsDeviceOGL::CreateVertexDeclaration(const SVertexElement* pElem, IZ_UINT nNum)
     {
@@ -315,6 +333,7 @@ namespace graph
             return IZ_TRUE;
         }
 
+#if 0
         CVertexBufferOGL* oglVB = reinterpret_cast<CVertexBufferOGL*>(pVB);
 
         if (oglVB != IZ_NULL) {
@@ -324,9 +343,37 @@ namespace graph
         else {
             CALL_GL_API(::glBindBuffer(GL_ARRAY_BUFFER, 0));
         }
+#else
+        if (!pVB) {
+            CALL_GL_API(::glBindBuffer(GL_ARRAY_BUFFER, 0));
+        }
+#endif
 
         // 現在設定されているものとして保持
         SAFE_REPLACE(m_RenderState.curVB[nStreamIdx], pVB);
+
+        m_dirty.isDirtyVB[nStreamIdx] = IZ_TRUE;
+
+        return IZ_TRUE;
+    }
+
+    IZ_BOOL CGraphicsDeviceOGL::SetIndexBuffer(CIndexBuffer* pIB)
+    {
+        if (m_RenderState.curIB == pIB) {
+            // すでに設定されている
+            return IZ_TRUE;
+        }
+
+        CIndexBufferGLES2* gles2IB = reinterpret_cast<CIndexBufferGLES2*>(pIB);
+
+        if (!pIB) {
+            CALL_GL_API(::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+        }
+
+        // 現在設定されているものとして保持
+        SAFE_REPLACE(m_RenderState.curIB, pIB);
+
+        m_dirty.isDirtyIB = IZ_TRUE;
 
         return IZ_TRUE;
     }
@@ -363,29 +410,9 @@ namespace graph
         return IZ_TRUE;
     }
 
-    IZ_BOOL CGraphicsDeviceOGL::DrawIndexedInstancedPrimitive(
-        E_GRAPH_PRIM_TYPE prim_type,
-        IZ_UINT vtxOffset,
-        IZ_UINT vtxNum,
-        IZ_UINT idxOffset,
-        IZ_UINT nPrimCnt)
+    void CGraphicsDeviceOGL::setTexToSampler()
     {
         CShaderProgramGLES2* gles2Program = reinterpret_cast<CShaderProgramGLES2*>(m_RenderState.curShader);
-        CVertexDeclarationOGL* vd = reinterpret_cast<CVertexDeclarationOGL*>(m_RenderState.curVD);
-
-        // NOTE
-        // ShaderProgramがセットされないとシェーダユニフォームの取得、設定ができないので
-        // 頂点宣言の反映、テクスチャのセットなどをこのタイミングでやる
-
-        IZ_ASSERT(m_RenderState.curVD != IZ_NULL);
-        IZ_ASSERT(m_RenderState.curVB != IZ_NULL);
-
-        m_instancingParams[0].offset += vtxOffset * m_instancingParams[0].stride;
-
-        vd->ApplyForInstancing(
-            gles2Program,
-            m_instancingParams,
-            m_RenderState.curVB);
 
         // NOTE
         // ShaderCompilerによってsamplerレジスタに応じたユニフォーム名が設定されている
@@ -400,7 +427,11 @@ namespace graph
             {
                 if (m_IsDirtyShaderProgram) {
                     m_SamplerHandle[i] = gles2Program->GetHandleByName(samplerName[i]);
-                    IZ_ASSERT(m_SamplerHandle[i] >= 0);
+                    //IZ_ASSERT(m_SamplerHandle[i] >= 0);
+                    if (m_SamplerHandle[i] < 0) {
+                        m_IsDirtyTex[i] = IZ_FALSE;
+                        continue;
+                    }
                 }
 
                 CALL_GL_API(::glActiveTexture(GL_TEXTURE0 + i));
@@ -418,7 +449,13 @@ namespace graph
 
             m_IsDirtyTex[i] = IZ_FALSE;
         }
+    }
 
+    CGraphicsDeviceOGL::IndexexDrawParam CGraphicsDeviceOGL::getIndexParam(
+        E_GRAPH_PRIM_TYPE prim_type,
+        IZ_UINT idxOffset,
+        IZ_UINT nPrimCnt)
+    {
         IZ_UINT idxNum = 0;
 
         // プリミティブタイプからインデックス数を計算
@@ -471,73 +508,13 @@ namespace graph
         IZ_UINT offset = idxOffset * sizeof(IZ_USHORT);
 #endif
 
-        IZ_ASSERT(m_numInstancingPrim > 0);
-
-        CALL_GL_API(::glDrawElementsInstanced(
-            mode,
-            idxNum,
-            type,
-            (const GLvoid*)offset,
-            m_numInstancingPrim));
-
-        m_IsDirtyShaderProgram = IZ_FALSE;
-
-        return IZ_TRUE;
+        return IndexexDrawParam(idxNum, mode, type, idxOffset);
     }
 
-    IZ_BOOL CGraphicsDeviceOGL::DrawInstancedPrimitive(
+    CGraphicsDeviceOGL::DrawParam CGraphicsDeviceOGL::getDrawParam(
         E_GRAPH_PRIM_TYPE prim_type,
-        IZ_UINT idxOffset,
         IZ_UINT nPrimCnt)
     {
-        CShaderProgramGLES2* gles2Program = reinterpret_cast<CShaderProgramGLES2*>(m_RenderState.curShader);
-        CVertexDeclarationOGL* vd = reinterpret_cast<CVertexDeclarationOGL*>(m_RenderState.curVD);
-
-        // NOTE
-        // ShaderProgramがセットされないとシェーダユニフォームの取得、設定ができないので
-        // 頂点宣言の反映、テクスチャのセットなどをこのタイミングでやる
-
-        IZ_ASSERT(m_RenderState.curVD != IZ_NULL);
-        IZ_ASSERT(m_RenderState.curVB != IZ_NULL);
-
-        vd->ApplyForInstancing(
-            gles2Program,
-            m_instancingParams,
-            m_RenderState.curVB);
-
-        // NOTE
-        // ShaderCompilerによってsamplerレジスタに応じたユニフォーム名が設定されている
-        static const char* samplerName[TEX_STAGE_NUM] =
-        {
-            "s0", "s1", "s2", "s3", "s4", "s5", "s6", "s7",
-        };
-
-        for (IZ_UINT i = 0; i < TEX_STAGE_NUM; i++) {
-            if (m_IsDirtyTex[i]
-                && m_Texture[i] != IZ_NULL)
-            {
-                if (m_IsDirtyShaderProgram) {
-                    m_SamplerHandle[i] = gles2Program->GetHandleByName(samplerName[i]);
-                }
-
-                if (m_SamplerHandle[i] >= 0) {
-                    CALL_GL_API(::glActiveTexture(GL_TEXTURE0 + i));
-
-                    GLenum type = (m_Texture[i]->GetTexType() == E_GRAPH_TEX_TYPE_PLANE
-                        ? GL_TEXTURE_2D
-                        : GL_TEXTURE_CUBE_MAP);
-
-                    GLuint handle = m_Texture[i]->GetTexHandle();
-
-                    CALL_GL_API(::glBindTexture(type, handle));
-
-                    gles2Program->SetInt(this, m_SamplerHandle[i], i);
-                }
-            }
-
-            m_IsDirtyTex[i] = IZ_FALSE;
-        }
-
         IZ_UINT vtxNum = 0;
 
         // プリミティブタイプからインデックス数を計算
@@ -568,6 +545,216 @@ namespace graph
 
         GLenum mode = CParamValueConverterGLES2::ConvAbstractToTarget_PrimType(prim_type);
 
+        return DrawParam(vtxNum, mode);
+    }
+
+    void CGraphicsDeviceOGL::setIndexBuffer()
+    {
+        if (m_dirty.isDirtyIB) {
+            CIndexBufferGLES2* ib = reinterpret_cast<CIndexBufferGLES2*>(m_RenderState.curIB);
+            if (ib != IZ_NULL) {
+                CALL_GL_API(::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib->GetRawInterface()));
+                ib->Initialize(this);
+            }
+
+            m_dirty.isDirtyIB = IZ_FALSE;
+        }
+    }
+
+    IZ_BOOL CGraphicsDeviceOGL::DrawIndexedPrimitive(
+        E_GRAPH_PRIM_TYPE prim_type,
+        IZ_UINT vtxOffset,
+        IZ_UINT nVtxNum,
+        IZ_UINT idxOffset,
+        IZ_UINT nPrimCnt)
+    {
+        CShaderProgramGLES2* gles2Program = reinterpret_cast<CShaderProgramGLES2*>(m_RenderState.curShader);
+        CVertexDeclarationOGL* vd = reinterpret_cast<CVertexDeclarationOGL*>(m_RenderState.curVD);
+        CVertexBufferOGL* vb = reinterpret_cast<CVertexBufferOGL*>(m_RenderState.curVB[0]);
+
+        // NOTE
+        // ShaderProgramがセットされないとシェーダユニフォームの取得、設定ができないので
+        // 頂点宣言の反映、テクスチャのセットなどをこのタイミングでやる
+
+        IZ_ASSERT(m_RenderState.curVD != IZ_NULL);
+        IZ_ASSERT(m_RenderState.curVB != IZ_NULL);
+
+        vd->begin(
+            this,
+            gles2Program,
+            vtxOffset,
+            m_dirty.isDirtyVB[0] ? vb : nullptr,
+            vb->GetStride());
+
+        m_dirty.isDirtyVB[0] = IZ_FALSE;
+
+        setIndexBuffer();
+
+        setTexToSampler();
+
+        auto idxParam = getIndexParam(prim_type, idxOffset, nPrimCnt);
+
+        IZ_UINT idxNum = std::get<0>(idxParam);
+        GLenum mode = std::get<1>(idxParam);
+        GLenum type = std::get<2>(idxParam);
+        IZ_UINT offset = std::get<3>(idxParam);
+
+        CALL_GL_API(::glDrawElements(
+            mode,
+            idxNum,
+            type,
+            (const GLvoid*)offset));
+
+        vd->end();
+
+        m_IsDirtyShaderProgram = IZ_FALSE;
+
+        return IZ_TRUE;
+    }
+
+    IZ_BOOL CGraphicsDeviceOGL::DrawPrimitive(
+        E_GRAPH_PRIM_TYPE prim_type,
+        IZ_UINT idxOffset,
+        IZ_UINT nPrimCnt)
+    {
+        CShaderProgramGLES2* gles2Program = reinterpret_cast<CShaderProgramGLES2*>(m_RenderState.curShader);
+        CVertexDeclarationOGL* vd = reinterpret_cast<CVertexDeclarationOGL*>(m_RenderState.curVD);
+        CVertexBufferOGL* vb = reinterpret_cast<CVertexBufferOGL*>(m_RenderState.curVB[0]);
+
+        // NOTE
+        // ShaderProgramがセットされないとシェーダユニフォームの取得、設定ができないので
+        // 頂点宣言の反映、テクスチャのセットなどをこのタイミングでやる
+
+        IZ_ASSERT(m_RenderState.curVD != IZ_NULL);
+        IZ_ASSERT(m_RenderState.curVB != IZ_NULL);
+
+        vd->begin(
+            this,
+            gles2Program,
+            0,
+            m_dirty.isDirtyVB[0] ? vb : nullptr,
+            vb->GetStride());
+
+        m_dirty.isDirtyVB[0] = IZ_FALSE;
+
+        setTexToSampler();
+
+        auto drawParam = getDrawParam(prim_type, nPrimCnt);
+
+        IZ_UINT vtxNum = std::get<0>(drawParam);
+        GLenum mode = std::get<1>(drawParam);
+
+        CALL_GL_API(::glDrawArrays(mode, idxOffset, vtxNum));
+
+        vd->end();
+
+        m_IsDirtyShaderProgram = IZ_FALSE;
+
+        return IZ_TRUE;
+    }
+
+    IZ_BOOL CGraphicsDeviceOGL::DrawIndexedInstancedPrimitive(
+        E_GRAPH_PRIM_TYPE prim_type,
+        IZ_UINT vtxOffset,
+        IZ_UINT vtxNum,
+        IZ_UINT idxOffset,
+        IZ_UINT nPrimCnt)
+    {
+        CShaderProgramGLES2* gles2Program = reinterpret_cast<CShaderProgramGLES2*>(m_RenderState.curShader);
+        CVertexDeclarationOGL* vd = reinterpret_cast<CVertexDeclarationOGL*>(m_RenderState.curVD);
+
+        // NOTE
+        // ShaderProgramがセットされないとシェーダユニフォームの取得、設定ができないので
+        // 頂点宣言の反映、テクスチャのセットなどをこのタイミングでやる
+
+        IZ_ASSERT(m_RenderState.curVD != IZ_NULL);
+        IZ_ASSERT(m_RenderState.curVB != IZ_NULL);
+
+        m_instancingParams[0].offset += vtxOffset * m_instancingParams[0].stride;
+
+        CVertexBuffer* vbs[MAX_STREAM_NUM] = {
+            m_RenderState.curVB[0],
+            m_RenderState.curVB[1],
+            m_RenderState.curVB[2],
+            m_RenderState.curVB[3],
+        };
+
+        vd->beginInstancing(
+            gles2Program,
+            m_instancingParams,
+            vbs);
+
+        m_dirty.isDirtyVB[0] = IZ_FALSE;
+        m_dirty.isDirtyVB[1] = IZ_FALSE;
+        m_dirty.isDirtyVB[2] = IZ_FALSE;
+        m_dirty.isDirtyVB[3] = IZ_FALSE;
+
+        setIndexBuffer();
+
+        setTexToSampler();
+
+        auto idxParam = getIndexParam(prim_type, idxOffset, nPrimCnt);
+
+        IZ_UINT idxNum = std::get<0>(idxParam);
+        GLenum mode = std::get<1>(idxParam);
+        GLenum type = std::get<2>(idxParam);
+        IZ_UINT offset = std::get<3>(idxParam);
+
+        IZ_ASSERT(m_numInstancingPrim > 0);
+
+        CALL_GL_API(::glDrawElementsInstanced(
+            mode,
+            idxNum,
+            type,
+            (const GLvoid*)offset,
+            m_numInstancingPrim));
+
+        vd->end();
+
+        m_IsDirtyShaderProgram = IZ_FALSE;
+
+        return IZ_TRUE;
+    }
+
+    IZ_BOOL CGraphicsDeviceOGL::DrawInstancedPrimitive(
+        E_GRAPH_PRIM_TYPE prim_type,
+        IZ_UINT idxOffset,
+        IZ_UINT nPrimCnt)
+    {
+        CShaderProgramGLES2* gles2Program = reinterpret_cast<CShaderProgramGLES2*>(m_RenderState.curShader);
+        CVertexDeclarationOGL* vd = reinterpret_cast<CVertexDeclarationOGL*>(m_RenderState.curVD);
+
+        // NOTE
+        // ShaderProgramがセットされないとシェーダユニフォームの取得、設定ができないので
+        // 頂点宣言の反映、テクスチャのセットなどをこのタイミングでやる
+
+        IZ_ASSERT(m_RenderState.curVD != IZ_NULL);
+        IZ_ASSERT(m_RenderState.curVB != IZ_NULL);
+
+        CVertexBuffer* vbs[MAX_STREAM_NUM] = {
+            m_RenderState.curVB[0],
+            m_RenderState.curVB[1],
+            m_RenderState.curVB[2],
+            m_RenderState.curVB[3],
+        };
+
+        vd->beginInstancing(
+            gles2Program,
+            m_instancingParams,
+            vbs);
+
+        m_dirty.isDirtyVB[0] = IZ_FALSE;
+        m_dirty.isDirtyVB[1] = IZ_FALSE;
+        m_dirty.isDirtyVB[2] = IZ_FALSE;
+        m_dirty.isDirtyVB[3] = IZ_FALSE;
+
+        setTexToSampler();
+
+        auto drawParam = getDrawParam(prim_type, nPrimCnt);
+
+        IZ_UINT vtxNum = std::get<0>(drawParam);
+        GLenum mode = std::get<1>(drawParam);
+
         IZ_ASSERT(m_numInstancingPrim > 0);
 
         CALL_GL_API(::glDrawArraysInstanced(
@@ -575,6 +762,8 @@ namespace graph
             idxOffset,
             vtxNum,
             m_numInstancingPrim));
+
+        vd->end();
 
         m_IsDirtyShaderProgram = IZ_FALSE;
 

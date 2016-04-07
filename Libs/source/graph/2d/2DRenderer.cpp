@@ -85,6 +85,8 @@ namespace graph
         SAFE_RELEASE(m_pIB);
         SAFE_RELEASE(m_pVD);
         SAFE_RELEASE(m_pShader);
+
+        FREE(m_Allocator, m_bufferIB);
     }
 
     // 初期化
@@ -117,6 +119,11 @@ namespace graph
             // m_pIBの分のデバイスの参照カウントを減らす
             device->Release();
         }
+
+        // NOTE
+        // OpenGLでは glMapBufferRange を入れ子で使用できないので、IndexBufferについてはテンポラリなバッファを用意する.
+        m_bufferIB = ALLOC(m_Allocator, m_pIB->GetSize());
+        VRETURN(m_bufferIB);
 
         static const SVertexElement VtxElement[] = {
             {0,  0, E_GRAPH_VTX_DECL_TYPE_FLOAT4, E_GRAPH_VTX_DECL_USAGE_POSITION, 0},  // 座標
@@ -683,6 +690,7 @@ namespace graph
                 VRETURN(result);
             }
 
+#if 0
             // インデックスバッファ
             {
                 m_sIBInfo.offset = m_sIBInfo.num * m_pIB->GetStride();
@@ -702,6 +710,12 @@ namespace graph
                 m_sIBInfo.next_lock_discard = IZ_FALSE;
                 VRETURN(result);
             }
+#else
+            // NOTE
+            // OpenGLでは、glMapBufferRange を入れ子で利用できないので、ローカルなバッファを一時的に利用する.
+            m_sIBInfo.offset = m_sIBInfo.num * m_pIB->GetStride();
+            m_sIBInfo.buf_ptr = m_bufferIB;
+#endif
         }
 
         return IZ_TRUE;
@@ -715,7 +729,35 @@ namespace graph
             ToggleIsLock();
 
             m_pVB->Unlock(device);
+
+#if 0
             m_pIB->Unlock(device);
+#else
+            // NOTE
+            // OpenGLでは、glMapBufferRange を入れ子で利用できないので、ローカルなバッファからコピーする.
+
+            // ロックサイズ
+            IZ_UINT nLockSize = (m_sIBInfo.next_lock_discard    // DISCARDでロックするかどうか
+                ? 0
+                : m_pIB->GetSize() - m_sIBInfo.offset); // 残りロック可能サイズ
+
+            void* ptr = nullptr;
+
+            IZ_BOOL result = m_pIB->Lock(
+                device,
+                m_sIBInfo.offset,
+                nLockSize,
+                (void**)&ptr,
+                IZ_FALSE,
+                m_sIBInfo.next_lock_discard);
+            m_sIBInfo.next_lock_discard = IZ_FALSE;
+
+            IZ_ASSERT(result);
+
+            memcpy(ptr, m_bufferIB, m_sIBInfo.num * m_pIB->GetStride());
+
+            m_pIB->Unlock(device);
+#endif
 
             m_sVBInfo.buf_ptr = IZ_NULL;
             m_sIBInfo.buf_ptr = IZ_NULL;

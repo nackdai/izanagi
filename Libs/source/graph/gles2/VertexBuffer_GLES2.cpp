@@ -98,7 +98,9 @@ namespace graph
     {
         SAFE_RELEASE(m_Device);
 
-        CALL_GL_API(::glDeleteBuffers(1, &m_VB));
+        if (m_VB > 0) {
+            CALL_GL_API(::glDeleteBuffers(1, &m_VB));
+        }
         
         FREE(m_Allocator, m_TemporaryData);
     }
