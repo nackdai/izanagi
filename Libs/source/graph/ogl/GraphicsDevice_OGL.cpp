@@ -508,7 +508,7 @@ namespace graph
         IZ_UINT offset = idxOffset * sizeof(IZ_USHORT);
 #endif
 
-        return IndexexDrawParam(idxNum, mode, type, idxOffset);
+        return IndexexDrawParam(idxNum, mode, type, offset);
     }
 
     CGraphicsDeviceOGL::DrawParam CGraphicsDeviceOGL::getDrawParam(
