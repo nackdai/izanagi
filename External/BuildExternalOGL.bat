@@ -21,7 +21,9 @@ if not defined PLATFORM (
 rem freeglut =========================
 
 if not exist freeglut\freeglut.sln (
-    cmake\bin\cmake.exe -G "Visual Studio 12 2013"
+    cd freeglut
+    ..\cmake\bin\cmake.exe -G "Visual Studio 12 2013"
+    cd ..
 )
 
 %MSBUILD% freeglut\freeglut.vcxproj /t:%TARGET% /p:Configuration=%CONFIG% /p:Platform=%PLATFORM% || goto error
@@ -38,3 +40,4 @@ exit /b 1
 cd /d %CURDIR%
 echo "Error====="
 pause
+exist /b 0

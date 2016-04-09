@@ -42,3 +42,4 @@ exit /b 1
 cd /d %CURDIR%
 echo "Error====="
 pause
+exist /b 0

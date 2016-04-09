@@ -5,7 +5,7 @@ set CURDIR=%CD%
 cd /d %~dp0
 
 if not defined MSBUILD (
-    set MSBUILD="C:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"
+    set MSBUILD="C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe"
 )
 
 if not defined TARGET (
@@ -41,3 +41,4 @@ exit /b 1
 cd /d %CURDIR%
 echo "Error====="
 pause
+exist /b 0
