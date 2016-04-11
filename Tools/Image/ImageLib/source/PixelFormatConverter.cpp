@@ -111,6 +111,10 @@ namespace {
 
         IZ_NULL,    // RGBX8
         IZ_NULL,    // D24S8
+
+        // Only for OpenGL...
+        IZ_NULL,    // RGBA32UI,
+        IZ_NULL,    // RGB32UI,
     };
 
     IZ_C_ASSERT(COUNTOF(ComputeByteSizeFuncTbl) == graph::E_GRAPH_PIXEL_FMT_NUM);
@@ -426,6 +430,10 @@ namespace {
         IZ_NULL,                        // DXT5
         IZ_NULL,                        // RGBX8
         IZ_NULL,                        // D24S8
+
+        // Only for OpenGL...
+        IZ_NULL,                        // RGBA32UI
+        IZ_NULL,                        // RGB32UI
     };
     IZ_C_ASSERT(COUNTOF(InterFmtConvTbl) == graph::E_GRAPH_PIXEL_FMT_NUM);
 
@@ -444,6 +452,10 @@ namespace {
         IZ_NULL,                        // DXT5
         IZ_NULL,                        // RGBX8
         IZ_NULL,                        // D24S8
+
+        // Only for OpenGL...
+        IZ_NULL,                        // RGBA32UI
+        IZ_NULL,                        // RGB32UI
     };
     IZ_C_ASSERT(COUNTOF(DstFmtConvTbl) == graph::E_GRAPH_PIXEL_FMT_NUM);
 }   // namespace

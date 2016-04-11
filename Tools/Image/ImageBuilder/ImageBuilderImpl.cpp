@@ -193,6 +193,10 @@ namespace {
 
             "rgbx8",    // graph::E_GRAPH_PIXEL_FMT_RGBX8
             "d24s8",    // graph::E_GRAPH_PIXEL_FMT_D24S8
+
+            // Only for OpenGL...
+            "rgba32ui", // E_GRAPH_PIXEL_FMT_RGBA32UI,
+            "rgb32ui",  // E_GRAPH_PIXEL_FMT_RGB32UI,
         };
         C_ASSERT(COUNTOF(str) == izanagi::graph::E_GRAPH_PIXEL_FMT_NUM);
 
