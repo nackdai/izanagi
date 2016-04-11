@@ -182,6 +182,8 @@ namespace graph
             IZ_UINT num;    // データ数
             void* buf_ptr;  // ロックしたときのポインタ
 
+            IZ_UINT numLockUnlock{ 0 };
+
             // 次のロックはDISCARDかどうか
             IZ_BOOL next_lock_discard;
 

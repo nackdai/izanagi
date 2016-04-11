@@ -715,6 +715,8 @@ namespace graph
             // OpenGLでは、glMapBufferRange を入れ子で利用できないので、ローカルなバッファを一時的に利用する.
             m_sIBInfo.offset = m_sIBInfo.num * m_pIB->GetStride();
             m_sIBInfo.buf_ptr = m_bufferIB;
+
+            m_sIBInfo.numLockUnlock = m_sIBInfo.num;
 #endif
         }
 
@@ -754,7 +756,10 @@ namespace graph
 
             IZ_ASSERT(result);
 
-            memcpy(ptr, m_bufferIB, m_sIBInfo.num * m_pIB->GetStride());
+            auto numLockUnlock = m_sIBInfo.num - m_sIBInfo.numLockUnlock;
+            m_sIBInfo.numLockUnlock = numLockUnlock;
+
+            memcpy(ptr, m_bufferIB, numLockUnlock * m_pIB->GetStride());
 
             m_pIB->Unlock(device);
 #endif
