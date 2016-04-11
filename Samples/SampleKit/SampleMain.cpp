@@ -20,6 +20,7 @@ static void OnInit(
 static void OnDestroy()
 {
     allocator.Dump();
+    allocatorForGraph.Dump();
 }
 
 IZ_INT SampleMain(
