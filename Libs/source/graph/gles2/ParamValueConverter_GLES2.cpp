@@ -186,9 +186,24 @@ namespace graph
             glFormat = GL_RGBA;
             glType = GL_FLOAT;
             break;
+        case E_GRAPH_PIXEL_FMT_RGBA16F:
+            glInternal = GL_RGBA16F;
+            glFormat = GL_RGBA;
+            glType = GL_HALF_FLOAT;
+            break;
         case E_GRAPH_PIXEL_FMT_DXT5:
             glInternal = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
             glFormat = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
+            glType = GL_UNSIGNED_BYTE;  // Not use, so dummy.
+            break;
+        case E_GRAPH_PIXEL_FMT_DXT1:
+            glInternal = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
+            glFormat = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
+            glType = GL_UNSIGNED_BYTE;  // Not use, so dummy.
+            break;
+        case E_GRAPH_PIXEL_FMT_DXT3:
+            glInternal = GL_COMPRESSED_RGBA_S3TC_DXT3_EXT;
+            glFormat = GL_COMPRESSED_RGBA_S3TC_DXT3_EXT;
             glType = GL_UNSIGNED_BYTE;  // Not use, so dummy.
             break;
         case E_GRAPH_PIXEL_FMT_RGBA32UI:
@@ -208,9 +223,6 @@ namespace graph
             break;
         case E_GRAPH_PIXEL_FMT_BGRA8:
         case E_GRAPH_PIXEL_FMT_RGB10A2:
-        case E_GRAPH_PIXEL_FMT_RGBA16F:
-        case E_GRAPH_PIXEL_FMT_DXT1:
-        case E_GRAPH_PIXEL_FMT_DXT3:
         default:
             // Not Supported
             IZ_ASSERT(IZ_FALSE);
