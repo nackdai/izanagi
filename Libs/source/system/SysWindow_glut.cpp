@@ -243,6 +243,8 @@ namespace sys
                 return E_KEYBOARD_BUTTON_BACK;
             case VK_DELETE:
                 return E_KEYBOARD_BUTTON_DELETE;
+            case VK_PAUSE:
+                return E_KEYBOARD_BUTTON_PAUSE;
             default:
                 break;
             }
