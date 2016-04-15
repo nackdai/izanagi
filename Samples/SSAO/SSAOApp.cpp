@@ -298,42 +298,57 @@ void SSAOApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     m_gbuffer.endGeometryPass(device);
 
 #if 1
-    m_gbuffer.beginSSAOPass(device, m_Shader);
+    {
+        m_gbuffer.beginSSAOPass(device, m_Shader);
 
-    izanagi::graph::CShaderProgram* program = m_Shader->GetShaderProgram(1, 0);
-    device->SetShaderProgram(program);
+        izanagi::graph::CShaderProgram* program = m_Shader->GetShaderProgram(1, 0);
+        device->SetShaderProgram(program);
 
-    device->SetTexture(0, m_gbuffer.getBuffer(GBuffer::Type::Albedo));
-    device->SetTexture(1, m_gbuffer.getBuffer(GBuffer::Type::Normal));
-    device->SetTexture(2, m_gbuffer.getBuffer(GBuffer::Type::Depth));
+        izanagi::math::SMatrix44 mtxC2V;
+        izanagi::math::SMatrix44::Inverse(mtxC2V, mtxV2C);
 
-    izanagi::math::SMatrix44 mtxC2V;
-    izanagi::math::SMatrix44::Inverse(mtxC2V, mtxV2C);
+        izanagi::math::SMatrix44 mtxV2W;
+        izanagi::math::SMatrix44::Inverse(mtxV2W, mtxW2V);
 
-    izanagi::math::SMatrix44 mtxV2W;
-    izanagi::math::SMatrix44::Inverse(mtxV2W, mtxW2V);
+        izanagi::SHADER_PARAM_HANDLE hMtxC2V = program->GetHandleByName("g_mC2V");
+        izanagi::SHADER_PARAM_HANDLE hMtxV2W = program->GetHandleByName("g_mV2W");
+        izanagi::SHADER_PARAM_HANDLE hMtxW2C = program->GetHandleByName("g_mW2C");
+        izanagi::SHADER_PARAM_HANDLE hSamples = program->GetHandleByName("samples");
+        izanagi::SHADER_PARAM_HANDLE hFarClip = program->GetHandleByName("g_farClip");
 
-    izanagi::SHADER_PARAM_HANDLE hMtxC2V = program->GetHandleByName("g_mC2V");
-    izanagi::SHADER_PARAM_HANDLE hMtxV2W = program->GetHandleByName("g_mV2W");
-    izanagi::SHADER_PARAM_HANDLE hMtxW2C = program->GetHandleByName("g_mW2C");
-    izanagi::SHADER_PARAM_HANDLE hSamples = program->GetHandleByName("samples");
-    izanagi::SHADER_PARAM_HANDLE hFarClip = program->GetHandleByName("g_farClip");
+        program->SetMatrix(device, hMtxC2V, mtxC2V);
+        program->SetMatrix(device, hMtxV2W, mtxV2W);
+        program->SetMatrix(device, hMtxW2C, mtxW2C);
+        program->SetValue(device, hSamples, samples, sizeof(samples));
+        program->SetFloat(device, hFarClip, farClip);
 
-    program->SetMatrix(device, hMtxC2V, mtxC2V);
-    program->SetMatrix(device, hMtxV2W, mtxV2W);
-    program->SetMatrix(device, hMtxW2C, mtxW2C);
-    program->SetValue(device, hSamples, samples, sizeof(samples));
-    program->SetFloat(device, hFarClip, farClip);
+        device->SetVertexBuffer(0, 0, m_VB->GetStride(), m_VB);
+        device->SetVertexDeclaration(m_VD);
 
-    device->SetVertexBuffer(0, 0, m_VB->GetStride(), m_VB);
-    device->SetVertexDeclaration(m_VD);
+        device->DrawPrimitive(
+            izanagi::graph::E_GRAPH_PRIM_TYPE_TRIANGLESTRIP,
+            0,
+            2);
 
-    device->DrawPrimitive(
-        izanagi::graph::E_GRAPH_PRIM_TYPE_TRIANGLESTRIP,
-        0,
-        2);
+        m_gbuffer.endSSAOPass(device, m_Shader);
+    }
 
-    m_gbuffer.endSSAOPass(device, m_Shader);
+    {
+        m_gbuffer.beginFinalPass(device, m_Shader);
+
+        izanagi::graph::CShaderProgram* program = m_Shader->GetShaderProgram(2, 0);
+        device->SetShaderProgram(program);
+
+        device->SetVertexBuffer(0, 0, m_VB->GetStride(), m_VB);
+        device->SetVertexDeclaration(m_VD);
+
+        device->DrawPrimitive(
+            izanagi::graph::E_GRAPH_PRIM_TYPE_TRIANGLESTRIP,
+            0,
+            2);
+
+        m_gbuffer.endFinalPass(device, m_Shader);
+    }
 #endif
 
     m_gbuffer.drawBuffers(device);

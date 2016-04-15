@@ -90,14 +90,8 @@ struct SPSInputSSAO {
 
 #define SVSOutputSSAO   SPSInputSSAO
 
-texture texAmbient;
 texture texNormal;
 texture texDepth;
-
-sampler sTexAmbient = sampler_state
-{
-    Texture = texAmbient;
-};
 
 sampler sTexNormal = sampler_state
 {
@@ -115,7 +109,7 @@ float4x4 g_mV2W;
 #define SAMPLE_NUM  (32)
 float4 samples[SAMPLE_NUM];
 
-SPSInputSSAO mainVS_SSAO(SVSInputSSAO sIn)
+SVSOutputSSAO mainVS_SSAO(SVSInputSSAO sIn)
 {
     SVSOutputSSAO sOut;
 
@@ -137,8 +131,6 @@ SPSInputSSAO mainVS_SSAO(SVSInputSSAO sIn)
 float4 mainPS_SSAO(SPSInputSSAO sIn) : COLOR0
 {
     float falloff = 0.000002;
-
-    float4 ambient = tex2D(sTexAmbient, sIn.vUV);
 
     // 実際の位置での法線
     float3 normal = tex2D(sTexNormal, sIn.vUV).rgb;
@@ -178,7 +170,6 @@ float4 mainPS_SSAO(SPSInputSSAO sIn) : COLOR0
 
     position = mul(position, g_mV2W);
 
-#if 1
     float bl = 0;
 
     for (int i = 0; i < SAMPLE_NUM; i++) {
@@ -226,7 +217,7 @@ float4 mainPS_SSAO(SPSInputSSAO sIn) : COLOR0
     // blが1.0に近いほど遮蔽されるので
     float a = 1.0f - bl;
 
-    float4 Out = ambient * (float4)a;
+    float4 Out = a;
     Out.a = 1.0f;
 
     if (centerDepth >= 1.0f) {
@@ -234,23 +225,60 @@ float4 mainPS_SSAO(SPSInputSSAO sIn) : COLOR0
     }
 
     return Out;
-#else
-    float4 Out = position;
-    Out.a = 1.0f;
-
-    if (centerDepth >= 1.0f) {
-        Out.a = 0.0f;
-    }
-
-    return Out;
-#endif
 }
 
-float4 mainPS_Ambient(SPSInputSSAO sIn) : COLOR0
+/////////////////////////////////////////////////////////////
+
+struct SVSInputFinal {
+    float4 vPos     : POSITION;
+    float2 vUV      : TEXCOORD0;
+};
+
+struct SPSInputFinal {
+    float4 vPos     : POSITION;
+    float2 vUV      : TEXCOORD0;
+};
+
+#define SVSOutputFinal   SPSInputFinal
+
+texture texAlbedo;
+texture texSSAO;
+
+sampler sTexAlbedo = sampler_state
 {
-    float4 ambient = tex2D(sTexAmbient, sIn.vUV);
-    ambient.a = 1.0f;
-    return ambient;
+    Texture = texAlbedo;
+};
+
+sampler sTexSSAO = sampler_state
+{
+    Texture = texSSAO;
+};
+
+SVSOutputFinal mainVSFinalPass(SVSInputFinal sIn)
+{
+    SVSOutputFinal sOut;
+
+    // 頂点位置
+    sOut.vPos = sIn.vPos;
+
+    // [0, 1] -> [-1, 1]
+    sOut.vPos.xy = sOut.vPos.xy * 2.0f - 1.0f;
+
+    // さらにY座標は反転させる
+    sOut.vPos.y *= -1.0f;
+
+    // UV座標
+    sOut.vUV = sIn.vUV;
+
+    return sOut;
+}
+
+float4 mainPSFinalPass(SPSInputSSAO sIn) : COLOR0
+{
+    float4 albedo = tex2D(sTexAlbedo, sIn.vUV);
+    float4 ssao = tex2D(sTexSSAO, sIn.vUV);
+    albedo *= ssao;
+    return albedo;
 }
 
 /////////////////////////////////////////////////////////////
@@ -274,13 +302,11 @@ technique RenderSSAO
     }
 }
 
-#if 0
 technique RenderNoSSAO
 {
     pass P0
     {
-        VertexShader = compile vs_3_0 mainVS_SSAO();
-        PixelShader = compile ps_3_0 mainPS_Ambient();
+        VertexShader = compile vs_3_0 mainVSFinalPass();
+        PixelShader = compile ps_3_0 mainPSFinalPass();
     }
 }
-#endif

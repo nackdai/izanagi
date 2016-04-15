@@ -35,7 +35,7 @@ IZ_BOOL GBuffer::initialize(
     // SSAO.
     m_SSAOBuffer = device->CreateRenderTarget(
         width, height,
-        izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA32F);
+        izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA8);
 
     return IZ_TRUE;
 }
@@ -93,6 +93,9 @@ IZ_BOOL GBuffer::beginSSAOPass(
         izanagi::graph::E_GRAPH_CLEAR_FLAG_COLOR,
         IZ_COLOR_RGBA(0x00, 0x00, 0x00, 0xff));
 
+    device->SetTexture(0, getBuffer(GBuffer::Type::Normal));
+    device->SetTexture(1, getBuffer(GBuffer::Type::Depth));
+
     return ret;
 }
 
@@ -102,6 +105,41 @@ IZ_BOOL GBuffer::endSSAOPass(
 {
     device->EndScene();
 
+    device->LoadRenderState();
+
+    return IZ_TRUE;
+}
+
+IZ_BOOL GBuffer::beginFinalPass(
+    izanagi::graph::CGraphicsDevice* device,
+    izanagi::shader::CShaderBasic* shader)
+{
+    shader->EnableToUpdateRenderState(
+        izanagi::graph::E_GRAPH_RS_ZWRITEENABLE,
+        IZ_FALSE);
+    shader->EnableToUpdateRenderState(
+        izanagi::graph::E_GRAPH_RS_ZENABLE,
+        IZ_FALSE);
+
+    device->SaveRenderState();
+
+    device->SetRenderState(
+        izanagi::graph::E_GRAPH_RS_ZWRITEENABLE,
+        IZ_FALSE);
+    device->SetRenderState(
+        izanagi::graph::E_GRAPH_RS_ZENABLE,
+        IZ_FALSE);
+
+    device->SetTexture(0, getBuffer(GBuffer::Type::Albedo));
+    device->SetTexture(1, m_SSAOBuffer);
+
+    return IZ_TRUE;
+}
+
+IZ_BOOL GBuffer::endFinalPass(
+    izanagi::graph::CGraphicsDevice* device,
+    izanagi::shader::CShaderBasic* shader)
+{
     device->LoadRenderState();
 
     return IZ_TRUE;

@@ -27,6 +27,13 @@ public:
         izanagi::graph::CGraphicsDevice* device,
         izanagi::shader::CShaderBasic* shader);
 
+    IZ_BOOL beginFinalPass(
+        izanagi::graph::CGraphicsDevice* device,
+        izanagi::shader::CShaderBasic* shader);
+    IZ_BOOL endFinalPass(
+        izanagi::graph::CGraphicsDevice* device,
+        izanagi::shader::CShaderBasic* shader);
+
     void drawBuffers(izanagi::graph::CGraphicsDevice* device);
 
 public:
