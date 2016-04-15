@@ -88,7 +88,8 @@ namespace shader
                         handle,
                         (const math::SVector4*)pValue,
                         //nRow * nElements);
-                        nRow);
+                        //nRow);
+                        nElements);
                 }
                     
 			}
