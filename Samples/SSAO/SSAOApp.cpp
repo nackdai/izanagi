@@ -217,6 +217,10 @@ void SSAOApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     izanagi::math::SMatrix44 mtxL2W;
     izanagi::math::SMatrix44::SetUnit(mtxL2W);
 
+    const auto& mtxW2V = camera.GetParam().mtxW2V;
+    const auto& mtxW2C = camera.GetParam().mtxW2C;
+    IZ_FLOAT farClip = camera.GetParam().cameraFar;
+
     m_Shader->Begin(device, 0, IZ_FALSE);
     {
         if (m_Shader->BeginPass(0)) {
@@ -230,14 +234,20 @@ void SSAOApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
             _SetShaderParam(
                 m_Shader,
                 "g_mW2V",
-                (void*)&camera.GetParam().mtxW2V,
-                sizeof(camera.GetParam().mtxW2V));
+                (void*)&mtxW2V,
+                sizeof(mtxW2V));
 
             _SetShaderParam(
                 m_Shader,
-                "g_mV2C",
-                (void*)&camera.GetParam().mtxV2C,
-                sizeof(camera.GetParam().mtxV2C));
+                "g_mW2C",
+                (void*)&mtxW2C,
+                sizeof(mtxW2C));
+
+            _SetShaderParam(
+                m_Shader,
+                "g_farClip",
+                (void*)&farClip,
+                sizeof(farClip));
 
             // ライトパラメータ
             {
@@ -286,6 +296,7 @@ void SSAOApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
     m_gbuffer.endGeometryPass(device);
 
+#if 0
     izanagi::graph::CShaderProgram* program = m_Shader->GetShaderProgram(1, 0);
     device->SetShaderProgram(program);
 
@@ -309,6 +320,9 @@ void SSAOApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
         izanagi::graph::E_GRAPH_PRIM_TYPE_TRIANGLESTRIP,
         0,
         2);
+#endif
+
+    m_gbuffer.drawBuffers(device);
 }
 
 void SSAOApp::RenderScene(

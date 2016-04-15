@@ -12,23 +12,25 @@ struct SPSInput {
     float4 vPos         : POSITION;
     float3 vNormal      : TEXCOORD0;    // 法線
     float4 ambient      : COLOR0;
-    float4 position     : TEXCOORD1;
+    float4 viewSpace    : TEXCOORD1;
 };
 
 #define SVSOutput        SPSInput
 
 struct SPSOutput {
-    float4 ambient  : COLOR0;
+    float4 albedo   : COLOR0;
     float4 normal   : COLOR1;
     float4 depth    : COLOR2;
-    float4 position : COLOR3;
 };
 
 /////////////////////////////////////////////////////////////
 
 float4x4 g_mL2W;
 float4x4 g_mW2V;
+float4x4 g_mW2C;
 float4x4 g_mV2C;
+
+float g_farClip;
 
 // マテリアル
 float4 g_vMtrlAmbient;
@@ -38,43 +40,40 @@ float4 g_vLitAmbientColor;
 
 /////////////////////////////////////////////////////////////
 
-SVSOutput mainVS(SVSInput In)
+SVSOutput mainVSGeometryPass(SVSInput In)
 {
     SVSOutput Out = (SVSOutput)0;
 
     Out.vPos = mul(In.vPos, g_mL2W);
-    Out.vPos = mul(Out.vPos, g_mW2V);
-    Out.vPos = mul(Out.vPos, g_mV2C);
 
-    Out.vNormal = normalize(mul(In.vNormal, (float3x3)g_mL2W));
+    Out.viewSpace = mul(Out.vPos, g_mW2V).z;
+    Out.viewSpace /= g_farClip;
+
+    Out.vPos = mul(Out.vPos, g_mW2C);
+
+    Out.vNormal = mul(In.vNormal, (float3x3)g_mL2W);
+    Out.vNormal = normalize(Out.vNormal);
 
     // Ambient
     Out.ambient = g_vMtrlAmbient * g_vLitAmbientColor;
 
-    Out.position = mul(In.vPos, g_mL2W);
-
     return Out;
 }
 
-SPSOutput mainPS(SPSInput In)
+SPSOutput mainPSGeometryPass(SPSInput In)
 {
-    SPSOutput vOut = (SPSOutput)0;
+    SPSOutput Out = (SPSOutput)0;
 
-    vOut.ambient = In.ambient;
-    vOut.ambient.a = 1.0f;
+    Out.normal.rgb = In.vNormal * 0.5f + 0.5f;  // normalize [-1, 1] ->[0, 1]
+    Out.normal.a = 1.0f;
 
-    vOut.normal.xyz = normalize(In.vNormal);
-    vOut.normal.xyz = 0.5f * vOut.normal.xyz + 0.5f;
-    vOut.normal.a = 1.0f;
+    Out.depth = In.viewSpace;
+    Out.depth.a = 1.0f;
 
-    float4 view = mul(In.position, g_mW2V);
-        float4 projected = mul(view, g_mV2C);
-        float d = projected.z / projected.w;
-    vOut.depth = float4(d, d, d, 1.0f);
+    Out.albedo = In.ambient;
+    Out.albedo.a = 1.0f;
 
-    vOut.position = In.position;
-
-    return vOut;
+    return Out;
 }
 
 /////////////////////////////////////////////////////////////
@@ -109,11 +108,6 @@ sampler sTexDepth = sampler_state
     Texture = texDepth;
 };
 
-sampler sTexPosition = sampler_state
-{
-    Texture = texPosition;
-};
-
 #define SAMPLE_NUM  (32)
 float4 samples[SAMPLE_NUM];
 
@@ -142,15 +136,15 @@ float4 mainPS_SSAO(SPSInputSSAO sIn) : COLOR0
 
     float4 ambient = tex2D(sTexAmbient, sIn.vUV);
 
-        // 実際の位置での法線
-        float3 normal = tex2D(sTexNormal, sIn.vUV).rgb;
-        normal = normalize(2.0f * normal - 1.0f);
+    // 実際の位置での法線
+    float3 normal = tex2D(sTexNormal, sIn.vUV).rgb;
+    normal = normalize(2.0f * normal - 1.0f);
 
     // 実際の位置での深度
     float z = tex2D(sTexDepth, sIn.vUV).r;
 
     // 頂点位置
-    float4 position = tex2D(sTexPosition, sIn.vUV);
+    float4 position = 0.0f;
 
         float bl = 0;
 
@@ -219,11 +213,12 @@ technique RenderToMRT
     pass P0
     {
         AlphaBlendEnable = false;
-        VertexShader = compile vs_3_0 mainVS();
-        PixelShader = compile ps_3_0 mainPS();
+        VertexShader = compile vs_3_0 mainVSGeometryPass();
+        PixelShader = compile ps_3_0 mainPSGeometryPass();
     }
 }
 
+#if 0
 technique RenderSSAO
 {
     pass P0
@@ -241,3 +236,4 @@ technique RenderNoSSAO
         PixelShader = compile ps_3_0 mainPS_Ambient();
     }
 }
+#endif

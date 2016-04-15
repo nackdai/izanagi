@@ -34,7 +34,6 @@ public:
         Albedo,
         Normal,
         Depth,
-        Position,
 
         Num,
     };

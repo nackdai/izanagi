@@ -32,11 +32,6 @@ IZ_BOOL GBuffer::initialize(
         width, height,
         izanagi::graph::E_GRAPH_PIXEL_FMT_R32F);
 
-    // Position.
-    m_buffers[Type::Position] = device->CreateRenderTarget(
-        width, height,
-        izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA32F);
-
     // SSAO.
     m_SSAOBuffer = device->CreateRenderTarget(
         width, height,
@@ -154,10 +149,12 @@ void GBuffer::drawBuffers(izanagi::graph::CGraphicsDevice* device)
             x += 320;
         }
 
+#if 0
         device->SetTexture(0, m_SSAOBuffer);
         device->Draw2DSprite(
             izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),
             izanagi::CIntRect(x, y, 320, 180));
+#endif
 
         device->End2D();
     }
