@@ -33,29 +33,34 @@ public:
     virtual IZ_BOOL OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key) override;
 
 private:
-    IZ_BOOL initMeshes(
-        izanagi::IMemoryAllocator* allocator,
-        izanagi::graph::CGraphicsDevice* device);
-
-    void renderGeometryPass(izanagi::graph::CGraphicsDevice* device);
-    void renderSSAOPass(izanagi::graph::CGraphicsDevice* device);
-    void renderFinalPass(izanagi::graph::CGraphicsDevice* device);
+    void RenderScene(
+        izanagi::graph::CGraphicsDevice* device,
+        izanagi::CDebugMesh* mesh,
+        const izanagi::math::SVector4& position);
 
 protected:
-    static const IZ_UINT MESH_NUM = 5;
+    izanagi::shader::CShaderBasic* m_Shader;
 
-    struct Mesh {
-        izanagi::CDebugMesh* mesh{ nullptr };
-        izanagi::math::CMatrix44 mtxL2W;
-    } m_meshes[MESH_NUM];
+    izanagi::CDebugMesh* m_Sphere;
+    izanagi::CDebugMesh* m_Cube;
+    izanagi::CDebugMesh* m_Plane;
 
-    izanagi::shader::CShaderBasic* m_Shader{ nullptr };
+    izanagi::math::SMatrix44 m_L2W;
+    izanagi::SParallelLightParam m_ParallelLight;
 
-    izanagi::CImage* m_Img{ nullptr };
+    izanagi::graph::CVertexBuffer* m_VB;
+    izanagi::graph::CVertexDeclaration* m_VD;
 
-    GBuffer m_gbuffer;
+    izanagi::graph::CRenderTarget* m_RT[4];
 
-    izanagi::CDebugMesh* m_screenFillPlane{ nullptr };
+    enum RenderMode {
+        SSAO,
+        Textures,
+        Ambient,
+
+        RenderModeNum,
+    };
+    RenderMode m_Mode;
 };
 
 #endif    // #if !defined(__SSAO_APP_H__)
