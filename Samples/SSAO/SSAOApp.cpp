@@ -219,6 +219,7 @@ void SSAOApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
     const auto& mtxW2V = camera.GetParam().mtxW2V;
     const auto& mtxW2C = camera.GetParam().mtxW2C;
+    const auto& mtxV2C = camera.GetParam().mtxV2C;
     IZ_FLOAT farClip = camera.GetParam().cameraFar;
 
     m_Shader->Begin(device, 0, IZ_FALSE);
@@ -296,22 +297,33 @@ void SSAOApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
     m_gbuffer.endGeometryPass(device);
 
-#if 0
+#if 1
+    m_gbuffer.beginSSAOPass(device, m_Shader);
+
     izanagi::graph::CShaderProgram* program = m_Shader->GetShaderProgram(1, 0);
     device->SetShaderProgram(program);
 
     device->SetTexture(0, m_gbuffer.getBuffer(GBuffer::Type::Albedo));
     device->SetTexture(1, m_gbuffer.getBuffer(GBuffer::Type::Normal));
     device->SetTexture(2, m_gbuffer.getBuffer(GBuffer::Type::Depth));
-    device->SetTexture(3, m_gbuffer.getBuffer(GBuffer::Type::Position));
 
-    izanagi::SHADER_PARAM_HANDLE h0 = program->GetHandleByName("g_mW2V");
-    izanagi::SHADER_PARAM_HANDLE h1 = program->GetHandleByName("g_mV2C");
-    izanagi::SHADER_PARAM_HANDLE h2 = program->GetHandleByName("samples");
+    izanagi::math::SMatrix44 mtxC2V;
+    izanagi::math::SMatrix44::Inverse(mtxC2V, mtxV2C);
 
-    program->SetMatrix(device, h0, camera.GetParam().mtxW2V);
-    program->SetMatrix(device, h1, camera.GetParam().mtxV2C);
-    program->SetValue(device, h2, samples, sizeof(samples));
+    izanagi::math::SMatrix44 mtxV2W;
+    izanagi::math::SMatrix44::Inverse(mtxV2W, mtxW2V);
+
+    izanagi::SHADER_PARAM_HANDLE hMtxC2V = program->GetHandleByName("g_mC2V");
+    izanagi::SHADER_PARAM_HANDLE hMtxV2W = program->GetHandleByName("g_mV2W");
+    izanagi::SHADER_PARAM_HANDLE hMtxW2C = program->GetHandleByName("g_mW2C");
+    izanagi::SHADER_PARAM_HANDLE hSamples = program->GetHandleByName("samples");
+    izanagi::SHADER_PARAM_HANDLE hFarClip = program->GetHandleByName("g_farClip");
+
+    program->SetMatrix(device, hMtxC2V, mtxC2V);
+    program->SetMatrix(device, hMtxV2W, mtxV2W);
+    program->SetMatrix(device, hMtxW2C, mtxW2C);
+    program->SetValue(device, hSamples, samples, sizeof(samples));
+    program->SetFloat(device, hFarClip, farClip);
 
     device->SetVertexBuffer(0, 0, m_VB->GetStride(), m_VB);
     device->SetVertexDeclaration(m_VD);
@@ -320,6 +332,8 @@ void SSAOApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
         izanagi::graph::E_GRAPH_PRIM_TYPE_TRIANGLESTRIP,
         0,
         2);
+
+    m_gbuffer.endSSAOPass(device, m_Shader);
 #endif
 
     m_gbuffer.drawBuffers(device);

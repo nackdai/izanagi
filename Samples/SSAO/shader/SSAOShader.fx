@@ -88,9 +88,10 @@ struct SPSInputSSAO {
     float2 vUV      : TEXCOORD0;
 };
 
+#define SVSOutputSSAO   SPSInputSSAO
+
 texture texAmbient;
 texture texNormal;
-texture texPosition;
 texture texDepth;
 
 sampler sTexAmbient = sampler_state
@@ -108,17 +109,20 @@ sampler sTexDepth = sampler_state
     Texture = texDepth;
 };
 
+float4x4 g_mC2V;
+float4x4 g_mV2W;
+
 #define SAMPLE_NUM  (32)
 float4 samples[SAMPLE_NUM];
 
 SPSInputSSAO mainVS_SSAO(SVSInputSSAO sIn)
 {
-    SPSInputSSAO sOut;
+    SVSOutputSSAO sOut;
 
     // 頂点位置
     sOut.vPos = sIn.vPos;
 
-    // [0.0f, 0.0f] - [1.0f, 1.0f] -> [-1.0f, -1.0f] - [1.0f, 1.0f]
+    // [0, 1] -> [-1, 1]
     sOut.vPos.xy = sOut.vPos.xy * 2.0f - 1.0f;
 
     // さらにY座標は反転させる
@@ -140,33 +144,62 @@ float4 mainPS_SSAO(SPSInputSSAO sIn) : COLOR0
     float3 normal = tex2D(sTexNormal, sIn.vUV).rgb;
     normal = normalize(2.0f * normal - 1.0f);
 
-    // 実際の位置での深度
-    float z = tex2D(sTexDepth, sIn.vUV).r;
+    // Depth format is R32F.
+    float centerDepth = tex2D(sTexDepth, sIn.vUV).r;
 
-    // 頂点位置
-    float4 position = 0.0f;
+    // Convert depth [0, 1] -> [0, far] in view-space.
+    float depth = centerDepth * g_farClip;
 
-        float bl = 0;
+    float4 position = float4(sIn.vUV.x, sIn.vUV.y, 0.0f, 1.0f);
+
+    // Convert from texcoord to clip-space.
+    position.y = 1.0f - position.y;
+    position.xy = position.xy * 2.0f - 1.0f;  // [0, 1] -> [-1, 1]
+
+    // NOTE
+    // P = (X, Y, Z, 1)
+    // mtxV2C = W 0 0 0
+    //          0 H 0 0
+    //          0 0 A 1
+    //          0 0 B 0
+    // Pview * mtxV2C = (Xclip, Yclip, Zclip, Wclip) = (Xclip, Yclip, Zclip, Zview)
+    //  Wclip = Zview = depth
+    // X' = Xclip / Wclip = Xclip / Zview = Xclip / depth
+    // Y' = Yclip / Wclip = Yclip / Zview = Yclip / depth
+    //
+    // X' * depth = Xclip
+    // Xview = Xclip * mtxC2V
+
+    position.xy *= depth;
+    position = mul(position, g_mC2V);
+
+    position.xy /= position.z;
+    position.z = depth;
+
+    position = mul(position, g_mV2W);
+
+#if 1
+    float bl = 0;
 
     for (int i = 0; i < SAMPLE_NUM; i++) {
         float4 ray = samples[i];
 
-            // NOTE
-            // 法線と逆方向を向いているときは反転することで法線方向の半円内におさまるようにする
-            ray.xyz *= sign(dot(ray.xyz, normal));
+        // NOTE
+        // 法線と逆方向を向いているときは反転することで法線方向の半円内におさまるようにする
+        ray.xyz *= sign(dot(ray.xyz, normal));
 
         // サンプリング点の位置ずらした位置の計算
-        float4 pos = mul(position + ray, g_mW2V);
-            pos = mul(pos, g_mV2C);
+        float4 pos = mul(position + ray, g_mW2C);
+        //pos = mul(pos, g_mV2C);
 
-        // サンプリング点の位置ずらした位置を2D上のUVに変換
+        // サンプリング点のずらした位置を2D上のUVに変換
         float2 uv = float2(
             0.5f * (pos.x / pos.w) + 0.5f,
             -0.5f * (pos.y / pos.w) + 0.5f);
 
         // 遮蔽するピクセルの法線
         float3 ocNml = tex2D(sTexNormal, uv).xyz;
-            ocNml = normalize(ocNml * 2.0f - 1.0f);
+        ocNml = normalize(ocNml * 2.0f - 1.0f);
 
         // 遮蔽するピクセルと現在のピクセルでの法線の角度の差を計算
         // 同方向なら1.0、反対なら0.0
@@ -176,11 +209,11 @@ float4 mainPS_SSAO(SPSInputSSAO sIn) : COLOR0
         float nmlDiff = 1.0 - dot(ocNml, normal);
 
         // 遮蔽するピクセルの深度
-        float depth = tex2D(sTexDepth, uv).r;
+        float sampleDepth = tex2D(sTexDepth, uv).r;
 
         // 正：遮蔽するピクセルが現在のピクセルより前 -> 現在のピクセルは遮蔽される
         // 負：遮蔽するピクセルが現在のピクセルより奥 -> 現在のピクセルは遮蔽されない
-        float depthDiff = z - depth;
+        float depthDiff = centerDepth - sampleDepth;
 
         // step(falloff, depthDiff) -> falloff より小さければ 0.0、大きければ 1.0
         //  -> ある程度以上深度が離れていない場合は遮蔽されていることとする
@@ -194,9 +227,23 @@ float4 mainPS_SSAO(SPSInputSSAO sIn) : COLOR0
     float a = 1.0f - bl;
 
     float4 Out = ambient * (float4)a;
-        Out.a = 1.0f;
+    Out.a = 1.0f;
+
+    if (centerDepth >= 1.0f) {
+        Out.a = 0.0f;
+    }
 
     return Out;
+#else
+    float4 Out = position;
+    Out.a = 1.0f;
+
+    if (centerDepth >= 1.0f) {
+        Out.a = 0.0f;
+    }
+
+    return Out;
+#endif
 }
 
 float4 mainPS_Ambient(SPSInputSSAO sIn) : COLOR0
@@ -218,7 +265,6 @@ technique RenderToMRT
     }
 }
 
-#if 0
 technique RenderSSAO
 {
     pass P0
@@ -228,6 +274,7 @@ technique RenderSSAO
     }
 }
 
+#if 0
 technique RenderNoSSAO
 {
     pass P0

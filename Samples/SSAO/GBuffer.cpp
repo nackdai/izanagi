@@ -35,7 +35,7 @@ IZ_BOOL GBuffer::initialize(
     // SSAO.
     m_SSAOBuffer = device->CreateRenderTarget(
         width, height,
-        izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA8);
+        izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA32F);
 
     return IZ_TRUE;
 }
@@ -77,12 +77,6 @@ IZ_BOOL GBuffer::beginSSAOPass(
     shader->EnableToUpdateRenderState(
         izanagi::graph::E_GRAPH_RS_ZENABLE,
         IZ_FALSE);
-    shader->EnableToUpdateRenderState(
-        izanagi::graph::E_GRAPH_RS_ALPHABLENDENABLE,
-        IZ_FALSE);
-    shader->EnableToUpdateRenderState(
-        izanagi::graph::E_GRAPH_RS_BLENDMETHOD,
-        IZ_FALSE);
 
     device->SaveRenderState();
 
@@ -92,13 +86,6 @@ IZ_BOOL GBuffer::beginSSAOPass(
     device->SetRenderState(
         izanagi::graph::E_GRAPH_RS_ZENABLE,
         IZ_FALSE);
-
-    device->SetRenderState(
-        izanagi::graph::E_GRAPH_RS_ALPHABLENDENABLE,
-        IZ_TRUE);
-    device->SetRenderState(
-        izanagi::graph::E_GRAPH_RS_BLENDMETHOD,
-        izanagi::graph::E_GRAPH_ALPHA_BLEND_Cs_Cd);
 
     auto ret = device->BeginScene(
         &m_SSAOBuffer,
@@ -149,7 +136,7 @@ void GBuffer::drawBuffers(izanagi::graph::CGraphicsDevice* device)
             x += 320;
         }
 
-#if 0
+#if 1
         device->SetTexture(0, m_SSAOBuffer);
         device->Draw2DSprite(
             izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),
