@@ -32,6 +32,11 @@ IZ_BOOL GBuffer::initialize(
         width, height,
         izanagi::graph::E_GRAPH_PIXEL_FMT_R32F);
 
+    // Position.
+    m_buffers[Type::Position] = device->CreateRenderTarget(
+        width, height,
+        izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA32F);
+
     // SSAO.
     m_SSAOBuffer = device->CreateRenderTarget(
         width, height,

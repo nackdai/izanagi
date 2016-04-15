@@ -11,8 +11,6 @@ SSAOApp::SSAOApp()
     m_Cube = IZ_NULL;
     m_Plane = IZ_NULL;
 
-    m_Mode = SSAO;
-
     const float SAMPLERADIUS = 0.75f;
 
 #if 0
@@ -68,6 +66,8 @@ IZ_BOOL SSAOApp::InitInternal(
     izanagi::sample::CSampleCamera& camera)
 {
     IZ_BOOL result = IZ_TRUE;
+
+    m_gbuffer.initialize(allocator, device);
 
     // カメラ
     camera.Init(
@@ -131,25 +131,6 @@ IZ_BOOL SSAOApp::InitInternal(
             10, 10,
             50.0f, 50.0f);
         VGOTO(result = (m_Plane != IZ_NULL), __EXIT__);
-    }
-
-    {
-        m_RT[0] = device->CreateRenderTarget(
-            device->GetBackBufferWidth(),
-            device->GetBackBufferHeight(),
-            izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA8);
-        m_RT[1] = device->CreateRenderTarget(
-            device->GetBackBufferWidth(),
-            device->GetBackBufferHeight(),
-            izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA8);
-        m_RT[2] = device->CreateRenderTarget(
-            device->GetBackBufferWidth(),
-            device->GetBackBufferHeight(),
-            izanagi::graph::E_GRAPH_PIXEL_FMT_R32F);
-        m_RT[3] = device->CreateRenderTarget(
-            device->GetBackBufferWidth(),
-            device->GetBackBufferHeight(),
-            izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA32F);
     }
 
     {
@@ -231,13 +212,7 @@ void SSAOApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
     const auto& camera = GetCamera();
 
-    if (m_Mode != Ambient) {
-        device->BeginScene(
-            m_RT,
-            COUNTOF(m_RT),
-            izanagi::graph::E_GRAPH_CLEAR_FLAG_ALL,
-            IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0));
-    }
+    m_gbuffer.beginGeometryPass(device);
 
     izanagi::math::SMatrix44 mtxL2W;
     izanagi::math::SMatrix44::SetUnit(mtxL2W);
@@ -309,76 +284,31 @@ void SSAOApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     }
     m_Shader->End(device);
 
-    device->EndScene();
+    m_gbuffer.endGeometryPass(device);
 
-    if (m_Mode == Textures) {
-        device->Begin2D();
-        {
-            device->SetTexture(0, m_RT[0]);
-            device->Draw2DSprite(
-                izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),
-                izanagi::CIntRect(0, 0, 640, 360));
+    izanagi::graph::CShaderProgram* program = m_Shader->GetShaderProgram(1, 0);
+    device->SetShaderProgram(program);
 
-            device->SetTexture(0, m_RT[1]);
-            device->Draw2DSprite(
-                izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),
-                izanagi::CIntRect(0, 360, 640, 360));
+    device->SetTexture(0, m_gbuffer.getBuffer(GBuffer::Type::Albedo));
+    device->SetTexture(1, m_gbuffer.getBuffer(GBuffer::Type::Normal));
+    device->SetTexture(2, m_gbuffer.getBuffer(GBuffer::Type::Depth));
+    device->SetTexture(3, m_gbuffer.getBuffer(GBuffer::Type::Position));
 
-            device->Set2DRenderOp(izanagi::graph::E_GRAPH_2D_RENDER_OP_NO_TEX_ALPHA);
+    izanagi::SHADER_PARAM_HANDLE h0 = program->GetHandleByName("g_mW2V");
+    izanagi::SHADER_PARAM_HANDLE h1 = program->GetHandleByName("g_mV2C");
+    izanagi::SHADER_PARAM_HANDLE h2 = program->GetHandleByName("samples");
 
-            device->SetTexture(0, m_RT[2]);
-            device->Draw2DSprite(
-                izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),
-                izanagi::CIntRect(640, 360, 640, 360));
+    program->SetMatrix(device, h0, camera.GetParam().mtxW2V);
+    program->SetMatrix(device, h1, camera.GetParam().mtxV2C);
+    program->SetValue(device, h2, samples, sizeof(samples));
 
-            device->Set2DRenderOp(izanagi::graph::E_GRAPH_2D_RENDER_OP_NO_TEX_ALPHA);
+    device->SetVertexBuffer(0, 0, m_VB->GetStride(), m_VB);
+    device->SetVertexDeclaration(m_VD);
 
-            device->SetTexture(0, m_RT[3]);
-            device->Draw2DSprite(
-                izanagi::CFloatRect(0.0f, 0.0f, 1.0f, 1.0f),
-                izanagi::CIntRect(640, 0, 640, 360));
-        }
-        device->End2D();
-    }
-    else if (m_Mode == SSAO) {
-        izanagi::graph::CShaderProgram* program = m_Shader->GetShaderProgram(1, 0);
-        device->SetShaderProgram(program);
-
-        device->SetTexture(0, m_RT[0]);
-        device->SetTexture(1, m_RT[1]);
-        device->SetTexture(2, m_RT[2]);
-        device->SetTexture(3, m_RT[3]);
-
-        izanagi::SHADER_PARAM_HANDLE h0 = program->GetHandleByName("g_mW2V");
-        izanagi::SHADER_PARAM_HANDLE h1 = program->GetHandleByName("g_mV2C");
-        izanagi::SHADER_PARAM_HANDLE h2 = program->GetHandleByName("samples");
-
-        program->SetMatrix(device, h0, camera.GetParam().mtxW2V);
-        program->SetMatrix(device, h1, camera.GetParam().mtxV2C);
-        program->SetValue(device, h2, samples, sizeof(samples));
-
-        device->SetVertexBuffer(0, 0, m_VB->GetStride(), m_VB);
-        device->SetVertexDeclaration(m_VD);
-
-        device->DrawPrimitive(
-            izanagi::graph::E_GRAPH_PRIM_TYPE_TRIANGLESTRIP,
-            0,
-            2);
-    }
-    else {
-        izanagi::graph::CShaderProgram* program = m_Shader->GetShaderProgram(2, 0);
-        device->SetShaderProgram(program);
-
-        device->SetTexture(0, m_RT[0]);
-
-        device->SetVertexBuffer(0, 0, m_VB->GetStride(), m_VB);
-        device->SetVertexDeclaration(m_VD);
-
-        device->DrawPrimitive(
-            izanagi::graph::E_GRAPH_PRIM_TYPE_TRIANGLESTRIP,
-            0,
-            2);
-    }
+    device->DrawPrimitive(
+        izanagi::graph::E_GRAPH_PRIM_TYPE_TRIANGLESTRIP,
+        0,
+        2);
 }
 
 void SSAOApp::RenderScene(
@@ -407,32 +337,13 @@ void SSAOApp::ReleaseInternal()
     SAFE_RELEASE(m_Cube);
     SAFE_RELEASE(m_Plane);
 
-    for (IZ_UINT i = 0; i < COUNTOF(m_RT); i++) {
-        SAFE_RELEASE(m_RT[i]);
-    }
-
     SAFE_RELEASE(m_VB);
     SAFE_RELEASE(m_VD);
+
+    m_gbuffer.release();
 }
 
 IZ_BOOL SSAOApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
 {
-    switch (key) {
-    case izanagi::sys::E_KEYBOARD_BUTTON_LEFT:
-    {
-        IZ_INT mode = m_Mode - 1;
-        m_Mode = (RenderMode)(mode < 0 ? RenderModeNum - 1 : mode);
-    }
-    break;
-    case izanagi::sys::E_KEYBOARD_BUTTON_RIGHT:
-    {
-        IZ_INT mode = m_Mode + 1;
-        m_Mode = (RenderMode)(mode % RenderModeNum);
-    }
-    break;
-    default:
-        break;
-    }
-
     return IZ_TRUE;
 }

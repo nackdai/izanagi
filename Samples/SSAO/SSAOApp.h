@@ -39,6 +39,8 @@ private:
         const izanagi::math::SVector4& position);
 
 protected:
+    GBuffer m_gbuffer;
+
     izanagi::shader::CShaderBasic* m_Shader;
 
     izanagi::CDebugMesh* m_Sphere;
@@ -50,17 +52,6 @@ protected:
 
     izanagi::graph::CVertexBuffer* m_VB;
     izanagi::graph::CVertexDeclaration* m_VD;
-
-    izanagi::graph::CRenderTarget* m_RT[4];
-
-    enum RenderMode {
-        SSAO,
-        Textures,
-        Ambient,
-
-        RenderModeNum,
-    };
-    RenderMode m_Mode;
 };
 
 #endif    // #if !defined(__SSAO_APP_H__)
