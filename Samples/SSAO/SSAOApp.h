@@ -38,6 +38,10 @@ private:
         izanagi::CDebugMesh* mesh,
         const izanagi::math::SVector4& position);
 
+    void renderGeometryPass(izanagi::graph::CGraphicsDevice* device);
+    void renderSSAOPass(izanagi::graph::CGraphicsDevice* device);
+    void renderFinalPass(izanagi::graph::CGraphicsDevice* device);
+
 protected:
     GBuffer m_gbuffer;
 

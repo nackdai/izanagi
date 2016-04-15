@@ -283,28 +283,22 @@ float4 mainPSFinalPass(SPSInputSSAO sIn) : COLOR0
 
 /////////////////////////////////////////////////////////////
 
-technique RenderToMRT
+technique SSAO
 {
-    pass P0
+    pass geometryPass
     {
         AlphaBlendEnable = false;
         VertexShader = compile vs_3_0 mainVSGeometryPass();
         PixelShader = compile ps_3_0 mainPSGeometryPass();
     }
-}
 
-technique RenderSSAO
-{
-    pass P0
+    pass ssaoPass
     {
         VertexShader = compile vs_3_0 mainVS_SSAO();
         PixelShader = compile ps_3_0 mainPS_SSAO();
     }
-}
 
-technique RenderNoSSAO
-{
-    pass P0
+    pass finalPass
     {
         VertexShader = compile vs_3_0 mainVSFinalPass();
         PixelShader = compile ps_3_0 mainPSFinalPass();
