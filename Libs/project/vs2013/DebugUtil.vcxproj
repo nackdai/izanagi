@@ -309,6 +309,7 @@
     <ClCompile Include="..\..\source\debugutil\mesh\DebugMeshScreenFillPlane.cpp" />
     <ClCompile Include="..\..\source\debugutil\mesh\DebugMeshSphere.cpp" />
     <ClCompile Include="..\..\source\debugutil\mesh\DebugMeshTorus.cpp" />
+    <ClCompile Include="..\..\source\debugutil\mesh\DebugMeshWiredBox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\source\debugutil\font.dat" />
@@ -325,6 +326,7 @@
     <ClInclude Include="..\..\include\debugutil\mesh\DebugMeshScreenFillPlane.h" />
     <ClInclude Include="..\..\include\debugutil\mesh\DebugMeshSphere.h" />
     <ClInclude Include="..\..\include\debugutil\mesh\DebugMeshTorus.h" />
+    <ClInclude Include="..\..\include\debugutil\mesh\DebugMeshWiredBox.h" />
     <ClInclude Include="..\..\include\izDebugUtil.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -34,6 +34,7 @@ private:
         MESH_TYPE_CYLINDER,
         MESH_TYPE_TORUS,
         MESH_TYPE_PLANE,
+        MESH_TYPE_WIRED_BOX,
 
         MESH_TYPE_NUM,
     };

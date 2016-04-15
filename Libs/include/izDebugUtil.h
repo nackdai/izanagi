@@ -14,5 +14,6 @@
 #include "debugutil/mesh/DebugMeshRectangle.h"
 #include "debugutil/mesh/DebugMeshFrustum.h"
 #include "debugutil/mesh/DebugMeshScreenFillPlane.h"
+#include "debugutil/mesh/DebugMeshWiredBox.h"
 
 #endif  // #if !defined(__IZANAGI_DEBUG_UTIL_H__)

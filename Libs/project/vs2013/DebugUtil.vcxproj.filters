@@ -50,6 +50,9 @@
     <ClCompile Include="..\..\source\debugutil\mesh\DebugMeshScreenFillPlane.cpp">
       <Filter>source\mesh</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\debugutil\mesh\DebugMeshWiredBox.cpp">
+      <Filter>source\mesh</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\source\debugutil\font.dat">
@@ -89,6 +92,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\izDebugUtil.h" />
     <ClInclude Include="..\..\include\debugutil\mesh\DebugMeshScreenFillPlane.h">
+      <Filter>include\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\debugutil\mesh\DebugMeshWiredBox.h">
       <Filter>include\mesh</Filter>
     </ClInclude>
   </ItemGroup>

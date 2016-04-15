@@ -39,11 +39,19 @@ IZ_BOOL CDebugMeshApp::InitInternal(
                 5.0f);
     VGOTO(result = (m_Grid != IZ_NULL), __EXIT__);
 
+    // WiredBox
+    m_Mesh[MESH_TYPE::MESH_TYPE_WIRED_BOX] = izanagi::CDebugMeshWiredBox::create(
+        allocator,
+        device,
+        IZ_COLOR_RGBA(0xff, 0xff, 0x00, 0xff),
+        10.0f, 10.0f, 10.0f);
+    VGOTO(result = (m_Mesh[MESH_TYPE::MESH_TYPE_WIRED_BOX] != IZ_NULL), __EXIT__);
+
     IZ_UINT flag = izanagi::E_DEBUG_MESH_VTX_FORM_POS
-                    | izanagi::E_DEBUG_MESH_VTX_FORM_COLOR
-                    | izanagi::E_DEBUG_MESH_VTX_FORM_UV
-                    | izanagi::E_DEBUG_MESH_VTX_FORM_NORMAL
-                    | izanagi::E_DEBUG_MESH_VTX_FORM_TANGENT;
+        | izanagi::E_DEBUG_MESH_VTX_FORM_COLOR
+        | izanagi::E_DEBUG_MESH_VTX_FORM_UV
+        | izanagi::E_DEBUG_MESH_VTX_FORM_NORMAL;
+        //| izanagi::E_DEBUG_MESH_VTX_FORM_TANGENT;
 
     // Sphere
     {
@@ -217,6 +225,8 @@ void CDebugMeshApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
             m_Grid->Draw(device);
             m_Axis->Draw(device);
+
+            m_Mesh[MESH_TYPE::MESH_TYPE_WIRED_BOX]->Draw(device);
 
             m_Shader->EndPass();
         }
