@@ -270,6 +270,10 @@ namespace graph
     void CGraphicsDeviceOGL::OnTerminate()
     {
         SAFE_RELEASE(m_rtInternalDepth);
+
+        for (IZ_UINT i = 0; i < COUNTOF(m_RenderState.curVB); i++) {
+            SAFE_RELEASE(m_RenderState.curVB[i]);
+        }
     }
 
     // “¯Šú
