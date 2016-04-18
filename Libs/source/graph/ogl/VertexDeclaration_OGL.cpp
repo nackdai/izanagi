@@ -15,6 +15,9 @@
 // ですが、glDrawElements() は glBindBuffer(GL_ELEMENT_ARRAY_BUFFER) を参照し、VAO は glBindBuffer(GL_ELEMENT_ARRAY_BUFFER) を置き換えます.
 // http://wlog.flatlib.jp/item/1629
 
+// NOTE
+// https://shikihuiku.wordpress.com/2014/02/10/opengl%E3%81%AEdrawcall%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/
+
 namespace izanagi
 {
 namespace graph
@@ -55,6 +58,101 @@ namespace graph
         return instance;
     }
 
+    namespace {
+        using ParamsByElemetType = std::tuple < IZ_BOOL, IZ_UINT, GLenum, size_t > ;
+
+        ParamsByElemetType getParamsByElemetType(izanagi::graph::E_GRAPH_VTX_DECL_TYPE elemType)
+        {
+            IZ_BOOL needNormalized = IZ_FALSE;
+            IZ_UINT num = 4;
+            GLenum type = GL_BYTE;
+            size_t size = 4;
+
+            switch (elemType)
+            {
+            case E_GRAPH_VTX_DECL_TYPE_FLOAT1:
+                size = sizeof(GLfloat);
+                type = GL_FLOAT;
+                num = 1;
+                break;
+            case E_GRAPH_VTX_DECL_TYPE_FLOAT2:
+                size = sizeof(GLfloat);
+                type = GL_FLOAT;
+                num = 2;
+                break;
+            case E_GRAPH_VTX_DECL_TYPE_FLOAT3:
+                size = sizeof(GLfloat);
+                type = GL_FLOAT;
+                num = 3;
+                break;
+            case E_GRAPH_VTX_DECL_TYPE_FLOAT4:
+                size = sizeof(GLfloat);
+                type = GL_FLOAT;
+                num = 4;
+                break;
+            case E_GRAPH_VTX_DECL_TYPE_COLOR:
+                size = sizeof(GLbyte);
+                type = GL_UNSIGNED_BYTE;
+                num = 4;
+                needNormalized = IZ_TRUE;
+                break;
+            case E_GRAPH_VTX_DECL_TYPE_UBYTE4:
+                size = sizeof(GLbyte);
+                type = GL_UNSIGNED_BYTE;
+                num = 4;
+                break;
+            case E_GRAPH_VTX_DECL_TYPE_SHORT2:
+                size = sizeof(GLshort);
+                type = GL_SHORT;
+                num = 2;
+                break;
+            case E_GRAPH_VTX_DECL_TYPE_SHORT4:
+                size = sizeof(GLshort);
+                type = GL_SHORT;
+                num = 2;
+                break;
+            case E_GRAPH_VTX_DECL_TYPE_UBYTE4N:
+                size = sizeof(GLbyte);
+                type = GL_UNSIGNED_BYTE;
+                num = 4;
+                needNormalized = IZ_TRUE;
+                break;
+            case E_GRAPH_VTX_DECL_TYPE_SHORT2N:
+                size = sizeof(GLshort);
+                type = GL_SHORT;
+                num = 2;
+                needNormalized = IZ_TRUE;
+                break;
+            case E_GRAPH_VTX_DECL_TYPE_SHORT4N:
+                size = sizeof(GLshort);
+                type = GL_SHORT;
+                num = 4;
+                needNormalized = IZ_TRUE;
+                break;
+            case E_GRAPH_VTX_DECL_TYPE_USHORT2N:
+                size = sizeof(GLshort);
+                type = GL_UNSIGNED_SHORT;
+                num = 2;
+                needNormalized = IZ_TRUE;
+                break;
+            case E_GRAPH_VTX_DECL_TYPE_USHORT4N:
+                size = sizeof(GLshort);
+                type = GL_UNSIGNED_SHORT;
+                num = 4;
+                needNormalized = IZ_TRUE;
+                break;
+            default:
+                IZ_ASSERT(IZ_FALSE);
+                size = 0;
+                break;
+            }
+
+            ParamsByElemetType ret(needNormalized, num, type, size);
+
+            return ret;
+        }
+    }
+
 #ifdef USE_VAO
     IZ_BOOL CVertexDeclarationOGL::begin(
         CGraphicsDevice* device,
@@ -86,90 +184,19 @@ namespace graph
                     // NOTE
                     // Semanticによる頂点データの位置は無視するm_Elementsの並び順通りに設定する
 
-                    IZ_BOOL needNormalized = IZ_FALSE;
-                    IZ_UINT num = 4;
-                    GLenum type = GL_BYTE;
-                    size_t size = 4;
-
                     E_GRAPH_VTX_DECL_TYPE elemType = element.Type;
                     if (element.Usage == E_GRAPH_VTX_DECL_USAGE_POSITION) {
                         elemType = E_GRAPH_VTX_DECL_TYPE_FLOAT3;
                     }
 
-                    switch (elemType)
-                    {
-                    case E_GRAPH_VTX_DECL_TYPE_FLOAT1:
-                        size = sizeof(GLfloat);
-                        type = GL_FLOAT;
-                        num = 1;
-                        break;
-                    case E_GRAPH_VTX_DECL_TYPE_FLOAT2:
-                        size = sizeof(GLfloat);
-                        type = GL_FLOAT;
-                        num = 2;
-                        break;
-                    case E_GRAPH_VTX_DECL_TYPE_FLOAT3:
-                        size = sizeof(GLfloat);
-                        type = GL_FLOAT;
-                        num = 3;
-                        break;
-                    case E_GRAPH_VTX_DECL_TYPE_FLOAT4:
-                        size = sizeof(GLfloat);
-                        type = GL_FLOAT;
-                        num = 4;
-                        break;
-                    case E_GRAPH_VTX_DECL_TYPE_COLOR:
-                        size = sizeof(GLbyte);
-                        type = GL_UNSIGNED_BYTE;
-                        num = 4;
-                        needNormalized = IZ_TRUE;
-                        break;
-                    case E_GRAPH_VTX_DECL_TYPE_UBYTE4:
-                        size = sizeof(GLbyte);
-                        type = GL_UNSIGNED_BYTE;
-                        num = 4;
-                        break;
-                    case E_GRAPH_VTX_DECL_TYPE_SHORT2:
-                        size = sizeof(GLshort);
-                        type = GL_SHORT;
-                        num = 2;
-                        break;
-                    case E_GRAPH_VTX_DECL_TYPE_SHORT4:
-                        size = sizeof(GLshort);
-                        type = GL_SHORT;
-                        num = 2;
-                        break;
-                    case E_GRAPH_VTX_DECL_TYPE_UBYTE4N:
-                        size = sizeof(GLbyte);
-                        type = GL_UNSIGNED_BYTE;
-                        num = 4;
-                        needNormalized = IZ_TRUE;
-                        break;
-                    case E_GRAPH_VTX_DECL_TYPE_SHORT2N:
-                        size = sizeof(GLshort);
-                        type = GL_SHORT;
-                        num = 2;
-                        needNormalized = IZ_TRUE;
-                        break;
-                    case E_GRAPH_VTX_DECL_TYPE_SHORT4N:
-                        size = sizeof(GLshort);
-                        type = GL_SHORT;
-                        num = 4;
-                        needNormalized = IZ_TRUE;
-                        break;
-                    case E_GRAPH_VTX_DECL_TYPE_USHORT2N:
-                        size = sizeof(GLshort);
-                        type = GL_UNSIGNED_SHORT;
-                        num = 2;
-                        needNormalized = IZ_TRUE;
-                        break;
-                    case E_GRAPH_VTX_DECL_TYPE_USHORT4N:
-                        size = sizeof(GLshort);
-                        type = GL_UNSIGNED_SHORT;
-                        num = 4;
-                        needNormalized = IZ_TRUE;
-                        break;
-                    default:
+                    auto params = getParamsByElemetType(elemType);
+
+                    IZ_BOOL needNormalized = std::get<0>(params);
+                    IZ_UINT num = std::get<1>(params);
+                    GLenum type = std::get<2>(params);
+                    size_t size = std::get<3>(params);
+
+                    if (size == 0) {
                         IZ_ASSERT(IZ_FALSE);
                         continue;
                     }
@@ -233,90 +260,19 @@ namespace graph
                     // NOTE
                     // Semanticによる頂点データの位置は無視するm_Elementsの並び順通りに設定する
 
-                    IZ_BOOL needNormalized = IZ_FALSE;
-                    IZ_UINT num = 4;
-                    GLenum type = GL_BYTE;
-                    size_t size = 4;
-
                     E_GRAPH_VTX_DECL_TYPE elemType = element.Type;
                     if (element.Usage == E_GRAPH_VTX_DECL_USAGE_POSITION) {
                         elemType = E_GRAPH_VTX_DECL_TYPE_FLOAT3;
                     }
 
-                    switch (elemType)
-                    {
-                    case E_GRAPH_VTX_DECL_TYPE_FLOAT1:
-                        size = sizeof(GLfloat);
-                        type = GL_FLOAT;
-                        num = 1;
-                        break;
-                    case E_GRAPH_VTX_DECL_TYPE_FLOAT2:
-                        size = sizeof(GLfloat);
-                        type = GL_FLOAT;
-                        num = 2;
-                        break;
-                    case E_GRAPH_VTX_DECL_TYPE_FLOAT3:
-                        size = sizeof(GLfloat);
-                        type = GL_FLOAT;
-                        num = 3;
-                        break;
-                    case E_GRAPH_VTX_DECL_TYPE_FLOAT4:
-                        size = sizeof(GLfloat);
-                        type = GL_FLOAT;
-                        num = 4;
-                        break;
-                    case E_GRAPH_VTX_DECL_TYPE_COLOR:
-                        size = sizeof(GLbyte);
-                        type = GL_UNSIGNED_BYTE;
-                        num = 4;
-                        needNormalized = IZ_TRUE;
-                        break;
-                    case E_GRAPH_VTX_DECL_TYPE_UBYTE4:
-                        size = sizeof(GLbyte);
-                        type = GL_UNSIGNED_BYTE;
-                        num = 4;
-                        break;
-                    case E_GRAPH_VTX_DECL_TYPE_SHORT2:
-                        size = sizeof(GLshort);
-                        type = GL_SHORT;
-                        num = 2;
-                        break;
-                    case E_GRAPH_VTX_DECL_TYPE_SHORT4:
-                        size = sizeof(GLshort);
-                        type = GL_SHORT;
-                        num = 2;
-                        break;
-                    case E_GRAPH_VTX_DECL_TYPE_UBYTE4N:
-                        size = sizeof(GLbyte);
-                        type = GL_UNSIGNED_BYTE;
-                        num = 4;
-                        needNormalized = IZ_TRUE;
-                        break;
-                    case E_GRAPH_VTX_DECL_TYPE_SHORT2N:
-                        size = sizeof(GLshort);
-                        type = GL_SHORT;
-                        num = 2;
-                        needNormalized = IZ_TRUE;
-                        break;
-                    case E_GRAPH_VTX_DECL_TYPE_SHORT4N:
-                        size = sizeof(GLshort);
-                        type = GL_SHORT;
-                        num = 4;
-                        needNormalized = IZ_TRUE;
-                        break;
-                    case E_GRAPH_VTX_DECL_TYPE_USHORT2N:
-                        size = sizeof(GLshort);
-                        type = GL_UNSIGNED_SHORT;
-                        num = 2;
-                        needNormalized = IZ_TRUE;
-                        break;
-                    case E_GRAPH_VTX_DECL_TYPE_USHORT4N:
-                        size = sizeof(GLshort);
-                        type = GL_UNSIGNED_SHORT;
-                        num = 4;
-                        needNormalized = IZ_TRUE;
-                        break;
-                    default:
+                    auto params = getParamsByElemetType(elemType);
+
+                    IZ_BOOL needNormalized = std::get<0>(params);
+                    IZ_UINT num = std::get<1>(params);
+                    GLenum type = std::get<2>(params);
+                    size_t size = std::get<3>(params);
+
+                    if (size == 0) {
                         IZ_ASSERT(IZ_FALSE);
                         continue;
                     }
@@ -375,90 +331,19 @@ namespace graph
                 // NOTE
                 // Semanticによる頂点データの位置は無視するm_Elementsの並び順通りに設定する
 
-                IZ_BOOL needNormalized = IZ_FALSE;
-                IZ_UINT num = 4;
-                GLenum type = GL_BYTE;
-                size_t size = 4;
-
                 E_GRAPH_VTX_DECL_TYPE elemType = element.Type;
                 if (element.Usage == E_GRAPH_VTX_DECL_USAGE_POSITION) {
                     elemType = E_GRAPH_VTX_DECL_TYPE_FLOAT3;
                 }
 
-                switch (elemType)
-                {
-                case E_GRAPH_VTX_DECL_TYPE_FLOAT1:
-                    size = sizeof(GLfloat);
-                    type = GL_FLOAT;
-                    num = 1;
-                    break;
-                case E_GRAPH_VTX_DECL_TYPE_FLOAT2:
-                    size = sizeof(GLfloat);
-                    type = GL_FLOAT;
-                    num = 2;
-                    break;
-                case E_GRAPH_VTX_DECL_TYPE_FLOAT3:
-                    size = sizeof(GLfloat);
-                    type = GL_FLOAT;
-                    num = 3;
-                    break;
-                case E_GRAPH_VTX_DECL_TYPE_FLOAT4:
-                    size = sizeof(GLfloat);
-                    type = GL_FLOAT;
-                    num = 4;
-                    break;
-                case E_GRAPH_VTX_DECL_TYPE_COLOR:
-                    size = sizeof(GLbyte);
-                    type = GL_UNSIGNED_BYTE;
-                    num = 4;
-                    needNormalized = IZ_TRUE;
-                    break;
-                case E_GRAPH_VTX_DECL_TYPE_UBYTE4:
-                    size = sizeof(GLbyte);
-                    type = GL_UNSIGNED_BYTE;
-                    num = 4;
-                    break;
-                case E_GRAPH_VTX_DECL_TYPE_SHORT2:
-                    size = sizeof(GLshort);
-                    type = GL_SHORT;
-                    num = 2;
-                    break;
-                case E_GRAPH_VTX_DECL_TYPE_SHORT4:
-                    size = sizeof(GLshort);
-                    type = GL_SHORT;
-                    num = 2;
-                    break;
-                case E_GRAPH_VTX_DECL_TYPE_UBYTE4N:
-                    size = sizeof(GLbyte);
-                    type = GL_UNSIGNED_BYTE;
-                    num = 4;
-                    needNormalized = IZ_TRUE;
-                    break;
-                case E_GRAPH_VTX_DECL_TYPE_SHORT2N:
-                    size = sizeof(GLshort);
-                    type = GL_SHORT;
-                    num = 2;
-                    needNormalized = IZ_TRUE;
-                    break;
-                case E_GRAPH_VTX_DECL_TYPE_SHORT4N:
-                    size = sizeof(GLshort);
-                    type = GL_SHORT;
-                    num = 4;
-                    needNormalized = IZ_TRUE;
-                    break;
-                case E_GRAPH_VTX_DECL_TYPE_USHORT2N:
-                    size = sizeof(GLshort);
-                    type = GL_UNSIGNED_SHORT;
-                    num = 2;
-                    needNormalized = IZ_TRUE;
-                    break;
-                case E_GRAPH_VTX_DECL_TYPE_USHORT4N:
-                    size = sizeof(GLshort);
-                    type = GL_UNSIGNED_SHORT;
-                    num = 4;
-                    needNormalized = IZ_TRUE;
-                    break;
-                default:
+                auto params = getParamsByElemetType(elemType);
+
+                IZ_BOOL needNormalized = std::get<0>(params);
+                IZ_UINT num = std::get<1>(params);
+                GLenum type = std::get<2>(params);
+                size_t size = std::get<3>(params);
+
+                if (size == 0) {
                     IZ_ASSERT(IZ_FALSE);
                     continue;
                 }
@@ -489,7 +374,6 @@ namespace graph
         InstancingParam* params,
         CVertexBuffer** vbs)
     {
-
         IZ_UINT curStream = IZ_UINT32_MAX;
 
         for (IZ_UINT i = 0; i < m_ElemNum; i++) {
@@ -517,90 +401,19 @@ namespace graph
                     // NOTE
                     // Semanticによる頂点データの位置は無視するm_Elementsの並び順通りに設定する
 
-                    IZ_BOOL needNormalized = IZ_FALSE;
-                    IZ_UINT num = 4;
-                    GLenum type = GL_BYTE;
-                    size_t size = 4;
-
                     E_GRAPH_VTX_DECL_TYPE elemType = element.Type;
                     if (element.Usage == E_GRAPH_VTX_DECL_USAGE_POSITION) {
                         elemType = E_GRAPH_VTX_DECL_TYPE_FLOAT3;
                     }
 
-                    switch (elemType)
-                    {
-                    case E_GRAPH_VTX_DECL_TYPE_FLOAT1:
-                        size = sizeof(GLfloat);
-                        type = GL_FLOAT;
-                        num = 1;
-                        break;
-                    case E_GRAPH_VTX_DECL_TYPE_FLOAT2:
-                        size = sizeof(GLfloat);
-                        type = GL_FLOAT;
-                        num = 2;
-                        break;
-                    case E_GRAPH_VTX_DECL_TYPE_FLOAT3:
-                        size = sizeof(GLfloat);
-                        type = GL_FLOAT;
-                        num = 3;
-                        break;
-                    case E_GRAPH_VTX_DECL_TYPE_FLOAT4:
-                        size = sizeof(GLfloat);
-                        type = GL_FLOAT;
-                        num = 4;
-                        break;
-                    case E_GRAPH_VTX_DECL_TYPE_COLOR:
-                        size = sizeof(GLbyte);
-                        type = GL_UNSIGNED_BYTE;
-                        num = 4;
-                        needNormalized = IZ_TRUE;
-                        break;
-                    case E_GRAPH_VTX_DECL_TYPE_UBYTE4:
-                        size = sizeof(GLbyte);
-                        type = GL_UNSIGNED_BYTE;
-                        num = 4;
-                        break;
-                    case E_GRAPH_VTX_DECL_TYPE_SHORT2:
-                        size = sizeof(GLshort);
-                        type = GL_SHORT;
-                        num = 2;
-                        break;
-                    case E_GRAPH_VTX_DECL_TYPE_SHORT4:
-                        size = sizeof(GLshort);
-                        type = GL_SHORT;
-                        num = 2;
-                        break;
-                    case E_GRAPH_VTX_DECL_TYPE_UBYTE4N:
-                        size = sizeof(GLbyte);
-                        type = GL_UNSIGNED_BYTE;
-                        num = 4;
-                        needNormalized = IZ_TRUE;
-                        break;
-                    case E_GRAPH_VTX_DECL_TYPE_SHORT2N:
-                        size = sizeof(GLshort);
-                        type = GL_SHORT;
-                        num = 2;
-                        needNormalized = IZ_TRUE;
-                        break;
-                    case E_GRAPH_VTX_DECL_TYPE_SHORT4N:
-                        size = sizeof(GLshort);
-                        type = GL_SHORT;
-                        num = 4;
-                        needNormalized = IZ_TRUE;
-                        break;
-                    case E_GRAPH_VTX_DECL_TYPE_USHORT2N:
-                        size = sizeof(GLshort);
-                        type = GL_UNSIGNED_SHORT;
-                        num = 2;
-                        needNormalized = IZ_TRUE;
-                        break;
-                    case E_GRAPH_VTX_DECL_TYPE_USHORT4N:
-                        size = sizeof(GLshort);
-                        type = GL_UNSIGNED_SHORT;
-                        num = 4;
-                        needNormalized = IZ_TRUE;
-                        break;
-                    default:
+                    auto params = getParamsByElemetType(elemType);
+
+                    IZ_BOOL needNormalized = std::get<0>(params);
+                    IZ_UINT num = std::get<1>(params);
+                    GLenum type = std::get<2>(params);
+                    size_t size = std::get<3>(params);
+
+                    if (size == 0) {
                         IZ_ASSERT(IZ_FALSE);
                         continue;
                     }
