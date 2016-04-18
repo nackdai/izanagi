@@ -161,15 +161,17 @@ namespace graph
         CVertexBufferOGL* vb,
         IZ_UINT vtxStride)
     {
-        IZ_ASSERT(m_vao > 0);
-        CALL_GL_API(::glBindVertexArray(m_vao));
+        if (!m_isForceUpdate) {
+            IZ_ASSERT(m_vao > 0);
+            CALL_GL_API(::glBindVertexArray(m_vao));
+        }
 
         if (vb) {
             CALL_GL_API(::glBindBuffer(GL_ARRAY_BUFFER, vb->GetRawInterface()));
             vb->Initialize(device);
         }
 
-        if (!m_isApplied) {
+        if (!m_isApplied || m_isForceUpdate) {
             for (IZ_UINT i = 0; i < m_ElemNum; i++) {
                 const char* attribName = GetAttribName(i);
                 IZ_INT attribIndex = program->GetAttribIndex(attribName);
@@ -230,8 +232,10 @@ namespace graph
         InstancingParam* params,
         CVertexBuffer** vbs)
     {
-        IZ_ASSERT(m_vao > 0);
-        CALL_GL_API(::glBindVertexArray(m_vao));
+        if (!m_isForceUpdate) {
+            IZ_ASSERT(m_vao > 0);
+            CALL_GL_API(::glBindVertexArray(m_vao));
+        }
 
         IZ_UINT curStream = IZ_UINT32_MAX;
 
@@ -256,7 +260,9 @@ namespace graph
 
                 curStream = stream;
 
-                if (!m_isApplied && vbs[stream]) {
+                if ((!m_isApplied || m_isForceUpdate)
+                    && vbs[stream])
+                {
                     // NOTE
                     // Semanticによる頂点データの位置は無視するm_Elementsの並び順通りに設定する
 

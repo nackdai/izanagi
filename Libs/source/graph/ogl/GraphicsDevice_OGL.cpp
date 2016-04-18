@@ -87,6 +87,10 @@ namespace graph
             m_2DRenderer = C2DRenderer::Create2DRenderer(this, m_Allocator);
             VRETURN(m_2DRenderer != IZ_NULL);
 
+            // VAO‚ðŽg‚í‚¸‚É–ˆ‰ñXV‚·‚é.
+            auto vd = (CVertexDeclarationOGL*)m_2DRenderer->getVD();
+            vd->enableForceUpdate();
+
             // FBO
             m_FBO = CGraphicsDeviceGLES2::CreateFBO(this, m_Allocator);
             VRETURN(m_FBO != IZ_NULL);

@@ -3,7 +3,7 @@
 
 #include "graph/gles2/VertexDeclaration_GLES2.h"
 
-//#define USE_VAO
+#define USE_VAO
 
 namespace izanagi
 {
@@ -53,12 +53,19 @@ namespace graph
 
         void end();
 
+        void enableForceUpdate()
+        {
+            m_isForceUpdate = IZ_TRUE;
+        }
+
     private:
 #ifdef USE_VAO
         GLuint m_vao;
 
         IZ_BOOL m_isApplied{ IZ_FALSE };
 #endif
+
+        IZ_BOOL m_isForceUpdate{ IZ_FALSE };
     };
 }   // namespace graph
 }   // namespace izanagi

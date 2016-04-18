@@ -135,6 +135,11 @@ namespace graph
         // リセット
         void RestoreResource();
 
+        graph::CVertexDeclaration* getVD()
+        {
+            return m_pVD;
+        }
+
     protected:
         // ロックフラグ制御
         IZ_BOOL IsLock() const { return m_bIsLock; }
