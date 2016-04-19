@@ -35,8 +35,8 @@ namespace graph
             IZ_UINT nElemNum);
 
     private:
-        CVertexDeclarationOGL() {}
-        virtual ~CVertexDeclarationOGL() {}
+        CVertexDeclarationOGL();
+        virtual ~CVertexDeclarationOGL();
 
     private:
         IZ_BOOL begin(
@@ -64,6 +64,8 @@ namespace graph
 
         IZ_BOOL m_isApplied{ IZ_FALSE };
 #endif
+
+        izanagi::graph::CVertexBuffer* m_vbs[MAX_STREAM_NUM];
 
         IZ_BOOL m_isForceUpdate{ IZ_FALSE };
     };

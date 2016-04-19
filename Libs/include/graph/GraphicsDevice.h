@@ -503,6 +503,14 @@ namespace graph
             IZ_UINT idxOffset,
             IZ_UINT nPrimCnt);
 
+        virtual IZ_BOOL DrawPrimitive(
+            E_GRAPH_PRIM_TYPE prim_type,
+            std::function<void(GLenum)> funcRenderer)
+        {
+            IZ_ASSERT(IZ_FALSE);
+            return IZ_FALSE;
+        }
+
     public:
         /** Sets the viewport parameters.
          *

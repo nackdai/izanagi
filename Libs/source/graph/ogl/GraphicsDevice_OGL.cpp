@@ -777,5 +777,45 @@ namespace graph
 
         return IZ_TRUE;
     }
+
+    IZ_BOOL CGraphicsDeviceOGL::DrawPrimitive(
+        E_GRAPH_PRIM_TYPE prim_type,
+        std::function<void(GLenum)> funcRenderer)
+    {
+        CShaderProgramGLES2* gles2Program = reinterpret_cast<CShaderProgramGLES2*>(m_RenderState.curShader);
+        CVertexDeclarationOGL* vd = reinterpret_cast<CVertexDeclarationOGL*>(m_RenderState.curVD);
+        CVertexBufferOGL* vb = reinterpret_cast<CVertexBufferOGL*>(m_RenderState.curVB[0]);
+
+        // NOTE
+        // ShaderProgramがセットされないとシェーダユニフォームの取得、設定ができないので
+        // 頂点宣言の反映、テクスチャのセットなどをこのタイミングでやる
+
+        IZ_ASSERT(m_RenderState.curVD != IZ_NULL);
+        IZ_ASSERT(m_RenderState.curVB != IZ_NULL);
+
+        vd->begin(
+            this,
+            gles2Program,
+            0,
+            m_dirty.isDirtyVB[0] ? vb : nullptr,
+            vb->GetStride());
+
+        m_dirty.isDirtyVB[0] = IZ_FALSE;
+
+        setTexToSampler();
+
+        auto drawParam = getDrawParam(prim_type, 0);
+
+        IZ_UINT vtxNum = std::get<0>(drawParam);
+        GLenum mode = std::get<1>(drawParam);
+
+        funcRenderer(mode);
+
+        vd->end();
+
+        m_IsDirtyShaderProgram = IZ_FALSE;
+
+        return IZ_TRUE;
+    }
 }   // namespace graph
 }   // namespace izanagi

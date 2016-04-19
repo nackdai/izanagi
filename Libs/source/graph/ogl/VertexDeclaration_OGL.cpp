@@ -58,6 +58,18 @@ namespace graph
         return instance;
     }
 
+    CVertexDeclarationOGL::CVertexDeclarationOGL()
+    {
+        FILL_ZERO(m_vbs, sizeof(m_vbs));
+    }
+
+    CVertexDeclarationOGL::~CVertexDeclarationOGL()
+    {
+        for (IZ_UINT i = 0; i < COUNTOF(m_vbs); i++) {
+            SAFE_RELEASE(m_vbs[i]);
+        }
+    }
+
     namespace {
         using ParamsByElemetType = std::tuple < IZ_BOOL, IZ_UINT, GLenum, size_t > ;
 
@@ -167,6 +179,10 @@ namespace graph
         }
 
         if (vb) {
+            if (m_vbs[0] != vb) {
+                m_isApplied = IZ_FALSE;
+                SAFE_REPLACE(m_vbs[0], vb);
+            }
             CALL_GL_API(::glBindBuffer(GL_ARRAY_BUFFER, vb->GetRawInterface()));
             vb->Initialize(device);
         }
@@ -251,6 +267,10 @@ namespace graph
                 auto& param = params[stream];
 
                 if (vbs[stream]) {
+                    if (m_vbs[stream] != vbs[stream]) {
+                        m_isApplied = IZ_FALSE;
+                        SAFE_REPLACE(m_vbs[stream], vbs[stream]);
+                    }
                     auto handleVB = ((CVertexBufferOGL*)vbs[stream])->GetRawInterface();
 
                     if (curStream != stream) {

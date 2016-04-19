@@ -77,12 +77,16 @@ namespace graph {
             IZ_UINT vtxOffset,
             IZ_UINT vtxNum,
             IZ_UINT idxOffset,
-            IZ_UINT nPrimCnt) override;
+            IZ_UINT inCnt) override;
 
         virtual IZ_BOOL DrawInstancedPrimitive(
             E_GRAPH_PRIM_TYPE prim_type,
             IZ_UINT idxOffset,
             IZ_UINT nPrimCnt) override;
+
+        virtual IZ_BOOL DrawPrimitive(
+            E_GRAPH_PRIM_TYPE prim_type,
+            std::function<void(GLenum)> funcRenderer) override;
 
         virtual IZ_BOOL CheckRenderTargetCount(IZ_UINT cnt) override
         {
