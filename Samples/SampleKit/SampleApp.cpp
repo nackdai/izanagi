@@ -264,7 +264,7 @@ void CSampleApp::Idle()
 namespace {
     inline IZ_FLOAT _NormalizeHorizontal(
         CSampleApp* app,
-        IZ_UINT x)
+        IZ_INT x)
     {
         IZ_UINT width = app->GetScreenWidth();
         IZ_FLOAT ret = (2.0f * x - width) / (IZ_FLOAT)width;
@@ -273,7 +273,7 @@ namespace {
 
     inline IZ_FLOAT _NormalizeVertical(
         CSampleApp* app,
-        IZ_UINT y)
+        IZ_INT y)
     {
         IZ_UINT height = app->GetScreenHeight();
         IZ_FLOAT ret = (height - 2.0f * y) / (IZ_FLOAT)height;
@@ -285,14 +285,18 @@ void CSampleApp::OnMouseMove(const izanagi::CIntPoint& point)
 {
     if (m_isEnableCamera) {
         if (m_Flags.onLBtn) {
-            GetCamera().Rotate(
-                izanagi::CFloatPoint(
-                _NormalizeHorizontal(this, m_PrevPoint.x),
-                _NormalizeVertical(this, m_PrevPoint.y)),
-                izanagi::CFloatPoint(
-                _NormalizeHorizontal(this, point.x),
-                _NormalizeVertical(this, point.y))
-                );
+            if (m_PrevPoint.x != point.x || m_PrevPoint.y != point.y)
+            {
+                izanagi::CFloatPoint p1(
+                    _NormalizeHorizontal(this, m_PrevPoint.x),
+                    _NormalizeVertical(this, m_PrevPoint.y));
+
+                izanagi::CFloatPoint p2(
+                    _NormalizeHorizontal(this, point.x),
+                    _NormalizeVertical(this, point.y));
+
+                GetCamera().Rotate(p1, p2);
+            }
         }
         else if (m_Flags.onRBtn) {
             float fOffsetX = (float)(m_PrevPoint.x - point.x);
