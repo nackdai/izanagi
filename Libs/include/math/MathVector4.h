@@ -1,10 +1,12 @@
 #if !defined(__IZANAGI__MATH_VECTOR4_H__)
 #define __IZANAGI__MATH_VECTOR4_H__
 
+#include <algorithm>
 #include <math.h>
 #include <memory.h>
 #include "izDefs.h"
-#include "MathUtil.h"
+#include "math/MathUtil.h"
+#include "math/MathVector3.h"
 
 namespace izanagi
 {
@@ -29,6 +31,13 @@ namespace math
         void Set(const SVector4& rhs)
         {
             x = rhs.x; y = rhs.y; z = rhs.z; w = rhs.w;
+        }
+
+        SVector3 getXYZ()
+        {
+            SVector3 ret;
+            ret.Set(x, y, z);
+            return std::move(ret);
         }
 
         // ベクトルを設定する
