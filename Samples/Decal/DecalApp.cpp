@@ -225,5 +225,7 @@ void CDecalApp::OnKeyUp(izanagi::sys::E_KEYBOARD_BUTTON key)
 
 IZ_BOOL CDecalApp::OnMouseLBtnDown(const izanagi::CIntPoint& point)
 {
+    CSampleApp::OnMouseLBtnDown(point);
+
     return IZ_TRUE;
 }

@@ -16,7 +16,7 @@ CSampleApp::CSampleApp()
     m_ScreenHeight = 1;
 
     m_Flags.onLBtn = IZ_FALSE;
-    m_Flags.onLBtn = IZ_FALSE;
+    m_Flags.onRBtn = IZ_FALSE;
 }
 
 CSampleApp::~CSampleApp()
