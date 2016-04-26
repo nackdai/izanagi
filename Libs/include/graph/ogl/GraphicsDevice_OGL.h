@@ -86,7 +86,7 @@ namespace graph {
 
         virtual IZ_BOOL DrawPrimitive(
             E_GRAPH_PRIM_TYPE prim_type,
-            std::function<void(GLenum)> funcRenderer) override;
+            std::function<void(IZ_UINT)> funcRenderer) override;
 
         virtual IZ_BOOL CheckRenderTargetCount(IZ_UINT cnt) override
         {

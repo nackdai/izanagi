@@ -780,7 +780,7 @@ namespace graph
 
     IZ_BOOL CGraphicsDeviceOGL::DrawPrimitive(
         E_GRAPH_PRIM_TYPE prim_type,
-        std::function<void(GLenum)> funcRenderer)
+        std::function<void(IZ_UINT)> funcRenderer)
     {
         CShaderProgramGLES2* gles2Program = reinterpret_cast<CShaderProgramGLES2*>(m_RenderState.curShader);
         CVertexDeclarationOGL* vd = reinterpret_cast<CVertexDeclarationOGL*>(m_RenderState.curVD);

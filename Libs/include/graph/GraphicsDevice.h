@@ -505,7 +505,7 @@ namespace graph
 
         virtual IZ_BOOL DrawPrimitive(
             E_GRAPH_PRIM_TYPE prim_type,
-            std::function<void(GLenum)> funcRenderer)
+            std::function<void(IZ_UINT)> funcRenderer)
         {
             IZ_ASSERT(IZ_FALSE);
             return IZ_FALSE;
