@@ -171,6 +171,7 @@ namespace math
             SVector4::Normalize(v0, from);
             SVector4::Normalize(v1, to);
 
+#if 0
             SVector4 c;
             SVector4::Cross(c, v0, v1);
 
@@ -182,6 +183,31 @@ namespace math
             quat.z = c.z / s;
 
             quat.w = s * 0.5f;
+#else
+            // http://www.euclideanspace.com/maths/algebra/vectors/angleBetween/index.htm
+
+            // angle = arcos(v1•v2 / | v1 || v2 | )
+            // axis = norm(v1 x v2)
+            // s = sin(angle / 2)
+            // x = axis.x *s
+            // y = axis.y *s
+            // z = axis.z *s
+            // w = cos(angle / 2)
+
+            SVector4 axis;
+            SVector4::Cross(axis, v0, v1);
+
+            IZ_FLOAT cosine = SVector4::Dot(v0, v1);
+            IZ_FLOAT angle = acosf(cosine);
+
+            IZ_FLOAT s = sinf(angle * 0.5f);
+
+            quat.x = axis.x * s;
+            quat.y = axis.y * s;
+            quat.z = axis.z * s;
+
+            quat.w = cosf(angle * 0.5f);
+#endif
         }
 
         // クオータニオンからオイラー角を計算する
