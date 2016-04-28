@@ -38,8 +38,10 @@ IzMain(0, 0)
             &allocator,
             0, 100,
             ParallelForFunc);
+
+        izanagi::threadmodel::CParallel::wait();
     
-        for (IZ_UINT i = 0; i < COUNTOF(Data); i++) {
+        for (IZ_INT i = 0; i < COUNTOF(Data); i++) {
             if (Data[i] != i - 1) {
                 IZ_PRINTF("Failed Parallel For Func!!!\n");
                 IZ_ASSERT(IZ_FALSE);
@@ -58,6 +60,8 @@ IzMain(0, 0)
             Data, sizeof(IZ_UINT),
             COUNTOF(Data),
             ParallelForEachFunc);
+
+        izanagi::threadmodel::CParallel::wait();
     
         for (IZ_UINT i = 0; i < COUNTOF(Data); i++) {
             if (Data[i] != i - 1) {

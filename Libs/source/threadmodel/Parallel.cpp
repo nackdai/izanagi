@@ -6,9 +6,27 @@ namespace izanagi
 {
 namespace threadmodel
 {
+#ifdef WAIT_OUTSIDE
+    CTask* CParallel::s_tasks[10] = { nullptr };
+#endif
+
     void CParallel::SetAllocator(CTask* task, IMemoryAllocator* allocator)
     {
         task->SetAllocator(allocator);
+    }
+
+    void CParallel::wait()
+    {
+#ifdef WAIT_OUTSIDE
+        // タスクが終了するのを待つ.
+        for (IZ_INT i = 0; i < COUNTOF(s_tasks); i++) {
+            if (s_tasks[i]) {
+                s_tasks[i]->Wait();
+                CTask::DeleteTask(s_tasks[i]);
+            }
+            s_tasks[i] = nullptr;
+        }
+#endif
     }
 
     static const IZ_INT PARALLEL_CHUNK_SIZE = 4;
@@ -63,6 +81,8 @@ namespace threadmodel
         IZ_INT fromInclusive, IZ_INT toExclusive, 
         std::function<void(IZ_INT)> func)
     {
+        wait();
+
 		// from > to になるようにする
 		if (fromInclusive > toExclusive) {
 			IZ_INT tmp = toExclusive;
@@ -73,6 +93,12 @@ namespace threadmodel
 		// 作成したタスク保持用.
 		CTask* tasks[10] = { IZ_NULL };
 
+#ifdef WAIT_OUTSIDE
+        #define TASKS   s_tasks
+#else
+        #define TASKS   tasks
+#endif
+
 		// 利用されるスレッド数.
 		IZ_INT threadCount = sys::CEnvironment::GetProcessorNum();
 
@@ -81,8 +107,8 @@ namespace threadmodel
 			? threadCount
 			: threadPool.GetMaxThreadNum());
 
-		if (threadCount > COUNTOF(tasks)) {
-			threadCount = COUNTOF(tasks);
+        if (threadCount > COUNTOF(TASKS)) {
+            threadCount = COUNTOF(TASKS);
 		}
 
 		// １スレッドあたりのループ回数.
@@ -123,7 +149,7 @@ namespace threadmodel
 			IZ_ASSERT(task != IZ_NULL);
 
 			SetAllocator(task, allocator);
-			tasks[i] = task;
+            TASKS[i] = task;
 
 			// スレッドプールに登録.
 			threadPool.EneueueTask(task);
@@ -134,14 +160,18 @@ namespace threadmodel
 			}
 		}
 
+#ifndef WAIT_OUTSIDE
 		// タスクが終了するのを待つ.
 		for (IZ_INT i = 0; i < threadCount; i++) {
-			if (tasks[i] == IZ_NULL) {
+            if (TASKS[i] == IZ_NULL) {
 				break;
 			}
-			tasks[i]->Wait();
-			CTask::DeleteTask(tasks[i]);
+            TASKS[i]->Wait();
+            CTask::DeleteTask(TASKS[i]);
 		}
+#endif
+
+#undef TASKS
     }
 
     ////////////////////////////////////////////////////////
@@ -211,8 +241,16 @@ namespace threadmodel
         IZ_UINT count,
 		std::function<void(void*)> func)
     {
+        wait();
+
 		// 作成したタスク保持用.
 		CTask* tasks[10] = { IZ_NULL };
+
+#ifdef WAIT_OUTSIDE
+        #define TASKS   s_tasks
+#else
+        #define TASKS   tasks
+#endif
 
 		// 利用されるスレッド数.
         IZ_UINT threadCount = sys::CEnvironment::GetProcessorNum();
@@ -222,8 +260,8 @@ namespace threadmodel
 			? threadCount
 			: threadPool.GetMaxThreadNum());
 
-        if (threadCount > COUNTOF(tasks)) {
-            threadCount = COUNTOF(tasks);
+        if (threadCount > COUNTOF(TASKS)) {
+            threadCount = COUNTOF(TASKS);
         }
 
 		// １ループあたりの処理回数.
@@ -270,7 +308,7 @@ namespace threadmodel
             IZ_ASSERT(task != IZ_NULL);
 
             SetAllocator(task, allocator);
-            tasks[i] = task;
+            TASKS[i] = task;
 
 			// スレッドプールに登録.
 			threadPool.EneueueTask(task);
@@ -281,15 +319,19 @@ namespace threadmodel
             }
         }
 
+#ifndef WAIT_OUTSIDE
 		// タスクが終了するのを待つ.
         for (IZ_UINT i = 0; i < threadCount; i++) {
-            if (tasks[i] == IZ_NULL) {
+            if (TASKS[i] == IZ_NULL) {
                 break;
             }
 
-            tasks[i]->Wait();
-			CTask::DeleteTask(tasks[i]);
+            TASKS[i]->Wait();
+            CTask::DeleteTask(TASKS[i]);
         }
+#endif
+
+#undef TASKS
     }
 }   // namespace threadmodel
 }   // namespace izanagi

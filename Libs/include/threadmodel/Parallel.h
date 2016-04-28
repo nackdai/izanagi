@@ -6,6 +6,8 @@
 
 #include "threadmodel/ThreadPool.h"
 
+#define WAIT_OUTSIDE
+
 namespace izanagi
 {
 namespace threadmodel
@@ -19,6 +21,10 @@ namespace threadmodel
     private:
         CParallel();
         ~CParallel();
+
+#ifdef WAIT_OUTSIDE
+        static CTask* s_tasks[10];
+#endif
 
     public:
 		/** w’è‚µ‚½”ÍˆÍ‚Åˆ—‚ğÀs‚·‚é.
@@ -37,6 +43,8 @@ namespace threadmodel
 			void* data, size_t stride,
 			IZ_UINT count,
 			std::function<void(void*)> func);
+
+        static void wait();
 
     private:
         static void SetAllocator(CTask* task, IMemoryAllocator* allocator);
