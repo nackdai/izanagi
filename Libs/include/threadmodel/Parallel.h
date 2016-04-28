@@ -22,16 +22,11 @@ namespace threadmodel
         CParallel();
         ~CParallel();
 
-#ifdef WAIT_OUTSIDE
-        static CTask* s_tasks[10];
-#endif
-
     public:
 		/** éwíËÇµÇΩîÕàÕÇ≈èàóùÇé¿çsÇ∑ÇÈ.
 		 */
 		static void For(
 			CThreadPool& threadPool,
-			IMemoryAllocator* allocator,
 			IZ_INT fromInclusive, IZ_INT toExclusive,
 			std::function<void(IZ_INT)> func);
 
@@ -39,15 +34,12 @@ namespace threadmodel
 		 */
 		static void ForEach(
 			CThreadPool& threadPool,
-			IMemoryAllocator* allocator,
 			void* data, size_t stride,
 			IZ_UINT count,
 			std::function<void(void*)> func);
 
-        static void wait();
-
-    private:
-        static void SetAllocator(CTask* task, IMemoryAllocator* allocator);
+        static void waitFor();
+        static void waitForEach();
     };
 }   // namespace threadmodel
 }   // namespace izanagi

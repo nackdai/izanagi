@@ -6,58 +6,59 @@ namespace izanagi
 {
 namespace threadmodel
 {
-#ifdef WAIT_OUTSIDE
-    CTask* CParallel::s_tasks[10] = { nullptr };
-#endif
-
-    void CParallel::SetAllocator(CTask* task, IMemoryAllocator* allocator)
+    class CParallelTask : public CTask
     {
-        task->SetAllocator(allocator);
-    }
+    public:
+        CParallelTask() {}
+        virtual ~CParallelTask() {}
 
-    void CParallel::wait()
-    {
-#ifdef WAIT_OUTSIDE
-        // タスクが終了するのを待つ.
-        for (IZ_INT i = 0; i < COUNTOF(s_tasks); i++) {
-            if (s_tasks[i]) {
-                s_tasks[i]->Wait();
-                CTask::DeleteTask(s_tasks[i]);
-            }
-            s_tasks[i] = nullptr;
+    public:
+        void beginWorking()
+        {
+            m_isWorking = IZ_TRUE;
         }
-#endif
+        void endWorking()
+        {
+            m_isWorking = IZ_FALSE;
+        }
+        IZ_BOOL isWorking()
+        {
+            return m_isWorking;
+        }
+
+    private:
+        IZ_BOOL m_isWorking{ IZ_FALSE };
+    };
+
+    template <typename _T>
+    static void wait(_T* tasks, IZ_UINT num)
+    {
+        for (IZ_UINT i = 0; i < num; i++) {
+            if (tasks[i].isWorking()) {
+                tasks[i].Wait();
+                tasks[i].endWorking();
+            }
+        }
     }
 
     static const IZ_INT PARALLEL_CHUNK_SIZE = 4;
 
 	// forループ処理用タスククラス.
-    class CParallelFor : public CTask
+    class CParallelFor : public CParallelTask
     {
     public:
-		static CTask* Create(
-            IMemoryAllocator* allocator,
-            IZ_INT from, IZ_INT to,
-			std::function<void(IZ_INT)> func)
-        {
-			void* buf = ALLOC(allocator, sizeof(CParallelFor));
-            VRETURN_NULL(buf != IZ_NULL);
+        CParallelFor() {}
+        virtual ~CParallelFor() {}
 
-			CParallelFor* ret = new(buf)CParallelFor(from, to, func);
-            return ret;
-        }
-
-    protected:
-		CParallelFor(IZ_INT from, IZ_INT to, std::function<void(IZ_INT)> func)
+    public:
+        void init(IZ_INT from, IZ_INT to, std::function<void(IZ_INT)> func)
         {
             m_From = from;
             m_To = to;
 
-			m_function = func;
+            m_function = func;
         }
-        virtual ~CParallelFor() {}
 
-    public:
         virtual void OnRun() override
         {
             for (IZ_INT i = m_From; i < m_To; i++) {
@@ -74,14 +75,23 @@ namespace threadmodel
 		std::function<void(IZ_INT)> m_function;
     };
 
+    static CParallelFor s_taskFor[10];
+
+    void CParallel::waitFor()
+    {
+#ifdef WAIT_OUTSIDE
+        // タスクが終了するのを待つ.
+        wait(s_taskFor, COUNTOF(s_taskFor));
+#endif
+    }
+
 	// 指定した範囲で処理を実行する.
     void CParallel::For(
 		CThreadPool& threadPool,
-        IMemoryAllocator* allocator,
         IZ_INT fromInclusive, IZ_INT toExclusive, 
         std::function<void(IZ_INT)> func)
     {
-        wait();
+        waitFor();
 
 		// from > to になるようにする
 		if (fromInclusive > toExclusive) {
@@ -91,10 +101,10 @@ namespace threadmodel
 		}
 
 		// 作成したタスク保持用.
-		CTask* tasks[10] = { IZ_NULL };
+        CParallelFor tasks[10];
 
 #ifdef WAIT_OUTSIDE
-        #define TASKS   s_tasks
+        #define TASKS   s_taskFor
 #else
         #define TASKS   tasks
 #endif
@@ -140,16 +150,9 @@ namespace threadmodel
 				to = toExclusive;
 			}
 
-			// 実行インスタンスを作成
-			CTask* task = CParallelFor::Create(
-				allocator,
-				from, to,
-				func);
-
-			IZ_ASSERT(task != IZ_NULL);
-
-			SetAllocator(task, allocator);
-            TASKS[i] = task;
+            auto task = &TASKS[i];
+            task->init(from, to, func);
+            task->beginWorking();
 
 			// スレッドプールに登録.
 			threadPool.EneueueTask(task);
@@ -162,13 +165,7 @@ namespace threadmodel
 
 #ifndef WAIT_OUTSIDE
 		// タスクが終了するのを待つ.
-		for (IZ_INT i = 0; i < threadCount; i++) {
-            if (TASKS[i] == IZ_NULL) {
-				break;
-			}
-            TASKS[i]->Wait();
-            CTask::DeleteTask(TASKS[i]);
-		}
+        wait(tasks, threadCount);
 #endif
 
 #undef TASKS
@@ -177,37 +174,25 @@ namespace threadmodel
     ////////////////////////////////////////////////////////
 
 	// foreach処理用タスククラス
-    class CParallelForEach : public CTask
+    class CParallelForEach : public CParallelTask
     {
     public:
-		static CTask* Create(
-            IMemoryAllocator* allocator,
-            IZ_UINT8* p, size_t stride, 
-			IZ_UINT from, IZ_UINT to,
-			std::function<void(void*)> func)
-        {
-			void* buf = ALLOC(allocator, sizeof(CParallelForEach));
-            VRETURN_NULL(buf != IZ_NULL);
+        CParallelForEach() {}
+        virtual ~CParallelForEach() {}
 
-			CParallelForEach* ret = new(buf) CParallelForEach(p, stride, from, to, func);
-            return ret;
-        }
-
-    protected:
-        CParallelForEach(
-			IZ_UINT8* p, size_t stride, 
-			IZ_UINT from, IZ_UINT to,
-			std::function<void(void*)> func)
+    public:
+        void init(
+            IZ_UINT8* p, size_t stride,
+            IZ_UINT from, IZ_UINT to,
+            std::function<void(void*)> func)
         {
             m_Ptr = p;
             m_Stride = stride;
             m_From = from;
             m_To = to;
 
-			m_function = func;
+            m_function = func;
         }
-
-        virtual ~CParallelForEach() {}
 
         virtual void OnRun() override
         {
@@ -233,21 +218,30 @@ namespace threadmodel
 		std::function<void(void*)> m_function;
     };
 
+    static CParallelForEach s_taskForEach[10];
+
+    void CParallel::waitForEach()
+    {
+#ifdef WAIT_OUTSIDE
+        // タスクが終了するのを待つ.
+        wait(s_taskForEach, COUNTOF(s_taskForEach));
+#endif
+    }
+
 	// 指定された回数だけ処理を実行する.
     void CParallel::ForEach(
 		CThreadPool& threadPool,
-        IMemoryAllocator* allocator,
         void* data, size_t stride,
         IZ_UINT count,
 		std::function<void(void*)> func)
     {
-        wait();
+        waitForEach();
 
 		// 作成したタスク保持用.
-		CTask* tasks[10] = { IZ_NULL };
+        CParallelForEach tasks[10];
 
 #ifdef WAIT_OUTSIDE
-        #define TASKS   s_tasks
+        #define TASKS   s_taskForEach
 #else
         #define TASKS   tasks
 #endif
@@ -299,16 +293,11 @@ namespace threadmodel
                 to = count;
             }
 
-            // 実行インスタンスを作成
-			CTask* task = CParallelForEach::Create(
-                allocator,
+            auto task = &TASKS[i];
+            task->init(
                 ptr, stride, from, to,
                 func);
-
-            IZ_ASSERT(task != IZ_NULL);
-
-            SetAllocator(task, allocator);
-            TASKS[i] = task;
+            task->beginWorking();
 
 			// スレッドプールに登録.
 			threadPool.EneueueTask(task);
@@ -321,14 +310,7 @@ namespace threadmodel
 
 #ifndef WAIT_OUTSIDE
 		// タスクが終了するのを待つ.
-        for (IZ_UINT i = 0; i < threadCount; i++) {
-            if (TASKS[i] == IZ_NULL) {
-                break;
-            }
-
-            TASKS[i]->Wait();
-            CTask::DeleteTask(TASKS[i]);
-        }
+        wait(tasks, threadCount);
 #endif
 
 #undef TASKS
