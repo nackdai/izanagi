@@ -26,6 +26,8 @@ namespace graph
         if (!m_IsSavedRS) {
             memcpy(&m_SaveRS.dwRS, this->dwRS, sizeof(m_SaveRS.dwRS));
 
+            m_SaveRS.stencilParams = this->stencilParams;
+
             m_IsSavedRS = IZ_TRUE;
             ret = IZ_TRUE;
         }
@@ -48,6 +50,9 @@ namespace graph
                     static_cast<E_GRAPH_RENDER_STATE>(i),
                     m_SaveRS.dwRS[i]);
             }
+
+            //SetStencilFunc(pDevice, stencilParams.func, stencilParams.ref, stencilParams.mask);
+            //SetStencilOp(pDevice, stencilParams.opPass, stencilParams.opZFail, stencilParams.opFail);
 
             m_IsSavedRS = IZ_FALSE;
             ret = IZ_TRUE;

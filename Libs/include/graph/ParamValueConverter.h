@@ -46,5 +46,6 @@
 #define IZ_GET_ABST_CUBE_FACE(v)            IZ_GET_ABST_VAL(CubeFace, v)
 #define IZ_GET_ABST_VTX_DECL_TYPE(v)        IZ_GET_ABST_VAL(VtxDeclType, v)
 #define IZ_GET_ABST_VTX_DECL_USAGE(v)       IZ_GET_ABST_VAL(VtxDeclUsage, v)
+#define IZ_GET_ABST_STENCIL_OP(v)           IZ_GET_ABST_VAL(Stencil, v)
 
 #endif  // #if !defined(__IZANAGI_GRAPH_PARAM_VALUE_CONVERTER_H__)

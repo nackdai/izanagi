@@ -110,6 +110,25 @@ namespace graph
     DEF_FUNC_CONV_PARAM_VAL(Cmp, D3DCMPFUNC, E_GRAPH_CMP_FUNC, CmpTbl)
 
     //////////////////////////////////////////
+    // ステンシル.
+
+    namespace {
+        D3DSTENCILOP StencilOpTbl[] {
+            D3DSTENCILOP_KEEP,
+            D3DSTENCILOP_ZERO,
+            D3DSTENCILOP_REPLACE,
+            D3DSTENCILOP_INCRSAT,
+            D3DSTENCILOP_DECRSAT,
+            D3DSTENCILOP_INVERT,
+            D3DSTENCILOP_INCR,
+            D3DSTENCILOP_DECR,
+        };
+        IZ_C_ASSERT(COUNTOF(StencilOpTbl) == E_GRAPH_STENCIL_OP_NUM);
+    };
+
+    DEF_FUNC_CONV_PARAM_VAL(Stencil, D3DSTENCILOP, E_GRAPH_STENCIL_OP, StencilOpTbl)
+
+    //////////////////////////////////////////
     // テクスチャアドレッシング
 
     namespace {

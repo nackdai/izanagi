@@ -33,6 +33,8 @@ namespace graph
             &CRenderState::EnableRenderColorA,      // E_GRAPH_RS_COLORWRITEENABLE_A
         
             &CRenderState::EnableScissorTest,       // E_GRAPH_RS_SCISSORTESTENABLE
+
+            &CRenderState::EnableStencilTest,       // E_GRAPH_RS_STENCIL_ENABLE
         };
         IZ_C_ASSERT(COUNTOF(func) == E_GRAPH_RS_NUM);
 
@@ -42,7 +44,118 @@ namespace graph
     // グラフィックスデバイスから現在設定されている値を取得する
     void CRenderState::GetParamsFromGraphicsDevice(CGraphicsDevice* device)
     {
+        GLboolean flag = GL_FALSE;
+        GLint data = 0;
+
+        // Depth.
+        {
+            CALL_GL_API(::glGetBooleanv(GL_DEPTH_WRITEMASK, &flag));
+            this->isZWriteEnable = flag;
+
+            CALL_GL_API(flag = ::glIsEnabled(GL_DEPTH_TEST));
+            this->isZTestEnable = flag;
+
+            CALL_GL_API(::glGetIntegerv(GL_DEPTH_FUNC, &data));
+            this->cmpZFunc = CParamValueConverterGLES2::ConvTargetToAbstract_Cmp(data);
+        }
+
         // TODO
+        // Alpha test.
+
+        // Alpha blend.
+        {
+            CALL_GL_API(flag = ::glIsEnabled(GL_BLEND));
+            this->isAlphaBlendEnable = flag;
+
+            CALL_GL_API(::glGetIntegerv(GL_BLEND_EQUATION_ALPHA, &data));
+            auto op = CParamValueConverterGLES2::ConvTargetToAbstract_BlendOp(data);
+
+            CALL_GL_API(::glGetIntegerv(GL_BLEND_SRC_ALPHA, &data));
+            auto src = CParamValueConverterGLES2::ConvTargetToAbstract_Blend(data);
+
+            CALL_GL_API(::glGetIntegerv(GL_BLEND_DST_ALPHA, &data));
+            auto dst = CParamValueConverterGLES2::ConvTargetToAbstract_Blend(data);
+
+            this->methodAlphaBlend = IZ_GRAPH_ALPHA_BLEND_VAL(op, src, dst);
+        }
+
+        // TODO
+        // Fill mode.
+
+        // Cull mode.
+        {
+            CALL_GL_API(flag = ::glIsEnabled(GL_CULL_FACE));
+
+            if (flag) {
+                CALL_GL_API(::glGetIntegerv(GL_CULL_FACE_MODE, &data));
+                this->cullMode = CParamValueConverterGLES2::ConvTargetToAbstract_Cull(data);
+            }
+            else {
+                this->cullMode = E_GRAPH_CULL_NONE;
+            }
+        }
+
+        // Color mask.
+        {
+            GLboolean masks[4];
+            CALL_GL_API(::glGetBooleanv(GL_COLOR_WRITEMASK, masks));
+            this->isEnableRenderRGB = masks[0];
+            this->isEnableRenderA = masks[3];
+        }
+
+        // Scissor.
+        CALL_GL_API(flag = ::glIsEnabled(GL_SCISSOR_TEST));
+        this->isScissorEnable = flag;
+
+        // Stencil.
+        {
+            CALL_GL_API(flag = ::glIsEnabled(GL_STENCIL_TEST));
+            this->isStencilEnable = flag;
+
+            CALL_GL_API(::glGetIntegerv(GL_STENCIL_FUNC, &data));
+            this->stencilParams.func = CParamValueConverterGLES2::ConvTargetToAbstract_Cmp(data);
+
+            CALL_GL_API(::glGetIntegerv(GL_STENCIL_VALUE_MASK, &data));
+            this->stencilParams.mask = data;
+
+            CALL_GL_API(::glGetIntegerv(GL_STENCIL_REF, &data));
+            this->stencilParams.ref = data;
+
+            CALL_GL_API(::glGetIntegerv(GL_STENCIL_FAIL, &data));
+            this->stencilParams.opFail = CParamValueConverterGLES2::ConvTargetToAbstract_Stencil(data);
+
+            CALL_GL_API(::glGetIntegerv(GL_STENCIL_PASS_DEPTH_PASS, &data));
+            this->stencilParams.opPass = CParamValueConverterGLES2::ConvTargetToAbstract_Stencil(data);
+
+            CALL_GL_API(::glGetIntegerv(GL_STENCIL_PASS_DEPTH_FAIL, &data));
+            this->stencilParams.opZFail = CParamValueConverterGLES2::ConvTargetToAbstract_Stencil(data);
+        }
+    }
+
+    // ビューポート.
+    IZ_BOOL CRenderState::SetViewport(CGraphicsDevice* device, const SViewport& _vp)
+    {
+        if ((vp.width != _vp.width)
+            || (vp.height != _vp.height)
+            || (vp.x != _vp.x)
+            || (vp.y != _vp.y)
+            || (vp.minZ != _vp.minZ)
+            || (vp.maxZ != _vp.maxZ))
+        {
+            CALL_GL_API(::glViewport(
+                _vp.x,
+                _vp.y,
+                _vp.width,
+                _vp.height));
+
+            CALL_GL_API(::glDepthRangef(
+                _vp.minZ,
+                _vp.maxZ));
+
+            vp = _vp;
+        }
+
+        return IZ_TRUE;
     }
 
     // 深度値描き込み有効・無効
@@ -72,7 +185,9 @@ namespace graph
     void CRenderState::SetZTestFunc(CGraphicsDevice* device, IZ_DWORD func)
     {
         if (cmpZFunc != func) {
-            // TODO
+            auto glFunc = CParamValueConverterGLES2::ConvAbstractToTarget_Cmp((izanagi::graph::E_GRAPH_CMP_FUNC)func);
+
+            CALL_GL_API(::glDepthFunc(glFunc));
 
             cmpZFunc = func;
         }
@@ -224,6 +339,64 @@ namespace graph
                     rc.height));
 
             rcScissor = rc;
+        }
+    }
+
+    void CRenderState::EnableStencilTest(CGraphicsDevice* device, IZ_DWORD flag)
+    {
+        if (isStencilEnable != flag) {
+            if (flag) {
+                CALL_GL_API(::glEnable(GL_STENCIL_TEST));
+            }
+            else {
+                CALL_GL_API(::glDisable(GL_STENCIL_TEST));
+            }
+
+            isStencilEnable = flag;
+        }
+    }
+
+    // Sets stencil function.
+    void CRenderState::SetStencilFunc(
+        CGraphicsDevice* device,
+        E_GRAPH_CMP_FUNC cmp,
+        IZ_INT ref,
+        IZ_DWORD mask)
+    {
+        if (stencilParams.func != cmp
+            || stencilParams.ref != ref
+            || stencilParams.mask != mask)
+        {
+            stencilParams.func = cmp;
+            stencilParams.ref = ref;
+            stencilParams.mask = mask;
+
+            auto glCmp = CParamValueConverterGLES2::ConvAbstractToTarget_Cmp(cmp);
+
+            CALL_GL_API(::glStencilFunc(glCmp, ref, mask));
+        }
+    }
+
+    // Sets stencil operations.
+    void CRenderState::SetStencilOp(
+        CGraphicsDevice* device,
+        E_GRAPH_STENCIL_OP pass,
+        E_GRAPH_STENCIL_OP zfail,
+        E_GRAPH_STENCIL_OP fail)
+    {
+        if (stencilParams.opPass != pass
+            || stencilParams.opZFail != zfail
+            || stencilParams.opFail != fail)
+        {
+            stencilParams.opPass = pass;
+            stencilParams.opZFail = zfail;
+            stencilParams.opFail = fail;
+
+            auto dppass = CParamValueConverterGLES2::ConvAbstractToTarget_Stencil(pass);
+            auto dpfail = CParamValueConverterGLES2::ConvAbstractToTarget_Stencil(zfail);
+            auto sfail = CParamValueConverterGLES2::ConvAbstractToTarget_Stencil(fail);
+
+            CALL_GL_API(::glStencilOp(sfail, dpfail, dppass));
         }
     }
 }   // namespace graph

@@ -43,6 +43,9 @@ namespace graph
         // 比較処理
         FUNC_CONV_PARAM_VAL(Cmp, D3DCMPFUNC, E_GRAPH_CMP_FUNC);
 
+        // ステンシル.
+        FUNC_CONV_PARAM_VAL(Stencil, D3DSTENCILOP, E_GRAPH_STENCIL_OP);
+
         // テクスチャアドレッシング
         FUNC_CONV_PARAM_VAL(TexAddr, D3DTEXTUREADDRESS, E_GRAPH_TEX_ADDRESS);
 

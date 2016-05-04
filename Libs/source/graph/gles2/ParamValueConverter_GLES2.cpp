@@ -15,7 +15,7 @@ namespace graph
                 break;\
             }\
         }\
-        IZ_ASSERT(ret > 0);\
+        IZ_ASSERT(ret >= 0);\
         return static_cast<abst>(ret)
 
     #define DEF_FUNC_CONV_PARAM_VAL(p, target, abst, tbl)\
@@ -98,6 +98,25 @@ namespace graph
     }   // namespace
 
     DEF_FUNC_CONV_PARAM_VAL(Cmp, GLenum, E_GRAPH_CMP_FUNC, CmpTbl)
+
+    //////////////////////////////////////////
+    // ステンシル.
+
+    namespace {
+        GLenum StencilOpTbl[] = {
+            GL_KEEP,        // 現在の値を保持する.
+            GL_ZERO,        // 値をゼロとする.
+            GL_REPLACE,     // 値を glStencilFunc() の引数の ref の値にする.
+            GL_INCR,        // 現在の値を + 1する.
+            GL_DECR,        // 現在の値を - 1する。ゼロ以上に補正される.
+            GL_INVERT,      // 現在の値をビット演算で反転させた値にする.
+            GL_INCR_WRAP,   // 現在値 + 1するが、最大値を超える場合はゼロにする.
+            GL_DECR_WRAP,   // 現在値 - 1するが、ゼロ以下になるなら最大値にする.
+        };
+        IZ_C_ASSERT(COUNTOF(StencilOpTbl) == E_GRAPH_STENCIL_OP_NUM);
+    }
+
+    DEF_FUNC_CONV_PARAM_VAL(Stencil, GLenum, E_GRAPH_STENCIL_OP, StencilOpTbl)
 
     //////////////////////////////////////////
     // テクスチャアドレッシング

@@ -266,7 +266,9 @@ namespace sys
             param.argv);
 
         ::glutInitWindowSize(param.width, param.height);
+
         ::glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE);
+        //::glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_STENCIL);
 
         ::glutCreateWindow(param.title);
 

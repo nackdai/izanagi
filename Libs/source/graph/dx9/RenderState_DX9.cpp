@@ -72,6 +72,8 @@ namespace graph
             &CRenderState::EnableRenderColorA,      // E_GRAPH_RS_COLORWRITEENABLE_A
         
             &CRenderState::EnableScissorTest,       // E_GRAPH_RS_SCISSORTESTENABLE
+
+            &CRenderState::EnableStencilTest,       // E_GRAPH_RS_STENCIL_ENABLE
         };
         IZ_C_ASSERT(COUNTOF(func) == E_GRAPH_RS_NUM);
 
@@ -87,50 +89,123 @@ namespace graph
         D3D_DEVICE* d3dDev = dx9Device->GetRawInterface();
 
         // 深度
-        _CHECK(d3dDev->GetRenderState(D3DRS_ZWRITEENABLE, (DWORD*)&isZWriteEnable));
-        _CHECK(d3dDev->GetRenderState(D3DRS_ZENABLE,      (DWORD*)&isZTestEnable));
-        _CHECK(d3dDev->GetRenderState(D3DRS_ZFUNC,        (DWORD*)&cmpZFunc));
+        {
+            _CHECK(d3dDev->GetRenderState(D3DRS_ZWRITEENABLE, (DWORD*)&isZWriteEnable));
+            _CHECK(d3dDev->GetRenderState(D3DRS_ZENABLE, (DWORD*)&isZTestEnable));
+            _CHECK(d3dDev->GetRenderState(D3DRS_ZFUNC, (DWORD*)&cmpZFunc));
 
-        cmpZFunc = IZ_GET_ABST_CMP((D3DCMPFUNC)cmpZFunc);
-    
+            cmpZFunc = IZ_GET_ABST_CMP((D3DCMPFUNC)cmpZFunc);
+        }
+
         // アルファテスト
-        _CHECK(d3dDev->GetRenderState(D3DRS_ALPHATESTENABLE,  (DWORD*)&isAlphaTestEnable));
-        _CHECK(d3dDev->GetRenderState(D3DRS_ALPHAREF,         (DWORD*)&alphaRef));
-        _CHECK(d3dDev->GetRenderState(D3DRS_ALPHAFUNC,        (DWORD*)&cmpAlphaFunc));
+        {
+            _CHECK(d3dDev->GetRenderState(D3DRS_ALPHATESTENABLE, (DWORD*)&isAlphaTestEnable));
+            _CHECK(d3dDev->GetRenderState(D3DRS_ALPHAREF, (DWORD*)&alphaRef));
+            _CHECK(d3dDev->GetRenderState(D3DRS_ALPHAFUNC, (DWORD*)&cmpAlphaFunc));
 
-        cmpAlphaFunc = IZ_GET_ABST_CMP((D3DCMPFUNC)cmpAlphaFunc);
+            cmpAlphaFunc = IZ_GET_ABST_CMP((D3DCMPFUNC)cmpAlphaFunc);
+        }
 
         // アルファブレンド
         _CHECK(d3dDev->GetRenderState(D3DRS_ALPHABLENDENABLE, (DWORD*)&isAlphaBlendEnable));
 
         // ブレンド方法
-        IZ_DWORD nOp, nSrc, nDst;
-        _CHECK(d3dDev->GetRenderState(D3DRS_BLENDOP,   (DWORD*)&nOp));
-        _CHECK(d3dDev->GetRenderState(D3DRS_SRCBLEND,  (DWORD*)&nSrc));
-        _CHECK(d3dDev->GetRenderState(D3DRS_DESTBLEND, (DWORD*)&nDst));
+        {
+            IZ_DWORD nOp, nSrc, nDst;
+            _CHECK(d3dDev->GetRenderState(D3DRS_BLENDOP, (DWORD*)&nOp));
+            _CHECK(d3dDev->GetRenderState(D3DRS_SRCBLEND, (DWORD*)&nSrc));
+            _CHECK(d3dDev->GetRenderState(D3DRS_DESTBLEND, (DWORD*)&nDst));
 
-        nOp = IZ_GET_ABST_BLEND_OP((D3DBLENDOP)nOp);
-        nSrc = IZ_GET_ABST_BLEND((D3DBLEND)nSrc);
-        nDst = IZ_GET_ABST_BLEND((D3DBLEND)nDst);
+            nOp = IZ_GET_ABST_BLEND_OP((D3DBLENDOP)nOp);
+            nSrc = IZ_GET_ABST_BLEND((D3DBLEND)nSrc);
+            nDst = IZ_GET_ABST_BLEND((D3DBLEND)nDst);
 
-        methodAlphaBlend = IZ_GRAPH_ALPHA_BLEND_VAL(nOp, nSrc, nDst);
+            methodAlphaBlend = IZ_GRAPH_ALPHA_BLEND_VAL(nOp, nSrc, nDst);
+        }
 
         // 描画モード
-        _CHECK(d3dDev->GetRenderState(D3DRS_FILLMODE, (DWORD*)&fillMode));
-        _CHECK(d3dDev->GetRenderState(D3DRS_CULLMODE, (DWORD*)&cullMode));
+        {
+            _CHECK(d3dDev->GetRenderState(D3DRS_FILLMODE, (DWORD*)&fillMode));
+            _CHECK(d3dDev->GetRenderState(D3DRS_CULLMODE, (DWORD*)&cullMode));
 
-        fillMode = IZ_GET_ABST_FILL_MODE((D3DFILLMODE)fillMode);
-        cullMode = IZ_GET_ABST_CULL((D3DCULL)cullMode);
+            fillMode = IZ_GET_ABST_FILL_MODE((D3DFILLMODE)fillMode);
+            cullMode = IZ_GET_ABST_CULL((D3DCULL)cullMode);
+        }
 
         // シザー矩形
-        _CHECK(d3dDev->GetRenderState(D3DRS_SCISSORTESTENABLE, (DWORD*)&isScissorEnable));
-        _CHECK(d3dDev->GetScissorRect((RECT*)&rcScissor));
+        {
+            _CHECK(d3dDev->GetRenderState(D3DRS_SCISSORTESTENABLE, (DWORD*)&isScissorEnable));
+            _CHECK(d3dDev->GetScissorRect((RECT*)&rcScissor));
+        }
 
         // カラー描画有効・無効
-        IZ_DWORD nColorWriteFlag;
-        _CHECK(d3dDev->GetRenderState(D3DRS_COLORWRITEENABLE, (DWORD*)&nColorWriteFlag));
-        isEnableRenderRGB = (nColorWriteFlag & (D3DCOLORWRITEENABLE_BLUE | D3DCOLORWRITEENABLE_GREEN | D3DCOLORWRITEENABLE_RED));
-        isEnableRenderA = (nColorWriteFlag & D3DCOLORWRITEENABLE_ALPHA);
+        {
+            IZ_DWORD nColorWriteFlag;
+            _CHECK(d3dDev->GetRenderState(D3DRS_COLORWRITEENABLE, (DWORD*)&nColorWriteFlag));
+            isEnableRenderRGB = (nColorWriteFlag & (D3DCOLORWRITEENABLE_BLUE | D3DCOLORWRITEENABLE_GREEN | D3DCOLORWRITEENABLE_RED));
+            isEnableRenderA = (nColorWriteFlag & D3DCOLORWRITEENABLE_ALPHA);
+        }
+
+        // ステンシル
+        {
+            _CHECK(d3dDev->GetRenderState(D3DRS_STENCILENABLE, (DWORD*)&isStencilEnable));
+
+            IZ_DWORD stencilFunc;
+            IZ_DWORD stencilRef;
+            IZ_DWORD stencilMask;
+            IZ_DWORD stencilOpPass;
+            IZ_DWORD stencilOpZFail;
+            IZ_DWORD stencilOpFail;
+            _CHECK(d3dDev->GetRenderState(D3DRS_STENCILFUNC, (DWORD*)&stencilFunc));
+            _CHECK(d3dDev->GetRenderState(D3DRS_STENCILREF, (DWORD*)&stencilRef));
+            _CHECK(d3dDev->GetRenderState(D3DRS_STENCILMASK, (DWORD*)&stencilMask));
+            _CHECK(d3dDev->GetRenderState(D3DRS_STENCILPASS, (DWORD*)&stencilOpPass));
+            _CHECK(d3dDev->GetRenderState(D3DRS_STENCILZFAIL, (DWORD*)&stencilOpZFail));
+            _CHECK(d3dDev->GetRenderState(D3DRS_STENCILFAIL, (DWORD*)&stencilOpFail));
+
+            stencilParams.func = IZ_GET_ABST_CMP((D3DCMPFUNC)stencilFunc);
+            stencilParams.ref = stencilRef;
+            stencilParams.mask = stencilMask;
+            stencilParams.opPass = IZ_GET_ABST_STENCIL_OP((D3DSTENCILOP)stencilOpPass);
+            stencilParams.opPass = IZ_GET_ABST_STENCIL_OP((D3DSTENCILOP)stencilOpZFail);
+            stencilParams.opPass = IZ_GET_ABST_STENCIL_OP((D3DSTENCILOP)stencilOpFail);
+        }
+    }
+
+    // ビューポート.
+    IZ_BOOL CRenderState::SetViewport(CGraphicsDevice* device, const SViewport& _vp)
+    {
+        IZ_BOOL ret = IZ_TRUE;
+
+        if ((vp.width != _vp.width)
+            || (vp.height != _vp.height)
+            || (vp.x != _vp.x)
+            || (vp.y != _vp.y)
+            || (vp.minZ != _vp.minZ)
+            || (vp.maxZ != _vp.maxZ))
+        {
+            D3D_VIEWPORT sD3DViewport;
+            {
+                sD3DViewport.X = _vp.x;
+                sD3DViewport.Y = _vp.y;
+                sD3DViewport.Width = _vp.width;
+                sD3DViewport.Height = _vp.height;
+                sD3DViewport.MinZ = _vp.minZ;
+                sD3DViewport.MaxZ = _vp.maxZ;
+            }
+
+            CGraphicsDeviceDX9* dx9Device = reinterpret_cast<CGraphicsDeviceDX9*>(device);
+            D3D_DEVICE* d3dDev = dx9Device->GetRawInterface();
+
+            auto hr = d3dDev->SetViewport(&sD3DViewport);
+
+            ret = SUCCEEDED(hr);
+            if (ret) {
+                vp = _vp;
+            }
+        }
+
+        return ret;
     }
 
     // 深度値描き込み有効・無効
@@ -313,6 +388,71 @@ namespace graph
             rcScissor = rc;
             D3D_DEVICE* d3DDev = dx9Device->GetRawInterface();
             d3DDev->SetScissorRect(reinterpret_cast<RECT*>(&rcScissor));
+        }
+    }
+
+    // ステンシル.
+    void CRenderState::EnableStencilTest(CGraphicsDevice* device, IZ_DWORD flag)
+    {
+        _SetRenderState(
+            device,
+            D3DRS_STENCILENABLE,
+            isStencilEnable, flag);
+    }
+
+    // Sets stencil function.
+    void CRenderState::SetStencilFunc(
+        CGraphicsDevice* device,
+        E_GRAPH_CMP_FUNC cmp,
+        IZ_INT ref,
+        IZ_DWORD mask)
+    {
+        CGraphicsDeviceDX9* dx9Device = reinterpret_cast<CGraphicsDeviceDX9*>(device);
+        D3D_DEVICE* d3DDev = dx9Device->GetRawInterface();
+
+        if (stencilParams.func != cmp) {
+            stencilParams.func = cmp;
+            auto d3dCmp = CD3D9ParamValueConverter::ConvAbstractToTarget_Cmp(cmp);
+            d3DDev->SetRenderState(D3DRS_STENCILFUNC, d3dCmp);
+        }
+
+        if (stencilParams.ref != ref) {
+            stencilParams.ref = ref;
+            d3DDev->SetRenderState(D3DRS_STENCILREF, ref);
+        }
+
+        if (stencilParams.mask != mask) {
+            stencilParams.mask = mask;
+            d3DDev->SetRenderState(D3DRS_STENCILMASK, mask);
+        }
+    }
+
+    // Sets stencil operations.
+    void CRenderState::SetStencilOp(
+        CGraphicsDevice* device,
+        E_GRAPH_STENCIL_OP pass,
+        E_GRAPH_STENCIL_OP zfail,
+        E_GRAPH_STENCIL_OP fail)
+    {
+        CGraphicsDeviceDX9* dx9Device = reinterpret_cast<CGraphicsDeviceDX9*>(device);
+        D3D_DEVICE* d3DDev = dx9Device->GetRawInterface();
+
+        if (stencilParams.opPass != pass) {
+            stencilParams.opPass = pass;
+            auto d3dPass = CD3D9ParamValueConverter::ConvAbstractToTarget_Stencil(pass);
+            d3DDev->SetRenderState(D3DRS_STENCILPASS, d3dPass);
+        }
+
+        if (stencilParams.opZFail != zfail) {
+            stencilParams.opZFail = zfail;
+            auto d3dZFail = CD3D9ParamValueConverter::ConvAbstractToTarget_Stencil(zfail);
+            d3DDev->SetRenderState(D3DRS_STENCILZFAIL, d3dZFail);
+        }
+
+        if (stencilParams.opFail != fail) {
+            stencilParams.opFail = fail;
+            auto d3dFail = CD3D9ParamValueConverter::ConvAbstractToTarget_Stencil(fail);
+            d3DDev->SetRenderState(D3DRS_STENCILFAIL, d3dFail);
         }
     }
 }   // namespace graph

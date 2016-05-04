@@ -43,6 +43,9 @@ namespace graph
         // 比較処理
         FUNC_CONV_PARAM_VAL(Cmp, GLenum, E_GRAPH_CMP_FUNC);
 
+        // ステンシル.
+        FUNC_CONV_PARAM_VAL(Stencil, GLenum, E_GRAPH_STENCIL_OP);
+
         // テクスチャアドレッシング
         FUNC_CONV_PARAM_VAL(TexAddr, GLenum, E_GRAPH_TEX_ADDRESS);
 

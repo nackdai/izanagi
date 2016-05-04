@@ -378,5 +378,37 @@ namespace graph
     {
         return DrawPrimitive(prim_type, idxOffset, nPrimCnt);
     }
+
+    IZ_BOOL CGraphicsDevice::SetViewport(const SViewport& vp)
+    {
+        if (m_Flags.is_render_2d) {
+            // TODO
+            // 2D描画中は不可
+            return IZ_TRUE;
+        }
+
+        auto ret = m_RenderState.SetViewport(this, vp);
+
+        IZ_ASSERT(ret);
+        return ret;
+    }
+
+    // Sets stencil function.
+    void CGraphicsDevice::SetStencilFunc(
+        E_GRAPH_CMP_FUNC cmp,
+        IZ_INT ref,
+        IZ_DWORD mask)
+    {
+        m_RenderState.SetStencilFunc(this, cmp, ref, mask);
+    }
+
+    // Sets stencil operations.
+    void CGraphicsDevice::SetStencilOp(
+        E_GRAPH_STENCIL_OP pass,
+        E_GRAPH_STENCIL_OP zfail,
+        E_GRAPH_STENCIL_OP fail)
+    {
+        m_RenderState.SetStencilOp(this, pass, zfail, fail);
+    }
 }   // namespace graph
 }   // namespace izanagi

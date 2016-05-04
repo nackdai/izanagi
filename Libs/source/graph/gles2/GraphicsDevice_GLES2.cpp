@@ -657,51 +657,11 @@ namespace graph
     }
 
     /**
-    * ビューポートセット
-    */
-    IZ_BOOL CGraphicsDeviceGLES2::SetViewport(const SViewport& vp)
-    {
-        if (m_Flags.is_render_2d) {
-            // TODO
-            // 2D描画中は不可
-            return IZ_TRUE;
-        }
-
-        IZ_BOOL ret = IZ_TRUE;
-
-        if ((m_RenderState.vp.width != vp.width)
-            || (m_RenderState.vp.height != vp.height)
-            || (m_RenderState.vp.x != vp.x)
-            || (m_RenderState.vp.y != vp.y)
-            || (m_RenderState.vp.minZ != vp.minZ)
-            || (m_RenderState.vp.maxZ != vp.maxZ))
-        {
-            CALL_GL_API(
-                ::glViewport(
-                    vp.x,
-                    vp.y,
-                    vp.width,
-                    vp.height));
-
-            CALL_GL_API(
-                ::glDepthRangef(
-                    vp.minZ,
-                    vp.maxZ));
-            
-            if (ret) {
-                memcpy(&m_RenderState.vp, &vp, sizeof(vp));
-            }
-        }
-
-        IZ_ASSERT(ret);
-        return ret;
-    }
-
-    /**
     * デフォルトのレンダーステートを設定
     */
     void CGraphicsDeviceGLES2::SetDefaultRenderState()
     {
+#if 0
         CGraphicsDevice::SetRenderState(E_GRAPH_RS_ZWRITEENABLE, IZ_TRUE);
         CGraphicsDevice::SetRenderState(E_GRAPH_RS_ZENABLE, IZ_TRUE);
         CGraphicsDevice::SetRenderState(E_GRAPH_RS_ZFUNC, E_GRAPH_CMP_FUNC_LESSEQUAL);
@@ -716,6 +676,9 @@ namespace graph
         CGraphicsDevice::SetRenderState(E_GRAPH_RS_FILLMODE, E_GRAPH_FILL_MODE_SOLID);
 
         CGraphicsDevice::SetRenderState(E_GRAPH_RS_CULLMODE, E_GRAPH_CULL_DEFAULT);
+#else
+        m_RenderState.GetParamsFromGraphicsDevice(this);
+#endif
     }
 
     /**
@@ -730,6 +693,9 @@ namespace graph
                 static_cast<E_GRAPH_RENDER_STATE>(i),
                 sRS.dwRS[i]);
         }
+
+        SetStencilFunc(sRS.stencilParams.func, sRS.stencilParams.ref, sRS.stencilParams.mask);
+        SetStencilOp(sRS.stencilParams.opPass, sRS.stencilParams.opZFail, sRS.stencilParams.opFail);
 
         // シザー矩形
         SetScissorTestRect(sRS.rcScissor);
@@ -933,11 +899,12 @@ namespace graph
         IZ_BOOL needUpdate = (m_Flags.is_force_set_state || (old_val != new_val));
 
         if (needUpdate) {
-            CALL_GL_API(
-                ::glTexParameteri(
-                    isPlane ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP,
-                    IZ_GET_TARGET_SAMPLER_STATE_TYPE(nSSType),
-                    IZ_GET_TARGET_TEX_ADDR(new_val)));
+            auto type = IZ_GET_TARGET_SAMPLER_STATE_TYPE(nSSType);
+            auto filter = IZ_GET_TARGET_TEX_ADDR(new_val);
+
+            CALL_GL_API(::glTexParameteri(
+                isPlane ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP,
+                type, filter));
 
             old_val = new_val;
         }
@@ -953,11 +920,12 @@ namespace graph
         IZ_BOOL needUpdate = (m_Flags.is_force_set_state || (old_val != new_val));
 
         if (needUpdate) {
-            CALL_GL_API(
-                ::glTexParameteri(
-                    isPlane ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP,
-                    IZ_GET_TARGET_SAMPLER_STATE_TYPE(nSSType),
-                    IZ_GET_TARGET_TEX_FILTER(new_val)));
+            auto type = IZ_GET_TARGET_SAMPLER_STATE_TYPE(nSSType);
+            auto filter = IZ_GET_TARGET_TEX_FILTER(new_val);
+
+            CALL_GL_API(::glTexParameteri(
+                isPlane ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP,
+                type, filter));
 
             old_val = new_val;
         }

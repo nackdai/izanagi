@@ -786,53 +786,11 @@ namespace graph
     }
 
     /**
-    * ビューポートセット
-    */
-    IZ_BOOL CGraphicsDeviceDX9::SetViewport(const SViewport& vp)
-    {
-        if (m_Flags.is_render_2d) {
-            // TODO
-            // 2D描画中は不可
-            return IZ_TRUE;
-        }
-
-        IZ_BOOL ret = IZ_TRUE;
-        HRESULT hr = S_OK;
-
-        if ((m_RenderState.vp.width != vp.width)
-            || (m_RenderState.vp.height != vp.height)
-            || (m_RenderState.vp.x != vp.x)
-            || (m_RenderState.vp.y != vp.y)
-            || (m_RenderState.vp.minZ != vp.minZ)
-            || (m_RenderState.vp.maxZ != vp.maxZ))
-        {
-            D3D_VIEWPORT sD3DViewport;
-            {
-                sD3DViewport.X = vp.x;
-                sD3DViewport.Y = vp.y;
-                sD3DViewport.Width = vp.width;
-                sD3DViewport.Height = vp.height;
-                sD3DViewport.MinZ = vp.minZ;
-                sD3DViewport.MaxZ = vp.maxZ;
-            }
-
-            hr = m_Device->SetViewport(&sD3DViewport);
-
-            ret = SUCCEEDED(hr);
-            if (ret) {
-                memcpy(&m_RenderState.vp, &vp, sizeof(vp));
-            }
-        }
-
-        IZ_ASSERT(ret);
-        return ret;
-    }
-
-    /**
     * デフォルトのレンダーステートを設定
     */
     void CGraphicsDeviceDX9::SetDefaultRenderState()
     {
+#if 0
         CGraphicsDevice::SetRenderState(E_GRAPH_RS_ZWRITEENABLE, IZ_TRUE);
         CGraphicsDevice::SetRenderState(E_GRAPH_RS_ZENABLE, IZ_TRUE);
         CGraphicsDevice::SetRenderState(E_GRAPH_RS_ZFUNC, E_GRAPH_CMP_FUNC_LESSEQUAL);
@@ -847,6 +805,9 @@ namespace graph
         CGraphicsDevice::SetRenderState(E_GRAPH_RS_FILLMODE, E_GRAPH_FILL_MODE_SOLID);
 
         CGraphicsDevice::SetRenderState(E_GRAPH_RS_CULLMODE, E_GRAPH_CULL_DEFAULT);
+#else
+        m_RenderState.GetParamsFromGraphicsDevice(this);
+#endif
 
         // うーん・・・
         for (IZ_UINT i = 0; i < TEX_STAGE_NUM; ++i) {
@@ -899,6 +860,9 @@ namespace graph
                 static_cast<E_GRAPH_RENDER_STATE>(i),
                 sRS.dwRS[i]);
         }
+
+        SetStencilFunc(sRS.stencilParams.func, sRS.stencilParams.ref, sRS.stencilParams.mask);
+        SetStencilOp(sRS.stencilParams.opPass, sRS.stencilParams.opZFail, sRS.stencilParams.opFail);
 
         // シザー矩形
         SetScissorTestRect(sRS.rcScissor);

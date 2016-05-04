@@ -50,13 +50,15 @@ namespace graph
 
         E_GRAPH_RS_SCISSORTESTENABLE,
 
+        E_GRAPH_RS_STENCIL_ENABLE,
+
         E_GRAPH_RS_NUM,
         E_GRAPH_RS_FORCE_INT32 = 0x7fffffff,
     };
 
     /** フィルモード
      */
-    enum E_GRAPH_FILL_MODE {
+    enum E_GRAPH_FILL_MODE : IZ_DWORD {
         E_GRAPH_FILL_MODE_POINT = 0,
         E_GRAPH_FILL_MODE_WIREFRAME,
         E_GRAPH_FILL_MODE_SOLID,
@@ -102,7 +104,7 @@ namespace graph
 
     /** カリングモード
      */
-    enum E_GRAPH_CULL {
+    enum E_GRAPH_CULL : IZ_DWORD {
         E_GRAPH_CULL_NONE = 0,
         E_GRAPH_CULL_CW,
         E_GRAPH_CULL_CCW,
@@ -119,7 +121,7 @@ namespace graph
 
     /** 比較処理
      */
-    enum E_GRAPH_CMP_FUNC {
+    enum E_GRAPH_CMP_FUNC : IZ_DWORD {
         E_GRAPH_CMP_FUNC_NEVER = 0,
         E_GRAPH_CMP_FUNC_LESS,
         E_GRAPH_CMP_FUNC_EQUAL,
@@ -131,6 +133,22 @@ namespace graph
 
         E_GRAPH_CMP_FUNC_NUM,
         E_GRAPH_CMP_FUNC_FORCE_INT32 = 0x7ffffff,
+    };
+
+    /** Defines stencil-buffer operations.
+     */
+    enum E_GRAPH_STENCIL_OP : IZ_DWORD {
+        E_GRAPH_STENCIL_OP_KEEP	= 0,    ///< 何もしない.
+        E_GRAPH_STENCIL_OP_ZERO,        ///< 0にする.
+        E_GRAPH_STENCIL_OP_REPLACE,     ///< 基準値で置き換え.
+        E_GRAPH_STENCIL_OP_INCR,        ///< + 1する（最大値ではそのまま）.
+        E_GRAPH_STENCIL_OP_DECR,        ///< - 1する（最小値ではそのまま）.
+        E_GRAPH_STENCIL_OP_INVERT,      ///< ビット反転.
+        E_GRAPH_STENCIL_OP_INCR_WRAP,   ///< + 1する（最大値では0に戻す）.
+        E_GRAPH_STENCIL_OP_DECR_WRAP,   ///< - 1する（最小値では最大値に戻す）.
+
+        E_GRAPH_STENCIL_OP_NUM,
+        E_GRAPH_STENCIL_OP_FORCE_INT32 = 0x7ffffff,
     };
 
     /** テクスチャアドレッシング
@@ -197,7 +215,7 @@ namespace graph
 
     /** アルファブレンド処理
      */
-    enum E_GRAPH_ALPHA_BLEND {
+    enum E_GRAPH_ALPHA_BLEND : IZ_DWORD {
         // 通常のアルファブレンド
         E_GRAPH_ALPHA_BLEND_NORMAL   = IZ_GRAPH_ALPHA_BLEND_VAL(E_GRAPH_BLEND_OP_ADD,         E_GRAPH_BLEND_SRCALPHA, E_GRAPH_BLEND_INVSRCALPHA),
 

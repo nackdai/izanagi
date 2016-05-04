@@ -191,9 +191,6 @@ namespace graph
             IZ_UINT nPrimCnt);      
 
     public:
-        // ビューポートセット
-        virtual IZ_BOOL SetViewport(const SViewport& vp);
-
         // デフォルトのレンダーステートを設定
         virtual void SetDefaultRenderState();
 

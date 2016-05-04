@@ -517,11 +517,37 @@ namespace graph
          * @param [in] vp Reference to SViewport, specifying the viewport parameters to set.
          * @return If this method succeeds, the return value is true. If the method fails, the return value is false.
          */
-        PURE_VIRTUAL(IZ_BOOL SetViewport(const SViewport& vp));
+        IZ_BOOL SetViewport(const SViewport& vp);
 
         /** Revert the render state to default values.
          */
         PURE_VIRTUAL(void SetDefaultRenderState());
+
+        /** Sets stencil function.
+         */
+        void SetStencilFunc(
+            E_GRAPH_CMP_FUNC cmp, 
+            IZ_INT ref, 
+            IZ_DWORD mask);
+
+        /** Sets stencil operations.
+         *
+         * +--------+------------+-----------+-------------------------------------
+         * | フラグ | ステンシル | Zバッファ |
+         * +--------+------------+-----------+-------------------------------------
+         * | pass	| ○         | ○        | 両方に通った時の振る舞い.
+         * | zfail	| ○         | ×        | Zバッファで引っかかった時の振る舞い.
+         * | fail	| ×         | ×        | 両方ダメだった時の振る舞い.
+         * +--------+------------+-----------+-------------------------------------
+         *
+         * @param pass 両方に通った時の振る舞い. Stencil operation to perform if both the stencil and the depth (z) tests pass. 
+         * @param zfail Zバッファで引っかかった時の振る舞い. Stencil operation to perform if the stencil test passes and the depth test (z-test) fails. 
+         * @param fail 両方ダメだった時の振る舞い. Stencil operation to perform if the stencil test fails.
+         */
+        void SetStencilOp(
+            E_GRAPH_STENCIL_OP pass,
+            E_GRAPH_STENCIL_OP zfail,
+            E_GRAPH_STENCIL_OP fail);
 
         /** Get the render state parameters.
          *
