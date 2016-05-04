@@ -51,8 +51,16 @@ namespace graph
                     m_SaveRS.dwRS[i]);
             }
 
-            //SetStencilFunc(pDevice, stencilParams.func, stencilParams.ref, stencilParams.mask);
-            //SetStencilOp(pDevice, stencilParams.opPass, stencilParams.opZFail, stencilParams.opFail);
+            SetStencilFunc(
+                pDevice, 
+                m_SaveRS.stencilParams.func, 
+                m_SaveRS.stencilParams.ref, 
+                m_SaveRS.stencilParams.mask);
+            SetStencilOp(
+                pDevice, 
+                m_SaveRS.stencilParams.opPass, 
+                m_SaveRS.stencilParams.opZFail, 
+                m_SaveRS.stencilParams.opFail);
 
             m_IsSavedRS = IZ_FALSE;
             ret = IZ_TRUE;
