@@ -46,13 +46,15 @@ SVSOutput mainVS(SVSInput sIn)
 }
 
 // NOTE
-// Brown ÇÃÉåÉìÉYòcÇ›ÉÇÉfÉã.
-// http://marina.sys.wakayama-u.ac.jp/~tokoi/?date=20140801#f20140801-01-01
-// http://www.roboken.esys.tsukuba.ac.jp/~ohya/pdf/Robomech2014-KNS.pdf
+// êFé˚ç∑ï‚ê≥.
+// http://www.nikon.co.jp/profile/technology/life/imaging/aberration/
 
 // NOTE
-// Oculus's distortion.
-// http://rifty-business.blogspot.jp/2013/08/understanding-oculus-rift-distortion.html
+// https://www.shadertoy.com/view/4sX3z4
+// https://www.shadertoy.com/view/4s2XDd
+
+// NOTE
+// Oculus's color collection.
 // https://github.com/dghost/glslRiftDistort
 
 // NOTE
@@ -61,26 +63,30 @@ SVSOutput mainVS(SVSInput sIn)
 
 float4 mainPS(SPSInput sIn) : COLOR
 {
-    float2 d = sIn.vUV - 0.5f;
-    float d2 = d.x * d.x + d.y * d.y;
-    float d4 = d2 * d2;
+    float aberrationStrength = 1.25f;
+    float vignetteStrength = 0.6f;
 
-    //float t = 1.0f + 0.18f * d2 + 0.115f * d4;
-    float t = 1.0f + 0.22f * d2 + 0.24f * d4;
+    float2 d = sIn.vUV - float2(0.5f, 0.5f);
+    float dist = dot(d, d);
 
-    float2 uv = float2(t * d.x + 0.5f, t * d.y + 0.5f);
+    float2 uvR = sIn.vUV * (1.0 + dist * 0.02 * aberrationStrength);
+    float2 uvG = sIn.vUV;
+    float2 uvB = sIn.vUV * (1.0 - dist * 0.02 * aberrationStrength);
 
-    float4 outColor = tex2D(sTex, uv);
+    float r = tex2D(sTex, uvR).r;
+    float g = tex2D(sTex, uvG).g;
+    float b = tex2D(sTex, uvB).b;
 
-    if (uv.x < 0.0f || uv.y < 0.0f || uv.x > 1.0f || uv.y > 1.0f) {
-        outColor.rgb = 0.0f;
-        outColor.a = 1.0f;
-    }
+    float4 outColor = float4(r, g, b, 1.0f);
+
+    // Apply vignette.
+    outColor *= 1.0f - dist * vignetteStrength;
+    outColor.a = 1.0f;
 
     return outColor;
 }
 
-technique Distortion
+technique ColorCollection
 {
     pass P0
     {
