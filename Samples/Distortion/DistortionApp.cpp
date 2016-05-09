@@ -63,7 +63,9 @@ void DistortionApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     device->SetUserDefs2DShader(vs, ps);
 
     if (device->Begin2D()) {
-        device->SetTexture(0, m_Img->GetTexture(0));
+        auto tex = m_Img->GetTexture(0);
+        tex->SetAddress(izanagi::graph::E_GRAPH_TEX_ADDRESS_CLAMP, izanagi::graph::E_GRAPH_TEX_ADDRESS_CLAMP);
+        device->SetTexture(0, tex);
 
         device->Set2DRenderOp(izanagi::graph::E_GRAPH_2D_RENDER_OP_USER_DEFS);
 
