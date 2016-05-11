@@ -17,17 +17,20 @@ namespace col
     // http://marupeke296.com/COL_2D_No8_QuadTree.html
     // http://marupeke296.com/COL_3D_No15_Octree.html
 
+    struct MortonNumber {
+        IZ_UINT number{ 0 };
+        IZ_UINT level{ 0 };
+
+        MortonNumber() {}
+        MortonNumber(IZ_UINT _n, IZ_UINT _l) : number(_n), level(_l) {}
+    };
+
     /** Octree.
      */
     template <typename NODE>
     class Octree {
     public:
         static const IZ_UINT MAX_LEVEL = 7;
-
-        struct MortonNumber {
-            IZ_UINT number;
-            IZ_UINT level;
-        };
 
     public:
         Octree() {}
@@ -263,44 +266,45 @@ namespace col
 
             if (!ret && isCreateNodeIfNoExist) {
                 // If there is no node, create a new node.
-                m_nodes[idx] = createNode(m_allocator);
-                ret = m_nodes[idx];
-
-                auto mortonNumber = getMortonNumber(idx);
-
-                auto level = mortonNumber.level;
-
-                ret->initialize(mortonNumber.number, level);
-
-                // Set AABB.
-                {
-                    IZ_UINT posX, posY, posZ;
-                    getPosFromMortonNumber(
-                        mortonNumber,
-                        posX, posY, posZ);
-
-                    // Compute size.
-                    izanagi::math::CVector4 size(m_unit);
-                    izanagi::math::SVector4::ScaleXYZ(size, size, (IZ_FLOAT)(1 << (m_level - level)));
-                    
-                    // Compute min position.
-                    izanagi::math::CVector4 minPos(m_min);
-                    minPos.x += size.x * posX;
-                    minPos.y += size.y * posY;
-                    minPos.z += size.z * posZ;
-
-                    izanagi::math::CVector4 maxPos(minPos);
-                    maxPos.x += size.x;
-                    maxPos.y += size.y;
-                    maxPos.z += size.z;
-
-                    AABB aabb;
-                    aabb.initialize(minPos, maxPos);
-                    ret->setAABB(aabb);
-                }
+                ret = createNodeByIdx(idx);
             }
 
             return ret;
+        }
+
+        /** Get children of the specified node.
+         */
+        NODE** getChildren(
+            NODE* node,
+            IZ_BOOL isCreateNodeIfNoExist = IZ_TRUE)
+        {
+            IZ_ASSERT(node);
+
+            MortonNumber mortonNumber;
+            mortonNumber.number = node->getMortonNumber();
+            mortonNumber.level = node->getLevel();
+
+            auto idx = getIndex(mortonNumber);
+
+            // 子供の起点インデックス.
+            auto childrenStartIdx = idx * 8 + 1;
+            
+            if (childrenStartIdx >= m_nodeCount) {
+                return nullptr;
+            }
+
+            if (isCreateNodeIfNoExist) {
+                for (IZ_UINT i = 0; i < 8; i++) {
+                    auto id = childrenStartIdx + i;
+                    IZ_ASSERT(id < m_nodeCount);
+
+                    if (!m_nodes[id]) {
+                        m_nodes[id] = createNodeByIdx(id);
+                    }
+                }
+            }
+
+            return &m_nodes[childrenStartIdx];
         }
 
         /** Return value from function to traverse nodes.
@@ -377,6 +381,52 @@ namespace col
         }
 
     private:
+        // Create node.
+        NODE* createNodeByIdx(IZ_UINT idx)
+        {
+            if (m_nodes[idx]) {
+                return m_nodes[idx];
+            }
+
+            m_nodes[idx] = createNode(m_allocator);
+            auto ret = m_nodes[idx];
+
+            auto mortonNumber = getMortonNumber(idx);
+
+            auto level = mortonNumber.level;
+
+            ret->initialize(mortonNumber.number, level);
+
+            // Set AABB.
+            {
+                IZ_UINT posX, posY, posZ;
+                getPosFromMortonNumber(
+                    mortonNumber,
+                    posX, posY, posZ);
+
+                // Compute size.
+                izanagi::math::CVector4 size(m_unit);
+                izanagi::math::SVector4::ScaleXYZ(size, size, (IZ_FLOAT)(1 << (m_level - level)));
+
+                // Compute min position.
+                izanagi::math::CVector4 minPos(m_min);
+                minPos.x += size.x * posX;
+                minPos.y += size.y * posY;
+                minPos.z += size.z * posZ;
+
+                izanagi::math::CVector4 maxPos(minPos);
+                maxPos.x += size.x;
+                maxPos.y += size.y;
+                maxPos.z += size.z;
+
+                AABB aabb;
+                aabb.initialize(minPos, maxPos);
+                ret->setAABB(aabb);
+            }
+
+            return ret;
+        }
+
         // Traverse nodes.
         void traverse(
             IZ_UINT idx,
@@ -389,7 +439,7 @@ namespace col
                 return;
             }
 
-            NODE* node = getNode(idx);
+            NODE* node = getNode(idx, isCreateNodeIfNoExist);
 
             RetvalTraverse ret(IZ_FALSE, IZ_FALSE);
 

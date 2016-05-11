@@ -14,9 +14,9 @@ namespace col
 {
     class OctreeElement;
 
-    /** Base of octree's node.
+    /** Interface of octree's node.
      */
-    class IOctreeNode {
+    class IOctreeNode : public CPlacementNew {
     public:
         IOctreeNode() {}
         virtual ~IOctreeNode() {}
@@ -59,7 +59,7 @@ namespace col
 
         NO_COPIABLE(OctreeNode);
 
-        IZ_DECL_PLACEMENT_NEW();
+        //IZ_DECL_PLACEMENT_NEW();
 
     public:
         virtual void setAABB(const AABB& aabb) override;
