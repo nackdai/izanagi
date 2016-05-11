@@ -226,6 +226,11 @@ namespace col
             return IZ_TRUE;
         }
 
+        IZ_UINT getMaxLevel() const
+        {
+            return m_level;
+        }
+
         /** Clear octree.
          */
         void clear()
@@ -266,7 +271,8 @@ namespace col
 
             if (!ret && isCreateNodeIfNoExist) {
                 // If there is no node, create a new node.
-                ret = createNodeByIdx(idx);
+                ret = createNodeByIdx(idx, nullptr);
+                m_nodes[idx] = ret;
             }
 
             return ret;
@@ -279,6 +285,10 @@ namespace col
             IZ_BOOL isCreateNodeIfNoExist = IZ_TRUE)
         {
             IZ_ASSERT(node);
+
+            if (node->hasChildren()) {
+                return node->getChildren<NODE>();
+            }
 
             MortonNumber mortonNumber;
             mortonNumber.number = node->getMortonNumber();
@@ -293,13 +303,13 @@ namespace col
                 return nullptr;
             }
 
-            if (isCreateNodeIfNoExist) {
+            if (isCreateNodeIfNoExist && !node->hasChildren()) {
                 for (IZ_UINT i = 0; i < 8; i++) {
                     auto id = childrenStartIdx + i;
                     IZ_ASSERT(id < m_nodeCount);
 
                     if (!m_nodes[id]) {
-                        m_nodes[id] = createNodeByIdx(id);
+                        m_nodes[id] = createNodeByIdx(id, node);
                     }
                 }
             }
@@ -381,8 +391,35 @@ namespace col
         }
 
     private:
+        NODE* getParentByMortonNumber(const MortonNumber& mortonNumber)
+        {
+            if (mortonNumber.level == 0) {
+                return nullptr;
+            }
+
+            auto level = mortonNumber.level - 1;
+            auto number = mortonNumber.number / 8;
+
+            auto idx = getIndex(MortonNumber(number, level));
+
+            auto ret = m_nodes[idx];
+            
+            if (!ret) {
+                m_nodes[idx] = createNodeByIdx(idx, nullptr);
+                ret = m_nodes[idx];
+            }
+
+            return ret;
+        }
+
+        NODE* getParentByIdx(IZ_UINT idx)
+        {
+            auto mortonNumber = getMortonNumber(idx);
+            return getParentByMortonNumber(mortonNumber);
+        }
+
         // Create node.
-        NODE* createNodeByIdx(IZ_UINT idx)
+        NODE* createNodeByIdx(IZ_UINT idx, NODE* parent)
         {
             if (m_nodes[idx]) {
                 return m_nodes[idx];
@@ -422,6 +459,15 @@ namespace col
                 AABB aabb;
                 aabb.initialize(minPos, maxPos);
                 ret->setAABB(aabb);
+            }
+
+            if (!parent) {
+                parent = getParentByIdx(idx);
+            }
+
+            if (parent) {
+                auto pos = mortonNumber.number & 0x07;
+                parent->addChild(pos, ret);
             }
 
             return ret;

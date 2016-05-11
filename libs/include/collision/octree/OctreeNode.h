@@ -18,7 +18,10 @@ namespace col
      */
     class IOctreeNode : public CPlacementNew {
     public:
-        IOctreeNode() {}
+        IOctreeNode()
+        {
+            FILL_ZERO(m_children, sizeof(m_children));
+        }
         virtual ~IOctreeNode() {}
 
     public:
@@ -43,9 +46,29 @@ namespace col
             return m_level;
         }
 
+        void addChild(IZ_UINT idx, void* child)
+        {
+            IZ_ASSERT(idx < 8);
+
+            m_children[idx] = child;
+        }
+
+        template <typename NODE>
+        NODE** getChildren()
+        {
+            return (NODE**)m_children;
+        }
+
+        bool hasChildren()
+        {
+            return (m_children[0] != nullptr);
+        }
+
     private:
         IZ_UINT m_mortonNumber{ 0 };
         IZ_UINT8 m_level{ 0 };
+
+        void* m_children[8];
     };
 
     /** Implementation of octree's node.
