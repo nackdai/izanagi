@@ -212,6 +212,7 @@ namespace col
         return std::move(sphere);
     }
 
+    // Compute if this aabb can be displayed by world to clip transform matrix.
     IZ_BOOL AABB::canDisplay(const math::SMatrix44& mtxW2C)
     {
         // 8“_.
@@ -273,9 +274,33 @@ namespace col
         return (m_displayFlag > 0);
     }
 
+    // Get the pre-computed result if the aabb can be displayed. 
     IZ_BOOL AABB::canDisplay() const
     {
         return (m_displayFlag > 0);
+    }
+
+    // Check if the point is contain in this aabb.
+    IZ_BOOL AABB::isContain(const math::SVector3& point)
+    {
+        auto x = point.x;
+        auto y = point.y;
+        auto z = point.z;
+
+        const auto& vMin = m_min;
+        izanagi::math::CVector3 vMax(m_min.x, m_min.y, m_min.z);
+        vMax += m_size;
+
+        IZ_BOOL ret = IZ_FALSE;
+
+        if ((vMin.x <= x && x <= vMax.x)
+            && (vMin.y <= y && y <= vMax.y)
+            && (vMin.z <= z && z <= vMax.z))
+        {
+            ret = IZ_TRUE;
+        }
+
+        return ret;
     }
 }   // namespace math
 }   // namespace izanagi

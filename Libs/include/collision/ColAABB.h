@@ -82,9 +82,17 @@ namespace col
          */
         col::Sphere getInscribedSphere() const;
 
+        /** Compute if this aabb can be displayed by world to clip transform matrix.
+         */
         IZ_BOOL canDisplay(const math::SMatrix44& mtxW2C);
 
+        /** Get the pre-computed result if the aabb can be displayed. 
+         */
         IZ_BOOL canDisplay() const;
+
+        /** Check if the point is contain in this aabb.
+         */
+        IZ_BOOL isContain(const math::SVector3& point);
 
     protected:
         math::SVector4 m_min;
