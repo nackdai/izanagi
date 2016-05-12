@@ -434,6 +434,9 @@ namespace col
 
             ret->initialize(mortonNumber.number, level);
 
+            IOctreeNode* node = (IOctreeNode*)ret;
+            node->setNodeArrayIdx(idx);
+
             // Set AABB.
             {
                 IZ_UINT posX, posY, posZ;

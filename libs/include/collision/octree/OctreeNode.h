@@ -17,6 +17,8 @@ namespace col
     /** Interface of octree's node.
      */
     class IOctreeNode : public CPlacementNew {
+        template <typename NODE> friend class Octree;
+
     public:
         IOctreeNode()
         {
@@ -64,7 +66,20 @@ namespace col
             return (m_children[0] != nullptr);
         }
 
+        IZ_UINT getNodeArrayIdx()
+        {
+            return m_nodeArrayIdx;
+        }
+
     private:
+        void setNodeArrayIdx(IZ_UINT idx)
+        {
+            m_nodeArrayIdx = idx;
+        }
+
+    private:
+        IZ_UINT m_nodeArrayIdx{ 0 };
+
         IZ_UINT m_mortonNumber{ 0 };
         IZ_UINT8 m_level{ 0 };
 
