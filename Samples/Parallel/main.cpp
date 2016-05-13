@@ -33,13 +33,16 @@ IzMain(0, 0)
             Data[i] = i;
         }
 
+        izanagi::threadmodel::CParallelFor forTasks[10];
+
         izanagi::threadmodel::CParallel::For(
 			theadPool,
             //&allocator,
+            forTasks,
             0, 100,
             ParallelForFunc);
 
-        izanagi::threadmodel::CParallel::waitFor();
+        izanagi::threadmodel::CParallel::waitFor(forTasks, COUNTOF(forTasks));
     
         for (IZ_INT i = 0; i < COUNTOF(Data); i++) {
             if (Data[i] != i - 1) {
@@ -54,14 +57,17 @@ IzMain(0, 0)
             Data[i] = i;
         }
 
+        izanagi::threadmodel::CParallelForEach forEachTasks[10];
+
         izanagi::threadmodel::CParallel::ForEach(
 			theadPool,
             //&allocator,
+            forEachTasks,
             Data, sizeof(IZ_UINT),
             COUNTOF(Data),
             ParallelForEachFunc);
 
-        izanagi::threadmodel::CParallel::waitForEach();
+        izanagi::threadmodel::CParallel::waitForEach(forEachTasks, COUNTOF(forEachTasks));
     
         for (IZ_UINT i = 0; i < COUNTOF(Data); i++) {
             if (Data[i] != i - 1) {
