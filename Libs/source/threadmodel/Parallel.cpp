@@ -1,93 +1,50 @@
 #include "threadmodel/Parallel.h"
-#include "threadmodel/ThreadPool.h"
-#include "threadmodel/ThreadModelTask.h"
 
 namespace izanagi
 {
 namespace threadmodel
 {
-    class CParallelTask : public CTask
+    static const IZ_INT PARALLEL_CHUNK_SIZE = 4;
+
+    void CParallelFor::init(IZ_INT from, IZ_INT to, std::function<void(IZ_INT)> func)
     {
-    public:
-        CParallelTask() {}
-        virtual ~CParallelTask() {}
+        m_From = from;
+        m_To = to;
 
-    public:
-        void beginWorking()
-        {
-            m_isWorking = IZ_TRUE;
-        }
-        void endWorking()
-        {
-            m_isWorking = IZ_FALSE;
-        }
-        IZ_BOOL isWorking()
-        {
-            return m_isWorking;
-        }
+        m_function = func;
+    }
 
-    private:
-        IZ_BOOL m_isWorking{ IZ_FALSE };
-    };
-
-    template <typename _T>
-    static void wait(_T* tasks, IZ_UINT num)
+    void CParallelFor::OnRun()
     {
-        for (IZ_UINT i = 0; i < num; i++) {
-            if (tasks[i].isWorking()) {
-                tasks[i].Wait();
-                tasks[i].endWorking();
+        for (IZ_INT i = m_From; i < m_To; i++) {
+            if (m_function) {
+                m_function(i);
             }
         }
     }
 
-    static const IZ_INT PARALLEL_CHUNK_SIZE = 4;
-
-	// forループ処理用タスククラス.
-    class CParallelFor : public CParallelTask
-    {
-    public:
-        CParallelFor() {}
-        virtual ~CParallelFor() {}
-
-    public:
-        void init(IZ_INT from, IZ_INT to, std::function<void(IZ_INT)> func)
-        {
-            m_From = from;
-            m_To = to;
-
-            m_function = func;
-        }
-
-        virtual void OnRun() override
-        {
-            for (IZ_INT i = m_From; i < m_To; i++) {
-				if (m_function) {
-					m_function(i);
-				}
-            }
-        }
-
-    protected:
-        IZ_INT m_From;
-        IZ_INT m_To;
-
-		std::function<void(IZ_INT)> m_function;
-    };
-
     static CParallelFor s_taskFor[10];
 
+#if 0
     void CParallel::waitFor()
     {
 #ifdef WAIT_OUTSIDE
         // タスクが終了するのを待つ.
-        wait(s_taskFor, COUNTOF(s_taskFor));
+        waitFor(s_taskFor, COUNTOF(s_taskFor));
 #endif
     }
+#else
+    void CParallel::waitFor(CParallelFor* tasks, IZ_UINT num)
+    {
+        // タスクが終了するのを待つ.
+        CParallelTask::wait(tasks, num);
+    }
+#endif
 
 	// 指定した範囲で処理を実行する.
     void CParallel::For(
 		CThreadPool& threadPool,
+        CParallelFor* tasks,
         IZ_INT fromInclusive, IZ_INT toExclusive, 
         std::function<void(IZ_INT)> func)
     {
@@ -100,12 +57,13 @@ namespace threadmodel
 			fromInclusive = tmp;
 		}
 
-		// 作成したタスク保持用.
+#ifdef WAIT_OUTSIDE
+        //#define TASKS   s_taskFor
+        #define TASKS   tasks
+#else
+        // 作成したタスク保持用.
         CParallelFor tasks[10];
 
-#ifdef WAIT_OUTSIDE
-        #define TASKS   s_taskFor
-#else
         #define TASKS   tasks
 #endif
 
@@ -117,9 +75,11 @@ namespace threadmodel
 			? threadCount
 			: threadPool.GetMaxThreadNum());
 
+#if 0
         if (threadCount > COUNTOF(TASKS)) {
             threadCount = COUNTOF(TASKS);
 		}
+#endif
 
 		// １スレッドあたりのループ回数.
 		IZ_INT step = (toExclusive - fromInclusive) / threadCount;
@@ -178,76 +138,67 @@ namespace threadmodel
 
     ////////////////////////////////////////////////////////
 
-	// foreach処理用タスククラス
-    class CParallelForEach : public CParallelTask
+    void CParallelForEach::init(
+        IZ_UINT8* p, size_t stride,
+        IZ_UINT from, IZ_UINT to,
+        std::function<void(void*)> func)
     {
-    public:
-        CParallelForEach() {}
-        virtual ~CParallelForEach() {}
+        m_Ptr = p;
+        m_Stride = stride;
+        m_From = from;
+        m_To = to;
 
-    public:
-        void init(
-            IZ_UINT8* p, size_t stride,
-            IZ_UINT from, IZ_UINT to,
-            std::function<void(void*)> func)
-        {
-            m_Ptr = p;
-            m_Stride = stride;
-            m_From = from;
-            m_To = to;
+        m_function = func;
+    }
 
-            m_function = func;
-        }
+    void CParallelForEach::OnRun()
+    {
+        if (m_Ptr != IZ_NULL) {
+            IZ_UINT8* ptr = m_Ptr;
 
-        virtual void OnRun() override
-        {
-            if (m_Ptr != IZ_NULL) {
-                IZ_UINT8* ptr = m_Ptr;
+            for (IZ_UINT i = m_From; i < m_To; i++) {
+                IZ_UINT8* p = ptr + i * m_Stride;
 
-                for (IZ_UINT i = m_From; i < m_To; i++) {
-                    IZ_UINT8* p = ptr + i * m_Stride;
-
-					if (m_function) {
-						m_function(p);
-					}
+                if (m_function) {
+                    m_function(p);
                 }
             }
         }
-
-    private:
-        IZ_UINT8* m_Ptr;
-        size_t m_Stride;
-        IZ_UINT m_From;
-        IZ_UINT m_To;
-
-		std::function<void(void*)> m_function;
-    };
+    }
 
     static CParallelForEach s_taskForEach[10];
 
+#if 0
     void CParallel::waitForEach()
     {
 #ifdef WAIT_OUTSIDE
         // タスクが終了するのを待つ.
-        wait(s_taskForEach, COUNTOF(s_taskForEach));
+        waitForEach(s_taskForEach, COUNTOF(s_taskForEach));
 #endif
     }
+#else
+    void CParallel::waitForEach(CParallelForEach* tasks, IZ_UINT num)
+    {
+        CParallelTask::wait(tasks, num);
+    }
+#endif
 
 	// 指定された回数だけ処理を実行する.
     void CParallel::ForEach(
 		CThreadPool& threadPool,
+        CParallelForEach* tasks,
         void* data, size_t stride,
         IZ_UINT count,
 		std::function<void(void*)> func)
     {
         //waitForEach();
 
-		// 作成したタスク保持用.
-        CParallelForEach tasks[10];
-
 #ifdef WAIT_OUTSIDE
-        #define TASKS   s_taskForEach
+        //#define TASKS   s_taskForEach
+        #define TASKS   tasks
 #else
+        // 作成したタスク保持用.
+        CParallelForEach tasks[10];
         #define TASKS   tasks
 #endif
 
@@ -259,9 +210,11 @@ namespace threadmodel
 			? threadCount
 			: threadPool.GetMaxThreadNum());
 
+#if 0
         if (threadCount > COUNTOF(TASKS)) {
             threadCount = COUNTOF(TASKS);
         }
+#endif
 
 		// １ループあたりの処理回数.
         IZ_UINT step = count / threadCount;
