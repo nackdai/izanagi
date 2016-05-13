@@ -124,12 +124,25 @@ namespace col
          */
         MortonNumber getMortonNumber(const math::SVector4& point)
         {
+            auto ret = getMortonNumberByLevel(point, m_level - 1);
+            return std::move(ret);
+        }
+
+        MortonNumber getMortonNumberByLevel(
+            const math::SVector4& point,
+            IZ_UINT level)
+        {
+            IZ_ASSERT(level < m_level);
+
+            math::CVector4 unit(m_unit);
+            unit *= (1 << (m_level - 1 - level));
+
             math::SVector4 tmp;
             math::SVector4::SubXYZ(tmp, point, m_min);
 
-            tmp.x /= m_unit.x;
-            tmp.y /= m_unit.y;
-            tmp.z /= m_unit.z;
+            tmp.x /= unit.x;
+            tmp.y /= unit.y;
+            tmp.z /= unit.z;
 
             auto x = separeteBit((IZ_BYTE)tmp.x);
             auto y = separeteBit((IZ_BYTE)tmp.y);
@@ -137,17 +150,26 @@ namespace col
 
             IZ_UINT number = (x | (y << 1) | (z << 2));
 
+            IZ_ASSERT(number < m_nodesNum[level]);
+
             MortonNumber ret;
             ret.number = number;
-            ret.level = m_level;
+            ret.level = level;
 
             return std::move(ret);
         }
 
         IZ_UINT getIndex(const math::SVector4& point)
         {
+            return getIndex(point, m_level - 1);
+        }
+
+        IZ_UINT getIndex(
+            const math::SVector4& point,
+            IZ_UINT level)
+        {
             // 所属レベルでのインデックス値.
-            auto mortonNumber = getMortonNumber(point);
+            auto mortonNumber = getMortonNumber(point, level);
 
             auto idx = getIndex(mortonNumber);
 
@@ -216,7 +238,7 @@ namespace col
             m_size.w = 0.0f;
 
             // 最小単位サイズを計算.
-            IZ_UINT div = (1 << m_level);
+            IZ_UINT div = (1 << (m_level - 1));
             math::SVector4::Div(m_unit, m_size, (IZ_FLOAT)div);
             m_unit.w = 0.0f;
 
@@ -225,6 +247,37 @@ namespace col
 
             return IZ_TRUE;
         }
+
+#if 0
+        void share(Octree<NODE>& octree)
+        {
+            m_allocator = octree.m_allocator;
+            
+            m_level = octree.m_level;
+            m_nodeCount = octree.m_nodeCount;
+
+            for (IZ_UINT i = 0; i < m_level; i++) {
+                m_nodesNum[i] = octree.m_nodesNum[i];
+            }
+
+            m_size = octree.m_size;
+            m_unit = octree.m_unit;
+            m_min = octree.m_min;
+            m_max = octree.m_max;
+
+            m_nodes = octree.m_nodes;
+        }
+
+        void cleanShare()
+        {
+            m_allocator = nullptr;
+
+            m_level = 0;
+            m_nodeCount = 0;
+
+            m_nodes = nullptr;
+        }
+#endif
 
         IZ_UINT getMaxLevel() const
         {
@@ -446,7 +499,7 @@ namespace col
 
                 // Compute size.
                 izanagi::math::CVector4 size(m_unit);
-                izanagi::math::SVector4::ScaleXYZ(size, size, (IZ_FLOAT)(1 << (m_level - level)));
+                izanagi::math::SVector4::ScaleXYZ(size, size, (IZ_FLOAT)(1 << (m_level - 1 - level)));
 
                 // Compute min position.
                 izanagi::math::CVector4 minPos(m_min);
@@ -554,14 +607,14 @@ namespace col
         // 各レベルでのノード数.
         IZ_UINT m_nodesNum[MAX_LEVEL];
 
-        math::SVector4 m_min;
-        math::SVector4 m_max;
+        math::CVector4 m_min;
+        math::CVector4 m_max;
 
         // 全体サイズ.
-        math::SVector4 m_size;
+        math::CVector4 m_size;
 
         // 最小単位サイズ.
-        math::SVector4 m_unit;
+        math::CVector4 m_unit;
     };
 }   // namespace math
 }   // namespace izanagi
