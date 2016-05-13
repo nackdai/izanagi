@@ -66,6 +66,10 @@ namespace threadmodel
 
         IZ_BOOL EneueueTask(CTask* task);
 
+        void beginEnqueueWithoutWait();
+        void endEnqueueWithoutWait();
+        IZ_BOOL enqueueWithoutWait(CTask* task);
+
         void WaitEmpty();
 
         void Terminate();

@@ -113,7 +113,7 @@ namespace threadmodel
             if (m_State == State_WillTerminate
                 || m_State == State_Terminated)
             {
-                return FALSE;
+                return IZ_FALSE;
             }
 
             m_TaskList.AddTail(task->GetListItem());
@@ -123,6 +123,32 @@ namespace threadmodel
         m_TaskWaiter.Set();
 
 		return IZ_TRUE;
+    }
+
+    void CThreadPool::beginEnqueueWithoutWait()
+    {
+        std::lock_guard<std::mutex> lock(m_TaskListLocker);
+    }
+
+    void CThreadPool::endEnqueueWithoutWait()
+    {
+        // Notify a task is queued.
+        m_TaskWaiter.Set();
+    }
+
+    IZ_BOOL CThreadPool::enqueueWithoutWait(CTask* task)
+    {
+        VRETURN(task->ResetWithoutWait());
+
+        if (m_State == State_WillTerminate
+            || m_State == State_Terminated)
+        {
+            return IZ_FALSE;
+        }
+
+        m_TaskList.AddTail(task->GetListItem());
+
+        return IZ_TRUE;
     }
 
     void CThreadPool::WaitEmpty()

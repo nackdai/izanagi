@@ -91,7 +91,7 @@ namespace threadmodel
         IZ_INT fromInclusive, IZ_INT toExclusive, 
         std::function<void(IZ_INT)> func)
     {
-        waitFor();
+        //waitFor();
 
 		// from > to になるようにする
 		if (fromInclusive > toExclusive) {
@@ -144,6 +144,8 @@ namespace threadmodel
 
 		IZ_INT from = fromInclusive;
 
+        threadPool.beginEnqueueWithoutWait();
+
 		for (IZ_INT i = 0; i < threadCount; i++) {
 			IZ_INT to = from + step;
 			if (to >= toExclusive) {
@@ -155,13 +157,16 @@ namespace threadmodel
             task->beginWorking();
 
 			// スレッドプールに登録.
-			threadPool.EneueueTask(task);
+			//threadPool.EneueueTask(task);
+            threadPool.enqueueWithoutWait(task);
 
 			from = to;
 			if (from >= toExclusive) {
 				break;
 			}
 		}
+
+        threadPool.endEnqueueWithoutWait();
 
 #ifndef WAIT_OUTSIDE
 		// タスクが終了するのを待つ.
@@ -235,7 +240,7 @@ namespace threadmodel
         IZ_UINT count,
 		std::function<void(void*)> func)
     {
-        waitForEach();
+        //waitForEach();
 
 		// 作成したタスク保持用.
         CParallelForEach tasks[10];
@@ -287,6 +292,8 @@ namespace threadmodel
         IZ_UINT8* ptr = (IZ_UINT8*)data;
         IZ_UINT from = 0;
 
+        threadPool.beginEnqueueWithoutWait();
+
         for (IZ_UINT i = 0; i < threadCount; i++) {
             IZ_UINT to = from + step;
             if (to >= count) {
@@ -300,13 +307,16 @@ namespace threadmodel
             task->beginWorking();
 
 			// スレッドプールに登録.
-			threadPool.EneueueTask(task);
+			//threadPool.EneueueTask(task);
+            threadPool.enqueueWithoutWait(task);
 
             from = to;
             if (from >= count) {
                 break;
             }
         }
+
+        threadPool.endEnqueueWithoutWait();
 
 #ifndef WAIT_OUTSIDE
 		// タスクが終了するのを待つ.

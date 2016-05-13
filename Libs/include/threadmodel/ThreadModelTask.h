@@ -69,6 +69,8 @@ namespace threadmodel
 	private:
 		IZ_BOOL Reset();
 
+        IZ_BOOL ResetWithoutWait();
+
     protected:
         /** タスク実行.
          */
