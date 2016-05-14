@@ -186,7 +186,7 @@
     </ClCompile>
     <Lib>
       <AdditionalDependencies>Std.lib;Graph.lib;DebugUtil.lib;System.lib;SceneGraph.lib;Math.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\Libs\project\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\Libs\project\lib\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
       <Command>md $(ProjectDir)..\..\$(ProjectName)\$(Configuration)
@@ -209,7 +209,7 @@ copy $(ProjectDir)$(ProjectName)\$(Configuration)\$(ProjectName).lib $(ProjectDi
     </ClCompile>
     <Lib>
       <AdditionalDependencies>Std.lib;Graph.lib;DebugUtil.lib;System.lib;SceneGraph.lib;Math.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\Libs\project\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\Libs\project\lib\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
       <Command>md $(ProjectDir)..\..\$(ProjectName)\$(Configuration)
@@ -233,7 +233,7 @@ copy $(ProjectDir)$(ProjectName)\$(Configuration)\$(ProjectName).lib $(ProjectDi
     </ClCompile>
     <Lib>
       <AdditionalDependencies>Std.lib;Graph.lib;DebugUtil.lib;System.lib;SceneGraph.lib;Math.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\Libs\project\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\Libs\project\lib\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
       <Command>md $(ProjectDir)..\..\$(ProjectName)\$(Configuration)
@@ -256,7 +256,7 @@ copy $(ProjectDir)$(ProjectName)\$(Configuration)\$(ProjectName).lib $(ProjectDi
     </ClCompile>
     <Lib>
       <AdditionalDependencies>Std.lib;Graph.lib;DebugUtil.lib;System.lib;SceneGraph.lib;Math.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\Libs\project\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\Libs\project\lib\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
       <Command>md $(ProjectDir)..\..\$(ProjectName)\$(Configuration)
@@ -280,7 +280,7 @@ copy $(ProjectDir)$(ProjectName)\$(Configuration)\$(ProjectName).lib $(ProjectDi
     </ClCompile>
     <Lib>
       <AdditionalDependencies>Std.lib;Graph.lib;DebugUtil.lib;System.lib;SceneGraph.lib;Math.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\Libs\project\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\Libs\project\lib\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
       <Command>md $(ProjectDir)..\..\$(ProjectName)\$(Configuration)
@@ -303,7 +303,7 @@ copy $(ProjectDir)$(ProjectName)\$(Configuration)\$(ProjectName).lib $(ProjectDi
     </ClCompile>
     <Lib>
       <AdditionalDependencies>Std.lib;Graph.lib;DebugUtil.lib;System.lib;SceneGraph.lib;Math.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\Libs\project\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\Libs\project\lib\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
       <Command>md $(ProjectDir)..\..\$(ProjectName)\$(Configuration)
@@ -325,7 +325,7 @@ copy $(ProjectDir)$(ProjectName)\$(Configuration)\$(ProjectName).lib $(ProjectDi
     </ClCompile>
     <Lib>
       <AdditionalDependencies>Std.lib;Graph.lib;DebugUtil.lib;System.lib;SceneGraph.lib;Math.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\Libs\project\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\Libs\project\lib\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
       <Command>md $(ProjectDir)..\..\$(ProjectName)\$(Configuration)
@@ -347,7 +347,7 @@ copy $(ProjectDir)$(ProjectName)\$(Configuration)\$(ProjectName).lib $(ProjectDi
     </ClCompile>
     <Lib>
       <AdditionalDependencies>Std.lib;Graph.lib;DebugUtil.lib;System.lib;SceneGraph.lib;Math.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\Libs\project\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\Libs\project\lib\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
       <Command>md $(ProjectDir)..\..\$(ProjectName)\$(Configuration)
@@ -369,7 +369,7 @@ copy $(ProjectDir)$(ProjectName)\$(Configuration)\$(ProjectName).lib $(ProjectDi
     </ClCompile>
     <Lib>
       <AdditionalDependencies>Std.lib;Graph.lib;DebugUtil.lib;System.lib;SceneGraph.lib;Math.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\Libs\project\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\Libs\project\lib\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
       <Command>md $(ProjectDir)..\..\$(ProjectName)\$(Configuration)
@@ -391,7 +391,7 @@ copy $(ProjectDir)$(ProjectName)\$(Configuration)\$(ProjectName).lib $(ProjectDi
     </ClCompile>
     <Lib>
       <AdditionalDependencies>Std.lib;Graph.lib;DebugUtil.lib;System.lib;SceneGraph.lib;Math.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\Libs\project\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\Libs\project\lib\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
       <Command>md $(ProjectDir)..\..\$(ProjectName)\$(Configuration)
