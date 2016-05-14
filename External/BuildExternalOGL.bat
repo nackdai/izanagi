@@ -20,13 +20,23 @@ if not defined PLATFORM (
 
 rem freeglut =========================
 
-if not exist freeglut\freeglut.sln (
-    cd freeglut
-    ..\cmake\bin\cmake.exe -G "Visual Studio 12 2013"
-    cd ..
+set BUILD_DIR=freeglut\%PLATFORM%
+
+if not exist %BUILD_DIR% (
+    mkdir %BUILD_DIR%
 )
 
-%MSBUILD% freeglut\freeglut.vcxproj /t:%TARGET% /p:Configuration=%CONFIG% /p:Platform=%PLATFORM% || goto error
+if not exist %BUILD_DIR%\freeglut.sln (
+    cd %BUILD_DIR%
+    if %PLATFORM% == Win32 (
+        ..\..\cmake\bin\cmake.exe -G "Visual Studio 12 2013" ..\
+    ) else (
+        ..\..\cmake\bin\cmake.exe -G "Visual Studio 12 2013 Win64" ..\
+    )
+    cd ..\..\
+)
+
+%MSBUILD% %BUILD_DIR%\freeglut.vcxproj /t:%TARGET% /p:Configuration=%CONFIG% /p:Platform=%PLATFORM% || goto error
 
 rem glew =============================
 
