@@ -56,7 +56,7 @@
     </ClCompile>
     <Lib>
       <AdditionalDependencies>NvTriStrip.lib;assimp-vc120-mtd.lib;zlibstaticd.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(EXTERNAL_DIR)/NvTriStrip\lib/$(Configuration);$(EXTERNAL_DIR)\assimp\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(EXTERNAL_DIR)/NvTriStrip\lib/$(Configuration);$(EXTERNAL_DIR)\assimp\build\code\$(Configuration);$(EXTERNAL_DIR)\assimp\build\contrib\zlib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -74,7 +74,7 @@
     </ClCompile>
     <Lib>
       <AdditionalDependencies>NvTriStrip.lib;assimp-vc120-mt.lib;zlibstatic.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(EXTERNAL_DIR)/NvTriStrip\lib/$(Configuration);$(EXTERNAL_DIR)\assimp\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(EXTERNAL_DIR)/NvTriStrip\lib/$(Configuration);$(EXTERNAL_DIR)\assimp\build\code\$(Configuration);$(EXTERNAL_DIR)\assimp\build\contrib\zlib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
