@@ -5,99 +5,26 @@ using namespace sample;
 
 // 頂点
 const CSampleEnvBox::SVertex CSampleEnvBox::sVtxList[CSampleEnvBox::VTX_NUM] = {
-    // 下
-    {
-        {-1.0f, -1.0f, -1.0f, 1.0f},
-        { 0.0f,  1.0f,  0.0f},
-    },
-    {
-        {-1.0f, -1.0f,  1.0f, 1.0f},
-        { 0.0f,  1.0f,  0.0f},
-    },
-    {
-        { 1.0f, -1.0f, -1.0f, 1.0f},
-        { 0.0f,  1.0f,  0.0f},
-    },
-    {
-        { 1.0f, -1.0f,  1.0f, 1.0f},
-        { 0.0f,  1.0f,  0.0f},
-    },
-    // 右
-    {
-        {-1.0f, -1.0f, -1.0f, 1.0f},
-        { 1.0f,  0.0f,  0.0f},
-    },
-    {
-        {-1.0f, -1.0f,  1.0f, 1.0f},
-        { 1.0f,  0.0f,  0.0f},
-    },
-    {
-        {-1.0f,  1.0f, -1.0f, 1.0f},
-        { 1.0f,  0.0f,  0.0f},
-    },
-    {
-        {-1.0f,  1.0f,  1.0f, 1.0f},
-        { 1.0f,  0.0f,  0.0f},
-    },
-    // 左
-    {
-        { 1.0f, -1.0f, -1.0f, 1.0f},
-        {-1.0f,  0.0f,  0.0f},
-    },
-    {
-        { 1.0f, -1.0f,  1.0f, 1.0f},
-        {-1.0f,  0.0f,  0.0f},
-    },
-    {
-        { 1.0f,  1.0f, -1.0f, 1.0f},
-        {-1.0f,  0.0f,  0.0f},
-    },
-    {
-        { 1.0f,  1.0f,  1.0f, 1.0f},
-        {-1.0f,  0.0f,  0.0f},
-    },
-    // 奥
-    {
-        { 1.0f, -1.0f, -1.0f, 1.0f},
-        { 0.0f,  0.0f,  1.0f},
-    },
-    {
-        {-1.0f, -1.0f, -1.0f, 1.0f},
-        { 0.0f,  0.0f,  1.0f},
-    },
-    {
-        { 1.0f,  1.0f, -1.0f, 1.0f},
-        { 0.0f,  0.0f,  1.0f},
-    },
-    {
-        {-1.0f,  1.0f, -1.0f, 1.0f},
-        { 0.0f,  0.0f,  1.0f},
-    },
+    {{-1.0f,-1.0f,-1.0f}}, 
+    {{-1.0f,-1.0f, 1.0f}}, 
+    {{ 1.0f,-1.0f,-1.0f}}, 
+    {{ 1.0f,-1.0f, 1.0f}},
+    {{ 1.0f, 1.0f,-1.0f}}, 
+    {{ 1.0f, 1.0f, 1.0f}}, 
+    {{-1.0f, 1.0f,-1.0f}}, 
+    {{-1.0f, 1.0f, 1.0f}},
 };
 
-const IZ_USHORT CSampleEnvBox::sIdxList[IDX_NUM] = 
-{
-    // 下
-    0, 1, 2,
-    1, 3, 2,
-
-    // 右
-    4, 6, 7,
-    4, 7, 5,
-
-    // 左
-    8, 11, 10,
-    8, 9, 11,
-
-    // 奥
-    12, 14, 15,
-    12, 15, 13,
+// インデックス
+const IZ_USHORT CSampleEnvBox::sIdxList[CSampleEnvBox::IDX_NUM] = {
+    0, 1, 2, 3, 4, 5, 6, 7, 0, 1,
+    1, 7, 3, 5, 5,
+    6, 6, 0, 4, 2,
 };
 
 // 頂点宣言
 static const izanagi::graph::SVertexElement VERTEX_ELEMENT[] = {
-    {0, 0, izanagi::graph::E_GRAPH_VTX_DECL_TYPE_FLOAT4, izanagi::graph::E_GRAPH_VTX_DECL_USAGE_POSITION , 0},
-    {0, 16, izanagi::graph::E_GRAPH_VTX_DECL_TYPE_FLOAT3, izanagi::graph::E_GRAPH_VTX_DECL_USAGE_NORMAL , 0},
+    {0, 0, izanagi::graph::E_GRAPH_VTX_DECL_TYPE_FLOAT3, izanagi::graph::E_GRAPH_VTX_DECL_USAGE_POSITION , 0},    // 座標
 };
 
 CSampleEnvBox* CSampleEnvBox::CreateSampleEnvBox(
@@ -157,9 +84,9 @@ IZ_BOOL CSampleEnvBox::Init(izanagi::graph::CGraphicsDevice* device)
         VRETURN(m_VB != IZ_NULL);
 
         SVertex* data;
-        m_VB->Lock(0, 0, (void**)&data, IZ_FALSE);
+        m_VB->Lock(device, 0, 0, (void**)&data, IZ_FALSE);
         memcpy(data, sVtxList, sizeof(sVtxList));
-        m_VB->Unlock();
+        m_VB->Unlock(device);
     }
 
     // インデックスバッファ
@@ -171,9 +98,9 @@ IZ_BOOL CSampleEnvBox::Init(izanagi::graph::CGraphicsDevice* device)
         VRETURN(m_IB != IZ_NULL);
 
         IZ_UINT16* data;
-        m_IB->Lock(0, 0, (void**)&data, IZ_FALSE);
+        m_IB->Lock(device, 0, 0, (void**)&data, IZ_FALSE);
         memcpy(data, sIdxList, sizeof(sIdxList));
-        m_IB->Unlock();
+        m_IB->Unlock(device);
     }
 
     // 頂点宣言
@@ -194,11 +121,9 @@ void CSampleEnvBox::Render(izanagi::graph::CGraphicsDevice* device)
     device->SetIndexBuffer(m_IB);
     device->SetVertexDeclaration(m_VD);
 
-    IZ_UINT primNum = VTX_NUM / 2;
-
     device->DrawIndexedPrimitive(
-        izanagi::graph::E_GRAPH_PRIM_TYPE_TRIANGLELIST,
+        izanagi::graph::E_GRAPH_PRIM_TYPE_TRIANGLESTRIP,
         0,
         VTX_NUM, 0,
-        primNum);
+        IDX_NUM - 2);
 }

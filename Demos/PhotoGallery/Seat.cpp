@@ -133,7 +133,7 @@ IZ_BOOL Seat::SeatPart::Init(
     VRETURN(SetIdx(slices));
 
     // Copy vertices and indices to buffer.
-    VRETURN(CopyDataToBuffer(flag));
+    VRETURN(CopyDataToBuffer(device, flag));
 
     return IZ_TRUE;
 }

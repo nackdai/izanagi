@@ -89,7 +89,7 @@ IZ_BOOL PhotoItemMesh::FrontFace::Init(
     VRETURN(SetIdx());
 
     // Copy vertices and indices to buffer.
-    VRETURN(CopyDataToBuffer(flag));
+    VRETURN(CopyDataToBuffer(device, flag));
 
     return IZ_TRUE;
 }
@@ -303,7 +303,7 @@ IZ_BOOL PhotoItemMesh::TopAndSideFaces::Init(
     VRETURN(SetIdx());
 
     // Copy vertices and indices to buffer.
-    VRETURN(CopyDataToBuffer(flag));
+    VRETURN(CopyDataToBuffer(device, flag));
 
     return IZ_TRUE;
 }

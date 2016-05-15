@@ -20,6 +20,7 @@ static void OnInit(
 static void OnDestroy()
 {
     allocator.Dump();
+    allocatorForGraph.Dump();
 }
 
 IZ_INT SampleMain(
@@ -28,7 +29,8 @@ IZ_INT SampleMain(
     const char* title,
     IZ_UINT screenWidth, IZ_UINT screenHeight,
     void* allocatorBuf, IZ_UINT bufSize,
-    void* graphBuf, IZ_UINT graphBufSize)
+    void* graphBuf, IZ_UINT graphBufSize,
+    IZ_BOOL canInternalLoop/*= IZ_TRUE*/)
 {
     allocator.Init(bufSize, allocatorBuf);
     allocatorForGraph.Init(graphBufSize, graphBuf);
@@ -75,7 +77,9 @@ IZ_INT SampleMain(
                                         wndParam);
     VGOTO(result = (wndHandle != IZ_NULL), __EXIT__);
 
-    izanagi::sys::CSysWindow::RunLoop(wndHandle);
+    if (canInternalLoop) {
+        izanagi::sys::CSysWindow::RunLoop(wndHandle);
+    }
 
 __EXIT__:
     int ret = (result ? 0 : 1);

@@ -48,7 +48,7 @@ ItemBoard* ItemBoard::Create(
     VGOTO(result, __EXIT__);
 
     // データをVB、IBにコピーする
-    result = instance->CopyDataToBuffer(flag);
+    result = instance->CopyDataToBuffer(device, flag);
     VGOTO(result, __EXIT__);
 
 __EXIT__:

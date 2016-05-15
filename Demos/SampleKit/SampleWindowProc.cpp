@@ -10,7 +10,6 @@ CSampleWndProc::CSampleWndProc()
 
     m_Flags.onLBtn = IZ_FALSE;
     m_Flags.onRBtn = IZ_FALSE;
-    m_Flags.onCtrlKey = IZ_FALSE;
 
     funcInit = IZ_NULL;
     funcDestroy = IZ_NULL;
@@ -27,19 +26,11 @@ void CSampleWndProc::SetApp(CSampleApp* app)
 
 void CSampleWndProc::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
 {
-    if (key == izanagi::sys::E_KEYBOARD_BUTTON_CONTROL) {
-        m_Flags.onCtrlKey = IZ_TRUE;
-    }
-
     m_App->OnKeyDown(key);
 }
 
 void CSampleWndProc::OnKeyUp(izanagi::sys::E_KEYBOARD_BUTTON key)
 {
-    if (key == izanagi::sys::E_KEYBOARD_BUTTON_CONTROL) {
-        m_Flags.onCtrlKey = IZ_FALSE;
-    }
-
     m_App->OnKeyUp(key);
 }
 
@@ -62,70 +53,26 @@ void CSampleWndProc::OnMouseRBtnDown(const izanagi::CIntPoint& point)
 {
     m_Flags.onRBtn = IZ_TRUE;
     m_PrevPoint = point;
+
+    m_App->OnMouseRBtnDown(point);
 }
 
 void CSampleWndProc::OnMouseRBtnUp(const izanagi::CIntPoint& point)
 {
     m_Flags.onRBtn = IZ_FALSE;
-}
 
-namespace {
-    inline IZ_FLOAT _NormalizeHorizontal(
-        CSampleApp* app,
-        IZ_UINT x)
-    {
-        IZ_UINT width = app->GetScreenWidth();
-        IZ_FLOAT ret = (2.0f * x - width) / (IZ_FLOAT)width;
-        return ret;
-    }
-
-    inline IZ_FLOAT _NormalizeVertical(
-        CSampleApp* app,
-        IZ_UINT y)
-    {
-        IZ_UINT height = app->GetScreenHeight();
-        IZ_FLOAT ret = (height - 2.0f * y) / (IZ_FLOAT)height;
-        return ret;
-    }
+    m_App->OnMouseRBtnUp(point);
 }
 
 void CSampleWndProc::OnMouseMove(const izanagi::CIntPoint& point)
 {
     IZ_ASSERT(m_App != IZ_NULL);
-
-    if (m_Flags.onCtrlKey) {
-        if (m_Flags.onLBtn) {
-            m_App->GetCamera().Rotate(
-                izanagi::CFloatPoint(
-                    _NormalizeHorizontal(m_App, m_PrevPoint.x),
-                    _NormalizeVertical(m_App, m_PrevPoint.y)),
-                izanagi::CFloatPoint(
-                    _NormalizeHorizontal(m_App, point.x),
-                    _NormalizeVertical(m_App, point.y))
-            );
-        }
-        else if (m_Flags.onRBtn) {
-            float fOffsetX = (float)(m_PrevPoint.x - point.x);
-            fOffsetX *= 0.5f;
-
-            float fOffsetY = (float)(m_PrevPoint.y - point.y);
-            fOffsetY *= 0.5f;
-
-            m_App->GetCamera().Move(fOffsetX, fOffsetY);
-        }
-    }
-    else {
-        m_App->OnMouseMove(point);
-    }
-
-    m_PrevPoint = point;
+    m_App->OnMouseMove(point);
 }
 
 void CSampleWndProc::OnMouseWheel(IZ_INT delta)
 {
-    if (m_Flags.onCtrlKey) {
-        m_App->GetCamera().Dolly(delta * 0.1f);
-    }
+    m_App->GetCamera().Dolly(delta * 0.1f);
 }
 
 void CSampleWndProc::OnPaint()
@@ -140,6 +87,7 @@ void CSampleWndProc::OnIdle()
 {
     IZ_ASSERT(m_App != IZ_NULL);
 
+#if 0
     m_App->GetTimer(0).Begin();
     m_App->GetTimer(1).Begin();
 
@@ -151,6 +99,9 @@ void CSampleWndProc::OnIdle()
     m_App->Present();
 
     m_App->GetTimer(0).End();
+#else
+    m_App->Idle();
+#endif
 }
 
 void CSampleWndProc::OnInit(const izanagi::sys::WindowHandle& handle)
