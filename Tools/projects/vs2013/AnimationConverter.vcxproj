@@ -80,7 +80,7 @@
       <DisableSpecificWarnings>4819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>ModelLib.lib;d3d9.lib;d3dx9.lib;Math.lib;shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ModelLib.lib;d3d9.lib;d3dx9.lib;$(ProjectDir)../../../Libs/project/lib/$(Platform)/$(Configuration)_DX9/Math.lib;shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>ModelLib/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
