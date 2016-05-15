@@ -13,9 +13,10 @@ rem %MSBUILD% ..\Libs\project\vs2013\Math.vcxproj /t:%TARGET% /p:Configuration=%
 
 cd /d %CURDIR%
 
-exit /b 1
+exit /b 0
 
 :error
 cd /d %CURDIR%
 echo "Error====="
 pause
+exit /b 1

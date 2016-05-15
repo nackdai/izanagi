@@ -44,10 +44,10 @@ rem glew =============================
 
 cd /d %CURDIR%
 
-exit /b 1
+exit /b 0
 
 :error
 cd /d %CURDIR%
 echo "Error====="
 pause
-exist /b 0
+exist /b 1
