@@ -96,6 +96,8 @@ namespace col
 
     protected:
         math::SVector4 m_min;
+        math::SVector4 m_max;
+
         math::SVector3 m_size;
 
         enum Clip {

@@ -28,6 +28,7 @@ namespace col
     const AABB& AABB::operator = (const AABB& rhs)
     {
         m_min.Set(rhs.m_min);
+        m_max.Set(rhs.m_max);
         m_size.Set(rhs.m_size);
         return *this;
     }
@@ -37,6 +38,7 @@ namespace col
         const math::SVector4& maxPtr)
     {
         m_min.Set(minPtr);
+        m_max.Set(maxPtr);
 
         m_size.x = maxPtr.x - minPtr.x;
         m_size.y = maxPtr.y - minPtr.y;
@@ -50,10 +52,14 @@ namespace col
         IZ_FLOAT lengthZ)
     {
         m_min.Set(center);
-
         m_min.x -= lengthX * 0.5f;
         m_min.y -= lengthY * 0.5f;
         m_min.z -= lengthZ * 0.5f;
+
+        m_max.Set(m_min);
+        m_max.x += lengthX;
+        m_max.y += lengthY;
+        m_max.z += lengthZ;
 
         m_size.x = lengthX;
         m_size.y = lengthY;
@@ -66,6 +72,7 @@ namespace col
         const auto& translate = mtx.v[3];
 
         math::SVector4::AddXYZ(m_min, m_min, translate);
+        math::SVector4::AddXYZ(m_max, m_max, translate);
 
         // TODO
         // スケール...
@@ -142,6 +149,7 @@ namespace col
     // 最大座標を取得.
     const math::SVector4 AABB::getMax() const
     {
+#if 0
         math::SVector4 ret;
 
         ret.Set(m_min);
@@ -151,6 +159,9 @@ namespace col
         ret.z += m_size.z;
 
         return std::move(ret);
+#else
+        return m_max;
+#endif
     }
 
     // サイズを取得.
@@ -169,6 +180,10 @@ namespace col
         m_size.x = maxSize;
         m_size.y = maxSize;
         m_size.z = maxSize;
+
+        m_max.x = m_min.x + m_size.x;
+        m_max.y = m_min.y + m_size.y;
+        m_max.z = m_min.z + m_size.z;
     }
 
     // AABBに外接するバウンディングスフィアを取得.
@@ -283,13 +298,16 @@ namespace col
     // Check if the point is contain in this aabb.
     IZ_BOOL AABB::isContain(const math::SVector3& point)
     {
+#if 0
         auto x = point.x;
         auto y = point.y;
         auto z = point.z;
 
         const auto& vMin = m_min;
-        izanagi::math::CVector3 vMax(m_min.x, m_min.y, m_min.z);
-        vMax += m_size;
+        izanagi::math::SVector3 vMax;
+        vMax.x = m_min.x + m_size.x;
+        vMax.y = m_min.y + m_size.y;
+        vMax.z = m_min.z + m_size.z;
 
         IZ_BOOL ret = IZ_FALSE;
 
@@ -301,6 +319,11 @@ namespace col
         }
 
         return ret;
+#else
+        return ((m_min.x <= point.x && point.x <= m_max.x)
+            && (m_min.y <= point.y && point.y <= m_max.y)
+            && (m_min.z <= point.z && point.z <= m_max.z));
+#endif
     }
 }   // namespace math
 }   // namespace izanagi

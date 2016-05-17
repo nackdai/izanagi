@@ -122,21 +122,29 @@ namespace col
         /** Compute morton number.
          * This method returns a morton number which belongs to max level.
          */
-        MortonNumber getMortonNumber(const math::SVector4& point)
+        void getMortonNumber(
+            MortonNumber& ret,
+            const math::SVector4& point)
         {
-            auto ret = getMortonNumberByLevel(point, m_level - 1);
-            return std::move(ret);
+            getMortonNumberByLevel(ret, point, m_level - 1);
         }
 
-        MortonNumber getMortonNumberByLevel(
-            const math::SVector4& point,
+        void getMortonNumberByLevel(
+            MortonNumber& ret,
+            IZ_FLOAT ptX, IZ_FLOAT ptY, IZ_FLOAT ptZ,
             IZ_UINT level)
         {
             IZ_ASSERT(level < m_level);
 
+#if 0
             math::CVector4 unit(m_unit);
             unit *= (1 << (m_level - 1 - level));
+#else
+            //math::CVector4 unit(m_units[level]);
+            math::CVector4 unit(m_divUnits[level]);
+#endif
 
+#if 0
             math::SVector4 tmp;
             math::SVector4::SubXYZ(tmp, point, m_min);
 
@@ -149,14 +157,24 @@ namespace col
             auto z = separeteBit((IZ_BYTE)tmp.z);
 
             IZ_UINT number = (x | (y << 1) | (z << 2));
+#else
+            ptX -= m_min.x;
+            ptY -= m_min.y;
+            ptZ -= m_min.z;
+
+            ptX *= unit.x;
+            ptY *= unit.y;
+            ptZ *= unit.z;
+
+            auto number = separeteBit((IZ_BYTE)ptX);
+            number |= separeteBit((IZ_BYTE)ptY) << 1;
+            number |= separeteBit((IZ_BYTE)ptZ) << 2;
+#endif
 
             IZ_ASSERT(number < m_nodesNum[level]);
 
-            MortonNumber ret;
             ret.number = number;
             ret.level = level;
-
-            return std::move(ret);
         }
 
         IZ_UINT getIndex(const math::SVector4& point)
@@ -169,7 +187,8 @@ namespace col
             IZ_UINT level)
         {
             // 所属レベルでのインデックス値.
-            auto mortonNumber = getMortonNumber(point, level);
+            MortonNumber mortonNumber;
+            getMortonNumber(MortonNumber, point, level);
 
             auto idx = getIndex(mortonNumber);
 
@@ -178,14 +197,16 @@ namespace col
 
         /** Compute morton number which the region belongs to.
          */
-        MortonNumber getMortonNumber(
+        void getMortonNumber(
+            MortonNumber& ret,
             const math::SVector4& vMin,
             const math::SVector4& vMax)
         {
-            auto minNumber = getMortonNumber(vMin);
-            auto maxNumber = getMortonNumber(vMax);
+            MortonNumber minNumber, maxNumber;
+            getMortonNumber(minNumber, vMin);
+            getMortonNumber(maxNumber, vMax);
             
-            auto def = maxNumber ^ minNumber;
+            auto def = maxNumber.number ^ minNumber.number;
 
             IZ_UINT topLevel = 1;
 
@@ -201,11 +222,8 @@ namespace col
 
             IZ_UINT number = maxNumber >> (topLevel * 3);
 
-            MortonNumber ret;
             ret.number = number;
             ret.level = topLevel - 1;
-
-            return std::move(ret);
         }
 
         /** Initialize octree.
@@ -241,6 +259,22 @@ namespace col
             IZ_UINT div = (1 << (m_level - 1));
             math::SVector4::Div(m_unit, m_size, (IZ_FLOAT)div);
             m_unit.w = 0.0f;
+
+            m_units[m_level - 1] = m_unit;
+
+            m_divUnits[m_level - 1].x = 1.0f / m_unit.x;
+            m_divUnits[m_level - 1].y = 1.0f / m_unit.y;
+            m_divUnits[m_level - 1].z = 1.0f / m_unit.z;
+
+            for (IZ_INT i = m_level - 2; i >= 0; i--) {
+                m_units[i].x = m_units[i + 1].x * 2.0f;
+                m_units[i].y = m_units[i + 1].y * 2.0f;
+                m_units[i].z = m_units[i + 1].z * 2.0f;
+
+                m_divUnits[i].x = 1.0f / m_units[i].x;
+                m_divUnits[i].y = 1.0f / m_units[i].y;
+                m_divUnits[i].z = 1.0f / m_units[i].z;
+            }
 
             m_min = vMin;
             m_max = vMax;
@@ -615,6 +649,9 @@ namespace col
 
         // 最小単位サイズ.
         math::CVector4 m_unit;
+
+        math::CVector4 m_units[MAX_LEVEL];
+        math::CVector4 m_divUnits[MAX_LEVEL];
     };
 }   // namespace math
 }   // namespace izanagi
