@@ -131,7 +131,7 @@ namespace col
 
         void getMortonNumberByLevel(
             MortonNumber& ret,
-            IZ_FLOAT ptX, IZ_FLOAT ptY, IZ_FLOAT ptZ,
+            const IZ_FLOAT* point,
             IZ_UINT level)
         {
             IZ_ASSERT(level < m_level);
@@ -141,7 +141,7 @@ namespace col
             unit *= (1 << (m_level - 1 - level));
 #else
             //math::CVector4 unit(m_units[level]);
-            math::CVector4 unit(m_divUnits[level]);
+            const auto& unit = m_divUnits[level];
 #endif
 
 #if 0
@@ -158,22 +158,37 @@ namespace col
 
             IZ_UINT number = (x | (y << 1) | (z << 2));
 #else
-            ptX -= m_min.x;
-            ptY -= m_min.y;
-            ptZ -= m_min.z;
+            auto ptX = point[0] - m_min.x;
+            auto ptY = point[1] - m_min.y;
+            auto ptZ = point[2] - m_min.z;
 
             ptX *= unit.x;
             ptY *= unit.y;
             ptZ *= unit.z;
 
+#define SEPARATE_BIT(ret, n, shift) \
+     {\
+        IZ_UINT s = n;\
+        s = (s | s << 8) & 0x0000f00f;\
+        s = (s | s << 4) & 0x000c30c3;\
+        s = (s | s << 2) & 0x00249249;\
+        ret s shift;\
+     }
+
+#if 0
             auto number = separeteBit((IZ_BYTE)ptX);
             number |= separeteBit((IZ_BYTE)ptY) << 1;
             number |= separeteBit((IZ_BYTE)ptZ) << 2;
+#else
+            SEPARATE_BIT(ret.number = , ptX, );
+            SEPARATE_BIT(ret.number |= , ptY, << 1);
+            SEPARATE_BIT(ret.number |= , ptZ, << 2);
+#endif
 #endif
 
             IZ_ASSERT(number < m_nodesNum[level]);
 
-            ret.number = number;
+            //ret.number = number;
             ret.level = level;
         }
 
