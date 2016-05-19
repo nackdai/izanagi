@@ -158,35 +158,24 @@ namespace col
 
             IZ_UINT number = (x | (y << 1) | (z << 2));
 #else
-            auto ptX = point[0] - m_min.x;
-            auto ptY = point[1] - m_min.y;
-            auto ptZ = point[2] - m_min.z;
+            double ptX = point[0] - m_min.x;
+            double ptY = point[1] - m_min.y;
+            double ptZ = point[2] - m_min.z;
 
             ptX *= unit.x;
             ptY *= unit.y;
             ptZ *= unit.z;
 
-#define SEPARATE_BIT(ret, n, shift) \
-     {\
-        IZ_UINT s = n;\
-        s = (s | s << 8) & 0x0000f00f;\
-        s = (s | s << 4) & 0x000c30c3;\
-        s = (s | s << 2) & 0x00249249;\
-        ret s shift;\
-     }
+            int iX = _mm_cvttsd_si32(_mm_load_sd(&ptX));
+            int iY = _mm_cvttsd_si32(_mm_load_sd(&ptY));
+            int iZ = _mm_cvttsd_si32(_mm_load_sd(&ptZ));
 
-#if 0
-            auto number = separeteBit((IZ_BYTE)ptX);
-            number |= separeteBit((IZ_BYTE)ptY) << 1;
-            number |= separeteBit((IZ_BYTE)ptZ) << 2;
-#else
-            SEPARATE_BIT(ret.number = , ptX, );
-            SEPARATE_BIT(ret.number |= , ptY, << 1);
-            SEPARATE_BIT(ret.number |= , ptZ, << 2);
-#endif
+            ret.number = separeteBit(iX);
+            ret.number |= separeteBit(iY) << 1;
+            ret.number |= separeteBit(iZ) << 2;
 #endif
 
-            IZ_ASSERT(number < m_nodesNum[level]);
+            IZ_ASSERT(ret.number < m_nodesNum[level]);
 
             //ret.number = number;
             ret.level = level;
@@ -195,19 +184,6 @@ namespace col
         IZ_UINT getIndex(const math::SVector4& point)
         {
             return getIndex(point, m_level - 1);
-        }
-
-        IZ_UINT getIndex(
-            const math::SVector4& point,
-            IZ_UINT level)
-        {
-            // 所属レベルでのインデックス値.
-            MortonNumber mortonNumber;
-            getMortonNumber(MortonNumber, point, level);
-
-            auto idx = getIndex(mortonNumber);
-
-            return idx;
         }
 
         /** Compute morton number which the region belongs to.
@@ -280,6 +256,7 @@ namespace col
             m_divUnits[m_level - 1].x = 1.0f / m_unit.x;
             m_divUnits[m_level - 1].y = 1.0f / m_unit.y;
             m_divUnits[m_level - 1].z = 1.0f / m_unit.z;
+            m_divUnits[m_level - 1].w = 0.0;
 
             for (IZ_INT i = m_level - 2; i >= 0; i--) {
                 m_units[i].x = m_units[i + 1].x * 2.0f;
@@ -289,44 +266,16 @@ namespace col
                 m_divUnits[i].x = 1.0f / m_units[i].x;
                 m_divUnits[i].y = 1.0f / m_units[i].y;
                 m_divUnits[i].z = 1.0f / m_units[i].z;
+                m_divUnits[i].w = 0.0;
             }
 
             m_min = vMin;
             m_max = vMax;
 
+            m_min.w = m_max.w = 0.0f;
+
             return IZ_TRUE;
         }
-
-#if 0
-        void share(Octree<NODE>& octree)
-        {
-            m_allocator = octree.m_allocator;
-            
-            m_level = octree.m_level;
-            m_nodeCount = octree.m_nodeCount;
-
-            for (IZ_UINT i = 0; i < m_level; i++) {
-                m_nodesNum[i] = octree.m_nodesNum[i];
-            }
-
-            m_size = octree.m_size;
-            m_unit = octree.m_unit;
-            m_min = octree.m_min;
-            m_max = octree.m_max;
-
-            m_nodes = octree.m_nodes;
-        }
-
-        void cleanShare()
-        {
-            m_allocator = nullptr;
-
-            m_level = 0;
-            m_nodeCount = 0;
-
-            m_nodes = nullptr;
-        }
-#endif
 
         IZ_UINT getMaxLevel() const
         {
@@ -373,7 +322,26 @@ namespace col
 
             if (!ret && isCreateNodeIfNoExist) {
                 // If there is no node, create a new node.
-                ret = createNodeByIdx(idx, nullptr);
+                ret = createNodeByIdx(idx, nullptr, nullptr);
+                m_nodes[idx] = ret;
+            }
+
+            return ret;
+        }
+
+        NODE* getNodeByMortonNumber(
+            const MortonNumber& mortonNumber,
+            IZ_BOOL isCreateNodeIfNoExist = IZ_TRUE)
+        {
+            auto idx = getIndex(mortonNumber);
+
+            IZ_ASSERT(m_nodes != nullptr);
+
+            NODE* ret = m_nodes[idx];
+
+            if (!ret && isCreateNodeIfNoExist) {
+                // If there is no node, create a new node.
+                ret = createNodeByIdx(idx, &mortonNumber, nullptr);
                 m_nodes[idx] = ret;
             }
 
@@ -411,7 +379,7 @@ namespace col
                     IZ_ASSERT(id < m_nodeCount);
 
                     if (!m_nodes[id]) {
-                        m_nodes[id] = createNodeByIdx(id, node);
+                        m_nodes[id] = createNodeByIdx(id, nullptr, node);
                     }
                 }
             }
@@ -502,12 +470,14 @@ namespace col
             auto level = mortonNumber.level - 1;
             auto number = mortonNumber.number / 8;
 
-            auto idx = getIndex(MortonNumber(number, level));
+            MortonNumber parentMortonNumber(number, level);
+
+            auto idx = getIndex(parentMortonNumber);
 
             auto ret = m_nodes[idx];
             
             if (!ret) {
-                m_nodes[idx] = createNodeByIdx(idx, nullptr);
+                m_nodes[idx] = createNodeByIdx(idx, &parentMortonNumber, nullptr);
                 ret = m_nodes[idx];
             }
 
@@ -521,7 +491,7 @@ namespace col
         }
 
         // Create node.
-        NODE* createNodeByIdx(IZ_UINT idx, NODE* parent)
+        NODE* createNodeByIdx(IZ_UINT idx, const MortonNumber* specifiedMortonNumber, NODE* parent)
         {
             if (m_nodes[idx]) {
                 return m_nodes[idx];
@@ -530,7 +500,14 @@ namespace col
             m_nodes[idx] = createNode(m_allocator);
             auto ret = m_nodes[idx];
 
-            auto mortonNumber = getMortonNumber(idx);
+            MortonNumber mortonNumber;
+
+            if (specifiedMortonNumber) {
+                mortonNumber = *specifiedMortonNumber;
+            }
+            else {
+                mortonNumber = getMortonNumber(idx);
+            }
 
             auto level = mortonNumber.level;
 
@@ -547,6 +524,7 @@ namespace col
                     posX, posY, posZ);
 
                 // Compute size.
+#if 0
                 izanagi::math::CVector4 size(m_unit);
                 izanagi::math::SVector4::ScaleXYZ(size, size, (IZ_FLOAT)(1 << (m_level - 1 - level)));
 
@@ -560,6 +538,21 @@ namespace col
                 maxPos.x += size.x;
                 maxPos.y += size.y;
                 maxPos.z += size.z;
+#else
+                izanagi::math::SVector4 size;
+                izanagi::math::SVector4::ScaleXYZ(size, m_unit, (IZ_FLOAT)(1 << (m_level - 1 - level)));
+
+                // Compute min position.
+                izanagi::math::SVector4 minPos;
+                minPos.x = m_min.x + size.x * posX;
+                minPos.y = m_min.y + size.y * posY;
+                minPos.z = m_min.z + size.z * posZ;
+
+                izanagi::math::SVector4 maxPos;
+                maxPos.x = minPos.x + size.x;
+                maxPos.y = minPos.y + size.y;
+                maxPos.z = minPos.z + size.z;
+#endif
 
                 AABB aabb;
                 aabb.initialize(minPos, maxPos);
@@ -633,7 +626,8 @@ namespace col
         }
 
     private:
-        static inline IZ_UINT separeteBit(IZ_BYTE n)
+        //static inline IZ_UINT separeteBit(IZ_BYTE n)
+        static inline IZ_UINT separeteBit(IZ_UINT n)
         {
             IZ_UINT s = n;
             s = (s | s << 8) & 0x0000f00f;
@@ -666,7 +660,10 @@ namespace col
         math::CVector4 m_unit;
 
         math::CVector4 m_units[MAX_LEVEL];
-        math::CVector4 m_divUnits[MAX_LEVEL];
+
+        struct {
+            double x, y, z, w;
+        } m_divUnits[MAX_LEVEL];
     };
 }   // namespace math
 }   // namespace izanagi
