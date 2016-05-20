@@ -42,6 +42,9 @@ namespace math
             FLOAT_EXP_MAX_SHIFT = FLOAT_EXP_MAX << 23,
 
             FLOAT_FRACTION_MAX = ((1 << 23) - 1),
+
+            HALF_FLOAT_ZERO = 0,
+            HALF_FLOAT_ONE = 15360,
         };
 
     public:
