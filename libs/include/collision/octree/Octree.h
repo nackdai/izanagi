@@ -158,17 +158,17 @@ namespace col
 
             IZ_UINT number = (x | (y << 1) | (z << 2));
 #else
-            double ptX = point[0] - m_min.x;
-            double ptY = point[1] - m_min.y;
-            double ptZ = point[2] - m_min.z;
+            float ptX = point[0] - m_min.x;
+            float ptY = point[1] - m_min.y;
+            float ptZ = point[2] - m_min.z;
 
             ptX *= unit.x;
             ptY *= unit.y;
             ptZ *= unit.z;
 
-            int iX = _mm_cvttsd_si32(_mm_load_sd(&ptX));
-            int iY = _mm_cvttsd_si32(_mm_load_sd(&ptY));
-            int iZ = _mm_cvttsd_si32(_mm_load_sd(&ptZ));
+            int iX = _mm_cvttss_si32(_mm_load_ss(&ptX));
+            int iY = _mm_cvttss_si32(_mm_load_ss(&ptY));
+            int iZ = _mm_cvttss_si32(_mm_load_ss(&ptZ));
 
             ret.number = separeteBit(iX);
             ret.number |= separeteBit(iY) << 1;
@@ -662,7 +662,7 @@ namespace col
         math::CVector4 m_units[MAX_LEVEL];
 
         struct {
-            double x, y, z, w;
+            float x, y, z, w;
         } m_divUnits[MAX_LEVEL];
     };
 }   // namespace math
