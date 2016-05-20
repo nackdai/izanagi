@@ -153,6 +153,11 @@ namespace graph
                 num = 4;
                 needNormalized = IZ_TRUE;
                 break;
+            case E_GRAPH_VTX_DECL_TYPE_FLOAT16_4:
+                size = sizeof(GLshort);
+                type = GL_HALF_FLOAT_ARB;
+                num = 4;
+                break;
             default:
                 IZ_ASSERT(IZ_FALSE);
                 size = 0;
@@ -203,7 +208,9 @@ namespace graph
                     // Semanticによる頂点データの位置は無視するm_Elementsの並び順通りに設定する
 
                     E_GRAPH_VTX_DECL_TYPE elemType = element.Type;
-                    if (element.Usage == E_GRAPH_VTX_DECL_USAGE_POSITION) {
+                    if (element.Usage == E_GRAPH_VTX_DECL_USAGE_POSITION
+                        && elemType != E_GRAPH_VTX_DECL_TYPE_FLOAT16_4)
+                    {
                         elemType = E_GRAPH_VTX_DECL_TYPE_FLOAT3;
                     }
 
