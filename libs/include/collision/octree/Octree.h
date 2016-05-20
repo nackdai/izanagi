@@ -141,7 +141,7 @@ namespace col
             unit *= (1 << (m_level - 1 - level));
 #else
             //math::CVector4 unit(m_units[level]);
-            const auto& unit = m_divUnits[level];
+            //const auto& unit = m_divUnits[level];
 #endif
 
 #if 0
@@ -157,7 +157,8 @@ namespace col
             auto z = separeteBit((IZ_BYTE)tmp.z);
 
             IZ_UINT number = (x | (y << 1) | (z << 2));
-#else
+#else       
+#if 0
             float ptX = point[0] - m_min.x;
             float ptY = point[1] - m_min.y;
             float ptZ = point[2] - m_min.z;
@@ -169,6 +170,18 @@ namespace col
             int iX = _mm_cvttss_si32(_mm_load_ss(&ptX));
             int iY = _mm_cvttss_si32(_mm_load_ss(&ptY));
             int iZ = _mm_cvttss_si32(_mm_load_ss(&ptZ));
+#else
+            auto pt = _mm_set_ps(0.0f, point[2], point[1], point[0]);
+            auto vMin = _mm_load_ps(m_min.v);
+            auto unit = _mm_load_ps(m_divUnits[level].v);
+
+            auto sub = _mm_sub_ps(pt, vMin);
+            auto mul = _mm_mul_ps(sub, unit);
+
+            int iX = _mm_cvttss_si32(_mm_load_ss(&mul.m128_f32[0]));
+            int iY = _mm_cvttss_si32(_mm_load_ss(&mul.m128_f32[1]));
+            int iZ = _mm_cvttss_si32(_mm_load_ss(&mul.m128_f32[2]));
+#endif
 
             ret.number = separeteBit(iX);
             ret.number |= separeteBit(iY) << 1;
@@ -650,7 +663,7 @@ namespace col
         // 各レベルでのノード数.
         IZ_UINT m_nodesNum[MAX_LEVEL];
 
-        math::CVector4 m_min;
+        __declspec(align(16)) math::CVector4 m_min;
         math::CVector4 m_max;
 
         // 全体サイズ.
@@ -661,8 +674,12 @@ namespace col
 
         math::CVector4 m_units[MAX_LEVEL];
 
-        struct {
-            float x, y, z, w;
+        __declspec(align(16))
+        union {
+            struct {
+                float x, y, z, w;
+            };
+            float v[4];
         } m_divUnits[MAX_LEVEL];
     };
 }   // namespace math
