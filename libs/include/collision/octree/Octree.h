@@ -176,11 +176,17 @@ namespace col
             auto unit = _mm_load_ps(m_divUnits[level].v);
 
             auto sub = _mm_sub_ps(pt, vMin);
-            auto mul = _mm_mul_ps(sub, unit);
 
-            int iX = _mm_cvttss_si32(_mm_load_ss(&mul.m128_f32[0]));
-            int iY = _mm_cvttss_si32(_mm_load_ss(&mul.m128_f32[1]));
-            int iZ = _mm_cvttss_si32(_mm_load_ss(&mul.m128_f32[2]));
+            union {
+                __m128 m;
+                float v[4];
+            } U;
+
+            U.m = _mm_mul_ps(sub, unit);
+
+            int iX = _mm_cvttss_si32(_mm_load_ss(&U.v[0]));
+            int iY = _mm_cvttss_si32(_mm_load_ss(&U.v[1]));
+            int iZ = _mm_cvttss_si32(_mm_load_ss(&U.v[2]));
 #endif
 
             ret.number = separeteBit(iX);
