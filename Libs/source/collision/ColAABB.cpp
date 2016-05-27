@@ -4,6 +4,12 @@ namespace izanagi
 {
 namespace col
 {
+    AABB::AABB()
+    {
+        m_min.Set(IZ_FLOAT_MAX, IZ_FLOAT_MAX, IZ_FLOAT_MAX);
+        m_max.Set(0, 0, 0);
+    }
+
     AABB::AABB(
         const math::SVector4& minPtr,
         const math::SVector4& maxPtr)

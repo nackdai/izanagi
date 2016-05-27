@@ -13,7 +13,7 @@ namespace col
      */
     class AABB : public BoundingVolume {
     public:
-        AABB(){}
+        AABB();
         AABB(
             const math::SVector4& minPtr,
             const math::SVector4& maxPtr);
@@ -93,6 +93,11 @@ namespace col
         /** Check if the point is contain in this aabb.
          */
         IZ_BOOL isContain(const math::SVector3& point);
+
+        IZ_BOOL isValid()
+        {
+            return (m_min.x < m_max.x && m_min.y < m_max.y && m_min.x < m_max.z);
+        }
 
     protected:
         math::SVector4 m_min;
