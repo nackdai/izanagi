@@ -1,4 +1,4 @@
-@echo off
+rem @echo off
 
 set CURDIR=%CD%
 
@@ -15,6 +15,12 @@ set TARGET=Build
 set CONFIG=%1
 set GFX=%2
 
+set BUILD=%3
+
+if not defined BUILD (
+    set BUILD=All
+)
+
 set TOOL_CONFIG=Release
 
 rem ShaderCompiler ================================
@@ -30,9 +36,16 @@ if %GFX%==OGL (
     call ..\External\BuildExternalOGL.bat %CONFIG%
 )
 
-call ..\External\BuildExternal.bat %CONFIG%
-
-%MSBUILD% project\vs2013\izanagi.sln /t:%TARGET% /p:Configuration=%CONFIG%_%GFX% /p:Platform=Win32 || goto error
+if %BUILD%==All (
+    call ..\External\BuildExternal.bat %CONFIG%
+    %MSBUILD% project\vs2013\izanagi.sln /t:%TARGET% /p:Configuration=%CONFIG%_%GFX% /p:Platform=Win32 || goto error
+) else (
+    %MSBUILD% project\vs2013\Std.vcxproj /t:%TARGET% /p:Configuration=%CONFIG%_%GFX% /p:Platform=Win32 || goto error
+    %MSBUILD% project\vs2013\System.vcxproj /t:%TARGET% /p:Configuration=%CONFIG%_%GFX% /p:Platform=Win32 || goto error
+    %MSBUILD% project\vs2013\Math.vcxproj /t:%TARGET% /p:Configuration=%CONFIG%_%GFX% /p:Platform=Win32 || goto error
+    %MSBUILD% project\vs2013\Graph.vcxproj /t:%TARGET% /p:Configuration=%CONFIG%_%GFX% /p:Platform=Win32 || goto error
+    %MSBUILD% project\vs2013\SceneGraph.vcxproj /t:%TARGET% /p:Configuration=%CONFIG%_%GFX% /p:Platform=Win32 || goto error
+)
 
 cd /d %CURDIR%
 
