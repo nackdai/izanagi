@@ -25,7 +25,7 @@ rem freetype =========================
 rem libuv =============================
 
 if not exist libuv\uv.sln (
-    call libuv\vcbuild.bat
+    call libuv\vcbuild.bat %CONFIG%
 ) else (
     %MSBUILD% libuv\libuv.vcxproj /t:%TARGET% /p:Configuration=%CONFIG% /p:Platform=%PLATFORM% || goto error
 )
