@@ -1,4 +1,4 @@
-# This is library to support to make 3D graphics applicationsiincluding gamesj.
+# This is library to support to make 3D graphics applications(including games).
 
 ## Main Feature
 
