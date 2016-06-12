@@ -83,6 +83,11 @@ namespace graph
         IZ_BOOL ret = CreateBody(param);
 
         if (ret) {
+            // Depth clip range is [0, 1] instead of [-1, 1].
+            CALL_GL_API(::glClipControl(
+                GL_LOWER_LEFT,
+                GL_ZERO_TO_ONE));
+
             // 2Dï`âÊèâä˙âª
             m_2DRenderer = C2DRenderer::Create2DRenderer(this, m_Allocator);
             VRETURN(m_2DRenderer != IZ_NULL);
