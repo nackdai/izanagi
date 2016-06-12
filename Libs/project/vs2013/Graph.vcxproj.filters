@@ -185,6 +185,9 @@
     <ClCompile Include="..\..\source\graph\ogl\IndexBuffer_OGL.cpp">
       <Filter>source\ogl</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\graph\ogl\Texture_OGL.cpp">
+      <Filter>source\ogl</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\source\graph\2d\shader\2DShader.hlsl">
@@ -365,6 +368,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\izGraph.h" />
     <ClInclude Include="..\..\include\graph\ogl\IndexBuffer_OGL.h">
+      <Filter>include\ogl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graph\ogl\Texture_OGL.h">
       <Filter>include\ogl</Filter>
     </ClInclude>
   </ItemGroup>

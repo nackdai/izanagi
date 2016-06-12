@@ -15,7 +15,7 @@ namespace graph
     {
         friend class CGraphicsDeviceGLES2;
 
-    private:
+    protected:
         // データからテクスチャ作成
         static CTextureGLES2* CreateTextureFromMemory(
             CGraphicsDeviceGLES2* device,
@@ -34,11 +34,11 @@ namespace graph
             E_GRAPH_PIXEL_FMT fmt,
             E_GRAPH_RSC_USAGE rscType);
 
-    private:
+    protected:
         inline CTextureGLES2();
         virtual inline ~CTextureGLES2();
 
-    private:
+    protected:
         // 本体作成（テクスチャ）
         IZ_BOOL CreateBody_Texture(
             IZ_UINT width,
@@ -81,7 +81,7 @@ namespace graph
 
         virtual IZ_BOOL Restore();
 
-    private:
+    protected:
         virtual TEX_HANDLE GetTexHandle()
         {
             return m_Texture;
@@ -90,7 +90,7 @@ namespace graph
     public:
         GLuint GetRawInterface() { return m_Texture; }
 
-    private:
+    protected:
         CGraphicsDeviceGLES2* m_Device;
 
         // 本体

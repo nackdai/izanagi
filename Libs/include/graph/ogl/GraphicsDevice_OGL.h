@@ -27,6 +27,20 @@ namespace graph {
         // 頂点宣言作成
         virtual CVertexDeclaration* CreateVertexDeclaration(const SVertexElement* pElem, IZ_UINT nNum) override;
 
+        // メモリからテクスチャ作成
+        virtual CTexture* CreateTextureFromMemory(
+            void* data,
+            IZ_UINT dataSize,
+            E_GRAPH_PIXEL_FMT fmt) override;
+
+        // テクスチャ作成
+        virtual CTexture* CreateTexture(
+            IZ_UINT width,
+            IZ_UINT height,
+            IZ_UINT mipLevel,
+            E_GRAPH_PIXEL_FMT fmt,
+            E_GRAPH_RSC_USAGE rscType) override;
+
     public:
         virtual IZ_BOOL Reset(const void* initialParam) override;
 

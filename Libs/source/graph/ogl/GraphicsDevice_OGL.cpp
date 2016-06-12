@@ -10,6 +10,7 @@
 #include "graph/ogl/VertexBuffer_OGL.h"
 #include "graph/ogl/IndexBuffer_OGL.h"
 #include "graph/ogl/VertexDeclaration_OGL.h"
+#include "graph/ogl/Texture_OGL.h"
 
 #include <GL/glut.h>
 
@@ -332,6 +333,41 @@ namespace graph
             pElem,
             nNum);
         return ret;
+    }
+
+    // メモリからテクスチャ作成
+    CTexture* CGraphicsDeviceOGL::CreateTextureFromMemory(
+        void* data,
+        IZ_UINT dataSize,
+        E_GRAPH_PIXEL_FMT fmt)
+    {
+        auto* tex = CTextureOGL::CreateTextureFromMemory(
+            this,
+            m_Allocator,
+            data,
+            dataSize,
+            fmt);
+
+        return tex;
+    }
+
+    // テクスチャ作成
+    CTexture* CGraphicsDeviceOGL::CreateTexture(
+        IZ_UINT width,
+        IZ_UINT height,
+        IZ_UINT mipLevel,
+        E_GRAPH_PIXEL_FMT fmt,
+        E_GRAPH_RSC_USAGE rscType)
+    {
+        auto* pTexture = CTextureOGL::CreateTexture(
+            this,
+            m_Allocator,
+            width, height,
+            mipLevel,
+            fmt,
+            rscType);
+
+        return pTexture;
     }
 
     // 頂点バッファセット
