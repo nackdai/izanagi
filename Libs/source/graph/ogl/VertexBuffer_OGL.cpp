@@ -73,10 +73,6 @@ namespace graph
 
         IZ_ASSERT(!isReadOnly);
 
-        CALL_GL_API(::glBindBuffer(
-            GL_COPY_WRITE_BUFFER,
-            m_VB));
-
         IZ_UINT lockSize = (size > 0
             ? size
             : GetSize());
@@ -84,12 +80,26 @@ namespace graph
         IZ_ASSERT(lockSize + offset <= GetSize());
 
         void* tmp = nullptr;
+
+#if 0
+        CALL_GL_API(::glBindBuffer(
+            GL_COPY_WRITE_BUFFER,
+            m_VB));
+
         CALL_GL_API(tmp = ::glMapBufferRange(
             GL_COPY_WRITE_BUFFER,
             offset,
             lockSize,
             GL_MAP_WRITE_BIT | GL_MAP_UNSYNCHRONIZED_BIT | GL_MAP_INVALIDATE_BUFFER_BIT));
         IZ_ASSERT(tmp != nullptr);
+#else
+        CALL_GL_API(tmp = ::glMapNamedBufferRange(
+            m_VB,
+            offset,
+            lockSize,
+            GL_MAP_WRITE_BIT | GL_MAP_UNSYNCHRONIZED_BIT | GL_MAP_INVALIDATE_BUFFER_BIT));
+        IZ_ASSERT(tmp != nullptr);
+#endif
 
         *data = tmp;
 
@@ -112,11 +122,15 @@ namespace graph
         IZ_BOOL isLocked = m_isLocked;
     
         if (isLocked) {
+#if 0
             CALL_GL_API(glUnmapBuffer(GL_COPY_WRITE_BUFFER));
 
             CALL_GL_API(glBindBuffer(
                 GL_COPY_WRITE_BUFFER,
                 0));
+#else
+            CALL_GL_API(glUnmapNamedBuffer(m_VB));
+#endif
 
             m_prevVB = 0;
             m_isLocked = IZ_FALSE;
