@@ -53,3 +53,32 @@ http://marina.sys.wakayama-u.ac.jp/~tokoi/?date=20110324
 
 Particle Rendering: Point Sprites vs Geometry Shaders Sprites
 http://www.geeks3d.com/20140828/test-particle-rendering-point-sprites-vs-geometry-shaders-sprites/
+
+//////////////////////////////////////////////////////////////
+
+OpenGLの同期APIについて
+https://shikihuiku.wordpress.com/2014/02/04/opengl%E3%81%AE%E5%90%8C%E6%9C%9Fapi%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/
+
+Beyond porting
+http://www.slideshare.net/CassEveritt/beyond-porting
+
+https://www.opengl.org/wiki_132/index.php?title=Buffer_Object&redirect=no#Immutable_Storage
+
+OpenGLのImmutable data sotreについて
+https://shikihuiku.wordpress.com/2014/01/28/opengl%E3%81%AEimmutable-data-sotre%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/
+
+最近のOpenGLにおける効率的なDrawCallを考える
+https://shikihuiku.wordpress.com/2014/02/13/%E6%9C%80%E8%BF%91%E3%81%AEopengl%E3%81%AB%E3%81%8A%E3%81%91%E3%82%8B%E5%8A%B9%E7%8E%87%E7%9A%84%E3%81%AAdrawcall%E3%82%92%E8%80%83%E3%81%88%E3%82%8B/
+
+Depth Bounds Test
+https://shikihuiku.wordpress.com/2012/07/02/depth-bounds-test2/
+
+テクスチャー・バッファー・オブジェクト(TBO)とは何か
+http://d.hatena.ne.jp/tueda_wolf/20111104/p1
+↑これだと、immutable storage がテクスチャに対してもつかえるぽい
+
+//////////////////////////////////////////////////////////////
+
+Dynamic Octree
+https://github.com/Nition/UnityOctree
+https://github.com/collinhover/threeoctree
