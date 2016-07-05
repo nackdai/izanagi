@@ -42,6 +42,28 @@ rem glew =============================
 
 %MSBUILD% glew\build\vc12\glew.sln /t:%TARGET% /p:Configuration=%CONFIG% /p:Platform=%PLATFORM% || goto error
 
+rem glfw =============================
+
+set BUILD_DIR=glfw\%PLATFORM%
+
+if not exist %BUILD_DIR% (
+    mkdir %BUILD_DIR%
+)
+
+if not exist %BUILD_DIR%\GLFW.sln (
+    cd %BUILD_DIR%
+    if %PLATFORM% == Win32 (
+        ..\..\cmake\bin\cmake.exe -G "Visual Studio 12 2013" ..\
+    ) else (
+        ..\..\cmake\bin\cmake.exe -G "Visual Studio 12 2013 Win64" ..\
+    )
+    cd ..\..\
+)
+
+%MSBUILD% %BUILD_DIR%\GLFW.sln /t:%TARGET% /p:Configuration=%CONFIG% /p:Platform=%PLATFORM% || goto error
+
+rem end ==============================
+
 cd /d %CURDIR%
 
 exit /b 0
