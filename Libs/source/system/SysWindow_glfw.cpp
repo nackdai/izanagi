@@ -1,3 +1,4 @@
+#if 0
 #include "system/SysWindow.h"
 
 extern "C" {
@@ -332,3 +333,4 @@ namespace sys
 
 }   // namespace sys
 }   // namespace izanagi
+#endif

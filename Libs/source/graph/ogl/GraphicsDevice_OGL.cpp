@@ -12,8 +12,6 @@
 #include "graph/ogl/VertexDeclaration_OGL.h"
 #include "graph/ogl/Texture_OGL.h"
 
-#include <GL/glut.h>
-
 namespace izanagi
 {
 namespace graph
@@ -286,12 +284,25 @@ namespace graph
         }
     }
 
+#if 1
+#include <GL/glut.h>
+
     // 同期
     IZ_BOOL CGraphicsDeviceGLES2::Present()
     {
         glutSwapBuffers();
         return IZ_TRUE;
     }
+#else
+#include <GLFW/glfw3.h>
+
+    // 同期
+    IZ_BOOL CGraphicsDeviceGLES2::Present()
+    {
+        glfwSwapBuffers(window);
+        return IZ_TRUE;
+    }
+#endif
 
     // 頂点バッファ作成
     CVertexBuffer* CGraphicsDeviceOGL::CreateVertexBuffer(
