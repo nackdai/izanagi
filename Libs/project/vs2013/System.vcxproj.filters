@@ -194,5 +194,8 @@
     <ClCompile Include="..\..\source\system\SysThread.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\system\SysWindow_glfw.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

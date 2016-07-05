@@ -238,7 +238,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\External\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -495,6 +495,7 @@
     <ClCompile Include="..\..\source\system\SysEvent.cpp" />
     <ClCompile Include="..\..\source\system\SysSemaphore.cpp" />
     <ClCompile Include="..\..\source\system\SysThread.cpp" />
+    <ClCompile Include="..\..\source\system\SysWindow_glfw.cpp" />
     <ClCompile Include="..\..\source\system\SysWindow_glut.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|x64'">true</ExcludedFromBuild>
