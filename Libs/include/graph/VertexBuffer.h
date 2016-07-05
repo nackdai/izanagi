@@ -58,6 +58,13 @@ namespace graph
             IZ_ASSERT(IZ_FALSE);
         }
 
+        virtual void* getRawInterface()
+        {
+            // Usualy unsupoort.
+            IZ_ASSERT(IZ_FALSE);
+            return nullptr;
+        }
+
     protected:
         IZ_UINT m_Stride;   // 頂点サイズ
         IZ_UINT m_VtxNum;   // 頂点数
