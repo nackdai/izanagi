@@ -546,7 +546,7 @@ namespace graph
     /**
     * 同期
     */
-    IZ_BOOL CGraphicsDeviceDX9::Present()
+    IZ_BOOL CGraphicsDeviceDX9::Present(void* nativeParam/*= nullptr*/)
     {
         IZ_BOOL ret = IZ_TRUE;
 

@@ -149,7 +149,7 @@ namespace graph
         virtual void EndScene(IZ_UINT flag = 0xffffffff);
 
         // 同期
-        virtual IZ_BOOL Present();
+        virtual IZ_BOOL Present(void* nativeParam = nullptr);
 
     public:
         // 頂点バッファセット

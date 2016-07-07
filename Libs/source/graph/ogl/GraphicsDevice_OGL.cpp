@@ -284,11 +284,11 @@ namespace graph
         }
     }
 
-#if 1
+#if 0
 #include <GL/glut.h>
 
     // “¯Šú
-    IZ_BOOL CGraphicsDeviceGLES2::Present()
+    IZ_BOOL CGraphicsDeviceGLES2::Present(void* nativeParam/*= nullptr*/)
     {
         glutSwapBuffers();
         return IZ_TRUE;
@@ -297,8 +297,9 @@ namespace graph
 #include <GLFW/glfw3.h>
 
     // “¯Šú
-    IZ_BOOL CGraphicsDeviceGLES2::Present()
+    IZ_BOOL CGraphicsDeviceGLES2::Present(void* nativeParam/*= nullptr*/)
     {
+        GLFWwindow* window = (GLFWwindow*)nativeParam;
         glfwSwapBuffers(window);
         return IZ_TRUE;
     }

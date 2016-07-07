@@ -1,3 +1,4 @@
+#ifdef __IZ_GLUT__
 extern "C" {
     #include <GL/glut.h>
     #include <GL/freeglut.h>
@@ -315,3 +316,4 @@ namespace sys
 
 }   // namespace sys
 }   // namespace izanagi
+#endif  // #ifdef __IZ_GLUT__

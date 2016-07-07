@@ -9,7 +9,7 @@
 #elif EMSCRIPTEN
     #include "graph/web/izWebGLDefs.h"
 #elif  __IZ_OGL__
-    #ifdef __IZ_GLUT__
+    #if defined(__IZ_GLUT__) || defined(__IZ_GLFW__)
         #include "graph/ogl/izOGLDefs.h"
     #elif __IZ_GLES2__
         #include "graph/gles2/izGLES2Defs.h"

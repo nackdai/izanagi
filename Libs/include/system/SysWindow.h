@@ -46,7 +46,7 @@ namespace sys
 
         virtual void OnPaint() {}
 
-        virtual void OnIdle() {}
+        virtual void OnIdle(void* nativeParam = nullptr) {}
 
         virtual void OnInit(const WindowHandle& handle) {}
 

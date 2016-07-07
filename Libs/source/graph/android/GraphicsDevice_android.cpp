@@ -159,7 +159,7 @@ namespace graph
     }
 
     // “¯Šú
-    IZ_BOOL CGraphicsDeviceGLES2::Present()
+    IZ_BOOL CGraphicsDeviceGLES2::Present(void* nativeParam/*= nullptr*/)
     {
         return IZ_TRUE;
     }

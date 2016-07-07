@@ -161,7 +161,7 @@ namespace graph
     /**
     * “¯Šú
     */
-    IZ_BOOL CGraphicsDeviceGLES2::Present()
+    IZ_BOOL CGraphicsDeviceGLES2::Present(void* nativeParam/*= nullptr*/)
     {
         ::eglSwapBuffers(m_Display, m_Surface);
         return IZ_TRUE;

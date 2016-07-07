@@ -1,4 +1,4 @@
-#if 0
+#ifdef __IZ_GLFW__
 #include "system/SysWindow.h"
 
 extern "C" {
@@ -315,10 +315,21 @@ namespace sys
 
         while (!glfwWindowShouldClose(window))
         {
-            CWindowGLFW::s_Instance->GetHandler()->OnIdle();
+            CWindowGLFW::s_Instance->GetHandler()->OnIdle(window);
 
             glfwPollEvents();
         }
+
+        CMessageHandler* handler = CWindowGLFW::s_Instance->GetHandler();
+
+        handler->OnTerminate();
+
+        CWindowGLFW::Destroy(CWindowGLFW::s_Instance);
+
+        handler->OnDestroy();
+
+        glfwDestroyWindow(CWindowGLFW::s_Instance->glfwWindow);
+        glfwTerminate();
     }
 
     void* CSysWindow::GetNativeWindowHandle(const WindowHandle& handle)
@@ -333,4 +344,4 @@ namespace sys
 
 }   // namespace sys
 }   // namespace izanagi
-#endif
+#endif  // #ifdef __IZ_GLFW__

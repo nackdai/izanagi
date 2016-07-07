@@ -290,7 +290,7 @@ namespace graph
 
         /** Presents the contents of the next buffer in the sequence of back buffers owned by the device.
          */
-        PURE_VIRTUAL(IZ_BOOL Present());
+        PURE_VIRTUAL(IZ_BOOL Present(void* nativeParam = nullptr));
 
     public:
         /** Begin to render 2D graphics.
