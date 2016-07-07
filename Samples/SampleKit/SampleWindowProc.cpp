@@ -80,10 +80,10 @@ void CSampleWndProc::OnPaint()
     IZ_ASSERT(m_App != IZ_NULL);
 
     m_App->Render();
-    m_App->Present();
+    m_App->Present(nullptr);
 }
 
-void CSampleWndProc::OnIdle()
+void CSampleWndProc::OnIdle(void* nativeParam)
 {
     IZ_ASSERT(m_App != IZ_NULL);
 
@@ -100,7 +100,7 @@ void CSampleWndProc::OnIdle()
 
     m_App->GetTimer(0).End();
 #else
-    m_App->Idle();
+    m_App->Idle(nativeParam);
 #endif
 }
 
