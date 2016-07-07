@@ -426,6 +426,16 @@ namespace graph
                 CVertexBuffer* pVB));
 
 
+        /** Sets the stream source frequency divider value. This may be used to draw several instances of geometry.
+         *
+         * @param [in] streamIdx Stream source index.
+         * @param [in] offsetByte Offset from the beginning of the stream to the beginning of the vertex data, in bytes. 
+         * @param [in] stride Stride of the component, in bytes.
+         * @param [in] usage Usage of vertex buffer.
+         * @param [in] divisor Specify the number of instances that will pass between updates of the generic attribute at slot streamIdx.
+         * @param [in] vb Pointer to a CVertexBuffer.
+         * @return If this method succeeds, the return value is true. If the method fails, the return value is false.
+         */
         virtual IZ_BOOL SetVertexBufferInstanced(
             IZ_UINT streamIdx,
             IZ_UINT offsetByte,
@@ -503,6 +513,12 @@ namespace graph
             IZ_UINT idxOffset,
             IZ_UINT nPrimCnt);
 
+        /** Renders the specified geometric primitive with user defined function.
+         *
+         * @param [in] prim_type Describing the type of primitive to render. See E_GRAPH_PRIM_TYPE.
+         * @param [in] funcRenderer User defined function for rendering primitive.
+         * @return If this method succeeds, the return value is true. If the method fails, the return value is false.
+         */
         virtual IZ_BOOL DrawPrimitive(
             E_GRAPH_PRIM_TYPE prim_type,
             std::function<void(IZ_UINT)> funcRenderer)

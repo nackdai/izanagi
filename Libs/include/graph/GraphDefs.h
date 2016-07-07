@@ -294,9 +294,9 @@ namespace graph
     /** テクスチャタイプ
      */
     enum E_GRAPH_TEX_TYPE {
-        E_GRAPH_TEX_TYPE_PLANE = 0, ///< 通常
-        E_GRAPH_TEX_TYPE_CUBE,      ///< キューブ
-        E_GRAPH_TEX_TYPE_VOLUME,    ///< ボリューム
+        E_GRAPH_TEX_TYPE_PLANE = 0, ///< Plane texture.
+        E_GRAPH_TEX_TYPE_CUBE,      ///< Cube texture.
+        E_GRAPH_TEX_TYPE_VOLUME,    ///< Volume texture.
 
         E_GRAPH_TEX_TYPE_NUM,
         E_GRAPH_TEX_TYPE_FORCE_INT32 = 0x7fffffff,
@@ -442,11 +442,11 @@ namespace graph
         E_GRAPH_VTX_DECL_USAGE_FORCE_INT32 = 0x7fffffff,
     };
 
-    /** 頂点バッファの使い方
+    /** Usage of vertex buffer.
      */
     enum E_GRAPH_VB_USAGE {
-        E_GRAPH_VB_USAGE_INDEXEDDATA = 0,
-        E_GRAPH_VB_USAGE_INSTANCEDATA,
+        E_GRAPH_VB_USAGE_INDEXEDDATA = 0,   ///< Identify the indexed geometry data.
+        E_GRAPH_VB_USAGE_INSTANCEDATA,      ///< Identify the stream containing the instance data.
 
         E_GRAPH_VB_USAGE_NUM,
         E_GRAPH_VB_USAGE_FORCE_INT32 = 0x7fffffff,
