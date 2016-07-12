@@ -30,7 +30,6 @@ namespace izanagi {
 #define CALL_GL_API(func)\
     func; \
     {\
-        IZ_PRINTF(#func); IZ_PRINTF("\n");\
         GLenum __gl_err__ = ::glGetError();\
         if (__gl_err__ != GL_NO_ERROR) { IZ_PRINTF("GL ERROR [0x%x]\n", __gl_err__); IZ_ASSERT(IZ_FALSE); }\
     }
