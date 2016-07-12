@@ -140,12 +140,11 @@ namespace graph
                 ? GL_STATIC_DRAW
                 : GL_DYNAMIC_DRAW);
 
-            CALL_GL_API(
-                ::glBufferData(
-                    GL_ARRAY_BUFFER,
-                    m_Size,
-                    NULL,
-                    glUsage));
+            CALL_GL_API(::glBufferData(
+                GL_ARRAY_BUFFER,
+                m_Size,
+                NULL,
+                glUsage));
 
             m_IsInitialized = IZ_TRUE;
         }
@@ -219,12 +218,11 @@ namespace graph
             IZ_UINT8* tmp = reinterpret_cast<IZ_UINT8*>(m_TemporaryData);
             tmp += m_LockOffset;
 
-            CALL_GL_API(
-                ::glBufferSubData(
-                    GL_ARRAY_BUFFER,
-                    m_LockOffset,
-                    m_LockSize,
-                    tmp));
+            CALL_GL_API(::glBufferSubData(
+                GL_ARRAY_BUFFER,
+                m_LockOffset,
+                m_LockSize,
+                tmp));
 
             // 元に戻す
             if (curVB != this) {
@@ -232,10 +230,9 @@ namespace graph
                     CALL_GL_API(::glBindBuffer(GL_ARRAY_BUFFER, 0));
                 }
                 else {
-                    CALL_GL_API(
-                        ::glBindBuffer(
-                            GL_ARRAY_BUFFER,
-                            ((CVertexBufferGLES2*)curVB)->m_VB));
+                    CALL_GL_API(::glBindBuffer(
+                        GL_ARRAY_BUFFER,
+                        ((CVertexBufferGLES2*)curVB)->m_VB));
                 }
             }
 

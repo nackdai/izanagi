@@ -19,7 +19,7 @@ namespace graph
         virtual ~CShaderProxy()
         {
             if (m_Shader != 0) {
-                ::glDeleteShader(m_Shader);
+                CALL_GL_API(::glDeleteShader(m_Shader));
                 m_Shader = 0;
             }
         }
@@ -27,16 +27,16 @@ namespace graph
     protected:
         IZ_BOOL CreateShader(const void* program, GLenum type)
         {
-            m_Shader = ::glCreateShader(type);
+            CALL_GL_API(m_Shader = ::glCreateShader(type));
             VRETURN(m_Shader != 0);
         
-            ::glShaderSource(
+            CALL_GL_API(::glShaderSource(
                 m_Shader,
                 1,
                 (const char**)&program,
-                IZ_NULL);
+                IZ_NULL));
             
-            ::glCompileShader(m_Shader);
+            CALL_GL_API(::glCompileShader(m_Shader));
 
 #ifdef __IZ_DEBUG__
             m_strProgram = (const char*)program;
@@ -47,11 +47,11 @@ namespace graph
 
             if (!isCompiled) {
                 GLint infoLen = 0;
-                ::glGetShaderiv(m_Shader, GL_INFO_LOG_LENGTH, &infoLen);
+                CALL_GL_API(::glGetShaderiv(m_Shader, GL_INFO_LOG_LENGTH, &infoLen));
 
                 if (infoLen > 1) {
                     char* log = (char*)ALLOC_ZERO(_SHADER_BASE::m_Allocator, infoLen);
-                    ::glGetShaderInfoLog(m_Shader, infoLen, NULL, log);
+                    CALL_GL_API(::glGetShaderInfoLog(m_Shader, infoLen, NULL, log));
                     IZ_PRINTF("Shader Compile Log **** \n");
                     IZ_PRINTF("%s", log);
                     FREE(_SHADER_BASE::m_Allocator, log);

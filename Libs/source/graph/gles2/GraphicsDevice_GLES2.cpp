@@ -208,12 +208,11 @@ namespace graph
 
             if (_IS_CLEAR(nClearFlags, E_GRAPH_CLEAR_FLAG_COLOR))
             {
-                CALL_GL_API(
-                    ::glClearColor(
-                        IZ_COLOR_R(nClearColor) * clr_div,
-                        IZ_COLOR_G(nClearColor) * clr_div,
-                        IZ_COLOR_B(nClearColor) * clr_div,
-                        IZ_COLOR_A(nClearColor) * clr_div));
+                CALL_GL_API(::glClearColor(
+                    IZ_COLOR_R(nClearColor) * clr_div,
+                    IZ_COLOR_G(nClearColor) * clr_div,
+                    IZ_COLOR_B(nClearColor) * clr_div,
+                    IZ_COLOR_A(nClearColor) * clr_div));
 
                 flag |= GL_COLOR_BUFFER_BIT;
             }
@@ -551,12 +550,11 @@ namespace graph
         IZ_UINT offset = idxOffset * sizeof(IZ_USHORT);
 #endif
 
-        CALL_GL_API(
-            ::glDrawElements(
-                mode,
-                idxNum,
-                type,
-                (const GLvoid*)offset));
+        CALL_GL_API(::glDrawElements(
+            mode,
+            idxNum,
+            type,
+            (const GLvoid*)offset));
 
         m_IsDirtyShaderProgram = IZ_FALSE;
 
@@ -781,10 +779,9 @@ namespace graph
         if (pTex != IZ_NULL) {
             IZ_BOOL isPlane = (pTex->GetTexType() == E_GRAPH_TEX_TYPE_PLANE);
 
-            CALL_GL_API(
-                ::glBindTexture(
-                    isPlane ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP,
-                    pTex->GetTexHandle()));
+            CALL_GL_API(::glBindTexture(
+                isPlane ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP,
+                pTex->GetTexHandle()));
 
             if (!pTex->IsRenderTarget()) {
                 if (pTex->GetTexType() == E_GRAPH_TEX_TYPE_PLANE) {

@@ -289,12 +289,11 @@ namespace graph
     void CRenderState::EnableRenderColorRGB(CGraphicsDevice* device, IZ_DWORD enableRGB)
     {
         if (isEnableRenderRGB != enableRGB) {
-            CALL_GL_API(
-                ::glColorMask(
-                    enableRGB,
-                    enableRGB,
-                    enableRGB,
-                    isEnableRenderA));
+            CALL_GL_API(::glColorMask(
+                enableRGB,
+                enableRGB,
+                enableRGB,
+                isEnableRenderA));
 
             isEnableRenderRGB = enableRGB;
         }
@@ -303,12 +302,11 @@ namespace graph
     void CRenderState::EnableRenderColorA(CGraphicsDevice* device, IZ_DWORD enableA)
     {
         if (isEnableRenderA != enableA) {
-            CALL_GL_API(
-                ::glColorMask(
-                    isEnableRenderRGB,
-                    isEnableRenderRGB,
-                    isEnableRenderRGB,
-                    enableA));
+            CALL_GL_API(::glColorMask(
+                isEnableRenderRGB,
+                isEnableRenderRGB,
+                isEnableRenderRGB,
+                enableA));
 
             isEnableRenderA = enableA;
         }
@@ -331,12 +329,11 @@ namespace graph
     void CRenderState::SetScissorRect(CGraphicsDevice* device, const SIntRect& rc)
     {
         if (rcScissor != rc) {
-            CALL_GL_API(
-                ::glScissor(
-                    rc.left,
-                    rc.top,
-                    rc.width,
-                    rc.height));
+            CALL_GL_API(::glScissor(
+                rc.left,
+                rc.top,
+                rc.width,
+                rc.height));
 
             rcScissor = rc;
         }

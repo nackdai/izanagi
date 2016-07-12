@@ -213,11 +213,10 @@ namespace graph
 
         CALL_GL_API(::glBindRenderbuffer(GL_RENDERBUFFER, m_Texture));
 
-        CALL_GL_API(
-            ::glRenderbufferStorage(
-                GL_RENDERBUFFER,
-                GL_DEPTH_COMPONENT16,
-                width, height));
+        CALL_GL_API(::glRenderbufferStorage(
+            GL_RENDERBUFFER,
+            GL_DEPTH_COMPONENT16,
+            width, height));
 
         // 戻す
         CALL_GL_API(::glBindRenderbuffer(GL_RENDERBUFFER, 0));

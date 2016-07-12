@@ -177,16 +177,15 @@ namespace graph
                     GLuint w = width >> level;
                     GLuint h = height >> level;
 
-                    CALL_GL_API(
-                        ::glTexImage2D(
-                            GL_TEXTURE_CUBE_MAP_POSITIVE_X + face,
-                            level,
-                            m_GLFormat,
-                            w, h,
-                            0,
-                            m_GLFormat,
-                            m_GLType,
-                            IZ_NULL));
+                    CALL_GL_API(::glTexImage2D(
+                        GL_TEXTURE_CUBE_MAP_POSITIVE_X + face,
+                        level,
+                        m_GLFormat,
+                        w, h,
+                        0,
+                        m_GLFormat,
+                        m_GLType,
+                        IZ_NULL));
                 }
             }
 
@@ -262,15 +261,14 @@ namespace graph
             IZ_UINT width = GetWidth(level);
             IZ_UINT height = GetHeight(level);
 
-            CALL_GL_API(
-                ::glTexSubImage2D(
-                    glFace,
-                    level,
-                    0, 0,
-                    width, height,
-                    m_GLFormat,
-                    m_GLType,
-                    m_TemporaryData));
+            CALL_GL_API(::glTexSubImage2D(
+                glFace,
+                level,
+                0, 0,
+                width, height,
+                m_GLFormat,
+                m_GLType,
+                m_TemporaryData));
 
             // 元に戻す
             if (curTex != this) {
@@ -278,10 +276,9 @@ namespace graph
                     CALL_GL_API(::glBindTexture(GL_TEXTURE_CUBE_MAP, 0));
                 }
                 else {
-                    CALL_GL_API(
-                        ::glBindTexture(
-                            curTex->GetTexType() == E_GRAPH_TEX_TYPE_PLANE ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP,
-                            ((CCubeTextureGLES2*)curTex)->m_Texture));
+                    CALL_GL_API(::glBindTexture(
+                        curTex->GetTexType() == E_GRAPH_TEX_TYPE_PLANE ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP,
+                        ((CCubeTextureGLES2*)curTex)->m_Texture));
                 }
             }
 

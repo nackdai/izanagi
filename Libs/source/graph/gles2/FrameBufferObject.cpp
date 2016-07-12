@@ -109,10 +109,9 @@ namespace graph
 
             m_IsOnOffScreen = IZ_TRUE;
 
-            CALL_GL_API(
-                ::glBindFramebuffer(
-                    GL_FRAMEBUFFER,
-                    m_FBO));
+            CALL_GL_API(::glBindFramebuffer(
+                GL_FRAMEBUFFER,
+                m_FBO));
 
             IZ_UINT attachedCnt = 0;
 
@@ -143,12 +142,11 @@ namespace graph
                 : 0);
 
 #if 0
-            CALL_GL_API(
-                ::glFramebufferRenderbuffer(
-                    GL_FRAMEBUFFER,
-                    GL_DEPTH_ATTACHMENT,
-                    GL_RENDERBUFFER,
-                    depthHandle));
+            CALL_GL_API(::glFramebufferRenderbuffer(
+                GL_FRAMEBUFFER,
+                GL_DEPTH_ATTACHMENT,
+                GL_RENDERBUFFER,
+                depthHandle));
 #else
             // NOTE
             // http://gamedev.stackexchange.com/questions/3082/getting-a-texture-from-a-renderbuffer-in-opengl

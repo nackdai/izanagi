@@ -304,15 +304,14 @@ namespace graph
             IZ_UINT width = GetWidth(level);
             IZ_UINT height = GetHeight(level);
 
-            CALL_GL_API(
-                ::glTexSubImage2D(
-                    GL_TEXTURE_2D,
-                    level,
-                    0, 0,
-                    width, height,
-                    m_GLFormat,
-                    m_GLType,
-                    m_TemporaryData));
+            CALL_GL_API(::glTexSubImage2D(
+                GL_TEXTURE_2D,
+                level,
+                0, 0,
+                width, height,
+                m_GLFormat,
+                m_GLType,
+                m_TemporaryData));
 
             m_LockedSize = 0;
         }
@@ -355,15 +354,14 @@ namespace graph
         VRETURN(width <= w);
         VRETURN(height <= h);
 
-        CALL_GL_API(
-            ::glTexSubImage2D(
-                GL_TEXTURE_2D,
-                level,
-                x, y,
-                width, height,
-                m_GLFormat,
-                m_GLType,
-                data));
+        CALL_GL_API(::glTexSubImage2D(
+            GL_TEXTURE_2D,
+            level,
+            x, y,
+            width, height,
+            m_GLFormat,
+            m_GLType,
+            data));
 
         return IZ_TRUE;
     }
@@ -410,10 +408,9 @@ namespace graph
             CALL_GL_API(::glBindTexture(GL_TEXTURE_2D, 0));
         }
         else {
-            CALL_GL_API(
-                ::glBindTexture(
-                    m_CurTex->GetTexType() == E_GRAPH_TEX_TYPE_PLANE ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP,
-                    m_CurTex->GetTexHandle()));
+            CALL_GL_API(::glBindTexture(
+                m_CurTex->GetTexType() == E_GRAPH_TEX_TYPE_PLANE ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP,
+                m_CurTex->GetTexHandle()));
         }
     }
 

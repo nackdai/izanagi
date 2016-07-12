@@ -184,14 +184,13 @@ namespace graph
                 // そのため、バイトオフセットに変換する
                 IZ_UINT offset = vtxOffset * vtxStride;
 
-                CALL_GL_API(
-                    ::glVertexAttribPointer(
-                        attribIndex,
-                        num,
-                        type,
-                        needNormalized ? GL_TRUE : GL_FALSE,
-                        vtxStride,
-                        (void*)(offset + element.Offset)));
+                CALL_GL_API(::glVertexAttribPointer(
+                    attribIndex,
+                    num,
+                    type,
+                    needNormalized ? GL_TRUE : GL_FALSE,
+                    vtxStride,
+                    (void*)(offset + element.Offset)));
 
                 CALL_GL_API(::glEnableVertexAttribArray(attribIndex));
                 s_EnabledAttribIndex[attribIndex] = Enabled;

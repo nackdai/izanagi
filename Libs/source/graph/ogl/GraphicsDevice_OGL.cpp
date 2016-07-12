@@ -284,7 +284,7 @@ namespace graph
         }
     }
 
-#if 0
+#ifdef __IZ_GLUT__
 #include <GL/glut.h>
 
     // “¯Šú
