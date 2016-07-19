@@ -137,6 +137,10 @@ class Vector<float, 4> {
     return Vector<float, 4>(simd4f_mul(data_.simd, v.data_.simd));
   }
 
+  inline Vector<float, 4> operator/(const Vector<float, 4>& v) const {
+    return Vector<float, 4>(simd4f_div(data_.simd, v.data_.simd));
+  }
+
   inline Vector<float, 4> operator+(const Vector<float, 4>& v) const {
     return Vector<float, 4>(simd4f_add(data_.simd, v.data_.simd));
   }
@@ -199,6 +203,17 @@ class Vector<float, 4> {
   inline Vector<float, 4>& operator-=(const float& s) {
     data_.simd = simd4f_sub(data_.simd, simd4f_splat(s));
     return *this;
+  }
+
+  inline bool operator==(const Vector<float, 4>& v) const {
+    for (int i = 0; i < 4; ++i) {
+      if ((*this)[i] != v[i]) return false;
+    }
+    return true;
+  }
+
+  inline bool operator!=(const Vector<float, 4>& v) const {
+    return !operator==(v);
   }
 
   inline float LengthSquared() const {

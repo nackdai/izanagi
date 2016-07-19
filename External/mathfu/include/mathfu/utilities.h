@@ -166,7 +166,7 @@
 /// @def MATHFU_VERSION_REVISION
 /// @brief Revision number of the library.
 /// @see kMathFuVersionString
-#define MATHFU_VERSION_REVISION 1
+#define MATHFU_VERSION_REVISION 2
 
 /// @}
 
@@ -427,6 +427,19 @@ T RoundUpToPowerOf2(T x) {
       pow(static_cast<T>(2), ceil(log(x) / log(static_cast<T>(2)))));
 }
 
+/// @brief Specialized version of RoundUpToPowerOf2 for int32_t.
+template <>
+inline int32_t RoundUpToPowerOf2<>(int32_t x) {
+  x--;
+  x |= x >> 1;
+  x |= x >> 2;
+  x |= x >> 4;
+  x |= x >> 8;
+  x |= x >> 16;
+  x++;
+  return x;
+}
+
 /// @}
 
 /// @addtogroup mathfu_allocator
@@ -487,7 +500,7 @@ inline void *AllocateAligned(size_t n) {
 /// @param p Pointer to memory to deallocate.
 inline void FreeAligned(void *p) {
 #if defined(_MSC_VER) && _MSC_VER >= 1900  // MSVC 2015
-  return _aligned_free(p);
+  _aligned_free(p);
 #else
   if (p == NULL) return;
   free(*(reinterpret_cast<uint8_t **>(p) - 1));

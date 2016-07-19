@@ -410,6 +410,26 @@ class Vector {
     MATHFU_VECTOR_OPERATION(vector->data[i] = data_[i]);
   }
 
+  /// @brief Compare 2 Vectors of the same size for equality.
+  ///
+  /// @note: The likelyhood of two float values being the same is very small.
+  /// Instead consider comparing the difference between two float vectors using
+  /// LengthSquared() with an epsilon value.
+  /// For example, v1.LengthSquared(v2) < epsilon.
+  ///
+  /// @return true if the 2 vectors contains the same value, false otherwise.
+  inline bool operator==(const Vector<T, d>& v) const {
+    for (int i = 0; i < d; ++i) {
+      if ((*this)[i] != v[i]) return false;
+    }
+    return true;
+  }
+
+  /// @brief Compare 2 Vectors of the same size for inequality.
+  ///
+  /// @return true if the elements of two vectors differ, false otherwise.
+  inline bool operator!=(const Vector<T, d>& v) const { return !operator==(v); }
+
   /// @brief Negate all elements of the Vector.
   ///
   /// @return A new Vector containing the result.
@@ -418,7 +438,7 @@ class Vector {
   /// @brief Multiply this Vector by another Vector.
   ///
   /// In line with GLSL, this performs component-wise multiplication.
-  /// @param v A Vector to mulitply this Vector with.
+  /// @param v A Vector to multiply this Vector with.
   /// @return A new Vector containing the result.
   inline Vector<T, d> operator*(const Vector<T, d>& v) const {
     return HadamardProduct(*this, v);
@@ -517,7 +537,7 @@ class Vector {
 
   /// @brief Multiply (in-place) each element of this Vector with a scalar.
   ///
-  /// @param s A scalar to mulitply this vector with.
+  /// @param s A scalar to multiply this vector with.
   /// @return A reference to this class.
   inline Vector<T, d>& operator*=(const T& s) {
     MATHFU_VECTOR_SELF_OPERATOR(data_[i] *= s);
@@ -768,6 +788,18 @@ static inline T DotProductHelper(const Vector<T, 4>& v1,
 }
 /// @endcond
 
+/// @}
+
+/// @addtogroup mathfu_utilities
+/// @{
+
+/// @brief Specialized version of RoundUpToPowerOf2 for vector.
+template <typename T, int d>
+inline Vector<T, d> RoundUpToPowerOf2(const Vector<T, d>& v) {
+  Vector<T, d> ret;
+  MATHFU_VECTOR_OPERATION(ret(i) = RoundUpToPowerOf2(v(i)));
+  return ret;
+}
 /// @}
 
 }  // namespace mathfu

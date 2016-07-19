@@ -31,7 +31,7 @@
 /// @addtogroup mathfu_matrix
 ///
 /// MathFu provides a generic Matrix implementation which is specialized
-/// for 4x4 matrices to take advantage of optimization oppotunities using
+/// for 4x4 matrices to take advantage of optimization opportunities using
 /// SIMD instructions.
 
 #ifdef _MSC_VER
@@ -116,11 +116,19 @@ inline Matrix<T, 4, 4> PerspectiveHelper(T fovy, T aspect, T znear, T zfar,
                                          T handedness);
 template <class T>
 static inline Matrix<T, 4, 4> OrthoHelper(T left, T right, T bottom, T top,
-                                          T znear, T zfar);
+                                          T znear, T zfar, T handedness);
 template <class T>
 static inline Matrix<T, 4, 4> LookAtHelper(const Vector<T, 3>& at,
                                            const Vector<T, 3>& eye,
-                                           const Vector<T, 3>& up);
+                                           const Vector<T, 3>& up,
+                                           T handedness);
+template <class T>
+static inline bool UnProjectHelper(const Vector<T, 3>& window_coord,
+                                   const Matrix<T, 4, 4>& model_view,
+                                   const Matrix<T, 4, 4>& projection,
+                                   const float window_width,
+                                   const float window_height,
+                                   Vector<T, 3>& result);
 /// @endcond
 
 /// @addtogroup mathfu_matrix
@@ -706,7 +714,7 @@ class Matrix {
     return RotationZ(Vector<T, 2>(cosf(angle), sinf(angle)));
   }
 
-  /// @brief Create a 4x4 perpective Matrix.
+  /// @brief Create a 4x4 perspective Matrix.
   ///
   /// @param fovy Field of view.
   /// @param aspect Aspect ratio.
@@ -727,10 +735,11 @@ class Matrix {
   /// @param top Top extent.
   /// @param znear Near plane location.
   /// @param zfar Far plane location.
+  /// @param handedness 1.0f for RH, -1.0f for LH
   /// @return 4x4 orthographic Matrix.
   static inline Matrix<T, 4, 4> Ortho(T left, T right, T bottom, T top, T znear,
-                                      T zfar) {
-    return OrthoHelper(left, right, bottom, top, znear, zfar);
+                                      T zfar, T handedness = 1) {
+    return OrthoHelper(left, right, bottom, top, znear, zfar, handedness);
   }
 
   /// @brief Create a 3-dimensional camera Matrix.
@@ -739,11 +748,36 @@ class Matrix {
   /// @param eye The position of the camera.
   /// @param up The up vector in the world, for example (0, 1, 0) if the
   /// y-axis is up.
+  /// @param handedness 1.0f for RH, -1.0f for LH.
   /// @return 3-dimensional camera Matrix.
+  /// TODO: Change default handedness to +1 so that it matches Perspective().
   static inline Matrix<T, 4, 4> LookAt(const Vector<T, 3>& at,
                                        const Vector<T, 3>& eye,
-                                       const Vector<T, 3>& up) {
-    return LookAtHelper(at, eye, up);
+                                       const Vector<T, 3>& up,
+                                       T handedness = -1) {
+    return LookAtHelper(at, eye, up, handedness);
+  }
+
+  /// @brief Get the 3D position in object space from a window coordinate.
+  ///
+  /// @param window_coord The window coordinate. The z value is for depth.
+  /// A window coordinate on the near plane will have 0 as the z value.
+  /// And a window coordinate on the far plane will have 1 as the z value.
+  /// z value should be with in [0, 1] here.
+  /// @param model_view The Model View matrix.
+  /// @param projection The projection matrix.
+  /// @param window_width Width of the window.
+  /// @param window_height Height of the window.
+  /// @return the mapped 3D position in object space.
+  static inline Vector<T, 3> UnProject(const Vector<T, 3>& window_coord,
+                                       const Matrix<T, 4, 4>& model_view,
+                                       const Matrix<T, 4, 4>& projection,
+                                       const float window_width,
+                                       const float window_height) {
+    Vector<T, 3> result;
+    UnProjectHelper(window_coord, model_view, projection, window_width,
+                    window_height, result);
+    return result;
   }
 
   /// @brief Multiply a Vector by a Matrix.
@@ -1290,11 +1324,11 @@ inline Matrix<T, 4, 4> PerspectiveHelper(T fovy, T aspect, T znear, T zfar,
                                          T handedness) {
   const T y = 1 / tan(static_cast<T>(fovy) * static_cast<T>(.5));
   const T x = y / aspect;
-  const T zdist = (znear - zfar) * handedness;
+  const T zdist = (znear - zfar);
   const T zfar_per_zdist = zfar / zdist;
-  return Matrix<T, 4, 4>(x, 0, 0, 0, 0, y, 0, 0, 0, 0, zfar_per_zdist,
-                         -1 * handedness, 0, 0,
-                         2.0f * znear * zfar_per_zdist * handedness, 0);
+  return Matrix<T, 4, 4>(x, 0, 0, 0, 0, y, 0, 0, 0, 0,
+                         zfar_per_zdist * handedness, -1 * handedness, 0, 0,
+                         2.0f * znear * zfar_per_zdist, 0);
 }
 /// @endcond
 
@@ -1302,10 +1336,10 @@ inline Matrix<T, 4, 4> PerspectiveHelper(T fovy, T aspect, T znear, T zfar,
 /// Create a 4x4 orthographic matrix.
 template <class T>
 static inline Matrix<T, 4, 4> OrthoHelper(T left, T right, T bottom, T top,
-                                          T znear, T zfar) {
+                                          T znear, T zfar, T handedness) {
   return Matrix<T, 4, 4>(static_cast<T>(2) / (right - left), 0, 0, 0, 0,
                          static_cast<T>(2) / (top - bottom), 0, 0, 0, 0,
-                         static_cast<T>(-2) / (zfar - znear), 0,
+                         -handedness * static_cast<T>(2) / (zfar - znear), 0,
                          -(right + left) / (right - left),
                          -(top + bottom) / (top - bottom),
                          -(zfar + znear) / (zfar - znear), static_cast<T>(1));
@@ -1319,14 +1353,21 @@ static inline Matrix<T, 4, 4> OrthoHelper(T left, T right, T bottom, T top,
 template <class T>
 static void LookAtHelperCalculateAxes(const Vector<T, 3>& at,
                                       const Vector<T, 3>& eye,
-                                      const Vector<T, 3>& up,
+                                      const Vector<T, 3>& up, T handedness,
                                       Vector<T, 3>* const axes) {
+  // Notice that y-axis is always the same regardless of handedness.
   axes[2] = (at - eye).Normalized();
   axes[0] = Vector<T, 3>::CrossProduct(up, axes[2]).Normalized();
   axes[1] = Vector<T, 3>::CrossProduct(axes[2], axes[0]);
-  axes[3] = Vector<T, 3>(-Vector<T, 3>::DotProduct(axes[0], eye),
+  axes[3] = Vector<T, 3>(handedness * Vector<T, 3>::DotProduct(axes[0], eye),
                          -Vector<T, 3>::DotProduct(axes[1], eye),
-                         -Vector<T, 3>::DotProduct(axes[2], eye));
+                         handedness * Vector<T, 3>::DotProduct(axes[2], eye));
+
+  // Default calculation is left-handed (i.e. handedness=-1).
+  // Negate x and z axes for right-handed (i.e. handedness=+1) case.
+  const float neg = -handedness;
+  axes[0] *= neg;
+  axes[2] *= neg;
 }
 /// @endcond
 
@@ -1335,14 +1376,49 @@ static void LookAtHelperCalculateAxes(const Vector<T, 3>& at,
 template <class T>
 static inline Matrix<T, 4, 4> LookAtHelper(const Vector<T, 3>& at,
                                            const Vector<T, 3>& eye,
-                                           const Vector<T, 3>& up) {
+                                           const Vector<T, 3>& up,
+                                           T handedness) {
   Vector<T, 3> axes[4];
-  LookAtHelperCalculateAxes(at, eye, up, axes);
+  LookAtHelperCalculateAxes(at, eye, up, handedness, axes);
   const Vector<T, 4> column0(axes[0][0], axes[1][0], axes[2][0], 0);
   const Vector<T, 4> column1(axes[0][1], axes[1][1], axes[2][1], 0);
   const Vector<T, 4> column2(axes[0][2], axes[1][2], axes[2][2], 0);
   const Vector<T, 4> column3(axes[3], 1);
   return Matrix<T, 4, 4>(column0, column1, column2, column3);
+}
+/// @endcond
+
+/// @cond MATHFU_INTERNAL
+/// Get the 3D position in object space from a window coordinate.
+template <class T>
+static inline bool UnProjectHelper(const Vector<T, 3>& window_coord,
+                                   const Matrix<T, 4, 4>& model_view,
+                                   const Matrix<T, 4, 4>& projection,
+                                   const float window_width,
+                                   const float window_height,
+                                   Vector<T, 3>& result) {
+  if (window_coord.z() < static_cast<T>(0) ||
+      window_coord.z() > static_cast<T>(1)) {
+    // window_coord.z should be with in [0, 1]
+    // 0: near plane
+    // 1: far plane
+    return false;
+  }
+  Matrix<T, 4, 4> matrix = (projection * model_view).Inverse();
+  Vector<T, 4> standardized = Vector<T, 4>(
+      static_cast<T>(2) * (window_coord.x() - window_width) / window_width +
+          static_cast<T>(1),
+      static_cast<T>(2) * (window_coord.y() - window_height) / window_height +
+          static_cast<T>(1),
+      static_cast<T>(2) * window_coord.z() - static_cast<T>(1),
+      static_cast<T>(1));
+
+  Vector<T, 4> multiply = matrix * standardized;
+  if (multiply.w() == static_cast<T>(0)) {
+    return false;
+  }
+  result = multiply.xyz() / multiply.w();
+  return true;
 }
 /// @endcond
 

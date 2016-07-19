@@ -338,20 +338,47 @@ class Matrix<float, 4> {
   }
 
   /// Create a 4x4 orthographic matrix.
+  /// @param handedness 1.0f for RH, -1.0f for LH
   static inline Matrix<float, 4, 4> Ortho(float left, float right, float bottom,
-                                          float top, float znear, float zfar) {
-    return OrthoHelper(left, right, bottom, top, znear, zfar);
+                                          float top, float znear, float zfar,
+                                          float handedness = 1.0f) {
+    return OrthoHelper(left, right, bottom, top, znear, zfar, handedness);
   }
 
   /// Create a 3-dimensional camera matrix.
   /// @param at The look-at target of the camera.
   /// @param eye The position of the camera.
   /// @param up The up vector in the world, for example (0, 1, 0) if the
+  /// @handedness: 1.0f for RH, -1.0f for LH
+  /// TODO: Change default handedness to 1.0f, to match Perspective().
   /// y-axis is up.
   static inline Matrix<float, 4, 4> LookAt(const Vector<float, 3>& at,
                                            const Vector<float, 3>& eye,
-                                           const Vector<float, 3>& up) {
-    return LookAtHelper(at, eye, up);
+                                           const Vector<float, 3>& up,
+                                           float handedness = -1.0f) {
+    return LookAtHelper(at, eye, up, handedness);
+  }
+
+  /// @brief Get the 3D position in object space from a window coordinate.
+  ///
+  /// @param window_coord The window coordinate. The z value is for depth.
+  /// A window coordinate on the near plane will have 0 as the z value.
+  /// And a window coordinate on the far plane will have 1 as the z value.
+  /// z value should be with in [0, 1] here.
+  /// @param model_view The Model View matrix.
+  /// @param projection The projection matrix.
+  /// @param window_width Width of the window.
+  /// @param window_height Height of the window.
+  /// @return the mapped 3D position in object space.
+  static inline Vector<float, 3> UnProject(
+      const Vector<float, 3>& window_coord,
+      const Matrix<float, 4, 4>& model_view,
+      const Matrix<float, 4, 4>& projection, const float window_width,
+      const float window_height) {
+    Vector<float, 3> result;
+    UnProjectHelper(window_coord, model_view, projection, window_width,
+                    window_height, result);
+    return result;
   }
 
   // Dimensions of the matrix.
