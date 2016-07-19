@@ -293,6 +293,9 @@ namespace sys
             window->glfwWindow,
             wheelCallback);
 
+        glfwMakeContextCurrent(window->glfwWindow);
+        glfwSwapInterval(1);
+
         if (param.handler) {
             param.handler->OnInit(IZ_NULL);
         }
