@@ -55,8 +55,10 @@ void CLatLongMapProxy::getUVFromRef(
     IZ_FLOAT& u, IZ_FLOAT& v)
 {
     // y = sin(θ) -> θ=asin(y)
-    // [-pi/2 : pi/2]
+    // θ : [-pi/2, pi/2]
     IZ_FLOAT latitude = ::asinf(ref.y);
+
+    // Normalize [-pi/2, pi/2] -> [-1, 1]
     v = latitude / IZ_MATH_PI1_2;
 
     IZ_FLOAT cosLat = ::cosf(latitude);
@@ -68,12 +70,14 @@ void CLatLongMapProxy::getUVFromRef(
     IZ_FLOAT longitude = ::acosf(cosLong);
     
     // NOTE
-    // acosf -> 範囲[0, +π]
-
+    // acosf -> 範囲[0, +π].
+    // φ : [-π, π]
     longitude = (ref.x < 0.0f ? -longitude : longitude);
 
+    // Normalize [-π, π] -> [-1, 1]
     u = longitude / IZ_MATH_PI;
 
+    // Normalize [-1, 1] -> [0, 1]
     u = (u + 1.0f) * 0.5f;
     v = (v + 1.0f) * 0.5f;
 }
