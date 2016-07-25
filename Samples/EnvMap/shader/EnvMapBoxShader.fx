@@ -69,7 +69,7 @@ SVSOutput mainVS_LatLong(SVSInput In)
     Out.vPos = mul(In.vPos, g_mL2W);
 
     // Compute reflection vector.
-    float3 ref = normalize(g_vEye.xyz - Out.vPos.xyz);
+    float3 ref = normalize(Out.vPos.xyz - g_vEye.xyz);
 
     Out.vPos = mul(Out.vPos, g_mW2C);
 
@@ -86,10 +86,10 @@ float4 mainPS_LatLong(SPSInput In) : COLOR
     float theta = asin(ref.y) + IZ_MATH_PI1_2;
 
     // [-pi, pi] -> [0, 2pi]
-    float phi = atan2(-ref.x, ref.z) + IZ_MATH_PI;
+    float phi = atan2(ref.x, ref.z) + IZ_MATH_PI;
 
     // Normalize [0, 1]
-    float2 uv = float2(phi / IZ_MATH_PI2, theta / IZ_MATH_PI);
+    float2 uv = float2(phi / IZ_MATH_PI2, -theta / IZ_MATH_PI);
 
     float4 vOut = tex2D(sTex, uv);
 
@@ -105,7 +105,7 @@ SVSOutput mainVS_Angular(SVSInput In)
     Out.vPos = mul(In.vPos, g_mL2W);
 
     // 反射ベクトルを計算
-    float3 ref = normalize(g_vEye.xyz - Out.vPos.xyz);
+    float3 ref = normalize(Out.vPos.xyz - g_vEye.xyz);
 
     Out.vPos = mul(Out.vPos, g_mW2C);
 
