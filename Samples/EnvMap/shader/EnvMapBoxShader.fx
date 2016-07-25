@@ -60,15 +60,18 @@ float4 mainPS_Cube(SPSInput In) : COLOR
 
 /////////////////////////////////////////////////////////////
 
+// For Equirect
+
 SVSOutput mainVS_LatLong(SVSInput In)
 {
     SVSOutput Out = (SVSOutput)0;
 
     Out.vPos = mul(In.vPos, g_mL2W);
-    Out.vPos = mul(Out.vPos, g_mW2C);
 
-    // 反射ベクトルを計算
-    float3 ref = normalize(In.vPos.xyz - g_vEye.xyz);
+    // Compute reflection vector.
+    float3 ref = normalize(g_vEye.xyz - Out.vPos.xyz);
+
+    Out.vPos = mul(Out.vPos, g_mW2C);
 
     Out.vUV = ref;
     
@@ -79,34 +82,16 @@ float4 mainPS_LatLong(SPSInput In) : COLOR
 {
     float3 ref = normalize(In.vUV);
 
-    // 反射ベクトルからUVを計算
+    // [-pi/2, pi/2] -> [0, pi]
+    float theta = asin(ref.y) + IZ_MATH_PI1_2;
 
-    // y = sin(θ) -> θ=asin(y)
-    // [-pi/2 : pi/2]
-    float latitude = asin(ref.y);
-    float v = latitude / IZ_MATH_PI1_2;
+    // [-pi, pi] -> [0, 2pi]
+    float phi = atan2(-ref.x, ref.z) + IZ_MATH_PI;
 
-    float cosLat = cos(latitude);
+    // Normalize [0, 1]
+    float2 uv = float2(phi / IZ_MATH_PI2, theta / IZ_MATH_PI);
 
-    // z = cos(θ)cos(φ) -> cos(φ) = z / cos(θ) -> φ = acos(z / cos(θ))
-    float cosLong = ref.z / (cosLat + 0.00001f);
-    cosLong = clamp(cosLong, -1.0f, 1.0f);
-
-    float longitude = acos(cosLong);
-    
-    // NOTE
-    // acosf -> 範囲[0, +π]
-
-    longitude = (ref.x < 0.0f ? -longitude : longitude);
-
-    float u = longitude / IZ_MATH_PI;
-
-    u = (u + 1.0f) * 0.5f;
-    v = (v + 1.0f) * 0.5f;
-
-    // TODO
-    // Why minus?
-    float4 vOut = tex2D(sTex, float2(u, -v));
+    float4 vOut = tex2D(sTex, uv);
 
     return vOut;
 }
@@ -118,10 +103,11 @@ SVSOutput mainVS_Angular(SVSInput In)
     SVSOutput Out = (SVSOutput)0;
 
     Out.vPos = mul(In.vPos, g_mL2W);
-    Out.vPos = mul(Out.vPos, g_mW2C);
 
     // 反射ベクトルを計算
-    float3 ref = normalize(In.vPos.xyz - g_vEye.xyz);
+    float3 ref = normalize(g_vEye.xyz - Out.vPos.xyz);
+
+    Out.vPos = mul(Out.vPos, g_mW2C);
 
     Out.vUV = ref;
     
@@ -182,9 +168,7 @@ float4 mainPS_Angular(SPSInput In) : COLOR
     u = (u + 1.0f) * 0.5f;
     v = (v + 1.0f) * 0.5f;
 
-    // TODO
-    // Why minus?
-    float4 vOut = tex2D(sTex, float2(u, -v));
+    float4 vOut = tex2D(sTex, float2(u, v));
 
     return vOut;
 }
