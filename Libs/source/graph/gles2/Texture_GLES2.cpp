@@ -259,6 +259,8 @@ namespace graph
         VRETURN_VAL(level < m_TexInfo.level, 0);
 
         IZ_UINT width = GetWidth(level);
+
+#if 0
         IZ_UINT bpp = CGraphUtil::GetBPP(GetPixelFormat());
 
         IZ_UINT pitch = width * bpp;
@@ -267,6 +269,42 @@ namespace graph
         // Align
 
         size_t size = pitch * GetHeight(level);
+#else
+        auto fmt = GetPixelFormat();
+
+        IZ_UINT bpp = 0;
+        IZ_UINT pitch = 0;
+        size_t size = 0;
+
+        if (CGraphUtil::IsCompressedPixelFormat(fmt)) {
+            IZ_ASSERT(level == 0);
+
+            auto height = GetHeight(level);
+
+            IZ_ASSERT((width & 0x03) == 0);
+            IZ_ASSERT((height & 0x03) == 0);
+
+            // NOTE
+            // DX9合わせにする.
+            // https://msdn.microsoft.com/ja-jp/library/cc323934.aspx
+            // DXTn フォーマットのピッチは、ブロック 1 行のバイト数を指す.
+            // たとえば、幅が 16 である場合、ピッチは 4 ブロックになる (DXT1 の場合は 4*8、DXT2-5 の場合は 4*16).
+
+            if (fmt == E_GRAPH_PIXEL_FMT_DXT1) {
+                pitch = (width >> 2) * 8;
+            }
+            else {
+                pitch = (width >> 2) * 16;
+            }
+
+            size = pitch * (height >> 2);
+        }
+        else {
+            bpp = CGraphUtil::GetBPP(fmt);
+            pitch = width * bpp;
+            size = pitch * GetHeight(level);
+        }
+#endif
 
         if (m_TemporaryData == IZ_NULL) {
             m_TemporaryData = ALLOC(m_Allocator, size);

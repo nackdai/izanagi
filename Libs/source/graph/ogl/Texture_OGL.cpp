@@ -1,5 +1,6 @@
 #include "graph/ogl/Texture_OGL.h"
 #include "graph/ogl/GraphicsDevice_OGL.h"
+#include "graph/GraphUtil.h"
 
 namespace izanagi
 {
@@ -109,14 +110,32 @@ namespace graph
             IZ_UINT width = GetWidth(level);
             IZ_UINT height = GetHeight(level);
 
-            CALL_GL_API(::glTextureSubImage2D(
-                m_Texture,
-                level,
-                0, 0,
-                width, height,
-                m_GLFormat,
-                m_GLType,
-                m_TemporaryData));
+            auto fmt = GetPixelFormat();
+
+            if (CGraphUtil::IsCompressedPixelFormat(fmt)) {
+                // TODO
+                // DXTではmipmapを許さない.
+                IZ_ASSERT(level == 0);
+
+                CALL_GL_API(::glCompressedTextureSubImage2D(
+                    m_Texture,
+                    level,
+                    0, 0,
+                    width, height,
+                    m_GLFormat,
+                    (GLsizei)m_LockedSize,
+                    m_TemporaryData));
+            }
+            else {
+                CALL_GL_API(::glTextureSubImage2D(
+                    m_Texture,
+                    level,
+                    0, 0,
+                    width, height,
+                    m_GLFormat,
+                    m_GLType,
+                    m_TemporaryData));
+            }
 
             m_LockedSize = 0;
         }
