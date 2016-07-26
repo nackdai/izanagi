@@ -9,6 +9,8 @@ namespace izanagi {
     /**
      */
     class CVectorCamera : public CCamera {
+        friend class StereoCamera;
+
     public:
         CVectorCamera();
         virtual ~CVectorCamera();
@@ -99,7 +101,7 @@ namespace izanagi {
 
         void SetUp(const math::SVector4& vecUp) {}
 
-    private:
+    protected:
         math::SVector4 m_X;
         
         // NOTE

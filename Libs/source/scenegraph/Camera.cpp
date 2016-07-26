@@ -188,6 +188,7 @@ void CCamera::ComputeW2V()
     math::SVector4::SubXYZ(vecZ, m_Param.pos, m_Param.ref);  // 右手
 #endif  // #ifdef VIEW_LH
 
+    vecZ.w = 0.0f;
     math::SVector4::Normalize(vecZ, vecZ);
 
     // NOTE

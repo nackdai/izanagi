@@ -146,6 +146,9 @@
     <ClCompile Include="..\..\source\scenegraph\VectorCamera.cpp">
       <Filter>source\camera</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\scenegraph\StereoCamera.cpp">
+      <Filter>source\camera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\scenegraph\FixedSceneStateManager.h">
@@ -270,6 +273,12 @@
       <Filter>include\camera</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\scenegraph\VectorCamera.h">
+      <Filter>include\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\CameraArm.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\scenegraph\StereoCamera.h">
       <Filter>include\camera</Filter>
     </ClInclude>
   </ItemGroup>

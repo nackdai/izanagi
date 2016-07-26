@@ -7,6 +7,7 @@
 // camera
 #include "scenegraph/Camera.h"
 #include "scenegraph/VectorCamera.h"
+#include "scenegraph/StereoCamera.h"
 
 // state
 #include "scenegraph/SceneState.h"
