@@ -89,7 +89,7 @@ float4 mainPS_LatLong(SPSInput In) : COLOR
     float phi = atan2(ref.x, ref.z) + IZ_MATH_PI;
 
     // Normalize [0, 1]
-    float2 uv = float2(phi / IZ_MATH_PI2, -theta / IZ_MATH_PI);
+    float2 uv = float2(phi / IZ_MATH_PI2, 1.0f - theta / IZ_MATH_PI);
 
     float4 vOut = tex2D(sTex, uv);
 
