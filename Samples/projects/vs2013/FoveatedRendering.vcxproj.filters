@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\FoveatedRendering\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\FoveatedRendering\FoveatedRenderingApp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\FoveatedRendering\shader\fs_equirect.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\FoveatedRendering\shader\vs_equirect.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\FoveatedRendering\shader\vs_2dscreen.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\FoveatedRendering\shader\fs_radicaldensitymask.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\FoveatedRendering\shader\fs_filter.glsl">
+      <Filter>shader</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="asset">
+      <UniqueIdentifier>{80ed2c7d-7fb3-4aa2-95c1-cefe30a44f7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shader">
+      <UniqueIdentifier>{24ad87bc-8301-4386-a9b3-8a51f3be200b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{21cbf708-1a39-419d-b1bd-32f30de6ba3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{10e013a1-c0a2-4599-bb6d-1be8283f112c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\FoveatedRendering\FoveatedRenderingApp.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\..\Media\EnvMap.xml">
+      <Filter>asset</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>
