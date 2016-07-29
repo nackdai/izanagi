@@ -155,15 +155,39 @@ namespace graph
     {
         IZ_ASSERT(m_Texture > 0);
 
+        auto isCompressed = CGraphUtil::IsCompressedPixelFormat(fmt);
+
         m_TexInfo.width = width;
         m_TexInfo.height = height;
     
-        m_TexInfo.level = mipLevel;
+        m_TexInfo.level = isCompressed ? 1 : mipLevel;
         m_TexInfo.fmt = fmt;
 
         m_TexInfo.is_rendertarget = IZ_FALSE;
         m_TexInfo.is_dynamic = IsDynamic();
         m_TexInfo.is_on_sysmem = IZ_FALSE;
+
+        if (isCompressed) {
+            if (fmt == E_GRAPH_PIXEL_FMT_DXT1) {
+                // RGBA 1/8
+                m_Size = (width * height) >> 1;
+            }
+            else {
+                // RGBA 1/4
+                m_Size = width * height;
+            }
+        }
+        else {
+            IZ_UINT bpp = CGraphUtil::GetBPP(fmt);
+
+            m_Size = width * height * bpp;
+        }
+
+        CTargetParamValueConverter::ConvAbstractToTarget_PixelFormat(
+            fmt,
+            m_GLInternal,
+            m_GLFormat,
+            m_GLType);
     }
 
     void CCubeTextureGLES2::Initialize()
@@ -180,7 +204,7 @@ namespace graph
                     CALL_GL_API(::glTexImage2D(
                         GL_TEXTURE_CUBE_MAP_POSITIVE_X + face,
                         level,
-                        m_GLFormat,
+                        m_GLInternal,
                         w, h,
                         0,
                         m_GLFormat,

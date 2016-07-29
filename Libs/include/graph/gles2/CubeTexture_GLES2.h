@@ -2,6 +2,7 @@
 #define __IZANAGI_GRAPH_CUBE_TEXTURE_GLES2_H__
 
 #include "graph/CubeTexture.h"
+#include "graph/gles2/TextureProxy.h"
 
 namespace izanagi
 {
@@ -10,7 +11,7 @@ namespace graph
     class CGraphicsDevice;
 
     // キューブテクスチャ
-    class CCubeTextureGLES2 : public CCubeTexture
+    class CCubeTextureGLES2 : public CTextureProxy<CCubeTexture>
     {
         friend class CGraphicsDeviceGLES2;
 
@@ -89,6 +90,7 @@ namespace graph
 
         IZ_UINT m_Size;
 
+        GLenum m_GLInternal;
         GLenum m_GLFormat;
         GLenum m_GLType;
 
