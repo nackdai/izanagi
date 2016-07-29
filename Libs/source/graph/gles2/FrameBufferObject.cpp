@@ -95,18 +95,6 @@ namespace graph
         if (m_Color != IZ_NULL
             || m_Depth != IZ_NULL)
         {
-#if 1
-            // TODO
-            // How to do about "glClipControl" for GLES2...
-
-            // NOTE
-            // http://www.slideshare.net/Mark_Kilgard/opengl-45-update-for-nvidia-gpus
-            // p38
-            CALL_GL_API(::glClipControl(
-                GL_UPPER_LEFT,
-                GL_ZERO_TO_ONE));
-#endif
-
             m_IsOnOffScreen = IZ_TRUE;
 
             CALL_GL_API(::glBindFramebuffer(
@@ -179,18 +167,6 @@ namespace graph
             }
 
             m_IsOnOffScreen = IZ_FALSE;
-
-#if 1
-            // TODO
-            // How to do about "glClipControl" for GLES2...
-
-            // NOTE
-            // http://www.slideshare.net/Mark_Kilgard/opengl-45-update-for-nvidia-gpus
-            // p38
-            CALL_GL_API(::glClipControl(
-                GL_LOWER_LEFT,
-                GL_ZERO_TO_ONE));
-#endif
         }
 
         return IZ_TRUE;
