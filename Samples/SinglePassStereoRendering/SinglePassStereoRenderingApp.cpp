@@ -169,7 +169,7 @@ void SinglePassStereoRenderingApp::UpdateInternal(izanagi::graph::CGraphicsDevic
 void SinglePassStereoRenderingApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
     if (m_enableAdvanced) {
-        RenderAdvancedStereo(device);
+        RenderSinglePassStereo(device);
     }
     else {
         RenderDefaultStereo(device);
@@ -184,7 +184,7 @@ void SinglePassStereoRenderingApp::RenderInternal(izanagi::graph::CGraphicsDevic
             device,
             0, 40,
             IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0xff),
-            m_enableAdvanced ? "Advance" : "Default");
+            m_enableAdvanced ? "SinglePass" : "Default");
 
         font->DBPrint(
             device,
@@ -217,7 +217,7 @@ void SinglePassStereoRenderingApp::RenderDefaultStereo(izanagi::graph::CGraphics
         },
     };
 
-    auto& defaultVP = device->GetViewport();
+    auto defaultVP = device->GetViewport();
 
     for (IZ_UINT n = 0; n < 2; n++) {
         device->SetViewport(vp[n]);
@@ -265,7 +265,7 @@ void SinglePassStereoRenderingApp::RenderDefaultStereo(izanagi::graph::CGraphics
     device->SetViewport(defaultVP);
 }
 
-void SinglePassStereoRenderingApp::RenderAdvancedStereo(izanagi::graph::CGraphicsDevice* device)
+void SinglePassStereoRenderingApp::RenderSinglePassStereo(izanagi::graph::CGraphicsDevice* device)
 {
     const auto& camera = GetCamera();
 

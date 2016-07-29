@@ -28,7 +28,7 @@ protected:
     virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device);
 
     void RenderDefaultStereo(izanagi::graph::CGraphicsDevice* device);
-    void RenderAdvancedStereo(izanagi::graph::CGraphicsDevice* device);
+    void RenderSinglePassStereo(izanagi::graph::CGraphicsDevice* device);
 
     virtual IZ_BOOL OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key) override;
 
