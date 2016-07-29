@@ -25,19 +25,14 @@ void main()
     // [-pi, pi] -> [0, 2pi]
     float phi = atan(ref.x, ref.z) + MATH_PI;
 
-    if (canFoveated) {
-        // Normalize [0, 1]
-        vec2 uv = vec2(phi / MATH_PI2, theta / MATH_PI);
-        gl_FragColor = texture2D(s0, uv);
+    // Normalize [0, 1]
+    vec2 uv = vec2(phi / MATH_PI2, 1 - theta / MATH_PI);
+    gl_FragColor = texture2D(s0, uv);
 
+    if (canFoveated) {
         vec2 maskuv = gl_FragCoord.xy * invScreen.xy;
         vec4 mask = texture2D(s1, maskuv);
 
         gl_FragColor.rgb *= mask.r;
-    }
-    else {
-        // Normalize [0, 1]
-        vec2 uv = vec2(phi / MATH_PI2, 1 - theta / MATH_PI);
-        gl_FragColor = texture2D(s0, uv);
     }
 }
