@@ -48,6 +48,7 @@ namespace graph
             PRIM_TYPE_SPRITE = 0,
             PRIM_TYPE_RECT,
             PRIM_TYPE_LINE,
+            PRIM_TYPE_TRIANGLE,
 
             PRIM_TYPE_NUM,
             PRIM_TYPE_FORCE_INT32 = 0x7fffffff,
@@ -93,6 +94,16 @@ namespace graph
             CGraphicsDevice* device,
             const CIntPoint& ptStart,
             const CIntPoint& ptGoal,
+            const IZ_COLOR color);
+
+        /**
+         * Draw a triangle.
+         */
+        IZ_BOOL DrawTriangle(
+            CGraphicsDevice* device,
+            const CIntPoint& pt0,
+            const CIntPoint& pt1,
+            const CIntPoint& pt2,
             const IZ_COLOR color);
 
         // 描画設定

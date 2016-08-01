@@ -214,6 +214,28 @@ namespace graph
         return ret;
     }
 
+    // Draw a triangle.
+    IZ_BOOL CGraphicsDevice::Draw2DTriangle(
+        const CIntPoint& pt0,
+        const CIntPoint& pt1,
+        const CIntPoint& pt2,
+        const IZ_COLOR color)
+    {
+        IZ_ASSERT(m_2DRenderer != IZ_NULL);
+        IZ_ASSERT(m_Flags.is_render_2d);
+
+        IZ_BOOL ret = IZ_FALSE;
+
+        if (m_Flags.is_render_2d) {
+            ret = m_2DRenderer->DrawTriangle(
+                this,
+                pt0, pt1, pt2,
+                color);
+        }
+
+        return ret;
+    }
+
     // 2D描画モードセット
     void CGraphicsDevice::Set2DRenderOp(E_GRAPH_2D_RENDER_OP nOp)
     {

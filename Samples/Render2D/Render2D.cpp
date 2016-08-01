@@ -86,6 +86,20 @@ void CRender2DApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
             izanagi::CIntPoint(200, 200),    // 終点
             IZ_COLOR_RGBA(0xff, 0, 0, 0xff));
 
+        // 三角形.
+        device->Draw2DTriangle(
+#if 1
+            izanagi::CIntPoint(100, 300),
+            izanagi::CIntPoint(200, 300), 
+            izanagi::CIntPoint(100, 400),
+#else
+            // If right hand coordinate, error occurs forcibly.
+            izanagi::CIntPoint(100, 300),
+            izanagi::CIntPoint(100, 400),
+            izanagi::CIntPoint(200, 300),
+#endif
+            IZ_COLOR_RGBA(0xff, 0xff, 0, 0xff));
+
         device->End2D();
     }
 }

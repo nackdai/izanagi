@@ -237,8 +237,28 @@ namespace graph
             IZ_UINT nIdx,
             IZ_UINT nLineNum)
         {
-            IZ_INT nMinIdx = nIdx - 2 * nLineNum;
+            //IZ_INT nMinIdx = nIdx - 2 * nLineNum;
+            IZ_INT nMinIdx = nIdx + 1 - 2 * nLineNum;
             return nMinIdx;
+        }
+
+        // 三角形の頂点数取得.
+        IZ_UINT GetTriangleVtxNum(IZ_UINT triNum)
+        {
+            return triNum * 3;
+        }
+
+        // 三角形を描画するために必要なプリミティブ数計算.
+        IZ_UINT ComputeTriangleRealPrimNum(IZ_UINT triNum)
+        {
+            return triNum;
+        }
+
+        // 三角形描画時の最小インデックス値計算.
+        IZ_INT ComputeTriangleMinIdx(IZ_UINT idx, IZ_UINT triNum)
+        {
+            IZ_INT minIdx = idx + 1 - 3 * triNum;
+            return minIdx;
         }
 
         // 頂点数取得
@@ -246,6 +266,7 @@ namespace graph
             GetRectVtxNum,
             GetRectVtxNum,
             GetLineVtxNum,
+            GetTriangleVtxNum,
         };
 
         // 描画するために必要なプリミティブ数計算
@@ -253,6 +274,7 @@ namespace graph
             ComputeRectRealPrimNum,
             ComputeRectRealPrimNum,
             ComputeLineRealPrimNum,
+            ComputeTriangleRealPrimNum,
         };
 
         // 描画時の最小インデックス値計算
@@ -260,6 +282,7 @@ namespace graph
             ComputeRectMinIdx,
             ComputeRectMinIdx,
             ComputeLineMinIdx,
+            ComputeTriangleMinIdx,
         };
 
         E_GRAPH_PRIM_TYPE PrimType[] = {
@@ -271,6 +294,8 @@ namespace graph
             E_GRAPH_PRIM_TYPE_TRIANGLELIST,
 #endif
             E_GRAPH_PRIM_TYPE_LINESTRIP,
+
+            E_GRAPH_PRIM_TYPE_TRIANGLELIST,
         };
     }   // namespace
 
@@ -546,6 +571,100 @@ namespace graph
         return IZ_TRUE;
     }
 
+    // Draw a triangle.
+    IZ_BOOL C2DRenderer::DrawTriangle(
+        CGraphicsDevice* device,
+        const CIntPoint& pt0,
+        const CIntPoint& pt1,
+        const CIntPoint& pt2,
+        const IZ_COLOR color)
+    {
+        // 元の値を覚えておく
+        E_GRAPH_2D_RENDER_OP nPrevOp = GetRenderOp();
+
+        // TODO
+        // テクスチャを張らないので強制的に
+        VRETURN(SetRenderOp(
+            device,
+            E_GRAPH_2D_RENDER_OP_VTX));
+
+        // 描画準備
+        VRETURN(PrepareDraw(
+            device,
+            PRIM_TYPE_TRIANGLE));
+
+        // ロック
+        VRETURN(Lock(device));
+
+        // 頂点データセット
+        {
+            CUSTOM_VERTEX* v = (CUSTOM_VERTEX*)m_sVBInfo.buf_ptr;
+
+            // 頂点色
+            v[0].color = v[1].color = v[2].color = v[3].color = color;
+
+            // 頂点位置
+            v[0].x = (IZ_FLOAT)pt0.x;
+            v[0].y = (IZ_FLOAT)pt0.y;
+
+            v[1].x = (IZ_FLOAT)pt1.x;
+            v[1].y = (IZ_FLOAT)pt1.y;
+
+            v[2].x = (IZ_FLOAT)pt2.x;
+            v[2].y = (IZ_FLOAT)pt2.y;
+
+#ifdef __IZ_DEBUG__
+            // Check whether left hand coordinate.
+            struct Vector {
+                IZ_FLOAT x, y, z;
+            };
+            Vector e0;
+            e0.x = pt1.x - pt0.x;
+            e0.y = pt1.y - pt0.y;
+            e0.z = 0.0f;
+
+            Vector e1;
+            e1.x = pt2.x - pt0.x;
+            e1.y = pt2.y - pt0.y;
+            e1.z = 0.0f;
+
+            IZ_FLOAT cross_z = e0.x * e1.y - e0.y * e1.x;
+
+            IZ_ASSERT(cross_z > 0.0f);
+#endif
+
+            v[0].z = v[1].z = v[2].z = 0.5f; // 適当
+            v[0].w = v[1].w = v[2].w = 1.0f;
+
+            // 3 vertices per 1 triangle.
+            m_sVBInfo.buf_ptr = (IZ_UINT8*)m_sVBInfo.buf_ptr + 3 * m_pVB->GetStride();
+            m_sVBInfo.num += 3;
+        }
+
+        // インデックスデータセット
+        {
+            IZ_ASSERT(m_pIB->GetFormat() == E_GRAPH_INDEX_BUFFER_FMT_INDEX16);
+
+            IZ_UINT16* pIdx = (IZ_UINT16*)m_sIBInfo.buf_ptr;
+
+            *pIdx++ = m_nCurIdx++;
+            *pIdx++ = m_nCurIdx++;
+            *pIdx++ = m_nCurIdx++;
+
+            m_sIBInfo.buf_ptr = pIdx;
+            m_sIBInfo.num += 3;
+        }
+
+        ++m_nCurPrimNum;
+
+        // 元に戻す
+        VRETURN(SetRenderOp(
+            device,
+            nPrevOp));
+
+        return IZ_TRUE;
+    }
+
     // 描画設定セット
     IZ_BOOL C2DRenderer::SetRenderOp(
         CGraphicsDevice* device,
@@ -608,6 +727,9 @@ namespace graph
             case PRIM_TYPE_LINE:
                 nVtxNumPerPrim = 2;
                 break;
+            case PRIM_TYPE_TRIANGLE:
+                nVtxNumPerPrim = 3;
+                break;
             default:
                 IZ_ASSERT(IZ_FALSE);
                 break;
@@ -641,6 +763,9 @@ namespace graph
                 break;
             case PRIM_TYPE_LINE:
                 nIdxNumPerPrim = 2;
+                break;
+            case PRIM_TYPE_TRIANGLE:
+                nIdxNumPerPrim = 3;
                 break;
             default:
                 IZ_ASSERT(IZ_FALSE);

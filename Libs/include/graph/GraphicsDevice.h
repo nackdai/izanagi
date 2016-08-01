@@ -363,6 +363,22 @@ namespace graph
             const CIntPoint& ptGoal,
             const IZ_COLOR color);
 
+        /** Draw a triangle.
+         *
+         * @attention You can call this method between CGraphicsDevice::Begin2D and CGraphicsDevice::End2D.
+         *
+         * @param [in] pt0 1st vertex of the triangle.
+         * @param [in] pt1 2nd vertex of the triangle.
+         * @param [in] pt2 3rd vertex of the triangle.
+         * @param [in] color Color of the triangle
+         * @return If this method succeeds, the return value is true. If the method fails, the return value is false.
+         */
+        IZ_BOOL Draw2DTriangle(
+            const CIntPoint& pt0,
+            const CIntPoint& pt1, 
+            const CIntPoint& pt2,
+            const IZ_COLOR color);
+
         /** Set how to render 2D graphics.
          *
          * @param [in] nOp See E_GRAPH_2D_RENDER_OP.
