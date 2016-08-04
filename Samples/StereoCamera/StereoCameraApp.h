@@ -4,7 +4,7 @@
 #include "izSampleKit.h"
 
 static const IZ_UINT SCREEN_WIDTH = 1280;
-static const IZ_UINT SCREEN_HEIGHT = 720;
+static const IZ_UINT SCREEN_HEIGHT = 800;
 
 class StereoCameraApp: public izanagi::sample::CSampleApp {
 public:

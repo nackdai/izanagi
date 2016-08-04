@@ -77,9 +77,9 @@ IZ_BOOL StereoCameraApp::InitInternal(
         izanagi::math::CVector4(0.0f, 0.0f,  0.0f, 1.0f),
         izanagi::math::CVector4(0.0f, 0.0f,  1.0f, 1.0f),
         izanagi::math::CVector4(0.0f, 1.0f,  0.0f, 1.0f),
-        1.0f,
-        500.0f,
-        izanagi::math::CMath::Deg2Rad(60.0f),
+        0.01f,
+        5.0f,
+        izanagi::math::CMath::Deg2Rad(90.0f),
         (IZ_FLOAT)device->GetBackBufferWidth() / device->GetBackBufferHeight());
     camera.Update();
 
@@ -107,7 +107,7 @@ void StereoCameraApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
     GetCamera().Update();
 
-    izanagi::math::SMatrix44::SetScale(m_L2W, 100.0f, 100.0f, 100.0f);
+    izanagi::math::SMatrix44::SetScale(m_L2W, 1, 1, 1);
 
     // カメラの位置にあわせて移動する
     izanagi::math::SMatrix44::Trans(
@@ -162,8 +162,20 @@ void StereoCameraApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     m_shd->SetMatrix(device, hL2W, m_L2W);
 
 #if 1
+    izanagi::HmdInfo info;
+    izanagi::FovPort fov;
+
+    // a typical DK1 half-FOV is 46 degrees inwards, 53 degrees outwards
+    // https://developer.oculusvr.com/forums/viewtopic.php?p=111699#p111699
+
     // Left
     {
+        izanagi::StereoCamera::setFov(
+            izanagi::StereoCamera::Eye::Left,
+            46, 53,
+            90,
+            fov);
+
         device->SetViewport(
             izanagi::graph::SViewport(
             0, 0,
@@ -173,7 +185,8 @@ void StereoCameraApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
         izanagi::StereoCamera::getCamera(
             izanagi::StereoCamera::Eye::Left,
-            6.0f,
+            info,
+            fov,
             cameraL,
             camera);
 
@@ -190,6 +203,12 @@ void StereoCameraApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
     // Right
     {
+        izanagi::StereoCamera::setFov(
+            izanagi::StereoCamera::Eye::Right,
+            46, 53,
+            90,
+            fov);
+
         device->SetViewport(
             izanagi::graph::SViewport(
             SCREEN_WIDTH / 2, 0,
@@ -199,7 +218,8 @@ void StereoCameraApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
         izanagi::StereoCamera::getCamera(
             izanagi::StereoCamera::Eye::Right,
-            6.0f,
+            info,
+            fov,
             cameraR,
             camera);
 
