@@ -1,0 +1,14 @@
+https://forums.oculus.com/developer/discussion/39938/oculus-rift-cv1-hmdinfo-device-parameters
+
+HResolution = 1280;                      // HMD horizontal resolution in pixels
+VResolution = 800;                       // HMD vertical resolution in pixels
+HScreenSize = 0.14976f;                 // HMD horizontal size in meters
+VScreenSize = 0.09356f;                // HMD vertical size in meters
+VScreenCenter = 0.04678f;             // HMD screen center in meters
+EyeToScreenDistance = 0.041f;        // HMD distance between eye and display in meters
+LensSeparationDistance = 0.0635f;   // HMD lens separation distance in meters
+InterpupillaryDistance = 0.064f;        // HMD IPD (distance between pupils) in meters
+DistortionK = { 1.0f,  0.22f, 0.24f, 0.0f };         // HMD lens distortion constants
+ChromaAbCorrection = { 0.996f, -0.004f, 1.014f, 0.0f };      // HMD chromatic aberration correction parameters
+
+http://marina.sys.wakayama-u.ac.jp/~tokoi/?date=20140907#f20140907-01-01
