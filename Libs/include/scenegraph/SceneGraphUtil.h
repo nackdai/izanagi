@@ -26,6 +26,13 @@ namespace izanagi {
             IZ_FLOAT minZ,
             IZ_FLOAT maxZ);
 
+        static void ComputePerspectiveOffCenter(
+            math::SMatrix44& mtxV2C,
+            IZ_FLOAT l, IZ_FLOAT r,
+            IZ_FLOAT b, IZ_FLOAT t,
+            IZ_FLOAT zn,
+            IZ_FLOAT zf);
+
         /** スクリーン距離計算.
          */
         static IZ_FLOAT ComputeScreenDistance(

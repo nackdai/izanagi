@@ -22,6 +22,51 @@ namespace izanagi {
         mtxC2S.m[3][1] = screenHeight * 0.5f;
     }
 
+    void CSceneGraphUtil::ComputePerspectiveOffCenter(
+        math::SMatrix44& mtxV2C,
+        IZ_FLOAT l, IZ_FLOAT r,
+        IZ_FLOAT b, IZ_FLOAT t,
+        IZ_FLOAT zn,
+        IZ_FLOAT zf)
+    {
+        // NOTE
+        // projection matrix.
+        // l : left at near plane.
+        // r : right at near plane.
+        // t : top at near plane.
+        // b : bottom at near plane.
+        // n : z near.
+        // f : z far.
+        //
+        // D3DXMatrixPerspectiveOffCenterLH
+        // https://msdn.microsoft.com/ja-jp/library/cc372889.aspx
+        //    2n/(r-l)        0          0      0
+        //       0         2n/(t-b)      0      0
+        //  (l+r)/(l-r)  (t+b)/(b-t)  f/(f-n)   1
+        //       0            0       nf/(n-f)  0
+        //
+        // D3DXMatrixPerspectiveOffCenterRH
+        // https://msdn.microsoft.com/ja-jp/library/cc372890.aspx
+        //    2n/(r-l)        0          0      0
+        //       0         2n/(t-b)      0      0
+        //  (l+r)/(r-l)  (t+b)/(t-b)  f/(n-f)   -1
+        //       0            0       nf/(n-f)  0
+
+        izanagi::math::SMatrix44::SetUnit(mtxV2C);
+
+        mtxV2C.m[0][0] = 2.0f * zn / (r - l);
+        mtxV2C.m[1][1] = 2.0f * zn / (t - b);
+
+        mtxV2C.m[2][0] = (l + r) / (l - r);
+        mtxV2C.m[2][1] = (t + b) / (b - t);
+
+        mtxV2C.m[2][2] = zf / (zf - zn);
+        mtxV2C.m[2][3] = 1.0f;
+
+        mtxV2C.m[3][2] = zn * zf / (zn - zf);
+        mtxV2C.m[3][3] = 0.0f;
+    }
+
     // スクリーン距離計算
     IZ_FLOAT CSceneGraphUtil::ComputeScreenDistance(
         IZ_FLOAT screenHeight,
