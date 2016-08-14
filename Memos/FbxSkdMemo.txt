@@ -6,3 +6,6 @@ https://github.com/ramemiso/ios_unitychan_es3/tree/master/ios_unitychan
 
 cocos2d-x v3.3 unityちゃんのfbxデータを変換する際のメモ
 http://qiita.com/makanai/items/b9a4d82d245475a3e143
+
+FBXSDKのバインドポーズ行列
+http://open.mixi.jp/user/7454352/diary/1938290018
