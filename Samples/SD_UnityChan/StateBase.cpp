@@ -331,11 +331,27 @@ IZ_BOOL CStateBase::Render(izanagi::graph::CGraphicsDevice* device)
 #endif
     }
 
+#if 0
     // 描画
     m_RenderGraph->Render(
         device,
         m_Renderer,
         m_MdlRenderHandler);
+#else
+    m_Shd->Begin(device, 0, IZ_TRUE);
+
+    m_Shd->BeginPass(0);
+
+    m_Shd->CommitChanges(device);
+
+    device->SetTexture(0, m_Img->GetTexture(0));
+
+    m_Mdl->Render(device);
+
+    m_Shd->EndPass();
+
+    m_Shd->End(device);
+#endif
 
     return IZ_TRUE;
 }
