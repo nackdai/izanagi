@@ -32,9 +32,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\..\..\Media\SD_UnityChan\SD_UnityChanImg.xml">
-      <Filter>asset</Filter>
-    </CustomBuild>
     <CustomBuild Include="..\..\..\Media\unitychan\SD_unitychan\SD_unitychan.fbx">
       <Filter>asset</Filter>
     </CustomBuild>
@@ -43,6 +40,12 @@
     </CustomBuild>
     <CustomBuild Include="..\..\SD_UnityChan\shader\SkinShader.xml">
       <Filter>shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\unitychan\SD_unitychan\SD_UnityChanImg.xml">
+      <Filter>asset\texture</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\unitychan\SD_unitychan\SD_unitychan_motion.fbx">
+      <Filter>asset</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

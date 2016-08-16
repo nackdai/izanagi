@@ -3,37 +3,6 @@
 #include "izSystem.h"
 #include "izSampleKit.h"
 
-static IZ_INT posAnm = 0;
-
-static const char* anmFileName[] = {
-    "data/unitychan_ARpose1.anm",
-    "data/unitychan_ARpose2.anm",
-    "data/unitychan_DAMAGED00.anm",
-    "data/unitychan_DAMAGED01.anm",
-    "data/unitychan_HANDUP00_R.anm",
-    "data/unitychan_JUMP00.anm",
-    "data/unitychan_JUMP00B.anm",
-    "data/unitychan_JUMP01.anm",
-    "data/unitychan_JUMP01B.anm",
-    "data/unitychan_LOSE00.anm",
-    "data/unitychan_REFLESH00.anm",
-    "data/unitychan_RUN00_F.anm",
-    "data/unitychan_RUN00_L.anm",
-    "data/unitychan_RUN00_R.anm",
-    "data/unitychan_SLIDE00.anm",
-    "data/unitychan_UMATOBI00.anm",
-    "data/unitychan_WAIT00.anm",
-    "data/unitychan_WAIT01.anm",
-    "data/unitychan_WAIT02.anm",
-    "data/unitychan_WAIT03.anm",
-    "data/unitychan_WAIT04.anm",
-    "data/unitychan_WALK00_B.anm",
-    "data/unitychan_WALK00_F.anm",
-    "data/unitychan_WALK00_L.anm",
-    "data/unitychan_WALK00_R.anm",
-    "data/unitychan_WIN00.anm",
-};
-
 CStateFbx::CStateFbx(izanagi::sample::CSampleApp* app)
 : CStateBase(app)
 {
@@ -61,11 +30,11 @@ IZ_BOOL CStateFbx::Enter(
         "data/SD_unitychan.skl",
         "data/SkinShader.shd");
 
-#if 0
+#if 1
     // Animation.
     {
         izanagi::CFileInputStream in;
-        VRETURN(in.Open(anmFileName[posAnm]));
+        VRETURN(in.Open("data/SD_unitychan_motion.anm"));
 
         m_Anm = izanagi::CAnimation::CreateAnimation(
             allocator,
@@ -104,7 +73,7 @@ void CStateFbx::OnUpdate(
     IZ_FLOAT time,
     izanagi::graph::CGraphicsDevice* device)
 {
-#if 0
+#if 1
     if (m_enableStepAnm) {
         if (m_step) {
             m_Timeline.Advance(16.67f / 1000.0f);
@@ -190,42 +159,6 @@ IZ_BOOL CStateFbx::CreateMaterial(izanagi::IMemoryAllocator* allocator)
 
 IZ_BOOL CStateFbx::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
 {
-#if 0
-    auto prevPosAnm = posAnm;
-
-    if (key == izanagi::sys::E_KEYBOARD_BUTTON_UP) {
-        posAnm++;
-    }
-    else if (key == izanagi::sys::E_KEYBOARD_BUTTON_DOWN) {
-        posAnm--;
-    }
-
-    posAnm = izanagi::math::CMath::Clamp<IZ_INT>(posAnm, 0, COUNTOF(anmFileName) - 1);
-
-    if (prevPosAnm != posAnm) {
-        SAFE_RELEASE(m_Anm);
-
-        izanagi::CFileInputStream in;
-        VRETURN(in.Open(anmFileName[posAnm]));
-
-        m_Anm = izanagi::CAnimation::CreateAnimation(
-            m_Allocator,
-            &in);
-
-        IZ_ASSERT(m_Anm != IZ_NULL);
-
-        // Reset Timeline
-        {
-            m_Timeline.Init(
-                m_Anm->GetAnimationTime(),
-                0.0f);
-            m_Timeline.EnableLoop(IZ_TRUE);
-            m_Timeline.AutoReverse(IZ_FALSE);
-            m_Timeline.Start();
-            m_Timeline.Reset();
-        }
-    }
-
     if (key == izanagi::sys::E_KEYBOARD_BUTTON_SPACE) {
         m_enableStepAnm = !m_enableStepAnm;
     }
@@ -235,7 +168,6 @@ IZ_BOOL CStateFbx::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
             m_step = IZ_TRUE;
         }
     }
-#endif
 
     return IZ_TRUE;
 }
