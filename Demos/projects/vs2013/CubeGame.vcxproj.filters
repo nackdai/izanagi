@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="asset">
+      <UniqueIdentifier>{8465ce63-33db-4db1-a795-df1a27e0ba73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shader">
+      <UniqueIdentifier>{4e35f4d6-9c3d-4214-90e4-7d96dfc21fcc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{4717dd34-6b30-46b7-9c51-0f6f0660f101}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{9d35beb2-6d98-47b0-93cd-f500ad6994e8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Media\unitychan\unitychan.fbx">
+      <Filter>asset</Filter>
+    </None>
+    <None Include="..\..\..\Media\unitychan\unitychan_RUN00_F.fbx">
+      <Filter>asset</Filter>
+    </None>
+    <None Include="..\..\..\Media\unitychan\unitychan_WAIT00.fbx">
+      <Filter>asset</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\..\..\Media\unitychan\UnityChanImg.xml">
+      <Filter>asset</Filter>
+    </Xml>
+    <Xml Include="..\..\CubeGame\shader\BasicShader.xml">
+      <Filter>shader</Filter>
+    </Xml>
+    <Xml Include="..\..\CubeGame\shader\SkinShader.xml">
+      <Filter>shader</Filter>
+    </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\CubeGame\Configure.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\CubeGame\Configure.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CubeGame\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\..\CubeGame\shader\SkinShader.fx">
+      <Filter>shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\CubeGame\shader\BasicShader.fx">
+      <Filter>shader</Filter>
+    </FxCompile>
+  </ItemGroup>
+</Project>

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SampleKit", "SampleKit.vcxproj", "{DD5D28B8-93F1-4F26-8AD1-DD224CCB9A4F}"
 EndProject
@@ -14,6 +14,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AppGallery", "AppGallery.vc
 	ProjectSection(ProjectDependencies) = postProject
 		{DD5D28B8-93F1-4F26-8AD1-DD224CCB9A4F} = {DD5D28B8-93F1-4F26-8AD1-DD224CCB9A4F}
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CubeGame", "CubeGame.vcxproj", "{D2637128-AD64-437F-AA3D-4B54B25A887D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +63,18 @@ Global
 		{028297AE-7F9A-4409-B4E4-A1CC8FD9690D}.Release_DX9|Win32.Build.0 = Release_DX9|Win32
 		{028297AE-7F9A-4409-B4E4-A1CC8FD9690D}.Release_GLES2|Win32.ActiveCfg = Release_GLES2|Win32
 		{028297AE-7F9A-4409-B4E4-A1CC8FD9690D}.Release_GLES2|Win32.Build.0 = Release_GLES2|Win32
+		{D2637128-AD64-437F-AA3D-4B54B25A887D}.Debug_DX9|Win32.ActiveCfg = Debug_DX9|Win32
+		{D2637128-AD64-437F-AA3D-4B54B25A887D}.Debug_DX9|Win32.Build.0 = Debug_DX9|Win32
+		{D2637128-AD64-437F-AA3D-4B54B25A887D}.Debug_GLES2|Win32.ActiveCfg = Debug_GLES2|Win32
+		{D2637128-AD64-437F-AA3D-4B54B25A887D}.Debug_GLES2|Win32.Build.0 = Debug_GLES2|Win32
+		{D2637128-AD64-437F-AA3D-4B54B25A887D}.Debug_GLUT|Win32.ActiveCfg = Debug_GLES2|Win32
+		{D2637128-AD64-437F-AA3D-4B54B25A887D}.Debug_GLUT|Win32.Build.0 = Debug_GLES2|Win32
+		{D2637128-AD64-437F-AA3D-4B54B25A887D}.Debug_OGL|Win32.ActiveCfg = Debug_OGL|Win32
+		{D2637128-AD64-437F-AA3D-4B54B25A887D}.Debug_OGL|Win32.Build.0 = Debug_OGL|Win32
+		{D2637128-AD64-437F-AA3D-4B54B25A887D}.Release_DX9|Win32.ActiveCfg = Release_DX9|Win32
+		{D2637128-AD64-437F-AA3D-4B54B25A887D}.Release_DX9|Win32.Build.0 = Release_DX9|Win32
+		{D2637128-AD64-437F-AA3D-4B54B25A887D}.Release_GLES2|Win32.ActiveCfg = Release_GLES2|Win32
+		{D2637128-AD64-437F-AA3D-4B54B25A887D}.Release_GLES2|Win32.Build.0 = Release_GLES2|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
