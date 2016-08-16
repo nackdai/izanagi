@@ -1054,6 +1054,8 @@ void FbxDataManager::GatherSkin(std::vector<SkinData>& skinList)
     {
         fbxsdk::FbxMesh* fbxMesh = m_fbxMeshes[m];
 
+        IZ_PRINTF("Mesh Node (%s)\n", fbxMesh->GetNode()->GetName());
+
         // メッシュに含まれるスキニング情報数.
         int skinCount = fbxMesh->GetDeformerCount(FbxDeformer::EDeformerType::eSkin);
 
@@ -1078,6 +1080,8 @@ void FbxDataManager::GatherSkin(std::vector<SkinData>& skinList)
                 // ノードのインデックス.
                 IZ_INT nodeIdx = GetNodeIndex(targetNode);
                 IZ_ASSERT(nodeIdx >= 0);
+
+                IZ_PRINTF("    skin[%d] : bone [%d] ([%d]%s)\n", n, b, nodeIdx, targetNode->GetName());
 
                 for (int v = 0; v < influencedVtxNum; v++) {
                     int vtxIdxInMesh = cluster->GetControlPointIndices()[v];

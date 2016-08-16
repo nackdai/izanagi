@@ -407,6 +407,7 @@ void CFbxImporter::GetJointInvMtx(
     FbxCluster* cluster = m_dataMgr->GetClusterByNode(node);
 
     if (cluster) {
+#if 0
         FbxAMatrix& mtxGlobal = node->EvaluateGlobalTransform();
         FbxAMatrix& mtxLocal = node->EvaluateLocalTransform();
 
@@ -423,6 +424,23 @@ void CFbxImporter::GetJointInvMtx(
         cluster->GetTransformMatrix(mtxTransform);
 
         FbxAMatrix globalBindposeInverseMatrix = mtxTransformLink.Inverse();
+#else
+        FbxAMatrix reference;
+        cluster->GetTransformMatrix(reference);
+
+        const FbxVector4 lT = node->GetGeometricTranslation(FbxNode::eSourcePivot);
+        const FbxVector4 lR = node->GetGeometricRotation(FbxNode::eSourcePivot);
+        const FbxVector4 lS = node->GetGeometricScaling(FbxNode::eSourcePivot);
+
+        FbxAMatrix refGeom(lT, lR, lS);
+
+        reference *= refGeom;
+
+        FbxAMatrix init;
+        cluster->GetTransformLinkMatrix(init);
+
+        FbxAMatrix globalBindposeInverseMatrix = init.Inverse() * reference;
+#endif
 
         for (IZ_UINT i = 0; i < 4; i++) {
             for (IZ_UINT n = 0; n < 4; n++) {
@@ -441,6 +459,8 @@ void CFbxImporter::GetJointTransform(
     std::vector<SJointTransform>& tvTransform)
 {
     FbxNode* node = m_dataMgr->GetFbxNode(nIdx);
+
+    auto name = node->GetName();
 
     FbxAMatrix& mtxLocal = node->EvaluateLocalTransform();
 
