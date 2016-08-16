@@ -425,6 +425,10 @@ void CFbxImporter::GetJointInvMtx(
 
         FbxAMatrix globalBindposeInverseMatrix = mtxTransformLink.Inverse();
 #else
+        // NOTE
+        // https://github.com/cocos2d-x/fbx-conv/blob/master/src/readers/FbxConverter.h
+        // getBindPose
+
         FbxAMatrix reference;
         cluster->GetTransformMatrix(reference);
 
