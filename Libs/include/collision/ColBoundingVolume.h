@@ -7,6 +7,14 @@ namespace izanagi
 {
 namespace col
 {
+    class Ray;
+
+    struct HitResult {
+        math::CVector4 pt;
+        math::CVector4 normal;
+        IZ_FLOAT t;
+    };
+
     /**
      */
     class BoundingVolume {
@@ -15,10 +23,6 @@ namespace col
         virtual ~BoundingVolume() {}
 
     public:
-        /** マトリクスを適用.
-         */
-        PURE_VIRTUAL(void apply(const math::SMatrix44& mtx));
-
         /** 実効半径を計算.
          */
         PURE_VIRTUAL(IZ_FLOAT computeRadius(const math::SVector4& normal) const);
@@ -32,6 +36,31 @@ namespace col
         /** 中心座標を取得.
          */
         PURE_VIRTUAL(const math::SVector4 getCenter() const);
+
+        /** Get if the ray is hit.
+         */
+        virtual IZ_BOOL isHit(const Ray& ray, HitResult& res)
+        {
+            return IZ_FALSE;
+        }
+
+        void setL2W(const math::SMatrix44& mtxL2W)
+        {
+            m_L2W = mtxL2W;
+        }
+
+        const math::CMatrix44& getL2W() const
+        {
+            return m_L2W;
+        }
+
+        math::CMatrix44& getL2W()
+        {
+            return m_L2W;
+        }
+
+    protected:
+        math::CMatrix44 m_L2W;
     };
 }   // namespace math
 }   // namespace izanagi

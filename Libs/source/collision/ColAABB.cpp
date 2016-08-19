@@ -6,8 +6,6 @@ namespace col
 {
     AABB::AABB()
     {
-        m_min.Set(IZ_FLOAT_MAX, IZ_FLOAT_MAX, IZ_FLOAT_MAX);
-        m_max.Set(0, 0, 0);
     }
 
     AABB::AABB(
@@ -34,7 +32,6 @@ namespace col
     const AABB& AABB::operator = (const AABB& rhs)
     {
         m_min.Set(rhs.m_min);
-        m_max.Set(rhs.m_max);
         m_size.Set(rhs.m_size);
         return *this;
     }
@@ -44,7 +41,6 @@ namespace col
         const math::SVector4& maxPtr)
     {
         m_min.Set(minPtr);
-        m_max.Set(maxPtr);
 
         m_size.x = maxPtr.x - minPtr.x;
         m_size.y = maxPtr.y - minPtr.y;
@@ -62,26 +58,9 @@ namespace col
         m_min.y -= lengthY * 0.5f;
         m_min.z -= lengthZ * 0.5f;
 
-        m_max.Set(m_min);
-        m_max.x += lengthX;
-        m_max.y += lengthY;
-        m_max.z += lengthZ;
-
         m_size.x = lengthX;
         m_size.y = lengthY;
         m_size.z = lengthZ;
-    }
-
-    void AABB::apply(const math::SMatrix44& mtx)
-    {
-        // AABBなので、回転は無視.
-        const auto& translate = mtx.v[3];
-
-        math::SVector4::AddXYZ(m_min, m_min, translate);
-        math::SVector4::AddXYZ(m_max, m_max, translate);
-
-        // TODO
-        // スケール...
     }
 
     IZ_FLOAT AABB::computeRadius(const math::SVector4& normal) const
@@ -135,9 +114,7 @@ namespace col
 
     const math::SVector4 AABB::getCenter() const
     {
-        math::SVector4 center;
-
-        center.Set(m_min);
+        math::CVector4 center = getMin();
 
         center.x += m_size.x * 0.5f;
         center.y += m_size.y * 0.5f;
@@ -147,27 +124,24 @@ namespace col
     }
 
     // 最小座標を取得.
-    const math::SVector4& AABB::getMin() const
+    const math::SVector4 AABB::getMin() const
     {
-        return m_min;
+        math::CVector4 ret(m_min);
+        math::SMatrix44::Apply(ret, m_min, m_L2W);
+
+        return std::move(ret);
     }
 
     // 最大座標を取得.
     const math::SVector4 AABB::getMax() const
     {
-#if 0
-        math::SVector4 ret;
-
-        ret.Set(m_min);
+        math::CVector4 ret = getMin();
 
         ret.x += m_size.x;
         ret.y += m_size.y;
         ret.z += m_size.z;
 
         return std::move(ret);
-#else
-        return m_max;
-#endif
     }
 
     // サイズを取得.
@@ -186,10 +160,6 @@ namespace col
         m_size.x = maxSize;
         m_size.y = maxSize;
         m_size.z = maxSize;
-
-        m_max.x = m_min.x + m_size.x;
-        m_max.y = m_min.y + m_size.y;
-        m_max.z = m_min.z + m_size.z;
     }
 
     // AABBに外接するバウンディングスフィアを取得.
@@ -199,7 +169,10 @@ namespace col
         // 毎回計算するのはコスト的に問題ありそうなので、何かのタイミングのときだけ更新したい.
         
         auto center = getCenter();
-        auto radius = math::SVector4::Length2(center, m_min);
+
+        auto min = getMin();
+
+        auto radius = math::SVector4::Length2(center, min);
 
         col::Sphere sphere(radius, center);
 
@@ -212,19 +185,11 @@ namespace col
         // TODO
         // 毎回計算するのはコスト的に問題ありそうなので、何かのタイミングのときだけ更新したい.
 
-#if 0
-        // 立方体でないといけない.
-        makeCubic();
-
-        // 立方体なので、全方向のサイズは同じ.
-        auto radius = m_size.x * 0.5f;
-#else
         // もっとも小さい辺の長さを取得.
         IZ_FLOAT minSize = IZ_MIN(m_size.x, m_size.y);
         minSize = IZ_MIN(minSize, m_size.z);
 
         auto radius = minSize * 0.5f;
-#endif
 
         auto center = getCenter();
 
@@ -239,7 +204,7 @@ namespace col
         // 8点.
         math::CVector4 ptr[8];
         {
-            ptr[0].Set(m_min.x, m_min.y, m_min.z);
+            ptr[0] = getMin();
 
             ptr[1].Set(ptr[0]);
             ptr[1].Add(m_size.x, 0.0f, 0.0f);
@@ -301,7 +266,7 @@ namespace col
         return (m_displayFlag > 0);
     }
 
-    // Check if the point is contain in this aabb.
+    // Check if the point is contain in the aabb.
     IZ_BOOL AABB::isContain(const math::SVector3& point)
     {
 #if 0
@@ -326,10 +291,22 @@ namespace col
 
         return ret;
 #else
-        return ((m_min.x <= point.x && point.x <= m_max.x)
-            && (m_min.y <= point.y && point.y <= m_max.y)
-            && (m_min.z <= point.z && point.z <= m_max.z));
+        auto min = getMin();
+        auto max = getMax();
+
+        return ((min.x <= point.x && point.x <= max.x)
+            && (min.y <= point.y && point.y <= max.y)
+            && (min.z <= point.z && point.z <= max.z));
 #endif
+    }
+
+    // Check if the aabb is valid.
+    IZ_BOOL AABB::isValid()
+    {
+        auto min = getMin();
+        auto max = getMax();
+
+        return (min.x < max.x && min.y < max.y && min.z < max.z);
     }
 }   // namespace math
 }   // namespace izanagi

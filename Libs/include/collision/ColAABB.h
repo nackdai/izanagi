@@ -40,10 +40,6 @@ namespace col
             IZ_FLOAT lengthY,
             IZ_FLOAT lengthZ);
 
-        /** マトリクスを適用.
-         */
-        virtual void apply(const math::SMatrix44& mtx) override;
-
         /** 実効半径を計算.
          */
         virtual IZ_FLOAT computeRadius(const math::SVector4& normal) const override;
@@ -60,7 +56,7 @@ namespace col
 
         /** 最小座標を取得.
          */
-        const math::SVector4& getMin() const;
+        const math::SVector4 getMin() const;
 
         /** 最大座標を取得.
          */
@@ -90,20 +86,18 @@ namespace col
          */
         IZ_BOOL canDisplay() const;
 
-        /** Check if the point is contain in this aabb.
+        /** Check if the point is contain in the aabb.
          */
         IZ_BOOL isContain(const math::SVector3& point);
 
-        IZ_BOOL isValid()
-        {
-            return (m_min.x < m_max.x && m_min.y < m_max.y && m_min.x < m_max.z);
-        }
+        /** Check if the aabb is valid.
+         */
+        IZ_BOOL isValid();
 
     protected:
-        math::SVector4 m_min;
-        math::SVector4 m_max;
+        math::CVector4 m_min;
 
-        math::SVector3 m_size;
+        math::CVector3 m_size;
 
         enum Clip {
             PositiveX,

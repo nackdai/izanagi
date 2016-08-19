@@ -138,6 +138,9 @@ namespace math
         // ベクトルの内積を計算する
         static inline IZ_FLOAT Dot(const SVector4& vec1, const SVector4& vec2);
 
+        // ベクトルの内積を計算する.
+        static inline IZ_FLOAT DotXYZ(const SVector4& vec1, const SVector4& vec2);
+
         // ベクトルの外積を計算する
         static inline void Cross(SVector4& dst, const SVector4& src1, const SVector4& src2);
 
