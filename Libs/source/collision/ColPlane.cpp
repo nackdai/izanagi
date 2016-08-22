@@ -5,193 +5,84 @@ namespace izanagi
 {
 namespace col
 {
-    // 平面上でレイと交差する点を取得
-    IZ_BOOL CPlane::GetIntersectPoint(
-        const CPlane& plane,
-        const SRay& ray,
-        math::SVector4& refPtr,
-        IZ_FLOAT* retRayCoefficient/*= IZ_NULL*/)
+    Plane::Plane()
     {
-        return plane.GetIntersectPoint(ray, refPtr, retRayCoefficient);
+        m_nml.Set(0.0f, 0.0f, 0.0f, 0.0f);
+        m_d = 0.0f;
+
+        m_pt.Set(0.0f, 0.0f, 0.0f);
     }
 
-    CPlane::CPlane()
-    {
-        a = b = c = d = padding = 0.0f;
-    }
-
-    CPlane::CPlane(const math::SVector4& normal, const math::SVector4& ptr)
+    Plane::Plane(const math::SVector4& normal, const math::SVector4& ptr)
     {
         Set(normal, ptr);
     }
 
-    CPlane::CPlane(const SPlane& rhs)
+    const Plane& Plane::operator=(const Plane& rhs)
     {
-        *this = rhs;
-    }
-
-    CPlane::CPlane(IZ_FLOAT _a, IZ_FLOAT _b, IZ_FLOAT _c, IZ_FLOAT _d)
-    {
-        a = _a;
-        b = _b;
-        c = _c;
-        d = _d;
-    }
-
-    const CPlane& CPlane::operator=(const SPlane& rhs)
-    {
-        Set(rhs.nml, rhs.pt);
+        Set(rhs.m_nml, rhs.m_pt);
         return *this;
     }
 
     // 平面を設定.
-    void CPlane::Set(const math::SVector4& normal, const math::SVector4& ptr)
+    void Plane::Set(const math::SVector4& normal, const math::SVector4& ptr)
     {
-        math::SVector4::Copy(nml, normal);
+        math::SVector4::Copy(m_nml, normal);
 
-        nml.w = 0.0f;
-        math::SVector4::Normalize(nml, nml);
+        m_nml.w = 0.0f;
+        m_nml.Normalize();
 
-        d = -(a * ptr.x + b * ptr.y + c * ptr.z);
+        IZ_FLOAT a = m_nml.x;
+        IZ_FLOAT b = m_nml.y;
+        IZ_FLOAT c = m_nml.z;
 
-        pt.Set(ptr.x, ptr.y, ptr.z);
+        m_d = -(a * ptr.x + b * ptr.y + c * ptr.z);
+
+        m_pt.Set(ptr.x, ptr.y, ptr.z);
     }
 
     // 平面を設定.
-    void CPlane::Set(const math::SVector4& normal, IZ_FLOAT _d)
+    void Plane::Set(const math::SVector4& normal, IZ_FLOAT _d)
     {
-        math::SVector4::Copy(nml, normal);
+        m_nml = normal;
 
-        nml.w = 0.0f;
-        math::SVector4::Normalize(nml, nml);
+        m_nml.w = 0.0f;
+        m_nml.Normalize();
 
-        d = _d;
+        m_d = _d;
 
         // 平面の基準位置を計算する
         // => 原点からの法線方向へのレイとの交点を計算する
-        CRay ray(
+        Ray ray(
             math::CVector4(0.0f, 0.0f, 0.0f),
-            nml);
-        GetIntersectPoint(ray, this->pt);
+            m_nml);
+
+        HitResult hit;
+
+        auto result = isHit(ray, hit);
+        IZ_ASSERT(result);
+
+        m_pt = hit.pt;
     }
 
-    // 原点からの距離を取得.
-    IZ_FLOAT CPlane::GetDistance() const
+    IZ_FLOAT Plane::computePlane(
+        const math::CMatrix44& mtxL2W,
+        math::CVector4& pt,
+        math::CVector4& nml)
     {
-        return ::fabs(d);
-    }
+        math::SMatrix44::Apply(pt, pt, mtxL2W);
+        math::SMatrix44::Apply(nml, nml, mtxL2W);
 
-    // 平面上に存在する点かどうか.
-    IZ_BOOL CPlane::IsOnPlane(const math::SVector4& ptr)
-    {
-        IZ_FLOAT tmp = a * ptr.x + b * ptr.y + c * ptr.z;
-        return math::CMath::IsNearyEqualZero(tmp + d);
-    }
+        IZ_FLOAT a = nml.x;
+        IZ_FLOAT b = nml.y;
+        IZ_FLOAT c = nml.z;
 
-    // 4x4行列による変換.
-    void CPlane::Transform(const math::SMatrix44& mtx)
-    {
-        // TODO
-        // Matrixにスケールが含まれていた場合
-        // 一度Normalizeする？
-
-        math::SMatrix44::ApplyXYZ(nml, nml, mtx);
-    }
-
-    // 平面をあらわすベクトルを取得
-    void CPlane::GetPlaneVector(math::SVector4& plane)
-    {
-        plane.Set(a, b, c, d);
-    }
-
-    // レイと交差する点を取得
-    IZ_BOOL CPlane::GetIntersectPoint(
-        const SRay& ray,
-        math::SVector4& refPtr,
-        IZ_FLOAT* retRayCoefficient/*= IZ_NULL*/) const
-    {
-        // NOTE
-        // Plane : L = <N, D>
-        // Ray   : P(t) = Q + Vt
-        //
-        // N・P(t) + D = 0
-        // <=> N・Q + (N・V)t + D = 0
-        // <=> t = -(N・Q + D) / N・V
-        // <=> t = -L・Q / L・V
-        //
-        // Q = (Qx, Qy, Qz, 1) => 位置ベクトル
-        // V = (Vx, Vy, Vz, 0) => 方向ベクトル
-        // L = (Nx, Ny, Nz, D)
-        // なので、
-        // N・Q + D = Nx * Qx + Ny * Qy + Nz * Qz + D * 1 = L・Q
-        // N・V + 0 = Nx * Vx + Ny * Vy + Nz * Vz + D * 0 = L・V
-
-        math::CVector4 plane(a, b, c, d);
-
-        // L・V
-        IZ_FLOAT d = math::SVector4::Dot(plane, ray.v);
-        if (math::CMath::IsNearyEqualZero(d))
-        {
-            return IZ_FALSE;
-        }
-
-        // L・Q
-        IZ_FLOAT t = math::SVector4::Dot(plane, ray.p);
-
-        // t = -L・Q / L・V 
-        t = -t / d;
-
-        if (retRayCoefficient != IZ_NULL) {
-            *retRayCoefficient = t;
-        }
-
-        refPtr.x = ray.p.x + t * ray.v.x;
-        refPtr.y = ray.p.y + t * ray.v.y;
-        refPtr.z = ray.p.z + t * ray.v.z;
-        refPtr.w = 1.0f;
-
-        return IZ_TRUE;
-    }
-
-    // 線分と交差する点を取得.
-    IZ_BOOL CPlane::GetIntersectPoint(
-        const math::SVector4& from,
-        const math::SVector4& to,
-        math::SVector4& refPtr,
-        IZ_FLOAT* retRayCoefficient/*= IZ_NULL*/) const
-    {
-        if ((IsPositive(from) && !IsPositive(to))
-            || (!IsPositive(from) && IsPositive(to)))
-        {
-            // 二つの点は面の正負のそれぞれにないといけない
-            CRay ray(
-                from,
-                math::CVector4(to, from, math::CVector4::INIT_SUB));
-
-            IZ_BOOL ret = GetIntersectPoint(ray, refPtr, retRayCoefficient);
-            return ret;
-        }
-
-        return IZ_FALSE;
-    }
-
-    // レイと交差するかどうか
-    IZ_BOOL CPlane::IsIntersect(const SRay& ray) const
-    {
-        math::CVector4 plane(a, b, c, d);
-
-        IZ_FLOAT d = math::SVector4::Dot(plane, ray.v);
-
-        if (math::CMath::IsNearyEqualZero(d))
-        {
-            return IZ_FALSE;
-        }
-
-        return IZ_TRUE;
+        auto d = -(a * pt.x + b * pt.y + c * pt.z);
+        return d;
     }
 
     // 面の正側（法線の向き側）に点があるかどうか.
-    IZ_BOOL CPlane::IsPositive(const math::SVector4& ptr) const
+    IZ_BOOL Plane::IsPositive(const math::SVector4& ptr) const
     {
 #if 0
         // 原点からの距離
@@ -220,11 +111,89 @@ namespace col
 
         return (dot >= 0.0f);
 #else
-        math::CVector4 n(a, b, c, d);
-        IZ_FLOAT dot = math::SVector4::Dot(n, ptr);
+        math::CVector4 pt(m_pt);
+        math::CVector4 nml(m_nml);
+        auto d = computePlane(m_L2W, pt, nml);
+
+        math::CVector4 n(nml.x, nml.y, nml.z, d);
+        IZ_FLOAT dot = math::SVector4::Dot(n, pt);
         dot = (math::CMath::IsNearyEqualZero(dot) ? 0.0f : dot);
         return (dot >= 0.0f);
 #endif
+    }
+
+    IZ_FLOAT Plane::computeRadius(const math::SVector4& normal) const
+    {
+        IZ_ASSERT(IZ_FALSE);
+        return 0.0f;
+    }
+
+    IZ_FLOAT Plane::computeRadius(
+        const math::SMatrix44& mtxW2V,
+        const math::SVector4& normal) const
+    {
+        IZ_ASSERT(IZ_FALSE);
+        return 0.0f;
+    }
+
+    const math::SVector4 Plane::getCenter() const
+    {
+        IZ_ASSERT(IZ_FALSE);
+        math::CVector4 tmp;
+        return std::move(tmp);
+    }
+
+    // Get if the ray is hit.
+    IZ_BOOL Plane::isHit(const Ray& ray, HitResult& res)
+    {
+        /*
+            レイの方程式 : p = x + t v
+            平面の方程式 : (p - p0)・n = 0
+            x  : レイの出る点
+            v  : レイの方向
+            p0 : 平面上の１点
+            n  : 法線ベクトル
+
+            連立した結果、レイの進んだ距離tは
+
+                (x - p0)・n
+            t = ------------
+                    v・n
+
+            v・n=0 の時は、レイと平面が平行に進んでいるので、交わらない.
+            t<0の時は、視線の後ろ側に交点があるので、やはり交わることがない.
+        */
+
+        math::CVector4 pt(m_pt);
+        math::CVector4 nml(m_nml);
+        auto d = computePlane(m_L2W, pt, nml);
+
+        auto vn = math::SVector4::Dot(ray.v, nml);
+
+        // カリングと発散を外す
+        if (-0.00001f <= vn) {
+            return IZ_FALSE;
+        }
+
+        math::CVector4 xp = pt - ray.p;
+
+        float xpn = math::SVector4::Dot(xp, nml);
+
+        IZ_FLOAT t = xpn / vn;
+
+        // 後ろ向きのレイは無効
+        if (t < 0) {
+            return IZ_FALSE;
+        }
+
+        // 平面への射影.
+        auto p = ray.p + t * ray.v;
+
+        res.pt = p;
+        res.normal = nml;
+        res.t = t;
+
+        return IZ_TRUE;
     }
 }   // namespace math
 }   // namespace izanagi

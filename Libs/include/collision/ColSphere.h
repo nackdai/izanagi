@@ -24,10 +24,6 @@ namespace col
             IZ_FLOAT radius,
             const math::SVector4& center);
 
-        /** マトリクスを適用.
-         */
-        virtual void apply(const math::SMatrix44& mtx) override;
-
         /** 実効半径を計算.
          */
         virtual IZ_FLOAT computeRadius(const math::SVector4& normal) const override;
@@ -41,6 +37,10 @@ namespace col
         /** 中心座標を取得.
          */
         virtual const math::SVector4 getCenter() const override;
+
+        /** Get if the ray is hit.
+        */
+        virtual IZ_BOOL isHit(const Ray& ray, HitResult& res) override;
 
     private:
         IZ_FLOAT m_radius{ 0.0f };

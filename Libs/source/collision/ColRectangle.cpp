@@ -7,203 +7,197 @@ namespace izanagi
 {
 namespace col
 {
-    CRectangle::CRectangle()
+    Rectangle::Rectangle()
     {
-        a = b = c = d = padding = 0.0f;
+        m_pt[0].Set(0.0f, 0.0f, 0.0f);
+        m_pt[1].Set(0.0f, 0.0f, 0.0f);
+        m_pt[2].Set(0.0f, 0.0f, 0.0f);
+        m_pt[3].Set(0.0f, 0.0f, 0.0f);
 
-        pt.Set(0.0f, 0.0f, 0.0f);
-        v[0].Set(0.0f, 0.0f, 0.0f, 0.0f);
-        v[1].Set(0.0f, 0.0f, 0.0f, 0.0f);
+        m_nml.Set(0.0f, 0.0f, 0.0f, 0.0f);
+        m_d = 0.0f;
     }
 
-    CRectangle::CRectangle(
+    Rectangle::Rectangle(
         const math::SVector4& point,
         const math::SVector4& v0,
-        const math::SVector4& v1)
+        const math::SVector4& v1,
+        IZ_BOOL isBothSides/*= IZ_FALSE*/)
     {
-        Set(point, v0, v1);
+        Set(point, v0, v1, isBothSides);
     }
 
-    CRectangle::CRectangle(const CRectangle& rhs)
+    Rectangle::Rectangle(
+        const math::SVector4& pt0,
+        const math::SVector4& pt1,
+        const math::SVector4& pt2,
+        const math::SVector4& pt3,
+        IZ_BOOL isBothSides/*= IZ_FALSE*/)
+    {
+        Set(pt0, pt1, pt2, pt3, isBothSides);
+    }
+
+    Rectangle::Rectangle(const Rectangle& rhs)
     {
         *this = rhs;
     }
 
-    const CRectangle& CRectangle::operator=(const CRectangle& rhs)
+    const Rectangle& Rectangle::operator=(const Rectangle& rhs)
     {
-#if 0
-        math::SVector4::Copy(pt, rhs.pt);
+        m_pt[0] = rhs.m_pt[0];
+        m_pt[1] = rhs.m_pt[1];
+        m_pt[2] = rhs.m_pt[2];
+        m_pt[3] = rhs.m_pt[3];
 
-        math::SVector4::Copy(v[0], rhs.v[0]);
-        math::SVector4::Copy(v[1], rhs.v[1]);
+        m_nml = rhs.m_nml;
+        m_d = rhs.m_d;
 
-        math::SVector4::Copy(nml, rhs.nml);
-
-        d = rhs.d;
-#else
-        Set(
-            rhs.pt,
-            rhs.v[0],
-            rhs.v[1]);
-#endif
+        m_isBothSides = rhs.m_isBothSides;
 
         return *this;
     }
 
     // 矩形を設定.
-    void CRectangle::Set(
+    void Rectangle::Set(
         const math::SVector4& point,
         const math::SVector4& v0,
-        const math::SVector4& v1)
+        const math::SVector4& v1,
+        IZ_BOOL isBothSides/*= IZ_FALSE*/)
     {
-        math::SVector4::Copy(pt, point);
+        math::SVector4 pt1;
+        math::SVector4::AddXYZ(pt1, point, v0);
+        pt1.w = 1.0f;
 
-        math::SVector4::Copy(v[0], v0);
-        math::SVector4::Copy(v[1], v1);
+        math::SVector4 pt2;
+        math::SVector4::AddXYZ(pt2, point, v1);
+        pt2.w = 1.0f;
 
-        math::SVector4::Cross(nml, v[0], v[1]);
-        math::SVector4::Normalize(nml, nml);
+        math::SVector4 pt3;
+        math::SVector4::AddXYZ(pt3, pt1, v1);
+        pt3.w = 1.0f;
 
-        d = -(a * pt.x + b * pt.y + c * pt.z);
+        Set(point, pt1, pt2, pt3, isBothSides);
     }
 
-    // 原点からの距離を取得.
-    IZ_FLOAT CRectangle::GetDistance() const
+    void Rectangle::Set(
+        const math::SVector4& pt0,
+        const math::SVector4& pt1,
+        const math::SVector4& pt2,
+        const math::SVector4& pt3,
+        IZ_BOOL isBothSides/*= IZ_FALSE*/)
     {
-        return ::fabs(d);
+        m_pt[0] = pt0;
+        m_pt[1] = pt1;
+        m_pt[2] = pt2;
+        m_pt[3] = pt3;
+
+        m_d = computePlane(
+            m_pt[0], m_pt[1], m_pt[2], m_pt[3],
+            m_nml);
+
+        m_isBothSides = isBothSides;
     }
 
-    // 矩形上に存在する点かどうか.
-    IZ_BOOL CRectangle::IsOnRectangle(const math::SVector4& ptr) const
+    IZ_FLOAT Rectangle::computePlane(
+        const math::CMatrix44& mtxL2W,
+        math::CVector4& pt0,
+        math::CVector4& pt1,
+        math::CVector4& pt2,
+        math::CVector4& pt3,
+        math::CVector4& nml)
     {
-#if 0
-        math::SVector4 p;
-        math::SVector4::Sub(p, ptr, pt);
+        math::SMatrix44::Apply(pt0, pt0, mtxL2W);
+        math::SMatrix44::Apply(pt1, pt1, mtxL2W);
+        math::SMatrix44::Apply(pt2, pt2, mtxL2W);
+        math::SMatrix44::Apply(pt3, pt3, mtxL2W);
 
-        IZ_FLOAT dot1 = math::SVector4::Dot(p, v[0]);
-        IZ_FLOAT dot2 = math::SVector4::Dot(p, v[1]);
+        auto d = computePlane(
+            pt0, pt1, pt2, pt3,
+            nml);
 
-        IZ_FLOAT length1 = math::SVector4::Length(v[0]);
-        IZ_FLOAT length2 = math::SVector4::Length(v[1]);
+        return d;
+    }
 
-#if 0
-        return IS_IN_BOUND(dot1 / length1, 0.0f, 1.0f) && IS_IN_BOUND(dot2 / length2, 0.0f, 1.0f);
-#else
-        // ptは矩形の中心点なので
-        // 矩形を構成する点は二つのベクトルの -0.5 - 0.5 の範囲に存在する
-        return IS_IN_BOUND(dot1 / length1, -0.5f, 0.5f)
-            && IS_IN_BOUND(dot2 / length2, -0.5f, 0.5f);
-#endif
-#else
-        // 矩形を二つの三角形に分割して、それぞれの三角形で判定を行う
+    IZ_FLOAT Rectangle::computePlane(
+        const math::CVector4& pt0,
+        const math::CVector4& pt1,
+        const math::CVector4& pt2,
+        const math::CVector4& pt3,
+        math::CVector4& nml)
+    {
+        auto v0 = pt1 - pt0;
+        auto v1 = pt2 - pt0;
 
-        math::CVector4 p0 = math::CVector4(pt.x, pt.y, pt.z) + math::CVector4(v[0].x, v[0].y, v[0].z);
-        math::CVector4 p1 = math::CVector4(pt.x, pt.y, pt.z) + math::CVector4(v[1].x, v[1].y, v[1].z);
-        math::CVector4 p2 = p0 + math::CVector4(v[1].x, v[1].y, v[1].z);
+        math::SVector4::Cross(nml, v0, v1);
+        nml.Normalize();
 
-        CTriangle tri0(pt, p0, p1);
+        IZ_FLOAT a = nml.x;
+        IZ_FLOAT b = nml.y;
+        IZ_FLOAT c = nml.z;
 
-        IZ_BOOL isIntersect = tri0.IsOnTriangle(ptr);
+        auto d = -(a * pt0.x + b * pt0.y + c * pt0.z);
+        return d;
+    }
 
-        if (!isIntersect) {
-            CTriangle tri1(p0, p2, p1);
+    IZ_FLOAT Rectangle::computeRadius(const math::SVector4& normal) const
+    {
+        auto center = getCenter();
 
-            isIntersect = tri1.IsOnTriangle(ptr);
+        math::CVector4 pt;
+        math::SMatrix44::Apply(pt, m_pt[0], m_L2W);
+
+        auto radius = math::SVector4::Length2(center, pt);
+
+        return radius;
+    }
+
+    IZ_FLOAT Rectangle::computeRadius(
+        const math::SMatrix44& mtxW2V,
+        const math::SVector4& normal) const
+    {
+        auto radius = computeRadius(normal);
+        return radius;
+    }
+
+    void Rectangle::apply(math::CVector4* pt) const
+    {
+        for (IZ_UINT i = 0; i < COUNTOF(m_pt); i++) {
+            math::SMatrix44::Apply(pt[i], m_pt[i], m_L2W);
+        }
+    }
+
+    const math::SVector4 Rectangle::getCenter() const
+    {
+        math::CVector4 pt[4];
+        apply(pt);
+
+        auto center = pt[0] + pt[1] + pt[2] + pt[3];
+        center /= 4;
+
+        return std::move(center);
+    }
+
+    // Get if the ray is hit.
+    IZ_BOOL Rectangle::isHit(const Ray& ray, HitResult& res)
+    {
+        // 2つの三角形に分割して、それぞれでテストする.
+
+        math::CVector4 pt[4];
+        apply(pt);
+
+        Triangle tri0(pt[0], pt[1], pt[2], m_isBothSides);
+
+        if (tri0.isHit(ray, res)) {
+            return IZ_TRUE;
         }
 
-        return isIntersect;
-#endif
-    }
+        Triangle tri1(pt[1], pt[3], pt[2], m_isBothSides);
 
-    // 4x4行列による変換.
-    void CRectangle::Transform(const math::SMatrix44& mtx)
-    {
-        math::SMatrix44::Apply(pt, pt, mtx);
-
-        math::SMatrix44::ApplyXYZ(v[0], v[0], mtx);
-        math::SMatrix44::ApplyXYZ(v[1], v[1], mtx);
-
-        math::SVector4::Cross(nml, v[0], v[1]);
-        math::SVector4::Normalize(nml, nml);
-
-        // 計算誤算を丸める
-        nml.x = math::CMath::IsNearyEqualZero(nml.x) ? 0.0f : nml.x;
-        nml.y = math::CMath::IsNearyEqualZero(nml.y) ? 0.0f : nml.y;
-        nml.z = math::CMath::IsNearyEqualZero(nml.z) ? 0.0f : nml.z;
-        math::SVector4::Normalize(nml, nml);
-
-        d = -(a * pt.x + b * pt.y + c * pt.z);
-    }
-
-    void CRectangle::Transform(
-        CRectangle& dst,
-        const math::SMatrix44& mtx)
-    {
-        dst = *this;    // Copy
-        dst.Transform(mtx);
-    }
-
-    // レイと交差する点を取得
-    IZ_BOOL CRectangle::GetIntersectPoint(
-        const SRay& ray,
-        math::SVector4& refPtr,
-        IZ_FLOAT* retRayCoefficient/*= IZ_NULL*/) const
-    {
-        IZ_BOOL isIntersect = GetIntersectPoint(
-            CPlane::GetIntersectPoint,
-            ray,
-            refPtr,
-            retRayCoefficient);
-
-        return isIntersect;
-    }
-
-    // レイと交差するかどうか
-    IZ_BOOL CRectangle::IsIntersect(
-        const SRay& ray,
-        IZ_FLOAT* retRayCoefficient/*= IZ_NULL*/)
-    {
-        math::CVector4 ptr;
-
-        IZ_BOOL isIntersect = GetIntersectPoint(ray, ptr, retRayCoefficient);
-
-        return isIntersect;
-    }
-
-    // 平面を取得.
-    void CRectangle::GetPlane(SPlane& plane) const
-    {
-        plane.pt.Set(
-            pt.x,
-            pt.y,
-            pt.z);
-
-        plane.nml.Set(a, b, c, 0.0f);
-        plane.d = d;
-    }
-
-    // レイと交差する点を取得
-    IZ_BOOL CRectangle::GetIntersectPoint(
-        CRectangle::GetCrossPointFunc func,
-        const SRay& ray,
-        math::SVector4& refPtr,
-        IZ_FLOAT* retRayCoefficient) const
-    {
-        math::CVector4 ptr;
-
-        IZ_BOOL isIntersect = (*func)(
-            CPlane(nml, pt),
-            ray, ptr,
-            retRayCoefficient);
-
-        if (isIntersect) {
-            isIntersect = IsOnRectangle(ptr);
-            if (isIntersect) {
-                math::SVector4::Copy(refPtr, ptr);
-            }
+        if (tri1.isHit(ray, res)) {
+            return IZ_TRUE;
         }
 
-        return isIntersect;
+        return IZ_FALSE;
     }
 }   // namespace math
 }   // namespace izanagi

@@ -103,6 +103,15 @@ namespace math
         return ret;
     }
 
+    // ベクトルの内積を計算する
+    IZ_FLOAT SVector4::DotXYZ(const SVector4& vec1, const SVector4& vec2)
+    {
+        IZ_FLOAT ret = D3DXVec3Dot(
+            reinterpret_cast<const D3DXVECTOR3*>(&vec1),
+            reinterpret_cast<const D3DXVECTOR3*>(&vec2));
+        return ret;
+    }
+
     // ベクトルの外積を計算する
     void SVector4::Cross(SVector4& dst, const SVector4& src1, const SVector4& src2)
     {

@@ -97,6 +97,13 @@ namespace math
         return ret;
     }
 
+    // ベクトルの内積を計算する.
+    IZ_FLOAT SVector4::DotXYZ(const SVector4& vec1, const SVector4& vec2)
+    {
+        IZ_FLOAT ret = vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z;
+        return ret;
+    }
+
     // ベクトルの外積を計算する
     void SVector4::Cross(SVector4& dst, const SVector4& src1, const SVector4& src2)
     {

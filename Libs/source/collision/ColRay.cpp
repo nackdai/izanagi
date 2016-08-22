@@ -4,14 +4,14 @@ namespace izanagi
 {
 namespace col
 {
-    CRay::CRay()
+    Ray::Ray()
     {
         p.Set(0.0f, 0.0f, 0.0f);
         v.Set(0.0f, 0.0f, 0.0f, 0.0f);
         t = 0.0f;
     }
 
-    CRay::CRay(const math::SVector4& ptr, const math::SVector4& dir)
+    Ray::Ray(const math::SVector4& ptr, const math::SVector4& dir)
     {
         IZ_FLOAT t = math::SVector4::Length(dir);
 
@@ -21,25 +21,25 @@ namespace col
         Set(ptr, v, t);
     }
 
-    CRay::CRay(const math::SVector4& ptr, const math::SVector4& dir, IZ_FLOAT _t)
+    Ray::Ray(const math::SVector4& ptr, const math::SVector4& dir, IZ_FLOAT _t)
     {
         Set(ptr, dir, _t);
     }
 
-    CRay::CRay(const SRay& rhs)
+    Ray::Ray(const SRay& rhs)
     {
         Set(rhs.p, rhs.v, rhs.t);
     }
 
     // 直線をコピー.
-    const CRay& CRay::operator=(const SRay& rhs)
+    const Ray& Ray::operator=(const SRay& rhs)
     {
         Set(rhs.p, rhs.v, rhs.t);
         return *this;
     }
 
     // 直線を設定する.
-    void CRay::Set(
+    void Ray::Set(
         const math::SVector4& ptr,
         const math::SVector4& dir,
         IZ_FLOAT _t)
@@ -52,7 +52,7 @@ namespace col
     }
 
     // 平行かどうか.
-    IZ_BOOL CRay::IsParallel(const SRay& rhs) const
+    IZ_BOOL Ray::IsParallel(const SRay& rhs) const
     {
         // NOTE
         // 方向ベクトルは正規化済み
@@ -64,26 +64,19 @@ namespace col
     }
 
     // 無限遠方の直線にする.
-    void CRay::SetInifite()
+    void Ray::SetInifite()
     {
         t = IZ_FLOAT_MAX;
     }
 
     // 係数を掛けた方向ベクトルを取得.
-    void CRay::GetMulAttnDir(math::SVector4& dir)
+    void Ray::GetMulAttnDir(math::SVector4& dir)
     {
         math::SVector4::ScaleXYZ(dir, v, t);
     }
 
-    // 直線上にあるかどうか.
-    IZ_BOOL CRay::IsOnRay(const math::SVector4& ptr)
-    {
-        // TODO
-        return IZ_TRUE;
-    }
-
     // 方向ベクトルを正規化.
-    void CRay::Normalize()
+    void Ray::Normalize()
     {
         math::SVector4::Normalize(v, v);
     }

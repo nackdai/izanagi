@@ -4,6 +4,7 @@
 #include "izMath.h"
 #include "collision/ColBoundingVolume.h"
 #include "collision/ColSphere.h"
+#include "collision/ColRectangle.h"
 
 namespace izanagi
 {
@@ -16,12 +17,14 @@ namespace col
         AABB();
         AABB(
             const math::SVector4& minPtr,
-            const math::SVector4& maxPtr);
+            const math::SVector4& maxPtr,
+            IZ_BOOL isAsBox = IZ_FALSE);
         AABB(
             const math::SVector4& center,
             IZ_FLOAT lengthX,
             IZ_FLOAT lengthY,
-            IZ_FLOAT lengthZ);
+            IZ_FLOAT lengthZ,
+            IZ_BOOL isAsBox = IZ_FALSE);
 
         virtual ~AABB() {}
 
@@ -32,17 +35,15 @@ namespace col
     public:
         void initialize(
             const math::SVector4& minPtr,
-            const math::SVector4& maxPtr);
+            const math::SVector4& maxPtr,
+            IZ_BOOL isAsBox = IZ_FALSE);
 
         void initialize(
             const math::SVector4& center,
             IZ_FLOAT lengthX,
             IZ_FLOAT lengthY,
-            IZ_FLOAT lengthZ);
-
-        /** マトリクスを適用.
-         */
-        virtual void apply(const math::SMatrix44& mtx) override;
+            IZ_FLOAT lengthZ,
+            IZ_BOOL isAsBox = IZ_FALSE);
 
         /** 実効半径を計算.
          */
@@ -58,9 +59,13 @@ namespace col
          */
         virtual const math::SVector4 getCenter() const override;
 
+        /** Get if the ray is hit.
+         */
+        virtual IZ_BOOL isHit(const Ray& ray, HitResult& res) override;
+
         /** 最小座標を取得.
          */
-        const math::SVector4& getMin() const;
+        const math::SVector4 getMin() const;
 
         /** 最大座標を取得.
          */
@@ -68,7 +73,7 @@ namespace col
 
         /** サイズを取得.
          */
-        const math::SVector3& getSize() const;
+        const math::SVector3 getSize() const;
 
         /** 立方体にする.
          */
@@ -90,20 +95,25 @@ namespace col
          */
         IZ_BOOL canDisplay() const;
 
-        /** Check if the point is contain in this aabb.
+        /** Check if the point is contain in the aabb.
          */
         IZ_BOOL isContain(const math::SVector3& point);
 
-        IZ_BOOL isValid()
+        /** Check if the aabb is valid.
+         */
+        IZ_BOOL isValid();
+
+        void asBox();
+
+        IZ_BOOL isBox() const
         {
-            return (m_min.x < m_max.x && m_min.y < m_max.y && m_min.x < m_max.z);
+            return m_hasRectangles;
         }
 
     protected:
-        math::SVector4 m_min;
-        math::SVector4 m_max;
+        math::CVector4 m_min;
 
-        math::SVector3 m_size;
+        math::CVector4 m_size;
 
         enum Clip {
             PositiveX,
@@ -112,9 +122,13 @@ namespace col
             NegativeY,
             PositiveZ,
             NegativeZ,
+            Num,
         };
 
         IZ_UINT m_displayFlag{ 0 };
+
+        IZ_BOOL m_hasRectangles{ IZ_FALSE };
+        Rectangle m_rect[Clip::Num];
     };
 }   // namespace math
 }   // namespace izanagi
