@@ -11,18 +11,20 @@ namespace col
 
     AABB::AABB(
         const math::SVector4& minPtr,
-        const math::SVector4& maxPtr)
+        const math::SVector4& maxPtr,
+        IZ_BOOL isAsBox/*= IZ_FALSE*/)
     {
-        initialize(minPtr, maxPtr);
+        initialize(minPtr, maxPtr, isAsBox);
     }
 
     AABB::AABB(
         const math::SVector4& center,
         IZ_FLOAT lengthX,
         IZ_FLOAT lengthY,
-        IZ_FLOAT lengthZ)
+        IZ_FLOAT lengthZ,
+        IZ_BOOL isAsBox/*= IZ_FALSE*/)
     {
-        initialize(center, lengthX, lengthY, lengthZ);
+        initialize(center, lengthX, lengthY, lengthZ, isAsBox);
     }
 
     AABB::AABB(const AABB& rhs)
@@ -39,20 +41,27 @@ namespace col
 
     void AABB::initialize(
         const math::SVector4& minPtr,
-        const math::SVector4& maxPtr)
+        const math::SVector4& maxPtr,
+        IZ_BOOL isAsBox/*= IZ_FALSE*/)
     {
         m_min.Set(minPtr);
 
         m_size.x = maxPtr.x - minPtr.x;
         m_size.y = maxPtr.y - minPtr.y;
         m_size.z = maxPtr.z - minPtr.z;
+
+        if (isAsBox) {
+            asBox();
+        }
+        m_hasRectangles = isAsBox;
     }
 
     void AABB::initialize(
         const math::SVector4& center,
         IZ_FLOAT lengthX,
         IZ_FLOAT lengthY,
-        IZ_FLOAT lengthZ)
+        IZ_FLOAT lengthZ,
+        IZ_BOOL isAsBox/*= IZ_FALSE*/)
     {
         m_min.Set(center);
         m_min.x -= lengthX * 0.5f;
@@ -62,6 +71,11 @@ namespace col
         m_size.x = lengthX;
         m_size.y = lengthY;
         m_size.z = lengthZ;
+
+        if (isAsBox) {
+            asBox();
+        }
+        m_hasRectangles = isAsBox;
     }
 
     IZ_FLOAT AABB::computeRadius(const math::SVector4& normal) const
@@ -168,6 +182,27 @@ namespace col
             ret = IZ_TRUE;
         }
 
+        if (ret && m_hasRectangles) {
+            for (IZ_UINT i = 0; i < COUNTOF(m_rect); i++) {
+                ret = m_rect[i].isHit(ray, res);
+                if (ret) {
+#if 0
+                    static const char* name[] = {
+                        "PositiveX",
+                        "NegativeX",
+                        "PositiveY",
+                        "NegativeY",
+                        "PositiveZ",
+                        "NegativeZ",
+                    };
+
+                    IZ_PRINTF("Hit(%s)\n", name[i]);
+#endif
+                    break;
+                }
+            }
+        }
+
         return ret;
     }
 
@@ -193,9 +228,12 @@ namespace col
     }
 
     // ƒTƒCƒY‚ðŽæ“¾.
-    const math::SVector3& AABB::getSize() const
+    const math::SVector3 AABB::getSize() const
     {
-        return m_size;
+        math::SVector3 ret;
+        ret.Set(m_size.x, m_size.y, m_size.z);
+
+        return std::move(ret);
     }
 
     void AABB::makeCubic()
@@ -357,6 +395,52 @@ namespace col
         auto max = getMax();
 
         return (min.x < max.x && min.y < max.y && min.z < max.z);
+    }
+
+    void AABB::asBox()
+    {
+        if (!m_hasRectangles) {
+            m_hasRectangles = IZ_TRUE;
+
+            const auto& min = m_min;
+            const auto& max = min + m_size;
+
+            m_rect[Clip::PositiveX].Set(
+                math::CVector4(max.x, max.y, min.z),
+                math::CVector4(max.x, max.y, max.z),
+                math::CVector4(max.x, min.y, min.z),
+                math::CVector4(max.x, min.y, max.z));
+
+            m_rect[Clip::NegativeX].Set(
+                math::CVector4(min.x, max.y, max.z),
+                math::CVector4(min.x, max.y, min.z),
+                math::CVector4(min.x, min.y, max.z),
+                math::CVector4(min.x, min.y, min.z));
+
+            m_rect[Clip::PositiveY].Set(
+                math::CVector4(min.x, max.y, max.z),
+                math::CVector4(max.x, max.y, max.z),
+                math::CVector4(min.x, max.y, min.z),
+                math::CVector4(max.x, max.y, min.z));
+
+            m_rect[Clip::NegativeY].Set(
+                math::CVector4(min.x, min.y, min.z),
+                math::CVector4(max.x, min.y, min.z),
+                math::CVector4(min.x, min.y, max.z),
+                math::CVector4(max.x, min.y, max.z));
+
+            m_rect[Clip::PositiveZ].Set(
+                math::CVector4(max.x, max.y, max.z),
+                math::CVector4(min.x, max.y, max.z),
+                math::CVector4(max.x, min.y, max.z),
+                math::CVector4(min.x, min.y, max.z));
+
+            m_rect[Clip::NegativeZ].Set(
+                math::CVector4(min.x, max.y, min.z),
+                math::CVector4(max.x, max.y, min.z),
+                math::CVector4(min.x, min.y, min.z),
+                math::CVector4(max.x, min.y, min.z));
+        }
     }
 }   // namespace math
 }   // namespace izanagi

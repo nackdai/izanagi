@@ -17,11 +17,23 @@ namespace col
     class Rectangle : public BoundingVolume {
     public:
         Rectangle();
+        
+        /**
+         * p------>v0
+         * |
+         * v1
+         */
         Rectangle(
             const math::SVector4& point,
             const math::SVector4& v0,
             const math::SVector4& v1,
             IZ_BOOL isBothSides = IZ_FALSE);
+
+        /**
+         * 0------1
+         * |      |
+         * 2------3
+         */
         Rectangle(
             const math::SVector4& pt0,
             const math::SVector4& pt1,

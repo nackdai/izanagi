@@ -4,6 +4,7 @@
 #include "izMath.h"
 #include "collision/ColBoundingVolume.h"
 #include "collision/ColSphere.h"
+#include "collision/ColRectangle.h"
 
 namespace izanagi
 {
@@ -16,12 +17,14 @@ namespace col
         AABB();
         AABB(
             const math::SVector4& minPtr,
-            const math::SVector4& maxPtr);
+            const math::SVector4& maxPtr,
+            IZ_BOOL isAsBox = IZ_FALSE);
         AABB(
             const math::SVector4& center,
             IZ_FLOAT lengthX,
             IZ_FLOAT lengthY,
-            IZ_FLOAT lengthZ);
+            IZ_FLOAT lengthZ,
+            IZ_BOOL isAsBox = IZ_FALSE);
 
         virtual ~AABB() {}
 
@@ -32,13 +35,15 @@ namespace col
     public:
         void initialize(
             const math::SVector4& minPtr,
-            const math::SVector4& maxPtr);
+            const math::SVector4& maxPtr,
+            IZ_BOOL isAsBox = IZ_FALSE);
 
         void initialize(
             const math::SVector4& center,
             IZ_FLOAT lengthX,
             IZ_FLOAT lengthY,
-            IZ_FLOAT lengthZ);
+            IZ_FLOAT lengthZ,
+            IZ_BOOL isAsBox = IZ_FALSE);
 
         /** ŽÀŒø”¼Œa‚ðŒvŽZ.
          */
@@ -68,7 +73,7 @@ namespace col
 
         /** ƒTƒCƒY‚ðŽæ“¾.
          */
-        const math::SVector3& getSize() const;
+        const math::SVector3 getSize() const;
 
         /** —§•û‘Ì‚É‚·‚é.
          */
@@ -98,10 +103,17 @@ namespace col
          */
         IZ_BOOL isValid();
 
+        void asBox();
+
+        IZ_BOOL isBox() const
+        {
+            return m_hasRectangles;
+        }
+
     protected:
         math::CVector4 m_min;
 
-        math::CVector3 m_size;
+        math::CVector4 m_size;
 
         enum Clip {
             PositiveX,
@@ -110,9 +122,13 @@ namespace col
             NegativeY,
             PositiveZ,
             NegativeZ,
+            Num,
         };
 
         IZ_UINT m_displayFlag{ 0 };
+
+        IZ_BOOL m_hasRectangles{ IZ_FALSE };
+        Rectangle m_rect[Clip::Num];
     };
 }   // namespace math
 }   // namespace izanagi

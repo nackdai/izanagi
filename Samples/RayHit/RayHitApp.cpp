@@ -38,7 +38,8 @@ IZ_BOOL RayHitApp::InitInternal(
 
         m_cube.initialize(
             izanagi::math::CVector4(0.0f, 0.0f, 0.0f),
-            10.0f, 10.0f, 10.0f);
+            10.0f, 10.0f, 10.0f,
+            IZ_TRUE);
 
         m_cube.getL2W().SetTrans(pos.x, pos.y, pos.z);
 
