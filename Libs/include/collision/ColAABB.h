@@ -54,6 +54,10 @@ namespace col
          */
         virtual const math::SVector4 getCenter() const override;
 
+        /** Get if the ray is hit.
+         */
+        virtual IZ_BOOL isHit(const Ray& ray, HitResult& res) override;
+
         /** Å¬À•W‚ğæ“¾.
          */
         const math::SVector4 getMin() const;

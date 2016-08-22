@@ -10,26 +10,26 @@ namespace col
     /**
      */
     struct SRay {
-        math::SVector4 p;
-        math::SVector4 v;
+        math::CVector4 p;
+        math::CVector4 v;
         IZ_FLOAT t;
     };
 
     /**
      */
-    class CRay : public SRay {
+    class Ray : public SRay {
     public:
-        CRay();
-        CRay(const math::SVector4& ptr, const math::SVector4& dir);
-        CRay(const math::SVector4& ptr, const math::SVector4& dir, IZ_FLOAT _t);
-        CRay(const SRay& rhs);
+        Ray();
+        Ray(const math::SVector4& ptr, const math::SVector4& dir);
+        Ray(const math::SVector4& ptr, const math::SVector4& dir, IZ_FLOAT _t);
+        Ray(const SRay& rhs);
 
-        ~CRay() {}
+        ~Ray() {}
 
     public:
         /** 直線をコピー.
          */
-        const CRay& operator=(const SRay& rhs);
+        const Ray& operator=(const SRay& rhs);
 
         /** 直線を設定する.
          */
@@ -49,10 +49,6 @@ namespace col
         /** 係数を掛けた方向ベクトルを取得.
          */
         void GetMulAttnDir(math::SVector4& dir);
-
-        /** 直線上にあるかどうか.
-         */
-        IZ_BOOL IsOnRay(const math::SVector4& ptr);
 
         /** 方向ベクトルを正規化.
          */

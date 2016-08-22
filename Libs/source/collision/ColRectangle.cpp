@@ -21,9 +21,20 @@ namespace col
     Rectangle::Rectangle(
         const math::SVector4& point,
         const math::SVector4& v0,
-        const math::SVector4& v1)
+        const math::SVector4& v1,
+        IZ_BOOL isBothSides/*= IZ_FALSE*/)
     {
-        Set(point, v0, v1);
+        Set(point, v0, v1, isBothSides);
+    }
+
+    Rectangle::Rectangle(
+        const math::SVector4& pt0,
+        const math::SVector4& pt1,
+        const math::SVector4& pt2,
+        const math::SVector4& pt3,
+        IZ_BOOL isBothSides/*= IZ_FALSE*/)
+    {
+        Set(pt0, pt1, pt2, pt3, isBothSides);
     }
 
     Rectangle::Rectangle(const Rectangle& rhs)
@@ -41,6 +52,8 @@ namespace col
         m_nml = rhs.m_nml;
         m_d = rhs.m_d;
 
+        m_isBothSides = rhs.m_isBothSides;
+
         return *this;
     }
 
@@ -48,7 +61,8 @@ namespace col
     void Rectangle::Set(
         const math::SVector4& point,
         const math::SVector4& v0,
-        const math::SVector4& v1)
+        const math::SVector4& v1,
+        IZ_BOOL isBothSides/*= IZ_FALSE*/)
     {
         math::SVector4 pt1;
         math::SVector4::AddXYZ(pt1, point, v0);
@@ -62,14 +76,15 @@ namespace col
         math::SVector4::AddXYZ(pt3, pt1, v1);
         pt3.w = 1.0f;
 
-        Set(point, pt1, pt2, pt3);
+        Set(point, pt1, pt2, pt3, isBothSides);
     }
 
     void Rectangle::Set(
         const math::SVector4& pt0,
         const math::SVector4& pt1,
         const math::SVector4& pt2,
-        const math::SVector4& pt3)
+        const math::SVector4& pt3,
+        IZ_BOOL isBothSides/*= IZ_FALSE*/)
     {
         m_pt[0] = pt0;
         m_pt[1] = pt1;
@@ -79,6 +94,8 @@ namespace col
         m_d = computePlane(
             m_pt[0], m_pt[1], m_pt[2], m_pt[3],
             m_nml);
+
+        m_isBothSides = isBothSides;
     }
 
     IZ_FLOAT Rectangle::computePlane(
@@ -168,13 +185,13 @@ namespace col
         math::CVector4 pt[4];
         apply(pt);
 
-        Triangle tri0(pt[0], pt[1], pt[2]);
+        Triangle tri0(pt[0], pt[1], pt[2], m_isBothSides);
 
         if (tri0.isHit(ray, res)) {
             return IZ_TRUE;
         }
 
-        Triangle tri1(pt[1], pt[3], pt[2]);
+        Triangle tri1(pt[1], pt[3], pt[2], m_isBothSides);
 
         if (tri1.isHit(ray, res)) {
             return IZ_TRUE;

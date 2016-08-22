@@ -34,7 +34,7 @@ IZ_BOOL RayHitApp::InitInternal(
             IZ_COLOR_RGBA(0xff, 0, 0, 0xff),
             10.0f, 10.0f, 10.0f);
 
-        izanagi::math::CVector4 pos(-20.0f, 0.0f, 0.0f);
+        izanagi::math::CVector4 pos(0.0f, 0.0f, 0.0f);
 
         m_cube.initialize(
             izanagi::math::CVector4(0.0f, 0.0f, 0.0f),
@@ -71,17 +71,18 @@ IZ_BOOL RayHitApp::InitInternal(
             allocator,
             device,
             flag,
-            IZ_COLOR_RGBA(0, 0, 0xff, 0xff),
+            IZ_COLOR_RGBA(0xff, 0xff, 0, 0xff),
             1, 1, 
             10.0f, 10.0f);
 
-        izanagi::math::CVector4 pos(0.0f, 0.0f, 0.0f);
+        izanagi::math::CVector4 pos(-20.0f, 0.0f, 0.0f);
 
         m_rect.Set(
             izanagi::math::CVector4(-5.0f, 0.0f,  5.0f),
             izanagi::math::CVector4( 5.0f, 0.0f,  5.0f),
             izanagi::math::CVector4(-5.0f, 0.0f, -5.0f),
-            izanagi::math::CVector4( 5.0f, 0.0f, -5.0f));
+            izanagi::math::CVector4( 5.0f, 0.0f, -5.0f),
+            IZ_TRUE);
 
         m_rect.getL2W().SetTrans(pos.x, pos.y, pos.z);
 

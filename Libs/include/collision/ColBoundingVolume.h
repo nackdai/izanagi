@@ -39,10 +39,7 @@ namespace col
 
         /** Get if the ray is hit.
          */
-        virtual IZ_BOOL isHit(const Ray& ray, HitResult& res)
-        {
-            return IZ_FALSE;
-        }
+        PURE_VIRTUAL(IZ_BOOL isHit(const Ray& ray, HitResult& res));
 
         void setL2W(const math::SMatrix44& mtxL2W)
         {

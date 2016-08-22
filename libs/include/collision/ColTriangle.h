@@ -2,6 +2,7 @@
 #define __IZANAGI_COLLISION_TRIANGLE_H__
 
 #include "izMath.h"
+#include "collision/ColBoundingVolume.h"
 
 namespace izanagi
 {
@@ -9,62 +10,83 @@ namespace col
 {
     struct SRay;
 
-    struct STriangle {
-        math::SVector4 pt[3];
-    };
-
-    struct STrianglePlane : public STriangle {
-        union {
-            math::SVector4 nml;
-            struct {
-                IZ_FLOAT a;
-                IZ_FLOAT b;
-                IZ_FLOAT c;
-                IZ_FLOAT padding;
-            };
-        };
-        IZ_FLOAT d;
-    };
-
-    class CTriangle : public STrianglePlane {
+    class Triangle : public BoundingVolume {
     public:
-        CTriangle();
-        CTriangle(const math::SVector4 point[3]);
-        CTriangle(
+        Triangle();
+        Triangle(
+            const math::SVector4 point[3],
+            IZ_BOOL isBothSides = IZ_FALSE);
+        Triangle(
             const math::SVector4& pt0,
             const math::SVector4& pt1,
-            const math::SVector4& pt2);
-        CTriangle(const CTriangle& rhs);
+            const math::SVector4& pt2,
+            IZ_BOOL isBothSides = IZ_FALSE);
+        Triangle(const Triangle& rhs);
 
-        ~CTriangle() {}
+        virtual ~Triangle() {}
 
     public:
-        const CTriangle& operator=(const CTriangle& rhs);
+        const Triangle& operator=(const Triangle& rhs);
 
-        void Set(const math::SVector4 point[3]);
+        void Set(
+            const math::SVector4 point[3],
+            IZ_BOOL isBothSides = IZ_FALSE);
 
         void Set(
             const math::SVector4& point0,
             const math::SVector4& point1,
-            const math::SVector4& point2);
+            const math::SVector4& point2,
+            IZ_BOOL isBothSides = IZ_FALSE);
 
-        /** 4x4行列による変換.
+        /** 実効半径を計算.
          */
-        void Transform(const math::SMatrix44& mtx);
+        virtual IZ_FLOAT computeRadius(const math::SVector4& normal) const override;
 
-        /** 三角形上に存在する点かどうか.
+        /** 実効半径を計算.
          */
-        IZ_BOOL IsOnTriangle(const math::SVector4& ptr) const;
+        virtual IZ_FLOAT computeRadius(
+            const math::SMatrix44& mtxW2V,
+            const math::SVector4& normal) const override;
 
-        /** レイと交差する点を取得.
+        /** 中心座標を取得.
          */
-        IZ_BOOL GetIntersectPoint(
-            const SRay& ray,
-            math::SVector4& refPtr) const;
+        virtual const math::SVector4 getCenter() const override;
 
-        /** レイと交差するかどうか.
+        /** Get if the ray is hit.
          */
-        IZ_BOOL IsIntersect(const SRay& ray);
+        virtual IZ_BOOL isHit(const Ray& ray, HitResult& res) override;
+
+        void setIsBothSides(IZ_BOOL isBoth)
+        {
+            m_isBothSides = isBoth;
+        }
+
+        IZ_BOOL isBothSides() const
+        {
+            return m_isBothSides;
+        }
+
+    private:
+        IZ_BOOL isHit(
+            const Ray& ray, 
+            const math::CVector4* pt,
+            const math::CVector4& nml,
+            IZ_BOOL isFlipped,
+            math::CVector4& retP, 
+            IZ_FLOAT& retT);
+
+        static IZ_FLOAT computePlane(
+            const math::CVector4& pt0,
+            const math::CVector4& pt1,
+            const math::CVector4& pt2,
+            math::CVector4& retNml);
+
+    private:
+        math::CVector4 m_pt[3];
+        math::CVector4 m_nml;
+        IZ_FLOAT m_d;
+
+        IZ_BOOL m_isBothSides{ IZ_FALSE };  ///< 両面判定の可否.
     };
 }   // namespace math
 }   // namespace izanagi

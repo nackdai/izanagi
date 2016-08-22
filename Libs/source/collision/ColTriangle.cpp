@@ -15,17 +15,20 @@ namespace col
         m_d = 0.0f;
     }
 
-    Triangle::Triangle(const math::SVector4 point[3])
+    Triangle::Triangle(
+        const math::SVector4 point[3],
+        IZ_BOOL isBothSides/*= IZ_FALSE*/)
     {
-        Set(point);
+        Set(point, isBothSides);
     }
 
     Triangle::Triangle(
         const math::SVector4& pt0,
         const math::SVector4& pt1,
-        const math::SVector4& pt2)
+        const math::SVector4& pt2,
+        IZ_BOOL isBothSides/*= IZ_FALSE*/)
     {
-        Set(pt0, pt1, pt2);
+        Set(pt0, pt1, pt2, isBothSides);
     }
 
     Triangle::Triangle(const Triangle& rhs)
@@ -39,18 +42,23 @@ namespace col
         math::SVector4::Copy(m_nml, rhs.m_nml);
         m_d = rhs.m_d;
 
+        m_isBothSides = rhs.m_isBothSides;
+
         return *this;
     }
 
-    void Triangle::Set(const math::SVector4 point[3])
+    void Triangle::Set(
+        const math::SVector4 point[3],
+        IZ_BOOL isBothSides/*= IZ_FALSE*/)
     {
-        Set(point[0], point[1], point[2]);
+        Set(point[0], point[1], point[2], isBothSides);
     }
 
     void Triangle::Set(
         const math::SVector4& point0,
         const math::SVector4& point1,
-        const math::SVector4& point2)
+        const math::SVector4& point2,
+        IZ_BOOL isBothSides/*= IZ_FALSE*/)
     {
         m_pt[0].Set(point0.x, point0.y, point0.z);
         m_pt[1].Set(point1.x, point1.y, point1.z);
@@ -59,6 +67,8 @@ namespace col
         m_d = computePlane(
             m_pt[0], m_pt[1], m_pt[2],
             m_nml);
+
+        m_isBothSides = isBothSides;
     }
 
     IZ_FLOAT Triangle::computePlane(
@@ -188,16 +198,23 @@ namespace col
         const math::CVector4& p,
         const math::CVector4& base,
         const math::CVector4& pos,
-        const math::CVector4& normal)
+        const math::CVector4& normal,
+        IZ_BOOL isFlipped = IZ_FALSE)
     {
         math::CVector4 d0 = p - base;
 
         math::CVector4 d1 = pos - base;
 
         math::SVector4 c;
-        math::SVector4::Cross(c, d1, d0);
 
-        float f = math::SVector4::Dot(c, normal);
+        if (isFlipped) {
+            math::SVector4::Cross(c, d0, d1);
+        }
+        else {
+            math::SVector4::Cross(c, d1, d0);
+        }
+
+        IZ_FLOAT f = math::SVector4::Dot(c, normal);
 
         if (f < 0) {
             return IZ_FALSE;
@@ -246,6 +263,7 @@ namespace col
             pt[0], pt[1], pt[2],
             nml);
 
+#if 0
         // ü•ª‚Æ‚Ì”»’è
         math::CVector4 xp = pt[0] - ray.p;
 
@@ -257,7 +275,7 @@ namespace col
             return IZ_FALSE;
         }
 
-        float t = xpn / vn;
+        IZ_FLOAT t = xpn / vn;
 
         // Œã‚ëŒü‚«‚ÌƒŒƒC‚Í–³Œø
         if (t < 0) {
@@ -276,10 +294,80 @@ namespace col
         if (!IsIn(p, pt[2], pt[0], nml)) {
             return IZ_FALSE;
         }
+#else
+        math::CVector4 p;
+        IZ_FLOAT t = 0.0f;
+
+        IZ_BOOL hit = IZ_FALSE;
+
+        hit = isHit(
+            ray,
+            pt, nml,
+            IZ_FALSE,
+            p, t);
+
+        if (!hit && isBothSides()) {
+            nml = -nml;
+            hit = isHit(
+                ray,
+                pt, nml,
+                IZ_TRUE,
+                p, t);
+        }
+
+        if (!hit) {
+            return IZ_FALSE;
+        }
+#endif
 
         res.pt = p;
         res.normal = nml;
         res.t = t;
+
+        return IZ_TRUE;
+    }
+
+    IZ_BOOL Triangle::isHit(
+        const Ray& ray, 
+        const math::CVector4* pt,
+        const math::CVector4& nml,
+        IZ_BOOL isFlipped,
+        math::CVector4& retP,
+        IZ_FLOAT& retT)
+    {
+        // ü•ª‚Æ‚Ì”»’è
+        math::CVector4 xp = pt[0] - ray.p;
+
+        float xpn = math::SVector4::Dot(xp, nml);
+        float vn = math::SVector4::Dot(ray.v, nml);
+
+        // ƒJƒŠƒ“ƒO‚Æ”­ŽU‚ðŠO‚·
+        if (-0.00001f <= vn) {
+            return IZ_FALSE;
+        }
+
+        IZ_FLOAT t = xpn / vn;
+
+        // Œã‚ëŒü‚«‚ÌƒŒƒC‚Í–³Œø
+        if (t < 0) {
+            return IZ_FALSE;
+        }
+
+        // ‚RŠpŒ`‚Ì•½–Ê‚Ö‚ÌŽË‰e
+        auto p = ray.p + t * ray.v;
+
+        if (!IsIn(p, pt[0], pt[1], nml, isFlipped)) {
+            return IZ_FALSE;
+        }
+        if (!IsIn(p, pt[1], pt[2], nml, isFlipped)) {
+            return IZ_FALSE;
+        }
+        if (!IsIn(p, pt[2], pt[0], nml, isFlipped)) {
+            return IZ_FALSE;
+        }
+
+        retP = p;
+        retT = t;
 
         return IZ_TRUE;
     }

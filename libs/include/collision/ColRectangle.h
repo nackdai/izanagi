@@ -2,6 +2,7 @@
 #define __IZANAGI_COLLISION_RECTANGLE_H__
 
 #include "izMath.h"
+#include "collision/ColBoundingVolume.h"
 
 namespace izanagi
 {
@@ -9,91 +10,98 @@ namespace col
 {
     struct SRay;
     struct SPlane;
-    class CPlane;
-
-    /** 矩形パラメータ構造体
-     */
-    struct SRectangle {
-        math::SVector4 pt;     ///< 左上原点
-        math::SVector4 v[2];   ///< 原点から伸びる矩形を形成する２ベクトル
-
-        union {
-            math::SVector4 nml;    ///< 法線
-            struct {
-                IZ_FLOAT a;
-                IZ_FLOAT b;
-                IZ_FLOAT c;
-                IZ_FLOAT padding;
-            };
-        };
-        IZ_FLOAT d;     ///< 原点からの距離
-    };
+    class Plane;
 
     /** 矩形クラス
      */
-    class CRectangle : public SRectangle {
+    class Rectangle : public BoundingVolume {
     public:
-        CRectangle();
-        CRectangle(
+        Rectangle();
+        Rectangle(
             const math::SVector4& point,
             const math::SVector4& v0,
-            const math::SVector4& v1);
-        CRectangle(const CRectangle& rhs);
+            const math::SVector4& v1,
+            IZ_BOOL isBothSides = IZ_FALSE);
+        Rectangle(
+            const math::SVector4& pt0,
+            const math::SVector4& pt1,
+            const math::SVector4& pt2,
+            const math::SVector4& pt3,
+            IZ_BOOL isBothSides = IZ_FALSE);
+        Rectangle(const Rectangle& rhs);
 
-        ~CRectangle() {}
+        virtual ~Rectangle() {}
 
     public:
-        const CRectangle& operator=(const CRectangle& rhs);
+        const Rectangle& operator=(const Rectangle& rhs);
 
         /** 矩形を設定.
          */
         void Set(
             const math::SVector4& point,
             const math::SVector4& v0,
-            const math::SVector4& v1);
+            const math::SVector4& v1,
+            IZ_BOOL isBothSides = IZ_FALSE);
 
-        /** 原点からの距離を取得.
+        void Set(
+            const math::SVector4& pt0,
+            const math::SVector4& pt1,
+            const math::SVector4& pt2,
+            const math::SVector4& pt3,
+            IZ_BOOL isBothSides = IZ_FALSE);
+
+        /** 実効半径を計算.
          */
-        IZ_FLOAT GetDistance() const;
+        virtual IZ_FLOAT computeRadius(const math::SVector4& normal) const override;
 
-        /** 矩形上に存在する点かどうか.
+        /** 実効半径を計算.
          */
-        IZ_BOOL IsOnRectangle(const math::SVector4& ptr) const;
+        virtual IZ_FLOAT computeRadius(
+            const math::SMatrix44& mtxW2V,
+            const math::SVector4& normal) const override;
 
-        /** 4x4行列による変換.
+        /** 中心座標を取得.
          */
-        void Transform(const math::SMatrix44& mtx);
+        virtual const math::SVector4 getCenter() const override;
 
-        void Transform(
-            CRectangle& dst,
-            const math::SMatrix44& mtx);
-
-        /** レイと交差する点を取得.
+        /** Get if the ray is hit.
          */
-        IZ_BOOL GetIntersectPoint(
-            const SRay& ray,
-            math::SVector4& refPtr,
-            IZ_FLOAT* retRayCoefficient = IZ_NULL) const;
+        virtual IZ_BOOL isHit(const Ray& ray, HitResult& res) override;
 
-        /** レイと交差するかどうか.
-         */
-        IZ_BOOL IsIntersect(
-            const SRay& ray,
-            IZ_FLOAT* retRayCoefficient = IZ_NULL);
+        void setIsBothSides(IZ_BOOL isBoth)
+        {
+            m_isBothSides = isBoth;
+        }
 
-        /** 平面を取得.
-         */
-        void GetPlane(SPlane& plane) const;
+        IZ_BOOL isBothSides() const
+        {
+            return m_isBothSides;
+        }
 
     private:
-        typedef IZ_BOOL (*GetCrossPointFunc)(const CPlane& plane, const SRay& ray, math::SVector4& refPtr, IZ_FLOAT* retRayCoefficient);
+        static IZ_FLOAT computePlane(
+            const math::CMatrix44& mtxL2W,
+            math::CVector4& pt0,
+            math::CVector4& pt1,
+            math::CVector4& pt2,
+            math::CVector4& pt3,
+            math::CVector4& nml);
 
-        // レイと交差する点を取得
-        IZ_BOOL GetIntersectPoint(
-            GetCrossPointFunc func,
-            const SRay& ray,
-            math::SVector4& refPtr,
-            IZ_FLOAT* retRayCoefficient) const;
+        static IZ_FLOAT computePlane(
+            const math::CVector4& pt0,
+            const math::CVector4& pt1,
+            const math::CVector4& pt2,
+            const math::CVector4& pt3,
+            math::CVector4& nml);
+
+        inline void apply(math::CVector4* pt) const;
+
+    private:
+        math::CVector4 m_pt[4]; ///< 矩形を構成する4点.
+        math::CVector4 m_nml;   ///< 法線.
+        IZ_FLOAT m_d;           ///< 原点からの距離.
+
+        IZ_BOOL m_isBothSides{ IZ_FALSE };  ///< 両面判定の可否.
     };
 }   // namespace math
 }   // namespace izanagi

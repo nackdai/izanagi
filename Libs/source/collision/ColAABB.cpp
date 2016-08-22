@@ -1,4 +1,5 @@
 #include "collision/ColAABB.h"
+#include "collision/ColRay.h"
 
 namespace izanagi
 {
@@ -123,6 +124,53 @@ namespace col
         return std::move(center);
     }
 
+    IZ_BOOL AABB::isHit(const Ray& ray, HitResult& res)
+    {
+        IZ_BOOL ret = IZ_FALSE;
+
+        math::CVector4 dir(ray.v);
+
+        const auto min = getMin();
+        const auto max = getMax();
+
+        IZ_FLOAT tmin = -IZ_FLOAT_MAX;
+        IZ_FLOAT tmax = IZ_FLOAT_MAX;
+
+        for (IZ_UINT i = 0; i < 3; i++) {
+            if (dir.v[i] == 0.0f) {
+                continue;
+            }
+
+            IZ_FLOAT inv = 1.0f / dir.v[i];
+
+            // NOTE
+            // ray : r = p + t * v
+            // plane of AABB : x(t) = p(x) + t * v(x)
+            //  t = (p(x) - x(t)) / v(x)
+            // x軸の面は手前と奥があるので、それぞれの t を計算.
+            // t がx軸の面の手前と奥の x の範囲内であれば、レイがAABBを通る.
+            // これをxyz軸について計算する.
+
+            IZ_FLOAT t0 = (min.v[i] - ray.p.v[i]) * inv;
+            IZ_FLOAT t1 = (max.v[i] - ray.p.v[i]) * inv;
+
+            if (inv < 0.0f) {
+                std::swap(t0, t1);
+            }
+
+            tmin = (t0 > tmin ? t0 : tmin);
+            tmax = (t1 < tmax ? t1 : tmax);
+
+            if (tmax <= tmin) {
+                return IZ_FALSE;
+            }
+
+            ret = IZ_TRUE;
+        }
+
+        return ret;
+    }
+
     // 最小座標を取得.
     const math::SVector4 AABB::getMin() const
     {
@@ -175,6 +223,7 @@ namespace col
         auto radius = math::SVector4::Length2(center, min);
 
         col::Sphere sphere(radius, center);
+        sphere.setL2W(m_L2W);
 
         return std::move(sphere);
     }
@@ -194,6 +243,7 @@ namespace col
         auto center = getCenter();
 
         col::Sphere sphere(radius, center);
+        sphere.setL2W(m_L2W);
 
         return std::move(sphere);
     }
