@@ -33,9 +33,10 @@ namespace izanagi {
 
     public:
         IZ_BOOL SetAnimation(
-            IZ_FLOAT weight,
             IAnimation* startAnm,
             IAnimation* goalAnm);
+
+        void SetWeight(IZ_FLOAT weight);
 
         void ApplyAnimation(
             CSkeletonInstance* skl,

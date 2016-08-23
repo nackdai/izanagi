@@ -29,6 +29,8 @@ protected:
     // 描画.
     virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device);
 
+    virtual IZ_BOOL OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key) override;
+
 private:
     izanagi::CImage* m_Img;
     izanagi::CModel* m_Mdl;
@@ -44,6 +46,8 @@ private:
 
     izanagi::CAnimation* m_Anm[2];
     izanagi::CAnmLinearBlender* m_AnmBlender;
+
+    IZ_FLOAT m_weight{ 0.0f };
 };
 
 #endif    // #if !defined(__MOTION_BLEND_APP_H__)

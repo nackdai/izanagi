@@ -9,8 +9,8 @@ using namespace izanagi;
 
 CAnmLinearBlender::CAnmLinearBlender()
 {
-    m_StartWeight = 0.0f;
-    m_GoalWeight = 1.0f;
+    m_StartWeight = 1.0f;
+    m_GoalWeight = 0.0f;
 
     m_MinTime = 0.0f;
     m_MaxTime = 0.0f; 
@@ -165,20 +165,14 @@ void CAnmLinearBlender::UpdatePose(
 }
 
 IZ_BOOL CAnmLinearBlender::SetAnimation(
-    IZ_FLOAT weight,
     IAnimation* startAnm,
     IAnimation* goalAnm)
 {
     IZ_ASSERT(startAnm != IZ_NULL);
     IZ_ASSERT(goalAnm != IZ_NULL);
-    IZ_ASSERT(weight > 0.0f);
-
 
     m_Anms[0].Set(startAnm);
     m_Anms[1].Set(goalAnm);
-
-    m_StartWeight = 1.0f - math::CMath::Clamp(weight, 0.0f, 1.0f);
-    m_GoalWeight = 1.0f - m_StartWeight;
 
     m_MinTime = IZ_MIN(
                     m_Anms[0].anm->GetAnimationTime(),
@@ -188,6 +182,14 @@ IZ_BOOL CAnmLinearBlender::SetAnimation(
                     m_Anms[1].anm->GetAnimationTime());
 
     return IZ_TRUE;
+}
+
+void CAnmLinearBlender::SetWeight(IZ_FLOAT weight)
+{
+    IZ_ASSERT(weight >= 0.0f);
+
+    m_StartWeight = 1.0f - math::CMath::Clamp(weight, 0.0f, 1.0f);
+    m_GoalWeight = 1.0f - m_StartWeight;
 }
 
 void CAnmLinearBlender::ApplyAnimation(

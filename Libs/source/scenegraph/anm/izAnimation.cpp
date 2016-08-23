@@ -164,14 +164,6 @@ IZ_UINT CAnimation::ApplyAnimation(
     const S_ANM_NODE& sAnmNode = *anmNode;
     const IZ_UINT nJointIdx = sAnmNode.targetIdx;
 
-#ifdef __IZ_DEBUG__
-    auto skl = ((CSklPoseUpdater*)&poseUpdater)->GetSkeletonInstance();
-    auto jnt = skl->GetBody()->GetJoint(nJointIdx);
-
-    IZ_ASSERT(sAnmNode.targetKey == jnt->nameKey);
-#endif  // #ifdef __IZ_DEBUG__
-
-
     math::SVector4 param;
 
     // 姿勢情報更新開始

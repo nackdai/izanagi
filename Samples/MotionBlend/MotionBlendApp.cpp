@@ -83,7 +83,6 @@ IZ_BOOL CMotionBlendApp::InitInternal(
         IZ_ASSERT(m_AnmBlender != IZ_NULL);
 
         m_AnmBlender->SetAnimation(
-            0.5f,   // ブレンド率
             m_Anm[0],
             m_Anm[1]);
     }
@@ -247,6 +246,9 @@ void CMotionBlendApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
     GetCamera().Update();
 
+    m_weight = izanagi::math::CMath::Clamp(m_weight, 0.0f, 1.0f);
+    m_AnmBlender->SetWeight(m_weight);
+
     // 時間更新
     IZ_FLOAT fElapsed = GetTimer(0).GetTime();
     fElapsed /= 1000.0f;
@@ -293,33 +295,6 @@ void CMotionBlendApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
     izanagi::sample::CSampleCamera& camera = GetCamera();
 
-#if 0
-    IZ_UINT passCnt = m_Shd->Begin(0, IZ_FALSE);
-    {
-        IZ_ASSERT(passCnt >= 1);
-        if (m_Shd->BeginPass(0)) {
-            // シェーダ定数セット
-            {
-                _SetShaderParam(
-                    m_Shd,
-                    "g_mW2C",
-                    (void*)&camera.GetParam().mtxW2C,
-                    sizeof(camera.GetParam().mtxW2C));
-            }
-
-            // テクスチャセット
-            //device->SetTexture(0, m_Img->GetTexture(IMG_IDX));
-
-            m_Shd->CommitChanges();
-
-            // モデル描画
-            m_Mdl->Render();
-
-            m_Shd->EndPass();
-        }
-    }
-    m_Shd->End();
-#else
     _SetShaderParam(
         m_Shd,
         "g_mW2C",
@@ -330,5 +305,31 @@ void CMotionBlendApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
         device,
         m_Renderer,
         s_MdlRenderHandler);
-#endif
+
+    if (device->Begin2D()) {
+        izanagi::CDebugFont* debugFont = GetDebugFont();
+
+        debugFont->Begin(device, 0, izanagi::CDebugFont::FONT_SIZE * 2);
+
+        debugFont->DBPrint(
+            device,
+            "weight [%.2f]\n",
+            m_weight);
+
+        debugFont->End();
+
+        device->End2D();
+    }
+}
+
+IZ_BOOL CMotionBlendApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
+{
+    if (key == izanagi::sys::E_KEYBOARD_BUTTON_UP) {
+        m_weight += 0.01f;
+    }
+    else if (key == izanagi::sys::E_KEYBOARD_BUTTON_DOWN) {
+        m_weight -= 0.01f;
+    }
+
+    return IZ_TRUE;
 }
