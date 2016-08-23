@@ -27,7 +27,8 @@ namespace izanagi {
     public:
         CStdString()
         {
-            Clear();
+            //Clear();
+            m_String[0] = 0;
         }
         CStdString(const _T* str)
         {

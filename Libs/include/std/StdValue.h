@@ -72,35 +72,35 @@ namespace izanagi {
             return *(reinterpret_cast<_T*>(m_ValPtr));
         }
 
-        operator IZ_INT8()
+        operator IZ_INT8() const
         {
             return GetValueAsInt32();
         }
-        operator IZ_UINT8()
+        operator IZ_UINT8() const
         {
             return GetValueAsUInt32();
         }
-        operator IZ_INT16()
+        operator IZ_INT16() const
         {
             return GetValueAsInt32();
         }
-        operator IZ_UINT16()
+        operator IZ_UINT16() const
         {
             return GetValueAsUInt32();
         }
-        operator IZ_INT32()
+        operator IZ_INT32() const
         {
             return GetValueAsInt32();
         }
-        operator IZ_UINT32()
+        operator IZ_UINT32() const
         {
             return GetValueAsUInt32();
         }
-        operator IZ_FLOAT()
+        operator IZ_FLOAT() const
         {
             return GetValueAsFloat();
         }
-        operator void*()
+        operator void*() const
         {
             return GetValueAsPtr();
         }

@@ -78,7 +78,7 @@ IZ_BOOL CMotionBlendApp::InitInternal(
 
     // アニメーションブレンド
     {
-         m_AnmBlender = izanagi::IAnimationBlender::CreateAnmBlender<izanagi::CAnmLinearBlender>(
+        m_AnmBlender = izanagi::IAnimationBlender::CreateAnmBlender<izanagi::CAnmLinearBlender>(
                         allocator);
         IZ_ASSERT(m_AnmBlender != IZ_NULL);
 

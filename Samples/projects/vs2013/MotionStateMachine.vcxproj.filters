@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="..\..\MotionStateMachine\shader\SkinShader.xml">
+      <Filter>shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\unitychan\unitychan_WAIT02.fbx">
+      <Filter>asset\motion</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\unitychan\unitychan_WALK00_F.fbx">
+      <Filter>asset\motion</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\unitychan\unitychan.fbx">
+      <Filter>asset</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\unitychan\UnityChanImg.xml">
+      <Filter>asset</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="shader">
+      <UniqueIdentifier>{bdc42ec9-208c-4020-906d-9f6698abcdec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{8e2fd1d6-df81-4e47-af06-b2ead7d81f84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{22134b77-37c3-4651-a90d-50e234c172d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="asset">
+      <UniqueIdentifier>{0495db37-b638-4ed1-bd63-e54fa5195372}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="asset\motion">
+      <UniqueIdentifier>{367cf0fb-bbf7-4545-8821-dfccd9bff4c3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\MotionStateMachine\shader\SkinShader.fx">
+      <Filter>shader</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\MotionStateMachine\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MotionStateMachine\MotionStateMachineApp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\MotionStateMachine\MotionStateMachineApp.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
