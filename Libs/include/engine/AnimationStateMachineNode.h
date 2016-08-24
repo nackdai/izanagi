@@ -62,7 +62,7 @@ namespace engine {
 
         void setTarget(izanagi::CSkeletonInstance* skl);
 
-        const animation::CTimeline getTimeline() const
+        const animation::CTimeline& getTimeline() const
         {
             return m_timeline;
         }
@@ -77,7 +77,10 @@ namespace engine {
             return &m_item;
         }
 
-        void clear();
+        void setFromBehavour(AnimationStateMachineBehaviour* behaviour)
+        {
+            SAFE_REPLACE(m_fromBehaviour, behaviour);
+        }
 
     private:
         IMemoryAllocator* m_Allocator{ nullptr };
@@ -96,6 +99,8 @@ namespace engine {
         izanagi::CStdList<AnimationStateMachineNode>::Item m_item;
 
         AnimationStateMachineBehaviour* m_currentBehaviour{ nullptr };
+
+        AnimationStateMachineBehaviour* m_fromBehaviour{ nullptr };
 
         animation::CTimeline m_timeline;
     };

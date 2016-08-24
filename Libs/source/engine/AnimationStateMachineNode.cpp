@@ -31,6 +31,8 @@ namespace engine {
     {
         SAFE_RELEASE(m_skl);
         SAFE_RELEASE(m_anm);
+
+        SAFE_RELEASE(m_fromBehaviour);
     }
 
     const AnimationStateMachineNode::Name& AnimationStateMachineNode::getName() const
@@ -178,6 +180,12 @@ namespace engine {
 
         m_timeline.Reset();
         m_timeline.Start();
+
+        // 前のアニメーションから現在の時間を引き継ぐ.
+        if (m_fromBehaviour) {
+            auto t = m_fromBehaviour->getTimeline().GetTime();
+            m_timeline.OverrideTimeForcibly(t);
+        }
     }
 
     void AnimationStateMachineNode::exit()
@@ -185,6 +193,7 @@ namespace engine {
         StateMachineNode::exit();
 
         SAFE_RELEASE(m_skl);
+        SAFE_RELEASE(m_fromBehaviour);
     }
 
     void AnimationStateMachineNode::updateAnimation(IZ_FLOAT delta)

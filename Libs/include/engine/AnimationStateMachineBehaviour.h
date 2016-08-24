@@ -92,6 +92,11 @@ namespace engine {
             return &m_item;
         }
 
+        const animation::CTimeline getTimeline() const
+        {
+            return m_timeline;
+        }
+
         virtual void releaseDelegatedContiditon(StateMachineCondition* cond) override;
 
     private:

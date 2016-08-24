@@ -108,6 +108,10 @@ namespace animation {
          */
         IZ_BOOL IsForward() const;
 
+        /** Override current time forcibly.
+         */
+        void OverrideTimeForcibly(IZ_FLOAT t);
+
     private:
         void ToggleDirection();
 
@@ -115,8 +119,6 @@ namespace animation {
 
         IZ_FLOAT GetOverTime();
         void SetOverTime(IZ_FLOAT over);
-
-        void SetTimeForcibly(IZ_FLOAT time);
 
     protected:
         IZ_FLOAT m_Time;        // 時間

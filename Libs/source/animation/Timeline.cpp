@@ -222,6 +222,13 @@ namespace animation {
         return m_Flags.isForward;
     }
 
+    // Override current time forcibly.
+    void CTimeline::OverrideTimeForcibly(IZ_FLOAT t)
+    {
+        m_Time = t;
+        m_OverTime = 0.0f;
+    }
+
     void CTimeline::ToggleDirection()
     {
         m_Flags.isForward = !m_Flags.isForward;
@@ -240,12 +247,6 @@ namespace animation {
     void CTimeline::SetOverTime(IZ_FLOAT over)
     {
         m_OverTime = over;
-    }
-
-    void CTimeline::SetTimeForcibly(IZ_FLOAT time)
-    {
-        m_Time = time;
-        m_OverTime = 0.0f;
     }
 }   // namespace animation
 }   // namespace izanagi

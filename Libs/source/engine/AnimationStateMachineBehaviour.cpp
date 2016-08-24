@@ -195,6 +195,11 @@ namespace engine {
     {
         StateMachineNode::exit();
 
+        // 次のノードのアニメーションに現在の時間を引き渡すためにビヘイビアを教える.
+        if (m_to) {
+            m_to->setFromBehavour(this);
+        }
+
         SAFE_RELEASE(m_skl);
         SAFE_RELEASE(m_anm);
 
