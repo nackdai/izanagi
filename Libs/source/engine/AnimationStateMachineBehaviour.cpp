@@ -80,20 +80,6 @@ namespace engine {
         return ret;
     }
 
-    IZ_FLOAT AnimationStateMachineBehaviour::getRatio()
-    {
-        auto ratio = m_timeline.GetNormalized();
-        return ratio;
-    }
-
-    IZ_BOOL AnimationStateMachineBehaviour::isTransition()
-    {
-        auto ret = (m_state == StateMachineNode::State::Enter
-            || m_state == StateMachineNode::State::Running);
-
-        return ret;
-    }
-
     AniimationStateMachineCondition* AnimationStateMachineBehaviour::addCondition(
         IMemoryAllocator* allocator,
         const char* name,
@@ -140,12 +126,14 @@ namespace engine {
 
         if (state == State::Running) {
             if (m_timeline.GetDuration() == 0.0f) {
+                // ‘JˆÚŽžŠÔ‚ªŽw’è‚³‚ê‚Ä‚¢‚È‚¢ = –³ðŒ‚Å‘JˆÚ.
                 m_state = State::Exit;
                 return State::None;
             }
             else {
                 auto f = m_timeline.GetNormalized();
                 if (f >= 1.0f) {
+                    // ‘JˆÚŽžŠÔ‚ð’´‚¦‚½‚Ì‚Å”²‚¯‚é.
                     m_state = State::Exit;
                     return State::None;
                 }

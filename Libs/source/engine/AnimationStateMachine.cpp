@@ -148,9 +148,6 @@ namespace engine {
 
         if (isRegistered(node)) {
             ret = m_entry.addBehaviour(&m_fromEntryTo, node);
-
-            // ‹­§.
-            m_entry.m_state = StateMachineNode::State::Enter;
         }
 
         return ret;
@@ -289,6 +286,7 @@ namespace engine {
             auto state = m_current->update(delta);
 
             if (state == StateMachineNode::State::Exit) {
+                // ŽŸ‚ÉˆÚ‚é.
                 auto next = m_current->next();
 
                 m_current = next;

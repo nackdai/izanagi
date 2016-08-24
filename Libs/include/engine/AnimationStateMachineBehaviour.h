@@ -50,11 +50,8 @@ namespace engine {
     public:
         void setTransitionTime(IZ_FLOAT t);
 
+        // ƒm[ƒhŠÔ‚Ì‘JˆÚ‚É‚©‚©‚éŠÔ.
         IZ_FLOAT getTransitionTime() const;
-
-        IZ_FLOAT getRatio();
-
-        IZ_BOOL isTransition();
 
         AniimationStateMachineCondition* addCondition(
             IMemoryAllocator* allocator,

@@ -6,8 +6,8 @@
 
 namespace izanagi {
 namespace engine {
-    /**
-    */
+    /** Condition about behavoiour.
+     */
     class StateMachineCondition {
         friend class StateMachineBehaviour;
 
@@ -18,12 +18,16 @@ namespace engine {
         NO_COPIABLE(StateMachineCondition);
 
     public:
+        /** Value type.
+         */
         enum Type {
             Int,
             Float,
             Bool,
         };
 
+        /** Compare way between values.
+         */
         enum Cmp {
             Equal,
             NotEqual,
@@ -33,23 +37,40 @@ namespace engine {
             GreaterEqual,
         };
 
+        /** Condition name.
+         */
         using Name = izanagi::CStdString < IZ_CHAR, 15 >;
 
         using Binding = std::function < const izanagi::CValue&() >;
 
+        /** Compare specifeid value.
+         */
         IZ_BOOL compare(const izanagi::CValue& value);
 
+        /** Compare specifeid value if specified name is same as the condition's name.
+         */
         IZ_BOOL compare(
             const char* name,
             const izanagi::CValue& value);
 
+        /** Get condition's name.
+         */
         const Name& getName() const;
 
+        /** Get key of condition's name.
+         */
         const CKey& getKey() const;
 
+        /** Get condition value type.
+         */
         StateMachineCondition::Type getType() const;
+
+        /** Get compare way.
+         */
         StateMachineCondition::Cmp getCmp() const;
 
+        /** Get condition's value.
+         */
         const izanagi::CValue& getValue() const;
 
         void set(

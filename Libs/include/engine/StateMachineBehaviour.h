@@ -9,8 +9,8 @@
 
 namespace izanagi {
 namespace engine {
-    /**
-    */
+    /** Behaviour to transit between two nodes.
+     */
     class StateMachineBehaviour : public StateMachineNode {
     public:
         StateMachineBehaviour() {}

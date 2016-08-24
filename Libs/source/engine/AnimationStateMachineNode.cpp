@@ -165,6 +165,7 @@ namespace engine {
                 auto state = behaviour->update(delta);
 
                 if (state == State::Enter) {
+                    // ビヘイビアが起動したのでノードから抜ける.
                     m_currentBehaviour = behaviour;
 
                     m_state = State::Exit;
@@ -227,6 +228,7 @@ namespace engine {
     {
         if (m_anm && m_skl) {
             if (!m_isLoopAnm) {
+                // アニメーションがループしない場合は、アニメーションが終了した時点でノードから抜ける.
                 auto f = m_timeline.GetNormalized();
                 if (f >= 1.0f) {
                     return IZ_FALSE;
