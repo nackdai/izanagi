@@ -116,29 +116,11 @@
     <ClCompile Include="..\..\UnityChan\main.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\UnityChan\StateBase.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\UnityChan\StateFbx.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\UnityChan\StateManager.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\UnityChan\UnityChanApp.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\UnityChan\StateBase.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UnityChan\StateFbx.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UnityChan\StateManager.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\UnityChan\UnityChanApp.h">
       <Filter>include</Filter>
     </ClInclude>

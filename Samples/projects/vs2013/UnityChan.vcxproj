@@ -1219,15 +1219,9 @@ move "%(RelativeDir)%(Filename).anm" "$(PROJECT_MAIN_DIR)data"</Command>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\UnityChan\main.cpp" />
-    <ClCompile Include="..\..\UnityChan\StateBase.cpp" />
-    <ClCompile Include="..\..\UnityChan\StateFbx.cpp" />
-    <ClCompile Include="..\..\UnityChan\StateManager.cpp" />
     <ClCompile Include="..\..\UnityChan\UnityChanApp.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\UnityChan\StateBase.h" />
-    <ClInclude Include="..\..\UnityChan\StateFbx.h" />
-    <ClInclude Include="..\..\UnityChan\StateManager.h" />
     <ClInclude Include="..\..\UnityChan\UnityChanApp.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
