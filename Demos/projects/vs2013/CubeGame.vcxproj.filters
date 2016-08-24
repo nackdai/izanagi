@@ -40,12 +40,33 @@
     <ClInclude Include="..\..\CubeGame\Configure.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\CubeGame\CubeGameApp.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CubeGame\StateGameMain.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CubeGame\StateManager.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CubeGame\PlayCharacter.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\CubeGame\Configure.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\CubeGame\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CubeGame\CubeGameApp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CubeGame\StateManager.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CubeGame\StateGameMain.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

@@ -55,15 +55,19 @@ namespace engine {
         m_key.SetValue(m_name.GetKeyValue());
     }
 
-    void AnimationStateMachineNode::setAnimation(izanagi::IAnimation* anm)
+    void AnimationStateMachineNode::setAnimation(
+        izanagi::IAnimation* anm,
+        IZ_BOOL isLoopAnm)
     {
         SAFE_REPLACE(m_anm, anm);
+
+        m_isLoopAnm = isLoopAnm;
 
         if (m_anm) {
             m_timeline.Init(
                 m_anm->GetAnimationTime(),
                 0.0f);
-            m_timeline.EnableLoop(IZ_TRUE); // TODO
+            m_timeline.EnableLoop(m_isLoopAnm);
             m_timeline.AutoReverse(IZ_FALSE);
             m_timeline.Reset();
             m_timeline.Start();
@@ -171,11 +175,24 @@ namespace engine {
                 item = item->GetNext();
             }
 
-            updateAnimation(delta);
+            if (updateAnimation(delta)) {
+                m_state = State::Running;
+                return State::Running;
+            }
+            else {
+                // 前のノードに戻るビヘイビアを探す.
+                if (m_fromBehaviour) {
+                    auto to = m_fromBehaviour->getFrom();
+                    auto behaviour = getBehaviour(to);
 
-            m_state = State::Running;
+                    if (behaviour) {
+                        m_currentBehaviour = behaviour;
+                    }
+                }
 
-            return State::Running;
+                m_state = State::Exit;
+                return State::None;
+            }
         }
     }
 
@@ -206,15 +223,24 @@ namespace engine {
         m_fromBehaviour = nullptr;
     }
 
-    void AnimationStateMachineNode::updateAnimation(IZ_FLOAT delta)
+    IZ_BOOL AnimationStateMachineNode::updateAnimation(IZ_FLOAT delta)
     {
         if (m_anm && m_skl) {
+            if (!m_isLoopAnm) {
+                auto f = m_timeline.GetNormalized();
+                if (f >= 1.0f) {
+                    return IZ_FALSE;
+                }
+            }
+            
             auto t = m_timeline.GetTime();
 
             m_skl->ApplyAnimation(t, m_anm);
 
             m_timeline.Advance(delta);
         }
+
+        return IZ_TRUE;
     }
 
     void AnimationStateMachineNode::setTarget(izanagi::CSkeletonInstance* skl)

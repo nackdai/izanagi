@@ -225,7 +225,7 @@ void MotionStateMachineApp::initStateMachine(izanagi::IMemoryAllocator* allocato
 
     auto idle = m_stateMachine->addNode(allocator, "idle", m_Anm[State::Idle]);
     auto move = m_stateMachine->addNode(allocator, "move", m_Anm[State::Walk]);
-    auto lose = m_stateMachine->addNode(allocator, "lose", m_Anm[State::Lose]);
+    auto lose = m_stateMachine->addNode(allocator, "lose", m_Anm[State::Lose], IZ_FALSE);
 
     m_stateMachine->setFromEntryTo(idle);
 
@@ -266,6 +266,10 @@ void MotionStateMachineApp::initStateMachine(izanagi::IMemoryAllocator* allocato
 
         cond->setBinding([&] {
             return m_isLose;
+        });
+
+        lose->setExitFunc([&] {
+            m_isLose = IZ_FALSE;
         });
     }
 

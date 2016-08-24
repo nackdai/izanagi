@@ -18,7 +18,8 @@ namespace engine {
         AnimationStateMachineNode* addNode(
             IMemoryAllocator* allocator,
             const char* name,
-            izanagi::IAnimation* anm);
+            izanagi::IAnimation* anm,
+            IZ_BOOL isLoopAnm = IZ_TRUE);
 
         AnimationStateMachineNode* getNode(const char* name);
 

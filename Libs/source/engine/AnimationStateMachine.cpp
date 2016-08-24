@@ -54,7 +54,8 @@ namespace engine {
     AnimationStateMachineNode* AnimationStateMachine::addNode(
         IMemoryAllocator* allocator,
         const char* name,
-        izanagi::IAnimation* anm)
+        izanagi::IAnimation* anm,
+        IZ_BOOL isLoopAnm/*= IZ_TRUE*/)
     {
         auto node = getNode(name);
 
@@ -64,7 +65,7 @@ namespace engine {
 
             m_nodes.AddTail(node->getListItem());
 
-            node->setAnimation(anm);
+            node->setAnimation(anm, isLoopAnm);
         }
 
         return node;

@@ -24,7 +24,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\CubeGame\Configure.cpp" />
+    <ClCompile Include="..\..\CubeGame\CubeGameApp.cpp" />
     <ClCompile Include="..\..\CubeGame\main.cpp" />
+    <ClCompile Include="..\..\CubeGame\StateGameMain.cpp" />
+    <ClCompile Include="..\..\CubeGame\StateManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Media\unitychan\unitychan.fbx" />
@@ -38,6 +41,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\CubeGame\Configure.h" />
+    <ClInclude Include="..\..\CubeGame\CubeGameApp.h" />
+    <ClInclude Include="..\..\CubeGame\PlayCharacter.h" />
+    <ClInclude Include="..\..\CubeGame\StateGameMain.h" />
+    <ClInclude Include="..\..\CubeGame\StateManager.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\..\CubeGame\shader\BasicShader.fx" />

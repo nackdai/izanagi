@@ -33,11 +33,9 @@ namespace engine {
 
         void setName(const char* name);
 
-        void setEnterFunc(HookFunc func);
-
-        void setExitFunc(HookFunc func);
-
-        void setAnimation(izanagi::IAnimation* anm);
+        void setAnimation(
+            izanagi::IAnimation* anm,
+            IZ_BOOL isLoopAnm);
 
         virtual izanagi::IAnimation* getAnimation();
 
@@ -58,7 +56,7 @@ namespace engine {
         virtual void enter() override;
         virtual void exit() override;
 
-        void updateAnimation(IZ_FLOAT delta);
+        IZ_BOOL updateAnimation(IZ_FLOAT delta);
 
         void setTarget(izanagi::CSkeletonInstance* skl);
 
@@ -93,6 +91,8 @@ namespace engine {
 
         izanagi::CSkeletonInstance* m_skl{ nullptr };
         izanagi::IAnimation* m_anm{ nullptr };
+
+        IZ_BOOL m_isLoopAnm{ IZ_TRUE };
 
         izanagi::CStdList<AnimationStateMachineBehaviour> m_behaviours;
 
