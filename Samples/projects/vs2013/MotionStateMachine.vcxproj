@@ -517,6 +517,49 @@ move "%(RelativeDir)%(Filename).anm" "$(PROJECT_MAIN_DIR)data"</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|x64'">%(FullPath);%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">%(FullPath);%(AdditionalInputs)</AdditionalInputs>
     </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\unitychan\unitychan_LOSE00.fbx">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(TOOL_DIR)Release\AnimationConverter.exe -i "%(FullPath)" -b "%(RelativeDir)unitychan.fbx"
+move "%(RelativeDir)%(Filename).anm" "$(PROJECT_MAIN_DIR)data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(TOOL_DIR)Release\AnimationConverter.exe -i "%(FullPath)" -b "%(RelativeDir)unitychan.fbx"
+move "%(RelativeDir)%(Filename).anm" "$(PROJECT_MAIN_DIR)data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(TOOL_DIR)Release\AnimationConverter.exe -i "%(FullPath)" -b "%(RelativeDir)unitychan.fbx"
+move "%(RelativeDir)%(Filename).anm" "$(PROJECT_MAIN_DIR)data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(TOOL_DIR)Release\AnimationConverter.exe -i "%(FullPath)" -b "%(RelativeDir)unitychan.fbx"
+move "%(RelativeDir)%(Filename).anm" "$(PROJECT_MAIN_DIR)data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(TOOL_DIR)Release\AnimationConverter.exe -i "%(FullPath)" -b "%(RelativeDir)unitychan.fbx"
+move "%(RelativeDir)%(Filename).anm" "$(PROJECT_MAIN_DIR)data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|x64'">$(TOOL_DIR)Release\AnimationConverter.exe -i "%(FullPath)" -b "%(RelativeDir)unitychan.fbx"
+move "%(RelativeDir)%(Filename).anm" "$(PROJECT_MAIN_DIR)data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|x64'">$(TOOL_DIR)Release\AnimationConverter.exe -i "%(FullPath)" -b "%(RelativeDir)unitychan.fbx"
+move "%(RelativeDir)%(Filename).anm" "$(PROJECT_MAIN_DIR)data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|x64'">$(TOOL_DIR)Release\AnimationConverter.exe -i "%(FullPath)" -b "%(RelativeDir)unitychan.fbx"
+move "%(RelativeDir)%(Filename).anm" "$(PROJECT_MAIN_DIR)data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|x64'">$(TOOL_DIR)Release\AnimationConverter.exe -i "%(FullPath)" -b "%(RelativeDir)unitychan.fbx"
+move "%(RelativeDir)%(Filename).anm" "$(PROJECT_MAIN_DIR)data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">$(TOOL_DIR)Release\AnimationConverter.exe -i "%(FullPath)" -b "%(RelativeDir)unitychan.fbx"
+move "%(RelativeDir)%(Filename).anm" "$(PROJECT_MAIN_DIR)data"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(DATA_DIR)%(Filename).anm;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(DATA_DIR)%(Filename).anm;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(DATA_DIR)%(Filename).anm;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(DATA_DIR)%(Filename).anm;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(DATA_DIR)%(Filename).anm;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|x64'">$(DATA_DIR)%(Filename).anm;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|x64'">$(DATA_DIR)%(Filename).anm;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|x64'">$(DATA_DIR)%(Filename).anm;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|x64'">$(DATA_DIR)%(Filename).anm;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">$(DATA_DIR)%(Filename).anm;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(FullPath);%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">%(FullPath);%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">%(FullPath);%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">%(FullPath);%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">%(FullPath);%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|x64'">%(FullPath);%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|x64'">%(FullPath);%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|x64'">%(FullPath);%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|x64'">%(FullPath);%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">%(FullPath);%(AdditionalInputs)</AdditionalInputs>
+    </CustomBuild>
     <None Include="..\..\MotionStateMachine\shader\SkinShader.fx" />
     <CustomBuild Include="..\..\MotionStateMachine\shader\SkinShader.xml">
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd</Outputs>
