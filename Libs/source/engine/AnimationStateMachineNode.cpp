@@ -23,6 +23,8 @@ namespace engine {
     AnimationStateMachineNode::AnimationStateMachineNode()
     {
         m_item.Init(this);
+
+        m_state = StateMachineNode::State::Enter;
     }
 
     AnimationStateMachineNode::~AnimationStateMachineNode()
@@ -123,17 +125,17 @@ namespace engine {
 
     StateMachineNode::State AnimationStateMachineNode::update(IZ_FLOAT delta)
     {
-        if (m_state == State::None) {
+        if (m_state == State::Enter) {
             m_currentBehaviour = nullptr;
 
             enter();
-            m_state = State::Enter;
+            m_state = State::Running;
             return State::Enter;
         }
         else if (m_state == State::Exit) {
             exit();
-            m_state = State::None;
-            return State::None;
+            m_state = State::Enter;
+            return State::Exit;
         }
         else {
             // TODO
@@ -149,10 +151,9 @@ namespace engine {
                 if (state == State::Enter) {
                     m_currentBehaviour = behaviour;
 
-                    exit();
-                    m_state = State::None;
+                    m_state = State::Exit;
 
-                    return State::Exit;
+                    return State::None;
                 }
 
                 item = item->GetNext();
@@ -161,6 +162,7 @@ namespace engine {
             updateAnimation(delta);
 
             m_state = State::Running;
+
             return State::Running;
         }
     }
@@ -188,11 +190,11 @@ namespace engine {
     void AnimationStateMachineNode::updateAnimation(IZ_FLOAT delta)
     {
         if (m_anm && m_skl) {
-            m_timeline.Advance(delta);
-
             auto t = m_timeline.GetTime();
 
             m_skl->ApplyAnimation(t, m_anm);
+
+            m_timeline.Advance(delta);
         }
     }
 

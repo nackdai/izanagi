@@ -143,13 +143,11 @@ namespace engine {
                 auto cond = item->GetData();
 
                 if (!cond->update()) {
-                    return State::None;
+                    return State::Running;
                 }
 
                 item = item->GetNext();
             }
-
-            enter();
 
             m_state = State::Enter;
             ret = State::Enter;

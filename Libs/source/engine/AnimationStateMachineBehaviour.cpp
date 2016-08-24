@@ -131,26 +131,27 @@ namespace engine {
     {
         auto state = StateMachineBehaviour::update(delta);
 
-        if (state == State::Enter) {
-            initAnimation();
-        }
-        else if (state == State::Running) {
-            initAnimation();
-
-            m_timeline.Advance(delta);
-
-            IZ_FLOAT t = m_timeline.GetTime();
-
-            if (m_anm && m_skl) {
-                m_skl->ApplyAnimation(t, m_anm);
+        if (state == State::Running) {
+            if (m_timeline.GetDuration() == 0.0f) {
+                m_state = State::Exit;
+                return State::None;
             }
+            else {
+                auto f = m_timeline.GetNormalized();
+                if (f >= 1.0f) {
+                    m_state = State::Exit;
+                    return State::None;
+                }
 
-            auto f = m_timeline.GetNormalized();
-            if (f >= 1.0f) {
-                state = State::Exit;
+                initAnimation();
 
-                exit();
-                m_state = State::None;
+                IZ_FLOAT t = m_timeline.GetTime();
+
+                if (m_anm && m_skl) {
+                    m_skl->ApplyAnimation(t, m_anm);
+                }
+
+                m_timeline.Advance(delta);
             }
         }
 

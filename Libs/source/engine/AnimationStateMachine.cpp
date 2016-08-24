@@ -267,37 +267,29 @@ namespace engine {
 
     StateMachineNode::State AnimationStateMachine::update(IZ_FLOAT delta)
     {
-        // TODO
-
-        IZ_ASSERT(m_current);
-
-        if (m_current->isNode()) {
-            AnimationStateMachineNode* node = (AnimationStateMachineNode*)m_current;
-            node->setTarget(m_skl);
-        }
-        else {
-            AnimationStateMachineBehaviour* behaviour = (AnimationStateMachineBehaviour*)m_current;
-            behaviour->setTarget(m_skl, m_blendAnm);
-        }
-
-        auto state = m_current->update(delta);
-
-        if (state == StateMachineNode::State::Exit) {
-            auto next = m_current->next();
-            IZ_ASSERT(next);
-
-            if (next == &m_fromEntryTo) {
-                next = next->next();
-
-                // ‹­§.
-                next->m_state = StateMachineNode::State::Enter;
-                next->enter();
+        while (m_current) {
+            if (m_current->isNode()) {
+                AnimationStateMachineNode* node = (AnimationStateMachineNode*)m_current;
+                node->setTarget(m_skl);
+            }
+            else {
+                AnimationStateMachineBehaviour* behaviour = (AnimationStateMachineBehaviour*)m_current;
+                behaviour->setTarget(m_skl, m_blendAnm);
             }
 
-            m_current = next;
+            auto state = m_current->update(delta);
+
+            if (state == StateMachineNode::State::Exit) {
+                auto next = m_current->next();
+
+                m_current = next;
+            }
+            else if (state == StateMachineNode::State::Running) {
+                return StateMachineNode::State::Running;
+            }
         }
 
-        return StateMachineNode::Running;
+        return StateMachineNode::State::Exit;
     }
 
     void AnimationStateMachine::update(
