@@ -11,15 +11,15 @@ namespace engine {
 
     /**
      */
-    class AniimationStateMachineCondition : public StateMachineBehaviourCondition, public CObject {
+    class AniimationStateMachineCondition : public StateMachineCondition, public CObject {
         friend class AnimationStateMachineBehaviour;
 
     private:
         static AniimationStateMachineCondition* create(
             IMemoryAllocator* allocator,
             const char* name,
-            StateMachineBehaviourCondition::Type type,
-            StateMachineBehaviourCondition::Cmp cmp,
+            StateMachineCondition::Type type,
+            StateMachineCondition::Cmp cmp,
             const izanagi::CValue& value);
 
     private:
@@ -59,8 +59,8 @@ namespace engine {
         AniimationStateMachineCondition* addCondition(
             IMemoryAllocator* allocator,
             const char* name,
-            StateMachineBehaviourCondition::Type type,
-            StateMachineBehaviourCondition::Cmp cmp,
+            StateMachineCondition::Type type,
+            StateMachineCondition::Cmp cmp,
             const izanagi::CValue& value);
 
         IZ_BOOL addCondition(AniimationStateMachineCondition* cond);
@@ -92,7 +92,7 @@ namespace engine {
             return &m_item;
         }
 
-        virtual void releaseDelegatedContiditon(StateMachineBehaviourCondition* cond) override;
+        virtual void releaseDelegatedContiditon(StateMachineCondition* cond) override;
 
     private:
         IMemoryAllocator* m_Allocator{ nullptr };

@@ -55,6 +55,7 @@
     <ClInclude Include="..\..\include\engine\AnimationStateMachineBehaviour.h" />
     <ClInclude Include="..\..\include\engine\AnimationStateMachineNode.h" />
     <ClInclude Include="..\..\include\engine\StateMachineBehaviour.h" />
+    <ClInclude Include="..\..\include\engine\StateMachineCondition.h" />
     <ClInclude Include="..\..\include\engine\StateMachineNode.h" />
     <ClInclude Include="..\..\include\izEngine.h" />
   </ItemGroup>
@@ -63,6 +64,7 @@
     <ClCompile Include="..\..\source\engine\AnimationStateMachineBehaviour.cpp" />
     <ClCompile Include="..\..\source\engine\AnimationStateMachineNode.cpp" />
     <ClCompile Include="..\..\source\engine\StateMachineBehaviour.cpp" />
+    <ClCompile Include="..\..\source\engine\StateMachineCondition.cpp" />
     <ClCompile Include="..\..\source\engine\StateMachineNode.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

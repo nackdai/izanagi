@@ -6,8 +6,8 @@ namespace engine {
     AniimationStateMachineCondition* AniimationStateMachineCondition::create(
         IMemoryAllocator* allocator,
         const char* name,
-        StateMachineBehaviourCondition::Type type,
-        StateMachineBehaviourCondition::Cmp cmp,
+        StateMachineCondition::Type type,
+        StateMachineCondition::Cmp cmp,
         const izanagi::CValue& value)
     {
         void* buf = ALLOC(allocator, sizeof(AniimationStateMachineCondition));
@@ -90,8 +90,8 @@ namespace engine {
     AniimationStateMachineCondition* AnimationStateMachineBehaviour::addCondition(
         IMemoryAllocator* allocator,
         const char* name,
-        StateMachineBehaviourCondition::Type type,
-        StateMachineBehaviourCondition::Cmp cmp,
+        StateMachineCondition::Type type,
+        StateMachineCondition::Cmp cmp,
         const izanagi::CValue& value)
     {
         auto cond = getCondition(name);
@@ -226,7 +226,7 @@ namespace engine {
         return m_to;
     }
 
-    void AnimationStateMachineBehaviour::releaseDelegatedContiditon(StateMachineBehaviourCondition* cond)
+    void AnimationStateMachineBehaviour::releaseDelegatedContiditon(StateMachineCondition* cond)
     {
         if (cond) {
             AniimationStateMachineCondition* c = (AniimationStateMachineCondition*)cond;
