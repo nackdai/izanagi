@@ -481,15 +481,9 @@ move "%(RelativeDir)%(Filename)*.mtrl" "$(PROJECT_MAIN_DIR)data"</Command>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\SD_UnityChan\main.cpp" />
-    <ClCompile Include="..\..\SD_UnityChan\StateBase.cpp" />
-    <ClCompile Include="..\..\SD_UnityChan\StateFbx.cpp" />
-    <ClCompile Include="..\..\SD_UnityChan\StateManager.cpp" />
     <ClCompile Include="..\..\SD_UnityChan\SD_UnityChanApp.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\SD_UnityChan\StateBase.h" />
-    <ClInclude Include="..\..\SD_UnityChan\StateFbx.h" />
-    <ClInclude Include="..\..\SD_UnityChan\StateManager.h" />
     <ClInclude Include="..\..\SD_UnityChan\SD_UnityChanApp.h" />
   </ItemGroup>
   <ItemGroup>

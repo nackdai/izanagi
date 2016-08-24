@@ -7,27 +7,9 @@
     <ClCompile Include="..\..\SD_UnityChan\SD_UnityChanApp.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\SD_UnityChan\StateBase.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\SD_UnityChan\StateFbx.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\SD_UnityChan\StateManager.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\SD_UnityChan\SD_UnityChanApp.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\SD_UnityChan\StateBase.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\SD_UnityChan\StateFbx.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\SD_UnityChan\StateManager.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
