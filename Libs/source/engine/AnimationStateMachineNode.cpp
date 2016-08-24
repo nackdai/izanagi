@@ -128,6 +128,8 @@ namespace engine {
             if (behaviour->getTo() == to) {
                 return behaviour;
             }
+
+            item = item->GetNext();
         }
 
         return nullptr;
