@@ -26,6 +26,9 @@ namespace engine {
         m_fromEntryTo.AddRef();
         m_toExitFrom.AddRef();
 
+        m_fromEntryTo.m_tag.SetString("FromEntryTo");
+        m_toExitFrom.m_tag.SetString("ToExitFrom");
+
         m_entry.AddRef();
         m_exit.AddRef();
 
@@ -114,7 +117,12 @@ namespace engine {
             IZ_ASSERT(ret);
 
             auto result = from->addBehaviour(ret, to);
-            if (!result) {
+
+            if (result) {
+                // fromƒm[ƒh‚ÉˆÏ÷‚·‚é.
+                ret->Release();
+            }
+            else {
                 SAFE_RELEASE(ret);
             }
         }

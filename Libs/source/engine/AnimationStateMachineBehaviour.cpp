@@ -48,8 +48,15 @@ namespace engine {
 
     AnimationStateMachineBehaviour::~AnimationStateMachineBehaviour()
     {
-        SAFE_RELEASE(m_from);
-        SAFE_RELEASE(m_to);
+        auto item = m_conditions.GetTop();
+
+        while (item) {
+            auto cond = (AniimationStateMachineCondition*)item->GetData();
+
+            item = item->GetNext();
+
+            SAFE_RELEASE(cond);
+        }
 
         SAFE_RELEASE(m_skl);
         SAFE_RELEASE(m_anm);
@@ -105,7 +112,7 @@ namespace engine {
             name, type, cmp, value);
         VRETURN_NULL(cond);
 
-        auto result = StateMachineBehaviour::addCondition(cond, IZ_TRUE);
+        auto result = StateMachineBehaviour::addCondition(cond);
 
         if (!result) {
             AniimationStateMachineCondition* c = (AniimationStateMachineCondition*)cond;
@@ -118,7 +125,7 @@ namespace engine {
 
     IZ_BOOL AnimationStateMachineBehaviour::addCondition(AniimationStateMachineCondition* cond)
     {
-        auto ret = StateMachineBehaviour::addCondition(cond, IZ_TRUE);
+        auto ret = StateMachineBehaviour::addCondition(cond);
         
         if (ret) {
             cond->AddRef();
@@ -218,8 +225,8 @@ namespace engine {
         AnimationStateMachineNode* from,
         AnimationStateMachineNode* to)
     {
-        SAFE_REPLACE(m_from, from);
-        SAFE_REPLACE(m_to, to);
+        m_from = from;
+        m_to = to;
     }
 
     AnimationStateMachineNode* AnimationStateMachineBehaviour::getFrom()
@@ -230,14 +237,6 @@ namespace engine {
     AnimationStateMachineNode* AnimationStateMachineBehaviour::getTo()
     {
         return m_to;
-    }
-
-    void AnimationStateMachineBehaviour::releaseDelegatedContiditon(StateMachineCondition* cond)
-    {
-        if (cond) {
-            AniimationStateMachineCondition* c = (AniimationStateMachineCondition*)cond;
-            SAFE_RELEASE(c);
-        }
     }
 }
 }

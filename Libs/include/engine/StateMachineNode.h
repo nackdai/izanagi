@@ -53,7 +53,7 @@ namespace izanagi {
             HookFunc m_enterFunc{ nullptr };
             HookFunc m_exitFunc{ nullptr };
 
-            izanagi::CStdList<StateMachineBehaviour> m_behaviours;
+            //izanagi::CStdList<StateMachineBehaviour> m_behaviours;
 
             StateMachineNode::State m_state{ StateMachineNode::State::None };
         };

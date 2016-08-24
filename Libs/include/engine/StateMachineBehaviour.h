@@ -19,9 +19,7 @@ namespace engine {
         NO_COPIABLE(StateMachineBehaviour);
 
     public:
-        IZ_BOOL addCondition(
-            StateMachineCondition* cond,
-            IZ_BOOL willDelegate = IZ_FALSE);
+        IZ_BOOL addCondition(StateMachineCondition* cond);
 
         IZ_BOOL isRegistered(const char* name);
 
@@ -41,9 +39,6 @@ namespace engine {
         }
 
     protected:
-        virtual void releaseDelegatedContiditon(StateMachineCondition* cond);
-
-    private:
         izanagi::CStdList<StateMachineCondition> m_conditions;
     };
 }   // namespace engine

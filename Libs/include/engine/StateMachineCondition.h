@@ -77,16 +77,6 @@ namespace engine {
             return &m_item;
         }
 
-        void setIsDelegated(IZ_BOOL b)
-        {
-            m_isDelegated = b;
-        }
-
-        IZ_BOOL isDelegated() const
-        {
-            return m_isDelegated;
-        }
-
         template <typename _T>
         IZ_BOOL onCompare(const izanagi::CValue& value);
 
@@ -101,8 +91,6 @@ namespace engine {
         izanagi::CValue m_value;
 
         izanagi::CValue m_curValue;
-
-        IZ_BOOL m_isDelegated{ IZ_FALSE };
 
         Binding m_binding{ nullptr };
     };

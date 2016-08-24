@@ -4,33 +4,10 @@ namespace izanagi {
 namespace engine {
     StateMachineBehaviour::~StateMachineBehaviour()
     {
-        auto item = m_conditions.GetTop();
-
-        while (item) {
-            auto cond = item->GetData();
-
-            item = item->GetNext();
-            item->Leave();
-
-            if (cond->isDelegated()) {
-                releaseDelegatedContiditon(cond);
-            }
-        }
     }
 
-    void StateMachineBehaviour::releaseDelegatedContiditon(StateMachineCondition* cond)
+    IZ_BOOL StateMachineBehaviour::addCondition(StateMachineCondition* cond)
     {
-        if (cond) {
-            delete cond;
-        }
-    }
-
-    IZ_BOOL StateMachineBehaviour::addCondition(
-        StateMachineCondition* cond,
-        IZ_BOOL willDelegate/*= IZ_FALSE*/)
-    {
-        cond->setIsDelegated(willDelegate);
-
         auto name = cond->getName();
 
         if (!isRegistered(name.GetString())) {

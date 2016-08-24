@@ -97,8 +97,6 @@ namespace engine {
             return m_timeline;
         }
 
-        virtual void releaseDelegatedContiditon(StateMachineCondition* cond) override;
-
     private:
         IMemoryAllocator* m_Allocator{ nullptr };
 
@@ -113,6 +111,8 @@ namespace engine {
         IZ_BOOL m_isInitAnm{ IZ_FALSE };
 
         izanagi::CStdList<AnimationStateMachineBehaviour>::Item m_item;
+
+        CStdString<char, 15> m_tag;
     };
 }   // namespace engine
 }   // namespace izanagi

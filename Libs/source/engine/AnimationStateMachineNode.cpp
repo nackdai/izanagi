@@ -32,7 +32,15 @@ namespace engine {
         SAFE_RELEASE(m_skl);
         SAFE_RELEASE(m_anm);
 
-        SAFE_RELEASE(m_fromBehaviour);
+        auto item = m_behaviours.GetTop();
+
+        while (item) {
+            auto b = item->GetData();
+
+            item = item->GetNext();
+
+            SAFE_RELEASE(b);
+        }
     }
 
     const AnimationStateMachineNode::Name& AnimationStateMachineNode::getName() const
@@ -193,7 +201,7 @@ namespace engine {
         StateMachineNode::exit();
 
         SAFE_RELEASE(m_skl);
-        SAFE_RELEASE(m_fromBehaviour);
+        m_fromBehaviour = nullptr;
     }
 
     void AnimationStateMachineNode::updateAnimation(IZ_FLOAT delta)

@@ -79,7 +79,7 @@ namespace engine {
 
         void setFromBehavour(AnimationStateMachineBehaviour* behaviour)
         {
-            SAFE_REPLACE(m_fromBehaviour, behaviour);
+            m_fromBehaviour = behaviour;
         }
 
     private:
