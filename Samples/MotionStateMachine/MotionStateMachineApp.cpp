@@ -227,7 +227,7 @@ void MotionStateMachineApp::initStateMachine(izanagi::IMemoryAllocator* allocato
     auto move = m_stateMachine->addNode("move", m_Anm[State::Walk]);
     auto lose = m_stateMachine->addNode("lose", m_Anm[State::Lose], IZ_FALSE);
 
-    m_stateMachine->setFromEntryTo(idle);
+    m_stateMachine->addBehaviour(nullptr, "idle");
 
     auto speed = m_stateMachine->addConditionValue("speed");
     auto isLose = m_stateMachine->addConditionValue("isLose");

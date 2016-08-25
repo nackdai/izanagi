@@ -37,14 +37,6 @@ namespace engine {
             const char* name,
             const izanagi::CValue& value);
 
-        IZ_BOOL setFromEntryTo(const char* name);
-
-        IZ_BOOL setFromEntryTo(AnimationStateMachineNode* node);
-
-        IZ_BOOL setToExitFrom(const char* name);
-
-        IZ_BOOL setToExitFrom(AnimationStateMachineNode* node);
-
         AnimationStateMachineBehaviour* getBehaviour(
             const char* from,
             const char* to);

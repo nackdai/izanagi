@@ -32,6 +32,9 @@ namespace engine {
         m_entry.AddRef();
         m_exit.AddRef();
 
+        m_entry.setName("entry");
+        m_exit.setName("exit");
+
         m_current = &m_entry;
     }
 
@@ -105,8 +108,24 @@ namespace engine {
         const char* from,
         const char* to)
     {
-        auto fromNode = getNode(from);
-        auto toNode = getNode(to);
+        IZ_ASSERT(from || to);
+
+        AnimationStateMachineNode* fromNode = nullptr;
+        AnimationStateMachineNode* toNode = nullptr;
+
+        if (from) {
+            IZ_ASSERT(strlen(from) > 0);
+            if (m_entry.getName() != from) { 
+                fromNode = getNode(from);
+            }
+        }
+
+        if (to) {
+            IZ_ASSERT(strlen(to) > 0);
+            if (m_exit.getName() != to) {
+                toNode = getNode(to);
+            }
+        }
 
         auto ret = addBehaviour(
             fromNode, toNode);
@@ -118,29 +137,48 @@ namespace engine {
         AnimationStateMachineNode* from,
         AnimationStateMachineNode* to)
     {
+        IZ_BOOL canReturn = IZ_FALSE;
+
         AnimationStateMachineBehaviour* ret = nullptr;
+
+        if (!from && to) {
+            // from ‚ª null -> entry.
+            from = &m_entry;
+            ret = &m_fromEntryTo;
+        }
+        else if (from && !to) {
+            // to ‚ª null -> exit.
+            to = &m_exit;
+            ret = &m_toExitFrom;
+        }
 
         if (from && to) {
             IZ_ASSERT(isRegistered(from) && isRegistered(to));
             IZ_ASSERT(from != to);
 
-            ret = AnimationStateMachineBehaviour::create(m_Allocator);
-            IZ_ASSERT(ret);
+            if (!ret) {
+                ret = AnimationStateMachineBehaviour::create(m_Allocator);
+                IZ_ASSERT(ret);
+
+                canReturn = IZ_TRUE;
+            }
 
             auto result = from->addBehaviour(ret, to);
 
-            if (result) {
-                // fromƒm[ƒh‚ÉˆÏ÷‚·‚é.
-                ret->Release();
-            }
-            else {
-                SAFE_RELEASE(ret);
+            if (canReturn) {
+                if (result) {
+                    // fromƒm[ƒh‚ÉˆÏ÷‚·‚é.
+                    ret->Release();
+                }
+                else {
+                    SAFE_RELEASE(ret);
+                }
             }
         }
 
         IZ_ASSERT(ret);
 
-        return ret;
+        return (canReturn ? ret : nullptr);
     }
 
     AnimationStateMachineConditionValue* AnimationStateMachine::addConditionValue(const char* name)
@@ -185,46 +223,6 @@ namespace engine {
         }
 
         return IZ_FALSE;
-    }
-
-    IZ_BOOL AnimationStateMachine::setFromEntryTo(const char* name)
-    {
-        auto node = getNode(name);
-
-        auto ret = setFromEntryTo(node);
-
-        return ret;
-    }
-
-    IZ_BOOL AnimationStateMachine::setFromEntryTo(AnimationStateMachineNode* node)
-    {
-        IZ_BOOL ret = IZ_FALSE;
-
-        if (isRegistered(node)) {
-            ret = m_entry.addBehaviour(&m_fromEntryTo, node);
-        }
-
-        return ret;
-    }
-
-    IZ_BOOL AnimationStateMachine::setToExitFrom(const char* name)
-    {
-        auto node = getNode(name);
-
-        auto ret = setToExitFrom(node);
-
-        return ret;
-    }
-
-    IZ_BOOL AnimationStateMachine::setToExitFrom(AnimationStateMachineNode* node)
-    {
-        IZ_BOOL ret = IZ_FALSE;
-
-        if (isRegistered(node)) {
-            ret = node->addBehaviour(&m_toExitFrom, &m_exit);
-        }
-
-        return ret;
     }
 
     AnimationStateMachineBehaviour* AnimationStateMachine::getBehaviour(

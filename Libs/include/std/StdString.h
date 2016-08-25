@@ -93,24 +93,31 @@ namespace izanagi {
             return (m_String[0] != '\0');
         }
 
-        IZ_BOOL operator==(const CStdString& rhs)
+        IZ_BOOL operator==(const CStdString& rhs) const
         {
-            size_t nCmpLen = strlen(m_String);
-            IZ_BOOL ret = (memcmp(m_String, rhs.m_String, nCmpLen) == 0);
+            size_t len = strlen(m_String);
+
+            if (len > _NUM) {
+                return IZ_FALSE;
+            }
+
+            IZ_BOOL ret = (memcmp(m_String, rhs.m_String, len) == 0);
             return ret;
         }
-        IZ_BOOL operator==(const _T* rhs)
+
+        IZ_BOOL operator==(const _T* rhs) const
         {
             return (*this == CStdString(rhs));
         }
 
-        IZ_BOOL operator!=(const CStdString& rhs)
+        IZ_BOOL operator!=(const CStdString& rhs) const
         {
             return !((*this) == rhs);
         }
-        IZ_BOOL operator!=(const _T* rhs)
+
+        IZ_BOOL operator!=(const _T* rhs) const
         {
-            return !((*this) == rhs);
+            return (*this != CStdString(rhs));
         }
 
         IZ_UINT operator%(IZ_UINT rhs) const
