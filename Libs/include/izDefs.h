@@ -10,14 +10,13 @@
 
 #include <float.h>
 
+#include "izTypes.h"
+
 #if defined(WIN32) || defined(WIN64)
-    #include "izTypes_windows.h"
     #include "izDefs_windows.h"
 #elif defined(ANDROID)
-    #include "izTypes_linux.h"
     #include "izDefs_android.h"
 #else
-    #include "izTypes_linux.h"
     #include "izDefs_linux.h"
 #endif
 

@@ -11,8 +11,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{6D503A3A-4
 		..\..\include\izDefs_windows.h = ..\..\include\izDefs_windows.h
 		..\..\include\izLimits.h = ..\..\include\izLimits.h
 		..\..\include\izTypes.h = ..\..\include\izTypes.h
-		..\..\include\izTypes_linux.h = ..\..\include\izTypes_linux.h
-		..\..\include\izTypes_windows.h = ..\..\include\izTypes_windows.h
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Middle", "Middle", "{576398E3-E15D-495C-8585-59CFE962FD6C}"
