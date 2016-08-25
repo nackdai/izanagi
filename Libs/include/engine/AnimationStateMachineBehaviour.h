@@ -2,6 +2,7 @@
 #define __IZANAGI_ENGINE_ANIIMATION_STATE_MACHINE_BEHAVIOUR_H__
 
 #include "engine/StateMachineBehaviour.h"
+#include "engine/AnimationStateMachineCondition.h"
 #include "izAnimation.h"
 #include "izSceneGraph.h"
 
@@ -11,30 +12,7 @@ namespace engine {
 
     /**
      */
-    class AniimationStateMachineCondition : public StateMachineCondition, public CObject {
-        friend class AnimationStateMachineBehaviour;
-
-    private:
-        static AniimationStateMachineCondition* create(
-            IMemoryAllocator* allocator,
-            const char* name,
-            StateMachineCondition::Type type,
-            StateMachineCondition::Cmp cmp,
-            const izanagi::CValue& value);
-
-    private:
-        AniimationStateMachineCondition() {}
-        virtual ~AniimationStateMachineCondition() {}
-
-        IZ_DEFINE_INTERNAL_RELEASE();
-
-    private:
-        IMemoryAllocator* m_Allocator{ nullptr };
-    };
-
-    /**
-     */
-    class AnimationStateMachineBehaviour : public StateMachineBehaviour, public CObject {
+    class AnimationStateMachineBehaviour : public StateMachineBehaviour {
         friend class AnimationStateMachineNode;
         friend class AnimationStateMachine;
 
@@ -48,19 +26,17 @@ namespace engine {
         IZ_DEFINE_INTERNAL_RELEASE();
 
     public:
+        AnimationStateMachineCondition* addCondition(
+            IMemoryAllocator* allocator,
+            AnimationStateMachineConditionValue* target,
+            StateMachineCondition::Type type,
+            StateMachineCondition::Cmp cmp,
+            const izanagi::CValue& threshold);
+
         void setTransitionTime(IZ_FLOAT t);
 
         // ÉmÅ[Éhä‘ÇÃëJà⁄Ç…Ç©Ç©ÇÈéûä‘.
         IZ_FLOAT getTransitionTime() const;
-
-        AniimationStateMachineCondition* addCondition(
-            IMemoryAllocator* allocator,
-            const char* name,
-            StateMachineCondition::Type type,
-            StateMachineCondition::Cmp cmp,
-            const izanagi::CValue& value);
-
-        IZ_BOOL addCondition(AniimationStateMachineCondition* cond);
 
     private:
         virtual StateMachineNode::State update(IZ_FLOAT delta) override;

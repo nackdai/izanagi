@@ -37,14 +37,28 @@ namespace engine {
 
     AnimationStateMachine::~AnimationStateMachine()
     {
-        auto item = m_nodes.GetTop();
+        {
+            auto item = m_values.GetTop();
 
-        while (item) {
-            auto node = item->GetData();
+            while (item) {
+                auto value = item->GetData();
 
-            item = item->GetNext();
+                item = item->GetNext();
 
-            SAFE_RELEASE(node);
+                SAFE_RELEASE(value);
+            }
+        }
+
+        {
+            auto item = m_nodes.GetTop();
+
+            while (item) {
+                auto node = item->GetData();
+
+                item = item->GetNext();
+
+                SAFE_RELEASE(node);
+            }
         }
 
         SAFE_RELEASE(m_blendAnm);
@@ -52,7 +66,6 @@ namespace engine {
     }
 
     AnimationStateMachineNode* AnimationStateMachine::addNode(
-        IMemoryAllocator* allocator,
         const char* name,
         izanagi::IAnimation* anm,
         IZ_BOOL isLoopAnm/*= IZ_TRUE*/)
@@ -60,7 +73,7 @@ namespace engine {
         auto node = getNode(name);
 
         if (!node) {
-            node = AnimationStateMachineNode::create(allocator, name);
+            node = AnimationStateMachineNode::create(m_Allocator, name);
             IZ_ASSERT(node);
 
             m_nodes.AddTail(node->getListItem());
@@ -88,23 +101,20 @@ namespace engine {
         return nullptr;
     }
 
-    AnimationStateMachineBehaviour* AnimationStateMachine::createBehaviour(
-        IMemoryAllocator* allocator,
+    AnimationStateMachineBehaviour* AnimationStateMachine::addBehaviour(
         const char* from,
         const char* to)
     {
         auto fromNode = getNode(from);
         auto toNode = getNode(to);
 
-        auto ret = createBehaviour(
-            allocator,
+        auto ret = addBehaviour(
             fromNode, toNode);
 
         return ret;
     }
 
-    AnimationStateMachineBehaviour* AnimationStateMachine::createBehaviour(
-        IMemoryAllocator* allocator,
+    AnimationStateMachineBehaviour* AnimationStateMachine::addBehaviour(
         AnimationStateMachineNode* from,
         AnimationStateMachineNode* to)
     {
@@ -114,7 +124,7 @@ namespace engine {
             IZ_ASSERT(isRegistered(from) && isRegistered(to));
             IZ_ASSERT(from != to);
 
-            ret = AnimationStateMachineBehaviour::create(allocator);
+            ret = AnimationStateMachineBehaviour::create(m_Allocator);
             IZ_ASSERT(ret);
 
             auto result = from->addBehaviour(ret, to);
@@ -131,6 +141,50 @@ namespace engine {
         IZ_ASSERT(ret);
 
         return ret;
+    }
+
+    AnimationStateMachineConditionValue* AnimationStateMachine::addConditionValue(const char* name)
+    {
+        auto item = m_values.GetTop();
+
+        while (item) {
+            auto value = item->GetData();
+
+            if (value->isSame(name)) {
+                return value;
+            }
+
+            item = item->GetNext();
+        }
+
+        auto value = AnimationStateMachineConditionValue::create(
+            m_Allocator,
+            name);
+        IZ_ASSERT(value);
+
+        m_values.AddTail(value->getListItem());
+
+        return value;
+    }
+
+    IZ_BOOL AnimationStateMachine::setConditionValue(
+        const char* name,
+        const izanagi::CValue& value)
+    {
+        auto item = m_values.GetTop();
+
+        while (item) {
+            auto target = item->GetData();
+
+            if (target->isSame(name)) {
+                target->setValue(value);
+                return IZ_TRUE;
+            }
+
+            item = item->GetNext();
+        }
+
+        return IZ_FALSE;
     }
 
     IZ_BOOL AnimationStateMachine::setFromEntryTo(const char* name)

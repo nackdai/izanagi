@@ -322,7 +322,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\scenegraph\Camera.h" />
-    <ClInclude Include="..\..\include\scenegraph\CameraArm.h" />
     <ClInclude Include="..\..\include\scenegraph\Decal.h" />
     <ClInclude Include="..\..\include\scenegraph\FixedSceneStateManager.h" />
     <ClInclude Include="..\..\include\scenegraph\LightParam.h" />

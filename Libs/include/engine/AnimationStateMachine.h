@@ -2,6 +2,7 @@
 #define __IZANAGI_ENGINE_ANIIMATION_STATE_MACHINE_H__
 
 #include "engine/AnimationStateMachineNode.h"
+#include "engine/AnimationStateMachineCondition.h"
 
 namespace izanagi {
 namespace engine {
@@ -16,22 +17,25 @@ namespace engine {
 
     public:
         AnimationStateMachineNode* addNode(
-            IMemoryAllocator* allocator,
             const char* name,
             izanagi::IAnimation* anm,
             IZ_BOOL isLoopAnm = IZ_TRUE);
 
         AnimationStateMachineNode* getNode(const char* name);
 
-        AnimationStateMachineBehaviour* createBehaviour(
-            IMemoryAllocator* allocator,
+        AnimationStateMachineBehaviour* addBehaviour(
             const char* from,
             const char* to);
 
-        AnimationStateMachineBehaviour* createBehaviour(
-            IMemoryAllocator* allocator,
+        AnimationStateMachineBehaviour* addBehaviour(
             AnimationStateMachineNode* from,
             AnimationStateMachineNode* to);
+
+        AnimationStateMachineConditionValue* addConditionValue(const char* name);
+
+        IZ_BOOL setConditionValue(
+            const char* name,
+            const izanagi::CValue& value);
 
         IZ_BOOL setFromEntryTo(const char* name);
 
@@ -85,6 +89,7 @@ namespace engine {
         izanagi::CAnimationInterp* m_blendAnm{ nullptr };
 
         izanagi::CStdList<AnimationStateMachineNode> m_nodes;
+        izanagi::CStdList<AnimationStateMachineConditionValue> m_values;
     };
 }   // namespace engine
 }   // namespace izanagi

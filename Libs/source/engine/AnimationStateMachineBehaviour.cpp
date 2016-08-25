@@ -3,29 +3,6 @@
 
 namespace izanagi {
 namespace engine {
-    AniimationStateMachineCondition* AniimationStateMachineCondition::create(
-        IMemoryAllocator* allocator,
-        const char* name,
-        StateMachineCondition::Type type,
-        StateMachineCondition::Cmp cmp,
-        const izanagi::CValue& value)
-    {
-        void* buf = ALLOC(allocator, sizeof(AniimationStateMachineCondition));
-        VRETURN_NULL(buf);
-
-        AniimationStateMachineCondition* cond = new(buf)AniimationStateMachineCondition;
-        {
-            cond->m_Allocator = allocator;
-            cond->set(name, type, cmp, value);
-
-            cond->AddRef();
-        }
-
-        return cond;
-    }
-
-    ////////////////////////////////////////////////////////////////////
-
     AnimationStateMachineBehaviour* AnimationStateMachineBehaviour::create(IMemoryAllocator* allocator)
     {
         void* buf = ALLOC(allocator, sizeof(AnimationStateMachineBehaviour));
@@ -48,16 +25,6 @@ namespace engine {
 
     AnimationStateMachineBehaviour::~AnimationStateMachineBehaviour()
     {
-        auto item = m_conditions.GetTop();
-
-        while (item) {
-            auto cond = (AniimationStateMachineCondition*)item->GetData();
-
-            item = item->GetNext();
-
-            SAFE_RELEASE(cond);
-        }
-
         SAFE_RELEASE(m_skl);
         SAFE_RELEASE(m_anm);
     }
@@ -80,44 +47,45 @@ namespace engine {
         return ret;
     }
 
-    AniimationStateMachineCondition* AnimationStateMachineBehaviour::addCondition(
+    AnimationStateMachineCondition* AnimationStateMachineBehaviour::addCondition(
         IMemoryAllocator* allocator,
-        const char* name,
+        AnimationStateMachineConditionValue* target,
         StateMachineCondition::Type type,
         StateMachineCondition::Cmp cmp,
-        const izanagi::CValue& value)
+        const izanagi::CValue& threshold)
     {
-        auto cond = getCondition(name);
+        IZ_ASSERT(target);
+        IZ_ASSERT(target->getNameLength() > 0);
 
-        if (cond) {
-            return (AniimationStateMachineCondition*)cond;
+        auto item = m_conditions.GetTop();
+
+        while (item) {
+            auto cond = item->GetData();
+
+            if (cond->isSame(target->getName())) {
+                return (AnimationStateMachineCondition*)cond;
+            }
+
+            item = item->GetNext();
         }
 
-        cond = AniimationStateMachineCondition::create(
+        IZ_BOOL result = IZ_FALSE;
+
+        auto cond = AnimationStateMachineCondition::create(
             allocator,
-            name, type, cmp, value);
-        VRETURN_NULL(cond);
+            type, cmp, threshold);
+        VGOTO(result = (cond != nullptr), __EXIT__);
 
-        auto result = StateMachineBehaviour::addCondition(cond);
+        cond->setTargetValue(target);
 
+        result = StateMachineBehaviour::addCondition(cond);
+
+    __EXIT__:
         if (!result) {
-            AniimationStateMachineCondition* c = (AniimationStateMachineCondition*)cond;
-            SAFE_RELEASE(c);
-            cond = nullptr;
+            SAFE_RELEASE(cond);
         }
 
-        return (AniimationStateMachineCondition*)cond;
-    }
-
-    IZ_BOOL AnimationStateMachineBehaviour::addCondition(AniimationStateMachineCondition* cond)
-    {
-        auto ret = StateMachineBehaviour::addCondition(cond);
-        
-        if (ret) {
-            cond->AddRef();
-        }
-
-        return ret;
+        return cond;
     }
 
     StateMachineNode::State AnimationStateMachineBehaviour::update(IZ_FLOAT delta)

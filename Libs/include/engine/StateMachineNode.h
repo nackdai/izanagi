@@ -8,10 +8,10 @@ namespace izanagi {
     namespace engine {
         class StateMachineBehaviour;
 
-        class StateMachineNode {
+        class StateMachineNode : public CObject {
             friend class AnimationStateMachine;
 
-        public:
+        protected:
             StateMachineNode();
             virtual ~StateMachineNode();
 

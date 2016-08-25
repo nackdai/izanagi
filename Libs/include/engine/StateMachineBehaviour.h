@@ -12,7 +12,7 @@ namespace engine {
     /** Behaviour to transit between two nodes.
      */
     class StateMachineBehaviour : public StateMachineNode {
-    public:
+    protected:
         StateMachineBehaviour() {}
         virtual ~StateMachineBehaviour();
 
@@ -23,12 +23,10 @@ namespace engine {
 
         IZ_BOOL isRegistered(const char* name);
 
-        IZ_BOOL removeCondition(StateMachineCondition* cond);
-        IZ_BOOL removeCondition(const char* name);
+        IZ_BOOL removeCondition(StateMachineCondition* _cond);
 
         IZ_UINT getConditionNum() const;
 
-        StateMachineCondition* getCondition(IZ_UINT idx);
         StateMachineCondition* getCondition(const char* name);
 
         virtual StateMachineNode::State update(IZ_FLOAT delta) override;

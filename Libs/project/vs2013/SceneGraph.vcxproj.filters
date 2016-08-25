@@ -275,9 +275,6 @@
     <ClInclude Include="..\..\include\scenegraph\VectorCamera.h">
       <Filter>include\camera</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\scenegraph\CameraArm.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\scenegraph\StereoCamera.h">
       <Filter>include\camera</Filter>
     </ClInclude>

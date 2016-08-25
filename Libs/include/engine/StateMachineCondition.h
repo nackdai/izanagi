@@ -6,16 +6,52 @@
 
 namespace izanagi {
 namespace engine {
-    /** Condition about behavoiour.
-     */
-    class StateMachineCondition {
-        friend class StateMachineBehaviour;
+    class StateMachineConditionValue : public CObject {
+    public:
+        /** Value's name.
+         */
+        using Name = izanagi::CStdString < IZ_CHAR, 15 >;
+
+    protected:
+        StateMachineConditionValue() {}
+        virtual ~StateMachineConditionValue() {}
+
+        IZ_DEFINE_INTERNAL_RELEASE();
 
     public:
+        const char* getName() const;
+
+        IZ_UINT getNameLength() const;
+
+        void setName(const char* name);
+
+        IZ_BOOL isSame(const char* name) const;
+
+        izanagi::CValue getValue() const;
+
+        void setValue(const izanagi::CValue& value);
+
+    protected:
+        IMemoryAllocator* m_Allocator{ nullptr };
+
+        Name m_name;
+        izanagi::CKey m_key;
+
+        izanagi::CValue m_value;
+    };
+
+    /** Condition about behavoiour.
+     */
+    class StateMachineCondition : public CObject {
+        friend class StateMachineBehaviour;
+
+    protected:
         StateMachineCondition();
-        virtual ~StateMachineCondition() {}
+        virtual ~StateMachineCondition();
 
         NO_COPIABLE(StateMachineCondition);
+
+        IZ_DEFINE_INTERNAL_RELEASE();
 
     public:
         /** Value type.
@@ -37,25 +73,9 @@ namespace engine {
             GreaterEqual,
         };
 
-        /** Condition name.
-         */
-        using Name = izanagi::CStdString < IZ_CHAR, 15 >;
-
-        using Binding = std::function < const izanagi::CValue&() >;
-
-        /** Compare specifeid value.
+        /** Compare target value.
          */
         IZ_BOOL compare(const izanagi::CValue& value);
-
-        /** Compare specifeid value if specified name is same as the condition's name.
-         */
-        IZ_BOOL compare(
-            const char* name,
-            const izanagi::CValue& value);
-
-        /** Get condition's name.
-         */
-        const Name& getName() const;
 
         /** Get key of condition's name.
          */
@@ -69,26 +89,30 @@ namespace engine {
          */
         StateMachineCondition::Cmp getCmp() const;
 
-        /** Get condition's value.
+        /** Get condition's threshold.
          */
-        const izanagi::CValue& getValue() const;
+        const izanagi::CValue& getThreshold() const;
+
+        void setThreshold(const izanagi::CValue& threshold);
 
         void set(
             StateMachineCondition::Type type,
             StateMachineCondition::Cmp cmp,
-            const izanagi::CValue& value);
+            const izanagi::CValue& threshold);
 
         void set(
-            const char* name,
             StateMachineCondition::Type type,
-            StateMachineCondition::Cmp cmp,
-            const izanagi::CValue& value);
+            StateMachineCondition::Cmp cmp);
 
-        IZ_BOOL isSame(const char* name);
+        IZ_BOOL isValid() const;
 
-        void setBinding(Binding binding);
+        const char* getName() const;
 
-        void setCurrentValue(const izanagi::CValue& value);
+        IZ_BOOL isSame(const char* name) const;
+
+        IZ_BOOL setTargetValue(StateMachineConditionValue* target);
+
+        StateMachineConditionValue* getTargetValue();
 
         IZ_BOOL update();
 
@@ -101,19 +125,16 @@ namespace engine {
         template <typename _T>
         IZ_BOOL onCompare(const izanagi::CValue& value);
 
-    private:
-        izanagi::CStdList<StateMachineCondition>::Item m_item;
+    protected:
+        IMemoryAllocator* m_Allocator{ nullptr };
 
-        Name m_name;
-        izanagi::CKey m_key;
+        izanagi::CStdList<StateMachineCondition>::Item m_item;
 
         StateMachineCondition::Type m_type{ StateMachineCondition::Type::Bool };
         StateMachineCondition::Cmp m_cmp{ StateMachineCondition::Cmp::Equal };
-        izanagi::CValue m_value;
+        izanagi::CValue m_threshold;
 
-        izanagi::CValue m_curValue;
-
-        Binding m_binding{ nullptr };
+        StateMachineConditionValue* m_target{ nullptr };
     };
 }   // namespace engine
 }   // namespace izanagi

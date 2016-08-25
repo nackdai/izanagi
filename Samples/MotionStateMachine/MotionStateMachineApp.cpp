@@ -223,70 +223,66 @@ void MotionStateMachineApp::initStateMachine(izanagi::IMemoryAllocator* allocato
 
     m_stateMachine = izanagi::engine::AnimationStateMachine::create(allocator);
 
-    auto idle = m_stateMachine->addNode(allocator, "idle", m_Anm[State::Idle]);
-    auto move = m_stateMachine->addNode(allocator, "move", m_Anm[State::Walk]);
-    auto lose = m_stateMachine->addNode(allocator, "lose", m_Anm[State::Lose], IZ_FALSE);
+    auto idle = m_stateMachine->addNode("idle", m_Anm[State::Idle]);
+    auto move = m_stateMachine->addNode("move", m_Anm[State::Walk]);
+    auto lose = m_stateMachine->addNode("lose", m_Anm[State::Lose], IZ_FALSE);
 
     m_stateMachine->setFromEntryTo(idle);
 
+    auto speed = m_stateMachine->addConditionValue("speed");
+    auto isLose = m_stateMachine->addConditionValue("isLose");
+
     {
-        auto behaviour = m_stateMachine->createBehaviour(allocator, "idle", "move");
+        auto behaviour = m_stateMachine->addBehaviour("idle", "move");
         behaviour->setTransitionTime(1.0f);
 
-        m_condSpeed[0] = behaviour->addCondition(
+        auto cond = behaviour->addCondition(
             allocator,
-            "speed",
+            speed,
             izanagi::engine::StateMachineCondition::Type::Float,
             izanagi::engine::StateMachineCondition::Cmp::GreaterEqual,
             izanagi::CValue(0.5f));
     }
 
     {
-        auto behaviour = m_stateMachine->createBehaviour(allocator, "move", "idle");
+        auto behaviour = m_stateMachine->addBehaviour("move", "idle");
         behaviour->setTransitionTime(1.0f);
 
-        m_condSpeed[1] = behaviour->addCondition(
+        auto cond = behaviour->addCondition(
             allocator,
-            "speed",
+            speed,
             izanagi::engine::StateMachineCondition::Type::Float,
             izanagi::engine::StateMachineCondition::Cmp::Less,
             izanagi::CValue(0.5f));
     }
 
     {
-        auto behaviour = m_stateMachine->createBehaviour(allocator, "idle", "lose");
+        auto behaviour = m_stateMachine->addBehaviour("idle", "lose");
         behaviour->setTransitionTime(1.0f);
 
         auto cond = behaviour->addCondition(
             allocator,
-            "isLose",
+            isLose,
             izanagi::engine::StateMachineCondition::Type::Bool,
             izanagi::engine::StateMachineCondition::Cmp::Equal,
             izanagi::CValue(IZ_TRUE));
 
-        cond->setBinding([&] {
-            return m_isLose;
-        });
-
         lose->setExitFunc([&] {
             m_isLose = IZ_FALSE;
+            m_stateMachine->setConditionValue("isLose", m_isLose);
         });
     }
 
     {
-        auto behaviour = m_stateMachine->createBehaviour(allocator, "lose", "idle");
+        auto behaviour = m_stateMachine->addBehaviour("lose", "idle");
         behaviour->setTransitionTime(1.0f);
 
         auto cond = behaviour->addCondition(
             allocator,
-            "isLose",
+            isLose,
             izanagi::engine::StateMachineCondition::Type::Bool,
             izanagi::engine::StateMachineCondition::Cmp::NotEqual,
             izanagi::CValue(IZ_TRUE));
-
-        cond->setBinding([&] {
-            return m_isLose;
-        });
     }
 }
 
@@ -322,15 +318,14 @@ void MotionStateMachineApp::UpdateInternal(izanagi::graph::CGraphicsDevice* devi
 
     m_speed = izanagi::math::CMath::Clamp(m_speed, 0.0f, 1.0f);
 
-    m_condSpeed[0]->setCurrentValue(izanagi::CValue(m_speed));
-    m_condSpeed[1]->setCurrentValue(izanagi::CValue(m_speed));
+    m_stateMachine->setConditionValue("speed", m_speed);
+    m_stateMachine->setConditionValue("isLose", m_isLose);
 
     IZ_FLOAT elapsed = GetTimer(0).GetTime();
     //elapsed /= 1000.0f;
     elapsed = 16.67f / 1000.0f;
 
     m_Timeline.Advance(elapsed);
-
 
     m_stateMachine->update(elapsed, m_Mdl->GetSkeleton());
 

@@ -60,8 +60,6 @@ private:
     izanagi::engine::AnimationStateMachine* m_stateMachine{ nullptr };
 
     IZ_FLOAT m_speed{ 0.0f };
-    izanagi::engine::AniimationStateMachineCondition* m_condSpeed[2];
-
     IZ_BOOL m_isLose{ IZ_FALSE };
 
     enum State {

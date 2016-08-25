@@ -4,13 +4,26 @@ namespace izanagi {
 namespace engine {
     StateMachineBehaviour::~StateMachineBehaviour()
     {
+        auto item = m_conditions.GetTop();
+
+        while (item) {
+            auto cond = item->GetData();
+
+            item = item->GetNext();
+
+            SAFE_RELEASE(cond);
+        }
     }
 
     IZ_BOOL StateMachineBehaviour::addCondition(StateMachineCondition* cond)
     {
+        if (!cond->isValid()) {
+            return IZ_FALSE;
+        }
+
         auto name = cond->getName();
 
-        if (!isRegistered(name.GetString())) {
+        if (!isRegistered(name)) {
             m_conditions.AddTail(cond->getListItem());
 
             return IZ_TRUE;
@@ -36,32 +49,14 @@ namespace engine {
         return IZ_FALSE;
     }
 
-    IZ_BOOL StateMachineBehaviour::removeCondition(StateMachineCondition* cond)
-    {
-        auto item = m_conditions.GetTop();
-
-        while (item) {
-            auto _cond = item->GetData();
-
-            if (_cond == cond) {
-                item->Leave();
-                return IZ_TRUE;
-            }
-
-            item = item->GetNext();
-        }
-
-        return IZ_FALSE;
-    }
-
-    IZ_BOOL StateMachineBehaviour::removeCondition(const char* name)
+    IZ_BOOL StateMachineBehaviour::removeCondition(StateMachineCondition* _cond)
     {
         auto item = m_conditions.GetTop();
 
         while (item) {
             auto cond = item->GetData();
 
-            if (cond->isSame(name)) {
+            if (cond == _cond) {
                 item->Leave();
                 return IZ_TRUE;
             }
@@ -76,20 +71,6 @@ namespace engine {
     {
         auto ret = m_conditions.GetItemNum();
         return ret;
-    }
-
-    StateMachineCondition* StateMachineBehaviour::getCondition(IZ_UINT idx)
-    {
-        IZ_ASSERT(idx < getConditionNum());
-
-        auto item = m_conditions.GetAt(idx);
-
-        if (item) {
-            auto cond = item->GetData();
-            return cond;
-        }
-
-        return nullptr;
     }
 
     StateMachineCondition* StateMachineBehaviour::getCondition(const char* name)

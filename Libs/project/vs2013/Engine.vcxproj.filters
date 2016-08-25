@@ -28,6 +28,9 @@
     <ClInclude Include="..\..\include\engine\StateMachineCondition.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\engine\AnimationStateMachineCondition.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\engine\StateMachineBehaviour.cpp">
@@ -46,6 +49,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\engine\StateMachineCondition.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\engine\AnimationStateMachineCondition.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

@@ -9,11 +9,11 @@ namespace izanagi {
 namespace engine {
     /**
      */
-    class AnimationStateMachineNode :public StateMachineNode, public CObject {
+    class AnimationStateMachineNode :public StateMachineNode {
         friend class AnimationStateMachine;
         friend class AnimationStateMachineBehaviour;
 
-    public:
+    private:
         static AnimationStateMachineNode* create(
             IMemoryAllocator* allocator,
             const char* name);
@@ -39,6 +39,7 @@ namespace engine {
 
         virtual izanagi::IAnimation* getAnimation();
 
+    private:
         IZ_BOOL addBehaviour(
             AnimationStateMachineBehaviour* behaviour,
             AnimationStateMachineNode* to);
@@ -48,7 +49,6 @@ namespace engine {
 
         AnimationStateMachineBehaviour* getBehaviour(AnimationStateMachineNode* to);
 
-    private:
         virtual State update(IZ_FLOAT delta) override;
 
         virtual StateMachineNode* next() override;

@@ -2,9 +2,50 @@
 
 namespace izanagi {
 namespace engine {
+
+    const char* StateMachineConditionValue::getName() const
+    {
+        return m_name.GetString();
+    }
+
+    IZ_UINT StateMachineConditionValue::getNameLength() const
+    {
+        auto name = getName();
+        return strlen(name);
+    }
+
+    void StateMachineConditionValue::setName(const char* name)
+    {
+        m_name = name;
+        m_key.SetValue(m_name.GetKeyValue());
+    }
+
+    IZ_BOOL StateMachineConditionValue::isSame(const char* name) const
+    {
+        CKey key(name);
+        return m_key == key;
+    }
+
+    izanagi::CValue StateMachineConditionValue::getValue() const
+    {
+        return std::move(m_value);
+    }
+
+    void StateMachineConditionValue::setValue(const izanagi::CValue& value)
+    {
+        m_value = value;
+    }
+
+    //////////////////////////////////////////////////////////////////
+
     StateMachineCondition::StateMachineCondition()
     {
         m_item.Init(this);
+    }
+
+    StateMachineCondition::~StateMachineCondition()
+    {
+        SAFE_RELEASE(m_target);
     }
 
     template <typename _T>
@@ -14,22 +55,22 @@ namespace engine {
 
         switch (m_cmp) {
         case StateMachineCondition::Cmp::Equal:
-            ret = ((_T)value == (_T)m_value);
+            ret = ((_T)value == (_T)m_threshold);
             break;
         case StateMachineCondition::Cmp::NotEqual:
-            ret = ((_T)value != (_T)m_value);
+            ret = ((_T)value != (_T)m_threshold);
             break;
         case StateMachineCondition::Cmp::Less:
-            ret = ((_T)value < (_T)m_value);
+            ret = ((_T)value < (_T)m_threshold);
             break;
         case StateMachineCondition::Cmp::LessEqual:
-            ret = ((_T)value <= (_T)m_value);
+            ret = ((_T)value <= (_T)m_threshold);
             break;
         case StateMachineCondition::Cmp::Greater:
-            ret = ((_T)value > (_T)m_value);
+            ret = ((_T)value >(_T)m_threshold);
             break;
         case StateMachineCondition::Cmp::GreaterEqual:
-            ret = ((_T)value >= (_T)m_value);
+            ret = ((_T)value >= (_T)m_threshold);
             break;
         default:
             IZ_ASSERT(IZ_FALSE);
@@ -51,7 +92,7 @@ namespace engine {
         }
         else if (m_type == StateMachineCondition::Type::Bool) {
             IZ_BOOL a = value.GetValueAsBool();
-            IZ_BOOL b = m_value.GetValueAsBool();
+            IZ_BOOL b = m_threshold.GetValueAsBool();
 
             if (m_cmp == StateMachineCondition::Cmp::Equal) {
                 ret = (a == b);
@@ -70,29 +111,6 @@ namespace engine {
         return ret;
     }
 
-    IZ_BOOL StateMachineCondition::compare(
-        const char* name,
-        const izanagi::CValue& value)
-    {
-        IZ_BOOL ret = IZ_FALSE;
-
-        if (isSame(name)) {
-            ret = compare(value);
-        }
-
-        return ret;
-    }
-
-    const StateMachineCondition::Name& StateMachineCondition::getName() const
-    {
-        return m_name;
-    }
-
-    const CKey& StateMachineCondition::getKey() const
-    {
-        return m_key;
-    }
-
     StateMachineCondition::Type StateMachineCondition::getType() const
     {
         return m_type;
@@ -103,64 +121,72 @@ namespace engine {
         return m_cmp;
     }
 
-    const izanagi::CValue& StateMachineCondition::getValue() const
+    const izanagi::CValue& StateMachineCondition::getThreshold() const
     {
-        return m_value;
+        return m_threshold;
     }
 
     void StateMachineCondition::set(
         StateMachineCondition::Type type,
         StateMachineCondition::Cmp cmp,
-        const izanagi::CValue& value)
+        const izanagi::CValue& threshold)
     {
         m_type = type;
         m_cmp = cmp;
-        m_value = value;
+        m_threshold = threshold;
     }
 
     void StateMachineCondition::set(
-        const char* name,
         StateMachineCondition::Type type,
-        StateMachineCondition::Cmp cmp,
-        const izanagi::CValue& value)
+        StateMachineCondition::Cmp cmp)
     {
-        IZ_ASSERT(strlen(name) <= m_name.GetLen());
-
-        set(type, cmp, value);
-
-        m_name = name;
-        m_key.SetValue(m_name.GetKeyValue());
+        m_type = type;
+        m_cmp = cmp;
     }
 
-    IZ_BOOL StateMachineCondition::isSame(const char* name)
+    IZ_BOOL StateMachineCondition::isValid() const
     {
-        CKey key(name);
-        return m_key == key;
+        return (m_target != nullptr);
     }
 
-    void StateMachineCondition::setBinding(
-        StateMachineCondition::Binding binding)
+    const char* StateMachineCondition::getName() const
     {
-        m_binding = binding;
+        IZ_ASSERT(m_target);
+
+        return m_target->getName();
     }
 
-    void StateMachineCondition::setCurrentValue(const izanagi::CValue& value)
+    IZ_BOOL StateMachineCondition::isSame(const char* name) const
     {
-        m_curValue = value;
+        IZ_ASSERT(m_target);
+
+        return m_target->isSame(name);
+    }
+
+    IZ_BOOL StateMachineCondition::setTargetValue(StateMachineConditionValue* target)
+    {
+        IZ_ASSERT(target);
+
+        if (target->getNameLength() == 0) {
+            return IZ_FALSE;
+        }
+
+        SAFE_REPLACE(m_target, target);
+        return IZ_TRUE;
+    }
+
+    StateMachineConditionValue* StateMachineCondition::getTargetValue()
+    {
+        return m_target;
     }
 
     IZ_BOOL StateMachineCondition::update()
     {
-        IZ_BOOL ret = IZ_FALSE;
-
-        if (m_binding) {
-            auto value = m_binding();
-            ret = compare(value);
-        }
-        else {
-            ret = compare(m_curValue);
+        if (!m_target) {
+            return IZ_TRUE;
         }
 
+        auto ret = compare(m_target->getValue());
         return ret;
     }
 }
