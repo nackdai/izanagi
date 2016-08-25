@@ -153,7 +153,8 @@ namespace engine {
         }
 
         if (from && to) {
-            IZ_ASSERT(isRegistered(from) && isRegistered(to));
+            // TODO
+            //IZ_ASSERT(isRegistered(from) && isRegistered(to));
             IZ_ASSERT(from != to);
 
             if (!ret) {
