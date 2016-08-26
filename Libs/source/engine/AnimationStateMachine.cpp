@@ -2,6 +2,8 @@
 
 namespace izanagi {
 namespace engine {
+    std::function<void(const char*, IZ_FLOAT, IZ_FLOAT)> AnimationStateMachine::StateHandler = nullptr;
+
     AnimationStateMachine* AnimationStateMachine::create(IMemoryAllocator* allocator)
     {
         void* buf = ALLOC(allocator, sizeof(AnimationStateMachine));
@@ -26,14 +28,20 @@ namespace engine {
         m_fromEntryTo.AddRef();
         m_toExitFrom.AddRef();
 
-        m_fromEntryTo.m_tag.SetString("FromEntryTo");
-        m_toExitFrom.m_tag.SetString("ToExitFrom");
+        m_fromEntryTo.setName("FromEntryTo");
+        m_toExitFrom.setName("ToExitFrom");
+
+        m_fromEntryTo.disableSetOwnNextNode();
+        m_toExitFrom.disableSetOwnNextNode();
 
         m_entry.AddRef();
         m_exit.AddRef();
 
         m_entry.setName("entry");
         m_exit.setName("exit");
+
+        m_entry.setWillAutoReturnToPreviousNode(IZ_FALSE);
+        m_exit.setWillAutoReturnToPreviousNode(IZ_FALSE);
 
         m_current = &m_entry;
     }
@@ -106,7 +114,8 @@ namespace engine {
 
     AnimationStateMachineBehaviour* AnimationStateMachine::addBehaviour(
         const char* from,
-        const char* to)
+        const char* to,
+        izanagi::CAnimationInterp::E_INTERP_TYPE interpType/*= izanagi::CAnimationInterp::E_INTERP_TYPE::E_INTERP_TYPE_SMOOTH*/)
     {
         IZ_ASSERT(from || to);
 
@@ -128,14 +137,16 @@ namespace engine {
         }
 
         auto ret = addBehaviour(
-            fromNode, toNode);
+            fromNode, toNode,
+            interpType);
 
         return ret;
     }
 
     AnimationStateMachineBehaviour* AnimationStateMachine::addBehaviour(
         AnimationStateMachineNode* from,
-        AnimationStateMachineNode* to)
+        AnimationStateMachineNode* to,
+        izanagi::CAnimationInterp::E_INTERP_TYPE interpType/*= izanagi::CAnimationInterp::E_INTERP_TYPE::E_INTERP_TYPE_SMOOTH*/)
     {
         IZ_BOOL canReturn = IZ_FALSE;
 
@@ -178,6 +189,8 @@ namespace engine {
         }
 
         IZ_ASSERT(ret);
+
+        ret->setAnmInterpType(interpType);
 
         return (canReturn ? ret : nullptr);
     }
@@ -326,6 +339,17 @@ namespace engine {
 
     StateMachineNode::State AnimationStateMachine::update(IZ_FLOAT delta)
     {
+        if (m_current == &m_exit) {
+            m_current = &m_entry;
+        }
+
+        auto prevExitNode = m_toExitFrom.getFrom();
+        if (prevExitNode) {
+            // exit‚ÌŽè‘O‚Ìƒm[ƒh‚Í‚»‚Ì‘O‚Ìƒm[ƒh‚ÉŽ©“®‚Å–ß‚ç‚¹‚È‚¢.
+            // -> ‹­§“I‚Éexit‚ÉŒü‚©‚í‚¹‚é.
+            prevExitNode->setWillAutoReturnToPreviousNode(IZ_FALSE);
+        }
+
         while (m_current) {
             if (m_current->isNode()) {
                 AnimationStateMachineNode* node = (AnimationStateMachineNode*)m_current;
@@ -347,6 +371,10 @@ namespace engine {
             else if (state == StateMachineNode::State::Running) {
                 return StateMachineNode::State::Running;
             }
+
+            if (m_current == &m_exit) {
+                break;
+            }
         }
 
         return StateMachineNode::State::Exit;
@@ -358,6 +386,79 @@ namespace engine {
     {
         SAFE_REPLACE(m_skl, skl);
         update(delta);
+    }
+
+    izanagi::IAnimation* AnimationStateMachine::getAnimation()
+    {
+        auto node = getNode();
+        return node->getAnimation();
+    }
+
+    const animation::CTimeline& AnimationStateMachine::getTimeline()
+    {
+        auto node = getNode();
+        return node->getTimeline();
+    }
+
+    AnimationStateMachineNode* AnimationStateMachine::getNode()
+    {
+        AnimationStateMachineNode* node = nullptr;
+
+        if (m_current == &m_entry) {
+            node = m_fromEntryTo.getTo();
+        }
+        else if (m_current == &m_exit) {
+            node = m_toExitFrom.getFrom();
+        }
+        else {
+            node = (AnimationStateMachineNode*)m_current;
+        }
+
+        IZ_ASSERT(node);
+
+        return node;
+    }
+
+    void AnimationStateMachine::setFromBehavour(AnimationStateMachineBehaviour* behaviour)
+    {
+        auto node = m_fromEntryTo.getTo();
+        IZ_ASSERT(node);
+
+        m_fromBehaviour = behaviour;
+
+        node->setFromBehavour(behaviour);
+    }
+
+    StateMachineNode* AnimationStateMachine::next()
+    {
+        // “ü‚Á‚Ä‚«‚½ƒm[ƒh‚É‘JˆÚ‚·‚éƒrƒwƒCƒrƒA‚ð’T‚·.
+        IZ_ASSERT(m_fromBehaviour != nullptr);
+
+        auto from = m_fromBehaviour->getFrom();
+        IZ_ASSERT(from != nullptr);
+
+        auto item = m_behaviours.GetTop();
+
+        while (item) {
+            auto behaviour = item->GetData();
+
+            auto to = behaviour->getTo();
+
+            if (from == to) {
+                return behaviour;
+            }
+
+            item = item->GetNext();
+        }
+
+        IZ_ASSERT(IZ_FALSE);
+
+        return nullptr;
+    }
+
+    void AnimationStateMachine::notifyInitializedInBehavour()
+    {
+        m_current = &m_entry;
     }
 }
 }

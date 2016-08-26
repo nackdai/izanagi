@@ -45,6 +45,8 @@ protected:
 
     void initStateMachine(izanagi::IMemoryAllocator* allocator);
 
+    void initLayer(izanagi::IMemoryAllocator* allocator);
+
     // 解放.
     virtual void ReleaseInternal();
 
@@ -58,6 +60,9 @@ protected:
 
 private:
     izanagi::engine::AnimationStateMachine* m_stateMachine{ nullptr };
+    izanagi::engine::AnimationStateMachine* m_layer{ nullptr };
+
+    izanagi::engine::AnimationStateMachineConditionValue* m_willUmatobi{ nullptr };
 
     IZ_FLOAT m_speed{ 0.0f };
     IZ_BOOL m_isLose{ IZ_FALSE };
@@ -66,6 +71,8 @@ private:
         Idle,
         Walk,
         Lose,
+        Run,
+        Umatobi,
         Num,
     };
 

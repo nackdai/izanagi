@@ -101,8 +101,8 @@ namespace engine {
                 auto cond = item->GetData();
 
                 if (!cond->update()) {
-                    // １つでも条件が合わなければ、このビヘイビアは処理中として外に対して通知する.
-                    return State::Running;
+                    // １つでも条件が合わなければ、このビヘイビアは何もしていないとして外に対して通知する.
+                    return State::None;
                 }
 
                 item = item->GetNext();

@@ -12,6 +12,7 @@ namespace engine {
     class AnimationStateMachineNode :public StateMachineNode {
         friend class AnimationStateMachine;
         friend class AnimationStateMachineBehaviour;
+        friend class AnimationStateMachineTransition;
 
     private:
         static AnimationStateMachineNode* create(
@@ -27,15 +28,28 @@ namespace engine {
     public:
         using Name = izanagi::CStdString < IZ_CHAR, 15 >;
 
-        using HookFunc = std::function<void(void)>;
-
         const Name& getName() const;
 
         void setName(const char* name);
 
-        void setAnimation(
+        virtual void setAnimation(
             izanagi::IAnimation* anm,
             IZ_BOOL isLoopAnm);
+
+        void setWillAutoReturnToPreviousNode(IZ_BOOL will)
+        {
+            m_willAutoReturnToPreviousNode = will;
+        }
+
+        IZ_BOOL willAutoReturnToPreviousNode() const
+        {
+            return m_willAutoReturnToPreviousNode;
+        }
+
+        void setCallbackIfNoneLoopAnimationOver(HookFunc func)
+        {
+            m_callbackIfNoneLoopAnimationOver = func;
+        }
 
         virtual izanagi::IAnimation* getAnimation();
 
@@ -60,7 +74,7 @@ namespace engine {
 
         void setTarget(izanagi::CSkeletonInstance* skl);
 
-        const animation::CTimeline& getTimeline() const
+        virtual const animation::CTimeline& getTimeline()
         {
             return m_timeline;
         }
@@ -75,12 +89,18 @@ namespace engine {
             return &m_item;
         }
 
-        void setFromBehavour(AnimationStateMachineBehaviour* behaviour)
+        virtual void setFromBehavour(AnimationStateMachineBehaviour* behaviour)
         {
             m_fromBehaviour = behaviour;
         }
 
-    private:
+        // Notify that node was called in AnimationStateMachineBehaviour::initAnimation.
+        virtual void notifyInitializedInBehavour()
+        {
+            // Nothing is done.
+        }
+
+    protected:
         IMemoryAllocator* m_Allocator{ nullptr };
 
         AnimationStateMachineNode::Name m_name;
@@ -103,6 +123,9 @@ namespace engine {
         AnimationStateMachineBehaviour* m_fromBehaviour{ nullptr };
 
         animation::CTimeline m_timeline;
+
+        IZ_BOOL m_willAutoReturnToPreviousNode{ IZ_TRUE };
+        HookFunc m_callbackIfNoneLoopAnimationOver{ nullptr };
     };
 }   // namespace engine
 }   // namespace izanagi

@@ -1,4 +1,5 @@
 #include"engine/AnimationStateMachineNode.h"
+#include"engine/AnimationStateMachine.h"
 
 namespace izanagi {
 namespace engine {
@@ -181,18 +182,27 @@ namespace engine {
                 return State::Running;
             }
             else {
-                // 前のノードに戻るビヘイビアを探す.
-                if (m_fromBehaviour) {
-                    auto to = m_fromBehaviour->getFrom();
-                    auto behaviour = getBehaviour(to);
-
-                    if (behaviour) {
-                        m_currentBehaviour = behaviour;
-                    }
+                if (m_callbackIfNoneLoopAnimationOver) {
+                    m_callbackIfNoneLoopAnimationOver();
                 }
 
-                m_state = State::Exit;
-                return State::None;
+                if (m_willAutoReturnToPreviousNode) {
+                    // 前のノードに戻るビヘイビアを探す.
+                    if (m_fromBehaviour) {
+                        auto to = m_fromBehaviour->getFrom();
+                        auto behaviour = getBehaviour(to);
+
+                        if (behaviour) {
+                            m_currentBehaviour = behaviour;
+                        }
+                    }
+
+                    m_state = State::Exit;
+                    return State::None;
+                }
+                else {
+                    return State::None;
+                }
             }
         }
     }
@@ -212,6 +222,15 @@ namespace engine {
         // 前のアニメーションから現在の時間を引き継ぐ.
         if (m_fromBehaviour) {
             auto t = m_fromBehaviour->getTimeline().GetTime();
+            auto anmTime = getAnimation()->GetAnimationTime();
+
+            t = (t > anmTime ? anmTime : t);
+
+            auto interp = m_fromBehaviour->getAnmInterpType();
+            if (interp == izanagi::CAnimationInterp::E_INTERP_TYPE::E_INTERP_TYPE_FROZEN) {
+                t = 0.0f;
+            }
+
             m_timeline.OverrideTimeForcibly(t);
         }
     }
@@ -237,12 +256,24 @@ namespace engine {
             
             auto t = m_timeline.GetTime();
 
+            // TODO
+            // time が duration を超えたとき.
+
+            if (AnimationStateMachine::StateHandler) {
+                AnimationStateMachine::StateHandler(
+                    m_name.GetString(),
+                    t,
+                    m_timeline.GetDuration());
+            }
+
             m_skl->ApplyAnimation(t, m_anm);
 
             m_timeline.Advance(delta);
+
+            return IZ_TRUE;
         }
 
-        return IZ_TRUE;
+        return IZ_FALSE;
     }
 
     void AnimationStateMachineNode::setTarget(izanagi::CSkeletonInstance* skl)

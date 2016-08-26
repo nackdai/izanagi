@@ -19,6 +19,12 @@
     <CustomBuild Include="..\..\..\Media\unitychan\unitychan_LOSE00.fbx">
       <Filter>asset\motion</Filter>
     </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\unitychan\unitychan_RUN00_F.fbx">
+      <Filter>asset\motion</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\unitychan\unitychan_UMATOBI00.fbx">
+      <Filter>asset\motion</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="shader">

@@ -16,17 +16,17 @@ namespace engine {
         friend class AnimationStateMachineNode;
         friend class AnimationStateMachine;
 
-    public:
+    private:
         static AnimationStateMachineBehaviour* create(IMemoryAllocator* allocator);
 
-    private:
+    protected:
         AnimationStateMachineBehaviour();
         virtual ~AnimationStateMachineBehaviour();
 
         IZ_DEFINE_INTERNAL_RELEASE();
 
     public:
-        AnimationStateMachineCondition* addCondition(
+        virtual AnimationStateMachineCondition* addCondition(
             IMemoryAllocator* allocator,
             AnimationStateMachineConditionValue* target,
             StateMachineCondition::Type type,
@@ -38,7 +38,11 @@ namespace engine {
         // ノード間の遷移にかかる時間.
         IZ_FLOAT getTransitionTime() const;
 
-    private:
+        void setName(const char* name);
+
+        const char* getName() const;
+
+    protected:
         virtual StateMachineNode::State update(IZ_FLOAT delta) override;
 
         virtual StateMachineNode* next() override;
@@ -52,7 +56,7 @@ namespace engine {
             izanagi::CSkeletonInstance* skl,
             izanagi::CAnimationInterp* anm);
 
-        void setNode(
+        virtual void setNode(
             AnimationStateMachineNode* from,
             AnimationStateMachineNode* to);
 
@@ -60,6 +64,16 @@ namespace engine {
         AnimationStateMachineNode* getTo();
 
     private:
+        void setAnmInterpType(izanagi::CAnimationInterp::E_INTERP_TYPE type)
+        {
+            m_anmInterpType = type;
+        }
+
+        izanagi::CAnimationInterp::E_INTERP_TYPE getAnmInterpType() const
+        {
+            return m_anmInterpType;
+        }
+
         izanagi::CStdList<AnimationStateMachineBehaviour>::Item* getListItem()
         {
             return &m_item;
@@ -70,7 +84,12 @@ namespace engine {
             return m_timeline;
         }
 
-    private:
+        void disableSetOwnNextNode()
+        {
+            m_canSetOwnNextNode = IZ_FALSE;
+        }
+
+    protected:
         IMemoryAllocator* m_Allocator{ nullptr };
 
         animation::CTimeline m_timeline;
@@ -85,7 +104,56 @@ namespace engine {
 
         izanagi::CStdList<AnimationStateMachineBehaviour>::Item m_item;
 
-        CStdString<char, 15> m_tag;
+        CStdString<char, 31> m_tag;
+
+        IZ_BOOL m_canSetOwnNextNode{ IZ_TRUE };
+
+        izanagi::CAnimationInterp::E_INTERP_TYPE m_anmInterpType{ izanagi::CAnimationInterp::E_INTERP_TYPE::E_INTERP_TYPE_SMOOTH };
+    };
+
+    // TODO
+    // 名前をどうするか.
+    // アニメーション終了時に強制遷移.
+    // アニメーションが終了するまでは無条件に待つ.
+    /**
+     */
+    class AnimationStateMachineTransition : public AnimationStateMachineBehaviour {
+        friend class AnimationStateMachine;
+
+    private:
+        AnimationStateMachineTransition() : m_handler(this) {}
+        virtual ~AnimationStateMachineTransition() {}
+
+    private:
+        virtual AnimationStateMachineCondition* addCondition(
+            IMemoryAllocator* allocator,
+            AnimationStateMachineConditionValue* target,
+            StateMachineCondition::Type type,
+            StateMachineCondition::Cmp cmp,
+            const izanagi::CValue& threshold) override
+        {
+            return nullptr;
+        }
+
+        virtual void setNode(
+            AnimationStateMachineNode* from,
+            AnimationStateMachineNode* to) override;
+
+        virtual StateMachineNode::State update(IZ_FLOAT delta) override;
+
+    private:
+        class Handler : public animation::CTimeline::CTimeOverHandler {
+        public:
+            Handler(AnimationStateMachineTransition* p) : m_behaviour(p) {}
+            virtual ~Handler() {}
+            virtual void Handle(const animation::CTimeline& timeline) override;
+
+            AnimationStateMachineTransition* m_behaviour;
+        };
+
+        Handler m_handler;
+
+        IZ_BOOL m_isFinishFromNode{ IZ_FALSE };
     };
 }   // namespace engine
 }   // namespace izanagi

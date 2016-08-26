@@ -204,7 +204,11 @@ void MotionStateMachineApp::initAnimation(izanagi::IMemoryAllocator* allocator)
         "data/unitychan_WAIT02.anm",
         "data/unitychan_WALK00_F.anm",
         "data/unitychan_LOSE00.anm",
+        "data/unitychan_RUN00_F.anm",
+        "data/unitychan_UMATOBI00.anm",
     };
+
+    IZ_C_ASSERT(COUNTOF(anm) == State::Num);
 
     for (IZ_UINT i = 0; i < State::Num; i++) {
         izanagi::CFileInputStream in;
@@ -221,6 +225,10 @@ void MotionStateMachineApp::initStateMachine(izanagi::IMemoryAllocator* allocato
 {
     initAnimation(allocator);
 
+    izanagi::engine::AnimationStateMachine::StateHandler = [] (const char* name, IZ_FLOAT t, IZ_FLOAT duration) {
+        IZ_PRINTF("(%s) [%.3f / %.3f]\n", name, t, duration);
+    };
+
     m_stateMachine = izanagi::engine::AnimationStateMachine::create(allocator);
 
     auto idle = m_stateMachine->addNode("idle", m_Anm[State::Idle]);
@@ -235,6 +243,7 @@ void MotionStateMachineApp::initStateMachine(izanagi::IMemoryAllocator* allocato
     {
         auto behaviour = m_stateMachine->addBehaviour("idle", "move");
         behaviour->setTransitionTime(1.0f);
+        behaviour->setName("idle -> move");
 
         auto cond = behaviour->addCondition(
             allocator,
@@ -247,6 +256,7 @@ void MotionStateMachineApp::initStateMachine(izanagi::IMemoryAllocator* allocato
     {
         auto behaviour = m_stateMachine->addBehaviour("move", "idle");
         behaviour->setTransitionTime(1.0f);
+        behaviour->setName("move -> idle");
 
         auto cond = behaviour->addCondition(
             allocator,
@@ -259,6 +269,7 @@ void MotionStateMachineApp::initStateMachine(izanagi::IMemoryAllocator* allocato
     {
         auto behaviour = m_stateMachine->addBehaviour("idle", "lose");
         behaviour->setTransitionTime(1.0f);
+        behaviour->setName("idle -> lose");
 
         auto cond = behaviour->addCondition(
             allocator,
@@ -276,6 +287,7 @@ void MotionStateMachineApp::initStateMachine(izanagi::IMemoryAllocator* allocato
     {
         auto behaviour = m_stateMachine->addBehaviour("lose", "idle");
         behaviour->setTransitionTime(1.0f);
+        behaviour->setName("lose -> idle");
 
         auto cond = behaviour->addCondition(
             allocator,
@@ -284,12 +296,71 @@ void MotionStateMachineApp::initStateMachine(izanagi::IMemoryAllocator* allocato
             izanagi::engine::StateMachineCondition::Cmp::NotEqual,
             izanagi::CValue(IZ_TRUE));
     }
+
+    {
+        initLayer(allocator);
+
+        {
+            auto behaviour = m_stateMachine->addBehaviour(move, m_layer);
+            behaviour->setTransitionTime(1.0f);
+            behaviour->setName("move -> layer");
+
+            auto cond = behaviour->addCondition(
+                allocator,
+                speed,
+                izanagi::engine::StateMachineCondition::Type::Float,
+                izanagi::engine::StateMachineCondition::Cmp::Greater,
+                izanagi::CValue(0.7f));
+        }
+
+        {
+            auto behaviour = m_stateMachine->addBehaviour(m_layer, move);
+            behaviour->setTransitionTime(1.0f);
+            behaviour->setName("layer -> move");
+        }
+    }
+}
+
+void MotionStateMachineApp::initLayer(izanagi::IMemoryAllocator* allocator)
+{
+    m_layer = izanagi::engine::AnimationStateMachine::create(allocator);
+
+    auto run = m_layer->addNode("run", m_Anm[State::Run], IZ_FALSE);
+    auto umatobi = m_layer->addNode("umatobi", m_Anm[State::Umatobi], IZ_FALSE);
+
+    m_layer->addBehaviour(nullptr, "run");
+    m_layer->addBehaviour("umatobi", nullptr);
+
+    m_willUmatobi = m_layer->addConditionValue("willUmatobi");
+
+    auto behaviour = m_layer->addBehaviour("run", "umatobi");
+    behaviour->setTransitionTime(0.2f);
+    behaviour->setName("run -> umatobi");
+
+    auto cond = behaviour->addCondition(
+        allocator,
+        m_willUmatobi,
+        izanagi::engine::StateMachineCondition::Type::Bool,
+        izanagi::engine::StateMachineCondition::Cmp::Equal,
+        izanagi::CValue(IZ_TRUE));
+
+    run->setWillAutoReturnToPreviousNode(IZ_FALSE);
+    run->setCallbackIfNoneLoopAnimationOver([&] {
+        m_willUmatobi->setValue(IZ_TRUE);
+    });
+    umatobi->setExitFunc([&] {
+        m_willUmatobi->setValue(IZ_FALSE);
+        m_speed = 0.5f;
+    });
 }
 
 // 解放.
 void MotionStateMachineApp::ReleaseInternal()
 {
     SAFE_RELEASE(m_stateMachine);
+    SAFE_RELEASE(m_layer);
+
+    SAFE_RELEASE(m_willUmatobi);
 
     SAFE_RELEASE(m_Img);
     SAFE_RELEASE(m_Mdl);

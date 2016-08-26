@@ -1,5 +1,6 @@
 #include"engine/AnimationStateMachineBehaviour.h"
 #include"engine/AnimationStateMachineNode.h"
+#include"engine/AnimationStateMachine.h"
 
 namespace izanagi {
 namespace engine {
@@ -31,6 +32,15 @@ namespace engine {
 
     void AnimationStateMachineBehaviour::setTransitionTime(IZ_FLOAT t)
     {
+        IZ_ASSERT(m_to);
+
+        // 遷移先アニメの時間を超えない.
+        auto anm = m_to->getAnimation();
+        if (anm) {
+            auto anmTime = anm->GetAnimationTime();
+            t = (t > anmTime ? anmTime : t);
+        }
+
         m_timeline.Init(t, 0.0f);
         m_timeline.EnableLoop(IZ_FALSE);
         m_timeline.AutoReverse(IZ_FALSE);
@@ -45,6 +55,16 @@ namespace engine {
     {
         auto ret = m_timeline.GetDuration();
         return ret;
+    }
+
+    void AnimationStateMachineBehaviour::setName(const char* name)
+    {
+        m_tag = name;
+    }
+
+    const char* AnimationStateMachineBehaviour::getName() const
+    {
+        return m_tag.GetString();
     }
 
     AnimationStateMachineCondition* AnimationStateMachineBehaviour::addCondition(
@@ -110,6 +130,16 @@ namespace engine {
 
                 IZ_FLOAT t = m_timeline.GetTime();
 
+                // TODO
+                // time が duration を超えたとき.
+
+                if (AnimationStateMachine::StateHandler) {
+                    AnimationStateMachine::StateHandler(
+                        getName(),
+                        t,
+                        m_timeline.GetDuration());
+                }
+
                 if (m_anm && m_skl) {
                     m_skl->ApplyAnimation(t, m_anm);
                 }
@@ -136,13 +166,16 @@ namespace engine {
 
             m_anm->SetAnimation(
                 m_timeline.GetDuration(),
-                izanagi::CAnimationInterp::E_INTERP_TYPE::E_INTERP_TYPE_SMOOTH,
+                m_anmInterpType,
                 fromAnm,
                 startTime,
                 toAnm,
                 0.0f);
 
             m_isInitAnm = IZ_TRUE;
+
+            m_from->notifyInitializedInBehavour();
+            m_to->notifyInitializedInBehavour();
         }
     }
 
@@ -159,7 +192,7 @@ namespace engine {
         StateMachineNode::exit();
 
         // 次のノードのアニメーションに現在の時間を引き渡すためにビヘイビアを教える.
-        if (m_to) {
+        if (m_to && m_canSetOwnNextNode) {
             m_to->setFromBehavour(this);
         }
 
@@ -193,6 +226,47 @@ namespace engine {
     AnimationStateMachineNode* AnimationStateMachineBehaviour::getTo()
     {
         return m_to;
+    }
+
+    ////////////////////////////////////////////////////////////////////////
+
+    void AnimationStateMachineTransition::Handler::Handle(const animation::CTimeline& timeline)
+    {
+        IZ_ASSERT(m_behaviour);
+
+        m_behaviour->m_isFinishFromNode = IZ_TRUE;
+    }
+
+    void AnimationStateMachineTransition::setNode(
+        AnimationStateMachineNode* from,
+        AnimationStateMachineNode* to)
+    {
+        m_from = from;
+        m_to = to;
+
+        if (m_from) {
+            m_from->m_timeline.SetTimeOverHandler(&m_handler);
+        }
+    }
+
+    StateMachineNode::State AnimationStateMachineTransition::update(IZ_FLOAT delta)
+    {
+        IZ_ASSERT(m_from);
+
+        if (m_isFinishFromNode) {
+            m_isFinishFromNode = IZ_FALSE;
+            m_state = State::Enter;
+            return State::Enter;
+        }
+        else {
+            if (m_state == State::Enter) {
+                m_state = State::None;
+                return State::Exit;
+            }
+            else {
+                return State::Running;
+            }
+        }
     }
 }
 }
