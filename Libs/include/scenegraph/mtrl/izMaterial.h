@@ -76,7 +76,7 @@ namespace izanagi {
 
         /** マテリアルにシェーダを追加.
          *
-         * マテリアルに関連付けられていないテクスチャを追加
+         * マテリアルに関連付けられていないシェーダを追加.
          */
         IZ_BOOL AddShader(shader::IShader* pShader);
 
