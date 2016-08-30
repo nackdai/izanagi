@@ -33,11 +33,21 @@ public:
         const izanagi::CCamera& camera);
 
     IZ_BOOL OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key);
+    void OnKeyUp(izanagi::sys::E_KEYBOARD_BUTTON key);
 
     IZ_FLOAT getSpeed() const
     {
         return m_speed;
     }
+
+private:
+    IZ_FLOAT GetDirection(
+        IZ_FLOAT forward, IZ_FLOAT right,
+        izanagi::math::CVector3& dir);
+
+    void MoveForward(
+        izanagi::math::CVector3& dir,
+        IZ_FLOAT value);
 
 protected:
     IZ_BOOL initModel(
@@ -53,6 +63,10 @@ protected:
     void initAnimation(izanagi::IMemoryAllocator* allocator);
 
 private:
+    izanagi::math::CQuat QuatToRotateRight;
+
+    izanagi::CCamera* m_camera{ nullptr };
+
     izanagi::engine::AnimationStateMachine* m_anm{ nullptr };
 
     IZ_FLOAT m_speed{ 0.0f };
@@ -62,6 +76,24 @@ private:
 
     izanagi::CRenderGraph* m_RenderGraph{ nullptr };
     izanagi::CSceneRenderer* m_Renderer{ nullptr };
+
+    enum State {
+        Idle,
+        Move,
+        Rotate,
+    };
+
+    State m_state{ State::Idle };
+    IZ_FLOAT m_slerp{ 0.0f };
+
+    // Character direction.
+    izanagi::math::CVector3 m_dir;
+
+    izanagi::math::CQuat m_toQuat;
+    izanagi::math::CQuat m_fromQuat;
+
+    IZ_FLOAT m_forward{ 0.0f };
+    IZ_FLOAT m_right{ 0.0f };
 };
 
 #endif    // #if !defined(__PLAYER_CHARACTER_H__)

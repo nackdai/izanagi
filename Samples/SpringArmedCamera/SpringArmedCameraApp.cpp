@@ -14,21 +14,21 @@ IZ_BOOL SpringArmedCameraApp::InitInternal(
     izanagi::graph::CGraphicsDevice* device,
     izanagi::sample::CSampleCamera& camera)
 {
-    IZ_BOOL result = m_player.init(
-        allocator,
-        device,
-        camera);
-
     // カメラ
     camera.Init(
-        izanagi::math::CVector4(0.0f, 5.0f, 30.0f, 1.0f),
-        izanagi::math::CVector4(0.0f, 5.0f, 0.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 80.0f, -160.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 80.0f, 0.0f, 1.0f),
         izanagi::math::CVector4(0.0f, 1.0f, 0.0f, 1.0f),
         1.0f,
         500.0f,
         izanagi::math::CMath::Deg2Rad(60.0f),
         (IZ_FLOAT)device->GetBackBufferWidth() / device->GetBackBufferHeight());
     camera.Update();
+
+    IZ_BOOL result = m_player.init(
+        allocator,
+        device,
+        camera);
 
 __EXIT__:
     if (!result) {
@@ -87,4 +87,9 @@ IZ_BOOL SpringArmedCameraApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
 {
     m_player.OnKeyDown(key);
     return IZ_TRUE;
+}
+
+void SpringArmedCameraApp::OnKeyUp(izanagi::sys::E_KEYBOARD_BUTTON key)
+{
+    m_player.OnKeyUp(key);
 }

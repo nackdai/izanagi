@@ -42,7 +42,8 @@ protected:
     // 描画.
     virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device);
 
-    virtual IZ_BOOL OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key);
+    virtual IZ_BOOL OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key) override;
+    virtual void OnKeyUp(izanagi::sys::E_KEYBOARD_BUTTON key) override;
 
 private:
     PlayerCharacter m_player;

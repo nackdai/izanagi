@@ -19,6 +19,7 @@ struct SPSInput {
 
 /////////////////////////////////////////////////////////////
 
+float4x4 g_mL2W;
 float4x4 g_mW2C;
 
 texture tex;
@@ -45,10 +46,11 @@ SVSOutput mainVS(SVSInput In)
 
         float4x4 mtx = vJointMatrix[idx];
 
-            Out.vPos += mul(In.vPos, mtx) * weight;
+        Out.vPos += mul(In.vPos, mtx) * weight;
         Out.vNormal += mul(In.vNormal, (float3x3)mtx) * weight;
     }
 
+    Out.vPos = mul(Out.vPos, g_mL2W);
     Out.vPos = mul(Out.vPos, g_mW2C);
 #else
     Out.vPos = mul(In.vPos, g_mW2C);

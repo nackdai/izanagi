@@ -2,6 +2,9 @@
 
 PlayerCharacter::PlayerCharacter()
 {
+    QuatToRotateRight = izanagi::math::CQuat::AngleAxis(
+        IZ_DEG2RAD(90.0f),
+        izanagi::math::CVector3::yup());
 }
 
 PlayerCharacter::~PlayerCharacter()
@@ -20,16 +23,16 @@ IZ_BOOL PlayerCharacter::init(
 
     initAnimation(allocator);
 
-    // カメラ
-    camera.Init(
-        izanagi::math::CVector4(0.0f, 5.0f, 30.0f, 1.0f),
-        izanagi::math::CVector4(0.0f, 5.0f, 0.0f, 1.0f),
-        izanagi::math::CVector4(0.0f, 1.0f, 0.0f, 1.0f),
-        1.0f,
-        500.0f,
-        izanagi::math::CMath::Deg2Rad(60.0f),
-        (IZ_FLOAT)device->GetBackBufferWidth() / device->GetBackBufferHeight());
-    camera.Update();
+    m_ctrl->rotation().InitAngleAxis(0.0f, izanagi::math::CVector3::yup());
+
+    m_camera = &camera;
+
+    const auto& camPos = m_camera->GetParam().pos;
+    const auto& pos = m_ctrl->position();
+
+    auto dir = pos - camPos;
+    m_dir.Set(dir.x, 0.0f, dir.z);
+    m_dir.Normalize();
 
 __EXIT__:
     if (!result) {
@@ -259,9 +262,10 @@ void PlayerCharacter::update(
 
     IZ_FLOAT elapsed)
 {
-    m_speed = izanagi::math::CMath::Clamp(m_speed, 0.0f, 1.0f);
+    izanagi::math::CVector3 dir(0, 0, 0);
+    auto value = GetDirection(m_forward, m_right, dir);
 
-    m_anm->setConditionValue("speed", m_speed);
+    MoveForward(dir, value);
 
     auto mdl = m_mesh->getMdl();
 
@@ -280,6 +284,145 @@ void PlayerCharacter::update(
             *m_RenderGraph);
     }
     m_RenderGraph->EndRegister();
+}
+
+IZ_FLOAT PlayerCharacter::GetDirection(
+    IZ_FLOAT forward, IZ_FLOAT right,
+    izanagi::math::CVector3& dir)
+{
+    IZ_ASSERT(m_camera);
+
+    const auto& camPos = m_camera->GetParam().pos;
+    const auto& pos = m_ctrl->position();
+
+    // Compute forward direction.
+    auto dirForward = pos - camPos;
+    dirForward.y = 0.0f;
+    dirForward.Normalize();
+
+    // Compute right direction.
+    izanagi::math::CVector4 dirRight = QuatToRotateRight * dirForward;
+
+    auto f = izanagi::math::CMath::Absf(forward);
+    auto r = izanagi::math::CMath::Absf(right);
+
+    auto total = 1.0f / (f + r);
+
+    // Compute normalized magnitude.
+    forward = forward * total;
+    right = right * total;
+
+    // Compute direction.
+    auto tmp = dirForward * forward + dirRight * right;
+    dir.Set(tmp.x, tmp.y, tmp.z);
+
+    // Return total magnitude.
+    return (f + r) * 0.5f;
+}
+
+void PlayerCharacter::MoveForward(
+    izanagi::math::CVector3& dir,
+    IZ_FLOAT value)
+{
+    // Set character speed to animation controller.
+    m_anm->setConditionValue("speed", izanagi::math::CMath::Absf(value));
+
+    if (value == 0.0f)
+    {
+        // If value is 0.0f, character don't move.
+        m_state = State::Idle;
+        m_slerp = 0.0f;
+    }
+    else
+    {
+        if (m_state == State::Idle)
+        {
+            if (!m_dir.Equals(dir) || value < 0.0f)
+            {
+                // If the character direction is different from the main camera direction, the character will rotate.
+                m_state = State::Rotate;
+            }
+            else
+            {
+                // If the character direction equal to the main camera direction, the character will move to the direction.
+                m_dir = dir;
+                m_state = State::Move;
+            }
+        }
+
+        if (m_state == State::Move)
+        {
+            if (!m_dir.Equals(dir))
+            {
+                // Update parameters to move character with rotation.
+
+                auto angle = IZ_RAD2DEG(::atan2f(dir.z, dir.x));
+                angle -= 90.0f;
+
+                if (value < 0.0f)
+                {
+                    // Rotate to opposite.
+                    angle -= 180.0f;
+                }
+
+                // Compute target rotation.
+                auto rotation = izanagi::math::CQuat::AngleAxis(
+                    IZ_DEG2RAD(-angle),
+                    izanagi::math::CVector3::yup());
+
+                m_ctrl->rotation() = rotation;
+
+                // Update character direction.
+                m_dir = dir * (value < 0.0f ? -1.0f : 1.0f);
+            }
+
+            //dir = m_dir * 0.01f;
+            dir = m_dir;
+
+            m_ctrl->move(dir);
+            //Camera.main.transform.position = dir;
+        }
+        else if (m_state == State::Rotate)
+        {
+            if (m_slerp == 0.0f)
+            {
+                // Initialize parameter for slerp.
+
+                auto angle = IZ_RAD2DEG(::atan2f(dir.z, dir.x));
+                angle -= 90.0f;
+
+                if (value < 0.0f)
+                {
+                    // Rotate to opposite.
+                    angle -= 180.0f;
+                }
+
+                // Compute target rotation.
+                m_toQuat = izanagi::math::CQuat::AngleAxis(
+                    IZ_DEG2RAD(-angle),
+                    izanagi::math::CVector3::yup());
+
+                // Get current rotation.
+                m_fromQuat = m_ctrl->rotation();
+            }
+
+            // Advance slerp.
+            m_slerp += 0.1f;
+
+            auto rotation = izanagi::math::SQuat::Slerp(m_fromQuat, m_toQuat, m_slerp);
+            m_ctrl->rotation() = rotation;
+
+            if (m_slerp >= 1.0f)
+            {
+                // Finish slerp.
+
+                m_slerp = 0.0f;
+                m_state = State::Move;
+
+                m_dir = dir * (value < 0.0f ? -1.0f : 1.0f);
+            }
+        }
+    }
 }
 
 namespace {
@@ -327,6 +470,9 @@ void PlayerCharacter::render(
     auto mtrl = m_mesh->getMaterial(0);
     auto shd = mtrl->GetShader();
 
+    auto mtxL2W = m_ctrl->getL2W();
+    _SetShaderParam(shd, "g_mL2W", &mtxL2W, sizeof(mtxL2W));
+
     const izanagi::math::SMatrix44& mtxW2C = camera.GetParam().mtxW2C;
     _SetShaderParam(shd, "g_mW2C", &mtxW2C, sizeof(mtxW2C));
 
@@ -342,12 +488,46 @@ void PlayerCharacter::render(
 
 IZ_BOOL PlayerCharacter::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
 {
-    if (key == izanagi::sys::E_KEYBOARD_BUTTON_UP) {
-        m_speed += 0.01f;
+    if (key == izanagi::sys::E_KEYBOARD_BUTTON_UP)
+    {
+        m_forward = 1.0f;
     }
-    else if (key == izanagi::sys::E_KEYBOARD_BUTTON_DOWN) {
-        m_speed -= 0.01f;
+    else if (key == izanagi::sys::E_KEYBOARD_BUTTON_DOWN)
+    {
+        m_forward = -1.0f;
+    }
+
+    if (key == izanagi::sys::E_KEYBOARD_BUTTON_RIGHT)
+    {
+        m_right = 1.0f;
+    }
+    else if (key == izanagi::sys::E_KEYBOARD_BUTTON_LEFT)
+    {
+        m_right = -1.0f;
     }
 
     return IZ_TRUE;
+}
+
+void PlayerCharacter::OnKeyUp(izanagi::sys::E_KEYBOARD_BUTTON key)
+{
+#if 1
+    if (key == izanagi::sys::E_KEYBOARD_BUTTON_UP)
+    {
+        m_forward = 0.0f;
+    }
+    else if (key == izanagi::sys::E_KEYBOARD_BUTTON_DOWN)
+    {
+        m_forward = 0.0f;
+    }
+#endif
+
+    if (key == izanagi::sys::E_KEYBOARD_BUTTON_RIGHT)
+    {
+        m_right = 0.0f;
+    }
+    else if (key == izanagi::sys::E_KEYBOARD_BUTTON_LEFT)
+    {
+        m_right = 0.0f;
+    }
 }
