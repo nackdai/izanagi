@@ -2,6 +2,7 @@
 #define __IZANAGI_MATH_CQUATERNION_H__
 
 #include "MathQuaternion.h"
+#include "MathVector3.h"
 
 namespace izanagi
 {
@@ -10,6 +11,14 @@ namespace math
     // うーん・・・
     class CQuat : public SQuat {
     public:
+        static CQuat AngleAxis(IZ_FLOAT angle, const SVector3& axis)
+        {
+            CQuat quat;
+            SQuat::SetQuatFromRadAxis(quat, angle, axis.x, axis.y, axis.z);
+
+            return std::move(quat);
+        }
+
         CQuat()
         {
             x = y = z = w = 0.0f;
@@ -107,6 +116,17 @@ namespace math
             return ret;
         }
 
+        SVector4 operator *(const SVector4& rhs) const
+        {
+            SMatrix44 mtx;
+            SQuat::MatrixFromQuat(mtx, *this);
+
+            SVector4 ret;
+            SMatrix44::Apply(ret, rhs, mtx);
+
+            return std::move(ret);
+        }
+
         SQuat operator *(IZ_FLOAT rhs) const
         {
             SQuat ret;
@@ -155,6 +175,11 @@ namespace math
         void Inverse()
         {
             SQuat::Inverse(*this, *this);
+        }
+
+        void InitAngleAxis(IZ_FLOAT angle, const SVector3& axis)
+        {
+            SQuat::SetQuatFromRadAxis(*this, angle, axis.x, axis.y, axis.z);
         }
     };
 }   // namespace math

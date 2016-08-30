@@ -122,7 +122,6 @@ namespace math
         D3DXVec3Normalize(
             reinterpret_cast<D3DXVECTOR3*>(&dst),
             reinterpret_cast<const D3DXVECTOR3*>(&src));
-        dst.z = 0.0f;
     }
 
     // ベクトルの線形補間

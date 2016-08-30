@@ -141,6 +141,13 @@ namespace math
                 t);
         }
 
+        static SQuat Slerp(const SQuat& quat1, const SQuat& quat2, IZ_FLOAT t)
+        {
+            SQuat ret;
+            Slerp(ret, quat1, quat2, t);
+            return std::move(ret);
+        }
+
         // 角度と軸からクオータニオンを設定する
         static void SetQuatFromRadAxis(SQuat& quat, IZ_FLOAT rad, IZ_FLOAT fAxisX, IZ_FLOAT fAxisY, IZ_FLOAT fAxisZ)
         {

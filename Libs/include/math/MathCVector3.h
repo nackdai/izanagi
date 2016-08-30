@@ -16,6 +16,12 @@ namespace math
             INIT_SUB,
         };
 
+        static CVector3 yup()
+        {
+            static CVector3 up(0, 1, 0);
+            return std::move(up);
+        }
+
     public:
         CVector3()
         {
@@ -29,7 +35,7 @@ namespace math
             x = rhs.x; y = rhs.y; z = rhs.z;
         }
 
-        CVector3(IZ_FLOAT _x, IZ_FLOAT _y, IZ_FLOAT _z = 1.0f)
+        CVector3(IZ_FLOAT _x, IZ_FLOAT _y, IZ_FLOAT _z)
         {
             x = _x; y = _y; z = _z;
         }
@@ -124,7 +130,18 @@ namespace math
             return CVector3(f * v.x, f * v.y, f * v.z);
         }
 
+        IZ_BOOL operator==(const CVector3& rhs)
+        {
+            IZ_FLOAT dot = Dot(rhs) - 1.0f;
+            return (-IZ_MATH_EPSILON < dot && dot < IZ_MATH_EPSILON);
+        }
+
     public:
+        IZ_BOOL Equals(const CVector3& rhs)
+        {
+            return *this == rhs;
+        }
+
         IZ_FLOAT Length() const
         {
             IZ_FLOAT ret = SVector3::Length(*this);
