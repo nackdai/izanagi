@@ -206,34 +206,36 @@ void CSampleApp::Render()
     {
         RenderInternal(m_Device);
 
-        IZ_ASSERT(m_DebugFont != IZ_NULL);
+        if (m_isDispFramerate) {
+            IZ_ASSERT(m_DebugFont != IZ_NULL);
 
-        // 時間表示
-        if (m_Device->Begin2D()) {
-            m_DebugFont->Begin(m_Device);
+            // 時間表示
+            if (m_Device->Begin2D()) {
+                m_DebugFont->Begin(m_Device);
 
-            {
-                IZ_FLOAT time = GetTimer(0).GetTime();
-                IZ_FLOAT fps = 1000.0f / time;
+                {
+                    IZ_FLOAT time = GetTimer(0).GetTime();
+                    IZ_FLOAT fps = 1000.0f / time;
 
-                m_DebugFont->DBPrint(
-                    m_Device,
-                    "%.2f[ms] %.2f[fps]\n",
-                    time, fps);
+                    m_DebugFont->DBPrint(
+                        m_Device,
+                        "%.2f[ms] %.2f[fps]\n",
+                        time, fps);
+                }
+                {
+                    IZ_FLOAT time = GetTimer(1).GetTime();
+                    IZ_FLOAT fps = 1000.0f / time;
+
+                    m_DebugFont->DBPrint(
+                        m_Device,
+                        "%.2f[ms] %.2f[fps]\n",
+                        time, fps);
+                }
+
+                m_DebugFont->End();
+
+                m_Device->End2D();
             }
-            {
-                IZ_FLOAT time = GetTimer(1).GetTime();
-                IZ_FLOAT fps = 1000.0f / time;
-
-                m_DebugFont->DBPrint(
-                    m_Device,
-                    "%.2f[ms] %.2f[fps]\n",
-                    time, fps);
-            }
-
-            m_DebugFont->End();
-
-            m_Device->End2D();
         }
     }
     m_Device->EndRender();
