@@ -26,15 +26,15 @@ namespace engine {
         SAFE_RELEASE(m_mesh);
     }
 
-    void CharacterController::move(const math::SVector4& dir)
+    void CharacterController::move(const math::SVector3& dir)
     {
         math::CVector4 moveDir(dir.x, dir.y, dir.z, 0.0f);
         m_position += moveDir;
     }
 
-    void CharacterController::move(const math::SVector4& dir, IZ_FLOAT value)
+    void CharacterController::move(const math::SVector3& dir, IZ_FLOAT value)
     {
-        math::CVector4 moveDir(dir.x, dir.y, dir.z, 0.0f);
+        math::CVector3 moveDir(dir);
         moveDir.Normalize();
         moveDir *= value;
 
@@ -61,12 +61,12 @@ namespace engine {
         return std::move(mtxL2W);
     }
 
-    math::CVector4& CharacterController::getPosition()     
+    math::CVector4& CharacterController::position()     
     {
         return m_position;
     }
 
-    math::CQuat& CharacterController::getRotate()     
+    math::CQuat& CharacterController::rotation()     
     {
         return m_rotate;
     }

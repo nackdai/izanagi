@@ -20,8 +20,8 @@ namespace engine {
         IZ_DEFINE_INTERNAL_RELEASE();
 
     public:
-        void move(const math::SVector4& dir);
-        void move(const math::SVector4& dir, IZ_FLOAT value);
+        void move(const math::SVector3& dir);
+        void move(const math::SVector3& dir, IZ_FLOAT value);
 
         void setMesh(Mesh* mesh);
 
@@ -29,9 +29,9 @@ namespace engine {
 
         math::CMatrix44 getL2W() const;
 
-        math::CVector4& getPosition();
+        math::CVector4& position();
 
-        math::CQuat& getRotate();
+        math::CQuat& rotation();
 
         IZ_BOOL registerToRenderGraph(
             const izanagi::CCamera& camera,
