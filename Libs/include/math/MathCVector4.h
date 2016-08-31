@@ -69,9 +69,25 @@ namespace math
             return *this;
         }
 
+        CVector4& operator +=(const SVector3& rhs)
+        {
+            this->x += rhs.x;
+            this->y += rhs.y;
+            this->z += rhs.z;
+            return *this;
+        }
+
         CVector4& operator -=(const SVector4& rhs)
         {
             SVector4::Sub(*this, *this, rhs);
+            return *this;
+        }
+
+        CVector4& operator -=(const SVector3& rhs)
+        {
+            this->x -= rhs.x;
+            this->y -= rhs.y;
+            this->z -= rhs.z;
             return *this;
         }
 
@@ -150,6 +166,11 @@ namespace math
         void Add(IZ_FLOAT _x, IZ_FLOAT _y, IZ_FLOAT _z)
         {
             x += _x; y += _y; z += _z;
+        }
+
+        void Dump() const
+        {
+            SVector4::Dump(*this);
         }
     };
 }   // namespace math

@@ -180,6 +180,11 @@ namespace math
 
         // ベクトルの線形補間
         static inline void Lerp(SVector3& dst, const SVector3& src0, const SVector3& src1, IZ_FLOAT f);
+
+        static void Dump(const SVector3& v)
+        {
+            IZ_PRINTF("%f %f %f\n", v.x, v.y, v.z);
+        }
     };
 }   // namespace math
 }   // namespace izanagi

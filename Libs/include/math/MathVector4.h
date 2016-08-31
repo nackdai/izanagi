@@ -202,6 +202,11 @@ namespace math
 
         // ベクトルの線形補間
         static inline void Lerp(SVector4& dst, const SVector4& src0, const SVector4& src1, IZ_FLOAT f);
+
+        static void Dump(const SVector4& v)
+        {
+            IZ_PRINTF("%f %f %f %f\n", v.x, v.y, v.z, v.w);
+        }
     };
 }   // namespace math
 }   // namespace izanagi

@@ -133,7 +133,8 @@ namespace math
         IZ_BOOL operator==(const CVector3& rhs)
         {
             IZ_FLOAT dot = Dot(rhs) - 1.0f;
-            return (-IZ_MATH_EPSILON < dot && dot < IZ_MATH_EPSILON);
+            //return (-IZ_MATH_EPSILON < dot && dot < IZ_MATH_EPSILON);
+            return (-0.0001f < dot && dot < 0.0001f);
         }
 
     public:
@@ -162,6 +163,11 @@ namespace math
         void Cross(const SVector3& rhs)
         {
             SVector3::Cross(*this, *this, rhs);
+        }
+
+        void Dump() const
+        {
+            SVector3::Dump(*this);
         }
     };
 }   // namespace math
