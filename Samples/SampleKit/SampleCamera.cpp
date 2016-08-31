@@ -150,6 +150,9 @@ void CSampleCamera::Move(float fOffsetX, float fOffsetY)
 
     izanagi::math::SVector4 pos = param.pos;
     izanagi::math::SVector4::Add(pos, param.pos, vOffset);
-
     SetPos(pos);
+
+    izanagi::math::SVector4 at = param.ref;
+    izanagi::math::SVector4::Add(at, param.ref, vOffset);
+    SetAt(at);
 }
