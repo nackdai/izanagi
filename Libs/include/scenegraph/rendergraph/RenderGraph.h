@@ -50,6 +50,8 @@ namespace izanagi {
         void EndRegister() {}
 
         /** 登録.
+         * 
+         * カメラが更新され、すべてのマトリクスが確定されたあとに呼ばないといけない.
          */
         IZ_BOOL Register(
             const CCamera& camera,
@@ -57,6 +59,8 @@ namespace izanagi {
             IRenderElement* element);
 
         /** 登録.
+         *
+         * カメラが更新され、すべてのマトリクスが確定されたあとに呼ばないといけない.
          */
         IZ_BOOL Register(
             const CCamera& camera,
