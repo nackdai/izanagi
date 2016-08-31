@@ -126,6 +126,7 @@ void CSampleCamera::Rotate(
 
     // 回転
     izanagi::CVectorCamera::Rotate(axis, theta);
+    //izanagi::CVectorCamera::RotatePose(axis, theta);
 }
 
 void CSampleCamera::Move(float fOffsetX, float fOffsetY)
@@ -148,11 +149,12 @@ void CSampleCamera::Move(float fOffsetX, float fOffsetY)
 
     izanagi::math::SMatrix44::Apply(vOffset, vOffset, mRot);
 
-    izanagi::math::SVector4 pos = param.pos;
-    izanagi::math::SVector4::Add(pos, param.pos, vOffset);
+    izanagi::math::CVector4 pos(param.pos);
+    izanagi::math::CVector4 at(param.ref);
+
+    izanagi::math::SVector4::Add(pos, pos, vOffset);
     SetPos(pos);
 
-    izanagi::math::SVector4 at = param.ref;
-    izanagi::math::SVector4::Add(at, param.ref, vOffset);
+    izanagi::math::SVector4::Add(at, at, vOffset);
     SetAt(at);
 }
