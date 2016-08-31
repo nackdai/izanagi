@@ -88,7 +88,7 @@ namespace {
         // そのため、どちらでも 0 - 1 の範囲に正規化する必要がある
         //normalizedZ = (normalizedZ + 1.0f) * 0.5f;    // For OpenGL
 
-        IZ_ASSERT(normalizedZ >= 0.0f);
+        IZ_ASSERT(0.0f <= normalizedZ && normalizedZ <= 1.0f);
 
         return normalizedZ;
     }
