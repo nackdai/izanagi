@@ -39,7 +39,7 @@ namespace izanagi {
     public:
         /** 初期化.
 		 */
-        void Init(
+        virtual void Init(
             const math::SVector4& vecPos,
             const math::SVector4& vecRef,
             const math::SVector4& vecUp,
@@ -49,7 +49,7 @@ namespace izanagi {
 
 		/** 初期化.
 		 */
-        void Init(const SCameraParam& sParam);
+        virtual void Init(const SCameraParam& sParam);
 
         /** カメラ更新.
 		 */
@@ -87,7 +87,7 @@ namespace izanagi {
 
 		/** 上方向ベクトルをセット.
 		 */
-        void SetUp(const math::SVector4& vecUp);
+        virtual void SetUp(const math::SVector4& vecUp);
 
 		/** カメラのnear値をセット.
 		 */

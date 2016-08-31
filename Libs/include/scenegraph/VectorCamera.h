@@ -57,9 +57,28 @@ namespace izanagi {
 
         /** 位置指定.
          */
-        void SetPos(const math::SVector4& pos);
+        virtual void SetPos(const math::SVector4& pos) override;
+
+        virtual void SetAt(const math::SVector4& vecAt) override;
 
         void SetTransform(const math::SMatrix44& mtx);
+
+    protected:
+        // 呼ばせない.
+        virtual void Init(
+            const math::SVector4& vecPos,
+            const math::SVector4& vecRef,
+            const math::SVector4& vecUp,
+            IZ_FLOAT fNear, IZ_FLOAT fFar,
+            IZ_FLOAT fFov,
+            IZ_FLOAT fAspect) override
+        {}
+
+        // 呼ばせない.
+        virtual void Init(const SCameraParam& sParam) override {}
+
+        // 呼ばせない.
+        virtual void SetUp(const math::SVector4& vecUp) override {}
 
     public:
         /** カメラのX軸取得
@@ -82,25 +101,6 @@ namespace izanagi {
          */
         const math::SMatrix44& GetTransform() const { return m_Transform; }
 
-    private:
-        // 使わせない
-
-        void Init(
-            const math::SVector4& vecPos,
-            const math::SVector4& vecRef,
-            const math::SVector4& vecUp,
-            IZ_FLOAT fNear, IZ_FLOAT fFar,
-            IZ_FLOAT fFov,
-            IZ_FLOAT fAspect)
-        {
-        }
-
-        void Init(const SCameraParam& sParam) {}
-
-        void SetAt(const math::SVector4& vecAt) {}
-
-        void SetUp(const math::SVector4& vecUp) {}
-
     protected:
         math::SVector4 m_X;
         
@@ -113,6 +113,10 @@ namespace izanagi {
         // NOTE
         // m_Param.pos の参照とすることで m_Param.pos と同期するようにする
         math::SVector4& m_Pos;
+
+        // NOTE
+        // m_Param.ref の参照とすることで m_Param.ref と同期するようにする
+        math::SVector4& m_At;
 
         // カメラの変換マトリクス
         math::SMatrix44 m_Transform;

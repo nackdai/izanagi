@@ -4,7 +4,7 @@
 using namespace izanagi;
 
 CVectorCamera::CVectorCamera()
-: m_Pos(m_Param.pos), m_Y(m_Param.up)
+    : m_Pos(m_Param.pos), m_Y(m_Param.up), m_At(m_Param.ref)
 {
     m_NeedUpdateByTransform = IZ_FALSE;
 }
@@ -174,6 +174,12 @@ void CVectorCamera::Rotate(const math::SQuat& quat)
 void CVectorCamera::SetPos(const math::SVector4& pos)
 {
     m_Pos.Set(pos.x, pos.y, pos.z);
+    m_IsDirtyW2V = IZ_TRUE;
+}
+
+void CVectorCamera::SetAt(const math::SVector4& at)
+{
+    m_At.Set(at.x, at.y, at.z);
     m_IsDirtyW2V = IZ_TRUE;
 }
 
