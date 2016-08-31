@@ -28,9 +28,16 @@ void CVectorCamera::Init(
         verticalFOV,
         aspect);
 
+    computeLenghtBetweenPosAndAt();
+
     math::SMatrix44::SetUnit(m_Transform);
 
     m_NeedUpdateByTransform = IZ_FALSE;
+}
+
+void CVectorCamera::computeLenghtBetweenPosAndAt()
+{
+    m_lenghtBetweenPosAndAt = math::SVector4::Length2(m_Pos, m_At);
 }
 
 // カメラ更新
@@ -80,9 +87,18 @@ void CVectorCamera::Update()
             m_Param.mtxW2V.m[3][2] = -1.0f * math::SVector4::Dot(m_Z, m_Pos);
             m_Param.mtxW2V.m[3][3] = 1.0f;
 
+#if 0
             // 一応、注視点を更新
             // 右手系なので、マイナスする
             izanagi::math::SVector4::SubXYZ(m_Param.ref, m_Z, m_Pos);
+#else
+            izanagi::math::CVector3 dir(m_Z.x, m_Z.y, m_Z.z);
+            dir *= m_lenghtBetweenPosAndAt;
+
+            izanagi::math::CVector4 pos(m_Pos);
+            auto at = pos + dir;
+            m_At.Set(at.x, at.y, at.z);
+#endif
 
             {
                 math::SVector4::Copy(m_Transform.v[0], m_X);
@@ -161,35 +177,71 @@ void CVectorCamera::Rotate(const math::SQuat& quat)
 	math::SMatrix44 mtx;
 	math::SQuat::MatrixFromQuat(mtx, quat);
 
-	math::SMatrix44::Apply(m_X, m_X, mtx);
-	math::SMatrix44::Apply(m_Y, m_Y, mtx);
-	math::SMatrix44::Apply(m_Z, m_Z, mtx);
-	math::SMatrix44::Apply(m_Pos, m_Pos, mtx);
+    math::SMatrix44::Apply(m_Pos, m_Pos, mtx);
+
+    // 変わらないはずだが、念のため.
+    computeLenghtBetweenPosAndAt();
 
 	m_IsDirtyW2V = IZ_TRUE;
-	m_NeedUpdateByTransform = IZ_TRUE;
+}
+
+void CVectorCamera::RotatePose(
+    const math::SVector4& axis,
+    IZ_FLOAT rad)
+{
+    math::SQuat quat;
+    math::SQuat::SetQuatFromRadAxis(quat, rad, axis);
+
+    RotatePose(quat);
+}
+
+void CVectorCamera::RotatePose(const math::SQuat& quat)
+{
+    math::SMatrix44 mtx;
+    math::SQuat::MatrixFromQuat(mtx, quat);
+
+    math::SMatrix44::Apply(m_X, m_X, mtx);
+    math::SMatrix44::Apply(m_Y, m_Y, mtx);
+    math::SMatrix44::Apply(m_Z, m_Z, mtx);
+
+    math::CVector3 dir(m_Z.x, m_Z.y, m_Z.z);
+
+    math::CVector4 pos(m_Pos);
+    auto length = math::SVector4::Length2(m_Pos, m_At);
+
+    auto at = pos + dir * length;
+    m_At.Set(at.x, at.y, at.z);
+
+    computeLenghtBetweenPosAndAt();
+
+    m_IsDirtyW2V = IZ_TRUE;
+    m_NeedUpdateByTransform = IZ_TRUE;
 }
 
 // 位置指定.
 void CVectorCamera::SetPos(const math::SVector4& pos)
 {
     m_Pos.Set(pos.x, pos.y, pos.z);
+
+    computeLenghtBetweenPosAndAt();
+
     m_IsDirtyW2V = IZ_TRUE;
 }
 
 void CVectorCamera::SetAt(const math::SVector4& at)
 {
     m_At.Set(at.x, at.y, at.z);
+
+    computeLenghtBetweenPosAndAt();
+
     m_IsDirtyW2V = IZ_TRUE;
 }
 
-void CVectorCamera::SetTransform(const math::SMatrix44& mtx)
+void CVectorCamera::Dump() const
 {
-    math::SVector4::Copy(m_X, mtx.v[0]);
-    math::SVector4::Copy(m_Y, mtx.v[1]);
-    math::SVector4::Copy(m_Z, mtx.v[2]);
-    math::SVector4::Copy(m_Pos, mtx.v[3]);
-
-    m_IsDirtyW2V = IZ_TRUE;
-    m_NeedUpdateByTransform = IZ_TRUE;
+    IZ_PRINTF("VectorCamera ====\n");
+    IZ_PRINTF("X "); math::SVector4::Dump(m_X);
+    IZ_PRINTF("Y "); math::SVector4::Dump(m_Y);
+    IZ_PRINTF("Z "); math::SVector4::Dump(m_Z);
+    IZ_PRINTF("P "); math::SVector4::Dump(m_Pos);
 }

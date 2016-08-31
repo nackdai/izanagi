@@ -119,9 +119,19 @@ namespace math
             return CVector4(x + rhs.x, y + rhs.y, z + rhs.z, w + rhs.w);
         }
 
+        CVector4 operator +(const SVector3& rhs) const
+        {
+            return CVector4(x + rhs.x, y + rhs.y, z + rhs.z, w);
+        }
+
         CVector4 operator -(const SVector4& rhs) const
         {
             return CVector4(x - rhs.x, y - rhs.y, z - rhs.z, w - rhs.w);
+        }
+
+        CVector4 operator -(const SVector3& rhs) const
+        {
+            return CVector4(x - rhs.x, y - rhs.y, z - rhs.z, w);
         }
 
         CVector4 operator *(IZ_FLOAT rhs) const

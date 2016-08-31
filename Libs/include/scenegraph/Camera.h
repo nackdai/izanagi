@@ -109,6 +109,9 @@ namespace izanagi {
 		 */
         math::SVector4 GetDir();
 
+        virtual void Dump() const
+        {}
+
     protected:
         // World - View
         void ComputeW2V();

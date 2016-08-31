@@ -55,13 +55,19 @@ namespace izanagi {
 
 		void Rotate(const math::SQuat& quat);
 
+        void RotatePose(
+            const math::SVector4& axis,
+            IZ_FLOAT rad);
+
+        void RotatePose(const math::SQuat& quat);
+
         /** 位置指定.
          */
         virtual void SetPos(const math::SVector4& pos) override;
 
         virtual void SetAt(const math::SVector4& vecAt) override;
 
-        void SetTransform(const math::SMatrix44& mtx);
+        virtual void Dump() const override;
 
     protected:
         // 呼ばせない.
@@ -101,6 +107,9 @@ namespace izanagi {
          */
         const math::SMatrix44& GetTransform() const { return m_Transform; }
 
+    private:
+        inline void computeLenghtBetweenPosAndAt();
+
     protected:
         math::SVector4 m_X;
         
@@ -122,6 +131,8 @@ namespace izanagi {
         math::SMatrix44 m_Transform;
 
         IZ_BOOL m_NeedUpdateByTransform;
+
+        IZ_FLOAT m_lenghtBetweenPosAndAt{ 0.0f };
     };
 
 }   // namespace izanagi
