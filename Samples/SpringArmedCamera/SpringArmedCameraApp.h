@@ -47,6 +47,12 @@ protected:
 
 private:
     PlayerCharacter m_player;
+
+    izanagi::CRenderGraph* m_RenderGraph{ nullptr };
+    izanagi::CSceneRenderer* m_Renderer{ nullptr };
+
+    izanagi::shader::CShaderBasic* m_shd{ nullptr };
+    izanagi::CDebugMeshGrid* m_grid{ nullptr };
 };
 
 #endif    // #if !defined(__SPRING_ARMED_CAMERA_APP_H__)

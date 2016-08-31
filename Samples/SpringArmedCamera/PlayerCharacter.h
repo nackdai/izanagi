@@ -27,17 +27,23 @@ public:
         const izanagi::CCamera& camera,
         IZ_FLOAT elapsed);
 
+    void prepareToRender(
+        const izanagi::CCamera& camera,
+        izanagi::CRenderGraph& renderGraph);
+
     // 描画.
     void render(
         izanagi::graph::CGraphicsDevice* device,
-        const izanagi::CCamera& camera);
+        const izanagi::CCamera& camera,
+        izanagi::CRenderGraph* renderGraph,
+        izanagi::CSceneRenderer* renderer);
 
     IZ_BOOL OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key);
     void OnKeyUp(izanagi::sys::E_KEYBOARD_BUTTON key);
 
-    IZ_FLOAT getSpeed() const
+    const izanagi::math::CVector4& position() const
     {
-        return m_speed;
+        return m_ctrl->position();
     }
 
 private:
@@ -73,9 +79,6 @@ private:
 
     izanagi::engine::Mesh* m_mesh{ nullptr };
     izanagi::engine::CharacterController* m_ctrl{ nullptr };
-
-    izanagi::CRenderGraph* m_RenderGraph{ nullptr };
-    izanagi::CSceneRenderer* m_Renderer{ nullptr };
 
     enum State {
         Idle,

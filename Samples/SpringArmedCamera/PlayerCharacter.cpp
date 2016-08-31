@@ -103,14 +103,6 @@ IZ_BOOL PlayerCharacter::initModel(
 
     m_ctrl->setMesh(m_mesh);
 
-    // レンダーグラフ
-    m_RenderGraph = izanagi::CRenderGraph::CreateRenderGraph(allocator, 5);
-    VGOTO(result = (m_RenderGraph != IZ_NULL), __EXIT__);
-
-    // レンダラ
-    m_Renderer = izanagi::CSceneRenderer::CreateSceneRenderer(allocator);
-    VGOTO(result = (m_Renderer != IZ_NULL), __EXIT__);
-
     result = createMaterial(
         allocator,
         device,
@@ -248,9 +240,6 @@ void PlayerCharacter::release()
 {
     SAFE_RELEASE(m_anm);
 
-    SAFE_RELEASE(m_RenderGraph);
-    SAFE_RELEASE(m_Renderer);
-
     SAFE_RELEASE(m_mesh);
     SAFE_RELEASE(m_ctrl);
 }
@@ -259,7 +248,6 @@ void PlayerCharacter::release()
 void PlayerCharacter::update(
     izanagi::graph::CGraphicsDevice* device,
     const izanagi::CCamera& camera,
-
     IZ_FLOAT elapsed)
 {
     izanagi::math::CVector3 dir(0, 0, 0);
@@ -270,20 +258,21 @@ void PlayerCharacter::update(
     auto mdl = m_mesh->getMdl();
 
     m_anm->update(
-        elapsed, 
+        elapsed,
         mdl->GetSkeleton());
 
     // TODO
     mdl->Update();
+}
 
+void PlayerCharacter::prepareToRender(
+    const izanagi::CCamera& camera,
+    izanagi::CRenderGraph& renderGraph)
+{
     // レンダーグラフに登録
-    m_RenderGraph->BeginRegister();
-    {
-        m_ctrl->registerToRenderGraph(
-            camera,
-            *m_RenderGraph);
-    }
-    m_RenderGraph->EndRegister();
+    m_ctrl->registerToRenderGraph(
+        camera,
+        renderGraph);
 }
 
 IZ_FLOAT PlayerCharacter::GetDirection(
@@ -380,6 +369,15 @@ void PlayerCharacter::MoveForward(
             dir = m_dir;
 
             m_ctrl->move(dir);
+
+            izanagi::math::CVector4 camPos(m_camera->GetParam().pos);
+            camPos += dir;
+            m_camera->SetPos(camPos);
+
+            izanagi::math::CVector4 camAt(m_camera->GetParam().ref);
+            camAt += dir;
+            m_camera->SetAt(camAt);
+
             //Camera.main.transform.position = dir;
         }
         else if (m_state == State::Rotate)
@@ -445,7 +443,9 @@ namespace {
 // 描画.
 void PlayerCharacter::render(
     izanagi::graph::CGraphicsDevice* device,
-    const izanagi::CCamera& camera)
+    const izanagi::CCamera& camera,
+    izanagi::CRenderGraph* renderGraph,
+    izanagi::CSceneRenderer* renderer)
 {
 #if 0
     m_Shd->Begin(device, 0, IZ_TRUE);
@@ -479,9 +479,9 @@ void PlayerCharacter::render(
     auto handler = m_mesh->getMshRenderHandler();
 
     // 描画
-    m_RenderGraph->Render(
+    renderGraph->Render(
         device,
-        m_Renderer,
+        renderer,
         handler);
 #endif
 }
@@ -522,6 +522,7 @@ void PlayerCharacter::OnKeyUp(izanagi::sys::E_KEYBOARD_BUTTON key)
     }
 #endif
 
+#if 1
     if (key == izanagi::sys::E_KEYBOARD_BUTTON_RIGHT)
     {
         m_right = 0.0f;
@@ -530,4 +531,5 @@ void PlayerCharacter::OnKeyUp(izanagi::sys::E_KEYBOARD_BUTTON key)
     {
         m_right = 0.0f;
     }
+#endif
 }

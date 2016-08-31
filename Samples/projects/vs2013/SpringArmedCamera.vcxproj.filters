@@ -16,6 +16,9 @@
     <CustomBuild Include="..\..\..\Media\unitychan\unitychan_RUN00_F.fbx">
       <Filter>asset</Filter>
     </CustomBuild>
+    <CustomBuild Include="..\..\SpringArmedCamera\shader\BasicShader.xml">
+      <Filter>shader</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="asset">
@@ -33,6 +36,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\SpringArmedCamera\shader\SkinShader.fx">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\SpringArmedCamera\shader\BasicShader.fx">
       <Filter>shader</Filter>
     </None>
   </ItemGroup>

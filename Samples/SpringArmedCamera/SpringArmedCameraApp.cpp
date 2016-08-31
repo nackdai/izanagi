@@ -14,9 +14,38 @@ IZ_BOOL SpringArmedCameraApp::InitInternal(
     izanagi::graph::CGraphicsDevice* device,
     izanagi::sample::CSampleCamera& camera)
 {
+    IZ_BOOL result = IZ_FALSE;
+
+    // レンダーグラフ
+    m_RenderGraph = izanagi::CRenderGraph::CreateRenderGraph(allocator, 5);
+    VGOTO(result = (m_RenderGraph != IZ_NULL), __EXIT__);
+
+    // レンダラ
+    m_Renderer = izanagi::CSceneRenderer::CreateSceneRenderer(allocator);
+    VGOTO(result = (m_Renderer != IZ_NULL), __EXIT__);
+
+    {
+        izanagi::CFileInputStream in;
+        VGOTO(result = in.Open("data/BasicShader.shd"), __EXIT__);
+
+        m_shd = izanagi::shader::CShaderBasic::CreateShader<izanagi::shader::CShaderBasic>(
+            allocator,
+            device,
+            &in);
+        VGOTO(result = (m_shd != IZ_NULL), __EXIT__);
+    }
+
+    m_grid = izanagi::CDebugMeshGrid::CreateDebugMeshGrid(
+        allocator,
+        device,
+        IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0xff),
+        100, 100,
+        10.0f);
+    VGOTO(result = (m_grid != IZ_NULL), __EXIT__);
+
     // カメラ
     camera.Init(
-        izanagi::math::CVector4(0.0f, 80.0f, -160.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 160.0f, -160.0f, 1.0f),
         izanagi::math::CVector4(0.0f, 80.0f, 0.0f, 1.0f),
         izanagi::math::CVector4(0.0f, 1.0f, 0.0f, 1.0f),
         1.0f,
@@ -25,7 +54,7 @@ IZ_BOOL SpringArmedCameraApp::InitInternal(
         (IZ_FLOAT)device->GetBackBufferWidth() / device->GetBackBufferHeight());
     camera.Update();
 
-    IZ_BOOL result = m_player.init(
+    result = m_player.init(
         allocator,
         device,
         camera);
@@ -42,6 +71,12 @@ __EXIT__:
 void SpringArmedCameraApp::ReleaseInternal()
 {
     m_player.release();
+
+    SAFE_RELEASE(m_RenderGraph);
+    SAFE_RELEASE(m_Renderer);
+
+    SAFE_RELEASE(m_shd);
+    SAFE_RELEASE(m_grid);
 } 
 
 // 更新.
@@ -49,13 +84,39 @@ void SpringArmedCameraApp::UpdateInternal(izanagi::graph::CGraphicsDevice* devic
 {
     auto& camera = GetCamera();
 
-    camera.Update();
-
     IZ_FLOAT elapsed = GetTimer(0).GetTime();
     //elapsed /= 1000.0f;
     elapsed = 16.67f / 1000.0f;
 
     m_player.update(device, camera, elapsed);
+
+    camera.Update();
+
+    // レンダーグラフに登録
+    m_RenderGraph->BeginRegister();
+    {
+        m_player.prepareToRender(
+            camera,
+            *m_RenderGraph);
+    }
+    m_RenderGraph->EndRegister();
+}
+
+namespace {
+    inline void _SetShaderParam(
+        izanagi::shader::IShader* shader,
+        const char* name,
+        const void* value,
+        IZ_UINT bytes)
+    {
+        izanagi::shader::IZ_SHADER_HANDLE handle = shader->GetParameterByName(name);
+        IZ_ASSERT(handle != 0);
+
+        shader->SetParamValue(
+            handle,
+            value,
+            bytes);
+    }
 }
 
 // 描画.
@@ -63,19 +124,64 @@ void SpringArmedCameraApp::RenderInternal(izanagi::graph::CGraphicsDevice* devic
 {
     auto& camera = GetCamera();
 
-    m_player.render(device, camera);
+    m_player.render(
+        device, 
+        camera,
+        m_RenderGraph,
+        m_Renderer);
+
+    izanagi::math::SMatrix44 mtxL2W;
+    izanagi::math::SMatrix44::SetUnit(mtxL2W);
+
+    // テクスチャなし
+    m_shd->Begin(device, 1, IZ_FALSE);
+    {
+        if (m_shd->BeginPass(0)) {
+            // パラメータ設定
+            _SetShaderParam(
+                m_shd,
+                "g_mL2W",
+                (void*)&mtxL2W,
+                sizeof(mtxL2W));
+
+            _SetShaderParam(
+                m_shd,
+                "g_mW2C",
+                (void*)&camera.GetParam().mtxW2C,
+                sizeof(camera.GetParam().mtxW2C));
+
+            // シェーダ設定
+            m_shd->CommitChanges(device);
+
+            m_grid->Draw(device);
+
+            m_shd->EndPass();
+        }
+    }
+    m_shd->End(device);
 
     if (device->Begin2D()) {
         izanagi::CDebugFont* debugFont = GetDebugFont();
 
         debugFont->Begin(device, 0, izanagi::CDebugFont::FONT_SIZE * 2);
 
-        auto speed = m_player.getSpeed();
+        izanagi::math::CVector4 pos(camera.GetParam().pos);
+        izanagi::math::CVector4 at(camera.GetParam().ref);
+        izanagi::math::CVector4 ply(m_player.position());
+
 
         debugFont->DBPrint(
             device,
-            "spped [%.2f]\n",
-            speed);
+            "pos [%.2f][%.2f][%.2f]\n",
+            pos.x, pos.y, pos.z);
+        debugFont->DBPrint(
+            device,
+            "at  [%.2f][%.2f][%.2f]\n",
+            at.x, at.y, at.z);
+        debugFont->DBPrint(
+            device,
+            "ply [%.2f][%.2f][%.2f]\n",
+            ply.x, ply.y, ply.z);
 
         debugFont->End();
 
