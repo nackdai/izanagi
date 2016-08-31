@@ -18,6 +18,7 @@ namespace engine {
     }
 
     CharacterController::CharacterController()
+        : m_position(0, 0, 0, 1)
     {
     }
 
