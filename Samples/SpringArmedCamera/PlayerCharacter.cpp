@@ -311,6 +311,50 @@ IZ_FLOAT PlayerCharacter::GetTargetDirection(
     return (f + r) * 0.5f;
 }
 
+void PlayerCharacter::prepareRotate(
+    const izanagi::math::CVector3& dir,
+    IZ_FLOAT value)
+{
+    auto angle = IZ_RAD2DEG(::atan2f(dir.z, dir.x));
+    angle -= 90.0f;
+
+    if (value < 0.0f)
+    {
+        // Rotate to opposite.
+        angle -= 180.0f;
+    }
+
+    // Compute target rotation.
+    m_toQuat = izanagi::math::CQuat::AngleAxis(
+        IZ_DEG2RAD(-angle),
+        izanagi::math::CVector3::yup());
+
+    // Get current rotation.
+    m_fromQuat = m_ctrl->rotation();
+}
+
+void PlayerCharacter::updateRotate(
+    IZ_FLOAT delta,
+    IZ_FLOAT value)
+{
+    // Advance slerp.
+    m_slerp += delta;
+
+    auto rotation = izanagi::math::SQuat::Slerp(m_fromQuat, m_toQuat, m_slerp);
+    m_ctrl->rotation() = rotation;
+
+    if (m_slerp >= 1.0f)
+    {
+        // Finish slerp.
+
+        m_slerp = 0.0f;
+        m_state = State::Move;
+    }
+
+    updateDirection(value);
+}
+
+
 void PlayerCharacter::MoveForward(
     izanagi::math::CVector3& dir,
     IZ_FLOAT value)
@@ -353,41 +397,12 @@ void PlayerCharacter::MoveForward(
                 // Reset current rotation.
                 m_slerp = 0.0f;
 
-                auto angle = IZ_RAD2DEG(::atan2f(dir.z, dir.x));
-                angle -= 90.0f;
-
-                if (value < 0.0f)
-                {
-                    // Rotate to opposite.
-                    angle -= 180.0f;
-                }
-
-                // Compute target rotation.
-                m_toQuat = izanagi::math::CQuat::AngleAxis(
-                    IZ_DEG2RAD(-angle),
-                    izanagi::math::CVector3::yup());
-
-                // Get current rotation.
-                m_fromQuat = m_ctrl->rotation();
+                prepareRotate(dir, value);
             }
 
             if ((m_state & State::Rotate) > 0)
             {
-                // Advance slerp.
-                m_slerp += 0.01f;
-
-                auto rotation = izanagi::math::SQuat::Slerp(m_fromQuat, m_toQuat, m_slerp);
-                m_ctrl->rotation() = rotation;
-
-                if (m_slerp >= 1.0f)
-                {
-                    // Finish slerp.
-
-                    m_slerp = 0.0f;
-                    m_state = State::Move;
-                }
-
-                updateDirection(value);
+                updateRotate(0.01f, value);
             }
 
             //dir = m_dir * 0.01f;
@@ -411,39 +426,10 @@ void PlayerCharacter::MoveForward(
             {
                 // Initialize parameter for slerp.
 
-                auto angle = IZ_RAD2DEG(::atan2f(dir.z, dir.x));
-                angle -= 90.0f;
-
-                if (value < 0.0f)
-                {
-                    // Rotate to opposite.
-                    angle -= 180.0f;
-                }
-
-                // Compute target rotation.
-                m_toQuat = izanagi::math::CQuat::AngleAxis(
-                    IZ_DEG2RAD(-angle),
-                    izanagi::math::CVector3::yup());
-
-                // Get current rotation.
-                m_fromQuat = m_ctrl->rotation();
+                prepareRotate(dir, value);
             }
 
-            // Advance slerp.
-            m_slerp += 0.1f;
-
-            auto rotation = izanagi::math::SQuat::Slerp(m_fromQuat, m_toQuat, m_slerp);
-            m_ctrl->rotation() = rotation;
-
-            if (m_slerp >= 1.0f)
-            {
-                // Finish slerp.
-
-                m_slerp = 0.0f;
-                m_state = State::Move;
-            }
-
-            updateDirection(value);
+            updateRotate(0.1f, value);
         }
     }
 }

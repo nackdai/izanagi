@@ -53,6 +53,14 @@ private:
         IZ_FLOAT forward, IZ_FLOAT right,
         izanagi::math::CVector3& dir);
 
+    void prepareRotate(
+        const izanagi::math::CVector3& dir,
+        IZ_FLOAT value);
+
+    void updateRotate(
+        IZ_FLOAT delta,
+        IZ_FLOAT value);
+
     void MoveForward(
         izanagi::math::CVector3& dir,
         IZ_FLOAT value);
