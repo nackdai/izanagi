@@ -177,9 +177,17 @@ void CVectorCamera::Rotate(const math::SQuat& quat)
 	math::SMatrix44 mtx;
 	math::SQuat::MatrixFromQuat(mtx, quat);
 
-    math::SMatrix44::Apply(m_Pos, m_Pos, mtx);
+    math::CVector4 pos(m_Pos.x, m_Pos.y, m_Pos.z);
+    math::CVector4 at(m_At.x, m_At.y, m_At.z);
 
-    // 変わらないはずだが、念のため.
+    pos -= at;
+
+    math::SMatrix44::Apply(pos, pos, mtx);
+
+    pos += at;
+
+    m_Pos.Set(pos.x, pos.y, pos.z);
+
     computeLenghtBetweenPosAndAt();
 
 	m_IsDirtyW2V = IZ_TRUE;
