@@ -47,7 +47,9 @@ public:
     }
 
 private:
-    IZ_FLOAT GetDirection(
+    void updateDirection(IZ_FLOAT value);
+
+    IZ_FLOAT GetTargetDirection(
         IZ_FLOAT forward, IZ_FLOAT right,
         izanagi::math::CVector3& dir);
 
@@ -81,12 +83,12 @@ private:
     izanagi::engine::CharacterController* m_ctrl{ nullptr };
 
     enum State {
-        Idle,
-        Move,
-        Rotate,
+        Idle = 1 << 0,
+        Move = 1 << 1,
+        Rotate = 1 << 2,
     };
 
-    State m_state{ State::Idle };
+    IZ_UINT m_state{ State::Idle };
     IZ_FLOAT m_slerp{ 0.0f };
 
     // Character direction.

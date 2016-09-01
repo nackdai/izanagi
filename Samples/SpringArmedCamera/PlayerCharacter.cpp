@@ -27,12 +27,7 @@ IZ_BOOL PlayerCharacter::init(
 
     m_camera = &camera;
 
-    const auto& camPos = m_camera->GetParam().pos;
-    const auto& pos = m_ctrl->position();
-
-    auto dir = pos - camPos;
-    m_dir.Set(dir.x, 0.0f, dir.z);
-    m_dir.Normalize();
+    updateDirection(1.0f);
 
 __EXIT__:
     if (!result) {
@@ -251,7 +246,7 @@ void PlayerCharacter::update(
     IZ_FLOAT elapsed)
 {
     izanagi::math::CVector3 dir(0, 0, 0);
-    auto value = GetDirection(m_forward, m_right, dir);
+    auto value = GetTargetDirection(m_forward, m_right, dir);
 
     MoveForward(dir, value);
 
@@ -275,7 +270,14 @@ void PlayerCharacter::prepareToRender(
         renderGraph);
 }
 
-IZ_FLOAT PlayerCharacter::GetDirection(
+void PlayerCharacter::updateDirection(IZ_FLOAT value)
+{
+    const auto mtxL2W = m_ctrl->getL2W();
+    m_dir.Set(mtxL2W.m[2][0], mtxL2W.m[2][1], mtxL2W.m[2][2]);
+    m_dir = m_dir * (value < 0.0f ? -1.0f : 1.0f);
+}
+
+IZ_FLOAT PlayerCharacter::GetTargetDirection(
     IZ_FLOAT forward, IZ_FLOAT right,
     izanagi::math::CVector3& dir)
 {
@@ -339,11 +341,17 @@ void PlayerCharacter::MoveForward(
             }
         }
 
-        if (m_state == State::Move)
+        if ((m_state & State::Move) > 0)
         {
             if (!m_dir.Equals(dir))
             {
                 // Update parameters to move character with rotation.
+
+                // 移動と回転を同時に行う.
+                m_state |= State::Rotate;
+
+                // Reset current rotation.
+                m_slerp = 0.0f;
 
                 auto angle = IZ_RAD2DEG(::atan2f(dir.z, dir.x));
                 angle -= 90.0f;
@@ -355,14 +363,31 @@ void PlayerCharacter::MoveForward(
                 }
 
                 // Compute target rotation.
-                auto rotation = izanagi::math::CQuat::AngleAxis(
+                m_toQuat = izanagi::math::CQuat::AngleAxis(
                     IZ_DEG2RAD(-angle),
                     izanagi::math::CVector3::yup());
 
+                // Get current rotation.
+                m_fromQuat = m_ctrl->rotation();
+            }
+
+            if ((m_state & State::Rotate) > 0)
+            {
+                // Advance slerp.
+                m_slerp += 0.01f;
+
+                auto rotation = izanagi::math::SQuat::Slerp(m_fromQuat, m_toQuat, m_slerp);
                 m_ctrl->rotation() = rotation;
 
-                // Update character direction.
-                m_dir = dir * (value < 0.0f ? -1.0f : 1.0f);
+                if (m_slerp >= 1.0f)
+                {
+                    // Finish slerp.
+
+                    m_slerp = 0.0f;
+                    m_state = State::Move;
+                }
+
+                updateDirection(value);
             }
 
             //dir = m_dir * 0.01f;
@@ -416,9 +441,9 @@ void PlayerCharacter::MoveForward(
 
                 m_slerp = 0.0f;
                 m_state = State::Move;
-
-                m_dir = dir * (value < 0.0f ? -1.0f : 1.0f);
             }
+
+            updateDirection(value);
         }
     }
 }
