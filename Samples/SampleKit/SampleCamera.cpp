@@ -3,27 +3,6 @@
 using namespace izanagi;
 using namespace sample;
 
-void CSampleCamera::Init(
-    const izanagi::math::CVector4& vPos,
-    const izanagi::math::CVector4& vRef,
-    const izanagi::math::CVector4& vUp,
-    IZ_FLOAT fNear, IZ_FLOAT fFar,
-    IZ_FLOAT fFov,
-    IZ_FLOAT fAspect)
-{
-    izanagi::CVectorCamera::Init(
-        vPos,
-        vRef,
-        fNear, fFar,
-        fFov,
-        fAspect);
-}
-
-void CSampleCamera::Update()
-{
-    izanagi::CVectorCamera::Update();
-}
-
 void CSampleCamera::Dolly(float fDistScale)
 {
     const izanagi::SCameraParam& param = GetParam();
@@ -125,8 +104,7 @@ void CSampleCamera::Rotate(
     IZ_FLOAT theta = ::acos(izanagi::math::SVector4::Dot(v1, v2));
 
     // 回転
-    izanagi::CVectorCamera::Rotate(axis, theta);
-    //izanagi::CVectorCamera::RotatePose(axis, theta);
+    izanagi::CVectorCamera::RotatePos(axis, theta);
 }
 
 void CSampleCamera::Move(float fOffsetX, float fOffsetY)
@@ -135,7 +113,8 @@ void CSampleCamera::Move(float fOffsetX, float fOffsetY)
 
     // 移動ベクトル
     izanagi::math::SVector4 vOffset;
-    izanagi::math::SVector4::Set(vOffset, fOffsetX, 0.0f, fOffsetY, 0.0f);
+    //izanagi::math::SVector4::Set(vOffset, fOffsetX, 0.0f, fOffsetY, 0.0f);
+    izanagi::math::SVector4::Set(vOffset, fOffsetX, fOffsetY, 0.0f, 0.0f);
 
     // カメラの回転を考慮する
     izanagi::math::SVector4 vDir;
