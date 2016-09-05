@@ -88,7 +88,7 @@ namespace {
         // そのため、どちらでも 0 - 1 の範囲に正規化する必要がある
         //normalizedZ = (normalizedZ + 1.0f) * 0.5f;    // For OpenGL
 
-        IZ_ASSERT(0.0f <= normalizedZ && normalizedZ <= 1.0f);
+        //IZ_ASSERT(0.0f <= normalizedZ && normalizedZ <= 1.0f);
 
         return normalizedZ;
     }
@@ -101,6 +101,12 @@ IZ_BOOL CRenderGraph::Register(
     IRenderElement* element)
 {
     IZ_FLOAT normalizedZ = _ComputeZLevel(camera, pos);
+
+    if (0.0f > normalizedZ || normalizedZ > 1.0f) {
+        // カメラ外なので、登録しない.
+        return IZ_FALSE;
+    }
+
     IZ_UINT level = static_cast<IZ_UINT>(normalizedZ * m_nZLevvel);
 
     element->SetZ(normalizedZ);
