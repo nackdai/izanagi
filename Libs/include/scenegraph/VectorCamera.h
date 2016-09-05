@@ -19,13 +19,16 @@ namespace izanagi {
 
     public:
         /** 初期化.
+         *
+         * vecUp は無視される.
          */
-        void Init(
-            const math::SVector4& pos,
-            const math::SVector4& at,
+        virtual void Init(
+            const math::SVector4& vecPos,
+            const math::SVector4& vecRef,
+            const math::SVector4& vecUp,
             IZ_FLOAT fNear, IZ_FLOAT fFar,
-            IZ_FLOAT verticalFOV,
-            IZ_FLOAT aspect);
+            IZ_FLOAT fFov,
+            IZ_FLOAT fAspect) override;
 
         /** カメラ更新.
          */
@@ -49,17 +52,17 @@ namespace izanagi {
 
         /** 任意軸回転.
          */
-        void Rotate(
+        void RotatePos(
             const math::SVector4& axis,
             IZ_FLOAT rad);
 
-		void Rotate(const math::SQuat& quat);
+		void RotatePos(const math::SQuat& quat);
 
-        void RotatePose(
+        void RotateAt(
             const math::SVector4& axis,
             IZ_FLOAT rad);
 
-        void RotatePose(const math::SQuat& quat);
+        void RotateAt(const math::SQuat& quat);
 
         /** 位置指定.
          */
@@ -67,24 +70,12 @@ namespace izanagi {
 
         virtual void SetAt(const math::SVector4& vecAt) override;
 
+        virtual void SetUp(const math::SVector4& vecUp) override
+        {
+            // Nothing is done...
+        }
+
         virtual void Dump() const override;
-
-    protected:
-        // 呼ばせない.
-        virtual void Init(
-            const math::SVector4& vecPos,
-            const math::SVector4& vecRef,
-            const math::SVector4& vecUp,
-            IZ_FLOAT fNear, IZ_FLOAT fFar,
-            IZ_FLOAT fFov,
-            IZ_FLOAT fAspect) override
-        {}
-
-        // 呼ばせない.
-        virtual void Init(const SCameraParam& sParam) override {}
-
-        // 呼ばせない.
-        virtual void SetUp(const math::SVector4& vecUp) override {}
 
     public:
         /** カメラのX軸取得

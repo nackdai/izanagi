@@ -17,6 +17,7 @@ CVectorCamera::~CVectorCamera()
 void CVectorCamera::Init(
     const math::SVector4& pos,
     const math::SVector4& at,
+    const math::SVector4& vecUp,
     IZ_FLOAT fNear, IZ_FLOAT fFar,
     IZ_FLOAT verticalFOV,
     IZ_FLOAT aspect)
@@ -146,33 +147,33 @@ void CVectorCamera::Translate(const math::SVector4& trans)
 // X軸回転.
 void CVectorCamera::RotateByX(IZ_FLOAT rad)
 {
-    Rotate(m_X, rad);
+    RotatePos(m_X, rad);
 }
 
 // Y軸回転.
 void CVectorCamera::RotateByY(IZ_FLOAT rad)
 {
-    Rotate(m_Y, rad);
+    RotatePos(m_Y, rad);
 }
 
 // Z軸回転.
 void CVectorCamera::RotateByZ(IZ_FLOAT rad)
 {
-    Rotate(m_Z, rad);
+    RotatePos(m_Z, rad);
 }
 
 // 任意軸回転.
-void CVectorCamera::Rotate(
+void CVectorCamera::RotatePos(
     const math::SVector4& axis,
     IZ_FLOAT rad)
 {
     math::SQuat quat;
     math::SQuat::SetQuatFromRadAxis(quat, rad, axis);
 
-	Rotate(quat);
+    RotatePos(quat);
 }
 
-void CVectorCamera::Rotate(const math::SQuat& quat)
+void CVectorCamera::RotatePos(const math::SQuat& quat)
 {
 	math::SMatrix44 mtx;
 	math::SQuat::MatrixFromQuat(mtx, quat);
@@ -193,17 +194,17 @@ void CVectorCamera::Rotate(const math::SQuat& quat)
 	m_IsDirtyW2V = IZ_TRUE;
 }
 
-void CVectorCamera::RotatePose(
+void CVectorCamera::RotateAt(
     const math::SVector4& axis,
     IZ_FLOAT rad)
 {
     math::SQuat quat;
     math::SQuat::SetQuatFromRadAxis(quat, rad, axis);
 
-    RotatePose(quat);
+    RotateAt(quat);
 }
 
-void CVectorCamera::RotatePose(const math::SQuat& quat)
+void CVectorCamera::RotateAt(const math::SQuat& quat)
 {
     math::SMatrix44 mtx;
     math::SQuat::MatrixFromQuat(mtx, quat);

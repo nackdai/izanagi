@@ -70,10 +70,14 @@ namespace izanagi {
         math::CVector4 pos(srcCamera.m_Pos);
         pos += dir;
 
+        // NOTE
+        // 左右の眼で注視点は同じなので、注視点は動かさない.
+
         math::SVector4::Copy(dstCamera.m_X, srcCamera.m_X);
         math::SVector4::Copy(dstCamera.m_Y, srcCamera.m_Y);
         math::SVector4::Copy(dstCamera.m_Z, srcCamera.m_Z);
-        math::SVector4::Copy(dstCamera.m_Pos, pos);
+        //math::SVector4::Copy(dstCamera.m_Pos, pos);
+        dstCamera.SetPos(pos);
 
         // W2Vのみ計算.
         dstCamera.m_IsDirtyW2V = IZ_TRUE;

@@ -49,7 +49,7 @@ namespace izanagi {
 
 		/** 初期化.
 		 */
-        virtual void Init(const SCameraParam& sParam);
+        void Init(const SCameraParam& sParam);
 
         /** カメラ更新.
 		 */
