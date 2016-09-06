@@ -44,7 +44,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1E33C714-3150-4306-9322-5AB4647C66F0}</ProjectGuid>
-    <RootNamespace>SpringArmedCamera</RootNamespace>
+    <RootNamespace>TargetFollowCamera</RootNamespace>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -344,9 +344,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\SpringArmedCamera\main.cpp" />
-    <ClCompile Include="..\..\SpringArmedCamera\PlayerCharacter.cpp" />
-    <ClCompile Include="..\..\SpringArmedCamera\SpringArmedCameraApp.cpp" />
+    <ClCompile Include="..\..\TargetFollowCamera\main.cpp" />
+    <ClCompile Include="..\..\TargetFollowCamera\PlayerCharacter.cpp" />
+    <ClCompile Include="..\..\TargetFollowCamera\TargetFollowCameraApp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\..\Media\unitychan\unitychan.fbx">
@@ -518,8 +518,8 @@ move "%(RelativeDir)%(Filename).anm" "$(PROJECT_MAIN_DIR)data"</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|x64'">%(FullPath);%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">%(FullPath);%(AdditionalInputs)</AdditionalInputs>
     </CustomBuild>
-    <None Include="..\..\SpringArmedCamera\shader\SkinShader.fx" />
-    <CustomBuild Include="..\..\SpringArmedCamera\shader\SkinShader.xml">
+    <None Include="..\..\TargetFollowCamera\shader\SkinShader.fx" />
+    <CustomBuild Include="..\..\TargetFollowCamera\shader\SkinShader.xml">
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|x64'">%(RootDir)%(Directory)..\data\%(Filename).shd</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd</Outputs>
@@ -551,8 +551,8 @@ move "%(RelativeDir)%(Filename).anm" "$(PROJECT_MAIN_DIR)data"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|x64'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
     </CustomBuild>
-    <None Include="..\..\SpringArmedCamera\shader\BasicShader.fx" />
-    <CustomBuild Include="..\..\SpringArmedCamera\shader\BasicShader.xml">
+    <None Include="..\..\TargetFollowCamera\shader\BasicShader.fx" />
+    <CustomBuild Include="..\..\TargetFollowCamera\shader\BasicShader.xml">
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|x64'">%(RootDir)%(Directory)..\data\%(Filename).shd</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd</Outputs>
@@ -610,8 +610,8 @@ move "%(RelativeDir)%(Filename).anm" "$(PROJECT_MAIN_DIR)data"</Command>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\SpringArmedCamera\PlayerCharacter.h" />
-    <ClInclude Include="..\..\SpringArmedCamera\SpringArmedCameraApp.h" />
+    <ClInclude Include="..\..\TargetFollowCamera\PlayerCharacter.h" />
+    <ClInclude Include="..\..\TargetFollowCamera\TargetFollowCameraApp.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

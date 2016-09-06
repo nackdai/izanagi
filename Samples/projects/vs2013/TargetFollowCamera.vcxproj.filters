@@ -10,13 +10,13 @@
     <CustomBuild Include="..\..\..\Media\unitychan\UnityChanImg.xml">
       <Filter>asset</Filter>
     </CustomBuild>
-    <CustomBuild Include="..\..\SpringArmedCamera\shader\SkinShader.xml">
+    <CustomBuild Include="..\..\TargetFollowCamera\shader\SkinShader.xml">
       <Filter>shader</Filter>
     </CustomBuild>
     <CustomBuild Include="..\..\..\Media\unitychan\unitychan_RUN00_F.fbx">
       <Filter>asset</Filter>
     </CustomBuild>
-    <CustomBuild Include="..\..\SpringArmedCamera\shader\BasicShader.xml">
+    <CustomBuild Include="..\..\TargetFollowCamera\shader\BasicShader.xml">
       <Filter>shader</Filter>
     </CustomBuild>
   </ItemGroup>
@@ -35,29 +35,29 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\SpringArmedCamera\shader\SkinShader.fx">
+    <None Include="..\..\TargetFollowCamera\shader\SkinShader.fx">
       <Filter>shader</Filter>
     </None>
-    <None Include="..\..\SpringArmedCamera\shader\BasicShader.fx">
+    <None Include="..\..\TargetFollowCamera\shader\BasicShader.fx">
       <Filter>shader</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\SpringArmedCamera\main.cpp">
+    <ClCompile Include="..\..\TargetFollowCamera\main.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\SpringArmedCamera\SpringArmedCameraApp.cpp">
+    <ClCompile Include="..\..\TargetFollowCamera\TargetFollowCameraApp.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\SpringArmedCamera\PlayerCharacter.cpp">
+    <ClCompile Include="..\..\TargetFollowCamera\PlayerCharacter.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\SpringArmedCamera\SpringArmedCameraApp.h">
+    <ClInclude Include="..\..\TargetFollowCamera\TargetFollowCameraApp.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\SpringArmedCamera\PlayerCharacter.h">
+    <ClInclude Include="..\..\TargetFollowCamera\PlayerCharacter.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
