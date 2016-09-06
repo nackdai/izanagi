@@ -37,6 +37,7 @@ private:
     IZ_BOOL initLights();
 
     void renderGeometryPass(izanagi::graph::CGraphicsDevice* device);
+    void renderStencilPass(izanagi::graph::CGraphicsDevice* device);
     void renderLightPass(izanagi::graph::CGraphicsDevice* device);
     void renderFinalPass(izanagi::graph::CGraphicsDevice* device);
 

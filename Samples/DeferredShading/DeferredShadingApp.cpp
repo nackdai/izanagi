@@ -233,7 +233,32 @@ namespace {
 void DeferredShadingApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
     renderGeometryPass(device);
+
+    renderStencilPass(device);
+
+    {
+        device->SetRenderState(
+            izanagi::graph::E_GRAPH_RS_STENCIL_ENABLE,
+            IZ_TRUE);
+
+        device->SetStencilFunc(
+            izanagi::graph::E_GRAPH_CMP_FUNC_NOTEQUAL,
+            0,
+            0xffffffff);
+
+        device->SetStencilOp(
+            izanagi::graph::E_GRAPH_STENCIL_OP_KEEP,
+            izanagi::graph::E_GRAPH_STENCIL_OP_KEEP,
+            izanagi::graph::E_GRAPH_STENCIL_OP_KEEP);
+    }
+
     renderLightPass(device);
+
+    {
+        device->SetRenderState(
+            izanagi::graph::E_GRAPH_RS_STENCIL_ENABLE,
+            IZ_FALSE);
+    }
 
     renderFinalPass(device);
 
@@ -340,6 +365,113 @@ namespace {
     }
 }
 
+void DeferredShadingApp::renderStencilPass(izanagi::graph::CGraphicsDevice* device)
+{
+    izanagi::sample::CSampleCamera& camera = GetCamera();
+
+    // カラー・デプスバッファに書き込みしない.
+    m_Shader->EnableToUpdateRenderState(
+        izanagi::graph::E_GRAPH_RS_ZENABLE,
+        IZ_TRUE);
+    m_Shader->EnableToUpdateRenderState(
+        izanagi::graph::E_GRAPH_RS_ZWRITEENABLE,
+        IZ_FALSE);
+    m_Shader->EnableToUpdateRenderState(
+        izanagi::graph::E_GRAPH_RS_COLORWRITEENABLE_RGB,
+        IZ_FALSE);
+    m_Shader->EnableToUpdateRenderState(
+        izanagi::graph::E_GRAPH_RS_COLORWRITEENABLE_A,
+        IZ_FALSE);
+
+    device->SaveRenderState();
+
+    device->SetRenderState(
+        izanagi::graph::E_GRAPH_RS_CULLMODE,
+        izanagi::graph::E_GRAPH_CULL_NONE);
+
+    device->SetRenderState(
+        izanagi::graph::E_GRAPH_RS_STENCIL_ENABLE,
+        IZ_TRUE);
+
+    device->SetStencilFunc(
+        izanagi::graph::E_GRAPH_CMP_FUNC_ALWAYS,
+        0,
+        0);
+
+    device->SetStencilOp(
+        izanagi::graph::E_GRAPH_STENCIL_OP_KEEP,
+        izanagi::graph::E_GRAPH_STENCIL_OP_INCR,
+        izanagi::graph::E_GRAPH_STENCIL_OP_KEEP,
+        IZ_FALSE);
+    device->SetStencilOp(
+        izanagi::graph::E_GRAPH_STENCIL_OP_KEEP,
+        izanagi::graph::E_GRAPH_STENCIL_OP_DECR,
+        izanagi::graph::E_GRAPH_STENCIL_OP_KEEP,
+        IZ_TRUE);
+
+    // カラー・デプスバッファに書き込みしない.
+    device->SetRenderState(
+        izanagi::graph::E_GRAPH_RS_ZENABLE,
+        IZ_TRUE);
+    device->SetRenderState(
+        izanagi::graph::E_GRAPH_RS_ZWRITEENABLE,
+        IZ_FALSE);
+    device->SetRenderState(
+        izanagi::graph::E_GRAPH_RS_COLORWRITEENABLE_RGB,
+        IZ_FALSE);
+    device->SetRenderState(
+        izanagi::graph::E_GRAPH_RS_COLORWRITEENABLE_A,
+        IZ_FALSE);
+
+    m_Shader->Begin(device, 0, IZ_FALSE);
+    {
+        if (m_Shader->BeginPass(0)) {
+            _SetShaderParam(
+                m_Shader,
+                "g_mW2C",
+                (void*)&camera.GetParam().mtxW2C,
+                sizeof(camera.GetParam().mtxW2C));
+
+            for (IZ_UINT i = 0; i < POINT_LIGHT_NUM; i++) {
+                auto s = _ComputePointLightScale(m_pointLights[i]);
+
+                izanagi::math::CMatrix44 mtxL2W;
+                mtxL2W.SetScale(s, s, s);
+                mtxL2W.Trans(
+                    m_pointLights[i].vPos.x,
+                    m_pointLights[i].vPos.y,
+                    m_pointLights[i].vPos.z);
+
+                _SetShaderParam(
+                    m_Shader,
+                    "g_mL2W",
+                    (void*)&mtxL2W,
+                    sizeof(izanagi::math::SMatrix44));
+
+                m_Shader->CommitChanges(device);
+
+                m_pointLitSphere->Draw(device);
+            }
+
+            m_Shader->EndPass();
+        }
+    }
+    m_Shader->End(device);
+
+    // 元に戻す.
+    device->LoadRenderState();
+
+    m_Shader->EnableToUpdateRenderState(
+        izanagi::graph::E_GRAPH_RS_ZWRITEENABLE,
+        IZ_TRUE);
+    m_Shader->EnableToUpdateRenderState(
+        izanagi::graph::E_GRAPH_RS_COLORWRITEENABLE_RGB,
+        IZ_TRUE);
+    m_Shader->EnableToUpdateRenderState(
+        izanagi::graph::E_GRAPH_RS_COLORWRITEENABLE_A,
+        IZ_TRUE);
+}
+
 void DeferredShadingApp::renderLightPass(izanagi::graph::CGraphicsDevice* device)
 {
     // TODO
@@ -357,6 +489,10 @@ void DeferredShadingApp::renderLightPass(izanagi::graph::CGraphicsDevice* device
     izanagi::math::SMatrix44::Inverse(mtxV2W, camera.GetParam().mtxW2V);
 
     m_gbuffer.beginLightPass(device, m_Shader);
+
+    device->SetRenderState(
+        izanagi::graph::E_GRAPH_RS_CULLMODE,
+        izanagi::graph::E_GRAPH_CULL_CW);
 
     m_Shader->Begin(device, 0, IZ_FALSE);
     {
@@ -398,20 +534,6 @@ void DeferredShadingApp::renderLightPass(izanagi::graph::CGraphicsDevice* device
                 auto dist = izanagi::math::SVector4::Length2(
                     camera.GetPos(),
                     m_pointLights[i].vPos);
-
-                // ある程度の余裕を持たせた半径で計算してみる.
-
-                if (dist < s * 1.1f) {
-                    // カメラがライトの中に入ったとき.
-                    device->SetRenderState(
-                        izanagi::graph::E_GRAPH_RS_CULLMODE,
-                        izanagi::graph::E_GRAPH_CULL_CW);
-                }
-                else {
-                    device->SetRenderState(
-                        izanagi::graph::E_GRAPH_RS_CULLMODE,
-                        izanagi::graph::E_GRAPH_CULL_CCW);
-                }
 
                 _SetShaderParam(
                     m_Shader,
