@@ -428,9 +428,10 @@ namespace graph
     void CGraphicsDevice::SetStencilOp(
         E_GRAPH_STENCIL_OP pass,
         E_GRAPH_STENCIL_OP zfail,
-        E_GRAPH_STENCIL_OP fail)
+        E_GRAPH_STENCIL_OP fail,
+        IZ_BOOL isFront/*= IZ_TRUE*/)
     {
-        m_RenderState.SetStencilOp(this, pass, zfail, fail);
+        m_RenderState.SetStencilOp(this, isFront, pass, zfail, fail);
     }
 }   // namespace graph
 }   // namespace izanagi

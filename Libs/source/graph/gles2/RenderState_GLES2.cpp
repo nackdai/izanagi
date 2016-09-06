@@ -122,13 +122,17 @@ namespace graph
             this->stencilParams.ref = data;
 
             CALL_GL_API(::glGetIntegerv(GL_STENCIL_FAIL, &data));
-            this->stencilParams.opFail = CParamValueConverterGLES2::ConvTargetToAbstract_Stencil(data);
+            this->stencilParams.op[0].fail = CParamValueConverterGLES2::ConvTargetToAbstract_Stencil(data);
 
             CALL_GL_API(::glGetIntegerv(GL_STENCIL_PASS_DEPTH_PASS, &data));
-            this->stencilParams.opPass = CParamValueConverterGLES2::ConvTargetToAbstract_Stencil(data);
+            this->stencilParams.op[0].pass = CParamValueConverterGLES2::ConvTargetToAbstract_Stencil(data);
 
             CALL_GL_API(::glGetIntegerv(GL_STENCIL_PASS_DEPTH_FAIL, &data));
-            this->stencilParams.opZFail = CParamValueConverterGLES2::ConvTargetToAbstract_Stencil(data);
+            this->stencilParams.op[0].zfail = CParamValueConverterGLES2::ConvTargetToAbstract_Stencil(data);
+
+            this->stencilParams.op[1].fail = this->stencilParams.op[0].fail;
+            this->stencilParams.op[1].pass = this->stencilParams.op[0].pass;
+            this->stencilParams.op[1].zfail = this->stencilParams.op[0].zfail;
         }
     }
 
@@ -370,30 +374,40 @@ namespace graph
 
             auto glCmp = CParamValueConverterGLES2::ConvAbstractToTarget_Cmp(cmp);
 
-            CALL_GL_API(::glStencilFunc(glCmp, ref, mask));
+            CALL_GL_API(::glStencilFuncSeparate(
+                GL_FRONT_AND_BACK,
+                glCmp, ref, mask));
         }
     }
 
     // Sets stencil operations.
     void CRenderState::SetStencilOp(
         CGraphicsDevice* device,
+        IZ_BOOL isFront,
         E_GRAPH_STENCIL_OP pass,
         E_GRAPH_STENCIL_OP zfail,
         E_GRAPH_STENCIL_OP fail)
     {
-        if (stencilParams.opPass != pass
-            || stencilParams.opZFail != zfail
-            || stencilParams.opFail != fail)
+        IZ_UINT idx = (isFront ? 0 : 1);
+        auto& op = stencilParams.op[idx];
+
+        if (op.pass != pass
+            || op.zfail != zfail
+            || op.fail != fail)
         {
-            stencilParams.opPass = pass;
-            stencilParams.opZFail = zfail;
-            stencilParams.opFail = fail;
+            op.pass = pass;
+            op.zfail = zfail;
+            op.fail = fail;
 
             auto dppass = CParamValueConverterGLES2::ConvAbstractToTarget_Stencil(pass);
             auto dpfail = CParamValueConverterGLES2::ConvAbstractToTarget_Stencil(zfail);
             auto sfail = CParamValueConverterGLES2::ConvAbstractToTarget_Stencil(fail);
 
-            CALL_GL_API(::glStencilOp(sfail, dpfail, dppass));
+            // NOTE
+            // glFrontFace(GL_CCW)で面の向きをOpenGLデフォルトと反対にしているので、BACKとFRONTを逆に扱う.
+            CALL_GL_API(::glStencilOpSeparate(
+                isFront ? GL_BACK : GL_FRONT,
+                sfail, dpfail, dppass));
         }
     }
 }   // namespace graph

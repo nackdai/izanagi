@@ -708,7 +708,13 @@ namespace graph
         }
 
         SetStencilFunc(sRS.stencilParams.func, sRS.stencilParams.ref, sRS.stencilParams.mask);
-        SetStencilOp(sRS.stencilParams.opPass, sRS.stencilParams.opZFail, sRS.stencilParams.opFail);
+
+        SetStencilOp(
+            sRS.stencilParams.op[0].pass, sRS.stencilParams.op[0].zfail, sRS.stencilParams.op[0].fail,
+            IZ_TRUE);
+        SetStencilOp(
+            sRS.stencilParams.op[1].pass, sRS.stencilParams.op[1].zfail, sRS.stencilParams.op[1].fail,
+            IZ_FALSE);
 
         // シザー矩形
         SetScissorTestRect(sRS.rcScissor);

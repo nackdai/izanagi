@@ -558,8 +558,8 @@ namespace graph
         /** Sets stencil function.
          */
         void SetStencilFunc(
-            E_GRAPH_CMP_FUNC cmp, 
-            IZ_INT ref, 
+            E_GRAPH_CMP_FUNC cmp,
+            IZ_INT ref,
             IZ_DWORD mask);
 
         /** Sets stencil operations.
@@ -579,7 +579,8 @@ namespace graph
         void SetStencilOp(
             E_GRAPH_STENCIL_OP pass,
             E_GRAPH_STENCIL_OP zfail,
-            E_GRAPH_STENCIL_OP fail);
+            E_GRAPH_STENCIL_OP fail,
+            IZ_BOOL isFront = IZ_TRUE);
 
         /** Get the render state parameters.
          *

@@ -52,15 +52,23 @@ namespace graph
             }
 
             SetStencilFunc(
-                pDevice, 
-                m_SaveRS.stencilParams.func, 
-                m_SaveRS.stencilParams.ref, 
+                pDevice,
+                m_SaveRS.stencilParams.func,
+                m_SaveRS.stencilParams.ref,
                 m_SaveRS.stencilParams.mask);
+
             SetStencilOp(
                 pDevice, 
-                m_SaveRS.stencilParams.opPass, 
-                m_SaveRS.stencilParams.opZFail, 
-                m_SaveRS.stencilParams.opFail);
+                IZ_TRUE,
+                m_SaveRS.stencilParams.op[0].pass,
+                m_SaveRS.stencilParams.op[0].zfail,
+                m_SaveRS.stencilParams.op[0].fail);
+            SetStencilOp(
+                pDevice,
+                IZ_FALSE,
+                m_SaveRS.stencilParams.op[1].pass,
+                m_SaveRS.stencilParams.op[1].zfail,
+                m_SaveRS.stencilParams.op[1].fail);
 
             m_IsSavedRS = IZ_FALSE;
             ret = IZ_TRUE;

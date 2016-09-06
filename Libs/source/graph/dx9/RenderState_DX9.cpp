@@ -39,7 +39,8 @@ namespace graph
             D3D_DEVICE* d3dDev = dx9Device->GetRawInterface();
 
             if (old_val != new_val) {
-                d3dDev->SetRenderState(nRSType, new_val);
+                HRESULT hr = d3dDev->SetRenderState(nRSType, new_val);
+                IZ_ASSERT(SUCCEEDED(hr));
                 old_val = new_val;
             }
         }
@@ -166,9 +167,13 @@ namespace graph
             stencilParams.func = IZ_GET_ABST_CMP((D3DCMPFUNC)stencilFunc);
             stencilParams.ref = stencilRef;
             stencilParams.mask = stencilMask;
-            stencilParams.opPass = IZ_GET_ABST_STENCIL_OP((D3DSTENCILOP)stencilOpPass);
-            stencilParams.opPass = IZ_GET_ABST_STENCIL_OP((D3DSTENCILOP)stencilOpZFail);
-            stencilParams.opPass = IZ_GET_ABST_STENCIL_OP((D3DSTENCILOP)stencilOpFail);
+            stencilParams.op[0].pass = IZ_GET_ABST_STENCIL_OP((D3DSTENCILOP)stencilOpPass);
+            stencilParams.op[0].zfail = IZ_GET_ABST_STENCIL_OP((D3DSTENCILOP)stencilOpZFail);
+            stencilParams.op[0].fail = IZ_GET_ABST_STENCIL_OP((D3DSTENCILOP)stencilOpFail);
+
+            stencilParams.op[1].pass = stencilParams.op[0].pass;
+            stencilParams.op[1].zfail = stencilParams.op[0].zfail;
+            stencilParams.op[1].fail = stencilParams.op[0].fail;
         }
     }
 
@@ -357,7 +362,7 @@ namespace graph
 
         // 現在の設定値
         IZ_DWORD nCurFlag = GET_RGB_FLAG(isEnableRenderRGB);
-        nCurFlag |= GET_A_FLAG(enableA);
+        nCurFlag |= GET_A_FLAG(isEnableRenderA);
 
         _SetRenderState(
             device,
@@ -394,10 +399,25 @@ namespace graph
     // ステンシル.
     void CRenderState::EnableStencilTest(CGraphicsDevice* device, IZ_DWORD flag)
     {
+#if 0
         _SetRenderState(
             device,
             D3DRS_STENCILENABLE,
             isStencilEnable, flag);
+#else
+        CGraphicsDeviceDX9* dx9Device = reinterpret_cast<CGraphicsDeviceDX9*>(device);
+        D3D_DEVICE* d3dDev = dx9Device->GetRawInterface();
+
+        if (isStencilEnable != flag) {
+            HRESULT hr = d3dDev->SetRenderState(D3DRS_STENCILENABLE, flag);
+            IZ_ASSERT(SUCCEEDED(hr));
+
+            hr = d3dDev->SetRenderState(D3DRS_TWOSIDEDSTENCILMODE, flag);
+            IZ_ASSERT(SUCCEEDED(hr));
+
+            isStencilEnable = flag;
+        }
+#endif
     }
 
     // Sets stencil function.
@@ -413,11 +433,19 @@ namespace graph
         if (stencilParams.func != cmp) {
             stencilParams.func = cmp;
             auto d3dCmp = CD3D9ParamValueConverter::ConvAbstractToTarget_Cmp(cmp);
-            d3DDev->SetRenderState(D3DRS_STENCILFUNC, d3dCmp);
+
+            // 両面を設定.
+            d3DDev->SetRenderState(
+                D3DRS_STENCILFUNC,
+                d3dCmp);
+            d3DDev->SetRenderState(
+                D3DRS_CCW_STENCILFUNC,
+                d3dCmp);
         }
 
         if (stencilParams.ref != ref) {
             stencilParams.ref = ref;
+            d3DDev->SetRenderState(D3DRS_STENCILREF, ref);
             d3DDev->SetRenderState(D3DRS_STENCILREF, ref);
         }
 
@@ -430,29 +458,39 @@ namespace graph
     // Sets stencil operations.
     void CRenderState::SetStencilOp(
         CGraphicsDevice* device,
+        IZ_BOOL isFront,
         E_GRAPH_STENCIL_OP pass,
         E_GRAPH_STENCIL_OP zfail,
         E_GRAPH_STENCIL_OP fail)
     {
+        IZ_UINT idx = (isFront ? 0 : 1);
+        auto& op = stencilParams.op[idx];
+
         CGraphicsDeviceDX9* dx9Device = reinterpret_cast<CGraphicsDeviceDX9*>(device);
         D3D_DEVICE* d3DDev = dx9Device->GetRawInterface();
 
-        if (stencilParams.opPass != pass) {
-            stencilParams.opPass = pass;
+        if (op.pass != pass) {
+            op.pass = pass;
             auto d3dPass = CD3D9ParamValueConverter::ConvAbstractToTarget_Stencil(pass);
-            d3DDev->SetRenderState(D3DRS_STENCILPASS, d3dPass);
+            d3DDev->SetRenderState(
+                isFront ? D3DRS_STENCILPASS : D3DRS_CCW_STENCILPASS,
+                d3dPass);
         }
 
-        if (stencilParams.opZFail != zfail) {
-            stencilParams.opZFail = zfail;
+        if (op.zfail != zfail) {
+            op.zfail = zfail;
             auto d3dZFail = CD3D9ParamValueConverter::ConvAbstractToTarget_Stencil(zfail);
-            d3DDev->SetRenderState(D3DRS_STENCILZFAIL, d3dZFail);
+            d3DDev->SetRenderState(
+                isFront ? D3DRS_STENCILZFAIL : D3DRS_CCW_STENCILZFAIL,
+                d3dZFail);
         }
 
-        if (stencilParams.opFail != fail) {
-            stencilParams.opFail = fail;
+        if (op.fail != fail) {
+            op.fail = fail;
             auto d3dFail = CD3D9ParamValueConverter::ConvAbstractToTarget_Stencil(fail);
-            d3DDev->SetRenderState(D3DRS_STENCILFAIL, d3dFail);
+            d3DDev->SetRenderState(
+                isFront ? D3DRS_STENCILFAIL : D3DRS_CCW_STENCILZFAIL,
+                d3dFail);
         }
     }
 }   // namespace graph

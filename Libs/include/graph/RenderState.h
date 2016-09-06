@@ -58,9 +58,11 @@ namespace graph
             E_GRAPH_CMP_FUNC func;
             IZ_INT ref;
             IZ_DWORD mask;
-            E_GRAPH_STENCIL_OP opPass;
-            E_GRAPH_STENCIL_OP opZFail;
-            E_GRAPH_STENCIL_OP opFail;
+            struct {
+                E_GRAPH_STENCIL_OP pass;
+                E_GRAPH_STENCIL_OP zfail;
+                E_GRAPH_STENCIL_OP fail;
+            } op[2];
         } stencilParams;
 
         CVertexBuffer* curVB[MAX_STREAM_NUM];       // 頂点バッファ
@@ -140,6 +142,7 @@ namespace graph
             IZ_DWORD mask);
         void SetStencilOp(
             CGraphicsDevice* device,
+            IZ_BOOL isFront,
             E_GRAPH_STENCIL_OP pass,
             E_GRAPH_STENCIL_OP zfail,
             E_GRAPH_STENCIL_OP fail);
