@@ -44,7 +44,7 @@ IZ_BOOL SpringArmedCameraApp::InitInternal(
     VGOTO(result = (m_grid != IZ_NULL), __EXIT__);
 
     // カメラ
-    camera.Init(
+    m_camera.Init(
         izanagi::math::CVector4(0.0f, 160.0f, -160.0f, 1.0f),
         izanagi::math::CVector4(0.0f, 80.0f, 0.0f, 1.0f),
         izanagi::math::CVector4(0.0f, 1.0f, 0.0f, 1.0f),
@@ -52,12 +52,12 @@ IZ_BOOL SpringArmedCameraApp::InitInternal(
         500.0f,
         izanagi::math::CMath::Deg2Rad(60.0f),
         (IZ_FLOAT)device->GetBackBufferWidth() / device->GetBackBufferHeight());
-    camera.Update();
+    m_camera.Update(0.0f);
 
     result = m_player.init(
         allocator,
         device,
-        camera);
+        m_camera);
 
 __EXIT__:
     if (!result) {
@@ -82,21 +82,19 @@ void SpringArmedCameraApp::ReleaseInternal()
 // 更新.
 void SpringArmedCameraApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
-    auto& camera = GetCamera();
-
     IZ_FLOAT elapsed = GetTimer(0).GetTime();
     //elapsed /= 1000.0f;
     elapsed = 16.67f / 1000.0f;
 
-    m_player.update(device, camera, elapsed);
+    m_player.update(device, m_camera, elapsed);
 
-    camera.Update();
+    m_camera.Update(elapsed);
 
     // レンダーグラフに登録
     m_RenderGraph->BeginRegister();
     {
         m_player.prepareToRender(
-            camera,
+            m_camera,
             *m_RenderGraph);
     }
     m_RenderGraph->EndRegister();
@@ -122,11 +120,9 @@ namespace {
 // 描画.
 void SpringArmedCameraApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
-    auto& camera = GetCamera();
-
     m_player.render(
         device, 
-        camera,
+        m_camera,
         m_RenderGraph,
         m_Renderer);
 
@@ -147,8 +143,8 @@ void SpringArmedCameraApp::RenderInternal(izanagi::graph::CGraphicsDevice* devic
             _SetShaderParam(
                 m_shd,
                 "g_mW2C",
-                (void*)&camera.GetParam().mtxW2C,
-                sizeof(camera.GetParam().mtxW2C));
+                (void*)&m_camera.GetParam().mtxW2C,
+                sizeof(m_camera.GetParam().mtxW2C));
 
             // シェーダ設定
             m_shd->CommitChanges(device);
@@ -165,10 +161,10 @@ void SpringArmedCameraApp::RenderInternal(izanagi::graph::CGraphicsDevice* devic
 
         debugFont->Begin(device, 0, izanagi::CDebugFont::FONT_SIZE * 2);
 
-        izanagi::math::CVector4 pos(camera.GetParam().pos);
-        izanagi::math::CVector4 at(camera.GetParam().ref);
+        izanagi::math::CVector4 pos(m_camera.GetParam().pos);
+        izanagi::math::CVector4 at(m_camera.GetParam().ref);
         izanagi::math::CVector4 ply(m_player.position());
-
+        const auto& v = m_camera.getVelocity();
 
         debugFont->DBPrint(
             device,
@@ -182,6 +178,10 @@ void SpringArmedCameraApp::RenderInternal(izanagi::graph::CGraphicsDevice* devic
             device,
             "ply [%.2f][%.2f][%.2f]\n",
             ply.x, ply.y, ply.z);
+        debugFont->DBPrint(
+            device,
+            "v   [%.2f][%.2f][%.2f]\n",
+            v.x, v.y, v.z);
 
         debugFont->End();
 

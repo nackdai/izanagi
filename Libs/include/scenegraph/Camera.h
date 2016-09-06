@@ -53,7 +53,7 @@ namespace izanagi {
 
         /** カメラ更新.
 		 */
-        virtual void Update();
+        virtual void Update(IZ_FLOAT elapsed = 0.0f);
 
         /** カメラ座標系でのオフセットを考慮にいれたV2Cマトリクスを取得.
          */

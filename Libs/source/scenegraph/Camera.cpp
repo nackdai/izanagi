@@ -43,7 +43,7 @@ void CCamera::Init(const SCameraParam& sParam)
 }
 
 // カメラ更新
-void CCamera::Update()
+void CCamera::Update(IZ_FLOAT elapsed/* = 0.0f*/)
 {
     if (m_IsDirtyW2V) {
         ComputeW2V();

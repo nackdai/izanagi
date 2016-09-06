@@ -60,6 +60,7 @@
     <ClInclude Include="..\..\include\engine\StateMachineBehaviour.h" />
     <ClInclude Include="..\..\include\engine\StateMachineCondition.h" />
     <ClInclude Include="..\..\include\engine\StateMachineNode.h" />
+    <ClInclude Include="..\..\include\engine\TargetFollowCamera.h" />
     <ClInclude Include="..\..\include\izEngine.h" />
   </ItemGroup>
   <ItemGroup>
@@ -72,6 +73,7 @@
     <ClCompile Include="..\..\source\engine\StateMachineBehaviour.cpp" />
     <ClCompile Include="..\..\source\engine\StateMachineCondition.cpp" />
     <ClCompile Include="..\..\source\engine\StateMachineNode.cpp" />
+    <ClCompile Include="..\..\source\engine\TargetFollowCamera.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{99898847-977F-46B7-9A68-09CD38A4764F}</ProjectGuid>

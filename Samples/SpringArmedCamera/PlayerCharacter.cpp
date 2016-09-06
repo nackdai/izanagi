@@ -5,6 +5,8 @@ PlayerCharacter::PlayerCharacter()
     QuatToRotateRight = izanagi::math::CQuat::AngleAxis(
         IZ_DEG2RAD(90.0f),
         izanagi::math::CVector3::yup());
+
+    m_camTarget.m_target = this;
 }
 
 PlayerCharacter::~PlayerCharacter()
@@ -15,7 +17,7 @@ PlayerCharacter::~PlayerCharacter()
 IZ_BOOL PlayerCharacter::init(
     izanagi::IMemoryAllocator* allocator,
     izanagi::graph::CGraphicsDevice* device,
-    izanagi::sample::CSampleCamera& camera)
+    izanagi::engine::TargetFollowCamera& camera)
 {
     IZ_BOOL result = IZ_TRUE;
 
@@ -25,9 +27,13 @@ IZ_BOOL PlayerCharacter::init(
 
     m_ctrl->rotation().InitAngleAxis(0.0f, izanagi::math::CVector3::yup());
 
-    m_camera = &camera;
-
     updateDirection(1.0f);
+
+    m_camera = &camera;
+    camera.setTarget(
+        &m_camTarget,
+        izanagi::math::CVector3(0.0f, 80.0f, -160.0f),
+        izanagi::math::CVector3(0.0f, 80.0f, 0.0f));
 
 __EXIT__:
     if (!result) {
@@ -293,6 +299,10 @@ IZ_FLOAT PlayerCharacter::GetTargetDirection(
 
     // Compute right direction.
     izanagi::math::CVector4 dirRight = QuatToRotateRight * dirForward;
+    dirRight.Normalize();
+
+    // TODO
+    // 誤差を消す.
 
     auto f = izanagi::math::CMath::Absf(forward);
     auto r = izanagi::math::CMath::Absf(right);
@@ -409,16 +419,6 @@ void PlayerCharacter::MoveForward(
             dir = m_dir;
 
             m_ctrl->move(dir);
-
-            izanagi::math::CVector4 camPos(m_camera->GetParam().pos);
-            camPos += dir;
-            m_camera->SetPos(camPos);
-
-            izanagi::math::CVector4 camAt(m_camera->GetParam().ref);
-            camAt += dir;
-            m_camera->SetAt(camAt);
-
-            //Camera.main.transform.position = dir;
         }
         else if (m_state == State::Rotate)
         {

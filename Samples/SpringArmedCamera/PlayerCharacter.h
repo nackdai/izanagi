@@ -16,7 +16,7 @@ public:
     IZ_BOOL init(
         izanagi::IMemoryAllocator* allocator,
         izanagi::graph::CGraphicsDevice* device,
-        izanagi::sample::CSampleCamera& camera);
+        izanagi::engine::TargetFollowCamera& camera);
 
     // 解放.
     void release();
@@ -107,6 +107,26 @@ private:
 
     IZ_FLOAT m_forward{ 0.0f };
     IZ_FLOAT m_right{ 0.0f };
+
+    class CameraTarget : public izanagi::engine::ICameraTarget {
+    public:
+        CameraTarget() {}
+        virtual ~CameraTarget() {}
+
+        virtual izanagi::math::CVector3 getPos() const override
+        {
+            const auto& pos = m_target->m_ctrl->position();
+            izanagi::math::CVector3 ret(pos.x, pos.y, pos.z);
+            return std::move(ret);
+        }
+        virtual izanagi::math::CQuat getDir() const override
+        {
+            return std::move(m_target->m_ctrl->rotation());
+        }
+
+        PlayerCharacter* m_target;
+    };
+    CameraTarget m_camTarget;
 };
 
 #endif    // #if !defined(__PLAYER_CHARACTER_H__)

@@ -42,7 +42,7 @@ void CVectorCamera::computeLenghtBetweenPosAndAt()
 }
 
 // カメラ更新
-void CVectorCamera::Update()
+void CVectorCamera::Update(IZ_FLOAT elapsed/* = 0.0f*/)
 {
     if (m_IsDirtyW2V) {
 #if 0

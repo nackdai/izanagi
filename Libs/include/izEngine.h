@@ -6,4 +6,6 @@
 #include "engine/CharacterController.h"
 #include "engine/CharacterMesh.h"
 
+#include "engine/TargetFollowCamera.h"
+
 #endif  // #if !defined(__IZANAGI_ENGINE_H__)

@@ -1,8 +1,9 @@
 #if !defined(__IZANAGI_MATH_CQUATERNION_H__)
 #define __IZANAGI_MATH_CQUATERNION_H__
 
-#include "MathQuaternion.h"
-#include "MathVector3.h"
+#include "math/MathQuaternion.h"
+#include "math/MathVector3.h"
+#include "math/MathCMatrix44.h"
 
 namespace izanagi
 {
@@ -180,6 +181,13 @@ namespace math
         void InitAngleAxis(IZ_FLOAT angle, const SVector3& axis)
         {
             SQuat::SetQuatFromRadAxis(*this, angle, axis.x, axis.y, axis.z);
+        }
+
+        CMatrix44 AsMatrix()
+        {
+            CMatrix44 mtx;
+            SQuat::MatrixFromQuat(mtx, *this);
+            return std::move(mtx);
         }
     };
 }   // namespace math

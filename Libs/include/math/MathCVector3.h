@@ -1,7 +1,9 @@
 #if !defined(__IZANAGI_MATH_CVECTOR3_H__)
 #define __IZANAGI_MATH_CVECTOR3_H__
 
-#include "MathVector3.h"
+#include "math/MathVector3.h"
+#include "math/MathCVector4.h"
+#include "math/MathCMatrix44.h"
 
 namespace izanagi
 {
@@ -87,6 +89,16 @@ namespace math
             return *this;
         }
 
+        CVector3& operator *=(const CMatrix44& rhs)
+        {
+            CVector4 tmp(x, y, z);
+            SMatrix44::ApplyXYZ(tmp, tmp, rhs);
+            x = tmp.x;
+            y = tmp.y;
+            z = tmp.z;
+            return *this;
+        }
+
         CVector3& operator /=(IZ_FLOAT rhs)
         {
             rhs = 1.0f / rhs;
@@ -117,6 +129,15 @@ namespace math
         CVector3 operator *(IZ_FLOAT rhs) const
         {
             return CVector3(x * rhs, y * rhs, z * rhs);
+        }
+
+        CVector3 operator *(const CMatrix44& rhs) const
+        {
+            CVector4 tmp(x, y, z);
+            SMatrix44::ApplyXYZ(tmp, tmp, rhs);
+
+            CVector3 ret(tmp.x, tmp.y, tmp.z);
+            return std::move(ret);
         }
 
         CVector3 operator /(IZ_FLOAT rhs) const

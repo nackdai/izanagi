@@ -53,6 +53,8 @@ private:
 
     izanagi::shader::CShaderBasic* m_shd{ nullptr };
     izanagi::CDebugMeshGrid* m_grid{ nullptr };
+
+    izanagi::engine::SpringArmedCamera m_camera;
 };
 
 #endif    // #if !defined(__SPRING_ARMED_CAMERA_APP_H__)

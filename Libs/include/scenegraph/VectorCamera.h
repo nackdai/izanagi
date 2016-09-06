@@ -32,7 +32,7 @@ namespace izanagi {
 
         /** カメラ更新.
          */
-        virtual void Update() override;
+        virtual void Update(IZ_FLOAT elapsed = 0.0f) override;
 
         /** 移動.
          */
