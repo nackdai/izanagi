@@ -1,5 +1,5 @@
-#if !defined(__SPRING_ARMED_CAMERA_APP_H__)
-#define __SPRING_ARMED_CAMERA_APP_H__
+#if !defined(__TARGET_FOLLOW_CAMERA_APP_H__)
+#define __TARGET_FOLLOW_CAMERA_APP_H__
 
 #include "izSampleKit.h"
 #include "PlayerCharacter.h"
@@ -7,24 +7,24 @@
 static const IZ_UINT SCREEN_WIDTH = 1280;
 static const IZ_UINT SCREEN_HEIGHT = 720;
 
-class SpringArmedCameraApp : public izanagi::sample::CSampleApp
+class TargetFollowCameraApp : public izanagi::sample::CSampleApp
 {
     class CTimeOverHandler : public izanagi::animation::CTimeline::CTimeOverHandler
     {
     public:
-        CTimeOverHandler(SpringArmedCameraApp* app) { m_App = app; }
+        CTimeOverHandler(TargetFollowCameraApp* app) { m_App = app; }
         virtual ~CTimeOverHandler() {}
 
     public:
         void Handle(const izanagi::animation::CTimeline& timeline);
 
     private:
-        SpringArmedCameraApp* m_App;
+        TargetFollowCameraApp* m_App;
     };
 
 public:
-    SpringArmedCameraApp();
-    virtual ~SpringArmedCameraApp();
+    TargetFollowCameraApp();
+    virtual ~TargetFollowCameraApp();
 
 protected:
     // 初期化.
@@ -57,4 +57,4 @@ private:
     izanagi::engine::TargetFollowCamera m_camera;
 };
 
-#endif    // #if !defined(__SPRING_ARMED_CAMERA_APP_H__)
+#endif    // #if !defined(__TARGET_FOLLOW_CAMERA_APP_H__)

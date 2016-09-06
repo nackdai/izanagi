@@ -1,15 +1,15 @@
-#include "SpringArmedCameraApp.h"
+#include "TargetFollowCameraApp.h"
 
-SpringArmedCameraApp::SpringArmedCameraApp()
+TargetFollowCameraApp::TargetFollowCameraApp()
 {
 }
 
-SpringArmedCameraApp::~SpringArmedCameraApp()
+TargetFollowCameraApp::~TargetFollowCameraApp()
 {
 }
 
 // 初期化.
-IZ_BOOL SpringArmedCameraApp::InitInternal(
+IZ_BOOL TargetFollowCameraApp::InitInternal(
     izanagi::IMemoryAllocator* allocator,
     izanagi::graph::CGraphicsDevice* device,
     izanagi::sample::CSampleCamera& camera)
@@ -68,7 +68,7 @@ __EXIT__:
 }
 
 // 解放.
-void SpringArmedCameraApp::ReleaseInternal()
+void TargetFollowCameraApp::ReleaseInternal()
 {
     m_player.release();
 
@@ -80,7 +80,7 @@ void SpringArmedCameraApp::ReleaseInternal()
 } 
 
 // 更新.
-void SpringArmedCameraApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
+void TargetFollowCameraApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
     IZ_FLOAT elapsed = GetTimer(0).GetTime();
     //elapsed /= 1000.0f;
@@ -118,7 +118,7 @@ namespace {
 }
 
 // 描画.
-void SpringArmedCameraApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
+void TargetFollowCameraApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
     m_player.render(
         device, 
@@ -189,13 +189,13 @@ void SpringArmedCameraApp::RenderInternal(izanagi::graph::CGraphicsDevice* devic
     }
 }
 
-IZ_BOOL SpringArmedCameraApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
+IZ_BOOL TargetFollowCameraApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
 {
     m_player.OnKeyDown(key);
     return IZ_TRUE;
 }
 
-void SpringArmedCameraApp::OnKeyUp(izanagi::sys::E_KEYBOARD_BUTTON key)
+void TargetFollowCameraApp::OnKeyUp(izanagi::sys::E_KEYBOARD_BUTTON key)
 {
     m_player.OnKeyUp(key);
 }
