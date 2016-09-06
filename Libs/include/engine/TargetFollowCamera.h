@@ -24,31 +24,21 @@ namespace engine {
         virtual ~TargetFollowCamera() {}
 
     public:
+        enum Follow {
+            Back,
+            AsIs,
+        };
+
         void setTarget(
+            Follow type,
             ICameraTarget* target,
             const math::CVector3& posOffset,
             const math::CVector3& atOffset);
 
-        virtual void Update(IZ_FLOAT elapsed) override;
+        void setFollowType(Follow type);
 
-    protected:
-        ICameraTarget* m_target{ nullptr };
+        Follow getFollowType() const;
 
-        math::CVector3 m_prevTargetPos;
-        math::CQuat m_prevTargetDir;
-
-        math::CVector3 m_posOffset;
-        math::CVector3 m_atOffset;
-
-        IZ_FLOAT m_radius{ 0.0f };
-    };
-
-    class SpringArmedCamera : public TargetFollowCamera {
-    public:
-        SpringArmedCamera() {}
-        virtual ~SpringArmedCamera() {}
-
-    public:
         virtual void Update(IZ_FLOAT elapsed) override;
 
         const math::CVector3& getVelocity() const
@@ -57,8 +47,15 @@ namespace engine {
         }
 
     protected:
+        ICameraTarget* m_target{ nullptr };
+
+        Follow m_followType{ Follow::AsIs };
+
+        math::CVector3 m_posOffset;
+        math::CVector3 m_atOffset;
+        
         // ÇŒÇÀíËêî.
-        IZ_FLOAT m_springRate{ 1800.0f };
+        IZ_FLOAT m_stiffness{ 1800.0f };
 
         // å∏êäåWêî.
         IZ_FLOAT m_damping{ 600.0f };
@@ -67,8 +64,6 @@ namespace engine {
 
         // éøó .
         IZ_FLOAT m_mass{ 50.0f };
-
-        math::CVector3 m_sum;
     };
 }   // namespace engine
 }   // namespace izanagi

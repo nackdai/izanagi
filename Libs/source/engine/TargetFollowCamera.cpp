@@ -3,47 +3,38 @@
 namespace izanagi {
 namespace engine {
     void TargetFollowCamera::setTarget(
+        Follow type,
         ICameraTarget* target,
         const math::CVector3& posOffset,
         const math::CVector3& atOffset)
     {
+        IZ_ASSERT(target);
+
+        m_followType = type;
+
         m_target = target;
 
-        if (m_target) {
-            m_prevTargetPos = m_target->getPos();
-            m_prevTargetDir = m_target->getDir();
-        }
+        auto targetPos = m_target->getPos();
+        auto targetDir = m_target->getDir();
 
         m_posOffset = posOffset;
         m_atOffset = atOffset;
 
-        auto camPos = m_prevTargetPos + m_posOffset;
-        auto camAt = m_prevTargetPos + m_atOffset;
+        auto camPos = targetPos + m_posOffset;
+        auto camAt = targetPos + m_atOffset;
 
         SetPos(math::CVector4(camPos.x, camPos.y, camPos.z, 1.0f));
         SetAt(math::CVector4(camAt.x, camAt.y, camAt.z, 1.0f));
-
-        m_radius = math::SVector3::Length2(camPos, camAt);
     }
 
-    void TargetFollowCamera::Update(IZ_FLOAT elapsed)
+    void TargetFollowCamera::setFollowType(Follow type)
     {
-        if (m_target) {
-            auto curTargetPos = m_target->getPos();
-            auto diff = curTargetPos - m_prevTargetPos;
+        m_followType = type;
+    }
 
-            izanagi::math::CVector4 camPos(GetParam().pos);
-            camPos += diff;
-            SetPos(camPos);
-
-            izanagi::math::CVector4 camAt(GetParam().ref);
-            camAt += diff;
-            SetAt(camAt);
-
-            m_prevTargetPos = curTargetPos;
-        }
-
-        CVectorCamera::Update(elapsed);
+    TargetFollowCamera::Follow TargetFollowCamera::getFollowType() const
+    {
+        return m_followType;
     }
 
     // NOTE
@@ -52,19 +43,19 @@ namespace engine {
     // http://jsciencer.com/daigakubuturicate/syotourikigaku/4351/
     // http://toshi1.civil.saga-u.ac.jp/aramakig/text/j1.pdf
 
-    void SpringArmedCamera::Update(IZ_FLOAT elapsed)
+    void TargetFollowCamera::Update(IZ_FLOAT elapsed)
     {
         if (m_target) {
             auto targetPos = m_target->getPos();
             auto targetDir = m_target->getDir();
 
-#if 0
             auto transform = targetDir.AsMatrix();
 
-            auto posOffset = m_posOffset * transform;
-#else
             auto posOffset = m_posOffset;
-#endif
+
+            if (m_followType == Follow::Back) {
+                posOffset *= transform;
+            }
 
             // 理想のカメラ位置.
             auto desiredPos = targetPos + posOffset;
@@ -75,29 +66,40 @@ namespace engine {
             auto stretch = position - desiredPos;
 
             // ばねの減衰運動方程式.
-            // F = ma = -kz - cv
+            // F = ma = -kx - cv
+            //  x : ばねの伸び.
+            //  k : ばね定数.
+            //  c : 減衰係数.
+            //  v : 速度.
 
-            auto force = -m_springRate * stretch - m_damping * m_velocity;
+            auto force = -m_stiffness * stretch - m_damping * m_velocity;
             auto f = force.Length();
 
-            // 加速度.
-            auto accel = force / m_mass;
+            if (f > 0.0f) {
+                // 加速度.
+                auto accel = force / m_mass;
 
-            // 速度.
-            m_velocity += accel * elapsed;
+                // 速度.
+                m_velocity += accel * elapsed;
 
-            // 移動量.
-            auto moveDistance = m_velocity * elapsed;
+                // 移動量.
+                auto moveDistance = m_velocity * elapsed;
 
-            position += moveDistance;
+                position += moveDistance;
 
-            SetPos(math::CVector4(position.x, position.y, position.z));
+                SetPos(math::CVector4(position.x, position.y, position.z));
 
-            math::CVector4 at(GetParam().ref);
-            at += moveDistance;
-            SetAt(at);
-
-            m_prevTargetPos = targetPos;
+                if (m_followType == Follow::Back) {
+                    auto atOffset = m_atOffset * transform;
+                    auto desiredAt = targetPos + atOffset;
+                    SetAt(math::CVector4(desiredAt.x, desiredAt.y, desiredAt.z));
+                }
+                else {
+                    math::CVector4 at(GetParam().ref);
+                    at += moveDistance;
+                    SetAt(at);
+                }
+            }
         }
 
         CVectorCamera::Update(elapsed);

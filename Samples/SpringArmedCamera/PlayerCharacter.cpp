@@ -31,6 +31,7 @@ IZ_BOOL PlayerCharacter::init(
 
     m_camera = &camera;
     camera.setTarget(
+        izanagi::engine::TargetFollowCamera::Follow::AsIs,
         &m_camTarget,
         izanagi::math::CVector3(0.0f, 80.0f, -160.0f),
         izanagi::math::CVector3(0.0f, 80.0f, 0.0f));
@@ -281,6 +282,8 @@ void PlayerCharacter::updateDirection(IZ_FLOAT value)
     const auto mtxL2W = m_ctrl->getL2W();
     m_dir.Set(mtxL2W.m[2][0], mtxL2W.m[2][1], mtxL2W.m[2][2]);
     m_dir = m_dir * (value < 0.0f ? -1.0f : 1.0f);
+
+    m_dir.Normalize();
 }
 
 IZ_FLOAT PlayerCharacter::GetTargetDirection(
@@ -289,20 +292,24 @@ IZ_FLOAT PlayerCharacter::GetTargetDirection(
 {
     IZ_ASSERT(m_camera);
 
+#if 0
     const auto& camPos = m_camera->GetParam().pos;
     const auto& pos = m_ctrl->position();
 
     // Compute forward direction.
     auto dirForward = pos - camPos;
+#else
+    izanagi::math::CVector4 camPos(m_camera->GetParam().pos);
+    izanagi::math::CVector4 camAt(m_camera->GetParam().ref);
+
+    auto dirForward = camAt - camPos;
+#endif
     dirForward.y = 0.0f;
     dirForward.Normalize();
 
     // Compute right direction.
     izanagi::math::CVector4 dirRight = QuatToRotateRight * dirForward;
     dirRight.Normalize();
-
-    // TODO
-    // 誤差を消す.
 
     auto f = izanagi::math::CMath::Absf(forward);
     auto r = izanagi::math::CMath::Absf(right);
