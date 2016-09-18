@@ -8,4 +8,7 @@
 #include "SampleEnvBox.h"
 #include "SampleModelRenderHandler.h"
 
+#include "SampleObjModel.h"
+#include "SampleShader.h"
+
 #endif    // #if !defined(__IZ_SAMPLE_KIT_H__)

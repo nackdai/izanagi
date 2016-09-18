@@ -172,7 +172,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\..\Libs\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\Libs\include;..\..\..\External\tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;__IZ_DEBUG__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -196,7 +196,7 @@ copy $(ProjectDir)$(ProjectName)\$(Configuration)\$(ProjectName).lib $(ProjectDi
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\..\Libs\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\Libs\include;..\..\..\External\tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;__IZ_DEBUG__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -219,7 +219,7 @@ copy $(ProjectDir)$(ProjectName)\$(Configuration)\$(ProjectName).lib $(ProjectDi
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\..\Libs\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\Libs\include;..\..\..\External\tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;__IZ_DEBUG__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -243,7 +243,7 @@ copy $(ProjectDir)$(ProjectName)\$(Configuration)\$(ProjectName).lib $(ProjectDi
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\..\Libs\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\Libs\include;..\..\..\External\tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;__IZ_DEBUG__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -266,7 +266,7 @@ copy $(ProjectDir)$(ProjectName)\$(Configuration)\$(ProjectName).lib $(ProjectDi
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\..\Libs\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\Libs\include;..\..\..\External\tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;__IZ_DEBUG__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -290,7 +290,7 @@ copy $(ProjectDir)$(ProjectName)\$(Configuration)\$(ProjectName).lib $(ProjectDi
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\..\Libs\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\Libs\include;..\..\..\External\tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;__IZ_DEBUG__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -313,7 +313,7 @@ copy $(ProjectDir)$(ProjectName)\$(Configuration)\$(ProjectName).lib $(ProjectDi
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
-      <AdditionalIncludeDirectories>..\..\..\Libs\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\Libs\include;..\..\..\External\tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader>
@@ -335,7 +335,7 @@ copy $(ProjectDir)$(ProjectName)\$(Configuration)\$(ProjectName).lib $(ProjectDi
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_DX9|x64'">
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
-      <AdditionalIncludeDirectories>..\..\..\Libs\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\Libs\include;..\..\..\External\tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader>
@@ -357,7 +357,7 @@ copy $(ProjectDir)$(ProjectName)\$(Configuration)\$(ProjectName).lib $(ProjectDi
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
-      <AdditionalIncludeDirectories>..\..\..\Libs\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\Libs\include;..\..\..\External\tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>
@@ -379,7 +379,7 @@ copy $(ProjectDir)$(ProjectName)\$(Configuration)\$(ProjectName).lib $(ProjectDi
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|x64'">
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
-      <AdditionalIncludeDirectories>..\..\..\Libs\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\Libs\include;..\..\..\External\tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>
@@ -405,6 +405,8 @@ copy $(ProjectDir)$(ProjectName)\$(Configuration)\$(ProjectName).lib $(ProjectDi
     <ClInclude Include="..\..\SampleKit\SampleEnvBox.h" />
     <ClInclude Include="..\..\SampleKit\SampleMain.h" />
     <ClInclude Include="..\..\SampleKit\SampleModelRenderHandler.h" />
+    <ClInclude Include="..\..\SampleKit\SampleObjModel.h" />
+    <ClInclude Include="..\..\SampleKit\SampleShader.h" />
     <ClInclude Include="..\..\SampleKit\SampleWindowProc.h" />
   </ItemGroup>
   <ItemGroup>
@@ -413,6 +415,7 @@ copy $(ProjectDir)$(ProjectName)\$(Configuration)\$(ProjectName).lib $(ProjectDi
     <ClCompile Include="..\..\SampleKit\SampleEnvBox.cpp" />
     <ClCompile Include="..\..\SampleKit\SampleMain.cpp" />
     <ClCompile Include="..\..\SampleKit\SampleModelRenderHandler.cpp" />
+    <ClCompile Include="..\..\SampleKit\SampleObjModel.cpp" />
     <ClCompile Include="..\..\SampleKit\SampleWindowProc.cpp" />
   </ItemGroup>
   <ItemGroup>
