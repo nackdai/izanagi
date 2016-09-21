@@ -21,13 +21,13 @@ namespace engine {
     public:
         IZ_BOOL addCondition(StateMachineCondition* cond);
 
-        IZ_BOOL isRegistered(const char* name);
+        IZ_BOOL isRegisteredConditionByName(const char* name);
 
         IZ_BOOL removeCondition(StateMachineCondition* _cond);
 
         IZ_UINT getConditionNum() const;
 
-        StateMachineCondition* getCondition(const char* name);
+        StateMachineCondition* getConditionByName(const char* name);
 
         virtual StateMachineNode::State update(IZ_FLOAT delta) override;
 

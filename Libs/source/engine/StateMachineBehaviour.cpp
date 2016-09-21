@@ -23,7 +23,7 @@ namespace engine {
 
         auto name = cond->getName();
 
-        if (!isRegistered(name)) {
+        if (!isRegisteredConditionByName(name)) {
             m_conditions.AddTail(cond->getListItem());
 
             return IZ_TRUE;
@@ -32,7 +32,7 @@ namespace engine {
         return IZ_FALSE;
     }
 
-    IZ_BOOL StateMachineBehaviour::isRegistered(const char* name)
+    IZ_BOOL StateMachineBehaviour::isRegisteredConditionByName(const char* name)
     {
         auto item = m_conditions.GetTop();
 
@@ -73,7 +73,7 @@ namespace engine {
         return ret;
     }
 
-    StateMachineCondition* StateMachineBehaviour::getCondition(const char* name)
+    StateMachineCondition* StateMachineBehaviour::getConditionByName(const char* name)
     {
         auto item = m_conditions.GetTop();
 
