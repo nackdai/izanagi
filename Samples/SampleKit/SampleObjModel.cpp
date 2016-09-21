@@ -45,32 +45,70 @@ namespace sample {
         izanagi::graph::CGraphicsDevice* device,
         const char* path)
     {
-        tinyobj::attrib_t attrib;
         std::vector<tinyobj::shape_t> shapes;
         std::vector<tinyobj::material_t> mtrls;
         std::string err;
 
+        // TODO
+        // mtl_basepath
+
+        IZ_UINT flags = tinyobj::triangulation | tinyobj::calculate_normals;
+
         auto result = tinyobj::LoadObj(
-            &attrib,
-            &shapes, &mtrls,
-            &err,
-            path);
+            shapes, mtrls,
+            err,
+            path, nullptr,
+            flags);
         VRETURN(result);
 
-        IZ_UINT vtxNum = attrib.vertices.size();
-        IZ_ASSERT(vtxNum % 3 == 0);
+        IZ_UINT vtxNum = 0;
+
+        // NOTE
+        // positon = float3
+        for (const auto& shape : shapes) {
+            auto num = shape.mesh.positions.size();
+            IZ_ASSERT(num % 3 == 0);
+            IZ_ASSERT(num == shape.mesh.normals.size());
+
+            vtxNum += num;
+        }
+
         vtxNum /= 3;
 
+        struct Vertex {
+            IZ_FLOAT pos[3];
+            IZ_FLOAT nml[3];
+        };
+
         m_vb = device->CreateVertexBuffer(
-            sizeof(IZ_FLOAT) * 3,
+            sizeof(Vertex),
             vtxNum,
             izanagi::graph::E_GRAPH_RSC_USAGE_STATIC);
         {
-            void* data = nullptr;
-            result = m_vb->Lock(device, 0, 0, &data, IZ_FALSE);
+            Vertex* data = nullptr;
+
+            result = m_vb->Lock(device, 0, 0, (void**)&data, IZ_FALSE);
             VRETURN(result);
 
-            memcpy(data, &attrib.vertices[0], 3 * sizeof(IZ_FLOAT) * vtxNum);
+            auto top = data;
+
+            for (const auto& shape : shapes) {
+                auto num = shape.mesh.positions.size();
+
+                for (IZ_UINT i = 0; i < num; i += 3) {
+                    Vertex& v = *data++;
+
+                    v.pos[0] = shape.mesh.positions[i + 0];
+                    v.pos[1] = shape.mesh.positions[i + 1];
+                    v.pos[2] = shape.mesh.positions[i + 2];
+
+                    v.nml[0] = shape.mesh.normals[i + 0];
+                    v.nml[1] = shape.mesh.normals[i + 1];
+                    v.nml[2] = shape.mesh.normals[i + 2];
+                }
+            }
+
+            IZ_ASSERT(izanagi::CStdUtil::GetPtrDistance(top, data) == sizeof(Vertex) * vtxNum);
 
             m_vb->Unlock(device);
         }
@@ -78,7 +116,10 @@ namespace sample {
         IZ_UINT idxNum = 0;
 
         for (const auto& s : shapes) {
-            idxNum += s.mesh.indices.size();
+            auto num = s.mesh.indices.size();
+            IZ_ASSERT(num % 3 == 0);
+
+            idxNum += num;
         }
 
         m_ib = device->CreateIndexBuffer(
@@ -90,17 +131,30 @@ namespace sample {
             result = m_ib->Lock(device, 0, 0, (void**)&data, IZ_FALSE);
             VRETURN(result);
 
+            auto top = data;
+
+            IZ_INT idxOffset = 0;
+
             for (const auto& s : shapes) {
-                for (const auto& i : s.mesh.indices) {
-                    *data++ = i.vertex_index;
+                auto num = s.mesh.indices.size();
+
+                for (IZ_UINT i = 0; i < num; i++) {
+                    *data++ = s.mesh.indices[i] + idxOffset;
                 }
+
+                auto vtxnum = s.mesh.positions.size() / 3;
+
+                idxOffset += vtxnum;
             }
+
+            IZ_ASSERT(izanagi::CStdUtil::GetPtrDistance(top, data) == sizeof(IZ_INT) * idxNum);
 
             m_ib->Unlock(device);
         }
 
         izanagi::graph::SVertexElement elems[] = {
-            { 0, 0, izanagi::graph::E_GRAPH_VTX_DECL_TYPE_FLOAT3, izanagi::graph::E_GRAPH_VTX_DECL_USAGE_POSITION, 0, },
+            { 0, 0,  izanagi::graph::E_GRAPH_VTX_DECL_TYPE_FLOAT3, izanagi::graph::E_GRAPH_VTX_DECL_USAGE_POSITION, 0, },
+            { 0, 12, izanagi::graph::E_GRAPH_VTX_DECL_TYPE_FLOAT3, izanagi::graph::E_GRAPH_VTX_DECL_USAGE_NORMAL, 0, },
         };
 
         m_vd = device->CreateVertexDeclaration(elems, COUNTOF(elems));
