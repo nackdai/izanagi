@@ -34,19 +34,19 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\..\..\Media\miku.pmd">
-      <Filter>asset</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\Media\MikuImage.xml">
-      <Filter>asset</Filter>
-    </CustomBuild>
     <CustomBuild Include="..\..\MotionBind\shader\SkinShader.xml">
       <Filter>shader</Filter>
     </CustomBuild>
-    <CustomBuild Include="..\..\..\Media\miku_walk_behind_hand.vmd">
+    <CustomBuild Include="..\..\..\Media\miku\miku.pmd">
       <Filter>asset</Filter>
     </CustomBuild>
-    <CustomBuild Include="..\..\..\Media\miku_run.vmd">
+    <CustomBuild Include="..\..\..\Media\miku\miku_run.vmd">
+      <Filter>asset</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\miku\miku_walk_behind_hand.vmd">
+      <Filter>asset</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\miku\MikuImage.xml">
       <Filter>asset</Filter>
     </CustomBuild>
   </ItemGroup>
