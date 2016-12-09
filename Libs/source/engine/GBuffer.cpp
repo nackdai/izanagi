@@ -21,8 +21,8 @@ namespace engine {
 
     GBuffer::Result GBuffer::addBuffer(
         graph::CGraphicsDevice* device,
-        graph::E_GRAPH_PIXEL_FMT format,
-        IZ_UINT width, IZ_UINT height)
+        IZ_UINT width, IZ_UINT height,
+        graph::E_GRAPH_PIXEL_FMT format)
     {
         IZ_ASSERT(device);
 
@@ -114,7 +114,7 @@ namespace engine {
         IZ_UINT* targets, IZ_UINT targetNum)
     {
         IZ_ASSERT(targets);
-        IZ_ASSERT(targetNum < getBufferNum());
+        IZ_ASSERT(targetNum <= getBufferNum());
 
         IZ_UINT rtNum = 0;
 
@@ -139,7 +139,7 @@ namespace engine {
     IZ_BOOL GBuffer::begin(
         graph::CGraphicsDevice* device,
         IZ_UINT* targets, IZ_UINT targetNum,
-        graph::E_GRAPH_CLEAR_FLAG clearFlag,
+        graph::E_GRAPH_CLEAR_FLAG clearFlag/*= graph::E_GRAPH_CLEAR_FLAG_ALL*/,
         IZ_COLOR clearColor/*= 0*/,
         IZ_FLOAT clearZ/*= 1.0f*/,
         IZ_DWORD clearStencil/*= 0*/)

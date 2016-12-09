@@ -28,8 +28,8 @@ namespace engine {
 
         Result addBuffer(
             graph::CGraphicsDevice* device,
-            graph::E_GRAPH_PIXEL_FMT format,
-            IZ_UINT width, IZ_UINT height);
+            IZ_UINT width, IZ_UINT height,
+            graph::E_GRAPH_PIXEL_FMT format);
 
         IZ_BOOL removeBuffer(IZ_UINT idx);
 
@@ -42,7 +42,7 @@ namespace engine {
         IZ_BOOL begin(
             graph::CGraphicsDevice* device,
             IZ_UINT* targets, IZ_UINT targetNum,
-            graph::E_GRAPH_CLEAR_FLAG clearFlag,
+            graph::E_GRAPH_CLEAR_FLAG clearFlag = graph::E_GRAPH_CLEAR_FLAG_ALL,
             IZ_COLOR clearColor = 0,
             IZ_FLOAT clearZ = 1.0f,
             IZ_DWORD clearStencil = 0);
