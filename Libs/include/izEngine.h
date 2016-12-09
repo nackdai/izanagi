@@ -8,4 +8,6 @@
 
 #include "engine/TargetFollowCamera.h"
 
+#include "engine/GBuffer.h"
+
 #endif  // #if !defined(__IZANAGI_ENGINE_H__)

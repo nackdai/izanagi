@@ -46,6 +46,9 @@
     <ClInclude Include="..\..\include\engine\TargetFollowCamera.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\engine\GBuffer.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\engine\AnimationStateMachine.cpp">
@@ -76,6 +79,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\engine\TargetFollowCamera.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\engine\GBuffer.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

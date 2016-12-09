@@ -57,6 +57,7 @@
     <ClInclude Include="..\..\include\engine\AnimationStateMachineNode.h" />
     <ClInclude Include="..\..\include\engine\CharacterController.h" />
     <ClInclude Include="..\..\include\engine\CharacterMesh.h" />
+    <ClInclude Include="..\..\include\engine\GBuffer.h" />
     <ClInclude Include="..\..\include\engine\StateMachineBehaviour.h" />
     <ClInclude Include="..\..\include\engine\StateMachineCondition.h" />
     <ClInclude Include="..\..\include\engine\StateMachineNode.h" />
@@ -70,6 +71,7 @@
     <ClCompile Include="..\..\source\engine\AnimationStateMachineNode.cpp" />
     <ClCompile Include="..\..\source\engine\CharacterController.cpp" />
     <ClCompile Include="..\..\source\engine\CharacterMesh.cpp" />
+    <ClCompile Include="..\..\source\engine\GBuffer.cpp" />
     <ClCompile Include="..\..\source\engine\StateMachineBehaviour.cpp" />
     <ClCompile Include="..\..\source\engine\StateMachineCondition.cpp" />
     <ClCompile Include="..\..\source\engine\StateMachineNode.cpp" />
