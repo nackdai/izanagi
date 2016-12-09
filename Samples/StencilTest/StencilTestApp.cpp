@@ -127,6 +127,7 @@ namespace {
 // 描画.
 void StencilTestApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
+#if 0
     if (device->Begin2D()) {
         device->SetRenderState(
             izanagi::graph::E_GRAPH_RS_STENCIL_ENABLE,
@@ -250,4 +251,287 @@ void StencilTestApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     device->SetRenderState(
         izanagi::graph::E_GRAPH_RS_STENCIL_ENABLE,
         IZ_FALSE);
+#elif 0
+    izanagi::sample::CSampleCamera& camera = GetCamera();
+
+    izanagi::math::SMatrix44 mtxL2W;
+    izanagi::math::SMatrix44::SetUnit(mtxL2W);
+
+    device->SaveRenderState();
+
+    {
+        device->SetRenderState(
+            izanagi::graph::E_GRAPH_RS_STENCIL_ENABLE,
+            IZ_TRUE);
+
+        // 四角形の描画範囲にステンシル１を付加する.
+        device->SetStencilFunc(
+            izanagi::graph::E_GRAPH_CMP_FUNC_ALWAYS,
+            1,
+            0xffffffff);
+
+        // これから描画するもののステンシル値にすべて１タグをつける.
+        device->SetStencilOp(
+            izanagi::graph::E_GRAPH_STENCIL_OP_REPLACE,
+            izanagi::graph::E_GRAPH_STENCIL_OP_REPLACE,
+            izanagi::graph::E_GRAPH_STENCIL_OP_REPLACE);
+
+        // カラー・デプスバッファに書き込みしない.
+        device->SetRenderState(
+            izanagi::graph::E_GRAPH_RS_ZENABLE,
+            IZ_FALSE);
+        device->SetRenderState(
+            izanagi::graph::E_GRAPH_RS_COLORWRITEENABLE_RGB,
+            IZ_FALSE);
+        device->SetRenderState(
+            izanagi::graph::E_GRAPH_RS_COLORWRITEENABLE_A,
+            IZ_FALSE);
+
+        m_Shader->EnableToUpdateRenderState(
+            izanagi::graph::E_GRAPH_RS_ZENABLE,
+            IZ_FALSE);
+        m_Shader->EnableToUpdateRenderState(
+            izanagi::graph::E_GRAPH_RS_COLORWRITEENABLE_RGB,
+            IZ_FALSE);
+        m_Shader->EnableToUpdateRenderState(
+            izanagi::graph::E_GRAPH_RS_COLORWRITEENABLE_A,
+            IZ_FALSE);
+    }
+
+    device->SetTexture(0, m_Img->GetTexture(0));
+
+    // テクスチャあり
+    m_Shader->Begin(device, 0, IZ_FALSE);
+    {
+        if (m_Shader->BeginPass(0)) {
+            // パラメータ設定
+            _SetShaderParam(
+                m_Shader,
+                "g_mW2C",
+                (void*)&camera.GetParam().mtxW2C,
+                sizeof(izanagi::math::SMatrix44));
+
+            _SetShaderParam(
+                m_Shader,
+                "g_mL2W",
+                (void*)&mtxL2W,
+                sizeof(izanagi::math::SMatrix44));
+
+            m_Shader->CommitChanges(device);
+
+            m_Mesh->Draw(device);
+
+            m_Shader->EndPass();
+        }
+    }
+    m_Shader->End(device);
+
+    device->LoadRenderState();
+    m_Shader->EnableToUpdateRenderState(
+        izanagi::graph::E_GRAPH_RS_ZENABLE,
+        IZ_TRUE);
+    m_Shader->EnableToUpdateRenderState(
+        izanagi::graph::E_GRAPH_RS_COLORWRITEENABLE_RGB,
+        IZ_TRUE);
+    m_Shader->EnableToUpdateRenderState(
+        izanagi::graph::E_GRAPH_RS_COLORWRITEENABLE_A,
+        IZ_TRUE);
+
+    {
+        device->SetRenderState(
+            izanagi::graph::E_GRAPH_RS_STENCIL_ENABLE,
+            IZ_TRUE);
+
+        // 0と一致する場合にテストを通す.
+        device->SetStencilFunc(
+            izanagi::graph::E_GRAPH_CMP_FUNC_EQUAL,
+            0,
+            0xffffffff);
+
+        // ステンシルは書き換えない.
+        device->SetStencilOp(
+            izanagi::graph::E_GRAPH_STENCIL_OP_KEEP,
+            izanagi::graph::E_GRAPH_STENCIL_OP_KEEP,
+            izanagi::graph::E_GRAPH_STENCIL_OP_KEEP);
+    }
+
+    // テクスチャなし
+    m_Shader->Begin(device, 1, IZ_FALSE);
+    {
+        if (m_Shader->BeginPass(0)) {
+            // パラメータ設定
+            _SetShaderParam(
+                m_Shader,
+                "g_mL2W",
+                (void*)&mtxL2W,
+                sizeof(mtxL2W));
+
+            _SetShaderParam(
+                m_Shader,
+                "g_mW2C",
+                (void*)&camera.GetParam().mtxW2C,
+                sizeof(camera.GetParam().mtxW2C));
+
+            // シェーダ設定
+            m_Shader->CommitChanges(device);
+
+            m_Grid->Draw(device);
+            m_Axis->Draw(device);
+
+            m_Shader->EndPass();
+        }
+    }
+    m_Shader->End(device);    
+
+    if (device->Begin2D()) {
+        static const IZ_INT rcWidth = 300;
+        static const IZ_INT rcHeight = 300;
+
+        static const IZ_INT centerX = SCREEN_WIDTH / 2;
+        static const IZ_INT centerY = SCREEN_HEIGHT / 2;
+
+        device->Draw2DRect(
+            izanagi::CIntRect(centerX - rcWidth / 2, centerY - rcHeight / 2, rcWidth, rcHeight),
+            IZ_COLOR_RGBA(0, 0, 0, 0xff));
+
+        device->End2D();
+    }
+
+    device->SetRenderState(
+        izanagi::graph::E_GRAPH_RS_STENCIL_ENABLE,
+        IZ_FALSE);
+#else
+    izanagi::sample::CSampleCamera& camera = GetCamera();
+
+    izanagi::math::CMatrix44 mtxL2W;
+
+    device->SetTexture(0, m_Img->GetTexture(0));
+
+    // テクスチャあり
+    m_Shader->Begin(device, 0, IZ_FALSE);
+    {
+        if (m_Shader->BeginPass(0)) {
+            // パラメータ設定
+            _SetShaderParam(
+                m_Shader,
+                "g_mW2C",
+                (void*)&camera.GetParam().mtxW2C,
+                sizeof(izanagi::math::SMatrix44));
+
+            _SetShaderParam(
+                m_Shader,
+                "g_mL2W",
+                (void*)&mtxL2W,
+                sizeof(izanagi::math::SMatrix44));
+
+            m_Shader->CommitChanges(device);
+
+            m_Mesh->Draw(device);
+
+            m_Shader->EndPass();
+        }
+    }
+    m_Shader->End(device);
+
+    device->SaveRenderState();
+
+    {
+        device->SetRenderState(
+            izanagi::graph::E_GRAPH_RS_STENCIL_ENABLE,
+            IZ_TRUE);
+
+        // 四角形の描画範囲にステンシル１を付加する.
+        device->SetStencilFunc(
+            izanagi::graph::E_GRAPH_CMP_FUNC_ALWAYS,
+            0,
+            0);
+
+        // これから描画するもののステンシル値にすべて１タグをつける.
+        device->SetStencilOp(
+            izanagi::graph::E_GRAPH_STENCIL_OP_KEEP,
+            izanagi::graph::E_GRAPH_STENCIL_OP_INCR,
+            izanagi::graph::E_GRAPH_STENCIL_OP_KEEP);
+
+        // カラー・デプスバッファに書き込みしない.
+        device->SetRenderState(
+            izanagi::graph::E_GRAPH_RS_ZENABLE,
+            IZ_TRUE);
+        device->SetRenderState(
+            izanagi::graph::E_GRAPH_RS_ZWRITEENABLE,
+            IZ_FALSE);
+
+        m_Shader->EnableToUpdateRenderState(
+            izanagi::graph::E_GRAPH_RS_ZENABLE,
+            IZ_TRUE);
+        m_Shader->EnableToUpdateRenderState(
+            izanagi::graph::E_GRAPH_RS_ZWRITEENABLE,
+            IZ_FALSE);
+    }
+
+    m_Shader->Begin(device, 0, IZ_FALSE);
+    {
+        if (m_Shader->BeginPass(0)) {
+            // パラメータ設定
+            _SetShaderParam(
+                m_Shader,
+                "g_mW2C",
+                (void*)&camera.GetParam().mtxW2C,
+                sizeof(izanagi::math::SMatrix44));
+
+            mtxL2W.Trans(10, 0, 0);
+
+            _SetShaderParam(
+                m_Shader,
+                "g_mL2W",
+                (void*)&mtxL2W,
+                sizeof(izanagi::math::SMatrix44));
+
+            m_Shader->CommitChanges(device);
+
+            m_Mesh->Draw(device);
+
+            m_Shader->EndPass();
+        }
+    }
+
+    device->LoadRenderState();
+
+#if 1
+    {
+        device->SetRenderState(
+            izanagi::graph::E_GRAPH_RS_STENCIL_ENABLE,
+            IZ_TRUE);
+
+        // 0と一致する場合にテストを通す.
+        device->SetStencilFunc(
+            izanagi::graph::E_GRAPH_CMP_FUNC_NOTEQUAL,
+            0,
+            0xffffffff);
+
+        // ステンシルは書き換えない.
+        device->SetStencilOp(
+            izanagi::graph::E_GRAPH_STENCIL_OP_KEEP,
+            izanagi::graph::E_GRAPH_STENCIL_OP_KEEP,
+            izanagi::graph::E_GRAPH_STENCIL_OP_KEEP);
+    }
+
+    if (device->Begin2D()) {
+        static const IZ_INT rcWidth = 300;
+        static const IZ_INT rcHeight = 300;
+
+        static const IZ_INT centerX = SCREEN_WIDTH / 2;
+        static const IZ_INT centerY = SCREEN_HEIGHT / 2;
+
+        device->Draw2DRect(
+            izanagi::CIntRect(centerX - rcWidth / 2, centerY - rcHeight / 2, rcWidth, rcHeight),
+            IZ_COLOR_RGBA(0, 0, 0, 0xff));
+
+        device->End2D();
+    }
+#endif
+
+    device->SetRenderState(
+        izanagi::graph::E_GRAPH_RS_STENCIL_ENABLE,
+        IZ_FALSE);
+#endif
 }
