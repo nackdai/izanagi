@@ -20,13 +20,15 @@ IZ_BOOL SSAOApp::InitInternal(
 
     m_shd.init(
         device,
-        "shader/vs_default.glsl",
-        "shader/ps_default.glsl");
+        "shader/vs_geometry.glsl",
+        "shader/ps_geometry.glsl");
 
     m_obj = izanagi::sample::ObjModel::create(
         allocator,
         device,
         "../../Media/teapot/teapot.obj");
+
+    m_gbuffer.init(allocator, device);
 
     // カメラ
     camera.Init(
@@ -75,7 +77,16 @@ void SSAOApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     auto hClr = shd->GetHandleByName("color");
     shd->SetVector(device, hClr, color);
 
+    auto hFar = shd->GetHandleByName("depthFar");
+    shd->SetFloat(device, hFar, camera.GetParam().cameraFar);
+
+    m_gbuffer.beginGeometryPass(device);
+
     m_obj->render(device);
+
+    m_gbuffer.endGeometryPass(device);
+
+    m_gbuffer.drawBuffers(device);
 }
 
 void SSAOApp::ReleaseInternal()

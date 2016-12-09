@@ -5,6 +5,8 @@
 #include "izSceneGraph.h"
 #include "izDebugUtil.h"
 
+#include "GBuffer.h"
+
 static const IZ_UINT SCREEN_WIDTH = 1280;
 static const IZ_UINT SCREEN_HEIGHT = 720;
 
@@ -33,6 +35,8 @@ protected:
     izanagi::sample::ObjModel* m_obj{ nullptr };
 
     izanagi::sample::Shader m_shd;
+
+    GBuffer m_gbuffer;
 };
 
 #endif    // #if !defined(__SSAO_APP_H__)

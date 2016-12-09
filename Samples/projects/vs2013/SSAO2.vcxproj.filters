@@ -18,6 +18,12 @@
     <None Include="..\..\SSAO2\shader\vs_default.glsl">
       <Filter>shader</Filter>
     </None>
+    <None Include="..\..\SSAO2\shader\vs_geometry.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\SSAO2\shader\ps_geometry.glsl">
+      <Filter>shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\SSAO2\SSAOApp.cpp">
@@ -26,9 +32,15 @@
     <ClCompile Include="..\..\SSAO2\main.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\SSAO2\GBuffer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\SSAO2\SSAOApp.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\SSAO2\GBuffer.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
