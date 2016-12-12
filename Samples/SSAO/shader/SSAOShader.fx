@@ -206,9 +206,13 @@ float4 mainPS_SSAO(SPSInputSSAO sIn) : COLOR0
         // 負：遮蔽するピクセルが現在のピクセルより奥 -> 現在のピクセルは遮蔽されない
         float depthDiff = centerDepth - sampleDepth;
 
+        // TODO
+        // 0.75 -> radius.
+        float rangeCheck = smoothstep(0.0, 1.0, (0.75 / g_farClip) / abs(centerDepth - sampleDepth));
+
         // step(falloff, depthDiff) -> falloff より小さければ 0.0、大きければ 1.0
         //  -> ある程度以上深度が離れていない場合は遮蔽されていることとする
-        bl += step(falloff, depthDiff) * nmlDiff;
+        bl += step(falloff, depthDiff) * nmlDiff * rangeCheck;
     }
 
     // サンプリング点の合計なので平均を計算する
