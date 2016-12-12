@@ -18,6 +18,9 @@ IZ_BOOL SSAOApp::InitInternal(
 {
     IZ_BOOL result = IZ_TRUE;
 
+    auto width = device->GetBackBufferWidth();
+    auto height = device->GetBackBufferHeight();
+
     // TODO
     izanagi::math::CMathRand::Init(0);
 
@@ -31,6 +34,10 @@ IZ_BOOL SSAOApp::InitInternal(
         device,
         "shader/vs_fillscreen.glsl",
         "shader/ps_ssao.glsl");
+    m_shdBlurPass.init(
+        device,
+        "shader/vs_fillscreen.glsl",
+        "shader/ps_blur.glsl");
 
     m_obj = izanagi::sample::ObjModel::create(
         allocator,
@@ -94,6 +101,7 @@ void SSAOApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
     renderGeometryPass(device);
     renderSSAOPass(device);
+    renderBlurPass(device);
 
     device->SetTexture(0, IZ_NULL);
     m_gbuffer.drawBuffers(device);
@@ -192,7 +200,40 @@ void SSAOApp::renderSSAOPass(izanagi::graph::CGraphicsDevice* device)
     auto hRadius = shd->GetHandleByName("radius");
     shd->SetFloat(device, hRadius, radius);
 
-    m_gbuffer.bind(device);
+    m_gbuffer.bindForSSAOPass(device);
+
+    m_gbuffer.beginSSAOPass(device);
+
+    m_screenFillPlane->Draw(device);
+
+    m_gbuffer.endSSAOPass(device);
+
+    device->LoadRenderState();
+}
+
+void SSAOApp::renderBlurPass(izanagi::graph::CGraphicsDevice* device)
+{
+    device->SaveRenderState();
+
+    device->SetRenderState(
+        izanagi::graph::E_GRAPH_RS_ZENABLE,
+        IZ_FALSE);
+    device->SetRenderState(
+        izanagi::graph::E_GRAPH_RS_ZWRITEENABLE,
+        IZ_FALSE);
+
+    auto width = device->GetBackBufferWidth();
+    auto height = device->GetBackBufferHeight();
+
+    auto* shd = m_shdBlurPass.m_program;
+
+    device->SetShaderProgram(shd);
+
+    auto hInvScr = shd->GetHandleByName("invScreen");
+    izanagi::math::CVector4 invScr(1.0f / width, 1.0f / height, 0.0f, 1.0f);
+    shd->SetVector(device, hInvScr, invScr);
+
+    m_gbuffer.bindForBlurPass(device);
 
     m_screenFillPlane->Draw(device);
 

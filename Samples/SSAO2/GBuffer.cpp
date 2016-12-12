@@ -15,21 +15,28 @@ IZ_BOOL GBuffer::init(
         device,
         width, height,
         izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA8);
-    VRETURN(std::get<1>(res));
+    VRETURN(std::get<1>(res) && std::get<0>(res) == Albedo);
 
     // Normal.
     res = m_gbuffer->addBuffer(
         device,
         width, height,
         izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA8);
-    VRETURN(std::get<1>(res));
+    VRETURN(std::get<1>(res) && std::get<0>(res) == Normal);
 
     // Depth.
     res = m_gbuffer->addBuffer(
         device,
         width, height,
         izanagi::graph::E_GRAPH_PIXEL_FMT_R32F);
-    VRETURN(std::get<1>(res));
+    VRETURN(std::get<1>(res) && std::get<0>(res) == Depth);
+
+    // SSAO
+    res = m_gbuffer->addBuffer(
+        device,
+        width, height,
+        izanagi::graph::E_GRAPH_PIXEL_FMT_A8);
+    VRETURN(std::get<1>(res) && std::get<0>(res) == SSAO);
 
     return IZ_TRUE;
 }
@@ -60,12 +67,39 @@ void GBuffer::endGeometryPass(izanagi::graph::CGraphicsDevice* device)
     m_gbuffer->end(device);
 }
 
-void GBuffer::bind(izanagi::graph::CGraphicsDevice* device)
+void GBuffer::beginSSAOPass(izanagi::graph::CGraphicsDevice* device)
+{
+    IZ_UINT targets[] = {
+        SSAO,
+    };
+
+    m_gbuffer->begin(
+        device,
+        targets, COUNTOF(targets));
+}
+
+void GBuffer::endSSAOPass(izanagi::graph::CGraphicsDevice* device)
+{
+    m_gbuffer->end(device);
+}
+
+void GBuffer::bindForSSAOPass(izanagi::graph::CGraphicsDevice* device)
 {
     izanagi::engine::GBuffer::BindOp ops[] = {
         { Albedo, 0, "s0" },
         { Normal, 1, "s1" },
         { Depth, 2, "s2" },
+    };
+
+    m_gbuffer->bind(
+        device,
+        ops, COUNTOF(ops));
+}
+
+void GBuffer::bindForBlurPass(izanagi::graph::CGraphicsDevice* device)
+{
+    izanagi::engine::GBuffer::BindOp ops[] = {
+        { SSAO, 0, "s0" },
     };
 
     m_gbuffer->bind(
@@ -79,6 +113,7 @@ void GBuffer::drawBuffers(izanagi::graph::CGraphicsDevice* device)
         Albedo,
         Normal,
         Depth,
+        SSAO,
     };
 
     m_gbuffer->dumpBuffers(

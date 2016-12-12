@@ -20,7 +20,11 @@ public:
     void beginGeometryPass(izanagi::graph::CGraphicsDevice* device);
     void endGeometryPass(izanagi::graph::CGraphicsDevice* device);
 
-    void bind(izanagi::graph::CGraphicsDevice* device);
+    void beginSSAOPass(izanagi::graph::CGraphicsDevice* device);
+    void endSSAOPass(izanagi::graph::CGraphicsDevice* device);
+
+    void bindForSSAOPass(izanagi::graph::CGraphicsDevice* device);
+    void bindForBlurPass(izanagi::graph::CGraphicsDevice* device);
 
     void drawBuffers(izanagi::graph::CGraphicsDevice* device);
 
@@ -29,6 +33,7 @@ private:
         Albedo = 0,
         Normal,
         Depth,
+        SSAO,
 
         Num,
     };

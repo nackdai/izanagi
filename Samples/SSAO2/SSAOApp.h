@@ -36,12 +36,14 @@ private:
 
     void renderGeometryPass(izanagi::graph::CGraphicsDevice* device);
     void renderSSAOPass(izanagi::graph::CGraphicsDevice* device);
+    void renderBlurPass(izanagi::graph::CGraphicsDevice* device);
 
 protected:
     izanagi::sample::ObjModel* m_obj{ nullptr };
 
     izanagi::sample::Shader m_shdGeometryPass;
     izanagi::sample::Shader m_shdSSAOPass;
+    izanagi::sample::Shader m_shdBlurPass;
 
     GBuffer m_gbuffer;
 

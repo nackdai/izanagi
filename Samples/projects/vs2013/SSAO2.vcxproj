@@ -353,6 +353,7 @@
     <ClInclude Include="..\..\SSAO2\SSAOApp.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\SSAO2\shader\ps_blur.glsl" />
     <None Include="..\..\SSAO2\shader\ps_default.glsl" />
     <None Include="..\..\SSAO2\shader\ps_geometry.glsl" />
     <None Include="..\..\SSAO2\shader\ps_ssao.glsl" />
