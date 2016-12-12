@@ -18,6 +18,11 @@ IZ_BOOL SSAOApp::InitInternal(
 {
     IZ_BOOL result = IZ_TRUE;
 
+    // TODO
+    izanagi::math::CMathRand::Init(0);
+
+    generateKernel();
+
     m_shdGeometryPass.init(
         device,
         "shader/vs_geometry.glsl",
@@ -59,6 +64,25 @@ __EXIT__:
     return result;
 }
 
+void SSAOApp::generateKernel()
+{
+    for (IZ_UINT i = 0; i < KernelSize; i++) {
+        // Generate random postion in hemisphere.
+        m_kernels[i] = izanagi::math::CVector4(
+            izanagi::math::CMathRand::GetRandBetween<IZ_FLOAT>(-1.0f, 1.0f),
+            izanagi::math::CMathRand::GetRandBetween<IZ_FLOAT>(-1.0f, 1.0f),
+            izanagi::math::CMathRand::GetRandBetween<IZ_FLOAT>(0.0f, 1.0f),
+            0.0f);
+
+        m_kernels[i].Normalize();
+
+        // Falloff the distance from the origin.
+        IZ_FLOAT scale = (IZ_FLOAT)i / (IZ_FLOAT)KernelSize;
+        scale = izanagi::math::CMath::Lerp(0.1f, 1.0f, scale * scale);
+        m_kernels[i] *= scale;
+    }
+}
+
 // 更新.
 void SSAOApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
@@ -79,9 +103,14 @@ void SSAOApp::renderGeometryPass(izanagi::graph::CGraphicsDevice* device)
 {
     const auto& camera = GetCamera();
 
+    // TODO
     izanagi::math::CMatrix44 mtxL2W;
-    const auto& mtxW2C = camera.GetParam().mtxW2C;
+    mtxL2W.SetScale(100, 100, 100);
+
     izanagi::math::CVector4 color(1.0f, 0.0f, 0.0f, 1.0f);
+
+    const auto& mtxW2C = camera.GetParam().mtxW2C;
+    const auto& mtxW2V = camera.GetParam().mtxW2V;
 
     auto* shd = m_shdGeometryPass.m_program;
 
@@ -92,6 +121,9 @@ void SSAOApp::renderGeometryPass(izanagi::graph::CGraphicsDevice* device)
 
     auto hW2C = shd->GetHandleByName("mtxW2C");
     shd->SetMatrix(device, hW2C, mtxW2C);
+
+    auto hW2V = shd->GetHandleByName("mtxW2V");
+    shd->SetMatrix(device, hW2V, mtxW2V);
 
     auto hClr = shd->GetHandleByName("color");
     shd->SetVector(device, hClr, color);
@@ -123,29 +155,11 @@ void SSAOApp::renderSSAOPass(izanagi::graph::CGraphicsDevice* device)
     const auto& camera = GetCamera();
 
     const auto& mtxW2C = camera.GetParam().mtxW2C;
+    const auto& mtxV2C = camera.GetParam().mtxV2C;
     
     izanagi::math::CMatrix44 mtxC2V, mtxV2W;
     izanagi::math::SMatrix44::Inverse(mtxC2V, camera.GetParam().mtxV2C);
     izanagi::math::SMatrix44::Inverse(mtxV2W, camera.GetParam().mtxW2V);
-
-    float depth = 200.0f;
-
-    izanagi::math::CVector4 pos(10, 10, 100.0f, 1);
-    izanagi::math::SMatrix44::Apply(pos, pos, mtxW2C);
-
-    pos.x /= pos.w;
-    pos.y /= pos.w;
-
-    pos.z = 0.0f; 
-    pos.w = 1.0f;
-
-    pos.x *= depth;
-    pos.y *= depth;
-
-    izanagi::math::SMatrix44::Apply(pos, pos, mtxC2V);
-    pos.z = depth;
-
-    izanagi::math::SMatrix44::Apply(pos, pos, mtxV2W);
 
     auto* shd = m_shdSSAOPass.m_program;
 
@@ -160,12 +174,23 @@ void SSAOApp::renderSSAOPass(izanagi::graph::CGraphicsDevice* device)
     auto hW2C = shd->GetHandleByName("mtxW2C");
     shd->SetMatrix(device, hW2C, mtxW2C);
 
+    auto hV2C = shd->GetHandleByName("mtxV2C");
+    shd->SetMatrix(device, hV2C, mtxV2C);
+
     auto hInvScr = shd->GetHandleByName("invScreen");
     izanagi::math::CVector4 invScr(1.0f / width, 1.0f / height, 0.0f, 1.0f);
     shd->SetVector(device, hInvScr, invScr);
 
     auto hFar = shd->GetHandleByName("depthFar");
     shd->SetFloat(device, hFar, camera.GetParam().cameraFar);
+
+    auto hKernel = shd->GetHandleByName("kernels");
+    shd->SetVectorArray(device, hKernel, m_kernels, KernelSize);
+
+    // TODO
+    static const IZ_FLOAT radius = 5.0f;
+    auto hRadius = shd->GetHandleByName("radius");
+    shd->SetFloat(device, hRadius, radius);
 
     m_gbuffer.bind(device);
 

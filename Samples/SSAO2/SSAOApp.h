@@ -32,6 +32,8 @@ public:
     virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device) override;
 
 private:
+    void generateKernel();
+
     void renderGeometryPass(izanagi::graph::CGraphicsDevice* device);
     void renderSSAOPass(izanagi::graph::CGraphicsDevice* device);
 
@@ -44,6 +46,9 @@ protected:
     GBuffer m_gbuffer;
 
     izanagi::CDebugMesh* m_screenFillPlane{ nullptr };
+
+    static const IZ_UINT KernelSize = 32;
+    izanagi::math::CVector4 m_kernels[KernelSize];
 };
 
 #endif    // #if !defined(__SSAO_APP_H__)

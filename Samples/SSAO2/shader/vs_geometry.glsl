@@ -11,6 +11,7 @@ out float varDepth;
 
 uniform mat4 mtxL2W;
 uniform mat4 mtxW2C;
+uniform mat4 mtxW2V;
 uniform vec4 color;
 
 uniform float depthFar;
@@ -22,6 +23,8 @@ void main()
     varAlbedo = color;
 
     varNormal = normalize(mtxL2W * vec4(normal, 0)).xyz;
+
+    // [-1, 1] -> [0, 1]
     varNormal = (varNormal + 1.0) * 0.5;
 
     varDepth = gl_Position.w / depthFar;
