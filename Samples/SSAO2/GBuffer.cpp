@@ -60,6 +60,19 @@ void GBuffer::endGeometryPass(izanagi::graph::CGraphicsDevice* device)
     m_gbuffer->end(device);
 }
 
+void GBuffer::bind(izanagi::graph::CGraphicsDevice* device)
+{
+    izanagi::engine::GBuffer::BindOp ops[] = {
+        { Albedo, 0, "s0" },
+        { Normal, 1, "s1" },
+        { Depth, 2, "s2" },
+    };
+
+    m_gbuffer->bind(
+        device,
+        ops, COUNTOF(ops));
+}
+
 void GBuffer::drawBuffers(izanagi::graph::CGraphicsDevice* device)
 {
     IZ_UINT targets[] = {

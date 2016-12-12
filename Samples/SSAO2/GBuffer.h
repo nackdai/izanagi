@@ -20,6 +20,8 @@ public:
     void beginGeometryPass(izanagi::graph::CGraphicsDevice* device);
     void endGeometryPass(izanagi::graph::CGraphicsDevice* device);
 
+    void bind(izanagi::graph::CGraphicsDevice* device);
+
     void drawBuffers(izanagi::graph::CGraphicsDevice* device);
 
 private:

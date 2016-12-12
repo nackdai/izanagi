@@ -24,6 +24,12 @@
     <None Include="..\..\SSAO2\shader\ps_geometry.glsl">
       <Filter>shader</Filter>
     </None>
+    <None Include="..\..\SSAO2\shader\vs_fillscreen.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\SSAO2\shader\ps_ssao.glsl">
+      <Filter>shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\SSAO2\SSAOApp.cpp">

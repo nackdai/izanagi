@@ -31,12 +31,19 @@ public:
     // 描画.
     virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device) override;
 
+private:
+    void renderGeometryPass(izanagi::graph::CGraphicsDevice* device);
+    void renderSSAOPass(izanagi::graph::CGraphicsDevice* device);
+
 protected:
     izanagi::sample::ObjModel* m_obj{ nullptr };
 
-    izanagi::sample::Shader m_shd;
+    izanagi::sample::Shader m_shdGeometryPass;
+    izanagi::sample::Shader m_shdSSAOPass;
 
     GBuffer m_gbuffer;
+
+    izanagi::CDebugMesh* m_screenFillPlane{ nullptr };
 };
 
 #endif    // #if !defined(__SSAO_APP_H__)

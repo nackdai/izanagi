@@ -355,7 +355,9 @@
   <ItemGroup>
     <None Include="..\..\SSAO2\shader\ps_default.glsl" />
     <None Include="..\..\SSAO2\shader\ps_geometry.glsl" />
+    <None Include="..\..\SSAO2\shader\ps_ssao.glsl" />
     <None Include="..\..\SSAO2\shader\vs_default.glsl" />
+    <None Include="..\..\SSAO2\shader\vs_fillscreen.glsl" />
     <None Include="..\..\SSAO2\shader\vs_geometry.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
