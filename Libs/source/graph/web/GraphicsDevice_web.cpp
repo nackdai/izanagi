@@ -102,7 +102,7 @@ namespace graph
             // NOTE
             // izanagiでは左手座標系なので
             // カリングの標準はCounterClockWiseにする
-            CALL_GL_API(::glFrontFace(GL_CCW));
+            CALL_GL_API(::glFrontFace(GL_CW));
 
             // ビューポート
             SViewport vp;

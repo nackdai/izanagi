@@ -72,8 +72,8 @@ namespace graph
     namespace {
         GLenum CullTbl[] = {
             GL_FRONT_AND_BACK,
-            GL_BACK,    // CW
-            GL_FRONT,   // CCW
+            GL_FRONT,  // CW
+            GL_BACK,   // CCW
         };
         IZ_C_ASSERT(COUNTOF(CullTbl) == E_GRAPH_CULL_NUM);
     }   // namespace
