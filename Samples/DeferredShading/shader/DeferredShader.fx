@@ -151,7 +151,6 @@ float4 mainPSLightPass(SPSInput In) : COLOR0
     pos.xy *= depth;
     pos = mul(pos, g_mtxC2V);
 
-    pos.xy /= pos.z;
     pos.z = depth;
 
     pos = mul(pos, g_mtxV2W);
