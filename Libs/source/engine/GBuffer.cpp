@@ -148,10 +148,9 @@ namespace engine {
         
         IZ_BOOL result = IZ_FALSE;
 
-        static const IZ_UINT maxrt = 16;
-        graph::CRenderTarget* rts[maxrt] = { nullptr };
+        graph::CRenderTarget* rts[MaxRT] = { nullptr };
 
-        IZ_ASSERT(targetNum < maxrt);
+        IZ_ASSERT(targetNum < MaxRT);
 
         auto rtNum = getBuffers(rts, targets, targetNum);
 
@@ -174,6 +173,31 @@ namespace engine {
         return IZ_TRUE;
     }
 
+    IZ_BOOL GBuffer::bind(
+        graph::CGraphicsDevice* device,
+        BindOp* targets, IZ_UINT targetNum)
+    {
+        IZ_ASSERT(targetNum <= getBufferNum());
+
+        for (IZ_UINT i = 0; i < targetNum; i++) {
+            auto op = targets[i];
+
+            auto item = m_buffers.GetAt(op.idx);
+            IZ_ASSERT(item);
+
+            if (item) {
+                auto buffer = item->GetData();
+                auto rt = buffer->rt;
+                IZ_ASSERT(rt);
+
+                auto result = device->SetTexture(op.stage, rt);
+                VRETURN(result);
+            }
+        }
+
+        return IZ_TRUE;
+    }
+
     void GBuffer::dumpBuffers(
         graph::CGraphicsDevice* device,
         IZ_UINT* targets, IZ_UINT targetNum,
@@ -188,10 +212,9 @@ namespace engine {
 
         IZ_ASSERT(device);
 
-        static const IZ_UINT maxrt = 16;
-        graph::CRenderTarget* rts[maxrt] = { nullptr };
+        graph::CRenderTarget* rts[MaxRT] = { nullptr };
 
-        IZ_ASSERT(targetNum < maxrt);
+        IZ_ASSERT(targetNum < MaxRT);
 
         auto rtNum = getBuffers(rts, targets, targetNum);
 

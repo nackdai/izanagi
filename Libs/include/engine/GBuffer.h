@@ -10,6 +10,9 @@ namespace engine {
     public:
         static const IZ_UINT BufferNameLength = 16;
 
+        // TODO
+        static const IZ_UINT MaxRT = 16;
+
     public:
         static GBuffer* crreate(IMemoryAllocator* allocator);
 
@@ -48,6 +51,16 @@ namespace engine {
             IZ_DWORD clearStencil = 0);
 
         IZ_BOOL end(graph::CGraphicsDevice* device);
+
+        struct BindOp {
+            IZ_UINT idx;
+            IZ_UINT stage;
+            IZ_CHAR* handleName;
+        };
+
+        IZ_BOOL bind(
+            graph::CGraphicsDevice* device,
+            BindOp* targets, IZ_UINT targetNum);
 
         void dumpBuffers(
             graph::CGraphicsDevice* device,
