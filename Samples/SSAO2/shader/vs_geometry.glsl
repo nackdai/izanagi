@@ -22,7 +22,7 @@ void main()
 
     varAlbedo = color;
 
-    varNormal = normalize(mtxL2W * vec4(normal, 0)).xyz;
+    varNormal = normalize(mtxW2V * mtxL2W * vec4(normal, 0)).xyz;
 
     // [-1, 1] -> [0, 1]
     varNormal = (varNormal + 1.0) * 0.5;

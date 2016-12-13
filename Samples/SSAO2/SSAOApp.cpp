@@ -2,6 +2,11 @@
 #include "izGraph.h"
 #include "izSystem.h"
 
+// NOTE
+// http://john-chapman-graphics.blogspot.jp/2013/01/ssao-tutorial.html
+// http://blazelight.net/en/articles/ssao-tutorial-english.php
+// http://www.gamedev.net/page/resources/_/technical/graphics-programming-and-theory/a-simple-and-practical-approach-to-ssao-r2753
+
 SSAOApp::SSAOApp()
 {
 }
@@ -38,6 +43,10 @@ IZ_BOOL SSAOApp::InitInternal(
         device,
         "shader/vs_fillscreen.glsl",
         "shader/ps_blur.glsl");
+    m_shdFinalPass.init(
+        device,
+        "shader/vs_fillscreen.glsl",
+        "shader/ps_final.glsl");
 
     m_obj = izanagi::sample::ObjModel::create(
         allocator,
@@ -102,6 +111,7 @@ void SSAOApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     renderGeometryPass(device);
     renderSSAOPass(device);
     renderBlurPass(device);
+    renderFinalPass(device);
 
     device->SetTexture(0, IZ_NULL);
     m_gbuffer.drawBuffers(device);
@@ -235,6 +245,39 @@ void SSAOApp::renderBlurPass(izanagi::graph::CGraphicsDevice* device)
 
     m_gbuffer.bindForBlurPass(device);
 
+    m_gbuffer.beginBlurPass(device);
+
+    m_screenFillPlane->Draw(device);
+
+    m_gbuffer.endBlurPass(device);
+
+    device->LoadRenderState();
+}
+
+void SSAOApp::renderFinalPass(izanagi::graph::CGraphicsDevice* device)
+{
+    device->SaveRenderState();
+
+    device->SetRenderState(
+        izanagi::graph::E_GRAPH_RS_ZENABLE,
+        IZ_FALSE);
+    device->SetRenderState(
+        izanagi::graph::E_GRAPH_RS_ZWRITEENABLE,
+        IZ_FALSE);
+
+    auto width = device->GetBackBufferWidth();
+    auto height = device->GetBackBufferHeight();
+
+    auto* shd = m_shdFinalPass.m_program;
+
+    device->SetShaderProgram(shd);
+
+    auto hInvScr = shd->GetHandleByName("invScreen");
+    izanagi::math::CVector4 invScr(1.0f / width, 1.0f / height, 0.0f, 1.0f);
+    shd->SetVector(device, hInvScr, invScr);
+
+    m_gbuffer.bindForFinalPass(device);
+
     m_screenFillPlane->Draw(device);
 
     device->LoadRenderState();
@@ -246,6 +289,8 @@ void SSAOApp::ReleaseInternal()
 
     m_shdGeometryPass.release();
     m_shdSSAOPass.release();
+    m_shdBlurPass.release();
+    m_shdFinalPass.release();
 
     SAFE_RELEASE(m_screenFillPlane);
 

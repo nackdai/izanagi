@@ -23,8 +23,12 @@ public:
     void beginSSAOPass(izanagi::graph::CGraphicsDevice* device);
     void endSSAOPass(izanagi::graph::CGraphicsDevice* device);
 
+    void beginBlurPass(izanagi::graph::CGraphicsDevice* device);
+    void endBlurPass(izanagi::graph::CGraphicsDevice* device);
+
     void bindForSSAOPass(izanagi::graph::CGraphicsDevice* device);
     void bindForBlurPass(izanagi::graph::CGraphicsDevice* device);
+    void bindForFinalPass(izanagi::graph::CGraphicsDevice* device);
 
     void drawBuffers(izanagi::graph::CGraphicsDevice* device);
 
@@ -34,6 +38,7 @@ private:
         Normal,
         Depth,
         SSAO,
+        Blur,
 
         Num,
     };

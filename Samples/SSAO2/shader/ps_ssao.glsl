@@ -23,6 +23,14 @@ uniform vec4 kernels[KernelSize];
 
 #define FallOff (0.000002)
 
+vec3 randomNormal(vec2 tex)
+{
+    float noiseX = (fract(sin(dot(tex, vec2(15.8989f, 76.132f) * 1.0f)) * 46336.23745f));
+    float noiseY = (fract(sin(dot(tex, vec2(11.9899f, 62.223f) * 2.0f)) * 34748.34744f));
+    float noiseZ = (fract(sin(dot(tex, vec2(13.3238f, 63.122f) * 3.0f)) * 59998.47362f));
+    return normalize(vec3(noiseX, noiseY, noiseZ));
+}
+
 void main()
 {
     vec4 uv = varPos;
@@ -65,11 +73,11 @@ void main()
     pos = mtxC2V * pos;
     pos.z = centerDepth;
 
+#if 0
     // View-space -> World-space
     pos = mtxV2W * pos;
     pos.w = 1.0;
 
-#if 0
     // Debug..
     pos = mtxW2C * pos;
     pos /= pos.w;
@@ -95,14 +103,21 @@ void main()
 
     float occlusion = 0.0;
 
+    vec3 randNml = randomNormal(uv.xy);
+
     for (int i = 0; i < KernelSize; i++) {
         // Get sample position.
+#if 1
         vec3 samplePos = tbn * kernels[i].xyz;
         samplePos = samplePos * radius + pos.xyz;
+#else
+        vec3 samplePos = reflect(kernels[i].xyz, randNml);
+        samplePos = samplePos * radius + pos.xyz;
+#endif
 
         // Compute offset uv.
         vec4 offset = vec4(samplePos, 1.0);
-        offset = mtxW2C * offset;
+        offset = mtxV2C * offset;
         offset.xy /= offset.w;
         offset.xy = offset.xy * 0.5 + 0.5;  // [-1, 1] -> [0, 1]
         offset.y = 1.0 - offset.y;
@@ -125,7 +140,7 @@ void main()
 
         // 正：遮蔽するピクセルが現在のピクセルより前 -> 現在のピクセルは遮蔽される
         // 負：遮蔽するピクセルが現在のピクセルより奥 -> 現在のピクセルは遮蔽されない
-        float depthDiff = centerDepth - sampleDepth;
+        float depthDiff = (centerDepth - sampleDepth) / depthFar;
 
         // step(falloff, depthDiff) -> falloff より小さければ 0.0、大きければ 1.0
         //  -> ある程度以上深度が離れていない場合は遮蔽されていることとする
@@ -133,7 +148,8 @@ void main()
     }
 
     occlusion = 1.0 - (occlusion / KernelSize);
+    occlusion = pow(occlusion, 3.0);
 
-    outColor = vec4(occlusion, occlusion, occlusion, occlusion);
+    outColor = vec4(occlusion, occlusion, occlusion, 1);
 #endif
 }
