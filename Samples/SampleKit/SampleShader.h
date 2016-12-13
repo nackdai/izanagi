@@ -28,7 +28,7 @@ namespace sample {
                 izanagi::CFileInputStream in;
                 in.Open(vsPath);
 
-                auto size = in.GetSize();
+                IZ_UINT size = (IZ_UINT)in.GetSize();
 
                 std::vector<char> program(size + 1);
                 in.Read(&program[0], 0, size);
@@ -42,7 +42,7 @@ namespace sample {
                 izanagi::CFileInputStream in;
                 in.Open(psPath);
 
-                auto size = in.GetSize();
+                IZ_UINT size = (IZ_UINT)in.GetSize();
 
                 std::vector<char> program(size + 1);
                 in.Read(&program[0], 0, size);
