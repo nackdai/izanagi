@@ -51,7 +51,7 @@ IZ_BOOL SSAOApp::InitInternal(
     m_obj = izanagi::sample::ObjModel::create(
         allocator,
         device,
-        "../../Media/teapot/teapot.obj");
+        "../../Media/teapot.obj");
 
     m_gbuffer.init(allocator, device);
 
