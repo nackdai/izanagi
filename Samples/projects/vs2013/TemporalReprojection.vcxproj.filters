@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\TemporalReprojection\GBuffer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TemporalReprojection\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TemporalReprojection\TemporalReprojectionApp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\TemporalReprojection\GBuffer.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TemporalReprojection\TemporalReprojectionApp.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\TemporalReprojection\shader\ps_blur.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\TemporalReprojection\shader\ps_default.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\TemporalReprojection\shader\ps_final.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\TemporalReprojection\shader\ps_geometry.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\TemporalReprojection\shader\ps_ssao.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\TemporalReprojection\shader\vs_default.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\TemporalReprojection\shader\vs_fillscreen.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\TemporalReprojection\shader\vs_geometry.glsl">
+      <Filter>shader</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="shader">
+      <UniqueIdentifier>{c4098c92-eeea-4afc-9c53-c64f4a0b18df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{05f32bb1-5766-4f56-a642-345110d60389}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{19ff4f2d-04b5-4c06-87d8-f1055117eed5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
