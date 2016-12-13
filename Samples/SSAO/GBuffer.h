@@ -1,65 +1,49 @@
 #if !defined(__GBUFFER_H__)
 #define __GBUFFER_H__
 
-#include "izSampleKit.h"
+#include "izStd.h"
+#include "izGraph.h"
+#include "izEngine.h"
 
 class GBuffer {
 public:
-    GBuffer();
-    virtual ~GBuffer();
+    GBuffer() {}
+    ~GBuffer() {}
 
 public:
-    // 初期化.
-    IZ_BOOL initialize(
+    IZ_BOOL init(
         izanagi::IMemoryAllocator* allocator,
         izanagi::graph::CGraphicsDevice* device);
 
-    // 解放.
-    void release();
+    void clear();
 
-    IZ_BOOL beginGeometryPass(izanagi::graph::CGraphicsDevice* device);
-    IZ_BOOL endGeometryPass(izanagi::graph::CGraphicsDevice* device);
+    void beginGeometryPass(izanagi::graph::CGraphicsDevice* device);
+    void endGeometryPass(izanagi::graph::CGraphicsDevice* device);
 
-    IZ_BOOL beginSSAOPass(
-        izanagi::graph::CGraphicsDevice* device,
-        izanagi::shader::CShaderBasic* shader);
-    IZ_BOOL endSSAOPass(
-        izanagi::graph::CGraphicsDevice* device,
-        izanagi::shader::CShaderBasic* shader);
+    void beginSSAOPass(izanagi::graph::CGraphicsDevice* device);
+    void endSSAOPass(izanagi::graph::CGraphicsDevice* device);
 
-    IZ_BOOL beginFinalPass(
-        izanagi::graph::CGraphicsDevice* device,
-        izanagi::shader::CShaderBasic* shader);
-    IZ_BOOL endFinalPass(
-        izanagi::graph::CGraphicsDevice* device,
-        izanagi::shader::CShaderBasic* shader);
+    void beginBlurPass(izanagi::graph::CGraphicsDevice* device);
+    void endBlurPass(izanagi::graph::CGraphicsDevice* device);
+
+    void bindForSSAOPass(izanagi::graph::CGraphicsDevice* device);
+    void bindForBlurPass(izanagi::graph::CGraphicsDevice* device);
+    void bindForFinalPass(izanagi::graph::CGraphicsDevice* device);
 
     void drawBuffers(izanagi::graph::CGraphicsDevice* device);
 
-public:
+private:
     enum Type {
-        Albedo,
+        Albedo = 0,
         Normal,
         Depth,
+        SSAO,
+        Blur,
 
         Num,
     };
 
-    izanagi::graph::CRenderTarget* getBuffer(Type type)
-    {
-        IZ_ASSERT(type < Type::Num);
-        return m_buffers[type];
-    }
-
-    izanagi::graph::CRenderTarget* getSSAOBuffer()
-    {
-        return m_SSAOBuffer;
-    }
-
-private:
-    izanagi::graph::CRenderTarget* m_buffers[Type::Num];
-
-    izanagi::graph::CRenderTarget* m_SSAOBuffer{ nullptr };
+    izanagi::engine::GBuffer* m_gbuffer{ nullptr };
 };
 
 #endif    // #if !defined(__GBUFFER_H__)

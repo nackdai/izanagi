@@ -4,6 +4,7 @@
 #include "izSampleKit.h"
 #include "izSceneGraph.h"
 #include "izDebugUtil.h"
+
 #include "GBuffer.h"
 
 static const IZ_UINT SCREEN_WIDTH = 1280;
@@ -30,32 +31,28 @@ public:
     // 描画.
     virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device) override;
 
-    virtual IZ_BOOL OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key) override;
-
 private:
-    void RenderScene(
-        izanagi::graph::CGraphicsDevice* device,
-        izanagi::CDebugMesh* mesh,
-        const izanagi::math::SVector4& position);
+    void generateKernel();
 
     void renderGeometryPass(izanagi::graph::CGraphicsDevice* device);
     void renderSSAOPass(izanagi::graph::CGraphicsDevice* device);
+    void renderBlurPass(izanagi::graph::CGraphicsDevice* device);
     void renderFinalPass(izanagi::graph::CGraphicsDevice* device);
 
 protected:
+    izanagi::sample::ObjModel* m_obj{ nullptr };
+
+    izanagi::sample::Shader m_shdGeometryPass;
+    izanagi::sample::Shader m_shdSSAOPass;
+    izanagi::sample::Shader m_shdBlurPass;
+    izanagi::sample::Shader m_shdFinalPass;
+
     GBuffer m_gbuffer;
 
-    izanagi::shader::CShaderBasic* m_Shader;
+    izanagi::CDebugMesh* m_screenFillPlane{ nullptr };
 
-    izanagi::CDebugMesh* m_Sphere;
-    izanagi::CDebugMesh* m_Cube;
-    izanagi::CDebugMesh* m_Plane;
-
-    izanagi::math::SMatrix44 m_L2W;
-    izanagi::SParallelLightParam m_ParallelLight;
-
-    izanagi::graph::CVertexBuffer* m_VB;
-    izanagi::graph::CVertexDeclaration* m_VD;
+    static const IZ_UINT KernelSize = 32;
+    izanagi::math::CVector4 m_kernels[KernelSize];
 };
 
 #endif    // #if !defined(__SSAO_APP_H__)
