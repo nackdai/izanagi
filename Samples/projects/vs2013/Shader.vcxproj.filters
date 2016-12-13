@@ -48,9 +48,6 @@
     <ClCompile Include="..\..\Shader\StateNormalMap.cpp">
       <Filter>state\source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Shader\StateSSAO.cpp">
-      <Filter>state\source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Shader\BevelShaderMesh.cpp">
       <Filter>source</Filter>
     </ClCompile>
@@ -72,9 +69,6 @@
       <Filter>shader</Filter>
     </None>
     <None Include="..\..\Shader\shader\NormalMapShader.fx">
-      <Filter>shader</Filter>
-    </None>
-    <None Include="..\..\Shader\shader\SSAOShader.fx">
       <Filter>shader</Filter>
     </None>
     <None Include="..\..\Shader\shader\BevelShader.fx">
@@ -101,9 +95,6 @@
       <Filter>state\include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Shader\StateNormalMap.h">
-      <Filter>state\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Shader\StateSSAO.h">
       <Filter>state\include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Shader\BevelShaderMesh.h">
@@ -133,9 +124,6 @@
       <Filter>asset</Filter>
     </CustomBuild>
     <CustomBuild Include="..\..\Shader\shader\NormalMapShader.xml">
-      <Filter>shader</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\..\Shader\shader\SSAOShader.xml">
       <Filter>shader</Filter>
     </CustomBuild>
     <CustomBuild Include="..\..\Shader\shader\BevelShader.xml">
