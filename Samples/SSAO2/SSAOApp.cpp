@@ -83,6 +83,7 @@ __EXIT__:
 void SSAOApp::generateKernel()
 {
     for (IZ_UINT i = 0; i < KernelSize; i++) {
+#if 0
         // Generate random postion in hemisphere.
         m_kernels[i] = izanagi::math::CVector4(
             izanagi::math::CMathRand::GetRandBetween<IZ_FLOAT>(-1.0f, 1.0f),
@@ -96,6 +97,25 @@ void SSAOApp::generateKernel()
         IZ_FLOAT scale = (IZ_FLOAT)i / (IZ_FLOAT)KernelSize;
         scale = izanagi::math::CMath::Lerp(0.1f, 1.0f, scale * scale);
         m_kernels[i] *= scale;
+#else
+        // Importance sampling.
+
+        IZ_FLOAT r1 = izanagi::math::CMathRand::GetRandFloat();
+        IZ_FLOAT(r1 >= 0.0f);
+
+        IZ_FLOAT r2 = izanagi::math::CMathRand::GetRandFloat();
+        IZ_FLOAT(r2 >= 0.0f);
+
+        IZ_FLOAT cos_theta = sqrt(1 - r2);
+        IZ_FLOAT sin_theta = sqrt(r2);
+        IZ_FLOAT phi = IZ_MATH_PI2 * r1;
+
+        IZ_FLOAT x = cos(phi) * sin_theta;
+        IZ_FLOAT y = sin(phi) * sin_theta;
+        IZ_FLOAT z = cos_theta;
+
+        m_kernels[i] = izanagi::math::CVector4(x, y, z, 0.0f);
+#endif
     }
 }
 
