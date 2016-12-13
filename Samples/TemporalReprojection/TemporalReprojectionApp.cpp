@@ -1,4 +1,4 @@
-#include "SSAOApp.h"
+#include "TemporalReprojectionApp.h"
 #include "izGraph.h"
 #include "izSystem.h"
 
@@ -7,16 +7,16 @@
 // http://blazelight.net/en/articles/ssao-tutorial-english.php
 // http://www.gamedev.net/page/resources/_/technical/graphics-programming-and-theory/a-simple-and-practical-approach-to-ssao-r2753
 
-SSAOApp::SSAOApp()
+TemporalReprojectionApp::TemporalReprojectionApp()
 {
 }
 
-SSAOApp::~SSAOApp()
+TemporalReprojectionApp::~TemporalReprojectionApp()
 {
 }
 
 // 開始
-IZ_BOOL SSAOApp::InitInternal(
+IZ_BOOL TemporalReprojectionApp::InitInternal(
     izanagi::IMemoryAllocator* allocator,
     izanagi::graph::CGraphicsDevice* device,
     izanagi::sample::CSampleCamera& camera)
@@ -80,7 +80,7 @@ __EXIT__:
     return result;
 }
 
-void SSAOApp::generateKernel()
+void TemporalReprojectionApp::generateKernel()
 {
     for (IZ_UINT i = 0; i < KernelSize; i++) {
 #if 0
@@ -120,13 +120,13 @@ void SSAOApp::generateKernel()
 }
 
 // 更新.
-void SSAOApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
+void TemporalReprojectionApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
     GetCamera().Update();
 }
 
 // 描画.
-void SSAOApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
+void TemporalReprojectionApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
     renderGeometryPass(device);
     renderSSAOPass(device);
@@ -134,10 +134,10 @@ void SSAOApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     renderFinalPass(device);
 
     device->SetTexture(0, IZ_NULL);
-    m_gbuffer.drawBuffers(device);
+    //m_gbuffer.drawBuffers(device);
 }
 
-void SSAOApp::renderGeometryPass(izanagi::graph::CGraphicsDevice* device)
+void TemporalReprojectionApp::renderGeometryPass(izanagi::graph::CGraphicsDevice* device)
 {
     const auto& camera = GetCamera();
 
@@ -176,7 +176,7 @@ void SSAOApp::renderGeometryPass(izanagi::graph::CGraphicsDevice* device)
     m_gbuffer.endGeometryPass(device);
 }
 
-void SSAOApp::renderSSAOPass(izanagi::graph::CGraphicsDevice* device)
+void TemporalReprojectionApp::renderSSAOPass(izanagi::graph::CGraphicsDevice* device)
 {
     device->SaveRenderState();
 
@@ -241,7 +241,7 @@ void SSAOApp::renderSSAOPass(izanagi::graph::CGraphicsDevice* device)
     device->LoadRenderState();
 }
 
-void SSAOApp::renderBlurPass(izanagi::graph::CGraphicsDevice* device)
+void TemporalReprojectionApp::renderBlurPass(izanagi::graph::CGraphicsDevice* device)
 {
     device->SaveRenderState();
 
@@ -274,7 +274,7 @@ void SSAOApp::renderBlurPass(izanagi::graph::CGraphicsDevice* device)
     device->LoadRenderState();
 }
 
-void SSAOApp::renderFinalPass(izanagi::graph::CGraphicsDevice* device)
+void TemporalReprojectionApp::renderFinalPass(izanagi::graph::CGraphicsDevice* device)
 {
     device->SaveRenderState();
 
@@ -303,7 +303,7 @@ void SSAOApp::renderFinalPass(izanagi::graph::CGraphicsDevice* device)
     device->LoadRenderState();
 }
 
-void SSAOApp::ReleaseInternal()
+void TemporalReprojectionApp::ReleaseInternal()
 {
     SAFE_RELEASE(m_obj);
 

@@ -1,5 +1,5 @@
-#if !defined(__SSAO_APP_H__)
-#define __SSAO_APP_H__
+#if !defined(__TEMPORAL_REPROJECTION_APP_H__)
+#define __TEMPORAL_REPROJECTION_APP_H__
 
 #include "izSampleKit.h"
 #include "izSceneGraph.h"
@@ -10,10 +10,10 @@
 static const IZ_UINT SCREEN_WIDTH = 1280;
 static const IZ_UINT SCREEN_HEIGHT = 720;
 
-class SSAOApp : public izanagi::sample::CSampleApp {
+class TemporalReprojectionApp : public izanagi::sample::CSampleApp {
 public:
-    SSAOApp();
-    virtual ~SSAOApp();
+    TemporalReprojectionApp();
+    virtual ~TemporalReprojectionApp();
 
 public:
     // 初期化.
@@ -55,4 +55,4 @@ protected:
     izanagi::math::CVector4 m_kernels[KernelSize];
 };
 
-#endif    // #if !defined(__SSAO_APP_H__)
+#endif    // #if !defined(__TEMPORAL_REPROJECTION_APP_H__)
