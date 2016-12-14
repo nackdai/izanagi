@@ -53,6 +53,13 @@ protected:
 
     static const IZ_UINT KernelSize = 32;
     izanagi::math::CVector4 m_kernels[KernelSize];
+
+    IZ_BOOL m_isInitialized{ IZ_TRUE };
+    IZ_UINT m_curFrame{ 0 };
+    izanagi::math::CMatrix44 m_mtxPrevV2C;
+
+    static const IZ_UINT MaxFrame = 4;
+    static const IZ_UINT KernelSizePerFrame = KernelSize / MaxFrame;
 };
 
 #endif    // #if !defined(__TEMPORAL_REPROJECTION_APP_H__)

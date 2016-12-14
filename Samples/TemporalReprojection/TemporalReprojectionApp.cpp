@@ -3,9 +3,9 @@
 #include "izSystem.h"
 
 // NOTE
-// http://john-chapman-graphics.blogspot.jp/2013/01/ssao-tutorial.html
-// http://blazelight.net/en/articles/ssao-tutorial-english.php
-// http://www.gamedev.net/page/resources/_/technical/graphics-programming-and-theory/a-simple-and-practical-approach-to-ssao-r2753
+// http://d.hatena.ne.jp/hanecci/20131103/p1
+// https://sites.google.com/site/monshonosuana/directxno-hanashi-1/directx-136
+// http://www.slideshare.net/HEXADRIVE/final-fantasy-hd-hd
 
 TemporalReprojectionApp::TemporalReprojectionApp()
 {
@@ -123,18 +123,33 @@ void TemporalReprojectionApp::generateKernel()
 void TemporalReprojectionApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
     GetCamera().Update();
+
+    if (m_isInitialized) {
+        m_mtxPrevV2C = GetCamera().GetParam().mtxV2C;
+
+        m_gbuffer.clearBuffer(device);
+    }
 }
+
+//#define RENDER_SSAO_PASS
 
 // 描画.
 void TemporalReprojectionApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
     renderGeometryPass(device);
     renderSSAOPass(device);
+#ifndef RENDER_SSAO_PASS
     renderBlurPass(device);
     renderFinalPass(device);
+#endif
 
     device->SetTexture(0, IZ_NULL);
     //m_gbuffer.drawBuffers(device);
+
+    m_mtxPrevV2C = GetCamera().GetParam().mtxV2C;
+    m_gbuffer.toggle();
+
+    m_isInitialized = IZ_FALSE;
 }
 
 void TemporalReprojectionApp::renderGeometryPass(izanagi::graph::CGraphicsDevice* device)
@@ -145,7 +160,7 @@ void TemporalReprojectionApp::renderGeometryPass(izanagi::graph::CGraphicsDevice
     izanagi::math::CMatrix44 mtxL2W;
     mtxL2W.SetScale(100, 100, 100);
 
-    izanagi::math::CVector4 color(1.0f, 0.0f, 0.0f, 1.0f);
+    izanagi::math::CVector4 color(1.0f, 0.0f, 1.0f, 1.0f);
 
     const auto& mtxW2C = camera.GetParam().mtxW2C;
     const auto& mtxW2V = camera.GetParam().mtxW2V;
@@ -215,6 +230,9 @@ void TemporalReprojectionApp::renderSSAOPass(izanagi::graph::CGraphicsDevice* de
     auto hV2C = shd->GetHandleByName("mtxV2C");
     shd->SetMatrix(device, hV2C, mtxV2C);
 
+    auto hPrevV2C = shd->GetHandleByName("mtxPrevV2C");
+    shd->SetMatrix(device, hPrevV2C, m_mtxPrevV2C);
+
     auto hInvScr = shd->GetHandleByName("invScreen");
     izanagi::math::CVector4 invScr(1.0f / width, 1.0f / height, 0.0f, 1.0f);
     shd->SetVector(device, hInvScr, invScr);
@@ -223,7 +241,12 @@ void TemporalReprojectionApp::renderSSAOPass(izanagi::graph::CGraphicsDevice* de
     shd->SetFloat(device, hFar, camera.GetParam().cameraFar);
 
     auto hKernel = shd->GetHandleByName("kernels");
-    shd->SetVectorArray(device, hKernel, m_kernels, KernelSize);
+    shd->SetVectorArray(device, hKernel, &m_kernels[KernelSizePerFrame * m_curFrame], KernelSizePerFrame);
+
+    m_curFrame++;
+    if (m_curFrame >= m_curFrame) {
+        m_curFrame = 0;
+    }
 
     // TODO
     static const IZ_FLOAT radius = 5.0f;
@@ -232,11 +255,15 @@ void TemporalReprojectionApp::renderSSAOPass(izanagi::graph::CGraphicsDevice* de
 
     m_gbuffer.bindForSSAOPass(device);
 
+#ifdef RENDER_SSAO_PASS
+    m_screenFillPlane->Draw(device);
+#else
     m_gbuffer.beginSSAOPass(device);
 
     m_screenFillPlane->Draw(device);
 
     m_gbuffer.endSSAOPass(device);
+#endif
 
     device->LoadRenderState();
 }
@@ -314,5 +341,5 @@ void TemporalReprojectionApp::ReleaseInternal()
 
     SAFE_RELEASE(m_screenFillPlane);
 
-    m_gbuffer.clear();
+    m_gbuffer.release();
 }

@@ -13,12 +13,15 @@ uniform float radius;
 
 uniform mat4 mtxW2C;
 uniform mat4 mtxV2C;
+uniform mat4 mtxPrevV2C;
 
 uniform sampler2D s0;   // albedo
 uniform sampler2D s1;   // normal
 uniform sampler2D s2;   // depth
+uniform sampler2D s3;   // prev depth
+uniform sampler2D s4;   // prev ssao
 
-#define KernelSize  (32)
+#define KernelSize  (8)
 uniform vec4 kernels[KernelSize];
 
 #define FallOff (0.000002)
@@ -31,65 +34,8 @@ vec3 randomNormal(vec2 tex)
     return normalize(vec3(noiseX, noiseY, noiseZ));
 }
 
-void main()
+float computeAO(vec4 pos, vec3 normal, vec2 uv, float centerDepth)
 {
-    vec4 uv = varPos;
-
-    uv.y = 1.0 - uv.y;
-
-    // Depth format is R32F.
-    float depth = texture(s2, uv.xy).r;
-
-    if (depth <= 0.0f) {
-        discard;
-    }
-
-    // Convert depth [0, 1] -> [0, far] in view-space.
-    float centerDepth = depth * depthFar;
-
-    // NOTE
-    // Pview = (Xview, Yview, Zview, 1)
-    // mtxV2C = W 0 0 0
-    //          0 H 0 0
-    //          0 0 A 1
-    //          0 0 B 0
-    // Pview * mtxV2C = (Xclip, Yclip, Zclip, Wclip) = (Xclip, Yclip, Zclip, Zview)
-    //  Wclip = Zview = depth
-    // Xscr = Xclip / Wclip = Xclip / Zview = Xclip / depth
-    // Yscr = Yclip / Wclip = Yclip / Zview = Yclip / depth
-    //
-    // Xscr * depth = Xclip
-    // Xview = Xclip * mtxC2V
-
-    vec4 pos = vec4(varPos.xy, 0, 1);
-
-    // [0, 1] -> [-1, 1]
-    pos.xy = pos.xy * 2.0 - 1.0;
-
-    // Screen-space -> Clip-space
-    pos.xy *= centerDepth;
-
-    // Clip-space -> View-space
-    pos = mtxC2V * pos;
-    pos.z = centerDepth;
-
-#if 0
-    // View-space -> World-space
-    pos = mtxV2W * pos;
-    pos.w = 1.0;
-
-    // Debug..
-    pos = mtxW2C * pos;
-    pos /= pos.w;
-    pos.xy = (pos.xy + 1.0) * 0.5;
-
-    pos.y = 1.0 - pos.y;
-    
-    outColor = texture(s1, pos.xy);
-#else
-    vec3 normal = texture(s1, uv.xy).xyz * 2.0 - 1.0;
-    normal = normalize(normal);
-
     // •½s‚É‚È‚ç‚È‚¢Ž²‚ðŒˆ‚ß‚é.
     vec3 tangent = abs(normal.x) > 0.9 ? vec3(0, 1, 0) : vec3(1, 0, 0);
     tangent = normalize(cross(tangent, normal));
@@ -150,6 +96,89 @@ void main()
     occlusion = 1.0 - (occlusion / KernelSize);
     occlusion = pow(occlusion, 3.0);
 
-    outColor = vec4(occlusion, occlusion, occlusion, 1);
+    return occlusion;
+}
+
+void main()
+{
+    vec4 uv = varPos;
+
+    uv.y = 1.0 - uv.y;
+
+    // Depth format is R32F.
+    float depth = texture(s2, uv.xy).r;
+
+    if (depth <= 0.0f) {
+        discard;
+    }
+
+    // Convert depth [0, 1] -> [0, far] in view-space.
+    float centerDepth = depth * depthFar;
+
+    // NOTE
+    // Pview = (Xview, Yview, Zview, 1)
+    // mtxV2C = W 0 0 0
+    //          0 H 0 0
+    //          0 0 A 1
+    //          0 0 B 0
+    // Pview * mtxV2C = (Xclip, Yclip, Zclip, Wclip) = (Xclip, Yclip, Zclip, Zview)
+    //  Wclip = Zview = depth
+    // Xscr = Xclip / Wclip = Xclip / Zview = Xclip / depth
+    // Yscr = Yclip / Wclip = Yclip / Zview = Yclip / depth
+    //
+    // Xscr * depth = Xclip
+    // Xview = Xclip * mtxC2V
+
+    vec4 pos = vec4(varPos.xy, 0, 1);
+
+    // [0, 1] -> [-1, 1]
+    pos.xy = pos.xy * 2.0 - 1.0;
+
+    // Screen-space -> Clip-space
+    pos.xy *= centerDepth;
+
+    // Clip-space -> View-space
+    pos = mtxC2V * pos;
+    pos.z = centerDepth;
+
+    vec4 prevPos = mtxPrevV2C * pos;
+    prevPos /= prevPos.w;
+    prevPos.xy = prevPos.xy * 0.5 + 0.5;
+    prevPos.y = 1.0 - prevPos.y;
+
+#if 1
+    vec3 normal = texture(s1, uv.xy).xyz * 2.0 - 1.0;
+    normal = normalize(normal);
+
+    float curAO = computeAO(pos, normal, uv.xy, centerDepth);
+
+    bool isInsideX = (0.0 <= prevPos.x) && (prevPos.x <= 1.0);
+    bool isInsideY = (0.0 <= prevPos.y) && (prevPos.y <= 1.0);
+
+    if (isInsideX && isInsideY)
+    {
+        float prevDepth = texture(s3, prevPos.xy).r;
+
+        if (prevDepth > 0.0) {
+            prevDepth *= depthFar;
+
+            if (abs(centerDepth - prevDepth) <= 0.5) {
+                // Cache Hit.
+                float prevAO = texture(s4, prevPos.xy).r;
+                float ao = (curAO * 15.0 + prevAO * 15.0) / 30.0;
+                outColor = vec4(ao, ao, ao, 1);
+                return;
+            }
+        }
+    }
+
+    outColor = vec4(curAO, curAO, curAO, 1);
+#else
+    vec3 normal = texture(s1, uv.xy).xyz * 2.0 - 1.0;
+    normal = normalize(normal);
+
+    vec2 occlusion = computeAO(pos, normal, uv.xy, centerDepth);
+
+    outColor = vec4(occlusion.xy, 0, 1);
 #endif
 }

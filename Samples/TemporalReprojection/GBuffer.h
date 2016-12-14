@@ -15,7 +15,9 @@ public:
         izanagi::IMemoryAllocator* allocator,
         izanagi::graph::CGraphicsDevice* device);
 
-    void clear();
+    void release();
+
+    void clearBuffer(izanagi::graph::CGraphicsDevice* device);
 
     void beginGeometryPass(izanagi::graph::CGraphicsDevice* device);
     void endGeometryPass(izanagi::graph::CGraphicsDevice* device);
@@ -30,20 +32,29 @@ public:
     void bindForBlurPass(izanagi::graph::CGraphicsDevice* device);
     void bindForFinalPass(izanagi::graph::CGraphicsDevice* device);
 
+    void toggle()
+    {
+        m_curIdx = 1 - m_curIdx;
+    }
+
     void drawBuffers(izanagi::graph::CGraphicsDevice* device);
 
 private:
     enum Type {
         Albedo = 0,
         Normal,
-        Depth,
-        SSAO,
+        Depth_0,
+        Depth_1,
+        SSAO_0,
+        SSAO_1,
         Blur,
 
         Num,
     };
 
     izanagi::engine::GBuffer* m_gbuffer{ nullptr };
+
+    IZ_UINT m_curIdx{ 0 };
 };
 
 #endif    // #if !defined(__GBUFFER_H__)

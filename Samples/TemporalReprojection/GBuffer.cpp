@@ -29,14 +29,24 @@ IZ_BOOL GBuffer::init(
         device,
         width, height,
         izanagi::graph::E_GRAPH_PIXEL_FMT_R32F);
-    VRETURN(std::get<1>(res) && std::get<0>(res) == Depth);
+    VRETURN(std::get<1>(res) && std::get<0>(res) == Depth_0);
+    res = m_gbuffer->addBuffer(
+        device,
+        width, height,
+        izanagi::graph::E_GRAPH_PIXEL_FMT_R32F);
+    VRETURN(std::get<1>(res) && std::get<0>(res) == Depth_1);
 
     // SSAO
     res = m_gbuffer->addBuffer(
         device,
         width, height,
         izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA8);
-    VRETURN(std::get<1>(res) && std::get<0>(res) == SSAO);
+    VRETURN(std::get<1>(res) && std::get<0>(res) == SSAO_0);
+    res = m_gbuffer->addBuffer(
+        device,
+        width, height,
+        izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA8);
+    VRETURN(std::get<1>(res) && std::get<0>(res) == SSAO_1);
 
     // Blur
     res = m_gbuffer->addBuffer(
@@ -48,7 +58,7 @@ IZ_BOOL GBuffer::init(
     return IZ_TRUE;
 }
 
-void GBuffer::clear()
+void GBuffer::release()
 {
     if (m_gbuffer) {
         m_gbuffer->removeAll();
@@ -56,12 +66,28 @@ void GBuffer::clear()
     }
 }
 
+void GBuffer::clearBuffer(izanagi::graph::CGraphicsDevice* device)
+{
+    IZ_UINT targets[] = {
+        Depth_0,
+        Depth_1,
+        SSAO_0,
+        SSAO_1,
+    };
+
+    m_gbuffer->begin(
+        device,
+        targets, COUNTOF(targets));
+
+    m_gbuffer->end(device);
+}
+
 void GBuffer::beginGeometryPass(izanagi::graph::CGraphicsDevice* device)
 {
     IZ_UINT targets[] = {
         Albedo,
         Normal,
-        Depth,
+        m_curIdx == 0 ? Depth_0 : Depth_1,
     };
 
     m_gbuffer->begin(
@@ -77,7 +103,7 @@ void GBuffer::endGeometryPass(izanagi::graph::CGraphicsDevice* device)
 void GBuffer::beginSSAOPass(izanagi::graph::CGraphicsDevice* device)
 {
     IZ_UINT targets[] = {
-        SSAO,
+        m_curIdx == 0 ? SSAO_0 : SSAO_1,
     };
 
     m_gbuffer->begin(
@@ -112,7 +138,9 @@ void GBuffer::bindForSSAOPass(izanagi::graph::CGraphicsDevice* device)
     izanagi::engine::GBuffer::BindOp ops[] = {
         { Albedo, 0, "s0" },
         { Normal, 1, "s1" },
-        { Depth, 2, "s2" },
+        { m_curIdx == 0 ? Depth_0 : Depth_1, 2, "s2" },
+        { m_curIdx == 0 ? Depth_1 : Depth_0, 3, "s3" },
+        { m_curIdx == 0 ? SSAO_1 : SSAO_0, 4, "s4" },
     };
 
     m_gbuffer->bind(
@@ -123,8 +151,8 @@ void GBuffer::bindForSSAOPass(izanagi::graph::CGraphicsDevice* device)
 void GBuffer::bindForBlurPass(izanagi::graph::CGraphicsDevice* device)
 {
     izanagi::engine::GBuffer::BindOp ops[] = {
-        { SSAO, 0, "s0" },
-        { Depth, 1, "s1" },
+        { m_curIdx == 0 ? SSAO_0 : SSAO_1, 0, "s0" },
+        { m_curIdx == 0 ? Depth_0 : Depth_1, 1, "s1" },
     };
 
     m_gbuffer->bind(
@@ -150,8 +178,10 @@ void GBuffer::drawBuffers(izanagi::graph::CGraphicsDevice* device)
     IZ_UINT targets[] = {
         Albedo,
         Normal,
-        Depth,
-        SSAO,
+        Depth_0,
+        Depth_1,
+        SSAO_0,
+        SSAO_1,
         Blur,
     };
 
