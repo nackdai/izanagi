@@ -165,7 +165,10 @@ void main()
             if (abs(centerDepth - prevDepth) <= 0.5) {
                 // Cache Hit.
                 float prevAO = texture(s4, prevPos.xy).r;
+
+                // TODO
                 float ao = (curAO * 15.0 + prevAO * 15.0) / 30.0;
+
                 outColor = vec4(ao, ao, ao, 1);
                 return;
             }
@@ -177,8 +180,8 @@ void main()
     vec3 normal = texture(s1, uv.xy).xyz * 2.0 - 1.0;
     normal = normalize(normal);
 
-    vec2 occlusion = computeAO(pos, normal, uv.xy, centerDepth);
+    float occlusion = computeAO(pos, normal, uv.xy, centerDepth);
 
-    outColor = vec4(occlusion.xy, 0, 1);
+    outColor = vec4(occlusion, occlusion, occlusion, 1);
 #endif
 }
