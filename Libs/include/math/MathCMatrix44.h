@@ -177,6 +177,11 @@ namespace math
             SMatrix44::GetTrans(*this, trans);
         }
 
+        void SetTrans(const SVector4& trans)
+        {
+            SMatrix44::GetTrans(*this, trans);
+        }
+
         void Trans(IZ_FLOAT x, IZ_FLOAT y, IZ_FLOAT z)
         {
             SMatrix44::Trans(
