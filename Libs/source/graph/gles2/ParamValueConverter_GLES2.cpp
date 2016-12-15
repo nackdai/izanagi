@@ -201,7 +201,7 @@ namespace graph
             glType = GL_UNSIGNED_INT;
             break;
         case E_GRAPH_PIXEL_FMT_RGBA32F:
-            glInternal = GL_RGBA;
+            glInternal = GL_RGBA32F;
             glFormat = GL_RGBA;
             glType = GL_FLOAT;
             break;
