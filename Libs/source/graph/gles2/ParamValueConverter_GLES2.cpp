@@ -235,6 +235,11 @@ namespace graph
             glFormat = GL_RGBA_INTEGER;
             glType = GL_UNSIGNED_INT;
             break;
+        case E_GRAPH_PIXEL_FMT_R32UI:
+            glInternal = GL_R32UI;
+            glFormat = GL_RED_INTEGER;
+            glType = GL_UNSIGNED_INT;
+            break;
         case E_GRAPH_PIXEL_FMT_R32F:
             glInternal = GL_R32F;
             glFormat = GL_RED;

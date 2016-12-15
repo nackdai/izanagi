@@ -206,6 +206,7 @@ namespace graph
             // Only for OpenGL...
             D3DFMT_UNKNOWN, // E_GRAPH_PIXEL_FMT_RGBA32UI
             D3DFMT_UNKNOWN, // E_GRAPH_PIXEL_FMT_RGB32UI
+            D3DFMT_UNKNOWN, // E_GRAPH_PIXEL_FMT_R32UI
         };
         IZ_C_ASSERT(COUNTOF(PixelFormatTbl) == E_GRAPH_PIXEL_FMT_NUM);
     }   // namespace

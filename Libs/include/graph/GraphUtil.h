@@ -73,6 +73,7 @@ namespace graph
                 // Only for OpenGL...
                 16, // E_GRAPH_PIXEL_FMT_RGBA32UI,
                 12, // E_GRAPH_PIXEL_FMT_RGB32UI,
+                4,  // E_GRAPH_PIXEL_FMT_R32UI
             };
             IZ_C_ASSERT(COUNTOF(bpp) == E_GRAPH_PIXEL_FMT_NUM);
 

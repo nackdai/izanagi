@@ -276,6 +276,7 @@ namespace graph
         // Only for OpenGL...
         E_GRAPH_PIXEL_FMT_RGBA32UI,
         E_GRAPH_PIXEL_FMT_RGB32UI,
+        E_GRAPH_PIXEL_FMT_R32UI,
 
         E_GRAPH_PIXEL_FMT_NUM,
         E_GRAPH_PIXEL_FMT_FORCE_INT32 = 0x7fffffff,
