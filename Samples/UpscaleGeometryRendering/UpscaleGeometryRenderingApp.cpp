@@ -126,7 +126,9 @@ void UpscaleGeometryRenderingApp::renderColorPass(izanagi::graph::CGraphicsDevic
     auto hW2C = shd->GetHandleByName("mtxW2C");
     shd->SetMatrix(device, hW2C, mtxW2C);
 
-    m_gbuffer.beginColorPass(device);
+    auto bgColor = GetBgColor();
+
+    m_gbuffer.beginColorPass(device, bgColor);
 
     m_scene.render(device, shd);
 
@@ -159,6 +161,7 @@ void UpscaleGeometryRenderingApp::ReleaseInternal()
 
     m_shdGeometryPass.release();
     m_shdColorPass.release();
+    m_shdFinalPass.release();
 
     SAFE_RELEASE(m_screenFillPlane);
 

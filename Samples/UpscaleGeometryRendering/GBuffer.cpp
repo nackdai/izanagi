@@ -21,8 +21,8 @@ IZ_BOOL GBuffer::init(
     res = m_gbuffer->addBuffer(
         device,
         width, height,
-        izanagi::graph::E_GRAPH_PIXEL_FMT_R32UI);
-        //izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA8);
+        //izanagi::graph::E_GRAPH_PIXEL_FMT_R32UI);
+        izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA8);
     VRETURN(std::get<1>(res) && std::get<0>(res) == Id);
 
     return IZ_TRUE;
@@ -52,7 +52,9 @@ void GBuffer::endGeometryPass(izanagi::graph::CGraphicsDevice* device)
     m_gbuffer->end(device);
 }
 
-void GBuffer::beginColorPass(izanagi::graph::CGraphicsDevice* device)
+void GBuffer::beginColorPass(
+    izanagi::graph::CGraphicsDevice* device,
+    IZ_COLOR bgColor)
 {
     IZ_UINT targets[] = {
         Color,
@@ -60,7 +62,9 @@ void GBuffer::beginColorPass(izanagi::graph::CGraphicsDevice* device)
 
     m_gbuffer->begin(
         device,
-        targets, COUNTOF(targets));
+        targets, COUNTOF(targets),
+        izanagi::graph::E_GRAPH_CLEAR_FLAG_ALL,
+        bgColor);
 }
 
 void GBuffer::endColorPass(izanagi::graph::CGraphicsDevice* device)
@@ -75,6 +79,15 @@ void GBuffer::bindForFinalPass(izanagi::graph::CGraphicsDevice* device)
         { Id, 1, "s1" },
     };
 
+    m_gbuffer->getBuffer(Color)->SetFilter(
+        izanagi::graph::E_GRAPH_TEX_FILTER_POINT,
+        izanagi::graph::E_GRAPH_TEX_FILTER_POINT,
+        izanagi::graph::E_GRAPH_TEX_FILTER_POINT);
+    m_gbuffer->getBuffer(Id)->SetFilter(
+        izanagi::graph::E_GRAPH_TEX_FILTER_POINT,
+        izanagi::graph::E_GRAPH_TEX_FILTER_POINT,
+        izanagi::graph::E_GRAPH_TEX_FILTER_POINT);
+
     m_gbuffer->bind(
         device,
         ops, COUNTOF(ops));
@@ -84,7 +97,7 @@ void GBuffer::drawBuffers(izanagi::graph::CGraphicsDevice* device)
 {
     IZ_UINT targets[] = {
         Color,
-        //Id,
+        Id,
     };
 
     m_gbuffer->dumpBuffers(
