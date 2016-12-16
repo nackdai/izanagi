@@ -68,6 +68,13 @@ __EXIT__:
     return result;
 }
 
+IZ_BOOL UpscaleGeometryRenderingApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
+{
+    if (key == izanagi::sys::E_KEYBOARD_BUTTON_RETURN) {
+        m_enableUpscale = !m_enableUpscale;
+    }
+    return IZ_TRUE;
+}
 
 // 更新.
 void UpscaleGeometryRenderingApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
@@ -75,57 +82,31 @@ void UpscaleGeometryRenderingApp::UpdateInternal(izanagi::graph::CGraphicsDevice
     GetCamera().Update();
 }
 
-int capIdx = 0;
-
-IZ_BOOL UpscaleGeometryRenderingApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
-{
-    if (key == izanagi::sys::E_KEYBOARD_BUTTON_LEFT) {
-        capIdx++;
-        if (capIdx >= 4) {
-            capIdx = 0;
-        }
-        printf("capIdx[%d]\n", capIdx);
-    }
-
-    return IZ_TRUE;
-}
-
 // 描画.
 void UpscaleGeometryRenderingApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
-{    
-    renderColorPass(device);
-    renderGeometryPass(device);
+{
+    if (m_enableUpscale) {
+        renderColorPass(device);
+        renderGeometryPass(device);
+        renderFinalPass(device);
 
-    {
-        device->SaveRenderState();
+        device->SetTexture(0, IZ_NULL);
+        m_gbuffer.drawBuffers(device);
+    }
+    else {
+        const auto& camera = GetCamera();
 
-        device->SetRenderState(
-            izanagi::graph::E_GRAPH_RS_ZENABLE,
-            IZ_FALSE);
-        device->SetRenderState(
-            izanagi::graph::E_GRAPH_RS_ZWRITEENABLE,
-            IZ_FALSE);
+        const auto& mtxW2C = camera.GetParam().mtxW2C;
 
-        auto width = device->GetBackBufferWidth();
-        auto height = device->GetBackBufferHeight();
-
-        auto* shd = m_shdFinalPass.m_program;
+        auto* shd = m_shdColorPass.m_program;
 
         device->SetShaderProgram(shd);
 
-        auto hInvScr = shd->GetHandleByName("invScreen");
-        izanagi::math::CVector4 invScr(1.0f / width, 1.0f / height, 0.0f, 1.0f);
-        shd->SetVector(device, hInvScr, invScr);
+        auto hW2C = shd->GetHandleByName("mtxW2C");
+        shd->SetMatrix(device, hW2C, mtxW2C);
 
-        m_gbuffer.bindForFinalPass(device);
-
-        m_screenFillPlane->Draw(device);
-
-        device->LoadRenderState();
+        m_scene.render(device, shd);
     }
-
-    device->SetTexture(0, IZ_NULL);
-    m_gbuffer.drawBuffers(device);
 }
 
 void UpscaleGeometryRenderingApp::renderColorPass(izanagi::graph::CGraphicsDevice* device)
@@ -168,6 +149,35 @@ void UpscaleGeometryRenderingApp::renderGeometryPass(izanagi::graph::CGraphicsDe
     m_scene.render(device, shd);
 
     m_gbuffer.endGeometryPass(device);
+}
+
+void UpscaleGeometryRenderingApp::renderFinalPass(izanagi::graph::CGraphicsDevice* device)
+{
+    device->SaveRenderState();
+
+    device->SetRenderState(
+        izanagi::graph::E_GRAPH_RS_ZENABLE,
+        IZ_FALSE);
+    device->SetRenderState(
+        izanagi::graph::E_GRAPH_RS_ZWRITEENABLE,
+        IZ_FALSE);
+
+    auto width = device->GetBackBufferWidth();
+    auto height = device->GetBackBufferHeight();
+
+    auto* shd = m_shdFinalPass.m_program;
+
+    device->SetShaderProgram(shd);
+
+    auto hInvScr = shd->GetHandleByName("invScreen");
+    izanagi::math::CVector4 invScr(1.0f / width, 1.0f / height, 0.0f, 1.0f);
+    shd->SetVector(device, hInvScr, invScr);
+
+    m_gbuffer.bindForFinalPass(device);
+
+    m_screenFillPlane->Draw(device);
+
+    device->LoadRenderState();
 }
 
 void UpscaleGeometryRenderingApp::ReleaseInternal()
