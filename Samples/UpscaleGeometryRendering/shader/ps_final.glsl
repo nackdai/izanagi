@@ -7,24 +7,13 @@ in vec4 varPos;
 layout(location = 0) out vec4 outColor;
 
 uniform sampler2D s0;   // color
-
 uniform usampler2D s1;  // id
-//uniform sampler2D s1;  // id
 
 // NOTE
 // +y
 // |
 // |
 // +----->+x
-
-const vec4 colors[6] = vec4[](
-    vec4(0, 0, 0, 1),
-    vec4(1, 0, 0, 1),
-    vec4(0, 1, 0, 1),
-    vec4(0, 0, 1, 1),
-    vec4(1, 1, 0, 1),
-    vec4(1, 0, 1, 1)
-);
 
 void main()
 {
@@ -41,12 +30,9 @@ void main()
 
     int id = idY * 2 + idX;
 
-#if 1
     uint centerId = texture(s1, uvId).r;
-#else
-    vec4 centerId = texture(s1, uvId);
-#endif
 
+    // TODO
     ivec2 offsetId[4] = ivec2[](
 #if 1
         ivec2(0, -1),
@@ -72,15 +58,9 @@ void main()
             continue;
         }
 
-#if 1
         uint geomId = texture(s1, uv).r;
 
         if (geomId == centerId) {
-#else
-        vec4 geomId = texture(s1, uv);
-
-        if (geomId.rgb == centerId.rgb) {
-#endif
             xy = ivec2(xy / 2);
             uv = xy * texelColor + vec2(0.5) * texelColor;
 
