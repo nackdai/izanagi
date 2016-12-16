@@ -6,8 +6,8 @@ in vec4 varColor;
 
 uniform int id;
 
-//layout(location = 0) out int outId;
-layout(location = 0) out vec4 outColor;
+layout(location = 0) out int outId;
+//layout(location = 0) out vec4 outColor;
 
 const vec4 colors[6] = vec4[](
     vec4(0, 0, 0, 1),
@@ -20,6 +20,6 @@ const vec4 colors[6] = vec4[](
 
 void main()
 {
-    //outId = id;
-    outColor = colors[id];
+    outId = id;
+    //outColor = colors[id];
 }

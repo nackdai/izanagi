@@ -119,18 +119,6 @@ void UpscaleGeometryRenderingApp::RenderInternal(izanagi::graph::CGraphicsDevice
 
         m_gbuffer.bindForFinalPass(device);
 
-        m_gbuffer.beginFinalPass(device);
-
-        auto isFinal = shd->GetHandleByName("isFinal");
-        shd->SetBool(device, isFinal, IZ_FALSE);
-        m_screenFillPlane->Draw(device);
-
-        auto hCapIdx = shd->GetHandleByName("capId");
-        shd->SetInt(device, hCapIdx, capIdx);
-
-        m_gbuffer.endFinalPass(device);
-
-        shd->SetBool(device, isFinal, IZ_TRUE);
         m_screenFillPlane->Draw(device);
 
         device->LoadRenderState();
