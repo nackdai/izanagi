@@ -25,6 +25,9 @@ public:
         IZ_COLOR bgColor);
     void endColorPass(izanagi::graph::CGraphicsDevice* device);
 
+    void beginFinalPass(izanagi::graph::CGraphicsDevice* device);
+    void endFinalPass(izanagi::graph::CGraphicsDevice* device);
+
     void bindForFinalPass(izanagi::graph::CGraphicsDevice* device);
 
     void drawBuffers(izanagi::graph::CGraphicsDevice* device);

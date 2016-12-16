@@ -25,6 +25,11 @@ IZ_BOOL GBuffer::init(
         izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA8);
     VRETURN(std::get<1>(res) && std::get<0>(res) == Id);
 
+    res = m_gbuffer->addBuffer(
+        device,
+        width, height,
+        izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA32F);
+
     return IZ_TRUE;
 }
 
@@ -68,6 +73,22 @@ void GBuffer::beginColorPass(
 }
 
 void GBuffer::endColorPass(izanagi::graph::CGraphicsDevice* device)
+{
+    m_gbuffer->end(device);
+}
+
+void GBuffer::beginFinalPass(izanagi::graph::CGraphicsDevice* device)
+{
+    IZ_UINT targets[] = {
+        Id + 1,
+    };
+
+    m_gbuffer->begin(
+        device,
+        targets, COUNTOF(targets));
+}
+
+void GBuffer::endFinalPass(izanagi::graph::CGraphicsDevice* device)
 {
     m_gbuffer->end(device);
 }

@@ -32,6 +32,8 @@ public:
     // 描画.
     virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device) override;
 
+    virtual IZ_BOOL OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key) override;
+
 private:
     void renderGeometryPass(izanagi::graph::CGraphicsDevice* device);
     void renderColorPass(izanagi::graph::CGraphicsDevice* device);

@@ -75,6 +75,21 @@ void UpscaleGeometryRenderingApp::UpdateInternal(izanagi::graph::CGraphicsDevice
     GetCamera().Update();
 }
 
+int capIdx = 0;
+
+IZ_BOOL UpscaleGeometryRenderingApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
+{
+    if (key == izanagi::sys::E_KEYBOARD_BUTTON_LEFT) {
+        capIdx++;
+        if (capIdx >= 4) {
+            capIdx = 0;
+        }
+        printf("capIdx[%d]\n", capIdx);
+    }
+
+    return IZ_TRUE;
+}
+
 // 描画.
 void UpscaleGeometryRenderingApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {    
@@ -104,6 +119,18 @@ void UpscaleGeometryRenderingApp::RenderInternal(izanagi::graph::CGraphicsDevice
 
         m_gbuffer.bindForFinalPass(device);
 
+        m_gbuffer.beginFinalPass(device);
+
+        auto isFinal = shd->GetHandleByName("isFinal");
+        shd->SetBool(device, isFinal, IZ_FALSE);
+        m_screenFillPlane->Draw(device);
+
+        auto hCapIdx = shd->GetHandleByName("capId");
+        shd->SetInt(device, hCapIdx, capIdx);
+
+        m_gbuffer.endFinalPass(device);
+
+        shd->SetBool(device, isFinal, IZ_TRUE);
         m_screenFillPlane->Draw(device);
 
         device->LoadRenderState();
