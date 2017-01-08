@@ -23,3 +23,6 @@
 [submodule "Tools/External/hlsl2glslfork"]
 	path = Tools/External/hlsl2glslfork
 	url = https://github.com/aras-p/hlsl2glslfork.git
+[submodule "External/imgui"]
+	path = External/imgui
+	url = https://github.com/ocornut/imgui.git
