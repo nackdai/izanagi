@@ -257,6 +257,8 @@ namespace graph
     IZ_BOOL CVertexBufferGLES2::Disable()
     {
         CALL_GL_API(::glDeleteBuffers(1, &m_VB));
+        m_VB = 0;
+
         return IZ_TRUE;
     }
 

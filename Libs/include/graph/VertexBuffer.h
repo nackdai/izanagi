@@ -52,7 +52,7 @@ namespace graph
             return (m_CreateType == E_GRAPH_RSC_USAGE_DYNAMIC);
         }
 
-        virtual void overrideNativeResource(void* rsc)
+        virtual void overrideNativeResource(void* rsc, E_GRAPH_OVERRIDE_NATIVE_RSC_BEHAVIOUR behaviour)
         {
             // Usualy unsupoort.
             IZ_ASSERT(IZ_FALSE);

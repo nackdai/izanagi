@@ -141,13 +141,15 @@ namespace graph
         return isLocked;
     }
 
-    void CVertexBufferOGL::overrideNativeResource(void* rsc)
+    void CVertexBufferOGL::overrideNativeResource(void* rsc, E_GRAPH_OVERRIDE_NATIVE_RSC_BEHAVIOUR behaviour)
     {
         GLuint vb = (rsc ? *(GLuint*)rsc : 0);
 
-        if (vb > 0) {
-            if (m_VB > 0) {
-                CALL_GL_API(::glDeleteBuffers(1, &m_VB));
+        if (behaviour == E_GRAPH_OVERRIDE_NATIVE_RSC_BEHAVIOUR::Replace) {
+            if (vb > 0) {
+                if (m_VB > 0) {
+                    CALL_GL_API(::glDeleteBuffers(1, &m_VB));
+                }
             }
         }
 

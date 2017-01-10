@@ -463,6 +463,13 @@ namespace graph
         E_GRAPH_IMAGE_FILE_FMT_FORCE_INT32 = 0x7fffffff,
     };
 
+    /** Behavour for calling overrideNativeResource.
+     */
+    enum E_GRAPH_OVERRIDE_NATIVE_RSC_BEHAVIOUR {
+        Replace,
+        Assign,
+    };
+
     /** ビューポート
      */
     struct SViewport {

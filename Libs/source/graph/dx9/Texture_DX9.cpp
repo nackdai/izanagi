@@ -478,6 +478,20 @@ namespace graph
         return ret;
     }
 
+    void CTextureDX9::overrideNativeResource(void* rsc, E_GRAPH_OVERRIDE_NATIVE_RSC_BEHAVIOUR behaviour)
+    {
+        D3D_TEXTURE* tex = (rsc ? (D3D_TEXTURE*)rsc : nullptr);
+
+        if (behaviour == E_GRAPH_OVERRIDE_NATIVE_RSC_BEHAVIOUR::Replace) {
+            if (tex) {
+                SAFE_REPLACE(m_Texture, tex);
+            }
+        }
+        else {
+            m_Texture = tex;
+        }
+    }
+
     IZ_BOOL CTextureDX9::IsPrepared() const
     {
         return (m_Texture != IZ_NULL);

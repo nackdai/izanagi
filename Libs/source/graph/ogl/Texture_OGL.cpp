@@ -184,5 +184,19 @@ namespace graph
         return IZ_TRUE;
     }
 
+    void CTextureOGL::overrideNativeResource(void* rsc, E_GRAPH_OVERRIDE_NATIVE_RSC_BEHAVIOUR behaviour)
+    {
+        GLuint tex = (rsc ? *(GLuint*)rsc : 0);
+
+        if (behaviour == E_GRAPH_OVERRIDE_NATIVE_RSC_BEHAVIOUR::Replace) {
+            if (tex > 0) {
+                if (m_Texture > 0) {
+                    CALL_GL_API(::glDeleteBuffers(1, &m_Texture));
+                }
+            }
+        }
+
+        m_Texture = tex;
+    }
 }   // namespace graph
 }   // namespace izanagi

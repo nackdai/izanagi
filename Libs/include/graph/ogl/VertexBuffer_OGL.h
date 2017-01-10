@@ -55,7 +55,7 @@ namespace graph
             return m_VB;
         }
 
-        virtual void overrideNativeResource(void* rsc) override;
+        virtual void overrideNativeResource(void* rsc, E_GRAPH_OVERRIDE_NATIVE_RSC_BEHAVIOUR behaviour) override;
 
         virtual void* getRawInterface() override
         {

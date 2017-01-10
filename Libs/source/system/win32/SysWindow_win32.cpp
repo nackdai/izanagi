@@ -23,7 +23,7 @@ namespace sys
         HWND hWnd)
     {
         IZ_ASSERT(handler != IZ_NULL);
-        IZ_ASSERT(hWnd != IZ_NULL);
+        //IZ_ASSERT(hWnd != IZ_NULL);
 
         IZ_UINT64 id = (IZ_UINT64)hWnd;
         handler->mHashItem.Init(id, handler);
@@ -194,9 +194,12 @@ namespace sys
 
     //////////////////////////////////////////
 
+    static CWindow* s_window = nullptr;
+
     LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
         CMessageHandler* msgHandler = sMsgHandlerMgr.FindData((IZ_UINT64)hWnd);
+        CMessageHandler* msgHandlerEx = sMsgHandlerMgr.FindData((IZ_UINT64)0);
 
         auto keyboard = sInputMgr.FindKeyboard((IZ_UINT64)hWnd);
         auto mouse = sInputMgr.FindMouse((IZ_UINT64)hWnd);
@@ -227,6 +230,9 @@ namespace sys
             if (msgHandler) {
                 msgHandler->OnKeyDown(key);
             }
+            if (msgHandlerEx) {
+                msgHandlerEx->OnKeyDown(key);
+            }
             if (keyboard) {
                 keyboard->PressKey(key);
             }
@@ -239,6 +245,9 @@ namespace sys
             if (msgHandler) {
                 msgHandler->OnKeyUp(key);
             }
+            if (msgHandlerEx) {
+                msgHandlerEx->OnKeyUp(key);
+            }
             if (keyboard) {
                 keyboard->ReleaseKey(key);
             }
@@ -246,59 +255,99 @@ namespace sys
             break;
 
         case WM_LBUTTONDOWN:
+        {
+            CIntPoint point(
+                static_cast<short>(LOWORD(lParam)),
+                static_cast<short>(HIWORD(lParam)));
+
+            ::SetCapture(hWnd);
+
             if (msgHandler) {
-                ::SetCapture(hWnd);
-                CIntPoint point(
-                    static_cast<short>(LOWORD(lParam)),
-                    static_cast<short>(HIWORD(lParam)));
                 msgHandler->OnMouseLBtnDown(point);
             }
+            if (msgHandlerEx) {
+                msgHandlerEx->OnMouseLBtnDown(point);
+            }
+        }
             break;
 
         case WM_LBUTTONUP:
+        {
+            CIntPoint point(
+                static_cast<short>(LOWORD(lParam)),
+                static_cast<short>(HIWORD(lParam)));
+
+            ::ReleaseCapture();
+
             if (msgHandler) {
-                ::ReleaseCapture();
-                CIntPoint point(
-                    static_cast<short>(LOWORD(lParam)),
-                    static_cast<short>(HIWORD(lParam)));
                 msgHandler->OnMouseLBtnUp(point);
             }
+            if (msgHandlerEx) {
+                msgHandlerEx->OnMouseLBtnUp(point);
+            }
+        }
             break;
 
         case WM_RBUTTONDOWN:
+        {
+            CIntPoint point(
+                static_cast<short>(LOWORD(lParam)),
+                static_cast<short>(HIWORD(lParam)));
+
+            ::SetCapture(hWnd);
+
             if (msgHandler) {
-                ::SetCapture(hWnd);
-                CIntPoint point(
-                    static_cast<short>(LOWORD(lParam)),
-                    static_cast<short>(HIWORD(lParam)));
                 msgHandler->OnMouseRBtnDown(point);
             }
+            if (msgHandlerEx) {
+                msgHandlerEx->OnMouseLBtnUp(point);
+            }
+        }
             break;
 
         case WM_RBUTTONUP:
+        {
+            CIntPoint point(
+                static_cast<short>(LOWORD(lParam)),
+                static_cast<short>(HIWORD(lParam)));
+
+            ::ReleaseCapture();
+
             if (msgHandler) {
-                ::ReleaseCapture();
-                CIntPoint point(
-                    static_cast<short>(LOWORD(lParam)),
-                    static_cast<short>(HIWORD(lParam)));
                 msgHandler->OnMouseRBtnUp(point);
             }
+            if (msgHandlerEx) {
+                msgHandlerEx->OnMouseRBtnUp(point);
+            }
+        }
             break;
 
         case WM_MOUSEMOVE:
+        {
+            CIntPoint point(
+                static_cast<short>(LOWORD(lParam)),
+                static_cast<short>(HIWORD(lParam)));
+
             if (msgHandler) {
-                CIntPoint point(
-                    static_cast<short>(LOWORD(lParam)),
-                    static_cast<short>(HIWORD(lParam)));
                 msgHandler->OnMouseMove(point);
             }
+            if (msgHandlerEx) {
+                msgHandlerEx->OnMouseMove(point);
+            }
+        }
             break;
 
         case WM_MOUSEWHEEL:
+        {
+            IZ_INT zDelta = static_cast<short>(HIWORD(wParam));
+
             if (msgHandler) {
-                IZ_INT zDelta = static_cast<short>(HIWORD(wParam));
                 msgHandler->OnMouseWheel(zDelta);
             }
+            if (msgHandlerEx) {
+                msgHandlerEx->OnMouseWheel(zDelta);
+            }
+        }
             break;
         }
 
@@ -360,6 +409,8 @@ namespace sys
         _Destroy(hDC, hWnd, hInst);
 
         CWindow::Destroy(window);
+
+        s_window = nullptr;
     }
 
     // ウインドウ作成.
@@ -479,6 +530,14 @@ namespace sys
             }
         }
 
+        if (param.handlerEx) {
+            sMsgHandlerMgr.Register(param.handlerEx, 0);
+
+            if (window) {
+                param.handlerEx->OnInit(window);
+            }
+        }
+
         // コンソールウインドウの閉じるを無効にする
         HWND hConsoleWnd = ::GetConsoleWindow();
         if (hConsoleWnd != NULL) {
@@ -493,6 +552,8 @@ __EXIT__:
         if (result) {
             sInputMgr.Register(hWnd, window->GetKeyboard());
             sInputMgr.Register(hWnd, window->GetMouse());
+
+            s_window = window;
         }
         else {
             _Destroy(hDC, hWnd, hInst);
@@ -527,6 +588,7 @@ __EXIT__:
         HWND hWnd = window->GetHWND();
 
         CMessageHandler* msgHandler = sMsgHandlerMgr.FindData((IZ_UINT64)hWnd);
+        CMessageHandler* msgHandlerEx = sMsgHandlerMgr.FindData((IZ_UINT64)0);
 
         while (ProcMsg()) {
             if (msgHandler) {
@@ -537,11 +599,17 @@ __EXIT__:
         if (msgHandler) {
             msgHandler->OnTerminate();
         }
+        if (msgHandlerEx) {
+            msgHandlerEx->OnTerminate();
+        }
 
         Destroy(handle);
 
         if (msgHandler) {
             msgHandler->OnDestroy();
+        }
+        if (msgHandlerEx) {
+            msgHandlerEx->OnDestroy();
         }
     }
 
@@ -602,6 +670,83 @@ __EXIT__:
 
         //IZ_ASSERT(IZ_FALSE);
         return E_KEYBOARD_BUTTON_UNDEFINED;
+    }
+
+    IZ_INT CSysWindow::GetOriginalKey(E_KEYBOARD_BUTTON key)
+    {
+        if (E_KEYBOARD_BUTTON_0 <= key && key <= E_KEYBOARD_BUTTON_9) {
+            auto c = key - E_KEYBOARD_BUTTON_0 + '0';
+            return c;
+        }
+        else if (E_KEYBOARD_BUTTON_A <= key && key <= E_KEYBOARD_BUTTON_Z) {
+            auto c = key - E_KEYBOARD_BUTTON_A + 'A';
+            return c;
+        }
+        else if (E_KEYBOARD_BUTTON_F1 <= key && key <= E_KEYBOARD_BUTTON_F12) {
+            auto c = key - E_KEYBOARD_BUTTON_F1 + VK_F1;
+            return c;
+        }
+        else {
+            switch (key) {
+            case E_KEYBOARD_BUTTON_UP:
+                return VK_UP;
+            case E_KEYBOARD_BUTTON_LEFT:
+                return VK_LEFT;
+            case E_KEYBOARD_BUTTON_DOWN:
+                return VK_DOWN;
+            case E_KEYBOARD_BUTTON_RIGHT:
+                return VK_RIGHT;
+            case E_KEYBOARD_BUTTON_CONTROL:
+                return VK_CONTROL;
+            case E_KEYBOARD_BUTTON_SHIFT:
+                return VK_SHIFT;
+            case E_KEYBOARD_BUTTON_RETURN:
+                return VK_RETURN;
+            case E_KEYBOARD_BUTTON_SPACE:
+                return VK_SPACE;
+            case E_KEYBOARD_BUTTON_BACK:
+                return VK_BACK;
+            case E_KEYBOARD_BUTTON_DELETE:
+                return VK_DELETE;
+            case E_KEYBOARD_BUTTON_TAB:
+                return VK_TAB;
+            case E_KEYBOARD_BUTTON_PRIOR:
+                return VK_PRIOR;
+            case E_KEYBOARD_BUTTON_NEXT:
+                return VK_NEXT;
+            case E_KEYBOARD_BUTTON_HOME:
+                return VK_HOME;
+            case E_KEYBOARD_BUTTON_END:
+                return VK_END;
+            case E_KEYBOARD_BUTTON_ESCAPE:
+                return VK_ESCAPE;
+            default:
+                break;
+            }
+        }
+
+        return -1;
+    }
+
+    void CSysWindow::HideCursor()
+    {
+        ::SetCursor(NULL);
+    }
+
+    CIntPoint CSysWindow::getDisplaySize()
+    {
+        IZ_ASSERT(s_window);
+
+        auto hWnd = s_window->GetHWND();
+
+        RECT rect;
+        GetClientRect(hWnd, &rect);
+
+        CIntPoint ret(
+            rect.right - rect.left,
+            rect.bottom - rect.top);
+
+        return std::move(ret);
     }
 
     CKeyboard* CSysWindow::GetKeyboard(const WindowHandle& handle)

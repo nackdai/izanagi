@@ -345,6 +345,20 @@ namespace sys
         return IZ_NULL;
     }
 
+    void CSysWindow::HideCursor()
+    {
+        glfwSetInputMode(CWindowGLFW::s_Instance->glfwWindow, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+    }
+
+    CIntPoint CSysWindow::getDisplaySize()
+    {
+        int w, h;
+        glfwGetWindowSize(CWindowGLFW::s_Instance->glfwWindow, &w, &h);
+
+        CIntPoint ret(w, h);
+
+        return std::move(ret);
+    }
 }   // namespace sys
 }   // namespace izanagi
 #endif  // #ifdef __IZ_GLFW__

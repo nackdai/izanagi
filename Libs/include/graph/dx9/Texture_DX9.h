@@ -86,6 +86,8 @@ namespace graph
             IZ_UINT x, IZ_UINT y,
             IZ_UINT width, IZ_UINT height) override;
 
+        virtual void overrideNativeResource(void* rsc, E_GRAPH_OVERRIDE_NATIVE_RSC_BEHAVIOUR behaviour) override;
+
     public:
         virtual IZ_BOOL IsPrepared() const;
 

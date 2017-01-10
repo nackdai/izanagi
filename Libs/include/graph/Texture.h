@@ -60,6 +60,12 @@ namespace graph
         {
             return IZ_NULL;
         }
+
+        virtual void overrideNativeResource(void* rsc, E_GRAPH_OVERRIDE_NATIVE_RSC_BEHAVIOUR behaviour)
+        {
+            // Usualy unsupoort.
+            IZ_ASSERT(IZ_FALSE);
+        }
     };
 }   // namespace graph
 }   // namespace izanagi

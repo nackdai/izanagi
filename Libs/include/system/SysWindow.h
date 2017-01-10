@@ -62,12 +62,13 @@ namespace sys
     struct WindowParams {
         IZ_INT argc;
         char** argv;
-        IZ_UINT width;              ///< ウインドウ幅
-        IZ_UINT height;             ///< ウインドウ高さ
-        IZ_BOOL isWindowed;         ///< ウインドウモードにするかどうか
-        IZ_PCSTR title;             ///< ウインドウタイトル
-        IZ_PLATFORM_PARAM platformParam;    ///< プラットフォーム固有パラメータ
-        CMessageHandler* handler;           ///< メッセージハンドラ
+        IZ_UINT width;              ///< ウインドウ幅.
+        IZ_UINT height;             ///< ウインドウ高さ.
+        IZ_BOOL isWindowed;         ///< ウインドウモードにするかどうか.
+        IZ_PCSTR title;             ///< ウインドウタイトル.
+        IZ_PLATFORM_PARAM platformParam;    ///< プラットフォーム固有パラメータ.
+        CMessageHandler* handler;           ///< メッセージハンドラ.
+        CMessageHandler* handlerEx;         ///< メッセージハンドラ拡張.
     };
 
     /**
@@ -100,6 +101,12 @@ namespace sys
         static void* GetNativeDisplayHandle(const WindowHandle& handle);
 
         static E_KEYBOARD_BUTTON GetKeyMap(IZ_UINT key);
+
+        static IZ_INT GetOriginalKey(E_KEYBOARD_BUTTON key);
+
+        static void HideCursor();
+
+        static CIntPoint getDisplaySize();
 
         static CKeyboard* GetKeyboard(const WindowHandle& handle);
         static CMouse* GetMouse(const WindowHandle& handle);

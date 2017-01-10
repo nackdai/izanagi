@@ -314,6 +314,20 @@ namespace sys
         return IZ_NULL;
     }
 
+    void CSysWindow::HideCursor()
+    {
+        glutSetCursor(GLUT_CURSOR_NONE);
+    }
+
+    CIntPoint CSysWindow::getDisplaySize()
+    {
+        auto w = glutGet(GLUT_WINDOW_WIDTH);
+        auto h = glutGet(GLUT_WINDOW_HEIGHT);
+
+        CIntPoint ret(w, h);
+
+        return std::move(ret);
+    }
 }   // namespace sys
 }   // namespace izanagi
 #endif  // #ifdef __IZ_GLUT__
