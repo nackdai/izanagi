@@ -3,7 +3,10 @@
 #endif
 
 GLSL_EXTERNAL_INCLUDE(
-#version 330
+#version 330\n
+
+precision highp float;
+precision highp int;
 
 uniform mat4 ProjMtx;
 
@@ -16,8 +19,8 @@ out vec4 Frag_Color;
 
 void main()
 {
-	Frag_UV = UV;
-	Frag_Color = Color;
-	gl_Position = ProjMtx * vec4(Position.xy,0,1);
+	Frag_UV = texcoord_0;
+	Frag_Color = color_0;
+	gl_Position = ProjMtx * vec4(position.xy,0,1);
 }
 )

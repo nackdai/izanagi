@@ -143,7 +143,7 @@ namespace graph
 
     void CVertexBufferOGL::overrideNativeResource(void* rsc, E_GRAPH_OVERRIDE_NATIVE_RSC_BEHAVIOUR behaviour)
     {
-        GLuint vb = (rsc ? *(GLuint*)rsc : 0);
+        GLuint vb = (rsc ? (GLuint)rsc : 0);
 
         if (behaviour == E_GRAPH_OVERRIDE_NATIVE_RSC_BEHAVIOUR::Replace) {
             if (vb > 0) {

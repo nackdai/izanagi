@@ -186,7 +186,7 @@ namespace graph
 
     void CTextureOGL::overrideNativeResource(void* rsc, E_GRAPH_OVERRIDE_NATIVE_RSC_BEHAVIOUR behaviour)
     {
-        GLuint tex = (rsc ? *(GLuint*)rsc : 0);
+        GLuint tex = (rsc ? (GLuint)rsc : 0);
 
         if (behaviour == E_GRAPH_OVERRIDE_NATIVE_RSC_BEHAVIOUR::Replace) {
             if (tex > 0) {

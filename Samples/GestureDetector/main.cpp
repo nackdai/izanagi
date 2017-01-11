@@ -62,7 +62,7 @@ void ImGuiApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
     {
         static float f = 0.0f;
         ImGui::Text("Hello, world!");
-        //ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
+        ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
         //ImGui::ColorEdit3("clear color", (float*)&clear_col);
         if (ImGui::Button("Test Window")) {
             //show_test_window ^= 1;
@@ -70,7 +70,8 @@ void ImGuiApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
         if (ImGui::Button("Another Window")) {
             //show_another_window ^= 1;
         }
-        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+        auto framerate = ImGui::GetIO().Framerate * 1000.0f;
+        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / framerate, framerate);
     }
 }
 

@@ -3,7 +3,10 @@
 #endif
 
 GLSL_EXTERNAL_INCLUDE(
-#version 330
+#version 330\n
+
+precision highp float;
+precision highp int;
 
 uniform sampler2D s0;
 

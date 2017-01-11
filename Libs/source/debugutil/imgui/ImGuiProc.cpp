@@ -56,11 +56,59 @@ namespace debugutil
             (IZ_UINT)io.DisplaySize.x,
             (IZ_UINT)io.DisplaySize.y));
 
-        ImGuiProc::Vertex* dataVB = nullptr;
-        vb->Lock(device, 0, draw_data->TotalVtxCount * sizeof(ImGuiProc::Vertex), (void**)&dataVB, IZ_FALSE, IZ_TRUE);
+        // Write to vertex buffer.
+        {
+            ImGuiProc::Vertex* dataVB = nullptr;
+            vb->Lock(device, 0, draw_data->TotalVtxCount * sizeof(ImGuiProc::Vertex), (void**)&dataVB, IZ_FALSE, IZ_TRUE);
 
-        ImDrawIdx* dataIB = nullptr;
-        ib->Lock(device, 0, draw_data->TotalIdxCount * sizeof(ImDrawIdx), (void**)&dataIB, IZ_FALSE, IZ_TRUE);
+            for (IZ_INT n = 0; n < draw_data->CmdListsCount; n++)
+            {
+                const ImDrawList* cmd_list = draw_data->CmdLists[n];
+                const ImDrawVert* vtx_src = cmd_list->VtxBuffer.Data;
+
+                for (int i = 0; i < cmd_list->VtxBuffer.Size; i++)
+                {
+                    auto a = ((vtx_src->col & 0xFF000000) >> 24);
+                    auto b = ((vtx_src->col & 0x00FF0000) >> 16);
+                    auto g = ((vtx_src->col & 0x0000FF00) >> 8);
+                    auto r = (vtx_src->col & 0x000000FF);
+
+                    dataVB->pos[0] = vtx_src->pos.x;
+                    dataVB->pos[1] = vtx_src->pos.y;
+                    dataVB->pos[2] = 0.0f;
+                    dataVB->pos[3] = 1.0f;
+                    dataVB->color = IZ_COLOR_RGBA(r, g, b, a);
+                    dataVB->uv[0] = vtx_src->uv.x;
+                    dataVB->uv[1] = vtx_src->uv.y;
+
+                    dataVB++;
+                    vtx_src++;
+                }
+            }
+
+            vb->Unlock(device);
+        }
+
+        // Write to index buffer.
+        {
+            ImDrawIdx* dataIB = nullptr;
+            ib->Lock(device, 0, draw_data->TotalIdxCount * sizeof(ImDrawIdx), (void**)&dataIB, IZ_FALSE, IZ_TRUE);
+
+            for (IZ_INT n = 0; n < draw_data->CmdListsCount; n++)
+            {
+                const ImDrawList* cmd_list = draw_data->CmdLists[n];
+                memcpy(dataIB, cmd_list->IdxBuffer.Data, cmd_list->IdxBuffer.Size * sizeof(ImDrawIdx));
+                dataIB += cmd_list->IdxBuffer.Size;
+            }
+
+            ib->Unlock(device);
+        }
+
+        device->SetVertexBuffer(0, 0, sizeof(ImGuiProc::Vertex), vb);
+        device->SetIndexBuffer(ib);
+        device->SetVertexDeclaration(vd);
+
+        device->SetShaderProgram(shader);
 
 #if 1
         const float L = 0.0f;
@@ -87,48 +135,6 @@ namespace debugutil
             0.0f, 0.0f, -1.0f, 0.0f,
             -1.0f, 1.0f, 0.0f, 1.0f);
 #endif
-
-
-        // Write to buffer.
-        for (IZ_INT n = 0; n < draw_data->CmdListsCount; n++)
-        {
-            const ImDrawList* cmd_list = draw_data->CmdLists[n];
-            const ImDrawVert* vtx_src = cmd_list->VtxBuffer.Data;
-
-            for (int i = 0; i < cmd_list->VtxBuffer.Size; i++)
-            {
-                auto a = ((vtx_src->col & 0xFF000000) >> 24);
-                auto b = ((vtx_src->col & 0x00FF0000) >> 16);
-                auto g = ((vtx_src->col & 0x0000FF00) >> 8);
-                auto r = (vtx_src->col & 0x000000FF);
-
-                dataVB->pos[0] = vtx_src->pos.x;
-                dataVB->pos[1] = vtx_src->pos.y;
-                dataVB->pos[2] = 0.0f;
-                dataVB->pos[3] = 1.0f;
-                dataVB->color = IZ_COLOR_RGBA(r, g, b, a);
-                dataVB->uv[0] = vtx_src->uv.x;
-                dataVB->uv[1] = vtx_src->uv.y;
-
-                izanagi::math::CVector4 tmp(vtx_src->pos.x, vtx_src->pos.y, 0.0f, 1.0f);
-                izanagi::math::CVector4 dst;
-                izanagi::math::SMatrix44::Apply(dst, tmp, mtxProj);
-
-                dataVB++;
-                vtx_src++;
-            }
-            memcpy(dataIB, cmd_list->IdxBuffer.Data, cmd_list->IdxBuffer.Size * sizeof(ImDrawIdx));
-            dataIB += cmd_list->IdxBuffer.Size;
-        }
-
-        vb->Unlock(device);
-        ib->Unlock(device);
-
-        device->SetVertexBuffer(0, 0, sizeof(ImGuiProc::Vertex), vb);
-        device->SetIndexBuffer(ib);
-        device->SetVertexDeclaration(vd);
-
-        device->SetShaderProgram(shader);
 
         auto hProjMtx = shader->GetHandleByName("ProjMtx");
         shader->SetMatrix(device, hProjMtx, mtxProj);

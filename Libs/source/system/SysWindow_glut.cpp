@@ -255,6 +255,62 @@ namespace sys
         return E_KEYBOARD_BUTTON_UNDEFINED;
     }
 
+    IZ_INT CSysWindow::GetOriginalKey(E_KEYBOARD_BUTTON key)
+    {
+        if (E_KEYBOARD_BUTTON_0 <= key && key <= E_KEYBOARD_BUTTON_9) {
+            auto c = key - E_KEYBOARD_BUTTON_0 + '0';
+            return c;
+        }
+        else if (E_KEYBOARD_BUTTON_A <= key && key <= E_KEYBOARD_BUTTON_Z) {
+            auto c = key - E_KEYBOARD_BUTTON_A + 'A';
+            return c;
+        }
+        else if (E_KEYBOARD_BUTTON_F1 <= key && key <= E_KEYBOARD_BUTTON_F12) {
+            auto c = key - E_KEYBOARD_BUTTON_F1 + VK_F1;
+            return c;
+        }
+        else {
+            switch (key) {
+            case E_KEYBOARD_BUTTON_UP:
+                return VK_UP;
+            case E_KEYBOARD_BUTTON_LEFT:
+                return VK_LEFT;
+            case E_KEYBOARD_BUTTON_DOWN:
+                return VK_DOWN;
+            case E_KEYBOARD_BUTTON_RIGHT:
+                return VK_RIGHT;
+            case E_KEYBOARD_BUTTON_CONTROL:
+                return VK_CONTROL;
+            case E_KEYBOARD_BUTTON_SHIFT:
+                return VK_SHIFT;
+            case E_KEYBOARD_BUTTON_RETURN:
+                return VK_RETURN;
+            case E_KEYBOARD_BUTTON_SPACE:
+                return VK_SPACE;
+            case E_KEYBOARD_BUTTON_BACK:
+                return VK_BACK;
+            case E_KEYBOARD_BUTTON_DELETE:
+                return VK_DELETE;
+            case E_KEYBOARD_BUTTON_TAB:
+                return VK_TAB;
+            case E_KEYBOARD_BUTTON_PRIOR:
+                return VK_PRIOR;
+            case E_KEYBOARD_BUTTON_NEXT:
+                return VK_NEXT;
+            case E_KEYBOARD_BUTTON_HOME:
+                return VK_HOME;
+            case E_KEYBOARD_BUTTON_END:
+                return VK_END;
+            case E_KEYBOARD_BUTTON_ESCAPE:
+                return VK_ESCAPE;
+            default:
+                break;
+            }
+        }
+
+        return -1;
+    }
+
     WindowHandle CSysWindow::Create(
         IMemoryAllocator* allocator,
         const WindowParams& param)
