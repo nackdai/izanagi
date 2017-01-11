@@ -93,7 +93,7 @@ IZ_BOOL CSampleApp::Init(
 
         gfxDevParams.enableMultiSample = GL_FALSE;
     }
-#elif __IZ_GLUT__
+#elif defined(__IZ_GLUT__) || defined(__IZ_GLFW__)
     {
         gfxDevParams.screenWidth = params.screenWidth;
         gfxDevParams.screenHeight = params.screenHeight;
@@ -103,7 +103,7 @@ IZ_BOOL CSampleApp::Init(
         gfxDevParams.rgba[2] = 8;
         gfxDevParams.rgba[3] = 8;
 
-        gfxDevParams.depth = 16;
+        gfxDevParams.depth = 24;
         gfxDevParams.stencil = 8;
 
         gfxDevParams.enableMultiSample = GL_FALSE;
