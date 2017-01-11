@@ -59,6 +59,7 @@ void ImGuiApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 
     // 1. Show a simple window
     // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets appears in a window automatically called "Debug"
+    ImGui::Begin("test");
     {
         static float f = 0.0f;
         ImGui::Text("Hello, world!");
@@ -73,6 +74,7 @@ void ImGuiApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
         auto framerate = ImGui::GetIO().Framerate * 1000.0f;
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / framerate, framerate);
     }
+    ImGui::End();
 }
 
 // 描画.
@@ -97,7 +99,7 @@ IzMain(SCREEN_WIDTH, SCREEN_HEIGHT)
     int ret = SampleMain(
         IzGetSystemDataForMainFunc(),
         &app,
-        "GestureDetector",
+        "ImGui",
         IzGetScreenWidth(), IzGetScreenHeight(),
         BUF, BUF_SIZE,
         GFX_BUF, GFX_BUF_SIZE);

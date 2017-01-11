@@ -161,11 +161,20 @@ namespace debugutil
 
                     device->SetTexture(0, tex);
 
+#if 0
                     CIntRect rc(
                         (IZ_INT)(pcmd->ClipRect.x),
-                        (IZ_INT)(fb_height - pcmd->ClipRect.w),
+                        (IZ_INT)(pcmd->ClipRect.y),
+                        (IZ_INT)(pcmd->ClipRect.z),
+                        (IZ_INT)(pcmd->ClipRect.w));
+#else
+                    CIntRect rc(
+                        (IZ_INT)(pcmd->ClipRect.x),
+                        //(IZ_INT)(fb_height - pcmd->ClipRect.w),
+                        pcmd->ClipRect.y,
                         (IZ_INT)(pcmd->ClipRect.z - pcmd->ClipRect.x),
                         (IZ_INT)(pcmd->ClipRect.w - pcmd->ClipRect.y));
+#endif
                     device->SetScissorTestRect(rc);
 
                     device->DrawIndexedPrimitive(
@@ -232,7 +241,9 @@ namespace debugutil
         SAFE_RELEASE(m_ib);
         SAFE_RELEASE(m_vd);
 
-        m_texture->overrideNativeResource(nullptr, graph::E_GRAPH_OVERRIDE_NATIVE_RSC_BEHAVIOUR::Assign);
+        if (m_texture) {
+            m_texture->overrideNativeResource(nullptr, graph::E_GRAPH_OVERRIDE_NATIVE_RSC_BEHAVIOUR::Assign);
+        }
         SAFE_RELEASE(m_texture);
 
         s_instance = nullptr;

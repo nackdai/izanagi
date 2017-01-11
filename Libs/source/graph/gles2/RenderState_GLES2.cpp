@@ -1,6 +1,7 @@
 #include "graph/RenderState.h"
 #include "graph/ParamValueConverter.h"
 #include "graph/GraphDefs.h"
+#include "graph/GraphicsDevice.h"
 
 namespace izanagi
 {
@@ -333,9 +334,13 @@ namespace graph
     void CRenderState::SetScissorRect(CGraphicsDevice* device, const SIntRect& rc)
     {
         if (rcScissor != rc) {
+            auto fbHeight = device->GetBackBufferHeight();
+            auto bottom = rc.top + rc.height;
+
             CALL_GL_API(::glScissor(
                 rc.left,
-                rc.top,
+                //rc.top,
+                fbHeight - bottom,
                 rc.width,
                 rc.height));
 

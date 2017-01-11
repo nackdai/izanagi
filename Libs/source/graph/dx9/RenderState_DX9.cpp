@@ -392,7 +392,14 @@ namespace graph
         if (rcScissor != rc) {
             rcScissor = rc;
             D3D_DEVICE* d3DDev = dx9Device->GetRawInterface();
-            d3DDev->SetScissorRect(reinterpret_cast<RECT*>(&rcScissor));
+
+            RECT rcDX9;
+            rcDX9.left = rcScissor.left;
+            rcDX9.top = rcScissor.top;
+            rcDX9.right = rcScissor.left + rcScissor.width;
+            rcDX9.bottom = rcScissor.top + rcScissor.height;
+
+            d3DDev->SetScissorRect(&rcDX9);
         }
     }
 
