@@ -26,6 +26,7 @@ namespace {
 
         D3DFMT_UNKNOWN,
         D3DFMT_UNKNOWN,
+        D3DFMT_UNKNOWN
     };
     IZ_C_ASSERT(COUNTOF(PixelFormatTbl) == izanagi::graph::E_GRAPH_PIXEL_FMT_NUM);
 

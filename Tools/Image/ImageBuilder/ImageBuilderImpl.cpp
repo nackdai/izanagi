@@ -197,6 +197,7 @@ namespace {
             // Only for OpenGL...
             "rgba32ui", // E_GRAPH_PIXEL_FMT_RGBA32UI,
             "rgb32ui",  // E_GRAPH_PIXEL_FMT_RGB32UI,
+            "r32ui",    // E_GRAPH_PIXEL_FMT_R32UI,
         };
         C_ASSERT(COUNTOF(str) == izanagi::graph::E_GRAPH_PIXEL_FMT_NUM);
 
