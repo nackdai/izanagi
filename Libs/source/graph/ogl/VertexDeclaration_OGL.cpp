@@ -192,6 +192,12 @@ namespace graph
             vb->Initialize(device);
         }
 
+        if (m_isApplied) {
+            if (m_prevVtxOffset != vtxOffset) {
+                m_isApplied = IZ_FALSE;
+            }
+        }
+
         if (!m_isApplied || m_isForceUpdate) {
             for (IZ_UINT i = 0; i < m_ElemNum; i++) {
                 const char* attribName = GetAttribName(i);
@@ -246,6 +252,8 @@ namespace graph
 
             m_isApplied = IZ_TRUE;
         }
+
+        m_prevVtxOffset = vtxOffset;
 
         return IZ_TRUE;
     }

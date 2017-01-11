@@ -68,6 +68,8 @@ namespace graph
         izanagi::graph::CVertexBuffer* m_vbs[MAX_STREAM_NUM];
 
         IZ_BOOL m_isForceUpdate{ IZ_FALSE };
+
+        IZ_UINT m_prevVtxOffset{ IZ_UINT32_MAX };
     };
 }   // namespace graph
 }   // namespace izanagi
