@@ -1,11 +1,58 @@
 #include "izSampleKit.h"
-#include "izDebugUtil.h"
-#include <imgui.h>
+#include "izUI.h"
 
-class ImGuiApp : public izanagi::sample::CSampleApp {
+class CGestureListener : public izanagi::ui::CGestureListenerImplement
+{
 public:
-    ImGuiApp();
-    virtual ~ImGuiApp();
+    CGestureListener() {}
+    virtual ~CGestureListener() {}
+
+public:
+    virtual void OnTapUp(const izanagi::sys::CTouchEvent& ev)
+    {
+        IZ_PRINTF("OnTapUp [%d] [%d]\n", ev.x, ev.y);
+    }
+
+    virtual void OnShowPress()
+    {
+        IZ_PRINTF("OnShowPress\n");
+    }
+
+    virtual void OnLongPress()
+    {
+        IZ_PRINTF("OnLongPress\n");
+    }
+
+    virtual void OnDrag(
+        const izanagi::sys::CTouchEvent& ev,
+        IZ_INT moveX, IZ_INT moveY)
+    {
+        IZ_PRINTF("OnDrag\n");
+    }
+
+    virtual void OnDragEnd(const izanagi::sys::CTouchEvent& ev)
+    {
+        IZ_PRINTF("OnDragEnd\n");
+    }
+
+    virtual void OnFling(
+        const izanagi::sys::CTouchEvent& ev,
+        IZ_FLOAT velocityX, IZ_FLOAT velocityY)
+    {
+        IZ_PRINTF("OnFling [%f] [%f]\n", velocityX, velocityY);
+    }
+
+    virtual IZ_BOOL OnDown()
+    {
+        IZ_PRINTF("OnDown\n");
+        return IZ_FALSE;
+    }
+};
+
+class CGestureDetectorApp : public izanagi::sample::CSampleApp {
+public:
+    CGestureDetectorApp();
+    virtual ~CGestureDetectorApp();
 
 protected:
     // 初期化.
@@ -23,64 +70,76 @@ protected:
     // 描画.
     virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device);
 
+    virtual IZ_BOOL OnMouseLBtnDown(const izanagi::CIntPoint& point);
+    virtual IZ_BOOL OnMouseLBtnUp(const izanagi::CIntPoint& point);
+    virtual void OnMouseMove(const izanagi::CIntPoint& point);
+
 private:
-    izanagi::debugutil::ImGuiProc* m_imgui{ nullptr };
+    izanagi::ui::CGestureDetector m_Detector;
+    CGestureListener m_Listener;
 };
 
-ImGuiApp::ImGuiApp()
+CGestureDetectorApp::CGestureDetectorApp()
 {
 }
 
-ImGuiApp::~ImGuiApp()
+CGestureDetectorApp::~CGestureDetectorApp()
 {
 }
 
 // 初期化.
-IZ_BOOL ImGuiApp::InitInternal(
+IZ_BOOL CGestureDetectorApp::InitInternal(
     izanagi::IMemoryAllocator* allocator,
     izanagi::graph::CGraphicsDevice* device,
     izanagi::sample::CSampleCamera& camera)
 {
-    m_imgui = izanagi::debugutil::ImGuiProc::init(allocator, device);
-    IZ_ASSERT(m_imgui);
+    m_Detector.Init(allocator, &m_Listener);
     return IZ_TRUE;
 }
 
 // 解放.
-void ImGuiApp::ReleaseInternal()
+void CGestureDetectorApp::ReleaseInternal()
 {
-    SAFE_RELEASE(m_imgui);
 }
 
 // 更新.
-void ImGuiApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
+void CGestureDetectorApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
-    m_imgui->beginFrame();
+    m_Detector.Update();
+}
 
-    // 1. Show a simple window
-    // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets appears in a window automatically called "Debug"
-    ImGui::Begin("test");
-    {
-        static float f = 0.0f;
-        ImGui::Text("Hello, world!");
-        ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
-        //ImGui::ColorEdit3("clear color", (float*)&clear_col);
-        if (ImGui::Button("Test Window")) {
-            //show_test_window ^= 1;
-        }
-        if (ImGui::Button("Another Window")) {
-            //show_another_window ^= 1;
-        }
-        auto framerate = ImGui::GetIO().Framerate * 1000.0f;
-        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / framerate, framerate);
-    }
-    ImGui::End();
+IZ_BOOL CGestureDetectorApp::OnMouseLBtnDown(const izanagi::CIntPoint& point)
+{
+    m_Detector.PostTouchEvent(
+        izanagi::sys::CTouchEvent(
+        izanagi::sys::E_SYS_TOUCH_EVENT_DOWN,
+        point.x, point.y));
+    return IZ_TRUE;
+}
+
+IZ_BOOL CGestureDetectorApp::OnMouseLBtnUp(const izanagi::CIntPoint& point)
+{
+    m_Detector.PostTouchEvent(
+        izanagi::sys::CTouchEvent(
+        izanagi::sys::E_SYS_TOUCH_EVENT_UP,
+        point.x, point.y));
+    return IZ_TRUE;
+}
+
+void CGestureDetectorApp::OnMouseMove(const izanagi::CIntPoint& point)
+{
+    m_Detector.PostTouchEvent(
+        izanagi::sys::CTouchEvent(
+        izanagi::sys::E_SYS_TOUCH_EVENT_MOVE,
+        point.x, point.y));
 }
 
 // 描画.
-void ImGuiApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
+void CGestureDetectorApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
-    ImGui::Render();
+    if (device->Begin2D()) {
+        device->End2D();
+    }
 }
 
 static const IZ_UINT BUF_SIZE = 1 * 1024 * 1024;
@@ -92,14 +151,14 @@ static IZ_UINT GFX_BUF[GFX_BUF_SIZE];
 static const IZ_UINT SCREEN_WIDTH = 1280;
 static const IZ_UINT SCREEN_HEIGHT = 720;
 
-ImGuiApp app;
+CGestureDetectorApp app;
 
 IzMain(SCREEN_WIDTH, SCREEN_HEIGHT)
 {
     int ret = SampleMain(
         IzGetSystemDataForMainFunc(),
         &app,
-        "ImGui",
+        "GestureDetector",
         IzGetScreenWidth(), IzGetScreenHeight(),
         BUF, BUF_SIZE,
         GFX_BUF, GFX_BUF_SIZE);
