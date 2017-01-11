@@ -10,6 +10,29 @@ namespace izanagi
 {
 namespace sys
 {
+    //////////////////////////////////////////
+    class CMsgHandlerManager : public CStdHash < IZ_UINT64, CMessageHandler, 4 > {
+    public:
+        CMsgHandlerManager() {}
+        ~CMsgHandlerManager() {}
+
+    public:
+        IZ_BOOL Register(
+            CMessageHandler* handler,
+            void* key)
+        {
+            IZ_ASSERT(handler != IZ_NULL);
+            //IZ_ASSERT(hWnd != IZ_NULL);
+
+            IZ_UINT64 id = (IZ_UINT64)key;
+            handler->mHashItem.Init(id, handler);
+
+            IZ_BOOL ret = Add(&handler->mHashItem);
+            return ret;
+        }
+    };
+    //////////////////////////////////////////
+
     // ウインドのもろもろを保持しておく用
     class CWindowGLUT : public CPlacementNew {
     public:
@@ -30,11 +53,28 @@ namespace sys
         ~CWindowGLUT() {}
 
     public:
-        CMessageHandler* GetHandler() { return m_MsgHandler; }
+        CMessageHandler* GetHandler()
+        {
+            IZ_UINT64 key = (IZ_UINT64)this;
+            auto handler = m_handlerMgr.FindData(key);
+            return handler;
+        }
+
+        IZ_BOOL registerHandler(CMessageHandler* handler, void* key)
+        {
+            auto ret = m_handlerMgr.Register(handler, key);
+            return ret;
+        }
+
+        CMessageHandler* get(IZ_UINT64 key)
+        {
+            auto handler = m_handlerMgr.FindData(key);
+            return handler;
+        }
 
     private:
         IMemoryAllocator* m_Allocator;
-        CMessageHandler* m_MsgHandler;
+        CMsgHandlerManager m_handlerMgr;
     };
 
     CWindowGLUT* CWindowGLUT::s_Instance = IZ_NULL;
@@ -51,7 +91,7 @@ namespace sys
             CWindowGLUT* window = new(buf) CWindowGLUT();
 
             window->m_Allocator = allocator;
-            window->m_MsgHandler = handler;
+            window->m_handlerMgr.Register(handler, window);
 
             s_Instance = window;
         }
@@ -84,8 +124,13 @@ namespace sys
         IZ_ASSERT(CWindowGLUT::s_Instance != IZ_NULL);
 
         CMessageHandler* handler = CWindowGLUT::s_Instance->GetHandler();
+        CMessageHandler* handlerEx = CWindowGLUT::s_Instance->get(0);
 
         handler->OnTerminate();
+
+        if (handlerEx) {
+            handlerEx->OnTerminate();
+        }
         
         CWindowGLUT::Destroy(CWindowGLUT::s_Instance);
 
@@ -104,6 +149,11 @@ namespace sys
         E_KEYBOARD_BUTTON mappedKey = CSysWindow::GetKeyMap(key);
 
         CWindowGLUT::s_Instance->GetHandler()->OnKeyDown(mappedKey);
+
+        CMessageHandler* handlerEx = CWindowGLUT::s_Instance->get(0);
+        if (handlerEx) {
+            handlerEx->OnKeyDown(mappedKey);
+        }
     }
 
     static void KeyUp(unsigned char key, int x, int y)
@@ -113,6 +163,11 @@ namespace sys
         E_KEYBOARD_BUTTON mappedKey = CSysWindow::GetKeyMap(key);
 
         CWindowGLUT::s_Instance->GetHandler()->OnKeyUp(mappedKey);
+
+        CMessageHandler* handlerEx = CWindowGLUT::s_Instance->get(0);
+        if (handlerEx) {
+            handlerEx->OnKeyUp(mappedKey);
+        }
     }
 
     static inline E_KEYBOARD_BUTTON _GetKeyMap(int key)
@@ -144,6 +199,11 @@ namespace sys
         E_KEYBOARD_BUTTON mappedKey = _GetKeyMap(key);
 
         CWindowGLUT::s_Instance->GetHandler()->OnKeyDown(mappedKey);
+
+        CMessageHandler* handlerEx = CWindowGLUT::s_Instance->get(0);
+        if (handlerEx) {
+            handlerEx->OnKeyDown(mappedKey);
+        }
     }
 
     static void SpecialKeyUp(int key, int x, int y)
@@ -153,6 +213,11 @@ namespace sys
         E_KEYBOARD_BUTTON mappedKey = _GetKeyMap(key);
 
         CWindowGLUT::s_Instance->GetHandler()->OnKeyUp(mappedKey);
+
+        CMessageHandler* handlerEx = CWindowGLUT::s_Instance->get(0);
+        if (handlerEx) {
+            handlerEx->OnKeyUp(mappedKey);
+        }
     }
 
     static void Mouse(int button, int state, int x, int y)
@@ -161,20 +226,42 @@ namespace sys
 
         CMessageHandler* handler = CWindowGLUT::s_Instance->GetHandler();
 
+        CIntPoint pt(x, y);
+
         if (button == GLUT_LEFT_BUTTON) {
             if (state == GLUT_DOWN) {
-                handler->OnMouseLBtnDown(CIntPoint(x, y));
+                handler->OnMouseLBtnDown(pt);
             }
             else if (state == GLUT_UP) {
-                handler->OnMouseLBtnUp(CIntPoint(x, y));
+                handler->OnMouseLBtnUp(pt);
             }
         }
         else if (button == GLUT_RIGHT_BUTTON) {
             if (state == GLUT_DOWN) {
-                handler->OnMouseRBtnDown(CIntPoint(x, y));
+                handler->OnMouseRBtnDown(pt);
             }
             else if (state == GLUT_UP) {
-                handler->OnMouseRBtnUp(CIntPoint(x, y));
+                handler->OnMouseRBtnUp(pt);
+            }
+        }
+
+        CMessageHandler* handlerEx = CWindowGLUT::s_Instance->get(0);
+        if (handlerEx) {
+            if (button == GLUT_LEFT_BUTTON) {
+                if (state == GLUT_DOWN) {
+                    handlerEx->OnMouseLBtnDown(pt);
+                }
+                else if (state == GLUT_UP) {
+                    handlerEx->OnMouseLBtnUp(pt);
+                }
+            }
+            else if (button == GLUT_RIGHT_BUTTON) {
+                if (state == GLUT_DOWN) {
+                    handlerEx->OnMouseRBtnDown(pt);
+                }
+                else if (state == GLUT_UP) {
+                    handlerEx->OnMouseRBtnUp(pt);
+                }
             }
         }
     }
@@ -183,7 +270,14 @@ namespace sys
     {
         IZ_ASSERT(CWindowGLUT::s_Instance != IZ_NULL);
 
-        CWindowGLUT::s_Instance->GetHandler()->OnMouseMove(CIntPoint(x, y));
+        CIntPoint pt(x, y);
+
+        CWindowGLUT::s_Instance->GetHandler()->OnMouseMove(pt);
+
+        CMessageHandler* handlerEx = CWindowGLUT::s_Instance->get(0);
+        if (handlerEx) {
+            handlerEx->OnMouseMove(pt);
+        }
     }
 
     static void Wheel(int wheel_number, int direction, int x, int y)
@@ -193,7 +287,14 @@ namespace sys
         // NOTE
         // We can not wheel delta on GLUT.
         // So, I send temporary value.
-        CWindowGLUT::s_Instance->GetHandler()->OnMouseWheel(direction * 10);
+        auto delta = direction * 10;
+
+        CWindowGLUT::s_Instance->GetHandler()->OnMouseWheel(delta);
+
+        CMessageHandler* handlerEx = CWindowGLUT::s_Instance->get(0);
+        if (handlerEx) {
+            handlerEx->OnMouseWheel(delta);
+        }
     }
 
 #ifndef VK_CONTROL
@@ -383,6 +484,19 @@ namespace sys
         CIntPoint ret(w, h);
 
         return std::move(ret);
+    }
+
+    IZ_BOOL CSysWindow::registerExtendMsgHandler(CMessageHandler* handler)
+    {
+        auto h = CWindowGLUT::s_Instance->get(0);
+
+        if (h) {
+            return IZ_FALSE;
+        }
+        else {
+            CWindowGLUT::s_Instance->registerHandler(handler, 0);
+            return IZ_TRUE;
+        }
     }
 }   // namespace sys
 }   // namespace izanagi

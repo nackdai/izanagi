@@ -9,6 +9,29 @@ namespace izanagi
 {
 namespace sys
 {
+    //////////////////////////////////////////
+    class CMsgHandlerManager : public CStdHash < IZ_UINT64, CMessageHandler, 4 > {
+    public:
+        CMsgHandlerManager() {}
+        ~CMsgHandlerManager() {}
+
+    public:
+        IZ_BOOL Register(
+            CMessageHandler* handler,
+            void* key)
+        {
+            IZ_ASSERT(handler != IZ_NULL);
+            //IZ_ASSERT(hWnd != IZ_NULL);
+
+            IZ_UINT64 id = (IZ_UINT64)key;
+            handler->mHashItem.Init(id, handler);
+
+            IZ_BOOL ret = Add(&handler->mHashItem);
+            return ret;
+        }
+    };
+    //////////////////////////////////////////
+
     // ウインドのもろもろを保持しておく用
     class CWindowGLFW : public CPlacementNew {
     public:
@@ -28,7 +51,24 @@ namespace sys
         ~CWindowGLFW() {}
 
     public:
-        CMessageHandler* GetHandler() { return m_MsgHandler; }
+        CMessageHandler* GetHandler()
+        {
+            IZ_UINT64 key = (IZ_UINT64)this;
+            auto handler = m_handlerMgr.FindData(key);
+            return handler;
+        }
+
+        IZ_BOOL registerHandler(CMessageHandler* handler, void* key)
+        {
+            auto ret = m_handlerMgr.Register(handler, key);
+            return ret;
+        }
+
+        CMessageHandler* get(IZ_UINT64 key)
+        {
+            auto handler = m_handlerMgr.FindData(key);
+            return handler;
+        }
 
         GLFWwindow* glfwWindow{ nullptr };
 
@@ -37,7 +77,7 @@ namespace sys
 
     private:
         IMemoryAllocator* m_Allocator;
-        CMessageHandler* m_MsgHandler;
+        CMsgHandlerManager m_handlerMgr;
     };
 
     CWindowGLFW* CWindowGLFW::s_Instance = IZ_NULL;
@@ -54,7 +94,7 @@ namespace sys
             CWindowGLFW* window = new(buf)CWindowGLFW();
 
             window->m_Allocator = allocator;
-            window->m_MsgHandler = handler;
+            window->registerHandler(handler, window);
 
             s_Instance = window;
         }
@@ -110,11 +150,23 @@ namespace sys
 
         E_KEYBOARD_BUTTON mappedKey = CSysWindow::GetKeyMap(key);
 
+        CMessageHandler* handler = CWindowGLFW::s_Instance->GetHandler();
+
         if (action == GLFW_PRESS) {
-            CWindowGLFW::s_Instance->GetHandler()->OnKeyDown(mappedKey);
+            handler->OnKeyDown(mappedKey);
         }
         else if (action == GLFW_RELEASE) {
-            CWindowGLFW::s_Instance->GetHandler()->OnKeyUp(mappedKey);
+            handler->OnKeyUp(mappedKey);
+        }
+
+        CMessageHandler* handlerEx = CWindowGLFW::s_Instance->get(0);
+        if (handlerEx) {
+            if (action == GLFW_PRESS) {
+                handlerEx->OnKeyDown(mappedKey);
+            }
+            else if (action == GLFW_RELEASE) {
+                handlerEx->OnKeyUp(mappedKey);
+            }
         }
     }
 
@@ -127,20 +179,42 @@ namespace sys
         auto x = CWindowGLFW::s_Instance->mouseX;
         auto y = CWindowGLFW::s_Instance->mouseY;
 
+        CIntPoint pt(x, y);
+
         if (button == GLFW_MOUSE_BUTTON_LEFT) {
             if (action == GLFW_PRESS) {
-                handler->OnMouseLBtnDown(CIntPoint(x, y));
+                handler->OnMouseLBtnDown(pt);
             }
             else if (action == GLFW_RELEASE) {
-                handler->OnMouseLBtnUp(CIntPoint(x, y));
+                handler->OnMouseLBtnUp(pt);
             }
         }
         else if (button == GLFW_MOUSE_BUTTON_RIGHT) {
             if (action == GLFW_PRESS) {
-                handler->OnMouseRBtnDown(CIntPoint(x, y));
+                handler->OnMouseRBtnDown(pt);
             }
             else if (action == GLFW_RELEASE) {
-                handler->OnMouseRBtnUp(CIntPoint(x, y));
+                handler->OnMouseRBtnUp(pt);
+            }
+        }
+
+        CMessageHandler* handlerEx = CWindowGLFW::s_Instance->get(0);
+        if (handlerEx) {
+            if (button == GLFW_MOUSE_BUTTON_LEFT) {
+                if (action == GLFW_PRESS) {
+                    handlerEx->OnMouseLBtnDown(pt);
+                }
+                else if (action == GLFW_RELEASE) {
+                    handlerEx->OnMouseLBtnUp(pt);
+                }
+            }
+            else if (button == GLFW_MOUSE_BUTTON_RIGHT) {
+                if (action == GLFW_PRESS) {
+                    handlerEx->OnMouseRBtnDown(pt);
+                }
+                else if (action == GLFW_RELEASE) {
+                    handlerEx->OnMouseRBtnUp(pt);
+                }
             }
         }
     }
@@ -152,15 +226,30 @@ namespace sys
         CWindowGLFW::s_Instance->mouseX = (int)xpos;
         CWindowGLFW::s_Instance->mouseY = (int)ypos;
 
-        CWindowGLFW::s_Instance->GetHandler()->OnMouseMove(
-            CIntPoint(CWindowGLFW::s_Instance->mouseX, CWindowGLFW::s_Instance->mouseY));
+        CIntPoint pt(CWindowGLFW::s_Instance->mouseX, CWindowGLFW::s_Instance->mouseY);
+
+        CWindowGLFW::s_Instance->GetHandler()->OnMouseMove(pt);
+
+        CMessageHandler* handlerEx = CWindowGLFW::s_Instance->get(0);
+        if (handlerEx) {
+            handlerEx->OnMouseMove(pt);
+        }
     }
 
     static void wheelCallback(GLFWwindow* window, double xoffset, double yoffset)
     {
         IZ_ASSERT(CWindowGLFW::s_Instance != IZ_NULL);
 
-        CWindowGLFW::s_Instance->GetHandler()->OnMouseWheel((int)xoffset);
+        // TODO.
+        // scale.
+        auto offset = (int)(yoffset * 10.0f);
+
+        CWindowGLFW::s_Instance->GetHandler()->OnMouseWheel(offset);
+
+        CMessageHandler* handlerEx = CWindowGLFW::s_Instance->get(0);
+        if (handlerEx) {
+            handlerEx->OnMouseWheel(offset);
+        }
     }
 
     E_KEYBOARD_BUTTON CSysWindow::GetKeyMap(IZ_UINT key)
@@ -236,6 +325,62 @@ namespace sys
 
         //IZ_ASSERT(IZ_FALSE);
         return E_KEYBOARD_BUTTON_UNDEFINED;
+    }
+
+    IZ_INT CSysWindow::GetOriginalKey(E_KEYBOARD_BUTTON key)
+    {
+        if (E_KEYBOARD_BUTTON_0 <= key && key <= E_KEYBOARD_BUTTON_9) {
+            auto c = key - E_KEYBOARD_BUTTON_0 + '0';
+            return c;
+        }
+        else if (E_KEYBOARD_BUTTON_A <= key && key <= E_KEYBOARD_BUTTON_Z) {
+            auto c = key - E_KEYBOARD_BUTTON_A + 'A';
+            return c;
+        }
+        else if (E_KEYBOARD_BUTTON_F1 <= key && key <= E_KEYBOARD_BUTTON_F12) {
+            auto c = key - E_KEYBOARD_BUTTON_F1 + GLFW_KEY_F1;
+            return c;
+        }
+        else {
+            switch (key) {
+            case E_KEYBOARD_BUTTON_UP:
+                return GLFW_KEY_UP;
+            case E_KEYBOARD_BUTTON_LEFT:
+                return GLFW_KEY_LEFT;
+            case E_KEYBOARD_BUTTON_DOWN:
+                return GLFW_KEY_DOWN;
+            case E_KEYBOARD_BUTTON_RIGHT:
+                return GLFW_KEY_RIGHT;
+            case E_KEYBOARD_BUTTON_CONTROL:
+                return GLFW_KEY_LEFT_CONTROL;   // TODO
+            case E_KEYBOARD_BUTTON_SHIFT:
+                return GLFW_KEY_LEFT_SHIFT;     // TODO
+            case E_KEYBOARD_BUTTON_RETURN:
+                return GLFW_KEY_ENTER;
+            case E_KEYBOARD_BUTTON_SPACE:
+                return GLFW_KEY_SPACE;
+            case E_KEYBOARD_BUTTON_BACK:
+                return GLFW_KEY_BACKSPACE;
+            case E_KEYBOARD_BUTTON_DELETE:
+                return GLFW_KEY_DELETE;
+            case E_KEYBOARD_BUTTON_TAB:
+                return GLFW_KEY_TAB;
+            case E_KEYBOARD_BUTTON_PRIOR:
+                return GLFW_KEY_PAGE_UP;
+            case E_KEYBOARD_BUTTON_NEXT:
+                return GLFW_KEY_PAGE_DOWN;
+            case E_KEYBOARD_BUTTON_HOME:
+                return GLFW_KEY_HOME;
+            case E_KEYBOARD_BUTTON_END:
+                return GLFW_KEY_END;
+            case E_KEYBOARD_BUTTON_ESCAPE:
+                return GLFW_KEY_ESCAPE;
+            default:
+                break;
+            }
+        }
+
+        return -1;
     }
 
     static void errorCallback(int error, const char* description)
@@ -324,14 +469,19 @@ namespace sys
         }
 
         CMessageHandler* handler = CWindowGLFW::s_Instance->GetHandler();
+        CMessageHandler* handlerEx = CWindowGLFW::s_Instance->get(0);
 
         handler->OnTerminate();
+
+        if (handlerEx) {
+            handlerEx->OnTerminate();
+        }
 
         CWindowGLFW::Destroy(CWindowGLFW::s_Instance);
 
         handler->OnDestroy();
 
-        glfwDestroyWindow(CWindowGLFW::s_Instance->glfwWindow);
+        glfwDestroyWindow(window);
         glfwTerminate();
     }
 
@@ -358,6 +508,19 @@ namespace sys
         CIntPoint ret(w, h);
 
         return std::move(ret);
+    }
+
+    IZ_BOOL CSysWindow::registerExtendMsgHandler(CMessageHandler* handler)
+    {
+        auto h = CWindowGLFW::s_Instance->get(0);
+
+        if (h) {
+            return IZ_FALSE;
+        }
+        else {
+            CWindowGLFW::s_Instance->registerHandler(handler, 0);
+            return IZ_TRUE;
+        }
     }
 }   // namespace sys
 }   // namespace izanagi
