@@ -3,6 +3,8 @@
 
 #include "debugutil/DebugFont.h"
 
+#include "debugutil/imgui/ImGuiProc.h"
+
 // メッシュ
 #include "debugutil/mesh/DebugMesh.h"
 #include "debugutil/mesh/DebugMeshBox.h"

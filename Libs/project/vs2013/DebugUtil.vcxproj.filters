@@ -65,6 +65,15 @@
     <ClCompile Include="..\..\source\debugutil\imgui\ImGuiProc.cpp">
       <Filter>source\imgui</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\External\imgui\imgui.cpp">
+      <Filter>source\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\External\imgui\imgui_demo.cpp">
+      <Filter>source\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\External\imgui\imgui_draw.cpp">
+      <Filter>source\imgui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\source\debugutil\font.dat">

@@ -530,14 +530,6 @@ namespace sys
             }
         }
 
-        if (param.handlerEx) {
-            sMsgHandlerMgr.Register(param.handlerEx, 0);
-
-            if (window) {
-                param.handlerEx->OnInit(window);
-            }
-        }
-
         // コンソールウインドウの閉じるを無効にする
         HWND hConsoleWnd = ::GetConsoleWindow();
         if (hConsoleWnd != NULL) {
@@ -747,6 +739,19 @@ __EXIT__:
             rect.bottom - rect.top);
 
         return std::move(ret);
+    }
+
+    IZ_BOOL CSysWindow::registerExtendMsgHandler(CMessageHandler* handler)
+    {
+        auto h = sMsgHandlerMgr.Find(0);
+
+        if (h) {
+            return IZ_FALSE;
+        }
+        else {
+            sMsgHandlerMgr.Register(handler, 0);
+            return IZ_TRUE;
+        }
     }
 
     CKeyboard* CSysWindow::GetKeyboard(const WindowHandle& handle)

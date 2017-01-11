@@ -1,8 +1,6 @@
 #if !defined(__IZANAGI_IMGUI_PROC_H__)
 #define __IZANAGI_IMGUI_PROC_H__
 
-#include <imgui.h>
-
 #include "izDefs.h"
 #include "izStd.h"
 #include "izSystem.h"
@@ -12,7 +10,9 @@ namespace izanagi
 {
 namespace debugutil
 {
-    class ImGuiProc: public sys::CMessageHandler, CObject {
+    class ImGuiProc: public sys::CMessageHandler, public CObject {
+        friend class ImGuiRenderer;
+
     public:
         static ImGuiProc* init(
             IMemoryAllocator* allocator,
@@ -57,7 +57,7 @@ namespace debugutil
         virtual void OnDestroy() override;
 
     private:
-        static void renderDrawLists(ImDrawData* draw_data);
+        IZ_BOOL init();
 
         IZ_BOOL createFontTexture();
         IZ_BOOL createGraphObjects(IZ_UINT vtxCount, IZ_UINT idxCount);

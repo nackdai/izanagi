@@ -19,7 +19,7 @@ struct PS_INPUT
 VS_OUTPUT mainVS(VS_INPUT input)
 {
     VS_OUTPUT output;
-    output.pos = mul(ProjMtx, float4(input.pos.xy, 0.f, 1.f));
+    output.pos = mul(float4(input.pos.xy, 0.f, 1.f), ProjMtx);
     output.col = input.col;
     output.uv = input.uv;
     return output;

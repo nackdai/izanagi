@@ -40,9 +40,9 @@ namespace math
 
         CMatrix44(
             IZ_FLOAT _00, IZ_FLOAT _01, IZ_FLOAT _02, IZ_FLOAT _03,
-            IZ_FLOAT _10, IZ_FLOAT _11, IZ_FLOAT _12, IZ_FLOAT _23,
-            IZ_FLOAT _20, IZ_FLOAT _21, IZ_FLOAT _22, IZ_FLOAT _33,
-            IZ_FLOAT _30, IZ_FLOAT _31, IZ_FLOAT _32, IZ_FLOAT _43)
+            IZ_FLOAT _10, IZ_FLOAT _11, IZ_FLOAT _12, IZ_FLOAT _13,
+            IZ_FLOAT _20, IZ_FLOAT _21, IZ_FLOAT _22, IZ_FLOAT _23,
+            IZ_FLOAT _30, IZ_FLOAT _31, IZ_FLOAT _32, IZ_FLOAT _33)
         {
             this->_00 = _00; this->_01 = _01; this->_02 = _02; this->_03 = _03;
             this->_10 = _10; this->_11 = _11; this->_12 = _12; this->_13 = _13;

@@ -68,7 +68,6 @@ namespace sys
         IZ_PCSTR title;             ///< ウインドウタイトル.
         IZ_PLATFORM_PARAM platformParam;    ///< プラットフォーム固有パラメータ.
         CMessageHandler* handler;           ///< メッセージハンドラ.
-        CMessageHandler* handlerEx;         ///< メッセージハンドラ拡張.
     };
 
     /**
@@ -107,6 +106,8 @@ namespace sys
         static void HideCursor();
 
         static CIntPoint getDisplaySize();
+
+        static IZ_BOOL registerExtendMsgHandler(CMessageHandler* handler);
 
         static CKeyboard* GetKeyboard(const WindowHandle& handle);
         static CMouse* GetMouse(const WindowHandle& handle);
