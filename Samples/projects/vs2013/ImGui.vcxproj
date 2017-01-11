@@ -43,7 +43,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\GestureDetector\main.cpp" />
+    <ClCompile Include="..\..\ImGui\main.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6E403E8B-08E0-4FD8-B5E3-7111AC91BFA9}</ProjectGuid>
