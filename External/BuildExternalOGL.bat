@@ -53,9 +53,9 @@ if not exist %BUILD_DIR% (
 if not exist %BUILD_DIR%\GLFW.sln (
     cd %BUILD_DIR%
     if %PLATFORM% == Win32 (
-        ..\..\cmake\bin\cmake.exe -G "Visual Studio 12 2013" ..\
+        ..\..\cmake\bin\cmake.exe -D USE_MSVC_RUNTIME_LIBRARY_DLL=OFF -G "Visual Studio 12 2013" ..\
     ) else (
-        ..\..\cmake\bin\cmake.exe -G "Visual Studio 12 2013 Win64" ..\
+        ..\..\cmake\bin\cmake.exe -D USE_MSVC_RUNTIME_LIBRARY_DLL=OFF -G "Visual Studio 12 2013 Win64" ..\
     )
     cd ..\..\
 )
