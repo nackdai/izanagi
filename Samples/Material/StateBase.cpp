@@ -39,7 +39,7 @@ IZ_BOOL CStateBase::Update(
         // 位置は原点なので
         m_RenderGraph->Register(
             m_App->GetCamera(),
-            izanagi::math::CVector4(),
+            izanagi::math::CVector4(0, 0, 0, 1),
             m_Mdl);
     }
     m_RenderGraph->EndRegister();
