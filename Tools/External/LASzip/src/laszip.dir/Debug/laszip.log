@@ -1,0 +1,72 @@
+﻿2016/05/15 1:49:34 にビルドを開始しました。
+     1>ノード 2 上のプロジェクト "D:\work\trials\3rdpirty\LASzip\src\laszip.vcxproj" (Rebuild ターゲット)。
+     1>CustomBuild:
+         Building Custom Rule D:/work/trials/3rdpirty/LASzip/src/CMakeLists.txt
+         CMake does not need to re-run because D:\work\trials\3rdpirty\LASzip\src\CMakeFiles\generate.stamp is up-to-date.
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /ID:\work\trials\3rdpirty\LASzip\include /Zi /nologo /W3 /WX- /MP4 /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D BOOST_ALL_NO_LIB /D _CRT_SECURE_NO_DEPRECATE /D _CRT_SECURE_NO_WARNINGS /D _CRT_NONSTDC_NO_WARNING /D _SCL_SECURE_NO_WARNINGS /D NOMINMAX /D WIN32_LEAN_AND_MEAN /D LASZIP_DLL_EXPORT=1 /D UNORDERED /D LASZIPDLL_EXPORTS /D "CMAKE_INTDIR=\"Debug\"" /D laszip_EXPORTS /D _WINDLL /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo"laszip.dir\Debug\\" /Fd"laszip.dir\Debug\vc120.pdb" /Gd /TP /wd4290 /wd4800 /errorReport:prompt D:\work\trials\3rdpirty\LASzip\src\arithmeticdecoder.cpp D:\work\trials\3rdpirty\LASzip\src\arithmeticencoder.cpp D:\work\trials\3rdpirty\LASzip\src\arithmeticmodel.cpp D:\work\trials\3rdpirty\LASzip\src\integercompressor.cpp D:\work\trials\3rdpirty\LASzip\src\lasindex.cpp D:\work\trials\3rdpirty\LASzip\src\lasinterval.cpp D:\work\trials\3rdpirty\LASzip\src\lasquadtree.cpp D:\work\trials\3rdpirty\LASzip\src\lasreaditemcompressed_v1.cpp D:\work\trials\3rdpirty\LASzip\src\lasreaditemcompressed_v2.cpp D:\work\trials\3rdpirty\LASzip\src\lasreadpoint.cpp D:\work\trials\3rdpirty\LASzip\src\laswriteitemcompressed_v1.cpp D:\work\trials\3rdpirty\LASzip\src\laswriteitemcompressed_v2.cpp D:\work\trials\3rdpirty\LASzip\src\laswritepoint.cpp D:\work\trials\3rdpirty\LASzip\src\laszip.cpp D:\work\trials\3rdpirty\LASzip\src\laszip_dll.cpp
+         arithmeticdecoder.cpp
+         arithmeticencoder.cpp
+         arithmeticmodel.cpp
+         integercompressor.cpp
+         lasindex.cpp
+         lasinterval.cpp
+         lasquadtree.cpp
+         lasreaditemcompressed_v1.cpp
+         lasreaditemcompressed_v2.cpp
+     1>D:\work\trials\3rdpirty\LASzip\src\lasindex.cpp(285): warning C4996: 'strdup': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _strdup. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\string.h(245) : 'strdup' の宣言を確認してください。
+     1>D:\work\trials\3rdpirty\LASzip\src\lasindex.cpp(465): warning C4996: 'strdup': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _strdup. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\string.h(245) : 'strdup' の宣言を確認してください。
+     1>D:\work\trials\3rdpirty\LASzip\src\lasinterval.cpp(157): warning C4267: 'return' : 'size_t' から 'U32' に変換しました。データが失われているかもしれません。
+         lasreadpoint.cpp
+     1>D:\work\trials\3rdpirty\LASzip\src\lasinterval.cpp(238): warning C4267: '初期化中' : 'size_t' から 'U32' に変換しました。データが失われているかもしれません。
+         laswriteitemcompressed_v1.cpp
+     1>D:\work\trials\3rdpirty\LASzip\src\lasinterval.cpp(650): warning C4267: '初期化中' : 'size_t' から 'U32' に変換しました。データが失われているかもしれません。
+         laswriteitemcompressed_v2.cpp
+         laswritepoint.cpp
+         laszip.cpp
+         laszip_dll.cpp
+     1>D:\work\trials\3rdpirty\LASzip\src\laszip_dll.cpp(1212): warning C4267: '引数' : 'size_t' から 'laszip_U16' に変換しました。データが失われているかもしれません。
+     1>D:\work\trials\3rdpirty\LASzip\src\laszip_dll.cpp(1818): warning C4258: 'i' : for ループからの定義は無視されます。外側のスコープからの定義が使われます。
+                 D:\work\trials\3rdpirty\LASzip\src\laszip_dll.cpp(1772) : 'i' の定義が無視されました。
+                 D:\work\trials\3rdpirty\LASzip\src\laszip_dll.cpp(1598) : 'i' の定義が使用されました。
+     1>D:\work\trials\3rdpirty\LASzip\src\laszip_dll.cpp(1820): warning C4258: 'i' : for ループからの定義は無視されます。外側のスコープからの定義が使われます。
+                 D:\work\trials\3rdpirty\LASzip\src\laszip_dll.cpp(1772) : 'i' の定義が無視されました。
+                 D:\work\trials\3rdpirty\LASzip\src\laszip_dll.cpp(1598) : 'i' の定義が使用されました。
+     1>D:\work\trials\3rdpirty\LASzip\src\laszip_dll.cpp(1822): warning C4258: 'i' : for ループからの定義は無視されます。外側のスコープからの定義が使われます。
+                 D:\work\trials\3rdpirty\LASzip\src\laszip_dll.cpp(1772) : 'i' の定義が無視されました。
+                 D:\work\trials\3rdpirty\LASzip\src\laszip_dll.cpp(1598) : 'i' の定義が使用されました。
+     1>D:\work\trials\3rdpirty\LASzip\src\laszip_dll.cpp(1877): warning C4267: '引数' : 'size_t' から 'laszip_U16' に変換しました。データが失われているかもしれません。
+     1>D:\work\trials\3rdpirty\LASzip\src\laszip_dll.cpp(2530): warning C4996: 'strdup': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _strdup. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\string.h(245) : 'strdup' の宣言を確認してください。
+     1>D:\work\trials\3rdpirty\LASzip\src\laszip_dll.cpp(3686): warning C4267: '引数' : 'size_t' から 'laszip_U16' に変換しました。データが失われているかもしれません。
+     1>D:\work\trials\3rdpirty\LASzip\src\laszip_dll.cpp(3717): warning C4258: 'i' : for ループからの定義は無視されます。外側のスコープからの定義が使われます。
+                 D:\work\trials\3rdpirty\LASzip\src\laszip_dll.cpp(3651) : 'i' の定義が無視されました。
+                 D:\work\trials\3rdpirty\LASzip\src\laszip_dll.cpp(2971) : 'i' の定義が使用されました。
+     1>D:\work\trials\3rdpirty\LASzip\src\laszip_dll.cpp(3719): warning C4258: 'i' : for ループからの定義は無視されます。外側のスコープからの定義が使われます。
+                 D:\work\trials\3rdpirty\LASzip\src\laszip_dll.cpp(3651) : 'i' の定義が無視されました。
+                 D:\work\trials\3rdpirty\LASzip\src\laszip_dll.cpp(2971) : 'i' の定義が使用されました。
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"D:\work\trials\3rdpirty\LASzip\bin\laszip.dll" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/work/trials/3rdpirty/LASzip/bin/laszip.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/work/trials/3rdpirty/LASzip/lib/laszip.lib" /MACHINE:X64  /machine:x64 /DLL laszip.dir\Debug\arithmeticdecoder.obj
+         laszip.dir\Debug\arithmeticencoder.obj
+         laszip.dir\Debug\arithmeticmodel.obj
+         laszip.dir\Debug\integercompressor.obj
+         laszip.dir\Debug\lasindex.obj
+         laszip.dir\Debug\lasinterval.obj
+         laszip.dir\Debug\lasquadtree.obj
+         laszip.dir\Debug\lasreaditemcompressed_v1.obj
+         laszip.dir\Debug\lasreaditemcompressed_v2.obj
+         laszip.dir\Debug\lasreadpoint.obj
+         laszip.dir\Debug\laswriteitemcompressed_v1.obj
+         laszip.dir\Debug\laswriteitemcompressed_v2.obj
+         laszip.dir\Debug\laswritepoint.obj
+         laszip.dir\Debug\laszip.obj
+         laszip.dir\Debug\laszip_dll.obj
+            ライブラリ D:/work/trials/3rdpirty/LASzip/lib/laszip.lib とオブジェクト D:/work/trials/3rdpirty/LASzip/lib/laszip.exp を作成中
+         laszip.vcxproj -> D:\work\trials\3rdpirty\LASzip\bin\laszip.dll
+     1>プロジェクト "D:\work\trials\3rdpirty\LASzip\src\laszip.vcxproj" (Rebuild ターゲット) のビルドが完了しました。
+
+ビルドに成功しました。
+
+経過時間 00:00:01.01
