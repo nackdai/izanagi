@@ -254,3 +254,14 @@ void CVectorCamera::Dump() const
     IZ_PRINTF("Z "); math::SVector4::Dump(m_Z);
     IZ_PRINTF("P "); math::SVector4::Dump(m_Pos);
 }
+
+void CVectorCamera::SetTransform(const math::SMatrix44& mtx)
+{
+    math::SVector4::Copy(m_X, mtx.v[0]);
+    math::SVector4::Copy(m_Y, mtx.v[1]);
+    math::SVector4::Copy(m_Z, mtx.v[2]);
+    math::SVector4::Copy(m_Pos, mtx.v[3]);
+
+    m_IsDirtyW2V = IZ_TRUE;
+    m_NeedUpdateByTransform = IZ_TRUE;
+}

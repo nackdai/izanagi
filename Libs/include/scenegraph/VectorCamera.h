@@ -98,6 +98,8 @@ namespace izanagi {
          */
         const math::SMatrix44& GetTransform() const { return m_Transform; }
 
+        void SetTransform(const math::SMatrix44& mtx);
+
     private:
         inline void computeLenghtBetweenPosAndAt();
 
