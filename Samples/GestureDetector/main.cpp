@@ -72,7 +72,7 @@ protected:
 
     virtual IZ_BOOL OnMouseLBtnDown(const izanagi::CIntPoint& point);
     virtual IZ_BOOL OnMouseLBtnUp(const izanagi::CIntPoint& point);
-    virtual void OnMouseMove(const izanagi::CIntPoint& point);
+    virtual void OnMouseMoveInternal(const izanagi::CIntPoint& point);
 
 private:
     izanagi::ui::CGestureDetector m_Detector;
@@ -126,7 +126,7 @@ IZ_BOOL CGestureDetectorApp::OnMouseLBtnUp(const izanagi::CIntPoint& point)
     return IZ_TRUE;
 }
 
-void CGestureDetectorApp::OnMouseMove(const izanagi::CIntPoint& point)
+void CGestureDetectorApp::OnMouseMoveInternal(const izanagi::CIntPoint& point)
 {
     m_Detector.PostTouchEvent(
         izanagi::sys::CTouchEvent(
