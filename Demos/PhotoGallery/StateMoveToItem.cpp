@@ -52,6 +52,7 @@ IZ_BOOL StateMoveToItem::Enter(
         tmpCam.Init(
             targetPos,
             targetAt,
+            izanagi::math::CVector4(0, 1, 0),
             1.0f,
             500.0f,
             izanagi::math::CMath::Deg2Rad(60.0f),

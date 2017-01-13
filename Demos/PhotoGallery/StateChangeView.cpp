@@ -36,6 +36,7 @@ StateChangeView::StateChangeView(izanagi::CVectorCamera& camera)
         tmpCam.Init(
             izanagi::math::CVector4(0.0f, v.y, -Configure::InnerRadius + v.z, 1.0f),
             izanagi::math::CVector4(0.0f, 15.0f, -Configure::InnerRadius + Configure::RadiusDiff + Configure::RadiusDiff * 0.5f, 1.0f),
+            izanagi::math::CVector4(0, 1, 0),
             1.0f,
             500.0f,
             izanagi::math::CMath::Deg2Rad(60.0f),
@@ -55,6 +56,7 @@ StateChangeView::StateChangeView(izanagi::CVectorCamera& camera)
         tmpCam.Init(
             izanagi::math::CVector4(0.0f, v.y, -Configure::InnerRadius + v.z, 1.0f),
             izanagi::math::CVector4(0.0f, 25.0f, -Configure::InnerRadius + Configure::RadiusDiff * 0.5f, 1.0f),
+            izanagi::math::CVector4(0, 1, 0),
             1.0f,
             500.0f,
             izanagi::math::CMath::Deg2Rad(60.0f),

@@ -30,7 +30,7 @@ namespace sample {
 
         virtual void OnPaint();
 
-        virtual void OnIdle();
+        virtual void OnIdle(void* nativeParam) override;
 
         virtual void OnInit(const izanagi::sys::WindowHandle& handle);
 

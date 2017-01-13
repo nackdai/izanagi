@@ -93,7 +93,7 @@ IZ_BOOL CSampleApp::Init(
 
         gfxDevParams.enableMultiSample = GL_FALSE;
     }
-#elif __IZ_GLUT__
+#elif defined(__IZ_GLUT__) || defined(__IZ_GLFW__)
     {
         gfxDevParams.screenWidth = params.screenWidth;
         gfxDevParams.screenHeight = params.screenHeight;
@@ -103,7 +103,7 @@ IZ_BOOL CSampleApp::Init(
         gfxDevParams.rgba[2] = 8;
         gfxDevParams.rgba[3] = 8;
 
-        gfxDevParams.depth = 16;
+        gfxDevParams.depth = 24;
         gfxDevParams.stencil = 8;
 
         gfxDevParams.enableMultiSample = GL_FALSE;
@@ -206,47 +206,49 @@ void CSampleApp::Render()
     {
         RenderInternal(m_Device);
 
-        IZ_ASSERT(m_DebugFont != IZ_NULL);
+        if (m_isDispFramerate) {
+            IZ_ASSERT(m_DebugFont != IZ_NULL);
 
-        // 時間表示
-        if (m_Device->Begin2D()) {
-            m_DebugFont->Begin(m_Device);
+            // 時間表示
+            if (m_Device->Begin2D()) {
+                m_DebugFont->Begin(m_Device);
 
-            {
-                IZ_FLOAT time = GetTimer(0).GetTime();
-                IZ_FLOAT fps = 1000.0f / time;
+                {
+                    IZ_FLOAT time = GetTimer(0).GetTime();
+                    IZ_FLOAT fps = 1000.0f / time;
 
-                m_DebugFont->DBPrint(
-                    m_Device,
-                    "%.2f[ms] %.2f[fps]\n",
-                    time, fps);
+                    m_DebugFont->DBPrint(
+                        m_Device,
+                        "%.2f[ms] %.2f[fps]\n",
+                        time, fps);
+                }
+                {
+                    IZ_FLOAT time = GetTimer(1).GetTime();
+                    IZ_FLOAT fps = 1000.0f / time;
+
+                    m_DebugFont->DBPrint(
+                        m_Device,
+                        "%.2f[ms] %.2f[fps]\n",
+                        time, fps);
+                }
+
+                m_DebugFont->End();
+
+                m_Device->End2D();
             }
-            {
-                IZ_FLOAT time = GetTimer(1).GetTime();
-                IZ_FLOAT fps = 1000.0f / time;
-
-                m_DebugFont->DBPrint(
-                    m_Device,
-                    "%.2f[ms] %.2f[fps]\n",
-                    time, fps);
-            }
-
-            m_DebugFont->End();
-
-            m_Device->End2D();
         }
     }
     m_Device->EndRender();
 }
 
 // V同期.
-void CSampleApp::Present()
+void CSampleApp::Present(void* nativeParam)
 {
     IZ_ASSERT(m_Device != IZ_NULL);
-    m_Device->Present();
+    m_Device->Present(nativeParam);
 }
 
-void CSampleApp::Idle()
+void CSampleApp::Idle(void* nativeParam)
 {
     GetTimer(0).Begin();
     GetTimer(1).Begin();
@@ -256,7 +258,7 @@ void CSampleApp::Idle()
 
     GetTimer(1).End();
 
-    Present();
+    Present(nativeParam);
 
     GetTimer(0).End();
 }

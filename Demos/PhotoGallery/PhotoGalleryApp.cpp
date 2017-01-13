@@ -213,7 +213,7 @@ IZ_BOOL PhotoGalleryApp::OnMouseLBtnUp(const izanagi::CIntPoint& point)
     return StateManager::Instance().OnMouseLBtnUp(point);
 }
 
-void PhotoGalleryApp::OnMouseMove(const izanagi::CIntPoint& point)
+void PhotoGalleryApp::OnMouseMoveInternal(const izanagi::CIntPoint& point)
 {
     StateManager::Instance().OnMouseMove(point);
 }

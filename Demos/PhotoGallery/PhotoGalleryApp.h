@@ -31,7 +31,7 @@ protected:
 
     virtual IZ_BOOL OnMouseLBtnDown(const izanagi::CIntPoint& point);
     virtual IZ_BOOL OnMouseLBtnUp(const izanagi::CIntPoint& point);
-    virtual void OnMouseMove(const izanagi::CIntPoint& point);
+    virtual void OnMouseMoveInternal(const izanagi::CIntPoint& point);
 
 private:
     izanagi::sys::CTimer m_Timer;

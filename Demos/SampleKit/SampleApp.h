@@ -63,9 +63,9 @@ namespace sample {
 
         /** V同期.
          */
-        virtual void Present();
+        virtual void Present(void* nativeParam);
 
-        void Idle();
+        void Idle(void* nativeParam);
 
         /** スクリーン幅取得.
          */
@@ -137,6 +137,8 @@ namespace sample {
         void setEnableCamera(IZ_BOOL isEnable) { m_isEnableCamera = isEnable; }
         IZ_BOOL isEnableCamera() const { return m_isEnableCamera; }
 
+        void setIsDispFramerate(IZ_BOOL isDisp) { m_isDispFramerate = isDisp; }
+
     protected:
         /** 背景色取得.
          */
@@ -183,6 +185,8 @@ namespace sample {
 
         IZ_BOOL m_isEnableCamera{ IZ_TRUE };
         CSampleCamera m_Camera;
+
+        IZ_BOOL m_isDispFramerate{ IZ_TRUE };
 
         izanagi::CIntPoint m_PrevPoint;
 

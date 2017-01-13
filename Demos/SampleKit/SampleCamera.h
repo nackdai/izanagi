@@ -15,17 +15,6 @@ namespace sample {
         NO_COPIABLE(CSampleCamera);
 
     public:
-        void Init(
-            const izanagi::math::CVector4& vPos,
-            const izanagi::math::CVector4& vRef,
-            const izanagi::math::CVector4& vUp,
-            IZ_FLOAT fNear, IZ_FLOAT fFar,
-            IZ_FLOAT fFov,
-            IZ_FLOAT fAspect);
-
-        void Update();
-
-    public:
         void Dolly(IZ_FLOAT fDistScale);
         void Rotate(
             const izanagi::CFloatPoint& pt1,
