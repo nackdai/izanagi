@@ -49,7 +49,7 @@ IZ_BOOL SinglePassStereoRenderingApp::InitInternal(
     }
 
     // テクスチャ
-    for (IZ_UINT i = 0; i < 10; i++) {
+    for (IZ_UINT i = 0; i < COUNTOF(m_Img); i++) {
         izanagi::CFileInputStream in;
         VGOTO(result = in.Open("data/earth.img"), __EXIT__);
 
@@ -144,7 +144,9 @@ void SinglePassStereoRenderingApp::ReleaseInternal()
 {
     for (IZ_UINT i = 0; i < MeshNum; i++) {
         SAFE_RELEASE(m_Mesh[i]);
+    }
 
+    for (IZ_UINT i = 0; i < COUNTOF(m_Img); i++) {
         SAFE_RELEASE(m_Img[i]);
     }
 
