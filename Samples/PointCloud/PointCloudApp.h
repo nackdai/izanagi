@@ -2,6 +2,7 @@
 #define __POINT_CLOUD_APP_H__
 
 #include "izSampleKit.h"
+#include "izDebugUtil.h"
 
 static const IZ_UINT SCREEN_WIDTH = 1280;
 static const IZ_UINT SCREEN_HEIGHT = 720;
@@ -26,8 +27,6 @@ protected:
 
     // 描画.
     virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device);
-
-    virtual IZ_BOOL OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key) override;
 
 private:
     void readPly(izanagi::graph::CGraphicsDevice* device);
@@ -76,11 +75,12 @@ private:
         Default,
         Interp,
         WeightSplat,
-        None,
     };
     Mode m_mode{ Mode::Default };
 
     float m_PointSize{ 1.0f };
+
+    izanagi::debugutil::ImGuiProc* m_imgui{ nullptr };
 };
 
 #endif    // #if !defined(__POINT_CLOUD_APP_H__)

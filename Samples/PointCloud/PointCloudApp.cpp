@@ -3,6 +3,8 @@
 
 #include "PCDFormat.h"
 
+#include <imgui.h>
+
 PointCloudApp::PointCloudApp()
 {
 }
@@ -52,6 +54,10 @@ IZ_BOOL PointCloudApp::InitInternal(
         SCREEN_WIDTH,
         SCREEN_HEIGHT,
         izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA16F);
+
+    m_imgui = izanagi::debugutil::ImGuiProc::init(allocator, device);
+    IZ_ASSERT(m_imgui);
+    izanagi::sys::CSysWindow::registerExtendMsgHandler(m_imgui);
     
 __EXIT__:
     if (!result) {
@@ -204,6 +210,8 @@ void PointCloudApp::ReleaseInternal()
 
     SAFE_RELEASE(m_rtDepth);
     SAFE_RELEASE(m_rtWeightedColor);
+
+    SAFE_RELEASE(m_imgui);
 }
 
 // 更新.
@@ -212,6 +220,19 @@ void PointCloudApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
     auto& camera = GetCamera();
     
     camera.Update();
+
+    m_imgui->beginFrame();
+    {
+        ImGui::Begin("Parameters");
+        {
+            ImGui::SliderFloat("PointSize", &m_PointSize, 0.5f, 7.5f);
+
+            ImGui::RadioButton("Default", (int*)&m_mode, Mode::Default);
+            ImGui::RadioButton("Interp", (int*)&m_mode, Mode::Interp);
+            ImGui::RadioButton("WeightSplat", (int*)&m_mode, Mode::WeightSplat);
+        }
+        ImGui::End();
+    }
 }
 
 namespace {
@@ -283,35 +304,7 @@ void PointCloudApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 #endif
     }
 
-#if 1
-    if (device->Begin2D()) {
-        static const char* mode[Mode::None] = {
-            "Default",
-            "Interp",
-            "WeightSplat",
-        };
-
-        auto font = GetDebugFont();
-
-        font->Begin(device);
-
-        font->DBPrint(
-            device,
-            0, 40,
-            IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0xff),
-            mode[m_mode]);
-
-        font->DBPrint(
-            device,
-            0, 60,
-            IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0xff),
-            "Size:%f", m_PointSize);
-
-        font->End();
-
-        device->End2D();
-    }
-#endif
+    ImGui::Render();
 }
 
 void PointCloudApp::renderScene(
@@ -466,28 +459,4 @@ void PointCloudApp::renderNormalize(izanagi::graph::CGraphicsDevice* device)
     // NOTE
     // 頂点バッファを使わず全画面に描画する頂点シェーダ.
     CALL_GL_API(glDrawArrays(GL_TRIANGLE_STRIP, 0, 4));
-}
-
-IZ_BOOL PointCloudApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
-{
-    IZ_INT mode = m_mode;
-
-    if (key == izanagi::sys::E_KEYBOARD_BUTTON_UP) {
-        mode++;
-        m_mode = (Mode)(mode >= Mode::None ? 0 : mode);
-    }
-    else if (key == izanagi::sys::E_KEYBOARD_BUTTON_DOWN) {
-        mode--;
-        m_mode = (Mode)(mode < 0 ? Mode::None - 1 : mode);
-    }
-    else if (key == izanagi::sys::E_KEYBOARD_BUTTON_LEFT) {
-        m_PointSize -= 0.1f;
-        m_PointSize = (m_PointSize < 0.5f ? 0.5f : m_PointSize);
-    }
-    else if (key == izanagi::sys::E_KEYBOARD_BUTTON_RIGHT) {
-        m_PointSize += 0.1f;
-        m_PointSize = (m_PointSize > 7.5f ? 7.5f : m_PointSize);
-    }
-
-    return IZ_TRUE;
 }
