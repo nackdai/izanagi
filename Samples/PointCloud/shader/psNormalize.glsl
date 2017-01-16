@@ -24,7 +24,7 @@ void main()
     gl_FragColor = vec4(vec3(color.xyz), 1.0);
 #else
     vec2 uv = gl_FragCoord.xy * invScreen.xy;
-    uv.y = 1.0 - uv.y;
+    //uv.y = 1.0 - uv.y;
 
     float depth = texture2D(depthMap, uv).r;
 

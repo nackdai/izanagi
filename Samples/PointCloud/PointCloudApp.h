@@ -30,11 +30,11 @@ protected:
     virtual IZ_BOOL OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key) override;
 
 private:
-    void initPly(izanagi::graph::CGraphicsDevice* device);
+    void readPly(izanagi::graph::CGraphicsDevice* device);
 
-    void initTmp(izanagi::graph::CGraphicsDevice* device);
+    void readPcd(izanagi::graph::CGraphicsDevice* device);
 
-    void initShaders(izanagi::graph::CGraphicsDevice* device);
+    void readShaders(izanagi::graph::CGraphicsDevice* device);
 
     izanagi::graph::CShaderProgram* initShader(
         izanagi::graph::CGraphicsDevice* device,

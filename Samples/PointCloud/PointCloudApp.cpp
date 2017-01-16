@@ -30,8 +30,8 @@ IZ_BOOL PointCloudApp::InitInternal(
         (IZ_FLOAT)device->GetBackBufferWidth() / device->GetBackBufferHeight());
     camera.Update();
 
-    //initPly(device);
-    initTmp(device);
+    //readPly(device);
+    readPcd(device);
 
     {
         izanagi::graph::SVertexElement elems[] = {
@@ -42,7 +42,7 @@ IZ_BOOL PointCloudApp::InitInternal(
         m_vd = device->CreateVertexDeclaration(elems, COUNTOF(elems));
     }
 
-    initShaders(device);
+    readShaders(device);
 
     m_rtDepth = device->CreateRenderTarget(
         SCREEN_WIDTH,
@@ -61,7 +61,7 @@ __EXIT__:
     return IZ_TRUE;
 }
 
-void PointCloudApp::initPly(izanagi::graph::CGraphicsDevice* device)
+void PointCloudApp::readPly(izanagi::graph::CGraphicsDevice* device)
 {
     PlyReader reader;
     reader.open("data/bunny.ply");
@@ -96,7 +96,7 @@ void PointCloudApp::initPly(izanagi::graph::CGraphicsDevice* device)
     m_vb->Unlock(device);
 }
 
-void PointCloudApp::initTmp(izanagi::graph::CGraphicsDevice* device)
+void PointCloudApp::readPcd(izanagi::graph::CGraphicsDevice* device)
 {
     izanagi::CFileInputStream in;
     auto res = in.Open("data/Stairs.pcd");
@@ -139,7 +139,7 @@ void PointCloudApp::initTmp(izanagi::graph::CGraphicsDevice* device)
     m_vb->Unlock(device);
 }
 
-void PointCloudApp::initShaders(izanagi::graph::CGraphicsDevice* device)
+void PointCloudApp::readShaders(izanagi::graph::CGraphicsDevice* device)
 {
     m_shdDefault = initShader(device, "shader/vs.glsl", "shader/ps.glsl");
     m_shdInterp = initShader(device, "shader/vs.glsl", "shader/psInterp.glsl");
