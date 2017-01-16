@@ -19,4 +19,9 @@ struct PCDHeader {
     float aabbMax[3];
 };
 
+struct Point {
+    IZ_FLOAT pos[3];
+    IZ_UINT8 rgba[4];
+};
+
 #endif  // #if !defined(__PCD_FORMAT_H__)

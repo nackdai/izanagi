@@ -5,11 +5,6 @@
 #include "PCDFormat.h"
 #include "LASPointReader.h"
 
-struct Point {
-    float pos[3];
-    uint8_t rgba[4];
-};
-
 bool convert(
     std::string& inFile,
     std::string& outFile)
