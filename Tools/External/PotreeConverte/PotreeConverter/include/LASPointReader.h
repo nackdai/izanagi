@@ -7,10 +7,14 @@
 #include <iostream>
 #include <vector>
 
-#include "laszip_dll.h"
+#include "laszip_api.h"
 
 #include "Point.h"
 #include "PointReader.h"
+
+#ifdef DISABLE_BOOST
+#include <shlwapi.h>
+#endif
 
 using std::string;
 
@@ -55,7 +59,17 @@ public:
 		laszip_request_compatibility_mode(laszip_reader, request_reader);
 
 		{// read first 1000 points to find if color is 1 or 2 bytes
-			laszip_BOOL is_compressed = boost::iends_with(path, ".laz") ? 1 : 0;
+#ifndef DISABLE_BOOST
+            laszip_BOOL is_compressed = boost::iends_with(path, ".laz") ? 1 : 0;
+#else
+            laszip_BOOL is_compressed = false;
+            {
+                std::string ext(::PathFindExtension(path.c_str()));
+                if (ext == ".laz") {
+                    is_compressed = true;
+                }
+            }
+#endif
 			laszip_open_reader(laszip_reader, path.c_str(), &is_compressed);
 
 			laszip_get_header_pointer(laszip_reader, &header);

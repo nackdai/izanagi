@@ -1,27 +1,24 @@
 #include <string>
-#include "proxy.h"
+#include <vector>
+#include <stdint.h>
 
-#include "TMPFormat.h"
+#include "PCDFormat.h"
+#include "LASPointReader.h"
 
 struct Point {
     float pos[3];
     uint8_t rgba[4];
 };
 
-int main(int argc, char* argv[])
+bool convert(
+    std::string& inFile,
+    std::string& outFile)
 {
-    if (argc < 3) {
-        return 1;
-    }
+    auto reader = new Potree::LASPointReader(inFile);
 
-    std::string inFile(argv[1]);
-    std::string outFile(argv[2]);
-
-    auto reader = (Potree::LASPointReader*)Proxy::createPointReader(inFile);
-
-    if (!reader) {
+    if (reader->numPoints() == 0) {
         // TODO
-        return 1;
+        return false;
     }
 
     auto aabb = reader->getAABB();
@@ -36,7 +33,7 @@ int main(int argc, char* argv[])
     FILE* fp = nullptr;
     fopen_s(&fp, outFile.c_str(), "wb");
 
-    fseek(fp, sizeof(TMPHeader), SEEK_SET);
+    fseek(fp, sizeof(PCDHeader), SEEK_SET);
 
     std::vector<Point> points;
     points.reserve(reader->numPoints());
@@ -51,9 +48,9 @@ int main(int argc, char* argv[])
 
         Point pt;
 
-        pt.pos[0] = point.position.x;
-        pt.pos[1] = point.position.y;
-        pt.pos[2] = point.position.z;
+        pt.pos[0] = (float)point.position.x;
+        pt.pos[1] = (float)point.position.y;
+        pt.pos[2] = (float)point.position.z;
 
         pt.rgba[0] = point.color.x;
         pt.rgba[1] = point.color.y;
@@ -79,7 +76,7 @@ int main(int argc, char* argv[])
 
     // Write header.
     {
-        TMPHeader header;
+        PCDHeader header;
         header.fileSize = ftell(fp);
         header.vtxFormat = VtxFormat::Position | VtxFormat::Color;
         header.vtxNum = pointNum;
@@ -87,13 +84,13 @@ int main(int argc, char* argv[])
         auto& aabbMin = aabb.min;
         auto& aabbMax = aabb.max;
 
-        header.aabbMin[0] = aabbMin.x;
-        header.aabbMin[1] = aabbMin.y;
-        header.aabbMin[2] = aabbMin.z;
+        header.aabbMin[0] = (float)aabbMin.x;
+        header.aabbMin[1] = (float)aabbMin.y;
+        header.aabbMin[2] = (float)aabbMin.z;
 
-        header.aabbMax[0] = aabbMax.x;
-        header.aabbMax[1] = aabbMax.y;
-        header.aabbMax[2] = aabbMax.z;
+        header.aabbMax[0] = (float)aabbMax.x;
+        header.aabbMax[1] = (float)aabbMax.y;
+        header.aabbMax[2] = (float)aabbMax.z;
 
         fseek(fp, 0, SEEK_SET);
         fwrite(&header, sizeof(header), 1, fp);
@@ -101,6 +98,6 @@ int main(int argc, char* argv[])
 
     fclose(fp);
 
-	return 0;
+	return true;
 }
 

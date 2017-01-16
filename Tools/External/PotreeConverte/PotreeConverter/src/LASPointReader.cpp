@@ -4,20 +4,25 @@
 #include <iostream>
 #include <vector>
 
+#ifndef DISABLE_BOOST
 #include "boost/filesystem.hpp"
 #include <boost/algorithm/string.hpp>
-#include "laszip_dll.h"
+#endif
+#include "laszip_api.h"
 
 #include "LASPointReader.h"
 
-
+#ifndef DISABLE_BOOST
 namespace fs = boost::filesystem;
+#endif
 
 using std::ifstream;
 using std::cout;
 using std::endl;
 using std::vector;
+#ifndef DISABLE_BOOST
 using boost::iequals;
+#endif
 using std::ios;
 
 namespace Potree{
@@ -36,7 +41,7 @@ AABB LIBLASReader::getAABB(){
 LASPointReader::LASPointReader(string path){
 	this->path = path;
 
-	
+#ifndef DISABLE_BOOST
 	if(fs::is_directory(path)){
 		// if directory is specified, find all las and laz files inside directory
 
@@ -51,6 +56,9 @@ LASPointReader::LASPointReader(string path){
 	}else{
 		files.push_back(path);
 	}
+#else
+    files.push_back(path);
+#endif
 	
 
 	// read bounding box

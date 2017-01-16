@@ -23,7 +23,7 @@ public:
 	Vector3<double> size;
 
 	AABB(){
-		min = Vector3<double>(std::numeric_limits<float>::max());
+        min = Vector3<double>(std::numeric_limits<float>::max());
 		max = Vector3<double>(-std::numeric_limits<float>::max());
 		size = Vector3<double>(std::numeric_limits<float>::max());
 	}
