@@ -29,3 +29,6 @@
 [submodule "Tools/External/IBLBaker"]
 	path = Tools/External/IBLBaker
 	url = https://github.com/derkreature/IBLBaker.git
+[submodule "Tools/External/draco"]
+	path = Tools/External/draco
+	url = https://github.com/google/draco.git
