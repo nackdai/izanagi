@@ -308,6 +308,7 @@
     <ClCompile Include="..\..\source\debugutil\mesh\DebugMeshCylinder.cpp" />
     <ClCompile Include="..\..\source\debugutil\mesh\DebugMeshFrustum.cpp" />
     <ClCompile Include="..\..\source\debugutil\mesh\DebugMeshGrid.cpp" />
+    <ClCompile Include="..\..\source\debugutil\mesh\DebugMeshLine.cpp" />
     <ClCompile Include="..\..\source\debugutil\mesh\DebugMeshRectangle.cpp" />
     <ClCompile Include="..\..\source\debugutil\mesh\DebugMeshScreenFillPlane.cpp" />
     <ClCompile Include="..\..\source\debugutil\mesh\DebugMeshSphere.cpp" />
@@ -328,6 +329,7 @@
     <ClInclude Include="..\..\include\debugutil\mesh\DebugMeshCylinder.h" />
     <ClInclude Include="..\..\include\debugutil\mesh\DebugMeshFrustum.h" />
     <ClInclude Include="..\..\include\debugutil\mesh\DebugMeshGrid.h" />
+    <ClInclude Include="..\..\include\debugutil\mesh\DebugMeshLine.h" />
     <ClInclude Include="..\..\include\debugutil\mesh\DebugMeshRectangle.h" />
     <ClInclude Include="..\..\include\debugutil\mesh\DebugMeshScreenFillPlane.h" />
     <ClInclude Include="..\..\include\debugutil\mesh\DebugMeshSphere.h" />

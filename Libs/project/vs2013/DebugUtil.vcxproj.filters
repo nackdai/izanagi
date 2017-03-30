@@ -71,6 +71,9 @@
     <ClCompile Include="..\..\..\External\imgui\imgui_draw.cpp">
       <Filter>source\imgui</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\debugutil\mesh\DebugMeshLine.cpp">
+      <Filter>source\mesh</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\source\debugutil\font.dat">
@@ -123,6 +126,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\debugutil\imgui\ImGuiProc.h">
       <Filter>include\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\debugutil\mesh\DebugMeshLine.h">
+      <Filter>include\mesh</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

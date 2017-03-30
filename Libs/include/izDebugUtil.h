@@ -17,5 +17,6 @@
 #include "debugutil/mesh/DebugMeshFrustum.h"
 #include "debugutil/mesh/DebugMeshScreenFillPlane.h"
 #include "debugutil/mesh/DebugMeshWiredBox.h"
+#include "debugutil/mesh/DebugMeshLine.h"
 
 #endif  // #if !defined(__IZANAGI_DEBUG_UTIL_H__)
