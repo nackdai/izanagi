@@ -264,6 +264,9 @@ void CCamera::ComputeV2C()
     m_Param.mtxV2C.m[3][2] = fQ * m_Param.cameraNear;
     m_Param.mtxV2C.m[2][3] = 1.0f;
 #else   // #ifdef VIEW_LH
+    // TODO
+    // 間違っている.
+    // zf - zn ではなく、zn - zf.
     // 右手
     m_Param.mtxV2C.m[2][2] = fQ;
     m_Param.mtxV2C.m[3][2] = fQ * m_Param.cameraNear;
@@ -277,8 +280,8 @@ void CCamera::ComputeV2C()
     m_Param.mtxV2C.m[2][3] = 1.0f;
 #else
     // 右手
-    m_Param.mtxV2C.m[2][2] = m_Param.cameraFar / (m_Param.cameraFar - m_Param.cameraNear);
-    m_Param.mtxV2C.m[3][2] = m_Param.cameraNear * m_Param.cameraFar / (m_Param.cameraFar - m_Param.cameraNear);
+    m_Param.mtxV2C.m[2][2] = m_Param.cameraFar / (m_Param.cameraNear - m_Param.cameraFar);
+    m_Param.mtxV2C.m[3][2] = m_Param.cameraNear * m_Param.cameraFar / (m_Param.cameraNear - m_Param.cameraFar);
     m_Param.mtxV2C.m[2][3] = -1.0f;
 #endif
 #endif
