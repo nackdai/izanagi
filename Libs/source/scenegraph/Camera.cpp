@@ -226,10 +226,37 @@ void CCamera::ComputeV2C()
     const IZ_FLOAT fH = 1 / tanf(m_Param.verticalFOV * 0.5f);
     const IZ_FLOAT fW = fH / m_Param.aspect;
 
-    const IZ_FLOAT fQ = -m_Param.cameraFar / (m_Param.cameraFar - m_Param.cameraNear);
-
     m_Param.mtxV2C.m[0][0] = fW;
     m_Param.mtxV2C.m[1][1] = fH;
+
+    /* D3DXMatrixPerspectiveFovLH
+    * w       0       0               0
+    * 0       h       0               0
+    * 0       0       zf/(zf-zn)      1
+    * 0       0       -zn*zf/(zf-zn)  0
+    * where:
+    * h is the view space height. It is calculated from
+    * h = cot(fovY/2);
+    *
+    * w is the view space width. It is calculated from
+    * w = h / Aspect.
+    */
+
+    /* 
+    * D3DXMatrixPerspectiveFovRH
+    *
+    * xScale     0          0              0
+    * 0        yScale       0              0
+    * 0        0        zf/(zn-zf)        -1
+    * 0        0        zn*zf/(zn-zf)      0
+    * where:
+    * yScale = cot(fovY/2)
+    *
+    * xScale = yScale / aspect ratio
+    */
+
+#if 1
+    const IZ_FLOAT fQ = -m_Param.cameraFar / (m_Param.cameraFar - m_Param.cameraNear);
 
 #ifdef IZ_COORD_LEFT_HAND
     // 左手
@@ -242,6 +269,19 @@ void CCamera::ComputeV2C()
     m_Param.mtxV2C.m[3][2] = fQ * m_Param.cameraNear;
     m_Param.mtxV2C.m[2][3] = -1.0f;
 #endif  // #ifdef VIEW_LH
+#else
+#ifdef IZ_COORD_LEFT_HAND
+    // 左手
+    m_Param.mtxV2C.m[2][2] = m_Param.cameraFar / (m_Param.cameraFar - m_Param.cameraNear);
+    m_Param.mtxV2C.m[3][2] = -m_Param.cameraNear * m_Param.cameraFar / (m_Param.cameraFar - m_Param.cameraNear);
+    m_Param.mtxV2C.m[2][3] = 1.0f;
+#else
+    // 右手
+    m_Param.mtxV2C.m[2][2] = m_Param.cameraFar / (m_Param.cameraFar - m_Param.cameraNear);
+    m_Param.mtxV2C.m[3][2] = m_Param.cameraNear * m_Param.cameraFar / (m_Param.cameraFar - m_Param.cameraNear);
+    m_Param.mtxV2C.m[2][3] = -1.0f;
+#endif
+#endif
 
     m_Param.mtxV2C.m[3][3] = 0.0f;
 }
