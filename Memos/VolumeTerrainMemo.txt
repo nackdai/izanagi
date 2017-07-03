@@ -1,0 +1,5 @@
+http://www.syuhitu.org/other/meta2/meta2.html
+https://0fps.net/2012/07/12/smooth-voxel-terrain-part-2/
+
+https://www.youtube.com/watch?v=3DNLkKKKDX8
+https://bitbucket.org/sinbad/ogre/src/0a5073385e6f7b3785e441d6f182846a24b8532f/Components/Volume/
