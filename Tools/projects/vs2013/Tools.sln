@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Model", "Model", "{7D9E0B88-7476-40E4-B6B2-14198E575355}"
 EndProject
@@ -127,6 +127,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PointCloud", "PointCloud", "{8A38419B-6754-4384-9873-C27CEA34EBDC}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PointCloudConverter", "PointCloudConverter.vcxproj", "{56FBA336-ACF6-410E-80BE-552ABDBFB65D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IrradianceMapMaker", "IrradianceMapMaker.vcxproj", "{4F29B327-57C8-4043-B787-246BB83A2B74}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -550,6 +552,20 @@ Global
 		{56FBA336-ACF6-410E-80BE-552ABDBFB65D}.Release|Win32.Build.0 = Release|Win32
 		{56FBA336-ACF6-410E-80BE-552ABDBFB65D}.Release|x86.ActiveCfg = Release|Win32
 		{56FBA336-ACF6-410E-80BE-552ABDBFB65D}.Release|x86.Build.0 = Release|Win32
+		{4F29B327-57C8-4043-B787-246BB83A2B74}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{4F29B327-57C8-4043-B787-246BB83A2B74}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{4F29B327-57C8-4043-B787-246BB83A2B74}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{4F29B327-57C8-4043-B787-246BB83A2B74}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4F29B327-57C8-4043-B787-246BB83A2B74}.Debug|Win32.Build.0 = Debug|Win32
+		{4F29B327-57C8-4043-B787-246BB83A2B74}.Debug|x86.ActiveCfg = Debug|Win32
+		{4F29B327-57C8-4043-B787-246BB83A2B74}.Debug|x86.Build.0 = Debug|Win32
+		{4F29B327-57C8-4043-B787-246BB83A2B74}.Release|Any CPU.ActiveCfg = Release|Win32
+		{4F29B327-57C8-4043-B787-246BB83A2B74}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{4F29B327-57C8-4043-B787-246BB83A2B74}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{4F29B327-57C8-4043-B787-246BB83A2B74}.Release|Win32.ActiveCfg = Release|Win32
+		{4F29B327-57C8-4043-B787-246BB83A2B74}.Release|Win32.Build.0 = Release|Win32
+		{4F29B327-57C8-4043-B787-246BB83A2B74}.Release|x86.ActiveCfg = Release|Win32
+		{4F29B327-57C8-4043-B787-246BB83A2B74}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -591,5 +607,6 @@ Global
 		{F4E5433D-B82E-482B-8C3C-637079F65B63} = {47EE3FCD-A12B-4A18-84CC-2AE700CCE111}
 		{7B1ACF45-05FB-433A-A43F-D525DDB1B0CB} = {A18A0FC4-8551-4472-8575-A78D1E05C57B}
 		{56FBA336-ACF6-410E-80BE-552ABDBFB65D} = {8A38419B-6754-4384-9873-C27CEA34EBDC}
+		{4F29B327-57C8-4043-B787-246BB83A2B74} = {47EE3FCD-A12B-4A18-84CC-2AE700CCE111}
 	EndGlobalSection
 EndGlobal
