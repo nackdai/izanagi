@@ -13,6 +13,9 @@
   <ItemGroup>
     <ClCompile Include="..\..\Image\IrradianceMapMaker\IrradianceMapMaker.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Image\IrradianceMapMaker\xorshift.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{4F29B327-57C8-4043-B787-246BB83A2B74}</ProjectGuid>
     <RootNamespace>IrradianceMapMaker</RootNamespace>
