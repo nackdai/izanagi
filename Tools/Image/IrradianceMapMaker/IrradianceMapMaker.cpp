@@ -85,26 +85,10 @@ int main(int argc, char* argv[])
     int nRetCode = 0;
 
     int width, height, comp;
-#if 1
     //auto data = stbi_loadf("studio015.hdr", &width, &height, &comp, 0);
     auto data = stbi_loadf("harbor.hdr", &width, &height, &comp, 0);
 
     EquirectTexture in(width, height, data);
-#else
-    auto data = stbi_load("input.png", &width, &height, &comp, 0);
-    float* f = (float*)malloc(width * height * 3 * sizeof(float));
-    for (int y = 0; y < height; y++) {
-        for (int x = 0; x < width; x++) {
-            int idx = y * width + x;
-            idx *= 3;
-
-            f[idx + 0] = data[idx + 0] / (float)255;
-            f[idx + 1] = data[idx + 1] / (float)255;
-            f[idx + 2] = data[idx + 2] / (float)255;
-        }
-    }
-    EquirectTexture in(width, height, f);
-#endif
 
     int bytes = sizeof(float) * 3 * width * height;
     float* outdata = (float*)malloc(bytes);
@@ -122,19 +106,17 @@ int main(int argc, char* argv[])
            IZ_PRINTF("%.3f %%\n", cur / (float)height * 100);
         }
 
-        izanagi::math::CVector3 conv;
-
         for (int x = 0; x < width; x++) {
             float u = x / (float)(width - 1);
             float v = y / (float)(height - 1);
 
             auto n = EquirectTexture::convertUVToDir(u, v);
-
             auto t = getOrthoVector(n);
-
             auto b = cross(n, t);
 
             float weight = 0.0f;
+
+            izanagi::math::CVector3 conv;
 
             for (int i = 0; i < samples; i++) {
                 XorShift sampler((y * height * 4 + x * 4) * samples + i + 1);
@@ -158,6 +140,13 @@ int main(int argc, char* argv[])
     }
 
     stbi_write_hdr("test.hdr", width, height, 3, outdata);
+
+    if (data) {
+        STBI_FREE(data);
+    }
+    if (outdata) {
+        free(outdata);
+    }
 
     return nRetCode;
 }
