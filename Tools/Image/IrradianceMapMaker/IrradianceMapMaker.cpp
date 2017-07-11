@@ -122,8 +122,8 @@ int main(int argc, char* argv[])
                 XorShift sampler((y * height * 4 + x * 4) * samples + i + 1);
 
                 float roughness = 0.2f;
-                auto clr = computeLambertRadiance(weight, sampler, in, roughness, n, t, b);
-                //auto clr = computeGGXRadiance(weight, sampler, in, roughness, n, t, b);
+                //auto clr = computeLambertRadiance(weight, sampler, in, roughness, n, t, b);
+                auto clr = computeGGXRadiance(weight, sampler, in, roughness, n, t, b);
 
                 if (isInvalidColor(clr)) {
                     IZ_PRINTF("Invalid(%d/%d[%d])\n", x, y, i);

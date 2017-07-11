@@ -71,6 +71,26 @@ inline izanagi::math::SVector3 computeLambertRadiance(
     return std::move(ret);
 }
 
+inline float computeGGXSmithG1(float roughness, const izanagi::math::SVector3& v, const izanagi::math::SVector3& n)
+{
+    // NOTE
+    // http://computergraphics.stackexchange.com/questions/2489/correct-form-of-the-ggx-geometry-term
+    // http://gregory-igehy.hatenadiary.com/entry/2015/02/26/154142
+
+    float a = roughness;
+
+    float costheta = ::abs(izanagi::math::SVector3::Dot(v, n));
+
+    float sintheta = ::sqrt(1 - izanagi::math::CMath::Clamp<float>(costheta * costheta, 0, 1));
+    float tan = costheta > 0 ? sintheta / costheta : 0;
+
+    float denom = ::sqrt(1 + a * a * tan * tan);
+
+    float ret = 2 / (1 + denom);
+
+    return ret;
+}
+
 inline izanagi::math::SVector3 computeGGXRadiance(
     float& weight,
     XorShift& sampler,
@@ -82,6 +102,7 @@ inline izanagi::math::SVector3 computeGGXRadiance(
 {
     // NOTE
     // https://learnopengl.com/#!PBR/IBL/Specular-IBL
+    // http://gregory-igehy.hatenadiary.com/entry/2015/02/26/154142
 
     auto r1 = sampler.nextSample();
     auto r2 = sampler.nextSample();
@@ -111,11 +132,39 @@ inline izanagi::math::SVector3 computeGGXRadiance(
 
     izanagi::math::CVector3 clr;
 
+    float NoV = izanagi::math::SVector3::Dot(N, V);
+    float NoL = izanagi::math::SVector3::Dot(N, L);
+    float NoH = izanagi::math::SVector3::Dot(N, H);
+    float VoH = izanagi::math::SVector3::Dot(V, H);
+
+    // TODO
+    izanagi::math::CVector3 SpecularColor(1, 1, 1);
+
     if (NdotL > 0.0f) {
         clr = in.read(L);
-        clr *= NdotL;
 
-        weight += NdotL;
+#if 1
+        clr *= NoL;
+        weight += NoL;
+#else
+        // G 項
+        float G1 = computeGGXSmithG1(roughness, L, N);
+        float G2 = computeGGXSmithG1(roughness, V, N);
+        float G = G1 * G2;
+
+        // F 項
+        float Fc = pow(1 - VoH, 5);
+        auto F = (1 - Fc) * SpecularColor + Fc;
+
+        // pdf = (D * NoH) / VoH
+        // L = ks * NoL * (DGF / (4 * NoL * NoV)) / pdf
+        //   = ks * NoL * (DGF / (4 * NoL * NoV)) * (VoH / (D * NoH))
+        //   = ks * (GF / NoV) * (VoH / NoH)
+
+        clr = clr * (G * F / NoV) * (VoH / NoH);
+
+        weight += 1.0f;
+#endif
     }
 
     return std::move(clr);
