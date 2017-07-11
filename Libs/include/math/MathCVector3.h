@@ -120,10 +120,19 @@ namespace math
         {
             return CVector3(x + rhs.x, y + rhs.y, z + rhs.z);
         }
+        CVector3 operator +(float rhs) const
+        {
+            return CVector3(x + rhs, y + rhs, z + rhs);
+        }
 
         CVector3 operator -(const SVector3& rhs) const
         {
             return CVector3(x - rhs.x, y - rhs.y, z - rhs.z);
+        }
+
+        CVector3 operator *(const CVector3& rhs) const
+        {
+            return CVector3(x * rhs.x, y * rhs.y, z * rhs.z);
         }
 
         CVector3 operator *(IZ_FLOAT rhs) const
