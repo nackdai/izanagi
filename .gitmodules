@@ -32,3 +32,6 @@
 [submodule "Tools/External/draco"]
 	path = Tools/External/draco
 	url = https://github.com/google/draco.git
+[submodule "External/stb"]
+	path = External/stb
+	url = https://github.com/nothings/stb.git
