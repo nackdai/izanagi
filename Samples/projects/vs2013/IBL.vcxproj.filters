@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="shader">
+      <UniqueIdentifier>{93e46caf-35d2-44cd-a45e-d834ae5ac751}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{4469de85-8532-43fb-80e8-54e4b92805b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="asset">
+      <UniqueIdentifier>{e3f8f63e-6cb7-4507-8c64-06129d45ccc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{f29bc49e-e997-4b05-936a-509bb1737f2d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\IBL\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\IBL\IBLApp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\IBL\IBLApp.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\IBL\shader\basic_vs.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\IBL\shader\basic_fs.glsl">
+      <Filter>shader</Filter>
+    </None>
+  </ItemGroup>
+</Project>
