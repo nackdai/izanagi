@@ -99,6 +99,7 @@ int main(int argc, char* argv[])
 
     static const int samples = 100;
 
+#if 0
 #pragma omp parallel for
     for (int y = 0; y < height; y++) {
         int cur = count.fetch_add(1);
@@ -107,8 +108,8 @@ int main(int argc, char* argv[])
         }
 
         for (int x = 0; x < width; x++) {
-            float u = x / (float)(width - 1);
-            float v = y / (float)(height - 1);
+            float u = (x + 0.5f) / (float)(width - 1);
+            float v = (y + 0.5f) / (float)(height - 1);
 
             auto n = EquirectTexture::convertUVToDir(u, v);
             auto t = getOrthoVector(n);
@@ -123,7 +124,7 @@ int main(int argc, char* argv[])
 
                 float roughness = 0.2f;
                 //auto clr = computeLambertRadiance(weight, sampler, in, roughness, n, t, b);
-                auto clr = computeGGXRadiance(weight, sampler, in, roughness, n, t, b);
+                auto clr = computeGGXPrefilter(weight, sampler, in, roughness, n, t, b);
 
                 if (isInvalidColor(clr)) {
                     IZ_PRINTF("Invalid(%d/%d[%d])\n", x, y, i);
@@ -146,6 +147,61 @@ int main(int argc, char* argv[])
     }
     if (outdata) {
         free(outdata);
+    }
+#endif
+
+    {
+        width = 100;
+        height = 100;
+        bytes = sizeof(float) * 3 * width * height;
+        float* outdata = (float*)malloc(bytes);
+
+//#pragma omp parallel for
+        for (int y = 0; y < height; y++) {
+            int cur = count.fetch_add(1);
+            if ((cur % 10) == 0) {
+                IZ_PRINTF("%.3f %%\n", cur / (float)height * 100);
+            }
+
+            for (int x = 0; x < width; x++) {
+                if (x == 50 && y == 50) {
+                    int xxxx = 0;
+                }
+
+                float u = (x + 0.5f) / (float)(width - 1);
+                float v = (y + 0.5f) / (float)(height - 1);
+
+                auto n = EquirectTexture::convertUVToDir(u, v);
+                auto t = getOrthoVector(n);
+                auto b = cross(n, t);
+
+                izanagi::math::CVector3 integ;
+
+                for (int i = 0; i < samples; i++) {
+                    XorShift sampler((y * height * 4 + x * 4) * samples + i + 1);
+
+                    float roughness = 0.2f;
+
+                    auto clr = computeIntegrateBRDF(
+                        u, v,
+                        sampler,
+                        n, t, b);
+
+                    integ += clr;
+                }
+
+                integ /= (float)samples;
+
+                int idx = y * width + x;
+                idx *= 3;
+
+                outdata[idx + 0] = integ.x;
+                outdata[idx + 1] = integ.y;
+                outdata[idx + 2] = integ.z;
+            }
+        }
+
+        stbi_write_hdr("integ.hdr", width, height, 3, outdata);
     }
 
     return nRetCode;

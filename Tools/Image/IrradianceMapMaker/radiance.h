@@ -91,22 +91,13 @@ inline float computeGGXSmithG1(float roughness, const izanagi::math::SVector3& v
     return ret;
 }
 
-inline izanagi::math::SVector3 computeGGXRadiance(
-    float& weight,
-    XorShift& sampler,
-    const EquirectTexture& in,
-    const float roughness,
+inline izanagi::math::SVector3 importanceSamplingGGX(
+    float r1, float r2,
+    float roughness,
     const izanagi::math::CVector3& n,
     const izanagi::math::CVector3& t,
     const izanagi::math::CVector3& b)
 {
-    // NOTE
-    // https://learnopengl.com/#!PBR/IBL/Specular-IBL
-    // http://gregory-igehy.hatenadiary.com/entry/2015/02/26/154142
-
-    auto r1 = sampler.nextSample();
-    auto r2 = sampler.nextSample();
-
     float a = roughness * roughness;
 
     float phi = 2.0 * IZ_MATH_PI * r1;
@@ -121,6 +112,28 @@ inline izanagi::math::SVector3 computeGGXRadiance(
 
     H = t * H.x + b * H.y + n * H.z;
 
+    return std::move(H);
+}
+
+inline izanagi::math::SVector3 computeGGXPrefilter(
+    float& weight,
+    XorShift& sampler,
+    const EquirectTexture& in,
+    const float roughness,
+    const izanagi::math::CVector3& n,
+    const izanagi::math::CVector3& t,
+    const izanagi::math::CVector3& b)
+{
+    // NOTE
+    // https://learnopengl.com/#!PBR/IBL/Specular-IBL
+    // http://gregory-igehy.hatenadiary.com/entry/2015/02/26/154142
+    // https://de45xmedrsdbp.cloudfront.net/Resources/files/2013SiggraphPresentationsNotes-26915738.pdf
+
+    auto r1 = sampler.nextSample();
+    auto r2 = sampler.nextSample();
+
+    auto H = importanceSamplingGGX(r1, r2, roughness, n, t, b);
+
     auto N = n;
     auto R = N;
     auto V = R;
@@ -128,10 +141,18 @@ inline izanagi::math::SVector3 computeGGXRadiance(
     auto L = 2.0f * izanagi::math::SVector3::Dot(V, H) * H - V;
     L.Normalize();
 
-    float NdotL = std::max<float>(izanagi::math::SVector3::Dot(N, L), 0.0f);
-
     izanagi::math::CVector3 clr;
 
+#if 1
+    float NoL = std::max<float>(izanagi::math::SVector3::Dot(N, L), 0.0f);
+
+    if (NoL > 0.0f) {
+        clr = in.read(L);
+        clr *= NoL;
+        weight += NoL;
+
+    }
+#else
     float NoV = izanagi::math::SVector3::Dot(N, V);
     float NoL = izanagi::math::SVector3::Dot(N, L);
     float NoH = izanagi::math::SVector3::Dot(N, H);
@@ -140,13 +161,9 @@ inline izanagi::math::SVector3 computeGGXRadiance(
     // TODO
     izanagi::math::CVector3 SpecularColor(1, 1, 1);
 
-    if (NdotL > 0.0f) {
+    if (NoL > 0.0f) {
         clr = in.read(L);
 
-#if 1
-        clr *= NoL;
-        weight += NoL;
-#else
         // G 項
         float G1 = computeGGXSmithG1(roughness, L, N);
         float G2 = computeGGXSmithG1(roughness, V, N);
@@ -164,8 +181,88 @@ inline izanagi::math::SVector3 computeGGXRadiance(
         clr = clr * (G * F / NoV) * (VoH / NoH);
 
         weight += 1.0f;
-#endif
     }
+#endif
 
     return std::move(clr);
+}
+inline float GeometrySchlickGGX(float NdotV, float roughness)
+{
+    float a = roughness;
+    float k = (a * a) / 2.0;
+
+    float nom = NdotV;
+    float denom = NdotV * (1.0 - k) + k;
+
+    return nom / denom;
+}
+
+inline float GeometrySmith(
+    const izanagi::math::CVector3& N,
+    const izanagi::math::CVector3& V,
+    const izanagi::math::CVector3& L,
+    const float roughness)
+{
+    float NdotV = std::max<float>(izanagi::math::SVector3::Dot(N, V), 0.0);
+    float NdotL = std::max<float>(izanagi::math::SVector3::Dot(N, L), 0.0);
+    float ggx2 = GeometrySchlickGGX(NdotV, roughness);
+    float ggx1 = GeometrySchlickGGX(NdotL, roughness);
+
+    return ggx1 * ggx2;
+}
+
+inline izanagi::math::SVector3 computeIntegrateBRDF(
+    float u, float v,
+    XorShift& sampler,
+    const izanagi::math::CVector3& n,
+    const izanagi::math::CVector3& t,
+    const izanagi::math::CVector3& b)
+{
+    // NOTE
+    // https://learnopengl.com/#!PBR/IBL/Specular-IBL
+    // https://de45xmedrsdbp.cloudfront.net/Resources/files/2013SiggraphPresentationsNotes-26915738.pdf
+
+    // NOTE
+    // roughness(v)
+    // |
+    // |
+    // |
+    // +--------> NoV(u)
+
+    const float NdotV = izanagi::math::CMath::Clamp<float>(u, 0, 1);
+    const float roughness = izanagi::math::CMath::Clamp<float>(v, 0, 1);
+
+    izanagi::math::CVector3 V;
+    V.x = sqrt(1.0 - NdotV * NdotV);    // sin
+    V.y = 0.0;
+    V.z = NdotV;  // cos
+
+    izanagi::math::CVector3 N(0.0, 0.0, 1.0);
+
+    auto r1 = sampler.nextSample();
+    auto r2 = sampler.nextSample();
+
+    auto H = importanceSamplingGGX(r1, r2, roughness, n, t, b);
+
+    auto L = 2.0f * izanagi::math::SVector3::Dot(V, H) * H - V;
+    L.Normalize();
+
+    float NdotL = std::max<float>(L.z, 0.0);
+    float NdotH = std::max<float>(H.z, 0.0);
+    float VdotH = std::max<float>(izanagi::math::SVector3::Dot(V, H), 0.0);
+
+    float A = 0.0;
+    float B = 0.0;
+
+    if (NdotL > 0.0)
+    {
+        float G = GeometrySmith(N, V, L, roughness);
+        float G_Vis = (G * VdotH) / (NdotH * NdotV + 0.0001f);
+        float Fc = pow(1.0 - VdotH, 5.0);
+
+        A += (1.0 - Fc) * G_Vis;
+        B += Fc * G_Vis;
+    }
+
+    return izanagi::math::CVector3(A, B, 0);
 }
