@@ -36,8 +36,11 @@
 #include <typeinfo>
 #include <cstring>
 #include <algorithm>
-#include <cxxabi.h>
 #include <cstdlib>
+
+#ifdef __GNUC__
+#include <cxxabi.h>
+#endif
 
 namespace cmdline{
 
@@ -102,6 +105,7 @@ Target lexical_cast(const Source &arg)
   return lexical_cast_t<Target, Source, detail::is_same<Target, Source>::value>::cast(arg);
 }
 
+#ifdef __GNUC__
 static inline std::string demangle(const std::string &name)
 {
   int status=0;
@@ -110,6 +114,12 @@ static inline std::string demangle(const std::string &name)
   free(p);
   return ret;
 }
+#else
+static inline std::string demangle(const std::string &name)
+{
+    return name;
+}
+#endif
 
 template <class T>
 std::string readable_typename()
@@ -566,7 +576,7 @@ public:
 
     size_t max_width=0;
     for (size_t i=0; i<ordered.size(); i++){
-      max_width=std::max(max_width, ordered[i]->name().length());
+        max_width = std::max<size_t>(max_width, ordered[i]->name().length());
     }
     for (size_t i=0; i<ordered.size(); i++){
       if (ordered[i]->short_name()){
