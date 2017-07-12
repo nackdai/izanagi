@@ -10,6 +10,8 @@
 #include "izToolKit.h"
 #include "izMath.h"
 
+#include <cmdline.h>
+
 #include "xorshift.h"
 #include "equirect.h"
 #include "radiance.h"
@@ -25,12 +27,6 @@
 #endif
 
 using namespace std;
-
-namespace {
-    inline void _DispUsage()
-    {
-    }
-}
 
 #ifdef VGOTO
 #undef VGOTO
@@ -80,24 +76,144 @@ inline bool isInvalidColor(const izanagi::math::SVector3& v)
     return b;
 }
 
+struct Options {
+    std::string input;
+    std::string output_diffuse;
+    std::string output_specular;
+    std::string output_integ;
+    int width{ 0 };
+    int height{ 0 };
+    int samples{ 100 };
+    float roughness{ 0.5f };
+};
+
+bool parseOption(
+    int argc, char* argv[],
+    cmdline::parser& cmd,
+    Options& opt)
+{
+    {
+        cmd.add<string>("input", 'i', "input environment map", true);
+        cmd.add<string>("output", 'o', "output filename base", true, "result");
+        cmd.add<int>("width", 'w', "output map width", false);
+        cmd.add<int>("height", 'h', "output map height", false);
+        cmd.add<int>("samples", 's', "ray samples", false, opt.samples);
+        cmd.add<float>("roughness", 'r', "material roughness", false, opt.roughness);
+        cmd.add<string>("help", '?', "print usage", false);
+    }
+
+    bool isCmdOk = cmd.parse(argc, argv);
+
+    if (argc == 1 || cmd.exist("help")){
+        cerr << cmd.usage();
+        return false;
+    }
+
+    if (!isCmdOk){
+        cerr << cmd.error() << endl << cmd.usage();
+        return false;
+    }
+
+    if (cmd.exist("input")) {
+        opt.input = cmd.get<string>("input");
+    }
+    if (cmd.exist("output")) {
+        auto output = cmd.get<string>("output");
+
+        opt.output_diffuse = output + "_diff.hdr";
+        opt.output_specular = output + "_spec.hdr";
+        opt.output_integ = output + "_integ.hdr";
+    }
+    if (cmd.exist("width")) {
+        opt.width = cmd.get<int>("width");
+    }
+    if (cmd.exist("height")) {
+        opt.height = cmd.get<int>("height");
+    }
+    if (cmd.exist("samples")) {
+        opt.samples = cmd.get<int>("samples");
+        opt.samples = std::max<int>(1, opt.samples);
+    }
+    if (cmd.exist("roughness")) {
+        opt.roughness = cmd.get<float>("roughness");
+        opt.roughness = izanagi::math::CMath::Clamp<float>(opt.roughness, 0, 1);
+    }
+
+    return true;
+}
+
+float* loadImage(
+    const char* input,
+    int& width,
+    int& height)
+{
+    int comp = 0;
+
+    if (stbi_is_hdr(input)) {
+        auto data = stbi_loadf(input, &width, &height, &comp, 0);
+        return data;
+    }
+    else {
+        auto data = stbi_load(input, &width, &height, &comp, 0);
+
+        if (data) {
+            auto bytes = sizeof(float) * (width * height * 3);
+            float* fdata = (float*)malloc(bytes);
+
+#pragma omp parallel for
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    int idx = y * width + x;
+                    idx *= 3;
+
+                    fdata[idx + 0] = data[idx + 0] / (float)255;
+                    fdata[idx + 1] = data[idx + 1] / (float)255;
+                    fdata[idx + 2] = data[idx + 2] / (float)255;
+                }
+            }
+
+            STBI_FREE(data);
+
+            return fdata;
+        }
+
+        return nullptr;
+    }
+}
+
 int main(int argc, char* argv[])
 {
-    int nRetCode = 0;
+    cmdline::parser cmd;
+    Options opt;
 
-    int width, height, comp;
-    //auto data = stbi_loadf("studio015.hdr", &width, &height, &comp, 0);
-    auto data = stbi_loadf("harbor.hdr", &width, &height, &comp, 0);
+    if (!parseOption(argc, argv, cmd, opt)) {
+        return 1;
+    }
+
+    int width, height;
+    auto data = loadImage(opt.input.c_str(), width, height);
+
+    if (!data) {
+        return 1;
+    }
 
     EquirectTexture in(width, height, data);
 
-    int bytes = sizeof(float) * 3 * width * height;
-    float* outdata = (float*)malloc(bytes);
+    if (opt.width == 0) {
+        opt.width = width;
+    }
+    if (opt.height == 0) {
+        opt.height = height;
+    }
 
-    EquirectTexture out(width, height, outdata);
+    int bytes = sizeof(float) * 3 * opt.width * opt.height;
+    float* bufDiffuse = (float*)malloc(bytes);
+    float* bufSpecular = (float*)malloc(bytes);
+
+    EquirectTexture outDiff(opt.width, opt.height, bufDiffuse);
+    EquirectTexture outSpec(opt.width, opt.height, bufSpecular);
 
     std::atomic<int> count = 0;
-
-    static const int samples = 100;
 
 #pragma omp parallel for
     for (int y = 0; y < height; y++) {
@@ -107,8 +223,8 @@ int main(int argc, char* argv[])
         }
 
         for (int x = 0; x < width; x++) {
-            float u = (x + 0.5f) / (float)(width - 1);
-            float v = (y + 0.5f) / (float)(height - 1);
+            float u = (x + 0.5f) / (float)width;
+            float v = (y + 0.5f) / (float)height;
 
             auto n = EquirectTexture::convertUVToDir(u, v);
             auto t = getOrthoVector(n);
@@ -116,43 +232,53 @@ int main(int argc, char* argv[])
 
             float weight = 0.0f;
 
-            izanagi::math::CVector3 conv;
+            izanagi::math::CVector3 convDiff;
+            izanagi::math::CVector3 convSpec;
 
-            for (int i = 0; i < samples; i++) {
-                XorShift sampler((y * height * 4 + x * 4) * samples + i + 1);
+            for (int i = 0; i < opt.samples; i++) {
+                XorShift sampler((y * height * 4 + x * 4) * opt.samples + i + 1);
 
-                float roughness = 0.2f;
-                //auto clr = computeLambertRadiance(weight, sampler, in, roughness, n, t, b);
-                auto clr = computeGGXPrefilter(weight, sampler, in, roughness, n, t, b);
+                auto diffuse = computeLambertRadiance(weight, sampler, in, opt.roughness, n, t, b);
+                auto specular = computeGGXPrefilter(weight, sampler, in, opt.roughness, n, t, b);
 
-                if (isInvalidColor(clr)) {
-                    IZ_PRINTF("Invalid(%d/%d[%d])\n", x, y, i);
+                if (isInvalidColor(diffuse)) {
+                    //IZ_PRINTF("Invalid(%d/%d[%d])\n", x, y, i);
                     continue;
                 }
 
-                conv += clr;
+                convDiff += diffuse;
+                convSpec += specular;
             }
 
-            conv /= weight;
+            convDiff /= weight;
+            convSpec /= weight;
 
-            out.write(conv, u, v);
+            outDiff.write(convDiff, u, v);
+            outSpec.write(convSpec, u, v);
         }
     }
 
-    stbi_write_hdr("test.hdr", width, height, 3, outdata);
+    stbi_write_hdr(opt.output_diffuse.c_str(), opt.width, opt.height, 3, bufDiffuse);
+    stbi_write_hdr(opt.output_specular.c_str(), opt.width, opt.height, 3, bufSpecular);
 
     if (data) {
-        STBI_FREE(data);
+        free(data);
     }
-    if (outdata) {
-        free(outdata);
+    if (bufDiffuse) {
+        free(bufDiffuse);
     }
-
+    if (bufSpecular) {
+        free(bufSpecular);
+    }
+    
+    // Reset counter.
     count = 0;
 
     {
-        width = 100;
-        height = 100;
+        // Fixed size.
+        width = 256;
+        height = 256;
+
         bytes = sizeof(float) * 3 * width * height;
         float* outdata = (float*)malloc(bytes);
 
@@ -164,21 +290,18 @@ int main(int argc, char* argv[])
             }
 
             for (int x = 0; x < width; x++) {
-                if (x == 50 && y == 50) {
-                    int xxxx = 0;
-                }
+                float u = (x + 0.5f) / (float)width;
+                float v = (y + 0.5f) / (float)height;
 
-                float u = (x + 0.5f) / (float)(width - 1);
-                float v = (y + 0.5f) / (float)(height - 1);
-
+                // Fixed normal.
                 izanagi::math::CVector3 n(0, 0, 1);
                 auto t = getOrthoVector(n);
                 auto b = cross(n, t);
 
                 izanagi::math::CVector3 integ;
 
-                for (int i = 0; i < samples; i++) {
-                    XorShift sampler((y * height * 4 + x * 4) * samples + i + 1);
+                for (int i = 0; i < opt.samples; i++) {
+                    XorShift sampler((y * height * 4 + x * 4) * opt.samples + i + 1);
 
                     auto clr = computeIntegrateBRDF(
                         u, v,
@@ -188,9 +311,9 @@ int main(int argc, char* argv[])
                     integ += clr;
                 }
 
-                integ /= (float)samples;
+                integ /= (float)opt.samples;
 
-                // 上下反転.
+                // Revert y axis.
                 int idx = (height - 1 - y) * width + x;
                 idx *= 3;
 
@@ -200,8 +323,9 @@ int main(int argc, char* argv[])
             }
         }
 
-        stbi_write_hdr("integ.hdr", width, height, 3, outdata);
+        stbi_write_hdr(opt.output_integ.c_str(), width, height, 3, outdata);
+        free(outdata);
     }
 
-    return nRetCode;
+    return 0;
 }

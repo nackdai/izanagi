@@ -14,6 +14,7 @@
     <ClCompile Include="..\..\Image\IrradianceMapMaker\IrradianceMapMaker.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\External\cmdline\cmdline.h" />
     <ClInclude Include="..\..\Image\IrradianceMapMaker\equirect.h" />
     <ClInclude Include="..\..\Image\IrradianceMapMaker\radiance.h" />
     <ClInclude Include="..\..\Image\IrradianceMapMaker\xorshift.h" />
@@ -57,7 +58,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)../../../External/stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)../../../External/stb;$(ProjectDir)../../External/cmdline;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>
@@ -73,7 +74,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)../../../External/stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)../../../External/stb;$(ProjectDir)../../External/cmdline;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>
