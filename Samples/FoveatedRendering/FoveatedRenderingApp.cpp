@@ -160,10 +160,7 @@ void FoveatedRenderingApp::UpdateInternal(izanagi::graph::CGraphicsDevice* devic
     izanagi::math::SMatrix44::SetScale(m_L2W, 100.0f, 100.0f, 100.0f);
 
     // カメラの位置にあわせて移動する
-    izanagi::math::SMatrix44::Trans(
-        m_L2W,
-        m_L2W,
-        GetCamera().GetParam().pos);
+    izanagi::math::SMatrix44::Trans(m_L2W, m_L2W, GetCamera().GetParam().pos);
 }
 
 namespace {
