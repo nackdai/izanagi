@@ -99,7 +99,6 @@ int main(int argc, char* argv[])
 
     static const int samples = 100;
 
-#if 0
 #pragma omp parallel for
     for (int y = 0; y < height; y++) {
         int cur = count.fetch_add(1);
@@ -148,7 +147,8 @@ int main(int argc, char* argv[])
     if (outdata) {
         free(outdata);
     }
-#endif
+
+    count = 0;
 
     {
         width = 100;
@@ -156,7 +156,7 @@ int main(int argc, char* argv[])
         bytes = sizeof(float) * 3 * width * height;
         float* outdata = (float*)malloc(bytes);
 
-//#pragma omp parallel for
+#pragma omp parallel for
         for (int y = 0; y < height; y++) {
             int cur = count.fetch_add(1);
             if ((cur % 10) == 0) {
@@ -171,7 +171,7 @@ int main(int argc, char* argv[])
                 float u = (x + 0.5f) / (float)(width - 1);
                 float v = (y + 0.5f) / (float)(height - 1);
 
-                auto n = EquirectTexture::convertUVToDir(u, v);
+                izanagi::math::CVector3 n(0, 0, 1);
                 auto t = getOrthoVector(n);
                 auto b = cross(n, t);
 
@@ -179,8 +179,6 @@ int main(int argc, char* argv[])
 
                 for (int i = 0; i < samples; i++) {
                     XorShift sampler((y * height * 4 + x * 4) * samples + i + 1);
-
-                    float roughness = 0.2f;
 
                     auto clr = computeIntegrateBRDF(
                         u, v,
@@ -192,7 +190,8 @@ int main(int argc, char* argv[])
 
                 integ /= (float)samples;
 
-                int idx = y * width + x;
+                // 上下反転.
+                int idx = (height - 1 - y) * width + x;
                 idx *= 3;
 
                 outdata[idx + 0] = integ.x;
