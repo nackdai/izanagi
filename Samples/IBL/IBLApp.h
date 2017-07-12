@@ -28,12 +28,17 @@ protected:
     virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device);
 
 private:
-    izanagi::CDebugMesh* m_Mesh;
+    izanagi::sample::CSampleEnvBox* m_envbox{ nullptr };
 
-    izanagi::CDebugMeshAxis* m_Axis;
-    izanagi::CDebugMeshGrid* m_Grid;
+    izanagi::CDebugMesh* m_Mesh{ nullptr };
 
-    izanagi::sample::Shader m_shd;
+    izanagi::CDebugMeshAxis* m_Axis{ nullptr };
+    izanagi::CDebugMeshGrid* m_Grid{ nullptr };
+
+    izanagi::sample::Shader m_shdMesh;
+    izanagi::sample::Shader m_shdEnvBox;
+
+    izanagi::CImage* m_Img{ nullptr };
 };
 
 #endif    // #if !defined(__IBL_APP_H__)

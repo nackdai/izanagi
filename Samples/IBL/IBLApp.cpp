@@ -2,10 +2,6 @@
 
 IBLApp::IBLApp()
 {
-    m_Mesh = nullptr;
-
-    m_Axis = IZ_NULL;
-    m_Grid = IZ_NULL;
 }
 
 IBLApp::~IBLApp()
@@ -19,6 +15,11 @@ IZ_BOOL IBLApp::InitInternal(
     izanagi::sample::CSampleCamera& camera)
 {
     IZ_BOOL result = IZ_TRUE;
+
+    m_envbox = izanagi::sample::CSampleEnvBox::CreateSampleEnvBox(
+        allocator,
+        device);
+    VGOTO(result = (m_envbox != IZ_NULL), __EXIT__);
 
     // Axis
     m_Axis = izanagi::CDebugMeshAxis::CreateDebugMeshAxisDefault(
@@ -51,11 +52,27 @@ IZ_BOOL IBLApp::InitInternal(
         VGOTO(result = (m_Mesh != IZ_NULL), __EXIT__);
     }
 
+    // テクスチャ
+    {
+        izanagi::CFileInputStream in;
+        VGOTO(result = in.Open("data/texture.img"), __EXIT__);
+
+        m_Img = izanagi::CImage::CreateImage(
+            allocator,
+            device,
+            &in);
+        VGOTO(result = (m_Img != IZ_NULL), __EXIT__);
+    }
+
     // シェーダ
-    m_shd.init(
+    m_shdMesh.init(
         device,
         "shader/basic_vs.glsl",
         "shader/basic_fs.glsl");
+    m_shdEnvBox.init(
+        device,
+        "shader/vs_equirect.glsl",
+        "shader/fs_equirect.glsl");
 
     // カメラ
     camera.Init(
@@ -81,10 +98,15 @@ void IBLApp::ReleaseInternal()
 {
     SAFE_RELEASE(m_Mesh);
 
+    SAFE_RELEASE(m_envbox);
+
     SAFE_RELEASE(m_Axis);
     SAFE_RELEASE(m_Grid);
 
-    m_shd.release();
+    SAFE_RELEASE(m_Img);
+
+    m_shdMesh.release();
+    m_shdEnvBox.release();
 }
 
 // 更新.
@@ -106,36 +128,72 @@ void IBLApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     const auto& mtxW2C = camera.GetParam().mtxW2C;
     const auto& mtxW2V = camera.GetParam().mtxW2V;
 
-    auto* shd = m_shd.m_program;
-
-    device->SetShaderProgram(shd);
-
+#if 1
     {
-        // パラメータ設定
-        auto hL2W = shd->GetHandleByName("mtxL2W");
-        shd->SetMatrix(device, hL2W, mtxL2W);
+        auto* shd = m_shdMesh.m_program;
 
-        auto hW2C = shd->GetHandleByName("mtxW2C");
-        shd->SetMatrix(device, hW2C, mtxW2C);
+        device->SetShaderProgram(shd);
 
-        auto hW2V = shd->GetHandleByName("mtxW2V");
-        shd->SetMatrix(device, hW2V, mtxW2V);
+        {
+            // パラメータ設定
+            auto hL2W = shd->GetHandleByName("mtxL2W");
+            shd->SetMatrix(device, hL2W, mtxL2W);
 
-        m_Grid->Draw(device);
-        m_Axis->Draw(device);
+            auto hW2C = shd->GetHandleByName("mtxW2C");
+            shd->SetMatrix(device, hW2C, mtxW2C);
+
+            auto hW2V = shd->GetHandleByName("mtxW2V");
+            shd->SetMatrix(device, hW2V, mtxW2V);
+
+            m_Grid->Draw(device);
+            m_Axis->Draw(device);
+        }
+
+        {
+            // パラメータ設定
+            auto hL2W = shd->GetHandleByName("mtxL2W");
+            shd->SetMatrix(device, hL2W, mtxL2W);
+
+            auto hW2C = shd->GetHandleByName("mtxW2C");
+            shd->SetMatrix(device, hW2C, mtxW2C);
+
+            auto hW2V = shd->GetHandleByName("mtxW2V");
+            shd->SetMatrix(device, hW2V, mtxW2V);
+
+            m_Mesh->Draw(device);
+        }
     }
-
+#endif
     {
-        // パラメータ設定
+        auto shd = m_shdEnvBox.m_program;
+
+        device->SetShaderProgram(shd);
+
+        izanagi::math::SMatrix44::SetScale(mtxL2W, 100.0f, 100.0f, 100.0f);
+
+        // カメラの位置にあわせて移動する
+        izanagi::math::SMatrix44::Trans(
+            mtxL2W,
+            mtxL2W,
+            GetCamera().GetParam().pos);
+
+        izanagi::sample::CSampleCamera& camera = GetCamera();
+
+        device->SetTexture(0, m_Img->GetTexture(0));
+
+        device->SetShaderProgram(shd);
+
         auto hL2W = shd->GetHandleByName("mtxL2W");
         shd->SetMatrix(device, hL2W, mtxL2W);
+
+        auto mtxW2C = camera.GetParam().mtxW2C;
 
         auto hW2C = shd->GetHandleByName("mtxW2C");
         shd->SetMatrix(device, hW2C, mtxW2C);
 
-        auto hW2V = shd->GetHandleByName("mtxW2V");
-        shd->SetMatrix(device, hW2V, mtxW2V);
+        auto hEye = shd->GetHandleByName("eye");
+        shd->SetVector(device, hEye, camera.GetParam().pos);
 
-        m_Mesh->Draw(device);
+        m_envbox->Render(device);
     }
 }
