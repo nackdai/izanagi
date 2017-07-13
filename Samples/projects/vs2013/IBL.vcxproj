@@ -353,10 +353,10 @@
   <ItemGroup>
     <None Include="..\..\IBL\shader\basic_fs.glsl" />
     <None Include="..\..\IBL\shader\basic_vs.glsl" />
-    <None Include="..\..\IBL\shader\fs_equirect.glsl" />
+    <None Include="..\..\IBL\shader\equirect_fs.glsl" />
+    <None Include="..\..\IBL\shader\equirect_vs.glsl" />
     <None Include="..\..\IBL\shader\ideal_spec_fs.glsl" />
     <None Include="..\..\IBL\shader\ideal_spec_vs.glsl" />
-    <None Include="..\..\IBL\shader\vs_equirect.glsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\IBL\asset\texture.xml">

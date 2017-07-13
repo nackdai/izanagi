@@ -34,16 +34,16 @@
     <None Include="..\..\IBL\shader\basic_fs.glsl">
       <Filter>shader</Filter>
     </None>
-    <None Include="..\..\IBL\shader\vs_equirect.glsl">
-      <Filter>shader</Filter>
-    </None>
-    <None Include="..\..\IBL\shader\fs_equirect.glsl">
-      <Filter>shader</Filter>
-    </None>
     <None Include="..\..\IBL\shader\ideal_spec_fs.glsl">
       <Filter>shader</Filter>
     </None>
     <None Include="..\..\IBL\shader\ideal_spec_vs.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\IBL\shader\equirect_fs.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\IBL\shader\equirect_vs.glsl">
       <Filter>shader</Filter>
     </None>
   </ItemGroup>

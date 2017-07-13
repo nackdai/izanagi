@@ -75,8 +75,8 @@ IZ_BOOL IBLApp::InitInternal(
         "shader/ideal_spec_fs.glsl");
     m_shdEnvBox.init(
         device,
-        "shader/vs_equirect.glsl",
-        "shader/fs_equirect.glsl");
+        "shader/equirect_vs.glsl",
+        "shader/equirect_fs.glsl");
 
     // カメラ
     camera.Init(
