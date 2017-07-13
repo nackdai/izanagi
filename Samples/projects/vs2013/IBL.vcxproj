@@ -357,6 +357,8 @@
     <None Include="..\..\IBL\shader\equirect_vs.glsl" />
     <None Include="..\..\IBL\shader\ideal_spec_fs.glsl" />
     <None Include="..\..\IBL\shader\ideal_spec_vs.glsl" />
+    <None Include="..\..\IBL\shader\pbr_fs.glsl" />
+    <None Include="..\..\IBL\shader\pbr_vs.glsl" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\IBL\asset\texture.xml">

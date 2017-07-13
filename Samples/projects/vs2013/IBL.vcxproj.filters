@@ -46,8 +46,16 @@
     <None Include="..\..\IBL\shader\equirect_vs.glsl">
       <Filter>shader</Filter>
     </None>
+    <None Include="..\..\IBL\shader\pbr_vs.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\IBL\shader\pbr_fs.glsl">
+      <Filter>shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\..\IBL\asset\texture.xml" />
+    <CustomBuild Include="..\..\IBL\asset\texture.xml">
+      <Filter>asset</Filter>
+    </CustomBuild>
   </ItemGroup>
 </Project>

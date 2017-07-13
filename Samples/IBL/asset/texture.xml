@@ -3,7 +3,10 @@
 <textures>
   <plane path="./studio.hdr"/>
   <plane path="./result_diff.hdr"/>
-  <plane path="./result_spec.hdr"/>
+  <plane path="./result_spec_0.hdr"
+         mippath_1="./result_spec_1.hdr"
+         mippath_2="./result_spec_2.hdr"
+         mippath_3="./result_spec_3.hdr"/>
   <plane path="./result_integ.hdr"/>
 </textures>
 

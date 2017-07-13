@@ -37,6 +37,7 @@ private:
 
     izanagi::sample::Shader m_shdBasic;
     izanagi::sample::Shader m_shdIdealSpec;
+    izanagi::sample::Shader m_shdPBR;
     izanagi::sample::Shader m_shdEnvBox;
 
     izanagi::CImage* m_Img{ nullptr };

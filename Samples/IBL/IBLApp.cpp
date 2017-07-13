@@ -4,7 +4,7 @@ enum TexType {
     bg,
     diffuse,
     filtered,
-    integ,
+    lut,
 };
 
 IBLApp::IBLApp()
@@ -80,6 +80,10 @@ IZ_BOOL IBLApp::InitInternal(
         device,
         "shader/ideal_spec_vs.glsl",
         "shader/ideal_spec_fs.glsl");
+    m_shdPBR.init(
+        device,
+        "shader/pbr_vs.glsl",
+        "shader/pbr_fs.glsl");
     m_shdEnvBox.init(
         device,
         "shader/equirect_vs.glsl",
@@ -118,6 +122,7 @@ void IBLApp::ReleaseInternal()
 
     m_shdBasic.release();
     m_shdIdealSpec.release();
+    m_shdPBR.release();
     m_shdEnvBox.release();
 }
 
@@ -166,6 +171,8 @@ void IBLApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
         device->SetShaderProgram(shd);
 
         device->SetTexture(0, m_Img->GetTexture(TexType::diffuse));
+        device->SetTexture(1, m_Img->GetTexture(TexType::filtered));
+        device->SetTexture(2, m_Img->GetTexture(TexType::lut));
 
         // パラメータ設定
         auto hL2W = shd->GetHandleByName("mtxL2W");
@@ -176,6 +183,19 @@ void IBLApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
         auto hEye = shd->GetHandleByName("eye");
         shd->SetVector(device, hEye, camera.GetParam().pos);
+
+        auto hMaxLod = shd->GetHandleByName("MAX_REFLECTION_LOD");
+        auto miplevel = m_Img->GetTexture(TexType::filtered)->GetMipMapNum() - 1;
+        shd->SetFloat(device, hMaxLod, (float)miplevel);
+
+        auto hRoughness = shd->GetHandleByName("roughness");
+        shd->SetFloat(device, hRoughness, 0.5f);
+
+        auto hMetalic = shd->GetHandleByName("metalic");
+        shd->SetFloat(device, hMetalic, 0.5f);
+
+        auto hF0 = shd->GetHandleByName("F0");
+        shd->SetVector(device, hF0, izanagi::math::CVector4(0.5, 0.5, 0.5, 0.5));
 
         m_Mesh->Draw(device);
     }
