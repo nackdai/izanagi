@@ -65,10 +65,14 @@ IZ_BOOL IBLApp::InitInternal(
     }
 
     // シェーダ
-    m_shdMesh.init(
+    m_shdBasic.init(
         device,
         "shader/basic_vs.glsl",
         "shader/basic_fs.glsl");
+    m_shdIdealSpec.init(
+        device,
+        "shader/ideal_spec_vs.glsl",
+        "shader/ideal_spec_fs.glsl");
     m_shdEnvBox.init(
         device,
         "shader/vs_equirect.glsl",
@@ -105,7 +109,8 @@ void IBLApp::ReleaseInternal()
 
     SAFE_RELEASE(m_Img);
 
-    m_shdMesh.release();
+    m_shdBasic.release();
+    m_shdIdealSpec.release();
     m_shdEnvBox.release();
 }
 
@@ -130,38 +135,45 @@ void IBLApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
 #if 1
     {
-        auto* shd = m_shdMesh.m_program;
+        auto* shd = m_shdBasic.m_program;
 
         device->SetShaderProgram(shd);
 
-        {
-            // パラメータ設定
-            auto hL2W = shd->GetHandleByName("mtxL2W");
-            shd->SetMatrix(device, hL2W, mtxL2W);
+        // パラメータ設定
+        auto hL2W = shd->GetHandleByName("mtxL2W");
+        shd->SetMatrix(device, hL2W, mtxL2W);
 
-            auto hW2C = shd->GetHandleByName("mtxW2C");
-            shd->SetMatrix(device, hW2C, mtxW2C);
+        auto hW2C = shd->GetHandleByName("mtxW2C");
+        shd->SetMatrix(device, hW2C, mtxW2C);
 
-            auto hW2V = shd->GetHandleByName("mtxW2V");
-            shd->SetMatrix(device, hW2V, mtxW2V);
+        auto hW2V = shd->GetHandleByName("mtxW2V");
+        shd->SetMatrix(device, hW2V, mtxW2V);
 
-            m_Grid->Draw(device);
-            m_Axis->Draw(device);
-        }
+        m_Grid->Draw(device);
+        m_Axis->Draw(device);
+    }
 
-        {
-            // パラメータ設定
-            auto hL2W = shd->GetHandleByName("mtxL2W");
-            shd->SetMatrix(device, hL2W, mtxL2W);
+    {
+        auto* shd = m_shdIdealSpec.m_program;
 
-            auto hW2C = shd->GetHandleByName("mtxW2C");
-            shd->SetMatrix(device, hW2C, mtxW2C);
+        device->SetShaderProgram(shd);
 
-            auto hW2V = shd->GetHandleByName("mtxW2V");
-            shd->SetMatrix(device, hW2V, mtxW2V);
+        device->SetTexture(0, m_Img->GetTexture(0));
 
-            m_Mesh->Draw(device);
-        }
+        // パラメータ設定
+        auto hL2W = shd->GetHandleByName("mtxL2W");
+        shd->SetMatrix(device, hL2W, mtxL2W);
+
+        auto hW2C = shd->GetHandleByName("mtxW2C");
+        shd->SetMatrix(device, hW2C, mtxW2C);
+
+        auto hW2V = shd->GetHandleByName("mtxW2V");
+        shd->SetMatrix(device, hW2V, mtxW2V);
+
+        auto hEye = shd->GetHandleByName("eye");
+        shd->SetVector(device, hEye, camera.GetParam().pos);
+
+        m_Mesh->Draw(device);
     }
 #endif
     {

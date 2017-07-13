@@ -35,7 +35,8 @@ private:
     izanagi::CDebugMeshAxis* m_Axis{ nullptr };
     izanagi::CDebugMeshGrid* m_Grid{ nullptr };
 
-    izanagi::sample::Shader m_shdMesh;
+    izanagi::sample::Shader m_shdBasic;
+    izanagi::sample::Shader m_shdIdealSpec;
     izanagi::sample::Shader m_shdEnvBox;
 
     izanagi::CImage* m_Img{ nullptr };

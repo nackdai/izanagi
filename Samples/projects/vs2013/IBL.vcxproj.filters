@@ -40,10 +40,14 @@
     <None Include="..\..\IBL\shader\fs_equirect.glsl">
       <Filter>shader</Filter>
     </None>
+    <None Include="..\..\IBL\shader\ideal_spec_fs.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\IBL\shader\ideal_spec_vs.glsl">
+      <Filter>shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="..\..\IBL\asset\texture.xml">
-      <Filter>asset</Filter>
-    </Xml>
+    <CustomBuild Include="..\..\IBL\asset\texture.xml" />
   </ItemGroup>
 </Project>
