@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <textures>
-  <plane
-      path="./studio.hdr"/>
+  <plane path="./studio.hdr"/>
+  <plane path="./result_diff.hdr"/>
+  <plane path="./result_spec.hdr"/>
+  <plane path="./result_integ.hdr"/>
 </textures>
 

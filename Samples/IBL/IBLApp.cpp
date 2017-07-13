@@ -1,5 +1,12 @@
 #include "IBLApp.h"
 
+enum TexType {
+    bg,
+    diffuse,
+    filtered,
+    integ,
+};
+
 IBLApp::IBLApp()
 {
 }
@@ -158,7 +165,7 @@ void IBLApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
         device->SetShaderProgram(shd);
 
-        device->SetTexture(0, m_Img->GetTexture(0));
+        device->SetTexture(0, m_Img->GetTexture(TexType::diffuse));
 
         // パラメータ設定
         auto hL2W = shd->GetHandleByName("mtxL2W");
@@ -166,9 +173,6 @@ void IBLApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
         auto hW2C = shd->GetHandleByName("mtxW2C");
         shd->SetMatrix(device, hW2C, mtxW2C);
-
-        auto hW2V = shd->GetHandleByName("mtxW2V");
-        shd->SetMatrix(device, hW2V, mtxW2V);
 
         auto hEye = shd->GetHandleByName("eye");
         shd->SetVector(device, hEye, camera.GetParam().pos);
@@ -191,7 +195,7 @@ void IBLApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
         izanagi::sample::CSampleCamera& camera = GetCamera();
 
-        device->SetTexture(0, m_Img->GetTexture(0));
+        device->SetTexture(0, m_Img->GetTexture(TexType::bg));
 
         device->SetShaderProgram(shd);
 

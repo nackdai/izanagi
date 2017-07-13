@@ -11,7 +11,6 @@ layout(location = 1) out vec3 reflection;
 
 uniform mat4 mtxL2W;
 uniform mat4 mtxW2C;
-uniform mat4 mtxW2V;
 
 uniform vec4 eye;
 
