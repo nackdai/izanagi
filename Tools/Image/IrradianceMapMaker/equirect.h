@@ -4,12 +4,36 @@
 
 class EquirectTexture {
 public:
+    EquirectTexture() {}
     EquirectTexture(int width, int height, float* data)
-        : m_width(width), m_height(height), m_data(data)
-    {}
+    {
+        init(width, height, data);
+    }
     ~EquirectTexture() {}
 
 public:
+    void init(int width, int height, float* data)
+    {
+        m_width = width;
+        m_height = height;
+        m_data = data;
+
+        m_counts.resize(width * height);
+    }
+
+    int width() const
+    {
+        return m_width;
+    }
+    int height() const
+    {
+        return m_height;
+    }
+    float* data()
+    {
+        return m_data;
+    }
+
     izanagi::math::SVector3 read(const izanagi::math::SVector3& dir) const
     {
         auto uv = convertDirToUV(dir);
@@ -43,9 +67,21 @@ public:
     {
         auto pos = computeIndexFromUV(u, v);
 
-        m_data[pos + 0] = clr.x;
-        m_data[pos + 1] = clr.y;
-        m_data[pos + 2] = clr.z;
+        int idx = pos / 3;
+        int cnt = m_counts[idx];
+
+        if (cnt == 0) {
+            m_data[pos + 0] = clr.x;
+            m_data[pos + 1] = clr.y;
+            m_data[pos + 2] = clr.z;
+        }
+        else {
+            m_data[pos + 0] = (m_data[pos + 0] * cnt + clr.x) / (float)(cnt + 1);
+            m_data[pos + 1] = (m_data[pos + 1] * cnt + clr.y) / (float)(cnt + 1);
+            m_data[pos + 2] = (m_data[pos + 2] * cnt + clr.z) / (float)(cnt + 1);
+        }
+
+        m_counts[idx] += 1;
     }
 
     static izanagi::math::SVector3 convertDirToUV(const izanagi::math::SVector3& dir)
@@ -106,4 +142,5 @@ private:
     int m_width{ 0 };
     int m_height{ 0 };
     float* m_data{ nullptr };
+    std::vector<int> m_counts;
 };

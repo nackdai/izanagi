@@ -84,7 +84,6 @@ struct Options {
     int width{ 0 };
     int height{ 0 };
     int samples{ 100 };
-    float roughness{ 0.5f };
 };
 
 bool parseOption(
@@ -98,7 +97,6 @@ bool parseOption(
         cmd.add<int>("width", 'w', "output map width", false);
         cmd.add<int>("height", 'h', "output map height", false);
         cmd.add<int>("samples", 's', "ray samples", false, opt.samples);
-        cmd.add<float>("roughness", 'r', "material roughness", false, opt.roughness);
         cmd.add<string>("help", '?', "print usage", false);
     }
 
@@ -121,8 +119,10 @@ bool parseOption(
         auto output = cmd.get<string>("output");
 
         opt.output_diffuse = output + "_diff.hdr";
-        opt.output_specular = output + "_spec.hdr";
         opt.output_integ = output + "_integ.hdr";
+
+        // Not fix filename here.
+        opt.output_specular = output + "_spec";
     }
     if (cmd.exist("width")) {
         opt.width = cmd.get<int>("width");
@@ -133,10 +133,6 @@ bool parseOption(
     if (cmd.exist("samples")) {
         opt.samples = cmd.get<int>("samples");
         opt.samples = std::max<int>(1, opt.samples);
-    }
-    if (cmd.exist("roughness")) {
-        opt.roughness = cmd.get<float>("roughness");
-        opt.roughness = izanagi::math::CMath::Clamp<float>(opt.roughness, 0, 1);
     }
 
     return true;
@@ -181,6 +177,26 @@ float* loadImage(
     }
 }
 
+inline int computeMipLevel(int width, int height)
+{
+    int wlevel = 0;
+    int hlevel = 0;
+
+    int w = width;
+    while (w > 8) {
+        w >>= 1;
+        wlevel += 1;
+    }
+
+    int h = height;
+    while (h > 8) {
+        h >>= 1;
+        hlevel += 1;
+    }
+
+    return std::min<int>(wlevel, hlevel);
+}
+
 int main(int argc, char* argv[])
 {
     cmdline::parser cmd;
@@ -206,15 +222,32 @@ int main(int argc, char* argv[])
         opt.height = height;
     }
 
-    int bytes = sizeof(float) * 3 * opt.width * opt.height;
-    float* bufDiffuse = (float*)malloc(bytes);
-    float* bufSpecular = (float*)malloc(bytes);
+    EquirectTexture outDiff;
+    {
+        int bytes = sizeof(float) * 3 * opt.width * opt.height;
+        float* bufDiffuse = (float*)malloc(bytes);
 
-    EquirectTexture outDiff(opt.width, opt.height, bufDiffuse);
-    EquirectTexture outSpec(opt.width, opt.height, bufSpecular);
+        outDiff.init(opt.width, opt.height, bufDiffuse);
+    }
+
+    int mipLevel = computeMipLevel(opt.width, opt.height);
+    mipLevel = std::min<int>(mipLevel, 10);
+
+    std::vector<EquirectTexture> outSpecs(mipLevel);
+
+    for (int i = 0; i < mipLevel; i++) {
+        int w = opt.width >> i;
+        int h = opt.height >> i;
+
+        int bytes = sizeof(float) * 3 * w * h;
+        float* bufSpecular = (float*)malloc(bytes);
+
+        outSpecs[i].init(w, h, bufSpecular);
+    }
 
     std::atomic<int> count = 0;
 
+    // Diffuse.
 #pragma omp parallel for
     for (int y = 0; y < height; y++) {
         int cur = count.fetch_add(1);
@@ -233,13 +266,11 @@ int main(int argc, char* argv[])
             float weight = 0.0f;
 
             izanagi::math::CVector3 convDiff;
-            izanagi::math::CVector3 convSpec;
 
             for (int i = 0; i < opt.samples; i++) {
                 XorShift sampler((y * height * 4 + x * 4) * opt.samples + i + 1);
 
-                auto diffuse = computeLambertRadiance(weight, sampler, in, opt.roughness, n, t, b);
-                auto specular = computeGGXPrefilter(weight, sampler, in, opt.roughness, n, t, b);
+                auto diffuse = computeLambertRadiance(weight, sampler, in, 1.0f, n, t, b);
 
                 if (isInvalidColor(diffuse)) {
                     //IZ_PRINTF("Invalid(%d/%d[%d])\n", x, y, i);
@@ -247,28 +278,72 @@ int main(int argc, char* argv[])
                 }
 
                 convDiff += diffuse;
-                convSpec += specular;
             }
 
             convDiff /= weight;
-            convSpec /= weight;
 
             outDiff.write(convDiff, u, v);
-            outSpec.write(convSpec, u, v);
         }
     }
 
-    stbi_write_hdr(opt.output_diffuse.c_str(), opt.width, opt.height, 3, bufDiffuse);
-    stbi_write_hdr(opt.output_specular.c_str(), opt.width, opt.height, 3, bufSpecular);
+    stbi_write_hdr(opt.output_diffuse.c_str(), outDiff.width(), outDiff.height(), 3, outDiff.data());
 
-    if (data) {
-        free(data);
-    }
-    if (bufDiffuse) {
-        free(bufDiffuse);
-    }
-    if (bufSpecular) {
-        free(bufSpecular);
+    float step_roughness = 1.0f / (float)(mipLevel - 1);
+
+    // Specular
+    for (int lod = 0; lod < mipLevel; lod++) {
+        auto& outSpec = outSpecs[lod];
+
+        int w = outSpec.width();
+        int h = outSpec.height();
+
+        float roughness = step_roughness * lod;
+
+        // Reset counter.
+        count = 0;
+
+#pragma omp parallel for
+        for (int y = 0; y < h; y++) {
+            int cur = count.fetch_add(1);
+            if ((cur % 10) == 0) {
+                IZ_PRINTF("[%d] %.3f %%\n", lod, cur / (float)height * 100);
+            }
+
+            for (int x = 0; x < w; x++) {
+                float u = (x + 0.5f) / (float)w;
+                float v = (y + 0.5f) / (float)h;
+
+                auto n = EquirectTexture::convertUVToDir(u, v);
+                auto t = getOrthoVector(n);
+                auto b = cross(n, t);
+
+                float weight = 0.0f;
+
+                izanagi::math::CVector3 convSpec;
+
+                for (int i = 0; i < opt.samples; i++) {
+                    XorShift sampler((y * height * 4 + x * 4) * opt.samples + i + 1);
+
+                    // TODO
+                    // Ideally, I have to fetch color from mipmapped texture.
+                    // But, currently, I fetch color from original size texture.
+
+                    auto specular = computeGGXPrefilter(weight, sampler, in, roughness, n, t, b);
+                    convSpec += specular;
+                }
+
+                convSpec /= weight;
+
+                outSpec.write(convSpec, u, v);
+            }
+        }
+
+        static char buf[16] = { 0 };
+        sprintf(buf, "%d\0", lod);
+
+        auto file = opt.output_specular + "_" + buf + ".hdr";
+
+        stbi_write_hdr(file.c_str(), outSpec.width(), outSpec.height(), 3, outSpec.data());
     }
     
     // Reset counter.
@@ -279,7 +354,7 @@ int main(int argc, char* argv[])
         width = 256;
         height = 256;
 
-        bytes = sizeof(float) * 3 * width * height;
+        auto bytes = sizeof(float) * 3 * width * height;
         float* outdata = (float*)malloc(bytes);
 
 #pragma omp parallel for
