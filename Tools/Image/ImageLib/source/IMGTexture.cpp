@@ -288,10 +288,13 @@ IZ_BOOL CIMGTexture::CreateMipMap(IZ_UINT nMipLevel/*= 1000*/)
 
         // TODO
         // 先頭以外は消す
-        std::vector<CIMGImage*>::iterator it = tImageList.begin();
-        IZ_ASSERT(it != tImageList.end());
-        for (; it != tImageList.end(); it++) {
-            tImageList.erase(it);
+        if (tImageList.size() > 1) {
+            std::vector<CIMGImage*>::iterator it = tImageList.begin();
+            it++;
+
+            for (; it != tImageList.end(); it++) {
+                tImageList.erase(it);
+            }
         }
 
         // 念のため
@@ -361,6 +364,16 @@ IZ_BOOL CIMGTexture::DeleteLawestMipMap()
     m_TexInfo.level--;
 
     return IZ_TRUE;
+}
+
+// mipmapとして追加.
+// TODO
+// ただし、現在は追加した順にmiplevelに登録される...
+// また、現在はcubemapは未サポート...
+void CIMGTexture::addImageAsMipmap(CIMGImage* image)
+{
+    m_Images[0].push_back(image);
+    m_TexInfo.level++;
 }
 
 // 出力

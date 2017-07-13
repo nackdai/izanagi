@@ -20,7 +20,7 @@ namespace tool {
         // Image内で保持されるフォーマット
         static graph::E_GRAPH_PIXEL_FMT GetFmtInImage(graph::E_GRAPH_PIXEL_FMT nFmt);
 
-    private:
+    public:
         CIMGImage();
         CIMGImage(
             IZ_UINT nWidth,
@@ -29,7 +29,22 @@ namespace tool {
 
         ~CIMGImage();
 
-        NO_COPIABLE(CIMGImage);
+        CIMGImage(const CIMGImage& rhs)
+        {
+            *this = rhs;
+        }
+
+        const CIMGImage& operator=(const CIMGImage& rhs)
+        {
+            m_DataBuffer.resize(rhs.m_DataBuffer.size());
+            memcpy(&m_DataBuffer[0], &rhs.m_DataBuffer[0], m_DataBuffer.size());
+
+            m_nWidth = rhs.m_nWidth;
+            m_nHeight = rhs.m_nHeight;
+            m_Fmt = rhs.m_Fmt;
+
+            return *this;
+        }
 
     public:
         // 初期化

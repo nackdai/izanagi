@@ -10,6 +10,8 @@ struct SImageElement {
     IZ_INT texIdx;
     izanagi::graph::E_GRAPH_CUBE_TEX_FACE face;
 
+    std::vector<std::string> mippaths;
+
     SImageElement()
     {
         texIdx = -1;

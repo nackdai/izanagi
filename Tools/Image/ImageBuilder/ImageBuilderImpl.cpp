@@ -40,6 +40,18 @@ namespace attr_type {
     static const char* TEX_TYPE   = "type";
 
     static const char* TEX_IDX    = "texIdx";
+
+    static const char* MIP_PATH[] = {
+        "mippath_1",
+        "mippath_2",
+        "mippath_3",
+        "mippath_4",
+        "mippath_5",
+        "mippath_6",
+        "mippath_7",
+        "mippath_8",
+        "mippath_9",
+    };
 }   // namespace attr_type
 
 void CImageBuilder::startElement(
@@ -349,6 +361,19 @@ namespace {
                                                 CMP_TYPE_LOWER);
         return ret;
     }
+
+    inline bool checkIfMippathString(const char* attr)
+    {
+        for (const auto& s : attr_type::MIP_PATH) {
+            std::string str(s);
+
+            if (str == attr) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }   // namespace
 
 void CImageBuilder::SetElementAttr(
@@ -377,6 +402,18 @@ void CImageBuilder::SetElementAttr(
                     val.c_str());
             }
         }
+        else if (checkIfMippathString(strAttrName)) {
+            std::string path;
+
+            if (m_BasePath.empty()) {
+                path = val;
+            }
+            else {
+                path = m_BasePath + "\\" + val;
+            }
+
+            imgElement.mippaths.push_back(path);
+        }
         else {
             // 小文字にする
             val.make_lower();
@@ -402,7 +439,8 @@ namespace {
         izanagi::E_PLATFORM type,
         izanagi::S_IMG_HEADER* pHeader,
         const SImageInfo& sImageInfo,
-        izanagi::tool::CIMGTexture* pTex)
+        izanagi::tool::CIMGTexture* pTex,
+        bool hasSpecifiedMipmap = false)
     {
         IZ_ASSERT(pOut != NULL);
         IZ_ASSERT(pHeader != NULL);
@@ -419,13 +457,15 @@ namespace {
             "Failed : ConvertPixelFormat(%d)",
             sImageInfo.info.fmt);
 
-        // MIPMAP作成
-        result = pTex->CreateMipMap(sImageInfo.info.level);
-        THROW_EXCEPTION(
-            result,
-            CErrorLog,
-            "Failed : CreateMipMap(%d)",
-            sImageInfo.info.level);
+        if (!hasSpecifiedMipmap) {
+            // 指定されたミップマップを持たないなら、MIPMAP作成.
+            result = pTex->CreateMipMap(sImageInfo.info.level);
+            THROW_EXCEPTION(
+                result,
+                CErrorLog,
+                "Failed : CreateMipMap(%d)",
+                sImageInfo.info.level);
+        }
 
         pTex->SetTexAddress(
             sImageInfo.info.addressU, 
@@ -477,17 +517,42 @@ namespace {
         const SImageElement& elem = imageInfo.elements[0];
 
         // テクスチャ読み込み
-        izanagi::tool::CIMGMaster* imgMaster = NULL;
-        imgMaster = izanagi::tool::CImageReader::GetInstance().Read(
+        auto imgMaster = izanagi::tool::CImageReader::GetInstance().Read(
                     elem.path,
                     izanagi::graph::E_GRAPH_TEX_TYPE_PLANE);
         VRETURN(imgMaster != IZ_NULL);
 
-        UINT nNum = imgMaster->GetTexNum();
+        INT nNum = imgMaster->GetTexNum();
         
-        if (elem.texIdx >= 0) {
-            INT nTexIdx = IZ_MAX(nNum - 1, (UINT)elem.texIdx);
+        if (elem.texIdx >= 0 || nNum == 1) {
+            INT nTexIdx = IZ_MIN(nNum - 1, elem.texIdx);
+            nTexIdx = (nTexIdx < 0 ? 0 : nTexIdx);
+
             izanagi::tool::CIMGTexture* tex = imgMaster->GetTexture(nTexIdx);
+
+            bool hasSpecifiedMipmap = false;
+
+            // ミップマップの直接指定を読み込み.
+            if (!elem.mippaths.empty()) {
+                for (const auto& mippath : elem.mippaths) {
+                    auto tmp = izanagi::tool::CImageReader::GetInstance().Read(mippath.c_str());
+
+                    if (tmp) {
+                        if (tmp->GetTexNum() > 0) {
+                            auto mip = tmp->GetTexture(0);
+                            auto mipimg = mip->GetImage(0)[0];
+
+                            izanagi::tool::CIMGImage* img = new izanagi::tool::CIMGImage(*mipimg);
+
+                            // 読み込んだミップマップをベースに移す.
+                            tex->addImageAsMipmap(img);
+                            hasSpecifiedMipmap = true;
+                        }
+
+                        izanagi::tool::CImageReader::GetInstance().Delete(tmp);
+                    }
+                }
+            }
 
             if (tex != IZ_NULL) {
                 // テクスチャ出力
@@ -496,12 +561,19 @@ namespace {
                         type,
                         header,
                         imageInfo,
-                        tex);
+                        tex,
+                        hasSpecifiedMipmap);
                 IZ_ASSERT(ret);
             }
         }
         else {
             // 全テクスチャ
+
+            // こちらの場合はミップマップの直接指定は無効.
+            if (!elem.mippaths.empty()) {
+                IZ_ASSERT(false);
+                IZ_PRINTF("Ignore mipmap path[%s]\n", elem.path);
+            }
 
             for (UINT n = 0; n < nNum; n++) {
                 izanagi::tool::CIMGTexture* tex = imgMaster->GetTexture(n);

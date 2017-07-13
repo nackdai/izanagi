@@ -72,6 +72,12 @@ namespace tool {
         // 最下位MIPMAP削除
         IZ_BOOL DeleteLawestMipMap();
 
+        // mipmapとして追加.
+        // TODO
+        // ただし、現在は追加した順にmiplevelに登録される...
+        // また、現在はcubemapは未サポート...
+        void addImageAsMipmap(CIMGImage* image);
+
         /** 出力.
          */
         IZ_BOOL Write(IOutputStream* pOut);
@@ -82,7 +88,6 @@ namespace tool {
             izanagi::graph::E_GRAPH_CUBE_TEX_FACE face,
             std::vector<CIMGImage*>& images);
 
-    private:
         /** 読み込み.
          */
         IZ_BOOL Read(IInputStream* pIn);
