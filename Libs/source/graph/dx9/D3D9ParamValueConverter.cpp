@@ -157,6 +157,11 @@ namespace graph
             D3DTEXF_LINEAR,
             D3DTEXF_ANISOTROPIC,
 
+            D3DTEXF_NONE,   // Not use.
+            D3DTEXF_NONE,   // Not use.
+            D3DTEXF_NONE,   // Not use.
+            D3DTEXF_NONE,   // Not use.
+
 #if 0
             D3DTEXF_PYRAMIDALQUAD,
             D3DTEXF_GAUSSIANQUAD,

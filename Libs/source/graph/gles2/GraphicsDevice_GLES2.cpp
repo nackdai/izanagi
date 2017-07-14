@@ -838,11 +838,44 @@ namespace graph
                 if (IsDirty(pTex, E_GRAPH_SAMPLER_STATE_TYPE_MIPFILTER)) {
                     // MIP_FILTER
                     if (pTex->GetMipMapNum() > 1) {
+                        E_GRAPH_TEX_FILTER filter;
+
+                        if (pTex->GetState().minFilter == E_GRAPH_TEX_FILTER_NONE
+                            || pTex->GetState().minFilter == E_GRAPH_TEX_FILTER_POINT)
+                        {
+                            // linear.
+
+                            if (pTex->GetState().mipFilter == E_GRAPH_TEX_FILTER_NONE
+                                || pTex->GetState().mipFilter == E_GRAPH_TEX_FILTER_POINT)
+                            {
+                                // linear.
+                                filter = E_GRAPH_TEX_FILTER_LINEAR_MIPMAP_LINEAR;
+                            }
+                            else {
+                                // nearest.
+                                filter = E_GRAPH_TEX_FILTER_LINEAR_MIPMAP_NEAREST;
+                            }
+                        }
+                        else {
+                            // nearest.
+
+                            if (pTex->GetState().mipFilter == E_GRAPH_TEX_FILTER_NONE
+                                || pTex->GetState().mipFilter == E_GRAPH_TEX_FILTER_POINT)
+                            {
+                                // linear.
+                                filter = E_GRAPH_TEX_FILTER_NEAREST_MIPMAP_LINEAR;
+                            }
+                            else {
+                                // nearest.
+                                filter = E_GRAPH_TEX_FILTER_NEAREST_MIPMAP_NEAREST;
+                            }
+                        }
+
                         SetSamplerStateFilter(
                             isPlane,
                             E_GRAPH_SAMPLER_STATE_TYPE_MIPFILTER,
                             m_SamplerState[nStage].mipFilter,
-                            pTex->GetState().mipFilter);
+                            filter);
                     }
                 }
 
@@ -862,6 +895,13 @@ namespace graph
                         E_GRAPH_SAMPLER_STATE_TYPE_ADDRESSV,
                         m_SamplerState[nStage].addressV,
                         pTex->GetState().addressV);
+                }
+
+                // TODO
+                auto level = pTex->GetMipMapNum();
+                if (level > 1) {
+                    CALL_GL_API(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0));
+                    CALL_GL_API(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, level - 1));
                 }
 
                 m_Flags.is_force_set_state = orgVal;

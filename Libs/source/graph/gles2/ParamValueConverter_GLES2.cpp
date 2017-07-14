@@ -141,6 +141,11 @@ namespace graph
             GL_NEAREST,
             GL_LINEAR,
             GL_LINEAR,
+
+            GL_NEAREST_MIPMAP_NEAREST,
+            GL_LINEAR_MIPMAP_NEAREST,
+            GL_NEAREST_MIPMAP_LINEAR,
+            GL_LINEAR_MIPMAP_LINEAR,
         };
         IZ_C_ASSERT(COUNTOF(TexFilterTbl) == E_GRAPH_TEX_FILTER_NUM);
     }   // namespace
@@ -157,7 +162,7 @@ namespace graph
             0,
             GL_TEXTURE_MAG_FILTER,
             GL_TEXTURE_MIN_FILTER,
-            0,
+            GL_TEXTURE_MIN_FILTER,
         };
         IZ_C_ASSERT(COUNTOF(SamplerStateTypeTbl) == E_GRAPH_SAMPLER_STATE_TYPE_NUM);
     }   // namespace
