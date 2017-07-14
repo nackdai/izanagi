@@ -1,0 +1,181 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{977bb6d4-be9b-4732-a0d0-00c95b234ffe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8f4fa678-89c8-414d-b747-7694d01abb75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shader">
+      <UniqueIdentifier>{f2806b7a-e561-492d-98e7-559f972168ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="asset">
+      <UniqueIdentifier>{454389db-4d85-48ed-8792-3ae47e7e4fbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="posteffect">
+      <UniqueIdentifier>{72028f26-e875-463c-ad4b-17b21fc9bbbc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="state">
+      <UniqueIdentifier>{9d844c34-bd8c-41aa-b53a-8efaacb806a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="state\include">
+      <UniqueIdentifier>{0a1157b9-627f-4b67-8f50-7f05d3bbf0a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="state\source">
+      <UniqueIdentifier>{acf3d670-f33b-4782-82d1-3942bbc3acdb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="posteffect\config">
+      <UniqueIdentifier>{f1460e78-4104-4021-9953-d9fe946ecd24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="posteffect\shader">
+      <UniqueIdentifier>{dbda3a87-34d8-4778-9c20-b5d954e033b6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\PostEffect\shader\PhongShader.fx">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\PostEffect\shader\CubeMapBoxShader.fx">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\PostEffect\posteffect\PostEffectMonotone.fx">
+      <Filter>posteffect\shader</Filter>
+    </None>
+    <None Include="..\..\PostEffect\posteffect\PostEffectNegative.fx">
+      <Filter>posteffect\shader</Filter>
+    </None>
+    <None Include="..\..\PostEffect\posteffect\PostEffectSepia.fx">
+      <Filter>posteffect\shader</Filter>
+    </None>
+    <None Include="..\..\PostEffect\posteffect\PostEffectBloomStar.fx">
+      <Filter>posteffect\shader</Filter>
+    </None>
+    <None Include="..\..\PostEffect\posteffect\PostEffectBloomStarMGF.fx">
+      <Filter>posteffect\shader</Filter>
+    </None>
+    <None Include="..\..\PostEffect\posteffect\PostEffectHDR2.fx">
+      <Filter>posteffect\shader</Filter>
+    </None>
+    <None Include="..\..\PostEffect\posteffect\PostEffectHDR.fx">
+      <Filter>posteffect\shader</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\PostEffect\main.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\SceneRenderer.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\PostEffectSample.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\PostEffectApp.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\StateManager.cpp">
+      <Filter>state\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\StateMonotone.cpp">
+      <Filter>state\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\StateBase.cpp">
+      <Filter>state\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\StateNegative.cpp">
+      <Filter>state\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\StatePostEffect.cpp">
+      <Filter>state\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\StateSepia.cpp">
+      <Filter>state\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\StateBloomStar.cpp">
+      <Filter>state\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\StateBloomStarMGF.cpp">
+      <Filter>state\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\StateHDR.cpp">
+      <Filter>state\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\StateHDR2.cpp">
+      <Filter>state\source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\PostEffect\SceneRenderer.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\PostEffectSample.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\PostEffectApp.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\StateBase.h">
+      <Filter>state\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\StateManager.h">
+      <Filter>state\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\StateMonotone.h">
+      <Filter>state\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\StateNegative.h">
+      <Filter>state\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\StatePostEffect.h">
+      <Filter>state\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\StateSepia.h">
+      <Filter>state\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\StateBloomStar.h">
+      <Filter>state\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\StateBloomStarMGF.h">
+      <Filter>state\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\StateHDR.h">
+      <Filter>state\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\StateHDR2.h">
+      <Filter>state\include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\PostEffect\shader\PhongShader.xml">
+      <Filter>shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\EnvMap.xml">
+      <Filter>asset</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\PostEffect\shader\CubeMapBoxShader.xml">
+      <Filter>shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\PostEffect\posteffect\Monotone.peh">
+      <Filter>posteffect\config</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\PostEffect\posteffect\Negative.peh">
+      <Filter>posteffect\config</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\PostEffect\posteffect\Sepia.peh">
+      <Filter>posteffect\config</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\PostEffect\posteffect\BloomStar.peh">
+      <Filter>posteffect\config</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\PostEffect\posteffect\BloomStarMGF.peh">
+      <Filter>posteffect\config</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\PostEffect\posteffect\HDR.peh">
+      <Filter>posteffect\config</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\PostEffect\posteffect\HDR2.peh">
+      <Filter>posteffect\config</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>

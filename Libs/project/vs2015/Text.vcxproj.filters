@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="include\host">
+      <UniqueIdentifier>{c5cd47d5-f6a2-4614-9258-93bf39dadd19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\paragraph">
+      <UniqueIdentifier>{09b07d7d-d3c3-40ca-a341-f34dc95ff3d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\host">
+      <UniqueIdentifier>{8121abb2-5753-4e07-98eb-4eda1fa6c01d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\paragraph">
+      <UniqueIdentifier>{fd5b213e-aed9-4f35-a72a-28936a44052b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\paragraph\impl">
+      <UniqueIdentifier>{e49d7ad2-a2bd-4361-8fdc-1b8d7d3107da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\paragraph\impl">
+      <UniqueIdentifier>{e08e61b7-fbf2-49ea-994a-d1d713915c0f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\source\text\FontRenderer.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\text\UString.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\text\FontGlyphCache.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\text\FontMap.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\text\FontHostFNT.cpp">
+      <Filter>source\host</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\text\FontHostFT.cpp">
+      <Filter>source\host</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\text\Paragraph.cpp">
+      <Filter>source\paragraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\text\ParagraphGroup.cpp">
+      <Filter>source\paragraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\text\TextLine.cpp">
+      <Filter>source\paragraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\text\ParagraphGroupImpl.cpp">
+      <Filter>source\paragraph\impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\text\ParagraphImpl.cpp">
+      <Filter>source\paragraph\impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\text\TextLineImpl.cpp">
+      <Filter>source\paragraph\impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\text\FontGlyphCacheImpl.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\izFont.h" />
+    <ClInclude Include="..\..\include\text\FNTFormat.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\text\FontDefs.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\text\FontRenderer.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\text\UString.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\text\FontGlyphCache.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\text\FontMap.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\text\FontHost.h">
+      <Filter>include\host</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\text\FontHostFT.h">
+      <Filter>include\host</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\text\FontHostFNT.h">
+      <Filter>include\host</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\text\Paragraph.h">
+      <Filter>include\paragraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\text\ParagraphGroup.h">
+      <Filter>include\paragraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\text\TextLine.h">
+      <Filter>include\paragraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\text\ParagraphGroupImpl.h">
+      <Filter>include\paragraph\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\text\ParagraphImpl.h">
+      <Filter>include\paragraph\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\text\TextLineImpl.h">
+      <Filter>include\paragraph\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\text\FontGlyphCacheImpl.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

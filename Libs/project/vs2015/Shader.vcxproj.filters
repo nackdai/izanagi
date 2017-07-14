@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="source\base">
+      <UniqueIdentifier>{f60e11b8-06ff-4436-a4dc-2f71d7c5aabd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="include\base">
+      <UniqueIdentifier>{a85185aa-2752-4238-bb47-f14ec6bca1f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\base\table">
+      <UniqueIdentifier>{69a7cf64-3606-4b65-a25d-addfb230d172}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\base\util">
+      <UniqueIdentifier>{8993fa2c-55c5-4be3-b32e-bfb36972972e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\base\table">
+      <UniqueIdentifier>{41863cef-27d6-4997-9a84-39c7a4fdaf3b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\source\shader\ShaderManager.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\shader\base\ShaderBasic.cpp">
+      <Filter>source\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\shader\ShaderUtil.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\shader\base\ShaderPass.cpp">
+      <Filter>source\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\shader\base\table\ShaderSamplerTable.cpp">
+      <Filter>source\base\table</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\shader\base\table\ShaderParameterTable.cpp">
+      <Filter>source\base\table</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\shader\base\table\ShaderAttrTable.cpp">
+      <Filter>source\base\table</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\shader\base\table\ShaderPassTable.cpp">
+      <Filter>source\base\table</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\shader\ShaderManager.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shader\base\Shader.h">
+      <Filter>include\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shader\base\ShaderBasic.h">
+      <Filter>include\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shader\base\ShaderDefs.h">
+      <Filter>include\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shader\base\ShaderPass.h">
+      <Filter>include\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shader\base\SHDFormat.h">
+      <Filter>include\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shader\base\table\ShaderAttrTable.h">
+      <Filter>include\base\table</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shader\base\table\ShaderParameterTable.h">
+      <Filter>include\base\table</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shader\base\table\ShaderPassTable.h">
+      <Filter>include\base\table</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shader\base\table\ShaderSamplerTable.h">
+      <Filter>include\base\table</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shader\base\table\ShaderStringBuffer.h">
+      <Filter>include\base\table</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shader\base\table\ShaderTechTable.h">
+      <Filter>include\base\table</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shader\base\table\ShaderTextureTable.h">
+      <Filter>include\base\table</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shader\base\util\ShaderParamUtil.h">
+      <Filter>include\base\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shader\base\util\ShaderUtil.h">
+      <Filter>include\base\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\izShader.h" />
+  </ItemGroup>
+</Project>

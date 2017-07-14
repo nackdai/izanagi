@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{fdae3f98-40c3-487f-8425-8c3c6999cad6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{1d0e8f1c-5e68-42eb-8a1a-7df49487ecc7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\JobQueue">
+      <UniqueIdentifier>{3e7186e2-cdc7-4375-bf89-9c867eaf6d1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\JobQueue">
+      <UniqueIdentifier>{d61513bd-5b18-40f4-9e49-b1748200eec8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\MessageQueue">
+      <UniqueIdentifier>{bf76c822-2ca5-4082-9c3f-1296e47f7cd5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\MessageQueue">
+      <UniqueIdentifier>{416334cd-04bf-44ac-b686-3f178f472a7d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\threadmodel\ThreadModelJob.h">
+      <Filter>include\JobQueue</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\threadmodel\ThreadModelJobQueue.h">
+      <Filter>include\JobQueue</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\threadmodel\ThreadModelJobWorker.h">
+      <Filter>include\JobQueue</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\izThreadModel.h" />
+    <ClInclude Include="..\..\include\threadmodel\ThreadModelMessageQueue.h">
+      <Filter>include\MessageQueue</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\threadmodel\ThreadModelMessage.h">
+      <Filter>include\MessageQueue</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\threadmodel\ThreadPool.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\threadmodel\Parallel.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\threadmodel\ThreadModelTask.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\threadmodel\TimerThread.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\threadmodel\ThreadSafeAllocator.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\source\threadmodel\ThreadModelJobQueue.cpp">
+      <Filter>source\JobQueue</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\threadmodel\ThreadModelJobWorker.cpp">
+      <Filter>source\JobQueue</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\threadmodel\ThreadModelJob.cpp">
+      <Filter>source\JobQueue</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\threadmodel\ThreadModelMessageQueue.cpp">
+      <Filter>source\MessageQueue</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\threadmodel\ThreadPool.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\threadmodel\Parallel.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\threadmodel\ThreadModelTask.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\threadmodel\TimerThread.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

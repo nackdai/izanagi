@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="shader">
+      <UniqueIdentifier>{d5b0180f-faca-4c5d-94a1-c2209e743a5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{026b2a9b-6e96-4c74-b378-d00dd2acb7ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{66535c8e-7c22-407e-932f-df49c1ea0452}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\PointCloud\shader\psNormalize.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\PointCloud\shader\psWeightSplat.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\PointCloud\shader\vs.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\PointCloud\shader\vsNormalize.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\PointCloud\shader\ps.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\PointCloud\shader\psDepth.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\PointCloud\shader\psInterp.glsl">
+      <Filter>shader</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\PointCloud\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PointCloud\PointCloudApp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PointCloud\PlyReader.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\PointCloud\PointCloudApp.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Tools\PointCloud\PCDFormat.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PointCloud\PlyReader.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

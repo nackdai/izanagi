@@ -1,0 +1,165 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="source\functor">
+      <UniqueIdentifier>{d4739c68-7317-413d-bbcf-472e38f70372}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\util">
+      <UniqueIdentifier>{bdd12b49-fdcc-4981-9ca8-ea174fd56861}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\vs">
+      <UniqueIdentifier>{96dd7f86-6e62-4979-ab0c-8832fef0f5f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="include\functor">
+      <UniqueIdentifier>{bb2e5991-7383-480f-90de-1f9b4f58a92f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\table">
+      <UniqueIdentifier>{45db000f-c7c0-48c4-9cbc-9970a71a2f8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\util">
+      <UniqueIdentifier>{d9085de7-085e-427c-9979-e444cb3831fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\vs">
+      <UniqueIdentifier>{4d6559ac-4ca3-4417-b14d-b7de6dfb9abc}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\source\posteffect\PostEffect.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\posteffect\PostEffectShader.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\posteffect\PostEffectSystem.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\posteffect\PostEffectTextureCreator.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\posteffect\functor\PostEffectFunctor.cpp">
+      <Filter>source\functor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\posteffect\functor\PostEffectFunctorDefault.cpp">
+      <Filter>source\functor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\posteffect\functor\PostEffectFunctorDOF.cpp">
+      <Filter>source\functor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\posteffect\functor\PostEffectFunctorMGF.cpp">
+      <Filter>source\functor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\posteffect\functor\PostEffectFunctorRenderStar.cpp">
+      <Filter>source\functor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\posteffect\functor\PostEffectFunctorSwitchTex.cpp">
+      <Filter>source\functor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\posteffect\util\PostEffectUtilityRect.cpp">
+      <Filter>source\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\posteffect\vs\PostEffectVS.cpp">
+      <Filter>source\vs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\posteffect\vs\PostEffectVSManager.cpp">
+      <Filter>source\vs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\posteffect\PostEffectShaderPass.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\posteffect\util\PostEffectShaderUtil.cpp">
+      <Filter>source\util</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\posteffect\PESFormat.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\posteffect\PostEffect.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\posteffect\PosteffectDefs.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\posteffect\PostEffectShader.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\posteffect\PostEffectShaderPass.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\posteffect\PostEffectSystem.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\posteffect\PostEffectTextureCreator.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\posteffect\functor\PostEffectFunctor.h">
+      <Filter>include\functor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\posteffect\functor\PostEffectFunctorCreator.h">
+      <Filter>include\functor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\posteffect\functor\PostEffectFunctorDefault.h">
+      <Filter>include\functor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\posteffect\functor\PostEffectFunctorDOF.h">
+      <Filter>include\functor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\posteffect\functor\PostEffectFunctorMGF.h">
+      <Filter>include\functor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\posteffect\functor\PostEffectFunctorOnce.h">
+      <Filter>include\functor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\posteffect\functor\PostEffectFunctorRenderStar.h">
+      <Filter>include\functor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\posteffect\functor\PostEffectFunctorSwitchTex.h">
+      <Filter>include\functor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\posteffect\table\PostEffectShaderConstTable.h">
+      <Filter>include\table</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\posteffect\table\PostEffectShaderPassTable.h">
+      <Filter>include\table</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\posteffect\table\PostEffectShaderSamplerTable.h">
+      <Filter>include\table</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\posteffect\table\PostEffectShaderStringTable.h">
+      <Filter>include\table</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\posteffect\table\PostEffectShaderTechTable.h">
+      <Filter>include\table</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\posteffect\table\PostEffectShaderTextureTable.h">
+      <Filter>include\table</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\posteffect\util\PostEffectShaderUtil.h">
+      <Filter>include\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\posteffect\util\PostEffectUtilityParam.h">
+      <Filter>include\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\posteffect\util\PostEffectUtilityRect.h">
+      <Filter>include\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\posteffect\vs\PostEffectVS.h">
+      <Filter>include\vs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\posteffect\vs\PostEffectVSManager.h">
+      <Filter>include\vs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\posteffect\vs\PostEffectVSSampling.h">
+      <Filter>include\vs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\izPostEffect.h" />
+  </ItemGroup>
+</Project>

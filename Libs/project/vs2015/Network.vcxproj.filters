@@ -1,0 +1,169 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{8cc8ff31-fe8b-4b4b-96f9-02bc1db36414}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{94dc2739-1eea-4d10-b8de-9352950c7443}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\windows">
+      <UniqueIdentifier>{fb4636d2-ab7f-4fcd-933b-c0006c911391}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\rudp">
+      <UniqueIdentifier>{29e93ad7-b46b-4511-a266-276f147f303d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\rudp\segment">
+      <UniqueIdentifier>{352bf091-fcad-456c-a5b3-441c0471ba90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\rudp">
+      <UniqueIdentifier>{c572d9c5-145b-4e34-bae2-d6b641b6dddb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\rudp\segment">
+      <UniqueIdentifier>{c01f08ca-f562-4414-9bef-514e888587d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\ReplicatedProperty">
+      <UniqueIdentifier>{fe2ab4c6-b47e-444f-9311-0bad584702ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\ReplicatedProperty">
+      <UniqueIdentifier>{4af35e2b-86db-4732-8315-163711677f99}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\network\NetworkTCP.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\network\Network.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\network\IPv4Endpoint.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\network\NetworkDefs.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\network\NetworkPacket.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\izNetwork.h" />
+    <ClInclude Include="..\..\include\network\NetworkUDP.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\network\NetworkTCP_libuv.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\network\NetworkUDP_libuv.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\network\rudp\segment\NullSegment.h">
+      <Filter>include\rudp\segment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\network\rudp\segment\ResetSegment.h">
+      <Filter>include\rudp\segment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\network\rudp\segment\Segment.h">
+      <Filter>include\rudp\segment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\network\rudp\segment\SynchronousSegment.h">
+      <Filter>include\rudp\segment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\network\rudp\segment\AcknowledgementSegment.h">
+      <Filter>include\rudp\segment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\network\rudp\segment\DataSegment.h">
+      <Filter>include\rudp\segment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\network\rudp\segment\ExtendAckSegment.h">
+      <Filter>include\rudp\segment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\network\rudp\segment\FinishSegment.h">
+      <Filter>include\rudp\segment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\network\rudp\RUDPParameter.h">
+      <Filter>include\rudp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\network\rudp\RUDPCounter.h">
+      <Filter>include\rudp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\network\rudp\ReliableUDP.h">
+      <Filter>include\rudp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\network\rudp\ReliableUDPListener.h">
+      <Filter>include\rudp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\network\rudp\CallbackRegister.h">
+      <Filter>include\rudp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\network\ReplicatedProperty\ReplicatedPropertyManager.h">
+      <Filter>include\ReplicatedProperty</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\network\ReplicatedProperty\ReplicatedPropertyObject.h">
+      <Filter>include\ReplicatedProperty</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\network\ReplicatedProperty\ReplicatedProperty.h">
+      <Filter>include\ReplicatedProperty</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\network\ReplicatedProperty\ReplicatedPropertyObjectClass.h">
+      <Filter>include\ReplicatedProperty</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\source\network\Network.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\network\windows\Network_win.cpp">
+      <Filter>source\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\network\NetworkTCP.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\network\IPv4Endpoint.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\network\NetworkUDP.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\network\NetworkTCP_libuv.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\network\Network _libuv.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\network\NetworkUDP_libuv.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\network\rudp\segment\Segment.cpp">
+      <Filter>source\rudp\segment</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\network\rudp\segment\DataSegment.cpp">
+      <Filter>source\rudp\segment</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\network\rudp\segment\ExtendAckSegment.cpp">
+      <Filter>source\rudp\segment</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\network\rudp\segment\SynchronousSegment.cpp">
+      <Filter>source\rudp\segment</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\network\rudp\ReliableUDP.cpp">
+      <Filter>source\rudp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\network\rudp\ReliableUDPListener.cpp">
+      <Filter>source\rudp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\network\rudp\CallbackRegister.cpp">
+      <Filter>source\rudp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\network\ReplicatedProperty\ReplicatedPropertyManager.cpp">
+      <Filter>source\ReplicatedProperty</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\network\ReplicatedProperty\ReplicatedPropertyObject.cpp">
+      <Filter>source\ReplicatedProperty</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\network\ReplicatedProperty\ReplicatedProperty.cpp">
+      <Filter>source\ReplicatedProperty</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\network\ReplicatedProperty\ReplicatedPropertyObjectClass.cpp">
+      <Filter>source\ReplicatedProperty</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

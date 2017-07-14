@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\SD_UnityChan\main.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SD_UnityChan\SD_UnityChanApp.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\SD_UnityChan\SD_UnityChanApp.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\..\Media\unitychan\SD_unitychan\SD_unitychan.fbx">
+      <Filter>asset</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\SD_UnityChan\shader\SkinShader.fx">
+      <Filter>shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\SD_UnityChan\shader\SkinShader.xml">
+      <Filter>shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\unitychan\SD_unitychan\SD_UnityChanImg.xml">
+      <Filter>asset\texture</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\unitychan\SD_unitychan\SD_unitychan_motion.fbx">
+      <Filter>asset</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="asset">
+      <UniqueIdentifier>{95f3e24f-ebd5-4ade-ae71-ebf7f33a1f95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shader">
+      <UniqueIdentifier>{ce454a0b-61ee-46f6-a6d6-763a752e2e6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{b025df4b-e2fd-4dd0-bb88-e896dd345fe0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{be214e14-39c0-4ef1-83d4-dfed7e139ec6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="asset\texture">
+      <UniqueIdentifier>{067056c4-960a-412b-9362-8b73e00ace66}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\Media\unitychan\SD_unitychan\Textures\utc_all2.tga">
+      <Filter>asset\texture</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

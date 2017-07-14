@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="..\..\UnityChan\shader\SkinShader.fx">
+      <Filter>shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\UnityChan\shader\SkinShader.xml">
+      <Filter>shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\unitychan\unitychan.fbx">
+      <Filter>asset</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\unitychan\unitychan_ARpose1.fbx">
+      <Filter>asset\motion</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\unitychan\unitychan_ARpose2.fbx">
+      <Filter>asset\motion</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\unitychan\unitychan_DAMAGED00.fbx">
+      <Filter>asset\motion</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\unitychan\unitychan_DAMAGED01.fbx">
+      <Filter>asset\motion</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\unitychan\unitychan_HANDUP00_R.fbx">
+      <Filter>asset\motion</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\unitychan\unitychan_JUMP00.fbx">
+      <Filter>asset\motion</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\unitychan\unitychan_JUMP00B.fbx">
+      <Filter>asset\motion</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\unitychan\unitychan_JUMP01.fbx">
+      <Filter>asset\motion</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\unitychan\unitychan_JUMP01B.fbx">
+      <Filter>asset\motion</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\unitychan\unitychan_LOSE00.fbx">
+      <Filter>asset\motion</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\unitychan\unitychan_REFLESH00.fbx">
+      <Filter>asset\motion</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\unitychan\unitychan_RUN00_F.fbx">
+      <Filter>asset\motion</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\unitychan\unitychan_RUN00_L.fbx">
+      <Filter>asset\motion</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\unitychan\unitychan_RUN00_R.fbx">
+      <Filter>asset\motion</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\unitychan\unitychan_SLIDE00.fbx">
+      <Filter>asset\motion</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\unitychan\unitychan_UMATOBI00.fbx">
+      <Filter>asset\motion</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\unitychan\unitychan_WAIT00.fbx">
+      <Filter>asset\motion</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\unitychan\unitychan_WAIT01.fbx">
+      <Filter>asset\motion</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\unitychan\unitychan_WAIT02.fbx">
+      <Filter>asset\motion</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\unitychan\unitychan_WAIT03.fbx">
+      <Filter>asset\motion</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\unitychan\unitychan_WAIT04.fbx">
+      <Filter>asset\motion</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\unitychan\unitychan_WALK00_B.fbx">
+      <Filter>asset\motion</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\unitychan\unitychan_WALK00_F.fbx">
+      <Filter>asset\motion</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\unitychan\unitychan_WALK00_L.fbx">
+      <Filter>asset\motion</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\unitychan\unitychan_WALK00_R.fbx">
+      <Filter>asset\motion</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\unitychan\unitychan_WIN00.fbx">
+      <Filter>asset\motion</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Media\unitychan\UnityChanImg.xml">
+      <Filter>asset</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="shader">
+      <UniqueIdentifier>{7c00f788-0d02-462a-b9ae-445760940895}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="asset">
+      <UniqueIdentifier>{b113728c-88e5-42f5-8003-da97f54e3e20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{f56419a2-673d-4f12-b2c8-2c6a6b3b4333}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{e87b91cb-d42a-4a37-a0bc-a3be93c3000b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="asset\motion">
+      <UniqueIdentifier>{d4f5a490-554e-4252-b8ba-f44d09e81ee3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="asset\texture">
+      <UniqueIdentifier>{fd4f434e-4612-4e5f-84df-f96a806ac5f0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\UnityChan\main.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UnityChan\UnityChanApp.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\UnityChan\UnityChanApp.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\Media\unitychan\Texture\body_01.tga">
+      <Filter>asset\texture</Filter>
+    </Image>
+    <Image Include="..\..\..\Media\unitychan\Texture\cheek_00.tga">
+      <Filter>asset\texture</Filter>
+    </Image>
+    <Image Include="..\..\..\Media\unitychan\Texture\eye_iris_L_00.tga">
+      <Filter>asset\texture</Filter>
+    </Image>
+    <Image Include="..\..\..\Media\unitychan\Texture\eye_iris_R_00.tga">
+      <Filter>asset\texture</Filter>
+    </Image>
+    <Image Include="..\..\..\Media\unitychan\Texture\eyeline_00.tga">
+      <Filter>asset\texture</Filter>
+    </Image>
+    <Image Include="..\..\..\Media\unitychan\Texture\face_00.tga">
+      <Filter>asset\texture</Filter>
+    </Image>
+    <Image Include="..\..\..\Media\unitychan\Texture\hair_01.tga">
+      <Filter>asset\texture</Filter>
+    </Image>
+    <Image Include="..\..\..\Media\unitychan\Texture\skin_01.tga">
+      <Filter>asset\texture</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\SinglePassStereoRendering\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SinglePassStereoRendering\SinglePassStereoRenderingApp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\SinglePassStereoRendering\shader\ps.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\SinglePassStereoRendering\shader\vs.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\SinglePassStereoRendering\shader\vs_default.glsl">
+      <Filter>shader</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="asset">
+      <UniqueIdentifier>{8368835e-ec33-4267-9835-8ae694fa71a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shader">
+      <UniqueIdentifier>{0a89f18f-e3cd-4f1c-a52e-5330086dd83c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{bba1ab92-ccee-4371-bd89-8f4a442d8ba2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{0ebbb25c-5a52-4dcc-b64b-4f35bb98da9e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\..\Media\earth.xml">
+      <Filter>asset</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\SinglePassStereoRendering\SinglePassStereoRenderingApp.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

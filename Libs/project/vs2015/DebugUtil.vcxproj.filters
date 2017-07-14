@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="source\mesh">
+      <UniqueIdentifier>{185b1158-fda9-42ee-b6f8-442c2d535fe0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="include\mesh">
+      <UniqueIdentifier>{4b32cbf5-161e-449e-9359-fdc62b4334d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\imgui">
+      <UniqueIdentifier>{d96598e6-afe9-45a9-a187-613d97cf76a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\imgui">
+      <UniqueIdentifier>{aff2e989-59f6-45ef-b9ec-5c59b2ca1ac9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\imgui\shader">
+      <UniqueIdentifier>{3a7bb10a-7bd9-42f4-b9b6-6b64bad0c5ea}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\source\debugutil\DebugFont.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\debugutil\mesh\DebugMesh.cpp">
+      <Filter>source\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\debugutil\mesh\DebugMeshAxis.cpp">
+      <Filter>source\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\debugutil\mesh\DebugMeshBox.cpp">
+      <Filter>source\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\debugutil\mesh\DebugMeshCylinder.cpp">
+      <Filter>source\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\debugutil\mesh\DebugMeshFrustum.cpp">
+      <Filter>source\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\debugutil\mesh\DebugMeshGrid.cpp">
+      <Filter>source\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\debugutil\mesh\DebugMeshRectangle.cpp">
+      <Filter>source\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\debugutil\mesh\DebugMeshSphere.cpp">
+      <Filter>source\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\debugutil\mesh\DebugMeshTorus.cpp">
+      <Filter>source\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\debugutil\mesh\DebugMeshScreenFillPlane.cpp">
+      <Filter>source\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\debugutil\mesh\DebugMeshWiredBox.cpp">
+      <Filter>source\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\debugutil\imgui\ImGuiProc.cpp">
+      <Filter>source\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\External\imgui\imgui.cpp">
+      <Filter>source\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\External\imgui\imgui_draw.cpp">
+      <Filter>source\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\debugutil\mesh\DebugMeshLine.cpp">
+      <Filter>source\mesh</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\source\debugutil\font.dat">
+      <Filter>source</Filter>
+    </None>
+    <None Include="..\..\include\debugutil\imgui\imgui.fs">
+      <Filter>source\imgui\shader</Filter>
+    </None>
+    <None Include="..\..\include\debugutil\imgui\imgui.vs">
+      <Filter>source\imgui\shader</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\debugutil\DebugFont.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\debugutil\mesh\DebugMesh.h">
+      <Filter>include\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\debugutil\mesh\DebugMeshAxis.h">
+      <Filter>include\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\debugutil\mesh\DebugMeshBox.h">
+      <Filter>include\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\debugutil\mesh\DebugMeshCylinder.h">
+      <Filter>include\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\debugutil\mesh\DebugMeshFrustum.h">
+      <Filter>include\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\debugutil\mesh\DebugMeshGrid.h">
+      <Filter>include\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\debugutil\mesh\DebugMeshRectangle.h">
+      <Filter>include\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\debugutil\mesh\DebugMeshSphere.h">
+      <Filter>include\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\debugutil\mesh\DebugMeshTorus.h">
+      <Filter>include\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\izDebugUtil.h" />
+    <ClInclude Include="..\..\include\debugutil\mesh\DebugMeshScreenFillPlane.h">
+      <Filter>include\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\debugutil\mesh\DebugMeshWiredBox.h">
+      <Filter>include\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\debugutil\imgui\ImGuiProc.h">
+      <Filter>include\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\debugutil\mesh\DebugMeshLine.h">
+      <Filter>include\mesh</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\include\debugutil\imgui\imgui.fx">
+      <Filter>source\imgui\shader</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>
