@@ -16,7 +16,7 @@ uniform sampler2D s2;   // look-up-table
 uniform float MAX_REFLECTION_LOD;
 uniform float roughness;
 uniform float metalic;
-uniform vec3 F0;
+uniform vec4 F0;
 
 #define MATH_PI          (3.14159265358979323846f)   // pi
 #define MATH_PI2         (MATH_PI * 2.0f)         // 2pi
@@ -38,17 +38,17 @@ void main()
     vec2 uv = vec2(phi / MATH_PI2, 1 - theta / MATH_PI);
 
     float NoV = max(dot(N, V), 0.0);
-    vec3 F = F0 + (vec3(1, 1, 1) - F0) * pow(1 - NoV, 5);
+    vec3 F = F0.rgb + (vec3(1, 1, 1) - F0.rgb) * pow(1 - NoV, 5);
 
     vec3 kS = F;
     vec3 kD = 1.0 - kS;
     kD *= 1.0 - metalic;
 
-    vec3 irradiance = texture2D(s0, uv).rgb;
+    vec3 irradiance = texture2D(s0, uv).bgr;
     vec3 diffuse = irradiance * albedo.rgb;
 
-    vec3 prefilteredColor = textureLod(s1, uv, roughness * MAX_REFLECTION_LOD).rgb;
-    vec2 envBRDF = texture(s2, vec2(max(dot(N, V), 0.0), roughness)).rg;
+    vec3 prefilteredColor = textureLod(s1, uv, roughness * MAX_REFLECTION_LOD).bgr;
+    vec2 envBRDF = texture(s2, vec2(max(dot(N, V), 0.0), roughness)).bg;
     vec3 specular = prefilteredColor * (F * envBRDF.x + envBRDF.y);
 
     outColor.rgb = kD * diffuse + specular;

@@ -41,6 +41,8 @@ private:
     izanagi::sample::Shader m_shdEnvBox;
 
     izanagi::CImage* m_Img{ nullptr };
+
+    izanagi::debugutil::ImGuiProc* m_imgui{ nullptr };
 };
 
 #endif    // #if !defined(__IBL_APP_H__)

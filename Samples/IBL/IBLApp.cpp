@@ -1,4 +1,5 @@
 #include "IBLApp.h"
+#include <imgui.h>
 
 enum TexType {
     bg,
@@ -71,6 +72,14 @@ IZ_BOOL IBLApp::InitInternal(
         VGOTO(result = (m_Img != IZ_NULL), __EXIT__);
     }
 
+    // imgui
+    {
+        m_imgui = izanagi::debugutil::ImGuiProc::init(allocator, device);
+        IZ_ASSERT(m_imgui);
+
+        izanagi::sys::CSysWindow::registerExtendMsgHandler(m_imgui);
+    }
+
     // シェーダ
     m_shdBasic.init(
         device,
@@ -120,16 +129,29 @@ void IBLApp::ReleaseInternal()
 
     SAFE_RELEASE(m_Img);
 
+    SAFE_RELEASE(m_imgui);
+
     m_shdBasic.release();
     m_shdIdealSpec.release();
     m_shdPBR.release();
     m_shdEnvBox.release();
 }
 
+static float g_roughness = 0.5f;
+static float g_metalic = 0.5f;
+static izanagi::math::CVector4 g_F0(0.5f, 0.5f, 0.5f, 0.5f);
+
 // 更新.
 void IBLApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
     GetCamera().Update();
+
+    m_imgui->beginFrame();
+    {
+        ImGui::SliderFloat("roughness", &g_roughness, 0, 1.0f);
+        ImGui::SliderFloat("metalic", &g_metalic, 0, 1.0f);
+        ImGui::ColorEdit3("F0", g_F0.v);
+    }
 }
 
 // 描画.
@@ -166,7 +188,7 @@ void IBLApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     }
 
     {
-        auto* shd = m_shdIdealSpec.m_program;
+        auto* shd = m_shdPBR.m_program;
 
         device->SetShaderProgram(shd);
 
@@ -189,13 +211,13 @@ void IBLApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
         shd->SetFloat(device, hMaxLod, (float)miplevel);
 
         auto hRoughness = shd->GetHandleByName("roughness");
-        shd->SetFloat(device, hRoughness, 0.5f);
+        shd->SetFloat(device, hRoughness, g_roughness);
 
         auto hMetalic = shd->GetHandleByName("metalic");
-        shd->SetFloat(device, hMetalic, 0.5f);
+        shd->SetFloat(device, hMetalic, g_metalic);
 
         auto hF0 = shd->GetHandleByName("F0");
-        shd->SetVector(device, hF0, izanagi::math::CVector4(0.5, 0.5, 0.5, 0.5));
+        shd->SetVector(device, hF0, g_F0);
 
         m_Mesh->Draw(device);
     }
@@ -232,4 +254,6 @@ void IBLApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
         m_envbox->Render(device);
     }
+
+    ImGui::Render();
 }
