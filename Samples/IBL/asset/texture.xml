@@ -7,6 +7,6 @@
          mippath_1="./result_spec_1.hdr"
          mippath_2="./result_spec_2.hdr"
          mippath_3="./result_spec_3.hdr"/>
-  <plane path="./result_integ.hdr"/>
+  <plane path="./result_lut.hdr"/>
 </textures>
 

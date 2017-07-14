@@ -56,7 +56,7 @@ IZ_BOOL IBLApp::InitInternal(
             flag,
             IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0xff),
             5.0f,
-            10, 10);
+            100, 100);
         VGOTO(result = (m_Mesh != IZ_NULL), __EXIT__);
     }
 
