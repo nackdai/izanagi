@@ -119,7 +119,7 @@ bool parseOption(
         auto output = cmd.get<string>("output");
 
         opt.output_diffuse = output + "_diff.hdr";
-        opt.output_integ = output + "_integ.hdr";
+        opt.output_integ = output + "_lut.hdr";
 
         // Not fix filename here.
         opt.output_specular = output + "_spec";
@@ -263,14 +263,14 @@ int main(int argc, char* argv[])
             auto t = getOrthoVector(n);
             auto b = cross(n, t);
 
-            float weight = 0.0f;
+            int validNum = 0;
 
             izanagi::math::CVector3 convDiff;
 
             for (int i = 0; i < opt.samples; i++) {
                 XorShift sampler((y * height * 4 + x * 4) * opt.samples + i + 1);
 
-                auto diffuse = computeLambertRadiance(weight, sampler, in, 1.0f, n, t, b);
+                auto diffuse = computeLambertRadiance(sampler, in, 1.0f, n, t, b);
 
                 if (isInvalidColor(diffuse)) {
                     //IZ_PRINTF("Invalid(%d/%d[%d])\n", x, y, i);
@@ -278,9 +278,10 @@ int main(int argc, char* argv[])
                 }
 
                 convDiff += diffuse;
+                validNum++;
             }
 
-            convDiff /= weight;
+            convDiff /= (float)validNum;
 
             outDiff.write(convDiff, u, v);
         }
@@ -375,10 +376,13 @@ int main(int argc, char* argv[])
 
                 izanagi::math::CVector3 integ;
 
-                for (int i = 0; i < opt.samples; i++) {
+                float weight = 0.0f;
+
+                for (int i = 0; i < opt.samples * 10; i++) {
                     XorShift sampler((y * height * 4 + x * 4) * opt.samples + i + 1);
 
                     auto clr = computeIntegrateBRDF(
+                        weight,
                         u, v,
                         sampler,
                         n, t, b);
@@ -386,10 +390,11 @@ int main(int argc, char* argv[])
                     integ += clr;
                 }
 
-                integ /= (float)opt.samples;
+                if (weight > 0.0f) {
+                    integ /= weight;
+                }
 
-                // Revert y axis.
-                int idx = (height - 1 - y) * width + x;
+                int idx = y * width + x;
                 idx *= 3;
 
                 outdata[idx + 0] = integ.x;

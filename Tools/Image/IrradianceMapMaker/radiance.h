@@ -29,7 +29,6 @@ inline izanagi::math::SVector3 getOrthoVector(const izanagi::math::SVector3& n)
 }
 
 inline izanagi::math::SVector3 computeLambertRadiance(
-    float& weight,
     XorShift& sampler,
     const EquirectTexture& in,
     float roughness,
@@ -66,7 +65,6 @@ inline izanagi::math::SVector3 computeLambertRadiance(
     auto pdf = c / IZ_MATH_PI;
 
     auto ret = bsdf * c / pdf;
-    weight += 1.0f;
 
     return std::move(ret);
 }
@@ -212,6 +210,7 @@ inline float GeometrySmith(
 }
 
 inline izanagi::math::SVector3 computeIntegrateBRDF(
+    float& weight,
     float u, float v,
     XorShift& sampler,
     const izanagi::math::CVector3& n,
@@ -262,6 +261,8 @@ inline izanagi::math::SVector3 computeIntegrateBRDF(
 
         A += (1.0 - Fc) * G_Vis;
         B += Fc * G_Vis;
+
+        weight += 1.0f;
     }
 
     return izanagi::math::CVector3(A, B, 0);
