@@ -35,3 +35,6 @@
 [submodule "External/stb"]
 	path = External/stb
 	url = https://github.com/nothings/stb.git
+[submodule "External/zstd"]
+	path = External/zstd
+	url = https://github.com/facebook/zstd.git
