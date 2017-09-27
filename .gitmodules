@@ -38,3 +38,6 @@
 [submodule "External/zstd"]
 	path = External/zstd
 	url = https://github.com/facebook/zstd.git
+[submodule "External/glfw"]
+	path = External/glfw
+	url = https://github.com/glfw/glfw.git
