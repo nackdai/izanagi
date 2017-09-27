@@ -23,6 +23,8 @@ if not defined BUILD (
 
 set TOOL_CONFIG=Release
 
+set VS_VER=vs2015
+
 rem ShaderCompiler ================================
 call ..\Tools\External\BuildMojoShader.bat %TOOL_CONFIG%
 %MSBUILD% ..\Tools\External\Preproc\Preproc.sln /t:%TARGET% /p:Configuration=%TOOL_CONFIG% || goto error
@@ -38,13 +40,13 @@ if %GFX%==OGL (
 
 if %BUILD%==All (
     call ..\External\BuildExternal.bat %CONFIG%
-    %MSBUILD% project\vs2013\izanagi.sln /t:%TARGET% /p:Configuration=%CONFIG%_%GFX% /p:Platform=Win32 || goto error
+    %MSBUILD% project\%VS_VER%\izanagi.sln /t:%TARGET% /p:Configuration=%CONFIG%_%GFX% /p:Platform=Win32 || goto error
 ) else (
-    %MSBUILD% project\vs2013\Std.vcxproj /t:%TARGET% /p:Configuration=%CONFIG%_%GFX% /p:Platform=Win32 || goto error
-    %MSBUILD% project\vs2013\System.vcxproj /t:%TARGET% /p:Configuration=%CONFIG%_%GFX% /p:Platform=Win32 || goto error
-    %MSBUILD% project\vs2013\Math.vcxproj /t:%TARGET% /p:Configuration=%CONFIG%_%GFX% /p:Platform=Win32 || goto error
-    %MSBUILD% project\vs2013\Graph.vcxproj /t:%TARGET% /p:Configuration=%CONFIG%_%GFX% /p:Platform=Win32 || goto error
-    %MSBUILD% project\vs2013\SceneGraph.vcxproj /t:%TARGET% /p:Configuration=%CONFIG%_%GFX% /p:Platform=Win32 || goto error
+    %MSBUILD% project\%VS_VER%\Std.vcxproj /t:%TARGET% /p:Configuration=%CONFIG%_%GFX% /p:Platform=Win32 || goto error
+    %MSBUILD% project\%VS_VER%\System.vcxproj /t:%TARGET% /p:Configuration=%CONFIG%_%GFX% /p:Platform=Win32 || goto error
+    %MSBUILD% project\%VS_VER%\Math.vcxproj /t:%TARGET% /p:Configuration=%CONFIG%_%GFX% /p:Platform=Win32 || goto error
+    %MSBUILD% project\%VS_VER%\Graph.vcxproj /t:%TARGET% /p:Configuration=%CONFIG%_%GFX% /p:Platform=Win32 || goto error
+    %MSBUILD% project\%VS_VER%\SceneGraph.vcxproj /t:%TARGET% /p:Configuration=%CONFIG%_%GFX% /p:Platform=Win32 || goto error
 )
 
 cd /d %CURDIR%
