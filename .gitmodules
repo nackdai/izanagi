@@ -41,3 +41,6 @@
 [submodule "External/glfw"]
 	path = External/glfw
 	url = https://github.com/glfw/glfw.git
+[submodule "Tools/External/glfw"]
+	path = Tools/External/glfw
+	url = https://github.com/glfw/glfw.git
