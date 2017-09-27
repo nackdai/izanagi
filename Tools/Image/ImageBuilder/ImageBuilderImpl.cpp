@@ -251,6 +251,10 @@ namespace {
             "point",        // graph::E_GRAPH_TEX_FILTER_POINT
             "linear",       // graph::E_GRAPH_TEX_FILTER_LINEAR
             "aniso",        // graph::E_GRAPH_TEX_FILTER_ANISOTROPIC
+            "nop",          // graph::E_GRAPH_TEX_FILTER_NEAREST_MIPMAP_NEAREST
+            "nop",          // graph::E_GRAPH_TEX_FILTER_LINEAR_MIPMAP_NEAREST
+            "nop",          // graph::E_GRAPH_TEX_FILTER_NEAREST_MIPMAP_LINEAR
+            "nop",          // graph::E_GRAPH_TEX_FILTER_LINEAR_MIPMAP_LINEAR
 #if 0
             "pyramidquad",  // graph::E_GRAPH_TEX_FILTER_PYRAMIDALQUAD
             "gaussquad",    // graph::E_GRAPH_TEX_FILTER_GAUSSIANQUAD
