@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\Image\FlakesTextureMaker\FlakesTextureMaker.cpp" />
+    <ClCompile Include="..\..\Image\FlakesTextureMaker\shader.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\External\cmdline\cmdline.h" />
+    <ClInclude Include="..\..\Image\FlakesTextureMaker\shader.h" />
+    <ClInclude Include="..\..\Image\FlakesTextureMaker\gldefs.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="shader">
+      <UniqueIdentifier>{e482f75e-75f2-42ec-acf1-d0b659ac918c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Image\FlakesTextureMaker\FlakesTextureMaker_fs.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\Image\FlakesTextureMaker\FlakesTextureMaker_vs.glsl">
+      <Filter>shader</Filter>
+    </None>
+  </ItemGroup>
+</Project>

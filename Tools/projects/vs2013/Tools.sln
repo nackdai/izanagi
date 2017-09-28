@@ -130,6 +130,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PointCloudConverter", "Poin
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IrradianceMapMaker", "IrradianceMapMaker.vcxproj", "{4F29B327-57C8-4043-B787-246BB83A2B74}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FlakesTextureMaker", "FlakesTextureMaker.vcxproj", "{B7A9CC85-AF8E-45F6-800C-B4C0BDD84F5E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -566,6 +568,20 @@ Global
 		{4F29B327-57C8-4043-B787-246BB83A2B74}.Release|Win32.Build.0 = Release|Win32
 		{4F29B327-57C8-4043-B787-246BB83A2B74}.Release|x86.ActiveCfg = Release|Win32
 		{4F29B327-57C8-4043-B787-246BB83A2B74}.Release|x86.Build.0 = Release|Win32
+		{B7A9CC85-AF8E-45F6-800C-B4C0BDD84F5E}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{B7A9CC85-AF8E-45F6-800C-B4C0BDD84F5E}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{B7A9CC85-AF8E-45F6-800C-B4C0BDD84F5E}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{B7A9CC85-AF8E-45F6-800C-B4C0BDD84F5E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B7A9CC85-AF8E-45F6-800C-B4C0BDD84F5E}.Debug|Win32.Build.0 = Debug|Win32
+		{B7A9CC85-AF8E-45F6-800C-B4C0BDD84F5E}.Debug|x86.ActiveCfg = Debug|Win32
+		{B7A9CC85-AF8E-45F6-800C-B4C0BDD84F5E}.Debug|x86.Build.0 = Debug|Win32
+		{B7A9CC85-AF8E-45F6-800C-B4C0BDD84F5E}.Release|Any CPU.ActiveCfg = Release|Win32
+		{B7A9CC85-AF8E-45F6-800C-B4C0BDD84F5E}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{B7A9CC85-AF8E-45F6-800C-B4C0BDD84F5E}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{B7A9CC85-AF8E-45F6-800C-B4C0BDD84F5E}.Release|Win32.ActiveCfg = Release|Win32
+		{B7A9CC85-AF8E-45F6-800C-B4C0BDD84F5E}.Release|Win32.Build.0 = Release|Win32
+		{B7A9CC85-AF8E-45F6-800C-B4C0BDD84F5E}.Release|x86.ActiveCfg = Release|Win32
+		{B7A9CC85-AF8E-45F6-800C-B4C0BDD84F5E}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -608,5 +624,6 @@ Global
 		{7B1ACF45-05FB-433A-A43F-D525DDB1B0CB} = {A18A0FC4-8551-4472-8575-A78D1E05C57B}
 		{56FBA336-ACF6-410E-80BE-552ABDBFB65D} = {8A38419B-6754-4384-9873-C27CEA34EBDC}
 		{4F29B327-57C8-4043-B787-246BB83A2B74} = {47EE3FCD-A12B-4A18-84CC-2AE700CCE111}
+		{B7A9CC85-AF8E-45F6-800C-B4C0BDD84F5E} = {47EE3FCD-A12B-4A18-84CC-2AE700CCE111}
 	EndGlobalSection
 EndGlobal
