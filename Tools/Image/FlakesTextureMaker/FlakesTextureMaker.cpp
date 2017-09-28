@@ -22,6 +22,10 @@ struct Options {
     std::string output;
     int width{ 1280 };
     int height{ 720 };
+
+    float flake_size{ 0.05f };
+    float flake_scale{ 1.0f };
+    float flake_orientation{ 0.0f };
 };
 
 Options g_opt;
@@ -46,12 +50,21 @@ static void Display()
 
     CALL_GL_API(::glUseProgram(g_shd.m_program));
 
-    auto hInvScr = GetHandle(g_shd.m_program, "u_resolution");
+    auto hResolution = GetHandle(g_shd.m_program, "u_resolution");
     assert(hInvScr >= 0);
-    CALL_GL_API(glUniform4f(hInvScr, g_opt.width, g_opt.height, 0.0f, 0.0f));
+    CALL_GL_API(glUniform4f(hResolution, g_opt.width, g_opt.height, 0.0f, 0.0f));
 
     auto hTime = GetHandle(g_shd.m_program, "u_time");
-    CALL_GL_API(glUniform1f(hTime, 0));
+    CALL_GL_API(glUniform1f(hTime, 1));
+
+    auto hSize = GetHandle(g_shd.m_program, "flake_size");
+    CALL_GL_API(glUniform1f(hSize, g_opt.flake_size));
+
+    auto hScale = GetHandle(g_shd.m_program, "flake_scale");
+    CALL_GL_API(glUniform1f(hScale, g_opt.flake_scale));
+
+    auto hOrientation = GetHandle(g_shd.m_program, "flake_orientation");
+    CALL_GL_API(glUniform1f(hOrientation, g_opt.flake_orientation));
 
     time += 1.0f / 60.0f;
 
@@ -88,6 +101,13 @@ static void errorCallback(int error, const char* description)
     IZ_PRINTF("Error: %s\n", description);
 }
 
+inline float clamp(float x, float a, float b)
+{
+    x = (x < a ? a : x);
+    x = (x > b ? b : x);
+    return x;
+}
+
 bool parseOption(
     int argc, char* argv[],
     cmdline::parser& cmd,
@@ -97,6 +117,11 @@ bool parseOption(
         cmd.add<std::string>("output", 'o', "output filename base", false, "result");
         cmd.add<int>("width", 'w', "output map width", false);
         cmd.add<int>("height", 'h', "output map height", false);
+
+        cmd.add<float>("flake_size", 's', "Smaller values zoom into the flake map, larger values zoom out", false);
+        cmd.add<float>("flake_scale", 'c', "Relative size of the flakes", false);
+        cmd.add<float>("flake_orientation", 'r', "Blend between the flake normals (0.0) and the surface normal (1.0)", false);
+
         cmd.add<std::string>("help", '?', "print usage", false);
     }
 
@@ -130,6 +155,20 @@ bool parseOption(
     if (cmd.exist("height")) {
         opt.height = cmd.get<int>("height");
     }
+
+    if (cmd.exist("flake_size")) {
+        opt.flake_size = cmd.get<float>("flake_size");
+    }
+    if (cmd.exist("flake_scale")) {
+        opt.flake_scale = cmd.get<float>("flake_scale");
+    }
+    if (cmd.exist("flake_orientation")) {
+        opt.flake_orientation = cmd.get<float>("flake_orientation");
+    }
+
+    opt.flake_size = max(opt.flake_size, 0.0f);
+    opt.flake_scale = max(opt.flake_size, 0.0001f);
+    opt.flake_orientation = clamp(opt.flake_orientation, 0.0f, 1.0f);
 
     return true;
 }
