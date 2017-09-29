@@ -189,13 +189,14 @@ vec3 cellnoise(vec3 p)
 
 // https://docs.chaosgroup.com/display/OSLShaders/Flakes+normal+map
 
+uniform float flake_scale = 50.0;               // Smaller values zoom into the flake map, larger values zoom out.
+uniform float flake_size = 0.5;                 // Relative size of the flakes
+uniform float flake_size_variance = 0.7;        // 0.0 makes all flakes the same size, 1.0 assigns random size between 0 and the given flake size
+uniform float flake_normal_orientation = 0.5;   // Blend between the flake normals (0.0) and the surface normal (1.0)
+
 void flakes(
     float u,
     float v,
-    float flake_scale,  // Smaller values zoom into the flake map, larger values zoom out.
-    float flake_size,   // Relative size of the flakes
-    float flake_size_variance,      // 0.0 makes all flakes the same size, 1.0 assigns random size between 0 and the given flake size
-    float flake_normal_orientation, // Blend between the flake normals (0.0) and the surface normal (1.0)
     out vec3 result,
     out float alpha)
 {
@@ -257,24 +258,15 @@ void main()
 {
     vec2 uv = gl_FragCoord.xy / u_resolution.xy;
 
-    float flake_scale = 50.0;
-    float flake_size = 0.5;
-    float flake_size_variance = 0.7;
-    float flake_normal_orientation = 0.5;
-
     vec3 result;
     float alpha;
 
     flakes(
         uv.x, uv.y,
-        flake_scale,
-        flake_size,
-        flake_size_variance,
-        flake_normal_orientation,
         result,
         alpha);
 
     gl_FragColor.xyz = result;
-    gl_FragColor.w = 1.0;
+    gl_FragColor.w = alpha;
 }
 #endif

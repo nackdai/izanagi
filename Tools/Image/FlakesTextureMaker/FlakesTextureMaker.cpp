@@ -23,9 +23,10 @@ struct Options {
     int width{ 1280 };
     int height{ 720 };
 
-    float flake_size{ 0.05f };
-    float flake_scale{ 1.0f };
-    float flake_orientation{ 0.0f };
+    float flake_scale{ 50.0f };               // Smaller values zoom into the flake map, larger values zoom out.
+    float flake_size{ 0.5f };                 // Relative size of the flakes
+    float flake_size_variance{ 0.7f };        // 0.0 makes all flakes the same size, 1.0 assigns random size between 0 and the given flake size
+    float flake_normal_orientation{ 0.5f };   // Blend between the flake normals (0.0) and the surface normal (1.0)
 };
 
 Options g_opt;
@@ -51,7 +52,6 @@ static void Display()
     CALL_GL_API(::glUseProgram(g_shd.m_program));
 
     auto hResolution = GetHandle(g_shd.m_program, "u_resolution");
-    assert(hInvScr >= 0);
     CALL_GL_API(glUniform4f(hResolution, g_opt.width, g_opt.height, 0.0f, 0.0f));
 
     auto hTime = GetHandle(g_shd.m_program, "u_time");
@@ -63,8 +63,11 @@ static void Display()
     auto hScale = GetHandle(g_shd.m_program, "flake_scale");
     CALL_GL_API(glUniform1f(hScale, g_opt.flake_scale));
 
-    auto hOrientation = GetHandle(g_shd.m_program, "flake_orientation");
-    CALL_GL_API(glUniform1f(hOrientation, g_opt.flake_orientation));
+    auto hVar = GetHandle(g_shd.m_program, "flake_size_variance");
+    CALL_GL_API(glUniform1f(hVar, g_opt.flake_size_variance));
+
+    auto hOrientation = GetHandle(g_shd.m_program, "flake_normal_orientation");
+    CALL_GL_API(glUniform1f(hOrientation, g_opt.flake_normal_orientation));
 
     time += 1.0f / 60.0f;
 
@@ -115,12 +118,13 @@ bool parseOption(
 {
     {
         cmd.add<std::string>("output", 'o', "output filename base", false, "result");
-        cmd.add<int>("width", 'w', "output map width", false);
-        cmd.add<int>("height", 'h', "output map height", false);
+        cmd.add<int>("width", 'w', "output map width", false, opt.width);
+        cmd.add<int>("height", 'h', "output map height", false, opt.height);
 
-        cmd.add<float>("flake_size", 's', "Smaller values zoom into the flake map, larger values zoom out", false);
-        cmd.add<float>("flake_scale", 'c', "Relative size of the flakes", false);
-        cmd.add<float>("flake_orientation", 'r', "Blend between the flake normals (0.0) and the surface normal (1.0)", false);
+        cmd.add<float>("flake_size", 's', "Smaller values zoom into the flake map, larger values zoom out", false, opt.flake_size);
+        cmd.add<float>("flake_scale", 'c', "Relative size of the flakes", false, opt.flake_scale);
+        cmd.add<float>("flake_size_variance", 'v', "0.0 makes all flakes the same size, 1.0 assigns random size between 0 and the given flake size", false, opt.flake_size_variance);
+        cmd.add<float>("flake_normal_orientation", 'n', "Blend between the flake normals (0.0) and the surface normal (1.0)", false, opt.flake_normal_orientation);
 
         cmd.add<std::string>("help", '?', "print usage", false);
     }
@@ -162,13 +166,17 @@ bool parseOption(
     if (cmd.exist("flake_scale")) {
         opt.flake_scale = cmd.get<float>("flake_scale");
     }
-    if (cmd.exist("flake_orientation")) {
-        opt.flake_orientation = cmd.get<float>("flake_orientation");
+    if (cmd.exist("flake_size_variance")) {
+        opt.flake_normal_orientation = cmd.get<float>("flake_size_variance");
+    }
+    if (cmd.exist("flake_normal_orientation")) {
+        opt.flake_normal_orientation = cmd.get<float>("flake_orientation");
     }
 
-    opt.flake_size = max(opt.flake_size, 0.0f);
-    opt.flake_scale = max(opt.flake_size, 0.0001f);
-    opt.flake_orientation = clamp(opt.flake_orientation, 0.0f, 1.0f);
+    opt.flake_size = max(opt.flake_size, 0.0001f);
+    opt.flake_scale = max(opt.flake_scale, 0.0001f);
+    opt.flake_size_variance = clamp(opt.flake_size_variance, 0.0f, 1.0f);
+    opt.flake_normal_orientation = clamp(opt.flake_normal_orientation, 0.0f, 1.0f);
 
     return true;
 }
@@ -212,7 +220,7 @@ int main(int argc, char* argv[])
 
     Init();
 
-    std::vector<uint8_t> pixels(g_opt.width * g_opt.height * 3);
+    std::vector<uint8_t> pixels(g_opt.width * g_opt.height * 4);
 
     while (!glfwWindowShouldClose(window)) {
         Display();
@@ -226,7 +234,7 @@ int main(int argc, char* argv[])
 
             CALL_GL_API(::glReadBuffer(GL_FRONT));
 
-            CALL_GL_API(::glReadPixels(0, 0, g_opt.width, g_opt.height, GL_RGB, GL_UNSIGNED_BYTE, &pixels[0]));
+            CALL_GL_API(::glReadPixels(0, 0, g_opt.width, g_opt.height, GL_RGBA, GL_UNSIGNED_BYTE, &pixels[0]));
         }
 
         break;
@@ -236,7 +244,7 @@ int main(int argc, char* argv[])
     ::glfwTerminate();
 
     {
-        static const int bpp = sizeof(uint8_t) * 3;
+        static const int bpp = sizeof(uint8_t) * 4;
         const int pitch = g_opt.width * bpp;
 
 #if 0
