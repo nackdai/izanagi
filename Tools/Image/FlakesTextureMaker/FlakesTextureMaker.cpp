@@ -228,6 +228,7 @@ int main(int argc, char* argv[])
         ::glfwSwapBuffers(window);
         ::glfwPollEvents();
 
+#if 1
         {
             CALL_GL_API(::glFlush());
             CALL_GL_API(::glFinish());
@@ -238,6 +239,7 @@ int main(int argc, char* argv[])
         }
 
         break;
+#endif
     }
 
     ::glfwDestroyWindow(window);
@@ -247,8 +249,8 @@ int main(int argc, char* argv[])
         static const int bpp = sizeof(uint8_t) * 4;
         const int pitch = g_opt.width * bpp;
 
-#if 0
-        std::vector<uint8_t> dst(g_opt.width * g_opt.height * 3);
+#if 1
+        std::vector<uint8_t> dst(g_opt.width * g_opt.height * bpp);
 
 #pragma omp parallel for
         for (int y = 0; y < g_opt.height; y++) {
