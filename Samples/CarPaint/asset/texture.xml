@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<textures>
+  <plane path="./studio.hdr"/>
+  <plane path="./result_spec_0.hdr"
+         mippath_1="./result_spec_1.hdr"
+         mippath_2="./result_spec_2.hdr"
+         mippath_3="./result_spec_3.hdr"/>
+  <plane path="./flakesnml.png"/>
+</textures>
+
