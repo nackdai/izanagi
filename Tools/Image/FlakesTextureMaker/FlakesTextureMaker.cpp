@@ -131,7 +131,7 @@ bool parseOption(
 
     bool isCmdOk = cmd.parse(argc, argv);
 
-    if (argc == 1 || cmd.exist("help")){
+    if (cmd.exist("help")){
         std::cerr << cmd.usage();
         return false;
     }
