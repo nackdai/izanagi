@@ -72,8 +72,7 @@ IZ_BOOL CarPaintApp::InitInternal(
 		"shader/carpaint_fs.glsl",
 	};
 
-	//for (int i = 0; i < CarPaintShadeType::Num; i++) {
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < CarPaintShadeType::Num; i++) {
 		m_shdCarPaint[i].init(
 			device,
 			"shader/vs.glsl",
@@ -132,7 +131,7 @@ void CarPaintApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 
     m_imgui->beginFrame();
     {
-		static const char* items[] = { "MultiToneOnly", "Environment", "MultiToneWithEnv", "Flake" };
+		static const char* items[] = { "MultiToneOnly", "Environment", "MultiToneWithEnv", "Flake", "CarPaint" };
 		int item_current = m_shaderType;
 		ImGui::Combo("mode", &item_current, items, COUNTOF(items));
 		m_shaderType = (CarPaintShadeType)item_current;
@@ -169,13 +168,17 @@ void CarPaintApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
 	// Car Paint.
     {
-		//device->SetTexture(0, m_tex->GetTexture(TexType::filtered));
-		//device->SetTexture(1, m_tex->GetTexture(TexType::flakes));
-		device->SetTexture(0, m_tex->GetTexture(TexType::flakes));
+		auto* shd = m_shdCarPaint[m_shaderType].m_program;
 
-        auto* shd = m_shdCarPaint[m_shaderType].m_program;
+		device->SetShaderProgram(shd);
 
-        device->SetShaderProgram(shd);
+		if (m_shaderType == CarPaintShadeType::Flakes) {
+			device->SetTexture(0, m_tex->GetTexture(TexType::flakes));
+		}
+		else {
+			device->SetTexture(0, m_tex->GetTexture(TexType::filtered));
+			device->SetTexture(1, m_tex->GetTexture(TexType::flakes));
+		}
 
 		// パラメータ設定
         auto hL2W = shd->GetHandleByName("mtxL2W");

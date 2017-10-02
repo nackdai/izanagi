@@ -24,8 +24,7 @@ uniform float microflakePerturbation;
 uniform float flakeScale;
 uniform vec4 flakeColor;
 
-uniform sampler2D s0;	// environment map.
-uniform sampler2D s1;	// flakes normal map.
+uniform sampler2D s0;	// flakes normal map.
 
 #define MATH_PI          (3.14159265358979323846f)	// pi
 #define MATH_PI2         (MATH_PI * 2.0f)			// 2pi
@@ -105,7 +104,7 @@ void main()
 
 	vec3 wi = normalize(-eyeToVtx);
 
-	vec3 flakeNormal = texture2D(s1, vUV * flakeScale).bgr;
+	vec3 flakeNormal = texture2D(s0, vUV * flakeScale).bgr;
 	flakeNormal = flakeNormal * 2.0 - 1.0;	// [0, 1] -> [-1, 1]
 
 	// This shader simulates two layers of micro-flakes suspended in
@@ -129,7 +128,7 @@ void main()
 	// microflakes. Again, transform perturbed surface normal for that layer into
 	// world space and then compute dot product of that normal with the view vector:
 	np2 = convToNTS(np2);
-	float fresnel2 = clamp(dot(np1, wi), 0.0, 1.0);
+	float fresnel2 = clamp(dot(np2, wi), 0.0, 1.0);
 
 	float fresnel1Sq = fresnel1 * fresnel1;
 

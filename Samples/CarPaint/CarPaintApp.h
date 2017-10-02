@@ -42,7 +42,7 @@ private:
 		Num,
 	};
 
-	CarPaintShadeType m_shaderType{ CarPaintShadeType::MultiToneOnly };
+	CarPaintShadeType m_shaderType{ CarPaintShadeType::All };
 
 	izanagi::math::CVector4 m_paintColor[3];
 	IZ_FLOAT m_normalScale{ 1.0f };
