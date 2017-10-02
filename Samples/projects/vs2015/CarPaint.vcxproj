@@ -44,7 +44,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{60C1039B-2FDD-4AC1-ABAC-207B709F6BE2}</ProjectGuid>
-    <RootNamespace>IBL</RootNamespace>
+    <RootNamespace>TAA</RootNamespace>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
