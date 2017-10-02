@@ -21,6 +21,7 @@ uniform float MAX_REFLECTION_LOD;
 uniform float normalPerturbation;
 uniform float microflakePerturbationA;
 uniform float microflakePerturbation;
+uniform float flakeScale;
 uniform vec4 flakeColor;
 
 uniform sampler2D s0;	// environment map.
@@ -104,7 +105,7 @@ void main()
 
 	vec3 wi = normalize(-eyeToVtx);
 
-	vec3 flakeNormal = texture2D(s1, vUV).rgb;
+	vec3 flakeNormal = texture2D(s1, vUV * flakeScale).bgr;
 	flakeNormal = flakeNormal * 2.0 - 1.0;	// [0, 1] -> [-1, 1]
 
 	// This shader simulates two layers of micro-flakes suspended in

@@ -148,7 +148,8 @@ void CarPaintApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 		ImGui::SliderFloat("normalPerturbation", &m_normalPerturbation, -1.0f, 1.0f);
 		ImGui::SliderFloat("microflakePerturbationA", &m_microflakePerturbationA, -1.0f, 1.0f);
 		ImGui::SliderFloat("microflakePerturbation", &m_microflakePerturbation, 0.0f, 1.0f);
-
+		ImGui::SliderFloat("flakeScale", &m_flakeScale, 0.0f, 50.0f);
+		
 		ImGui::ColorEdit3("FlakeColor", m_flakeColor.v);
     }
 }
@@ -207,6 +208,9 @@ void CarPaintApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
 		auto hMicroflakePerturbation = shd->GetHandleByName("microflakePerturbation");
 		shd->SetFloat(device, hMicroflakePerturbation, m_microflakePerturbation);
+
+		auto hFlakeScale = shd->GetHandleByName("flakeScale");
+		shd->SetFloat(device, hFlakeScale, m_flakeScale);
 
         auto hPaintColor = shd->GetHandleByName("paintColor0");
         shd->SetVector(device, hPaintColor, m_paintColor[0]);

@@ -51,6 +51,7 @@ private:
 	IZ_FLOAT m_normalPerturbation{ 0.0f };
 	IZ_FLOAT m_microflakePerturbationA{ 0.15f };
 	IZ_FLOAT m_microflakePerturbation{ 0.5f };
+	IZ_FLOAT m_flakeScale{ 30.0f };
 	izanagi::math::CVector4 m_flakeColor;
 
     izanagi::sample::Shader m_shdCarPaint[CarPaintShadeType::Num];
