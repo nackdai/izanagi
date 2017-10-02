@@ -309,11 +309,13 @@ IZ_BOOL CImage::ReadTexture(
         // パラメータセット
         m_pTexture[i]->SetAddress(
             static_cast<graph::E_GRAPH_TEX_ADDRESS>(sTexHeader.addressU),
-            static_cast<graph::E_GRAPH_TEX_ADDRESS>(sTexHeader.addressV));
+            static_cast<graph::E_GRAPH_TEX_ADDRESS>(sTexHeader.addressV),
+			IZ_TRUE);
         m_pTexture[i]->SetFilter(
             static_cast<graph::E_GRAPH_TEX_FILTER>(sTexHeader.minFilter),
             static_cast<graph::E_GRAPH_TEX_FILTER>(sTexHeader.magFilter),
-            static_cast<graph::E_GRAPH_TEX_FILTER>(sTexHeader.mipFilter));
+            static_cast<graph::E_GRAPH_TEX_FILTER>(sTexHeader.mipFilter),
+			IZ_TRUE);
     }
 
 __EXIT__:

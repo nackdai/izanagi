@@ -75,7 +75,8 @@ namespace graph
         virtual void SetFilter(
             E_GRAPH_TEX_FILTER minFilter,
             E_GRAPH_TEX_FILTER magFilter,
-            E_GRAPH_TEX_FILTER mipFilter)
+            E_GRAPH_TEX_FILTER mipFilter,
+			IZ_BOOL isForcibly = IZ_TRUE)
         {
             m_State.minFilter = minFilter;
             m_State.magFilter = magFilter;
@@ -89,7 +90,8 @@ namespace graph
          */
         virtual void SetAddress(
             E_GRAPH_TEX_ADDRESS addressU,
-            E_GRAPH_TEX_ADDRESS addressV)
+            E_GRAPH_TEX_ADDRESS addressV,
+			IZ_BOOL isForcibly = IZ_TRUE)
         {
             m_State.addressU = addressU;
             m_State.addressV = addressV;
