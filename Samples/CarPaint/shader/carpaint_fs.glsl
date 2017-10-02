@@ -144,6 +144,8 @@ void main()
 		vec3 flakeNormal = texture2D(s1, vUV * flakeScale).bgr;
 		flakeNormal = flakeNormal * 2.0 - 1.0;	// [0, 1] -> [-1, 1]
 
+		flakeNormal = convToNTS(flakeNormal);
+
 		// This shader simulates two layers of micro-flakes suspended in
 		// the coat of paint. To compute the surface normal for the first layer,
 		// the following formula is used:
@@ -158,13 +160,11 @@ void main()
 		// Compute modified Fresnel term for reflections from the first layer of
 		// microflakes. First transform perturbed surface normal for that layer into
 		// world space and then compute dot product of that normal with the view vector:
-		np1 = convToNTS(np1);
 		float fresnel1 = clamp(dot(np1, wi), 0.0, 1.0);
 
 		// Compute modified Fresnel term for reflections from the second layer of
 		// microflakes. Again, transform perturbed surface normal for that layer into
 		// world space and then compute dot product of that normal with the view vector:
-		np2 = convToNTS(np2);
 		float fresnel2 = clamp(dot(np2, wi), 0.0, 1.0);
 
 		float fresnel1Sq = fresnel1 * fresnel1;
