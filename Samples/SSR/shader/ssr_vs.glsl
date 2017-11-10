@@ -2,18 +2,20 @@
 precision highp float;
 precision highp int;
 
-attribute vec4 position;
-attribute vec3 normal;
-
-varying vec4 var_Color;
+layout(location = 0) in vec4 position;
+layout(location = 1) in vec4 color_0;
+layout(location = 2) in vec3 normal;
 
 uniform mat4 mtxL2W;
 uniform mat4 mtxW2C;
-uniform vec4 color;
+
+out vec4 varColor;
+out vec3 varNormal;
 
 void main()
 {
-    gl_Position = mtxW2C * mtxL2W * position;
+	gl_Position = mtxW2C * mtxL2W * position;
 
-    var_Color = color;
+	varColor = color_0;
+	varNormal = normalize(mtxL2W * vec4(normal, 0)).xyz;
 }

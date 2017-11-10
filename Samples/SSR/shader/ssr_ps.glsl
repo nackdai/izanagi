@@ -2,154 +2,195 @@
 precision highp float;
 precision highp int;
 
-in vec4 varPos;
+in vec4 varColor;
+in vec3 varNormal;
 
 layout(location = 0) out vec4 outColor;
 
-uniform mat4 mtxC2V;
-uniform mat4 mtxV2W;
-uniform float depthFar;
-uniform float radius;
+uniform sampler2D s0;   // color
+uniform sampler2D s1;   // depth
 
-uniform mat4 mtxW2C;
+uniform mat4 mtxW2V;
 uniform mat4 mtxV2C;
+uniform vec3 camPos;
+uniform float nearPlaneZ;
+uniform float maxDistance;
+uniform float zThickness;
+uniform int maxSteps;
 
-uniform sampler2D s0;   // albedo
-uniform sampler2D s1;   // normal
-uniform sampler2D s2;   // depth
-
-#define KernelSize  (32)
-uniform vec4 kernels[KernelSize];
-
-#define FallOff (0.000002)
-
-vec3 randomNormal(vec2 tex)
+float squaredLength(vec2 a, vec2 b)
 {
-    float noiseX = (fract(sin(dot(tex, vec2(15.8989f, 76.132f) * 1.0f)) * 46336.23745f));
-    float noiseY = (fract(sin(dot(tex, vec2(11.9899f, 62.223f) * 2.0f)) * 34748.34744f));
-    float noiseZ = (fract(sin(dot(tex, vec2(13.3238f, 63.122f) * 3.0f)) * 59998.47362f));
-    return normalize(vec3(noiseX, noiseY, noiseZ));
+	a -= b;
+	return dot(a, a);
+}
+
+bool intersectsDepthBuffer(float z, float minZ, float maxZ)
+{
+	/*
+	* Based on how far away from the camera the depth is,
+	* adding a bit of extra thickness can help improve some
+	* artifacts. Driving this value up too high can cause
+	* artifacts of its own.
+	*/
+
+	// 指定範囲内（レイの始点と終点）に z があれば、それはレイにヒットしたとみなせる.
+
+	z += zThickness;
+	return (maxZ >= z) && (minZ - zThickness <= z);
+}
+
+bool traceScreenSpaceRay(
+	vec3 csOrig,
+	vec3 csDir,
+	out vec2 hitPixel,
+	out vec3 hitPoint)
+{
+	// Clip to the near plane.
+	float rayLength = (csOrig.z + csDir.z * maxDistance) < nearPlaneZ
+		? (nearPlaneZ - csOrig.z) / csDir.z
+		: maxDistance;
+
+	float csEndPoint = csOrig + csDir * rayLenght;
+
+	// Project into homogeneous clip space.
+	vec4 H0 = mtxV2C * vec4(csOrig, 1);
+	vec4 H1 = mtxV2C * vec4(csEndPoint, 1);
+
+	float k0 = 1.0 / HO.w;
+	float k1 = 1.0 / H1.w;
+
+	// The interpolated homogeneous version of the camera-space points.
+	vec3 Q0 = csOrig * k0;
+	vec3 Q1 = csEndPoint * k1;
+
+	// Screen space point.
+	vec2 P0 = H0.xy * k0;
+	vec2 P1 = H1.xy * k1;
+
+	ivec2 texsize = textureSize(ss, 0);
+
+	P0 *= vec2(texsize.x, texsize.y);
+	P1 *= vec2(texsize.x, texsize.y);
+
+	// If the line is degenerate, make it cover at least one pixel to avoid handling zero-pixel extent as a special case later.
+	// 2点間の距離がある程度離れるようにする.
+	P1 += squaredLength(P0, P1) < 0.0001
+		? vec2(0.01, 0.01)
+		: 0.0;
+	vec2 delta = P1 - P0;
+
+	// Permute so that the primary iteration is in x to collapse all quadrant-specific DDA cases later.
+	bool permute = false;
+	if (abs(delta.x) < abs(delta.y))
+	{
+		permute = true;
+
+		delta = delta.yz;
+		P0 = P0.yx;
+		P1 = P1.yx;
+	}
+
+	float stepDir = sign(delta.x);
+	float invdx = stepDir / delta.x;
+
+	// Track the derivatives of Q and k.
+	vec3 dQ = (Q1 - Q0) / invdx;
+	float dk = (k1 - k0) / invdx;
+
+	// y is slope.
+	// slope = (y1 - y0) / (x1 - x0)
+	vec2 dP = vec2(stepDir, delta.y / invdx);	
+
+	// Adjust end condition for iteration direction
+	float end = P1.x * stepDir;
+
+	int stepCount = 0;
+
+	float prevZMaxEstimate = csOrig.z;
+	
+	float rayZMin = prevZMaxEstimate;
+	float rayZMax = prevZMaxEstimate;
+	
+	float sceneZMax = rayZMax + 100.0f;
+
+	vec4 PQk = vec4(P0.x, P0.y Q0.z, k0);
+	vec4 dPQk = vec4(dP0.x, dP0.y dQ0.z, dk0);
+	vec3 Q = Q0;
+
+	for (;
+		(PQk.x * stepDir) <= end)	// 終点に到達したか.
+		&& (stepCount < maxSteps)	// 最大処理数に到達したか.
+		&& !intersectsDepthBuffer(sceneZMax, rayZMin, rayZMax)	// レイが衝突したか.
+		&& (sceneZMax != 0.0);	// 何もないところの到達してないか.
+		++stepCount)
+	{
+		// 前回のZの最大値が次の最小値になる.
+		rayZMin = prevZMaxEstimate;
+
+		// 次のZの最大値を計算する.
+		// ただし、1/2 pixel分 余裕を持たせる.
+		// Qはw成分で除算されていて、そこに1/wで除算するので、元（View座標系）に戻ることになる.
+		rayZMax = (PQk.z + dPGk.z * 0.5) / (PQk.w + dPQk.w * 0.5);
+
+		// 次に向けて最大値を保持.
+		prevZMaxEstimate = rayZMax;
+
+		if (rayZMin > rayZMax) {
+			// 念のため.
+			float tmp = rayZMin;
+			rayZMin = rayZMax;
+			rayZMax = tmp;
+		}
+
+		hitPixel = permute ? PQk.yx : PQk.xy;
+
+		// シーン内の現時点での深度値を取得.
+		sceneZMax = texture
+	}
 }
 
 void main()
 {
-    vec4 uv = varPos;
+	vec3 normal = normalize(varNormal);
 
-    uv.y = 1.0 - uv.y;
+	// Ray origin is camera origin.
+	vec3 rayOrg = camPos;
 
-    // Depth format is R32F.
-    float depth = texture(s2, uv.xy).r;
+	// Compute world position.
+	vec3 worldPos;
 
-    if (depth <= 0.0f) {
-        discard;
-    }
+	// Compute ray direction.
+	// From ray origin to world position.
+	vec3 rayDir = normalize(worldPos - rayOrg);
 
-    // Convert depth [0, 1] -> [0, far] in view-space.
-    float centerDepth = depth * depthFar;
+	// Compute reflection vector.
+	vec3 refDir = reflect(rayDir, normal);
 
-    // NOTE
-    // Pview = (Xview, Yview, Zview, 1)
-    // mtxV2C = W 0 0 0
-    //          0 H 0 0
-    //          0 0 A 1
-    //          0 0 B 0
-    // Pview * mtxV2C = (Xclip, Yclip, Zclip, Wclip) = (Xclip, Yclip, Zclip, Zview)
-    //  Wclip = Zview = depth
-    // Xscr = Xclip / Wclip = Xclip / Zview = Xclip / depth
-    // Yscr = Yclip / Wclip = Yclip / Zview = Yclip / depth
-    //
-    // Xscr * depth = Xclip
-    // Xview = Xclip * mtxC2V
+	// Reflection vector origin is world position.
+	vec3 refOrg = worldPos;
 
-    vec4 pos = vec4(varPos.xy, 0, 1);
+	// Transform to view coordinate.
+	refOrg = mtxW2V * refOrg;
+	refDir = mtxW2V * vec4(refDir, 0);
 
-    // [0, 1] -> [-1, 1]
-    pos.xy = pos.xy * 2.0 - 1.0;
+	vec2 hitPixel = vec2(0, 0);
+	vec3 hitPoint = vec3(0, 0, 0);
 
-    // Screen-space -> Clip-space
-    pos.xy *= centerDepth;
+	// Trace screen space ray.
+	bool isIntersect = traceScreenSpaceRay(refOrg, refDir, hitPixel, hitPoint);
 
-    // Clip-space -> View-space
-    pos = mtxC2V * pos;
-    pos.z = centerDepth;
+	ivec2 texsize = textureSize(s0, 0);
 
-#if 0
-    // View-space -> World-space
-    pos = mtxV2W * pos;
-    pos.w = 1.0;
+	vec2 uv = hitPixel / texsize.xy;
 
-    // Debug..
-    pos = mtxW2C * pos;
-    pos /= pos.w;
-    pos.xy = (pos.xy + 1.0) * 0.5;
+	if (uv.x > 1.0 || uv.x < 0.0f || uv.y > 1.0 || uv.y < 0.0) {
+		isIntersect = false;
+	}
 
-    pos.y = 1.0 - pos.y;
-    
-    outColor = texture(s1, pos.xy);
-#else
-    vec3 normal = texture(s1, uv.xy).xyz * 2.0 - 1.0;
-    normal = normalize(normal);
-
-    // 平行にならない軸を決める.
-    vec3 tangent = abs(normal.x) > 0.9 ? vec3(0, 1, 0) : vec3(1, 0, 0);
-    tangent = normalize(cross(tangent, normal));
-
-    // NOTE
-    // Left hand coordinate.
-
-    vec3 bitangent = cross(tangent, normal);
-
-    mat3 tbn = mat3(tangent, bitangent, normal);
-
-    float occlusion = 0.0;
-
-    vec3 randNml = randomNormal(uv.xy);
-
-    for (int i = 0; i < KernelSize; i++) {
-        // Get sample position.
-#if 1
-        vec3 samplePos = tbn * kernels[i].xyz;
-        samplePos = samplePos * radius + pos.xyz;
-#else
-        vec3 samplePos = reflect(kernels[i].xyz, randNml);
-        samplePos = samplePos * radius + pos.xyz;
-#endif
-
-        // Compute offset uv.
-        vec4 offset = vec4(samplePos, 1.0);
-        offset = mtxV2C * offset;
-        offset.xy /= offset.w;
-        offset.xy = offset.xy * 0.5 + 0.5;  // [-1, 1] -> [0, 1]
-        offset.y = 1.0 - offset.y;
-
-        float sampleDepth = texture(s2, offset.xy).r;
-        sampleDepth *= depthFar;
-
-        // Range check.
-        float rangeCheck = smoothstep(0.0, 1.0, radius / abs(centerDepth - sampleDepth));
-
-        vec3 ocNml = texture(s1, offset.xy).xyz;
-        ocNml = normalize(ocNml * 2.0f - 1.0f);
-
-        // 遮蔽するピクセルと現在のピクセルでの法線の角度の差を計算
-        // 同方向なら1.0、反対なら0.0
-        // 同方向を向いていたら遮蔽されていない、角度が大きいほど遮蔽されている、とみなす
-        //  -> 同方向を向いている = 同じ面上にある -> 遮蔽していない
-        //  -> 角度が大きい = 同じ面上にない -> 遮蔽している
-        float nmlDiff = 1.0 - dot(ocNml, normal);
-
-        // 正：遮蔽するピクセルが現在のピクセルより前 -> 現在のピクセルは遮蔽される
-        // 負：遮蔽するピクセルが現在のピクセルより奥 -> 現在のピクセルは遮蔽されない
-        float depthDiff = (centerDepth - sampleDepth) / depthFar;
-
-        // step(falloff, depthDiff) -> falloff より小さければ 0.0、大きければ 1.0
-        //  -> ある程度以上深度が離れていない場合は遮蔽されていることとする
-        occlusion += step(FallOff, depthDiff) * nmlDiff * rangeCheck;
-    }
-
-    occlusion = 1.0 - (occlusion / KernelSize);
-    occlusion = pow(occlusion, 3.0);
-
-    outColor = vec4(occlusion, occlusion, occlusion, 1);
-#endif
+	if (isIntersect) {
+		outColor = varColor * texture(s0, uv);
+	}
+	else {
+		outColor = varColor;
+	}
 }

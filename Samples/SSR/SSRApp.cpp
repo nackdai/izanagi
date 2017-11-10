@@ -60,7 +60,7 @@ IZ_BOOL SSRApp::InitInternal(
         device,
         "shader/geometry_vs.glsl",
         "shader/geometry_ps.glsl");
-#if 0
+#if 1
     m_shdSSRPass.init(
         device,
         "shader/ssr_vs.glsl",
@@ -71,7 +71,7 @@ IZ_BOOL SSRApp::InitInternal(
 
     // カメラ
     camera.Init(
-        izanagi::math::CVector4(0.0f, 0.0f, 30.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 0.0f, 100.0f, 1.0f),
         izanagi::math::CVector4(0.0f, 0.0f, 0.0f, 1.0f),
         izanagi::math::CVector4(0.0f, 1.0f, 0.0f, 1.0f),
         1.0f,
@@ -166,6 +166,25 @@ void SSRApp::renderToScreenPass(izanagi::graph::CGraphicsDevice* device)
 
 void SSRApp::renderSSRPass(izanagi::graph::CGraphicsDevice* device)
 {
+	const auto& camera = GetCamera();
+
+	const auto& mtxW2C = camera.GetParam().mtxW2C;
+	const auto& mtxW2V = camera.GetParam().mtxW2V;
+
+	auto* shd = m_shdSSRPass.m_program;
+
+	device->SetShaderProgram(shd);
+
+	auto hW2C = shd->GetHandleByName("mtxW2C");
+	shd->SetMatrix(device, hW2C, mtxW2C);
+
+	auto hL2W = shd->GetHandleByName("mtxL2W");
+	izanagi::math::CMatrix44 mtxL2W;
+	shd->SetMatrix(device, hL2W, mtxL2W);
+
+	m_gbuffer.bindForSSRPass(device);
+
+	m_plane->Draw(device);
 }
 
 void SSRApp::ReleaseInternal()
