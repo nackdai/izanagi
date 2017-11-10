@@ -46,6 +46,8 @@ protected:
     izanagi::sample::Shader m_shdSSRPass;
 
     GBuffer m_gbuffer;
+
+	izanagi::debugutil::ImGuiProc* m_imgui{ nullptr };
 };
 
 #endif    // #if !defined(__SSR_APP_H__)

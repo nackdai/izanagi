@@ -19,8 +19,9 @@ uniform mat4 mtxV2C;
 uniform mat4 mtxC2V;
 uniform mat4 mtxV2W;
 
-uniform vec3 camPos;
+uniform vec4 camPos;
 uniform float nearPlaneZ;
+
 uniform float maxDistance;
 uniform float zThickness;
 uniform int maxSteps;
@@ -57,13 +58,13 @@ bool traceScreenSpaceRay(
 		? (nearPlaneZ - csOrig.z) / csDir.z
 		: maxDistance;
 
-	vec3 csEndPoint = csOrig + csDir * rayLenght;
+	vec3 csEndPoint = csOrig + csDir * rayLength;
 
 	// Project into homogeneous clip space.
 	vec4 H0 = mtxV2C * vec4(csOrig, 1);
 	vec4 H1 = mtxV2C * vec4(csEndPoint, 1);
 
-	float k0 = 1.0 / HO.w;
+	float k0 = 1.0 / H0.w;
 	float k1 = 1.0 / H1.w;
 
 	// The interpolated homogeneous version of the camera-space points.
@@ -122,7 +123,7 @@ bool traceScreenSpaceRay(
 	float sceneZMax = rayZMax + 100.0f;
 
 	vec4 PQk = vec4(P0.x, P0.y, Q0.z, k0);
-	vec4 dPQk = vec4(dP0.x, dP0.y, dQ0.z, dk0);
+	vec4 dPQk = vec4(dP.x, dP.y, dQ.z, dk);
 	vec3 Q = Q0;
 
 	for (;
@@ -138,7 +139,7 @@ bool traceScreenSpaceRay(
 		// ŽŸ‚ÌZ‚ÌÅ‘å’l‚ðŒvŽZ‚·‚é.
 		// ‚½‚¾‚µA1/2 pixel•ª —]—T‚ðŽ‚½‚¹‚é.
 		// Q‚Íw¬•ª‚ÅœŽZ‚³‚ê‚Ä‚¢‚ÄA‚»‚±‚É1/w‚ÅœŽZ‚·‚é‚Ì‚ÅAŒ³iViewÀ•WŒnj‚É–ß‚é‚±‚Æ‚É‚È‚é.
-		rayZMax = (PQk.z + dPGk.z * 0.5) / (PQk.w + dPQk.w * 0.5);
+		rayZMax = (PQk.z + dPQk.z * 0.5) / (PQk.w + dPQk.w * 0.5);
 
 		// ŽŸ‚ÉŒü‚¯‚ÄÅ‘å’l‚ð•ÛŽ.
 		prevZMaxEstimate = rayZMax;
@@ -170,12 +171,12 @@ bool traceScreenSpaceRay(
 void main()
 {
 	vec3 normal = normalize(varNormal);
-	float depth = texFetch(s1, gl_FragCoord.xy, 0).r;
+	float depth = texelFetch(s1, ivec2(gl_FragCoord.xy), 0).r;
 
 	ivec2 texsize = textureSize(s0, 0);
 
 	// Ray origin is camera origin.
-	vec3 rayOrg = camPos;
+	vec3 rayOrg = camPos.xyz;
 
 	// Screen coordinate.
 	vec4 pos = vec4(gl_FragCoord.xy / texsize, 0, 1);
@@ -191,7 +192,7 @@ void main()
 	pos.z = depth;
 
 	// View-space -> World-space.
-	vec3 worldPos = mtxV2W * vec4(pos.xyz, 1);
+	vec3 worldPos = (mtxV2W * vec4(pos.xyz, 1)).xyz;
 
 	// Compute ray direction.
 	// From ray origin to world position.
