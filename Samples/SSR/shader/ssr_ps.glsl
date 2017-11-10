@@ -2,6 +2,9 @@
 precision highp float;
 precision highp int;
 
+// NOTE
+// http://roar11.com/2015/07/screen-space-glossy-reflections/
+
 in vec4 varColor;
 in vec3 varNormal;
 
@@ -12,6 +15,10 @@ uniform sampler2D s1;   // depth
 
 uniform mat4 mtxW2V;
 uniform mat4 mtxV2C;
+
+uniform mat4 mtxC2V;
+uniform mat4 mtxV2W;
+
 uniform vec3 camPos;
 uniform float nearPlaneZ;
 uniform float maxDistance;
@@ -50,7 +57,7 @@ bool traceScreenSpaceRay(
 		? (nearPlaneZ - csOrig.z) / csDir.z
 		: maxDistance;
 
-	float csEndPoint = csOrig + csDir * rayLenght;
+	vec3 csEndPoint = csOrig + csDir * rayLenght;
 
 	// Project into homogeneous clip space.
 	vec4 H0 = mtxV2C * vec4(csOrig, 1);
@@ -67,7 +74,8 @@ bool traceScreenSpaceRay(
 	vec2 P0 = H0.xy * k0;
 	vec2 P1 = H1.xy * k1;
 
-	ivec2 texsize = textureSize(ss, 0);
+	ivec2 texsize = textureSize(s0, 0);
+	vec2 texel = vec2(1) / texsize;
 
 	P0 *= vec2(texsize.x, texsize.y);
 	P1 *= vec2(texsize.x, texsize.y);
@@ -76,7 +84,7 @@ bool traceScreenSpaceRay(
 	// 2点間の距離がある程度離れるようにする.
 	P1 += squaredLength(P0, P1) < 0.0001
 		? vec2(0.01, 0.01)
-		: 0.0;
+		: vec2(0.0);
 	vec2 delta = P1 - P0;
 
 	// Permute so that the primary iteration is in x to collapse all quadrant-specific DDA cases later.
@@ -85,7 +93,7 @@ bool traceScreenSpaceRay(
 	{
 		permute = true;
 
-		delta = delta.yz;
+		delta = delta.yx;
 		P0 = P0.yx;
 		P1 = P1.yx;
 	}
@@ -113,15 +121,15 @@ bool traceScreenSpaceRay(
 	
 	float sceneZMax = rayZMax + 100.0f;
 
-	vec4 PQk = vec4(P0.x, P0.y Q0.z, k0);
-	vec4 dPQk = vec4(dP0.x, dP0.y dQ0.z, dk0);
+	vec4 PQk = vec4(P0.x, P0.y, Q0.z, k0);
+	vec4 dPQk = vec4(dP0.x, dP0.y, dQ0.z, dk0);
 	vec3 Q = Q0;
 
 	for (;
-		(PQk.x * stepDir) <= end)	// 終点に到達したか.
+		((PQk.x * stepDir) <= end)	// 終点に到達したか.
 		&& (stepCount < maxSteps)	// 最大処理数に到達したか.
 		&& !intersectsDepthBuffer(sceneZMax, rayZMin, rayZMax)	// レイが衝突したか.
-		&& (sceneZMax != 0.0);	// 何もないところの到達してないか.
+		&& (sceneZMax != 0.0);	// 何もないところに到達してないか.
 		++stepCount)
 	{
 		// 前回のZの最大値が次の最小値になる.
@@ -145,19 +153,45 @@ bool traceScreenSpaceRay(
 		hitPixel = permute ? PQk.yx : PQk.xy;
 
 		// シーン内の現時点での深度値を取得.
-		sceneZMax = texture
+		sceneZMax = texture(s1, hitPixel * texel).r;
+
+		PQk += dPQk;
 	}
+
+	// Advance Q based on the number of steps
+	Q.xy += dQ.xy * stepCount;
+
+	// Qはw成分で除算されていて、そこに1 / wで除算するので、元（View座標系）に戻ることになる.
+	hitPoint = Q * (1.0f / PQk.w);
+
+	return intersectsDepthBuffer(sceneZMax, rayZMin, rayZMax);
 }
 
 void main()
 {
 	vec3 normal = normalize(varNormal);
+	float depth = texFetch(s1, gl_FragCoord.xy, 0).r;
+
+	ivec2 texsize = textureSize(s0, 0);
 
 	// Ray origin is camera origin.
 	vec3 rayOrg = camPos;
 
-	// Compute world position.
-	vec3 worldPos;
+	// Screen coordinate.
+	vec4 pos = vec4(gl_FragCoord.xy / texsize, 0, 1);
+
+	// [0, 1] -> [-1, 1]
+	pos.xy = pos.xy * 2.0 - 1.0;
+
+	// Screen-space -> Clip-space
+	pos.xy *= depth;
+
+	// Clip-space -> View-space
+	pos = mtxC2V * pos;
+	pos.z = depth;
+
+	// View-space -> World-space.
+	vec3 worldPos = mtxV2W * vec4(pos.xyz, 1);
 
 	// Compute ray direction.
 	// From ray origin to world position.
@@ -170,16 +204,14 @@ void main()
 	vec3 refOrg = worldPos;
 
 	// Transform to view coordinate.
-	refOrg = mtxW2V * refOrg;
-	refDir = mtxW2V * vec4(refDir, 0);
+	refOrg = (mtxW2V * vec4(refOrg, 1)).xyz;
+	refDir = (mtxW2V * vec4(refDir, 0)).xyz;
 
 	vec2 hitPixel = vec2(0, 0);
 	vec3 hitPoint = vec3(0, 0, 0);
 
 	// Trace screen space ray.
 	bool isIntersect = traceScreenSpaceRay(refOrg, refDir, hitPixel, hitPoint);
-
-	ivec2 texsize = textureSize(s0, 0);
 
 	vec2 uv = hitPixel / texsize.xy;
 
