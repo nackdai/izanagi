@@ -6,8 +6,8 @@ layout(location = 0) in vec4 position;
 layout(location = 1) in vec4 color_0;
 layout(location = 2) in vec3 normal;
 
-uniform mat4 mtxL2W;
-uniform mat4 mtxW2C;
+uniform mat4 mtxL2W;	// Local to World space.
+uniform mat4 mtxW2C;	// World to Clip space.
 
 out vec4 varColor;
 out vec3 varNormal;

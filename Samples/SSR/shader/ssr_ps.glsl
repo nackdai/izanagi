@@ -13,13 +13,13 @@ layout(location = 0) out vec4 outColor;
 uniform sampler2D s0;   // color
 uniform sampler2D s1;   // depth
 
-uniform mat4 mtxW2V;
-uniform mat4 mtxV2C;
+uniform mat4 mtxW2V;	// World to View(Camera) space.
+uniform mat4 mtxV2C;	// View(Camera) to Clip space.
 
-uniform mat4 mtxC2V;
-uniform mat4 mtxV2W;
+uniform mat4 mtxC2V;	// Clip to View(Camera) space.
+uniform mat4 mtxV2W;	// View(Camera) to World space.
 
-uniform vec4 camPos;
+uniform vec4 camPos;	// Camera position (World space).
 uniform float nearPlaneZ;
 
 uniform float maxDistance;
@@ -43,9 +43,8 @@ bool intersectsDepthBuffer(float z, float minZ, float maxZ)
 	*/
 
 	// 指定範囲内（レイの始点と終点）に z があれば、それはレイにヒットしたとみなせる.
-	//z += zThickness;
-	//return (maxZ >= z) && (minZ - zThickness <= z);
-	return (minZ <= z) && (z <= maxZ);
+	z += zThickness;
+	return (maxZ >= z) && (minZ - zThickness <= z);
 }
 
 bool traceScreenSpaceRay(
@@ -59,7 +58,6 @@ bool traceScreenSpaceRay(
 		? (nearPlaneZ - csOrig.z) / csDir.z
 		: maxDistance;
 
-#if 1
 	vec3 csEndPoint = csOrig + csDir * rayLength;
 
 	// Project into homogeneous clip space.
@@ -142,7 +140,6 @@ bool traceScreenSpaceRay(
 		((PQk.x * stepDir) <= end)	// 終点に到達したか.
 		&& (stepCount < maxSteps)	// 最大処理数に到達したか.
 		&& !intersectsDepthBuffer(sceneZMax, rayZMin, rayZMax)	// レイが衝突したか.
-		//&& ((rayZMax < sceneZMax - zThickness) || (rayZMin > sceneZMax))
 		&& (sceneZMax != 0.0);	// 何もないところに到達してないか.
 		++stepCount)
 	{
@@ -183,8 +180,6 @@ bool traceScreenSpaceRay(
 	hitPoint = vec3(sceneZMax, rayZMin, rayZMax);
 
 	return intersectsDepthBuffer(sceneZMax, rayZMin, rayZMax);
-	//return (rayZMax >= sceneZMax - zThickness) && (rayZMin < sceneZMax);
-#endif
 }
 
 void main()
@@ -200,11 +195,6 @@ void main()
 	// Screen coordinate.
 	vec4 pos = vec4(gl_FragCoord.xy / texsize, 0, 1);
 
-#if 0
-	outColor = pos;
-	outColor.z = 0;
-	outColor.w = 1;
-#else
 	// [0, 1] -> [-1, 1]
 	pos.xy = pos.xy * 2.0 - 1.0;
 
@@ -238,15 +228,11 @@ void main()
 	// Trace screen space ray.
 	bool isIntersect = traceScreenSpaceRay(refOrg, refDir, hitPixel, hitPoint);
 
-#if 1
 	vec2 uv = hitPixel / texsize.xy;
 
 	if (uv.x > 1.0 || uv.x < 0.0f || uv.y > 1.0 || uv.y < 0.0) {
 		isIntersect = false;
 	}
-#endif
-
-#if 1
 	if (isIntersect) {
 		//outColor = varColor * texture(s0, uv);
 		//vec2 uv = hitPixel / texsize.xy;
@@ -255,7 +241,4 @@ void main()
 	else {
 		outColor = vec4(1, 1, 1, 1);
 	}
-#endif
-	outColor = vec4(1, 0, 0, 1);
-#endif
 }
