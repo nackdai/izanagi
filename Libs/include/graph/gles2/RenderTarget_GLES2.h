@@ -64,6 +64,16 @@ namespace graph
 
         virtual IZ_BOOL Restore();
 
+		// ロック
+		virtual IZ_UINT Lock(
+			IZ_UINT level,
+			void** data,
+			IZ_BOOL isReadOnly,
+			IZ_BOOL isDiscard = IZ_FALSE) override;
+
+		// アンロック
+		virtual IZ_BOOL Unlock(IZ_UINT level) override;
+
     private:
         virtual TEX_HANDLE GetTexHandle()
         {
@@ -75,6 +85,9 @@ namespace graph
 
         // 本体
         GLuint m_Texture;
+
+		void* m_TemporaryData{ nullptr };
+		IZ_UINT m_allocatedSize{ 0 };
     };
 }   // namespace graph
 }   // namespace izanagi

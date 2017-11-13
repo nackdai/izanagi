@@ -253,6 +253,9 @@ namespace graph
         IZ_BOOL isReadOnly,
         IZ_BOOL isDiscard/*= IZ_FALSE*/)
     {
+		// TODO
+		// Not support read...
+
         IZ_ASSERT(m_Texture != 0);
 
         // レベル指定

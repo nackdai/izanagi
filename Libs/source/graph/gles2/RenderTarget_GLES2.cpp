@@ -2,6 +2,7 @@
 #include "graph/ParamValueConverter.h"
 #include "graph/gles2/GraphicsDevice_GLES2.h"
 #include "graph/gles2/Texture_GLES2.h"
+#include "graph/GraphUtil.h"
 
 namespace izanagi
 {
@@ -24,6 +25,9 @@ namespace graph
                 CALL_GL_API(::glDeleteTextures(1, &m_Texture));
             }
         }
+
+		FREE(m_Allocator, m_TemporaryData);
+		m_allocatedSize = 0;
 
         SAFE_RELEASE(m_Device);
     }
@@ -289,5 +293,69 @@ namespace graph
     {
         return IZ_TRUE;
     }
+
+	// ロック
+	IZ_UINT CRenderTargetGLES2::Lock(
+		IZ_UINT level,
+		void** data,
+		IZ_BOOL isReadOnly,
+		IZ_BOOL isDiscard/*= IZ_FALSE*/)
+	{
+		if (isReadOnly) {
+			auto width = GetWidth(level);
+			auto height = GetHeight(level);
+
+			auto fmt = GetPixelFormat();
+			auto bpp = CGraphUtil::GetBPP(fmt);
+			auto pitch = width * bpp;
+			auto size = pitch * GetHeight(level);
+
+			if (m_TemporaryData == IZ_NULL) {
+				m_TemporaryData = ALLOC(m_Allocator, size);
+			}
+			else if (size > m_allocatedSize) {
+				m_TemporaryData = REALLOC(m_Allocator, m_TemporaryData, size);
+			}
+
+			IZ_ASSERT(m_TemporaryData);
+
+			m_allocatedSize = size;
+
+			GLenum glInternal, glFormat, glType;
+
+			CTargetParamValueConverter::ConvAbstractToTarget_PixelFormat(
+				fmt,
+				glInternal,
+				glFormat,
+				glType);
+
+			// コンストラクタで現在のテクスチャを保持しつつ設定したいテクスチャにバインド、デストラクタで元に戻す.
+			CTextureOperator texOp(m_Device, m_Texture);
+
+			CALL_GL_API(::glGetTexImage(
+				GL_TEXTURE_2D,
+				level,
+				glFormat,
+				glType,
+				m_TemporaryData));
+
+			*data = m_TemporaryData;
+
+			return pitch;
+		}
+		else {
+			// Not support...
+			IZ_ASSERT(false);
+			return 0;
+		}
+	}
+
+	// アンロック
+	IZ_BOOL CRenderTargetGLES2::Unlock(IZ_UINT level)
+	{
+		// TODO
+		// Support only for reading...
+		return IZ_TRUE;
+	}
 }   // namespace graph
 }   // namespace izanagi
