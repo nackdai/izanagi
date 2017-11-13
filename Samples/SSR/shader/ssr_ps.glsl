@@ -25,6 +25,7 @@ uniform float nearPlaneZ;
 uniform float maxDistance;
 uniform float zThickness;
 uniform int maxSteps;
+uniform float stride;
 
 float squaredLength(vec2 a, vec2 b)
 {
@@ -42,7 +43,6 @@ bool intersectsDepthBuffer(float z, float minZ, float maxZ)
 	*/
 
 	// 指定範囲内（レイの始点と終点）に z があれば、それはレイにヒットしたとみなせる.
-
 	z += zThickness;
 	return (maxZ >= z) && (minZ - zThickness <= z);
 }
@@ -58,6 +58,7 @@ bool traceScreenSpaceRay(
 		? (nearPlaneZ - csOrig.z) / csDir.z
 		: maxDistance;
 
+#if 1
 	vec3 csEndPoint = csOrig + csDir * rayLength;
 
 	// Project into homogeneous clip space.
@@ -75,11 +76,14 @@ bool traceScreenSpaceRay(
 	vec2 P0 = H0.xy * k0;
 	vec2 P1 = H1.xy * k1;
 
-	ivec2 texsize = textureSize(s0, 0);
-	vec2 texel = vec2(1) / texsize;
+	// [-1, 1] -> [0, 1]
+	P0 = P0 * 0.5 + 0.5;
+	P1 = P1 * 0.5 + 0.5;
 
-	P0 *= vec2(texsize.x, texsize.y);
-	P1 *= vec2(texsize.x, texsize.y);
+	ivec2 texsize = textureSize(s0, 0);
+
+	P0 *= vec2(texsize.xy);
+	P1 *= vec2(texsize.xy);
 
 	// If the line is degenerate, make it cover at least one pixel to avoid handling zero-pixel extent as a special case later.
 	// 2点間の距離がある程度離れるようにする.
@@ -122,6 +126,10 @@ bool traceScreenSpaceRay(
 	
 	float sceneZMax = rayZMax + 100.0f;
 
+	dP *= stride;
+	dQ *= stride;
+	dk *= stride;
+
 	vec4 PQk = vec4(P0.x, P0.y, Q0.z, k0);
 	vec4 dPQk = vec4(dP.x, dP.y, dQ.z, dk);
 	vec3 Q = Q0;
@@ -129,7 +137,8 @@ bool traceScreenSpaceRay(
 	for (;
 		((PQk.x * stepDir) <= end)	// 終点に到達したか.
 		&& (stepCount < maxSteps)	// 最大処理数に到達したか.
-		&& !intersectsDepthBuffer(sceneZMax, rayZMin, rayZMax)	// レイが衝突したか.
+		//&& !intersectsDepthBuffer(sceneZMax, rayZMin, rayZMax)	// レイが衝突したか.
+		&& ((rayZMax < sceneZMax - zThickness) || (rayZMin > sceneZMax))
 		&& (sceneZMax != 0.0);	// 何もないところに到達してないか.
 		++stepCount)
 	{
@@ -154,7 +163,7 @@ bool traceScreenSpaceRay(
 		hitPixel = permute ? PQk.yx : PQk.xy;
 
 		// シーン内の現時点での深度値を取得.
-		sceneZMax = texture(s1, hitPixel * texel).r;
+		sceneZMax = texelFetch(s1, ivec2(hitPixel), 0).r;
 
 		PQk += dPQk;
 	}
@@ -165,7 +174,9 @@ bool traceScreenSpaceRay(
 	// Qはw成分で除算されていて、そこに1 / wで除算するので、元（View座標系）に戻ることになる.
 	hitPoint = Q * (1.0f / PQk.w);
 
-	return intersectsDepthBuffer(sceneZMax, rayZMin, rayZMax);
+	//return intersectsDepthBuffer(sceneZMax, rayZMin, rayZMax);
+	return (rayZMax >= sceneZMax - zThickness) && (rayZMin < sceneZMax);
+#endif
 }
 
 void main()
@@ -181,6 +192,11 @@ void main()
 	// Screen coordinate.
 	vec4 pos = vec4(gl_FragCoord.xy / texsize, 0, 1);
 
+#if 0
+	outColor = pos;
+	outColor.z = 0;
+	outColor.w = 1;
+#else
 	// [0, 1] -> [-1, 1]
 	pos.xy = pos.xy * 2.0 - 1.0;
 
@@ -214,16 +230,21 @@ void main()
 	// Trace screen space ray.
 	bool isIntersect = traceScreenSpaceRay(refOrg, refDir, hitPixel, hitPoint);
 
+#if 1
 	vec2 uv = hitPixel / texsize.xy;
 
 	if (uv.x > 1.0 || uv.x < 0.0f || uv.y > 1.0 || uv.y < 0.0) {
 		isIntersect = false;
 	}
+#endif
 
 	if (isIntersect) {
-		outColor = varColor * texture(s0, uv);
+		//outColor = varColor * texture(s0, uv);
+		//vec2 uv = hitPixel / texsize.xy;
+		outColor = vec4(1, 0, 0, 1);
 	}
 	else {
 		outColor = varColor;
 	}
+#endif
 }

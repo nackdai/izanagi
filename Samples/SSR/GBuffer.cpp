@@ -56,7 +56,7 @@ void GBuffer::bindForSSRPass(izanagi::graph::CGraphicsDevice* device)
 {
     izanagi::engine::GBuffer::BindOp ops[] = {
         { Color, 0, "s0" },
-        { Depth, 2, "s1" },
+        { Depth, 1, "s1" },
     };
 
     m_gbuffer->bind(

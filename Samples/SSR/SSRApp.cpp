@@ -6,6 +6,7 @@
 static float maxDistance = 1000.0f;
 static float zThickness = 1.0f;
 static int maxSteps = 25;
+static float stride = 3.0f;
 
 SSRApp::SSRApp()
 {
@@ -84,7 +85,7 @@ IZ_BOOL SSRApp::InitInternal(
 
     // カメラ
     camera.Init(
-        izanagi::math::CVector4(0.0f, 0.0f, 100.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 100.0f, -100.0f, 1.0f),
         izanagi::math::CVector4(0.0f, 0.0f, 0.0f, 1.0f),
         izanagi::math::CVector4(0.0f, 1.0f, 0.0f, 1.0f),
         1.0f,
@@ -144,13 +145,15 @@ void SSRApp::renderToGBufferPass(izanagi::graph::CGraphicsDevice* device)
     m_gbuffer.beginGeometryPass(device);
 
 	auto hL2W = shd->GetHandleByName("mtxL2W");
+	auto hIsWriteColor = shd->GetHandleByName("isWriteColor");
 
 	// Sphere.
 	{
 		izanagi::math::CMatrix44 mtxL2W;
-		mtxL2W.SetTrans(izanagi::math::CVector4(0.0f, 10.0f, 0.0f));
+		mtxL2W.SetTrans(izanagi::math::CVector4(0.0f, 10.0f, 10.0f));
 
 		shd->SetMatrix(device, hL2W, mtxL2W);
+		shd->SetBool(device, hIsWriteColor, IZ_TRUE);
 
 		m_sphere->Draw(device);
 	}
@@ -158,12 +161,36 @@ void SSRApp::renderToGBufferPass(izanagi::graph::CGraphicsDevice* device)
 	// Cube.
 	{
 		izanagi::math::CMatrix44 mtxL2W;
-		mtxL2W.SetTrans(izanagi::math::CVector4(20.0f, 10.0f, 0.0f));
+		mtxL2W.SetTrans(izanagi::math::CVector4(20.0f, 10.0f, 10.0f));
 
 		shd->SetMatrix(device, hL2W, mtxL2W);
+		shd->SetBool(device, hIsWriteColor, IZ_TRUE);
 
 		m_cube->Draw(device);
 	}
+
+	device->SaveRenderState();
+
+	// Plane.
+	{
+		izanagi::math::CMatrix44 mtxL2W;
+		shd->SetMatrix(device, hL2W, mtxL2W);
+
+		// NOTE
+		// あとでSSRとして描画するので、カラーは出力しない.
+		shd->SetBool(device, hIsWriteColor, IZ_FALSE);
+
+		// NOTE
+		// G-Bufferに深度値のみを出力したい.
+		// あとでSSRとして描画するので、Z-bufferへの深度値書き込みをしない.
+		device->SetRenderState(
+			izanagi::graph::E_GRAPH_RS_ZWRITEENABLE,
+			IZ_FALSE);
+
+		m_plane->Draw(device);
+	}
+
+	device->LoadRenderState();
 
     m_gbuffer.endGeometryPass(device);
 }
@@ -186,13 +213,22 @@ void SSRApp::renderToScreenPass(izanagi::graph::CGraphicsDevice* device)
 	device->End2D();
 }
 
+using vec3 = izanagi::math::CVector3;
+using vec4 = izanagi::math::CVector4;
+
+float squaredLength(vec3 a, vec3 b)
+{
+	a -= b;
+	return a.Dot(a);
+}
+
 void SSRApp::renderSSRPass(izanagi::graph::CGraphicsDevice* device)
 {
 	const auto& camera = GetCamera();
 
-	const auto& mtxW2C = camera.GetParam().mtxW2C;
-	const auto& mtxW2V = camera.GetParam().mtxW2V;
-	const auto& mtxV2C = camera.GetParam().mtxV2C;
+	const izanagi::math::CMatrix44 mtxW2C = camera.GetParam().mtxW2C;
+	const izanagi::math::CMatrix44 mtxW2V = camera.GetParam().mtxW2V;
+	const izanagi::math::CMatrix44 mtxV2C = camera.GetParam().mtxV2C;
 
 	izanagi::math::CMatrix44 mtxC2V(mtxV2C);
 	mtxC2V.Inverse();
@@ -203,6 +239,187 @@ void SSRApp::renderSSRPass(izanagi::graph::CGraphicsDevice* device)
 	const auto& camPos = camera.GetParam().pos;
 	float nearPlaneZ = camera.GetParam().cameraNear;
 
+#if 0
+	vec3 normal = vec3(0, 1, 0);
+	//float depth = 141.535f;
+
+	auto D = mtxW2C * vec4(0, 0, 0, 1);
+	float depth = D.w;
+
+	// Ray origin is camera origin.
+	vec3 rayOrg = camPos.xyz;
+
+	// Screen coordinate.
+	vec4 pos = vec4(0.5, 0.5, 0, 1);
+
+	// [0, 1] -> [-1, 1]
+	pos.x = pos.x * 2.0 - 1.0;
+	pos.y = pos.y * 2.0 - 1.0;
+
+	// Screen-space -> Clip-space
+	pos.x *= depth;
+	pos.y *= depth;
+
+	// Clip-space -> View-space
+	pos = mtxC2V * pos;
+	pos.z = depth;
+
+	// View-space -> World-space.
+	vec3 worldPos = (mtxV2W * vec4(pos.xyz, 1)).xyz;
+
+	// Compute ray direction.
+	// From ray origin to world position.
+	vec3 rayDir = worldPos - rayOrg;
+	rayDir.Normalize();
+
+	// Compute reflection vector.
+	vec3 refDir = rayDir - 2.0 * normal.Dot(rayDir) * normal;
+	refDir.Normalize();
+
+	// Reflection vector origin is world position.
+	vec3 refOrg = worldPos;
+
+	// Transform to view coordinate.
+	refOrg = (mtxW2V * vec4(refOrg, 1)).xyz;
+	refDir = (mtxW2V * vec4(refDir, 0)).xyz;
+
+	vec3 hitPixel = vec3(0, 0, 0);
+	vec3 hitPoint = vec3(0, 0, 0);
+
+	auto csOrig = refOrg;
+	auto csDir = refDir;
+
+	// Clip to the near plane.
+	float rayLength = (csOrig.z + csDir.z * maxDistance) < nearPlaneZ
+		? (nearPlaneZ - csOrig.z) / csDir.z
+		: maxDistance;
+
+	vec3 csEndPoint = csOrig + csDir * rayLength;
+
+	// Project into homogeneous clip space.
+	vec4 H0 = mtxV2C * vec4(csOrig, 1);
+	vec4 H1 = mtxV2C * vec4(csEndPoint, 1);
+
+	float k0 = 1.0 / H0.w;
+	float k1 = 1.0 / H1.w;
+
+	// The interpolated homogeneous version of the camera-space points.
+	vec3 Q0 = csOrig * k0;
+	vec3 Q1 = csEndPoint * k1;
+
+	// Screen space point.
+	vec3 P0 = vec3(H0.x * k0, H0.y * k0, 0);
+	vec3 P1 = vec3(H1.x * k1, H1.y * k1, 0);
+
+	// [-1, 1] -> [0, 1]
+	P0 = P0 * 0.5 + 0.5;
+	P1 = P1 * 0.5 + 0.5;
+
+	P0.x *= 1280;
+	P0.y *= 720;
+
+	P1.x *= 1280;
+	P1.y *= 720;
+
+	// If the line is degenerate, make it cover at least one pixel to avoid handling zero-pixel extent as a special case later.
+	// 2点間の距離がある程度離れるようにする.
+	P1 += squaredLength(P0, P1) < 0.0001
+		? vec3(0.01, 0.01, 0)
+		: vec3(0, 0, 0);
+	vec3 delta = P1 - P0;
+
+	// Permute so that the primary iteration is in x to collapse all quadrant-specific DDA cases later.
+	bool permute = false;
+	if (abs(delta.x) < abs(delta.y))
+	{
+		permute = true;
+
+		std::swap(delta.x, delta.y);
+		std::swap(P0.x, P0.y);
+		std::swap(P1.x, P1.y);
+	}
+
+	float stepDir = 0;
+	if (delta.x < 0) {
+		stepDir = -1;
+	}
+	else if (delta.x > 0) {
+		stepDir = 1;
+	}
+
+	float invdx = stepDir / delta.x;
+
+	// Track the derivatives of Q and k.
+	vec3 dQ = (Q1 - Q0) / invdx;
+	float dk = (k1 - k0) / invdx;
+
+	// y is slope.
+	// slope = (y1 - y0) / (x1 - x0)
+	vec3 dP = vec3(stepDir, delta.y / invdx, 0);
+
+	// Adjust end condition for iteration direction
+	float end = P1.x * stepDir;
+
+	int stepCount = 0;
+
+	float prevZMaxEstimate = csOrig.z;
+
+	float rayZMin = prevZMaxEstimate;
+	float rayZMax = prevZMaxEstimate;
+
+	float sceneZMax = rayZMax + 100.0f;
+
+	dP *= stride;
+	dQ *= stride;
+	dk *= stride;
+
+	vec4 PQk = vec4(P0.x, P0.y, Q0.z, k0);
+	vec4 dPQk = vec4(dP.x, dP.y, dQ.z, dk);
+	vec3 Q = Q0;
+
+	for (;
+		((PQk.x * stepDir) <= end)	// 終点に到達したか.
+		&& (stepCount < maxSteps)	// 最大処理数に到達したか.
+									//&& !intersectsDepthBuffer(sceneZMax, rayZMin, rayZMax)	// レイが衝突したか.
+		&& ((rayZMax < sceneZMax - zThickness) || (rayZMin > sceneZMax))
+		&& (sceneZMax != 0.0);	// 何もないところに到達してないか.
+		++stepCount)
+	{
+		// 前回のZの最大値が次の最小値になる.
+		rayZMin = prevZMaxEstimate;
+
+		// 次のZの最大値を計算する.
+		// ただし、1/2 pixel分 余裕を持たせる.
+		// Qはw成分で除算されていて、そこに1/wで除算するので、元（View座標系）に戻ることになる.
+		rayZMax = (PQk.z + dPQk.z * 0.5) / (PQk.w + dPQk.w * 0.5);
+
+		// 次に向けて最大値を保持.
+		prevZMaxEstimate = rayZMax;
+
+		if (rayZMin > rayZMax) {
+			// 念のため.
+			float tmp = rayZMin;
+			rayZMin = rayZMax;
+			rayZMax = tmp;
+		}
+
+		hitPixel = permute ? vec3(PQk.y, PQk.x, 0) : vec3(PQk.x, PQk.y, 0);
+
+		// シーン内の現時点での深度値を取得.
+		//sceneZMax = texelFetch(s1, ivec2(hitPixel), 0).r;
+
+		PQk += dPQk;
+	}
+
+	// Advance Q based on the number of steps
+	Q.x += dQ.x * stepCount;
+	Q.y += dQ.y * stepCount;
+
+	// Qはw成分で除算されていて、そこに1 / wで除算するので、元（View座標系）に戻ることになる.
+	hitPoint = Q * (1.0f / PQk.w);
+
+	auto isect = (rayZMax >= sceneZMax - zThickness) && (rayZMin < sceneZMax);
+#else
 	auto* shd = m_shdSSRPass.m_program;
 
 	device->SetShaderProgram(shd);
@@ -241,9 +458,13 @@ void SSRApp::renderSSRPass(izanagi::graph::CGraphicsDevice* device)
 	auto hMaxSteps = shd->GetHandleByName("maxSteps");
 	shd->SetInt(device, hMaxSteps, maxSteps);
 
+	auto hStride = shd->GetHandleByName("stride");
+	shd->SetFloat(device, hStride, stride);
+
 	m_gbuffer.bindForSSRPass(device);
 
 	m_plane->Draw(device);
+#endif
 }
 
 void SSRApp::ReleaseInternal()
