@@ -24,6 +24,13 @@ IZ_BOOL GBuffer::init(
         izanagi::graph::E_GRAPH_PIXEL_FMT_R32F);
     VRETURN(std::get<1>(res) && std::get<0>(res) == Depth);
 
+	// Debug.
+	res = m_gbuffer->addBuffer(
+		device,
+		width, height,
+		izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA32F);
+	VRETURN(std::get<1>(res) && std::get<0>(res) == Debug);
+
     return IZ_TRUE;
 }
 
@@ -64,11 +71,28 @@ void GBuffer::bindForSSRPass(izanagi::graph::CGraphicsDevice* device)
         ops, COUNTOF(ops));
 }
 
+void GBuffer::beginDebug(izanagi::graph::CGraphicsDevice* device)
+{
+	IZ_UINT targets[] = {
+		Debug,
+	};
+
+	m_gbuffer->begin(
+		device,
+		targets, COUNTOF(targets));
+}
+
+void GBuffer::endDebug(izanagi::graph::CGraphicsDevice* device)
+{
+	m_gbuffer->end(device);
+}
+
 void GBuffer::drawBuffers(izanagi::graph::CGraphicsDevice* device)
 {
     IZ_UINT targets[] = {
         Color,
         Depth,
+		Debug,
     };
 
     m_gbuffer->dumpBuffers(

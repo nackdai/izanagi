@@ -43,8 +43,9 @@ bool intersectsDepthBuffer(float z, float minZ, float maxZ)
 	*/
 
 	// 指定範囲内（レイの始点と終点）に z があれば、それはレイにヒットしたとみなせる.
-	z += zThickness;
-	return (maxZ >= z) && (minZ - zThickness <= z);
+	//z += zThickness;
+	//return (maxZ >= z) && (minZ - zThickness <= z);
+	return (minZ <= z) && (z <= maxZ);
 }
 
 bool traceScreenSpaceRay(
@@ -84,6 +85,9 @@ bool traceScreenSpaceRay(
 
 	P0 *= vec2(texsize.xy);
 	P1 *= vec2(texsize.xy);
+
+	P1.x = min(max(P1.x, 0), texsize.x);
+	P1.y = min(max(P1.y, 0), texsize.y);
 
 	// If the line is degenerate, make it cover at least one pixel to avoid handling zero-pixel extent as a special case later.
 	// 2点間の距離がある程度離れるようにする.
@@ -130,15 +134,15 @@ bool traceScreenSpaceRay(
 	dQ *= stride;
 	dk *= stride;
 
-	vec4 PQk = vec4(P0.x, P0.y, Q0.z, k0);
-	vec4 dPQk = vec4(dP.x, dP.y, dQ.z, dk);
+	vec4 PQk = vec4(P0, Q0.z, k0);
+	vec4 dPQk = vec4(dP, dQ.z, dk);
 	vec3 Q = Q0;
 
 	for (;
 		((PQk.x * stepDir) <= end)	// 終点に到達したか.
 		&& (stepCount < maxSteps)	// 最大処理数に到達したか.
-		//&& !intersectsDepthBuffer(sceneZMax, rayZMin, rayZMax)	// レイが衝突したか.
-		&& ((rayZMax < sceneZMax - zThickness) || (rayZMin > sceneZMax))
+		&& !intersectsDepthBuffer(sceneZMax, rayZMin, rayZMax)	// レイが衝突したか.
+		//&& ((rayZMax < sceneZMax - zThickness) || (rayZMin > sceneZMax))
 		&& (sceneZMax != 0.0);	// 何もないところに到達してないか.
 		++stepCount)
 	{
@@ -162,6 +166,8 @@ bool traceScreenSpaceRay(
 
 		hitPixel = permute ? PQk.yx : PQk.xy;
 
+		//hitPixel.y = texsize.y - hitPixel.y;
+
 		// シーン内の現時点での深度値を取得.
 		sceneZMax = texelFetch(s1, ivec2(hitPixel), 0).r;
 
@@ -174,8 +180,10 @@ bool traceScreenSpaceRay(
 	// Qはw成分で除算されていて、そこに1 / wで除算するので、元（View座標系）に戻ることになる.
 	hitPoint = Q * (1.0f / PQk.w);
 
-	//return intersectsDepthBuffer(sceneZMax, rayZMin, rayZMax);
-	return (rayZMax >= sceneZMax - zThickness) && (rayZMin < sceneZMax);
+	hitPoint = vec3(sceneZMax, rayZMin, rayZMax);
+
+	return intersectsDepthBuffer(sceneZMax, rayZMin, rayZMax);
+	//return (rayZMax >= sceneZMax - zThickness) && (rayZMin < sceneZMax);
 #endif
 }
 
@@ -238,13 +246,16 @@ void main()
 	}
 #endif
 
+#if 1
 	if (isIntersect) {
 		//outColor = varColor * texture(s0, uv);
 		//vec2 uv = hitPixel / texsize.xy;
-		outColor = vec4(1, 0, 0, 1);
+		outColor = vec4(1, 1, 0, 1);
 	}
 	else {
-		outColor = varColor;
+		outColor = vec4(1, 1, 1, 1);
 	}
+#endif
+	outColor = vec4(1, 0, 0, 1);
 #endif
 }

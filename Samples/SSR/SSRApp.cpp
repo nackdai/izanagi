@@ -5,8 +5,8 @@
 
 static float maxDistance = 1000.0f;
 static float zThickness = 1.0f;
-static int maxSteps = 25;
-static float stride = 3.0f;
+static int maxSteps = 1000;
+static float stride = 5.0f;
 
 SSRApp::SSRApp()
 {
@@ -222,6 +222,20 @@ float squaredLength(vec3 a, vec3 b)
 	return a.Dot(a);
 }
 
+bool intersectsDepthBuffer(float z, float minZ, float maxZ)
+{
+	/*
+	* Based on how far away from the camera the depth is,
+	* adding a bit of extra thickness can help improve some
+	* artifacts. Driving this value up too high can cause
+	* artifacts of its own.
+	*/
+
+	// 指定範囲内（レイの始点と終点）に z があれば、それはレイにヒットしたとみなせる.
+	z += zThickness;
+	return (maxZ >= z) && (minZ - zThickness <= z);
+}
+
 void SSRApp::renderSSRPass(izanagi::graph::CGraphicsDevice* device)
 {
 	const auto& camera = GetCamera();
@@ -239,186 +253,235 @@ void SSRApp::renderSSRPass(izanagi::graph::CGraphicsDevice* device)
 	const auto& camPos = camera.GetParam().pos;
 	float nearPlaneZ = camera.GetParam().cameraNear;
 
-#if 0
+#if 1
+	auto rt = m_gbuffer.getBuffer(1);
+
+	float* data;
+	auto pitch = rt->Lock(0, (void**)&data, IZ_TRUE);
+	rt->Unlock(0);
+
 	vec3 normal = vec3(0, 1, 0);
 	//float depth = 141.535f;
 
-	auto D = mtxW2C * vec4(0, 0, 0, 1);
-	float depth = D.w;
+	izanagi::math::CMatrix44 mtxTex;
+	mtxTex._00 = 0.5;
+	mtxTex._11 = 0.5;
+	mtxTex._30 = 0.5;
+	mtxTex._31 = 0.5;
 
-	// Ray origin is camera origin.
-	vec3 rayOrg = camPos.xyz;
+	for (int y = 0; y < 720; y++) {
+		for (int x = 0; x < 1280; x++) {
+			auto D = mtxW2C * vec4(0, 0, 0, 1);
+			//float depth = D.w;
 
-	// Screen coordinate.
-	vec4 pos = vec4(0.5, 0.5, 0, 1);
+			x = 640;
+			y = 360;
 
-	// [0, 1] -> [-1, 1]
-	pos.x = pos.x * 2.0 - 1.0;
-	pos.y = pos.y * 2.0 - 1.0;
+			int yy = 719 - y;
 
-	// Screen-space -> Clip-space
-	pos.x *= depth;
-	pos.y *= depth;
+			if (x == 261 && y == 93) {
+				int hoge = 0;
+			}
 
-	// Clip-space -> View-space
-	pos = mtxC2V * pos;
-	pos.z = depth;
+			float depth = data[yy * 1280 + x];
 
-	// View-space -> World-space.
-	vec3 worldPos = (mtxV2W * vec4(pos.xyz, 1)).xyz;
+			if (depth == 0.0f) {
+				continue;
+			}
 
-	// Compute ray direction.
-	// From ray origin to world position.
-	vec3 rayDir = worldPos - rayOrg;
-	rayDir.Normalize();
+			// Ray origin is camera origin.
+			vec3 rayOrg = camPos.xyz;
 
-	// Compute reflection vector.
-	vec3 refDir = rayDir - 2.0 * normal.Dot(rayDir) * normal;
-	refDir.Normalize();
+			// Screen coordinate.
+			vec4 pos = vec4(x / 1280.0f, yy / 720.0f, 0, 1);
 
-	// Reflection vector origin is world position.
-	vec3 refOrg = worldPos;
+			// [0, 1] -> [-1, 1]
+			pos.x = pos.x * 2.0 - 1.0;
+			pos.y = pos.y * 2.0 - 1.0;
 
-	// Transform to view coordinate.
-	refOrg = (mtxW2V * vec4(refOrg, 1)).xyz;
-	refDir = (mtxW2V * vec4(refDir, 0)).xyz;
+			// Screen-space -> Clip-space
+			pos.x *= depth;
+			pos.y *= depth;
 
-	vec3 hitPixel = vec3(0, 0, 0);
-	vec3 hitPoint = vec3(0, 0, 0);
+			// Clip-space -> View-space
+			pos = mtxC2V * pos;
+			pos.z = depth;
 
-	auto csOrig = refOrg;
-	auto csDir = refDir;
+			// View-space -> World-space.
+			vec3 worldPos = (mtxV2W * vec4(pos.xyz, 1)).xyz;
 
-	// Clip to the near plane.
-	float rayLength = (csOrig.z + csDir.z * maxDistance) < nearPlaneZ
-		? (nearPlaneZ - csOrig.z) / csDir.z
-		: maxDistance;
+			// Compute ray direction.
+			// From ray origin to world position.
+			vec3 rayDir = worldPos - rayOrg;
+			rayDir.Normalize();
 
-	vec3 csEndPoint = csOrig + csDir * rayLength;
+			// Compute reflection vector.
+			vec3 refDir = rayDir - 2.0 * normal.Dot(rayDir) * normal;
+			refDir.Normalize();
 
-	// Project into homogeneous clip space.
-	vec4 H0 = mtxV2C * vec4(csOrig, 1);
-	vec4 H1 = mtxV2C * vec4(csEndPoint, 1);
+			// Reflection vector origin is world position.
+			vec3 refOrg = worldPos;
 
-	float k0 = 1.0 / H0.w;
-	float k1 = 1.0 / H1.w;
+			// Transform to view coordinate.
+			refOrg = (mtxW2V * vec4(refOrg, 1)).xyz;
+			refDir = (mtxW2V * vec4(refDir, 0)).xyz;
 
-	// The interpolated homogeneous version of the camera-space points.
-	vec3 Q0 = csOrig * k0;
-	vec3 Q1 = csEndPoint * k1;
+			vec3 hitPixel = vec3(0, 0, 0);
+			vec3 hitPoint = vec3(0, 0, 0);
 
-	// Screen space point.
-	vec3 P0 = vec3(H0.x * k0, H0.y * k0, 0);
-	vec3 P1 = vec3(H1.x * k1, H1.y * k1, 0);
+			auto csOrig = refOrg;
+			auto csDir = refDir;
 
-	// [-1, 1] -> [0, 1]
-	P0 = P0 * 0.5 + 0.5;
-	P1 = P1 * 0.5 + 0.5;
+			// Clip to the near plane.
+			float rayLength = (csOrig.z + csDir.z * maxDistance) < nearPlaneZ
+				? (nearPlaneZ - csOrig.z) / csDir.z
+				: maxDistance;
 
-	P0.x *= 1280;
-	P0.y *= 720;
+			vec3 csEndPoint = csOrig + csDir * rayLength;
 
-	P1.x *= 1280;
-	P1.y *= 720;
+			// Project into homogeneous clip space.
+			vec4 H0 = mtxV2C * vec4(csOrig, 1);
+			vec4 H1 = mtxV2C * vec4(csEndPoint, 1);
 
-	// If the line is degenerate, make it cover at least one pixel to avoid handling zero-pixel extent as a special case later.
-	// 2点間の距離がある程度離れるようにする.
-	P1 += squaredLength(P0, P1) < 0.0001
-		? vec3(0.01, 0.01, 0)
-		: vec3(0, 0, 0);
-	vec3 delta = P1 - P0;
+			//H0 = mtxTex * H0;
+			//H1 = mtxTex * H1;
 
-	// Permute so that the primary iteration is in x to collapse all quadrant-specific DDA cases later.
-	bool permute = false;
-	if (abs(delta.x) < abs(delta.y))
-	{
-		permute = true;
+			float k0 = 1.0 / H0.w;
+			float k1 = 1.0 / H1.w;
 
-		std::swap(delta.x, delta.y);
-		std::swap(P0.x, P0.y);
-		std::swap(P1.x, P1.y);
-	}
+			// The interpolated homogeneous version of the camera-space points.
+			vec3 Q0 = csOrig * k0;
+			vec3 Q1 = csEndPoint * k1;
 
-	float stepDir = 0;
-	if (delta.x < 0) {
-		stepDir = -1;
-	}
-	else if (delta.x > 0) {
-		stepDir = 1;
-	}
+			// Screen space point.
+			vec3 P0 = vec3(H0.x * k0, H0.y * k0, 0);
+			vec3 P1 = vec3(H1.x * k1, H1.y * k1, 0);
 
-	float invdx = stepDir / delta.x;
+			// [-1, 1] -> [0, 1]
+			P0 = P0 * 0.5 + 0.5;
+			P1 = P1 * 0.5 + 0.5;
 
-	// Track the derivatives of Q and k.
-	vec3 dQ = (Q1 - Q0) / invdx;
-	float dk = (k1 - k0) / invdx;
+			P0.x *= 1280;
+			P0.y *= 720;
 
-	// y is slope.
-	// slope = (y1 - y0) / (x1 - x0)
-	vec3 dP = vec3(stepDir, delta.y / invdx, 0);
+			P1.x *= 1280;
+			P1.y *= 720;
 
-	// Adjust end condition for iteration direction
-	float end = P1.x * stepDir;
+			P1.x = izanagi::math::CMath::Clamp(P1.x, 0.0f, 1280.0f);
+			P1.y = izanagi::math::CMath::Clamp(P1.y, 0.0f, 720.0f);
 
-	int stepCount = 0;
+			// If the line is degenerate, make it cover at least one pixel to avoid handling zero-pixel extent as a special case later.
+			// 2点間の距離がある程度離れるようにする.
+			P1 += squaredLength(P0, P1) < 0.0001
+				? vec3(0.01, 0.01, 0)
+				: vec3(0, 0, 0);
+			vec3 delta = P1 - P0;
 
-	float prevZMaxEstimate = csOrig.z;
+			// Permute so that the primary iteration is in x to collapse all quadrant-specific DDA cases later.
+			bool permute = false;
+			if (abs(delta.x) < abs(delta.y))
+			{
+				permute = true;
 
-	float rayZMin = prevZMaxEstimate;
-	float rayZMax = prevZMaxEstimate;
+				std::swap(delta.x, delta.y);
+				std::swap(P0.x, P0.y);
+				std::swap(P1.x, P1.y);
+			}
 
-	float sceneZMax = rayZMax + 100.0f;
+			float stepDir = 0;
+			if (delta.x < 0) {
+				stepDir = -1;
+			}
+			else if (delta.x > 0) {
+				stepDir = 1;
+			}
 
-	dP *= stride;
-	dQ *= stride;
-	dk *= stride;
+			float invdx = stepDir / delta.x;
 
-	vec4 PQk = vec4(P0.x, P0.y, Q0.z, k0);
-	vec4 dPQk = vec4(dP.x, dP.y, dQ.z, dk);
-	vec3 Q = Q0;
+			// Track the derivatives of Q and k.
+			vec3 dQ = (Q1 - Q0) / invdx;
+			float dk = (k1 - k0) / invdx;
 
-	for (;
-		((PQk.x * stepDir) <= end)	// 終点に到達したか.
-		&& (stepCount < maxSteps)	// 最大処理数に到達したか.
-									//&& !intersectsDepthBuffer(sceneZMax, rayZMin, rayZMax)	// レイが衝突したか.
-		&& ((rayZMax < sceneZMax - zThickness) || (rayZMin > sceneZMax))
-		&& (sceneZMax != 0.0);	// 何もないところに到達してないか.
-		++stepCount)
-	{
-		// 前回のZの最大値が次の最小値になる.
-		rayZMin = prevZMaxEstimate;
+			// y is slope.
+			// slope = (y1 - y0) / (x1 - x0)
+			vec3 dP = vec3(stepDir, delta.y / invdx, 0);
 
-		// 次のZの最大値を計算する.
-		// ただし、1/2 pixel分 余裕を持たせる.
-		// Qはw成分で除算されていて、そこに1/wで除算するので、元（View座標系）に戻ることになる.
-		rayZMax = (PQk.z + dPQk.z * 0.5) / (PQk.w + dPQk.w * 0.5);
+			// Adjust end condition for iteration direction
+			float end = P1.x * stepDir;
 
-		// 次に向けて最大値を保持.
-		prevZMaxEstimate = rayZMax;
+			int stepCount = 0;
 
-		if (rayZMin > rayZMax) {
-			// 念のため.
-			float tmp = rayZMin;
-			rayZMin = rayZMax;
-			rayZMax = tmp;
+			float prevZMaxEstimate = csOrig.z;
+
+			float rayZMin = prevZMaxEstimate;
+			float rayZMax = prevZMaxEstimate;
+
+			float sceneZMax = rayZMax + 100.0f;
+
+			dP *= stride;
+			dQ *= stride;
+			dk *= stride;
+
+			vec4 PQk = vec4(P0.x, P0.y, Q0.z, k0);
+			vec4 dPQk = vec4(dP.x, dP.y, dQ.z, dk);
+			vec3 Q = Q0;
+
+			for (;
+				((PQk.x * stepDir) <= end)	// 終点に到達したか.
+				&& (stepCount < maxSteps)	// 最大処理数に到達したか.
+				&& !intersectsDepthBuffer(sceneZMax, rayZMin, rayZMax)	// レイが衝突したか.
+				//&& ((rayZMax < sceneZMax - zThickness) || (rayZMin > sceneZMax))
+				&& (sceneZMax != 0.0);	// 何もないところに到達してないか.
+				++stepCount)
+			{
+				// 前回のZの最大値が次の最小値になる.
+				rayZMin = prevZMaxEstimate;
+
+				// 次のZの最大値を計算する.
+				// ただし、1/2 pixel分 余裕を持たせる.
+				// Qはw成分で除算されていて、そこに1/wで除算するので、元（View座標系）に戻ることになる.
+				rayZMax = (PQk.z + dPQk.z * 0.5) / (PQk.w + dPQk.w * 0.5);
+
+				// 次に向けて最大値を保持.
+				prevZMaxEstimate = rayZMax;
+
+				if (rayZMin > rayZMax) {
+					// 念のため.
+					float tmp = rayZMin;
+					rayZMin = rayZMax;
+					rayZMax = tmp;
+				}
+
+				hitPixel = permute ? vec3(PQk.y, PQk.x, 0) : vec3(PQk.x, PQk.y, 0);
+
+				// シーン内の現時点での深度値を取得.
+				//sceneZMax = texelFetch(s1, ivec2(hitPixel), 0).r;
+				int ix = hitPixel.x;
+				int iy = 720 - hitPixel.y;
+
+				if (ix >= 1280 || iy >= 720) {
+					break;
+				}
+				sceneZMax = data[iy * 1280 + ix];
+
+				PQk += dPQk;
+			}
+
+			// Advance Q based on the number of steps
+			Q.x += dQ.x * stepCount;
+			Q.y += dQ.y * stepCount;
+
+			// Qはw成分で除算されていて、そこに1 / wで除算するので、元（View座標系）に戻ることになる.
+			hitPoint = Q * (1.0f / PQk.w);
+
+			//auto isect = (rayZMax >= sceneZMax - zThickness) && (rayZMin < sceneZMax);
+			auto isect = intersectsDepthBuffer(sceneZMax, rayZMin, rayZMax);
+
+			if (isect) {
+				int xxx = 0;
+			}
 		}
-
-		hitPixel = permute ? vec3(PQk.y, PQk.x, 0) : vec3(PQk.x, PQk.y, 0);
-
-		// シーン内の現時点での深度値を取得.
-		//sceneZMax = texelFetch(s1, ivec2(hitPixel), 0).r;
-
-		PQk += dPQk;
 	}
-
-	// Advance Q based on the number of steps
-	Q.x += dQ.x * stepCount;
-	Q.y += dQ.y * stepCount;
-
-	// Qはw成分で除算されていて、そこに1 / wで除算するので、元（View座標系）に戻ることになる.
-	hitPoint = Q * (1.0f / PQk.w);
-
-	auto isect = (rayZMax >= sceneZMax - zThickness) && (rayZMin < sceneZMax);
 #else
 	auto* shd = m_shdSSRPass.m_program;
 
@@ -461,9 +524,13 @@ void SSRApp::renderSSRPass(izanagi::graph::CGraphicsDevice* device)
 	auto hStride = shd->GetHandleByName("stride");
 	shd->SetFloat(device, hStride, stride);
 
+	//m_gbuffer.beginDebug(device);
+
 	m_gbuffer.bindForSSRPass(device);
 
 	m_plane->Draw(device);
+
+	//m_gbuffer.endDebug(device);
 #endif
 }
 

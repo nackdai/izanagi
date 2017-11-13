@@ -22,6 +22,9 @@ public:
 
     void bindForSSRPass(izanagi::graph::CGraphicsDevice* device);
 
+	void beginDebug(izanagi::graph::CGraphicsDevice* device);
+	void endDebug(izanagi::graph::CGraphicsDevice* device);
+
     void drawBuffers(izanagi::graph::CGraphicsDevice* device);
 
 	izanagi::graph::CRenderTarget* getBuffer(IZ_UINT idx)
@@ -33,6 +36,7 @@ private:
     enum Type {
         Color,
 		Depth,
+		Debug,
 
         Num,
     };
