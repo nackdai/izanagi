@@ -70,6 +70,8 @@ namespace graph
         IZ_BOOL m_isForceUpdate{ IZ_FALSE };
 
         IZ_UINT m_prevVtxOffset{ IZ_UINT32_MAX };
+
+		CShaderProgramGLES2* m_prevProgram{ nullptr };
     };
 }   // namespace graph
 }   // namespace izanagi

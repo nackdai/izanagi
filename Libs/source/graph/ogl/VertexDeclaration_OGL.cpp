@@ -196,7 +196,12 @@ namespace graph
             if (m_prevVtxOffset != vtxOffset) {
                 m_isApplied = IZ_FALSE;
             }
+			else if (program != m_prevProgram) {
+				m_isApplied = IZ_FALSE;
+			}
         }
+
+		m_prevProgram = program;
 
         if (!m_isApplied || m_isForceUpdate) {
             for (IZ_UINT i = 0; i < m_ElemNum; i++) {
