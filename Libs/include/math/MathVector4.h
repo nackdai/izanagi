@@ -16,7 +16,13 @@ namespace math
         union {
             IZ_FLOAT v[4];
             struct {
-                IZ_FLOAT x, y, z, w;
+				union {
+					struct {
+						IZ_FLOAT x, y, z;
+					};
+					SVector3 xyz;
+				};
+				IZ_FLOAT w;
             };
             struct {
                 IZ_FLOAT r, g, b, a;

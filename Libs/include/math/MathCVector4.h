@@ -30,6 +30,14 @@ namespace math
             x = rhs.x; y = rhs.y; z = rhs.z; w = rhs.w;
         }
 
+		CVector4(const SVector3& rhs, IZ_FLOAT _w)
+		{
+			x = rhs.x;
+			y = rhs.y;
+			z = rhs.z;
+			w = _w;
+		}
+
         CVector4(IZ_FLOAT _x, IZ_FLOAT _y, IZ_FLOAT _z, IZ_FLOAT _w = 1.0f)
         {
             x = _x; y = _y; z = _z; w = _w;

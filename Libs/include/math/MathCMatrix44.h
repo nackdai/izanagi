@@ -112,6 +112,13 @@ namespace math
             return ret;
         }
 
+		SVector4 operator *(const SVector4& rhs) const
+		{
+			SVector4 ret;
+			Apply(ret, rhs, *this);
+			return ret;
+		}
+
         SMatrix44 operator +(const SMatrix44& rhs) const
         {
             SMatrix44 ret;
