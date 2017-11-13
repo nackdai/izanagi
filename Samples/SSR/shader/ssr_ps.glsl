@@ -11,7 +11,7 @@ in vec3 varNormal;
 layout(location = 0) out vec4 outColor;
 
 uniform sampler2D s0;   // color
-uniform sampler2D s1;   // depth
+uniform sampler2D s1;   // linear depth.
 
 uniform mat4 mtxW2V;	// World to View(Camera) space.
 uniform mat4 mtxV2C;	// View(Camera) to Clip space.
@@ -185,7 +185,7 @@ bool traceScreenSpaceRay(
 void main()
 {
 	vec3 normal = normalize(varNormal);
-	float depth = texelFetch(s1, ivec2(gl_FragCoord.xy), 0).r;
+	float linearDepth = texelFetch(s1, ivec2(gl_FragCoord.xy), 0).r;
 
 	ivec2 texsize = textureSize(s0, 0);
 
@@ -199,11 +199,11 @@ void main()
 	pos.xy = pos.xy * 2.0 - 1.0;
 
 	// Screen-space -> Clip-space
-	pos.xy *= depth;
+	pos.xy *= linearDepth;
 
 	// Clip-space -> View-space
 	pos = mtxC2V * pos;
-	pos.z = depth;
+	pos.z = linearDepth;
 
 	// View-space -> World-space.
 	vec3 worldPos = (mtxV2W * vec4(pos.xyz, 1)).xyz;
