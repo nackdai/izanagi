@@ -51,7 +51,7 @@ bool traceScreenSpaceRay(
 	vec3 csOrig,
 	vec3 csDir,
 	out vec2 hitPixel,
-	out vec3 hitPoint)
+	out vec4 hitPoint)
 {
 	// Clip to the near plane.
 	float rayLength = (csOrig.z + csDir.z * maxDistance) < nearPlaneZ
@@ -172,20 +172,47 @@ bool traceScreenSpaceRay(
 	Q.xy += dQ.xy * stepCount;
 
 	// Q‚Íw¬•ª‚ÅœŽZ‚³‚ê‚Ä‚¢‚ÄA‚»‚±‚É1 / w‚ÅœŽZ‚·‚é‚Ì‚ÅAŒ³iViewÀ•WŒnj‚É–ß‚é‚±‚Æ‚É‚È‚é.
-	hitPoint = Q * (1.0f / PQk.w);
+	hitPoint.xyz = Q * (1.0f / PQk.w);
 
-	hitPoint = vec3(sceneZMax, rayZMin, rayZMax);
+	hitPoint = vec4(sceneZMax, rayZMin, rayZMax, stepCount);
 
+	if (sceneZMax <= 0) {
+		return false;
+	}
 	return intersectsDepthBuffer(sceneZMax, rayZMin, rayZMax);
 }
 
 void main()
 {
+	// Normal is transformed in view space.
 	vec3 normal = normalize(varNormal);
+
 	float linearDepth = texelFetch(s1, ivec2(gl_FragCoord.xy), 0).r;
 
 	ivec2 texsize = textureSize(s0, 0);
 
+#if 1
+	// Screen coordinate.
+	vec4 pos = vec4(gl_FragCoord.xy / texsize, 0, 1);
+
+	// [0, 1] -> [-1, 1]
+	pos.xy = pos.xy * 2.0 - 1.0;
+
+	// Screen-space -> Clip-space
+	pos.xy *= linearDepth;
+
+	// Clip-space -> View-space
+	pos = mtxC2V * pos;
+	pos.z = linearDepth;
+
+	// Compute ray direction.
+	// From ray origin(0,0,0) to view position.
+	vec3 rayDir = normalize(pos.xyz);
+
+	// Compute reflection vector.
+	vec3 refDir = normalize(reflect(rayDir, normal));
+	vec3 refOrg = pos.xyz;
+#else
 	// Ray origin is camera origin.
 	vec3 rayOrg = camPos.xyz;
 
@@ -218,9 +245,10 @@ void main()
 	// Transform to view coordinate.
 	refOrg = (mtxW2V * vec4(refOrg, 1)).xyz;
 	refDir = normalize((mtxW2V * vec4(refDir, 0)).xyz);
+#endif
 
 	vec2 hitPixel = vec2(0, 0);
-	vec3 hitPoint = vec3(0, 0, 0);
+	vec4 hitPoint = vec4(0, 0, 0, 0);
 
 	// Trace screen space ray.
 	bool isIntersect = traceScreenSpaceRay(refOrg, refDir, hitPixel, hitPoint);
@@ -235,6 +263,7 @@ void main()
 		//outColor = varColor * texture(s0, uv);
 		//vec2 uv = hitPixel / texsize.xy;
 		outColor = vec4(1, 1, 0, 1);
+		//outColor = hitPoint;
 	}
 	else {
 		outColor = vec4(1, 1, 1, 1);

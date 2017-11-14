@@ -85,7 +85,7 @@ IZ_BOOL SSRApp::InitInternal(
 
     // カメラ
     camera.Init(
-        izanagi::math::CVector4(0.0f, 100.0f, -100.0f, 1.0f),
+        izanagi::math::CVector4(0.0f, 20.0f, -100.0f, 1.0f),
         izanagi::math::CVector4(0.0f, 0.0f, 0.0f, 1.0f),
         izanagi::math::CVector4(0.0f, 1.0f, 0.0f, 1.0f),
         1.0f,
@@ -109,8 +109,9 @@ void SSRApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 
 	m_imgui->beginFrame();
 	{
-		ImGui::SliderFloat("zThickness", &zThickness, 0.0f, 10.0f);
+		ImGui::SliderFloat("zThickness", &zThickness, 0.0f, 100.0f);
 		ImGui::SliderInt("maxSteps", &maxSteps, 1, 100);
+		ImGui::SliderFloat("stride", &stride, 1, 10);
 	}
 }
 
@@ -253,7 +254,7 @@ void SSRApp::renderSSRPass(izanagi::graph::CGraphicsDevice* device)
 	const auto& camPos = camera.GetParam().pos;
 	float nearPlaneZ = camera.GetParam().cameraNear;
 
-#if 1
+#if 0
 	auto rt = m_gbuffer.getBuffer(1);
 
 	float* data;
@@ -271,26 +272,33 @@ void SSRApp::renderSSRPass(izanagi::graph::CGraphicsDevice* device)
 
 	for (int y = 0; y < 720; y++) {
 		for (int x = 0; x < 1280; x++) {
-			auto D = mtxW2C * vec4(0, 0, 0, 1);
-			//float depth = D.w;
+			vec4 D = mtxW2C * vec4(10, 10, 10, 1);
+			float d = D.w;
 
-			x = 640;
-			y = 360;
+			D /= D.w;
+
+			D.x *= d;
+			D.y *= d;
+			D.z = 0;
+			D.w = 1;
+
+			vec4 vpos = mtxC2V * D;
+			vpos.z = d;
+
+			vec4 wpos = mtxV2W * vpos;
 
 			int yy = 719 - y;
+			//auto yy = y;
 
-			if (x == 261 && y == 93) {
+			if (x == 258 && yy == 417) {
 				int hoge = 0;
 			}
 
 			float depth = data[yy * 1280 + x];
 
-			if (depth == 0.0f) {
+			if (depth == 0) {
 				continue;
 			}
-
-			// Ray origin is camera origin.
-			vec3 rayOrg = camPos.xyz;
 
 			// Screen coordinate.
 			vec4 pos = vec4(x / 1280.0f, yy / 720.0f, 0, 1);
@@ -306,6 +314,10 @@ void SSRApp::renderSSRPass(izanagi::graph::CGraphicsDevice* device)
 			// Clip-space -> View-space
 			pos = mtxC2V * pos;
 			pos.z = depth;
+
+#if 0
+			// Ray origin is camera origin.
+			vec3 rayOrg = camPos.xyz;
 
 			// View-space -> World-space.
 			vec3 worldPos = (mtxV2W * vec4(pos.xyz, 1)).xyz;
@@ -325,6 +337,21 @@ void SSRApp::renderSSRPass(izanagi::graph::CGraphicsDevice* device)
 			// Transform to view coordinate.
 			refOrg = (mtxW2V * vec4(refOrg, 1)).xyz;
 			refDir = (mtxW2V * vec4(refDir, 0)).xyz;
+			refDir.Normalize();
+#else
+			vec3 rayDir = pos.xyz;
+			rayDir.Normalize();
+
+			vec3 vsNml = (mtxW2V * vec4(normal, 0)).xyz;
+
+			vec3 refDir = rayDir - 2.0 * vsNml.Dot(rayDir) * vsNml;
+			refDir.Normalize();
+
+			vec3 refOrg = pos.xyz;
+			refOrg += vsNml * 0.2f;
+
+			vec3 worldPos = (mtxV2W * vec4(refOrg, 1)).xyz;
+#endif
 
 			vec3 hitPixel = vec3(0, 0, 0);
 			vec3 hitPoint = vec3(0, 0, 0);
@@ -367,8 +394,8 @@ void SSRApp::renderSSRPass(izanagi::graph::CGraphicsDevice* device)
 			P1.x *= 1280;
 			P1.y *= 720;
 
-			P1.x = izanagi::math::CMath::Clamp(P1.x, 0.0f, 1280.0f);
-			P1.y = izanagi::math::CMath::Clamp(P1.y, 0.0f, 720.0f);
+			//P1.x = izanagi::math::CMath::Clamp(P1.x, 0.0f, 1280.0f);
+			//P1.y = izanagi::math::CMath::Clamp(P1.y, 0.0f, 720.0f);
 
 			// If the line is degenerate, make it cover at least one pixel to avoid handling zero-pixel extent as a special case later.
 			// 2点間の距離がある程度離れるようにする.
@@ -399,12 +426,12 @@ void SSRApp::renderSSRPass(izanagi::graph::CGraphicsDevice* device)
 			float invdx = stepDir / delta.x;
 
 			// Track the derivatives of Q and k.
-			vec3 dQ = (Q1 - Q0) / invdx;
-			float dk = (k1 - k0) / invdx;
+			vec3 dQ = (Q1 - Q0) * invdx;
+			float dk = (k1 - k0) * invdx;
 
 			// y is slope.
 			// slope = (y1 - y0) / (x1 - x0)
-			vec3 dP = vec3(stepDir, delta.y / invdx, 0);
+			vec3 dP = vec3(stepDir, delta.y * invdx, 0);
 
 			// Adjust end condition for iteration direction
 			float end = P1.x * stepDir;
@@ -457,9 +484,10 @@ void SSRApp::renderSSRPass(izanagi::graph::CGraphicsDevice* device)
 				// シーン内の現時点での深度値を取得.
 				//sceneZMax = texelFetch(s1, ivec2(hitPixel), 0).r;
 				int ix = hitPixel.x;
-				int iy = 720 - hitPixel.y;
+				//int iy = 720 - hitPixel.y;
+				int iy = hitPixel.y;
 
-				if (ix >= 1280 || iy >= 720) {
+				if (ix >= 1280 || iy >= 720 || ix < 0 || iy < 0) {
 					break;
 				}
 				sceneZMax = data[iy * 1280 + ix];
@@ -478,10 +506,12 @@ void SSRApp::renderSSRPass(izanagi::graph::CGraphicsDevice* device)
 			auto isect = intersectsDepthBuffer(sceneZMax, rayZMin, rayZMax);
 
 			if (isect) {
-				int xxx = 0;
+				IZ_PRINTF("isect [%d][%d]\n", x, y);
 			}
 		}
 	}
+
+	int xxx = 0;
 #else
 	auto* shd = m_shdSSRPass.m_program;
 
