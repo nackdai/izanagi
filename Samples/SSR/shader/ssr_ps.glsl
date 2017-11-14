@@ -50,6 +50,7 @@ bool intersectsDepthBuffer(float z, float minZ, float maxZ)
 bool traceScreenSpaceRay(
 	vec3 csOrig,
 	vec3 csDir,
+	float jitter,
 	out vec2 hitPixel,
 	out vec4 hitPoint)
 {
@@ -128,6 +129,10 @@ bool traceScreenSpaceRay(
 	dP *= stride;
 	dQ *= stride;
 	dk *= stride;
+
+	P0 += dP * jitter;
+	Q0 += dQ * jitter;
+	k0 += dk * jitter;
 
 	vec4 PQk = vec4(P0, Q0.z, k0);
 	vec4 dPQk = vec4(dP, dQ.z, dk);
@@ -250,8 +255,11 @@ void main()
 	vec2 hitPixel = vec2(0, 0);
 	vec4 hitPoint = vec4(0, 0, 0, 0);
 
+	float c = (gl_FragCoord.x + gl_FragCoord.y) * 0.25;
+	float jitter = stride > 1.0 ? mod(c, 1.0) : 0.0;
+
 	// Trace screen space ray.
-	bool isIntersect = traceScreenSpaceRay(refOrg, refDir, hitPixel, hitPoint);
+	bool isIntersect = traceScreenSpaceRay(refOrg, refDir, jitter, hitPixel, hitPoint);
 
 	vec2 uv = hitPixel / texsize.xy;
 
