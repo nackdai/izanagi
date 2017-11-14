@@ -84,9 +84,6 @@ bool traceScreenSpaceRay(
 	P0 *= vec2(texsize.xy);
 	P1 *= vec2(texsize.xy);
 
-	P1.x = min(max(P1.x, 0), texsize.x);
-	P1.y = min(max(P1.y, 0), texsize.y);
-
 	// If the line is degenerate, make it cover at least one pixel to avoid handling zero-pixel extent as a special case later.
 	// 2“_ŠÔ‚Ì‹——£‚ª‚ ‚é’ö“x—£‚ê‚é‚æ‚¤‚É‚·‚é.
 	P1 += squaredLength(P0, P1) < 0.0001
@@ -109,12 +106,12 @@ bool traceScreenSpaceRay(
 	float invdx = stepDir / delta.x;
 
 	// Track the derivatives of Q and k.
-	vec3 dQ = (Q1 - Q0) / invdx;
-	float dk = (k1 - k0) / invdx;
+	vec3 dQ = (Q1 - Q0) * invdx;
+	float dk = (k1 - k0) * invdx;
 
 	// y is slope.
 	// slope = (y1 - y0) / (x1 - x0)
-	vec2 dP = vec2(stepDir, delta.y / invdx);	
+	vec2 dP = vec2(stepDir, delta.y * invdx);	
 
 	// Adjust end condition for iteration direction
 	float end = P1.x * stepDir;
@@ -213,14 +210,14 @@ void main()
 	vec3 rayDir = normalize(worldPos - rayOrg);
 
 	// Compute reflection vector.
-	vec3 refDir = reflect(rayDir, normal);
+	vec3 refDir = normalize(reflect(rayDir, normal));
 
 	// Reflection vector origin is world position.
 	vec3 refOrg = worldPos;
 
 	// Transform to view coordinate.
 	refOrg = (mtxW2V * vec4(refOrg, 1)).xyz;
-	refDir = (mtxW2V * vec4(refDir, 0)).xyz;
+	refDir = normalize((mtxW2V * vec4(refDir, 0)).xyz);
 
 	vec2 hitPixel = vec2(0, 0);
 	vec3 hitPoint = vec3(0, 0, 0);
@@ -233,6 +230,7 @@ void main()
 	if (uv.x > 1.0 || uv.x < 0.0f || uv.y > 1.0 || uv.y < 0.0) {
 		isIntersect = false;
 	}
+
 	if (isIntersect) {
 		//outColor = varColor * texture(s0, uv);
 		//vec2 uv = hitPixel / texsize.xy;
