@@ -8,6 +8,10 @@ precision highp int;
 // https://github.com/kode80/kode80SSR/blob/master/Assets/Resources/Shaders/SSR.shader
 // http://tips.hecomi.com/entry/2016/04/04/022550
 
+// NOTE
+// Perspective Projection and Texture Mapping
+// http://15462.courses.cs.cmu.edu/fall2016content/lectures/07_texture/07_texture_slides.pdf
+
 in vec4 varColor;
 in vec3 varNormal;
 
