@@ -5,6 +5,7 @@ precision highp int;
 // NOTE
 // http://roar11.com/2015/07/screen-space-glossy-reflections/
 // http://casual-effects.blogspot.jp/2014/08/screen-space-ray-tracing.html
+// https://github.com/kode80/kode80SSR/blob/master/Assets/Resources/Shaders/SSR.shader
 // http://tips.hecomi.com/entry/2016/04/04/022550
 
 in vec4 varColor;
