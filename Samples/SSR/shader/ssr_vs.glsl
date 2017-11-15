@@ -12,6 +12,7 @@ uniform mat4 mtxW2V;	// World to View space.
 
 out vec4 varColor;
 out vec3 varNormal;
+out float linearDepth;
 
 void main()
 {
@@ -19,4 +20,5 @@ void main()
 
 	varColor = color_0;
 	varNormal = normalize(mtxW2V * mtxL2W * vec4(normal, 0)).xyz;
+	linearDepth = gl_Position.w;
 }

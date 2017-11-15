@@ -14,6 +14,7 @@ precision highp int;
 
 in vec4 varColor;
 in vec3 varNormal;
+in float linearDepth;
 
 layout(location = 0) out vec4 outColor;
 
@@ -145,10 +146,12 @@ bool traceScreenSpaceRay(
 	vec4 dPQk = vec4(dP, dQ.z, dk);
 	vec3 Q = Q0;
 
+	bool isCaster = true;
+
 	for (;
 		((PQk.x * stepDir) <= end)	// 終点に到達したか.
 		&& (stepCount < maxSteps)	// 最大処理数に到達したか.
-		&& !intersectsDepthBuffer(sceneZMax, rayZMin, rayZMax)	// レイが衝突したか.
+		//&& !intersectsDepthBuffer(sceneZMax, rayZMin, rayZMax)	// レイが衝突したか.
 		&& (sceneZMax != 0.0);	// 何もないところに到達してないか.
 		++stepCount)
 	{
@@ -172,10 +175,15 @@ bool traceScreenSpaceRay(
 
 		hitPixel = permute ? PQk.yx : PQk.xy;
 
-		//hitPixel.y = texsize.y - hitPixel.y;
-
 		// シーン内の現時点での深度値を取得.
 		sceneZMax = texelFetch(s1, ivec2(hitPixel), 0).r;
+
+		isCaster = (sceneZMax > 0);
+		sceneZMax = abs(sceneZMax);
+
+		if (intersectsDepthBuffer(sceneZMax, rayZMin, rayZMax) && isCaster) {
+			break;
+		}
 
 		PQk += dPQk;
 	}
@@ -185,8 +193,6 @@ bool traceScreenSpaceRay(
 
 	// Qはw成分で除算されていて、そこに1 / wで除算するので、元（View座標系）に戻ることになる.
 	hitPoint.xyz = Q * (1.0f / PQk.w);
-
-	hitPoint = vec4(sceneZMax, rayZMin, rayZMax, stepCount);
 
 	if (sceneZMax <= 0) {
 		return false;
@@ -198,8 +204,6 @@ void main()
 {
 	// Normal is transformed in view space.
 	vec3 normal = normalize(varNormal);
-
-	float linearDepth = texelFetch(s1, ivec2(gl_FragCoord.xy), 0).r;
 
 	ivec2 texsize = textureSize(s0, 0);
 
@@ -275,12 +279,9 @@ void main()
 	}
 
 	if (isIntersect) {
-		//outColor = varColor * texture(s0, uv);
-		//vec2 uv = hitPixel / texsize.xy;
-		outColor = vec4(1, 1, 0, 1);
-		//outColor = hitPoint;
+		outColor = varColor * texture(s0, uv);
 	}
 	else {
-		outColor = vec4(1, 1, 1, 1);
+		outColor = varColor;
 	}
 }

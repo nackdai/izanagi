@@ -146,7 +146,7 @@ void SSRApp::renderToGBufferPass(izanagi::graph::CGraphicsDevice* device)
     m_gbuffer.beginGeometryPass(device);
 
 	auto hL2W = shd->GetHandleByName("mtxL2W");
-	auto hIsWriteColor = shd->GetHandleByName("isWriteColor");
+	auto hIsSSRCaster = shd->GetHandleByName("isSSRCaster");
 
 	// Sphere.
 	{
@@ -154,7 +154,7 @@ void SSRApp::renderToGBufferPass(izanagi::graph::CGraphicsDevice* device)
 		mtxL2W.SetTrans(izanagi::math::CVector4(0.0f, 10.0f, 10.0f));
 
 		shd->SetMatrix(device, hL2W, mtxL2W);
-		shd->SetBool(device, hIsWriteColor, IZ_TRUE);
+		shd->SetBool(device, hIsSSRCaster, IZ_TRUE);
 
 		m_sphere->Draw(device);
 	}
@@ -165,7 +165,7 @@ void SSRApp::renderToGBufferPass(izanagi::graph::CGraphicsDevice* device)
 		mtxL2W.SetTrans(izanagi::math::CVector4(20.0f, 10.0f, 10.0f));
 
 		shd->SetMatrix(device, hL2W, mtxL2W);
-		shd->SetBool(device, hIsWriteColor, IZ_TRUE);
+		shd->SetBool(device, hIsSSRCaster, IZ_TRUE);
 
 		m_cube->Draw(device);
 	}
@@ -179,7 +179,7 @@ void SSRApp::renderToGBufferPass(izanagi::graph::CGraphicsDevice* device)
 
 		// NOTE
 		// あとでSSRとして描画するので、カラーは出力しない.
-		shd->SetBool(device, hIsWriteColor, IZ_FALSE);
+		shd->SetBool(device, hIsSSRCaster, IZ_FALSE);
 
 		// NOTE
 		// G-Bufferに深度値のみを出力したい.
