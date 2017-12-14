@@ -1,6 +1,7 @@
 #include "BilateralUpsamplingApp.h"
 #include "izGraph.h"
 #include "izSystem.h"
+#include <imgui.h>
 
 // NOTE
 // http://d.hatena.ne.jp/hanecci/20131103/p1
@@ -49,6 +50,14 @@ IZ_BOOL BilateralUpsamplingApp::InitInternal(
         IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0xff));
     IZ_ASSERT(m_screenFillPlane != IZ_NULL);
 
+	// imgui
+	{
+		m_imgui = izanagi::debugutil::ImGuiProc::init(allocator, device);
+		IZ_ASSERT(m_imgui);
+
+		izanagi::sys::CSysWindow::registerExtendMsgHandler(m_imgui);
+	}
+
     // カメラ
     camera.Init(
         izanagi::math::CVector4(0.0f, 0.0f, 30.0f, 1.0f),
@@ -70,14 +79,6 @@ __EXIT__:
 
 IZ_BOOL BilateralUpsamplingApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
 {
-    if (key == izanagi::sys::E_KEYBOARD_BUTTON_RETURN) {
-		int type = (int)m_type;
-		type += 1;
-
-		type = type >= Type::Num ? 0 : type;
-
-		m_type = (Type)type;
-    }
     return IZ_TRUE;
 }
 
@@ -85,6 +86,17 @@ IZ_BOOL BilateralUpsamplingApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
 void BilateralUpsamplingApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
     GetCamera().Update();
+
+	m_imgui->beginFrame();
+	{
+		static const char* items[] = { "Upsampling", "Reference", "Default" };
+		int item_current = m_type;
+		ImGui::Combo("type", &item_current, items, COUNTOF(items));
+
+		if (m_type != item_current) {
+			m_type = (Type)item_current;
+		}
+	}
 }
 
 // 描画.
@@ -131,6 +143,9 @@ void BilateralUpsamplingApp::RenderInternal(izanagi::graph::CGraphicsDevice* dev
 			device->End2D();
 		}
 	}
+
+	// imgui.
+	ImGui::Render();
 }
 
 void BilateralUpsamplingApp::renderColorPass(izanagi::graph::CGraphicsDevice* device)
@@ -231,6 +246,8 @@ void BilateralUpsamplingApp::ReleaseInternal()
     m_shdFinalPass.release();
 
     SAFE_RELEASE(m_screenFillPlane);
+
+	SAFE_RELEASE(m_imgui);
 
     m_gbuffer.release();
 }

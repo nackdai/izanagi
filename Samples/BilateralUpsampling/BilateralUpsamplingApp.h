@@ -59,6 +59,8 @@ protected:
 	};
 
 	Type m_type{ Type::Upscale };
+
+	izanagi::debugutil::ImGuiProc* m_imgui{ nullptr };
 };
 
 #endif    // #if !defined(__BILATERAL_UPSAMPLING_APP_H__)
