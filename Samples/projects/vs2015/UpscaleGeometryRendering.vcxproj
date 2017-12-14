@@ -44,7 +44,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{ED494DE5-07CD-43E0-9F64-1DCD1EAD8A29}</ProjectGuid>
-    <RootNamespace>UpscaleGeometryRendering</RootNamespace>
+    <RootNamespace>BilateralUpsampling</RootNamespace>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -344,23 +344,23 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\UpscaleGeometryRendering\GBuffer.cpp" />
-    <ClCompile Include="..\..\UpscaleGeometryRendering\main.cpp" />
-    <ClCompile Include="..\..\UpscaleGeometryRendering\Scene.cpp" />
-    <ClCompile Include="..\..\UpscaleGeometryRendering\UpscaleGeometryRenderingApp.cpp" />
+    <ClCompile Include="..\..\BilateralUpsampling\GBuffer.cpp" />
+    <ClCompile Include="..\..\BilateralUpsampling\main.cpp" />
+    <ClCompile Include="..\..\BilateralUpsampling\Scene.cpp" />
+    <ClCompile Include="..\..\BilateralUpsampling\BilateralUpsamplingApp.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\UpscaleGeometryRendering\GBuffer.h" />
-    <ClInclude Include="..\..\UpscaleGeometryRendering\Scene.h" />
-    <ClInclude Include="..\..\UpscaleGeometryRendering\UpscaleGeometryRenderingApp.h" />
+    <ClInclude Include="..\..\BilateralUpsampling\GBuffer.h" />
+    <ClInclude Include="..\..\BilateralUpsampling\Scene.h" />
+    <ClInclude Include="..\..\BilateralUpsampling\BilateralUpsamplingApp.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\UpscaleGeometryRendering\shader\ps_default.glsl" />
-    <None Include="..\..\UpscaleGeometryRendering\shader\ps_final.glsl" />
-    <None Include="..\..\UpscaleGeometryRendering\shader\ps_geometry.glsl" />
-    <None Include="..\..\UpscaleGeometryRendering\shader\vs_default.glsl" />
-    <None Include="..\..\UpscaleGeometryRendering\shader\vs_fillscreen.glsl" />
-    <None Include="..\..\UpscaleGeometryRendering\shader\vs_geometry.glsl" />
+    <None Include="..\..\BilateralUpsampling\shader\ps_default.glsl" />
+    <None Include="..\..\BilateralUpsampling\shader\ps_final.glsl" />
+    <None Include="..\..\BilateralUpsampling\shader\ps_geometry.glsl" />
+    <None Include="..\..\BilateralUpsampling\shader\vs_default.glsl" />
+    <None Include="..\..\BilateralUpsampling\shader\vs_fillscreen.glsl" />
+    <None Include="..\..\BilateralUpsampling\shader\vs_geometry.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
