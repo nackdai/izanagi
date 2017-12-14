@@ -1,5 +1,5 @@
-#if !defined(__UPSCALE_GEOMETRY_RENDERING_APP_H__)
-#define __UPSCALE_GEOMETRY_RENDERING_APP_H__
+#if !defined(__BILATERAL_UPSAMPLING_APP_H__)
+#define __BILATERAL_UPSAMPLING_APP_H__
 
 #include "izSampleKit.h"
 #include "izSceneGraph.h"
@@ -11,10 +11,10 @@
 static const IZ_UINT SCREEN_WIDTH = 1280;
 static const IZ_UINT SCREEN_HEIGHT = 720;
 
-class UpscaleGeometryRenderingApp : public izanagi::sample::CSampleApp {
+class BilateralUpsamplingApp : public izanagi::sample::CSampleApp {
 public:
-    UpscaleGeometryRenderingApp();
-    virtual ~UpscaleGeometryRenderingApp();
+    BilateralUpsamplingApp();
+    virtual ~BilateralUpsamplingApp();
 
 public:
     // 初期化.
@@ -61,4 +61,4 @@ protected:
 	Type m_type{ Type::Upscale };
 };
 
-#endif    // #if !defined(__UPSCALE_GEOMETRY_RENDERING_APP_H__)
+#endif    // #if !defined(__BILATERAL_UPSAMPLING_APP_H__)

@@ -1,4 +1,4 @@
-#include "UpscaleGeometryRenderingApp.h"
+#include "BilateralUpsamplingApp.h"
 #include "izGraph.h"
 #include "izSystem.h"
 
@@ -7,16 +7,16 @@
 // https://sites.google.com/site/monshonosuana/directxno-hanashi-1/directx-136
 // http://www.slideshare.net/HEXADRIVE/final-fantasy-hd-hd
 
-UpscaleGeometryRenderingApp::UpscaleGeometryRenderingApp()
+BilateralUpsamplingApp::BilateralUpsamplingApp()
 {
 }
 
-UpscaleGeometryRenderingApp::~UpscaleGeometryRenderingApp()
+BilateralUpsamplingApp::~BilateralUpsamplingApp()
 {
 }
 
 // 開始
-IZ_BOOL UpscaleGeometryRenderingApp::InitInternal(
+IZ_BOOL BilateralUpsamplingApp::InitInternal(
     izanagi::IMemoryAllocator* allocator,
     izanagi::graph::CGraphicsDevice* device,
     izanagi::sample::CSampleCamera& camera)
@@ -68,7 +68,7 @@ __EXIT__:
     return result;
 }
 
-IZ_BOOL UpscaleGeometryRenderingApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
+IZ_BOOL BilateralUpsamplingApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
 {
     if (key == izanagi::sys::E_KEYBOARD_BUTTON_RETURN) {
 		int type = (int)m_type;
@@ -82,13 +82,13 @@ IZ_BOOL UpscaleGeometryRenderingApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON k
 }
 
 // 更新.
-void UpscaleGeometryRenderingApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
+void BilateralUpsamplingApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
     GetCamera().Update();
 }
 
 // 描画.
-void UpscaleGeometryRenderingApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
+void BilateralUpsamplingApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
     if (m_type == Type::Upscale) {
         renderColorPass(device);
@@ -133,7 +133,7 @@ void UpscaleGeometryRenderingApp::RenderInternal(izanagi::graph::CGraphicsDevice
 	}
 }
 
-void UpscaleGeometryRenderingApp::renderColorPass(izanagi::graph::CGraphicsDevice* device)
+void BilateralUpsamplingApp::renderColorPass(izanagi::graph::CGraphicsDevice* device)
 {
     const auto& camera = GetCamera();
 
@@ -155,7 +155,7 @@ void UpscaleGeometryRenderingApp::renderColorPass(izanagi::graph::CGraphicsDevic
     m_gbuffer.endColorPass(device);
 }
 
-void UpscaleGeometryRenderingApp::renderGeometryPass(izanagi::graph::CGraphicsDevice* device)
+void BilateralUpsamplingApp::renderGeometryPass(izanagi::graph::CGraphicsDevice* device)
 {
 	device->SaveRenderState();
 
@@ -193,7 +193,7 @@ void UpscaleGeometryRenderingApp::renderGeometryPass(izanagi::graph::CGraphicsDe
 	device->LoadRenderState();
 }
 
-void UpscaleGeometryRenderingApp::renderFinalPass(izanagi::graph::CGraphicsDevice* device)
+void BilateralUpsamplingApp::renderFinalPass(izanagi::graph::CGraphicsDevice* device)
 {
     device->SaveRenderState();
 
@@ -222,7 +222,7 @@ void UpscaleGeometryRenderingApp::renderFinalPass(izanagi::graph::CGraphicsDevic
     device->LoadRenderState();
 }
 
-void UpscaleGeometryRenderingApp::ReleaseInternal()
+void BilateralUpsamplingApp::ReleaseInternal()
 {
     m_scene.release();
 
