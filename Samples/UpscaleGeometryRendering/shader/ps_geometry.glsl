@@ -2,13 +2,15 @@
 precision highp float;
 precision highp int;
 
-in vec4 varColor;
+in float depth;
+in vec3 nml;
 
 uniform int id;
 
-layout(location = 0) out int outId;
+layout(location = 0) out vec4 oScreen;
 
 void main()
 {
-    outId = id;
+	oScreen.xyz = normalize(nml);
+	oScreen.w = depth;
 }

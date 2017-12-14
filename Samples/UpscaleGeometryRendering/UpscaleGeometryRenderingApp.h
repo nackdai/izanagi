@@ -50,7 +50,15 @@ protected:
 
     izanagi::CDebugMesh* m_screenFillPlane{ nullptr };
 
-    IZ_BOOL m_enableUpscale{ IZ_TRUE };
+	enum Type : int {
+		Upscale,
+		Reference,
+		Non,
+
+		Num,
+	};
+
+	Type m_type{ Type::Upscale };
 };
 
 #endif    // #if !defined(__UPSCALE_GEOMETRY_RENDERING_APP_H__)

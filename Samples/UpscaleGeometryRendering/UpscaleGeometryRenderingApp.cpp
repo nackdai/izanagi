@@ -71,7 +71,12 @@ __EXIT__:
 IZ_BOOL UpscaleGeometryRenderingApp::OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key)
 {
     if (key == izanagi::sys::E_KEYBOARD_BUTTON_RETURN) {
-        m_enableUpscale = !m_enableUpscale;
+		int type = (int)m_type;
+		type += 1;
+
+		type = type >= Type::Num ? 0 : type;
+
+		m_type = (Type)type;
     }
     return IZ_TRUE;
 }
@@ -85,7 +90,7 @@ void UpscaleGeometryRenderingApp::UpdateInternal(izanagi::graph::CGraphicsDevice
 // 描画.
 void UpscaleGeometryRenderingApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
-    if (m_enableUpscale) {
+    if (m_type == Type::Upscale) {
         renderColorPass(device);
         renderGeometryPass(device);
         renderFinalPass(device);
@@ -93,7 +98,7 @@ void UpscaleGeometryRenderingApp::RenderInternal(izanagi::graph::CGraphicsDevice
         device->SetTexture(0, IZ_NULL);
         m_gbuffer.drawBuffers(device);
     }
-    else {
+	else if (m_type == Type::Reference) {
         const auto& camera = GetCamera();
 
         const auto& mtxW2C = camera.GetParam().mtxW2C;
@@ -107,6 +112,25 @@ void UpscaleGeometryRenderingApp::RenderInternal(izanagi::graph::CGraphicsDevice
 
         m_scene.render(device, shd);
     }
+	else {
+		renderColorPass(device);
+
+		if (device->Begin2D()) {
+			auto clr = m_gbuffer.getBuffer(GBuffer::Type::Color);
+			device->SetTexture(0, clr);
+
+			auto width = device->GetBackBufferWidth();
+			auto height = device->GetBackBufferHeight();
+
+			device->Set2DRenderOp(izanagi::graph::E_GRAPH_2D_RENDER_OP_MODULATE);
+
+			device->Draw2DSprite(
+				izanagi::CFloatRect(0.0f, 1.0f, 1.0f, 0.0f),
+				izanagi::CIntRect(0, 0, width, height));
+
+			device->End2D();
+		}
+	}
 }
 
 void UpscaleGeometryRenderingApp::renderColorPass(izanagi::graph::CGraphicsDevice* device)
@@ -133,6 +157,12 @@ void UpscaleGeometryRenderingApp::renderColorPass(izanagi::graph::CGraphicsDevic
 
 void UpscaleGeometryRenderingApp::renderGeometryPass(izanagi::graph::CGraphicsDevice* device)
 {
+	device->SaveRenderState();
+
+	device->SetRenderState(
+		izanagi::graph::E_GRAPH_RS_ALPHABLENDENABLE,
+		IZ_FALSE);
+
     const auto& camera = GetCamera();
 
     const auto& mtxW2C = camera.GetParam().mtxW2C;
@@ -144,11 +174,23 @@ void UpscaleGeometryRenderingApp::renderGeometryPass(izanagi::graph::CGraphicsDe
     auto hW2C = shd->GetHandleByName("mtxW2C");
     shd->SetMatrix(device, hW2C, mtxW2C);
 
-    m_gbuffer.beginGeometryPass(device);
+	{
+		m_gbuffer.beginGeometryLowResPass(device);
 
-    m_scene.render(device, shd);
+		m_scene.render(device, shd);
 
-    m_gbuffer.endGeometryPass(device);
+		m_gbuffer.endGeometryLowResPass(device);
+	}
+
+	{
+		m_gbuffer.beginGeometryHiResPass(device);
+
+		m_scene.render(device, shd);
+
+		m_gbuffer.endGeometryHiResPass(device);
+	}
+
+	device->LoadRenderState();
 }
 
 void UpscaleGeometryRenderingApp::renderFinalPass(izanagi::graph::CGraphicsDevice* device)

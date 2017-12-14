@@ -7,73 +7,75 @@ in vec4 varPos;
 layout(location = 0) out vec4 outColor;
 
 uniform sampler2D s0;   // color
-uniform usampler2D s1;  // id
+uniform sampler2D s1;	// normal/depth
+uniform sampler2D s2;	// normal/depth hi-resolution
+
+uniform vec4 invScreen;
 
 // NOTE
-// +y
-// |
-// |
-// +----->+x
+// http://d.hatena.ne.jp/hanecci/20131030/p1
+// https://github.com/septag/darkhammer/blob/master/data/shaders/hlsl/upsample-bilateral.ps.hlsl
+
+const vec2 offsets[4] = vec2[4](
+	vec2( 0.0f,  1.0f),
+	vec2( 1.0f,  0.0f),
+	vec2( 0.0f, -1.0f),
+	vec2(-1.0f, 0.0f)
+);
+
+const float g_epsilon = 0.0001f;
 
 void main()
 {
-    ivec2 baseXY = ivec2(gl_FragCoord.xy);
+	vec2 uv = gl_FragCoord.xy * invScreen.xy;
 
-    vec2 texelColor = 1.0 / textureSize(s0, 0);
-    vec2 texelId = 1.0 / textureSize(s1, 0);
+	vec2 coords[4];
 
-    vec2 uvColor = (baseXY / 2) * texelColor + vec2(0.5) * texelColor;
-    vec2 uvId = baseXY * texelId + vec2(0.5) * texelId;
+	for (int i = 0; i < 4; i++) {
+		coords[i] = uv + invScreen.xy * offsets[i];
+	}
 
-    int idX = baseXY.x & 0x01;
-    int idY = baseXY.y & 0x01;
+	// normal weight.
 
-    int id = idY * 2 + idX;
+	float nmlWeight[4];
+	
+	vec3 nmlHires = texture2D(s2, uv).xyz;
 
-    uint centerId = texture(s1, uvId).r;
+	for (int i = 0; i < 4; i++) {
+		vec3 nmlCoarse = texture2D(s1, coords[i]).xyz;
+		nmlWeight[i] = pow(abs(dot(nmlCoarse, nmlHires)), 32);
+	}
 
-    // TODO
-    ivec2 offsetId[4] = ivec2[](
-#if 1
-        ivec2(0, -1),
-        ivec2(1, 0),
-        ivec2(0, 1),
-        ivec2(-1, 0)
-#else
-        ivec2(-1, -1),
-        ivec2(1, -1),
-        ivec2(1, 1),
-        ivec2(-1, 1)
-#endif
-    );
+	// depth weight.
 
-    vec4 sumColor = vec4(0, 0, 0, 0);
-    float weight = 0;
+	float depthWeight[4];
 
-    for (int i = 0; i < 4; i++) {
-        ivec2 xy = baseXY + offsetId[i];
-        vec2 uv = xy * texelId + vec2(0.5) * texelId;
+	float depthHires = texture2D(s2, uv).w;
 
-        if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0) {
-            continue;
-        }
+	for (int i = 0; i < 4; i++) {
+		float depthCoars = texture2D(s1, coords[i]).w;
+		depthWeight[i] = 1.0f / (g_epsilon + abs(depthHires - depthCoars));
+	}
 
-        uint geomId = texture(s1, uv).r;
+	vec4 sum = vec4(0);
+	float weight = 0.0001f;
 
-        if (geomId == centerId) {
-            xy = ivec2(xy / 2);
-            uv = xy * texelColor + vec2(0.5) * texelColor;
+	for (int i = 0; i < 4; i++) {
+		float w = nmlWeight[i] * depthWeight[i];
+		sum += texture2D(s0, coords[i]) * w;
+		weight += w;
+	}
 
-            // TODO
-            float w = 1.0 / length(vec2(offsetId[i]));
+	sum /= weight;
 
-            sumColor += texture(s0, uv) * w;
-
-            weight += w;
-        }
-    }
-
-    sumColor /= weight;
-
-    outColor = vec4(sumColor.rgb, 1.0);
+	if (depthHires <= 0.0f) {
+		// Background.
+		outColor = texture2D(s0, uv);
+		outColor.a = 1.0f;
+		return;
+	}
+	else {
+		outColor = sum;
+		outColor.a = 1.0;
+	}
 }

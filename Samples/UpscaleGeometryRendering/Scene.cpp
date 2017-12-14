@@ -104,6 +104,8 @@ void Scene::render(
         auto hL2W = shd->GetHandleByName("mtxL2W");
         shd->SetMatrix(device, hL2W, mtxL2W);
 
+		// NOTE
+		// id = 0 は背景に使う.
         auto hId = shd->GetHandleByName("id");
         shd->SetInt(device, hId, i + 1);
 

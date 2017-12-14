@@ -15,15 +15,21 @@ IZ_BOOL GBuffer::init(
         device,
         width / 2, height / 2,
         izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA8);
-    VRETURN(std::get<1>(res) && std::get<0>(res) == Color);
+    VRETURN(std::get<1>(res) && std::get<0>(res) == Type::Color);
 
-    // Id.
+    // Normal Depth Low-Res.
     res = m_gbuffer->addBuffer(
         device,
-        width, height,
-        izanagi::graph::E_GRAPH_PIXEL_FMT_R32UI);
-        //izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA8);
-    VRETURN(std::get<1>(res) && std::get<0>(res) == Id);
+        width / 2, height / 2,
+        izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA32F);
+    VRETURN(std::get<1>(res) && std::get<0>(res) == Type::NmlDepth_LowRes);
+
+	// Normal Depth Hi-Res.
+	res = m_gbuffer->addBuffer(
+		device,
+		width, height,
+		izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA32F);
+	VRETURN(std::get<1>(res) && std::get<0>(res) == Type::NmlDepth_HiRes);
 
     return IZ_TRUE;
 }
@@ -36,10 +42,10 @@ void GBuffer::release()
     }
 }
 
-void GBuffer::beginGeometryPass(izanagi::graph::CGraphicsDevice* device)
+void GBuffer::beginGeometryLowResPass(izanagi::graph::CGraphicsDevice* device)
 {
     IZ_UINT targets[] = {
-        Id,
+		Type::NmlDepth_LowRes,
     };
 
     m_gbuffer->begin(
@@ -47,9 +53,25 @@ void GBuffer::beginGeometryPass(izanagi::graph::CGraphicsDevice* device)
         targets, COUNTOF(targets));
 }
 
-void GBuffer::endGeometryPass(izanagi::graph::CGraphicsDevice* device)
+void GBuffer::endGeometryLowResPass(izanagi::graph::CGraphicsDevice* device)
 {
     m_gbuffer->end(device);
+}
+
+void GBuffer::beginGeometryHiResPass(izanagi::graph::CGraphicsDevice* device)
+{
+	IZ_UINT targets[] = {
+		Type::NmlDepth_HiRes,
+	};
+
+	m_gbuffer->begin(
+		device,
+		targets, COUNTOF(targets));
+}
+
+void GBuffer::endGeometryHiResPass(izanagi::graph::CGraphicsDevice* device)
+{
+	m_gbuffer->end(device);
 }
 
 void GBuffer::beginColorPass(
@@ -75,18 +97,23 @@ void GBuffer::endColorPass(izanagi::graph::CGraphicsDevice* device)
 void GBuffer::bindForFinalPass(izanagi::graph::CGraphicsDevice* device)
 {
     izanagi::engine::GBuffer::BindOp ops[] = {
-        { Color, 0, "s0" },
-        { Id, 1, "s1" },
+        { Type::Color, 0, "s0" },
+        { Type::NmlDepth_LowRes, 1, "s1" },
+		{ Type::NmlDepth_HiRes, 2, "s2" },
     };
 
-    m_gbuffer->getBuffer(Color)->SetFilter(
+    m_gbuffer->getBuffer(Type::Color)->SetFilter(
         izanagi::graph::E_GRAPH_TEX_FILTER_POINT,
         izanagi::graph::E_GRAPH_TEX_FILTER_POINT,
         izanagi::graph::E_GRAPH_TEX_FILTER_POINT);
-    m_gbuffer->getBuffer(Id)->SetFilter(
+    m_gbuffer->getBuffer(Type::NmlDepth_LowRes)->SetFilter(
         izanagi::graph::E_GRAPH_TEX_FILTER_POINT,
         izanagi::graph::E_GRAPH_TEX_FILTER_POINT,
         izanagi::graph::E_GRAPH_TEX_FILTER_POINT);
+	m_gbuffer->getBuffer(Type::NmlDepth_HiRes)->SetFilter(
+		izanagi::graph::E_GRAPH_TEX_FILTER_POINT,
+		izanagi::graph::E_GRAPH_TEX_FILTER_POINT,
+		izanagi::graph::E_GRAPH_TEX_FILTER_POINT);
 
     m_gbuffer->bind(
         device,
@@ -96,8 +123,9 @@ void GBuffer::bindForFinalPass(izanagi::graph::CGraphicsDevice* device)
 void GBuffer::drawBuffers(izanagi::graph::CGraphicsDevice* device)
 {
     IZ_UINT targets[] = {
-        Color,
-        Id,
+		Type::Color,
+        Type::NmlDepth_LowRes,
+		Type::NmlDepth_HiRes,
     };
 
     m_gbuffer->dumpBuffers(

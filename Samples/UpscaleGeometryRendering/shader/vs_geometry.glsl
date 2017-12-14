@@ -3,9 +3,10 @@ precision highp float;
 precision highp int;
 
 attribute vec4 position;
-attribute vec4 color_0;
+attribute vec3 normal;
 
-out vec4 varColor;
+out float depth;
+out vec3 nml;
 
 uniform mat4 mtxL2W;
 uniform mat4 mtxW2C;
@@ -14,5 +15,6 @@ void main()
 {
     gl_Position = mtxW2C * mtxL2W * position;
 
-    varColor = color_0;
+	depth = gl_Position.w;
+	nml = normalize(mtxL2W * vec4(normal, 0)).xyz;
 }

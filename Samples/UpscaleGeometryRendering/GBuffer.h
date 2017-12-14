@@ -17,26 +17,37 @@ public:
 
     void release();
 
-    void beginGeometryPass(izanagi::graph::CGraphicsDevice* device);
-    void endGeometryPass(izanagi::graph::CGraphicsDevice* device);
+    void beginGeometryLowResPass(izanagi::graph::CGraphicsDevice* device);
+	void endGeometryLowResPass(izanagi::graph::CGraphicsDevice* device);
+
+	void beginGeometryHiResPass(izanagi::graph::CGraphicsDevice* device);
+	void endGeometryHiResPass(izanagi::graph::CGraphicsDevice* device);
 
     void beginColorPass(
         izanagi::graph::CGraphicsDevice* device,
         IZ_COLOR bgColor);
+
     void endColorPass(izanagi::graph::CGraphicsDevice* device);
 
     void bindForFinalPass(izanagi::graph::CGraphicsDevice* device);
 
     void drawBuffers(izanagi::graph::CGraphicsDevice* device);
 
-private:
+public:
     enum Type {
         Color = 0,
-        Id,
+        NmlDepth_LowRes,
+		NmlDepth_HiRes,
 
         Num,
     };
 
+	izanagi::graph::CRenderTarget* getBuffer(Type type)
+	{
+		return m_gbuffer->getBuffer((IZ_UINT)type);
+	}
+
+private:
     izanagi::engine::GBuffer* m_gbuffer{ nullptr };
 };
 
