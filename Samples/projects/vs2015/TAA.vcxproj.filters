@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\TAA\GBuffer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAA\TAAApp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAA\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\TAA\GBuffer.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TAA\TAAApp.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\TAA\shader\ps_default.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\TAA\shader\ps_final.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\TAA\shader\ps_geometry.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\TAA\shader\vs_default.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\TAA\shader\vs_fillscreen.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\TAA\shader\vs_geometry.glsl">
+      <Filter>shader</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{41c10764-8846-404c-a09e-046be2827e9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{e08456c3-678c-4464-8bea-8d9398dadb34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shader">
+      <UniqueIdentifier>{88cb99ae-83dc-4117-b37c-a5be6601394c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
