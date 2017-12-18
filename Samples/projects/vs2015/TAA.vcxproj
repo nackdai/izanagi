@@ -356,8 +356,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\TAA\shader\ps_default.glsl" />
-    <None Include="..\..\TAA\shader\ps_final.glsl" />
     <None Include="..\..\TAA\shader\ps_geometry.glsl" />
+    <None Include="..\..\TAA\shader\ps_taa.glsl" />
     <None Include="..\..\TAA\shader\vs_default.glsl" />
     <None Include="..\..\TAA\shader\vs_fillscreen.glsl" />
     <None Include="..\..\TAA\shader\vs_geometry.glsl" />

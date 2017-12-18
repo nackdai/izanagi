@@ -23,9 +23,6 @@
     <None Include="..\..\TAA\shader\ps_default.glsl">
       <Filter>shader</Filter>
     </None>
-    <None Include="..\..\TAA\shader\ps_final.glsl">
-      <Filter>shader</Filter>
-    </None>
     <None Include="..\..\TAA\shader\ps_geometry.glsl">
       <Filter>shader</Filter>
     </None>
@@ -36,6 +33,9 @@
       <Filter>shader</Filter>
     </None>
     <None Include="..\..\TAA\shader\vs_geometry.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\TAA\shader\ps_taa.glsl">
       <Filter>shader</Filter>
     </None>
   </ItemGroup>
