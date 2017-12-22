@@ -9,12 +9,11 @@ out vec4 var_Color;
 
 uniform mat4 mtxL2W;
 uniform mat4 mtxW2C;
-uniform mat4 mtxOffset;
 uniform vec4 color;
 
 void main()
 {
-    gl_Position = mtxOffset * mtxW2C * mtxL2W * position;
+    gl_Position = mtxW2C * mtxL2W * position;
 
     var_Color = color;
 }

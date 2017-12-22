@@ -15,13 +15,14 @@ uniform mat4 mtxW2C;
 uniform mat4 mtxPrevL2W;
 uniform mat4 mtxPrevW2C;
 
-uniform mat4 mtxOffset;
+uniform vec4 jitter;
 
 void main()
 {
-    gl_Position = mtxOffset * mtxW2C * mtxL2W * position;
+    gl_Position = mtxW2C * mtxL2W * position;
 
 	prevCSPos = mtxPrevW2C * mtxPrevL2W * position;
+	prevCSPos.xy += prevCSPos.w * 2 * jitter.xy;
 
 	depth = gl_Position.w;
 	nml = normalize(mtxL2W * vec4(normal, 0)).xyz;
