@@ -51,6 +51,11 @@ protected:
 	izanagi::CDebugMesh* m_screenFillPlane{ nullptr };
 
 	izanagi::math::CMatrix44 m_mtxL2W;
+
+	IZ_UINT m_frame{ 0 };
+
+	izanagi::math::CMatrix44 m_mtxPrevL2W;
+	izanagi::math::CMatrix44 m_mtxPrevW2C;
 };
 
 #endif    // #if !defined(__TAA_APP_H__)

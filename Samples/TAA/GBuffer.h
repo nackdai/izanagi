@@ -28,6 +28,7 @@ private:
 	enum Type {
 		Normal,
 		Depth,
+		Motion,
 
 		Num,
 	};

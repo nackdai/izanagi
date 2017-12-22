@@ -24,6 +24,13 @@ IZ_BOOL GBuffer::init(
 		izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA32F);
 	VRETURN(std::get<1>(res) && std::get<0>(res) == Depth);
 
+	// Motion.
+	res = m_gbuffer->addBuffer(
+		device,
+		width, height,
+		izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA32F);
+	VRETURN(std::get<1>(res) && std::get<0>(res) == Motion);
+
 	return IZ_TRUE;
 }
 
@@ -40,6 +47,7 @@ void GBuffer::beginGeometryPass(izanagi::graph::CGraphicsDevice* device)
 	IZ_UINT targets[] = {
 		Normal,
 		Depth,
+		Motion,
 	};
 
 	m_gbuffer->begin(
@@ -57,6 +65,7 @@ void GBuffer::bindForTAAPass(izanagi::graph::CGraphicsDevice* device)
 	izanagi::engine::GBuffer::BindOp ops[] = {
 		{ Normal, 0, "s0" },
 		{ Depth, 1, "s1" },
+		{ Motion, 1, "s2" },
 	};
 
 	m_gbuffer->bind(
@@ -69,6 +78,7 @@ void GBuffer::drawBuffers(izanagi::graph::CGraphicsDevice* device)
 	IZ_UINT targets[] = {
 		Normal,
 		Depth,
+		Motion,
 	};
 
 	m_gbuffer->dumpBuffers(

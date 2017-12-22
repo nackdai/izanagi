@@ -10,7 +10,6 @@ TAAApp::~TAAApp()
 {
 }
 
-// 開始
 IZ_BOOL TAAApp::InitInternal(
 	izanagi::IMemoryAllocator* allocator,
 	izanagi::graph::CGraphicsDevice* device,
@@ -81,7 +80,14 @@ void TAAApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 // 描画.
 void TAAApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
+	const auto& camera = GetCamera();
+
 	m_mtxL2W.SetScale(100, 100, 100);
+
+	if (m_frame == 0) {
+		m_mtxPrevL2W = m_mtxL2W;
+		m_mtxPrevW2C = camera.GetParam().mtxW2C;
+	}
 
 	renderGeometryPass(device);
 	renderColorPass(device);
@@ -91,20 +97,12 @@ void TAAApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 
 	m_gbuffer.drawBuffers(device);
 
-	device->Begin2D();
-	{
-		auto width = device->GetBackBufferWidth();
-		auto height = device->GetBackBufferHeight();
-
-		device->SetTexture(0, m_rt[m_curRt]);
-
-		device->Draw2DSprite(
-			izanagi::CFloatRect(0.0f, 1.0f, 1.0f, 0.0f),
-			izanagi::CIntRect(0, height - 180, 320, 180));
-	}
-	device->End2D();
-
 	m_curRt = 1 - m_curRt;
+
+	m_mtxPrevL2W = m_mtxL2W;
+	m_mtxPrevW2C = camera.GetParam().mtxW2C;
+
+	m_frame++;
 }
 
 void TAAApp::renderGeometryPass(izanagi::graph::CGraphicsDevice* device)
@@ -117,11 +115,29 @@ void TAAApp::renderGeometryPass(izanagi::graph::CGraphicsDevice* device)
 
 	device->SetShaderProgram(shd);
 
-	auto hL2W = shd->GetHandleByName("mtxL2W");
-	shd->SetMatrix(device, hL2W, m_mtxL2W);
+	// Current frame matrix.
+	{
+		auto hL2W = shd->GetHandleByName("mtxL2W");
+		shd->SetMatrix(device, hL2W, m_mtxL2W);
 
-	auto hW2C = shd->GetHandleByName("mtxW2C");
-	shd->SetMatrix(device, hW2C, mtxW2C);
+		auto hW2C = shd->GetHandleByName("mtxW2C");
+		shd->SetMatrix(device, hW2C, mtxW2C);
+	}
+
+	// Previous frame matrix.
+	{
+		auto hL2W = shd->GetHandleByName("mtxPrevL2W");
+		shd->SetMatrix(device, hL2W, m_mtxPrevL2W);
+
+		auto hW2C = shd->GetHandleByName("mtxPrevW2C");
+		shd->SetMatrix(device, hW2C, m_mtxPrevW2C);
+	}
+
+	auto width = device->GetBackBufferWidth();
+	auto height = device->GetBackBufferHeight();
+
+	auto hInvScr = shd->GetHandleByName("invScreen");
+	shd->SetVector(device, hInvScr, izanagi::math::CVector4(1.0f / width, 1.0f / height, 0.0f, 0.0f));
 
 	m_gbuffer.beginGeometryPass(device);
 
@@ -184,6 +200,9 @@ void TAAApp::renderTAAPass(izanagi::graph::CGraphicsDevice* device)
 	shd->SetVector(device, hInvScr, izanagi::math::CVector4(1.0f / width, 1.0f / height, 0.0f, 0.0f));
 
 	m_gbuffer.bindForTAAPass(device);
+
+	device->SetTexture(3, m_rt[m_curRt]);
+	device->SetTexture(4, m_rt[1 - m_curRt]);
 
 	m_screenFillPlane->Draw(device);
 
