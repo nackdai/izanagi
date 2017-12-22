@@ -20,6 +20,9 @@ public:
 	void beginGeometryPass(izanagi::graph::CGraphicsDevice* device);
 	void endGeometryPass(izanagi::graph::CGraphicsDevice* device);
 
+	void beginColorPass(izanagi::graph::CGraphicsDevice* device);
+	void endColorPass(izanagi::graph::CGraphicsDevice* device);
+
 	void bindForTAAPass(izanagi::graph::CGraphicsDevice* device);
 
 	void drawBuffers(izanagi::graph::CGraphicsDevice* device);
@@ -29,6 +32,7 @@ private:
 		Normal,
 		Depth,
 		Motion,
+		Color,
 
 		Num,
 	};

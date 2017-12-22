@@ -1,6 +1,7 @@
 #include "TAAApp.h"
 #include "izGraph.h"
 #include "izSystem.h"
+#include <imgui.h>
 
 TAAApp::TAAApp()
 {
@@ -32,6 +33,10 @@ IZ_BOOL TAAApp::InitInternal(
 		device,
 		"shader/vs_fillscreen.glsl",
 		"shader/ps_taa.glsl");
+	m_shdFinalPass.init(
+		device,
+		"shader/vs_fillscreen.glsl",
+		"shader/ps_final.glsl");
 
 	m_obj = izanagi::sample::ObjModel::create(
 		allocator,
@@ -51,6 +56,14 @@ IZ_BOOL TAAApp::InitInternal(
 		device,
 		IZ_COLOR_RGBA(0xff, 0xff, 0xff, 0xff));
 	IZ_ASSERT(m_screenFillPlane != IZ_NULL);
+
+	// imgui
+	{
+		m_imgui = izanagi::debugutil::ImGuiProc::init(allocator, device);
+		IZ_ASSERT(m_imgui);
+
+		izanagi::sys::CSysWindow::registerExtendMsgHandler(m_imgui);
+	}
 
 	// カメラ
 	camera.Init(
@@ -75,6 +88,15 @@ __EXIT__:
 void TAAApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
 	GetCamera().Update();
+
+	m_imgui->beginFrame();
+	{
+		ImGui::SliderFloat("Alpha", &m_param.lerpRatio, 0.0f, 1.0f);
+		ImGui::SliderFloat("Color-Box Sigma", &m_param.colorBoxSigma, 0.0f, 1.0f);
+
+		ImGui::Checkbox("Enable TAA", &m_param.enableTAA);
+		ImGui::Checkbox("Show TAA Diff", &m_param.showDiff);
+	}
 }
 
 // 描画.
@@ -115,10 +137,14 @@ void TAAApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 	renderGeometryPass(device);
 	renderColorPass(device);
 	renderTAAPass(device);
+	renderFinalPass(device);
 
 	device->SetTexture(0, IZ_NULL);
 
 	m_gbuffer.drawBuffers(device);
+
+	// imgui.
+	ImGui::Render();
 
 	m_curRt = 1 - m_curRt;
 
@@ -196,15 +222,11 @@ void TAAApp::renderColorPass(izanagi::graph::CGraphicsDevice* device)
 	auto hClr = shd->GetHandleByName("color");
 	shd->SetVector(device, hClr, color);
 
-	izanagi::graph::CRenderTarget* rt[] = {
-		m_rt[m_curRt],
-	};
-
-	device->BeginScene(rt, 1, izanagi::graph::E_GRAPH_CLEAR_FLAG_ALL);
+	m_gbuffer.beginColorPass(device);
 
 	m_obj->render(device);
 
-	device->EndScene();
+	m_gbuffer.endColorPass(device);
 }
 
 void TAAApp::renderTAAPass(izanagi::graph::CGraphicsDevice* device)
@@ -228,10 +250,57 @@ void TAAApp::renderTAAPass(izanagi::graph::CGraphicsDevice* device)
 	auto hInvScr = shd->GetHandleByName("invScreen");
 	shd->SetVector(device, hInvScr, izanagi::math::CVector4(1.0f / width, 1.0f / height, 0.0f, 0.0f));
 
+	auto hClrBoxSigma = shd->GetHandleByName("colorBoxSigma");
+	shd->SetFloat(device, hClrBoxSigma, m_param.colorBoxSigma);
+
+	auto hLerpRatio = shd->GetHandleByName("lerpRatio");
+	shd->SetFloat(device, hLerpRatio, m_param.lerpRatio);
+
+	auto hEnableTAA = shd->GetHandleByName("enableTAA");
+	shd->SetBool(device, hEnableTAA, m_param.enableTAA);
+
+	auto hShowDiff = shd->GetHandleByName("showDiff");
+	shd->SetBool(device, hShowDiff, m_param.showDiff);
+
 	m_gbuffer.bindForTAAPass(device);
 
-	device->SetTexture(3, m_rt[m_curRt]);
 	device->SetTexture(4, m_rt[1 - m_curRt]);
+
+	izanagi::graph::CRenderTarget* rt[] = {
+		m_rt[m_curRt],
+	};
+
+	device->BeginScene(rt, 1, izanagi::graph::E_GRAPH_CLEAR_FLAG_ALL);
+
+	m_screenFillPlane->Draw(device);
+
+	device->EndScene();
+
+	device->LoadRenderState();
+}
+
+void TAAApp::renderFinalPass(izanagi::graph::CGraphicsDevice* device)
+{
+	device->SaveRenderState();
+
+	device->SetRenderState(
+		izanagi::graph::E_GRAPH_RS_ZENABLE,
+		IZ_FALSE);
+	device->SetRenderState(
+		izanagi::graph::E_GRAPH_RS_ZWRITEENABLE,
+		IZ_FALSE);
+
+	auto* shd = m_shdFinalPass.m_program;
+
+	device->SetShaderProgram(shd);
+
+	auto width = device->GetBackBufferWidth();
+	auto height = device->GetBackBufferHeight();
+
+	auto hInvScr = shd->GetHandleByName("invScreen");
+	shd->SetVector(device, hInvScr, izanagi::math::CVector4(1.0f / width, 1.0f / height, 0.0f, 0.0f));
+
+	device->SetTexture(0, m_rt[m_curRt]);
 
 	m_screenFillPlane->Draw(device);
 
@@ -245,12 +314,15 @@ void TAAApp::ReleaseInternal()
 	m_shdGeometryPass.release();
 	m_shdColorPass.release();
 	m_shdTAAPass.release();
+	m_shdFinalPass.release();
 
 	SAFE_RELEASE(m_screenFillPlane);
 
 	for (int i = 0; i < COUNTOF(m_rt); i++) {
 		SAFE_RELEASE(m_rt[i]);
 	}
+
+	SAFE_RELEASE(m_imgui);
 
 	m_gbuffer.clear();
 }

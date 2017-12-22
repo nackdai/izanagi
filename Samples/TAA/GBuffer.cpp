@@ -31,6 +31,13 @@ IZ_BOOL GBuffer::init(
 		izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA32F);
 	VRETURN(std::get<1>(res) && std::get<0>(res) == Motion);
 
+	// Color.
+	res = m_gbuffer->addBuffer(
+		device,
+		width, height,
+		izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA8);
+	VRETURN(std::get<1>(res) && std::get<0>(res) == Color);
+
 	return IZ_TRUE;
 }
 
@@ -60,12 +67,29 @@ void GBuffer::endGeometryPass(izanagi::graph::CGraphicsDevice* device)
 	m_gbuffer->end(device);
 }
 
+void GBuffer::beginColorPass(izanagi::graph::CGraphicsDevice* device)
+{
+	IZ_UINT targets[] = {
+		Color,
+	};
+
+	m_gbuffer->begin(
+		device,
+		targets, COUNTOF(targets));
+}
+
+void GBuffer::endColorPass(izanagi::graph::CGraphicsDevice* device)
+{
+	m_gbuffer->end(device);
+}
+
 void GBuffer::bindForTAAPass(izanagi::graph::CGraphicsDevice* device)
 {
 	izanagi::engine::GBuffer::BindOp ops[] = {
 		{ Normal, 0, "s0" },
 		{ Depth, 1, "s1" },
-		{ Motion, 1, "s2" },
+		{ Motion, 2, "s2" },
+		{ Color, 3, "s3" },
 	};
 
 	m_gbuffer->bind(
@@ -79,6 +103,7 @@ void GBuffer::drawBuffers(izanagi::graph::CGraphicsDevice* device)
 		Normal,
 		Depth,
 		Motion,
+		Color,
 	};
 
 	m_gbuffer->dumpBuffers(

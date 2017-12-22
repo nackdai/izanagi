@@ -35,6 +35,7 @@ private:
 	void renderGeometryPass(izanagi::graph::CGraphicsDevice* device);
 	void renderColorPass(izanagi::graph::CGraphicsDevice* device);
 	void renderTAAPass(izanagi::graph::CGraphicsDevice* device);
+	void renderFinalPass(izanagi::graph::CGraphicsDevice* device);
 
 protected:
 	izanagi::sample::ObjModel* m_obj{ nullptr };
@@ -42,6 +43,7 @@ protected:
 	izanagi::sample::Shader m_shdGeometryPass;
 	izanagi::sample::Shader m_shdColorPass;
 	izanagi::sample::Shader m_shdTAAPass;
+	izanagi::sample::Shader m_shdFinalPass;
 
 	GBuffer m_gbuffer;
 
@@ -57,6 +59,15 @@ protected:
 
 	izanagi::math::CMatrix44 m_mtxPrevL2W;
 	izanagi::math::CMatrix44 m_mtxPrevW2C;
+
+	struct {
+		float colorBoxSigma{ 1.0f };
+		float lerpRatio{ 0.1f };
+		bool enableTAA{ true };
+		bool showDiff{ false };
+	} m_param;
+
+	izanagi::debugutil::ImGuiProc* m_imgui{ nullptr };
 };
 
 #endif    // #if !defined(__TAA_APP_H__)
