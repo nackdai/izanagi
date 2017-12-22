@@ -82,6 +82,29 @@ void TAAApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
 	const auto& camera = GetCamera();
 
+	auto width = device->GetBackBufferWidth();
+	auto height = device->GetBackBufferHeight();
+
+	static const float offset_tbl[8][2] = {
+		// http://en.wikipedia.org/wiki/Halton_sequence
+		{ 1.0f / 2.0f, 1.0f / 3.0f },
+		{ 1.0f / 4.0f, 2.0f / 3.0f },
+		{ 3.0f / 4.0f, 1.0f / 9.0f },
+		{ 1.0f / 8.0f, 4.0f / 9.0f },
+		{ 5.0f / 8.0f, 7.0f / 9.0f },
+		{ 3.0f / 8.0f, 2.0f / 9.0f },
+		{ 7.0f / 8.0f, 5.0f / 9.0f },
+		{ 1.0f / 16.0f, 8.0f / 9.0f },
+	};
+
+	int idx = m_frame % 8;
+	izanagi::math::SMatrix44::SetUnit(m_mtxOffset);
+	izanagi::math::SMatrix44::GetTrans(
+		m_mtxOffset,
+		offset_tbl[idx][0] / width,
+		offset_tbl[idx][1] / height,
+		0.0f);
+
 	m_mtxL2W.SetScale(100, 100, 100);
 
 	if (m_frame == 0) {
@@ -133,6 +156,9 @@ void TAAApp::renderGeometryPass(izanagi::graph::CGraphicsDevice* device)
 		shd->SetMatrix(device, hW2C, m_mtxPrevW2C);
 	}
 
+	auto hOffset = shd->GetHandleByName("mtxOffset");
+	shd->SetMatrix(device, hOffset, m_mtxOffset);
+
 	auto width = device->GetBackBufferWidth();
 	auto height = device->GetBackBufferHeight();
 
@@ -163,6 +189,9 @@ void TAAApp::renderColorPass(izanagi::graph::CGraphicsDevice* device)
 
 	auto hW2C = shd->GetHandleByName("mtxW2C");
 	shd->SetMatrix(device, hW2C, mtxW2C);
+
+	auto hOffset = shd->GetHandleByName("mtxOffset");
+	shd->SetMatrix(device, hOffset, m_mtxOffset);
 
 	auto hClr = shd->GetHandleByName("color");
 	shd->SetVector(device, hClr, color);

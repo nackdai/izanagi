@@ -15,9 +15,11 @@ uniform mat4 mtxW2C;
 uniform mat4 mtxPrevL2W;
 uniform mat4 mtxPrevW2C;
 
+uniform mat4 mtxOffset;
+
 void main()
 {
-    gl_Position = mtxW2C * mtxL2W * position;
+    gl_Position = mtxOffset * mtxW2C * mtxL2W * position;
 
 	prevCSPos = mtxPrevW2C * mtxPrevL2W * position;
 

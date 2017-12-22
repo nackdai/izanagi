@@ -51,6 +51,7 @@ protected:
 	izanagi::CDebugMesh* m_screenFillPlane{ nullptr };
 
 	izanagi::math::CMatrix44 m_mtxL2W;
+	izanagi::math::CMatrix44 m_mtxOffset;
 
 	IZ_UINT m_frame{ 0 };
 
