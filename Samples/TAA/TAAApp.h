@@ -7,9 +7,6 @@
 
 #include "GBuffer.h"
 
-static const IZ_UINT SCREEN_WIDTH = 1280;
-static const IZ_UINT SCREEN_HEIGHT = 720;
-
 class TAAApp : public izanagi::sample::CSampleApp {
 public:
 	TAAApp();
