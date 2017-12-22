@@ -1,9 +1,12 @@
 #include "izSampleKit.h"
 
-#define TRY_INSIDE_TAA
+//#define TRY_INSIDE_TAA
+#define TRY_NEW_TAA
 
 #ifdef TRY_INSIDE_TAA
 #include "TAAApp2.h"
+#elif defined(TRY_NEW_TAA)
+#include "TAAApp3.h"
 #else
 #include "TAAApp.h"
 #endif
@@ -19,6 +22,8 @@ static IZ_UINT GFX_BUF[GFX_BUF_SIZE];
 
 #ifdef TRY_INSIDE_TAA
 TAAApp2 app;
+#elif defined(TRY_NEW_TAA)
+TAAApp3 app;
 #else
 TAAApp app;
 #endif
@@ -30,6 +35,8 @@ IzMain(SCREEN_WIDTH, SCREEN_HEIGHT)
         &app,
 #ifdef TRY_INSIDE_TAA
         "TAA INSIDE",
+#elif defined(TRY_NEW_TAA)
+		"TAA New",
 #else
 		"TAA",
 #endif
