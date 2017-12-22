@@ -126,7 +126,7 @@ vec4 temporalReprojection(
 	float unbiased_weight_sqr = unbiased_weight * unbiased_weight;
 
 	// TODO
-	float _FeedbackMin = 0;
+	float _FeedbackMin = 0.2;
 	float _FeedbackMax = 1;
 
 	float k_feedback = mix(_FeedbackMin, _FeedbackMax, unbiased_weight_sqr);
@@ -168,6 +168,41 @@ vec4 PDsrand4(vec2 n)
 	return PDnrand4(n) * 2 - 1;
 }
 
+#define ZCMP_GT(a, b) (a > b)
+
+vec3 find_closest_fragment_3x3(vec2 uv)
+{
+	vec2 dd = 1.0 / textureSize(s2, 0).xy;
+	vec2 du = vec2(dd.x, 0.0);
+	vec2 dv = vec2(0.0, dd.y);
+
+	vec3 dtl = vec3(-1, -1, texture2D(s2, uv - dv - du).x);
+	vec3 dtc = vec3(0, -1, texture2D(s2, uv - dv).x);
+	vec3 dtr = vec3(1, -1, texture2D(s2, uv - dv + du).x);
+
+	vec3 dml = vec3(-1, 0, texture2D(s2, uv - du).x);
+	vec3 dmc = vec3(0, 0, texture2D(s2, uv).x);
+	vec3 dmr = vec3(1, 0, texture2D(s2, uv + du).x);
+
+	vec3 dbl = vec3(-1, 1, texture2D(s2, uv + dv - du).x);
+	vec3 dbc = vec3(0, 1, texture2D(s2, uv + dv).x);
+	vec3 dbr = vec3(1, 1, texture2D(s2, uv + dv + du).x);
+
+	vec3 dmin = dtl;
+	if (ZCMP_GT(dmin.z, dtc.z)) dmin = dtc;
+	if (ZCMP_GT(dmin.z, dtr.z)) dmin = dtr;
+
+	if (ZCMP_GT(dmin.z, dml.z)) dmin = dml;
+	if (ZCMP_GT(dmin.z, dmc.z)) dmin = dmc;
+	if (ZCMP_GT(dmin.z, dmr.z)) dmin = dmr;
+
+	if (ZCMP_GT(dmin.z, dbl.z)) dmin = dbl;
+	if (ZCMP_GT(dmin.z, dbc.z)) dmin = dbc;
+	if (ZCMP_GT(dmin.z, dbr.z)) dmin = dbr;
+
+	return vec3(uv + dd.xy * dmin.xy, dmin.z);
+}
+
 void main()
 {
 	vec2 texSize = textureSize(s3, 0).xy;
@@ -181,7 +216,12 @@ void main()
 		return;
 	}
 
+#if 1
+	vec3 c_frag = find_closest_fragment_3x3(uv);
+	vec2 velocity = texture2D(s2, c_frag.xy).xy;
+#else
 	vec2 velocity = texture2D(s2, uv).xy;
+#endif
 
 	// temporal resolve
 	vec4 color_temporal = temporalReprojection(uv, velocity, texelSize);

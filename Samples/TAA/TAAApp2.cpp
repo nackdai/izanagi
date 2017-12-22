@@ -190,6 +190,35 @@ void TAAApp2::renderColorPass(izanagi::graph::CGraphicsDevice* device)
 	auto hW2C = shd->GetHandleByName("mtxW2C");
 	shd->SetMatrix(device, hW2C, mtxW2C);
 
+	{
+		static const float offset_tbl[8][2] = {
+			// http://en.wikipedia.org/wiki/Halton_sequence
+			{ 1.0f / 2.0f, 1.0f / 3.0f },
+			{ 1.0f / 4.0f, 2.0f / 3.0f },
+			{ 3.0f / 4.0f, 1.0f / 9.0f },
+			{ 1.0f / 8.0f, 4.0f / 9.0f },
+			{ 5.0f / 8.0f, 7.0f / 9.0f },
+			{ 3.0f / 8.0f, 2.0f / 9.0f },
+			{ 7.0f / 8.0f, 5.0f / 9.0f },
+			{ 1.0f / 16.0f, 8.0f / 9.0f },
+		};
+
+		auto width = device->GetBackBufferWidth();
+		auto height = device->GetBackBufferHeight();
+
+		int idx = m_frame % 8;
+
+		izanagi::math::CMatrix44 mtxOffset;
+		izanagi::math::SMatrix44::GetTrans(
+			mtxOffset,
+			offset_tbl[idx][0] / width,
+			offset_tbl[idx][1] / height,
+			0.0f);
+
+		auto hOffset = shd->GetHandleByName("mtxOffset");
+		shd->SetMatrix(device, hOffset, mtxOffset);
+	}
+
 	auto hClr = shd->GetHandleByName("color");
 	shd->SetVector(device, hClr, color);
 
