@@ -21,7 +21,7 @@ IZ_BOOL GBuffer::init(
 	res = m_gbuffer->addBuffer(
 		device,
 		width, height,
-		izanagi::graph::E_GRAPH_PIXEL_FMT_R32F);
+		izanagi::graph::E_GRAPH_PIXEL_FMT_RGBA32F);
 	VRETURN(std::get<1>(res) && std::get<0>(res) == Depth);
 
 	return IZ_TRUE;

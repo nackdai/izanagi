@@ -49,6 +49,8 @@ protected:
 	izanagi::graph::CRenderTarget* m_rt[2];
 
 	izanagi::CDebugMesh* m_screenFillPlane{ nullptr };
+
+	izanagi::math::CMatrix44 m_mtxL2W;
 };
 
 #endif    // #if !defined(__TAA_APP_H__)
