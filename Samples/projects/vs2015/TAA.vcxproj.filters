@@ -10,12 +10,18 @@
     <ClCompile Include="..\..\TAA\main.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\TAA\TAAApp2.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\TAA\GBuffer.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\TAA\TAAApp.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TAA\TAAApp2.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
@@ -38,6 +44,30 @@
     <None Include="..\..\TAA\shader\ps_taa.glsl">
       <Filter>shader</Filter>
     </None>
+    <None Include="..\..\TAA\shader\ps_final.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\TAA\shader2\ps_geometry.glsl">
+      <Filter>shader2</Filter>
+    </None>
+    <None Include="..\..\TAA\shader2\ps_taa.glsl">
+      <Filter>shader2</Filter>
+    </None>
+    <None Include="..\..\TAA\shader2\vs_default.glsl">
+      <Filter>shader2</Filter>
+    </None>
+    <None Include="..\..\TAA\shader2\vs_fillscreen.glsl">
+      <Filter>shader2</Filter>
+    </None>
+    <None Include="..\..\TAA\shader2\vs_geometry.glsl">
+      <Filter>shader2</Filter>
+    </None>
+    <None Include="..\..\TAA\shader2\ps_default.glsl">
+      <Filter>shader2</Filter>
+    </None>
+    <None Include="..\..\TAA\shader2\ps_final.glsl">
+      <Filter>shader2</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -48,6 +78,9 @@
     </Filter>
     <Filter Include="shader">
       <UniqueIdentifier>{88cb99ae-83dc-4117-b37c-a5be6601394c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shader2">
+      <UniqueIdentifier>{3b573902-064a-4c11-8982-b4e9304a6fc3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

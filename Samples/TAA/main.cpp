@@ -1,5 +1,12 @@
 #include "izSampleKit.h"
+
+#define TRY_INSIDE_TAA
+
+#ifdef TRY_INSIDE_TAA
+#include "TAAApp2.h"
+#else
 #include "TAAApp.h"
+#endif
 
 static const IZ_UINT SCREEN_WIDTH = 1280;
 static const IZ_UINT SCREEN_HEIGHT = 720;
@@ -10,14 +17,22 @@ static IZ_UINT8 BUF[BUF_SIZE];
 static const IZ_UINT GFX_BUF_SIZE = 1 * 1024 * 1024;
 static IZ_UINT GFX_BUF[GFX_BUF_SIZE];
 
+#ifdef TRY_INSIDE_TAA
+TAAApp2 app;
+#else
 TAAApp app;
+#endif
 
 IzMain(SCREEN_WIDTH, SCREEN_HEIGHT)
 {
     int ret = SampleMain(
         IzGetSystemDataForMainFunc(),
         &app,
-        "TAA",
+#ifdef TRY_INSIDE_TAA
+        "TAA INSIDE",
+#else
+		"TAA",
+#endif
         IzGetScreenWidth(), IzGetScreenHeight(),
         BUF, BUF_SIZE,
         GFX_BUF, GFX_BUF_SIZE);
