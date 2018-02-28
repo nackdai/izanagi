@@ -127,8 +127,8 @@ IZ_UINT8* CAnimation::Init(
     VRETURN_NULL(result);
 
     // チャンネル情報にキー情報を関連付ける
-    for (IZ_UINT nKeyIdx = 0; nKeyIdx < m_Header.numNodes; ++nKeyIdx) {
-        S_ANM_NODE& sNode = *m_pNodes[nKeyIdx].node;
+    for (IZ_UINT nNodeIdx = 0; nNodeIdx < m_Header.numNodes; ++nNodeIdx) {
+        S_ANM_NODE& sNode = *m_pNodes[nNodeIdx].node;
 
         for (IZ_UINT nChannelIdx = 0; nChannelIdx < sNode.numChannels; ++nChannelIdx) {
             S_ANM_CHANNEL& sChannel = m_Channels[nChannelIdx + sNode.channelIdx];
