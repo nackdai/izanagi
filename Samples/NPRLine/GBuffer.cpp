@@ -76,17 +76,17 @@ void GBuffer::bindForFinalPass(izanagi::graph::CGraphicsDevice* device)
     };
 
     m_gbuffer->getBuffer(Type::Color)->SetFilter(
-        izanagi::graph::E_GRAPH_TEX_FILTER_POINT,
-        izanagi::graph::E_GRAPH_TEX_FILTER_POINT,
-        izanagi::graph::E_GRAPH_TEX_FILTER_POINT);
+        izanagi::graph::E_GRAPH_TEX_FILTER_LINEAR,
+        izanagi::graph::E_GRAPH_TEX_FILTER_LINEAR,
+        izanagi::graph::E_GRAPH_TEX_FILTER_LINEAR_MIPMAP_LINEAR);
     m_gbuffer->getBuffer(Type::NmlDepth)->SetFilter(
-        izanagi::graph::E_GRAPH_TEX_FILTER_POINT,
-        izanagi::graph::E_GRAPH_TEX_FILTER_POINT,
-        izanagi::graph::E_GRAPH_TEX_FILTER_POINT);
+        izanagi::graph::E_GRAPH_TEX_FILTER_LINEAR,
+        izanagi::graph::E_GRAPH_TEX_FILTER_LINEAR,
+        izanagi::graph::E_GRAPH_TEX_FILTER_LINEAR_MIPMAP_LINEAR);
 	m_gbuffer->getBuffer(Type::GeomId)->SetFilter(
 		izanagi::graph::E_GRAPH_TEX_FILTER_POINT,
 		izanagi::graph::E_GRAPH_TEX_FILTER_POINT,
-		izanagi::graph::E_GRAPH_TEX_FILTER_POINT);
+		izanagi::graph::E_GRAPH_TEX_FILTER_NEAREST_MIPMAP_NEAREST);
 
     m_gbuffer->bind(
         device,

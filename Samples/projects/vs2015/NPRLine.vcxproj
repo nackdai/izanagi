@@ -358,6 +358,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\NPRLine\shader\ps_geometry.glsl" />
+    <None Include="..\..\NPRLine\shader\ps_nprline.glsl" />
     <None Include="..\..\NPRLine\shader\vs_fillscreen.glsl" />
     <None Include="..\..\NPRLine\shader\vs_geometry.glsl" />
   </ItemGroup>

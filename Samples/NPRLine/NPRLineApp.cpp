@@ -28,12 +28,10 @@ IZ_BOOL NPRLineApp::InitInternal(
         device,
         "shader/vs_geometry.glsl",
         "shader/ps_geometry.glsl");
-#if 0
     m_shdFinalPass.init(
         device,
         "shader/vs_fillscreen.glsl",
-        "shader/ps_final.glsl");
-#endif
+        "shader/ps_nprline.glsl");
     
     m_gbuffer.init(allocator, device);
 
@@ -89,6 +87,81 @@ void NPRLineApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 // 描画.
 void NPRLineApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 {
+	renderGeometryPass(device);
+
+	{
+		// TODO
+		// Only one time...
+		std::vector<izanagi::math::CVector4> taps;
+		std::vector<izanagi::math::CVector4> creaseTaps;
+
+		for (int n = 0; n < 2; n++) {
+			int num = (n + 1) * 8;
+			for (int i = 0; i < num; i++) {
+				float theta = (IZ_MATH_PI2 * i) / num;
+				float x = izanagi::math::CMath::CosF(theta);
+				float y = izanagi::math::CMath::SinF(theta);
+
+				auto t = izanagi::math::CVector4(x, y, 0.0f, 0.0f);
+
+				taps.push_back(t);
+
+				if (i % (2 << n) == 0) {
+					creaseTaps.push_back(t);
+				}
+			}
+		}
+
+		auto shd = m_shdFinalPass.m_program;
+		device->SetShaderProgram(shd);
+
+		auto hTaps = shd->GetHandleByName("taps");
+		shd->SetVectorArray(device, hTaps, &taps[0], taps.size());
+
+		auto hCreaseTaps = shd->GetHandleByName("creaseTaps");
+		shd->SetVectorArray(device, hCreaseTaps, &creaseTaps[0], creaseTaps.size());
+
+		auto hRadius = shd->GetHandleByName("radius");
+		shd->SetFloat(device, hRadius, 1.0f);
+
+		auto hDepthThreshold = shd->GetHandleByName("depthThreshold");
+		shd->SetFloat(device, hDepthThreshold, 2.0f);
+
+		auto nNormalThreshold = shd->GetHandleByName("normalThreshold");
+		shd->SetFloat(device, nNormalThreshold, 0.9f);
+
+		device->SaveRenderState();
+
+		device->SetRenderState(
+			izanagi::graph::E_GRAPH_RS_ZENABLE,
+			IZ_FALSE);
+		device->SetRenderState(
+			izanagi::graph::E_GRAPH_RS_ZWRITEENABLE,
+			IZ_FALSE);
+
+		auto width = device->GetBackBufferWidth();
+		auto height = device->GetBackBufferHeight();
+
+		auto hInvScr = shd->GetHandleByName("invScreen");
+		izanagi::math::CVector4 invScr(1.0f / width, 1.0f / height, 0.0f, 1.0f);
+		shd->SetVector(device, hInvScr, invScr);
+
+		m_gbuffer.bindForFinalPass(device);
+
+		m_screenFillPlane->Draw(device);
+
+		device->LoadRenderState();
+	}
+
+	device->SetTexture(0, IZ_NULL);
+	m_gbuffer.drawBuffers(device);
+
+	// imgui.
+	ImGui::Render();
+}
+
+void NPRLineApp::renderGeometryPass(izanagi::graph::CGraphicsDevice* device)
+{
 	device->SaveRenderState();
 
 	device->SetRenderState(
@@ -117,12 +190,6 @@ void NPRLineApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 	m_gbuffer.end(device);
 
 	device->LoadRenderState();
-
-	device->SetTexture(0, IZ_NULL);
-	m_gbuffer.drawBuffers(device);
-
-	// imgui.
-	ImGui::Render();
 }
 
 void NPRLineApp::ReleaseInternal()

@@ -33,6 +33,9 @@ public:
 
     virtual IZ_BOOL OnKeyDown(izanagi::sys::E_KEYBOARD_BUTTON key) override;
 
+private:
+	void renderGeometryPass(izanagi::graph::CGraphicsDevice* device);
+
 protected:
     Scene m_scene;
 
