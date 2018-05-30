@@ -2,8 +2,10 @@
 precision highp float;
 precision highp int;
 
-layout(location = 0) out vec4 outColor;
+// NOTE
+// http://www.sci.utah.edu/~roni/research/projects/NPR-lines/
 
+layout(location = 0) out vec4 outColor;
 
 uniform sampler2D s0;   // color.
 uniform sampler2D s1;	// normal/depth.
@@ -24,6 +26,11 @@ uniform vec4 creaseTaps[4];
 uniform float radius;
 uniform float depthThreshold;
 uniform float normalThreshold;
+
+float computeEdgeStrength(int i)
+{
+	return clamp(1.0f - abs(i - M / 2) / (M / 2), 0.0f, 1.0f);
+}
 
 void main()
 {
@@ -63,7 +70,7 @@ void main()
 	float edgeStrength = 0.0f;
 
 	if (m > 0) {
-		edgeStrength = clamp(1.0f - abs(m - M / 2) / (M / 2), 0.0f, 1.0f);
+		edgeStrength = computeEdgeStrength(m);
 	}
 	else {
 		for (int i = 0; i < 4; i++) {
@@ -80,7 +87,7 @@ void main()
 		}
 
 		if (edgeStrength == 0.0f) {
-			edgeStrength = clamp(1.0f - abs(d - M / 2) / (M / 2), 0.0f, 1.0f);
+			edgeStrength = computeEdgeStrength(d);
 		}
 	}
 
