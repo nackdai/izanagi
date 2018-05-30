@@ -44,6 +44,13 @@ namespace graph
         IZ_BOOL StartOffScreen();
         IZ_BOOL EndOffScreen();
 
+		bool isOffScreen() const
+		{
+			return m_IsOnOffScreen;
+		}
+
+		void clearColor();
+
     public:
         GLuint GetRawInterface() { return m_FBO; }
 

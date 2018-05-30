@@ -234,6 +234,12 @@ namespace graph
             if (flag > 0) {
                 CALL_GL_API(::glClear(flag));
             }
+
+			// TODO
+			// Need to simplify clear buffer.
+			if (m_FBO->isOffScreen()) {
+				m_FBO->clearColor();
+			}
         }
     }
 

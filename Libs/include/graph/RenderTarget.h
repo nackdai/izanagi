@@ -30,6 +30,11 @@ namespace graph
         {
             return nullptr;
         }
+
+		virtual void setClearColor(float r, float g, float b, float a)
+		{
+			IZ_ASSERT(false);
+		}
     };
 }   // namespace graph
 }   // namespace izanagi

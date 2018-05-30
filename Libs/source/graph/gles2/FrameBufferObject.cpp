@@ -171,5 +171,23 @@ namespace graph
 
         return IZ_TRUE;
     }
+
+	void CFrameBufferObject::clearColor()
+	{
+		for (IZ_UINT i = 0; i < MAX_MRT_NUM; i++) {
+			GLuint colorTexHandle = (m_Color[i] != IZ_NULL
+				? m_Color[i]->GetTexHandle()
+				: 0);
+
+			if (colorTexHandle > 0) {
+				// TODO
+				CRenderTargetGLES2* rt = (CRenderTargetGLES2*)m_Color[i];
+				if (rt->isSpecifiedClearClr()) {
+					const auto clr = rt->getClearColor();
+					CALL_GL_API(::glClearNamedFramebufferfv(m_FBO, GL_COLOR, i, clr));
+				}
+			}
+		}
+	}
 }   // namespace graph
 }   // namespace izanagi
