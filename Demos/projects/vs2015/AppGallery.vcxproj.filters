@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{beb5773f-dd03-437c-a2cb-395e531823f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{76ce0a01-77db-4ede-9821-cd329d8d444a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shader">
+      <UniqueIdentifier>{4da7ed9e-375b-4f23-8901-cc0499448e04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\state">
+      <UniqueIdentifier>{fb4ad5f4-87f8-4401-b946-de15af4db489}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\state">
+      <UniqueIdentifier>{a1c72542-85c1-4674-8e73-c2e44f247d69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="asset">
+      <UniqueIdentifier>{7c2b4023-2a68-407b-b7bf-be4b655c3977}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\AppGallery\AppGalleryApp.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\AppGallery\Configure.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\AppGallery\LoadTextureJob.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\AppGallery\GestureListener.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\AppGallery\Ring.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\AppGallery\Scene.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\AppGallery\Utility.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\AppGallery\MeshVtx.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\AppGallery\Item.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\AppGallery\ItemManager.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\AppGallery\ItemBox.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\AppGallery\ItemBoard.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\AppGallery\data\ImageFiles.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\AppGallery\Environment.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\AppGallery\StateDefault.h">
+      <Filter>include\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\AppGallery\StateRotateByFling.h">
+      <Filter>include\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\AppGallery\StateManager.h">
+      <Filter>include\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\AppGallery\StateRotateByDrag.h">
+      <Filter>include\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\AppGallery\StateBase.h">
+      <Filter>include\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\AppGallery\2D.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\AppGallery\Configure.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\AppGallery\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\AppGallery\AppGalleryApp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\AppGallery\LoadTextureJob.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\AppGallery\GestureListener.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\AppGallery\Ring.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\AppGallery\Scene.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\AppGallery\Utility.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\AppGallery\ItemManager.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\AppGallery\Item.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\AppGallery\ItemBox.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\AppGallery\ItemBoard.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\AppGallery\Environment.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\AppGallery\StateBase.cpp">
+      <Filter>src\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\AppGallery\StateRotateByFling.cpp">
+      <Filter>src\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\AppGallery\StateDefault.cpp">
+      <Filter>src\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\AppGallery\StateManager.cpp">
+      <Filter>src\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\AppGallery\StateRotateByDrag.cpp">
+      <Filter>src\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\AppGallery\2D.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\AppGallery\shader\BevelShader.fx">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\AppGallery\shader\BasicShader.fx">
+      <Filter>shader</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\AppGallery\shader\BevelShader.xml">
+      <Filter>shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\AppGallery\shader\BasicShader.xml">
+      <Filter>shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\AppGallery\data\images.xml">
+      <Filter>asset</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>

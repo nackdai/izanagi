@@ -1,0 +1,190 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{a5b464f3-f861-4e13-adf2-cbda73fa5c7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{14a9ee0d-0f49-4963-8227-5dc961299a27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shader">
+      <UniqueIdentifier>{0b9a5094-76e5-44a9-b64c-8053276ed220}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\state">
+      <UniqueIdentifier>{946b76d4-4380-4753-9355-a07d6c7685c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\state">
+      <UniqueIdentifier>{37485d49-f714-4421-b38e-99d4ae15be2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\data">
+      <UniqueIdentifier>{9e917459-585f-4c6b-b373-348fb4d4762c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="posteffect">
+      <UniqueIdentifier>{99772a96-9cec-4bb9-9d80-36cb699a57b7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\PhotoGallery\shader\BasicShader.fx">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\PhotoGallery\shader\PhotoItemShader.fx">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\PhotoGallery\shader\SeatShader.fx">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\PhotoGallery\shader\SSAOShader.fx">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="..\..\PhotoGallery\posteffect\PostEffectBloomStar.fx">
+      <Filter>posteffect</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\PhotoGallery\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PhotoGallery\PhotoGalleryApp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PhotoGallery\Seat.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PhotoGallery\PhotoItemMesh.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PhotoGallery\PhotoItem.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PhotoGallery\LoadTextureJob.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PhotoGallery\PhotoItemManager.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PhotoGallery\Configure.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PhotoGallery\Utility.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PhotoGallery\GestureListener.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PhotoGallery\StateManager.cpp">
+      <Filter>src\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PhotoGallery\StateBase.cpp">
+      <Filter>src\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PhotoGallery\StateDefault.cpp">
+      <Filter>src\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PhotoGallery\StateRotateByFling.cpp">
+      <Filter>src\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PhotoGallery\StateChangeView.cpp">
+      <Filter>src\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PhotoGallery\StateMoveToItem.cpp">
+      <Filter>src\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PhotoGallery\Environment.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PhotoGallery\StateRotateByDrag.cpp">
+      <Filter>src\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PhotoGallery\BG.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PhotoGallery\BGRenderer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PhotoGallery\PostEffect.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\PhotoGallery\PhotoGalleryApp.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PhotoGallery\Seat.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PhotoGallery\PhotoItemMesh.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PhotoGallery\Configure.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PhotoGallery\PhotoItem.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PhotoGallery\LoadTextureJob.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PhotoGallery\PhotoItemManager.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PhotoGallery\Utility.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PhotoGallery\GestureListener.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PhotoGallery\StateRotateByFling.h">
+      <Filter>include\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PhotoGallery\StateDefault.h">
+      <Filter>include\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PhotoGallery\StateManager.h">
+      <Filter>include\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PhotoGallery\StateMoveToItem.h">
+      <Filter>include\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PhotoGallery\StateBase.h">
+      <Filter>include\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PhotoGallery\StateChangeView.h">
+      <Filter>include\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PhotoGallery\data\PhotoFiles.h">
+      <Filter>include\data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PhotoGallery\Environment.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PhotoGallery\StateRotateByDrag.h">
+      <Filter>include\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PhotoGallery\BG.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PhotoGallery\BGRenderer.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PhotoGallery\PostEffect.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\PhotoGallery\shader\BasicShader.xml">
+      <Filter>shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\PhotoGallery\shader\PhototItemShader.xml">
+      <Filter>shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\PhotoGallery\shader\SeatShader.xml">
+      <Filter>shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\PhotoGallery\shader\SSAOShader.xml">
+      <Filter>shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\PhotoGallery\posteffect\BloomStar.peh">
+      <Filter>posteffect</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>
