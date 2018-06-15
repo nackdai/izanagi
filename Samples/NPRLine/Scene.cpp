@@ -38,6 +38,7 @@ IZ_BOOL Scene::init(
         10.0f, 10.0f, 10.0f);
     VGOTO(result = (m_Mesh[MESH_TYPE_CUBE] != IZ_NULL), __EXIT__);
 
+#if 0
     // Cylinder
     m_Mesh[MESH_TYPE_CYLINDER] = izanagi::CDebugMeshCylinder::CreateDebugMeshCylinder(
         allocator,
@@ -47,6 +48,7 @@ IZ_BOOL Scene::init(
         5.0f, 10.0f,
         10, 10);
     VGOTO(result = (m_Mesh[MESH_TYPE_CYLINDER] != IZ_NULL), __EXIT__);
+#endif
 
     // Torus
     m_Mesh[MESH_TYPE_TORUS] = izanagi::CDebugMeshTorus::CreateDebugMeshTorus(

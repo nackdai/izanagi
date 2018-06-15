@@ -28,7 +28,7 @@ protected:
     enum MESH_TYPE {
         MESH_TYPE_SPHERE = 0,
         MESH_TYPE_CUBE,
-        MESH_TYPE_CYLINDER,
+        //MESH_TYPE_CYLINDER,
         MESH_TYPE_TORUS,
         MESH_TYPE_PLANE,
 
