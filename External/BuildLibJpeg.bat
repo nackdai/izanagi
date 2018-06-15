@@ -9,6 +9,7 @@ call ..\Build\SetBuildParams.bat
 set TARGET=Build
 set CONFIG=%1
 set PLATFORM=%2
+set VSVER=%3
 
 if not defined CONFIG (
     set CONFIG=Debug
@@ -16,6 +17,24 @@ if not defined CONFIG (
 
 if not defined PLATFORM (
     set PLATFORM=Win32
+)
+
+if not defined VSVER (
+    set VSVER=2015
+)
+
+set VS="Visual Studio 12 2013"
+
+if %VSVER% == 2015 (
+    set VS="Visual Studio 14 2015"
+    if %PLATFORM% == x64 (
+        set VS="Visual Studio 14 2015 Win64"
+    )
+) else (
+    set VS="Visual Studio 12 2013"
+    if %PLATFORM% == x64 (
+        set VS="Visual Studio 12 2013 Win64"
+    )
 )
 
 set BUILD_DIR=libjpeg\%PLATFORM%
@@ -28,11 +47,9 @@ set CMAKE_OPTIONS=-DWITH_SIMD=FALSE -DENABLE_SHARED=FALSE
 
 if not exist %BUILD_DIR%\libjpeg-turbo.sln (
     cd %BUILD_DIR%
-    if %PLATFORM% == Win32 (
-        ..\..\cmake\bin\cmake.exe -G "Visual Studio 12 2013" %CMAKE_OPTIONS% ..\
-    ) else (
-        ..\..\cmake\bin\cmake.exe -G "Visual Studio 12 2013 Win64" %CMAKE_OPTIONS% ..\
-    )
+
+    ..\..\cmake\bin\cmake.exe -G %VS% %CMAKE_OPTIONS% ..\
+
     cd ..\..\
 )
 
