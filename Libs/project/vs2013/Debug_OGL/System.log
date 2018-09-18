@@ -1,0 +1,24 @@
+﻿2016/05/04 13:03:55 にビルドを開始しました。
+     1>ノード 5 上のプロジェクト "D:\work\izanagi\Libs\project\vs2013\System.vcxproj" (Build ターゲット)。
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (Debug_OGL\) contains files shared from another project (Animation.vcxproj, Collision.vcxproj, DebugUtil.vcxproj, Graph.vcxproj, Math.vcxproj, Network.vcxproj, PostEffect.vcxproj, Resource.vcxproj, SceneGraph.vcxproj, Shader.vcxproj, Std.vcxproj, Terra.vcxproj, Text.vcxproj, ThreadModel.vcxproj, UI.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I../../include /I..\..\..\External\glew\include /I..\..\..\External\freeglut\include /Zi /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D __IZ_DEBUG__ /D __IZ_OGL__ /D __IZ_GLUT__ /D __IZANAGI_NO_USE_D3D__ /D _XKEYCHECK_H /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug_OGL\\" /Fd"D:\work\izanagi\Libs\project\vs2013\..\lib\Debug_OGL\System.pdb" /Gd /TP /wd4819 /analyze- /errorReport:prompt ..\..\source\system\SysWindow_glut.cpp
+         SysWindow_glut.cpp
+     1>d:\work\izanagi\libs\include\izDefs_windows.h(15): warning C4005: 'WIN32_LEAN_AND_MEAN' : マクロが再定義されました。
+                 d:\work\izanagi\external\freeglut\include\gl\freeglut_std.h(58) : 'WIN32_LEAN_AND_MEAN' の前の定義を確認してください
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"D:\work\izanagi\Libs\project\vs2013\..\lib\Debug_OGL\System.lib" freeglutd.lib /LIBPATH:..\..\..\External\freeglut\lib\Debug /NOLOGO Debug_OGL\SysEvent.obj
+         Debug_OGL\SysSemaphore.obj
+         Debug_OGL\SysThread.obj
+         Debug_OGL\SysWindow_glut.obj
+         Debug_OGL\TouchInput.obj
+         Debug_OGL\FileStream_win32.obj
+         "Debug_OGL\SysEnvironment_win32 .obj"
+         Debug_OGL\SysTimer_win32.obj
+         Debug_OGL\SysUtil_win32.obj
+         System.vcxproj -> D:\work\izanagi\Libs\project\vs2013\..\lib\Debug_OGL\System.lib
+     1>プロジェクト "D:\work\izanagi\Libs\project\vs2013\System.vcxproj" (Build ターゲット) のビルドが完了しました。
+
+ビルドに成功しました。
+
+経過時間 00:00:01.23

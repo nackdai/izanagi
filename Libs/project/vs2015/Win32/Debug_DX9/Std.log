@@ -1,0 +1,3 @@
+﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (Win32\Debug_DX9\) contains files shared from another project (Animation.vcxproj, Collision.vcxproj, DebugUtil.vcxproj, Engine.vcxproj, Graph.vcxproj, Math.vcxproj, Network.vcxproj, PostEffect.vcxproj, Resource.vcxproj, SceneGraph.vcxproj, Shader.vcxproj, System.vcxproj, Terra.vcxproj, Text.vcxproj, ThreadModel.vcxproj, UI.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+Binding.obj : warning LNK4221: このオブジェクト ファイルは、以前に未定義であったパブリック シンボルを定義していないため、このライブラリを使用するリンク操作では使用されません
+  Std.vcxproj -> D:\work\izanagi\Libs\project\vs2015\..\lib\Win32\Debug_DX9\Std.lib

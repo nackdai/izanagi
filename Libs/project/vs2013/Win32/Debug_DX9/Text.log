@@ -1,0 +1,40 @@
+﻿2016/05/15 0:11:14 にビルドを開始しました。
+     1>ノード 3 上のプロジェクト "D:\work\izanagi\Libs\project\vs2013\Text.vcxproj" (Build ターゲット)。
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (Win32\Debug_DX9\) contains files shared from another project (DebugUtil.vcxproj, Graph.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ID:\work\izanagi\Libs\project\vs2013\..\..\..\External\freetype\include /I../../include /Zi /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D D3D_DEBUG_INFO /D __IZ_DEBUG__ /D __IZ_DX9__ /D _XKEYCHECK_H /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Win32\Debug_DX9\\" /Fd"D:\work\izanagi\Libs\project\vs2013\..\lib\Win32\Debug_DX9\Text.pdb" /Gd /TP /wd4819 /analyze- /errorReport:prompt ..\..\source\text\FontGlyphCache.cpp ..\..\source\text\FontGlyphCacheImpl.cpp ..\..\source\text\FontHostFNT.cpp ..\..\source\text\FontHostFT.cpp ..\..\source\text\FontMap.cpp ..\..\source\text\FontRenderer.cpp ..\..\source\text\Paragraph.cpp ..\..\source\text\ParagraphGroup.cpp ..\..\source\text\ParagraphGroupImpl.cpp ..\..\source\text\ParagraphImpl.cpp ..\..\source\text\TextLine.cpp ..\..\source\text\TextLineImpl.cpp ..\..\source\text\UString.cpp
+         UString.cpp
+     1>..\..\source\text\UString.cpp(305): warning C4244: '初期化中' : 'IZ_LONG' から 'IZ_UINT' への変換です。データが失われる可能性があります。
+         TextLineImpl.cpp
+         TextLine.cpp
+         ParagraphImpl.cpp
+         ParagraphGroupImpl.cpp
+         ParagraphGroup.cpp
+         Paragraph.cpp
+         FontRenderer.cpp
+         FontMap.cpp
+         FontHostFT.cpp
+         FontHostFNT.cpp
+         FontGlyphCacheImpl.cpp
+         FontGlyphCache.cpp
+         コードを生成中...
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"D:\work\izanagi\Libs\project\vs2013\..\lib\Win32\Debug_DX9\Text.lib" /NOLOGO Win32\Debug_DX9\FontGlyphCache.obj
+         Win32\Debug_DX9\FontGlyphCacheImpl.obj
+         Win32\Debug_DX9\FontHostFNT.obj
+         Win32\Debug_DX9\FontHostFT.obj
+         Win32\Debug_DX9\FontMap.obj
+         Win32\Debug_DX9\FontRenderer.obj
+         Win32\Debug_DX9\Paragraph.obj
+         Win32\Debug_DX9\ParagraphGroup.obj
+         Win32\Debug_DX9\ParagraphGroupImpl.obj
+         Win32\Debug_DX9\ParagraphImpl.obj
+         Win32\Debug_DX9\TextLine.obj
+         Win32\Debug_DX9\TextLineImpl.obj
+         Win32\Debug_DX9\UString.obj
+         Text.vcxproj -> D:\work\izanagi\Libs\project\vs2013\..\lib\Win32\Debug_DX9\Text.lib
+     1>プロジェクト "D:\work\izanagi\Libs\project\vs2013\Text.vcxproj" (Build ターゲット) のビルドが完了しました。
+
+ビルドに成功しました。
+
+経過時間 00:00:08.11

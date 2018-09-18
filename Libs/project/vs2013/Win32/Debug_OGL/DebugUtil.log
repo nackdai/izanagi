@@ -1,0 +1,22 @@
+﻿2016/12/09 22:26:26 にビルドを開始しました。
+     1>ノード 2 上のプロジェクト "D:\work\izanagi\Libs\project\vs2013\DebugUtil.vcxproj" (Build ターゲット)。
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (Win32\Debug_OGL\) contains files shared from another project (Animation.vcxproj, Collision.vcxproj, Graph.vcxproj, Math.vcxproj, Network.vcxproj, PostEffect.vcxproj, Resource.vcxproj, SceneGraph.vcxproj, Shader.vcxproj, Std.vcxproj, System.vcxproj, Terra.vcxproj, Text.vcxproj, ThreadModel.vcxproj, UI.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+     1>Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"D:\work\izanagi\Libs\project\vs2013\..\lib\Win32\Debug_OGL\DebugUtil.lib" /NOLOGO Win32\Debug_OGL\DebugFont.obj
+         Win32\Debug_OGL\DebugMesh.obj
+         Win32\Debug_OGL\DebugMeshAxis.obj
+         Win32\Debug_OGL\DebugMeshBox.obj
+         Win32\Debug_OGL\DebugMeshCylinder.obj
+         Win32\Debug_OGL\DebugMeshFrustum.obj
+         Win32\Debug_OGL\DebugMeshGrid.obj
+         Win32\Debug_OGL\DebugMeshRectangle.obj
+         Win32\Debug_OGL\DebugMeshScreenFillPlane.obj
+         Win32\Debug_OGL\DebugMeshSphere.obj
+         Win32\Debug_OGL\DebugMeshTorus.obj
+         Win32\Debug_OGL\DebugMeshWiredBox.obj
+         DebugUtil.vcxproj -> D:\work\izanagi\Libs\project\vs2013\..\lib\Win32\Debug_OGL\DebugUtil.lib
+     1>プロジェクト "D:\work\izanagi\Libs\project\vs2013\DebugUtil.vcxproj" (Build ターゲット) のビルドが完了しました。
+
+ビルドに成功しました。
+
+経過時間 00:00:01.05

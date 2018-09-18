@@ -1,0 +1,28 @@
+﻿2016/11/23 9:43:53 にビルドを開始しました。
+     1>ノード 4 上のプロジェクト "D:\work\izanagi\Libs\project\vs2013\Std.vcxproj" (Build ターゲット)。
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (Win32\Debug_DX9\) contains files shared from another project (Animation.vcxproj, Collision.vcxproj, DebugUtil.vcxproj, Graph.vcxproj, Math.vcxproj, Network.vcxproj, PostEffect.vcxproj, Resource.vcxproj, SceneGraph.vcxproj, Shader.vcxproj, System.vcxproj, Terra.vcxproj, Text.vcxproj, ThreadModel.vcxproj, UI.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+     1>Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"D:\work\izanagi\Libs\project\vs2013\..\lib\Win32\Debug_DX9\Std.lib" /NOLOGO Win32\Debug_DX9\BlockMemoryAllocator.obj
+         Win32\Debug_DX9\MemoryAllocator.obj
+         Win32\Debug_DX9\Binding.obj
+         Win32\Debug_DX9\BindingExpression.obj
+         Win32\Debug_DX9\BindingOperations.obj
+         Win32\Debug_DX9\DependencyObject.obj
+         Win32\Debug_DX9\DependencyPropertyChangedEventArgs.obj
+         Win32\Debug_DX9\StdBase64.obj
+         Win32\Debug_DX9\StdBitStream.obj
+         Win32\Debug_DX9\StdColor.obj
+         Win32\Debug_DX9\StdKey.obj
+         Win32\Debug_DX9\StdLog.obj
+         Win32\Debug_DX9\StdProfiler.obj
+         Win32\Debug_DX9\StdUtf.obj
+         Win32\Debug_DX9\ChunkedMemoryAllocator.obj
+         Win32\Debug_DX9\SimpleMemoryAllocator.obj
+         Win32\Debug_DX9\StandardMemoryAllocator.obj
+         Win32\Debug_DX9\STLMemoryAllocator.obj
+         Std.vcxproj -> D:\work\izanagi\Libs\project\vs2013\..\lib\Win32\Debug_DX9\Std.lib
+     1>プロジェクト "D:\work\izanagi\Libs\project\vs2013\Std.vcxproj" (Build ターゲット) のビルドが完了しました。
+
+ビルドに成功しました。
+
+経過時間 00:00:00.78

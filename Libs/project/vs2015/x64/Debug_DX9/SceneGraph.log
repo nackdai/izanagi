@@ -1,0 +1,146 @@
+﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (x64\Debug_DX9\) contains files shared from another project (DebugUtil.vcxproj, Graph.vcxproj, Math.vcxproj, PostEffect.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  RenderGraph.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+  SkeletonUtil.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+  SkeletonInstance.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\system/io/FileInputStream.h(70): warning C4267: '引数': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+d:\work\izanagi\libs\include\system/io/FileOutputStream.h(72): warning C4267: '+=': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+  izSkeleton.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\system/io/FileInputStream.h(70): warning C4267: '引数': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+d:\work\izanagi\libs\include\system/io/FileOutputStream.h(72): warning C4267: '+=': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+  MshPrimitiveSet.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\system/io/FileInputStream.h(70): warning C4267: '引数': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+d:\work\izanagi\libs\include\system/io/FileOutputStream.h(72): warning C4267: '+=': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+  MshMeshSet.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\system/io/FileInputStream.h(70): warning C4267: '引数': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+d:\work\izanagi\libs\include\system/io/FileOutputStream.h(72): warning C4267: '+=': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+  MshMeshGroup.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\system/io/FileInputStream.h(70): warning C4267: '引数': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+d:\work\izanagi\libs\include\system/io/FileOutputStream.h(72): warning C4267: '+=': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+  MeshSetInstance.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+  MeshInstance.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+  izMesh.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\system/io/FileInputStream.h(70): warning C4267: '引数': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+d:\work\izanagi\libs\include\system/io/FileOutputStream.h(72): warning C4267: '+=': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+  izMaterial.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\system/io/FileInputStream.h(70): warning C4267: '引数': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+d:\work\izanagi\libs\include\system/io/FileOutputStream.h(72): warning C4267: '+=': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+  AnimationLinearBlender.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+  PoseUpdater.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+  izAnimation.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\system/io/FileInputStream.h(70): warning C4267: '引数': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+d:\work\izanagi\libs\include\system/io/FileOutputStream.h(72): warning C4267: '+=': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+  AnimationUtil.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+  AnimationInterp.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\system/io/FileInputStream.h(70): warning C4267: '引数': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+d:\work\izanagi\libs\include\system/io/FileOutputStream.h(72): warning C4267: '+=': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+  AnimationInterface.cpp
+  AnimationBinder.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+  izModel.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\system/io/FileInputStream.h(70): warning C4267: '引数': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+d:\work\izanagi\libs\include\system/io/FileOutputStream.h(72): warning C4267: '+=': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+  izImage.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\system/io/FileInputStream.h(70): warning C4267: '引数': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+d:\work\izanagi\libs\include\system/io/FileOutputStream.h(72): warning C4267: '+=': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+  コードを生成中...
+  コンパイル中...
+  VectorCamera.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+  StereoCamera.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+  SceneState.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\system/io/FileInputStream.h(70): warning C4267: '引数': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+d:\work\izanagi\libs\include\system/io/FileOutputStream.h(72): warning C4267: '+=': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+  SceneParam.cpp
+  SceneGraphUtil.cpp
+D:\work\izanagi\Libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+D:\work\izanagi\Libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\std/allocator/STLMemoryAllocator.h(103): warning C4018: '>=': signed と unsigned の数値を比較しようとしました。
+  d:\work\izanagi\libs\include\std/allocator/STLMemoryAllocator.h(98): note: クラス テンプレート のメンバー関数 'void izanagi::STLMemoryAllocator<izanagi::math::CTriangle>::deallocate(izanagi::math::CTriangle *,izanagi::STLMemoryAllocator<izanagi::math::CTriangle>::std::size_type)' のコンパイル中
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xmemory0(987): note: コンパイル対象の関数 テンプレート インスタンス化 'void izanagi::STLMemoryAllocator<izanagi::math::CTriangle>::deallocate(izanagi::math::CTriangle *,izanagi::STLMemoryAllocator<izanagi::math::CTriangle>::std::size_type)' のリファレンスを確認してください
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xmemory0(883): note: コンパイル対象のクラス テンプレート インスタンス化 'izanagi::STLMemoryAllocator<izanagi::math::CTriangle>' のリファレンスを確認してください
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vector(450): note: コンパイル対象のクラス テンプレート インスタンス化 'std::_Wrap_alloc<izanagi::STLMemoryAllocator<izanagi::math::CTriangle>>' のリファレンスを確認してください
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vector(502): note: コンパイル対象のクラス テンプレート インスタンス化 'std::_Vec_base_types<_Ty,_Alloc>' のリファレンスを確認してください
+          with
+          [
+              _Ty=izanagi::math::CTriangle,
+              _Alloc=izanagi::STLMemoryAllocator<izanagi::math::CTriangle>
+          ]
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vector(680): note: コンパイル対象のクラス テンプレート インスタンス化 'std::_Vector_alloc<std::_Vec_base_types<_Ty,_Alloc>>' のリファレンスを確認してください
+          with
+          [
+              _Ty=izanagi::math::CTriangle,
+              _Alloc=izanagi::STLMemoryAllocator<izanagi::math::CTriangle>
+          ]
+  ..\..\source\scenegraph\SceneGraphUtil.cpp(414): note: コンパイル対象のクラス テンプレート インスタンス化 'std::vector<izanagi::math::CTriangle,izanagi::STLMemoryAllocator<izanagi::math::CTriangle>>' のリファレンスを確認してください
+  SceneRenderer.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+  Decal.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\std/allocator/STLMemoryAllocator.h(103): warning C4018: '>=': signed と unsigned の数値を比較しようとしました。
+  d:\work\izanagi\libs\include\std/allocator/STLMemoryAllocator.h(98): note: クラス テンプレート のメンバー関数 'void izanagi::STLMemoryAllocator<izanagi::math::CTriangle>::deallocate(izanagi::math::CTriangle *,izanagi::STLMemoryAllocator<izanagi::math::CTriangle>::std::size_type)' のコンパイル中
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xmemory0(987): note: コンパイル対象の関数 テンプレート インスタンス化 'void izanagi::STLMemoryAllocator<izanagi::math::CTriangle>::deallocate(izanagi::math::CTriangle *,izanagi::STLMemoryAllocator<izanagi::math::CTriangle>::std::size_type)' のリファレンスを確認してください
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xmemory0(883): note: コンパイル対象のクラス テンプレート インスタンス化 'izanagi::STLMemoryAllocator<izanagi::math::CTriangle>' のリファレンスを確認してください
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vector(450): note: コンパイル対象のクラス テンプレート インスタンス化 'std::_Wrap_alloc<izanagi::STLMemoryAllocator<izanagi::math::CTriangle>>' のリファレンスを確認してください
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vector(502): note: コンパイル対象のクラス テンプレート インスタンス化 'std::_Vec_base_types<_Ty,_Alloc>' のリファレンスを確認してください
+          with
+          [
+              _Ty=izanagi::math::CTriangle,
+              _Alloc=izanagi::STLMemoryAllocator<izanagi::math::CTriangle>
+          ]
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vector(680): note: コンパイル対象のクラス テンプレート インスタンス化 'std::_Vector_alloc<std::_Vec_base_types<_Ty,_Alloc>>' のリファレンスを確認してください
+          with
+          [
+              _Ty=izanagi::math::CTriangle,
+              _Alloc=izanagi::STLMemoryAllocator<izanagi::math::CTriangle>
+          ]
+  D:\work\izanagi\Libs\include\scenegraph/Decal.h(220): note: コンパイル対象のクラス テンプレート インスタンス化 'std::vector<izanagi::math::CTriangle,izanagi::STLMemoryAllocator<izanagi::math::CTriangle>>' のリファレンスを確認してください
+  Camera.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+  コードを生成中...
+AnimationInterface.obj : warning LNK4221: このオブジェクト ファイルは、以前に未定義であったパブリック シンボルを定義していないため、このライブラリを使用するリンク操作では使用されません
+  SceneGraph.vcxproj -> D:\work\izanagi\Libs\project\vs2015\..\lib\x64\Debug_DX9\SceneGraph.lib

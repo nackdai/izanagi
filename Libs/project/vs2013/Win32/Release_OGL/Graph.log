@@ -1,0 +1,83 @@
+﻿2016/05/15 0:12:14 にビルドを開始しました。
+     1>ノード 2 上のプロジェクト "D:\work\izanagi\Libs\project\vs2013\Graph.vcxproj" (Build ターゲット)。
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (Win32\Release_OGL\) contains files shared from another project (Math.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+     1>CustomBuild:
+         Performing Custom Build Tools
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         Performing Custom Build Tools
+         
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I../../include /I..\..\..\External\glew\include /I..\..\..\External\freeglut\include /Zi /nologo /W3 /WX- /O2 /Oy- /D WIN32 /D NDEBUG /D _LIB /D __IZ_OGL__ /D __IZ_GLUT__ /D __IZANAGI_NO_USE_D3D__ /D _XKEYCHECK_H /D _MBCS /Gm- /EHsc /MT /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Win32\Release_OGL\\" /Fd"D:\work\izanagi\Libs\project\vs2013\..\lib\Win32\Release_OGL\Graph.pdb" /Gd /TP /wd4819 /analyze- /errorReport:prompt ..\..\source\graph\2d\2DShader.cpp ..\..\source\graph\BufferBase.cpp ..\..\source\graph\gles2\2DShader_GLES2.cpp ..\..\source\graph\gles2\CubeTexture_GLES2.cpp ..\..\source\graph\gles2\FrameBufferObject.cpp ..\..\source\graph\gles2\GraphicsDeviceResourceFuncs.cpp ..\..\source\graph\gles2\GraphicsDevice_GLES2.cpp ..\..\source\graph\gles2\GraphPerf_GLES2.cpp ..\..\source\graph\gles2\IndexBuffer_GLES2.cpp ..\..\source\graph\gles2\ParamValueConverter_GLES2.cpp ..\..\source\graph\gles2\PixelShader_GLES2.cpp ..\..\source\graph\gles2\RenderState_GLES2.cpp ..\..\source\graph\gles2\RenderTarget_GLES2.cpp ..\..\source\graph\gles2\ShaderProgram_GLES2.cpp ..\..\source\graph\gles2\Texture_GLES2.cpp ..\..\source\graph\gles2\VertexBuffer_GLES2.cpp ..\..\source\graph\gles2\VertexDeclaration_GLES2.cpp ..\..\source\graph\gles2\VertexShader_GLES2.cpp ..\..\source\graph\GraphicsDevice.cpp ..\..\source\graph\2d\2DRenderer.cpp ..\..\source\graph\ogl\IndexBuffer_OGL.cpp ..\..\source\graph\ogl\VertexBuffer_OGL.cpp ..\..\source\graph\ogl\VertexDeclaration_OGL.cpp ..\..\source\graph\RenderState.cpp ..\..\source\graph\ShaderProgram.cpp
+         2DShader.cpp
+         BufferBase.cpp
+         2DShader_GLES2.cpp
+         CubeTexture_GLES2.cpp
+         FrameBufferObject.cpp
+         GraphicsDeviceResourceFuncs.cpp
+         GraphicsDevice_GLES2.cpp
+         GraphPerf_GLES2.cpp
+         IndexBuffer_GLES2.cpp
+         ParamValueConverter_GLES2.cpp
+         PixelShader_GLES2.cpp
+         RenderState_GLES2.cpp
+         RenderTarget_GLES2.cpp
+         ShaderProgram_GLES2.cpp
+     1>..\..\source\graph\gles2\ShaderProgram_GLES2.cpp(177): warning C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\string.h(195) : 'strncpy' の宣言を確認してください。
+         Texture_GLES2.cpp
+         VertexBuffer_GLES2.cpp
+         VertexDeclaration_GLES2.cpp
+         VertexShader_GLES2.cpp
+         GraphicsDevice.cpp
+         2DRenderer.cpp
+         コードを生成中...
+         コンパイル中...
+         IndexBuffer_OGL.cpp
+         VertexBuffer_OGL.cpp
+         VertexDeclaration_OGL.cpp
+         RenderState.cpp
+         ShaderProgram.cpp
+         コードを生成中...
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I../../include /I..\..\..\External\glew\include /I..\..\..\External\freeglut\include /Zi /nologo /W3 /WX- /O2 /Oy- /D WIN32 /D NDEBUG /D _LIB /D __IZ_OGL__ /D __IZ_GLUT__ /D __IZANAGI_NO_USE_D3D__ /D _XKEYCHECK_H /D _MBCS /Gm- /EHsc /MT /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Win32\Release_OGL\\" /Fd"D:\work\izanagi\Libs\project\vs2013\..\lib\Win32\Release_OGL\Graph.pdb" /Gd /TP /wd4819 /analyze- /errorReport:prompt ..\..\source\graph\ogl\GraphicsDevice_OGL.cpp
+         GraphicsDevice_OGL.cpp
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"D:\work\izanagi\Libs\project\vs2013\..\lib\Win32\Release_OGL\Graph.lib" glew32.lib /LIBPATH:..\..\..\External\glew\lib\Release\Win32 /NOLOGO Win32\Release_OGL\2DShader.obj
+         Win32\Release_OGL\BufferBase.obj
+         Win32\Release_OGL\2DShader_GLES2.obj
+         Win32\Release_OGL\CubeTexture_GLES2.obj
+         Win32\Release_OGL\FrameBufferObject.obj
+         Win32\Release_OGL\GraphicsDeviceResourceFuncs.obj
+         Win32\Release_OGL\GraphicsDevice_GLES2.obj
+         Win32\Release_OGL\GraphPerf_GLES2.obj
+         Win32\Release_OGL\IndexBuffer_GLES2.obj
+         Win32\Release_OGL\ParamValueConverter_GLES2.obj
+         Win32\Release_OGL\PixelShader_GLES2.obj
+         Win32\Release_OGL\RenderState_GLES2.obj
+         Win32\Release_OGL\RenderTarget_GLES2.obj
+         Win32\Release_OGL\ShaderProgram_GLES2.obj
+         Win32\Release_OGL\Texture_GLES2.obj
+         Win32\Release_OGL\VertexBuffer_GLES2.obj
+         Win32\Release_OGL\VertexDeclaration_GLES2.obj
+         Win32\Release_OGL\VertexShader_GLES2.obj
+         Win32\Release_OGL\GraphicsDevice.obj
+         Win32\Release_OGL\2DRenderer.obj
+         Win32\Release_OGL\IndexBuffer_OGL.obj
+         Win32\Release_OGL\VertexBuffer_OGL.obj
+         Win32\Release_OGL\VertexDeclaration_OGL.obj
+         Win32\Release_OGL\RenderState.obj
+         Win32\Release_OGL\ShaderProgram.obj
+         Win32\Release_OGL\GraphicsDevice_OGL.obj
+         Graph.vcxproj -> D:\work\izanagi\Libs\project\vs2013\..\lib\Win32\Release_OGL\Graph.lib
+     1>プロジェクト "D:\work\izanagi\Libs\project\vs2013\Graph.vcxproj" (Build ターゲット) のビルドが完了しました。
+
+ビルドに成功しました。
+
+経過時間 00:00:15.75

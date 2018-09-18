@@ -1,0 +1,70 @@
+﻿2016/05/15 0:12:14 にビルドを開始しました。
+     1>ノード 4 上のプロジェクト "D:\work\izanagi\Libs\project\vs2013\SceneGraph.vcxproj" (Build ターゲット)。
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (Win32\Release_OGL\) contains files shared from another project (Graph.vcxproj, Math.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I../../include /I..\..\..\External\glew\include /I..\..\..\External\freeglut\include /Zi /nologo /W3 /WX- /O2 /Oy- /D WIN32 /D NDEBUG /D _LIB /D __IZ_OGL__ /D __IZ_GLUT__ /D __IZANAGI_NO_USE_D3D__ /D _XKEYCHECK_H /D _MBCS /Gm- /EHsc /MT /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Win32\Release_OGL\\" /Fd"D:\work\izanagi\Libs\project\vs2013\..\lib\Win32\Release_OGL\SceneGraph.pdb" /Gd /TP /wd4819 /analyze- /errorReport:prompt ..\..\source\scenegraph\Camera.cpp ..\..\source\scenegraph\Decal.cpp ..\..\source\scenegraph\rendergraph\SceneRenderer.cpp ..\..\source\scenegraph\SceneGraphUtil.cpp ..\..\source\scenegraph\SceneParam.cpp ..\..\source\scenegraph\SceneState.cpp ..\..\source\scenegraph\VectorCamera.cpp ..\..\source\scenegraph\img\izImage.cpp ..\..\source\scenegraph\mdl\izModel.cpp ..\..\source\scenegraph\anm\AnimationBinder.cpp ..\..\source\scenegraph\anm\AnimationInterface.cpp ..\..\source\scenegraph\anm\AnimationInterp.cpp ..\..\source\scenegraph\anm\AnimationUtil.cpp ..\..\source\scenegraph\anm\izAnimation.cpp ..\..\source\scenegraph\anm\PoseUpdater.cpp ..\..\source\scenegraph\anm\AnimationLinearBlender.cpp ..\..\source\scenegraph\mtrl\izMaterial.cpp ..\..\source\scenegraph\msh\izMesh.cpp ..\..\source\scenegraph\msh\MeshInstance.cpp ..\..\source\scenegraph\msh\MeshSetInstance.cpp ..\..\source\scenegraph\msh\MshMeshGroup.cpp ..\..\source\scenegraph\msh\MshMeshSet.cpp ..\..\source\scenegraph\msh\MshPrimitiveSet.cpp ..\..\source\scenegraph\skl\izSkeleton.cpp ..\..\source\scenegraph\skl\SkeletonInstance.cpp ..\..\source\scenegraph\skl\SkeletonUtil.cpp ..\..\source\scenegraph\rendergraph\RenderGraph.cpp
+         Camera.cpp
+         Decal.cpp
+         SceneRenderer.cpp
+         SceneGraphUtil.cpp
+         SceneParam.cpp
+         SceneState.cpp
+         VectorCamera.cpp
+         izImage.cpp
+         izModel.cpp
+         AnimationBinder.cpp
+         AnimationInterface.cpp
+         AnimationInterp.cpp
+         AnimationUtil.cpp
+         izAnimation.cpp
+         PoseUpdater.cpp
+         AnimationLinearBlender.cpp
+         izMaterial.cpp
+         izMesh.cpp
+         MeshInstance.cpp
+         MeshSetInstance.cpp
+         コードを生成中...
+         コンパイル中...
+         MshMeshGroup.cpp
+         MshMeshSet.cpp
+         MshPrimitiveSet.cpp
+         izSkeleton.cpp
+         SkeletonInstance.cpp
+         SkeletonUtil.cpp
+         RenderGraph.cpp
+         コードを生成中...
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"D:\work\izanagi\Libs\project\vs2013\..\lib\Win32\Release_OGL\SceneGraph.lib" /NOLOGO Win32\Release_OGL\Camera.obj
+         Win32\Release_OGL\Decal.obj
+         Win32\Release_OGL\SceneRenderer.obj
+         Win32\Release_OGL\SceneGraphUtil.obj
+         Win32\Release_OGL\SceneParam.obj
+         Win32\Release_OGL\SceneState.obj
+         Win32\Release_OGL\VectorCamera.obj
+         Win32\Release_OGL\izImage.obj
+         Win32\Release_OGL\izModel.obj
+         Win32\Release_OGL\AnimationBinder.obj
+         Win32\Release_OGL\AnimationInterface.obj
+         Win32\Release_OGL\AnimationInterp.obj
+         Win32\Release_OGL\AnimationUtil.obj
+         Win32\Release_OGL\izAnimation.obj
+         Win32\Release_OGL\PoseUpdater.obj
+         Win32\Release_OGL\AnimationLinearBlender.obj
+         Win32\Release_OGL\izMaterial.obj
+         Win32\Release_OGL\izMesh.obj
+         Win32\Release_OGL\MeshInstance.obj
+         Win32\Release_OGL\MeshSetInstance.obj
+         Win32\Release_OGL\MshMeshGroup.obj
+         Win32\Release_OGL\MshMeshSet.obj
+         Win32\Release_OGL\MshPrimitiveSet.obj
+         Win32\Release_OGL\izSkeleton.obj
+         Win32\Release_OGL\SkeletonInstance.obj
+         Win32\Release_OGL\SkeletonUtil.obj
+         Win32\Release_OGL\RenderGraph.obj
+     1>AnimationInterface.obj : warning LNK4221: このオブジェクト ファイルは、以前に未定義であったパブリック シンボルを定義していないため、このライブラリを使用するリンク操作では使用されません
+         SceneGraph.vcxproj -> D:\work\izanagi\Libs\project\vs2013\..\lib\Win32\Release_OGL\SceneGraph.lib
+     1>プロジェクト "D:\work\izanagi\Libs\project\vs2013\SceneGraph.vcxproj" (Build ターゲット) のビルドが完了しました。
+
+ビルドに成功しました。
+
+経過時間 00:00:15.60

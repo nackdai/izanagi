@@ -1,0 +1,28 @@
+const char* main_OpModulateAlpha = {
+
+"\n"
+"const vec4 ps_c0 = vec4(1.0, 0.0, 0.0, 0.0);\n"
+"vec4 ps_r0;\n"
+"vec4 ps_r1;\n"
+"\n"
+"varying vec4 var_Color;\n"
+"\n"
+"varying vec4 var_TexCoord_0;\n"
+"\n"
+"\n"
+"uniform sampler2D s0;\n"
+"// original name:s0/sTex\n"
+
+"\n"
+"\n"
+"\n"
+"void main()\n"
+"{\n"
+" ps_r0 = texture2D(s0, var_TexCoord_0.xy);\n"
+" ps_r0.xyz = ps_c0.xxx;\n"
+" ps_r0 = clamp(ps_r0 * var_Color, vec4(0.0), vec4(1.0));\n"
+" ps_r1.xw = ps_r0.zw;\n"
+" ps_r1.z = ps_r0.x;\n"
+" ps_r1.y = ps_r0.y;\n"
+" gl_FragColor = ps_r1;\n"
+"}\n"};

@@ -1,0 +1,56 @@
+﻿  Performing Custom Build Tools
+  compilation succeeded; see D:\work\izanagi\Libs\include\debugutil\imgui\mainVS.h
+  compilation succeeded; see D:\work\izanagi\Libs\include\debugutil\imgui\mainPS.h
+  DebugMeshWiredBox.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+  DebugMeshTorus.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+  DebugMeshSphere.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+  DebugMeshScreenFillPlane.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+..\..\source\debugutil\mesh\DebugMeshScreenFillPlane.cpp(97): warning C4244: '=': 'IZ_UINT' から 'IZ_FLOAT' への変換です。データが失われる可能性があります。
+..\..\source\debugutil\mesh\DebugMeshScreenFillPlane.cpp(111): warning C4244: '=': 'IZ_UINT' から 'IZ_FLOAT' への変換です。データが失われる可能性があります。
+..\..\source\debugutil\mesh\DebugMeshScreenFillPlane.cpp(123): warning C4244: '=': 'IZ_UINT' から 'IZ_FLOAT' への変換です。データが失われる可能性があります。
+..\..\source\debugutil\mesh\DebugMeshScreenFillPlane.cpp(124): warning C4244: '=': 'IZ_UINT' から 'IZ_FLOAT' への変換です。データが失われる可能性があります。
+  DebugMeshRectangle.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+  DebugMeshLine.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+  DebugMeshGrid.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+  DebugMeshFrustum.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+  DebugMeshCylinder.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+  DebugMeshBox.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+  DebugMeshAxis.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+  DebugMesh.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+  ImGuiProc.cpp
+d:\work\izanagi\libs\include\system/io/FileInputStream.h(70): warning C4267: '引数': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+d:\work\izanagi\libs\include\system/io/FileOutputStream.h(72): warning C4267: '+=': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+..\..\source\debugutil\imgui\ImGuiProc.cpp(176): warning C4244: '引数': 'const float' から 'IZ_INT' への変換です。データが失われる可能性があります。
+  DebugFont.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+  imgui_draw.cpp
+  imgui.cpp
+  コードを生成中...
+  DebugUtil.vcxproj -> D:\work\izanagi\Libs\project\vs2015\..\lib\x64\Debug_DX9\DebugUtil.lib

@@ -1,0 +1,25 @@
+﻿2016/12/12 22:26:45 にビルドを開始しました。
+     1>ノード 3 上のプロジェクト "D:\work\izanagi\Libs\project\vs2013\Engine.vcxproj" (Build ターゲット)。
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (Win32\Debug_OGL\) contains files shared from another project (Animation.vcxproj, Collision.vcxproj, DebugUtil.vcxproj, Graph.vcxproj, Math.vcxproj, Network.vcxproj, PostEffect.vcxproj, Resource.vcxproj, SceneGraph.vcxproj, Shader.vcxproj, Std.vcxproj, System.vcxproj, Terra.vcxproj, Text.vcxproj, ThreadModel.vcxproj, UI.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I../../include /I..\..\..\External\glew\include /I..\..\..\External\freeglut\include /I..\..\..\External\glfw\include /Zi /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D __IZ_DEBUG__ /D __IZ_OGL__ /D __IZ_GLUT__ /D __IZANAGI_NO_USE_D3D__ /D _XKEYCHECK_H /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Win32\Debug_OGL\\" /Fd"D:\work\izanagi\Libs\project\vs2013\..\lib\Win32\Debug_OGL\Engine.pdb" /Gd /TP /wd4819 /analyze- /errorReport:prompt ..\..\source\engine\GBuffer.cpp
+         GBuffer.cpp
+     1>..\..\source\engine\GBuffer.cpp(226): warning C4018: '>' : signed と unsigned の数値を比較しようとしました。
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"D:\work\izanagi\Libs\project\vs2013\..\lib\Win32\Debug_OGL\Engine.lib" /NOLOGO Win32\Debug_OGL\AnimationStateMachine.obj
+         Win32\Debug_OGL\AnimationStateMachineBehaviour.obj
+         Win32\Debug_OGL\AnimationStateMachineCondition.obj
+         Win32\Debug_OGL\AnimationStateMachineNode.obj
+         Win32\Debug_OGL\CharacterController.obj
+         Win32\Debug_OGL\CharacterMesh.obj
+         Win32\Debug_OGL\GBuffer.obj
+         Win32\Debug_OGL\StateMachineBehaviour.obj
+         Win32\Debug_OGL\StateMachineCondition.obj
+         Win32\Debug_OGL\StateMachineNode.obj
+         Win32\Debug_OGL\TargetFollowCamera.obj
+         Engine.vcxproj -> D:\work\izanagi\Libs\project\vs2013\..\lib\Win32\Debug_OGL\Engine.lib
+     1>プロジェクト "D:\work\izanagi\Libs\project\vs2013\Engine.vcxproj" (Build ターゲット) のビルドが完了しました。
+
+ビルドに成功しました。
+
+経過時間 00:00:01.64

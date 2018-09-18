@@ -1,0 +1,10 @@
+﻿2016/05/28 15:18:29 にビルドを開始しました。
+     1>ノード 2 上のプロジェクト "D:\work\izanagi\Libs\project\vs2013\Math.vcxproj" (Build ターゲット)。
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (x64\Debug_OGL\) contains files shared from another project (Collision.vcxproj, Std.vcxproj, System.vcxproj, ThreadModel.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+     1>Lib:
+         Math.vcxproj -> D:\work\izanagi\Libs\project\vs2013\..\lib\x64\Debug_OGL\Math.lib
+     1>プロジェクト "D:\work\izanagi\Libs\project\vs2013\Math.vcxproj" (Build ターゲット) のビルドが完了しました。
+
+ビルドに成功しました。
+
+経過時間 00:00:00.05

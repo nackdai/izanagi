@@ -1,0 +1,28 @@
+﻿2016/12/09 22:26:28 にビルドを開始しました。
+     1>ノード 2 上のプロジェクト "D:\work\izanagi\Libs\project\vs2013\Std.vcxproj" (Build ターゲット)。
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (Win32\Debug_OGL\) contains files shared from another project (Animation.vcxproj, Collision.vcxproj, DebugUtil.vcxproj, Graph.vcxproj, Math.vcxproj, Network.vcxproj, PostEffect.vcxproj, Resource.vcxproj, SceneGraph.vcxproj, Shader.vcxproj, System.vcxproj, Terra.vcxproj, Text.vcxproj, ThreadModel.vcxproj, UI.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+     1>Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"D:\work\izanagi\Libs\project\vs2013\..\lib\Win32\Debug_OGL\Std.lib" /NOLOGO Win32\Debug_OGL\BlockMemoryAllocator.obj
+         Win32\Debug_OGL\MemoryAllocator.obj
+         Win32\Debug_OGL\Binding.obj
+         Win32\Debug_OGL\BindingExpression.obj
+         Win32\Debug_OGL\BindingOperations.obj
+         Win32\Debug_OGL\DependencyObject.obj
+         Win32\Debug_OGL\DependencyPropertyChangedEventArgs.obj
+         Win32\Debug_OGL\StdBase64.obj
+         Win32\Debug_OGL\StdBitStream.obj
+         Win32\Debug_OGL\StdColor.obj
+         Win32\Debug_OGL\StdKey.obj
+         Win32\Debug_OGL\StdLog.obj
+         Win32\Debug_OGL\StdProfiler.obj
+         Win32\Debug_OGL\StdUtf.obj
+         Win32\Debug_OGL\ChunkedMemoryAllocator.obj
+         Win32\Debug_OGL\SimpleMemoryAllocator.obj
+         Win32\Debug_OGL\StandardMemoryAllocator.obj
+         Win32\Debug_OGL\STLMemoryAllocator.obj
+         Std.vcxproj -> D:\work\izanagi\Libs\project\vs2013\..\lib\Win32\Debug_OGL\Std.lib
+     1>プロジェクト "D:\work\izanagi\Libs\project\vs2013\Std.vcxproj" (Build ターゲット) のビルドが完了しました。
+
+ビルドに成功しました。
+
+経過時間 00:00:00.53

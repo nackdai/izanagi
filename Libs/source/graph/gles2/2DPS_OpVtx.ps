@@ -1,0 +1,15 @@
+const char* main_OpVtx = {
+
+"\n"
+"vec4 ps_r0;\n"
+"\n"
+"varying vec4 var_Color;\n"
+"\n"
+"\n"
+"void main()\n"
+"{\n"
+" ps_r0.xw = var_Color.zw;\n"
+" ps_r0.z = var_Color.x;\n"
+" ps_r0.y = var_Color.y;\n"
+" gl_FragColor = ps_r0;\n"
+"}\n"};

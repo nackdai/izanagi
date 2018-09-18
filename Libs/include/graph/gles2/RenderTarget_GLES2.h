@@ -14,6 +14,7 @@ namespace graph
     class CRenderTargetGLES2 : public CTextureProxy<CRenderTarget>
     {
         friend class CGraphicsDeviceGLES2;
+		friend class CFrameBufferObject;
 
     private:
         // レンダーターゲット作成
@@ -57,6 +58,16 @@ namespace graph
             IZ_UINT height,
             E_GRAPH_PIXEL_FMT fmt);
 
+		 bool isSpecifiedClearClr() const
+		 {
+			 return m_isSpecifedClearClr;
+		 }
+
+		 const float* getClearColor() const
+		 {
+			 return m_clearClr;
+		 }
+
     public:
         virtual IZ_BOOL IsPrepared() const;
 
@@ -74,6 +85,15 @@ namespace graph
 		// アンロック
 		virtual IZ_BOOL Unlock(IZ_UINT level) override;
 
+		virtual void setClearColor(float r, float g, float b, float a) override final
+		{
+			m_isSpecifedClearClr = true;
+			m_clearClr[0] = r;
+			m_clearClr[1] = g;
+			m_clearClr[2] = b;
+			m_clearClr[3] = a;
+		}
+
     private:
         virtual TEX_HANDLE GetTexHandle()
         {
@@ -88,6 +108,9 @@ namespace graph
 
 		void* m_TemporaryData{ nullptr };
 		IZ_UINT m_allocatedSize{ 0 };
+
+		bool m_isSpecifedClearClr{ false };
+		float m_clearClr[4];
     };
 }   // namespace graph
 }   // namespace izanagi

@@ -31,6 +31,8 @@ public:
     // 描画.
     virtual void RenderInternal(izanagi::graph::CGraphicsDevice* device) override;
 
+	virtual void OnKeyUp(izanagi::sys::E_KEYBOARD_BUTTON key) override final;
+
 private:
     void generateKernel();
 
@@ -53,6 +55,8 @@ protected:
 
     static const IZ_UINT KernelSize = 32;
     izanagi::math::CVector4 m_kernels[KernelSize];
+
+	bool m_isShowGBuffer{ false };
 };
 
 #endif    // #if !defined(__SSAO_APP_H__)

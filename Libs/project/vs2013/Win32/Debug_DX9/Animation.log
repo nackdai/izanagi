@@ -1,0 +1,31 @@
+﻿2016/09/18 1:15:43 にビルドを開始しました。
+     1>ノード 5 上のプロジェクト "D:\work\izanagi\Libs\project\vs2013\Animation.vcxproj" (Build ターゲット)。
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (Win32\Debug_DX9\) contains files shared from another project (Collision.vcxproj, DebugUtil.vcxproj, Graph.vcxproj, Math.vcxproj, Network.vcxproj, PostEffect.vcxproj, Resource.vcxproj, SceneGraph.vcxproj, Shader.vcxproj, Std.vcxproj, System.vcxproj, Terra.vcxproj, Text.vcxproj, ThreadModel.vcxproj, UI.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I../../include /Zi /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D D3D_DEBUG_INFO /D __IZ_DEBUG__ /D __IZ_DX9__ /D _XKEYCHECK_H /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Win32\Debug_DX9\\" /Fd"D:\work\izanagi\Libs\project\vs2013\..\lib\Win32\Debug_DX9\Animation.pdb" /Gd /TP /wd4819 /analyze- /errorReport:prompt ..\..\source\animation\EasingInterpolator.cpp ..\..\source\animation\Interpolator.cpp ..\..\source\animation\LinearInterpolator.cpp ..\..\source\animation\SplineInterpolator.cpp ..\..\source\animation\StoryBoard.cpp ..\..\source\animation\Timeline.cpp ..\..\source\animation\Tweener.cpp ..\..\source\animation\TweenerUtility.cpp
+         Timeline.cpp
+         コードを生成中...
+         コンパイル中...
+         TweenerUtility.cpp
+         Tweener.cpp
+         StoryBoard.cpp
+         SplineInterpolator.cpp
+         LinearInterpolator.cpp
+         Interpolator.cpp
+         EasingInterpolator.cpp
+         コードを生成中...
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"D:\work\izanagi\Libs\project\vs2013\..\lib\Win32\Debug_DX9\Animation.lib" /NOLOGO Win32\Debug_DX9\EasingInterpolator.obj
+         Win32\Debug_DX9\Interpolator.obj
+         Win32\Debug_DX9\LinearInterpolator.obj
+         Win32\Debug_DX9\SplineInterpolator.obj
+         Win32\Debug_DX9\StoryBoard.obj
+         Win32\Debug_DX9\Timeline.obj
+         Win32\Debug_DX9\Tweener.obj
+         Win32\Debug_DX9\TweenerUtility.obj
+         Animation.vcxproj -> D:\work\izanagi\Libs\project\vs2013\..\lib\Win32\Debug_DX9\Animation.lib
+     1>プロジェクト "D:\work\izanagi\Libs\project\vs2013\Animation.vcxproj" (Build ターゲット) のビルドが完了しました。
+
+ビルドに成功しました。
+
+経過時間 00:00:04.06

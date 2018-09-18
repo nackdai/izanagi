@@ -1,0 +1,32 @@
+﻿2016/11/23 9:43:52 にビルドを開始しました。
+     1>ノード 3 上のプロジェクト "D:\work\izanagi\Libs\project\vs2013\Graph.vcxproj" (Build ターゲット)。
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (Win32\Debug_DX9\) contains files shared from another project (Animation.vcxproj, Collision.vcxproj, DebugUtil.vcxproj, Math.vcxproj, Network.vcxproj, PostEffect.vcxproj, Resource.vcxproj, SceneGraph.vcxproj, Shader.vcxproj, Std.vcxproj, System.vcxproj, Terra.vcxproj, Text.vcxproj, ThreadModel.vcxproj, UI.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+     1>Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"D:\work\izanagi\Libs\project\vs2013\..\lib\Win32\Debug_DX9\Graph.lib" /NOLOGO Win32\Debug_DX9\2DShader.obj
+         Win32\Debug_DX9\BufferBase.obj
+         Win32\Debug_DX9\2DShader_DX9.obj
+         Win32\Debug_DX9\CubeTexture_DX9.obj
+         Win32\Debug_DX9\D3D9ParamValueConverter.obj
+         Win32\Debug_DX9\GraphicsDeviceResourceFuncs.obj
+         Win32\Debug_DX9\GraphicsDevice_DX9.obj
+         Win32\Debug_DX9\GraphPerf_DX9.obj
+         Win32\Debug_DX9\IndexBuffer_DX9.obj
+         Win32\Debug_DX9\PixelShader_DX9.obj
+         Win32\Debug_DX9\RenderState_DX9.obj
+         Win32\Debug_DX9\RenderTarget_DX9.obj
+         Win32\Debug_DX9\ShaderProgram_DX9.obj
+         Win32\Debug_DX9\Surface_DX9.obj
+         Win32\Debug_DX9\Texture_DX9.obj
+         Win32\Debug_DX9\VertexBuffer_DX9.obj
+         Win32\Debug_DX9\VertexDeclaration_DX9.obj
+         Win32\Debug_DX9\VertexShader_DX9.obj
+         Win32\Debug_DX9\GraphicsDevice.obj
+         Win32\Debug_DX9\2DRenderer.obj
+         Win32\Debug_DX9\RenderState.obj
+         Win32\Debug_DX9\ShaderProgram.obj
+         Graph.vcxproj -> D:\work\izanagi\Libs\project\vs2013\..\lib\Win32\Debug_DX9\Graph.lib
+     1>プロジェクト "D:\work\izanagi\Libs\project\vs2013\Graph.vcxproj" (Build ターゲット) のビルドが完了しました。
+
+ビルドに成功しました。
+
+経過時間 00:00:01.92

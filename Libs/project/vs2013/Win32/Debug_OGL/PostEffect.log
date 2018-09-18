@@ -1,0 +1,44 @@
+﻿2016/06/12 12:09:12 にビルドを開始しました。
+     1>ノード 2 上のプロジェクト "D:\work\izanagi\Libs\project\vs2013\PostEffect.vcxproj" (Build ターゲット)。
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (Win32\Debug_OGL\) contains files shared from another project (Animation.vcxproj, Collision.vcxproj, DebugUtil.vcxproj, Graph.vcxproj, Math.vcxproj, Network.vcxproj, Resource.vcxproj, SceneGraph.vcxproj, Shader.vcxproj, Std.vcxproj, System.vcxproj, Terra.vcxproj, Text.vcxproj, ThreadModel.vcxproj, UI.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I../../include /I..\..\..\External\glew\include /I..\..\..\External\freeglut\include /Zi /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D __IZ_DEBUG__ /D __IZ_OGL__ /D __IZ_GLUT__ /D __IZANAGI_NO_USE_D3D__ /D _XKEYCHECK_H /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Win32\Debug_OGL\\" /Fd"D:\work\izanagi\Libs\project\vs2013\..\lib\Win32\Debug_OGL\PostEffect.pdb" /Gd /TP /wd4819 /analyze- /errorReport:prompt ..\..\source\posteffect\PostEffect.cpp ..\..\source\posteffect\PostEffectShader.cpp ..\..\source\posteffect\PostEffectShaderPass.cpp ..\..\source\posteffect\PostEffectSystem.cpp ..\..\source\posteffect\PostEffectTextureCreator.cpp ..\..\source\posteffect\functor\PostEffectFunctor.cpp ..\..\source\posteffect\functor\PostEffectFunctorDOF.cpp ..\..\source\posteffect\functor\PostEffectFunctorDefault.cpp ..\..\source\posteffect\functor\PostEffectFunctorMGF.cpp ..\..\source\posteffect\functor\PostEffectFunctorRenderStar.cpp ..\..\source\posteffect\functor\PostEffectFunctorSwitchTex.cpp ..\..\source\posteffect\util\PostEffectShaderUtil.cpp ..\..\source\posteffect\util\PostEffectUtilityRect.cpp ..\..\source\posteffect\vs\PostEffectVS.cpp ..\..\source\posteffect\vs\PostEffectVSManager.cpp
+         PostEffectVSManager.cpp
+         PostEffectVS.cpp
+         PostEffectUtilityRect.cpp
+         PostEffectShaderUtil.cpp
+         PostEffectFunctorSwitchTex.cpp
+         PostEffectFunctorRenderStar.cpp
+         PostEffectFunctorMGF.cpp
+         PostEffectFunctorDefault.cpp
+         PostEffectFunctorDOF.cpp
+         PostEffectFunctor.cpp
+         PostEffectTextureCreator.cpp
+         PostEffectSystem.cpp
+         PostEffectShaderPass.cpp
+         PostEffectShader.cpp
+         PostEffect.cpp
+         コードを生成中...
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"D:\work\izanagi\Libs\project\vs2013\..\lib\Win32\Debug_OGL\PostEffect.lib" /NOLOGO Win32\Debug_OGL\PostEffect.obj
+         Win32\Debug_OGL\PostEffectShader.obj
+         Win32\Debug_OGL\PostEffectShaderPass.obj
+         Win32\Debug_OGL\PostEffectSystem.obj
+         Win32\Debug_OGL\PostEffectTextureCreator.obj
+         Win32\Debug_OGL\PostEffectFunctor.obj
+         Win32\Debug_OGL\PostEffectFunctorDefault.obj
+         Win32\Debug_OGL\PostEffectFunctorDOF.obj
+         Win32\Debug_OGL\PostEffectFunctorMGF.obj
+         Win32\Debug_OGL\PostEffectFunctorRenderStar.obj
+         Win32\Debug_OGL\PostEffectFunctorSwitchTex.obj
+         Win32\Debug_OGL\PostEffectShaderUtil.obj
+         Win32\Debug_OGL\PostEffectUtilityRect.obj
+         Win32\Debug_OGL\PostEffectVS.obj
+         Win32\Debug_OGL\PostEffectVSManager.obj
+     1>PostEffectShaderUtil.obj : warning LNK4221: このオブジェクト ファイルは、以前に未定義であったパブリック シンボルを定義していないため、このライブラリを使用するリンク操作では使用されません
+         PostEffect.vcxproj -> D:\work\izanagi\Libs\project\vs2013\..\lib\Win32\Debug_OGL\PostEffect.lib
+     1>プロジェクト "D:\work\izanagi\Libs\project\vs2013\PostEffect.vcxproj" (Build ターゲット) のビルドが完了しました。
+
+ビルドに成功しました。
+
+経過時間 00:00:08.22

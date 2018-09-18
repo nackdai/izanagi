@@ -1,0 +1,29 @@
+﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (x64\Debug_DX9\) contains files shared from another project (DebugUtil.vcxproj, Graph.vcxproj, Math.vcxproj, PostEffect.vcxproj, SceneGraph.vcxproj, Std.vcxproj, System.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  ShaderUtil.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+  ShaderBasic.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\system/io/FileInputStream.h(70): warning C4267: '引数': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+d:\work\izanagi\libs\include\system/io/FileOutputStream.h(72): warning C4267: '+=': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+  ShaderManager.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+  ShaderSamplerTable.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+  ShaderPassTable.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+  ShaderParameterTable.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+  ShaderAttrTable.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+  ShaderPass.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+  コードを生成中...
+  Shader.vcxproj -> D:\work\izanagi\Libs\project\vs2015\..\lib\x64\Debug_DX9\Shader.lib

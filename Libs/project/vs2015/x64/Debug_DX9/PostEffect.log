@@ -1,0 +1,65 @@
+﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (x64\Debug_DX9\) contains files shared from another project (DebugUtil.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  PostEffectVSManager.cpp
+d:\work\izanagi\libs\include\system/io/FileInputStream.h(70): warning C4267: '引数': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+d:\work\izanagi\libs\include\system/io/FileOutputStream.h(72): warning C4267: '+=': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+D:\work\izanagi\Libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+D:\work\izanagi\Libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+  PostEffectVS.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\system/io/FileInputStream.h(70): warning C4267: '引数': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+d:\work\izanagi\libs\include\system/io/FileOutputStream.h(72): warning C4267: '+=': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+  PostEffectUtilityRect.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+  PostEffectShaderUtil.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+  PostEffectFunctorSwitchTex.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\system/io/FileInputStream.h(70): warning C4267: '引数': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+d:\work\izanagi\libs\include\system/io/FileOutputStream.h(72): warning C4267: '+=': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+  PostEffectFunctorRenderStar.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\system/io/FileInputStream.h(70): warning C4267: '引数': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+d:\work\izanagi\libs\include\system/io/FileOutputStream.h(72): warning C4267: '+=': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+  PostEffectFunctorMGF.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\system/io/FileInputStream.h(70): warning C4267: '引数': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+d:\work\izanagi\libs\include\system/io/FileOutputStream.h(72): warning C4267: '+=': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+  PostEffectFunctorDOF.cpp
+  PostEffectFunctorDefault.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\system/io/FileInputStream.h(70): warning C4267: '引数': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+d:\work\izanagi\libs\include\system/io/FileOutputStream.h(72): warning C4267: '+=': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+  PostEffectFunctor.cpp
+  PostEffectTextureCreator.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+  PostEffectSystem.cpp
+d:\work\izanagi\libs\include\system/io/FileInputStream.h(70): warning C4267: '引数': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+d:\work\izanagi\libs\include\system/io/FileOutputStream.h(72): warning C4267: '+=': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+D:\work\izanagi\Libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+D:\work\izanagi\Libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+  PostEffectShaderPass.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\system/io/FileInputStream.h(70): warning C4267: '引数': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+d:\work\izanagi\libs\include\system/io/FileOutputStream.h(72): warning C4267: '+=': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+  PostEffectShader.cpp
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\system/io/FileInputStream.h(70): warning C4267: '引数': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+d:\work\izanagi\libs\include\system/io/FileOutputStream.h(72): warning C4267: '+=': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+  PostEffect.cpp
+D:\work\izanagi\Libs\include\graph/dx9/izDX9Defs.h(48): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+D:\work\izanagi\Libs\include\graph/dx9/izDX9Defs.h(49): warning C4312: '型キャスト': 'unsigned int' からより大きいサイズの 'SHADER_PARAM_HANDLE_DX9' へ変換します。
+d:\work\izanagi\libs\include\system/io/FileInputStream.h(70): warning C4267: '引数': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+d:\work\izanagi\libs\include\system/io/FileOutputStream.h(72): warning C4267: '+=': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+  コードを生成中...
+PostEffectShaderUtil.obj : warning LNK4221: このオブジェクト ファイルは、以前に未定義であったパブリック シンボルを定義していないため、このライブラリを使用するリンク操作では使用されません
+  PostEffect.vcxproj -> D:\work\izanagi\Libs\project\vs2015\..\lib\x64\Debug_DX9\PostEffect.lib

@@ -1,0 +1,55 @@
+﻿2016/05/15 1:07:02 にビルドを開始しました。
+     1>ノード 4 上のプロジェクト "D:\work\izanagi\Libs\project\vs2013\Std.vcxproj" (Build ターゲット)。
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (x64\Debug_OGL\) contains files shared from another project (Math.vcxproj, System.vcxproj, ThreadModel.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I../../include /I..\..\..\External\glew\include /I..\..\..\External\freeglut\include /Zi /nologo /W3 /WX- /Od /D WIN32 /D _DEBUG /D _LIB /D __IZ_DEBUG__ /D __IZ_OGL__ /D __IZ_GLUT__ /D __IZANAGI_NO_USE_D3D__ /D _XKEYCHECK_H /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug_OGL\\" /Fd"D:\work\izanagi\Libs\project\vs2013\..\lib\x64\Debug_OGL\Std.pdb" /Gd /TP /wd4819 /errorReport:prompt ..\..\source\std\allocator\BlockMemoryAllocator.cpp ..\..\source\std\allocator\MemoryAllocator.cpp ..\..\source\std\binding\Binding.cpp ..\..\source\std\binding\BindingExpression.cpp ..\..\source\std\binding\BindingOperations.cpp ..\..\source\std\binding\DependencyObject.cpp ..\..\source\std\binding\DependencyPropertyChangedEventArgs.cpp ..\..\source\std\StdBase64.cpp ..\..\source\std\StdBitStream.cpp ..\..\source\std\StdColor.cpp ..\..\source\std\StdKey.cpp ..\..\source\std\StdLog.cpp ..\..\source\std\StdProfiler.cpp ..\..\source\std\StdUtf.cpp ..\..\source\std\allocator\ChunkedMemoryAllocator.cpp ..\..\source\std\allocator\SimpleMemoryAllocator.cpp ..\..\source\std\allocator\StandardMemoryAllocator.cpp ..\..\source\std\allocator\STLMemoryAllocator.cpp
+         STLMemoryAllocator.cpp
+         StandardMemoryAllocator.cpp
+     1>..\..\source\std\allocator\StandardMemoryAllocator.cpp(108): warning C4267: '初期化中' : 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+     1>..\..\source\std\allocator\StandardMemoryAllocator.cpp(279): warning C4244: '引数' : 'IZ_UINT64' から 'IZ_UINT' への変換です。データが失われる可能性があります。
+     1>..\..\source\std\allocator\StandardMemoryAllocator.cpp(377): warning C4244: '引数' : 'IZ_UINT64' から 'IZ_UINT' への変換です。データが失われる可能性があります。
+         SimpleMemoryAllocator.cpp
+         ChunkedMemoryAllocator.cpp
+         StdUtf.cpp
+         StdProfiler.cpp
+         StdLog.cpp
+         StdKey.cpp
+         StdColor.cpp
+         StdBitStream.cpp
+         StdBase64.cpp
+     1>..\..\source\std\StdBase64.cpp(195): warning C4244: '初期化中' : 'IZ_UINT64' から 'IZ_UINT' への変換です。データが失われる可能性があります。
+     1>..\..\source\std\StdBase64.cpp(261): warning C4244: '初期化中' : 'IZ_UINT64' から 'IZ_UINT' への変換です。データが失われる可能性があります。
+         DependencyPropertyChangedEventArgs.cpp
+         DependencyObject.cpp
+         BindingOperations.cpp
+         BindingExpression.cpp
+         Binding.cpp
+         MemoryAllocator.cpp
+         BlockMemoryAllocator.cpp
+     1>..\..\source\std\allocator\BlockMemoryAllocator.cpp(86): warning C4267: '初期化中' : 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+         コードを生成中...
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\Lib.exe /OUT:"D:\work\izanagi\Libs\project\vs2013\..\lib\x64\Debug_OGL\Std.lib" /NOLOGO /MACHINE:X64 x64\Debug_OGL\BlockMemoryAllocator.obj
+         x64\Debug_OGL\MemoryAllocator.obj
+         x64\Debug_OGL\Binding.obj
+         x64\Debug_OGL\BindingExpression.obj
+         x64\Debug_OGL\BindingOperations.obj
+         x64\Debug_OGL\DependencyObject.obj
+         x64\Debug_OGL\DependencyPropertyChangedEventArgs.obj
+         x64\Debug_OGL\StdBase64.obj
+         x64\Debug_OGL\StdBitStream.obj
+         x64\Debug_OGL\StdColor.obj
+         x64\Debug_OGL\StdKey.obj
+         x64\Debug_OGL\StdLog.obj
+         x64\Debug_OGL\StdProfiler.obj
+         x64\Debug_OGL\StdUtf.obj
+         x64\Debug_OGL\ChunkedMemoryAllocator.obj
+         x64\Debug_OGL\SimpleMemoryAllocator.obj
+         x64\Debug_OGL\StandardMemoryAllocator.obj
+         x64\Debug_OGL\STLMemoryAllocator.obj
+         Std.vcxproj -> D:\work\izanagi\Libs\project\vs2013\..\lib\x64\Debug_OGL\Std.lib
+     1>プロジェクト "D:\work\izanagi\Libs\project\vs2013\Std.vcxproj" (Build ターゲット) のビルドが完了しました。
+
+ビルドに成功しました。
+
+経過時間 00:00:04.78

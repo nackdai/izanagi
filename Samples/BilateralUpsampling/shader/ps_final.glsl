@@ -37,51 +37,82 @@ void main()
 	vec2 uv = gl_FragCoord.xy * invScreen.xy;
 	ivec2 pos = ivec2(gl_FragCoord.xy);
 
-	int idx = (1 - (pos.y & 0x01)) * 2 + (1 - (pos.x & 0x01));
+	// NOTE
+	// Origin is lower-left.
+	// +Y
+	// +-----+-----+
+	// |(0,1)|(1,1)|
+	// +-----+-----+
+	// |(0,0)|(1,0)|
+	// +-----+-----+->+X
+	// 
+	// +Y
+	// +---+---+
+	// | 2 | 3 |
+	// +---+---+
+	// | 0 | 1 |
+	// +---+---+->+X
+
+	// NOTE
+	// In below, * is origin.
+	// Below is sample pattern.
+	//         +Y
+	//     +---+---+---+---+
+	//     | 2x| 2x| 3x| 3x|
+	//     +---+---+---+---+
+	//     | 2x| 2 | 3 | 3x|
+	//     +---+---+---+---+
+	//     | 0x| 0 | 1 | 1x|
+	// -X<-+---*---+---+---+->+X
+	//     | 0x| 0x| 1x| 1x|
+	//     +---+---+---+---+
+	//         -Y
+
+	int idx = (pos.y & 0x01) * 2 + (pos.x & 0x01);
 
 	vec4 lowResNmlDepth[4];
 	vec4 lowResClr[4];
 
 	switch (idx) {
 	case 0:
-		lowResNmlDepth[0] = fetch(s1, uv, vec2(0, 0));
-		lowResNmlDepth[1] = fetch(s1, uv, vec2(1, 0));
-		lowResNmlDepth[2] = fetch(s1, uv, vec2(0, 1));
-		lowResNmlDepth[3] = fetch(s1, uv, vec2(1, 1));
-		lowResClr[0] = fetch(s0, uv, vec2(0, 0));
-		lowResClr[1] = fetch(s0, uv, vec2(1, 0));
-		lowResClr[2] = fetch(s0, uv, vec2(0, 1));
-		lowResClr[3] = fetch(s0, uv, vec2(1, 1));
+		lowResNmlDepth[0] = fetch(s1, uv, vec2( 0,  0));
+		lowResNmlDepth[1] = fetch(s1, uv, vec2(-1,  0));
+		lowResNmlDepth[2] = fetch(s1, uv, vec2( 0, -1));
+		lowResNmlDepth[3] = fetch(s1, uv, vec2(-1, -1));
+		lowResClr[0] = fetch(s0, uv, vec2( 0,  0));
+		lowResClr[1] = fetch(s0, uv, vec2(-1,  0));
+		lowResClr[2] = fetch(s0, uv, vec2( 0, -1));
+		lowResClr[3] = fetch(s0, uv, vec2(-1, -1));
 		break;
 	case 1:
-		lowResNmlDepth[0] = fetch(s1, uv, vec2(-1, 0));
-		lowResNmlDepth[1] = fetch(s1, uv, vec2( 0, 0));
-		lowResNmlDepth[2] = fetch(s1, uv, vec2(-1, 1));
-		lowResNmlDepth[3] = fetch(s1, uv, vec2( 0, 1));
-		lowResClr[0] = fetch(s0, uv, vec2(-1, 0));
-		lowResClr[1] = fetch(s0, uv, vec2( 0, 0));
-		lowResClr[2] = fetch(s0, uv, vec2(-1, 1));
-		lowResClr[3] = fetch(s0, uv, vec2( 0, 1));
+		lowResNmlDepth[0] = fetch(s1, uv, vec2(0, -1));
+		lowResNmlDepth[1] = fetch(s1, uv, vec2(0,  0));
+		lowResNmlDepth[2] = fetch(s1, uv, vec2(1,  0));
+		lowResNmlDepth[3] = fetch(s1, uv, vec2(1, -1));
+		lowResClr[0] = fetch(s0, uv, vec2(0, -1));
+		lowResClr[1] = fetch(s0, uv, vec2(0,  0));
+		lowResClr[2] = fetch(s0, uv, vec2(1,  0));
+		lowResClr[3] = fetch(s0, uv, vec2(1, -1));
 		break;
 	case 2:
-		lowResNmlDepth[0] = fetch(s1, uv, vec2(0, -1));
-		lowResNmlDepth[1] = fetch(s1, uv, vec2(1, -1));
-		lowResNmlDepth[2] = fetch(s1, uv, vec2(0,  0));
-		lowResNmlDepth[3] = fetch(s1, uv, vec2(1,  0));
-		lowResClr[0] = fetch(s0, uv, vec2(0, -1));
-		lowResClr[1] = fetch(s0, uv, vec2(1, -1));
-		lowResClr[2] = fetch(s0, uv, vec2(0,  0));
-		lowResClr[3] = fetch(s0, uv, vec2(1,  0));
+		lowResNmlDepth[0] = fetch(s1, uv, vec2(-1, 0));
+		lowResNmlDepth[1] = fetch(s1, uv, vec2( 0, 1));
+		lowResNmlDepth[2] = fetch(s1, uv, vec2( 0, 0));
+		lowResNmlDepth[3] = fetch(s1, uv, vec2(-1, 1));
+		lowResClr[0] = fetch(s0, uv, vec2(-1, 0));
+		lowResClr[1] = fetch(s0, uv, vec2( 0, 1));
+		lowResClr[2] = fetch(s0, uv, vec2( 0, 0));
+		lowResClr[3] = fetch(s0, uv, vec2(-1, 1));
 		break;
 	case 3:
-		lowResNmlDepth[0] = fetch(s1, uv, vec2(-1, -1));
-		lowResNmlDepth[1] = fetch(s1, uv, vec2( 0, -1));
-		lowResNmlDepth[2] = fetch(s1, uv, vec2(-1,  0));
-		lowResNmlDepth[3] = fetch(s1, uv, vec2( 0,  0));
-		lowResClr[0] = fetch(s0, uv, vec2(-1, -1));
-		lowResClr[1] = fetch(s0, uv, vec2( 0, -1));
-		lowResClr[2] = fetch(s0, uv, vec2(-1,  0));
-		lowResClr[3] = fetch(s0, uv, vec2( 0,  0));
+		lowResNmlDepth[0] = fetch(s1, uv, vec2(0, 1));
+		lowResNmlDepth[1] = fetch(s1, uv, vec2(1, 0));
+		lowResNmlDepth[2] = fetch(s1, uv, vec2(0, 0));
+		lowResNmlDepth[3] = fetch(s1, uv, vec2(1, 1));
+		lowResClr[0] = fetch(s0, uv, vec2(0, 1));
+		lowResClr[1] = fetch(s0, uv, vec2(1, 0));
+		lowResClr[2] = fetch(s0, uv, vec2(0, 0));
+		lowResClr[3] = fetch(s0, uv, vec2(1, 1));
 		break;
 	}
 

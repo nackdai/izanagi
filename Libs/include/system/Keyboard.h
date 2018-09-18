@@ -27,13 +27,15 @@ namespace sys
     public:
         void PressKey(E_KEYBOARD_BUTTON key)
         {
-            IZ_ASSERT(key < E_KEYBOARD_BUTTON_NUM);
-            m_State[1 - m_Pos][key] = 1;
+			if (key < E_KEYBOARD_BUTTON_NUM) {
+				m_State[1 - m_Pos][key] = 1;
+			}
         }
         void ReleaseKey(E_KEYBOARD_BUTTON key)
         {
-            IZ_ASSERT(key < E_KEYBOARD_BUTTON_NUM);
-            m_State[1 - m_Pos][key] = 0;
+			if (key < E_KEYBOARD_BUTTON_NUM) {
+				m_State[1 - m_Pos][key] = 0;
+			}
         }
 
         void Update()

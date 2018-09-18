@@ -1,0 +1,24 @@
+﻿2016/11/23 9:43:54 にビルドを開始しました。
+     1>ノード 3 上のプロジェクト "D:\work\izanagi\Libs\project\vs2013\System.vcxproj" (Build ターゲット)。
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (Win32\Debug_DX9\) contains files shared from another project (Animation.vcxproj, Collision.vcxproj, DebugUtil.vcxproj, Graph.vcxproj, Math.vcxproj, Network.vcxproj, PostEffect.vcxproj, Resource.vcxproj, SceneGraph.vcxproj, Shader.vcxproj, Std.vcxproj, Terra.vcxproj, Text.vcxproj, ThreadModel.vcxproj, UI.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+     1>Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"D:\work\izanagi\Libs\project\vs2013\..\lib\Win32\Debug_DX9\System.lib" /NOLOGO Win32\Debug_DX9\Pad.obj
+         Win32\Debug_DX9\SysEvent.obj
+         Win32\Debug_DX9\SysSemaphore.obj
+         Win32\Debug_DX9\SysThread.obj
+         Win32\Debug_DX9\SysWindow_glfw.obj
+         Win32\Debug_DX9\TouchInput.obj
+         Win32\Debug_DX9\DeviceUtil.obj
+         Win32\Debug_DX9\Pad_DInput.obj
+         Win32\Debug_DX9\Pad_XInput.obj
+         Win32\Debug_DX9\FileStream_win32.obj
+         "Win32\Debug_DX9\SysEnvironment_win32 .obj"
+         Win32\Debug_DX9\SysTimer_win32.obj
+         Win32\Debug_DX9\SysUtil_win32.obj
+         Win32\Debug_DX9\SysWindow_win32.obj
+         System.vcxproj -> D:\work\izanagi\Libs\project\vs2013\..\lib\Win32\Debug_DX9\System.lib
+     1>プロジェクト "D:\work\izanagi\Libs\project\vs2013\System.vcxproj" (Build ターゲット) のビルドが完了しました。
+
+ビルドに成功しました。
+
+経過時間 00:00:00.58

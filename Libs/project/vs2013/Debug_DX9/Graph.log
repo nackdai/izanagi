@@ -1,0 +1,37 @@
+﻿2016/05/05 0:19:29 にビルドを開始しました。
+     1>ノード 2 上のプロジェクト "D:\work\izanagi\Libs\project\vs2013\Graph.vcxproj" (Build ターゲット)。
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (Debug_DX9\) contains files shared from another project (Animation.vcxproj, Collision.vcxproj, DebugUtil.vcxproj, Math.vcxproj, Network.vcxproj, PostEffect.vcxproj, Resource.vcxproj, SceneGraph.vcxproj, Shader.vcxproj, Std.vcxproj, System.vcxproj, Terra.vcxproj, Text.vcxproj, ThreadModel.vcxproj, UI.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I../../include /Zi /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D D3D_DEBUG_INFO /D __IZ_DEBUG__ /D __IZ_DX9__ /D _XKEYCHECK_H /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug_DX9\\" /Fd"D:\work\izanagi\Libs\project\vs2013\..\lib\Debug_DX9\Graph.pdb" /Gd /TP /wd4819 /analyze- /errorReport:prompt ..\..\source\graph\RenderState.cpp ..\..\source\graph\dx9\RenderState_DX9.cpp
+         RenderState_DX9.cpp
+         RenderState.cpp
+         コードを生成中...
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"D:\work\izanagi\Libs\project\vs2013\..\lib\Debug_DX9\Graph.lib" /NOLOGO Debug_DX9\2DShader.obj
+         Debug_DX9\BufferBase.obj
+         Debug_DX9\2DShader_DX9.obj
+         Debug_DX9\CubeTexture_DX9.obj
+         Debug_DX9\D3D9ParamValueConverter.obj
+         Debug_DX9\GraphicsDeviceResourceFuncs.obj
+         Debug_DX9\GraphicsDevice_DX9.obj
+         Debug_DX9\GraphPerf_DX9.obj
+         Debug_DX9\IndexBuffer_DX9.obj
+         Debug_DX9\PixelShader_DX9.obj
+         Debug_DX9\RenderState_DX9.obj
+         Debug_DX9\RenderTarget_DX9.obj
+         Debug_DX9\ShaderProgram_DX9.obj
+         Debug_DX9\Surface_DX9.obj
+         Debug_DX9\Texture_DX9.obj
+         Debug_DX9\VertexBuffer_DX9.obj
+         Debug_DX9\VertexDeclaration_DX9.obj
+         Debug_DX9\VertexShader_DX9.obj
+         Debug_DX9\GraphicsDevice.obj
+         Debug_DX9\2DRenderer.obj
+         Debug_DX9\RenderState.obj
+         Debug_DX9\ShaderProgram.obj
+         Graph.vcxproj -> D:\work\izanagi\Libs\project\vs2013\..\lib\Debug_DX9\Graph.lib
+     1>プロジェクト "D:\work\izanagi\Libs\project\vs2013\Graph.vcxproj" (Build ターゲット) のビルドが完了しました。
+
+ビルドに成功しました。
+
+経過時間 00:00:01.21

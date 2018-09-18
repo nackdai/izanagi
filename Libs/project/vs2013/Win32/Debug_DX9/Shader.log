@@ -1,0 +1,18 @@
+﻿2016/11/23 9:43:54 にビルドを開始しました。
+     1>ノード 5 上のプロジェクト "D:\work\izanagi\Libs\project\vs2013\Shader.vcxproj" (Build ターゲット)。
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (Win32\Debug_DX9\) contains files shared from another project (Animation.vcxproj, Collision.vcxproj, DebugUtil.vcxproj, Graph.vcxproj, Math.vcxproj, Network.vcxproj, PostEffect.vcxproj, Resource.vcxproj, SceneGraph.vcxproj, Std.vcxproj, System.vcxproj, Terra.vcxproj, Text.vcxproj, ThreadModel.vcxproj, UI.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+     1>Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"D:\work\izanagi\Libs\project\vs2013\..\lib\Win32\Debug_DX9\Shader.lib" /NOLOGO Win32\Debug_DX9\ShaderPass.obj
+         Win32\Debug_DX9\ShaderAttrTable.obj
+         Win32\Debug_DX9\ShaderParameterTable.obj
+         Win32\Debug_DX9\ShaderPassTable.obj
+         Win32\Debug_DX9\ShaderSamplerTable.obj
+         Win32\Debug_DX9\ShaderManager.obj
+         Win32\Debug_DX9\ShaderBasic.obj
+         Win32\Debug_DX9\ShaderUtil.obj
+         Shader.vcxproj -> D:\work\izanagi\Libs\project\vs2013\..\lib\Win32\Debug_DX9\Shader.lib
+     1>プロジェクト "D:\work\izanagi\Libs\project\vs2013\Shader.vcxproj" (Build ターゲット) のビルドが完了しました。
+
+ビルドに成功しました。
+
+経過時間 00:00:00.54

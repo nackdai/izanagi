@@ -1,0 +1,34 @@
+﻿2016/05/28 15:18:29 にビルドを開始しました。
+     1>ノード 2 上のプロジェクト "D:\work\izanagi\Libs\project\vs2013\Collision.vcxproj" (Build ターゲット)。
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (x64\Debug_OGL\) contains files shared from another project (Math.vcxproj, Std.vcxproj, System.vcxproj, ThreadModel.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I../../include /I..\..\..\External\glew\include /I..\..\..\External\freeglut\include /Zi /nologo /W3 /WX- /Od /D WIN32 /D _DEBUG /D _LIB /D __IZ_DEBUG__ /D __IZ_OGL__ /D __IZ_GLUT__ /D __IZANAGI_NO_USE_D3D__ /D _XKEYCHECK_H /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug_OGL\\" /Fd"D:\work\izanagi\Libs\project\vs2013\..\lib\x64\Debug_OGL\Collision.pdb" /Gd /TP /wd4819 /errorReport:prompt ..\..\source\collision\ColAABB.cpp ..\..\source\collision\ColFrustum.cpp ..\..\source\collision\ColPlane.cpp ..\..\source\collision\ColRay.cpp ..\..\source\collision\ColRectangle.cpp ..\..\source\collision\ColSphere.cpp ..\..\source\collision\ColTriangle.cpp ..\..\source\collision\octree\OctreeElement.cpp ..\..\source\collision\octree\OctreeNode.cpp
+         ColAABB.cpp
+         コードを生成中...
+         コンパイル中...
+         OctreeNode.cpp
+         OctreeElement.cpp
+         コードを生成中...
+         スキップ中... (関連する変更は検出されませんでした)
+         ColTriangle.cpp
+         ColSphere.cpp
+         ColRectangle.cpp
+         ColRay.cpp
+         ColPlane.cpp
+         ColFrustum.cpp
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\Lib.exe /OUT:"D:\work\izanagi\Libs\project\vs2013\..\lib\x64\Debug_OGL\Collision.lib" /NOLOGO /MACHINE:X64 x64\Debug_OGL\ColAABB.obj
+         x64\Debug_OGL\ColFrustum.obj
+         x64\Debug_OGL\ColPlane.obj
+         x64\Debug_OGL\ColRay.obj
+         x64\Debug_OGL\ColRectangle.obj
+         x64\Debug_OGL\ColSphere.obj
+         x64\Debug_OGL\ColTriangle.obj
+         x64\Debug_OGL\OctreeElement.obj
+         x64\Debug_OGL\OctreeNode.obj
+         Collision.vcxproj -> D:\work\izanagi\Libs\project\vs2013\..\lib\x64\Debug_OGL\Collision.lib
+     1>プロジェクト "D:\work\izanagi\Libs\project\vs2013\Collision.vcxproj" (Build ターゲット) のビルドが完了しました。
+
+ビルドに成功しました。
+
+経過時間 00:00:01.39

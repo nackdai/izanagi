@@ -201,7 +201,7 @@
       <AdditionalLibraryDirectories>..\..\..\External\libjpeg\$(Platform)\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PreBuildEvent>
-      <Command>..\..\..\External\BuildLibJpeg.bat</Command>
+      <Command>..\..\..\External\BuildLibJpeg.bat Debug $(Platform) 2015</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">
@@ -223,7 +223,7 @@
       <AdditionalDependencies>Shader.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>..\..\..\External\BuildLibJpeg.bat</Command>
+      <Command>..\..\..\External\BuildLibJpeg.bat $(Configuration) $(Platform) 2015</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">
@@ -245,7 +245,7 @@
       <AdditionalDependencies>Shader.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>..\..\..\External\BuildLibJpeg.bat</Command>
+      <Command>..\..\..\External\BuildLibJpeg.bat Debug $(Platform) 2015</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">
@@ -268,7 +268,7 @@
       <AdditionalLibraryDirectories>..\..\..\External\libjpeg\$(Platform)\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PreBuildEvent>
-      <Command>..\..\..\External\BuildLibJpeg.bat</Command>
+      <Command>..\..\..\External\BuildLibJpeg.bat Release $(Platform) 2015</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">
@@ -289,7 +289,7 @@
       <AdditionalDependencies>Shader.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>..\..\..\External\BuildLibJpeg.bat</Command>
+      <Command>..\..\..\External\BuildLibJpeg.bat $(Configuration) $(Platform) 2015</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

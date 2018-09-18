@@ -119,6 +119,13 @@ void SSAOApp::generateKernel()
     }
 }
 
+void SSAOApp::OnKeyUp(izanagi::sys::E_KEYBOARD_BUTTON key)
+{
+	if (key == izanagi::sys::E_KEYBOARD_BUTTON::E_KEYBOARD_BUTTON_F1) {
+		m_isShowGBuffer = !m_isShowGBuffer;
+	}
+}
+
 // 更新.
 void SSAOApp::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
@@ -134,7 +141,10 @@ void SSAOApp::RenderInternal(izanagi::graph::CGraphicsDevice* device)
     renderFinalPass(device);
 
     device->SetTexture(0, IZ_NULL);
-    m_gbuffer.drawBuffers(device);
+
+	if (m_isShowGBuffer) {
+		m_gbuffer.drawBuffers(device);
+	}
 }
 
 void SSAOApp::renderGeometryPass(izanagi::graph::CGraphicsDevice* device)

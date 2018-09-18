@@ -1,0 +1,12 @@
+﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (x64\Debug_DX9\) contains files shared from another project (DebugUtil.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  MathNumericalAnlysis.cpp
+  SFMT.cpp
+  MathTriangle.cpp
+  MathRectangle.cpp
+  MathRay.cpp
+  MathPlane.cpp
+  MathMatrix44.cpp
+  MathMatrix33.cpp
+  MathCurve.cpp
+  コードを生成中...
+  Math.vcxproj -> D:\work\izanagi\Libs\project\vs2015\..\lib\x64\Debug_DX9\Math.lib

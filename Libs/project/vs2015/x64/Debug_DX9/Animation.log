@@ -1,0 +1,26 @@
+﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (x64\Debug_DX9\) contains files shared from another project (DebugUtil.vcxproj, Graph.vcxproj, Math.vcxproj, PostEffect.vcxproj, SceneGraph.vcxproj, Shader.vcxproj, Std.vcxproj, System.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  TweenerUtility.cpp
+  Tweener.cpp
+..\..\source\animation\Tweener.cpp(33): warning C4244: 'return': 'double' から 'IZ_FLOAT' への変換です。データが失われる可能性があります。
+..\..\source\animation\Tweener.cpp(37): warning C4244: 'return': 'double' から 'IZ_FLOAT' への変換です。データが失われる可能性があります。
+..\..\source\animation\Tweener.cpp(42): warning C4244: 'return': 'double' から 'IZ_FLOAT' への変換です。データが失われる可能性があります。
+..\..\source\animation\Tweener.cpp(129): warning C4244: 'return': 'double' から 'IZ_FLOAT' への変換です。データが失われる可能性があります。
+..\..\source\animation\Tweener.cpp(135): warning C4244: 'return': 'double' から 'IZ_FLOAT' への変換です。データが失われる可能性があります。
+..\..\source\animation\Tweener.cpp(150): warning C4244: 'return': 'double' から 'IZ_FLOAT' への変換です。データが失われる可能性があります。
+..\..\source\animation\Tweener.cpp(154): warning C4244: 'return': 'double' から 'IZ_FLOAT' への変換です。データが失われる可能性があります。
+..\..\source\animation\Tweener.cpp(177): warning C4244: 'return': 'double' から 'IZ_FLOAT' への変換です。データが失われる可能性があります。
+..\..\source\animation\Tweener.cpp(195): warning C4244: 'return': 'double' から 'IZ_FLOAT' への変換です。データが失われる可能性があります。
+..\..\source\animation\Tweener.cpp(215): warning C4244: 'return': 'double' から 'IZ_FLOAT' への変換です。データが失われる可能性があります。
+..\..\source\animation\Tweener.cpp(219): warning C4244: 'return': 'double' から 'IZ_FLOAT' への変換です。データが失われる可能性があります。
+..\..\source\animation\Tweener.cpp(255): warning C4244: 'return': 'double' から 'IZ_FLOAT' への変換です。データが失われる可能性があります。
+..\..\source\animation\Tweener.cpp(261): warning C4244: 'return': 'double' から 'IZ_FLOAT' への変換です。データが失われる可能性があります。
+..\..\source\animation\Tweener.cpp(269): warning C4244: 'return': 'double' から 'IZ_FLOAT' への変換です。データが失われる可能性があります。
+..\..\source\animation\Tweener.cpp(274): warning C4244: 'return': 'double' から 'IZ_FLOAT' への変換です。データが失われる可能性があります。
+  Timeline.cpp
+  StoryBoard.cpp
+  SplineInterpolator.cpp
+  LinearInterpolator.cpp
+  Interpolator.cpp
+  EasingInterpolator.cpp
+  コードを生成中...
+  Animation.vcxproj -> D:\work\izanagi\Libs\project\vs2015\..\lib\x64\Debug_DX9\Animation.lib

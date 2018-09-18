@@ -1,0 +1,54 @@
+﻿2016/05/15 0:11:42 にビルドを開始しました。
+     1>ノード 4 上のプロジェクト "D:\work\izanagi\Libs\project\vs2013\Network.vcxproj" (Build ターゲット)。
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (Win32\Debug_DX9\) contains files shared from another project (Animation.vcxproj, DebugUtil.vcxproj, Graph.vcxproj, Math.vcxproj, PostEffect.vcxproj, Resource.vcxproj, SceneGraph.vcxproj, Shader.vcxproj, Std.vcxproj, System.vcxproj, Terra.vcxproj, Text.vcxproj, ThreadModel.vcxproj, UI.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\..\..\External\libuv\include /I../../include /Zi /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D D3D_DEBUG_INFO /D __IZ_DEBUG__ /D __IZ_DX9__ /D _XKEYCHECK_H /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Win32\Debug_DX9\\" /Fd"D:\work\izanagi\Libs\project\vs2013\..\lib\Win32\Debug_DX9\Network.pdb" /Gd /TP /wd4819 /analyze- /errorReport:prompt ..\..\source\network\IPv4Endpoint.cpp "..\..\source\network\Network _libuv.cpp" ..\..\source\network\NetworkTCP_libuv.cpp ..\..\source\network\NetworkUDP_libuv.cpp ..\..\source\network\ReplicatedProperty\ReplicatedProperty.cpp ..\..\source\network\ReplicatedProperty\ReplicatedPropertyManager.cpp ..\..\source\network\ReplicatedProperty\ReplicatedPropertyObject.cpp ..\..\source\network\ReplicatedProperty\ReplicatedPropertyObjectClass.cpp ..\..\source\network\rudp\CallbackRegister.cpp ..\..\source\network\rudp\ReliableUDP.cpp ..\..\source\network\rudp\ReliableUDPListener.cpp ..\..\source\network\rudp\segment\DataSegment.cpp ..\..\source\network\rudp\segment\ExtendAckSegment.cpp ..\..\source\network\rudp\segment\Segment.cpp ..\..\source\network\rudp\segment\SynchronousSegment.cpp
+         SynchronousSegment.cpp
+         Segment.cpp
+         ExtendAckSegment.cpp
+         DataSegment.cpp
+         ReliableUDPListener.cpp
+         ReliableUDP.cpp
+     1>..\..\source\network\rudp\ReliableUDP.cpp(313): warning C4018: '>=' : signed と unsigned の数値を比較しようとしました。
+         CallbackRegister.cpp
+         ReplicatedPropertyObjectClass.cpp
+         ReplicatedPropertyObject.cpp
+         ReplicatedPropertyManager.cpp
+         ReplicatedProperty.cpp
+         NetworkUDP_libuv.cpp
+     1>..\..\source\network\NetworkUDP_libuv.cpp(356): warning C4018: '<' : signed と unsigned の数値を比較しようとしました。
+         NetworkTCP_libuv.cpp
+     1>..\..\source\network\NetworkTCP_libuv.cpp(226): warning C4018: '<' : signed と unsigned の数値を比較しようとしました。
+         Network _libuv.cpp
+         IPv4Endpoint.cpp
+     1>..\..\source\network\IPv4Endpoint.cpp(88): warning C4996: 'gethostbyname': Use getaddrinfo() or GetAddrInfoW() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
+                 C:\Program Files (x86)\Windows Kits\8.1\Include\um\WinSock2.h(2238) : 'gethostbyname' の宣言を確認してください。
+         コードを生成中...
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"D:\work\izanagi\Libs\project\vs2013\..\lib\Win32\Debug_DX9\Network.lib" WS2_32.lib libuv.lib userenv.lib Iphlpapi.lib psapi.lib /LIBPATH:..\..\..\External\libuv\Debug\lib /NOLOGO Win32\Debug_DX9\IPv4Endpoint.obj
+         "Win32\Debug_DX9\Network _libuv.obj"
+         Win32\Debug_DX9\NetworkTCP_libuv.obj
+         Win32\Debug_DX9\NetworkUDP_libuv.obj
+         Win32\Debug_DX9\ReplicatedProperty.obj
+         Win32\Debug_DX9\ReplicatedPropertyManager.obj
+         Win32\Debug_DX9\ReplicatedPropertyObject.obj
+         Win32\Debug_DX9\ReplicatedPropertyObjectClass.obj
+         Win32\Debug_DX9\CallbackRegister.obj
+         Win32\Debug_DX9\ReliableUDP.obj
+         Win32\Debug_DX9\ReliableUDPListener.obj
+         Win32\Debug_DX9\DataSegment.obj
+         Win32\Debug_DX9\ExtendAckSegment.obj
+         Win32\Debug_DX9\Segment.obj
+         Win32\Debug_DX9\SynchronousSegment.obj
+     1>userenv.lib(USERENV.dll) : warning LNK4006: __NULL_IMPORT_DESCRIPTOR は WS2_32.lib(WS2_32.dll) で定義されています。2 つ目以降の定義は無視されます。
+     1>userenv.lib(USERENV.dll) : warning LNK4221: このオブジェクト ファイルは、以前に未定義であったパブリック シンボルを定義していないため、このライブラリを使用するリンク操作では使用されません
+     1>Iphlpapi.lib(IPHLPAPI.DLL) : warning LNK4006: __NULL_IMPORT_DESCRIPTOR は WS2_32.lib(WS2_32.dll) で定義されています。2 つ目以降の定義は無視されます。
+     1>Iphlpapi.lib(IPHLPAPI.DLL) : warning LNK4221: このオブジェクト ファイルは、以前に未定義であったパブリック シンボルを定義していないため、このライブラリを使用するリンク操作では使用されません
+     1>psapi.lib(PSAPI.DLL) : warning LNK4006: __NULL_IMPORT_DESCRIPTOR は WS2_32.lib(WS2_32.dll) で定義されています。2 つ目以降の定義は無視されます。
+     1>psapi.lib(PSAPI.DLL) : warning LNK4221: このオブジェクト ファイルは、以前に未定義であったパブリック シンボルを定義していないため、このライブラリを使用するリンク操作では使用されません
+         Network.vcxproj -> D:\work\izanagi\Libs\project\vs2013\..\lib\Win32\Debug_DX9\Network.lib
+     1>プロジェクト "D:\work\izanagi\Libs\project\vs2013\Network.vcxproj" (Build ターゲット) のビルドが完了しました。
+
+ビルドに成功しました。
+
+経過時間 00:00:09.20

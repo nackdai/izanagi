@@ -1,0 +1,29 @@
+﻿2016/05/03 2:29:43 にビルドを開始しました。
+     1>ノード 2 上のプロジェクト "D:\work\izanagi\Libs\project\vs2013\ThreadModel.vcxproj" (Build ターゲット)。
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (Debug_DX9\) contains files shared from another project (Animation.vcxproj, Collision.vcxproj, DebugUtil.vcxproj, Graph.vcxproj, Math.vcxproj, Network.vcxproj, PostEffect.vcxproj, Resource.vcxproj, SceneGraph.vcxproj, Shader.vcxproj, Std.vcxproj, System.vcxproj, Terra.vcxproj, Text.vcxproj, UI.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I../../include /Zi /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D D3D_DEBUG_INFO /D __IZ_DEBUG__ /D __IZ_DX9__ /D _XKEYCHECK_H /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug_DX9\\" /Fd"D:\work\izanagi\Libs\project\vs2013\..\lib\Debug_DX9\ThreadModel.pdb" /Gd /TP /wd4819 /analyze- /errorReport:prompt ..\..\source\threadmodel\Parallel.cpp ..\..\source\threadmodel\ThreadModelJob.cpp ..\..\source\threadmodel\ThreadModelJobQueue.cpp ..\..\source\threadmodel\ThreadModelJobWorker.cpp ..\..\source\threadmodel\ThreadModelMessageQueue.cpp ..\..\source\threadmodel\ThreadModelTask.cpp ..\..\source\threadmodel\ThreadPool.cpp ..\..\source\threadmodel\TimerThread.cpp
+         TimerThread.cpp
+         ThreadPool.cpp
+         ThreadModelTask.cpp
+         ThreadModelMessageQueue.cpp
+         ThreadModelJobWorker.cpp
+         ThreadModelJobQueue.cpp
+         ThreadModelJob.cpp
+         Parallel.cpp
+         コードを生成中...
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"D:\work\izanagi\Libs\project\vs2013\..\lib\Debug_DX9\ThreadModel.lib" /NOLOGO Debug_DX9\Parallel.obj
+         Debug_DX9\ThreadModelJob.obj
+         Debug_DX9\ThreadModelJobQueue.obj
+         Debug_DX9\ThreadModelJobWorker.obj
+         Debug_DX9\ThreadModelMessageQueue.obj
+         Debug_DX9\ThreadModelTask.obj
+         Debug_DX9\ThreadPool.obj
+         Debug_DX9\TimerThread.obj
+         ThreadModel.vcxproj -> D:\work\izanagi\Libs\project\vs2013\..\lib\Debug_DX9\ThreadModel.lib
+     1>プロジェクト "D:\work\izanagi\Libs\project\vs2013\ThreadModel.vcxproj" (Build ターゲット) のビルドが完了しました。
+
+ビルドに成功しました。
+
+経過時間 00:00:05.29

@@ -1,0 +1,54 @@
+﻿2016/05/15 1:07:12 にビルドを開始しました。
+     1>ノード 4 上のプロジェクト "D:\work\izanagi\Libs\project\vs2013\Std.vcxproj" (Build ターゲット)。
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I../../include /I..\..\..\External\glew\include /I..\..\..\External\freeglut\include /Zi /nologo /W3 /WX- /O2 /D WIN32 /D NDEBUG /D _LIB /D __IZ_OGL__ /D __IZ_GLUT__ /D __IZANAGI_NO_USE_D3D__ /D _XKEYCHECK_H /D _MBCS /Gm- /EHsc /MT /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Release_OGL\\" /Fd"D:\work\izanagi\Libs\project\vs2013\..\lib\x64\Release_OGL\Std.pdb" /Gd /TP /wd4819 /errorReport:prompt ..\..\source\std\allocator\BlockMemoryAllocator.cpp ..\..\source\std\allocator\MemoryAllocator.cpp ..\..\source\std\binding\Binding.cpp ..\..\source\std\binding\BindingExpression.cpp ..\..\source\std\binding\BindingOperations.cpp ..\..\source\std\binding\DependencyObject.cpp ..\..\source\std\binding\DependencyPropertyChangedEventArgs.cpp ..\..\source\std\StdBase64.cpp ..\..\source\std\StdBitStream.cpp ..\..\source\std\StdColor.cpp ..\..\source\std\StdKey.cpp ..\..\source\std\StdLog.cpp ..\..\source\std\StdProfiler.cpp ..\..\source\std\StdUtf.cpp ..\..\source\std\allocator\ChunkedMemoryAllocator.cpp ..\..\source\std\allocator\SimpleMemoryAllocator.cpp ..\..\source\std\allocator\StandardMemoryAllocator.cpp ..\..\source\std\allocator\STLMemoryAllocator.cpp
+         BlockMemoryAllocator.cpp
+     1>..\..\source\std\allocator\BlockMemoryAllocator.cpp(86): warning C4267: '初期化中' : 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+         MemoryAllocator.cpp
+         Binding.cpp
+         BindingExpression.cpp
+         BindingOperations.cpp
+         DependencyObject.cpp
+         DependencyPropertyChangedEventArgs.cpp
+         StdBase64.cpp
+     1>..\..\source\std\StdBase64.cpp(195): warning C4244: '初期化中' : 'IZ_UINT64' から 'IZ_UINT' への変換です。データが失われる可能性があります。
+     1>..\..\source\std\StdBase64.cpp(261): warning C4244: '初期化中' : 'IZ_UINT64' から 'IZ_UINT' への変換です。データが失われる可能性があります。
+         StdBitStream.cpp
+         StdColor.cpp
+         StdKey.cpp
+         StdLog.cpp
+         StdProfiler.cpp
+         StdUtf.cpp
+         ChunkedMemoryAllocator.cpp
+         SimpleMemoryAllocator.cpp
+         StandardMemoryAllocator.cpp
+     1>..\..\source\std\allocator\StandardMemoryAllocator.cpp(108): warning C4267: '初期化中' : 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+     1>..\..\source\std\allocator\StandardMemoryAllocator.cpp(279): warning C4244: '引数' : 'IZ_UINT64' から 'IZ_UINT' への変換です。データが失われる可能性があります。
+     1>..\..\source\std\allocator\StandardMemoryAllocator.cpp(377): warning C4244: '引数' : 'IZ_UINT64' から 'IZ_UINT' への変換です。データが失われる可能性があります。
+         STLMemoryAllocator.cpp
+         コードを生成中...
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\Lib.exe /OUT:"D:\work\izanagi\Libs\project\vs2013\..\lib\x64\Release_OGL\Std.lib" /NOLOGO /MACHINE:X64 x64\Release_OGL\BlockMemoryAllocator.obj
+         x64\Release_OGL\MemoryAllocator.obj
+         x64\Release_OGL\Binding.obj
+         x64\Release_OGL\BindingExpression.obj
+         x64\Release_OGL\BindingOperations.obj
+         x64\Release_OGL\DependencyObject.obj
+         x64\Release_OGL\DependencyPropertyChangedEventArgs.obj
+         x64\Release_OGL\StdBase64.obj
+         x64\Release_OGL\StdBitStream.obj
+         x64\Release_OGL\StdColor.obj
+         x64\Release_OGL\StdKey.obj
+         x64\Release_OGL\StdLog.obj
+         x64\Release_OGL\StdProfiler.obj
+         x64\Release_OGL\StdUtf.obj
+         x64\Release_OGL\ChunkedMemoryAllocator.obj
+         x64\Release_OGL\SimpleMemoryAllocator.obj
+         x64\Release_OGL\StandardMemoryAllocator.obj
+         x64\Release_OGL\STLMemoryAllocator.obj
+         Std.vcxproj -> D:\work\izanagi\Libs\project\vs2013\..\lib\x64\Release_OGL\Std.lib
+     1>プロジェクト "D:\work\izanagi\Libs\project\vs2013\Std.vcxproj" (Build ターゲット) のビルドが完了しました。
+
+ビルドに成功しました。
+
+経過時間 00:00:06.84

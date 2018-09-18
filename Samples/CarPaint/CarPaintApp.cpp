@@ -1,6 +1,9 @@
 #include "CarPaintApp.h"
 #include <imgui.h>
 
+// NOTE
+// https://2pha.com/blog/threejs-car-paint-shader-recreating-radeon-9700-demo/
+
 enum TexType {
     bg,
 	filtered,

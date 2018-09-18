@@ -1,0 +1,39 @@
+﻿2016/11/23 9:43:52 にビルドを開始しました。
+     1>ノード 2 上のプロジェクト "D:\work\izanagi\Libs\project\vs2013\SceneGraph.vcxproj" (Build ターゲット)。
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (Win32\Debug_DX9\) contains files shared from another project (Animation.vcxproj, Collision.vcxproj, DebugUtil.vcxproj, Graph.vcxproj, Math.vcxproj, Network.vcxproj, PostEffect.vcxproj, Resource.vcxproj, Shader.vcxproj, Std.vcxproj, System.vcxproj, Terra.vcxproj, Text.vcxproj, ThreadModel.vcxproj, UI.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+     1>Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"D:\work\izanagi\Libs\project\vs2013\..\lib\Win32\Debug_DX9\SceneGraph.lib" /NOLOGO Win32\Debug_DX9\Camera.obj
+         Win32\Debug_DX9\Decal.obj
+         Win32\Debug_DX9\SceneRenderer.obj
+         Win32\Debug_DX9\SceneGraphUtil.obj
+         Win32\Debug_DX9\SceneParam.obj
+         Win32\Debug_DX9\SceneState.obj
+         Win32\Debug_DX9\StereoCamera.obj
+         Win32\Debug_DX9\VectorCamera.obj
+         Win32\Debug_DX9\izImage.obj
+         Win32\Debug_DX9\izModel.obj
+         Win32\Debug_DX9\AnimationBinder.obj
+         Win32\Debug_DX9\AnimationInterface.obj
+         Win32\Debug_DX9\AnimationInterp.obj
+         Win32\Debug_DX9\AnimationUtil.obj
+         Win32\Debug_DX9\izAnimation.obj
+         Win32\Debug_DX9\PoseUpdater.obj
+         Win32\Debug_DX9\AnimationLinearBlender.obj
+         Win32\Debug_DX9\izMaterial.obj
+         Win32\Debug_DX9\izMesh.obj
+         Win32\Debug_DX9\MeshInstance.obj
+         Win32\Debug_DX9\MeshSetInstance.obj
+         Win32\Debug_DX9\MshMeshGroup.obj
+         Win32\Debug_DX9\MshMeshSet.obj
+         Win32\Debug_DX9\MshPrimitiveSet.obj
+         Win32\Debug_DX9\izSkeleton.obj
+         Win32\Debug_DX9\SkeletonInstance.obj
+         Win32\Debug_DX9\SkeletonUtil.obj
+         Win32\Debug_DX9\RenderGraph.obj
+     1>AnimationInterface.obj : warning LNK4221: このオブジェクト ファイルは、以前に未定義であったパブリック シンボルを定義していないため、このライブラリを使用するリンク操作では使用されません
+         SceneGraph.vcxproj -> D:\work\izanagi\Libs\project\vs2013\..\lib\Win32\Debug_DX9\SceneGraph.lib
+     1>プロジェクト "D:\work\izanagi\Libs\project\vs2013\SceneGraph.vcxproj" (Build ターゲット) のビルドが完了しました。
+
+ビルドに成功しました。
+
+経過時間 00:00:02.13

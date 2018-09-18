@@ -1,0 +1,39 @@
+﻿2016/05/05 0:17:55 にビルドを開始しました。
+     1>ノード 2 上のプロジェクト "D:\work\izanagi\Libs\project\vs2013\Graph.vcxproj" (Build ターゲット)。
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (Debug_OGL\) contains files shared from another project (Animation.vcxproj, Collision.vcxproj, DebugUtil.vcxproj, Math.vcxproj, Network.vcxproj, PostEffect.vcxproj, Resource.vcxproj, SceneGraph.vcxproj, Shader.vcxproj, Std.vcxproj, System.vcxproj, Terra.vcxproj, Text.vcxproj, ThreadModel.vcxproj, UI.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I../../include /I..\..\..\External\glew\include /I..\..\..\External\freeglut\include /Zi /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D __IZ_DEBUG__ /D __IZ_OGL__ /D __IZ_GLUT__ /D __IZANAGI_NO_USE_D3D__ /D _XKEYCHECK_H /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug_OGL\\" /Fd"D:\work\izanagi\Libs\project\vs2013\..\lib\Debug_OGL\Graph.pdb" /Gd /TP /wd4819 /analyze- /errorReport:prompt ..\..\source\graph\RenderState.cpp
+         RenderState.cpp
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"D:\work\izanagi\Libs\project\vs2013\..\lib\Debug_OGL\Graph.lib" glew32d.lib /LIBPATH:..\..\..\External\glew\lib\Debug\Win32 /NOLOGO Debug_OGL\2DShader.obj
+         Debug_OGL\BufferBase.obj
+         Debug_OGL\2DShader_GLES2.obj
+         Debug_OGL\CubeTexture_GLES2.obj
+         Debug_OGL\FrameBufferObject.obj
+         Debug_OGL\GraphicsDeviceResourceFuncs.obj
+         Debug_OGL\GraphicsDevice_GLES2.obj
+         Debug_OGL\GraphPerf_GLES2.obj
+         Debug_OGL\IndexBuffer_GLES2.obj
+         Debug_OGL\ParamValueConverter_GLES2.obj
+         Debug_OGL\PixelShader_GLES2.obj
+         Debug_OGL\RenderState_GLES2.obj
+         Debug_OGL\RenderTarget_GLES2.obj
+         Debug_OGL\ShaderProgram_GLES2.obj
+         Debug_OGL\Texture_GLES2.obj
+         Debug_OGL\VertexBuffer_GLES2.obj
+         Debug_OGL\VertexDeclaration_GLES2.obj
+         Debug_OGL\VertexShader_GLES2.obj
+         Debug_OGL\GraphicsDevice.obj
+         Debug_OGL\2DRenderer.obj
+         Debug_OGL\GraphicsDevice_OGL.obj
+         Debug_OGL\IndexBuffer_OGL.obj
+         Debug_OGL\VertexBuffer_OGL.obj
+         Debug_OGL\VertexDeclaration_OGL.obj
+         Debug_OGL\RenderState.obj
+         Debug_OGL\ShaderProgram.obj
+         Graph.vcxproj -> D:\work\izanagi\Libs\project\vs2013\..\lib\Debug_OGL\Graph.lib
+     1>プロジェクト "D:\work\izanagi\Libs\project\vs2013\Graph.vcxproj" (Build ターゲット) のビルドが完了しました。
+
+ビルドに成功しました。
+
+経過時間 00:00:00.68

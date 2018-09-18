@@ -1,0 +1,19 @@
+﻿2016/05/15 1:08:32 にビルドを開始しました。
+     1>ノード 2 上のプロジェクト "D:\work\izanagi\Libs\project\vs2013\System.vcxproj" (Build ターゲット)。
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (x64\Debug_OGL\) contains files shared from another project (Collision.vcxproj, Math.vcxproj, Std.vcxproj, ThreadModel.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+     1>Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\Lib.exe /OUT:"D:\work\izanagi\Libs\project\vs2013\..\lib\x64\Debug_OGL\System.lib" /NOLOGO /MACHINE:X64 x64\Debug_OGL\SysEvent.obj
+         x64\Debug_OGL\SysSemaphore.obj
+         x64\Debug_OGL\SysThread.obj
+         x64\Debug_OGL\SysWindow_glut.obj
+         x64\Debug_OGL\TouchInput.obj
+         x64\Debug_OGL\FileStream_win32.obj
+         "x64\Debug_OGL\SysEnvironment_win32 .obj"
+         x64\Debug_OGL\SysTimer_win32.obj
+         x64\Debug_OGL\SysUtil_win32.obj
+         System.vcxproj -> D:\work\izanagi\Libs\project\vs2013\..\lib\x64\Debug_OGL\System.lib
+     1>プロジェクト "D:\work\izanagi\Libs\project\vs2013\System.vcxproj" (Build ターゲット) のビルドが完了しました。
+
+ビルドに成功しました。
+
+経過時間 00:00:00.07

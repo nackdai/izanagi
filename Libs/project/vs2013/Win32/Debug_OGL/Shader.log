@@ -1,0 +1,31 @@
+﻿2016/09/19 1:26:35 にビルドを開始しました。
+     1>ノード 4 上のプロジェクト "D:\work\izanagi\Libs\project\vs2013\Shader.vcxproj" (Build ターゲット)。
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (Win32\Debug_OGL\) contains files shared from another project (Animation.vcxproj, Collision.vcxproj, DebugUtil.vcxproj, Graph.vcxproj, Math.vcxproj, Network.vcxproj, PostEffect.vcxproj, Resource.vcxproj, SceneGraph.vcxproj, Std.vcxproj, System.vcxproj, Terra.vcxproj, Text.vcxproj, ThreadModel.vcxproj, UI.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I../../include /I..\..\..\External\glew\include /I..\..\..\External\freeglut\include /I..\..\..\External\glfw\include /Zi /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D __IZ_DEBUG__ /D __IZ_OGL__ /D __IZ_GLUT__ /D __IZANAGI_NO_USE_D3D__ /D _XKEYCHECK_H /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Win32\Debug_OGL\\" /Fd"D:\work\izanagi\Libs\project\vs2013\..\lib\Win32\Debug_OGL\Shader.pdb" /Gd /TP /wd4819 /analyze- /errorReport:prompt ..\..\source\shader\ShaderManager.cpp ..\..\source\shader\ShaderUtil.cpp ..\..\source\shader\base\ShaderBasic.cpp ..\..\source\shader\base\ShaderPass.cpp ..\..\source\shader\base\table\ShaderAttrTable.cpp ..\..\source\shader\base\table\ShaderParameterTable.cpp ..\..\source\shader\base\table\ShaderPassTable.cpp ..\..\source\shader\base\table\ShaderSamplerTable.cpp
+         ShaderManager.cpp
+         コードを生成中...
+         コンパイル中...
+         ShaderSamplerTable.cpp
+         ShaderPassTable.cpp
+         ShaderParameterTable.cpp
+         ShaderAttrTable.cpp
+         ShaderPass.cpp
+         ShaderBasic.cpp
+         ShaderUtil.cpp
+         コードを生成中...
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"D:\work\izanagi\Libs\project\vs2013\..\lib\Win32\Debug_OGL\Shader.lib" /NOLOGO Win32\Debug_OGL\ShaderPass.obj
+         Win32\Debug_OGL\ShaderAttrTable.obj
+         Win32\Debug_OGL\ShaderParameterTable.obj
+         Win32\Debug_OGL\ShaderPassTable.obj
+         Win32\Debug_OGL\ShaderSamplerTable.obj
+         Win32\Debug_OGL\ShaderManager.obj
+         Win32\Debug_OGL\ShaderBasic.obj
+         Win32\Debug_OGL\ShaderUtil.obj
+         Shader.vcxproj -> D:\work\izanagi\Libs\project\vs2013\..\lib\Win32\Debug_OGL\Shader.lib
+     1>プロジェクト "D:\work\izanagi\Libs\project\vs2013\Shader.vcxproj" (Build ターゲット) のビルドが完了しました。
+
+ビルドに成功しました。
+
+経過時間 00:00:05.69

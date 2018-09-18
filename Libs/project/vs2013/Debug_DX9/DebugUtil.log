@@ -1,0 +1,43 @@
+﻿2016/05/04 12:53:14 にビルドを開始しました。
+     1>ノード 2 上のプロジェクト "D:\work\izanagi\Libs\project\vs2013\DebugUtil.vcxproj" (Build ターゲット)。
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (Debug_DX9\) contains files shared from another project (Animation.vcxproj, Collision.vcxproj, Graph.vcxproj, Math.vcxproj, Network.vcxproj, PostEffect.vcxproj, Resource.vcxproj, SceneGraph.vcxproj, Shader.vcxproj, Std.vcxproj, System.vcxproj, Terra.vcxproj, Text.vcxproj, ThreadModel.vcxproj, UI.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I../../include /Zi /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D D3D_DEBUG_INFO /D __IZ_DEBUG__ /D __IZ_DX9__ /D _XKEYCHECK_H /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug_DX9\\" /Fd"D:\work\izanagi\Libs\project\vs2013\..\lib\Debug_DX9\DebugUtil.pdb" /Gd /TP /wd4819 /analyze- /errorReport:prompt ..\..\source\debugutil\DebugFont.cpp ..\..\source\debugutil\mesh\DebugMesh.cpp ..\..\source\debugutil\mesh\DebugMeshAxis.cpp ..\..\source\debugutil\mesh\DebugMeshBox.cpp ..\..\source\debugutil\mesh\DebugMeshCylinder.cpp ..\..\source\debugutil\mesh\DebugMeshFrustum.cpp ..\..\source\debugutil\mesh\DebugMeshGrid.cpp ..\..\source\debugutil\mesh\DebugMeshRectangle.cpp ..\..\source\debugutil\mesh\DebugMeshScreenFillPlane.cpp ..\..\source\debugutil\mesh\DebugMeshSphere.cpp ..\..\source\debugutil\mesh\DebugMeshTorus.cpp ..\..\source\debugutil\mesh\DebugMeshWiredBox.cpp
+         DebugFont.cpp
+         コードを生成中...
+         コンパイル中...
+         DebugMeshWiredBox.cpp
+         DebugMeshTorus.cpp
+         DebugMeshSphere.cpp
+         DebugMeshScreenFillPlane.cpp
+     1>..\..\source\debugutil\mesh\DebugMeshScreenFillPlane.cpp(97): warning C4244: '=' : 'IZ_UINT' から 'IZ_FLOAT' への変換です。データが失われる可能性があります。
+     1>..\..\source\debugutil\mesh\DebugMeshScreenFillPlane.cpp(111): warning C4244: '=' : 'IZ_UINT' から 'IZ_FLOAT' への変換です。データが失われる可能性があります。
+     1>..\..\source\debugutil\mesh\DebugMeshScreenFillPlane.cpp(123): warning C4244: '=' : 'IZ_UINT' から 'IZ_FLOAT' への変換です。データが失われる可能性があります。
+     1>..\..\source\debugutil\mesh\DebugMeshScreenFillPlane.cpp(124): warning C4244: '=' : 'IZ_UINT' から 'IZ_FLOAT' への変換です。データが失われる可能性があります。
+         DebugMeshRectangle.cpp
+         DebugMeshGrid.cpp
+         DebugMeshFrustum.cpp
+         DebugMeshCylinder.cpp
+         DebugMeshBox.cpp
+         DebugMeshAxis.cpp
+         DebugMesh.cpp
+         コードを生成中...
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"D:\work\izanagi\Libs\project\vs2013\..\lib\Debug_DX9\DebugUtil.lib" /NOLOGO Debug_DX9\DebugFont.obj
+         Debug_DX9\DebugMesh.obj
+         Debug_DX9\DebugMeshAxis.obj
+         Debug_DX9\DebugMeshBox.obj
+         Debug_DX9\DebugMeshCylinder.obj
+         Debug_DX9\DebugMeshFrustum.obj
+         Debug_DX9\DebugMeshGrid.obj
+         Debug_DX9\DebugMeshRectangle.obj
+         Debug_DX9\DebugMeshScreenFillPlane.obj
+         Debug_DX9\DebugMeshSphere.obj
+         Debug_DX9\DebugMeshTorus.obj
+         Debug_DX9\DebugMeshWiredBox.obj
+         DebugUtil.vcxproj -> D:\work\izanagi\Libs\project\vs2013\..\lib\Debug_DX9\DebugUtil.lib
+     1>プロジェクト "D:\work\izanagi\Libs\project\vs2013\DebugUtil.vcxproj" (Build ターゲット) のビルドが完了しました。
+
+ビルドに成功しました。
+
+経過時間 00:00:15.32

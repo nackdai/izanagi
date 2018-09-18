@@ -1,0 +1,45 @@
+﻿2016/05/15 1:07:12 にビルドを開始しました。
+     1>ノード 5 上のプロジェクト "D:\work\izanagi\Libs\project\vs2013\ThreadModel.vcxproj" (Build ターゲット)。
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (x64\Release_OGL\) contains files shared from another project (Std.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I../../include /I..\..\..\External\glew\include /I..\..\..\External\freeglut\include /Zi /nologo /W3 /WX- /O2 /D WIN32 /D NDEBUG /D _LIB /D __IZ_OGL__ /D __IZ_GLUT__ /D __IZANAGI_NO_USE_D3D__ /D _XKEYCHECK_H /D _MBCS /Gm- /EHsc /MT /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Release_OGL\\" /Fd"D:\work\izanagi\Libs\project\vs2013\..\lib\x64\Release_OGL\ThreadModel.pdb" /Gd /TP /wd4819 /errorReport:prompt ..\..\source\threadmodel\Parallel.cpp ..\..\source\threadmodel\ThreadModelJob.cpp ..\..\source\threadmodel\ThreadModelJobQueue.cpp ..\..\source\threadmodel\ThreadModelJobWorker.cpp ..\..\source\threadmodel\ThreadModelMessageQueue.cpp ..\..\source\threadmodel\ThreadModelTask.cpp ..\..\source\threadmodel\ThreadPool.cpp ..\..\source\threadmodel\TimerThread.cpp
+         Parallel.cpp
+     1>d:\work\izanagi\libs\include\system/io/FileInputStream.h(70): warning C4267: '引数' : 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+     1>d:\work\izanagi\libs\include\system/io/FileOutputStream.h(72): warning C4267: '+=' : 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+         ThreadModelJob.cpp
+     1>d:\work\izanagi\libs\include\system/io/FileInputStream.h(70): warning C4267: '引数' : 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+     1>d:\work\izanagi\libs\include\system/io/FileOutputStream.h(72): warning C4267: '+=' : 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+         ThreadModelJobQueue.cpp
+     1>d:\work\izanagi\libs\include\system/io/FileInputStream.h(70): warning C4267: '引数' : 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+     1>d:\work\izanagi\libs\include\system/io/FileOutputStream.h(72): warning C4267: '+=' : 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+         ThreadModelJobWorker.cpp
+     1>d:\work\izanagi\libs\include\system/io/FileInputStream.h(70): warning C4267: '引数' : 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+     1>d:\work\izanagi\libs\include\system/io/FileOutputStream.h(72): warning C4267: '+=' : 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+         ThreadModelMessageQueue.cpp
+     1>d:\work\izanagi\libs\include\system/io/FileInputStream.h(70): warning C4267: '引数' : 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+     1>d:\work\izanagi\libs\include\system/io/FileOutputStream.h(72): warning C4267: '+=' : 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+         ThreadModelTask.cpp
+     1>d:\work\izanagi\libs\include\system/io/FileInputStream.h(70): warning C4267: '引数' : 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+     1>d:\work\izanagi\libs\include\system/io/FileOutputStream.h(72): warning C4267: '+=' : 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+         ThreadPool.cpp
+     1>d:\work\izanagi\libs\include\system/io/FileInputStream.h(70): warning C4267: '引数' : 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+     1>d:\work\izanagi\libs\include\system/io/FileOutputStream.h(72): warning C4267: '+=' : 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+         TimerThread.cpp
+     1>d:\work\izanagi\libs\include\system/io/FileInputStream.h(70): warning C4267: '引数' : 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+     1>d:\work\izanagi\libs\include\system/io/FileOutputStream.h(72): warning C4267: '+=' : 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+         コードを生成中...
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\Lib.exe /OUT:"D:\work\izanagi\Libs\project\vs2013\..\lib\x64\Release_OGL\ThreadModel.lib" /NOLOGO /MACHINE:X64 x64\Release_OGL\Parallel.obj
+         x64\Release_OGL\ThreadModelJob.obj
+         x64\Release_OGL\ThreadModelJobQueue.obj
+         x64\Release_OGL\ThreadModelJobWorker.obj
+         x64\Release_OGL\ThreadModelMessageQueue.obj
+         x64\Release_OGL\ThreadModelTask.obj
+         x64\Release_OGL\ThreadPool.obj
+         x64\Release_OGL\TimerThread.obj
+         ThreadModel.vcxproj -> D:\work\izanagi\Libs\project\vs2013\..\lib\x64\Release_OGL\ThreadModel.lib
+     1>プロジェクト "D:\work\izanagi\Libs\project\vs2013\ThreadModel.vcxproj" (Build ターゲット) のビルドが完了しました。
+
+ビルドに成功しました。
+
+経過時間 00:00:06.31

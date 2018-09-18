@@ -1,0 +1,24 @@
+﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (x64\Debug_DX9\) contains files shared from another project (DebugUtil.vcxproj, Graph.vcxproj, Math.vcxproj, PostEffect.vcxproj, SceneGraph.vcxproj, Std.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  SysWindow_win32.cpp
+..\..\source\system\win32\SysWindow_win32.cpp(441): warning C4302: '型キャスト': 'LPSTR' から 'WORD' へ切り詰めます。
+..\..\source\system\win32\SysWindow_win32.cpp(447): warning C4302: '型キャスト': 'LPSTR' から 'WORD' へ切り詰めます。
+..\..\source\system\win32\SysWindow_win32.cpp(459): warning C4838: 'const IZ_UINT' から 'LONG' への変換には縮小変換が必要です
+  SysUtil_win32.cpp
+..\..\source\system\win32\SysUtil_win32.cpp(41): warning C4267: '引数': 'size_t' から 'DWORD' に変換しました。データが失われているかもしれません。
+  SysTimer_win32.cpp
+..\..\source\system\win32\SysTimer_win32.cpp(86): warning C4244: '初期化中': 'IZ_FLOAT' から 'IZ_INT64' への変換です。データが失われる可能性があります。
+  SysEnvironment_win32 .cpp
+  FileStream_win32.cpp
+..\..\source\system\win32\FileStream_win32.cpp(34): warning C4267: 'return': 'size_t' から 'IZ_INT' に変換しました。データが失われているかもしれません。
+..\..\source\system\win32\FileStream_win32.cpp(44): warning C4267: 'return': 'size_t' から 'IZ_UINT' に変換しました。データが失われているかもしれません。
+  Pad_XInput.cpp
+  Pad_DInput.cpp
+  DeviceUtil.cpp
+  TouchInput.cpp
+  SysWindow_glfw.cpp
+  SysThread.cpp
+  SysSemaphore.cpp
+  SysEvent.cpp
+  Pad.cpp
+  コードを生成中...
+  System.vcxproj -> D:\work\izanagi\Libs\project\vs2015\..\lib\x64\Debug_DX9\System.lib
