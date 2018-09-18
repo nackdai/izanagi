@@ -1,0 +1,298 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug_DX9|Win32">
+      <Configuration>Debug_DX9</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug_GLES2|Win32">
+      <Configuration>Debug_GLES2</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug_OGL|Win32">
+      <Configuration>Debug_OGL</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release_DX9|Win32">
+      <Configuration>Release_DX9</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release_GLES2|Win32">
+      <Configuration>Release_GLES2</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\AppGallery\2D.h" />
+    <ClInclude Include="..\..\AppGallery\AppGalleryApp.h" />
+    <ClInclude Include="..\..\AppGallery\Configure.h" />
+    <ClInclude Include="..\..\AppGallery\data\ImageFiles.h" />
+    <ClInclude Include="..\..\AppGallery\Environment.h" />
+    <ClInclude Include="..\..\AppGallery\GestureListener.h" />
+    <ClInclude Include="..\..\AppGallery\Item.h" />
+    <ClInclude Include="..\..\AppGallery\ItemBoard.h" />
+    <ClInclude Include="..\..\AppGallery\ItemBox.h" />
+    <ClInclude Include="..\..\AppGallery\ItemManager.h" />
+    <ClInclude Include="..\..\AppGallery\LoadTextureJob.h" />
+    <ClInclude Include="..\..\AppGallery\MeshVtx.h" />
+    <ClInclude Include="..\..\AppGallery\Ring.h" />
+    <ClInclude Include="..\..\AppGallery\Scene.h" />
+    <ClInclude Include="..\..\AppGallery\StateBase.h" />
+    <ClInclude Include="..\..\AppGallery\StateDefault.h" />
+    <ClInclude Include="..\..\AppGallery\StateManager.h" />
+    <ClInclude Include="..\..\AppGallery\StateRotateByDrag.h" />
+    <ClInclude Include="..\..\AppGallery\StateRotateByFling.h" />
+    <ClInclude Include="..\..\AppGallery\Utility.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\AppGallery\2D.cpp" />
+    <ClCompile Include="..\..\AppGallery\AppGalleryApp.cpp" />
+    <ClCompile Include="..\..\AppGallery\Configure.cpp" />
+    <ClCompile Include="..\..\AppGallery\Environment.cpp" />
+    <ClCompile Include="..\..\AppGallery\GestureListener.cpp" />
+    <ClCompile Include="..\..\AppGallery\Item.cpp" />
+    <ClCompile Include="..\..\AppGallery\ItemBoard.cpp" />
+    <ClCompile Include="..\..\AppGallery\ItemBox.cpp" />
+    <ClCompile Include="..\..\AppGallery\ItemManager.cpp" />
+    <ClCompile Include="..\..\AppGallery\LoadTextureJob.cpp" />
+    <ClCompile Include="..\..\AppGallery\main.cpp" />
+    <ClCompile Include="..\..\AppGallery\Ring.cpp" />
+    <ClCompile Include="..\..\AppGallery\Scene.cpp" />
+    <ClCompile Include="..\..\AppGallery\StateBase.cpp" />
+    <ClCompile Include="..\..\AppGallery\StateDefault.cpp" />
+    <ClCompile Include="..\..\AppGallery\StateManager.cpp" />
+    <ClCompile Include="..\..\AppGallery\StateRotateByDrag.cpp" />
+    <ClCompile Include="..\..\AppGallery\StateRotateByFling.cpp" />
+    <ClCompile Include="..\..\AppGallery\Utility.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\AppGallery\data\images.xml">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(TOOL_DIR)Release\ImageBuilder.exe -i "%(FullPath)" -o "$(PROJECT_MAIN_DIR)data\%(Filename).img"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(TOOL_DIR)Release\ImageBuilder.exe -i "%(FullPath)" -o "$(PROJECT_MAIN_DIR)data\%(Filename).img"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(TOOL_DIR)Release\ImageBuilder.exe -i "%(FullPath)" -o "$(PROJECT_MAIN_DIR)data\%(Filename).img"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(TOOL_DIR)Release\ImageBuilder.exe -i "%(FullPath)" -o "$(PROJECT_MAIN_DIR)data\%(Filename).img"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(TOOL_DIR)Release\ImageBuilder.exe -i "%(FullPath)" -o "$(PROJECT_MAIN_DIR)data\%(Filename).img"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(PROJECT_MAIN_DIR)data\%(Filename).img;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(PROJECT_MAIN_DIR)data\%(Filename).img;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(PROJECT_MAIN_DIR)data\%(Filename).img;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(PROJECT_MAIN_DIR)data\%(Filename).img;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(PROJECT_MAIN_DIR)data\%(Filename).img;%(Outputs)</Outputs>
+    </CustomBuild>
+    <None Include="..\..\AppGallery\shader\BasicShader.fx" />
+    <CustomBuild Include="..\..\AppGallery\shader\BasicShader.xml">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(RootDir)%(Directory)%(Filename).fx;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">%(RootDir)%(Directory)%(Filename).fx;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">%(RootDir)%(Directory)%(Filename).fx;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">%(RootDir)%(Directory)%(Filename).fx;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">%(RootDir)%(Directory)%(Filename).fx;%(AdditionalInputs)</AdditionalInputs>
+    </CustomBuild>
+    <None Include="..\..\AppGallery\shader\BevelShader.fx" />
+    <CustomBuild Include="..\..\AppGallery\shader\BevelShader.xml">
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">%(RootDir)%(Directory)..\data\%(Filename).shd;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">%(RootDir)%(Directory)%(Filename).fx;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">%(RootDir)%(Directory)%(Filename).fx;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">%(RootDir)%(Directory)%(Filename).fx;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">%(RootDir)%(Directory)%(Filename).fx;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">%(RootDir)%(Directory)%(Filename).fx;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">$(ProjectDir)..\..\..\Tools\tools\Release\ShaderConverter.exe -src "%(FullPath)" -obj "$(ProjectDir)..\..\$(ProjectName)\shader_obj" -o "$(ProjectDir)..\..\$(ProjectName)\data"</Command>
+    </CustomBuild>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{028297AE-7F9A-4409-B4E4-A1CC8FD9690D}</ProjectGuid>
+    <RootNamespace>AppGallery</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="PropertySeet\Release_DX9.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="PropertySeet\Release_GLES2.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="PropertySeet\Debug_DX9.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="PropertySeet\Debug_GLES2.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="PropertySeet\Debug_OGL.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_DX9|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalIncludeDirectories>..\..\..\External\libjpeg;..\..\..\External\libjpeg\$(Platform);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalDependencies>Shader.lib;ThreadModel.lib;UI.lib;Animation.lib;PostEffect.lib;jpeg-static.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\..\External\libjpeg\$(Platform)\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PreBuildEvent>
+      <Command>..\..\..\External\BuildLibJpeg.bat</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_GLES2|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalDependencies>Shader.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PreBuildEvent>
+      <Command>..\..\..\External\BuildLibJpeg.bat</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_OGL|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalDependencies>Shader.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PreBuildEvent>
+      <Command>..\..\..\External\BuildLibJpeg.bat</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_DX9|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>..\..\..\External\libjpeg;..\..\..\External\libjpeg\$(Platform);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalDependencies>Shader.lib;ThreadModel.lib;UI.lib;Animation.lib;PostEffect.lib;jpeg-static.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\..\External\libjpeg\$(Platform)\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PreBuildEvent>
+      <Command>..\..\..\External\BuildLibJpeg.bat</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_GLES2|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalDependencies>Shader.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PreBuildEvent>
+      <Command>..\..\..\External\BuildLibJpeg.bat</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
