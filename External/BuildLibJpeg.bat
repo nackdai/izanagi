@@ -29,9 +29,9 @@ set CMAKE_OPTIONS=-DWITH_SIMD=FALSE -DENABLE_SHARED=FALSE
 if not exist %BUILD_DIR%\libjpeg-turbo.sln (
     cd %BUILD_DIR%
     if %PLATFORM% == Win32 (
-        ..\..\cmake\bin\cmake.exe -G "Visual Studio 12 2013" %CMAKE_OPTIONS% ..\
+        ..\..\cmake\bin\cmake.exe -G "Visual Studio 14 2015" %CMAKE_OPTIONS% ..\
     ) else (
-        ..\..\cmake\bin\cmake.exe -G "Visual Studio 12 2013 Win64" %CMAKE_OPTIONS% ..\
+        ..\..\cmake\bin\cmake.exe -G "Visual Studio 14 2015 Win64" %CMAKE_OPTIONS% ..\
     )
     cd ..\..\
 )
