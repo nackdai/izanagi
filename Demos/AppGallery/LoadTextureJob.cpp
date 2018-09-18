@@ -115,6 +115,7 @@ IZ_BOOL LoadTextureJob::OnRun()
     izanagi::CFileInputStream input;
     //VRETURN(input.Open(m_Path));
     if (!input.Open(m_Path)) {
+		IZ_ASSERT(IZ_FALSE);
         return IZ_FALSE;
     }
 

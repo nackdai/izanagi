@@ -5,8 +5,8 @@
 #include "LoadTextureJob.h"
 
 // TODO
-static const IZ_FLOAT Width = 10.0f;
-static const IZ_FLOAT Height = 10.0f;
+static const IZ_FLOAT Width = 50.0f;
+static const IZ_FLOAT Height = 50.0f;
 
 PhotoItem* PhotoItem::Create(
     izanagi::IMemoryAllocator* allocator,
