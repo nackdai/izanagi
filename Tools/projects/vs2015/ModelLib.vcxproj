@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{EF4D87C6-8948-4325-8F97-A7CEA9F2B243}</ProjectGuid>
+    <RootNamespace>ModelLib</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Release.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Debug.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(EXTERNAL_DIR)\assimp\include;$(EXTERNAL_DIR)\NvTriStrip\include;$(EXTERNAL_DIR)\zlib;$(EXTERNAL_DIR)\rapidjson\include;$(ProjectDir)../../Model/ModelLib/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;BOOST_ALL_NO_LIB;PCRE_STATIC;DOM_INCLUDE_LIBXML;__IZANAGI_NO_USE_D3D__;COLLADA_DOM_SUPPORT141;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <DisableSpecificWarnings>4819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Lib>
+      <AdditionalDependencies>NvTriStrip.lib;assimp-vc120-mtd.lib;zlibstaticd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(EXTERNAL_DIR)/NvTriStrip\lib/$(Configuration);$(EXTERNAL_DIR)\assimp\build\code\$(Configuration);$(EXTERNAL_DIR)\assimp\build\contrib\zlib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(EXTERNAL_DIR)\assimp\include;$(EXTERNAL_DIR)\NvTriStrip\include;$(EXTERNAL_DIR)\zlib;$(EXTERNAL_DIR)\rapidjson\include;$(ProjectDir)../../Model/ModelLib/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;BOOST_ALL_NO_LIB;PCRE_STATIC;DOM_INCLUDE_LIBXML;__IZANAGI_NO_USE_D3D__;COLLADA_DOM_SUPPORT141;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <Optimization>MaxSpeed</Optimization>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+    </ClCompile>
+    <Lib>
+      <AdditionalDependencies>NvTriStrip.lib;assimp-vc120-mt.lib;zlibstatic.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(EXTERNAL_DIR)/NvTriStrip\lib/$(Configuration);$(EXTERNAL_DIR)\assimp\build\code\$(Configuration);$(EXTERNAL_DIR)\assimp\build\contrib\zlib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Model\ModelLib\importer\assimp\AssimpImporter.h" />
+    <ClInclude Include="..\..\Model\ModelLib\importer\json\JsonGeometry.h" />
+    <ClInclude Include="..\..\Model\ModelLib\importer\json\JsonImporter.h" />
+    <ClInclude Include="..\..\Model\ModelLib\include\Importer.h" />
+    <ClInclude Include="..\..\Model\ModelLib\include\izModelLib.h" />
+    <ClInclude Include="..\..\Model\ModelLib\include\ToolOption.h" />
+    <ClInclude Include="..\..\Model\ModelLib\include\AnmExporter.h" />
+    <ClInclude Include="..\..\Model\ModelLib\include\MtrlExporter.h" />
+    <ClInclude Include="..\..\Model\ModelLib\include\GeometryChunk.h" />
+    <ClInclude Include="..\..\Model\ModelLib\include\GeometryCommon.h" />
+    <ClInclude Include="..\..\Model\ModelLib\include\JointChunk.h" />
+    <ClInclude Include="..\..\Model\ModelLib\include\MdlExporter.h" />
+    <ClInclude Include="..\..\Model\ModelLib\include\MshExporter.h" />
+    <ClInclude Include="..\..\Model\ModelLib\include\SklExporter.h" />
+    <ClInclude Include="..\..\Model\ModelLib\importer\x_file\XFileImporter.h" />
+    <ClInclude Include="..\..\Model\ModelLib\importer\x_file\XFileHelper.h" />
+    <ClInclude Include="..\..\Model\ModelLib\importer\x_file\XFileParser.h" />
+    <ClInclude Include="..\..\Model\ModelLib\importer\x_file\XFileGeometry.h" />
+    <ClInclude Include="..\..\Model\ModelLib\importer\x_file\XFileJoint.h" />
+    <ClInclude Include="..\..\Model\ModelLib\importer\x_file\XFileAnimation.h" />
+    <ClInclude Include="..\..\Model\ModelLib\importer\x_file\XFileMaterial.h" />
+    <ClInclude Include="..\..\Model\ModelLib\importer\pmd\PMDDefs.h" />
+    <ClInclude Include="..\..\Model\ModelLib\importer\pmd\PMDFormat.h" />
+    <ClInclude Include="..\..\Model\ModelLib\importer\pmd\PMDImporter.h" />
+    <ClInclude Include="..\..\Model\ModelLib\importer\pmd\PMDLoader.h" />
+    <ClInclude Include="..\..\Model\ModelLib\importer\pmd\VMDFormat.h" />
+    <ClInclude Include="..\..\Model\ModelLib\importer\pmd\VMDLoader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Model\ModelLib\importer\assimp\AssimpImporter.cpp" />
+    <ClCompile Include="..\..\Model\ModelLib\importer\json\JsonGeometry.cpp" />
+    <ClCompile Include="..\..\Model\ModelLib\importer\json\JsonImporter.cpp" />
+    <ClCompile Include="..\..\Model\ModelLib\source\Importer.cpp" />
+    <ClCompile Include="..\..\Model\ModelLib\source\GeometryChunk.cpp" />
+    <ClCompile Include="..\..\Model\ModelLib\source\GeometryCommon.cpp" />
+    <ClCompile Include="..\..\Model\ModelLib\source\JointChunk.cpp" />
+    <ClCompile Include="..\..\Model\ModelLib\source\MdlExporter.cpp" />
+    <ClCompile Include="..\..\Model\ModelLib\source\MshExporter.cpp" />
+    <ClCompile Include="..\..\Model\ModelLib\source\SklExporter.cpp" />
+    <ClCompile Include="..\..\Model\ModelLib\source\AnmExporter.cpp" />
+    <ClCompile Include="..\..\Model\ModelLib\source\MtrlExporter.cpp" />
+    <ClCompile Include="..\..\Model\ModelLib\importer\x_file\XFileImporter.cpp" />
+    <ClCompile Include="..\..\Model\ModelLib\importer\x_file\XFileHelper.cpp" />
+    <ClCompile Include="..\..\Model\ModelLib\importer\x_file\XFileParser.cpp" />
+    <ClCompile Include="..\..\Model\ModelLib\importer\x_file\XFileGeometry.cpp" />
+    <ClCompile Include="..\..\Model\ModelLib\importer\x_file\XFileJoint.cpp" />
+    <ClCompile Include="..\..\Model\ModelLib\importer\x_file\XFileAnimation.cpp" />
+    <ClCompile Include="..\..\Model\ModelLib\importer\x_file\XFileMaterial.cpp" />
+    <ClCompile Include="..\..\Model\ModelLib\importer\pmd\PMDImporter.cpp" />
+    <ClCompile Include="..\..\Model\ModelLib\importer\pmd\PMDLoader.cpp" />
+    <ClCompile Include="..\..\Model\ModelLib\importer\pmd\VMDLoader.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="ToolKit.vcxproj">
+      <Project>{e39712e8-aa2f-4764-975b-40b54164b95e}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="potree">
+      <UniqueIdentifier>{60617488-c37c-40ce-a133-615792697d70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="potree\include">
+      <UniqueIdentifier>{c3187215-4669-483f-9900-ba91ab1ba2c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="potree\src">
+      <UniqueIdentifier>{9a6ae611-7431-48dc-aabb-ea10a4345b7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{9b47a00c-d3de-43dc-a1eb-aaddcd3b64a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{f79659b2-7873-40ae-882c-ffa5e33fdbd6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\BINPointReader.hpp">
+      <Filter>potree\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\BINPointWriter.hpp">
+      <Filter>potree\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\CloudJS.hpp">
+      <Filter>potree\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\definitions.hpp">
+      <Filter>potree\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\GridCell.h">
+      <Filter>potree\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\GridIndex.h">
+      <Filter>potree\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\LASPointReader.h">
+      <Filter>potree\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\LASPointWriter.hpp">
+      <Filter>potree\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\PlyPointReader.h">
+      <Filter>potree\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\Point.h">
+      <Filter>potree\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\PointAttributes.hpp">
+      <Filter>potree\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\PointReader.h">
+      <Filter>potree\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\PointWriter.hpp">
+      <Filter>potree\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\PotreeConverter.h">
+      <Filter>potree\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\PotreeException.h">
+      <Filter>potree\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\PotreeWriter.h">
+      <Filter>potree\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\PTXPointReader.h">
+      <Filter>potree\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\SparseGrid.h">
+      <Filter>potree\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\stuff.h">
+      <Filter>potree\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\Vector3.h">
+      <Filter>potree\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\XYZPointReader.hpp">
+      <Filter>potree\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\AABB.h">
+      <Filter>potree\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PointCloud\PointCloudeConverterCore.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PointCloud\PCDFormat.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\External\PotreeConverte\PotreeConverter\src\LASPointReader.cpp">
+      <Filter>potree\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PointCloud\PointCloudeConverterCore.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PointCloud\PointCloudeConverter.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

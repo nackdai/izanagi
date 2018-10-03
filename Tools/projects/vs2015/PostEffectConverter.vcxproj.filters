@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{23a2e2fe-e0ef-4271-8511-407ffaf22d0d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\PostEffect\PostEffectConverter\PostEffectConverter.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\PostEffectConverter\Option.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\PostEffectConverter\ParamUtil.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\PostEffectConverter\PassUtil.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\PostEffectConverter\PostEffectConverterImpl.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\PostEffectConverter\PostEffectConverterUtil.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\PostEffectConverter\Preproc.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\PostEffectConverter\SamplerUtil.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\PostEffectConverter\StringChunk.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\PostEffectConverter\TextureUtil.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\PostEffectConverter\CompileCmdCreator.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\PostEffect\PostEffectConverter\DataBuffer.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\PostEffect\PostEffectConverter\Preproc.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\PostEffectConverter\SamplerUtil.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\PostEffectConverter\StringChunk.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\PostEffectConverter\TextureUtil.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\PostEffectConverter\CompileCmdCreator.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\PostEffectConverter\DataBuffer.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\PostEffectConverter\Option.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\PostEffectConverter\ParamUtil.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\PostEffectConverter\PassUtil.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\PostEffectConverter\PostEffectConverterImpl.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\PostEffect\PostEffectConverter\PostEffectConverterUtil.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

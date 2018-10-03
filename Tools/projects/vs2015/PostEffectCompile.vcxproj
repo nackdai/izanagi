@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{3FCA0C02-EB59-45C2-9BC0-45AD0E342215}</ProjectGuid>
+    <RootNamespace>PostEffectCompile</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\PostEffect\PostEffectCompile\peh\BloomStar.peh">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RootDir)%(Directory)../../../tools/$(Configuration)/PostEffectConverter.exe -l "%(FullPath)" -obj "%(RootDir)%(Directory)/../obj" -asm -o "%(RootDir)%(Directory)/../data/%(Filename).pes"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RootDir)%(Directory)/../data/%(Filename).pes;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RootDir)%(Directory)../../../tools/$(Configuration)/PostEffectConverter.exe -l "%(FullPath)" -obj "%(RootDir)%(Directory)/../obj" -asm -o "%(RootDir)%(Directory)/../data/%(Filename).pes"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RootDir)%(Directory)/../data/%(Filename).pes;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\..\PostEffect\PostEffectCompile\peh\HDR.peh">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RootDir)%(Directory)../../../tools/$(Configuration)/PostEffectConverter.exe -l "%(FullPath)" -obj "%(RootDir)%(Directory)/../obj" -asm -o "%(RootDir)%(Directory)/../data/%(Filename).pes"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RootDir)%(Directory)/../data/%(Filename).pes;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RootDir)%(Directory)../../../tools/$(Configuration)/PostEffectConverter.exe -l "%(FullPath)" -obj "%(RootDir)%(Directory)/../obj" -asm -o "%(RootDir)%(Directory)/../data/%(Filename).pes"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RootDir)%(Directory)/../data/%(Filename).pes;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\..\PostEffect\PostEffectCompile\peh\HDR2.peh">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RootDir)%(Directory)../../../tools/$(Configuration)/PostEffectConverter.exe -l "%(FullPath)" -obj "%(RootDir)%(Directory)/../obj" -asm -o "%(RootDir)%(Directory)/../data/%(Filename).pes"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RootDir)%(Directory)/../data/%(Filename).pes;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RootDir)%(Directory)../../../tools/$(Configuration)/PostEffectConverter.exe -l "%(FullPath)" -obj "%(RootDir)%(Directory)/../obj" -asm -o "%(RootDir)%(Directory)/../data/%(Filename).pes"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RootDir)%(Directory)/../data/%(Filename).pes;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\..\PostEffect\PostEffectCompile\peh\Monotone.peh">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RootDir)%(Directory)../../../tools/$(Configuration)/PostEffectConverter.exe -l "%(FullPath)" -obj "%(RootDir)%(Directory)/../obj" -asm -o "%(RootDir)%(Directory)/../data/%(Filename).pes"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RootDir)%(Directory)/../data/%(Filename).pes;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RootDir)%(Directory)../../../tools/$(Configuration)/PostEffectConverter.exe -l "%(FullPath)" -obj "%(RootDir)%(Directory)/../obj" -asm -o "%(RootDir)%(Directory)/../data/%(Filename).pes"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RootDir)%(Directory)/../data/%(Filename).pes;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\..\PostEffect\PostEffectCompile\peh\Negative.peh">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RootDir)%(Directory)../../../tools/$(Configuration)/PostEffectConverter.exe -l "%(FullPath)" -obj "%(RootDir)%(Directory)/../obj" -asm -o "%(RootDir)%(Directory)/../data/%(Filename).pes"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RootDir)%(Directory)/../data/%(Filename).pes;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RootDir)%(Directory)../../../tools/$(Configuration)/PostEffectConverter.exe -l "%(FullPath)" -obj "%(RootDir)%(Directory)/../obj" -asm -o "%(RootDir)%(Directory)/../data/%(Filename).pes"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RootDir)%(Directory)/../data/%(Filename).pes;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\..\PostEffect\PostEffectCompile\peh\Sepia.peh">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RootDir)%(Directory)../../../tools/$(Configuration)/PostEffectConverter.exe -l "%(FullPath)" -obj "%(RootDir)%(Directory)/../obj" -asm -o "%(RootDir)%(Directory)/../data/%(Filename).pes"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RootDir)%(Directory)/../data/%(Filename).pes;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RootDir)%(Directory)../../../tools/$(Configuration)/PostEffectConverter.exe -l "%(FullPath)" -obj "%(RootDir)%(Directory)/../obj" -asm -o "%(RootDir)%(Directory)/../data/%(Filename).pes"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RootDir)%(Directory)/../data/%(Filename).pes;%(Outputs)</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\PostEffect\PostEffectCompile\peh\BloomStarMGF.peh">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RootDir)%(Directory)../../../tools/$(Configuration)/PostEffectConverter.exe -l "%(FullPath)" -obj "%(RootDir)%(Directory)/../obj" -asm -o "%(RootDir)%(Directory)/../data/%(Filename).pes"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RootDir)%(Directory)../../../tools/$(Configuration)/PostEffectConverter.exe -l "%(FullPath)" -obj "%(RootDir)%(Directory)/../obj" -asm -o "%(RootDir)%(Directory)/../data/%(Filename).pes"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RootDir)%(Directory)/../data/%(Filename).pes;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RootDir)%(Directory)/../data/%(Filename).pes;%(Outputs)</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

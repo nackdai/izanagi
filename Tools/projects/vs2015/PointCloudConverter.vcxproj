@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\AABB.h" />
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\BINPointReader.hpp" />
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\BINPointWriter.hpp" />
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\CloudJS.hpp" />
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\definitions.hpp" />
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\GridCell.h" />
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\GridIndex.h" />
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\LASPointReader.h" />
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\LASPointWriter.hpp" />
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\PlyPointReader.h" />
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\Point.h" />
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\PointAttributes.hpp" />
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\PointReader.h" />
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\PointWriter.hpp" />
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\PotreeConverter.h" />
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\PotreeException.h" />
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\PotreeWriter.h" />
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\PTXPointReader.h" />
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\SparseGrid.h" />
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\stuff.h" />
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\Vector3.h" />
+    <ClInclude Include="..\..\External\PotreeConverte\PotreeConverter\include\XYZPointReader.hpp" />
+    <ClInclude Include="..\..\PointCloud\PCDFormat.h" />
+    <ClInclude Include="..\..\PointCloud\PointCloudeConverterCore.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\External\PotreeConverte\PotreeConverter\src\LASPointReader.cpp" />
+    <ClCompile Include="..\..\PointCloud\PointCloudeConverter.cpp" />
+    <ClCompile Include="..\..\PointCloud\PointCloudeConverterCore.cpp" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{56FBA336-ACF6-410E-80BE-552ABDBFB65D}</ProjectGuid>
+    <RootNamespace>PointCloudConverter</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Release.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Debug.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\External\LASzip\include\laszip;..\..\External\PotreeConverte\PotreeConverter\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;DISABLE_BOOST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>laszip.lib;shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalLibraryDirectories>$(ProjectDir)../../External/LASzip/$(Platform)/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PreBuildEvent>
+      <Command>$(ProjectDir)../../External/BuildLASzip.bat $(Configuration) $(Platform)</Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>copy /Y $(SolutionDir)..\..\External\LASzip\$(Platform)\bin\*.dll $(SolutionDir)..\..\tools\$(ConfigurationName)"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\External\LASzip\include\laszip;..\..\External\PotreeConverte\PotreeConverter\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;DISABLE_BOOST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>laszip.lib;shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalLibraryDirectories>$(ProjectDir)../../External/LASzip/$(Platform)/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PreBuildEvent>
+      <Command>$(ProjectDir)../../External/BuildLASzip.bat $(Configuration) $(Platform)</Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>copy /Y $(SolutionDir)..\..\External\LASzip\$(Platform)\bin\*.dll $(SolutionDir)..\..\tools\$(ConfigurationName)"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

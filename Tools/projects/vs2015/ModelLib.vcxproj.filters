@@ -1,0 +1,207 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{54ff3aee-7dba-4133-905f-fe094f20d425}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\anm">
+      <UniqueIdentifier>{10b4a226-c85f-4db2-a6ce-666cd87c6106}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mtrl">
+      <UniqueIdentifier>{c4434c18-9503-476d-b349-07f8f70ac225}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mdl">
+      <UniqueIdentifier>{6d882cde-4434-4164-99bb-d8877cfcf4de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{1990c563-062a-4d84-8565-c6515c69c6ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\mdl">
+      <UniqueIdentifier>{65a542a5-2b2d-423e-9ed0-2b5b8e8cf6ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\anm">
+      <UniqueIdentifier>{bd1d6bee-a20b-4f53-89ea-e4bb2f0a41f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\mtrl">
+      <UniqueIdentifier>{5fca863e-64e8-4759-9dc1-52a9f1f626f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="importer">
+      <UniqueIdentifier>{0322a08d-34ad-41b6-ab5f-de85e2d37a90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="importer\x_file">
+      <UniqueIdentifier>{6da32937-1dfb-4f44-95d9-ad20e65842ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="importer\x_file\parser">
+      <UniqueIdentifier>{15a6e477-d39d-46e7-b5e4-320d8829322b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="importer\x_file\mdl">
+      <UniqueIdentifier>{6191995b-893f-420a-81d5-c37c60e13177}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="importer\x_file\anm">
+      <UniqueIdentifier>{b1a64cc0-2ae6-4abd-a0ec-c5f4d078a645}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="importer\x_file\mtrl">
+      <UniqueIdentifier>{08297a5d-c6de-4388-8d59-cb5e07c102bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="importer\pmd">
+      <UniqueIdentifier>{5bd6e254-004b-49c2-be92-1cd350ee97c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="importer\json">
+      <UniqueIdentifier>{74ebcead-4336-41fe-b3fc-d81054f5df0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="importer\assimp">
+      <UniqueIdentifier>{12e9811d-df17-4604-994f-738d1ff64186}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Model\ModelLib\include\Importer.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Model\ModelLib\include\izModelLib.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Model\ModelLib\include\ToolOption.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Model\ModelLib\include\AnmExporter.h">
+      <Filter>include\anm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Model\ModelLib\include\MtrlExporter.h">
+      <Filter>include\mtrl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Model\ModelLib\include\GeometryChunk.h">
+      <Filter>include\mdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Model\ModelLib\include\GeometryCommon.h">
+      <Filter>include\mdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Model\ModelLib\include\JointChunk.h">
+      <Filter>include\mdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Model\ModelLib\include\MdlExporter.h">
+      <Filter>include\mdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Model\ModelLib\include\MshExporter.h">
+      <Filter>include\mdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Model\ModelLib\include\SklExporter.h">
+      <Filter>include\mdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Model\ModelLib\importer\x_file\XFileImporter.h">
+      <Filter>importer\x_file</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Model\ModelLib\importer\x_file\XFileHelper.h">
+      <Filter>importer\x_file\parser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Model\ModelLib\importer\x_file\XFileParser.h">
+      <Filter>importer\x_file\parser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Model\ModelLib\importer\x_file\XFileGeometry.h">
+      <Filter>importer\x_file\mdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Model\ModelLib\importer\x_file\XFileJoint.h">
+      <Filter>importer\x_file\mdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Model\ModelLib\importer\x_file\XFileAnimation.h">
+      <Filter>importer\x_file\anm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Model\ModelLib\importer\x_file\XFileMaterial.h">
+      <Filter>importer\x_file\mtrl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Model\ModelLib\importer\pmd\PMDDefs.h">
+      <Filter>importer\pmd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Model\ModelLib\importer\pmd\PMDFormat.h">
+      <Filter>importer\pmd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Model\ModelLib\importer\pmd\PMDImporter.h">
+      <Filter>importer\pmd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Model\ModelLib\importer\pmd\PMDLoader.h">
+      <Filter>importer\pmd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Model\ModelLib\importer\pmd\VMDFormat.h">
+      <Filter>importer\pmd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Model\ModelLib\importer\pmd\VMDLoader.h">
+      <Filter>importer\pmd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Model\ModelLib\importer\json\JsonImporter.h">
+      <Filter>importer\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Model\ModelLib\importer\json\JsonGeometry.h">
+      <Filter>importer\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Model\ModelLib\importer\assimp\AssimpImporter.h">
+      <Filter>importer\assimp</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Model\ModelLib\source\Importer.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Model\ModelLib\source\GeometryChunk.cpp">
+      <Filter>source\mdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Model\ModelLib\source\GeometryCommon.cpp">
+      <Filter>source\mdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Model\ModelLib\source\JointChunk.cpp">
+      <Filter>source\mdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Model\ModelLib\source\MdlExporter.cpp">
+      <Filter>source\mdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Model\ModelLib\source\MshExporter.cpp">
+      <Filter>source\mdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Model\ModelLib\source\SklExporter.cpp">
+      <Filter>source\mdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Model\ModelLib\source\AnmExporter.cpp">
+      <Filter>source\anm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Model\ModelLib\source\MtrlExporter.cpp">
+      <Filter>source\mtrl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Model\ModelLib\importer\x_file\XFileImporter.cpp">
+      <Filter>importer\x_file</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Model\ModelLib\importer\x_file\XFileHelper.cpp">
+      <Filter>importer\x_file\parser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Model\ModelLib\importer\x_file\XFileParser.cpp">
+      <Filter>importer\x_file\parser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Model\ModelLib\importer\x_file\XFileGeometry.cpp">
+      <Filter>importer\x_file\mdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Model\ModelLib\importer\x_file\XFileJoint.cpp">
+      <Filter>importer\x_file\mdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Model\ModelLib\importer\x_file\XFileAnimation.cpp">
+      <Filter>importer\x_file\anm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Model\ModelLib\importer\x_file\XFileMaterial.cpp">
+      <Filter>importer\x_file\mtrl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Model\ModelLib\importer\pmd\PMDImporter.cpp">
+      <Filter>importer\pmd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Model\ModelLib\importer\pmd\PMDLoader.cpp">
+      <Filter>importer\pmd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Model\ModelLib\importer\pmd\VMDLoader.cpp">
+      <Filter>importer\pmd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Model\ModelLib\importer\json\JsonImporter.cpp">
+      <Filter>importer\json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Model\ModelLib\importer\json\JsonGeometry.cpp">
+      <Filter>importer\json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Model\ModelLib\importer\assimp\AssimpImporter.cpp">
+      <Filter>importer\assimp</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
