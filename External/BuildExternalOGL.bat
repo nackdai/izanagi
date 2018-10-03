@@ -40,7 +40,7 @@ if not exist %BUILD_DIR%\freeglut.sln (
 
 rem glew =============================
 
-%MSBUILD% glew\build\vc12\glew.sln /t:%TARGET% /p:Configuration=%CONFIG% /p:Platform=%PLATFORM% || goto error
+%MSBUILD% glew\build\vc14\glew.sln /t:%TARGET% /p:Configuration=%CONFIG% /p:Platform=%PLATFORM% || goto error
 
 rem glfw =============================
 
