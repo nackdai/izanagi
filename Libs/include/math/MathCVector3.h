@@ -37,6 +37,11 @@ namespace math
             x = rhs.x; y = rhs.y; z = rhs.z;
         }
 
+        CVector3(IZ_FLOAT f)
+        {
+            x = y = z = f;
+        }
+
         CVector3(IZ_FLOAT _x, IZ_FLOAT _y, IZ_FLOAT _z)
         {
             x = _x; y = _y; z = _z;
