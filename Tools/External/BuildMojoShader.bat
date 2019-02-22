@@ -5,7 +5,7 @@ set CURDIR=%CD%
 cd /d %~dp0
 
 if not defined MSBUILD (
-    set MSBUILD="C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe"
+    set MSBUILD="C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe"
 )
 
 if not defined TARGET (
@@ -27,7 +27,7 @@ set SOLUTION=".\mojoshader\MojoShader.sln"
 
 if not exist %SOLUTION% (
     cd mojoshader
-    ..\..\..\External\cmake\bin\cmake.exe -G "Visual Studio 12 2013"
+    ..\..\..\External\cmake\bin\cmake.exe -G "Visual Studio 14 2015"
     cd ..
 )
 
