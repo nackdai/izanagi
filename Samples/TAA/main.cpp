@@ -1,7 +1,7 @@
 #include "izSampleKit.h"
 
-//#define TRY_INSIDE_TAA
-#define TRY_NEW_TAA
+#define TRY_INSIDE_TAA
+//#define TRY_NEW_TAA
 
 #ifdef TRY_INSIDE_TAA
 #include "TAAApp2.h"

@@ -43,6 +43,20 @@ IZ_BOOL TAAApp2::InitInternal(
 		device,
 		"../../Media/teapot.obj");
 
+	{
+		IZ_UINT flag = izanagi::E_DEBUG_MESH_VTX_FORM_POS
+			| izanagi::E_DEBUG_MESH_VTX_FORM_NORMAL;
+
+		// Plane
+		m_rc = izanagi::CDebugMeshRectangle::CreateDebugMeshRectangle(
+			allocator,
+			device,
+			flag,
+			0xffffffff,
+			1, 1,
+			2.0f, 2.0f);
+	}
+
 	for (int i = 0; i < COUNTOF(m_rt); i++) {
 		m_rt[i] = device->CreateRenderTarget(
 			width, height,
@@ -87,6 +101,28 @@ __EXIT__:
 // 更新.
 void TAAApp2::UpdateInternal(izanagi::graph::CGraphicsDevice* device)
 {
+	auto& cam = GetCamera();
+
+	auto pos = cam.GetParam().pos;
+	auto at = cam.GetParam().ref;
+
+	static float dz = 10.0f;
+	static float z = 0.0f;
+
+	if (z > 100) {
+		dz = -dz;
+	}
+	else if (z < -100) {
+		dz = -dz;
+	}
+
+	pos.z += dz;
+	at.z += dz;
+	z += dz;
+
+	//cam.SetPos(pos);
+	//cam.SetAt(at);
+
 	GetCamera().Update();
 
 	m_imgui->beginFrame();
@@ -109,6 +145,38 @@ void TAAApp2::RenderInternal(izanagi::graph::CGraphicsDevice* device)
 	if (m_frame == 0) {
 		m_mtxPrevL2W = m_mtxL2W;
 		m_mtxPrevW2C = camera.GetParam().mtxW2C;
+	}
+	else {
+		izanagi::math::CVector4 vtxs[] = {
+			izanagi::math::CVector4(-1, 0, 1),
+			izanagi::math::CVector4(1, 0, 1),
+			izanagi::math::CVector4(-1, 0, -1),
+			izanagi::math::CVector4(1, 0, -1),
+		};
+
+		const auto& mtxW2C = camera.GetParam().mtxW2C;
+
+		for (int i = 0; i < 1; i++) {
+			izanagi::math::CVector4 cur = vtxs[i] * 100;
+			cur.w = 1;
+			izanagi::math::SMatrix44::Apply(cur, cur, mtxW2C);
+			cur /= cur.w;
+			cur = cur * 0.5 + izanagi::math::CVector4(0.5, 0.5, 0, 0);
+
+			izanagi::math::CVector4 prev = vtxs[i] * 100;
+			prev.w = 1;
+			izanagi::math::SMatrix44::Apply(prev, prev, m_mtxPrevW2C);
+			prev /= prev.w;
+			prev = prev * 0.5 + izanagi::math::CVector4(0.5, 0.5, 0, 0);
+
+			//IZ_PRINTF("(%d)[%f, %f] / [%f, %f] => [%f, %f]\n", i, cur.x, cur.y, prev.x, prev.y, cur.x - prev.x, cur.y - prev.y);
+
+			cur.x *= width;
+			cur.y *= height;
+			prev.x *= width;
+			prev.y *= height;
+			//IZ_PRINTF("  (%d)[%f, %f] / [%f, %f] => [%f, %f]\n", i, cur.x, cur.y, prev.x, prev.y, cur.x - prev.x, cur.y - prev.y);
+		}
 	}
 
 	renderGeometryPass(device);
@@ -168,6 +236,7 @@ void TAAApp2::renderGeometryPass(izanagi::graph::CGraphicsDevice* device)
 	m_gbuffer.beginGeometryPass(device);
 
 	m_obj->render(device);
+	m_rc->Draw(device);
 
 	m_gbuffer.endGeometryPass(device);
 }
@@ -175,8 +244,6 @@ void TAAApp2::renderGeometryPass(izanagi::graph::CGraphicsDevice* device)
 void TAAApp2::renderColorPass(izanagi::graph::CGraphicsDevice* device)
 {
 	const auto& camera = GetCamera();
-
-	izanagi::math::CVector4 color(1.0f, 0.0f, 0.0f, 1.0f);
 
 	const auto& mtxW2C = camera.GetParam().mtxW2C;
 
@@ -219,12 +286,20 @@ void TAAApp2::renderColorPass(izanagi::graph::CGraphicsDevice* device)
 		shd->SetMatrix(device, hOffset, mtxOffset);
 	}
 
-	auto hClr = shd->GetHandleByName("color");
-	shd->SetVector(device, hClr, color);
-
 	m_gbuffer.beginColorPass(device);
-
-	m_obj->render(device);
+	
+	{
+		izanagi::math::CVector4 color(1.0f, 0.0f, 0.0f, 1.0f);
+		auto hClr = shd->GetHandleByName("color");
+		shd->SetVector(device, hClr, color);
+		m_obj->render(device);
+	}
+	{
+		izanagi::math::CVector4 color(1.0f, 1.0f, 0.0f, 1.0f);
+		auto hClr = shd->GetHandleByName("color");
+		shd->SetVector(device, hClr, color);
+		m_rc->Draw(device);
+	}
 
 	m_gbuffer.endColorPass(device);
 }
@@ -313,6 +388,7 @@ void TAAApp2::renderFinalPass(izanagi::graph::CGraphicsDevice* device)
 void TAAApp2::ReleaseInternal()
 {
 	SAFE_RELEASE(m_obj);
+	SAFE_RELEASE(m_rc);
 
 	m_shdGeometryPass.release();
 	m_shdColorPass.release();

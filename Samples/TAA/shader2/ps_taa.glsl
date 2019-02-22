@@ -78,12 +78,14 @@ vec4 clip_aabb(vec3 aabb_min, vec3 aabb_max, vec4 p, vec4 q)
 
 vec4 temporalReprojection(
 	vec2 uv, vec2 velocity,
-	vec2 texelSize)
+	vec2 texelSize,
+	float vs_dist)
 {
 	// Read texels.
 	vec4 texel0 = sample_color(s3, uv);
 	vec4 texel1 = sample_color(s4, uv - velocity);
 
+#if 0
 	vec2 du = vec2(texelSize.x, 0.0);
 	vec2 dv = vec2(0.0, texelSize.y);
 
@@ -108,6 +110,28 @@ vec4 temporalReprojection(
 	cmin = 0.5 * (cmin + cmin5);
 	cmax = 0.5 * (cmax + cmax5);
 	cavg = 0.5 * (cavg + cavg5);
+#else
+	const float _SubpixelThreshold = 0.5;
+	const float _GatherBase = 0.5;
+	const float _GatherSubpixelMotion = 0.1666;
+
+	vec2 texel_vel = velocity / texelSize.xy;
+	float texel_vel_mag = length(texel_vel) * vs_dist;
+	float k_subpixel_motion = clamp(_SubpixelThreshold / (0.00000001f + texel_vel_mag), 0.0f, 1.0f);
+	float k_min_max_support = _GatherBase + _GatherSubpixelMotion * k_subpixel_motion;
+
+	vec2 ss_offset01 = k_min_max_support * vec2(-texelSize.x, texelSize.y);
+	vec2 ss_offset11 = k_min_max_support * vec2(texelSize.x, texelSize.y);
+	vec4 c00 = sample_color(s3, uv - ss_offset11);
+	vec4 c10 = sample_color(s3, uv - ss_offset01);
+	vec4 c01 = sample_color(s3, uv + ss_offset01);
+	vec4 c11 = sample_color(s3, uv + ss_offset11);
+
+	vec4 cmin = min(c00, min(c10, min(c01, c11)));
+	vec4 cmax = max(c00, max(c10, max(c01, c11)));
+
+	vec4 cavg = (c00 + c10 + c01 + c11) / 4.0;
+#endif
 
 	vec2 chroma_extent = vec2(0.25 * 0.5 * (cmax.r - cmin.r));
 	vec2 chroma_center = texel0.gb;
@@ -219,19 +243,26 @@ void main()
 #if 1
 	vec3 c_frag = find_closest_fragment_3x3(uv);
 	vec2 velocity = texture2D(s2, c_frag.xy).xy;
+	float depth = texture2D(s1, c_frag.xy).x;
 #else
 	vec2 velocity = texture2D(s2, uv).xy;
+	float depth = texture2D(s1, uv).x;
 #endif
 
 	// temporal resolve
-	vec4 color_temporal = temporalReprojection(uv, velocity, texelSize);
+	vec4 color_temporal = temporalReprojection(uv, velocity, texelSize, depth);
 
 	// prepare outputs
 	vec4 to_buffer = resolve_color(color_temporal);
 
+#if 0
 	vec4 noise4 = PDsrand4(uv + sinTime.x + 0.6959174) / 510.0;
 	outColor = clamp(to_buffer + noise4, vec4(0), vec4(1));
 	outColor.w = 1;
+#else
+	outColor = to_buffer;
+	outColor.w = 1;
+#endif
 
 	if (showDiff) {
 		outColor.rgb = abs(outColor.rgb - texture2D(s3, uv).rgb);

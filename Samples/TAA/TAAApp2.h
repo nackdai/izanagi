@@ -36,6 +36,7 @@ private:
 
 protected:
 	izanagi::sample::ObjModel* m_obj{ nullptr };
+	izanagi::CDebugMeshRectangle* m_rc{ nullptr };
 
 	izanagi::sample::Shader m_shdGeometryPass;
 	izanagi::sample::Shader m_shdColorPass;

@@ -17,7 +17,7 @@ void main()
 	vec2 curScreenPos = gl_FragCoord.xy * invScreen.xy;
 
 	vec2 prevScreenPos = prevCSPos.xy / prevCSPos.w;
-	prevScreenPos *= vec2(0.5, 0.5) + vec2(0.5);
+	//prevScreenPos *= vec2(0.5, 0.5) + vec2(0.5);
 
 	// [-1, 1] -> [0, 1]
 	prevScreenPos = prevScreenPos * vec2(0.5) + vec2(0.5);

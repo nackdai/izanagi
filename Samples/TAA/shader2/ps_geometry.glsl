@@ -15,12 +15,14 @@ layout(location = 2) out vec4 outMotion;
 
 void main()
 {
-	vec2 curNDC = curCSPos.xy / curCSPos.w;
-	vec2 prevNDC = prevCSPos.xy / prevCSPos.w;
+	vec2 curScreenPos = gl_FragCoord.xy * invScreen.xy;
 
-	// [-1, 1] -> [-0.5, 0.5]
-	// ”ÍˆÍ‚ð 2 ‚©‚ç 1 ‚ÉŽû‚ß‚é.
-	vec2 motion = 0.5 * (curNDC - prevNDC);
+	vec2 prevScreenPos = prevCSPos.xy / prevCSPos.w;
+
+	// [-1, 1] -> [0, 1]
+	prevScreenPos = prevScreenPos * vec2(0.5) + vec2(0.5);
+
+	vec2 motion = prevScreenPos - curScreenPos;
 
 	outMotion.xy = motion;
 	outMotion.z = 0;
