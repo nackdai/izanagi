@@ -1,1 +1,1 @@
-call BuildLibs.bat Debug OGL
+call BuildLibs.bat Debug OGL Simple

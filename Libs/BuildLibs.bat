@@ -26,9 +26,9 @@ set TOOL_CONFIG=Release
 set VS_VER=vs2015
 
 rem ShaderCompiler ================================
-call ..\Tools\External\BuildMojoShader.bat %TOOL_CONFIG%
-%MSBUILD% ..\Tools\External\Preproc\Preproc.sln /t:%TARGET% /p:Configuration=%TOOL_CONFIG% || goto error
-%MSBUILD% ..\Tools\projects\vs2013\ShaderCompiler.sln /t:%TARGET% /p:Configuration=%TOOL_CONFIG% || goto error
+rem call ..\Tools\External\BuildMojoShader.bat %TOOL_CONFIG%
+rem %MSBUILD% ..\Tools\External\Preproc\Preproc.sln /t:%TARGET% /p:Configuration=%TOOL_CONFIG% || goto error
+rem %MSBUILD% ..\Tools\projects\vs2013\ShaderCompiler.sln /t:%TARGET% /p:Configuration=%TOOL_CONFIG% || goto error
 
 if %GFX%==GLES2 (
     %MSBUILD% ..\External\ANGLE\projects\src\ANGLE.sln /t:%TARGET% /p:Configuration=%CONFIG% /p:Platform=Win32 || goto error
