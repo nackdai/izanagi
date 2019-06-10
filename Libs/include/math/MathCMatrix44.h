@@ -7,7 +7,6 @@ namespace izanagi
 {
 namespace math
 {
-    // うーん・・・
     class CMatrix44 : public SMatrix44 {
     public:
         CMatrix44()
