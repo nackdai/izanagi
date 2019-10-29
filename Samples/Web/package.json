@@ -9,7 +9,7 @@
   },
   "devDependencies": {
     "grunt": "~0.4.5",
-    "express": "~4.3.1",
+    "express": "~4.17.1",
     "grunt-express-server": "~0.4.17"
   },
   "scripts": {
